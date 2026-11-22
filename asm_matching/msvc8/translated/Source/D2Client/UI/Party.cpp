@@ -614,10 +614,10 @@ static void __stdcall ShowToolTipOnPartyButtons(int16_t nLocaleIdLine1, int16_t 
       nSizeY = 0xf;
     }
     if (nWidth1 > nWidth2) {
-      nWidth2 = nWidth1;
+      Engine::Gfx::D2GFX_DrawSolidRectExBySize(Inv::gnPanelOffsetX - nWidth1 / 2 - 5 + nOffsetX, nBoxY - Inv::gnPanelOffsetY, nWidth1 + 10, nSizeY, (uint32_t)cRed, DRAW_LESSTRANSPARENT);
+    } else {
+      Engine::Gfx::D2GFX_DrawSolidRectExBySize(Inv::gnPanelOffsetX - nWidth2 / 2 - 5 + nOffsetX, nBoxY - Inv::gnPanelOffsetY, nWidth2 + 10, nSizeY, (uint32_t)cRed, DRAW_LESSTRANSPARENT);
     }
-
-    Engine::Gfx::D2GFX_DrawSolidRectExBySize(Inv::gnPanelOffsetX - nWidth2 / 2 - 5 + nOffsetX, nBoxY - Inv::gnPanelOffsetY, nWidth2 + 10, nSizeY, (uint32_t)cRed, DRAW_LESSTRANSPARENT);
 }
 
 void __stdcall DRAW_UI_PartyWindow_II() {

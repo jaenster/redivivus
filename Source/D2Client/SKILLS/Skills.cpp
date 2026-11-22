@@ -843,6 +843,13 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // Tests whether pUnit2 is a legal skill target for caster pUnit under the skill's target-flags bitmask (nTargetFlags). Switches on the target's unit type, requiring the matching allow-bit (player/monster/object/missile/item) and checking liveness/anim-mode (e.g. dead/death rejected unless the corpse-target bit 0x1000 is set). Applies optional filters per bit: undead-only (0x4), exclude-boss (0x4000), monster-stat flag (0x40000), not-in-town (0x100), skill-target-type & non-NPC (0x10000), CanInteractWith (0x8000), in-melee-range (0x20000), not just-hit (0x80000), and line-of-sight wall collision (0x200). Returns 1 if the target passes all applicable checks, 0 otherwise.
 uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nTargetFlags) {
     D2MissilesTxt* pMissileTxt;
@@ -1803,8 +1810,6 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     int nPrgStep;
     int16_t aSavedSP1X[2];
     int16_t aSavedSP1Y[2];
-    SKILL_ExecuteClientProgressWithAura_Slotm8 uSlot8;
-    uint32_t nAuraStatList;
     D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return;
@@ -1815,20 +1820,16 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
       return;
     }
 
-    uSlot8.pUnitArg2Saved = pUnit2;
     D2StatListExStrc* pAuraStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)nAuraState);
     if (!pAuraStatList) {
-      D2StatListExStrc* pNewStatList;
-      pNewStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0, 0, pUnit->eUnitType, pUnit->nUnitGUID);
-      if (!pNewStatList) {
+      pAuraStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(nullptr, 0, 0, GetTypeInline(pUnit), GetGUIDInline(pUnit));
+      if (!pAuraStatList) {
         return;
       }
 
-      pAuraStatList = pNewStatList;
-      D2Common::Stats::StatsEx::SetState(pNewStatList, (int)pSkillTxt->aurastate);
-      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pNewStatList, 1);
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pNewStatList, (int)pSkillTxt->aurastat[0], nProgressIndex, 0);
-      pUnit2 = uSlot8.pUnitArg2Saved;
+      D2Common::Stats::StatsEx::SetState(pAuraStatList, (int)pSkillTxt->aurastate);
+      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pAuraStatList, 1);
+      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pAuraStatList, (int)pSkillTxt->aurastat[0], nProgressIndex, 0);
     }
 
     BOOL bHadTarget = GetCooordinates(pUnit, (int32_t*)aSavedSP1X, (int32_t*)aSavedSP1Y);
@@ -1845,36 +1846,39 @@ void __fastcall SKILL_ExecuteClientProgressWithAura(D2UnitStrc * pUnit, D2UnitSt
     if (nTargetX && !nTargetY) {
       pUnit->nInitSeed = nTargetX;
     }
+    nProgressIndex--;
     if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
       nPrgStep = 0;
-      if (nProgressIndex - 1 > 0) {
-        uSlot8.pnCltPrgFunc = pSkillTxt->cltprgfunc;
+      if (nProgressIndex > 0) {
+        int16_t* pnCltPrgFunc = pSkillTxt->cltprgfunc;
         do {
-          if (SKILLCLTDOFUNCS[*uSlot8.pnCltPrgFunc]) {
+          if (SKILLCLTDOFUNCS[*pnCltPrgFunc]) {
             D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pAuraStatList, (int)pSkillTxt->aurastat[0], nPrgStep + 1, 0);
-            (*SKILLCLTDOFUNCS[*uSlot8.pnCltPrgFunc])(pUnit, eSkill, nSkillLevel);
+            (*SKILLCLTDOFUNCS[*pnCltPrgFunc])(pUnit, eSkill, nSkillLevel);
           }
 
-          uSlot8.pnCltPrgFunc++;
+          pnCltPrgFunc++;
           nPrgStep++;
-        } while (nPrgStep < nProgressIndex - 1);
+        } while (nPrgStep < nProgressIndex);
       }
 
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pAuraStatList, (int)pSkillTxt->aurastat[0], nProgressIndex, 0);
+      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pAuraStatList, (int)pSkillTxt->aurastat[0], nProgressIndex + 1, 0);
     }
-    if (pSkillTxt->cltprgfunc[nProgressIndex - 1] >= 0 && pSkillTxt->cltprgfunc[nProgressIndex - 1] < SKILLCLTDOFUNCS_SIZE) {
+    if (pSkillTxt->cltprgfunc[nProgressIndex] >= 0 && pSkillTxt->cltprgfunc[nProgressIndex] < SKILLCLTDOFUNCS_SIZE) {
       if (pSkillTxt->cltmissile[0] > 0) {
         if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-          GetCooordinates(pUnit, &uSlot8.nMissileX, (int32_t*)&nAuraStatList);
-          UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (int)pSkillTxt->cltmissile[0], 0, 0, uSlot8.nMissileX, nAuraStatList, eSkill, nSkillLevel, 0);
+          int32_t nMissileX;
+          int32_t nMissileY;
+          GetCooordinates(pUnit, &nMissileX, &nMissileY);
+          UNIT::Missile::MISSILE_CreateFromUnitWithOffset(pUnit, (int)pSkillTxt->cltmissile[0], 0, 0, nMissileX, nMissileY, eSkill, nSkillLevel, 0);
         } else {
           MakeMissileAtSkillTarget(pUnit, (int)pSkillTxt->cltmissile[0], eSkill, nSkillLevel);
         }
 
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
-      if (SKILLCLTDOFUNCS[pSkillTxt->cltprgfunc[nProgressIndex - 1]]) {
-        bPrgFuncResult = (*SKILLCLTDOFUNCS[pSkillTxt->cltprgfunc[nProgressIndex - 1]])(pUnit, eSkill, nSkillLevel);
+      if (SKILLCLTDOFUNCS[pSkillTxt->cltprgfunc[nProgressIndex]]) {
+        bPrgFuncResult = (*SKILLCLTDOFUNCS[pSkillTxt->cltprgfunc[nProgressIndex]])(pUnit, eSkill, nSkillLevel);
         if (bPrgFuncResult) {
           if (pSkillTxt->dosound > 0) {
             Sound::SOUND_PlaySound((int)pSkillTxt->dosound, pUnit, 0, 0, 0);

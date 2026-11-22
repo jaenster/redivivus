@@ -1849,17 +1849,14 @@ void __fastcall FreeCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // @sourcefile .\UNIT\SUnitDmg.cpp
 void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, D2UnitStrc * pUnit2) {
-    D2CombatEntryStrc* pNextCombatEntry;
     if (!(pAttacker && pUnit2 && (D2CombatEntryStrc*)pAttacker->pCombat)) {
       return;
     }
 
-    D2CombatEntryStrc* pPrevCombatEntry = 0;
+    D2CombatEntryStrc* pPrevCombatEntry = nullptr;
     D2CombatEntryStrc* pCombatEntry = (D2CombatEntryStrc*)pAttacker->pCombat;
     do {
-      D2CombatEntryStrc* pCurCombatEntry;
-      pNextCombatEntry = pCombatEntry->pNext;
-      pCurCombatEntry = pCombatEntry;
+      D2CombatEntryStrc* pNextCombatEntry = pCombatEntry->pNext;
       if (pCombatEntry->eAttackerType == pAttacker->eUnitType && pCombatEntry->nAttackerGUID == pAttacker->nUnitGUID && pCombatEntry->eDefenderType == pUnit2->eUnitType && pCombatEntry->nDefenderGUID == pUnit2->nUnitGUID) {
         if (!pPrevCombatEntry) {
           pAttacker->pCombat = (uint8_t*)pNextCombatEntry;
@@ -1868,12 +1865,12 @@ void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, D2UnitStrc * p
         }
 
         D2_FREE_POOL_AT(pGame->pMemoryPool, pCombatEntry, ".\\UNIT\\SUnitDmg.cpp", 0x79f);
-        pCurCombatEntry = pPrevCombatEntry;
+      } else {
+        pPrevCombatEntry = pCombatEntry;
       }
 
       pCombatEntry = pNextCombatEntry;
-      pPrevCombatEntry = pCurCombatEntry;
-    } while (pNextCombatEntry);
+    } while (pCombatEntry);
 }
 
 // @sourcefile .\UNIT\SUnitDmg.cpp
@@ -3242,41 +3239,31 @@ static int32_t __stdcall XP_ApplyLevelExpRatio(int32_t nLevel, int32_t nExperien
 
 // Calculates the experience cap for a mercenary gaining XP. If pUnit is a player, returns nBaseXp unchanged. If pUnit is a player-owned pet/merc, caps the award to 1/64 of the XP needed for the merc's current level (from HirelingTxt expPerLvl). Returns 0 if no valid hireling record is found (non-player-owned unit).
 static uint32_t __stdcall CALC_Experience(::SGAMEDATA * pGame, uint32_t nBaseXp, D2UnitStrc * pUnit, int32_t nMercLevel) {
-    int32_t nBaseXpCur;
-    int32_t nBaseXpNext;
-    uint32_t nXpPerLevel;
-    int nMercGUID;
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
-      return nBaseXp;
-    }
+    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+      D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
+      if (!(pOwner && pOwner->eUnitType == UNIT_PLAYER)) {
+        return 0;
+      }
 
-    D2UnitStrc* pUnit_00 = Ai::AiGeneral::GetOwnerUnit(pUnit);
-    if (!(pUnit_00 && pUnit_00->eUnitType == UNIT_PLAYER)) {
-      return 0;
-    }
-    if (!pUnit) {
-      nMercGUID = -1;
-    } else {
-      nMercGUID = pUnit->nUnitGUID;
-    }
+      D2PetDataStrc* pPetData = PLAYER::PlayerPets::GetPlayersPetData(pOwner, !pUnit ? -1 : pUnit->nUnitGUID);
+      if (!pPetData) {
+        return 0;
+      }
 
-    D2PetDataStrc* pPetData = PLAYER::PlayerPets::GetPlayersPetData(pUnit_00, nMercGUID);
-    if (pPetData) {
-      D2HirelingTxt* pHirelingTxt;
-      pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, pPetData->nType, nMercLevel);
-      if (pHirelingTxt) {
-        nBaseXpCur = D2Common::Merc::GetBaseExperience(nMercLevel, pHirelingTxt->expPerLvl);
-        nBaseXpNext = D2Common::Merc::GetBaseExperience(nMercLevel + 1, pHirelingTxt->expPerLvl);
-        nXpPerLevel = (uint32_t)(nBaseXpNext - nBaseXpCur) >> 6;
-        if (nBaseXp > nXpPerLevel) {
-          return nXpPerLevel;
-        }
+      D2HirelingTxt* pHirelingTxt = D2Common::DATATBLS::MonsterTbls::GetHirelingText(pGame->bExpansion, pPetData->nType, nMercLevel);
+      if (!pHirelingTxt) {
+        return 0;
+      }
 
-        return nBaseXp;
+      int32_t nBaseXpCur = D2Common::Merc::GetBaseExperience(nMercLevel, pHirelingTxt->expPerLvl);
+      int32_t nBaseXpNext = D2Common::Merc::GetBaseExperience(nMercLevel + 1, pHirelingTxt->expPerLvl);
+      uint32_t nXpPerLevel = (uint32_t)(nBaseXpNext - nBaseXpCur) >> 6;
+      if (nBaseXp > nXpPerLevel) {
+        nBaseXp = nXpPerLevel;
       }
     }
 
-    return 0;
+    return nBaseXp;
 }
 
 static uint32_t __stdcall SERVER_CalculateExperienceForUnit(::SGAMEDATA * pGame, int32_t nKillerLevel, int32_t baseExperience, D2UnitStrc * pUnit, int32_t nPlayerLevel) {

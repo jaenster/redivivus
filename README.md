@@ -9,9 +9,9 @@ At this commit (Ghidra database v2139):
 
 - Builds strict (`-std=c++17`, no `-fpermissive`) and links with no undefined symbol.
 - Single player works. A full playthrough has been completed on the Visual C++ 2005 build.
-- Functions whose machine code is identical to 1.14d, compiled with Visual C++ 2005 SP1: 11,234 of 14,900 (75.4%), of which 2,237 hand-written.
-- Code bytes identical: 1,286,580 of 2,612,801 (49.24%).
-- A 64-bit build links (mingw x86-64, `-fpermissive`) and has never been run; 236 pointer-width casts left, from 7,955.
+- Functions whose machine code is identical to 1.14d, compiled with Visual C++ 2005 SP1: 11,420 of 14,900 (76.6%), of which 2,427 hand-written.
+- Code bytes identical: 1,323,712 of 2,612,801 (50.66%).
+- A 64-bit build links (mingw x86-64, `-fpermissive`) and has never been run; 233 pointer-width casts left, from 7,955.
 
 What is compared, what is left out, and the chart: [BYTE-MATCHING.md](BYTE-MATCHING.md). The names, types
 and structure layouts are reconstructions from the Ghidra databases; the function bodies are maintained in

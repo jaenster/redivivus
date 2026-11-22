@@ -632,26 +632,23 @@ int __fastcall SaveCorpseItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t 
 }
 
 int __fastcall SaveMercItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * ppWritePos, uint8_t * nEndOffset, int32_t bUnk1, int32_t bUnk2) {
-    uint8_t* puVar1 = *ppWritePos;
-    if (!pGame->bExpansion) {
-      return 0;
-    }
-
-    puVar1[0] = 'j';
-    puVar1[1] = 'f';
-    uint8_t* pWritePtr = puVar1 + 2;
-    D2UnitStrc* pMerc = PlayerPets::SERVER_GetUnitPetByTypeId(pGame, pUnit, PETTYPE_hireable, 1);
-    if (pMerc) {
-      int32_t pInventoryCopyResult;
-      pInventoryCopyResult = PlayerSave::GetCopyInventory(pGame, pMerc, (uint16_t*)pWritePtr, (intptr_t)nEndOffset - (intptr_t)pWritePtr, 0, bUnk1, bUnk2);
-      if (pInventoryCopyResult < 0) {
-        return 5;
+    uint8_t* pWritePtr = *ppWritePos;
+    if (pGame->bExpansion) {
+      *(uint16_t*)pWritePtr = 0x666a;
+      pWritePtr += 2;
+      D2UnitStrc* pMerc = PlayerPets::SERVER_GetUnitPetByTypeId(pGame, pUnit, PETTYPE_hireable, 1);
+      if (pMerc) {
+        int32_t nCopied = PlayerSave::GetCopyInventory(pGame, pMerc, (uint16_t*)pWritePtr, (intptr_t)nEndOffset - (intptr_t)pWritePtr, 0, bUnk1, bUnk2);
+        if (nCopied >= 0) {
+          pWritePtr += nCopied;
+        } else {
+          return 5;
+        }
       }
 
-      pWritePtr += pInventoryCopyResult;
+      *ppWritePos = pWritePtr;
     }
 
-    *ppWritePos = pWritePtr;
     return 0;
 }
 
@@ -1438,16 +1435,16 @@ int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc *
     BOOL bIsDead;
     int nUnit;
     uint8_t* pMercUnit = pUnit2;
-    uint8_t** ppReadPosOut = ppUnit;
+    uint8_t* pCursor = *ppUnit;
     if (!pGame->bExpansion) {
       return 0;
     }
 
-    short int* psVar1 = (short int*)((char*)*ppUnit + 2);
+    short int* psVar1 = (short int*)(pCursor + 2);
     if (psVar1 > (short*)pUnit2) {
       return 0;
     }
-    if (*(short int*)*ppUnit != 0x666a) {
+    if (*(short int*)pCursor != 0x666a) {
       if (pnErrorCode) {
         *pnErrorCode = 0x65;
       }
@@ -1476,7 +1473,7 @@ int __fastcall LoadMerc2(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc *
       }
     }
 
-    *ppReadPosOut = (uint8_t*)pUnit22;
+    *ppUnit = (uint8_t*)pUnit22;
     return 0;
 }
 

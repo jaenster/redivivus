@@ -183,7 +183,7 @@ BOOL __stdcall MAINMENU_DisableControlIfDataNonZero2(struct D2ControlMsg * pCont
 // Shows BNet account creation UI. Clears gbPasswordChangeInProgress, creates form with username/password/confirmation fields. Entry point for new account flow from main menu.
 void __stdcall UIMENU_CreateBattleNetAccount();
 void __stdcall UIMENU_BackgroundAndExpansionText();
-int16_t __stdcall MAINMENU_FilterNewlineKey(int16_t wChar);
+uint8_t __stdcall MAINMENU_FilterNewlineKey(int16_t wChar);
 int __stdcall MAINMENU_PollRevisionCheckPump(int nFrameIndex);
 BOOL __stdcall MAINMENU_OnPressCreateBattleNetAccount(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall MAINMENU_ScrollListExUp(struct D2ControlMsg * pControlMsg);

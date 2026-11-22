@@ -657,12 +657,7 @@ void __stdcall UnloadBin(void * pTxtTable) {
 
 // Populates the wide-string class-name field in every row of the CharStats txt table. For each row, looks up the string-table key via STRTABLE_GetStringByKey; if not found, formats a fallback like "&lt;keyname&gt;" and writes the wide string (up to nWstringSize chars) into the destination field at the computed struct offset.
 void __fastcall TXT_CharStats_DefineWideStringClass(D2CharStatsTxt * pTxtCharStats, int32_t nTxtCharStatsSize, int32_t nStructStride, int32_t nSrcFieldOffset, int32_t nDstFieldOffset, size_t nWstringSize) {
-    uint32_t* pWideOut;
-    uint16_t* pWideResult;
     int i;
-    uint16_t* pDestination;
-    uint8_t* pszKeyField;
-    int nRowsRemaining;
     uint16_t wszTmpBuf[512];
     uint16_t wszSrcBuf[512];
     uint16_t wszShortBuf[32];
@@ -678,25 +673,19 @@ void __fastcall TXT_CharStats_DefineWideStringClass(D2CharStatsTxt * pTxtCharSta
     memset(wszShortBuf, 0, 16 * sizeof(wszShortBuf[0]));
     D2Lang::UTF8_ConvertToWideChar(wszShortBuf + 0x10, "<", 0x10);
     D2Lang::UTF8_ConvertToWideChar(wszShortBuf, ">", 0x10);
-    if (nTxtCharStatsSize > 0) {
-      pDestination = (uint16_t*)((char*)pTxtCharStats->wszClass + nDstFieldOffset);
-      nRowsRemaining = nTxtCharStatsSize;
-      do {
-        memset(pDestination, 0, nWstringSize);
-        pszKeyField = (uint8_t*)(nSrcFieldOffset - nDstFieldOffset + (char*)pDestination);
-        pWideResult = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey(pszKeyField);
-        if (!pWideResult) {
-          D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszSrcBuf, wszShortBuf + 0x10);
-          D2Lang::UTF8_ConvertToWideChar(wszTmpBuf, (char*)pszKeyField, nWstringSize - 1);
-          D2Lang::Unicode::UNISYS::AppendToBuffer(wszSrcBuf, wszTmpBuf);
-          D2Lang::Unicode::UNISYS::AppendToBuffer(wszSrcBuf, wszShortBuf);
-          pWideResult = wszSrcBuf;
-        }
-
-        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pDestination, pWideResult, nWstringSize);
-        pDestination = (uint16_t*)((char*)pDestination + nStructStride);
-        nRowsRemaining--;
-      } while (nRowsRemaining);
+    for (int nRow = 0; nRow < nTxtCharStatsSize; nRow++) {
+      char* pRecord = (char*)pTxtCharStats + nRow * nStructStride;
+      memset(pRecord + nDstFieldOffset, 0, nWstringSize);
+      uint16_t* pWideResult = D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)(pRecord + nSrcFieldOffset));
+      if (!pWideResult) {
+        D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszSrcBuf, wszShortBuf + 0x10);
+        D2Lang::UTF8_ConvertToWideChar(wszTmpBuf, pRecord + nSrcFieldOffset, nWstringSize - 1);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszSrcBuf, wszTmpBuf);
+        D2Lang::Unicode::UNISYS::AppendToBuffer(wszSrcBuf, wszShortBuf);
+        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)(pRecord + nDstFieldOffset), wszSrcBuf, nWstringSize);
+      } else {
+        D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer((uint16_t*)(pRecord + nDstFieldOffset), pWideResult, nWstringSize);
+      }
     }
 }
 

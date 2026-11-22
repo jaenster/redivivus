@@ -1683,35 +1683,37 @@ void __fastcall STATLIST_PropagateStatChange(D2StatListExStrc * pStatsEx, int32_
       return;
     }
 
-    uint32_t dwFlags = nShiftedStat >> 0x10 & 0xffff;
-    D2ItemStatCostTxt* pItemStatCostLine = (int)dwFlags < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + dwFlags : nullptr;
+    int nStatId = nShiftedStat >> 0x10 & 0xffff;
+    D2ItemStatCostTxt* pItemStatCostLine = nStatId >= 0 && nStatId < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + nStatId : nullptr;
     if (!pItemStatCostLine) {
       return;
     }
 
-    uint32_t eStatIdx = pStatsEx->sStatList.nFlags;
-    if (eStatIdx & 0x2000) {
+    uint32_t dwFlags = pStatsEx->sStatList.nFlags;
+    if (dwFlags & 0x2000) {
       return;
     }
 
-    uint32_t uVar1 = (uint8_t)(char)pItemStatCostLine->dwItemStatFlags & Fog::BitBuffer::gadwBitMasks[2];
-    if ((int)eStatIdx >= 0) {
-      pStatsEx = pStatsEx->sStatList.pParent;
+    uint32_t dwNoParentWalk = (uint8_t)pItemStatCostLine->dwItemStatFlags & Fog::BitBuffer::gadwBitMasks[2];
+    D2StatListExStrc* pList = pStatsEx;
+    if (!(dwFlags & 0x80000000)) {
+      pList = pStatsEx->sStatList.pParent;
     }
 
-    while (pStatsEx) {
+    while (pList) {
       if (!pItemStatCostLine->bHasOpBaseDependencies && !pItemStatCostLine->bReferencedByOpStat) {
-        STATLIST_PropagateStatDelta(nShiftedStat, nDelta, pItemStatCostLine, pUnit, pStatsEx);
+        STATLIST_PropagateStatDelta(nShiftedStat, nDelta, pItemStatCostLine, pUnit, pList);
       } else {
-        STATLIST_ApplyComplexStatFormula(pStatsEx, nShiftedStat, &pItemStatCostLine->stat, pUnit);
+        STATLIST_ApplyComplexStatFormula(pList, nShiftedStat, &pItemStatCostLine->stat, pUnit);
       }
 
-      eStatIdx = pStatsEx->sStatList.nFlags;
-      pStatsEx = pStatsEx->sStatList.pParent;
-      if (eStatIdx & 0x2000) {
+      D2StatListExStrc* pPrev = pList;
+      pList = pList->sStatList.pParent;
+      dwFlags = pPrev->sStatList.nFlags;
+      if (dwFlags & 0x2000) {
         return;
       }
-      if (uVar1 && eStatIdx & 0x40000000) {
+      if (dwNoParentWalk && dwFlags & 0x40000000) {
         return;
       }
     }

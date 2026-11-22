@@ -595,7 +595,6 @@ float __fastcall SOUNDHDR_GetFalloffMax(int32_t nSoundId) {
 int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId) {
     int32_t nRoll;
     int nHistIdx;
-    int32_t* pHistEntry;
     D2SoundsTxt* pSound;
     if (!pTxtSounds) {
       return nSoundId;
@@ -622,26 +621,20 @@ int32_t __fastcall SOUNDHDR_RandomizeSoundFromGroup(int32_t nSoundId) {
       }
     }
 
+    int nPickedId;
+    BOOL bRecent;
     do {
-      int nPickedId;
-      nPickedId = _Utils::RollRandomNumerUpToArgument((uint32_t)pSound->Group_Size);
-      nPickedId += nSoundId;
-      nHistIdx = 0;
-      if (nHistDepth <= 0) {
-        return nPickedId;
-      }
-
-      pHistEntry = pSound->aRecentSoundHistory;
-      while (nPickedId != *pHistEntry) {
-        nHistIdx++;
-        pHistEntry++;
-        if (nHistIdx >= nHistDepth) {
-          return nPickedId;
+      nPickedId = _Utils::RollRandomNumerUpToArgument((uint32_t)pSound->Group_Size) + nSoundId;
+      bRecent = FALSE;
+      for (nHistIdx = 0; nHistIdx < nHistDepth; nHistIdx++) {
+        if (nPickedId == pSound->aRecentSoundHistory[nHistIdx]) {
+          bRecent = TRUE;
+          break;
         }
       }
-    } while (true);
+    } while (bRecent);
 
-    return nSoundId;
+    return nPickedId;
 }
 
 void __fastcall SOUNDHDR_BuildSoundPath(int32_t nSoundId, char * pszOutPath) {
@@ -802,42 +795,25 @@ void __fastcall SOUNDHDR_LoadSoundFile(int32_t nSoundId, int32_t bForceSync, int
 }
 
 void __fastcall SOUNDHDR_ProcessAsyncLoads(int32_t dwTick) {
-    int nRowIndex;
-    int nRowOffset;
-    D2SoundsTxt* pSoundRow;
-    uint32_t dwTickToStore = gdwLastSoundAsyncLoadTick;
-    if (pTxtSounds && (!dwTick || dwTick - gdwLastSoundAsyncLoadTick >= 0x19)) {
-      uint32_t bAsyncComplete;
-      nRowIndex = 1;
-      nRowOffset = 0x8e;
-      do {
-        pSoundRow = (D2SoundsTxt*)(pTxtSounds->Filename + nRowOffset);
-        if (!*(int*)((char*)pTxtSounds->aRecentSoundHistory + (nRowOffset + 0x22)) && (pSoundRow->nRefCount || pSoundRow->Cache)) {
-          if (!dwTick || gnSoundAsyncLoadCount < 0xf && (uint32_t)(dwTick - gnSoundEvictedAudioVolume) >= 0xfa) {
-            SOUNDHDR_LoadSoundFile(nRowIndex, (uint32_t)!dwTick, 1);
-            if (pSoundRow->nLoadState == 1) {
-              bAsyncComplete = Fog::Src::AsyncData::ASYNCDATA_IsComplete((D2AsyncData_Line0x128*)pSoundRow->pAsyncData);
-              if (bAsyncComplete) {
-                SOUNDHDR_CompleteAsyncLoad(pSoundRow);
-              }
+    if (pTxtSounds) {
+      BOOL bForce = !dwTick;
+      if (!dwTick || (uint32_t)(dwTick - gdwLastSoundAsyncLoadTick) >= 0x19) {
+        for (int nRowIndex = 1; nRowIndex <= 2933; nRowIndex++) {
+          D2SoundsTxt* pSoundRow = &pTxtSounds[nRowIndex];
+          if (!pSoundRow->nLoadState && (pSoundRow->nRefCount || pSoundRow->Cache)) {
+            if (bForce || gnSoundAsyncLoadCount < 0xf && (uint32_t)(dwTick - gnSoundEvictedAudioVolume) >= 0xfa) {
+              SOUNDHDR_LoadSoundFile(nRowIndex, bForce, 1);
+            } else {
+              continue;
             }
           }
-        } else {
-          if (pSoundRow->nLoadState == 1) {
-            bAsyncComplete = Fog::Src::AsyncData::ASYNCDATA_IsComplete((D2AsyncData_Line0x128*)pSoundRow->pAsyncData);
-            if (bAsyncComplete) {
-              SOUNDHDR_CompleteAsyncLoad(pSoundRow);
-            }
+          if (pSoundRow->nLoadState == 1 && Fog::Src::AsyncData::ASYNCDATA_IsComplete((D2AsyncData_Line0x128*)pSoundRow->pAsyncData)) {
+            SOUNDHDR_CompleteAsyncLoad(pSoundRow);
           }
         }
-
-        nRowOffset += 0x8e;
-        nRowIndex++;
-        dwTickToStore = dwTick;
-      } while (nRowOffset <= 0x65ae6);
+        gdwLastSoundAsyncLoadTick = dwTick;
+      }
     }
-
-    gdwLastSoundAsyncLoadTick = dwTickToStore;
 }
 
 void __stdcall DRAW_AfterDraw() {

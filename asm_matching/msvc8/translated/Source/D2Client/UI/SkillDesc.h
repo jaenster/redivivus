@@ -121,7 +121,7 @@ void __fastcall SKILLDESC_BuildMagicAffixDesc(struct D2UnitStrc * pUnit, uint16_
 uint16_t __fastcall SKILLDESC_GetStatNameString(int32_t nSkillId, int32_t nStatOffset);
 int32_t __stdcall SKILLDESC_GetAuraBonusDamage();
 int __stdcall SKILLDESC_AccumulateAuraBonusDmg(struct D2UnitStrc * pUnit, int * pnMinDmgAcc, int * pnMaxDmgAcc, uint32_t * pdwElemColorOut);
-void __stdcall SKILLDESC_FormatDecimalRange(uint16_t * wszText, int32_t bPrefixSign);
+void __stdcall SKILLDESC_FormatDecimalRange(uint16_t * wszText, int32_t bPrefixSign, int32_t nMinInt, int32_t nMinFrac, int32_t nMaxInt, int32_t nMaxFrac);
 int __stdcall SKILLDESC_CalcElemDamageRange(struct D2UnitStrc * pUnit, int * pnMinDamage, int * pnMaxDamage, uint32_t * pnColor, struct D2SkillStrc * pSkill);
 void __fastcall SKILLDESC_CalcAttackRateForWeapon(struct D2UnitStrc * pUnit, int * pnAttackRate, uint32_t * pnColor, int32_t * param_1, uint32_t dwParam1, int32_t nSkillLevel, struct D2SkillStrc * pSkill, uint32_t dwParam2, struct D2UnitStrc * pUnit2);
 void __fastcall SKILLDESC_CalcEquippedAttackRate(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill, struct D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t * pnMinDamage, int32_t * pnMinColor, int32_t * pnMaxDamage, int32_t * pnMaxColor);

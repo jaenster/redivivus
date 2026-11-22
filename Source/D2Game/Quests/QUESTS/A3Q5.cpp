@@ -32,15 +32,15 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game::Quests::QUESTS::A3Q5 {
 
 // Q21_CheckGoldenBirdDropConditions (GOLDEN BIRD helper, Q1/internal Q21) — gate that arms the Jade Figurine drop on a boss/Council kill. Returns 1 if the bird drop should be armed: requires bIsNotIntroduction, bBirdDropEnabled, bCanDropBird, AND that the "Blade of the Old Religion" (Gidbinn) quest has NOT failed its Tainted-Sun start. On success: attaches the Golden Bird quest to the killed unit, installs Q21_Callback_08 as handler[8], clears bCanDropBird, sets bBossKillTracking, records killer GUID. No GetQuestState/SetQuestState here.
-void __fastcall Q21_CheckGoldenBirdDropConditions(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
+BOOL __fastcall Q21_CheckGoldenBirdDropConditions(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     D2QuestDataA3Q4Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q4;
     if (!(pQuestData->bIsNotIntroduction != '\0' && pQuestSpecificData->bBirdDropEnabled && pQuestSpecificData->bCanDropBird == '\x01')) {
-      return;
+      return 0;
     }
 
     D2QuestDataStrc* pQuestDataBladeOldReligion = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_BladeOfTheOldReligion);
     if (!(!pQuestDataBladeOldReligion || pQuestDataBladeOldReligion->pQuestSpecificData.pA3Q3->nBladeGivenFlag == '\0')) {
-      return;
+      return 0;
     }
 
     QUEST_AttachToUnitByQuestId(pQuestData->pGame, pUnit, QUESTINT_TheGoldenBird);
@@ -48,6 +48,7 @@ void __fastcall Q21_CheckGoldenBirdDropConditions(D2QuestDataStrc * pQuestData, 
     pQuestSpecificData->bCanDropBird = '\0';
     pQuestSpecificData->bBossKillTracking = true;
     pQuestSpecificData->nBirdKillerGUID = !pUnit ? -1 : pUnit->nUnitGUID;
+    return 1;
 }
 
 // Q22_OnCouncilMemberKilled (BLACKENED TEMPLE / Travincal council, internal Q22) — on-death notifier for a tracked Council member. Reads quest-specific data off the game (offset 0x18); if its byte[2] tracking flag is set and the killer's GUID (param2 unit field [0xc], -1 if none) matches the recorded killer GUID at [4], clears tracking byte[2] and sets the "kill confirmed" byte[1]. No quest-record state calls (operates on the in-memory D2QuestDataA3Q5Strc council-kill bookkeeping).
@@ -473,10 +474,9 @@ bool __fastcall Q22_SequenceFilter(D2QuestDataStrc * pQuestData) {
 // Q22_Callback_13 (BLACKENED TEMPLE) — quest-state[0xd] init/resume handler that reconstructs the live nStateFlag from the player's saved quest record when a game (re)loads. Sets bJerhynAiActive if Khalim's Will is done. If the record is Completed OR at Step0x04, marks the shared record JustCompleted and ends intro. Otherwise reads Lam Esen's Tome completion into pPortalSpawnRoom, then maps record Step0x02/Step0x03 to live nStateFlag (2/3 -> Step0x02 partial; 4/5 -> Step0x03), choosing the value by Lam Esen completion. Pure resume logic; one record write (JustCompleted).
 // State flow: derive live nStateFlag {2,3,4,5} from record steps; record Completed/Step0x04 -> SetQuestRecordState JustCompleted + end intro.
 void __fastcall Q22_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int bLamEsenDone;
-    ::SGAMEDATA* pGame = pQuestArgs->pGame;
+    ::SGAMEDATA* pGame = pQuestArgs->pGame; // steer-ok: the original loads pGame before calling GetPlayerData; VC8 leaves the operands of the subscript unsequenced
     D2QuestDataA3Q5Strc* pLamEsenResult = pQuestData->pQuestSpecificData.pA3Q5;
-    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+    D2BitBufferStrc* pBitBuffer = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pGame->nDifficulty];
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
     if (bQuestState) {
       pLamEsenResult->bJerhynAiActive = true;
@@ -501,13 +501,13 @@ void __fastcall Q22_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
       /* GetQuestState(Blackened Temple=0x15, Step0x03=3): with Step0x02 set, step 3
                          -> nStateFlag 4/5 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x03);
       if (!bQuestState) {
-        bLamEsenDone = pLamEsenResult->bLamEsenComplete;
-        pQuestData->nStateFlagPrev = 2;
-        if (bLamEsenDone) {
+        if (pLamEsenResult->bLamEsenComplete) {
+          pQuestData->nStateFlagPrev = 2;
           pQuestData->nStateFlag = 2;
           return;
         }
 
+        pQuestData->nStateFlagPrev = 2;
         pQuestData->nStateFlag = 3;
         return;
       }
@@ -519,13 +519,13 @@ void __fastcall Q22_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
       }
     }
 
-    bLamEsenDone = pLamEsenResult->bLamEsenComplete;
-    pQuestData->nStateFlagPrev = 3;
-    if (bLamEsenDone) {
+    if (pLamEsenResult->bLamEsenComplete) {
+      pQuestData->nStateFlagPrev = 3;
       pQuestData->nStateFlag = 4;
       return;
     }
 
+    pQuestData->nStateFlagPrev = 3;
     pQuestData->nStateFlag = 5;
     return;
 }

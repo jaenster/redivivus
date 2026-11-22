@@ -87,10 +87,10 @@ static void ITEM_ToggleHandState(D2UnitStrc * pUnit) {
     }
 }
 
-void __stdcall TEXT_HandleMouseMove() {
+BOOL __stdcall TEXT_HandleMouseMove() {
     int nPlayerGUID;
     if (ui::gnPlayerCashDisplay != 2) {
-      return;
+      return 0;
     }
 
     Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
@@ -108,10 +108,11 @@ void __stdcall TEXT_HandleMouseMove() {
       }
 
       GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nPlayerGUID, ui::gnNpcShopActiveTab, gnCursorItemUnitId, 3);
-      return;
+      return 1;
     }
 
     npcmenu::SubmitItem(gnCursorItemUnitId);
+    return 1;
 }
 
 void __fastcall TEXT_HandleItemUse(int32_t nMouseX, int32_t nMouseY) {

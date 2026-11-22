@@ -69,7 +69,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TaskNodeStrc) == 0x14, "D2_NEW_AT
 
 #ifndef RECON_FPTD_fnUpdateCharacterLadder
 #define RECON_FPTD_fnUpdateCharacterLadder
-typedef void (__fastcall *fnUpdateCharacterLadder)(char * lpCharName, uint16_t wCharClass, uint32_t dwCharLevel, uint32_t dwCharExpLow, uint32_t dwCharExpHigh, uint16_t wCharStatus, void * pPlayerMark);
+typedef void (__fastcall *fnUpdateCharacterLadder)(char * lpCharName, uint16_t wCharClass, uint32_t dwCharLevel, uint64_t dwCharExp, uint16_t wCharStatus, void * pPlayerMark);
 #endif
 #ifndef RECON_FPTD_fnEnterGame
 #define RECON_FPTD_fnEnterGame
@@ -696,18 +696,12 @@ uint32_t __fastcall NET_IsClientAllowedToLeave(uint32_t nClientId) {
 
 // Game-cleanup save: force-saves the disconnecting client's character (SaveGameAllGameTypes with bForceFullSave=1), then iterates all remaining clients in the game and soft-saves each (bForceFullSave=0). For non-singleplayer games, also invokes BattleNetServerService->fpUpdateCharacterLadder with the player's level, experience, char status, guild info, and file-time pointer so the ladder record stays current. No-ops if pClient or its player unit is null.
 void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame) {
-    char* szCharName;
     fnUpdateCharacterLadder* ppfpUpdateLadder;
-    uint32_t nCharStatus;
-    uint32_t nLevel;
-    uint16_t wCharStatus;
     uint8_t nGuildRank;
     uint8_t nGuildEmblem;
     uint8_t nGuildUnknown;
-    uint32_t dwLadderPad;
     int nClassId;
     D2ClientStrc* pClientLoop;
-    FILETIME* ppFileTime;
     if (!pClient) {
       return;
     }
@@ -733,15 +727,8 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
         if (BattleNetServerService && BattleNetServerService->fpUpdateCharacterLadder && pGame->eGameType != GAMETYPE_SINGLEPLAYER) {
           Clients::GetGuildInfo(pClientLoop, &nGuildRank, &nGuildEmblem, &nGuildUnknown);
           nClassId = pPlayer->nClassId;
-          ppFileTime = &pClientLoop->ftFileTime;
           ppfpUpdateLadder = &BattleNetServerService->fpUpdateCharacterLadder;
-          nCharStatus = Clients::GetCharacterStatus(pClientLoop);
-          wCharStatus = (uint16_t)nCharStatus;
-          nCharStatus = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_experience, 0);
-          dwLadderPad = 0;
-          nLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_level, 0);
-          szCharName = Clients::GetCharName(pClientLoop);
-          (**ppfpUpdateLadder)(szCharName, (uint16_t)nClassId, nLevel, nCharStatus, dwLadderPad, wCharStatus, ppFileTime);
+          (*ppfpUpdateLadder)(Clients::GetCharName(pClientLoop), (uint16_t)nClassId, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_level, 0), (uint32_t)D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayer, UNITSTAT_experience, 0), (uint16_t)Clients::GetCharacterStatus(pClientLoop), &pClientLoop->ftFileTime);
         }
       }
     }
@@ -749,18 +736,12 @@ void __fastcall SavePlayerOnCleanUp(D2ClientStrc * pClient, ::SGAMEDATA * pGame)
 
 // Saves all connected players to persistent storage. Iterates client list, gets player unit for each, calls SaveGameAllGameTypes to write character data (inventory/stats/quests/waypoints). For BNet non-singleplayer games, also updates ladder ranking via fpUpdateCharacterLadder callback with level, experience, character status, guild info (rank/emblem), and file timestamp. Called every 8192 frames (5.5 minutes) or on disconnects/timeouts. Critical for preventing rollback on crashes.
 void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
-    char* pCharName;
     fnUpdateCharacterLadder* pfpUpdateLadder;
-    uint32_t nExperience;
-    uint32_t nLevel;
-    uint16_t wCharStatus;
     uint8_t nGuildRank;
     uint8_t nGuildEmblem;
     uint8_t nGuildUnknown;
-    uint32_t dwUnusedParam;
     int nClassId;
     D2ClientStrc* pClient;
-    FILETIME* ppFileTime;
     D2ClientStrc* pClientNext = pGame->pClient;
     while (pClient = pClientNext) {
       D2UnitStrc* pPlayerUnit_lcl;
@@ -770,16 +751,9 @@ void __fastcall SaveAllPlayers(::SGAMEDATA * pGame) {
         PLAYER::PlayerSave::SaveGameAllGameTypes(pGame, pPlayerUnit_lcl, Clients::GetCharName(pClient), 0);
         if (BattleNetServerService && BattleNetServerService->fpUpdateCharacterLadder && pGame->eGameType != GAMETYPE_SINGLEPLAYER) {
           Clients::GetGuildInfo(pClient, &nGuildRank, &nGuildEmblem, &nGuildUnknown);
-          nClassId = pPlayerUnit_lcl->nClassId;
-          ppFileTime = &pClient->ftFileTime;
+          nClassId = pPlayerUnit_lcl->nClassId; // steer-ok: the original reads the class id before the argument calls GetCharName and SERVER_GetUnitStat; the order of call arguments is unspecified
           pfpUpdateLadder = &BattleNetServerService->fpUpdateCharacterLadder;
-          nExperience = Clients::GetCharacterStatus(pClient);
-          wCharStatus = (uint16_t)nExperience;
-          nExperience = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayerUnit_lcl, UNITSTAT_experience, 0);
-          dwUnusedParam = 0;
-          nLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayerUnit_lcl, UNITSTAT_level, 0);
-          pCharName = Clients::GetCharName(pClient);
-          (**pfpUpdateLadder)(pCharName, (uint16_t)nClassId, nLevel, nExperience, dwUnusedParam, wCharStatus, ppFileTime);
+          (*pfpUpdateLadder)(Clients::GetCharName(pClient), (uint16_t)nClassId, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayerUnit_lcl, UNITSTAT_level, 0), (uint32_t)D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayerUnit_lcl, UNITSTAT_experience, 0), (uint16_t)Clients::GetCharacterStatus(pClient), &pClient->ftFileTime);
         }
       }
     }
@@ -2931,41 +2905,29 @@ int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bF
     // Static local variables (originally global data)
     static int gdwQServerLastDispatchTick; D2_STATIC_GUARD_BSS(gdwQServerLastDispatchTick, "D2Game::GAME::Server::QSERVER_DispatchAndCleanup::gdwQServerLastDispatchTick");
 
-    ::SGAMEDATA* pGame;
-    LARGE_INTEGER qpcStartHigh;
-    LARGE_INTEGER qpcEndHigh;
-    uint32_t nToken;
-    D2ClientStrc* pClient;
-    D2ClientStrc* pClientNext;
-    int bAnyGameDispatched;
-    bAnyGameDispatched = 0;
-    QueryPerformanceCounter(&qpcStartHigh);
-    DWORD dwTickCount;
-    dwTickCount = GetTickCount();
-    DWORD dwDispatchTick;
-    dwDispatchTick = gdwQServerLastDispatchTick;
+    LARGE_INTEGER qpcStart;
+    LARGE_INTEGER qpcEnd;
+    BOOL bAnyGameDispatched = FALSE;
+    QueryPerformanceCounter(&qpcStart);
+    DWORD dwTickCount = GetTickCount();
     if (!pTokenCursor && !bForceDispatch) {
-      dwDispatchTick = dwTickCount;
       if (dwTickCount - gdwQServerLastDispatchTick < 0x28) {
         return 0;
       }
+      gdwQServerLastDispatchTick = dwTickCount;
     }
 
-    gdwQServerLastDispatchTick = dwDispatchTick;
     pTokenCursor = gaQServerGameTokens;
-    DWORD dwThisFrameTick;
-    dwThisFrameTick = dwTickCount;
     do {
-      nToken = *pTokenCursor;
+      uint32_t nToken = *pTokenCursor;
       if (nToken && nToken != 0xffffffff) {
-        pGame = QSERVER_FindAndLockGame(nToken);
+        ::SGAMEDATA* pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
-          bAnyGameDispatched = 1;
-          pClient = pGame->pClient;
+          bAnyGameDispatched = TRUE;
+          D2ClientStrc* pClient = pGame->pClient;
           while (pClient) {
-            pClientNext = pClient->pNext;
+            D2ClientStrc* pClientNext = pClient->pNext;
             FlushClientPackets(pGame, 1, pClient);
-            dwTickCount = dwThisFrameTick;
             pClient = pClientNext;
           }
 
@@ -2988,15 +2950,16 @@ int32_t __stdcall QSERVER_DispatchAndCleanup(uint32_t * pTokenCursor, int32_t bF
 
       next_game:
       pTokenCursor++;
-      if ((intptr_t)pTokenCursor >= (intptr_t)(gaQServerGameTokens + 1024)) {
-        if (!bAnyGameDispatched) {
-          return 0;
-        }
+    } while ((intptr_t)pTokenCursor < (intptr_t)(gaQServerGameTokens + 1024));
 
-        /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&qpcEndHigh);
-        return qpcEndHigh.u.LowPart - qpcStartHigh.u.LowPart;
-      }
-    } while (true);
+    LARGE_INTEGER qpcElapsed;
+    if (bAnyGameDispatched) {
+      QueryPerformanceCounter(&qpcEnd);
+      qpcElapsed.QuadPart = qpcEnd.QuadPart - qpcStart.QuadPart;
+    } else {
+      qpcElapsed.QuadPart = 0;
+    }
+    return qpcElapsed.u.LowPart;
 }
 
 ::SGAMEDATA * __fastcall NET_SERVER_FindGameByClientId(int32_t nClientId) {

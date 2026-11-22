@@ -2,41 +2,41 @@
 <title>Bytes of the original game code by kind of match</title>
 <rect width="800" height="280" rx="6" fill="#ffffff"/>
 <text x="24" y="30" font-size="15" font-weight="600" fill="#1f2328">Original game code, C runtime, prebuilt PKWARE library and compiler EH stubs left out: 2,612,801 bytes</text>
-<rect x="24.00" y="52" width="370.30" height="30" fill="#1f6feb"/>
-<text x="209.15" y="71" font-size="12" text-anchor="middle" fill="#ffffff">49.2%</text>
-<rect x="394.30" y="52" width="216.78" height="30" fill="#79b8ff"/>
-<text x="502.69" y="71" font-size="12" text-anchor="middle" fill="#000000">28.8%</text>
-<rect x="611.08" y="52" width="77.41" height="30" fill="#e3b341"/>
-<text x="649.78" y="71" font-size="12" text-anchor="middle" fill="#000000">10.3%</text>
-<rect x="688.49" y="52" width="77.07" height="30" fill="#d1d5da"/>
-<text x="727.02" y="71" font-size="12" text-anchor="middle" fill="#000000">10.2%</text>
-<rect x="765.56" y="52" width="6.09" height="30" fill="#eceff3"/>
+<rect x="24.00" y="52" width="380.98" height="30" fill="#1f6feb"/>
+<text x="214.49" y="71" font-size="12" text-anchor="middle" fill="#ffffff">50.7%</text>
+<rect x="404.98" y="52" width="209.96" height="30" fill="#79b8ff"/>
+<text x="509.96" y="71" font-size="12" text-anchor="middle" fill="#000000">27.9%</text>
+<rect x="614.95" y="52" width="75.46" height="30" fill="#e3b341"/>
+<text x="652.68" y="71" font-size="12" text-anchor="middle" fill="#000000">10.0%</text>
+<rect x="690.41" y="52" width="75.29" height="30" fill="#d1d5da"/>
+<text x="728.05" y="71" font-size="12" text-anchor="middle" fill="#000000">10.0%</text>
+<rect x="765.70" y="52" width="5.95" height="30" fill="#eceff3"/>
 <rect x="771.65" y="52" width="4.35" height="30" fill="#9aa4ae"/>
 <rect x="24" y="52" width="752" height="30" fill="none" stroke="#d1d9e0"/>
 <rect x="24" y="101" width="14" height="14" rx="2" fill="#1f6feb" stroke="#d1d9e0"/>
 <text x="46" y="112" font-size="13" fill="#1f2328">Whole function identical</text>
-<text x="334" y="112" font-size="13" text-anchor="end" fill="#1f2328">1,286,580</text>
-<text x="398" y="112" font-size="13" text-anchor="end" fill="#1f2328">49.24%</text>
+<text x="334" y="112" font-size="13" text-anchor="end" fill="#1f2328">1,323,712</text>
+<text x="398" y="112" font-size="13" text-anchor="end" fill="#1f2328">50.66%</text>
 <text x="416" y="112" font-size="12" fill="#59636e">functions that compile to the original bytes (MATCH)</text>
 <rect x="24" y="127" width="14" height="14" rx="2" fill="#79b8ff" stroke="#d1d9e0"/>
 <text x="46" y="138" font-size="13" fill="#1f2328">Matching instructions</text>
-<text x="334" y="138" font-size="13" text-anchor="end" fill="#1f2328">753,207</text>
-<text x="398" y="138" font-size="13" text-anchor="end" fill="#1f2328">28.83%</text>
+<text x="334" y="138" font-size="13" text-anchor="end" fill="#1f2328">729,513</text>
+<text x="398" y="138" font-size="13" text-anchor="end" fill="#1f2328">27.92%</text>
 <text x="416" y="138" font-size="12" fill="#59636e">already right, but the function still differs elsewhere</text>
 <rect x="24" y="153" width="14" height="14" rx="2" fill="#e3b341" stroke="#d1d9e0"/>
 <text x="46" y="164" font-size="13" fill="#1f2328">Same instruction, other operands</text>
-<text x="334" y="164" font-size="13" text-anchor="end" fill="#1f2328">268,961</text>
-<text x="398" y="164" font-size="13" text-anchor="end" fill="#1f2328">10.29%</text>
+<text x="334" y="164" font-size="13" text-anchor="end" fill="#1f2328">262,179</text>
+<text x="398" y="164" font-size="13" text-anchor="end" fill="#1f2328">10.03%</text>
 <text x="416" y="164" font-size="12" fill="#59636e">same instruction, other registers or offsets</text>
 <rect x="24" y="179" width="14" height="14" rx="2" fill="#d1d5da" stroke="#d1d9e0"/>
 <text x="46" y="190" font-size="13" fill="#1f2328">Different instructions</text>
-<text x="334" y="190" font-size="13" text-anchor="end" fill="#1f2328">267,771</text>
-<text x="398" y="190" font-size="13" text-anchor="end" fill="#1f2328">10.25%</text>
+<text x="334" y="190" font-size="13" text-anchor="end" fill="#1f2328">261,605</text>
+<text x="398" y="190" font-size="13" text-anchor="end" fill="#1f2328">10.01%</text>
 <text x="416" y="190" font-size="12" fill="#59636e">instructions with no matching partner</text>
 <rect x="24" y="205" width="14" height="14" rx="2" fill="#eceff3" stroke="#d1d9e0"/>
 <text x="46" y="216" font-size="13" fill="#1f2328">Tables and padding</text>
-<text x="334" y="216" font-size="13" text-anchor="end" fill="#1f2328">21,153</text>
-<text x="398" y="216" font-size="13" text-anchor="end" fill="#1f2328">0.81%</text>
+<text x="334" y="216" font-size="13" text-anchor="end" fill="#1f2328">20,663</text>
+<text x="398" y="216" font-size="13" text-anchor="end" fill="#1f2328">0.79%</text>
 <text x="416" y="216" font-size="12" fill="#59636e">switch tables and padding in functions that still differ</text>
 <rect x="24" y="231" width="14" height="14" rx="2" fill="#9aa4ae" stroke="#d1d9e0"/>
 <text x="46" y="242" font-size="13" fill="#1f2328">Not compared</text>

@@ -146,11 +146,7 @@ int __fastcall Unreferenced_004151b0(int param_1) {
 // @blizzard DecompressLzw_BufferRead (SFILE.CPP)
 uint32_t SFILE_DecompressLzw_BufferRead(void * pDstBuf, uint32_t * pnBytesRequested, D2LzwBufferStateStrc * pReadState) {
     uint32_t nAvail = pReadState->nSrcSize - pReadState->nSrcPos;
-    uint32_t nReadLen = *pnBytesRequested;
-    if (*pnBytesRequested >= nAvail) {
-      nReadLen = nAvail;
-    }
-
+    uint32_t nReadLen = *pnBytesRequested < nAvail ? *pnBytesRequested : nAvail;
     SMem::SMemCopy(pDstBuf, pReadState->pSrc + pReadState->nSrcPos, nReadLen);
     pReadState->nSrcPos += nReadLen;
     return nReadLen;
@@ -1320,27 +1316,24 @@ int32_t __stdcall SFileSetBasePath(char * szText) {
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    if (*szText == '\0') {
+    if (!*szText) {
       szSFileBasePath[0] = '\0';
-      return 1;
+    } else {
+      BOOL bHasBackslash = szText[SSTR::SStrLen(szText) - 1] == '\\';
+      if (SSTR::SStrLen(szText) + !bHasBackslash + 1 > 0x104) {
+        SErr::SErrSetLastError(0xa1);
+        return 0;
+      }
+
+      EnterCriticalSection(&lpCriticalSection_00779068);
+      SSTR::SStrCopy(szSFileBasePath, szText, 0x104);
+      if (!bHasBackslash) {
+        SSTR::SStrPack(szSFileBasePath, "\\", 0x104);
+      }
+
+      LeaveCriticalSection(&lpCriticalSection_00779068);
     }
 
-    uint32_t pStrEnd = SSTR::SStrLen(szText);
-    char cLastChar = szText[pStrEnd - 1];
-    int nTest = cLastChar != '\\';
-    pStrEnd = SSTR::SStrLen(szText);
-    if (pStrEnd + 1 + (uint32_t)nTest > 0x104) {
-      SErr::SErrSetLastError(0xa1);
-      return 0;
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    SSTR::SStrCopy(szSFileBasePath, szText, 0x104);
-    if (nTest) {
-      SSTR::SStrPack(szSFileBasePath, "\\", 0x104);
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
 
@@ -1499,7 +1492,8 @@ int __fastcall Unreferenced_00416850(StormLinkStrc * pLink) {
 }
 
 int32_t __fastcall Unreferenced_00416860(void * pHandle) {
-    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
+    StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
 uint32_t __thiscall SFILE_CompareFileTime2(StormLinkStrc * pLink, intptr_t pLeft) {
@@ -2205,7 +2199,8 @@ void * __fastcall Unreferenced_00417790(StormLinkStrc * pLink) {
 }
 
 int32_t __fastcall Unreferenced_004177a0(void * pHandle) {
-    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
+    StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
 StormLinkStrc * __fastcall Unreferenced_00417850(StormLinkStrc * pLink) {
@@ -5998,8 +5993,9 @@ void __fastcall CrcBuffer(uint8_t * pbData, int32_t nLength, uint32_t * pdwCrc, 
       dwCrc = -1;
     }
     if (byFlags & 2) {
-      for (; nLength; nLength--) {
+      while (nLength) {
         dwCrc = dwCrc >> 8 ^ gdwSFileCompressionMethod[(*pbData ^ dwCrc) & 0xff];
+        nLength--;
         pbData++;
       }
     }

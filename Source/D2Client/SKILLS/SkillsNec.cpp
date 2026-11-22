@@ -478,8 +478,7 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterRoomNotInTownNec(D2UnitStrc * pUnit,
       return 0;
     }
 
-    BOOL bResult = Skills::GetCooordinates(pUnit, &nTargetX, &nTargetY);
-    if (!bResult) {
+    if (!Skills::GetCooordinates(pUnit, &nTargetX, &nTargetY)) {
       return 0;
     }
 
@@ -487,16 +486,11 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterRoomNotInTownNec(D2UnitStrc * pUnit,
     if (!pRoom) {
       return 0;
     }
-    if (pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
-      return 1;
+    if (!(pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+      return 0;
     }
 
-    bResult = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!bResult) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 // @sourcefile .\SKILLS\SkillsNec.cpp

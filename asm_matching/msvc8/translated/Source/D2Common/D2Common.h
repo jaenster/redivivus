@@ -8116,7 +8116,7 @@ struct IgnoreListVtable {
 
 // Functions
 namespace D2Common {
-void __stdcall ITEM_ProcessSetItemEquip(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nEquipMode, int32_t bUpdateStates);
+BOOL __stdcall ITEM_ProcessSetItemEquip(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nEquipMode, int32_t bUpdateStates);
 } // namespace D2Common
 namespace D2Common { namespace Chat {
 // @sourcefile .\Chat\Chat.cpp

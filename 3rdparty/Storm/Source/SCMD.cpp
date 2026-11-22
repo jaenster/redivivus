@@ -229,33 +229,27 @@ int __fastcall Unreferenced_006c40d0(StormLinkStrc * pLink) {
 
 // @blizzard FindFlagDef (SCMD.CPP)
 static CMDDEF * __stdcall SCMD_FindFlagDef(CMDDEF * cmdList, char * str, int minLen) {
-    int nCmpResult;
-    uint32_t pcStrEnd = SSTR::SStrLen(str);
-    int uBestLen = minLen - 1;
-    CMDDEF* pMinLen = 0;
-    do {
-      size_t nCmdLen;
-      if (!cmdList) {
-        return pMinLen;
-      }
-
-      nCmdLen = cmdList->nTextLen;
-      if ((int)nCmdLen > uBestLen && (int)nCmdLen <= (int)pcStrEnd) {
-        if (cmdList->nArgTypeFlags & 0x100) {
-          nCmpResult = strncmp(cmdList->szName, str, nCmdLen);
+    int nStrLen = SSTR::SStrLen(str);
+    int nBestLen = minLen - 1;
+    CMDDEF* pBest = 0;
+    for (CMDDEF* pCmd = cmdList; pCmd; pCmd = (intptr_t)pCmd->pNext <= 0 ? nullptr : pCmd->pNext) {
+      int nCmdLen = pCmd->nTextLen;
+      if (nCmdLen > nBestLen && nCmdLen <= nStrLen) {
+        BOOL bMatch;
+        if (pCmd->nArgTypeFlags & 0x100) {
+          bMatch = !strncmp(pCmd->szName, str, nCmdLen);
         } else {
-          nCmpResult = _strnicmp(cmdList->szName, str, nCmdLen);
+          bMatch = !_strnicmp(pCmd->szName, str, nCmdLen);
         }
-        if (!nCmpResult) {
-          uBestLen = cmdList->nTextLen;
-          pMinLen = cmdList;
+
+        if (bMatch) {
+          nBestLen = pCmd->nTextLen;
+          pBest = pCmd;
         }
       }
+    }
 
-      cmdList = cmdList->pNext;
-    } while ((intptr_t)cmdList > 0);
-
-    return pMinLen;
+    return pBest;
 }
 
 // TSLink's constructor: a new link belongs to no list.

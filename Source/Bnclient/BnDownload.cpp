@@ -864,18 +864,16 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
       szText2 = "";
     }
 
-    int32_t pCacheData = pDownloadCtx;
-    uint32_t nDownloadFlags = dwDownloadFlags;
     BOOL bCacheHit = Cache::CACHE_ReadData(szText1, (uint32_t*)&ftCacheTime.dwLowDateTime, &pCachedBuf, &nCachedSize);
     if (bCacheHit) {
       LONG nTimeCmp;
       /* FILETIME * lpFileTime2 for CompareFileTime */ /* FILETIME * lpFileTime1 for CompareFileTime */ nTimeCmp = CompareFileTime(pFileTime, &ftCacheTime);
       if (!nTimeCmp) {
-        if (nDownloadFlags & 2) {
+        if (dwDownloadFlags & 2) {
           BNDOWNLOAD_WriteFileWithTimestamp(szBufferInput, (LPCVOID)pCachedBuf, nCachedSize, pFileTime);
         }
 
-        NET_BNFTP_CLIENT_ProcessFile(pCacheData, nDownloadFlags, eFileType, nOpcode, (LPCSTR)pFileTime, szBufferInput, szText2, pCachedBuf, (int32_t)nCachedSize, 1);
+        NET_BNFTP_CLIENT_ProcessFile(pDownloadCtx, dwDownloadFlags, eFileType, nOpcode, (LPCSTR)pFileTime, szBufferInput, szText2, pCachedBuf, (int32_t)nCachedSize, 1);
         Cache::CACHE_FreeMem(pCachedBuf, nCachedSize);
         return;
       }
@@ -889,18 +887,16 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
     }
 
     memset(pThreadCtx, 0, 0x230);
-    char* pcNameEnd = szBufferInput;
-    pcNameEnd = pcNameEnd + strlen(pcNameEnd) + 1;
+    pThreadCtx->nSendSize = (short int)(strlen(szBufferInput) + 0x21);
     pThreadCtx->nUnk0x0C = eFileType;
-    pThreadCtx->nSendSize = (short int)(pcNameEnd - szBufferInput) - 1 + 0x21;
     pThreadCtx->nUnk0x02 = 0;
-    pThreadCtx->nFileType = nDownloadFlags;
     pThreadCtx->nUnk0x03 = 1;
     pThreadCtx->dwPlatformId = 0x49583836;
     pThreadCtx->dwProductId = 0x44324456;
     pThreadCtx->nUnk0x10 = nOpcode;
     pThreadCtx->nCachedFileSize = 0;
-    pThreadCtx->nConnMode = pCacheData;
+    pThreadCtx->nConnMode = pDownloadCtx;
+    pThreadCtx->nFileType = dwDownloadFlags;
     pThreadCtx->ftFileTime.dwLowDateTime = pFileTime->dwLowDateTime;
     pThreadCtx->ftFileTime.dwHighDateTime = pFileTime->dwHighDateTime;
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, szBufferInput, 0x104);

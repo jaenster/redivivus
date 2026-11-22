@@ -496,6 +496,17 @@ template <class T, class U> static inline bool D2_AtomicCompareExchange(T* p, T*
     return D2AtomicCas<sizeof(T)>::Exchange((void*)p, (void*)pExpected, &tDesired);
 }
 #endif
+
+// A 16-bit rotate (ROL r16, imm8): VC8's _rotl16 intrinsic, declared in <intrin.h>, which would
+// bring declarations the tree makes its own way; GCC gets the same operation inline.
+#if defined(_MSC_VER)
+extern "C" unsigned short __cdecl _rotl16(unsigned short value, unsigned char shift);
+#pragma intrinsic(_rotl16)
+#elif !defined(__INTRINSIC_DEFINED__rotl16)
+static inline unsigned short _rotl16(unsigned short value, unsigned char shift) {
+    return (unsigned short)((value << shift) | (value >> (16 - shift)));
+}
+#endif
 // The bit pattern of a float or double, as C++20 std::bit_cast gives it.
 template <class To, class From>
 static inline To d2_bit_cast(const From& v) {

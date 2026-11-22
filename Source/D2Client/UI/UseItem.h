@@ -42,7 +42,7 @@ namespace D2Client::UI::UseItem {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-void __stdcall TEXT_HandleMouseMove();
+BOOL __stdcall TEXT_HandleMouseMove();
 void __fastcall TEXT_HandleItemUse(int32_t nMouseX, int32_t nMouseY);
 // @sourcefile .\UI\UseItem.cpp
 void __stdcall INPUT_UseItemClick(struct D2UIMouseMsgStrc * pMsg);

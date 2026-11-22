@@ -1500,7 +1500,6 @@ void __fastcall SKILLNEC_InitializeSummon(::SGAMEDATA * pGame, D2UnitStrc * pUni
 BOOL __fastcall Skills_SrvDoFunc_056_SummonGolem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt;
     D2MonsterCastPetHeadStrc sSummonArgs;
-    eD2Skills eSkillOrig = eSkill;
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
@@ -1513,9 +1512,9 @@ BOOL __fastcall Skills_SrvDoFunc_056_SummonGolem(::SGAMEDATA * pGame, D2UnitStrc
       return 0;
     }
 
-    eSkill = (uint32_t)(uint8_t)pSkillsTxt->pettype << 0x18;
-    if ((int)(uint32_t)(uint8_t)pSkillsTxt->pettype >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
-      eSkill = SKILL_Attack;
+    uint8_t nPetType = pSkillsTxt->pettype;
+    if (nPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
+      nPetType = 0;
     }
 
     uint8_t bySumMode = pSkillsTxt->summode;
@@ -1523,20 +1522,18 @@ BOOL __fastcall Skills_SrvDoFunc_056_SummonGolem(::SGAMEDATA * pGame, D2UnitStrc
       bySumMode = 1;
     }
 
-    sSummonArgs.nX = 0;
-    sSummonArgs.nY2 = 0;
-    sSummonArgs.nSkillCalc = 0;
+    memset(&sSummonArgs, 0, sizeof(sSummonArgs));
     sSummonArgs.nFlags = 0;
-    sSummonArgs.classId = (int32_t)pSkillsTxt->summon;
-    sSummonArgs.nFunctionId = 0;
-    sSummonArgs.nMode = (uint32_t)bySumMode;
-    sSummonArgs.nType = eSkill >> 0x18;
     sSummonArgs.pPlayer = pUnit;
-    sSummonArgs.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->petmax, eSkillOrig, nSkillLvl);
+    sSummonArgs.classId = pSkillsTxt->summon;
+    sSummonArgs.nFunctionId = 0;
+    sSummonArgs.nMode = bySumMode;
+    sSummonArgs.nType = nPetType;
+    sSummonArgs.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->petmax, eSkill, nSkillLvl);
     D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGame, (D2MonsterCastPetStrc*)&sSummonArgs);
     if (pSummon) {
       D2ClientStrc* pClient;
-      SKILLNEC_InitializeSummon(pGame, pUnit, pSummon, eSkillOrig, nSkillLvl);
+      SKILLNEC_InitializeSummon(pGame, pUnit, pSummon, eSkill, nSkillLvl);
       pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\SKILLS\\SkillNec.cpp", 0x6fb);
       GAME::SCmd::NET_D2GS_SERVER_Send_0x7F_AllyPartyInfo_0x90_PartyAutoMapInfo(pClient, pSummon);
       GAME::Targets::CreateUnitNode(pGame, pSummon, nullptr, pUnit->nNodeTableIndex);

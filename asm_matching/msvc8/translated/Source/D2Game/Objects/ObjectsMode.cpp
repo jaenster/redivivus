@@ -447,37 +447,29 @@ void __fastcall OBJMODE_DeactivateShrine(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Advances the fill-progress animation for fillable objects (e.g. Mana Wells, Healing Wells). Reads Components[0] as the current fill level, increments it each tick, then recomputes SetupUpdateFlag based on the ratio of current level to the doubled/default txt sizes. Halts with an unrecoverable error if fill level exceeds its expected bounds. Used by the object-mode update tick to drive incremental fill visuals.
 void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    uint8_t nErrorLine;
     uint8_t byComponent = pUnit->pUnitData.pUnitDataObject->nShrineId;
     D2ObjectsTxt* pObjectTxt = D2Common::Units::GetObjectTxtRecordFromObject(pUnit);
-    uint32_t uFillLevel = (uint32_t)byComponent;
-    uint8_t bVar1 = OBJECT_GetDefaultSize();
-    if (!((int)uFillLevel / pObjectTxt->Parm[2] < (int)(uint32_t)bVar1)) {
-      byComponent = OBJECT_GetDefaultSize();
-      if ((int)uFillLevel / pObjectTxt->Parm[2] >= (int)(uint32_t)byComponent) {
+    int uFillLevel = byComponent;
+    if (uFillLevel / pObjectTxt->Parm[2] >= OBJECT_GetDefaultSize()) {
+      if (uFillLevel / pObjectTxt->Parm[2] >= OBJECT_GetDefaultSize()) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdc);
         exit(-1);
       }
     } else {
-      uint32_t nDoubledTxtSize;
       byComponent++;
       pUnit->pUnitData.pUnitDataObject->nShrineId = byComponent;
-      nDoubledTxtSize = OBJECT_GetDoubledTxtSize(pObjectTxt);
-      if ((int)((uint8_t)nDoubledTxtSize - uFillLevel) < 0) {
-        nErrorLine = OBJECT_GetDoubledTxtSize(pObjectTxt);
-        pUnit->pUnitData.pUnitDataObject->nShrineId = nErrorLine;
-        nDoubledTxtSize = OBJECT_GetDoubledTxtSize(pObjectTxt);
-        if ((int)((uint8_t)nDoubledTxtSize - uFillLevel) < 0) {
+      if ((uint8_t)OBJECT_GetDoubledTxtSize(pObjectTxt) - uFillLevel < 0) {
+        pUnit->pUnitData.pUnitDataObject->nShrineId = (uint8_t)OBJECT_GetDoubledTxtSize(pObjectTxt);
+        if ((uint8_t)OBJECT_GetDoubledTxtSize(pObjectTxt) - uFillLevel < 0) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe3);
           exit(-1);
         }
       } else {
-        nErrorLine = OBJECT_GetDoubledTxtSize(pObjectTxt);
-        if (byComponent <= nErrorLine) {
-          bVar1 = OBJECT_GetDefaultSize();
-          if (!(int)((int)(uint32_t)byComponent % (int)(nErrorLine / (int)(uint32_t)bVar1))) {
-            bVar1 = OBJECT_GetDefaultSize();
-            D2Common::Units::ChangeAnimMode(pUnit, (uint32_t)bVar1 - (int)((int)(uint32_t)byComponent / pObjectTxt->Parm[2]));
+        uint8_t nDoubledTxtSize = (uint8_t)OBJECT_GetDoubledTxtSize(pObjectTxt);
+        if (byComponent <= nDoubledTxtSize) {
+          uint8_t nStep = nDoubledTxtSize / OBJECT_GetDefaultSize();
+          if (!(byComponent % nStep)) {
+            D2Common::Units::ChangeAnimMode(pUnit, OBJECT_GetDefaultSize() - byComponent / pObjectTxt->Parm[2]);
           }
         }
 
@@ -1376,20 +1368,17 @@ BOOL __fastcall OBJOP_UseObelisk(D2ObjectOperateFnArg * pOperation) {
 }
 
 uint32_t __fastcall UNIT_IsAlive(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg) {
+    uint32_t bAlive = 1;
     if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType == UNIT_MONSTER) {
-      BOOL BVar1;
-      BVar1 = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
-      if (!BVar1) {
-        return 1;
+      bAlive = 0;
+    } else if (pUnit->eUnitType == UNIT_MONSTER) {
+      if (D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit)) {
+        bAlive = 0;
       }
-    } else if (pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode != Death && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
-      return 1;
+    } else if (pUnit->eUnitType != UNIT_PLAYER || pUnit->eAnimMode.ePlayerMode == Death || pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead) {
+      bAlive = 0;
     }
-
-    return 0;
+    return bAlive;
 }
 
 // Returns 1 if pUnit is a valid targetable monster for pUnit2 (e.g. for shrine/object counter-attack targeting). Checks: pUnit != pUnit2, is UNIT_MONSTER, not an ally of pUnit2, neutral alignment, not dead, in Neutral or Walk anim mode, has the required monster stat flag (index 2), has a non-zero Height in MonStats2, and is neither a boss nor flagged by MonStatFlag bit 7 nor of type 0x1F. Returns 0 otherwise.
@@ -1611,20 +1600,13 @@ void __fastcall Shrines_GemShrineFunction(D2ObjectOperateFnArg * pArguments, D2S
     uint32_t acItemCode;
     D2InventoryStrc* pInventory = pArguments->pAttacker->pInventory;
     D2UnitStrc* pGemItem = D2Common::INVENTORY::Inventory::INVENTORY_FindItemByType(pInventory, 0x14, nullptr);
-    bool bUpgradePerformed = false;
-    if (pGemItem) {
-      D2ItemsTxt* pItemTxt;
-      do {
+    BOOL bUpgradePerformed = FALSE;
+    while (pGemItem) {
+        D2ItemsTxt* pItemTxt;
         if (bUpgradePerformed) {
           return;
         }
-        if (!pGemItem) {
-          acItemCode = -1;
-        } else {
-          acItemCode = pGemItem->nClassId;
-        }
-
-        pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(acItemCode);
+        pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(!pGemItem ? -1 : pGemItem->nClassId);
         if (pItemTxt->dwBetterGem != 0x206e6f6e) {
           nItemClassId = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(pItemTxt->dwBetterGem);
           if (nItemClassId == -1) {
@@ -1634,17 +1616,16 @@ void __fastcall Shrines_GemShrineFunction(D2ObjectOperateFnArg * pArguments, D2S
 
           bGemSpawnSucceeded = Shrines_GemShrine_SpawnGem(nItemClassId, pGemItem, pArguments->sArg.pGame, pArguments->pAttacker);
           if (bGemSpawnSucceeded) {
-            bUpgradePerformed = true;
+            bUpgradePerformed = TRUE;
             pGemItem = 0;
           }
         }
 
         pGemItem = D2Common::INVENTORY::Inventory::INVENTORY_FindItemByType(pInventory, 0x14, pGemItem);
-      } while (pGemItem);
+    }
 
-      if (bUpgradePerformed) {
-        return;
-      }
+    if (bUpgradePerformed) {
+      return;
     }
 
     pGemItem = pArguments->pAttacker;
@@ -2390,21 +2371,21 @@ BOOL __fastcall OBJOP_TimedDestructible(D2ObjectOperateFnArg * pOperation) {
     }
 
     D2ObjectsTxt* pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-    ::SGAMEDATA* pGame = pOperation->sArg.pGame;
-    GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
-    pGame = pOperation->sArg.pGame;
-    GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 10, pGame->dwGameFrame + 1 + pTxtObjects->Parm[1], 0, 0);
+    GAME::Event::SetEvent(pOperation->sArg.pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pOperation->sArg.pGame->dwGameFrame, 0, 0);
+    GAME::Event::SetEvent(pOperation->sArg.pGame, pOperation->sArg.pVictim, 10, pTxtObjects->Parm[1] + 1 + pOperation->sArg.pGame->dwGameFrame, 0, 0);
     if (!pTxtObjects->HasCollision[1]) {
       D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
     }
 
     OBJMODE_DispatchOperateCallback(pOperation, pOperation->sArg.pVictim->pUnitData.pUnitDataObject->nShrineId & 0x7f);
+    int nUnitId;
     if (!pOperation->pAttacker) {
-      OBJECTS_SetUnitIdInTimerArg(pOperation->sArg.pVictim, -1);
-      return 1;
+      nUnitId = -1;
+    } else {
+      nUnitId = pOperation->pAttacker->nUnitGUID;
     }
 
-    OBJECTS_SetUnitIdInTimerArg(pOperation->sArg.pVictim, pOperation->pAttacker->nUnitGUID);
+    OBJECTS_SetUnitIdInTimerArg(pOperation->sArg.pVictim, nUnitId);
     return 1;
 }
 
@@ -3659,39 +3640,39 @@ static BOOL __stdcall OBJMODE_ApplyWellHealing(::SGAMEDATA * pGame, D2ObjectsTxt
     uint32_t nCurStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
     uint32_t dwWellFlags = pTxtObjects->Parm[3];
     if (nCurStat < nMaxStat && dwWellFlags & 2) {
-      nCurStat = (pTxtObjects->Parm[1] * nMaxStat >> 8) + nCurStat;
-      if (nCurStat > nMaxStat) {
-        nCurStat = nMaxStat;
+      uint32_t nNewStat = (pTxtObjects->Parm[1] * nMaxStat >> 8) + nCurStat;
+      if (nNewStat > nMaxStat) {
+        nNewStat = nMaxStat;
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nCurStat, 0);
-      PLAYER::PlayerMsg::SendAttributeUpdate(pUnit, 6, nCurStat, pUnit);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nNewStat, 0);
+      PLAYER::PlayerMsg::SendAttributeUpdate(pUnit, 6, nNewStat, pUnit);
       eHealed = 1;
     }
 
     nMaxStat = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     nCurStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
     if (nCurStat < nMaxStat && dwWellFlags & 1) {
-      nCurStat = (pTxtObjects->Parm[1] * nMaxStat >> 8) + nCurStat;
-      if (nCurStat > nMaxStat) {
-        nCurStat = nMaxStat;
+      uint32_t nNewStat = (pTxtObjects->Parm[1] * nMaxStat >> 8) + nCurStat;
+      if (nNewStat > nMaxStat) {
+        nNewStat = nMaxStat;
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nCurStat, 0);
-      PLAYER::PlayerMsg::SendAttributeUpdate(pUnit, 8, nCurStat, pUnit);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, nNewStat, 0);
+      PLAYER::PlayerMsg::SendAttributeUpdate(pUnit, 8, nNewStat, pUnit);
       eHealed = 1;
     }
 
     nCurStat = D2Common::Stats::StatsEx::STATLIST_GetMaxStaminaFromUnit(pUnit);
     dwWellFlags = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_stamina, 0);
     if (dwWellFlags < nCurStat) {
-      dwWellFlags = (pTxtObjects->Parm[1] * nCurStat >> 8) + dwWellFlags;
-      if (dwWellFlags > nCurStat) {
-        dwWellFlags = nCurStat;
+      uint32_t nNewStat = (pTxtObjects->Parm[1] * nCurStat >> 8) + dwWellFlags;
+      if (nNewStat > nCurStat) {
+        nNewStat = nCurStat;
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, dwWellFlags, 0);
-      PLAYER::PlayerMsg::SendAttributeUpdate(pUnit, 10, dwWellFlags, pUnit);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nNewStat, 0);
+      PLAYER::PlayerMsg::SendAttributeUpdate(pUnit, 10, nNewStat, pUnit);
       eHealed = 1;
     }
 

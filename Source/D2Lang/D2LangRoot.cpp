@@ -210,18 +210,12 @@ static int32_t __stdcall UTF8_GetNextCharWidth(uint8_t * pUtf8, int32_t nMaxByte
       return -1;
     }
 
-    uint8_t byCurByte = *pUtf8;
-    uint32_t uCodePoint = (uint32_t)byCurByte;
-    uint16_t wTableMask = gaUtf8DecodeTable[0].wMask;
-    while (true) {
-      uint8_t* pbNext;
-      if (!wTableMask) {
-        return -1;
-      }
-
+    uint8_t byFirstByte = *pUtf8;
+    uint32_t uCodePoint = byFirstByte;
+    for (D2Utf8DecodeRowStrc* pRow = gaUtf8DecodeTable; pRow->wMask; pRow++) {
       nByteWidth++;
-      if (((int)(short int)wTableMask & (uint32_t)byCurByte) == (int)(short int)gaUtf8DecodeTable[nByteWidth - 1].wExpect) {
-        if ((int)(gaUtf8DecodeTable[nByteWidth - 1].dwCodePointMask & uCodePoint) < (int)gaUtf8DecodeTable[nByteWidth - 1].dwMinValue) {
+      if (((short int)pRow->wMask & byFirstByte) == (short int)pRow->wExpect) {
+        if ((int)(pRow->dwCodePointMask & uCodePoint) < (int)pRow->dwMinValue) {
           return -1;
         }
 
@@ -231,14 +225,13 @@ static int32_t __stdcall UTF8_GetNextCharWidth(uint8_t * pUtf8, int32_t nMaxByte
         return -1;
       }
 
-      pbNext = pUtf8 + 1;
       pUtf8++;
-      if ((*pbNext ^ 0x80) & 0xc0) {
-        break;
+      uint32_t uContinuation = *pUtf8 ^ 0x80;
+      if (uContinuation & 0xc0) {
+        return -1;
       }
 
-      uCodePoint = uCodePoint << 6 | *pbNext ^ 0x80;
-      wTableMask = gaUtf8DecodeTable[nByteWidth].wMask;
+      uCodePoint = uCodePoint << 6 | uContinuation;
     }
 
     return -1;
@@ -246,38 +239,22 @@ static int32_t __stdcall UTF8_GetNextCharWidth(uint8_t * pUtf8, int32_t nMaxByte
 
 // Counts UTF-8 characters in string. Iterates via GetNextCharWidth, handles variable-width encoding. Returns character count (not byte count).
 int32_t __fastcall UTF8_GetStringLength(char * szUtf8, int32_t nMaxBytes) {
-    int nBytesRead;
-    uint8_t byCurByte;
     int32_t nCharCount = 0;
-    if (nMaxBytes <= 0) {
-      return nCharCount;
-    }
-
-    while (*szUtf8) {
-      int32_t nWidth;
-      nWidth = UTF8_GetNextCharWidth((uint8_t*)szUtf8, nMaxBytes);
+    while (nMaxBytes > 0 && *szUtf8) {
+      const int32_t nWidth = UTF8_GetNextCharWidth((uint8_t*)szUtf8, nMaxBytes);
       if (nWidth != -1) {
-        for (nBytesRead = 0; nBytesRead < nWidth; nBytesRead++) {
-          byCurByte = *szUtf8;
-          szUtf8++;
-          if (!byCurByte) {
+        for (int32_t nBytesRead = 0; nBytesRead < nWidth; nBytesRead++) {
+          if (!*szUtf8++) {
             return nCharCount;
           }
         }
-
         nCharCount++;
-        nBytesRead = -nWidth;
+        nMaxBytes -= nWidth;
       } else {
         szUtf8++;
-        nBytesRead = -1;
-      }
-
-      nMaxBytes += nBytesRead;
-      if (nMaxBytes <= 0) {
-        return nCharCount;
+        nMaxBytes--;
       }
     }
-
     return nCharCount;
 }
 
@@ -345,40 +322,26 @@ char * __fastcall WideCharToUTF8(char * pDest, uint16_t * pSrc, int nMaxBytes) {
     return pDest;
 }
 
-void __fastcall UTF8_GetEncodedLength(uint16_t * pwszStr, int32_t nMaxChars) {
-    int32_t nEncBytes;
+int32_t __fastcall UTF8_GetEncodedLength(uint16_t * pwszStr, int32_t nMaxChars) {
     uint8_t abUtf8Buf[12];
-    int nCharsProcessed = 0;
-    uint16_t wCurChar = *pwszStr;
-    while (true) {
-      if (!wCurChar) {
-        break;
-      }
-      if (nCharsProcessed >= nMaxChars) {
-        break;
-      }
-
-      nEncBytes = EncodeUTF8CodePoint(*pwszStr, abUtf8Buf);
+    int32_t nTotalBytes = 0;
+    int32_t nCharsProcessed = 0;
+    while (*pwszStr && nCharsProcessed < nMaxChars) {
+      int32_t nEncBytes = EncodeUTF8CodePoint(*pwszStr, abUtf8Buf);
       if (nEncBytes == -1) {
         break;
       }
 
+      nTotalBytes += nEncBytes;
       pwszStr++;
       nCharsProcessed++;
-      wCurChar = *pwszStr;
     }
+    return nTotalBytes;
 }
 
 // Compares two characters using UI character lookup table for case-insensitive comparison. If char < 0x100, maps via CharacterLookupTable, else uses raw value. Returns 1 if equal, 0 otherwise.
 BOOL __stdcall UI_CompareCharsUsingLookupTable(uint16_t wChar1, uint16_t wChar2) {
-    if (wChar1 < 0x100) {
-      wChar1 = Unicode::UNISYS::CharacterLookupTable[wChar1];
-    }
-    if (wChar2 < 0x100) {
-      return (uint32_t)(wChar1 == Unicode::UNISYS::CharacterLookupTable[wChar2]);
-    }
-
-    return (uint32_t)(wChar1 == wChar2);
+    return (wChar1 < 0x100 ? Unicode::UNISYS::CharacterLookupTable[wChar1] : wChar1) == (wChar2 < 0x100 ? Unicode::UNISYS::CharacterLookupTable[wChar2] : wChar2);
 }
 
 } // namespace D2Lang

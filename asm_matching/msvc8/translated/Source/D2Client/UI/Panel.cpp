@@ -458,18 +458,15 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
 }
 
 void __stdcall PANEL_DrawHealthOrb() {
-    eD2RendererMode eRenderer;
     D2GfxDataStrc sGfxData;
-    eD2UnitStat eUnitStat;
-    uint16_t nLayer;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    int32_t nValue = PANEL_GetSmoothedStatValue(UNITSTAT_hitpoints);
-    int32_t nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-    if (!nMaxValue) {
+    int32_t nLife = PANEL_GetSmoothedStatValue(UNITSTAT_hitpoints);
+    int32_t nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+    if (!nMaxLife) {
       return;
     }
 
-    int nPercentHideFromBottom = nValue * 0x50 / nMaxValue;
+    int nPercentHideFromBottom = nLife * 0x50 / nMaxLife;
     if (nPercentHideFromBottom >= 0x1 && nPercentHideFromBottom <= 0x2) {
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
@@ -478,38 +475,34 @@ void __stdcall PANEL_DrawHealthOrb() {
     }
 
     memset(&sGfxData, 0, 0x48);
-    eD2States eState2 = STATE_healthpot;
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = Hlthmana;
     sGfxData.nFrameNumber = 0;
-    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState2);
-    if (eState) {
-      int nRegenWidth;
-      nLayer = 0;
-      eUnitStat = UNITSTAT_hpregen;
-      nRegenWidth = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nLayer);
-      nRegenWidth = nRegenWidth * 0x50 / 100;
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), STATE_healthpot)) {
+      int nRegenWidth = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), UNITSTAT_hpregen, 0) * 0x50 / 100;
       if (nRegenWidth > 0x50) {
         nRegenWidth = 0x50;
       }
       if (nRegenWidth > nPercentHideFromBottom) {
-        eRenderer = D2gfx::D2GFX::D2GFX_GetRendererMode();
-        if (eRenderer == RENDERER_Direct3D) {
-          nValue = 0x1c;
+        if (D2gfx::D2GFX::D2GFX_GetRendererMode() == RENDERER_Direct3D) {
           D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1c, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         } else {
-          nValue = 0x1d;
           D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         }
       }
     }
 
-    eState2 = STATE_poison;
-    eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState2);
-    sGfxData.nFrameNumber = eState ? 2 : 0;
+    sGfxData.nFrameNumber = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), STATE_poison) ? 2 : 0;
     if (nPercentHideFromBottom) {
-      D2gfx::D2GFX::D2GFX_GetRendererMode();
-      D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+      switch (D2gfx::D2GFX::D2GFX_GetRendererMode()) {
+        case RENDERER_Windowed:
+        case RENDERED_DirectDraw:
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+          break;
+        default:
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+          break;
+      }
     }
 
     sGfxData.pDC6 = overlap;
@@ -518,50 +511,46 @@ void __stdcall PANEL_DrawHealthOrb() {
 }
 
 void __stdcall PANEL_DrawManaOrb() {
-    eD2RendererMode eRenderer;
     D2GfxDataStrc sGfxData;
-    eD2UnitStat eUnitStat;
-    uint16_t nLayer;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    int32_t nPositionX = PANEL_GetSmoothedStatValue(UNITSTAT_mana);
-    int32_t nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
-    if (!nMaxValue) {
+    int32_t nMana = PANEL_GetSmoothedStatValue(UNITSTAT_mana);
+    int32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
+    if (!nMaxMana) {
       return;
     }
-    if (nPositionX > nMaxValue) {
-      nPositionX = nMaxValue;
+    if (nMana > nMaxMana) {
+      nMana = nMaxMana;
     }
 
-    int nPercentHideFromBottom = nPositionX * 0x50 / nMaxValue;
+    int nPercentHideFromBottom = nMana * 0x50 / nMaxMana;
     memset(&sGfxData, 0, 0x48);
-    eD2States eState2 = STATE_manapot;
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = Hlthmana;
     sGfxData.nFrameNumber = 1;
-    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState2);
-    if (eState) {
-      int nRegenWidth;
-      nLayer = 0;
-      eUnitStat = UNITSTAT_manarecovery;
-      nRegenWidth = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nLayer);
-      nRegenWidth = nRegenWidth * 0x50 / 100;
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), STATE_manapot)) {
+      int nRegenWidth = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), UNITSTAT_manarecovery, 0) * 0x50 / 100;
       if (nRegenWidth > 0x50) {
         nRegenWidth = 0x50;
       }
       if (nRegenWidth > nPercentHideFromBottom) {
-        eRenderer = D2gfx::D2GFX::D2GFX_GetRendererMode();
-        if (eRenderer == RENDERER_Direct3D) {
-          nPositionX = ui::ScreenSizeX - 0x70;
+        if (D2gfx::D2GFX::D2GFX_GetRendererMode() == RENDERER_Direct3D) {
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x70, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         } else {
-          nPositionX = ui::ScreenSizeX - 0x6f;
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x6f, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         }
-
-        D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, nPositionX, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
       }
     }
 
-    D2gfx::D2GFX::D2GFX_GetRendererMode();
-    D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x6f, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+    switch (D2gfx::D2GFX::D2GFX_GetRendererMode()) {
+      case RENDERER_Windowed:
+      case RENDERED_DirectDraw:
+        D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x6f, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+        break;
+      default:
+        D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x6f, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+        break;
+    }
+
     sGfxData.pDC6 = overlap;
     sGfxData.nFrameNumber = 1;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x6e, Inv::ScreenSizeY - 9, -1, DRAW_SOLID, nullptr);
@@ -2268,67 +2257,47 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall PANEL_UpdatePanelFromMode(D2UIMouseMsgStrc * pMsg) {
-    uint32_t bIsDeadOrFlag;
-    D2UnitStrc* pPlayer;
-    int32_t nMouseY;
-    int32_t nMouseX;
-    if (GAME::Game::ServerLoadingComplete) {
-      BOOL bFlag;
-      bFlag = GAME::Game::GAMEDATA_GetExitFlag3();
-      if (!bFlag) {
-        bIsDeadOrFlag = UNIT::Player::IsPlayerDead();
-        if (!bIsDeadOrFlag) {
-          nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
-          nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
-          pPlayer = UNIT::Player::GetPlayerUnit_UI();
-          bIsDeadOrFlag = GAME::Game::GAME_HasQueuedPrimaryClick();
-          if (bIsDeadOrFlag) {
-            return;
-          }
-          if (gnPanelBeltRowsExpanded) {
-            bFlag = PANEL_CalculateBeltSlotIndex(pMsg);
-            if (bFlag) {
-              bFlag = ui::GetUIFlag(UI_BELTROWS);
-              if (bFlag) {
-                pMsg->bHandled = 1;
-                pMsg->dwResult = 0;
-              }
-
-              CLIENT_HandleBeltMouseDown(pPlayer->pInventory, nMouseX, nMouseY);
-              return;
-            }
-
-            gbPanelBeltAnimating = ui::GetUIFlag(UI_BELTROWS);
-            if (!gbPanelBeltAnimating) {
-              pMsg->bHandled = 0;
-              gnPanelBeltRowsExpanded = gbPanelBeltAnimating;
-              gpPanelBeltSlot = gbPanelBeltAnimating;
-              return;
-            }
-
-            pMsg->bHandled = 0;
-            gbPanelBeltAnimating = 0;
-            gpPanelBeltSlot = 0;
-            return;
-          }
-          if (nMouseX >= ui::ScreenSizeX / 2 + 0x17 && nMouseX <= ui::ScreenSizeX / 2 + 0x91 && nMouseY >= Inv::ScreenSizeY - 0x27 && nMouseY <= Inv::ScreenSizeY - 10) {
-            bFlag = ui::UI_GetFlag(UI_ESCMENU);
-            if (!bFlag) {
-              gnPanelBeltRowsExpanded = 1;
-              gbPanelBeltAnimating = 1;
-              CLIENT_HandleBeltMouseDown(pPlayer->pInventory, nMouseX, nMouseY);
-            }
-
+    if (GAME::Game::ServerLoadingComplete && !GAME::Game::GAMEDATA_GetExitFlag3() && !UNIT::Player::IsPlayerDead()) {
+      int32_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+      int32_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
+      D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
+      if (GAME::Game::GAME_HasQueuedPrimaryClick()) {
+        return;
+      }
+      if (gnPanelBeltRowsExpanded) {
+        if (PANEL_CalculateBeltSlotIndex(pMsg)) {
+          if (ui::GetUIFlag(UI_BELTROWS)) {
             pMsg->bHandled = 1;
             pMsg->dwResult = 0;
-            return;
           }
 
-          pMsg->bHandled = 0;
-          gpPanelBeltSlot = 0;
+          CLIENT_HandleBeltMouseDown(pPlayer->pInventory, nMouseX, nMouseY);
           return;
         }
+        if (!ui::GetUIFlag(UI_BELTROWS)) {
+          gnPanelBeltRowsExpanded = 0;
+        }
+
+        pMsg->bHandled = 0;
+        gbPanelBeltAnimating = 0;
+        gpPanelBeltSlot = 0;
+        return;
       }
+      if (nMouseX >= ui::ScreenSizeX / 2 + 0x17 && nMouseX <= ui::ScreenSizeX / 2 + 0x91 && nMouseY >= Inv::ScreenSizeY - 0x27 && nMouseY <= Inv::ScreenSizeY - 10) {
+        if (!ui::UI_GetFlag(UI_ESCMENU)) {
+          gnPanelBeltRowsExpanded = 1;
+          gbPanelBeltAnimating = 1;
+          CLIENT_HandleBeltMouseDown(pPlayer->pInventory, nMouseX, nMouseY);
+        }
+
+        pMsg->bHandled = 1;
+        pMsg->dwResult = 0;
+        return;
+      }
+
+      pMsg->bHandled = 0;
+      gpPanelBeltSlot = 0;
+      return;
     }
 
     pMsg->bHandled = 0;

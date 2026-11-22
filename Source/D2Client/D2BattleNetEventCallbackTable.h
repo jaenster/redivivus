@@ -67,7 +67,7 @@ typedef void (*fnUnlockDatabaseCharacter)(void * pAccountName);
 #endif
 #ifndef RECON_FPTD_fnUpdateCharacterLadder
 #define RECON_FPTD_fnUpdateCharacterLadder
-typedef void (__fastcall *fnUpdateCharacterLadder)(char * lpCharName, uint16_t wCharClass, uint32_t dwCharLevel, uint32_t dwCharExpLow, uint32_t dwCharExpHigh, uint16_t wCharStatus, void * pPlayerMark);
+typedef void (__fastcall *fnUpdateCharacterLadder)(char * lpCharName, uint16_t wCharClass, uint32_t dwCharLevel, uint64_t dwCharExp, uint16_t wCharStatus, void * pPlayerMark);
 #endif
 #ifndef RECON_FPTD_fnUpdateGameInformation
 #define RECON_FPTD_fnUpdateGameInformation
@@ -88,7 +88,7 @@ struct D2BattleNetEventCallbackTable {
     /* 0x1C */ uint8_t * fpSaveDatabaseGuild;
     /* 0x20 */ void (__fastcall *fpUnlockDatabaseCharacter)(uint32_t *, char *, char *);
     /* 0x24 */ uint8_t * fpReserved1;
-    /* 0x28 */ void (__fastcall *fpUpdateCharacterLadder)(char *, uint16_t, uint32_t, uint32_t, uint32_t, uint16_t, void *);
+    /* 0x28 */ void (__fastcall *fpUpdateCharacterLadder)(char *, uint16_t, uint32_t, uint64_t, uint16_t, void *);
     /* 0x2C */ void (__fastcall *fpUpdateGameInformation)(WORD, char *, int32_t, int32_t);
     /* 0x30 */ void (__fastcall *fpReserved2_systemMsg)(struct D2BNetSystemInfoStrc *);
     /* 0x34 */ int (*fpSetGameData)();

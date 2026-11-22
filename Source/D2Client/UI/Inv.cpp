@@ -5674,47 +5674,28 @@ void __stdcall INV_DrawHirelingStatLabels() {
     }
 }; D2_STATIC_GUARD(gaHirelingStatLabelX, "D2Client::UI::Inv::INV_DrawHirelingStatLabels::gaHirelingStatLabelX");
 
-    // Frame slots -12..-4 are ONE object: &pwColorCodePart is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint16_t* pwColorCodePart;
-      uint32_t nStatIndex;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int bHasColorCode;
-    int nX;
-    int nCenterWidth;
+    uint16_t* pwColorCodePart;
     uint16_t wszLabel[100];
-    uint32_t nFieldOffset;
     int32_t nFontId = D2Win::Src::D2WinFont::SetAndReturnLastFont(6);
-    __frame0.nStatIndex = 0;
-    do {
-      int nY;
-      nFieldOffset = __frame0.nStatIndex;
-      for (bHasColorCode = 0; bHasColorCode < 0x64; bHasColorCode++) {
-        wszLabel[bHasColorCode] = L'\0';
+    for (uint32_t i = 0; i < 12; i++) {
+      for (int j = 0; j < 100; j++) {
+        wszLabel[j] = L'\0';
       }
 
-      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabel, D2Lang::StrTable::strtable::GetLocaleString(*(uint16_t*)((intptr_t)&gaHirelingStatLabelX[0].wStrId + nFieldOffset)), 99);
-      nY = *(int*)((intptr_t)&gaHirelingStatLabelX[0].nY + nFieldOffset) - gnPanelOffsetY;
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszLabel, D2Lang::StrTable::strtable::GetLocaleString(gaHirelingStatLabelX[i].wStrId), 99);
       wszLabel[99] = L'\0';
-      nX = *(int*)((intptr_t)&gaHirelingStatLabelX[0].nX + nFieldOffset) + gnPanelOffsetX;
-      nCenterWidth = *(int*)((intptr_t)&gaHirelingStatLabelX[0].nCenterWidth + nFieldOffset) + gnPanelOffsetX;
-      bHasColorCode = ui::UI_AppendColorCodeToString(wszLabel, &__frame0.pwColorCodePart);
-      if (bHasColorCode) {
+      int nX = gaHirelingStatLabelX[i].nX + gnPanelOffsetX;
+      int nCenterWidth = gaHirelingStatLabelX[i].nCenterWidth + gnPanelOffsetX;
+      int nY = gaHirelingStatLabelX[i].nY - gnPanelOffsetY;
+      if (ui::UI_AppendColorCodeToString(wszLabel, &pwColorCodePart)) {
         ui::UI_DrawTextCentered(nX, nY - 4, nCenterWidth, wszLabel, 0);
-        ui::UI_DrawTextCentered(nX, nY + 4, nCenterWidth, __frame0.pwColorCodePart, 0);
+        ui::UI_DrawTextCentered(nX, nY + 4, nCenterWidth, pwColorCodePart, 0);
+      } else if (nCenterWidth) {
+        ui::UI_DrawTextCentered(nX, nY, nCenterWidth, wszLabel, 0);
       } else {
-        if (nCenterWidth) {
-          ui::UI_DrawTextCentered(nX, nY, nCenterWidth, wszLabel, 0);
-        } else {
-          D2Win::Src::D2WinFont::DRAW_text(wszLabel, nX, nY, 0, 0);
-        }
+        D2Win::Src::D2WinFont::DRAW_text(wszLabel, nX, nY, 0, 0);
       }
-
-      __frame0.nStatIndex += 0xe;
-    } while (__frame0.nStatIndex < 0xa8);
+    }
 
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nFontId);
 }

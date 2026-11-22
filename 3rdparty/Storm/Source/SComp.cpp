@@ -214,17 +214,15 @@ D2BitStreamReaderStrc * __thiscall LINKEDLIST_Unlink(D2BitStreamReaderStrc * pLi
 }
 
 int __fastcall Unreferenced_0041d8a0(D2BitStreamReader32Strc * pReader) {
-    uint32_t uVar2 = pReader->dwBitBuffer;
-    uint32_t* puVar1 = &pReader->nBitCount;
-    (*puVar1)--;
-    pReader->dwBitBuffer = uVar2 >> 1;
-    if (!*puVar1) {
+    int nBit = pReader->dwBitBuffer & 1;
+    pReader->dwBitBuffer >>= 1;
+    if (!--pReader->nBitCount) {
       pReader->dwBitBuffer = *pReader->pCur;
       pReader->pCur++;
       pReader->nBitCount = 0x20;
     }
 
-    return uVar2 & 1;
+    return nBit;
 }
 
 uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitCount, uint32_t nMask) {
@@ -277,25 +275,16 @@ void __thiscall BITSTREAM_WriteBits(D2BitStreamWriterStrc * pBitStream, int32_t 
 }
 
 void __fastcall BITSTREAM_Flush(D2BitStreamWriterStrc * pBitStream) {
-    uint32_t nBitsTmp;
-    int nBitsHeld = pBitStream->nBitsHeld;
-    while (nBitsHeld) {
-      uint32_t nShift;
+    while (pBitStream->nBitsHeld) {
       if (pBitStream->nBytesRemaining) {
         *pBitStream->pOutPtr = (uint8_t)pBitStream->nBitAccum;
         pBitStream->pOutPtr++;
         pBitStream->nBytesRemaining--;
       }
 
-      nBitsTmp = pBitStream->nBitsHeld;
+      uint32_t nBitsHeld = pBitStream->nBitsHeld;
       pBitStream->nBitAccum >>= 8;
-      nShift = 8;
-      if (nBitsTmp <= 8) {
-        nShift = nBitsTmp;
-      }
-
-      nBitsHeld = nBitsTmp - nShift;
-      pBitStream->nBitsHeld = nBitsHeld;
+      pBitStream->nBitsHeld = nBitsHeld - (nBitsHeld > 8 ? 8 : nBitsHeld);
     }
 }
 
@@ -631,26 +620,18 @@ static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uin
 // @blizzard PkwareBufferRead (SCOMP.CPP)
 uint32_t SCOMP_PkwareBufferRead(void * pDst, uint32_t * pnReqSize, PKWARE_STREAM * pStream) {
     uint32_t nAvail = pStream->nInLen - pStream->nInPos;
-    uint32_t _Size = *pnReqSize;
-    if (*pnReqSize >= nAvail) {
-      _Size = nAvail;
-    }
-
-    SMem::SMemCopy(pDst, (void*)((char*)pStream->pInBuf + pStream->nInPos), _Size);
-    pStream->nInPos += _Size;
-    return _Size;
+    uint32_t nSize = *pnReqSize < nAvail ? *pnReqSize : nAvail;
+    SMem::SMemCopy(pDst, (char*)pStream->pInBuf + pStream->nInPos, nSize);
+    pStream->nInPos += nSize;
+    return nSize;
 }
 
 // @blizzard PkwareBufferWrite (SCOMP.CPP)
 void SCOMP_PkwareBufferWrite(void * pSrc, uint32_t * pnReqSize, PKWARE_STREAM * pStream) {
     uint32_t nAvail = pStream->nOutLen - pStream->nOutPos;
-    uint32_t _Size = *pnReqSize;
-    if (*pnReqSize >= nAvail) {
-      _Size = nAvail;
-    }
-
-    SMem::SMemCopy((void*)((char*)pStream->pOutBuf + pStream->nOutPos), pSrc, _Size);
-    pStream->nOutPos += _Size;
+    uint32_t nSize = *pnReqSize < nAvail ? *pnReqSize : nAvail;
+    SMem::SMemCopy((char*)pStream->pOutBuf + pStream->nOutPos, pSrc, nSize);
+    pStream->nOutPos += nSize;
 }
 
 // @sourcefile .\SOURCE\SCOMP.CPP
@@ -659,19 +640,19 @@ void __fastcall SCOMP_PkwareCompress(void * pOutBuf, uint32_t * pdwOutLength, vo
     PKWARE_STREAM Stream;
     uint32_t nDictSize;
     TCmpStruct* pWorkBuf = (TCmpStruct*)SMem::SMemAlloc(0x8dd8, ".\\SOURCE\\SCOMP.CPP", 0x440, 0);
-    Stream.nOutLen = *pdwOutLength;
+    Stream.pOutBuf = pOutBuf;
     Stream.nOutPos = 0;
-    uint32_t nCompType = (uint32_t)(*pnMode == 2);
-    Stream.nInPos = 0;
+    Stream.nOutLen = *pdwOutLength;
     Stream.pInBuf = pInBuf;
+    Stream.nInPos = 0;
     Stream.nInLen = nInLen;
+    uint32_t nCompType = (uint32_t)(*pnMode == 2);
     if (nInLen >= 0xc00) {
       nDictSize = 0x1000;
     } else {
       nDictSize = nInLen < 0x600 ? 0x400 : 0x800;
     }
 
-    Stream.pOutBuf = pOutBuf;
     _3rdparty::PKWARE::implode::implode((pfnPkwareRead)SCOMP_PkwareBufferRead, (pfnPkwareWrite)SCOMP_PkwareBufferWrite, pWorkBuf, &Stream, &nCompType, &nDictSize);
     SMem::SMemFree(pWorkBuf, ".\\SOURCE\\SCOMP.CPP", 0x467, 0);
     *pdwOutLength = Stream.nOutPos;
@@ -1181,7 +1162,8 @@ int __fastcall Unreferenced_0041e930(StormLinkStrc * pLink) {
 }
 
 int32_t __fastcall Unreferenced_0041e940(void * pHandle) {
-    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
+    StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(StormLinkStrc * pNode) {
@@ -1212,19 +1194,16 @@ int __fastcall Unreferenced_0041e9d0(int * pValueA, int * pValueB) {
 }
 
 uint32_t __thiscall BITBUFFER_ReadBits(D2BitStreamReaderStrc * pBitBuf, uint32_t nBits, uint32_t nMask) {
-    uint32_t pBitPos = pBitBuf->nBitCount;
-    if (pBitPos <= nBits) {
-      uint16_t wWord;
-      wWord = *pBitBuf->pCur;
-      pBitBuf->nBitCount = pBitPos + 0x10;
-      pBitBuf->dwBitBuffer |= (uint32_t)wWord << D2_SHIFT_COUNT(pBitPos);
+    if (pBitBuf->nBitCount <= nBits) {
+      pBitBuf->dwBitBuffer |= (uint32_t)*pBitBuf->pCur << D2_SHIFT_COUNT(pBitBuf->nBitCount);
+      pBitBuf->nBitCount += 0x10;
       pBitBuf->pCur++;
     }
 
-    pBitPos = pBitBuf->dwBitBuffer;
+    uint32_t nValue = pBitBuf->dwBitBuffer & nMask;
+    pBitBuf->dwBitBuffer >>= D2_SHIFT_COUNT(nBits);
     pBitBuf->nBitCount -= nBits;
-    pBitBuf->dwBitBuffer = pBitPos >> D2_SHIFT_COUNT(nBits);
-    return pBitPos & nMask;
+    return nValue;
 }
 
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize) {

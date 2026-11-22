@@ -120,38 +120,27 @@ char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, uint32_t * ppCompress
 }
 
 void __fastcall SUBTILE_AllocAndCompress(uint32_t * pRawData, int bIsRaw) {
-    uint8_t* pCompressedBuf;
-    int i;
-    uint32_t* pCompEndPtr;
-    uint8_t* pbVar1;
-    uint32_t* pCompressedEnd = pRawData;
+    uint8_t* pPixelData;
+    int nDataLength;
+    uint32_t nCompressedSize;
     if (bIsRaw) {
-      pCompressedBuf = (uint8_t*)D2_ALLOC_AT(0xc00, ".\\SRC\\SubTile.cpp", 0x66);
-      pbVar1 = pCompressedBuf;
-      memcpy(pbVar1, pRawData, 0xc00);
-      pCompEndPtr = (uint32_t*)0xc00;
+      pPixelData = (uint8_t*)D2_ALLOC_AT(0xc00, ".\\SRC\\SubTile.cpp", 0x66);
+      memcpy(pPixelData, pRawData, 0xc00);
+      nDataLength = 0xc00;
     } else {
-      pCompressedBuf = (uint8_t*)SUBTILE_CompressToRLE((char*)pRawData, (uint32_t*)&pCompressedEnd);
-      pCompEndPtr = pCompressedEnd;
+      pPixelData = (uint8_t*)SUBTILE_CompressToRLE((char*)pRawData, &nCompressedSize);
+      nDataLength = nCompressedSize;
     }
 
     D2GroundSubTileStrc* pSubTileEntry = D2_NEW_AT(D2GroundSubTileStrc, ".\\SRC\\SubTile.cpp", 0x6e);
-    pSubTileEntry->nOffsetX = 0;
-    pSubTileEntry->nOffsetY = 0;
-    pSubTileEntry->nTextureCacheIndex = 0;
-    pSubTileEntry->nSubIdxLo = 0;
-    pSubTileEntry->nSubIdxHi = 0;
-    pSubTileEntry->wFormat = 0;
-    pSubTileEntry->wDataLength = 0;
-    *(uint32_t*)&pSubTileEntry->field_0xc = 0;
-    pSubTileEntry->pPixelData = 0;
-    if ((intptr_t)pCompEndPtr <= 0xffff) {
+    memset(pSubTileEntry, 0, sizeof(D2GroundSubTileStrc));
+    if (nDataLength <= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x70);
       exit(-1);
     }
 
-    pSubTileEntry->wDataLength = (uint16_t)(uintptr_t)pCompEndPtr;
-    pSubTileEntry->pPixelData = pCompressedBuf;
+    pSubTileEntry->wDataLength = (uint16_t)nDataLength;
+    pSubTileEntry->pPixelData = pPixelData;
 }
 
 void __fastcall SUBTILE_ConvertToIndexed(D2GroundSubTileStrc * pDstFrame, D2GroundSubTileStrc * pSrcFrame, uint32_t dwColorKey, pfnRGBToPaletteIndex pfnGetPaletteIndex) {

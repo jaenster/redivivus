@@ -4223,7 +4223,7 @@ void __fastcall FORMS_DestroyEncoderContext_Thunk_Unref_0041f940(uint32_t * pEnc
 }
 
 uint16_t __fastcall Unreferenced_0042e5c0(uint16_t nValue) {
-    return nValue << 8 | nValue >> 8;
+    return _rotl16(nValue, 8);
 }
 
 void __fastcall CRYPTO_ByteSwap16Array(uint16_t * pArray, uint32_t nCount) {
@@ -4907,18 +4907,6 @@ uint32_t __stdcall MAINMENU_CheckBattleNetIPFlag() {
 
 // Displays main menu screen before menu UI. Creates background forms with sky palette, retrieves copyright string (classic: 0x13f0, expansion: 0x557a), searches for year "2000"/"2001" and replaces with "2000 - 2016" to update copyright range, converts UTF8 to wide char, sets textbox text, hides cursor, and enables music if configured.
 void __stdcall UIMENU_MainScreenBeforeMenu() {
-    // Frame slots -2052..-4 are ONE object: &wszWideBuffer is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      uint16_t wszWideBuffer;
-      uint16_t wszWideBufferRest[510];
-      uint8_t __pad1022[2];
-      char szTempBuffer[512];
-      char szUTF8Buffer[512];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 2048, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    uint16_t* wszLocaleString;
     int nBufferSize;
     char* szYearPosition;
     int32_t nSetTextParam2;
@@ -4929,41 +4917,33 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
     FORMS_CreateAnyFormFromListExEx(7);
     D2GFX_SetPaletteForDraw("palette\\sky\\pal.dat", "palette\\sky\\pal.pl2");
     ::D2WinTextBox* pTextControl = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(4);
-    __frame0.szTempBuffer[0] = '\0';
-    memset(__frame0.szTempBuffer + 1, 0, 0x1ff);
-    __frame0.szUTF8Buffer[0] = '\0';
-    memset(__frame0.szUTF8Buffer + 1, 0, 0x1ff);
-    __frame0.wszWideBuffer = L'\0';
-    uint16_t* pWidePtr = __frame0.wszWideBufferRest;
-    for (nBufferSize = 0xff; nBufferSize; nBufferSize--) {
-      pWidePtr[0] = L'\0';
-      pWidePtr[1] = L'\0';
-      pWidePtr += 2;
+    char szTempBuffer[512] = {0};
+    char szUTF8Buffer[512] = {0};
+    uint16_t wszWideBuffer[512];
+    wszWideBuffer[0] = L'\0';
+    for (nBufferSize = 1; nBufferSize < 512; nBufferSize++) {
+      wszWideBuffer[nBufferSize] = L'\0';
     }
 
-    *pWidePtr = L'\0';
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
-    nBufferSize = 0x200;
     if (bIsExpansion) {
-      wszLocaleString = D2Lang::StrTable::strtable::GetLocaleString(0x557a);
-      D2Lang::WideCharToUTF8(__frame0.szUTF8Buffer, wszLocaleString, nBufferSize);
+      D2Lang::WideCharToUTF8(szUTF8Buffer, D2Lang::StrTable::strtable::GetLocaleString(0x557a), 0x200);
       szYearPosition = "2001";
     } else {
-      wszLocaleString = D2Lang::StrTable::strtable::GetLocaleString(0x13f0);
-      D2Lang::WideCharToUTF8(__frame0.szUTF8Buffer, wszLocaleString, nBufferSize);
+      D2Lang::WideCharToUTF8(szUTF8Buffer, D2Lang::StrTable::strtable::GetLocaleString(0x13f0), 0x200);
       szYearPosition = "2000";
     }
 
     uint32_t nNewYearStrLen = Storm::Source::SSTR::SStrLen(szYearPosition);
-    szYearPosition = strstr(__frame0.szUTF8Buffer, szYearPosition);
-    if (szYearPosition) {
-      Storm::Source::SSTR::SStrCopy(__frame0.szTempBuffer, szYearPosition + nNewYearStrLen, 0x7fffffff);
-      Storm::Source::SSTR::SStrCopy(szYearPosition, "2000 - 2016", 0x7fffffff);
-      Storm::Source::SSTR::SStrCopy(szYearPosition + Storm::Source::SSTR::SStrLen("2000 - 2016"), __frame0.szTempBuffer, 0x7fffffff);
+    char* szFound = strstr(szUTF8Buffer, szYearPosition);
+    if (szFound) {
+      Storm::Source::SSTR::SStrCopy(szTempBuffer, szFound + nNewYearStrLen, 0x7fffffff);
+      Storm::Source::SSTR::SStrCopy(szFound, "2000 - 2016", 0x7fffffff);
+      Storm::Source::SSTR::SStrCopy(szFound + Storm::Source::SSTR::SStrLen("2000 - 2016"), szTempBuffer, 0x7fffffff);
     }
 
-    D2Lang::UTF8_ConvertToWideChar(&__frame0.wszWideBuffer, __frame0.szUTF8Buffer, 0x200);
-    D2Win::Src::D2WinTextBox::SetText(pTextControl, &__frame0.wszWideBuffer, 4, false, 0);
+    D2Lang::UTF8_ConvertToWideChar(wszWideBuffer, szUTF8Buffer, 0x200);
+    D2Win::Src::D2WinTextBox::SetText(pTextControl, wszWideBuffer, 4, false, 0);
     D2Win::Src::D2WinTextBox::SetText(pTextControl, D2Lang::StrTable::strtable::GetLocaleString(0x13f1), 4, false, 0);
     D2Win::Src::D2WinMain::D2WINMAIN_SetCursorVisible(0);
     nBufferSize = D2Sound::Src::D2SoundFast::SOUND_GetOptionsMusic();
@@ -5239,13 +5219,8 @@ void __stdcall UIMENU_BackgroundAndExpansionText() {
     D2GFX_SetPaletteForDraw("palette\\sky\\pal.dat", "palette\\sky\\pal.pl2");
 }
 
-int16_t __stdcall MAINMENU_FilterNewlineKey(int16_t wChar) {
-    uint8_t byHighByte = (uint8_t)((uint16_t)wChar >> 8);
-    if (wChar != 0xd && wChar != 10) {
-      return (uint16_t)byHighByte << 8;
-    }
-
-    return (uint16_t)((uint16_t)(uint8_t)byHighByte << 8 | (uint16_t)(uint8_t)1);
+uint8_t __stdcall MAINMENU_FilterNewlineKey(int16_t wChar) {
+    return wChar == '\r' || wChar == '\n';
 }
 
 int __stdcall MAINMENU_PollRevisionCheckPump(int nFrameIndex) {
@@ -6026,36 +6001,23 @@ BOOL __stdcall MAINMENU_ShowCinematicsMenu(D2ControlMsg * pControlMsg) {
 
 void __stdcall GetAndDispatchAllPossible() {
     tagMSG msg;
-    int bHasMsg;
-    bHasMsg = PeekMessageA(&msg, (HWND)0x0, 0, 0, 1);
-    do {
-      if (!bHasMsg) {
-        return;
+    while (PeekMessageA(&msg, (HWND)0x0, 0, 0, 1)) {
+      switch (msg.message) {
+        case 0x12:
+        case 0x102:
+        case 0x201:
+        case 0x202:
+        case 0x204:
+        case 0x205:
+        case 0x207:
+        case 0x208:
+          break;
+        default:
+          TranslateMessage(&msg);
+          DispatchMessageA(&msg);
+          break;
       }
-      if (msg.message <= 0x202) {
-        if (msg.message < 0x201 && msg.message != 0x12 && msg.message != 0x102) {
-          /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&msg);
-          /* MSG * lpMsg for DispatchMessageA */ DispatchMessageA(&msg);
-        }
-      } else {
-        switch (msg.message) {
-          case 0x204:
-
-          case 0x205:
-
-          case 0x207:
-
-          case 0x208:
-            goto next_message;
-        }
-
-        /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&msg);
-        /* MSG * lpMsg for DispatchMessageA */ DispatchMessageA(&msg);
-      }
-
-      next_message:
-      /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ bHasMsg = PeekMessageA(&msg, (HWND)0x0, 0, 0, 1);
-    } while (true);
+    }
 }
 
 static void __stdcall UIMENU_PlayCutScene(char * szSceneName, D2ControlMsg * pControlMsg) {
@@ -6224,15 +6186,14 @@ void __fastcall Unreferenced_00431c60(uint8_t * pPacket, int nSize) {
     if (nSize == -1) {
       return;
     }
-    if (*pPacket != 0xaf) {
-      int iVar1;
-      iVar1 = *pPacket - 0xb0;
-      if (!iVar1) {
-        gnBnetConnectionSuccessFlag = iVar1;
-        return;
-      }
-    } else {
-      gnBnetConnectionSuccessFlag = 1;
+
+    switch (*pPacket) {
+      case 0xaf:
+        gnBnetConnectionSuccessFlag = 1;
+        break;
+      case 0xb0:
+        gnBnetConnectionSuccessFlag = 0;
+        break;
     }
 }
 

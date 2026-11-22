@@ -432,25 +432,18 @@ BOOL __fastcall IsPerIpLimitReached(D2QServerStrc * pQServer, in_addr * pClientI
     }
 
     uint32_t nIpAddr = pClientIp->S_un.S_addr;
-    uint32_t nBucketModulo = pQServer->nIpConnCountModulo;
-    CRITICAL_SECTION* lpCriticalSection = &pQServer->csClientLifecycle;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-    D2QServerIpConnCountEntryStrc* pIpEntry = pQServer->ppIpConnCountBuckets[nIpAddr % nBucketModulo];
-    while (true) {
-      if (!pIpEntry) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-        return 0;
-      }
+    uint32_t nBucket = nIpAddr % pQServer->nIpConnCountModulo; // steer-ok: the original computes the bucket index before EnterCriticalSection
+    EnterCriticalSection(&pQServer->csClientLifecycle);
+    for (D2QServerIpConnCountEntryStrc* pIpEntry = pQServer->ppIpConnCountBuckets[nBucket]; pIpEntry; pIpEntry = pIpEntry->pNext) {
       if (pIpEntry->nIpAddress == nIpAddr) {
-        break;
+        int nActiveConns = pIpEntry->nActiveConnectionCount;
+        LeaveCriticalSection(&pQServer->csClientLifecycle);
+        return nActiveConns >= pQServer->nPerIpConnectionLimit;
       }
-
-      pIpEntry = pIpEntry->pNext;
     }
 
-    int nActiveConns = pIpEntry->nActiveConnectionCount;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-    return (uint32_t)(nActiveConns >= pQServer->nPerIpConnectionLimit);
+    LeaveCriticalSection(&pQServer->csClientLifecycle);
+    return 0;
 }
 
 int __stdcall CountQueuedPacketsInMode(D2QServerStrc * pQServer, int nMode) {
@@ -1379,13 +1372,13 @@ void __fastcall BanIpAddress(D2QServerStrc * pQServer, char * szFile, uint32_t n
 // @sourcefile .\Src\QServer\QServer.cpp
 int __fastcall CheckIpConnectionRate(D2QServerStrc * pQServer, in_addr * pIpAddress) {
     D2QServerIpRateEntryStrc* pRateEntry;
-    if (0 >= pQServer->nPerIpConnectionLimit) {
+    if (pQServer->nPerIpConnectionLimit < 1) {
       return 1;
     }
 
     _struct_1227 ipAddrBytes = d2_bits_as<_struct_1227>(pIpAddress->S_un.S_addr);
     DWORD dwNow = GetTickCount();
-    int nLimit = pQServer->nPerIpConnectionLimit;
+    uint32_t nMaxAttempts = pQServer->nPerIpConnectionLimit * 2 + 3; // steer-ok: the original computes the attempt limit before PruneIpRateList
     PruneIpRateList(pQServer);
     CRITICAL_SECTION* lpCriticalSection = &pQServer->csClientLifecycle;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
@@ -1393,7 +1386,7 @@ int __fastcall CheckIpConnectionRate(D2QServerStrc * pQServer, in_addr * pIpAddr
       if (d2_bits_as<_struct_1227>(pRateEntry->ipAddress.S_un.S_addr) == ipAddrBytes) {
         if (dwNow - pRateEntry->dwLastAttemptTick < 15000) {
           pRateEntry->nAttemptsInWindow++;
-          if ((uint32_t)pRateEntry->nAttemptsInWindow > nLimit * 2 + 3U) {
+          if (pRateEntry->nAttemptsInWindow > nMaxAttempts) {
             /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
             return 0;
           }

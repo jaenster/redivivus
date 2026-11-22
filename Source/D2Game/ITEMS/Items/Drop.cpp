@@ -408,35 +408,38 @@ static BOOL __stdcall ITEM_MarkUniqueAsDropped(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 static BOOL __stdcall ITEM_RollMagicPrefixSuffix(D2ItemGenContextStrc * pItemGenCtx, D2UnitStrc * * ppUnit) {
-    int pItemsTxt;
-    pItemsTxt = pItemGenCtx->nForcePrefix;
-    int16_t wMagicSuffix;
-    wMagicSuffix = 0;
-    int16_t wMagicPrefix;
-    wMagicPrefix = 0;
-    int pExcludeFlag;
-    pExcludeFlag = 0;
-    if (pItemsTxt < 0) {
-      pExcludeFlag = 1;
+    int nForcePrefix = pItemGenCtx->nForcePrefix;
+    BOOL bPrefixForced = FALSE;
+    int16_t wMagicPrefix = 0;
+    int16_t wMagicSuffix = 0;
+    BOOL bExclude = FALSE;
+    if (nForcePrefix < 0) {
+      bExclude = TRUE;
     } else {
-      wMagicPrefix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(*ppUnit, 1, (uint32_t)(0 < pItemsTxt), 1, 1, pItemsTxt);
+      if (nForcePrefix > 0) {
+        bPrefixForced = TRUE;
+      }
+
+      wMagicPrefix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(*ppUnit, 1, bPrefixForced, 1, 1, nForcePrefix);
       D2Common::ITEMS::Items::SetMagixPrefix(*ppUnit, wMagicPrefix, 0);
       if (!wMagicPrefix) {
-        pExcludeFlag = 1;
-      } else if (pItemGenCtx->nForceSuffix < 0) {
-        goto finish_affixes;
+        bExclude = TRUE;
       }
     }
-    if (pItemGenCtx->nForceSuffix > 0) {
-      pExcludeFlag = 1;
+
+    if (bExclude || pItemGenCtx->nForceSuffix >= 0) {
+      if (pItemGenCtx->nForceSuffix > 0) {
+        bExclude = TRUE;
+      }
+
+      wMagicSuffix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(*ppUnit, 1, bExclude, 1, 0, pItemGenCtx->nForceSuffix);
+      D2Common::ITEMS::Items::SetMagicSuffix(*ppUnit, wMagicSuffix, 0);
     }
 
-    wMagicSuffix = SKILLS::Items::ITEMMOD_RollMagicAffixVersioned(*ppUnit, 1, pExcludeFlag, 1, 0, pItemGenCtx->nForceSuffix);
-    D2Common::ITEMS::Items::SetMagicSuffix(*ppUnit, wMagicSuffix, 0);
-    finish_affixes:
     if (!wMagicPrefix && !wMagicSuffix) {
       return 0;
     }
+
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(*ppUnit, ITEMFLAG_IDENTIFIED, 0);
     SKILLS::Items::StaffMod(*ppUnit, pItemGenCtx);
     return 1;
@@ -1404,14 +1407,13 @@ int __fastcall ITEM_ApplyQualityAndAffixes(::SGAMEDATA * pGame, D2UnitStrc * * p
 }
 
 static void ITEM_RollVariantGraphic(D2UnitStrc * pUnit) {
-    uint8_t bVarInvGfxMax = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(pUnit);
-    if (!bVarInvGfxMax) {
+    DWORD dwVariant;
+    if (!D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(pUnit)) {
       return;
     }
 
-    bVarInvGfxMax = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(pUnit);
-    int32_t nRolledVariant = Seed::RollBetweenMinAndMax(&pUnit->sSeed, 0, (uint32_t)bVarInvGfxMax);
-    D2Common::ITEMS::Items::ITEM_SetItemData_bVariant(pUnit, (uint8_t)nRolledVariant);
+    *(uint8_t*)&dwVariant = (uint8_t)Seed::RollBetweenMinAndMax(&pUnit->sSeed, 0, D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_varinvgfx(pUnit));
+    D2Common::ITEMS::Items::ITEM_SetItemData_bVariant(pUnit, (BYTE)dwVariant);
 }
 
 // Initializes the base (pre-affix) stats of a freshly created item unit based on its item type. Gold items get a seeded random gold amount (clamped to inventory limit if owned by a player). Quivers/stackables roll a quantity between min and max stack (seeded), forced to 1 if magic-or-better; weapons/armor roll durability and max-durability (seeded, capped at 255), armor also sets block% and rolls base AC, weapons set attack/velocity rate and base damage. Rolls varinvgfx variant. If bApplyQuality and a generation context is supplied, calls ITEM_ApplyQualityAndAffixes and, for quest items, attaches a stat list storing the quest item difficulty and marks it identified. pGame/pItem=target item, pItemGenCtx=generation parameters (preset quantity etc.). Returns a BOOL in EAX.

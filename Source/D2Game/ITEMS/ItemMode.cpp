@@ -2796,7 +2796,7 @@ static void __stdcall ITEMMODE_InitItemCreateContext(int nItemClassId, D2UnitStr
     pItemGenContext->nModSeed = nModSeed;
 }
 
-BOOL __stdcall RemoveStackItem(uint32_t dwParam1, uint32_t * dwParam2) {
+BOOL __fastcall RemoveStackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwItemGUID, uint32_t * pnSize) {
     return 0;
 }
 
@@ -3454,14 +3454,7 @@ static uint32_t __stdcall ITEMMODE_GetSocketCount(D2UnitStrc * pUnit, D2UnitStrc
 
 // For a scroll unit, searches the owner unit's inventory for a matching book. The second parameter is the OWNER UNIT, a whole pointer in EDX - typed from DL alone it was a truncated byte the body then used as an address, reaching for the inventory at +0x60 of a one-byte value.
 D2UnitStrc * __fastcall ITEMMODE_FindBookWithSpaceForScroll(::SGAMEDATA * pGameStrc, D2UnitStrc * pOwnerUnit, D2UnitStrc * pUnit, int * pnBrokenCount) {
-    bool bIsScrollOrMatch;
-    eInventoryPage eInvPage;
-    D2UnitStrc* pBookItem;
-    eD2ItemTypes eItemType;
-    int nBookQty;
-    int nBookMaxQty;
-    uint32_t bScrollOrSocketMatch = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll);
-    if (!bScrollOrSocketMatch) {
+    if (!D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_Scroll)) {
       return nullptr;
     }
     if (!pOwnerUnit->pInventory) {
@@ -3469,27 +3462,18 @@ D2UnitStrc * __fastcall ITEMMODE_FindBookWithSpaceForScroll(::SGAMEDATA * pGameS
     }
 
     D2UnitStrc* pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pOwnerUnit->pInventory);
+    D2UnitStrc* pBookItem;
+    int nBookQty;
+    int nBookMaxQty;
     do {
       do {
-        do {
-          do {
-            do {
-              if (!pInvItem) {
-                return nullptr;
-              }
+        if (!pInvItem) {
+          return nullptr;
+        }
 
-              pBookItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem);
-              pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem);
-            } while (!pBookItem);
-
-            eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pBookItem);
-          } while (eItemType != ITEMTYPE_Book);
-
-          eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pBookItem);
-        } while (eInvPage != INVPAGE_INVENTORY);
-
-        bScrollOrSocketMatch = ITEMMODE_GetSocketCount(pBookItem, pUnit);
-      } while (!bScrollOrSocketMatch);
+        pBookItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvItem);
+        pInvItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvItem);
+      } while (!pBookItem || D2Common::ITEMS::Items::ITEM_GetItemData_wType(pBookItem) != ITEMTYPE_Book || D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pBookItem) != INVPAGE_INVENTORY || !ITEMMODE_GetSocketCount(pBookItem, pUnit));
 
       nBookQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pBookItem, UNITSTAT_quantity, 0);
       if (nBookQty < 0) {

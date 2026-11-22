@@ -303,8 +303,9 @@ static D2RoomExStrc * __stdcall DRLGSPAWN_FindWaypointRoomAndCoords(int * pX, in
 // Gets the room at the level's center position offset by (nOffsetX, nOffsetY).
 // Computes center as (WorldPos + WorldSize/2 - 2) plus the offsets.
 D2RoomExStrc * __thiscall DRLGSPAWN_GetRoomAtLevelCenterOffset(D2DrlgLevelStrc * pLevel, int32_t nOffsetX, int32_t nOffsetY) {
-    D2RoomExStrc* pDVar1 = GetRoomOfCoord(pLevel, pLevel->sCoordinatesAndSize.WorldSize.x / 2 + pLevel->sCoordinatesAndSize.WorldPosition.x - 2 + nOffsetX, pLevel->sCoordinatesAndSize.WorldSize.y / 2 + pLevel->sCoordinatesAndSize.WorldPosition.y - 2 + nOffsetY);
-    return pDVar1;
+    int nX = pLevel->sCoordinatesAndSize.WorldSize.x / 2 + pLevel->sCoordinatesAndSize.WorldPosition.x - 2 + nOffsetX; // steer-ok: the original computes the x coordinate before the y coordinate
+    int nY = pLevel->sCoordinatesAndSize.WorldSize.y / 2 + pLevel->sCoordinatesAndSize.WorldPosition.y - 2 + nOffsetY;
+    return GetRoomOfCoord(pLevel, nX, nY);
 }
 
 // Selects a random room from the level's room list.
@@ -575,23 +576,26 @@ D2RoomStrc * __fastcall DRLGSPAWN_FindSpawnLocationInLevel(D2DrlgStrc * pDrlg, e
     pFoundRoomEx = DRLGSPAWN_FindWaypointRoomAndCoords(pX, pY, pLevel);
     if (!pFoundRoomEx) {
       pFoundRoomEx = DRLGWARP_ValidateWarpFlagsAgainstVis(pLevel);
-      if (!pFoundRoomEx) {
-        pFoundRoomEx = GetRoomOfCoord(pLevel, pLevel->sCoordinatesAndSize.WorldSize.x / 2 - 2 + pLevel->sCoordinatesAndSize.WorldPosition.x, pLevel->sCoordinatesAndSize.WorldSize.y / 2 - 2 + pLevel->sCoordinatesAndSize.WorldPosition.y);
-        if (!pFoundRoomEx) {
-          pFoundRoomEx = DRLGSPAWN_GetRandomRoomFromLevel(pLevel);
-          if (!pFoundRoomEx) {
-            return nullptr;
-          }
-        }
-      }
     }
-    if (*pX == -1 || *pY == -1) {
-      *pX = pFoundRoomEx->sCoords.WorldSize.x / 2 + pFoundRoomEx->sCoords.WorldPosition.x;
-      *pY = pFoundRoomEx->sCoords.WorldSize.y / 2 + pFoundRoomEx->sCoords.WorldPosition.y;
+    if (!pFoundRoomEx) {
+      int nCenterX = pLevel->sCoordinatesAndSize.WorldSize.x / 2 - 2 + pLevel->sCoordinatesAndSize.WorldPosition.x; // steer-ok: the original computes the centre x before the centre y
+      int nCenterY = pLevel->sCoordinatesAndSize.WorldSize.y / 2 - 2 + pLevel->sCoordinatesAndSize.WorldPosition.y;
+      pFoundRoomEx = GetRoomOfCoord(pLevel, nCenterX, nCenterY);
+    }
+    if (!pFoundRoomEx) {
+      pFoundRoomEx = DRLGSPAWN_GetRandomRoomFromLevel(pLevel);
+    }
+    if (pFoundRoomEx) {
+      if (*pX == -1 || *pY == -1) {
+        *pX = pFoundRoomEx->sCoords.WorldSize.x / 2 + pFoundRoomEx->sCoords.WorldPosition.x;
+        *pY = pFoundRoomEx->sCoords.WorldSize.y / 2 + pFoundRoomEx->sCoords.WorldPosition.y;
+      }
+
+      DUNGEON::Dungeon::InitRoomEx(pFoundRoomEx);
+      return pFoundRoomEx->pRoom;
     }
 
-    DUNGEON::Dungeon::InitRoomEx(pFoundRoomEx);
-    return pFoundRoomEx->pRoom;
+    return nullptr;
 }
 
 // Allocates and initializes a new D2RoomExStrc for the given level with the specified preset type.
@@ -691,28 +695,23 @@ void __fastcall DRLGROOMEX_AllocNodesForBothRoomEx(D2RoomExStrc * pRoomExA, D2Ro
 // Finds and removes a D2DrlgOrthStrc node from pRoomEx->pOrth linked list that has nType==1 and points to pDrlgRoomExTarget. Frees the removed node.
 // @sourcefile .\DRLG\DrlgRoom.cpp
 void __fastcall DRLGROOMEX_FreeOrthToRoomEx(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomExTarget) {
-    D2DrlgOrthStrc* pOrthCurrent = pRoomEx->pOrth;
-    D2DrlgOrthStrc* pOrthNext = pOrthCurrent->pNext;
-    if (pOrthCurrent->nType == 1 && pOrthCurrent->pLink.pRoomEx == pDrlgRoomExTarget) {
-      pRoomEx->pOrth = pOrthNext;
+    D2DrlgOrthStrc* pOrthPrev = pRoomEx->pOrth;
+    D2DrlgOrthStrc* pOrthCurrent = pOrthPrev->pNext;
+    if (pOrthPrev->nType == 1 && pOrthPrev->pLink.pRoomEx == pDrlgRoomExTarget) {
+      pRoomEx->pOrth = pOrthCurrent;
+      pOrthCurrent = pOrthPrev;
     } else {
-      D2DrlgOrthStrc* pOrthPrev;
-      pOrthPrev = pOrthCurrent;
-      if (!pOrthNext) {
-        return;
-      }
-
       while (true) {
-        pOrthCurrent = pOrthNext;
-        if (!(pOrthCurrent->nType != 1 || pOrthCurrent->pLink.pRoomEx != pDrlgRoomExTarget)) {
+        if (!pOrthCurrent) {
+          return;
+        }
+
+        if (pOrthCurrent->nType == 1 && pOrthCurrent->pLink.pRoomEx == pDrlgRoomExTarget) {
           break;
         }
 
-        pOrthNext = pOrthCurrent->pNext;
         pOrthPrev = pOrthCurrent;
-        if (!pOrthCurrent->pNext) {
-          return;
-        }
+        pOrthCurrent = pOrthCurrent->pNext;
       }
 
       pOrthPrev->pNext = pOrthCurrent->pNext;

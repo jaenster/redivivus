@@ -159,30 +159,27 @@ D2FontGlyphStrc * __fastcall FONT_GetCharWidthCallback(uint16_t wCharCode) {
 }
 
 D2FontGlyphStrc * __fastcall D2WINFONT_LookupGlyphEntry(uint16_t wCharCode) {
-    uint16_t wGlyphCharCode;
+    D2FontCacheEntryStrc* pCache = &gaFontCache[gnLastUsedFontId];
     int nIterations = 0;
     int nLo = 0;
-    int nHi = gaFontCache[gnLastUsedFontId].pFontTableHeader->nGlyphCount - 1;
-    if (nHi < 0) {
-      return gaFontCache[gnLastUsedFontId].pGlyphs + 0x1f;
+    int nHi = pCache->pFontTableHeader->nGlyphCount - 1;
+    if (nHi >= 0) {
+      do {
+        int nMid = (nHi + nLo) / 2;
+        uint16_t wGlyphCharCode = pCache->pGlyphs[nMid].wCharCode;
+        nIterations++;
+        if (wCharCode == wGlyphCharCode) {
+          return pCache->pGlyphs + nMid;
+        }
+        if (wCharCode < wGlyphCharCode) {
+          nHi = nMid - 1;
+        } else {
+          nLo = nMid + 1;
+        }
+      } while (nIterations <= 0x3e8 && nHi >= nLo);
     }
 
-    do {
-      int nMid;
-      nMid = (nHi + nLo) / 2;
-      wGlyphCharCode = gaFontCache[gnLastUsedFontId].pGlyphs[nMid].wCharCode;
-      nIterations++;
-      if (wCharCode == wGlyphCharCode) {
-        return gaFontCache[gnLastUsedFontId].pGlyphs + nMid;
-      }
-      if (wCharCode < wGlyphCharCode) {
-        nHi = nMid - 1;
-      } else {
-        nLo = nMid + 1;
-      }
-    } while (nIterations <= 0x3e8 && nHi >= nLo);
-
-    return gaFontCache[gnLastUsedFontId].pGlyphs + 0x1f;
+    return pCache->pGlyphs + 0x1f;
 }
 
 int32_t __fastcall D2WINFONT_GetStringPixelWidthN(uint16_t * pwszString, int32_t nMaxChars) {

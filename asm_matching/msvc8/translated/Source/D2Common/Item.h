@@ -20,7 +20,7 @@ struct D2UnitStrc;
 namespace D2Common {
 
 // Function declarations
-void __stdcall ITEM_ProcessSetItemEquip(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nEquipMode, int32_t bUpdateStates);
+BOOL __stdcall ITEM_ProcessSetItemEquip(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nEquipMode, int32_t bUpdateStates);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 // Enables/disables the partial-set-bonus states on a set item according to how many set pieces are currently equipped. Only acts on quality==5 (set) items whose setitems.txt addFunc is nonzero. For addFunc==1 it iterates the set's other members and toggles each gaSetItemBonusStates entry disabled/enabled via STATLIST_ToggleStateDisabled based on the corresponding bit in nEquippedMask (the equipped-pieces bitmask). For addFunc==2 it derives a piece count and enables the first N bonus states while disabling the rest. Returns 1 if a set-bonus update was applied, 0 otherwise.

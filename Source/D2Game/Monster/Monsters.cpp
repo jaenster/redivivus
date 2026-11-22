@@ -1404,14 +1404,12 @@ static void __stdcall MONSTER_SetElementalDamageFromLevel(D2UnitStrc * pUnit, eD
 
 // Applies the Amplify Damage curse (skill 0x42) from pUnit onto pAttacker. Validates attack eligibility and skill table bounds, then builds a D2StateExArgStrc with duration and stat values derived from skills.txt aura columns, calls SetStateWithExpiryTime to attach the state, and iterates remaining aura stats to add them to the resulting stat list.
 void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t nSkillLevel) {
-    int32_t nValue;
-    uint32_t bCanAttackTarget = UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget);
-    if (!(bCanAttackTarget && 0x42 < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
+    if (!UNIT::SUnit::UNITS_CheckIfCanAttackTarget(pGame, pUnit, pTarget)) {
       return;
     }
 
-    D2SkillsTxt* pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-    if (!(pSkillsTxt != (D2SkillsTxt*)-37752 && pSkillsTxt[0x42].aurastat[0] >= -1 && (int)pSkillsTxt[0x42].aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillsTxt[0x42].auratargetstate >= 0 && (int)pSkillsTxt[0x42].auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
+    D2SkillsTxt* pSkillsTxt = 0x42 < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + 0x42 : nullptr;
+    if (!pSkillsTxt || pSkillsTxt->aurastat[0] < -1 || pSkillsTxt->aurastat[0] >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize || pSkillsTxt->auratargetstate < 0 || pSkillsTxt->auratargetstate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return;
     }
 
@@ -1421,32 +1419,24 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc 
     sStateArg.pUnit = pUnit;
     sStateArg.eSkill = SKILL_AmplifyDamage;
     sStateArg.nSkillLvl = nSkillLevel;
-    sStateArg.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[0x42].auralencalc, SKILL_AmplifyDamage, nSkillLevel);
-    sStateArg.eStat = (eD2UnitStat)pSkillsTxt[0x42].aurastat[0];
-    sStateArg.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt[0x42].aurastatcalc[0], SKILL_AmplifyDamage, nSkillLevel);
-    sStateArg.eAuraState = (eD2States)pSkillsTxt[0x42].auratargetstate;
+    sStateArg.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, SKILL_AmplifyDamage, nSkillLevel);
+    sStateArg.eStat = (eD2UnitStat)pSkillsTxt->aurastat[0];
+    sStateArg.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurastatcalc[0], SKILL_AmplifyDamage, nSkillLevel);
+    sStateArg.eAuraState = (eD2States)pSkillsTxt->auratargetstate;
     sStateArg.pFunction = 0;
     D2StatListExStrc* pStateStats = SKILLS::SkillsServer::SetStateWithExpiryTime(&sStateArg);
     if (!pStateStats) {
       return;
     }
 
-    short int* pAuraStat = pSkillsTxt[0x42].aurastat;
-    int* pAuraStatCalcPtr = pSkillsTxt[0x42].aurastatcalc;
-    pTarget = (D2UnitStrc*)0x5;
-    do {
-      D2UnitStrc* pUnitSaved = pUnit;
-      pAuraStat++;
-      pAuraStatCalcPtr++;
-      if (*pAuraStat >= 0 && (int)*pAuraStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-        nValue = D2Common::Skills::D2GetSkillCalc(pUnitSaved, *pAuraStatCalcPtr, SKILL_AmplifyDamage, nSkillLevel);
+    for (int i = 1; i < 6; i++) {
+      if (pSkillsTxt->aurastat[i] >= 0 && pSkillsTxt->aurastat[i] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
+        int nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurastatcalc[i], SKILL_AmplifyDamage, nSkillLevel);
         if (nValue) {
-          D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStateStats, (int)*pAuraStat, nValue, 0);
+          D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStateStats, pSkillsTxt->aurastat[i], nValue, 0);
         }
       }
-
-      pTarget = (D2UnitStrc*)((intptr_t)&pTarget[-1].pMsgLast + 3);
-    } while (pTarget);
+    }
 }
 
 void __fastcall MONSTER_CastAmplifyDamageOnHit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
@@ -3012,7 +3002,7 @@ void __fastcall InitUmods(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nInde
 }
 
 void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char uMod) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
 
@@ -3022,7 +3012,12 @@ void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 
     uint8_t* pUModList = pMonsterData->MonUModList;
-    if (!(pUModList && (!pMonsterData || !(pMonsterData->eMonsterType & 4)))) {
+    if (!pUModList) {
+      return;
+    }
+
+    pMonsterData = GetMonsterDataInline(pUnit);
+    if (pMonsterData && pMonsterData->eMonsterType & 4) {
       return;
     }
 
@@ -3552,25 +3547,29 @@ void __fastcall MONSTER_AttackTarget(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
 }
 
 void __stdcall MONSTER_SetSandLeaperHitResultFlag(D2UnitStrc * pUnit, D2DamageStrc * pDamage) {
-    if (!(pDamage->wResultFlags & 4 && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
+    if (!(pDamage->wResultFlags & 4)) {
+      return;
+    }
+
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
 
     int nClassId = pUnit->nClassId;
+    D2DataTableTxtStrc* pDataTables = D2Common::ITEMS::Items::sgptDataTable;
     if (nClassId < 0) {
       return;
     }
 
-    D2MonStatsTxt* pMonStatsTxt = nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    D2MonStatsTxt* pMonStatsTxt = nClassId < pDataTables->nTxtMonStatsSize ? pDataTables->pTxtMonStats + nClassId : nullptr;
     if (pMonStatsTxt) {
       nClassId = (int)pMonStatsTxt->BaseId;
     }
-    if (!(nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nClassId == 0x4e)) {
+    if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nClassId != 0x4e) {
       return;
     }
 
-    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
-    if (eState) {
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze)) {
       return;
     }
 

@@ -337,26 +337,20 @@ BOOL __fastcall FORMS_AppendFormToDestroyQueue(D2ControlStrc * pControl) {
 // @sourcefile .\Src\D2WinMain.cpp
 BOOL __stdcall D2WINMAIN_FreeLeadingFormControls()
 {
-    D2ControlStrc* pNext;
-    if (D2WinButton::gnFormControlCount <= 0 && pFormUnknown) {
-      while (!(pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[0])) {
-        pNext = pFormUnknown->pNext;
-        D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x25a);
-        pFormUnknown = pNext;
-        if (!pNext) {
-          return 1;
-        }
-      }
+    if (D2WinButton::gnFormControlCount > 0) {
+      return 1;
+    }
 
-      do {
-        if (pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[1]) {
-          break;
-        }
+    while (pFormUnknown && !(pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[0])) {
+      D2ControlStrc* pNext = pFormUnknown->pNext;
+      D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x25a);
+      pFormUnknown = pNext;
+    }
 
-        pNext = pFormUnknown->pNext;
-        D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x263);
-        pFormUnknown = pNext;
-      } while (pNext);
+    while (pFormUnknown && !(pFormUnknown->dwState & Fog::BitBuffer::gadwBitMasks[1])) {
+      D2ControlStrc* pNext = pFormUnknown->pNext;
+      D2_FREE_AT(pFormUnknown, ".\\Src\\D2WinMain.cpp", 0x263);
+      pFormUnknown = pNext;
     }
 
     return 1;

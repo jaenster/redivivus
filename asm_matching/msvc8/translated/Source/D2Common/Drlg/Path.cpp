@@ -611,52 +611,46 @@ int32_t __stdcall DRLGPATH_GetApproxDistancePacked(uint32_t nPackedCoord1, uint3
 // at 0x6f1648 (3-byte direction entries) and 0x6f1518 (12-byte path vector entries).
 // Takes params via fastcall: ECX=y2, EDX=x1, stack=y1, stack=x2.
 static int32_t __stdcall DRLGPATH_GetDirectionIndex(int32_t nY2, int32_t nX1, int32_t nY1, int32_t nX2) {
-    uint32_t nDx;
-    nDx = nX2 - nX1;
-    uint32_t nDy;
-    nDy = nY2 - nY1;
-    uint32_t nAbsDx;
-    nAbsDx = nDx;
-    if ((int)nDx < 0) {
-      nAbsDx = -nDx;
+    int nAbsDeltaX = nX2 - nX1;
+    int nAbsDeltaY = nY2 - nY1;
+    int nDeltaX = nAbsDeltaX;
+    int nDeltaY = nAbsDeltaY;
+    if (nAbsDeltaX < 0) {
+      nAbsDeltaX = -nAbsDeltaX;
+    }
+    if (nAbsDeltaY < 0) {
+      nAbsDeltaY = -nAbsDeltaY;
     }
 
-    uint32_t nAbsDy;
-    nAbsDy = nDy;
-    if ((int)nDy < 0) {
-      nAbsDy = -nDy;
-    }
-    if (!((int)nAbsDx < (int)(nAbsDy * 2))) {
-      if ((int)nDy < 0) {
-        nDy = -1;
+    if (nAbsDeltaX >= nAbsDeltaY * 2) {
+      if (nDeltaY < 0) {
+        nDeltaY = -1;
       } else {
-        nDy &= 1;
+        nDeltaY &= 1;
       }
-    } else {
-      if ((int)nAbsDy >= (int)(nAbsDx * 2)) {
-        if ((int)nDx < 0) {
-          nDx = -1;
-          goto combine_dir_index;
-        }
-
-        nDx &= 1;
+    } else if (nAbsDeltaY >= nAbsDeltaX * 2) {
+      if (nDeltaX < 0) {
+        nDeltaX = -1;
+        goto clamp_y;
       }
-    }
-    if ((int)nDx < -1) {
-      nDx = -2;
-    } else if ((int)nDx > 1) {
-      nDx = 2;
+
+      nDeltaX &= 1;
     }
 
-    combine_dir_index:
-    if ((int)nDy < -1) {
-      return nDx * 5 + 10;
-    }
-    if ((int)nDy > 1) {
-      nDy = 2;
+    if (nDeltaX < -1) {
+      nDeltaX = -2;
+    } else if (nDeltaX > 1) {
+      nDeltaX = 2;
     }
 
-    return nDx * 5 + 0xc + nDy;
+clamp_y:
+    if (nDeltaY < -1) {
+      nDeltaY = -2;
+    } else if (nDeltaY > 1) {
+      nDeltaY = 2;
+    }
+
+    return nDeltaX * 5 + 0xc + nDeltaY;
 }
 
 // Core direction index computation from two packed coordinate points.
@@ -664,48 +658,42 @@ static int32_t __stdcall DRLGPATH_GetDirectionIndex(int32_t nY2, int32_t nX1, in
 // Same 5x5 grid clamping logic as DRLGPATH_GetDirectionIndex, producing index 0-24
 // for lookup into direction and path vector tables.
 int32_t __stdcall DRLGPATH_GetDirectionIndexPacked(uint32_t nPackedFrom, uint32_t nPackedTo) {
-    uint32_t nDeltaX;
-    nDeltaX = (uint16_t)nPackedTo - (uint16_t)nPackedFrom;
-    uint32_t nDeltaY;
-    nDeltaY = (nPackedTo >> 0x10) - (nPackedFrom >> 0x10);
-    uint32_t nAbsDeltaX;
-    nAbsDeltaX = nDeltaX;
-    if ((int)nDeltaX < 0) {
-      nAbsDeltaX = -nDeltaX;
+    int nAbsDeltaX = (int)(uint16_t)nPackedTo - (int)(uint16_t)nPackedFrom;
+    int nAbsDeltaY = (int)(nPackedTo >> 0x10) - (int)(nPackedFrom >> 0x10);
+    int nDeltaX = nAbsDeltaX;
+    int nDeltaY = nAbsDeltaY;
+    if (nAbsDeltaX < 0) {
+      nAbsDeltaX = -nAbsDeltaX;
+    }
+    if (nAbsDeltaY < 0) {
+      nAbsDeltaY = -nAbsDeltaY;
     }
 
-    uint32_t nAbsDeltaY;
-    nAbsDeltaY = nDeltaY;
-    if ((int)nDeltaY < 0) {
-      nAbsDeltaY = -nDeltaY;
-    }
-    if (!((int)nAbsDeltaX < (int)(nAbsDeltaY * 2))) {
-      if ((int)nDeltaY < 0) {
+    if (nAbsDeltaX >= nAbsDeltaY * 2) {
+      if (nDeltaY < 0) {
         nDeltaY = -1;
       } else {
         nDeltaY &= 1;
       }
-    } else {
-      if ((int)nAbsDeltaY >= (int)(nAbsDeltaX * 2)) {
-        if ((int)nDeltaX < 0) {
-          nDeltaX = -1;
-          goto combine_dir_index;
-        }
-
-        nDeltaX &= 1;
+    } else if (nAbsDeltaY >= nAbsDeltaX * 2) {
+      if (nDeltaX < 0) {
+        nDeltaX = -1;
+        goto clamp_y;
       }
+
+      nDeltaX &= 1;
     }
-    if ((int)nDeltaX < -1) {
+
+    if (nDeltaX < -1) {
       nDeltaX = -2;
-    } else if ((int)nDeltaX > 1) {
+    } else if (nDeltaX > 1) {
       nDeltaX = 2;
     }
 
-    combine_dir_index:
-    if ((int)nDeltaY < -1) {
-      return nDeltaX * 5 + 10;
-    }
-    if ((int)nDeltaY > 1) {
+clamp_y:
+    if (nDeltaY < -1) {
+      nDeltaY = -2;
+    } else if (nDeltaY > 1) {
       nDeltaY = 2;
     }
 
@@ -836,36 +824,26 @@ uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pPathData
 // Used by DRLGPATH_StepPathWithCollisionCheck to keep velocity components in
 // a safe range for fixed-point iteration.
 void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnStepX, int * pnStepY) {
-    int nShiftCount = *pnStepX;
-    if (nShiftCount >= 0) {
-      while (nShiftCount > 0x10000) {
+    if (*pnStepX >= 0) {
+      while (*pnStepX > 0x10000) {
         *pnStepX >>= 1;
         *pnStepY >>= 1;
-        nShiftCount = *pnStepX;
       }
     } else {
-      while (nShiftCount < -0x10000) {
+      while (*pnStepX < -0x10000) {
         *pnStepX >>= 1;
         *pnStepY >>= 1;
-        nShiftCount = *pnStepX;
       }
     }
-
-    nShiftCount = *pnStepY;
-    if (nShiftCount >= 0) {
-      if (nShiftCount > 0x10000) {
-        do {
-          *pnStepX >>= 1;
-          *pnStepY >>= 1;
-        } while (*pnStepY > 0x10000);
-
-        return;
-      }
-    } else {
-      while (nShiftCount < -0x10000) {
+    if (*pnStepY >= 0) {
+      while (*pnStepY > 0x10000) {
         *pnStepX >>= 1;
         *pnStepY >>= 1;
-        nShiftCount = *pnStepY;
+      }
+    } else {
+      while (*pnStepY < -0x10000) {
+        *pnStepX >>= 1;
+        *pnStepY >>= 1;
       }
     }
 }

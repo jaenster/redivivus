@@ -844,13 +844,10 @@ BOOL __stdcall OOGUTIL_OnPressChatWarningOk(D2ControlMsg * pControlMsg) {
 }
 
 int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText) {
-    char* pszCur;
     char szTokenCopy[256];
     char szMultiByte[256];
-    uint16_t* pwszText = wszText;
     gnChatTabCompletionIndex = -1;
-    int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-    if (!nLength) {
+    if (!D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText)) {
       return 0;
     }
     if (!pNetworkUnknown) {
@@ -859,22 +856,15 @@ int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText) {
     }
 
     szMultiByte[0] = '\0';
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szMultiByte, (uint16_t*)pwszText, 0x100);
-    int nCopyIndex = 0;
-    do {
-      pszCur = szMultiByte + nCopyIndex;
-      szTokenCopy[nCopyIndex] = *pszCur;
-      nCopyIndex++;
-    } while (*pszCur != '\0');
-
-    pszCur = strtok(szTokenCopy, " ");
-    if (!pszCur) {
+    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szMultiByte, wszText, 0x100);
+    strcpy(szTokenCopy, szMultiByte);
+    char szSeparators[] = " ";
+    if (!strtok(szTokenCopy, szSeparators)) {
       D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextWide(gpChatDlgInputEditBox, nullptr);
       return 1;
     }
 
-    nCopyIndex = ChatDlg::OOGUTIL_SendChatMessage(szMultiByte, 0);
-    return nCopyIndex;
+    return ChatDlg::OOGUTIL_SendChatMessage(szMultiByte, 0);
 }
 
 int __fastcall Unreferenced_00442a70(uint32_t * pFlags, int nValue) {

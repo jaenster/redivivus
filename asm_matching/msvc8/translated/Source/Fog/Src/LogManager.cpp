@@ -1849,42 +1849,35 @@ void __fastcall Atomic64Load(int64_t * pllResult, int64_t * pllSource) {
     *(int64_t*)pllResult = llValue;                                  // 004107dc / 004107de
 }
 
-void __stdcall GetFreeDiskSpaceForSavePath() {
-    pfnGetDiskFreeSpaceEx npfnGetDiskFreeSpaceEx;
-    ULONGLONG uTotalFreeBytes;
-    ULONGLONG uTotalBytes;
-    ULONGLONG uFreeBytesAvailable;
-    DWORD adwDiskFreeSpaceInfo[3];
+ULONGLONG __stdcall GetFreeDiskSpaceForSavePath() {
     char szSavePath[1024];
     Source::SFile::GetAndCreateSavePath(szSavePath, 0x400);
     HMODULE hModule = LoadLibraryA("kernel32.dll");
-    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ if (hModule) {
-      npfnGetDiskFreeSpaceEx = (pfnGetDiskFreeSpaceEx)GetProcAddress(hModule, "GetDiskFreeSpaceExA");
+    if (hModule) {
+      pfnGetDiskFreeSpaceEx npfnGetDiskFreeSpaceEx = (pfnGetDiskFreeSpaceEx)GetProcAddress(hModule, "GetDiskFreeSpaceExA");
       if (npfnGetDiskFreeSpaceEx) {
-        uTotalFreeBytes = 0;
-        uTotalBytes = 0;
-        uFreeBytesAvailable = 0;
-        (*npfnGetDiskFreeSpaceEx)(szSavePath, &uFreeBytesAvailable, &uTotalBytes, &uTotalFreeBytes);
-        /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hModule);
-        return;
+        ULONGLONG uFreeBytesAvailable = 0;
+        ULONGLONG uTotalBytes = 0;
+        ULONGLONG uTotalFreeBytes = 0;
+        npfnGetDiskFreeSpaceEx(szSavePath, &uFreeBytesAvailable, &uTotalBytes, &uTotalFreeBytes);
+        FreeLibrary(hModule);
+        return uFreeBytesAvailable;
       }
     }
 
-    uint32_t nCharIndex = 0;
-    do {
+    for (uint32_t nCharIndex = 0; nCharIndex < 0x400; nCharIndex++) {
       if (szSavePath[nCharIndex] == '\\') {
         szSavePath[nCharIndex + 1] = '\0';
         break;
       }
+    }
 
-      nCharIndex++;
-    } while (nCharIndex < 0x400);
-
-    /* LPDWORD lpTotalNumberOfClusters for GetDiskFreeSpaceA */ /* LPDWORD lpNumberOfFreeClusters for GetDiskFreeSpaceA */ /* LPDWORD lpBytesPerSector for GetDiskFreeSpaceA */ /* LPDWORD lpSectorsPerCluster for GetDiskFreeSpaceA */ /* LPCSTR lpRootPathName for GetDiskFreeSpaceA */ adwDiskFreeSpaceInfo[2] = 0;
-    adwDiskFreeSpaceInfo[0] = 0;
-    adwDiskFreeSpaceInfo[1] = 0;
+    DWORD dwSectorsPerCluster = 0;
     DWORD dwBytesPerSector = 0;
-    GetDiskFreeSpaceA(szSavePath, adwDiskFreeSpaceInfo + 2, adwDiskFreeSpaceInfo, adwDiskFreeSpaceInfo + 1, &dwBytesPerSector);
+    DWORD dwNumberOfFreeClusters = 0;
+    DWORD dwTotalNumberOfClusters = 0;
+    GetDiskFreeSpaceA(szSavePath, &dwSectorsPerCluster, &dwBytesPerSector, &dwNumberOfFreeClusters, &dwTotalNumberOfClusters);
+    return dwNumberOfFreeClusters * dwBytesPerSector * dwSectorsPerCluster;
 }
 
 void GetGlobalMemoryStatus(LPMEMORYSTATUS pMemoryStatus) {

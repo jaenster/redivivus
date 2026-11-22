@@ -12,6 +12,14 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/D2ClientRoot.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -127,17 +135,8 @@ int32_t __fastcall SKILLSASS_GetCltMissileByAuraLevel(D2UnitStrc * pUnit, int32_
 
     D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)sAuraState);
     if (pStatListEx) {
-      int nAuraStatVal;
-      nAuraStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, (int)pSkillTxt->aurastat[0], 0);
-      if (nAuraStatVal > 1) {
-        if (nAuraStatVal >= 3) {
-          nAuraStatVal = 3;
-        }
-
-        return (int)pSkillTxt->cltmissile[nAuraStatVal];
-      }
-
-      return (int)pSkillTxt->cltmissile[1];
+      int nAuraStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, (int)pSkillTxt->aurastat[0], 0);
+      return (int)pSkillTxt->cltmissile[min(max(nAuraStatVal, 1), 3)]; // steer-ok: windef.h min/max macros
     }
 
     return (int)pSkillTxt->cltmissile[1];
@@ -145,40 +144,27 @@ int32_t __fastcall SKILLSASS_GetCltMissileByAuraLevel(D2UnitStrc * pUnit, int32_
 
 // Assassin skill helper: returns the appropriate progressive-calc value (prgcalc[0..2]) for a charge-up/aura skill based on the current aura level stored in the active state's aurastat[0]. If the skill is not an aura (flags bit 2 clear) or the state is absent, falls back to prgcalc[0].
 uint32_t __fastcall SKILLSASS_GetPrgCalcByAuraLevel(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t nCalcResult;
-    int nAuraStat;
-    short int sAuraState;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
-    if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
-      D2StatListExStrc* pStatListEx;
-      sAuraState = pSkillTxt->aurastate;
-      if (sAuraState < 0 || (int)sAuraState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-        nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
-        return nCalcResult;
-      }
-      if (pSkillTxt->aurastat[0] >= 0 && (int)pSkillTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-        pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)sAuraState);
-        if (pStatListEx) {
-          nAuraStat = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, (int)pSkillTxt->aurastat[0], 0);
-          if (nAuraStat > 1) {
-            if (nAuraStat >= 3) {
-              nAuraStat = 3;
-            }
-          } else {
-            nAuraStat = 1;
-          }
+    if (!(pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+      return D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
+    }
 
-          nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[nAuraStat - 1], eSkill, nSkillLvl);
-          return nCalcResult;
-        }
+    short int sAuraState = pSkillTxt->aurastate;
+    if (sAuraState < 0 || (int)sAuraState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      return D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
+    }
+    if (pSkillTxt->aurastat[0] >= 0 && (int)pSkillTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
+      D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)sAuraState);
+      if (pStatListEx) {
+        int nAuraStat = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, (int)pSkillTxt->aurastat[0], 0);
+        return D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[min(max(nAuraStat, 1), 3) - 1], eSkill, nSkillLvl); // steer-ok: windef.h min/max macros
       }
     }
 
-    nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
-    return nCalcResult;
+    return D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
 }
 
 BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileRandom(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {

@@ -1026,21 +1026,29 @@ D2UnitStrc * __fastcall SpawnMonsterAtRoomPosGuid(::SGAMEDATA * pGame, D2RoomStr
     return pMonster;
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 D2UnitStrc * __fastcall SpawnMonsterSetOwnOwner(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, BOOL bTransferBoss, int16_t wFlags) {
     D2UnknownCreateMonsterStrc sCreateParams;
     sCreateParams.pRoom = pRoom;
-    sCreateParams.eMode = eMode;
     sCreateParams.nClassId = nClassId;
+    sCreateParams.eMode = eMode;
     sCreateParams.nSpawnRadius = nSpawnRadius;
-    sCreateParams.nX = nX;
     sCreateParams.nGUID = 0;
     sCreateParams.pGame = pGame;
     sCreateParams.pCoordList = 0;
     sCreateParams.nFlags = wFlags;
+    sCreateParams.nX = nX;
     sCreateParams.nY = nY;
     D2UnitStrc* pUnit = CreateMonster(&sCreateParams);
     if (pUnit) {
-      Ai::AiGeneral::AssignMinionOwner(pGame, pUnit, pUnit->nUnitGUID, UNIT_MONSTER, 1, bTransferBoss);
+      Ai::AiGeneral::AssignMinionOwner(pGame, pUnit, GetGUIDInline(pUnit), UNIT_MONSTER, 1, bTransferBoss);
     }
 
     return pUnit;

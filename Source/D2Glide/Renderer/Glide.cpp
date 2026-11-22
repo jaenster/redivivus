@@ -22,6 +22,13 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Glide/Renderer/Glide.data.h"
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_FREE_AT
@@ -1013,33 +1020,26 @@ void __fastcall UpdateScaleFactor(int32_t nScaleFactor) {
 }
 
 BOOL __fastcall SetGamma(int32_t nGamma) {
-    FxU32* pGammaTable;
-    int32_t nFreeResult;
-    FxU32 FVar1;
-    D2FloatIntUnion fGammaVal;
-    FxU32 nTableSize;
+    FxU32 nResult;
     if (gbWINDOWED > 0) {
-      FxU32 nGrGetResult;
-      fGammaVal = d2_bits_as<D2FloatIntUnion>(nGamma);
-      nGrGetResult = (*GLIDEDLL_grGet_12)(5, 4, (FxI32*)&nTableSize);
-      FVar1 = 0;
-      if (nGrGetResult) {
-        nGrGetResult = (*GLIDEDLL_grGet_12)(0x2a, 4, &fGammaVal.nValue);
-        FVar1 = 0;
-        if (nGrGetResult) {
-          pGammaTable = (FxU32*)Storm::Source::SMem::SMemAlloc(nTableSize * 4, ".\\Src\\glCore.cpp", 0x42f, 0);
-          Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(nGamma, pGammaTable, (double)gbWINDOWED, 4, nTableSize, (1 << D2_SHIFT_COUNT(fGammaVal.nValue)) - 1);
+      FxU32 nTableSize;
+      FxI32 nGammaBits;
+      nResult = (*GLIDEDLL_grGet_12)(5, 4, (FxI32*)&nTableSize);
+      if (nResult) {
+        nResult = (*GLIDEDLL_grGet_12)(0x2a, 4, &nGammaBits);
+        if (nResult) {
+          FxU32* pGammaTable = (FxU32*)Storm::Source::SMem::SMemAlloc(nTableSize * 4, ".\\Src\\glCore.cpp", 0x42f, 0);
+          Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(nGamma, pGammaTable, (double)gbWINDOWED, 4, nTableSize, (1 << D2_SHIFT_COUNT(nGammaBits)) - 1);
           (*GLIDEDLL_grLoadGammaTable_16)(nTableSize, pGammaTable, pGammaTable, pGammaTable);
-          nFreeResult = Storm::Source::SMem::SMemFree(pGammaTable, ".\\Src\\glCore.cpp", 0x43a, 0);
-          return nFreeResult;
+          return Storm::Source::SMem::SMemFree(pGammaTable, ".\\Src\\glCore.cpp", 0x43a, 0);
         }
       }
     } else {
-      fGammaVal.fValue = (float)nGamma / 100.0;
-      FVar1 = (*GLIDEDLL_guGammaCorrectionRGB_12)(fGammaVal.fValue, fGammaVal.fValue, fGammaVal.fValue);
+      float fGamma = (float)nGamma / 100.0;
+      nResult = (*GLIDEDLL_guGammaCorrectionRGB_12)(fGamma, fGamma, fGamma);
     }
 
-    return FVar1;
+    return nResult;
 }
 
 int32_t __fastcall CheckGamma() {
@@ -1185,22 +1185,19 @@ void __fastcall RENDERER_GLIDE_SetTextureMode(int32_t nTextureMode) {
 }
 
 void __fastcall RENDERER_GLIDE_SetColorCombine(int32_t nCombineMode) {
-    int nPrevMode;
-    if (!gnGlideColorCombineMode || (nPrevMode = gnGlideColorCombineMode , nCombineMode != gnGlideColorCombineMode)) {
-      if (nCombineMode != 1) {
-        nPrevMode = nCombineMode;
-        if (nCombineMode == 2) {
-          (*GLIDEDLL_grColorCombine_20)(1, 0, 1, 2, 0);
-          gnGlideColorCombineMode = nCombineMode;
-          return;
-        }
-      } else {
-        (*GLIDEDLL_grColorCombine_20)(3, 1, 0, 1, 0);
-        nPrevMode = nCombineMode;
-      }
+    if (gnGlideColorCombineMode && nCombineMode == gnGlideColorCombineMode) {
+      return;
     }
 
-    gnGlideColorCombineMode = nPrevMode;
+    switch (nCombineMode) {
+      case 1:
+        (*GLIDEDLL_grColorCombine_20)(3, 1, 0, 1, 0);
+        break;
+      case 2:
+        (*GLIDEDLL_grColorCombine_20)(1, 0, 1, 2, 0);
+        break;
+    }
+    gnGlideColorCombineMode = nCombineMode;
 }
 
 void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nAlphaBlendMode) {
@@ -3016,36 +3013,18 @@ void __fastcall DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd,
 
 void __fastcall DrawSolidRectAlpha(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, DWORD dwColor, BYTE nAlpha) {
     D2GlideVertexStrc fV0X[4];
-    uint32_t nClampX = nXStart <= 0 ? 0 : nXStart;
-    uint32_t nScaledColor = RENDERER_nWindowWidth;
-    if ((int)nClampX < RENDERER_nWindowWidth) {
-      nScaledColor = nClampX;
-    }
-
-    uint32_t nClampedXEnd = nXEnd <= 0 ? 0 : nXEnd;
-    nClampX = RENDERER_nWindowWidth;
-    if ((int)nClampedXEnd < RENDERER_nWindowWidth) {
-      nClampX = nClampedXEnd;
-    }
-    if (nScaledColor == nClampX) {
+    nXStart = min(max(nXStart, 0), RENDERER_nWindowWidth); // steer-ok: windef.h min/max macros
+    nXEnd = min(max(nXEnd, 0), RENDERER_nWindowWidth); // steer-ok: windef.h min/max macros
+    if (nXStart == nXEnd) {
       return;
     }
 
-    uint32_t uVar1 = nYStart <= 0 ? 0 : nYStart;
-    nClampedXEnd = RENDERER_nWindowHeight;
-    if ((int)uVar1 < RENDERER_nWindowHeight) {
-      nClampedXEnd = uVar1;
-    }
-
-    uint32_t nClampedYEnd = nYEnd <= 0 ? 0 : nYEnd;
-    uVar1 = RENDERER_nWindowHeight;
-    if ((int)nClampedYEnd < RENDERER_nWindowHeight) {
-      uVar1 = nClampedYEnd;
-    }
-    if (uVar1 == nClampedXEnd) {
+    nYStart = min(max(nYStart, 0), RENDERER_nWindowHeight); // steer-ok: windef.h min/max macros
+    nYEnd = min(max(nYEnd, 0), RENDERER_nWindowHeight); // steer-ok: windef.h min/max macros
+    if (nYEnd == nYStart) {
       return;
     }
-    if ((int)nClampedXEnd > (int)uVar1) {
+    if (nYEnd <= nYStart) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x61);
       exit(-1);
     }
@@ -3053,27 +3032,31 @@ void __fastcall DrawSolidRectAlpha(int32_t nXStart, int32_t nYStart, int32_t nXE
     RENDERER_GLIDE_SetColorCombine(2);
     RENDERER_GLIDE_SetAlphaBlendMode(4);
     (*GLIDEDLL_grChromakeyMode_4)(0);
-    fV0X[0].fX = (float)(int)nScaledColor;
-    fV0X[0].fY = (float)(int)nClampedXEnd;
+    float fX0 = (float)nXStart;
+    fV0X[0].fX = fX0;
+    float fY0 = (float)nYStart;
+    fV0X[0].fY = fY0;
     fV0X[0].fOOW = 1.0;
     fV0X[0].fS = 0.0;
     fV0X[0].fT = 0.0;
-    fV0X[1].fY = (float)(int)uVar1;
+    fV0X[1].fX = fX0;
+    float fY1 = (float)nYEnd;
+    fV0X[1].fY = fY1;
     fV0X[1].fOOW = 1.0;
     fV0X[1].fS = 0.0;
     fV0X[1].fT = 0.0;
-    fV0X[2].fX = (float)(int)nClampX;
+    float fX1 = (float)nXEnd;
+    fV0X[2].fX = fX1;
+    fV0X[2].fY = fY1;
     fV0X[2].fOOW = 1.0;
-    fV0X[3].fOOW = 1.0;
     fV0X[2].fS = 0.0;
     fV0X[2].fT = 0.0;
+    fV0X[3].fX = fX1;
+    fV0X[3].fY = fY0;
+    fV0X[3].fOOW = 1.0;
     fV0X[3].fS = 0.0;
     fV0X[3].fT = 0.0;
-    fV0X[1].fX = fV0X[0].fX;
-    fV0X[2].fY = fV0X[1].fY;
-    fV0X[3].fX = fV0X[2].fX;
-    fV0X[3].fY = fV0X[0].fY;
-    nScaledColor = RENDERER_GLIDE_ScalePaletteValue(dwColor & 0xff);
+    uint32_t nScaledColor = RENDERER_GLIDE_ScalePaletteValue((BYTE)dwColor);
     (*GLIDEDLL_grConstantColorValue_4)(nScaledColor & -256 | (uint32_t)nAlpha);
     (*GLIDEDLL_grDrawVertexArrayContiguous_16)(5, 4, fV0X, 0x1c);
     (*GLIDEDLL_grChromakeyMode_4)(1);
@@ -3947,7 +3930,8 @@ void __fastcall SetGlobalLight(int nRed, int nGreen, int nBlue) {
 }
 
 void __fastcall RENDERER_GLIDE_ApplyShadowLighting(D2GlideVertexStrc * pVertex, uint8_t nIntensity) {
-    pVertex->dwColor = ((gpGlideLightingTable[(uint32_t)gbGlideGlobalLightRed + ((uint32_t)nIntensity << 8)] | -256) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)gbGlideGlobalLightGreen + ((uint32_t)nIntensity << 8)]) << 8 | (uint32_t)gpGlideLightingTable[(uint32_t)gbGlideGlobalLightBlue + ((uint32_t)nIntensity << 8)];
+    const uint8_t* pLightRow = &gpGlideLightingTable[nIntensity << 8];
+    pVertex->dwColor = (((uint32_t)pLightRow[gbGlideGlobalLightRed] | 0xffffff00) << 8 | pLightRow[gbGlideGlobalLightGreen]) << 8 | pLightRow[gbGlideGlobalLightBlue];
 }
 
 void __fastcall RENDERER_GLIDE_ApplyColorLighting(D2GlideVertexStrc * pVertex, uint32_t dwPackedColor) {

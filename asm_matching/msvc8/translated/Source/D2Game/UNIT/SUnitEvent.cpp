@@ -77,30 +77,31 @@ D2SUnitEventStrc * __fastcall SUNITEVENT_Alloc(::SGAMEDATA * pGame, D2UnitStrc *
 // It sets nothing; the loop at 005c0b70 only removes matches.
 // @sourcefile .\UNIT\SUnitEvent.cpp
 void __fastcall SUNITEVENT_RemoveEventsByQueueAndOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nQueueNo, int32_t nOwnerKey) {
-    D2SUnitEventStrc* pMemoryToFree;
     if (!pUnit) {
       return;
     }
 
-    D2SUnitEventStrc* pNextEvent = pUnit->uSideData.pServerSide.pSrvUnitEventList;
-    while (pMemoryToFree = pNextEvent) {
-      pNextEvent = pMemoryToFree->pNext;
-      if (pMemoryToFree->nQueueNo == nQueueNo && pMemoryToFree->nOwnerKey == nOwnerKey) {
-        if (pMemoryToFree->nFlags & 1) {
-          pMemoryToFree->nFlags |= 2;
+    D2SUnitEventStrc* pEvent = pUnit->uSideData.pServerSide.pSrvUnitEventList;
+    while (pEvent) {
+      D2SUnitEventStrc* pNextEvent = pEvent->pNext;
+      if (pEvent->nQueueNo == nQueueNo && pEvent->nOwnerKey == nOwnerKey) {
+        if (pEvent->nFlags & 1) {
+          pEvent->nFlags |= 2;
         } else {
-          if (pMemoryToFree->pPrev) {
-            pMemoryToFree->pPrev->pNext = pNextEvent;
+          if (pEvent->pPrev) {
+            pEvent->pPrev->pNext = pEvent->pNext;
           } else {
-            pUnit->uSideData.pServerSide.pSrvUnitEventList = pNextEvent;
+            pUnit->uSideData.pServerSide.pSrvUnitEventList = pEvent->pNext;
           }
-          if (pMemoryToFree->pNext) {
-            pMemoryToFree->pNext->pPrev = pMemoryToFree->pPrev;
+          if (pEvent->pNext) {
+            pEvent->pNext->pPrev = pEvent->pPrev;
           }
 
-          D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\UNIT\\SUnitEvent.cpp", 0x95);
+          D2_FREE_POOL_AT(pGame->pMemoryPool, pEvent, ".\\UNIT\\SUnitEvent.cpp", 0x95);
         }
       }
+
+      pEvent = pNextEvent;
     }
 }
 

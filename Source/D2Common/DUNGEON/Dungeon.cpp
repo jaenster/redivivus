@@ -191,27 +191,48 @@ void __stdcall DRLGROOM_SetWarpTileSelect(D2RoomStrc * pRoom, BOOL bSelect) {
     Drlg::DrlgRoom::DRLGWARP_SetAllWarpTilesSelectValue(pRoom->pRoomEx, bSelect);
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // The unit-list search loop leaves its found (or NULL) D2UnitStrc* result in EAX at the fallthrough return, unused by the body itself; caller evidence names the read pStaircaseUnit.
 D2UnitStrc * __stdcall TakeStairsInternal(D2RoomStrc * pRoom, eD2LevelId eLevelId, D2LvlWarpTxt * * ppRoomEx) {
-    D2UnitStrc* pDVar1;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6a);
       exit(-1);
-    } else {
-      D2RoomStrc* pDVar2;
-      int nOrth;
-      D2LvlWarpTxt* pWarpTxt;
-      pDVar2 = Drlg::DrlgRoom::DRLGWARP_GetWarpDestinationRoom(pRoom->pRoomEx, eLevelId, &nOrth, &pWarpTxt);
-      if (!pDVar2) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x71);
-        exit(-1);
-      }
-
-      for (pDVar1 = pDVar2->pUnitList; pDVar1 && (pDVar1->eUnitType != UNIT_WARP || pDVar1->nClassId != nOrth); pDVar1 = pDVar1->pRoomNext) {}
-
-      *ppRoomEx = pWarpTxt;
-      return pDVar1;
     }
+
+    int nOrth;
+    D2LvlWarpTxt* pWarpTxt;
+    D2RoomStrc* pDestRoom = Drlg::DrlgRoom::DRLGWARP_GetWarpDestinationRoom(pRoom->pRoomEx, eLevelId, &nOrth, &pWarpTxt);
+    if (!pDestRoom) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x71);
+      exit(-1);
+    }
+
+    D2UnitStrc* pWarp;
+    for (pWarp = pDestRoom->pUnitList; pWarp; pWarp = pWarp->pRoomNext) {
+      eD2UnitType eType = GetTypeInline(pWarp);
+      int nClassId = GetClassIdInline(pWarp); // steer-ok: the original reads the type and the class id together, before the type test
+      if (eType == UNIT_WARP && nClassId == nOrth) {
+        break;
+      }
+    }
+
+    *ppRoomEx = pWarpTxt;
+    return pWarp;
 }
 
 // Returns the D2LvlWarpTxt record of the warp node whose Id matches the warp unit's class id, or NULL if the node is disabled.

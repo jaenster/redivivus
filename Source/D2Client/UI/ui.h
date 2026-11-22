@@ -211,7 +211,7 @@ void __stdcall UI_ToggleHelpScreen();
 void __stdcall UI_ToggleBeltRows();
 int __stdcall INV_IsCurrentInventoryPage1Or2();
 void __stdcall UI_InitializeStatDescriptionPointers();
-int64_t __stdcall UI_GetControlConfigRowCount();
+int __stdcall UI_GetControlConfigRowCount();
 void __fastcall UI_ScrollConfigListVertical(int32_t nSteps);
 void __fastcall UI_ScrollConfigListHorizontal(int32_t nSteps);
 uint32_t __stdcall UI_IsMouseInRightColumn(int32_t nMouseX);

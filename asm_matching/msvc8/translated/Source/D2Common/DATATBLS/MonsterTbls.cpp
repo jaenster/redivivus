@@ -1264,29 +1264,17 @@ D2ParsedTreasureClassStrc * __stdcall TC_LookupTreasureClassByName(char * szText
 
 // TC level-variant selector. TCs with same nGroup form a chain, select best match where TC.nLevel <= nLevel. Linear scan through variants, returns highest applicable TC or base TC if no variants.
 D2ParsedTreasureClassStrc * __stdcall TC_GetParsedTreasureClassByLevel(uint16_t nTreasureClassId, int32_t nLevel) {
-    D2ParsedTreasureClassStrc* pBestTC;
-    D2ParsedTreasureClassStrc* pLookAheadTC;
     if (nTreasureClassId > 0 && (int)(uint32_t)nTreasureClassId < sgtDataTable.nParsedTreasureClassSize) {
-      D2ParsedTreasureClassStrc* pIterTC;
-      pBestTC = sgtDataTable.pParsedTreasureClass + nTreasureClassId;
-      if (!(nLevel > 0 && pBestTC->nGroup)) {
-        return pBestTC;
-      }
+      D2ParsedTreasureClassStrc* pBestTC = &sgtDataTable.pParsedTreasureClass[nTreasureClassId];
+      if (nLevel > 0 && pBestTC->nGroup) {
+        for (D2ParsedTreasureClassStrc* pNextTC = pBestTC + 1; pNextTC->nGroup == pBestTC->nGroup; pNextTC++) {
+          if (pNextTC->nLevel > nLevel) {
+            break;
+          }
 
-      pIterTC = pBestTC;
-      if (pBestTC[1].nGroup != pBestTC->nGroup) {
-        return pBestTC;
-      }
-
-      do {
-        pBestTC = pIterTC + 1;
-        if (pIterTC[1].nLevel > nLevel) {
-          return pIterTC;
+          pBestTC = pNextTC;
         }
-
-        pLookAheadTC = pIterTC + 2;
-        pIterTC = pBestTC;
-      } while (pLookAheadTC->nGroup == pBestTC->nGroup);
+      }
 
       return pBestTC;
     }
@@ -1295,21 +1283,12 @@ D2ParsedTreasureClassStrc * __stdcall TC_GetParsedTreasureClassByLevel(uint16_t 
 }
 
 D2ParsedTreasureClassStrc * __stdcall DATATBLS_GetChestTreasureClass(int32_t nDifficulty, int32_t nAct, int32_t nTier) {
-    uint32_t nClampedDiff = nDifficulty <= 0 ? 0 : nDifficulty;
-    if ((int)nClampedDiff >= 2) {
-      nClampedDiff = 2;
-    }
-
-    uint32_t nClampedAct = nAct <= 0 ? 0 : nAct;
-    if ((int)nClampedAct >= 4) {
-      nClampedAct = 4;
-    }
-
-    uint32_t nClampedChest = nTier <= 0 ? 0 : nTier;
-    if ((int)nClampedChest >= 2) {
-      nClampedChest = 2;
-    }
-
+    const int32_t nDiff = nDifficulty <= 0 ? 0 : nDifficulty;
+    const int32_t nClampedDiff = nDiff < 2 ? nDiff : 2; // steer-ok: the original clamps difficulty, then act, then chest; the order of the subscripts is unspecified
+    const int32_t nActIdx = nAct <= 0 ? 0 : nAct;
+    const int32_t nClampedAct = nActIdx < 4 ? nActIdx : 4; // steer-ok: the original clamps difficulty, then act, then chest; the order of the subscripts is unspecified
+    const int32_t nChest = nTier <= 0 ? 0 : nTier;
+    const int32_t nClampedChest = nChest < 2 ? nChest : 2; // steer-ok: the original clamps difficulty, then act, then chest; the order of the subscripts is unspecified
     return sgtDataTable.pParsedTreasureClassDiffActChestABC.Difficulty[nClampedDiff].Act[nClampedAct].Chest[nClampedChest];
 }
 
@@ -1769,21 +1748,12 @@ void __stdcall DATATBLS_UnloadNpcTxt() {
 }
 
 D2NpcTxt * __stdcall TXT_npc_GetLine(int32_t nNpc) {
-    int nIndex = 0;
-    D2NpcTxt* pEntry = sgtDataTable.pTxtNpc;
-    if (sgtDataTable.nTxtNpcSize <= 0) {
-      return nullptr;
-    }
-
-    do {
-      if (pEntry->npc == nNpc) {
-        return pEntry;
+    for (int nIndex = 0; nIndex < sgtDataTable.nTxtNpcSize; nIndex++) {
+      D2NpcTxt* pNpcTxt = &sgtDataTable.pTxtNpc[nIndex];
+      if (pNpcTxt->npc == nNpc) {
+        return pNpcTxt;
       }
-
-      nIndex++;
-      pEntry++;
-    } while (nIndex < sgtDataTable.nTxtNpcSize);
-
+    }
     return nullptr;
 }
 
@@ -2135,9 +2105,7 @@ void Unreferenced_00658440() {
 
 // Breadth-first traversal of the monstypes.txt equiv1/equiv2/equiv3 parent-type hierarchy to test whether monster type nMonTypeId belongs to type nCheckTypeId. Returns 1 if found, 0 if not found, out-of-range, or stack depth exceeds 124. Despite its name, behaves as a monster-type membership test (analogous to ITEMTBLS_CheckItemTypeRecursive but for MonType with three equiv slots).
 BOOL __fastcall MONSTERTBLS_CheckNestedMonsterTypes(int32_t nMonTypeId, int32_t nCheckTypeId) {
-    int nNewStackSize;
-    int32_t typeStack[128];
-    short int wEquiv3;
+    int32_t nTypeStack[128];
     if (nCheckTypeId <= 0) {
       return 0;
     }
@@ -2145,37 +2113,31 @@ BOOL __fastcall MONSTERTBLS_CheckNestedMonsterTypes(int32_t nMonTypeId, int32_t 
       return 0;
     }
 
-    typeStack[0] = nMonTypeId;
+    nTypeStack[0] = nMonTypeId;
     int nStackSize = 1;
     do {
-      int nCurrentTypeId;
-      nCurrentTypeId = typeStack[nStackSize - 1];
-      nNewStackSize = nStackSize - 1;
-      if (nCheckTypeId == nCurrentTypeId) {
+      int nTypeId = nTypeStack[--nStackSize];
+      if (nCheckTypeId == nTypeId) {
         return 1;
       }
-      if (nCurrentTypeId >= sgtDataTable.nTxtMonTypeSize) {
+      if (nTypeId >= sgtDataTable.nTxtMonTypeSize) {
         return 0;
       }
-      if (nNewStackSize > 0x7c) {
+      if (nStackSize > 0x7c) {
         return 0;
       }
-      if (sgtDataTable.pTxtMonType[nCurrentTypeId].equiv1 > 0) {
-        typeStack[nNewStackSize] = (int)sgtDataTable.pTxtMonType[nCurrentTypeId].equiv1;
-        nNewStackSize = nStackSize;
-        if (sgtDataTable.pTxtMonType[nCurrentTypeId].equiv2) {
-          wEquiv3 = sgtDataTable.pTxtMonType[nCurrentTypeId].equiv3;
-          typeStack[nStackSize] = (int)sgtDataTable.pTxtMonType[nCurrentTypeId].equiv2;
-          nNewStackSize = nStackSize + 1;
-          if (wEquiv3) {
-            typeStack[nNewStackSize] = (int)wEquiv3;
-            nNewStackSize = nStackSize + 2;
+
+      D2MonTypeTxt* pMonType = &sgtDataTable.pTxtMonType[nTypeId];
+      if (pMonType->equiv1 > 0) {
+        nTypeStack[nStackSize++] = pMonType->equiv1;
+        if (pMonType->equiv2) {
+          nTypeStack[nStackSize++] = pMonType->equiv2;
+          if (pMonType->equiv3) {
+            nTypeStack[nStackSize++] = pMonType->equiv3;
           }
         }
       }
-
-      nStackSize = nNewStackSize;
-    } while (nNewStackSize);
+    } while (nStackSize);
 
     return 0;
 }
@@ -2381,8 +2343,7 @@ void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32
     }
 
     pRecord[1] = '\0';
-    pRecord[2] = '\0';
-    pRecord[3] = '\0';
+    *(short int*)(pRecord + 2) = 0;
     if (!(pName && *pName != '\0')) {
       return;
     }

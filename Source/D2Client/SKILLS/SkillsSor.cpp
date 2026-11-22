@@ -366,7 +366,6 @@ BOOL __fastcall Skills_CltDoFunc_Sor_MissileWithChargeCount(D2UnitStrc * pUnit, 
 
 // Client DoFunc for Sorceress aura-level missile skills. Resolves the missile id via SKILLSASS_GetCltMissileByAuraLevel, then computes a positional offset from the caster to the confirmed target unit. Builds a D2SkillArgStrc (flags=0x21, owner, offset-adjusted X/Y, skill level in nToHit) and spawns a client missile via MakeMissile. On success sets the missile's target-X (used as the missile count or distance parameter) from calc[0]. Returns 1 on success, 0 if skill/missile record invalid or missile creation fails.
 BOOL __fastcall Skills_CltDoFunc_Sor_OffsetMissileCount(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nPosTmp2;
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -386,25 +385,18 @@ BOOL __fastcall Skills_CltDoFunc_Sor_OffsetMissileCount(D2UnitStrc * pUnit, eD2S
     int nOffsetY = 0;
     D2UnitStrc* pMissileUnit = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (pMissileUnit) {
-      int32_t nCasterPosTmp;
-      nPosTmp2 = D2Common::Units::GetXPosFromDynamicPathUnit(pMissileUnit);
-      nPosTmp2 -= D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-      nOffsetX = nPosTmp2;
-      nPosTmp2 = D2Common::Units::GetYPosFromDynamicPathUnit(pMissileUnit);
-      nPosTmp2 -= D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      nOffsetY = nPosTmp2;
+      nOffsetX = D2Common::Units::GetXPosFromDynamicPathUnit(pMissileUnit) - D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+      nOffsetY = D2Common::Units::GetYPosFromDynamicPathUnit(pMissileUnit) - D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     }
 
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
-    nPosTmp2 = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-    sSkillArg.nX = nPosTmp2 + nOffsetX;
-    nPosTmp2 = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+    sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit) + nOffsetX;
+    sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit) + nOffsetY;
     sSkillArg.eSkillNo = eSkill;
-    sSkillArg.nY = nPosTmp2 + nOffsetY;
-    sSkillArg.nMissileTxtNo = eMissileId;
     sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nMissileTxtNo = eMissileId;
     BOOL bGotCoords = Skills::GetCooordinates(pUnit, &sSkillArg.nUnitX, &sSkillArg.nUnitY);
     if (!(bGotCoords && sSkillArg.nUnitX && sSkillArg.nUnitY)) {
       return 0;
@@ -450,27 +442,24 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterHasRoomNotInTown(D2UnitStrc * pUnit,
     if (!pRoom) {
       return 0;
     }
-
-    BOOL bIsInTown = Skills::GetCooordinates(pUnit, &nPosX, &nPosY);
-    if (!bIsInTown) {
+    if (!Skills::GetCooordinates(pUnit, &nPosX, &nPosY)) {
       return 0;
     }
 
     pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nPosX, nPosY);
-    D2SkillsTxt* pSkillsTxt;
-    if (!(pRoom && (pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr))) {
+    if (!pRoom) {
       return 0;
     }
-    if (pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
-      return 1;
+
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
+      return 0;
+    }
+    if (!(pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+      return 0;
     }
 
-    bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!bIsInTown) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 BOOL __fastcall Skills_CltDoFunc_Sor_SimpleMakeMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {

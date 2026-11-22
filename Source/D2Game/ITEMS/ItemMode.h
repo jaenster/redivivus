@@ -97,7 +97,7 @@ BOOL __fastcall SpecialItemsBonuses(::SGAMEDATA * pGame, struct D2UnitStrc * pUn
 // Server handler for stacking a stackable/socketable item onto another. Validates game and player unit, sends stackable-usage packets, then looks up both source and destination item units. If the destination is on the merc inventory page the operation is silently skipped. If IsItemSocketable confirms compatibility and class IDs match, calls ITEMMODE_MergeStackableItems, marks the destination with ITEMCMD_CURSOR_STACK_ITEM, upserts it in the update list, and refreshes the inventory. Returns 1 on success/handled, 0 if not applicable; calls ERROR_Halt on null game/player.
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall StackItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nItemGUID, DWORD nScrollGUID, BOOL * pbBadParams);
-BOOL __stdcall RemoveStackItem(uint32_t dwParam1, uint32_t * dwParam2);
+BOOL __fastcall RemoveStackItem(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t dwItemGUID, uint32_t * pnSize);
 // Server-side handler: validates and places a beltable item (by GUID) into a specific belt slot for pUnit. If nParam==0, checks slot capacity via INVENTORY_CanPlaceItemInBelt; if non-zero, auto-finds a slot via INVENTORY_PlacePotionInBelt. On success, applies item effects to owner, clears TARGETABLE flag, handles charm activation, and broadcasts inventory refresh. Returns 1 on success, 0 on failure; writes error code to *pdwParam.
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall ITEM_TryPlaceInBelt(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, DWORD nItemGUID, uint32_t nBeltSlot, int32_t bAutoPlace, BOOL * pbBadParams);

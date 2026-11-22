@@ -1259,12 +1259,8 @@ static void __stdcall SKILLBAR_InitChargeTarget(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nSkillId) {
-    if (!(nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxtBase = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-    if (!(pSkillsTxtBase + nSkillId)) {
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[nSkillId] : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -1277,16 +1273,11 @@ static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nX,
     if (!pRoom) {
       return 0;
     }
-    if (*((uint8_t*)&pSkillsTxtBase[nSkillId] + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
-      return 1;
+    if (!(*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+      return 0;
     }
 
-    BOOL bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!bIsInTown) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {

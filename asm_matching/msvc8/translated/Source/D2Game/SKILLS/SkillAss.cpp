@@ -26,6 +26,14 @@
 #include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/SKILLS/SkillsServer.data.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -54,22 +62,18 @@ D2MonEquipTxt * __fastcall SKILLBAR_GetVelocityAndSpreadForMissile(int32_t nMonS
     return D2Common::ITEMS::Items::sgptDataTable->pTxtMonEquip + nMonEquipId;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 BOOL __fastcall SKILLASS_SrvStFn22_PsychicHammer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (!pTarget) {
-      return 0;
-    }
-
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    BOOL bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (bIsInTown) {
-      return 0;
-    }
-
-    pRoom = D2Common::Units::UNITS_GetRoom(pTarget);
-    bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!bIsInTown) {
-      return (uint32_t)(pTarget->eUnitType < UNIT_OBJECT);
+    if (pTarget && !D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(D2Common::Units::UNITS_GetRoom(pUnit)) && !D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(D2Common::Units::UNITS_GetRoom(pTarget))) {
+      return GetTypeInline(pTarget) <= UNIT_MONSTER;
     }
 
     return 0;
@@ -587,40 +591,28 @@ int32_t __fastcall SKILLASS_GetChargeUpMissile(D2UnitStrc * pUnit, int32_t nSkil
 
 // Returns the charge-level-indexed prgcalc value for a charge-up skill. If the skill has the charge-up flag (bit 2) and a valid aurastate with an active stat list, selects prgcalc[0..2] by clamped charge level (1/2/3); otherwise falls back to prgcalc[0]. Returns 0 if skill id is out of range.
 uint32_t __fastcall SKILLASS_GetChargeUpCalcValue(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    uint32_t nCalcResult;
-    int nCalcIdx;
-    short int eAuraState;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
-    if (pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
-      D2StatListExStrc* pStatList;
-      eAuraState = pSkillTxt->aurastate;
-      if (eAuraState < 0 || (int)eAuraState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-        nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
-        return nCalcResult;
-      }
-      if (pSkillTxt->aurastat[0] >= 0 && (int)pSkillTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-        pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)eAuraState);
-        if (pStatList) {
-          nCalcIdx = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, (int)pSkillTxt->aurastat[0], 0);
-          if (nCalcIdx > 1) {
-            if (nCalcIdx >= 3) {
-              nCalcIdx = 3;
-            }
-          } else {
-            nCalcIdx = 1;
-          }
+    if (!(pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+      return D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
+    }
 
-          nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[nCalcIdx - 1], eSkill, nSkillLvl);
-          return nCalcResult;
-        }
+    short int eAuraState = pSkillTxt->aurastate;
+    if (eAuraState < 0 || (int)eAuraState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      return D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
+    }
+    if (pSkillTxt->aurastat[0] >= 0 && (int)pSkillTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
+      D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)eAuraState);
+      if (pStatList) {
+        int nCharges = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, (int)pSkillTxt->aurastat[0], 0);
+        nCharges = min(max(nCharges, 1), 3); // steer-ok: windef.h min/max macros
+        return D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[nCharges - 1], eSkill, nSkillLvl);
       }
     }
 
-    nCalcResult = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
-    return nCalcResult;
+    return D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
 }
 
 // Server do-func 38: the second charge release of Fists of Fire and Blades of Ice. Applies direct melee damage to the target via DAMAGE_ProcessCombatQueueEntry, then fires an area explosion at the target/cursor position; the radius comes from SKILLASS_GetChargeUpCalcValue (falling back to aurarangecalc).

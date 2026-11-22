@@ -6826,7 +6826,7 @@ void __stdcall UI_InitializeStatDescriptionPointers() {
     gnUICtrlConfigScrollMaxLines = 6;
 }
 
-int64_t __stdcall UI_GetControlConfigRowCount() {
+int __stdcall UI_GetControlConfigRowCount() {
     uint32_t nScrollExtra = WindowSizeY - 0x1a4 >> 0x1f;
     int i = 0;
     int nRows = gnUICtrlConfigTotalRows;
@@ -9172,45 +9172,41 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
     }
 
     Party::SetRedToBlack();
-    bool bHoverLowerBtn = false;
-    bool bHoverUpperBtn = false;
-    uint32_t local_8 = 0;
-    if (nMouseX >= Inv::gnPanelOffsetX + 0xa2) {
-      if (nMouseX > Inv::gnPanelOffsetX + 0x140 || nMouseY < Inv::gnPanelOffsetY - 0x14e + Inv::ScreenSizeY || nMouseY > Inv::gnPanelOffsetY - 0x13b + Inv::ScreenSizeY) {
-        bHoverLowerBtn = false;
-        if (nMouseX >= Inv::gnPanelOffsetX + 0xa2 && nMouseX <= Inv::gnPanelOffsetX + 0x140 && nMouseY >= Inv::gnPanelOffsetY - 0x134 + Inv::ScreenSizeY && nMouseY <= Inv::gnPanelOffsetY - 0x121 + Inv::ScreenSizeY) {
-          bHoverLowerBtn = true;
-        }
-      } else {
-        bHoverLowerBtn = false;
-        bHoverUpperBtn = true;
-      }
+    int bHoverUpperBtn = 0;
+    int bHoverLowerBtn = 0;
+    if (nMouseX >= Inv::gnPanelOffsetX + 0xa2 && nMouseX <= Inv::gnPanelOffsetX + 0x140 && nMouseY >= Inv::gnPanelOffsetY - 0x14e + Inv::ScreenSizeY && nMouseY <= Inv::gnPanelOffsetY - 0x13b + Inv::ScreenSizeY) {
+      bHoverUpperBtn = 1;
+    } else if (nMouseX >= Inv::gnPanelOffsetX + 0xa2 && nMouseX <= Inv::gnPanelOffsetX + 0x140 && nMouseY >= Inv::gnPanelOffsetY - 0x134 + Inv::ScreenSizeY && nMouseY <= Inv::gnPanelOffsetY - 0x121 + Inv::ScreenSizeY) {
+      bHoverLowerBtn = 1;
     }
     if (!bUpperEnabled) {
-      bHoverUpperBtn = false;
+      bHoverUpperBtn = 0;
     }
     if (!bLowerEnabled) {
-      bHoverLowerBtn = false;
+      bHoverLowerBtn = 0;
     }
+    int nValue;
     if (bHoverUpperBtn) {
       nBtnIndex = 0;
+      nValue = bUpperEnabled;
     } else {
       if (!bHoverLowerBtn) {
         return;
       }
 
       nBtnIndex = 1;
-      bUpperEnabled = bLowerEnabled;
+      nValue = bLowerEnabled;
     }
-    if (bUpperEnabled < 5) {
-      bUpperEnabled = 5;
-    } else if (bUpperEnabled > 0x5f) {
-      bUpperEnabled = 0x5f;
+    if (nValue < 5) {
+      nValue = 5;
+    } else if (nValue > 0x5f) {
+      nValue = 0x5f;
     }
 
     Engine::Gfx::D2GFX_DrawSolidRectExBySize(gaStatWindowRowLayout[nBtnIndex * 6] + Inv::gnPanelOffsetX, gaStatWindowRowLayout[nBtnIndex * 6 + 1] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY, 0x9b, 0x1e, (uint32_t)gbUIStatWindowDrawFlag, DRAW_LESSTRANSPARENT);
+    int nY = gaStatWindowRowLayout[nBtnIndex * 6 + 3] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY; // steer-ok: the original loads the y row before the x row, both ahead of the GetLocaleString call; argument order is unspecified
     int nX = gaStatWindowRowLayout[nBtnIndex * 6 + 2] + Inv::gnPanelOffsetX;
-    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x103f), nX, gaStatWindowRowLayout[nBtnIndex * 6 + 3] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY, 0, 0);
+    D2Win::Src::D2WinFont::DRAW_text(D2Lang::StrTable::strtable::GetLocaleString(0x103f), nX, nY, 0, 0);
     int nMonsterIdx = GAME::Select::SELECT_GetConstant13_X();
     D2MonStatsTxt* pMonStatsTxt = nMonsterIdx >= 0 && nMonsterIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterIdx : nullptr;
     if (!pMonStatsTxt) {
@@ -9221,7 +9217,7 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
     
     
     
-    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszMonNameTooltip, (uint16_t*)(D2Lang::StrTable::strtable::GetLocaleString(0x2777)), (uint16_t*)(D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr)), bUpperEnabled);
+    D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszMonNameTooltip, (uint16_t*)(D2Lang::StrTable::strtable::GetLocaleString(0x2777)), (uint16_t*)(D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr)), nValue);
     D2Win::Src::D2WinFont::DRAW_text(wszMonNameTooltip, gaStatWindowRowLayout[nBtnIndex * 6 + 4] + Inv::gnPanelOffsetX, gaStatWindowRowLayout[nBtnIndex * 6 + 5] + Inv::gnPanelOffsetY - 0x1e0 + Inv::ScreenSizeY, 0, 0);
     return;
 }

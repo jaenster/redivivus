@@ -360,7 +360,7 @@ struct D2BattleNetEventCallbackTable {
     /* 0x1C */ uint8_t * fpSaveDatabaseGuild;
     /* 0x20 */ void (__fastcall *fpUnlockDatabaseCharacter)(uint32_t *, char *, char *);
     /* 0x24 */ uint8_t * fpReserved1;
-    /* 0x28 */ void (__fastcall *fpUpdateCharacterLadder)(char *, uint16_t, uint32_t, uint32_t, uint32_t, uint16_t, void *);
+    /* 0x28 */ void (__fastcall *fpUpdateCharacterLadder)(char *, uint16_t, uint32_t, uint64_t, uint16_t, void *);
     /* 0x2C */ void (__fastcall *fpUpdateGameInformation)(WORD, char *, int32_t, int32_t);
     /* 0x30 */ void (__fastcall *fpReserved2_systemMsg)(struct D2BNetSystemInfoStrc *);
     /* 0x34 */ int (*fpSetGameData)();

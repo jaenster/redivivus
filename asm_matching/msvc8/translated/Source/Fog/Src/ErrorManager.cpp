@@ -259,50 +259,33 @@ uint8_t Unreferenced_00407dd0() {
 
 void __stdcall InitializeSystemInfo() {
     _MEMORYSTATUS memoryStatus;
-    uint32_t dwMajorVersion;
     _OSVERSIONINFOA osVersionInfo;
-    float fMajorVersionF;
-    float fMinorVersionFrac;
-    /* LPOSVERSIONINFOA lpVersionInformation for GetVersionExA */ osVersionInfo.dwOSVersionInfoSize = 0x94;
-    BOOL bVersionOk = GetVersionExA(&osVersionInfo);
-    if (bVersionOk) {
-      fMinorVersionFrac = (float)(int)osVersionInfo.dwMinorVersion;
-      if ((int)osVersionInfo.dwMinorVersion < 0) {
-        fMinorVersionFrac += 4294967296.0;
+    osVersionInfo.dwOSVersionInfoSize = 0x94;
+    if (GetVersionExA(&osVersionInfo)) {
+      float fMinorVersion = (float)osVersionInfo.dwMinorVersion;
+      while (fMinorVersion > 1.0) {
+        fMinorVersion /= 10.0;
       }
 
-      for (; 1.0 < fMinorVersionFrac; fMinorVersionFrac /= 10.0) {}
-
-      dwMajorVersion = osVersionInfo.dwMajorVersion;
-      fMajorVersionF = (float)(int)osVersionInfo.dwMajorVersion;
-      if ((int)osVersionInfo.dwMajorVersion < 0) {
-        fMajorVersionF += 4294967296.0;
-      }
-
-      gSystemInfo.fOSVersion = fMajorVersionF + fMinorVersionFrac / 100.0;
+      gSystemInfo.fOSVersion = (float)osVersionInfo.dwMajorVersion + fMinorVersion / 100.0;
       switch (osVersionInfo.dwPlatformId) {
         case 2:
-          {
-            gSystemInfo.eOSType = 1;
-            if (osVersionInfo.dwMajorVersion >= 5) {
-              if (osVersionInfo.dwMinorVersion >= 2) {
-                gSystemInfo.eOSType = 4;
-              } else {
-                gSystemInfo.eOSType = 3 - !osVersionInfo.dwMinorVersion;
-              }
+          gSystemInfo.eOSType = 1;
+          if (osVersionInfo.dwMajorVersion >= 5) {
+            if (osVersionInfo.dwMinorVersion >= 2) {
+              gSystemInfo.eOSType = 4;
+            } else {
+              gSystemInfo.eOSType = osVersionInfo.dwMinorVersion >= 1 ? 3 : 2;
             }
-
-            break;
           }
+          break;
         default:
-          {
-            gSystemInfo.eOSType = 0;
-          }
+          gSystemInfo.eOSType = 0;
       }
     }
 
-    /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ GlobalMemoryStatus(&memoryStatus);
-    /* LPSYSTEM_INFO lpSystemInfo for GetSystemInfo */ gSystemInfo.dwTotalPhysicalMemory = memoryStatus.dwTotalPhys;
+    GlobalMemoryStatus(&memoryStatus);
+    gSystemInfo.dwTotalPhysicalMemory = memoryStatus.dwTotalPhys;
     GetSystemInfo(&gSystemInfo.sWinSystemInfo);
     gSystemInfo.bInitialized = 1;
 }

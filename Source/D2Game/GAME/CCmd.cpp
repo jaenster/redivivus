@@ -20,77 +20,51 @@ namespace D2Game::GAME::CCmd {
 
 // Checks if the given server token represents the first game in a session. Returns status code (0=success, 6=error).
 static int __stdcall IsTokenFirstGame(int nMode, int nClientVersion, char * szCharName) {
-    D2ClientStrc* pClient;
-    int32_t nStrCmpResult;
-    char* pGameNameCursor;
-    char cNameChar;
-    int nResult;
-    nResult = 0;
+    int nResult = 0;
     if (nMode != 1) {
       return 6;
     }
 
-    uint32_t nToken;
-    nToken = Server::SERVER_IsTokenValid(1);
+    uint32_t nToken = Server::SERVER_IsTokenValid(1);
     if (!nToken) {
       return 6;
     }
 
-    ::SGAMEDATA* pGame;
-    pGame = Server::QSERVER_FindAndLockGame(nToken);
+    ::SGAMEDATA* pGame = Server::QSERVER_FindAndLockGame(nToken);
     if (!pGame) {
       return 6;
     }
     if (nClientVersion != 0xe) {
-      Server::Unlock(pGame);
-      return 0x10;
-    }
-    if (pGame->nClientsCount >= 8) {
-      Server::Unlock(pGame);
-      return 0xf;
-    }
-    if (*szCharName != '\0' && szCharName[1] != '\0') {
-      int nCharIdx;
-      nCharIdx = 0;
-      pGameNameCursor = szCharName;
-      do {
-        cNameChar = *pGameNameCursor;
-        pGameNameCursor++;
-        if (cNameChar == '\0') {
-          pClient = Clients::GetFirstClientOfGame(pGame);
-          if (pClient) {
-            goto find_name_in_game;
-          }
-
-          goto unlock_and_return;
-        }
-
-        nCharIdx++;
-      } while (nCharIdx < 0x10);
-    }
-
-    while (true) {
-      nResult = 6;
-      unlock_and_return:
-      Server::Unlock(pGame);
-      return nResult;
-      find_name_in_game:
-      while (true) {
-        pGameNameCursor = Clients::GetCharName(pClient);
-        if (pGameNameCursor) {
-          nStrCmpResult = Storm::Source::SSTR::SStrCmpI(pGameNameCursor, szCharName, 0x10);
-          if (!nStrCmpResult) {
+      nResult = 0x10;
+    } else if (pGame->nClientsCount >= 8) {
+      nResult = 0xf;
+    } else {
+      BOOL bNameOk = 0;
+      if (*szCharName != '\0' && szCharName[1] != '\0') {
+        char* pCursor = szCharName;
+        for (int nCharIdx = 0; nCharIdx < 0x10; nCharIdx++) {
+          if (*pCursor++ == '\0') {
+            bNameOk = 1;
             break;
           }
         }
+      }
 
-        pClient = Clients::GetNext(pClient);
-        if (!pClient) {
-          Server::Unlock(pGame);
-          return 0;
+      if (bNameOk) {
+        for (D2ClientStrc* pClient = Clients::GetFirstClientOfGame(pGame); pClient; pClient = Clients::GetNext(pClient)) {
+          char* szClientName = Clients::GetCharName(pClient);
+          if (szClientName && !Storm::Source::SSTR::SStrCmpI(szClientName, szCharName, 0x10)) {
+            nResult = 6;
+            break;
+          }
         }
+      } else {
+        nResult = 6;
       }
     }
+
+    Server::Unlock(pGame);
+    return nResult;
 }
 
 // D2GS server-side dispatcher for the game-setup / session control packet family (opcodes 0x67..0x70, indexed by pPacket[1]-0x67). Reads the client id from pPacket[0] and routes: 0=GAMELOGON_SP (single-player create via GAME_CreateSingleplayerGame), 1=GAMELOGON_MULTI (token-first-game anti-cheat check, NET_D2GS_SERVER_IsValidChecks then NET_D2GS_SERVER_SrvJoinGame), 2=LEAVEGAME, 3=REQUESTHOSTEDGAMES, 4=JOINGAME (SrvJoinAct), 5=UPLOADSAVE (halts unrecoverably if save size >0x1fff), 6=PING (NET_SendPong), 7=FINDME_6E, 9=force-disconnect (sets QServer nForceTimeoutDisconnect). Most branches gate the action behind a per-command validity/allowed check. Returns via Fog::Debug::GuardStack. pCritSec is the clients-list critical section (released on the force-disconnect path). NOTE: several gate booleans (bSetupCheckResult, bServerValidRequest, bFindMeCheckResult) read as uninitialized in decompile due to lost register-param/inlined-return storage.

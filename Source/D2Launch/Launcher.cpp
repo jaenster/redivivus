@@ -639,12 +639,54 @@ int __fastcall EnterEmailMessagePumper(D2IniConfigStrc * pIniConfig, int32_t bCr
 
     MainMenus::UIMENU_PleaseWaitWithCancelButton();
     gpBNetCallbacks->pfnGetStateAndClear((int*)&sBnetErrorState);
-    if (!bCreateAccount || sBnetErrorState.eErrorCode) {
+    if (bCreateAccount && !sBnetErrorState.eErrorCode) {
+      gpBNetCallbacks->pfnSendCreateAccountRequest(pIniConfig->szLastBnetAccount, pIniConfig->szLastKnownIpTcpIp);
+      D2Win::Src::D2WinMain::MessagePump(LAUNCHER_HandleBnetConnect_1);
+      if (gnBusyFlag) {
+        MainMenus::FORMS_DestroyListJmp();
+        return 0;
+      }
+
+      gpBNetCallbacks->pfnWaitForCreateAccountResponse((uint32_t*)&nResponseCode);
+      if (nResponseCode) {
+        bSocketConnected = gpBNetCallbacks->pfnIsSocketConnected();
+        if (bSocketConnected) {
+          switch (nResponseCode) {
+            case 2:
+              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_2, nullptr);
+            break;
+            case 3:
+              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_3, nullptr);
+            break;
+            case 4:
+              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_4, nullptr);
+            break;
+            case 5:
+              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_5, nullptr);
+            break;
+            case 6:
+              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_6, nullptr);
+            break;
+            case 7:
+              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_7, nullptr);
+            break;
+            case 8:
+              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_8, nullptr);
+            break;
+            default:
+              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_1, nullptr);
+            break;
+          }
+          return 0;
+        }
+      }
+    } else {
       if (nResponseCode && !sBnetErrorState.eErrorCode) {
         gpBNetCallbacks->pfnSendChangePasswordRequest(pIniConfig->szLastBnetAccount, gszPasswordChangeNewPasswordMB, pIniConfig->szLastKnownIpTcpIp);
         D2Win::Src::D2WinMain::MessagePump(LAUNCHER_PumpChangePasswordResponse);
         if (gnBusyFlag) {
-          goto close_wait_and_abort;
+          MainMenus::FORMS_DestroyListJmp();
+        return 0;
         }
 
         gpBNetCallbacks->pfnWaitForChangePasswordResponse((uint32_t*)&nResponseCode);
@@ -656,45 +698,6 @@ int __fastcall EnterEmailMessagePumper(D2IniConfigStrc * pIniConfig, int32_t bCr
           }
         }
       }
-    } else {
-      gpBNetCallbacks->pfnSendCreateAccountRequest(pIniConfig->szLastBnetAccount, pIniConfig->szLastKnownIpTcpIp);
-      D2Win::Src::D2WinMain::MessagePump(LAUNCHER_HandleBnetConnect_1);
-      if (gnBusyFlag) {
-        goto close_wait_and_abort;
-      }
-
-      gpBNetCallbacks->pfnWaitForCreateAccountResponse((uint32_t*)&nResponseCode);
-      if (nResponseCode) {
-        bSocketConnected = gpBNetCallbacks->pfnIsSocketConnected();
-        if (bSocketConnected) {
-          switch (nResponseCode) {
-            case 2:
-              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_2, nullptr);
-            return 0;
-            case 3:
-              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_3, nullptr);
-            return 0;
-            case 4:
-              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_4, nullptr);
-            return 0;
-            case 5:
-              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_5, nullptr);
-            return 0;
-            case 6:
-              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_6, nullptr);
-            return 0;
-            case 7:
-              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_7, nullptr);
-            return 0;
-            case 8:
-              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_8, nullptr);
-            return 0;
-            default:
-              LAUNCHER_ShowOogErrorDialog_ForEnterEmail(OOG_ERROR_CREATE_ACCOUNT_1, nullptr);
-            return 0;
-          }
-        }
-      }
     }
 
     bSocketConnected = gpBNetCallbacks->pfnIsSocketConnected();
@@ -702,11 +705,9 @@ int __fastcall EnterEmailMessagePumper(D2IniConfigStrc * pIniConfig, int32_t bCr
       char* szPass;
       szPass = pIniConfig->szLastKnownIpTcpIp;
       gpBNetCallbacks->pfnSendLogonRequest(pIniConfig->szLastBnetAccount, szPass);
-      *(uint32_t*)szPass = 0;
-      memset(pIniConfig->szLastKnownIpTcpIp + 4, 0, 20 * sizeof(pIniConfig->szLastKnownIpTcpIp[0]));
+      memset(szPass, 0, sizeof(pIniConfig->szLastKnownIpTcpIp));
       D2Win::Src::D2WinMain::MessagePump(MainMenus::LAUNCHER_PollBNConnectionPump);
       if (gnBusyFlag || (bSocketConnected = MainMenus::MAINMENU_GetGlobalValue2() , bSocketConnected != 0)) {
-        close_wait_and_abort:
         MainMenus::FORMS_DestroyListJmp();
         return 0;
       }

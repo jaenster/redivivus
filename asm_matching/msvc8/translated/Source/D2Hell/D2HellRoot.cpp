@@ -92,20 +92,14 @@ char __fastcall D2FILE_VerifyFileSignature(LPCSTR szText) {
     // Static local variables (originally global data)
     static LPCSTR gnFileSignatureResult = (LPCSTR)(char*)"Blizzard Entertainment, Inc."; D2_STATIC_GUARD(gnFileSignatureResult, "D2Hell::D2FILE_VerifyFileSignature::gnFileSignatureResult");
 
-    bool bVar1;
-    char bIsSigned;
-    int nOrgCmp;
     char szSignerOrg[512];
-    int32_t dwWinTrustResult = D2FILE_VerifySignatureWinTrust(szText);
-    if (dwWinTrustResult) {
-      bIsSigned = '\0';
-    } else {
-      bVar1 = D2FILE_GetSignerOrganization(szText, szSignerOrg, 0x200);
-      bIsSigned = '\0';
-      if (bVar1) {
-        nOrgCmp = _strnicmp(szSignerOrg, gnFileSignatureResult, 0x200);
-        bIsSigned = nOrgCmp != 0 ? 0 : 1;
-      }
+    if (D2FILE_VerifySignatureWinTrust(szText)) {
+      return 0;
+    }
+
+    bool bIsSigned = D2FILE_GetSignerOrganization(szText, szSignerOrg, 0x200);
+    if (bIsSigned) {
+      bIsSigned = _strnicmp(szSignerOrg, gnFileSignatureResult, 0x200) == 0;
     }
 
     return bIsSigned;
@@ -529,11 +523,14 @@ int32_t __fastcall LINKEDLIST_GetNodeLinkAtOffset(int * pList, int, void * nOffs
 // TSList<TMESSAGESOURCE>::UnlinkAll: unlinks every node without freeing it.
 // Named per redivivus issue #35; T from gFaultHandlerList, whose nodes are allocated with .?AUTMESSAGESOURCE@@ (0072f9fc).
 void __fastcall TSList_TMESSAGESOURCE_UnlinkAll(StormLinkedListStrc * pList) {
+    StormFaultHandlerNodeStrc* pItem;
     while (true) {
-      StormFaultHandlerNodeStrc* pItem;
       pItem = (StormFaultHandlerNodeStrc*)pList->head.pNext;
       if ((intptr_t)pItem <= 0) {
         pItem = 0;
+      }
+
+      if (!pItem) {
         break;
       }
 

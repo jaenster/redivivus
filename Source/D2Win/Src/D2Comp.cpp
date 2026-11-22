@@ -1767,53 +1767,41 @@ static void __stdcall D2COMP_ReleaseCOFCacheEntry(int32_t bFreeData, D2CompCofCa
 }
 
 static void __stdcall D2COMP_BuildCOFFilePath(int32_t nAnimMode, uint32_t dwWeaponClassToken, char * pszDestPath, int32_t nPlayerClassId) {
-    uint8_t bMaskedTokenByte;
-    int nOpenResult;
     int* pArchiveHandle;
-    char COFanimation[4];
-    char COFhitclass[4];
-    uint32_t uAnimCode;
-    uint32_t uHitclassCode;
+    char szHitClass[4];
+    char szMode[4];
+    char szClass[4];
     if (!((uint32_t)nPlayerClassId < 0x19)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x488);
       exit(-1);
     }
+    if (!((uint32_t)nAnimMode < gnD2CompCOFLayerCount)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
+      exit(-1);
+    }
 
-    {
-      uint8_t bHitclassByte3;
-      if (!((uint32_t)nAnimMode < gnD2CompCOFLayerCount)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
-        exit(-1);
-      }
-
-      uHitclassCode = gaCompCharClassTokens[nPlayerClassId];
-      uAnimCode = gaCompAnimModeTokens[nAnimMode];
-      COFhitclass[3] = '\0';
-      COFhitclass[0] = (uint8_t)dwWeaponClassToken == 0x20 ? 0 : (uint8_t)dwWeaponClassToken;
-      COFhitclass[1] = *(uint8_t*)((char*)&dwWeaponClassToken + 1) == 0x20 ? 0 : *(uint8_t*)((char*)&dwWeaponClassToken + 1);
-      COFhitclass[2] = *(uint8_t*)((char*)&dwWeaponClassToken + 2) == 0x20 ? 0 : *(uint8_t*)((char*)&dwWeaponClassToken + 2);
-      *(uint8_t*)(char*)&dwWeaponClassToken = (uint8_t)uHitclassCode == 0x20 ? 0 : (uint8_t)uHitclassCode;
-      bMaskedTokenByte = (uint8_t)(uHitclassCode >> 8);
-      *(uint8_t*)((char*)&dwWeaponClassToken + 1) = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
-      bHitclassByte3 = (uint8_t)(uHitclassCode >> 0x10);
-      *(uint8_t*)((char*)&dwWeaponClassToken + 3) = 0;
-      COFanimation[3] = '\0';
-      *(uint8_t*)((char*)&dwWeaponClassToken + 2) = bHitclassByte3 == 0x20 ? 0 : bHitclassByte3;
-      COFanimation[0] = (uint8_t)uAnimCode == 0x20 ? 0 : (uint8_t)uAnimCode;
-      bMaskedTokenByte = (uint8_t)(uAnimCode >> 8);
-      COFanimation[1] = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
-      bMaskedTokenByte = (uint8_t)(uAnimCode >> 0x10);
-      COFanimation[2] = bMaskedTokenByte == 0x20 ? 0 : bMaskedTokenByte;
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pszDestPath, "%s\\%s\\COF\\%s%s%s.COF", (uint32_t)nPlayerClassId >= 7 ? (char*)"DATA\\GLOBAL\\MONSTERS" : (char*)"DATA\\GLOBAL\\CHARS", &dwWeaponClassToken, &dwWeaponClassToken, COFanimation, COFhitclass);
-      nOpenResult = Fog::Source::SFile::ARCHIVE_OpenD2FileWrap(pszDestPath, (D2MPQFileStrc**)&pArchiveHandle);
-      if (nOpenResult) {
-        Fog::Source::SFile::ERRORMANAGER_FCloseFile((D2MPQFileStrc*)pArchiveHandle);
-        return;
-      }
-
-      *pszDestPath = '\0';
+    uint32_t uClassCode = gaCompCharClassTokens[nPlayerClassId];
+    uint32_t uModeCode = gaCompAnimModeTokens[nAnimMode];
+    char* pszWeaponToken = (char*)&dwWeaponClassToken;
+    szHitClass[0] = pszWeaponToken[0] == ' ' ? 0 : pszWeaponToken[0];
+    szHitClass[1] = pszWeaponToken[1] == ' ' ? 0 : pszWeaponToken[1];
+    szHitClass[2] = pszWeaponToken[2] == ' ' ? 0 : pszWeaponToken[2];
+    szHitClass[3] = 0;
+    szClass[0] = (char)uClassCode == ' ' ? 0 : (char)uClassCode;
+    szClass[1] = (char)(uClassCode >> 8) == ' ' ? 0 : (char)(uClassCode >> 8);
+    szClass[2] = (char)(uClassCode >> 16) == ' ' ? 0 : (char)(uClassCode >> 16);
+    szClass[3] = 0;
+    szMode[0] = (char)uModeCode == ' ' ? 0 : (char)uModeCode;
+    szMode[1] = (char)(uModeCode >> 8) == ' ' ? 0 : (char)(uModeCode >> 8);
+    szMode[2] = (char)(uModeCode >> 16) == ' ' ? 0 : (char)(uModeCode >> 16);
+    szMode[3] = 0;
+    wsprintfA(pszDestPath, "%s\\%s\\COF\\%s%s%s.COF", (uint32_t)nPlayerClassId < 7 ? (char*)"DATA\\GLOBAL\\CHARS" : (char*)"DATA\\GLOBAL\\MONSTERS", szClass, szClass, szMode, szHitClass);
+    if (Fog::Source::SFile::ARCHIVE_OpenD2FileWrap(pszDestPath, (D2MPQFileStrc**)&pArchiveHandle)) {
+      Fog::Source::SFile::ERRORMANAGER_FCloseFile((D2MPQFileStrc*)pArchiveHandle);
       return;
     }
+
+    *pszDestPath = '\0';
 }
 
 static D2CompCofListNodeStrc * D2COMP_FindCOFEntryByModeAndWeapon(D2CompCofListNodeStrc * * ppCOFList, int32_t nAnimMode, uint32_t dwWeaponClassToken) {
@@ -2740,40 +2728,23 @@ void __fastcall D2COMP_DrawCompositeUnit(D2CharSelCompStrc * pCompUnit, int32_t 
 }
 
 int32_t __stdcall D2COMP_TruncateStringToFitWidth(uint16_t * wszText, int32_t nMaxWidth) {
-    int32_t nPixelWidth;
-    char* pEllipsisPos;
     char szMultiByte[300];
-    char cCurChar;
-    int nCharIndex = 0;
+    int nFitCount = 0;
     D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szMultiByte, (uint16_t*)wszText, 300);
-    char* pCharScan = szMultiByte;
-    pCharScan = pCharScan + strlen(pCharScan) + 1;
-    int bTruncatedFlag = 0;
-    int nFitCount = nCharIndex;
-    if ((intptr_t)pCharScan - (intptr_t)(szMultiByte + 1) > 0) {
-      do {
-        nFitCount = nCharIndex + 1;
-        nPixelWidth = D2WinFont::D2WINFONT_GetStringPixelWidth(wszText, nFitCount);
-        if (nPixelWidth >= nMaxWidth) {
-          bTruncatedFlag = 1;
-          nFitCount = nCharIndex;
-          break;
-        }
+    int nLength = strlen(szMultiByte);
+    int bTruncated = 0;
+    while (nFitCount < nLength) {
+      if (D2WinFont::D2WINFONT_GetStringPixelWidth(wszText, nFitCount + 1) >= nMaxWidth) {
+        bTruncated = 1;
+        break;
+      }
 
-        nCharIndex = nFitCount;
-      } while (nFitCount < (intptr_t)pCharScan - (intptr_t)(szMultiByte + 1));
+      nFitCount++;
     }
 
-    bool bTruncated = bTruncatedFlag != 0;
     szMultiByte[nFitCount] = '\0';
     if (bTruncated) {
-      pEllipsisPos = (char*)((uint8_t*)&szMultiByte - 1);
-      do {
-        pCharScan = pEllipsisPos;
-        pEllipsisPos = pCharScan + 1;
-      } while (pCharScan[1] != '\0');
-
-      memcpy(pCharScan + 1, "...", 4);
+      strcat(szMultiByte, "...");
     }
 
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszText, szMultiByte, 299);
@@ -3007,13 +2978,11 @@ void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFie
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFilePath, "%s\\%s%s", "DATA\\GLOBAL\\EXCEL", szTxtName, ".bin");
       pArchive = (uint32_t*)D2Hell::D2FILE_AllocAndLoadD2File(pMemory, szFilePath, &nFileSize, ".\\Src\\D2Comp.cpp", 0x958);
     } else {
-      int bIsCaseLevelDefs;
-      bIsCaseLevelDefs = _stricmp(szTxtName, "leveldefs");
-      if (!bIsCaseLevelDefs) {
-        szTxtName = "levels";
+      if (!_stricmp(szTxtName, "leveldefs")) {
+        pArchive = (uint32_t*)D2COMP_LoadExcelTxtFile(pMemory, "levels", ".txt", &nFileSize);
+      } else {
+        pArchive = (uint32_t*)D2COMP_LoadExcelTxtFile(pMemory, szTxtName, ".txt", &nFileSize);
       }
-
-      pArchive = (uint32_t*)D2COMP_LoadExcelTxtFile(pMemory, szTxtName, ".txt", &nFileSize);
     }
     if (!pArchive) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9e3);

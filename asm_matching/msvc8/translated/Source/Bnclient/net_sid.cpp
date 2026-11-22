@@ -466,17 +466,12 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ReportVersion(char * pBytes, size_t nSiz
 
 // SID_STARTVERSIONING (0x06) response handler. Version check challenge from server. Receives (FILETIME)FileTime, (STRING)MPQFilename, (STRING)ValueString for CheckRevision algorithm. Initiates MPQ file download (mode 0x80000001, type 3) for version verification. ValueString passed to BNSEND_SendString for client-side checksum computation.
 BOOL __fastcall NET_SID_CLIENT_Incoming_StartVersioning(char * pBytes, size_t nSize) {
-    char c;
-    char* szText1 = pBytes + 8;
-    char* pszEnd = szText1;
-    pszEnd = pszEnd + strlen(pszEnd) + 1;
-    if ((uintptr_t)(pszEnd + (9 - (intptr_t)(pBytes + 9))) < nSize) {
-      pszEnd = szText1;
-      pszEnd = pszEnd + strlen(pszEnd) + 1;
-      BnSend::BNSEND_SendString(szText1 + (int)(pszEnd - (pBytes + 9) + 1));
+    char* szFileName = pBytes + 8;
+    if (strlen(szFileName) + 9 < nSize) {
+      BnSend::BNSEND_SendString(szFileName + strlen(szFileName) + 1);
     }
 
-    BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7fffffff, 3, 0, 0, (FILETIME*)pBytes, szText1, nullptr);
+    BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7fffffff, 3, 0, 0, (FILETIME*)pBytes, szFileName, nullptr);
     return 1;
 }
 
@@ -573,20 +568,15 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_GetFileTime(char * pBytes, size_t nSize)
 // BATTLE.NET SID_CHECKAD (0x15) HANDLER
 // Receives banner ad info containing: DWORD ad_id, DWORD file_extension, FILETIME(8) file_time, null-terminated filename, null-terminated URL. Checks if the ad_id differs from the last cached ad (g_dwLastAdId), and if both filename and URL are non-empty, initiates asynchronous download via BNDOWNLOAD_InitiateFileDownload with the ad's file timestamp and URL.
 BOOL __fastcall NET_SID_CLIENT_Incoming_CheckAd(char * pBytes, size_t nSize) {
-    char* szFilenameScan;
-    char cChar;
-    uint32_t dwAdIdReg = *(uint32_t*)pBytes;
-    if (nSize >= 0x11 && dwAdIdReg != g_dwLastAdId) {
-      char* szText1;
-      szText1 = pBytes + 0x10;
-      szFilenameScan = szText1;
-      szFilenameScan = szFilenameScan + strlen(szFilenameScan) + 1;
-      g_dwLastAdId = dwAdIdReg;
-      if (*szText1 != '\0' && szText1[(int)(szFilenameScan - (pBytes + 0x11) + 1)] != '\0') {
-        BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7ffffffd, 5, dwAdIdReg, *(uint32_t*)(pBytes + 4), (FILETIME*)(pBytes + 8), szText1, szText1 + (int)(szFilenameScan - (pBytes + 0x11) + 1));
+    uint32_t dwAdId = *(uint32_t*)pBytes;
+    if (nSize >= 0x11 && dwAdId != g_dwLastAdId) {
+      FILETIME* pFileTime = (FILETIME*)(pBytes + 8);
+      char* szFileName = (char*)(pFileTime + 1);
+      g_dwLastAdId = dwAdId;
+      char* szUrl = szFileName + strlen(szFileName) + 1;
+      if (*szFileName != '\0' && *szUrl != '\0') {
+        BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7ffffffd, 5, dwAdId, *(uint32_t*)(pBytes + 4), pFileTime, szFileName, szUrl);
       }
-
-      return 1;
     }
 
     return 1;
@@ -2935,16 +2925,14 @@ void __fastcall NET_SID_CLIENT_IDEAExpandKey(uint16_t * pUserKey, uint16_t * pEx
     pExpandedSubkeys[5] = pUserKey[5];
     pExpandedSubkeys[6] = pUserKey[6];
     pExpandedSubkeys[7] = pUserKey[7];
-    int remainingSubkeys = 0x2c;
-    uint32_t uVar1 = 0;
+    uint32_t i = 0;
+    int nRemaining = 0x2c;
     do {
-      uint32_t nextIdx;
-      nextIdx = uVar1 + 1 & 7;
-      pExpandedSubkeys[uVar1 + 8] = pExpandedSubkeys[uVar1 + 2 & 7] >> 7 | pExpandedSubkeys[nextIdx] << 9;
-      remainingSubkeys--;
-      pExpandedSubkeys += uVar1 + 1 & 8;
-      uVar1 = nextIdx;
-    } while (remainingSubkeys);
+      i++;
+      pExpandedSubkeys[i + 7] = pExpandedSubkeys[i + 1 & 7] >> 7 | pExpandedSubkeys[i & 7] << 9;
+      pExpandedSubkeys += i & 8;
+      i &= 7;
+    } while (--nRemaining);
 }
 
 void __fastcall NET_SID_CLIENT_IDEAInvertKey(uint16_t * pEncryptKey, uint16_t * pDecryptKey) {

@@ -39,7 +39,7 @@ char * __fastcall WideCharToUTF8(char * pDest, uint16_t * pSrc, int nMaxBytes);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Lang)
 void __fastcall UTF8_EncodeCodePoint(uint16_t * pCodePoint);
-void __fastcall UTF8_GetEncodedLength(uint16_t * pwszStr, int32_t nMaxChars);
+int32_t __fastcall UTF8_GetEncodedLength(uint16_t * pwszStr, int32_t nMaxChars);
 // Compares two characters using UI character lookup table for case-insensitive comparison. If char < 0x100, maps via CharacterLookupTable, else uses raw value. Returns 1 if equal, 0 otherwise.
 BOOL __stdcall UI_CompareCharsUsingLookupTable(uint16_t wChar1, uint16_t wChar2);
 #endif // D2_MODULE_D2Lang

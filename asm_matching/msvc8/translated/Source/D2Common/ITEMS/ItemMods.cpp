@@ -1695,25 +1695,20 @@ BOOL __stdcall ITEMMOD_CanApplyAffix(D2UnitStrc * pUnit, D2RareAffixTxt * pRareA
 // Checks whether an item matches the repair eligibility described by szRepairModes byte flags. Tests melee weapons (excl. staves/bows/crossbows/scepters/wands) against flag [1], body armor (excl. shields/boots/gloves/belts) against flag [0], then falls through a table of 9 specific item types (Shield, Scepter, Wand, Staff, Bow, Crossbow, Boots, Gloves, Belt) each paired with an individual mode flag. Returns 1 on match, 0 otherwise.
 uint32_t __stdcall ITEMMOD_MatchesRepairType(D2UnitStrc * pUnit, char * szRepairModes) {
     uint32_t bIsArmor;
-    D2RepairTypeEntryStrc eTypeEntry0[9];
-    eTypeEntry0[0].byMode = szRepairModes[2];
-    eTypeEntry0[1].byMode = szRepairModes[3];
-    eTypeEntry0[2].byMode = szRepairModes[4];
-    eTypeEntry0[3].byMode = szRepairModes[5];
-    eTypeEntry0[4].byMode = szRepairModes[6];
-    eTypeEntry0[6].byMode = szRepairModes[7];
-    eTypeEntry0[7].byMode = szRepairModes[8];
-    eTypeEntry0[8].byMode = szRepairModes[9];
-    eTypeEntry0[0].eType = ITEMTYPE_Shield;
-    eTypeEntry0[1].eType = ITEMTYPE_Scepter;
-    eTypeEntry0[2].eType = ITEMTYPE_Wand;
-    eTypeEntry0[3].eType = ITEMTYPE_Staff;
-    eTypeEntry0[4].eType = ITEMTYPE_Bow;
-    eTypeEntry0[5].eType = ITEMTYPE_Crossbow;
-    eTypeEntry0[6].eType = ITEMTYPE_Boots;
-    eTypeEntry0[7].eType = ITEMTYPE_Gloves;
-    eTypeEntry0[8].eType = ITEMTYPE_Belt;
-    eTypeEntry0[5].byMode = eTypeEntry0[4].byMode;
+    struct {
+      char byMode;
+      eD2ItemTypes eType;
+    } eTypeEntry0[9] = {
+      { szRepairModes[2], ITEMTYPE_Shield },
+      { szRepairModes[3], ITEMTYPE_Scepter },
+      { szRepairModes[4], ITEMTYPE_Wand },
+      { szRepairModes[5], ITEMTYPE_Staff },
+      { szRepairModes[6], ITEMTYPE_Bow },
+      { szRepairModes[6], ITEMTYPE_Crossbow },
+      { szRepairModes[7], ITEMTYPE_Boots },
+      { szRepairModes[8], ITEMTYPE_Gloves },
+      { szRepairModes[9], ITEMTYPE_Belt },
+    };
     eD2ItemTypes eItemType = Items::ITEM_GetItemData_wType(pUnit);
     if (szRepairModes[1] != '\0') {
       uint32_t bIsTypeMatch;

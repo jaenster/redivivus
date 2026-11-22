@@ -238,12 +238,12 @@ void __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUn
     }
 }
 
-void __stdcall ITEM_ProcessSetItemEquip(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nEquipMode, int32_t bUpdateStates) {
+BOOL __stdcall ITEM_ProcessSetItemEquip(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nEquipMode, int32_t bUpdateStates) {
     if (!pUnit) {
-      return;
+      return 0;
     }
     if (!(pUnit2 && pUnit2->eUnitType == UNIT_ITEM && pUnit->pInventory)) {
-      return;
+      return 0;
     }
 
     D2UnitStrc* pOwnerUnit = INVENTORY::Inventory::INVENTORY_IsItemOwnedBy(pUnit->pInventory, pUnit2);
@@ -262,6 +262,7 @@ void __stdcall ITEM_ProcessSetItemEquip(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
     }
 
     ITEM_ManageSetBonusStatList(pUnit, pUnit2, nEquipMode);
+    return 1;
 }
 
 } // namespace D2Common

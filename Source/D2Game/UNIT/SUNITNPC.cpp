@@ -2290,36 +2290,32 @@ void __fastcall SUNITNPC_ValidateNpcInteraction(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Dispatches an NPC interaction for a player. nMode==0: repair/trade path — registers player interaction, repairs items, and initialises inventory for vendor NPCs (Charsi=0x96, Fara=0xC6, Larzuk=0x203, Halbu=0xFC) if not yet done. nMode!=0 with a personal inventory: registers gamble interaction and validates it via SUNITNPC_ValidateNpcInteraction.
 void __fastcall SUNITNPC_ProcessNpcAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc, int32_t nMode) {
-    D2NpcPlayerInteractionStrc* nGambleInteractNode;
     int nNpcDataIdx;
     if (!pNpc) {
       return;
     }
 
     int nNpcClassId = pNpc->nClassId;
-    D2UnitStrc* pPlayerUnit_lcl = pUnit;
     D2GameNpcStrc* pNpcData = sunitproxy::GetGameNpcByUnit(pGame, pNpc, &nNpcDataIdx);
     if (!pNpcData) {
       return;
     }
     if (nMode) {
       if (pNpcData->flags0x0C) {
-        nGambleInteractNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayerUnit_lcl);
-        *(uint8_t*)&nGambleInteractNode->bGambling = 1;
-        SUNITNPC_ValidateNpcInteraction(pGame, pNpc, pPlayerUnit_lcl, pNpcData);
-        return;
+        D2NpcPlayerInteractionStrc* pInteraction = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pUnit);
+        *(uint8_t*)&pInteraction->bGambling = 1;
+        SUNITNPC_ValidateNpcInteraction(pGame, pNpc, pUnit, pNpcData);
       }
     } else {
-      D2NpcTradeStateStrc* pTradeState;
-      pTradeState = &pNpcData->sTrade;
-      if (pTradeState && pNpcData->sTrade.bHasStore) {
-        nGambleInteractNode = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pPlayerUnit_lcl);
-        *(uint8_t*)&nGambleInteractNode->bGambling = 0;
+      D2NpcTradeStateStrc* pTradeState = &pNpcData->sTrade;
+      if (pTradeState && pTradeState->bHasStore) {
+        D2NpcPlayerInteractionStrc* pInteraction = sunitproxy::SUNITPROXY_AddPlayerInteraction(pGame, pNpcData, pUnit);
+        *(uint8_t*)&pInteraction->bGambling = 0;
         if (!pTradeState->bStoreFilled) {
-          SUNITNPC_FillNpcStore(pGame, pPlayerUnit_lcl, pNpc, pTradeState);
+          SUNITNPC_FillNpcStore(pGame, pUnit, pNpc, pTradeState);
           pTradeState->bStoreFilled = 1;
         }
-        if (!pNpcData->sTrade.bHirelingsInitialized) {
+        if (!pTradeState->bHirelingsInitialized) {
           if (nNpcClassId == 0x96 || nNpcClassId == 0x203 || nNpcClassId == 0xc6 || nNpcClassId == 0xfc) {
             SUNITNPC_InitNpcInventory(pGame, nNpcClassId, pNpcData);
           }

@@ -535,19 +535,19 @@ int32_t __stdcall FOG_GetLowestSetBitIndex(uint32_t dwBits) {
     if (!dwBits) {
       return -1;
     }
-    if ((uint8_t)(char)dwBits > '\0') {
-      return gaLowestSetBitIndex.aLowestSetBitIndex[(uint8_t)dwBits];
-    }
 
-    uint8_t byClassByte = (uint8_t)(dwBits >> 8);
-    if (byClassByte > 0) {
-      return gaLowestSetBitIndex.aLowestSetBitIndex[byClassByte] + 8;
+    uint8_t* pBytes = (uint8_t*)&dwBits;
+    if (pBytes[0] > 0) {
+      return gaLowestSetBitIndex.aLowestSetBitIndex[pBytes[0]];
     }
-    if ((uint8_t)*(uint8_t*)((char*)&dwBits + 2) > 0) {
-      return gaLowestSetBitIndex.aLowestSetBitIndex[*(uint8_t*)((char*)&dwBits + 2)] + 0x10;
+    if (pBytes[1] > 0) {
+      return gaLowestSetBitIndex.aLowestSetBitIndex[pBytes[1]] + 8;
     }
-    if ((uint8_t)*(uint8_t*)((char*)&dwBits + 3) > 0) {
-      return gaLowestSetBitIndex.aLowestSetBitIndex[*(uint8_t*)((char*)&dwBits + 3)] + 0x18;
+    if (pBytes[2] > 0) {
+      return gaLowestSetBitIndex.aLowestSetBitIndex[pBytes[2]] + 0x10;
+    }
+    if (pBytes[3] > 0) {
+      return gaLowestSetBitIndex.aLowestSetBitIndex[pBytes[3]] + 0x18;
     }
 
     return -1;

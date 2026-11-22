@@ -77,28 +77,24 @@ int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, size_
 }
 
 BOOL __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage) {
-    char cCurrentChar;
     ::BnMessQueue* pNewMessage = D2_NEW_AT(::BnMessQueue, ".\\BnMessQueue.cpp", 0x5c);
-    char* pDestBuffer = pNewMessage->bBuffer;
-    Storm::Source::SSTR::SStrCopy(pDestBuffer, szMessage, 0x120);
-    pDestBuffer = pDestBuffer + strlen(pDestBuffer) + 1;
-    pNewMessage->nDataSize = (size_t)(pDestBuffer + (1 - (intptr_t)(pNewMessage->bBuffer + 1)));
+    Storm::Source::SSTR::SStrCopy(pNewMessage->bBuffer, szMessage, 0x120);
+    size_t nDataSize = strlen(pNewMessage->bBuffer) + 1;
+    pNewMessage->nDataSize = nDataSize;
     pNewMessage->nZero = nEventType;
     pNewMessage->pNext = 0;
-    if (!(pDestBuffer + (1 - (intptr_t)(pNewMessage->bBuffer + 1)) < (char*)0x121)) {
+    if (nDataSize > 0x120) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x62);
       exit(-1);
     }
 
-    ::BnMessQueue* pFirstMessage;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
-    pFirstMessage = pNewMessage;
-    if (nLobbyChatCurrentMessage) {
+    EnterCriticalSection(&lpCriticalSection_00882004);
+    if (!nLobbyChatCurrentMessage) {
+      nLobbyChatCurrentMessage = pNewMessage;
+    } else {
       nLobbyChatQueueMessages->pNext = pNewMessage;
-      pFirstMessage = nLobbyChatCurrentMessage;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ nLobbyChatCurrentMessage = pFirstMessage;
     nLobbyChatQueueMessages = pNewMessage;
     LeaveCriticalSection(&lpCriticalSection_00882004);
     return 1;
