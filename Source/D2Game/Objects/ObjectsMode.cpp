@@ -2360,17 +2360,14 @@ BOOL __fastcall OBJOP_ActivateShrine(D2ObjectOperateFnArg * pOperation) {
 }
 
 BOOL __fastcall OBJOP_SpawnRewardItem(D2ObjectOperateFnArg * pOperation) {
-    D2ObjectOperateFnArg* pOperationArg;
-    ::SGAMEDATA* pGame;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
-      D2ObjectsTxt* pTxtObjects;
-      pUnit->dwDropItemCode = 0x2067656c;
-      pUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationArg, nullptr, -1, 0);
-      if (pUnit) {
+      int32_t nItemLevel;
+      pOperation->sArg.pVictim->dwDropItemCode = 0x2067656c;
+      if (ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, &nItemLevel, nullptr, -1, 0)) {
         D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
-        pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-        pGame = pOperation->sArg.pGame;
+        D2ObjectsTxt* pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
+        ::SGAMEDATA* pGame = pOperation->sArg.pGame;
         GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
         pGame = pOperation->sArg.pGame;
         GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 7, pGame->dwGameFrame + 10, 0, 0);
