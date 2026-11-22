@@ -2065,26 +2065,25 @@ static BOOL QualityCanHaveSockets(eD2ItemQuality eQuality) {
 }
 
 BOOL __stdcall ITEM_ValidateItemQuantity(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      return 0;
-    }
-
-    int nQuantity = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0);
-    if (nQuantity > 0) {
-      return 1;
-    }
-
-    int32_t nThrowableMinVal = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throwable, 0);
-    if (nThrowableMinVal) {
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_quantity, 0, 0);
-    } else {
-      nQuantity = ITEM_GetMaxStack(pUnit);
+    if (pUnit) {
+      int nQuantity = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0);
       if (nQuantity > 0) {
-        return 0;
+        return 1;
+      }
+
+      int32_t nThrowableMinVal = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throwable, 0);
+      if (nThrowableMinVal) {
+        Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_quantity, 0, 0);
+        return 1;
+      }
+
+      nQuantity = ITEM_GetMaxStack(pUnit);
+      if (nQuantity <= 0) {
+        return 1;
       }
     }
 
-    return 1;
+    return 0;
 }
 
 BOOL __stdcall ReturnFalse(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
