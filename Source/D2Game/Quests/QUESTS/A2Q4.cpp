@@ -21,71 +21,31 @@ namespace D2Game::Quests::QUESTS::A2Q4 {
 
 // A2Q4 "The Arcane Sanctuary" - ActiveFilter. Decides whether an NPC (target classId) currently has a quest-active gossip option for this player. Returns false if Sanctuary already Completed(0). For Drognan(0x14b): blocked if RewardAwaits(1); offers Step0x07 if portal not yet placed, or Step0x08 once portal exists (sSub.field_0x2E). For Atma/Cain (0xb1 stateFlag==1, 0xc9 stateFlag==2): offers Completed path unless RewardAwaits set. Filtered out if the chosen quest-record state bit is already set.
 bool __fastcall Q12_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    eD2QuestState eQuestState;
-    uint16_t nPortalPlacedState;
-    BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed);
-    if (BVar1 == 1) {
-      return false;
-    }
-    if (nTargetClassId == 0x14b) {
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
-      if (BVar1 == 1) {
-        return false;
-      }
-
-      nPortalPlacedState = pQuestData->pQuestSpecificData.pA2Q4->nPortalPlacedState;
-      switch (nPortalPlacedState) {
-        case 0:
-          {
-            eQuestState = QUESTSTATE_Step0x07;
-            break;
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed) != 1) {
+      if (nTargetClassId == 0x14b) {
+        if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits) != 1) {
+          switch (pQuestData->pQuestSpecificData.pA2Q4->nPortalPlacedState) {
+            case 2:
+              if (pQuestData->pQuestSpecificData.pA2Q4->bHaremBlockerNeutral && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x08)) {
+                return true;
+              }
+              break;
+            case 0:
+              if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07)) {
+                return true;
+              }
+              break;
           }
-        default:
-          {
-            return false;
-          }
-        case 2:
-          {
-            if (!pQuestData->pQuestSpecificData.pA2Q4->bHaremBlockerNeutral) {
-              return false;
-            }
-
-            eQuestState = QUESTSTATE_Step0x08;
-            break;
-          }
-      }
-    } else {
-      bool bStateMatches;
-      if (nTargetClassId == 0xb1) {
-        bStateMatches = false;
-        if (pQuestData->nStateFlag == 1) {
-          bStateMatches = true;
         }
-      } else {
-        if (nTargetClassId != 0xc9) {
-          return false;
+      } else if (nTargetClassId == 0xb1) {
+        if (pQuestData->nStateFlag == 1 && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed)) {
+          return true;
         }
-
-        bStateMatches = false;
-        if (pQuestData->nStateFlag == 2) {
-          bStateMatches = true;
+      } else if (nTargetClassId == 0xc9) {
+        if (pQuestData->nStateFlag == 2 && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed)) {
+          return true;
         }
       }
-      if (!bStateMatches) {
-        return false;
-      }
-
-      BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
-      if (BVar1) {
-        return false;
-      }
-
-      eQuestState = QUESTSTATE_Completed;
-    }
-
-    BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, eQuestState);
-    if (!BVar1) {
-      return true;
     }
 
     return false;
