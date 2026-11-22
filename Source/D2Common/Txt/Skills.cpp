@@ -852,53 +852,39 @@ static BOOL __stdcall SKILLS_CheckWeaponRequirements(D2UnitStrc * pUnit, D2Skill
 
 // Checks whether a skill's use-restriction condition is satisfied for the caster. Reads the restrict field from the skill record: 0 = requires no active poison state (returns true if not poisoned); 1 = always allowed; 2 = requires a poison state AND at least one of the skill's three state[] entries active on the unit. Returns 1 if the restriction passes, 0 otherwise. Returns 0 immediately if unit or skill pointer is null.
 static int SKILLS_CheckRestriction(D2SkillStrc * pSkillTxt, D2UnitStrc * pUnitStrc) {
-    BOOL eActiveState;
-    int32_t nHasPoisonState2;
-    int32_t nStateIdx;
-    short int* psReqState;
-    char cRestrictionType;
     if (!pUnitStrc || !pSkillTxt) {
       return 0;
     }
 
     D2SkillsTxt* pSkillRecord = pSkillTxt->pRecord;
-    if (pSkillRecord) {
-      int32_t nHasPoisonState;
-      cRestrictionType = pSkillRecord->restrict;
-      if (cRestrictionType == '\0') {
-        nHasPoisonState2 = DATATBLS::ItemStats::STATES_HasRestrictFlagState(pUnitStrc);
-        return (uint32_t)!nHasPoisonState2;
-      }
-      if (cRestrictionType == '\x01' || cRestrictionType != '\x02') {
+    if (!pSkillRecord) {
+      return 0;
+    }
+
+    switch ((uint8_t)pSkillRecord->restrict) {
+      case 0:
+        return !DATATBLS::ItemStats::STATES_HasRestrictFlagState(pUnitStrc);
+      case 1:
         return 1;
-      }
+      case 2:
+        if (!DATATBLS::ItemStats::STATES_HasRestrictFlagState(pUnitStrc)) {
+          return 0;
+        }
 
-      nHasPoisonState = DATATBLS::ItemStats::STATES_HasRestrictFlagState(pUnitStrc);
-      if (nHasPoisonState) {
-        nStateIdx = 0;
-        psReqState = pSkillRecord->state;
-        while (true) {
-          if (*psReqState < 0) {
+        for (int i = 0; i < 3; i++) {
+          int nState = pSkillRecord->state[i];
+          if (nState < 0) {
             return 0;
           }
-
-          eActiveState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, (int)*psReqState);
-          if (eActiveState) {
-            break;
-          }
-
-          nStateIdx++;
-          psReqState++;
-          if (nStateIdx >= 3) {
-            return 0;
+          if (DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, nState)) {
+            return 1;
           }
         }
 
-        return 1;
-      }
+        return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pint (ESI): int*, pint (EDI): int*
