@@ -3834,10 +3834,9 @@ void __stdcall SBigDel(BigData * pBigData) {
 // @oracle Mac PPC 1.10b Storm -- PPC SBigDiv -> 10099d70, 160B, single bl .Div__FR9BigBufferR9BigBufferRC9BigBufferRC9BigBufferR8BigStack (quot, rem, a, b, stack). 1.14d passes the caller's destination in the QUOTIENT slot and a BigStack temp in the remainder slot - the mirror image of SBigMod 00424ed0.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigDiv(BigData * pResult, BigData * pBigA, BigData * pBigB) {
-    uint32_t nStackBase = pResult->sStack.nUsed;
-    pResult->sStack.nUsed = nStackBase + 1;
-    BigBuffer_Div(&pResult->sPrimary, pResult->sStack.aBuffers + nStackBase, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    pResult->sStack.nUsed--;
+    BigStack* pStack = &pResult->sStack;
+    BigBuffer_Div(&pResult->sPrimary, &pStack->aBuffers[pStack->nUsed++], &pBigB->sPrimary, pStack, &pBigA->sPrimary);
+    pStack->nUsed--;
 }
 
 // @renamed-from SBIG_GCDWrapper (2026-08-28, Storm PowerPC oracle pass 4)
