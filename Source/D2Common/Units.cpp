@@ -2926,28 +2926,27 @@ void __stdcall SetShiftRightSkillData(D2UnitStrc * pUnit, eD2Skills eSkill, int3
 }
 
 void __stdcall SetWeaponGUID(D2UnitStrc * pUnit, D2UnitStrc * pWeapon) {
-    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
     }
 
-    D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+    D2UnitDataPlayerStrc* pPlayerData = GetTypeInline(pUnit) == UNIT_PLAYER ? pUnit->pUnitData.pUnitDataPlayer : nullptr;
     if (!pPlayerData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x14c5);
       exit(-1);
-    } else {
-      if (pWeapon) {
-        if (pWeapon->eUnitType != UNIT_ITEM) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x14c9);
-          exit(-1);
-        }
+    }
 
-        pPlayerData->nWeaponGUID = pWeapon->nUnitGUID;
-        return;
+    if (pWeapon) {
+      if (pWeapon->eUnitType != UNIT_ITEM) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x14c9);
+        exit(-1);
       }
 
-      pPlayerData->nWeaponGUID = 0;
+      pPlayerData->nWeaponGUID = pWeapon->nUnitGUID;
       return;
     }
+
+    pPlayerData->nWeaponGUID = 0;
 }
 
 int32_t __stdcall GetWeaponGUID(D2UnitStrc * pUnit) {
