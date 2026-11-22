@@ -677,10 +677,7 @@ void __fastcall Q10_OnStaffAssembledViaCube(::SGAMEDATA * pGame, D2UnitStrc * pU
       int32_t nAssemblerGUID;
       pA2Q2Data = pPlayerData->pQuestSpecificData.pA2Q2;
       pA2Q2Data->bStaffAssembled = true;
-      nAssemblerGUID = -1;
-      if (pUnit) {
-        nAssemblerGUID = pUnit->nUnitGUID;
-      }
+      nAssemblerGUID = !pUnit ? -1 : pUnit->nUnitGUID;
 
       pA2Q2Data->nMsfCount--;
       pA2Q2Data->nVipCount--;
