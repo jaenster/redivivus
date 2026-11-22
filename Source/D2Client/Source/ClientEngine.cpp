@@ -2336,19 +2336,19 @@ int __fastcall CLIENT_GetEffectiveAnimMode(D2UnitStrc * pUnit) {
 }
 
 DWORD __fastcall CLIENT_GetEffectiveClassId(D2UnitStrc * pUnit) {
-    if (pUnit) {
-      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
-        return pUnit->nClassId;
-      }
-
-      eD2UnitType eUnitType = pUnit->eUnitType;
-      DWORD nEffectiveClassId = pUnit->nClassId;
-      int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, (int*)&nEffectiveClassId, &nAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0x116);
-      return nEffectiveClassId;
+    if (pUnit && !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
+      return pUnit->nClassId;
     }
 
-    return -1;
+    if (!pUnit) {
+      return -1;
+    }
+
+    eD2UnitType eUnitType = pUnit->eUnitType;
+    DWORD nEffectiveClassId = pUnit->nClassId;
+    int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, (int*)&nEffectiveClassId, &nAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0x116);
+    return nEffectiveClassId;
 }
 
 void RENDERING_TogglePerspective_Thunk() {
