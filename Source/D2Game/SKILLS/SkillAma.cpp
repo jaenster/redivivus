@@ -21,6 +21,7 @@
 #include "Source/D2Game/UNIT/SUnitDmg.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Game/SKILLS/SkillSor.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -646,11 +647,6 @@ BOOL __fastcall Skills_SrvDoFunc_010_GuidedArrowLaunch(::SGAMEDATA * pGame, D2Un
 
 // Server-side do-function for Amazon Charged Strike (skill 11). Sets UNITFLAG_SKSRVDOFUNC on the caster, retrieves the current target, applies melee combat damage via DAMAGE_ProcessCombatQueueEntry, computes the number of charged bolts from skills.txt calc[0], then reads the charged-bolt missile type accumulated from prior Charge Up hits (SKILLASS_GetChargeUpMissile). If valid, spawns that many charged bolt missiles from the target position outward, each initialised with SKILL_InitChargedBoltPath. Returns 1 on success.
 BOOL __fastcall Skills_SrvDoFunc_011_ChargedStrike(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int nSrcX;
-    D2SkillArgStrc sSkillArg;
-    int nUnitY;
-    int nY;
-    int nX;
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
@@ -667,71 +663,33 @@ BOOL __fastcall Skills_SrvDoFunc_011_ChargedStrike(::SGAMEDATA * pGame, D2UnitSt
 
     UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
     int32_t nChargedBoltCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-    eD2UnitType eUnitType = pTarget->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = pTarget->pPath.pStaticPath->nPosX;
-    } else if (pTarget->pPath.pDynamicPath) {
-      nX = D2Common::PATH::DynamicPath::GetXPos(pTarget->pPath.pDynamicPath);
-    } else {
-      nX = 0;
-    }
-
-    eUnitType = pTarget->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = pTarget->pPath.pStaticPath->nPosY;
-    } else if (pTarget->pPath.pDynamicPath) {
-      nY = D2Common::PATH::DynamicPath::GetYPos(pTarget->pPath.pDynamicPath);
-    } else {
-      nY = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nSrcX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nSrcX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nSrcX = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nUnitY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nUnitY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nUnitY = 0;
-    }
-
+    int nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pTarget);
+    int nY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pTarget);
+    int nUnitX = nX * 2 - D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    int nUnitY = nY * 2 - D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
     eMissilesId eMissileId = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
-    if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-      int nBoltIdx;
-      memset(&sSkillArg, 0, 0x5c);
-      sSkillArg.nX = nX;
-      sSkillArg.nY = nY;
-      sSkillArg.nUnitY = nY * 2 - nUnitY;
-      nBoltIdx = 0;
-      sSkillArg.nMissileTxtNo = eMissileId;
-      sSkillArg.pOwner = pUnit;
-      sSkillArg.nFlags = 0x21;
-      sSkillArg.nUnitX = nX * 2 - nSrcX;
-      sSkillArg.eSkillNo = eSkill;
-      sSkillArg.nSkillLevel = nSkillLvl;
-      sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
-      if (nChargedBoltCount <= 0) {
-        return 1;
-      }
-
-      do {
-        sSkillArg.nFunctionParam = nBoltIdx;
-        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
-        nBoltIdx++;
-      } while (nBoltIdx < nChargedBoltCount);
-
-      return 1;
+    if ((int)eMissileId < 0 || (int)eMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      return 0;
     }
 
-    return 0;
+    D2SkillArgStrc sSkillArg;
+    memset(&sSkillArg, 0, 0x5c);
+    sSkillArg.nFlags = 0x21;
+    sSkillArg.pOwner = pUnit;
+    sSkillArg.nMissileTxtNo = eMissileId;
+    sSkillArg.nX = nX;
+    sSkillArg.nY = nY;
+    sSkillArg.nUnitX = nUnitX;
+    sSkillArg.nUnitY = nUnitY;
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.fpFunction = SkillSor::SKILL_InitChargedBoltPath;
+    for (int i = 0; i < nChargedBoltCount; i++) {
+      sSkillArg.nFunctionParam = i;
+      MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+    }
+
+    return 1;
 }
 
 // Server do-function continuation for the Amazon Strafe skill (func 012). Each invocation fires one strafe arrow missile toward the current or nearest valid target in the strafe radius, decrements the remaining arrow count (param1), and picks the next target via SKILLS_FindNextUnitInAreaByGUID. Applies AmazonDamagePercentCallback for per-arrow damage scaling. Returns 0 when arrows are exhausted or no target is found.
