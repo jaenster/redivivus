@@ -1829,14 +1829,8 @@ static void GFX_LoadMonsterModeCofByState(D2UnitStrc * pUnit, uint32_t nAnimMode
 // @sourcefile .\ENGINE\Gfx.cpp
 D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(D2UnitStrc * pUnit, int32_t nWeaponClass, int nAnimMode) {
     D2GfxInfoUnkStrc* pGfxInfo;
-    int nClassId;
-    eD2UnitType eUnitType = UNIT_COUNT;
-    if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
-    }
+    eD2UnitType eUnitType = GetUnitTypeOrDefaultInline(pUnit);
+    int nClassId = GetUnitClassIdOrNoneInline(pUnit);
 
     uint32_t nModeDefault = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, (int*)&nModeDefault, ".\\ENGINE\\Gfx.cpp", 0x502);
