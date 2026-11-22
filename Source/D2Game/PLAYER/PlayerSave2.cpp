@@ -390,7 +390,6 @@ int32_t __fastcall SaveWaypoints(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_
 
 // Serialises per-act NPC introduction/interaction state into a D2SaveFileNpcStrc (magic 0x7701, 0x34 bytes) and writes it to the save buffer. Copies both the intro bit-buffer data and size/position info for each act. Returns 0 on success, 1 if buffer too small, 2 if player data missing.
 int32_t __fastcall SaveNPC(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * pStartAddress, uint32_t * pEndAddress) {
-    int j;
     D2SaveFileNpcStrc pSaveNpc;
     uint8_t* pDst = *pStartAddress;
     uint32_t* pEnd = (uint32_t*)(pDst + 0x34);
@@ -407,21 +406,15 @@ int32_t __fastcall SaveNPC(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * * 
     pSaveNpc.szMagic = 0x7701;
     pSaveNpc.nSize = 0x34;
     uint8_t (*pDest)[8] = pSaveNpc.pActNpcBitInfo;
-    D2UnitDataPlayerInteractedNPCStrc** ppDVar4 = pPlayerData->pInteractedNPCs;
+    D2UnitDataPlayerInteractedNPCStrc** ppInteractedNPCs = pPlayerData->pInteractedNPCs;
     for (int i = 0; i < 3; i++) {
-      PlayerIntro::PLAYERINTRO_CopyIntroToBuffer(*ppDVar4, (char*)(pDest - 3));
-      PlayerIntro::PLAYERINTRO_CopyIntro2ToBuffer(*ppDVar4, *pDest);
-      ppDVar4++;
+      PlayerIntro::PLAYERINTRO_CopyIntroToBuffer(*ppInteractedNPCs, (char*)(pDest - 3));
+      PlayerIntro::PLAYERINTRO_CopyIntro2ToBuffer(*ppInteractedNPCs, *pDest);
+      ppInteractedNPCs++;
       pDest++;
     }
 
-    D2SaveFileNpcStrc* pSrc = &pSaveNpc;
-    /* Safety ckecks */ for (j = 0xd; j; j--) {
-      *(uint32_t*)pDst = *(uint32_t*)pSrc;
-      pSrc = (D2SaveFileNpcStrc*)pSrc->pActNpcData;
-      pDst += 4;
-    }
-
+    memcpy(pDst, &pSaveNpc, sizeof(pSaveNpc));
     *pStartAddress = (uint8_t*)pEnd;
     return 0;
 }
