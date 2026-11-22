@@ -797,26 +797,27 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, size_t nSize) {
 }
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, size_t nSize) {
-    int nGameTokenUnused = pBytes->nGameToken;
-    int nGameHashValue = pBytes->nGameHash;
+    int nGameToken = pBytes->nGameToken; // steer-ok: packet fields are read together on entry, before the request-id test
+    int nGameIp = pBytes->nGameIp; // steer-ok: packet fields are read together on entry, before the request-id test
+    int nGameHash = pBytes->nGameHash; // steer-ok: packet fields are read together on entry, before the request-id test
+    int nResult = pBytes->nResult; // steer-ok: packet fields are read together on entry, before the request-id test
     if ((uint16_t)pBytes->nRequestId != nMcpPacketSequence) {
       return 1;
     }
 
     D2GSRequestId = nMcpPacketSequence;
-    D2GSGameToken = nGameTokenUnused;
-    D2GSGameHash = nGameHashValue;
-    if (!pBytes->nGameIp) {
-      if (pBytes->nResult) {
-        SetD2GSJoinResult(pBytes->nResult);
-        return 1;
+    D2GSGameToken = nGameToken;
+    D2GSGameHash = nGameHash;
+    if (!nGameIp) {
+      if (nResult) {
+        SetD2GSJoinResult(nResult);
+      } else {
+        SetD2GSJoinResult(0x28);
       }
-
-      SetD2GSJoinResult(0x28);
-      return 1;
+    } else {
+      Storm::Source::SSTR::SStrCopy(D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(nGameIp), 0x12);
     }
 
-    Storm::Source::SSTR::SStrCopy(D2GSConnectIp, Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(pBytes->nGameIp), 0x12);
     return 1;
 }
 
