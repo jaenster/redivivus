@@ -1705,37 +1705,32 @@ uint32_t __stdcall SStrHash(char * pszText, uint8_t bCaseSensitive, uint32_t nSe
     0xe4444563
 }; D2_STATIC_GUARD(gnHashLowTable, "Storm::Source::SSTR::SStrHash::gnHashLowTable");
 
-    uint32_t nChar;
     D2_CHECKS_BEGIN;
     D2_CHECK(pszText);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    int nAccum;
     if (!nSeed) {
       nSeed = 0x7fed7fed;
     }
 
-    nChar = (uint32_t)(uint8_t)*pszText;
-    nAccum = -0x11111112;
+    int nAccum = -0x11111112;
     if (bCaseSensitive & 1) {
-      while (nChar) {
-        nSeed = nSeed + nAccum ^ gnHashLowTable[nChar >> 4] - gnHashLowTable[nChar & 0xf];
+      for (uint32_t nChar = (uint8_t)*pszText; nChar; nChar = (uint8_t)*pszText) {
         pszText++;
+        nSeed = nSeed + nAccum ^ gnHashLowTable[nChar >> 4] - gnHashLowTable[nChar & 0xf];
         nAccum = nAccum * 0x21 + nChar + 3 + nSeed;
-        nChar = (uint32_t)(uint8_t)*pszText;
       }
     } else {
-      while (nChar) {
+      for (uint32_t nChar = (uint8_t)*pszText; nChar; nChar = (uint8_t)*pszText) {
         pszText++;
-        if (nChar >= 0x61 && nChar <= 0x7a) {
+        if (nChar >= 'a' && nChar <= 'z') {
           nChar -= 0x20;
         }
-        if (nChar == 0x2f) {
-          nChar = 0x5c;
+        if (nChar == '/') {
+          nChar = '\\';
         }
 
         nSeed = nSeed + nAccum ^ gnHashLowTable[nChar >> 4] - gnHashLowTable[nChar & 0xf];
         nAccum = nAccum * 0x21 + nChar + 3 + nSeed;
-        nChar = (uint32_t)(uint8_t)*pszText;
       }
     }
     if (nSeed) {
