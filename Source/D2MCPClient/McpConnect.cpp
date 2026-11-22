@@ -821,57 +821,39 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, size_t nS
 }
 
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize) {
-    char cByte;
-    int nCopyOffset = *(int*)(pBytes + 3);
-    uint32_t dwJoinStatusPart4 = *(uint32_t*)(pBytes + 7);
+    int nGameToken = *(int*)(pBytes + 3);
+    uint32_t dwElapsedSeconds = *(uint32_t*)(pBytes + 7);
     if (*(uint16_t*)(pBytes + 1) != nMcpPacketSequence) {
       return 1;
     }
 
     g_CharSelectBuffer.wRequestId = nMcpPacketSequence;
-    g_CharSelectBuffer.nPlayerCount = (int32_t)(uint8_t)pBytes[0xe];
+    g_CharSelectBuffer.nGameToken = nGameToken;
+    g_CharSelectBuffer.nPlayerCount = (uint8_t)pBytes[0xe];
+    g_CharSelectBuffer.dwElapsedSeconds = dwElapsedSeconds;
     g_CharSelectBuffer.nLevelMin = pBytes[0xb];
     g_CharSelectBuffer.nLevelRange = pBytes[0xc];
     g_CharSelectBuffer.nMaxPlayers = pBytes[0xd];
-    g_CharSelectBuffer.dwElapsedSeconds = dwJoinStatusPart4;
-    g_CharSelectBuffer.nGameToken = nCopyOffset;
-    if (nCopyOffset == -1) {
+    if (nGameToken == -1) {
       SetD2GSJoinResult(0x32);
       return 1;
     }
-    if (nCopyOffset == -2) {
+    if (nGameToken == -2) {
       SetD2GSJoinResult(0x33);
       return 1;
     }
 
-    char* pszSrc = pBytes + 0x2f;
-    char* pszScan = pszSrc;
-    pszScan = pszScan + strlen(pszScan) + 1;
-    nCopyOffset = (intptr_t)&g_CharSelectBuffer.szGameDescription - (intptr_t)pszSrc;
-    do {
-      cByte = *pszSrc;
-      pszSrc[nCopyOffset] = cByte;
-      pszSrc++;
-    } while (cByte != '\0');
-
-    if ((uint8_t)pBytes[0xe] <= '\0') {
-      return 1;
+    char* pCursor = pBytes + 0x2f;
+    char* pGameDescription = pCursor;
+    pCursor += strlen(pCursor) + 1;
+    strcpy(g_CharSelectBuffer.szGameDescription, pGameDescription);
+    for (int i = 0; i < (uint8_t)pBytes[0xe]; i++) {
+      g_CharSelectBuffer.awPlayerClass[i] = (uint8_t)pBytes[0xf + i];
+      g_CharSelectBuffer.awPlayerLevel[i] = (uint8_t)pBytes[0x1f + i];
+      char* pPlayerName = pCursor;
+      pCursor += strlen(pCursor) + 1;
+      strcpy(g_CharSelectBuffer.aszPlayerName[i], pPlayerName);
     }
-
-    uint8_t* pbGameNameSrc = (uint8_t*)(pBytes + 0x1f);
-    char* pszGameNameDst = g_CharSelectBuffer.aszPlayerName[0];
-    uint16_t* pwGameNameLenDst = g_CharSelectBuffer.awPlayerLevel;
-    do {
-      pwGameNameLenDst[-0x10] = (uint16_t)pbGameNameSrc[-0x10];
-      *pwGameNameLenDst = (uint16_t)*pbGameNameSrc;
-      pszSrc = pszScan;
-      pszSrc = pszSrc + strlen(pszSrc) + 1;
-      strcpy(pszGameNameDst, pszScan);
-      pszGameNameDst += 0x10;
-      pbGameNameSrc++;
-      pwGameNameLenDst++;
-      pszScan = pszSrc;
-    } while ((int)((char*)pbGameNameSrc - (char*)pBytes - 0x1f) < (int)(uint32_t)(uint8_t)pBytes[0xe]);
 
     return 1;
 }
