@@ -4183,8 +4183,10 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4F_ClickButton(::SGAMEDATA * pGame, D2
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    eD2ServerIncomingStatus eVar1 = PlayerTrade::ClickButton(pGame, pUnit, pPacket->nButton, (uint32_t)((uint32_t)(uint16_t)(short int)pPacket->dwParam << 16 | (uint32_t)(uint16_t)*(uint16_t*)((intptr_t)&pPacket->dwParam + 2)));
-    return (eD2ServerIncomingStatus)eVar1;
+    uint16_t nButton = pPacket->nButton; // steer-ok: packet fields are read together on entry, before the words are swapped
+    uint16_t wParamLow = LOWORD(pPacket->dwParam); // steer-ok: packet fields are read together on entry, before the words are swapped
+    uint16_t wParamHigh = HIWORD(pPacket->dwParam); // steer-ok: packet fields are read together on entry, before the words are swapped
+    return PlayerTrade::ClickButton(pGame, pUnit, nButton, MAKELONG(wParamHigh, wParamLow));
 }
 
 eD2ServerIncomingStatus __fastcall SCMD_0x50_DropGold(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x50_DropGold * pPacket, uint32_t nSize) {
