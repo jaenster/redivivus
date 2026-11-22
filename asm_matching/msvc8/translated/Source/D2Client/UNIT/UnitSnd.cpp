@@ -2494,15 +2494,26 @@ int gaAmbientMusicLevelSetTable[168] = {
 
 namespace D2Client { namespace UNIT { namespace UnitSnd {
 
-static DWORD GetSndUnitClassId(D2UnitStrc * pUnit) {
-    DWORD nClassId;
+// The unit type read as this unit's callers inlined it: UNIT_COUNT loaded first, the unit's type over it.
+static inline eD2UnitType GetUnitTypeOrDefaultInline(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType = UNIT_COUNT;
     if (pUnit) {
       eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
     }
+    return eUnitType;
+}
+
+// The class id read as this unit's callers inlined it: the -1 path first, then the unit's class id.
+static inline int GetUnitClassIdOrNoneInline(D2UnitStrc * pUnit) {
+    if (!pUnit) {
+      return -1;
+    }
+    return pUnit->nClassId;
+}
+
+static DWORD GetSndUnitClassId(D2UnitStrc * pUnit) {
+    eD2UnitType eUnitType = GetUnitTypeOrDefaultInline(pUnit);
+    DWORD nClassId = GetUnitClassIdOrNoneInline(pUnit);
 
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     if (eUnitType == UNIT_PLAYER) {
@@ -2513,14 +2524,8 @@ static DWORD GetSndUnitClassId(D2UnitStrc * pUnit) {
 }
 
 static eD2UnitType GetSndUnitType(D2UnitStrc * pUnit) {
-    int nClassId;
-    eD2UnitType eUnitType = UNIT_COUNT;
-    if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
-    }
+    eD2UnitType eUnitType = GetUnitTypeOrDefaultInline(pUnit);
+    int nClassId = GetUnitClassIdOrNoneInline(pUnit);
 
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     if (eUnitType == UNIT_PLAYER) {
@@ -2531,14 +2536,8 @@ static eD2UnitType GetSndUnitType(D2UnitStrc * pUnit) {
 }
 
 static int32_t GetSndUnitMode(D2UnitStrc * pUnit) {
-    int nClassId;
-    eD2UnitType eUnitType = UNIT_COUNT;
-    if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
-    }
+    eD2UnitType eUnitType = GetUnitTypeOrDefaultInline(pUnit);
+    int nClassId = GetUnitClassIdOrNoneInline(pUnit);
 
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     if (eUnitType == UNIT_PLAYER) {

@@ -639,6 +639,23 @@ static int32_t GFXUTIL_GetBodyLocWeaponToken(int32_t nBodyLoc, D2UnitStrc * pUni
     return 0x2074696c;
 }
 
+// The unit type read as this unit's callers inlined it: UNIT_COUNT loaded first, the unit's type over it.
+static inline eD2UnitType GetUnitTypeOrDefaultInline(D2UnitStrc * pUnit) {
+    eD2UnitType eUnitType = UNIT_COUNT;
+    if (pUnit) {
+      eUnitType = pUnit->eUnitType;
+    }
+    return eUnitType;
+}
+
+// The class id read as this unit's callers inlined it: the -1 path first, then the unit's class id.
+static inline int GetUnitClassIdOrNoneInline(D2UnitStrc * pUnit) {
+    if (!pUnit) {
+      return -1;
+    }
+    return pUnit->nClassId;
+}
+
 // Returns 1 if the unit supports animation mode nMode (0–15), 0 otherwise. Accounts for shape-shift/transform GFX overrides via SKILLS_GetStateTransformGfx. For players, always accepts modes 0–4, 8, 9. For monsters, checks the MonStats2 bitmask (HD/TR/LG/RA/LA/RH/LH/SH flags). For objects, checks ObjectsTxt->Mode[nMode+0x12]. Items accept mode 1 only.
 // @sourcefile .\ENGINE\GfxUtil.cpp
 BOOL __fastcall GFXUTIL_UnitHasAnimMode(D2UnitStrc * pUnit, uint32_t nMode) {
@@ -890,25 +907,22 @@ static void __stdcall GFXUTIL_UpdateDirectionForMode(uint8_t nDirection, int32_t
       return;
     }
 
-    eD2UnitType eType = UNIT_COUNT;
-    if (pUnit) {
-      eType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
-    }
+    eD2UnitType eType = GetUnitTypeOrDefaultInline(pUnit);
+    nClassId = GetUnitClassIdOrNoneInline(pUnit);
 
     nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eType, &nClassId, &nAnimMode, ".\\ENGINE\\GfxUtil.cpp", 0x53c);
-    if (eType != UNIT_PLAYER) {
-      if (eType == UNIT_MONSTER && (!nAnimMode || nAnimMode == 0xc) && nPrevDirection != nNewDirection) {
-        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, nDirection);
-        return;
-      }
-    } else {
-      if ((!nAnimMode || nAnimMode == 0x11) && nPrevDirection != nNewDirection) {
-        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, nDirection);
-      }
+    switch (eType) {
+      case UNIT_PLAYER:
+        if ((!nAnimMode || nAnimMode == 0x11) && nPrevDirection != nNewDirection) {
+          D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, nDirection);
+        }
+        break;
+      case UNIT_MONSTER:
+        if ((!nAnimMode || nAnimMode == 0xc) && nPrevDirection != nNewDirection) {
+          D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, nDirection);
+        }
+        break;
     }
 }
 

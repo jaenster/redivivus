@@ -642,7 +642,12 @@ void __stdcall MINIPANEL_Init() {
 }
 
 void __stdcall MINIPANEL_Shutdown() {
-    Storm::Source::SReg::SRegSaveValue("Diablo II", "Mini Panel", 1, (uint32_t)!gaEscMenuUIFlags[0x15].nSavedState);
+    BOOL bRegValue = FALSE;
+    if (!gaEscMenuUIFlags[0x15].nSavedState) {
+      bRegValue = TRUE;
+    }
+
+    Storm::Source::SReg::SRegSaveValue("Diablo II", "Mini Panel", 1, bRegValue);
     if (gpMiniPanelBackgroundDC6) {
       Core::Archive::DC6_FreeAndDelete(gpMiniPanelBackgroundDC6);
       gpMiniPanelBackgroundDC6 = 0;
