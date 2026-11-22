@@ -1518,13 +1518,13 @@ void __stdcall GetShiftedFrameMetrics(D2UnitStrc * pUnit, int * pCurrentFrame, i
       exit(-1);
     }
 
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    *pCurrentFrame = pUnit->nGfxCurrentFrame >> 8;
-    if (eUnitType == UNIT_OBJECT) {
+    if (pUnit->eUnitType == UNIT_OBJECT) {
+      *pCurrentFrame = pUnit->nGfxCurrentFrame >> 8;
       *pFrameCount = pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->FrameCnt[pUnit->eAnimMode.ePlayerMode];
       return;
     }
 
+    *pCurrentFrame = pUnit->nGfxCurrentFrame >> 8;
     *pFrameCount = pUnit->nFrameCount >> 8;
 }
 
