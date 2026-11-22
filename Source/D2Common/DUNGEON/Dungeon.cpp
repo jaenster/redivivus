@@ -978,62 +978,32 @@ static BOOL __fastcall DRLGROOM_ValidateClientList(D2RoomStrc * pRoom) {
 
 // Sorts the client list of a room using bubble sort by client ID. Validates the list first, halts on error.
 static void DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
-    uint32_t nNonNullCount;
-    int j;
-    bool bSwapped;
-    D2ClientStrc* dwSwapTmp;
-    int nOuter;
-    BOOL bValid = DRLGROOM_ValidateClientList(pRoom);
-    D2ClientStrc** ppSlot;
-    if (!bValid) {
+    if (!DRLGROOM_ValidateClientList(pRoom)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45b);
       exit(-1);
-    } else {
-      D2ClientStrc** ppDVar1;
-      nOuter = pRoom->nClientsCount;
-      while (--nOuter > 0) {
-        bSwapped = false;
-        j = 0;
-        if (nOuter <= 0) {
-          return;
-        }
+    }
 
-        do {
-          ppDVar1 = pRoom->pClients;
-          ppSlot = ppDVar1 + j;
-          if (ppDVar1[j] > ppDVar1[j + 1]) {
-            ppSlot = pRoom->pClients + j;
-            dwSwapTmp = *ppSlot;
-            *ppSlot = pRoom->pClients[j + 1];
-            ppSlot = pRoom->pClients;
-            ppSlot[j + 1] = dwSwapTmp;
-            bSwapped = true;
-          }
-
-          j++;
-        } while (j < nOuter);
-
-        if (!bSwapped) {
-          return;
+    for (int nLast = pRoom->nClientsCount - 1; nLast > 0; nLast--) {
+      BOOL bSwapped = FALSE;
+      for (int i = 0; i < nLast; i++) {
+        if (pRoom->pClients[i] > pRoom->pClients[i + 1]) {
+          D2ClientStrc* pSwap = pRoom->pClients[i];
+          pRoom->pClients[i] = pRoom->pClients[i + 1];
+          pRoom->pClients[i + 1] = pSwap;
+          bSwapped = TRUE;
         }
       }
 
-      nNonNullCount = 0;
-      if ((uint32_t)pRoom->nClientsCount <= 0) {
+      if (!bSwapped) {
         return;
       }
+    }
 
-      ppSlot = pRoom->pClients;
-      while (*ppSlot) {
-        nNonNullCount++;
-        ppSlot++;
-        if (nNonNullCount >= (uint32_t)pRoom->nClientsCount) {
-          return;
-        }
+    for (uint32_t i = 0; i < (uint32_t)pRoom->nClientsCount; i++) {
+      if (!pRoom->pClients[i]) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x453);
+        exit(-1);
       }
-
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x453);
-      exit(-1);
     }
 }
 
