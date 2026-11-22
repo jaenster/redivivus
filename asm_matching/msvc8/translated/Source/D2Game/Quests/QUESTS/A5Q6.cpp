@@ -151,47 +151,26 @@ BOOL __fastcall SetStep0x2And0x3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void *
 
 // A5Q6 Eve of Destruction. Quest dialog/gossip-completed handler. Maps the NPC dialog message index (0x4ecf..0x4ed4, Larzuk/Anya/Malah/Qual-Kehk/Tyrael act-V conversation lines) to a quest-record journal sub-step (Step0x04..Step0x09) and writes it to the player's quest record. Records which act-V townsfolk the player has spoken to about the final assault on Baal.
 void __fastcall Q36_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2UnitDataPlayerStrc* pPlayerData;
-    ::SGAMEDATA* pGame;
-    eD2QuestState eQuestState;
     switch (pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex) {
       case 0x4ed2:
-        pGame = pQuestData->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      eQuestState = QUESTSTATE_Step0x04;
-      break;
+        D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x04);
+        break;
       case 0x4ed1:
-        pGame = pQuestData->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      eQuestState = QUESTSTATE_Step0x05;
-      break;
+        D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x05);
+        break;
       case 0x4ed3:
-        pGame = pQuestData->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      eQuestState = QUESTSTATE_Step0x06;
-      break;
+        D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x06);
+        break;
       case 0x4ecf:
-        pGame = pQuestData->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      eQuestState = QUESTSTATE_Step0x07;
-      break;
+        D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x07);
+        break;
       case 0x4ed4:
-        pGame = pQuestData->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      eQuestState = QUESTSTATE_Step0x08;
-      break;
-      default:
-        return;
+        D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x08);
+        break;
       case 0x4ed0:
-        pGame = pQuestData->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      eQuestState = QUESTSTATE_Step0x09;
-      break;
+        D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x09);
+        break;
     }
-
-    /* SetQuestState(QUEST_EveOfDestruction, eState) — eState from dialog switch:
-                         msg 0x4ecf->Step0x07, 0x4ed0->Step0x09, 0x4ed1->Step0x05, 0x4ed2->Step0x04,
-                         0x4ed3->Step0x06, 0x4ed4->Step0x08 (records which NPC spoke) */ D2Common::QuestRecord::SetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], pQuestData->nQuestIdReal, eQuestState);
 }
 
 // A5Q6 Eve of Destruction. Main NPC gossip-menu dispatcher (state-fn slot 0). Picks which conversation menu an act-V NPC offers based on quest progress. Two regimes: (a) target class 0x219..0x21b (the Ancients statues, gated on A5Q5 Rite-of-Passage having spawned & cleared them) -> offer post-Ancients gossip; (b) otherwise switch on the player's per-state quest-record bits. Before completion: index gdwQuestCallbackAddressQ36[nStateFlag]. After Completed: per-NPC-class jump table reading Step0x04..Step0x09/JustCompleted to choose the right "talk about killing Baal" line. Pure dialog selection (AddGossipMessageOnMonster); does not mutate quest state.

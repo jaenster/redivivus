@@ -652,23 +652,20 @@ BOOL __fastcall Skills_SrvDoFunc_131_ConditionalTransformOrBuff(::SGAMEDATA * pG
 }
 
 BOOL __fastcall Skills_SrvDoFunc_132_FireClassUpgradedMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    eD2Skills eSkill_00 = eSkill;
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
-    int nBaseMissileId = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].srvmissile[1];
-    if (nBaseMissileId > 0 && nBaseMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-      int32_t nMonClassId;
+    int nMissile = pSkillTxt->srvmissile[1];
+    if (nMissile > 0 && nMissile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       if (pUnit) {
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-        nMonClassId = pUnit->nClassId;
-      } else {
-        nMonClassId = -1;
       }
 
-      D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nMonClassId, nullptr, (int32_t*)&eSkill);
-      SkillsServer::CreatingAMissile(pGame, eSkill + nBaseMissileId, pUnit, eSkill_00, nSkillLvl, 0, 0, 0, 0, 0);
+      int32_t nChainId;
+      D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(!pUnit ? -1 : pUnit->nClassId, nullptr, &nChainId);
+      SkillsServer::CreatingAMissile(pGame, nChainId + nMissile, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       return 1;
     }
 

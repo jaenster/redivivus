@@ -734,51 +734,42 @@ D2UnitStrc * __fastcall UNITS_FindPortalOwnerUnit(::SGAMEDATA * pGame, D2UnitStr
 
 // Walks the game's player (eUnitType=0) or monster (eUnitType=1) hash table (128 slots), skipping dead/body units (STATE_playerbody check), and calls pfnCallback(pCallbackArg) for each live unit. Returns the first unit for which the callback returns 1, or NULL if none found or the unit type is unsupported. Validates pfnCallback with IsBadCodePtr before iterating.
 D2UnitStrc * __fastcall IteratePlayerOrMonsterUnits(::SGAMEDATA * pGame, int eUnitType, void * pCallbackArg, ::fpExecuteOnUnitFunction pfnCallback) {
-    int nSlot;
+    if (!pGame) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b2);
+      exit(-1);
+    }
+    if (!pfnCallback) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b3);
+      exit(-1);
+    }
+
     D2UnitStrc** ppUnitTable;
-    int32_t nErrorLine;
-    D2UnitStrc* pCurUnit;
-    if (pGame && pfnCallback) {
-      BOOL bBadCodePtr;
-      if (!eUnitType) {
-        ppUnitTable = pGame->pUnitList[0];
-      } else {
-        if (eUnitType != 1) {
-          return nullptr;
+    if (!eUnitType) {
+      ppUnitTable = pGame->pUnitList[0];
+    } else if (eUnitType == 1) {
+      ppUnitTable = pGame->pUnitList[1];
+    } else {
+      return nullptr;
+    }
+
+    if (IsBadCodePtr((FARPROC)pfnCallback)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7c7);
+      exit(-1);
+    }
+
+    for (int i = 0; i < 0x80; i++, ppUnitTable++) {
+      for (D2UnitStrc* pCurUnit = *ppUnitTable; pCurUnit; pCurUnit = pCurUnit->pListNext) {
+        if (!D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCurUnit, STATE_playerbody) && (*pfnCallback)(pGame, pCurUnit, pCallbackArg) == 1) {
+          return pCurUnit;
         }
-
-        ppUnitTable = pGame->pUnitList[1];
-      }
-
-      /* FARPROC lpfn for IsBadCodePtr */ bBadCodePtr = IsBadCodePtr((FARPROC)pfnCallback);
-      if (!bBadCodePtr) {
-        nSlot = 0;
-        do {
-          for (pCurUnit = *ppUnitTable; pCurUnit; pCurUnit = pCurUnit->pListNext) {
-            bBadCodePtr = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pCurUnit, STATE_playerbody);
-            if (!bBadCodePtr) {
-              bBadCodePtr = (*pfnCallback)(pGame, pCurUnit, pCallbackArg);
-              if (bBadCodePtr == 1) {
-                return pCurUnit;
-              }
-            }
-            if (!pCurUnit) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xde);
-              exit(-1);
-            }
-          }
-
-          ppUnitTable++;
-          nSlot++;
-          if (nSlot >= 0x80) {
-            return nullptr;
-          }
-        } while (true);
+        if (!pCurUnit) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xde);
+          exit(-1);
+        }
       }
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
-    exit(-1);
+    return nullptr;
 }
 
 // 2022.01.09 - dzik

@@ -227,27 +227,24 @@ BOOL __fastcall Skills_SrvDoFunc_084_SpawnMinionsAndSuicide(::SGAMEDATA * pGame,
 }
 
 BOOL __fastcall Skills_SrvDoFunc_085_FireUpgradedMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nClassId;
-    eD2Skills eSkillSlot;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
-    int nMissileBase = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].srvmissile[1];
-    if (!(nMissileBase >= 0 && nMissileBase < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+    int nMissile = pSkillTxt->srvmissile[1];
+    if (nMissile < 0 || nMissile >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
     }
 
-    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nClassId, nullptr, (int32_t*)&eSkillSlot);
-    eMissilesId eMissileUpgraded = nMissileBase + eSkillSlot;
-    if ((int)eMissileUpgraded >= 0 && (int)eMissileUpgraded < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-      SkillsServer::CreatingAMissile(pGame, eMissileUpgraded, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
+    int32_t nChainId;
+    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(!pUnit ? -1 : pUnit->nClassId, nullptr, &nChainId);
+    nMissile += nChainId;
+    if (nMissile >= 0 && nMissile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      SkillsServer::CreatingAMissile(pGame, nMissile, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       return 1;
     }
 
@@ -343,13 +340,7 @@ BOOL __fastcall SKILLMONST_SrvStFn45_MaggotDown(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 BOOL __fastcall Skills_SrvDoFunc_086_SelfHeal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int nValue_00;
-    int32_t nAnimFrameCount;
-    eD2Skills eSkillSlot;
-    D2SkillsTxt* pSkillsTxt = nullptr;
-    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-      pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    }
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -357,23 +348,23 @@ BOOL __fastcall Skills_SrvDoFunc_086_SelfHeal(::SGAMEDATA * pGame, D2UnitStrc * 
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    D2Common::Units::GetShiftedFrameMetrics(pUnit, (int*)&eSkillSlot, &nAnimFrameCount);
-    if ((int)eSkillSlot <= 0) {
+    int nFrame;
+    int32_t nAnimFrameCount;
+    D2Common::Units::GetShiftedFrameMetrics(pUnit, &nFrame, &nAnimFrameCount);
+    if (nFrame <= 0) {
       pUnit->nSeqAnimSpeed = 0;
     }
 
     int32_t nHealAmt = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
     if (nHealAmt > 0) {
-      int nValue;
-      nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-      nSkillLvl = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-      nHealAmt = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, nHealAmt, 100);
-      nValue_00 = nValue + nHealAmt;
-      if (nValue + nHealAmt >= nSkillLvl) {
-        nValue_00 = nSkillLvl;
+      int nHitpoints = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
+      int nMaxHitpoints = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+      nHitpoints += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHitpoints, nHealAmt, 100);
+      if (nHitpoints >= nMaxHitpoints) {
+        nHitpoints = nMaxHitpoints;
       }
 
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nValue_00, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nHitpoints, 0);
     }
 
     return 1;

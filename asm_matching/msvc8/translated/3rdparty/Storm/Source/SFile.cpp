@@ -250,48 +250,40 @@ static void SFILE_InitializeHashSource(uint32_t nSeed) {
 
 // @blizzard ReadFileChecked (SFILE.CPP)
 static int __stdcall SFILE_ReadFileChecked(int32_t * pMPQFile, void * pOutputBuf, uint32_t nBytesToRead, uint32_t * pnBytesRead, HANDLE hFile, LPDWORD pdwBytesRead, int32_t nFileOffset) {
-    BOOL bReadSuccess;
-    DWORD dwLastError;
-    int bShouldRetry;
     int nRetryCount = 0;
-    do {
-      while (true) {
-        if (nFileOffset != -1) {
-          /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(hFile, nFileOffset, (PLONG)0x0, 0);
-        }
-
-        /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ bReadSuccess = ReadFile(hFile, pOutputBuf, nBytesToRead, pdwBytesRead, (LPOVERLAPPED)0x0);
-        *pMPQFile = *pdwBytesRead + nFileOffset;
-        if (bReadSuccess) {
-          if (*pdwBytesRead == nBytesToRead) {
-            return 1;
-          }
-
-          SErr::SErrSetLastError(0x26);
-          return 0;
-        }
-
-        dwLastError = GetLastError();
-        if (!gnSFileReadErrorMode) {
-          return 0;
-        }
-        if (gnSFileReadErrorMode == 1) {
-          break;
-        }
-        if (gnSFileReadErrorMode == 2) {
-          SErr::SErrDisplayError(dwLastError, pnBytesRead, -4, nullptr, 0, 1);
-        }
+    while (true) {
+      if (nFileOffset != -1) {
+        SetFilePointer(hFile, nFileOffset, nullptr, 0);
       }
 
-      if (!pfnSFileReadErrorHandler) {
+      BOOL bReadSuccess = ReadFile(hFile, pOutputBuf, nBytesToRead, pdwBytesRead, nullptr);
+      *pMPQFile = *pdwBytesRead + nFileOffset;
+      if (bReadSuccess) {
+        if (*pdwBytesRead == nBytesToRead) {
+          return 1;
+        }
+
+        SErr::SErrSetLastError(0x26);
         return 0;
       }
 
-      bShouldRetry = (*pfnSFileReadErrorHandler)(pnBytesRead, dwLastError, nRetryCount);
-      nRetryCount++;
-    } while (bShouldRetry);
-
-    return 0;
+      DWORD dwLastError = GetLastError();
+      switch (gnSFileReadErrorMode) {
+        case 0:
+          return 0;
+        case 1:
+          if (!pfnSFileReadErrorHandler) {
+            return 0;
+          }
+          if (!(*pfnSFileReadErrorHandler)(pnBytesRead, dwLastError, nRetryCount++)) {
+            return 0;
+          }
+          break;
+        case 2:
+          SErr::SErrDisplayError(dwLastError, pnBytesRead, -4, nullptr, 0, 1);
+          break;
+      }
+    }
 }
 
 static int __stdcall SFILE_SyncReadFile(void * pOutputBuf, uint32_t nBytesToRead, uint32_t * pnBytesRead, int32_t nFileOffset, D2MPQFileStrc * pFileHandle) {

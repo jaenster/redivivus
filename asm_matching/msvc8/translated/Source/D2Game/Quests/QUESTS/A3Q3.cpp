@@ -459,12 +459,9 @@ void __fastcall Q20_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     D2UnitStrc* pPlayerData;
     int nDifficulty;
     int32_t nRewardLevel;
-    int32_t* piQuestCounter;
+    uint16_t nNPCId = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
     uint16_t nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
-    short int nNPCId = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
-    D2UnitDataPlayerStrc* pGame = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    ::SGAMEDATA* pGamePtr = pQuestArgs->pGame;
-    D2BitBufferStrc* pBitBuffer = pGame->pQuestRecord[pGamePtr->nDifficulty];
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed);
     if (bQuestState == 1) {
       return;
@@ -479,8 +476,7 @@ void __fastcall Q20_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
             if (!bQuestState) {
               pQuestData->pQuestSpecificData.pA3Q3->field_0x7 = 1;
               QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20333367);
-              piQuestCounter = &pQuestData->pQuestSpecificData.pA3Q3->nBladeItemCount;
-              (*piQuestCounter)--;
+              pQuestData->pQuestSpecificData.pA3Q3->nBladeItemCount--;
               /* SetQuestState Step0x06: Khalim's Will consumed / Compelling Orb smashed
                          (quest climax) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
               nNPCNo = UNIT::SUnit::GetPartyId(pQuestArgs->pPlayer);
