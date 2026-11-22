@@ -681,39 +681,34 @@ static void __stdcall SMemShrinkBlock(D2FogHeapBlockHdrStrc * pBlock, int32_t nO
 
 // @blizzard SMemDestroy (SMEM.CPP)
 uint32_t __stdcall SMemDestroy() {
-    LPVOID pHeap;
-    int nBucketOffset = 0;
     if (!g_SMemInitialized) {
       return 1;
     }
 
     g_SMemInitialized = 0;
-    CRITICAL_SECTION* lpCriticalSection = DebugMemoryCriticalSection;
-    for (int nCount = 0; nCount < 0x100; nCount++) {
-      LPVOID* ppHeapLink;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-      ppHeapLink = &g_SMemHeapBuckets[nBucketOffset];
-      g_SMemHeapCleanupFlags[nBucketOffset] = 0;
-      pHeap = *ppHeapLink;
-      while (pHeap) {
-        pHeap = *ppHeapLink;
-        if (*(int*)((char*)pHeap + 0x14)) {
-          ppHeapLink = SMEM_DestroyHeap(ppHeapLink);
+    int nBucket = 0;
+    CRITICAL_SECTION* pLock = DebugMemoryCriticalSection;
+    for (int nCount = 0x100; nCount; nCount--) {
+      EnterCriticalSection(pLock);
+      LPVOID* ppLink = &g_SMemHeapBuckets[nBucket];
+      g_SMemHeapCleanupFlags[nBucket] = 0;
+      while (*ppLink) {
+        D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)*ppLink;
+        if (pHeap->nAllocCount) {
+          ppLink = SMEM_DestroyHeap(ppLink);
         } else {
-          if (*(int*)((char*)pHeap + 0x10) && *(uint32_t*)((char*)pHeap + 4) >= 0x80000000) {
+          if (pHeap->bActive && pHeap->nHash >= 0x80000000) {
             SErr::SErrReportResourceLeak("HSHEAP");
           }
 
-          SMEM_FreeHeap(ppHeapLink);
+          SMEM_FreeHeap(ppLink);
         }
-
-        pHeap = *ppHeapLink;
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(lpCriticalSection);
-      nBucketOffset++;
-      lpCriticalSection++;
+      LeaveCriticalSection(pLock);
+      DeleteCriticalSection(pLock);
+      nBucket++;
+      pLock++;
     }
 
     return 1;
