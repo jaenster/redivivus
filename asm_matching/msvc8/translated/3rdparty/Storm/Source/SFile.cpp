@@ -1499,7 +1499,8 @@ int __fastcall Unreferenced_00416850(StormLinkStrc * pLink) {
 }
 
 int32_t __fastcall Unreferenced_00416860(void * pHandle) {
-    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
+    StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
 uint32_t __fastcall SFILE_CompareFileTime2(StormLinkStrc * pLink, int, intptr_t pLeft) {
@@ -2205,7 +2206,8 @@ void * __fastcall Unreferenced_00417790(StormLinkStrc * pLink) {
 }
 
 int32_t __fastcall Unreferenced_004177a0(void * pHandle) {
-    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
+    StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
 StormLinkStrc * __fastcall Unreferenced_00417850(StormLinkStrc * pLink) {
@@ -5998,8 +6000,9 @@ void __fastcall CrcBuffer(uint8_t * pbData, int32_t nLength, uint32_t * pdwCrc, 
       dwCrc = -1;
     }
     if (byFlags & 2) {
-      for (; nLength; nLength--) {
+      while (nLength) {
         dwCrc = dwCrc >> 8 ^ gdwSFileCompressionMethod[(*pbData ^ dwCrc) & 0xff];
+        nLength--;
         pbData++;
       }
     }
