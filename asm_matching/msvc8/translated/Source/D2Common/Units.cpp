@@ -1084,8 +1084,6 @@ int32_t __stdcall UNITS_GetInventoryRecordId(D2UnitStrc * pUnit, uint8_t nInvPag
 }; D2_STATIC_GUARD(aPlayerInventoryPage, "D2Common::Units::UNITS_GetInventoryRecordId::aPlayerInventoryPage");
     static unsigned int nPlayerInventoryPageSize = 0x7; D2_STATIC_GUARD(nPlayerInventoryPageSize, "D2Common::Units::UNITS_GetInventoryRecordId::nPlayerInventoryPageSize");
 
-    eInventoryPage eResultPage;
-    uint32_t i;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xa2f);
       exit(-1);
@@ -1107,16 +1105,12 @@ int32_t __stdcall UNITS_GetInventoryRecordId(D2UnitStrc * pUnit, uint8_t nInvPag
               return 9;
           }
 
-          i = 0;
-          if (nPlayerInventoryPageSize > 0) {
-            while (pUnit->nClassId != aPlayerInventoryPage[i * 2]) {
-              i++;
-              if (i >= nPlayerInventoryPageSize) {
-                return nPageResult;
-              }
+          int nClassId = pUnit->nClassId; // steer-ok: the original reads the class id before the page table loop
+          for (uint32_t i = 0; i < nPlayerInventoryPageSize; i++) {
+            if (nClassId == aPlayerInventoryPage[i * 2]) {
+              nPageResult = aPlayerInventoryPage[i * 2 + 1];
+              break;
             }
-
-            nPageResult = aPlayerInventoryPage[i * 2 + 1];
           }
 
           break;
@@ -1136,9 +1130,9 @@ int32_t __stdcall UNITS_GetInventoryRecordId(D2UnitStrc * pUnit, uint8_t nInvPag
               {
                 return 0xb;
               }
+            default:
+              return nPageResult;
           }
-
-          return -1;
         }
     }
 
@@ -1352,23 +1346,22 @@ static BOOL __stdcall UNITS_CanAnimModeUseVelocityModifier(D2UnitStrc * pUnit, i
 // @sourcefile .\UNITS\Units.cpp
 uint32_t __fastcall UNITS_CanAnimModeUseAttackRate(int32_t nAnimMode, eD2UnitType eUnitType, D2UnitStrc * pUnit, int32_t nClassId) {
     int* pAnimModeEntry;
-    if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType != UNIT_MONSTER) {
-        if (eUnitType == UNIT_PLAYER) {
-          return 0;
-        }
-        if (eUnitType != UNIT_MONSTER) {
+    switch (eUnitType) {
+      case UNIT_PLAYER:
+        pAnimModeEntry = gaPlayerAnimModeCheckTable + nAnimMode * 5;
+        break;
+      case UNIT_MONSTER:
+        pAnimModeEntry = (int*)UNITS_GetAnimTableEntry(nClassId, nAnimMode);
+        break;
+      default:
+        if (eUnitType != UNIT_PLAYER && eUnitType != UNIT_MONSTER) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xbef);
           exit(-1);
         }
 
         return 0;
-      }
-
-      pAnimModeEntry = (int*)UNITS_GetAnimTableEntry(nClassId, nAnimMode);
-    } else {
-      pAnimModeEntry = gaPlayerAnimModeCheckTable + nAnimMode * 5;
     }
+
     if (pAnimModeEntry[3]) {
       return 1;
     }
@@ -1488,8 +1481,12 @@ static int32_t GetDiminishedStat(D2UnitStrc * pUnit, int32_t nIndex) {
 }; D2_STATIC_GUARD(gaUnitStatDiminished, "D2Common::Units::GetDiminishedStat::gaUnitStatDiminished");
 
     int32_t nStatValue = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, gaUnitStatDiminished[nIndex].eStat, 0);
-    if (gaUnitStatDiminished[nIndex].nDiminishedFlag == 1 && nStatValue) {
-      return gaUnitStatDiminished[nIndex].nBaseOffset * nStatValue / (gaUnitStatDiminished[nIndex].nBaseOffset + nStatValue);
+    switch (gaUnitStatDiminished[nIndex].nDiminishedFlag) {
+      case 1:
+        if (nStatValue) {
+          return gaUnitStatDiminished[nIndex].nBaseOffset * nStatValue / (gaUnitStatDiminished[nIndex].nBaseOffset + nStatValue);
+        }
+        break;
     }
 
     return nStatValue;

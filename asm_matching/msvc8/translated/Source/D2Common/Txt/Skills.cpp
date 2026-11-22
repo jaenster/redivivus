@@ -852,53 +852,39 @@ static BOOL __stdcall SKILLS_CheckWeaponRequirements(D2UnitStrc * pUnit, D2Skill
 
 // Checks whether a skill's use-restriction condition is satisfied for the caster. Reads the restrict field from the skill record: 0 = requires no active poison state (returns true if not poisoned); 1 = always allowed; 2 = requires a poison state AND at least one of the skill's three state[] entries active on the unit. Returns 1 if the restriction passes, 0 otherwise. Returns 0 immediately if unit or skill pointer is null.
 static int SKILLS_CheckRestriction(D2SkillStrc * pSkillTxt, D2UnitStrc * pUnitStrc) {
-    BOOL eActiveState;
-    int32_t nHasPoisonState2;
-    int32_t nStateIdx;
-    short int* psReqState;
-    char cRestrictionType;
     if (!pUnitStrc || !pSkillTxt) {
       return 0;
     }
 
     D2SkillsTxt* pSkillRecord = pSkillTxt->pRecord;
-    if (pSkillRecord) {
-      int32_t nHasPoisonState;
-      cRestrictionType = pSkillRecord->restrict;
-      if (cRestrictionType == '\0') {
-        nHasPoisonState2 = DATATBLS::ItemStats::STATES_HasRestrictFlagState(pUnitStrc);
-        return (uint32_t)!nHasPoisonState2;
-      }
-      if (cRestrictionType == '\x01' || cRestrictionType != '\x02') {
+    if (!pSkillRecord) {
+      return 0;
+    }
+
+    switch ((uint8_t)pSkillRecord->restrict) {
+      case 0:
+        return !DATATBLS::ItemStats::STATES_HasRestrictFlagState(pUnitStrc);
+      case 1:
         return 1;
-      }
+      case 2:
+        if (!DATATBLS::ItemStats::STATES_HasRestrictFlagState(pUnitStrc)) {
+          return 0;
+        }
 
-      nHasPoisonState = DATATBLS::ItemStats::STATES_HasRestrictFlagState(pUnitStrc);
-      if (nHasPoisonState) {
-        nStateIdx = 0;
-        psReqState = pSkillRecord->state;
-        while (true) {
-          if (*psReqState < 0) {
+        for (int i = 0; i < 3; i++) {
+          int nState = pSkillRecord->state[i];
+          if (nState < 0) {
             return 0;
           }
-
-          eActiveState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, (int)*psReqState);
-          if (eActiveState) {
-            break;
-          }
-
-          nStateIdx++;
-          psReqState++;
-          if (nStateIdx >= 3) {
-            return 0;
+          if (DATATBLS::ItemStats::UNIT_GetUnitState(pUnitStrc, nState)) {
+            return 1;
           }
         }
 
-        return 1;
-      }
+        return 0;
     }
 
-    return 0;
+    return 1;
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pint (ESI): int*, pint (EDI): int*
@@ -3911,12 +3897,7 @@ int32_t __stdcall SKILL_CalcMaxDamage(D2UnitStrc * pUnit, int32_t nSkillId, int3
 
 // Evaluates a passive skill's elemental calc value for a specific element type (0=min fire/0x156, 1=min cold/0x157, 2=min lightning/0x158). Searches the skill's passivestat array for the matching stat ID, then calls D2GetSkillCalc on the corresponding passivecalc slot. Returns 0 if the skill/level is invalid or the element type is not found in passivestat.
 uint32_t __stdcall SKILL_GetPassiveElementCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nElementType) {
-    int nMinStatId;
-    if ((int)eSkill < 0 || (int)eSkill >= ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -3924,47 +3905,37 @@ uint32_t __stdcall SKILL_GetPassiveElementCalc(D2UnitStrc * pUnit, eD2Skills eSk
       return 0;
     }
 
+    uint16_t nMinStatId;
+    uint16_t nMaxStatId;
     switch (nElementType) {
       case 0:
-        {
-          nMinStatId = 0x156;
-          nElementType = 0x159;
-          break;
-        }
+        nMinStatId = 0x156;
+        nMaxStatId = 0x159;
+        break;
       case 1:
-        {
-          nMinStatId = 0x157;
-          nElementType = 0x15a;
-          break;
-        }
-      default:
-        {
-          return 0;
-        }
+        nMinStatId = 0x157;
+        nMaxStatId = 0x15a;
+        break;
       case 2:
-        {
-          nMinStatId = 0x158;
-          nElementType = 0x15b;
-          break;
-        }
+        nMinStatId = 0x158;
+        nMaxStatId = 0x15b;
+        break;
+      default:
+        return 0;
     }
 
-    int nPassiveSlot = 0;
-    short int* pPassiveStat = pSkillTxt->passivestat;
-    while (*pPassiveStat != nMinStatId && *pPassiveStat != nElementType) {
-      nPassiveSlot++;
-      pPassiveStat++;
-      if (nPassiveSlot >= 5) {
-        return 0;
+    int i;
+    for (i = 0; i < 5; i++) {
+      if (pSkillTxt->passivestat[i] == nMinStatId || pSkillTxt->passivestat[i] == nMaxStatId) {
+        break;
       }
     }
 
-    if (nPassiveSlot >= 5) {
+    if (i >= 5) {
       return 0;
     }
 
-    uint32_t nCalcResult = D2GetSkillCalc(pUnit, pSkillTxt->passivecalc[nPassiveSlot], eSkill, nSkillLevel);
-    return nCalcResult;
+    return D2GetSkillCalc(pUnit, pSkillTxt->passivecalc[i], eSkill, nSkillLevel);
 }
 
 // Initialises a unit's skill list with class default skills if not already populated. Checks whether the base Attack skill (skill 0, nOwnerGUID -1) is present; if not, allocates it plus all class-specific skills from CharStats.txt (up to 10 entries). Also ensures left and right skill slots are assigned, defaulting to Attack (left) and skill 0 (right) if unset.

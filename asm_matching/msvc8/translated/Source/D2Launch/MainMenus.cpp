@@ -6224,15 +6224,14 @@ void __fastcall Unreferenced_00431c60(uint8_t * pPacket, int nSize) {
     if (nSize == -1) {
       return;
     }
-    if (*pPacket != 0xaf) {
-      int iVar1;
-      iVar1 = *pPacket - 0xb0;
-      if (!iVar1) {
-        gnBnetConnectionSuccessFlag = iVar1;
-        return;
-      }
-    } else {
-      gnBnetConnectionSuccessFlag = 1;
+
+    switch (*pPacket) {
+      case 0xaf:
+        gnBnetConnectionSuccessFlag = 1;
+        break;
+      case 0xb0:
+        gnBnetConnectionSuccessFlag = 0;
+        break;
     }
 }
 

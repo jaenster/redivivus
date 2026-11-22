@@ -450,27 +450,24 @@ BOOL __fastcall Skills_CltStFunc_CheckCasterHasRoomNotInTown(D2UnitStrc * pUnit,
     if (!pRoom) {
       return 0;
     }
-
-    BOOL bIsInTown = Skills::GetCooordinates(pUnit, &nPosX, &nPosY);
-    if (!bIsInTown) {
+    if (!Skills::GetCooordinates(pUnit, &nPosX, &nPosY)) {
       return 0;
     }
 
     pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nPosX, nPosY);
-    D2SkillsTxt* pSkillsTxt;
-    if (!(pRoom && (pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr))) {
+    if (!pRoom) {
       return 0;
     }
-    if (pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
-      return 1;
+
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
+      return 0;
+    }
+    if (!(pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+      return 0;
     }
 
-    bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!bIsInTown) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 BOOL __fastcall Skills_CltDoFunc_Sor_SimpleMakeMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
