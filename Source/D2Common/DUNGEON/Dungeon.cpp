@@ -1047,38 +1047,32 @@ void __stdcall DRLGROOM_AddClientToRoom(D2RoomStrc * pRoom, D2ClientStrc * nClie
 
 // Removes nClientId from the room's pClients array by linear search. Fills the vacated slot with the last element, decrements nClientsCount, then re-sorts the client list. Halts if the room pointer is null, the client ID is zero, the client is not found (assertion 0x490), or validation fails. Each halt pushes its __LINE__ and enters the shared tail DRLGROOM_RemoveClientFromRoom_HaltTail.
 void __stdcall DRLGROOM_RemoveClientFromRoom(D2RoomStrc * pRoom, D2ClientStrc * nClientId) {
-    D2ClientStrc** pClientSearch;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x487);
       exit(-1);
     }
     if (!nClientId) {
-      DRLGROOM_RemoveClientFromRoom_HaltTail(0x488);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x488);
+      exit(-1);
+    }
+    if (!DRLGROOM_ValidateClientList(pRoom)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
+      exit(-1);
     }
 
-    BOOL bValidated = DRLGROOM_ValidateClientList(pRoom);
-    if (!bValidated) {
-      DRLGROOM_RemoveClientFromRoom_HaltTail(0x489);
+    uint32_t i;
+    for (i = 0; i < (uint32_t)pRoom->nClientsCount; i++) {
+      if (pRoom->pClients[i] == nClientId) {
+        break;
+      }
     }
 
-    uint32_t nCount = pRoom->nClientsCount;
-    uint32_t nFoundIdx = 0;
-    if (nCount > 0) {
-      pClientSearch = pRoom->pClients;
-      do {
-        if (*pClientSearch == nClientId) {
-          break;
-        }
-
-        nFoundIdx++;
-        pClientSearch++;
-      } while (nFoundIdx < nCount);
-    }
-    if (nFoundIdx >= nCount) {
-      DRLGROOM_RemoveClientFromRoom_HaltTail(0x490);
+    if (i >= (uint32_t)pRoom->nClientsCount) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x490);
+      exit(-1);
     }
 
-    pRoom->pClients[nFoundIdx] = pRoom->pClients[nCount - 1];
+    pRoom->pClients[i] = pRoom->pClients[pRoom->nClientsCount - 1];
     pRoom->nClientsCount--;
     DRLGROOM_SortClientList(pRoom);
 }
