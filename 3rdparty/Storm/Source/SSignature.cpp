@@ -508,10 +508,10 @@ uint32_t __thiscall SSIG_StoreBigEndian64(uint8_t * pbOut, uint32_t dwValueLow, 
 }
 
 void __fastcall Unreferenced_00425ee0(int nValue, uint8_t * pBytes) {
-    pBytes[3] = (uint8_t)nValue;
-    pBytes[2] = (uint8_t)(nValue >> 8);
-    pBytes[1] = (uint8_t)(nValue >> 0x10);
-    *pBytes = (uint8_t)(nValue >> 0x18);
+    for (int i = 3; i >= 0; i--) {
+      pBytes[i] = (uint8_t)nValue;
+      nValue = (uint32_t)nValue >> 8;
+    }
 }
 
 // Storm SBig SHA-1 implementation - init, update, and finalize functions
