@@ -3521,50 +3521,24 @@ uint32_t __fastcall OOGMENU_CreateGame(mcp0x03data * pMcpData, char * szServerIp
     void* nAddress;
     int32_t nHasPeer;
     uint16_t* pwszError;
-    uint16_t nReqId;
-    char cCur;
+    if (!OOGUtilities::OOG_DisableControlCallback) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x559);
+      exit(-1);
+    }
+
     CHATDLG_DestroyAllForms();
     gpfnChatDlgCallback = OOGUtilities::OOG_DisableControlCallback;
-    char* pcSrc = OOGUtilities::D2IniData_multiplayer->szGAMENAME;
-    mcp0x03data* pSrcName = pMcpData;
-    do {
-      cCur = pSrcName->szGameName[0];
-      *pcSrc = cCur;
-      pSrcName = (mcp0x03data*)(pSrcName->szGameName + 1);
-      pcSrc++;
-    } while (cCur != '\0');
-
-    pcSrc = pMcpData->szGamePassword;
-    char* pcDst = OOGUtilities::D2IniData_multiplayer->szGamePassword;
-    do {
-      cCur = *pcSrc;
-      *pcDst = cCur;
-      pcSrc++;
-      pcDst++;
-    } while (cCur != '\0');
-
-    pcSrc = pMcpData->szGameDescription;
-    pcDst = OOGUtilities::D2IniData_multiplayer->szGameDescription;
-    do {
-      cCur = *pcSrc;
-      *pcDst = cCur;
-      pcSrc++;
-      pcDst++;
-    } while (cCur != '\0');
-
+    strcpy(OOGUtilities::D2IniData_multiplayer->szGAMENAME, pMcpData->szGameName);
+    strcpy(OOGUtilities::D2IniData_multiplayer->szGamePassword, pMcpData->szGamePassword);
+    strcpy(OOGUtilities::D2IniData_multiplayer->szGameDescription, pMcpData->szGameDescription);
     OOGUtilities::gpChatFormList = (void*)0x1;
     if (OOGUtilities::D2IniData_multiplayer->szCharacterRealm[0] != '\0') {
-      short int nNextReqId;
       nHasPeer = D2MCPClient::McpConnect::HasPeerName();
       if (nHasPeer) {
         OOGUtilities::D2IniData_multiplayer->nGAMETYPE = GAMETYPE_BNET_BETA;
-        nReqId = CreateJoinGameRequestId;
         do {
-          nNextReqId = nReqId + 1;
-          nReqId = 0;
-        } while (!nNextReqId);
-
-        CreateJoinGameRequestId = (uint16_t)nNextReqId;
+          CreateJoinGameRequestId++;
+        } while (!CreateJoinGameRequestId);
         D2MCPClient::McpConnect::SetIsMPCJoinSuccesfull(0);
         D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x03_CreateGame(pMcpData, (int16_t)CreateJoinGameRequestId);
         OOGUtilities::LastGameRequestId = CreateJoinGameRequestId;
@@ -3578,14 +3552,7 @@ uint32_t __fastcall OOGMENU_CreateGame(mcp0x03data * pMcpData, char * szServerIp
     }
 
     OOGUtilities::D2IniData_multiplayer->nGAMETYPE = GAMETYPE_OBNET_HOST;
-    pcSrc = OOGUtilities::D2IniData_multiplayer->szSERVERIP;
-    do {
-      cCur = *szServerIp;
-      *pcSrc = cCur;
-      szServerIp++;
-      pcSrc++;
-    } while (cCur != '\0');
-
+    strcpy(OOGUtilities::D2IniData_multiplayer->szSERVERIP, szServerIp);
     gnOpenBNetMode = 1;
     D2Win::Src::D2WinMain::D2WINMAIN_SetCursorDC6(nullptr);
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
@@ -3780,8 +3747,6 @@ void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCou
     char* pbCopySrc;
     uint16_t* pwszScratch;
     uint32_t nCopyLen;
-    char* pbCopyDst;
-    D2LadderRowBufStrc* pcScratch;
     uint16_t wszNamePart[256];
     uint16_t wszEmptyMsg[256];
     char sScratch[256];
@@ -3793,12 +3758,7 @@ void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCou
       return;
     }
     if (!nRankCount) {
-      pcScratch = &sRowBuf;
-      for (nCmp = 0x80; nCmp; nCmp--) {
-        pcScratch->wszCell[0] = L'\0';
-        pcScratch->wszCell[1] = L'\0';
-        pcScratch = (D2LadderRowBufStrc*)(pcScratch->wszCell + 2);
-      }
+      for (nCmp = 0; nCmp < 0x80; nCmp++) { ((uint32_t*)sRowBuf.wszCell)[nCmp] = 0; }
 
       for (nCmp = 0; nCmp < 0x100; nCmp++) {
         wszNamePart[nCmp] = L'\0';
@@ -3836,8 +3796,9 @@ void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCou
     int nEntryStride = nEntryIndex + 0xc;
     uint8_t* pbEntry = nLadderData + 0xc;
     do {
-      uint8_t* pbName;
       dwCharStats = *(uint32_t*)(pbEntry - 4);
+      int nClass = dwCharStats & 0xf;
+      int nLevel = (int)dwCharStats >> 0x10 & 0xff; // steer-ok: the asm computes the level at the loop head (00440520), before strcmp and every call
       nCmp = strcmp((char*)pbEntry, gszLadderCharNameFilter);
       if (!nCmp) {
         nCopyLen = 0;
@@ -3851,24 +3812,17 @@ void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCou
       _itoa(nNextRank, szNumBuf, 10);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineCellTextA(g_pLadderBoardTextBox, szNumBuf, nStartRank, 0);
       sRowBuf.szName[0] = '\0';
-      pbCopySrc = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress(dwCharStats & 0xf, dwCharStats >> 8 & 0x1f, dwCharStats & 0x20, dwCharStats & 0x40);
-      pbName = pbEntry;
-      pbCopyDst = pbCopySrc;
+      pbCopySrc = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress(nClass, dwCharStats >> 8 & 0x1f, dwCharStats & 0x20, dwCharStats & 0x40);
       if (pbCopySrc) {
         strcat(sRowBuf.szName, pbCopySrc);
       }
 
       strcat(sRowBuf.szName, (char*)pbEntry);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineCellTextA(g_pLadderBoardTextBox, sRowBuf.szName, nStartRank, 1);
-      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineCellTextA(g_pLadderBoardTextBox, gaszPlayerClassTokens[dwCharStats & 0xf], nStartRank, 2);
-      _itoa((int)dwCharStats >> 0x10 & 0xff, szNumBuf, 10);
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineCellTextA(g_pLadderBoardTextBox, gaszPlayerClassTokens[nClass], nStartRank, 2);
+      _itoa(nLevel, szNumBuf, 10);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineCellTextA(g_pLadderBoardTextBox, szNumBuf, nStartRank, 3);
-      pcScratch = &sRowBuf;
-      for (nCmp = 0x80; nCmp; nCmp--) {
-        pcScratch->wszCell[0] = L'\0';
-        pcScratch->wszCell[1] = L'\0';
-        pcScratch = (D2LadderRowBufStrc*)(pcScratch->wszCell + 2);
-      }
+      for (nCmp = 0; nCmp < 0x80; nCmp++) { ((uint32_t*)sRowBuf.wszCell)[nCmp] = 0; }
 
       D2Lang::StrTable::strtable::STRTABLE_FormatUInt64WithAbbrev(sRowBuf.wszCell, *(uint32_t*)(pbEntry - 0xc), *(uint32_t*)(pbEntry - 8), 0xff);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineCellTextWDirect(g_pLadderBoardTextBox, sRowBuf.wszCell, nStartRank, 4);

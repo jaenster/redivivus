@@ -983,10 +983,8 @@ void __stdcall CHARSEL_DestroyAllCharEntries() {
 }
 
 int __fastcall Unreferenced_00438f40(char * szName) {
-    char cVar1;
-    char* pcVar2 = szName;
-    pcVar2 = pcVar2 + strlen(pcVar2) + 1;
-    if (pcVar2 + (-2 - (intptr_t)(szName + 1)) < (char*)0xe && szName[(int)(pcVar2 - (szName + 1) - 1)] != '-' && *szName != '_') {
+    int nLen = strlen(szName);
+    if (nLen >= 2 && nLen <= 15 && szName[nLen - 1] != '-' && *szName != '_') {
       return 1;
     }
 
@@ -2482,12 +2480,9 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
 }
 
 void StaticInit_pBetaRealmNames() {
-    int nCount = 0x380;
-    uint16_t* pwCursor = pBetaRealmNames[0];
-    for (; nCount; nCount--) {
-      pwCursor[0] = L'\0';
-      pwCursor[1] = L'\0';
-      pwCursor += 2;
+    uint32_t* pdwCursor = (uint32_t*)pBetaRealmNames;
+    for (int nCount = 0x380; nCount; nCount--) {
+      *pdwCursor++ = 0;
     }
 }
 

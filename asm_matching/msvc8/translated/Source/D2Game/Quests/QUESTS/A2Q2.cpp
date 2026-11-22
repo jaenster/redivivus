@@ -559,45 +559,29 @@ BOOL __fastcall OBJOP_A2Q2_OpenHoradricScrollChest(D2ObjectOperateFnArg * pOpera
 // A2Q2 Staff of Kings chest operate fn (OperateFn 41). Opens the chest, sets the drop item code 'msf ', counts eligible players via Q10_OnStaffOrViperPickup, drops that many identified reward items (bumps nMsfCount/bHasViperAmulet), then rolls gold. No QuestRecord writes.
 // Slot from objects.txt OperateFn 41.
 BOOL __fastcall OBJOP_A2Q2_OpenStaffOfKingsChest(D2ObjectOperateFnArg * pOperation) {
-    D2ObjectOperateFnArg* pOperationLocal;
-    D2QuestDataA2Q2Strc* pA2Q2Data;
-    BOOL nDropIdx = QUESTS_OpenQuestChest(pOperation);
-    if (nDropIdx) {
+    if (QUESTS_OpenQuestChest(pOperation)) {
       pOperation->sArg.pVictim->dwDropItemCode = 0x2066736d;
       D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheHoradricStaff);
-      int nNotifyIdx = 0;
       if (pQuestData) {
-        D2UnitStrc* pDroppedItem;
-        pA2Q2Data = pQuestData->pQuestSpecificData.pA2Q2;
+        D2QuestDataA2Q2Strc* pA2Q2Data = pQuestData->pQuestSpecificData.pA2Q2;
         pA2Q2Data->nItemDropCount = 0;
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q10_CountPlayersNeedingStaff);
-        if (pA2Q2Data->nItemDropCount > 0) {
-          do {
-            pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_UNIQUE, (int32_t*)&pOperationLocal, nullptr, -1, 1);
-            if (pDroppedItem) {
-              D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pDroppedItem, ITEMFLAG_IDENTIFIED, 1);
-              pA2Q2Data->nMsfCount++;
-              pA2Q2Data->bHasViperAmulet = true;
-            }
-
-            nNotifyIdx++;
-          } while (nNotifyIdx < pA2Q2Data->nItemDropCount);
+        for (int i = 0; i < pA2Q2Data->nItemDropCount; i++) {
+          int32_t nItemLevel;
+          D2UnitStrc* pDroppedItem = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_UNIQUE, &nItemLevel, nullptr, -1, 1);
+          if (pDroppedItem) {
+            D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pDroppedItem, ITEMFLAG_IDENTIFIED, 1);
+            pA2Q2Data->nMsfCount++;
+            pA2Q2Data->bHasViperAmulet = true;
+          }
         }
       }
 
       Objects::ObjectsMode::RollChestDrops(pOperation, QUALITY_MAGIC);
-      D2SeedStrc* pSeed = GetQuestControlSeed(pOperation->sArg.pGame);
-      uint32_t sNewSeed = D2_SeedRoll(pSeed);
-      int nGoldDropsLeft = sNewSeed % 5 + 5;
-      if (nGoldDropsLeft <= 0) {
-        return 0;
-      }
-
-      for (int i = 0; i < nGoldDropsLeft; i++) {
+      int nGoldDrops = D2_SeedRoll(GetQuestControlSeed(pOperation->sArg.pGame)) % 5 + 5;
+      for (int i = 0; i < nGoldDrops; i++) {
         Objects::ObjectsMode::SpawnDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, 0x20646c67, QUALITY_NORMAL);
       }
-
-      return 0;
     }
 
     return 0;

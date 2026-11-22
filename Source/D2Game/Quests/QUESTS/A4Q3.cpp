@@ -231,7 +231,6 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
     D2ObjectsTxt* pObjectsTxt;
     eD2ObjectAnimMode eForgeMode;
     D2UnitStrc* pQuestItem;
-    D2ItemsTxt* pItemsTxt;
     D2QuestDataA4Q3Strc* pForgeQuestSpecific;
     D2QuestDataA4Q3Strc* pA4Q3Data;
     D2QuestDataStrc* pForgeQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_HellsForge);
@@ -258,10 +257,7 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
 
         pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nForgeObjClassId);
         pQuestItem = pOperation->sArg.pVictim;
-        eForgeMode = eD2ObjectAnimMode_ns::Neutral;
-        if (pQuestItem) {
-          eForgeMode = pQuestItem->eAnimMode.eObjectMode;
-        }
+        eForgeMode = !pQuestItem ? eD2ObjectAnimMode_ns::Neutral : pQuestItem->eAnimMode.eObjectMode;
 
         switch (eForgeMode) {
           case eD2ObjectAnimMode_ns::Neutral:
@@ -298,16 +294,14 @@ BOOL __fastcall OBJOP_A4Q3_HellforgeSmash(D2ObjectOperateFnArg * pOperation) {
             {
               pQuestItem = ITEMS::Items::Drop::HasQuestItem(pOperation->sArg.pGame, pOperation->pAttacker, 0x20686668);
               if (pQuestItem) {
-                pQuestItem = pOperation->pAttacker;
-                if (!pQuestItem->pInventory) {
-                  UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pQuestItem, 0x13, pQuestItem);
+                if (!pOperation->pAttacker->pInventory) {
+                  UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
                   return 0;
                 }
 
-                pQuestItem = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pQuestItem->pInventory);
+                pQuestItem = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pOperation->pAttacker->pInventory);
                 if (pQuestItem) {
-                  pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pQuestItem->nClassId);
-                  if (pItemsTxt->dwCode == 0x20686668) {
+                  if (D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(!pQuestItem ? -1 : pQuestItem->nClassId)->dwCode == 0x20686668) {
                     pA4Q3Data->nHammerStrikeCount++;
                     if (pA4Q3Data->nHammerStrikeCount <= 2) {
                       return 0;
@@ -765,22 +759,7 @@ void __fastcall Q28_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[4] = Q28_Callback04_ItemPickedUp;
     D2QuestDataA4Q3Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA4Q3Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q3.cpp", 0x358);
     pQuestData->pQuestSpecificData.pA4Q3 = pQuestSpecificData;
-    pQuestSpecificData->nForgeStage = 0;
-    pQuestSpecificData->bForgeQuestAccepted = 0;
-    pQuestSpecificData->bDropActive = 0;
-    pQuestSpecificData->bSetupUpdateFlag = 0;
-    pQuestSpecificData->field_0x05 = 0;
-    pQuestSpecificData->field_0x06 = 0;
-    pQuestSpecificData->field_0x07 = 0;
-    pQuestSpecificData->nGemQuality = 0;
-    pQuestSpecificData->nHammerStrikeCount = 0;
-    pQuestSpecificData->nHammerDropCount = 0;
-    pQuestSpecificData->nItemsToDrop = 0;
-    pQuestSpecificData->field_0x18 = 0;
-    pQuestSpecificData->bGotHammer = 0;
-    pQuestSpecificData->field_0x1D = 0;
-    pQuestSpecificData->field_0x1E = 0;
-    pQuestSpecificData->field_0x1F = 0;
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
 }
 
 // A4Q3 Hell's Forge — Q28_TimerCallback_DropForgeRunes: the forge reward drop, fired by a scheduled event after the smash. Drops nItemsToDrop gems each pass — gem code chosen per difficulty (Act3/Act2/Act1 gem-code tables = hell/nm/normal) from the quest control seed — decrementing the gem-quality counter each pass and re-scheduling itself until exhausted; on the final pass (expansion only) also drops one rune from the per-difficulty rune table (normal r01-r11, nightmare r12-r22, hell r15-r25). This is the classic Hell's Forge gem+rune reward. No QuestRecord writes (drops only).

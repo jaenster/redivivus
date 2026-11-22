@@ -982,7 +982,6 @@ BOOL __fastcall Skills_SrvDoFunc_123_Volcano(::SGAMEDATA * pGame, D2UnitStrc * p
 // Server-side skill handler for Armageddon (Druid, skill 124). Validates skill and aura state, allocates or refreshes a timed stat list on the caster for the aura state, sets aura stats from skill calc, records modifier_skill/level stats, schedules the meteor-drop timer event (type 5), and seeds the Armageddon random sequence via UNIT_GetModuloFromSeed. Returns 0 if skill/state validation fails.
 // @sourcefile .\SKILLS\SkillDruid.cpp
 BOOL __fastcall Skills_SrvDoFunc_124_Armageddon(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nUnitGUID;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt || pSkillTxt->aurastate < 0 || (int)pSkillTxt->aurastate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return 0;
@@ -1007,19 +1006,10 @@ BOOL __fastcall Skills_SrvDoFunc_124_Armageddon(::SGAMEDATA * pGame, D2UnitStrc 
       nDuration = 1;
     }
 
-    nDuration = pGame->dwGameFrame + nDuration;
+    int nEndFrame = pGame->dwGameFrame + nDuration;
     D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
     if (!pStatsEx) {
-      eD2UnitType eUnitType;
-      if (!pUnit) {
-        nUnitGUID = -1;
-        eUnitType = UNIT_COUNT;
-      } else {
-        nUnitGUID = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-      }
-
-      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nDuration, eUnitType, nUnitGUID);
+      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nEndFrame, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       if (!pStatsEx) {
         return 0;
       }
@@ -1030,15 +1020,14 @@ BOOL __fastcall Skills_SrvDoFunc_124_Armageddon(::SGAMEDATA * pGame, D2UnitStrc 
       D2Common::DATATBLS::ItemStats::SetState(pUnit, (int)pSkillTxt->aurastate, 1);
     }
 
-    D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatsEx, nDuration);
-    GAME::Event::SetEvent(pGame, pUnit, 0xc, nDuration, 0, 0);
+    D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatsEx, nEndFrame);
+    GAME::Event::SetEvent(pGame, pUnit, 0xc, nEndFrame, 0, 0);
     D2SetAurastatsFromSkills(pUnit, pStatsEx, pSkillTxt, eSkill, nSkillLvl);
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_skill, eSkill, 0);
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_level, nSkillLvl, 0);
-    nUnitGUID = D2Common::Skills::GetSkilParam3(eSkill);
-    nDuration = pGame->dwGameFrame;
+    int nTimerFrame = D2Common::Skills::GetSkilParam3(eSkill) + pGame->dwGameFrame;
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ACTIVESTATE, eSkill);
-    GAME::Event::SetEvent(pGame, pUnit, 5, nUnitGUID + nDuration, eSkill, nSkillLvl);
+    GAME::Event::SetEvent(pGame, pUnit, 5, nTimerFrame, eSkill, nSkillLvl);
     D2Common::Skills::SKILL_SetParam1(pSkill, nArmageddonSeed);
     return 1;
 }

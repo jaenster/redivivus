@@ -354,24 +354,20 @@ BOOL __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTa
 int32_t __fastcall D2WINTEXTBOX_GetVisibleLineCount(::D2WinTextBox * pTextBox) {
     int iVar1;
     int nHeight;
-    int nPaddingTop;
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x290);
       exit(-1);
     } else {
-      uint32_t uFontHeight;
       if (pTextBox->sControl.neD2FormType != FORM_TextBox) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x291);
         exit(-1);
       }
 
       D2WinFont::SetAndReturnLastFont(pTextBox->nScrollWidth);
-      nPaddingTop = pTextBox->sListState.nTextOffsetY;
-      nHeight = pTextBox->sControl.dwSizeY;
+      nHeight = pTextBox->sControl.dwSizeY - pTextBox->sListState.nTextOffsetY * 2;
       D2WINTEXTBOX_ComputeLineSpacingForLanguage(pTextBox->nScrollWidth);
-      uFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-      iVar1 = uFontHeight + pTextBox->pLineSpacingGlobal;
-      return (nHeight + nPaddingTop * -2 - iVar1) / (pTextBox->nExtraLineSpacingC + iVar1) + 1;
+      iVar1 = D2WinFont::D2WINFONT_GetCurrentFontHeight() + pTextBox->pLineSpacingGlobal;
+      return (nHeight - iVar1) / (pTextBox->nExtraLineSpacingC + iVar1) + 1;
     }
 }
 

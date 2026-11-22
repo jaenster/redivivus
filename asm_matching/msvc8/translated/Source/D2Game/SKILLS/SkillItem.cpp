@@ -2606,20 +2606,28 @@ BOOL __fastcall ITEMEVENT_LaunchMissileOnOwner(::SGAMEDATA * pGame, uint32_t nUn
 BOOL __fastcall ITEMEVENT_ApplyFreezeDamage(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     short int sCltOverlay;
-    D2SkillsTxt* pSkillTxt = nullptr;
-    if (!(!pUnit || !pTarget || pTarget->eUnitType != UNIT_PLAYER && pTarget->eUnitType != UNIT_MONSTER || pDamage && pDamage->dwPhysDamage <= 0)) {
-      pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pUnit || !pTarget) {
+      return 0;
     }
+    if (pTarget->eUnitType != UNIT_PLAYER && pTarget->eUnitType != UNIT_MONSTER) {
+      return 0;
+    }
+    if (pDamage && pDamage->dwPhysDamage <= 0) {
+      return 0;
+    }
+
+    int32_t nLevel = nSkillLvl; // steer-ok: the original reads nSkillLvl before the skill table lookup
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
-    if (nSkillLvl < 0) {
-      nSkillLvl = 1;
+    if (nLevel < 0) {
+      nLevel = 1;
     }
 
     memset(&sDamage, 0, 0x70);
     sDamage.wResultFlags |= 0x20;
-    sDamage.dwFrzLength = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+    sDamage.dwFrzLength = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nLevel);
     UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pTarget, 1, &sDamage);
     sCltOverlay = pSkillTxt->cltoverlaya;
     if (sCltOverlay >= 0 && (int)sCltOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {

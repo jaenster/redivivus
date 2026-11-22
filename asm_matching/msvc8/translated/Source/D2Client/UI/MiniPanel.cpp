@@ -426,12 +426,9 @@ static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
 
 void __stdcall INPUT_MiniPanelMouseUp(D2UIMouseMsgStrc * pMsg) {
     uint32_t bBeltHover;
-    eD2UnitType eUnitType;
-    eD2PlayerAnimMode eAnimMode;
     int32_t nMouseX;
     int nButtonFrame;
     int32_t nMouseY;
-    uint32_t* pButtonState;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (!gnMiniPanelHoverState) {
       return;
@@ -462,12 +459,8 @@ void __stdcall INPUT_MiniPanelMouseUp(D2UIMouseMsgStrc * pMsg) {
       nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
       nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
       nCenterX = 0;
-      if (nButtonCount) {
-        pButtonState = gnMiniPanelButtonState;
-        for (nButtonFrame = nButtonCount; nButtonFrame; nButtonFrame--) {
-          *pButtonState = 0;
-          pButtonState++;
-        }
+      for (nButtonFrame = 0; nButtonFrame < nButtonCount; nButtonFrame++) {
+        gnMiniPanelButtonState[nButtonFrame] = 0;
       }
 
       bBeltHover = Panel::PANEL_GetBeltSlotHoverFlag();
@@ -484,20 +477,16 @@ void __stdcall INPUT_MiniPanelMouseUp(D2UIMouseMsgStrc * pMsg) {
         nCenterX += 0x77;
       }
 
-      nCenterX = ui::ScreenSizeX / 2 + nCenterX;
-      if (nMouseX > nCenterX - 0x54 && nMouseX < nCenterX + 0x59 && nMouseY > Inv::ScreenSizeY - 0x45 && nMouseY < Inv::ScreenSizeY - 0x2f) {
-        nCenterX = 0;
-        if (nButtonCount) {
-          do {
-            if (nMouseX > gnMiniPanelButtonX[nCenterX] && nMouseX < gnMiniPanelButtonX[nCenterX] + 0x14) {
-              nButtonId = gnMiniPanelButtonFrame[nCenterX];
-              if (nButtonId == 7 || (eUnitType = D2Common::Units::GetType(pPlayer) , eUnitType == UNIT_PLAYER && (eAnimMode = D2Common::Units::GetAnimMode(pPlayer) , eAnimMode != eD2PlayerAnimMode_ns::Dead))) {
-                MINIPANEL_HandleButtonClick(nButtonId);
-              }
+      if (nMouseX > ui::ScreenSizeX / 2 + nCenterX - 0x54 && nMouseX < ui::ScreenSizeX / 2 + nCenterX + 0x59 && nMouseY > Inv::ScreenSizeY - 0x45 && nMouseY < Inv::ScreenSizeY - 0x2f) {
+        for (nCenterX = 0; nCenterX < nButtonCount; nCenterX++) {
+          if (nMouseX > gnMiniPanelButtonX[nCenterX] && nMouseX < gnMiniPanelButtonX[nCenterX] + 0x14) {
+            nButtonId = gnMiniPanelButtonFrame[nCenterX];
+            if (nButtonId == 7) {
+              MINIPANEL_HandleButtonClick(nButtonId);
+            } else if (D2Common::Units::GetType(pPlayer) == UNIT_PLAYER && D2Common::Units::GetAnimMode(pPlayer) != eD2PlayerAnimMode_ns::Dead) {
+              MINIPANEL_HandleButtonClick(nButtonId);
             }
-
-            nCenterX++;
-          } while (nCenterX < nButtonCount);
+          }
         }
 
         GAME::Game::UI_ResetInputState();

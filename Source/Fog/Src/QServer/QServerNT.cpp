@@ -27,60 +27,24 @@ namespace Fog::Src::QServer::QServerNT {
 void __fastcall AwaitAndClose(D2QServerStrc * pQserver) {
     HANDLE aWaitHandles[8];
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQserver->csClientLifecycle);
-    HANDLE pThreadHandle = pQserver->aAcceptThreadHandles[0];
-    if (pThreadHandle) {
-      aWaitHandles[0] = pThreadHandle;
+    int nCount = 0;
+    for (int i = 0; i < 4; i++) {
+      if (pQserver->aAcceptThreadHandles[i]) {
+        aWaitHandles[nCount] = pQserver->aAcceptThreadHandles[i];
+        nCount++;
+      }
+
+      pQserver->aAcceptThreadStopFlags[i] = 1;
+      if (pQserver->bUseDedicatedIoWorkers && pQserver->aIoWorkerThreadHandles[i]) {
+        aWaitHandles[nCount] = pQserver->aIoWorkerThreadHandles[i];
+        nCount++;
+      }
+
+      pQserver->aIoWorkerStopFlags[i] = 1;
     }
 
-    DWORD nCount = (DWORD)(pThreadHandle != (HANDLE)0x0);
-    pQserver->aAcceptThreadStopFlags[0] = 1;
-    if (pQserver->bUseDedicatedIoWorkers && pQserver->aIoWorkerThreadHandles[0]) {
-      aWaitHandles[nCount] = pQserver->aIoWorkerThreadHandles[0];
-      nCount++;
-    }
-
-    pThreadHandle = pQserver->aAcceptThreadHandles[1];
-    pQserver->aIoWorkerStopFlags[0] = 1;
-    if (pThreadHandle) {
-      aWaitHandles[nCount] = pThreadHandle;
-      nCount++;
-    }
-
-    pQserver->aAcceptThreadStopFlags[1] = 1;
-    if (pQserver->bUseDedicatedIoWorkers && pQserver->aIoWorkerThreadHandles[1]) {
-      aWaitHandles[nCount] = pQserver->aIoWorkerThreadHandles[1];
-      nCount++;
-    }
-
-    pThreadHandle = pQserver->aAcceptThreadHandles[2];
-    pQserver->aIoWorkerStopFlags[1] = 1;
-    if (pThreadHandle) {
-      aWaitHandles[nCount] = pThreadHandle;
-      nCount++;
-    }
-
-    pQserver->aAcceptThreadStopFlags[2] = 1;
-    if (pQserver->bUseDedicatedIoWorkers && pQserver->aIoWorkerThreadHandles[2]) {
-      aWaitHandles[nCount] = pQserver->aIoWorkerThreadHandles[2];
-      nCount++;
-    }
-
-    pThreadHandle = pQserver->aAcceptThreadHandles[3];
-    pQserver->aIoWorkerStopFlags[2] = 1;
-    if (pThreadHandle) {
-      aWaitHandles[nCount] = pThreadHandle;
-      nCount++;
-    }
-
-    pQserver->aAcceptThreadStopFlags[3] = 1;
-    if (pQserver->bUseDedicatedIoWorkers && pQserver->aIoWorkerThreadHandles[3]) {
-      aWaitHandles[nCount] = pQserver->aIoWorkerThreadHandles[3];
-      nCount++;
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQserver->aIoWorkerStopFlags[3] = 1;
     LeaveCriticalSection(&pQserver->csClientLifecycle);
-    if (nCount) {
+    if (nCount > 0) {
       /* DWORD dwMilliseconds for WaitForMultipleObjects */ /* BOOL bWaitAll for WaitForMultipleObjects */ /* HANDLE * lpHandles for WaitForMultipleObjects */ /* DWORD nCount for WaitForMultipleObjects */ WaitForMultipleObjects(nCount, aWaitHandles, 1, 1000);
     }
 

@@ -1684,104 +1684,58 @@ D2UnitStrc * __fastcall Objects_PopulateFn7_CorpseOnStick(::SGAMEDATA * pGame, D
     // Static local variables (originally global data)
     static uint32_t gnObjectSpawnGroupCount = 0x4; D2_STATIC_GUARD(gnObjectSpawnGroupCount, "D2Game::Objects::Objects_PopulateFn7_CorpseOnStick::gnObjectSpawnGroupCount");
 
-    // Frame slots -44..-4 are ONE object: &nOffsetX is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int32_t nOffsetX;
-      int32_t nOffsetY;
-      int nSpawnX;
-      int nSpawnY;
-      int* pOffsetCount;
-      ::SGAMEDATA* pGameSave;
-      Objects_PopulateFn7_CorpseOnStick_Slotm14 uSlot14;
-      D2UnitStrc* pSpawnedUnit;
-      uint32_t nObjSizeX;
-      D2RoomStrc* pRoomSave;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 40, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int _nChancePercent;
-    BOOL BVar1;
-    int nXRange;
-    uint32_t nRandVal;
     D2DrlgRoomCoordsStrc sRoomCoords;
-    uint32_t nObjSizeY;
-    __frame0.pGameSave = pGame;
-    __frame0.pRoomSave = pRoom;
-    D2SeedStrc* pSeed;
-    pSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-    uint32_t sNewSeed;
-    sNewSeed = D2_SeedRoll(pSeed);
-    if (sNewSeed % 100 <= (uint32_t)nChancePercent) {
-      D2ObjectsTxt* pObjectsTxt;
-      __frame0.uSlot14.nSpawnGroupIdx = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, gnObjectSpawnGroupCount);
-      pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nObjectClassId);
-      __frame0.nObjSizeX = pObjectsTxt->SizeX;
-      nObjSizeY = pObjectsTxt->SizeY;
-      D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
-      _nChancePercent = 8;
-      __frame0.pSpawnedUnit = 0;
-      do {
-        nXRange = sRoomCoords.dwXSize - __frame0.nObjSizeX;
-        nRandVal = nXRange - 1;
-        nRandVal = D2_SeedRollLimited(pSeed, nRandVal);
-        nXRange = sRoomCoords.dwYSize - nObjSizeY;
-        __frame0.nSpawnX = nRandVal + sRoomCoords.dwXStart;
-        nRandVal = nXRange - 1;
-        nRandVal = D2_SeedRollLimited(pSeed, nRandVal);
-        __frame0.nSpawnY = nRandVal + sRoomCoords.dwYStart;
-        BVar1 = ROOM_CheckSpawnCollision(__frame0.pRoomSave, 5, &sRoomCoords.dwXStart, &__frame0.nSpawnX, 5);
-        if (BVar1 == 1) {
-          __frame0.pOffsetCount = &gaObjectSpawnOffsetTables[__frame0.uSlot14.nSpawnGroupIdx].nCount;
-          _nChancePercent = 0;
-          if (gaObjectSpawnOffsetTables[__frame0.uSlot14.nSpawnGroupIdx].nCount <= 0) {
-            return __frame0.pSpawnedUnit;
-          }
+    int anSpawnCoord[2];
+    int anOffsetCoord[2];
+    D2SeedStrc* pSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
+    if (D2_SeedRoll(pSeed) % 100 > (uint32_t)nChancePercent) {
+      return nullptr;
+    }
 
-          __frame0.uSlot14.pSpawnGroup = gaObjectSpawnOffsetTables + __frame0.uSlot14.nSpawnGroupIdx;
-          goto spawn_group_slot;
+    int nSpawnGroupIdx = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, gnObjectSpawnGroupCount);
+    D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nObjectClassId);
+    uint32_t nObjSizeX = pObjectsTxt->SizeX;
+    uint32_t nObjSizeY = pObjectsTxt->SizeY;
+    D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
+    int nTries = 8;
+    D2UnitStrc* pSpawnedUnit = nullptr;
+    do {
+      anSpawnCoord[0] = D2_SeedRollLimited(pSeed, sRoomCoords.dwXSize - nObjSizeX - 1) + sRoomCoords.dwXStart;
+      anSpawnCoord[1] = D2_SeedRollLimited(pSeed, sRoomCoords.dwYSize - nObjSizeY - 1) + sRoomCoords.dwYStart;
+      if (ROOM_CheckSpawnCollision(pRoom, 5, &sRoomCoords.dwXStart, anSpawnCoord, 5) == 1) {
+        for (int i = 0; i < gaObjectSpawnOffsetTables[nSpawnGroupIdx].nCount; i++) {
+          int* pOffset = &gaObjectSpawnOffsetTables[nSpawnGroupIdx].pOffsets[i * 2];
+          anOffsetCoord[0] = pOffset[0] + anSpawnCoord[0];
+          anOffsetCoord[1] = pOffset[1] + anSpawnCoord[1];
+          if (ROOM_CheckSpawnCollision(pRoom, nObjSizeY, &sRoomCoords.dwXStart, anOffsetCoord, nObjSizeX) == 1) {
+            uint32_t nClassId = (D2_SeedRoll(pSeed) & 1) + 0x39;
+            if (nClassId > 0x3a) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7dd);
+              exit(-1);
+            }
+            if (!pRoom) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7de);
+              exit(-1);
+            }
+
+            pSpawnedUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nClassId, anOffsetCoord[0], anOffsetCoord[1], pGame, pRoom, 1, 0, 0);
+            if (pSpawnedUnit) {
+              OBJECTS_SpawnFliesOnCorpse(pGame, pSpawnedUnit);
+            }
+          }
         }
 
-        _nChancePercent--;
-      } while (0 < _nChancePercent);
-    }
+        return pSpawnedUnit;
+      }
+
+      nTries--;
+    } while (nTries > 0);
 
     return nullptr;
-    spawn_group_slot:
-    __frame0.nOffsetY = (__frame0.uSlot14.pSpawnGroup->pOffsets + _nChancePercent * 2)[1] + __frame0.nSpawnY;
-    __frame0.nOffsetX = __frame0.uSlot14.pSpawnGroup->pOffsets[_nChancePercent * 2] + __frame0.nSpawnX;
-    BVar1 = ROOM_CheckSpawnCollision(__frame0.pRoomSave, nObjSizeY, &sRoomCoords.dwXStart, &__frame0.nOffsetX, __frame0.nObjSizeX);
-    ::SGAMEDATA* pGameLocal = __frame0.pGameSave;
-    if (BVar1 == 1) {
-      sNewSeed = D2_SeedRoll(pSeed);
-      nRandVal = (sNewSeed & 1) + 0x39;
-      if (nRandVal > 0x3a) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7dd);
-        exit(-1);
-      }
-      if (!__frame0.pRoomSave) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7de);
-        exit(-1);
-      }
-
-      __frame0.pSpawnedUnit = UNIT::SUnit::CreateUnit(UNIT_OBJECT, nRandVal, __frame0.nOffsetX, __frame0.nOffsetY, __frame0.pGameSave, __frame0.pRoomSave, 1, 0, 0);
-      if (__frame0.pSpawnedUnit) {
-        OBJECTS_SpawnFliesOnCorpse(pGameLocal, __frame0.pSpawnedUnit);
-      }
-    }
-
-    _nChancePercent++;
-    if (*__frame0.pOffsetCount <= _nChancePercent) {
-      return __frame0.pSpawnedUnit;
-    }
-
-    goto spawn_group_slot;
 }
 
 D2UnitStrc * __fastcall Objects_PopulateFn3(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
-    int nSpawnCount;
     D2DrlgRoomCoordsStrc sRoomCoords;
-    ::SGAMEDATA* pGameSave = pGame;
     if (nDensity > 0x80) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x864);
       exit(-1);
@@ -1791,15 +1745,14 @@ D2UnitStrc * __fastcall Objects_PopulateFn3(::SGAMEDATA * pGame, D2RoomStrc * pR
     int32_t nObjSizeX = pObjectsTxt->SizeX;
     int32_t nObjSizeY = pObjectsTxt->SizeY;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
-    D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-    uint32_t sNewSeed = D2_SeedRoll(pCtrlSeed);
-    if (sNewSeed % 100 > (uint32_t)nChancePercent) {
+    if (D2_SeedRoll(ObjectsRgn::GetObjectControlSeed(pGame, pRoom)) % 100 > nChancePercent) {
       return nullptr;
     }
 
-    D2UnitStrc* pSpawnedUnit = 0;
-    for (nSpawnCount = (int)((sRoomCoords.dwYSize * sRoomCoords.dwXSize >> 7) * (uint32_t)nDensity) >> 8; nSpawnCount > 0; nSpawnCount--) {
-      pSpawnedUnit = OBJECT_PlaceAtRandomPosition(pGameSave, nObjectClassId, nObjSizeX, nObjSizeY, pRoom);
+    int nSpawnCount = (int)((sRoomCoords.dwXSize * sRoomCoords.dwYSize >> 7) * nDensity) >> 8;
+    D2UnitStrc* pSpawnedUnit = nullptr;
+    for (; nSpawnCount > 0; nSpawnCount--) {
+      pSpawnedUnit = OBJECT_PlaceAtRandomPosition(pGame, nObjectClassId, nObjSizeX, nObjSizeY, pRoom);
       if (pSpawnedUnit) {
         if (pObjectsTxt->Selectable[pSpawnedUnit->eAnimMode.ePlayerMode]) {
           pSpawnedUnit->eUnitFlags |= UNITFLAG_TARGETABLE;

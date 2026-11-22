@@ -21,6 +21,13 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_FREE_AT
@@ -3934,36 +3941,18 @@ BOOL __stdcall RENDERER_D3D_IsShadowBlendingEnabled() {
 
 void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dwColor, int nDrawMode) {
     D2D3DVertexStrc fV0x[4];
-    uint32_t nClampedBottom = nXStart <= 0 ? 0 : nXStart;
-    uint32_t nClampedRight = RENDERER_nWindowWidth - 1;
-    uint32_t nClampedXStart = nClampedRight;
-    if ((int)nClampedBottom < (int)nClampedRight) {
-      nClampedXStart = nClampedBottom;
-    }
-
-    nClampedBottom = nXEnd <= 0 ? 0 : nXEnd;
-    if ((int)nClampedBottom < (int)nClampedRight) {
-      nClampedRight = nClampedBottom;
-    }
-    if (nClampedXStart == nClampedRight) {
+    nXStart = min(max(nXStart, 0), RENDERER_nWindowWidth - 1); // steer-ok: windef.h min/max macros
+    nXEnd = min(max(nXEnd, 0), RENDERER_nWindowWidth - 1); // steer-ok: windef.h min/max macros
+    if (nXStart == nXEnd) {
       return;
     }
 
-    nClampedBottom = RENDERER_nWindowHeight - 1;
-    uint32_t nClampedLeft = nYStart <= 0 ? 0 : nYStart;
-    uint32_t nClampedYStart = nClampedBottom;
-    if ((int)nClampedLeft < (int)nClampedBottom) {
-      nClampedYStart = nClampedLeft;
-    }
-
-    nClampedLeft = nYEnd <= 0 ? 0 : nYEnd;
-    if ((int)nClampedLeft < (int)nClampedBottom) {
-      nClampedBottom = nClampedLeft;
-    }
-    if (nClampedBottom == nClampedYStart) {
+    nYStart = min(max(nYStart, 0), RENDERER_nWindowHeight - 1); // steer-ok: windef.h min/max macros
+    nYEnd = min(max(nYEnd, 0), RENDERER_nWindowHeight - 1); // steer-ok: windef.h min/max macros
+    if (nYEnd == nYStart) {
       return;
     }
-    if ((int)nClampedYStart > (int)nClampedBottom) {
+    if (nYEnd <= nYStart) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2b);
       exit(-1);
     }
@@ -3971,18 +3960,25 @@ void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, 
     RENDERER_D3D_SetBlendMode(2);
     SetBlendMode(4);
     RENDERER_D3D_SetTextureFilterMode(1);
-    fV0x[0].fX = (float)(int)nClampedXStart;
-    fV0x[0].fY = (float)(int)nClampedYStart;
+    float fLeft = (float)nXStart;
+    fV0x[0].fX = fLeft;
+    float fTop = (float)nYStart;
+    fV0x[0].fY = fTop;
     fV0x[0].fZ = 0.5;
     fV0x[0].fRHW = 1.0;
     fV0x[0].fU = 0.0;
     fV0x[0].fV = 0.0;
-    fV0x[1].fY = (float)(int)nClampedBottom;
+    fV0x[1].fX = fLeft;
+    float fBottom = (float)nYEnd;
+    fV0x[1].fY = fBottom;
     fV0x[1].fZ = 0.5;
     fV0x[1].fRHW = 1.0;
     fV0x[1].fU = 0.0;
     fV0x[1].fV = 0.0;
-    fV0x[2].fX = (float)(int)nClampedRight;
+    float fRight = (float)nXEnd;
+    fV0x[2].fX = fRight;
+    fV0x[3].fX = fRight;
+    fV0x[2].fY = fBottom;
     fV0x[2].fZ = 0.5;
     fV0x[3].fZ = 0.5;
     fV0x[2].fRHW = 1.0;
@@ -3991,31 +3987,27 @@ void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, 
     fV0x[2].fV = 0.0;
     fV0x[3].fU = 0.0;
     fV0x[3].fV = 0.0;
-    fV0x[1].fX = fV0x[0].fX;
-    fV0x[2].fY = fV0x[1].fY;
-    fV0x[3].fX = fV0x[2].fX;
-    fV0x[3].fY = fV0x[0].fY;
-    nClampedRight = PALETTE_GetColorByIndex((uint32_t)dwColor);
-    nClampedRight &= 0xffffff;
+    fV0x[3].fY = fTop;
+    uint32_t dwPaletteColor = PALETTE_GetColorByIndex((uint32_t)dwColor) & 0xffffff;
     switch (nDrawMode) {
       case 0:
         {
-          fV0x[0].dwDiffuse = nClampedRight | 0x40000000;
+          fV0x[0].dwDiffuse = dwPaletteColor | 0x40000000;
           break;
         }
       case 1:
         {
-          fV0x[0].dwDiffuse = nClampedRight | 0x80000000;
+          fV0x[0].dwDiffuse = dwPaletteColor | 0x80000000;
           break;
         }
       case 2:
         {
-          fV0x[0].dwDiffuse = nClampedRight | 0xc0000000;
+          fV0x[0].dwDiffuse = dwPaletteColor | 0xc0000000;
           break;
         }
       default:
         {
-          fV0x[0].dwDiffuse = nClampedRight | -16777216;
+          fV0x[0].dwDiffuse = dwPaletteColor | -16777216;
         }
     }
 
@@ -4027,36 +4019,18 @@ void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, 
 
 void __fastcall DrawSolidRectAlpha(int nXStart, int nYStart, int nXEnd, int nYEnd, DWORD dwColor, BYTE nAlpha) {
     D2D3DVertexStrc fV0x[4];
-    uint32_t nClampedBottom = nXStart <= 0 ? 0 : nXStart;
-    uint32_t dwRGBColor = RENDERER_nWindowWidth - 1;
-    uint32_t nClampedXStart = dwRGBColor;
-    if ((int)nClampedBottom < (int)dwRGBColor) {
-      nClampedXStart = nClampedBottom;
-    }
-
-    nClampedBottom = nXEnd <= 0 ? 0 : nXEnd;
-    if ((int)nClampedBottom < (int)dwRGBColor) {
-      dwRGBColor = nClampedBottom;
-    }
-    if (nClampedXStart == dwRGBColor) {
+    nXStart = min(max(nXStart, 0), RENDERER_nWindowWidth - 1); // steer-ok: windef.h min/max macros
+    nXEnd = min(max(nXEnd, 0), RENDERER_nWindowWidth - 1); // steer-ok: windef.h min/max macros
+    if (nXStart == nXEnd) {
       return;
     }
 
-    nClampedBottom = RENDERER_nWindowHeight - 1;
-    uint32_t nClampedLeft = nYStart <= 0 ? 0 : nYStart;
-    uint32_t nClampedYStart = nClampedBottom;
-    if ((int)nClampedLeft < (int)nClampedBottom) {
-      nClampedYStart = nClampedLeft;
-    }
-
-    nClampedLeft = nYEnd <= 0 ? 0 : nYEnd;
-    if ((int)nClampedLeft < (int)nClampedBottom) {
-      nClampedBottom = nClampedLeft;
-    }
-    if (nClampedBottom == nClampedYStart) {
+    nYStart = min(max(nYStart, 0), RENDERER_nWindowHeight - 1); // steer-ok: windef.h min/max macros
+    nYEnd = min(max(nYEnd, 0), RENDERER_nWindowHeight - 1); // steer-ok: windef.h min/max macros
+    if (nYEnd == nYStart) {
       return;
     }
-    if ((int)nClampedYStart > (int)nClampedBottom) {
+    if (nYEnd <= nYStart) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x68);
       exit(-1);
     }
@@ -4064,18 +4038,25 @@ void __fastcall DrawSolidRectAlpha(int nXStart, int nYStart, int nXEnd, int nYEn
     RENDERER_D3D_SetBlendMode(2);
     SetBlendMode(4);
     RENDERER_D3D_SetTextureFilterMode(1);
-    fV0x[0].fX = (float)(int)nClampedXStart;
-    fV0x[0].fY = (float)(int)nClampedYStart;
+    float fLeft = (float)nXStart;
+    fV0x[0].fX = fLeft;
+    float fTop = (float)nYStart;
+    fV0x[0].fY = fTop;
     fV0x[0].fZ = 0.5;
     fV0x[0].fRHW = 1.0;
     fV0x[0].fU = 0.0;
     fV0x[0].fV = 0.0;
-    fV0x[1].fY = (float)(int)nClampedBottom;
+    fV0x[1].fX = fLeft;
+    float fBottom = (float)nYEnd;
+    fV0x[1].fY = fBottom;
     fV0x[1].fZ = 0.5;
     fV0x[1].fRHW = 1.0;
     fV0x[1].fU = 0.0;
     fV0x[1].fV = 0.0;
-    fV0x[2].fX = (float)(int)dwRGBColor;
+    float fRight = (float)nXEnd;
+    fV0x[2].fX = fRight;
+    fV0x[3].fX = fRight;
+    fV0x[2].fY = fBottom;
     fV0x[2].fZ = 0.5;
     fV0x[3].fZ = 0.5;
     fV0x[2].fRHW = 1.0;
@@ -4084,11 +4065,8 @@ void __fastcall DrawSolidRectAlpha(int nXStart, int nYStart, int nXEnd, int nYEn
     fV0x[2].fV = 0.0;
     fV0x[3].fU = 0.0;
     fV0x[3].fV = 0.0;
-    fV0x[1].fX = fV0x[0].fX;
-    fV0x[2].fY = fV0x[1].fY;
-    fV0x[3].fX = fV0x[2].fX;
-    fV0x[3].fY = fV0x[0].fY;
-    uint32_t dwPaletteColor = PALETTE_GetColorByIndex(dwColor & 0xff);
+    fV0x[3].fY = fTop;
+    uint32_t dwPaletteColor = PALETTE_GetColorByIndex((uint8_t)dwColor);
     fV0x[0].dwDiffuse = dwPaletteColor & 0xffffff | (uint32_t)nAlpha << 0x18;
     fV0x[1].dwDiffuse = fV0x[0].dwDiffuse;
     fV0x[2].dwDiffuse = fV0x[0].dwDiffuse;

@@ -4537,14 +4537,21 @@ void __fastcall SKILL_ApplyStunState(::SGAMEDATA * pGame, D2UnitStrc * pAttacker
     pUnit->eUnitFlags &= ~UNITFLAG_DOUPDATE;
 }
 
+static inline D2UnitDataMonsterStrc * GetMonsterDataInline(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+        return pUnit->pUnitData.pUnitDataMonster;
+    }
+    return nullptr;
+}
+
 void __fastcall SKILL_StunExpireAndRestoreAi(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatListEx) {
     ::SGAMEDATA* pGame = UNIT::SUnit::GetGamePointer(pUnit);
     BOOL eUninterruptState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
     if (eUninterruptState) {
       return;
     }
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
-      D2AiGeneralStrc* pAiGeneral = !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
+    if (GetTypeInline(pUnit) == UNIT_MONSTER) {
+      D2AiGeneralStrc* pAiGeneral = GetMonsterDataInline(pUnit) ? GetMonsterDataInline(pUnit)->pAiGeneral : nullptr;
       Monster::AI::AttachCorrectAiFunctionToMonster(pGame, pUnit, pAiGeneral, 0);
     }
 

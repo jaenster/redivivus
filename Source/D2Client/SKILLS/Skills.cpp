@@ -847,6 +847,13 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
     return p->eUnitFlags >> 3 & 1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Tests whether pUnit2 is a legal skill target for caster pUnit under the skill's target-flags bitmask (nTargetFlags). Switches on the target's unit type, requiring the matching allow-bit (player/monster/object/missile/item) and checking liveness/anim-mode (e.g. dead/death rejected unless the corpse-target bit 0x1000 is set). Applies optional filters per bit: undead-only (0x4), exclude-boss (0x4000), monster-stat flag (0x40000), not-in-town (0x100), skill-target-type & non-NPC (0x10000), CanInteractWith (0x8000), in-melee-range (0x20000), not just-hit (0x80000), and line-of-sight wall collision (0x200). Returns 1 if the target passes all applicable checks, 0 otherwise.
 uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nTargetFlags) {
     D2MissilesTxt* pMissileTxt;
@@ -860,12 +867,8 @@ uint32_t __fastcall SKILL_ValidateTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
     eD2PlayerAnimMode eAnimMode;
     eD2PlayerAnimMode ePlayerMode;
     D2UnitStrc* pCasterForY;
-    if (!pUnit2) {
-      return 0;
-    }
-
     D2UnitStrc* pCasterSaved = pUnit;
-    switch (pUnit2->eUnitType) {
+    switch (GetTypeInline(pUnit2)) {
       case UNIT_PLAYER:
         if (!(nTargetFlags & 1)) {
           return 0;

@@ -696,48 +696,27 @@ int16_t __fastcall GetUnitPartyId(D2UnitStrc * pUnit) {
 }
 
 uint32_t __fastcall ROSTER_GetLootFlag(D2RosterStrc * pRoster) {
-    uint32_t bFlag;
     if (pRoster) {
       D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
-      if (!pPlayer) {
-        bFlag = UNIT::PlayerList::GetFlag(-1, pRoster->nRosterGUID, 1);
-        return bFlag;
-      }
-
-      bFlag = UNIT::PlayerList::GetFlag(pPlayer->nUnitGUID, pRoster->nRosterGUID, 1);
-      return bFlag;
+      return UNIT::PlayerList::GetFlag(!pPlayer ? -1 : pPlayer->nUnitGUID, pRoster->nRosterGUID, 1);
     }
 
     return 0;
 }
 
 uint32_t __fastcall ROSTER_GetListenFlag(D2RosterStrc * pRoster) {
-    uint32_t bFlag;
     if (pRoster) {
       D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
-      if (!pPlayer) {
-        bFlag = UNIT::PlayerList::GetFlag(-1, pRoster->nRosterGUID, 2);
-        return bFlag;
-      }
-
-      bFlag = UNIT::PlayerList::GetFlag(pPlayer->nUnitGUID, pRoster->nRosterGUID, 2);
-      return bFlag;
+      return UNIT::PlayerList::GetFlag(!pPlayer ? -1 : pPlayer->nUnitGUID, pRoster->nRosterGUID, 2);
     }
 
     return 0;
 }
 
 uint32_t __fastcall ROSTER_GetMuteFlag(D2RosterStrc * pRoster) {
-    uint32_t bFlag;
     if (pRoster) {
       D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
-      if (!pPlayer) {
-        bFlag = UNIT::PlayerList::GetFlag(-1, pRoster->nRosterGUID, 4);
-        return bFlag;
-      }
-
-      bFlag = UNIT::PlayerList::GetFlag(pPlayer->nUnitGUID, pRoster->nRosterGUID, 4);
-      return bFlag;
+      return UNIT::PlayerList::GetFlag(!pPlayer ? -1 : pPlayer->nUnitGUID, pRoster->nRosterGUID, 4);
     }
 
     return 0;
@@ -1246,38 +1225,26 @@ void __fastcall AllocRosterOther(int32_t nOwnerGUID, int32_t nRosterGUID) {
 
 // @sourcefile .\GAME\Roster.cpp
 void __fastcall FreeAllRosterPlayer(int32_t nOwnerGUID, int32_t nRosterGUID) {
-    D2RosterLinkListStrc* pMemoryToFree;
+    D2RosterLinkListStrc* pPrevLink = 0;
     D2RosterStrc* pRoster = GetRosterPlayerByGUID(nOwnerGUID);
     if (!pRoster) {
       return;
     }
 
-    D2RosterLinkListStrc* pCurLink = pRoster->pRosterLinkList;
-    D2RosterLinkListStrc* pPrevLink = 0;
-    if (!pRoster->pRosterLinkList) {
-      return;
-    }
+    for (D2RosterLinkListStrc* pLink = pRoster->pRosterLinkList; pLink; pLink = pLink->pNext) {
+      if (pLink->nRosterGUID == nRosterGUID) {
+        if (pPrevLink) {
+          pPrevLink->pNext = pLink->pNext;
+        } else {
+          pRoster->pRosterLinkList = pLink->pNext;
+        }
 
-    while (true) {
-      pMemoryToFree = pCurLink;
-      if (pMemoryToFree->nRosterGUID == nRosterGUID) {
-        break;
-      }
-
-      pCurLink = pMemoryToFree->pNext;
-      pPrevLink = pMemoryToFree;
-      if (!pMemoryToFree->pNext) {
+        D2_FREE_AT(pLink, ".\\GAME\\Roster.cpp", 0x6bd);
         return;
       }
-    }
 
-    if (pPrevLink) {
-      pPrevLink->pNext = pMemoryToFree->pNext;
-    } else {
-      pRoster->pRosterLinkList = pMemoryToFree->pNext;
+      pPrevLink = pLink;
     }
-
-    D2_FREE_AT(pMemoryToFree, ".\\GAME\\Roster.cpp", 0x6bd);
 }
 
 BOOL __fastcall ROSTER_CheckPlayerCanLoot(int32_t nLooterGUID, int32_t nOwnerGUID) {

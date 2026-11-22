@@ -1382,111 +1382,95 @@ void __fastcall D2GFX_DrawWallTileBasic(uint8_t * pbTileData, uint8_t * pbDstRow
     }
 }
 
-void __fastcall D2GFX_DrawWallTileWithPerspective(uint8_t * pbTileData, uint8_t * pbDstRow, int32_t nLightAccumX, int32_t nLightStepX, int32_t nLightAccumY, int32_t nLightStepY, int32_t nRowsLeft, uint8_t byShift) {
+void __fastcall D2GFX_DrawWallTileWithPerspective(uint8_t * pbTileData, uint8_t * pbDstRow, int32_t nLightAccumX, int32_t nLightStepX, int32_t nLightAccumY, int32_t nLightStepY, int32_t nRowsLeft, int32_t byShift) {
     uint32_t nRunLength;
     uint32_t nSkipCount;
-    uint8_t* pbTileDataNext;
-    uint8_t (*pbLineBufRowPtr)[32] = gpLineBufferTileArray[nLightAccumX >> D2_SHIFT_COUNT(byShift)] + (nLightAccumY >> D2_SHIFT_COUNT(byShift));
     uint8_t* pbDstWritePtr = pbDstRow;
-    uint8_t* pbDstRowStart = pbDstRow;
-    do {
-      uint8_t* pbLineBufSrcPixel;
-      while (true) {
-        if (!nRowsLeft) {
-          return;
-        }
-
-        nSkipCount = (uint32_t)*pbTileData;
-        nRunLength = (uint32_t)pbTileData[1];
-        pbTileDataNext = pbTileData + 2;
-        if (nSkipCount || nRunLength) {
-          break;
-        }
-
+    uint8_t (*pbLineBufRowPtr)[32] = gpLineBufferTileArray[nLightAccumX >> D2_SHIFT_COUNT(byShift)] + (nLightAccumY >> D2_SHIFT_COUNT(byShift));
+    while (nRowsLeft) {
+      nSkipCount = *pbTileData++;
+      nRunLength = *pbTileData++;
+      if (!nSkipCount && !nRunLength) {
         nLightAccumX += nLightStepX;
         nLightAccumY += nLightStepY;
         pbDstRow += gRenderBufferPitch;
         nRowsLeft--;
-        pbLineBufRowPtr = gpLineBufferTileArray[nLightAccumX >> D2_SHIFT_COUNT(byShift)] + (nLightAccumY >> D2_SHIFT_COUNT(byShift));
-        pbTileData = pbTileDataNext;
         pbDstWritePtr = pbDstRow;
-        pbDstRowStart = pbDstRow;
-      }
-
-      pbDstWritePtr += nSkipCount;
-      pbLineBufSrcPixel = *pbLineBufRowPtr + nSkipCount;
-      switch (nRunLength) {
+        pbLineBufRowPtr = gpLineBufferTileArray[nLightAccumX >> D2_SHIFT_COUNT(byShift)] + (nLightAccumY >> D2_SHIFT_COUNT(byShift));
+      } else {
+        pbDstWritePtr += nSkipCount;
+        uint8_t* pbLineBufSrcPixel = *pbLineBufRowPtr + nSkipCount;
+        switch (nRunLength) {
         case 0x20:
-          pbDstWritePtr[0x1f] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1f]][pbTileData[0x21]];
+          pbDstWritePtr[0x1f] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1f]][pbTileData[0x1f]];
         case 0x1f:
-          pbDstWritePtr[0x1e] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1e]][pbTileData[0x20]];
+          pbDstWritePtr[0x1e] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1e]][pbTileData[0x1e]];
         case 0x1e:
-          pbDstWritePtr[0x1d] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1d]][pbTileData[0x1f]];
+          pbDstWritePtr[0x1d] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1d]][pbTileData[0x1d]];
         case 0x1d:
-          pbDstWritePtr[0x1c] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1c]][pbTileData[0x1e]];
+          pbDstWritePtr[0x1c] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1c]][pbTileData[0x1c]];
         case 0x1c:
-          pbDstWritePtr[0x1b] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1b]][pbTileData[0x1d]];
+          pbDstWritePtr[0x1b] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1b]][pbTileData[0x1b]];
         case 0x1b:
-          pbDstWritePtr[0x1a] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1a]][pbTileData[0x1c]];
+          pbDstWritePtr[0x1a] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1a]][pbTileData[0x1a]];
         case 0x1a:
-          pbDstWritePtr[0x19] = gaPaletteColorLUT[pbLineBufSrcPixel[0x19]][pbTileData[0x1b]];
+          pbDstWritePtr[0x19] = gaPaletteColorLUT[pbLineBufSrcPixel[0x19]][pbTileData[0x19]];
         case 0x19:
-          pbDstWritePtr[0x18] = gaPaletteColorLUT[pbLineBufSrcPixel[0x18]][pbTileData[0x1a]];
+          pbDstWritePtr[0x18] = gaPaletteColorLUT[pbLineBufSrcPixel[0x18]][pbTileData[0x18]];
         case 0x18:
-          pbDstWritePtr[0x17] = gaPaletteColorLUT[pbLineBufSrcPixel[0x17]][pbTileData[0x19]];
+          pbDstWritePtr[0x17] = gaPaletteColorLUT[pbLineBufSrcPixel[0x17]][pbTileData[0x17]];
         case 0x17:
-          pbDstWritePtr[0x16] = gaPaletteColorLUT[pbLineBufSrcPixel[0x16]][pbTileData[0x18]];
+          pbDstWritePtr[0x16] = gaPaletteColorLUT[pbLineBufSrcPixel[0x16]][pbTileData[0x16]];
         case 0x16:
-          pbDstWritePtr[0x15] = gaPaletteColorLUT[pbLineBufSrcPixel[0x15]][pbTileData[0x17]];
+          pbDstWritePtr[0x15] = gaPaletteColorLUT[pbLineBufSrcPixel[0x15]][pbTileData[0x15]];
         case 0x15:
-          pbDstWritePtr[0x14] = gaPaletteColorLUT[pbLineBufSrcPixel[0x14]][pbTileData[0x16]];
+          pbDstWritePtr[0x14] = gaPaletteColorLUT[pbLineBufSrcPixel[0x14]][pbTileData[0x14]];
         case 0x14:
-          pbDstWritePtr[0x13] = gaPaletteColorLUT[pbLineBufSrcPixel[0x13]][pbTileData[0x15]];
+          pbDstWritePtr[0x13] = gaPaletteColorLUT[pbLineBufSrcPixel[0x13]][pbTileData[0x13]];
         case 0x13:
-          pbDstWritePtr[0x12] = gaPaletteColorLUT[pbLineBufSrcPixel[0x12]][pbTileData[0x14]];
+          pbDstWritePtr[0x12] = gaPaletteColorLUT[pbLineBufSrcPixel[0x12]][pbTileData[0x12]];
         case 0x12:
-          pbDstWritePtr[0x11] = gaPaletteColorLUT[pbLineBufSrcPixel[0x11]][pbTileData[0x13]];
+          pbDstWritePtr[0x11] = gaPaletteColorLUT[pbLineBufSrcPixel[0x11]][pbTileData[0x11]];
         case 0x11:
-          pbDstWritePtr[0x10] = gaPaletteColorLUT[pbLineBufSrcPixel[0x10]][pbTileData[0x12]];
+          pbDstWritePtr[0x10] = gaPaletteColorLUT[pbLineBufSrcPixel[0x10]][pbTileData[0x10]];
         case 0x10:
-          pbDstWritePtr[0xf] = gaPaletteColorLUT[pbLineBufSrcPixel[0xf]][pbTileData[0x11]];
+          pbDstWritePtr[0xf] = gaPaletteColorLUT[pbLineBufSrcPixel[0xf]][pbTileData[0xf]];
         case 0xf:
-          pbDstWritePtr[0xe] = gaPaletteColorLUT[pbLineBufSrcPixel[0xe]][pbTileData[0x10]];
+          pbDstWritePtr[0xe] = gaPaletteColorLUT[pbLineBufSrcPixel[0xe]][pbTileData[0xe]];
         case 0xe:
-          pbDstWritePtr[0xd] = gaPaletteColorLUT[pbLineBufSrcPixel[0xd]][pbTileData[0xf]];
+          pbDstWritePtr[0xd] = gaPaletteColorLUT[pbLineBufSrcPixel[0xd]][pbTileData[0xd]];
         case 0xd:
-          pbDstWritePtr[0xc] = gaPaletteColorLUT[pbLineBufSrcPixel[0xc]][pbTileData[0xe]];
+          pbDstWritePtr[0xc] = gaPaletteColorLUT[pbLineBufSrcPixel[0xc]][pbTileData[0xc]];
         case 0xc:
-          pbDstWritePtr[0xb] = gaPaletteColorLUT[pbLineBufSrcPixel[0xb]][pbTileData[0xd]];
+          pbDstWritePtr[0xb] = gaPaletteColorLUT[pbLineBufSrcPixel[0xb]][pbTileData[0xb]];
         case 0xb:
-          pbDstWritePtr[10] = gaPaletteColorLUT[pbLineBufSrcPixel[10]][pbTileData[0xc]];
-        case 10:
-          pbDstWritePtr[9] = gaPaletteColorLUT[pbLineBufSrcPixel[9]][pbTileData[0xb]];
-        case 9:
-          pbDstWritePtr[8] = gaPaletteColorLUT[pbLineBufSrcPixel[8]][pbTileData[10]];
-        case 8:
-          pbDstWritePtr[7] = gaPaletteColorLUT[pbLineBufSrcPixel[7]][pbTileData[9]];
-        case 7:
-          pbDstWritePtr[6] = gaPaletteColorLUT[pbLineBufSrcPixel[6]][pbTileData[8]];
-        case 6:
-          pbDstWritePtr[5] = gaPaletteColorLUT[pbLineBufSrcPixel[5]][pbTileData[7]];
-        case 5:
-          pbDstWritePtr[4] = gaPaletteColorLUT[pbLineBufSrcPixel[4]][pbTileData[6]];
-        case 4:
-          pbDstWritePtr[3] = gaPaletteColorLUT[pbLineBufSrcPixel[3]][pbTileData[5]];
-        case 3:
-          pbDstWritePtr[2] = gaPaletteColorLUT[pbLineBufSrcPixel[2]][pbTileData[4]];
-        case 2:
-          pbDstWritePtr[1] = gaPaletteColorLUT[pbLineBufSrcPixel[1]][pbTileData[3]];
+          pbDstWritePtr[0xa] = gaPaletteColorLUT[pbLineBufSrcPixel[0xa]][pbTileData[0xa]];
+        case 0xa:
+          pbDstWritePtr[0x9] = gaPaletteColorLUT[pbLineBufSrcPixel[0x9]][pbTileData[0x9]];
+        case 0x9:
+          pbDstWritePtr[0x8] = gaPaletteColorLUT[pbLineBufSrcPixel[0x8]][pbTileData[0x8]];
+        case 0x8:
+          pbDstWritePtr[0x7] = gaPaletteColorLUT[pbLineBufSrcPixel[0x7]][pbTileData[0x7]];
+        case 0x7:
+          pbDstWritePtr[0x6] = gaPaletteColorLUT[pbLineBufSrcPixel[0x6]][pbTileData[0x6]];
+        case 0x6:
+          pbDstWritePtr[0x5] = gaPaletteColorLUT[pbLineBufSrcPixel[0x5]][pbTileData[0x5]];
+        case 0x5:
+          pbDstWritePtr[0x4] = gaPaletteColorLUT[pbLineBufSrcPixel[0x4]][pbTileData[0x4]];
+        case 0x4:
+          pbDstWritePtr[0x3] = gaPaletteColorLUT[pbLineBufSrcPixel[0x3]][pbTileData[0x3]];
+        case 0x3:
+          pbDstWritePtr[0x2] = gaPaletteColorLUT[pbLineBufSrcPixel[0x2]][pbTileData[0x2]];
+        case 0x2:
+          pbDstWritePtr[0x1] = gaPaletteColorLUT[pbLineBufSrcPixel[0x1]][pbTileData[0x1]];
         case 1:
-          *pbDstWritePtr = gaPaletteColorLUT[*pbLineBufSrcPixel][*pbTileDataNext];
-        pbDstRow = pbDstRowStart;
-        default:
-          pbDstWritePtr += nRunLength;
-        pbTileData = pbTileDataNext + nRunLength;
+          *pbDstWritePtr = gaPaletteColorLUT[*pbLineBufSrcPixel][*pbTileData];
+        }
+        pbDstWritePtr += nRunLength;
+        pbTileData += nRunLength;
         pbLineBufRowPtr = (uint8_t (*)[32])(pbLineBufSrcPixel + nRunLength);
       }
-    } while (true);
+    }
 }
 
 void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenYStart, uint8_t * pbTileData, uint8_t * pbDstRow, uint8_t * pbPaletteRow, int32_t nRowCount) {

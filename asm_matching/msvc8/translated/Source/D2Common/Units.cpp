@@ -2705,14 +2705,28 @@ void __stdcall InitRightSkill(D2UnitStrc * pUnit) {
     pPlayerData->nRightSkillOwnerGUID = nErrLine;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
+static inline D2UnitDataPlayerStrc * GetPlayerDataInline(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+        return pUnit->pUnitData.pUnitDataPlayer;
+    }
+    return nullptr;
+}
+
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall InitLeftSkill(D2UnitStrc * pUnit) {
     int32_t nOwnerGUID;
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
     }
 
-    D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+    D2UnitDataPlayerStrc* pPlayerData = GetPlayerDataInline(pUnit);
     if (!pPlayerData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1405);
       exit(-1);

@@ -482,9 +482,11 @@ D2GroundItemLabelStrc * __fastcall Unreferenced_004c0ce0(D2GroundItemLabelStrc *
 }
 
 void StaticInit_gaGroundItemLabels() {
+    D2GroundItemLabelStrc* pLabel = gaGroundItemLabels;
     int nRemaining = 0x1f;
     do {
-      Fog::File::CONTAINER_InitializeBuffer(gaGroundItemLabels[-nRemaining + 31].wszName, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      Fog::File::CONTAINER_InitializeBuffer(pLabel->wszName, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+      pLabel++;
       nRemaining--;
     } while (nRemaining >= 0);
 }

@@ -743,18 +743,20 @@ static void __stdcall UI_DrawPartyButtonTextWithTooltip(uint16_t nLocaleId1, uin
 
 static void ROSTER_DrawPlayerTooltip(D2RosterStrc * pRoster) {
     // Static local variables (originally global data)
-    static short gawRosterTooltipOffsetX[4] = { 0x2783, 0x277f, 0x2781, 0x277e }; D2_STATIC_GUARD(gawRosterTooltipOffsetX, "D2Client::UI::Party::ROSTER_DrawPlayerTooltip::gawRosterTooltipOffsetX");
-    static short gawRosterTooltipOffsetY[4] = { 0x2783, 0x2780, 0x2782, 0x277e }; D2_STATIC_GUARD(gawRosterTooltipOffsetY, "D2Client::UI::Party::ROSTER_DrawPlayerTooltip::gawRosterTooltipOffsetY");
+    static uint16_t gawRosterTooltipOffsetX[4] = { 0x2783, 0x277f, 0x2781, 0x277e }; D2_STATIC_GUARD(gawRosterTooltipOffsetX, "D2Client::UI::Party::ROSTER_DrawPlayerTooltip::gawRosterTooltipOffsetX");
+    static uint16_t gawRosterTooltipOffsetY[4] = { 0x2783, 0x2780, 0x2782, 0x277e }; D2_STATIC_GUARD(gawRosterTooltipOffsetY, "D2Client::UI::Party::ROSTER_DrawPlayerTooltip::gawRosterTooltipOffsetY");
     static uint16_t gwRosterCountMax[4] = { 0x2789, 0x2787, 0x2785, 0x2784 }; D2_STATIC_GUARD(gwRosterCountMax, "D2Client::UI::Party::ROSTER_DrawPlayerTooltip::gwRosterCountMax");
     static uint16_t gwRosterSizeMax[4] = { 0x2789, 0x2788, 0x2786, 0x2784 }; D2_STATIC_GUARD(gwRosterSizeMax, "D2Client::UI::Party::ROSTER_DrawPlayerTooltip::gwRosterSizeMax");
 
     uint16_t* pSrc;
-    uint16_t* pFormat;
     int bOutHostile;
-    uint16_t wszName[128];
-    uint16_t wszLine2[128];
+    char szErrName[128];
     uint16_t wszLine1[128];
-    char szErrName[18];
+    uint16_t wszLine2[128];
+    uint16_t wszName[128];
+    int32_t nColorLine1 = 0;
+    int32_t nColorLine2 = 0;
+    int32_t nBoxHeight = 0x10;
     for (bOutHostile = 0; bOutHostile < 0x80; bOutHostile++) {
       wszLine1[bOutHostile] = L'\0';
     }
@@ -767,9 +769,6 @@ static void ROSTER_DrawPlayerTooltip(D2RosterStrc * pRoster) {
       wszName[bOutHostile] = L'\0';
     }
 
-    int32_t nColorLine1 = 0;
-    int32_t nColorLine2 = 0;
-    int32_t nBoxHeight = 0x10;
     char* pszName = GAME::Roster::GetRosterName(pRoster);
     /* ERROR PLAYER NAME */ if (!pszName) {
       memcpy(szErrName, "ERROR PLAYER NAME", 0x12);
@@ -791,17 +790,11 @@ static void ROSTER_DrawPlayerTooltip(D2RosterStrc * pRoster) {
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine1, pSrc);
       }
     } else {
-      uint16_t nLocaleId;
-      pSrc = wszName;
-      bOutHostile = bInHostile + BVar1 * 2;
       if (bIsFemale) {
-        nLocaleId = gawRosterTooltipOffsetX[bOutHostile];
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszLine1, D2Lang::StrTable::strtable::GetLocaleString(gawRosterTooltipOffsetX[bInHostile + BVar1 * 2]), wszName);
       } else {
-        nLocaleId = gawRosterTooltipOffsetY[bOutHostile];
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszLine1, D2Lang::StrTable::strtable::GetLocaleString(gawRosterTooltipOffsetY[bInHostile + BVar1 * 2]), wszName);
       }
-
-      pFormat = D2Lang::StrTable::strtable::GetLocaleString(nLocaleId);
-      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszLine1, pFormat, pSrc);
     }
 
     uint32_t nUiFlags = ClientModeInGame::CLIENTMODE_IsHardcoreCharacter();
@@ -810,7 +803,7 @@ static void ROSTER_DrawPlayerTooltip(D2RosterStrc * pRoster) {
       if (bOutLoot == bInLoot) {
         bIsFemale = GAME::Roster::RosterIsFemale(pRoster);
         if (bIsFemale) {
-          pSrc = D2Lang::StrTable::strtable::GetLocaleString(gwRosterCountMax[bInLoot + bOutLoot * 2]);
+          pSrc = D2Lang::StrTable::strtable::GetLocaleString(gwRosterCountMax[bOutLoot * 2 + bInLoot]);
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine2, pSrc);
         } else {
           pSrc = D2Lang::StrTable::strtable::GetLocaleString(gwRosterSizeMax[bInLoot + bOutLoot * 2]);
@@ -819,16 +812,13 @@ static void ROSTER_DrawPlayerTooltip(D2RosterStrc * pRoster) {
       } else {
         bIsFemale = GAME::Roster::RosterIsFemale(pRoster);
         if (bIsFemale) {
-          pSrc = wszName;
-          pFormat = D2Lang::StrTable::strtable::GetLocaleString(gwRosterCountMax[bInLoot + bOutLoot * 2]);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszLine2, D2Lang::StrTable::strtable::GetLocaleString(gwRosterCountMax[bOutLoot * 2 + bInLoot]), wszName);
         } else {
-          pSrc = wszName;
-          pFormat = D2Lang::StrTable::strtable::GetLocaleString(gwRosterSizeMax[bInLoot + bOutLoot * 2]);
+          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszLine2, D2Lang::StrTable::strtable::GetLocaleString(gwRosterSizeMax[bInLoot + bOutLoot * 2]), wszName);
         }
-
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x80, wszLine2, pFormat, pSrc);
       }
     }
+
     if (BVar1) {
       nColorLine1 = 8;
     }
@@ -842,14 +832,13 @@ static void ROSTER_DrawPlayerTooltip(D2RosterStrc * pRoster) {
       nColorLine2 = 4;
     }
 
-    int32_t nPixelWidth1 = D2Win::Src::D2WinFont::DRAW_text0(wszLine1);
-    int32_t nPixelWidth2 = D2Win::Src::D2WinFont::DRAW_text0(wszLine2);
-    bOutHostile = nPixelWidth2 + 10;
-    if (nPixelWidth1 + 10 > nPixelWidth2 + 10) {
-      bOutHostile = nPixelWidth1 + 10;
+    int32_t nPixelWidth1 = D2Win::Src::D2WinFont::DRAW_text0(wszLine1) + 10;
+    int32_t nBoxWidth = D2Win::Src::D2WinFont::DRAW_text0(wszLine2) + 10;
+    if (nPixelWidth1 > nBoxWidth) {
+      nBoxWidth = nPixelWidth1;
     }
 
-    Engine::Gfx::D2GFX_DrawSolidRectExBySize(Inv::gnPanelOffsetX + 0x24, 0x23 - Inv::gnPanelOffsetY, bOutHostile, nBoxHeight, (uint32_t)cRed, DRAW_LESSTRANSPARENT);
+    Engine::Gfx::D2GFX_DrawSolidRectExBySize(Inv::gnPanelOffsetX + 0x24, 0x23 - Inv::gnPanelOffsetY, nBoxWidth, nBoxHeight, (uint32_t)cRed, DRAW_LESSTRANSPARENT);
     D2Win::Src::D2WinFont::DRAW_text(wszLine1, Inv::gnPanelOffsetX + 0x29, 0x32 - Inv::gnPanelOffsetY, nColorLine1, 0);
     D2Win::Src::D2WinFont::DRAW_text(wszLine2, Inv::gnPanelOffsetX + 0x29, 0x41 - Inv::gnPanelOffsetY, nColorLine2, 0);
 }

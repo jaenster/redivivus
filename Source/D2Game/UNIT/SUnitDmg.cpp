@@ -1512,15 +1512,21 @@ void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc *
     pDmg->dwDmgTotal = pDmg->dwLifeLeech + nDrStatValue;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
+static inline D2UnitDataMonsterStrc * GetMonsterDataInline(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+        return pUnit->pUnitData.pUnitDataMonster;
+    }
+    return nullptr;
+}
+
 uint32_t __thiscall DAMAGE_GetMonsterDrainEffectiveness(D2UnitStrc * pMonster, ::SGAMEDATA * pGame) {
-    if ((pMonster ? pMonster->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if (GetTypeInline(pMonster) != UNIT_MONSTER) {
       return 100;
     }
-    if (!pMonster->pUnitData.pUnitDataMonster) {
-      return 0;
-    }
 
-    D2MonStatsTxt* nMonsterIndex = pMonster->pUnitData.pUnitDataMonster->pMonStatsTxt;
+    D2MonStatsTxt* nMonsterIndex = GetMonsterDataInline(pMonster) ? GetMonsterDataInline(pMonster)->pMonStatsTxt : nullptr;
     if (!nMonsterIndex) {
       return 0;
     }

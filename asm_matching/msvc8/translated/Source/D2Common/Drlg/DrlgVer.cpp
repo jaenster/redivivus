@@ -229,26 +229,22 @@ void __fastcall DRLGVER_CreateRoomVertices(D2PoolManagerStrc * pMemory, D2DrlgVe
 
 // @sourcefile .\DRLG\DrlgVer.cpp
 void __fastcall DRLGVER_FreeVertices(D2PoolManagerStrc * pMemory, D2DrlgVertexStrc * * ppVertices) {
-    D2DrlgVertexStrc* pNext;
     if (!*ppVertices) {
       return;
     }
 
-    D2DrlgVertexStrc* pCurrent;
-    pCurrent = (*ppVertices)->pNext;
-    do {
-      if (!pCurrent) {
-        goto free_head;
+    D2DrlgVertexStrc* pVertex = (*ppVertices)->pNext;
+    while (pVertex) {
+      D2DrlgVertexStrc* pFree = pVertex;
+      pVertex = pVertex->pNext;
+      D2_FREE_POOL_AT(pMemory, pFree, ".\\DRLG\\DrlgVer.cpp", 0x114);
+      if (pVertex == *ppVertices) {
+        D2_FREE_POOL_AT(pMemory, pVertex, ".\\DRLG\\DrlgVer.cpp", 0x117);
+        break;
       }
+    }
 
-      pNext = pCurrent->pNext;
-      D2_FREE_POOL_AT(pMemory, pCurrent, ".\\DRLG\\DrlgVer.cpp", 0x114);
-      pCurrent = pNext;
-    } while (pNext != *ppVertices);
-
-    D2_FREE_POOL_AT(pMemory, pNext, ".\\DRLG\\DrlgVer.cpp", 0x117);
-    if (!pNext) {
-      free_head:
+    if (!pVertex) {
       D2_FREE_POOL_AT(pMemory, *ppVertices, ".\\DRLG\\DrlgVer.cpp", 0x11f);
     }
 

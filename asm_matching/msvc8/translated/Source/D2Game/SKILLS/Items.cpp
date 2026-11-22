@@ -1605,6 +1605,7 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQuality(D2UnitStrc * pUnit) {
     D2SeedStrc* pSeed = D2Common::ITEMS::Items::GetItemSeed(pUnit);
     nClassId = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, pnLowQualCount->nSize);
     D2Common::ITEMS::Items::ITEM_SetItemData_nFileIndex(pUnit, nClassId);
+    bResult = FALSE;
     nClassId = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(pUnit);
     if (nClassId) {
       uint32_t nDurabilityThird;
@@ -1663,19 +1664,16 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQuality(D2UnitStrc * pUnit) {
 
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_secondary_mindamage, nScaledStat, 0);
       nStatValue = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pUnit);
-      if (!nStatValue) {
-        return 1;
-      }
-
+      if (nStatValue) {
       nStatValue = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throw_mindamage, 0), 2, 0x4b);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_mindamage, nStatValue, 0);
       nScaledStat = SKILLITEMS_ApplyPercentWithMinimum(D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throw_maxdamage, 0), 1, 0x4b);
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_item_throw_maxdamage, nScaledStat, 0);
+      }
+      bResult = TRUE;
     } else {
       nClassId = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_AnyArmor);
-      if (!nClassId) {
-        return 0;
-      }
+      if (nClassId) {
 
       nStatValue = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_armorclass, 0);
       nScaledStat = nStatValue * 0x4b / 100;
@@ -1684,9 +1682,11 @@ BOOL __fastcall ITEMMOD_ApplyCrudeQuality(D2UnitStrc * pUnit) {
       }
 
       D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_armorclass, nScaledStat, 0);
+      bResult = TRUE;
+      }
     }
 
-    return 1;
+    return bResult;
 }
 
 // Applies "Low Quality" (Crude/Cracked/etc.) item generation. Picks a random low-quality prefix index from LowQualityItems.txt (via the item's seed) and stores it as the item file index. If the item has durability, sets durability/maxdurability to roughly a third of base (with a random partial-durability roll). For weapons, scales min/max (and secondary, and throwable min/max) damage to 75% (0x4b/100) with floors; for armor, scales armorclass to 75%. Finally applies staff-skill mods via StaffMod. Mutates the item unit's stats in place; returns FALSE when the tables are missing or the item is neither weapon nor armor, else TRUE (asm: XOR EAX,EAX / MOV EAX,[EBP-4]).

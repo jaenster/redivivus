@@ -287,105 +287,80 @@ void __fastcall D2WINEDITBOX_LinkTabOrder(::D2WinEditBox * pEditBox, ::D2WinEdit
 
 // Handles mouse click in D2 edit box. Converts wide text to multi-byte, wraps lines to fit box width, calculates cursor position relative to click point.
 static int32_t __stdcall D2WINEDITBOX_GetTextHeight(int * pEditBox, short * wszText) {
-    int32_t nWszStart;
-    int32_t nCharPixelWidth;
-    int nZeroCount;
-    char* pszCurChar;
-    uint16_t* pWideBufIter;
-    int32_t nSize;
     uint16_t wszLineBuffer[256];
     char szLineBuffer[256];
     char szDecodedText[256];
-    int nCurrentLineY;
     uint16_t wszCursorChar[2];
-    char szCursorChar[2];
-    bool bLineWrapped;
-    char cCur;
-    int32_t nLine;
-    int nSizeX;
-    int nWszText;
     if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5ea);
       exit(-1);
-    } else {
-      uint32_t nFontH;
-      if (*pEditBox == 1) {
-        D2WinFont::SetAndReturnLastFont(pEditBox[0x9c]);
-        nFontH = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-        nWszStart = nFontH + (pEditBox[0x11] - pEditBox[6]) + pEditBox[4];
-        szCursorChar[0] = '_';
-        szCursorChar[1] = '\0';
-        wszCursorChar[0] = L'\0';
-        wszCursorChar[1] = L'\0';
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszCursorChar, szCursorChar, 2);
-        nLine = D2WinFont::D2WINFONT_GetStringPixelWidth(wszCursorChar, 2);
-        for (nZeroCount = 0; nZeroCount < 0x100; nZeroCount++) {
-          wszLineBuffer[nZeroCount] = L'\0';
-        }
-
-        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szDecodedText, (uint16_t*)wszText, 0x100);
-        pszCurChar = szDecodedText;
-        nFontH = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-        nZeroCount = pEditBox[0x10];
-        nSizeX = pEditBox[5];
-        nWszText = nWszStart;
-        do {
-          if (szDecodedText[0] == '\0') {
-            return nWszText - nWszStart;
-          }
-
-          bLineWrapped = false;
-          nSize = 0;
-          memset(szLineBuffer, 0, 0x100);
-          cCur = *pszCurChar;
-          while (true) {
-            if (cCur == '\0' || cCur == '\r' || cCur == '\n') {
-              goto advance_to_next_line;
-            }
-
-            szLineBuffer[nSize] = cCur;
-            D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineBuffer, szLineBuffer, 0x100);
-            nCharPixelWidth = D2WinFont::D2WINFONT_GetStringPixelWidth(wszLineBuffer, nSize);
-            if (nCharPixelWidth + nLine > nSizeX + nZeroCount * -2) {
-              break;
-            }
-
-            cCur = pszCurChar[1];
-            pszCurChar++;
-            nSize++;
-          }
-
-          bLineWrapped = true;
-          advance_to_next_line:
-          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineBuffer, szLineBuffer, 0x100);
-          if (bLineWrapped) {
-            nWszText = (int)(nWszText + nFontH);
-          }
-          if (*pszCurChar == '\r') {
-            if (pszCurChar[1] == '\n') {
-              do {
-                if (pszCurChar[1] != '\n') {
-                  break;
-                }
-
-                pszCurChar += 2;
-                nWszText = (int)(nWszText + nFontH);
-              } while (*pszCurChar == '\r');
-            } else {
-              do {
-                pszCurChar++;
-                nWszText = (int)(nWszText + nFontH);
-              } while (*pszCurChar == '\r');
-            }
-          }
-
-          szDecodedText[0] = *pszCurChar;
-        } while (true);
-      }
-
+    }
+    if (*pEditBox != 1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5ec);
       exit(-1);
     }
+
+    D2WinFont::SetAndReturnLastFont(pEditBox[0x9c]);
+    int nStartY = D2WinFont::D2WINFONT_GetCurrentFontHeight() + (pEditBox[0x11] - pEditBox[6]) + pEditBox[4];
+    char szCursorChar[2] = "_";
+    wszCursorChar[0] = L'\0';
+    wszCursorChar[1] = L'\0';
+    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszCursorChar, szCursorChar, 2);
+    int nCursorWidth = D2WinFont::D2WINFONT_GetStringPixelWidth(wszCursorChar, 2);
+    for (int i = 0; i < 0x100; i++) {
+      wszLineBuffer[i] = L'\0';
+    }
+
+    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szDecodedText, (uint16_t*)wszText, 0x100);
+    char* pszLineStart = szDecodedText;
+    char* pszCurChar = szDecodedText;
+    int nY = nStartY;
+    int nFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
+    int nMaxWidth = pEditBox[5] - pEditBox[0x10] * 2;
+    if (szDecodedText[0] != '\0') {
+      do {
+        BOOL bLineWrapped = FALSE;
+        int nCharCount = pszCurChar - pszLineStart;
+        memset(szLineBuffer, 0, 0x100);
+        while (*pszCurChar != '\0' && *pszCurChar != '\r' && *pszCurChar != '\n') {
+          szLineBuffer[nCharCount] = *pszCurChar;
+          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineBuffer, szLineBuffer, 0x100);
+          if (D2WinFont::D2WINFONT_GetStringPixelWidth(wszLineBuffer, nCharCount) + nCursorWidth > nMaxWidth) {
+            bLineWrapped = TRUE;
+            break;
+          }
+
+          pszCurChar++;
+          nCharCount++;
+        }
+
+        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineBuffer, szLineBuffer, 0x100);
+        if (bLineWrapped) {
+          nY += nFontHeight;
+        }
+        if (*pszCurChar == '\r') {
+          if (pszCurChar[1] == '\n') {
+            do {
+              if (pszCurChar[1] != '\n') {
+                break;
+              }
+
+              pszCurChar += 2;
+              nY += nFontHeight;
+            } while (*pszCurChar == '\r');
+          } else {
+            do {
+              pszCurChar++;
+              nY += nFontHeight;
+            } while (*pszCurChar == '\r');
+          }
+        }
+
+        pszLineStart = pszCurChar;
+      } while (*pszCurChar != '\0');
+    }
+
+    return nY - nStartY;
 }
 
 // Calculate text cursor position from edit box state. Iterates text lines and calculates pixel X,Y position of cursor based on character index. Outputs screen coordinates via pX and pY.

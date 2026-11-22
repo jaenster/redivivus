@@ -457,14 +457,14 @@ void __stdcall NET_D2GS_CLIENT_Send_Extern(uint8_t * pBytes, int32_t nSize) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_CMD(uint8_t nOpcode) {
-    uint8_t aPacketFrame[4];
-    d2_store24((char*)&aPacketFrame, (uint32_t)(uint32_t)((uint32_t)((uint32_t)0 & 0xffffffu) << 8 | (uint32_t)(uint8_t)nOpcode) & 0xffffffu);
-    aPacketFrame[3] = nOpcode;
-    NET_D2GS_CLIENT_Send(aPacketFrame + 3, 1);
+    uint8_t nPacketId = nOpcode;
+    NET_D2GS_CLIENT_Send(&nPacketId, 1);
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_SHORT(uint8_t nPacketId, uint16_t nArg1) {
-    D2GSPacketClt_CMD_SHORT packet = d2_bits_as<D2GSPacketClt_CMD_SHORT>((uint32_t)((uint32_t)((uint32_t)(uint16_t)nArg1 << 8 | (uint32_t)(uint8_t)nPacketId) & 0xffffffu));
+    D2GSPacketClt_CMD_SHORT packet;
+    packet.nId = nPacketId;
+    packet.nArg1 = nArg1;
     NET_D2GS_CLIENT_Send(&packet.nId, 3);
 }
 
@@ -569,20 +569,23 @@ void __fastcall NET_D2GS_CLIENT_Send_Chat(D2ChatPacketBuildStrc * pChatPacket) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Send_0x66(void * pData, uint32_t nLen) {
-    D2GSPacketClt0x66 packet;
-    uint8_t aPayload[509];
-    if (nLen > 0x1fd) {
-      NET_D2GS_CLIENT_Send_0x66_HaltTail(0x452);
-    }
-    if (nLen + 3 > 0x200) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x453);
-      exit(-1);
+    uint8_t aPacketBuffer[0x200];
+    if (nLen <= 0x1fd) {
+      if (nLen + 3 > 0x200) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x453);
+        exit(-1);
+      }
+
+      D2GSPacketClt0x66* pPacket = (D2GSPacketClt0x66*)aPacketBuffer;
+      pPacket->nId = 0x66;
+      pPacket->nDataLength = (short int)nLen;
+      memcpy(pPacket->Data, pData, nLen);
+      NET_D2GS_CLIENT_Send(&pPacket->nId, nLen + 3);
+      return;
     }
 
-    packet.nId = 0x66;
-    packet.nDataLength = (short int)nLen;
-    memcpy(aPayload, pData, nLen);
-    NET_D2GS_CLIENT_Send(&packet.nId, nLen + 3);
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x452);
+    exit(-1);
 }
 
 void __stdcall NET_D2GS_CLIENT_Send_0x66_HaltTail(int nLine) {

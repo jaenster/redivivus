@@ -674,12 +674,11 @@ BOOL __fastcall Skills_SrvDoFunc_022_Nova_FrostNova(::SGAMEDATA * pGame, D2UnitS
 
 // Server do-func shared by Blaze and Energy Shield (skill 23 dispatch). Validates the skill's aurastat and aurastate entries in skills.txt, allocates a timed stat list via SetStateWithExpiryTime (duration = auralencalc), applies passive stats via D2SetPassiveStatsFromSkills, records skill/level modifier stats, then iterates the up-to-3 auraevent entries to register aura target events via D2SetAuraTargetEvent and D2SetAuraEvent.
 BOOL __fastcall Skills_SrvDoFunc_023_Blaze_EnergyShield(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillTxt && pSkillTxt->aurastat[0] >= -1 && (int)pSkillTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
+    if (!(pSkillTxt->aurastat[0] >= -1 && (int)pSkillTxt->aurastat[0] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
       return 0;
     }
 
@@ -849,18 +848,10 @@ BOOL __fastcall Skills_SrvDoFunc_024_FireWall(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server do-func for the Sorceress Enchant skill (skill func 0x19/25). Validates the skill's aurastat/aurastate indices against the data tables. Picks the target: the unit's current target if it is a valid ally (SKILL_CanUnitTargetAlly), otherwise the caster itself. Applies the aura state (aurastate) with a duration from auralencalc via SetStateWithExpiryTime, then loops the skill's 6 aurastat/aurastatcalc pairs, computing each via D2GetSkillCalc and adding nonzero values to the new state's stat list (D2AddStatToStatsListEx). Finally toggles the state gfx on the target. Returns TRUE on success, FALSE if validation or state creation fails.
 BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL _bTargetIsAlly;
-    bool bTargetIsAlly;
     int32_t nValue;
     D2StateExArgStrc sStateArg;
-    Skills_SrvDoFunc_025_Enchant_Slotmc uSlotC;
     D2UnitStrc* pEnchantTarget;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt;
-    pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -877,29 +868,17 @@ BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    uSlotC.pGameSaved = pGame;
-    sStateArg.pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (sStateArg.pTarget) {
-      pEnchantTarget = sStateArg.pTarget;
-      _bTargetIsAlly = UNIT::SUnit::SKILL_CanUnitTargetAlly(uSlotC.pGameSaved, pUnit, sStateArg.pTarget);
-      if (!_bTargetIsAlly) {
-        sStateArg.pTarget = pUnit;
-        pEnchantTarget = pUnit;
-      }
-      if (sStateArg.pTarget) {
-        goto apply_enchant_state;
-      }
+    pEnchantTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    if (pEnchantTarget && !UNIT::SUnit::SKILL_CanUnitTargetAlly(pGame, pUnit, pEnchantTarget)) {
+      pEnchantTarget = pUnit;
+    }
+    if (!pEnchantTarget) {
+      pEnchantTarget = pUnit;
     }
 
-    sStateArg.pTarget = pUnit;
-    pEnchantTarget = pUnit;
-    apply_enchant_state:
-    sStateArg.nDurationInFrames = 0;
-    sStateArg.eStat = UNITSTAT_strength;
-    sStateArg.nSkillCalc = 0;
-    sStateArg.eAuraState = STATE_none;
-    sStateArg.pFunction = 0;
+    memset(&sStateArg, 0, sizeof(sStateArg));
     sStateArg.pUnit = pUnit;
+    sStateArg.pTarget = pEnchantTarget;
     sStateArg.eSkill = eSkill;
     sStateArg.nSkillLvl = nSkillLvl;
     sStateArg.nDurationInFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->auralencalc, eSkill, nSkillLvl);
@@ -912,7 +891,7 @@ BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * p
 
     short int* psAuraStat = pSkillTxt->aurastat;
     int* piStatCalc = pSkillTxt->aurastatcalc;
-    uSlotC.nAuraStatRemaining = 6;
+    int nAuraStatRemaining = 6;
     do {
       D2UnitStrc* pCaster = pUnit;
       if (*psAuraStat >= 0 && (int)*psAuraStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
@@ -924,8 +903,8 @@ BOOL __fastcall Skills_SrvDoFunc_025_Enchant(::SGAMEDATA * pGame, D2UnitStrc * p
 
       piStatCalc++;
       psAuraStat++;
-      uSlotC.nAuraStatRemaining--;
-    } while (uSlotC.nAuraStatRemaining);
+      nAuraStatRemaining--;
+    } while (nAuraStatRemaining);
 
     D2Common::DATATBLS::ItemStats::D2StatesTogglegfx(pEnchantTarget, (int)pSkillTxt->aurastate, 1);
     return 1;

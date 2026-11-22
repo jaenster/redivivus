@@ -68,34 +68,27 @@ int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * w
 
 int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16_t * pwszText2) {
     uint16_t wChar1 = *pwszText1;
-    do {
-      uint16_t wChar2;
-      if (wChar1 == L'\0') {
-        return *pwszText2 != L'\0' ? (uint32_t)-1 : 0;
-      }
-
-      wChar2 = *pwszText2;
-      if (wChar2 == L'\0') {
+    while (wChar1) {
+      uint16_t wChar2 = *pwszText2;
+      if (wChar2) {
+        uint16_t wFold1 = wChar1 < 0x100 ? CharacterLookupTable[wChar1] : wChar1;
+        uint16_t wFold2 = wChar2 < 0x100 ? CharacterLookupTable[wChar2] : wChar2;
+        if (wFold1 != wFold2) {
+          return wFold1 < wFold2 ? -1 : 1;
+        }
+      } else {
         if (!*pwszText1) {
-          return *pwszText2 != L'\0' ? (uint32_t)-1 : 0;
+          break;
         }
 
         return 1;
       }
-      if ((uint16_t)wChar1 < 0x100) {
-        wChar1 = CharacterLookupTable[(uint16_t)wChar1];
-      }
-      if ((uint16_t)wChar2 < 0x100) {
-        wChar2 = CharacterLookupTable[(uint16_t)wChar2];
-      }
-      if (wChar1 != wChar2) {
-        return (uint16_t)wChar1 < (uint16_t)wChar2 ? -1 : 1;
-      }
 
-      wChar1 = pwszText1[1];
-      pwszText1++;
+      wChar1 = *++pwszText1;
       pwszText2++;
-    } while (true);
+    }
+
+    return *pwszText2 != 0 ? -1 : 0;
 }
 
 int32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint16_t * pwszText2, int32_t nMaxChars) {
@@ -154,20 +147,11 @@ int32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint1
 }
 
 uint16_t * __fastcall UNICODE_FindWideChar(uint16_t * pThis, int, uint16_t wCharToFind) {
-    uint16_t wCurChar = *pThis;
-    if (wCurChar == L'\0') {
-      return nullptr;
+    while (*pThis && *pThis != wCharToFind) {
+      pThis++;
     }
 
-    while (wCurChar != wCharToFind) {
-      wCurChar = pThis[1];
-      pThis = pThis + 1;
-      if (wCurChar == L'\0') {
-        return nullptr;
-      }
-    }
-
-    if (*pThis == L'\0') {
+    if (!*pThis) {
       return nullptr;
     }
 
@@ -975,22 +959,17 @@ uint32_t __fastcall UNICODE_CheckByteInRange(void * pThis, int, uint8_t byValue)
 }
 
 static int32_t __stdcall UNICODE_IsControlChar(uint8_t byChar) {
-    int32_t i = 0;
     if (byChar < 0x20) {
-      return i;
-    }
-    if (gnUnicodeKamapGroupCount) {
-      do {
-        if (g_pUnicodeKamapTable[i * 2] <= byChar && byChar <= g_pUnicodeKamapTable[i * 2 + 1]) {
-          return 0;
-        }
-
-        i++;
-      } while (i < (int)(uint32_t)gnUnicodeKamapGroupCount);
+      return 0;
     }
 
-    i = 1;
-    return i;
+    for (int32_t i = 0; i < gnUnicodeKamapGroupCount; i++) {
+      if (g_pUnicodeKamapTable[i * 2] <= byChar && byChar <= g_pUnicodeKamapTable[i * 2 + 1]) {
+        return 0;
+      }
+    }
+
+    return 1;
 }
 
 void __stdcall UNICODE_FreeKamapTables() {

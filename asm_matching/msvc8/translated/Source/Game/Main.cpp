@@ -1688,30 +1688,23 @@ void __stdcall main(DWORD dwNumServicesArgs, LPSTR * lpServiceArgVectors) {
 
 BOOL StartDiablo2ServerAsService() {
     SERVICE_TABLE_ENTRYA aServiceTable[2];
-    DWORD dwVersion = GetVersion();
-    if ((int)dwVersion < 0) {
-      return 0;
-    }
+    if (!(GetVersion() & 0x80000000)) {
+      SC_HANDLE hSCManager = OpenSCManagerA((LPCSTR)0x0, (LPCSTR)0x0, 0xf003f);
+      if (hSCManager) {
+        SC_HANDLE hSCObject = OpenServiceA(hSCManager, s_DIABLO2SRV_007065dc, 0xf01ff);
+        if (hSCObject) {
+          CloseServiceHandle(hSCObject);
+        }
 
-    SC_HANDLE hSCManager = OpenSCManagerA((LPCSTR)0x0, (LPCSTR)0x0, 0xf003f);
-    if (!hSCManager) {
-      return 0;
-    }
-
-    SC_HANDLE hSCObject = OpenServiceA(hSCManager, s_DIABLO2SRV_007065dc, 0xf01ff);
-    if (hSCObject) {
-      /* SC_HANDLE hSCObject for CloseServiceHandle */ CloseServiceHandle(hSCObject);
-    }
-
-    /* SC_HANDLE hSCObject for CloseServiceHandle */ CloseServiceHandle(hSCManager);
-    if (hSCObject) {
-      BOOL bDispatched;
-      aServiceTable[1].lpServiceName = (LPSTR)0x0;
-      aServiceTable[1].lpServiceProc = (LPSERVICE_MAIN_FUNCTIONA)0x0;
-      /* SERVICE_TABLE_ENTRYA * lpServiceStartTable for StartServiceCtrlDispatcherA */ aServiceTable[0].lpServiceName = s_DIABLO2SRV_007065dc;
-      aServiceTable[0].lpServiceProc = (LPSERVICE_MAIN_FUNCTIONA)main;
-      bDispatched = StartServiceCtrlDispatcherA(aServiceTable);
-      return (uint32_t)(bDispatched != 0);
+        CloseServiceHandle(hSCManager);
+        if (hSCObject) {
+          aServiceTable[1].lpServiceName = (LPSTR)0x0;
+          aServiceTable[1].lpServiceProc = (LPSERVICE_MAIN_FUNCTIONA)0x0;
+          aServiceTable[0].lpServiceName = s_DIABLO2SRV_007065dc;
+          aServiceTable[0].lpServiceProc = (LPSERVICE_MAIN_FUNCTIONA)main;
+          return StartServiceCtrlDispatcherA(aServiceTable) != 0;
+        }
+      }
     }
 
     return 0;

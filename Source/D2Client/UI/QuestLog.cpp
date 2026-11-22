@@ -2991,9 +2991,6 @@ BOOL __fastcall QUESTLOG_IsQuestAvailableForInteraction(int32_t nQuestIconIndex)
 }
 
 void __stdcall QUESTLOG_OnMouseUp(D2UIMouseMsgStrc * pMsg) {
-    uint32_t nRawMouseY;
-    uint32_t nBottomThresholdY;
-    bool bSignedLessOrEqual;
     int nPanelRelX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX - Inv::gnPanelOffsetX;
     int nPanelRelY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY + Inv::gnPanelOffsetY;
     if (gQuestLog.bQuestLogOpenBtnPressed != '\0') {
@@ -3026,21 +3023,15 @@ void __stdcall QUESTLOG_OnMouseUp(D2UIMouseMsgStrc * pMsg) {
     gQuestLog.bQuestLogBossCinematicPlayed = 0;
     gQuestLog.bZooSpawnArmed = 0;
     gQuestLog.bZooMonsterSpawned = 0;
-    if (!((int)(uint32_t)pMsg->uLParam.sMousePos.nMouseX <= ui::ScreenSizeX / 2)) {
+    if (pMsg->uLParam.sMousePos.nMouseX > ui::ScreenSizeX / 2) {
       return;
     }
 
-    DWORD dwResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-    if (dwResMode == 2) {
-      nRawMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-      nBottomThresholdY = Inv::ScreenSizeY - 0x2f;
-      bSignedLessOrEqual = (int32_t)nRawMouseY <= (int32_t)nBottomThresholdY;
-    } else {
-      nBottomThresholdY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-      nRawMouseY = Inv::ScreenSizeY - 0x31;
-      bSignedLessOrEqual = (int32_t)nBottomThresholdY <= (int32_t)nRawMouseY;
-    }
-    if (!bSignedLessOrEqual) {
+    if (D2gfx::D2GFX::D2GFX_GetResolutionMode() == 2) {
+      if (HIWORD(pMsg->uLParam.nLParam) > Inv::ScreenSizeY - 0x2f) { // steer-ok: windef.h HIWORD
+        return;
+      }
+    } else if (HIWORD(pMsg->uLParam.nLParam) > Inv::ScreenSizeY - 0x31) { // steer-ok: windef.h HIWORD
       return;
     }
 

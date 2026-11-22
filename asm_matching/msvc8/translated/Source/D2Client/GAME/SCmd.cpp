@@ -1508,7 +1508,11 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x08_REMOVEROOM(char * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x09_AssignLevelWarp(D2GSPacketSrv0x09 * pBytes) {
-    D2UnitStrc* pUnit = UNIT::CUnit::UNIT_CreateWarp(pBytes->dwUnitGUID, (uint32_t)pBytes->nClassId, (uint32_t)pBytes->wX, (uint32_t)pBytes->wY, (eD2UnitType)pBytes->nUnitType, 0);
+    const uint16_t wX = pBytes->wX; // steer-ok: the original loads wY, wX, GUID and type into registers before the first push
+    const uint16_t wY = pBytes->wY; // steer-ok: the original loads wY, wX, GUID and type into registers before the first push
+    const int32_t dwUnitGUID = pBytes->dwUnitGUID; // steer-ok: the original loads wY, wX, GUID and type into registers before the first push
+    const int nUnitType = pBytes->nUnitType; // steer-ok: the original loads wY, wX, GUID and type into registers before the first push
+    D2UnitStrc* pUnit = UNIT::CUnit::UNIT_CreateWarp(dwUnitGUID, (uint32_t)pBytes->nClassId, wX, wY, (eD2UnitType)nUnitType, 0);
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
     }
@@ -2468,15 +2472,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x27_PRESETTALK(D2GSPacketSrv0x27 * pByt
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x2A_TRANSACTION_RESULTS(D2GSPacketSrv0x2A * pBytes) {
-    D2GSPacketSrv0x2A packet;
-    packet.nPacketId = pBytes->nPacketId;
-    packet.nTradeType = pBytes->nTradeType;
-    packet.nResult = pBytes->nResult;
-    *(uint8_t*)((char*)&packet + 3) = pBytes->field_0x3;
-    *(uint32_t*)((char*)&packet + 4) = *(uint32_t*)&pBytes->field_0x4;
-    *(uint32_t*)((char*)&packet + 8) = *(uint32_t*)((intptr_t)&pBytes->nUnitGUID + 1);
-    *(uint16_t*)((char*)&packet.nGold + 1) = *(uint16_t*)((intptr_t)&pBytes->nGold + 1);
-    *(uint8_t*)((char*)&packet.nGold + 3) = *(uint8_t*)((intptr_t)&pBytes->nGold + 3);
+    D2GSPacketSrv0x2A packet = *pBytes;
     UI::npcmenu::NPCMENU_HandleTradePacket(&packet);
 }
 
@@ -3273,7 +3269,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAB(D2GSPacketSrv0xAB * pBytes) {
       return;
     }
 
-    Roster::SetRosterPlayerHpPercent(pBytes->dwUnitGUID, (uint8_t)((int)((uint32_t)pBytes->nHpPercent128 * 100) >> 7));
+    Roster::SetRosterPlayerHpPercent(pBytes->dwUnitGUID, (uint8_t)((int)(pBytes->nHpPercent128 * 100) / 128));
 }
 
 // Client-side handler for server packet 0xAC (assign/create monster unit). Reads fixed header (unitGUID@+1, monstatId@+5, x@+7, y@+9, hp byte@+0xb) then a bit stream from +0xd: unit type, optional component/equipment bytes per MonStats2 layout, monster-type flags (Champion/Unique/SuperUnique/Minion/Ghostly), optional super-unique index and name, nameId and owner GUID. Calls UNIT_CreateMonster to instantiate the client unit, resets its anim frame cache, seeds maxhp/hitpoints and a packed x+y pierce-idx stat, stores owner info, then drains a (statId,value[,param]) list per ItemStatCost sendBits into a freshly attached stat list. Skips HP seeding for the local player's hireling. NOTE: pUnit is read after UNIT_CreateMonster but the call's return is not visibly assigned to it in this decompile (likely an out/return artifact).

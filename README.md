@@ -5,75 +5,37 @@
 
 Diablo II: Lord of Destruction 1.14d, reverse-engineered into C++ that builds and runs.
 
-|At this commit|Ghidra database v2139|
-|-|-|
-|Build|every translation unit compiles with a strict `-std=c++17`, no `-fpermissive`; the executable links with no undefined symbol|
-|Play|single player works; a full playthrough has been completed on the Visual C++ 2005 build|
-|Modules|22 libraries, one per original module; 4 strict, with no include the original DLL imports did not allow|
-|64-bit|a 64-bit build links (mingw x86-64, -fpermissive, 20 stubbed 32-bit-only imports); never run; 238 pointer-width casts left (from 7,955), [counted](asm_matching/msvc8/x64/README.md) with Visual C++ 2005 x64|
+At this commit (Ghidra database v2139):
 
-Machine code identical to 1.14d, compiled with Visual C++ 2005 SP1, the compiler of the original:
+- Builds strict (`-std=c++17`, no `-fpermissive`) and links with no undefined symbol.
+- Single player works. A full playthrough has been completed on the Visual C++ 2005 build.
+- Functions whose machine code is identical to 1.14d, compiled with Visual C++ 2005 SP1: 10,881 of 14,900 (73.0%), of which 1,875 hand-written.
+- Code bytes identical: 1,212,086 of 2,612,801 (46.39%).
+- A 64-bit build links (mingw x86-64, `-fpermissive`) and has never been run; 238 pointer-width casts left, from 7,955.
 
-|Measure|Identical machine code|
-|-|-|
-|Functions|10,773 of 14,900 (72.3%), of which 1,767 hand-written|
-|Code|1,182,668 of 2,612,801 bytes (45.26%)|
-|Instructions|2,004,725 of 2,612,801 bytes (76.7%), counting identical instructions in functions that still differ|
-
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="asm_matching/msvc8/evidence/byte-match-dark.svg">
-  <img alt="The original's code split by how closely the rebuild matches it" src="asm_matching/msvc8/evidence/byte-match-light.svg">
-</picture>
-
-What is compared, what is left out (the C runtime, compiler-made exception code, PKWARE) and
-the figures over the whole binary: [BYTE-MATCHING.md](BYTE-MATCHING.md).
-
-*Redivivus* is Latin for a thing restored to life. Next to the game mechanics it carries the
-parts that make the game run at all: the program host and its main loop, the renderers, sound,
-input, files and archives, the network layer, and Blizzard's Storm and Fog libraries. The tree is
-generated from reverse-engineered Ghidra databases and corrected where needed, so the names,
-types and structure are reconstructions, and some functions still read like a decompiler wrote
-them. How it is laid out: [docs/layout.md](docs/layout.md). How it came about:
-[redivivus.app/about](https://redivivus.app/about).
+What is compared, what is left out, and the chart: [BYTE-MATCHING.md](BYTE-MATCHING.md). The names, types
+and structure layouts are reconstructions from the Ghidra databases; the function bodies are maintained in
+this tree and checked against the original's machine code. How the tree is laid out: [docs/layout.md](docs/layout.md).
+How it came about: [redivivus.app/about](https://redivivus.app/about).
 
 Redivivus is a single-player project, made to study and preserve the game. Online play on
 Battle.net is outside its scope.
 
 ## Build and run
 
-You need your own Diablo II: Lord of Destruction 1.14 installation; this repository holds no
-game data. With a mingw-w64 cross compiler for 32-bit Windows, CMake and Ninja:
+You need your own Diablo II: Lord of Destruction 1.14 installation; this repository holds no game data.
+Build steps per platform, and with the original compilers: [docs/building.md](docs/building.md).
+Copy `d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe -w`.
 
-```sh
-cmake -S . -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake
-cmake --build build
-```
-
-Copy `build/d2.exe` next to `Game.exe` in your Diablo II folder and run `d2.exe -w`.
-Per platform, and with the original compilers: [docs/building.md](docs/building.md),
-[docs/original-compilers.md](docs/original-compilers.md).
-
-## Known issues
-
-- When an NPC has quest news, the scrolling text box does not appear; the quest itself advances.
-- It can still crash, rarely. A crash writes a report with a stack trace next to the executable;
-  please attach it to an [issue](https://github.com/jaenster/redivivus/issues).
-  Where the reports land: [docs/crash-reports.md](docs/crash-reports.md).
+It can still crash, rarely. A crash writes a report with a stack trace next to the executable
+([docs/crash-reports.md](docs/crash-reports.md)); please attach it to an [issue](https://github.com/jaenster/redivivus/issues).
 
 ## Contributing
 
-A function body that compiles to the original (MATCH in `oracle diff`, nothing else in its unit
-lost) is welcome as a pull request, one function per commit. A fix to a declaration (a wrong type,
-a missing parameter) is best sent as a proposal against the Ghidra databases: it is checked,
-reviewed, and applied with you as the git author. With Claude Code:
-
-```
-claude plugin marketplace add jaenster/redivivus
-claude plugin install redivivus@redivivus
-```
-
-Other agents, the rules for function-body pull requests, and which door a finding takes: [CONTRIBUTING.md](CONTRIBUTING.md)
-and [redivivus.app/about#contributing](https://redivivus.app/about#contributing).
+A function body that compiles to the original is welcome as a pull request, one function per commit.
+A fix to a declaration (a wrong type, a missing parameter) is sent as a proposal against the Ghidra
+databases and applied with you as the git author. The rules, the tools and which door a finding takes:
+[CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## Credits
 

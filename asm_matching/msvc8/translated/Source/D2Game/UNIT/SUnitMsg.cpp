@@ -722,12 +722,8 @@ void __fastcall PLAYER_SendOverlayToClient(D2UnitStrc * pUnit, D2ClientStrc * pC
     if (!(nOverlayId >= 0 && nOverlayId <= D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize)) {
       return;
     }
-    if (!pUnit) {
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x11_UnitDoOverlay(pClient, '\x06', -1, (uint16_t)nOverlayId);
-      return;
-    }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x11_UnitDoOverlay(pClient, (uint8_t)pUnit->eUnitType, pUnit->nUnitGUID, (uint16_t)nOverlayId);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x11_UnitDoOverlay(pClient, !pUnit ? 6 : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID, (uint16_t)nOverlayId);
 }
 
 void __fastcall SendRemoveObject(D2UnitStrc * pItem, D2ClientStrc * pClient) {

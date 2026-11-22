@@ -1593,13 +1593,8 @@ void __fastcall QUESTGUID_AddPlayerToList(D2QuestGUIDStrc * pQuestGUID, int32_t 
 }
 
 BOOL __fastcall QUESTGUID_RemovePlayerFromList(D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID) {
-    uint32_t nPlayerCount = (uint32_t)pQuestGUID->nPlayerCount;
-    int nSearchIdx = 0;
-    if (!nPlayerCount) {
-      return 0;
-    }
-
-    do {
+    int nPlayerCount = pQuestGUID->nPlayerCount;
+    for (int nSearchIdx = 0; nSearchIdx < pQuestGUID->nPlayerCount; nSearchIdx++) {
       if (pQuestGUID->aPlayerGUID[nSearchIdx] == nPlayerGUID) {
         if (nSearchIdx != nPlayerCount - 1) {
           pQuestGUID->aPlayerGUID[nSearchIdx] = pQuestGUID->aPlayerGUID[nPlayerCount - 1];
@@ -1608,9 +1603,7 @@ BOOL __fastcall QUESTGUID_RemovePlayerFromList(D2QuestGUIDStrc * pQuestGUID, int
         pQuestGUID->nPlayerCount--;
         return 1;
       }
-
-      nSearchIdx++;
-    } while (nSearchIdx < (int)(uint32_t)pQuestGUID->nPlayerCount);
+    }
 
     return 0;
 }

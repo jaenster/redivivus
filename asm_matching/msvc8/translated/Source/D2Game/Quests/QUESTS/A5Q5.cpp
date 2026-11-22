@@ -329,14 +329,10 @@ BOOL __fastcall Q35_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q5.cpp
 void __fastcall Q35_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL BVar1;
-    D2BitBufferStrc* pBitBuffer;
     int* pStatueModeEntry;
-    eD2QuestState eQuestState;
-    eD2Quests nQuestId;
-    ::SGAMEDATA* pGame;
     uint16_t nMessageIndex;
     nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
-    short int nNpcId;
+    uint16_t nNpcId;
     nNpcId = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
     D2QuestDataA5Q5Strc* pQuestSpecificData;
     pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
@@ -391,9 +387,8 @@ void __fastcall Q35_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         return;
       }
       if (nMessageIndex == 0x4ec9) {
-        pGame = pQuestData->pGame;
         /* SetQuestState(RiteOfPassage, Step0x04) — altar query 0x4ec9: marks the
-                         post-completion "Worldstone portal revealed" record bit */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+                         post-completion "Worldstone portal revealed" record bit */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer);
         D2Common::QuestRecord::SetQuestState(pQuestRecord, QUEST_RiteOfPassage, QUESTSTATE_Step0x04);
         return;
       }
@@ -401,48 +396,31 @@ void __fastcall Q35_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
     switch (nNpcId) {
       case 0x1ff:
-        if (nMessageIndex != 0x4ec7) {
-          return;
+        if (nMessageIndex == 0x4ec7) {
+          D2Common::QuestRecord::SetQuestState(GetQuestBitBuffer(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x05);
         }
-      eQuestState = QUESTSTATE_Step0x05;
-      break;
+        return;
       case 0x208:
-        if (nMessageIndex != 0x4ec5) {
-          return;
+        if (nMessageIndex == 0x4ec5) {
+          D2Common::QuestRecord::SetQuestState(GetQuestBitBuffer(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x06);
         }
-      nQuestId = pQuestData->nQuestIdReal;
-      eQuestState = QUESTSTATE_Step0x06;
-      goto set_npc_told_step;
+        return;
       case 0x200:
-        if (nMessageIndex != 0x4ec6) {
-          return;
+        if (nMessageIndex == 0x4ec6) {
+          D2Common::QuestRecord::SetQuestState(GetQuestBitBuffer(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x07);
         }
-      eQuestState = QUESTSTATE_Step0x07;
-      break;
+        return;
       case 0x201:
-        if (nMessageIndex != 0x4ec8) {
-          return;
+        if (nMessageIndex == 0x4ec8) {
+          D2Common::QuestRecord::SetQuestState(GetQuestBitBuffer(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x08);
         }
-      nQuestId = pQuestData->nQuestIdReal;
-      eQuestState = QUESTSTATE_Step0x08;
-      goto set_npc_told_step;
-      default:
         return;
       case 0x203:
-        if (nMessageIndex != 0x4ec4) {
-          return;
+        if (nMessageIndex == 0x4ec4) {
+          D2Common::QuestRecord::SetQuestState(GetQuestBitBuffer(pQuestData->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Step0x09);
         }
-      eQuestState = QUESTSTATE_Step0x09;
-      break;
+        return;
     }
-
-    nQuestId = pQuestData->nQuestIdReal;
-    set_npc_told_step:
-    pBitBuffer = GetQuestBitBuffer(pQuestData->pGame, pQuestArgs->pPlayer);
-    /* SetQuestState(nQuestIdReal, Step0x05..0x09) — shared tail: NPC talk-flag
-                         set by which msg (0x4ec7->Larzuk/Step5, 0x4ec6->Qual-Kehk/Step7,
-                         0x4ec8->Anya/Step8, 0x4ec4->altar/Step9, 0x4ec5->Malah/Step6). Tracks who
-                         you've told you beat the Ancients. */ D2Common::QuestRecord::SetQuestState(pBitBuffer, nQuestId, eQuestState);
 }
 
 // A5Q5 (Rite of Passage) gossip/log driver, handler index 0. Pre-completion: if NPC is an Ancient (class 0x219–0x21b) and reward not pending, queues gossip line 4; then looks up a state-flag-indexed gossip line from gdwQuestCallbackAddressQ35 and queues it. Post-completion: per recognized NPC (Larzuk/Drehya/Malah/Qualkhek/Cain) checks a per-NPC talk step-flag; not yet talked → line 5, already talked + JustCompleted → line 3.

@@ -570,56 +570,38 @@ void __fastcall SFILE_DeleteOldLogFiles(char * szLogPrefix) {
 void __stdcall LOGFILE_StoreGameStartupInfo() {
     _SYSTEMTIME systemTime;
     char szAppPath[4096];
-    char szOsName[13];
+    char szOsName[4096];
     char szComputerName[64];
     Src::LogManager::LOGFILE_WriteStringToFile("------------------------------------------------------");
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&systemTime);
     Src::LogManager::LOGFILE_WriteStringToFile("%04d-%02d-%02d %02d:%02d:%02d", (uint32_t)systemTime.wYear, (uint32_t)systemTime.wMonth, (uint32_t)systemTime.wDay, (uint32_t)systemTime.wHour, (uint32_t)systemTime.wMinute, (uint32_t)systemTime.wSecond);
     switch (gSystemInfo.eOSType) {
       case 1:
-        memcpy(szOsName, "Windows NT", 0xb);
-      break;
+        strcpy(szOsName, "Windows NT");
+        break;
       case 2:
-        memcpy(szOsName, "Windows 2000", 0xd);
-      break;
+        strcpy(szOsName, "Windows 2000");
+        break;
       case 3:
-        szOsName[4] = 'o';
-      szOsName[5] = 'w';
-      szOsName[6] = 's';
-      szOsName[7] = ' ';
-      memcpy(szOsName, "Wind", 4);
-      szOsName[8] = 'X';
-      szOsName[9] = 'P';
-      szOsName[10] = '\0';
-      break;
+        strcpy(szOsName, "Windows XP");
+        break;
       case 4:
-        memcpy(szOsName, "Windows .Net", 0xd);
-      break;
+        strcpy(szOsName, "Windows .Net");
+        break;
       case 9:
-        memcpy(szOsName, "MacO", 4);
-      szOsName[4] = 'S';
-      szOsName[5] = '\0';
-      break;
+        strcpy(szOsName, "MacOS");
+        break;
       case 10:
-        memcpy(szOsName, "MacOS X", 8);
-      break;
+        strcpy(szOsName, "MacOS X");
+        break;
       default:
-        szOsName[4] = 'o';
-      szOsName[5] = 'w';
-      szOsName[6] = 'n';
-      szOsName[7] = '\0';
-      memcpy(szOsName, "unkn", 4);
-      break;
+        strcpy(szOsName, "unknown");
+        break;
     }
 
     Src::LogManager::LOGFILE_WriteStringToFile("%s running under %s (Version %.3f)", "Diablo II", szOsName, (double)gSystemInfo.fOSVersion);
     Src::LogManager::LogCpuInfo();
-    float fMemBytes = (float)(int)gSystemInfo.dwTotalPhysicalMemory;
-    if ((int)gSystemInfo.dwTotalPhysicalMemory < 0) {
-      fMemBytes += 4294967296.0;
-    }
-
-    Src::LogManager::LOGFILE_WriteStringToFile("Total Physical Memory: %.2fMB", (double)(fMemBytes * 9.5367431640625e-7));
+    Src::LogManager::LOGFILE_WriteStringToFile("Total Physical Memory: %.2fMB", (float)gSystemInfo.dwTotalPhysicalMemory * 9.5367431640625e-7);
     BOOL bGotName = Debug::FILETOOLS_GetExecutableFolderPath(szAppPath, 0x1000);
     if (bGotName) {
       Src::LogManager::LOGFILE_WriteStringToFile("Application Path: %s", szAppPath);

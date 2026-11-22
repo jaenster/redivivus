@@ -2867,7 +2867,9 @@ static void __stdcall PLAYER_PlaceUnitInRoom(int32_t nX, D2RoomStrc * pRoom, D2U
 }
 
 void __fastcall CLIENT_UpdateMonsterAllegiance(D2UnitStrc * pUnit, uint8_t byOldAllegiance, uint8_t byNewAllegiance) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && byOldAllegiance != byNewAllegiance)) {
+    int nOldAllegiance = byOldAllegiance;
+    int nNewAllegiance = byNewAllegiance;
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && nOldAllegiance != nNewAllegiance)) {
       return;
     }
 
@@ -2875,10 +2877,10 @@ void __fastcall CLIENT_UpdateMonsterAllegiance(D2UnitStrc * pUnit, uint8_t byOld
     if (!pRoom) {
       return;
     }
-    if (byNewAllegiance == '\x02') {
+    if (nNewAllegiance == 2) {
       D2Common::DUNGEON::Dungeon::DRLGROOM_IncreaseAlliedCount(pRoom);
     } else {
-      if (byOldAllegiance == '\x02') {
+      if (nOldAllegiance == 2) {
         D2Common::DUNGEON::Dungeon::DRLGROOM_DecreaseAlliedCount(pRoom);
       }
     }

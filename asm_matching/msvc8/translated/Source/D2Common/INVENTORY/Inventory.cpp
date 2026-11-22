@@ -146,75 +146,73 @@ static void __stdcall INVENTORY_FillGridRect(uint8_t nWidth, int32_t nStartCol, 
 // Unlinks pItem from the doubly-linked page list (prev/next pointers in D2UnitDataItemStrc) and clears the corresponding grid-cell slots in pPageList->pGridCells. When bUseWidthHeight is non-zero, clears all width×height cells occupied by the item; otherwise clears only the single origin cell. Resets eInventoryGrid to INVENTORY_GRID_BODYLOC and nulls the prev/next links.
 // @sourcefile .\INVENTORY\Inventory.cpp
 static void __stdcall INVENTORY_RemoveItemFromGrid(D2UnitStrc * pItem, D2InventoryGridInfoStrc * pPageList, int bUseWidthHeight) {
-    int32_t nY;
-    int nCellX;
-    int nEndX;
-    int32_t nCellY;
-    uint8_t byHeight;
-    D2UnitDataItemStrc* pDVar2;
-    D2UnitDataItemStrc* pNeighborItemData;
-    uint8_t byGridWidth;
-    D2UnitStrc** pNeighborUnit;
     if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
     D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
-    if (!(pItemData && pItemData != (D2UnitDataItemStrc*)-92)) {
+    if (!pItemData) {
       return;
     }
 
-    D2UnitStrc* pDVar1 = pItemData->sInvNode.pPrevItemInPage;
-    if (!pDVar1) {
+    D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+    if (!pNode) {
+      return;
+    }
+
+    D2UnitStrc* pPrev = pNode->pPrevItemInPage;
+    if (!pPrev) {
       if (pPageList->pFirstItem == pItem) {
-        pPageList->pFirstItem = pItemData->sInvNode.pNextItemInPage;
+        pPageList->pFirstItem = pNode->pNextItemInPage;
       }
-    } else if (pDVar1->eUnitType == UNIT_ITEM && (pNeighborItemData = pDVar1->pUnitData.pUnitDataItem , pNeighborItemData != 0) && pNeighborItemData != (D2UnitDataItemStrc*)-92) {
-      pNeighborItemData->sInvNode.pNextItemInPage = pItemData->sInvNode.pNextItemInPage;
+    } else if (pPrev->eUnitType == UNIT_ITEM) {
+      D2UnitDataItemStrc* pPrevData = pPrev->pUnitData.pUnitDataItem;
+      if (pPrevData) {
+        D2ItemInventoryNodeStrc* pPrevNode = &pPrevData->sInvNode;
+        if (pPrevNode) {
+          pPrevNode->pNextItemInPage = pNode->pNextItemInPage;
+        }
+      }
     }
 
-    pDVar1 = pItemData->sInvNode.pNextItemInPage;
-    if (!pDVar1) {
+    D2UnitStrc* pNext = pNode->pNextItemInPage;
+    if (!pNext) {
       if (pPageList->pLastItem == pItem) {
-        pPageList->pLastItem = pItemData->sInvNode.pPrevItemInPage;
+        pPageList->pLastItem = pNode->pPrevItemInPage;
       }
-    } else if (pDVar1->eUnitType == UNIT_ITEM && (pDVar2 = pDVar1->pUnitData.pUnitDataItem , pDVar2 != 0) && pDVar2 != (D2UnitDataItemStrc*)-92) {
-      pDVar2->sInvNode.pPrevItemInPage = pItemData->sInvNode.pPrevItemInPage;
+    } else if (pNext->eUnitType == UNIT_ITEM) {
+      D2UnitDataItemStrc* pNextData = pNext->pUnitData.pUnitDataItem;
+      if (pNextData) {
+        D2ItemInventoryNodeStrc* pNextNode = &pNextData->sInvNode;
+        if (pNextNode) {
+          pNextNode->pPrevItemInPage = pNode->pPrevItemInPage;
+        }
+      }
     }
-    if (pPageList->pGridCells) {
-      int32_t nX;
-      if (bUseWidthHeight) {
-        nX = Units::GetXPosFromDynamicPathUnit(pItem);
-        nY = Units::GetYPosFromDynamicPathUnit(pItem);
-        ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItem, (char*)((intptr_t)&bUseWidthHeight + 3), (char*)&byHeight, ".\\INVENTORY\\Inventory.cpp", 0x199);
-        if (nY < (int)((uint32_t)byHeight + nY)) {
-          nEndX = (uint32_t)*(uint8_t*)((char*)&bUseWidthHeight + 3) + nX;
-          nCellY = nY;
-          do {
-            byGridWidth = pPageList->bWidth;
-            pNeighborUnit = pPageList->pGridCells;
-            nCellX = nX;
-            if (nX < nEndX) {
-              do {
-                pNeighborUnit[(uint32_t)byGridWidth * nCellY + nCellX] = 0;
-                nCellX++;
-                nEndX = (uint32_t)*(uint8_t*)((char*)&bUseWidthHeight + 3) + nX;
-              } while (nCellX < nEndX);
-            }
 
-            nCellY++;
-          } while (nCellY < (int)((uint32_t)byHeight + nY));
+    if (pPageList->pGridCells) {
+      if (bUseWidthHeight) {
+        char nWidth;
+        char nHeight;
+        int nX = Units::GetXPosFromDynamicPathUnit(pItem);
+        int nY = Units::GetYPosFromDynamicPathUnit(pItem);
+        ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItem, &nWidth, &nHeight, ".\\INVENTORY\\Inventory.cpp", 0x199);
+        for (int nCellY = nY; nCellY < nY + (uint8_t)nHeight; nCellY++) {
+          D2UnitStrc** pRow = &pPageList->pGridCells[pPageList->bWidth * nCellY];
+          for (int nCellX = nX; nCellX < nX + (uint8_t)nWidth; nCellX++) {
+            pRow[nCellX] = 0;
+          }
         }
       } else {
-        nX = Units::GetXPosFromDynamicPathUnit(pItem);
-        nY = Units::GetYPosFromDynamicPathUnit(pItem);
+        int nX = Units::GetXPosFromDynamicPathUnit(pItem);
+        int nY = Units::GetYPosFromDynamicPathUnit(pItem);
         pPageList->pGridCells[(uint32_t)pPageList->bWidth * nY + nX] = 0;
       }
     }
 
-    pItemData->sInvNode.pNextItemInPage = 0;
-    pItemData->sInvNode.pPrevItemInPage = 0;
-    pItemData->sInvNode.eInventoryGrid = INVENTORY_GRID_BODYLOC;
+    pNode->pNextItemInPage = 0;
+    pNode->pPrevItemInPage = 0;
+    pNode->eInventoryGrid = INVENTORY_GRID_BODYLOC;
 }
 
 int __fastcall Unreferenced_0063aad0(D2UnitStrc * pUnit) {
@@ -4698,10 +4696,17 @@ int32_t __stdcall ITEM_GetItemData_eD2InventoryGridType(D2UnitStrc * pUnit) {
     return (int)(char)pItemData->sInvNode.eInventoryGridType;
 }
 
+static inline D2UnitDataItemStrc * GetItemDataInline(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
+        return pUnit->pUnitData.pUnitDataItem;
+    }
+    return nullptr;
+}
+
 D2UnitStrc * __stdcall INVENTORY_IsItemOwnedBy(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
-    if (pInventory && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+    if (pInventory && GetTypeInline(pUnit) == UNIT_ITEM && GetItemDataInline(pUnit)) {
       D2ItemInventoryNodeStrc* ppTradeCopyInventory;
-      ppTradeCopyInventory = &pUnit->pUnitData.pUnitDataItem->sInvNode;
+      ppTradeCopyInventory = &GetItemDataInline(pUnit)->sInvNode;
       if (ppTradeCopyInventory) {
         return pInventory != ppTradeCopyInventory->pInventory ? nullptr : pUnit;
       }

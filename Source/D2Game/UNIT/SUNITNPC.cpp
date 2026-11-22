@@ -1266,23 +1266,14 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_4(D2UnitStrc * p)
 }
 
 D2UnitStrc * __fastcall SUNITNPC_GetBuyableStackSize(D2UnitStrc * pNpcUnit, int32_t nTargetClassId) {
-    int nItemClassId;
-    if (!pNpcUnit->pInventory) {
-      return nullptr;
-    }
-
-    D2UnitStrc* pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pNpcUnit->pInventory);
-    while (pCurItem) {
-      D2UnitStrc* pCarriedItem;
-      pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
-      pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
-      if (!pCarriedItem) {
-        nItemClassId = -1;
-      } else {
-        nItemClassId = pCarriedItem->nClassId;
-      }
-      if (nItemClassId == nTargetClassId && (!pCarriedItem || !FlagBit_D2UnitStrc_eUnitFlagsEx_4(pCarriedItem))) {
-        return pCarriedItem;
+    if (pNpcUnit->pInventory) {
+      D2UnitStrc* pNextItem;
+      for (D2UnitStrc* pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pNpcUnit->pInventory); pCurItem; pCurItem = pNextItem) {
+        D2UnitStrc* pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
+        pNextItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
+        if ((!pCarriedItem ? -1 : pCarriedItem->nClassId) == nTargetClassId && (!pCarriedItem || !FlagBit_D2UnitStrc_eUnitFlagsEx_4(pCarriedItem))) {
+          return pCarriedItem;
+        }
       }
     }
 

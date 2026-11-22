@@ -494,22 +494,27 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
       return;
     }
 
-    uint8_t nIconCel = pSkillDescTxt->iconcel;
+    uint32_t nIconCel = pSkillDescTxt->iconcel;
     nMouseXCheck = Cursor::GetMouseX();
     int nMouseX = Cursor::GetMouseY();
+    GLOBALPALLETE nPalette;
     if (nMouseXCheck >= nSkillIdSlot && nMouseXCheck <= nSkillIdSlot + 0x30 && nMouseX >= nIconX - 0x30 && nMouseX <= nIconX) {
       if (!nGlobalPaletteShift) {
-        nGlobalPaletteShift = 0;
-      } else if (nGlobalPaletteShift != PALETTE_RED) {
-        nGlobalPaletteShift = (nGlobalPaletteShift != PALETTE_GOLD ? -3 : 0) + PALETTE_GOLD;
+        nPalette = (GLOBALPALLETE)0;
+      } else if (nGlobalPaletteShift == PALETTE_RED) {
+        nPalette = nGlobalPaletteShift;
+      } else {
+        nPalette = (GLOBALPALLETE)((nGlobalPaletteShift != PALETTE_GOLD ? -3 : 0) + PALETTE_GOLD);
       }
+    } else {
+      nPalette = nGlobalPaletteShift;
     }
 
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = pDC6;
     sGfxData.nDirection = 0;
-    sGfxData.nFrameNumber = (uint32_t)nIconCel;
-    D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nSkillIdSlot, nIconX, -1, DRAW_SOLID, nGlobalPaletteShift);
+    sGfxData.nFrameNumber = nIconCel;
+    D2gfx::D2GFX::D2GFX_DrawShiftedImage(&sGfxData, nSkillIdSlot, nIconX, -1, DRAW_SOLID, nPalette);
     if (bIsLeftHand) {
       SPELLSEL_DrawKeyBindingsForLeftHand(nSkillId, pSkillId, nSkillIdSlot, nIconX);
     } else {
@@ -521,8 +526,23 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
       D2UnitStrc* pEquippedWeapon;
       pInventory = pPlayerUnit_lcl->pInventory;
       if (pInventory) {
-        if (*pSkillId != 2) {
-          if (*pSkillId == 4) {
+        switch (*pSkillId) {
+          case 2:
+          {
+          pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pInventory);
+          if (pPlayerUnit_lcl) {
+            iVar1 = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pPlayerUnit_lcl);
+            if (iVar1) {
+              bIsStackable = D2Common::ITEMS::Items::IsStackable(pPlayerUnit_lcl);
+              if (bIsStackable) {
+                nQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, UNITSTAT_quantity, 0);
+              }
+            }
+          }
+            break;
+          }
+          case 4:
+          {
             pEquippedWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pInventory);
             pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
             pAltWeapon = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
@@ -541,17 +561,7 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
                 }
               }
             }
-          }
-        } else {
-          pPlayerUnit_lcl = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pInventory);
-          if (pPlayerUnit_lcl) {
-            iVar1 = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pPlayerUnit_lcl);
-            if (iVar1) {
-              bIsStackable = D2Common::ITEMS::Items::IsStackable(pPlayerUnit_lcl);
-              if (bIsStackable) {
-                nQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pPlayerUnit_lcl, UNITSTAT_quantity, 0);
-              }
-            }
+            break;
           }
         }
       }
@@ -689,68 +699,47 @@ int __fastcall SPELLSEL_FindChargedSkill4(D2UnitStrc * pUnit, int32_t nTargetSki
 }
 
 void __stdcall INPUT_SpellSelectClick(D2UIMouseMsgStrc * pMsg) {
-    int nCurMouseX;
-    int nCurMouseY;
-    D2SkillStrc* pSkill;
-    BOOL bHasCharges;
-    int nChargesLeft;
-    int32_t nSlotScreenY;
-    int32_t nErrLine;
-    int nSlotScreenXPos;
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    if (!pPlayerUnit_lcl) {
+    if (!UNIT::Player::GetPlayerUnit_UI()) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ba);
       exit(-1);
     }
 
     int nInitialMouseY = Cursor::GetMouseY();
-    int bHandled = 0;
-    int* pSlotSkillIdPtr = gSpellSelGridRegion.aRightHandSlots;
-    do {
-      nSlotScreenY = pSlotSkillIdPtr[-0x78];
-      nSlotScreenXPos = ((D2SpellSelGridRegionStrc*)(pSlotSkillIdPtr - 0xb4))->aSkillGrid[0];
-      nCurMouseX = Cursor::GetMouseX();
-      nCurMouseY = Cursor::GetMouseY();
-      if (nCurMouseX >= nSlotScreenXPos && nCurMouseX <= nSlotScreenXPos + 0x30 && nCurMouseY >= nSlotScreenY - 0x30 && nCurMouseY <= nSlotScreenY) {
-        nErrLine = *pSlotSkillIdPtr;
-        pSkill = D2Common::Skills::GetSkillByIdAndOwner(UNIT::Player::GetPlayerUnit_UI(), pSlotSkillIdPtr[-0x3c], nErrLine);
+    BOOL bHandled = FALSE;
+    for (int i = 0; i < 60; i++) {
+      int nSlotY = gSpellSelGridRegion.aSkillGridRow2[i];
+      int nSlotX = gSpellSelGridRegion.aSkillGrid[i];
+      int nMouseX = Cursor::GetMouseX();
+      int nMouseY = Cursor::GetMouseY();
+      if (nMouseX >= nSlotX && nMouseX <= nSlotX + 0x30 && nMouseY >= nSlotY - 0x30 && nMouseY <= nSlotY) {
+        D2SkillStrc* pSkill = D2Common::Skills::GetSkillByIdAndOwner(UNIT::Player::GetPlayerUnit_UI(), gSpellSelGridRegion.aLeftHandSlots[i], gSpellSelGridRegion.aRightHandSlots[i]);
         if (pSkill) {
-          nErrLine = D2Common::Skills::GetOwnerGUID(pSkill);
-          if (nErrLine != -1) {
-            bHasCharges = D2Common::Skills::SKILLS_GetSkillData(pSkill, nullptr, nullptr, nullptr, &nChargesLeft);
-            if (bHasCharges && nChargesLeft <= 0) {
-              bHasCharges = ui::GetUIFlag(UI_SKILLSELECT);
-              if (bHasCharges) {
-                ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
-              }
-
-              pMsg->dwResult = 0;
-              break;
+          int nChargesLeft;
+          if (D2Common::Skills::GetOwnerGUID(pSkill) != -1 && D2Common::Skills::SKILLS_GetSkillData(pSkill, nullptr, nullptr, nullptr, &nChargesLeft) && nChargesLeft <= 0) {
+            if (ui::GetUIFlag(UI_SKILLSELECT)) {
+              ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
             }
+
+            pMsg->dwResult = 0;
+            pMsg->bHandled = 1;
+            Storm::SMsgBreakHandlerChain(pMsg);
+            return;
           }
 
-          GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x3c, (gbSpellSelMouseHandFlag ? 0x80000000 : 0) + pSlotSkillIdPtr[-0x3c], *pSlotSkillIdPtr);
+          GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x3c, (gbSpellSelMouseHandFlag ? 0x80000000 : 0) + gSpellSelGridRegion.aLeftHandSlots[i], gSpellSelGridRegion.aRightHandSlots[i]);
           ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
           gbSpellSelMouseHandFlag = 0;
-          bHandled = 1;
+          bHandled = TRUE;
           GAME::Game::UI_ResetInputState();
         }
       }
+    }
 
-      pSlotSkillIdPtr++;
-      if ((intptr_t)pSlotSkillIdPtr >= (intptr_t)((char*)&gSpellSelGridRegion + 960)) {
-        if (nInitialMouseY <= Inv::ScreenSizeY - 0x31 && !bHandled) {
-          bHasCharges = ui::GetUIFlag(UI_SKILLSELECT);
-          if (bHasCharges) {
-            ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
-          }
-        }
+    if (nInitialMouseY <= Inv::ScreenSizeY - 0x31 && !bHandled && ui::GetUIFlag(UI_SKILLSELECT)) {
+      ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
+    }
 
-        pMsg->dwResult = 0;
-        break;
-      }
-    } while (true);
-
+    pMsg->dwResult = 0;
     pMsg->bHandled = 1;
     Storm::SMsgBreakHandlerChain(pMsg);
 }
@@ -1618,45 +1607,25 @@ void __stdcall SKILLTREE_RenderSkillTree() {
     int32_t nTooltipX;
     int nTooltipY;
     if (gnSkillTreeHighlightIndex == 1) {
-      nScreenX = ui::ScreenSizeX - Inv::gnPanelOffsetX;
       nTooltipY = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
+      nScreenX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x95;
       nMouseX = Cursor::GetMouseX();
       nMouseY = Cursor::GetMouseY();
-      if (nMouseX < nScreenX - 0x95) {
-        return;
-      }
-      if (nMouseX > nScreenX - 0x73) {
-        return;
-      }
-      if (nMouseY < nTooltipY - 0x22) {
-        return;
-      }
-      if (nMouseY > nTooltipY) {
+      if (nMouseX < nScreenX || nMouseX > nScreenX + 0x22 || nMouseY < nTooltipY - 0x22 || nMouseY > nTooltipY) {
         return;
       }
 
-      nTooltipY = Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY;
-      nTooltipX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x86;
+      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x86, Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY, 0, 1);
     } else if (gnSkillTreeHighlightIndex == 2) {
-      nScreenX = ui::ScreenSizeX - Inv::gnPanelOffsetX;
       nTooltipY = Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY;
+      nScreenX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xdc;
       nMouseX = Cursor::GetMouseX();
       nMouseY = Cursor::GetMouseY();
-      if (nMouseX < nScreenX - 0xdc) {
-        return;
-      }
-      if (nMouseX > nScreenX - 0xba) {
-        return;
-      }
-      if (nMouseY < nTooltipY - 0x22) {
-        return;
-      }
-      if (nMouseY > nTooltipY) {
+      if (nMouseX < nScreenX || nMouseX > nScreenX + 0x22 || nMouseY < nTooltipY - 0x22 || nMouseY > nTooltipY) {
         return;
       }
 
-      nTooltipY = Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY;
-      nTooltipX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xcd;
+      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), ui::ScreenSizeX - Inv::gnPanelOffsetX - 0xcd, Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY, 0, 1);
     } else {
       if (gnSkillTreeHighlightIndex != 3) {
         return;
@@ -1667,14 +1636,9 @@ void __stdcall SKILLTREE_RenderSkillTree() {
         return;
       }
 
-      nTooltipY = Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY;
-      nTooltipX = ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x122;
+      D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(D2Lang::StrTable::strtable::GetLocaleString(0x1030), ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x122, Inv::gnPanelOffsetY - 0x62 + Inv::ScreenSizeY, 0, 1);
     }
 
-    int32_t nShowTooltip = 1;
-    int32_t bMouseOver = 0;
-    uint16_t* pwszTabLabel = D2Lang::StrTable::strtable::GetLocaleString(0x1030);
-    D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(pwszTabLabel, nTooltipX, nTooltipY, bMouseOver, nShowTooltip);
 }
 
 int Unreferenced_004ab7b0() {

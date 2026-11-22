@@ -345,12 +345,8 @@ static BOOL __stdcall SKILL_ValidateTeleportDestination(D2UnitStrc * pUnit, int3
 }
 
 static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int32_t nY, eD2Skills eSkill) {
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -363,16 +359,11 @@ static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int
     if (!pRoom) {
       return 0;
     }
-    if (*((uint8_t*)&pSkillTxt[eSkill] + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
-      return 1;
+    if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+      return 0;
     }
 
-    BOOL bIsTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-    if (!bIsTown) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 // Skill client-state setup func for a teleport/leap-to-location skill: computes and commits the destination into the unit's current D2SkillStrc params. For the local player, aborts if uninterruptable or already casting this very skill. For non-monsters it reads the requested coords (GetCooordinates), checks SKILL_CanUseAtLocation and SKILL_ValidateTeleportDestination. For monsters it targets the confirmed target's mirrored position (2*target - self) or the requested coords. Snaps to a free cell, adds the unit's collision footprint at the destination, stores dest in SKILL param1/param2 (param3/param4 = target type/GUID for monsters), sets skill flags 0x1080 and rebuilds the active-skill stat list. Returns TRUE if a valid destination was set, else FALSE.

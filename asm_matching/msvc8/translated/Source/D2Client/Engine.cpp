@@ -170,19 +170,21 @@ void __fastcall LOADER_DrawInsertDiscScreen(int32_t nUnused) {
 }
 
 void __stdcall INPUT_CharScreenOkDown(D2UIMouseMsgStrc * pMsg) {
-    int nBaseX = UI::Inv::gnPanelOffsetX;
-    int nBaseY = -UI::Inv::gnPanelOffsetY;
-    int nLeftEdge = UI::Inv::gnPanelOffsetX + 0x110;
+    int nLeftX = UI::Inv::gnPanelOffsetX + 0x110;
+    int nBottomY = 0x136 - UI::Inv::gnPanelOffsetY;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
-    if (nMouseX >= nLeftEdge && nMouseX <= nBaseX + 0x170 && nMouseY >= nBaseY + 0x116 && nMouseY <= nBaseY + 0x136) {
+    if (nMouseX >= nLeftX && nMouseX <= nLeftX + 0x60 && nMouseY >= nBottomY - 0x20 && nMouseY <= nBottomY) {
       gnCharScreenOkButtonPressed = 1;
       gnCharScreenInputState = 1;
       Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
-    } else {
-      GAME::Game::GAMEDATA_ClearQueuedClicks();
+      pMsg->bHandled = 1;
+      pMsg->dwResult = 0;
+      Storm::SMsgBreakHandlerChain(pMsg);
+      return;
     }
 
+    GAME::Game::GAMEDATA_ClearQueuedClicks();
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);

@@ -350,7 +350,7 @@ static LPFILETIME CACHE_GetFileTime(uint32_t nSecondsFromNow) {
 
     /* LPSYSTEMTIME lpSystemTime for GetSystemTime */ GetSystemTime(&sSystemTime);
     /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ SystemTimeToFileTime(&sSystemTime, &lpFileTime_008818ac);
-    lpFileTime_008818ac = d2_bits_as<FILETIME>((uint64_t)nSecondsFromNow * 10000000 + (uint64_t)((uint64_t)(uint32_t)lpFileTime_008818ac.dwHighDateTime << 32 | (uint64_t)(uint32_t)lpFileTime_008818ac.dwLowDateTime));
+    *(uint64_t*)&lpFileTime_008818ac += (uint64_t)nSecondsFromNow * 10000000;
     gnCacheLastFileTimeParam = nSecondsFromNow;
     gdwCacheLastTickCount = GetTickCount();
     return &lpFileTime_008818ac;

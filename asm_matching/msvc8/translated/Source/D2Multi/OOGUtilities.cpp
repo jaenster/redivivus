@@ -21,6 +21,13 @@
 #include "Source/D2Win/D2WinImageEx.h"
 #include "Source/D2Win/D2WinScrollbar.h"
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -254,18 +261,13 @@ int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
 
 // Opens a URL in the default system browser by querying registry for .html file association. Reads "SOFTWARE\\Classes\\.html" to get file type, then reads "SOFTWARE\\Classes\\{type}\\shell\\open\\command" to get the command line. Appends the URL to the command string, creates a process via CreateProcessA with NORMAL_PRIORITY_CLASS flag, and closes process handles. Shows error dialog (locale 5340) if registry lookup fails. Uses 1024-byte buffers for registry paths and 1025-byte buffer for final command line construction.
 int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
-    uint32_t nCopyCount;
-    char* pcCopySrc;
-    char* pcScan;
-    char* pcCopyDst;
     char szFileType[2048];
     char szRegistryCommandPath[1024];
-    char szRegistryKeyPath[1023];
-    char szCommandLineBuffer[1025];
+    char szRegistryKeyPath[1024];
+    char szCommandLine[1024];
     _STARTUPINFOA sStartupInfo;
     _PROCESS_INFORMATION sProcessInfo;
-    LPDWORD dwBytesRead;
-    char cChar;
+    DWORD dwBytesRead;
     char* pszUrl;
     pszUrl = pNetworkUnknown->pfnSendQueryAdURL(ghBannerAdProcess);
     if (!pszUrl) {
@@ -273,67 +275,31 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
     }
 
     szFileType[0] = '\0';
-    memset(szFileType + 1, 0, 0x7ff);
+    memset(szFileType + 1, 0, sizeof(szFileType) - 1);
     int bLaunched;
     bLaunched = 0;
-    HWND hWnd;
-    hWnd = GetDesktopWindow();
-    /* HWND hWnd for SetForegroundWindow */ SetForegroundWindow(hWnd);
+    SetForegroundWindow(GetDesktopWindow());
     sprintf(szRegistryKeyPath, "%s\\.html", "SOFTWARE\\Classes");
-    uint32_t nRegOk;
-    nRegOk = LAUNCHER_ReadRegistryValue(szRegistryKeyPath, (LPCSTR)0x0, (LPBYTE)szFileType, 0x400, (LPDWORD)&dwBytesRead);
-    if (nRegOk) {
-      BOOL bCreated;
+    if (LAUNCHER_ReadRegistryValue(szRegistryKeyPath, (LPCSTR)0x0, (LPBYTE)szFileType, 0x400, &dwBytesRead)) {
       sprintf(szRegistryCommandPath, "%s\\%s\\shell\\open\\command", "SOFTWARE\\Classes", szFileType);
-      szCommandLineBuffer[1] = '\0';
-      memset(szCommandLineBuffer + 2, 0, 0x3ff);
-      nRegOk = LAUNCHER_ReadRegistryValue(szRegistryCommandPath, (LPCSTR)0x0, (LPBYTE)(szCommandLineBuffer + 1), 0x400, (LPDWORD)&dwBytesRead);
-      if (nRegOk) {
-        pcScan = szCommandLineBuffer;
-        do {
-          pcCopyDst = pcScan + 1;
-          pcScan++;
-        } while (*pcCopyDst != '\0');
-
-        pcScan[0] = ' ';
-        pcScan[1] = '\0';
-        int nStrLen;
-        nStrLen = (int)strlen(pszUrl);
-        pcCopyDst = szCommandLineBuffer;
-        do {
-          pcCopySrc = pcCopyDst + 1;
-          pcCopyDst++;
-        } while (*pcCopySrc != '\0');
-
-        pcCopySrc = pszUrl;
-        for (nCopyCount = (uint32_t)((int)nStrLen + 1) >> 2; nCopyCount; nCopyCount--) {
-          *(uint32_t*)pcCopyDst = *(uint32_t*)pcCopySrc;
-          pcCopySrc += 4;
-          pcCopyDst += 4;
-        }
-
-        for (nCopyCount = (int)nStrLen + 1 & 3; nCopyCount; nCopyCount--) {
-          *pcCopyDst = *pcCopySrc;
-          pcCopySrc++;
-          pcCopyDst++;
-        }
-
+      szCommandLine[0] = '\0';
+      memset(szCommandLine + 1, 0, sizeof(szCommandLine) - 1);
+      if (LAUNCHER_ReadRegistryValue(szRegistryCommandPath, (LPCSTR)0x0, (LPBYTE)szCommandLine, 0x400, &dwBytesRead)) {
+        strcat(szCommandLine, " ");
+        strcat(szCommandLine, pszUrl);
         Storm::Source::SMem::SMemZero(&sStartupInfo, 0x44);
-        /* LPPROCESS_INFORMATION lpProcessInformation for CreateProcessA */ /* LPSTARTUPINFOA lpStartupInfo for CreateProcessA */ /* LPCSTR lpCurrentDirectory for CreateProcessA */ /* LPVOID lpEnvironment for CreateProcessA */ /* DWORD dwCreationFlags for CreateProcessA */ /* BOOL bInheritHandles for CreateProcessA */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateProcessA */ /* LPSECURITY_ATTRIBUTES lpProcessAttributes for CreateProcessA */ /* LPSTR lpCommandLine for CreateProcessA */ /* LPCSTR lpApplicationName for CreateProcessA */ sStartupInfo.cb = 0x44;
-        bCreated = CreateProcessA((LPCSTR)0x0, szCommandLineBuffer + 1, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0x20, (LPVOID)0x0, (LPCSTR)0x0, &sStartupInfo, &sProcessInfo);
-        if (bCreated) {
-          /* HANDLE hObject for CloseHandle */ CloseHandle(sProcessInfo.hThread);
-          /* HANDLE hObject for CloseHandle */ CloseHandle(sProcessInfo.hProcess);
+        sStartupInfo.cb = 0x44;
+        if (CreateProcessA((LPCSTR)0x0, szCommandLine, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0x20, (LPVOID)0x0, (LPCSTR)0x0, &sStartupInfo, &sProcessInfo)) {
+          CloseHandle(sProcessInfo.hThread);
+          CloseHandle(sProcessInfo.hProcess);
           bLaunched = 1;
-          goto report_click_result;
         }
       }
     }
 
-    uint16_t* wszTitle;
-    wszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x14dc);
-    ChatDlg::UIMENU_DrawTitleOnCenterSmaller(wszTitle, nullptr);
-    report_click_result:
+    if (!bLaunched) {
+      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(D2Lang::StrTable::strtable::GetLocaleString(0x14dc), nullptr);
+    }
     pNetworkUnknown->pfnSendClickAd(ghBannerAdProcess, (uint32_t)!bLaunched);
     return 1;
 }
@@ -1371,74 +1337,51 @@ BOOL __stdcall OOGUTIL_FilterPrintableAsciiChar(DWORD dwParam1, DWORD dwParam2, 
 }
 
 void __stdcall OOGUTIL_RefreshGameList() {
-    char* pszScan;
-    BOOL bLevelRestrictionChecked;
-    long int nClampedCount;
-    char szValue[260];
-    char cChar;
-    bool bNameValid;
-    bNameValid = false;
+    char szValue[256];
+    BOOL bNameValid;
+    bNameValid = 0;
     int bSelectedValid;
     bSelectedValid = 0;
-    bool bRestrictionValid;
-    bRestrictionValid = false;
+    BOOL bRestrictionValid;
+    bRestrictionValid = 0;
     uint16_t* pwszValue;
     pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpOogGameNameEditControl->sControl);
     if (pwszValue) {
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 0x10);
-      pszScan = szValue;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      if (szValue[0] != ' ' && (intptr_t)pszScan - (intptr_t)(szValue + 1) >= 1 && szValue[(intptr_t)pszScan - (intptr_t)(szValue + 1) - 1] != ' ') {
-        bNameValid = true;
+      int nNameLen = strlen(szValue);
+      if (szValue[0] != ' ' && nNameLen >= 1 && szValue[nNameLen - 1] != ' ') {
+        bNameValid = 1;
       }
     }
 
-    int32_t bHasPeerName;
-    bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
-    if (!bHasPeerName) {
-      bSelectedValid = 1;
-      bRestrictionValid = true;
-      goto update_create_button;
-    }
-
-    pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
-    if (pwszValue) {
-      long int nGameCount;
-      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 3);
-      if (strlen(szValue) != 0) {
-        bSelectedValid = 1;
-        nGameCount = atoi(szValue);
-        nClampedCount = bSelectedValid;
-        if (0 < nGameCount) {
-          if (nGameCount <= 8) {
-            goto check_restriction_field;
-          }
-          if (1 < nGameCount) {
-            nClampedCount = nGameCount;
-            if (nGameCount >= 8) {
-              nClampedCount = 8;
-            }
+    if (D2MCPClient::McpConnect::HasPeerName()) {
+      pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
+      if (pwszValue) {
+        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 3);
+        if (strlen(szValue) != 0) {
+          bSelectedValid = 1;
+          long int nGameCount = atoi(szValue);
+          if (nGameCount < 1 || nGameCount > 8) {
+            sprintf(szValue, "%d", min(max(nGameCount, 1), 8)); // steer-ok: windef.h min/max macros
+            D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUIGameListMaxPlayersEditBox, szValue);
           }
         }
-
-        sprintf(szValue, "%d", nClampedCount);
-        D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUIGameListMaxPlayersEditBox, szValue);
       }
+
+      if (D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox)) {
+        pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
+        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 3);
+        if (strlen(szValue) == 0 || atoi(szValue) < 0) {
+          goto update_create_button;
+        }
+      }
+
+      bRestrictionValid = 1;
+    } else {
+      bSelectedValid = 1;
+      bRestrictionValid = 1;
     }
 
-    check_restriction_field:
-    bLevelRestrictionChecked = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
-    if (bLevelRestrictionChecked) {
-      pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
-      D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 3);
-      pszScan = szValue;
-      pszScan = pszScan + strlen(pszScan) + 1;
-      if (pszScan == szValue + 1 || (nClampedCount = atoi(szValue) , nClampedCount < 0)) {
-        goto update_create_button;
-      }
-    }
-
-    bRestrictionValid = true;
     update_create_button:
     if (bNameValid && bSelectedValid && bRestrictionValid) {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gUIGameListCreateButton, 1);

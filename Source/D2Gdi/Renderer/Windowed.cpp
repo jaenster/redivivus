@@ -276,14 +276,7 @@ void __fastcall SetPalette(LPPALETTEENTRY pPalette) {
 }
 
 void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {
-    int nRemaining;
-    uint8_t** pPaletteTableDst = gpGlidePaletteTableData;
-    for (nRemaining = 0x48; nRemaining; nRemaining--) {
-      *pPaletteTableDst = *ppPaletteTable;
-      ppPaletteTable++;
-      pPaletteTableDst++;
-    }
-
+    memcpy(gpGlidePaletteTableData, ppPaletteTable, sizeof(gpGlidePaletteTableData));
     gpPaletteTable = gpGlidePaletteTableData;
 }
 

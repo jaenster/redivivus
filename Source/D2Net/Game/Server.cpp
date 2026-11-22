@@ -308,10 +308,9 @@ void __stdcall NET_HACK_SetUseQServerHack(BOOL bResult) {
 }
 
 void NET_QServer_FreeAndSend0xB0ToEveryone() {
-    uint8_t aShutdownCmd[4];
-    aShutdownCmd[3] = 0xb0;
-    d2_store24((char*)&aShutdownCmd, 0);
-    Fog::Src::Shutdown(gpQServer, (char*)(aShutdownCmd + 3), 1);
+    uint8_t nShutdownCmd;
+    nShutdownCmd = 0xb0;
+    Fog::Src::Shutdown(gpQServer, (char*)&nShutdownCmd, 1);
     gpQServer = 0;
 }
 
@@ -483,10 +482,9 @@ int32_t __fastcall NET_D2GS_SERVER_Send_0xAF01(D2QServerStrc * pQServer, uint32_
 }
 
 int32_t __fastcall NET_D2GS_CLIENT_Send_0x70(D2QServerStrc * pQServer, uint32_t nClientId, char * pszSourceFile, int nLine) {
-    uint8_t aPacketFrame[4];
-    d2_store24((char*)&aPacketFrame, (uint32_t)((uint32_t)(uintptr_t)pQServer & 0xffffffu));
-    aPacketFrame[3] = 0x70;
-    Fog::Src::QSERVER_EnqueueClientPacket(gpQServer, (char*)(aPacketFrame + 3), 1, nClientId);
+    uint8_t nPacketId;
+    nPacketId = 0x70;
+    Fog::Src::QSERVER_EnqueueClientPacket(gpQServer, (char*)&nPacketId, 1, nClientId);
     return 1;
 }
 

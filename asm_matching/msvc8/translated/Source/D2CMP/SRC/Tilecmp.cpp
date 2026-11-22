@@ -132,8 +132,6 @@ void __stdcall TILECMP_FreeTileSetChain(D2TileCmpTileSetListStrc * pTileSetList)
 }
 
 void __stdcall TILECMP_AddTileToSet(D2TileCmpTileSetListStrc * pTileSetList, uint16_t wFlags, uint16_t wRoofHeight, uint32_t nOrientation, uint32_t nMainIndex, uint32_t nSubIndex, uint32_t nRarity, uint32_t nDirection, uint32_t * pSubTileFlags) {
-    int iCopyCount;
-    uint8_t* pDstIsoData;
     if (!pTileSetList) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa2);
       exit(-1);
@@ -157,14 +155,7 @@ void __stdcall TILECMP_AddTileToSet(D2TileCmpTileSetListStrc * pTileSetList, uin
       pDVar1->nDirection = nDirection;
       pDVar1->dwTransparentColor = pTileSetList->dwColorKey;
       pDVar1->field_0x51 = 2;
-      pDstIsoData = pDVar1->abSubTileFlags;
-      for (iCopyCount = 6; iCopyCount; iCopyCount--) {
-        *(uint32_t*)pDstIsoData = *pSubTileFlags;
-        pSubTileFlags++;
-        pDstIsoData += 4;
-      }
-
-      *pDstIsoData = (uint8_t)*pSubTileFlags;
+      memcpy(pDVar1->abSubTileFlags, pSubTileFlags, sizeof(pDVar1->abSubTileFlags));
       return;
     }
 }

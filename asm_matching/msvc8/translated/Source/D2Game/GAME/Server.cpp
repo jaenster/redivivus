@@ -3392,10 +3392,11 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
     }
 
     uint32_t nQServerToken = QSERVER_GenerateToken();
-    TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* self = gpQServerGameState;
     if (!(uint16_t)nQServerToken) {
       return 0;
     }
+
+    TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* self = gpQServerGameState;
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gpQServerGameState->tSync.m_critsect);
     uint32_t nHashToken = self->GenerateUniqueHandle();
@@ -3432,7 +3433,12 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
 
     pGame->wItemFormat = pGame->bExpansion ? 0x65 : 0x2;
     pGame->eGameType = flags >> 0x15 & GAMETYPE_SINGLEPLAYER_UNCAPPED;
-    memset(pGame->anUnitGuidCounters, 0, 6 * sizeof(pGame->anUnitGuidCounters[0]));
+    pGame->anUnitGuidCounters[0] = 0;
+    pGame->anUnitGuidCounters[1] = 0;
+    pGame->anUnitGuidCounters[2] = 0;
+    pGame->anUnitGuidCounters[3] = 0;
+    pGame->anUnitGuidCounters[4] = 0;
+    pGame->anUnitGuidCounters[5] = 0;
     pGame->dwServerGame = 0;
     pGame->pPrev = 0;
     pGame->pNext = 0;

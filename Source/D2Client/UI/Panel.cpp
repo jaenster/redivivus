@@ -363,7 +363,7 @@ void __stdcall PANEL_DrawSkillIcons() {
 }
 
 static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
-    int nMaxValue;
+    int nMaxValue = 0;
     int32_t nNow;
     int nAbsDiff;
     int32_t nInterp;
@@ -384,10 +384,6 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
           nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
           nSlotOffset = 1;
           break;
-        }
-      default:
-        {
-          return 0;
         }
       case UNITSTAT_stamina:
         {
@@ -416,10 +412,8 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
 
     int nPrevValue = gaPanelImageLoadFlags[nSlotOffset * 4];
     if (nPrevValue != nCurValue) {
-      nAbsDiff = nPrevValue - nCurValue;
-      if (nAbsDiff < 0) {
-        nAbsDiff = -nAbsDiff;
-      }
+      int nDiff = nPrevValue - nCurValue;
+      nAbsDiff = nDiff < 0 ? -nDiff : nDiff;
       if (!(nAbsDiff < nMaxValue / 8)) {
         gaPanelImageLoadFlags[nSlotOffset * 4 + 2] = nCurValue;
         nNow = GAME::Game::GetEntryIndex();
@@ -455,9 +449,8 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
       }
     }
     if (nCurValue < 0) {
-      return 0;
-    }
-    if (nCurValue > nMaxValue) {
+      nCurValue = 0;
+    } else if (nCurValue > nMaxValue) {
       nCurValue = nMaxValue;
     }
 
@@ -1031,7 +1024,6 @@ void __stdcall DRAW_EquipmentNeedArrows() {
     D2ItemsTxt* pOtherItemsTxt;
     int nStackQuantity;
     uint32_t nSlotIndex;
-    int* pWarningEntry;
     uint32_t nWarningItemIndex;
     memset(gaPanelBeltArrowsNeeded, 0, 6 * sizeof(gaPanelBeltArrowsNeeded[0]));
     D2UnitStrc* pItem;
@@ -1075,8 +1067,8 @@ void __stdcall DRAW_EquipmentNeedArrows() {
         if (bQntWarning) {
           nWarningItemIndex = 0;
           if (gnInventoryWarningItemCount > 0) {
-            for (pWarningEntry = gaInventoryWarningItems_nWarningKind_col[0] + 4; nWarningItemIndex < gnInventoryWarningItemCount; nWarningItemIndex++ , pWarningEntry += 5) {
-              if ((*(int (*)[5])(pWarningEntry - 4))[0] == 1) {
+            for (; nWarningItemIndex < gnInventoryWarningItemCount; nWarningItemIndex++) {
+              if (bQntWarning == gaInventoryWarningItems_nWarningKind_col[nWarningItemIndex][0]) {
                 nItemClassId = D2Common::Units::GetClassId(pItem);
                 pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
                 nTotalQuantity = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0);
@@ -1102,21 +1094,13 @@ void __stdcall DRAW_EquipmentNeedArrows() {
                     }
                   }
                 }
-                if (!(nTotalQuantity > (uint32_t)*pWarningEntry)) {
-                  nTotalQuantity = pWarningEntry[-3] + 2;
-                } else {
-                  if (!(nTotalQuantity > (uint32_t)pWarningEntry[-1])) {
-                    nTotalQuantity = pWarningEntry[-3] + 1;
-                  } else {
-                    if (nTotalQuantity > (uint32_t)pWarningEntry[-2]) {
-                      continue;
-                    }
-
-                    nTotalQuantity = pWarningEntry[-3];
-                  }
+                if (nTotalQuantity <= (uint32_t)gaInventoryWarningItems_nWarningKind_col[nWarningItemIndex][4]) {
+                  PANEL_DrawBeltSlots(gaInventoryWarningItems_nWarningKind_col[nWarningItemIndex][1] + 2);
+                } else if (nTotalQuantity <= (uint32_t)gaInventoryWarningItems_nWarningKind_col[nWarningItemIndex][3]) {
+                  PANEL_DrawBeltSlots(gaInventoryWarningItems_nWarningKind_col[nWarningItemIndex][1] + 1);
+                } else if (nTotalQuantity <= (uint32_t)gaInventoryWarningItems_nWarningKind_col[nWarningItemIndex][2]) {
+                  PANEL_DrawBeltSlots(gaInventoryWarningItems_nWarningKind_col[nWarningItemIndex][1]);
                 }
-
-                PANEL_DrawBeltSlots(nTotalQuantity);
               }
             }
           }

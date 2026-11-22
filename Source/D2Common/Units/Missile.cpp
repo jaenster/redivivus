@@ -595,10 +595,10 @@ void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2Missi
     uint32_t dwMissileFlags;
     int iBonusLayer;
     D2StatStrc awBonusLayers[128];
-    if ((pMissile ? pMissile->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
+    if (GetTypeInline(pMissile) != UNIT_MISSILE) {
       return;
     }
-    if (pMissile->pUnitData.pUnitDataMissile) {
+    if (GetTypeInline(pMissile) == UNIT_MISSILE && pMissile->pUnitData.pUnitDataMissile) {
       dwMissileFlags = pMissile->pUnitData.pUnitDataMissile->dwMissileFlags;
     } else {
       dwMissileFlags = 0;
@@ -609,7 +609,7 @@ void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2Missi
     if (pMissileDamageData->nFlags & 4U) {
       dwMissileFlags |= 2;
     }
-    if (true && pMissile->pUnitData.pUnitDataMissile) {
+    if (GetTypeInline(pMissile) == UNIT_MISSILE && pMissile->pUnitData.pUnitDataMissile) {
       pMissile->pUnitData.pUnitDataMissile->dwMissileFlags = dwMissileFlags;
     }
 

@@ -41,8 +41,6 @@ HMODULE __stdcall StormGetInstance() {
 }
 
 BOOL __stdcall SSYSTEM_GetSystemOption(uint32_t nOptionId, uint32_t * pOutValue, uint32_t * pnBufferSize) {
-    uint32_t nBufferSize;
-    uint32_t nOptionValue;
     D2_CHECKS_BEGIN;
     D2_CHECK(pOutValue);
     D2_CHECK(pnBufferSize);
@@ -53,39 +51,38 @@ BOOL __stdcall SSYSTEM_GetSystemOption(uint32_t nOptionId, uint32_t * pOutValue,
         if (*pnBufferSize < 4) {
           return 0;
         }
-      *pOutValue = gnSSystemOption1;
-      break;
+        *pOutValue = gnSSystemOption1;
+        break;
       case 2:
-        nBufferSize = *pnBufferSize;
-      nOptionValue = gnSSystemWaveBufferSize;
-      goto store_dword_option;
+        if (*pnBufferSize < 4) {
+          return 0;
+        }
+        *pOutValue = gnSSystemWaveBufferSize;
+        break;
       case 3:
         if (*pnBufferSize < 4) {
           return 0;
         }
-      *pOutValue = gnSSystemOption3;
-      break;
+        *pOutValue = gnSSystemOption3;
+        break;
       case 4:
         if (*pnBufferSize < 4) {
           return 0;
         }
-      *pOutValue = gnSSystemAsyncReadSize;
-      break;
+        *pOutValue = gnSSystemAsyncReadSize;
+        break;
       case 5:
-        nBufferSize = *pnBufferSize;
-      nOptionValue = gbCompressionDebugOutput;
-      store_dword_option:
-      if (nBufferSize < 4) {
-        return 0;
-      }
-      *pOutValue = nOptionValue;
-      break;
+        if (*pnBufferSize < 4) {
+          return 0;
+        }
+        *pOutValue = gbCompressionDebugOutput;
+        break;
       default:
-        goto clear_error_and_succeed;
+        SErr::SErrSetLastError(0);
+        return 1;
     }
 
     *pnBufferSize = 4;
-    clear_error_and_succeed:
     SErr::SErrSetLastError(0);
     return 1;
 }

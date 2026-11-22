@@ -181,19 +181,18 @@ void __fastcall Q05_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     int32_t* pStoneGUIDEntry;
     int nPlayerGuid;
     D2QuestDataA1Q5Strc* pA1Q4Data;
-    ::SGAMEDATA* pGame;
-    uint16_t nMsgId;
-    nMsgId = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     short int nNpcClassNo;
     nNpcClassNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
+    uint16_t nMsgId;
+    nMsgId = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     D2QuestDataA1Q5Strc* pQuestSpecific;
     pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q5;
     if (nMsgId == 0x7f && pQuestData->bIsNotIntroduction != '\0') {
       bool bStateChanged;
       bStateChanged = false;
       if (pQuestSpecific->bTalkedToNPC == '\x01') {
-        bStateChanged = pQuestData->nStateFlagPrev < 1;
-        if (bStateChanged) {
+        if (pQuestData->nStateFlagPrev < 1) {
+          bStateChanged = true;
           pQuestData->nQuestPacketFlags = '\0';
           QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, 1);
         }
@@ -217,8 +216,7 @@ void __fastcall Q05_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
     handle_town_npc_talk:
     if ((nNpcClassNo == 0x9a || nNpcClassNo == 0x96 || nNpcClassNo == 0x109 || nNpcClassNo == 0x9b || nNpcClassNo == 0x94 || nNpcClassNo == 0x93) && (nMsgId == 0x90 || nMsgId == 0x8c || nMsgId == 0x91 || nMsgId == 0x8d || nMsgId == 0x8f || nMsgId == 0x8e)) {
-      pGame = pQuestArgs->pGame;
-      D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
+      D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
       bResult = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
       if (bResult && pQuestSpecific->bQuestCompleted) {
         pQuestSpecific->bQuestCompleted = false;
@@ -237,35 +235,23 @@ void __fastcall Q05_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         nPlayerGuid = pQuestArgs->pPlayer->nUnitGUID;
       }
 
-      iStoneIdx = 0;
-      if (pQuestSpecific->nPlayersForRewardCount) {
-        pStoneGUIDBase = pQuestSpecific->aPlayersForRewardGUIDs;
-        pStoneGUIDEntry = pStoneGUIDBase;
-        while (*pStoneGUIDEntry != nPlayerGuid) {
-          iStoneIdx++;
-          pStoneGUIDEntry++;
-          if (iStoneIdx >= (int)(uint32_t)pQuestSpecific->nPlayersForRewardCount) {
-            return;
+      for (iStoneIdx = 0; iStoneIdx < pQuestSpecific->nPlayersForRewardCount; iStoneIdx++) {
+        if (pQuestSpecific->aPlayersForRewardGUIDs[iStoneIdx] == nPlayerGuid) {
+          for (iStoneIdx = 0; iStoneIdx < pQuestSpecific->nPlayersForRewardCount; iStoneIdx++) {
+            if (pQuestSpecific->aPlayersForRewardGUIDs[iStoneIdx] == nPlayerGuid) {
+              if (iStoneIdx != pQuestSpecific->nPlayersForRewardCount - 1) {
+                pQuestSpecific->aPlayersForRewardGUIDs[iStoneIdx] = pQuestSpecific->aPlayersForRewardGUIDs[pQuestSpecific->nPlayersForRewardCount - 1];
+              }
+
+              pQuestSpecific->nPlayersForRewardCount--;
+              if (pQuestSpecific->nPlayersInTowerCount < 0xc) {
+                pQuestSpecific->aPlayersInTowerGUIDs[pQuestSpecific->nPlayersInTowerCount] = nPlayerGuid;
+                pQuestSpecific->nPlayersInTowerCount++;
+              }
+              return;
+            }
           }
-        }
-
-        iStoneIdx = 0;
-        while (*pStoneGUIDBase != nPlayerGuid) {
-          iStoneIdx++;
-          pStoneGUIDBase++;
-          if (iStoneIdx >= (int)(uint32_t)pQuestSpecific->nPlayersForRewardCount) {
-            return;
-          }
-        }
-
-        if (iStoneIdx != pQuestSpecific->nPlayersForRewardCount - 1) {
-          pQuestSpecific->aPlayersForRewardGUIDs[iStoneIdx] = pQuestSpecific->aPlayersForRewardGUIDs[pQuestSpecific->nPlayersForRewardCount - 1];
-        }
-
-        pQuestSpecific->nPlayersForRewardCount--;
-        if (pQuestSpecific->nPlayersInTowerCount < 0xc) {
-          pQuestSpecific->aPlayersInTowerGUIDs[pQuestSpecific->nPlayersInTowerCount] = nPlayerGuid;
-          pQuestSpecific->nPlayersInTowerCount++;
+          return;
         }
       }
     }

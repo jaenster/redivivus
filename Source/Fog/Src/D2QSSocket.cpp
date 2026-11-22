@@ -213,8 +213,6 @@ int __stdcall ReceiveLoopCallback(D2QSSocketStrc * pQSSocket) {
     nPendingOffset = 0;
     D2NetDataStrc* pSafesock;
     pSafesock = pQSSocket->pSafesock;
-    int nPendingBytes;
-    nPendingBytes = 0;
     while (!pSafesock) {
       if (pQSSocket->bStopRequested) {
         goto cleanup;
@@ -232,11 +230,7 @@ int __stdcall ReceiveLoopCallback(D2QSSocketStrc * pQSSocket) {
         break;
       }
       if (nPollResult) {
-        nPollResult = pQSSocket->bStopRequested;
-        while (true) {
-          if (nPollResult) {
-            goto cleanup;
-          }
+        while (!pQSSocket->bStopRequested) {
 
           nBufferSpace = 0x2064 - nPendingOffset;
           nBytesRecv = Safesock::WSASocket2_Read(pQSSocket->pSafesock, aRecvBuffer + nPendingOffset, nBufferSpace);
@@ -254,13 +248,10 @@ int __stdcall ReceiveLoopCallback(D2QSSocketStrc * pQSSocket) {
             return 0;
           }
 
-          nPendingOffset = ProcessReceivedData(pQSSocket, aRecvBuffer, nBytesRecv + nPendingBytes);
-          nPendingBytes = nPendingOffset;
+          nPendingOffset = ProcessReceivedData(pQSSocket, aRecvBuffer, nBytesRecv + nPendingOffset);
           if (nBytesRecv < nBufferSpace) {
             break;
           }
-
-          nPollResult = pQSSocket->bStopRequested;
         }
       }
 

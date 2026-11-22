@@ -1987,33 +1987,26 @@ D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize() {
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __stdcall ITEMTBLS_CopyRunewordRecord(int32_t nRunewordId, char * pSourceRecord) {
-    int nDwords;
-    D2RunesTxt* pDstRecord;
     if (nTxtRunesSize.nSize <= nRunewordId) {
-      size_t nNewAllocSize;
-      nNewAllocSize = (nRunewordId * 9 + 9) * 0x20;
-      pDstRecord = nTxtRunesSize.pTable;
+      size_t nNewAllocSize = (nRunewordId * 9 + 9) * 0x20;
+      void* pOldTable = nTxtRunesSize.pTable;
       if (gbTxtAllocCountHeader) {
-        pDstRecord = (D2RunesTxt*)&nTxtRunesSize.pTable[-1].t1max7;
+        pOldTable = &nTxtRunesSize.pTable[-1].t1max7;
         nNewAllocSize += 4;
       }
 
-      nTxtRunesSize.pTable = (D2RunesTxt*)D2_REALLOC_POOL_AT(nullptr, pDstRecord, nNewAllocSize, ".\\DATATBLS\\ItemTbls.cpp", 0x95b);
+      D2RunesTxt* pTable = (D2RunesTxt*)D2_REALLOC_POOL_AT(nullptr, pOldTable, nNewAllocSize, ".\\DATATBLS\\ItemTbls.cpp", 0x95b);
       if (gbTxtAllocCountHeader) {
-        *(int32_t*)nTxtRunesSize.pTable->name = nRunewordId + 1;
-        nTxtRunesSize.pTable = (D2RunesTxt*)(nTxtRunesSize.pTable->name + 4);
+        *(int32_t*)pTable = nRunewordId + 1;
+        pTable = (D2RunesTxt*)((char*)pTable + 4);
       }
 
-      memset(nTxtRunesSize.pTable + nTxtRunesSize.nSize, 0, (nRunewordId - nTxtRunesSize.nSize) * 0x120);
+      nTxtRunesSize.pTable = pTable;
+      memset(pTable + nTxtRunesSize.nSize, 0, (nRunewordId - nTxtRunesSize.nSize) * sizeof(D2RunesTxt));
       nTxtRunesSize.nSize = nRunewordId + 1;
     }
 
-    pDstRecord = nTxtRunesSize.pTable + nRunewordId;
-    for (nDwords = 0x48; nDwords; nDwords--) {
-      *(uint32_t*)pDstRecord->name = *(uint32_t*)pSourceRecord;
-      pSourceRecord += 4;
-      pDstRecord = (D2RunesTxt*)(pDstRecord->name + 4);
-    }
+    memcpy(&nTxtRunesSize.pTable[nRunewordId], pSourceRecord, sizeof(D2RunesTxt));
 }
 
 D2RunesTxt * __stdcall ITEMTBLS_GetRunewordTxtRecord(int32_t nRunewordId) {

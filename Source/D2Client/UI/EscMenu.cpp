@@ -58554,26 +58554,9 @@ static int SizeCurrentSelectedEscMenuItem = 0; D2_STATIC_GUARD(SizeCurrentSelect
 
 namespace D2Client::UI::EscMenu {
 
-static int __stdcall UI_SLIDER_GetValueFromPosition(int32_t nCurrentPos, int32_t nMinPos, D2EscMenuItemStrc * pSliderItem, int32_t nMaxPos) {
-    int nStepCount = pSliderItem->nSubImageCount - 1;
-    float fStepCount = (float)nStepCount;
-    if (nStepCount < 0) {
-      fStepCount += 4294967296.0;
-    }
-
-    nStepCount = nMaxPos - nMinPos + 1;
-    float fRange = (float)nStepCount;
-    if (nStepCount < 0) {
-      fRange += 4294967296.0;
-    }
-
-    float fOffset = (float)(nCurrentPos - nMinPos);
-    if (nCurrentPos - nMinPos < 0) {
-      fOffset += 4294967296.0;
-    }
-
-    int32_t nResultValue = (int32_t)(int64_t)(fRange * fStepCount / fOffset);
-    return nResultValue;
+static int __stdcall UI_SLIDER_GetValueFromPosition(int32_t nMinPos, int32_t nCurrentPos, D2EscMenuItemStrc * pSliderItem, int32_t nMaxPos) {
+    float fStepCount = (float)(uint32_t)(pSliderItem->nSubImageCount - 1);
+    return (int32_t)(uint32_t)((float)(uint32_t)(nMaxPos - nMinPos + 1) * fStepCount / (float)(uint32_t)(nCurrentPos - nMinPos));
 }
 
 static uint32_t __fastcall UI_SLIDER_GetPositionFromValue(D2EscMenuItemStrc * pSliderItem, uint32_t nMinPos, uint32_t nMaxPos) {
@@ -58587,7 +58570,7 @@ void __fastcall UI_SLIDER_ApplyMasterVolumeFromSlider(D2EscMenuItemStrc * pItem,
 
 void __fastcall UI_SLIDER_ApplyMasterVolume(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int nCurrentVolume = D2Sound::Src::D2SoundFast::SOUND_GetMasterVolume();
-    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(100, 0, pItem, nCurrentVolume);
+    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(0, 100, pItem, nCurrentVolume);
     pItem->nImageIndex = nSliderValue;
 }
 
@@ -58598,7 +58581,7 @@ void __fastcall UI_SLIDER_ApplyMusicVolumeFromSlider(D2EscMenuItemStrc * pItem, 
 
 void __fastcall UI_SLIDER_ApplyMusicVolume(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int nCurrentVolume = D2Sound::Src::D2SoundFast::SOUND_GetMusicVolume();
-    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(100, 0, pItem, nCurrentVolume);
+    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(0, 100, pItem, nCurrentVolume);
     pItem->nImageIndex = nSliderValue;
 }
 
@@ -58616,7 +58599,7 @@ void __fastcall UI_SLIDER_ApplyPositionalBiasFromSlider(D2EscMenuItemStrc * pIte
 
 void __fastcall UI_SLIDER_ApplyPositionalBias(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int nCurrentBias = D2Sound::Src::D2SoundFast::SOUND_GetPositionalBias();
-    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(100, 0, pItem, nCurrentBias);
+    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(0, 100, pItem, nCurrentBias);
     pItem->nImageIndex = nSliderValue;
 }
 
@@ -58788,7 +58771,7 @@ void __fastcall StoreGamma(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
 void __fastcall UI_SLIDER_InitGamma(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     int32_t nStoredGamma = 0x9b;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "Gamma", 0, &nStoredGamma);
-    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(0xff, 0x37, pItem, nStoredGamma);
+    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(0x37, 0xff, pItem, nStoredGamma);
     pItem->nImageIndex = nSliderValue;
     BOOL bGammaSupported = D2gfx::D2GFX::D2GFX_CheckGamma();
     if (!bGammaSupported) {
@@ -58811,7 +58794,7 @@ void __fastcall UI_SLIDER_InitContrast(D2EscMenuItemStrc * pItem, D2UIMouseMsgSt
     eD2RendererMode eRendererMode_lcl = D2gfx::D2GFX::D2GFX_GetRendererMode();
     int32_t nContrastVal = eRendererMode_lcl != RENDERER_Glide ? 100 : 0;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "Contrast", 0, &nContrastVal);
-    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(100, 0, pItem, nContrastVal);
+    int32_t nSliderValue = UI_SLIDER_GetValueFromPosition(0, 100, pItem, nContrastVal);
     pItem->nImageIndex = nSliderValue;
     uint32_t nContrastPos = UI_SLIDER_GetPositionFromValue(pItem, 0, 100);
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Contrast", 0, nContrastPos);

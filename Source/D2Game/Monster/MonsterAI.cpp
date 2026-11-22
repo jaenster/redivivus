@@ -517,17 +517,17 @@ static BOOL __stdcall UnitHasSwitchAiSet(D2UnitStrc * pMonster) {
     return 1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 // nParam arrives in EDX, survives the UnitHasSwitchAiSet call (that callee clobbers only EAX/ECX) and is stored to nAiRelated2.
 BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nSwitchAiMode, uint32_t nTargetGUID) {
-    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && nSwitchAiMode < 5)) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER || nSwitchAiMode >= 5) {
       return 0;
     }
 
-    BOOL bHasSwitchAi = UnitHasSwitchAiSet(pUnit);
-    if (bHasSwitchAi) {
-      D2UnitDataMonsterStrc* pMonsterData;
-      pMonsterData = pUnit->pUnitData.pUnitDataMonster;
-      if (pMonsterData) {
+    if (UnitHasSwitchAiSet(pUnit)) {
+      if (GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
+        D2UnitDataMonsterStrc* pMonsterData = pUnit->pUnitData.pUnitDataMonster;
         pMonsterData->nAiRelated2 = nSwitchAiMode;
         pMonsterData->nAiRelated1 = nTargetGUID;
         return 1;
@@ -537,28 +537,39 @@ BOOL __fastcall AI_SetSwitchAiTargetParams(D2UnitStrc * pUnit, int32_t nSwitchAi
     return 0;
 }
 
-int32_t __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-      return pUnit->pUnitData.pUnitDataMonster->nAiRelated2;
+static inline D2UnitDataMonsterStrc * GetMonsterDataInline(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+        return pUnit->pUnitData.pUnitDataMonster;
     }
+    return nullptr;
+}
 
+int32_t __fastcall AI_GetSwitchAiParam1(D2UnitStrc * pUnit) {
+    if (GetTypeInline(pUnit) == UNIT_MONSTER) {
+      D2UnitDataMonsterStrc* pMonsterData = GetMonsterDataInline(pUnit);
+      if (pMonsterData) {
+        return pMonsterData->nAiRelated2;
+      }
+    }
     return 0;
 }
 
 uint32_t __fastcall AI_GetSwitchAiParam2(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-      return pUnit->pUnitData.pUnitDataMonster->nAiRelated1;
+    if (GetTypeInline(pUnit) == UNIT_MONSTER) {
+      D2UnitDataMonsterStrc* pMonsterData = GetMonsterDataInline(pUnit);
+      if (pMonsterData) {
+        return pMonsterData->nAiRelated1;
+      }
     }
-
     return 0;
 }
 
 void __fastcall AI_ClearSwitchAiTargetParams(D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
 
-    D2UnitDataMonsterStrc* pMonsterData = pUnit->pUnitData.pUnitDataMonster;
+    D2UnitDataMonsterStrc* pMonsterData = GetMonsterDataInline(pUnit);
     if (!pMonsterData) {
       return;
     }

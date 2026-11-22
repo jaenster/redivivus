@@ -1506,9 +1506,9 @@ void __fastcall Shrines_RefillFunction(D2ObjectOperateFnArg * pArguments, D2Shri
 
 void __fastcall Shrines_HealthExchangeFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int nCurrentHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pArguments->pAttacker, UNITSTAT_hitpoints, 0) >> 8;
-    uint32_t uHpDelta = pTxtShrines->dwArg0 * nCurrentHp / 100;
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pArguments->pAttacker, UNITSTAT_hitpoints, uHpDelta * -0x100, 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pArguments->pAttacker, UNITSTAT_mana, (pTxtShrines->dwArg1 << 8 << 8) / 100, 0);
+    uint32_t uHpDelta = (pTxtShrines->dwArg0 * nCurrentHp / 100) << 8;
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pArguments->pAttacker, UNITSTAT_hitpoints, -uHpDelta, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pArguments->pAttacker, UNITSTAT_mana, pTxtShrines->dwArg1 * uHpDelta / 100, 0);
 }
 
 void __fastcall Shrines_ManaExchangeFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {

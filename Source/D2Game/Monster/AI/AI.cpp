@@ -187,6 +187,13 @@
 #include "Source/D2Game/Seed.inline.h"
 #include "Source/Fog/Src/Safesock.h"
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -4779,10 +4786,7 @@ void __fastcall MONSTERAI_CalculateCounterAttackDamage(::SGAMEDATA * pGame, D2Un
     }
 
     int nVictimHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_hitpoints, 0);
-    uint32_t nDmgMax = nVictimHp >> 5;
-    if ((int)nDmgMax <= 1) {
-      nDmgMax = 1;
-    }
+    int nDmgMax = max(nVictimHp >> 5, 1); // steer-ok: windef.h min/max macros
 
     uint32_t nDmgMin = nVictimHp >> 3;
     if ((uint32_t)(nVictimHp >> 3) <= nDmgMax + 1) {
@@ -4790,11 +4794,9 @@ void __fastcall MONSTERAI_CalculateCounterAttackDamage(::SGAMEDATA * pGame, D2Un
     }
 
     nVictimHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_level, 0);
-    uint32_t nTrapDamageRoll = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nVictimHp >> 2);
-    char nLevelByte = (char)nVictimHp;
-    int nToHitChance = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_dexterity, 0) >> 1;
-    int nVictimDex = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_armorclass, 0);
-    nVictimHp = ((uint32_t)(uint8_t)((char)nTrapDamageRoll + nLevelByte) + nToHitChance * -5 - nVictimHp) * 2 - nVictimDex + 0x7d;
+    uint8_t nBase = (uint8_t)(D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, nVictimHp >> 2) + nVictimHp);
+    nVictimHp = (nBase - (D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_dexterity, 0) >> 1) * 5 - nVictimHp) * 2 - D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictim, UNITSTAT_armorclass, 0) + 0x7d;
+    uint32_t nTrapDamageRoll;
     if (nVictimHp < 0x41) {
       nVictimHp = 0x41;
     }
@@ -4811,25 +4813,24 @@ void __fastcall MONSTERAI_CalculateCounterAttackDamage(::SGAMEDATA * pGame, D2Un
     }
 
     memset(&sDamage, 0, 0x70);
-    uint32_t dwPhysDamage = sDamage.dwPhysDamage;
-    if (nDmgType != 1) {
-      if (nDmgType != 2) {
-        dwPhysDamage = nTrapDamageRoll;
-        if (nDmgType == 3) {
-          sDamage.dwHitClass = 0x30;
-          dwPhysDamage = sDamage.dwPhysDamage;
-          sDamage.dwColdDmg = nTrapDamageRoll;
-        }
-      } else {
+    switch (nDmgType) {
+      case 1:
+        sDamage.dwFireDmg = nTrapDamageRoll;
+        sDamage.dwHitClass = 0x20;
+        break;
+      case 2:
         sDamage.dwLtngDamage = nTrapDamageRoll;
         sDamage.dwHitClass = 0x40;
-      }
-    } else {
-      sDamage.dwFireDmg = nTrapDamageRoll;
-      sDamage.dwHitClass = 0x20;
+        break;
+      case 3:
+        sDamage.dwColdDmg = nTrapDamageRoll;
+        sDamage.dwHitClass = 0x30;
+        break;
+      default:
+        sDamage.dwPhysDamage = nTrapDamageRoll;
+        break;
     }
 
-    sDamage.dwPhysDamage = dwPhysDamage;
     sDamage.wResultFlags = 1;
     bResult = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pVictim, STATE_uninterruptable);
     if (!bResult) {
@@ -15820,12 +15821,12 @@ void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     uint32_t nSeedHighScratch;
     uint32_t nOverlay;
     uint32_t sNewSeed;
-    int nDistanceToTarget = pAiParam->nDistanceToTarget;
-    int bEngagedInCombat = pAiParam->bEngagedInCombat;
+    int nDistanceToTarget = pAiParam->nDistanceToTarget; // steer-ok: the original reads both AI parameters at entry; without the copies OUR-4
+    int bEngagedInCombat = pAiParam->bEngagedInCombat; // steer-ok: the original reads both AI parameters at entry; without the copies OUR-4
     D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     D2SeedStrc* pSeed = &pUnit->sSeed;
+    D2AiGeneralStrc* pMonsterAiGeneral = pAiParam->pMonsterAiGeneral;
     D2UnitStrc* pUnitCopy = pUnit;
     if (!pMonsterAiGeneral->dwArg0) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_blue, 0);
@@ -15836,22 +15837,26 @@ void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     pMonsterAiGeneral->dwArg0++;
     int nMulHighScratch = (int)pMonStats->aip[4][pGame->nDifficulty];
     if (pMonsterAiGeneral->dwArg0 == nMulHighScratch) {
-      if (pMonStats->aip[5][pGame->nDifficulty] != 1) {
-        nOverlay = 0x2e;
-        D2Common::Units::SetOverlay(pUnitCopy, 0x2e, 0);
-      } else {
-        nOverlay = 0x96;
-        D2Common::Units::SetOverlay(pUnitCopy, 0x96, 0);
+      switch (pMonStats->aip[5][pGame->nDifficulty]) {
+        case 1:
+          D2Common::Units::SetOverlay(pUnitCopy, 0x96, 0);
+          break;
+        default:
+          D2Common::Units::SetOverlay(pUnitCopy, 0x2e, 0);
+          break;
       }
 
       PlanNextAiMove(pGame, pUnitCopy, pMonStats->aidel[pGame->nDifficulty] + 1);
       return;
     }
-    if (nMulHighScratch < pMonsterAiGeneral->dwArg0) {
-      if (pMonStats->aip[5][pGame->nDifficulty] != 1) {
-        D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, STATE_red, 1);
-      } else {
-        D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, STATE_blue, 1);
+    if (pMonsterAiGeneral->dwArg0 > nMulHighScratch) {
+      switch (pMonStats->aip[5][pGame->nDifficulty]) {
+        case 1:
+          D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, STATE_blue, 1);
+          break;
+        default:
+          D2Common::DATATBLS::ItemStats::SetState(pUnitCopy, STATE_red, 1);
+          break;
       }
 
       pMonsterAiGeneral->dwArg1 = 1;
@@ -15898,13 +15903,7 @@ void __fastcall AITHINK_Fn1_SandRaider(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
         return;
       }
     } else {
-      if (!pMonsterAiGeneral->dwArg1) {
-        sNewSeed = D2_SeedRoll(pSeed);
-        if ((int)(sNewSeed % 100) < (int)pMonStats->aip[3][pGame->nDifficulty]) {
-          MONSTERAI_CommandWalkToUnit(pGame, pUnitCopy, pTarget, 0);
-          return;
-        }
-      } else {
+      if (pMonsterAiGeneral->dwArg1 || (int)(D2_SeedRoll(pSeed) % 100) < (int)pMonStats->aip[3][pGame->nDifficulty]) {
         MONSTERAI_CommandWalkToUnit(pGame, pUnitCopy, pTarget, 0);
         return;
       }

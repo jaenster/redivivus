@@ -1101,29 +1101,21 @@ uint8_t __fastcall CLIENT_GetCharTemplate(D2ClientStrc * pClient) {
 }
 
 uint32_t __fastcall QSERVER_IsClientAllowedToJoin(uint32_t nClientId, uint32_t nExpectedState) {
-    uint32_t _bResult;
-    bool bResult;
     if (!gQServerClientTablesInitialized) {
       return 0;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ _bResult = 0;
+    uint32_t bResult = 0;
     EnterCriticalSection(&gQServerClientByIdCs);
-    D2ClientStrc* pClient = QServerClientBucketById[nClientId & 0xff];
-    if (pClient) {
-      while (pClient->nClientNo != nClientId) {
-        pClient = pClient->pServerNext;
-        if (!pClient) {
-          /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
-          return 0;
-        }
+    for (D2ClientStrc* pClient = QServerClientBucketById[nClientId & 0xff]; pClient; pClient = pClient->pServerNext) {
+      if (pClient->nClientNo == nClientId) {
+        bResult = pClient->ConnectionState == nExpectedState;
+        break;
       }
-
-      _bResult = (uint32_t)(pClient->ConnectionState == nExpectedState);
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
-    return _bResult;
+    LeaveCriticalSection(&gQServerClientByIdCs);
+    return bResult;
 }
 
 // Handles a heartbeat pong response for a client identified by nClientId. Computes round-trip ping as (now - dwSendTick) - dwClientTick. In-game path: stores the sample in a 16-slot ring buffer and recomputes the rolling average across up to 16 samples. Pre-game (QServer) path: accumulates an average over up to 10 samples using 64-bit arithmetic. In both cases sends the 0x8F Pong packet back to the client and resets its timeout watchdog timestamp.
@@ -1242,9 +1234,9 @@ BOOL __fastcall NET_D2GS_SERVER_GetPlayerNameByClientId(int32_t nClientId, char 
 
 int32_t __fastcall GetClientId(char * szCharName) {
     int nFoundClientId = 0;
-    uint16_t uVar1 = Fog::SMem::HashForName(szCharName);
+    int nBucket = (uint16_t)Fog::SMem::HashForName(szCharName) & 0xff;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerClientByNameCs);
-    D2ClientStrc* pClient = QServerClientBucketByName[uVar1 & 0xff];
+    D2ClientStrc* pClient = QServerClientBucketByName[nBucket];
     while (pClient && !nFoundClientId) {
       int32_t nCmpResult;
       nCmpResult = Storm::Source::SSTR::SStrCmpI(pClient->szCharName, szCharName, 0x10);
@@ -2267,7 +2259,6 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
 // When fClientFlags bit 1 is set, looks up the unit (nAttachedUnitType, dwAttachedUnitGUID). Returns it if IsUnitNearClient, otherwise clears the bit and returns NULL. Halts (line 1977) on a NULL client.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 D2UnitStrc * __fastcall CLIENT_GetAttachedUnit(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
-    BOOL BVar1;
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b9);
       exit(-1);
@@ -2278,14 +2269,15 @@ D2UnitStrc * __fastcall CLIENT_GetAttachedUnit(::SGAMEDATA * pGame, D2ClientStrc
 
     D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, pClient->nAttachedUnitType, pClient->dwAttachedUnitGUID);
     if (pUnit) {
-      BVar1 = IsUnitNearClient(pUnit, pClient);
-      if (BVar1) {
+      if (IsUnitNearClient(pUnit, pClient)) {
         return pUnit;
       }
+
+      pUnit = nullptr;
     }
 
     pClient->fClientFlags &= -3;
-    return nullptr;
+    return pUnit;
 }
 
 // Dead code / unused client join path. Sets pClient->nClass to bParam, resolves the player unit and its spawn coords, then deletes the existing unit from the room (AllocDrlgDelete + FreeServerUnit) and reloads it from scratch via CLIENT_LoadCharacterAndSendGameData + CLIENT_PlacePlayerInRoom. Clears the lowest fClientFlags bit and fires GAME_OnClientRoomChange if the room changed. Halts with an internal error if pClient is null. Not referenced by any active join flow.

@@ -6077,7 +6077,7 @@ void __fastcall UI_UnregisterHandlersForPanel(eD2UIvars ePanel) {
 
 DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DWORD bAdjustMouse) {
     int iVar1;
-    if (UI_RECIPESCROLL < eUI) {
+    if (eUI >= 0x26) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13fb);
       exit(-1);
     }
@@ -6150,10 +6150,10 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
     switch (eUI) {
       case UI_ANVIL:
         if (!iVar1) {
-          goto clear_world_overlay;
+          Path::TypeOfUiOverlayOverWorld(0);
+          break;
         }
-      eOverlayMode = 1;
-      Path::TypeOfUiOverlayOverWorld(eOverlayMode);
+      Path::TypeOfUiOverlayOverWorld(1);
       break;
       case UI_NPCSHOP:
 
@@ -6169,29 +6169,28 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
 
       case UI_0x20:
         if (!iVar1) {
-          clear_world_overlay:
           Path::TypeOfUiOverlayOverWorld(0);
-          return 1;
+          break;
         }
       Path::TypeOfUiOverlayOverWorld(3);
-      return 1;
+      break;
       case UI_CONFIG:
         if (iVar1) {
-          return 1;
+          break;
         }
       UI_ConfigKeyBindModeCancelAndRevert();
-      return 1;
+      break;
       case UI_INVENTORY:
         Inv::INV_ResetHoverAndContextState();
       case UI_SKILLTREE:
         if (Draw::GFX_bShowUIFlag.CharStat || Draw::GFX_bShowUIFlag.WaypointMenu || Draw::GFX_bShowUIFlag.Quest || Draw::GFX_bShowUIFlag.PartyPane || Draw::GFX_bShowUIFlag.MercMenu || Draw::GFX_bShowUIFlag.UnusedScroll || Draw::GFX_bShowUIFlag.PartyMenu) {
           if (!iVar1) {
             Path::TypeOfUiOverlayOverWorld(2);
-            return 1;
+            break;
           }
 
           Path::TypeOfUiOverlayOverWorld(3);
-          return 1;
+          break;
         }
       if (iVar1) {
         Path::TypeOfUiOverlayOverWorld(1);
@@ -6199,14 +6198,14 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
           iVar1 = ScreenSizeX / 4;
           if (iVar2 > iVar1) {
             Cursor::SetMouseXY(iVar2 - iVar1, y);
-            return 1;
+            break;
           }
         }
       } else {
         Path::TypeOfUiOverlayOverWorld(0);
         if (bAdjustMouse && iVar2 < ScreenSizeX / 2) {
           Cursor::SetMouseXY(ScreenSizeX / 4 + iVar2, y);
-          return 1;
+          break;
         }
       }
 
@@ -6228,37 +6227,35 @@ DWORD __fastcall SetUIFlag(eD2UIvars eUI, eD2UIvarsSetType neD2UIvarsSetType, DW
           if (iVar1) {
             Path::TypeOfUiOverlayOverWorld(2);
             if (!bAdjustMouse) {
-              return 1;
+              break;
             }
 
             iVar1 = ScreenSizeX / 4;
             if (iVar2 >= ScreenSizeX - iVar1) {
-              return 1;
+              break;
             }
 
             Cursor::SetMouseXY(iVar1 + iVar2, y);
-            return 1;
+            break;
           }
 
           Path::TypeOfUiOverlayOverWorld(0);
           if (!bAdjustMouse) {
-            return 1;
+            break;
           }
           if (iVar2 <= ScreenSizeX / 2) {
-            return 1;
+            break;
           }
 
           Cursor::SetMouseXY(iVar2 - ScreenSizeX / 4, y);
-          return 1;
+          break;
         }
-      eOverlayMode = 3;
-      if (!iVar1) {
-        eOverlayMode = 1;
-        Path::TypeOfUiOverlayOverWorld(eOverlayMode);
-        break;
+      if (iVar1) {
+        Path::TypeOfUiOverlayOverWorld(3);
+      } else {
+        Path::TypeOfUiOverlayOverWorld(1);
       }
 
-      Path::TypeOfUiOverlayOverWorld(eOverlayMode);
       break;
       default:
         break;
@@ -8039,24 +8036,23 @@ void __stdcall INPUT_ConfigKeyBind(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_ConfigKeyBindAlternate(D2UIMouseMsgStrc * pMsg) {
-    BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
-    if (bExitFlag) {
+    if (GAME::Game::GAMEDATA_GetExitFlag3()) {
       pMsg->bHandled = 0;
       return;
     }
+    int nPendingKeyStrId = 0;
     if (gnConfigBindingFirstClick) {
-      int nPendingKeyStrId = 0;
-      bExitFlag = CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, (uint32_t)(uint16_t)pMsg->nWParam, (uint16_t*)&nPendingKeyStrId);
-      if (bExitFlag) {
+      if (CmdTbl::CMD_SetKeyBinding(gpStatDescriptorTable[g_ControlConfigUIState].nCmdIndex, nConfigControlSelected, (uint32_t)(uint16_t)pMsg->nWParam, (uint16_t*)&nPendingKeyStrId)) {
         UI_ConfigKeyBindModeDisable(1);
         Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
       }
-      if ((short int)nPendingKeyStrId) {
-        *(uint16_t*)(char*)&gnUICtrlConfigPendingKeyStrId = (short int)nPendingKeyStrId;
-        gdwUICtrlConfigKeyBindTimestamp = GetTickCount();
-      }
     } else {
       gnConfigBindingFirstClick = 1;
+    }
+
+    if ((short int)nPendingKeyStrId) {
+      *(uint16_t*)(char*)&gnUICtrlConfigPendingKeyStrId = (short int)nPendingKeyStrId;
+      gdwUICtrlConfigKeyBindTimestamp = GetTickCount();
     }
 
     pMsg->bHandled = 1;

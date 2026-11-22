@@ -403,15 +403,24 @@ D2UnitStrc * __fastcall GetOwnerUnit(D2UnitStrc * pUnit) {
     return pDVar1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
+static inline D2UnitDataMonsterStrc * GetMonsterDataInline(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+        return pUnit->pUnitData.pUnitDataMonster;
+    }
+    return nullptr;
+}
+
 // @sourcefile .\Ai\AiGeneral.cpp
 void __fastcall AddMinionToList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMinion) {
     int nMinionGUID;
     D2AiGeneralStrc* pAiGeneral;
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
-    if (pUnit->pUnitData.pUnitDataMonster) {
-      pAiGeneral = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
+    if (GetMonsterDataInline(pUnit)) {
+      pAiGeneral = GetMonsterDataInline(pUnit)->pAiGeneral;
     } else {
       pAiGeneral = 0;
     }
