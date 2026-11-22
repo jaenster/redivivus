@@ -1573,22 +1573,16 @@ uint32_t __fastcall Unreferenced_005451b0(D2UnitStrc * pUnit) {
 }
 
 void __fastcall QUESTGUID_AddPlayerToList(D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID) {
-    uint16_t nPlayerCount = pQuestGUID->nPlayerCount;
-    if (nPlayerCount >= 0x20) {
+    if (pQuestGUID->nPlayerCount >= 0x20) {
       return;
     }
-    if (nPlayerCount) {
-      int nSearchIdx = 0;
-      do {
-        if (pQuestGUID->aPlayerGUID[nSearchIdx] == nPlayerGUID) {
-          return;
-        }
-
-        nSearchIdx++;
-      } while (nSearchIdx < (int)(uint32_t)pQuestGUID->nPlayerCount);
+    for (int nSearchIdx = 0; nSearchIdx < pQuestGUID->nPlayerCount; nSearchIdx++) {
+      if (pQuestGUID->aPlayerGUID[nSearchIdx] == nPlayerGUID) {
+        return;
+      }
     }
 
-    pQuestGUID->aPlayerGUID[nPlayerCount] = nPlayerGUID;
+    pQuestGUID->aPlayerGUID[pQuestGUID->nPlayerCount] = nPlayerGUID;
     pQuestGUID->nPlayerCount++;
 }
 
