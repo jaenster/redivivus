@@ -2685,14 +2685,17 @@ void __stdcall Return(D2UnitStrc * pUnit, int32_t nParam) {
 
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+static inline D2UnitDataPlayerStrc * GetPlayerDataInline(D2UnitStrc * pUnit);
+
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall InitRightSkill(D2UnitStrc * pUnit) {
     int32_t nErrLine;
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
     }
 
-    D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+    D2UnitDataPlayerStrc* pPlayerData = GetPlayerDataInline(pUnit);
     if (!pPlayerData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13f6);
       exit(-1);
