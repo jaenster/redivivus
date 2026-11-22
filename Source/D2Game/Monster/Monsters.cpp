@@ -3037,16 +3037,20 @@ void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, D2UnitStrc * pUni
     UMOD_ApplyEnchantmentsToMonster(pGame, nullptr, pUnit, 1, 0, 0);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 void __fastcall MONSTER_PromoteToUnique(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
 
     D2UnitDataMonsterStrc* pMonsterData = pUnit->pUnitData.pUnitDataMonster;
-    if (!(pMonsterData && pMonsterData != (D2UnitDataMonsterStrc*)-28)) {
+    if (!pMonsterData || !pMonsterData->MonUModList) {
       return;
     }
-    if (true && pMonsterData) {
+
+    pMonsterData = GetTypeInline(pUnit) == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : nullptr;
+    if (pMonsterData) {
       pMonsterData->eMonsterType |= 1;
     }
 
