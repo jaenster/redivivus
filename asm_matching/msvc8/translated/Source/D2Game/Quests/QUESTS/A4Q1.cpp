@@ -566,7 +566,7 @@ void __fastcall Q26_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 1;
-    ::SGAMEDATA* pSVar1 = pQuestData->pGame;
+    ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->pNpcMessages = A4Q1::aNpcGossipData;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q26_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q26_Callback03_ChangedLevel;
@@ -579,23 +579,11 @@ void __fastcall Q26_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->nInitNo = 4;
     pQuestData->fpStatusFilter = 0;
     pQuestData->fpActiveFilter = Q26_ActiveFilter;
-    D2QuestDataA4Q1Strc* pQuestSpecificData = D2_NEW_POOL_AT(pSVar1->pMemoryPool, D2QuestDataA4Q1Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q1.cpp", 0x2a0);
+    D2QuestDataA4Q1Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA4Q1Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q1.cpp", 0x2a0);
     pQuestData->pQuestSpecificData.pA4Q1 = pQuestSpecificData;
     pQuestData->fpSequenceFilter = Q26_SequenceFilter;
     pQuestData->nSequenceQuestId = QUEST_SpokeToTyrael;
-    pQuestSpecificData->field_0x00 = 0;
-    pQuestSpecificData->ptIzualDeath.x = 0;
-    pQuestSpecificData->ptIzualDeath.y = 0;
-    pQuestSpecificData->bHasStep4 = 0;
-    pQuestSpecificData->bSpawnTimerAdded = 0;
-    pQuestSpecificData->field_0x0E = 0;
-    pQuestSpecificData->bIzualTalked = 0;
-    pQuestSpecificData->bIzualLocationSet = 0;
-    pQuestSpecificData->bTalkedToTyrael = 0;
-    pQuestSpecificData->bTalkedToIzualNpc = 0;
-    pQuestSpecificData->field_0x13 = 0;
-    pQuestSpecificData->pIzualUnit = 0;
-    pQuestSpecificData->field_0x18 = 0;
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
 }
 
 }}}} // namespace D2Game::Quests::QUESTS::A4Q1

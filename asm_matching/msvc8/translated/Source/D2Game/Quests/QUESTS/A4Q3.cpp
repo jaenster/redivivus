@@ -765,22 +765,7 @@ void __fastcall Q28_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[4] = Q28_Callback04_ItemPickedUp;
     D2QuestDataA4Q3Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA4Q3Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q3.cpp", 0x358);
     pQuestData->pQuestSpecificData.pA4Q3 = pQuestSpecificData;
-    pQuestSpecificData->nForgeStage = 0;
-    pQuestSpecificData->bForgeQuestAccepted = 0;
-    pQuestSpecificData->bDropActive = 0;
-    pQuestSpecificData->bSetupUpdateFlag = 0;
-    pQuestSpecificData->field_0x05 = 0;
-    pQuestSpecificData->field_0x06 = 0;
-    pQuestSpecificData->field_0x07 = 0;
-    pQuestSpecificData->nGemQuality = 0;
-    pQuestSpecificData->nHammerStrikeCount = 0;
-    pQuestSpecificData->nHammerDropCount = 0;
-    pQuestSpecificData->nItemsToDrop = 0;
-    pQuestSpecificData->field_0x18 = 0;
-    pQuestSpecificData->bGotHammer = 0;
-    pQuestSpecificData->field_0x1D = 0;
-    pQuestSpecificData->field_0x1E = 0;
-    pQuestSpecificData->field_0x1F = 0;
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
 }
 
 // A4Q3 Hell's Forge — Q28_TimerCallback_DropForgeRunes: the forge reward drop, fired by a scheduled event after the smash. Drops nItemsToDrop gems each pass — gem code chosen per difficulty (Act3/Act2/Act1 gem-code tables = hell/nm/normal) from the quest control seed — decrementing the gem-quality counter each pass and re-scheduling itself until exhausted; on the final pass (expansion only) also drops one rune from the per-difficulty rune table (normal r01-r11, nightmare r12-r22, hell r15-r25). This is the classic Hell's Forge gem+rune reward. No QuestRecord writes (drops only).

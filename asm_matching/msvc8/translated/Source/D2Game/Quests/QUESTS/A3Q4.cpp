@@ -702,25 +702,8 @@ void __fastcall Q21_InitData(D2QuestDataStrc * pQuestData) {
     QUESTGUID_SetPlayerCountToZero(&pQuestData->sQuestGUID);
     D2QuestDataA3Q4Strc* pQuestSpecificData = D2_NEW_POOL_AT(pQuestData->pGame->pMemoryPool, D2QuestDataA3Q4Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q4.cpp", 0x340);
     pQuestData->pQuestSpecificData.pA3Q4 = pQuestSpecificData;
-    /* Should use here memset */ memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
-    pQuestSpecificData->bBossKillTracking = false;
-    pQuestSpecificData->field_0x3 = 0;
-    pQuestSpecificData->nBirdKillerGUID = 0;
-    pQuestSpecificData->bRewardGivenToAlchemist = '\0';
-    pQuestSpecificData->bCainToldAboutTome = '\0';
-    pQuestSpecificData->bAlchemistTradedBird = '\0';
-    pQuestSpecificData->bJadeGivenToMeshif = '\0';
-    pQuestSpecificData->bBirdDropEnabled = false;
-    pQuestSpecificData->field_0xD = 0;
-    pQuestSpecificData->field_0xE = 0;
-    pQuestSpecificData->field_0xF = 0;
-    pQuestSpecificData->nBirdItemCount = 0;
-    pQuestSpecificData->bBirdItemGiven = false;
-    pQuestSpecificData->bReShowPending = 0;
-    pQuestSpecificData->field_0x16 = 0;
-    pQuestSpecificData->field_0x17 = 0;
-    pQuestSpecificData->nGoldenBirdState = 0;
-    /* Actual initialization */ pQuestSpecificData->bBirdDropEnabled = true;
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
+    pQuestSpecificData->bBirdDropEnabled = true;
     pQuestSpecificData->bCanDropBird = '\x01';
 }
 

@@ -263,25 +263,14 @@ void __fastcall Q24_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q7.cpp
 void __fastcall Q24_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, 0x3c);
-    ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q24_Callback13_PlayerStartedGame;
     pQuestData->pNpcMessages = 0;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
     pQuestData->nStateFlagPrev = 0;
-    D2QuestDataA3Q7Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA3Q7Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q7.cpp", 0xb9);
+    D2QuestDataA3Q7Strc* pQuestSpecificData = D2_NEW_POOL_AT(pQuestData->pGame->pMemoryPool, D2QuestDataA3Q7Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q7.cpp", 0xb9);
     pQuestData->pQuestSpecificData.pA3Q7 = pQuestSpecificData;
-    /* memset should be used here */ pQuestSpecificData->bHasSpawnCoords = false;
-    pQuestSpecificData->bQuestCompleted = false;
-    pQuestSpecificData->bCoordsAdjusted = false;
-    pQuestSpecificData->field_0x3 = 0;
-    pQuestSpecificData->nDarkWandererX = 0;
-    pQuestSpecificData->nDarkWandererY = 0;
-    pQuestSpecificData->bPortalsSpawned = false;
-    pQuestSpecificData->bTimerStarted = false;
-    pQuestSpecificData->field_0x0E = 0;
-    pQuestSpecificData->field_0x0F = 0;
-    pQuestSpecificData->nDarkWandererGUID = 0;
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     pQuestData->nQuestIdReal = QUEST_SpokeToHratli;
     pQuestData->fpStatusFilter = Q24_StatusFilter;
     pQuestData->fpActiveFilter = Q24_ActiveFilter;
