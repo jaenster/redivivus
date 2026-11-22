@@ -2878,18 +2878,9 @@ void __fastcall QUESTLOG_ToggleQuestScreen(DWORD bAdjustMouse) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS(char * pBytes) {
-    int nDwordCopyCount;
-    uint8_t* pQuestStateDst = &gQuestLog.aQuestLogStateBuffer;
-    for (nDwordCopyCount = 10; nDwordCopyCount; nDwordCopyCount--) {
-      *(uint32_t*)pQuestStateDst = *(uint32_t*)pBytes;
-      pBytes += 4;
-      pQuestStateDst += 4;
-    }
-
-    *(uint16_t*)pQuestStateDst = *(uint16_t*)pBytes;
+    memcpy(&gQuestLog.aQuestLogStateBuffer, pBytes, 0x2a);
     gQuestLog.bQuestLogWindowOpen = '\0';
-    uint8_t bItemDescDirty = INV_GetItemDescDirtyFlag();
-    if (bItemDescDirty != '\0') {
+    if (INV_GetItemDescDirtyFlag()) {
       return;
     }
     if (gQuestLog.bQuestLogOpen == 2) {
