@@ -492,34 +492,29 @@ BOOL __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution) {
 }
 
 BOOL __stdcall D2GFX_DestroyWindow() {
-    int nCursorDisplayCount;
+    BOOL bSuccess = TRUE;
     if (!RENDERER_CurrentRenderedFunctions) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 300);
       exit(-1);
     }
     if (!IsOSCursorVisible) {
-      do {
-        /* BOOL bShow for ShowCursor */ nCursorDisplayCount = ShowCursor(1);
-      } while (nCursorDisplayCount < 0);
-
-      IsOSCursorVisible = 1;
-    }
-
-    BOOL bResult = RENDERER_CurrentRenderedFunctions->nfpDestroyWindow();
-    uint32_t bSuccess = 1;
-    if (bResult == 0) {
-      bSuccess = 0;
-    }
-    if (hwndD2GFX_Window) {
-      /* HWND hWnd for DestroyWindow */ bResult = DestroyWindow(hwndD2GFX_Window);
-      if (!bResult) {
-        bSuccess = 0;
+      while (ShowCursor(TRUE) < 0) {
       }
 
-      hwndD2GFX_Window = (HWND)0x0;
+      IsOSCursorVisible = TRUE;
+    }
+    if (!RENDERER_CurrentRenderedFunctions->nfpDestroyWindow()) {
+      bSuccess = FALSE;
+    }
+    if (hwndD2GFX_Window) {
+      if (!DestroyWindow(hwndD2GFX_Window)) {
+        bSuccess = FALSE;
+      }
+
+      hwndD2GFX_Window = nullptr;
     }
 
-    /* DWORD dwFlags for ChangeDisplaySettingsA */ /* DEVMODEA * lpDevMode for ChangeDisplaySettingsA */ ChangeDisplaySettingsA(nullptr, 0);
+    ChangeDisplaySettingsA(nullptr, 0);
     return bSuccess;
 }
 
