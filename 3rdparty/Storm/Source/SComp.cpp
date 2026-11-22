@@ -214,17 +214,15 @@ D2BitStreamReaderStrc * __thiscall LINKEDLIST_Unlink(D2BitStreamReaderStrc * pLi
 }
 
 int __fastcall Unreferenced_0041d8a0(D2BitStreamReader32Strc * pReader) {
-    uint32_t uVar2 = pReader->dwBitBuffer;
-    uint32_t* puVar1 = &pReader->nBitCount;
-    (*puVar1)--;
-    pReader->dwBitBuffer = uVar2 >> 1;
-    if (!*puVar1) {
+    int nBit = pReader->dwBitBuffer & 1;
+    pReader->dwBitBuffer >>= 1;
+    if (!--pReader->nBitCount) {
       pReader->dwBitBuffer = *pReader->pCur;
       pReader->pCur++;
       pReader->nBitCount = 0x20;
     }
 
-    return uVar2 & 1;
+    return nBit;
 }
 
 uint32_t __thiscall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, uint16_t * nBitCount, uint32_t nMask) {
