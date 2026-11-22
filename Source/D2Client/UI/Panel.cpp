@@ -458,18 +458,15 @@ static int32_t PANEL_GetSmoothedStatValue(eD2UnitStat eUnitStat) {
 }
 
 void __stdcall PANEL_DrawHealthOrb() {
-    eD2RendererMode eRenderer;
     D2GfxDataStrc sGfxData;
-    eD2UnitStat eUnitStat;
-    uint16_t nLayer;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    int32_t nValue = PANEL_GetSmoothedStatValue(UNITSTAT_hitpoints);
-    int32_t nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-    if (!nMaxValue) {
+    int32_t nLife = PANEL_GetSmoothedStatValue(UNITSTAT_hitpoints);
+    int32_t nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+    if (!nMaxLife) {
       return;
     }
 
-    int nPercentHideFromBottom = nValue * 0x50 / nMaxValue;
+    int nPercentHideFromBottom = nLife * 0x50 / nMaxLife;
     if (nPercentHideFromBottom >= 0x1 && nPercentHideFromBottom <= 0x2) {
       pUnit = UNIT::Player::GetPlayerUnit_UI();
       if (pUnit && pUnit->eUnitType == UNIT_PLAYER && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
@@ -478,38 +475,34 @@ void __stdcall PANEL_DrawHealthOrb() {
     }
 
     memset(&sGfxData, 0, 0x48);
-    eD2States eState2 = STATE_healthpot;
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = Hlthmana;
     sGfxData.nFrameNumber = 0;
-    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState2);
-    if (eState) {
-      int nRegenWidth;
-      nLayer = 0;
-      eUnitStat = UNITSTAT_hpregen;
-      nRegenWidth = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nLayer);
-      nRegenWidth = nRegenWidth * 0x50 / 100;
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), STATE_healthpot)) {
+      int nRegenWidth = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), UNITSTAT_hpregen, 0) * 0x50 / 100;
       if (nRegenWidth > 0x50) {
         nRegenWidth = 0x50;
       }
       if (nRegenWidth > nPercentHideFromBottom) {
-        eRenderer = D2gfx::D2GFX::D2GFX_GetRendererMode();
-        if (eRenderer == RENDERER_Direct3D) {
-          nValue = 0x1c;
+        if (D2gfx::D2GFX::D2GFX_GetRendererMode() == RENDERER_Direct3D) {
           D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1c, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         } else {
-          nValue = 0x1d;
           D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         }
       }
     }
 
-    eState2 = STATE_poison;
-    eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState2);
-    sGfxData.nFrameNumber = eState ? 2 : 0;
+    sGfxData.nFrameNumber = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), STATE_poison) ? 2 : 0;
     if (nPercentHideFromBottom) {
-      D2gfx::D2GFX::D2GFX_GetRendererMode();
-      D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+      switch (D2gfx::D2GFX::D2GFX_GetRendererMode()) {
+        case RENDERER_Windowed:
+        case RENDERED_DirectDraw:
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+          break;
+        default:
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, 0x1d, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+          break;
+      }
     }
 
     sGfxData.pDC6 = overlap;
