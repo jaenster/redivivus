@@ -3850,10 +3850,9 @@ void __stdcall SBigGcd(BigData * pResult, BigData * pBigA, BigData * pBigB) {
 // @oracle Mac PPC 1.10b Storm -- PPC SBigMod -> 10099900, 160B, single bl .Div (same method as SBigDiv). 1.14d passes the caller's destination in the REMAINDER slot. Slot order proved from BigBuffer_MulMod 004245f0, which reduces a product by calling Div with the product in the quotient slot and the result in the remainder slot.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigMod(BigData * pResult, BigData * pBigA, BigData * pBigB) {
-    uint32_t nStackBase = pResult->sStack.nUsed;
-    pResult->sStack.nUsed = nStackBase + 1;
-    BigBuffer_Div(pResult->sStack.aBuffers + nStackBase, &pResult->sPrimary, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    pResult->sStack.nUsed--;
+    BigStack* pStack = &pResult->sStack;
+    BigBuffer_Div(&pStack->aBuffers[pStack->nUsed++], &pResult->sPrimary, &pBigB->sPrimary, pStack, &pBigA->sPrimary);
+    pStack->nUsed--;
 }
 
 // @renamed-from SBIG_MontgomeryMulWrapper (2026-08-28, Storm PowerPC oracle pass 4)
