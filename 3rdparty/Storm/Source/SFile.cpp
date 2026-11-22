@@ -146,11 +146,7 @@ int __fastcall Unreferenced_004151b0(int param_1) {
 // @blizzard DecompressLzw_BufferRead (SFILE.CPP)
 uint32_t SFILE_DecompressLzw_BufferRead(void * pDstBuf, uint32_t * pnBytesRequested, D2LzwBufferStateStrc * pReadState) {
     uint32_t nAvail = pReadState->nSrcSize - pReadState->nSrcPos;
-    uint32_t nReadLen = *pnBytesRequested;
-    if (*pnBytesRequested >= nAvail) {
-      nReadLen = nAvail;
-    }
-
+    uint32_t nReadLen = *pnBytesRequested < nAvail ? *pnBytesRequested : nAvail;
     SMem::SMemCopy(pDstBuf, pReadState->pSrc + pReadState->nSrcPos, nReadLen);
     pReadState->nSrcPos += nReadLen;
     return nReadLen;
