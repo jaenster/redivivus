@@ -133,38 +133,33 @@ void __fastcall DeactivateRespecQuest(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 // - Gossip msg 0x4c (player returns for the reward, only if RewardAwaits is set): if also JustCompleted and not yet at state 5, finalizes the quest (runs the sequence filter to unlock the next quest, broadcasts final state 0x0d). Then on the player's record it sets QUESTSTATE_Completed, clears QUESTSTATE_RewardAwaits, and on the Respec sub-quest sets JustCompleted+RewardAwaits, clears the Den step sub-states, and grants the actual reward: STATLIST_AddUnitStat(UNITSTAT_newskills, +1) -- the free skill point Akara gives for clearing the Den. Records the player GUID and sends the gossip packet.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q1.cpp
 void __fastcall Q01_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int32_t nLine;
+    D2QuestDataA1Q1Strc* pA1Q1Data = pQuestData->pQuestSpecificData.pA1Q1;
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
-    D2QuestDataA1Q1Strc* pQuestDataA1Q1 = pQuestData->pQuestSpecificData.pA1Q1;
     if (pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo != 0x94) {
       return;
     }
 
-    ::SGAMEDATA* pGame = pQuestData->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer);
     if (nMessageIndex == 0x40) {
-      pQuestDataA1Q1->bAcceptedQuest = '\x01';
+      pA1Q1Data->bAcceptedQuest = '\x01';
       QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q1.cpp", 0xfd);
       UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q01_SyncQuestStepToPlayer);
       QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
       return;
     }
+
     if (nMessageIndex != 0x4c) {
       return;
     }
 
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-    if (bQuestState != 1) {
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits) != 1) {
       return;
     }
 
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
-    if (bQuestState) {
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted)) {
       if (pQuestData->nStateFlag != 5) {
         QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q1.cpp", 0x109);
-        /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
-        if (bQuestState) {
+        if (IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10a);
           exit(-1);
         }
@@ -177,25 +172,13 @@ void __fastcall Q01_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
     }
 
-    /* SetQuestState DenOfEvil, Completed(0x0) -- player turned in the quest to
-                         Akara */ D2Common::QuestRecord::SetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-    /* UnsetQuestState DenOfEvil, RewardAwaits(0x1) -- reward claimed, clear the
-                         "return to Akara" flag */ D2Common::QuestRecord::UnsetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-    /* SetQuestState Respec (nSubQuestId), JustCompleted(0xd) -- arm the free respec
-                         sub-quest */ D2Common::QuestRecord::SetQuestState(pBitBuffer, pQuestData->nSubQuestId, QUESTSTATE_JustCompleted);
-    /* SetQuestState Respec (nSubQuestId), RewardAwaits(0x1) -- Akara may now offer
-                         the respec */ D2Common::QuestRecord::SetQuestState(pBitBuffer, pQuestData->nSubQuestId, QUESTSTATE_RewardAwaits);
-    /* UnsetQuestStepStates DenOfEvil -- clear the Step0x02/03/04 journal progress
-                         sub-states now that it's done */ D2Common::QuestRecord::UnsetQuestStepStates(pBitBuffer, pQuestData->nQuestIdReal);
-    /* STATLIST_AddUnitStat(UNITSTAT_newskills, +1) -- the Den-of-Evil reward: Akara
-                         grants one free skill point */ D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pQuestArgs->pPlayer, UNITSTAT_newskills, 1, 0);
-    if (!pQuestArgs->pPlayer) {
-      nLine = -1;
-    } else {
-      nLine = pQuestArgs->pPlayer->nUnitGUID;
-    }
-
-    QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, nLine);
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
+    D2Common::QuestRecord::UnsetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, pQuestData->nSubQuestId, QUESTSTATE_JustCompleted);
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, pQuestData->nSubQuestId, QUESTSTATE_RewardAwaits);
+    D2Common::QuestRecord::UnsetQuestStepStates(pBitBuffer, pQuestData->nQuestIdReal);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pQuestArgs->pPlayer, UNITSTAT_newskills, 1, 0);
+    QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
     QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
 }
 
