@@ -628,7 +628,6 @@ void __thiscall SBIG_ArrayByteAltSetCapacity(TSGrowableArray_Uc * pArray, int32_
 // @oracle-method CONFIRMED. n*4 sizing, SMemReAlloc flag 0x10 with the alloc/copy/free fallback. Matches the block the oracle inlines into .SetCount__29TSGrowableArray<Ui,8TSCD<Ui>>FUi @1009b120. Dword instantiation, SMem tag 0x708874.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __thiscall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, uint32_t nCapacity) {
-    uint32_t nIndex;
     uint32_t* pOldBuffer = pArray->pData;
     pArray->nCapacity = nCapacity;
     uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity * 4, s__I_00708874, -2, 0x10);
@@ -646,9 +645,10 @@ void __thiscall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, uint32_t nCapaci
       nCapacity = pArray->nCount;
     }
 
-    for (nIndex = 0; nIndex < nCapacity; nIndex++) {
-      if (pArray->pData + nIndex) {
-        pArray->pData[nIndex] = pOldBuffer[nIndex];
+    for (uint32_t i = 0; i < nCapacity; i++) {
+      uint32_t* pSlot = &pArray->pData[i];
+      if (pSlot) {
+        *pSlot = pOldBuffer[i];
       }
     }
 
