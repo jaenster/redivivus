@@ -2434,18 +2434,19 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x4D_SKILL_XY(D2UnitStrc * pUnit, D2GSPa
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x26_CHATSTART(D2GSPacketSrv0x26 * pBytes) {
-    MessageStrc MStack_120;
-    MStack_120.packetId = pBytes->nPacketId;
-    MStack_120.messageType = pBytes->nMessageType;
-    MStack_120.language = pBytes->nLanguage;
-    MStack_120.entityType = pBytes->nMsgSubType;
-    MStack_120.id = pBytes->nUnitGUID;
-    MStack_120.messageColor = pBytes->nMessageColor;
-    MStack_120.nameColor = pBytes->nColor;
-    Storm::Source::SSTR::SStrCopy(MStack_120.name, pBytes->szName, 0x10);
-    int nameLength = Storm::Source::SSTR::SStrLen(pBytes->szName);
-    Storm::Source::SSTR::SStrCopy(MStack_120.message, pBytes->szName + (nameLength + 1), 0x100);
-    UI::Text::TEXT_ProcessChatMessage(&MStack_120);
+    MessageStrc sMessage;
+    sMessage.packetId = pBytes->nPacketId;
+    sMessage.messageType = pBytes->nMessageType;
+    sMessage.language = pBytes->nLanguage;
+    sMessage.entityType = pBytes->nMsgSubType;
+    sMessage.id = pBytes->nUnitGUID;
+    sMessage.messageColor = pBytes->nMessageColor;
+    sMessage.nameColor = pBytes->nColor;
+    char* szText = pBytes->szName;
+    Storm::Source::SSTR::SStrCopy(sMessage.name, szText, 0x10);
+    szText += Storm::Source::SSTR::SStrLen(szText) + 1;
+    Storm::Source::SSTR::SStrCopy(sMessage.message, szText, 0x100);
+    UI::Text::TEXT_ProcessChatMessage(&sMessage);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x76(D2GSPacketSrv0x76 * pBytes) {
