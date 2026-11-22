@@ -631,26 +631,18 @@ static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uin
 // @blizzard PkwareBufferRead (SCOMP.CPP)
 uint32_t SCOMP_PkwareBufferRead(void * pDst, uint32_t * pnReqSize, PKWARE_STREAM * pStream) {
     uint32_t nAvail = pStream->nInLen - pStream->nInPos;
-    uint32_t _Size = *pnReqSize;
-    if (*pnReqSize >= nAvail) {
-      _Size = nAvail;
-    }
-
-    SMem::SMemCopy(pDst, (void*)((char*)pStream->pInBuf + pStream->nInPos), _Size);
-    pStream->nInPos += _Size;
-    return _Size;
+    uint32_t nSize = *pnReqSize < nAvail ? *pnReqSize : nAvail;
+    SMem::SMemCopy(pDst, (char*)pStream->pInBuf + pStream->nInPos, nSize);
+    pStream->nInPos += nSize;
+    return nSize;
 }
 
 // @blizzard PkwareBufferWrite (SCOMP.CPP)
 void SCOMP_PkwareBufferWrite(void * pSrc, uint32_t * pnReqSize, PKWARE_STREAM * pStream) {
     uint32_t nAvail = pStream->nOutLen - pStream->nOutPos;
-    uint32_t _Size = *pnReqSize;
-    if (*pnReqSize >= nAvail) {
-      _Size = nAvail;
-    }
-
-    SMem::SMemCopy((void*)((char*)pStream->pOutBuf + pStream->nOutPos), pSrc, _Size);
-    pStream->nOutPos += _Size;
+    uint32_t nSize = *pnReqSize < nAvail ? *pnReqSize : nAvail;
+    SMem::SMemCopy((char*)pStream->pOutBuf + pStream->nOutPos, pSrc, nSize);
+    pStream->nOutPos += nSize;
 }
 
 // @sourcefile .\SOURCE\SCOMP.CPP

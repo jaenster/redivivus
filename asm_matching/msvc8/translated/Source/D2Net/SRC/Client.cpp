@@ -157,84 +157,63 @@ size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, size_
 
 // @sourcefile .\SRC\Client.cpp
 int __stdcall NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues() {
-    size_t nPacketSizeResult;
-    D2OnePacketClientStrc* pNewPacket;
-    DWORD dwTickCount;
-    D2OnePacketClientStrc** ppTailNext;
-    uint8_t* pcHuffmanTableOut;
-    int nHuffmanIter;
-    D2PacketsClientStrc* pWalkBuffer;
-    uint32_t nPacketSize;
-    uint8_t aHuffmanTable[256];
-    uint8_t byFirstByte;
-    D2OnePacketClientStrc* pWalkPacket;
-    size_t pBytesSize = pD2PacketsClientBuffer->nCount;
+    size_t nRemaining = pD2PacketsClientBuffer->nCount;
+    char* pCursor = pD2PacketsClientBuffer->pBytes;
     int bHasCompressionPacket = 0;
-    D2PacketsClientStrc* pBytes = pD2PacketsClientBuffer;
-    while (true) {
-      if (pBytesSize < 1) {
-        break;
-      }
-
-      nPacketSizeResult = ::D2Net::Game::Server::NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(pBytes->pBytes, pBytesSize, &nPacketSize);
-      if (!nPacketSizeResult) {
+    while (nRemaining >= 1) {
+      uint32_t nPacketSize;
+      if (!::D2Net::Game::Server::NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(pCursor, nRemaining, &nPacketSize)) {
         break;
       }
       if (nPacketSize > 0x204) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x129);
         exit(-1);
       }
-      if ((int)nPacketSize > (int)pBytesSize) {
+      if ((int)nPacketSize > (int)nRemaining) {
         break;
       }
 
-      pNewPacket = D2_NEW_AT(D2OnePacketClientStrc, ".\\SRC\\Client.cpp", 300);
+      D2OnePacketClientStrc* pNewPacket = D2_NEW_AT(D2OnePacketClientStrc, ".\\SRC\\Client.cpp", 300);
       pNewPacket->nSize = nPacketSize;
       pNewPacket->nTickCount = 0;
       pNewPacket->pD2PacketClientNext = 0;
-      memcpy(pNewPacket, pBytes, nPacketSize);
-      if (pBytes->pBytes[0] == -0x51 && pBytes->pBytes[1] != '\0') {
+      memcpy(pNewPacket, pCursor, nPacketSize);
+      if (pCursor[0] == -0x51 && pCursor[1]) {
         bHasCompressionPacket = 1;
-        if (pBytes->pBytes[1] == -0x7f) {
-          pcHuffmanTableOut = aHuffmanTable + 1;
-          nHuffmanIter = 0x80;
-          pWalkBuffer = pBytes;
-          do {
-            pWalkBuffer = (D2PacketsClientStrc*)(pWalkBuffer->pBytes + 1);
-            byFirstByte = pWalkBuffer->pBytes[0];
-            pcHuffmanTableOut[-1] = (byFirstByte & 0xf) + 1;
-            *pcHuffmanTableOut = (byFirstByte >> 4) + 1;
-            pcHuffmanTableOut += 2;
-            nHuffmanIter--;
-          } while (nHuffmanIter);
+        if (pCursor[1] == -0x7f) {
+          uint8_t aHuffmanTable[256];
+          uint8_t* pHighNibble = aHuffmanTable + 1;
+          char* pCodeLengths = pCursor + 1;
+          for (int i = 0x80; i; i--) {
+            uint8_t byCodeLengths = *pCodeLengths++;
+            pHighNibble[-1] = (byCodeLengths & 0xf) + 1;
+            pHighNibble[0] = (byCodeLengths >> 4) + 1;
+            pHighNibble += 2;
+          }
 
           Fog::Source::SSComp::COMPRESS_BuildHuffmanDecodeTable(aHuffmanTable);
         }
-      } else if (pBytes->pBytes[0] == -0x71) {
-        dwTickCount = GetTickCount();
-        *(DWORD*)(pNewPacket->pBytes + 0xd) = dwTickCount;
+      } else if (pCursor[0] == -0x71) {
+        *(DWORD*)(pNewPacket->pBytes + 0xd) = GetTickCount();
       }
 
-      ppTailNext = &pD2PacketClient_to_0xAE;
-      if ((uint8_t)pBytes->pBytes[0] >= 0xaf) {
+      D2OnePacketClientStrc** ppTailNext = &pD2PacketClient_to_0xAE;
+      if ((uint8_t)pCursor[0] >= 0xaf) {
         ppTailNext = &pD2PacketClient_from_0xAF;
       }
 
-      pWalkPacket = *ppTailNext;
-      while (pWalkPacket) {
+      while (*ppTailNext) {
         ppTailNext = &(*ppTailNext)->pD2PacketClientNext;
-        pWalkPacket = *ppTailNext;
       }
 
       *ppTailNext = pNewPacket;
-      pBytesSize -= nPacketSize;
-      pBytes = (D2PacketsClientStrc*)(pBytes->pBytes + nPacketSize);
+      pCursor += nPacketSize;
+      nRemaining -= nPacketSize;
     }
 
-    pWalkBuffer = pD2PacketsClientBuffer;
-    pD2PacketsClientBuffer->nCount = pBytesSize;
-    if (pBytesSize && pBytes != pWalkBuffer) {
-      memmove(pWalkBuffer, pBytes, pBytesSize);
+    pD2PacketsClientBuffer->nCount = nRemaining;
+    if (nRemaining && pCursor != pD2PacketsClientBuffer->pBytes) {
+      memmove(pD2PacketsClientBuffer, pCursor, nRemaining);
     }
 
     return bHasCompressionPacket;
