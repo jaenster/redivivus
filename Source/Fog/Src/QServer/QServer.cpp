@@ -1372,13 +1372,13 @@ void __fastcall BanIpAddress(D2QServerStrc * pQServer, char * szFile, uint32_t n
 // @sourcefile .\Src\QServer\QServer.cpp
 int __fastcall CheckIpConnectionRate(D2QServerStrc * pQServer, in_addr * pIpAddress) {
     D2QServerIpRateEntryStrc* pRateEntry;
-    if (0 >= pQServer->nPerIpConnectionLimit) {
+    if (pQServer->nPerIpConnectionLimit < 1) {
       return 1;
     }
 
     _struct_1227 ipAddrBytes = d2_bits_as<_struct_1227>(pIpAddress->S_un.S_addr);
     DWORD dwNow = GetTickCount();
-    int nLimit = pQServer->nPerIpConnectionLimit;
+    uint32_t nMaxAttempts = pQServer->nPerIpConnectionLimit * 2 + 3; // steer-ok: the original computes the attempt limit before PruneIpRateList
     PruneIpRateList(pQServer);
     CRITICAL_SECTION* lpCriticalSection = &pQServer->csClientLifecycle;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
@@ -1386,7 +1386,7 @@ int __fastcall CheckIpConnectionRate(D2QServerStrc * pQServer, in_addr * pIpAddr
       if (d2_bits_as<_struct_1227>(pRateEntry->ipAddress.S_un.S_addr) == ipAddrBytes) {
         if (dwNow - pRateEntry->dwLastAttemptTick < 15000) {
           pRateEntry->nAttemptsInWindow++;
-          if ((uint32_t)pRateEntry->nAttemptsInWindow > nLimit * 2 + 3U) {
+          if (pRateEntry->nAttemptsInWindow > nMaxAttempts) {
             /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
             return 0;
           }
