@@ -1958,41 +1958,29 @@ BOOL __fastcall ITEMEVENT_FreezeTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 
     int nAttackerLvl = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     int nTargetLvl = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0);
-    int nRollMod = nStatLvl - 1;
-    if (nRollMod < 0) {
-      nRollMod = 0;
+    int nBonusLvl = nStatLvl - 1;
+    if (nBonusLvl < 0) {
+      nBonusLvl = 0;
     }
     if (nUnitEvent == 6) {
       nAttackerLvl += -6;
     }
 
-    uint32_t nChancePct = (nRollMod * 4 - nTargetLvl + 10 + nAttackerLvl) * 5;
+    int nChancePct = (nBonusLvl * 4 - nTargetLvl + 10 + nAttackerLvl) * 5;
     if (nUnitEvent == 6) {
-      nChancePct = (int)nChancePct / 3;
+      nChancePct /= 3;
     }
 
-    nChancePct = (int)nChancePct <= 0 ? 0 : nChancePct;
-    if ((int)nChancePct >= 100) {
-      nChancePct = 100;
-    }
-
-    uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
-    nRollMod = DVar1 % 100;
-    if (nRollMod >= (int)nChancePct) {
+    nChancePct = min(max(nChancePct, 0), 100); // steer-ok: windef.h min/max macros
+    int nRoll = D2_SeedRoll(&pUnit->sSeed) % 100;
+    if (nRoll >= nChancePct) {
       return 0;
     }
 
-    nRollMod = (nChancePct - nRollMod) * 2 + 0x19;
-    if (nRollMod > 0x19) {
-      if (nRollMod >= 0xfa) {
-        nRollMod = 0xfa;
-      }
-    } else {
-      nRollMod = 0x19;
-    }
-
+    int nFreezeLength = (nChancePct - nRoll) * 2 + 0x19;
+    nFreezeLength = min(max(nFreezeLength, 0x19), 0xfa); // steer-ok: windef.h min/max macros
     memset(&sDamage, 0, 0x70);
-    sDamage.dwFrzLength = nRollMod;
+    sDamage.dwFrzLength = nFreezeLength;
     UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pTarget, 1, &sDamage);
     return 1;
 }
