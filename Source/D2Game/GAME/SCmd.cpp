@@ -1968,33 +1968,22 @@ void __fastcall NET_D2GS_SERVER_Send_0x74_SYNCHDEADBODY(D2ClientStrc * pClient, 
 
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall NET_D2GS_SERVER_Send_0x75_UPDATEROSTER(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    int nGUID;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\GAME\\SCmd.cpp", 0xafa);
     D2GSPacketSrv0x75 aPacket;
     memset(&aPacket, 0, sizeof(aPacket));
-    *(uint8_t*)(char*)&aPacket.nLevel = 0;
-    *(uint8_t*)((char*)&aPacket.nLevel + 1) = 0;
-    aPacket.wFlags = 0;
-    *(uint8_t*)(char*)&aPacket.wIsPartied = 0;
-    *(uint8_t*)((char*)&aPacket.wIsPartied + 1) = 0;
+    aPacket.nPacketId = 'u';
+    int nGUID;
     if (!pTargetUnit) {
       nGUID = -1;
     } else {
       nGUID = pTargetUnit->nUnitGUID;
     }
 
-    d2_store24((char*)&aPacket.dwUnitGUID, (uint32_t)nGUID & 0xffffffu);
-    aPacket.nPacketId = 'u';
-    *(uint8_t*)((char*)&aPacket.dwUnitGUID + 3) = (uint8_t)(nGUID >> 0x18);
-    nGUID = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_level, 0);
-    *(uint8_t*)(char*)&aPacket.nLevel = (uint8_t)nGUID;
-    *(uint8_t*)((char*)&aPacket.nLevel + 1) = (uint8_t)(nGUID >> 8);
+    aPacket.dwUnitGUID = nGUID;
+    aPacket.nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_level, 0);
     aPacket.nPartyId = UNIT::SUnit::GetPartyId(pTargetUnit);
-    uint32_t dwFlags = UNIT::PlayerList::PLAYERLIST_GetFlags(pUnit, pTargetUnit);
-    aPacket.wFlags = (uint16_t)dwFlags;
-    uint16_t wIsPartied = UNIT::PlayerList::PLAYERLIST_IsPartied(pUnit, pTargetUnit);
-    *(uint8_t*)(char*)&aPacket.wIsPartied = (uint8_t)wIsPartied;
-    *(uint8_t*)((char*)&aPacket.wIsPartied + 1) = (uint8_t)(wIsPartied >> 8);
+    aPacket.wFlags = UNIT::PlayerList::PLAYERLIST_GetFlags(pUnit, pTargetUnit);
+    aPacket.wIsPartied = UNIT::PlayerList::PLAYERLIST_IsPartied(pUnit, pTargetUnit);
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 0xd);
 }
 
