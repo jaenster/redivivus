@@ -385,10 +385,6 @@ void __fastcall Q22_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // Q22_Callback_11 (BLACKENED TEMPLE) — quest-state[0xb] NPC-gossip handler, the main Ormus dialog path. Bails if the quest is already Completed. For special NPC 0xff + msg 0x252: sets nStateFlag 2/3 and the bTaintedSunStartedFailed flag (string varies by Lam Esen's Tome completion). For Ormus (class 0xf5) + msg 0x272, only when at Step0x04: if Khalim's Will is done, strips the 5 Khalim's Will items (eye/heart/brain/flail qf1/qf2) from the player; if a JustCompleted flag is pending and live nStateFlag!=7, marks the quest-record JustCompleted, broadcasts live state 0xd, sets nStateFlag 7, runs the sequence filter, then writes record Completed and clears Step0x04, and adds the player to the completion GUID list. Finally sends the NPC gossip packet.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
 void __fastcall Q22_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int _bLamEsenDone;
-    bool bLamEsenDone;
-    int32_t nSetStateFlag;
-    uint32_t dwSrcLine;
     short int nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
@@ -402,71 +398,49 @@ void __fastcall Q22_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         return;
       }
 
-      /* GetQuestRecordState(Lam Esen's Tome=0x11, JustCompleted=0xd): selects Ormus
-                         dialog string + nStateFlag 2 vs 3 */ _bLamEsenDone = QUEST_GetQuestRecordState(pQuestArgs->pGame, QUEST_LamEsensTome, 0xd);
-      if (_bLamEsenDone == 1) {
-        dwSrcLine = 0x1b0;
-        nSetStateFlag = 2;
+      if (QUEST_GetQuestRecordState(pQuestArgs->pGame, QUEST_LamEsensTome, 0xd) == 1) {
+        QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x1b0);
       } else {
-        dwSrcLine = 0x1b4;
-        nSetStateFlag = 3;
+        QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x1b4);
       }
 
-      QUEST_SetStateFlag(pQuestData, nSetStateFlag, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", dwSrcLine);
       pQuestData->pQuestSpecificData.pA3Q5->nTrackedCouncilByte0 = '\x01';
-    } else {
-      if (nNPCNo != 0xf5) {
-        return;
-      }
-      if (nMessageIndex != 0x272) {
-        return;
-      }
-
-      /* GetQuestState(Blackened Temple=0x15, Step0x04=4): Ormus completion path only
-                         valid once council is dead (step 4) */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
-      if (!bQuestState) {
-        return;
-      }
-
-      /* GetQuestState(Khalim's Will=0x12, Completed=0): if done, strip the 5 Khalim's
-                         Will quest items from the player */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed);
-      if (bQuestState) {
-        QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20796571);
-        QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20726871);
-        QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20726271);
-        QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20316671);
-        QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20326671);
-      }
-
-      /* GetQuestState(Blackened Temple=0x15, JustCompleted=0xd): proceed to finalize
-                         only if a fresh-completion flag is pending and nStateFlag!=7 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
-      if (bQuestState && pQuestData->nStateFlag != 7) {
-        /* SetQuestRecordState(Blackened Temple=0x15, JustCompleted=0xd): mark the
-                         shared quest record fresh-complete before broadcasting */ QUEST_SetQuestRecordState(pQuestArgs->pGame, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
-        pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, 0);
-        QUEST_SetStateFlag(pQuestData, 7, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x1ce);
-      }
-
-      /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
-      if (bQuestState) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d1);
-        exit(-1);
-      }
-
-      pQuestData->fpSequenceFilter(pQuestData);
-      /* SetQuestState(Blackened Temple=0x15, Completed=0): finalize quest as done in self player's record */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
-      /* UnsetQuestState(Blackened Temple=0x15, Step0x04=4): clear the intermediate
-                         step now that quest is Completed */ D2Common::QuestRecord::UnsetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
-      if (!pQuestArgs->pPlayer) {
-        nSetStateFlag = -1;
-      } else {
-        nSetStateFlag = pQuestArgs->pPlayer->nUnitGUID;
-      }
-
-      QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, nSetStateFlag);
+      QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
+      return;
     }
 
+    if (nNPCNo != 0xf5 || nMessageIndex != 0x272) {
+      return;
+    }
+
+    if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04)) {
+      return;
+    }
+
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_KhalimsWill, QUESTSTATE_Completed)) {
+      QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20796571);
+      QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20726871);
+      QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20726271);
+      QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20316671);
+      QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20326671);
+    }
+
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted) && pQuestData->nStateFlag != 7) {
+      QUEST_SetQuestRecordState(pQuestArgs->pGame, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
+      pQuestData->nQuestPacketFlags = '\0';
+      QUEST_SetStateAndBroadcast(pQuestData, 0xd, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerNotifyCompleted, 0);
+      QUEST_SetStateFlag(pQuestData, 7, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x1ce);
+    }
+
+    if (IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d1);
+      exit(-1);
+    }
+
+    pQuestData->fpSequenceFilter(pQuestData);
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
+    D2Common::QuestRecord::UnsetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
+    QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
     QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
 }
 
