@@ -724,10 +724,7 @@ static uint32_t __stdcall SKILL_IsSequenceInputReady(D2UnitStrc * pUnit, D2Skill
 
 // Returns TRUE if the player unit's current animation mode allows an incoming skill-interrupt. Returns FALSE immediately if the player is holding a cursor item. Blocks interrupts during Death, GetHit, Attack, Block, Cast, Throw, Kick, Dead, KnockBack, and class-specific Skill modes (Paladin Skill1, Assassin Skill2, Barb/Assassin/Druid Skill3-4). For Sequence mode, delegates to SKILL_IsSequenceInputReady.
 BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
-    uint32_t bSeqReady;
-    int nClassId;
-    D2UnitStrc* pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory);
-    if (pCursorItem_lcl) {
+    if (D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory)) {
       return 0;
     }
     if (pUnit->eUnitType != UNIT_PLAYER) {
@@ -756,8 +753,7 @@ BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill)
       case KnockBack:
         return 0;
       case eD2PlayerAnimMode_ns::Sequence:
-        bSeqReady = SKILL_IsSequenceInputReady(pUnit, pSkill);
-      return bSeqReady;
+        return SKILL_IsSequenceInputReady(pUnit, pSkill);
       case eD2PlayerAnimMode_ns::Skill1:
         if (pUnit->nClassId == CLASS_PALADIN) {
           return 0;
@@ -771,22 +767,9 @@ BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill)
       case eD2PlayerAnimMode_ns::Skill3:
 
       case eD2PlayerAnimMode_ns::Skill4:
-        nClassId = pUnit->nClassId;
-      switch (nClassId) {
-        case CLASS_BARBARIAN:
-          {
-            return 0;
-          }
-        case CLASS_ASSASSIN:
-          {
-            return 0;
-          }
-        case CLASS_DRUID:
-          {
-            return 0;
-          }
-      }
-
+        if (pUnit->nClassId == CLASS_BARBARIAN || pUnit->nClassId == CLASS_ASSASSIN || pUnit->nClassId == CLASS_DRUID) {
+          return 0;
+        }
       break;
     }
 

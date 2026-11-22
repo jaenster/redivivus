@@ -2372,50 +2372,31 @@ void __stdcall CHATDLG_DestroyLobbyChatForms() {
 }
 
 static void __stdcall CHATDLG_AddMultiLineText(::D2WinTextBox * pTextBox, int32_t bAddBlankLine, char * szText, int32_t nColor) {
-    char* pcNextLine;
-    char* pcNewlinePos;
-    char cCur;
-    char* pcCur;
-    if (strlen(szText) == 0 || (int)strlen(szText) < 0) {
-      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
-    } else if (*szText != '\0') {
-      do {
-        pcCur = szText;
-        if (*szText == '\n') {
-          *pcCur = '\0';
-          pcNextLine = pcCur + 1;
-          pcNewlinePos = pcCur;
-        } else {
-          do {
-            if (*pcCur == '\0') {
-              break;
-            }
-
-            pcCur++;
-          } while (*pcCur != '\n');
-
-          pcNextLine = pcCur;
-          pcNewlinePos = 0;
-          if (*pcCur == '\n') {
-            *pcCur = '\0';
-            pcNextLine = pcCur + 1;
-            pcNewlinePos = pcCur;
-          }
+    if ((int)strlen(szText) > 0) {
+      char* pszCur = szText;
+      while (*pszCur != '\0') {
+        char* pszLine = pszCur;
+        char* pszNewline = nullptr;
+        while (*pszCur != '\n' && *pszCur != '\0') {
+          pszCur++;
         }
 
-        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, szText, nColor);
+        if (*pszCur == '\n') {
+          pszNewline = pszCur;
+          *pszCur = '\0';
+          pszCur++;
+        }
+
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, pszLine, nColor);
         if (bAddBlankLine) {
           D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
         }
-        if (pcNewlinePos) {
-          *pcNewlinePos = '\n';
+        if (pszNewline) {
+          *pszNewline = '\n';
         }
-
-        szText = pcNextLine;
-        if (*pcNextLine == '\0') {
-          return;
-        }
-      } while (true);
+      }
+    } else {
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
     }
 }
 
@@ -2494,15 +2475,14 @@ D2ChatDlgUnknown_0x10 * Unreferenced_0043e370() {
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_ProcessPendingMessages() {
     while (true) {
-      D2ChatDlgUnknown_0x10* pMemoryToFree;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077ae28);
-      pMemoryToFree = 0;
+      D2ChatDlgUnknown_0x10* pMemoryToFree = nullptr;
+      EnterCriticalSection(&lpCriticalSection_0077ae28);
       if (gpChatMessageQueueHead) {
         pMemoryToFree = gpChatMessageQueueHead;
         gpChatMessageQueueHead = gpChatMessageQueueHead->pNext;
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077ae28);
+      LeaveCriticalSection(&lpCriticalSection_0077ae28);
       if (!pMemoryToFree) {
         break;
       }

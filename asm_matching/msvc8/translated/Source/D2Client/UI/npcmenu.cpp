@@ -5150,7 +5150,11 @@ void __fastcall NPCMENU_MarkNpcSpeechesUpdated(D2GSPacketSrv0x91 * pBytes) {
 }
 
 uint8_t * __fastcall Unreferenced_004b3560(uint8_t * pData) {
-    memset(pData + 21, 0, 80 * sizeof(pData[0]));
+    uint32_t* pValues = (uint32_t*)(pData + 21);
+    for (int i = 0; i < 20; i++) {
+      pValues[i] = 0;
+    }
+
     return pData;
 }
 
