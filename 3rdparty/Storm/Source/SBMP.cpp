@@ -497,14 +497,12 @@ static void __thiscall SBMP_FlipImage(int numRows, void * dst, uint8_t * src, in
 
 // @blizzard FlushPacket (SBMP.CPP)
 static void __stdcall SBMP_FlushPacket(D2GifLzwEncoderStrc * pState, uint8_t * * ppOutput) {
-    int nBlockLen = pState->nBlockLen;
-    if (!nBlockLen) {
+    if (!pState->nBlockLen) {
       return;
     }
 
-    pState->abBlock[0] = (uint8_t)nBlockLen;
-    pState->nBlockLen = nBlockLen + 1U;
-    SMem::SMemCopy(*ppOutput, pState->abBlock, nBlockLen + 1U);
+    pState->abBlock[0] = (uint8_t)pState->nBlockLen++;
+    SMem::SMemCopy(*ppOutput, pState->abBlock, pState->nBlockLen);
     *ppOutput += pState->nBlockLen;
     pState->nBlockLen = 0;
 }
