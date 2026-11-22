@@ -80,32 +80,20 @@ static BOOL __stdcall Q05_RemovePlayerFromTrackingList(int32_t nListSelector, D2
 
 // Quest item drop and callback functions for A1Q4 (Search for Cain), A1Q5 (Forgotten Tower), and A1Q6 (Sisters to the Slaughter)
 static uint32_t __stdcall QUEST_IsPlayerGUIDInTrackingList(D2QuestDataA1Q5Strc * pListBase, int32_t nListSelector, int32_t nPlayerGUID) {
-    int32_t* pListEntry;
-    int i = 0;
     if (nListSelector) {
-      if (pListBase->nPlayersForRewardCount) {
-        pListEntry = pListBase->aPlayersForRewardGUIDs;
-        do {
-          if (*pListEntry == nPlayerGUID) {
-            return 1;
-          }
-
-          i++;
-          pListEntry++;
-        } while (i < (int)(uint32_t)pListBase->nPlayersForRewardCount);
+      for (int i = 0; i < pListBase->nPlayersForRewardCount; i++) {
+        if (pListBase->aPlayersForRewardGUIDs[i] == nPlayerGUID) {
+          return 1;
+        }
       }
     } else {
-      if (pListBase->nPlayersInTowerCount) {
-        do {
-          if (pListBase->aPlayersInTowerGUIDs[i] == nPlayerGUID) {
-            return 1;
-          }
-
-          i++;
-        } while (i < (int)(uint32_t)pListBase->nPlayersInTowerCount);
-
-        return 0;
+      for (int i = 0; i < pListBase->nPlayersInTowerCount; i++) {
+        if (pListBase->aPlayersInTowerGUIDs[i] == nPlayerGUID) {
+          return 1;
+        }
       }
+
+      return 0;
     }
 
     return 0;
