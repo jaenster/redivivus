@@ -3587,8 +3587,7 @@ void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, D2UnitStrc * pOw
       return;
     }
 
-    BOOL bPortalFlagSet = D2Common::Units::CheckObjectPortalFlag(pBluePortal, 1);
-    if (bPortalFlagSet) {
+    if (D2Common::Units::CheckObjectPortalFlag(pBluePortal, 1)) {
       return;
     }
 
@@ -3597,7 +3596,13 @@ void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, D2UnitStrc * pOw
       return;
     }
     if (pUnit->nClassId != 0x3b) {
-      OBJMODE_FinalizePortalLink_HaltTail(0x11ea);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11ea);
+      exit(-1);
+    }
+
+    if ((uint8_t)eLevel > 0xff) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11ec);
+      exit(-1);
     }
 
     pBluePortal->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eLevel;
@@ -3605,15 +3610,13 @@ void __fastcall OBJMODE_FinalizePortalLink(::SGAMEDATA * pGame, D2UnitStrc * pOw
     byPortalFlags |= 1;
     D2Common::Units::SetObjectPortalFlags(pBluePortal, byPortalFlags);
     D2Common::Units::ChangeAnimMode(pBluePortal, 3);
-    int nUnitGUID = pUnit->nUnitGUID;
-    eD2UnitType eUnitType = UNIT_OBJECT;
-    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), eUnitType, nUnitGUID);
+    int nUnitGUID = pUnit->nUnitGUID; // steer-ok: the original reads the GUID before the UNITS_GetRoom call
+    D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pUnit), UNIT_OBJECT, nUnitGUID);
     UNIT::SUnit::FreeServerUnit(pGame, pUnit);
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pBluePortal);
-    eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    pBluePortal = SKILLS::SkillsServer::LinkPortal(pGame, pOwner, pBluePortal, eLevel, nLevelId2);
+    pBluePortal = SKILLS::SkillsServer::LinkPortal(pGame, pOwner, pBluePortal, eLevel, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pBluePortal)));
     if (!pBluePortal) {
-      OBJMODE_FinalizePortalLink_HaltTail(0x11fb);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x11fb);
+      exit(-1);
     }
 
     byPortalFlags = D2Common::Units::GetObjectPortalFlags(pBluePortal);
