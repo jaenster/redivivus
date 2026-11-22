@@ -1659,66 +1659,50 @@ static void __stdcall BigBuffer_Mul_Ux(BigBuffer * pSource, uint32_t nMultiplier
 // @oracle Mac PPC 1.10b Storm mangled symbol .Not__FR9BigBufferRC9BigBuffer @1009d620 -- sole target of SBigNot's forwarder; 2 args.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_Not(BigBuffer * pSource, BigBuffer * pDest) {
-    uint32_t nGranularity;
-    uint32_t nWordValue;
-    uint32_t nAbsIndex = pSource->nStartWord;
-    uint32_t nNewLen = pSource->nCount;
-    int nWordCount = 0;
-    int i = 0;
-    if (nAbsIndex < nNewLen) {
-      uint32_t nNewCapacity;
-      do {
-        if (nAbsIndex + i < nNewLen) {
-          nWordValue = pSource->pData[nAbsIndex + i];
-        } else {
-          nWordValue = 0;
-        }
-
-        nAbsIndex = pDest->nStartWord + i;
-        if (nAbsIndex >= pDest->nCount) {
-          nNewLen = nAbsIndex + 1;
-          if (nNewLen > pDest->nCapacity) {
-            nGranularity = pDest->nGrowStep;
-            if (!nGranularity) {
-              nGranularity = TSGrowableArray_Ui_CalcChunkSize(pDest, nNewLen);
-            }
-
-            nNewCapacity = nNewLen;
-            if (nNewLen % nGranularity) {
-              nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
-            }
-
-            TSFixedArray_Ui_ReallocData(pDest, nNewCapacity);
+    uint32_t i;
+    for (i = 0; pSource->nStartWord + i < pSource->nCount; i++) {
+      uint32_t nWordIndex = pSource->nStartWord + i;
+      uint32_t nWord = nWordIndex < pSource->nCount ? pSource->pData[nWordIndex] : 0;
+      nWordIndex = pDest->nStartWord + i;
+      if (nWordIndex >= pDest->nCount) {
+        uint32_t nNewLen = nWordIndex + 1;
+        if (nNewLen > pDest->nCapacity) {
+          uint32_t nGranularity = pDest->nGrowStep;
+          if (!nGranularity) {
+            nGranularity = TSGrowableArray_Ui_CalcChunkSize(pDest, nNewLen);
           }
 
-          SMem::SMemZero(pDest->pData + pDest->nCount, (nAbsIndex - pDest->nCount) * 4 + 4);
-          pDest->nCount = nNewLen;
+          uint32_t nNewCapacity = nNewLen;
+          if (nNewLen % nGranularity) {
+            nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
+          }
+
+          TSFixedArray_Ui_ReallocData(pDest, nNewCapacity);
         }
 
-        pDest->pData[pDest->nStartWord + i] = ~nWordValue;
-        nAbsIndex = pSource->nStartWord;
-        nNewLen = pSource->nCount;
-        nWordCount = i + 1;
-        i = nWordCount;
-      } while (nAbsIndex + nWordCount < nNewLen);
-    }
-
-    nAbsIndex = pDest->nStartWord + nWordCount;
-    if (nAbsIndex > pDest->nCount && nAbsIndex > pDest->nCapacity) {
-      nNewLen = pDest->nGrowStep;
-      if (!nNewLen) {
-        nNewLen = TSGrowableArray_Ui_CalcChunkSize(pDest, nAbsIndex);
+        SMem::SMemZero(pDest->pData + pDest->nCount, (nWordIndex - pDest->nCount) * 4 + 4);
+        pDest->nCount = nNewLen;
       }
 
-      nGranularity = nAbsIndex;
-      if (nAbsIndex % nNewLen) {
-        nGranularity = nNewLen - nAbsIndex % nNewLen + nAbsIndex;
-      }
-
-      TSFixedArray_Ui_ReallocData(pDest, nGranularity);
+      pDest->pData[pDest->nStartWord + i] = ~nWord;
     }
 
-    pDest->nCount = nAbsIndex;
+    uint32_t nNewCount = pDest->nStartWord + i;
+    if (nNewCount > pDest->nCount && nNewCount > pDest->nCapacity) {
+      uint32_t nGranularity = pDest->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = TSGrowableArray_Ui_CalcChunkSize(pDest, nNewCount);
+      }
+
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      TSFixedArray_Ui_ReallocData(pDest, nNewCapacity);
+    }
+
+    pDest->nCount = nNewCount;
 }
 
 // @renamed-from SBIG_BitwiseOr (2026-08-28, Storm PowerPC oracle pass 4)
