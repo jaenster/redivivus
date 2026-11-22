@@ -641,10 +641,7 @@ void __thiscall WND_EntryArray_FreeEntries(BigStack * pThis, int32_t nFreeCount)
 
 BigBuffer * __thiscall WND_EntryArray_AllocOrReuse(BigStack * pThis, BigBuffer * pReuseEntry, int32_t bAllocNew) {
     if (bAllocNew) {
-      uint32_t uVar1;
-      uVar1 = pThis->nUsed;
-      pThis->nUsed = uVar1 + 1;
-      return pThis->aBuffers + uVar1;
+      return &pThis->aBuffers[pThis->nUsed++];
     }
 
     return pReuseEntry;
