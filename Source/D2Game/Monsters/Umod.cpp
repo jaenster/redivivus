@@ -516,41 +516,26 @@ void __fastcall AuraEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown)
       bUnknown = 1;
     }
 
-    uint32_t nAuraIndex = (uint32_t)(gaAuraEnchantedTable[0].nLevelThreshold <= bUnknown);
-    if (gaAuraEnchantedTable[1].nLevelThreshold <= bUnknown) {
-      nAuraIndex++;
-    }
-    if (gaAuraEnchantedTable[2].nLevelThreshold <= bUnknown) {
-      nAuraIndex++;
-    }
-    if (gaAuraEnchantedTable[3].nLevelThreshold <= bUnknown) {
-      nAuraIndex++;
-    }
-    if (gaAuraEnchantedTable[4].nLevelThreshold <= bUnknown) {
-      nAuraIndex++;
-    }
-    if (gaAuraEnchantedTable[5].nLevelThreshold <= bUnknown) {
-      nAuraIndex++;
-    }
-    if (gaAuraEnchantedTable[6].nLevelThreshold <= bUnknown) {
-      nAuraIndex++;
-    }
-    if (gaAuraEnchantedTable[7].nLevelThreshold <= bUnknown) {
-      nAuraIndex++;
+    uint32_t nAuraIndex = 0;
+    for (int i = 0; i < 8; i++) {
+      if (gaAuraEnchantedTable[i].nLevelThreshold <= bUnknown) {
+        nAuraIndex++;
+      }
     }
     if (!nAuraIndex) {
       nAuraIndex = 1;
     }
-    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-      wNameSeed = pUnit->pUnitData.pUnitDataMonster->nNameSeed;
-    } else {
+    if (!(pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : nullptr)) {
       wNameSeed = 0x1506;
+    } else {
+      wNameSeed = pUnit->pUnitData.pUnitDataMonster->nNameSeed;
     }
 
     D2Common::Seed::SEED_InitDefault(&sNameSeed);
     D2Common::Seed::InitSeed_Param_666(&sNameSeed, (uint32_t)wNameSeed);
     uint32_t nAuraRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&sNameSeed, nAuraIndex);
-    if (pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster && pUnit->pUnitData.pUnitDataMonster->nBossNo == 0x25) {
+    int16_t nBossNo = !(pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : nullptr) ? -1 : pUnit->pUnitData.pUnitDataMonster->nBossNo;
+    if (nBossNo == 0x25) {
       nAuraRoll = 5;
     }
     if (pUnit->nClassId == 0x2c0) {
@@ -560,13 +545,7 @@ void __fastcall AuraEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown)
     }
 
     int32_t nSkillLevel = (gaAuraEnchantedTable[nAuraRoll].nSkillLevelBase + bUnknown) * gaAuraEnchantedTable[nAuraRoll].nSkillLevelMul / gaAuraEnchantedTable[nAuraRoll].nSkillLevelDiv;
-    if (nSkillLevel > 1) {
-      if (nSkillLevel >= 0x63) {
-        nSkillLevel = 99;
-      }
-    } else {
-      nSkillLevel = 1;
-    }
+    nSkillLevel = min(max(nSkillLevel, 1), 0x63); // steer-ok: windef.h min/max macros
 
     SKILLS::SkillsServer::SetSkill(pUnit, gaAuraEnchantedTable[nAuraRoll].eSkill, nSkillLevel, 1);
     SKILLS::SkillsServer::Server_SelectSkill(pUnit, 0, gaAuraEnchantedTable[nAuraRoll].eSkill, -1);
