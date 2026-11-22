@@ -1635,7 +1635,7 @@ static BOOL BigBuffer_IsOne(BigBuffer * pBignum) {
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static uint32_t BigBuffer_IsZero(BigBuffer * pBignum) {
     SBIG_TrimLeadingZeros(pBignum);
-    return (uint32_t)(pBignum->nCount == pBignum->nStartWord);
+    return pBignum->nCount - pBignum->nStartWord == 0;
 }
 
 // @renamed-from SBIG_MulValue64 (2026-08-28, Storm PowerPC oracle pass 4)
@@ -3834,10 +3834,9 @@ void __stdcall SBigDel(BigData * pBigData) {
 // @oracle Mac PPC 1.10b Storm -- PPC SBigDiv -> 10099d70, 160B, single bl .Div__FR9BigBufferR9BigBufferRC9BigBufferRC9BigBufferR8BigStack (quot, rem, a, b, stack). 1.14d passes the caller's destination in the QUOTIENT slot and a BigStack temp in the remainder slot - the mirror image of SBigMod 00424ed0.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigDiv(BigData * pResult, BigData * pBigA, BigData * pBigB) {
-    uint32_t nStackBase = pResult->sStack.nUsed;
-    pResult->sStack.nUsed = nStackBase + 1;
-    BigBuffer_Div(&pResult->sPrimary, pResult->sStack.aBuffers + nStackBase, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    pResult->sStack.nUsed--;
+    BigStack* pStack = &pResult->sStack;
+    BigBuffer_Div(&pResult->sPrimary, &pStack->aBuffers[pStack->nUsed++], &pBigB->sPrimary, pStack, &pBigA->sPrimary);
+    pStack->nUsed--;
 }
 
 // @renamed-from SBIG_GCDWrapper (2026-08-28, Storm PowerPC oracle pass 4)
@@ -3851,10 +3850,9 @@ void __stdcall SBigGcd(BigData * pResult, BigData * pBigA, BigData * pBigB) {
 // @oracle Mac PPC 1.10b Storm -- PPC SBigMod -> 10099900, 160B, single bl .Div (same method as SBigDiv). 1.14d passes the caller's destination in the REMAINDER slot. Slot order proved from BigBuffer_MulMod 004245f0, which reduces a product by calling Div with the product in the quotient slot and the result in the remainder slot.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigMod(BigData * pResult, BigData * pBigA, BigData * pBigB) {
-    uint32_t nStackBase = pResult->sStack.nUsed;
-    pResult->sStack.nUsed = nStackBase + 1;
-    BigBuffer_Div(pResult->sStack.aBuffers + nStackBase, &pResult->sPrimary, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    pResult->sStack.nUsed--;
+    BigStack* pStack = &pResult->sStack;
+    BigBuffer_Div(&pStack->aBuffers[pStack->nUsed++], &pResult->sPrimary, &pBigB->sPrimary, pStack, &pBigA->sPrimary);
+    pStack->nUsed--;
 }
 
 // @renamed-from SBIG_MontgomeryMulWrapper (2026-08-28, Storm PowerPC oracle pass 4)

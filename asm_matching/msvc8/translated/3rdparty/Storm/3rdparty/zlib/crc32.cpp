@@ -2196,23 +2196,9 @@ uint32_t __fastcall gf2_matrix_times(uint32_t vec, uint32_t * mat) {
 }
 
 static void gf2_matrix_square(uint32_t * square, uint32_t * mat) {
-    uint32_t dwBits;
-    uint32_t dwAccum;
-    int nRowCount;
-    for (nRowCount = 0; nRowCount < 0x20; nRowCount++) {
-      uint32_t* pdwCol;
-      dwAccum = 0;
-      pdwCol = mat;
-      for (dwBits = mat[nRowCount]; dwBits; dwBits >>= 1) {
-        if (dwBits & 1) {
-          dwAccum ^= *pdwCol;
-        }
-
-        pdwCol++;
-      }
-
-      square[nRowCount] = dwAccum;
-    }
+    int n;
+    for (n = 0; n < 32; n++)
+        square[n] = gf2_matrix_times(mat[n], mat);
 }
 
 uint32_t __stdcall crc32_combine_(uint32_t crc1, uint32_t crc2, int64_t len2) {
