@@ -2899,11 +2899,11 @@ void __stdcall GetShiftRightSkillData(D2UnitStrc * pUnit, eD2Skills * pShiftRigh
 }
 
 void __stdcall SetShiftLeftSkillData(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nShiftLeftSkillOwnerGUID) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
     }
 
-    D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+    D2UnitDataPlayerStrc* pPlayerData = GetPlayerDataInline(pUnit);
     if (!pPlayerData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x14a8);
       exit(-1);
