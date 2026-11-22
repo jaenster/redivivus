@@ -227,27 +227,24 @@ BOOL __fastcall Skills_SrvDoFunc_084_SpawnMinionsAndSuicide(::SGAMEDATA * pGame,
 }
 
 BOOL __fastcall Skills_SrvDoFunc_085_FireUpgradedMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nClassId;
-    eD2Skills eSkillSlot;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
-    int nMissileBase = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].srvmissile[1];
-    if (!(nMissileBase >= 0 && nMissileBase < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+    int nMissile = pSkillTxt->srvmissile[1];
+    if (nMissile < 0 || nMissile >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
     }
 
-    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(nClassId, nullptr, (int32_t*)&eSkillSlot);
-    eMissilesId eMissileUpgraded = nMissileBase + eSkillSlot;
-    if ((int)eMissileUpgraded >= 0 && (int)eMissileUpgraded < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-      SkillsServer::CreatingAMissile(pGame, eMissileUpgraded, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
+    int32_t nChainId;
+    D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_GetUpgradeDataByMonStatsId(!pUnit ? -1 : pUnit->nClassId, nullptr, &nChainId);
+    nMissile += nChainId;
+    if (nMissile >= 0 && nMissile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      SkillsServer::CreatingAMissile(pGame, nMissile, pUnit, eSkill, nSkillLvl, 0, 0, 0, 0, 0);
       return 1;
     }
 
