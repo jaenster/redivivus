@@ -241,13 +241,17 @@ void __thiscall WND_UnlinkListNode(StormLinkedListStrc * pThis, StormLinkStrc * 
     pNode->pNext = 0;
 }
 
+// TSLink's constructor: a new link belongs to no list.
+static inline void StormLink_Construct(StormLinkStrc* pLink) {
+    pLink->pPrevLink = 0;
+    pLink->pNext = 0;
+}
+
 StormLinkedListStrc * __fastcall Unreferenced_004206a0(StormLinkedListStrc * pList) {
-    StormLinkStrc* pSVar1 = &pList->head;
-    pSVar1->pPrevLink = 0;
-    pSVar1->pNext = 0;
-    pSVar1->pPrevLink = pSVar1;
+    StormLink_Construct(&pList->head);
+    pList->head.pPrevLink = &pList->head;
     pList->nLinkOffset = 0;
-    pList->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)&pList->head;
     return pList;
 }
 
