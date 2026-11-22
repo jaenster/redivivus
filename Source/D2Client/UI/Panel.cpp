@@ -2257,67 +2257,47 @@ void __stdcall INPUT_PanelLeftClickUp(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall PANEL_UpdatePanelFromMode(D2UIMouseMsgStrc * pMsg) {
-    uint32_t bIsDeadOrFlag;
-    D2UnitStrc* pPlayer;
-    int32_t nMouseY;
-    int32_t nMouseX;
-    if (GAME::Game::ServerLoadingComplete) {
-      BOOL bFlag;
-      bFlag = GAME::Game::GAMEDATA_GetExitFlag3();
-      if (!bFlag) {
-        bIsDeadOrFlag = UNIT::Player::IsPlayerDead();
-        if (!bIsDeadOrFlag) {
-          nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
-          nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
-          pPlayer = UNIT::Player::GetPlayerUnit_UI();
-          bIsDeadOrFlag = GAME::Game::GAME_HasQueuedPrimaryClick();
-          if (bIsDeadOrFlag) {
-            return;
-          }
-          if (gnPanelBeltRowsExpanded) {
-            bFlag = PANEL_CalculateBeltSlotIndex(pMsg);
-            if (bFlag) {
-              bFlag = ui::GetUIFlag(UI_BELTROWS);
-              if (bFlag) {
-                pMsg->bHandled = 1;
-                pMsg->dwResult = 0;
-              }
-
-              CLIENT_HandleBeltMouseDown(pPlayer->pInventory, nMouseX, nMouseY);
-              return;
-            }
-
-            gbPanelBeltAnimating = ui::GetUIFlag(UI_BELTROWS);
-            if (!gbPanelBeltAnimating) {
-              pMsg->bHandled = 0;
-              gnPanelBeltRowsExpanded = gbPanelBeltAnimating;
-              gpPanelBeltSlot = gbPanelBeltAnimating;
-              return;
-            }
-
-            pMsg->bHandled = 0;
-            gbPanelBeltAnimating = 0;
-            gpPanelBeltSlot = 0;
-            return;
-          }
-          if (nMouseX >= ui::ScreenSizeX / 2 + 0x17 && nMouseX <= ui::ScreenSizeX / 2 + 0x91 && nMouseY >= Inv::ScreenSizeY - 0x27 && nMouseY <= Inv::ScreenSizeY - 10) {
-            bFlag = ui::UI_GetFlag(UI_ESCMENU);
-            if (!bFlag) {
-              gnPanelBeltRowsExpanded = 1;
-              gbPanelBeltAnimating = 1;
-              CLIENT_HandleBeltMouseDown(pPlayer->pInventory, nMouseX, nMouseY);
-            }
-
+    if (GAME::Game::ServerLoadingComplete && !GAME::Game::GAMEDATA_GetExitFlag3() && !UNIT::Player::IsPlayerDead()) {
+      int32_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+      int32_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
+      D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
+      if (GAME::Game::GAME_HasQueuedPrimaryClick()) {
+        return;
+      }
+      if (gnPanelBeltRowsExpanded) {
+        if (PANEL_CalculateBeltSlotIndex(pMsg)) {
+          if (ui::GetUIFlag(UI_BELTROWS)) {
             pMsg->bHandled = 1;
             pMsg->dwResult = 0;
-            return;
           }
 
-          pMsg->bHandled = 0;
-          gpPanelBeltSlot = 0;
+          CLIENT_HandleBeltMouseDown(pPlayer->pInventory, nMouseX, nMouseY);
           return;
         }
+        if (!ui::GetUIFlag(UI_BELTROWS)) {
+          gnPanelBeltRowsExpanded = 0;
+        }
+
+        pMsg->bHandled = 0;
+        gbPanelBeltAnimating = 0;
+        gpPanelBeltSlot = 0;
+        return;
       }
+      if (nMouseX >= ui::ScreenSizeX / 2 + 0x17 && nMouseX <= ui::ScreenSizeX / 2 + 0x91 && nMouseY >= Inv::ScreenSizeY - 0x27 && nMouseY <= Inv::ScreenSizeY - 10) {
+        if (!ui::UI_GetFlag(UI_ESCMENU)) {
+          gnPanelBeltRowsExpanded = 1;
+          gbPanelBeltAnimating = 1;
+          CLIENT_HandleBeltMouseDown(pPlayer->pInventory, nMouseX, nMouseY);
+        }
+
+        pMsg->bHandled = 1;
+        pMsg->dwResult = 0;
+        return;
+      }
+
+      pMsg->bHandled = 0;
+      gpPanelBeltSlot = 0;
+      return;
     }
 
     pMsg->bHandled = 0;
