@@ -3023,21 +3023,26 @@ BOOL __stdcall CanDualWield(D2UnitStrc * pUnit) {
       eUnitType = pUnit->eUnitType;
       nClassId = pUnit->nClassId;
     }
-    if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType == UNIT_MONSTER && nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nClassId >= 0x1a1 && nClassId <= 0x1a2) {
-        return 1;
-      }
-    } else {
-      switch (nClassId) {
-        case 4:
-          {
+    switch (eUnitType) {
+      case UNIT_MONSTER:
+        if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+          // Only MonsterUnitWarrior and MonsterUnitMaster, the shadow warrior and master, wield two weapons.
+          if (nClassId < 0x1a1) {
+            return 0;
+          }
+          if (nClassId <= 0x1a2) {
             return 1;
           }
-        case 6:
-          {
+        }
+        return 0;
+      case UNIT_PLAYER:
+        switch (nClassId) {
+          case CLASS_BARBARIAN:
             return 1;
-          }
-      }
+          case CLASS_ASSASSIN:
+            return 1;
+        }
+        break;
     }
 
     return 0;
