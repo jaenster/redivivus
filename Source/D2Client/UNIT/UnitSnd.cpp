@@ -2494,6 +2494,23 @@ int gaAmbientMusicLevelSetTable[168] = {
 
 namespace D2Client::UNIT::UnitSnd {
 
+// The unit type read as this unit's callers inlined it: UNIT_COUNT loaded first, the unit's type over it.
+static inline eD2UnitType GetUnitTypeOrDefaultInline(D2UnitStrc * pUnit) {
+    eD2UnitType eUnitType = UNIT_COUNT;
+    if (pUnit) {
+      eUnitType = pUnit->eUnitType;
+    }
+    return eUnitType;
+}
+
+// The class id read as this unit's callers inlined it: the -1 path first, then the unit's class id.
+static inline int GetUnitClassIdOrNoneInline(D2UnitStrc * pUnit) {
+    if (!pUnit) {
+      return -1;
+    }
+    return pUnit->nClassId;
+}
+
 static DWORD GetSndUnitClassId(D2UnitStrc * pUnit) {
     DWORD nClassId;
     eD2UnitType eUnitType = UNIT_COUNT;
@@ -2531,14 +2548,8 @@ static eD2UnitType GetSndUnitType(D2UnitStrc * pUnit) {
 }
 
 static int32_t GetSndUnitMode(D2UnitStrc * pUnit) {
-    int nClassId;
-    eD2UnitType eUnitType = UNIT_COUNT;
-    if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
-    }
+    eD2UnitType eUnitType = GetUnitTypeOrDefaultInline(pUnit);
+    int nClassId = GetUnitClassIdOrNoneInline(pUnit);
 
     int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     if (eUnitType == UNIT_PLAYER) {
