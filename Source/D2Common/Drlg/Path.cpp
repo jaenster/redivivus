@@ -836,36 +836,26 @@ uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pPathData
 // Used by DRLGPATH_StepPathWithCollisionCheck to keep velocity components in
 // a safe range for fixed-point iteration.
 void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnStepX, int * pnStepY) {
-    int nShiftCount = *pnStepX;
-    if (nShiftCount >= 0) {
-      while (nShiftCount > 0x10000) {
+    if (*pnStepX >= 0) {
+      while (*pnStepX > 0x10000) {
         *pnStepX >>= 1;
         *pnStepY >>= 1;
-        nShiftCount = *pnStepX;
       }
     } else {
-      while (nShiftCount < -0x10000) {
+      while (*pnStepX < -0x10000) {
         *pnStepX >>= 1;
         *pnStepY >>= 1;
-        nShiftCount = *pnStepX;
       }
     }
-
-    nShiftCount = *pnStepY;
-    if (nShiftCount >= 0) {
-      if (nShiftCount > 0x10000) {
-        do {
-          *pnStepX >>= 1;
-          *pnStepY >>= 1;
-        } while (*pnStepY > 0x10000);
-
-        return;
-      }
-    } else {
-      while (nShiftCount < -0x10000) {
+    if (*pnStepY >= 0) {
+      while (*pnStepY > 0x10000) {
         *pnStepX >>= 1;
         *pnStepY >>= 1;
-        nShiftCount = *pnStepY;
+      }
+    } else {
+      while (*pnStepY < -0x10000) {
+        *pnStepX >>= 1;
+        *pnStepY >>= 1;
       }
     }
 }
