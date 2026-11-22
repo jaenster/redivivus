@@ -56,16 +56,16 @@ namespace Storm { namespace Source {
 // Parses command-line boolean argument with optional +/- prefix. Updates bitmask in cmdDef based on flags (sets bits on +/true, clears bits on -/false). Also updates external bitmask pointer if provided.
 // @blizzard ConvertBool (SCMD.CPP)
 static void __fastcall SCMD_ConvertBool(CMDDEF * cmdDef, char * str, uint32_t * outConsumed) {
-    bool bSetFlags;
+    BOOL bSetFlags;
     uint32_t* pTradeBitmask;
     if (*str == '-') {
-      bSetFlags = false;
+      bSetFlags = FALSE;
       *outConsumed = 1;
     } else if (*str == '+') {
-      bSetFlags = true;
+      bSetFlags = TRUE;
       *outConsumed = 1;
     } else {
-      bSetFlags = (cmdDef->nArgTypeFlags & 1) != 1;
+      bSetFlags = ((uint8_t)cmdDef->nArgTypeFlags & 1) != 1;
     }
 
     cmdDef->uValue.dwUnsignedValue &= ~cmdDef->dwSetMask;

@@ -1482,13 +1482,20 @@ void __fastcall NET_D2GS_SERVER_Send_0x9D_ITEMUNITEX(D2ClientStrc * pClient, D2U
     }
 
     sPacket.nItemGUID = nItemGUIDValue;
-    sPacket.nOwnerUnitType = '\x06';
+    eD2UnitType eOwnerType = UNIT_COUNT;
     if (pUnit) {
-      sPacket.nOwnerUnitType = (uint8_t)pUnit->eUnitType;
-      sPacket.nOwnerGUID = pUnit->nUnitGUID;
-    } else {
-      sPacket.nOwnerGUID = -1;
+      eOwnerType = pUnit->eUnitType;
     }
+
+    sPacket.nOwnerUnitType = eOwnerType;
+    int32_t nOwnerGUID;
+    if (!pUnit) {
+      nOwnerGUID = -1;
+    } else {
+      nOwnerGUID = pUnit->nUnitGUID;
+    }
+
+    sPacket.nOwnerGUID = nOwnerGUID;
 
     eD2ItemFlag eSavedItemFlag = D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pItem);
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, eItemFlag, 1);

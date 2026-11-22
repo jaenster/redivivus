@@ -938,8 +938,8 @@ int __stdcall SEvtBreakHandlerChain(void * pUnderMouse) {
     }
 
     pNode->link.pPrevLink = gpSevtBreakCmdListHead.head.pPrevLink;
-    pNode->link.pNext = gpSevtBreakCmdListHead.head.pPrevLink->pNext;
-    gpSevtBreakCmdListHead.head.pPrevLink->pNext = (intptr_t)pNewNode;
+    pNode->link.pNext = pNode->link.pPrevLink->pNext;
+    pNode->link.pPrevLink->pNext = (intptr_t)pNewNode;
     gpSevtBreakCmdListHead.head.pPrevLink = &pNode->link;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pNewNode->pData = pUnderMouse;
     LeaveCriticalSection(&lpCriticalSection_0077930c);
