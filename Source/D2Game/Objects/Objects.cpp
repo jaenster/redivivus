@@ -1779,9 +1779,7 @@ D2UnitStrc * __fastcall Objects_PopulateFn7_CorpseOnStick(::SGAMEDATA * pGame, D
 }
 
 D2UnitStrc * __fastcall Objects_PopulateFn3(::SGAMEDATA * pGame, D2RoomStrc * pRoom, uint8_t nDensity, int32_t nObjectClassId, uint16_t nChancePercent) {
-    int nSpawnCount;
     D2DrlgRoomCoordsStrc sRoomCoords;
-    ::SGAMEDATA* pGameSave = pGame;
     if (nDensity > 0x80) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x864);
       exit(-1);
@@ -1791,15 +1789,14 @@ D2UnitStrc * __fastcall Objects_PopulateFn3(::SGAMEDATA * pGame, D2RoomStrc * pR
     int32_t nObjSizeX = pObjectsTxt->SizeX;
     int32_t nObjSizeY = pObjectsTxt->SizeY;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
-    D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-    uint32_t sNewSeed = D2_SeedRoll(pCtrlSeed);
-    if (sNewSeed % 100 > (uint32_t)nChancePercent) {
+    if (D2_SeedRoll(ObjectsRgn::GetObjectControlSeed(pGame, pRoom)) % 100 > nChancePercent) {
       return nullptr;
     }
 
-    D2UnitStrc* pSpawnedUnit = 0;
-    for (nSpawnCount = (int)((sRoomCoords.dwYSize * sRoomCoords.dwXSize >> 7) * (uint32_t)nDensity) >> 8; nSpawnCount > 0; nSpawnCount--) {
-      pSpawnedUnit = OBJECT_PlaceAtRandomPosition(pGameSave, nObjectClassId, nObjSizeX, nObjSizeY, pRoom);
+    int nSpawnCount = (int)((sRoomCoords.dwXSize * sRoomCoords.dwYSize >> 7) * nDensity) >> 8;
+    D2UnitStrc* pSpawnedUnit = nullptr;
+    for (; nSpawnCount > 0; nSpawnCount--) {
+      pSpawnedUnit = OBJECT_PlaceAtRandomPosition(pGame, nObjectClassId, nObjSizeX, nObjSizeY, pRoom);
       if (pSpawnedUnit) {
         if (pObjectsTxt->Selectable[pSpawnedUnit->eAnimMode.ePlayerMode]) {
           pSpawnedUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
