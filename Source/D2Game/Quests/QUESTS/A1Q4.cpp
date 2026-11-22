@@ -1685,43 +1685,30 @@ BOOL __fastcall Q04_SetSecretCowLevelDiscovered(::SGAMEDATA * pGame, D2UnitStrc 
 // mark all players via Q04_SetSecretCowLevelDiscovered, and drop 8 reward items at the
 // target. Cow Level is bookkept inside A1Q4's quest record via Step0x10/Step0x11.
 void __fastcall Q04_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    BOOL BVar1;
-    D2BitBufferStrc* pBitBuffer;
-    D2QuestDataStrc* pQuestDataTmp;
-    ::SGAMEDATA* pGame;
     if (pQuestArgs->pPlayer) {
-      D2UnitDataPlayerStrc* pPlayerData;
-      pGame = pQuestArgs->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      BVar1 = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TheSearchForCain, QUESTSTATE_Step0x10);
-      if (BVar1) {
+      if (D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer), QUEST_TheSearchForCain, QUESTSTATE_Step0x10)) {
         return;
       }
 
-      pGame = pQuestArgs->pGame;
-      if (pGame->bExpansion) {
-        pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-        pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_EveOfDestruction, QUESTSTATE_Completed);
+      BOOL bCompleted;
+      if (pQuestArgs->pGame->bExpansion) {
+        bCompleted = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer), QUEST_EveOfDestruction, QUESTSTATE_Completed);
       } else {
-        pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-        pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-        BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed);
+        bCompleted = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer), QUEST_TerrorsEnd, QUESTSTATE_Completed);
       }
-      if (!BVar1) {
+      if (!bCompleted) {
         return;
       }
 
-      pGame = pQuestArgs->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      D2Common::QuestRecord::SetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TheSearchForCain, QUESTSTATE_Step0x10);
+      D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer), QUEST_TheSearchForCain, QUESTSTATE_Step0x10);
     }
 
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestArgs->pGame, 0, pQuestArgs->pTarget, (::fpExecuteOnUnitFunction)Q04_SetSecretCowLevelDiscovered);
     QUEST_StubEmpty(pQuestData, pQuestArgs, 0x40);
     pQuestArgs->pTarget->dwDropItemCode = 0x20737076;
-    for (int nDropCount = 0; nDropCount < 8; nDropCount++) {
-      ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestArgs->pGame, pQuestArgs->pTarget, QUALITY_INVALID, (int32_t*)&pQuestDataTmp, nullptr, -1, 0);
+    for (int i = 0; i < 8; i++) {
+      int32_t nItemLevel;
+      ITEMS::Items::Drop::ITEM_RewardItemToDrop(pQuestArgs->pGame, pQuestArgs->pTarget, QUALITY_INVALID, &nItemLevel, nullptr, -1, 0);
     }
 }
 
