@@ -1102,24 +1102,26 @@ uint32_t __stdcall SMemHeapFree(int32_t nHeapId, uint32_t dwFlags, void * pObjec
       }
     }
 
-    void* pObjectSaved = pObject;
-    D2FogHeapBlockHdrStrc* pBlock = 0;
-    BOOL nValid = SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pObject, 1, 0, nullptr);
-    if (!nValid) {
+    if (!SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pObject, 1, 0, nullptr)) {
       return 0;
     }
-    if (pObjectSaved) {
-      pBlock = (D2FogHeapBlockHdrStrc*)((char*)pObjectSaved - 8);
-      if (*(uint8_t*)((char*)pObjectSaved - 5) & 8) {
-        pBlock = *(D2FogHeapBlockHdrStrc**)((char*)pObjectSaved - 0xc);
+
+    D2FogHeapBlockHdrStrc* pBlock;
+    if (!pObject) {
+      pBlock = 0;
+    } else {
+      pBlock = (D2FogHeapBlockHdrStrc*)((char*)pObject - 8);
+      if (pBlock->byFlags & 8) {
+        pBlock = ((D2FogHeapBlockHdrStrc**)pBlock)[-1];
       }
     }
-    if (*(int*)(((uint32_t)*(uint16_t*)&pBlock->uLink << 0x10) + 4) != nHeapId) {
+
+    if (((D2FogHeapDescStrc*)((uint32_t)*(uint16_t*)&pBlock->uLink << 0x10))->nHash != nHeapId) {
       return 0;
     }
 
     D2FogHeapDescStrc* pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&nObject, pBlock);
-    SMEM_SatisfyFreeRequest(pObjectSaved, pHeap, pBlock);
+    SMEM_SatisfyFreeRequest(pObject, pHeap, pBlock);
     if (nObject != -1) {
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nObject);
     }
