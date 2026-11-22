@@ -173,91 +173,67 @@ static void __stdcall Q12_OnJournalActivate(D2QuestDataA2Q4Strc * pQuestData, D2
 
 // A2Q4 - Callback_11 (NPC-talk handler). Drives the quest from NPC dialogue. Drognan(0x14b): msg 0xba -> set Step0x07; msg 0xbb..0xbd -> set Step0x08. Other NPCs: for the Summoner-aftermath gossip set, send gossip packet and consume RewardAwaits(1) (Unset + add player to participation list). On msg 0x18c (staff/Sanctuary trigger) broadcasts state 5 and, if player is in the right room, spawns the Canyon-of-the-Magi portal and marks record JustCompleted(0xd). Atma(0xb1 msg0x175)->stateFlag 2 + OnJournalActivate; Cain/Jerhyn(0xc9 msg0x179)->stateFlag 3, broadcast state 3, persist.
 void __fastcall Q12_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArg) {
-    int32_t nPlayerGUID;
-    D2RoomStrc* pDVar3;
-    BOOL nPortalId;
-    D2QuestDataA2Q4Strc* dwQuestSpecificData;
-    POINT ptPlayerPos;
-    uint32_t nNPCNo = (uint32_t)(uint16_t)pQuestArg->sQuestArgs.sNpcMessage.nNPCNo;
-    uint32_t nMessageIndex = (uint32_t)pQuestArg->sQuestArgs.sNpcMessage.nMessageIndex;
+    uint16_t nNPCNo = pQuestArg->sQuestArgs.sNpcMessage.nNPCNo;
+    uint16_t nMessageIndex = pQuestArg->sQuestArgs.sNpcMessage.nMessageIndex;
     if (!pQuestData) {
       return;
     }
 
-    D2QuestDataA2Q4Strc* pA2Q4Specific = pQuestData->pQuestSpecificData.pA2Q4;
-    ::SGAMEDATA* pSVar1 = pQuestArg->pGame;
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pQuestArg->pPlayer);
-    D2BitBufferStrc* pBitBuffer = pDVar2->pQuestRecord[pSVar1->nDifficulty];
-    if ((short int)nNPCNo == 0x14b) {
-      if ((nMessageIndex & 0xffff) == 0xba) {
-        /* SetQuestState Step0x07 - Drognan first hint about Summoner (msg 0xba) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
-        return;
+    D2QuestDataA2Q4Strc* pA2Q4Data = pQuestData->pQuestSpecificData.pA2Q4;
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArg->pGame, pQuestArg->pPlayer);
+    if (nNPCNo == 0x14b) {
+      switch (nMessageIndex) {
+        case 0xba:
+          D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x07);
+          break;
+        case 0xbb:
+        case 0xbc:
+        case 0xbd:
+          D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x08);
+          break;
       }
-      if ((nMessageIndex & 0xffff) - 0xbb <= 2) {
-        /* SetQuestState Step0x08 - Drognan tells Summoner location (msg 0xbb-0xbd) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x08);
-        return;
+      return;
+    }
+
+    if (nMessageIndex == 0x196 || nMessageIndex == 0x193 || nMessageIndex == 0x18d || nMessageIndex == 400 || nMessageIndex == 0x18e || nMessageIndex == 399 || nMessageIndex == 0x195 || nMessageIndex == 0x197 || nMessageIndex == 0x192 || nMessageIndex == 0x191 || nMessageIndex == 0x194) {
+      QUEST_SendNpcGossipPacket(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
+      if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits)) {
+        D2Common::QuestRecord::UnsetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
+        QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, !pQuestArg->pPlayer ? -1 : pQuestArg->pPlayer->nUnitGUID);
       }
-    } else {
-      short int sNPCOrMsgId;
-      sNPCOrMsgId = (short int)nMessageIndex;
-      if (sNPCOrMsgId == 0x196 || sNPCOrMsgId == 0x193 || sNPCOrMsgId == 0x18d || sNPCOrMsgId == 400 || sNPCOrMsgId == 0x18e || sNPCOrMsgId == 399 || sNPCOrMsgId == 0x195 || sNPCOrMsgId == 0x197 || sNPCOrMsgId == 0x192 || sNPCOrMsgId == 0x191 || sNPCOrMsgId == 0x194) {
-        QUEST_SendNpcGossipPacket(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
-        /* GetQuestState RewardAwaits(1) - was reward pending for self NPC turn-in? */ nPortalId = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
-        if (nPortalId) {
-          /* UnsetQuestState RewardAwaits(1) - consume reward, add player to participation
-                         list */ D2Common::QuestRecord::UnsetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits);
-          if (!pQuestArg->pPlayer) {
-            nPlayerGUID = -1;
-          } else {
-            nPlayerGUID = pQuestArg->pPlayer->nUnitGUID;
-          }
+    }
 
-          QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, nPlayerGUID);
-        }
-
-        sNPCOrMsgId = (short int)nMessageIndex;
-      }
-
-      dwQuestSpecificData = pA2Q4Specific;
-      if (sNPCOrMsgId == 0x18c) {
-        if (pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev < 5) {
-          pQuestData->nQuestPacketFlags = '\0';
-          QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, 0);
-        }
-
-        dwQuestSpecificData = pA2Q4Specific;
-        if (!pA2Q4Specific->bPortalSpawned) {
-          pDVar3 = D2Common::Units::UNITS_GetRoom(pQuestArg->pPlayer);
-          if (pDVar3 == dwQuestSpecificData->pPortalSpawnRoom) {
-            pA2Q4Specific = 0;
-            D2Common::Units::GetCoords(pQuestArg->pPlayer, &ptPlayerPos);
-            FindSpawnableLocation(dwQuestSpecificData->pPortalSpawnRoom, &ptPlayerPos, 2, 0xbe11, (D2RoomStrc**)&pA2Q4Specific, 8, 100);
-            if (pA2Q4Specific) {
-              nPortalId = SKILLS::SkillsServer::SERVER_SpawnPortal(pQuestData->pGame, pQuestArg->pPlayer, (D2RoomStrc*)pA2Q4Specific, ptPlayerPos.x, ptPlayerPos.y, LEVEL_CanyonOfTheMagi, nullptr, 0x3c, 0);
-              if (nPortalId) {
-                dwQuestSpecificData->bPortalSpawned = true;
-                /* SetQuestRecordState JustCompleted(0xd) - Canyon-of-Magi portal spawned at
-                         altar */ QUEST_SetQuestRecordState(pQuestArg->pGame, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
-              }
-            }
-          }
-        }
-      }
-      if ((short int)nNPCNo == 0xb1) {
-        if ((short int)nMessageIndex == 0x175) {
-          QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x1d2);
-          dwQuestSpecificData->bAtmaSpokeToJerhyn = '\x01';
-          Q12_OnJournalActivate(dwQuestSpecificData, pQuestData);
-          QUEST_SendNpcGossipPacket(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
-          return;
-        }
-      } else if ((short int)nNPCNo == 0xc9 && (short int)nMessageIndex == 0x179) {
-        QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x1da);
-        QUEST_SendNpcGossipPacket(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
+    if (nMessageIndex == 0x18c) {
+      if (pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev < 5) {
         pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, 1);
-        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q12_UpdateQuestRecord);
+        QUEST_SetStateAndBroadcast(pQuestData, 5, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, 0);
       }
+
+      if (!pA2Q4Data->bPortalSpawned && D2Common::Units::UNITS_GetRoom(pQuestArg->pPlayer) == pA2Q4Data->pPortalSpawnRoom) {
+        D2RoomStrc* pPortalRoom = nullptr;
+        POINT ptPlayerPos;
+        D2Common::Units::GetCoords(pQuestArg->pPlayer, &ptPlayerPos);
+        FindSpawnableLocation(pA2Q4Data->pPortalSpawnRoom, &ptPlayerPos, 2, 0xbe11, &pPortalRoom, 8, 100);
+        if (pPortalRoom && SKILLS::SkillsServer::SERVER_SpawnPortal(pQuestData->pGame, pQuestArg->pPlayer, pPortalRoom, ptPlayerPos.x, ptPlayerPos.y, LEVEL_CanyonOfTheMagi, nullptr, 0x3c, 0)) {
+          pA2Q4Data->bPortalSpawned = true;
+          QUEST_SetQuestRecordState(pQuestArg->pGame, pQuestData->nQuestIdReal, QUESTSTATE_JustCompleted);
+        }
+      }
+    }
+
+    if (nNPCNo == 0xb1) {
+      if (nMessageIndex == 0x175) {
+        QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x1d2);
+        pA2Q4Data->bAtmaSpokeToJerhyn = '\x01';
+        Q12_OnJournalActivate(pA2Q4Data, pQuestData);
+        QUEST_SendNpcGossipPacket(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
+      }
+    } else if (nNPCNo == 0xc9 && nMessageIndex == 0x179) {
+      QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x1da);
+      QUEST_SendNpcGossipPacket(pQuestArg->pGame, pQuestArg->pPlayer, pQuestArg->pTarget);
+      pQuestData->nQuestPacketFlags = '\0';
+      QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q12_NotifyArcaneComplete, 1);
+      UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q12_UpdateQuestRecord);
     }
 }
 
