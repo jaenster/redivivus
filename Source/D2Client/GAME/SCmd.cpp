@@ -2841,12 +2841,14 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x81(D2GSPacketSrv0x81 * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x7B_SYNCHOTKEYS(D2GSPacketSrv0x7B * pBytes) {
-    uint32_t nSkillId = pBytes->wSkillId & 0xfff;
-    if ((int)nSkillId > D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+    uint16_t wSkillId = pBytes->wSkillId;
+    int nRightHandBit = wSkillId & 0x8000; // steer-ok: the original masks the hand bit before the skill id
+    int nSkillId = wSkillId & 0xfff;
+    if (nSkillId > D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       nSkillId = -1;
     }
 
-    UI::SpellSel::SPELLSEL_SetSkillSlot((uint32_t)pBytes->nHotkeySlot, nSkillId, (uint32_t)((pBytes->wSkillId & 0x8000) != 0), pBytes->dwHotkeyArg);
+    UI::SpellSel::SPELLSEL_SetSkillSlot(pBytes->nHotkeySlot, nSkillId, nRightHandBit != 0, pBytes->dwHotkeyArg);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x7C_SETITEMUNUSED(char * pBytes) {
