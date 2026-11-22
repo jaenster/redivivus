@@ -2865,21 +2865,20 @@ void __stdcall GetShiftLeftSkillData(D2UnitStrc * pUnit, eD2Skills * pShiftLeftS
 }
 
 void __stdcall GetShiftRightSkillData(D2UnitStrc * pUnit, eD2Skills * pShiftRightSkillId, int * pShiftRightSkillOwnerGUID) {
-    D2UnitDataPlayerStrc* pPlayerData;
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
-      pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
-      if (!pPlayerData) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1499);
-        exit(-1);
-      }
-
-      *pShiftRightSkillId = pPlayerData->eSwitchRightSkillId;
-      *pShiftRightSkillOwnerGUID = pPlayerData->nSwitchRightSkillOwnerGUID;
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
+      *pShiftRightSkillId = SKILL_Attack;
+      *pShiftRightSkillOwnerGUID = -1;
       return;
     }
 
-    *pShiftRightSkillId = SKILL_Attack;
-    *pShiftRightSkillOwnerGUID = -1;
+    D2UnitDataPlayerStrc* pPlayerData = GetTypeInline(pUnit) == UNIT_PLAYER ? pUnit->pUnitData.pUnitDataPlayer : nullptr;
+    if (!pPlayerData) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1499);
+      exit(-1);
+    }
+
+    *pShiftRightSkillId = pPlayerData->eSwitchRightSkillId;
+    *pShiftRightSkillOwnerGUID = pPlayerData->nSwitchRightSkillOwnerGUID;
 }
 
 void __stdcall SetShiftLeftSkillData(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nShiftLeftSkillOwnerGUID) {
