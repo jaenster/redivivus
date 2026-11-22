@@ -2267,7 +2267,6 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
 // When fClientFlags bit 1 is set, looks up the unit (nAttachedUnitType, dwAttachedUnitGUID). Returns it if IsUnitNearClient, otherwise clears the bit and returns NULL. Halts (line 1977) on a NULL client.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 D2UnitStrc * __fastcall CLIENT_GetAttachedUnit(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
-    BOOL BVar1;
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b9);
       exit(-1);
@@ -2278,14 +2277,15 @@ D2UnitStrc * __fastcall CLIENT_GetAttachedUnit(::SGAMEDATA * pGame, D2ClientStrc
 
     D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(pGame, pClient->nAttachedUnitType, pClient->dwAttachedUnitGUID);
     if (pUnit) {
-      BVar1 = IsUnitNearClient(pUnit, pClient);
-      if (BVar1) {
+      if (IsUnitNearClient(pUnit, pClient)) {
         return pUnit;
       }
+
+      pUnit = nullptr;
     }
 
     pClient->fClientFlags &= -3;
-    return nullptr;
+    return pUnit;
 }
 
 // Dead code / unused client join path. Sets pClient->nClass to bParam, resolves the player unit and its spawn coords, then deletes the existing unit from the room (AllocDrlgDelete + FreeServerUnit) and reloads it from scratch via CLIENT_LoadCharacterAndSendGameData + CLIENT_PlacePlayerInRoom. Clears the lowest fClientFlags bit and fires GAME_OnClientRoomChange if the room changed. Halts with an internal error if pClient is null. Not referenced by any active join flow.
