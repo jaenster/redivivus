@@ -949,8 +949,9 @@ static void __stdcall MONSTER_InitWanderingMonsterRegion(D2MonsterRegionStrc * p
       return;
     }
 
-    uint32_t byMonBaseOffset = (uint32_t)(uint8_t)gaActWanderingMonsterParams[byAct][0];
-    if (!(uint8_t)gaActWanderingMonsterParams[byAct][1]) {
+    uint32_t nPoolSize = (uint8_t)gaActWanderingMonsterParams[byAct][1];  // steer-ok: the original reads the pool size before the pool start
+    uint32_t nPoolStart = (uint8_t)gaActWanderingMonsterParams[byAct][0];
+    if (!nPoolSize) {
       return;
     }
     if (pRoom) {
@@ -959,8 +960,7 @@ static void __stdcall MONSTER_InitWanderingMonsterRegion(D2MonsterRegionStrc * p
       pSeed = 0;
     }
 
-    uint32_t nWanderingClassId = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, (uint32_t)(uint8_t)gaActWanderingMonsterParams[byAct][1]);
-    nWanderingClassId = gaWanderingMonsterClassIds[nWanderingClassId + byMonBaseOffset];
+    uint32_t nWanderingClassId = gaWanderingMonsterClassIds[D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, nPoolSize) + nPoolStart];
     BOOL bFoundPos = SPAWN_FindRandomPositionForMonster(pGame, pRoom, nullptr, nWanderingClassId, &nX, &nY, 0);
     if (!bFoundPos) {
       return;
