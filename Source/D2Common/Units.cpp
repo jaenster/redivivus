@@ -1488,8 +1488,12 @@ static int32_t GetDiminishedStat(D2UnitStrc * pUnit, int32_t nIndex) {
 }; D2_STATIC_GUARD(gaUnitStatDiminished, "D2Common::Units::GetDiminishedStat::gaUnitStatDiminished");
 
     int32_t nStatValue = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, gaUnitStatDiminished[nIndex].eStat, 0);
-    if (gaUnitStatDiminished[nIndex].nDiminishedFlag == 1 && nStatValue) {
-      return gaUnitStatDiminished[nIndex].nBaseOffset * nStatValue / (gaUnitStatDiminished[nIndex].nBaseOffset + nStatValue);
+    switch (gaUnitStatDiminished[nIndex].nDiminishedFlag) {
+      case 1:
+        if (nStatValue) {
+          return gaUnitStatDiminished[nIndex].nBaseOffset * nStatValue / (gaUnitStatDiminished[nIndex].nBaseOffset + nStatValue);
+        }
+        break;
     }
 
     return nStatValue;
