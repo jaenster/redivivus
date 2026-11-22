@@ -199,43 +199,23 @@ bool __fastcall Q20_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 //  - 0xfc (merc/NPC): active if Step0x06 set and Step0x07 NOT yet set.
 // Step0x06 = Khalim's Will assembled; Step0x07/0x08 = post-orb-smash outcomes still pending.
 bool __fastcall Q20_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
-    D2UnitStrc* pQuestItem;
-    BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed);
-    if (bQuestState) {
-      return false;
-    }
-    if (nTargetClassId == 0xfd) {
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20333367);
-      if (!pQuestItem && pQuestData->nStateFlag == 1) {
-        return true;
-      }
-    } else {
-      if (nTargetClassId == 0xff) {
-        pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20333367);
-        if (pQuestItem) {
+    if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Completed)) {
+      if (nTargetClassId == 0xfd) {
+        if (!ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20333367) && pQuestData->nStateFlag == 1) {
+          return true;
+        }
+      } else if (nTargetClassId == 0xff) {
+        if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20333367)) {
           return true;
         }
 
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
-        if (!bQuestState) {
-          return false;
+        if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08)) {
+          return true;
         }
-
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x08);
-      } else {
-        if (nTargetClassId != 0xfc) {
-          return false;
+      } else if (nTargetClassId == 0xfc) {
+        if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07)) {
+          return true;
         }
-
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x06);
-        if (!bQuestState) {
-          return false;
-        }
-
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_BladeOfTheOldReligion, QUESTSTATE_Step0x07);
-      }
-      if (!bQuestState) {
-        return true;
       }
     }
 
