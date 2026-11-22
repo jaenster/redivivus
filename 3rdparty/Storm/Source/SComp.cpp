@@ -1179,7 +1179,8 @@ int __fastcall Unreferenced_0041e930(StormLinkStrc * pLink) {
 }
 
 int32_t __fastcall Unreferenced_0041e940(void * pHandle) {
-    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
+    StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(StormLinkStrc * pNode) {
