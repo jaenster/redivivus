@@ -2475,15 +2475,14 @@ D2ChatDlgUnknown_0x10 * Unreferenced_0043e370() {
 // @sourcefile .\Src\ChatDlg.cpp
 void __stdcall CHATDLG_ProcessPendingMessages() {
     while (true) {
-      D2ChatDlgUnknown_0x10* pMemoryToFree;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077ae28);
-      pMemoryToFree = 0;
+      D2ChatDlgUnknown_0x10* pMemoryToFree = nullptr;
+      EnterCriticalSection(&lpCriticalSection_0077ae28);
       if (gpChatMessageQueueHead) {
         pMemoryToFree = gpChatMessageQueueHead;
         gpChatMessageQueueHead = gpChatMessageQueueHead->pNext;
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077ae28);
+      LeaveCriticalSection(&lpCriticalSection_0077ae28);
       if (!pMemoryToFree) {
         break;
       }
