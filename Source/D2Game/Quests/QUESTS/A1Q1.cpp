@@ -424,15 +424,11 @@ void __fastcall Q01_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // A1Q1 (Den of Evil) level-event / player-leave callback (slot 3). On event index 8 (player entered Den level): sets bEnteredDen, advances nStateFlag to 3 if it was 1 or 2, and if progress was below 2 broadcasts state 2 (\"found the Den\") and clears the slot-2 handler. On player-removed sentinel (pTextControl==1) with nStateFlag==2: if the player's record is neither Completed nor RewardAwaits, advances to 3 and broadcasts state 1. Both paths call Q01_SyncQuestStepToPlayer for all players.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q1.cpp
 void __fastcall Q01_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2UnitDataPlayerStrc* pPlayerData;
-    BOOL bQuestState;
-    D2BitBufferStrc* pBitBuffer;
-    ::SGAMEDATA* pGame;
+    int nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     D2QuestDataA1Q1Strc* pQuestDataA1Q1 = pQuestData->pQuestSpecificData.pA1Q1;
     if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel == 8) {
-      bool bDidSetStateFlag;
       if (pQuestData->bIsNotIntroduction != '\0') {
-        bDidSetStateFlag = false;
+        bool bDidSetStateFlag = false;
         if (pQuestData->nStateFlag == 1 || pQuestData->nStateFlag == 2) {
           QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q1.cpp", 0x259);
           bDidSetStateFlag = true;
@@ -448,25 +444,32 @@ void __fastcall Q01_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
         }
 
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q01_SyncQuestStepToPlayer);
-        return;
       }
-    } else if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 1 && (QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs) , pQuestData->nStateFlag == 2)) {
-      pGame = pQuestArgs->pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-      if (bQuestState != 1) {
-        bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-        if (bQuestState != 1) {
-          QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q1.cpp", 0x275);
-          UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q01_SyncQuestStepToPlayer);
-          if (pQuestData->nStateFlagPrev != 1) {
-            pQuestData->nQuestPacketFlags = '\0';
-            QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 1);
-            pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
-          }
-        }
-      }
+      return;
+    }
+    if (nOldLevel != 1) {
+      return;
+    }
+
+    QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
+    if (pQuestData->nStateFlag != 2) {
+      return;
+    }
+
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed) == 1) {
+      return;
+    }
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits) == 1) {
+      return;
+    }
+
+    QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q1.cpp", 0x275);
+    UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q01_SyncQuestStepToPlayer);
+    if (pQuestData->nStateFlagPrev != 1) {
+      pQuestData->nQuestPacketFlags = '\0';
+      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)MarkCompleteQuest, 1);
+      pQuestData->sStateFunctions.fpQuestStateHandler[2] = (QUESTCALLBACKFN)0x0;
     }
 }
 
