@@ -246,31 +246,21 @@ static D2SevtTypeEntryStrc * SEVT_FindTypeHashEntry(uintptr_t nSubId, uint32_t n
 // @rename-basis Behaviour, confirmed against the PPC body. The only SEvt function that tears the whole module down: walks every hash bucket, frees every handler table and every event record, then frees the bucket array itself and zeroes gpEventHashBuckets, gaEventRegistryHead and gnSevtRegisteredEventCount. Takes no arguments and returns 1. .SEvtDestroy likewise reads no PowerPC argument register at all before entering the critical section. Zero xrefs in Game.exe, consistent with an exported entry point that the statically linked game never calls.
 // @former-name SEVT_DestroyAllEvents (invented)
 BOOL SEvtDestroy() {
-    uint32_t nBucketIndex;
-    D2SevtHandlerTableStrc* pTable;
     EnterCriticalSection(&lpCriticalSection_0077930c);
-    D2SevtTypeEntryStrc** pObject_00 = gpEventHashBuckets;
-    for (nBucketIndex = 0; nBucketIndex < gaEventRegistryHead; nBucketIndex++) {
-      D2SevtTypeEntryStrc* pObject;
-      pObject = pObject_00[nBucketIndex];
-      while (pObject) {
-        pTable = pObject->pHandlerTable;
-        while (pTable) {
-          pObject->pHandlerTable = pTable->pPrevState;
+    for (uint32_t i = 0; i < gaEventRegistryHead; i++) {
+      for (D2SevtTypeEntryStrc* pEntry = gpEventHashBuckets[i]; pEntry; pEntry = gpEventHashBuckets[i]) {
+        for (D2SevtHandlerTableStrc* pTable = pEntry->pHandlerTable; pTable; pTable = pEntry->pHandlerTable) {
+          pEntry->pHandlerTable = pTable->pPrevState;
           SEVT_DeleteIdHashTable(pTable);
-          pObject_00 = gpEventHashBuckets;
-          pTable = pObject->pHandlerTable;
         }
 
-        pObject_00[nBucketIndex] = pObject->pNext;
-        SMem::SMemFree(pObject, "delete", -1, 0);
-        pObject_00 = gpEventHashBuckets;
-        pObject = gpEventHashBuckets[nBucketIndex];
+        gpEventHashBuckets[i] = pEntry->pNext;
+        SMem::SMemFree(pEntry, "delete", -1, 0);
       }
     }
 
-    if (pObject_00) {
-      SMem::SMemFree(pObject_00, "delete", -1, 0);
+    if (gpEventHashBuckets) {
+      SMem::SMemFree(gpEventHashBuckets, "delete", -1, 0);
     }
 
     gpEventHashBuckets = 0;
