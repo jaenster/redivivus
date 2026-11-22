@@ -2723,16 +2723,15 @@ BOOL __fastcall SKILLS_IsSkillEquipped(D2UnitStrc * pUnit, eD2Skills eSkill) {
     }
 
     D2SkillStrc* pSkill = D2Common::Units::GetLeftSkill(pUnit);
-    if (!pSkill) {
-      return 0;
+    if (pSkill) {
+      eD2Skills eLeftSkillId;
+      eLeftSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x1143);
+      if (eLeftSkillId == eSkill) {
+        return 1;
+      }
     }
 
-    eD2Skills eLeftSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x1143);
-    if (eLeftSkillId != eSkill) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
