@@ -716,130 +716,105 @@ bool __fastcall Q19_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
     return false;
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 void __fastcall Q19_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    BOOL bQuestState;
-    D2UnitStrc* pQuestItem;
-    D2QuestDataStrc* pBlackenedTempleQuest;
-    int nKhalimPartsHeld;
-    bool bHasBoneWand;
-    bool bHasEye;
-    bool bHasFlail;
-    bool bHasHeart;
-    bool bHasWill;
-    int32_t nGossipMsgIndex;
-    ::SGAMEDATA* pGame;
-    pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData;
-    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pQuestRecord;
-    pQuestRecord = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    if (!pQuestArgs->pTarget) {
+    ::SGAMEDATA* pGame = pQuestArgs->pGame;
+    D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pGame->nDifficulty];
+    if (GetClassIdInline(pQuestArgs->pTarget) != 0xf5) {
       return;
     }
-    if (pQuestArgs->pTarget->nClassId != 0xf5) {
+    if (pQuestData->nStateFlag >= 1 && !D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x02)) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 0);
       return;
     }
-    if (pQuestData->nStateFlag < 1 || (bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x02) , bQuestState != 0)) {
-      D2GSPacketSrv0x27_TextStrc* sTextMessage;
-      nKhalimPartsHeld = 0;
-      bHasWill = false;
-      bHasFlail = false;
-      bHasEye = false;
-      bHasHeart = false;
-      bHasBoneWand = false;
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20326671);
-      if (pQuestItem) {
-        bHasWill = true;
-        bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x07);
-        if (!bQuestState) {
-          pBlackenedTempleQuest = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheBlackenedTemple);
-          if (!pBlackenedTempleQuest || !pBlackenedTempleQuest->pQuestSpecificData.pA3Q5->bJerhynAiActive) {
-            nGossipMsgIndex = 5;
-            goto show_gossip;
-          }
+
+    int nKhalimPartsHeld = 0;
+    BOOL bHasWill = FALSE;
+    BOOL bHasFlail = FALSE;
+    BOOL bHasEye = FALSE;
+    BOOL bHasHeart = FALSE;
+    BOOL bHasBrain = FALSE;
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20326671)) {
+      bHasWill = TRUE;
+      if (!D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x07)) {
+        D2QuestDataStrc* pBlackenedTempleQuest = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheBlackenedTemple);
+        bool bTempleNotDone = true;
+        if (pBlackenedTempleQuest) {
+          bTempleNotDone = !pBlackenedTempleQuest->pQuestSpecificData.pA3Q5->bJerhynAiActive;
+        }
+        if (bTempleNotDone) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 5);
+          return;
         }
       }
-
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20316671);
-      if (pQuestItem) {
-        nKhalimPartsHeld = 1;
-        bHasFlail = true;
-        bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x05);
-        if (!bQuestState) {
-          nGossipMsgIndex = 4;
-          goto show_gossip;
-        }
-      }
-
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20796571);
-      if (pQuestItem) {
-        nKhalimPartsHeld++;
-        bHasEye = true;
-        bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x03);
-        if (!bQuestState) {
-          nGossipMsgIndex = 1;
-          goto show_gossip;
-        }
-      }
-
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20726871);
-      if (pQuestItem) {
-        nKhalimPartsHeld++;
-        bHasHeart = true;
-        bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x06);
-        if (!bQuestState) {
-          nGossipMsgIndex = 2;
-          goto show_gossip;
-        }
-      }
-
-      pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20726271);
-      if (pQuestItem) {
-        nKhalimPartsHeld++;
-        bHasBoneWand = true;
-        bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x04);
-        if (!bQuestState) {
-          nGossipMsgIndex = 3;
-          goto show_gossip;
-        }
-      }
-      if (nKhalimPartsHeld) {
-        if (bHasFlail) {
-          nGossipMsgIndex = 10;
-        } else if (bHasHeart) {
-          nGossipMsgIndex = 8;
-        } else {
-          if (!bHasEye) {
-            sTextMessage = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
-            if (bHasBoneWand) {
-              AddGossipMessageOnMonster(pQuestData, sTextMessage, 0xf5, 9);
-              return;
-            }
-
-            AddGossipMessageOnMonster(pQuestData, sTextMessage, 0xf5, 6);
-            return;
-          }
-
-          nGossipMsgIndex = 7;
-        }
-      } else {
-        if (bHasWill) {
-          nGossipMsgIndex = 0xb;
-        } else {
-          bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x02);
-          if (!bQuestState) {
-            return;
-          }
-
-          nGossipMsgIndex = 6;
-        }
-      }
-    } else {
-      nGossipMsgIndex = 0;
     }
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20316671)) {
+      nKhalimPartsHeld = 1;
+      bHasFlail = TRUE;
+      if (!D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x05)) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 4);
+        return;
+      }
+    }
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20796571)) {
+      nKhalimPartsHeld++;
+      bHasEye = TRUE;
+      if (!D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x03)) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 1);
+        return;
+      }
+    }
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20726871)) {
+      nKhalimPartsHeld++;
+      bHasHeart = TRUE;
+      if (!D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x06)) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 2);
+        return;
+      }
+    }
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20726271)) {
+      nKhalimPartsHeld++;
+      bHasBrain = TRUE;
+      if (!D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x04)) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 3);
+        return;
+      }
+    }
+    if (nKhalimPartsHeld > 0) {
+      if (bHasFlail) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 10);
+        return;
+      }
+      if (bHasHeart) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 8);
+        return;
+      }
+      if (bHasEye) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 7);
+        return;
+      }
+      if (bHasBrain) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 9);
+        return;
+      }
 
-    show_gossip:
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, nGossipMsgIndex);
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 6);
+      return;
+    }
+    if (bHasWill) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 0xb);
+      return;
+    }
+    if (D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_KhalimsWill, QUESTSTATE_Step0x02)) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0xf5, 6);
+    }
 }
 
 // A3Q2 (Khalim's Will) quest status-string selector. Writes a status code byte into *nUnknown based on which Khalim body-part items the player carries (eye/brain/heart/flail) and relevant quest-record step states; codes 1–7 map to UI status strings. Returns true once Act3 is reachable (AbleGoToAct3 Completed); always returns true thereafter.
