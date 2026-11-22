@@ -1612,18 +1612,11 @@ BOOL __fastcall QUESTGUID_RemovePlayerFromList(D2QuestGUIDStrc * pQuestGUID, int
 // pQuestGUID->aPlayerGUID, else 0. ECX is a D2QuestGUIDStrc (int[32] at +0, word count at +0x80);
 // every caller passes a quest data block's sQuestGUID member.
 BOOL __fastcall QUESTGUID_SearchForValueInIntArray32(D2QuestGUIDStrc * pQuestGUID, int32_t iValue) {
-    int nSearchIdx = 0;
-    if (!pQuestGUID->nPlayerCount) {
-      return 0;
-    }
-
-    do {
+    for (int nSearchIdx = 0; nSearchIdx < pQuestGUID->nPlayerCount; nSearchIdx++) {
       /* If the value is found, stop and return 1 */ if (pQuestGUID->aPlayerGUID[nSearchIdx] == iValue) {
         return 1;
       }
-
-      nSearchIdx++;
-    } while (nSearchIdx < (int)(uint32_t)pQuestGUID->nPlayerCount);
+    }
 
     return 0;
 }
