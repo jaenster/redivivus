@@ -1628,37 +1628,19 @@ void __fastcall ClientInit_Noop09(D2IniConfigStrc * pIni) {
 
 // Apply character name from config.
 void __fastcall ClientInit_CharName(D2IniConfigStrc * pIniConfig) {
-    char cChar;
-    char* pszCharName = pIniConfig->szNAME;
-    bool bIsZero = !strcmp(pszCharName, "0");
-    if (bIsZero) {
+    char* szName = pIniConfig->szNAME;
+    if (!strcmp(szName, "0")) {
       return;
     }
 
-    char* pszCur = pszCharName;
-    pszCur = pszCur + strlen(pszCur) + 1;
-    pszCur += 1 - (intptr_t)(pIniConfig->szNAME + 1);
-    D2Game::Save::szSaveCharacterName[0] = '\0';
-    D2Game::Save::szSaveCharacterName[1] = '\0';
-    D2Game::Save::szSaveCharacterName[2] = '\0';
-    D2Game::Save::szSaveCharacterName[3] = '\0';
-    D2Game::Save::szSaveCharacterName[4] = '\0';
-    D2Game::Save::szSaveCharacterName[5] = '\0';
-    D2Game::Save::szSaveCharacterName[6] = '\0';
-    D2Game::Save::szSaveCharacterName[7] = '\0';
-    D2Game::Save::szSaveCharacterName[8] = '\0';
-    D2Game::Save::szSaveCharacterName[9] = '\0';
-    D2Game::Save::szSaveCharacterName[10] = '\0';
-    D2Game::Save::szSaveCharacterName[0xb] = '\0';
-    D2Game::Save::szSaveCharacterName[0xc] = '\0';
-    D2Game::Save::szSaveCharacterName[0xd] = '\0';
-    D2Game::Save::szSaveCharacterName[0xe] = '\0';
-    D2Game::Save::szSaveCharacterName[0xf] = '\0';
-    if ((intptr_t)pszCur > 0x10) {
-      pszCur = (char*)0x10;
+    int nLength = strlen(szName);
+    nLength++;
+    memset(D2Game::Save::szSaveCharacterName, 0, 0x10);
+    if (nLength > 0x10) {
+      nLength = 0x10;
     }
 
-    strncpy(D2Game::Save::szSaveCharacterName, pszCharName, (size_t)pszCur);
+    strncpy(D2Game::Save::szSaveCharacterName, szName, nLength);
 }
 
 // Apply realm selection from config.
