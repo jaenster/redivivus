@@ -33,34 +33,9 @@ DC6 * __fastcall IMAGE_LoadDC6(char * szFilename, BOOL bUseDccExtension) {
 
 // @sourcefile .\Src\D2WinArchive.cpp
 int * __fastcall D2WINARCHIVE_LoadImageFromArchive(char * szText, uint32_t * pnSize, BOOL bUseDccExtension) {
-    uint32_t nCopyCount;
-    char* pSrcRead;
     char szFilePath[260];
-    char cByte;
     strcpy(szFilePath, szText);
-    char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(bUseDccExtension);
-    char* szExtensionEnd;
-    int nStrLen;
-    nStrLen = (int)strlen(szExtension);
-    char* pDstWrite = (char*)((uint8_t*)&szFilePath - 1);
-    do {
-      pSrcRead = pDstWrite + 1;
-      pDstWrite++;
-    } while (*pSrcRead != '\0');
-
-    pSrcRead = szExtension;
-    for (nCopyCount = (uint32_t)((int)nStrLen + 1) >> 2; nCopyCount; nCopyCount--) {
-      *(uint32_t*)pDstWrite = *(uint32_t*)pSrcRead;
-      pSrcRead += 4;
-      pDstWrite += 4;
-    }
-
-    for (nCopyCount = (int)nStrLen + 1 & 3; nCopyCount; nCopyCount--) {
-      *pDstWrite = *pSrcRead;
-      pSrcRead++;
-      pDstWrite++;
-    }
-
+    strcat(szFilePath, D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(bUseDccExtension));
     DC6* pDC6Result;
     DC6* pRawArchiveData = (DC6*)D2Hell::D2FILE_AllocAndLoadD2File(nullptr, szFilePath, pnSize, ".\\Src\\D2WinArchive.cpp", 0x52);
     D2CMP::SRC::CelCmp::CELCMP_FixupPointersAndPrepare(pRawArchiveData, &pDC6Result, ".\\Src\\D2WinArchive.cpp", 0x53, -1, nullptr);
