@@ -4059,53 +4059,19 @@ BOOL __stdcall IsValidImbumeItem(D2UnitStrc * pUnit) {
 // Returns true if the item is eligible to receive a custom player name. Rejects gold, body-parts, quivers, broken items, items already named (ITEMFLAG_PLAYERNAME set), compact-save items, and items whose Items.txt bNameable flag is false.
 // @sourcefile .\ITEMS\Items.cpp
 BOOL __stdcall ITEM_CheckIfItemCanBeNamed(D2UnitStrc * pUnit) {
-    eD2ItemTypes eItemType;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x67d);
       exit(-1);
     }
-    if (pUnit->eUnitType == UNIT_ITEM) {
-      eItemType = TXT_Items_GetType(pUnit->nClassId);
-      if (eItemType == ITEMTYPE_Gold) {
-        return 0;
+
+    if (!(GetTypeInline(pUnit) == UNIT_ITEM && TXT_Items_GetType(pUnit->nClassId) == ITEMTYPE_Gold) && !CheckItemFlagInline(pUnit, ITEMFLAG_MONSTER)) {
+      if (ITEM_GetItemData_wType(pUnit) != ITEMTYPE_PlayerBodyPart && ITEM_GetItemData_wType(pUnit) != ITEMTYPE_BowQuiver && ITEM_GetItemData_wType(pUnit) != ITEMTYPE_CrossbowQuiver && !CheckItemFlag(pUnit, ITEMFLAG_BROKEN, 0x12f7, ".\\ITEMS\\Items.cpp") && !(ITEM_GetItemData_eD2ItemFlag(pUnit) & ITEMFLAG_PLAYERNAME) && !ITEMS_GetCompactSaveFlag(pUnit)) {
+        D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(GetClassIdInline(pUnit));
+        return pItemsTxt->bNameable != 0;
       }
     }
-    if (!(pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_MONSTER) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))) {
-      return 0;
-    }
 
-    eItemType = ITEM_GetItemData_wType(pUnit);
-    if (eItemType == ITEMTYPE_PlayerBodyPart) {
-      return 0;
-    }
-
-    eItemType = ITEM_GetItemData_wType(pUnit);
-    if (eItemType == ITEMTYPE_BowQuiver) {
-      return 0;
-    }
-
-    eItemType = ITEM_GetItemData_wType(pUnit);
-    if (eItemType == ITEMTYPE_CrossbowQuiver) {
-      return 0;
-    }
-
-    BOOL bBroken = CheckItemFlag(pUnit, ITEMFLAG_BROKEN, 0x12f7, ".\\ITEMS\\Items.cpp");
-    if (bBroken) {
-      return 0;
-    }
-
-    eD2ItemFlag eFlags = ITEM_GetItemData_eD2ItemFlag(pUnit);
-    if ((eFlags & ITEMFLAG_PLAYERNAME) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
-      return 0;
-    }
-
-    bBroken = ITEMS_GetCompactSaveFlag(pUnit);
-    if (bBroken) {
-      return 0;
-    }
-
-    D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pUnit->nClassId);
-    return (uint32_t)pItemsTxt->bNameable;
+    return 0;
 }
 
 // Returns true if the item is eligible to receive sockets (e.g. via Larzuk quest or cube recipe). Rejects gold, quest items (unless code is 'leg'), items that already have socketed children, already have ITEMFLAG_SOCKETED, or have ITEM_GetMaxSockCount==0. Returns true only when current socket count is 0.
