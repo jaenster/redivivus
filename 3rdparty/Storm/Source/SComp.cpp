@@ -659,19 +659,19 @@ void __fastcall SCOMP_PkwareCompress(void * pOutBuf, uint32_t * pdwOutLength, vo
     PKWARE_STREAM Stream;
     uint32_t nDictSize;
     TCmpStruct* pWorkBuf = (TCmpStruct*)SMem::SMemAlloc(0x8dd8, ".\\SOURCE\\SCOMP.CPP", 0x440, 0);
-    Stream.nOutLen = *pdwOutLength;
+    Stream.pOutBuf = pOutBuf;
     Stream.nOutPos = 0;
-    uint32_t nCompType = (uint32_t)(*pnMode == 2);
-    Stream.nInPos = 0;
+    Stream.nOutLen = *pdwOutLength;
     Stream.pInBuf = pInBuf;
+    Stream.nInPos = 0;
     Stream.nInLen = nInLen;
+    uint32_t nCompType = (uint32_t)(*pnMode == 2);
     if (nInLen >= 0xc00) {
       nDictSize = 0x1000;
     } else {
       nDictSize = nInLen < 0x600 ? 0x400 : 0x800;
     }
 
-    Stream.pOutBuf = pOutBuf;
     _3rdparty::PKWARE::implode::implode((pfnPkwareRead)SCOMP_PkwareBufferRead, (pfnPkwareWrite)SCOMP_PkwareBufferWrite, pWorkBuf, &Stream, &nCompType, &nDictSize);
     SMem::SMemFree(pWorkBuf, ".\\SOURCE\\SCOMP.CPP", 0x467, 0);
     *pdwOutLength = Stream.nOutPos;
