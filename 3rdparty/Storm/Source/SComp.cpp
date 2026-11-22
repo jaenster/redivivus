@@ -631,14 +631,10 @@ static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uin
 // @blizzard PkwareBufferRead (SCOMP.CPP)
 uint32_t SCOMP_PkwareBufferRead(void * pDst, uint32_t * pnReqSize, PKWARE_STREAM * pStream) {
     uint32_t nAvail = pStream->nInLen - pStream->nInPos;
-    uint32_t _Size = *pnReqSize;
-    if (*pnReqSize >= nAvail) {
-      _Size = nAvail;
-    }
-
-    SMem::SMemCopy(pDst, (void*)((char*)pStream->pInBuf + pStream->nInPos), _Size);
-    pStream->nInPos += _Size;
-    return _Size;
+    uint32_t nSize = *pnReqSize < nAvail ? *pnReqSize : nAvail;
+    SMem::SMemCopy(pDst, (char*)pStream->pInBuf + pStream->nInPos, nSize);
+    pStream->nInPos += nSize;
+    return nSize;
 }
 
 // @blizzard PkwareBufferWrite (SCOMP.CPP)
