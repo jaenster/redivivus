@@ -806,98 +806,49 @@ void __fastcall Q22_PlayerCompleteKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * 
 // A3Q5 Compelling Orb operate fn (OperateFn 53, Travincal): the player smashes the orb with Khalim's Will (flail 'qf2'). Needs Khalim's Will equipped and two uses (counter at 0x38); on the second use it completes Khalim's Will, removes the flail, promotes The Blackened Temple from step 4 to completed and triggers the orb effect.
 // Slot from objects.txt OperateFn 53.
 BOOL __fastcall OBJOP_A3Q5_SmashCompellingOrb(D2ObjectOperateFnArg * pOperation) {
-    BOOL _bQuestState;
-    bool bQuestState;
-    int32_t nItemCode;
-    D2QuestDataStrc* pQuestData;
-    D2UnitDataPlayerStrc* pAttackerPlayerData;
-    eD2QuestState eQuestState_00;
-    int32_t nClassId;
-    D2ObjectsTxt* pObjectsTxt;
-    eD2Quests nQuestId;
-    D2QuestDataA3Q5Strc* pQuestSpecificData;
-    eD2Quests eQuestId;
-    eD2QuestState eQuestState;
-    ::SGAMEDATA* pGameInner;
-    D2UnitStrc* pWeaponOrVictim = pOperation->sArg.pVictim;
-    if (!(!pWeaponOrVictim || pWeaponOrVictim->eAnimMode.ePlayerMode == Death)) {
-      return 0;
-    }
+    if (!pOperation->sArg.pVictim || pOperation->sArg.pVictim->eAnimMode.ePlayerMode == Death) {
+      D2UnitStrc* pWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pOperation->pAttacker->pInventory);
+      if (pWeapon && D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pWeapon) == 0x20326671) {
+        D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheBlackenedTemple);
+        D2QuestDataA3Q5Strc* pA3Q5Data = pQuestData->pQuestSpecificData.pA3Q5;
+        pA3Q5Data->nCompellingOrbUseCount++;
+        if (pA3Q5Data->nCompellingOrbUseCount >= 2) {
+          D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pOperation->sArg.pGame, pOperation->pAttacker), QUEST_KhalimsWill, QUESTSTATE_Completed);
+          D2Common::QuestRecord::SetQuestState(GetQuestBitBufferInline(pOperation->sArg.pGame, pOperation->pAttacker), QUEST_KhalimsWill, QUESTSTATE_JustCompleted);
+          QUEST_RemoveQuestItemFromPlayer(pOperation->sArg.pGame, pOperation->pAttacker, 0x20326671);
+          if (D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pOperation->sArg.pGame, pOperation->pAttacker), QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04)
+              && !D2Common::QuestRecord::GetQuestState(GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker), QUEST_TheBlackenedTemple, QUESTSTATE_Completed)) {
+            D2Common::QuestRecord::SetQuestState(GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker), QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
+          }
 
-    pWeaponOrVictim = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pOperation->pAttacker->pInventory);
-    if (pWeaponOrVictim) {
-      int16_t nAttackerPartyId;
-      nItemCode = D2Common::ITEMS::Items::ITEM_GetItemsTxt_szCode(pWeaponOrVictim);
-      if (nItemCode == 0x20326671) {
-        pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TheBlackenedTemple);
-        pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q5;
-        pQuestSpecificData->nCompellingOrbUseCount++;
-        if (pQuestSpecificData->nCompellingOrbUseCount < 2) {
-          return 0;
-        }
+          D2UnitStrc* pMonster = UNIT::SUnit::FindUnitFromTable(pOperation->sArg.pGame, UNIT_MONSTER, pA3Q5Data->nCompellingOrbGUID);
+          if (pMonster) {
+            Monster::AI::MONSTERAI_CommandSkillAtPosition(pOperation->sArg.pGame, pMonster, 0, 0, 0);
+            Monster::AI::AI_Boss_LaunchOrbAtObject(pOperation->sArg.pGame, pMonster);
+          }
 
-        pGameInner = pOperation->sArg.pGame;
-        pAttackerPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
-        /* SetQuestState(Khalim's Will=0x12, Completed=0): orb used twice -> Khalim's
-                         Will done */ D2Common::QuestRecord::SetQuestState(pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty], QUEST_KhalimsWill, QUESTSTATE_Completed);
-        pGameInner = pOperation->sArg.pGame;
-        pAttackerPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
-        /* SetQuestState(Khalim's Will=0x12, JustCompleted=0xd): fire Khalim's Will
-                         completion notify */ D2Common::QuestRecord::SetQuestState(pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty], QUEST_KhalimsWill, QUESTSTATE_JustCompleted);
-        QUEST_RemoveQuestItemFromPlayer(pOperation->sArg.pGame, pOperation->pAttacker, 0x20326671);
-        pGameInner = pOperation->sArg.pGame;
-        pAttackerPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
-        /* GetQuestState(Blackened Temple=0x15, Step0x04=4): if council already dead,
-                         finishing Khalim's Will also completes the temple */ _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty], QUEST_TheBlackenedTemple, QUESTSTATE_Step0x04);
-        if (_bQuestState) {
-          eQuestState = QUESTSTATE_Completed;
-          eQuestId = QUEST_TheBlackenedTemple;
-          /* GetQuestState(Blackened Temple=0x15, Completed=0): guard to avoid
-                         re-completing */ eQuestState_00 = D2Common::QuestRecord::GetQuestState(GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker), eQuestId, eQuestState);
-          if (eQuestState_00 == QUESTSTATE_Completed) {
-            nQuestId = QUEST_TheBlackenedTemple;
-            /* SetQuestState(Blackened Temple=0x15, Completed=0): finish the temple quest
-                         (council + Khalim's Will both done) */ D2Common::QuestRecord::SetQuestState(GetQuestBitBuffer(pOperation->sArg.pGame, pOperation->pAttacker), nQuestId, eQuestState_00);
+          D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
+          D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(!pOperation->sArg.pVictim ? -1 : pOperation->sArg.pVictim->nClassId);
+          ::SGAMEDATA* pGame = pOperation->sArg.pGame;
+          GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 8) + pGame->dwGameFrame, 0, 0);
+          pA3Q5Data->bJerhynAiActive = true;
+          NotifyPlayersAboutEvent(pQuestData->pGame, 10);
+          if (IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter)) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x353);
+            exit(-1);
+          }
+
+          pQuestData->fpSequenceFilter(pQuestData);
+          uint16_t nPartyId = UNIT::SUnit::GetPartyId(pOperation->pAttacker);
+          if (nPartyId != 0xffff) {
+            UNIT::Party::ExecuteFunctionForEveryPartyMember(pOperation->sArg.pGame, nPartyId, (::fpExecuteOnUnitFunction)Q22_PlayerCompleteKhalimsWill, nullptr);
           }
         }
-
-        pWeaponOrVictim = UNIT::SUnit::FindUnitFromTable(pOperation->sArg.pGame, UNIT_MONSTER, pQuestSpecificData->nCompellingOrbGUID);
-        if (pWeaponOrVictim) {
-          Monster::AI::MONSTERAI_CommandSkillAtPosition(pOperation->sArg.pGame, pWeaponOrVictim, 0, 0, 0);
-          Monster::AI::AI_Boss_LaunchOrbAtObject(pOperation->sArg.pGame, pWeaponOrVictim);
-        }
-
-        D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
-        pWeaponOrVictim = pOperation->sArg.pVictim;
-        if (!pWeaponOrVictim) {
-          nClassId = -1;
-        } else {
-          nClassId = pWeaponOrVictim->nClassId;
-        }
-
-        pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
-        pGameInner = pOperation->sArg.pGame;
-        GAME::Event::SetEvent(pGameInner, pOperation->sArg.pVictim, 1, (pObjectsTxt->FrameCnt[1] >> 8) + pGameInner->dwGameFrame, 0, 0);
-        pQuestSpecificData->bJerhynAiActive = true;
-        NotifyPlayersAboutEvent(pQuestData->pGame, 10);
-        /* FARPROC lpfn for IsBadCodePtr */ _bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
-        if (_bQuestState) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x353);
-          exit(-1);
-        }
-
-        pQuestData->fpSequenceFilter(pQuestData);
-        nAttackerPartyId = UNIT::SUnit::GetPartyId(pOperation->pAttacker);
-        if (nAttackerPartyId == -1) {
-          return 0;
-        }
-
-        UNIT::Party::ExecuteFunctionForEveryPartyMember(pOperation->sArg.pGame, nAttackerPartyId, (::fpExecuteOnUnitFunction)Q22_PlayerCompleteKhalimsWill, nullptr);
-        return 0;
+      } else {
+        UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
       }
     }
 
-    UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, 0x13, pOperation->pAttacker);
     return 0;
 }
 
