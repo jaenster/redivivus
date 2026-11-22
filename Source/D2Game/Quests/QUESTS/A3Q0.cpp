@@ -27,17 +27,13 @@ void __fastcall Q17_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       return;
     }
 
-    ::SGAMEDATA* pGame = pQuestData->pGame;
-    D2UnitStrc* pPlayer = pQuestArgs->pPlayer;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pPlayer);
-    if (!(nMessageIndex == 0x1d1 || nMessageIndex == 0x1d2)) {
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer);
+    if (nMessageIndex != 0x1d1 && nMessageIndex != 0x1d2) {
       return;
     }
 
-    /* SetQuestState(QUEST_SpokeToHratli, QUESTSTATE_Completed) — flag self player
-                         as having spoken to Hratli */ D2Common::QuestRecord::SetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_SpokeToHratli, QUESTSTATE_Completed);
-    /* SetQuestRecordState(QUEST_SpokeToHratli, QUESTSTATE_JustCompleted=0xd) —
-                         broadcast just-completed (triggers quest-log/UI update) */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_SpokeToHratli, QUESTSTATE_JustCompleted);
+    D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_SpokeToHratli, QUESTSTATE_Completed);
+    QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_SpokeToHratli, QUESTSTATE_JustCompleted);
 }
 
 // GetClassId as its callers inlined it: two returns, the value in a register of its own.
