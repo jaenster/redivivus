@@ -2309,19 +2309,20 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL(char * pBytes) {
 
 // Client handler for S2C packet 0x93 (8 bytes). Reads player GUID, signed bonus delta, element type filter, and skill page filter. Finds the player unit client-side, then calls SKILLS_CltUpdateSkillList to walk all skills and adjust bonuses matching the element/page criteria. Removes skills whose level drops to 0. Dead code in 1.14d — server never sends this packet.
 void __fastcall NET_D2GS_CLIENT_RecvSkillTabBonusDelta(char * pBytes) {
-    uint32_t nBonusDelta = (uint32_t)(uint8_t)pBytes[5];
-    if ((int32_t)nBonusDelta > 0x80) {
+    int32_t nUnitGUID = *(int32_t*)(pBytes + 1); // steer-ok: the original reads the GUID before the bonus delta
+    int32_t nBonusDelta = (uint8_t)pBytes[5];
+    if (nBonusDelta > 0x80) {
       nBonusDelta -= 0x100;
     }
 
-    uint8_t nElementType = pBytes[6];
+    uint32_t nElementType = (uint8_t)pBytes[6];
     uint8_t nSkillPage = pBytes[7];
-    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 1), UNIT_PLAYER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nUnitGUID, UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
 
-    SKILLS::Skills::SKILLS_CltAdjustSkillTabBonuses(pUnit, nBonusDelta, (uint32_t)nElementType, nSkillPage);
+    SKILLS::Skills::SKILLS_CltAdjustSkillTabBonuses(pUnit, nBonusDelta, nElementType, nSkillPage);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
