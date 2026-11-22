@@ -3566,8 +3566,10 @@ eD2ServerIncomingStatus __fastcall SCMD_0x33_NpcSell(::SGAMEDATA * pGame, D2Unit
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    eD2ServerIncomingStatus eResult = UNIT::SUNITNPC::SUNITNPC_SellItem(pGame, pUnit, pBytes->nNpcGUID, pBytes->nItemGUID, (uint32_t)pBytes->nMode, pBytes->nPrice);
-    return eResult;
+    int nNpcGUID = pBytes->nNpcGUID; // steer-ok: the original loads every packet field before the first push
+    int nItemGUID = pBytes->nItemGUID; // steer-ok: same load-before-push order
+    int nMode = pBytes->nMode; // steer-ok: same load-before-push order
+    return UNIT::SUNITNPC::SUNITNPC_SellItem(pGame, pUnit, nNpcGUID, nItemGUID, nMode, pBytes->nPrice);
 }
 
 // C->S 0x35 NPC Repair (17B). Packet: [op:1][npcGUID:u32][itemGUID:u32][params:8B]. Repair item at smithy. Checks durability, ethereal.
