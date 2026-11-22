@@ -586,38 +586,35 @@ int32_t __fastcall UI_CalculateCenteredTextXPosition(uint16_t nLocaleId, int32_t
 }
 
 static void __stdcall ShowToolTipOnPartyButtons(int16_t nLocaleIdLine1, int16_t nLocaleIdLine2, int32_t nOffsetX, int32_t bIsTwoLiner) {
-    int nBoxY;
     uint16_t wszLine1[100];
-    for (nBoxY = 0; nBoxY < 0x64; nBoxY++) {
-      wszLine1[nBoxY] = L'\0';
+    for (int i = 0; i < 0x64; i++) {
+      wszLine1[i] = L'\0';
     }
 
-    uint16_t* pwszSrc = D2Lang::StrTable::strtable::GetLocaleString(nLocaleIdLine1);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine1, pwszSrc);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine1, D2Lang::StrTable::strtable::GetLocaleString(nLocaleIdLine1));
     int32_t nWidth1 = D2Win::Src::D2WinFont::DRAW_text0(wszLine1);
     int32_t nWidth2 = 0;
     if (nLocaleIdLine2) {
       uint16_t wszLine2[100];
-      for (nBoxY = 0; nBoxY < 0x64; nBoxY++) {
-        wszLine2[nBoxY] = L'\0';
+      for (int i = 0; i < 0x64; i++) {
+        wszLine2[i] = L'\0';
       }
 
-      pwszSrc = D2Lang::StrTable::strtable::GetLocaleString(nLocaleIdLine2);
-      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine2, pwszSrc);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLine2, D2Lang::StrTable::strtable::GetLocaleString(nLocaleIdLine2));
       nWidth2 = D2Win::Src::D2WinFont::DRAW_text0(wszLine2);
     }
 
-    nBoxY = 0x23;
+    int nBoxY = 0x23;
     int32_t nSizeY = 0x1e;
     if (!bIsTwoLiner) {
       nBoxY = 0x2a;
       nSizeY = 0xf;
     }
     if (nWidth1 > nWidth2) {
-      nWidth2 = nWidth1;
+      Engine::Gfx::D2GFX_DrawSolidRectExBySize(Inv::gnPanelOffsetX - nWidth1 / 2 - 5 + nOffsetX, nBoxY - Inv::gnPanelOffsetY, nWidth1 + 10, nSizeY, (uint32_t)cRed, DRAW_LESSTRANSPARENT);
+    } else {
+      Engine::Gfx::D2GFX_DrawSolidRectExBySize(Inv::gnPanelOffsetX - nWidth2 / 2 - 5 + nOffsetX, nBoxY - Inv::gnPanelOffsetY, nWidth2 + 10, nSizeY, (uint32_t)cRed, DRAW_LESSTRANSPARENT);
     }
-
-    Engine::Gfx::D2GFX_DrawSolidRectExBySize(Inv::gnPanelOffsetX - nWidth2 / 2 - 5 + nOffsetX, nBoxY - Inv::gnPanelOffsetY, nWidth2 + 10, nSizeY, (uint32_t)cRed, DRAW_LESSTRANSPARENT);
 }
 
 void __stdcall DRAW_UI_PartyWindow_II() {

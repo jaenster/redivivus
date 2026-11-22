@@ -1379,14 +1379,20 @@ static D2UnitStrc * __stdcall CLIENT_FindClosestTrackedUnit(D2UnitStrc * pUnit, 
 static void __stdcall CLIENT_SendMonsterMoveToUnitMessage(int32_t nSenderId, int32_t nSkillLvl, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2ServerMessageHandleStrc sMsgTargetPos;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    sMsgTargetPos.nSkillId = UNIT_COUNT;
+    eD2UnitType eTargetType = UNIT_COUNT;
     if (pTarget) {
-      sMsgTargetPos.nSkillId = pTarget->eUnitType;
-      sMsgTargetPos.nItemId = pTarget->nUnitGUID;
-    } else {
-      sMsgTargetPos.nItemId = -1;
+      eTargetType = pTarget->eUnitType;
     }
 
+    sMsgTargetPos.nSkillId = eTargetType;
+    int nTargetGUID;
+    if (!pTarget) {
+      nTargetGUID = -1;
+    } else {
+      nTargetGUID = pTarget->nUnitGUID;
+    }
+
+    sMsgTargetPos.nItemId = nTargetGUID;
     sMsgTargetPos.nTargetUnitType = 0;
     sMsgTargetPos.nTargetUnitId = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
     sMsgTargetPos.nSkillLvl = nSkillLvl;

@@ -664,88 +664,62 @@ int __fastcall Unreferenced_00457ac0(D2AutomapCellStrc * pCellA, D2AutomapCellSt
 // Source: .\\UI\\automap.cpp
 int32_t __fastcall AUTOMAP_InsertCellIntoTree(D2AutomapCellStrc * pAutomapCell1, D2AutomapCellStrc * * pAutomapCell2) {
     int32_t nInserted;
-    int32_t wWeight;
     D2AutomapCellStrc* pNode = *pAutomapCell2;
     if (pNode) {
       int nCompare = (int)pAutomapCell1->yPixel - (int)pNode->yPixel;
       if (!nCompare) {
         nCompare = (int)pAutomapCell1->xPixel - (int)pNode->xPixel;
-        if (!nCompare) {
-          if (gnAutoMapCellPriority[pAutomapCell1->nCellNo] == -1 || gnAutoMapCellPriority[pAutomapCell1->nCellNo] == gnAutoMapCellPriority[pNode->nCellNo]) {
-            *pAutomapCell2 = pNode;
-            return 0;
-          }
-
+        if (!nCompare && gnAutoMapCellPriority[pAutomapCell1->nCellNo] != -1 && gnAutoMapCellPriority[pAutomapCell1->nCellNo] != gnAutoMapCellPriority[pNode->nCellNo]) {
           nCompare = (int)pAutomapCell1->nCellNo - (int)pNode->nCellNo;
         }
       }
 
-      D2AutomapCellStrc* pRebalanceRoot = pNode;
       if (nCompare < 0) {
         nInserted = AUTOMAP_InsertCellIntoTree(pAutomapCell1, &pNode->pLess);
-        pAutomapCell1 = pNode;
-        if (!nInserted) {
-          *pAutomapCell2 = pAutomapCell1;
-          return nInserted;
+        if (nInserted) {
+          switch (pNode->wWeight) {
+            case -1:
+              AUTOMAP_RebalanceTreeRight(&pNode);
+              nInserted = 0;
+              break;
+            case 0:
+              pNode->wWeight = -1;
+              break;
+            case 1:
+              pNode->wWeight = 0;
+              nInserted = 0;
+              break;
+          }
         }
-
-        wWeight = pNode->wWeight;
-        if (wWeight == -1) {
-          AUTOMAP_RebalanceTreeRight(&pRebalanceRoot);
-          *pAutomapCell2 = pRebalanceRoot;
-          return 0;
-        }
-        if (!wWeight) {
-          pNode->wWeight = -1;
-          *pAutomapCell2 = pNode;
-          return nInserted;
-        }
-        if (wWeight != 1) {
-          *pAutomapCell2 = pAutomapCell1;
-          return nInserted;
+      } else if (nCompare > 0) {
+        nInserted = AUTOMAP_InsertCellIntoTree(pAutomapCell1, &pNode->pMore);
+        if (nInserted) {
+          switch (pNode->wWeight) {
+            case -1:
+              pNode->wWeight = 0;
+              nInserted = 0;
+              break;
+            case 0:
+              pNode->wWeight = 1;
+              break;
+            case 1:
+              AUTOMAP_RebalanceTreeLeft(&pNode);
+              nInserted = 0;
+              break;
+          }
         }
       } else {
-        if (nCompare < 1) {
-          *pAutomapCell2 = pNode;
-          return 0;
-        }
-
-        nInserted = AUTOMAP_InsertCellIntoTree(pAutomapCell1, &pNode->pMore);
-        pAutomapCell1 = pNode;
-        if (!nInserted) {
-          *pAutomapCell2 = pAutomapCell1;
-          return nInserted;
-        }
-
-        wWeight = pNode->wWeight;
-        if (wWeight != -1) {
-          if (wWeight) {
-            if (wWeight == 1) {
-              AUTOMAP_RebalanceTreeLeft(&pRebalanceRoot);
-              *pAutomapCell2 = pRebalanceRoot;
-              return 0;
-            }
-
-            *pAutomapCell2 = pAutomapCell1;
-            return nInserted;
-          }
-
-          pNode->wWeight = 1;
-          *pAutomapCell2 = pNode;
-          return nInserted;
-        }
+        nInserted = 0;
       }
-
+    } else {
+      pNode = pAutomapCell1;
+      pNode->pLess = 0;
+      pNode->pMore = 0;
       pNode->wWeight = 0;
-      *pAutomapCell2 = pNode;
-      return 0;
+      nInserted = 1;
     }
 
-    pAutomapCell1->pLess = 0;
-    pAutomapCell1->pMore = 0;
-    pAutomapCell1->wWeight = 0;
-    nInserted = 1;
-    *pAutomapCell2 = pAutomapCell1;
+    *pAutomapCell2 = pNode;
     return nInserted;
 }
 
