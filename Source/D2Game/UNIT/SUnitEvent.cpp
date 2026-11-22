@@ -105,22 +105,19 @@ void __fastcall SUNITEVENT_RemoveEventsByQueueAndOwner(::SGAMEDATA * pGame, D2Un
 }
 
 D2SUnitEventStrc * __fastcall UNITEVENT_FindByCallbackParams(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, int32_t nQueueNo, int32_t nOwnerKey, eD2Skills eSkill) {
-    D2SUnitEventStrc* pEvent;
     if (!pUnit) {
       return nullptr;
     }
 
-    D2SUnitEventStrc* pCurrentEvent = pUnit->uSideData.pServerSide.pSrvUnitEventList;
-    do {
-      pEvent = pCurrentEvent;
-      if (!pEvent) {
-        return nullptr;
+    D2SUnitEventStrc* pNext;
+    for (D2SUnitEventStrc* pEvent = pUnit->uSideData.pServerSide.pSrvUnitEventList; pEvent; pEvent = pNext) {
+      pNext = pEvent->pNext;
+      if (pEvent->nQueueNo == nQueueNo && pEvent->nOwnerKey == nOwnerKey && pEvent->eSkill == eSkill) {
+        return pEvent;
       }
+    }
 
-      pCurrentEvent = pEvent->pNext;
-    } while (pEvent->nQueueNo != nQueueNo || pEvent->nOwnerKey != nOwnerKey || pEvent->eSkill != eSkill);
-
-    return pEvent;
+    return nullptr;
 }
 
 // Iterates pUnit's pSrvUnitEventList and invokes fpItemEventFunc of every entry whose nUnitEvent matches eEventType, passing pGame, eEventType, pUnit, pOtherUnit, pDamage, eSkill and nSkillLevel. Sets the executing flag during the call; after, frees the entry if it was marked for removal or has nQueueNo==0 (one-shot). Returns the last callback's return value, or 0 if pUnit is null.
