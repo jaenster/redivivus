@@ -1173,36 +1173,38 @@ void __fastcall SCMD_QueueThreeBytePacket(D2ClientStrc * pClient, uint8_t * pPac
 
 // Sends opcode 0x5B player-join packet to pClient describing pUnit. Fills D2GSPacketSrv0x5B with GUID, class, level, party ID, guild flags, character name, guild tag, and guild name from pOtherClient. After the join packet, also sends the pet list if pUnit is a player unit.
 void __fastcall NET_D2GS_SERVER_Send_0x5B_PlayerJoin(D2ClientStrc * pClient, D2UnitStrc * pUnit, D2ClientStrc * pOtherClient) {
-    D2ClientStrc* pClientSaved;
     D2GSPacketSrv0x5B packet;
-    char cCur;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     memset(&packet, 0, 0x122);
     packet.nPacketId = 0x5b;
+    int nUnitGUID;
     if (!pUnit) {
-      packet.nPlayerGUID = -1;
-      packet.nCharType = 0xff;
+      nUnitGUID = -1;
     } else {
-      packet.nPlayerGUID = pUnit->nUnitGUID;
-      packet.nCharType = (uint8_t)pUnit->nClassId;
+      nUnitGUID = pUnit->nUnitGUID;
     }
 
-    int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    packet.nPlayerLevel = (short int)nLevel;
+    packet.nPlayerGUID = nUnitGUID;
+    int nClassId;
+    if (!pUnit) {
+      nClassId = -1;
+    } else {
+      nClassId = pUnit->nClassId;
+    }
+
+    packet.nCharType = nClassId;
+    packet.nPlayerLevel = (short int)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     packet.nPartyId = UNIT::SUnit::GetPartyId(pUnit);
     packet.nUnused = 0;
     packet.bInParty = 0;
     packet.nGuildFlags = Clients::GetGuildFlags(pOtherClient);
     Storm::Source::SSTR::SStrCopy(packet.szPlayerName, pPlayerData->szCharName, 0x7fffffff);
     Clients::GetGuildTag(pOtherClient, packet.szGuildTag);
-    char* pGuildTagEnd = packet.szGuildTag;
-    pGuildTagEnd = pGuildTagEnd + strlen(pGuildTagEnd) + 1;
-    char* szGuildName = packet.szGuildTag + 1 + (int)((char*)pGuildTagEnd - (char*)((uint8_t*)&packet + 300) + 0x109);
+    char* szGuildName = packet.szGuildTag + strlen(packet.szGuildTag) + 1;
     Clients::GetGuildName(pOtherClient, szGuildName);
-    char* pGuildNameEnd = szGuildName;
-    pGuildNameEnd = pGuildNameEnd + strlen(pGuildNameEnd) + 1;
-    packet.nPacketLength = (short int)(uintptr_t)(pGuildNameEnd + ((intptr_t)((uint8_t*)&packet + 300) * -2 - (int)((char*)pGuildTagEnd - (char*)((uint8_t*)&packet + 300) + 0x109)) + 0x235 + (intptr_t)szGuildName);
-    SCMD_QueuePacketForClient(pClient, &packet.nPacketId, (size_t)(pGuildNameEnd + ((intptr_t)((uint8_t*)&packet + 300) * -2 - (int)((char*)pGuildTagEnd - (char*)((uint8_t*)&packet + 300) + 0x109)) + 0x235 + (intptr_t)szGuildName));
+    size_t nPacketSize = offsetof(D2GSPacketSrv0x5B, szGuildTag) + (szGuildName - packet.szGuildTag) + strlen(szGuildName) + 1;
+    packet.nPacketLength = (short int)nPacketSize;
+    SCMD_QueuePacketForClient(pClient, &packet.nPacketId, nPacketSize);
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
       PLAYER::PlayerPets::PLAYERPETS_SendPetListToClient(pClient, pUnit);
     }
