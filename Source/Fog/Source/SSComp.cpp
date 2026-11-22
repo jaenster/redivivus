@@ -60,7 +60,6 @@ void __fastcall COMPRESS_BuildHuffmanTree(int * pWeights, int32_t nCount) {
     int nWriteIndex;
     int nReadIndex;
     int nScanIndex;
-    int nTailIndex;
     if (!nCount) {
       return;
     }
@@ -71,9 +70,8 @@ void __fastcall COMPRESS_BuildHuffmanTree(int * pWeights, int32_t nCount) {
 
     *pWeights += pWeights[1];
     nReadIndex = 0;
-    nTailIndex = nCount - 1;
     nScanIndex = 2;
-    for (nWriteIndex = 1; nWriteIndex < nTailIndex; nWriteIndex++) {
+    for (nWriteIndex = 1; nWriteIndex < nCount - 1; nWriteIndex++) {
       if (nScanIndex < nCount && pWeights[nReadIndex] >= pWeights[nScanIndex]) {
         pWeights[nWriteIndex] = pWeights[nScanIndex];
         nScanIndex++;
@@ -92,33 +90,32 @@ void __fastcall COMPRESS_BuildHuffmanTree(int * pWeights, int32_t nCount) {
       }
     }
 
-    nScanIndex = nCount - 2;
-    pWeights[nScanIndex] = 0;
+    pWeights[nCount - 2] = 0;
     for (nWriteIndex = nCount - 3; nWriteIndex >= 0; nWriteIndex--) {
       pWeights[nWriteIndex] = pWeights[pWeights[nWriteIndex]] + 1;
     }
 
-    nReadIndex = 0;
-    nWriteIndex = 1;
-    do {
-      int nRunLength;
-      nRunLength = 0;
-      for (; nScanIndex >= 0 && pWeights[nScanIndex] == nReadIndex; nScanIndex--) {
-        nRunLength++;
+    int nAvailable = 1;
+    int nDepth = 0;
+    int nUsed = 0;
+    int nRoot = nCount - 2;
+    int nNext = nCount - 1;
+    while (nAvailable > 0) {
+      while (nRoot >= 0 && pWeights[nRoot] == nDepth) {
+        nUsed++;
+        nRoot--;
       }
 
-      if (nWriteIndex > nRunLength) {
-        nWriteIndex -= nRunLength;
-        do {
-          pWeights[nTailIndex] = nReadIndex;
-          nTailIndex--;
-          nWriteIndex--;
-        } while (nWriteIndex);
+      while (nAvailable > nUsed) {
+        pWeights[nNext] = nDepth;
+        nNext--;
+        nAvailable--;
       }
 
-      nWriteIndex = nRunLength * 2;
-      nReadIndex++;
-    } while (nWriteIndex > 0);
+      nAvailable = nUsed * 2;
+      nDepth++;
+      nUsed = 0;
+    }
 }
 
 void __fastcall COMPRESS_BuildHuffmanDecodeTable(uint8_t * pCodeLengths) {
