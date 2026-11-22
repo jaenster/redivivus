@@ -751,30 +751,28 @@ TSGrowableArray_Ui * __fastcall Unreferenced_004218a0(TSGrowableArray_Ui * pArra
 // @oracle-negative Pass 6 examined this: no oracle symbol corresponds to it. The existing descriptive name matches what the body does and was kept unchanged rather than forced onto a TS* method name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
 int32_t __thiscall SBIG_ArrayByteAppendData(TSGrowableArray_Uc * pArray, uint32_t nCount, uint8_t * pSrc) {
-    uint32_t nNewSize = pArray->nLen + nCount;
-    if (nNewSize > pArray->nCapacity) {
-      uint32_t nGranularity;
-      nGranularity = pArray->nGrowStep;
+    uint32_t nNewCount = pArray->nLen + nCount;
+    if (nNewCount > pArray->nCapacity) {
+      uint32_t nGranularity = pArray->nGrowStep;
       if (!nGranularity) {
-        nGranularity = TSGrowableArray_Uc_CalcChunkSize((BigBuffer*)pArray, nNewSize);
-      }
-      if (nNewSize % nGranularity) {
-        nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
+        nGranularity = TSGrowableArray_Uc_CalcChunkSize((BigBuffer*)pArray, nNewCount);
       }
 
-      TSFixedArray_Uc_ReallocData(pArray, nNewSize);
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      TSFixedArray_Uc_ReallocData(pArray, nNewCapacity);
     }
 
-    uint32_t uVar1 = 0;
-    if (nCount > 0) {
-      do {
-        if (pArray->pData + (pArray->nLen + uVar1)) {
-          pArray->pData[pArray->nLen + uVar1] = *pSrc;
-        }
+    for (uint32_t i = 0; i < nCount; i++) {
+      uint8_t* pSlot = &pArray->pData[pArray->nLen + i];
+      if (pSlot) {
+        *pSlot = *pSrc;
+      }
 
-        uVar1++;
-        pSrc++;
-      } while (uVar1 < nCount);
+      pSrc++;
     }
 
     pArray->nLen += nCount;
