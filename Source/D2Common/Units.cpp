@@ -3340,6 +3340,31 @@ D2UnitStrc * __stdcall GetWeaponBySkill(D2UnitStrc * pUnit, int32_t nParam) {
     return pEquippedWeapon;
 }
 
+// The unit type read as this unit's callers inlined it: UNIT_COUNT loaded first, the unit's type over it.
+static inline eD2UnitType GetUnitTypeOrDefaultInline(D2UnitStrc * pUnit) {
+    eD2UnitType eUnitType = UNIT_COUNT;
+    if (pUnit) {
+      eUnitType = pUnit->eUnitType;
+    }
+    return eUnitType;
+}
+
+// The class id read as this unit's callers inlined it: the -1 path first, then the unit's class id.
+static inline int GetUnitClassIdOrNoneInline(D2UnitStrc * pUnit) {
+    if (!pUnit) {
+      return -1;
+    }
+    return pUnit->nClassId;
+}
+
+// The anim mode read as this unit's callers inlined it: the Death path first, then the unit's mode.
+static inline eD2PlayerAnimMode GetUnitAnimModeOrDeathInline(D2UnitStrc * pUnit) {
+    if (!pUnit) {
+      return Death;
+    }
+    return pUnit->eAnimMode.ePlayerMode;
+}
+
 // Returns the weapon animation-class field used to drive a player unit's attack/cast animation selection. Resolves the unit's effective type/class/anim-mode through SKILLS_GetStateTransformGfx (handling shape-shift transforms). Only meaningful for players in Attack1/Attack2 or (when dual-wield capable) Skill3/Skill4 modes: fetches the relevant weapon via GetWeaponBySkill, reads its weapon anim class (ITEM_GetWeaponAnimClass), and indexes gdwUnitStrucFieldMask by (transformed-class * 7 + animclass) to return the field mask/value. Returns 0 for non-players or other modes. pUnit = the unit being animated.
 // @sourcefile .\UNITS\Units.cpp
 uint32_t __stdcall UNITS_GetFrameBonus(D2UnitStrc * pUnit) {
@@ -3445,54 +3470,35 @@ uint32_t __stdcall UNITS_GetFrameBonus(D2UnitStrc * pUnit) {
     0x0
 }; D2_STATIC_GUARD(gaClassWeaponFrameBonus, "D2Common::Units::UNITS_GetFrameBonus::gaClassWeaponFrameBonus");
 
-    uint16_t wAnimClass;
-    BOOL bCanDualWield;
-    uint32_t nAnimClassIdx;
-    uint32_t nWeaponAnimClass;
-    eD2PlayerAnimMode nAnimMode;
-    int nUnit;
-    D2UnitStrc* pUnitOrg = pUnit;
-    eD2UnitType eUnitType = UNIT_COUNT;
-    if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-      nAnimMode = pUnit->eAnimMode.ePlayerMode;
-      nUnit = pUnit->nClassId;
-    } else {
-      nAnimMode = Death;
-      nUnit = -1;
-    }
-
-    Skills::SKILLS_GetStateTransformGfx(pUnitOrg, &eUnitType, &nUnit, (int*)&nAnimMode, ".\\UNITS\\Units.cpp", 0x118a);
-    if (!(eUnitType == UNIT_PLAYER && true)) {
+    eD2UnitType eUnitType = GetUnitTypeOrDefaultInline(pUnit);
+    int nClassId = GetUnitClassIdOrNoneInline(pUnit);
+    int nAnimMode = GetUnitAnimModeOrDeathInline(pUnit);
+    Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\UNITS\\Units.cpp", 0x118a);
+    if (eUnitType != UNIT_PLAYER) {
       return 0;
     }
 
     switch (nAnimMode) {
       case eD2PlayerAnimMode_ns::Attack1:
-
       case eD2PlayerAnimMode_ns::Attack2:
-        pUnitOrg = GetWeaponBySkill(pUnitOrg, 1);
-      nAnimClassIdx = 0;
-      if (pUnitOrg) {
-        wAnimClass = ITEMS::Items::ITEM_GetWeaponAnimClass(pUnitOrg);
-        nAnimClassIdx = (uint32_t)wAnimClass;
-      }
-
-      return gaClassWeaponFrameBonus[(int)(nUnit + (nAnimClassIdx * 7 - 0x19) + 25)];
-      case eD2PlayerAnimMode_ns::Skill3:
-
-      case eD2PlayerAnimMode_ns::Skill4:
-        bCanDualWield = CanDualWield(pUnitOrg);
-      if (bCanDualWield) {
-        pUnitOrg = GetWeaponBySkill(pUnitOrg, 1);
-        nWeaponAnimClass = 0;
-        if (pUnitOrg) {
-          wAnimClass = ITEMS::Items::ITEM_GetWeaponAnimClass(pUnitOrg);
-          nWeaponAnimClass = (uint32_t)wAnimClass;
+        {
+          D2UnitStrc* pWeapon = GetWeaponBySkill(pUnit, 1);
+          uint16_t wAnimClass = 0;
+          if (pWeapon) {
+            wAnimClass = ITEMS::Items::ITEM_GetWeaponAnimClass(pWeapon);
+          }
+          return gaClassWeaponFrameBonus[wAnimClass * 7 + nClassId];
         }
-
-        return gaClassWeaponFrameBonus[(int)(nUnit + (nWeaponAnimClass * 7 - 0x19) + 25)];
-      }
+      case eD2PlayerAnimMode_ns::Skill3:
+      case eD2PlayerAnimMode_ns::Skill4:
+        if (CanDualWield(pUnit)) {
+          D2UnitStrc* pWeapon = GetWeaponBySkill(pUnit, 1);
+          uint16_t wAnimClass = 0;
+          if (pWeapon) {
+            wAnimClass = ITEMS::Items::ITEM_GetWeaponAnimClass(pWeapon);
+          }
+          return gaClassWeaponFrameBonus[wAnimClass * 7 + nClassId];
+        }
     }
 
     return 0;
