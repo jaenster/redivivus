@@ -246,12 +246,7 @@ void __fastcall XorFlag(int * pFlag, int32_t nFlag) {
 }
 
 void __fastcall OverwriteFlagIfZero(int * pFlag, int32_t nFlag) {
-    if (*pFlag) {
-      *pFlag = *pFlag;
-      return;
-    }
-
-    *pFlag = nFlag;
+    *pFlag = *pFlag ? *pFlag : nFlag;
 }
 
 void __fastcall AndNegatedFlag(int * pFlag, int32_t nFlag) {
