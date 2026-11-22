@@ -2075,51 +2075,48 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER(char * pBytes) {
 
 // Server→client handler for stat-set/add opcodes 0x19–0x1F targeting the local player. Opcodes 0x19–0x1B add gold or experience (delta from bytes 1–4, varying width); 0x1C sets experience outright; 0x1D–0x1F set an arbitrary stat (id=byte 1, value bytes 2+, byte/word/dword). Calls STATLIST_SetUnitStat then SCMD_HandleStatChangeEffect to apply side-effects (level-up UI, sound, etc.).
 void __fastcall NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(char * pBytes) {
-    int nCurrentValue;
-    char nSubCmd = *pBytes;
+    uint8_t nPacketId = *pBytes;
     uint32_t nValue = 0;
-    eD2UnitStat eUnitStat = ~UNITSTAT_strength;
+    int nStatId = -1;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9aa);
       exit(-1);
     }
 
-    switch (nSubCmd) {
-      case '\x19':
-        eUnitStat = UNITSTAT_gold;
-      nCurrentValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      nValue = nCurrentValue + (uint32_t)(uint8_t)pBytes[1];
-      break;
-      case '\x1a':
-        eUnitStat = UNITSTAT_experience;
-      nCurrentValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
-      nValue = nCurrentValue + (uint32_t)(uint8_t)pBytes[1];
-      break;
-      case '\x1b':
-        eUnitStat = UNITSTAT_experience;
-      nCurrentValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
-      nValue = nCurrentValue + (uint32_t)*(uint16_t*)(pBytes + 1);
-      break;
-      case '\x1c':
+    switch (nPacketId) {
+      case 0x19:
+        nStatId = UNITSTAT_gold;
+        nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0) + (uint8_t)pBytes[1];
+        break;
+      case 0x1a:
+        nStatId = UNITSTAT_experience;
+        nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0) + (uint8_t)pBytes[1];
+        break;
+      case 0x1b:
+        nStatId = UNITSTAT_experience;
+        nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0) + *(uint16_t*)(pBytes + 1);
+        break;
+      case 0x1c:
         nValue = *(uint32_t*)(pBytes + 1);
-      eUnitStat = UNITSTAT_experience;
-      break;
-      case '\x1d':
-        nValue = (uint32_t)(uint8_t)pBytes[2];
-      eUnitStat = (eD2UnitStat)(uint8_t)pBytes[1];
-      break;
-      case '\x1e':
-        nValue = (uint32_t)*(uint16_t*)(pBytes + 2);
-      eUnitStat = (eD2UnitStat)(uint8_t)pBytes[1];
-      break;
-      case '\x1f':
+        nStatId = UNITSTAT_experience;
+        break;
+      case 0x1d:
+        nValue = (uint8_t)pBytes[2];
+        nStatId = (uint8_t)pBytes[1];
+        break;
+      case 0x1e:
+        nValue = *(uint16_t*)(pBytes + 2);
+        nStatId = (uint8_t)pBytes[1];
+        break;
+      case 0x1f:
         nValue = *(uint32_t*)(pBytes + 2);
-      eUnitStat = (eD2UnitStat)(uint8_t)pBytes[1];
+        nStatId = (uint8_t)pBytes[1];
+        break;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, 0);
-    SCMD_HandleStatChangeEffect(pUnit, eUnitStat, nValue);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, nStatId, nValue, 0);
+    SCMD_HandleStatChangeEffect(pUnit, nStatId, nValue);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x20(D2GSPacketSrv0x20 * pBytes) {
