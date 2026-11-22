@@ -2268,16 +2268,22 @@ void __fastcall SKILLS_CreateMissileScatter(D2UnitStrc * pUnit, D2SkillArgStrc *
 BOOL __fastcall CLIENT_HandleUnitMessage0x16(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     D2ServerMessageHandleStrc nMsgHandle;
     memset(&nMsgHandle, 0, sizeof(nMsgHandle));
-    nMsgHandle.nTargetUnitType = UNIT_COUNT;
     nMsgHandle.nSkillId = 0;
     nMsgHandle.nItemId = -1;
+    eD2UnitType eTargetType = UNIT_COUNT;
     if (pTargetUnit) {
-      nMsgHandle.nTargetUnitType = pTargetUnit->eUnitType;
-      nMsgHandle.nTargetUnitId = pTargetUnit->nUnitGUID;
-    } else {
-      nMsgHandle.nTargetUnitId = -1;
+      eTargetType = pTargetUnit->eUnitType;
     }
 
+    nMsgHandle.nTargetUnitType = eTargetType;
+    int nTargetGUID;
+    if (!pTargetUnit) {
+      nTargetGUID = -1;
+    } else {
+      nTargetGUID = pTargetUnit->nUnitGUID;
+    }
+
+    nMsgHandle.nTargetUnitId = nTargetGUID;
     nMsgHandle.nSkillLvl = 1;
     UNIT::UnitMode::HandleMessage(0x16, pUnit, &nMsgHandle, 1);
     return 1;
