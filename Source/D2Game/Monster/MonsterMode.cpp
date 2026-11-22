@@ -331,17 +331,7 @@ static void __stdcall AddGamePathCount(int32_t ePathTypeOrEngaged, uint8_t byMon
 // @sourcefile .\MONSTER\MonsterMode.cpp
 D2MonsterPathParamStrc * __fastcall AllocAiParam(::SGAMEDATA * pGame) {
     D2MonsterPathParamStrc* pMonsterMode = D2_NEW_POOL_AT(pGame->pMemoryPool, D2MonsterPathParamStrc, ".\\MONSTER\\MonsterMode.cpp", 0x13f);
-    pMonsterMode->bPathFlag0 = '\0';
-    pMonsterMode->bPathFlag1 = '\0';
-    *(uint16_t*)&pMonsterMode->field_0x2 = 0;
-    pMonsterMode->pLastTarget = 0;
-    pMonsterMode->nLastTargetX = 0;
-    pMonsterMode->nLastTargetY = 0;
-    pMonsterMode->nVelocity = 0;
-    pMonsterMode->nDistanceToTarget = 0;
-    pMonsterMode->nPathTypeOverride = 0;
-    pMonsterMode->nVelocityOverride = 0;
-    *(uint32_t*)&pMonsterMode->nStepsOverride = 0;
+    memset(pMonsterMode, 0, sizeof(*pMonsterMode));
     return pMonsterMode;
 }
 
