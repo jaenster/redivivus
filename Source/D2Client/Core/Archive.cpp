@@ -29,37 +29,10 @@ DC6 * __fastcall IMAGE_LoadDC6Ex(char * szFilename, BOOL bUseDccExtension) {
 
 // @sourcefile .\CORE\ARCHIVE.CPP
 DC6 * __fastcall IMAGE_LoadWeatherDC6ToPointer(char * szFilename, uint32_t * pnSize, BOOL bUseDccExtension) {
-    uint32_t nWordsLeft;
-    char* pszExtSrc;
     char aFullName[260];
-    char cChar;
     strcpy(aFullName, szFilename);
-    char* szExtension = D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(bUseDccExtension);
-    char* pszExtTail;
-    int nStrLen;
-    nStrLen = (int)strlen(szExtension);
-    char* pszNameEnd = (char*)((uint8_t*)&aFullName - 1);
-    do {
-      pszExtSrc = pszNameEnd + 1;
-      pszNameEnd++;
-    } while (*pszExtSrc != '\0');
-
-    pszExtSrc = szExtension;
-    for (nWordsLeft = (uint32_t)((int)nStrLen + 1) >> 2; nWordsLeft; nWordsLeft--) {
-      *(uint32_t*)pszNameEnd = *(uint32_t*)pszExtSrc;
-      pszExtSrc += 4;
-      pszNameEnd += 4;
-    }
-
-    int32_t nSrcLine = 0x68;
-    char* szSrcFile = ".\\CORE\\ARCHIVE.CPP";
-    for (nWordsLeft = (int)nStrLen + 1 & 3; nWordsLeft; nWordsLeft--) {
-      *pszNameEnd = *pszExtSrc;
-      pszExtSrc++;
-      pszNameEnd++;
-    }
-
-    DC6* pArchiveData = (DC6*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), aFullName, pnSize, szSrcFile, nSrcLine);
+    strcat(aFullName, D2CMP::SRC::SpriteCache::IMAGE_ReturnImageExtension(bUseDccExtension));
+    DC6* pArchiveData = (DC6*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), aFullName, pnSize, ".\\CORE\\ARCHIVE.CPP", 0x68);
     DC6* pDC6Result = 0;
     D2CMP::SRC::CelCmp::CELCMP_FixupPointersAndPrepare(pArchiveData, &pDC6Result, ".\\CORE\\ARCHIVE.CPP", 0x6b, -1, aFullName);
     return pDC6Result;
