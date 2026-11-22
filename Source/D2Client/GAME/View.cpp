@@ -580,19 +580,14 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
 
     int32_t nTargetX = D2Common::Units::GetScreenX(pPlayerUnit);
     gnAncientsScrollDelta = nTargetX - gnAncientsScrollBaseX;
-    int nScrollOffset = gnAncientsScrollDelta + (gnAncientsScrollDelta >> 0x1f & 7U);
-    uint32_t nCloudFrame = nScrollOffset >> 3;
-    uint32_t nTileFrameX = (int)nCloudFrame % 256;
-    nCloudFrame = (int)(nCloudFrame + (nScrollOffset >> 0x1f & 0xffU)) >> 8 & 0x80000003;
-    if ((int)nCloudFrame < 0) {
-      nFrameIdx = nCloudFrame - 1 | -4;
-      nCloudFrame = nFrameIdx + 1;
-      if ((int)nCloudFrame < 0) {
-        nCloudFrame = nFrameIdx + 5 + (-nCloudFrame - 1 & -4);
-      }
+    int nScrollOffset = gnAncientsScrollDelta / 8;
+    uint32_t nTileFrameX = nScrollOffset % 256;
+    int nCloudFrame = nScrollOffset / 256 % 4;
+    while (nCloudFrame < 0) {
+      nCloudFrame += 4;
     }
 
-    nCloudFrame = (int)nCloudFrame % 4;
+    nCloudFrame %= 4;
     nScrollOffset = -nTileFrameX;
     if (!gpAncientsBgDC6) {
       memcpy(szFilePath, "data\\global\\ui\\summit01", 0x18);
