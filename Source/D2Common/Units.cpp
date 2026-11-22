@@ -2742,11 +2742,11 @@ void __stdcall InitLeftSkill(D2UnitStrc * pUnit) {
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall InitSwitchRightSkill(D2UnitStrc * pUnit) {
     int32_t nOwnerGUID;
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
     }
 
-    D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+    D2UnitDataPlayerStrc* pPlayerData = GetPlayerDataInline(pUnit);
     if (!pPlayerData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1414);
       exit(-1);
