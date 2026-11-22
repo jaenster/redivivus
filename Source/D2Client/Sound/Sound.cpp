@@ -179,31 +179,17 @@ uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle) {
 }
 
 int __fastcall SOUND_GetSoundByIndex(int32_t nChannelHandle) {
-    uint32_t bIsActive;
-    D2ClientSoundChannelStrc* pSoundHandle;
-    D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
-    if (!nChannelHandle) {
-      return 0;
-    }
+    if (nChannelHandle) {
+      for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+        D2SoundChannelStrc* pChannel = pNode->pChannel;
+        if (pChannel->nChannelHandle == nChannelHandle) {
+          D2ClientSoundChannelStrc* pSoundHandle = pChannel->pClientChannel;
+          if (pSoundHandle && SOUND_GetSoundId(nChannelHandle) && GAME::Sound::SOUND_GetPlaybackStatus((int**)pSoundHandle)) {
+            return 1;
+          }
 
-    for (; pDVar1; pDVar1 = pDVar1->pNext) {
-      if (pDVar1->pChannel->nChannelHandle == nChannelHandle) {
-        pSoundHandle = pDVar1->pChannel->pClientChannel;
-        if (!pSoundHandle) {
-          return 0;
+          break;
         }
-
-        bIsActive = SOUND_GetSoundId(nChannelHandle);
-        if (!bIsActive) {
-          return 0;
-        }
-
-        bIsActive = GAME::Sound::SOUND_GetPlaybackStatus((int**)pSoundHandle);
-        if (!bIsActive) {
-          return 0;
-        }
-
-        return 1;
       }
     }
 
