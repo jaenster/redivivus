@@ -432,25 +432,18 @@ BOOL __fastcall IsPerIpLimitReached(D2QServerStrc * pQServer, in_addr * pClientI
     }
 
     uint32_t nIpAddr = pClientIp->S_un.S_addr;
-    uint32_t nBucketModulo = pQServer->nIpConnCountModulo;
-    CRITICAL_SECTION* lpCriticalSection = &pQServer->csClientLifecycle;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-    D2QServerIpConnCountEntryStrc* pIpEntry = pQServer->ppIpConnCountBuckets[nIpAddr % nBucketModulo];
-    while (true) {
-      if (!pIpEntry) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-        return 0;
-      }
+    uint32_t nBucket = nIpAddr % pQServer->nIpConnCountModulo; // steer-ok: the original computes the bucket index before EnterCriticalSection
+    EnterCriticalSection(&pQServer->csClientLifecycle);
+    for (D2QServerIpConnCountEntryStrc* pIpEntry = pQServer->ppIpConnCountBuckets[nBucket]; pIpEntry; pIpEntry = pIpEntry->pNext) {
       if (pIpEntry->nIpAddress == nIpAddr) {
-        break;
+        int nActiveConns = pIpEntry->nActiveConnectionCount;
+        LeaveCriticalSection(&pQServer->csClientLifecycle);
+        return nActiveConns >= pQServer->nPerIpConnectionLimit;
       }
-
-      pIpEntry = pIpEntry->pNext;
     }
 
-    int nActiveConns = pIpEntry->nActiveConnectionCount;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-    return (uint32_t)(nActiveConns >= pQServer->nPerIpConnectionLimit);
+    LeaveCriticalSection(&pQServer->csClientLifecycle);
+    return 0;
 }
 
 int __stdcall CountQueuedPacketsInMode(D2QServerStrc * pQServer, int nMode) {
