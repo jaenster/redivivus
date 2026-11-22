@@ -567,52 +567,37 @@ void __fastcall ClearMinionList(::SGAMEDATA * pGame, D2MonsterDataMinionList * p
 
 // Iterates all minions in pUnit's owner's pMinionList and calls pfnProc(pArgument) for each resolved minion unit. Validates pfnProc via IsBadCodePtr first — halts with an unrecoverable error if the pointer is bad. Traverses owner->pMinionList and calls the callback only when the minion unit resolves successfully.
 void __fastcall CallForEachMinion(D2UnitStrc * pUnit, void * pContext, void * pArgument, pfnMinionForEachCallback pfnProc) {
-    D2AiGeneralStrc* pOwnerAi;
-    D2UnitStrc* pMinion;
-    D2AiGeneralStrc* pAi;
-    ::SGAMEDATA* pGame;
-    D2MonsterDataMinionList* pMinionListHead;
-    D2MonsterDataMinionList* pMinionNode;
-    BOOL bBadCodePtr = IsBadCodePtr((FARPROC)pfnProc);
-    if (bBadCodePtr) {
+    if (IsBadCodePtr((FARPROC)pfnProc)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x24e);
       exit(-1);
     }
 
-    {
-      D2UnitStrc* pOwnerUnit;
-      if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
-        return;
-      }
-
-      pAi = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
-      if (!(pAi && pAi->pGame)) {
-        return;
-      }
-
-      pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pAi->pGame, pAi->eOwnerTypeEx, pAi->nOwnerGUIDEx);
-      if ((pOwnerUnit ? pOwnerUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-        return;
-      }
-      if (pOwnerUnit->pUnitData.pUnitDataMonster) {
-        pOwnerAi = pOwnerUnit->pUnitData.pUnitDataMonster->pAiGeneral;
-      } else {
-        pOwnerAi = 0;
-      }
-
-      pGame = pOwnerAi->pGame;
-      pMinionNode = pOwnerAi->pMinionList;
-      while (pMinionNode) {
-        pMinionListHead = pMinionNode->pNext;
-        pMinion = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pMinionNode->nMinionGUID);
-        if (pMinion) {
-          (*pfnProc)(pMinion, pContext, pArgument);
-        }
-
-        pMinionNode = pMinionListHead;
-      }
-
+    if (!(GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
+    }
+
+    D2AiGeneralStrc* pAi = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
+    if (!(pAi && pAi->pGame)) {
+      return;
+    }
+
+    D2UnitStrc* pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pAi->pGame, pAi->eOwnerTypeEx, pAi->nOwnerGUIDEx);
+    if (GetTypeInline(pOwnerUnit) != UNIT_MONSTER) {
+      return;
+    }
+
+    D2UnitDataMonsterStrc* pOwnerData = GetTypeInline(pOwnerUnit) == UNIT_MONSTER ? pOwnerUnit->pUnitData.pUnitDataMonster : nullptr;
+    D2AiGeneralStrc* pOwnerAi = pOwnerData ? pOwnerData->pAiGeneral : nullptr;
+    ::SGAMEDATA* pGame = pOwnerAi->pGame;
+    D2MonsterDataMinionList* pMinionNode = pOwnerAi->pMinionList;
+    while (pMinionNode) {
+      D2MonsterDataMinionList* pNextNode = pMinionNode->pNext;
+      D2UnitStrc* pMinion = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pMinionNode->nMinionGUID);
+      if (pMinion) {
+        (*pfnProc)(pMinion, pContext, pArgument);
+      }
+
+      pMinionNode = pNextNode;
     }
 }
 
