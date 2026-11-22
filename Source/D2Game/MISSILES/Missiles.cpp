@@ -337,6 +337,14 @@ D2UnitStrc * __fastcall CreatingMissile(::SGAMEDATA * pGame, D2SkillArgStrc * pA
     return pUnit;
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 // Sends packet 0x73 (MissileData) to the given client for a missile unit, but only if the missile's txt-row has the network-visible flag (0x20) set. Packs classId, current position, optional target coords, animation frame, owner type/GUID, missile level, and pierce index into the packet buffer.
 void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nVelocity) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
@@ -354,23 +362,10 @@ void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA *
       return;
     }
 
-    D2GSPacketSrv0x73 sPacket = {0};
-    *(uint8_t*)((char*)&sPacket.nUnused + 3) = 0;
-    sPacket.nMissileClassId = 0;
-    sPacket.nMissileX = 0;
-    sPacket.nMissileY = 0;
-    sPacket.nTargetX = 0;
-    sPacket.nTargetY = 0;
-    *(uint8_t*)(char*)&sPacket.nCurrentFrame = 0;
-    *(uint8_t*)((char*)&sPacket.nCurrentFrame + 1) = 0;
-    sPacket.nOwnerType = 0;
-    *(uint16_t*)(char*)&sPacket.nOwnerGUID = 0;
-    *(uint16_t*)((char*)&sPacket.nOwnerGUID + 2) = 0;
-    sPacket.nSkillLevel = 0;
-    sPacket.nPierceIdxValue = 0;
-    *(uint32_t*)(char*)&sPacket = 0x73;
-    int32_t nTmp = D2Common::Units::Missile::GetClassId(pUnit);
-    sPacket.nMissileClassId = (short int)nTmp;
+    D2GSPacketSrv0x73 sPacket;
+    memset(&sPacket, 0, sizeof(sPacket));
+    sPacket.nPacketId = 0x73;
+    sPacket.nMissileClassId = D2Common::Units::Missile::GetClassId(pUnit);
     sPacket.nMissileX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     sPacket.nMissileY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     if (nVelocity) {
@@ -378,16 +373,11 @@ void __fastcall MISSILES_SendMissilePacket(D2ClientStrc * pClient, ::SGAMEDATA *
       sPacket.nTargetY = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
     }
 
-    nTmp = D2Common::Units::Missile::GetCurrentFrame(pUnit);
-    *(uint8_t*)(char*)&sPacket.nCurrentFrame = (uint8_t)nTmp;
-    *(uint8_t*)((char*)&sPacket.nCurrentFrame + 1) = (uint8_t)(nTmp >> 8);
-    sPacket.nOwnerType = (uint8_t)pOwnerUnit->eUnitType;
-    *(uint16_t*)(char*)&sPacket.nOwnerGUID = (uint16_t)pOwnerUnit->nUnitGUID;
-    *(uint16_t*)((char*)&sPacket.nOwnerGUID + 2) = (uint16_t)((uint32_t)pOwnerUnit->nUnitGUID >> 0x10);
-    nTmp = D2Common::Units::Missile::GetLevel(pUnit);
-    sPacket.nSkillLevel = (uint8_t)nTmp;
-    nMissileClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_pierce_idx, 0);
-    sPacket.nPierceIdxValue = (uint8_t)nMissileClassId;
+    sPacket.nCurrentFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
+    sPacket.nOwnerType = GetTypeInline(pOwnerUnit);
+    sPacket.nOwnerGUID = pOwnerUnit->nUnitGUID;
+    sPacket.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+    sPacket.nPierceIdxValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_pierce_idx, 0);
     GAME::SCmd::NET_D2GS_SERVER_Send_0x73_MissileData(pClient, &sPacket);
 }
 
