@@ -1594,7 +1594,7 @@ static void __stdcall BigBuffer_Div_Ux(uint32_t * pRemainderOut, BigBuffer * pDi
 static BOOL BigBuffer_IsOdd(BigBuffer * pBignum) {
     SBIG_TrimLeadingZeros(pBignum);
     uint32_t nLowWord = pBignum->nStartWord;
-    if (pBignum->nCount != nLowWord) {
+    if (pBignum->nCount - nLowWord >= 1) {
       if (nLowWord < pBignum->nCount) {
         nLowWord = pBignum->pData[nLowWord];
       } else {
