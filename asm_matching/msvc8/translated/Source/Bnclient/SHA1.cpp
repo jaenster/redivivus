@@ -424,9 +424,9 @@ void __fastcall SHA1Update(D2BnSha1ContextStrc * context, void * data, uint32_t 
     context->nBitCountHigh += (len >> 29);
     if ((j + len) > 63) {
         memcpy(&context->abyBlock[j], data, (i = 64 - j));
-        SHA1Transform((uint32_t *)context->abyBlock, context->aState);
+        SHA1Transform(context->aState, (uint32_t *)context->abyBlock);
         for (; i + 63 < len; i += 64) {
-            SHA1Transform((uint32_t *)&((unsigned char *)data)[i], context->aState);
+            SHA1Transform(context->aState, (uint32_t *)&((unsigned char *)data)[i]);
         }
         j = 0;
     } else

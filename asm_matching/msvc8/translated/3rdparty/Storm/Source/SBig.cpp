@@ -74,24 +74,16 @@ static int64_t __stdcall SBIG_Accumulator_ComputeOffset(uint32_t nMultiplicand, 
 static void BigBuffer_DecodeDataBytes(uint32_t nBufferLen, uint32_t * pnReadPos, uint32_t * pnValue, uint8_t * pBuffer) {
     *pnValue = 0;
     *pnReadPos = 0;
-    if (nBufferLen > 0) {
-      uint32_t byByte;
-      do {
-        byByte = (uint32_t)pBuffer[*pnReadPos];
-        (*pnReadPos)++;
-        if (byByte == 0xff) {
-          break;
-        }
+    while (*pnReadPos < nBufferLen) {
+      uint32_t nByte = pBuffer[(*pnReadPos)++];
+      if (nByte == 0xff) {
+        break;
+      }
 
-        *pnValue = *pnValue * 0xff + byByte;
-      } while (*pnReadPos < nBufferLen);
-    }
-    if (*pnValue < nBufferLen - *pnReadPos) {
-      *pnValue = *pnValue;
-      return;
+      *pnValue = *pnValue * 0xff + nByte;
     }
 
-    *pnValue = nBufferLen - *pnReadPos;
+    *pnValue = *pnValue < nBufferLen - *pnReadPos ? *pnValue : nBufferLen - *pnReadPos;
 }
 
 // @was SBIG_DynArray_GetElementPtr (pass 6, 2026.08.28)
@@ -636,7 +628,6 @@ void __fastcall SBIG_ArrayByteAltSetCapacity(TSGrowableArray_Uc * pArray, int, i
 // @oracle-method CONFIRMED. n*4 sizing, SMemReAlloc flag 0x10 with the alloc/copy/free fallback. Matches the block the oracle inlines into .SetCount__29TSGrowableArray<Ui,8TSCD<Ui>>FUi @1009b120. Dword instantiation, SMem tag 0x708874.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __fastcall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, int, uint32_t nCapacity) {
-    uint32_t nIndex;
     uint32_t* pOldBuffer = pArray->pData;
     pArray->nCapacity = nCapacity;
     uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity * 4, s__I_00708874, -2, 0x10);
@@ -654,9 +645,10 @@ void __fastcall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, int, uint32_t nC
       nCapacity = pArray->nCount;
     }
 
-    for (nIndex = 0; nIndex < nCapacity; nIndex++) {
-      if (pArray->pData + nIndex) {
-        pArray->pData[nIndex] = pOldBuffer[nIndex];
+    for (uint32_t i = 0; i < nCapacity; i++) {
+      uint32_t* pSlot = &pArray->pData[i];
+      if (pSlot) {
+        *pSlot = pOldBuffer[i];
       }
     }
 
@@ -759,30 +751,28 @@ TSGrowableArray_Ui * __fastcall Unreferenced_004218a0(TSGrowableArray_Ui * pArra
 // @oracle-negative Pass 6 examined this: no oracle symbol corresponds to it. The existing descriptive name matches what the body does and was kept unchanged rather than forced onto a TS* method name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
 int32_t __fastcall SBIG_ArrayByteAppendData(TSGrowableArray_Uc * pArray, int, uint32_t nCount, uint8_t * pSrc) {
-    uint32_t nNewSize = pArray->nLen + nCount;
-    if (nNewSize > pArray->nCapacity) {
-      uint32_t nGranularity;
-      nGranularity = pArray->nGrowStep;
+    uint32_t nNewCount = pArray->nLen + nCount;
+    if (nNewCount > pArray->nCapacity) {
+      uint32_t nGranularity = pArray->nGrowStep;
       if (!nGranularity) {
-        nGranularity = vc8_thiscall(TSGrowableArray_Uc_CalcChunkSize)((BigBuffer*)pArray, nNewSize);
-      }
-      if (nNewSize % nGranularity) {
-        nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
+        nGranularity = vc8_thiscall(TSGrowableArray_Uc_CalcChunkSize)((BigBuffer*)pArray, nNewCount);
       }
 
-      vc8_thiscall(TSFixedArray_Uc_ReallocData)(pArray, nNewSize);
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      vc8_thiscall(TSFixedArray_Uc_ReallocData)(pArray, nNewCapacity);
     }
 
-    uint32_t uVar1 = 0;
-    if (nCount > 0) {
-      do {
-        if (pArray->pData + (pArray->nLen + uVar1)) {
-          pArray->pData[pArray->nLen + uVar1] = *pSrc;
-        }
+    for (uint32_t i = 0; i < nCount; i++) {
+      uint8_t* pSlot = &pArray->pData[pArray->nLen + i];
+      if (pSlot) {
+        *pSlot = *pSrc;
+      }
 
-        uVar1++;
-        pSrc++;
-      } while (uVar1 < nCount);
+      pSrc++;
     }
 
     pArray->nLen += nCount;
@@ -794,23 +784,22 @@ int32_t __fastcall SBIG_ArrayByteAppendData(TSGrowableArray_Uc * pArray, int, ui
 // @oracle-method PLAUSIBLE with a named caveat. Matches the oracle's .New__34TSGrowableArray<3RGN,10TSCD<3RGN>>Fv @10041370: calls CalcChunkSize and ReallocData, returns m_data + old_count, then increments the count. CAVEAT: New() and NewElement() are genuinely indistinguishable for a POD element type - both oracle instantiations collapse to the same body - so the choice between the two names is not established.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 int32_t __fastcall TSGrowableArray_Uc_New(uint32_t * pArray) {
-    uint32_t nGranularity;
-    uint32_t nNewSize = pArray[1] + 1;
-    if (nNewSize > *pArray) {
-      nGranularity = pArray[3];
+    uint32_t nNewCount = pArray[1] + 1;
+    if (nNewCount > *pArray) {
+      uint32_t nGranularity = pArray[3];
       if (!nGranularity) {
-        nGranularity = vc8_thiscall(TSGrowableArray_Uc_CalcChunkSize)((BigBuffer*)pArray, nNewSize);
-      }
-      if (nNewSize % nGranularity) {
-        nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
+        nGranularity = vc8_thiscall(TSGrowableArray_Uc_CalcChunkSize)((BigBuffer*)pArray, nNewCount);
       }
 
-      vc8_thiscall(TSFixedArray_Uc_ReallocData)((TSGrowableArray_Uc*)pArray, nNewSize);
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      vc8_thiscall(TSFixedArray_Uc_ReallocData)((TSGrowableArray_Uc*)pArray, nNewCapacity);
     }
 
-    nGranularity = pArray[1];
-    pArray[1] = nGranularity + 1;
-    return pArray[2] + nGranularity;
+    return pArray[2] + pArray[1]++;
 }
 
 // @was SBIG_ArrayByteSetSize (pass 6, 2026.08.28)
@@ -1146,28 +1135,26 @@ void __fastcall TSGrowableArray_Ui_SetCount(BigBuffer * pDwordArray, int, uint32
 int32_t __fastcall SBIG_AppendBytes(TSGrowableArray_Uc * pByteArray, int, uint32_t nByteCount, uint8_t * pSrcBytes) {
     uint32_t nNewLen = pByteArray->nLen + nByteCount;
     if (nNewLen > pByteArray->nCapacity) {
-      uint32_t i;
-      i = pByteArray->nGrowStep;
-      if (!i) {
-        i = vc8_thiscall(TSGrowableArray_UcAlt_CalcChunkSize)((BigBuffer*)pByteArray, nNewLen);
-      }
-      if (nNewLen % i) {
-        nNewLen = i - nNewLen % i + nNewLen;
+      uint32_t nGranularity = pByteArray->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = vc8_thiscall(TSGrowableArray_UcAlt_CalcChunkSize)((BigBuffer*)pByteArray, nNewLen);
       }
 
-      vc8_thiscall(TSFixedArray_UcAlt_ReallocData)(pByteArray, nNewLen);
+      uint32_t nNewCapacity = nNewLen;
+      if (nNewLen % nGranularity) {
+        nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
+      }
+
+      vc8_thiscall(TSFixedArray_UcAlt_ReallocData)(pByteArray, nNewCapacity);
     }
 
-    uint32_t uVar1 = 0;
-    if (nByteCount > 0) {
-      do {
-        if (pByteArray->pData + (pByteArray->nLen + uVar1)) {
-          pByteArray->pData[pByteArray->nLen + uVar1] = *pSrcBytes;
-        }
+    for (uint32_t i = 0; i < nByteCount; i++) {
+      uint8_t* pSlot = &pByteArray->pData[pByteArray->nLen + i];
+      if (pSlot) {
+        *pSlot = *pSrcBytes;
+      }
 
-        uVar1++;
-        pSrcBytes++;
-      } while (uVar1 < nByteCount);
+      pSrcBytes++;
     }
 
     pByteArray->nLen += nByteCount;
@@ -1258,28 +1245,19 @@ void __fastcall SBIG_SetOffset(BigBuffer * pBigNum, int, int32_t nOffset) {
 }
 
 void __fastcall SBIG_TrimLeadingZeros(BigBuffer * pDwordArray) {
-    uint32_t nGranularity;
-    uint32_t nNewCapacity;
-    uint32_t nNewLen;
-    if (pDwordArray->nCount == pDwordArray->nStartWord) {
-      return;
-    }
-
-    do {
-      uint32_t* pTopLimb;
-      pTopLimb = TSBaseArray_Ui_Top(pDwordArray);
-      if (*pTopLimb) {
+    while (pDwordArray->nCount - pDwordArray->nStartWord != 0) {
+      if (*TSBaseArray_Ui_Top(pDwordArray)) {
         return;
       }
 
-      nNewLen = pDwordArray->nCount - 1;
+      uint32_t nNewLen = pDwordArray->nCount - 1;
       if (nNewLen > pDwordArray->nCount && nNewLen > pDwordArray->nCapacity) {
-        nGranularity = pDwordArray->nGrowStep;
+        uint32_t nGranularity = pDwordArray->nGrowStep;
         if (!nGranularity) {
           nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pDwordArray, nNewLen);
         }
 
-        nNewCapacity = nNewLen;
+        uint32_t nNewCapacity = nNewLen;
         if (nNewLen % nGranularity) {
           nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
         }
@@ -1288,7 +1266,7 @@ void __fastcall SBIG_TrimLeadingZeros(BigBuffer * pDwordArray) {
       }
 
       pDwordArray->nCount = nNewLen;
-    } while (nNewLen != pDwordArray->nStartWord);
+    }
 }
 
 void * __fastcall SBIG_CopyAssign(uint32_t * pDest, int, BigBuffer * pSource) {
@@ -1603,7 +1581,7 @@ static void __stdcall BigBuffer_Div_Ux(uint32_t * pRemainderOut, BigBuffer * pDi
 static BOOL BigBuffer_IsOdd(BigBuffer * pBignum) {
     SBIG_TrimLeadingZeros(pBignum);
     uint32_t nLowWord = pBignum->nStartWord;
-    if (pBignum->nCount != nLowWord) {
+    if (pBignum->nCount - nLowWord >= 1) {
       if (nLowWord < pBignum->nCount) {
         nLowWord = pBignum->pData[nLowWord];
       } else {

@@ -733,26 +733,27 @@ void __fastcall MISSILES_ClearDamageStruct(::SGAMEDATA * pGameStrc, D2UnitStrc *
     switch (byElemType) {
       case ELEMENTAL_POISON:
         pDamage->dwColdLength = 0;
-      pDamage->dwFrzLength = 0;
-      pDamage->dwBurnLen = 0;
-      return;
+        pDamage->dwFrzLength = 0;
+        pDamage->dwBurnLen = 0;
+        break;
       case ELEMENTAL_BURNING:
         pDamage->dwColdLength = 0;
-      pDamage->dwPoisLength = 0;
-      pDamage->dwFrzLength = 0;
-      return;
+        pDamage->dwPoisLength = 0;
+        pDamage->dwFrzLength = 0;
+        break;
+      default:
+        pDamage->dwColdLength = 0;
+        pDamage->dwFrzLength = 0;
+        // fall through: the remaining lengths are cleared as for cold
       case ELEMENTAL_COLD:
-
+        pDamage->dwPoisLength = 0;
+        pDamage->dwBurnLen = 0;
+        break;
       case ELEMENTAL_FREEZE:
         pDamage->dwPoisLength = 0;
-      pDamage->dwBurnLen = 0;
-      return;
+        pDamage->dwBurnLen = 0;
+        break;
     }
-
-    pDamage->dwColdLength = 0;
-    pDamage->dwFrzLength = 0;
-    pDamage->dwPoisLength = 0;
-    pDamage->dwBurnLen = 0;
 }
 
 // Adds nParam bonus to the D2MissileDamageDataStrc field that corresponds to the missile's elemental type (derived from its class ID). Dispatches on ELEMENTAL_NONE/FIRE/LIGHTNING/MAGIC/COLD/POISON/LIFEDRAIN/MANADRAIN/STAMDRAIN/STUN/BURNING/FREEZE, mapping each to the appropriate min/max/length/count field.

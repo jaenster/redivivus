@@ -1158,12 +1158,11 @@ int __stdcall SFILE_GetFilePlatform(D2ArchiveStrc * pArchive, uint32_t * pPlatfo
       return 0;
     }
 
-    uint32_t* pArchiveData;
-    pArchiveData = (uint32_t*)pArchive->pMpqFileRecord;
-    *pPlatformInfo = pArchiveData[7];
-    pPlatformInfo[1] = pArchiveData[8];
-    pPlatformInfo[2] = pArchiveData[9];
-    pPlatformInfo[3] = pArchiveData[10];
+    uint32_t* pPlatform = (uint32_t*)pArchive->pMpqFileRecord + 7;
+    pPlatformInfo[0] = pPlatform[0];
+    pPlatformInfo[1] = pPlatform[1];
+    pPlatformInfo[2] = pPlatform[2];
+    pPlatformInfo[3] = pPlatform[3];
     LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
@@ -2856,13 +2855,17 @@ void __fastcall SFILE_CloseAllOpenFiles1_Unref_00418430(D2ArchiveStrc * pArchive
     pArchive->pNext = 0;
 }
 
+// TSLink's constructor: a new link belongs to no list.
+static inline void StormLink_Construct(StormLinkStrc* pLink) {
+    pLink->pPrevLink = 0;
+    pLink->pNext = 0;
+}
+
 StormLinkedListStrc * __fastcall Unreferenced_00418470(StormLinkedListStrc * pList) {
-    StormLinkStrc* pSVar1 = &pList->head;
-    pSVar1->pPrevLink = 0;
-    pSVar1->pNext = 0;
-    pSVar1->pPrevLink = pSVar1;
+    StormLink_Construct(&pList->head);
+    pList->head.pPrevLink = &pList->head;
     pList->nLinkOffset = 0;
-    pList->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)&pList->head;
     return pList;
 }
 
@@ -3389,12 +3392,10 @@ void __fastcall SFILE_CloseStream4(StormLinkedListStrc * pListHead) {
 }
 
 StormLinkedListStrc * __fastcall Unreferenced_00418d80(StormLinkedListStrc * pList) {
-    StormLinkStrc* pSVar1 = &pList->head;
-    pSVar1->pPrevLink = 0;
-    pSVar1->pNext = 0;
-    pSVar1->pPrevLink = pSVar1;
+    StormLink_Construct(&pList->head);
+    pList->head.pPrevLink = &pList->head;
     pList->nLinkOffset = 0;
-    pList->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)&pList->head;
     return pList;
 }
 
