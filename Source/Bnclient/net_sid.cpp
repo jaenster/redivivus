@@ -466,17 +466,12 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ReportVersion(char * pBytes, size_t nSiz
 
 // SID_STARTVERSIONING (0x06) response handler. Version check challenge from server. Receives (FILETIME)FileTime, (STRING)MPQFilename, (STRING)ValueString for CheckRevision algorithm. Initiates MPQ file download (mode 0x80000001, type 3) for version verification. ValueString passed to BNSEND_SendString for client-side checksum computation.
 BOOL __fastcall NET_SID_CLIENT_Incoming_StartVersioning(char * pBytes, size_t nSize) {
-    char c;
-    char* szText1 = pBytes + 8;
-    char* pszEnd = szText1;
-    pszEnd = pszEnd + strlen(pszEnd) + 1;
-    if ((uintptr_t)(pszEnd + (9 - (intptr_t)(pBytes + 9))) < nSize) {
-      pszEnd = szText1;
-      pszEnd = pszEnd + strlen(pszEnd) + 1;
-      BnSend::BNSEND_SendString(szText1 + (int)(pszEnd - (pBytes + 9) + 1));
+    char* szFileName = pBytes + 8;
+    if (strlen(szFileName) + 9 < nSize) {
+      BnSend::BNSEND_SendString(szFileName + strlen(szFileName) + 1);
     }
 
-    BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7fffffff, 3, 0, 0, (FILETIME*)pBytes, szText1, nullptr);
+    BnDownload::BNDOWNLOAD_InitiateFileDownload(-0x7fffffff, 3, 0, 0, (FILETIME*)pBytes, szFileName, nullptr);
     return 1;
 }
 
