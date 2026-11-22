@@ -2739,22 +2739,19 @@ void __stdcall InitLeftSkill(D2UnitStrc * pUnit) {
 
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall InitSwitchRightSkill(D2UnitStrc * pUnit) {
-    int32_t nOwnerGUID;
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
     }
 
-    D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+    D2UnitDataPlayerStrc* pPlayerData = GetTypeInline(pUnit) == UNIT_PLAYER ? pUnit->pUnitData.pUnitDataPlayer : nullptr;
     if (!pPlayerData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1414);
       exit(-1);
     }
 
     D2SkillStrc* pSkill = D2Common::Units::GetRightSkill(pUnit);
-    eD2Skills eSkill = Skills::GetSkillId(pSkill, ".\\UNITS\\Units.cpp", 0x1419);
-    pPlayerData->eSwitchRightSkillId = eSkill;
-    nOwnerGUID = Skills::GetOwnerGUID(pSkill);
-    pPlayerData->nSwitchRightSkillOwnerGUID = nOwnerGUID;
+    pPlayerData->eSwitchRightSkillId = Skills::GetSkillId(pSkill, ".\\UNITS\\Units.cpp", 0x1419);
+    pPlayerData->nSwitchRightSkillOwnerGUID = Skills::GetOwnerGUID(pSkill);
 }
 
 // @sourcefile .\UNITS\Units.cpp
