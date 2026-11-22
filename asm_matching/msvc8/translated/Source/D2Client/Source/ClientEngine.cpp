@@ -1375,17 +1375,29 @@ static D2UnitStrc * __stdcall CLIENT_FindClosestTrackedUnit(D2UnitStrc * pUnit, 
     return pClosest;
 }
 
+// The unit type read as this unit's callers inlined it: UNIT_COUNT loaded first, the unit's type over it.
+static inline eD2UnitType GetUnitTypeOrDefaultInline(D2UnitStrc * pUnit) {
+    eD2UnitType eUnitType = UNIT_COUNT;
+    if (pUnit) {
+      eUnitType = pUnit->eUnitType;
+    }
+    return eUnitType;
+}
+
+// The GUID read as this unit's callers inlined it: the -1 path first, then the unit's GUID.
+static inline int GetUnitGUIDOrNoneInline(D2UnitStrc * pUnit) {
+    if (!pUnit) {
+      return -1;
+    }
+    return pUnit->nUnitGUID;
+}
+
 // Sends a monster message whose target is pTarget's unit type and GUID (6 / -1 when pTarget is NULL); asm 0046c77c..0046c795.
 static void __stdcall CLIENT_SendMonsterMoveToUnitMessage(int32_t nSenderId, int32_t nSkillLvl, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2ServerMessageHandleStrc sMsgTargetPos;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    sMsgTargetPos.nSkillId = UNIT_COUNT;
-    if (pTarget) {
-      sMsgTargetPos.nSkillId = pTarget->eUnitType;
-      sMsgTargetPos.nItemId = pTarget->nUnitGUID;
-    } else {
-      sMsgTargetPos.nItemId = -1;
-    }
+    sMsgTargetPos.nSkillId = GetUnitTypeOrDefaultInline(pTarget);
+    sMsgTargetPos.nItemId = GetUnitGUIDOrNoneInline(pTarget);
 
     sMsgTargetPos.nTargetUnitType = 0;
     sMsgTargetPos.nTargetUnitId = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
@@ -2293,19 +2305,19 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p)
 }
 
 eD2UnitType __fastcall CLIENT_GetEffectiveUnitType(D2UnitStrc * pUnit) {
-    if (pUnit) {
-      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
-        return pUnit->eUnitType;
-      }
-
-      eD2UnitType eEffectiveType = pUnit->eUnitType;
-      int nClassId = pUnit->nClassId;
-      int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eEffectiveType, &nClassId, &nAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0xf2);
-      return eEffectiveType;
+    if (pUnit && !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
+      return pUnit->eUnitType;
     }
 
-    return UNIT_COUNT;
+    if (!pUnit) {
+      return UNIT_COUNT;
+    }
+
+    eD2UnitType eEffectiveType = pUnit->eUnitType;
+    int nClassId = pUnit->nClassId;
+    int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eEffectiveType, &nClassId, &nAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0xf2);
+    return eEffectiveType;
 }
 
 int __fastcall CLIENT_GetEffectiveAnimMode(D2UnitStrc * pUnit) {
@@ -2324,19 +2336,19 @@ int __fastcall CLIENT_GetEffectiveAnimMode(D2UnitStrc * pUnit) {
 }
 
 DWORD __fastcall CLIENT_GetEffectiveClassId(D2UnitStrc * pUnit) {
-    if (pUnit) {
-      if (!FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
-        return pUnit->nClassId;
-      }
-
-      eD2UnitType eUnitType = pUnit->eUnitType;
-      DWORD nEffectiveClassId = pUnit->nClassId;
-      int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, (int*)&nEffectiveClassId, &nAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0x116);
-      return nEffectiveClassId;
+    if (pUnit && !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit)) {
+      return pUnit->nClassId;
     }
 
-    return -1;
+    if (!pUnit) {
+      return -1;
+    }
+
+    eD2UnitType eUnitType = pUnit->eUnitType;
+    DWORD nEffectiveClassId = pUnit->nClassId;
+    int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, (int*)&nEffectiveClassId, &nAnimMode, "d:\\diablo2\\Diablo2\\Source\\D2Client/Engine.h", 0x116);
+    return nEffectiveClassId;
 }
 
 void RENDERING_TogglePerspective_Thunk() {

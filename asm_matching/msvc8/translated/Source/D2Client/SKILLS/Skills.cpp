@@ -2295,18 +2295,30 @@ void __fastcall SKILLS_CreateMissileScatter(D2UnitStrc * pUnit, D2SkillArgStrc *
     } while (nRemaining);
 }
 
+// The unit type read as this unit's callers inlined it: UNIT_COUNT loaded first, the unit's type over it.
+static inline eD2UnitType GetUnitTypeOrDefaultInline(D2UnitStrc * pUnit) {
+    eD2UnitType eUnitType = UNIT_COUNT;
+    if (pUnit) {
+      eUnitType = pUnit->eUnitType;
+    }
+    return eUnitType;
+}
+
+// The GUID read as this unit's callers inlined it: the -1 path first, then the unit's GUID.
+static inline int GetUnitGUIDOrNoneInline(D2UnitStrc * pUnit) {
+    if (!pUnit) {
+      return -1;
+    }
+    return pUnit->nUnitGUID;
+}
+
 BOOL __fastcall CLIENT_HandleUnitMessage0x16(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     D2ServerMessageHandleStrc nMsgHandle;
     memset(&nMsgHandle, 0, sizeof(nMsgHandle));
-    nMsgHandle.nTargetUnitType = UNIT_COUNT;
     nMsgHandle.nSkillId = 0;
     nMsgHandle.nItemId = -1;
-    if (pTargetUnit) {
-      nMsgHandle.nTargetUnitType = pTargetUnit->eUnitType;
-      nMsgHandle.nTargetUnitId = pTargetUnit->nUnitGUID;
-    } else {
-      nMsgHandle.nTargetUnitId = -1;
-    }
+    nMsgHandle.nTargetUnitType = GetUnitTypeOrDefaultInline(pTargetUnit);
+    nMsgHandle.nTargetUnitId = GetUnitGUIDOrNoneInline(pTargetUnit);
 
     nMsgHandle.nSkillLvl = 1;
     UNIT::UnitMode::HandleMessage(0x16, pUnit, &nMsgHandle, 1);
