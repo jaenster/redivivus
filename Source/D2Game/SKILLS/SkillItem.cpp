@@ -2190,19 +2190,15 @@ BOOL __fastcall ITEMEVENT_ReplenishLifeFlat(::SGAMEDATA * pGame, uint32_t nUnitE
       return 0;
     }
 
-    uint32_t nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+    int nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     int nCurLife = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    if (nCurLife >= (int)nMaxLife) {
+    if (nCurLife >= nMaxLife) {
       return 0;
     }
 
-    uint32_t nNewLife = nCurLife + nStatPct * 0x100;
-    nNewLife = (int)nNewLife <= 0 ? 0 : nNewLife;
-    if ((int)nNewLife < (int)nMaxLife) {
-      nMaxLife = nNewLife;
-    }
-
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMaxLife, 0);
+    nCurLife += nStatPct << 8;
+    nCurLife = nCurLife <= 0 ? 0 : nCurLife;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nCurLife < nMaxLife ? nCurLife : nMaxLife, 0);
     D2Common::Units::SetOverlay(pUnit, 0x97, 0);
     return 1;
 }
