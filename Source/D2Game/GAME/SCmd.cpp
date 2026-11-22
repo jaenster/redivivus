@@ -2587,27 +2587,35 @@ void __fastcall NET_D2GS_SERVER_Send_0x59_AssignPlayer(D2ClientStrc * pClient, u
 // For larger values, reuses SetAttribute opcodes (0x1D/0x1E/0x1F) with stat ID 0x0E (gold).
 // Called when player picks up gold pile or receives gold from trade/vendor.
 void __fastcall NET_D2GS_SERVER_Send_0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(D2ClientStrc * pClient, uint32_t nNewValue, uint32_t nCurrentValue) {
-    D2GSPacketSrv0x1F aPacket;
     int nGoldDelta = nNewValue - nCurrentValue;
     if (nGoldDelta >= 0x1 && nGoldDelta <= 0xfe) {
-      *(uint16_t*)(char*)&nCurrentValue = (uint16_t)((uint16_t)(uint8_t)(char)nGoldDelta << 8 | (uint16_t)(uint8_t)0x19);
-      SCMD_QueuePacketForClient(pClient, (uint8_t*)&nCurrentValue, 2);
+      uint8_t aPacket0x19[2];
+      aPacket0x19[0] = 0x19;
+      aPacket0x19[1] = (uint8_t)nGoldDelta;
+      SCMD_QueuePacketForClient(pClient, aPacket0x19, 2);
       return;
     }
     if (nNewValue < 0xff) {
-      d2_store24((char*)&nCurrentValue, (uint32_t)((uint32_t)((uint32_t)(uint8_t)(char)nNewValue << 16 | (uint32_t)(uint16_t)0xe1d) & 0xffffffu));
-      SCMD_QueuePacketForClient(pClient, (uint8_t*)&nCurrentValue, 3);
+      uint8_t aPacket0x1D[3];
+      aPacket0x1D[0] = 0x1d;
+      aPacket0x1D[1] = UNITSTAT_gold;
+      aPacket0x1D[2] = (uint8_t)nNewValue;
+      SCMD_QueuePacketForClient(pClient, aPacket0x1D, 3);
       return;
     }
     if (nNewValue < 0xffff) {
-      nCurrentValue = (uint32_t)((uint32_t)(uint16_t)(short int)nNewValue << 16 | (uint32_t)(uint16_t)0xe1e);
-      SCMD_QueuePacketForClient(pClient, (uint8_t*)&nCurrentValue, 4);
+      uint8_t aPacket0x1E[4];
+      aPacket0x1E[0] = 0x1e;
+      aPacket0x1E[1] = UNITSTAT_gold;
+      *(uint16_t*)&aPacket0x1E[2] = (uint16_t)nNewValue;
+      SCMD_QueuePacketForClient(pClient, aPacket0x1E, 4);
       return;
     }
 
+    D2GSPacketSrv0x1F aPacket;
+    aPacket.nPacketId = 0x1f;
+    aPacket.nStatId = UNITSTAT_gold;
     aPacket.dwValue = nNewValue;
-    aPacket.nPacketId = '\x1f';
-    aPacket.nStatId = '\x0e';
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 6);
 }
 
