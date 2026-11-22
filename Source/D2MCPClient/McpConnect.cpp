@@ -1205,21 +1205,18 @@ void __stdcall MCPCONNECT_SanitizeWideString(uint16_t * wszText) {
 // This is NOT one concatenated packet, and NOT BNCS SID_GETADVLISTEX (that path is TCP/IP
 // only, via OOGUTIL_RequestGameListFromServer / g_pBNetGameListData).
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x05(char * pBytes, size_t nSize) {
-    char* pCursor2;
     char szServerName[1024];
     uint16_t wszServerName[576];
-    char cChar;
-    uint32_t dwJoinStatusPart5 = *(uint32_t*)(pBytes + 3);
+    uint32_t dwGameId = *(uint32_t*)(pBytes + 3);
     int nJoinToken = *(int*)(pBytes + 8);
     if (*(uint16_t*)(pBytes + 1) != nMcpPacketSequence) {
       return 1;
     }
 
     g_CharSelectBuffer.wRequestId = nMcpPacketSequence;
-    g_CharSelectBuffer.nPlayerCount = (int32_t)(uint8_t)pBytes[7];
-    g_CharSelectBuffer.dwGameId = dwJoinStatusPart5;
+    g_CharSelectBuffer.dwGameId = dwGameId;
+    g_CharSelectBuffer.nPlayerCount = (uint8_t)pBytes[7];
     g_CharSelectBuffer.nGameToken = nJoinToken;
-    size_t nSizeCopy = nSize;
     if (nJoinToken == -2) {
       SetD2GSJoinResult(0x33);
       return 1;
@@ -1229,22 +1226,18 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x05(char * pBytes, size_t nSize) {
       return 1;
     }
 
-    char* pCharName = pBytes + 0xc;
-    char* pCursor = pCharName;
-    do {
-      cChar = *pCursor;
-      pCursor++;
-      pCursor2 = pCursor;
-    } while (cChar != '\0');
-
-    pCursor2 = pCursor2 + strlen(pCursor2) + 1;
+    char* pCursor = pBytes + 0xc;
+    char* pGameName = pCursor;
+    pCursor += strlen(pCursor) + 1;
+    char* pGameDescription = pCursor;
+    pCursor += strlen(pCursor) + 1;
     Fog::File::CONTAINER_InitializeBuffer(wszServerName, 2, 0x240, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszServerName, pCharName, 0x240);
+    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszServerName, pGameName, 0x240);
     MCPCONNECT_SanitizeWideString(wszServerName);
-    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szServerName, (uint16_t*)wszServerName, 0x400);
+    D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szServerName, wszServerName, 0x400);
     Storm::Source::SSTR::SStrCopy(g_CharSelectBuffer.szGameName, szServerName, 0x10);
-    Storm::Source::SSTR::SStrCopy(g_CharSelectBuffer.szGameDescription, pCursor, 0x10);
-    g_CharSelectBuffer.nHasMoreData = (int)((uint32_t)((intptr_t)pCursor2 - (intptr_t)pBytes) < nSizeCopy);
+    Storm::Source::SSTR::SStrCopy(g_CharSelectBuffer.szGameDescription, pGameDescription, 0x10);
+    g_CharSelectBuffer.nHasMoreData = (uint32_t)(pCursor - pBytes) < nSize;
     return 1;
 }
 
