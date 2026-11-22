@@ -55,25 +55,26 @@ static uint32_t SMEM_GetHandleByCaller(int * pnName, uint32_t nNameLen) {
       nNameVersion = 0;
     }
     if (gdwSMemLastHashedHeapKey && pnName == (int*)g_SMemCachedHeapNamePtr && nNameLen == g_SMemCachedHeapNameLength) {
-      if (nNameVersion == g_SMemCachedHeapNameVersion) {
+      if (nNameVersion != g_SMemCachedHeapNameVersion) {
+        gdwSMemLastHashedHeapKey = 0;
+      } else {
         return g_SMemCachedHeapNameHash;
       }
-
-      gdwSMemLastHashedHeapKey = 0;
     }
     if (pnName) {
       uHash = SSTR::SStrHash((char*)pnName, 1, nNameLen);
     }
 
-    g_SMemCachedHeapNameHash = uHash & 0x7fffffff;
-    if (!g_SMemCachedHeapNameHash) {
-      g_SMemCachedHeapNameHash = 1;
+    uHash &= 0x7fffffff;
+    if (!uHash) {
+      uHash = 1;
     }
 
     g_SMemCachedHeapNameVersion = nNameVersion;
     g_SMemCachedHeapNamePtr = pnName;
     g_SMemCachedHeapNameLength = nNameLen;
-    return g_SMemCachedHeapNameHash;
+    g_SMemCachedHeapNameHash = uHash;
+    return uHash;
 }
 
 void * __fastcall Unreferenced_004116e0(D2FogHeapBlockHdrStrc * pBlockHdr) {
