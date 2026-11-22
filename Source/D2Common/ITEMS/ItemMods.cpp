@@ -312,8 +312,11 @@ static D2StatListExStrc * __stdcall ITEMMOD_GetOrCreateStatList(D2UnitStrc * pUn
 }
 
 static BOOL __stdcall Unreferenced_0065cca0(int32_t nValue) {
-    if (nValue >= 0x10 && nValue <= 0x12) {
-      return 1;
+    switch (nValue) {
+      case 0x10:
+      case 0x11:
+      case 0x12:
+        return 1;
     }
 
     return 0;
