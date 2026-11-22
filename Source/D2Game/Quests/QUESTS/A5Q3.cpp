@@ -1665,39 +1665,37 @@ uint8_t __fastcall Q33_TransformFrozenAnya(::SGAMEDATA * pGame, D2QuestDataStrc 
     uint32_t dwReturnVal;
     eD2UnitType eUnitType;
     D2QuestDataA5Q3Strc* pA1Q4Specific = pQuestData->pQuestSpecificData.pA5Q3;
-    if (pA1Q4Specific->bAnyaTransformed) {
-      return '\0';
-    }
-
-    D2UnitStrc* pFrozenAnyaObj = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pA1Q4Specific->nPresetObjectUnit);
-    int nFrozenAnyaGUID = pA1Q4Specific->nTransformStep;
-    if (!nFrozenAnyaGUID) {
-      if (pFrozenAnyaObj) {
-        D2Common::Units::ChangeAnimMode(pFrozenAnyaObj, 2);
-        D2Common::Units::RemoveCollision_Vector(pFrozenAnyaObj);
-      }
-
-      pA1Q4Specific->nTransformStep = 1;
-      return '\0';
-    }
-    if (nFrozenAnyaGUID == 1 && (pA1Q4Specific->nTransformStep = 2 , pFrozenAnyaObj != 0)) {
-      pAnyaMonster = QUEST_SpawnMonsterNearCoords(pGame, pA1Q4Specific->nTransformX, pA1Q4Specific->nTransformY, D2Common::Units::UNITS_GetRoom(pFrozenAnyaObj), nFrozenAnyaGUID, 0x20f);
-      if (pAnyaMonster) {
-        nFrozenAnyaGUID = pFrozenAnyaObj->nUnitGUID;
-        eUnitType = pFrozenAnyaObj->eUnitType;
-        D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pFrozenAnyaObj), eUnitType, nFrozenAnyaGUID);
-        D2Common::Unit::RemoveUnitFromRoom(pFrozenAnyaObj);
-        ppMapAi = Ai::AiGeneral::GetMonsterMapAi(pAnyaMonster);
-        if (pA1Q4Specific->pDrlgMap && pA1Q4Specific->pDrlgMap->pPosition && !pA1Q4Specific->bDrlgMapTaken) {
-          D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(&pA1Q4Specific->pDrlgMap, ppMapAi);
-          pA1Q4Specific->bDrlgMapTaken = 1;
+    if (!pA1Q4Specific->bAnyaTransformed) {
+      D2UnitStrc* pFrozenAnyaObj = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_OBJECT, pA1Q4Specific->nPresetObjectUnit);
+      int nFrozenAnyaGUID = pA1Q4Specific->nTransformStep;
+      if (!nFrozenAnyaGUID) {
+        if (pFrozenAnyaObj) {
+          D2Common::Units::ChangeAnimMode(pFrozenAnyaObj, 2);
+          D2Common::Units::RemoveCollision_Vector(pFrozenAnyaObj);
         }
 
-        pA1Q4Specific->nAnyaMonsterGUID = pAnyaMonster->nUnitGUID;
-        pA1Q4Specific->bAnyaTransformed = 1;
-        Q33_SequenceFilter(pQuestData);
-        pA1Q4Specific->bTransformComplete = 0;
-        return '\x01';
+        pA1Q4Specific->nTransformStep = 1;
+        return '\0';
+      }
+      if (nFrozenAnyaGUID == 1 && (pA1Q4Specific->nTransformStep = 2 , pFrozenAnyaObj != 0)) {
+        pAnyaMonster = QUEST_SpawnMonsterNearCoords(pGame, pA1Q4Specific->nTransformX, pA1Q4Specific->nTransformY, D2Common::Units::UNITS_GetRoom(pFrozenAnyaObj), nFrozenAnyaGUID, 0x20f);
+        if (pAnyaMonster) {
+          nFrozenAnyaGUID = pFrozenAnyaObj->nUnitGUID;
+          eUnitType = pFrozenAnyaObj->eUnitType;
+          D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pFrozenAnyaObj), eUnitType, nFrozenAnyaGUID);
+          D2Common::Unit::RemoveUnitFromRoom(pFrozenAnyaObj);
+          ppMapAi = Ai::AiGeneral::GetMonsterMapAi(pAnyaMonster);
+          if (pA1Q4Specific->pDrlgMap && pA1Q4Specific->pDrlgMap->pPosition && !pA1Q4Specific->bDrlgMapTaken) {
+            D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(&pA1Q4Specific->pDrlgMap, ppMapAi);
+            pA1Q4Specific->bDrlgMapTaken = 1;
+          }
+
+          pA1Q4Specific->nAnyaMonsterGUID = GetGUIDInline(pAnyaMonster);
+          pA1Q4Specific->bAnyaTransformed = 1;
+          Q33_SequenceFilter(pQuestData);
+          pA1Q4Specific->bTransformComplete = 0;
+          return '\x01';
+        }
       }
     }
 
