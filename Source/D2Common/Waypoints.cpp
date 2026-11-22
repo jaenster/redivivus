@@ -294,12 +294,7 @@ void __stdcall CopyWaypoint(D2WaypointStrc * pWaypoint, D2WaypointStrc * pEntry)
       pWaypoint->nSignature = 0x102;
     }
 
-    nSignature = pWaypoint->aWaypointBits[0];
-    pEntry->nSignature = pWaypoint->nSignature;
-    pEntry->aWaypointBits[0] = nSignature;
-    *(uint32_t*)(pEntry->aWaypointBits + 1) = *(uint32_t*)(pWaypoint->aWaypointBits + 1);
-    *(uint32_t*)(pEntry->aWaypointBits + 3) = *(uint32_t*)(pWaypoint->aWaypointBits + 3);
-    *(uint32_t*)(pEntry->aWaypointBits + 5) = *(uint32_t*)(pWaypoint->aWaypointBits + 5);
+    *pEntry = *pWaypoint;
 }
 
 } // namespace D2Common::Waypoints
