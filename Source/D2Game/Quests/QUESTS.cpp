@@ -2660,6 +2660,13 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     goto send_quest_state;
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // Quest reward delivery: creates an item from a 4-char item code at the given level and quality, sets full durability, and attempts to place it directly into the player's inventory. If inventory is full and bMustDrop is set, finds a nearby spawnable floor tile and drops it there instead; otherwise deletes the item. Returns the created item unit, or null on failure.
 // @sourcefile .\QUESTS\QUESTS.CPP
 D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t szRewardCode, int32_t nRewardLevel, eD2ItemQuality eQuality, BOOL bMustDrop) {
@@ -2671,47 +2678,46 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
     D2RoomStrc** pRoomsNear;
     D2RoomStrc* pRoomNear;
     D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(szRewardCode, &szRewardCode);
-    if (!pItemsTxt) {
-      return nullptr;
-    }
-
-    int nItemLvl = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
-    if (nRewardLevel) {
-      nItemLvl = nRewardLevel;
-    }
-
-    D2UnitStrc* pRewardItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, szRewardCode, pGame, 4, eQuality, 0, 1, nItemLvl, 0, 0, 0);
-    if (!pRewardItem) {
-      return nullptr;
-    }
-
-    int32_t nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pRewardItem);
-    if (nMaxDurability > 0) {
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pRewardItem, UNITSTAT_durability, nMaxDurability, 0);
-    }
-
-    D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pRewardItem, INVPAGE_INVENTORY);
-    _bInventoryPlaced = ITEMS::ItemMode::SERVER_ItemToInventory(".\\QUESTS\\QUESTS.CPP", 0x9cf, pGame, pUnit, pRewardItem->nUnitGUID, 0, 0, 1, 1, nullptr);
-    if (_bInventoryPlaced) {
-      BOOL bIsIdentified;
-      bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pRewardItem, ITEMFLAG_IDENTIFIED, 0x9d2, ".\\QUESTS\\QUESTS.CPP");
-      if (!bIsIdentified) {
-        ITEMS::ItemMode::ITEMMODE_IdentifyItem(pGame, pUnit, pRewardItem);
+    if (pItemsTxt) {
+      int nItemLvl = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
+      if (nRewardLevel) {
+        nItemLvl = nRewardLevel;
       }
 
-      return pRewardItem;
-    }
-    if (bMustDrop) {
-      D2Common::Units::GetCoords(pUnit, &sDropCoords);
-      nSearchIterations = 100;
-      nFindRadius = 5;
-      pRoomsNear = &pRoomNear;
-      FindSpawnableLocation(D2Common::Units::UNITS_GetRoom(pUnit), &sDropCoords, 1, 0x3e01, pRoomsNear, nFindRadius, nSearchIterations);
-      ITEMS::Items::Drop::DropItem(pGame, nullptr, pRewardItem, pRoomNear, sDropCoords.x, sDropCoords.y);
-      return pRewardItem;
+      D2UnitStrc* pRewardItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, szRewardCode, pGame, 4, eQuality, 0, 1, nItemLvl, 0, 0, 0);
+      if (!pRewardItem) {
+        return nullptr;
+      }
+
+      int32_t nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pRewardItem);
+      if (nMaxDurability > 0) {
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pRewardItem, UNITSTAT_durability, nMaxDurability, 0);
+      }
+
+      D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pRewardItem, INVPAGE_INVENTORY);
+      _bInventoryPlaced = ITEMS::ItemMode::SERVER_ItemToInventory(".\\QUESTS\\QUESTS.CPP", 0x9cf, pGame, pUnit, GetGUIDInline(pRewardItem), 0, 0, 1, 1, nullptr);
+      if (_bInventoryPlaced) {
+        BOOL bIsIdentified;
+        bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pRewardItem, ITEMFLAG_IDENTIFIED, 0x9d2, ".\\QUESTS\\QUESTS.CPP");
+        if (!bIsIdentified) {
+          ITEMS::ItemMode::ITEMMODE_IdentifyItem(pGame, pUnit, pRewardItem);
+        }
+
+        return pRewardItem;
+      }
+      if (bMustDrop) {
+        D2Common::Units::GetCoords(pUnit, &sDropCoords);
+        nSearchIterations = 100;
+        nFindRadius = 5;
+        pRoomsNear = &pRoomNear;
+        FindSpawnableLocation(D2Common::Units::UNITS_GetRoom(pUnit), &sDropCoords, 1, 0x3e01, pRoomsNear, nFindRadius, nSearchIterations);
+        ITEMS::Items::Drop::DropItem(pGame, nullptr, pRewardItem, pRoomNear, sDropCoords.x, sDropCoords.y);
+        return pRewardItem;
+      }
+
+      ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pRewardItem);
     }
 
-    ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pRewardItem);
     return nullptr;
 }
 
