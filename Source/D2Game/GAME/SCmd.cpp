@@ -704,21 +704,24 @@ void __fastcall NET_D2GS_SERVER_Send_0x1A_0x1B_0x1C_Experience(D2ClientStrc * pC
     uint32_t nExpDelta = nCurrentExp - nPreviousExp;
     if (nExpDelta <= 0xfffe) {
       if ((int)nExpDelta < 0xff) {
-        nPreviousExp = (uint32_t)((uint32_t)((uint32_t)(uint16_t)*(uint16_t*)((char*)&nPreviousExp + 2) << 8 | (uint32_t)(uint8_t)(char)nExpDelta) << 8 | (uint32_t)(uint8_t)0x1a);
-        SCMD_QueuePacketForClient(pClient, (uint8_t*)&nPreviousExp, 2);
+        uint8_t aPacket0x1A[2];
+        aPacket0x1A[0] = 0x1a;
+        aPacket0x1A[1] = (uint8_t)nExpDelta;
+        SCMD_QueuePacketForClient(pClient, aPacket0x1A, 2);
         return;
       }
 
-      d2_store24((char*)&nPreviousExp, (uint32_t)((uint32_t)((uint32_t)(uint16_t)(short int)nExpDelta << 8 | (uint32_t)(uint8_t)0x1b) & 0xffffffu));
-      SCMD_QueuePacketForClient(pClient, (uint8_t*)&nPreviousExp, 3);
+      uint8_t aPacket0x1B[3];
+      aPacket0x1B[0] = 0x1b;
+      *(uint16_t*)&aPacket0x1B[1] = (uint16_t)nExpDelta;
+      SCMD_QueuePacketForClient(pClient, aPacket0x1B, 3);
       return;
     }
 
-    D2GSPacketSrv0x1C byOpcode;
-    byOpcode.dwExpDelta = nCurrentExp;
-    byOpcode.nPacketId = '\x1c';
-    SCMD_QueuePacketForClient(pClient, &byOpcode.nPacketId, 5);
-    return;
+    D2GSPacketSrv0x1C aPacket;
+    aPacket.nPacketId = 0x1c;
+    aPacket.dwExpDelta = nCurrentExp;
+    SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 5);
 }
 
 // Server-to-client attribute update (life, mana, stamina). Size-based opcode: 0x1D (3 bytes), 0x1E (4), 0x1F (6). The attribute id is 16-bit: 0053be46 is CMP DX,0xff, not a byte compare, so typing it from DL truncated the range check that selects the opcode.
