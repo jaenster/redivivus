@@ -305,17 +305,8 @@ void __stdcall SetActivateFrame(D2UnitStrc * pUnit, int32_t nActivateFrame) {
     if (!pMissileData) {
       return;
     }
-    if (nActivateFrame > -0x8000) {
-      if (nActivateFrame >= 0x7fff) {
-        nActivateFrame = 0x7fff;
-      }
 
-      pMissileData->nActivateFrame = (int16_t)nActivateFrame;
-      return;
-    }
-
-    pMissileData->nActivateFrame = -0x8000;
-    return;
+    pMissileData->nActivateFrame = (int16_t)min(max(nActivateFrame, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 }
 
 int32_t __stdcall GetActivateFrame(D2UnitStrc * pUnit) {
