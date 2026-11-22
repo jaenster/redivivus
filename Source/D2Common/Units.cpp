@@ -1084,8 +1084,6 @@ int32_t __stdcall UNITS_GetInventoryRecordId(D2UnitStrc * pUnit, uint8_t nInvPag
 }; D2_STATIC_GUARD(aPlayerInventoryPage, "D2Common::Units::UNITS_GetInventoryRecordId::aPlayerInventoryPage");
     static unsigned int nPlayerInventoryPageSize = 0x7; D2_STATIC_GUARD(nPlayerInventoryPageSize, "D2Common::Units::UNITS_GetInventoryRecordId::nPlayerInventoryPageSize");
 
-    eInventoryPage eResultPage;
-    uint32_t i;
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xa2f);
       exit(-1);
@@ -1107,16 +1105,12 @@ int32_t __stdcall UNITS_GetInventoryRecordId(D2UnitStrc * pUnit, uint8_t nInvPag
               return 9;
           }
 
-          i = 0;
-          if (nPlayerInventoryPageSize > 0) {
-            while (pUnit->nClassId != aPlayerInventoryPage[i * 2]) {
-              i++;
-              if (i >= nPlayerInventoryPageSize) {
-                return nPageResult;
-              }
+          int nClassId = pUnit->nClassId; // steer-ok: the original reads the class id before the page table loop
+          for (uint32_t i = 0; i < nPlayerInventoryPageSize; i++) {
+            if (nClassId == aPlayerInventoryPage[i * 2]) {
+              nPageResult = aPlayerInventoryPage[i * 2 + 1];
+              break;
             }
-
-            nPageResult = aPlayerInventoryPage[i * 2 + 1];
           }
 
           break;
@@ -1136,9 +1130,9 @@ int32_t __stdcall UNITS_GetInventoryRecordId(D2UnitStrc * pUnit, uint8_t nInvPag
               {
                 return 0xb;
               }
+            default:
+              return nPageResult;
           }
-
-          return -1;
         }
     }
 
