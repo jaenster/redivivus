@@ -2492,18 +2492,13 @@ D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nAct, int * p
 int32_t __stdcall MONSTERTBLS_MapSuperUniqueId(int32_t nType, int32_t nSuperUniqueId) {
     switch (nType) {
       case 0:
-        {
-          nSuperUniqueId += sgtDataTable.nTxtSuperUniquesSize;
-        }
+        nSuperUniqueId += sgtDataTable.nTxtSuperUniquesSize;
       case 2:
-        {
-          return nSuperUniqueId + ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
-        }
-      default:
-        {
-          return nSuperUniqueId;
-        }
+        nSuperUniqueId += ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
+        break;
     }
+
+    return nSuperUniqueId;
 }
 
 void __fastcall TXT_AllocTxt_sounds(D2PoolManagerStrc * pMemory) {
