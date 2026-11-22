@@ -2033,62 +2033,64 @@ void __stdcall CELCMP_InvokeFormatSpecificCleanup(DC6 * pDC6, BYTE * pPaletteRem
 }
 
 void __stdcall CELCMP_DrawCelFrame(D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, uint32_t nDstPitch, BYTE * pRenderArg1, BYTE * pRenderArg2, BYTE * pPalette) {
-    int nDrawYAdj;
-    int nFormat;
-    int nFrameHeight;
-    int nDrawXAdj;
-    int32_t nErrorLine;
-    int32_t nGfxData;
     DC6* pDC6 = pGfxData->pDC6;
-    if (!pDC6 || pDC6->nVersion == 6 && !(pDC6->nFlags & 4)) {
-      DC6Block* pImageHeader;
-      if (!pDstBits) {
-        nErrorLine = 0x456;
-      } else {
-        pImageHeader = pGfxData->pDC6Block;
-        if (pImageHeader) {
-          nDrawYAdj = nDrawY + pImageHeader->nOffsetY;
-          nFrameHeight = pImageHeader->nHeight;
-          nDrawXAdj = nDrawX + pImageHeader->nOffsetX;
-          nGfxData = 0x0;
-          if (nDrawYAdj - nFrameHeight < 0) {
-            nFrameHeight = nDrawYAdj + 1;
-          }
-          if (nFrameHeight <= 0) {
-            return;
-          }
-          if (nDrawYAdj >= nDstHeight) {
-            nGfxData = nDrawYAdj - nDstHeight + 1;
-            nFrameHeight -= nGfxData;
-            if (nFrameHeight <= 0) {
-              return;
-            }
-
-            nDrawYAdj = nDstHeight - 1;
-          }
-          if (!(nClipLeft || nClipRight || nDrawXAdj >= 0 && nDrawYAdj >= 0)) {
-            return;
-          }
-
-          nFormat = 0;
-          if (pDC6) {
-            nFormat = pDC6->nFormat;
-          }
-          if (!gaaCelDrawFuncTable[nFormat]) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x481);
-            exit(-1);
-          }
-
-          (*gaaCelDrawFuncTable[nFormat])((uint8_t*)pImageHeader, pDstBits + (nDrawYAdj * nDstPitch + nDrawXAdj), nDrawXAdj, nClipLeft, nClipRight, nDstPitch, nGfxData, nFrameHeight, (int32_t)pRenderArg1, pRenderArg2, (int32_t)pPalette);
-          return;
-        }
-
-        nErrorLine = 0x459;
+    if (pDC6) {
+      if (pDC6->nVersion != 6) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x452);
+        exit(-1);
+      }
+      if (pDC6->nFlags & 4) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x453);
+        exit(-1);
       }
     }
+    if (!pDstBits) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x456);
+      exit(-1);
+    }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
-    exit(-1);
+    DC6Block* pBlock = pGfxData->pDC6Block;
+    if (!pBlock) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x459);
+      exit(-1);
+    }
+
+    nDrawY += pBlock->nOffsetY;
+    nDrawX += pBlock->nOffsetX;
+    int nHeight = pBlock->nHeight;
+    int nSkippedRows = 0;
+    if (nDrawY - nHeight < 0) {
+      nHeight = nDrawY + 1;
+    }
+    if (nHeight <= 0) {
+      return;
+    }
+    if (nDrawY >= nDstHeight) {
+      nSkippedRows = nDrawY - nDstHeight + 1;
+      nHeight -= nSkippedRows;
+      if (nHeight <= 0) {
+        return;
+      }
+
+      nDrawY = nDstHeight - 1;
+    }
+    if (!nClipLeft && !nClipRight && (nDrawX < 0 || nDrawY < 0)) {
+      return;
+    }
+
+    BYTE* pDst = pDstBits + (nDrawY * nDstPitch + nDrawX);
+    int nFormat = 0;
+    if (pDC6) {
+      nFormat = pDC6->nFormat;
+    }
+
+    fpCelDrawFrameByFormat pfnDraw = gaaCelDrawFuncTable[nFormat];
+    if (!pfnDraw) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x481);
+      exit(-1);
+    }
+
+    pfnDraw((uint8_t*)pBlock, pDst, nDrawX, nClipLeft, nClipRight, nDstPitch, nSkippedRows, nHeight, (int32_t)pRenderArg1, pRenderArg2, (int32_t)pPalette);
 }
 
 BOOL __stdcall CELCMP_CopyCelDataToBuffer(DC6 * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer) {
