@@ -1635,7 +1635,7 @@ static BOOL BigBuffer_IsOne(BigBuffer * pBignum) {
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static uint32_t BigBuffer_IsZero(BigBuffer * pBignum) {
     SBIG_TrimLeadingZeros(pBignum);
-    return (uint32_t)(pBignum->nCount == pBignum->nStartWord);
+    return pBignum->nCount - pBignum->nStartWord == 0;
 }
 
 // @renamed-from SBIG_MulValue64 (2026-08-28, Storm PowerPC oracle pass 4)
