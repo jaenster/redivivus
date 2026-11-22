@@ -315,71 +315,56 @@ void __fastcall Q06_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 // A1Q6 "entered level" / area-trigger callback (state slot 3). On entering the relevant area (index field): if first time, bumps stateFlag to 3, and broadcasts state 2 (started, idx 0x25) or state 1 via QUEST_SetStateAndBroadcast(Q06_NotifyQuestStateToPlayer), then syncs all players. Also handles re-entry (textControl==1): removes player from list and, if stateFlag==2 and player record not Completed/RewardAwaits, advances to flag 3 and re-syncs. Drives quest start from walking into the Catacombs.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q6.cpp
 void __fastcall Q06_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2UnitDataPlayerStrc* pGame;
-    BOOL bStateAlreadyAdvanced;
-    ::SGAMEDATA* pPlayerData;
-    int nAreaIndex;
-    nAreaIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
-    if (nAreaIndex - 0x22U > 3 || pQuestData->bIsNotIntroduction == '\0') {
-      D2BitBufferStrc* pBitBuffer;
-      if (pQuestData->nStateFlag == 4 && nAreaIndex == 0x28) {
-        QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x187);
-        return;
+    int nNewLevel = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
+    int nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    if (nNewLevel - 0x22U <= 3 && pQuestData->bIsNotIntroduction != '\0') {
+      bool bAdvanced = false;
+      if (pQuestData->nStateFlag < 3) {
+        QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x166);
+        bAdvanced = true;
       }
-      if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 1) {
-        return;
-      }
-
-      QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
-      if (pQuestData->nStateFlag != 2) {
-        return;
-      }
-
-      pPlayerData = pQuestArgs->pGame;
-      pGame = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-      pBitBuffer = pGame->pQuestRecord[pPlayerData->nDifficulty];
-      bStateAlreadyAdvanced = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-      if (bStateAlreadyAdvanced == 1) {
-        return;
+      if (nNewLevel == 0x25) {
+        if (pQuestData->nStateFlagPrev < 2) {
+          pQuestData->nQuestPacketFlags = '\0';
+          QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, 1);
+          UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q06_SyncQuestStepToPlayer);
+        } else if (bAdvanced) {
+          UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q06_SyncQuestStepToPlayer);
+        }
+      } else if (!pQuestData->nStateFlagPrev) {
+        pQuestData->nQuestPacketFlags = '\0';
+        QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, 0);
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q06_SyncQuestStepToPlayer);
+      } else if (bAdvanced) {
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q06_SyncQuestStepToPlayer);
       }
 
-      bStateAlreadyAdvanced = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits);
-      if (bStateAlreadyAdvanced == 1) {
-        return;
-      }
-
-      QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x195);
-      UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q06_SyncQuestStepToPlayer);
+      QUEST_DebugPrint(pQuestArgs->pGame, "started quest by jumping to level", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x180);
+      return;
+    }
+    if (pQuestData->nStateFlag == 4 && nNewLevel == 0x28) {
+      QUEST_SetStateFlag(pQuestData, 5, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x187);
+      return;
+    }
+    if (nOldLevel != 1) {
       return;
     }
 
-    bool bQuestState;
-    bQuestState = 2 < pQuestData->nStateFlag;
-    if (!bQuestState) {
-      QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x166);
-    }
-    if (nAreaIndex == 0x25) {
-      if (pQuestData->nStateFlagPrev < 2) {
-        pQuestData->nQuestPacketFlags = '\0';
-        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, 1);
-      } else {
-        sync_unless_advanced:
-        if (bQuestState) {
-          goto log_quest_started;
-        }
-      }
-    } else {
-      if (pQuestData->nStateFlagPrev) {
-        goto sync_unless_advanced;
-      }
-
-      pQuestData->nQuestPacketFlags = '\0';
-      QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q06_NotifyQuestStateToPlayer, 0);
+    QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
+    if (pQuestData->nStateFlag != 2) {
+      return;
     }
 
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed) == 1) {
+      return;
+    }
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_RewardAwaits) == 1) {
+      return;
+    }
+
+    QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x195);
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q06_SyncQuestStepToPlayer);
-    log_quest_started:
-    QUEST_DebugPrint(pQuestArgs->pGame, "started quest by jumping to level", "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q6.cpp", 0x180);
 }
 
 // A1Q6 completion-sound callback (IteratePlayerOrMonsterUnits). If player record has both RewardAwaits and JustCompleted set, plays the quest-complete sound/event (event sound 0x21) on that player. Read-only on quest state.
