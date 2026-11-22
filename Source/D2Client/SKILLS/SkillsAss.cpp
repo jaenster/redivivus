@@ -12,6 +12,14 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/D2ClientRoot.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -127,17 +135,8 @@ int32_t __fastcall SKILLSASS_GetCltMissileByAuraLevel(D2UnitStrc * pUnit, int32_
 
     D2StatListExStrc* pStatListEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)sAuraState);
     if (pStatListEx) {
-      int nAuraStatVal;
-      nAuraStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, (int)pSkillTxt->aurastat[0], 0);
-      if (nAuraStatVal > 1) {
-        if (nAuraStatVal >= 3) {
-          nAuraStatVal = 3;
-        }
-
-        return (int)pSkillTxt->cltmissile[nAuraStatVal];
-      }
-
-      return (int)pSkillTxt->cltmissile[1];
+      int nAuraStatVal = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatListEx, (int)pSkillTxt->aurastat[0], 0);
+      return (int)pSkillTxt->cltmissile[min(max(nAuraStatVal, 1), 3)]; // steer-ok: windef.h min/max macros
     }
 
     return (int)pSkillTxt->cltmissile[1];
