@@ -168,8 +168,11 @@ void __fastcall FreeAi(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // @sourcefile .\Ai\AiGeneral.cpp
 static void FreeAiCmds(D2AiGeneralStrc * pAiGeneral, ::SGAMEDATA * pGame) {
-    D2MonsterAiCmdStrc* pCmd = pAiGeneral->pCmdLast;
-    while (pCmd && (pCmd = pAiGeneral->pCmdCurrent)) {
+    while (pAiGeneral->pCmdLast) {
+      D2MonsterAiCmdStrc* pCmd = pAiGeneral->pCmdCurrent;
+      if (!pCmd) {
+        return;
+      }
       if (pCmd != pCmd->pNext) {
         if (pAiGeneral->pCmdLast == pCmd) {
           pAiGeneral->pCmdLast = pCmd->pNext;
@@ -184,7 +187,6 @@ static void FreeAiCmds(D2AiGeneralStrc * pAiGeneral, ::SGAMEDATA * pGame) {
       }
 
       D2_FREE_POOL_AT(pGame->pMemoryPool, pCmd, ".\\Ai\\AiGeneral.cpp", 0xc4);
-      pCmd = pAiGeneral->pCmdLast;
     }
 }
 
@@ -372,17 +374,23 @@ void __fastcall AssignMinionOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
     pAiGeneral->pGame = pGame;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 void __fastcall AIGENERAL_GetOwnerData(D2UnitStrc * pUnit, uint32_t * pnOwnerGUID, int * peOwnerType) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
-      D2AiGeneralStrc* pMonsterData = !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
-      if (pMonsterData->pGame) {
-        *pnOwnerGUID = pMonsterData->nOwnerGUIDEx;
-        *peOwnerType = pMonsterData->eOwnerTypeEx;
-        return;
-      }
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
+      *pnOwnerGUID = -1;
+      return;
     }
 
-    *pnOwnerGUID = -1;
+    D2UnitDataMonsterStrc* pMonsterData = GetTypeInline(pUnit) == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : nullptr;
+    D2AiGeneralStrc* pAiGeneral = pMonsterData ? pMonsterData->pAiGeneral : nullptr;
+    if (!pAiGeneral->pGame) {
+      *pnOwnerGUID = -1;
+      return;
+    }
+
+    *pnOwnerGUID = pAiGeneral->nOwnerGUIDEx;
+    *peOwnerType = pAiGeneral->eOwnerTypeEx;
 }
 
 // Returns the owner unit for a monster. Walks pMonsterData->pAiGeneral->pGame to call FindUnitFromTable with the owner's type and GUID.

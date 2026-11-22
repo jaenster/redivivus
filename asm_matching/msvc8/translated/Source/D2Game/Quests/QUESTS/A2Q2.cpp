@@ -72,7 +72,7 @@ void __fastcall Q09_AICallback_GreaterMummy(::SGAMEDATA * pGame, D2UnitStrc * pU
 bool __fastcall Q10_IsRadamentCompleted(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RadamentsLair);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
-      return pQuestData->nStateFlag == 5;
+      return pQuestData->nStateFlag == 5 ? true : false;
     }
 
     return true;

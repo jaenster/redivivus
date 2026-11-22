@@ -275,14 +275,15 @@ void __fastcall MONUMOD_ApplyFanatic(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     MONUMOD_ApplyChampionStats(pUnit, nIndex, bUnique);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 void __fastcall MONUMOD_ApplyPossessed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
-    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && bUnique)) {
+    if (!(GetTypeInline(pUnit) == UNIT_MONSTER && bUnique)) {
       return;
     }
-    if (true && pUnit->pUnitData.pUnitDataMonster) {
-      uint16_t* pMonType;
-      pMonType = &pUnit->pUnitData.pUnitDataMonster->eMonsterType;
-      *pMonType |= MONTYPE_POSSESSED;
+    D2UnitDataMonsterStrc* pMonsterData = GetTypeInline(pUnit) == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : nullptr;
+    if (pMonsterData) {
+      pMonsterData->eMonsterType |= MONTYPE_POSSESSED;
     }
 
     UMOD_IncreaseMonsterHp(100, pUnit);
