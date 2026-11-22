@@ -2546,45 +2546,39 @@ BOOL __stdcall TestCollisionBetweenInteractingUnits(D2UnitStrc * pUnit, D2UnitSt
     return 0;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 BOOL __stdcall IsInMeleeRange(D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t nAttackerExtendRange) {
-    int32_t nMeleeRangeAttacker;
-    int32_t nMeleeRange;
     if (!pTarget || !pUnit) {
       return 0;
     }
-    if (pTarget->eUnitType == UNIT_MONSTER) {
-      int nBaseId;
-      nBaseId = DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pTarget);
+    if (GetTypeInline(pTarget) == UNIT_MONSTER) {
+      int nBaseId = DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pTarget);
       if (nBaseId < 0 || nBaseId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
         nBaseId = -1;
       }
 
       switch (nBaseId) {
         case 0x102:
-          case 0x105:
-            {
-              nMeleeRangeAttacker = Collision::GetDistanceBetweenUnits(pUnit, pTarget);
-              nMeleeRange = GetMeleeRange(pUnit);
-              if (nMeleeRange + 8 > nMeleeRangeAttacker) {
-                return 1;
-              }
+        case 0x105:
+          if (GetMeleeRange(pUnit) + 8 > Collision::GetDistanceBetweenUnits(pUnit, pTarget)) {
+            return 1;
+          }
 
-              break;
-            }
+          break;
       }
     }
 
-    nMeleeRangeAttacker = GetMeleeRange(pUnit);
-    nMeleeRange = Collision::GetDistanceBetweenUnits(pUnit, pTarget);
-    if (nMeleeRange <= 0) {
-      return 1;
-    }
-    if (!(nMeleeRangeAttacker + 1 + nAttackerExtendRange >= nMeleeRange)) {
+    int nReach = GetMeleeRange(pUnit) + nAttackerExtendRange + 1;
+    int nDistance = Collision::GetDistanceBetweenUnits(pUnit, pTarget);
+    if (nDistance > 0 && nReach < nDistance) {
       return 0;
     }
+    if (nDistance <= 0) {
+      return 1;
+    }
 
-    BOOL bLOSBlocked = TestCollisionWithUnit(pUnit, pTarget, 0x804);
-    return (uint32_t)!bLOSBlocked;
+    return !TestCollisionWithUnit(pUnit, pTarget, 0x804);
 }
 
 // GetAnimMode as its callers inlined it: two returns, the value in a register of its own.
