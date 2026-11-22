@@ -1160,7 +1160,8 @@ static void __stdcall CreateMonsterPreset(D2PoolManagerStrc * pMemory, D2DrlgMap
     int32_t nX = pDrlgMap->nSizeX / 2 + pDrlgMap->nRealOffsetX;
     int32_t nY = pDrlgMap->nSizeY / 2 + pDrlgMap->nRealOffsetY;
     Transform::CoordsRoomToWorld(&nX, &nY);
-    D2PresetUnitStrc* pPreset = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_MONSTER, ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x10a ? -1 : 0x10a, 1, nX, nY);
+    int nClassId = ITEMS::Items::sgptDataTable->nTxtMonStatsSize <= 0x10a ? -1 : 0x10a; // steer-ok: the original computes the class id before loading the coordinates
+    D2PresetUnitStrc* pPreset = DrlgRoom::AllocPresetUnit(nullptr, pMemory, UNIT_MONSTER, nClassId, 1, nX, nY);
     pPreset->pPresetUnitNext = pDrlgMap->pPresetUnit;
     pDrlgMap->pPresetUnit = pPreset;
 }
