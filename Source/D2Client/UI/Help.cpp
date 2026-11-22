@@ -370,8 +370,6 @@ void __stdcall HELP_DrawHelpButton() {
 }
 
 void __stdcall INPUT_HelpScrollButtonDown(D2UIMouseMsgStrc * pMsg) {
-    int nScreenY = Inv::ScreenSizeY;
-    int nScreenX = ui::ScreenSizeX;
     if (gpHelpScrollButtonUp) {
       return;
     }
@@ -380,7 +378,7 @@ void __stdcall INPUT_HelpScrollButtonDown(D2UIMouseMsgStrc * pMsg) {
     int nLeftX = ui::ScreenSizeX - 0x4b;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
-    if (!(nMouseX >= nLeftX && nMouseX <= nScreenX - 0x28 && nMouseY >= nScreenY - 0xc4 && nMouseY <= nBottomY)) {
+    if (nMouseX < nLeftX || nMouseX > nLeftX + 0x23 || nMouseY < nBottomY - 0x24 || nMouseY > nBottomY) {
       return;
     }
 
