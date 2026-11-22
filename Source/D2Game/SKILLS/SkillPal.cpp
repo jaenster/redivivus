@@ -407,88 +407,67 @@ int __fastcall SKILLPAL_ApplyAuraStateToTarget(D2SkillCallbackContextStrc * pCon
 
 // Server skill DoFunc #65 (Paladin Prayer-family healing/regen auras): per-interval aura tick for pUnit. Validates eSkill, computes mana cost and the next per-delay interval, gathers the skill's aurastat/aurastatcalc list and (when mana permits) its passivestat/passivecalc list into a target statlist, applies the area effect to valid targets via SKILLS_ApplyAreaEffect filtered by SKILLPAL_IsHolyBoltValidTarget, and for players deducts mana / toggles STATE_nomanaregen. Returns 1. Note: the decompile shows pAuraStatList/nManaRemaining read before assignment (decompiler artifact / possible stack-slot aliasing) — behavior around the passive-stat branch is uncertain from pseudocode alone.
 BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int nCalc;
-    D2SkillAuraArgStrc nAuraStateArg;
-    int nCurMana;
-    int* pSkillsTxtSaved;
-    int* pAuraStatCalcArr;
-    short int* pSkill;
-    short int* pSkill2;
-    eD2Skills eSkill_00 = eSkill;
-    D2SkillsTxt* pSkillData = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillData) {
+    D2SkillAuraArgStrc sAuraArg;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
     int32_t nManaCost = D2Common::Skills::SKILLS_CalculateManaCost(eSkill, nSkillLvl);
     int nMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-    memset(&nAuraStateArg, 0, 0x50);
-    nAuraStateArg.eSkill = eSkill;
-    nAuraStateArg.nSkillLvl = nSkillLvl;
-    int32_t nDelayInterval = SkillsServer::SKILLS_CalcPerDelayInterval(pGame, pUnit, pSkillData, eSkill, nSkillLvl);
-    nAuraStateArg.nDelayFrame = nDelayInterval + (1 - pGame->dwGameFrame);
-    if (pSkillData->passivestate > 0) {
-      nAuraStateArg.nFlag = (int32_t)pSkillData->passivestate;
+    memset(&sAuraArg, 0, 0x50);
+    sAuraArg.eSkill = eSkill;
+    sAuraArg.nSkillLvl = nSkillLvl;
+    sAuraArg.nDelayFrame = SkillsServer::SKILLS_CalcPerDelayInterval(pGame, pUnit, pSkillTxt, eSkill, nSkillLvl) + (1 - pGame->dwGameFrame);
+    if (pSkillTxt->passivestate > 0) {
+      sAuraArg.nFlag = (int32_t)pSkillTxt->passivestate;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER || nMana >= nManaCost) {
-      pAuraStatCalcArr = pSkillData->aurastatcalc;
-      nCalc = 0;
-      pSkill2 = (short int*)pSkillData->aurastat;
-      do {
-        if (*pSkill2 < 0) {
+      for (int i = 0; i < 6; i++) {
+        int nStat = pSkillTxt->aurastat[i];
+        if (nStat < 0) {
           break;
         }
 
-        nAuraStateArg.anStats[nCalc] = (int)*pSkill2;
-        nDelayInterval = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraStatCalcArr, eSkill_00, nSkillLvl);
-        pSkill2 = (short int*)((char*)pSkill2 + SKILL_Throw);
-        pAuraStatCalcArr++;
-        nAuraStateArg.anCalcs[nCalc] = nDelayInterval;
-        nCalc++;
-      } while (nCalc < 6);
+        sAuraArg.anStats[i] = nStat;
+        sAuraArg.anCalcs[i] = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurastatcalc[i], eSkill, nSkillLvl);
+      }
     }
-    if (pSkillData->aurastate > 0) {
-      eD2UnitStat eUnitStat;
-      nAuraStateArg.nAuraState = (int32_t)pSkillData->aurastate;
-      if (nAuraStateArg.nAuraState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-        SkillsServer::SKILLS_InvokeCallbackNoTarget(pGame, pUnit, SKILLPAL_ApplyAuraStateToTarget, &nAuraStateArg);
-        if (nAuraStateArg.pStatList && nMana > nManaCost && pSkillData->passivestate <= 0) {
-          pSkillsTxtSaved = pSkillData->passivecalc;
-          pSkill = (short int*)pSkillData->passivestat;
-          for (nCurMana = 0; nCurMana < 5; nCurMana++) {
-            eUnitStat = (eD2UnitStat)*pSkill;
-            nDelayInterval = D2Common::Skills::D2GetSkillCalc(pUnit, *pSkillsTxtSaved, eSkill_00, nSkillLvl);
-            if (nDelayInterval && (int)eUnitStat > 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
-              D2Common::Stats::StatsEx::D2AddStatToStatsListEx((D2StatListExStrc*)nAuraStateArg.pStatList, eUnitStat, nDelayInterval, 0);
+    if (pSkillTxt->aurastate > 0) {
+      if ((int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+        sAuraArg.nAuraState = (int32_t)pSkillTxt->aurastate;
+        SkillsServer::SKILLS_InvokeCallbackNoTarget(pGame, pUnit, SKILLPAL_ApplyAuraStateToTarget, &sAuraArg);
+        if (sAuraArg.pStatList && nMana > nManaCost && pSkillTxt->passivestate <= 0) {
+          for (int i = 0; i < 5; i++) {
+            eD2UnitStat eUnitStat = (eD2UnitStat)pSkillTxt->passivestat[i];
+            int32_t nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->passivecalc[i], eSkill, nSkillLvl);
+            if (nValue && (int)eUnitStat > 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
+              D2Common::Stats::StatsEx::D2AddStatToStatsListEx((D2StatListExStrc*)sAuraArg.pStatList, eUnitStat, nValue, 0);
             }
-
-            pSkill = (short int*)((char*)pSkill + SKILL_Throw);
-            pSkillsTxtSaved++;
           }
         }
       }
     }
-    if (pSkillData->auratargetstate < 0) {
+    if (pSkillTxt->auratargetstate < 0) {
       return 1;
     }
 
-    nAuraStateArg.nAuraState = (int32_t)pSkillData->auratargetstate;
-    if (nAuraStateArg.nAuraState >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+    if ((int)pSkillTxt->auratargetstate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return 1;
     }
 
-    nDelayInterval = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->aurarangecalc, eSkill_00, nSkillLvl);
-    SkillsServer::SKILLS_ApplyAreaEffect(pGame, pUnit, 0, 0, nDelayInterval, pSkillData->aurafilter, (PFN_AreaEffectCallback)SKILLPAL_ApplyAuraStateToTarget, &nAuraStateArg, 1, ".\\SKILLS\\SkilPal.cpp", 0x1f6);
-    if (!(nManaCost > 0 && pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
-      return 1;
-    }
-    if (nAuraStateArg.nAppliedCount > 0) {
-      D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_nomanaregen, 1);
-      SkillsServer::SKILLS_DeductManaCost(pUnit, nManaCost);
-      return 1;
+    sAuraArg.nAuraState = (int32_t)pSkillTxt->auratargetstate;
+    int32_t nRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
+    SkillsServer::SKILLS_ApplyAreaEffect(pGame, pUnit, 0, 0, nRange, pSkillTxt->aurafilter, (PFN_AreaEffectCallback)SKILLPAL_ApplyAuraStateToTarget, &sAuraArg, 1, ".\\SKILLS\\SkilPal.cpp", 0x1f6);
+    if (nManaCost > 0 && pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+      if (sAuraArg.nAppliedCount > 0) {
+        D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_nomanaregen, 1);
+        SkillsServer::SKILLS_DeductManaCost(pUnit, nManaCost);
+      } else {
+        D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_nomanaregen, 0);
+      }
     }
 
-    D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_nomanaregen, 0);
     return 1;
 }
 
