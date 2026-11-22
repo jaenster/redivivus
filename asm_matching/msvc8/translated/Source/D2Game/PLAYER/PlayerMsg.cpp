@@ -768,24 +768,13 @@ void __fastcall SendReassignPlayer(D2UnitStrc * pUnitStrc, D2ClientStrc * pClien
 // Broadcasts the player's current skill cast to nearby clients. If the skill has a valid target unit visible to the client, sends packet 0x4C (target-entity cast). Otherwise sends packet 0x4D (XY cast) using the caster's SP1 path coordinates. Skips if the skill has flag bit 2 set and the caster is the client's own player unit.
 // @sourcefile .\PLAYER\PlrMsg.cpp
 void __fastcall SendUnitCast0x4d(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, ::SGAMEDATA * pGameParam) {
-    uint16_t wTargetY;
-    D2UnitStrc* pTarget;
-    uint32_t dwSkillLevelPacked;
     uint32_t dwCasterGUID;
-    uint32_t dwPathCoord;
-    int32_t nSubType;
-    uint16_t wPad;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
       return;
     }
-
-    uint32_t dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
-    if (!(dwSkillFlags & 4)) {
-      pTarget = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
-      if (pUnit == pTarget) {
-        return;
-      }
+    if (!(D2Common::Skills::SKILL_GetFlags(pSkill) & 4) && pUnit == GAME::Clients::CLIENTS_GetControlUnit(pClient, 0)) {
+      return;
     }
     if (!pUnit) {
       dwCasterGUID = -1;
@@ -793,120 +782,53 @@ void __fastcall SendUnitCast0x4d(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Clie
       dwCasterGUID = pUnit->nUnitGUID;
     }
 
-    pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrMsg.cpp", 0xcf);
-    int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-    uint8_t skillLevel = (uint8_t)nSkillLevel;
-    BOOL bIsNearClient;
-    bIsNearClient = pTarget ? GAME::Clients::IsUnitNearClient(pTarget, pClient) : 0;
-    if (!bIsNearClient) {
-      eSkillId &= 0xffff;
-      nSubType = 0;
-      wPad = 0;
-      dwPathCoord = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
-      wTargetY = (uint16_t)dwPathCoord;
-      dwPathCoord = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, 0, dwCasterGUID, (uint16_t)dwPathCoord, wTargetY, eSkillId, wPad, skillLevel, nSubType);
-      return;
+    uint8_t nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+    if (pTarget && GAME::Clients::IsUnitNearClient(pTarget, pClient)) {
+      uint32_t dwTargetGUID = pTarget->nUnitGUID; // steer-ok: the original reads the target GUID before its type
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY(pClient, '\0', dwCasterGUID, GetTypeInline(pTarget), dwTargetGUID, (uint16_t)eSkillId, 0, nSkillLevel, 0);
+    } else {
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, 0, dwCasterGUID, D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath), D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath), (uint16_t)eSkillId, 0, nSkillLevel, 0);
     }
-
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY(pClient, '\0', dwCasterGUID, (uint8_t)pTarget->eUnitType, pTarget->nUnitGUID, (uint16_t)eSkillId, 0, skillLevel, 0);
-    return;
 }
 
 // Sends the appropriate movement packet to pClient for pUnit's current move-mode (index nModeIndex into gaPlayerModeNetMsgTable). If pUnit has a target entity visible to the client, sends 0x10 (CharToObj); otherwise sends 0x0F (PlayerMove) with the unit's current tile position and path sub-step target coordinates. Skips self-movement (pUnit == client's own player).
 void __fastcall SendPlayerMoveOrObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nModeIndex) {
-    uint16_t wPosY;
-    uint32_t dwUnitGUID;
-    uint32_t dwTargetGUID;
-    eD2UnitType eUnitType;
-    int32_t nPos;
-    int32_t wPosX;
     D2UnitStrc* pSelfUnit = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
     if (pUnit == pSelfUnit) {
       return;
     }
 
     pSelfUnit = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    if (pSelfUnit) {
-      BOOL bIsNearClient;
-      bIsNearClient = GAME::Clients::IsUnitNearClient(pSelfUnit, pClient);
-      if (bIsNearClient) {
-        dwTargetGUID = pSelfUnit->nUnitGUID;
-        eUnitType = pSelfUnit->eUnitType;
-        if (!pUnit) {
-          dwUnitGUID = -1;
-        } else {
-          dwUnitGUID = pUnit->nUnitGUID;
-        }
-
-        nPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        wPosY = (uint16_t)nPos;
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(pClient, '\x10', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nObjModeByte, (uint8_t)eUnitType, dwTargetGUID, (uint16_t)D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), wPosY);
-        return;
+    if (pSelfUnit && GAME::Clients::IsUnitNearClient(pSelfUnit, pClient)) {
+      uint32_t dwTargetGUID = pSelfUnit->nUnitGUID;
+      eD2UnitType eUnitType = pSelfUnit->eUnitType;
+      uint32_t dwUnitGUID;
+      if (!pUnit) {
+        dwUnitGUID = -1;
+      } else {
+        dwUnitGUID = pUnit->nUnitGUID;
       }
+
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x10_UNITCHANGE_IDPOS(pClient, '\x10', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nObjModeByte, (uint8_t)eUnitType, dwTargetGUID, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit));
+      return;
     }
 
-    eUnitType = pUnit->eUnitType;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosY = pDynamicPath->nTargetX;
-    } else if (pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetYPos(pDynamicPath);
-      wPosY = (uint16_t)nPos;
-    } else {
-      wPosY = 0;
-    }
-
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      wPosX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-      wPosX = nPos;
-    } else {
-      wPosX = 0;
-    }
-
-    dwTargetGUID = pUnit->nUnitGUID;
-    uint8_t byReserved = '\0';
-    uint32_t dwTargetYRaw = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
-    uint16_t wTargetY = (uint16_t)dwTargetYRaw;
-    uint32_t dwTargetY = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(pClient, '\x0f', '\0', dwTargetGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nMoveModeByte, (uint16_t)dwTargetY, wTargetY, byReserved, wPosX, wPosY);
+    int32_t nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+    int32_t nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    uint32_t dwUnitGUID = pUnit->nUnitGUID; // steer-ok: the original reads the GUID before the GetYSP1/GetXSP1 calls
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(pClient, '\x0f', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nMoveModeByte, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath), D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath), 0, nPosX, nPosY);
 }
 
 void __fastcall SendPlayerMove(::SGAMEDATA * pGame, D2UnitStrc * pUnitRaw, D2ClientStrc * pClient, int32_t nModeIndex) {
-    int32_t nPos;
-    int32_t wPosX;
-    uint16_t wPosY;
-    uint8_t byHitClass = (uint8_t)pUnitRaw->dwLastHitClass;
     D2DynamicPathStrc* pDynamicPath = pUnitRaw->pPath.pDynamicPath;
-    eD2UnitType nUnitType = pUnitRaw->eUnitType;
-    if (nUnitType == UNIT_OBJECT || (int)nUnitType > 3 && (int)nUnitType <= 5) {
-      wPosY = pDynamicPath->nTargetX;
-    } else if (pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetYPos(pDynamicPath);
-      wPosY = (uint16_t)nPos;
-    } else {
-      wPosY = 0;
-    }
-
-    nUnitType = pUnitRaw->eUnitType;
-    if (nUnitType == UNIT_OBJECT || (int)nUnitType > 3 && (int)nUnitType <= 5) {
-      wPosX = pUnitRaw->pPath.pStaticPath->nPosX;
-    } else if (pUnitRaw->pPath.pDynamicPath) {
-      nPos = D2Common::PATH::DynamicPath::GetXPos(pUnitRaw->pPath.pDynamicPath);
-      wPosX = nPos;
-    } else {
-      wPosX = 0;
-    }
-
-    uint32_t dwUnitGUID = pUnitRaw->nUnitGUID;
-    uint32_t dwTargetYRaw = D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath);
-    uint16_t wTargetY = (uint16_t)dwTargetYRaw;
-    uint32_t dwTargetXRaw = D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(pClient, '\x0f', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nMoveModeByte, (uint16_t)dwTargetXRaw, wTargetY, byHitClass, wPosX, wPosY);
+    uint8_t byHitClass = (uint8_t)pUnitRaw->dwLastHitClass;
+    int32_t nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnitRaw);
+    int32_t nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnitRaw);
+    uint32_t dwUnitGUID = pUnitRaw->nUnitGUID; // steer-ok: the original reads the GUID before the GetYSP1/GetXSP1 calls
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(pClient, '\x0f', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nMoveModeByte, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath), D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath), byHitClass, nPosX, nPosY);
 }
 
 void __fastcall SendPlayerStop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, eD2MonsterAnimMode eAnimMode) {
