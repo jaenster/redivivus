@@ -110,18 +110,12 @@ void __stdcall ReadQuestRecordFromBuffer(D2BitBufferStrc * pBitBuffer, char * sz
 }
 
 void __stdcall CopyQuestBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pOutputBuffer, int16_t nLength, uint32_t dwParam) {
-    uint32_t iCount;
     /* Input is an array of 96 bytes (=24 uints) */ if (nLength != 0x60) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x84);
       exit(-1);
     }
 
-    uint32_t* pInputAddress = (uint32_t*)pBitBuffer->pBuffer;
-    /* Input is an array of 24x uint */ for (iCount = 0x18; iCount; iCount--) {
-      *(uint32_t*)pOutputBuffer = *pInputAddress;
-      pInputAddress++;
-      pOutputBuffer = pOutputBuffer + 4;
-    }
+    memcpy(pOutputBuffer, pBitBuffer->pBuffer, 0x60);
 }
 
 D2PropertiesTxt * __fastcall Unreferenced_0065c5a0(int32_t nPropertyIndex) {
