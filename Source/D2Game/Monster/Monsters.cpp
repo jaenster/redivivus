@@ -142,6 +142,7 @@
 #include "Source/D2Common/ITEMS/ItemMods.h"
 #include "Source/D2Common/Seed.inline.h"
 #include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/Monster/Monsters.data.h"
@@ -2149,85 +2150,29 @@ void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Death handler for the Andariel Queen Bee / Spider Queen: spawns MISSILE_Queenpoisoncloud in four cardinal directions (±X, ±Y) from the unit's position. Each direction fires 2 missiles via CreatingMissile with SKILL_InitChargedBoltPath as the path function and the unit's level as the toHit value. Called as a fastcall death callback with pGame and pUnit.
 void __fastcall MONSTER_QueenPoisonCloudDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
-    int nPosX;
-    int nPosY;
     D2SkillArgStrc sSkillArg;
-    int anOffsetTable[8];
-    int nDirX;
-    int nDirY;
-    D2UnitStrc* pUnitSaved = pUnit;
-    ::SGAMEDATA* pGameSaved = pGame;
     memset(&sSkillArg, 0, 0x5c);
-    eD2UnitType eUnitType = pUnit->eUnitType;
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
-    int nXValue;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nXValue = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nXValue = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nXValue = 0;
-    }
-
-    sSkillArg.nX = nXValue;
-    eUnitType = pUnit->eUnitType;
-    int nYValue;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nYValue = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nYValue = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nYValue = 0;
-    }
-
-    sSkillArg.nY = nYValue;
+    sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+    sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
     sSkillArg.nSkillLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     sSkillArg.nMissileTxtNo = MISSILE_Queenpoisoncloud;
     sSkillArg.fpFunction = SKILLS::SkillSor::SKILL_InitChargedBoltPath;
-    anOffsetTable[4] = 0;
-    anOffsetTable[5] = 1;
-    anOffsetTable[6] = 0;
-    anOffsetTable[7] = -1;
-    anOffsetTable[0] = -1;
-    anOffsetTable[1] = 0;
-    anOffsetTable[2] = 1;
-    anOffsetTable[3] = 0;
-    int nDirLoopIdx = 0;
-    do {
-      int nMissileSpawnIdx;
-      nDirY = nDirLoopIdx;
-      nPosX = 0;
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosX = pUnit->pPath.pStaticPath->nPosX;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nPosX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+    int anDirX[4] = {0, 1, 0, -1};
+    int anDirY[4] = {-1, 0, 1, 0};
+    for (int nDir = 0; nDir < 4; nDir++) {
+      int nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
+      int nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
+      int nTargetX = anDirX[nDir] + nPosX;
+      int nTargetY = anDirY[nDir] + nPosY;
+      for (int i = 0; i < 2; i++) {
+        sSkillArg.nFunctionParam = i;
+        sSkillArg.nUnitX = nTargetX;
+        sSkillArg.nUnitY = nTargetY;
+        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
       }
-
-      eUnitType = pUnit->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nPosY = pUnit->pPath.pStaticPath->nPosY;
-      } else if (pUnit->pPath.pDynamicPath) {
-        nPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      } else {
-        nPosY = 0;
-      }
-
-      nDirX = *(int*)((char*)anOffsetTable + (nDirY + 0x10));
-      nDirY = *(int*)((char*)anOffsetTable + nDirY);
-      nMissileSpawnIdx = 0;
-      do {
-        sSkillArg.nFunctionParam = nMissileSpawnIdx;
-        sSkillArg.nUnitX = nDirX + nPosX;
-        sSkillArg.nUnitY = nDirY + nPosY;
-        MISSILES::Missiles::CreatingMissile(pGameSaved, &sSkillArg);
-        nMissileSpawnIdx++;
-      } while (nMissileSpawnIdx < 2);
-
-      nDirLoopIdx += 4;
-      pUnit = pUnitSaved;
-    } while (nDirLoopIdx < 0x10);
+    }
 }
 
 // Server-side missile hit handler that splits an Aura-Enchanted monster's missile into two diverging copies on impact. Validates the missile has the split flag set (flags2 & 0x10) and the owner is not aura-enchanted (type 0x80). Computes perpendicular offset directions from owner to target, spawns two child missiles via CreatingAMissile, and temporarily sets/clears the owner's 0x80 monster-type bit to prevent recursion.
