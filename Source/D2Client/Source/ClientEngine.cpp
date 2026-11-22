@@ -1375,17 +1375,29 @@ static D2UnitStrc * __stdcall CLIENT_FindClosestTrackedUnit(D2UnitStrc * pUnit, 
     return pClosest;
 }
 
+// The unit type read as this unit's callers inlined it: UNIT_COUNT loaded first, the unit's type over it.
+static inline eD2UnitType GetUnitTypeOrDefaultInline(D2UnitStrc * pUnit) {
+    eD2UnitType eUnitType = UNIT_COUNT;
+    if (pUnit) {
+      eUnitType = pUnit->eUnitType;
+    }
+    return eUnitType;
+}
+
+// The GUID read as this unit's callers inlined it: the -1 path first, then the unit's GUID.
+static inline int GetUnitGUIDOrNoneInline(D2UnitStrc * pUnit) {
+    if (!pUnit) {
+      return -1;
+    }
+    return pUnit->nUnitGUID;
+}
+
 // Sends a monster message whose target is pTarget's unit type and GUID (6 / -1 when pTarget is NULL); asm 0046c77c..0046c795.
 static void __stdcall CLIENT_SendMonsterMoveToUnitMessage(int32_t nSenderId, int32_t nSkillLvl, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2ServerMessageHandleStrc sMsgTargetPos;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    sMsgTargetPos.nSkillId = UNIT_COUNT;
-    if (pTarget) {
-      sMsgTargetPos.nSkillId = pTarget->eUnitType;
-      sMsgTargetPos.nItemId = pTarget->nUnitGUID;
-    } else {
-      sMsgTargetPos.nItemId = -1;
-    }
+    sMsgTargetPos.nSkillId = GetUnitTypeOrDefaultInline(pTarget);
+    sMsgTargetPos.nItemId = GetUnitGUIDOrNoneInline(pTarget);
 
     sMsgTargetPos.nTargetUnitType = 0;
     sMsgTargetPos.nTargetUnitId = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
