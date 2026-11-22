@@ -856,60 +856,61 @@ bool __fastcall Q19_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
       *pbyStatusCode = '\x01';
     }
 
-    D2UnitStrc* pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20326671);
-    if (pQuestItem) {
-      D2QuestDataStrc* pBlackenedTempleQuest;
-      pBlackenedTempleQuest = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheBlackenedTemple);
-      if (pBlackenedTempleQuest && pBlackenedTempleQuest->pQuestSpecificData.pA3Q5->bJerhynAiActive) {
-        *pbyStatusCode = '\f';
+    int nPartsCount = 0;
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20326671)) {
+      D2QuestDataStrc* pBlackenedTempleQuest = GetQuestDataByQuestNoInternal(pQuestData->pGame, QUESTINT_TheBlackenedTemple);
+      bool bTempleNotDone = true;
+      if (pBlackenedTempleQuest) {
+        bTempleNotDone = !pBlackenedTempleQuest->pQuestSpecificData.pA3Q5->bJerhynAiActive;
+      }
+      if (bTempleNotDone) {
+        *pbyStatusCode = '\x06';
         return true;
       }
 
-      *pbyStatusCode = '\x06';
+      *pbyStatusCode = '\f';
       return true;
     }
 
-    pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20316671);
-    bool bHasFlail = false;
-    if (pQuestItem != 0) {
-      bHasFlail = true;
+    BOOL bHasFlail = FALSE;
+    BOOL bHasEye = FALSE;
+    BOOL bHasHeart = FALSE;
+    BOOL bHasBrain = FALSE;
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20316671)) {
+      nPartsCount = 1;
+      bHasFlail = TRUE;
     }
-
-    pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20796571);
-    char nPartsCount = bHasFlail;
-    if (pQuestItem) {
-      nPartsCount = bHasFlail + '\x01';
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20796571)) {
+      nPartsCount++;
+      bHasEye = TRUE;
     }
-
-    D2UnitStrc* pBrainItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20726871);
-    if (pBrainItem) {
-      nPartsCount += '\x01';
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20726871)) {
+      nPartsCount++;
+      bHasHeart = TRUE;
     }
-
-    D2UnitStrc* pHeartItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20726271);
-    if (pHeartItem) {
-      nPartsCount += '\x01';
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pUnit, 0x20726271)) {
+      nPartsCount++;
+      bHasBrain = TRUE;
     }
-    if (nPartsCount == '\x04') {
-      bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_KhalimsWill, QUESTSTATE_Step0x05);
-      *pbyStatusCode = bQuestState ? 0x5 : 0x7;
+    if (nPartsCount == 4) {
+      *pbyStatusCode = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_KhalimsWill, QUESTSTATE_Step0x05) ? 0x5 : 0x7;
       return true;
     }
-    if (nPartsCount != '\0') {
-      if (!pQuestItem) {
+    if (nPartsCount) {
+      if (!bHasEye) {
         *pbyStatusCode = '\x01';
         return true;
       }
-      if (!pHeartItem) {
+      if (!bHasBrain) {
         *pbyStatusCode = '\x02';
         return true;
       }
-      if (!pBrainItem) {
+      if (!bHasHeart) {
         *pbyStatusCode = '\x04';
         return true;
       }
 
-      *pbyStatusCode = bHasFlail * '\x04' + '\x03';
+      *pbyStatusCode = bHasFlail ? 0x7 : 0x3;
       return true;
     }
     if (bQuestState) {
