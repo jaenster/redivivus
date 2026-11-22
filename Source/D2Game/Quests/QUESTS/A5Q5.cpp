@@ -1068,24 +1068,22 @@ static void Q35_SetStatueAnimMode(D2QuestDataA5Q5Strc * pQuestData, D2ObjectInit
       nClassId = pUnit->nClassId;
     }
 
+    int nStatue;
     switch (nClassId) {
       case 0x1da:
-        {
-          D2Common::Units::ChangeAnimMode(pUnit, pQuestData->anStatueMode[1]);
-          break;
-        }
+        nStatue = 1;
+        break;
       case 0x1db:
-        {
-          D2Common::Units::ChangeAnimMode(pUnit, pQuestData->anStatueMode[0]);
-          return;
-        }
+        nStatue = 0;
+        break;
       case 0x1dc:
-        {
-          int anStatueMode = pQuestData->anStatueMode[2];
-          D2Common::Units::ChangeAnimMode(pUnit, anStatueMode);
-          return;
-        }
+        nStatue = 2;
+        break;
+      default:
+        return;
     }
+
+    D2Common::Units::ChangeAnimMode(pUnit, pQuestData->anStatueMode[nStatue]);
 }
 
 // [A5Q5 = Rite of Passage] Objects_InitFn65: object init for one Ancient altar statue — records its GUID (slot 5) and applies its anim mode. No quest-state writes.
