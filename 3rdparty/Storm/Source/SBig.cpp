@@ -1258,28 +1258,19 @@ void __thiscall SBIG_SetOffset(BigBuffer * pBigNum, int32_t nOffset) {
 }
 
 void __fastcall SBIG_TrimLeadingZeros(BigBuffer * pDwordArray) {
-    uint32_t nGranularity;
-    uint32_t nNewCapacity;
-    uint32_t nNewLen;
-    if (pDwordArray->nCount == pDwordArray->nStartWord) {
-      return;
-    }
-
-    do {
-      uint32_t* pTopLimb;
-      pTopLimb = TSBaseArray_Ui_Top(pDwordArray);
-      if (*pTopLimb) {
+    while (pDwordArray->nCount - pDwordArray->nStartWord != 0) {
+      if (*TSBaseArray_Ui_Top(pDwordArray)) {
         return;
       }
 
-      nNewLen = pDwordArray->nCount - 1;
+      uint32_t nNewLen = pDwordArray->nCount - 1;
       if (nNewLen > pDwordArray->nCount && nNewLen > pDwordArray->nCapacity) {
-        nGranularity = pDwordArray->nGrowStep;
+        uint32_t nGranularity = pDwordArray->nGrowStep;
         if (!nGranularity) {
           nGranularity = TSGrowableArray_Ui_CalcChunkSize(pDwordArray, nNewLen);
         }
 
-        nNewCapacity = nNewLen;
+        uint32_t nNewCapacity = nNewLen;
         if (nNewLen % nGranularity) {
           nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
         }
@@ -1288,7 +1279,7 @@ void __fastcall SBIG_TrimLeadingZeros(BigBuffer * pDwordArray) {
       }
 
       pDwordArray->nCount = nNewLen;
-    } while (nNewLen != pDwordArray->nStartWord);
+    }
 }
 
 void * __thiscall SBIG_CopyAssign(uint32_t * pDest, BigBuffer * pSource) {
