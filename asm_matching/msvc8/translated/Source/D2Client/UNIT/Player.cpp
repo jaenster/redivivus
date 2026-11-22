@@ -1339,20 +1339,29 @@ static void __stdcall PLAYER_ExecuteSkillAtUnit(eD2UnitType eTargetUnitType, int
     PLAYER_ExecuteModeBasedAction(nWeaponClass, pUnderMouse);
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 BOOL __stdcall PLAYER_CheckPendingInteraction(int32_t nTargetType, int32_t nTargetGUID) {
-    int eQueuedTargetType;
-    D2UnitDataPlayerStrc* pPlayerData;
-    D2UnitStrc* pPlayerUnit_lcl = GetPlayerUnit_UI();
-    if (pPlayerUnit_lcl && pPlayerUnit_lcl->eUnitType == UNIT_PLAYER) {
-      int nQueuedTargetGUID;
-      pPlayerData = pPlayerUnit_lcl->pUnitData.pUnitDataPlayer;
-      if (pPlayerData && pPlayerData->eQueuedSkillId == 0x13) {
-        eQueuedTargetType = pPlayerData->eTargetUnitType;
-        nQueuedTargetGUID = pPlayerData->nTargetUnitGUID;
-        if (eQueuedTargetType == nTargetType && nQueuedTargetGUID == nTargetGUID) {
-          return 1;
-        }
-      }
+    D2UnitStrc* pPlayer = GetPlayerUnit_UI();
+    if (GetTypeInline(pPlayer) != UNIT_PLAYER) {
+      return 0;
+    }
+
+    D2UnitDataPlayerStrc* pPlayerData = pPlayer->pUnitData.pUnitDataPlayer;
+    if (!pPlayerData || pPlayerData->eQueuedSkillId != 0x13) {
+      return 0;
+    }
+
+    int nQueuedTargetType = GetTypeInline(pPlayer) == UNIT_PLAYER ? pPlayerData->eTargetUnitType : 0;
+    int nQueuedTargetGUID = GetTypeInline(pPlayer) == UNIT_PLAYER ? pPlayerData->nTargetUnitGUID : 0;
+    if (nQueuedTargetType == nTargetType && nQueuedTargetGUID == nTargetGUID) {
+      return 1;
     }
 
     return 0;
