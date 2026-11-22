@@ -552,32 +552,28 @@ LPVOID * __fastcall SMEM_DestroyHeap(LPVOID * ppHeap) {
 
 // @blizzard FreeEmptyHeaps (SMEM.CPP)
 void __stdcall SMEM_FreeEmptyHeaps() {
-    LPVOID pHeap;
-    LPVOID* ppPrevLink;
-    int nBucketOffset = 0;
     g_SMemPendingCleanupHeap = 0;
-    CRITICAL_SECTION* lpCriticalSection = DebugMemoryCriticalSection;
-    for (int nCount = 0; nCount < 0x100; nCount++) {
-      if (g_SMemHeapCleanupFlags[nBucketOffset]) {
-        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-        g_SMemHeapCleanupFlags[nBucketOffset] = 0;
-        pHeap = g_SMemHeapBuckets[nBucketOffset];
-        ppPrevLink = &g_SMemHeapBuckets[nBucketOffset];
-        while (pHeap) {
-          D2FogHeapDescStrc* pDesc = (D2FogHeapDescStrc*)*ppPrevLink;
-          if (!pDesc->nAllocCount && pDesc->nHash < 0x80000000) {
-            SMEM_FreeHeap(ppPrevLink);
+    int nBucket = 0;
+    CRITICAL_SECTION* pLock = DebugMemoryCriticalSection;
+    for (int nCount = 0x100; nCount; nCount--) {
+      if (g_SMemHeapCleanupFlags[nBucket]) {
+        EnterCriticalSection(pLock);
+        g_SMemHeapCleanupFlags[nBucket] = 0;
+        LPVOID* ppLink = &g_SMemHeapBuckets[nBucket];
+        while (*ppLink) {
+          D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)*ppLink;
+          if (!pHeap->nAllocCount && pHeap->nHash < 0x80000000) {
+            SMEM_FreeHeap(ppLink);
           } else {
-            ppPrevLink = (LPVOID*)&pDesc->pNext;
+            ppLink = (LPVOID*)&pHeap->pNext;
           }
-          pHeap = *ppPrevLink;
         }
 
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
+        LeaveCriticalSection(pLock);
       }
 
-      nBucketOffset++;
-      lpCriticalSection++;
+      nBucket++;
+      pLock++;
     }
 }
 
