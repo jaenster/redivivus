@@ -1415,63 +1415,22 @@ static void __stdcall BigBuffer_Add(BigBuffer * pSourceA, BigBuffer * pSourceB, 
 // @oracle Mac PPC 1.10b Storm mangled symbol .And__FR9BigBufferRC9BigBufferRC9BigBuffer @100a0070 -- sole target of SBigAnd's forwarder.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_And(BigBuffer * pSourceA, BigBuffer * pSourceB, BigBuffer * pDest) {
-    uint32_t nGranularity;
-    uint32_t nNewLen;
-    uint32_t nWordIndex;
-    uint32_t nNewCapacity;
-    uint32_t nWordA;
-    uint32_t nWordB;
-    int i;
-    i = 0;
-    do {
-      nWordIndex = pSourceA->nStartWord + i;
-      if (!(nWordIndex < pSourceA->nCount)) {
-        if (pSourceB->nStartWord + i >= pSourceB->nCount) {
-          nWordIndex = pDest->nStartWord + i;
-          if (nWordIndex > pDest->nCount && nWordIndex > pDest->nCapacity) {
-            nNewLen = pDest->nGrowStep;
-            if (!nNewLen) {
-              nNewLen = TSGrowableArray_Ui_CalcChunkSize(pDest, nWordIndex);
-            }
-
-            nGranularity = nWordIndex;
-            if (nWordIndex % nNewLen) {
-              nGranularity = nNewLen - nWordIndex % nNewLen + nWordIndex;
-            }
-
-            TSFixedArray_Ui_ReallocData(pDest, nGranularity);
-          }
-
-          pDest->nCount = nWordIndex;
-          return;
-        }
-        if (nWordIndex < pSourceA->nCount) {
-          goto read_lhs_word;
-        }
-
-        nWordA = 0;
-      } else {
-        read_lhs_word:
-        nWordA = pSourceA->pData[nWordIndex];
-      }
-
+    uint32_t i;
+    for (i = 0; pSourceA->nStartWord + i < pSourceA->nCount || pSourceB->nStartWord + i < pSourceB->nCount; i++) {
+      uint32_t nWordIndex = pSourceA->nStartWord + i;
+      uint32_t nWordA = nWordIndex < pSourceA->nCount ? pSourceA->pData[nWordIndex] : 0;
       nWordIndex = pSourceB->nStartWord + i;
-      if (nWordIndex < pSourceB->nCount) {
-        nWordB = pSourceB->pData[nWordIndex];
-      } else {
-        nWordB = 0;
-      }
-
+      uint32_t nWordB = nWordIndex < pSourceB->nCount ? pSourceB->pData[nWordIndex] : 0;
       nWordIndex = pDest->nStartWord + i;
       if (nWordIndex >= pDest->nCount) {
-        nNewLen = nWordIndex + 1;
+        uint32_t nNewLen = nWordIndex + 1;
         if (nNewLen > pDest->nCapacity) {
-          nGranularity = pDest->nGrowStep;
+          uint32_t nGranularity = pDest->nGrowStep;
           if (!nGranularity) {
             nGranularity = TSGrowableArray_Ui_CalcChunkSize(pDest, nNewLen);
           }
 
-          nNewCapacity = nNewLen;
+          uint32_t nNewCapacity = nNewLen;
           if (nNewLen % nGranularity) {
             nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
           }
@@ -1484,8 +1443,24 @@ static void __stdcall BigBuffer_And(BigBuffer * pSourceA, BigBuffer * pSourceB, 
       }
 
       pDest->pData[pDest->nStartWord + i] = nWordB & nWordA;
-      i++;
-    } while (true);
+    }
+
+    uint32_t nNewCount = pDest->nStartWord + i;
+    if (nNewCount > pDest->nCount && nNewCount > pDest->nCapacity) {
+      uint32_t nGranularity = pDest->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = TSGrowableArray_Ui_CalcChunkSize(pDest, nNewCount);
+      }
+
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      TSFixedArray_Ui_ReallocData(pDest, nNewCapacity);
+    }
+
+    pDest->nCount = nNewCount;
 }
 
 // Compare big integer array against scalar value
