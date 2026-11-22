@@ -424,13 +424,12 @@ static bool __stdcall DEBUG_EnumerateModules(int * pModuleList) {
 }
 
 static void __stdcall DEBUG_ExtractDebugDirectory64(uint32_t dwParam, uint32_t * pnRVA, uint32_t * pnSize, uint8_t * pOptHeader) {
-    if (*(uint32_t*)(pOptHeader + 0x6c) <= 6) {
-      return;
+    IMAGE_OPTIONAL_HEADER64* pOptHeader64 = (IMAGE_OPTIONAL_HEADER64*)pOptHeader; // steer-ok: winnt.h IMAGE_OPTIONAL_HEADER64
+    if (pOptHeader64->NumberOfRvaAndSizes > 6) {
+      IMAGE_DATA_DIRECTORY dir = pOptHeader64->DataDirectory[6];
+      *pnRVA = dir.VirtualAddress;
+      *pnSize = dir.Size;
     }
-
-    uint32_t nSize = *(uint32_t*)(pOptHeader + 0xa4);
-    *pnRVA = *(uint32_t*)(pOptHeader + 0xa0);
-    *pnSize = nSize;
 }
 
 static void __stdcall DEBUG_ExtractDebugDirectory32(uint32_t dwUnused, uint32_t * pnRVA, uint32_t * pnSize, IMAGE_OPTIONAL_HEADER32 * pOptHeader) {

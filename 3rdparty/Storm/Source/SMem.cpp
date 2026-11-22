@@ -247,16 +247,10 @@ static void __stdcall SMemCalculateAllocationLayout(uint32_t nSize, int * pnOutP
 void __stdcall SMEM_ComputePageSize() {
     _SYSTEM_INFO sysInfo;
     /* LPSYSTEM_INFO lpSystemInfo for GetSystemInfo */ GetSystemInfo(&sysInfo);
-    uint32_t uPageSize = 1;
     g_SMemPageSize = 1;
-    if (1 >= sysInfo.dwPageSize) {
-      return;
+    while (g_SMemPageSize < sysInfo.dwPageSize) {
+      g_SMemPageSize *= 2;
     }
-
-    do {
-      uPageSize *= 2;
-      g_SMemPageSize = uPageSize;
-    } while (uPageSize < sysInfo.dwPageSize);
 }
 
 static void __stdcall SMemWriteBlockHeader(uint8_t byFlags, int32_t nExtraBytes, D2FogHeapDescStrc * nHeap, D2FogHeapBlockHdrStrc * pwHeader, int32_t nBlockSize) {

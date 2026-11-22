@@ -2740,12 +2740,13 @@ int __fastcall MATH_RandomRange(int32_t nMin, int32_t nMax, uint32_t nRangeMax, 
     if (!pSeed) {
       return 0;
     }
+
+    D2SeedStrc* pUnitSeed = &pSeed->pUnit->sSeed; // steer-ok: the original computes the unit's seed before the range check
     if (nMin >= nMax) {
       return nMin;
     }
 
-    uint32_t nRandOffset = Seed::RANDOM_RandomNumberSelector(&pSeed->pUnit->sSeed, nMax - nMin + 1);
-    return nRandOffset + nMin;
+    return Seed::RANDOM_RandomNumberSelector(pUnitSeed, nMax - nMin + 1) + nMin;
 }
 
 int32_t __fastcall UNITS_GetStatValueByType(eD2UnitStat eUnitStat, int32_t nQueryMode, uint32_t dwContext, D2UnitStrc * * ppUnit) {

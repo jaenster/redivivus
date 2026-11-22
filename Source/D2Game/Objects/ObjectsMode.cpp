@@ -2360,17 +2360,14 @@ BOOL __fastcall OBJOP_ActivateShrine(D2ObjectOperateFnArg * pOperation) {
 }
 
 BOOL __fastcall OBJOP_SpawnRewardItem(D2ObjectOperateFnArg * pOperation) {
-    D2ObjectOperateFnArg* pOperationArg;
-    ::SGAMEDATA* pGame;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
-      D2ObjectsTxt* pTxtObjects;
-      pUnit->dwDropItemCode = 0x2067656c;
-      pUnit = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, (int32_t*)&pOperationArg, nullptr, -1, 0);
-      if (pUnit) {
+      int32_t nItemLevel;
+      pOperation->sArg.pVictim->dwDropItemCode = 0x2067656c;
+      if (ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_NORMAL, &nItemLevel, nullptr, -1, 0)) {
         D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
-        pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-        pGame = pOperation->sArg.pGame;
+        D2ObjectsTxt* pTxtObjects = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
+        ::SGAMEDATA* pGame = pOperation->sArg.pGame;
         GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (pTxtObjects->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
         pGame = pOperation->sArg.pGame;
         GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 7, pGame->dwGameFrame + 10, 0, 0);
@@ -3548,29 +3545,15 @@ int __fastcall _x44PacketHandler(::SGAMEDATA * pGame, DWORD dwPlayerGUID, DWORD 
 }
 
 void __fastcall OBJMODE_HandleObjectDeactivation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pObject) {
-    DWORD dwPlayerGUID;
     if (pObject) {
-      short int nClassId;
-      nClassId = (short int)pObject->nClassId;
-      if (nClassId == 0x50 || nClassId == 0x5a) {
-        if (!pUnit) {
-          dwPlayerGUID = -1;
-        } else {
-          dwPlayerGUID = pUnit->nUnitGUID;
-        }
-
-        _x44PacketHandler(pGame, dwPlayerGUID, pObject->nUnitGUID, 0, 2);
-      } else {
-        if (nClassId == 0x151) {
-          OBJMODE_ClearObjectUnitLink(pGame, pUnit, pObject);
-          UNIT::SUnit::ClearInteractInfo(pUnit);
-          return;
-        }
-        if (nClassId == 0x98) {
-          D2Common::Units::ChangeAnimMode(pObject, 0);
-          UNIT::SUnit::ClearInteractInfo(pUnit);
-          return;
-        }
+      int nClassId = pObject->nClassId;
+      if ((short)nClassId == 0x50 || (short)nClassId == 0x5a) {
+        DWORD dwObjectGUID = pObject->nUnitGUID; // steer-ok: the original reads the object GUID before testing pUnit
+        _x44PacketHandler(pGame, !pUnit ? -1 : pUnit->nUnitGUID, dwObjectGUID, 0, 2);
+      } else if ((short)nClassId == 0x151) {
+        OBJMODE_ClearObjectUnitLink(pGame, pUnit, pObject);
+      } else if ((short)nClassId == 0x98) {
+        D2Common::Units::ChangeAnimMode(pObject, 0);
       }
     }
 

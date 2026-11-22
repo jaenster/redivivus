@@ -1727,7 +1727,6 @@ void __stdcall UpdateDirectionAndSpeed(D2UnitStrc * pUnit, int32_t nX, int32_t n
 }
 
 static void __stdcall StoreOwnerTypeAndGUID(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nOwnerGUID) {
-    D2StatListExStrc* pStatsEx;
     if (!pUnit) {
       return;
     }
@@ -1736,9 +1735,9 @@ static void __stdcall StoreOwnerTypeAndGUID(D2UnitStrc * pUnit, eD2UnitType eUni
     pUnit->nOwnerGUID = nOwnerGUID;
     if (pUnit->pStatsEx) {
       DATATBLS::ItemStats::SetState(pUnit, STATE_sourceunit, 1);
-      pStatsEx = Stats::StatsEx::GetStatsByState(pUnit, STATE_sourceunit);
+      D2StatListExStrc* pStatsEx = Stats::StatsEx::GetStatsByState(pUnit, STATE_sourceunit);
       if (!pStatsEx) {
-        pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(pUnit->pMemory, 0, 0, pUnit->eUnitType, pUnit->nUnitGUID);
+        pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(!pUnit ? nullptr : pUnit->pMemory, 0, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
         if (!pStatsEx) {
           return;
         }
@@ -3023,21 +3022,26 @@ BOOL __stdcall CanDualWield(D2UnitStrc * pUnit) {
       eUnitType = pUnit->eUnitType;
       nClassId = pUnit->nClassId;
     }
-    if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType == UNIT_MONSTER && nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize && nClassId >= 0x1a1 && nClassId <= 0x1a2) {
-        return 1;
-      }
-    } else {
-      switch (nClassId) {
-        case 4:
-          {
+    switch (eUnitType) {
+      case UNIT_MONSTER:
+        if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+          // Only MonsterUnitWarrior and MonsterUnitMaster, the shadow warrior and master, wield two weapons.
+          if (nClassId < 0x1a1) {
+            return 0;
+          }
+          if (nClassId <= 0x1a2) {
             return 1;
           }
-        case 6:
-          {
+        }
+        return 0;
+      case UNIT_PLAYER:
+        switch (nClassId) {
+          case CLASS_BARBARIAN:
             return 1;
-          }
-      }
+          case CLASS_ASSASSIN:
+            return 1;
+        }
+        break;
     }
 
     return 0;

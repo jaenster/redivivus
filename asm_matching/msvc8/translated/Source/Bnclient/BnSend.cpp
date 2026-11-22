@@ -2123,9 +2123,6 @@ void * __fastcall BNNEWS_DestroyNewsTable(D2BnNewsTableStrc * pNewsTable, int, u
 }
 
 void __fastcall BNNEWS_ReallocateNewsTable(D2BnNewsTableStrc * pNewsTable, int, uint32_t dwNewCapacity) {
-    int nByteOffset;
-    int* pSrc;
-    int* pDst;
     D2BnNewsEntryStrc* pBlock = pNewsTable->pEntries;
     pNewsTable->nCapacity = dwNewCapacity;
     D2BnNewsEntryStrc* pFallbackAlloc = (D2BnNewsEntryStrc*)Storm::Source::SMem::SMemReAlloc(&pBlock->dwFlags, dwNewCapacity * 0x408, s___AUItem_NewsTable___0072ff8c, -2, 0x10);
@@ -2144,24 +2141,12 @@ void __fastcall BNNEWS_ReallocateNewsTable(D2BnNewsTableStrc * pNewsTable, int, 
     if (dwNewCapacity < pNewsTable->nCount) {
       nCopyCount = dwNewCapacity;
     }
-    if (nCopyCount > 0) {
-      int nDwordsLeft;
-      nByteOffset = 0;
-      dwNewCapacity = nCopyCount;
-      do {
-        pDst = (int*)&pNewsTable->pEntries[nByteOffset].dwFlags;
-        if (pDst) {
-          pSrc = (int*)&pBlock[nByteOffset].dwFlags;
-          for (nDwordsLeft = 0x102; nDwordsLeft; nDwordsLeft--) {
-            *pDst = *pSrc;
-            pSrc++;
-            pDst++;
-          }
-        }
 
-        nByteOffset++;
-        dwNewCapacity--;
-      } while (dwNewCapacity);
+    for (uint32_t i = 0; i < nCopyCount; i++) {
+      D2BnNewsEntryStrc* pSlot = &pNewsTable->pEntries[i];
+      if (pSlot) {
+        *pSlot = pBlock[i];
+      }
     }
 
     Storm::Source::SMem::SMemFree(pBlock, s___AUItem_NewsTable___0072ff8c, -2, 0);
@@ -2252,21 +2237,20 @@ BOOL __stdcall BNNEWS_Shutdown() {
 int __fastcall BNNEWS_AllocateNewsEntry(uint32_t * pNewsTable) {
     uint32_t nNewCount = pNewsTable[1] + 1;
     if (nNewCount > *pNewsTable) {
-      uint32_t nPageSize;
-      nPageSize = pNewsTable[3];
+      uint32_t nPageSize = pNewsTable[3];
       if (!nPageSize) {
         nPageSize = vc8_thiscall(BNNEWS_RoundToPowerOfTwo)((D2BnNewsTableStrc*)pNewsTable, nNewCount);
       }
+
+      uint32_t nNewCapacity = nNewCount;
       if (nNewCount % nPageSize) {
-        nNewCount = nPageSize - nNewCount % nPageSize + nNewCount;
+        nNewCapacity = nPageSize - nNewCount % nPageSize + nNewCount;
       }
 
-      vc8_thiscall(BNNEWS_ReallocateNewsTable)((D2BnNewsTableStrc*)pNewsTable, nNewCount);
+      vc8_thiscall(BNNEWS_ReallocateNewsTable)((D2BnNewsTableStrc*)pNewsTable, nNewCapacity);
     }
 
-    nNewCount = pNewsTable[1];
-    pNewsTable[1] = nNewCount + 1;
-    return nNewCount * 0x408 + pNewsTable[2];
+    return pNewsTable[1]++ * 0x408 + pNewsTable[2];
 }
 
 void __fastcall BNNEWS_EnsureCapacity(D2BnNewsTableStrc * pNewsTable, int, uint32_t dwAdditionalCount) {

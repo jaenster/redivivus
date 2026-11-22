@@ -816,11 +816,14 @@ static char * __stdcall SBMP_FindExtension(char * path) {
 
 // @blizzard DetermineImageType (SBMP.CPP)
 static int __stdcall SBMP_DetermineImageType(uint16_t magic) {
-    if (magic != 0x50a) {
-      return magic != 0x4d42 ? 0x3U : 0x1U;
+    switch (magic) {
+      case 0x50a:
+        return 2;
+      case 0x4d42:
+        return 1;
+      default:
+        return 3;
     }
-
-    return 2;
 }
 
 // @blizzard DecodeBmpFile (SBMP.CPP)

@@ -74,24 +74,16 @@ static int64_t __stdcall SBIG_Accumulator_ComputeOffset(uint32_t nMultiplicand, 
 static void BigBuffer_DecodeDataBytes(uint32_t nBufferLen, uint32_t * pnReadPos, uint32_t * pnValue, uint8_t * pBuffer) {
     *pnValue = 0;
     *pnReadPos = 0;
-    if (nBufferLen > 0) {
-      uint32_t byByte;
-      do {
-        byByte = (uint32_t)pBuffer[*pnReadPos];
-        (*pnReadPos)++;
-        if (byByte == 0xff) {
-          break;
-        }
+    while (*pnReadPos < nBufferLen) {
+      uint32_t nByte = pBuffer[(*pnReadPos)++];
+      if (nByte == 0xff) {
+        break;
+      }
 
-        *pnValue = *pnValue * 0xff + byByte;
-      } while (*pnReadPos < nBufferLen);
-    }
-    if (*pnValue < nBufferLen - *pnReadPos) {
-      *pnValue = *pnValue;
-      return;
+      *pnValue = *pnValue * 0xff + nByte;
     }
 
-    *pnValue = nBufferLen - *pnReadPos;
+    *pnValue = *pnValue < nBufferLen - *pnReadPos ? *pnValue : nBufferLen - *pnReadPos;
 }
 
 // @was SBIG_DynArray_GetElementPtr (pass 6, 2026.08.28)
@@ -636,7 +628,6 @@ void __fastcall SBIG_ArrayByteAltSetCapacity(TSGrowableArray_Uc * pArray, int, i
 // @oracle-method CONFIRMED. n*4 sizing, SMemReAlloc flag 0x10 with the alloc/copy/free fallback. Matches the block the oracle inlines into .SetCount__29TSGrowableArray<Ui,8TSCD<Ui>>FUi @1009b120. Dword instantiation, SMem tag 0x708874.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __fastcall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, int, uint32_t nCapacity) {
-    uint32_t nIndex;
     uint32_t* pOldBuffer = pArray->pData;
     pArray->nCapacity = nCapacity;
     uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity * 4, s__I_00708874, -2, 0x10);
@@ -654,9 +645,10 @@ void __fastcall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, int, uint32_t nC
       nCapacity = pArray->nCount;
     }
 
-    for (nIndex = 0; nIndex < nCapacity; nIndex++) {
-      if (pArray->pData + nIndex) {
-        pArray->pData[nIndex] = pOldBuffer[nIndex];
+    for (uint32_t i = 0; i < nCapacity; i++) {
+      uint32_t* pSlot = &pArray->pData[i];
+      if (pSlot) {
+        *pSlot = pOldBuffer[i];
       }
     }
 
@@ -759,30 +751,28 @@ TSGrowableArray_Ui * __fastcall Unreferenced_004218a0(TSGrowableArray_Ui * pArra
 // @oracle-negative Pass 6 examined this: no oracle symbol corresponds to it. The existing descriptive name matches what the body does and was kept unchanged rather than forced onto a TS* method name.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer, not a bitset. Chunk cap = 256/sizeof(element).
 int32_t __fastcall SBIG_ArrayByteAppendData(TSGrowableArray_Uc * pArray, int, uint32_t nCount, uint8_t * pSrc) {
-    uint32_t nNewSize = pArray->nLen + nCount;
-    if (nNewSize > pArray->nCapacity) {
-      uint32_t nGranularity;
-      nGranularity = pArray->nGrowStep;
+    uint32_t nNewCount = pArray->nLen + nCount;
+    if (nNewCount > pArray->nCapacity) {
+      uint32_t nGranularity = pArray->nGrowStep;
       if (!nGranularity) {
-        nGranularity = vc8_thiscall(TSGrowableArray_Uc_CalcChunkSize)((BigBuffer*)pArray, nNewSize);
-      }
-      if (nNewSize % nGranularity) {
-        nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
+        nGranularity = vc8_thiscall(TSGrowableArray_Uc_CalcChunkSize)((BigBuffer*)pArray, nNewCount);
       }
 
-      vc8_thiscall(TSFixedArray_Uc_ReallocData)(pArray, nNewSize);
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      vc8_thiscall(TSFixedArray_Uc_ReallocData)(pArray, nNewCapacity);
     }
 
-    uint32_t uVar1 = 0;
-    if (nCount > 0) {
-      do {
-        if (pArray->pData + (pArray->nLen + uVar1)) {
-          pArray->pData[pArray->nLen + uVar1] = *pSrc;
-        }
+    for (uint32_t i = 0; i < nCount; i++) {
+      uint8_t* pSlot = &pArray->pData[pArray->nLen + i];
+      if (pSlot) {
+        *pSlot = *pSrc;
+      }
 
-        uVar1++;
-        pSrc++;
-      } while (uVar1 < nCount);
+      pSrc++;
     }
 
     pArray->nLen += nCount;
@@ -794,23 +784,22 @@ int32_t __fastcall SBIG_ArrayByteAppendData(TSGrowableArray_Uc * pArray, int, ui
 // @oracle-method PLAUSIBLE with a named caveat. Matches the oracle's .New__34TSGrowableArray<3RGN,10TSCD<3RGN>>Fv @10041370: calls CalcChunkSize and ReallocData, returns m_data + old_count, then increments the count. CAVEAT: New() and NewElement() are genuinely indistinguishable for a POD element type - both oracle instantiations collapse to the same body - so the choice between the two names is not established.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 int32_t __fastcall TSGrowableArray_Uc_New(uint32_t * pArray) {
-    uint32_t nGranularity;
-    uint32_t nNewSize = pArray[1] + 1;
-    if (nNewSize > *pArray) {
-      nGranularity = pArray[3];
+    uint32_t nNewCount = pArray[1] + 1;
+    if (nNewCount > *pArray) {
+      uint32_t nGranularity = pArray[3];
       if (!nGranularity) {
-        nGranularity = vc8_thiscall(TSGrowableArray_Uc_CalcChunkSize)((BigBuffer*)pArray, nNewSize);
-      }
-      if (nNewSize % nGranularity) {
-        nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
+        nGranularity = vc8_thiscall(TSGrowableArray_Uc_CalcChunkSize)((BigBuffer*)pArray, nNewCount);
       }
 
-      vc8_thiscall(TSFixedArray_Uc_ReallocData)((TSGrowableArray_Uc*)pArray, nNewSize);
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      vc8_thiscall(TSFixedArray_Uc_ReallocData)((TSGrowableArray_Uc*)pArray, nNewCapacity);
     }
 
-    nGranularity = pArray[1];
-    pArray[1] = nGranularity + 1;
-    return pArray[2] + nGranularity;
+    return pArray[2] + pArray[1]++;
 }
 
 // @was SBIG_ArrayByteSetSize (pass 6, 2026.08.28)
@@ -1146,28 +1135,26 @@ void __fastcall TSGrowableArray_Ui_SetCount(BigBuffer * pDwordArray, int, uint32
 int32_t __fastcall SBIG_AppendBytes(TSGrowableArray_Uc * pByteArray, int, uint32_t nByteCount, uint8_t * pSrcBytes) {
     uint32_t nNewLen = pByteArray->nLen + nByteCount;
     if (nNewLen > pByteArray->nCapacity) {
-      uint32_t i;
-      i = pByteArray->nGrowStep;
-      if (!i) {
-        i = vc8_thiscall(TSGrowableArray_UcAlt_CalcChunkSize)((BigBuffer*)pByteArray, nNewLen);
-      }
-      if (nNewLen % i) {
-        nNewLen = i - nNewLen % i + nNewLen;
+      uint32_t nGranularity = pByteArray->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = vc8_thiscall(TSGrowableArray_UcAlt_CalcChunkSize)((BigBuffer*)pByteArray, nNewLen);
       }
 
-      vc8_thiscall(TSFixedArray_UcAlt_ReallocData)(pByteArray, nNewLen);
+      uint32_t nNewCapacity = nNewLen;
+      if (nNewLen % nGranularity) {
+        nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
+      }
+
+      vc8_thiscall(TSFixedArray_UcAlt_ReallocData)(pByteArray, nNewCapacity);
     }
 
-    uint32_t uVar1 = 0;
-    if (nByteCount > 0) {
-      do {
-        if (pByteArray->pData + (pByteArray->nLen + uVar1)) {
-          pByteArray->pData[pByteArray->nLen + uVar1] = *pSrcBytes;
-        }
+    for (uint32_t i = 0; i < nByteCount; i++) {
+      uint8_t* pSlot = &pByteArray->pData[pByteArray->nLen + i];
+      if (pSlot) {
+        *pSlot = *pSrcBytes;
+      }
 
-        uVar1++;
-        pSrcBytes++;
-      } while (uVar1 < nByteCount);
+      pSrcBytes++;
     }
 
     pByteArray->nLen += nByteCount;
@@ -1258,28 +1245,19 @@ void __fastcall SBIG_SetOffset(BigBuffer * pBigNum, int, int32_t nOffset) {
 }
 
 void __fastcall SBIG_TrimLeadingZeros(BigBuffer * pDwordArray) {
-    uint32_t nGranularity;
-    uint32_t nNewCapacity;
-    uint32_t nNewLen;
-    if (pDwordArray->nCount == pDwordArray->nStartWord) {
-      return;
-    }
-
-    do {
-      uint32_t* pTopLimb;
-      pTopLimb = TSBaseArray_Ui_Top(pDwordArray);
-      if (*pTopLimb) {
+    while (pDwordArray->nCount - pDwordArray->nStartWord != 0) {
+      if (*TSBaseArray_Ui_Top(pDwordArray)) {
         return;
       }
 
-      nNewLen = pDwordArray->nCount - 1;
+      uint32_t nNewLen = pDwordArray->nCount - 1;
       if (nNewLen > pDwordArray->nCount && nNewLen > pDwordArray->nCapacity) {
-        nGranularity = pDwordArray->nGrowStep;
+        uint32_t nGranularity = pDwordArray->nGrowStep;
         if (!nGranularity) {
           nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pDwordArray, nNewLen);
         }
 
-        nNewCapacity = nNewLen;
+        uint32_t nNewCapacity = nNewLen;
         if (nNewLen % nGranularity) {
           nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
         }
@@ -1288,7 +1266,7 @@ void __fastcall SBIG_TrimLeadingZeros(BigBuffer * pDwordArray) {
       }
 
       pDwordArray->nCount = nNewLen;
-    } while (nNewLen != pDwordArray->nStartWord);
+    }
 }
 
 void * __fastcall SBIG_CopyAssign(uint32_t * pDest, int, BigBuffer * pSource) {
@@ -1437,63 +1415,22 @@ static void __stdcall BigBuffer_Add(BigBuffer * pSourceA, BigBuffer * pSourceB, 
 // @oracle Mac PPC 1.10b Storm mangled symbol .And__FR9BigBufferRC9BigBufferRC9BigBuffer @100a0070 -- sole target of SBigAnd's forwarder.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_And(BigBuffer * pSourceA, BigBuffer * pSourceB, BigBuffer * pDest) {
-    uint32_t nGranularity;
-    uint32_t nNewLen;
-    uint32_t nWordIndex;
-    uint32_t nNewCapacity;
-    uint32_t nWordA;
-    uint32_t nWordB;
-    int i;
-    i = 0;
-    do {
-      nWordIndex = pSourceA->nStartWord + i;
-      if (!(nWordIndex < pSourceA->nCount)) {
-        if (pSourceB->nStartWord + i >= pSourceB->nCount) {
-          nWordIndex = pDest->nStartWord + i;
-          if (nWordIndex > pDest->nCount && nWordIndex > pDest->nCapacity) {
-            nNewLen = pDest->nGrowStep;
-            if (!nNewLen) {
-              nNewLen = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pDest, nWordIndex);
-            }
-
-            nGranularity = nWordIndex;
-            if (nWordIndex % nNewLen) {
-              nGranularity = nNewLen - nWordIndex % nNewLen + nWordIndex;
-            }
-
-            vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nGranularity);
-          }
-
-          pDest->nCount = nWordIndex;
-          return;
-        }
-        if (nWordIndex < pSourceA->nCount) {
-          goto read_lhs_word;
-        }
-
-        nWordA = 0;
-      } else {
-        read_lhs_word:
-        nWordA = pSourceA->pData[nWordIndex];
-      }
-
+    uint32_t i;
+    for (i = 0; pSourceA->nStartWord + i < pSourceA->nCount || pSourceB->nStartWord + i < pSourceB->nCount; i++) {
+      uint32_t nWordIndex = pSourceA->nStartWord + i;
+      uint32_t nWordA = nWordIndex < pSourceA->nCount ? pSourceA->pData[nWordIndex] : 0;
       nWordIndex = pSourceB->nStartWord + i;
-      if (nWordIndex < pSourceB->nCount) {
-        nWordB = pSourceB->pData[nWordIndex];
-      } else {
-        nWordB = 0;
-      }
-
+      uint32_t nWordB = nWordIndex < pSourceB->nCount ? pSourceB->pData[nWordIndex] : 0;
       nWordIndex = pDest->nStartWord + i;
       if (nWordIndex >= pDest->nCount) {
-        nNewLen = nWordIndex + 1;
+        uint32_t nNewLen = nWordIndex + 1;
         if (nNewLen > pDest->nCapacity) {
-          nGranularity = pDest->nGrowStep;
+          uint32_t nGranularity = pDest->nGrowStep;
           if (!nGranularity) {
             nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pDest, nNewLen);
           }
 
-          nNewCapacity = nNewLen;
+          uint32_t nNewCapacity = nNewLen;
           if (nNewLen % nGranularity) {
             nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
           }
@@ -1506,8 +1443,24 @@ static void __stdcall BigBuffer_And(BigBuffer * pSourceA, BigBuffer * pSourceB, 
       }
 
       pDest->pData[pDest->nStartWord + i] = nWordB & nWordA;
-      i++;
-    } while (true);
+    }
+
+    uint32_t nNewCount = pDest->nStartWord + i;
+    if (nNewCount > pDest->nCount && nNewCount > pDest->nCapacity) {
+      uint32_t nGranularity = pDest->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pDest, nNewCount);
+      }
+
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nNewCapacity);
+    }
+
+    pDest->nCount = nNewCount;
 }
 
 // Compare big integer array against scalar value
@@ -1603,7 +1556,7 @@ static void __stdcall BigBuffer_Div_Ux(uint32_t * pRemainderOut, BigBuffer * pDi
 static BOOL BigBuffer_IsOdd(BigBuffer * pBignum) {
     SBIG_TrimLeadingZeros(pBignum);
     uint32_t nLowWord = pBignum->nStartWord;
-    if (pBignum->nCount != nLowWord) {
+    if (pBignum->nCount - nLowWord >= 1) {
       if (nLowWord < pBignum->nCount) {
         nLowWord = pBignum->pData[nLowWord];
       } else {
@@ -1635,7 +1588,7 @@ static BOOL BigBuffer_IsOne(BigBuffer * pBignum) {
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static uint32_t BigBuffer_IsZero(BigBuffer * pBignum) {
     SBIG_TrimLeadingZeros(pBignum);
-    return (uint32_t)(pBignum->nCount == pBignum->nStartWord);
+    return pBignum->nCount - pBignum->nStartWord == 0;
 }
 
 // @renamed-from SBIG_MulValue64 (2026-08-28, Storm PowerPC oracle pass 4)
@@ -1706,222 +1659,172 @@ static void __stdcall BigBuffer_Mul_Ux(BigBuffer * pSource, uint32_t nMultiplier
 // @oracle Mac PPC 1.10b Storm mangled symbol .Not__FR9BigBufferRC9BigBuffer @1009d620 -- sole target of SBigNot's forwarder; 2 args.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_Not(BigBuffer * pSource, BigBuffer * pDest) {
-    uint32_t nGranularity;
-    uint32_t nWordValue;
-    uint32_t nAbsIndex = pSource->nStartWord;
-    uint32_t nNewLen = pSource->nCount;
-    int nWordCount = 0;
-    int i = 0;
-    if (nAbsIndex < nNewLen) {
-      uint32_t nNewCapacity;
-      do {
-        if (nAbsIndex + i < nNewLen) {
-          nWordValue = pSource->pData[nAbsIndex + i];
-        } else {
-          nWordValue = 0;
-        }
-
-        nAbsIndex = pDest->nStartWord + i;
-        if (nAbsIndex >= pDest->nCount) {
-          nNewLen = nAbsIndex + 1;
-          if (nNewLen > pDest->nCapacity) {
-            nGranularity = pDest->nGrowStep;
-            if (!nGranularity) {
-              nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pDest, nNewLen);
-            }
-
-            nNewCapacity = nNewLen;
-            if (nNewLen % nGranularity) {
-              nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
-            }
-
-            vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nNewCapacity);
+    uint32_t i;
+    for (i = 0; pSource->nStartWord + i < pSource->nCount; i++) {
+      uint32_t nWordIndex = pSource->nStartWord + i;
+      uint32_t nWord = nWordIndex < pSource->nCount ? pSource->pData[nWordIndex] : 0;
+      nWordIndex = pDest->nStartWord + i;
+      if (nWordIndex >= pDest->nCount) {
+        uint32_t nNewLen = nWordIndex + 1;
+        if (nNewLen > pDest->nCapacity) {
+          uint32_t nGranularity = pDest->nGrowStep;
+          if (!nGranularity) {
+            nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pDest, nNewLen);
           }
 
-          SMem::SMemZero(pDest->pData + pDest->nCount, (nAbsIndex - pDest->nCount) * 4 + 4);
-          pDest->nCount = nNewLen;
+          uint32_t nNewCapacity = nNewLen;
+          if (nNewLen % nGranularity) {
+            nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
+          }
+
+          vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nNewCapacity);
         }
 
-        pDest->pData[pDest->nStartWord + i] = ~nWordValue;
-        nAbsIndex = pSource->nStartWord;
-        nNewLen = pSource->nCount;
-        nWordCount = i + 1;
-        i = nWordCount;
-      } while (nAbsIndex + nWordCount < nNewLen);
-    }
-
-    nAbsIndex = pDest->nStartWord + nWordCount;
-    if (nAbsIndex > pDest->nCount && nAbsIndex > pDest->nCapacity) {
-      nNewLen = pDest->nGrowStep;
-      if (!nNewLen) {
-        nNewLen = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pDest, nAbsIndex);
+        SMem::SMemZero(pDest->pData + pDest->nCount, (nWordIndex - pDest->nCount) * 4 + 4);
+        pDest->nCount = nNewLen;
       }
 
-      nGranularity = nAbsIndex;
-      if (nAbsIndex % nNewLen) {
-        nGranularity = nNewLen - nAbsIndex % nNewLen + nAbsIndex;
-      }
-
-      vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nGranularity);
+      pDest->pData[pDest->nStartWord + i] = ~nWord;
     }
 
-    pDest->nCount = nAbsIndex;
+    uint32_t nNewCount = pDest->nStartWord + i;
+    if (nNewCount > pDest->nCount && nNewCount > pDest->nCapacity) {
+      uint32_t nGranularity = pDest->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pDest, nNewCount);
+      }
+
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nNewCapacity);
+    }
+
+    pDest->nCount = nNewCount;
 }
 
 // @renamed-from SBIG_BitwiseOr (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm mangled symbol .Or__FR9BigBufferRC9BigBufferRC9BigBuffer @1009d4f0 -- sole target of SBigOr's forwarder.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_Or(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffer * pResult) {
-    uint32_t nAlignedCount;
-    uint32_t nChunkSize;
-    uint32_t nIndex;
-    uint32_t nAlignedCount2;
-    uint32_t dwLhsWord;
-    uint32_t dwRhsWord;
-    int i;
-    i = 0;
-    do {
-      nIndex = pLhs->nStartWord + i;
-      if (!(nIndex < pLhs->nCount)) {
-        if (pRhs->nStartWord + i >= pRhs->nCount) {
-          nIndex = pResult->nStartWord + i;
-          if (nIndex > pResult->nCount && nIndex > pResult->nCapacity) {
-            nChunkSize = pResult->nGrowStep;
-            if (!nChunkSize) {
-              nChunkSize = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nIndex);
-            }
-
-            nAlignedCount = nIndex;
-            if (nIndex % nChunkSize) {
-              nAlignedCount = nChunkSize - nIndex % nChunkSize + nIndex;
-            }
-
-            vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount);
+    uint32_t i;
+    for (i = 0; pLhs->nStartWord + i < pLhs->nCount || pRhs->nStartWord + i < pRhs->nCount; i++) {
+      uint32_t nWordIndex = pLhs->nStartWord + i;
+      uint32_t dwLhsWord = nWordIndex < pLhs->nCount ? pLhs->pData[nWordIndex] : 0;
+      nWordIndex = pRhs->nStartWord + i;
+      uint32_t dwRhsWord = nWordIndex < pRhs->nCount ? pRhs->pData[nWordIndex] : 0;
+      nWordIndex = pResult->nStartWord + i;
+      if (nWordIndex >= pResult->nCount) {
+        uint32_t nNewLen = nWordIndex + 1;
+        if (nNewLen > pResult->nCapacity) {
+          uint32_t nGranularity = pResult->nGrowStep;
+          if (!nGranularity) {
+            nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNewLen);
           }
 
-          pResult->nCount = nIndex;
-          return;
-        }
-        if (nIndex < pLhs->nCount) {
-          goto read_lhs_word;
-        }
-
-        dwLhsWord = 0;
-      } else {
-        read_lhs_word:
-        dwLhsWord = pLhs->pData[nIndex];
-      }
-
-      nIndex = pRhs->nStartWord + i;
-      if (nIndex < pRhs->nCount) {
-        dwRhsWord = pRhs->pData[nIndex];
-      } else {
-        dwRhsWord = 0;
-      }
-
-      nIndex = pResult->nStartWord + i;
-      if (nIndex >= pResult->nCount) {
-        nChunkSize = nIndex + 1;
-        if (nChunkSize > pResult->nCapacity) {
-          nAlignedCount = pResult->nGrowStep;
-          if (!nAlignedCount) {
-            nAlignedCount = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nChunkSize);
+          uint32_t nNewCapacity = nNewLen;
+          if (nNewLen % nGranularity) {
+            nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
           }
 
-          nAlignedCount2 = nChunkSize;
-          if (nChunkSize % nAlignedCount) {
-            nAlignedCount2 = nAlignedCount - nChunkSize % nAlignedCount + nChunkSize;
-          }
-
-          vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount2);
+          vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
         }
 
-        SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
-        pResult->nCount = nChunkSize;
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+        pResult->nCount = nNewLen;
       }
 
       pResult->pData[pResult->nStartWord + i] = dwRhsWord | dwLhsWord;
-      i++;
-    } while (true);
+    }
+
+    uint32_t nNewCount = pResult->nStartWord + i;
+    if (nNewCount > pResult->nCount && nNewCount > pResult->nCapacity) {
+      uint32_t nGranularity = pResult->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNewCount);
+      }
+
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
+    }
+
+    pResult->nCount = nNewCount;
 }
 
 // @renamed-from SBIG_SetBit (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm mangled symbol .Set2Exp__FR9BigBufferUi @1009c730 -- sole target of SBigSet2Exp's forwarder; also called by .FindPrime where 1.14d FindPrime calls this. Sets the value to 2^n. Was SBIG_SetBit.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_Set2Exp(uint32_t nBitPos, BigBuffer * pResult) {
-    uint32_t nChunkSize;
-    uint32_t nNeededCount;
-    uint32_t nAlignedCount;
-    uint32_t nIndex = 0;
-    uint32_t i = 0;
-    if (nBitPos >> 5) {
-      do {
-        nIndex = pResult->nStartWord + i;
-        if (nIndex >= pResult->nCount) {
-          nNeededCount = nIndex + 1;
-          if (nNeededCount > pResult->nCapacity) {
-            nChunkSize = pResult->nGrowStep;
-            if (!nChunkSize) {
-              nChunkSize = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNeededCount);
-            }
-
-            nAlignedCount = nNeededCount;
-            if (nNeededCount % nChunkSize) {
-              nAlignedCount = nChunkSize - nNeededCount % nChunkSize + nNeededCount;
-            }
-
-            vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount);
+    uint32_t i;
+    for (i = 0; i < nBitPos >> 5; i++) {
+      uint32_t nWordIndex = pResult->nStartWord + i;
+      if (nWordIndex >= pResult->nCount) {
+        uint32_t nNewLen = nWordIndex + 1;
+        if (nNewLen > pResult->nCapacity) {
+          uint32_t nGranularity = pResult->nGrowStep;
+          if (!nGranularity) {
+            nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNewLen);
           }
 
-          SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
-          pResult->nCount = nNeededCount;
+          uint32_t nNewCapacity = nNewLen;
+          if (nNewLen % nGranularity) {
+            nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
+          }
+
+          vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
         }
 
-        nIndex = i + 1;
-        pResult->pData[pResult->nStartWord + i] = 0;
-        i = nIndex;
-      } while (nIndex < nBitPos >> 5);
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+        pResult->nCount = nNewLen;
+      }
+
+      pResult->pData[pResult->nStartWord + i] = 0;
     }
 
-    nNeededCount = pResult->nStartWord + nIndex;
-    if (nNeededCount >= pResult->nCount) {
-      uint32_t nChunkSize2;
-      nChunkSize = nNeededCount + 1;
-      if (nChunkSize > pResult->nCapacity) {
-        nChunkSize2 = pResult->nGrowStep;
-        if (!nChunkSize2) {
-          nChunkSize2 = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nChunkSize);
+    uint32_t nWordIndex = pResult->nStartWord + i;
+    if (nWordIndex >= pResult->nCount) {
+      uint32_t nNewLen = nWordIndex + 1;
+      if (nNewLen > pResult->nCapacity) {
+        uint32_t nGranularity = pResult->nGrowStep;
+        if (!nGranularity) {
+          nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNewLen);
         }
 
-        nAlignedCount = nChunkSize;
-        if (nChunkSize % nChunkSize2) {
-          nAlignedCount = nChunkSize2 - nChunkSize % nChunkSize2 + nChunkSize;
+        uint32_t nNewCapacity = nNewLen;
+        if (nNewLen % nGranularity) {
+          nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
         }
 
-        vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount);
+        vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
       }
 
-      SMem::SMemZero(pResult->pData + pResult->nCount, (nNeededCount - pResult->nCount) * 4 + 4);
-      pResult->nCount = nChunkSize;
+      SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+      pResult->nCount = nNewLen;
     }
 
-    pResult->pData[pResult->nStartWord + nIndex] = 1 << D2_SHIFT_COUNT(nBitPos);
-    nIndex = pResult->nStartWord + 1 + nIndex;
-    if (nIndex > pResult->nCount && nIndex > pResult->nCapacity) {
-      nNeededCount = pResult->nGrowStep;
-      if (!nNeededCount) {
-        nNeededCount = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nIndex);
+    pResult->pData[pResult->nStartWord + i] = 1 << (nBitPos & 0x1f);
+    uint32_t nNewCount = pResult->nStartWord + i + 1;
+    if (nNewCount > pResult->nCount && nNewCount > pResult->nCapacity) {
+      uint32_t nGranularity = pResult->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNewCount);
       }
 
-      nChunkSize = nIndex;
-      if (nIndex % nNeededCount) {
-        nChunkSize = nNeededCount - nIndex % nNeededCount + nIndex;
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
       }
 
-      vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nChunkSize);
+      vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
     }
 
-    pResult->nCount = nIndex;
+    pResult->nCount = nNewCount;
 }
 
 // @renamed-from SBIG_SetToOne (2026-08-28, Storm PowerPC oracle pass 4)
@@ -2308,115 +2211,79 @@ static void __stdcall BigBuffer_Sub(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffe
 // @oracle Mac PPC 1.10b Storm mangled symbol .Xor__FR9BigBufferRC9BigBufferRC9BigBuffer @1009bc40 -- sole target of SBigXor's forwarder.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_Xor(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffer * pResult) {
-    uint32_t nAlignedCount;
-    uint32_t nChunkSize;
-    uint32_t nIndex;
-    uint32_t nAlignedCount2;
-    uint32_t dwLhsWord;
-    uint32_t dwRhsWord;
-    int i;
-    i = 0;
-    do {
-      nIndex = pLhs->nStartWord + i;
-      if (!(nIndex < pLhs->nCount)) {
-        if (pRhs->nStartWord + i >= pRhs->nCount) {
-          nIndex = pResult->nStartWord + i;
-          if (nIndex > pResult->nCount && nIndex > pResult->nCapacity) {
-            nChunkSize = pResult->nGrowStep;
-            if (!nChunkSize) {
-              nChunkSize = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nIndex);
-            }
-
-            nAlignedCount = nIndex;
-            if (nIndex % nChunkSize) {
-              nAlignedCount = nChunkSize - nIndex % nChunkSize + nIndex;
-            }
-
-            vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount);
+    uint32_t i;
+    for (i = 0; pLhs->nStartWord + i < pLhs->nCount || pRhs->nStartWord + i < pRhs->nCount; i++) {
+      uint32_t nWordIndex = pLhs->nStartWord + i;
+      uint32_t dwLhsWord = nWordIndex < pLhs->nCount ? pLhs->pData[nWordIndex] : 0;
+      nWordIndex = pRhs->nStartWord + i;
+      uint32_t dwRhsWord = nWordIndex < pRhs->nCount ? pRhs->pData[nWordIndex] : 0;
+      nWordIndex = pResult->nStartWord + i;
+      if (nWordIndex >= pResult->nCount) {
+        uint32_t nNewLen = nWordIndex + 1;
+        if (nNewLen > pResult->nCapacity) {
+          uint32_t nGranularity = pResult->nGrowStep;
+          if (!nGranularity) {
+            nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNewLen);
           }
 
-          pResult->nCount = nIndex;
-          return;
-        }
-        if (nIndex < pLhs->nCount) {
-          goto read_lhs_word;
-        }
-
-        dwLhsWord = 0;
-      } else {
-        read_lhs_word:
-        dwLhsWord = pLhs->pData[nIndex];
-      }
-
-      nIndex = pRhs->nStartWord + i;
-      if (nIndex < pRhs->nCount) {
-        dwRhsWord = pRhs->pData[nIndex];
-      } else {
-        dwRhsWord = 0;
-      }
-
-      nIndex = pResult->nStartWord + i;
-      if (nIndex >= pResult->nCount) {
-        nChunkSize = nIndex + 1;
-        if (nChunkSize > pResult->nCapacity) {
-          nAlignedCount = pResult->nGrowStep;
-          if (!nAlignedCount) {
-            nAlignedCount = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nChunkSize);
+          uint32_t nNewCapacity = nNewLen;
+          if (nNewLen % nGranularity) {
+            nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
           }
 
-          nAlignedCount2 = nChunkSize;
-          if (nChunkSize % nAlignedCount) {
-            nAlignedCount2 = nAlignedCount - nChunkSize % nAlignedCount + nChunkSize;
-          }
-
-          vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount2);
+          vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
         }
 
-        SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
-        pResult->nCount = nChunkSize;
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+        pResult->nCount = nNewLen;
       }
 
       pResult->pData[pResult->nStartWord + i] = dwRhsWord ^ dwLhsWord;
-      i++;
-    } while (true);
+    }
+
+    uint32_t nNewCount = pResult->nStartWord + i;
+    if (nNewCount > pResult->nCount && nNewCount > pResult->nCapacity) {
+      uint32_t nGranularity = pResult->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNewCount);
+      }
+
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
+    }
+
+    pResult->nCount = nNewCount;
 }
 
 // @renamed-from SBIG_ImportBytes (2026-08-28, Storm PowerPC oracle pass 4)
 // @oracle Mac PPC 1.10b Storm mangled symbol .FromBinary__FR9BigBufferPCvUi @1009b7b0 -- sole target of SBigFromBinary's forwarder; also the sole bignum callee of .FromStream, matching 1.14d FromStream. Was SBIG_ImportBytes.
 // @oracle-note Internal, NOT an export: absent from the 337-name export table by design. The real symbol is the free function without a class qualifier; the BigBuffer_ prefix is a local disambiguator, and _Ui / _Ux are the MWCC mangling tokens for the scalar overloads.
 static void __stdcall BigBuffer_FromBinary(void * pSrcBytes, uint32_t nByteCount, BigBuffer * pResult) {
-    uint32_t nWordIndex;
-    uint32_t nChunkSize;
-    uint32_t nAlignedCount;
-    uint32_t nAlignedCount2;
-    uint8_t byValue;
-    uint32_t nNeededCount;
-    uint32_t nByteInWord = pResult->nStartWord;
-    if (nByteInWord > pResult->nCount && nByteInWord > pResult->nCapacity) {
-      nWordIndex = pResult->nGrowStep;
-      if (!nWordIndex) {
-        nWordIndex = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nByteInWord);
+    uint32_t nNewCount = pResult->nStartWord;
+    if (nNewCount > pResult->nCount && nNewCount > pResult->nCapacity) {
+      uint32_t nGranularity = pResult->nGrowStep;
+      if (!nGranularity) {
+        nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNewCount);
       }
 
-      nAlignedCount = nByteInWord;
-      if (nByteInWord % nWordIndex) {
-        nAlignedCount = nWordIndex - nByteInWord % nWordIndex + nByteInWord;
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
       }
 
-      vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount);
+      vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
     }
 
-    pResult->nCount = nByteInWord;
-    uint32_t i = 0;
-    if (nByteCount <= 0) {
-      return;
-    }
-
-    do {
+    pResult->nCount = nNewCount;
+    for (uint32_t i = 0; i < nByteCount; i++) {
+      uint32_t nWordIndex = i >> 2;
+      uint32_t nByteInWord = i & 3;
+      uint32_t nByte = ((uint8_t*)pSrcBytes)[i]; // steer-ok: the original reads the source byte before the SBIG_GrowToIndex call
       uint32_t dwCurWord;
-      byValue = *(uint8_t*)(i + (char*)pSrcBytes);
-      nWordIndex = i >> 2;
-      nByteInWord = i & 3;
       if (nByteInWord) {
         vc8_thiscall(SBIG_GrowToIndex)(pResult, nWordIndex);
         dwCurWord = pResult->pData[pResult->nStartWord + nWordIndex];
@@ -2424,30 +2291,29 @@ static void __stdcall BigBuffer_FromBinary(void * pSrcBytes, uint32_t nByteCount
         dwCurWord = 0;
       }
 
-      nAlignedCount = pResult->nStartWord + nWordIndex;
-      if (nAlignedCount >= pResult->nCount) {
-        nNeededCount = nAlignedCount + 1;
-        if (nNeededCount > pResult->nCapacity) {
-          nChunkSize = pResult->nGrowStep;
-          if (!nChunkSize) {
-            nChunkSize = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNeededCount);
+      uint32_t nDestIndex = pResult->nStartWord + nWordIndex;
+      if (nDestIndex >= pResult->nCount) {
+        uint32_t nNewLen = nDestIndex + 1;
+        if (nNewLen > pResult->nCapacity) {
+          uint32_t nGranularity = pResult->nGrowStep;
+          if (!nGranularity) {
+            nGranularity = vc8_thiscall(TSGrowableArray_Ui_CalcChunkSize)(pResult, nNewLen);
           }
 
-          nAlignedCount2 = nNeededCount;
-          if (nNeededCount % nChunkSize) {
-            nAlignedCount2 = nChunkSize - nNeededCount % nChunkSize + nNeededCount;
+          uint32_t nNewCapacity = nNewLen;
+          if (nNewLen % nGranularity) {
+            nNewCapacity = nGranularity - nNewLen % nGranularity + nNewLen;
           }
 
-          vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount2);
+          vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
         }
 
-        SMem::SMemZero(pResult->pData + pResult->nCount, (nAlignedCount - pResult->nCount) * 4 + 4);
-        pResult->nCount = nNeededCount;
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nDestIndex - pResult->nCount) * 4 + 4);
+        pResult->nCount = nNewLen;
       }
 
-      i++;
-      pResult->pData[pResult->nStartWord + nWordIndex] = ((uint32_t)byValue << (char)nByteInWord * '\b') + dwCurWord;
-    } while (i < nByteCount);
+      pResult->pData[pResult->nStartWord + nWordIndex] = (nByte << nByteInWord * 8) + dwCurWord;
+    }
 }
 
 // @renamed-from SBIG_ImportDecimalString (2026-08-28, Storm PowerPC oracle pass 4)
@@ -3834,10 +3700,9 @@ void __stdcall SBigDel(BigData * pBigData) {
 // @oracle Mac PPC 1.10b Storm -- PPC SBigDiv -> 10099d70, 160B, single bl .Div__FR9BigBufferR9BigBufferRC9BigBufferRC9BigBufferR8BigStack (quot, rem, a, b, stack). 1.14d passes the caller's destination in the QUOTIENT slot and a BigStack temp in the remainder slot - the mirror image of SBigMod 00424ed0.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigDiv(BigData * pResult, BigData * pBigA, BigData * pBigB) {
-    uint32_t nStackBase = pResult->sStack.nUsed;
-    pResult->sStack.nUsed = nStackBase + 1;
-    BigBuffer_Div(&pResult->sPrimary, pResult->sStack.aBuffers + nStackBase, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    pResult->sStack.nUsed--;
+    BigStack* pStack = &pResult->sStack;
+    BigBuffer_Div(&pResult->sPrimary, &pStack->aBuffers[pStack->nUsed++], &pBigB->sPrimary, pStack, &pBigA->sPrimary);
+    pStack->nUsed--;
 }
 
 // @renamed-from SBIG_GCDWrapper (2026-08-28, Storm PowerPC oracle pass 4)
@@ -3851,10 +3716,9 @@ void __stdcall SBigGcd(BigData * pResult, BigData * pBigA, BigData * pBigB) {
 // @oracle Mac PPC 1.10b Storm -- PPC SBigMod -> 10099900, 160B, single bl .Div (same method as SBigDiv). 1.14d passes the caller's destination in the REMAINDER slot. Slot order proved from BigBuffer_MulMod 004245f0, which reduces a product by calling Div with the product in the quotient slot and the result in the remainder slot.
 // @oracle-note Real Storm export name, present in the 337-name TVector export table at 100cbc34-100ce064.
 void __stdcall SBigMod(BigData * pResult, BigData * pBigA, BigData * pBigB) {
-    uint32_t nStackBase = pResult->sStack.nUsed;
-    pResult->sStack.nUsed = nStackBase + 1;
-    BigBuffer_Div(pResult->sStack.aBuffers + nStackBase, &pResult->sPrimary, &pBigB->sPrimary, &pResult->sStack, &pBigA->sPrimary);
-    pResult->sStack.nUsed--;
+    BigStack* pStack = &pResult->sStack;
+    BigBuffer_Div(&pStack->aBuffers[pStack->nUsed++], &pResult->sPrimary, &pBigB->sPrimary, pStack, &pBigA->sPrimary);
+    pStack->nUsed--;
 }
 
 // @renamed-from SBIG_MontgomeryMulWrapper (2026-08-28, Storm PowerPC oracle pass 4)

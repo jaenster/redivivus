@@ -556,13 +556,17 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_EnterChat(char * pBytes, size_t nSize) {
 // BATTLE.NET SID_GETFILETIME (0x33) HANDLER
 // Receives file metadata from Battle.net server containing: request_id(4), unknown(4), file_time(8 bytes FILETIME), filename(null-terminated). Decodes request_id to determine download type (0x80000005=optional patch with flags 2|1=3, 0x80000006=required patch with flags 4|1=5, others=flags 4|1=5) and initiates file download via BNDOWNLOAD_InitiateFileDownload with the provided timestamp and filename.
 BOOL __fastcall NET_SID_CLIENT_Incoming_GetFileTime(char * pBytes, size_t nSize) {
-    uint32_t dwDownloadFlags;
     int dwRequestId = *(int*)pBytes;
-    if (dwRequestId == -0x7ffffffb || (dwDownloadFlags = 4 , dwRequestId == -0x7ffffffa)) {
+    FILETIME* pFileTime = (FILETIME*)(pBytes + 8); // steer-ok: the original computes the file time and name pointers on entry, before the request-id test
+    char* szFileName = (char*)(pFileTime + 1); // steer-ok: the original computes the file time and name pointers on entry, before the request-id test
+    uint32_t dwDownloadFlags;
+    if (dwRequestId == -0x7ffffffb || dwRequestId == -0x7ffffffa) {
       dwDownloadFlags = 2;
+    } else {
+      dwDownloadFlags = 4;
     }
 
-    BnDownload::BNDOWNLOAD_InitiateFileDownload(dwRequestId, dwDownloadFlags | 1, 0, 0, (FILETIME*)(pBytes + 8), pBytes + 0x10, nullptr);
+    BnDownload::BNDOWNLOAD_InitiateFileDownload(dwRequestId, dwDownloadFlags | 1, 0, 0, pFileTime, szFileName, nullptr);
     return 1;
 }
 

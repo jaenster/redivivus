@@ -271,12 +271,13 @@ int __fastcall SKILLS_RandomRange(int32_t pnMinVal, int32_t nRange, uint32_t nUn
     if (!pnSeed) {
       return 0;
     }
+
+    D2SeedStrc* pUnitSeed = &pnSeed->pUnit->sSeed; // steer-ok: the original computes the unit's seed before the range check
     if (pnMinVal >= nRange) {
       return pnMinVal;
     }
 
-    uint32_t nRandOffset = Seed::RANDOM_RandomNumberSelector(&pnSeed->pUnit->sSeed, nRange - pnMinVal + 1);
-    return nRandOffset + pnMinVal;
+    return Seed::RANDOM_RandomNumberSelector(pUnitSeed, nRange - pnMinVal + 1) + pnMinVal;
 }
 
 int __fastcall SKILLS_GetMissileSpecialParam(int32_t nParamIndex, uint8_t bParamType, uint32_t nUnused, D2SkillCalcContextStrc * ppContext) {

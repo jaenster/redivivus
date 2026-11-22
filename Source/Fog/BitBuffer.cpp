@@ -43,88 +43,38 @@ void __stdcall XorBitAtOffset(char * pBuffer, int32_t nOffset) {
 }
 
 void __stdcall BITBUF_AndBuffers(uint32_t * pBufferA, uint32_t * pBufferB, uint32_t * pDest, int32_t nBitCount) {
-    uint32_t dwValB;
-    int nByteOffset = nBitCount + 7 + (nBitCount + 7 >> 0x1f & 7U);
-    int nByteCount = nByteOffset >> 3;
-    int nDwordCount = (int)(nByteCount + (nByteOffset >> 0x1f & 3U)) >> 2;
-    int nRemaining = nDwordCount * 4;
-    nByteOffset = 0;
-    if (nRemaining > 0) {
-      int nWord;
-      nRemaining = (nRemaining - 1U >> 2) + 1;
-      nByteOffset = nRemaining * 4;
-      nWord = 0;
-      do {
-        dwValB = pBufferB[nWord];
-        pDest[nWord] = pBufferA[nWord] & dwValB;
-        nWord++;
-        nRemaining--;
-      } while (nRemaining);
+    nBitCount = (nBitCount + 7) / 8;
+    int nDwordBytes = nBitCount / 4 * 4;
+    int i;
+    for (i = 0; i < nDwordBytes; i += 4) {
+      *(uint32_t*)((uint8_t*)pDest + i) = *(uint32_t*)((uint8_t*)pBufferA + i) & *(uint32_t*)((uint8_t*)pBufferB + i);
     }
 
-    nByteCount += nDwordCount * -4;
-    switch (nByteCount) {
-      default:
-        {
-          return;
-        }
+    switch (nBitCount - nDwordBytes) {
       case 3:
-        {
-          *(uint8_t*)(nByteOffset + 2 + (char*)pDest) = *(uint8_t*)(nByteOffset + 2 + (char*)pBufferA) & *(uint8_t*)(nByteOffset + 2 + (char*)pBufferB);
-        }
+        ((uint8_t*)pDest)[i + 2] = ((uint8_t*)pBufferA)[i + 2] & ((uint8_t*)pBufferB)[i + 2];
       case 2:
-        {
-          *(uint8_t*)(nByteOffset + 1 + (char*)pDest) = *(uint8_t*)(nByteOffset + 1 + (char*)pBufferA) & *(uint8_t*)(nByteOffset + 1 + (char*)pBufferB);
-        }
+        ((uint8_t*)pDest)[i + 1] = ((uint8_t*)pBufferA)[i + 1] & ((uint8_t*)pBufferB)[i + 1];
       case 1:
-        {
-          *(uint8_t*)(nByteOffset + (char*)pDest) = *(uint8_t*)(nByteOffset + (char*)pBufferA) & *(uint8_t*)(nByteOffset + (char*)pBufferB);
-          return;
-        }
+        ((uint8_t*)pDest)[i] = ((uint8_t*)pBufferA)[i] & ((uint8_t*)pBufferB)[i];
     }
 }
 
 void __stdcall BITBUF_OrBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_t * pDest, int32_t nBitCount) {
-    uint32_t dwValB;
-    uint32_t* pCursorA;
-    int nByteOffset = nBitCount + 7 + (nBitCount + 7 >> 0x1f & 7U);
-    int nByteCount = nByteOffset >> 3;
-    int nDwordCount = (int)(nByteCount + (nByteOffset >> 0x1f & 3U)) >> 2;
-    int nRemaining = nDwordCount * 4;
-    nByteOffset = 0;
-    if (nRemaining > 0) {
-      uint32_t* pCursorB;
-      nRemaining = (nRemaining - 1U >> 2) + 1;
-      nByteOffset = nRemaining * 4;
-      pCursorB = pBufferB;
-      do {
-        pCursorA = (uint32_t*)((intptr_t)pBufferA - (intptr_t)pBufferB + (char*)pCursorB);
-        dwValB = *pCursorB;
-        pCursorB++;
-        nRemaining--;
-        *(uint32_t*)(pDest + (-4 - (intptr_t)pBufferB) + (intptr_t)pCursorB) = *pCursorA | dwValB;
-      } while (nRemaining);
+    nBitCount = (nBitCount + 7) / 8;
+    int nDwordBytes = nBitCount / 4 * 4;
+    int i;
+    for (i = 0; i < nDwordBytes; i += 4) {
+      *(uint32_t*)(pDest + i) = *(uint32_t*)(pBufferA + i) | *(uint32_t*)((uint8_t*)pBufferB + i);
     }
 
-    nByteCount += nDwordCount * -4;
-    switch (nByteCount) {
-      default:
-        {
-          return;
-        }
+    switch (nBitCount - nDwordBytes) {
       case 3:
-        {
-          pDest[nByteOffset + 2] = pBufferA[nByteOffset + 2] | *(uint8_t*)(nByteOffset + 2 + (char*)pBufferB);
-        }
+        pDest[i + 2] = pBufferA[i + 2] | ((uint8_t*)pBufferB)[i + 2];
       case 2:
-        {
-          pDest[nByteOffset + 1] = pBufferA[nByteOffset + 1] | *(uint8_t*)(nByteOffset + 1 + (char*)pBufferB);
-        }
+        pDest[i + 1] = pBufferA[i + 1] | ((uint8_t*)pBufferB)[i + 1];
       case 1:
-        {
-          pDest[nByteOffset] = pBufferA[nByteOffset] | *(uint8_t*)(nByteOffset + (char*)pBufferB);
-          return;
-        }
+        pDest[i] = pBufferA[i] | ((uint8_t*)pBufferB)[i];
     }
 }
 
@@ -147,46 +97,20 @@ void __stdcall BITBUF_NotBuffer(uint8_t * pSrc, uint32_t * pDest, int32_t nBitCo
 }
 
 void __stdcall BITBUF_XorBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_t * pDest, int32_t nBitCount) {
-    uint32_t dwValB;
-    uint32_t* pCursorA;
-    int nByteOffset = nBitCount + 7 + (nBitCount + 7 >> 0x1f & 7U);
-    int nByteCount = nByteOffset >> 3;
-    int nDwordCount = (int)(nByteCount + (nByteOffset >> 0x1f & 3U)) >> 2;
-    int nRemaining = nDwordCount * 4;
-    nByteOffset = 0;
-    if (nRemaining > 0) {
-      uint32_t* pCursorB;
-      nRemaining = (nRemaining - 1U >> 2) + 1;
-      nByteOffset = nRemaining * 4;
-      pCursorB = pBufferB;
-      do {
-        pCursorA = (uint32_t*)((intptr_t)pBufferA - (intptr_t)pBufferB + (char*)pCursorB);
-        dwValB = *pCursorB;
-        pCursorB++;
-        nRemaining--;
-        *(uint32_t*)(pDest + (-4 - (intptr_t)pBufferB) + (intptr_t)pCursorB) = *pCursorA ^ dwValB;
-      } while (nRemaining);
+    nBitCount = (nBitCount + 7) / 8;
+    int nDwordBytes = nBitCount / 4 * 4;
+    int i;
+    for (i = 0; i < nDwordBytes; i += 4) {
+      *(uint32_t*)(pDest + i) = *(uint32_t*)(pBufferA + i) ^ *(uint32_t*)((uint8_t*)pBufferB + i);
     }
 
-    nByteCount += nDwordCount * -4;
-    switch (nByteCount) {
-      default:
-        {
-          return;
-        }
+    switch (nBitCount - nDwordBytes) {
       case 3:
-        {
-          pDest[nByteOffset + 2] = pBufferA[nByteOffset + 2] ^ *(uint8_t*)(nByteOffset + 2 + (char*)pBufferB);
-        }
+        pDest[i + 2] = pBufferA[i + 2] ^ ((uint8_t*)pBufferB)[i + 2];
       case 2:
-        {
-          pDest[nByteOffset + 1] = pBufferA[nByteOffset + 1] ^ *(uint8_t*)(nByteOffset + 1 + (char*)pBufferB);
-        }
+        pDest[i + 1] = pBufferA[i + 1] ^ ((uint8_t*)pBufferB)[i + 1];
       case 1:
-        {
-          pDest[nByteOffset] = pBufferA[nByteOffset] ^ *(uint8_t*)(nByteOffset + (char*)pBufferB);
-          return;
-        }
+        pDest[i] = pBufferA[i] ^ ((uint8_t*)pBufferB)[i];
     }
 }
 

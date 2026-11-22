@@ -40,25 +40,11 @@ static BOOL STATES_IsUnitTransformable(D2UnitStrc * pUnit) {
 
     switch (eUnitType) {
       case UNIT_PLAYER:
-        {
-          if (!pUnit) {
-            return 0;
-          }
-
-          return (uint32_t)(pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Sequence);
-        }
+        return (!pUnit ? Death : pUnit->eAnimMode.ePlayerMode) == eD2PlayerAnimMode_ns::Sequence;
       case UNIT_MONSTER:
-        {
-          if (!pUnit) {
-            return 0;
-          }
-
-          return (uint32_t)(pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Skill2);
-        }
+        return (!pUnit ? Death : pUnit->eAnimMode.ePlayerMode) == eD2PlayerAnimMode_ns::Skill2;
       default:
-        {
-          return 0;
-        }
+        return 0;
     }
 }
 

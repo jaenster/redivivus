@@ -2471,17 +2471,15 @@ static void StoreData(int32_t nColor, int32_t nLength, char * szText) {
       return;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077ae28);
+    EnterCriticalSection(&lpCriticalSection_0077ae28);
     if (gpChatMessageQueueHead) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gpChatMessageQueueTail->pNext = pChatNode;
-      gpChatMessageQueueTail = pChatNode;
-      LeaveCriticalSection(&lpCriticalSection_0077ae28);
-      return;
+      gpChatMessageQueueTail->pNext = pChatNode;
+    } else {
+      gpChatMessageQueueHead = pChatNode;
     }
 
-    gpChatMessageQueueHead = pChatNode;
     gpChatMessageQueueTail = pChatNode;
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077ae28);
+    LeaveCriticalSection(&lpCriticalSection_0077ae28);
 }
 
 D2ChatDlgUnknown_0x10 * Unreferenced_0043e370() {

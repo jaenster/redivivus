@@ -2190,57 +2190,40 @@ BOOL __fastcall ITEMEVENT_ReplenishLifeFlat(::SGAMEDATA * pGame, uint32_t nUnitE
       return 0;
     }
 
-    uint32_t nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+    int nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     int nCurLife = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    if (nCurLife >= (int)nMaxLife) {
+    if (nCurLife >= nMaxLife) {
       return 0;
     }
 
-    uint32_t nNewLife = nCurLife + nStatPct * 0x100;
-    nNewLife = (int)nNewLife <= 0 ? 0 : nNewLife;
-    if ((int)nNewLife < (int)nMaxLife) {
-      nMaxLife = nNewLife;
-    }
-
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMaxLife, 0);
+    nCurLife += nStatPct << 8;
+    nCurLife = nCurLife <= 0 ? 0 : nCurLife;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nCurLife < nMaxLife ? nCurLife : nMaxLife, 0);
     D2Common::Units::SetOverlay(pUnit, 0x97, 0);
     return 1;
 }
 
 BOOL __fastcall ITEMEVENT_LifeDrainDemon(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
-    uint32_t nMaxLife;
-    int nCurLife;
-    uint32_t nNewLife;
-    if (!(pUnit && pTarget)) {
+    if (!pUnit || !pTarget || !D2Common::Monsters::MONSTERS::IsDemon(pTarget)) {
       return 0;
     }
 
-    uint32_t bIsDemon = D2Common::Monsters::MONSTERS::IsDemon(pTarget);
-    if (bIsDemon) {
-      int32_t nStatPct;
-      nStatPct = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
-      if (!nStatPct) {
-        return 0;
-      }
-
-      nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-      nCurLife = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-      if (nCurLife >= (int)nMaxLife) {
-        return 0;
-      }
-
-      nNewLife = nCurLife + nStatPct * 0x100;
-      nNewLife = (int)nNewLife <= 0 ? 0 : nNewLife;
-      if ((int)nNewLife < (int)nMaxLife) {
-        nMaxLife = nNewLife;
-      }
-
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nMaxLife, 0);
-      D2Common::Units::SetOverlay(pUnit, 0x97, 0);
-      return 1;
+    int32_t nStatPct = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, eSkill >> 0x10, eSkill);
+    if (!nStatPct) {
+      return 0;
     }
 
-    return 0;
+    int nMaxLife = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+    int nCurLife = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
+    if (nCurLife >= nMaxLife) {
+      return 0;
+    }
+
+    nCurLife += nStatPct << 8;
+    nCurLife = nCurLife <= 0 ? 0 : nCurLife;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nCurLife < nMaxLife ? nCurLife : nMaxLife, 0);
+    D2Common::Units::SetOverlay(pUnit, 0x97, 0);
+    return 1;
 }
 
 // Server-side item hit-event handler that applies a slow state to a target. Reads the slow percentage from the item's stat (via ITEM_GetMinimalStatValueShifted). Clamps the slow to 50% for players/bosses/mercs/champions, 75% for normal monsters, 90% for others. Applies STATE_slowed with UNITSTAT_velocitypercent, attackrate, and other_animrate for 750 frames. Returns 1 if state was successfully applied.

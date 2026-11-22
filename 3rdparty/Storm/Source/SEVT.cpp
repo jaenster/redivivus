@@ -159,10 +159,8 @@ void __fastcall LINKEDLIST_UnlinkSelf_Unref_004204b0(StormLinkStrc * pNode) {
 // Calculates the next power of 2 greater than or equal to a given value passed in ECX. Used for sizing hash tables and event handler arrays. Returns the smallest power of 2 that can contain the input value times 2 plus 2.
 uint32_t __fastcall SEVT_NextPowerOf2(uint32_t nValue) {
     uint32_t nPowerOf2 = 1;
-    if (nValue * 2 != -2) {
-      do {
-        nPowerOf2 *= 2;
-      } while (nPowerOf2 <= nValue * 2 + 2);
+    while (nPowerOf2 <= nValue * 2 + 2) {
+      nPowerOf2 *= 2;
     }
 
     return nPowerOf2;
@@ -248,31 +246,21 @@ static D2SevtTypeEntryStrc * SEVT_FindTypeHashEntry(uintptr_t nSubId, uint32_t n
 // @rename-basis Behaviour, confirmed against the PPC body. The only SEvt function that tears the whole module down: walks every hash bucket, frees every handler table and every event record, then frees the bucket array itself and zeroes gpEventHashBuckets, gaEventRegistryHead and gnSevtRegisteredEventCount. Takes no arguments and returns 1. .SEvtDestroy likewise reads no PowerPC argument register at all before entering the critical section. Zero xrefs in Game.exe, consistent with an exported entry point that the statically linked game never calls.
 // @former-name SEVT_DestroyAllEvents (invented)
 BOOL SEvtDestroy() {
-    uint32_t nBucketIndex;
-    D2SevtHandlerTableStrc* pTable;
     EnterCriticalSection(&lpCriticalSection_0077930c);
-    D2SevtTypeEntryStrc** pObject_00 = gpEventHashBuckets;
-    for (nBucketIndex = 0; nBucketIndex < gaEventRegistryHead; nBucketIndex++) {
-      D2SevtTypeEntryStrc* pObject;
-      pObject = pObject_00[nBucketIndex];
-      while (pObject) {
-        pTable = pObject->pHandlerTable;
-        while (pTable) {
-          pObject->pHandlerTable = pTable->pPrevState;
+    for (uint32_t i = 0; i < gaEventRegistryHead; i++) {
+      for (D2SevtTypeEntryStrc* pEntry = gpEventHashBuckets[i]; pEntry; pEntry = gpEventHashBuckets[i]) {
+        for (D2SevtHandlerTableStrc* pTable = pEntry->pHandlerTable; pTable; pTable = pEntry->pHandlerTable) {
+          pEntry->pHandlerTable = pTable->pPrevState;
           SEVT_DeleteIdHashTable(pTable);
-          pObject_00 = gpEventHashBuckets;
-          pTable = pObject->pHandlerTable;
         }
 
-        pObject_00[nBucketIndex] = pObject->pNext;
-        SMem::SMemFree(pObject, "delete", -1, 0);
-        pObject_00 = gpEventHashBuckets;
-        pObject = gpEventHashBuckets[nBucketIndex];
+        gpEventHashBuckets[i] = pEntry->pNext;
+        SMem::SMemFree(pEntry, "delete", -1, 0);
       }
     }
 
-    if (pObject_00) {
-      SMem::SMemFree(pObject_00, "delete", -1, 0);
+    if (gpEventHashBuckets) {
+      SMem::SMemFree(gpEventHashBuckets, "delete", -1, 0);
     }
 
     gpEventHashBuckets = 0;
@@ -785,13 +773,17 @@ void __thiscall LINKEDLIST_GetHead(StormLinkedListStrc * pThis, StormLinkStrc * 
     pListHead->pNext = 0;
 }
 
+// TSLink's constructor: a new link belongs to no list.
+static inline void StormLink_Construct(StormLinkStrc* pLink) {
+    pLink->pPrevLink = 0;
+    pLink->pNext = 0;
+}
+
 StormLinkedListStrc * __fastcall Unreferenced_00426c60(StormLinkedListStrc * pList) {
-    StormLinkStrc* pSVar1 = &pList->head;
-    pSVar1->pPrevLink = 0;
-    pSVar1->pNext = 0;
-    pSVar1->pPrevLink = pSVar1;
+    StormLink_Construct(&pList->head);
+    pList->head.pPrevLink = &pList->head;
     pList->nLinkOffset = 0;
-    pList->head.pNext = ~(uintptr_t)pSVar1;
+    pList->head.pNext = ~(uintptr_t)&pList->head;
     return pList;
 }
 
