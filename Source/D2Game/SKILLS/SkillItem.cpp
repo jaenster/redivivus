@@ -152,6 +152,14 @@
 #include "Source/D2Game/SKILLS/SkillItem.data.h"
 #include "Source/Fog/Src/Safesock.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -1880,7 +1888,7 @@ BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 
 // Item hit-event handler for "Chance to cast Dim Vision on striking". Only applies to monster targets. Reads the item's proc chance stat, computes an effective % from attacker/target levels, rolls the unit seed; on success calls SKILLNEC_ApplyDimVision with a duration scaled by how much the roll was beaten. Halves effective % when param1==6 (ranged hit). Returns 1 if Dim Vision was applied.
 BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
-    if (!pUnit || (pTarget ? pTarget->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if ((pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER) == 0) {
       return 0;
     }
 
@@ -1895,13 +1903,7 @@ BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitE
     if (nUnitEvent == 6 && nEffectivePct > 0) {
       nEffectivePct /= 3;
     }
-    if (nEffectivePct > 1) {
-      if (nEffectivePct >= 0x63) {
-        nEffectivePct = 99;
-      }
-    } else {
-      nEffectivePct = 1;
-    }
+    nEffectivePct = min(max(nEffectivePct, 1), 99); // steer-ok: windef.h min/max macros
 
     uint32_t nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
     if ((int)nRoll >= nEffectivePct) {
@@ -1909,13 +1911,7 @@ BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitE
     }
 
     nEffectivePct = (int)(nEffectivePct - nRoll) / 5 + 1;
-    if (nEffectivePct > 1) {
-      if (nEffectivePct >= 0x14) {
-        nEffectivePct = 0x14;
-      }
-    } else {
-      nEffectivePct = 1;
-    }
+    nEffectivePct = min(max(nEffectivePct, 1), 0x14); // steer-ok: windef.h min/max macros
 
     SkillNec::SKILLNEC_ApplyDimVision(pGame, pUnit, pTarget, nEffectivePct);
     return 1;
