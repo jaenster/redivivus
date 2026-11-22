@@ -518,50 +518,46 @@ void __stdcall PANEL_DrawHealthOrb() {
 }
 
 void __stdcall PANEL_DrawManaOrb() {
-    eD2RendererMode eRenderer;
     D2GfxDataStrc sGfxData;
-    eD2UnitStat eUnitStat;
-    uint16_t nLayer;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
-    int32_t nPositionX = PANEL_GetSmoothedStatValue(UNITSTAT_mana);
-    int32_t nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
-    if (!nMaxValue) {
+    int32_t nMana = PANEL_GetSmoothedStatValue(UNITSTAT_mana);
+    int32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
+    if (!nMaxMana) {
       return;
     }
-    if (nPositionX > nMaxValue) {
-      nPositionX = nMaxValue;
+    if (nMana > nMaxMana) {
+      nMana = nMaxMana;
     }
 
-    int nPercentHideFromBottom = nPositionX * 0x50 / nMaxValue;
+    int nPercentHideFromBottom = nMana * 0x50 / nMaxMana;
     memset(&sGfxData, 0, 0x48);
-    eD2States eState2 = STATE_manapot;
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = Hlthmana;
     sGfxData.nFrameNumber = 1;
-    BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), eState2);
-    if (eState) {
-      int nRegenWidth;
-      nLayer = 0;
-      eUnitStat = UNITSTAT_manarecovery;
-      nRegenWidth = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, nLayer);
-      nRegenWidth = nRegenWidth * 0x50 / 100;
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(UNIT::Player::GetPlayerUnit_UI(), STATE_manapot)) {
+      int nRegenWidth = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), UNITSTAT_manarecovery, 0) * 0x50 / 100;
       if (nRegenWidth > 0x50) {
         nRegenWidth = 0x50;
       }
       if (nRegenWidth > nPercentHideFromBottom) {
-        eRenderer = D2gfx::D2GFX::D2GFX_GetRendererMode();
-        if (eRenderer == RENDERER_Direct3D) {
-          nPositionX = ui::ScreenSizeX - 0x70;
+        if (D2gfx::D2GFX::D2GFX_GetRendererMode() == RENDERER_Direct3D) {
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x70, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         } else {
-          nPositionX = ui::ScreenSizeX - 0x6f;
+          D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x6f, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
         }
-
-        D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, nPositionX, Inv::ScreenSizeY - 0xd, nPercentHideFromBottom, nRegenWidth - nPercentHideFromBottom, DRAW_VERYTRANSPARENT);
       }
     }
 
-    D2gfx::D2GFX::D2GFX_GetRendererMode();
-    D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x6f, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+    switch (D2gfx::D2GFX::D2GFX_GetRendererMode()) {
+      case RENDERER_Windowed:
+      case RENDERED_DirectDraw:
+        D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x6f, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+        break;
+      default:
+        D2gfx::D2GFX::D2GFX_DrawVerticalCropImage(&sGfxData, ui::ScreenSizeX - 0x6f, Inv::ScreenSizeY - 0xd, 0, nPercentHideFromBottom, DRAW_SOLID);
+        break;
+    }
+
     sGfxData.pDC6 = overlap;
     sGfxData.nFrameNumber = 1;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, ui::ScreenSizeX - 0x6e, Inv::ScreenSizeY - 9, -1, DRAW_SOLID, nullptr);
