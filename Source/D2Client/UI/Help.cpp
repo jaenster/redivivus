@@ -889,28 +889,30 @@ void __stdcall DrawBackgroundHelpMenu() {
 }
 
 void __stdcall INPUT_HelpCloseButtonUp(D2UIMouseMsgStrc * pMsg) {
-    uint16_t nMouseY;
-    nMouseY = pMsg->uLParam.sMousePos.nMouseY;
-    uint32_t nRelX;
-    nRelX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
+    int nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     if (gpHelpCloseButton) {
-      DWORD eResMode;
-      eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-      if (eResMode == 2) {
-        nRelX -= 0x2ad;
-      } else {
-        nRelX -= 0x20d;
-      }
-      if (nRelX <= 0x20 && nMouseY >= 0x18 && nMouseY <= 0x38) {
+      if (D2gfx::D2GFX::D2GFX_GetResolutionMode() == 2) {
+        if (nMouseX >= 0x2ad && nMouseX <= 0x2cd && nMouseY >= 0x18 && nMouseY <= 0x38) {
+          ui::SetUIFlag(UI_HELPSCREEN, UI_TOGGLE, 0);
+          HELP_HideMiniPanel();
+          pMsg->bHandled = 1;
+          pMsg->dwResult = 0;
+          Storm::SMsgBreakHandlerChain(pMsg);
+          return;
+        }
+      } else if (nMouseX >= 0x20d && nMouseX <= 0x22d && nMouseY >= 0x18 && nMouseY <= 0x38) {
         ui::SetUIFlag(UI_HELPSCREEN, UI_TOGGLE, 0);
         HELP_HideMiniPanel();
-        goto consume_click;
+        pMsg->bHandled = 1;
+        pMsg->dwResult = 0;
+        Storm::SMsgBreakHandlerChain(pMsg);
+        return;
       }
     }
 
     gpHelpCloseButton = 0;
     GAME::Game::GAMEDATA_ClearQueuedClicks();
-    consume_click:
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
