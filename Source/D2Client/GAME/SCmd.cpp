@@ -2752,42 +2752,40 @@ void __fastcall SCMD_Rcv0x66_Ignore(char * pBytes) {
 // D2Common::Unit::Missile::MakeMissile, then StoreOwnerInfo, STATLIST_SetUnitStat(UNITSTAT_pierce_idx)
 // and Missile::SetCurrentFrame on the returned unit. It creates a missile.
 void __fastcall NET_D2GS_CLIENT_Incoming0x73_CreateMissile(D2GSPacketSrv0x73 * pBytes) {
-    D2SkillArgStrc pSkillArg;
-    eMissilesId nMissileClassId;
-    int nTargetYCopy = pBytes->nMissileY;
-    int nMissileYCopy = pBytes->nTargetY;
-    uint16_t wCurrentFrame = pBytes->nCurrentFrame;
-    int nMissileX = pBytes->nMissileX;
-    uint16_t nMissileTxtNo = pBytes->nMissileClassId;
-    int32_t nOwnerId = pBytes->nOwnerGUID;
+    int nMissileX = pBytes->nMissileX; // steer-ok: packet fields are read together on entry, before GetPlayerUnit_Net
+    int nMissileY = pBytes->nMissileY;
+    int nTargetY = pBytes->nTargetY;
+    uint16_t nCurrentFrame = pBytes->nCurrentFrame;
+    uint16_t nMissileClassId = pBytes->nMissileClassId;
+    int32_t nOwnerGUID = pBytes->nOwnerGUID;
     int nTargetX = pBytes->nTargetX;
-    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
-    memset(&pSkillArg, 0, 0x5c);
-    pSkillArg.nSkillLevel = (int32_t)pBytes->nSkillLevel;
-    pSkillArg.nFlags = 0x40000001;
-    if (nTargetX && nMissileYCopy) {
-      pSkillArg.nFlags = 0x40000021;
-      pSkillArg.nUnitX = nTargetX;
-      pSkillArg.nUnitY = nMissileYCopy;
+    D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
+    D2SkillArgStrc sSkillArg;
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
+    sSkillArg.nFlags = 0x40000001;
+    sSkillArg.pOwner = pPlayer;
+    sSkillArg.nX = nMissileX;
+    sSkillArg.nY = nMissileY;
+    sSkillArg.nSkillLevel = pBytes->nSkillLevel;
+    sSkillArg.nMissileTxtNo = nMissileClassId;
+    if (nTargetX && nTargetY) {
+      sSkillArg.nFlags = 0x40000021;
+      sSkillArg.nUnitX = nTargetX;
+      sSkillArg.nUnitY = nTargetY;
     }
 
-    pSkillArg.pOwner = pUnit;
-    pSkillArg.nMissileTxtNo = (uint32_t)nMissileTxtNo;
-    pSkillArg.nX = nMissileX;
-    pSkillArg.nY = nTargetYCopy;
-    pUnit = UNIT::Missile::MakeMissile(&pSkillArg);
-    if (!pUnit) {
+    D2UnitStrc* pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
+    if (!pMissile) {
       return;
     }
 
-    D2Common::Units::StoreOwnerInfo(pUnit, (eD2UnitType)pBytes->nOwnerType, nOwnerId);
+    D2Common::Units::StoreOwnerInfo(pMissile, (eD2UnitType)pBytes->nOwnerType, nOwnerGUID);
     if (pBytes->nPierceIdxValue) {
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, (uint32_t)pBytes->nPierceIdxValue, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_pierce_idx, pBytes->nPierceIdxValue, 0);
     }
 
-    D2Common::Units::Missile::SetCurrentFrame(pUnit, (uint32_t)wCurrentFrame);
-    uint32_t nGfxFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pUnit->nFrameCount >> 8);
-    pUnit->nGfxCurrentFrame = nGfxFrame << 8;
+    D2Common::Units::Missile::SetCurrentFrame(pMissile, nCurrentFrame);
+    pMissile->nGfxCurrentFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pMissile->sSeed, pMissile->nFrameCount >> 8) << 8;
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x74(D2GSPacketSrv0x74 * pBytes) {
