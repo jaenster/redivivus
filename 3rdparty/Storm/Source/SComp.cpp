@@ -1210,19 +1210,16 @@ int __fastcall Unreferenced_0041e9d0(int * pValueA, int * pValueB) {
 }
 
 uint32_t __thiscall BITBUFFER_ReadBits(D2BitStreamReaderStrc * pBitBuf, uint32_t nBits, uint32_t nMask) {
-    uint32_t pBitPos = pBitBuf->nBitCount;
-    if (pBitPos <= nBits) {
-      uint16_t wWord;
-      wWord = *pBitBuf->pCur;
-      pBitBuf->nBitCount = pBitPos + 0x10;
-      pBitBuf->dwBitBuffer |= (uint32_t)wWord << D2_SHIFT_COUNT(pBitPos);
+    if (pBitBuf->nBitCount <= nBits) {
+      pBitBuf->dwBitBuffer |= (uint32_t)*pBitBuf->pCur << D2_SHIFT_COUNT(pBitBuf->nBitCount);
+      pBitBuf->nBitCount += 0x10;
       pBitBuf->pCur++;
     }
 
-    pBitPos = pBitBuf->dwBitBuffer;
+    uint32_t nValue = pBitBuf->dwBitBuffer & nMask;
+    pBitBuf->dwBitBuffer >>= D2_SHIFT_COUNT(nBits);
     pBitBuf->nBitCount -= nBits;
-    pBitBuf->dwBitBuffer = pBitPos >> D2_SHIFT_COUNT(nBits);
-    return pBitPos & nMask;
+    return nValue;
 }
 
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize) {
