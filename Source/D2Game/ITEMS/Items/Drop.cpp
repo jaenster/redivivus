@@ -2349,17 +2349,15 @@ D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, D2RoomStrc 
     int nItemsTableSize;
     D2UnitStrc* pUnit;
     int32_t nBytesConsumed;
-    D2UnitDataItemDetailsStrc* pDVar1 = pUnitDataItemDetails;
     if (!pGame) {
       return nullptr;
     }
+
+    D2UnitDataItemDetailsStrc* pDVar1 = pUnitDataItemDetails;
     if ((int)pUnitDataItemDetails->classId >= 0) {
       D2ItemsTableStrc* pnItemsTxtSize;
       pnItemsTxtSize = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
-      nItemsTableSize = 0;
-      if (pnItemsTxtSize) {
-        nItemsTableSize = pnItemsTxtSize->nSize;
-      }
+      nItemsTableSize = !pnItemsTxtSize ? 0 : pnItemsTxtSize->nSize;
       if ((int)pDVar1->classId < nItemsTableSize) {
         pUnit = UNIT::SUnit::CreateUnit(UNIT_ITEM, pDVar1->classId, (uint32_t)pDVar1->x, (uint32_t)pDVar1->y, pGame, pRoom, 1, (uint32_t)pDVar1->nAnimMode, 0);
         if (!pUnit) {
