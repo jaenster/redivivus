@@ -467,49 +467,41 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // Applies Fist of the Heavens lightning-bolt damage to pUnit. Reads pre-computed damage params from pContext: copies all D2DamageStrc fields, calls SKILLPAL_ApplyAuraStateToTarget if aura flag set, then applies and calculates hit via DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation. Returns 1 always.
 uint32_t __fastcall SKILLPAL_AuraCallback_OffensiveAura(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pUnit) {
-    int nCopyCount;
-    D2DamageAuraArgUnion uScratch;
-    D2UnitStrc* pCaster = pContext->pUnit;
-    D2SkillAuraArgStrc* pAuraArgs = (D2SkillAuraArgStrc*)pContext->pCallbackArg;
     ::SGAMEDATA* pGame = pContext->pGame;
+    D2SkillAuraArgStrc* pAuraArgs = (D2SkillAuraArgStrc*)pContext->pCallbackArg;
+    D2UnitStrc* pCaster = pContext->pUnit;
     if (pAuraArgs->nFlag) {
+      D2SkillAuraArgStrc sAuraArg;
+      memset(&sAuraArg, 0, sizeof(sAuraArg));
+      sAuraArg.nAuraState = pAuraArgs->nAuraState;
+      sAuraArg.eSkill = pAuraArgs->eSkill;
+      sAuraArg.nSkillLvl = pAuraArgs->nSkillLvl;
+      sAuraArg.nDelayFrame = pAuraArgs->nDelayFrame;
+      sAuraArg.anStats[0] = pAuraArgs->anStats[0];
+      sAuraArg.anCalcs[0] = pAuraArgs->anCalcs[0];
+      sAuraArg.anStats[1] = pAuraArgs->anStats[1];
+      sAuraArg.anCalcs[1] = pAuraArgs->anCalcs[1];
+      sAuraArg.anStats[2] = pAuraArgs->anStats[2];
+      sAuraArg.anCalcs[2] = pAuraArgs->anCalcs[2];
+      sAuraArg.anStats[3] = pAuraArgs->anStats[3];
+      sAuraArg.anCalcs[3] = pAuraArgs->anCalcs[3];
+      sAuraArg.anStats[4] = pAuraArgs->anStats[4];
+      sAuraArg.anCalcs[4] = pAuraArgs->anCalcs[4];
+      sAuraArg.anStats[5] = pAuraArgs->anStats[5];
+      sAuraArg.anCalcs[5] = pAuraArgs->anCalcs[5];
       D2SkillCallbackContextStrc sContext;
-      memset(&uScratch.sAura.sAuraArg, 0, 0x50);
-      uScratch.sAura.sAuraArg.nAuraState = pAuraArgs->nAuraState;
-      uScratch.sAura.sAuraArg.nSkillLvl = pAuraArgs->nSkillLvl;
-      uScratch.sAura.sAuraArg.eSkill = pAuraArgs->eSkill;
-      uScratch.sAura.sAuraArg.nDelayFrame = pAuraArgs->nDelayFrame;
-      uScratch.sAura.sAuraArg.anCalcs[0] = pAuraArgs->anCalcs[0];
-      uScratch.sAura.sAuraArg.anStats[0] = pAuraArgs->anStats[0];
-      uScratch.sAura.sAuraArg.anStats[1] = pAuraArgs->anStats[1];
-      uScratch.sAura.sAuraArg.anStats[2] = pAuraArgs->anStats[2];
-      uScratch.sAura.sAuraArg.anCalcs[1] = pAuraArgs->anCalcs[1];
-      uScratch.sAura.sAuraArg.anCalcs[2] = pAuraArgs->anCalcs[2];
-      uScratch.sAura.sAuraArg.anCalcs[3] = pAuraArgs->anCalcs[3];
-      uScratch.sAura.sAuraArg.anStats[3] = pAuraArgs->anStats[3];
-      uScratch.sAura.sAuraArg.anStats[4] = pAuraArgs->anStats[4];
-      uScratch.sAura.sAuraArg.anStats[5] = pAuraArgs->anStats[5];
-      uScratch.sAura.sAuraArg.anCalcs[4] = pAuraArgs->anCalcs[4];
-      uScratch.sAura.sAuraArg.anCalcs[5] = pAuraArgs->anCalcs[5];
-      sContext.pCallbackArg = &uScratch.sAura.sAuraArg;
       sContext.pUnit = pCaster;
+      sContext.pCallbackArg = &sAuraArg;
       sContext.pGame = pGame;
       SKILLPAL_ApplyAuraStateToTarget(&sContext, pUnit);
     }
-    if (!pAuraArgs->pExtra) {
-      return 1;
+    if (pAuraArgs->pExtra) {
+      D2DamageStrc sDamage;
+      memcpy(&sDamage, pAuraArgs->pExtra, sizeof(sDamage));
+      UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pCaster, pUnit, 1, &sDamage);
+      UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pCaster, pUnit, &sDamage);
     }
 
-    uint32_t* pCopySrc = (uint32_t*)pAuraArgs->pExtra;
-    uint32_t* pCopyDst = (uint32_t*)&uScratch;
-    for (nCopyCount = 0x1c; nCopyCount; nCopyCount--) {
-      *pCopyDst = *pCopySrc;
-      pCopySrc++;
-      pCopyDst++;
-    }
-
-    UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pCaster, pUnit, 1, &uScratch.sDamage);
-    UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pCaster, pUnit, &uScratch.sDamage);
     return 1;
 }
 
