@@ -2288,29 +2288,33 @@ void __fastcall UNITS_UnlinkUnitFromRoom(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ac);
       exit(-1);
-    } else {
-      if ((int)pUnit->eUnitType < 6) {
-        switch (pUnit->eUnitType) {
-          case UNIT_PLAYER:
-            ClearInteractOnFreePlayer(pUnit, pGame);
-          case UNIT_MONSTER:
-
-          case UNIT_OBJECT:
-
-          case UNIT_MISSILE:
-            D2Common::PATH::DynamicPath::PATH_RemoveCollision(pUnit);
-          default:
-            if (!bDisallowNotify) {
-              D2Common::Unit::RemoveUnitFromRoom(pUnit);
-            }
-          UNITS_RemoveUnitFromHashTable(pGame, pUnit);
-          return;
-        }
-      }
-
+    }
+    if ((int)pUnit->eUnitType >= 6) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ad);
       exit(-1);
     }
+
+    switch (pUnit->eUnitType) {
+      case UNIT_PLAYER:
+        ClearInteractOnFreePlayer(pUnit, pGame);
+        D2Common::PATH::DynamicPath::PATH_RemoveCollision(pUnit);
+        break;
+      case UNIT_MONSTER:
+        D2Common::PATH::DynamicPath::PATH_RemoveCollision(pUnit);
+        break;
+      case UNIT_OBJECT:
+        D2Common::PATH::DynamicPath::PATH_RemoveCollision(pUnit);
+        break;
+      case UNIT_MISSILE:
+        D2Common::PATH::DynamicPath::PATH_RemoveCollision(pUnit);
+        break;
+    }
+
+    if (!bDisallowNotify) {
+      D2Common::Unit::RemoveUnitFromRoom(pUnit);
+    }
+
+    UNITS_RemoveUnitFromHashTable(pGame, pUnit);
 }
 
 // Fully tears down a server-side unit: unlinks it from its room, frees quest-event data, then dispatches per-type cleanup (player: portals, party, resources, path; monster: target nodes, resources, path; object: object data, static path, unit data; missile: path, missile data; item: inventory+timers, item data; warp: static path). Finishes by freeing unit events, queued packets, and the unit itself. Asserts pGame/pUnit non-null and eUnitType < 6.
