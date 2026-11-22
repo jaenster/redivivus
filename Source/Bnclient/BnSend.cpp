@@ -2252,21 +2252,20 @@ BOOL __stdcall BNNEWS_Shutdown() {
 int __fastcall BNNEWS_AllocateNewsEntry(uint32_t * pNewsTable) {
     uint32_t nNewCount = pNewsTable[1] + 1;
     if (nNewCount > *pNewsTable) {
-      uint32_t nPageSize;
-      nPageSize = pNewsTable[3];
+      uint32_t nPageSize = pNewsTable[3];
       if (!nPageSize) {
         nPageSize = BNNEWS_RoundToPowerOfTwo((D2BnNewsTableStrc*)pNewsTable, nNewCount);
       }
+
+      uint32_t nNewCapacity = nNewCount;
       if (nNewCount % nPageSize) {
-        nNewCount = nPageSize - nNewCount % nPageSize + nNewCount;
+        nNewCapacity = nPageSize - nNewCount % nPageSize + nNewCount;
       }
 
-      BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, nNewCount);
+      BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, nNewCapacity);
     }
 
-    nNewCount = pNewsTable[1];
-    pNewsTable[1] = nNewCount + 1;
-    return nNewCount * 0x408 + pNewsTable[2];
+    return pNewsTable[1]++ * 0x408 + pNewsTable[2];
 }
 
 void __thiscall BNNEWS_EnsureCapacity(D2BnNewsTableStrc * pNewsTable, uint32_t dwAdditionalCount) {
