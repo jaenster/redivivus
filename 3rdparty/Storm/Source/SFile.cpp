@@ -4477,15 +4477,15 @@ int __stdcall SFileDestroy() {
 
 // Releases and frees one async request (REQUEST tag) and returns the next link of the list it was on (0 at the end). Provenance: 1.14d asm 0041a2c0.
 D2StormAsyncOpStrc * __thiscall SFILE_DeleteAsyncRequestGetNext(StormLinkedListStrc * pListContext, D2StormAsyncOpStrc * pAsyncOp) {
-    D2StormAsyncOpStrc* pPrev = pAsyncOp;
+    D2StormAsyncOpStrc* pLink = pAsyncOp;
     if (!pAsyncOp) {
-      pPrev = (D2StormAsyncOpStrc*)&pListContext->head;
+      pLink = (D2StormAsyncOpStrc*)&pListContext->head;
     }
 
-    pPrev = pPrev->pNext;
+    D2StormAsyncOpStrc* pNext = (intptr_t)pLink->pNext <= 0 ? nullptr : pLink->pNext;
     SFILE_ReleaseAsyncRequest(pAsyncOp);
     SMem::SMemFree(pAsyncOp, sRTTI_REQUEST_AllocTag, -2, 0);
-    return (intptr_t)pPrev <= 0 ? nullptr : pPrev;
+    return pNext;
 }
 
 // Cancels a pending async file request. The PPC second parameter is IDirectSoundBuffer*; the Windows typing is unchanged.
