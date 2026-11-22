@@ -784,63 +784,52 @@ void __stdcall INPUT_WaypointMouseUp(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall INPUT_WaypointMouseDown(D2UIMouseMsgStrc * pMsg) {
-    D2UnitStrc* pPlayerUnit_lcl;
-    D2RoomStrc* pRoom;
-    int32_t nWaypointMouseX;
-    int32_t nRelMouseY;
-    int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
-    int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
-    int32_t nRelMouseX = MiniPanel::WAYPOINT_IsMouseInMiniPanel();
-    if (nRelMouseX) {
+    int32_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    int32_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
+    if (MiniPanel::WAYPOINT_IsMouseInMiniPanel()) {
       return;
     }
+
     if (nMouseX > ui::ScreenSizeX / 2 || nMouseY > Inv::ScreenSizeY - 0x31) {
-      if (!D2Client::Waypoint::bNeedAllocation) {
-        pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-        if (pPlayerUnit_lcl) {
-          pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-          pRoom = D2Common::Units::UNITS_GetRoom(pPlayerUnit_lcl);
-          if (pRoom) {
-            GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x49, D2Client::Waypoint::nWaypointSignature, 0);
-            D2Client::Waypoint::bNeedAllocation = true;
-          }
-        }
+      if (!D2Client::Waypoint::bNeedAllocation && UNIT::Player::GetPlayerUnit_UI() && D2Common::Units::UNITS_GetRoom(UNIT::Player::GetPlayerUnit_UI())) {
+        GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x49, D2Client::Waypoint::nWaypointSignature, 0);
+        D2Client::Waypoint::bNeedAllocation = true;
       }
 
       ui::SetUIFlag(UI_WAYPOINT, UI_RESET, 1);
+      return;
+    }
+
+    nMouseX -= Inv::gnPanelOffsetX;
+    nMouseY += Inv::gnPanelOffsetY;
+    int32_t nAct = WAYPOINT_GetActIndexFromMouse(nMouseX, nMouseY);
+    if (nAct != -1) {
+      if (nAct != WaypointCurrentSelectedAct) {
+        Sound::SOUND_PlaySound(SOUND_CURSOR_SWITCH, nullptr, 0, 0, 0);
+      }
+
+      Waypoint_SetWaypointArea(nAct);
+      WAYPOINT_PopulateList();
+      pMsg->bHandled = 1;
+      pMsg->dwResult = 0;
+      Storm::SMsgBreakHandlerChain(pMsg);
+    }
+
+    ClickingDownOnWaypointEntry = -1;
+    if (nMouseX >= 0x111 && nMouseX <= 0x134 && nMouseY >= 0x183 && nMouseY <= 0x1a4) {
+      gbWaypointButtonPressed = 1;
+      Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
     } else {
-      int32_t nAct;
-      nWaypointMouseX = nMouseX - Inv::gnPanelOffsetX;
-      nRelMouseY = nMouseY + Inv::gnPanelOffsetY;
-      nAct = WAYPOINT_GetActIndexFromMouse(nWaypointMouseX, nRelMouseY);
-      if (nAct != -1) {
-        if (nAct != WaypointCurrentSelectedAct) {
-          Sound::SOUND_PlaySound(SOUND_CURSOR_SWITCH, nullptr, 0, 0, 0);
-        }
-
-        Waypoint_SetWaypointArea(nAct);
-        WAYPOINT_PopulateList();
-        pMsg->bHandled = 1;
-        pMsg->dwResult = 0;
-        Storm::SMsgBreakHandlerChain(pMsg);
-      }
-
-      ClickingDownOnWaypointEntry = -1;
-      if (nWaypointMouseX >= 0x111 && nWaypointMouseX <= 0x134 && nRelMouseY >= 0x183 && nRelMouseY <= 0x1a4) {
-        gbWaypointButtonPressed = 1;
+      ClickingDownOnWaypointEntry = WAYPOINT_GetWaypointIndexFromMouse(nMouseX, nMouseY);
+      if (ClickingDownOnWaypointEntry != -1) {
         Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
-      } else {
-        ClickingDownOnWaypointEntry = WAYPOINT_GetWaypointIndexFromMouse(nWaypointMouseX, nRelMouseY);
-        if (ClickingDownOnWaypointEntry != -1) {
-          Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
-        }
       }
-      if ((int)(uint32_t)pMsg->uLParam.sMousePos.nMouseX <= ui::ScreenSizeX && (int)(uint32_t)pMsg->uLParam.sMousePos.nMouseY <= Inv::ScreenSizeY - 0x31) {
-        pMsg->bHandled = 1;
-        pMsg->dwResult = 0;
-        Storm::SMsgBreakHandlerChain(pMsg);
-        return;
-      }
+    }
+
+    if (pMsg->uLParam.sMousePos.nMouseX <= ui::ScreenSizeX && HIWORD(pMsg->uLParam.nLParam) <= Inv::ScreenSizeY - 0x31) {
+      pMsg->bHandled = 1;
+      pMsg->dwResult = 0;
+      Storm::SMsgBreakHandlerChain(pMsg);
     }
 }
 
