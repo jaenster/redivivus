@@ -74,24 +74,16 @@ static int64_t __stdcall SBIG_Accumulator_ComputeOffset(uint32_t nMultiplicand, 
 static void BigBuffer_DecodeDataBytes(uint32_t nBufferLen, uint32_t * pnReadPos, uint32_t * pnValue, uint8_t * pBuffer) {
     *pnValue = 0;
     *pnReadPos = 0;
-    if (nBufferLen > 0) {
-      uint32_t byByte;
-      do {
-        byByte = (uint32_t)pBuffer[*pnReadPos];
-        (*pnReadPos)++;
-        if (byByte == 0xff) {
-          break;
-        }
+    while (*pnReadPos < nBufferLen) {
+      uint32_t nByte = pBuffer[(*pnReadPos)++];
+      if (nByte == 0xff) {
+        break;
+      }
 
-        *pnValue = *pnValue * 0xff + byByte;
-      } while (*pnReadPos < nBufferLen);
-    }
-    if (*pnValue < nBufferLen - *pnReadPos) {
-      *pnValue = *pnValue;
-      return;
+      *pnValue = *pnValue * 0xff + nByte;
     }
 
-    *pnValue = nBufferLen - *pnReadPos;
+    *pnValue = *pnValue < nBufferLen - *pnReadPos ? *pnValue : nBufferLen - *pnReadPos;
 }
 
 // @was SBIG_DynArray_GetElementPtr (pass 6, 2026.08.28)
