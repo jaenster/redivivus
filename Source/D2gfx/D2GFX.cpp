@@ -107,40 +107,34 @@ int __stdcall Unreferenced_004f5040(int param_1, int param_2, int param_3) {
 }
 
 BOOL __stdcall D2GFX_Release() {
-    char szCaption[256];
     char szErrorMsg[256];
-    char* szErrorFmt;
+    char szCaption[256];
     RENDERER_CurrentRenderedFunctions->nfpRelease();
-    /* HINSTANCE hInstance for UnregisterClassA */ /* LPCSTR lpClassName for UnregisterClassA */ UnregisterClassA(gpszWindowClassName, ghD2GFXInstance);
-    if (!ghWndMain) {
-      RENDERER_CurrentRenderedFunctions = 0;
-      return 1;
+    UnregisterClassA(gpszWindowClassName, ghD2GFXInstance);
+    if (ghWndMain) {
+      sprintf(szCaption, "Diablo II Critical Error");
+      switch (eRendererMode) {
+        case RENDERER_Windowed:
+          sprintf(szErrorMsg, "Error 21: A critical error has occurred while initializing windowed mode.");
+          break;
+        case RENDERED_DirectDraw:
+          sprintf(szErrorMsg, "Error 22: A critical error has occurred while initializing DirectDraw.");
+          break;
+        case RENDERER_Glide:
+          sprintf(szErrorMsg, "Error 23: A critical error has occurred while initializing Glide.");
+          break;
+        case RENDERED_Unused5:
+          sprintf(szErrorMsg, "Error 24: A critical error has occurred while initializing OpenGL.");
+          break;
+        case RENDERER_Direct3D:
+          sprintf(szErrorMsg, "Error 25: A critical error has occurred while initializing Direct3D.");
+          break;
+      }
+
+      MessageBoxA(nullptr, szErrorMsg, szCaption, 0x30);
     }
 
-    sprintf(szCaption, "Diablo II Critical Error");
-    switch (eRendererMode) {
-      case RENDERER_Windowed:
-        szErrorFmt = "Error 21: A critical error has occurred while initializing windowed mode.";
-      break;
-      default:
-        goto show_critical_error;
-      case RENDERED_DirectDraw:
-        szErrorFmt = "Error 22: A critical error has occurred while initializing DirectDraw.";
-      break;
-      case RENDERER_Glide:
-        szErrorFmt = "Error 23: A critical error has occurred while initializing Glide.";
-      break;
-      case RENDERED_Unused5:
-        szErrorFmt = "Error 24: A critical error has occurred while initializing OpenGL.";
-      break;
-      case RENDERER_Direct3D:
-        szErrorFmt = "Error 25: A critical error has occurred while initializing Direct3D.";
-    }
-
-    sprintf(szErrorMsg, szErrorFmt);
-    show_critical_error:
-    /* UINT uType for MessageBoxA */ /* LPCSTR lpCaption for MessageBoxA */ /* LPCSTR lpText for MessageBoxA */ /* HWND hWnd for MessageBoxA */ MessageBoxA((HWND)0x0, szErrorMsg, szCaption, 0x30);
-    RENDERER_CurrentRenderedFunctions = 0;
+    RENDERER_CurrentRenderedFunctions = nullptr;
     return 1;
 }
 
