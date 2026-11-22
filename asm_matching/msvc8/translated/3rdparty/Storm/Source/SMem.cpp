@@ -516,72 +516,64 @@ static void SMEM_CombineFreeBlocks(D2FogHeapDescStrc * pHeap) {
 
 // @blizzard DestroyHeap (SMEM.CPP)
 LPVOID * __fastcall SMEM_DestroyHeap(LPVOID * ppHeap) {
-    D2FogHeapBlockHdrStrc* pNextBlock;
     char szErrorMsg[200];
-    uint8_t byFlags;
-    D2FogHeapDescStrc* pHeap;
-    D2FogHeapDescStrc* nHeap = (D2FogHeapDescStrc*)*ppHeap;
-    D2FogHeapBlockHdrStrc* pBlock = (D2FogHeapBlockHdrStrc*)nHeap->pDataStart;
-    uint32_t byLeakFlags = 0;
-    if ((void*)pBlock < nHeap->pWriteCursor) {
-      do {
-        byFlags = pBlock->byFlags;
-        pNextBlock = (D2FogHeapBlockHdrStrc*)((intptr_t)&pBlock->wBlockSize + (uint32_t)pBlock->wBlockSize);
-        if (byFlags & 0x82) {
-          byLeakFlags |= byFlags & 0x80;
-        } else {
-          if (!(byFlags & 0x40)) {
-            if (!gnSSystemOption3) {
-              SMEM_Warning((uint32_t*)nHeap->szName, nHeap->nSourceLine, 0x8510007e);
-            } else {
-              /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szErrorMsg, "Storm Error : memory never released -- %s, %i\n", nHeap->szName, nHeap->nSourceLine);
-              /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA(szErrorMsg);
-            }
-          }
-
-          SMEM_FreeHeapBlock(pBlock, nHeap);
-        }
-
+    D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)*ppHeap;
+    uint32_t nLeakFlags = 0;
+    D2FogHeapBlockHdrStrc* pBlock = (D2FogHeapBlockHdrStrc*)pHeap->pDataStart;
+    while ((void*)pBlock < pHeap->pWriteCursor) {
+      uint8_t byFlags = pBlock->byFlags;
+      D2FogHeapBlockHdrStrc* pNextBlock = (D2FogHeapBlockHdrStrc*)((char*)pBlock + pBlock->wBlockSize);
+      if (byFlags & 0x82) {
+        nLeakFlags |= byFlags & 0x80;
         pBlock = pNextBlock;
-      } while ((void*)pNextBlock < nHeap->pWriteCursor);
-
-      if (byLeakFlags) {
-        return (LPVOID*)&nHeap->pNext;
+        continue;
       }
+
+      if (!(byFlags & 0x40)) {
+        if (!gnSSystemOption3) {
+          SMEM_Warning((uint32_t*)pHeap->szName, pHeap->nSourceLine, 0x8510007e);
+        } else {
+          wsprintfA(szErrorMsg, "Storm Error : memory never released -- %s, %i\n", pHeap->szName, pHeap->nSourceLine);
+          OutputDebugStringA(szErrorMsg);
+        }
+      }
+
+      SMEM_FreeHeapBlock(pBlock, pHeap);
+      pBlock = pNextBlock;
     }
 
-    SMEM_FreeHeap(ppHeap);
-    return ppHeap;
+    if (!nLeakFlags) {
+      SMEM_FreeHeap(ppHeap);
+      return ppHeap;
+    }
+
+    return (LPVOID*)&pHeap->pNext;
 }
 
 // @blizzard FreeEmptyHeaps (SMEM.CPP)
 void __stdcall SMEM_FreeEmptyHeaps() {
-    LPVOID pHeap;
-    LPVOID* ppPrevLink;
-    int nBucketOffset = 0;
     g_SMemPendingCleanupHeap = 0;
-    CRITICAL_SECTION* lpCriticalSection = DebugMemoryCriticalSection;
-    for (int nCount = 0; nCount < 0x100; nCount++) {
-      if (g_SMemHeapCleanupFlags[nBucketOffset]) {
-        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-        g_SMemHeapCleanupFlags[nBucketOffset] = 0;
-        pHeap = g_SMemHeapBuckets[nBucketOffset];
-        ppPrevLink = &g_SMemHeapBuckets[nBucketOffset];
-        while (pHeap) {
-          D2FogHeapDescStrc* pDesc = (D2FogHeapDescStrc*)*ppPrevLink;
-          if (!pDesc->nAllocCount && pDesc->nHash < 0x80000000) {
-            SMEM_FreeHeap(ppPrevLink);
+    int nBucket = 0;
+    CRITICAL_SECTION* pLock = DebugMemoryCriticalSection;
+    for (int nCount = 0x100; nCount; nCount--) {
+      if (g_SMemHeapCleanupFlags[nBucket]) {
+        EnterCriticalSection(pLock);
+        g_SMemHeapCleanupFlags[nBucket] = 0;
+        LPVOID* ppLink = &g_SMemHeapBuckets[nBucket];
+        while (*ppLink) {
+          D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)*ppLink;
+          if (!pHeap->nAllocCount && pHeap->nHash < 0x80000000) {
+            SMEM_FreeHeap(ppLink);
           } else {
-            ppPrevLink = (LPVOID*)&pDesc->pNext;
+            ppLink = (LPVOID*)&pHeap->pNext;
           }
-          pHeap = *ppPrevLink;
         }
 
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
+        LeaveCriticalSection(pLock);
       }
 
-      nBucketOffset++;
-      lpCriticalSection++;
+      nBucket++;
+      pLock++;
     }
 }
 
@@ -689,39 +681,34 @@ static void __stdcall SMemShrinkBlock(D2FogHeapBlockHdrStrc * pBlock, int32_t nO
 
 // @blizzard SMemDestroy (SMEM.CPP)
 uint32_t __stdcall SMemDestroy() {
-    LPVOID pHeap;
-    int nBucketOffset = 0;
     if (!g_SMemInitialized) {
       return 1;
     }
 
     g_SMemInitialized = 0;
-    CRITICAL_SECTION* lpCriticalSection = DebugMemoryCriticalSection;
-    for (int nCount = 0; nCount < 0x100; nCount++) {
-      LPVOID* ppHeapLink;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-      ppHeapLink = &g_SMemHeapBuckets[nBucketOffset];
-      g_SMemHeapCleanupFlags[nBucketOffset] = 0;
-      pHeap = *ppHeapLink;
-      while (pHeap) {
-        pHeap = *ppHeapLink;
-        if (*(int*)((char*)pHeap + 0x14)) {
-          ppHeapLink = SMEM_DestroyHeap(ppHeapLink);
+    int nBucket = 0;
+    CRITICAL_SECTION* pLock = DebugMemoryCriticalSection;
+    for (int nCount = 0x100; nCount; nCount--) {
+      EnterCriticalSection(pLock);
+      LPVOID* ppLink = &g_SMemHeapBuckets[nBucket];
+      g_SMemHeapCleanupFlags[nBucket] = 0;
+      while (*ppLink) {
+        D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)*ppLink;
+        if (pHeap->nAllocCount) {
+          ppLink = SMEM_DestroyHeap(ppLink);
         } else {
-          if (*(int*)((char*)pHeap + 0x10) && *(uint32_t*)((char*)pHeap + 4) >= 0x80000000) {
+          if (pHeap->bActive && pHeap->nHash >= 0x80000000) {
             SErr::SErrReportResourceLeak("HSHEAP");
           }
 
-          SMEM_FreeHeap(ppHeapLink);
+          SMEM_FreeHeap(ppLink);
         }
-
-        pHeap = *ppHeapLink;
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-      /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(lpCriticalSection);
-      nBucketOffset++;
-      lpCriticalSection++;
+      LeaveCriticalSection(pLock);
+      DeleteCriticalSection(pLock);
+      nBucket++;
+      pLock++;
     }
 
     return 1;

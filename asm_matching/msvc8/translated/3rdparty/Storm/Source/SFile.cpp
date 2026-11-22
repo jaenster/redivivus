@@ -1320,27 +1320,24 @@ int32_t __stdcall SFileSetBasePath(char * szText) {
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    if (*szText == '\0') {
+    if (!*szText) {
       szSFileBasePath[0] = '\0';
-      return 1;
+    } else {
+      BOOL bHasBackslash = szText[SSTR::SStrLen(szText) - 1] == '\\';
+      if (SSTR::SStrLen(szText) + !bHasBackslash + 1 > 0x104) {
+        SErr::SErrSetLastError(0xa1);
+        return 0;
+      }
+
+      EnterCriticalSection(&lpCriticalSection_00779068);
+      SSTR::SStrCopy(szSFileBasePath, szText, 0x104);
+      if (!bHasBackslash) {
+        SSTR::SStrPack(szSFileBasePath, "\\", 0x104);
+      }
+
+      LeaveCriticalSection(&lpCriticalSection_00779068);
     }
 
-    uint32_t pStrEnd = SSTR::SStrLen(szText);
-    char cLastChar = szText[pStrEnd - 1];
-    int nTest = cLastChar != '\\';
-    pStrEnd = SSTR::SStrLen(szText);
-    if (pStrEnd + 1 + (uint32_t)nTest > 0x104) {
-      SErr::SErrSetLastError(0xa1);
-      return 0;
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    SSTR::SStrCopy(szSFileBasePath, szText, 0x104);
-    if (nTest) {
-      SSTR::SStrPack(szSFileBasePath, "\\", 0x104);
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
 

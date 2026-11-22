@@ -2001,30 +2001,24 @@ double __fastcall _Pow_int(uint32_t nValue, double dBase) {
 
 // Scales dBase by a power of ten. Returns a double in ST(0), not through a hidden return pointer, so dBase sits at Stack[0x4] and nExp at Stack[0xc]. An 80-bit x87 return type would make Ghidra add a __return_storage_ptr__ at Stack[0x4] and shift every argument by four bytes.
 double SSTR_PowDoubleInt(double dBase, int nExp) {
-    uint32_t nAbsExp = nExp;
-    if (nExp < 0) {
+    double dPower = dBase; // steer-ok: the original loads the base onto the FPU stack before the exponent sign test
+    uint32_t nAbsExp;
+    if (nExp >= 0) {
+      nAbsExp = nExp;
+    } else {
       nAbsExp = -nExp;
     }
 
-    double dResult = 1.0;
-    while (true) {
+    for (double dResult = 1.0;; dPower *= dPower) {
       if (nAbsExp & 1) {
-        dResult *= dBase;
+        dResult *= dPower;
       }
 
       nAbsExp >>= 1;
       if (!nAbsExp) {
-        break;
+        return nExp < 0 ? 1.0 / dResult : dResult;
       }
-
-      dBase *= dBase;
     }
-
-    if (nExp < 0) {
-      return 1.0 / dResult;
-    }
-
-    return dResult;
 }
 
 void __stdcall SSTR_InitPow10Table() {
