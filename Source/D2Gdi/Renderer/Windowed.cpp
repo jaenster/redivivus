@@ -464,7 +464,7 @@ void __fastcall RENDERER_WINDOWED_UpdateScaleFactor(int nParam) {
 }
 
 // Windowed GDI renderer helper functions - DIB section allocation, palette conversion, line drawing (Bresenham), crop rect calculation, Smacker video blitting
-static void __stdcall RENDERER_WINDOWED_ValidateDC6Visibility(DC6Block * pDC6Block, int nScreenX, int nScreenY, int bShadow) {
+static BOOL __stdcall RENDERER_WINDOWED_ValidateDC6Visibility(DC6Block * pDC6Block, int nScreenX, int nScreenY, int bShadow) {
     int32_t nDC6Width = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     if (bShadow) {
@@ -473,15 +473,18 @@ static void __stdcall RENDERER_WINDOWED_ValidateDC6Visibility(DC6Block * pDC6Blo
       nHeight >>= 1;
     }
 
-    int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nScreenX + nOffsetX < RENDERER_nWindowWidth && nDC6Width + (nScreenX + nOffsetX) >= 0)) {
-      return;
+    nScreenX += D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
+    if (nScreenX < RENDERER_nWindowWidth) {
+      nDC6Width += nScreenX;
+      if (nDC6Width >= 0) {
+        nScreenY += D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
+        if (nScreenY >= 0 && nScreenY - nHeight < RENDERER_nWindowHeight) {
+          return 0;
+        }
+      }
     }
 
-    int32_t nDC6OffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    if (!(nScreenY + nDC6OffsetY >= 0 && nScreenY + nDC6OffsetY - nHeight < RENDERER_nWindowHeight)) {
-      return;
-    }
+    return 1;
 }
 
 // Calculates clipped crop rectangle for DC6 image rendering. Takes input crop rect + DC6 position/dimensions, clamps to window bounds, calculates top/bottom skip lines for partial draws. Outputs adjusted crop rect (nClippedLeft, nClippedRight, skipTop, visibleHeight) to pOutput array. Used to optimize blits by pre-calculating which scanlines to draw.
@@ -570,10 +573,10 @@ BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwG
     return 1;
 }
 
-void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift) {
+BOOL __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, int nGlobalPaletteShift) {
     int nSpriteHandle = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(pData, 0, 1);
     if (!nSpriteHandle) {
-      return;
+      return 0;
     }
 
     DC6Block* pDC6Block = pData->pDC6Block;
@@ -581,12 +584,12 @@ void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DW
     int32_t nSpriteHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int32_t nOffsetXY = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
     if (!(nOffsetXY + nPosX < RENDERER_nWindowWidth && nSpriteWidth + (nOffsetXY + nPosX) >= 0)) {
-      return;
+      return 0;
     }
 
     nOffsetXY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
     if (!(nOffsetXY + nPosY >= 0 && nOffsetXY + nPosY - nSpriteHeight < RENDERER_nWindowHeight)) {
-      return;
+      return 0;
     }
 
     uint8_t* pRenderArg1 = 0;
@@ -603,6 +606,7 @@ void __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DW
     }
 
     D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame(pData, nPosX, nPosY, RENDERER_WINDOWED_nScaleOffsetY, RENDERER_WINDOWED_nScaleWidth, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, pRenderArg1, pRenderArg2, pPalette);
+    return 1;
 }
 
 void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPosY, int nSkipLines, int nDrawLines, int nDrawMode) {

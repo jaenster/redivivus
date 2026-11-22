@@ -300,8 +300,7 @@ static BOOL SOUND_InitStreamChannels(int32_t nMixerMode) {
       exit(-1);
     }
 
-    int nChannelIdx = 0;
-    while (true) {
+    for (int nChannelIdx = 0; nChannelIdx < 16; nChannelIdx++) {
       gaSoundChannels[nChannelIdx].nChannelType = 0;
       if (nChannelIdx < 4) {
         gaSoundChannels[nChannelIdx].nChannelType = 1;
@@ -314,82 +313,56 @@ static BOOL SOUND_InitStreamChannels(int32_t nMixerMode) {
       pNewSampleInst = D2Sound::Src::D2SoundSmp::CallSounds(gaSoundChannels[nChannelIdx].nChannelType, BackgroundSoundsActive);
       gaSoundChannels[nChannelIdx].pSoundSmp = pNewSampleInst;
       if (!pNewSampleInst) {
-        break;
-      }
-
-      nChannelIdx++;
-      if ((intptr_t)&gaSoundChannels[nChannelIdx].nChannelType >= (intptr_t)((char*)&gaSoundChannels + sizeof(gaSoundChannels) + 4)) {
-        SOUND_SetEaxEnvironment(0);
-        pAudioMixerInterface = 1;
-        return 1;
+        SOUND_ShutdownAudio();
+        return 0;
       }
     }
 
-    SOUND_ShutdownAudio();
-    return 0;
+    SOUND_SetEaxEnvironment(0);
+    pAudioMixerInterface = 1;
+    return 1;
 }
 
 // Finds a free or preemptable sound channel for playback. First scans the global sound instance pool for a channel matching pnParam (sound type/category) that is not currently playing and has no active sound. If none found, scans for the best occupied channel that can be preempted via SOUND_IsChannelAvailable; if preemptable, stops the current sample, saves its stream progress, marks the channel free, and returns it. Returns NULL if no channel is available.
 static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundChannelStrc * pSound, int nChannelType) {
-    int32_t bIsPlaying;
-    BOOL BVar1;
-    uint32_t nStreamProgress;
-    D2ClientSoundChannelStrc* pBestChannel;
-    pBestChannel = gaSoundChannels;
-    do {
-      if (!pBestChannel->pActiveSound && pBestChannel->nChannelType == nChannelType) {
-        bIsPlaying = D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying(pBestChannel->pSoundSmp);
-        if (!bIsPlaying) {
-          return pBestChannel;
+    D2ClientSoundChannelStrc* pChannel;
+    int i;
+    for (i = 0; i < 16; i++) {
+      pChannel = &gaSoundChannels[i];
+      if (!pChannel->pActiveSound && pChannel->nChannelType == nChannelType && !D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying(pChannel->pSoundSmp)) {
+        return pChannel;
+      }
+    }
+
+    D2ClientSoundChannelStrc* pBestChannel = nullptr;
+    for (i = 0; i < 16; i++) {
+      pChannel = &gaSoundChannels[i];
+      if (pChannel->nChannelType == nChannelType && pChannel->pActiveSound) {
+        if (!pBestChannel || D2Client::Sound::SOUND_IsChannelAvailable(pBestChannel->pActiveSound, pChannel->pActiveSound, 1, 1)) {
+          pBestChannel = pChannel;
         }
       }
+    }
 
-      pBestChannel++;
-    } while ((intptr_t)pBestChannel < (intptr_t)&gaSoundChannels[16]);
+    if (!pBestChannel || !D2Client::Sound::SOUND_IsChannelAvailable(pSound, pBestChannel->pActiveSound, 0, 0)) {
+      return nullptr;
+    }
 
-    pBestChannel = 0;
-    D2SoundChannelStrc** pChannelEntry;
-    pChannelEntry = &gaSoundChannels[0].pActiveSound;
-    do {
-      if (pChannelEntry[-1] == (D2SoundChannelStrc*)nChannelType && *pChannelEntry) {
-        if (pBestChannel) {
-          BVar1 = D2Client::Sound::SOUND_IsChannelAvailable(pBestChannel->pActiveSound, *pChannelEntry, 1, 1);
-          if (!BVar1) {
-            goto next_channel;
-          }
-        }
-
-        pBestChannel = (D2ClientSoundChannelStrc*)(pChannelEntry - 2);
+    if (pBestChannel->pSoundSmp) {
+      if (pBestChannel->pActiveSound) {
+        *(uint32_t*)pBestChannel->pActiveSound->undefined_0x41 = D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStreamProgress(pBestChannel->pSoundSmp);
       }
 
-      next_channel:
-      pChannelEntry += 8;
-      if ((intptr_t)pChannelEntry >= (intptr_t)((char*)&gaSoundChannels + sizeof(gaSoundChannels) + 8)) {
-        if (!pBestChannel) {
-          return nullptr;
-        }
+      D2Sound::Src::D2SoundSmp::SOUNDSMP_Stop(pBestChannel->pSoundSmp);
+    }
 
-        BVar1 = D2Client::Sound::SOUND_IsChannelAvailable(pSound, pBestChannel->pActiveSound, 0, 0);
-        if (!BVar1) {
-          return nullptr;
-        }
-        if (pBestChannel->pSoundSmp) {
-          if (pBestChannel->pActiveSound) {
-            nStreamProgress = D2Sound::Src::D2SoundSmp::SOUNDSMP_GetStreamProgress(pBestChannel->pSoundSmp);
-            *(uint32_t*)pBestChannel->pActiveSound->undefined_0x41 = nStreamProgress;
-          }
+    if (pBestChannel->pActiveSound) {
+      pBestChannel->pActiveSound->nPlayMode = 2;
+      pBestChannel->pActiveSound->pClientChannel = 0;
+      pBestChannel->pActiveSound = 0;
+    }
 
-          D2Sound::Src::D2SoundSmp::SOUNDSMP_Stop(pBestChannel->pSoundSmp);
-        }
-        if (pBestChannel->pActiveSound) {
-          pBestChannel->pActiveSound->nPlayMode = 2;
-          pBestChannel->pActiveSound->pClientChannel = 0;
-          pBestChannel->pActiveSound = 0;
-        }
-
-        return pBestChannel;
-      }
-    } while (true);
+    return pBestChannel;
 }
 
 // Recomputes and re-applies a positional sound channel's mixing state (__fastcall, ECX=pSoundChannel). Reads the channel's sound descriptor (pSoundChannel[2]) and its sounds.txt line; halts via Fog::ErrorManager if descriptor is null. Computes effective volume by chaining music/master volume, per-channel left/right multipliers (skipping certain reserved sound-id ranges and Solo lines), and positional bias from the mixer. If the new volume and the descriptor's 3D position (offsets 0xC/0x10/0x14/0x20) match the channel's cached copy (pSoundChannel[3..7]) it returns 0 early (no change); otherwise distance-attenuates volume via falloff min/max, calls SOUNDSMP_CalculateVolumeAndPan/SetPan/Set3DPosition/SetEaxObstruction/SetVolume, caches the new pos+volume into the channel, and returns the descriptor pointer. Side-effects: drives the underlying audio mixer sample.

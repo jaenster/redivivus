@@ -385,17 +385,15 @@ uint16_t * __fastcall D2WINTEXTBOX_GetSelectedLineText(::D2WinTextBox * pnTextBo
       }
 
       iVar1 = pnTextBox->sListState.nSelectedLine;
-      if (!(iVar1 != -1 && pnTextBox->sListState.dwStyleFlags & 1)) {
-        return nullptr;
-      }
+      if (iVar1 != -1 && pnTextBox->sListState.dwStyleFlags & 1) {
+        pLineNode = pnTextBox->sListState.pLineHead;
+        for (nSelectedLine = 0; pLineNode; nSelectedLine++) {
+          if (iVar1 == nSelectedLine) {
+            return pLineNode->apwszCells[0];
+          }
 
-      nSelectedLine = 0;
-      for (pLineNode = pnTextBox->sListState.pLineHead; pLineNode; pLineNode = pLineNode->pNext) {
-        if (iVar1 == nSelectedLine) {
-          return pLineNode->apwszCells[0];
+          pLineNode = pLineNode->pNext;
         }
-
-        nSelectedLine++;
       }
 
       return nullptr;
@@ -872,25 +870,18 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
       }
 
       uSelectedRow = pTextBox->sControl.dwState;
-      if (!(Fog::BitBuffer::gadwBitMasks[2] & uSelectedRow && Fog::BitBuffer::gadwBitMasks[0] & uSelectedRow && 0 < pTextBox->sListState.nLineCount)) {
+      if (!(Fog::BitBuffer::gadwBitMasks[2] & uSelectedRow && Fog::BitBuffer::gadwBitMasks[0] & uSelectedRow && pTextBox->sListState.nLineCount >= 1)) {
         return 0;
       }
       if (pTextBox->sListState.dwStyleFlags & 1) {
         nMouseYOffset = pTextBox->sControl.dwSizeY - pTextBox->sControl.dwPosY + D2WinMain::nPosY;
         D2WinFont::SetAndReturnLastFont(pTextBox->nScrollWidth);
         D2WINTEXTBOX_ComputeLineSpacingForLanguage(pTextBox->nScrollWidth);
-        uFontHeight = D2WinFont::D2WINFONT_GetCurrentFontHeight();
-        uSelectedRow = (nMouseYOffset - pTextBox->sListState.nTextOffsetY) / (int)(pTextBox->pLineSpacingGlobal + uFontHeight) + pTextBox->sListState.nTopLineIndex;
-        pTextBox->sListState.nSelectedLine = uSelectedRow;
+        pTextBox->sListState.nSelectedLine = (nMouseYOffset - pTextBox->sListState.nTextOffsetY) / (int)(D2WinFont::D2WINFONT_GetCurrentFontHeight() + pTextBox->pLineSpacingGlobal) + pTextBox->sListState.nTopLineIndex;
         if (pTextBox->sListState.dwStyleFlags & 8) {
-          uClampedSel = pTextBox->sListState.nLineCount - 1;
-          if ((int)((int)uSelectedRow <= 0 ? 0 : uSelectedRow) < (int)uClampedSel) {
-            uClampedSel = (int)uSelectedRow <= 0 ? 0 : uSelectedRow;
-          }
-
-          pTextBox->sListState.nSelectedLine = uClampedSel;
+          pTextBox->sListState.nSelectedLine = (pTextBox->sListState.nSelectedLine <= 0 ? 0 : pTextBox->sListState.nSelectedLine) < pTextBox->sListState.nLineCount - 1 ? (pTextBox->sListState.nSelectedLine <= 0 ? 0 : pTextBox->sListState.nSelectedLine) : pTextBox->sListState.nLineCount - 1;
         } else {
-          if ((int)uSelectedRow < 0 || (int)uSelectedRow >= pTextBox->sListState.nLineCount) {
+          if (pTextBox->sListState.nSelectedLine < 0 || pTextBox->sListState.nSelectedLine >= pTextBox->sListState.nLineCount) {
             pTextBox->sListState.nSelectedLine = -1;
           }
         }

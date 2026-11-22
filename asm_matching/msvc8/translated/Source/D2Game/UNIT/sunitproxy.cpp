@@ -695,43 +695,35 @@ static void __stdcall SUNITPROXY_FreeNpcProxyData(D2GameNpcStrc * pNpcEntry, ::S
 // Tears down pGame->pNpcControl entirely. For each of nNpcCount NPC entries: frees the interaction linked list, calls SUNITPROXY_FreeNpcProxyData, and frees two auxiliary memory blocks. Finally frees the NPC array and the control struct itself from pGame->pMemoryPool, then nulls pGame->pNpcControl.
 // @sourcefile .\UNIT\sunitproxy.cpp
 void __fastcall FreeNpcControl(::SGAMEDATA * pGame) {
-    D2NpcTradeItemStrc** pNpcEntryPtr;
-    D2NpcPlayerInteractionStrc* pNextInteraction;
     D2GameNpcControlStrc* pNpcControl = pGame->pNpcControl;
-    int iNpc = 0;
-    if (pNpcControl->nNpcCount > 0) {
-      D2NpcPlayerInteractionStrc* pInteractionEntry;
-      pNpcEntryPtr = &pNpcControl->pNpc->pNpc[0].sTrade.pTradeList1;
-      do {
-        pInteractionEntry = (D2NpcPlayerInteractionStrc*)pNpcEntryPtr[-5];
-        if ((D2NpcPlayerInteractionStrc*)pNpcEntryPtr[-5]) {
-          do {
-            pNextInteraction = pInteractionEntry->pNext;
-            D2_FREE_POOL_AT(pGame->pMemoryPool, pInteractionEntry, ".\\UNIT\\sunitproxy.cpp", 0x21e);
-            pInteractionEntry = pNextInteraction;
-          } while (pNextInteraction);
+    D2GameNpcArrayStrc* pNpcArray = pNpcControl->pNpc;
+    for (int i = 0; i < pNpcControl->nNpcCount; i++) {
+      D2NpcPlayerInteractionStrc* pInteraction = pNpcArray->pNpc[i].pPlayerInteractions;
+      if (pInteraction) {
+        do {
+          D2NpcPlayerInteractionStrc* pNextInteraction = pInteraction->pNext;
+          D2_FREE_POOL_AT(pGame->pMemoryPool, pInteraction, ".\\UNIT\\sunitproxy.cpp", 0x21e);
+          pInteraction = pNextInteraction;
+        } while (pInteraction);
 
-          pNpcEntryPtr[-5] = 0;
-        }
+        pNpcArray->pNpc[i].pPlayerInteractions = 0;
+      }
 
-        SUNITPROXY_FreeNpcProxyData((D2GameNpcStrc*)(pNpcEntryPtr - 0xb), pGame);
-        if (*pNpcEntryPtr) {
-          D2_FREE_POOL_AT(pGame->pMemoryPool, *pNpcEntryPtr, ".\\UNIT\\sunitproxy.cpp", 0x227);
-          *pNpcEntryPtr = 0;
-        }
-        if (pNpcEntryPtr[2]) {
-          D2_FREE_POOL_AT(pGame->pMemoryPool, pNpcEntryPtr[2], ".\\UNIT\\sunitproxy.cpp", 0x22c);
-          pNpcEntryPtr[2] = 0;
-        }
-        if (pNpcEntryPtr[-7]) {
-          D2_FREE_POOL_AT(pGame->pMemoryPool, pNpcEntryPtr[-7], ".\\UNIT\\sunitproxy.cpp", 0x237);
-          pNpcEntryPtr[-7] = 0;
-        }
+      SUNITPROXY_FreeNpcProxyData(&pNpcArray->pNpc[i], pGame);
+      if (pNpcArray->pNpc[i].sTrade.pTradeList1) {
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pNpcArray->pNpc[i].sTrade.pTradeList1, ".\\UNIT\\sunitproxy.cpp", 0x227);
+        pNpcArray->pNpc[i].sTrade.pTradeList1 = 0;
+      }
+      if (pNpcArray->pNpc[i].sTrade.pTradeList2) {
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pNpcArray->pNpc[i].sTrade.pTradeList2, ".\\UNIT\\sunitproxy.cpp", 0x22c);
+        pNpcArray->pNpc[i].sTrade.pTradeList2 = 0;
+      }
+      if (pNpcArray->pNpc[i].pHirelingSlots) {
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pNpcArray->pNpc[i].pHirelingSlots, ".\\UNIT\\sunitproxy.cpp", 0x237);
+        pNpcArray->pNpc[i].pHirelingSlots = 0;
+      }
 
-        pNpcEntryPtr[-6] = 0;
-        iNpc++;
-        pNpcEntryPtr += 0x11;
-      } while (iNpc < pNpcControl->nNpcCount);
+      pNpcArray->pNpc[i].pProxyQueue = 0;
     }
 
     D2_FREE_POOL_AT(pGame->pMemoryPool, pNpcControl->pNpc, ".\\UNIT\\sunitproxy.cpp", 0x242);
@@ -1265,33 +1257,25 @@ void __fastcall SUNITPROXY_RemovePlayerProxyInventory(::SGAMEDATA * pGame, D2Uni
     }
 
     D2NpcProxyInventoryStrc* pPrevNode = 0;
-    D2NpcProxyInventoryStrc* pMemoryToFree = pNpc->pProxyInventories;
-    if (!pNpc->pProxyInventories) {
-      return;
-    }
+    for (D2NpcProxyInventoryStrc* pMemoryToFree = pNpc->pProxyInventories; pMemoryToFree; pMemoryToFree = pMemoryToFree->pNext) {
+      if (pMemoryToFree->nPlayerGUID == nPlayerUnitId) {
+        if (pPrevNode) {
+          pPrevNode->pNext = pMemoryToFree->pNext;
+        } else {
+          pNpc->pProxyInventories = pMemoryToFree->pNext;
+        }
+        if (pMemoryToFree->pInventory) {
+          SUNITPROXY_FreeInventoryItems(pGame, pMemoryToFree->pInventory);
+          D2Common::INVENTORY::Inventory::STRUCT_FreeInventory(pMemoryToFree->pInventory);
+          pMemoryToFree->pInventory = 0;
+        }
 
-    while (pMemoryToFree->nPlayerGUID != nPlayerUnitId) {
-      D2NpcProxyInventoryStrc** pGameNpc;
-      pGameNpc = &pMemoryToFree->pNext;
-      pPrevNode = pMemoryToFree;
-      pMemoryToFree = *pGameNpc;
-      if (!*pGameNpc) {
+        D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\UNIT\\sunitproxy.cpp", 0x5d0);
         return;
       }
-    }
 
-    if (pPrevNode) {
-      pPrevNode->pNext = pMemoryToFree->pNext;
-    } else {
-      pNpc->pProxyInventories = pMemoryToFree->pNext;
+      pPrevNode = pMemoryToFree;
     }
-    if (pMemoryToFree->pInventory) {
-      SUNITPROXY_FreeInventoryItems(pGame, pMemoryToFree->pInventory);
-      D2Common::INVENTORY::Inventory::STRUCT_FreeInventory(pMemoryToFree->pInventory);
-      pMemoryToFree->pInventory = 0;
-    }
-
-    D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\UNIT\\sunitproxy.cpp", 0x5d0);
 }
 
 // Refreshes all NPC proxies that belong to act nAct. When bResult==0 and 240 s have elapsed since last update, marks the proxy dirty. When bResult!=0, verifies the backing live monster still exists with the correct class; if not, resets the proxy inventory; if yes and no AI-counted monsters remain, resets via SUNITPROXY_ResetNpcProxy; otherwise marks proxy dirty. Iterates pGame->pNpcControl->pNpc using GetTickCount for time checks.

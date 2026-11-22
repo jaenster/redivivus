@@ -65,17 +65,13 @@ int __fastcall SERVERCMD_SendBufferToClient(int32_t nClientId, uint16_t wGuildFl
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated(int32_t nClientId) {
-    uint8_t aPacketFrame[4];
-    d2_store24((char*)&aPacketFrame, (uint32_t)nClientId & 0xffffffu);
-    aPacketFrame[3] = 0xb0;
-    D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', nClientId, (char*)(aPacketFrame + 3), 1);
+    uint8_t nPacketId = 0xb0;
+    D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', nClientId, (char*)&nPacketId, 1);
 }
 
 void __fastcall SERVERCMD_SendSingleBytePacket(int32_t nClientId) {
-    uint8_t aPacketFrame[4];
-    d2_store24((char*)&aPacketFrame, (uint32_t)nClientId & 0xffffffu);
-    aPacketFrame[3] = 6;
-    D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x01', nClientId, (char*)(aPacketFrame + 3), 1);
+    uint8_t nPacketId = 6;
+    D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x01', nClientId, (char*)&nPacketId, 1);
 }
 
 void __fastcall NET_D2GS_SERVER_Send_0xB4_ConnectionRefused(int32_t nClientId, int32_t nReason) {

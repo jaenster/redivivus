@@ -110,28 +110,22 @@ static BOOL __stdcall NET_RecvExact(SOCKET hSocket, char * pBuffer, uint32_t nLe
 // Opens szText; when its last-write FILETIME is within 0x2625a00 (40,000,000 x 100 ns = 4 s) of *pftCompare in either direction, returns its size, else 0.
 // Provenance: 1.14d asm 0051e677-0051e69d (SUB/SBB against [EDI]/[EDI+4], 64-bit NEG/ADC/NEG abs, CMP 0x2625a00).
 static DWORD BNDOWNLOAD_GetCachedFileSize(LPCSTR szText, FILETIME * pftCompare) {
-    bool bBorrow;
     _FILETIME ftLastWrite;
     HANDLE hFile = Fog::Source::SFile::thunk_CreateFileA(szText, 0x80000000, 3, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x8000000, (HANDLE)0x0);
     if (hFile == (HANDLE)-1) {
       return 0;
     }
 
-    /* LPFILETIME lpLastWriteTime for GetFileTime */ /* LPFILETIME lpLastAccessTime for GetFileTime */ /* LPFILETIME lpCreationTime for GetFileTime */ /* HANDLE hFile for GetFileTime */ GetFileTime(hFile, (LPFILETIME)0x0, (LPFILETIME)0x0, &ftLastWrite);
-    uint32_t nHighDateTime = ftLastWrite.dwLowDateTime - pftCompare->dwLowDateTime;
-    int nAgeDiff = ftLastWrite.dwHighDateTime - pftCompare->dwHighDateTime - (uint32_t)(ftLastWrite.dwLowDateTime < pftCompare->dwLowDateTime);
-    if (nAgeDiff <= 0) {
-      DWORD dwCachedSize;
-      if (nAgeDiff < 0 || false) {
-        bBorrow = nHighDateTime != 0;
-        nHighDateTime = -nHighDateTime;
-        nAgeDiff = -(nAgeDiff + (uint32_t)bBorrow);
-      }
-      if (!nAgeDiff && nHighDateTime <= 0x2625a00) {
-        /* LPDWORD lpFileSizeHigh for GetFileSize */ /* HANDLE hFile for GetFileSize */ dwCachedSize = GetFileSize(hFile, (LPDWORD)0x0);
-        Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
-        return dwCachedSize;
-      }
+    GetFileTime(hFile, (LPFILETIME)0x0, (LPFILETIME)0x0, &ftLastWrite);
+    LARGE_INTEGER nAgeDiff;
+    nAgeDiff.QuadPart = *(__int64*)&ftLastWrite - *(__int64*)pftCompare;
+    if (nAgeDiff.QuadPart < 0) {
+      nAgeDiff.QuadPart = -nAgeDiff.QuadPart;
+    }
+    if (!nAgeDiff.HighPart && nAgeDiff.LowPart <= 0x2625a00) {
+      DWORD dwCachedSize = GetFileSize(hFile, (LPDWORD)0x0);
+      Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
+      return dwCachedSize;
     }
 
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);

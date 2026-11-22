@@ -237,50 +237,32 @@ uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nCom
     nullptr
 }; D2_STATIC_GUARD(gnOverlayTblsMaxId, "D2Common::DATATBLS::OverlayTbls::MONSTER_GetComponentOverlay::gnOverlayTblsMaxId");
 
-    eD2LevelId eLevelId;
-    int32_t nBaseClassId;
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      return 0;
-    }
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
+      D2MonStats2Txt* pMonStats2 = nComponentIdx < 0x10 ? MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) : 0;
+      if (!pMonStats2) {
+        return 0;
+      }
+      if (pMonStats2->aComponents[nComponentIdx] <= nVariantIdx) {
+        return 0;
+      }
 
-    D2MonStats2Txt* pMonStats2 = nComponentIdx < 0x10 ? MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId) : 0;
-    if (!pMonStats2) {
-      return 0;
-    }
-    if (pMonStats2->aComponents[nComponentIdx] <= nVariantIdx) {
-      return 0;
-    }
-
-    uint32_t dwCompCode = DataTbls::DATATBLS_GetCompCodeByIndex((uint32_t)pMonStats2->aCompCodes[nVariantIdx + nComponentIdx * 0xc]);
-    D2RoomStrc* pRoom = Units::UNITS_GetRoom(pUnit);
-    uint32_t pDVar1 = dwCompCode;
-    if (pRoom) {
-      eAct neAct;
-      eLevelId = DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      neAct = Drlg::GetActNoFromLevelNumber(eLevelId);
-      pDVar1 = dwCompCode;
-      if (neAct == ACT_II) {
-        nBaseClassId = MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
-        nBaseClassId = MonsterTbls::ValidateClassId(nBaseClassId);
+      uint32_t nResult = DataTbls::DATATBLS_GetCompCodeByIndex((uint32_t)pMonStats2->aCompCodes[nVariantIdx + nComponentIdx * 0xc]);
+      D2RoomStrc* pRoom = Units::UNITS_GetRoom(pUnit);
+      if (pRoom && Drlg::GetActNoFromLevelNumber(DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom)) == ACT_II) {
+        int32_t nBaseClassId = MonsterTbls::ValidateClassId(MonsterTbls::TXT_MonStats_GetBaseId(pUnit));
         if (nBaseClassId) {
-          pDVar1 = dwCompCode;
-          if (nBaseClassId == 0xaa) {
-            pDVar1 = dwCompCode;
-            if (gnOverlayTblsMaxId[nComponentIdx]) {
-              return gnOverlayTblsMaxId[nComponentIdx][nVariantIdx];
-            }
+          if (nBaseClassId == 0xaa && gnOverlayTblsMaxId[nComponentIdx]) {
+            nResult = gnOverlayTblsMaxId[nComponentIdx][nVariantIdx];
           }
-        } else {
-          pDVar1 = dwCompCode;
-          if (gnOverlayTblsCount[nComponentIdx]) {
-            pDVar1 = gnOverlayTblsCount[nComponentIdx][nVariantIdx];
-          }
+        } else if (gnOverlayTblsCount[nComponentIdx]) {
+          nResult = gnOverlayTblsCount[nComponentIdx][nVariantIdx];
         }
       }
+
+      return nResult;
     }
 
-    uint32_t nUnit = pDVar1;
-    return nUnit;
+    return 0;
 }
 
 // 2022.01.09 - dzik

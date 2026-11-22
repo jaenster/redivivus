@@ -1144,14 +1144,7 @@ void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {
     // Static local variables (originally global data)
     static BYTE * gaGlidePaletteTableData[72] = {}; D2_STATIC_GUARD(gaGlidePaletteTableData, "D2Glide::Renderer::Glide::SetPaletteTable::gaGlidePaletteTableData");
 
-    int nCount;
-    uint8_t** pDst = gaGlidePaletteTableData;
-    for (nCount = 0x48; nCount; nCount--) {
-      *pDst = *ppPaletteTable;
-      ppPaletteTable++;
-      pDst++;
-    }
-
+    memcpy(gaGlidePaletteTableData, ppPaletteTable, sizeof(gaGlidePaletteTableData));
     gpPaletteTable = gaGlidePaletteTableData;
 }
 

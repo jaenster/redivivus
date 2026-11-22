@@ -269,13 +269,15 @@ void __fastcall SERVER_LinkServerPlayerUnitToClient(D2ClientStrc * pClient, D2Un
     pClient->pPlayer = 0;
 }
 
-static void __stdcall CLIENT_SendHandshakePacket0x0B(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0xb, 6, -1);
-      return;
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
     }
+    return (int)(-1);
+}
 
-    SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0xb, pUnit->eUnitType, pUnit->nUnitGUID);
+static void __stdcall CLIENT_SendHandshakePacket0x0B(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
+    SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0xb, !pUnit ? 6 : pUnit->eUnitType, GetGUIDInline(pUnit));
 }
 
 void __fastcall SetCientFlag0x01(D2ClientStrc * pClient) {
@@ -1252,32 +1254,22 @@ int32_t __fastcall GetClientId(char * szCharName) {
 }
 
 BOOL __fastcall CLIENTS_IsCharacterNameFree(char * szCharName, char * szCharNameOut) {
-    int _bNotFound;
-    bool bNotFound;
-    _bNotFound = 1;
-    uint16_t uVar1 = Fog::SMem::HashForName(szCharName);
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerClientByNameCs);
-    D2ClientStrc* pClient = QServerClientBucketByName[uVar1 & 0xff];
-    do {
-      int32_t nCmpResult;
-      if (!pClient) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByNameCs);
-        return _bNotFound;
-      }
-
-      nCmpResult = Storm::Source::SSTR::SStrCmpI(pClient->szCharName, szCharName, 0x10);
-      if (!nCmpResult) {
+    int bNotFound = 1;
+    int nBucket = (uint16_t)Fog::SMem::HashForName(szCharName) & 0xff;
+    EnterCriticalSection(&gQServerClientByNameCs);
+    for (D2ClientStrc* pClient = QServerClientBucketByName[nBucket]; pClient; pClient = pClient->pNextInListByName) {
+      if (!Storm::Source::SSTR::SStrCmpI(pClient->szCharName, szCharName, 0x10)) {
         if (szCharNameOut) {
           Storm::Source::SSTR::SStrCopy(szCharNameOut, pClient->szCharName, 0x10);
         }
 
-        _bNotFound = 0;
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByNameCs);
-        return _bNotFound;
+        bNotFound = 0;
+        break;
       }
+    }
 
-      pClient = pClient->pNextInListByName;
-    } while (true);
+    LeaveCriticalSection(&gQServerClientByNameCs);
+    return bNotFound;
 }
 
 // Appends an incoming save-data chunk to the client's in-progress save buffer. Looks up the client by nClientId in the QServer bucket table (under critical section), allocates pSaveGame on the first chunk, memcpys the chunk, advances nSaveOpenSize. When nSaveOpenSize reaches nTotalSize the save is complete: sets fClientFlags bit 3, runs PLAYERSAVE_CRC32MissileTable, and returns 1. Returns 0 if the QServer tables are uninitialised or the client is not found.
@@ -1291,12 +1283,7 @@ int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerClientByIdCs);
-    D2ClientStrc* pClient = QServerClientBucketById[nClientId & 0xff];
-    do {
-      if (!pClient) {
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
-        return bComplete;
-      }
+    for (D2ClientStrc* pClient = QServerClientBucketById[nClientId & 0xff]; pClient; pClient = pClient->pServerNext) {
       if (pClient->nClientNo == nClientId) {
         if (!pClient->nSaveOpenSize) {
           pSaveBuffer = (D2SaveFileHeaderStrc*)D2_ALLOC_POOL_AT(pClient->pGame->pMemoryPool, nTotalSize, ".\\GAME\\Clients.cpp", 0xb2a);
@@ -1319,12 +1306,12 @@ int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size
           bComplete = 1;
         }
 
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
-        return bComplete;
+        break;
       }
+    }
 
-      pClient = pClient->pServerNext;
-    } while (true);
+    LeaveCriticalSection(&gQServerClientByIdCs);
+    return bComplete;
 }
 
 D2SaveFileHeaderStrc * __fastcall GetSaveGame(D2ClientStrc * pClient) {
@@ -2337,12 +2324,6 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
         return pUnit->eUnitType;
     }
     return (eD2UnitType)6;
-}
-static inline int GetGUIDInline(D2UnitStrc * pUnit) {
-    if (pUnit) {
-        return pUnit->nUnitGUID;
-    }
-    return (int)(-1);
 }
 void __fastcall UnusedClientJoinGame2(::SGAMEDATA * pGame, D2ClientStrc * pClient, uint8_t bActNo) {
     D2UnitStrc* pUnit = CLIENTS_GetControlUnit(pClient, 0);

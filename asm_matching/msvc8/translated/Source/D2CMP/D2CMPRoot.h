@@ -27,7 +27,7 @@ void __fastcall SPRITECACHE_LRU_FreeEntryCallback(struct D2LRUCacheNodeStrc * pE
 void __fastcall SPRITECACHE_LRU_RemoveCacheEntryCallback(struct D2LRUCacheNodeStrc * pEntry);
 uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDirections, void * * ppRawData, int32_t bRawData);
 int __stdcall TILEPROJECT_GetSoundIndexIndex(struct D2TileLibraryEntryStrc * pComp8);
-uint32_t __stdcall TILEPROJECT_GetMainIndex(struct D2TileLibraryEntryStrc * pComp24);
+uint16_t __stdcall TILEPROJECT_GetMainIndex(struct D2TileLibraryEntryStrc * pComp24);
 char * __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(struct D2TileLibraryEntryStrc * pComp24);
 // Returns the larger of two doubles; fParam2 when equal or unordered (FCOM, TEST AH,0x41).
 double __stdcall D2CMP_MaxDouble(double fParam1, double fParam2);

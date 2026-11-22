@@ -494,16 +494,8 @@ static void __stdcall TILECMP_SerializeTileSet(D2TileCmpTileSetStrc * pSrcTileSe
     pDstEntry->nFrame_Rarity = pSrcTileSet->nRarity;
     pDstEntry->transparentColorRGB24 = pSrcTileSet->dwTransparentColor;
     pDstEntry->nSubTiles = pSrcTileSet->nNodeCount;
-    uint8_t* pSrcIsoData = pSrcTileSet->abSubTileFlags;
-    uint8_t* pDstIsoData = pDstEntry->abSubTileFlags;
-    for (nCopiedNodes = 6; nCopiedNodes; nCopiedNodes--) {
-      *(uint32_t*)pDstIsoData = *(uint32_t*)pSrcIsoData;
-      pSrcIsoData += 4;
-      pDstIsoData += 4;
-    }
-
+    memcpy(pDstEntry->abSubTileFlags, pSrcTileSet->abSubTileFlags, 25);
     nCopiedNodes = pDstEntry->nSubTiles;
-    *pDstIsoData = *pSrcIsoData;
     size_t nNodeArrayBytes = nCopiedNodes * 0x14;
     if (nNodeArrayBytes) {
       D2GroundSubTileStrc* pSerialNodeArray;

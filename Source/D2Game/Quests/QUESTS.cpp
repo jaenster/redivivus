@@ -1481,27 +1481,14 @@ static void QUEST_SetActNpcIntroFlags(::SGAMEDATA * pGame, D2UnitStrc * pUnit, e
 }
 
 static BOOL __stdcall INTRONPC_FillInPacketWithIntroNpcIds(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs, int * aNpcList, int32_t nListSize, D2GSPacketSrv0x91 * pD2GSPacketSrv0x91) {
-    short int* pNpcIdSlot = (short int*)pD2GSPacketSrv0x91->nNpcID;
-    pNpcIdSlot[0] = 0xffff;
-    pNpcIdSlot[1] = 0xffff;
-    pD2GSPacketSrv0x91->nNpcID[2] = 0xffff;
-    pD2GSPacketSrv0x91->nNpcID[3] = 0xffff;
-    pD2GSPacketSrv0x91->nNpcID[4] = 0xffff;
-    pD2GSPacketSrv0x91->nNpcID[5] = 0xffff;
     BOOL bNeedSend = 0;
-    pD2GSPacketSrv0x91->nNpcID[6] = 0xffff;
-    pD2GSPacketSrv0x91->nNpcID[7] = 0xffff;
+    memset(pD2GSPacketSrv0x91->nNpcID, 0xff, sizeof(pD2GSPacketSrv0x91->nNpcID));
     int nIndex = 0;
-    pD2GSPacketSrv0x91->nNpcID[8] = 0xffff;
-    pD2GSPacketSrv0x91->nNpcID[9] = 0xffff;
-    pD2GSPacketSrv0x91->nNpcID[10] = 0xffff;
-    pD2GSPacketSrv0x91->nNpcID[0xb] = 0xffff;
     if (nListSize > 0) {
-      BOOL bResult;
+      uint16_t* pNpcIdSlot = pD2GSPacketSrv0x91->nNpcID;
       do {
-        bResult = PLAYER::PlayerIntro::INTRONPC_CheckIfSpokenWithNPC_Intro2(pInteractedNPCs, aNpcList[nIndex]);
-        if (bResult) {
-          *pNpcIdSlot = *(uint16_t*)(aNpcList + nIndex);
+        if (PLAYER::PlayerIntro::INTRONPC_CheckIfSpokenWithNPC_Intro2(pInteractedNPCs, aNpcList[nIndex])) {
+          *pNpcIdSlot = aNpcList[nIndex];
           pNpcIdSlot++;
           bNeedSend = 1;
         }
@@ -1573,22 +1560,16 @@ uint32_t __fastcall Unreferenced_005451b0(D2UnitStrc * pUnit) {
 }
 
 void __fastcall QUESTGUID_AddPlayerToList(D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID) {
-    uint16_t nPlayerCount = pQuestGUID->nPlayerCount;
-    if (nPlayerCount >= 0x20) {
+    if (pQuestGUID->nPlayerCount >= 0x20) {
       return;
     }
-    if (nPlayerCount) {
-      int nSearchIdx = 0;
-      do {
-        if (pQuestGUID->aPlayerGUID[nSearchIdx] == nPlayerGUID) {
-          return;
-        }
-
-        nSearchIdx++;
-      } while (nSearchIdx < (int)(uint32_t)pQuestGUID->nPlayerCount);
+    for (int nSearchIdx = 0; nSearchIdx < pQuestGUID->nPlayerCount; nSearchIdx++) {
+      if (pQuestGUID->aPlayerGUID[nSearchIdx] == nPlayerGUID) {
+        return;
+      }
     }
 
-    pQuestGUID->aPlayerGUID[nPlayerCount] = nPlayerGUID;
+    pQuestGUID->aPlayerGUID[pQuestGUID->nPlayerCount] = nPlayerGUID;
     pQuestGUID->nPlayerCount++;
 }
 
@@ -1612,18 +1593,11 @@ BOOL __fastcall QUESTGUID_RemovePlayerFromList(D2QuestGUIDStrc * pQuestGUID, int
 // pQuestGUID->aPlayerGUID, else 0. ECX is a D2QuestGUIDStrc (int[32] at +0, word count at +0x80);
 // every caller passes a quest data block's sQuestGUID member.
 BOOL __fastcall QUESTGUID_SearchForValueInIntArray32(D2QuestGUIDStrc * pQuestGUID, int32_t iValue) {
-    int nSearchIdx = 0;
-    if (!pQuestGUID->nPlayerCount) {
-      return 0;
-    }
-
-    do {
+    for (int nSearchIdx = 0; nSearchIdx < pQuestGUID->nPlayerCount; nSearchIdx++) {
       /* If the value is found, stop and return 1 */ if (pQuestGUID->aPlayerGUID[nSearchIdx] == iValue) {
         return 1;
       }
-
-      nSearchIdx++;
-    } while (nSearchIdx < (int)(uint32_t)pQuestGUID->nPlayerCount);
+    }
 
     return 0;
 }
@@ -2660,6 +2634,13 @@ void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     goto send_quest_state;
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // Quest reward delivery: creates an item from a 4-char item code at the given level and quality, sets full durability, and attempts to place it directly into the player's inventory. If inventory is full and bMustDrop is set, finds a nearby spawnable floor tile and drops it there instead; otherwise deletes the item. Returns the created item unit, or null on failure.
 // @sourcefile .\QUESTS\QUESTS.CPP
 D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t szRewardCode, int32_t nRewardLevel, eD2ItemQuality eQuality, BOOL bMustDrop) {
@@ -2671,47 +2652,46 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
     D2RoomStrc** pRoomsNear;
     D2RoomStrc* pRoomNear;
     D2ItemsTxt* pItemsTxt = D2Common::DATATBLS::ItemTbls::ConvertItemCodeToClassIdAndGetItemsTxtLine(szRewardCode, &szRewardCode);
-    if (!pItemsTxt) {
-      return nullptr;
-    }
-
-    int nItemLvl = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
-    if (nRewardLevel) {
-      nItemLvl = nRewardLevel;
-    }
-
-    D2UnitStrc* pRewardItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, szRewardCode, pGame, 4, eQuality, 0, 1, nItemLvl, 0, 0, 0);
-    if (!pRewardItem) {
-      return nullptr;
-    }
-
-    int32_t nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pRewardItem);
-    if (nMaxDurability > 0) {
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pRewardItem, UNITSTAT_durability, nMaxDurability, 0);
-    }
-
-    D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pRewardItem, INVPAGE_INVENTORY);
-    _bInventoryPlaced = ITEMS::ItemMode::SERVER_ItemToInventory(".\\QUESTS\\QUESTS.CPP", 0x9cf, pGame, pUnit, pRewardItem->nUnitGUID, 0, 0, 1, 1, nullptr);
-    if (_bInventoryPlaced) {
-      BOOL bIsIdentified;
-      bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pRewardItem, ITEMFLAG_IDENTIFIED, 0x9d2, ".\\QUESTS\\QUESTS.CPP");
-      if (!bIsIdentified) {
-        ITEMS::ItemMode::ITEMMODE_IdentifyItem(pGame, pUnit, pRewardItem);
+    if (pItemsTxt) {
+      int nItemLvl = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
+      if (nRewardLevel) {
+        nItemLvl = nRewardLevel;
       }
 
-      return pRewardItem;
-    }
-    if (bMustDrop) {
-      D2Common::Units::GetCoords(pUnit, &sDropCoords);
-      nSearchIterations = 100;
-      nFindRadius = 5;
-      pRoomsNear = &pRoomNear;
-      FindSpawnableLocation(D2Common::Units::UNITS_GetRoom(pUnit), &sDropCoords, 1, 0x3e01, pRoomsNear, nFindRadius, nSearchIterations);
-      ITEMS::Items::Drop::DropItem(pGame, nullptr, pRewardItem, pRoomNear, sDropCoords.x, sDropCoords.y);
-      return pRewardItem;
+      D2UnitStrc* pRewardItem = ITEMS::Items::Drop::ITEM_CreateFromTemplate(pUnit, szRewardCode, pGame, 4, eQuality, 0, 1, nItemLvl, 0, 0, 0);
+      if (!pRewardItem) {
+        return nullptr;
+      }
+
+      int32_t nMaxDurability = D2Common::Stats::StatsEx::STATLIST_GetMaxDurabilityFromUnit(pRewardItem);
+      if (nMaxDurability > 0) {
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pRewardItem, UNITSTAT_durability, nMaxDurability, 0);
+      }
+
+      D2Common::ITEMS::Items::ITEM_SetItemData_ePage(pRewardItem, INVPAGE_INVENTORY);
+      _bInventoryPlaced = ITEMS::ItemMode::SERVER_ItemToInventory(".\\QUESTS\\QUESTS.CPP", 0x9cf, pGame, pUnit, GetGUIDInline(pRewardItem), 0, 0, 1, 1, nullptr);
+      if (_bInventoryPlaced) {
+        BOOL bIsIdentified;
+        bIsIdentified = D2Common::ITEMS::Items::CheckItemFlag(pRewardItem, ITEMFLAG_IDENTIFIED, 0x9d2, ".\\QUESTS\\QUESTS.CPP");
+        if (!bIsIdentified) {
+          ITEMS::ItemMode::ITEMMODE_IdentifyItem(pGame, pUnit, pRewardItem);
+        }
+
+        return pRewardItem;
+      }
+      if (bMustDrop) {
+        D2Common::Units::GetCoords(pUnit, &sDropCoords);
+        nSearchIterations = 100;
+        nFindRadius = 5;
+        pRoomsNear = &pRoomNear;
+        FindSpawnableLocation(D2Common::Units::UNITS_GetRoom(pUnit), &sDropCoords, 1, 0x3e01, pRoomsNear, nFindRadius, nSearchIterations);
+        ITEMS::Items::Drop::DropItem(pGame, nullptr, pRewardItem, pRoomNear, sDropCoords.x, sDropCoords.y);
+        return pRewardItem;
+      }
+
+      ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pRewardItem);
     }
 
-    ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pRewardItem);
     return nullptr;
 }
 
@@ -3315,95 +3295,6 @@ void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
     *pbRunDefaultAi = 1;
     *pbDelayNextMove = 0;
-}
-
-static void CreateSealGlow(D2ObjectOperateFnArg * pOperateArg, POINT * pPoint, int32_t nSealIndex) {
-    int32_t nCollisionMask;
-    LONG nY = pPoint->y;
-    D2RoomStrc* pVictimRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pOperateArg->sArg.pVictim), pPoint->x, nY);
-    if (!pVictimRoom) {
-      return;
-    }
-
-    D2RoomStrc* pSpawnRoom = 0;
-    if (nSealIndex == 1) {
-      nCollisionMask = 0xd;
-    } else {
-      nCollisionMask = nSealIndex != 3 ? 0xf : 0xe;
-    }
-
-    FindSpawnableLocation(pVictimRoom, pPoint, 3, 0x3f11, &pSpawnRoom, nCollisionMask, 100);
-    if (!pSpawnRoom) {
-      return;
-    }
-
-    D2UnitStrc* pGlowObject = UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x83, pPoint->x, pPoint->y, pOperateArg->sArg.pGame, pSpawnRoom, 1, 0, 0);
-    if (!pGlowObject) {
-      return;
-    }
-
-    D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(pSpawnRoom, 0);
-    A4Q2::OBJOP_A4Q2_DiabloSealActivateKillChaos(pOperateArg);
-}
-
-BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow1(D2ObjectOperateFnArg * pOperation) {
-    D2QuestDataA4Q2Strc* pA4Q2Data;
-    POINT* pGlowCoord;
-    D2UnitStrc* pVictim = pOperation->sArg.pVictim;
-    if (!pVictim || pVictim->eAnimMode.ePlayerMode == Death) {
-      D2QuestDataStrc* pQuestData;
-      pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
-      if (pQuestData) {
-        pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
-        pGlowCoord = &pA4Q2Data->sInfectorCoords;
-        D2Common::Units::GetCoords(pOperation->sArg.pVictim, pGlowCoord);
-        pA4Q2Data->sInfectorCoords.y += -0x34;
-        pGlowCoord->x += -0xc;
-        CreateSealGlow(pOperation, pGlowCoord, 1);
-      }
-    }
-
-    return 0;
-}
-
-BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow2(D2ObjectOperateFnArg * pOperation) {
-    D2QuestDataA4Q2Strc* pA4Q2Data;
-    POINT* pCoord;
-    D2UnitStrc* pVictim = pOperation->sArg.pVictim;
-    if (!pVictim || pVictim->eAnimMode.ePlayerMode == Death) {
-      D2QuestDataStrc* pQuestData;
-      pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
-      if (pQuestData) {
-        pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
-        pCoord = &pA4Q2Data->sSeisCoords;
-        D2Common::Units::GetCoords(pOperation->sArg.pVictim, pCoord);
-        pA4Q2Data->sSeisCoords.y += 0x21;
-        pCoord->x += -0x27;
-        CreateSealGlow(pOperation, pCoord, 3);
-      }
-    }
-
-    return 0;
-}
-
-BOOL __fastcall OBJOP_A4Q2_DiabloSealCreateGlow3(D2ObjectOperateFnArg * pOperation) {
-    D2QuestDataA4Q2Strc* pA4Q2Data;
-    POINT* pCoord;
-    D2UnitStrc* pVictim = pOperation->sArg.pVictim;
-    if (!pVictim || pVictim->eAnimMode.ePlayerMode == Death) {
-      D2QuestDataStrc* pQuestData;
-      pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_TerrorsEnd);
-      if (pQuestData) {
-        pA4Q2Data = pQuestData->pQuestSpecificData.pA4Q2;
-        pCoord = &pA4Q2Data->sVisierCoords;
-        D2Common::Units::GetCoords(pOperation->sArg.pVictim, pCoord);
-        pA4Q2Data->sVisierCoords.y += 0x10;
-        pCoord->x += 0x20;
-        CreateSealGlow(pOperation, pCoord, 5);
-      }
-    }
-
-    return 0;
 }
 
 static void * keep_00544f60 = (0 ? (QUEST_MarkNPCsAsIntroduced(*(::SGAMEDATA * *)0, *(int32_t * *)0, *(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);

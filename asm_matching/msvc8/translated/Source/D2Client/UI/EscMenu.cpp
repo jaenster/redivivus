@@ -59343,53 +59343,34 @@ void __stdcall ESCMENU_Initialize() {
 
 // Frees all DC6 images loaded for an escape menu table. Iterates through menu items and calls DC6_FreeAndDelete on main image and all sub-images, zeroing the pointers after freeing.
 void __fastcall ESCMENU_FreeLoadedImages(int * pnItemCount, D2EscMenuItemStrc * pMenuTable) {
-    uint32_t nSubImageIndex;
-    DC6** ppSubImage;
-    int nItemIndex;
-    uint32_t nSubImageCount;
     if (!pnItemCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x558);
       exit(-1);
     }
     if (!pMenuTable) {
-      ESCMENU_FreeLoadedImages_HaltTail(0x559);
-      return;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x559);
+      exit(-1);
     }
 
-    nItemIndex = 0;
-    if (*pnItemCount <= 0) {
-      return;
+    for (int i = 0; i < *pnItemCount; i++) {
+      if (pMenuTable[i].pDC6Main) {
+        Core::Archive::DC6_FreeAndDelete(pMenuTable[i].pDC6Main);
+        pMenuTable[i].pDC6Main = nullptr;
+      }
+      if (pMenuTable[i].nMenuItemType == 1) {
+        if (!((uint32_t)pMenuTable[i].nSubImageCount > 0 && (uint32_t)pMenuTable[i].nSubImageCount <= 4)) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x565);
+          exit(-1);
+        }
+
+        for (uint32_t j = 0; j < pMenuTable[i].nSubImageCount; j++) {
+          if (pMenuTable[i].pDC6SubImages[j]) {
+            Core::Archive::DC6_FreeAndDelete(pMenuTable[i].pDC6SubImages[j]);
+            pMenuTable[i].pDC6SubImages[j] = nullptr;
+          }
+        }
+      }
     }
-
-    do {
-      nSubImageIndex = 0;
-      if (pMenuTable[nItemIndex].pDC6Main) {
-        Core::Archive::DC6_FreeAndDelete(pMenuTable[nItemIndex].pDC6Main);
-        *(int*)&pMenuTable[nItemIndex].pDC6Main = 0;
-      }
-      if (pMenuTable[nItemIndex].nMenuItemType == 1) {
-        nSubImageCount = pMenuTable[nItemIndex].nSubImageCount;
-        if (nSubImageCount <= 0 || nSubImageCount > 4) {
-          ESCMENU_FreeLoadedImages_HaltTail(0x565);
-        }
-        if (nSubImageCount > 0) {
-          ppSubImage = pMenuTable[nItemIndex].pDC6SubImages;
-          do {
-            if (*ppSubImage) {
-              Core::Archive::DC6_FreeAndDelete(*ppSubImage);
-              *ppSubImage = 0;
-            }
-
-            nSubImageIndex++;
-            ppSubImage++;
-          } while (nSubImageIndex < (uint32_t)pMenuTable[nItemIndex].nSubImageCount);
-        }
-      }
-
-      nItemIndex++;
-    } while (nItemIndex < *pnItemCount);
-
-    return;
 }
 
 // Shared fatal tail of ESCMENU_FreeLoadedImages: every failing check pushes its source line and enters here; reports ERROR_UnrecoverableInternalError_Halt("", ip, nLine) and exits.

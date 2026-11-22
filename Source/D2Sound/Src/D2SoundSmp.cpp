@@ -283,7 +283,6 @@ D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSamplePa
 
 BOOL __fastcall SOUNDSMP_LoadWavDataIntoBuffer(D2SoundSmpStrc * ppSoundSmp, int * pWavData, uint32_t nWavDataSize) {
     WAVEFORMATEX waveFormat;
-    uint32_t nInputSize = nWavDataSize;
     if (!(ppSoundSmp && ppSoundSmp->pDSBuffer && pWavData && nWavDataSize)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 599);
       exit(-1);
@@ -292,14 +291,14 @@ BOOL __fastcall SOUNDSMP_LoadWavDataIntoBuffer(D2SoundSmpStrc * ppSoundSmp, int 
     {
       uint8_t* pPcmData;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
-      nWavDataSize = nInputSize;
-      pPcmData = (uint8_t*)SOUNDSMP_ParseWavHeader(pWavData, &nWavDataSize, &waveFormat);
-      if (!(ppSoundSmp->nMinBufSize < nWavDataSize)) {
+      uint32_t nInputSize = nWavDataSize;
+      pPcmData = (uint8_t*)SOUNDSMP_ParseWavHeader(pWavData, &nInputSize, &waveFormat);
+      if (!(ppSoundSmp->nMinBufSize < nInputSize)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x25f);
         exit(-1);
       }
 
-      ppSoundSmp->nPcmSize = nWavDataSize;
+      ppSoundSmp->nPcmSize = nInputSize;
       ppSoundSmp->pPcmData = pPcmData;
       SOUNDSMP_WriteToBuffer(ppSoundSmp, 0, 0, ppSoundSmp->nBufSize);
       ppSoundSmp->bLoaded = 1;
@@ -1009,29 +1008,25 @@ float __stdcall SOUNDSMP_ClampAttenuation(float fMillibels) {
 }
 
 static int * __stdcall SOUNDSMP_FindWavChunk(uint32_t * pRemainingSize, uint32_t * pChunkSize, int32_t nChunkId, int * pChunkHeader) {
-    uint32_t dwChunkDataSize;
-    uint32_t dwRemainingSize = *pRemainingSize;
-    while (true) {
-      if (dwRemainingSize < 8) {
-        return nullptr;
-      }
-
+    while (*pRemainingSize >= 8) {
       *pRemainingSize -= 8;
-      dwChunkDataSize = pChunkHeader[1];
-      if (*pChunkHeader == nChunkId) {
-        break;
+      uint32_t dwRemainingSize = *pRemainingSize;
+      int* pHeader = pChunkHeader;
+      pChunkHeader += 2;
+      uint32_t dwChunkDataSize = pHeader[1];
+      if (*pHeader == nChunkId) {
+        *pChunkSize = dwChunkDataSize;
+        return pChunkHeader;
       }
-      if (*pRemainingSize < dwChunkDataSize) {
+      if (dwRemainingSize < dwChunkDataSize) {
         return nullptr;
       }
 
-      dwRemainingSize = *pRemainingSize - dwChunkDataSize;
-      pChunkHeader = (int*)((char*)(pChunkHeader + 2) + dwChunkDataSize);
-      *pRemainingSize = dwRemainingSize;
+      *pRemainingSize = dwRemainingSize - dwChunkDataSize;
+      pChunkHeader = (int*)((char*)pChunkHeader + dwChunkDataSize);
     }
 
-    *pChunkSize = dwChunkDataSize;
-    return pChunkHeader + 2;
+    return nullptr;
 }
 
 void __fastcall SOUNDSMP_InitWaveFormat(WAVEFORMATEX * pWaveFormat, WORD nChannels) {

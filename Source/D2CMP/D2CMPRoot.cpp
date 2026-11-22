@@ -87,7 +87,7 @@ int __stdcall TILEPROJECT_GetSoundIndexIndex(D2TileLibraryEntryStrc * pComp8) {
     return pComp8->nHeightToBottom;
 }
 
-uint32_t __stdcall TILEPROJECT_GetMainIndex(D2TileLibraryEntryStrc * pComp24) {
+uint16_t __stdcall TILEPROJECT_GetMainIndex(D2TileLibraryEntryStrc * pComp24) {
     if (!pComp24) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x83);
       exit(-1);

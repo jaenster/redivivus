@@ -15,15 +15,20 @@
 
 namespace D2Game::Quests::QUESTS::A1Q7 {
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // A1Q7 (hidden slot, nQuestIdReal=QUEST_UnknownDuplicate2): SpokeTo-Akara gossip pseudo-quest, NOT the Cow Level. Q07_Callback_00 = idle-gossip handler (state index 0). Target must be Akara (nClassId 0x10a). Drives Akara's chatter that is gated on the Den of Evil (Q1) progress: if Q1 not yet Completed/JustCompleted/RewardAwaits for this player AND not flagged JustCompleted-in-game AND Q1 is past its intro -> emit a seeded gossip line (modulo-2 variant). Otherwise advance player RNG seed and emit a different seeded gossip line (modulo-3 +2). No quest state is ever WRITTEN here; this slot only reads Q1 state to pick flavor text. Sets no rewards, spawns nothing.
 void __fastcall Q07_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL bQuestState;
     uint32_t nGossipVariantMod2;
-    uint32_t nGossipSeedLow;
     D2BitBufferStrc* pBitBuffer;
     ::SGAMEDATA* pGame;
-    D2UnitStrc* pPlayer;
-    if (!(pQuestArgs->pTarget && pQuestArgs->pTarget->nClassId == 0x10a)) {
+    if (GetClassIdInline(pQuestArgs->pTarget) != 0x10a) {
       return;
     }
 
@@ -51,15 +56,10 @@ void __fastcall Q07_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
         }
       }
 
-      pPlayer = pQuestArgs->pPlayer;
-      nGossipSeedLow = pPlayer->sSeed.nSeedLow;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x10a, D2_SeedRollLimited(&pQuestArgs->pPlayer->sSeed, 3) + 2);
     } else {
-      pPlayer = pQuestArgs->pPlayer;
-      nGossipSeedLow = pPlayer->sSeed.nSeedLow;
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x10a, D2_SeedRollLimited(&pQuestArgs->pPlayer->sSeed, 3) + 2);
     }
-
-    uint32_t seedNext = D2_SeedRoll(&pPlayer->sSeed);
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x10a, seedNext % 3 + 2);
 }
 
 // A1Q7 Q07_Callback_08: quest-state handler for state index 8. STUB / no-op (empty body). Registered into sStateFunctions[8] by Q07_InitData but does nothing; this pseudo-quest never reaches/uses state 8.

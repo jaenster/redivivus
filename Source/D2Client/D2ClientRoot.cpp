@@ -1489,16 +1489,7 @@ void __fastcall NET_D2GS_CLIENT_Handle0x50_QuestSpecial(D2GSPacketSrv0x50 * pPac
 
 // Handles GS→client packet 0x5E (quest availability update): copies 37 bytes (9 dwords + 1 byte) from packet payload into aQuestAvailabilityPacket global buffer, then sets bReceivedQuestAvailabilityPacket=1.
 void __fastcall NET_D2GS_CLIENT_Incoming0x5E_QUESTPICKS(char * pBytes) {
-    int nDwordCount;
-    uint8_t* pSrc = (uint8_t*)(pBytes + 1);
-    uint8_t* pDst = aQuestAvailabilityPacket;
-    for (nDwordCount = 9; nDwordCount; nDwordCount--) {
-      *(uint32_t*)pDst = *(uint32_t*)pSrc;
-      pSrc += 4;
-      pDst += 4;
-    }
-
-    *pDst = *pSrc;
+    memcpy(aQuestAvailabilityPacket, pBytes + 1, sizeof(aQuestAvailabilityPacket));
     bReceivedQuestAvailabilityPacket = 1;
 }
 

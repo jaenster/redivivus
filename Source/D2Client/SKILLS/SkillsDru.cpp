@@ -26,8 +26,8 @@ BOOL __fastcall Skills_CltStFunc_AddAuraToggleOverlay(D2UnitStrc * pUnit, eD2Ski
       return 0;
     }
 
-    eOverlayId eOverlay = (eOverlayId)pSkillTxt->cltoverlaya;
-    if ((int)eOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
+    if ((int)pSkillTxt->cltoverlaya < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
+      eOverlayId eOverlay = (eOverlayId)pSkillTxt->cltoverlaya;
       eD2States eAuraState;
       if (pSkillTxt->cltoverlayb >= 0 && (int)pSkillTxt->cltoverlayb < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
         eAuraState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nAuraStateIdx);

@@ -791,16 +791,14 @@ static BOOL MONSTER_CanSpawnInRoom(D2RoomStrc * pRoom, ::SGAMEDATA * pGame) {
     }
 
     eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (eLevelId != LEVEL_ChaosSanctuary) {
-      return 1;
+    if (eLevelId == LEVEL_ChaosSanctuary) {
+      BOOL bAllSealsActive = Quests::QUESTS::A4Q2::Q27_GetAllSealsActivated(pGame);
+      if (bAllSealsActive) {
+        return 0;
+      }
     }
 
-    BOOL bAllSealsActive = Quests::QUESTS::A4Q2::Q27_GetAllSealsActivated(pGame);
-    if (!bAllSealsActive) {
-      return 1;
-    }
-
-    return 0;
+    return 1;
 }
 
 BOOL __fastcall CheckIfBaseIsFallenOrScarabAndSet(int32_t nMonstatId) {

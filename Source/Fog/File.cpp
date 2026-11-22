@@ -166,84 +166,93 @@ void __fastcall CRASH_EnumerateThreads(fnCrashOutputLine pOutputCallback, ::Repo
 
 static void CRASH_GetExceptionName(char * szText, DWORD dwExceptionCode) {
     DWORD nMsgLen;
+    const char* pszName;
+    HMODULE hNtdll;
     if (dwExceptionCode <= 0xc0000005) {
-      if (dwExceptionCode == 0xc0000005) {
-        strncpy_s(szText, 0x100, "ACCESS_VIOLATION", -1);
-        return;
-      }
-
       switch (dwExceptionCode) {
         case 0x80000002:
-          strncpy_s(szText, 0x100, "DATATYPE_MISALIGNMENT", -1);
-        return;
+          pszName = "DATATYPE_MISALIGNMENT";
+        break;
         case 0x80000003:
-          strncpy_s(szText, 0x100, "BREAKPOINT", -1);
-        return;
+          pszName = "BREAKPOINT";
+        break;
         case 0x80000004:
-          strncpy_s(szText, 0x100, "SINGLE_STEP", -1);
-        return;
+          pszName = "SINGLE_STEP";
+        break;
         case 0x80000001:
-          strncpy_s(szText, 0x100, "GUARD_PAGE", -1);
-        return;
+          pszName = "GUARD_PAGE";
+        break;
+        case 0xc0000005:
+          pszName = "ACCESS_VIOLATION";
+        break;
+        default:
+          goto format_message;
       }
     } else {
       switch (dwExceptionCode) {
         case 0xc000008c:
-          strncpy_s(szText, 0x100, "ARRAY_BOUNDS_EXCEEDED", -1);
-        return;
+          pszName = "ARRAY_BOUNDS_EXCEEDED";
+        break;
         case 0xc000008d:
-          strncpy_s(szText, 0x100, "FLT_DENORMAL_OPERAND", -1);
-        return;
+          pszName = "FLT_DENORMAL_OPERAND";
+        break;
         case 0xc000008e:
-          strncpy_s(szText, 0x100, "FLT_DIVIDE_BY_ZERO", -1);
-        return;
+          pszName = "FLT_DIVIDE_BY_ZERO";
+        break;
         case 0xc000008f:
-          strncpy_s(szText, 0x100, "FLT_INEXACT_RESULT", -1);
-        return;
+          pszName = "FLT_INEXACT_RESULT";
+        break;
         case 0xc0000090:
-          strncpy_s(szText, 0x100, "FLT_INVALID_OPERATION", -1);
-        return;
+          pszName = "FLT_INVALID_OPERATION";
+        break;
         case 0xc0000091:
-          strncpy_s(szText, 0x100, "FLT_OVERFLOW", -1);
-        return;
+          pszName = "FLT_OVERFLOW";
+        break;
         case 0xc0000092:
-          strncpy_s(szText, 0x100, "FLT_STACK_CHECK", -1);
-        return;
+          pszName = "FLT_STACK_CHECK";
+        break;
         case 0xc0000093:
-          strncpy_s(szText, 0x100, "FLT_UNDERFLOW", -1);
-        return;
+          pszName = "FLT_UNDERFLOW";
+        break;
         case 0xc0000094:
-          strncpy_s(szText, 0x100, "INT_DIVIDE_BY_ZERO", -1);
-        return;
+          pszName = "INT_DIVIDE_BY_ZERO";
+        break;
         case 0xc0000095:
-          strncpy_s(szText, 0x100, "INT_OVERFLOW", -1);
-        return;
+          pszName = "INT_OVERFLOW";
+        break;
         case 0xc0000096:
-          strncpy_s(szText, 0x100, "PRIV_INSTRUCTION", -1);
-        return;
+          pszName = "PRIV_INSTRUCTION";
+        break;
         case 0xc0000006:
-          strncpy_s(szText, 0x100, "IN_PAGE_ERROR", -1);
-        return;
+          pszName = "IN_PAGE_ERROR";
+        break;
         case 0xc000001d:
-          strncpy_s(szText, 0x100, "ILLEGAL_INSTRUCTION", -1);
-        return;
+          pszName = "ILLEGAL_INSTRUCTION";
+        break;
         case 0xc0000025:
-          strncpy_s(szText, 0x100, "NONCONTINUABLE_EXCEPTION", -1);
-        return;
+          pszName = "NONCONTINUABLE_EXCEPTION";
+        break;
         case 0xc00000fd:
-          strncpy_s(szText, 0x100, "STACK_OVERFLOW", -1);
-        return;
+          pszName = "STACK_OVERFLOW";
+        break;
         case 0xc0000026:
-          strncpy_s(szText, 0x100, "INVALID_DISPOSITION", -1);
-        return;
+          pszName = "INVALID_DISPOSITION";
+        break;
         case 0xc0000008:
-          strncpy_s(szText, 0x100, "INVALID_HANDLE", -1);
-        return;
+          pszName = "INVALID_HANDLE";
+        break;
+        default:
+          goto format_message;
       }
     }
 
-    HMODULE hNtdll = GetModuleHandleA("ntdll.dll");
-    /* va_list * Arguments for FormatMessageA */ /* DWORD nSize for FormatMessageA */ /* LPSTR lpBuffer for FormatMessageA */ /* DWORD dwLanguageId for FormatMessageA */ /* DWORD dwMessageId for FormatMessageA */ /* LPCVOID lpSource for FormatMessageA */ /* DWORD dwFlags for FormatMessageA */ if (!(!hNtdll || (nMsgLen = FormatMessageA(0xa00, (LPCVOID)hNtdll, dwExceptionCode, 0x400, szText, 0x100, nullptr) , nMsgLen <= 0))) {
+    strncpy_s(szText, 0x100, pszName, -1);
+    return;
+
+format_message:
+
+    hNtdll = GetModuleHandleA("ntdll.dll");
+    if (!(!hNtdll || (nMsgLen = FormatMessageA(0xa00, (LPCVOID)hNtdll, dwExceptionCode, 0x400, szText, 0x100, nullptr) , nMsgLen <= 0))) {
       return;
     }
 

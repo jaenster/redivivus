@@ -26,7 +26,7 @@ namespace D2DDraw { namespace ddSprite {
 // DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
 void __fastcall RENDERER_DDRAW_SetHorizontalBounds(int32_t bWidescreen);
 BOOL __fastcall DrawImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, BYTE * pPalette);
-void __fastcall DrawShiftedImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, int32_t nGlobalPaletteShift);
+BOOL __fastcall DrawShiftedImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, int32_t nGlobalPaletteShift);
 void __fastcall DrawVerticalCropImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, int32_t nSkipLines, int32_t nDrawLines, int32_t nDrawMode);
 void __fastcall DrawClippedImage(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, void * pCropRect, int32_t nDrawMode);
 void __fastcall DrawShadow(struct D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY);

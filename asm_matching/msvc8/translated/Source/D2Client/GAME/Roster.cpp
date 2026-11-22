@@ -114,45 +114,21 @@ static D2RosterStrc * GetRosterByGuidOrName(char * szPlayerName, int32_t nRoster
 
 // Writes identity/party/guild fields into a D2RosterStrc. 004793c4..004793c6 read EAX, EDI and EBX without ever loading them: the roster, the player name and the clan tag all arrive in registers. Modelled as locals, the reconstruction wrote the roster through an uninitialised pointer.
 static void __stdcall ROSTER_InitializeFields(D2RosterStrc * pRoster, char * szPlayerName, char * szClanTag, int32_t nRosterGUID, int32_t nCharType, int16_t nUnitLevel, int16_t nPartyId, int32_t bInParty, int16_t nGuildFlags, char * szGuildTag) {
-    char cChar;
-    char* pSrcCursor = szPlayerName;
-    do {
-      cChar = *pSrcCursor;
-      pSrcCursor[(intptr_t)pRoster - (intptr_t)szPlayerName] = cChar;
-      pSrcCursor++;
-    } while (cChar != '\0');
-
+    strcpy(pRoster->szRosterName, szPlayerName);
     pRoster->nRosterGUID = nRosterGUID;
     pRoster->nCharType = nCharType;
     pRoster->nUnitLevel = nUnitLevel;
     pRoster->nPartyId = nPartyId;
     pRoster->nPartyState = bInParty;
     pRoster->nGuildFlags = nGuildFlags;
-    pSrcCursor = szClanTag;
-    do {
-      cChar = *pSrcCursor;
-      pSrcCursor[(intptr_t)pRoster + (0x46 - (intptr_t)szClanTag)] = cChar;
-      pSrcCursor++;
-    } while (cChar != '\0');
-
-    intptr_t nDstDelta = 0x4a - (intptr_t)szGuildTag;
-    do {
-      cChar = *szGuildTag;
-      szGuildTag[(intptr_t)pRoster + nDstDelta] = cChar;
-      szGuildTag++;
-    } while (cChar != '\0');
-
+    strcpy(pRoster->szGuildTag, szClanTag);
+    strcpy(pRoster->szGuildName, szGuildTag);
     if (*szClanTag != '\0') {
       sprintf(pRoster->pRosterName, "%s {%s}", szPlayerName, szClanTag);
       return;
     }
 
-    nDstDelta = 0x66 - (intptr_t)szPlayerName;
-    do {
-      cChar = *szPlayerName;
-      szPlayerName[(intptr_t)pRoster + nDstDelta] = cChar;
-      szPlayerName++;
-    } while (cChar != '\0');
+    strcpy(pRoster->pRosterName, szPlayerName);
 }
 
 // @sourcefile .\GAME\Roster.cpp

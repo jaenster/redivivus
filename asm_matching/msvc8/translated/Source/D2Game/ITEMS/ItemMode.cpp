@@ -3009,16 +3009,17 @@ void __fastcall ITEMMODE_RemoveInventoryItem(::SGAMEDATA * pGame, D2UnitStrc * p
 // @sourcefile .\ITEMS\ItemMode.cpp
 void __fastcall ITEMMODE_SortBeltColumn(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, int nColumn) {
     BOOL bIsDisabled;
-    uint32_t nCurSlot = nColumn & 3;
+    int nStartSlot = nColumn & 3;
     D2InventoryStrc* pInventory = pUnit->pInventory;
     nColumn = 0;
-    nCurSlot = !nCurSlot ? 0 : nCurSlot;
-    if ((int32_t)nCurSlot >= 3) {
-      nCurSlot = 3;
+    nStartSlot = nStartSlot <= 0 ? 0 : nStartSlot;
+    if (nStartSlot >= 3) {
+      nStartSlot = 3;
     }
 
     int iRow = 0;
-    uint32_t nDestSlot = nCurSlot;
+    int nCurSlot = nStartSlot;
+    int nDestSlot = nStartSlot;
     do {
       D2UnitStrc* pBeltItem;
       pBeltItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemInBeltSlot(pInventory, nCurSlot);
@@ -3439,35 +3440,16 @@ BOOL __fastcall ITEMMODE_HasSocketedItems(D2UnitStrc * pUnit, char * szFile, int
 }
 
 static uint32_t __stdcall ITEMMODE_GetSocketCount(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    int16_t wPrefixB;
-    int16_t wSuffixA;
-    int16_t wSuffixB;
-    uint16_t wAutoMagic;
-    uint16_t wAutoMagic2;
-    int nIndex = 0;
-    while (true) {
-      int16_t wPrefixA;
-      wPrefixA = D2Common::ITEMS::Items::GetMagicPrefix(pUnit, nIndex);
-      wPrefixB = D2Common::ITEMS::Items::GetMagicPrefix(pUnit2, nIndex);
-      if (wPrefixA != wPrefixB) {
+    for (int nIndex = 0; nIndex < 3; nIndex++) {
+      if (D2Common::ITEMS::Items::GetMagicPrefix(pUnit, nIndex) != D2Common::ITEMS::Items::GetMagicPrefix(pUnit2, nIndex)) {
         return 0;
       }
-
-      wSuffixA = D2Common::ITEMS::Items::GetMagicSuffix(pUnit, nIndex);
-      wSuffixB = D2Common::ITEMS::Items::GetMagicSuffix(pUnit2, nIndex);
-      if (wSuffixA != wSuffixB) {
-        break;
-      }
-
-      nIndex++;
-      if (nIndex >= 3) {
-        wAutoMagic = D2Common::ITEMS::Items::GetAutoMagic(pUnit);
-        wAutoMagic2 = D2Common::ITEMS::Items::GetAutoMagic(pUnit2);
-        return (uint32_t)(wAutoMagic == wAutoMagic2);
+      if (D2Common::ITEMS::Items::GetMagicSuffix(pUnit, nIndex) != D2Common::ITEMS::Items::GetMagicSuffix(pUnit2, nIndex)) {
+        return 0;
       }
     }
 
-    return 0;
+    return D2Common::ITEMS::Items::GetAutoMagic(pUnit) == D2Common::ITEMS::Items::GetAutoMagic(pUnit2);
 }
 
 // For a scroll unit, searches the owner unit's inventory for a matching book. The second parameter is the OWNER UNIT, a whole pointer in EDX - typed from DL alone it was a truncated byte the body then used as an address, reaching for the inventory at +0x60 of a one-byte value.
@@ -6346,74 +6328,36 @@ int32_t __fastcall ITEMMODE_EquipCorpseItems(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Processes picking up items from a corpse into pItem (a socket or container). Iterates all items in the corpse's inventory, clones each via ITEM_CloneFromSerializedData, copies the clone's map coordinates, then calls PutItemInItem to place the clone into the target item slot. Returns 0 immediately if the corpse has no inventory or if any PutItemInItem call fails; returns 1 on full success.
 BOOL __fastcall ITEMMODE_ProcessCorpsePickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pCorpse, D2UnitStrc * pItem, int32_t bApplyRuneword) {
-    // Frame slots -12..-4 are ONE object: &nPutItemResult is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int32_t nPutItemResult;
-      D2UnitStrc* pUnitAsPool;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int32_t _bHasInv;
-    bool bHasInv;
-    D2UnitStrc* pInvIterNode;
-    D2UnitStrc* pNewItem;
-    int nCoord;
-    BOOL BVar1;
-    DWORD nSourceGUID;
-    int32_t bAllowSocket;
-    int32_t bCheckMode;
-    int32_t bHandleCursor;
-    eD2UnitType eUnitType;
-    int32_t* pResultOut;
-    __frame0.pUnitAsPool = pUnit;
-    _bHasInv = D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pCorpse);
-    if (!_bHasInv) {
-      return 1;
-    }
-    if (!pCorpse->pInventory) {
-      return 0;
-    }
-
-    for (pInvIterNode = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pCorpse->pInventory); pInvIterNode; pInvIterNode = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvIterNode)) {
-      D2UnitStrc* pClonedItem;
-      pClonedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvIterNode);
-      pNewItem = Items::Drop::ITEM_CloneFromSerializedData(pGame, pClonedItem, nullptr, 1);
-      D2Common::Units::ChangeAnimMode(pNewItem, 4);
-      eUnitType = pClonedItem->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nCoord = pClonedItem->pPath.pStaticPath->nPosX;
-      } else if (pClonedItem->pPath.pDynamicPath) {
-        nCoord = D2Common::PATH::DynamicPath::GetXPos(pClonedItem->pPath.pDynamicPath);
-      } else {
-        nCoord = 0;
-      }
-
-      D2Common::Units::SetXForStaticUnit(pNewItem, nCoord);
-      eUnitType = pClonedItem->eUnitType;
-      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        nCoord = pClonedItem->pPath.pStaticPath->nPosY;
-      } else if (pClonedItem->pPath.pDynamicPath) {
-        nCoord = D2Common::PATH::DynamicPath::GetYPos(pClonedItem->pPath.pDynamicPath);
-      } else {
-        nCoord = 0;
-      }
-
-      D2Common::Units::SetYForStaticUnit(pNewItem, nCoord);
-      if (!pNewItem) {
-        nSourceGUID = -1;
-      } else {
-        nSourceGUID = pNewItem->nUnitGUID;
-      }
-
-      bHandleCursor = 0;
-      bAllowSocket = 1;
-      bCheckMode = 0;
-      pResultOut = &__frame0.nPutItemResult;
-      _bHasInv = bApplyRuneword;
-      BVar1 = PutItemInItem(pGame, __frame0.pUnitAsPool, nSourceGUID, D2Common::Units::GetGUID(pItem), pResultOut, _bHasInv, bCheckMode, bAllowSocket, bHandleCursor);
-      if (!BVar1) {
+    int32_t nPutItemResult;
+    if (D2Common::ITEMS::Items::ITEM_GetItemsTxt_bHasInv(pCorpse)) {
+      if (!pCorpse->pInventory) {
         return 0;
+      }
+
+      for (D2UnitStrc* pInvIterNode = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pCorpse->pInventory); pInvIterNode; pInvIterNode = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pInvIterNode)) {
+        D2UnitStrc* pClonedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pInvIterNode);
+        D2UnitStrc* pNewItem = Items::Drop::ITEM_CloneFromSerializedData(pGame, pClonedItem, nullptr, 1);
+        D2Common::Units::ChangeAnimMode(pNewItem, 4);
+        int nCoord;
+        eD2UnitType eUnitType = pClonedItem->eUnitType;
+        if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
+          nCoord = pClonedItem->pPath.pDynamicPath ? D2Common::PATH::DynamicPath::GetXPos(pClonedItem->pPath.pDynamicPath) : 0;
+        } else {
+          nCoord = pClonedItem->pPath.pStaticPath->nPosX;
+        }
+
+        D2Common::Units::SetXForStaticUnit(pNewItem, nCoord);
+        eUnitType = pClonedItem->eUnitType;
+        if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
+          nCoord = pClonedItem->pPath.pDynamicPath ? D2Common::PATH::DynamicPath::GetYPos(pClonedItem->pPath.pDynamicPath) : 0;
+        } else {
+          nCoord = pClonedItem->pPath.pStaticPath->nPosY;
+        }
+
+        D2Common::Units::SetYForStaticUnit(pNewItem, nCoord);
+        if (!PutItemInItem(pGame, pUnit, !pNewItem ? -1 : pNewItem->nUnitGUID, D2Common::Units::GetGUID(pItem), &nPutItemResult, bApplyRuneword, 0, 1, 0)) {
+          return 0;
+        }
       }
     }
 

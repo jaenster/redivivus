@@ -1339,20 +1339,28 @@ static void __stdcall PLAYER_ExecuteSkillAtUnit(eD2UnitType eTargetUnitType, int
     PLAYER_ExecuteModeBasedAction(nWeaponClass, pUnderMouse);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 BOOL __stdcall PLAYER_CheckPendingInteraction(int32_t nTargetType, int32_t nTargetGUID) {
-    int eQueuedTargetType;
-    D2UnitDataPlayerStrc* pPlayerData;
-    D2UnitStrc* pPlayerUnit_lcl = GetPlayerUnit_UI();
-    if (pPlayerUnit_lcl && pPlayerUnit_lcl->eUnitType == UNIT_PLAYER) {
-      int nQueuedTargetGUID;
-      pPlayerData = pPlayerUnit_lcl->pUnitData.pUnitDataPlayer;
-      if (pPlayerData && pPlayerData->eQueuedSkillId == 0x13) {
-        eQueuedTargetType = pPlayerData->eTargetUnitType;
-        nQueuedTargetGUID = pPlayerData->nTargetUnitGUID;
-        if (eQueuedTargetType == nTargetType && nQueuedTargetGUID == nTargetGUID) {
-          return 1;
-        }
-      }
+    D2UnitStrc* pPlayer = GetPlayerUnit_UI();
+    if (GetTypeInline(pPlayer) != UNIT_PLAYER) {
+      return 0;
+    }
+
+    D2UnitDataPlayerStrc* pPlayerData = pPlayer->pUnitData.pUnitDataPlayer;
+    if (!pPlayerData || pPlayerData->eQueuedSkillId != 0x13) {
+      return 0;
+    }
+
+    int nQueuedTargetType = GetTypeInline(pPlayer) == UNIT_PLAYER ? pPlayerData->eTargetUnitType : 0;
+    int nQueuedTargetGUID = GetTypeInline(pPlayer) == UNIT_PLAYER ? pPlayerData->nTargetUnitGUID : 0;
+    if (nQueuedTargetType == nTargetType && nQueuedTargetGUID == nTargetGUID) {
+      return 1;
     }
 
     return 0;
@@ -2324,7 +2332,7 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
     eD2BodyLoc eBodyLoc;
     uint8_t nDirection;
     int32_t nTmpPos;
-    
+    D2RoomStrc* pRoom;
     BOOL BVar2;
     D2UnitStrc* pItem;
     D2UnitStrc* pItemOwner;
@@ -2348,7 +2356,7 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
 
     D2UnitStrc* pKillerOrCorpse = GetPlayerUnit_UI();
     if (pUnit == pKillerOrCorpse) {
-      
+      int16_t nPosX;
       pKillerOrCorpse = CUnit::UNITS_FindClientSideUnit(pDeathMsg->dwCorpseGUID, UNIT_PLAYER);
       if (!pKillerOrCorpse) {
         return;
@@ -2357,19 +2365,13 @@ void __fastcall PLAYER_HandlePlayerDeath(D2GSPacketSrv0x74 * pDeathMsg) {
       pDynamicPath = pKillerOrCorpse->pPath.pDynamicPath;
       D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, 0);
       D2Common::PATH::DynamicPath::PATH_SetUnitCollisionPattern(pKillerOrCorpse, 5);
-      nTmpPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      nPosY = (int16_t)nTmpPos;
-      nTmpPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-      
-      
-      BVar2 = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pKillerOrCorpse, (D2RoomStrc*)(D2Common::Units::UNITS_GetRoom(pUnit)), (int16_t)((int16_t)nTmpPos), nPosY);
+      BVar2 = D2Common::PATH::Path::PATH_GetCollisionMaskAt(pDynamicPath, pKillerOrCorpse, D2Common::Units::UNITS_GetRoom(pUnit), D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit));
       if (!BVar2) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xaba);
         exit(-1);
       }
 
-      nDirection = D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath);
-      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pKillerOrCorpse->pPath.pDynamicPath, nDirection);
+      D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pKillerOrCorpse->pPath.pDynamicPath, D2Common::PATH::DynamicPath::GetDirection(pUnit->pPath.pDynamicPath));
     }
 
     D2InventoryStrc* pInventory = pUnit->pInventory;

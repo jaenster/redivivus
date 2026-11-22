@@ -740,33 +740,28 @@ uint32_t __fastcall INI_IsDelimiterChar(char cChar) {
 static void INI_StripDelimiters(char * szText) {
     int nWriteIdx;
     int nDelimIdx;
-    char aWorkBuf[260];
-    char cChar;
-    char* pCursor;
-    pCursor = szText;
-    do {
-      cChar = *pCursor;
-      pCursor[(int)(aWorkBuf - szText + 4)] = cChar;
-      pCursor++;
-    } while (cChar != '\0');
-
-    int nStrLen;
-    nStrLen = (int)strlen(szText);
-    int nLen;
-    nLen = (int)nStrLen;
-    int nReadIdx;
-    nReadIdx = 0;
+    char szDelims[4];
+    char szCopy[256];
+    strcpy(szCopy, szText);
+    int nLen = (int)strlen(szText);
+    int nReadIdx = 0;
     if (nLen > 0) {
-      memcpy(aWorkBuf, " \t\n:", 4);
+      szDelims[0] = ' ';
+      szDelims[1] = '\t';
+      szDelims[2] = '\n';
+      szDelims[3] = ':';
       do {
         nWriteIdx = 0;
-        while (aWorkBuf[nWriteIdx] != szText[nReadIdx]) {
-          nWriteIdx++;
-          if (nWriteIdx >= 4) {
-            goto copy_token;
+        do {
+          if (szDelims[nWriteIdx] == szText[nReadIdx]) {
+            goto skip_delimiter;
           }
-        }
 
+          nWriteIdx++;
+        } while (nWriteIdx < 4);
+        goto copy_token;
+
+        skip_delimiter:
         nReadIdx++;
       } while (nReadIdx < nLen);
     }
@@ -774,11 +769,14 @@ static void INI_StripDelimiters(char * szText) {
     copy_token:
     nWriteIdx = 0;
     if (nReadIdx < nLen) {
-      memcpy(aWorkBuf, " \t\n:", 4);
+      szDelims[0] = ' ';
+      szDelims[1] = '\t';
+      szDelims[2] = '\n';
+      szDelims[3] = ':';
       do {
         nDelimIdx = 0;
         do {
-          if (aWorkBuf[nDelimIdx] == aWorkBuf[nReadIdx + 4]) {
+          if (szDelims[nDelimIdx] == szCopy[nReadIdx]) {
             szText[nWriteIdx] = '\0';
             return;
           }
@@ -786,7 +784,7 @@ static void INI_StripDelimiters(char * szText) {
           nDelimIdx++;
         } while (nDelimIdx < 4);
 
-        szText[nWriteIdx] = aWorkBuf[nReadIdx + 4];
+        szText[nWriteIdx] = szCopy[nReadIdx];
         nReadIdx++;
         nWriteIdx++;
       } while (nReadIdx < nLen);

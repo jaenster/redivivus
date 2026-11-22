@@ -89,51 +89,33 @@ void __stdcall FreeQuestRecordPool(D2PoolManagerStrc * pMemory, D2BitBufferStrc 
 // Copies the 0x60-byte quest record from szText into pBitBuffer (0x18 dwords; halts if nSize != 0x60). If nParam is non-zero, for each 16-bit quest slot (bit offsets 0..0x2ae, stride 16) clears QUESTSTATE_JustCompleted (13) and QUESTSTATE_CannotCompleteQuestInGame (14) and sets QUESTSTATE_FinishedInPreviousGame (15) when QUESTSTATE_RewardAwaits (1) is set.
 // Bit numbers from the 1.14d asm 0065c50e-0065c54d (ESI = slot base + 14) and the program's eD2QuestState enum.
 void __stdcall ReadQuestRecordFromBuffer(D2BitBufferStrc * pBitBuffer, char * szText, int16_t nSize, int32_t bResetQuestFlags) {
-    BOOL bBitSet;
-    int iCopyCount;
     if (nSize != 0x60) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6e);
       exit(-1);
     }
 
-    uint8_t* pDstBuf = pBitBuffer->pBuffer;
-    for (iCopyCount = 0x18; iCopyCount; iCopyCount--) {
-      *(uint32_t*)pDstBuf = *(uint32_t*)szText;
-      szText += 4;
-      pDstBuf += 4;
-    }
-
+    memcpy(pBitBuffer->pBuffer, szText, 0x60);
     if (!bResetQuestFlags) {
       return;
     }
 
-    iCopyCount = 0xe;
-    do {
-      Fog::BitBuffer::UnsetBitAtOffset((char*)pBitBuffer->pBuffer, iCopyCount - 1);
-      Fog::BitBuffer::UnsetBitAtOffset((char*)pBitBuffer->pBuffer, iCopyCount);
-      bBitSet = Fog::BitBuffer::CheckBitAtOffset((char*)pBitBuffer->pBuffer, iCopyCount - 0xd);
-      if (bBitSet) {
+    for (int i = 0; i < 0x2a; i++) {
+      Fog::BitBuffer::UnsetBitAtOffset((char*)pBitBuffer->pBuffer, i * 0x10 + 0xd);
+      Fog::BitBuffer::UnsetBitAtOffset((char*)pBitBuffer->pBuffer, i * 0x10 + 0xe);
+      if (Fog::BitBuffer::CheckBitAtOffset((char*)pBitBuffer->pBuffer, i * 0x10 + 1)) {
         /* SetBitAtOffset(quest*16 + 15): QUESTSTATE_FinishedInPreviousGame
-                         (eD2QuestState), set when bit 1 QUESTSTATE_RewardAwaits is set */ Fog::BitBuffer::SetBitAtOffset((char*)pBitBuffer->pBuffer, iCopyCount + 1);
+                         (eD2QuestState), set when bit 1 QUESTSTATE_RewardAwaits is set */ Fog::BitBuffer::SetBitAtOffset((char*)pBitBuffer->pBuffer, i * 0x10 + 0xf);
       }
-
-      iCopyCount += 0x10;
-    } while (iCopyCount < 0x2ae);
+    }
 }
 
 void __stdcall CopyQuestBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pOutputBuffer, int16_t nLength, uint32_t dwParam) {
-    uint32_t iCount;
     /* Input is an array of 96 bytes (=24 uints) */ if (nLength != 0x60) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x84);
       exit(-1);
     }
 
-    uint32_t* pInputAddress = (uint32_t*)pBitBuffer->pBuffer;
-    /* Input is an array of 24x uint */ for (iCount = 0x18; iCount; iCount--) {
-      *(uint32_t*)pOutputBuffer = *pInputAddress;
-      pInputAddress++;
-      pOutputBuffer = pOutputBuffer + 4;
-    }
+    memcpy(pOutputBuffer, pBitBuffer->pBuffer, 0x60);
 }
 
 D2PropertiesTxt * __fastcall Unreferenced_0065c5a0(int32_t nPropertyIndex) {

@@ -3373,6 +3373,7 @@ void __fastcall ForAllButDenOfEvil(D2DrlgLevelStrc * pLevel) {
 static void __stdcall DRLGMAZE_SelectRandomPresetFile(int nPresetFile, D2DrlgLevelStrc * pLevel, D2DrlgMapStrc * pState) {
     D2DrlgLevelLinkNodeStrc* pNode;
     eLvlTypes nLevelType;
+    D2PoolManagerStrc* pMemPool = pLevel->pDrlg->pMemoryPool;
     if (nPresetFile != -1) {
       pState->nRandomMapFileSelector = nPresetFile;
       return;
@@ -3383,59 +3384,53 @@ static void __stdcall DRLGMAZE_SelectRandomPresetFile(int nPresetFile, D2DrlgLev
     int nFirstFile;
     nFirstFile = pState->pTxtLevelPrest->Def;
     uint32_t nResult;
-    nResult = pLevel->nLevelType - 3;
-    if (nResult > 0x20) {
-      return;
-    }
-
-    nResult = (uint32_t)gaMazeLevelTypeCaseTable[pLevel->nLevelType + 1];
-    switch (nResult) {
-      case 0:
-        nResult = 0x34;
-      break;
-      case 1:
-        nResult = 0x6c;
-      break;
-      case 2:
-        nResult = 0xa7;
-      break;
+    switch (pLevel->nLevelType) {
       case 3:
-        nResult = 0xcd;
-      break;
+        nResult = 0x34;
+        break;
       case 4:
-        nResult = 0x101;
-      break;
-      case 5:
-        nResult = 0x12d;
-      break;
-      case 6:
-        nResult = 0x19d;
-      break;
+        nResult = 0x6c;
+        break;
       case 7:
-        nResult = 0x1e1;
-      break;
+        nResult = 0xa7;
+        break;
       case 8:
-        nResult = 0x2f1;
-      break;
-      case 9:
-        nResult = 0x298;
-      break;
+        nResult = 0xcd;
+        break;
       case 10:
+        nResult = 0x101;
+        break;
+      case 13:
+        nResult = 0x12d;
+        break;
+      case 17:
+        nResult = 0x19d;
+        break;
+      case 18:
+        nResult = 0x1e1;
+        break;
+      case 22:
+        nResult = 0x2f1;
+        break;
+      case 24:
+        nResult = 0x298;
+        break;
+      case 25:
         nResult = 0x2c0;
-      break;
-      case 0xb:
+        break;
+      case 28:
         nResult = 0x344;
-      break;
-      case 0xc:
+        break;
+      case 33:
         nResult = 0x3ea;
-      break;
-      case 0xd:
+        break;
+      case 34:
         nResult = 0x422;
-      break;
-      case 0xe:
+        break;
+      case 35:
         nResult = 0x41c;
-      break;
-      case 0xf:
+        break;
+      default:
         return;
     }
 
@@ -3454,7 +3449,7 @@ static void __stdcall DRLGMAZE_SelectRandomPresetFile(int nPresetFile, D2DrlgLev
       }
     }
 
-    pNode = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgLevelLinkNodeStrc, ".\\DRLG\\Maze.cpp", 0x780);
+    pNode = D2_NEW_POOL_AT(pMemPool, D2DrlgLevelLinkNodeStrc, ".\\DRLG\\Maze.cpp", 0x780);
     memset(pNode, 0, sizeof(*pNode));
     pNode->dwData0 = nFirstFile;
     pNode->dwData1 = nFileCount;

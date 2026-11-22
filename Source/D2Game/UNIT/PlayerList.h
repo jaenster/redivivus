@@ -45,7 +45,7 @@ void __fastcall PLAYERLIST_RemoveFromList(::SGAMEDATA * pGame, struct D2UnitStrc
 // Updates the relationship flags between pUnit and pTargetUnit in pUnit's player list, then sends packet 0x8C (RelationshipUpdate) to pTargetUnit's client. dwFlagMask selects which relationship bits to modify; nParam=0 clears them, non-zero sets them. No-op if the two units are the same or no list entry exists for pTargetUnit.
 void __fastcall SendRelationshipStatus(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetUnit, uint32_t dwFlagMask, int32_t bSet);
 uint32_t __fastcall PLAYERLIST_GetFlagsMasked(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t nMaskFlags);
-uint32_t __fastcall PLAYERLIST_GetFlags(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
+uint16_t __fastcall PLAYERLIST_GetFlags(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 void __fastcall SetPlayerRelationship(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, int32_t nRelationship);
 uint16_t __fastcall PLAYERLIST_IsPartied(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 // Sends SCMD 0x8B (PlayerRelationship) packet to pUnit's client reflecting the party/hostility relationship with pUnit2. Walks pUnit's player list to find the entry matching pUnit2's GUID, then—if the units differ and the list entry exists—calls NET_D2GS_SERVER_Send_0x8B_PlayerRelationship with the target GUID and bIsPartied flag.

@@ -27,33 +27,21 @@ int32_t __thiscall GetSystemTimeZone(D2BNetGatewayAccessStr * pGatewayAccess) {
 
 // @sourcefile .\BNetGW.cpp
 void __stdcall SaveAndUnload(D2BNetGatewayAccessStr * pGatewayAccess) {
-    DWORD dwGatewayDataSize;
-    int nCurGatewayIdx;
-    uint8_t* pbGatewayData;
-    char* szSourceFileName;
-    /* 0x117ed0  18  ?SaveAndUnload@BNGatewayAccess@@QAGXXZ */ if (pGatewayAccess->bDirty && pGatewayAccess->pGatewayData) {
-      uint32_t pcCursor;
+    if (pGatewayAccess->bDirty && pGatewayAccess->pGatewayData) {
       Bnet::BnetLog_WriteLine("Recording gateway list selection");
-      szSourceFileName = pGatewayAccess->pGatewayData;
-      pcCursor = Storm::Source::SSTR::SStrLen(szSourceFileName);
-      nCurGatewayIdx = pGatewayAccess->nCurGatewayIdx;
-      szSourceFileName += pcCursor + 1;
-      *szSourceFileName = (char)(nCurGatewayIdx / 10) + '0';
-      szSourceFileName[1] = (char)(pGatewayAccess->nCurGatewayIdx % 10) + '0';
-      szSourceFileName = "Override Battle.net gateways";
-      if (!pGatewayAccess->bIsOverride) {
-        szSourceFileName = "Diablo II Battle.net gateways";
-      }
-
-      dwGatewayDataSize = pGatewayAccess->nGatewayDataSize;
-      pbGatewayData = (uint8_t*)pGatewayAccess->pGatewayData;
-      if (pbGatewayData[dwGatewayDataSize - 1] != '\0' || pbGatewayData[dwGatewayDataSize - 2] != '\0') {
+      char* pIndexText = pGatewayAccess->pGatewayData;
+      pIndexText += Storm::Source::SSTR::SStrLen(pIndexText) + 1;
+      pIndexText[0] = (char)(pGatewayAccess->nCurGatewayIdx / 10) + '0';
+      pIndexText[1] = (char)(pGatewayAccess->nCurGatewayIdx % 10) + '0';
+      const char* szValueName = pGatewayAccess->bIsOverride ? "Override Battle.net gateways" : "Diablo II Battle.net gateways";
+      if (pGatewayAccess->pGatewayData[pGatewayAccess->nGatewayDataSize - 1] != '\0' || pGatewayAccess->pGatewayData[pGatewayAccess->nGatewayDataSize - 2] != '\0') {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb9);
         exit(-1);
       }
 
-      Storm::Source::SReg::SRegSaveData("Configuration", szSourceFileName, 0x82, pbGatewayData, dwGatewayDataSize);
+      Storm::Source::SReg::SRegSaveData("Configuration", szValueName, 0x82, (uint8_t*)pGatewayAccess->pGatewayData, pGatewayAccess->nGatewayDataSize);
     }
+
     if (pGatewayAccess->pGatewayData) {
       Storm::Source::SMem::SMemFree(pGatewayAccess->pGatewayData, ".\\BNetGW.cpp", 0xc6, 0);
       pGatewayAccess->pGatewayData = 0;

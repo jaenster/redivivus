@@ -2381,32 +2381,25 @@ static void TEXT_FreeScreenMessage(ScreenMessage_t * pMessage) {
 }
 
 void __stdcall TEXT_FreeAllScreenMessages(D2ScreenMessageListStrc * pList) {
-    ScreenMessage_t* pNextMessage;
+    int nCount = 0;
     ScreenMessage_t* pMessage = pList->pHead;
-    uint16_t nCountPrev = 0;
-    uint16_t nCount = 0;
     if (pMessage) {
-      int i;
       do {
-        pNextMessage = pMessage->pNext;
-        i = 0;
-        do {
-          if (pMessage->apwszLines[i]) {
-            D2_FREE_AT(pMessage->apwszLines[i], ".\\UI\\text.cpp", 0x6b3);
+        ScreenMessage_t* pFreeMessage = pMessage;
+        pMessage = pMessage->pNext;
+        for (int i = 0; i < 6; i++) {
+          if (pFreeMessage->apwszLines[i]) {
+            D2_FREE_AT(pFreeMessage->apwszLines[i], ".\\UI\\text.cpp", 0x6b3);
           }
+        }
 
-          i++;
-        } while (i < 6);
-
-        D2_FREE_AT(pMessage, ".\\UI\\text.cpp", 0x6b6);
-        nCount = nCountPrev + 1;
-        pMessage = pNextMessage;
-        nCountPrev = nCount;
-      } while (pNextMessage);
+        D2_FREE_AT(pFreeMessage, ".\\UI\\text.cpp", 0x6b6);
+        nCount++;
+      } while (pMessage);
 
       pList->pHead = 0;
     }
-    if (nCount != pList->nCount) {
+    if ((uint16_t)nCount != pList->nCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6cd);
       exit(-1);
     }

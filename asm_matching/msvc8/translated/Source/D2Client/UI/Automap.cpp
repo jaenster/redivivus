@@ -877,14 +877,14 @@ void __stdcall AUTOMAP_AddCellByCoords(int16_t nCellNo, int16_t nPixelX, int16_t
 
 static void __stdcall AUTOMAP_AddCellForUnit(int32_t nCellNo, D2AutomapCellStrc * * pAutomapCell, D2UnitStrc * pUnit) {
     D2AutomapCellStrc* pAutomapCell1 = AUTOMAP_AllocCell();
-    int32_t nTargetX = D2Common::Units::GetScreenX(pUnit);
-    int32_t nTargetY = D2Common::Units::GetScreenY(pUnit);
-    if (nTargetX / 10 + 0x8001U <= 0xffff) {
-      if (nTargetY / 10 + 0x7ffdU <= 0xffff) {
+    int32_t nTargetX = D2Common::Units::GetScreenX(pUnit) / 10 + 1;
+    int32_t nTargetY = D2Common::Units::GetScreenY(pUnit) / 10 - 3;
+    if (nTargetX + 0x8000U <= 0xffff) {
+      if (nTargetY + 0x8000U <= 0xffff) {
         if (nCellNo + 0x8000U <= 0xffff) {
           pAutomapCell1->nCellNo = (short int)nCellNo;
-          pAutomapCell1->xPixel = (short int)(nTargetX / 10) + 1;
-          pAutomapCell1->yPixel = (short int)(nTargetY / 10) - 3;
+          pAutomapCell1->xPixel = (short int)nTargetX;
+          pAutomapCell1->yPixel = (short int)nTargetY;
           AUTOMAP_InsertCellIntoTree(pAutomapCell1, pAutomapCell);
           return;
         }
@@ -903,12 +903,9 @@ static void __stdcall AUTOMAP_AddCellForUnit(int32_t nCellNo, D2AutomapCellStrc 
 
 HANDLE __stdcall AUTOMAP_GetMapFileHandle() {
     HANDLE hFile;
-    int i;
-    uint32_t nNextSlot;
     char szRealmPath[260];
     char szSavePath[260];
     char szFileName[260];
-    AutomapSeedHeader sSeedHeader;
     szSavePath[0] = '\0';
     memset(szSavePath + 1, 0, 0x103);
     szFileName[0] = '\0';
@@ -935,56 +932,46 @@ HANDLE __stdcall AUTOMAP_GetMapFileHandle() {
       }
     }
 
-    sSeedHeader.nHeaderMagic = 0;
-    sSeedHeader.nSlotCursor = 0;
-    memset(sSeedHeader.anSeedSlots, 0, 4 * sizeof(sSeedHeader.anSeedSlots[0]));
+    AutomapSeedHeader sSeedHeader = { 0 };
     DWORD dwBytesRead;
     dwBytesRead = 0;
     Fog::Source::SFile::thunk_ReadFile(hFile, &sSeedHeader, 0x18, &dwBytesRead, (LPOVERLAPPED)0x0);
-    uint32_t nCurrentSlot;
-    nCurrentSlot = sSeedHeader.nSlotCursor;
-    if (dwBytesRead == 0x18 && sSeedHeader.nHeaderMagic == 0xc) {
-      uint32_t nNextSlotCursor;
-      nNextSlot = 0;
-      do {
-        if (sSeedHeader.anSeedSlots[nNextSlot] == GAME::Game::D2GameGame0x546->nInitSeed) {
-          break;
-        }
-
-        nNextSlot++;
-      } while ((int)nNextSlot < 4);
-
-      if (nNextSlot != 4) {
-        goto open_slot_file;
-      }
-
-      nNextSlotCursor = (int)(sSeedHeader.nSlotCursor + 1) % 4;
-      sSeedHeader.anSeedSlots[sSeedHeader.nSlotCursor] = GAME::Game::D2GameGame0x546->nInitSeed;
-      sSeedHeader.nSlotCursor = nNextSlotCursor;
-      sprintf(szFileName, "%s%s.ma%d", szSavePath, D2Game::Save::szSaveCharacterName, nCurrentSlot);
-      Fog::Source::SFile::thunk_DeleteFileA(szFileName);
-    } else {
+    int nSlot;
+    BOOL bInvalid = dwBytesRead != 0x18 ? TRUE : sSeedHeader.nHeaderMagic != 0xc;
+    if (bInvalid) {
       sSeedHeader.nHeaderMagic = 0xc;
       sSeedHeader.nSlotCursor = 1;
       sSeedHeader.anSeedSlots[0] = GAME::Game::D2GameGame0x546->nInitSeed;
-      i = 0;
-      do {
-        sprintf(szFileName, "%s%s.ma%d", szSavePath, D2Game::Save::szSaveCharacterName, i);
+      for (nSlot = 0; nSlot < 4; nSlot++) {
+        sprintf(szFileName, "%s%s.ma%d", szSavePath, D2Game::Save::szSaveCharacterName, nSlot);
         Fog::Source::SFile::thunk_DeleteFileA(szFileName);
-        i++;
-      } while (i < 4);
+      }
 
-      nCurrentSlot = 0;
+      nSlot = 0;
+    } else {
+      for (nSlot = 0; nSlot < 4; nSlot++) {
+        if (sSeedHeader.anSeedSlots[nSlot] == GAME::Game::D2GameGame0x546->nInitSeed) {
+          break;
+        }
+      }
+
+      if (nSlot != 4) {
+        goto open_slot_file;
+      }
+
+      nSlot = sSeedHeader.nSlotCursor;
+      sSeedHeader.nSlotCursor = (int)(nSlot + 1) % 4;
+      sSeedHeader.anSeedSlots[nSlot] = GAME::Game::D2GameGame0x546->nInitSeed;
+      sprintf(szFileName, "%s%s.ma%d", szSavePath, D2Game::Save::szSaveCharacterName, nSlot);
+      Fog::Source::SFile::thunk_DeleteFileA(szFileName);
     }
 
     Fog::Source::SFile::SFILE_Win32SetFilePointer(hFile, 0, (PLONG)0x0, 0);
     Fog::Source::SFile::thunk_WriteFile(hFile, (LPCVOID)&sSeedHeader, 0x18, &dwBytesRead, (LPOVERLAPPED)0x0);
-    nNextSlot = nCurrentSlot;
     open_slot_file:
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
-    sprintf(szFileName, "%s%s.ma%d", szSavePath, D2Game::Save::szSaveCharacterName, nNextSlot);
-    hFile = Fog::Source::SFile::thunk_CreateFileA(szFileName, 0xc0000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 4, 0x80, (HANDLE)0x0);
-    return hFile;
+    sprintf(szFileName, "%s%s.ma%d", szSavePath, D2Game::Save::szSaveCharacterName, nSlot);
+    return Fog::Source::SFile::thunk_CreateFileA(szFileName, 0xc0000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 4, 0x80, (HANDLE)0x0);
 }
 
 static void AUTOMAP_SaveLayerToFile(D2AutomapFileEntryStrc * pEntry) {

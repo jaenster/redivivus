@@ -84,9 +84,8 @@ BOOL __fastcall SKILLPAL_SrvStFn29_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc * p
 // Sacrifice do-func: deals a percentage of the hit damage back to the casting paladin as self-damage. Finds the combat entry for the (pUnit, pTarget) pair, caps nDmgFromHit at target's current HP, applies calc[1]% of that as physical damage to the caster via DAMAGE_ApplyDamageToUnit + SERVER_GetHitCalculation, then processes the combat queue entry to complete the hit against pTarget.
 BOOL __fastcall Skills_SrvDoFunc_064_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    int32_t nDmgFromHit;
-    D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillsTxtBase) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
       return 0;
     }
 
@@ -95,18 +94,13 @@ BOOL __fastcall Skills_SrvDoFunc_064_Sacrifice(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    uint8_t* pCombatEntry = (uint8_t*)UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
+    int32_t* pCombatEntry = (int32_t*)UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
     if (pCombatEntry) {
-      int nTargetHp;
       memset(&sDamage, 0, 0x70);
       sDamage.dwHitFlags |= 0x1000;
-      nDmgFromHit = *(int32_t*)(pCombatEntry + 8);
-      nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-      if (nTargetHp < nDmgFromHit) {
-        nDmgFromHit = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-      }
-
-      sDamage.dwPhysDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDmgFromHit, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxtBase->calc[1], eSkill, nSkillLvl), 100);
+      int32_t nHitDamage = pCombatEntry[2];
+      int32_t nDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0) < nHitDamage ? D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0) : nHitDamage;
+      sDamage.dwPhysDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamage, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl), 100);
       sDamage.dwDmgTotal = sDamage.dwPhysDamage;
       UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pUnit, 0, &sDamage);
       UNIT::SUnitDmg::SERVER_GetHitCalculation(pGame, pUnit, pUnit, &sDamage);

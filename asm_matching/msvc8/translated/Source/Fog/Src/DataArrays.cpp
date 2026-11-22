@@ -97,30 +97,25 @@ uint32_t __fastcall FOG_GetMissileField(D2DataArrayStrc * pMissilesTxt) {
 // Returns the entry of pDataArray addressed by nHandle (high word = slot index, low word = the entry's 16-bit id; low word 0 matches any), or NULL for handle -1, an empty slot or an id mismatch. Halts (lines 219/222) on an index outside numObjects or an uninitialised array.
 // Provenance: asm 006bcc10..006bcc83 (+0x100 numObjects, +0x108 bInitialized, pData + index * nObjectSize); the argument is a D2DataArrayStrc.
 short * __fastcall FOG_GetDataArrayEntry(D2DataArrayStrc * pDataArray, int nHandle) {
-    int nHighWord;
-    if (nHandle == -1) {
-      return nullptr;
-    }
-    if (nHandle < 0 || (nHighWord = (int)(short int)((uint32_t)nHandle >> 0x10) , nHighWord >= pDataArray->numObjects)) {
+    short* pEntry = nullptr;
+    if (nHandle != -1) {
+    short nSlotIndex = (short)(nHandle >> 0x10);
+    if (nSlotIndex < 0 || nSlotIndex >= pDataArray->numObjects) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0xdb);
       exit(-1);
-    } else {
-      short int nSlotId;
-      if (!pDataArray->bInitialized) {
-        ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0xde);
-        exit(-1);
-      }
-
-      nSlotId = *(short int*)(pDataArray->pData + pDataArray->nObjectSize * nHighWord);
-      if (!nSlotId) {
-        return nullptr;
-      }
-      if (!((short int)nHandle && nSlotId != (short int)nHandle)) {
-        return (short int*)(pDataArray->pData + pDataArray->nObjectSize * nHighWord);
-      }
-
-      return nullptr;
     }
+    if (!pDataArray->bInitialized) {
+      ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0xde);
+      exit(-1);
+    }
+
+    short* pSlot = (short*)(pDataArray->pData + pDataArray->nObjectSize * nSlotIndex);
+    if (*pSlot && (!(short)nHandle || *pSlot == (short)nHandle)) {
+      pEntry = pSlot;
+    }
+    }
+
+    return pEntry;
 }
 
 // Returns FOG_GetDataArrayEntry(pDataArray, nHandle); halts (line 253) when that returns NULL.

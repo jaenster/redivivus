@@ -238,10 +238,8 @@ static void __stdcall SKILLSCLT_CreateMultiMissileDirected(D2SkillsTxt * pSkills
 
 // Client-side do-function for multi-missile directed skills (e.g. Strafe, multi-shot variants). Validates skill id and txt row, checks room/town status, manages the progressive missile sound (plays if out of town, stops if in town). If not in town, evaluates cltcalc[0] for the repeat count and calls SKILLSCLT_CreateMultiMissileDirected three times per iteration for nSkillLvl calc rounds. Returns 0 if in town or skill invalid, 1 on success.
 BOOL __fastcall Skills_CltDoFunc_MultiMissileDirected(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL bIsInTown;
-    bool bInTown;
-    int32_t nRepeatCount;
-    nRepeatCount = nSkillLvl;
+    BOOL bInTown;
+    int32_t nCount;
     D2SkillsTxt* pSkillTxt;
     pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -250,23 +248,24 @@ BOOL __fastcall Skills_CltDoFunc_MultiMissileDirected(D2UnitStrc * pUnit, eD2Ski
 
     D2RoomStrc* pRoom;
     pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    if (!pRoom || (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , bIsInTown != 0)) {
-      bInTown = true;
+    if (!pRoom || D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+      bInTown = 1;
     } else {
-      bInTown = false;
+      bInTown = 0;
     }
     if (pSkillTxt->prgsound > 0) {
       int32_t nMissileSound;
       nMissileSound = UNIT::UnitSnd::UNITSND_GetMissileSound(pUnit, (int)pSkillTxt->prgsound);
-      if (!bInTown) {
+      if (bInTown) {
+        if (nMissileSound) {
+          Sound::SOUND_StopUnitSoundByIndex(nMissileSound, pUnit, 1);
+        }
+      } else {
         if (!nMissileSound) {
           Sound::SOUND_PlaySound((int)pSkillTxt->prgsound, pUnit, 0, 0, 0);
         }
 
         goto spawn_missile_rounds;
-      }
-      if (nMissileSound) {
-        Sound::SOUND_StopUnitSoundByIndex(nMissileSound, pUnit, 1);
       }
     }
     if (bInTown) {
@@ -274,15 +273,11 @@ BOOL __fastcall Skills_CltDoFunc_MultiMissileDirected(D2UnitStrc * pUnit, eD2Ski
     }
 
     spawn_missile_rounds:
-    nSkillLvl = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->cltcalc[0], eSkill, nSkillLvl);
-    if (nSkillLvl <= 0) {
-      return 1;
-    }
-
-    for (int32_t i = 0; i < nSkillLvl; i++) {
-      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
-      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
-      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nRepeatCount, pUnit);
+    nCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->cltcalc[0], eSkill, nSkillLvl);
+    for (int32_t i = 0; i < nCount; i++) {
+      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nSkillLvl, pUnit);
+      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nSkillLvl, pUnit);
+      SKILLSCLT_CreateMultiMissileDirected(pSkillTxt, eSkill, nSkillLvl, pUnit);
     }
 
     return 1;
@@ -415,14 +410,11 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsMonsterOrPlayer(D2UnitStrc * pUnit
 
 // Client-side helper that spawns up to nCount² missiles of type pMissileId in a circular area of radius nCount around (nCenterX, nCenterY). Uses a seeded PRNG to pick random offsets within the diameter; skips positions outside the circle or without a valid nearby room. Used by client skill effects to display visual missile bursts.
 void __fastcall SKILLSCLT_CreateMissileWithGfx(D2UnitStrc * pUnit, uint32_t nSeed, eMissilesId pMissileId, int32_t nCenterX, int32_t nCenterY, int32_t nCount, eD2Skills eSkill, int32_t nSkillLevel) {
-    D2RoomStrc* pNearbyRoom;
-    uint32_t nRandOffsetX;
     D2SkillArgStrc sSkillArg;
-    D2SeedStrc ullSeedPair;
-    D2Common::Seed::InitSeed_Param_666(&ullSeedPair, nSeed);
-    int nDeltaY = nCount * nCount;
-    uint32_t ullSeedInner = nCount * 2;
-    int nMaxDistSq = nDeltaY;
+    D2SeedStrc sSeed;
+    D2Common::Seed::InitSeed_Param_666(&sSeed, nSeed);
+    int nMaxDistSq = nCount * nCount;
+    int nRange = nCount * 2;
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 1;
     sSkillArg.pOwner = pUnit;
@@ -430,65 +422,25 @@ void __fastcall SKILLSCLT_CreateMissileWithGfx(D2UnitStrc * pUnit, uint32_t nSee
     sSkillArg.nSkillLevel = nSkillLevel;
     sSkillArg.nMissileTxtNo = pMissileId;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    D2SeedStrc ullSeed = ullSeedPair;
-    nSkillLevel = nDeltaY;
-    if (nDeltaY <= 0) {
-      return;
-    }
-
-    do {
-      int nDeltaX;
-      if ((int)ullSeedInner <= 0) {
-        nRandOffsetX = 0;
-      } else if (ullSeedInner & ullSeedInner - 1) {
-        ullSeed = D2_SEED_NEXT_VAL(ullSeed);
-        nRandOffsetX = (uint32_t)(ullSeed.nSeedLow % ullSeedInner);
-        ullSeedPair = ullSeed;
-      } else {
-        ullSeed = D2_SEED_NEXT_VAL(ullSeed);
-        nRandOffsetX = ullSeedInner - 1 & ullSeed.nSeedLow;
-        ullSeedPair = ullSeed;
-      }
-
-      nDeltaY = nCount - nRandOffsetX;
-      if ((int)ullSeedInner <= 0) {
-        nRandOffsetX = 0;
-      } else if (ullSeedInner & ullSeedInner - 1) {
-        ullSeed = D2_SEED_NEXT_VAL(ullSeed);
-        nRandOffsetX = (uint32_t)(ullSeed.nSeedLow % ullSeedInner);
-        ullSeedPair = ullSeed;
-      } else {
-        ullSeed = D2_SEED_NEXT_VAL(ullSeed);
-        nRandOffsetX = ullSeedInner - 1 & ullSeed.nSeedLow;
-        ullSeedPair = ullSeed;
-      }
-
-      nDeltaX = nCount - nRandOffsetX;
-      if (nDeltaX * nDeltaX + nDeltaY * nDeltaY <= nMaxDistSq) {
-        sSkillArg.nX = nCenterX + nDeltaY;
-        sSkillArg.nY = nDeltaX + nCenterY;
-        pNearbyRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY);
-        ullSeed = ullSeedPair;
-        if (pNearbyRoom) {
+    for (int i = 0; i < nMaxDistSq; i++) {
+      int nDeltaX = nCount - D2_SeedRollLimited(&sSeed, nRange);
+      int nDeltaY = nCount - D2_SeedRollLimited(&sSeed, nRange);
+      if (nDeltaY * nDeltaY + nDeltaX * nDeltaX <= nMaxDistSq) {
+        sSkillArg.nX = nCenterX + nDeltaX;
+        sSkillArg.nY = nDeltaY + nCenterY;
+        if (D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, sSkillArg.nX, sSkillArg.nY)) {
           UNIT::Missile::MakeMissile(&sSkillArg);
-          ullSeed = ullSeedPair;
         }
       }
-
-      nSkillLevel--;
-    } while (nSkillLevel);
+    }
 }
 
 // Client aura do-function: fires one missile toward the current target (or cursor if no target) with graphics and range determined by the aura's current level via SKILLSASS_GetCltMissileByAuraLevel and SKILLSASS_GetPrgCalcByAuraLevel. Falls back to aurarangecalc from SkillsTxt if prgcalc returns less than 1. Returns FALSE if the skill entry is invalid or missile ID is -1.
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissileAtTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nPosX;
     int32_t nPosY;
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -499,7 +451,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissileAtTarget(D2UnitStrc * pUnit, e
 
     uint32_t nPrgCalc = SkillsAss::SKILLSASS_GetPrgCalcByAuraLevel(pUnit, eSkill, nSkillLvl);
     if ((int)nPrgCalc <= 0) {
-      nPrgCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt[eSkill].aurarangecalc, eSkill, nSkillLvl);
+      nPrgCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
     }
 
     D2UnitStrc* pTargetUnit = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
@@ -1222,19 +1174,14 @@ uint32_t __fastcall SKILLSCLT_ValidateSkillAndMissile(D2UnitStrc * pUnit, int32_
 
 // Returns the sound duration (in frames) for a monster's charge-skill animation. Looks up the monster unit's MonStats entry, finds the matching skill slot among Skill1..Skill8, and reads the corresponding Skill[N] duration from MonSoundsTxt. Returns 0 if the monster, stats row, or sounds row are invalid; clamps negative durations to 0 via bitmask.
 uint32_t __fastcall SKILLSCLT_CalcChargeSkillDuration(D2UnitStrc * pMonUnit, int32_t nSkillId) {
-    if (!pMonUnit) {
-      return 0;
+    int nSkillSlot;
+    D2MonStatsTxt* pMonStats = nullptr;
+    if (pMonUnit) {
+      nSkillSlot = pMonUnit->nClassId;
+      if (nSkillSlot >= 0 && nSkillSlot < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+        pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nSkillSlot;
+      }
     }
-
-    int nSkillSlot = pMonUnit->nClassId;
-    if (nSkillSlot < 0) {
-      return 0;
-    }
-    if (!(nSkillSlot < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
-      return 0;
-    }
-
-    D2MonStatsTxt* pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nSkillSlot;
     if (!pMonStats) {
       return 0;
     }

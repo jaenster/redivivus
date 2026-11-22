@@ -183,14 +183,7 @@ void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {
     // Static local variables (originally global data)
     static BYTE * gaPaletteTableLocal[72] = {}; D2_STATIC_GUARD(gaPaletteTableLocal, "D2DDraw::Renderer::DirectDraw::SetPaletteTable::gaPaletteTableLocal");
 
-    int nCount;
-    uint8_t** pDst = gaPaletteTableLocal;
-    for (nCount = 0x48; nCount; nCount--) {
-      *pDst = *ppPaletteTable;
-      ppPaletteTable++;
-      pDst++;
-    }
-
+    memcpy(gaPaletteTableLocal, ppPaletteTable, sizeof(gaPaletteTableLocal));
     gpPaletteTable = gaPaletteTableLocal;
 }
 

@@ -4288,37 +4288,27 @@ void __stdcall SOUND_UpdateAmbientMusic() {
         return;
       }
 
-      nTableIdx = 0;
-      do {
+      for (nTableIdx = 0; nTableIdx < 10; nTableIdx++) {
         if (nMusicTableEntryPtr[nTableIdx] == LEVEL_None) {
           break;
         }
         if (nMusicTableEntryPtr[nTableIdx] == eCurrentLevelId) {
-          nTableIdx = 0;
           goto mark_set_played;
         }
-
-        nTableIdx++;
-      } while (nTableIdx < 10);
+      }
 
       pMusicTableRow++;
-      if ((intptr_t)pMusicTableRow >= (intptr_t)((char*)&gaLanguageNames_0072a300 + 20)) {
-        return;
-      }
-    } while (true);
+    } while ((intptr_t)pMusicTableRow < (intptr_t)((char*)&gaLanguageNames_0072a300 + 20));
 
-    while (true) {
-      nTableIdx++;
-      gaLevelAmbientMusicPlayedFlags[*pnLevelId] = 1;
-      if (nTableIdx >= 10) {
+    return;
+
+mark_set_played:
+    for (nTableIdx = 0; nTableIdx < 10; nTableIdx++) {
+      if (!nMusicTableEntryPtr[nTableIdx]) {
         break;
       }
 
-      mark_set_played:
-      pnLevelId = nMusicTableEntryPtr + nTableIdx;
-      if (!*pnLevelId) {
-        break;
-      }
+      gaLevelAmbientMusicPlayedFlags[nMusicTableEntryPtr[nTableIdx]] = 1;
     }
 
     if (!(!nMusicTableEntryPtr[10] || (BVar1 = UI::QuestLog::QUESTLOG_IsQuestAvailableForInteraction(nMusicTableEntryPtr[10]) , BVar1 != 0))) {

@@ -1991,14 +1991,17 @@ int32_t __fastcall GAMEDATA_TimerGetRemaining(int32_t * pTimerStruct) {
 
 uint32_t __fastcall GAMEDATA_CheckTimerExpired(D2ClientTimerStrc * pTimer) {
     if (pTimer->dwDurationMs) {
-      DWORD dwCurrentTick = GetTickCount();
-      if (dwCurrentTick >= pTimer->dwStartTick + pTimer->dwDurationMs) {
+      int nRemaining;
+      DWORD dwNow = GetTickCount();
+      if (dwNow >= pTimer->dwStartTick + pTimer->dwDurationMs) {
         pTimer->dwStartTick = 0;
         pTimer->dwDurationMs = 0;
-        return 1;
+        nRemaining = 0;
+      } else {
+        nRemaining = pTimer->dwStartTick - dwNow + pTimer->dwDurationMs;
       }
 
-      return (uint32_t)!(pTimer->dwStartTick - dwCurrentTick + pTimer->dwDurationMs);
+      return nRemaining == 0;
     }
 
     return 1;
@@ -2209,13 +2212,9 @@ void __stdcall Congratz_HandleOkButton(D2UIMouseMsgStrc * pMsg) {
 
 void __stdcall GAMEDATA_DrawCharacterPortrait() {
     int nTitleIndex;
-    uint32_t nCopyWords;
-    uint16_t* pwClearCursor;
     uint16_t awcTitle[100];
     uint16_t awcName[100];
     D2CharPortraitTextStrc sText;
-    char cChar;
-    char* pNextChar;
     D2IniConfigStrc* pIniData = ClientModeInGame::D2IniData_Getter();
     for (nTitleIndex = 0; nTitleIndex < 0x64; nTitleIndex++) {
       awcName[nTitleIndex] = L'\0';
@@ -2223,76 +2222,59 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
 
     strcpy(sText.szName, pIniData->szNAME);
     D2Lang::UTF8_ConvertToWideChar(awcName, sText.szName, 0x40);
-    int32_t nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(awcName);
-    D2Win::Src::D2WinFont::DRAW_text(awcName, UI::ui::ScreenSizeX / 2 - nTextWidth / 2, 0xbb, 4, 0);
-    eD2PlayerStatus ePlayerStatus = pIniData->eCTEMP_eD2PlayerStatus;
+    int32_t nHalfWidth = D2Win::Src::D2WinFont::DRAW_text0(awcName) / 2;
+    int32_t nTextX = UI::ui::ScreenSizeX / 2 - nHalfWidth;
+    D2Win::Src::D2WinFont::DRAW_text(awcName, nTextX, 0xbb, 4, 0);
+    int ePlayerStatus = pIniData->eCTEMP_eD2PlayerStatus;
+    uint8_t nClassId = nD2PlayerClassID;
+    uint32_t nHardcore = ePlayerStatus & PLAYERSTATUS_Hardcore;
+    uint32_t nExpansion = ePlayerStatus & PLAYERSTATUS_Expansion;
     for (nTitleIndex = 0; nTitleIndex < 0x64; nTitleIndex++) {
       awcTitle[nTitleIndex] = L'\0';
     }
 
-    uint32_t nHardcoreFlag = ePlayerStatus & 4;
-    if (CLIENT_nDifficulty == '\0') {
-      nTitleIndex = (ePlayerStatus & PLAYERSTATUS_Expansion) != 0 ? 5 : 4;
-      if (!(ePlayerStatus & PLAYERSTATUS_Hardcore)) {
-        nHardcoreFlag = 0;
+    char* pSrcChar;
+    int nDifficulty = CLIENT_nDifficulty;
+    if (nDifficulty == 0) {
+      nTitleIndex = (nExpansion != 0) + 4;
+      if (nHardcore) {
+        pSrcChar = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress(nClassId, nTitleIndex, nHardcore, nExpansion);
+      } else {
+        pSrcChar = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress(nClassId, nTitleIndex, 0, nExpansion);
       }
-    } else if (CLIENT_nDifficulty == '\x01') {
-      nTitleIndex = (ePlayerStatus & PLAYERSTATUS_Expansion) != 0 ? 0xaU : 0x8U;
-      if (!(ePlayerStatus & PLAYERSTATUS_Hardcore)) {
-        nHardcoreFlag = 0;
+    } else if (nDifficulty == 1) {
+      nTitleIndex = (nExpansion != 0) * 2 + 8;
+      if (nHardcore) {
+        pSrcChar = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress(nClassId, nTitleIndex, nHardcore, nExpansion);
+      } else {
+        pSrcChar = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress(nClassId, nTitleIndex, 0, nExpansion);
+      }
+    } else if (nDifficulty == 2) {
+      nTitleIndex = (nExpansion ? 3 : 0) + 12;
+      if (nHardcore) {
+        pSrcChar = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress(nClassId, nTitleIndex, nHardcore, nExpansion);
+      } else {
+        pSrcChar = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress(nClassId, nTitleIndex, 0, nExpansion);
       }
     } else {
-      if (CLIENT_nDifficulty != '\x02') {
-        return;
-      }
-
-      nTitleIndex = 0xc + (ePlayerStatus & PLAYERSTATUS_Expansion ? 3 : 0);
-      if (!(ePlayerStatus & PLAYERSTATUS_Hardcore)) {
-        nHardcoreFlag = 0;
-      }
+      return;
     }
 
-    char* pSrcChar = D2Win::Src::D2WinSmack::D2COMP_GetTitleFromProgress((uint32_t)nD2PlayerClassID, nTitleIndex, nHardcoreFlag, ePlayerStatus & 0x20);
     if (!pSrcChar) {
       return;
     }
 
     strcpy(sText.szTitle, pSrcChar);
-
-    D2CharPortraitTextStrc* pDstChar = &sText;
-    do {
-      pSrcChar = pDstChar->szName;
-      pDstChar = (D2CharPortraitTextStrc*)(pDstChar->szName + 1);
-    } while (*pSrcChar != '\0');
-
-    nHardcoreFlag = (intptr_t)pDstChar - (intptr_t)&sText;
-    pSrcChar = sText.szName + 99;
-    do {
-      pNextChar = pSrcChar + 1;
-      pSrcChar++;
-    } while (*pNextChar != '\0');
-
-    pDstChar = &sText;
-    for (nCopyWords = nHardcoreFlag >> 2; nCopyWords; nCopyWords--) {
-      *(uint32_t*)pSrcChar = *(uint32_t*)pDstChar->szName;
-      pDstChar = (D2CharPortraitTextStrc*)(pDstChar->szName + 4);
-      pSrcChar += 4;
-    }
-
-    for (nHardcoreFlag &= 3; nHardcoreFlag; nHardcoreFlag--) {
-      *pSrcChar = pDstChar->szName[0];
-      pDstChar = (D2CharPortraitTextStrc*)(pDstChar->szName + 1);
-      pSrcChar++;
-    }
-
+    strcat(sText.szTitle, sText.szName);
     D2Lang::UTF8_ConvertToWideChar(awcTitle, sText.szTitle, 0x40);
-    nTextWidth = D2Win::Src::D2WinFont::DRAW_text0(awcTitle);
+    nHalfWidth = D2Win::Src::D2WinFont::DRAW_text0(awcTitle) / 2;
+    nTextX = UI::ui::ScreenSizeX / 2 - nHalfWidth;
     int32_t nY = 0x115;
     if (gClientGameData.CLIENT_bExpansion) {
       nY = 0x165;
     }
 
-    D2Win::Src::D2WinFont::DRAW_text(awcTitle, UI::ui::ScreenSizeX / 2 - nTextWidth / 2, nY, 4, 0);
+    D2Win::Src::D2WinFont::DRAW_text(awcTitle, nTextX, nY, 4, 0);
 }
 
 // End-game congrats screen; caches images in `gD2QServer.congratsBgImage`/`congratsOkButton` and uses `gD2QServer.frameSkipLevel` to decide whether to skip frames.

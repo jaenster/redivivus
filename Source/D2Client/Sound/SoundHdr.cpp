@@ -561,8 +561,10 @@ BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMu
 }
 
 float __fastcall SOUNDHDR_GetFalloffMin(int32_t nSoundId) {
-    D2SoundsTxt* pSound = !pTxtSounds || nSoundId < 0 || nSoundId >= nTxtSoundsSize ? 0 : pTxtSounds + nSoundId;
+    D2SoundsTxt* pSound = !pTxtSounds || nSoundId < 0 || nSoundId >= nTxtSoundsSize ? 0 : pTxtSounds + nSoundId; // steer-ok: row select before the field load, as the asm computes it
     switch (pSound->Falloff) {
+      case 0:
+        return 60.0;
       case 2:
         return 200.0;
       case 3:

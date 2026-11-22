@@ -309,14 +309,14 @@ void __fastcall ITEM_RemoveItemStatsFromOwner(D2UnitStrc * pUnit, D2UnitStrc * p
 static D2UnitStrc * __stdcall ITEM_CreateItemFromGroundPacket(uint16_t nItemX, uint16_t nItemY, int32_t bSendIdentRequest, uint8_t * pPacketData, D2UnitDataItemDetailsStrc * pUnitDataItemDetails) {
     D2UnitDataItemDetailsStrc itemDetails;
     int32_t bLoadFailed;
-    uint8_t byPacketSize = pPacketData[2];
+    int nDataSize = pPacketData[2] - 8;
     if (!pUnitDataItemDetails) {
-      D2Common::ITEMS::Items::ExtractItemDetails(pPacketData + 8, byPacketSize - 8, 0, &itemDetails);
+      D2Common::ITEMS::Items::ExtractItemDetails(pPacketData + 8, nDataSize, 0, &itemDetails);
       pUnitDataItemDetails = &itemDetails;
     }
 
     D2UnitStrc* pUnit = CUnit::UNIT_CreateWarp(*(int32_t*)(pPacketData + 4), pUnitDataItemDetails->classId, (uint32_t)nItemX, (uint32_t)nItemY, UNIT_ITEM, (uint32_t)pUnitDataItemDetails->nAnimMode);
-    D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pPacketData + 8, byPacketSize - 8, 0, nullptr, 0x60, &bLoadFailed);
+    D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pPacketData + 8, nDataSize, 0, nullptr, 0x60, &bLoadFailed);
     if (bLoadFailed) {
       CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pPacketData + 4), UNIT_ITEM);
       return nullptr;
@@ -341,14 +341,14 @@ static D2UnitStrc * __stdcall ITEM_CreateItemFromGroundPacket(uint16_t nItemX, u
 static D2UnitStrc * __stdcall ITEM_CreateItemFromBodyPacket(uint16_t nItemX, uint16_t nItemY, int32_t bSendIdentRequest, uint8_t * pPacketData, D2UnitDataItemDetailsStrc * pUnitDataItemDetails) {
     D2UnitDataItemDetailsStrc itemDetails;
     int32_t bLoadFailed;
-    uint8_t byPacketSize = pPacketData[2];
+    int nDataSize = pPacketData[2] - 0xd;
     if (!pUnitDataItemDetails) {
-      D2Common::ITEMS::Items::ExtractItemDetails(pPacketData + 0xd, byPacketSize - 0xd, 0, &itemDetails);
+      D2Common::ITEMS::Items::ExtractItemDetails(pPacketData + 0xd, nDataSize, 0, &itemDetails);
       pUnitDataItemDetails = &itemDetails;
     }
 
     D2UnitStrc* pUnit = CUnit::UNIT_CreateWarp(*(int32_t*)(pPacketData + 4), pUnitDataItemDetails->classId, (uint32_t)nItemX, (uint32_t)nItemY, UNIT_ITEM, (uint32_t)pUnitDataItemDetails->nAnimMode);
-    D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pPacketData + 0xd, byPacketSize - 0xd, 0, nullptr, 0x60, &bLoadFailed);
+    D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pPacketData + 0xd, nDataSize, 0, nullptr, 0x60, &bLoadFailed);
     if (bLoadFailed) {
       CUnit::RemoveObjectFromServerObjectTable(*(uint32_t*)(pPacketData + 4), UNIT_ITEM);
       return nullptr;

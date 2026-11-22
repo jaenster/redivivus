@@ -456,39 +456,15 @@ BOOL __fastcall Skills_CltStFunc_SetSrvDoFlagAndReviveGfx(D2UnitStrc * pUnit, eD
 }
 
 BOOL __fastcall Skills_CltDoFunc_EMon_ScreenShake(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int nRampUpFrames;
-    int nHoldFrames;
-    int nRampDownFrames;
-    int32_t nDuration;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillsTxt) {
-      nDuration = 0;
-    } else {
-      nDuration = pSkillsTxt->Param[0];
-    }
-
-    D2SkillsTxt* pSkillsTxt2 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillsTxt2) {
-      nRampUpFrames = 0;
-    } else {
-      nRampUpFrames = pSkillsTxt2->Param[1];
-    }
-
-    D2SkillsTxt* pSkillsTxt3 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillsTxt3) {
-      nHoldFrames = 0;
-    } else {
-      nHoldFrames = pSkillsTxt3->Param[2];
-    }
-
-    D2SkillsTxt* pSkillsTxt4 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillsTxt4) {
-      nRampDownFrames = 0;
-    } else {
-      nRampDownFrames = pSkillsTxt4->Param[3];
-    }
-
-    GAME::View::SetShake(nDuration, nRampUpFrames * 1000 / 0x19, nHoldFrames * 1000 / 0x19, nRampDownFrames * 1000 / 0x19);
+    int nDuration = !pSkillsTxt ? 0 : pSkillsTxt->Param[0];
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    int nRampUpMs = (!pSkillsTxt ? 0 : pSkillsTxt->Param[1]) * 1000 / 25;
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    int nHoldMs = (!pSkillsTxt ? 0 : pSkillsTxt->Param[2]) * 1000 / 25;
+    pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    int nRampDownMs = (!pSkillsTxt ? 0 : pSkillsTxt->Param[3]) * 1000 / 25;
+    GAME::View::SetShake(nDuration, nRampUpMs, nHoldMs, nRampDownMs);
     return 1;
 }
 
@@ -619,7 +595,6 @@ BOOL __fastcall Skills_CltStFunc_SetTimedDurationAndInfernoState(D2UnitStrc * pU
 
 // Client DoFunc for EMon Inferno-style skills with Z elevation. Checks the skill's Param1 against the current game entry index to decide whether to clear the STATE_inferno state or create an inferno missile via SKILLSSOR_CltCreateInfernoMissile. If created, sets particle Z from cltcalc[0] and enables reverse direction. Clears UNITFLAG_SKSRVDOFUNC on success.
 BOOL __fastcall Skills_CltDoFunc_EMon_InfernoWithZ(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nPosZ;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
@@ -630,27 +605,24 @@ BOOL __fastcall Skills_CltDoFunc_EMon_InfernoWithZ(D2UnitStrc * pUnit, eD2Skills
       return 0;
     }
 
-    uint32_t nSkillParam1 = D2Common::Skills::SKILL_GetParam1(pSkill);
-    uint32_t nEntryIndex = GAME::Game::GetEntryIndex();
-    if (nEntryIndex > nSkillParam1) {
+    if ((uint32_t)GAME::Game::GetEntryIndex() > (uint32_t)D2Common::Skills::SKILL_GetParam1(pSkill)) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 0);
-    } else {
-      D2UnitStrc* pInfernoMissile;
-      pInfernoMissile = SkillsSor::SKILLSSOR_CltCreateInfernoMissile(pUnit, eSkill, nSkillLvl);
-      if (pInfernoMissile) {
-        Engine::Particle::AllocParticle(pInfernoMissile);
-        nPosZ = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->cltcalc[0], eSkill, nSkillLvl);
-        Engine::Particle::SetPosVectorShifted(pInfernoMissile, 0, 0, nPosZ);
-        Engine::Particle::PARTICLE_SetReverseDirection(pInfernoMissile, 1);
-        if (pUnit) {
-          pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
-        }
-
-        return 1;
-      }
+      return 0;
     }
 
-    return 0;
+    D2UnitStrc* pInfernoMissile = SkillsSor::SKILLSSOR_CltCreateInfernoMissile(pUnit, eSkill, nSkillLvl);
+    if (!pInfernoMissile) {
+      return 0;
+    }
+
+    Engine::Particle::AllocParticle(pInfernoMissile);
+    Engine::Particle::SetPosVectorShifted(pInfernoMissile, 0, 0, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->cltcalc[0], eSkill, nSkillLvl));
+    Engine::Particle::PARTICLE_SetReverseDirection(pInfernoMissile, 1);
+    if (pUnit) {
+      pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
+    }
+
+    return 1;
 }
 
 // Client StFunc: reads the confirmed target unit's map X/Y position and stores them into the current skill's Param1/Param2. Used by EMon skills so subsequent DoFunc calls can fire missiles at the remembered target coordinates rather than the live target position.
@@ -876,12 +848,11 @@ BOOL __fastcall Skills_CltDoFunc_EMon_VineAttack(D2UnitStrc * pUnit, eD2Skills e
 
 BOOL __fastcall Skills_CltDoFunc_EMon_BloodAndMissileB(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillTxt && pSkillTxt->cltmissile[2] >= 0 && (int)pSkillTxt->cltmissile[2] < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+    if (pSkillTxt->cltmissile[2] < 0 || pSkillTxt->cltmissile[2] >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
 

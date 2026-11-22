@@ -479,18 +479,15 @@ eD2ServerIncomingStatus __fastcall PARTYSCREEN_DispatchAction(::SGAMEDATA * pGam
     if (!pActingUnit) {
       return SERVERSTATUS_OK;
     }
-    if (!gaPartyScreenActionTable[nActionIndex]) {
-      return SERVERSTATUS_OK;
-    }
+    if (gaPartyScreenActionTable[nActionIndex]) {
+      if (IsBadCodePtr((FARPROC)gaPartyScreenActionTable[nActionIndex])) {
+        return SERVERSTATUS_BAD_PARAMS;
+      }
 
-    BOOL bIsBadCode = IsBadCodePtr((FARPROC)gaPartyScreenActionTable[nActionIndex]);
-    if (bIsBadCode) {
-      return SERVERSTATUS_BAD_PARAMS;
-    }
-
-    (*gaPartyScreenActionTable[nActionIndex])(pGame, pUnit, pActingUnit, dwArg, (uintptr_t)&nError);
-    if (nError) {
-      return SERVERSTATUS_BAD_PARAMS;
+      (*gaPartyScreenActionTable[nActionIndex])(pGame, pUnit, pActingUnit, dwArg, (uintptr_t)&nError);
+      if (nError) {
+        return SERVERSTATUS_BAD_PARAMS;
+      }
     }
 
     return SERVERSTATUS_OK;

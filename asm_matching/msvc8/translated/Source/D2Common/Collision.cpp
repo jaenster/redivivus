@@ -737,63 +737,49 @@ D2UnitStrc * __stdcall CallCollisionFunction(D2RoomStrc * pRoom, int32_t nX, int
 }
 
 static void __stdcall TileLibrary_AddCollision(uint32_t nY, uint32_t nX, D2TileLibraryEntryStrc * pTileLibraryEntry, D2RoomCollisionGridStrc * pCollisionMap) {
-    uint16_t* pCellPtr;
-    if (!(pCollisionMap && pCollisionMap->pMapStart)) {
+    if (!pCollisionMap || !pCollisionMap->pMapStart) {
       return;
     }
 
     uint8_t* pTileFlags = D2CMP::DUNGEON::Dungeon::TILE_GetTileFlags(pTileLibraryEntry);
     int nGridXSize = pCollisionMap->sCoords.dwXSize;
-    uint32_t nXClamped = (int)nX <= 0 ? 0 : nX;
-    uint8_t* pSubTileFlags = pTileFlags + ((nX - nXClamped + 4) * 5 - nY);
-    if ((int)nXClamped >= (int)(nX + 5)) {
-      return;
-    }
-
-    int nRowByteOffset = nXClamped * nGridXSize * 2;
-    int nColsRemaining = nX + 5 - nXClamped;
-    do {
-      eCollisionFlags* pMapBase;
-      pMapBase = pCollisionMap->pMapStart;
-      for (nXClamped = (int)nY <= 0 ? 0 : nY; (int)nXClamped < (int)(nY + 5); nXClamped++) {
-        pCellPtr = (uint16_t*)((char*)pMapBase + (nXClamped * 2 + nRowByteOffset));
-        *pCellPtr |= (uint16_t)pSubTileFlags[nXClamped];
+    int nColStart = (int)nY <= 0 ? 0 : nY;
+    int nColEnd = nY + 5;
+    int nRowEnd = nX + 5;
+    int nRowStart = (int)nX <= 0 ? 0 : nX;
+    uint8_t* pFlagRow = pTileFlags + (nX - nRowStart + 4) * 5 + (nColStart - nY);
+    int nRowOffset = nRowStart * nGridXSize;
+    for (int nRow = nRowStart; nRow < nRowEnd; nRow++) {
+      eCollisionFlags* pMapRow = pCollisionMap->pMapStart + nRowOffset;
+      for (int nCol = nColStart; nCol < nColEnd; nCol++) {
+        pMapRow[nCol] |= (uint16_t)pFlagRow[nCol - nColStart];
       }
-
-      nRowByteOffset += nGridXSize * 2;
-      pSubTileFlags += -5;
-      nColsRemaining--;
-    } while (nColsRemaining);
+      nRowOffset += nGridXSize;
+      pFlagRow -= 5;
+    }
 }
 
 static void __stdcall TileLibrary_RemoveCollision(uint32_t nY, uint32_t nX, D2TileLibraryEntryStrc * pTileLibraryEntry, D2RoomCollisionGridStrc * pCollisionMap) {
-    uint16_t* pCellPtr;
-    if (!(pCollisionMap && pCollisionMap->pMapStart)) {
+    if (!pCollisionMap || !pCollisionMap->pMapStart) {
       return;
     }
 
     uint8_t* pTileFlags = D2CMP::DUNGEON::Dungeon::TILE_GetTileFlags(pTileLibraryEntry);
     int nGridXSize = pCollisionMap->sCoords.dwXSize;
-    uint32_t nXClamped = (int)nX <= 0 ? 0 : nX;
-    uint8_t* pSubTileFlags = pTileFlags + ((nX - nXClamped + 4) * 5 - nY);
-    if ((int)nXClamped >= (int)(nX + 5)) {
-      return;
-    }
-
-    int nRowByteOffset = nXClamped * nGridXSize * 2;
-    int nColsRemaining = nX + 5 - nXClamped;
-    do {
-      eCollisionFlags* pMapBase;
-      pMapBase = pCollisionMap->pMapStart;
-      for (nXClamped = (int)nY <= 0 ? 0 : nY; (int)nXClamped < (int)(nY + 5); nXClamped++) {
-        pCellPtr = (uint16_t*)((char*)pMapBase + (nXClamped * 2 + nRowByteOffset));
-        *pCellPtr &= ~(uint16_t)pSubTileFlags[nXClamped];
+    int nRowStart = (int)nX <= 0 ? 0 : nX;
+    int nColStart = (int)nY <= 0 ? 0 : nY;
+    int nRowEnd = nX + 5;
+    int nColEnd = nY + 5;
+    uint8_t* pFlagRow = pTileFlags + (nX - nRowStart + 4) * 5 + (nColStart - nY);
+    int nRowOffset = nRowStart * nGridXSize;
+    for (int nRow = nRowStart; nRow < nRowEnd; nRow++) {
+      eCollisionFlags* pMapRow = pCollisionMap->pMapStart + nRowOffset;
+      for (int nCol = nColStart; nCol < nColEnd; nCol++) {
+        pMapRow[nCol] &= ~(uint16_t)pFlagRow[nCol - nColStart];
       }
-
-      nRowByteOffset += nGridXSize * 2;
-      pSubTileFlags += -5;
-      nColsRemaining--;
-    } while (nColsRemaining);
+      nRowOffset += nGridXSize;
+      pFlagRow -= 5;
+    }
 }
 
 static void __stdcall TileLibrary_SetCollision(D2TileLibraryEntryStrc * pTileLibraryEntry, int32_t nX, int32_t nY, D2RoomCollisionGridStrc * pCollisionMap) {
@@ -825,30 +811,23 @@ static void __stdcall TileLibrary_SetCollision(D2TileLibraryEntryStrc * pTileLib
 }
 
 static void __stdcall AddCollisionFlagToCoords(int32_t nY, int32_t nX, D2RoomCollisionGridStrc * pCollisionMap, eCollisionFlags eCollisionFlag) {
-    eCollisionFlags* pCell;
-    if (!(pCollisionMap && pCollisionMap->pMapStart)) {
+    if (!pCollisionMap || !pCollisionMap->pMapStart) {
       return;
     }
 
     int nGridXSize = pCollisionMap->sCoords.dwXSize;
-    uint32_t nXClamped = nX <= 0 ? 0 : nX;
-    if (!((int)nXClamped < nX + 5)) {
-      return;
-    }
-
-    int nRowByteOffset = nXClamped * nGridXSize * 2;
-    int nColsRemaining = nX + 5 - nXClamped;
-    do {
-      eCollisionFlags* pMapBase;
-      pMapBase = pCollisionMap->pMapStart;
-      for (nXClamped = nY <= 0 ? 0 : nY; (int)nXClamped < nY + 5; nXClamped++) {
-        pCell = (eCollisionFlags*)((char*)pMapBase + (nXClamped * 2 + nRowByteOffset));
-        *pCell |= eCollisionFlag;
+    int nRowStart = nX <= 0 ? 0 : nX;
+    int nRowEnd = nX + 5;
+    int nColStart = nY <= 0 ? 0 : nY;
+    int nRowOffset = nRowStart * nGridXSize;
+    int nColEnd = nY + 5;
+    for (int nRow = nRowStart; nRow < nRowEnd; nRow++) {
+      eCollisionFlags* pMapRow = pCollisionMap->pMapStart + nRowOffset;
+      for (int nCol = nColStart; nCol < nColEnd; nCol++) {
+        pMapRow[nCol] |= eCollisionFlag;
       }
-
-      nRowByteOffset += nGridXSize * 2;
-      nColsRemaining--;
-    } while (nColsRemaining);
+      nRowOffset += nGridXSize;
+    }
 }
 
 // Stamps collision flags from a tile library array (pTileData, nTilesSize tiles) into pCollisionMap for tiles that fall inside the room bounds. Derives eCollisionFlags from per-tile nFlags bits (COLLIDE_ALTERNATE_FLOOR / BLOCK_PLAYER / WALL). bReplace selects between AddCollision and SetCollision (overwrite vs. OR). Called during room collision grid build.
@@ -1776,58 +1755,40 @@ eCollisionFlags __stdcall CheckCollision_BlockAll_Width(D2RoomStrc * pRoom, int3
 
 // Clears eCollisionFlag from the 5-cell cross pattern centered at (nX,nY): the center cell and its 4 cardinal neighbours. Each cell is looked up via DRLGROOM_FindBetterNearbyRoom so cells that span room boundaries are handled correctly. Inverse of AddCollision_Cross.
 static void __stdcall RemoveCollision_Cross(D2RoomStrc * pRoom1, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
-    D2RoomCollisionGridStrc* pBetterRoom;
-    eCollisionFlags* pCollisionCell;
-    D2RoomStrc* pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX - 1, nY);
-    uint16_t wCollisionFlag = (uint16_t)eCollisionFlag;
-    if (pRoom) {
-      D2RoomCollisionGridStrc* pCollisionMap;
-      pCollisionMap = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom);
-      if (pCollisionMap && pCollisionMap->pMapStart) {
-        pCollisionCell = pCollisionMap->pMapStart + ((nY - pCollisionMap->sCoords.dwYStart) * pCollisionMap->sCoords.dwXSize - pCollisionMap->sCoords.dwXStart) + nX - 1;
-        *pCollisionCell &= ~wCollisionFlag;
-      }
+    D2RoomStrc* pRoom;
+    D2RoomCollisionGridStrc* pGrid;
+    int nCellX;
+    eCollisionFlags* pCell;
+    int nCellY;
+    nCellX = nX - 1;
+    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nCellX, nY);
+    if (pRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nCellX);
+      *pCell &= ~eCollisionFlag;
     }
-
     pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nY);
-    if (pRoom) {
-      pBetterRoom = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom);
-      if (pBetterRoom && pBetterRoom->pMapStart) {
-        pCollisionCell = pBetterRoom->pMapStart + ((nY - pBetterRoom->sCoords.dwYStart) * pBetterRoom->sCoords.dwXSize - pBetterRoom->sCoords.dwXStart) + nX;
-        *pCollisionCell &= ~wCollisionFlag;
-      }
+    if (pRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nX);
+      *pCell &= ~eCollisionFlag;
     }
-
-    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX + 1, nY);
-    if (pRoom) {
-      pBetterRoom = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom);
-      if (pBetterRoom && pBetterRoom->pMapStart) {
-        pCollisionCell = pBetterRoom->pMapStart + ((nY - pBetterRoom->sCoords.dwYStart) * pBetterRoom->sCoords.dwXSize - pBetterRoom->sCoords.dwXStart) + nX + 1;
-        *pCollisionCell &= ~wCollisionFlag;
-      }
+    nCellX = nX + 1;
+    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nCellX, nY);
+    if (pRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nCellX);
+      *pCell &= ~eCollisionFlag;
     }
-
-    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nY - 1);
-    if (pRoom) {
-      pBetterRoom = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom);
-      if (pBetterRoom && pBetterRoom->pMapStart) {
-        pCollisionCell = pBetterRoom->pMapStart + ((nY - 1 - pBetterRoom->sCoords.dwYStart) * pBetterRoom->sCoords.dwXSize - pBetterRoom->sCoords.dwXStart) + nX;
-        *pCollisionCell &= ~wCollisionFlag;
-      }
+    nCellY = nY - 1;
+    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nCellY);
+    if (pRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nCellY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nX);
+      *pCell &= ~eCollisionFlag;
     }
-
-    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nY + 1);
-    if (!pRoom) {
-      return;
+    nCellY = nY + 1;
+    pRoom = DRLGROOM_FindBetterNearbyRoom(pRoom1, nX, nCellY);
+    if (pRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nCellY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nX);
+      *pCell &= ~eCollisionFlag;
     }
-
-    pBetterRoom = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pRoom);
-    if (!(pBetterRoom && pBetterRoom->pMapStart)) {
-      return;
-    }
-
-    pCollisionCell = pBetterRoom->pMapStart + ((nY + 1 - pBetterRoom->sCoords.dwYStart) * pBetterRoom->sCoords.dwXSize - pBetterRoom->sCoords.dwXStart) + nX;
-    *pCollisionCell &= ~wCollisionFlag;
 }
 
 static void __stdcall COLLISN_ClearCellMask(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
@@ -1873,56 +1834,40 @@ void __stdcall RemoveCollision_Vector(D2RoomStrc * pRoom, int32_t nX, int32_t nY
 
 // ORs eCollisionFlag into the 5-cell cross pattern centered at (nX,nY): the center cell and its 4 cardinal neighbours. Each cell is resolved through DRLGROOM_FindBetterNearbyRoom so cross-room boundaries are handled. Inverse of RemoveCollision_Cross. Used to mark unit presence / blocking around a subtile position.
 static void __stdcall AddCollision_Cross(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {
-    D2RoomCollisionGridStrc* pCollisionGrid;
-    eCollisionFlags* peTargetCell;
-    D2RoomStrc* pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX - 1, nY);
-    if (pBetterRoom) {
-      pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom);
-      if (pCollisionGrid && pCollisionGrid->pMapStart) {
-        peTargetCell = pCollisionGrid->pMapStart + ((nY - pCollisionGrid->sCoords.dwYStart) * pCollisionGrid->sCoords.dwXSize - pCollisionGrid->sCoords.dwXStart) + nX - 1;
-        *peTargetCell |= eCollisionFlag;
-      }
+    D2RoomStrc* pBetterRoom;
+    D2RoomCollisionGridStrc* pGrid;
+    int nCellX;
+    eCollisionFlags* pCell;
+    int nCellY;
+    nCellX = nX - 1;
+    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nCellX, nY);
+    if (pBetterRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nCellX);
+      *pCell |= eCollisionFlag;
     }
-
     pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
-    if (pBetterRoom) {
-      pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom);
-      if (pCollisionGrid && pCollisionGrid->pMapStart) {
-        peTargetCell = pCollisionGrid->pMapStart + ((nY - pCollisionGrid->sCoords.dwYStart) * pCollisionGrid->sCoords.dwXSize - pCollisionGrid->sCoords.dwXStart) + nX;
-        *peTargetCell |= eCollisionFlag;
-      }
+    if (pBetterRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nX);
+      *pCell |= eCollisionFlag;
     }
-
-    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX + 1, nY);
-    if (pBetterRoom) {
-      pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom);
-      if (pCollisionGrid && pCollisionGrid->pMapStart) {
-        peTargetCell = pCollisionGrid->pMapStart + ((nY - pCollisionGrid->sCoords.dwYStart) * pCollisionGrid->sCoords.dwXSize - pCollisionGrid->sCoords.dwXStart) + nX + 1;
-        *peTargetCell |= eCollisionFlag;
-      }
+    nCellX = nX + 1;
+    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nCellX, nY);
+    if (pBetterRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nCellX);
+      *pCell |= eCollisionFlag;
     }
-
-    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY - 1);
-    if (pBetterRoom) {
-      pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom);
-      if (pCollisionGrid && pCollisionGrid->pMapStart) {
-        peTargetCell = pCollisionGrid->pMapStart + ((nY - 1 - pCollisionGrid->sCoords.dwYStart) * pCollisionGrid->sCoords.dwXSize - pCollisionGrid->sCoords.dwXStart) + nX;
-        *peTargetCell |= eCollisionFlag;
-      }
+    nCellY = nY - 1;
+    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nCellY);
+    if (pBetterRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nCellY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nX);
+      *pCell |= eCollisionFlag;
     }
-
-    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY + 1);
-    if (!pBetterRoom) {
-      return;
+    nCellY = nY + 1;
+    pBetterRoom = DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nCellY);
+    if (pBetterRoom && (pGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom)) != 0 && pGrid->pMapStart) {
+      pCell = pGrid->pMapStart + ((nCellY - pGrid->sCoords.dwYStart) * pGrid->sCoords.dwXSize - pGrid->sCoords.dwXStart + nX);
+      *pCell |= eCollisionFlag;
     }
-
-    pCollisionGrid = DUNGEON::Dungeon::DRLGROOM_GetCollisionGridFromRoom(pBetterRoom);
-    if (!(pCollisionGrid && pCollisionGrid->pMapStart)) {
-      return;
-    }
-
-    peTargetCell = pCollisionGrid->pMapStart + ((nY + 1 - pCollisionGrid->sCoords.dwYStart) * pCollisionGrid->sCoords.dwXSize - pCollisionGrid->sCoords.dwXStart) + nX;
-    *peTargetCell |= eCollisionFlag;
 }
 
 static void __stdcall COLLISN_SetCellMask(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eCollisionFlags eCollisionFlag) {

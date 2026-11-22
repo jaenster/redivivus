@@ -107,40 +107,34 @@ int __stdcall Unreferenced_004f5040(int param_1, int param_2, int param_3) {
 }
 
 BOOL __stdcall D2GFX_Release() {
-    char szCaption[256];
     char szErrorMsg[256];
-    char* szErrorFmt;
+    char szCaption[256];
     RENDERER_CurrentRenderedFunctions->nfpRelease();
-    /* HINSTANCE hInstance for UnregisterClassA */ /* LPCSTR lpClassName for UnregisterClassA */ UnregisterClassA(gpszWindowClassName, ghD2GFXInstance);
-    if (!ghWndMain) {
-      RENDERER_CurrentRenderedFunctions = 0;
-      return 1;
+    UnregisterClassA(gpszWindowClassName, ghD2GFXInstance);
+    if (ghWndMain) {
+      sprintf(szCaption, "Diablo II Critical Error");
+      switch (eRendererMode) {
+        case RENDERER_Windowed:
+          sprintf(szErrorMsg, "Error 21: A critical error has occurred while initializing windowed mode.");
+          break;
+        case RENDERED_DirectDraw:
+          sprintf(szErrorMsg, "Error 22: A critical error has occurred while initializing DirectDraw.");
+          break;
+        case RENDERER_Glide:
+          sprintf(szErrorMsg, "Error 23: A critical error has occurred while initializing Glide.");
+          break;
+        case RENDERED_Unused5:
+          sprintf(szErrorMsg, "Error 24: A critical error has occurred while initializing OpenGL.");
+          break;
+        case RENDERER_Direct3D:
+          sprintf(szErrorMsg, "Error 25: A critical error has occurred while initializing Direct3D.");
+          break;
+      }
+
+      MessageBoxA(nullptr, szErrorMsg, szCaption, 0x30);
     }
 
-    sprintf(szCaption, "Diablo II Critical Error");
-    switch (eRendererMode) {
-      case RENDERER_Windowed:
-        szErrorFmt = "Error 21: A critical error has occurred while initializing windowed mode.";
-      break;
-      default:
-        goto show_critical_error;
-      case RENDERED_DirectDraw:
-        szErrorFmt = "Error 22: A critical error has occurred while initializing DirectDraw.";
-      break;
-      case RENDERER_Glide:
-        szErrorFmt = "Error 23: A critical error has occurred while initializing Glide.";
-      break;
-      case RENDERED_Unused5:
-        szErrorFmt = "Error 24: A critical error has occurred while initializing OpenGL.";
-      break;
-      case RENDERER_Direct3D:
-        szErrorFmt = "Error 25: A critical error has occurred while initializing Direct3D.";
-    }
-
-    sprintf(szErrorMsg, szErrorFmt);
-    show_critical_error:
-    /* UINT uType for MessageBoxA */ /* LPCSTR lpCaption for MessageBoxA */ /* LPCSTR lpText for MessageBoxA */ /* HWND hWnd for MessageBoxA */ MessageBoxA((HWND)0x0, szErrorMsg, szCaption, 0x30);
-    RENDERER_CurrentRenderedFunctions = 0;
+    RENDERER_CurrentRenderedFunctions = nullptr;
     return 1;
 }
 
@@ -492,34 +486,29 @@ BOOL __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution) {
 }
 
 BOOL __stdcall D2GFX_DestroyWindow() {
-    int nCursorDisplayCount;
+    BOOL bSuccess = TRUE;
     if (!RENDERER_CurrentRenderedFunctions) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 300);
       exit(-1);
     }
     if (!IsOSCursorVisible) {
-      do {
-        /* BOOL bShow for ShowCursor */ nCursorDisplayCount = ShowCursor(1);
-      } while (nCursorDisplayCount < 0);
-
-      IsOSCursorVisible = 1;
-    }
-
-    BOOL bResult = RENDERER_CurrentRenderedFunctions->nfpDestroyWindow();
-    uint32_t bSuccess = 1;
-    if (bResult == 0) {
-      bSuccess = 0;
-    }
-    if (hwndD2GFX_Window) {
-      /* HWND hWnd for DestroyWindow */ bResult = DestroyWindow(hwndD2GFX_Window);
-      if (!bResult) {
-        bSuccess = 0;
+      while (ShowCursor(TRUE) < 0) {
       }
 
-      hwndD2GFX_Window = (HWND)0x0;
+      IsOSCursorVisible = TRUE;
+    }
+    if (!RENDERER_CurrentRenderedFunctions->nfpDestroyWindow()) {
+      bSuccess = FALSE;
+    }
+    if (hwndD2GFX_Window) {
+      if (!DestroyWindow(hwndD2GFX_Window)) {
+        bSuccess = FALSE;
+      }
+
+      hwndD2GFX_Window = nullptr;
     }
 
-    /* DWORD dwFlags for ChangeDisplaySettingsA */ /* DEVMODEA * lpDevMode for ChangeDisplaySettingsA */ ChangeDisplaySettingsA(nullptr, 0);
+    ChangeDisplaySettingsA(nullptr, 0);
     return bSuccess;
 }
 
@@ -576,7 +565,6 @@ BOOL __stdcall D2GFX_ActivateWindow(BOOL bActive) {
 
 BOOL __stdcall D2GFX_ResizeWindow(int32_t nResolution, BOOL bForceResize) {
     tagRECT rcNewWindow;
-    tagRECT rcCurrentClient;
     if (!RENDERER_CurrentRenderedFunctions) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e5);
       exit(-1);
@@ -587,10 +575,7 @@ BOOL __stdcall D2GFX_ResizeWindow(int32_t nResolution, BOOL bForceResize) {
 
     gnD2GFXResolutionMode = nResolution;
     if (bD2GFX_Windowed == 1) {
-      rcCurrentClient.top = 0;
-      rcCurrentClient.right = 0;
-      rcCurrentClient.bottom = 0;
-      /* LPRECT lpRect for GetClientRect */ /* HWND hWnd for GetClientRect */ rcCurrentClient.left = 0;
+      tagRECT rcCurrentClient = {0};
       GetClientRect(hwndD2GFX_Window, &rcCurrentClient);
       if (rcCurrentClient.right - rcCurrentClient.left <= 0x320 && rcCurrentClient.bottom - rcCurrentClient.top <= 0x258) {
         rcNewWindow.left = 0;
@@ -859,19 +844,16 @@ static LARGE_INTEGER gliPerfCounterStart = {}; D2_STATIC_GUARD(gliPerfCounterSta
 
     LARGE_INTEGER liFrequency;
     LARGE_INTEGER liElapsed;
-    int64_t nElapsedTicks;
     if (!(gbGammaRampInitialized & 1)) {
       gbGammaRampInitialized |= 1;
       /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&gliPerfCounterStart);
     }
 
     /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&liElapsed);
-    bool bBorrow = liElapsed.u.LowPart < gliPerfCounterStart.u.LowPart;
-    liElapsed.u.LowPart -= *(uint32_t*)(char*)&gliPerfCounterStart;
-    liElapsed.u.HighPart = liElapsed.u.HighPart - *(uint32_t*)((char*)&gliPerfCounterStart + 4) - (uint32_t)bBorrow;
-    nElapsedTicks = (uint64_t)liElapsed.QuadPart;
-    /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ QueryPerformanceFrequency(&liFrequency);
-    return (double)nElapsedTicks / ((double)liFrequency.QuadPart / 1000.0);
+    liElapsed.QuadPart -= gliPerfCounterStart.QuadPart;
+    double dElapsed = (double)liElapsed.QuadPart;
+    QueryPerformanceFrequency(&liFrequency);
+    return dElapsed / ((double)liFrequency.QuadPart / 1000.0);
 }
 
 // End render frame. Dispatches EndScene1/2 to backend, then Sleep() for frame pacing.
@@ -962,18 +944,8 @@ void __stdcall D2GFX_SetPalette(LPPALETTEENTRY pPalette) {
     // Static local variables (originally global data)
     static tagPALETTEENTRY gaPaletteCurrentBuffer[256] = {}; D2_STATIC_GUARD(gaPaletteCurrentBuffer, "D2gfx::D2GFX::D2GFX_SetPalette::gaPaletteCurrentBuffer");
 
-    LPPALETTEENTRY pSrcEntry;
-    tagPALETTEENTRY* pDstEntry;
     if (pPalette) {
-      int nCount;
-      pSrcEntry = pPalette;
-      pDstEntry = gaPaletteCurrentBuffer;
-      for (nCount = 0x100; nCount; nCount--) {
-        *pDstEntry = *pSrcEntry;
-        pSrcEntry++;
-        pDstEntry++;
-      }
-
+      memcpy(gaPaletteCurrentBuffer, pPalette, sizeof(gaPaletteCurrentBuffer));
       RENDERER_CurrentRenderedFunctions->nfpSetPalette(pPalette);
       return;
     }
@@ -1595,7 +1567,7 @@ void __fastcall D2GFX_DrawGroundTileBasic(int32_t nClipOriginX, int32_t nScreenY
     } while (iRow < nRowCount);
 }
 
-void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_t nScreenYStart, uint8_t * pbTileData, uint8_t * nDstRowBase, int32_t nLightAccumX, int32_t nLightStepX, int32_t nLightAccumY, int32_t nLightStepY, int32_t nRowCount, uint8_t byShift) {
+void __fastcall D2GFX_DrawGroundTileWithPerspective(int32_t nClipOriginX, int32_t nScreenYStart, uint8_t * pbTileData, uint8_t * nDstRowBase, int32_t nLightAccumX, int32_t nLightStepX, int32_t nLightAccumY, int32_t nLightStepY, int32_t nRowCount, int32_t byShift) {
     uint8_t* pbLightBufPixel;
     uint32_t nClipLeft;
     uint8_t* pbSrcPixel;
@@ -1780,31 +1752,11 @@ void __fastcall D2GFX_FillYBufferFast(int32_t nScreenWidth, int32_t nScreenHeigh
 
 // Initializes color lookup tables for palette blending. Populates gPaletteBlendLookupTable (256x256 entries) by blending all combinations of source and destination palette indices. Used by rendering functions for alpha blending and color effects.
 void __fastcall PALETTE_InitColorLookupTables(BYTE * * ppPaletteTable) {
-    int nCount;
-    uint8_t* pDstRow;
-    uint8_t** pPaletteEntry = gaPaletteBlendEntries;
-    for (nCount = 0x48; nCount; nCount--) {
-      *pPaletteEntry = *ppPaletteTable;
-      ppPaletteTable++;
-      pPaletteEntry++;
-    }
-
+    memcpy(gaPaletteBlendEntries, ppPaletteTable, sizeof(gaPaletteBlendEntries));
     gpPaletteBlendLookupTable = gaPaletteBlendEntries;
-    pPaletteEntry = gaPaletteBlendEntries + 3;
-    uint8_t* pDst = gaPaletteColorLUT[0];
-    do {
-      uint8_t* pSrcEntry;
-      pSrcEntry = *pPaletteEntry;
-      pPaletteEntry++;
-      pDstRow = pDst;
-      for (nCount = 0x40; nCount; nCount--) {
-        *(uint32_t*)pDstRow = *(uint32_t*)pSrcEntry;
-        pSrcEntry += 4;
-        pDstRow += 4;
-      }
-
-      pDst += 0x100;
-    } while ((intptr_t)pPaletteEntry < (intptr_t)((char*)&gaPaletteBlendEntries + 208));
+    for (int i = 0; i < 49; i++) {
+      memcpy(gaPaletteColorLUT[i], gaPaletteBlendEntries[i + 3], sizeof(gaPaletteColorLUT[i]));
+    }
 }
 
 void Unreferenced_004f8e90() {

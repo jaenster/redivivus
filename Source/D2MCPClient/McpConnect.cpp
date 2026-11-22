@@ -307,8 +307,6 @@ void * __stdcall MCPCONNECT_GetCharListPacket() {
 
 void __stdcall CopyCharListToGlobal(char * pBytes, size_t nSize) {
     uint8_t* pszCursor;
-    uint32_t nCharCount;
-    uint8_t byChar;
     if (CharListPacket) {
       D2_FREE_AT(CharListPacket, ".\\Src\\McpConnect.cpp", 0x21e);
       CharListPacket = 0;
@@ -357,10 +355,13 @@ void __stdcall CopyCharListToGlobal(char * pBytes, size_t nSize) {
       }
 
       pszCursor = CharListPacket + 9;
-      for (nCharCount = (uint32_t)*(uint16_t*)(CharListPacket + 7); nCharCount; nCharCount--) {
+      for (int nChar = 0; nChar < *(uint16_t*)(CharListPacket + 7); nChar++) {
         pszCursor += 4;
-        pszCursor = pszCursor + strlen((char*)pszCursor) + 1;
-        pszCursor = pszCursor + strlen((char*)pszCursor) + 1;
+        while (*pszCursor++) {
+        }
+
+        while (*pszCursor++) {
+        }
       }
 
       return;
@@ -451,19 +452,11 @@ uint32_t __stdcall ThreadHandler() {
 }
 
 void __stdcall MCPCONNECT_CreateThread(uint32_t * pSrcState) {
-    int nCopyCount;
     if (MCPThread) {
       return;
     }
 
-    uint32_t* pSrcCursor = pSrcState;
-    uint32_t* pdwDest = (uint32_t*)gMCPConnectionState;
-    /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ for (nCopyCount = 0x52; nCopyCount; nCopyCount--) {
-      *pdwDest = *pSrcCursor;
-      pSrcCursor++;
-      pdwDest++;
-    }
-
+    memcpy(gMCPConnectionState, pSrcState, 0x52 * sizeof(uint32_t));
     MCPThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)ThreadHandler, (LPVOID)0x0, 0, (LPDWORD)&pSrcState);
 }
 
@@ -723,12 +716,10 @@ void __stdcall NET_MCP_CLIENT_Send_0x10() {
 
 void __fastcall NET_MCP_CLIENT_Send_0x11_RequestLadderData(uint8_t nLadderFilterMode, uint16_t wRequestId) {
     uint8_t aPacketFrame[4];
-    d2_store24((char*)&aPacketFrame + 1, 0);
-    aPacketFrame[0] = nLadderFilterMode;
     SetD2GSJoinResult(0);
-    aPacketFrame[1] = nLadderFilterMode;
     aPacketFrame[0] = 0x11;
-    *(uint16_t*)((char*)&aPacketFrame + 2) = wRequestId;
+    aPacketFrame[1] = nLadderFilterMode;
+    *(uint16_t*)(aPacketFrame + 2) = wRequestId;
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)aPacketFrame, 4);
 }
 

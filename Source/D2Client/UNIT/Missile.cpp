@@ -628,32 +628,22 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
 }
 
 static uint32_t __stdcall MISSILE_CanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
-    BOOL bIsOwner;
-    bool bIsValidTarget;
-    if (!(pUnit1 && FlagBit_D2UnitStrc_eUnitFlags_3(pUnit1) && FlagBit_D2UnitStrc_eUnitFlags_2(pUnit1))) {
+    if (!FlagBit_D2UnitStrc_eUnitFlags_3(pUnit1)) {
       return 0;
     }
-    if (pMissileTxt->NextHit != '\0') {
-      bIsOwner = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit1, STATE_justhit);
-      if (bIsOwner) {
-        return 0;
-      }
-    }
-
-    bIsOwner = D2Common::Units::Missile::CheckUnitIfOwner(pUnit, pUnit1);
-    if (bIsOwner) {
+    if (!FlagBit_D2UnitStrc_eUnitFlags_2(pUnit1)) {
       return 0;
     }
-    if (!pUnit2) {
-      return 1;
+    if (pMissileTxt->NextHit && D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit1, STATE_justhit)) {
+      return 0;
     }
-
-    uint32_t bCanInteract = CUnit::CanInteractWith(pUnit2, pUnit1);
-    if (!(!bCanInteract && pMissileTxt->CollideFriend == '\0')) {
-      return 1;
+    if (D2Common::Units::Missile::CheckUnitIfOwner(pUnit, pUnit1)) {
+      return 0;
     }
-
-    return 0;
+    if (pUnit2 && !CUnit::CanInteractWith(pUnit2, pUnit1) && !pMissileTxt->CollideFriend) {
+      return 0;
+    }
+    return 1;
 }
 
 int32_t __fastcall Missiles_SrvDoFuncData_02(D2UnitStrc * pUnit, D2MissileCltCollideCtxStrc * pCtx) {
@@ -4914,13 +4904,10 @@ int32_t __fastcall MISSILE_CltHitFn48_CatapultColdBall(D2UnitStrc * pUnit, D2Uni
 
 // Spawns Anya's steam vent missiles (MISSILE_Anyasteamvent + MISSILE_Anyasteam) at a randomly chosen unblocked tile near (nX, nY). Up to 4 attempts: each iteration advances pMissile's RNG seed to pick a random offset within a ~34x34 tile window, then calls CheckCollision_BlockPlayerMissile to reject blocked tiles. On success, fills a D2SkillArgStrc with the owner, skill ID, level, and chosen coordinates, then calls MakeMissile twice for the vent and steam sub-missiles.
 static void __stdcall MISSILE_CreateSteamVent(D2UnitStrc * pUnit, int32_t nX, int32_t nY, D2UnitStrc * pMissile) {
-    eCollisionFlags eCollision;
-    int nCandidateY;
-    int nRandY;
     D2SkillArgStrc sSkillArg;
-    bool bNotPlaced = true;
+    BOOL bNotPlaced = TRUE;
     int nAttempt = 0;
-    if (!(pMissile && pUnit)) {
+    if (!pMissile || !pUnit) {
       return;
     }
 
@@ -4930,7 +4917,6 @@ static void __stdcall MISSILE_CreateSteamVent(D2UnitStrc * pUnit, int32_t nX, in
     }
 
     do {
-      D2SeedStrc DVar1;
       if (nAttempt >= 4) {
         if (bNotPlaced) {
           return;
@@ -4939,20 +4925,15 @@ static void __stdcall MISSILE_CreateSteamVent(D2UnitStrc * pUnit, int32_t nX, in
         break;
       }
 
-      DVar1 = D2_SEED_NEXT(pMissile->sSeed);
-      pMissile->sSeed = DVar1;
-      nRandY = (int)(DVar1.nSeedLow / 0x22) * 0x22 - DVar1.nSeedLow;
-      DVar1 = D2_SEED_NEXT_VAL(DVar1);
-      pMissile->sSeed = DVar1;
-      nCandidateY = (int)(DVar1.nSeedLow / 0x22) * 0x22 - DVar1.nSeedLow + 0x11;
-      if (nRandY + 0x12U > 2 || nCandidateY < -1) {
-        nCandidateY += nY;
-        nRandY = nRandY + 0x11 + nX;
-        eCollision = D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, nRandY, nCandidateY, COLLIDE_WALL);
-        if (eCollision == COLLIDE_NONE) {
-          bNotPlaced = false;
-          nX = nRandY;
-          nY = nCandidateY;
+      int nOffsetX = 0x11 - D2_SeedRoll(&pMissile->sSeed) % 0x22;
+      int nOffsetY = 0x11 - D2_SeedRoll(&pMissile->sSeed) % 0x22;
+      if (nOffsetX + 1U > 2 || nOffsetY < -1) {
+        int nNewY = nOffsetY + nY;
+        int nNewX = nOffsetX + nX;
+        if (D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, nNewX, nNewY, COLLIDE_WALL) == COLLIDE_NONE) {
+          nX = nNewX;
+          nY = nNewY;
+          bNotPlaced = FALSE;
         }
       }
 
@@ -5128,7 +5109,8 @@ void __fastcall MISSILE_ClientFrameUpdate(D2UnitStrc * pUnit) {
     int nPosY;
     BOOL bIsInTown;
     eD2UnitType eUnitType;
-    if (!pUnit || (nPosY = pUnit->nClassId , nPosY < 0) || nPosY >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize || (pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nPosY , !pMissileTxt)) {
+    pMissileTxt = !pUnit || (nPosY = pUnit->nClassId , nPosY < 0) || nPosY >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? nullptr : D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nPosY;
+    if (!pMissileTxt) {
       MISSILE_RemoveClientSide(pUnit);
       return;
     }

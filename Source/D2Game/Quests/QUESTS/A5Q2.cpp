@@ -762,34 +762,22 @@ void __fastcall Objects_InitFn62_CagedWussie(D2ObjectInitFnArg * pInitArg) {
       QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
     }
 
-    int nBarricadeIdx = 0;
-    while (pA5Q2Data->abGroupAllFreed[nBarricadeIdx]) {
-      nBarricadeIdx++;
-      if (nBarricadeIdx >= 3) {
+    for (int nBarricadeIdx = 0; nBarricadeIdx < 3; nBarricadeIdx++) {
+      if (!pA5Q2Data->abGroupAllFreed[nBarricadeIdx]) {
+        for (int nCheckIdx = 0; nCheckIdx < nBarricadeIdx; nCheckIdx++) {
+          if (pA5Q2Data->aBarricadePos[nCheckIdx].x == pInitArg->nX && pA5Q2Data->aBarricadePos[nCheckIdx].y == pInitArg->nY) {
+            return;
+          }
+        }
+
+        pA5Q2Data->aBarricadePos[nBarricadeIdx].x = pInitArg->nX;
+        pA5Q2Data->aBarricadePos[nBarricadeIdx].y = pInitArg->nY;
+        pA5Q2Data->nTotalPrisonersToFree += Q32_SpawnBarricadePrisoners(pQuestData, pInitArg, nBarricadeIdx);
+        pA5Q2Data->abGroupAllFreed[nBarricadeIdx] = 1;
+        pA5Q2Data->abBarricadeGroupComplete[nBarricadeIdx] = 0;
         return;
       }
     }
-
-    int nCheckIdx = 0;
-    if (nBarricadeIdx > 0) {
-      LONG* pBarricadeEntry;
-      pBarricadeEntry = &pA5Q2Data->aBarricadePos[0].y;
-      do {
-        if (((POINT*)(pBarricadeEntry - 1))->x == pInitArg->nX && *pBarricadeEntry == pInitArg->nY) {
-          return;
-        }
-
-        nCheckIdx++;
-        pBarricadeEntry += 2;
-      } while (nCheckIdx < nBarricadeIdx);
-    }
-
-    pA5Q2Data->aBarricadePos[nBarricadeIdx].x = pInitArg->nX;
-    pA5Q2Data->aBarricadePos[nBarricadeIdx].y = pInitArg->nY;
-    int32_t nPrisonersSpawned = Q32_SpawnBarricadePrisoners(pQuestData, pInitArg, nBarricadeIdx);
-    pA5Q2Data->nTotalPrisonersToFree += nPrisonersSpawned;
-    pA5Q2Data->abGroupAllFreed[nBarricadeIdx] = 1;
-    pA5Q2Data->abBarricadeGroupComplete[nBarricadeIdx] = 0;
 }
 
 // Q32_PropagateCompleteToParty (A5Q2 Rescue on Mount Arreat) -- iterated over players.

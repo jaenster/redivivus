@@ -117,41 +117,30 @@ static uint8_t __fastcall DEBUG_ParseDebugInfoFromMemory(uint32_t nDataSize, uin
 }
 
 static uint8_t __stdcall DEBUG_ParseDebugDataDirectory(uint32_t nCount, uint8_t * nBaseAddress, uint8_t * pDirEntries, D2FogDebugModuleEntryStrc * pOutput) {
-    uint8_t bVar1;
-    BOOL bIsBadPtr;
-    CV_INFO_PDB70* pDebugData;
-    uint32_t nIter;
-    nIter = 0;
-    if (!(nCount / 0x1c)) {
-      return 0;
-    }
-
-    int* pEntry;
-    pEntry = (int*)(pDirEntries + 0xc);
-    do {
-      pDebugData = (CV_INFO_PDB70*)(nBaseAddress + pEntry[2]);
-      if (*pEntry == 2 && (uint32_t)pEntry[1] >= 4) {
-        /* UINT_PTR ucb for IsBadReadPtr */ /* void * lp for IsBadReadPtr */ bIsBadPtr = IsBadReadPtr(pDebugData, pEntry[1]);
-        if (!bIsBadPtr) {
+    uint32_t nEntries = nCount / 0x1c;
+    uint32_t nIter = 0;
+    if (nEntries) {
+      int* pEntry = (int*)(pDirEntries + 0xc);
+      do {
+        CV_INFO_PDB70* pDebugData = (CV_INFO_PDB70*)(nBaseAddress + pEntry[2]);
+        if (*pEntry == 2 && (uint32_t)pEntry[1] >= 4 && !IsBadReadPtr(pDebugData, pEntry[1])) {
+          uint8_t bFound;
           if (pDebugData->CvSignature == 0x3031424e) {
-            bVar1 = DEBUG_ParseNB01DebugInfo((CV_INFO_PDB20*)pDebugData, pOutput);
+            bFound = DEBUG_ParseNB01DebugInfo((CV_INFO_PDB20*)pDebugData, pOutput);
+          } else if (pDebugData->CvSignature == 0x53445352) {
+            bFound = DEBUG_ParseRSDSDebugInfo(pDebugData, pOutput);
           } else {
-            if (pDebugData->CvSignature != 0x53445352) {
-              goto next_entry;
-            }
-
-            bVar1 = DEBUG_ParseRSDSDebugInfo(pDebugData, pOutput);
+            bFound = 0;
           }
-          if (bVar1) {
+          if (bFound) {
             return 1;
           }
         }
-      }
 
-      next_entry:
-      nIter++;
-      pEntry += 7;
-    } while (nIter < nCount / 0x1c);
+        nIter++;
+        pEntry += 7;
+      } while (nIter < nEntries);
+    }
 
     return 0;
 }
@@ -690,11 +679,7 @@ bool __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize) {
     BOOL bUsedDefaultChar = 0;
     int nWideConverted = WideCharToMultiByte(0, 0x400, pwszKnownPath, -1, szOutPath, nBufferSize, (LPCSTR)0x0, &bUsedDefaultChar);
     /* LPVOID pv for CoTaskMemFree */ CoTaskMemFree(pwszKnownPath);
-    if (nWideConverted && !bUsedDefaultChar) {
-      return true;
-    }
-
-    return false;
+    return nWideConverted && !bUsedDefaultChar;
 }
 
 static void * keep_004048c0 = (0 ? (DEBUG_ParseDebugInfoFromMemory(*(uint32_t *)0, *(uint32_t * *)0, *(D2FogDebugModuleEntryStrc * *)0), (void *)0) : (void *)0);

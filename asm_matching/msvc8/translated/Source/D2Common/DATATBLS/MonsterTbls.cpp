@@ -851,9 +851,7 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
     uint32_t bIsMissilePotion;
     D2ItemTypesTxt* pItemTypesTxt;
     D2ParsedTreasureClassEntriesStrc* pTCEntry;
-    D2DataTableTxtStrc* pSgtDataTable;
     uint32_t nItemClassIdx;
-    bool bClassicItem;
     uint32_t nRarity;
     int nLevelStep;
     int nItemTypeStride;
@@ -865,7 +863,6 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
     eD2ItemTypes nRecordId = ITEMTYPE_None1;
     if (nItemTypesCount > 0) {
       nItemTypeStride = 0;
-      pSgtDataTable = ITEMS::Items::sgptDataTable;
       do {
         if (nItemTypeStride < 0) {
           break;
@@ -874,7 +871,7 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
           break;
         }
 
-        szItemTypeCode = pSgtDataTable->pTxtItemTypes[nItemTypeStride].code;
+        szItemTypeCode = ITEMS::Items::sgptDataTable->pTxtItemTypes[nItemTypeStride].code;
         if (!szItemTypeCode) {
           break;
         }
@@ -887,10 +884,10 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
               Storm::Source::SSTR::SStrPrintf(szTCName, 0x20, "%s%d", szTCLinkCode, nLevelStep);
               pNewTC = TC_ExtendTreasureClassSize(szTCName);
               if (pNewTC) {
-                nItemClassIdx = 0;
                 pNewTC->nProb = 1;
                 pNewTC->nGroup = 0;
                 pNewTC->nLevel = (short int)nLevelStep - 3;
+                nItemClassIdx = 0;
                 if (pnTotalItems->nSize > 0) {
                   do {
                     pItemsTxt = ItemTbls::TXT_Items_GetLine(nItemClassIdx);
@@ -907,13 +904,11 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
 
                           pTCEntry = AddOneParsedTCEntry(pNewTC);
                           pTCEntry->nItemClassId = (int16_t)nItemClassIdx;
-                          bClassicItem = (uint16_t)pItemsTxt->wVersion < 100;
-                          if (!bClassicItem) {
+                          if ((uint16_t)pItemsTxt->wVersion >= 100) {
                             pTCEntry->nFlags |= TC_Expansion;
-                            bClassicItem = (uint16_t)pItemsTxt->wVersion < 100;
                           }
 
-                          AdjustRarities(pNewTC, pTCEntry, nRarity, 1 - (uint32_t)bClassicItem);
+                          AdjustRarities(pNewTC, pTCEntry, nRarity, (uint16_t)pItemsTxt->wVersion >= 100);
                         }
                       }
                     }
@@ -925,11 +920,10 @@ void __stdcall TC_GenerateAutoItemTypeTreasureClasses() {
             }
 
             nLevelStep += 3;
-            pSgtDataTable = ITEMS::Items::sgptDataTable;
           } while (nLevelStep <= 0x60);
         }
 
-        nItemTypesCount = pSgtDataTable->nTxtItemTypesSize;
+        nItemTypesCount = ITEMS::Items::sgptDataTable->nTxtItemTypesSize;
         nRecordId += ITEMTYPE_None2;
         nItemTypeStride++;
       } while ((int)nRecordId < nItemTypesCount);
@@ -2492,18 +2486,13 @@ D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nAct, int * p
 int32_t __stdcall MONSTERTBLS_MapSuperUniqueId(int32_t nType, int32_t nSuperUniqueId) {
     switch (nType) {
       case 0:
-        {
-          nSuperUniqueId += sgtDataTable.nTxtSuperUniquesSize;
-        }
+        nSuperUniqueId += sgtDataTable.nTxtSuperUniquesSize;
       case 2:
-        {
-          return nSuperUniqueId + ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
-        }
-      default:
-        {
-          return nSuperUniqueId;
-        }
+        nSuperUniqueId += ITEMS::Items::sgptDataTable->nTxtMonStatsSize;
+        break;
     }
+
+    return nSuperUniqueId;
 }
 
 void __fastcall TXT_AllocTxt_sounds(D2PoolManagerStrc * pMemory) {

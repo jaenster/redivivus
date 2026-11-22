@@ -219,36 +219,8 @@ char * __stdcall IMAGE_ReturnImageExtension(int32_t bUseDcc) {
 }
 
 void __stdcall SPRITECACHE_BuildPath(char * szText1, int32_t bUseDcc, char * szText2, va_list vaArgs) {
-    char* pEndPtr;
-    uint32_t nExtLen;
-    char* pDstCursor;
-    char cByte;
-    char* pExtStart;
     vsprintf(szText1, szText2, vaArgs);
-    if (!bUseDcc || (pEndPtr = (char*)gpszExtDcc , pDstCursor = (char*)gpszExtDcc , !gbUseCompressedData)) {
-      pEndPtr = (char*)gpszExtDc6;
-      pDstCursor = (char*)gpszExtDc6;
-    }
-
-    pEndPtr = pEndPtr + strlen(pEndPtr) + 1;
-    uint32_t nExtBytes = (intptr_t)pEndPtr - (intptr_t)pDstCursor;
-    pEndPtr = szText1 - 1;
-    do {
-      pExtStart = pEndPtr + 1;
-      pEndPtr++;
-    } while (*pExtStart != '\0');
-
-    for (nExtLen = nExtBytes >> 2; nExtLen; nExtLen--) {
-      *(uint32_t*)pEndPtr = *(uint32_t*)pDstCursor;
-      pDstCursor += 4;
-      pEndPtr += 4;
-    }
-
-    for (nExtBytes &= 3; nExtBytes; nExtBytes--) {
-      *pEndPtr = *pDstCursor;
-      pDstCursor++;
-      pEndPtr++;
-    }
+    strcat(szText1, bUseDcc && gbUseCompressedData ? (char*)gpszExtDcc : (char*)gpszExtDc6);
 }
 
 void __stdcall SetCompressedDataGlobalAndSaveItToRegistry(BOOL bUseCompressedData) {

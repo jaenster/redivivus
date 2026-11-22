@@ -3662,44 +3662,11 @@ void __stdcall D2COMP_LoadGuildEmblemIcon(D2CharSelCompStrc * pCompUnit, uint8_t
 }
 
 static void D2COMP_LoadItemPaletteFile(int32_t nPaletteSlot, char * szPaletteFilename) {
-    char* pDstScan;
-    int nCopyIter;
-    uint32_t nCopyDwords;
-    char* pFilenameSrc;
     char szFullPath[256];
     D2MPQFileStrc* pFile;
-    char cCharScan;
-    char* pSrcScan = "Data\\Global\\Items\\Palette\\";
-    char* pPathEnd = szFullPath;
-    memcpy(pPathEnd, pSrcScan, 27);
-    int nStrLen;
-    nStrLen = (int)strlen(szPaletteFilename);
-    pPathEnd = (char*)((uint8_t*)&szFullPath - 1);
-    do {
-      pFilenameSrc = pPathEnd + 1;
-      pPathEnd++;
-    } while (*pFilenameSrc != '\0');
-
-    pFilenameSrc = szPaletteFilename;
-    for (nCopyDwords = (uint32_t)((int)nStrLen + 1) >> 2; nCopyDwords; nCopyDwords--) {
-      *(uint32_t*)pPathEnd = *(uint32_t*)pFilenameSrc;
-      pFilenameSrc += 4;
-      pPathEnd += 4;
-    }
-
-    for (nCopyDwords = (int)nStrLen + 1 & 3; nCopyDwords; nCopyDwords--) {
-      *pPathEnd = *pFilenameSrc;
-      pFilenameSrc++;
-      pPathEnd++;
-    }
-
-    char* pScan = (char*)((uint8_t*)&szFullPath - 1);
-    do {
-      pDstScan = pScan;
-      pScan = pDstScan + 1;
-    } while (pDstScan[1] != '\0');
-
-    memcpy(pDstScan + 1, ".dat", 5);
+    strcpy(szFullPath, "Data\\Global\\Items\\Palette\\");
+    strcat(szFullPath, szPaletteFilename);
+    strcat(szFullPath, ".dat");
     BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, szFullPath, &pFile, 1);
     if (!bFileExists) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd8);

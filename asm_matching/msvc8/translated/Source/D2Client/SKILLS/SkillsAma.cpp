@@ -147,15 +147,11 @@ BOOL __fastcall Skills_CltStFunc_FindClosestMeleeTargetSetParams(D2UnitStrc * pU
 // Client StFunc for Amazon melee skills (e.g. Jab, Impale). Validates skill bounds and retrieves current skill. Computes melee range, searches for a confirmed or nearest target via SKILL_FindClosestTargetWithStats. If no target, clears param1 and returns. Otherwise stores the skill calc[0] result in param1, steers the unit's path toward the target, and stores target eUnitType in param2 and GUID in param3 for use by the DoFunc.
 BOOL __fastcall Skills_CltStFunc_FindMeleeTargetSetCalcParam(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTargetX;
-    if ((int)eSkill < 0) {
-      return 0;
+    D2SkillsTxt* pSkillTxt = nullptr;
+    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+      pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    if (!pSkillTxt) {
       return 0;
     }
 
@@ -174,8 +170,7 @@ BOOL __fastcall Skills_CltStFunc_FindMeleeTargetSetCalcParam(D2UnitStrc * pUnit,
       }
     }
 
-    nMeleeRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt[eSkill].calc[0], eSkill, nSkillLvl);
-    D2Common::Skills::SKILL_SetParam1(pSkill, nMeleeRange);
+    D2Common::Skills::SKILL_SetParam1(pSkill, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl));
     eD2UnitType eUnitType = pConfirmedTarget->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nSkillLvl = pConfirmedTarget->pPath.pStaticPath->nPosY;
@@ -195,25 +190,26 @@ BOOL __fastcall Skills_CltStFunc_FindMeleeTargetSetCalcParam(D2UnitStrc * pUnit,
     }
 
     D2Common::PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, nTargetX, nSkillLvl, 0);
-    D2Common::Skills::SKILL_SetParam2(pSkill, pConfirmedTarget->eUnitType);
-    D2Common::Skills::SKILL_SetParam3(pSkill, pConfirmedTarget->nUnitGUID);
+    D2Common::Skills::SKILL_SetParam2(pSkill, GetTypeInline(pConfirmedTarget));
+    D2Common::Skills::SKILL_SetParam3(pSkill, GetGUIDInline(pConfirmedTarget));
     return 1;
 }
 
 BOOL __fastcall Skills_CltDoFunc_Ama_PlayDoSound(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    if (pUnit->nActionFrame != 3) {
-      return 1;
-    }
-
-    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!pSkillTxt) {
-      return 0;
-    }
-    if (pUnit->eUnitType == UNIT_PLAYER && pSkillTxt->dosounda > 0) {
-      Sound::SOUND_PlaySound((int)pSkillTxt->dosounda, pUnit, 0, 0, 0);
-    }
-    if (pUnit->eUnitType == UNIT_MONSTER && pSkillTxt->dosoundb > 0) {
-      Sound::SOUND_PlaySound((int)pSkillTxt->dosoundb, pUnit, 0, 0, 0);
+    if (pUnit->nActionFrame == 3) {
+      D2SkillsTxt* pSkillTxt = nullptr;
+      if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+        pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+      }
+      if (!pSkillTxt) {
+        return 0;
+      }
+      if (pUnit->eUnitType == UNIT_PLAYER && pSkillTxt->dosounda > 0) {
+        Sound::SOUND_PlaySound((int)pSkillTxt->dosounda, pUnit, 0, 0, 0);
+      }
+      if (pUnit->eUnitType == UNIT_MONSTER && pSkillTxt->dosoundb > 0) {
+        Sound::SOUND_PlaySound((int)pSkillTxt->dosoundb, pUnit, 0, 0, 0);
+      }
     }
 
     return 1;

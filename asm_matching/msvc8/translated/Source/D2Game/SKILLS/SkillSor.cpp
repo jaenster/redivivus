@@ -470,8 +470,8 @@ uint32_t __fastcall SKILLSOR_ApplyStaticFieldToUnit(D2SkillCallbackContextStrc *
     }
     if (pDmgEvent[2]) {
       int32_t nMaxHpThreshold;
-      nMaxHpThreshold = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-      nMaxHpThreshold = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHpThreshold >> 8, pDmgEvent[2], 100);
+      nMaxHpThreshold = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
+      nMaxHpThreshold = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHpThreshold, pDmgEvent[2], 100);
       if (nHp <= nMaxHpThreshold) {
         return 0;
       }
@@ -482,25 +482,25 @@ uint32_t __fastcall SKILLSOR_ApplyStaticFieldToUnit(D2SkillCallbackContextStrc *
       nHpDrain = nHp - 1;
     }
 
-    nHp = nHpDrain * 0x100;
-    if (nHpDrain * 0x100 < *pDmgEvent) {
-      nHp = *pDmgEvent;
+    nHpDrain <<= 8;
+    if (nHpDrain < *pDmgEvent) {
+      nHpDrain = *pDmgEvent;
     }
 
     memset(&sDamage, 0, 0x70);
     eStatType = ~UNITSTAT_strength;
     eElemType = pDmgEvent[4];
-    SkillsServer::SERVER_AppendDamageToUnitEvent(pAttackerUnit, &sDamage, eElemType, nHp, pDmgEvent[3], &eStatType, (int*)&eElemType);
+    SkillsServer::SERVER_AppendDamageToUnitEvent(pAttackerUnit, &sDamage, eElemType, nHpDrain, pDmgEvent[3], &eStatType, (int*)&eElemType);
     if ((int)eStatType >= 0) {
-      nHpDrain = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictimSaved, eStatType, 0);
-      if (nHpDrain < 0) {
-        nHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHp, 100, 100 - nHpDrain);
+      int nResist = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pVictimSaved, eStatType, 0);
+      if (nResist < 0) {
+        nHpDrain = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nHpDrain, 100, 100 - nResist);
       }
     }
 
     memset(&sDamage, 0, 0x70);
-    SkillsServer::SERVER_AppendDamageToUnitEvent(pAttackerUnit, &sDamage, eElemType, nHp, pDmgEvent[3], nullptr, nullptr);
-    pVictimLoop = pVictimSaved;
+    SkillsServer::SERVER_AppendDamageToUnitEvent(pAttackerUnit, &sDamage, eElemType, nHpDrain, pDmgEvent[3], nullptr, nullptr);
+    pVictimLoop = pVictimSaved; // steer-ok: the original loads the next victim before the damage call
     sDamage.dwHitClass |= 0xd;
     sDamage.nHitClassActiveSet = 1;
     sDamage.wResultFlags = 0x4001;

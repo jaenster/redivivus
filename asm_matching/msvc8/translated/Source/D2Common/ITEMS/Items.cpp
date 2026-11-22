@@ -113,6 +113,13 @@
 #include "Source/D2Game/GAME/SCmd.h"
 #include "Source/D2Game/Monster/AI/AI.h"
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -2065,26 +2072,25 @@ static BOOL QualityCanHaveSockets(eD2ItemQuality eQuality) {
 }
 
 BOOL __stdcall ITEM_ValidateItemQuantity(D2UnitStrc * pUnit) {
-    if (!pUnit) {
-      return 0;
-    }
-
-    int nQuantity = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0);
-    if (nQuantity > 0) {
-      return 1;
-    }
-
-    int32_t nThrowableMinVal = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throwable, 0);
-    if (nThrowableMinVal) {
-      Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_quantity, 0, 0);
-    } else {
-      nQuantity = ITEM_GetMaxStack(pUnit);
+    if (pUnit) {
+      int nQuantity = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0);
       if (nQuantity > 0) {
-        return 0;
+        return 1;
+      }
+
+      int32_t nThrowableMinVal = Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throwable, 0);
+      if (nThrowableMinVal) {
+        Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_quantity, 0, 0);
+        return 1;
+      }
+
+      nQuantity = ITEM_GetMaxStack(pUnit);
+      if (nQuantity <= 0) {
+        return 1;
       }
     }
 
-    return 1;
+    return 0;
 }
 
 BOOL __stdcall ReturnFalse(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
@@ -2145,8 +2151,15 @@ uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc 
     return nSetMask;
 }
 
+static inline D2UnitDataItemStrc * GetItemDataInline(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
+        return pUnit->pUnitData.pUnitDataItem;
+    }
+    return nullptr;
+}
+
 D2SetItemsTxt * __stdcall GetSetItemsLine(D2UnitStrc * pUnit) {
-    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem && pUnit->pUnitData.pUnitDataItem->eQuality == QUALITY_SET)) {
+    if (!(GetTypeInline(pUnit) == UNIT_ITEM && GetItemDataInline(pUnit) && GetItemDataInline(pUnit)->eQuality == QUALITY_SET)) {
       return nullptr;
     }
 
@@ -2166,38 +2179,42 @@ BOOL __stdcall ITEM_CheckIfItemIsNotBrokenAndNotDisabled(D2UnitStrc * pUnit) {
     return 0;
 }
 
+static inline BOOL CheckItemFlagInline(D2UnitStrc * pUnit, eD2ItemFlag eItemFlag) {
+    if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+        return pUnit->pUnitData.pUnitDataItem->dwItemFlags & eItemFlag;
+    }
+    return 0;
+}
+
+static inline eInventoryPage GetContainingInventoryPageInline(D2UnitStrc * pUnit) {
+    if (GetTypeInline(pUnit) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
+        return pUnit->pUnitData.pUnitDataItem->ePage;
+    }
+    return INVPAGE_None;
+}
+
 // Counts unidentified items in a player's inventory and equipped slots. Iterates all inventory slots; counts carried items on INVENTORY_GRID_TYPE_INVENTORY pages (INVPAGE_INVENTORY or INVPAGE_CUBE) and body-loc slots whose ITEMFLAG_IDENTIFIED is not set. Returns the count.
 int32_t __stdcall PLAYER_GetUnidentifiedItemsCount(D2UnitStrc * pUnit) {
     int32_t iVar1;
-    bool bOnValidPage;
     int32_t nCount = 0;
     D2InventoryStrc* pInventory = pUnit->pInventory;
     D2UnitStrc* pCurItem = INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
     if (pCurItem) {
       D2UnitStrc* pCarriedItem;
-      nCount = 0;
       do {
         pCarriedItem = INVENTORY::Inventory::GetCarriedItem(pCurItem);
-        if (!pCarriedItem || pCarriedItem->eUnitType != UNIT_ITEM || !pCarriedItem->pUnitData.pUnitDataItem || (pCarriedItem->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_IDENTIFIED) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
+        if (!CheckItemFlagInline(pCarriedItem, ITEMFLAG_IDENTIFIED)) {
           iVar1 = INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pCurItem);
           if (iVar1 == INVENTORY_GRID_TYPE_INVENTORY) {
-            if ((pCarriedItem ? pCarriedItem->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
-              if (pCarriedItem->pUnitData.pUnitDataItem && pCarriedItem->pUnitData.pUnitDataItem->ePage == INVPAGE_INVENTORY) {
+            if (GetTypeInline(pCarriedItem) == UNIT_ITEM) {
+              if (GetContainingInventoryPageInline(pCarriedItem) == INVPAGE_INVENTORY) {
                 nCount++;
-              } else {
-                if (true && pCarriedItem->pUnitData.pUnitDataItem) {
-                  bOnValidPage = pCarriedItem->pUnitData.pUnitDataItem->ePage == INVPAGE_CUBE;
-                  if (bOnValidPage) {
-                    nCount++;
-                  }
-                }
+              } else if (GetContainingInventoryPageInline(pCarriedItem) == INVPAGE_CUBE) {
+                nCount++;
               }
             }
-          } else {
-            bOnValidPage = iVar1 == INVENTORY_GRID_TYPE_BODYLOC;
-            if (bOnValidPage) {
-              nCount++;
-            }
+          } else if (iVar1 == INVENTORY_GRID_TYPE_BODYLOC) {
+            nCount++;
           }
         }
 
@@ -2726,12 +2743,7 @@ BOOL __stdcall ReadInfoFromStreamVersioned(uint8_t * pBytesAfterId, size_t size,
 
 void __fastcall ITEMS_WriteClampedValueToBitBuffer(int32_t nBits, uint32_t nValue, D2BitBufferStrc * pBitBuffer) {
     if (nBits != 0x20) {
-      uint32_t uClamped;
-      uClamped = nValue ? nValue : 0;
-      nValue = (1 << D2_SHIFT_COUNT(nBits)) - 1;
-      if (uClamped < nValue) {
-        nValue = uClamped;
-      }
+      nValue = min(max(nValue, 0), (1 << D2_SHIFT_COUNT(nBits)) - 1); // steer-ok: windef.h min/max macros
     }
 
     Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nValue, nBits);
@@ -2969,7 +2981,7 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
 }
 
 int32_t __stdcall ITEM_GetTxtSetItems_setIndex(D2UnitStrc * pUnit) {
-    if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem && pUnit->pUnitData.pUnitDataItem->eQuality == QUALITY_SET)) {
+    if (!(GetTypeInline(pUnit) == UNIT_ITEM && GetItemDataInline(pUnit) && GetItemDataInline(pUnit)->eQuality == QUALITY_SET)) {
       return -1;
     }
 
@@ -5771,23 +5783,14 @@ D2Row_char_32 * __stdcall ITEM_GetTxtItemTypes_invgfx(D2UnitStrc * pUnit, uint32
     // Static local variables (originally global data)
     static char * gpszItemNoInvGfx = (char*)""; D2_STATIC_GUARD(gpszItemNoInvGfx, "D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx::gpszItemNoInvGfx");
 
-    D2ItemTypesTxt* pItemTypesTxt;
-    uint32_t nClampedGfxIdx;
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return (D2Row_char_32*)(char (*)[32])gpszItemNoInvGfx;
     }
 
     eD2ItemTypes eItemType = ITEM_GetItemData_wType(pUnit);
-    pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
+    D2ItemTypesTxt* pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
     if (pItemTypesTxt) {
-      uint32_t nMaxGfxIdx;
-      nMaxGfxIdx = (uint8_t)pItemTypesTxt->varinvgfx - 1;
-      nClampedGfxIdx = (int)nGfxIndex <= 0 ? 0 : nGfxIndex;
-      if ((int)nClampedGfxIdx < (int)nMaxGfxIdx) {
-        nMaxGfxIdx = nClampedGfxIdx;
-      }
-
-      return pItemTypesTxt->invgfx + nMaxGfxIdx;
+      return pItemTypesTxt->invgfx + min(max((int)nGfxIndex, 0), (uint8_t)pItemTypesTxt->varinvgfx - 1); // steer-ok: windef.h min/max macros
     }
 
     return (D2Row_char_32*)(char (*)[32])gpszItemNoInvGfx;
@@ -7711,61 +7714,40 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
 
 // Serializes a single item unit to a bit buffer for network/save transmission. Writes the 0x4d4a item header (if pStatListEx present), item flags word, then delegates to SerializeComplexItem or SerializeSimpleItem based on COMPACT flag. Recursively serializes socketed child items when bAllItems is set. bIsCrude forces the CRUDE flag.
 void __fastcall SerializeItemToBitBuffer(D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2StatListExStrc * pStatListEx, BOOL bAllItems, BOOL bIsCrude) {
-    eD2ItemFlag eItemFlags;
-    uint32_t nItemClassId;
-    D2UnitStrc* pUnit_01;
-    if (!pUnit || pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem) {
-      eItemFlags = ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
-    } else {
-      eItemFlags = pUnit->pUnitData.pUnitDataItem->dwItemFlags;
-    }
-
-    eD2ItemFlag nValue = eItemFlags & (ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD) | ITEMFLAG_SAVED;
-    if (!pUnit) {
-      nItemClassId = -1;
-    } else {
-      nItemClassId = pUnit->nClassId;
-    }
-
-    D2ItemsTxt* txtLine = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
+    uint32_t dwFlags = !pUnit || pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem ? 0 : pUnit->pUnitData.pUnitDataItem->dwItemFlags;
+    dwFlags = dwFlags & 0xfff7ffff | 0x800000;
+    D2ItemsTxt* txtLine = DATATBLS::ItemTbls::TXT_Items_GetLine(!pUnit ? -1 : pUnit->nClassId);
     if (!txtLine) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x12e0);
       exit(-1);
     }
-
-    {
-      D2UnitStrc* pUnit_00;
-      if (txtLine->bCompactSave != '\0') {
-        nValue = eItemFlags & (ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD) | (ITEMFLAG_SAVED | ITEMFLAG_COMPACT);
-      }
-      if (bIsCrude) {
-        nValue = nValue & (ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD) | ITEMFLAG_CRUDE;
-      }
-      if (pStatListEx) {
-        Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 0x4d4a, 0x10);
-      } else {
-        if ((nValue & ITEMFLAG_IDENTIFIED) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
-          nValue &= ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD;
-        }
-      }
-
-      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, nValue, 0x20);
-      if ((nValue & ITEMFLAG_COMPACT) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
-        SerializeSimpleItem(pUnit, pBitBuffer, pStatListEx);
-      } else {
-        SerializeComplexItem(pUnit, pBitBuffer, pStatListEx, bIsCrude);
-      }
-      if (!bIsCrude && bAllItems && pUnit->pInventory) {
-        for (pUnit_00 = INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory); pUnit_00; pUnit_00 = INVENTORY::Inventory::INVENTORY_GetNextItem(pUnit_00)) {
-          pUnit_01 = INVENTORY::Inventory::GetCarriedItem(pUnit_00);
-          Fog::BitBuffer::BitBufferEndCurrentByte(pBitBuffer);
-          SerializeItemToBitBuffer(pUnit_01, pBitBuffer, pStatListEx, bAllItems, 0);
-        }
-      }
-
-      Fog::BitBuffer::GetNextPositon(pBitBuffer);
-      return;
+    if (txtLine->bCompactSave) {
+      dwFlags |= 0x200000;
     }
+    if (bIsCrude) {
+      dwFlags = dwFlags & 0xffbfffff | 0x2000000;
+    }
+    if (pStatListEx) {
+      Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 0x4d4a, 0x10);
+    } else if (!(dwFlags & 0x10)) {
+      dwFlags &= 0xfffff7ff;
+    }
+
+    Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, dwFlags, 0x20);
+    if (dwFlags & 0x200000) {
+      SerializeSimpleItem(pUnit, pBitBuffer, pStatListEx);
+    } else {
+      SerializeComplexItem(pUnit, pBitBuffer, pStatListEx, bIsCrude);
+    }
+    if (!bIsCrude && bAllItems && pUnit->pInventory) {
+      for (D2UnitStrc* pNode = INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory); pNode; pNode = INVENTORY::Inventory::INVENTORY_GetNextItem(pNode)) {
+        D2UnitStrc* pItem = INVENTORY::Inventory::GetCarriedItem(pNode);
+        Fog::BitBuffer::BitBufferEndCurrentByte(pBitBuffer);
+        SerializeItemToBitBuffer(pItem, pBitBuffer, pStatListEx, bAllItems, 0);
+      }
+    }
+
+    Fog::BitBuffer::GetNextPositon(pBitBuffer);
 }
 
 int32_t __stdcall SerializeItem(D2UnitStrc * pUnit, uint8_t * pBitStream, size_t nBitStreamSize, D2StatListExStrc * pStatListEx, BOOL bAllItems, BOOL bIsCrude) {

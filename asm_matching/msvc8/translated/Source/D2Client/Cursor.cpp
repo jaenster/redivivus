@@ -519,37 +519,26 @@ void __fastcall UI_SetMousePosition(int32_t nX, int32_t nY) {
 }
 
 void __fastcall SetMouseXY(int32_t x, int32_t y) {
-    HWND hWnd;
-    int iCaptionAreaHeight;
-    int iFixedFrameWidth;
-    tagRECT WindowRect_lcl;
-    tagRECT* lpRect;
     if (x < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x30f);
       exit(-1);
-    } else {
-      uint32_t bIsFullscreen;
-      if (!(y >= 0)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x310);
-        exit(-1);
-      }
-
-      bIsFullscreen = D2gfx::D2GFX::IsFullscreen();
-      if (!bIsFullscreen) {
-        lpRect = &WindowRect_lcl;
-        /* LPRECT lpRect for GetWindowRect */ hWnd = D2gfx::D2GFX::GetHwnd();
-        /* HWND hWnd for GetWindowRect */ GetWindowRect(hWnd, lpRect);
-        /* int nIndex for GetSystemMetrics */ iCaptionAreaHeight = GetSystemMetrics(4);
-        /* int nIndex for GetSystemMetrics */ iFixedFrameWidth = GetSystemMetrics(7);
-        /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(iFixedFrameWidth + WindowRect_lcl.left + x, iCaptionAreaHeight + WindowRect_lcl.top + y);
-      } else {
-        /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(x, y);
-      }
-
-      MouseY = y;
-      MouseX = x;
-      return;
     }
+    if (y < 0) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x310);
+      exit(-1);
+    }
+    if (!D2gfx::D2GFX::IsFullscreen()) {
+      RECT sWindowRect;
+      GetWindowRect(D2gfx::D2GFX::GetHwnd(), &sWindowRect);
+      int nScreenY = GetSystemMetrics(4) + sWindowRect.top + y; // steer-ok: the original computes the screen y (caption height) before the screen x
+      int nScreenX = GetSystemMetrics(7) + sWindowRect.left + x;
+      SetCursorPos(nScreenX, nScreenY);
+    } else {
+      SetCursorPos(x, y);
+    }
+
+    MouseY = y;
+    MouseX = x;
 }
 
 int __stdcall GetItemType() {

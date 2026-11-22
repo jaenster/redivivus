@@ -239,17 +239,18 @@ BOOL __fastcall Skills_SrvStFunc_21_IsRevivableCorpse(::SGAMEDATA * pGame, D2Uni
     return BVar1;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 void __fastcall SKILLNEC_OnCurseExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     if (!pUnit) {
       return;
     }
 
-    int32_t bReattach = 1;
-    eD2States pStateAsUnit = eState;
-    UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(UNIT::SUnit::GetGamePointer(pUnit), pUnit, bReattach, pStateAsUnit);
-    if (pUnit->eUnitType == UNIT_MONSTER) {
-      D2AiGeneralStrc* pMonsterAiGeneral = !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
-      Monster::AI::AttachCorrectAiFunctionToMonster(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pMonsterAiGeneral, 0);
+    UNIT::SUnitEvent::SUNITEVENT_RemoveEventsByQueueAndOwner(UNIT::SUnit::GetGamePointer(pUnit), pUnit, 1, eState);
+    if (GetTypeInline(pUnit) == UNIT_MONSTER) {
+      D2UnitDataMonsterStrc* pMonsterData = GetTypeInline(pUnit) == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : nullptr;
+      D2AiGeneralStrc* pAiGeneral = pMonsterData ? pMonsterData->pAiGeneral : nullptr;
+      Monster::AI::AttachCorrectAiFunctionToMonster(UNIT::SUnit::GetGamePointer(pUnit), pUnit, pAiGeneral, 0);
     }
 
     SkillsServer::DefaultExpireFunction(pUnit, eState, dwParam);

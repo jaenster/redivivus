@@ -564,14 +564,7 @@ void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {
     // also labelled: gpGlidePaletteTable
 static BYTE * gaGlidePaletteTable[72] = {0}; D2_STATIC_GUARD(gaGlidePaletteTable, "D2Direct3D::Renderer::SetPaletteTable::gaGlidePaletteTable");
 
-    int nEntriesRemaining;
-    uint8_t** pDestPaletteEntry = gaGlidePaletteTable;
-    for (nEntriesRemaining = 0x48; nEntriesRemaining; nEntriesRemaining--) {
-      *pDestPaletteEntry = *ppPaletteTable;
-      ppPaletteTable++;
-      pDestPaletteEntry++;
-    }
-
+    memcpy(gaGlidePaletteTable, ppPaletteTable, sizeof(gaGlidePaletteTable));
     gpPaletteTable = gaGlidePaletteTable;
 }
 
@@ -642,43 +635,34 @@ void __fastcall RENDERER_D3D_SetBlendMode(int nBlendMode) {
 
 // Sets Direct3D alpha blending mode. Mode 1=opaque, 2=additive, 3=modulate, 4=alpha blend. Caches current mode to avoid redundant state changes.
 void __fastcall SetBlendMode(int nBlendMode) {
-    uint32_t nNewBlendMode;
-    if (!g_nCurrentAlphaBlendMode || (nNewBlendMode = g_nCurrentAlphaBlendMode , nBlendMode != g_nCurrentAlphaBlendMode)) {
-      DWORD uDestBlendFactor;
-      nNewBlendMode = nBlendMode;
-      switch (nBlendMode) {
-        case 1:
-          g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x1b, 0);
-        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x13, 2);
-        uDestBlendFactor = 1;
-        break;
-        case 2:
-          g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x1b, 1);
-        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x13, 2);
-        uDestBlendFactor = 2;
-        break;
-        case 3:
-          g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x1b, 1);
-        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x13, 1);
-        uDestBlendFactor = 3;
-        break;
-        case 4:
-          g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x1b, 1);
-        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x13, 5);
-        uDestBlendFactor = 6;
-        break;
-        default:
-          {
-            g_nCurrentAlphaBlendMode = nNewBlendMode;
-            return;
-          }
-      }
-
-      g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x14, uDestBlendFactor);
-      nNewBlendMode = nBlendMode;
+    if (g_nCurrentAlphaBlendMode && nBlendMode == g_nCurrentAlphaBlendMode) {
+      return;
     }
 
-    g_nCurrentAlphaBlendMode = nNewBlendMode;
+    switch (nBlendMode) {
+      case 1:
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x1b, 0);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x13, 2);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x14, 1);
+        break;
+      case 2:
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x1b, 1);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x13, 2);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x14, 2);
+        break;
+      case 3:
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x1b, 1);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x13, 1);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x14, 3);
+        break;
+      case 4:
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x1b, 1);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x13, 5);
+        g_pD3DDevice->lpVtbl->SetRenderState(g_pD3DDevice, 0x14, 6);
+        break;
+    }
+
+    g_nCurrentAlphaBlendMode = nBlendMode;
 }
 
 void __fastcall RENDERER_D3D_SetTextureFilterMode(int nFilterMode) {
@@ -937,9 +921,9 @@ void __stdcall RENDERER_D3D_AllocateTextureCaches() {
 
     gnTextureMemoryUsageBytes.nGlideSmallTextureCacheMemBytes = nGenericCacheEnd * 0x10000;
     nSmackerBase = d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 1, nGenericNodeBytes, (uSubtileCacheAlloc >> 5) + nSmackerBase, 0x80, 0x80);
-    gnTextureMemoryUsageBytes.nGlideMediumTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[1].nMaxNodes << 0xe << 0xe;
+    gnTextureMemoryUsageBytes.nGlideMediumTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[1].nMaxNodes * g_nBytesPerPixel << 0xe;
     d3dTextureCache::RENDERER_D3D_InitializeTextureCachePool(gD3DGenericTextureCache.aCaches + 2, nSmackerBase, uSmallCacheAlloc, 0x20, 0x20);
-    gnTextureMemoryUsageBytes.nGlideLargeTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[2].nMaxNodes << 0xa << 0xa;
+    gnTextureMemoryUsageBytes.nGlideLargeTextureCacheMemBytes = gD3DGenericTextureCache.aCaches[2].nMaxNodes * g_nBytesPerPixel << 0xa;
     RENDERER_D3D_InitializeTexturePools();
     D2CMP::SRC::CelCmp::GFX_SetSpriteCacheFreeCallback((pfnLruFreeEntry)d3dFloorCache::D3D_InvalidateTileCachesForEntry);
 }

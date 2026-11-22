@@ -560,10 +560,8 @@ void __stdcall SMemInitPerfCounters() {
 
     LARGE_INTEGER liFrequency;
     /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ QueryPerformanceFrequency(&liFrequency);
-    int64_t llDivResult = _alldiv(liFrequency.u.LowPart, liFrequency.u.HighPart, 1000, 0);
-    gnSMemPerfTicksPerMillisecond = (uint32_t)llDivResult;
-    int64_t nTicksPerMicrosecond = _alldiv(liFrequency.u.LowPart, liFrequency.u.HighPart, 1000000, 0);
-    gnSMemPerfTicksPerMicrosecond = (uint32_t)nTicksPerMicrosecond;
+    gnSMemPerfTicksPerMillisecond = (uint32_t)(liFrequency.QuadPart / 1000);
+    gnSMemPerfTicksPerMicrosecond = (uint32_t)(liFrequency.QuadPart / 1000000);
     memset(gaSMemHeapStats, 0, 0x18000);
     g_SMemLastTickCount = ::GetTickCount();
 }

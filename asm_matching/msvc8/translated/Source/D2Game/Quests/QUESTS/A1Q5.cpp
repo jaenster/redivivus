@@ -31,81 +31,52 @@ namespace D2Game { namespace Quests { namespace QUESTS { namespace A1Q5 {
 
 // A1Q5 "Forgotten Tower" — removes a player from one of two in-quest GUID tracking lists (selected by nListSelector 0/1). Searches the list in nListBase for nPlayerGUID; if found, swaps it with the tail entry and decrements the count. Returns 1 if found+removed, 0 if not present. Used to deregister players who leave or are re-synced.
 static BOOL __stdcall Q05_RemovePlayerFromTrackingList(int32_t nListSelector, D2QuestDataA1Q5Strc * nListBase, int32_t nPlayerGUID) {
-    uint32_t nListCount;
-    int i = 0;
+    int i;
     if (nListSelector) {
-      nListCount = (uint32_t)nListBase->nPlayersForRewardCount;
-      if (!nListCount) {
-        return 0;
-      }
-
-      int32_t* pListEntry = nListBase->aPlayersForRewardGUIDs;
-      do {
-        if (*pListEntry == nPlayerGUID) {
-          if (i != nListCount - 1) {
-            nListBase->aPlayersForRewardGUIDs[i] = nListBase->aPlayersForRewardGUIDs[nListCount - 1];
+      for (i = 0; i < nListBase->nPlayersForRewardCount; i++) {
+        if (nListBase->aPlayersForRewardGUIDs[i] == nPlayerGUID) {
+          if (i != nListBase->nPlayersForRewardCount - 1) {
+            nListBase->aPlayersForRewardGUIDs[i] = nListBase->aPlayersForRewardGUIDs[nListBase->nPlayersForRewardCount - 1];
           }
 
           nListBase->nPlayersForRewardCount--;
           return 1;
         }
-
-        i++;
-        pListEntry++;
-      } while (i < (int)(uint32_t)nListBase->nPlayersForRewardCount);
+      }
 
       return 0;
     }
 
-    nListCount = (uint32_t)nListBase->nPlayersInTowerCount;
-    if (!nListCount) {
-      return 0;
-    }
-
-    do {
+    for (i = 0; i < nListBase->nPlayersInTowerCount; i++) {
       if (nListBase->aPlayersInTowerGUIDs[i] == nPlayerGUID) {
-        if (i != nListCount - 1) {
-          nListBase->aPlayersInTowerGUIDs[i] = nListBase->aPlayersInTowerGUIDs[nListCount - 1];
+        if (i != nListBase->nPlayersInTowerCount - 1) {
+          nListBase->aPlayersInTowerGUIDs[i] = nListBase->aPlayersInTowerGUIDs[nListBase->nPlayersInTowerCount - 1];
         }
 
         nListBase->nPlayersInTowerCount--;
         return 1;
       }
-
-      i++;
-    } while (i < (int)(uint32_t)nListBase->nPlayersInTowerCount);
+    }
 
     return 0;
 }
 
 // Quest item drop and callback functions for A1Q4 (Search for Cain), A1Q5 (Forgotten Tower), and A1Q6 (Sisters to the Slaughter)
 static uint32_t __stdcall QUEST_IsPlayerGUIDInTrackingList(D2QuestDataA1Q5Strc * pListBase, int32_t nListSelector, int32_t nPlayerGUID) {
-    int32_t* pListEntry;
-    int i = 0;
     if (nListSelector) {
-      if (pListBase->nPlayersForRewardCount) {
-        pListEntry = pListBase->aPlayersForRewardGUIDs;
-        do {
-          if (*pListEntry == nPlayerGUID) {
-            return 1;
-          }
-
-          i++;
-          pListEntry++;
-        } while (i < (int)(uint32_t)pListBase->nPlayersForRewardCount);
+      for (int i = 0; i < pListBase->nPlayersForRewardCount; i++) {
+        if (pListBase->aPlayersForRewardGUIDs[i] == nPlayerGUID) {
+          return 1;
+        }
       }
     } else {
-      if (pListBase->nPlayersInTowerCount) {
-        do {
-          if (pListBase->aPlayersInTowerGUIDs[i] == nPlayerGUID) {
-            return 1;
-          }
-
-          i++;
-        } while (i < (int)(uint32_t)pListBase->nPlayersInTowerCount);
-
-        return 0;
+      for (int i = 0; i < pListBase->nPlayersInTowerCount; i++) {
+        if (pListBase->aPlayersInTowerGUIDs[i] == nPlayerGUID) {
+          return 1;
+        }
       }
+
+      return 0;
     }
 
     return 0;
@@ -276,44 +247,28 @@ void __fastcall Q05_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
     }
 
     QUESTGUID_RemovePlayerFromList(&pQuestSpecific->sQuestGUID, nPlayerGUIDRemove);
-    uint32_t nListCount = (uint32_t)pQuestSpecific->nPlayersForRewardCount;
-    int i = 0;
-    if (nListCount) {
-      int32_t* pListEntry;
-      pListEntry = pQuestSpecific->aPlayersForRewardGUIDs;
-      do {
-        if (*pListEntry == nPlayerGUID) {
-          if (i != nListCount - 1) {
-            pQuestSpecific->aPlayersForRewardGUIDs[i] = pQuestSpecific->aPlayersForRewardGUIDs[nListCount - 1];
-          }
-
-          pQuestSpecific->nPlayersForRewardCount--;
-          break;
+    int i;
+    for (i = 0; i < pQuestSpecific->nPlayersForRewardCount; i++) {
+      if (pQuestSpecific->aPlayersForRewardGUIDs[i] == nPlayerGUID) {
+        if (i != pQuestSpecific->nPlayersForRewardCount - 1) {
+          pQuestSpecific->aPlayersForRewardGUIDs[i] = pQuestSpecific->aPlayersForRewardGUIDs[pQuestSpecific->nPlayersForRewardCount - 1];
         }
 
-        i++;
-        pListEntry++;
-      } while (i < (int)(uint32_t)pQuestSpecific->nPlayersForRewardCount);
-    }
-
-    nListCount = (uint32_t)pQuestSpecific->nPlayersInTowerCount;
-    i = 0;
-    if (!nListCount) {
-      return;
-    }
-
-    while (pQuestSpecific->aPlayersInTowerGUIDs[i] != nPlayerGUID) {
-      i++;
-      if (i >= (int)(uint32_t)pQuestSpecific->nPlayersInTowerCount) {
-        return;
+        pQuestSpecific->nPlayersForRewardCount--;
+        break;
       }
     }
 
-    if (i != nListCount - 1) {
-      pQuestSpecific->aPlayersInTowerGUIDs[i] = pQuestSpecific->aPlayersInTowerGUIDs[nListCount - 1];
-    }
+    for (i = 0; i < pQuestSpecific->nPlayersInTowerCount; i++) {
+      if (pQuestSpecific->aPlayersInTowerGUIDs[i] == nPlayerGUID) {
+        if (i != pQuestSpecific->nPlayersInTowerCount - 1) {
+          pQuestSpecific->aPlayersInTowerGUIDs[i] = pQuestSpecific->aPlayersInTowerGUIDs[pQuestSpecific->nPlayersInTowerCount - 1];
+        }
 
-    pQuestSpecific->nPlayersInTowerCount--;
+        pQuestSpecific->nPlayersInTowerCount--;
+        return;
+      }
+    }
 }
 
 // A1Q5 (Forgotten Tower) NPC-talk gossip callback (handler slot 0). Only runs once the quest intro is past. Looks up the talking player's quest record for QUEST_ForgottenTower (Completed/JustCompleted), and resolves the target NPC class id and player GUID. Scans the quest-specific per-player GUID lists to pick which gossip line to play, then calls AddGossipMessageOnMonster to make the NPC speak the appropriate line (completion line, or the initial-mask line from gdwQuestDataIntialMask indexed by stateFlag). Pure dialog selection; no quest-state mutation.
@@ -432,7 +387,7 @@ void __fastcall Unreferenced_00594db0(void * pQuestData, void * pArg) {
     D2Common::Units::ChangeAnimMode(*(D2UnitStrc**)((char*)pArg + 4), 3);
 }
 
-// 1.14d: 0x594dd0 | A1Q5 "The Forgotten Tower" — reward-award pass (per-player iterator callback).
+// A1Q5 at 0x594dd0 | "The Forgotten Tower" — reward-award pass (per-player iterator callback).
 // Runs once per player unit. Skips if this player's quest record already has Completed OR RewardAwaits.
 // Gate: player must be standing in LEVEL_TowerCellarLevel5 (the Countess room). Records the player's
 // GUID into the quest's shared player-list (so the rune/gold reward isn't double-granted), then marks
@@ -565,7 +520,7 @@ BOOL __fastcall Q05_MarkCompleteForPlayersInTower(::SGAMEDATA * pGame, D2UnitStr
     return 0;
 }
 
-// 1.14d: 0x594fd0 | A1Q5 "The Forgotten Tower" — top-level completion handler (Countess slain).
+// A1Q5 at 0x594fd0 | "The Forgotten Tower" — top-level completion handler (Countess slain).
 // Takes pQuestData in ESI and loads pGame from pQuestData->pGame at the entry (00594fd0 MOV ECX,[ESI+4]).
 // Iterates all player units calling Q05_MarkCompleteForPlayersInTower to stamp each player's quest
 // record (Completed/JustCompleted, or CannotComplete if absent). Then sets the GAME-WIDE quest record
@@ -818,7 +773,7 @@ uint8_t __fastcall Q05_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStr
     return '\x01';
 }
 
-// 1.14d: 0x5954f0 | A1Q5 "The Forgotten Tower" — Countess death visual/loot effect spawner.
+// A1Q5 at 0x5954f0 | "The Forgotten Tower" — Countess death visual/loot effect spawner.
 // Guarded by quest-data flags (+0x118 set, +0x119 not yet fired) and a tracked-chest count (+0x88).
 // Walks the list of tracked chest object GUIDs (+0x68): for the first valid chest, spawns the death
 // "actor" monster (type 0x146, Dead anim mode) in a good nearby room at the recorded kill position
@@ -903,7 +858,7 @@ void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, D2Ques
     } while (i < (int)(uint32_t)pA1Q5Data->nCountessChestCount);
 }
 
-// 1.14d: 0x5956c0 | A1Q5 "The Forgotten Tower" — death-effect trigger (timer-driven thunk).
+// A1Q5 at 0x5956c0 | "The Forgotten Tower" — death-effect trigger (timer-driven thunk).
 // Called from the monster-id timer path. Invokes Q05_SpawnCountessDeathEffect with the quest data, then
 // if the reward has been distributed (bRewardDistributed) but the death animation hasn't yet played
 // (bDeathEffectPlayed==false), schedules event 7 on the unit ~10 frames out to play the final

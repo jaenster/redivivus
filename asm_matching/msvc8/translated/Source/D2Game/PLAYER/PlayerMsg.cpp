@@ -4359,24 +4359,15 @@ static uint32_t __stdcall ValidateSyncWarpPath(::SGAMEDATA * pGame, D2UnitStrc *
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 0xf);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, 0x4d);
     D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nX, (int16_t)nY);
-    uint32_t bCalcOk;
-    bCalcOk = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
-    uint32_t bPathReachable;
-    bPathReachable = 0;
-    if (bCalcOk) {
-      bPathReachable = D2Common::PATH::DynamicPath::GetLastPathPointX(pDynamicPath);
-      if (nX == bPathReachable) {
-        bPathReachable = D2Common::PATH::DynamicPath::GetLastPathPointY(pDynamicPath);
-        if (nY == bPathReachable) {
-          bPathReachable = 1;
-          goto restore_path_settings;
-        }
+    uint32_t bPathReachable = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+    if (bPathReachable) {
+      if (nX == D2Common::PATH::DynamicPath::GetLastPathPointX(pDynamicPath) && nY == D2Common::PATH::DynamicPath::GetLastPathPointY(pDynamicPath)) {
+        bPathReachable = 1;
+      } else {
+        bPathReachable = 0;
       }
-
-      bPathReachable = 0;
     }
 
-    restore_path_settings:
     D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynamicPath, nSavedCollisionFlags);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, nSavedPathType);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, nDistance);

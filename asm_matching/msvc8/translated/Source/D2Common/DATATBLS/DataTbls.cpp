@@ -127,8 +127,8 @@ DWORD __stdcall TXT_Experience_GetLineLevel(int32_t ePlayerClass, int32_t nLevel
 // Returns experience.txt row 0 (the MaxLvl row) Class[ePlayerClass], falling back to Class[0] outside 0..6.
 // Evidence: reads only [pTxtExperience + class*4]; callers clamp levels to it (006442a0, 0062b5b0, 0057eb10).
 int32_t __stdcall TXT_Experience_GetMaxLevel(int32_t ePlayerClass) {
-    if (!(ePlayerClass >= 0 && ePlayerClass < 7)) {
-      return MonsterTbls::sgtDataTable.pTxtExperience->Class[0];
+    if (ePlayerClass < 0 || ePlayerClass >= 7) {
+      ePlayerClass = 0;
     }
 
     return MonsterTbls::sgtDataTable.pTxtExperience->Class[ePlayerClass];

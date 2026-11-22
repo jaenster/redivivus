@@ -253,54 +253,32 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     BOOL nFileVersionResult;
-    char* pszPathEnd;
-    bool bVersionInRange;
-    bool bVersionMatch;
     char szWindowsDir[260];
     uint32_t dwVerBuild;
-    char* pszPath;
     LanguageCode = dwLanguageCode;
     gbSoundInBackground = bSoundInBackground;
     g_bSoundDriverScanComplete = 0;
     DirectSoundEnumerateA(SOUND_DetectLegacySoundDrivers, 0);
     if (gbHasLegacyEMU10K1Driver) {
       /* UINT uSize for GetWindowsDirectoryA */ /* LPSTR lpBuffer for GetWindowsDirectoryA */ GetWindowsDirectoryA(szWindowsDir, 0x104);
-      pszPath = (char*)((uint8_t*)&szWindowsDir - 1);
-      do {
-        pszPathEnd = pszPath;
-        pszPath = pszPathEnd + 1;
-      } while (pszPathEnd[1] != '\0');
-
-      memcpy(pszPathEnd + 1, "\\SYSTEM\\EMU10K1.VXD", 0x14);
+      strcat(szWindowsDir, "\\SYSTEM\\EMU10K1.VXD");
       nFileVersionResult = D2SoundUntil::SOUNDUTIL_GetFileVersionInfo(szWindowsDir, &__frame0.dwVerMinor, &dwVerBuild, &__frame0.dwVerMajor);
       if (nFileVersionResult && __frame0.dwVerMinor == 4) {
         if (dwVerBuild == 6) {
-          bVersionInRange = __frame0.dwVerMajor - 0x26e < 0x58;
-          bVersionMatch = __frame0.dwVerMajor - 0x26e == 0x58;
-        } else {
-          if (dwVerBuild != 0xb) {
-            goto check_crlds3d_version;
+          if (__frame0.dwVerMajor >= 0x26e && __frame0.dwVerMajor <= 0x2c6) {
+            gbDirectSoundDelayWorkaround = 1;
           }
-
-          bVersionInRange = __frame0.dwVerMajor == 0x274;
-          bVersionMatch = __frame0.dwVerMajor == 0x275;
-        }
-        if (bVersionInRange || bVersionMatch) {
-          gbDirectSoundDelayWorkaround = 1;
+        } else if (dwVerBuild == 0xb) {
+          if (__frame0.dwVerMajor >= 0x274 && __frame0.dwVerMajor <= 0x275) {
+            gbDirectSoundDelayWorkaround = 1;
+          }
         }
       }
     }
 
-    check_crlds3d_version:
     if (gbHasLegacySoundDriverCrlds3d) {
       /* UINT uSize for GetWindowsDirectoryA */ /* LPSTR lpBuffer for GetWindowsDirectoryA */ GetWindowsDirectoryA(szWindowsDir, 0x104);
-      pszPath = (char*)((uint8_t*)&szWindowsDir - 1);
-      do {
-        pszPathEnd = pszPath;
-        pszPath = pszPathEnd + 1;
-      } while (pszPathEnd[1] != '\0');
-
-      memcpy(pszPathEnd + 1, "\\SYSTEM\\CRLDS3D.VXD", 0x14);
+      strcat(szWindowsDir, "\\SYSTEM\\CRLDS3D.VXD");
       nFileVersionResult = D2SoundUntil::SOUNDUTIL_GetFileVersionInfo(szWindowsDir, &__frame0.dwVerMinor, &dwVerBuild, &__frame0.dwVerMajor);
       if (nFileVersionResult && (__frame0.dwVerMinor < 4 || __frame0.dwVerMinor == 4 && (dwVerBuild < 0xc || dwVerBuild == 0xc && __frame0.dwVerMajor < 0x40b))) {
         gbDirectSoundDelayWorkaround = 1;

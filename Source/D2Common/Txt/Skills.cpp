@@ -327,16 +327,18 @@ int32_t __fastcall SKILLS_GetUnitStatValue(eD2UnitStat eUnitStat, int32_t nShift
 }
 
 static D2SkillStrc * GetSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
-    D2SkillStrc* pFirstSkill;
-    if (!pUnit->pSkillsList) {
+    D2SkillListStrc* pSkillList = pUnit->pSkillsList;
+    if (!pSkillList) {
       return nullptr;
     }
 
-    D2SkillStrc* pSkill = 0;
-    /* ghidra fails here to change type for real its SkillsList->pFirstSkill */ for (pFirstSkill = pUnit->pSkillsList->pFirstSkill; pFirstSkill; pFirstSkill = pFirstSkill->pNext) {
-      if ((int)pFirstSkill->pRecord->skill == eSkill && !pFirstSkill->bItemSkill && (!pSkill || pFirstSkill->nOwnerGUID == -1 || pSkill->nOwnerGUID != -1 && pFirstSkill->nLevel > pSkill->nLevel)) {
-        pSkill = pFirstSkill;
+    D2SkillStrc* pCur = pSkillList->pFirstSkill;
+    D2SkillStrc* pSkill = nullptr;
+    while (pCur) {
+      if ((int)pCur->pRecord->skill == eSkill && !pCur->bItemSkill && (!pSkill || pCur->nOwnerGUID == -1 || pSkill->nOwnerGUID != -1 && pCur->nLevel > pSkill->nLevel)) {
+        pSkill = pCur;
       }
+      pCur = pCur->pNext;
     }
 
     return pSkill;
@@ -1337,12 +1339,11 @@ BOOL __stdcall SkillCalculateIfWeCanSkillThisSkill(D2UnitStrc * pUnit, eD2Skills
 }
 
 uint32_t __stdcall SKILLS_CheckRequiredAttributes(D2UnitStrc * pUnit, eD2Skills eSkill) {
-    if (!((int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
       return 0;
     }
-
-    D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillTxt && pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
+    if (!(pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2])) {
       return 0;
     }
 
@@ -2492,37 +2493,22 @@ uint32_t __stdcall SKILLS_CheckSkillFlagBit1(int32_t nSkillId) {
 
 // Removes the disguise (shapeshift) states from a unit. Iterates sgptDataTable->pAllStatesDataTblFlag0x10 (the list built with bit index 0x10, the disguise states), and for each state currently active on pUnit, removes the associated stat list via STATLIST_RemoveAndRecalc + FreeStatList and clears the state via SetState. Returns 1 if the unit type is eligible (ITEMSTATS_CheckItemStatCostFlag200Bit3), 0 otherwise.
 BOOL __stdcall STATES_RemoveDisguiseStates(D2UnitStrc * pUnit) {
-    D2StatListExStrc* pStatList;
-    int32_t nStateCount;
-    eD2States eState;
-    D2UnitStrc* i = pUnit;
-    uint32_t bIsProgressiveStateEligible = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit);
-    if (!bIsProgressiveStateEligible) {
+    if (!DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit)) {
       return 0;
     }
 
-    int nUnit = 0x0;
-    if (ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
-      return 1;
-    }
-
-    do {
-      BOOL eStateId;
-      eState = (eD2States)(short int)ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[nUnit];
-      eStateId = DATATBLS::ItemStats::UNIT_GetUnitState(i, eState);
-      if (eStateId) {
-        pStatList = Stats::StatsEx::GetStatsByState(i, eState);
+    for (int i = 0; i < ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size; i++) {
+      int16_t nState = ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[i];
+      if (DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nState)) {
+        D2StatListExStrc* pStatList = Stats::StatsEx::GetStatsByState(pUnit, nState);
         if (pStatList) {
-          Stats::StatsEx::STATLIST_RemoveAndRecalc(i, pStatList);
+          Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
           Stats::StatsEx::FreeStatList(&pStatList->sStatList);
         }
 
-        DATATBLS::ItemStats::SetState(i, eState, 0);
+        DATATBLS::ItemStats::SetState(pUnit, nState, 0);
       }
-
-      nStateCount = (int32_t)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size;
-      nUnit++;
-    } while (nUnit < nStateCount);
+    }
 
     return 1;
 }
@@ -2588,12 +2574,7 @@ int32_t __stdcall SKILL_GetConcentrationDamageBonus(D2UnitStrc * pUnit, int32_t 
 
     int32_t nDamagePct = Stats::StatsEx::STATLIST_GetBaseStatValue(pConcentrationStatList, UNITSTAT_damagepercent, 0);
     D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
-    if (!pSkillsTxt) {
-      return 0;
-    }
-
-    int nScaledBonus = pSkillsTxt->Param[0] * nDamagePct;
-    return nScaledBonus / 8;
+    return (!pSkillsTxt ? 0 : pSkillsTxt->Param[0]) * nDamagePct / 8;
 }
 
 // Computes the kick (Assassin Dragon Talon etc.) damage range and bonus and accumulates it into the three out-params (min/max/bonus). Reads item_kickdamage stat, temporarily marks the equipped weapon and off-hand weapon item-stats active, then derives base min/max from the equipped boots' ItemsTxt nMinDam/nMaxDam plus strength/dexterity %-bonuses (D2ApplyPercent) and the damagepercent/maxdamage_percent stats. Clamps damage% to >= -90. Server-side; no return value, results written through pnParam1/2/3.

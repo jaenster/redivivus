@@ -7084,14 +7084,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
 }
 
 void __fastcall NPCMENU_HandleTradePacket(D2GSPacketSrv0x2A * pPacket) {
-    D2GSPacketSrv0x2A_007c0d87.nPacketId = pPacket->nPacketId;
-    D2GSPacketSrv0x2A_007c0d87.nTradeType = pPacket->nTradeType;
-    D2GSPacketSrv0x2A_007c0d87.nResult = pPacket->nResult;
-    *(uint8_t*)((char*)&D2GSPacketSrv0x2A_007c0d87 + 3) = pPacket->field_0x3;
-    *(uint32_t*)((char*)&D2GSPacketSrv0x2A_007c0d87 + 4) = *(uint32_t*)&pPacket->field_0x4;
-    *(uint32_t*)((char*)&D2GSPacketSrv0x2A_007c0d87 + 8) = *(uint32_t*)((intptr_t)&pPacket->nUnitGUID + 1);
-    *(uint16_t*)((char*)&D2GSPacketSrv0x2A_007c0d87.nGold + 1) = *(uint16_t*)((intptr_t)&pPacket->nGold + 1);
-    *(uint8_t*)((char*)&D2GSPacketSrv0x2A_007c0d87.nGold + 3) = *(uint8_t*)((intptr_t)&pPacket->nGold + 3);
+    D2GSPacketSrv0x2A_007c0d87 = *pPacket;
     uint16_t wStatLayer = 0;
     eD2UnitStat eUnitStat = UNITSTAT_gold;
     PLAYER_CurrentGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), eUnitStat, wStatLayer);

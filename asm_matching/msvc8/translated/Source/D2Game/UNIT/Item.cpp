@@ -543,22 +543,22 @@ static void __stdcall MONSTER_SendNpcEnchantsToClient(D2ClientStrc * pClient, D2
       return;
     }
 
-    uint16_t* pModArray = (uint16_t*)Monsters::GetMonUModList(pUnit);
+    uint8_t* pModArray = (uint8_t*)Monsters::GetMonUModList(pUnit);
     if (!pModArray) {
       return;
     }
 
     uint16_t wNameSeed = Monsters::GetNameSeed(pUnit);
-    uint16_t wEnchant2 = pModArray[1];
-    uint16_t wEnchant1 = *pModArray;
-    nMonFlags = Monsters::CheckMonsterType(pUnit, 4);
+    uint16_t wEnchant1 = (uint16_t)(pModArray[1] << 8 | pModArray[0]); // steer-ok: the original reads mods[0..1] before mods[2] and the CheckMonsterType call; folded OUR-1
+    uint16_t wEnchant2 = pModArray[2];
+    uint16_t wIsChampion = (uint16_t)Monsters::CheckMonsterType(pUnit, 4);
     if (!pUnit) {
       nUnitGUID = -1;
     } else {
       nUnitGUID = pUnit->nUnitGUID;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT(pClient, nUnitGUID, '\x01', wNameSeed, wEnchant1, (uint16_t)(uint8_t)wEnchant2, (uint16_t)nMonFlags);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT(pClient, nUnitGUID, '\x01', wNameSeed, wEnchant1, wEnchant2, wIsChampion);
 }
 
 static void __stdcall MONSTER_SendNpcHealthUpdate(D2ClientStrc * pClient, D2UnitStrc * pUnit) {

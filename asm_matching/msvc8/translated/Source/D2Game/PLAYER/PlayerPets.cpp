@@ -353,14 +353,14 @@ static int32_t GetPetUidByIndex(int32_t nIndex, D2UnitStrc * pUnit) {
 }
 
 int __fastcall Unreferenced_00574810(D2UnitStrc * pUnit, int nPetType) {
-    D2PetListStrc* pDVar1;
-    D2UnitDataPlayerStrc* pDVar2 = D2Common::Units::GetPlayerData(pUnit);
-    pDVar1 = pDVar2 && pDVar2->pPets && nPetType >= 0 && nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? pDVar2->pPets->pPetList + nPetType : nullptr;
-    if (pDVar1) {
-      return pDVar1->nMax;
+    int nMax = 0;
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2PetListStrc* pPetList = pPlayerData && pPlayerData->pPets && nPetType >= 0 && nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize ? pPlayerData->pPets->pPetList + nPetType : nullptr;
+    if (pPetList) {
+      nMax = pPetList->nMax;
     }
 
-    return 0;
+    return nMax;
 }
 
 // Removes a single pet entry (by GUID) from a D2PetListStrc and handles its death. Unlinks the node from the linked list, broadcasts a 0x7A summon-log packet to all units, then either clears the ISREVIVE flag (nParam=0) or actively kills the pet unit. Frees the node memory and decrements the pet count; halts if count goes negative.

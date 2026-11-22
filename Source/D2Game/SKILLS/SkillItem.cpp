@@ -152,6 +152,13 @@
 #include "Source/D2Game/SKILLS/SkillItem.data.h"
 #include "Source/Fog/Src/Safesock.h"
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -1880,7 +1887,7 @@ BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 
 // Item hit-event handler for "Chance to cast Dim Vision on striking". Only applies to monster targets. Reads the item's proc chance stat, computes an effective % from attacker/target levels, rolls the unit seed; on success calls SKILLNEC_ApplyDimVision with a duration scaled by how much the roll was beaten. Halves effective % when param1==6 (ranged hit). Returns 1 if Dim Vision was applied.
 BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
-    if (!pUnit || (pTarget ? pTarget->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if ((pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER) == 0) {
       return 0;
     }
 
@@ -1895,13 +1902,7 @@ BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitE
     if (nUnitEvent == 6 && nEffectivePct > 0) {
       nEffectivePct /= 3;
     }
-    if (nEffectivePct > 1) {
-      if (nEffectivePct >= 0x63) {
-        nEffectivePct = 99;
-      }
-    } else {
-      nEffectivePct = 1;
-    }
+    nEffectivePct = min(max(nEffectivePct, 1), 99); // steer-ok: windef.h min/max macros
 
     uint32_t nRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
     if ((int)nRoll >= nEffectivePct) {
@@ -1909,13 +1910,7 @@ BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitE
     }
 
     nEffectivePct = (int)(nEffectivePct - nRoll) / 5 + 1;
-    if (nEffectivePct > 1) {
-      if (nEffectivePct >= 0x14) {
-        nEffectivePct = 0x14;
-      }
-    } else {
-      nEffectivePct = 1;
-    }
+    nEffectivePct = min(max(nEffectivePct, 1), 0x14); // steer-ok: windef.h min/max macros
 
     SkillNec::SKILLNEC_ApplyDimVision(pGame, pUnit, pTarget, nEffectivePct);
     return 1;
@@ -1962,41 +1957,29 @@ BOOL __fastcall ITEMEVENT_FreezeTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 
     int nAttackerLvl = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     int nTargetLvl = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0);
-    int nRollMod = nStatLvl - 1;
-    if (nRollMod < 0) {
-      nRollMod = 0;
+    int nBonusLvl = nStatLvl - 1;
+    if (nBonusLvl < 0) {
+      nBonusLvl = 0;
     }
     if (nUnitEvent == 6) {
       nAttackerLvl += -6;
     }
 
-    uint32_t nChancePct = (nRollMod * 4 - nTargetLvl + 10 + nAttackerLvl) * 5;
+    int nChancePct = (nBonusLvl * 4 - nTargetLvl + 10 + nAttackerLvl) * 5;
     if (nUnitEvent == 6) {
-      nChancePct = (int)nChancePct / 3;
+      nChancePct /= 3;
     }
 
-    nChancePct = (int)nChancePct <= 0 ? 0 : nChancePct;
-    if ((int)nChancePct >= 100) {
-      nChancePct = 100;
-    }
-
-    uint32_t DVar1 = D2_SeedRoll(&pUnit->sSeed);
-    nRollMod = DVar1 % 100;
-    if (nRollMod >= (int)nChancePct) {
+    nChancePct = min(max(nChancePct, 0), 100); // steer-ok: windef.h min/max macros
+    int nRoll = D2_SeedRoll(&pUnit->sSeed) % 100;
+    if (nRoll >= nChancePct) {
       return 0;
     }
 
-    nRollMod = (nChancePct - nRollMod) * 2 + 0x19;
-    if (nRollMod > 0x19) {
-      if (nRollMod >= 0xfa) {
-        nRollMod = 0xfa;
-      }
-    } else {
-      nRollMod = 0x19;
-    }
-
+    int nFreezeLength = (nChancePct - nRoll) * 2 + 0x19;
+    nFreezeLength = min(max(nFreezeLength, 0x19), 0xfa); // steer-ok: windef.h min/max macros
     memset(&sDamage, 0, 0x70);
-    sDamage.dwFrzLength = nRollMod;
+    sDamage.dwFrzLength = nFreezeLength;
     UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pTarget, 1, &sDamage);
     return 1;
 }

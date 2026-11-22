@@ -1173,7 +1173,7 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1_20to30s(D2UnitStrc * pUnit) {
 bool __fastcall OBJECT_ClientFn_OperateCycle_10s(D2UnitStrc * pUnit) {
     int32_t nDelayMs;
     DWORD DVar1 = GetTickCount();
-    if (pUnit->eAnimMode.ePlayerMode == Death) {
+    if (pUnit->eAnimMode.eObjectMode == eD2ObjectAnimMode_ns::Neutral) {
       if (pUnit->dwTickCount < DVar1) {
         pUnit->dwTickCount = DVar1 + 10000;
         pUnit->nGfxCurrentFrame = (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[1];
@@ -1181,7 +1181,7 @@ bool __fastcall OBJECT_ClientFn_OperateCycle_10s(D2UnitStrc * pUnit) {
         Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
         return true;
       }
-    } else if (pUnit->eAnimMode.ePlayerMode != Death && pUnit->dwTickCount < DVar1) {
+    } else if (pUnit->eAnimMode.eObjectMode >= eD2ObjectAnimMode_ns::Operating && pUnit->dwTickCount < DVar1) {
       nDelayMs = D2Game::Seed::SEED_RollRange(&pUnit->sSeed, 0x1194, 0x1d4c);
       pUnit->dwTickCount = nDelayMs + DVar1;
       D2Common::Units::ChangeAnimMode(pUnit, 0);
@@ -1202,7 +1202,7 @@ bool __fastcall OBJECT_ClientFn_Nop_0B(D2UnitStrc * pUnit) {
 bool __fastcall OBJECT_ClientFn_OperateCycle_3s(D2UnitStrc * pUnit) {
     int32_t nDelayMs;
     DWORD DVar1 = GetTickCount();
-    if (pUnit->eAnimMode.ePlayerMode == Death) {
+    if (pUnit->eAnimMode.eObjectMode == eD2ObjectAnimMode_ns::Neutral) {
       if (pUnit->dwTickCount < DVar1) {
         pUnit->dwTickCount = DVar1 + 3000;
         pUnit->nGfxCurrentFrame = (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[1];
@@ -1210,7 +1210,7 @@ bool __fastcall OBJECT_ClientFn_OperateCycle_3s(D2UnitStrc * pUnit) {
         Engine::Gfx::GFX_LoadUnitModeCof(pUnit, 0);
         return true;
       }
-    } else if (pUnit->eAnimMode.ePlayerMode != Death && pUnit->dwTickCount < DVar1) {
+    } else if (pUnit->eAnimMode.eObjectMode >= eD2ObjectAnimMode_ns::Operating && pUnit->dwTickCount < DVar1) {
       nDelayMs = D2Game::Seed::SEED_RollRange(&pUnit->sSeed, 0x9c4, 0x1d4c);
       pUnit->dwTickCount = nDelayMs + DVar1;
       D2Common::Units::ChangeAnimMode(pUnit, 0);
@@ -1410,35 +1410,36 @@ bool __fastcall OBJECT_ExecuteClientFunction(D2UnitStrc * pUnit) {
 }
 
 void __fastcall WAYPOINT_HandleActivation(uint8_t * pMessage) {
-    D2UnitStrc* pUnit;
     if (!pMessage) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x556);
       exit(-1);
-    } else {
-      uint8_t byPortalFlags;
-      pUnit = CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pMessage + 3), UNIT_OBJECT);
-      if (!pUnit) {
-        return;
-      }
-      if (!(pUnit->nClassId == 0x3b || pUnit->nClassId == 0x3c)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x560);
-        exit(-1);
-      }
+    }
 
-      pUnit->pUnitData.pUnitDataObject->nShrineId = pMessage[2];
-      byPortalFlags = D2Common::Units::GetObjectPortalFlags(pUnit);
-      if (pMessage[1] & 2) {
-        byPortalFlags |= 2;
-      }
-      if (pMessage[1] & 1) {
-        byPortalFlags |= 1;
-      }
-
-      D2Common::Units::SetObjectPortalFlags(pUnit, byPortalFlags);
+    D2UnitStrc* pUnit = CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pMessage + 3), UNIT_OBJECT);
+    if (!pUnit) {
       return;
+    }
+    if (pUnit->nClassId != 0x3b && pUnit->nClassId != 0x3c) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x560);
+      exit(-1);
+    }
+
+    uint8_t nWaypointId = pMessage[2];
+    if (nWaypointId > 0xff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x562);
       exit(-1);
     }
+
+    pUnit->pUnitData.pUnitDataObject->nShrineId = nWaypointId;
+    uint8_t byPortalFlags = D2Common::Units::GetObjectPortalFlags(pUnit);
+    if (pMessage[1] & 2) {
+      byPortalFlags |= 2;
+    }
+    if (pMessage[1] & 1) {
+      byPortalFlags |= 1;
+    }
+
+    D2Common::Units::SetObjectPortalFlags(pUnit, byPortalFlags);
 }
 
 // Returns the object unit's szOwnerName (D2UnitDataObjectStrc+0x28): the town-portal owner shown on hover when the roster has no name.

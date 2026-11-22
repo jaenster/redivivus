@@ -34,14 +34,7 @@ namespace D2Game { namespace SKILLS { namespace SkillBar {
 // Server-side skill start function for skill index 32 (likely Fist of the Heavens or similar melee/charge). Validates skill and retrieves the current attack target via GetTargetEx; returns 0 if target is in town. Applies an attack-rate buff from calc[2], performs a to-hit check via SKILLS_CalcToHit + DAMAGE_CalculateHitCheck, builds a D2DamageStrc with damage/conversion from calc[0]/calc[3], calls DAMAGE_CalculateAndApplyDamage, adds a combat-queue bonus from calc[1], and applies/creates the skill's aura state via D2SetAurastatsFromSkills.
 BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : 0;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -87,8 +80,7 @@ BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2Un
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, bySrcDam);
     D2DamageStrc* pCombatQueueEntry = UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTarget);
     if (pCombatQueueEntry) {
-      nCalcVal = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
-      pCombatQueueEntry->dwPhysDamage += nCalcVal * 0x100;
+      pCombatQueueEntry->dwPhysDamage += D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl) << 8;
     }
 
     short int eAuraState = pSkillsTxt->aurastate;
@@ -98,16 +90,8 @@ BOOL __fastcall SKILLBAR_SrvStFn32_StrikeWithAuraState(::SGAMEDATA * pGame, D2Un
 
     D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)eAuraState);
     if (!pStatsEx) {
-      eD2UnitType eAttackerUnitType;
-      if (!pUnit) {
-        nCalcVal = -1;
-        eAttackerUnitType = UNIT_COUNT;
-      } else {
-        nCalcVal = pUnit->nUnitGUID;
-        eAttackerUnitType = pUnit->eUnitType;
-      }
 
-      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 4, 0, eAttackerUnitType, nCalcVal);
+      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 4, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       if (!pStatsEx) {
         return 1;
       }
@@ -584,14 +568,7 @@ BOOL __fastcall Skills_SrvDoFunc_075_GrimWard(::SGAMEDATA * pGame, D2UnitStrc * 
 // Generic server-side melee attack handler used by multiple Barbarian skills. Sets the target unit, calculates to-hit via SKILLS_CalcToHit, resolves hit/miss via DAMAGE_CalculateHitCheck, applies elemental damage conversion (EType/ConvPct from skills.txt), builds a D2DamageStrc, then calls DAMAGE_CalculateAndApplyDamage and DAMAGE_ProcessCombatQueueEntry. Stores hit result (1=hit, 0=miss) in skill param1.
 BOOL __fastcall SKILLBAR_SkillMeleeAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : 0;
     if (!pSkillsTxt) {
       return 0;
     }

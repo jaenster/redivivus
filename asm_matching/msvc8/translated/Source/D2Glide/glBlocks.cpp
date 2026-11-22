@@ -277,7 +277,6 @@ void __fastcall GLBLOCKS_ReleaseTileTextures(D2TileLibraryEntryStrc * pTile) {
 }
 
 void __stdcall GLBLOCKS_RenderBinkVideoFrame() {
-    GrLfbInfo_t lfbInfo;
     if (!gnGlideWindowHandle) {
       return;
     }
@@ -289,11 +288,7 @@ void __stdcall GLBLOCKS_RenderBinkVideoFrame() {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-    lfbInfo.size = 0x14;
-    lfbInfo.lfbPtr = 0;
-    lfbInfo.strideInBytes = 0;
-    lfbInfo.writeMode = 0;
-    lfbInfo.origin = 0;
+    GrLfbInfo_t lfbInfo = { 0x14 };
     FxBool bLfbLocked = (*Renderer::Glide::GLIDEDLL_grLfbLock_24)(1, 0, 5, 0, 0, &lfbInfo);
     if (bLfbLocked) {
       BinkCopyToBuffer(gpBinkVideoGlide, lfbInfo.lfbPtr, lfbInfo.strideInBytes, gpBinkVideoGlide->Height, gnBinkGlideXOffset, gnBinkGlideYOffset, gnGlideBinkSurfaceType);

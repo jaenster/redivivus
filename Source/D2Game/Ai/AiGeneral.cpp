@@ -168,8 +168,11 @@ void __fastcall FreeAi(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // @sourcefile .\Ai\AiGeneral.cpp
 static void FreeAiCmds(D2AiGeneralStrc * pAiGeneral, ::SGAMEDATA * pGame) {
-    D2MonsterAiCmdStrc* pCmd = pAiGeneral->pCmdLast;
-    while (pCmd && (pCmd = pAiGeneral->pCmdCurrent)) {
+    while (pAiGeneral->pCmdLast) {
+      D2MonsterAiCmdStrc* pCmd = pAiGeneral->pCmdCurrent;
+      if (!pCmd) {
+        return;
+      }
       if (pCmd != pCmd->pNext) {
         if (pAiGeneral->pCmdLast == pCmd) {
           pAiGeneral->pCmdLast = pCmd->pNext;
@@ -184,7 +187,6 @@ static void FreeAiCmds(D2AiGeneralStrc * pAiGeneral, ::SGAMEDATA * pGame) {
       }
 
       D2_FREE_POOL_AT(pGame->pMemoryPool, pCmd, ".\\Ai\\AiGeneral.cpp", 0xc4);
-      pCmd = pAiGeneral->pCmdLast;
     }
 }
 
@@ -278,11 +280,7 @@ void __fastcall AI_SetCurrentAiCommand(D2UnitStrc * pUnit, int32_t nStepDelta, D
 
 // Searches a monster's AI command ring for a node whose first arg (nCmdArg[0]) matches nParam. Starts from pCmdCurrent->pNext and wraps around. If bSetCurrent is non-zero, advances pCmdCurrent to the found node. Returns the matching D2MonsterAiCmdStrc* or NULL if not found or unit invalid.
 D2MonsterAiCmdStrc * __fastcall FindMonsterAiCmd(D2UnitStrc * pUnit, int nCmdArg0, int32_t bSetCurrent) {
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
-      return nullptr;
-    }
-
-    D2AiGeneralStrc* pAiGeneral = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
+    D2AiGeneralStrc* pAiGeneral = pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster ? pUnit->pUnitData.pUnitDataMonster->pAiGeneral : nullptr;
     if (!pAiGeneral) {
       return nullptr;
     }
@@ -372,17 +370,23 @@ void __fastcall AssignMinionOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32
     pAiGeneral->pGame = pGame;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 void __fastcall AIGENERAL_GetOwnerData(D2UnitStrc * pUnit, uint32_t * pnOwnerGUID, int * peOwnerType) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
-      D2AiGeneralStrc* pMonsterData = !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
-      if (pMonsterData->pGame) {
-        *pnOwnerGUID = pMonsterData->nOwnerGUIDEx;
-        *peOwnerType = pMonsterData->eOwnerTypeEx;
-        return;
-      }
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
+      *pnOwnerGUID = -1;
+      return;
     }
 
-    *pnOwnerGUID = -1;
+    D2UnitDataMonsterStrc* pMonsterData = GetTypeInline(pUnit) == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : nullptr;
+    D2AiGeneralStrc* pAiGeneral = pMonsterData ? pMonsterData->pAiGeneral : nullptr;
+    if (!pAiGeneral->pGame) {
+      *pnOwnerGUID = -1;
+      return;
+    }
+
+    *pnOwnerGUID = pAiGeneral->nOwnerGUIDEx;
+    *peOwnerType = pAiGeneral->eOwnerTypeEx;
 }
 
 // Returns the owner unit for a monster. Walks pMonsterData->pAiGeneral->pGame to call FindUnitFromTable with the owner's type and GUID.
@@ -559,52 +563,37 @@ void __fastcall ClearMinionList(::SGAMEDATA * pGame, D2MonsterDataMinionList * p
 
 // Iterates all minions in pUnit's owner's pMinionList and calls pfnProc(pArgument) for each resolved minion unit. Validates pfnProc via IsBadCodePtr first — halts with an unrecoverable error if the pointer is bad. Traverses owner->pMinionList and calls the callback only when the minion unit resolves successfully.
 void __fastcall CallForEachMinion(D2UnitStrc * pUnit, void * pContext, void * pArgument, pfnMinionForEachCallback pfnProc) {
-    D2AiGeneralStrc* pOwnerAi;
-    D2UnitStrc* pMinion;
-    D2AiGeneralStrc* pAi;
-    ::SGAMEDATA* pGame;
-    D2MonsterDataMinionList* pMinionListHead;
-    D2MonsterDataMinionList* pMinionNode;
-    BOOL bBadCodePtr = IsBadCodePtr((FARPROC)pfnProc);
-    if (bBadCodePtr) {
+    if (IsBadCodePtr((FARPROC)pfnProc)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x24e);
       exit(-1);
     }
 
-    {
-      D2UnitStrc* pOwnerUnit;
-      if (!((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
-        return;
-      }
-
-      pAi = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
-      if (!(pAi && pAi->pGame)) {
-        return;
-      }
-
-      pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pAi->pGame, pAi->eOwnerTypeEx, pAi->nOwnerGUIDEx);
-      if ((pOwnerUnit ? pOwnerUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-        return;
-      }
-      if (pOwnerUnit->pUnitData.pUnitDataMonster) {
-        pOwnerAi = pOwnerUnit->pUnitData.pUnitDataMonster->pAiGeneral;
-      } else {
-        pOwnerAi = 0;
-      }
-
-      pGame = pOwnerAi->pGame;
-      pMinionNode = pOwnerAi->pMinionList;
-      while (pMinionNode) {
-        pMinionListHead = pMinionNode->pNext;
-        pMinion = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pMinionNode->nMinionGUID);
-        if (pMinion) {
-          (*pfnProc)(pMinion, pContext, pArgument);
-        }
-
-        pMinionNode = pMinionListHead;
-      }
-
+    if (!(GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
+    }
+
+    D2AiGeneralStrc* pAi = pUnit->pUnitData.pUnitDataMonster->pAiGeneral;
+    if (!(pAi && pAi->pGame)) {
+      return;
+    }
+
+    D2UnitStrc* pOwnerUnit = UNIT::SUnit::FindUnitFromTable(pAi->pGame, pAi->eOwnerTypeEx, pAi->nOwnerGUIDEx);
+    if (GetTypeInline(pOwnerUnit) != UNIT_MONSTER) {
+      return;
+    }
+
+    D2UnitDataMonsterStrc* pOwnerData = GetTypeInline(pOwnerUnit) == UNIT_MONSTER ? pOwnerUnit->pUnitData.pUnitDataMonster : nullptr;
+    D2AiGeneralStrc* pOwnerAi = pOwnerData ? pOwnerData->pAiGeneral : nullptr;
+    ::SGAMEDATA* pGame = pOwnerAi->pGame;
+    D2MonsterDataMinionList* pMinionNode = pOwnerAi->pMinionList;
+    while (pMinionNode) {
+      D2MonsterDataMinionList* pNextNode = pMinionNode->pNext;
+      D2UnitStrc* pMinion = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pMinionNode->nMinionGUID);
+      if (pMinion) {
+        (*pfnProc)(pMinion, pContext, pArgument);
+      }
+
+      pMinionNode = pNextNode;
     }
 }
 

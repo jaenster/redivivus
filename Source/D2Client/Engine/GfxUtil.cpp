@@ -704,8 +704,6 @@ BOOL __fastcall GFXUTIL_UnitHasAnimMode(D2UnitStrc * pUnit, uint32_t nMode) {
 }
 
 static int32_t __stdcall GFXUTIL_GetNumDirectionsForUnit(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nMode, int32_t nClassId) {
-    uint8_t cNumDirs;
-    D2UnitStrc* pPlayerUnit_lcl;
     D2MonStats2Txt* pMonStats2;
     D2MonsterCofStatusEntryStrc* nModeStatus;
     D2MissilesTxt* pMissilesTxt;
@@ -716,32 +714,33 @@ static int32_t __stdcall GFXUTIL_GetNumDirectionsForUnit(D2UnitStrc * pUnit, eD2
     uint32_t nNumDirections = 1;
     switch (eUnitType) {
       case UNIT_PLAYER:
-        if (!Gfx::gnGfxDirectionCountCache && (pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI() , pUnit == pPlayerUnit_lcl)) {
-          return 0x10;
+        if (!Gfx::gnGfxDirectionCountCache && pUnit == UNIT::Player::GetPlayerUnit_UI()) {
+          nNumDirections = 0x10;
+        } else {
+          nNumDirections = 8;
         }
-      return 8;
+        break;
       case UNIT_MONSTER:
         pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nClassId);
-      if (pMonStats2) {
-        nNumDirections = (uint32_t)pMonStats2->byDirDT[nMode];
-        if (nNumDirections == 8) {
-          nModeStatus = Gfx::GFX_GetModeStatusEntry(nClassId);
-          if (nModeStatus && !nModeStatus->nModeLoadStatus[nMode]) {
-            return 4;
+        if (pMonStats2) {
+          nNumDirections = (uint32_t)pMonStats2->byDirDT[nMode];
+          if (nNumDirections == 8) {
+            nModeStatus = Gfx::GFX_GetModeStatusEntry(nClassId);
+            if (nModeStatus && !nModeStatus->nModeLoadStatus[nMode]) {
+              nNumDirections = 4;
+            }
           }
         }
-      }
-
-      break;
+        break;
       case UNIT_MISSILE:
         pMissilesTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(nClassId);
-      if (pMissilesTxt) {
-        return (uint32_t)pMissilesTxt->NumDirections;
-      }
-
-      break;
+        if (pMissilesTxt) {
+          nNumDirections = (uint32_t)pMissilesTxt->NumDirections;
+        }
+        break;
       case UNIT_COUNT:
         nNumDirections = GFXUTIL_GetOverlayNumDirections(nClassId);
+        break;
     }
 
     return nNumDirections;

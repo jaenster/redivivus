@@ -1771,30 +1771,28 @@ D2ItemsTxt * __fastcall Unreferenced_0065e9b0(D2UnitStrc * pUnit, D2UnitStrc * p
 
 // Rolls a random integer in [nMin, nParam] using the item's seed (via GetItemSeed for UNIT_ITEM, pUnit->sSeed otherwise). If min==max returns min with no RNG call. Returns the rolled value in EAX.
 int32_t __fastcall ITEMMOD_RollRandomValue(D2UnitStrc * pUnit, int32_t nMin, int32_t nMax) {
-    uint32_t nRolled;
-    int32_t nLow = nMin;
     if (nMax == nMin) {
-      return nLow;
+      return nMin;
     }
     if (nMax < nMin) {
-      nLow = nMax;
+      int nSwap = nMax;
       nMax = nMin;
+      nMin = nSwap;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
-      if (nLow < nMax) {
-        nRolled = Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMax - nLow + 1);
-        return nRolled + nLow;
+      if (nMin >= nMax) {
+        return nMin;
       }
-    } else {
-      D2SeedStrc* pSeed;
-      pSeed = Items::GetItemSeed(pUnit);
-      if (nLow < nMax) {
-        nRolled = Seed::RANDOM_RandomNumberSelector(pSeed, nMax - nLow + 1);
-        return nRolled + nLow;
-      }
+
+      return Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMax - nMin + 1) + nMin;
     }
 
-    return nLow;
+    D2SeedStrc* pSeed = Items::GetItemSeed(pUnit);
+    if (nMin >= nMax) {
+      return nMin;
+    }
+
+    return Seed::RANDOM_RandomNumberSelector(pSeed, nMax - nMin + 1) + nMin;
 }
 
 // Adds a stat to an item's stat list. Validates stat ID against ItemStatCost table, then calls ITEMMOD_GetOrCreateStatList to obtain or create the target stat list. Adds the shifted stat value via STATLIST_AddStatValue or D2AddStatToStatsListEx depending on nParam2. Special-cases poison (stat 0x3A) to also add/check UNITSTAT_poison_count. Returns nParam3 (the stat value) on success, 0 on invalid stat or missing stat list.

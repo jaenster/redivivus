@@ -2577,35 +2577,25 @@ static int32_t * DRLGPATH_PopBestNodeFromOpenList(D2DrlgPathSearchCtxStrc * nOpe
 
 // Propagates improved path costs through the A* node graph. When a shorter path is found to a node, updates its g-cost and recursively updates all 8 directional neighbors that could benefit from the shorter path.
 static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, D2DrlgPathSearchCtxStrc * pSearchCtx) {
-    short int nEdgeCost;
-    int nChildIdx;
-    D2DrlgPathNodeStrc* pNeighborNode;
-    D2DrlgPathNodeStrc* pCurNode;
-    D2DrlgPathNodeStrc* pNeighborNode2;
     pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pStartNode;
-    int32_t* pQueueCount = &pSearchCtx->nPropagateCount;
-    (*pQueueCount)++;
-    int nQueueCount = *pQueueCount;
-    do {
-      D2DrlgPathNodeStrc** pChildPtr;
-      if (!nQueueCount) {
-        return;
-      }
-
+    pSearchCtx->nPropagateCount++;
+    while (pSearchCtx->nPropagateCount) {
       pSearchCtx->nPropagateCount--;
-      pCurNode = (D2DrlgPathNodeStrc*)pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount];
-      nChildIdx = 0;
-      pChildPtr = pCurNode->pChildren + 1;
-      do {
-        pNeighborNode = pChildPtr[-1];
+      D2DrlgPathNodeStrc* pCurNode = (D2DrlgPathNodeStrc*)pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount];
+      for (int nChildIdx = 0; nChildIdx < 8; nChildIdx++) {
+        D2DrlgPathNodeStrc* pNeighborNode = pCurNode->pChildren[nChildIdx];
         if (!pNeighborNode) {
           break;
         }
-        if (pCurNode->nX == pNeighborNode->nX || (nEdgeCost = 3 , pCurNode->nY == pNeighborNode->nY)) {
-          nEdgeCost = 2;
+
+        int nStepCost;
+        if (pCurNode->nX == pNeighborNode->nX || pCurNode->nY == pNeighborNode->nY) {
+          nStepCost = 2;
+        } else {
+          nStepCost = 3;
         }
 
-        nEdgeCost = pCurNode->nGCost + nEdgeCost;
+        short int nEdgeCost = pCurNode->nGCost + nStepCost;
         if (nEdgeCost < pNeighborNode->nGCost) {
           pNeighborNode->pParent = pCurNode;
           pNeighborNode->nGCost = nEdgeCost;
@@ -2613,64 +2603,8 @@ static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, D2DrlgP
           pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pNeighborNode;
           pSearchCtx->nPropagateCount++;
         }
-
-        pNeighborNode2 = *pChildPtr;
-        if (!pNeighborNode2) {
-          break;
-        }
-        if (pCurNode->nX == pNeighborNode2->nX || (nEdgeCost = 3 , pCurNode->nY == pNeighborNode2->nY)) {
-          nEdgeCost = 2;
-        }
-
-        nEdgeCost = pCurNode->nGCost + nEdgeCost;
-        if (nEdgeCost < pNeighborNode2->nGCost) {
-          pNeighborNode2->pParent = pCurNode;
-          pNeighborNode2->nGCost = nEdgeCost;
-          pNeighborNode2->nFCost = pNeighborNode2->nHCost + nEdgeCost;
-          pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pNeighborNode2;
-          pSearchCtx->nPropagateCount++;
-        }
-
-        pNeighborNode2 = pChildPtr[1];
-        if (!pNeighborNode2) {
-          break;
-        }
-        if (pCurNode->nX == pNeighborNode2->nX || (nEdgeCost = 3 , pCurNode->nY == pNeighborNode2->nY)) {
-          nEdgeCost = 2;
-        }
-
-        nEdgeCost = pCurNode->nGCost + nEdgeCost;
-        if (nEdgeCost < pNeighborNode2->nGCost) {
-          pNeighborNode2->pParent = pCurNode;
-          pNeighborNode2->nGCost = nEdgeCost;
-          pNeighborNode2->nFCost = pNeighborNode2->nHCost + nEdgeCost;
-          pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pNeighborNode2;
-          pSearchCtx->nPropagateCount++;
-        }
-
-        pNeighborNode2 = pChildPtr[2];
-        if (!pNeighborNode2) {
-          break;
-        }
-        if (pCurNode->nX == pNeighborNode2->nX || (nEdgeCost = 3 , pCurNode->nY == pNeighborNode2->nY)) {
-          nEdgeCost = 2;
-        }
-
-        nEdgeCost = pCurNode->nGCost + nEdgeCost;
-        if (nEdgeCost < pNeighborNode2->nGCost) {
-          pNeighborNode2->pParent = pCurNode;
-          pNeighborNode2->nGCost = nEdgeCost;
-          pNeighborNode2->nFCost = pNeighborNode2->nHCost + nEdgeCost;
-          pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount] = pNeighborNode2;
-          pSearchCtx->nPropagateCount++;
-        }
-
-        nChildIdx += 4;
-        pChildPtr += 4;
-      } while (nChildIdx < 8);
-
-      nQueueCount = pSearchCtx->nPropagateCount;
-    } while (true);
+      }
+    }
 }
 
 // Allocates a new path node from the pre-allocated node pool (max 200 nodes). Returns NULL if the pool is exhausted. Each node is 0x38 bytes and is zero-initialized.

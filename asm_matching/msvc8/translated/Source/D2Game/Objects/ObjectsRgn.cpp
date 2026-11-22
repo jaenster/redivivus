@@ -435,77 +435,49 @@ void __fastcall AddPointsToLevelRngPoints1(::SGAMEDATA * pGame, eD2LevelId eLeve
 
 // Resolves the monster class ID to use for object-mode spawns in a given room/level. If the level's cached nMonClassId is invalid, builds an act-specific table of valid skeleton/zombie base IDs, searches the room's monster region entries for a matching class range, caches the result in pLevelRng->nMonClassId, and returns it. Falls back to 0xEA (default skeleton) if no region match is found.
 int32_t __fastcall OBJECTRGN_GetTrapMonsterClassId(D2ObjectModeArg * pObjectModeArg) {
-    // Frame slots -16..-4 are ONE object: &nAct2MonId is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int32_t nAct2MonId;
-      int32_t nDefaultMonId;
-      D2ObjectRngStrc* pLevelRng;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int nClassIdCandidate;
-    int anActMonIds[7];
-    int32_t nMonClassIdResult;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pObjectModeArg->pVictim);
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+    D2ObjectRngStrc* pLevelRng;
+    int32_t nDefaultMonId;
+    int32_t nAct2MonId;
+    int nMonCount;
+    int anActMonIds[6];
+    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pObjectModeArg->pVictim));
     eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-    __frame0.pLevelRng = pObjectModeArg->pGame->pObjectControl->aLevelsRng[eLevel];
-    if (!(__frame0.pLevelRng->nMonClassId < 0 || __frame0.pLevelRng->nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
-      return __frame0.pLevelRng->nMonClassId;
-    }
+    pLevelRng = pObjectModeArg->pGame->pObjectControl->aLevelsRng[eLevel];
+    if (pLevelRng->nMonClassId < 0 || pLevelRng->nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      nDefaultMonId = 5;
+      nAct2MonId = 0x60;
+      anActMonIds[0] = 0;
+      anActMonIds[1] = 0xaa;
+      anActMonIds[2] = 0x112;
+      anActMonIds[3] = 0x17b;
+      anActMonIds[4] = 0x17f;
+      anActMonIds[5] = 0x183;
+      int32_t* pActMonIdTable = &nDefaultMonId;
+      if (eActNo == ACT_II) {
+        pActMonIdTable = &nAct2MonId;
+      }
 
-    __frame0.nDefaultMonId = 5;
-    __frame0.nAct2MonId = 0x60;
-    anActMonIds[0] = 0;
-    anActMonIds[1] = 0xaa;
-    anActMonIds[2] = 0x112;
-    anActMonIds[3] = 0x17b;
-    anActMonIds[4] = 0x17f;
-    anActMonIds[5] = 0x183;
-    int32_t* pActMonIdTable = &__frame0.nDefaultMonId;
-    if (eActNo == ACT_II) {
-      pActMonIdTable = &__frame0.nAct2MonId;
-    }
-
-    D2MonsterRegionStrc* pMonsterRegion = Monster::MonsterRegion::ReturnMonsterRegionEntryForLevel(pObjectModeArg->pGame->pMonsterRegion, eLevel);
-    __frame0.pLevelRng->nMonClassId = 0xea;
-    int nMonDataIdx = 0;
-    if (!pMonsterRegion->nCounter) {
-      return __frame0.pLevelRng->nMonClassId;
-    }
-
-    D2MonsterRegionFieldStrc* pMonData = pMonsterRegion->pMonData;
-    do {
-      int iActMonIdx;
-      nClassIdCandidate = (int)(short int)pMonData->nClassId;
-      iActMonIdx = 0;
-      do {
-        if (nClassIdCandidate >= pActMonIdTable[iActMonIdx] && nClassIdCandidate < pActMonIdTable[iActMonIdx] + 5) {
-          nMonClassIdResult = pActMonIdTable[iActMonIdx];
-          __frame0.pLevelRng->nMonClassId = nMonClassIdResult;
-          return nMonClassIdResult;
+      D2MonsterRegionStrc* pMonsterRegion = Monster::MonsterRegion::ReturnMonsterRegionEntryForLevel(pObjectModeArg->pGame->pMonsterRegion, eLevel);
+      pLevelRng->nMonClassId = 0xea;
+      nMonCount = pMonsterRegion->nCounter;
+      for (int i = 0; i < nMonCount; i++) {
+        int nClassId = (short)pMonsterRegion->pMonData[i].nClassId;
+        int j;
+        for (j = 0; j < 1; j++) {
+          if (nClassId >= pActMonIdTable[j] && nClassId < pActMonIdTable[j] + 5) {
+            return pLevelRng->nMonClassId = pActMonIdTable[j];
+          }
         }
 
-        iActMonIdx++;
-      } while (iActMonIdx < 1);
-
-      iActMonIdx = 0;
-      do {
-        if (nClassIdCandidate >= anActMonIds[iActMonIdx] && nClassIdCandidate < anActMonIds[iActMonIdx] + 4) {
-          nMonClassIdResult = anActMonIds[iActMonIdx];
-          __frame0.pLevelRng->nMonClassId = nMonClassIdResult;
-          return nMonClassIdResult;
+        for (j = 0; j < 6; j++) {
+          if (nClassId >= anActMonIds[j] && nClassId < anActMonIds[j] + 4) {
+            return pLevelRng->nMonClassId = anActMonIds[j];
+          }
         }
+      }
+    }
 
-        iActMonIdx++;
-      } while (iActMonIdx < 6);
-
-      nMonDataIdx++;
-      pMonData++;
-    } while (nMonDataIdx < (int)(uint32_t)pMonsterRegion->nCounter);
-
-    return __frame0.pLevelRng->nMonClassId;
+    return pLevelRng->nMonClassId;
 }
 
 }}} // namespace D2Game::Objects::ObjectsRgn

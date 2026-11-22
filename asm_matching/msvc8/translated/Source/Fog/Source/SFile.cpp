@@ -99,35 +99,31 @@ DWORD __fastcall SFILE_Win32SetFilePointer(HANDLE hFile, LONG lDistanceToMove, P
 }
 
 int __fastcall SafeCreateDirectoryTree(char * szPath) {
-    BOOL bCreated;
-    DWORD dwError;
-    uint32_t nSegmentLen;
     char szPartialPath[260];
-    int bFailed = 1;
+    int bResult = 1;
     if (!szPath || *szPath == '\0') {
       return 0;
     }
 
-    char* pNextSep = Storm::Source::SSTR::SStrChr(szPath + 1, '\\');
-    if (pNextSep) {
-      while ((nSegmentLen = (intptr_t)pNextSep - (intptr_t)szPath) < 0x104) {
-        memcpy(szPartialPath, szPath, nSegmentLen);
-        /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateDirectoryA */ /* LPCSTR lpPathName for CreateDirectoryA */ szPartialPath[nSegmentLen] = '\0';
-        bCreated = CreateDirectoryA(szPartialPath, (LPSECURITY_ATTRIBUTES)0x0);
-        /* LPCSTR lpFileName for GetFileAttributesA */ if (!bCreated && ((dwError = GetLastError() , dwError != 0xb7 && dwError != 5) || (dwError = GetFileAttributesA(szPartialPath) , !(dwError & 0x10)))) {
-          break;
-        }
-
-        pNextSep = Storm::Source::SSTR::SStrChr(pNextSep + 1, '\\');
-        if (!pNextSep) {
-          return 1;
-        }
+    for (char* pNextSep = Storm::Source::SSTR::SStrChr(szPath + 1, '\\'); pNextSep; pNextSep = Storm::Source::SSTR::SStrChr(pNextSep + 1, '\\')) {
+      uint32_t nSegmentLen = pNextSep - szPath;
+      if (nSegmentLen >= 0x104) {
+        bResult = 0;
+        break;
       }
 
-      bFailed = 0;
+      memcpy(szPartialPath, szPath, nSegmentLen);
+      szPartialPath[nSegmentLen] = '\0';
+      if (!CreateDirectoryA(szPartialPath, NULL)) {
+        DWORD dwError = GetLastError();
+        if (dwError != 0xb7 && dwError != 5 || !(GetFileAttributesA(szPartialPath) & 0x10)) {
+          bResult = 0;
+          break;
+        }
+      }
     }
 
-    return bFailed;
+    return bResult;
 }
 
 int __fastcall SFILE_EnsurePathEndsWithBackslash(char * szText1, uint32_t nMaxLen) {

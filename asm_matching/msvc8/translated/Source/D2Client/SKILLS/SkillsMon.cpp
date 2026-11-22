@@ -13,6 +13,13 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units.inline.h"
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -640,34 +647,29 @@ BOOL __fastcall Skills_CltDoFunc_Mon_SpawnMissilesInArea(D2UnitStrc * pUnit, eD2
 }
 
 // Configures the total frame count and animation speed of an existing missile unit (pUnit2). Frame count comes from skill calc[0], falling back to MissileTxt.Param2-1+nSkillLvl, clamped to [1, 255]. Sets path distance, animation speed (AnimLen&lt;&lt;8 / frames), total frames, and current frame on the missile. Used to synchronize missile travel time with skill level.
-static void __stdcall SKILLSMON_SetMissileFrameAndSpeed(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nSkillLvl, D2UnitStrc * pUnit2) {
+static BOOL __stdcall SKILLSMON_SetMissileFrameAndSpeed(eD2Skills eSkill, D2UnitStrc * pUnit, int32_t nSkillLvl, D2UnitStrc * pUnit2) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
-      return;
+      return 0;
     }
 
     int nTotalFrames;
     D2MissilesTxt* pMissileTxt = pUnit2 && (nTotalFrames = pUnit2->nClassId) >= 0 && nTotalFrames < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nTotalFrames : nullptr;
     if (!pMissileTxt) {
-      return;
+      return 0;
     }
 
     nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
     if (nTotalFrames <= 0) {
       nTotalFrames = pMissileTxt->Param2 - 1 + nSkillLvl;
     }
-    if (nTotalFrames > 1) {
-      if (nTotalFrames >= 0xff) {
-        nTotalFrames = 0xff;
-      }
-    } else {
-      nTotalFrames = 1;
-    }
+    nTotalFrames = min(max(nTotalFrames, 1), 0xff); // steer-ok: windef.h min/max macros
 
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pUnit2->pPath.pDynamicPath, (uint8_t)nTotalFrames);
-    D2Common::Units::SetAnimationSpeed(pUnit2, (int32_t)((pMissileTxt->AnimLen << 8) / nTotalFrames));
+    D2Common::Units::SetAnimationSpeed(pUnit2, (pMissileTxt->AnimLen << 8) / nTotalFrames);
     D2Common::Units::Missile::SetTotalFrames(pUnit2, nTotalFrames);
     D2Common::Units::Missile::SetCurrentFrame(pUnit2, nTotalFrames);
+    return 1;
 }
 
 // Creates a single missile from a pre-built D2SkillArgStrc using pUnit's RNG seed to pick a velocity offset from a table (pVelocityOffsets points to an int array, seed mod 5 selects entry). Advances pUnit->sSeed twice. After MakeMissile succeeds, calls SKILLSMON_SetMissileFrameAndSpeed to apply frame/speed from skill calc. Returns the new missile unit or NULL on failure.

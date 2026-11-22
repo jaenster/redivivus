@@ -682,52 +682,43 @@ static void COMCALLBACK_FormatChannelUserData(D2ChannelUserStrc * pChannelUser) 
     uint16_t wszClanTag[32];
     uint16_t wszClanNameW[17];
     char cFirstChar;
-    uint16_t* pwszClear = wszDisplayName;
-    for (nProductTag = 0x19; nProductTag; nProductTag--) {
-      pwszClear[0] = L'\0';
-      pwszClear[1] = L'\0';
-      pwszClear += 2;
+    for (int i = 0; i < 51; i++) {
+      wszDisplayName[i] = 0;
+    }
+    for (int i = 0; i < 17; i++) {
+      wszClanNameW[i] = 0;
     }
 
-    *pwszClear = L'\0';
-    for (int iFill = 0; iFill < 17; iFill++) {
-      wszClanNameW[iFill] = L'\0';
+    for (int i = 0; i < 51; i++) {
+      wszRealmName[i] = 0;
     }
-
-    pwszClear = wszRealmName;
-    for (nProductTag = 0x19; nProductTag; nProductTag--) {
-      pwszClear[0] = L'\0';
-      pwszClear[1] = L'\0';
-      pwszClear += 2;
-    }
-
-    *pwszClear = L'\0';
     char* pszUsername = pChannelUser->szUsername;
-    for (int iFill2 = 0; iFill2 < 32; iFill2++) {
-      wszClanTag[iFill2] = L'\0';
+    for (int i = 0; i < 32; i++) {
+      wszClanTag[i] = 0;
     }
 
     if (pChannelUser->szUsername[0] == '*') {
       D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszDisplayName, pszUsername, 0x32);
-      *(uint32_t*)(char*)&wszClanNameW &= -65536;
+      wszClanNameW[0] = 0;
     } else {
       char* pszClanSep;
       szClanName[0] = '\0';
       memset(szClanName + 1, 0, 0x31);
-      cFirstChar = *pszUsername;
       for (nProductTag = 0; nProductTag < 0x32; nProductTag++) {
         wszCharName[nProductTag] = L'\0';
       }
 
-      if (cFirstChar == '*' || (pszClanSep = Storm::Source::SSTR::SStrChr(pszUsername, '*') , !pszClanSep)) {
+      if (*pszUsername == '*') {
         Storm::Source::SSTR::SStrCopy(szClanName, pszUsername, 0x7fffffff);
-      } else {
+      } else if ((pszClanSep = Storm::Source::SSTR::SStrChr(pszUsername, '*')) != nullptr) {
         memcpy(szClanName, pszUsername, (intptr_t)pszClanSep - (intptr_t)pszUsername);
         szClanName[(intptr_t)pszClanSep - (intptr_t)pszUsername] = '\0';
+      } else {
+        Storm::Source::SSTR::SStrCopy(szClanName, pszUsername, 0x7fffffff);
       }
 
-      pszClanSep = Storm::Source::SSTR::SStrChr(pszUsername, '*');
-      if (!pszClanSep || (pCharName = pszClanSep + 1 , pszClanSep[1] == '\0')) {
+      pCharName = Storm::Source::SSTR::SStrChr(pszUsername, '*');
+      if (!pCharName || !*++pCharName) {
         pCharName = pszUsername;
       }
 

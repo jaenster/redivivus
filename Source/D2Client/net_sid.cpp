@@ -22,8 +22,6 @@ static void __stdcall NET_SID_CLIENT_SHA1Init(uint32_t * pSha1Context) {
 // SHA-0 update: adds to the bit count with signed carry, copies each 64-byte block to ctx+0x1c and calls SHA0_Transform.
 // Name per redivivus issue #36 (asm-verified hash variant).
 static void __stdcall SHA0_Update(uint32_t * pnData, uint32_t nLength, uint32_t * pnContext) {
-    int nWordCopyIdx;
-    uint32_t* pCtxBlock;
     uint32_t nBlocksRemaining;
     uint32_t nNewBitLen = pnContext[5] + nLength * 8;
     if ((int)nNewBitLen < (int)pnContext[5]) {
@@ -38,15 +36,7 @@ static void __stdcall SHA0_Update(uint32_t * pnData, uint32_t nLength, uint32_t 
 
     nBlocksRemaining = nLength >> 6;
     do {
-      uint32_t* pSrcBlock;
-      pSrcBlock = pnData;
-      pCtxBlock = pnContext + 7;
-      for (nWordCopyIdx = 0x10; nWordCopyIdx; nWordCopyIdx--) {
-        *pCtxBlock = *pSrcBlock;
-        pSrcBlock++;
-        pCtxBlock++;
-      }
-
+      memcpy(pnContext + 7, pnData, 0x40);
       Bnclient::_net_sid::SHA0_Transform(pnContext);
       pnData += 0x10;
       nBlocksRemaining--;

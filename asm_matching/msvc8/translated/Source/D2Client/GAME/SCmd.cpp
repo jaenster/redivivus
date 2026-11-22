@@ -2033,14 +2033,15 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(D2GSPacketSrv0xA3
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(D2GSPacketSrv0xA5 * pBytes) {
+    int32_t nUnitGUID = pBytes->dwUnitGUID; // steer-ok: the original reads the GUID before the skill id
     uint16_t nSkill = pBytes->wSkillId;
-    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
       return;
     }
 
     eD2Skills eSkill = (eD2Skills)nSkill;
-    D2SkillsTxt* pSkillsTxt = (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
     }
@@ -2048,17 +2049,16 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(D2GSPacketSrv0xA5 * 
     switch (pSkillsTxt->srvdofunc) {
       case 0x43:
         SKILLS::SkillsPal::SKILL_StopAndClearUninterruptable(pUnit, eSkill);
-      D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
-      return;
+        D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
+        return;
       case 0x4d:
-
       case 0x4e:
         SKILLS::SkillsBar::SKILL_HandleTeleportLanding(pUnit);
-      D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
-      return;
+        D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
+        return;
       case 0x4c:
         SKILLS::SkillsBar::SKILL_StopAndClearSound(pUnit, eSkill);
-      break;
+        break;
     }
 
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
@@ -2075,51 +2075,48 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER(char * pBytes) {
 
 // Server→client handler for stat-set/add opcodes 0x19–0x1F targeting the local player. Opcodes 0x19–0x1B add gold or experience (delta from bytes 1–4, varying width); 0x1C sets experience outright; 0x1D–0x1F set an arbitrary stat (id=byte 1, value bytes 2+, byte/word/dword). Calls STATLIST_SetUnitStat then SCMD_HandleStatChangeEffect to apply side-effects (level-up UI, sound, etc.).
 void __fastcall NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA(char * pBytes) {
-    int nCurrentValue;
-    char nSubCmd = *pBytes;
+    uint8_t nPacketId = *pBytes; // steer-ok: the original reads the packet id on entry, before GetPlayerUnit_Net; folded OUR-2
     uint32_t nValue = 0;
-    eD2UnitStat eUnitStat = ~UNITSTAT_strength;
+    int nStatId = -1;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9aa);
       exit(-1);
     }
 
-    switch (nSubCmd) {
-      case '\x19':
-        eUnitStat = UNITSTAT_gold;
-      nCurrentValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-      nValue = nCurrentValue + (uint32_t)(uint8_t)pBytes[1];
-      break;
-      case '\x1a':
-        eUnitStat = UNITSTAT_experience;
-      nCurrentValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
-      nValue = nCurrentValue + (uint32_t)(uint8_t)pBytes[1];
-      break;
-      case '\x1b':
-        eUnitStat = UNITSTAT_experience;
-      nCurrentValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0);
-      nValue = nCurrentValue + (uint32_t)*(uint16_t*)(pBytes + 1);
-      break;
-      case '\x1c':
+    switch (nPacketId) {
+      case 0x19:
+        nStatId = UNITSTAT_gold;
+        nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0) + (uint8_t)pBytes[1];
+        break;
+      case 0x1a:
+        nStatId = UNITSTAT_experience;
+        nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0) + (uint8_t)pBytes[1];
+        break;
+      case 0x1b:
+        nStatId = UNITSTAT_experience;
+        nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_experience, 0) + *(uint16_t*)(pBytes + 1);
+        break;
+      case 0x1c:
         nValue = *(uint32_t*)(pBytes + 1);
-      eUnitStat = UNITSTAT_experience;
-      break;
-      case '\x1d':
-        nValue = (uint32_t)(uint8_t)pBytes[2];
-      eUnitStat = (eD2UnitStat)(uint8_t)pBytes[1];
-      break;
-      case '\x1e':
-        nValue = (uint32_t)*(uint16_t*)(pBytes + 2);
-      eUnitStat = (eD2UnitStat)(uint8_t)pBytes[1];
-      break;
-      case '\x1f':
+        nStatId = UNITSTAT_experience;
+        break;
+      case 0x1d:
+        nValue = (uint8_t)pBytes[2];
+        nStatId = (uint8_t)pBytes[1];
+        break;
+      case 0x1e:
+        nValue = *(uint16_t*)(pBytes + 2);
+        nStatId = (uint8_t)pBytes[1];
+        break;
+      case 0x1f:
         nValue = *(uint32_t*)(pBytes + 2);
-      eUnitStat = (eD2UnitStat)(uint8_t)pBytes[1];
+        nStatId = (uint8_t)pBytes[1];
+        break;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, 0);
-    SCMD_HandleStatChangeEffect(pUnit, eUnitStat, nValue);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, nStatId, nValue, 0);
+    SCMD_HandleStatChangeEffect(pUnit, nStatId, nValue);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x20(D2GSPacketSrv0x20 * pBytes) {
@@ -2309,19 +2306,20 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL(char * pBytes) {
 
 // Client handler for S2C packet 0x93 (8 bytes). Reads player GUID, signed bonus delta, element type filter, and skill page filter. Finds the player unit client-side, then calls SKILLS_CltUpdateSkillList to walk all skills and adjust bonuses matching the element/page criteria. Removes skills whose level drops to 0. Dead code in 1.14d — server never sends this packet.
 void __fastcall NET_D2GS_CLIENT_RecvSkillTabBonusDelta(char * pBytes) {
-    uint32_t nBonusDelta = (uint32_t)(uint8_t)pBytes[5];
-    if ((int32_t)nBonusDelta > 0x80) {
+    int32_t nUnitGUID = *(int32_t*)(pBytes + 1); // steer-ok: the original reads the GUID before the bonus delta
+    int32_t nBonusDelta = (uint8_t)pBytes[5];
+    if (nBonusDelta > 0x80) {
       nBonusDelta -= 0x100;
     }
 
-    uint8_t nElementType = pBytes[6];
+    uint32_t nElementType = (uint8_t)pBytes[6]; // steer-ok: the original reads the packet bytes before the unit lookup; folded INSN_COUNT_MATCH
     uint8_t nSkillPage = pBytes[7];
-    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 1), UNIT_PLAYER);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nUnitGUID, UNIT_PLAYER);
     if (!pUnit) {
       return;
     }
 
-    SKILLS::Skills::SKILLS_CltAdjustSkillTabBonuses(pUnit, nBonusDelta, (uint32_t)nElementType, nSkillPage);
+    SKILLS::Skills::SKILLS_CltAdjustSkillTabBonuses(pUnit, nBonusDelta, nElementType, nSkillPage);
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2436,18 +2434,19 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x4D_SKILL_XY(D2UnitStrc * pUnit, D2GSPa
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x26_CHATSTART(D2GSPacketSrv0x26 * pBytes) {
-    MessageStrc MStack_120;
-    MStack_120.packetId = pBytes->nPacketId;
-    MStack_120.messageType = pBytes->nMessageType;
-    MStack_120.language = pBytes->nLanguage;
-    MStack_120.entityType = pBytes->nMsgSubType;
-    MStack_120.id = pBytes->nUnitGUID;
-    MStack_120.messageColor = pBytes->nMessageColor;
-    MStack_120.nameColor = pBytes->nColor;
-    Storm::Source::SSTR::SStrCopy(MStack_120.name, pBytes->szName, 0x10);
-    int nameLength = Storm::Source::SSTR::SStrLen(pBytes->szName);
-    Storm::Source::SSTR::SStrCopy(MStack_120.message, pBytes->szName + (nameLength + 1), 0x100);
-    UI::Text::TEXT_ProcessChatMessage(&MStack_120);
+    MessageStrc sMessage;
+    sMessage.packetId = pBytes->nPacketId;
+    sMessage.messageType = pBytes->nMessageType;
+    sMessage.language = pBytes->nLanguage;
+    sMessage.entityType = pBytes->nMsgSubType;
+    sMessage.id = pBytes->nUnitGUID;
+    sMessage.messageColor = pBytes->nMessageColor;
+    sMessage.nameColor = pBytes->nColor;
+    char* szText = pBytes->szName;
+    Storm::Source::SSTR::SStrCopy(sMessage.name, szText, 0x10);
+    szText += Storm::Source::SSTR::SStrLen(szText) + 1;
+    Storm::Source::SSTR::SStrCopy(sMessage.message, szText, 0x100);
+    UI::Text::TEXT_ProcessChatMessage(&sMessage);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x76(D2GSPacketSrv0x76 * pBytes) {
@@ -2754,42 +2753,40 @@ void __fastcall SCMD_Rcv0x66_Ignore(char * pBytes) {
 // D2Common::Unit::Missile::MakeMissile, then StoreOwnerInfo, STATLIST_SetUnitStat(UNITSTAT_pierce_idx)
 // and Missile::SetCurrentFrame on the returned unit. It creates a missile.
 void __fastcall NET_D2GS_CLIENT_Incoming0x73_CreateMissile(D2GSPacketSrv0x73 * pBytes) {
-    D2SkillArgStrc pSkillArg;
-    eMissilesId nMissileClassId;
-    int nTargetYCopy = pBytes->nMissileY;
-    int nMissileYCopy = pBytes->nTargetY;
-    uint16_t wCurrentFrame = pBytes->nCurrentFrame;
-    int nMissileX = pBytes->nMissileX;
-    uint16_t nMissileTxtNo = pBytes->nMissileClassId;
-    int32_t nOwnerId = pBytes->nOwnerGUID;
+    int nMissileX = pBytes->nMissileX; // steer-ok: packet fields are read together on entry, before GetPlayerUnit_Net
+    int nMissileY = pBytes->nMissileY;
+    int nTargetY = pBytes->nTargetY;
+    uint16_t nCurrentFrame = pBytes->nCurrentFrame; // steer-ok: packet fields read on entry, before GetPlayerUnit_Net; folded OUR-2
+    uint16_t nMissileClassId = pBytes->nMissileClassId; // steer-ok: packet fields read on entry, before GetPlayerUnit_Net; folded OUR-2
+    int32_t nOwnerGUID = pBytes->nOwnerGUID; // steer-ok: packet fields read on entry, before GetPlayerUnit_Net; folded OUR-2
     int nTargetX = pBytes->nTargetX;
-    D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
-    memset(&pSkillArg, 0, 0x5c);
-    pSkillArg.nSkillLevel = (int32_t)pBytes->nSkillLevel;
-    pSkillArg.nFlags = 0x40000001;
-    if (nTargetX && nMissileYCopy) {
-      pSkillArg.nFlags = 0x40000021;
-      pSkillArg.nUnitX = nTargetX;
-      pSkillArg.nUnitY = nMissileYCopy;
+    D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
+    D2SkillArgStrc sSkillArg;
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
+    sSkillArg.nFlags = 0x40000001;
+    sSkillArg.pOwner = pPlayer;
+    sSkillArg.nX = nMissileX;
+    sSkillArg.nY = nMissileY;
+    sSkillArg.nSkillLevel = pBytes->nSkillLevel;
+    sSkillArg.nMissileTxtNo = nMissileClassId;
+    if (nTargetX && nTargetY) {
+      sSkillArg.nFlags = 0x40000021;
+      sSkillArg.nUnitX = nTargetX;
+      sSkillArg.nUnitY = nTargetY;
     }
 
-    pSkillArg.pOwner = pUnit;
-    pSkillArg.nMissileTxtNo = (uint32_t)nMissileTxtNo;
-    pSkillArg.nX = nMissileX;
-    pSkillArg.nY = nTargetYCopy;
-    pUnit = UNIT::Missile::MakeMissile(&pSkillArg);
-    if (!pUnit) {
+    D2UnitStrc* pMissile = UNIT::Missile::MakeMissile(&sSkillArg);
+    if (!pMissile) {
       return;
     }
 
-    D2Common::Units::StoreOwnerInfo(pUnit, (eD2UnitType)pBytes->nOwnerType, nOwnerId);
+    D2Common::Units::StoreOwnerInfo(pMissile, (eD2UnitType)pBytes->nOwnerType, nOwnerGUID);
     if (pBytes->nPierceIdxValue) {
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, (uint32_t)pBytes->nPierceIdxValue, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_pierce_idx, pBytes->nPierceIdxValue, 0);
     }
 
-    D2Common::Units::Missile::SetCurrentFrame(pUnit, (uint32_t)wCurrentFrame);
-    uint32_t nGfxFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pUnit->nFrameCount >> 8);
-    pUnit->nGfxCurrentFrame = nGfxFrame << 8;
+    D2Common::Units::Missile::SetCurrentFrame(pMissile, nCurrentFrame);
+    pMissile->nGfxCurrentFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pMissile->sSeed, pMissile->nFrameCount >> 8) << 8;
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x74(D2GSPacketSrv0x74 * pBytes) {
@@ -2841,12 +2838,14 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x81(D2GSPacketSrv0x81 * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x7B_SYNCHOTKEYS(D2GSPacketSrv0x7B * pBytes) {
-    uint32_t nSkillId = pBytes->wSkillId & 0xfff;
-    if ((int)nSkillId > D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+    uint16_t wSkillId = pBytes->wSkillId;
+    int nRightHandBit = wSkillId & 0x8000; // steer-ok: the original masks the hand bit before the skill id
+    int nSkillId = wSkillId & 0xfff;
+    if (nSkillId > D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
       nSkillId = -1;
     }
 
-    UI::SpellSel::SPELLSEL_SetSkillSlot((uint32_t)pBytes->nHotkeySlot, nSkillId, (uint32_t)((pBytes->wSkillId & 0x8000) != 0), pBytes->dwHotkeyArg);
+    UI::SpellSel::SPELLSEL_SetSkillSlot(pBytes->nHotkeySlot, nSkillId, nRightHandBit != 0, pBytes->dwHotkeyArg);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x7C_SETITEMUNUSED(char * pBytes) {

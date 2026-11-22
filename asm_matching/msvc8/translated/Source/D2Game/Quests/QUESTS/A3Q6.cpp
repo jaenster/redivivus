@@ -37,7 +37,7 @@ namespace D2Game { namespace Quests { namespace QUESTS { namespace A3Q6 {
 uint8_t __fastcall Q23_IsBlackenedTempleNotDone(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheBlackenedTemple);
     if (pQuestData) {
-      return !pQuestData->pQuestSpecificData.pA3Q5->bJerhynAiActive;
+      return pQuestData->pQuestSpecificData.pA3Q5->bJerhynAiActive ? 0 : 1;
     }
 
     return 1;

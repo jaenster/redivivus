@@ -67,26 +67,20 @@ static long STATLIST_BinarySearchStatById(int32_t nStatKey, D2StatInfoStrc * pSt
 }
 
 static int32_t STATLIST_BinarySearchInsertPos(int32_t nStatKey, D2StatInfoStrc * pStatInfo) {
-    int nMid;
-    int nCount = (int)pStatInfo->wStatCount;
+    D2StatStrc* pStats = pStatInfo->pStatInfo;
+    int nHi = pStatInfo->wStatCount;
     int nLo = 0;
-    if (nCount <= 0) {
-      return nLo;
-    }
-
-    do {
-      int nEntryKey;
-      nMid = (nCount - nLo) / 2 + nLo;
-      nEntryKey = pStatInfo->pStatInfo[nMid].uKey.nPackedStatId;
+    while (nLo < nHi) {
+      int nMid = (nHi - nLo) / 2 + nLo;
+      int nEntryKey = pStats[nMid].uKey.nPackedStatId;
       if (nStatKey > nEntryKey) {
         nLo = nMid + 1;
-        nMid = nCount;
-      } else if (nEntryKey <= nStatKey) {
+      } else if (nStatKey >= nEntryKey) {
         return -1;
+      } else {
+        nHi = nMid;
       }
-
-      nCount = nMid;
-    } while (nLo < nMid);
+    }
 
     return nLo;
 }
@@ -161,24 +155,20 @@ static void __stdcall STATLIST_RemoveStatFromArray(D2PoolManagerStrc * pPoolMana
 }
 
 static int32_t STATLIST_BinarySearchChangedInsertPos(D2ChangedStatArrayStrc * pStatInfo, int32_t nStatKey) {
-    int nMid;
-    int nCount = (int)pStatInfo->wCount;
+    int* pIds = pStatInfo->pChangedStatIds;
+    int nHi = pStatInfo->wCount;
     int nLo = 0;
-    if (nCount <= 0) {
-      return nLo;
-    }
-
-    do {
-      nMid = (nCount - nLo) / 2 + nLo;
-      if (nStatKey > pStatInfo->pChangedStatIds[nMid]) {
+    while (nLo < nHi) {
+      int nMid = (nHi - nLo) / 2 + nLo;
+      int nEntryKey = pIds[nMid];
+      if (nStatKey > nEntryKey) {
         nLo = nMid + 1;
-        nMid = nCount;
-      } else if (pStatInfo->pChangedStatIds[nMid] <= nStatKey) {
+      } else if (nStatKey >= nEntryKey) {
         return -1;
+      } else {
+        nHi = nMid;
       }
-
-      nCount = nMid;
-    } while (nLo < nMid);
+    }
 
     return nLo;
 }

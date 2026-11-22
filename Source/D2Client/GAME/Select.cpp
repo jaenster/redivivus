@@ -652,19 +652,12 @@ static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pP
     int nUnitX;
     int nUnitY;
     D2UnitStrc* pTargetUnit;
-    BOOL bHasFlag;
-    uint32_t bCanInteract;
-    uint32_t nAdjustedDirIdx;
     eD2UnitType eUnitType;
-    int nOffsetX;
-    int nOffsetY;
-    uint8_t bVar1 = D2Common::Units::PATH_GetCurrentDirection(pPlayerUnit_lcl);
+    uint32_t nDirBase = D2Common::Units::PATH_GetCurrentDirection(pPlayerUnit_lcl) >> 3;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pPlayerUnit_lcl);
-    uint32_t* pDirTableEntry = (uint32_t*)gaTargetSelectionAngleTable;
-    while (true) {
-      eCollisionFlags eCollision;
+    for (int i = 0; i < 5; i++) {
+      uint32_t nDirIdx = gaTargetSelectionAngleTable[i] + nDirBase & 7;
       eUnitType = pPlayerUnit_lcl->eUnitType;
-      nAdjustedDirIdx = *pDirTableEntry + (uint32_t)(bVar1 >> 3) & 7;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nUnitX = pPlayerUnit_lcl->pPath.pStaticPath->nPosX;
       } else if (pPlayerUnit_lcl->pPath.pDynamicPath) {
@@ -673,7 +666,7 @@ static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pP
         nUnitX = 0;
       }
 
-      nOffsetX = gnGameSelectPathState[nAdjustedDirIdx];
+      int nX = gnGameSelectPathState[nDirIdx] + nUnitX;
       eUnitType = pPlayerUnit_lcl->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         nUnitY = pPlayerUnit_lcl->pPath.pStaticPath->nPosY;
@@ -683,36 +676,19 @@ static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pP
         nUnitY = 0;
       }
 
-      nOffsetY = gnGameSelectGameState[nAdjustedDirIdx];
-      eCollision = D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, nOffsetX + nUnitX, nOffsetY + nUnitY, COLLISION_UNIT_SIZE_POINT, 0x180);
-      if (eCollision != COLLIDE_NONE) {
-        pTargetUnit = D2Common::Collision::CallCollisionFunction(pRoom, nOffsetX + nUnitX, nOffsetY + nUnitY, (fpMissileSrvDoFuncData)UnitIsOfTypeMonster, nullptr, 1);
+      int nY = gnGameSelectGameState[nDirIdx] + nUnitY;
+      if (D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, nX, nY, COLLISION_UNIT_SIZE_POINT, 0x180) != COLLIDE_NONE) {
+        pTargetUnit = D2Common::Collision::CallCollisionFunction(pRoom, nX, nY, (fpMissileSrvDoFuncData)UnitIsOfTypeMonster, nullptr, 1);
         if (pTargetUnit && FlagBit_D2UnitStrc_eUnitFlags_2(pTargetUnit)) {
-          if (!(pSkillsTxt->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4])) {
-            break;
-          }
-          if (pTargetUnit->eUnitType == UNIT_MONSTER) {
-            bHasFlag = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pTargetUnit->nClassId, shiftSel);
-            if (bHasFlag) {
-              break;
-            }
-          }
-
-          bCanInteract = UNIT::CUnit::CanInteractWith(pPlayerUnit_lcl, pTargetUnit);
-          if (bCanInteract) {
-            break;
+          if (!(pSkillsTxt->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4]) || pTargetUnit->eUnitType == UNIT_MONSTER && D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pTargetUnit->nClassId, shiftSel) || UNIT::CUnit::CanInteractWith(pPlayerUnit_lcl, pTargetUnit)) {
+            D2Common::Units::SetTargetUnitForDynamicUnit(pPlayerUnit_lcl, pTargetUnit);
+            return pTargetUnit;
           }
         }
       }
-
-      pDirTableEntry++;
-      if ((intptr_t)pDirTableEntry >= (intptr_t)((char*)&gaTargetSelectionAngleTable + sizeof(gaTargetSelectionAngleTable))) {
-        return nullptr;
-      }
     }
 
-    D2Common::Units::SetTargetUnitForDynamicUnit(pPlayerUnit_lcl, pTargetUnit);
-    return pTargetUnit;
+    return nullptr;
 }
 
 // Resolves world coordinates for a click target. If pUnit is null, reads X/Y directly from pnOutX/pnOutY. Otherwise extracts the unit's position from its static or dynamic path. Then checks the local player's room for movement collision; if blocked, calls GetFreeCoordinates_WithMaxDistance (radius 7) to find the nearest walkable tile and writes the adjusted coords back to pnOutX/pnOutY. Returns null on success, or pUnit if no adjustment was needed.

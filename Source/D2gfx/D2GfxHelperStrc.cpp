@@ -124,17 +124,18 @@ void __fastcall DRAW_DrawWallTileWithLighting(uint8_t * nTileDataPtr, int32_t nS
       return;
     }
 
+    uint8_t* pPaletteLUT = D2GFX::gaPaletteColorLUT[(uint8_t)nLightLevel >> 3];
     uint8_t* pDst = pRenderSurfaceBuffer + (nScreenX + gaYBufferRowOffsets[nScreenY + 0x20]);
     if (!pRenderSurfaceBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x373);
       exit(-1);
     }
     if (nScreenY >= gnTileInnerClipYMinRow && nScreenY < gnTileInnerClipYMax && nScreenX >= gnTileInnerClipXMax_b && nScreenX < gnTileClipXMax) {
-      D2GFX::D2GFX_DrawWallTileBasic(nTileDataPtr, pDst, D2GFX::gaPaletteColorLUT[nLightLevel >> 3 & 0x1f], 0x20);
+      D2GFX::D2GFX_DrawWallTileBasic(nTileDataPtr, pDst, pPaletteLUT, 0x20);
       return;
     }
 
-    D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, nTileDataPtr, pDst, D2GFX::gaPaletteColorLUT[nLightLevel >> 3 & 0x1f], 0x20);
+    D2GFX::D2GFX_DrawGroundTileBasic(nScreenX, nScreenY, nTileDataPtr, pDst, pPaletteLUT, 0x20);
 }
 
 // Stack-slot reuse: with perspective on, the low byte of the pCoords slot caches the first byte read through pCoords (tested against 0xf8).

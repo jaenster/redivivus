@@ -202,7 +202,7 @@ uint32_t __fastcall PLAYERLIST_GetFlagsMasked(D2UnitStrc * pUnit, D2UnitStrc * p
     return 0;
 }
 
-uint32_t __fastcall PLAYERLIST_GetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
+uint16_t __fastcall PLAYERLIST_GetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitPlayerListStrc* pListEntry;
     uint16_t wPtrHigh;
     int nUnit2GUID;

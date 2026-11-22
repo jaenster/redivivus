@@ -2349,17 +2349,15 @@ D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, D2RoomStrc 
     int nItemsTableSize;
     D2UnitStrc* pUnit;
     int32_t nBytesConsumed;
-    D2UnitDataItemDetailsStrc* pDVar1 = pUnitDataItemDetails;
     if (!pGame) {
       return nullptr;
     }
+
+    D2UnitDataItemDetailsStrc* pDVar1 = pUnitDataItemDetails;
     if ((int)pUnitDataItemDetails->classId >= 0) {
       D2ItemsTableStrc* pnItemsTxtSize;
       pnItemsTxtSize = D2Common::DATATBLS::ItemTbls::TXT_Items_GetSize();
-      nItemsTableSize = 0;
-      if (pnItemsTxtSize) {
-        nItemsTableSize = pnItemsTxtSize->nSize;
-      }
+      nItemsTableSize = !pnItemsTxtSize ? 0 : pnItemsTxtSize->nSize; // steer-ok: the table size is loaded before the classId compare, as the asm orders it
       if ((int)pDVar1->classId < nItemsTableSize) {
         pUnit = UNIT::SUnit::CreateUnit(UNIT_ITEM, pDVar1->classId, (uint32_t)pDVar1->x, (uint32_t)pDVar1->y, pGame, pRoom, 1, (uint32_t)pDVar1->nAnimMode, 0);
         if (!pUnit) {
@@ -3364,36 +3362,37 @@ static D2UnitStrc * __stdcall ITEMGEN_CreateItemFromClassIdAndQuality(int32_t nI
     }
 
     memset(&sItemGenCtx, 0, 0x84);
-    sItemGenCtx.wItemFormat = pGame->wItemFormat;
     sItemGenCtx.pGame = pGame;
+    sItemGenCtx.wItemFormat = pGame->wItemFormat;
+    sItemGenCtx.nItemClassid = nItemClassId;
+    sItemGenCtx.pUnit = pUnit;
     sItemGenCtx.pSeed = 0;
     sItemGenCtx.dwMode = 3;
     sItemGenCtx.nPosX = ptSpawnPos.x;
     sItemGenCtx.nPosY = ptSpawnPos.y;
+    sItemGenCtx.pDrlgRoom = pItemRoom;
     sItemGenCtx.usually_one = 1;
     sItemGenCtx.eQuality = eQuality;
-    sItemGenCtx.pUnit = pUnit;
-    sItemGenCtx.nItemClassid = nItemClassId;
-    sItemGenCtx.pDrlgRoom = pItemRoom;
+    int nItemLevel;
     if (pUnit) {
-      D2RoomStrc* pSpawnRoom;
       if (pUnit->eUnitType == UNIT_MONSTER) {
-        sItemGenCtx.nItemLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+        nItemLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
       } else if (pUnit->eUnitType == UNIT_PLAYER) {
-        sItemGenCtx.nItemLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
+        nItemLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
       } else {
-        pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+        D2RoomStrc* pSpawnRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pSpawnRoom);
         pUnitGame = UNIT::SUnit::GetGamePointer(pUnit);
-        sItemGenCtx.nItemLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevelId, pUnitGame->nDifficulty, pUnitGame->bExpansion);
+        nItemLevel = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetMonLvlForDifficulty(eLevelId, pUnitGame->nDifficulty, pUnitGame->bExpansion);
       }
-      if (1 < sItemGenCtx.nItemLevel) {
-        goto create_item;
+      if (nItemLevel <= 1) {
+        nItemLevel = 1;
       }
+    } else {
+      nItemLevel = 1;
     }
 
-    sItemGenCtx.nItemLevel = 1;
-    create_item:
+    sItemGenCtx.nItemLevel = nItemLevel;
     sItemGenCtx.dwFileIndex = dwFileIndex;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->nClassId == 0x187) {
       sItemGenCtx.nFlags = ITEMFLAG_RELOAD;

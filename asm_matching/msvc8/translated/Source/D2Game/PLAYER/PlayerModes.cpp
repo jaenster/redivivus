@@ -1256,50 +1256,32 @@ void __fastcall PLRMODES_CheckWeaponQuantityAndDurability(::SGAMEDATA * pGame, D
 // Iterates a player's inventory looking for equipped weapons (eInvGridType==3) with zero durability that are not already broken. For each such weapon, sets the ITEMFLAG_BROKEN flag via ITEMMODE_SendItemUpdate and broadcasts the item state change. Sets a unit update flag on the first break found. No-op if pUnit is null or not a player.
 // @sourcefile .\PLAYER\PlrModes.cpp
 void __fastcall PLRMODES_BreakZeroDurabilityWeapons(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    uint32_t _bIsWeapon;
-    bool bIsWeapon;
-    int32_t iVar1;
-    D2UnitStrc* pWeaponItem;
-    int nDurability;
-    BOOL bIsBroken;
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
       return;
     }
 
-    D2InventoryStrc* pInventory;
-    pInventory = pUnit->pInventory;
-    D2UnitStrc* pEquipSlot;
-    pEquipSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
-    bool bUpdatedUnit;
-    bUpdatedUnit = false;
-    do {
-      while (true) {
-        if (!pEquipSlot) {
-          return;
+    D2InventoryStrc* pInventory = pUnit->pInventory;
+    D2UnitStrc* pEquipSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
+    BOOL bUpdatedUnit = 0;
+    while (pEquipSlot) {
+      if (D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pEquipSlot) == 3) {
+        D2UnitStrc* pWeaponItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pEquipSlot);
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pWeaponItem, ITEMTYPE_Weapon) && D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(pWeaponItem)
+            && D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pWeaponItem, UNITSTAT_durability, 0) <= 0
+            && !D2Common::ITEMS::Items::CheckItemFlag(pWeaponItem, ITEMFLAG_BROKEN, 0x5e9, ".\\PLAYER\\PlrModes.cpp")) {
+          if (!bUpdatedUnit) {
+            D2Common::Units::ChangeAnimMode(pUnit, 1);
+            bUpdatedUnit = 1;
+          }
+
+          ITEMS::ItemMode::ITEMMODE_BreakItem(pGame, pUnit, pWeaponItem);
+          pEquipSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
+          continue;
         }
-
-        iVar1 = D2Common::INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pEquipSlot);
-        if (iVar1 == 3) {
-          break;
-        }
-
-        next_item:
-        pEquipSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pEquipSlot);
       }
 
-      pWeaponItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pEquipSlot);
-      _bIsWeapon = D2Common::ITEMS::Items::ITEMS_IsA(pWeaponItem, ITEMTYPE_Weapon);
-      if (!_bIsWeapon || (_bIsWeapon = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(pWeaponItem) , !_bIsWeapon) || (nDurability = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pWeaponItem, UNITSTAT_durability, 0) , nDurability > 0) || (bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pWeaponItem, ITEMFLAG_BROKEN, 0x5e9, ".\\PLAYER\\PlrModes.cpp") , bIsBroken != 0)) {
-        goto next_item;
-      }
-      if (!bUpdatedUnit) {
-        D2Common::Units::ChangeAnimMode(pUnit, 1);
-        bUpdatedUnit = true;
-      }
-
-      ITEMS::ItemMode::ITEMMODE_BreakItem(pGame, pUnit, pWeaponItem);
-      pEquipSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
-    } while (true);
+      pEquipSlot = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pEquipSlot);
+    }
 }
 
 int32_t __fastcall PLRMODES_ModeCallback_AttackSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nModeArg, int32_t nSeqFrame) {
@@ -1406,23 +1388,17 @@ uint8_t __fastcall PLRMODES_GetHpPercent128(D2UnitStrc * pUnit) {
 
 // Per-tick HP regeneration tick for a player unit. Reads UNITSTAT_hpregen; if zero returns early. Adds regen to current HP capped at txt-max; if the max is exceeded and the player has a healthpot state-list, removes and frees it. Enforces a floor of 0x100. Writes the new HP via STATLIST_SetUnitStat, then computes a 7-bit HP-percent and sends packet 0xAB to the client only if the change exceeds 4 units from the last sent value.
 static BOOL PLRMODES_RegenHp(D2UnitStrc * pUnit) {
-    uint32_t nNewHpPct128;
-    int nHpRegen;
-    nHpRegen = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hpregen, 0);
+    int nHpRegen = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hpregen, 0);
     if (!nHpRegen) {
       return 1;
     }
 
-    int nCurrentHp;
-    nCurrentHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-    int32_t nMaxHp;
-    nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-    int nNewHp;
-    nNewHp = nCurrentHp + nHpRegen;
-    if (nCurrentHp + nHpRegen > nMaxHp) {
-      D2StatListExStrc* pStatList;
-      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_healthpot);
+    int nNewHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
+    int nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
+    nNewHp += nHpRegen;
+    if (nNewHp > nMaxHp) {
       nNewHp = nMaxHp;
+      D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_healthpot);
       if (pStatList) {
         D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
         D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
@@ -1433,27 +1409,27 @@ static BOOL PLRMODES_RegenHp(D2UnitStrc * pUnit) {
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nNewHp, 0);
-    uint32_t nLastSentHpPct;
-    nLastSentHpPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_last_sent_hp_pct, 0);
+    uint8_t nLastSentHpPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_last_sent_hp_pct, 0);
+    uint8_t nNewHpPct128;
     if (pUnit) {
-      nHpRegen = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
-      nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-      nNewHp = nMaxHp >> 8;
-      if (nNewHp > 0 && nHpRegen >> 8 < nNewHp) {
-        nNewHpPct128 = (nHpRegen >> 8 << 7) / nNewHp;
-        goto send_hp_pct_if_changed;
+      int nHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8;
+      int nMax = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
+      if (nMax > 0 && nHp < nMax) {
+        nNewHpPct128 = (nHp << 7) / nMax;
+      } else {
+        nNewHpPct128 = 0x80;
       }
+    } else {
+      nNewHpPct128 = 0x80;
     }
 
-    nNewHpPct128 = 0x80;
-    send_hp_pct_if_changed:
-    nHpRegen = (nLastSentHpPct & 0xff) - (uint8_t)nNewHpPct128;
-    if (nHpRegen < 0) {
-      nHpRegen = -nHpRegen;
+    int nDiff = nLastSentHpPct - nNewHpPct128;
+    if (nDiff < 0) {
+      nDiff = -nDiff;
     }
-    if (nHpRegen > 4) {
-      UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, (uint8_t)nNewHpPct128);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint8_t)nNewHpPct128, 0);
+    if (nDiff > 4) {
+      UNIT::SUnitMsg::UnitQueuePacket0xAB(pUnit, nNewHpPct128);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, nNewHpPct128, 0);
     }
 
     return 1;
@@ -1998,41 +1974,25 @@ void __fastcall PLRMODES_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
               PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit);
             break;
             case Kick:
-              nLine = PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit);
-            if (!nLine) {
+              if (PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit)) {
+                break;
+              }
               return;
-            }
-
-            break;
             case eD2PlayerAnimMode_ns::Skill1:
-              bSkipIdle = false;
-            if (!pUnit->nClassId) {
-              bSkipIdle = true;
-            }
-            if (bSkipIdle) {
-              return;
-            }
-
-            break;
+              if (!pUnit->nClassId) {
+                return;
+              }
+              break;
             case eD2PlayerAnimMode_ns::Skill3:
-              bSkipIdle = false;
-            if (pUnit->nClassId == 5) {
-              bSkipIdle = true;
-            }
-            if (bSkipIdle) {
-              return;
-            }
-
-            break;
+              if (pUnit->nClassId == 5) {
+                return;
+              }
+              break;
             case eD2PlayerAnimMode_ns::Sequence:
-              bBadPtr = PLRMODES_HasEndAnimEventAndSeqInput(pGame, pUnit);
-            bSkipIdle = false;
-            if (!bBadPtr) {
-              bSkipIdle = true;
-            }
-            if (bSkipIdle) {
-              return;
-            }
+              if (!PLRMODES_HasEndAnimEventAndSeqInput(pGame, pUnit)) {
+                return;
+              }
+              break;
           }
         }
 
@@ -2041,13 +2001,13 @@ void __fastcall PLRMODES_OnModeComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
           return;
         }
 
-        /* FARPROC lpfn for IsBadCodePtr */ bBadPtr = IsBadCodePtr((FARPROC)PLRMODES_ChangeAnimModeAndResetSkill);
+        /* FARPROC lpfn for IsBadCodePtr */ bBadPtr = IsBadCodePtr((FARPROC)gaPlayerModeMoveFuncs[4].pfnMoveToLocation);
         if (bBadPtr) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x812);
           exit(-1);
         }
 
-        PLRMODES_ChangeAnimModeAndResetSkill(pGame, pUnit, 4, -1, 0);
+        gaPlayerModeMoveFuncs[4].pfnMoveToLocation(pGame, pUnit, 4, -1, 0);
         return;
       }
     }

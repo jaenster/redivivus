@@ -646,27 +646,26 @@ void __fastcall Q21_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 // state 3 if the player now holds the Golden Bird, else state 1 (Jade). No QuestRecord state calls.
 void __fastcall Q21_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA3Q4Strc* pA3Q4Data = pQuestData->pQuestSpecificData.pA3Q4;
-    D2UnitStrc* pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x2034336a);
-    if (pQuestItem) {
+    bool bHasSecondItem = false;
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x2034336a)) {
       pA3Q4Data->nBirdItemCount++;
     }
 
-    pQuestItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20343367);
-    if (pQuestItem) {
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20343367)) {
       pA3Q4Data->nBirdItemCount++;
-    }
-    if (!(pA3Q4Data->nBirdItemCount == 1 && pQuestData->bIsNotIntroduction != '\0' && pA3Q4Data->bReShowPending)) {
-      return;
+      bHasSecondItem = true;
     }
 
-    pA3Q4Data->bReShowPending = 0;
-    pQuestData->nQuestPacketFlags = '\0';
-    int nPrevStateFlag = 1;
-    if (pQuestItem) {
-      nPrevStateFlag = 3;
-    }
+    if (pA3Q4Data->nBirdItemCount == 1 && pQuestData->bIsNotIntroduction && pA3Q4Data->bReShowPending) {
+      pA3Q4Data->bReShowPending = 0;
+      pQuestData->nQuestPacketFlags = 0;
+      int nState = 1;
+      if (bHasSecondItem) {
+        nState = 3;
+      }
 
-    QUEST_SetStateAndBroadcast(pQuestData, nPrevStateFlag, nullptr, (::fpExecuteOnUnitFunction)Q21_PlayerNotifyCompleted, 1);
+      QUEST_SetStateAndBroadcast(pQuestData, nState, nullptr, (::fpExecuteOnUnitFunction)Q21_PlayerNotifyCompleted, 1);
+    }
 }
 
 // Q21_InitData -- Golden Bird quest registration/init (called once at quest-table setup). Allocates the

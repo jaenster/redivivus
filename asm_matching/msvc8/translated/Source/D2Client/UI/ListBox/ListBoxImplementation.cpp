@@ -159,51 +159,37 @@ void __fastcall DrawScrollbar(::ListBoxImplementation * pThis, int) {
 }
 
 int __fastcall GetVisibleItemCount(::ListBoxImplementation * pThis, int) {
-    uint32_t nTotalItems = (uint32_t)pThis->nItemCount;
-    int nAccumHeight = 0;
-    int i = 0;
-    if (!nTotalItems) {
-      return nTotalItems;
+    int nItemCount = pThis->nItemCount;
+    int nTotalHeight = 0;
+    for (int i = 0; i < nItemCount; i++) {
+      if (i >= pThis->nFirstVisibleIndex && i < nItemCount) {
+        if (pThis->aItems[i].wszText[0][0] != L'\0') {
+          nTotalHeight += pThis->nLineHeight;
+        }
+        if (pThis->aItems[i].wszText[1][0] != L'\0') {
+          nTotalHeight += pThis->nLineHeight;
+        }
+        if (pThis->aItems[i].wszText[2][0] != L'\0') {
+          nTotalHeight += pThis->nLineHeight;
+        }
+        if (pThis->aItems[i].wszText[3][0] != L'\0') {
+          nTotalHeight += pThis->nLineHeight;
+        }
+        if (pThis->aItems[i].wszText[4][0] != L'\0') {
+          nTotalHeight += pThis->nLineHeight;
+        }
+        if (pThis->aItems[i].wszText[5][0] != L'\0') {
+          nTotalHeight += pThis->nLineHeight;
+        }
+
+        nTotalHeight += pThis->nItemSpacing;
+      }
+      if (nTotalHeight > pThis->nHeight - 0x14) {
+        return i - pThis->nFirstVisibleIndex >= 1 ? i - pThis->nFirstVisibleIndex : 1;
+      }
     }
 
-    uint16_t (*pItemCols)[1024] = pThis->aItems[0].wszText + 1;
-    do {
-      if (i >= pThis->nFirstVisibleIndex && i < (int)nTotalItems) {
-        if (((D2ListBoxItemStrc*)(pItemCols - 1))->wszText[0][0] != L'\0') {
-          nAccumHeight += pThis->nLineHeight;
-        }
-        if ((*pItemCols)[0] != L'\0') {
-          nAccumHeight += pThis->nLineHeight;
-        }
-        if (pItemCols[1][0] != L'\0') {
-          nAccumHeight += pThis->nLineHeight;
-        }
-        if (pItemCols[2][0] != L'\0') {
-          nAccumHeight += pThis->nLineHeight;
-        }
-        if (pItemCols[3][0] != L'\0') {
-          nAccumHeight += pThis->nLineHeight;
-        }
-        if (pItemCols[4][0] != L'\0') {
-          nAccumHeight += pThis->nLineHeight;
-        }
-
-        nAccumHeight += pThis->nItemSpacing;
-      }
-      if (nAccumHeight > pThis->nHeight - 0x14) {
-        i -= pThis->nFirstVisibleIndex;
-        if (i >= 1) {
-          return i;
-        }
-
-        return 1;
-      }
-
-      i++;
-      pItemCols = (uint16_t (*)[1024])((char*)(pItemCols + 6) + 0xe);
-    } while (i < (int)nTotalItems);
-
-    return nTotalItems;
+    return nItemCount;
 }
 
 void __fastcall DrawTruncatedText(::ListBoxImplementation * pThis, int, uint16_t * wszText, int nX, int nY, int nColor) {
@@ -412,51 +398,42 @@ int __fastcall OnRightArrow(::ListBoxImplementation * pThis, int, D2UIMouseMsgSt
 }
 
 int __fastcall HitTestItem(::ListBoxImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
-    uint16_t (*pItemCols)[1024];
-    if ((int)(uint32_t)pMsg->uLParam.sMousePos.nMouseX > pThis->nScrollBarX - 0xf || !pThis->pfnOnItemActivated) {
+    if (pMsg->uLParam.sMousePos.nMouseX > pThis->nScrollBarX - 0xf || !pThis->pfnOnItemActivated) {
       return -1;
     }
 
-    uint32_t nMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
-    int i = pThis->nFirstVisibleIndex;
-    int nRowTop = 0;
-    if (i < (int)(uint32_t)pThis->nItemCount) {
-      int nRowBottom;
-      pItemCols = pThis->aItems[i].wszText + 1;
-      do {
-        nRowBottom = nRowTop;
-        if (((D2ListBoxItemStrc*)(pItemCols - 1))->wszText[0][0] != L'\0') {
-          nRowBottom = nRowTop + pThis->nLineHeight;
-        }
-        if ((*pItemCols)[0] != L'\0') {
-          nRowBottom += pThis->nLineHeight;
-        }
-        if (pItemCols[1][0] != L'\0') {
-          nRowBottom += pThis->nLineHeight;
-        }
-        if (pItemCols[2][0] != L'\0') {
-          nRowBottom += pThis->nLineHeight;
-        }
-        if (pItemCols[3][0] != L'\0') {
-          nRowBottom += pThis->nLineHeight;
-        }
-        if (pItemCols[4][0] != L'\0') {
-          nRowBottom += pThis->nLineHeight;
-        }
-        if ((int)nMouseY > pThis->nPosY + 0xc + nRowTop && (int)nMouseY < pThis->nPosY + 0xc + nRowBottom) {
-          pThis->nSelectedIndex = i;
-          return i;
-        }
+    int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
+    int nRowY = 0;
+    for (int i = pThis->nFirstVisibleIndex; i < pThis->nItemCount; i++) {
+      int nRowTop = nRowY;
+      if (pThis->aItems[i].wszText[0][0] != L'\0') {
+        nRowY += pThis->nLineHeight;
+      }
+      if (pThis->aItems[i].wszText[1][0] != L'\0') {
+        nRowY += pThis->nLineHeight;
+      }
+      if (pThis->aItems[i].wszText[2][0] != L'\0') {
+        nRowY += pThis->nLineHeight;
+      }
+      if (pThis->aItems[i].wszText[3][0] != L'\0') {
+        nRowY += pThis->nLineHeight;
+      }
+      if (pThis->aItems[i].wszText[4][0] != L'\0') {
+        nRowY += pThis->nLineHeight;
+      }
+      if (pThis->aItems[i].wszText[5][0] != L'\0') {
+        nRowY += pThis->nLineHeight;
+      }
+      if (nMouseY > pThis->nPosY + 0xc + nRowTop && nMouseY < pThis->nPosY + 0xc + nRowY) {
+        pThis->nSelectedIndex = i;
+        return i;
+      }
 
-        nRowTop = nRowBottom + pThis->nItemSpacing;
-        i++;
-        pItemCols = (uint16_t (*)[1024])((char*)(pItemCols + 6) + 0xe);
-      } while (i < (int)(uint32_t)pThis->nItemCount);
+      nRowY += pThis->nItemSpacing;
     }
 
-    i = -1;
-    pThis->nSelectedIndex = i;
-    return i;
+    pThis->nSelectedIndex = -1;
+    return -1;
 }
 
 int __fastcall OnMouseMove(::ListBoxImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {

@@ -460,27 +460,24 @@ void __stdcall GetBodyDimensions(int32_t neInventoryPage, int32_t nScreenMode, D
     if (!pTxtInventory) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7f);
       exit(-1);
-    } else if (nTxtIndex > (uint32_t)nTxtInventorySize || !(pTxtInventory + nTxtIndex)) {
+    }
+    D2InventoryTxt* pRow;
+    if (nTxtIndex > (uint32_t)nTxtInventorySize) {
+      goto bad_row;
+    }
+    pRow = pTxtInventory + nTxtIndex;
+    if (!pRow) {
+      bad_row:
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa3);
       exit(-1);
-    } else {
-      pDVar1 = &pTxtInventory[nTxtIndex].pBody.rArm + eBodyLoc;
-      if (!pDVar1) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5);
-        exit(-1);
-      }
-
-      pOutput->nLeft = pDVar1->nLeft;
-      pOutput->nRight = pDVar1->nRight;
-      pOutput->nTop = pDVar1->nTop;
-      pOutput->nBottom = pDVar1->nBottom;
-      byHeight = pDVar1->nHeight;
-      wPadCopy = pDVar1->wPad;
-      pOutput->nWidth = pDVar1->nWidth;
-      pOutput->nHeight = byHeight;
-      pOutput->wPad = wPadCopy;
-      return;
     }
+    pDVar1 = &pRow->pBody.rArm + eBodyLoc;
+    if (!pDVar1) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5);
+      exit(-1);
+    }
+
+    *pOutput = *pDVar1;
 }
 
 static int32_t __stdcall TOKTBLS_GetTokenIndex(int32_t nParam1, int32_t nParam2) {

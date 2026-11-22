@@ -530,152 +530,77 @@ void __fastcall LeaveHackPlayer(::SGAMEDATA * pGame, uint32_t nClientID, char * 
 
 // Validates a character/player name against the legal-name charset (custom regs: EDX=szText, EDI=nMaxLen). Walks up to nMaxLen chars; permits A-Z, a-z and the separators apostrophe/hyphen/underscore. Rejects (returns 0) any other character, an empty name, a separator that is the first char, two consecutive separators, a trailing separator, or a name reaching nMaxLen with no NUL. Returns 1 only when a non-empty all-valid name terminates with NUL. Used server-side to gate player names.
 static uint32_t STRING_CheckIfPlayerNameDoNotContainForbidenChars(char * szText, int32_t nMaxLen) {
-    char cCurrentChar;
-    bool bPrevWasSeparator;
-    bPrevWasSeparator = false;
-    int nCharCount;
-    nCharCount = 0;
-    if (nMaxLen <= 0) {
-      return 0;
-    }
-
-    do {
-      cCurrentChar = *szText;
-      szText++;
-      switch (cCurrentChar) {
+    BOOL bPrevWasSeparator = FALSE;
+    for (int nCharCount = 0; nCharCount < nMaxLen; nCharCount++) {
+      switch (*szText++) {
+        case 'A':
+        case 'B':
+        case 'C':
+        case 'D':
+        case 'E':
+        case 'F':
+        case 'G':
+        case 'H':
+        case 'I':
+        case 'J':
+        case 'K':
+        case 'L':
+        case 'M':
+        case 'N':
+        case 'O':
+        case 'P':
+        case 'Q':
+        case 'R':
+        case 'S':
+        case 'T':
+        case 'U':
+        case 'V':
+        case 'W':
+        case 'X':
+        case 'Y':
+        case 'Z':
+        case 'a':
+        case 'b':
+        case 'c':
+        case 'd':
+        case 'e':
+        case 'f':
+        case 'g':
+        case 'h':
+        case 'i':
+        case 'j':
+        case 'k':
+        case 'l':
+        case 'm':
+        case 'n':
+        case 'o':
+        case 'p':
+        case 'q':
+        case 'r':
+        case 's':
+        case 't':
+        case 'u':
+        case 'v':
+        case 'w':
+        case 'x':
+        case 'y':
+        case 'z':
+          break;
         case '\'':
-
         case '-':
-
         case '_':
-          if (bPrevWasSeparator) {
+          if (bPrevWasSeparator || !nCharCount || !*szText) {
             return 0;
           }
-        if (!nCharCount) {
-          return 0;
-        }
-        if (*szText == '\0') {
-          return 0;
-        }
-
-        bPrevWasSeparator = true;
-        accept_char:
-        nCharCount++;
-        if (nCharCount >= nMaxLen) {
-          return 0;
-        }
-
-        break;
-        case 'A':
-
-        case 'B':
-
-        case 'C':
-
-        case 'D':
-
-        case 'E':
-
-        case 'F':
-
-        case 'G':
-
-        case 'H':
-
-        case 'I':
-
-        case 'J':
-
-        case 'K':
-
-        case 'L':
-
-        case 'M':
-
-        case 'N':
-
-        case 'O':
-
-        case 'P':
-
-        case 'Q':
-
-        case 'R':
-
-        case 'S':
-
-        case 'T':
-
-        case 'U':
-
-        case 'V':
-
-        case 'W':
-
-        case 'X':
-
-        case 'Y':
-
-        case 'Z':
-
-        case 'a':
-
-        case 'b':
-
-        case 'c':
-
-        case 'd':
-
-        case 'e':
-
-        case 'f':
-
-        case 'g':
-
-        case 'h':
-
-        case 'i':
-
-        case 'j':
-
-        case 'k':
-
-        case 'l':
-
-        case 'm':
-
-        case 'n':
-
-        case 'o':
-
-        case 'p':
-
-        case 'q':
-
-        case 'r':
-
-        case 's':
-
-        case 't':
-
-        case 'u':
-
-        case 'v':
-
-        case 'w':
-
-        case 'x':
-
-        case 'y':
-
-        case 'z':
-          goto accept_char;
+          bPrevWasSeparator = TRUE;
+          break;
+        case '\0':
+          return nCharCount != 0;
         default:
           return 0;
-        case '\0':
-          return (uint32_t)(nCharCount != 0);
       }
-    } while (true);
+    }
+    return 0;
 }
 
 // Validates an incoming client join request before admitting them to a game. Checks: player name length ≤16 and language < 14, existing client name matches pPlayerName, token is valid, char class < 7, name contains no forbidden chars, then calls BattleNetServerService->fpFindPlayerToken to verify the BNet token. Calls GuardStack(1) on success, GuardStack(0) on any failure — callers treat the stack-cookie result as the admit/reject signal.
@@ -1601,25 +1526,24 @@ uint32_t __stdcall GAME_GetUnusedServerConstant() {
 // GAME_TrackGameStatistics - Tracks per-game statistics (win/loss counters per game ID). Called periodically from game loop.
 // @sourcefile .\GAME\Game.cpp
 static void __stdcall GAME_TrackGameStatistics(D2Game_Line0x13af * pStatRoot, int32_t nGameToken, int32_t nNodeValue) {
-    D2Game_Line0x13af* pStatNode = pStatRoot;
+    D2Game_Line0x13af* pHead = pStatRoot;
     if (!pStatRoot) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x139e);
       exit(-1);
     }
 
     do {
-      if (pStatNode->nValue == nNodeValue) {
+      if (pStatRoot->nValue == nNodeValue) {
         if (nGameToken) {
-          pStatNode->nWins++;
-          return;
+          pStatRoot->nWins++;
+        } else {
+          pStatRoot->nLosses++;
         }
-
-        pStatNode->nLosses++;
         return;
       }
 
-      pStatNode = pStatNode->pNext;
-    } while (pStatNode);
+      pStatRoot = pStatRoot->pNext;
+    } while (pStatRoot);
 
     D2Game_Line0x13af* pNewNode = D2_NEW_POOL_AT(nullptr, D2Game_Line0x13af, ".\\GAME\\Game.cpp", 0x13af);
     if (!pNewNode) {
@@ -1636,8 +1560,8 @@ static void __stdcall GAME_TrackGameStatistics(D2Game_Line0x13af * pStatRoot, in
       pNewNode->nLosses = 1;
     }
 
-    pNewNode->pNext = pStatRoot->pNext;
-    pStatRoot->pNext = pNewNode;
+    pNewNode->pNext = pHead->pNext;
+    pHead->pNext = pNewNode;
 }
 
 // Writes the ASCII class name string for a given player class ID (eD2PlayerClassIDDWORD) into a caller-supplied 16-byte buffer via inline byte stores. Handles all 7 classes (Amazon, Sorceress, Necromancer, Paladin, Barbarian, Druid, Assassin); unknown class writes "Invalid Class". Used to produce human-readable class labels, e.g. for logging or save-file headers.
@@ -1913,7 +1837,7 @@ void __fastcall SendSaveFileToClient(::SGAMEDATA * pGame) {
 
 // Flushes the server-side outbound packet queue for one client. If nParam != 0 and the client is connected (state 4), optionally sends nearby unit positions and player vital stats first. For OBNet/LAN games also sends the save-file packet (0xB3). Then drains the client's dispatch list by calling NET_D2GS_SERVER_SendPacketToClient in a loop; on send failure increments a retry counter and requeues the list, disconnecting the client after 3 consecutive failures. Halts with an internal error if pGame or pClient is NULL.
 static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t bSendStatusUpdates, D2ClientStrc * pClient) {
-    bool bSendFailed;
+    BOOL bSendFailed;
     int32_t nErrorLine;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf37);
@@ -1935,9 +1859,9 @@ static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t bSendStatu
         NET_D2GS_SERVER_Send_0xB3_SendSaveFile(pGame, pClient);
       }
 
-      bSendFailed = false;
+      bSendFailed = 0;
       bSendStatusUpdates = 0;
-      while (true) {
+      do {
         pPacketList = Clients::CLIENT_ClearDispatchList(pClient);
         if (!pPacketList || !pPacketList->nSize) {
           return;
@@ -1952,7 +1876,7 @@ static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t bSendStatu
           pClient->dwPacketsInList = 0;
         } else {
           D2Net::Game::Server::WSAGetLastError();
-          bSendFailed = true;
+          bSendFailed = 1;
           pClient->dwPacketsInList++;
           Clients::CLIENT_SetPacketList(pClient, pPacketList);
           if (pClient->dwPacketsInList >= 3) {
@@ -1961,12 +1885,9 @@ static void __stdcall FlushClientPackets(::SGAMEDATA * pGame, int32_t bSendStatu
           }
         }
         if ((pGame->nGameType == SGAMETYPE_OBNET_HOST || pGame->nGameType == SGAMETYPE_LAN_HOST) && bSendStatusUpdates >= 3) {
-          break;
-        }
-        if (bSendFailed) {
           return;
         }
-      }
+      } while (!bSendFailed);
 
       return;
     }
@@ -2198,14 +2119,14 @@ void __stdcall QSERVER_GetGameListByAge(short * pHistogramOut, int32_t nMaxMinut
       if (nToken && nToken != 0xffffffff) {
         pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
-          nAgeMinutes = pGame->dwGameFrame;
+          nAgeMinutes = pGame->dwGameFrame / 25;
           if (!pGame->lpCriticalSection) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1064);
             exit(-1);
           }
 
           /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pGame->lpCriticalSection);
-          nAgeMinutes /= 0x1d4c;
+          nAgeMinutes /= 300;
           if (nAgeMinutes >= nMaxMinutes) {
             nAgeMinutes = nMaxMinutes - 1;
           }
@@ -3296,29 +3217,19 @@ void __fastcall NET_D2GS_SERVER_LeaveServer(uint32_t nClientId, int32_t bBroadca
 
 // Removes a client from the server by token, cleaning up their connection state.
 void __fastcall LeaveServer(::SGAMEDATA * pQServer, D2ClientStrc * nClientToken) {
-    // Frame slots -12..-4 are ONE object: &pActiveClient is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      D2ClientStrc* pActiveClient;
-      D2ClientStrc* pSaveCompleteClient;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    uint32_t nClientId;
-    __frame0.pSaveCompleteClient = 0;
-    ForEachClient(pQServer, (fpForEachClientFn)CLIENT_GetSaveCompleteClient, &__frame0.pSaveCompleteClient);
-    D2ClientStrc* pFoundClient = __frame0.pSaveCompleteClient;
-    if (!__frame0.pSaveCompleteClient && (pFoundClient = nClientToken , !nClientToken)) {
-      __frame0.pActiveClient = nClientToken;
-      ForEachClient(pQServer, (fpForEachClientFn)CLIENT_GetFirstActiveClient, &__frame0.pActiveClient);
-      if (__frame0.pActiveClient) {
-        nClientId = Clients::GetClientNo(__frame0.pActiveClient);
-        NET_D2GS_SERVER_LeaveServer(nClientId, 0);
-        return;
+    D2ClientStrc* pSaveCompleteClient = 0;
+    D2ClientStrc* pActiveClient;
+    ForEachClient(pQServer, (fpForEachClientFn)CLIENT_GetSaveCompleteClient, &pSaveCompleteClient);
+    if (pSaveCompleteClient) {
+      NET_D2GS_SERVER_LeaveServer(Clients::GetClientNo(pSaveCompleteClient), 0);
+    } else if (!nClientToken) {
+      pActiveClient = nClientToken;
+      ForEachClient(pQServer, (fpForEachClientFn)CLIENT_GetFirstActiveClient, &pActiveClient);
+      if (pActiveClient) {
+        NET_D2GS_SERVER_LeaveServer(Clients::GetClientNo(pActiveClient), 0);
       }
     } else {
-      nClientId = Clients::GetClientNo(pFoundClient);
-      NET_D2GS_SERVER_LeaveServer(nClientId, 0);
+      NET_D2GS_SERVER_LeaveServer(Clients::GetClientNo(nClientToken), 0);
     }
 }
 

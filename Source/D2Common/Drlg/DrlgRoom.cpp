@@ -511,52 +511,37 @@ void __fastcall DRLGWARP_InitWarpConnectionsBetweenLevels(D2DrlgStrc * pDrlg, ui
 
 // Validates that warp flags on room tiles match the vis array entries for the level. Iterates room extensions checking warp tile destinations against expected vis connections.
 static D2RoomExStrc * DRLGWARP_ValidateWarpFlagsAgainstVis(D2DrlgLevelStrc * pLevel) {
-    D2LevelDefsTxt* pLevelDef;
-    int* pWarpArray;
-    uint32_t nWarpIndex;
-    uint32_t nRoomFlagMask;
-    D2DrlgActWarpsInfoStrc* pWarpsInfo;
-    D2RoomExStrc* pRoomEx;
-    pRoomEx = pLevel->pRoomExFirst;
-    if (!pRoomEx) {
-      return nullptr;
-    }
-
-    do {
-      if (pRoomEx->eRoomExFlags & 0xff0U) {
-        nRoomFlagMask = 0x10;
-        nWarpIndex = 0;
-        do {
+    for (D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
+      if (pRoomEx->eRoomExFlags & 0xff0) {
+        uint32_t nRoomFlagMask = 0x10;
+        uint8_t nWarpIndex = 0;
+        for (; nRoomFlagMask & 0xff0; nRoomFlagMask <<= 1) {
           if (pRoomEx->eRoomExFlags & nRoomFlagMask) {
-            for (pWarpsInfo = pLevel->pDrlg->pWarpsInfo; pWarpsInfo; pWarpsInfo = pWarpsInfo->pNext) {
+            int* pWarpArray;
+            D2DrlgActWarpsInfoStrc* pWarpsInfo = pLevel->pDrlg->pWarpsInfo;
+            eD2LevelId eLevel = pLevel->eD2LevelId;
+            for (; pWarpsInfo; pWarpsInfo = pWarpsInfo->pNext) {
               if (pWarpsInfo->nLevelId == LEVEL_None) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a2);
                 exit(-1);
               }
-              if (pLevel->eD2LevelId == pWarpsInfo->nLevelId) {
-                pWarpArray = pWarpsInfo->nWarpId;
-                goto check_warp_slot;
+              if (eLevel == pWarpsInfo->nLevelId) {
+                break;
               }
             }
 
-            pLevelDef = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(pLevel->eD2LevelId);
-            pWarpArray = pLevelDef->Warp;
-            check_warp_slot:
+            pWarpArray = pWarpsInfo ? pWarpsInfo->nWarpId : DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(eLevel)->Warp;
             if (pWarpArray[nWarpIndex] != -1) {
               return pRoomEx;
             }
           }
 
-          nRoomFlagMask *= 2;
-          nWarpIndex = (uint32_t)(uint8_t)((char)nWarpIndex + 1);
-        } while (nRoomFlagMask & 0xff0);
+          nWarpIndex++;
+        }
       }
+    }
 
-      pRoomEx = pRoomEx->pRoomExNext;
-      if (!pRoomEx) {
-        return nullptr;
-      }
-    } while (true);
+    return nullptr;
 }
 
 // Main entry point for finding a spawn location in a level.
@@ -1224,41 +1209,34 @@ static BOOL __stdcall DRLGROOMEX_LinkNearRoomByDirection(uint8_t dstVisSlot, D2R
     int nGapX;
     int nGapY;
     int nDstRoomY;
+    int nVisMask = 1 << D2_SHIFT_COUNT(dstVisSlot + 4);
     BOOL bLinkAdded = 0;
-    do {
-      if (!pDstRoomExIter) {
-        return bLinkAdded;
-      }
-      if (pDstRoomExIter->eRoomExFlags & 1 << D2_SHIFT_COUNT(dstVisSlot + 4)) {
+    for (; pDstRoomExIter; pDstRoomExIter = pDstRoomExIter->pRoomExNext) {
+      if (pDstRoomExIter->eRoomExFlags & nVisMask) {
         if (warpDestLevel != -1) {
           DRLGROOMEX_ResizeArrayAndAddNewNearRoom(pRoomEx, pMemory, pDstRoomExIter);
           DRLGROOMEX_AllocRoomTile(pDstRoomExIter, srcVisSlot, pRoomEx);
           return 1;
         }
 
-        nGapX = pRoomEx->sCoords.WorldPosition.x;
-        nGapY = pDstRoomExIter->sCoords.WorldPosition.x;
-        if (nGapX < nGapY) {
-          nGapX = nGapY - pRoomEx->sCoords.WorldSize.x - nGapX;
+        if (pRoomEx->sCoords.WorldPosition.x < pDstRoomExIter->sCoords.WorldPosition.x) {
+          nGapX = pDstRoomExIter->sCoords.WorldPosition.x - pRoomEx->sCoords.WorldSize.x - pRoomEx->sCoords.WorldPosition.x;
         } else {
-          nGapX = nGapX - pDstRoomExIter->sCoords.WorldSize.x - nGapY;
+          nGapX = pRoomEx->sCoords.WorldPosition.x - pDstRoomExIter->sCoords.WorldSize.x - pDstRoomExIter->sCoords.WorldPosition.x;
         }
-
-        nGapY = pRoomEx->sCoords.WorldPosition.y;
-        nDstRoomY = pDstRoomExIter->sCoords.WorldPosition.y;
-        if (nGapY < nDstRoomY) {
-          nGapY = nDstRoomY - pRoomEx->sCoords.WorldSize.y - nGapY;
+        if (pRoomEx->sCoords.WorldPosition.y < pDstRoomExIter->sCoords.WorldPosition.y) {
+          nGapY = pDstRoomExIter->sCoords.WorldPosition.y - pRoomEx->sCoords.WorldSize.y - pRoomEx->sCoords.WorldPosition.y;
         } else {
-          nGapY = nGapY - pDstRoomExIter->sCoords.WorldSize.y - nDstRoomY;
+          nGapY = pRoomEx->sCoords.WorldPosition.y - pDstRoomExIter->sCoords.WorldSize.y - pDstRoomExIter->sCoords.WorldPosition.y;
         }
         if (nGapX < 6 && nGapY < 6) {
           DRLGROOMEX_ResizeArrayAndAddNewNearRoom(pRoomEx, pMemory, pDstRoomExIter);
           bLinkAdded = 1;
         }
       }
+    }
 
-      pDstRoomExIter = pDstRoomExIter->pRoomExNext;
-    } while (true);
+    return bLinkAdded;
 }
 
 // Allocates a D2PresetUnitStrc, initializes fields, and optionally links it into pRoomEx->pPresetUnit list.

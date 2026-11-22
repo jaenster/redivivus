@@ -407,8 +407,10 @@ int __stdcall OOGUTIL_JoinDefaultChannel(D2ControlMsg * pControlMsg) {
       ChatDlg::CHATDLG_EnqueueClearMessage();
       ChatDlg::CHATDLG_CreateAllForms();
       int32_t bRegLoaded = Storm::Source::SReg::SRegLoadString("Diablo II", "Default Channel", 0, szDefaultChannel, 0x20);
-      char* szChannelName = szDefaultChannel;
-      if (!bRegLoaded) {
+      char* szChannelName;
+      if (bRegLoaded) {
+        szChannelName = szDefaultChannel;
+      } else {
         szChannelName = "";
       }
 
@@ -2273,32 +2275,25 @@ void __stdcall OOGUTIL_RequestGameListFromServer() {
 // If nScreenToShow == 2 (REALM/Battle.net): sends MCP 0x05 GAMELIST request (reqid=CreateJoinGameRequestId)
 // over d2cs; server replies with one 0x05 packet per game + a token=-2 terminator (see NET_MCP_CLIENT_Incoming0x05).
 void __stdcall OOGMENU_RequestGameList() {
-    uint16_t wRequestId;
-    char aRequestBuf[24];
+    uint32_t aRequestBuf[6];
     gpChatFormList = (void*)0x3;
     nGameListDifficultyFilter = 0;
     if (D2IniData_multiplayer->nScreenToShow == 2) {
-      memset(aRequestBuf, 0, 24 * sizeof(aRequestBuf[0]));
+      memset(aRequestBuf, 0, sizeof(aRequestBuf));
       if (D2IniData_multiplayer->eCTEMP_eD2PlayerStatus & PLAYERSTATUS_Hardcore) {
-        aRequestBuf[0x14] = '\0';
-        aRequestBuf[0x15] = '\b';
-        aRequestBuf[0x16] = '\0';
-        aRequestBuf[0x17] = '\0';
+        aRequestBuf[5] |= 0x800;
       }
 
       do {
-        wRequestId = CreateJoinGameRequestId + 1;
-        CreateJoinGameRequestId = 0;
-      } while (!wRequestId);
+        CreateJoinGameRequestId++;
+      } while (!CreateJoinGameRequestId);
 
-      CreateJoinGameRequestId = wRequestId;
-      D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x05_GameList(aRequestBuf, wRequestId);
+      D2MCPClient::McpConnect::NET_MCP_CLIENT_Send_0x05_GameList((char*)aRequestBuf, CreateJoinGameRequestId);
       LastGameRequestId = CreateJoinGameRequestId;
       return;
     }
 
     OOGUTIL_RequestGameListFromServer();
-    return;
 }
 
 BOOL __stdcall OOGUTIL_SendGamePassword(DWORD dwParam1, DWORD dwParam2, char * szText) {

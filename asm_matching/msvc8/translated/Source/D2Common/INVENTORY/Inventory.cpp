@@ -76,40 +76,52 @@ static D2ItemInventoryNodeStrc * INVENTORY_GetItemInventoryNode(D2UnitStrc * pUn
 
 // Unlinks an item unit from a doubly-linked inventory list. Updates prev/next pointers in D2UnitDataItemStrc at offsets 0x60/0x64.
 static void INVENTORY_UnlinkItemFromList(D2UnitStrc * * pItemListHead, D2UnitStrc * pItem) {
-    D2UnitDataItemStrc* pDVar1;
-    D2UnitDataItemStrc* pDataOther;
     if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
     D2UnitDataItemStrc* pData = pItem->pUnitData.pUnitDataItem;
-    if (!(pData && pData != (D2UnitDataItemStrc*)-92)) {
+    if (!pData) {
       return;
     }
 
-    D2UnitStrc* pPrevItem = pData->sInvNode.pPrevItem;
-    if (!pPrevItem) {
+    D2ItemInventoryNodeStrc* pNode = &pData->sInvNode;
+    if (!pNode) {
+      return;
+    }
+
+    D2UnitStrc* pPrev = pNode->pPrevItem;
+    if (!pPrev) {
       if (*pItemListHead == pItem) {
-        *pItemListHead = pData->sInvNode.pNextItem;
+        *pItemListHead = pNode->pNextItem;
       }
-    } else if (pPrevItem->eUnitType == UNIT_ITEM && (pDVar1 = pPrevItem->pUnitData.pUnitDataItem , pDVar1 != 0) && pDVar1 != (D2UnitDataItemStrc*)-92) {
-      pDVar1->sInvNode.pNextItem = pData->sInvNode.pNextItem;
+    } else if (pPrev->eUnitType == UNIT_ITEM) {
+      D2UnitDataItemStrc* pPrevData = pPrev->pUnitData.pUnitDataItem;
+      if (pPrevData) {
+        D2ItemInventoryNodeStrc* pPrevNode = &pPrevData->sInvNode;
+        if (pPrevNode) {
+          pPrevNode->pNextItem = pNode->pNextItem;
+        }
+      }
     }
 
-    pPrevItem = pData->sInvNode.pNextItem;
-    if (!pPrevItem) {
+    D2UnitStrc* pNext = pNode->pNextItem;
+    if (!pNext) {
       if (pItemListHead[1] == pItem) {
-        pItemListHead[1] = pData->sInvNode.pPrevItem;
-        pData->sInvNode.pNextItem = 0;
-        pData->sInvNode.pPrevItem = 0;
-        return;
+        pItemListHead[1] = pNode->pPrevItem;
       }
-    } else if (pPrevItem->eUnitType == UNIT_ITEM && (pDataOther = pPrevItem->pUnitData.pUnitDataItem , pDataOther != 0) && pDataOther != (D2UnitDataItemStrc*)-92) {
-      pDataOther->sInvNode.pPrevItem = pData->sInvNode.pPrevItem;
+    } else if (pNext->eUnitType == UNIT_ITEM) {
+      D2UnitDataItemStrc* pNextData = pNext->pUnitData.pUnitDataItem;
+      if (pNextData) {
+        D2ItemInventoryNodeStrc* pNextNode = &pNextData->sInvNode;
+        if (pNextNode) {
+          pNextNode->pPrevItem = pNode->pPrevItem;
+        }
+      }
     }
 
-    pData->sInvNode.pNextItem = 0;
-    pData->sInvNode.pPrevItem = 0;
+    pNode->pNextItem = 0;
+    pNode->pPrevItem = 0;
 }
 
 static BOOL __stdcall INVENTORY_IsGridRectEmpty(int32_t nStartRow, uint8_t byWidth, int32_t nStartCol, uint8_t byHeight, D2InventoryGridInfoStrc * pGridInfo) {
@@ -438,8 +450,6 @@ static D2InventoryGridInfoStrc * __stdcall ReinitializeInventoryGrid(int32_t nNe
 
 // Links pItem onto the tail of pInventoryStrc's item linked list (pFirstItem/pLastItem chain). Validates that pItem is a unit of type UNIT_ITEM (eUnitType==4) with valid pUnitData and pStatsEx. Sets pUnitDataItem->pInventory to the previous last item and pStatsEx to the inventory pointer.
 static void INVENTORY_AppendItemToList(D2UnitStrc * pItem, D2InventoryStrc * pInventoryStrc) {
-    D2UnitDataItemStrc* pLastItemData;
-    D2UnitDataItemStrc* pItemUnitData;
     if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
@@ -456,12 +466,14 @@ static void INVENTORY_AppendItemToList(D2UnitStrc * pItem, D2InventoryStrc * pIn
 
     D2UnitStrc* pPrevLastItem = pInventoryStrc->pLastItem;
     if (pPrevLastItem) {
-      if (pPrevLastItem->eUnitType == UNIT_ITEM && (pLastItemData = pPrevLastItem->pUnitData.pUnitDataItem , pLastItemData != 0) && pLastItemData != (D2UnitDataItemStrc*)-92) {
-        pLastItemData->sInvNode.pNextItem = pItem;
-        pDVar1->pPrevItem = pInventoryStrc->pLastItem;
-        pInventoryStrc->pLastItem = pItem;
-        pDVar1->pInventory = pInventoryStrc;
-        return;
+      if (pPrevLastItem->eUnitType == UNIT_ITEM) {
+        D2UnitDataItemStrc* pLastData = pPrevLastItem->pUnitData.pUnitDataItem;
+        if (pLastData) {
+          D2ItemInventoryNodeStrc* pLastNode = &pLastData->sInvNode;
+          if (pLastNode) {
+            pLastNode->pNextItem = pItem;
+          }
+        }
       }
     } else {
       pInventoryStrc->pFirstItem = pItem;
@@ -473,29 +485,36 @@ static void INVENTORY_AppendItemToList(D2UnitStrc * pItem, D2InventoryStrc * pIn
 }
 
 static void __stdcall INVENTORY_InsertItemInPageList(D2InventoryStrc * pInventory, D2UnitStrc * pItem, D2InventoryGridInfoStrc * pGridInfo) {
-    D2UnitDataItemStrc* pLastUnitData;
     if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
     }
 
-    D2UnitDataItemStrc* pInsertItemData = pItem->pUnitData.pUnitDataItem;
-    if (!(pInsertItemData && &pInsertItemData->sInvNode && pInsertItemData->sInvNode.pInventory == pInventory)) {
+    D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
+    if (!pItemData) {
+      return;
+    }
+
+    D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+    if (!pNode || pNode->pInventory != pInventory) {
       return;
     }
 
     D2UnitStrc* pLastUnit = pGridInfo->pLastItem;
     if (pLastUnit) {
-      if (pLastUnit->eUnitType == UNIT_ITEM && (pLastUnitData = pLastUnit->pUnitData.pUnitDataItem , pLastUnitData != 0) && pLastUnitData != (D2UnitDataItemStrc*)-92) {
-        pLastUnitData->sInvNode.pNextItemInPage = pItem;
-        pInsertItemData->sInvNode.pPrevItemInPage = pGridInfo->pLastItem;
-        pGridInfo->pLastItem = pItem;
-        return;
+      if (pLastUnit->eUnitType == UNIT_ITEM) {
+        D2UnitDataItemStrc* pLastData = pLastUnit->pUnitData.pUnitDataItem;
+        if (pLastData) {
+          D2ItemInventoryNodeStrc* pLastNode = &pLastData->sInvNode;
+          if (pLastNode) {
+            pLastNode->pNextItemInPage = pItem;
+          }
+        }
       }
     } else {
       pGridInfo->pFirstItem = pItem;
     }
 
-    pInsertItemData->sInvNode.pPrevItemInPage = pGridInfo->pLastItem;
+    pNode->pPrevItemInPage = pGridInfo->pLastItem;
     pGridInfo->pLastItem = pItem;
 }
 
@@ -1405,12 +1424,8 @@ BOOL __stdcall INVENTORY_HasEquippedWeaponClass(D2InventoryStrc * pInventory, in
       }
     }
 
-    BOOL BVar6 = ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pItem);
-    if (BVar6) {
-      BVar6 = ITEMS::Items::HasWeaponClass(pItem, ConfirmWClass);
-      if (BVar6) {
-        return 1;
-      }
+    if (ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pItem) && ITEMS::Items::HasWeaponClass(pItem, ConfirmWClass)) {
+      return 1;
     }
     if (pInventory->nSignatureMagic != 0x1020304) {
       pItem = 0;
@@ -1423,17 +1438,11 @@ BOOL __stdcall INVENTORY_HasEquippedWeaponClass(D2InventoryStrc * pInventory, in
       }
     }
 
-    BVar6 = ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pItem);
-    if (!BVar6) {
-      return 0;
+    if (ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pItem) && ITEMS::Items::HasWeaponClass(pItem, ConfirmWClass)) {
+      return 1;
     }
 
-    BVar6 = ITEMS::Items::HasWeaponClass(pItem, ConfirmWClass);
-    if (!BVar6) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 D2UnitStrc * __stdcall GetEquipedWeapon(D2InventoryStrc * pInventory) {
@@ -2813,78 +2822,47 @@ void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(D2InventoryStrc * pInventory
 
 // Determines the equipped-weapon handedness for a unit. Returns -1 (no weapon), 1 (dual-wield / Barbarian dual-handed), or 2 (two-handed weapon). Reads the left-arm (slot 5) and right-arm (slot 4) body-location cells from the equipment grid, checks IsTwoHanded and BARBARIAN_CheckItemData for each combination.
 int __stdcall INVENTORY_GetWeaponHandedness(D2UnitStrc * pUnit, D2InventoryStrc * pInventory) {
-    BOOL _bIsTwoHanded;
-    bool bIsTwoHanded;
     D2InventoryGridInfoStrc* pGridInfo;
-    int32_t iVar1;
     D2UnitStrc* pLeftArmItem;
     D2UnitStrc* pRightArmItem;
-    if (!pInventory) {
-      return -1;
-    }
-    if (pInventory->nSignatureMagic != 0x1020304) {
-      pLeftArmItem = 0;
-    } else {
-      pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
-      if (!pGridInfo) {
+    if (pInventory) {
+      if (pInventory->nSignatureMagic != 0x1020304) {
         pLeftArmItem = 0;
       } else {
-        pLeftArmItem = pGridInfo->pGridCells[5];
+        pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
+        if (!pGridInfo) {
+          pLeftArmItem = 0;
+        } else {
+          pLeftArmItem = pGridInfo->pGridCells[5];
+        }
       }
-    }
-    if (pInventory->nSignatureMagic != 0x1020304) {
-      pRightArmItem = 0;
-    } else {
-      pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
-      if (!pGridInfo) {
+      if (pInventory->nSignatureMagic != 0x1020304) {
         pRightArmItem = 0;
       } else {
-        pRightArmItem = pGridInfo->pGridCells[4];
+        pGridInfo = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
+        if (!pGridInfo) {
+          pRightArmItem = 0;
+        } else {
+          pRightArmItem = pGridInfo->pGridCells[4];
+        }
       }
-    }
-    if (pLeftArmItem) {
-      BOOL BVar2;
-      if (pRightArmItem) {
-        iVar1 = ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pUnit, pLeftArmItem);
-        if (!iVar1) {
-          iVar1 = ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pUnit, pRightArmItem);
-          if (!iVar1) {
-            BVar2 = ITEMS::Items::IsTwoHanded(pLeftArmItem);
-            if (BVar2) {
-              return 2;
-            }
-
-            BVar2 = ITEMS::Items::IsTwoHanded(pRightArmItem);
-            if (!BVar2) {
-              return -1;
-            }
-
+      if (pLeftArmItem) {
+        if (pRightArmItem) {
+          if (ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pUnit, pLeftArmItem) || ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pUnit, pRightArmItem)) {
+            return 1;
+          }
+          if (ITEMS::Items::IsTwoHanded(pLeftArmItem) || ITEMS::Items::IsTwoHanded(pRightArmItem)) {
             return 2;
           }
+        } else if (ITEMS::Items::IsTwoHanded(pLeftArmItem) || ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pUnit, pLeftArmItem)) {
+          return 2;
         }
-
-        return 1;
+      } else if (pRightArmItem && (ITEMS::Items::IsTwoHanded(pRightArmItem) || ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pUnit, pRightArmItem))) {
+        return 2;
       }
-
-      _bIsTwoHanded = ITEMS::Items::IsTwoHanded(pLeftArmItem);
-    } else {
-      if (!pRightArmItem) {
-        return -1;
-      }
-
-      _bIsTwoHanded = ITEMS::Items::IsTwoHanded(pRightArmItem);
-      pLeftArmItem = pRightArmItem;
-    }
-    if (_bIsTwoHanded) {
-      return 2;
     }
 
-    iVar1 = ITEMS::Items::BARBARIAN_CheckItemData_b1or2Handed_isTrue(pUnit, pLeftArmItem);
-    if (!iVar1) {
-      return -1;
-    }
-
-    return 2;
+    return -1;
 }
 
 void __stdcall INVENTORY_SetOwnerGUID(D2InventoryStrc * pInventory, int32_t nUnitGUID) {

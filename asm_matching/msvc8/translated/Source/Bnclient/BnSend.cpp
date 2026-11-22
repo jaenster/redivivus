@@ -432,33 +432,12 @@ BOOL __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount) {
 }
 
 BOOL __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, char * dwProductCode) {
-    // Frame slots -524..-8 are ONE object: &dwProductVersion is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int dwProductVersion;
-      char szPacketBuf[512];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 516, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    char cCur;
-    BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
-    __frame0.dwProductVersion = bIsExpansion ? 0x44325850 : 0x44324456;
-    NET_SID_CLIENT_Send(0xb, (char*)&__frame0.dwProductVersion, 4);
-    __frame0.szPacketBuf[0] = '\0';
-    memset(__frame0.szPacketBuf + 1, 0, 0x1ff);
-    Storm::Source::SSTR::SStrCopy(__frame0.szPacketBuf, szText1, 0x100);
-    char* pszCursor = __frame0.szPacketBuf;
-    pszCursor = pszCursor + strlen(pszCursor) + 1;
-    Storm::Source::SSTR::SStrCopy(pszCursor, szText2, 0x100);
-    pszCursor = __frame0.szPacketBuf;
-    char* pszText2End = pszCursor + strlen(pszCursor);
-    pszCursor = pszText2End + 1;
-    pszCursor = __frame0.szPacketBuf;
-    pszCursor = pszCursor + strlen(pszCursor) + 1;
-    char* pszScanEnd = __frame0.szPacketBuf + 1 + (int)((char*)pszCursor - (char*)((uint8_t*)&__frame0.szPacketBuf + 520) + 0x207);
-    pszScanEnd = pszScanEnd + strlen(pszScanEnd) + 1;
-    int32_t nSendResult = NET_SID_CLIENT_Send(10, __frame0.szPacketBuf, (size_t)(pszScanEnd + ((intptr_t)((uint8_t*)&__frame0.szPacketBuf + 520) * -2 - (int)((char*)pszCursor - (char*)((uint8_t*)&__frame0.szPacketBuf + 520) + 0x207)) + (intptr_t)(pszText2End + 0x410)));
-    return (uint32_t)(nSendResult >= 0);
+    int dwProductVersion = BnSend::D2CheckExpansionGame() ? 0x44325850 : 0x44324456;
+    NET_SID_CLIENT_Send(0xb, (char*)&dwProductVersion, 4);
+    char szPacketBuf[512] = {0};
+    Storm::Source::SSTR::SStrCopy(szPacketBuf, szText1, 0x100);
+    Storm::Source::SSTR::SStrCopy(szPacketBuf + strlen(szPacketBuf) + 1, szText2, 0x100);
+    return NET_SID_CLIENT_Send(10, szPacketBuf, strlen(szPacketBuf) + 1 + strlen(szPacketBuf + strlen(szPacketBuf) + 1) + 1) >= 0;
 }
 
 uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat() {
@@ -711,47 +690,30 @@ int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t bReques
 
 // @sourcefile .\BnSend.cpp
 uint32_t __fastcall NET_SID_CLIENT_Send_0x27_WriteUserData(char * szAccount, uint32_t nCount, char * * pszKeys, char * * pszValues) {
-    char** ppszValueScan;
     uint32_t nIdx;
-    uint32_t nLen = Storm::Source::SSTR::SStrLen(szAccount);
-    int nStringsSize = nLen + 1;
-    if (nCount > 0) {
-      uint32_t nValueLen;
-      ppszValueScan = pszValues;
-      char** ppszKeyScan = pszKeys;
-      nIdx = nCount;
-      do {
-        nLen = Storm::Source::SSTR::SStrLen(*ppszKeyScan);
-        ppszKeyScan++;
-        nValueLen = Storm::Source::SSTR::SStrLen(*ppszValueScan);
-        ppszValueScan++;
-        nIdx--;
-        nStringsSize = nStringsSize + nLen + 2 + nValueLen;
-      } while (nIdx);
+    int nStringsSize = Storm::Source::SSTR::SStrLen(szAccount) + 1;
+    for (nIdx = 0; nIdx < nCount; nIdx++) {
+      nStringsSize += Storm::Source::SSTR::SStrLen(pszKeys[nIdx]) + 1;
+      nStringsSize += Storm::Source::SSTR::SStrLen(pszValues[nIdx]) + 1;
     }
 
-    char* pPacketBuf = (char*)D2_ALLOC_AT(nStringsSize + 8, ".\\BnSend.cpp", 0x4c4);
-    pPacketBuf[0] = '\x01';
-    pPacketBuf[1] = '\0';
-    pPacketBuf[2] = '\0';
-    pPacketBuf[3] = '\0';
-    *(uint32_t*)(pPacketBuf + 4) = nCount;
-    nLen = Storm::Source::SSTR::SStrCopy(pPacketBuf + 8, szAccount, 0x7fffffff);
-    char* szBufferOutput = pPacketBuf + (nLen + 9);
+    uint32_t* pPacketBuf = (uint32_t*)D2_ALLOC_AT(nStringsSize + 8, ".\\BnSend.cpp", 0x4c4);
+    pPacketBuf[0] = 1;
+    pPacketBuf[1] = nCount;
+    char* szBufferOutput = (char*)(pPacketBuf + 2);
+    szBufferOutput += Storm::Source::SSTR::SStrCopy(szBufferOutput, szAccount, 0x7fffffff) + 1;
     for (nIdx = 0; nIdx < nCount; nIdx++) {
-      nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszKeys[nIdx], 0x7fffffff);
-      szBufferOutput += nLen + 1;
+      szBufferOutput += Storm::Source::SSTR::SStrCopy(szBufferOutput, pszKeys[nIdx], 0x7fffffff) + 1;
     }
 
     for (nIdx = 0; nIdx < nCount; nIdx++) {
-      nLen = Storm::Source::SSTR::SStrCopy(szBufferOutput, pszValues[nIdx], 0x7fffffff);
-      szBufferOutput += nLen + 1;
+      szBufferOutput += Storm::Source::SSTR::SStrCopy(szBufferOutput, pszValues[nIdx], 0x7fffffff) + 1;
     }
 
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x27);
-    int32_t nSendResult = NET_SID_CLIENT_Send(0x27, pPacketBuf, (intptr_t)szBufferOutput - (intptr_t)pPacketBuf);
+    uint32_t bSent = NET_SID_CLIENT_Send(0x27, (char*)pPacketBuf, szBufferOutput - (char*)pPacketBuf) >= 0;
     D2_FREE_AT(pPacketBuf, ".\\BnSend.cpp", 0x4e0);
-    return (uint32_t)(nSendResult >= 0);
+    return bSent;
 }
 
 // @sourcefile .\BnSend.cpp
@@ -2828,40 +2790,24 @@ static void BNSEND_CalculateCDKeyChecksum(char * szCDKey, uint32_t * pOutChecksu
     0xff
 }; D2_STATIC_GUARD(gaCDKeyCharLookup, "Bnclient::BnSend::BNSEND_CalculateCDKeyChecksum::gaCDKeyCharLookup");
 
-    uint8_t bHexChar;
-    uint32_t nHighNibble;
-    char cNibble;
     uint32_t nBitFlag = 1;
     *pOutChecksum = 0;
     uint8_t* pKeyPair = (uint8_t*)(szCDKey + 1);
-    for (int nPairIndex = 0; nPairIndex < 8; nPairIndex++) {
-      uint32_t nByteVal;
-      nByteVal = (int)(char)gaCDKeyCharLookup[*pKeyPair] + (char)gaCDKeyCharLookup[pKeyPair[-1]] * 0x18;
+    int nPairCount = 8;
+    do {
+      uint32_t nByteVal = (char)gaCDKeyCharLookup[pKeyPair[-1]] * 0x18 + (char)gaCDKeyCharLookup[*pKeyPair];
       if (nByteVal >= 0x100) {
         nByteVal -= 0x100;
         *pOutChecksum |= nBitFlag;
       }
 
-      nHighNibble = nByteVal >> 4 & 0xf;
-      cNibble = (char)nHighNibble;
-      if (nHighNibble >= 10) {
-        bHexChar = cNibble + 0x37;
-      } else {
-        bHexChar = cNibble + 0x30;
-      }
-
-      pKeyPair[-1] = bHexChar;
-      cNibble = (char)(nByteVal & 0xf);
-      if ((nByteVal & 0xf) >= 10) {
-        bHexChar = cNibble + 0x37;
-      } else {
-        bHexChar = cNibble + 0x30;
-      }
-
-      *pKeyPair = bHexChar;
+      uint32_t nNibble = nByteVal >> 4 & 0xf;
+      pKeyPair[-1] = nNibble >= 10 ? nNibble + 0x37 : nNibble + 0x30;
+      nNibble = nByteVal & 0xf;
+      *pKeyPair = nNibble >= 10 ? nNibble + 0x37 : nNibble + 0x30;
       pKeyPair += 2;
       nBitFlag *= 2;
-    }
+    } while (--nPairCount);
 }
 
 // Decodes 16-character CD key string into three components (Product: 3 hex digits, Public: 7 hex digits, Private: 9 hex digits). Validates checksum and performs character shuffling/XOR transformations. Returns 1 on success, 0 on failure.

@@ -12,6 +12,13 @@
 #include "Source/D2Common/D2CommonRoot.h"
 #include "Source/D2Common/DATATBLS/DataTbls.inline.h"
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -331,17 +338,8 @@ void __stdcall SetAnimSpeed(D2UnitStrc * pUnit, int32_t nAnimSpeed) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
     }
-    if (nAnimSpeed > -0x8000) {
-      if (nAnimSpeed >= 0x7fff) {
-        nAnimSpeed = 0x7fff;
-      }
 
-      pUnit->nAnimSpeed = (short int)nAnimSpeed;
-      return;
-    }
-
-    pUnit->nAnimSpeed = -0x8000;
-    return;
+    pUnit->nAnimSpeed = (short int)min(max(nAnimSpeed, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 }
 
 void __fastcall SetStream(D2UnitStrc * pUnit, D2MissileStreamStrc * pStream) {
@@ -462,22 +460,21 @@ static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
 // nShift is passed in EBX and copied to ECX before each SHL; only CL is used.
 static void AddStatsToDamage(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, int32_t nShift) {
     int nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firemindam, 0);
-    uint8_t bVar1 = (uint8_t)nShift;
-    pMissileDamageData->nFireMinDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
+    pMissileDamageData->nFireMinDamage += nStatValue << D2_SHIFT_COUNT(nShift);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firemaxdam, 0);
-    pMissileDamageData->nFireMaxDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
+    pMissileDamageData->nFireMaxDamage += nStatValue << D2_SHIFT_COUNT(nShift);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_lightmindam, 0);
-    pMissileDamageData->nLightMinDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
+    pMissileDamageData->nLightMinDamage += nStatValue << D2_SHIFT_COUNT(nShift);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_lightmaxdam, 0);
-    pMissileDamageData->nLightMaxDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
+    pMissileDamageData->nLightMaxDamage += nStatValue << D2_SHIFT_COUNT(nShift);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_magicmindam, 0);
-    pMissileDamageData->nMagicMinDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
+    pMissileDamageData->nMagicMinDamage += nStatValue << D2_SHIFT_COUNT(nShift);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_magicmaxdam, 0);
-    pMissileDamageData->nMagicMaxDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
+    pMissileDamageData->nMagicMaxDamage += nStatValue << D2_SHIFT_COUNT(nShift);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldmindam, 0);
-    pMissileDamageData->nColdMinDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
+    pMissileDamageData->nColdMinDamage += nStatValue << D2_SHIFT_COUNT(nShift);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldmaxdam, 0);
-    pMissileDamageData->nColdMaxDamage += nStatValue << D2_SHIFT_COUNT(bVar1);
+    pMissileDamageData->nColdMaxDamage += nStatValue << D2_SHIFT_COUNT(nShift);
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_coldlength, 0);
     pMissileDamageData->nColdLength += nStatValue;
     nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_poisonmindam, 0);
@@ -1002,6 +999,13 @@ int32_t __fastcall GetSpecialParamValueForSkillMissile(eD2Skills eSkill, uint8_t
     return uVar1;
 }
 
+static inline D2UnitDataMissileStrc * GetMissileDataInline(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
+        return pUnit->pUnitData.pUnitDataMissile;
+    }
+    return nullptr;
+}
+
 // Evaluates missile calc expression using missile/owner context and resolved missile id/level; dispatches into the calc VM callback path.
 int32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * pOwner, uint32_t nCalcExpression, int32_t nMissileId, int32_t nMissileLevel) {
     // Static local variables (originally global data)
@@ -1027,17 +1031,17 @@ int32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * pO
 
     D2MissileCalcContextStrc sCalcCtx;
     if (pMissile) {
-      if (pMissile->eUnitType != UNIT_MISSILE) {
+      if (GetTypeInline(pMissile) != UNIT_MISSILE) {
         return 0;
       }
       if (nMissileId < 0) {
         nMissileId = pMissile->nClassId;
       }
       if (nMissileLevel < 0) {
-        if (false || !pMissile->pUnitData.pUnitDataMissile) {
+        if (!GetMissileDataInline(pMissile)) {
           nMissileLevel = 0;
         } else {
-          nMissileLevel = (int32_t)pMissile->pUnitData.pUnitDataMissile->nSkillLevel;
+          nMissileLevel = (int32_t)GetMissileDataInline(pMissile)->nSkillLevel;
         }
       }
     }
@@ -1048,10 +1052,10 @@ int32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * pO
       return 0;
     }
 
-    sCalcCtx.nMissileLevel = nMissileLevel;
     sCalcCtx.pMissile = pMissile;
     sCalcCtx.pOwner = pOwner;
     sCalcCtx.nMissileId = nMissileId;
+    sCalcCtx.nMissileLevel = nMissileLevel;
     uint32_t nResult = Fog::Skills::FOG_EvaluateCalcExpression((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pMissCode + nCalcExpression), ITEMS::Items::sgptDataTable->nMissCodeSize - nCalcExpression, (fnSkillCalcMethod)MISSILE_CalcVMCallback_GetSpecialParam, gaMissileCalcMethods, gnMissileCalcMethodCount, &sCalcCtx);
     return nResult;
 }

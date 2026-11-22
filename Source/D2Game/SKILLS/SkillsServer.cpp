@@ -1182,23 +1182,21 @@ void __fastcall CalculateManaUse(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Ski
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_mana, -nManaCost, 0);
 }
 
-void __fastcall SKILLS_DeductManaCost(D2UnitStrc * pUnit, int32_t nManaCost) {
+BOOL __fastcall SKILLS_DeductManaCost(D2UnitStrc * pUnit, int32_t nManaCost) {
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
-      return;
+      return 1;
     }
 
-    BOOL eBloodManaState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blood_mana);
-    if (eBloodManaState) {
-      SkillEMonst::SKILLEMONST_ProcessBloodMana(pUnit, nManaCost);
-      return;
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blood_mana)) {
+      return SkillEMonst::SKILLEMONST_ProcessBloodMana(pUnit, nManaCost);
     }
 
-    int nCurrentMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-    if (nCurrentMana < nManaCost) {
-      return;
+    if (D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0) < nManaCost) {
+      return 0;
     }
 
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_mana, -nManaCost, 0);
+    return 1;
 }
 
 // Returns nonzero if the player has enough mana (or charges) to cast their current skill without consuming any. For charged skills checks pSkill->nCharges > 0. For srvdofunc 0x74 (leap/charge type) checks a special item stat flag. Otherwise computes the mana cost from SkillsTxt and compares against current UNITSTAT_mana. Non-player units always return 1.
@@ -1312,51 +1310,31 @@ int32_t __fastcall BowDecreaseQuantity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
 // Finds the active stackable/throwable weapon in the player's right or left arm slot and decrements its quantity via BowDecreaseQuantity. Skips non-player units. Prefers the right arm; falls back to the left arm if the right slot item is not the active weapon or is not stackable/throwable. Returns the remaining quantity from BowDecreaseQuantity, or 0 if no suitable ammo item is found.
 int32_t __fastcall RemoveQuanityOnUse(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    BOOL bIsStackableR;
-    int32_t nThrowableStat;
-    if (!pUnit) {
-      return 0;
-    }
-    if (pUnit->eUnitType != UNIT_PLAYER) {
-      return 0;
-    }
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+      D2UnitStrc* pActiveWeapon = PLAYER::Player::PLAYER_GetActiveWeaponForSkill(pUnit);
+      BOOL bAmmoMustBeWeapon = 1;
+      if (D2Common::ITEMS::Items::ITEMS_IsA(pActiveWeapon, ITEMTYPE_Bow) || D2Common::ITEMS::Items::ITEMS_IsA(pActiveWeapon, ITEMTYPE_Crossbow)) {
+        bAmmoMustBeWeapon = 0;
+      }
 
-    D2UnitStrc* pActiveWeapon = PLAYER::Player::PLAYER_GetActiveWeaponForSkill(pUnit);
-    bool bAmmoMustBeWeapon = true;
-    uint32_t bIsBow = D2Common::ITEMS::Items::ITEMS_IsA(pActiveWeapon, ITEMTYPE_Bow);
-    if (bIsBow || (bIsBow = D2Common::ITEMS::Items::ITEMS_IsA(pActiveWeapon, ITEMTYPE_Crossbow) , bIsBow != 0)) {
-      bAmmoMustBeWeapon = false;
-    }
+      D2InventoryStrc* pInventory = pUnit->pInventory;
+      D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
+      if (pItem && (!bAmmoMustBeWeapon || pItem == pActiveWeapon) && (D2Common::ITEMS::Items::IsStackable(pItem) || D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pItem) || D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pItem, UNITSTAT_item_throwable, 0))) {
+        return BowDecreaseQuantity(pGame, pUnit, pItem);
+      }
 
-    D2InventoryStrc* pInventory = pUnit->pInventory;
-    D2UnitStrc* pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
-    if (!pItem || bAmmoMustBeWeapon && pItem != pActiveWeapon || (bIsStackableR = D2Common::ITEMS::Items::IsStackable(pItem) , !bIsStackableR && (nThrowableStat = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pItem) , !nThrowableStat && (nThrowableStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pItem, UNITSTAT_item_throwable, 0) , !nThrowableStat)))) {
       pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
-      if (!pItem || bAmmoMustBeWeapon && pItem != pActiveWeapon) {
-        return 0;
-      }
-
-      bIsStackableR = D2Common::ITEMS::Items::IsStackable(pItem);
-      if (!bIsStackableR) {
-        nThrowableStat = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pItem);
-        if (!nThrowableStat) {
-          nThrowableStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pItem, UNITSTAT_item_throwable, 0);
-          if (!nThrowableStat) {
-            return 0;
-          }
-        }
+      if (pItem && (!bAmmoMustBeWeapon || pItem == pActiveWeapon) && (D2Common::ITEMS::Items::IsStackable(pItem) || D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pItem) || D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pItem, UNITSTAT_item_throwable, 0))) {
+        return BowDecreaseQuantity(pGame, pUnit, pItem);
       }
     }
 
-    nThrowableStat = BowDecreaseQuantity(pGame, pUnit, pItem);
-    return nThrowableStat;
+    return 0;
 }
 
 // Server-side check for whether a player has valid throwable/ammo for their current skill and active weapon. Returns 1 immediately for non-players or magic-arrow bows with Attack skill. For players, checks both right and left arm inventory slots for a stackable, throwable, or item_throwable item matching the active weapon; validates item quantity. Returns 0 if no valid ammo is found.
 // @sourcefile .\SKILLS\Skills.cpp
 BOOL __fastcall SKILLS_CheckThrowableAmmo(D2UnitStrc * pUnit) {
-    float fIsStackable;
-    BOOL BVar1;
     if (!pUnit) {
       return 0;
     }
@@ -1374,11 +1352,11 @@ BOOL __fastcall SKILLS_CheckThrowableAmmo(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    bool bAmmoMustBeWeapon = true;
+    BOOL bAmmoMustBeWeapon = 1;
     int32_t nShootsType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_shoots(pActiveWeapon);
     if (nShootsType) {
       eD2Skills eCurrentSkillId;
-      bAmmoMustBeWeapon = false;
+      bAmmoMustBeWeapon = 0;
       eCurrentSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x640);
       if (eCurrentSkillId == SKILL_Attack) {
         nShootsType = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pActiveWeapon, UNITSTAT_item_magicarrow, 0);
@@ -1394,29 +1372,16 @@ BOOL __fastcall SKILLS_CheckThrowableAmmo(D2UnitStrc * pUnit) {
     }
 
     D2UnitStrc* pAmmoItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
-    if (!pAmmoItem || bAmmoMustBeWeapon && pAmmoItem != pActiveWeapon || (fIsStackable = (float)D2Common::ITEMS::Items::IsStackable(pAmmoItem) , fIsStackable == 0.0 && (nShootsType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem) , !nShootsType && (nShootsType = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAmmoItem, UNITSTAT_item_throwable, 0) , !nShootsType)))) {
-      pAmmoItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
-      if (!pAmmoItem) {
-        return 0;
-      }
-      if (bAmmoMustBeWeapon && pAmmoItem != pActiveWeapon) {
-        return 0;
-      }
-
-      BVar1 = D2Common::ITEMS::Items::IsStackable(pAmmoItem);
-      if (!BVar1) {
-        nShootsType = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem);
-        if (!nShootsType) {
-          nShootsType = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAmmoItem, UNITSTAT_item_throwable, 0);
-          if (!nShootsType) {
-            return 0;
-          }
-        }
-      }
+    if (pAmmoItem && (!bAmmoMustBeWeapon || pAmmoItem == pActiveWeapon) && (D2Common::ITEMS::Items::IsStackable(pAmmoItem) || D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem) || D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAmmoItem, UNITSTAT_item_throwable, 0))) {
+      return D2Common::ITEMS::Items::ITEM_ValidateItemQuantity(pAmmoItem);
     }
 
-    int32_t nAmmoQtyValid = D2Common::ITEMS::Items::ITEM_ValidateItemQuantity(pAmmoItem);
-    return nAmmoQtyValid;
+    pAmmoItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
+    if (pAmmoItem && (!bAmmoMustBeWeapon || pAmmoItem == pActiveWeapon) && (D2Common::ITEMS::Items::IsStackable(pAmmoItem) || D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pAmmoItem) || D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pAmmoItem, UNITSTAT_item_throwable, 0))) {
+      return D2Common::ITEMS::Items::ITEM_ValidateItemQuantity(pAmmoItem);
+    }
+
+    return 0;
 }
 
 void __fastcall SKILLS_ApplySkillToHitAndDamage(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2UnitStrc * pWeapon) {
@@ -1819,14 +1784,13 @@ void __fastcall SKILLS_SetPeriodicSkillTimer(::SGAMEDATA * pGame, D2UnitStrc * p
     GAME::Event::SetEvent(pGame, pUnit, 8, (nGameFrame - 1 + nPerDelay) / nPerDelay * nPerDelay + 1, eSkill, nSkillLevel);
 }
 
-void __fastcall SKILLS_SetPeriodicStatOrSkillTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nStatId, eD2Skills eSkill, int32_t nSkillLvl, int32_t bPeriodicSkill) {
-    if (!((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return;
+int32_t __fastcall SKILLS_SetPeriodicStatOrSkillTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nStatId, eD2Skills eSkill, int32_t nSkillLvl, int32_t bPeriodicSkill) {
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
+      return 0;
     }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    if (!(pSkillTxt && (Fog::BitBuffer::gadwBitMasks[6] & pSkillTxt->aFlagBytes[0] || Fog::BitBuffer::gadwBitMasks[5] & pSkillTxt->aFlagBytes[0]))) {
-      return;
+    if (!(Fog::BitBuffer::gadwBitMasks[6] & pSkillTxt->aFlagBytes[0]) && !(Fog::BitBuffer::gadwBitMasks[5] & pSkillTxt->aFlagBytes[0])) {
+      return 0;
     }
 
     int32_t nPerDelay = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->perdelay, eSkill, nSkillLvl);
@@ -1834,16 +1798,15 @@ void __fastcall SKILLS_SetPeriodicStatOrSkillTimer(::SGAMEDATA * pGame, D2UnitSt
       nPerDelay = 5;
     }
 
-    int nGameFrame = pGame->dwGameFrame;
+    int nEventFrame = (pGame->dwGameFrame + nPerDelay - 1) / nPerDelay * nPerDelay + 1;
     if (bPeriodicSkill) {
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSKILLS, -1);
-      eSkill = SKILL_Attack;
-      nStatId = -1;
-      GAME::Event::SetEvent(pGame, pUnit, 8, (nGameFrame - 1 + nPerDelay) / nPerDelay * nPerDelay + 1, nStatId, eSkill);
+      GAME::Event::SetEvent(pGame, pUnit, 8, nEventFrame, -1, SKILL_Attack);
     } else {
       GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nStatId);
-      GAME::Event::SetEvent(pGame, pUnit, 9, (nGameFrame - 1 + nPerDelay) / nPerDelay * nPerDelay + 1, nStatId, eSkill);
+      GAME::Event::SetEvent(pGame, pUnit, 9, nEventFrame, nStatId, eSkill);
     }
+    return 1;
 }
 
 // Server-side: spawns and links a Town Portal object for pUnit. Finds a free spawn coordinate in eSrcLevel, checks for the special Duriel portal, creates an OBJECT unit of pUnit's class, stores the source level ID in the portal's char name buffer, sets portal flags, and bidirectionally links owner/portal via StoreOwner and LinkPortalCoords. Frees the placeholder pUnit on spawn failure. Returns the new portal unit or NULL on error.
@@ -2294,73 +2257,50 @@ void __fastcall SKILLS_CreateMissileStar(::SGAMEDATA * pGame, int32_t nMissileCo
 }
 
 // Server-side: gives a player a temporary weapon item in the free weapon hand for skills that require one. Inspects the player's R_ARM/L_ARM body-loc items; if a hand is empty (or the held item is not a one-handed weapon) it generates a normal-quality item of szItemCode via ITEM_CreateItemInstance at the appropriate ilvl and equips it to that body location (BODYLOC_R_ARM=4 / L_ARM=5) via SERVER_EquipItemToBodyLoc. No-op for non-player units. Halts with Fog error 0xf4c (bad item code) or 0xf55 (item creation failed).
-void __fastcall SKILLS_SpawnWeaponForHand(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * szItemCode) {
-    D2UnitStrc* pUnit_00;
-    BOOL BVar1;
-    uint32_t bIsWeapon2;
-    eD2BodyLocDWORD eBodyLoc;
+int32_t __fastcall SKILLS_SpawnWeaponForHand(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * szItemCode) {
     D2ItemGenContextStrc sItemGenCtx;
-    ::SGAMEDATA* pGameLocal;
-    D2InventoryStrc* pInventory;
-    ::SGAMEDATA* pGameCopy;
-    pGameCopy = pGame;
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
-      D2UnitStrc* pCreatedItem;
-      pInventory = pUnit->pInventory;
-      pCreatedItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
-      pUnit_00 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
-      if (!pCreatedItem) {
-        if (!pUnit_00) {
-          eBodyLoc = BODYLOC_R_ARM;
-          goto create_and_equip;
-        }
-
-        BVar1 = D2Common::ITEMS::Items::IsTwoHanded(pUnit_00);
-        if (!BVar1) {
-          bIsWeapon2 = D2Common::ITEMS::Items::ITEMS_IsA(pUnit_00, ITEMTYPE_Weapon);
-          if (!bIsWeapon2) {
-            eBodyLoc = BODYLOC_R_ARM;
-            goto create_and_equip;
-          }
-        }
-      }
-      if (!pUnit_00 && pCreatedItem) {
-        BVar1 = D2Common::ITEMS::Items::IsTwoHanded(pCreatedItem);
-        if (!BVar1) {
-          bIsWeapon2 = D2Common::ITEMS::Items::ITEMS_IsA(pCreatedItem, ITEMTYPE_Weapon);
-          if (!bIsWeapon2) {
-            eBodyLoc = BODYLOC_L_ARM;
-            create_and_equip:
-            memset(&sItemGenCtx, 0, 0x84);
-            pGameLocal = pGameCopy;
-            sItemGenCtx.wItemFormat = pGameCopy->wItemFormat;
-            sItemGenCtx.pGame = pGameCopy;
-            sItemGenCtx.pUnit = pUnit;
-            sItemGenCtx.nItemClassid = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId((uint32_t)szItemCode);
-            if (sItemGenCtx.nItemClassid == -1) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf4c);
-              exit(-1);
-            } else {
-              sItemGenCtx.dwMode = 4;
-              sItemGenCtx.nPosX = 0;
-              sItemGenCtx.nPosY = 0;
-              sItemGenCtx.pDrlgRoom = 0;
-              sItemGenCtx.usually_one = 1;
-              sItemGenCtx.eQuality = QUALITY_NORMAL;
-              sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
-              pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGameLocal, &sItemGenCtx, 0);
-              if (!pCreatedItem) {
-                Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf55);
-                exit(-1);
-              }
-
-              ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGameLocal, pUnit, pCreatedItem->nUnitGUID, (eD2BodyLoc)eBodyLoc, 0, (BOOL*)&pGameCopy);
-              return;
-            }
-          }
-        }
-      }
+    eD2BodyLocDWORD eBodyLoc;
+    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+      return 0;
     }
+
+    D2InventoryStrc* pInventory = pUnit->pInventory;
+    D2UnitStrc* pRightItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
+    D2UnitStrc* pLeftItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
+    if (!pRightItem && (!pLeftItem || !D2Common::ITEMS::Items::IsTwoHanded(pLeftItem) && !D2Common::ITEMS::Items::ITEMS_IsA(pLeftItem, ITEMTYPE_Weapon))) {
+      eBodyLoc = BODYLOC_R_ARM;
+    } else if (!pLeftItem && pRightItem && !D2Common::ITEMS::Items::IsTwoHanded(pRightItem) && !D2Common::ITEMS::Items::ITEMS_IsA(pRightItem, ITEMTYPE_Weapon)) {
+      eBodyLoc = BODYLOC_L_ARM;
+    } else {
+      return 0;
+    }
+
+    memset(&sItemGenCtx, 0, 0x84);
+    sItemGenCtx.pUnit = pUnit;
+    sItemGenCtx.pGame = pGame;
+    sItemGenCtx.wItemFormat = pGame->wItemFormat;
+    sItemGenCtx.nItemClassid = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId((uint32_t)szItemCode);
+    if (sItemGenCtx.nItemClassid == -1) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf4c);
+      exit(-1);
+    }
+
+    sItemGenCtx.dwMode = 4;
+    sItemGenCtx.nPosX = 0;
+    sItemGenCtx.nPosY = 0;
+    sItemGenCtx.pDrlgRoom = 0;
+    sItemGenCtx.usually_one = 1;
+    sItemGenCtx.eQuality = QUALITY_NORMAL;
+    sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit, LEVEL_None);
+    D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
+    if (!pCreatedItem) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf55);
+      exit(-1);
+    }
+
+    BOOL bEquipped;
+    ITEMS::ItemMode::SERVER_EquipItemToBodyLoc(pGame, pUnit, pCreatedItem->nUnitGUID, (eD2BodyLoc)eBodyLoc, 0, &bEquipped);
+    return 1;
 }
 
 void __fastcall SKILLS_DispatchStateActiveFunc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nSkillId, int32_t nSkillLvl) {
@@ -2723,16 +2663,15 @@ BOOL __fastcall SKILLS_IsSkillEquipped(D2UnitStrc * pUnit, eD2Skills eSkill) {
     }
 
     D2SkillStrc* pSkill = D2Common::Units::GetLeftSkill(pUnit);
-    if (!pSkill) {
-      return 0;
+    if (pSkill) {
+      eD2Skills eLeftSkillId;
+      eLeftSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x1143);
+      if (eLeftSkillId == eSkill) {
+        return 1;
+      }
     }
 
-    eD2Skills eLeftSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\Skills.cpp", 0x1143);
-    if (eLeftSkillId != eSkill) {
-      return 0;
-    }
-
-    return 1;
+    return 0;
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
@@ -3039,13 +2978,9 @@ int32_t __fastcall SKILLS_GetSummonMonsterClassId(D2UnitStrc * pUnit, int32_t bU
 
 uint16_t __fastcall SKILLS_CalcToHitAndApply(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2SkillsTxt * pSkillsTxt, int32_t nSkillId, int32_t nSkillLvl, D2DamageStrc * pDamage, int32_t nExtraRange) {
     if (!(pSkillsTxt->ResultFlags & 1U)) {
-      uint16_t nToHitFlags;
-      nToHitFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, nSkillId, nSkillLvl), nExtraRange);
-      pDamage->wResultFlags = nToHitFlags;
-      if (nToHitFlags & 1) {
-        nToHitFlags = pSkillsTxt->ResultFlags | nToHitFlags;
-        pDamage->wResultFlags = nToHitFlags;
-        return nToHitFlags;
+      pDamage->wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, nSkillId, nSkillLvl), nExtraRange);
+      if (pDamage->wResultFlags & 1) {
+        pDamage->wResultFlags |= pSkillsTxt->ResultFlags;
       }
     } else {
       pDamage->wResultFlags = pSkillsTxt->ResultFlags;

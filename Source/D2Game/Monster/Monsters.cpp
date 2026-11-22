@@ -752,20 +752,26 @@ uint32_t __fastcall CheckMonUModList(D2UnitStrc * pUnit) {
     return (uint32_t)(pUnit->pUnitData.pUnitDataMonster->MonUModList[0] != 0);
 }
 
+static inline D2UnitDataMonsterStrc * GetMonsterDataInline(D2UnitStrc * pUnit) {
+    if (GetTypeInline(pUnit) == UNIT_MONSTER) {
+        return pUnit->pUnitData.pUnitDataMonster;
+    }
+    return nullptr;
+}
+
 int32_t __fastcall MONSTER_GetBossNo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return -1;
     }
 
-    D2UnitDataMonsterStrc* pMonsterData = pUnit->pUnitData.pUnitDataMonster;
+    D2UnitDataMonsterStrc* pMonsterData = GetMonsterDataInline(pUnit);
     if (!(pMonsterData && pMonsterData->eMonsterType & 2)) {
       return -1;
     }
-    if (!(true ? pMonsterData : 0)) {
-      return -1;
-    }
 
-    return (int)pMonsterData->nBossNo;
+    pMonsterData = GetMonsterDataInline(pUnit);
+    short int nBossNo = !pMonsterData ? -1 : pMonsterData->nBossNo;
+    return nBossNo;
 }
 
 // Checks whether a MonUMod.txt unique modifier entry is eligible to be applied to pUnit. Rejects if disabled or version &gt; 99 in non-expansion mode. Rejects if the monster has any excluded monster type (exclude1/exclude2). Respects the fpick field: 1=boss-only, 2=excludes melee/no-multishot monsters, 3=requires a different boss flag. Returns 1 if eligible, 0 otherwise.
@@ -3038,15 +3044,17 @@ void __fastcall MONSTER_AddUniqueModifier(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 void __fastcall MONSTER_PromoteToUnique(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
 
     D2UnitDataMonsterStrc* pMonsterData = pUnit->pUnitData.pUnitDataMonster;
-    if (!(pMonsterData && pMonsterData != (D2UnitDataMonsterStrc*)-28)) {
+    if (!pMonsterData || !pMonsterData->MonUModList) {
       return;
     }
-    if (true && pMonsterData) {
+
+    pMonsterData = GetTypeInline(pUnit) == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : nullptr;
+    if (pMonsterData) {
       pMonsterData->eMonsterType |= 1;
     }
 

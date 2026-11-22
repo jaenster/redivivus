@@ -400,8 +400,8 @@ void __stdcall SMSG_AddWindow(HWND hWnd) {
     }
 
     pRecord->link.pPrevLink = gpWndTrackingListHead.head.pPrevLink;
-    pRecord->link.pNext = gpWndTrackingListHead.head.pPrevLink->pNext;
-    gpWndTrackingListHead.head.pPrevLink->pNext = (intptr_t)pEntry;
+    pRecord->link.pNext = pRecord->link.pPrevLink->pNext;
+    pRecord->link.pPrevLink->pNext = (intptr_t)pEntry;
     gpWndTrackingListHead.head.pPrevLink = &pRecord->link;
     pEntry->hWnd = hWnd;
 }

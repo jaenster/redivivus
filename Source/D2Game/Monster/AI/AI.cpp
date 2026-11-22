@@ -427,30 +427,25 @@ void __fastcall AttachCorrectAiFunctionToMonster(::SGAMEDATA * pGame, D2UnitStrc
     }
 }
 
+static inline int GetClassIdInline(D2UnitStrc * pUnit);
+
+static inline int GetGUIDInline(D2UnitStrc * pUnit);
+
 BOOL __fastcall MonsterNeedsToOpenDoor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct params;
-    /* Open Door */ if (!(*((uint8_t*)pAiParam->pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3])) {
-      return 0;
-    }
-
-    eCollisionFlags eCollision = D2Common::PATH::DynamicPath::CheckAndGetCollisionFlag(pUnit->pPath.pDynamicPath);
-    if ((eCollision & COLLIDE_DOOR) == COLLIDE_NONE) {
-      return 0;
-    }
-
-    params.pBestUnit = 0;
-    params.nBestDistance = 9;
-    ForEach(pGame, pUnit, &params, nullptr, 8);
-    if (!params.pBestUnit) {
-      return 0;
-    }
-
-    D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(params.pBestUnit->nClassId);
-    if (pObjectsTxt->MonsterOK) {
-      D2UnitStrc* pDoor = params.pBestUnit;
-      Objects::ObjectsMode::Interact(pGame, pUnit, 2, pDoor->nUnitGUID);
-      PlanNextAiMove(pGame, pUnit, 5);
-      return 1;
+    if (*((uint8_t*)pAiParam->pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+      eCollisionFlags eCollision = D2Common::PATH::DynamicPath::CheckAndGetCollisionFlag(pUnit->pPath.pDynamicPath);
+      if ((eCollision & COLLIDE_DOOR) != COLLIDE_NONE) {
+        params.pBestUnit = 0;
+        params.nBestDistance = 9;
+        ForEach(pGame, pUnit, &params, nullptr, 8);
+        D2UnitStrc* pDoor = params.pBestUnit;
+        if (pDoor && D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(GetClassIdInline(pDoor))->MonsterOK) {
+          Objects::ObjectsMode::Interact(pGame, pUnit, 2, GetGUIDInline(pDoor));
+          PlanNextAiMove(pGame, pUnit, 5);
+          return 1;
+        }
+      }
     }
 
     return 0;
@@ -2891,11 +2886,11 @@ uint32_t __fastcall GetFlagBit(D2AiGeneralStrc * pAiGeneral, uint16_t nFlags) {
 
 void __fastcall SetUnsetAiFlag(D2AiGeneralStrc * pAiGeneral, uint16_t nAiFlag, BOOL bSet) {
     if (bSet) {
-      *(uint16_t*)&pAiGeneral->nAiFlags = (uint16_t)pAiGeneral->nAiFlags | nAiFlag;
+      *(uint16_t*)&pAiGeneral->nAiFlags |= nAiFlag;
       return;
     }
 
-    *(uint16_t*)&pAiGeneral->nAiFlags = (uint16_t)pAiGeneral->nAiFlags & ~nAiFlag;
+    *(uint16_t*)&pAiGeneral->nAiFlags &= ~nAiFlag;
 }
 
 void __fastcall SetUnsetAiFlags0x20(D2UnitStrc * pUnit, BOOL bSet) {

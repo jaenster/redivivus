@@ -905,58 +905,42 @@ void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat) {
 }
 
 void __stdcall STRTABLE_FormatNumber(uint16_t * wszText, uint32_t nValue, int32_t nMaxLen) {
-    int nOutPos;
-    int nOutPos2;
     uint16_t wszFallback[2];
     char szDigits[64];
-    char cChar;
-    int nDigitIdx;
-    uint16_t* pwszOut = wszText;
+    int nGroupCount = 0;
     if (nMaxLen <= 2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ed);
       exit(-1);
     }
 
     _ultoa(nValue, szDigits, 10);
-    char* pcDigit = szDigits;
-    int nDigitCount = 0;
-    pcDigit = pcDigit + strlen(pcDigit) + 1;
-    int nRawDigitCount = (intptr_t)pcDigit - (intptr_t)(szDigits + 1);
-    if (nRawDigitCount) {
-      nOutPos = (nRawDigitCount - 1) / 3 + nRawDigitCount;
+    int nDigitCount = strlen(szDigits);
+    if (nDigitCount) {
+      int nOutPos = (nDigitCount - 1) / 3 + nDigitCount;
       if (nOutPos >= 1 && nOutPos < nMaxLen - 1) {
-        pwszOut[nOutPos] = L'\0';
-        while (nOutPos) {
-          nDigitIdx = nRawDigitCount - 1;
-          nRawDigitCount--;
-          nOutPos2 = nOutPos - 1;
-          nDigitCount++;
-          pwszOut[nOutPos2] = (short int)szDigits[nDigitIdx];
-          if (nDigitCount >= 3) {
-            if ((uint32_t)(int)strlen(szDigits) > 3) {
-              nDigitCount = 0;
-              if (nOutPos2 > 0) {
-                nOutPos2 = nOutPos - 2;
-                pwszOut[nOutPos2] = L',';
-              }
+        wszText[nOutPos] = L'\0';
+        do {
+          if (!nOutPos) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x500);
+            exit(-1);
+          }
+
+          wszText[--nOutPos] = szDigits[--nDigitCount];
+          if (++nGroupCount >= 3 && strlen(szDigits) > 3) {
+            nGroupCount = 0;
+            if (nOutPos > 0) {
+              wszText[--nOutPos] = L',';
             }
           }
-          if (!nRawDigitCount) {
-            return;
-          }
-
-          nOutPos = nOutPos2;
-        }
-
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x500);
-        exit(-1);
+        } while (nDigitCount);
+        return;
       }
     }
 
     wszFallback[0] = L'\0';
     wszFallback[1] = 0;
     UTF8_ConvertToWideChar(wszFallback, "*", 2);
-    Unicode::UNISYS::STRING_CopyWideString(pwszOut, wszFallback);
+    Unicode::UNISYS::STRING_CopyWideString(wszText, wszFallback);
 }
 
 void __stdcall STRTABLE_FormatInt64(uint16_t * wszText, int32_t nValueLo, int32_t nValueHi, int32_t nMaxLen) {

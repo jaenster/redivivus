@@ -931,51 +931,45 @@ BOOL __fastcall Skills_SrvDoFunc_122_Hunger(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // Server DoFunc, srvdofunc slot 123; skills.txt row 244 Volcano. Resolves the charge-up missile ID, gets the target/cursor position, checks missile collision clearance, then creates the skill's missile via CreatingMissile with UNITFLAG_SKSRVDOFUNC set. Seeds the missile's target X from the unit's RNG (mod 256) for random spin direction. Sends a unit message packet to clients with skill, level, target coords, and the random seed byte.
 BOOL __fastcall Skills_SrvDoFunc_123_Volcano(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    bool bHasTarget;
-    bool bCanFire;
-    D2SkillArgStrc sSkillArg;
-    uint32_t nTargetY;
-    uint32_t nTargetX;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
 
-    ::SGAMEDATA* pGameSaved = pGame;
     eMissilesId nMissileId = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
     if ((int)nMissileId <= 0) {
       return 0;
     }
 
-    BOOL bTargetFound = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSaved, pUnit, &nTargetY, &nTargetX);
-    if (!bTargetFound) {
+    uint32_t nTargetX;
+    uint32_t nTargetY;
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY)) {
       return 0;
     }
-
-    uint32_t uVar1 = SkillsServer::SKILLS_CheckMissileCollision(pGameSaved, pUnit, nMissileId);
-    if (!uVar1) {
+    if (!SkillsServer::SKILLS_CheckMissileCollision(pGame, pUnit, nMissileId)) {
       return 0;
     }
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    uVar1 = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 0x100);
+    uint8_t nRandom = (uint8_t)D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 0x100);
+    D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.nY = nTargetX;
-    sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nFlags = 1;
-    sSkillArg.nX = nTargetY;
-    sSkillArg.eSkillNo = eSkill;
     sSkillArg.pOwner = pUnit;
+    sSkillArg.nX = nTargetX;
+    sSkillArg.nY = nTargetY;
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nMissileTxtNo = nMissileId;
-    D2UnitStrc* pMissile = MISSILES::Missiles::CreatingMissile(pGameSaved, &sSkillArg);
+    D2UnitStrc* pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
     if (!pMissile) {
       return 0;
     }
 
-    D2Common::Units::Missile::SetTargetX(pMissile, uVar1 & 0xff);
-    UNIT::SUnitMsg::SERVER_SendUnitMessagePacket(pUnit, nullptr, (uint16_t)eSkill, (uint16_t)nSkillLvl, nTargetY, nTargetX, (uint8_t)uVar1);
+    D2Common::Units::Missile::SetTargetX(pMissile, nRandom);
+    UNIT::SUnitMsg::SERVER_SendUnitMessagePacket(pUnit, nullptr, (uint16_t)eSkill, (uint16_t)nSkillLvl, nTargetX, nTargetY, nRandom);
     return 1;
 }
 

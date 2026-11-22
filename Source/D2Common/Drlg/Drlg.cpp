@@ -284,12 +284,21 @@ static uint8_t gaOutRoomPathDirectionDelta[24] = {
 
 namespace D2Common::Drlg {
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 void __fastcall PLAYER_SetSkillHitFlagAndStoreTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nUnitType, int32_t nUid) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
     }
-    if (pUnit->pUnitData.pUnitDataPlayer) {
-      pUnit->pUnitData.pUnitDataPlayer->bHasPendingInteract = 1;
+
+    D2UnitDataPlayerStrc* pPlayerData = GetTypeInline(pUnit) == UNIT_PLAYER ? pUnit->pUnitData.pUnitDataPlayer : nullptr;
+    if (pPlayerData) {
+      pPlayerData->bHasPendingInteract = 1;
     }
 
     Skills::StoreLastSkillHit(eSkill, pUnit, nUnitType, nUid);

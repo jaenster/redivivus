@@ -306,15 +306,17 @@ static void __stdcall GetIntensityFlagsForTile(int32_t nTileX, int32_t nTileY, i
     int nRow;
     int nWorldX;
     if (nIndoorFlag) {
-      int32_t nIntensity;
-      nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
-      D2Common::Environment::DRLGENV_GetLightColorFromAct(Game::sgpDrlgAct, (uint8_t*)((intptr_t)&nTileX + 3), (uint8_t*)((intptr_t)&nTileY + 3), (uint8_t*)((intptr_t)&nIndoorFlag + 3));
+      uint8_t byRed;
+      uint8_t byGreen;
+      uint8_t byBlue;
+      uint8_t byIntensity = (uint8_t)D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
+      D2Common::Environment::DRLGENV_GetLightColorFromAct(Game::sgpDrlgAct, &byRed, &byGreen, &byBlue);
       for (nRow = 0; nRow < 8; nRow++) {
         for (nCol = 0; nCol < 8; nCol++) {
-          pLightGrid->sLight.nRed = *(uint8_t*)((char*)&nTileX + 3);
-          pLightGrid->sLight.nIntensity = (uint8_t)nIntensity;
-          pLightGrid->sLight.nBlue = *(uint8_t*)((char*)&nIndoorFlag + 3);
-          pLightGrid->sLight.nGreen = *(uint8_t*)((char*)&nTileY + 3);
+          pLightGrid->sLight.nRed = byRed;
+          pLightGrid->sLight.nIntensity = byIntensity;
+          pLightGrid->sLight.nBlue = byBlue;
+          pLightGrid->sLight.nGreen = byGreen;
           pLightGrid++;
         }
       }
@@ -322,22 +324,18 @@ static void __stdcall GetIntensityFlagsForTile(int32_t nTileX, int32_t nTileY, i
       return;
     }
 
-    nRow = nTileX * 8;
-    nCol = nTileY * 8 - 8;
-    nTileX = 8;
-    do {
-      nIndoorFlag = 8;
-      nWorldX = nRow - 8;
-      do {
-        View::DRAW_CoordIsInCoord(nWorldX, nCol, (uint8_t*)pLightGrid, &pLightGrid->sLight.nRed, &pLightGrid->sLight.nGreen, &pLightGrid->sLight.nBlue);
+    int nStartX = nTileX * 8 - 8;
+    int nWorldY = nTileY * 8 - 8;
+    for (int nRowsLeft = 8; nRowsLeft; nRowsLeft--) {
+      nWorldX = nStartX;
+      for (int nColsLeft = 8; nColsLeft; nColsLeft--) {
+        View::DRAW_CoordIsInCoord(nWorldX, nWorldY, (uint8_t*)pLightGrid, &pLightGrid->sLight.nRed, &pLightGrid->sLight.nGreen, &pLightGrid->sLight.nBlue);
         pLightGrid++;
         nWorldX += 8;
-        nIndoorFlag--;
-      } while (nIndoorFlag);
+      }
 
-      nCol += 8;
-      nTileX--;
-    } while (nTileX);
+      nWorldY += 8;
+    }
 }
 
 // Fills a 6×6 grid of D2GfxLightExStrc entries with full-white (RGB 0xFF, intensity 0xFF) light positions for roof/ortho lighting. When bBorderOnly is set, only the border cells are written. nSplitSide (1=left, 2=right) shifts nScreenX by ±ScreenSizeX/4 for split-screen support. Each cell position is computed from the (col, row) index and the base screen coords.
@@ -954,7 +952,10 @@ void __stdcall dInitWallDraw() {
     static uint8_t gLightIntensity; D2_STATIC_GUARD_BSS(gLightIntensity, "D2Client::GAME::Draw::dInitWallDraw::gLightIntensity");
     static uint8_t gLightRed; D2_STATIC_GUARD_BSS(gLightRed, "D2Client::GAME::Draw::dInitWallDraw::gLightRed");
 
-    D2ColorInfo roomColor;
+    char nRoomRed;
+    char nRoomGreen;
+    char nRoomBlue;
+    char nRoomIntensity;
     D2Common::Environment::DRLGENV_GetLightColorFromAct(Game::sgpDrlgAct, &gLightRed, &gLightGreen, &gLightBlue);
     int32_t nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
     gLightIntensity = (uint8_t)nIntensity;
@@ -968,15 +969,15 @@ void __stdcall dInitWallDraw() {
       return;
     }
 
-    D2Common::DUNGEON::Dungeon::GetRGB_IntensityFromRoom(pRoom, &roomColor.nIntensity, &roomColor.nRed, &roomColor.nGreen, &roomColor.nBlue);
-    if (!(roomColor.nRed != '\0' || roomColor.nGreen != '\0' || roomColor.nBlue != '\0')) {
+    D2Common::DUNGEON::Dungeon::GetRGB_IntensityFromRoom(pRoom, &nRoomIntensity, &nRoomRed, &nRoomGreen, &nRoomBlue);
+    if (!(nRoomRed != '\0' || nRoomGreen != '\0' || nRoomBlue != '\0')) {
       return;
     }
 
-    gLightIntensity = roomColor.nIntensity;
-    gLightRed = roomColor.nRed;
-    gLightGreen = roomColor.nGreen;
-    gLightBlue = roomColor.nBlue;
+    gLightIntensity = nRoomIntensity;
+    gLightRed = nRoomRed;
+    gLightGreen = nRoomGreen;
+    gLightBlue = nRoomBlue;
 }
 
 static int32_t * __stdcall DRAW_GetIntensityTableForMode(int * pnTableMode, int32_t bPerspective, int * pnIntensityMode) {

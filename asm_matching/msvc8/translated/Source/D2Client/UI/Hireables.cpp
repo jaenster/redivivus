@@ -317,17 +317,12 @@ void __stdcall DRAW_Overlay_PetsAndPartyMembers() {
     }
 
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
-    BOOL bHasRosterPet = GAME::RosterPets::CheckIfUnitHasRosterPet(pPlayer);
-    BOOL bHasPartiedRosters = GAME::Roster::CheckIfUnitHasPartiedRosters(pPlayer);
-    if ((!bHasPartiedRosters || gnHireDisplayMode == 1) && !bHasRosterPet) {
-      gnHireIconHoverIndex = 0;
-      gnHireIconHoverY = 0;
-      gnHireIconHoverX = 0;
-      bHasRosterPet = ui::GetUIFlag(UI_HIREABLES);
-      if (bHasRosterPet) {
-        ui::SetUIFlag(UI_HIREABLES, UI_RESET, 0);
-      }
-    } else {
+    BOOL bHasRosterPet = 0;
+    if (GAME::RosterPets::CheckIfUnitHasRosterPet(pPlayer)) {
+      bHasRosterPet = 1;
+    }
+
+    if ((GAME::Roster::CheckIfUnitHasPartiedRosters(pPlayer) && gnHireDisplayMode != 1) || bHasRosterPet) {
       int32_t nPetGUID;
       nPetGUID = GAME::RosterPets::GetRosterPetGUID(pPlayer, 7, 0);
       if (nPetGUID == -1 || (pPlayer = UNIT::CUnit::UNITS_FindClientSideUnit(nPetGUID, UNIT_MONSTER) , pPlayer && (bIsActive = UNIT::CUnit::IsActive(pPlayer) , bIsActive != 0))) {
@@ -336,10 +331,15 @@ void __stdcall DRAW_Overlay_PetsAndPartyMembers() {
         gnHireIconHoverIndex = 0;
       }
 
-      bHasRosterPet = ui::GetUIFlag(UI_HIREABLES);
-      if (!bHasRosterPet) {
+      if (!ui::GetUIFlag(UI_HIREABLES)) {
         ui::SetUIFlag(UI_HIREABLES, UI_SET, 0);
-        return;
+      }
+    } else {
+      gnHireIconHoverIndex = 0;
+      gnHireIconHoverY = 0;
+      gnHireIconHoverX = 0;
+      if (ui::GetUIFlag(UI_HIREABLES)) {
+        ui::SetUIFlag(UI_HIREABLES, UI_RESET, 0);
       }
     }
 }

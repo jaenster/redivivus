@@ -290,7 +290,7 @@ void __fastcall Q11_OnViperAmuletInit(D2QuestDataStrc * pQuestData, D2ObjectInit
     pA2Q3Data->nViperAmuletUnitGUID = nViperAmuletGUID;
     if (pQuestData->bIsNotIntroduction == '\x01') {
       bool bDarkeningStarted;
-      if (pQuestData->nStateFlag < 2) {
+      if (pQuestData->nStateFlag <= 1) {
         bDarkeningStarted = (bool)Q11_BeginTaintedSun(pQuestData);
         if (!bDarkeningStarted) {
           pA2Q3Data->bViperAmuletInitPending = '\x01';

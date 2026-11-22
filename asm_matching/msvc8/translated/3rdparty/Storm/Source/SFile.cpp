@@ -250,48 +250,40 @@ static void SFILE_InitializeHashSource(uint32_t nSeed) {
 
 // @blizzard ReadFileChecked (SFILE.CPP)
 static int __stdcall SFILE_ReadFileChecked(int32_t * pMPQFile, void * pOutputBuf, uint32_t nBytesToRead, uint32_t * pnBytesRead, HANDLE hFile, LPDWORD pdwBytesRead, int32_t nFileOffset) {
-    BOOL bReadSuccess;
-    DWORD dwLastError;
-    int bShouldRetry;
     int nRetryCount = 0;
-    do {
-      while (true) {
-        if (nFileOffset != -1) {
-          /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(hFile, nFileOffset, (PLONG)0x0, 0);
-        }
-
-        /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ bReadSuccess = ReadFile(hFile, pOutputBuf, nBytesToRead, pdwBytesRead, (LPOVERLAPPED)0x0);
-        *pMPQFile = *pdwBytesRead + nFileOffset;
-        if (bReadSuccess) {
-          if (*pdwBytesRead == nBytesToRead) {
-            return 1;
-          }
-
-          SErr::SErrSetLastError(0x26);
-          return 0;
-        }
-
-        dwLastError = GetLastError();
-        if (!gnSFileReadErrorMode) {
-          return 0;
-        }
-        if (gnSFileReadErrorMode == 1) {
-          break;
-        }
-        if (gnSFileReadErrorMode == 2) {
-          SErr::SErrDisplayError(dwLastError, pnBytesRead, -4, nullptr, 0, 1);
-        }
+    while (true) {
+      if (nFileOffset != -1) {
+        SetFilePointer(hFile, nFileOffset, nullptr, 0);
       }
 
-      if (!pfnSFileReadErrorHandler) {
+      BOOL bReadSuccess = ReadFile(hFile, pOutputBuf, nBytesToRead, pdwBytesRead, nullptr);
+      *pMPQFile = *pdwBytesRead + nFileOffset;
+      if (bReadSuccess) {
+        if (*pdwBytesRead == nBytesToRead) {
+          return 1;
+        }
+
+        SErr::SErrSetLastError(0x26);
         return 0;
       }
 
-      bShouldRetry = (*pfnSFileReadErrorHandler)(pnBytesRead, dwLastError, nRetryCount);
-      nRetryCount++;
-    } while (bShouldRetry);
-
-    return 0;
+      DWORD dwLastError = GetLastError();
+      switch (gnSFileReadErrorMode) {
+        case 0:
+          return 0;
+        case 1:
+          if (!pfnSFileReadErrorHandler) {
+            return 0;
+          }
+          if (!(*pfnSFileReadErrorHandler)(pnBytesRead, dwLastError, nRetryCount++)) {
+            return 0;
+          }
+          break;
+        case 2:
+          SErr::SErrDisplayError(dwLastError, pnBytesRead, -4, nullptr, 0, 1);
+          break;
+      }
+    }
 }
 
 static int __stdcall SFILE_SyncReadFile(void * pOutputBuf, uint32_t nBytesToRead, uint32_t * pnBytesRead, int32_t nFileOffset, D2MPQFileStrc * pFileHandle) {
@@ -4114,15 +4106,15 @@ int __stdcall SFileCloseArchive(D2ArchiveStrc * pArchive) {
 // Stream-list delete-node: destroys and frees pNode, returns the next node (NULL at the list end).
 // Provenance: next = [node+4] (<=0 -> NULL), CALL 004199a0, SMemFree(node), RET 4.
 D2StormAudioStreamRec * __fastcall SFILE_AudioStreamListDeleteNode(StormLinkedListStrc * pList, int, D2StormAudioStreamRec * pNode) {
-    D2StormAudioStreamRec* pPrev = pNode;
+    D2StormAudioStreamRec* pLink = pNode;
     if (!pNode) {
-      pPrev = (D2StormAudioStreamRec*)&pList->head;
+      pLink = (D2StormAudioStreamRec*)&pList->head;
     }
 
-    pPrev = pPrev->pNext;
+    D2StormAudioStreamRec* pNext = (intptr_t)pLink->pNext <= 0 ? nullptr : pLink->pNext;
     AUDIOSTREAM_Destructor(pNode);
     SMem::SMemFree(pNode, sRTTI_AUDIOSTREAM_AllocTag, -2, 0);
-    return (intptr_t)pPrev <= 0 ? nullptr : pPrev;
+    return pNext;
 }
 
 // Drops one reference (nRefCount +0x4c) on pAudioStream (ESI); at zero runs SFILE_DestroyAudioStream and SMemFree.
@@ -4477,15 +4469,15 @@ int __stdcall SFileDestroy() {
 
 // Releases and frees one async request (REQUEST tag) and returns the next link of the list it was on (0 at the end). Provenance: 1.14d asm 0041a2c0.
 D2StormAsyncOpStrc * __fastcall SFILE_DeleteAsyncRequestGetNext(StormLinkedListStrc * pListContext, int, D2StormAsyncOpStrc * pAsyncOp) {
-    D2StormAsyncOpStrc* pPrev = pAsyncOp;
+    D2StormAsyncOpStrc* pLink = pAsyncOp;
     if (!pAsyncOp) {
-      pPrev = (D2StormAsyncOpStrc*)&pListContext->head;
+      pLink = (D2StormAsyncOpStrc*)&pListContext->head;
     }
 
-    pPrev = pPrev->pNext;
+    D2StormAsyncOpStrc* pNext = (intptr_t)pLink->pNext <= 0 ? nullptr : pLink->pNext;
     SFILE_ReleaseAsyncRequest(pAsyncOp);
     SMem::SMemFree(pAsyncOp, sRTTI_REQUEST_AllocTag, -2, 0);
-    return (intptr_t)pPrev <= 0 ? nullptr : pPrev;
+    return pNext;
 }
 
 // Cancels a pending async file request. The PPC second parameter is IDirectSoundBuffer*; the Windows typing is unchanged.

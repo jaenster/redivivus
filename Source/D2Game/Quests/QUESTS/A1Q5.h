@@ -42,7 +42,7 @@ void __fastcall Q05_Callback10_PlayerLeavesGame(struct D2QuestDataStrc * pQuestD
 // A1Q5 (Forgotten Tower) NPC-talk gossip callback (handler slot 0). Only runs once the quest intro is past. Looks up the talking player's quest record for QUEST_ForgottenTower (Completed/JustCompleted), and resolves the target NPC class id and player GUID. Scans the quest-specific per-player GUID lists to pick which gossip line to play, then calls AddGossipMessageOnMonster to make the NPC speak the appropriate line (completion line, or the initial-mask line from gdwQuestDataIntialMask indexed by stateFlag). Pure dialog selection; no quest-state mutation.
 void __fastcall Q05_Callback00_NpcActivate(struct D2QuestDataStrc * pQuestData, struct D2QuestArgStrc * pQuestArgs);
 void __fastcall Unreferenced_00594db0(void * pQuestData, void * pArg);
-// 1.14d: 0x594dd0 | A1Q5 "The Forgotten Tower" — reward-award pass (per-player iterator callback).
+// A1Q5 at 0x594dd0 | "The Forgotten Tower" — reward-award pass (per-player iterator callback).
 // Runs once per player unit. Skips if this player's quest record already has Completed OR RewardAwaits.
 // Gate: player must be standing in LEVEL_TowerCellarLevel5 (the Countess room). Records the player's
 // GUID into the quest's shared player-list (so the rune/gold reward isn't double-granted), then marks
@@ -68,7 +68,7 @@ void __fastcall Q05_SetPartyMemberRewardStates(::SGAMEDATA * pGame, struct D2Uni
 BOOL __fastcall Q05_PropagateRewardToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, void * pArg);
 void __fastcall Q05_SetCompletionForTrackedPlayers(::SGAMEDATA * pGame, struct D2QuestGUIDStrc * pQuestGUIDBase, eD2Quests eQuest, int32_t nSoundId);
 uint8_t __fastcall Q05_TimerNotifyCompletion(::SGAMEDATA * pGame, struct D2QuestDataStrc * pQuestData);
-// 1.14d: 0x5954f0 | A1Q5 "The Forgotten Tower" — Countess death visual/loot effect spawner.
+// A1Q5 at 0x5954f0 | "The Forgotten Tower" — Countess death visual/loot effect spawner.
 // Guarded by quest-data flags (+0x118 set, +0x119 not yet fired) and a tracked-chest count (+0x88).
 // Walks the list of tracked chest object GUIDs (+0x68): for the first valid chest, spawns the death
 // "actor" monster (type 0x146, Dead anim mode) in a good nearby room at the recorded kill position
@@ -76,7 +76,7 @@ uint8_t __fastcall Q05_TimerNotifyCompletion(::SGAMEDATA * pGame, struct D2Quest
 // launches a SKILL_Attack missile aimed at the chest and toggles its room portal flag — this drives
 // the gold/treasure-burst visual from the Countess's chests. No quest-state changes here (pure FX).
 void __stdcall Q05_SpawnCountessDeathEffect(struct D2QuestDataStrc * pQuestData, struct D2QuestDataA1Q5Strc * pA1Q5Data);
-// 1.14d: 0x5956c0 | A1Q5 "The Forgotten Tower" — death-effect trigger (timer-driven thunk).
+// A1Q5 at 0x5956c0 | "The Forgotten Tower" — death-effect trigger (timer-driven thunk).
 // Called from the monster-id timer path. Invokes Q05_SpawnCountessDeathEffect with the quest data, then
 // if the reward has been distributed (bRewardDistributed) but the death animation hasn't yet played
 // (bDeathEffectPlayed==false), schedules event 7 on the unit ~10 frames out to play the final

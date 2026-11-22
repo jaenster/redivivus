@@ -504,8 +504,7 @@ void __stdcall CallRoomCallback(D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallba
 // NOTE: Callee-saved register params inferred (medium confidence): param_ebx (EBX): DWORD
 int32_t * __stdcall DRLGROOM_GetMinimapRect(D2RoomStrc * pRoom, int32_t * pRect) {
     int* pRect2;
-    int32_t* pX = pRect;
-    D2RoomStrc* pTopLeft = pRoom;
+    int32_t nDummy;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1d0);
       exit(-1);
@@ -514,16 +513,16 @@ int32_t * __stdcall DRLGROOM_GetMinimapRect(D2RoomStrc * pRoom, int32_t * pRect)
     {
       int32_t* pY;
       pY = pRect + 1;
-      Drlg::Transform::SizeMiniMapToScreen(pRoom->sCoords.sTileRect.left, pRoom->sCoords.sTileRect.top, (int32_t*)&pRoom, pY);
-      Drlg::Transform::SizeMiniMapToScreen(pTopLeft->sCoords.sTileRect.left, pTopLeft->sCoords.sTileRect.top + pTopLeft->sCoords.sTileRect.bottom, pX, (int32_t*)&pRoom);
-      pRect2 = pX + 2;
-      Drlg::Transform::SizeMiniMapToScreen(pTopLeft->sCoords.sTileRect.right + pTopLeft->sCoords.sTileRect.left, pTopLeft->sCoords.sTileRect.top, (int32_t*)pRect2, (int32_t*)&pRoom);
-      Drlg::Transform::SizeMiniMapToScreen(pTopLeft->sCoords.sTileRect.right + pTopLeft->sCoords.sTileRect.left, pTopLeft->sCoords.sTileRect.top + pTopLeft->sCoords.sTileRect.bottom, (int32_t*)&pRoom, pX + 3);
-      if (!(*pY <= pX[3])) {
+      Drlg::Transform::SizeMiniMapToScreen(pRoom->sCoords.sTileRect.left, pRoom->sCoords.sTileRect.top, &nDummy, pY);
+      Drlg::Transform::SizeMiniMapToScreen(pRoom->sCoords.sTileRect.left, pRoom->sCoords.sTileRect.top + pRoom->sCoords.sTileRect.bottom, pRect, &nDummy);
+      pRect2 = pRect + 2;
+      Drlg::Transform::SizeMiniMapToScreen(pRoom->sCoords.sTileRect.right + pRoom->sCoords.sTileRect.left, pRoom->sCoords.sTileRect.top, (int32_t*)pRect2, &nDummy);
+      Drlg::Transform::SizeMiniMapToScreen(pRoom->sCoords.sTileRect.right + pRoom->sCoords.sTileRect.left, pRoom->sCoords.sTileRect.top + pRoom->sCoords.sTileRect.bottom, &nDummy, pRect + 3);
+      if (!(*pY <= pRect[3])) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1da);
         exit(-1);
       }
-      if (!(*pX <= *(int32_t*)pRect2)) {
+      if (!(*pRect <= *(int32_t*)pRect2)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1db);
         exit(-1);
       }
@@ -978,62 +977,32 @@ static BOOL __fastcall DRLGROOM_ValidateClientList(D2RoomStrc * pRoom) {
 
 // Sorts the client list of a room using bubble sort by client ID. Validates the list first, halts on error.
 static void DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
-    uint32_t nNonNullCount;
-    int j;
-    bool bSwapped;
-    D2ClientStrc* dwSwapTmp;
-    int nOuter;
-    BOOL bValid = DRLGROOM_ValidateClientList(pRoom);
-    D2ClientStrc** ppSlot;
-    if (!bValid) {
+    if (!DRLGROOM_ValidateClientList(pRoom)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45b);
       exit(-1);
-    } else {
-      D2ClientStrc** ppDVar1;
-      nOuter = pRoom->nClientsCount;
-      while (--nOuter > 0) {
-        bSwapped = false;
-        j = 0;
-        if (nOuter <= 0) {
-          return;
-        }
+    }
 
-        do {
-          ppDVar1 = pRoom->pClients;
-          ppSlot = ppDVar1 + j;
-          if (ppDVar1[j] > ppDVar1[j + 1]) {
-            ppSlot = pRoom->pClients + j;
-            dwSwapTmp = *ppSlot;
-            *ppSlot = pRoom->pClients[j + 1];
-            ppSlot = pRoom->pClients;
-            ppSlot[j + 1] = dwSwapTmp;
-            bSwapped = true;
-          }
-
-          j++;
-        } while (j < nOuter);
-
-        if (!bSwapped) {
-          return;
+    for (int nLast = pRoom->nClientsCount - 1; nLast > 0; nLast--) {
+      BOOL bSwapped = FALSE;
+      for (int i = 0; i < nLast; i++) {
+        if (pRoom->pClients[i] > pRoom->pClients[i + 1]) {
+          D2ClientStrc* pSwap = pRoom->pClients[i];
+          pRoom->pClients[i] = pRoom->pClients[i + 1];
+          pRoom->pClients[i + 1] = pSwap;
+          bSwapped = TRUE;
         }
       }
 
-      nNonNullCount = 0;
-      if ((uint32_t)pRoom->nClientsCount <= 0) {
+      if (!bSwapped) {
         return;
       }
+    }
 
-      ppSlot = pRoom->pClients;
-      while (*ppSlot) {
-        nNonNullCount++;
-        ppSlot++;
-        if (nNonNullCount >= (uint32_t)pRoom->nClientsCount) {
-          return;
-        }
+    for (uint32_t i = 0; i < (uint32_t)pRoom->nClientsCount; i++) {
+      if (!pRoom->pClients[i]) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x453);
+        exit(-1);
       }
-
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x453);
-      exit(-1);
     }
 }
 
@@ -1077,38 +1046,32 @@ void __stdcall DRLGROOM_AddClientToRoom(D2RoomStrc * pRoom, D2ClientStrc * nClie
 
 // Removes nClientId from the room's pClients array by linear search. Fills the vacated slot with the last element, decrements nClientsCount, then re-sorts the client list. Halts if the room pointer is null, the client ID is zero, the client is not found (assertion 0x490), or validation fails. Each halt pushes its __LINE__ and enters the shared tail DRLGROOM_RemoveClientFromRoom_HaltTail.
 void __stdcall DRLGROOM_RemoveClientFromRoom(D2RoomStrc * pRoom, D2ClientStrc * nClientId) {
-    D2ClientStrc** pClientSearch;
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x487);
       exit(-1);
     }
     if (!nClientId) {
-      DRLGROOM_RemoveClientFromRoom_HaltTail(0x488);
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x488);
+      exit(-1);
+    }
+    if (!DRLGROOM_ValidateClientList(pRoom)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
+      exit(-1);
     }
 
-    BOOL bValidated = DRLGROOM_ValidateClientList(pRoom);
-    if (!bValidated) {
-      DRLGROOM_RemoveClientFromRoom_HaltTail(0x489);
+    uint32_t i;
+    for (i = 0; i < (uint32_t)pRoom->nClientsCount; i++) {
+      if (pRoom->pClients[i] == nClientId) {
+        break;
+      }
     }
 
-    uint32_t nCount = pRoom->nClientsCount;
-    uint32_t nFoundIdx = 0;
-    if (nCount > 0) {
-      pClientSearch = pRoom->pClients;
-      do {
-        if (*pClientSearch == nClientId) {
-          break;
-        }
-
-        nFoundIdx++;
-        pClientSearch++;
-      } while (nFoundIdx < nCount);
-    }
-    if (nFoundIdx >= nCount) {
-      DRLGROOM_RemoveClientFromRoom_HaltTail(0x490);
+    if (i >= (uint32_t)pRoom->nClientsCount) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x490);
+      exit(-1);
     }
 
-    pRoom->pClients[nFoundIdx] = pRoom->pClients[nCount - 1];
+    pRoom->pClients[i] = pRoom->pClients[pRoom->nClientsCount - 1];
     pRoom->nClientsCount--;
     DRLGROOM_SortClientList(pRoom);
 }
@@ -1134,33 +1097,17 @@ int32_t __stdcall DRLGROOM_GetIdleTicks(D2RoomStrc * pRoom) {
 
 // Checks whether room2's client list contains any client ID not present in room1's list. Returns 1 if a unique client is found, 0 otherwise.
 BOOL __fastcall DRLGROOM_HasUniqueClient(D2RoomStrc * pRoom1, D2RoomStrc * pRoom2) {
-    D2ClientStrc** pClient1Iter;
-    int i = 0;
-    if (pRoom2->nClientsCount <= 0) {
-      return 0;
-    }
-
-    int nClients1 = pRoom1->nClientsCount;
-    do {
+    for (int i = 0; i < pRoom2->nClientsCount; i++) {
       int j;
-      j = 0;
-      if (nClients1 > 0) {
-        pClient1Iter = pRoom1->pClients;
-        do {
-          if (*pClient1Iter == pRoom2->pClients[i]) {
-            break;
-          }
-
-          j++;
-          pClient1Iter++;
-        } while (j < nClients1);
+      for (j = 0; j < pRoom1->nClientsCount; j++) {
+        if (pRoom1->pClients[j] == pRoom2->pClients[i]) {
+          break;
+        }
       }
-      if (j >= nClients1) {
+      if (j >= pRoom1->nClientsCount) {
         return 1;
       }
-
-      i++;
-    } while (i < pRoom2->nClientsCount);
+    }
 
     return 0;
 }

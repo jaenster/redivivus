@@ -151,15 +151,14 @@ static int gnActCount = 0x5; D2_STATIC_GUARD(gnActCount, "gnActCount");
 namespace D2Game { namespace UNIT { namespace SUnitMsg {
 
 static void __stdcall PLAYER_SetStartingLevelForAct(uint8_t nAct, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    uint32_t uVar1 = (uint32_t)nAct;
     if (nAct >= 5) {
-      uVar1 = 4;
+      nAct = 4;
     }
-    if ((int)uVar1 >= gnActCount) {
-      uVar1 = 0;
+    if (nAct >= gnActCount) {
+      nAct = 0;
     }
 
-    SUnitDmg::DAMAGE_SetUnitToLevel(pGame, pUnit, gaStartingLevelByAct[uVar1]);
+    SUnitDmg::DAMAGE_SetUnitToLevel(pGame, pUnit, gaStartingLevelByAct[nAct]);
 }
 
 static inline int GetClassIdInline(D2UnitStrc * pUnit) {
@@ -941,35 +940,11 @@ void __fastcall UnitQueuePacket0xA1(D2UnitStrc * pUnit, uint16_t nStatId, int32_
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall UnitQueuePacket0xAB(D2UnitStrc * pUnit, uint8_t nHpPercent128) {
-    int32_t nUnitGUID;
-    D2PoolManagerStrc* pAllocPool = 0;
-    if (pUnit) {
-      pAllocPool = pUnit->pMemory;
-    }
-
-    D2SUnitMsgStrc* pMsg = (D2SUnitMsgStrc*)D2_ALLOC_POOL_AT(pAllocPool, 0x14, ".\\UNIT\\SUnitMsg.cpp", 0x2d9);
-    pMsg->pNext = 0;
-    pMsg->nOpcode = '\0';
-    pMsg->pad_0x5[0] = '\0';
-    pMsg->pad_0x5[1] = '\0';
-    pMsg->pad_0x5[2] = '\0';
-    *(uint32_t*)&pMsg->uArgs.sAB.nUnitType = 0;
-    pMsg->uArgs.sAB.nUnitGUID = 0;
-    *(uint32_t*)&pMsg->uArgs.sAB.nHpPercent128 = 0;
+    D2SUnitMsgStrc* pMsg = (D2SUnitMsgStrc*)D2_ALLOC_POOL_AT(!pUnit ? nullptr : pUnit->pMemory, 0x14, ".\\UNIT\\SUnitMsg.cpp", 0x2d9);
+    memset(pMsg, 0, 0x14);
     pMsg->nOpcode = 0xab;
-    uint8_t byUnitType = '\x06';
-    if (pUnit) {
-      byUnitType = (uint8_t)pUnit->eUnitType;
-    }
-
-    pMsg->uArgs.sAB.nUnitType = byUnitType;
-    if (!pUnit) {
-      nUnitGUID = -1;
-    } else {
-      nUnitGUID = pUnit->nUnitGUID;
-    }
-
-    pMsg->uArgs.sAB.nUnitGUID = nUnitGUID;
+    pMsg->uArgs.sAB.nUnitType = !pUnit ? 6 : pUnit->eUnitType;
+    pMsg->uArgs.sAB.nUnitGUID = !pUnit ? -1 : pUnit->nUnitGUID;
     pMsg->uArgs.sAB.nHpPercent128 = nHpPercent128;
     if (!pUnit->pMsgFirst) {
       pUnit->pMsgFirst = pMsg;
