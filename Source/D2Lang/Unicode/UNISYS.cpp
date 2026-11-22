@@ -188,29 +188,12 @@ uint16_t * __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * p
 
 uint16_t * __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uint16_t * wszChar, size_t nSizeMaybe) {
     uint16_t* pWritePtr = pDestination;
-    while (nSizeMaybe) {
-      if (*wszChar == L'\0') {
-        break;
-      }
-
-      *pWritePtr = *wszChar;
-      pWritePtr++;
-      wszChar++;
-      nSizeMaybe--;
+    while (nSizeMaybe-- && *wszChar) {
+      *pWritePtr++ = *wszChar++;
     }
 
-    if (nSizeMaybe) {
-      uint32_t nRemaining;
-      for (nRemaining = nSizeMaybe >> 1; nRemaining; nRemaining--) {
-        pWritePtr[0] = L'\0';
-        pWritePtr[1] = L'\0';
-        pWritePtr += 2;
-      }
-
-      for (nRemaining = (uint32_t)((nSizeMaybe & 1) != 0); nRemaining; nRemaining--) {
-        *pWritePtr = L'\0';
-        pWritePtr++;
-      }
+    while (nSizeMaybe-- != (size_t)-1) {
+      *pWritePtr++ = L'\0';
     }
 
     return pDestination;
