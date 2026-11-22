@@ -151,6 +151,14 @@
 #include "Source/D2Game/Monster/AI/AI.h"
 #include "Source/D2Game/SKILLS/SkillAss.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -389,12 +397,11 @@ void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH(D2ClientStrc 
 void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH(D2ClientStrc * pClient, uint8_t nPacketId, uint32_t nMonsterGUID, uint8_t nMoveType, uint16_t wX, uint16_t wY, uint8_t nStepNum) {
     D2GSPacketSrv0x67 sPacket;
     memset(&sPacket, 0, sizeof(sPacket));
-    sPacket.nMoveType = nMoveType;
-    sPacket.wY = wY;
-    d2_store24((char*)&sPacket.dwMonsterGUID, (uint32_t)nMonsterGUID & 0xffffffu);
     sPacket.nPacketId = nPacketId;
-    *(uint8_t*)((char*)&sPacket.dwMonsterGUID + 3) = (uint8_t)(nMonsterGUID >> 0x18);
+    sPacket.dwMonsterGUID = nMonsterGUID;
+    sPacket.nMoveType = nMoveType;
     sPacket.wX = wX;
+    sPacket.wY = wY;
     D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), UNIT_MONSTER, nMonsterGUID);
     if (!pUnit) {
       return;
@@ -421,17 +428,10 @@ void __fastcall NET_D2GS_SERVER_Send_0x67_UNITCHANGE_MONSTERXYPATH(D2ClientStrc 
     }
 
     int nVelocityPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_velocitypercent, 0);
-    if (nVelocityPct > -0x8000) {
-      if (nVelocityPct >= 0x7fff) {
-        nVelocityPct = 0x7fff;
-      }
-    } else {
-      nVelocityPct = -0x8000;
-    }
+    nVelocityPct = min(max(nVelocityPct, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 
     sPacket.wVelocityPct = (uint16_t)nVelocityPct;
-    byPathType = D2Common::PATH::DynamicPath::GetMaxDistance(pDynamicPath);
-    sPacket.nParam4 = byPathType;
+    sPacket.nParam4 = D2Common::PATH::DynamicPath::GetMaxDistance(pDynamicPath);
     SCMD_QueuePacketForClient(pClient, &sPacket.nPacketId, 0x10);
 }
 
