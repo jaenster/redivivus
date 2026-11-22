@@ -329,16 +329,7 @@ void __fastcall Q04_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     // Static local variables (originally global data)
     static int32_t gdwQuestCallbackAddressQ40[8] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 }; D2_STATIC_GUARD(gdwQuestCallbackAddressQ40, "D2Game::Quests::QUESTS::A1Q4::Q04_Callback00_NpcActivate::gdwQuestCallbackAddressQ40");
 
-    D2UnitStrc* pDecipheredScrollItem;
-    int32_t nListSearchResult;
-    BOOL BVar1;
-    uint32_t nMessageIndexMaybe;
-    uint32_t nMessageIdx;
-    int32_t nRewardListResult;
-    int32_t nInListResult;
-    int32_t nPlayerGUID;
     int32_t nTargetClassId;
-    uint8_t byStateFlag;
     D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20736b62);
     if (!pQuestArgs->pTarget) {
       nTargetClassId = -1;
@@ -346,153 +337,91 @@ void __fastcall Q04_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
       nTargetClassId = pQuestArgs->pTarget->nClassId;
     }
 
-    ::SGAMEDATA* pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
     D2QuestDataA1Q4Strc* pA1Q4Data = pQuestData->pQuestSpecificData.pA1Q4;
     if (nTargetClassId == 0x92) {
       AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x92, 9);
     }
-    if (pA1Q4Data->sSub.bStoneSequenceComplete == 1) {
-      pDecipheredScrollItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20646b62);
-      if (pDecipheredScrollItem) {
-        QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20646b62);
-        pA1Q4Data->sSub.nRewardRetryCount--;
-      }
+    if (pA1Q4Data->sSub.bStoneSequenceComplete == 1 && ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20646b62)) {
+      QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20646b62);
+      pA1Q4Data->sSub.nRewardRetryCount--;
     }
 
-    BOOL bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
+    BOOL bRewardAwaits = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_RewardAwaits);
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_JustCompleted);
-    if (nTargetClassId == 0x109) {
-      if (!pQuestArgs->pPlayer) {
-        nListSearchResult = -1;
-      } else {
-        nListSearchResult = pQuestArgs->pPlayer->nUnitGUID;
-      }
-
-      BVar1 = QUESTGUID_SearchForValueInIntArray32(&pA1Q4Data->sQuestGUID2, nListSearchResult);
-      if (!BVar1 && bJustCompleted) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 5);
-        return;
-      }
+    if (nTargetClassId == 0x109 && !QUESTGUID_SearchForValueInIntArray32(&pA1Q4Data->sQuestGUID2, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID) && bJustCompleted) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 5);
+      return;
     }
-    if (bQuestStateResult) {
-      D2GSPacketSrv0x27_TextStrc* sTextMessage;
+    if (bRewardAwaits) {
       if (nTargetClassId == 0x109) {
-        if (!pQuestArgs->pPlayer) {
-          nListSearchResult = -1;
-        } else {
-          nListSearchResult = pQuestArgs->pPlayer->nUnitGUID;
-        }
-
-        bQuestStateResult = QUESTGUID_SearchForValueInIntArray32(&pA1Q4Data->sQuestGUID2, nListSearchResult);
-        sTextMessage = pQuestArgs->sQuestArgs.sNpcActivate.pTextControl;
-        if (bQuestStateResult) {
-          AddGossipMessageOnMonster(pQuestData, sTextMessage, 0x109, 7);
+        if (QUESTGUID_SearchForValueInIntArray32(&pA1Q4Data->sQuestGUID2, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID)) {
+          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 7);
           return;
         }
 
-        AddGossipMessageOnMonster(pQuestData, sTextMessage, 0x109, 5);
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 5);
         return;
       }
 
       AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 5);
       return;
     }
-    if (!pQuestArgs->pPlayer) {
-      nListSearchResult = -1;
-    } else {
-      nListSearchResult = pQuestArgs->pPlayer->nUnitGUID;
+    if (QUESTGUID_SearchForValueInIntArray32(&pA1Q4Data->sQuestGUID1, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID) == 1) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 6);
+      return;
+    }
+    if (QUEST_HasPlayerParticipated(pQuestData, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID) == 1 && nTargetClassId == 0x109 && !QUESTGUID_SearchForValueInIntArray32(&pA1Q4Data->sQuestGUID2, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID)) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 5);
+      return;
+    }
+    if (QUEST_HasPlayerParticipated(pQuestData, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID) == 1) {
+      if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_CannotCompleteQuestInGame)) {
+        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 8);
+        return;
+      }
+      if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed)) {
+        return;
+      }
+
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 7);
+      return;
+    }
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_CannotCompleteQuestInGame)) {
+      return;
+    }
+    if (!pQuestData->nStateFlag) {
+      return;
+    }
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed) == 1) {
+      return;
+    }
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_FinishedInPreviousGame)) {
+      return;
+    }
+    if (!pScrollItem && pQuestData->nStateFlag == 4) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 2);
+      return;
+    }
+    if (pScrollItem) {
+      AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 3);
+      return;
     }
 
-    bQuestStateResult = QUESTGUID_SearchForValueInIntArray32(&pA1Q4Data->sQuestGUID1, nListSearchResult);
-    if (bQuestStateResult == 1) {
-      nMessageIndexMaybe = 6;
-    } else {
-      if (!pQuestArgs->pPlayer) {
-        nListSearchResult = -1;
-      } else {
-        nListSearchResult = pQuestArgs->pPlayer->nUnitGUID;
-      }
-
-      bQuestStateResult = QUEST_HasPlayerParticipated(pQuestData, nListSearchResult);
-      if (bQuestStateResult == 1 && nTargetClassId == 0x109) {
-        if (!pQuestArgs->pPlayer) {
-          nListSearchResult = -1;
-        } else {
-          nListSearchResult = pQuestArgs->pPlayer->nUnitGUID;
-        }
-
-        bQuestStateResult = QUESTGUID_SearchForValueInIntArray32(&pA1Q4Data->sQuestGUID2, nListSearchResult);
-        if (!bQuestStateResult) {
-          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, 0x109, 5);
-          return;
-        }
-      }
-      if (!pQuestArgs->pPlayer) {
-        nListSearchResult = -1;
-      } else {
-        nListSearchResult = pQuestArgs->pPlayer->nUnitGUID;
-      }
-
-      bQuestStateResult = QUEST_HasPlayerParticipated(pQuestData, nListSearchResult);
-      if (bQuestStateResult == 1) {
-        bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_CannotCompleteQuestInGame);
-        if (bQuestStateResult) {
-          AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 8);
-          return;
-        }
-
-        bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed);
-        if (!bQuestStateResult) {
-          return;
-        }
-
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 7);
-        return;
-      }
-
-      bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_CannotCompleteQuestInGame);
-      if (bQuestStateResult) {
-        return;
-      }
-      if (!pQuestData->nStateFlag) {
-        return;
-      }
-
-      bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed);
-      if (bQuestStateResult == 1) {
-        return;
-      }
-
-      bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_FinishedInPreviousGame);
-      if (bQuestStateResult) {
-        return;
-      }
-      if (pScrollItem) {
-        AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, 3);
-        return;
-      }
-
-      byStateFlag = pQuestData->nStateFlag;
-      if (byStateFlag == 4) {
-        nMessageIndexMaybe = 2;
-      } else {
-        if (byStateFlag >= 6) {
-          return;
-        }
-
-        nMessageIndexMaybe = gdwQuestCallbackAddressQ40[byStateFlag];
-        if (nMessageIndexMaybe == -1) {
-          return;
-        }
-        if (nMessageIndexMaybe >= 11) {
-          return;
-        }
-      }
+    uint8_t nStateFlag = pQuestData->nStateFlag;
+    if (nStateFlag >= 6) {
+      return;
     }
 
-    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nMessageIndexMaybe);
+    uint32_t nMessageIndex = gdwQuestCallbackAddressQ40[nStateFlag];
+    if (nMessageIndex == -1) {
+      return;
+    }
+    if (nMessageIndex >= 11) {
+      return;
+    }
+
+    AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nTargetClassId, nMessageIndex);
 }
 
 // A1Q4 — QuestStartDebugNotify: debug-only QUEST_DebugPrint("Started quest") helper
