@@ -689,68 +689,47 @@ int __fastcall SPELLSEL_FindChargedSkill4(D2UnitStrc * pUnit, int32_t nTargetSki
 }
 
 void __stdcall INPUT_SpellSelectClick(D2UIMouseMsgStrc * pMsg) {
-    int nCurMouseX;
-    int nCurMouseY;
-    D2SkillStrc* pSkill;
-    BOOL bHasCharges;
-    int nChargesLeft;
-    int32_t nSlotScreenY;
-    int32_t nErrLine;
-    int nSlotScreenXPos;
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    if (!pPlayerUnit_lcl) {
+    if (!UNIT::Player::GetPlayerUnit_UI()) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ba);
       exit(-1);
     }
 
     int nInitialMouseY = Cursor::GetMouseY();
-    int bHandled = 0;
-    int* pSlotSkillIdPtr = gSpellSelGridRegion.aRightHandSlots;
-    do {
-      nSlotScreenY = pSlotSkillIdPtr[-0x78];
-      nSlotScreenXPos = ((D2SpellSelGridRegionStrc*)(pSlotSkillIdPtr - 0xb4))->aSkillGrid[0];
-      nCurMouseX = Cursor::GetMouseX();
-      nCurMouseY = Cursor::GetMouseY();
-      if (nCurMouseX >= nSlotScreenXPos && nCurMouseX <= nSlotScreenXPos + 0x30 && nCurMouseY >= nSlotScreenY - 0x30 && nCurMouseY <= nSlotScreenY) {
-        nErrLine = *pSlotSkillIdPtr;
-        pSkill = D2Common::Skills::GetSkillByIdAndOwner(UNIT::Player::GetPlayerUnit_UI(), pSlotSkillIdPtr[-0x3c], nErrLine);
+    BOOL bHandled = FALSE;
+    for (int i = 0; i < 60; i++) {
+      int nSlotY = gSpellSelGridRegion.aSkillGridRow2[i];
+      int nSlotX = gSpellSelGridRegion.aSkillGrid[i];
+      int nMouseX = Cursor::GetMouseX();
+      int nMouseY = Cursor::GetMouseY();
+      if (nMouseX >= nSlotX && nMouseX <= nSlotX + 0x30 && nMouseY >= nSlotY - 0x30 && nMouseY <= nSlotY) {
+        D2SkillStrc* pSkill = D2Common::Skills::GetSkillByIdAndOwner(UNIT::Player::GetPlayerUnit_UI(), gSpellSelGridRegion.aLeftHandSlots[i], gSpellSelGridRegion.aRightHandSlots[i]);
         if (pSkill) {
-          nErrLine = D2Common::Skills::GetOwnerGUID(pSkill);
-          if (nErrLine != -1) {
-            bHasCharges = D2Common::Skills::SKILLS_GetSkillData(pSkill, nullptr, nullptr, nullptr, &nChargesLeft);
-            if (bHasCharges && nChargesLeft <= 0) {
-              bHasCharges = ui::GetUIFlag(UI_SKILLSELECT);
-              if (bHasCharges) {
-                ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
-              }
-
-              pMsg->dwResult = 0;
-              break;
+          int nChargesLeft;
+          if (D2Common::Skills::GetOwnerGUID(pSkill) != -1 && D2Common::Skills::SKILLS_GetSkillData(pSkill, nullptr, nullptr, nullptr, &nChargesLeft) && nChargesLeft <= 0) {
+            if (ui::GetUIFlag(UI_SKILLSELECT)) {
+              ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
             }
+
+            pMsg->dwResult = 0;
+            pMsg->bHandled = 1;
+            Storm::SMsgBreakHandlerChain(pMsg);
+            return;
           }
 
-          GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x3c, (gbSpellSelMouseHandFlag ? 0x80000000 : 0) + pSlotSkillIdPtr[-0x3c], *pSlotSkillIdPtr);
+          GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x3c, (gbSpellSelMouseHandFlag ? 0x80000000 : 0) + gSpellSelGridRegion.aLeftHandSlots[i], gSpellSelGridRegion.aRightHandSlots[i]);
           ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
           gbSpellSelMouseHandFlag = 0;
-          bHandled = 1;
+          bHandled = TRUE;
           GAME::Game::UI_ResetInputState();
         }
       }
+    }
 
-      pSlotSkillIdPtr++;
-      if ((intptr_t)pSlotSkillIdPtr >= (intptr_t)((char*)&gSpellSelGridRegion + 960)) {
-        if (nInitialMouseY <= Inv::ScreenSizeY - 0x31 && !bHandled) {
-          bHasCharges = ui::GetUIFlag(UI_SKILLSELECT);
-          if (bHasCharges) {
-            ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
-          }
-        }
+    if (nInitialMouseY <= Inv::ScreenSizeY - 0x31 && !bHandled && ui::GetUIFlag(UI_SKILLSELECT)) {
+      ui::SetUIFlag(UI_SKILLSELECT, UI_RESET, 0);
+    }
 
-        pMsg->dwResult = 0;
-        break;
-      }
-    } while (true);
-
+    pMsg->dwResult = 0;
     pMsg->bHandled = 1;
     Storm::SMsgBreakHandlerChain(pMsg);
 }
