@@ -173,9 +173,12 @@ void __thiscall Draw(::ButtonImplementation * pThis) {
     sGfxData.nFrameNumber = (uint32_t)pThis->nFrameBase + pThis->bPressed;
     sGfxData.nDirection = 0;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pThis->nPosX, pThis->nPosY, -1, DRAW_SOLID, nullptr);
-    uint32_t nCurMouseX = Cursor::GetMouseX();
-    uint32_t nCurMouseY = Cursor::GetMouseY();
-    if (!((int)(uint16_t)nCurMouseX >= pThis->nPosX && (int)(uint16_t)nCurMouseX <= pThis->nWidth + pThis->nPosX && (int)(nCurMouseY & 0xffff) >= pThis->nPosY - pThis->nHeight && (int)(nCurMouseY & 0xffff) <= pThis->nPosY)) {
+    int nMouseX = Cursor::GetMouseX();
+    int nMouseY = Cursor::GetMouseY();
+    DWORD dwMousePos = MAKELONG(nMouseX, nMouseY); // steer-ok: the original packs the cursor position into one dword and unpacks both words before the tests
+    int nPointX = LOWORD(dwMousePos);
+    int nPointY = HIWORD(dwMousePos);
+    if (nPointX < pThis->nPosX || nPointX > pThis->nWidth + pThis->nPosX || nPointY < pThis->nPosY - pThis->nHeight || nPointY > pThis->nPosY) {
       return;
     }
 
