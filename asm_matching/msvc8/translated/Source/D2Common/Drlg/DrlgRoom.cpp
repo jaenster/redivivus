@@ -303,8 +303,9 @@ static D2RoomExStrc * __stdcall DRLGSPAWN_FindWaypointRoomAndCoords(int * pX, in
 // Gets the room at the level's center position offset by (nOffsetX, nOffsetY).
 // Computes center as (WorldPos + WorldSize/2 - 2) plus the offsets.
 D2RoomExStrc * __fastcall DRLGSPAWN_GetRoomAtLevelCenterOffset(D2DrlgLevelStrc * pLevel, int, int32_t nOffsetX, int32_t nOffsetY) {
-    D2RoomExStrc* pDVar1 = GetRoomOfCoord(pLevel, pLevel->sCoordinatesAndSize.WorldSize.x / 2 + pLevel->sCoordinatesAndSize.WorldPosition.x - 2 + nOffsetX, pLevel->sCoordinatesAndSize.WorldSize.y / 2 + pLevel->sCoordinatesAndSize.WorldPosition.y - 2 + nOffsetY);
-    return pDVar1;
+    int nX = pLevel->sCoordinatesAndSize.WorldSize.x / 2 + pLevel->sCoordinatesAndSize.WorldPosition.x - 2 + nOffsetX; // steer-ok: the original computes the x coordinate before the y coordinate
+    int nY = pLevel->sCoordinatesAndSize.WorldSize.y / 2 + pLevel->sCoordinatesAndSize.WorldPosition.y - 2 + nOffsetY;
+    return GetRoomOfCoord(pLevel, nX, nY);
 }
 
 // Selects a random room from the level's room list.

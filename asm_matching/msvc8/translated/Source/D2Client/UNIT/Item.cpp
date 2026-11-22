@@ -1512,32 +1512,24 @@ void __fastcall HandleItemAddToGround(uint8_t * pBytes) {
 void __fastcall HandleItemPickedFromGround(uint8_t * pBytes) {
     D2UnitDataItemDetailsStrc stItemDetails;
     D2Common::ITEMS::Items::ExtractItemDetails(pBytes + 8, pBytes[2] - 8, 0, &stItemDetails);
-    D2UnitStrc* pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
-    D2InventoryStrc* pInventory = pPlayerUnit_lcl->pInventory;
+    D2InventoryStrc* pInventory = Player::GetPlayerUnit_UI()->pInventory;
     if (stItemDetails.nAnimMode != 4) {
       return;
     }
-
-    pPlayerUnit_lcl = CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 4), UNIT_ITEM);
-    if (!pPlayerUnit_lcl) {
-      {
-        D2UnitStrc* pNewCursorItem;
-        pPlayerUnit_lcl = ITEM_CreateItemFromGroundPacket(0, 0, 0, pBytes, &stItemDetails);
-        if (!pPlayerUnit_lcl) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3a2);
-          exit(-1);
-        }
-
-        D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pInventory, pPlayerUnit_lcl);
-        pNewCursorItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
-        Cursor::ITEM_SetItemOnHand(pNewCursorItem);
-        ITEM_RemoveUninterruptableState(pPlayerUnit_lcl);
-        return;
-      }
+    if (CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 4), UNIT_ITEM)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3a0);
+      exit(-1);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3a0);
-    exit(-1);
+    D2UnitStrc* pItem = ITEM_CreateItemFromGroundPacket(0, 0, 0, pBytes, &stItemDetails);
+    if (!pItem) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3a2);
+      exit(-1);
+    }
+
+    D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pInventory, pItem);
+    Cursor::ITEM_SetItemOnHand(D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory));
+    ITEM_RemoveUninterruptableState(pItem);
 }
 
 // Client-side handler for a server packet indicating an item was dropped to the ground. Extracts item details from the packet; if the item already exists client-side and is the cursor item, clears the cursor. For ITEMFLAG_RELOAD items, removes the old unit and recreates it via ITEM_CreateItemFromGroundPacket. Places the resulting item unit in the world at the packet-specified tile coordinates via ITEM_SetAnimModeAndPlace.

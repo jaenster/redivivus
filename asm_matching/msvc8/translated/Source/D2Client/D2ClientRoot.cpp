@@ -1263,88 +1263,74 @@ void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod,
     }
 
     uint32_t nClassId = pUnit->nClassId;
-    if (nClassId <= 0x100) {
-      if (nClassId != 0x100) {
-        switch (nClassId) {
-          case 0x9c:
-            if (pUnit->eAnimMode.ePlayerMode == Death) {
-              Source::ClientEngine::CLIENT_BossDeath_Andariel(pUnit);
-              return;
-            }
-          break;
-          case 0x2d:
-            if (pUnit->eAnimMode.ePlayerMode == Death) {
-              Source::ClientEngine::CLIENT_SpawnTowerMistEffect(pUnit);
-              return;
-            }
-          break;
-          case 0xe5:
-            if (pUnit->eAnimMode.ePlayerMode == Death) {
-              Source::ClientEngine::CLIENT_BossDeath_Radament(pUnit);
-              return;
-            }
-          break;
-          case 0xd3:
-            if (pUnit->eAnimMode.ePlayerMode == Death) {
-              Source::ClientEngine::CLIENT_BossDeath_Duriel(pUnit);
-              return;
-            }
-          break;
-          case 0xf2:
-            if (pUnit->eAnimMode.ePlayerMode == Death) {
-              Source::ClientEngine::CLIENT_BossDeath_Mephisto(pUnit);
-              return;
-            }
-          break;
-          case 0xf3:
-            if (pUnit->eAnimMode.ePlayerMode == Death) {
-              Source::ClientEngine::CLIENT_StoreUnitGuidForQuestTracking(pUnit);
-              return;
-            }
+    switch (nClassId) {
+      case 0x9c:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Source::ClientEngine::CLIENT_BossDeath_Andariel(pUnit);
         }
-      } else {
+        break;
+      case 0x2d:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Source::ClientEngine::CLIENT_SpawnTowerMistEffect(pUnit);
+        }
+        break;
+      case 0xe5:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Source::ClientEngine::CLIENT_BossDeath_Radament(pUnit);
+        }
+        break;
+      case 0xd3:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Source::ClientEngine::CLIENT_BossDeath_Duriel(pUnit);
+        }
+        break;
+      case 0xf2:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Source::ClientEngine::CLIENT_BossDeath_Mephisto(pUnit);
+        }
+        break;
+      case 0xf3:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Source::ClientEngine::CLIENT_StoreUnitGuidForQuestTracking(pUnit);
+        }
+        break;
+      case 0x100:
         if (pUnit->eAnimMode.ePlayerMode == Death) {
           Source::ClientEngine::CLIENT_BossDeath_Izual(pUnit);
-          return;
         }
-      }
-    } else if (nClassId <= 0x1df) {
-      if (nClassId != 0x1df) {
-        if (nClassId != 0x10b) {
-          if (nClassId != 0x11c) {
-            if (nClassId == 0x16e && pUnit->eAnimMode.ePlayerMode == Death) {
-              Source::ClientEngine::CLIENT_SpawnOrbMistEffect(pUnit);
-              return;
-            }
-          } else {
-            if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Skill2) {
-              Source::ClientEngine::CLIENT_BossDeath_SandMaggotQueen(pUnit);
-              return;
-            }
-          }
-        } else {
-          if (pUnit->eAnimMode.ePlayerMode == Death) {
-            Source::ClientEngine::CLIENT_BossDeath_BloodRaven(pUnit);
-            return;
-          }
+        break;
+      case 0x16e:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Source::ClientEngine::CLIENT_SpawnOrbMistEffect(pUnit);
         }
-      } else {
+        break;
+      case 0x11c:
+        if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Skill2) {
+          Source::ClientEngine::CLIENT_BossDeath_SandMaggotQueen(pUnit);
+        }
+        break;
+      case 0x10b:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Source::ClientEngine::CLIENT_BossDeath_BloodRaven(pUnit);
+        }
+        break;
+      case 0x1df:
         if (pUnit->eAnimMode.ePlayerMode == Death) {
           Source::ClientEngine::CLIENT_SpawnOverseerControlMissile(pUnit);
-          return;
         }
-      }
-    } else if (nClassId >= 0x21c) {
-      if (nClassId > 0x21e) {
-        if (nClassId == 0x220 && pUnit->eAnimMode.ePlayerMode == Death) {
+        break;
+      case 0x220:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
           Source::ClientEngine::CLIENT_BossDeath_Baal();
-          return;
         }
-      } else {
+        break;
+      case 0x21c:
+      case 0x21d:
+      case 0x21e:
         if (pUnit->eAnimMode.ePlayerMode == Death) {
           Source::ClientEngine::CLIENT_SpawnAncientDeathMissile(pUnit);
         }
-      }
+        break;
     }
 }
 

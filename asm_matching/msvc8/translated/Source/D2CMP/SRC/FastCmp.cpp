@@ -96,28 +96,26 @@ static void __stdcall FASTCMP_CompressToRLE(int32_t nWidth, uint32_t nLineCount,
 
 // Remap the palette indices of one already-decoded DC6 frame in place, walking the frame's RLE stream from +0x20 for nHeight rows and translating each pixel byte through the caller-supplied 256-byte remap table
 void __fastcall FASTCMP_RemapFramePaletteIndices(DC6Block * pFrame, BYTE * pPaletteRemap) {
-    int nRunLength;
-    uint8_t byRleControl;
     int nRowsRemaining = pFrame->nHeight;
     uint8_t* pStreamCursor = (uint8_t*)(pFrame + 1);
-    do {
-      while (true) {
-        byRleControl = *pStreamCursor;
-        pStreamCursor++;
-        if (byRleControl & 0x80) {
-          break;
+    while (true) {
+      char cRleControl = *pStreamCursor;
+      pStreamCursor++;
+      if (cRleControl < 0) {
+        if (!(cRleControl & 0x7f)) {
+          nRowsRemaining--;
+          if (!nRowsRemaining) {
+            return;
+          }
         }
-
-        nRunLength = (int)(char)byRleControl;
-        if (nRunLength > 0) {
-          do {
-            *pStreamCursor = pPaletteRemap[*pStreamCursor];
-            pStreamCursor++;
-            nRunLength--;
-          } while (nRunLength);
+      } else {
+        int nRunLength = cRleControl;
+        for (int i = 0; i < nRunLength; i++) {
+          *pStreamCursor = pPaletteRemap[*pStreamCursor];
+          pStreamCursor++;
         }
       }
-    } while (byRleControl & 0x7f || (nRowsRemaining-- , nRowsRemaining != 0));
+    }
 }
 
 // Convert a DC6 sprite from RGB pixel data to palette-indexed RLE format using a caller-supplied colour-mapping callback
