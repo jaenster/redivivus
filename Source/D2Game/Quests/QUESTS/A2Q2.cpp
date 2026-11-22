@@ -259,56 +259,44 @@ BOOL __fastcall Q10_CountPlayersNeedingCube(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // A2Q2 (Horadric Staff) NPC-gossip callback for Drognan (classId 0xf4). Dispatches on dialog message index: 0x14f removes the Staff of Kings item from inventory and sets Step0x03; 0x150/0x151/0x152 set the corresponding step bit plus Step0x03; 0x153 (told-everything) clears RewardAwaits, registers the player GUID in the quest list, sets Step0x10+0x04+0x06+0x05+0x03, and sends an NPC gossip packet. Early-exits if NPC is not Drognan.
 void __fastcall Q10_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    int32_t nPlayerGUID;
-    eD2QuestState eQuestState;
-    short int nNPCClassId = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
-    uint16_t nDialogMsgId = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
-    D2UnitDataPlayerStrc* pGame = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    ::SGAMEDATA* pPlayerData = pQuestArgs->pGame;
-    D2BitBufferStrc* pBitBuffer = pGame->pQuestRecord[pPlayerData->nDifficulty];
-    if (nNPCClassId != 0xf4) {
+    uint16_t nNpcNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
+    uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
+    if (nNpcNo != 0xf4) {
       return;
     }
 
-    switch (nDialogMsgId) {
+    switch (nMessageIndex) {
       case 0x14f:
         QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20317274);
-      /* SetQuestState Step0x03 (case 0x14f, after taking Staff of Kings) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
-      return;
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
+        return;
       case 0x150:
-        eQuestState = QUESTSTATE_Step0x04;
-      break;
+        pQuestData->nQuestPacketFlags = '\0';
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x04);
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
+        return;
       case 0x151:
-        eQuestState = QUESTSTATE_Step0x05;
-      break;
+        pQuestData->nQuestPacketFlags = '\0';
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x05);
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
+        return;
       case 0x152:
-        eQuestState = QUESTSTATE_Step0x06;
-      break;
+        pQuestData->nQuestPacketFlags = '\0';
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x06);
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
+        return;
       case 0x153:
-        /* UnsetQuestState RewardAwaits (case 0x153 "told everything") */ D2Common::QuestRecord::UnsetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_RewardAwaits);
-      /* SetQuestState Step0x03 (case 0x153, before registering player in GUID list)
-                          */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
-      if (!pQuestArgs->pPlayer) {
-        nPlayerGUID = -1;
-      } else {
-        nPlayerGUID = pQuestArgs->pPlayer->nUnitGUID;
-      }
-
-      QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, nPlayerGUID);
-      /* SetQuestState Step0x10 (case 0x153, mark all-told) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x10);
-      /* SetQuestState Step0x04 (case 0x153) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x04);
-      /* SetQuestState Step0x06 (case 0x153) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x06);
-      /* SetQuestState Step0x05 (case 0x153, last of the all-told step bits) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x05);
-      QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
-      default:
+        D2Common::QuestRecord::UnsetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_RewardAwaits);
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
+        QUESTGUID_AddPlayerToList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x10);
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x04);
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x06);
+        D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x05);
+        QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
         return;
     }
-
-    pQuestData->nQuestPacketFlags = '\0';
-    /* SetQuestState (case dialog 0x150/0x151/0x152 -> Step0x04/05/06 via
-                         eQuestState) */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, eQuestState);
-    /* SetQuestState Step0x03 (always paired after the 0x150/0x151/0x152 step bit)
-                          */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Step0x03);
 }
 
 static inline int GetClassIdInline(D2UnitStrc * pUnit) {
