@@ -575,23 +575,26 @@ D2RoomStrc * __fastcall DRLGSPAWN_FindSpawnLocationInLevel(D2DrlgStrc * pDrlg, e
     pFoundRoomEx = DRLGSPAWN_FindWaypointRoomAndCoords(pX, pY, pLevel);
     if (!pFoundRoomEx) {
       pFoundRoomEx = DRLGWARP_ValidateWarpFlagsAgainstVis(pLevel);
-      if (!pFoundRoomEx) {
-        pFoundRoomEx = GetRoomOfCoord(pLevel, pLevel->sCoordinatesAndSize.WorldSize.x / 2 - 2 + pLevel->sCoordinatesAndSize.WorldPosition.x, pLevel->sCoordinatesAndSize.WorldSize.y / 2 - 2 + pLevel->sCoordinatesAndSize.WorldPosition.y);
-        if (!pFoundRoomEx) {
-          pFoundRoomEx = DRLGSPAWN_GetRandomRoomFromLevel(pLevel);
-          if (!pFoundRoomEx) {
-            return nullptr;
-          }
-        }
-      }
     }
-    if (*pX == -1 || *pY == -1) {
-      *pX = pFoundRoomEx->sCoords.WorldSize.x / 2 + pFoundRoomEx->sCoords.WorldPosition.x;
-      *pY = pFoundRoomEx->sCoords.WorldSize.y / 2 + pFoundRoomEx->sCoords.WorldPosition.y;
+    if (!pFoundRoomEx) {
+      int nCenterX = pLevel->sCoordinatesAndSize.WorldSize.x / 2 - 2 + pLevel->sCoordinatesAndSize.WorldPosition.x; // steer-ok: the original computes the centre x before the centre y
+      int nCenterY = pLevel->sCoordinatesAndSize.WorldSize.y / 2 - 2 + pLevel->sCoordinatesAndSize.WorldPosition.y;
+      pFoundRoomEx = GetRoomOfCoord(pLevel, nCenterX, nCenterY);
+    }
+    if (!pFoundRoomEx) {
+      pFoundRoomEx = DRLGSPAWN_GetRandomRoomFromLevel(pLevel);
+    }
+    if (pFoundRoomEx) {
+      if (*pX == -1 || *pY == -1) {
+        *pX = pFoundRoomEx->sCoords.WorldSize.x / 2 + pFoundRoomEx->sCoords.WorldPosition.x;
+        *pY = pFoundRoomEx->sCoords.WorldSize.y / 2 + pFoundRoomEx->sCoords.WorldPosition.y;
+      }
+
+      DUNGEON::Dungeon::InitRoomEx(pFoundRoomEx);
+      return pFoundRoomEx->pRoom;
     }
 
-    DUNGEON::Dungeon::InitRoomEx(pFoundRoomEx);
-    return pFoundRoomEx->pRoom;
+    return nullptr;
 }
 
 // Allocates and initializes a new D2RoomExStrc for the given level with the specified preset type.
