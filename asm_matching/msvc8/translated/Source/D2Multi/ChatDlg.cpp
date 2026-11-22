@@ -2734,53 +2734,34 @@ static BOOL __stdcall CHATDLG_FindSubstringMatch(int32_t nTargetHash, int32_t nW
 }
 
 BOOL __stdcall CHATDLG_DetectCDKeyInString(char * szText) {
-    BOOL BVar1;
+    char szKeyBuf[1024];
     uint32_t dwKeyOut2;
     uint32_t dwKeyType;
-    char cCur;
-    int nCharsCollected;
-    nCharsCollected = 0;
-    uint32_t pnStrLen;
-    pnStrLen = Storm::Source::SSTR::SStrLen(szText);
-    int nPos;
-    nPos = 0;
-    int nRemaining;
-    nRemaining = pnStrLen;
-    if ((int)pnStrLen <= 0) {
-      return 0;
-    }
-
-    do {
-      char szKeyBuf[1024];
-      if (nRemaining < 0x10 - nCharsCollected) {
+    int nCharsCollected = 0;
+    int nLength = Storm::Source::SSTR::SStrLen(szText);
+    for (int i = 0; i < nLength; i++) {
+      if (nLength - i < 0x10 - nCharsCollected) {
         return 0;
       }
 
-      cCur = szText[nPos];
-      if ((cCur < 'A' || cCur > 'Z') && (cCur < 'a' || cCur > 'z') && (uint8_t)(cCur - 0x30U) > 9) {
-        if (cCur == '-' || cCur == ' ') {
-          goto check_key_complete;
+      char cCur = szText[i];
+      if (cCur >= 'A' && cCur <= 'Z' || cCur >= 'a' && cCur <= 'z' || cCur >= '0' && cCur <= '9') {
+        szKeyBuf[nCharsCollected] = cCur;
+        nCharsCollected++;
+      } else if (cCur != '-' && cCur != ' ') {
+        nCharsCollected = 0;
+        continue;
+      }
+
+      if (nCharsCollected == 0x10) {
+        szKeyBuf[0x10] = '\0';
+        if (ComCallback::COMCALLBACK_DetectCDKeyInMessage(szKeyBuf, &dwKeyType, &dwKeyOut2) && (dwKeyType == 6 || dwKeyType == 7 || dwKeyType == 10 || dwKeyType == 0xc)) {
+          return 1;
         }
 
         nCharsCollected = 0;
-      } else {
-        szKeyBuf[nCharsCollected] = cCur;
-        nCharsCollected++;
-        check_key_complete:
-        if (nCharsCollected == 0x10) {
-          szKeyBuf[0x10] = '\0';
-          BVar1 = ComCallback::COMCALLBACK_DetectCDKeyInMessage(szKeyBuf, &dwKeyType, &dwKeyOut2);
-          if (BVar1 && (dwKeyType == 6 || dwKeyType == 7 || dwKeyType == 10 || dwKeyType == 0xc)) {
-            return 1;
-          }
-
-          nCharsCollected = 0;
-        }
       }
-
-      nPos++;
-      nRemaining--;
-    } while (nPos < (int)pnStrLen);
+    }
 
     return 0;
 }

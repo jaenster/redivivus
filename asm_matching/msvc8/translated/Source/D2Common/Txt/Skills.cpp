@@ -2492,37 +2492,22 @@ uint32_t __stdcall SKILLS_CheckSkillFlagBit1(int32_t nSkillId) {
 
 // Removes the disguise (shapeshift) states from a unit. Iterates sgptDataTable->pAllStatesDataTblFlag0x10 (the list built with bit index 0x10, the disguise states), and for each state currently active on pUnit, removes the associated stat list via STATLIST_RemoveAndRecalc + FreeStatList and clears the state via SetState. Returns 1 if the unit type is eligible (ITEMSTATS_CheckItemStatCostFlag200Bit3), 0 otherwise.
 BOOL __stdcall STATES_RemoveDisguiseStates(D2UnitStrc * pUnit) {
-    D2StatListExStrc* pStatList;
-    int32_t nStateCount;
-    eD2States eState;
-    D2UnitStrc* i = pUnit;
-    uint32_t bIsProgressiveStateEligible = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit);
-    if (!bIsProgressiveStateEligible) {
+    if (!DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit)) {
       return 0;
     }
 
-    int nUnit = 0x0;
-    if (ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size <= 0) {
-      return 1;
-    }
-
-    do {
-      BOOL eStateId;
-      eState = (eD2States)(short int)ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[nUnit];
-      eStateId = DATATBLS::ItemStats::UNIT_GetUnitState(i, eState);
-      if (eStateId) {
-        pStatList = Stats::StatsEx::GetStatsByState(i, eState);
+    for (int i = 0; i < ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size; i++) {
+      int16_t nState = ITEMS::Items::sgptDataTable->pAllStatesDataTblFlag0x10[i];
+      if (DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nState)) {
+        D2StatListExStrc* pStatList = Stats::StatsEx::GetStatsByState(pUnit, nState);
         if (pStatList) {
-          Stats::StatsEx::STATLIST_RemoveAndRecalc(i, pStatList);
+          Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
           Stats::StatsEx::FreeStatList(&pStatList->sStatList);
         }
 
-        DATATBLS::ItemStats::SetState(i, eState, 0);
+        DATATBLS::ItemStats::SetState(pUnit, nState, 0);
       }
-
-      nStateCount = (int32_t)ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size;
-      nUnit++;
-    } while (nUnit < nStateCount);
+    }
 
     return 1;
 }

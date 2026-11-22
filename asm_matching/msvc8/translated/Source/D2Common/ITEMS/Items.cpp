@@ -5774,23 +5774,14 @@ D2Row_char_32 * __stdcall ITEM_GetTxtItemTypes_invgfx(D2UnitStrc * pUnit, uint32
     // Static local variables (originally global data)
     static char * gpszItemNoInvGfx = (char*)""; D2_STATIC_GUARD(gpszItemNoInvGfx, "D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx::gpszItemNoInvGfx");
 
-    D2ItemTypesTxt* pItemTypesTxt;
-    uint32_t nClampedGfxIdx;
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return (D2Row_char_32*)(char (*)[32])gpszItemNoInvGfx;
     }
 
     eD2ItemTypes eItemType = ITEM_GetItemData_wType(pUnit);
-    pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
+    D2ItemTypesTxt* pItemTypesTxt = (int)eItemType >= 0 && (int)eItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + eItemType : nullptr;
     if (pItemTypesTxt) {
-      uint32_t nMaxGfxIdx;
-      nMaxGfxIdx = (uint8_t)pItemTypesTxt->varinvgfx - 1;
-      nClampedGfxIdx = (int)nGfxIndex <= 0 ? 0 : nGfxIndex;
-      if ((int)nClampedGfxIdx < (int)nMaxGfxIdx) {
-        nMaxGfxIdx = nClampedGfxIdx;
-      }
-
-      return pItemTypesTxt->invgfx + nMaxGfxIdx;
+      return pItemTypesTxt->invgfx + min(max((int)nGfxIndex, 0), (uint8_t)pItemTypesTxt->varinvgfx - 1); // steer-ok: windef.h min/max macros
     }
 
     return (D2Row_char_32*)(char (*)[32])gpszItemNoInvGfx;
