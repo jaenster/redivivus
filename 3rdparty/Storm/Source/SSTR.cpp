@@ -2088,9 +2088,9 @@ char * __stdcall SStrDup(char * szText) {
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), nullptr);
-    uint32_t nLen = SStrLen(szText);
-    char* pCopy = (char*)SMem::SMemAlloc(nLen + 1, ".\\SOURCE\\SSTR.CPP", 0x1f2, 0);
-    SMem::SMemCopy(pCopy, szText, nLen + 1);
+    uint32_t nSize = SStrLen(szText) + 1;
+    char* pCopy = (char*)SMem::SMemAlloc(nSize, ".\\SOURCE\\SSTR.CPP", 0x1f2, 0);
+    SMem::SMemCopy(pCopy, szText, nSize);
     return pCopy;
 }
 
