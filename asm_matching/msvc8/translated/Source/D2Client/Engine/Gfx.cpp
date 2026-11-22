@@ -694,123 +694,90 @@ void __fastcall GFX_DrawOverlayOnUnit(D2UnitStrc * pUnit, int32_t nOverlayId, in
 }
 
 void __stdcall DRAW_UNIT_States(D2UnitStrc * pUnit, int32_t nBlendMode, int32_t bSecondPass, int32_t nScreenX, int32_t nScreenY, int32_t bRaiseY) {
-    int32_t nOffset;
-    BOOL BVar1;
-    int iVar2;
-    D2OverlayTxt* pOverlayTxt;
-    bool bShow;
     D2GfxDataStrc sGfxData;
-    int32_t nDrawX;
-    int nDrawY;
-    int32_t nAnimMode;
-    int32_t nParticleX;
-    int32_t nTargetX;
-    int32_t nTargetY;
-    uint8_t byOne;
-    int nFrame;
-    eOverlayId nThisOverlayId;
-    int32_t* pAdjustX;
-    int32_t* pAdjustY;
-    D2GfxInfoStrc* pGfxInfo;
-    pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
+    D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x271);
       exit(-1);
     }
 
-    uint32_t bPerspective;
-    bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
-    D2GfxUnknown_0xa8* pCur;
-    pCur = pGfxInfo->pOverlayList;
+    BOOL bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
+    D2GfxUnknown_0xa8* pCur = pGfxInfo->pOverlayList;
     if (!pCur) {
       return;
     }
-    if (!bPerspective || pUnit && pUnit->eUnitType == UNIT_ITEM && (nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit) , nAnimMode != 3)) {
-      nTargetX = D2Common::Units::GetScreenX(pUnit);
-      nOffset = UI::Path::DRAW_GetWorldOffsetX();
-      nDrawX = nTargetX - nOffset;
-      nTargetY = D2Common::Units::GetScreenY(pUnit);
-      nOffset = UI::Path::DRAW_GetWorldOffsetY();
-      nDrawY = nTargetY - nOffset;
+
+    int nDrawX;
+    int nDrawY;
+    if (!bPerspective || pUnit && pUnit->eUnitType == UNIT_ITEM && D2Common::Units::GetAnimOrSeqMode(pUnit) != 3) {
+      nDrawX = D2Common::Units::GetScreenX(pUnit) - UI::Path::DRAW_GetWorldOffsetX();
+      nDrawY = D2Common::Units::GetScreenY(pUnit) - UI::Path::DRAW_GetWorldOffsetY();
       if (pUnit && pUnit->eUnitType == UNIT_ITEM && nScreenX != -1 && nScreenY != -1) {
         nDrawX = nScreenX;
         nDrawY = nScreenY;
       }
     } else {
-      pAdjustY = &nScreenY;
-      pAdjustX = &nScreenX;
-      D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(D2Common::Units::GetPrecisionX(pUnit), D2Common::Units::GetPrecisionY(pUnit), 0, pAdjustX, pAdjustY);
-      bPerspective = UI::Path::DRAW_GetTypeOfBorder();
-      switch (bPerspective) {
+      D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition(D2Common::Units::GetPrecisionX(pUnit), D2Common::Units::GetPrecisionY(pUnit), 0, &nScreenX, &nScreenY);
+      switch (UI::Path::DRAW_GetTypeOfBorder()) {
         case 1:
-          {
-            nScreenX -= UI::ui::ScreenSizeX / 4;
-            break;
-          }
+          nScreenX -= UI::ui::ScreenSizeX / 4;
+          break;
         case 2:
-          {
-            nScreenX += UI::ui::ScreenSizeX / 4;
-            nDrawY = nScreenY + 0x10;
-            nDrawX = nScreenX;
-            goto draw_overlays;
-          }
+          nScreenX += UI::ui::ScreenSizeX / 4;
+          break;
       }
 
       nDrawX = nScreenX;
       nDrawY = nScreenY + 0x10;
     }
 
-    draw_overlays:
-    nParticleX = Particle::PARTICLE_GetX(pUnit);
-    nOffset = Particle::PARTICLE_GetY(pUnit);
-    int32_t nTmpZ = Particle::PARTICLE_GetScreenZ(pUnit);
-    nDrawY = nDrawY + nOffset + nTmpZ;
+    nDrawX += Particle::PARTICLE_GetX(pUnit);
+    nDrawY += Particle::PARTICLE_GetY(pUnit);
+    nDrawY += Particle::PARTICLE_GetScreenZ(pUnit);
     if (bRaiseY) {
-      nDrawY += -8;
+      nDrawY -= 8;
     }
 
-    do {
-      bShow = true;
-      if ((!pCur->nPreDraw || (bShow = bSecondPass != 0 , !pCur->nPreDraw)) && bSecondPass) {
-        bShow = false;
+    for (; pCur; pCur = pCur->pNext) {
+      BOOL bShow = TRUE;
+      if (pCur->nPreDraw && !bSecondPass) {
+        bShow = FALSE;
+      }
+      if (!pCur->nPreDraw && bSecondPass) {
+        bShow = FALSE;
       }
       if (pCur->nOverlayType == 6 && !pCur->nValue0) {
-        bShow = false;
+        bShow = FALSE;
       }
-      if ((pCur->nOverlayType != 8 || *(int*)&pCur->field_0x3c) && bShow) {
-        nThisOverlayId = pCur->neOverlayId;
-        iVar2 = (int)pCur->nRandomOffset >> 8;
-        if ((int)nThisOverlayId < 0 || (int)nThisOverlayId >= D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize || (pOverlayTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay + nThisOverlayId , !pOverlayTxt)) {
-          DRAW_UNIT_States_HaltTail(0x2d1);
-        }
-
-        memset(&sGfxData, 0, 0x48);
-        nOffset = -1;
-        byOne = '\x01';
-        pAdjustY = &nScreenX;
-        nFrame = iVar2;
-        sGfxData.nOverlayId = nThisOverlayId;
-        nOffset = GfxUtil::DC6_AssignParams(&sGfxData, nullptr, nullptr, (uint32_t)D2Common::Units::GetDirection(pUnit), nFrame, pAdjustY, byOne, nOffset);
-        if (!nOffset) {
-          return;
-        }
-        if (iVar2 < (int)pCur->nFrameDelay >> 8) {
-          if (pOverlayTxt->LocalBlood != '\0') {
-            BVar1 = GAME::Game::GAMEDATA_GetBloodFlag();
-            if (BVar1) {
-              GAME::PalShift::PALSHIFT_GetGreenBloodTable();
-            }
-          }
-
-          D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pCur->nOffsetX + (nDrawX + nParticleX), pCur->nOffsetY + nDrawY, nBlendMode, (DRAWMODE)pOverlayTxt->Trans, nullptr);
-        }
+      if (pCur->nOverlayType == 8 && !*(int*)&pCur->field_0x3c) {
+        bShow = FALSE;
+      }
+      if (!bShow) {
+        continue;
       }
 
-      pCur = pCur->pNext;
-      if (!pCur) {
+      int nFrame = (int)pCur->nRandomOffset >> 8;
+      eOverlayId nThisOverlayId = pCur->neOverlayId;
+      D2OverlayTxt* pOverlayTxt = (int)nThisOverlayId >= 0 && (int)nThisOverlayId < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize ? &D2Common::ITEMS::Items::sgptDataTable->pTxtOverlay[nThisOverlayId] : nullptr;
+      if (!pOverlayTxt) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2d1);
+        exit(-1);
+      }
+
+      memset(&sGfxData, 0, 0x48);
+      sGfxData.nOverlayId = nThisOverlayId;
+      if (!GfxUtil::DC6_AssignParams(&sGfxData, nullptr, nullptr, (uint32_t)D2Common::Units::GetDirection(pUnit), nFrame, &nScreenX, 1, -1)) {
         return;
       }
-    } while (true);
+
+      if (nFrame < (int)pCur->nFrameDelay >> 8) {
+        if (pOverlayTxt->LocalBlood && GAME::Game::GAMEDATA_GetBloodFlag()) {
+          GAME::PalShift::PALSHIFT_GetGreenBloodTable();
+        }
+
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pCur->nOffsetX + nDrawX, pCur->nOffsetY + nDrawY, nBlendMode, (DRAWMODE)pOverlayTxt->Trans, nullptr);
+      }
+    }
 }
 
 void __stdcall DRAW_UNIT_States_HaltTail(int nLine) {
