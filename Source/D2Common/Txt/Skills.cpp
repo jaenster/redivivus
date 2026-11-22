@@ -929,13 +929,11 @@ D2SkillsTxt * __fastcall GetSkillsTxt(D2SkillStrc * pSkill) {
 }
 
 int32_t __stdcall GetShrineBonus(D2UnitStrc * pUnit) {
-    BOOL eShrineSkillState = DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_shrine_skill);
-    int32_t nBonus = 2;
-    if (eShrineSkillState) {
-      return nBonus;
+    int32_t nBonus = 0;
+    if (DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_shrine_skill)) {
+      nBonus += 2;
     }
 
-    nBonus = 0;
     return nBonus;
 }
 
