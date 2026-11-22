@@ -2033,14 +2033,15 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(D2GSPacketSrv0xA3
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(D2GSPacketSrv0xA5 * pBytes) {
+    int32_t nUnitGUID = pBytes->dwUnitGUID; // steer-ok: the original reads the GUID before the skill id
     uint16_t nSkill = pBytes->wSkillId;
-    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwUnitGUID, (eD2UnitType)pBytes->nUnitType);
+    D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nUnitGUID, (eD2UnitType)pBytes->nUnitType);
     if (!pUnit) {
       return;
     }
 
     eD2Skills eSkill = (eD2Skills)nSkill;
-    D2SkillsTxt* pSkillsTxt = (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return;
     }
@@ -2048,17 +2049,16 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(D2GSPacketSrv0xA5 * 
     switch (pSkillsTxt->srvdofunc) {
       case 0x43:
         SKILLS::SkillsPal::SKILL_StopAndClearUninterruptable(pUnit, eSkill);
-      D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
-      return;
+        D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
+        return;
       case 0x4d:
-
       case 0x4e:
         SKILLS::SkillsBar::SKILL_HandleTeleportLanding(pUnit);
-      D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
-      return;
+        D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
+        return;
       case 0x4c:
         SKILLS::SkillsBar::SKILL_StopAndClearSound(pUnit, eSkill);
-      break;
+        break;
     }
 
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
