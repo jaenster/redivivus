@@ -362,53 +362,30 @@ int32_t __stdcall TXT_Levels_GetMonLvlForDifficulty(eD2LevelId eLevel, eD2Diffic
 // Scans the LevelDefs table for levels with the Portal flag set, counts them, allocates a server array (gpPortalLevelArray) of that size, and fills it with the level indices. Used at startup to build the list of portal-accessible levels. Halts if write index exceeds the counted portal level count.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
 static void LVLTBLS_BuildPortalLevelArray(D2LevelDefsTxt * pTxtLevelDefs) {
-    int* pPortalFieldCur;
-    int nLevelsRemaining = ITEMS::Items::sgptDataTable->nTxtLevelsSize;
     nPortalLevelCount = 0;
-    eD2LevelId* pPortalLevelIds = gpPortalLevelArray;
-    uint32_t nPortalLevels = nPortalLevelCount;
-    if (nLevelsRemaining > 0) {
-      pPortalFieldCur = &pTxtLevelDefs->Portal;
-      nPortalLevels = 0;
-      do {
-        if (*pPortalFieldCur) {
-          nPortalLevels++;
-        }
-
-        pPortalFieldCur += 0x27;
-        nLevelsRemaining--;
-      } while (nLevelsRemaining);
-
-      nPortalLevelCount = nPortalLevels;
-      if (nPortalLevels) {
-        pPortalLevelIds = (eD2LevelId*)D2_ALLOC_POOL_AT(nullptr, nPortalLevels * 4, ".\\DATATBLS\\LvlTbls.cpp", 0x16c);
-        nPortalLevels = nPortalLevelCount;
-        gpPortalLevelArray = pPortalLevelIds;
-        memset(pPortalLevelIds, 0, nPortalLevelCount * 4);
+    for (int i = 0; i < ITEMS::Items::sgptDataTable->nTxtLevelsSize; i++) {
+      if (pTxtLevelDefs[i].Portal) {
+        nPortalLevelCount++;
       }
     }
 
-    eD2LevelId eVar1 = LEVEL_None;
-    nLevelsRemaining = 0;
-    if (ITEMS::Items::sgptDataTable->nTxtLevelsSize <= 0) {
-      return;
+    if (nPortalLevelCount) {
+      gpPortalLevelArray = (eD2LevelId*)D2_ALLOC_POOL_AT(nullptr, nPortalLevelCount * 4, ".\\DATATBLS\\LvlTbls.cpp", 0x16c);
+      memset(gpPortalLevelArray, 0, nPortalLevelCount * 4);
     }
 
-    pPortalFieldCur = &pTxtLevelDefs->Portal;
-    do {
-      if (*pPortalFieldCur) {
-        if (nLevelsRemaining >= (int)nPortalLevels) {
+    int nPortalIndex = 0;
+    for (int i = 0; i < ITEMS::Items::sgptDataTable->nTxtLevelsSize; i++) {
+      if (pTxtLevelDefs[i].Portal) {
+        if (nPortalIndex >= (int)nPortalLevelCount) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x177);
           exit(-1);
         }
 
-        pPortalLevelIds[nLevelsRemaining] = eVar1;
-        nLevelsRemaining++;
+        gpPortalLevelArray[nPortalIndex] = (eD2LevelId)i;
+        nPortalIndex++;
       }
-
-      eVar1 += LEVEL_RogueEncampment;
-      pPortalFieldCur += 0x27;
-    } while ((int)eVar1 < ITEMS::Items::sgptDataTable->nTxtLevelsSize);
+    }
 }
 
 eD2LevelId * __fastcall GetPortalLevelArrayFromPortalFlags(uint32_t * pnPortalLevelCount) {
