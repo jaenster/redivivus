@@ -21,6 +21,14 @@
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Common/Waypoints.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -948,36 +956,40 @@ void __stdcall SetTargetUnitForPlayerOrMonster(D2UnitStrc * pUnit, D2UnitStrc * 
 }
 
 void __stdcall SetAnimSpeedForMonster(D2UnitStrc * pUnit) {
-    D2MonStatsTxt* pMonStatsTxt;
-    short int nBaseAnimSpeed;
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+    if (!pUnit) {
       return;
     }
 
-    int nClassId = pUnit->nClassId;
-    if (nClassId < 0 || nClassId >= ITEMS::Items::sgptDataTable->nTxtMonStatsSize || (pMonStatsTxt = ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId , !pMonStatsTxt)) {
-      pUnit->nAnimSpeed = 0;
-      return;
-    }
-    if (!pUnit->pStatsEx) {
-      pUnit->nAnimSpeed = pMonStatsTxt->wWalkAnimSpeed;
-      return;
-    }
+    switch (pUnit->eUnitType) {
+      case UNIT_MONSTER:
+        {
+          int nClassId = pUnit->nClassId;
+          D2MonStatsTxt* pMonStatsTxt = nullptr;
+          if (nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+            pMonStatsTxt = &ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId];
+          }
+          if (!pMonStatsTxt) {
+            pUnit->nAnimSpeed = 0;
+            return;
+          }
+          if (!pUnit->pStatsEx) {
+            pUnit->nAnimSpeed = pMonStatsTxt->wWalkAnimSpeed;
+            return;
+          }
 
-    int nVelocityPct = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_velocitypercent, 0);
-    if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Skill3) {
-      nBaseAnimSpeed = pMonStatsTxt->wRunAnimSpeed;
-    } else {
-      nBaseAnimSpeed = pMonStatsTxt->wWalkAnimSpeed;
-    }
+          int nVelocityPct = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_velocitypercent, 0);
+          short int nBaseAnimSpeed;
+          if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Skill3) {
+            nBaseAnimSpeed = pMonStatsTxt->wRunAnimSpeed;
+          } else {
+            nBaseAnimSpeed = pMonStatsTxt->wWalkAnimSpeed;
+          }
 
-    uint32_t nRawAnimSpeed = nBaseAnimSpeed * nVelocityPct / 100;
-    uint32_t nAnimSpeed = (int)nRawAnimSpeed <= 0 ? 0 : nRawAnimSpeed;
-    if ((int)nAnimSpeed >= 0x7fff) {
-      nAnimSpeed = 0x7fff;
+          int nAnimSpeed = nBaseAnimSpeed * nVelocityPct / 100;
+          pUnit->nAnimSpeed = (short int)min(max(nAnimSpeed, 0), 0x7fff); // steer-ok: windef.h min/max macros
+          break;
+        }
     }
-
-    pUnit->nAnimSpeed = (short int)nAnimSpeed;
 }
 
 void __stdcall GetRunAndWalkVelocityForPlayer(D2UnitStrc * nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity) {
