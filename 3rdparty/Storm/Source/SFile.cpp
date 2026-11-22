@@ -2206,7 +2206,8 @@ void * __fastcall Unreferenced_00417790(StormLinkStrc * pLink) {
 }
 
 int32_t __fastcall Unreferenced_004177a0(void * pHandle) {
-    return (int)*(uint32_t*)(**(int**)pHandle + 4) <= 0 ? 0 : *(uint32_t*)(**(int**)pHandle + 4);
+    StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
+    return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
 StormLinkStrc * __fastcall Unreferenced_00417850(StormLinkStrc * pLink) {
