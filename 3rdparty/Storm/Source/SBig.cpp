@@ -786,23 +786,22 @@ int32_t __thiscall SBIG_ArrayByteAppendData(TSGrowableArray_Uc * pArray, uint32_
 // @oracle-method PLAUSIBLE with a named caveat. Matches the oracle's .New__34TSGrowableArray<3RGN,10TSCD<3RGN>>Fv @10041370: calls CalcChunkSize and ReallocData, returns m_data + old_count, then increments the count. CAVEAT: New() and NewElement() are genuinely indistinguishable for a POD element type - both oracle instantiations collapse to the same body - so the choice between the two names is not established.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 int32_t __fastcall TSGrowableArray_Uc_New(uint32_t * pArray) {
-    uint32_t nGranularity;
-    uint32_t nNewSize = pArray[1] + 1;
-    if (nNewSize > *pArray) {
-      nGranularity = pArray[3];
+    uint32_t nNewCount = pArray[1] + 1;
+    if (nNewCount > *pArray) {
+      uint32_t nGranularity = pArray[3];
       if (!nGranularity) {
-        nGranularity = TSGrowableArray_Uc_CalcChunkSize((BigBuffer*)pArray, nNewSize);
-      }
-      if (nNewSize % nGranularity) {
-        nNewSize = nGranularity - nNewSize % nGranularity + nNewSize;
+        nGranularity = TSGrowableArray_Uc_CalcChunkSize((BigBuffer*)pArray, nNewCount);
       }
 
-      TSFixedArray_Uc_ReallocData((TSGrowableArray_Uc*)pArray, nNewSize);
+      uint32_t nNewCapacity = nNewCount;
+      if (nNewCount % nGranularity) {
+        nNewCapacity = nGranularity - nNewCount % nGranularity + nNewCount;
+      }
+
+      TSFixedArray_Uc_ReallocData((TSGrowableArray_Uc*)pArray, nNewCapacity);
     }
 
-    nGranularity = pArray[1];
-    pArray[1] = nGranularity + 1;
-    return pArray[2] + nGranularity;
+    return pArray[2] + pArray[1]++;
 }
 
 // @was SBIG_ArrayByteSetSize (pass 6, 2026.08.28)
