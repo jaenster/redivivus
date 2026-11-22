@@ -1411,49 +1411,31 @@ static int __stdcall UNITS_IsAnimModeSpeedFixed(int32_t nAnimMode, int32_t nClas
 
 // @sourcefile .\UNITS\Units.cpp
 static BOOL UNITS_IsAnimSpeedSetByCastRate(D2UnitStrc * pUnit, int32_t nAnimMode, eD2UnitType eUnitType) {
-    eD2Skills eSkill;
-    D2SkillsTxt* pSkillsTxt;
-    if (eUnitType != UNIT_PLAYER) {
-      if (eUnitType != UNIT_MONSTER || nAnimMode != 7) {
-        return 0;
-      }
-    } else {
-      D2SkillStrc* pSkill;
-      switch (nAnimMode) {
-        default:
-          {
-            return 0;
-          }
-        case 0x12:
-          {
-            if (!pUnit) {
-              return 0;
-            }
-
-            pSkill = D2Common::Units::GetCurrentSkill(pUnit);
-            if (!pSkill) {
-              return 0;
-            }
-
-            eSkill = Skills::GetSkillId(pSkill, ".\\UNITS\\Units.cpp", 0xc48);
-            pSkillsTxt = Skills::TXT_Skills_GetLine(eSkill);
-            if (!pSkillsTxt) {
-              return 0;
-            }
-            if (pSkillsTxt->seqtrans == '\n') {
+    switch (eUnitType) {
+      case UNIT_PLAYER:
+        if (nAnimMode == 10) {
+          return 1;
+        }
+        if (nAnimMode == 0x12 && pUnit) {
+          D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
+          if (pSkill) {
+            D2SkillsTxt* pSkillsTxt = Skills::TXT_Skills_GetLine(Skills::GetSkillId(pSkill, ".\\UNITS\\Units.cpp", 0xc48));
+            if (pSkillsTxt && pSkillsTxt->seqtrans == '\n') {
               return 1;
             }
+          }
+        }
 
-            return 0;
-          }
-        case 10:
-          {
-            break;
-          }
-      }
+        break;
+      case UNIT_MONSTER:
+        if (nAnimMode == 7) {
+          return 1;
+        }
+
+        break;
     }
 
-    return 1;
+    return 0;
 }
 
 // Returns the diminished (soft-capped) value of a unit stat indexed by nParam into gaUnitStatDiminished[]. If the entry has nDiminishedFlag==1 and the raw value is non-zero, applies a harmonic-mean formula: (base * value) / (base + value), producing diminishing returns. Otherwise returns the raw shifted stat value unchanged.
