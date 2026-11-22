@@ -632,9 +632,7 @@ BigBuffer * __thiscall WND_EntryArray_AllocNext(BigStack * pThis, int * pnCount)
       (*pnCount)++;
     }
 
-    uint32_t uVar1 = pThis->nUsed;
-    pThis->nUsed = uVar1 + 1;
-    return pThis->aBuffers + uVar1;
+    return &pThis->aBuffers[pThis->nUsed++];
 }
 
 void __thiscall WND_EntryArray_FreeEntries(BigStack * pThis, int32_t nFreeCount) {
