@@ -269,20 +269,25 @@ void __stdcall FreeHelpBorder() {
 }
 
 void __stdcall INPUT_HelpCloseButtonDown(D2UIMouseMsgStrc * pMsg) {
-    uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
-    uint32_t nRelX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
-    DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-    if (eResMode == 2) {
-      nRelX -= 0x2ad;
-    } else {
-      nRelX -= 0x20d;
-    }
-    if (nRelX <= 0x20 && nMouseY >= 0x18 && nMouseY <= 0x38) {
+    int nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
+    if (D2gfx::D2GFX::D2GFX_GetResolutionMode() == 2) {
+      if (nMouseX >= 0x2ad && nMouseX <= 0x2cd && nMouseY >= 0x18 && nMouseY <= 0x38) {
+        gpHelpCloseButton = 1;
+        pMsg->bHandled = 1;
+        pMsg->dwResult = 0;
+        Storm::SMsgBreakHandlerChain(pMsg);
+        return;
+      }
+    } else if (nMouseX >= 0x20d && nMouseX <= 0x22d && nMouseY >= 0x18 && nMouseY <= 0x38) {
       gpHelpCloseButton = 1;
-    } else {
-      GAME::Game::GAMEDATA_ClearQueuedClicks();
+      pMsg->bHandled = 1;
+      pMsg->dwResult = 0;
+      Storm::SMsgBreakHandlerChain(pMsg);
+      return;
     }
 
+    GAME::Game::GAMEDATA_ClearQueuedClicks();
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
