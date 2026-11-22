@@ -367,7 +367,6 @@ BOOL __fastcall Skills_CltStFunc_CalcPathToTargetSetFlag(D2UnitStrc * pUnit, eD2
 }
 
 BOOL __fastcall Skills_CltDoFunc_Mon_SetSequenceFromCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int nCalcIdx;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
@@ -378,16 +377,13 @@ BOOL __fastcall Skills_CltDoFunc_Mon_SetSequenceFromCalc(D2UnitStrc * pUnit, eD2
       return 0;
     }
 
-    uint32_t nFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
-    if (nFlags & 2) {
+    if (D2Common::Skills::SKILL_GetFlags(pSkill) & 2) {
       D2Common::Skills::SKILL_SetFlags(pSkill, 0);
-      nCalcIdx = pSkillTxt->calc[1];
+      D2Common::Units::SetSequenceFrame(pUnit, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl));
     } else {
-      nCalcIdx = pSkillTxt->calc[0];
+      D2Common::Units::SetSequenceFrame(pUnit, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl));
     }
 
-    int32_t nSeqFrame = D2Common::Skills::D2GetSkillCalc(pUnit, nCalcIdx, eSkill, nSkillLvl);
-    D2Common::Units::SetSequenceFrame(pUnit, nSeqFrame);
     return 1;
 }
 
