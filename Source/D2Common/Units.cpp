@@ -2923,11 +2923,11 @@ void __stdcall SetShiftRightSkillData(D2UnitStrc * pUnit, eD2Skills eSkill, int3
 }
 
 void __stdcall SetWeaponGUID(D2UnitStrc * pUnit, D2UnitStrc * pWeapon) {
-    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
+    if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
     }
 
-    D2UnitDataPlayerStrc* pPlayerData = pUnit->pUnitData.pUnitDataPlayer;
+    D2UnitDataPlayerStrc* pPlayerData = GetPlayerDataInline(pUnit);
     if (!pPlayerData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x14c5);
       exit(-1);
