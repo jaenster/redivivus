@@ -405,30 +405,10 @@ BOOL __thiscall SRP_ClientVerifyServerProof(D2Srp * * pThis, void * pSrpContext,
 }
 
 uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32_t * pModulusN, uint32_t * pGenerator, uint32_t * pServerPublicBBytes) {
-    int i;
     Storm::Source::SSTR::SStrCopy((char*)(pContext + 0x10), szText, 0x7fffffff);
-    uint32_t* pDst = pContext;
-    for (i = 8; i; i--) {
-      *pDst = *pModulusN;
-      pModulusN++;
-      pDst++;
-    }
-
-    pDst = pContext + 8;
-    for (i = 8; i; i--) {
-      *pDst = *pGenerator;
-      pGenerator++;
-      pDst++;
-    }
-
-    pDst = pServerPublicBBytes;
-    uint32_t* pDst2 = pContext + 0x18;
-    for (i = 8; i; i--) {
-      *pDst2 = *pDst;
-      pDst++;
-      pDst2++;
-    }
-
+    memcpy(pContext, pModulusN, 0x20);
+    memcpy(pContext + 8, pGenerator, 0x20);
+    memcpy(pContext + 0x18, pServerPublicBBytes, 0x20);
     BigData* pServerPublicB = SHA::SHA1_FromBigIntBytes(pServerPublicBBytes, 0x20);
     int32_t nCompareResult = SHA::SHA1_BigIntCompareValue(pServerPublicB, 0);
     SHA::SHA1_BigIntFree(pServerPublicB);
