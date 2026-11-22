@@ -148,125 +148,111 @@ static void CHAT_HandleIMECandidateList(HIMC hImc) {
 
 // @sourcefile .\UI\chat.cpp
 void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
-    HKL hKbLayout;
-    LPCANDIDATELIST pMemoryToFree;
-    DWORD dwSentence;
-    D2UIMouseMsgStrc* pUnderMouseLocal;
-    pUnderMouseLocal = pMsg;
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
-    HWND hWnd;
-    hWnd = D2gfx::D2GFX::GetHwnd();
-    HIMC hImc;
-    hImc = ImmGetContext(hWnd);
+    HIMC hImc = ImmGetContext(D2gfx::D2GFX::GetHwnd());
     if (!hImc) {
       return;
     }
-    if (!false) {
-      BOOL bImeStatus;
-      switch (pUnderMouseLocal->nWParam) {
-        case 8:
-          if (gnLanguageCode == 6) {
-            /* HIMC param_1 for ImmGetOpenStatus */ bImeStatus = ImmGetOpenStatus(hImc);
-            if (bImeStatus) {
-              gaChatInputBuffer = '\x01';
-              gnIMEInputMode = 3;
-              goto cleanup;
-            }
-          } else if (gnLanguageCode != 8) {
-            if (gnLanguageCode != 9) {
-              goto cleanup;
-            }
 
-            /* HIMC param_1 for ImmGetOpenStatus */ bImeStatus = ImmGetOpenStatus(hImc);
-            if (bImeStatus) {
+    switch (pMsg->nWParam) {
+      case 8:
+        switch (gnLanguageCode) {
+          case 9:
+            if (ImmGetOpenStatus(hImc)) {
               gaChatInputBuffer = '\x01';
               gnIMEInputMode = 4;
-              goto cleanup;
+            } else {
+              gaChatInputBuffer = '\0';
+              gnIMEInputMode = 0;
             }
-          } else {
-            /* HIMC param_1 for ImmGetOpenStatus */ bImeStatus = ImmGetOpenStatus(hImc);
-            if (bImeStatus) {
+            break;
+          case 8:
+            if (ImmGetOpenStatus(hImc)) {
               gaChatInputBuffer = '\x01';
               gnIMEInputMode = 5;
-              goto cleanup;
+            } else {
+              gaChatInputBuffer = '\0';
+              gnIMEInputMode = 0;
+            }
+            break;
+          case 6:
+            if (ImmGetOpenStatus(hImc)) {
+              gaChatInputBuffer = '\x01';
+              gnIMEInputMode = 3;
+            } else {
+              gaChatInputBuffer = '\0';
+              gnIMEInputMode = 0;
+            }
+            break;
+        }
+        break;
+      case 6:
+        {
+          DWORD dwConversion;
+          DWORD dwSentence;
+          ImmGetConversionStatus(hImc, &dwConversion, &dwSentence);
+          if (gnLanguageCode == 7 || gnLanguageCode == 0xc) {
+            if (dwConversion & 1) {
+              gnIMEInputMode = 1;
+              gaChatInputBuffer = '\x01';
+            } else {
+              gaChatInputBuffer = '\0';
+              gnIMEInputMode = 0;
             }
           }
-        ime_off:
-        gaChatInputBuffer = '\0';
-        gnIMEInputMode = 0;
-        goto cleanup;
-        case 6:
-          /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hImc, (LPDWORD)&pMsg, &dwSentence);
-        if (gnLanguageCode != 7 && gnLanguageCode != 0xc) {
-          goto cleanup;
+          break;
         }
-        if ((uintptr_t)pMsg & 1) {
-          gnIMEInputMode = 1;
-          gaChatInputBuffer = '\x01';
-          goto cleanup;
+      case 5:
+        if (gnLanguageCode == 9) {
+          CHAT_HandleIMECandidateList(hImc);
+          pMsg->bHandled = 1;
+          pMsg->dwResult = 0;
         }
-
-        goto ime_off;
-        default:
-          goto cleanup;
-        case 5:
-          if (gnLanguageCode == 9) {
-            CHAT_HandleIMECandidateList(hImc);
-            pUnderMouseLocal->bHandled = 1;
-            pUnderMouseLocal->dwResult = 0;
-          }
-        if (gnLanguageCode != 8) {
-          goto cleanup;
+        if (gnLanguageCode == 8) {
+          CHAT_HandleIMECandidateList(hImc);
+          pMsg->bHandled = 1;
+          pMsg->dwResult = 0;
         }
-
-        CHAT_HandleIMECandidateList(hImc);
         break;
-        case 4:
-          pMemoryToFree = gpIMECandidateList;
+      case 4:
         if (gnLanguageCode == 9) {
           if (gpIMECandidateList) {
             D2_FREE_AT(gpIMECandidateList, ".\\UI\\chat.cpp", 0x160);
-            gpIMECandidateList = (LPCANDIDATELIST)0x0;
+            gpIMECandidateList = nullptr;
           }
 
-          pMemoryToFree = gpIMECandidateList;
-          pUnderMouseLocal->bHandled = 1;
-          pUnderMouseLocal->dwResult = 0;
+          pMsg->bHandled = 1;
+          pMsg->dwResult = 0;
         }
-        if (gnLanguageCode != 8) {
-          goto cleanup;
-        }
-        if (pMemoryToFree) {
-          D2_FREE_AT(pMemoryToFree, ".\\UI\\chat.cpp", 0x16b);
-          gpIMECandidateList = (LPCANDIDATELIST)0x0;
-        }
-
-        break;
-        case 3:
-          if (gnLanguageCode != 9) {
-            goto cleanup;
+        if (gnLanguageCode == 8) {
+          if (gpIMECandidateList) {
+            D2_FREE_AT(gpIMECandidateList, ".\\UI\\chat.cpp", 0x16b);
+            gpIMECandidateList = nullptr;
           }
-        CHAT_HandleIMECandidateList(hImc);
-        break;
-        case 2:
-          if (gnLanguageCode != 9) {
-            goto cleanup;
-          }
-        /* DWORD idThread for GetKeyboardLayout */ hKbLayout = GetKeyboardLayout(0);
-        /* HKL param_1 for ImmIsIME */ bImeStatus = ImmIsIME(hKbLayout);
-        gnIMEInputMode = bImeStatus ? 0 : 4;
-        break;
-      }
 
-      pUnderMouseLocal->dwResult = 0;
-      pUnderMouseLocal->bHandled = 1;
+          pMsg->bHandled = 1;
+          pMsg->dwResult = 0;
+        }
+        break;
+      case 3:
+        if (gnLanguageCode == 9) {
+          CHAT_HandleIMECandidateList(hImc);
+          pMsg->bHandled = 1;
+          pMsg->dwResult = 0;
+        }
+        break;
+      case 2:
+        if (gnLanguageCode == 9) {
+          gnIMEInputMode = ImmIsIME(GetKeyboardLayout(0)) ? 0 : 4;
+          pMsg->bHandled = 1;
+          pMsg->dwResult = 0;
+        }
+        break;
     }
 
-    cleanup:
-    /* HIMC param_2 for ImmReleaseContext */ hWnd = D2gfx::D2GFX::GetHwnd();
-    /* HWND param_1 for ImmReleaseContext */ ImmReleaseContext(hWnd, hImc);
+    ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hImc);
 }
 
 uint8_t __stdcall CHAT_CheckIMELanguage() {
@@ -295,10 +281,6 @@ void __stdcall CHAT_ResetIMEState(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall CHAT_InitIME() {
-    BOOL bResult;
-    DWORD dwConversionMode;
-    DWORD dwSentenceMode;
-    int32_t nEventCount;
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagChatInit, 4);
     gnLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     if (gnLanguageCode != 6 && gnLanguageCode != 9 && gnLanguageCode != 8 && gnLanguageCode != 7 && gnLanguageCode != 0xc) {
@@ -306,100 +288,83 @@ void __stdcall CHAT_InitIME() {
     }
 
     gbChatInputEnabled = 0;
-    uint8_t bVar1;
-    bVar1 = CHAT_CheckIMELanguage();
-    if (!bVar1) {
+    if (!CHAT_CheckIMELanguage()) {
       return;
     }
 
-    LANGID langId;
-    langId = GetSystemDefaultLangID();
-    HWND hWnd;
-    hWnd = D2gfx::D2GFX::GetHwnd();
-    HIMC hIMC;
-    hIMC = ImmGetContext(hWnd);
+    LANGID langId = GetSystemDefaultLangID();
+    HIMC hIMC = ImmGetContext(D2gfx::D2GFX::GetHwnd());
     if (!hIMC) {
       return;
     }
 
     gwcIMECompositionString[0] = L'\0';
     gwcImeCompositionBuffer[0] = L'\0';
-    if (!false) {
-      HKL hKeyboardLayout;
-      switch (gnLanguageCode) {
-        case 6:
-          if (langId == 0x411) {
-            nEventCount = 7;
-            gbChatInputEnabled = 1;
-            _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitChatPanel, nEventCount);
-            /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ bResult = ImmSetOpenStatus(hIMC, 1);
-            if (bResult) {
-              /* HIMC param_2 for ImmReleaseContext */ gaChatInputBuffer = '\x01';
-              gnIMEInputMode = 3;
-              /* HWND param_1 for ImmReleaseContext */ ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hIMC);
-              return;
-            }
-
-            /* HIMC param_2 for ImmReleaseContext */ gaChatInputBuffer = '\0';
+    switch (gnLanguageCode) {
+      case 6:
+        if (langId == 0x411) {
+          gbChatInputEnabled = 1;
+          _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitChatPanel, 7);
+          if (ImmSetOpenStatus(hIMC, 1)) {
+            gaChatInputBuffer = '\x01';
+            gnIMEInputMode = 3;
+          } else {
+            gaChatInputBuffer = '\0';
             gnIMEInputMode = 0;
-            /* HWND param_1 for ImmReleaseContext */ ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hIMC);
-            return;
           }
-        goto release_ime_context;
-        case 7:
 
-        case 0xc:
-          if (langId != 0x412 && langId != 0x812) {
-            goto release_ime_context;
-          }
-        /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ ImmSetOpenStatus(hIMC, 1);
-        /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hIMC, &dwConversionMode, &dwSentenceMode);
-        /* DWORD param_3 for ImmSetConversionStatus */ /* DWORD param_2 for ImmSetConversionStatus */ /* HIMC param_1 for ImmSetConversionStatus */ ImmSetConversionStatus(hIMC, 1, dwSentenceMode);
-        /* LPDWORD lpfdwSentence for ImmGetConversionStatus */ /* LPDWORD lpfdwConversion for ImmGetConversionStatus */ /* HIMC param_1 for ImmGetConversionStatus */ ImmGetConversionStatus(hIMC, &dwConversionMode, &dwSentenceMode);
-        if ((uint8_t)dwConversionMode & 1) {
-          gnIMEInputMode = 1;
-          gaChatInputBuffer = '\x01';
-          gbChatInputEnabled = 1;
-        } else {
-          gnIMEInputMode = 0;
-          gbChatInputEnabled = 1;
+          ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hIMC);
+          return;
         }
 
         break;
-        case 9:
-          /* DWORD idThread for GetKeyboardLayout */ gaChatInputBuffer = '\0';
-        gbChatInputEnabled = 1;
-        hKeyboardLayout = GetKeyboardLayout(0);
-        /* HKL param_1 for ImmIsIME */ bResult = ImmIsIME(hKeyboardLayout);
-        if (!bResult) {
-          /* DWORD param_2 for ImmSimulateHotKey */ /* HWND param_1 for ImmSimulateHotKey */ ImmSimulateHotKey(D2gfx::D2GFX::GetHwnd(), 0x70);
+      case 7:
+      case 0xc:
+        if (langId == 0x412 || langId == 0x812) {
+          DWORD dwConversionMode;
+          DWORD dwSentenceMode;
+          ImmSetOpenStatus(hIMC, 1);
+          ImmGetConversionStatus(hIMC, &dwConversionMode, &dwSentenceMode);
+          ImmSetConversionStatus(hIMC, 1, dwSentenceMode);
+          ImmGetConversionStatus(hIMC, &dwConversionMode, &dwSentenceMode);
+          if (dwConversionMode & 1) {
+            gnIMEInputMode = 1;
+            gaChatInputBuffer = '\x01';
+          } else {
+            gnIMEInputMode = 0;
+          }
+
+          gbChatInputEnabled = 1;
+
+          _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitChatPanel, 7);
         }
 
-        /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ ImmSetOpenStatus(hIMC, 1);
+        break;
+      case 9:
+        gaChatInputBuffer = '\0';
+        gbChatInputEnabled = 1;
+        if (!ImmIsIME(GetKeyboardLayout(0))) {
+          ImmSimulateHotKey(D2gfx::D2GFX::GetHwnd(), 0x70);
+        }
+
+        ImmSetOpenStatus(hIMC, 1);
         gnIMEInputMode = 4;
+        _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitChatPanel, 7);
         break;
-        default:
-          goto release_ime_context;
-        case 8:
-          /* DWORD idThread for GetKeyboardLayout */ gaChatInputBuffer = '\0';
+      case 8:
+        gaChatInputBuffer = '\0';
         gbChatInputEnabled = 1;
-        hKeyboardLayout = GetKeyboardLayout(0);
-        /* HKL param_1 for ImmIsIME */ bResult = ImmIsIME(hKeyboardLayout);
-        if (!bResult) {
-          /* DWORD param_2 for ImmSimulateHotKey */ /* HWND param_1 for ImmSimulateHotKey */ ImmSimulateHotKey(D2gfx::D2GFX::GetHwnd(), 0x10);
+        if (!ImmIsIME(GetKeyboardLayout(0))) {
+          ImmSimulateHotKey(D2gfx::D2GFX::GetHwnd(), 0x10);
         }
 
-        /* BOOL param_2 for ImmSetOpenStatus */ /* HIMC param_1 for ImmSetOpenStatus */ ImmSetOpenStatus(hIMC, 1);
+        ImmSetOpenStatus(hIMC, 1);
         gnIMEInputMode = 5;
+        _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitChatPanel, 7);
         break;
-      }
-
-      _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), g_UIFlagInitChatPanel, 7);
     }
 
-    release_ime_context:
-    /* HIMC param_2 for ImmReleaseContext */ hWnd = D2gfx::D2GFX::GetHwnd();
-    /* HWND param_1 for ImmReleaseContext */ ImmReleaseContext(hWnd, hIMC);
+    ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hIMC);
 }
 
 // @sourcefile .\UI\chat.cpp
