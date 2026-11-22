@@ -406,30 +406,26 @@ int __stdcall NET_MCP_CLIENT_SendPacketToQSocket(D2QSSocketStrc * pQSocket, char
 }
 
 int32_t __stdcall NET_MCP_CLIENT_Send(D2QSSocketStrc * pQSocket, char * pBytes, uint16_t nDataSizeNoHeader) {
-    uint32_t _nDataSizeNoHeader;
     uint32_t nTotalSendSize;
     uint8_t abLenHeader[4];
     uint8_t aSendBuf[8292];
-    uint16_t nDataSize = nDataSizeNoHeader;
-    _nDataSizeNoHeader = (uint32_t)nDataSizeNoHeader;
     if (!pQSocket || !pQSocket->pSafesock || !pQSocket->pSafesock->bConnected) {
       return -1;
     }
     if (pQSocket->nHeaderSize == 4 && pQSocket->nSizeFieldOffset == 2) {
-      if (!pBytes || (uint16_t)(nDataSize - 1) > 0x205e) {
+      if (!pBytes || (uint16_t)(nDataSizeNoHeader - 1) > 0x205e) {
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x5d);
         exit(-1);
       }
 
-      _nDataSizeNoHeader = (uint32_t)nDataSize;
-      Storm::Source::SMem::SMemCopy(aSendBuf + 3, pBytes, _nDataSizeNoHeader - 1);
-      *(uint16_t*)((char*)&abLenHeader + 2) = nDataSize + 3;
+      Storm::Source::SMem::SMemCopy(aSendBuf + 3, pBytes, nDataSizeNoHeader - 1);
+      *(uint16_t*)((char*)&abLenHeader + 2) = nDataSizeNoHeader + 3;
       abLenHeader[1] = *pBytes;
       abLenHeader[0] = (uint8_t)pQSocket->nHeaderLeadByte;
       Storm::Source::SMem::SMemCopy(aSendBuf, abLenHeader, 4);
-      nTotalSendSize = _nDataSizeNoHeader + 3;
+      nTotalSendSize = nDataSizeNoHeader + 3;
     } else {
-      *(uint16_t*)(char*)&abLenHeader = nDataSize + 2;
+      *(uint16_t*)(char*)&abLenHeader = nDataSizeNoHeader + 2;
       if ((uint16_t)*(uint16_t*)(char*)&abLenHeader >= 0x2064) {
         ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x71);
         exit(-1);
@@ -437,17 +433,17 @@ int32_t __stdcall NET_MCP_CLIENT_Send(D2QSSocketStrc * pQSocket, char * pBytes, 
 
       Storm::Source::SMem::SMemCopy(aSendBuf, abLenHeader, 2);
       if (!pBytes) {
-        _nDataSizeNoHeader = 0;
+        nDataSizeNoHeader = 0;
       }
 
-      nTotalSendSize = _nDataSizeNoHeader + 2;
+      nTotalSendSize = nDataSizeNoHeader + 2;
       if (pBytes && nTotalSendSize < 0x2064) {
-        Storm::Source::SMem::SMemCopy(aSendBuf + 2, pBytes, _nDataSizeNoHeader);
+        Storm::Source::SMem::SMemCopy(aSendBuf + 2, pBytes, nDataSizeNoHeader);
       }
     }
 
     int nSendResult = NET_MCP_CLIENT_SendPacketToQSocket(pQSocket, (char*)aSendBuf, (uint16_t)nTotalSendSize);
-    return nSendResult + (_nDataSizeNoHeader - nTotalSendSize);
+    return nSendResult + (nDataSizeNoHeader - nTotalSendSize);
 }
 
 } // namespace Fog::Src::D2QSSocket
