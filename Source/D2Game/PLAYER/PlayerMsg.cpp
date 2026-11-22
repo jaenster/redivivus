@@ -768,24 +768,13 @@ void __fastcall SendReassignPlayer(D2UnitStrc * pUnitStrc, D2ClientStrc * pClien
 // Broadcasts the player's current skill cast to nearby clients. If the skill has a valid target unit visible to the client, sends packet 0x4C (target-entity cast). Otherwise sends packet 0x4D (XY cast) using the caster's SP1 path coordinates. Skips if the skill has flag bit 2 set and the caster is the client's own player unit.
 // @sourcefile .\PLAYER\PlrMsg.cpp
 void __fastcall SendUnitCast0x4d(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, ::SGAMEDATA * pGameParam) {
-    uint16_t wTargetY;
-    D2UnitStrc* pTarget;
-    uint32_t dwSkillLevelPacked;
     uint32_t dwCasterGUID;
-    uint32_t dwPathCoord;
-    int32_t nSubType;
-    uint16_t wPad;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
       return;
     }
-
-    uint32_t dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
-    if (!(dwSkillFlags & 4)) {
-      pTarget = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
-      if (pUnit == pTarget) {
-        return;
-      }
+    if (!(D2Common::Skills::SKILL_GetFlags(pSkill) & 4) && pUnit == GAME::Clients::CLIENTS_GetControlUnit(pClient, 0)) {
+      return;
     }
     if (!pUnit) {
       dwCasterGUID = -1;
@@ -793,25 +782,15 @@ void __fastcall SendUnitCast0x4d(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Clie
       dwCasterGUID = pUnit->nUnitGUID;
     }
 
-    pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\PLAYER\\PlrMsg.cpp", 0xcf);
-    int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-    uint8_t skillLevel = (uint8_t)nSkillLevel;
-    BOOL bIsNearClient;
-    bIsNearClient = pTarget ? GAME::Clients::IsUnitNearClient(pTarget, pClient) : 0;
-    if (!bIsNearClient) {
-      eSkillId &= 0xffff;
-      nSubType = 0;
-      wPad = 0;
-      dwPathCoord = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
-      wTargetY = (uint16_t)dwPathCoord;
-      dwPathCoord = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, 0, dwCasterGUID, (uint16_t)dwPathCoord, wTargetY, eSkillId, wPad, skillLevel, nSubType);
-      return;
+    uint8_t nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+    if (pTarget && GAME::Clients::IsUnitNearClient(pTarget, pClient)) {
+      uint32_t dwTargetGUID = pTarget->nUnitGUID; // steer-ok: the original reads the target GUID before its type
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY(pClient, '\0', dwCasterGUID, GetTypeInline(pTarget), dwTargetGUID, (uint16_t)eSkillId, 0, nSkillLevel, 0);
+    } else {
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x4D_SKILL_XY(pClient, 0, dwCasterGUID, D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath), D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath), (uint16_t)eSkillId, 0, nSkillLevel, 0);
     }
-
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x4C_UnitCastSkill_Target_0x4D_UnitCastSkill_XY(pClient, '\0', dwCasterGUID, (uint8_t)pTarget->eUnitType, pTarget->nUnitGUID, (uint16_t)eSkillId, 0, skillLevel, 0);
-    return;
 }
 
 // Sends the appropriate movement packet to pClient for pUnit's current move-mode (index nModeIndex into gaPlayerModeNetMsgTable). If pUnit has a target entity visible to the client, sends 0x10 (CharToObj); otherwise sends 0x0F (PlayerMove) with the unit's current tile position and path sub-step target coordinates. Skips self-movement (pUnit == client's own player).
