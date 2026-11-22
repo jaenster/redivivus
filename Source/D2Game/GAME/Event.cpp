@@ -519,18 +519,18 @@ void __fastcall EVENT_DispatchAllTimers(::SGAMEDATA * pGame) {
 
 // Checks if a timer of the specified type already exists on a unit. Walks the unit's timer linked list (pNextTimerOnUnit) and returns the earliest scheduled frame number if a matching timer type is found, 0 if not found. Used to prevent duplicate timers on units.
 int32_t __fastcall EVENT_GetTimerFrame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType) {
-    int nTimerFrame;
-    D2TimerStrc* pCurrentTimer;
-    D2TimerStrc* pTimerHead = UNIT::SUnit::GetTimerList(pUnit);
+    D2TimerStrc* pTimer = UNIT::SUnit::GetTimerList(pUnit);
     int nBestFrame = 0;
-    while (pCurrentTimer = pTimerHead) {
-      pTimerHead = pCurrentTimer->pNextTimerOnUnit;
-      if (pCurrentTimer->nTimerType == eTimerType) {
-        nTimerFrame = pCurrentTimer->nFrame;
+    while (pTimer) {
+      D2TimerStrc* pNextTimer = pTimer->pNextTimerOnUnit;
+      if (pTimer->nTimerType == eTimerType) {
+        int nTimerFrame = pTimer->nFrame;
         if (nTimerFrame > 0 && (nTimerFrame < nBestFrame || !nBestFrame)) {
           nBestFrame = nTimerFrame;
         }
       }
+
+      pTimer = pNextTimer;
     }
 
     return nBestFrame;
