@@ -516,42 +516,38 @@ static void SMEM_CombineFreeBlocks(D2FogHeapDescStrc * pHeap) {
 
 // @blizzard DestroyHeap (SMEM.CPP)
 LPVOID * __fastcall SMEM_DestroyHeap(LPVOID * ppHeap) {
-    D2FogHeapBlockHdrStrc* pNextBlock;
     char szErrorMsg[200];
-    uint8_t byFlags;
-    D2FogHeapDescStrc* pHeap;
-    D2FogHeapDescStrc* nHeap = (D2FogHeapDescStrc*)*ppHeap;
-    D2FogHeapBlockHdrStrc* pBlock = (D2FogHeapBlockHdrStrc*)nHeap->pDataStart;
-    uint32_t byLeakFlags = 0;
-    if ((void*)pBlock < nHeap->pWriteCursor) {
-      do {
-        byFlags = pBlock->byFlags;
-        pNextBlock = (D2FogHeapBlockHdrStrc*)((intptr_t)&pBlock->wBlockSize + (uint32_t)pBlock->wBlockSize);
-        if (byFlags & 0x82) {
-          byLeakFlags |= byFlags & 0x80;
-        } else {
-          if (!(byFlags & 0x40)) {
-            if (!gnSSystemOption3) {
-              SMEM_Warning((uint32_t*)nHeap->szName, nHeap->nSourceLine, 0x8510007e);
-            } else {
-              /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szErrorMsg, "Storm Error : memory never released -- %s, %i\n", nHeap->szName, nHeap->nSourceLine);
-              /* LPCSTR lpOutputString for OutputDebugStringA */ OutputDebugStringA(szErrorMsg);
-            }
-          }
-
-          SMEM_FreeHeapBlock(pBlock, nHeap);
-        }
-
+    D2FogHeapDescStrc* pHeap = (D2FogHeapDescStrc*)*ppHeap;
+    uint32_t nLeakFlags = 0;
+    D2FogHeapBlockHdrStrc* pBlock = (D2FogHeapBlockHdrStrc*)pHeap->pDataStart;
+    while ((void*)pBlock < pHeap->pWriteCursor) {
+      uint8_t byFlags = pBlock->byFlags;
+      D2FogHeapBlockHdrStrc* pNextBlock = (D2FogHeapBlockHdrStrc*)((char*)pBlock + pBlock->wBlockSize);
+      if (byFlags & 0x82) {
+        nLeakFlags |= byFlags & 0x80;
         pBlock = pNextBlock;
-      } while ((void*)pNextBlock < nHeap->pWriteCursor);
-
-      if (byLeakFlags) {
-        return (LPVOID*)&nHeap->pNext;
+        continue;
       }
+
+      if (!(byFlags & 0x40)) {
+        if (!gnSSystemOption3) {
+          SMEM_Warning((uint32_t*)pHeap->szName, pHeap->nSourceLine, 0x8510007e);
+        } else {
+          wsprintfA(szErrorMsg, "Storm Error : memory never released -- %s, %i\n", pHeap->szName, pHeap->nSourceLine);
+          OutputDebugStringA(szErrorMsg);
+        }
+      }
+
+      SMEM_FreeHeapBlock(pBlock, pHeap);
+      pBlock = pNextBlock;
     }
 
-    SMEM_FreeHeap(ppHeap);
-    return ppHeap;
+    if (!nLeakFlags) {
+      SMEM_FreeHeap(ppHeap);
+      return ppHeap;
+    }
+
+    return (LPVOID*)&pHeap->pNext;
 }
 
 // @blizzard FreeEmptyHeaps (SMEM.CPP)
