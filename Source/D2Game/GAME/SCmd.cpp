@@ -433,38 +433,37 @@ void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex(D2ClientSt
     int32_t nUnitCoord;
     D2GSPacketSrv0x68 sPacket;
     memset(&sPacket, 0, sizeof(sPacket));
-    sPacket.nMode = nMode;
-    sPacket.dwTargetGUID = dwTargetGUID;
-    d2_store24((char*)&sPacket.dwMonsterGUID, (uint32_t)nMonsterGUID & 0xffffffu);
     sPacket.nPacketId = nPacketId;
-    *(uint8_t*)((char*)&sPacket.dwMonsterGUID + 3) = (uint8_t)(nMonsterGUID >> 0x18);
+    sPacket.dwMonsterGUID = nMonsterGUID;
+    sPacket.nMode = nMode;
     sPacket.nTargetType = nTargetUnitType;
+    sPacket.dwTargetGUID = dwTargetGUID;
     D2UnitStrc* pUnit = UNIT::SUnit::FindUnitFromTable(Clients::CLIENT_GetGame(pClient), UNIT_MONSTER, nMonsterGUID);
     if (!pUnit) {
       return;
     }
 
-    eD2UnitType eUnitType = pUnit->eUnitType;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
+    eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sPacket.wX = (uint16_t)pDynamicPath->ScreenPos.y;
-    } else if (pDynamicPath) {
-      nUnitCoord = D2Common::PATH::DynamicPath::GetXPos(pDynamicPath);
-      sPacket.wX = (uint16_t)nUnitCoord;
+      nUnitCoord = pUnit->pPath.pStaticPath->nPosX;
+    } else if (pUnit->pPath.pDynamicPath) {
+      nUnitCoord = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
     } else {
-      sPacket.wX = 0;
+      nUnitCoord = 0;
     }
 
+    sPacket.wX = (uint16_t)nUnitCoord;
     eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      sPacket.wY = (uint16_t)pUnit->pPath.pStaticPath->nPosY;
+      nUnitCoord = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
       nUnitCoord = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-      sPacket.wY = (uint16_t)nUnitCoord;
     } else {
-      sPacket.wY = 0;
+      nUnitCoord = 0;
     }
 
+    sPacket.wY = (uint16_t)nUnitCoord;
     sPacket.nParam1 = nDistance;
     sPacket.nReserved = nHitClass;
     int nVelocityPct = D2Common::PATH::DynamicPath::GetPathType(pDynamicPath);
@@ -476,13 +475,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x68_UNITCHANGE_MONSTERIDPATH_Ex(D2ClientSt
     sPacket.nReserved = sPacket.nReserved;
     sPacket.nPathType = sPacket.nPathType;
     nVelocityPct = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_velocitypercent, 0);
-    if (nVelocityPct > -0x8000) {
-      if (nVelocityPct >= 0x7fff) {
-        nVelocityPct = 0x7fff;
-      }
-    } else {
-      nVelocityPct = -0x8000;
-    }
+    nVelocityPct = min(max(nVelocityPct, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 
     sPacket.wVelocityPct = (uint16_t)nVelocityPct;
     sPacket.nParam3 = nHpPercent;
