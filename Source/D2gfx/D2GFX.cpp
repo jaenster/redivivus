@@ -1780,31 +1780,11 @@ void __fastcall D2GFX_FillYBufferFast(int32_t nScreenWidth, int32_t nScreenHeigh
 
 // Initializes color lookup tables for palette blending. Populates gPaletteBlendLookupTable (256x256 entries) by blending all combinations of source and destination palette indices. Used by rendering functions for alpha blending and color effects.
 void __fastcall PALETTE_InitColorLookupTables(BYTE * * ppPaletteTable) {
-    int nCount;
-    uint8_t* pDstRow;
-    uint8_t** pPaletteEntry = gaPaletteBlendEntries;
-    for (nCount = 0x48; nCount; nCount--) {
-      *pPaletteEntry = *ppPaletteTable;
-      ppPaletteTable++;
-      pPaletteEntry++;
-    }
-
+    memcpy(gaPaletteBlendEntries, ppPaletteTable, sizeof(gaPaletteBlendEntries));
     gpPaletteBlendLookupTable = gaPaletteBlendEntries;
-    pPaletteEntry = gaPaletteBlendEntries + 3;
-    uint8_t* pDst = gaPaletteColorLUT[0];
-    do {
-      uint8_t* pSrcEntry;
-      pSrcEntry = *pPaletteEntry;
-      pPaletteEntry++;
-      pDstRow = pDst;
-      for (nCount = 0x40; nCount; nCount--) {
-        *(uint32_t*)pDstRow = *(uint32_t*)pSrcEntry;
-        pSrcEntry += 4;
-        pDstRow += 4;
-      }
-
-      pDst += 0x100;
-    } while ((intptr_t)pPaletteEntry < (intptr_t)((char*)&gaPaletteBlendEntries + 208));
+    for (int i = 0; i < 49; i++) {
+      memcpy(gaPaletteColorLUT[i], gaPaletteBlendEntries[i + 3], sizeof(gaPaletteColorLUT[i]));
+    }
 }
 
 void Unreferenced_004f8e90() {
