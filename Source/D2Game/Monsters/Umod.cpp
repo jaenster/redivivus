@@ -111,7 +111,6 @@ void __fastcall MONUMOD_ApplyChampionLevelBonus(D2UnitStrc * pUnit, int32_t nInd
 // Applies champion-tier stat bonuses to a monster unit. Decrements level by 1, reduces XP by 40%, then adds difficulty-scaled damage percent (MonUmod[11].constants) and to-hit percent (MonUmod[10].constants) bonuses. Also adds a velocity bonus based on nIndex: 0x24 subtracts speed, 0x25 computes a formula from base Velocity, other values add a flat +20%. Skips Griswold (classId 0x76) with halved damage bonus.
 void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
     int32_t nBaseMonId;
-    int nToHitBonus;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
     }
@@ -127,24 +126,32 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
       return;
     }
 
-    int nDamageBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    nDamageBonus -= 1;
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nDamageBonus, 0);
+    int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_level, nLevel - 1, 0);
     uint32_t nExp = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_experience, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_experience, nExp + nExp / 5 * -2, 0);
+    int nDamageBonus;
     if (D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize <= 0xb) {
       nDamageBonus = 0;
-    } else if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-352) {
-      nDamageBonus = 0;
     } else {
-      nDamageBonus = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[0xb].constants;
+      D2MonUModTxt* pDamageUModTxt = &D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[0xb];
+      if (!pDamageUModTxt) {
+        nDamageBonus = 0;
+      } else {
+        nDamageBonus = pDamageUModTxt->constants;
+      }
     }
+
+    int nToHitBonus;
     if (D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize <= 0xa) {
       nToHitBonus = 0;
-    } else if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod == (D2MonUModTxt*)-320) {
-      nToHitBonus = 0;
     } else {
-      nToHitBonus = D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[10].constants;
+      D2MonUModTxt* pToHitUModTxt = &D2Common::ITEMS::Items::sgptDataTable->pTxtMonUmod[10];
+      if (!pToHitUModTxt) {
+        nToHitBonus = 0;
+      } else {
+        nToHitBonus = pToHitUModTxt->constants;
+      }
     }
 
     D2DifficultyLevelsTxt* pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
@@ -167,30 +174,17 @@ void __fastcall MONUMOD_ApplyChampionStats(D2UnitStrc * pUnit, int32_t nIndex, B
 
     switch (nIndex) {
       case 0x24:
-        {
-          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, -0x21, 0);
-          break;
-        }
-      case 0x25:
-        {
-          nBaseMonId = (int)(0x800 / (int)nVelocity) - 0x80;
-          if (nBaseMonId > 10) {
-            if (nBaseMonId >= 100) {
-              nBaseMonId = 100;
-            }
-
-            D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, nBaseMonId, 0);
-            return;
-          }
-
-          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, 10, 0);
-          return;
-        }
+        D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, -0x21, 0);
+        break;
+      case 0x25: {
+        int nVelocityBonus = 0x800 / nVelocity - 0x80;
+        nVelocityBonus = min(max(nVelocityBonus, 10), 100); // steer-ok: windef.h min/max macros
+        D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, nVelocityBonus, 0);
+        return;
+      }
       default:
-        {
-          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, 0x14, 0);
-          return;
-        }
+        D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_velocitypercent, 0x14, 0);
+        return;
     }
 }
 
