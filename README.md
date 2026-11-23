@@ -3,6 +3,10 @@
 [![Discord](https://img.shields.io/badge/Discord-join%20the%20chat-5865F2?logo=discord&logoColor=white)](https://discord.gg/MHK2Dg9)
 [![redivivus.app](https://img.shields.io/badge/redivivus.app-site-8f2b2b)](https://redivivus.app)
 
+[![Functions identical to 1.14d](https://img.shields.io/badge/functions%20identical-77.0%25-2e7d32?style=for-the-badge)](BYTE-MATCHING.md)
+[![Code bytes identical](https://img.shields.io/badge/code%20bytes%20identical-51.35%25-1565c0?style=for-the-badge)](BYTE-MATCHING.md)
+[![Data bytes identical](https://img.shields.io/badge/data%20bytes%20identical-99.16%25-6a1b9a?style=for-the-badge)](BYTE-MATCHING.md)
+
 Diablo II: Lord of Destruction 1.14d, reverse-engineered into C++ that builds and runs.
 
 At this commit (Ghidra database v2139):
@@ -11,6 +15,7 @@ At this commit (Ghidra database v2139):
 - Single player works. A full playthrough has been completed on the Visual C++ 2005 build.
 - Functions whose machine code is identical to 1.14d, compiled with Visual C++ 2005 SP1: 11,479 of 14,900 (77.0%), of which 2,484 hand-written.
 - Code bytes identical: 1,341,681 of 2,612,801 (51.35%).
+- Initialised data identical (tables, globals, initialisers): 341,576 of 344,485 bytes (99.16%), 1,723 of 1,966 symbols.
 - A 64-bit build links (mingw x86-64, `-fpermissive`) and has never been run; 233 pointer-width casts left, from 7,955.
 
 What is compared, what is left out, and the chart: [BYTE-MATCHING.md](BYTE-MATCHING.md). The names, types

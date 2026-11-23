@@ -94,6 +94,21 @@ the same run as [`audit.tsv.summary`](asm_matching/msvc8/evidence/audit.tsv.summ
 Over the whole binary, runtime included, at this commit: 12,079 of 16,020
 functions (75.4%), 1,443,658 of 2,764,824 bytes (52.22%).
 
+## Data
+
+The function figures cannot see a table. `oracle data` (or `ORACLE_DATA=1` after the
+function audit) compares every initialised data symbol of our objects (tables, globals,
+their initialisers) with the bytes 1.14d holds at that symbol's address. A pointer in the
+data counts as equal when both sides point at the same function, global or string.
+Ghidra's `.rdata`/`.data` items are the denominator. The totals are in
+[`data-audit.tsv.summary`](asm_matching/msvc8/evidence/data-audit.tsv.summary), the rate by
+size in [`datatrend.tsv`](asm_matching/msvc8/evidence/datatrend.tsv).
+
+It compares contents per symbol, not where the linker places them: the order of the
+linked sections is a separate, later question. Uninitialised data (`.bss`) is compared by
+size and alignment only. Items that exist only at run time, import slots and the
+compiler's exception and RTTI tables are left out, and the summary counts them.
+
 ## What it does not say
 
 - **A function that does not match is not necessarily wrong.** It may behave identically
