@@ -1609,83 +1609,68 @@ D2UnitStrc * __stdcall INVENTORY_GetHandItem(D2InventoryStrc * pInventory) {
 
 // Searches the stash inventory page for the first item that is socketable with pUnit1 (the socketing reagent) and has remaining stack capacity (quantity &lt; maxStack). If pUnit2 is non-null, scanning starts after pUnit2 in the page-linked list (used to resume past a previously checked item). Returns the matching D2UnitStrc* or null if none found.
 D2UnitStrc * __stdcall INVENTORY_FindBackpackItemForStack(D2InventoryStrc * pInventory, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
-    int _bSocketable;
-    int32_t bStackMatches;
-    bool bSocketable;
-    int32_t nItemMaxStack;
     D2GridScreenCoordinates sGridDims;
-    D2UnitDataItemStrc* pItemData;
-    if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
+    if (!pInventory) {
+      return nullptr;
+    }
+    if (pInventory->nSignatureMagic != 0x1020304) {
       return nullptr;
     }
 
-    D2UnitStrc* pCurItem;
-    pCurItem = pInventory->pOwner;
-    D2GridScreenCoordinates* pGridDims;
-    pGridDims = 0;
-    if (pCurItem && pCurItem->eUnitType == UNIT_PLAYER) {
+    D2UnitStrc* pItem = pInventory->pOwner;
+    D2GridScreenCoordinates* pGridDims = 0;
+    if (pItem && pItem->eUnitType == UNIT_PLAYER) {
       int32_t neInventoryPage;
-      neInventoryPage = Units::UNITS_GetInventoryRecordId(pCurItem, '\0', 1);
+      neInventoryPage = Units::UNITS_GetInventoryRecordId(pItem, '\0', 1);
       DATATBLS::TokTbls::GetGridDimensions(neInventoryPage, 0, &sGridDims);
       pGridDims = &sGridDims;
     }
 
-    D2InventoryGridInfoStrc* pStashGridInfo;
-    pStashGridInfo = ReinitializeInventoryGrid(2, (D2InventorySizesStrc*)pGridDims, pInventory);
+    D2InventoryGridInfoStrc* pStashGridInfo = ReinitializeInventoryGrid(2, (D2InventorySizesStrc*)pGridDims, pInventory);
     if (!pStashGridInfo) {
       return nullptr;
     }
 
-    pCurItem = pStashGridInfo->pFirstItem;
+    pItem = pStashGridInfo->pFirstItem;
     if (pUnit2) {
-      while (pCurItem) {
-        if (pCurItem == pUnit2) {
-          goto search_from_item;
-        }
-        if (pCurItem->eUnitType != UNIT_ITEM) {
+      while (pItem && pItem != pUnit2) {
+        if (pItem->eUnitType != UNIT_ITEM) {
           return nullptr;
         }
 
-        pItemData = pCurItem->pUnitData.pUnitDataItem;
+        D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pCurItem = pItemData->sInvNode.pNextItemInPage;
+        pItem = pNode->pNextItemInPage;
       }
-    } else {
-      search_from_item:
-      if (pCurItem) {
-        while (true) {
-          bStackMatches = ITEMS::Items::ITEMS_AreStackablesEqual(pCurItem, pUnit1);
-          if (bStackMatches) {
-            _bSocketable = Stats::StatsEx::STATSEX_GetCurrentStat(pCurItem, UNITSTAT_quantity, 0);
-            nItemMaxStack = ITEMS::Items::ITEM_GetMaxStack(pCurItem);
-            if (_bSocketable < nItemMaxStack) {
-              return pCurItem;
-            }
-          }
-          if (pCurItem->eUnitType != UNIT_ITEM) {
-            break;
-          }
+    }
 
-          pItemData = pCurItem->pUnitData.pUnitDataItem;
-          if (!pItemData) {
-            break;
-          }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
-            break;
-          }
-
-          pCurItem = pItemData->sInvNode.pNextItemInPage;
-          if (!pCurItem) {
-            return nullptr;
-          }
-        }
+    while (pItem) {
+      if (ITEMS::Items::ITEMS_AreStackablesEqual(pItem, pUnit1) && Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0) < ITEMS::Items::ITEM_GetMaxStack(pItem)) {
+        return pItem;
       }
+      if (pItem->eUnitType != UNIT_ITEM) {
+        return nullptr;
+      }
+
+      D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
+      if (!pItemData) {
+        return nullptr;
+      }
+
+      D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+      if (!pNode) {
+        return nullptr;
+      }
+
+      pItem = pNode->pNextItemInPage;
     }
 
     return nullptr;
