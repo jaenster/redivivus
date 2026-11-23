@@ -212,25 +212,17 @@ static void DRLGOUTROOM_MarkBorderJunctions(D2DrlgLevelStrc * pLevel) {
 // Spawns a corner fill preset at grid coordinates (nX, nY) to fill gaps in outdoor room layouts.
 static BOOL __stdcall DRLGOUTROOM_SpawnCornerFillPreset(D2DrlgLevelStrc * pLevel, int nX, int nY) {
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    int nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nX, nY);
-    switch (nGridFlags) {
+    switch (DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nX, nY)) {
       case 0x10:
-        {
-          nGridFlags = 0x19;
-          break;
-        }
+        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, 0x19, -1, 0);
+        break;
       case 0x11:
-        {
-          nGridFlags = 0x18;
-          break;
-        }
+        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, 0x18, -1, 0);
+        break;
       default:
-        {
-          return 0;
-        }
+        return 0;
     }
 
-    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nGridFlags, -1, 0);
     pWildData->dwFlags |= 0x40;
     return 1;
 }
