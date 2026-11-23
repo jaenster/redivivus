@@ -9222,7 +9222,7 @@ void __stdcall STATLIST_AttachStatListToUnit(struct D2UnitStrc * pOp45Owner, str
 void __stdcall STATLIST_AddStatValue(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nSubIndex);
 // Sets a stat to an absolute value in a D2StatListExStrc's base-stat array. Packs (eUnitStat, low subindex) into a single key, binary-searches the sorted stat array, and either updates an existing entry or inserts a new one. If nParam==0, removes the entry entirely. Computes the delta and propagates it via STATLIST_PropagateStatChange. For player-owned stat lists with the dirty flag set, records the changed stat via STATLIST_TrackChangedStat for client sync. Returns 1 if the value changed, 0 if already equal or list is null.
 BOOL __stdcall STATLIST_SetStatValue(struct D2StatListExStrc * pStatEx, eD2UnitStat eUnitStat, int32_t nValue, uint16_t low);
-BOOL __stdcall D2AddStatToStatsListEx(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer);
+void __stdcall D2AddStatToStatsListEx(struct D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer);
 void __stdcall STATLIST_SetStatValueInBaseArraySafe(struct D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer, struct D2UnitStrc * pUnit);
 void __stdcall STATLIST_SetUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer);
 void __stdcall STATLIST_AddUnitStat(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, int16_t nLayer);

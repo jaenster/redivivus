@@ -2112,13 +2112,10 @@ BOOL __stdcall STATLIST_SetStatValue(D2StatListExStrc * pStatEx, eD2UnitStat eUn
     return 1;
 }
 
-BOOL __stdcall D2AddStatToStatsListEx(D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer) {
-    BOOL BVar1 = 0;
+void __stdcall D2AddStatToStatsListEx(D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer) {
     if (pStatsEx) {
-      BVar1 = STATLIST_SetStatValue(pStatsEx, eUnitStat, nValue, (uint16_t)nLayer);
+      STATLIST_SetStatValue(pStatsEx, eUnitStat, nValue, (uint16_t)nLayer);
     }
-
-    return BVar1;
 }
 
 // Sets a stat value in the unit's base stat array by binary search on the packed (statId<<16|layer) key. Inserts a new entry if missing and value != 0; removes entry if value == 0; propagates the delta to all dependent stat lists via STATLIST_PropagateStatChange. Also enqueues a change notification for player-owned stat lists (flag 0x80000000). Returns 1 on change, 0 on no-op.

@@ -1088,18 +1088,22 @@ int32_t __fastcall DRLGPATH_AdvanceAlongPathPoints(D2DynamicPathStrc * pDynamicP
 }
 
 // Tests whether a single path step from nParam2 to nParam1 is passable for pDynamicPath's owner. If the path has flag 0x4 (teleport/move-collision update), directly calls UpdateCollision_Type and returns 1. Otherwise calls RemoveGetCollision_Type or RemoveGetCollision_Width (based on bbox flag 0x40000), accumulates the result into eCollisionFlag, and returns 1 (passable) or 0 (blocked) depending on collision bits 0x1/0x4.
-static BOOL __stdcall PATH_CheckCollisionOnStep(uint32_t nPackedNewPos, uint32_t nPackedOldPos, D2DynamicPathStrc * pDynamicPath) {
+static BOOL __stdcall PATH_CheckCollisionOnStep(D2PathPointStrc tNewPos, D2PathPointStrc tOldPos, D2DynamicPathStrc * pDynamicPath) {
     eCollisionFlags eCheckCollisionPattern;
     eCollisionFlags eCollResult;
     if (pDynamicPath->nFlags & 4U) {
       D2UnitStrc* pDVar1;
       pDVar1 = pDynamicPath->pOwner;
-      if (!(pDVar1 && (pDVar1->eUnitType == UNIT_PLAYER || pDVar1 && pDVar1->eUnitType == UNIT_MONSTER))) {
+      if (!pDVar1) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x209);
+        exit(-1);
+      }
+      if (!(pDVar1->eUnitType == UNIT_PLAYER || pDVar1 && pDVar1->eUnitType == UNIT_MONSTER)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x209);
         exit(-1);
       }
 
-      Collision::UpdateCollision_Type(pDynamicPath->pRoom, nPackedOldPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedOldPos + 2), pDynamicPath->pRoom, nPackedNewPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedNewPos + 2), pDynamicPath->nCollisionPattern, pDynamicPath->nCollisionFlag);
+      Collision::UpdateCollision_Type(pDynamicPath->pRoom, tOldPos.nX, tOldPos.nY, pDynamicPath->pRoom, tNewPos.nX, tNewPos.nY, pDynamicPath->nCollisionPattern, pDynamicPath->nCollisionFlag);
       return 1;
     }
 
@@ -1109,9 +1113,9 @@ static BOOL __stdcall PATH_CheckCollisionOnStep(uint32_t nPackedNewPos, uint32_t
       nCollisionPattern = 0x3c01;
     }
     if (nBBoxFlag) {
-      eCollResult = Collision::RemoveGetCollision_Width(pDynamicPath->pRoom, nPackedOldPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedOldPos + 2), nPackedNewPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedNewPos + 2), pDynamicPath->nUnitSize, pDynamicPath->nCollisionFlag, nCollisionPattern);
+      eCollResult = Collision::RemoveGetCollision_Width(pDynamicPath->pRoom, tOldPos.nX, tOldPos.nY, tNewPos.nX, tNewPos.nY, pDynamicPath->nUnitSize, pDynamicPath->nCollisionFlag, nCollisionPattern);
     } else {
-      eCollResult = Collision::RemoveGetCollision_Type(pDynamicPath->pRoom, nPackedOldPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedOldPos + 2), nPackedNewPos & 0xffff, (uint32_t)*(uint16_t*)((char*)&nPackedNewPos + 2), pDynamicPath->nCollisionPattern, pDynamicPath->nCollisionFlag, nCollisionPattern);
+      eCollResult = Collision::RemoveGetCollision_Type(pDynamicPath->pRoom, tOldPos.nX, tOldPos.nY, tNewPos.nX, tNewPos.nY, pDynamicPath->nCollisionPattern, pDynamicPath->nCollisionFlag, nCollisionPattern);
     }
 
     pDynamicPath->eCollisionFlag |= eCollResult;
@@ -1189,50 +1193,37 @@ static BOOL __stdcall PATH_ComputeDirectMovementVector(int * pVelOut, D2DynamicP
 
 // Traces a straight-line path from the dynamic path's current position by (nStartX, nStartY) fixed-point steps, checking collision at each cell transition via PATH_CheckCollisionOnStep. On collision writes the last valid cell centre into pFinalCoords and step count into pNumStepsTraced and returns 1; if the endpoint is reached without collision returns 0 with the full target coords. Optionally records each crossed cell in pDynamicPath->SaveCoords (flag 0x20000).
 // Stack-slot reuse: the nStartY slot holds the packed next cell (nextCellY << 16 | nextCellX) passed to PATH_CheckCollisionOnStep.
-static BOOL __stdcall PATH_TraceCollisionPath(int32_t nStartX, uint32_t nStartY, uint32_t * pFinalCoords, uint32_t * pNumStepsTraced, D2DynamicPathStrc * pDynamicPath) {
-    BOOL nStepResult;
-    short int currentCellY;
-    short int nextCellY;
-    uint32_t nextPosXfp;
-    uint32_t nNextPosYfp;
-    int nSaveIdx;
-    uint32_t nStepY = nStartY;
+static BOOL __stdcall PATH_TraceCollisionPath(int32_t nStepX, int32_t nStepY, uint32_t * pFinalCoords, uint32_t * pNumStepsTraced, D2DynamicPathStrc * pDynamicPath) {
     pDynamicPath->nSaveCoordsSize = 0;
-    int32_t nStepX = nStartX;
-    Drlg::Path::DRLGPATH_NormalizeFixedPointPair(&nStepX, (int*)&nStepY);
-    uint32_t currentPosXfp = pDynamicPath->Coords.tFixed.x;
-    uint32_t currentPosYfp = pDynamicPath->Coords.tFixed.y;
-    uint32_t targetPosYfp = currentPosYfp + nStartY;
-    uint32_t targetPosXfp = currentPosXfp + nStartX;
-    uint32_t nCellPackedXY = (uint32_t)((uint32_t)(uint16_t)(short int)(currentPosYfp >> 0x10) << 16 | (uint32_t)(uint16_t)(short int)(currentPosXfp >> 0x10));
-    short int targetCellY = (short int)(targetPosYfp >> 0x10);
-    uint32_t nTargetCellX = targetPosXfp >> 0x10;
-    uint32_t bDistantFlag = pDynamicPath->nFlags & 0x20000;
-    uint16_t targetCellX = (uint16_t)(targetPosXfp >> 0x10);
-    while (true) {
-      short int nextCellX;
-      currentCellY = (short int)(nCellPackedXY >> 0x10);
-      if ((short int)nCellPackedXY == (short int)nTargetCellX && currentCellY == targetCellY) {
-        break;
-      }
-
-      nextPosXfp = nStepX + currentPosXfp;
-      nNextPosYfp = nStepY + currentPosYfp;
-      nextCellX = (short int)(nextPosXfp >> 0x10);
-      nextCellY = (short int)(nNextPosYfp >> 0x10);
-      nStartY = (uint32_t)((uint32_t)(uint16_t)nextCellY << 16 | (uint32_t)(uint16_t)nextCellX);
-      if ((short int)nCellPackedXY != nextCellX || currentCellY != nextCellY) {
-        nStepResult = PATH_CheckCollisionOnStep(nStartY, nCellPackedXY, pDynamicPath);
-        if (!nStepResult) {
-          *pFinalCoords = (currentPosXfp & -65536) + 0x8000;
-          pFinalCoords[1] = (currentPosYfp & -65536) + 0x8000;
+    int32_t nNormStepX = nStepX;
+    int32_t nNormStepY = nStepY;
+    Drlg::Path::DRLGPATH_NormalizeFixedPointPair(&nNormStepX, &nNormStepY);
+    uint32_t nCurPosX = pDynamicPath->Coords.tFixed.x;
+    uint32_t nCurPosY = pDynamicPath->Coords.tFixed.y;
+    D2PathPointStrc tCurCell;
+    tCurCell.nX = (uint16_t)(nCurPosX >> 0x10);
+    tCurCell.nY = (uint16_t)(nCurPosY >> 0x10);
+    uint32_t nTargetPosY = nCurPosY + nStepY;
+    uint32_t nTargetPosX = nCurPosX + nStepX;
+    D2PathPointStrc tTargetCell;
+    tTargetCell.nY = (uint16_t)(nTargetPosY >> 0x10);
+    uint32_t bSaveCoords = pDynamicPath->nFlags & 0x20000;
+    tTargetCell.nX = (uint16_t)(nTargetPosX >> 0x10);
+    while (tCurCell.nX != tTargetCell.nX || tCurCell.nY != tTargetCell.nY) {
+      uint32_t nNextPosX = nNormStepX + nCurPosX;
+      uint32_t nNextPosY = nNormStepY + nCurPosY;
+      D2PathPointStrc tNextCell;
+      tNextCell.nX = (uint16_t)(nNextPosX >> 0x10);
+      tNextCell.nY = (uint16_t)(nNextPosY >> 0x10);
+      if (tCurCell.nX != tNextCell.nX || tCurCell.nY != tNextCell.nY) {
+        if (!PATH_CheckCollisionOnStep(tNextCell, tCurCell, pDynamicPath)) {
+          *pFinalCoords = (nCurPosX & 0xffff0000) + 0x8000;
+          pFinalCoords[1] = (nCurPosY & 0xffff0000) + 0x8000;
           *pNumStepsTraced = pDynamicPath->nSaveCoordsSize;
           return 1;
         }
-        if (bDistantFlag) {
-          nSaveIdx = pDynamicPath->nSaveCoordsSize;
-          pDynamicPath->SaveCoords[nSaveIdx].nX = nextCellX;
-          pDynamicPath->SaveCoords[nSaveIdx].nY = nextCellY;
+        if (bSaveCoords) {
+          pDynamicPath->SaveCoords[pDynamicPath->nSaveCoordsSize] = tNextCell;
         }
 
         pDynamicPath->nSaveCoordsSize++;
@@ -1241,18 +1232,17 @@ static BOOL __stdcall PATH_TraceCollisionPath(int32_t nStartX, uint32_t nStartY,
         }
       }
 
-      nCellPackedXY = nStartY;
-      nTargetCellX = (uint32_t)targetCellX;
-      currentPosYfp = nNextPosYfp;
-      currentPosXfp = nextPosXfp;
+      tCurCell = tNextCell;
+      nCurPosX = nNextPosX;
+      nCurPosY = nNextPosY;
     }
 
     if (pDynamicPath->nSaveCoordsSize) {
       pDynamicPath->nFlags |= 8;
     }
 
-    *pFinalCoords = targetPosXfp;
-    pFinalCoords[1] = targetPosYfp;
+    *pFinalCoords = nTargetPosX;
+    pFinalCoords[1] = nTargetPosY;
     *pNumStepsTraced = pDynamicPath->nSaveCoordsSize;
     return 0;
 }
@@ -1601,49 +1591,45 @@ BOOL __stdcall PATH_AdvanceUnitAlongPath(D2UnitStrc * pUnit, int pExternalPath) 
 }
 
 // Commits a unit's collision footprint to its new tile position. Depending on path flags and whether nTargetPos is zero: removes, updates, or width-updates collision via the appropriate Collision helper; sets the room-change flag if the room changed; calls DRLGPATH_SetPathPosition to record the new fixed-point coordinates; and for non-zero targets validates the destination room (fatal error if none found). Resets path state afterward. Returns 1.
-static BOOL __stdcall PATH_MoveUnitToPosition(D2RoomStrc * pRoom, uint32_t nTargetPos, D2DynamicPathStrc * pPath) {
+static BOOL __stdcall PATH_MoveUnitToPosition(D2RoomStrc * pRoom, D2PathPointStrc tTargetPos, D2DynamicPathStrc * pPath) {
     eCollisionFlags eNewCollision;
     uint16_t nOldX;
     uint16_t nOldY;
-    uint16_t nTargetY = *(uint16_t*)((char*)&nTargetPos + 2);
     if (!pPath->pOwner || pPath->pOwner->eUnitType != UNIT_MISSILE) {
       nOldX = pPath->Coords.tSubtile.nPosX;
       nOldY = pPath->Coords.tSubtile.nPosY;
-      if (nTargetPos || false) {
-        Collision::UpdateCollision_Type(pPath->pRoom, (uint32_t)nOldX, (uint32_t)nOldY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nCollisionPattern, pPath->nCollisionFlag);
+      if (tTargetPos.nX || tTargetPos.nY) {
+        Collision::UpdateCollision_Type(pPath->pRoom, nOldX, nOldY, pRoom, tTargetPos.nX, tTargetPos.nY, pPath->nCollisionPattern, pPath->nCollisionFlag);
       } else {
-        Collision::RemoveCollision_Type(pPath->pRoom, (uint32_t)nOldX, (uint32_t)nOldY, pPath->nCollisionPattern, pPath->nCollisionFlag);
+        Collision::RemoveCollision_Type(pPath->pRoom, nOldX, nOldY, pPath->nCollisionPattern, pPath->nCollisionFlag);
       }
-    } else if (!(short int)nTargetPos && !(nTargetPos >> 0x10)) {
-      Collision::RemoveCollision_Width(pPath->pRoom, (uint32_t)(uint16_t)pPath->Coords.tSubtile.nPosX, (uint32_t)(uint16_t)pPath->Coords.tSubtile.nPosY, pPath->nUnitSize, pPath->nCollisionFlag);
+    } else if (!tTargetPos.nX && !tTargetPos.nY) {
+      Collision::RemoveCollision_Width(pPath->pRoom, (uint16_t)pPath->Coords.tSubtile.nPosX, (uint16_t)pPath->Coords.tSubtile.nPosY, pPath->nUnitSize, pPath->nCollisionFlag);
       pPath->eCollisionFlag = 0;
     } else {
       nOldX = pPath->Coords.tSubtile.nPosX;
       nOldY = pPath->Coords.tSubtile.nPosY;
-      if (nTargetPos != (uint32_t)((uint32_t)(uint16_t)nOldY << 16 | (uint32_t)(uint16_t)nOldX) || false) {
+      if (nOldX != tTargetPos.nX || nOldY != tTargetPos.nY) {
         pPath->nFlags |= 8;
       } else {
         pPath->nFlags &= -9;
       }
 
-      eNewCollision = Collision::UpdateGetCollision_Width(pPath->pRoom, (uint32_t)nOldX, (uint32_t)nOldY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nUnitSize, pPath->nCollisionFlag, pPath->nMoveTestCollisionMask);
+      eNewCollision = Collision::UpdateGetCollision_Width(pPath->pRoom, nOldX, nOldY, pRoom, tTargetPos.nX, tTargetPos.nY, pPath->nUnitSize, pPath->nCollisionFlag, pPath->nMoveTestCollisionMask);
       pPath->eCollisionFlag = eNewCollision;
       pPath->nSaveCoordsSize = 1;
-      pPath->SaveCoords[0].nX = (uint16_t)nTargetPos;
-      pPath->SaveCoords[0].nY = *(uint16_t*)((char*)&nTargetPos + 2);
+      pPath->SaveCoords[0] = tTargetPos;
     }
     if (pPath->pRoom != pRoom) {
       pPath->nFlags |= 1;
     }
 
     POINT tPos;
-    tPos.x = (nTargetPos << 0x10) + 0x8000;
-    tPos.y = ((uint32_t)nTargetY << 0x10) + 0x8000;
+    tPos.x = ((uint32_t)tTargetPos.nX << 0x10) + 0x8000;
+    tPos.y = ((uint32_t)tTargetPos.nY << 0x10) + 0x8000;
     DRLGPATH_SetPathPosition(tPos, pRoom, pPath);
-    if (nTargetPos || false) {
-      D2RoomStrc* pBetterRoom;
-      pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint16_t)nTargetPos, (uint32_t)nTargetY);
-      if (!pBetterRoom) {
+    if (tTargetPos.nX || tTargetPos.nY) {
+      if (!Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, tTargetPos.nX, tTargetPos.nY)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x489);
         exit(-1);
       }
@@ -1653,32 +1639,30 @@ static BOOL __stdcall PATH_MoveUnitToPosition(D2RoomStrc * pRoom, uint32_t nTarg
     return 1;
 }
 
-static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, uint32_t nTargetPos, D2DynamicPathStrc * pPath) {
+static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, D2PathPointStrc tTargetPos, D2DynamicPathStrc * pPath) {
     uint16_t wPosX = pPath->Coords.tSubtile.nPosX;
     uint16_t wPosY = pPath->Coords.tSubtile.nPosY;
     if (!pPath->pOwner || pPath->pOwner->eUnitType != UNIT_MISSILE) {
-      if (nTargetPos || false) {
-        Collision::UpdateCollision_Type(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nCollisionPattern, pPath->nCollisionFlag);
+      if (tTargetPos.nX || tTargetPos.nY) {
+        Collision::UpdateCollision_Type(pPath->pRoom, wPosX, wPosY, pRoom, tTargetPos.nX, tTargetPos.nY, pPath->nCollisionPattern, pPath->nCollisionFlag);
       } else {
-        Collision::RemoveCollision_Type(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pPath->nCollisionPattern, pPath->nCollisionFlag);
+        Collision::RemoveCollision_Type(pPath->pRoom, wPosX, wPosY, pPath->nCollisionPattern, pPath->nCollisionFlag);
       }
-    } else if (!(short int)nTargetPos && !(nTargetPos >> 0x10)) {
-      Collision::RemoveCollision_Width(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pPath->nUnitSize, pPath->nCollisionFlag);
+    } else if (!tTargetPos.nX && !tTargetPos.nY) {
+      Collision::RemoveCollision_Width(pPath->pRoom, wPosX, wPosY, pPath->nUnitSize, pPath->nCollisionFlag);
     } else {
-      Collision::UpdateCollision_Width(pPath->pRoom, (uint32_t)wPosX, (uint32_t)wPosY, pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2), pPath->nUnitSize, pPath->nCollisionFlag);
+      Collision::UpdateCollision_Width(pPath->pRoom, wPosX, wPosY, pRoom, tTargetPos.nX, tTargetPos.nY, pPath->nUnitSize, pPath->nCollisionFlag);
     }
     if (pPath->pRoom != pRoom) {
       pPath->nFlags |= 1;
     }
 
     POINT tPos;
-    tPos.x = (nTargetPos << 0x10) + 0x8000;
-    tPos.y = ((uint32_t)*(uint16_t*)((char*)&nTargetPos + 2) << 0x10) + 0x8000;
+    tPos.x = ((uint32_t)tTargetPos.nX << 0x10) + 0x8000;
+    tPos.y = ((uint32_t)tTargetPos.nY << 0x10) + 0x8000;
     DRLGPATH_SetPathPosition(tPos, pRoom, pPath);
-    if (nTargetPos || false) {
-      D2RoomStrc* pBetterRoom;
-      pBetterRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, (uint16_t)nTargetPos, (uint32_t)*(uint16_t*)((char*)&nTargetPos + 2));
-      if (!pBetterRoom) {
+    if (tTargetPos.nX || tTargetPos.nY) {
+      if (!Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, tTargetPos.nX, tTargetPos.nY)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4cc);
         exit(-1);
       }
@@ -1701,7 +1685,10 @@ BOOL __stdcall PATH_GetCollisionMaskAt(D2DynamicPathStrc * pDynamicPath, D2UnitS
 }
 
 int32_t __stdcall PATH_GetCollisionTypeAt(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * dwUnused, D2RoomStrc * pRoom, int wPosX, int wPosY) {
-    PATH_MoveObjectToPosition(pRoom, (uint32_t)((uint32_t)(uint16_t)wPosY << 16 | (uint32_t)(uint16_t)(short int)wPosX), pDynamicPath);
+    D2PathPointStrc tPoint;
+    tPoint.nX = (uint16_t)wPosX;
+    tPoint.nY = (uint16_t)wPosY;
+    PATH_MoveObjectToPosition(pRoom, tPoint, pDynamicPath);
     pDynamicPath->dwPathPoints = 0;
     return 1;
 }

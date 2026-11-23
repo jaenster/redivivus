@@ -53,24 +53,17 @@ BOOL __fastcall Q21_CheckGoldenBirdDropConditions(D2QuestDataStrc * pQuestData, 
 
 // Q22_OnCouncilMemberKilled (BLACKENED TEMPLE / Travincal council, internal Q22) — on-death notifier for a tracked Council member. Reads quest-specific data off the game (offset 0x18); if its byte[2] tracking flag is set and the killer's GUID (param2 unit field [0xc], -1 if none) matches the recorded killer GUID at [4], clears tracking byte[2] and sets the "kill confirmed" byte[1]. No quest-record state calls (operates on the in-memory D2QuestDataA3Q5Strc council-kill bookkeeping).
 void __fastcall Q22_OnCouncilMemberKilled(D2QuestDataStrc * pQuestData, D2UnitStrc * pKillerUnit) {
-    int nKillerGUID;
-    D2QuestDataA3Q5Strc* pCouncilQuestData = pQuestData->pQuestSpecificData.pA3Q5;
-    if (pCouncilQuestData->bCouncilMemberTracking != '\x01') {
-      return;
-    }
-    if (!pKillerUnit) {
-      nKillerGUID = -1;
-    } else {
-      nKillerGUID = pKillerUnit->nUnitGUID;
-    }
-
-    int nTrackedUnitGUID = (int)((uint32_t)(uint8_t)pCouncilQuestData->nTrackedCouncilByte0 | (uint32_t)(uint8_t)pCouncilQuestData->bCouncilTrackingActive << 8 | (uint32_t)(uint8_t)pCouncilQuestData->field_0x6 << 16 | (uint32_t)(uint8_t)pCouncilQuestData->field_0x7 << 24);
-    if (nTrackedUnitGUID != nKillerGUID) {
+    D2QuestDataA3Q4Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q4;
+    if (pQuestSpecificData->bBossKillTracking != 1) {
       return;
     }
 
-    pCouncilQuestData->bCouncilMemberTracking = '\0';
-    pCouncilQuestData->bCouncilMemberKillNotify = true;
+    if (pQuestSpecificData->nBirdKillerGUID != (!pKillerUnit ? -1 : pKillerUnit->nUnitGUID)) {
+      return;
+    }
+
+    pQuestSpecificData->bBossKillTracking = false;
+    pQuestSpecificData->bCanDropBird = 1;
 }
 
 // Q22_IsGoldenBirdQuestActive — returns 1 if the Golden Bird quest data exists and its bBloodRavenKilled-aliased flag is set. Cross-quest probe used by Blackened Temple flow; pure read of in-memory quest-specific data, no quest-record state calls.
@@ -146,7 +139,6 @@ BOOL __fastcall Q22_PlayerUpdateBlackenedTempleState(::SGAMEDATA * pGame, D2Unit
 // State flow: requires !Completed && !Step0x04 -> set Completed|Step0x04, set JustCompleted.
 BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     int _bSameOrAdjacentRoom;
-    uint32_t nUnitGUID;
     D2QuestDataStrc* pQuestDataBlackenedTemple;
     D2UnitStrc* pCouncilUnit;
     D2RoomStrc* pTargetRoom;
@@ -179,9 +171,8 @@ BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * p
     if (neAct == ACT_III) {
       D2QuestDataA3Q5Strc* pDVar1;
       pQuestDataBlackenedTemple = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheBlackenedTemple);
-      pDVar1 = pQuestDataBlackenedTemple->pQuestSpecificData.pA3Q5;
-      nUnitGUID = (uint32_t)((uint32_t)(uint8_t)pDVar1->bLastKilledCouncilByte0 | (uint32_t)(uint8_t)pDVar1->bCouncilMemberKillNotify << 8 | (uint32_t)(uint8_t)pDVar1->bCouncilMemberTracking << 16 | (uint32_t)(uint8_t)pDVar1->byLastKilledCouncilGUIDByte3 << 24);
-      pCouncilUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nUnitGUID);
+      pDVar1 = pQuestDataBlackenedTemple->pQuestSpecificData.pA3Q5; // steer-ok: folded into the call, 005bae20 drops to INSN_MATCH (24 byte diffs, measured)
+      pCouncilUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pDVar1->nLastKilledCouncilGUID);
       if (pCouncilUnit) {
         pTargetRoom = D2Common::Units::UNITS_GetRoom(pCouncilUnit);
         if (pTargetRoom) {
@@ -920,10 +911,7 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
             nTargetGUID = pQuestArgs->pTarget->nUnitGUID;
           }
 
-          pDVar1->bLastKilledCouncilByte0 = (bool)(char)nTargetGUID;
-          pDVar1->bCouncilMemberKillNotify = (bool)(char)(nTargetGUID >> 8);
-          pDVar1->bCouncilMemberTracking = (char)(nTargetGUID >> 0x10);
-          pDVar1->byLastKilledCouncilGUIDByte3 = (bool)(char)(nTargetGUID >> 0x18);
+          pDVar1->nLastKilledCouncilGUID = nTargetGUID;
           pQuestData->nQuestPacketFlags = '\0';
           if (pDVar1->bJerhynAiActive) {
             QUEST_SetStateFlag(pQuestData, 7, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x3cc);

@@ -1808,10 +1808,7 @@ struct D2QuestDataA3Q4Strc {
 #ifndef D2_DEFINED_D2QuestDataA3Q5Strc
 #define D2_DEFINED_D2QuestDataA3Q5Strc
 struct D2QuestDataA3Q5Strc {
-    /* 0x00 */ bool bLastKilledCouncilByte0; // Low byte of council tracking
-    /* 0x01 */ bool bCouncilMemberKillNotify; // Set in OnCouncilMemberKilled
-    /* 0x02 */ uint8_t bCouncilMemberTracking; // Council member being tracked
-    /* 0x03 */ bool byLastKilledCouncilGUIDByte3;
+    /* 0x00 */ int32_t nLastKilledCouncilGUID; // GUID of the council member whose kill emptied the count; written by Q22_Callback08_MonsterKilled, read by Q22_PlayerCheckNearTravincal
     /* 0x04 */ uint8_t nTrackedCouncilByte0; // Byte 0 of tracked council GUID / notify flag from Callback_11
     /* 0x05 */ bool bCouncilTrackingActive; // Council-kill / Compelling-Orb sequence active. Set in Q22_TrackCouncilKill; read (as bViperAmuletInitialized) by Q22_PlayerUpdateBlackenedTempleState to advance log to Step0x03
     /* 0x06 */ uint8_t field_0x6;
