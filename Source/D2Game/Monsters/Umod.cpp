@@ -692,13 +692,12 @@ void __fastcall FireEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) 
 
 // Applies the Lightning Enchanted monster modifier (umod) to pUnit. Identical structure to FireEnchanted: requires a live UNIT_MONSTER + game pointer, derives difficulty (0-2) and single/multiplayer flag, reads unit level, indexes monlvl.txt DM[mp*3+diff], and computes light min/max damage from GetUmodConstant (diff+0x10/+0x13, or +0x1c/+0x1f when bUnknown set), adding UNITSTAT_lightmindam/lightmaxdam and chaining MagicResist. No-op on null unit/game or out-of-range monlvl row.
 void __fastcall LightningEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnique) {
-    int32_t nMaxDamConst;
     uint32_t nDifficulty;
     int bIsMultiplayer;
     if (!pUnit) {
       return;
     }
-    if (pUnit->eUnitType != UNIT_MONSTER) {
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       return;
     }
 
@@ -708,56 +707,31 @@ void __fastcall LightningEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUni
       return;
     }
 
-    uint32_t byGameDifficulty;
-    byGameDifficulty = pGame->nDifficulty;
-    if (byGameDifficulty > 0) {
-      if (1 < byGameDifficulty) {
-        nDifficulty = 2;
-        goto add_lightning_damage;
-      }
-      if (byGameDifficulty > 0) {
-        nDifficulty = (uint32_t)byGameDifficulty;
-        goto add_lightning_damage;
-      }
-    }
-
-    nDifficulty = 0;
-    add_lightning_damage:
+    nDifficulty = min(max(pGame->nDifficulty, 0), 2); // steer-ok: windef.h min/max macros
     if (pGame->nGameType != SGAMETYPE_BNET_HOST || (bIsMultiplayer = 0 , pGame->eGameType != GAMETYPE_SINGLEPLAYER)) {
       bIsMultiplayer = 1;
     }
     int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    int nLevelClamped = nLevel;
-    if (nLevel <= 1) {
-      nLevelClamped = 1;
-    }
-
-    int nLevelIdx = D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1;
-    if (nLevelClamped < nLevelIdx && (nLevelIdx = nLevel , nLevel <= 1)) {
-      nLevelIdx = 1;
-    } else if (nLevelIdx < 0) {
-      return;
-    }
-
-    D2MonLvlTxt* pMonLvlTxt = nLevelIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevelIdx : nullptr;
+    nLevel = min(max(nLevel, 1), D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize - 1); // steer-ok: windef.h min/max macros
+    D2MonLvlTxt* pMonLvlTxt = nLevel >= 0 && nLevel < D2Common::ITEMS::Items::sgptDataTable->nTxtMonLvlSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonLvl + nLevel : nullptr;
     if (!pMonLvlTxt) {
       return;
     }
 
-    nLevelClamped = pMonLvlTxt->DM[bIsMultiplayer * 3 + nDifficulty];
+    int nLvlDamage;
+    nLvlDamage = pMonLvlTxt->DM[bIsMultiplayer * 3 + nDifficulty];
+    int nMinDamage;
+    int nMaxDamage;
     if (bUnique) {
-      nMaxDamConst = GetUmodConstant(nDifficulty + 0x1c);
-      nLevelIdx = (int)((uint64_t)((int64_t)(nMaxDamConst * nLevelClamped) * 0x51eb851f) >> 0x20);
-      nLevel = nDifficulty + 0x1f;
+      nMinDamage = GetUmodConstant(nDifficulty + 0x1c) * nLvlDamage / 100;
+      nMaxDamage = GetUmodConstant(nDifficulty + 0x1f) * nLvlDamage / 100;
     } else {
-      nMaxDamConst = GetUmodConstant(nDifficulty + 0x10);
-      nLevelIdx = (int)((uint64_t)((int64_t)(nMaxDamConst * nLevelClamped) * 0x51eb851f) >> 0x20);
-      nLevel = nDifficulty + 0x13;
+      nMinDamage = GetUmodConstant(nDifficulty + 0x10) * nLvlDamage / 100;
+      nMaxDamage = GetUmodConstant(nDifficulty + 0x13) * nLvlDamage / 100;
     }
 
-    nMaxDamConst = GetUmodConstant(nLevel);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_lightmindam, (nLevelIdx >> 5) - (nLevelIdx >> 0x1f), 0);
-    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_lightmaxdam, nMaxDamConst * nLevelClamped / 100, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_lightmindam, nMinDamage, 0);
+    D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_lightmaxdam, nMaxDamage, 0);
     MagicResist(pUnit, nIndex, bUnique);
 }
 
