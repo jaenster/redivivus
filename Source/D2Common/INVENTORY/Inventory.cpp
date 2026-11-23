@@ -2618,18 +2618,19 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInvent
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pCurItem = pItemData->sInvNode.pNextItemInPage;
+        pCurItem = pNode->pNextItemInPage;
       }
     } else {
       uint32_t nPosX;
       search_from_item:
       if (pCurItem) {
         while (true) {
-          if (pCurItem->nClassId == nInventory) {
+          if (GetClassIdInline(pCurItem) == nInventory) {
             eUnitType = pCurItem->eUnitType;
             if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
               nPosX = pCurItem->pPath.pStaticPath->nPosX;
@@ -2652,11 +2653,12 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInvent
           if (!pItemData) {
             break;
           }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
+          D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+          if (!pNode) {
             return nullptr;
           }
 
-          pCurItem = pItemData->sInvNode.pNextItemInPage;
+          pCurItem = pNode->pNextItemInPage;
           if (!pCurItem) {
             return nullptr;
           }
