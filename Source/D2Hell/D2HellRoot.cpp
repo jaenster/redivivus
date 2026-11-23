@@ -401,8 +401,9 @@ void __fastcall FAULT_ShowErrorAndTerminate(LPCSTR szText) {
     FAULT_TerminateCurrentProcess();
 }
 
-void __fastcall FAULT_ShowErrorMessageBox(LPCSTR szText) {
-    /* UINT uType for MessageBoxA */ /* LPCSTR lpCaption for MessageBoxA */ /* LPCSTR lpText for MessageBoxA */ /* HWND hWnd for MessageBoxA */ MessageBoxA((HWND)0x0, szText, "Diablo 2.EXE", 0x2010);
+int __fastcall FAULT_ShowErrorMessageBox(LPCSTR szText) {
+    MessageBoxA((HWND)0x0, szText, lpCaption_006cc848, 0x2010);
+    return 1;
 }
 
 void __fastcall FAULT_FormatAndShowError(LPCSTR szFile, int nLine, LPCSTR szExpression) {

@@ -40,6 +40,7 @@ struct D2SkillCalcOperandStackStrc {
     /* 0x000 */ uint8_t abTokenTypes[64];
     /* 0x040 */ uint32_t adwTokenValues[64];
     /* 0x140 */ int32_t nTop;
+    /* 0x144 */ int32_t nPrecedenceDepth;
 };
 
 #endif // D2_MODULE_Fog

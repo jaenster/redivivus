@@ -1600,13 +1600,13 @@ D2MonModeTableRowStrc * __fastcall MONMODE_GetModeTableRow(D2UnitStrc * pUnit, u
     return gaMonModeTable + nAnimMode;
 }
 
-static void __stdcall MONMODE_RequestNeutral(::SGAMEDATA * pGame, eD2MonsterAnimMode eAnimMode, D2UnitStrc * pUnit) {
+static BOOL __stdcall MONMODE_RequestNeutral(::SGAMEDATA * pGame, eD2MonsterAnimMode eAnimMode, D2UnitStrc * pUnit) {
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     if (eAnimMode != Death && eAnimMode != eD2MonsterAnimMode_ns::Dead) {
       BOOL bIsModeZeroDeath;
       bIsModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
       if (bIsModeZeroDeath) {
-        return;
+        return 1;
       }
     }
 
@@ -1615,6 +1615,7 @@ static void __stdcall MONMODE_RequestNeutral(::SGAMEDATA * pGame, eD2MonsterAnim
     sMonsterKill.pUnit = pUnit;
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Neutral;
     MONMODE_StartNeutral(pGame, &sMonsterKill);
+    return 0;
 }
 
 void __fastcall MONMODE_EventModeUpdate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nArg1, int32_t nArg2) {

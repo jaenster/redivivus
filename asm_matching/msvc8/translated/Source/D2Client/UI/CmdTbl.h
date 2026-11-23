@@ -76,7 +76,7 @@ void __stdcall CMDTBL_InvokeMouseRightButtonHandler();
 void __stdcall CMD_InvokeCallback_0x1148();
 void __stdcall CMDTBL_InvokeMouseMiddleButtonHandler();
 void __fastcall CMD_InvokeCallbackByParam(int32_t nScrollDirection);
-int32_t SORT_CompareInts(int * pA, int * pB);
+int32_t SORT_CompareInts(struct D2KeyBindStrc * pA, struct D2KeyBindStrc * pB);
 // Rebuilds derived mouse button bindings (0x100-0x104) from command table. Scans all key bindings and populates gKeyBindingTable slots for left/right/middle/scroll/forward mouse buttons. Invalidates bindings (sets 0xFFFF) if command has no handler or conflicts with mouse-specific restrictions.
 void __stdcall CMD_RebuildDerivedBindings();
 // Serializes the global key-bindings table (g_KeyBindingsTable, 0x474 bytes, 0x11d entries) to two files: the user's active key file (via GetKeyFileHandle) and the install-directory "default.key" fallback. Writes a header with signature 0x5357 and version 0x25 before the binding data.

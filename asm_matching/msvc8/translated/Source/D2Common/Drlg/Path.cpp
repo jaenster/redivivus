@@ -1277,7 +1277,7 @@ static BOOL __stdcall DRLGPATH_RaycastCollisionLine(int * pVelocity, uint32_t nP
 }
 
 // Performs a Bresenham line raycast between two packed positions, checking collision at each step. Handles all octant cases (X-major, Y-major, diagonal). Returns 0 if blocked, 1 if path is clear.
-static BOOL __stdcall DRLGPATH_RaycastBresenhamLine(uint32_t nPackedSrc, uint32_t * pnPackedDst, D2DynamicPathStrc * pPathArg) {
+static BOOL __stdcall DRLGPATH_RaycastBresenhamLine(uint32_t nPackedSrc, D2PathPointStrc * pnPackedDst, D2DynamicPathStrc * pPathArg) {
     int32_t iVar1;
     D2PathPointStrc sDst;
     uint32_t nPackedPrev;
@@ -1441,7 +1441,7 @@ static BOOL __stdcall DRLGPATH_RaycastBresenhamLine(uint32_t nPackedSrc, uint32_
 }
 
 // Checks if a target position is reachable from a unit's current dynamic path position. Validates unit type (player/monster), handles zero-velocity case, and performs a Bresenham line collision check.
-static BOOL DRLGPATH_CheckTargetReachable(uint32_t * pTargetPos, D2DynamicPathStrc * pDynamicPath) {
+static BOOL DRLGPATH_CheckTargetReachable(D2PathPointStrc * pTargetPos, D2DynamicPathStrc * pDynamicPath) {
     BOOL nReachResult;
     uint32_t nPackedPos;
     D2UnitStrc* pDVar1 = pDynamicPath->pOwner;
@@ -1451,24 +1451,24 @@ static BOOL DRLGPATH_CheckTargetReachable(uint32_t * pTargetPos, D2DynamicPathSt
     } else if (pDynamicPath->ePathType == 4) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x145);
       exit(-1);
-    } else if (!(short int)*pTargetPos) {
+    } else if (!pTargetPos->nX) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x146);
       exit(-1);
     } else {
-      if (!*(short int*)((char*)pTargetPos + 2)) {
+      if (!pTargetPos->nY) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x147);
         exit(-1);
       }
       if (!pDynamicPath->dwVelocity) {
-        *(short int*)pTargetPos = pDynamicPath->Coords.tSubtile.nPosX;
-        *(short int*)((char*)pTargetPos + 2) = pDynamicPath->Coords.tSubtile.nPosY;
+        pTargetPos->nX = pDynamicPath->Coords.tSubtile.nPosX;
+        pTargetPos->nY = pDynamicPath->Coords.tSubtile.nPosY;
         return 0;
       }
 
       PATH::Path::DRLGPATH_AdvanceAlongPathPoints(pDynamicPath, 1, 1);
       if (!pDynamicPath->dwVelocity) {
-        *(short int*)pTargetPos = pDynamicPath->Coords.tSubtile.nPosX;
-        *(short int*)((char*)pTargetPos + 2) = pDynamicPath->Coords.tSubtile.nPosY;
+        pTargetPos->nX = pDynamicPath->Coords.tSubtile.nPosX;
+        pTargetPos->nY = pDynamicPath->Coords.tSubtile.nPosY;
         return 0;
       }
 
@@ -1578,7 +1578,7 @@ int32_t __fastcall PATH_FindPathToward(D2PathTypeArg * pPathTypeArg) {
     ptDst = pPathTypeArg->tTargetCoord;
     pDynamicPath->PathPoints[0] = ptDst;
     BOOL bReachable;
-    bReachable = DRLGPATH_CheckTargetReachable((uint32_t*)&ptDst, pDynamicPath);
+    bReachable = DRLGPATH_CheckTargetReachable(&ptDst, pDynamicPath);
     D2PathPointStrc ptCur;
     ptCur = ptDst;
     if (bReachable) {
@@ -1745,7 +1745,7 @@ int32_t __fastcall PATH_FindPathSingleStep(D2PathTypeArg * pPathTypeArg) {
     pDynamicPath->nPathPointIndex = 0;
     D2PathPointStrc ptTarget = pPathTypeArg->tTargetCoord;
     pDynamicPath->PathPoints[0] = ptTarget;
-    DRLGPATH_CheckTargetReachable((uint32_t*)&ptTarget, pDynamicPath);
+    DRLGPATH_CheckTargetReachable(&ptTarget, pDynamicPath);
     if (pPathTypeArg->tStartCoord.nX == ptTarget.nX && pPathTypeArg->tStartCoord.nY == ptTarget.nY) {
       return 0;
     }
@@ -1759,7 +1759,7 @@ int32_t __fastcall PATH_FindPathForceMove(D2PathTypeArg * pPathTypeArg) {
     D2DynamicPathStrc* pDynamicPath = pPathTypeArg->pDynamicPath;
     pDynamicPath->nPathPointIndex = 0;
     pDynamicPath->PathPoints[0] = pPathTypeArg->tTargetCoord;
-    DRLGPATH_CheckTargetReachable((uint32_t*)pDynamicPath->PathPoints, pDynamicPath);
+    DRLGPATH_CheckTargetReachable(pDynamicPath->PathPoints, pDynamicPath);
     return 1;
 }
 
@@ -1828,7 +1828,7 @@ int32_t __fastcall PATH_FindPathKnockback(D2PathTypeArg * pPathTypeArg) {
     }
 
     pDynamicPath->PathPoints[0] = ptKnockTarget;
-    DRLGPATH_RaycastBresenhamLine((uint32_t)d2_bits_of(pPathTypeArg->tStartCoord), (uint32_t*)&ptKnockTarget, pDynamicPath);
+    DRLGPATH_RaycastBresenhamLine((uint32_t)d2_bits_of(pPathTypeArg->tStartCoord), &ptKnockTarget, pDynamicPath);
     uint16_t nFinalX = ptKnockTarget.nX;
     PATH::DynamicPath::SetSP1(pDynamicPath, ptKnockTarget.nX, ptKnockTarget.nY);
     if (nFinalX == pPathTypeArg->tStartCoord.nX && ptKnockTarget.nY == pPathTypeArg->tStartCoord.nY) {

@@ -1743,13 +1743,13 @@ struct __attribute__((packed)) D2ItemStatCostTxt {
     /* 0x031 */ uint8_t pad_31;
     /* 0x032 */ uint16_t maxstat;
     /* 0x034 */ short descpriority;
-    /* 0x036 */ char descfunc;
+    /* 0x036 */ uint8_t descfunc;
     /* 0x037 */ char descval;
     /* 0x038 */ uint16_t descstrpos;
     /* 0x03A */ uint16_t descstrneg;
     /* 0x03C */ uint16_t descstr2;
     /* 0x03E */ short dgrp;
-    /* 0x040 */ char dgrpfunc;
+    /* 0x040 */ uint8_t dgrpfunc;
     /* 0x041 */ char dgrpval;
     /* 0x042 */ short dgrpstrpos;
     /* 0x044 */ short dgrpstrneg;
@@ -8133,7 +8133,7 @@ void __stdcall SetLanguageCode(struct D2HoverTextStrc * pHover, uint8_t nLanguag
 namespace D2Common::Chat::Ignorelist {
 void __stdcall IGNORELIST_Shutdown();
 // @sourcefile .\Chat\Ignorelist.cpp
-void __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nRawLen);
+BOOL __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nRawLen);
 // @sourcefile .\Chat\Ignorelist.cpp
 void __stdcall MISC_InitIgnorelist();
 // Lazy accessor - returns ppIgnoreListVTable, and only when that global is null

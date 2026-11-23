@@ -196,7 +196,7 @@ typedef void (__fastcall *fpD2ShrineTableHandler)(D2ObjectOperateFnArg * pArgume
 #endif
 #ifndef RECON_FPTD_pfnPetForEachCallback
 #define RECON_FPTD_pfnPetForEachCallback
-typedef void (__stdcall *pfnPetForEachCallback)(D2UnitStrc * pPetUnit, void * pContext);
+typedef void (__fastcall *pfnPetForEachCallback)(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pPetUnit, void * pContext);
 #endif
 
 static PFN_ObjectOperateCallback gapObjectOperateCallbacks[10] = {

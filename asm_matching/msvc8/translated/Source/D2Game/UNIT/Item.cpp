@@ -561,8 +561,16 @@ static void __stdcall MONSTER_SendNpcEnchantsToClient(D2ClientStrc * pClient, D2
     GAME::SCmd::NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT(pClient, nUnitGUID, '\x01', wNameSeed, wEnchant1, wEnchant2, wIsChampion);
 }
 
+// GetGUID as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 static void __stdcall MONSTER_SendNpcHealthUpdate(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
-    uint32_t dwLastHitClass = pUnit->dwLastHitClass;
+    uint8_t nHitClass = (uint8_t)pUnit->dwLastHitClass;
     uint8_t byHpPct = Monsters::MONSTER_GetHpPercent128(pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_last_sent_hp_pct, (uint32_t)byHpPct, 0);
     if (byHpPct > 1) {
@@ -574,7 +582,7 @@ static void __stdcall MONSTER_SendNpcHealthUpdate(D2ClientStrc * pClient, D2Unit
       byHpPct |= 0x80;
     }
 
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(pClient, '\f', '\x01', pUnit->nUnitGUID, '\x13', (uint8_t)dwLastHitClass, byHpPct);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x0C_UNITCHANGE(pClient, '\f', '\x01', GetGUIDInline(pUnit), '\x13', nHitClass, byHpPct);
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.

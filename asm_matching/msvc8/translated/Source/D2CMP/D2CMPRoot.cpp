@@ -16,7 +16,7 @@
 namespace D2CMP {
 
 void __fastcall SPRITECACHE_LRU_FreeEntryCallback(D2LRUCacheNodeStrc * pEntry) {
-    void* pCacheData = pEntry->pUserData;
+    D2TileLibraryEntryStrc* pCacheData = (D2TileLibraryEntryStrc*)pEntry->pUserData;
     if (gpfnSpriteCacheFreeEntry) {
       BOOL BVar1;
       BVar1 = IsBadCodePtr((FARPROC)gpfnSpriteCacheFreeEntry);
@@ -28,8 +28,8 @@ void __fastcall SPRITECACHE_LRU_FreeEntryCallback(D2LRUCacheNodeStrc * pEntry) {
       (*gpfnSpriteCacheFreeEntry)(pCacheData);
     }
 
-    *(uint32_t*)((char*)pCacheData + 0x54) = 0;
-    *(uint32_t*)((char*)pCacheData + 0x5c) = 0;
+    pCacheData->pSubTiles = 0;
+    pCacheData->pLruNode = 0;
 }
 
 void __fastcall SPRITECACHE_LRU_RemoveCacheEntryCallback(D2LRUCacheNodeStrc * pEntry) {

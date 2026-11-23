@@ -10432,7 +10432,7 @@ void __stdcall INPUT_InventoryRightClick(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __stdcall SelectDefaultTabForNPC() {
-    uint32_t* pTabState;
+    D2NpcShopTabStrc* pTabState;
     int nTabCount;
     int32_t nNpcGuid;
     gnInvInventoryGold = 0;
@@ -10440,12 +10440,12 @@ void __stdcall SelectDefaultTabForNPC() {
     CurrentInventoryPage = 0;
     gbInvOverlayFlag = 0;
     if (AmountOfNPCTabs > 0) {
-      pTabState = &gaNpcShopTabs[0].nHasItems;
+      pTabState = &gaNpcShopTabs[0];
       nTabCount = AmountOfNPCTabs;
       do {
-        pTabState[-1] = 0;
-        *pTabState = 0;
-        pTabState = (uint32_t*)((char*)pTabState + 0x12);
+        pTabState->nSelected = 0;
+        pTabState->nHasItems = 0;
+        pTabState++;
         nTabCount--;
       } while (nTabCount);
     }
@@ -11124,7 +11124,6 @@ void __stdcall INPUT_CubeLeftClick(D2UIMouseMsgStrc * pMsg) {
       if (bInRange) {
         gbInvPanelButtonPressed = 1;
         pMsg->dwResult = 0;
-        consume_button_click:
         pMsg->bHandled = 1;
         Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
         Storm::SMsgBreakHandlerChain(pMsg);
@@ -11140,7 +11139,10 @@ void __stdcall INPUT_CubeLeftClick(D2UIMouseMsgStrc * pMsg) {
       gbInvCubePageOpen2 = 0;
       gShopTradeUIState = 1;
       pMsg->dwResult = 0;
-      goto consume_button_click;
+      pMsg->bHandled = 1;
+      Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
+      Storm::SMsgBreakHandlerChain(pMsg);
+      return;
     }
 
     bInRange = CheckSomeCoords(nX, nY);
@@ -11177,7 +11179,17 @@ void __stdcall INPUT_CubeLeftClick(D2UIMouseMsgStrc * pMsg) {
     bInRange = IsInInventoryScreenRange(nX, nY);
     if (!bInRange && (bInRange = IsInTransmogrifyScreenRange(nX, nY) , !bInRange)) {
       bInRange = INV_IsMouseOverGoldButton(nX, nY);
-      if (!bInRange) {
+      if (bInRange) {
+        gbInventoryDragInProgress = 0;
+        gbTradeConfirmationPending = 0;
+        gShopTradeUIState = 0;
+        gbInvCubePageOpen = 0;
+        gbInvCubePageOpen2 = 0;
+        gnInvInventoryGold = 1;
+        pMsg->bHandled = 1;
+        pMsg->dwResult = 0;
+        Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
+      } else {
         if (nX >= pTranspogrifyBoxScreenCoordinates.nLeft && nX < pTranspogrifyBoxScreenCoordinates.nRight && nY >= 0 && nY <= pTranspogrifyBoxScreenCoordinates.nBottom) {
           gbInventoryDragInProgress = 0;
           gbTradeConfirmationPending = 0;
@@ -11194,16 +11206,6 @@ void __stdcall INPUT_CubeLeftClick(D2UIMouseMsgStrc * pMsg) {
 
         goto forward_unhandled_and_reset;
       }
-
-      gnInvInventoryGold = 1;
-      pMsg->bHandled = 1;
-      gbInventoryDragInProgress = 0;
-      gbTradeConfirmationPending = 0;
-      gShopTradeUIState = 0;
-      gbInvCubePageOpen = 0;
-      gbInvCubePageOpen2 = 0;
-      pMsg->dwResult = 0;
-      Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
     } else {
       ClickItemHandler(pMsg);
       pMsg->bHandled = 1;

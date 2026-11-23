@@ -38,6 +38,9 @@ Each module under `Source/` and `3rdparty/` builds into its own static library, 
 executable links them whole in the order of the 1.14d link. `-DREDIVIVUS_MODULE_LIBRARIES=OFF`
 compiles the tree into the executable directly instead.
 
+The three licensed DLLs the executable imports, and the experimental 64-bit build with its
+FFmpeg-backed stand-ins for them, are covered in [building-x64.md](building-x64.md).
+
 The module table is `project.json` (`modules`): each module's directory, kind, dependencies
 with their evidence, documented exceptions, link order and strictness. `Source/modules.cmake` is
 generated from it, and the configure step fails when the two disagree, so a change to the table

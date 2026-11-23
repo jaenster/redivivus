@@ -1234,18 +1234,10 @@ void __stdcall TXT_AllocTxt_TreasureClassEx(D2PoolManagerStrc * pMemory) {
 
 void __stdcall FreeParsedTC() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMonsterTblsLink);
-    int nIdx = 0;
-    if (sgtDataTable.nParsedTreasureClassSize > 0) {
-      int nTCStride;
-      nTCStride = 0;
-      do {
-        if ((void*)sgtDataTable.pParsedTreasureClass[nTCStride].pEntries) {
-          D2_FREE_POOL_AT(nullptr, (void*)sgtDataTable.pParsedTreasureClass[nTCStride].pEntries, ".\\DATATBLS\\MonsterTbls.cpp", 0x643);
-        }
-
-        nIdx++;
-        nTCStride++;
-      } while (nIdx < sgtDataTable.nParsedTreasureClassSize);
+    for (int nIdx = 0; nIdx < sgtDataTable.nParsedTreasureClassSize; nIdx++) {
+      if ((void*)sgtDataTable.pParsedTreasureClass[nIdx].pEntries) {
+        D2_FREE_POOL_AT(nullptr, (void*)sgtDataTable.pParsedTreasureClass[nIdx].pEntries, ".\\DATATBLS\\MonsterTbls.cpp", 0x643);
+      }
     }
 
     D2_FREE_POOL_AT(nullptr, sgtDataTable.pParsedTreasureClass, ".\\DATATBLS\\MonsterTbls.cpp", 0x647);

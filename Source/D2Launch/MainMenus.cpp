@@ -6083,7 +6083,7 @@ void __stdcall UIMENU_PleaseInsertCinematicDiscWithCancelAndNotWorkingOkButtons(
     D2Win::Src::D2WinTextBox::SetText(pTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x1432), 0, false, 0);
 }
 
-bool fpRequiredUserAction() {
+BOOL fpRequiredUserAction() {
     // Static local variables (originally global data)
     static fpLoadVideoMpqFiles fpLoadVideoMpqCallback; D2_STATIC_GUARD_BSS(fpLoadVideoMpqCallback, "D2Launch::MainMenus::fpRequiredUserAction::fpLoadVideoMpqCallback");
 
@@ -6094,7 +6094,7 @@ bool fpRequiredUserAction() {
     gbCdCheckPassed[0] = 1;
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_PollDisconnectFlagPump);
     FORMS_DestroyList();
-    return (uint8_t)(uint32_t)::fpInsertPlayCd;
+    return ::fpInsertPlayCd;
 }
 
 BOOL __stdcall MAINMENU_OnPressTcpIpOptions(D2ControlMsg * pControlMsg) {
@@ -7534,7 +7534,7 @@ BOOL fpInsertExpansionCd() {
 
 BOOL __stdcall MAINMENU_OnPressPlayIntroCinematic(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)(bool (*)())MainMenus::fpRequiredUserAction, 0, 0);
+    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles(MainMenus::fpRequiredUserAction, 0, 0);
     if (!bVideoMpqLoaded) {
       D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
       D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)fpInsertPlayCd, (::fpRequiredUserAction)fpInsertExpansionCd, 0, D2IniData_launcher);
@@ -7547,7 +7547,7 @@ BOOL __stdcall MAINMENU_OnPressPlayIntroCinematic(D2ControlMsg * pControlMsg) {
 
 BOOL __stdcall MAINMENU_OnPressPlayAct2StartCinematic(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)(bool (*)())MainMenus::fpRequiredUserAction, 0, 0);
+    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles(MainMenus::fpRequiredUserAction, 0, 0);
     if (!bVideoMpqLoaded) {
       D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
       D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)fpInsertPlayCd, (::fpRequiredUserAction)fpInsertExpansionCd, 0, D2IniData_launcher);
@@ -7560,7 +7560,7 @@ BOOL __stdcall MAINMENU_OnPressPlayAct2StartCinematic(D2ControlMsg * pControlMsg
 
 BOOL __stdcall MAINMENU_OnPressPlayAct3StartCinematic(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)(bool (*)())MainMenus::fpRequiredUserAction, 0, 0);
+    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles(MainMenus::fpRequiredUserAction, 0, 0);
     if (!bVideoMpqLoaded) {
       D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
       D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)fpInsertPlayCd, (::fpRequiredUserAction)fpInsertExpansionCd, 0, D2IniData_launcher);
@@ -7573,7 +7573,7 @@ BOOL __stdcall MAINMENU_OnPressPlayAct3StartCinematic(D2ControlMsg * pControlMsg
 
 BOOL __stdcall MAINMENU_OnPressPlayAct4StartCinematic(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)(bool (*)())MainMenus::fpRequiredUserAction, 0, 0);
+    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles(MainMenus::fpRequiredUserAction, 0, 0);
     if (!bVideoMpqLoaded) {
       D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
       D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)fpInsertPlayCd, (::fpRequiredUserAction)fpInsertExpansionCd, 0, D2IniData_launcher);
@@ -7586,7 +7586,7 @@ BOOL __stdcall MAINMENU_OnPressPlayAct4StartCinematic(D2ControlMsg * pControlMsg
 
 BOOL __stdcall MAINMENU_OnPressPlayAct4EndCinematic(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)(bool (*)())MainMenus::fpRequiredUserAction, 0, 0);
+    BOOL bVideoMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles(MainMenus::fpRequiredUserAction, 0, 0);
     if (!bVideoMpqLoaded) {
       D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
       D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)fpInsertPlayCd, (::fpRequiredUserAction)fpInsertExpansionCd, 0, D2IniData_launcher);

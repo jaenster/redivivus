@@ -141,7 +141,7 @@ typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStr
 #endif
 #ifndef RECON_FPTD_pfnPetForEachCallback
 #define RECON_FPTD_pfnPetForEachCallback
-typedef void (__stdcall *pfnPetForEachCallback)(D2UnitStrc * pPetUnit, void * pContext);
+typedef void (__fastcall *pfnPetForEachCallback)(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pPetUnit, void * pContext);
 #endif
 
 namespace D2Game { namespace PLAYER { namespace PlayerPets {
@@ -648,7 +648,7 @@ void __fastcall PetsForEach(::SGAMEDATA * pGame, D2UnitStrc * pUnit, pfnPetForEa
             if (!(pCurPetNode->nFlags & 1)) {
               pPetUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pCurPetNode->nPetGUID);
               if (pPetUnit) {
-                (*pfnCallback)(pPetUnit, pCallbackArg);
+                pfnCallback(pGame, pUnit, pPetUnit, pCallbackArg);
               }
             }
           }

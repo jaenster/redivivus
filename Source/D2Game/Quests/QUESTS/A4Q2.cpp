@@ -417,30 +417,30 @@ D2UnitStrc * __fastcall Q27_SpawnDiablo(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 uint8_t __fastcall QuitGameAfterDia(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     DWORD dwNowTick;
     int* pnSpawnRetryCount;
-    D2QuestDataA1Q1Strc* pDVar1 = pQuestData->pQuestSpecificData.pA1Q1;
-    if (*(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 2) != '\0') {
+    D2QuestDataA4Q2Strc* pDVar1 = pQuestData->pQuestSpecificData.pA4Q2;
+    if (pDVar1->bWaitingForDiabloSpawn != '\0') {
       D2UnitStrc* pDVar2;
-      pnSpawnRetryCount = pDVar1->sQuestGUID.aPlayerGUID + 6;
+      pnSpawnRetryCount = &pDVar1->nDiabloKillTick;
       (*pnSpawnRetryCount)++;
-      if ((uint32_t)pDVar1->sQuestGUID.aPlayerGUID[6] >= 10 && *(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 6) != '\0') {
-        pDVar2 = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pDVar1->sQuestGUID.aPlayerGUID[2]);
+      if ((uint32_t)pDVar1->nDiabloKillTick >= 10 && pDVar1->bWaitingForSealSpawn != '\0') {
+        pDVar2 = UNIT::SUnit::FindUnitFromTable(pQuestData->pGame, UNIT_OBJECT, pDVar1->nSealObjectGUID);
         if (pDVar2) {
-          pDVar2 = Q27_SpawnDiablo(pQuestData->pGame, D2Common::Units::UNITS_GetRoom(pDVar2), D2Common::Units::GetXPosFromDynamicPathUnit(pDVar2), D2Common::Units::GetYPosFromDynamicPathUnit(pDVar2), (D2QuestDataA4Q2Strc*)pDVar1);
+          pDVar2 = Q27_SpawnDiablo(pQuestData->pGame, D2Common::Units::UNITS_GetRoom(pDVar2), D2Common::Units::GetXPosFromDynamicPathUnit(pDVar2), D2Common::Units::GetYPosFromDynamicPathUnit(pDVar2), pDVar1);
           if (pDVar2) {
-            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 2) = 0;
-            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 1) = 0;
+            pDVar1->bWaitingForDiabloSpawn = 0;
+            pDVar1->bDiabloSpawnStarted = 0;
             return '\x01';
           }
         }
       }
     } else {
-      if (*(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 3) != '\0') {
-        if ((char)pDVar1->sQuestGUID.aPlayerGUID[1] != '\0') {
+      if (pDVar1->bDiabloKilled != '\0') {
+        if ((char)pDVar1->bNeedLeaveServer != '\0') {
           dwNowTick = GetTickCount();
-          if (pDVar1->sQuestGUID.aPlayerGUID[6] + 95000U < dwNowTick) {
-            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 1) = 0;
-            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 3) = 0;
-            *(uint8_t*)(pDVar1->sQuestGUID.aPlayerGUID + 1) = 0;
+          if (pDVar1->nDiabloKillTick + 95000U < dwNowTick) {
+            pDVar1->bDiabloSpawnStarted = 0;
+            pDVar1->bDiabloKilled = 0;
+            pDVar1->bNeedLeaveServer = 0;
             if (pQuestData->pGame->bExpansion) {
               return '\x01';
             }
@@ -451,18 +451,18 @@ uint8_t __fastcall QuitGameAfterDia(::SGAMEDATA * pGame, D2QuestDataStrc * pQues
         }
 
         dwNowTick = GetTickCount();
-        if (pDVar1->sQuestGUID.aPlayerGUID[6] + 90000U < dwNowTick) {
-          if (*(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 5) != '\0') {
+        if (pDVar1->nDiabloKillTick + 90000U < dwNowTick) {
+          if (pDVar1->bDiabloDeathNotified != '\0') {
             if (!pQuestData->pGame->bExpansion) {
               UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q27_PlayerEnterGame);
             }
 
-            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 5) = 0;
+            pDVar1->bDiabloDeathNotified = 0;
           }
         } else {
           dwNowTick = GetTickCount();
-          if (pDVar1->sQuestGUID.aPlayerGUID[6] + 75000U < dwNowTick && *(char*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 0x15) == '\0') {
-            *(uint8_t*)((char*)pDVar1->sQuestGUID.aPlayerGUID + 0x15) = 1;
+          if (pDVar1->nDiabloKillTick + 75000U < dwNowTick && pDVar1->bSaveFileSent == '\0') {
+            pDVar1->bSaveFileSent = 1;
             GAME::Server::SendSaveFileToClient(pGame);
           }
 

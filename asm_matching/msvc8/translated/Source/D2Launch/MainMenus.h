@@ -113,7 +113,7 @@ __pragma(pack(push, 1)) struct D2ControlMsg {
 namespace D2Launch { namespace MainMenus {
 
 // Function declarations
-bool fpRequiredUserAction();
+BOOL fpRequiredUserAction();
 BOOL fpInsertPlayCd();
 BOOL fpInsertExpansionCd();
 // Module-private: no other module references these

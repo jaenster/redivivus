@@ -24,7 +24,7 @@ struct D2UnitStrc;
 struct SGAMEDATA;
 #ifndef RECON_FPTD_pfnPetForEachCallback
 #define RECON_FPTD_pfnPetForEachCallback
-typedef void (__stdcall *pfnPetForEachCallback)(struct D2UnitStrc * pPetUnit, void * pContext);
+typedef void (__fastcall *pfnPetForEachCallback)(::SGAMEDATA * pGame, struct D2UnitStrc * pOwner, struct D2UnitStrc * pPetUnit, void * pContext);
 #endif
 
 // Data types

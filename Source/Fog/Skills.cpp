@@ -798,7 +798,7 @@ static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, D2Ski
         }
 
         nPrecedence = SKILLS_GetOpcodePrecedence(opcode, pFunction, nFunctionArg);
-        if (*(int*)((char*)pOperatorStack + 0x144) < nPrecedence) {
+        if (pOperatorStack->nPrecedenceDepth < nPrecedence) {
           goto clear_and_fail;
         }
         if (nWriteOffset >= nBufferSize) {
@@ -809,7 +809,7 @@ static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, D2Ski
         nWriteOffset++;
         *pWritePtr = opcode;
         pOperatorStack->nTop--;
-        *(int*)((char*)pOperatorStack + 0x144) += 1 - nPrecedence;
+        pOperatorStack->nPrecedenceDepth += 1 - nPrecedence;
         pWritePtr++;
       } while (pOperatorStack->nTop > 0);
     }
@@ -907,7 +907,6 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
       uint8_t __pad10;
       uint8_t aTokenBuf;
       D2SkillCalcOperandStackStrc sOpStack;
-      int nPrecedenceDepth;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 340, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
@@ -920,7 +919,7 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
     int nBytesWritten;
     eD2SkillCalcOp bEmitOpcode;
     __frame0.sOpStack.nTop = 0;
-    __frame0.nPrecedenceDepth = 0;
+    __frame0.sOpStack.nPrecedenceDepth = 0;
     __frame0.bLastWasValue = 0;
     bool bHasVarRef;
     bHasVarRef = false;
@@ -965,13 +964,13 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
 
               nFunctionArg = __frame0.sOpStack.adwTokenValues[__frame0.sOpStack.nTop - 1];
               nPrecedence = SKILLS_GetOpcodePrecedence(__frame0.aTokenBuf, pOpcodeInfo, nFunctionArg);
-              if (__frame0.nPrecedenceDepth < nPrecedence || nBytesWritten >= nMaxOutputSize) {
+              if (__frame0.sOpStack.nPrecedenceDepth < nPrecedence || nBytesWritten >= nMaxOutputSize) {
                 *pbByteCodeOutput = 0;
                 return 0;
               }
 
               nBytesWritten++;
-              __frame0.nPrecedenceDepth += 1 - nPrecedence;
+              __frame0.sOpStack.nPrecedenceDepth += 1 - nPrecedence;
               *pbWritePtr = __frame0.aTokenBuf;
               pbFinalWrite = pbWritePtr + 1;
               if (__frame0.aTokenBuf == 1) {

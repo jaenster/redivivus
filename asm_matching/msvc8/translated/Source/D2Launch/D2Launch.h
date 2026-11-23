@@ -157,7 +157,7 @@ fnAppModeRun * __fastcall AppModeLauncherInit(HMODULE hModule);
 void __stdcall AppModeLauncherShutdown();
 } // namespace D2Launch
 namespace D2Launch { namespace MainMenus {
-bool fpRequiredUserAction();
+BOOL fpRequiredUserAction();
 BOOL fpInsertPlayCd();
 BOOL fpInsertExpansionCd();
 }} // namespace D2Launch::MainMenus

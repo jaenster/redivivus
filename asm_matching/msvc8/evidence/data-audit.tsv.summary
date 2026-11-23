@@ -1,4 +1,4 @@
-tree 8f3310100-dirty; Ghidra v2021 extents (dataextent.tsv); 464 objects (build/obj/ + Source/globals/)
+tree dae9ffece-dirty; Ghidra v2021 extents (dataextent.tsv); 464 objects (build/obj/ + Source/globals/)
 Initialised game data: 1723 of 1966 symbols MATCH (87.64%), 341576 of 344485 bytes (99.16%); bytes equal in place 341660 (99.18%)
   uncompared: 237 game items (2789 bytes) that no data symbol of ours pairs with
   left out: 609 runtime-only items (17915 bytes), 371 import slots, 336 compiler EH/RTTI items
@@ -52,4 +52,4 @@ by section (symbols MATCH/total, bytes MATCH/total):
   .bss     2310/2313   2367690/2371806 
 floating-point constants judged by the literals of their readers' objects: 17, 16 MATCH
 pairings: name 3947, datamap 148, name-address-noitem 26, name-address 21, tu-literal 17, datamap-noitem 3; data symbols of ours unpaired 5411 (5166 of them compiler literals); defined twice 547
-name pair disagrees with the datamap address: 10
+name pair disagrees with the datamap address: 9

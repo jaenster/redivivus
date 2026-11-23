@@ -1495,8 +1495,8 @@ static eD2ServerIncomingStatus __stdcall ItemIsOfPlayerAndNotOnCursor(uint32_t n
     return (uint32_t)(pCursorItem_lcl != pItem);
 }
 
-static BOOL __stdcall Unreferenced_005492a0(void * pUnit, int32_t nArg) {
-    D2UnitStrc* pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(*(D2InventoryStrc**)((char*)pUnit + 0x60), nArg);
+static BOOL __stdcall Unreferenced_005492a0(D2UnitStrc * pUnit, int32_t nArg) {
+    D2UnitStrc* pDVar1 = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pUnit->pInventory, nArg);
     return (uint32_t)!pDVar1;
 }
 
@@ -5045,7 +5045,7 @@ void __fastcall SendPlayerStopAndAtributeUpdate(::SGAMEDATA * pGame, D2UnitStrc 
     SendAttributeUpdate(pUnit, 0xaf, nGoldLost, pUnit);
 }
 
-static void * keep_005492a0 = (0 ? (Unreferenced_005492a0(*(void * *)0, *(int32_t *)0), (void *)0) : (void *)0);
+static void * keep_005492a0 = (0 ? (Unreferenced_005492a0(*(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_005492c0 = (0 ? (PLRMSG_CheckWeaponSlotEmpty(*(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_00549410 = (0 ? (MONSTER_FindNearbyAllyUnit(*(::SGAMEDATA * *)0, *(int32_t *)0, *(D2UnitStrc * * *)0, *(D2UnitStrc * *)0, *(DWORD *)0), (void *)0) : (void *)0);
 

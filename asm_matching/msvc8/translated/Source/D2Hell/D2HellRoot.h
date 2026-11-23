@@ -153,7 +153,7 @@ struct D2FogArchiveStrc * __fastcall ARCHIVE_LoadMPQ(char * szMpqFileName, int32
 // @sourcefile .\SRC\Archive.cpp
 void __fastcall ARCHIVE_FreeMpqFile(struct D2FogArchiveStrc * pFogArchive);
 pfnFaultError __fastcall RegisterExitFunction(pfnFaultError pfnNewCallback);
-void __fastcall FAULT_ShowErrorMessageBox(LPCSTR szText);
+int __fastcall FAULT_ShowErrorMessageBox(LPCSTR szText);
 void __fastcall FAULT_RegisterErrorHandler(pfnStormErrorHandler pfnHandler);
 void FAULT_ShowFormattedErrorWithArgs(uint32_t nErrorCode, ...);
 LPVOID __fastcall D2MEM_VirtualAlloc(SIZE_T nSize);

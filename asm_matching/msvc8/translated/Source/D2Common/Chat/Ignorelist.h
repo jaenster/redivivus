@@ -23,7 +23,7 @@ namespace D2Common { namespace Chat { namespace Ignorelist {
 // Function declarations
 void __stdcall IGNORELIST_Shutdown();
 // @sourcefile .\Chat\Ignorelist.cpp
-void __fastcall AddAccountMapping(::IgnoreList * pThis, int, char * szRaw, int32_t nRawLen);
+BOOL __fastcall AddAccountMapping(::IgnoreList * pThis, int, char * szRaw, int32_t nRawLen);
 // @sourcefile .\Chat\Ignorelist.cpp
 void __stdcall MISC_InitIgnorelist();
 // Lazy accessor - returns ppIgnoreListVTable, and only when that global is null

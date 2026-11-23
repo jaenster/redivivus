@@ -46,6 +46,22 @@ struct D2XSHA1Strc {
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
+struct SID_C2S_AuthAccountUpgradeProof {
+    /* 0x00 */ DWORD dwClientToken;
+    /* 0x04 */ D2XSHA1Strc shaPasswordProof;
+    /* 0x18 */ D2SrpSaltVerifierStrc sSaltVerifier;
+};
+
+#endif // D2_MODULE_Bnclient
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
+struct D2SidPasswordProofInputStrc {
+    /* 0x00 */ DWORD dwClientToken;
+    /* 0x04 */ DWORD dwServerToken;
+    /* 0x08 */ uint8_t abPasswordHash[20];
+};
+
+#endif // D2_MODULE_Bnclient
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 struct SID_C2S_AuthAccountCreate {
     /* 0x00 */ uint8_t aSalt[32];
     /* 0x20 */ uint8_t aVerifier[32];

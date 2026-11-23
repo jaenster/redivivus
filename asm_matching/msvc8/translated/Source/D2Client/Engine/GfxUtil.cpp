@@ -1415,7 +1415,7 @@ int32_t __fastcall DC6_AssignParams(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit
     return nResult;
 }
 
-static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(void * pCofFile, int32_t nAnimMode, short * pComponentTable, D2MonStatsTxt * pMonStatsTxt, int32_t nComponentRow, int32_t nWeaponClass, D2GfxDataStrc * pGfxData) {
+static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(D2CofTextureCacheEntryStrc * pCofFile, int32_t nAnimMode, short * pComponentTable, D2MonStatsTxt * pMonStatsTxt, int32_t nComponentRow, int32_t nWeaponClass, D2GfxDataStrc * pGfxData) {
     BOOL _bCompositeDeath;
     bool bCompositeDeath;
     uint32_t nOverlay;
@@ -1447,7 +1447,7 @@ static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(void * pCofFile, int32_t nAn
     pGfxData->nCompositToken = nCompositeToken;
     pGfxData->nArmorToken = 0x2074696c;
     pGfxData->nUnitToken = *(int*)pMonStatsTxt->Code;
-    pCofDataBase = *(uint8_t**)((char*)pCofFile + 0x14);
+    pCofDataBase = pCofFile->pFileData;
     if (!pCofDataBase) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x3f0);
       exit(-1);
@@ -1514,7 +1514,7 @@ static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(void * pCofFile, int32_t nAn
     return 0;
 }
 
-int32_t __fastcall GFXUTIL_InitAndBuildMonsterCofParams(D2GfxDataStrc * pGfxData, int32_t nDirection, int32_t nFrameNumber, uint8_t nComponentType, int32_t nAnimMode, int32_t nWeaponClass, void * pCofFile, short * pComponentTable, D2MonStatsTxt * pMonStatsTxt, int32_t nComponentRow) {
+int32_t __fastcall GFXUTIL_InitAndBuildMonsterCofParams(D2GfxDataStrc * pGfxData, int32_t nDirection, int32_t nFrameNumber, uint8_t nComponentType, int32_t nAnimMode, int32_t nWeaponClass, D2CofTextureCacheEntryStrc * pCofFile, short * pComponentTable, D2MonStatsTxt * pMonStatsTxt, int32_t nComponentRow) {
     pGfxData->nDirection = nDirection;
     pGfxData->nFrameNumber = nFrameNumber;
     pGfxData->nComponentType = nComponentType;

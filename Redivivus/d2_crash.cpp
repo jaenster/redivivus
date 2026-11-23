@@ -15,6 +15,20 @@
 #include <string.h>
 
 #include "3rdparty/libbacktrace/backtrace.h"
+#include "D2Arch.h"
+
+// An address in the image. The 32-bit target keeps every one in a DWORD, as the
+// report has always printed them; the 64-bit build widens the same code.
+#if D2_ARCH_X86
+typedef DWORD ADDR;
+#define ADDR_FMT "%08lX"
+#define ADDR_ARG(x) ((unsigned long)(x))
+#else
+// wsprintfA knows no 64-bit conversion, so a wide value prints as two halves.
+typedef ULONG_PTR ADDR;
+#define ADDR_FMT "%08lX%08lX"
+#define ADDR_ARG(x) (unsigned long)((ULONG_PTR)(x) >> 32), (unsigned long)(ULONG_PTR)(x)
+#endif
 
 #ifndef REDIVIVUS_BUILD_ID
 #define REDIVIVUS_BUILD_ID "unknown"
@@ -73,7 +87,7 @@ const char* FatalName(DWORD dwCode) {
 // ---------------------------------------------------------------------------
 enum FrameKind { FRAME_FAULT, FRAME_CHAIN, FRAME_SCAN };
 struct Frame {
-    DWORD dwAddr;
+    ADDR dwAddr;
     DWORD dwStackOff;   // FRAME_SCAN: offset from ESP the slot was found at
     FrameKind eKind;
 };
@@ -81,9 +95,9 @@ const int MAX_FRAMES = 64;
 Frame g_aFrames[MAX_FRAMES];
 int g_nFrames = 0;
 
-DWORD g_dwExeLo = 0, g_dwExeHi = 0;
+ADDR g_dwExeLo = 0, g_dwExeHi = 0;
 
-void AddFrame(DWORD dwAddr, DWORD dwStackOff, FrameKind eKind) {
+void AddFrame(ADDR dwAddr, DWORD dwStackOff, FrameKind eKind) {
     if (g_nFrames < MAX_FRAMES) {
         g_aFrames[g_nFrames].dwAddr = dwAddr;
         g_aFrames[g_nFrames].dwStackOff = dwStackOff;
@@ -92,7 +106,7 @@ void AddFrame(DWORD dwAddr, DWORD dwStackOff, FrameKind eKind) {
     }
 }
 
-bool InExecutableSectionOfExe(DWORD dwAddr) {
+bool InExecutableSectionOfExe(ADDR dwAddr) {
     if (dwAddr < g_dwExeLo || dwAddr >= g_dwExeHi) return false;
     const char* pBase = (const char*)(UINT_PTR)g_dwExeLo;
     const IMAGE_NT_HEADERS* pNt =
@@ -109,7 +123,7 @@ bool InExecutableSectionOfExe(DWORD dwAddr) {
 
 // A stack slot is a plausible return address when it points into our code just
 // after a CALL: E8 rel32, or FF /2 in its register and memory forms.
-bool LooksLikeReturnAddress(DWORD dwAddr) {
+bool LooksLikeReturnAddress(ADDR dwAddr) {
     if (!InExecutableSectionOfExe(dwAddr) || !InExecutableSectionOfExe(dwAddr - 7)) return false;
     const unsigned char* p = (const unsigned char*)(UINT_PTR)dwAddr;
     if (p[-5] == 0xE8) return true;
@@ -119,6 +133,7 @@ bool LooksLikeReturnAddress(DWORD dwAddr) {
     return false;
 }
 
+#if D2_ARCH_X86
 void CollectFrames(const CONTEXT* pCtx) {
     g_nFrames = 0;
     AddFrame(pCtx->Eip, 0, FRAME_FAULT);
@@ -165,6 +180,51 @@ void CollectFrames(const CONTEXT* pCtx) {
         }
     }
 }
+#else
+// x86-64 keeps no frame-pointer chain; the walk is the unwind tables the linker
+// emitted for every function, stepped with RtlVirtualUnwind as the system's
+// dispatcher steps them. A function without an entry is a leaf: its return
+// address is at [RSP].
+void CollectFrames(const CONTEXT* pCtx) {
+    g_nFrames = 0;
+    AddFrame(pCtx->Rip, 0, FRAME_FAULT);
+
+    NT_TIB* pTib = (NT_TIB*)NtCurrentTeb();
+    ADDR dwBase = (ADDR)pTib->StackBase;
+    ADDR dwLimit = (ADDR)pTib->StackLimit;
+    ADDR dwLo = pCtx->Rsp > dwLimit ? pCtx->Rsp : dwLimit;
+
+    CONTEXT ctx = *pCtx;
+    for (int i = 0; i < 48 && ctx.Rip; ++i) {
+        if (ctx.Rsp < dwLo || ctx.Rsp + 8 > dwBase) break;
+        ULONG64 nImageBase = 0;
+        PRUNTIME_FUNCTION pFn = RtlLookupFunctionEntry(ctx.Rip, &nImageBase, nullptr);
+        if (pFn) {
+            PVOID pHandlerData = nullptr;
+            ULONG64 nEstablisher = 0;
+            RtlVirtualUnwind(UNW_FLAG_NHANDLER, nImageBase, ctx.Rip, pFn, &ctx, &pHandlerData, &nEstablisher, nullptr);
+        } else {
+            ctx.Rip = *(const ULONG64*)ctx.Rsp;
+            ctx.Rsp += 8;
+        }
+        if (!ctx.Rip) break;
+        AddFrame(ctx.Rip, 0, FRAME_CHAIN);
+    }
+
+    // As on x86: a fault outside our image says too little, so read the stack
+    // itself for return addresses into our code.
+    bool bRipOurs = pCtx->Rip >= g_dwExeLo && pCtx->Rip < g_dwExeHi;
+    if (!bRipOurs) {
+        int nFound = 0;
+        for (ADDR dwSlot = dwLo; dwSlot + 8 <= dwBase && nFound < 24; dwSlot += 8) {
+            ADDR dwVal = *(const ADDR*)dwSlot;
+            if (!LooksLikeReturnAddress(dwVal)) continue;
+            AddFrame(dwVal, (DWORD)(dwSlot - pCtx->Rsp), FRAME_SCAN);
+            ++nFound;
+        }
+    }
+}
+#endif
 
 // ---------------------------------------------------------------------------
 // Report output. wsprintfA rather than the CRT: it needs no CRT state and keeps
@@ -191,7 +251,7 @@ const char* BaseName(const char* pszPath) {
 }
 
 // "module+0xOFFSET" for any address, or the bare address when no module holds it.
-void ModuleOffset(DWORD dwAddr, char* pszOut) {
+void ModuleOffset(ADDR dwAddr, char* pszOut) {
     HMODULE hMod = 0;
     char szPath[MAX_PATH];
     if (dwAddr && GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
@@ -199,9 +259,9 @@ void ModuleOffset(DWORD dwAddr, char* pszOut) {
                                      (LPCSTR)(UINT_PTR)dwAddr, &hMod) &&
         GetModuleFileNameA(hMod, szPath, MAX_PATH)) {
         wsprintfA(pszOut, "%s+0x%06lX", BaseName(szPath),
-                  (unsigned long)(dwAddr - (DWORD)(UINT_PTR)hMod));
+                  (unsigned long)(dwAddr - (ADDR)(UINT_PTR)hMod));
     } else {
-        wsprintfA(pszOut, "0x%08lX (no module)", (unsigned long)dwAddr);
+        wsprintfA(pszOut, "0x" ADDR_FMT " (no module)", ADDR_ARG(dwAddr));
     }
 }
 
@@ -355,7 +415,7 @@ DWORD WINAPI SymbolizeThread(LPVOID) {
             SymAppend("  #%-2d %s  %s", i, s_aKindLabel[f.eKind], szMod);
         // A return address points after the CALL; step back into it so the line
         // reported is the call's own.
-        DWORD dwPc = f.eKind == FRAME_FAULT ? f.dwAddr : f.dwAddr - 1;
+        ADDR dwPc = f.eKind == FRAME_FAULT ? f.dwAddr : f.dwAddr - 1;
         PcInfo info = { 0 };
         if (g_pBtState && f.dwAddr >= g_dwExeLo && f.dwAddr < g_dwExeHi) {
             backtrace_pcinfo(g_pBtState, dwPc, OnPcInfo, OnBtErrorQuiet, &info);
@@ -377,7 +437,7 @@ void WriteModules() {
     MODULEENTRY32 me;
     me.dwSize = sizeof(me);
     for (BOOL bOk = Module32First(hSnap, &me); bOk; bOk = Module32Next(hSnap, &me)) {
-        Out("  %08lX %08lX  %s\r\n", (unsigned long)(UINT_PTR)me.modBaseAddr,
+        Out("  " ADDR_FMT " %08lX  %s\r\n", ADDR_ARG((UINT_PTR)me.modBaseAddr),
             (unsigned long)me.modBaseSize, me.szExePath);
     }
     CloseHandle(hSnap);
@@ -388,7 +448,7 @@ void WriteModules() {
 // passes and the call-site address GetInstructionPointer produced.
 struct HaltInfo {
     int nLine;
-    DWORD dwAddr;
+    ADDR dwAddr;
 };
 
 void WriteReport(EXCEPTION_POINTERS* pExc, bool bForeign, DWORD dwThreadId,
@@ -422,33 +482,45 @@ void WriteReport(EXCEPTION_POINTERS* pExc, bool bForeign, DWORD dwThreadId,
         st.wDay, st.wHour, st.wMinute, st.wSecond, (unsigned long)dwThreadId);
 
     char szWhere[MAX_PATH + 40];
-    ModuleOffset((DWORD)(UINT_PTR)pRec->ExceptionAddress, szWhere);
+    ModuleOffset((ADDR)(UINT_PTR)pRec->ExceptionAddress, szWhere);
     if (pHalt) {
-        Out("\r\nHALT line=%d (0x%x) at %s  (%08lX)\r\n", pHalt->nLine, pHalt->nLine, szWhere,
-            (unsigned long)pHalt->dwAddr);
+        Out("\r\nHALT line=%d (0x%x) at %s  (" ADDR_FMT ")\r\n", pHalt->nLine, pHalt->nLine, szWhere,
+            ADDR_ARG(pHalt->dwAddr));
         Out("Note:      Fog's unrecoverable-error halt; the game exits or shows its error "
             "dialog after this.\r\n");
     } else {
         Out("\r\nException: %08lX %s\r\n", (unsigned long)pRec->ExceptionCode,
             FatalName(pRec->ExceptionCode));
-        Out("At:        %s  (%08lX)\r\n", szWhere, (unsigned long)(UINT_PTR)pRec->ExceptionAddress);
+        Out("At:        %s  (" ADDR_FMT ")\r\n", szWhere, ADDR_ARG((UINT_PTR)pRec->ExceptionAddress));
     }
     if (!pHalt && (pRec->ExceptionCode == 0xC0000005 || pRec->ExceptionCode == 0xC0000006) &&
         pRec->NumberParameters >= 2) {
         ULONG_PTR uOp = pRec->ExceptionInformation[0];
         const char* pszOp = uOp == 0 ? "read of" : uOp == 1 ? "write to" : uOp == 8 ? "execute at" : "access to";
-        Out("Access:    %s %08lX\r\n", pszOp, (unsigned long)pRec->ExceptionInformation[1]);
+        Out("Access:    %s " ADDR_FMT "\r\n", pszOp, ADDR_ARG(pRec->ExceptionInformation[1]));
     }
     if (bForeign)
         Out("Note:      the fault is inside another module, reported at first chance; "
             "if the game kept running, that module handled it.\r\n");
 
     Out("\r\nRegisters:\r\n");
+#if D2_ARCH_X86
     Out("  EAX=%08lX EBX=%08lX ECX=%08lX EDX=%08lX\r\n", (unsigned long)pCtx->Eax,
         (unsigned long)pCtx->Ebx, (unsigned long)pCtx->Ecx, (unsigned long)pCtx->Edx);
     Out("  ESI=%08lX EDI=%08lX EBP=%08lX ESP=%08lX\r\n", (unsigned long)pCtx->Esi,
         (unsigned long)pCtx->Edi, (unsigned long)pCtx->Ebp, (unsigned long)pCtx->Esp);
     Out("  EIP=%08lX EFL=%08lX\r\n", (unsigned long)pCtx->Eip, (unsigned long)pCtx->EFlags);
+#else
+    Out("  RAX=" ADDR_FMT " RBX=" ADDR_FMT " RCX=" ADDR_FMT " RDX=" ADDR_FMT "\r\n", ADDR_ARG(pCtx->Rax),
+        ADDR_ARG(pCtx->Rbx), ADDR_ARG(pCtx->Rcx), ADDR_ARG(pCtx->Rdx));
+    Out("  RSI=" ADDR_FMT " RDI=" ADDR_FMT " RBP=" ADDR_FMT " RSP=" ADDR_FMT "\r\n", ADDR_ARG(pCtx->Rsi),
+        ADDR_ARG(pCtx->Rdi), ADDR_ARG(pCtx->Rbp), ADDR_ARG(pCtx->Rsp));
+    Out("  R8 =" ADDR_FMT " R9 =" ADDR_FMT " R10=" ADDR_FMT " R11=" ADDR_FMT "\r\n", ADDR_ARG(pCtx->R8),
+        ADDR_ARG(pCtx->R9), ADDR_ARG(pCtx->R10), ADDR_ARG(pCtx->R11));
+    Out("  R12=" ADDR_FMT " R13=" ADDR_FMT " R14=" ADDR_FMT " R15=" ADDR_FMT "\r\n", ADDR_ARG(pCtx->R12),
+        ADDR_ARG(pCtx->R13), ADDR_ARG(pCtx->R14), ADDR_ARG(pCtx->R15));
+    Out("  RIP=" ADDR_FMT " EFL=%08lX\r\n", ADDR_ARG(pCtx->Rip), (unsigned long)pCtx->EFlags);
+#endif
 
     Out(pHalt ? "\r\nStack (the halting thread; \"fault\" = the halt call site):\r\n"
               : "\r\nStack (fault, then the EBP chain; \"scan\" = return address found on the stack):\r\n");
@@ -506,12 +578,12 @@ LONG CALLBACK CrashVectoredHandler(EXCEPTION_POINTERS* pExc) {
     // A fault while a report is being written (on any thread) is left alone.
     if (InterlockedCompareExchange(&g_nBusy, 1, 0) != 0) return EXCEPTION_CONTINUE_SEARCH;
 
-    DWORD dwAddr = (DWORD)(UINT_PTR)pExc->ExceptionRecord->ExceptionAddress;
+    ADDR dwAddr = (ADDR)(UINT_PTR)pExc->ExceptionRecord->ExceptionAddress;
     HMODULE hMod = 0;
     bool bInModule = GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS |
                                         GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT,
                                         (LPCSTR)(UINT_PTR)dwAddr, &hMod) != 0;
-    bool bForeign = bInModule && (DWORD)(UINT_PTR)hMod != g_dwExeLo;
+    bool bForeign = bInModule && (ADDR)(UINT_PTR)hMod != g_dwExeLo;
 
     CollectFrames(pExc->ContextRecord);
     bool bReport;
@@ -579,7 +651,7 @@ struct CrashInit {
         DWORD n = GetModuleFileNameA(0, g_szExePath, MAX_PATH);
         if (n == 0 || n >= MAX_PATH) g_szExePath[0] = 0;
         HMODULE hExe = GetModuleHandleA(0);
-        g_dwExeLo = (DWORD)(UINT_PTR)hExe;
+        g_dwExeLo = (ADDR)(UINT_PTR)hExe;
         const IMAGE_NT_HEADERS* pNt =
             (const IMAGE_NT_HEADERS*)((const char*)hExe + ((const IMAGE_DOS_HEADER*)hExe)->e_lfanew);
         g_dwExeHi = g_dwExeLo + pNt->OptionalHeader.SizeOfImage;

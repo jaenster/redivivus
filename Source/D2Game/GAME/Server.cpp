@@ -1899,7 +1899,7 @@ void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
         exit(-1);
       }
 
-      BattleNetServerService->fpCloseGame(pGame->anUnitGuidCounters[0], pGame->dwGameFrame / 0x19);
+      BattleNetServerService->fpCloseGame(pGame->nServerToken, pGame->bExpansion ? 0x44325850 : 0x44324456, pGame->anUnitGuidCounters[0], pGame->dwGameFrame / 0x19);
     }
     if (!pGame->lpCriticalSection) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x108d);
@@ -1938,7 +1938,7 @@ void __fastcall QSERVER_DestroyGameByToken(uint32_t nToken) {
 void __stdcall RequestHostedGames(int32_t nClientId) {
     char szGameNameCopy[16];
     uint32_t dwStackCookie;
-    int nClientsCount;
+    uint16_t nClientsCount;
     uint16_t wServerToken;
     uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
@@ -1947,7 +1947,7 @@ void __stdcall RequestHostedGames(int32_t nClientId) {
       if (nToken && nToken != 0xffffffff) {
         pGame = QSERVER_FindAndLockGame(nToken);
         if (pGame) {
-          nClientsCount = pGame->nClientsCount;
+          nClientsCount = pGame->nClientsCount; // steer-ok: read under the game lock, before LeaveCriticalSection
           wServerToken = pGame->nServerToken;
           Storm::Source::SSTR::SStrCopy(szGameNameCopy, pGame->szGameName, 0x7fffffff);
           if (!pGame->lpCriticalSection) {

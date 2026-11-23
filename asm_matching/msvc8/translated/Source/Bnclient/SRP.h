@@ -18,6 +18,7 @@
 // Forward declarations
 struct BigData;
 struct D2Srp;
+struct D2SrpServerSessionStrc;
 
 // Data types
 #ifndef D2_DEFINED_BigStack
@@ -50,6 +51,22 @@ struct D2SrpCredentialsStrc {
 };
 
 #endif // D2_DEFINED_D2SrpCredentialsStrc
+#ifndef D2_DEFINED_D2SrpServerSessionStrc
+#define D2_DEFINED_D2SrpServerSessionStrc
+// Server-side SRP session as SRP_ClientVerifyAndComputeKey and SRP_ComputeFinalProof address it.
+struct D2SrpServerSessionStrc {
+    /* 0x000 */ uint8_t aSalt_s[32];
+    /* 0x020 */ uint8_t aVerifier_v[32];
+    /* 0x040 */ char szUsername[32];
+    /* 0x060 */ uint8_t aClientPublicKey_A[32];
+    /* 0x080 */ uint8_t aServerPrivateKey_b[32];
+    /* 0x0A0 */ uint8_t aServerPublicKey_B[32];
+    /* 0x0C0 */ uint8_t aSessionKey_K[40];
+    /* 0x0E8 */ uint8_t aClientProof_M1[20];
+    /* 0x0FC */ uint8_t aServerProof_M2[20];
+};
+
+#endif // D2_DEFINED_D2SrpServerSessionStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 __pragma(pack(push, 1)) struct D2SrpSeedEntropyStrc {
     /* 0x00 */ __time32_t tTime; // _time32() result
@@ -106,9 +123,9 @@ BOOL __fastcall SRP_ClientKeyExchange(struct D2Srp * * pThis, int, struct D2SrpC
 BOOL __fastcall SRP_ClientVerifyServerProof(struct D2Srp * * pThis, int, struct D2SrpCredentialsStrc * pSrpContext, uint8_t * pServerProof);
 uint32_t __stdcall SRP_ParseChallenge(uint32_t * pContext, char * szText, uint32_t * pModulusN, uint32_t * pGenerator, uint32_t * pServerPublicBBytes);
 void __fastcall SRP_ServerComputePublicB(struct D2Srp * * pThis, int, uint8_t * nContextBase);
-void __fastcall SRP_ClientVerifyAndComputeKey(void * pThis, int, void * pContext, uint32_t * pServerProof);
+void __fastcall SRP_ClientVerifyAndComputeKey(struct D2Srp * * pThis, int, struct D2SrpServerSessionStrc * pContext, uint32_t * pServerProof);
 // Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
-void __fastcall SRP_ComputeFinalProof(struct D2Srp * * ppSrp, int, uint8_t * nContextBase);
+void __fastcall SRP_ComputeFinalProof(struct D2Srp * * ppSrp, int, struct D2SrpServerSessionStrc * pContext);
 void __stdcall SRP_GlobalInit();
 void SRP_AtexitCleanup();
 #endif // D2_MODULE_Bnclient

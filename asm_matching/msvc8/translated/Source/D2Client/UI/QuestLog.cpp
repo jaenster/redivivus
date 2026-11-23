@@ -1937,12 +1937,12 @@ void __fastcall QUESTLOG_SelectQuestByIndex(int32_t nQuestId) {
     gQuestLogSelectedQuestByAct[gaQuestInfoTable[nActIndex].nAct] = gaQuestInfoTable[nActIndex].nQuestIndexInAct;
 }
 
-void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(void * pUnit) {
-    if (!(pUnit && *(int*)((char*)pUnit + 4) == 0x92)) {
+void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(D2UnitStrc * pUnit) {
+    if (!(pUnit && pUnit->nClassId == 0x92)) {
       return;
     }
 
-    *(uint32_t*)((char*)pUnit + 0xc4) &= -3;
+    pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
 }
 
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile527(D2UnitStrc * pUnit) {
@@ -1981,7 +1981,7 @@ void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwUnused, D2GSPacketClt
           Text::TEXT_PrintGameString(pText, 0);
           return;
           case 4:
-            UNIT::CUnit::CUNIT_IterateMissilesWithCallback(QUESTLOG_ClearMissileFlagCb_Missile146);
+            UNIT::CUnit::CUNIT_IterateMissilesWithCallback((fnUnitIterCallback)QUESTLOG_ClearMissileFlagCb_Missile146);
           return;
           default:
             return;

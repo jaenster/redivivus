@@ -21,9 +21,18 @@
 cmake_minimum_required(VERSION 3.24)
 project(Redivivus LANGUAGES C CXX ASM)
 
-if(NOT WIN32 OR NOT CMAKE_SIZEOF_VOID_P EQUAL 4)
+if(NOT WIN32 OR NOT (CMAKE_SIZEOF_VOID_P EQUAL 4 OR CMAKE_SIZEOF_VOID_P EQUAL 8))
     message(FATAL_ERROR "Redivivus targets 32-bit Windows. Configure with "
         "-DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake (or a native i686 mingw-w64 g++).")
+endif()
+# The 64-bit build (cmake/mingw-x86_64.cmake) is an experiment beside the target:
+# it selects the shims in Redivivus/x64/ in place of the three licensed 32-bit DLLs
+# and leaves the 32-bit build untouched. Nothing in it is a release.
+if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+    set(D2_ARCH_X64 ON)
+    message(STATUS "64-bit build: Bink, Smacker and IJL come from Redivivus/x64/ (FFmpeg at run time)")
+else()
+    set(D2_ARCH_X64 OFF)
 endif()
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
@@ -77,7 +86,13 @@ foreach(list D2_SOURCES D2_HEADERS)
     # internal.h) must not land on the game's include path.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/3rdparty/libbacktrace/")
     list(FILTER ${list} EXCLUDE REGEX "^${CMAKE_BINARY_DIR}/")
+    # The 64-bit shims are their own target below, never part of the Redivivus module.
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Redivivus/x64/")
 endforeach()
+if(D2_ARCH_X64)
+    # x86 assembly: the i686-decorated stub the 64-bit build defines in C++ instead.
+    list(FILTER D2_SOURCES EXCLUDE REGEX "/Redivivus/d2_link_support\\.s$")
+endif()
 list(SORT D2_SOURCES)
 
 if(NOT REDIVIVUS_DEV)
@@ -343,7 +358,40 @@ target_link_libraries(d2 PRIVATE
 # export tables - see 3rdparty/implibs/gen-implibs.sh), so the references resolve
 # for real rather than against stubs.
 set(D2_IMPLIB_DEFS "${D2_ROOT}/3rdparty/implibs")
-if(EXISTS "${D2_IMPLIB_DEFS}")
+if(D2_ARCH_X64)
+    # No 64-bit binkw32/smackw32/ijl11 exists. Redivivus/x64/ provides the same
+    # entry points: Bink and Smacker decode through FFmpeg's DLLs, loaded at run
+    # time (LoadLibrary, no import), IJL writes the JPEG with stb_image_write. The
+    # FFmpeg headers are a compile-time dependency only; point at the include/ of
+    # the same shared build whose DLLs will sit beside the exe (docs/building.md).
+    set(REDIVIVUS_FFMPEG_INCLUDE "" CACHE PATH
+        "include/ of an FFmpeg shared build (libavformat/avformat.h ...), 64-bit build only")
+    if(NOT EXISTS "${REDIVIVUS_FFMPEG_INCLUDE}/libavformat/avformat.h")
+        message(FATAL_ERROR "64-bit build: set -DREDIVIVUS_FFMPEG_INCLUDE=<ffmpeg>/include "
+            "(the directory holding libavformat/avformat.h); see docs/building.md")
+    endif()
+    file(GLOB D2_X64_SOURCES CONFIGURE_DEPENDS LIST_DIRECTORIES false "${D2_SUPPORT}/x64/*.cpp")
+    add_library(d2_x64deps STATIC ${D2_X64_SOURCES})
+    target_compile_features(d2_x64deps PRIVATE cxx_std_17)
+    target_compile_options(d2_x64deps PRIVATE -g -Wall -Wextra)
+    # stb_image_write.h is static and only part of it is called.
+    set_source_files_properties("${D2_SUPPORT}/x64/d2_ijl.cpp" PROPERTIES COMPILE_OPTIONS -Wno-unused-function)
+    target_include_directories(d2_x64deps PRIVATE "${D2_ROOT}" "${D2_ROOT}/Source/D2Headers"
+        "${D2_ROOT}/3rdparty/stb" SYSTEM "${REDIVIVUS_FFMPEG_INCLUDE}")
+    target_link_libraries(d2_x64deps PUBLIC winmm)
+    target_link_libraries(d2 PRIVATE d2_x64deps)
+    # The decode/write path on its own, for a run without the game (docs/building.md).
+    add_executable(x64deps_test EXCLUDE_FROM_ALL "${D2_SUPPORT}/x64/test/x64deps_test.cpp")
+    target_compile_features(x64deps_test PRIVATE cxx_std_17)
+    target_include_directories(x64deps_test PRIVATE "${D2_ROOT}" "${D2_ROOT}/Source/D2Headers" "${D2_ROOT}/3rdparty/stb")
+    target_link_options(x64deps_test PRIVATE -static -static-libgcc -static-libstdc++)
+    target_link_libraries(x64deps_test PRIVATE d2_x64deps)
+    # A 64-bit glide3x.dll beside it, resolved by the decorated names Glide.cpp asks for.
+    add_executable(glidetest WIN32 EXCLUDE_FROM_ALL "${D2_SUPPORT}/x64/test/glidetest.cpp")
+    target_compile_features(glidetest PRIVATE cxx_std_17)
+    target_link_options(glidetest PRIVATE -static -static-libgcc -static-libstdc++)
+    target_link_libraries(glidetest PRIVATE user32 gdi32)
+elseif(EXISTS "${D2_IMPLIB_DEFS}")
     if(NOT CMAKE_DLLTOOL)
         find_program(CMAKE_DLLTOOL NAMES ${D2_TOOL_PREFIX}dlltool dlltool REQUIRED)
     endif()

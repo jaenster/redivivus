@@ -140,7 +140,7 @@ int __fastcall IGNORELIST_ParsePattern(::IgnoreList * pThis, int, char * szText1
 }
 
 // @sourcefile .\Chat\Ignorelist.cpp
-void __fastcall AddAccountMapping(::IgnoreList * pThis, int, char * szRaw, int32_t nRawLen) {
+BOOL __fastcall AddAccountMapping(::IgnoreList * pThis, int, char * szRaw, int32_t nRawLen) {
     int32_t bIsOnline;
     ::MappingEntryNode* pNameEntry;
     char* pszPatternDup;
@@ -155,24 +155,16 @@ void __fastcall AddAccountMapping(::IgnoreList * pThis, int, char * szRaw, int32
         Storm::Source::SMem::SMemZero(szCharName, 0x100);
         Storm::Source::SMem::SMemZero(szAccountName, 0x100);
         nOpenParenIdx = 0;
-        nCharIdx = 0;
-        if (*szRaw != '\0') {
-          while (nCharIdx < nRawLen - 1U) {
-            if (szRaw[nCharIdx + 1] == '(') {
-              nOpenParenIdx = nCharIdx + 1;
-              Storm::Source::SMem::SMemCopy(szAccountName, szRaw, nOpenParenIdx);
-            }
-            if (szRaw[nCharIdx + 1] == ')') {
-              Storm::Source::SMem::SMemCopy(szCharName, szRaw + (nOpenParenIdx + 1), nCharIdx - nOpenParenIdx);
-            }
-            if (szAccountName[0] != '\0' && szCharName[0] != '\0') {
-              break;
-            }
-
-            nCharIdx++;
-            if (szRaw[nCharIdx] == '\0') {
-              break;
-            }
+        for (nCharIdx = 0; szRaw[nCharIdx] != '\0' && nCharIdx < nRawLen - 1U; nCharIdx++) {
+          if (szRaw[nCharIdx + 1] == '(') {
+            nOpenParenIdx = nCharIdx + 1;
+            Storm::Source::SMem::SMemCopy(szAccountName, szRaw, nOpenParenIdx);
+          }
+          if (szRaw[nCharIdx + 1] == ')') {
+            Storm::Source::SMem::SMemCopy(szCharName, szRaw + (nOpenParenIdx + 1), nCharIdx - nOpenParenIdx);
+          }
+          if (szAccountName[0] != '\0' && szCharName[0] != '\0') {
+            break;
           }
         }
         if (szAccountName[0] != '\0' && szCharName[0] != '\0') {
@@ -189,13 +181,21 @@ void __fastcall AddAccountMapping(::IgnoreList * pThis, int, char * szRaw, int32
           Storm::Source::SSTR::SStrPack(cPatternPrefix, szCharName, 0x100);
           pszPatternDup = Storm::Source::SSTR::SStrDup(cPatternPrefix);
           pNameEntry->szMappedValue = pszPatternDup;
-          return;
+          return TRUE;
         }
 
-        return;
+        return FALSE;
       }
     }
+    return FALSE;
 }
+
+
+
+
+
+
+
 
 // @sourcefile .\Chat\Ignorelist.cpp
 void __stdcall MISC_InitIgnorelist() {

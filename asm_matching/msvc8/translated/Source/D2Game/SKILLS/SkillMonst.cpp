@@ -395,15 +395,15 @@ BOOL __fastcall Skills_SrvDoFunc_087_SpawnBehindTarget(::SGAMEDATA * pGame, D2Un
       return 0;
     }
 
-    uint8_t bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2((uint8_t)D2Common::Units::GetDirectionToCoords(pUnit, D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit)));
-    uint32_t nGfxDirMasked = (int)bVar1 % 8;
+    uint8_t nDirection = (uint8_t)D2Common::Units::GetDirectionToCoords(pUnit, D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pTargetUnit));
+    uint8_t bVar1 = D2Common::Monsters::MONSTERS::MONSTERS_GetGfxOffsetTable2(nDirection);
+    uint32_t nGfxDirMasked = (int)bVar1 % 8; // steer-ok: the original masks before the coordinate loads; folded, 005cb3c0 loses MATCH
     D2Common::Monsters::MONSTERS::MONSTERS_GetCompositeDimensions(BYTE_ARRAY_006e3138[(uint8_t)nGfxDirMasked], &nSkillLvl, &nOffsetY);
-    int32_t nTargetY = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-    int nSpawnX = nTargetY + nSkillLvl;
-    nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+    int nSpawnX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit) + nSkillLvl;
+    int nSpawnY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit) + nOffsetY;
     pUnit->nActionFrame = 0;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pTargetUnit = Monster::Create::SpawnMonsterAtRoomPos(pGame, pRoom, nSpawnX, nTargetY + nOffsetY, nSummonClassId, eAnimMode, -1, 0);
+    pTargetUnit = Monster::Create::SpawnMonsterAtRoomPos(pGame, pRoom, nSpawnX, nSpawnY, nSummonClassId, eAnimMode, -1, 0);
     if (!pTargetUnit) {
       return 0;
     }

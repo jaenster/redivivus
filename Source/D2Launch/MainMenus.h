@@ -113,7 +113,7 @@ struct __attribute__((packed)) D2ControlMsg {
 namespace D2Launch::MainMenus {
 
 // Function declarations
-bool fpRequiredUserAction();
+BOOL fpRequiredUserAction();
 BOOL fpInsertPlayCd();
 BOOL fpInsertExpansionCd();
 // Module-private: no other module references these

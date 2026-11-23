@@ -180,7 +180,7 @@ static int __stdcall DRLGOUTDOOR_ValidateSubTilePlacement(D2UnkOutdoorStrc * pOu
     return 1;
 }
 
-int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoorStrc * pOutdoorCtx, D2DrlgCoordStrc * pCoords, D2LvlSubTxt * pLvlSub, int nOffset) {
+void __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoorStrc * pOutdoorCtx, D2DrlgCoordStrc * pCoords, D2LvlSubTxt * pLvlSub, int nOffset) {
     uint32_t uFloorFlags;
     int nPresetId;
     int nX;
@@ -190,25 +190,26 @@ int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoo
     int nWorldX = pCoords->nPosX + nOffset;
     int nWorldY = pCoords->nPosY;
     int nGridSize = pLvlSub->GridSize;
-    nOffset = 0;
-    int nResult = nBaseY / nGridSize;
-    if (pCoords->nHeight > 0) {
+    nBaseX -= nBaseX % nGridSize;
+    nBaseY -= nBaseY % nGridSize;
+    int nRow;
+    for (nRow = 0; nRow < pCoords->nHeight; nRow++) {
       uint32_t uWallFlags;
-      do {
+      {
         for (nCol = 0; nCol < pCoords->nWidth; nCol++) {
           if (pLvlSub->pDrlgFile->nWallLayers) {
-            uWallFlags = DrlgGrid::GetGridFlags(pLvlSub->pWallGrid, nCol + nWorldX, nOffset + nWorldY);
+            uWallFlags = DrlgGrid::GetGridFlags(pLvlSub->pWallGrid, nCol + nWorldX, nWorldY + nRow);
           } else {
             uWallFlags = 0;
           }
           if (pLvlSub->pDrlgFile->nFloorLayers) {
-            uFloorFlags = DrlgGrid::GetGridFlags(&pLvlSub->pFloorGrid, nCol + nWorldX, nOffset + nWorldY);
+            uFloorFlags = DrlgGrid::GetGridFlags(&pLvlSub->pFloorGrid, nCol + nWorldX, nWorldY + nRow);
           } else {
             uFloorFlags = 0;
           }
 
-          nResult = pLvlSub->GridSize * nOffset + (nBaseY - nBaseY % nGridSize);
-          nX = pLvlSub->GridSize * nCol + (nBaseX - nBaseX % nGridSize);
+          nX = pLvlSub->GridSize * nCol + nBaseX;
+          int nY = pLvlSub->GridSize * nRow + nBaseY;
           if (uWallFlags & 1) {
             uFloorFlags = uWallFlags >> 8 & 0xff;
             nWallMainIndex = uFloorFlags - 1;
@@ -218,24 +219,23 @@ int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, D2UnkOutdoo
               nPresetId = pOutdoorCtx->nLevelPrestId + nWallMainIndex;
             }
             if (nPresetId != -5 && nWallMainIndex != pOutdoorCtx->nPrevBorderPresetId) {
-              pOutdoorCtx->pfnSpawnPreset(pDrlgLevel, nX, nResult, nPresetId, 0, 1);
+              pOutdoorCtx->pfnSpawnPreset(pDrlgLevel, nX, nY, nPresetId, 0, 1);
             }
           } else {
             if (uFloorFlags & 2) {
-              pOutdoorCtx->pfnAlterAdjacentCells(pDrlgLevel, nX, nResult);
+              pOutdoorCtx->pfnAlterAdjacentCells(pDrlgLevel, nX, nY);
             } else {
-              pOutdoorCtx->pfnSetBlankCell(pDrlgLevel, nX, nResult);
+              pOutdoorCtx->pfnSetBlankCell(pDrlgLevel, nX, nY);
             }
           }
         }
 
-        nResult = nOffset + 1;
-        nOffset = nResult;
-      } while (nResult < pCoords->nHeight);
+      }
     }
-
-    return nResult;
 }
+
+
+
 
 // Shuffles candidate border subtile positions using current level seed, then tries each until `ValidateSubTilePlacement` approves and calls `ApplySubTileToGrid`. Defaults to random variant (pRect[5]) and returns as soon as a placement succeeds when the level flag indicates only one patch per run.
 BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoorCtx, D2LvlSubTxt * pLevelPtr, int * pRect) {

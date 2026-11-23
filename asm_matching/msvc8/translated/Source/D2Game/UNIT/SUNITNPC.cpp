@@ -175,7 +175,7 @@ typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, D2UnitStrc 
 #endif
 #ifndef RECON_FPTD_pfnPetForEachCallback
 #define RECON_FPTD_pfnPetForEachCallback
-typedef void (__stdcall *pfnPetForEachCallback)(D2UnitStrc * pPetUnit, void * pContext);
+typedef void (__fastcall *pfnPetForEachCallback)(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pPetUnit, void * pContext);
 #endif
 
 static uint32_t gnMonsterSpawnTotalCount = 0; D2_STATIC_GUARD(gnMonsterSpawnTotalCount, "gnMonsterSpawnTotalCount");

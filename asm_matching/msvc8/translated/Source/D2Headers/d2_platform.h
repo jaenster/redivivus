@@ -502,7 +502,9 @@ template <class T, class U> static inline bool D2_AtomicCompareExchange(T* p, T*
 #if defined(_MSC_VER)
 extern "C" unsigned short __cdecl _rotl16(unsigned short value, unsigned char shift);
 #pragma intrinsic(_rotl16)
-#elif !defined(__INTRINSIC_DEFINED__rotl16)
+#elif !defined(__INTRINSIC_DEFINED__rotl16) && !defined(__x86_64)
+// On x86-64 mingw's winnt.h declares _rotl16 extern "C"; the definition is
+// Redivivus/x64/d2_crt_x64.cpp.
 static inline unsigned short _rotl16(unsigned short value, unsigned char shift) {
     return (unsigned short)((value << shift) | (value >> (16 - shift)));
 }

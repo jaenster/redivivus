@@ -3,6 +3,7 @@
 
 #define D2_TRACE_DEFINITIONS
 #include "Redivivus/d2_trace.h"
+#include "D2Arch.h"
 #include "Source/globals/globals.h"
 #include "Source/D2gfx/D2gfx.globals.h"
 
@@ -124,11 +125,19 @@ static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
     // after the write, so the value written is already in place to print.
     if (dwCode == EXCEPTION_SINGLE_STEP && g_watchAddr) {
         char szLine[256];
+#if D2_ARCH_X86
         wsprintfA(szLine, "D2WATCH %p -> %08lX from eip=%08lX rva=%08lX\n",
                   g_watchAddr, (unsigned long)*(DWORD*)g_watchAddr,
                   (unsigned long)pExc->ContextRecord->Eip,
                   (unsigned long)(pExc->ContextRecord->Eip
                                   - (DWORD)(UINT_PTR)GetModuleHandleA(0)));
+#else
+        wsprintfA(szLine, "D2WATCH %p -> %08lX from rip=%p rva=%08lX\n",
+                  g_watchAddr, (unsigned long)*(DWORD*)g_watchAddr,
+                  (void*)pExc->ContextRecord->Rip,
+                  (unsigned long)(pExc->ContextRecord->Rip
+                                  - (UINT_PTR)GetModuleHandleA(0)));
+#endif
         OutputDebugStringA(szLine);
         FILE* pLogW = TraceLog();
         if (pLogW) { fputs(szLine, pLogW); fflush(pLogW); }
@@ -161,6 +170,7 @@ static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
     // hand gives a real stack without a debugger present. Each frame is logged
     // as a module-relative RVA, which addr2line resolves against the unstripped
     // build back on the host.
+#if D2_ARCH_X86
     CONTEXT* pCtx = pExc->ContextRecord;
     wsprintfA(szLine, "D2FAULT eip=%08lX ebp=%08lX esp=%08lX\n",
               (unsigned long)pCtx->Eip, (unsigned long)pCtx->Ebp,
@@ -204,6 +214,51 @@ static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
         if (pNext <= pFrame) break;   // chain must ascend, or it is garbage
         pFrame = pNext;
     }
+#else
+    // x86-64: no frame-pointer chain. The same two reports - a scan of the stack
+    // for return addresses into our image, then the frames - with the frames
+    // stepped through the unwind tables (RtlVirtualUnwind), which every function
+    // of a 64-bit image has.
+    CONTEXT* pCtx = pExc->ContextRecord;
+    wsprintfA(szLine, "D2FAULT rip=%p rbp=%p rsp=%p\n", (void*)pCtx->Rip, (void*)pCtx->Rbp, (void*)pCtx->Rsp);
+    OutputDebugStringA(szLine);
+    if (pLog) { fputs(szLine, pLog); fflush(pLog); }
+
+    UINT_PTR nLo = (UINT_PTR)hBase;
+    IMAGE_NT_HEADERS* pNt = (IMAGE_NT_HEADERS*)((char*)hBase + ((IMAGE_DOS_HEADER*)hBase)->e_lfanew);
+    UINT_PTR nHi = nLo + pNt->OptionalHeader.SizeOfImage;
+    if (!pCtx->Rip || pCtx->Rip < nLo || pCtx->Rip >= nHi) {
+        UINT_PTR* pStack = (UINT_PTR*)pCtx->Rsp;
+        for (int i = 0, nFound = 0; i < 1024 && nFound < 32; ++i) {
+            if (IsBadReadPtr(pStack + i, sizeof(UINT_PTR))) break;
+            UINT_PTR nVal = pStack[i];
+            if (nVal <= nLo || nVal >= nHi) continue;
+            wsprintfA(szLine, "D2SCAN +%03X ret=%p rva=%08lX\n", i * 8, (void*)nVal, (unsigned long)(nVal - nLo));
+            OutputDebugStringA(szLine);
+            if (pLog) { fputs(szLine, pLog); fflush(pLog); }
+            ++nFound;
+        }
+    }
+
+    CONTEXT ctx = *pCtx;
+    for (int i = 0; i < 24 && ctx.Rip; ++i) {
+        ULONG64 nImageBase = 0;
+        PRUNTIME_FUNCTION pFn = RtlLookupFunctionEntry(ctx.Rip, &nImageBase, nullptr);
+        if (pFn) {
+            PVOID pHandlerData = nullptr;
+            ULONG64 nEstablisher = 0;
+            RtlVirtualUnwind(UNW_FLAG_NHANDLER, nImageBase, ctx.Rip, pFn, &ctx, &pHandlerData, &nEstablisher, nullptr);
+        } else {
+            if (IsBadReadPtr((void*)ctx.Rsp, sizeof(UINT_PTR))) break;
+            ctx.Rip = *(ULONG64*)ctx.Rsp;
+            ctx.Rsp += 8;
+        }
+        if (!ctx.Rip) break;
+        wsprintfA(szLine, "D2FRAME %2d ret=%p rva=%08lX\n", i, (void*)ctx.Rip, (unsigned long)(ctx.Rip - nLo));
+        OutputDebugStringA(szLine);
+        if (pLog) { fputs(szLine, pLog); fflush(pLog); }
+    }
+#endif
     return EXCEPTION_CONTINUE_SEARCH;
 }
 

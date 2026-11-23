@@ -3463,7 +3463,7 @@ static void __stdcall SKILLDESC_CalcWeaponDamageRange(D2UnitStrc * pUnit, int * 
 
     nItemBonusMin = 0;
     if (pUnit2) {
-      int16_t sAttrBonus;
+      int sAttrBonus;
       sAttrBonus = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wStrBonus(pUnit2);
       if (sAttrBonus) {
         nAttrStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0);
@@ -4575,7 +4575,7 @@ void __fastcall SKILLDESC_CalcAuraDamageRange(D2UnitStrc * pUnit, int * pnMinDam
     uint32_t uIsMissilePotion;
     uIsMissilePotion = D2Common::ITEMS::Items::ITEMS_IsA(pWeaponUnit, ITEMTYPE_MissilePotion);
     if (!uIsMissilePotion) {
-      int16_t sStrBonus;
+      int sStrBonus;
       nStrDexBonus = 0;
       sStrBonus = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wStrBonus(pWeaponUnit);
       if (sStrBonus) {

@@ -28,7 +28,7 @@ namespace D2Common { namespace Drlg { namespace Outdoors {
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-int __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, struct D2UnkOutdoorStrc * pOutdoorCtx, struct D2DrlgCoordStrc * pCoords, struct D2LvlSubTxt * pLvlSub, int nOffset);
+void __stdcall DRLGOUTDOOR_ApplySubTileToGrid(int nBaseX, int nBaseY, struct D2UnkOutdoorStrc * pOutdoorCtx, struct D2DrlgCoordStrc * pCoords, struct D2LvlSubTxt * pLvlSub, int nOffset);
 // Shuffles candidate border subtile positions using current level seed, then tries each until `ValidateSubTilePlacement` approves and calls `ApplySubTileToGrid`. Defaults to random variant (pRect[5]) and returns as soon as a placement succeeds when the level flag indicates only one patch per run.
 BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(struct D2UnkOutdoorStrc * pOutdoorCtx, struct D2LvlSubTxt * pLevelPtr, int * pRect);
 // Checks that applying the LvlSub patch doesn’t conflict with existing floor/wall/shadow cells; returns false if any flagged tiles overlap and existing grids already set the same flags.

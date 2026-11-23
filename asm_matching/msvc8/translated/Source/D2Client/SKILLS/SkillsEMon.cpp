@@ -941,9 +941,8 @@ BOOL __fastcall Skills_CltDoFunc_EMon_WallMissileRow(D2UnitStrc * pUnit, eD2Skil
 }
 
 BOOL __fastcall Skills_CltDoFunc_EMon_PerpendicularMissile2(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nUnitY;
-    int nCoordY;
     int nCoordX;
+    int nCoordY;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
@@ -961,11 +960,10 @@ BOOL __fastcall Skills_CltDoFunc_EMon_PerpendicularMissile2(D2UnitStrc * pUnit, 
 
     D2UnitStrc* pMissile = Skills::MakeMissileAtSkillTarget(pUnit, eMissileId, eSkill, nSkillLvl);
     if (pMissile) {
-      int32_t nUnitX;
-      nUnitX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-      nUnitY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      D2Common::Units::Missile::SetTargetX(pMissile, -(nCoordY - nUnitY));
-      D2Common::Units::Missile::SetTargetY(pMissile, nCoordX - nUnitX);
+      int nDeltaX = nCoordX - D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+      int nDeltaY = nCoordY - D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+      D2Common::Units::Missile::SetTargetX(pMissile, -nDeltaY);
+      D2Common::Units::Missile::SetTargetY(pMissile, nDeltaX);
       return 1;
     }
 

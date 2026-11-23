@@ -906,30 +906,35 @@ void __fastcall CMD_InvokeCallbackByParam(int32_t nScrollDirection) {
 }
 
 // Validates whether a command can be bound to mouse buttons (0x103-0x104). Returns false if command handler exists and button is left/right click, true otherwise. Used during key binding setup to prevent invalid mouse button assignments.
-static BOOL CMD_ValidateMouseButtonBinding(int32_t nCmdIndex, uint16_t * pErrorCode, uint32_t nMouseButton) {
-    if ((uint32_t)(uint16_t)nMouseButton - 0x103 <= 1 && gaCmdBindings[nCmdIndex].pfnAltHandler) {
-      if (pErrorCode) {
-        *pErrorCode = 0xf8a;
-      }
+static BOOL CMD_ValidateMouseButtonBinding(uint16_t nMouseButton, int32_t nCmdIndex, uint16_t * pErrorCode) {
+    switch (nMouseButton) {
+      case 0x103:
+      case 0x104:
+        if (gaCmdBindings[nCmdIndex].pfnAltHandler) {
+          if (pErrorCode) {
+            *pErrorCode = 0xf8a;
+          }
 
-      return 0;
+          return 0;
+        }
+        break;
     }
 
     return 1;
 }
 
-int32_t SORT_CompareInts(int * pA, int * pB) {
-    if (*pA < *pB) {
+int32_t SORT_CompareInts(D2KeyBindStrc * pA, D2KeyBindStrc * pB) {
+    if (pA->nCmdIndex < pB->nCmdIndex) {
       return -1;
     }
-    if (*pA > *pB) {
+    if (pA->nCmdIndex > pB->nCmdIndex) {
       return 1;
     }
-    if (*(int*)((char*)pA + 6)) {
-      return *(int*)((char*)pB + 6) ? 0 : -1;
+    if (pA->nSlot) {
+      return pB->nSlot ? 0 : -1;
     }
 
-    return *(int*)((char*)pB + 6) ? 1 : 0;
+    return pB->nSlot ? 1 : 0;
 }
 
 // Rebuilds derived mouse button bindings (0x100-0x104) from command table. Scans all key bindings and populates gKeyBindingTable slots for left/right/middle/scroll/forward mouse buttons. Invalidates bindings (sets 0xFFFF) if command has no handler or conflicts with mouse-specific restrictions.
@@ -1356,7 +1361,7 @@ BOOL __fastcall CMD_SetKeyBinding(int32_t nCmdIndex, int32_t nSlot, uint32_t nKe
     uint16_t wKeyCode = (uint16_t)nKeyCode;
     BOOL nResult = CMD_IsBindableKey(wKeyCode);
     if (nResult) {
-      nResult = CMD_ValidateMouseButtonBinding(nCmdIndex, pErrorCode, nKeyCode);
+      nResult = CMD_ValidateMouseButtonBinding(wKeyCode, nCmdIndex, pErrorCode);
       if (!nResult) {
         return 0;
       }

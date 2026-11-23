@@ -127,7 +127,7 @@ bool __stdcall QUESTLOG_IsPointInQuestLog(int32_t nX, int32_t nY);
 void __stdcall QUESTLOG_OnQuestLogMouseDown(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall QUESTLOG_DrawQuestLogButton();
 void __fastcall QUESTLOG_SelectQuestByIndex(int32_t nQuestId);
-void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(void * pUnit);
+void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(struct D2UnitStrc * pUnit);
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile527(struct D2UnitStrc * pUnit);
 // QuestLog.cpp - Client handler for 0x5D quest state packets, plays sounds and updates UI
 void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwUnused, struct D2GSPacketClt0x5D * pPacket);

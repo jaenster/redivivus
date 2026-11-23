@@ -696,7 +696,7 @@ static void __stdcall SUNITPROXY_FreeNpcProxyData(D2GameNpcStrc * pNpcEntry, ::S
 // @sourcefile .\UNIT\sunitproxy.cpp
 void __fastcall FreeNpcControl(::SGAMEDATA * pGame) {
     D2GameNpcControlStrc* pNpcControl = pGame->pNpcControl;
-    D2GameNpcArrayStrc* pNpcArray = pNpcControl->pNpc;
+    D2GameNpcArrayStrc* pNpcArray = pNpcControl->pNpc; // steer-ok: the original loads the array before GetTickCount; folded, 00537230 loses MATCH
     for (int i = 0; i < pNpcControl->nNpcCount; i++) {
       D2NpcPlayerInteractionStrc* pInteraction = pNpcArray->pNpc[i].pPlayerInteractions;
       if (pInteraction) {
@@ -1277,32 +1277,38 @@ void __fastcall SUNITPROXY_RemovePlayerProxyInventory(::SGAMEDATA * pGame, D2Uni
     }
 }
 
+// GetClassId as its callers inlined it: two returns, the value in a register of its own.
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
 // Refreshes all NPC proxies that belong to act nAct. When bResult==0 and 240 s have elapsed since last update, marks the proxy dirty. When bResult!=0, verifies the backing live monster still exists with the correct class; if not, resets the proxy inventory; if yes and no AI-counted monsters remain, resets via SUNITPROXY_ResetNpcProxy; otherwise marks proxy dirty. Iterates pGame->pNpcControl->pNpc using GetTickCount for time checks.
 void __stdcall SUNITPROXY_UpdateNpcProxiesForAct(::SGAMEDATA * pGame, char nAct, BOOL bResult) {
     D2UnitStrc* pLiveUnit;
     D2MonsterAiStrc* pMonAi;
     int32_t nMonsterCount;
-    D2InventoryStrc* pNewInventory;
     D2GameNpcControlStrc* pNpcControl = pGame->pNpcControl;
-    D2GameNpcArrayStrc* pNpcArray = pNpcControl->pNpc;
+    D2GameNpcArrayStrc* pNpcArray = pNpcControl->pNpc; // steer-ok: the original loads the array before GetTickCount; folded, 00537230 loses MATCH
     int nNpcIdx = 0;
     DWORD dwNow = GetTickCount();
     if (pNpcControl->nNpcCount <= 0) {
       return;
     }
 
-    D2GameNpcStrc* pNpc = &pNpcArray->pNpc[0];
+    D2GameNpcStrc* pNpc = pNpcArray->pNpc;
     do {
       D2NpcTradeStateStrc* pTrade = &pNpc->sTrade;
       if (pTrade && pTrade->nAct == (uint8_t)nAct && pTrade->bHasStore == 1 && pNpc->bTrading == 1 && pTrade->bStoreFilled == 1) {
         if (bResult) {
           pLiveUnit = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, pNpc->nNpcGUID);
-          if (!pLiveUnit || pLiveUnit->nClassId != pNpc->nMonStatsId) {
+          if (!pLiveUnit || GetClassIdInline(pLiveUnit) != pNpc->nMonStatsId) {
             SUNITPROXY_FreeNpcProxyData(pNpc, pGame);
             pTrade->bStoreFilled = 0;
             pTrade->dwLastTradeTick = 0;
-            pNewInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(pGame->pMemoryPool, nullptr);
-            pNpc->pInventory = (D2InventoryStrc*)pNewInventory;
+            pNpc->pInventory = D2Common::INVENTORY::Inventory::STRUCT_CreatePlayerInventory(pGame->pMemoryPool, nullptr);
           } else {
             pMonAi = GetMonsterAI(pLiveUnit);
             nMonsterCount = D2Game::Monster::MonsterAI::CountMonstersByAi(pMonAi);

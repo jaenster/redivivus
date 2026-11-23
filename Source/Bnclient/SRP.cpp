@@ -434,11 +434,12 @@ void __thiscall SRP_ServerComputePublicB(D2Srp * * pThis, uint8_t * nContextBase
     SHA::SHA1_BigIntFree(pPublicB);
 }
 
-void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uint32_t * pServerProof) {
+void __thiscall SRP_ClientVerifyAndComputeKey(D2Srp * * pThis, D2SrpServerSessionStrc * pContext, uint32_t * pServerProof) {
     // The values VC8 kept in pClientProofBuf's one frame slot, one member each: a frame object reaches the slot.
     union pClientProofBuf_u {
       BigData* pClientProofBuf2;
       int32_t nClientProofBuf;
+      uint32_t* pnClientProofCur;
     };
     static_assert(sizeof(void*) != 4 || sizeof(pClientProofBuf_u) == 4, "pClientProofBuf_u must stay one 4-byte frame slot");
     // Frame slots -52..-8 are ONE object: &pServerPublicB is passed out and the callee reaches the rest by byte offset.
@@ -453,36 +454,36 @@ void __thiscall SRP_ClientVerifyAndComputeKey(void * pThis, void * pContext, uin
     __frame0_t __frame0;
     BigData* pSharedSecret = SHA::SHA1_BigIntFromUnsigned(0);
     __frame0.pClientProofBuf.pClientProofBuf2 = pSharedSecret;
-    BigData* pSmallKey = SHA::SHA1_FromBigIntBytes((void*)((char*)pContext + 0x20), 0x20);
-    __frame0.pRandomKey = SHA::SHA1_FromBigIntBytes((void*)((char*)pContext + 0x80), 0x20);
-    __frame0.pServerPublicB = SHA::SHA1_FromBigIntBytes((void*)((char*)pContext + 0xa0), 0x20);
-    BigData* pClientProofOut = SHA::SHA1_FromBigIntBytes((void*)((char*)pContext + 0x60), 0x20);
-    SRP_ServerComputeSharedSecret(*(D2Srp**)pThis, &pClientProofOut, (int*)&__frame0.pServerPublicB, &__frame0.pRandomKey, &pSmallKey, &__frame0.pClientProofBuf.pClientProofBuf2);
+    BigData* pSmallKey = SHA::SHA1_FromBigIntBytes(pContext->aVerifier_v, 0x20);
+    __frame0.pRandomKey = SHA::SHA1_FromBigIntBytes(pContext->aServerPrivateKey_b, 0x20);
+    __frame0.pServerPublicB = SHA::SHA1_FromBigIntBytes(pContext->aServerPublicKey_B, 0x20);
+    BigData* pClientProofOut = SHA::SHA1_FromBigIntBytes(pContext->aClientPublicKey_A, 0x20);
+    SRP_ServerComputeSharedSecret(*pThis, &pClientProofOut, (int*)&__frame0.pServerPublicB, &__frame0.pRandomKey, &pSmallKey, &__frame0.pClientProofBuf.pClientProofBuf2);
     SHA::SHA1_BigIntFree(pClientProofOut);
     SHA::SHA1_BigIntFree(__frame0.pServerPublicB);
     SHA::SHA1_BigIntFree(__frame0.pRandomKey);
     SHA::SHA1_BigIntFree(pSmallKey);
     __frame0.pClientProofBuf.nClientProofBuf = (int32_t)SHA::SHA1_ToBigIntBytes(pSharedSecret, __frame0.sessionKeyBytes, 0x20);
     SHA::SHA1_BigIntFree(pSharedSecret);
-    SHA::SHA1_HashWideString((uint8_t*)((char*)pContext + 0xc0), (char*)__frame0.sessionKeyBytes, __frame0.pClientProofBuf.nClientProofBuf);
-    __frame0.pClientProofBuf.pClientProofBuf2 = (BigData*)((char*)pContext + 0xe8);
-    SRP_ComputeClientProof(*(D2Srp**)pThis, (char*)((char*)pContext + 0x40), pContext, (void*)((char*)pContext + 0x60), (void*)((char*)pContext + 0xa0), (uint8_t*)((char*)pContext + 0xc0), (uint8_t*)__frame0.pClientProofBuf.pClientProofBuf2);
+    SHA::SHA1_HashWideString(pContext->aSessionKey_K, (char*)__frame0.sessionKeyBytes, __frame0.pClientProofBuf.nClientProofBuf);
+    __frame0.pClientProofBuf.pnClientProofCur = (uint32_t*)pContext->aClientProof_M1;
+    SRP_ComputeClientProof(*pThis, pContext->szUsername, pContext->aSalt_s, pContext->aClientPublicKey_A, pContext->aServerPublicKey_B, pContext->aSessionKey_K, (uint8_t*)__frame0.pClientProofBuf.pnClientProofCur);
     uint32_t nRemaining = 0x14;
-    pSharedSecret = __frame0.pClientProofBuf.pClientProofBuf2;
+    uint32_t* pnProofCur = __frame0.pClientProofBuf.pnClientProofCur;
     do {
-      if (pSharedSecret->sPrimary.nCapacity != *pServerProof) {
+      if (*pnProofCur != *pServerProof) {
         break;
       }
 
       nRemaining -= 4;
       pServerProof++;
-      pSharedSecret = (BigData*)&pSharedSecret->sPrimary.nCount;
+      pnProofCur++;
     } while (nRemaining >= 4);
 }
 
 // Registers: ppSrp in ECX (__thiscall); *ppSrp is forwarded to SRP_ComputeServerProof.
-void __thiscall SRP_ComputeFinalProof(D2Srp * * ppSrp, uint8_t * nContextBase) {
-    SRP_ComputeServerProof(*ppSrp, nContextBase + 0x60, nContextBase + 0xe8, nContextBase + 0xc0, nContextBase + 0xfc);
+void __thiscall SRP_ComputeFinalProof(D2Srp * * ppSrp, D2SrpServerSessionStrc * pContext) {
+    SRP_ComputeServerProof(*ppSrp, pContext->aClientPublicKey_A, pContext->aClientProof_M1, pContext->aSessionKey_K, pContext->aServerProof_M2);
 }
 
 void __stdcall SRP_GlobalInit() {

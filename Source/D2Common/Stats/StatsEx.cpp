@@ -1546,7 +1546,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
 }
 
 // Recursively computes and stores an item-stat-cost stat value that has dependent/related stats (op formula). pStatList=stat list, nParam=stat id packed in high word, pItemStatCostStat=pointer into the ItemStatCost record for this stat, pUnitOwner=owner. First computes the combined base value; if the stat has no related-stats flag (offset+0x51==0) it just stores and returns. Otherwise it recurses over up to 3 related stats, and per the itemstatcost.txt "op" column (byte at +0x2a, enum eD2ItemStatOp) decides whether the owner/attached unit qualifies; if all related contributions are zero it then propagates the value to a secondary list of up to 0x40 stats. Returns the stat value. Mutates stat-list entries via STATLIST_SetFullStatValue.
-int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList, int32_t nStatKey, uint16_t * pItemStatCostStat, D2UnitStrc * pUnitOwner) {
+int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList, int32_t nStatKey, D2ItemStatCostTxt * pItemStatCostStat, D2UnitStrc * pUnitOwner) {
     uint32_t nRelatedStatIdx;
     int32_t nRelatedVal;
     int nAttachedStatVal;
@@ -1556,18 +1556,18 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
     D2UnitStrc* pUnit;
     int32_t nStatValue;
     nStatValue = STATLIST_CalcCombinedStatValue(pStatList, nStatKey);
-    if (*(char*)((char*)pItemStatCostStat + 0x51) == '\0') {
-      STATLIST_SetFullStatValue(nStatKey, nStatValue, (D2ItemStatCostTxt*)pItemStatCostStat, pUnitOwner, pStatList);
+    if (pItemStatCostStat->bHasOpBaseDependencies == '\0') {
+      STATLIST_SetFullStatValue(nStatKey, nStatValue, pItemStatCostStat, pUnitOwner, pStatList);
       return nStatValue;
     }
     if (!nStatValue) {
-      STATLIST_SetFullStatValue(nStatKey, 0, (D2ItemStatCostTxt*)pItemStatCostStat, pUnitOwner, pStatList);
+      STATLIST_SetFullStatValue(nStatKey, 0, pItemStatCostStat, pUnitOwner, pStatList);
     }
 
-    uint16_t* pOpBaseStatCur;
-    pOpBaseStatCur = pItemStatCostStat + 0x6f;
+    D2ItemStatCostOpRelationStrc* pOpBaseStatCur;
+    pOpBaseStatCur = &pItemStatCostStat->aOpRelations[0];
     uint16_t* pOpStatCur;
-    pOpStatCur = pItemStatCostStat + 0x2c;
+    pOpStatCur = (uint16_t*)&pItemStatCostStat->opStat1;
     bool bAllRelatedZero;
     bAllRelatedZero = true;
     int nOpIdx;
@@ -1584,10 +1584,10 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
         pItemStatCostLine = ITEMS::Items::sgptDataTable->pTxtItemStatCost + nRelatedStatIdx;
       }
 
-      nRelatedVal = STATLIST_ApplyComplexStatFormula(pStatList, nRelatedStatIdx << 0x10, &pItemStatCostLine->stat, pUnitOwner);
+      nRelatedVal = STATLIST_ApplyComplexStatFormula(pStatList, nRelatedStatIdx << 0x10, pItemStatCostLine, pUnitOwner);
       STATLIST_SetFullStatValue(nRelatedStatIdx << 0x10, nRelatedVal, pItemStatCostLine, pUnitOwner, pStatList);
       if (nRelatedVal) {
-        switch ((char)pItemStatCostStat[0x2a]) {
+        switch ((char)pItemStatCostStat->op) {
           case '\0':
 
           case '\b':
@@ -1602,8 +1602,8 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
 
           case '\x03':
             eOwnerType = pStatList->sStatList.eOwnerType;
-          if ((eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) && *pOpBaseStatCur != 0xffff) {
-            nRelatedVal = STATLIST_GetStatValueByKey(nullptr, pStatList, (uint32_t)*pOpBaseStatCur << 0x10);
+          if ((eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) && (uint16_t)pOpBaseStatCur->nOpBaseStat != 0xffff) {
+            nRelatedVal = STATLIST_GetStatValueByKey(nullptr, pStatList, (uint32_t)(uint16_t)pOpBaseStatCur->nOpBaseStat << 0x10);
             if (nRelatedVal > 0) {
               bAllRelatedZero = false;
             }
@@ -1614,8 +1614,8 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
 
           case '\x05':
             pUnit = pStatList->sStatList.pUnitAttached;
-          if (pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER) && *pOpBaseStatCur != 0xffff) {
-            nAttachedStatVal = STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)*pOpBaseStatCur, 0);
+          if (pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER) && (uint16_t)pOpBaseStatCur->nOpBaseStat != 0xffff) {
+            nAttachedStatVal = STATSEX_GetCurrentStat(pUnit, (eD2UnitStat)(uint16_t)pOpBaseStatCur->nOpBaseStat, 0);
             if (nAttachedStatVal > 0) {
               goto default_case;
             }
@@ -1645,7 +1645,7 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
       }
 
       pOpStatCur++;
-      pOpBaseStatCur += 3;
+      pOpBaseStatCur++;
       nOpIdx++;
     } while (nOpIdx < 3);
 
@@ -1653,8 +1653,8 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
       return nStatValue;
     }
 
-    STATLIST_SetFullStatValue(nStatKey, nStatValue, (D2ItemStatCostTxt*)pItemStatCostStat, pUnitOwner, pStatList);
-    unsigned short* pItemStatCostStat2 = pItemStatCostStat + 0x2f;
+    STATLIST_SetFullStatValue(nStatKey, nStatValue, pItemStatCostStat, pUnitOwner, pStatList);
+    unsigned short* pItemStatCostStat2 = (uint16_t*)pItemStatCostStat->aOpBaseDependents;
     nOpIdx = 0;
     do {
       if (*(uint16_t*)pItemStatCostStat2 == 0xffff) {
@@ -1668,7 +1668,7 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
         pItemStatCostLine = ITEMS::Items::sgptDataTable->pTxtItemStatCost + nRelatedStatIdx;
       }
 
-      nRelatedVal = STATLIST_ApplyComplexStatFormula(pStatList, nRelatedStatIdx << 0x10, &pItemStatCostLine->stat, pUnitOwner);
+      nRelatedVal = STATLIST_ApplyComplexStatFormula(pStatList, nRelatedStatIdx << 0x10, pItemStatCostLine, pUnitOwner);
       STATLIST_SetFullStatValue(nRelatedStatIdx << 0x10, nRelatedVal, pItemStatCostLine, pUnitOwner, pStatList);
       pItemStatCostStat2 = (uint16_t*)pItemStatCostStat2 + 1;
       nOpIdx++;
@@ -1704,7 +1704,7 @@ void __fastcall STATLIST_PropagateStatChange(D2StatListExStrc * pStatsEx, int32_
       if (!pItemStatCostLine->bHasOpBaseDependencies && !pItemStatCostLine->bReferencedByOpStat) {
         STATLIST_PropagateStatDelta(nShiftedStat, nDelta, pItemStatCostLine, pUnit, pList);
       } else {
-        STATLIST_ApplyComplexStatFormula(pList, nShiftedStat, &pItemStatCostLine->stat, pUnit);
+        STATLIST_ApplyComplexStatFormula(pList, nShiftedStat, pItemStatCostLine, pUnit);
       }
 
       D2StatListExStrc* pPrev = pList;
@@ -1788,7 +1788,7 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
           eStatIdx = anOp45Stats[nOp45Count] >> 0x10 & 0xffff;
           D2ItemStatCostTxt* pItemStatCostTxt2;
           if (true && (pItemStatCostTxt2 = (int)eStatIdx < ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatIdx : nullptr)) {
-            STATLIST_ApplyComplexStatFormula(pStatList, anOp45Stats[nOp45Count], &pItemStatCostTxt2->stat, nullptr);
+            STATLIST_ApplyComplexStatFormula(pStatList, anOp45Stats[nOp45Count], pItemStatCostTxt2, nullptr);
           }
         }
       }
@@ -2003,7 +2003,7 @@ void __stdcall STATLIST_AttachStatListToUnit(D2UnitStrc * pOp45Owner, D2StatList
           nOp45Count = anOp45Stats[nOp45Idx];
           pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine(nOp45Count >> 0x10 & 0xffff);
           if (pItemStatCostLine) {
-            STATLIST_ApplyComplexStatFormula(pChildStatsEx, nOp45Count, &pItemStatCostLine->stat, nullptr);
+            STATLIST_ApplyComplexStatFormula(pChildStatsEx, nOp45Count, pItemStatCostLine, nullptr);
           }
         }
       }

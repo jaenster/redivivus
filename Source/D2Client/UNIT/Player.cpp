@@ -1231,7 +1231,7 @@ uint32_t __fastcall SKILL_CheckAuraRange(D2SkillStrc * pSkill, D2UnitStrc * pUni
 }
 
 // Client-side aura movement handler: checks SKILL_CheckAuraRange for the active aura skill; if the caster is in range, records last skill hits for unk1 and unk3|Poison aura types, then interpolates the caster's position along the remaining steps toward the target and calls CLIENT_MovePlayerToPosition. Falls back to PLAYER_ExecuteModeBasedAction if the caster has left range.
-static int PLAYER_ExecuteSkillWithAura(int32_t nTargetGUID, eD2UnitType eTargetUnitType, D2UnderMouseStrc * pUnderMouse) {
+static int PLAYER_ExecuteSkillWithAura(D2UnderMouseStrc * pUnderMouse, eD2UnitType eTargetUnitType, int32_t nTargetGUID) {
     int32_t nSrcXPos;
     int32_t nDstX;
     int32_t nDstY;
@@ -1275,11 +1275,13 @@ static int PLAYER_ExecuteSkillWithAura(int32_t nTargetGUID, eD2UnitType eTargetU
         }
 
         nSrcXPos = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pPlayer);
-        nCurDist = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pPlayer);
-        nDstX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
-        nDstY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
-        nCurDist = (nDstY - nCurDist) * nStepsRemaining / nTotalDist + nCurDist;
-        CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, (nDstX - nSrcXPos) * nStepsRemaining / nTotalDist + nSrcXPos, nCurDist, pUnderMouse->nMoveActionType);
+        int32_t nSrcYPos = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pPlayer);
+        nDstX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget) - nSrcXPos;
+        nDstY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget) - nSrcYPos;
+        nDstY = nDstY * nStepsRemaining / nTotalDist;
+        nDstX = nDstX * nStepsRemaining / nTotalDist;
+        nSrcYPos += nDstY;
+        CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, nDstX + nSrcXPos, nSrcYPos, pUnderMouse->nMoveActionType);
         return 1;
       }
     }
@@ -1301,42 +1303,38 @@ static void __stdcall PLAYER_ExecuteSkillAtUnit(eD2UnitType eTargetUnitType, int
 
     BOOL bInMeleeRange = D2Common::Units::IsInMovingModeEx(pUnit);
     bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnderMouse->pPlayer, pUnderMouse->pTarget, bInMeleeRange);
-    if (!bInMeleeRange) {
-      D2SkillsTxt* pSkillsTxt;
-      if (*ppSkill) {
-        pSkillsTxt = D2Common::Skills::GetSkillsTxt(*ppSkill);
-        if (pSkillsTxt && pSkillsTxt->srvdofunc == 0x13) {
-          PLAYER_ExecuteSkillWithAura(nTargetGUID, eTargetUnitType, pUnderMouse);
-          return;
-        }
-      }
+    if (bInMeleeRange) {
+      PLAYER_ExecuteModeBasedAction(1, pUnderMouse);
+      return;
+    }
 
-      switch (nWeaponClass) {
-        case 1:
-          case 4:
-            {
-              nWeaponClass = 0;
-              if (!(*(uint8_t*)&pUnderMouse->flags & 0x20)) {
-                UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
-                if (*(uint8_t*)&pUnderMouse->flags & 1) {
-                  D2Common::Skills::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
-                }
-                if (!(*(uint8_t*)&pUnderMouse->flags & 2)) {
-                  return;
-                }
-
-                D2Common::Skills::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
-                return;
-              }
-
-              PLAYER_ExecuteModeBasedAction(nWeaponClass, pUnderMouse);
-              return;
-            }
+    if (*ppSkill) {
+      D2SkillsTxt* pSkillsTxt = D2Common::Skills::GetSkillsTxt(*ppSkill);
+      if (pSkillsTxt && pSkillsTxt->srvdofunc == 0x13) {
+        PLAYER_ExecuteSkillWithAura(pUnderMouse, eTargetUnitType, nTargetGUID);
+        return;
       }
     }
 
-    nWeaponClass = 1;
-    PLAYER_ExecuteModeBasedAction(nWeaponClass, pUnderMouse);
+    switch (nWeaponClass) {
+      case 1:
+      case 4:
+        if (!(*(uint8_t*)&pUnderMouse->flags & 0x20)) {
+          UnitMode::UNITMODE_ExecuteSkillAction(pUnderMouse->nAttackActionType, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID, 0);
+          if (*(uint8_t*)&pUnderMouse->flags & 1) {
+            D2Common::Skills::StoreLastSkillHit(unk1, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+          }
+          if (*(uint8_t*)&pUnderMouse->flags & 2) {
+            D2Common::Skills::StoreLastSkillHit(unk3 | Poison, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
+          }
+          return;
+        }
+
+        PLAYER_ExecuteModeBasedAction(0, pUnderMouse);
+        return;
+    }
+
+    PLAYER_ExecuteModeBasedAction(1, pUnderMouse);
 }
 
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {

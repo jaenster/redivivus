@@ -211,7 +211,7 @@ typedef void (__fastcall *pfnMinionForEachCallback)(D2UnitStrc * pMinion, void *
 #endif
 #ifndef RECON_FPTD_pfnPetForEachCallback
 #define RECON_FPTD_pfnPetForEachCallback
-typedef void (__stdcall *pfnPetForEachCallback)(D2UnitStrc * pPetUnit, void * pContext);
+typedef void (__fastcall *pfnPetForEachCallback)(::SGAMEDATA * pGame, D2UnitStrc * pOwner, D2UnitStrc * pPetUnit, void * pContext);
 #endif
 #ifndef RECON_FPTD_fpQuestNpcPhaseFn
 #define RECON_FPTD_fpQuestNpcPhaseFn

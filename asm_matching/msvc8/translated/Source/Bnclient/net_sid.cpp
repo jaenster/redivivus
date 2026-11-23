@@ -1579,38 +1579,38 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x57_AuthAccountUpgrade(int32_t bIncrementFl
 }
 
 int __fastcall NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof(uint32_t nServerToken) {
-    // Frame slots -380..-292 are ONE object: &dwClientToken is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwClientToken;
-      D2XSHA1Strc shaOldPasswordHash;
-      uint8_t abSrpSaltCopy[64];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 88, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    // Frame -292..-284 is ONE Ghidra variable the decompiler printed as 2 locals.
-    // Separate locals let the compiler reorder them, so the pieces are one struct.
-    struct __frame1_t {
-      DWORD abUpgradeProofInput;
-      uint32_t uStack_120;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame1_t) == 8, "frame group __frame1_t must reproduce the Ghidra frame layout");
-    __frame1_t __frame1;
-    D2XSHA1Strc shaUsernameHash;
-    char szUsernameLower[256];
-    __frame1.abUpgradeProofInput = GetTickCount();
-    __frame1.uStack_120 = nServerToken;
-    uint32_t nLen = Storm::Source::SSTR::SStrCopy(szUsernameLower, g_srpCredentials.szPassword, 0x100);
-    /* DWORD cchLength for CharLowerBuffA */ /* LPSTR lpsz for CharLowerBuffA */ CharLowerBuffA(szUsernameLower, nLen);
-    uint32_t nInputSize = Storm::Source::SSTR::SStrLen(szUsernameLower);
-    XSHA1(&shaUsernameHash, szUsernameLower, nInputSize);
-    __frame0.dwClientToken = __frame1.abUpgradeProofInput;
-    XSHA1(&__frame0.shaOldPasswordHash, (char*)&__frame1.abUpgradeProofInput, 0x1c);
-    Storm::Source::SMem::SMemCopy(__frame0.abSrpSaltCopy, &g_srpSaltVerifier, 0x40);
+    SID_C2S_AuthAccountUpgradeProof sPacket;
+    D2SidPasswordProofInputStrc sProofInput;
+    char szPasswordLower[256];
+    sProofInput.dwClientToken = GetTickCount();
+    sProofInput.dwServerToken = nServerToken;
+    uint32_t nLen = Storm::Source::SSTR::SStrCopy(szPasswordLower, g_srpCredentials.szPassword, 0x100);
+    CharLowerBuffA(szPasswordLower, nLen);
+    XSHA1((D2XSHA1Strc*)sProofInput.abPasswordHash, szPasswordLower, Storm::Source::SSTR::SStrLen(szPasswordLower));
+    sPacket.dwClientToken = sProofInput.dwClientToken;
+    XSHA1(&sPacket.shaPasswordProof, (char*)&sProofInput, 0x1c);
+    Storm::Source::SMem::SMemCopy(&sPacket.sSaltVerifier, &g_srpSaltVerifier, 0x40);
     Storm::Source::SMem::SMemZero(&g_srpSaltVerifier, 0x40);
-    BnSend::NET_SID_CLIENT_Send(0x58, (char*)&__frame0.dwClientToken, 0x58);
+    BnSend::NET_SID_CLIENT_Send(0x58, (char*)&sPacket, 0x58);
     return 0;
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 // Verifies the server's 20-byte SRP proof M2 = H(A, M1, K) against the locally computed expected value stored in g_srpCredentials. Called after receiving status 0 in the 0x54 logon proof response.
 int32_t __fastcall NET_SID_CLIENT_VerifyServerProof(void * pM2ServerProof) {

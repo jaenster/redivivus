@@ -1,0 +1,5 @@
+# stb_image_write.h - Sean Barrett's single-file JPEG/PNG/BMP writer.
+# Used by Redivivus/x64/d2_ijl.cpp, the 64-bit stand-in for ijl11.dll (screenshots).
+# Dual-licensed MIT / public domain (see the end of the file); its license text stays in the header.
+# Source: https://github.com/nothings/stb, commit 6b5799bae8a1fe3792691ef4b72ae26434c3e799, v1.19, unmodified.
+5d89edc8bffd848f3e138b2a1dbec67aadbed591894bde16ade7c83dc233af9b  stb_image_write.h

@@ -1309,12 +1309,12 @@ D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint3
     return pTxtItemRatio + nBestMatchIdx;
 }
 
-int SORT_ItemDescPriority(LPCVOID pEntry1, LPCVOID pEntry2) {
-    if (*(short int*)((char*)pEntry1 + 2) < *(short int*)((char*)pEntry2 + 2)) {
+int SORT_ItemDescPriority(const D2ItemStatCostDescPriorityStrc * pEntry1, const D2ItemStatCostDescPriorityStrc * pEntry2) {
+    if (pEntry1->nDescPriority < pEntry2->nDescPriority) {
       return -1;
     }
 
-    return (uint32_t)(*(short int*)((char*)pEntry1 + 2) != *(short int*)((char*)pEntry2 + 2));
+    return (uint32_t)(pEntry1->nDescPriority != pEntry2->nDescPriority);
 }
 
 // Builds the itemstatcost.txt field-descriptor array (52 columns) and compiles it into the in-memory ItemStatCost table via DataTbls::CompileTxt (record size 0x144), enforcing a max of 0x1FF stats (fatal error otherwise). Then post-processes op-relationships: clears each stat's aOpBaseDependents arrays to -1, derives the charged-skill-level bit count (clamped 1..8, default 6) and its mask, and for every stat with an op walks its op-base/op-stat references to populate the dependency graph (aOpBaseDependents, aOpRelations, bHasOpBaseDependencies/bHasOp4Or5Dependency flags) plus special-case stat flag bits. Finally collects stats with a nonzero descpriority, qsorts them via SORT_ItemDescPriority, and allocates/stores the sorted pItemStatCostDescPriority list. __fastcall, pMemory in ECX.
@@ -1563,7 +1563,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
       } while (nDepSlotIdx < nStatCount);
     }
 
-    qsort(aDescPrioritySort, nDescPriorityCount, 4, SORT_ItemDescPriority);
+    qsort(aDescPrioritySort, nDescPriorityCount, 4, (int (*)(const void*, const void*))SORT_ItemDescPriority);
     MonsterTbls::sgtDataTable.pItemStatCostDescPriority = (short*)D2_ALLOC_POOL_AT(nullptr, MonsterTbls::sgtDataTable.nItemStatCostDescPrioritySize * 2, ".\\DATATBLS\\ItemTbls.cpp", 0x748);
     if (MonsterTbls::sgtDataTable.nItemStatCostDescPrioritySize <= 0) {
       return;
@@ -1639,11 +1639,11 @@ void __stdcall ITEMTBLS_FreeProperties() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtPropertiesLink);
 }
 
-int TXT_Gamble_SortFunction(LPCVOID pEntry1, LPCVOID pEntry2) {
-    if (*(uint32_t*)((char*)pEntry1 + 4) > *(uint32_t*)((char*)pEntry2 + 4)) {
+int TXT_Gamble_SortFunction(const D2GambleTxt * pEntry1, const D2GambleTxt * pEntry2) {
+    if ((uint32_t)pEntry1->nLevel > (uint32_t)pEntry2->nLevel) {
       return 1;
     }
-    if (*(uint32_t*)((char*)pEntry1 + 4) < *(uint32_t*)((char*)pEntry2 + 4)) {
+    if ((uint32_t)pEntry1->nLevel < (uint32_t)pEntry2->nLevel) {
       return -1;
     }
     return 0;
@@ -1680,7 +1680,7 @@ void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
         } while (nIdx < nTxtGambleSize.nSize);
       }
 
-      qsort(pTxtGamble, nTxtGambleSize.nSize, 0xc, TXT_Gamble_SortFunction);
+      qsort(pTxtGamble, nTxtGambleSize.nSize, 0xc, (int (*)(const void*, const void*))TXT_Gamble_SortFunction);
     } else {
       nTxtGambleSize.pTable = 0;
     }

@@ -1613,13 +1613,13 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
     szCofPath[0] = '\0';
     memset(szCofPath + 1, 0, 0x103);
     GFX_BuildMonsterCofPath(nModeId, szCofPath, &nComponentCode, (int)*pComponentTable);
-    void* pCofFile = GFX_FindTextureInCache(&gMonsterCofCache, szCofPath);
-    if (!pCofFile && (pCofFile = GFX_LoadCofFile(&gMonsterCofCache, szCofPath) , !pCofFile)) {
+    D2CofTextureCacheEntryStrc* pCofFile = (D2CofTextureCacheEntryStrc*)GFX_FindTextureInCache(&gMonsterCofCache, szCofPath);
+    if (!pCofFile && (pCofFile = (D2CofTextureCacheEntryStrc*)GFX_LoadCofFile(&gMonsterCofCache, szCofPath) , !pCofFile)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xec3);
       exit(-1);
     } else {
       uint8_t* pLayerCount;
-      pLayerData = ((D2CofTextureCacheEntryStrc*)pCofFile)->pFileData;
+      pLayerData = pCofFile->pFileData;
       if (!pLayerData) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xec9);
         exit(-1);
