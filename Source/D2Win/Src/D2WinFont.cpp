@@ -1223,68 +1223,45 @@ void __stdcall D2WINFONT_InitFontSystem() {
     gnFontIdSmall = 0x10;
     gnFontIdLarge = 0x11;
     gnFontIdBody = 3;
-    char byFontCacheByte;
-    byFontCacheByte = _FONT::sLanguageCode[7];
     if ((int)nLangCode < 6) {
-      memcpy(_FONT::sLanguageCode, "Lati", 4);
-      _FONT::sLanguageCode[4] = 'n';
-      _FONT::sLanguageCode[5] = '\\';
-      _FONT::sLanguageCode[6] = '\0';
+      strcpy(_FONT::sLanguageCode, "Latin\\");
       gpfnFontGetCharWidth = FONT_GetCharWidthCallback;
       gnFontIdLarge = 0x10;
     } else {
       switch (nLangCode) {
         case 0xc:
           gbFontIsKoreanChatMode = 1;
-        memcpy(_FONT::sLanguageCode, "LATI", 4);
-        _FONT::sLanguageCode[4] = 'N';
-        _FONT::sLanguageCode[5] = '\\';
-        _FONT::sLanguageCode[6] = '\0';
-        *(uint32_t*)((char*)&_FONT::sLanguageCode + 4) = (uint32_t)((uint32_t)(uint8_t)byFontCacheByte << 24 | (uint32_t)((uint32_t)d2_load24((char*)&_FONT::sLanguageCode + 4) & 0xffffffu));
-        gpfnFontGetCharWidth = FONT_GetCharWidthCallback;
-        goto load_font_images;
+          strcpy(_FONT::sLanguageCode, "LATIN\\");
+          gpfnFontGetCharWidth = FONT_GetCharWidthCallback;
+          goto load_font_images;
         case 6:
           gnFontIdSmall = 0xe;
-        gnFontIdLarge = 0xf;
-        gnFontIdBody = 5;
-        memcpy(_FONT::sLanguageCode, "JPN\\", 4);
-        *(uint32_t*)((char*)&_FONT::sLanguageCode + 4) = (uint32_t)((uint32_t)d2_load24((char*)&_FONT::sLanguageCode + 5) & 0xffffffu) << 8;
-        break;
+          gnFontIdLarge = 0xf;
+          gnFontIdBody = 5;
+          strcpy(_FONT::sLanguageCode, "JPN\\");
+          break;
         case 7:
           gnFontIdBody = 5;
-        memcpy(_FONT::sLanguageCode, "KOR\\", 4);
-        *(uint32_t*)((char*)&_FONT::sLanguageCode + 4) = (uint32_t)((uint32_t)d2_load24((char*)&_FONT::sLanguageCode + 5) & 0xffffffu) << 8;
-        break;
+          strcpy(_FONT::sLanguageCode, "KOR\\");
+          break;
         case 8:
-
         case 9:
-          _FONT::sLanguageCode[0] = 'C';
-        _FONT::sLanguageCode[1] = 'H';
-        _FONT::sLanguageCode[2] = 'I';
-        _FONT::sLanguageCode[3] = '\\';
-        gnFontIdSmall = 0xe;
-        gnFontIdLarge = 0xe;
-        gnFontIdBody = 2;
-        *(uint32_t*)((char*)&_FONT::sLanguageCode + 4) = (uint32_t)((uint32_t)d2_load24((char*)&_FONT::sLanguageCode + 5) & 0xffffffu) << 8;
-        break;
+          gnFontIdSmall = 0xe;
+          gnFontIdLarge = 0xe;
+          gnFontIdBody = 2;
+          strcpy(_FONT::sLanguageCode, "CHI\\");
+          break;
         case 10:
           gnFontIdSmall = 0xd;
-        gnFontIdLarge = 0xd;
-        memcpy(_FONT::sLanguageCode, "LATIN2\\", 8);
-        break;
+          gnFontIdLarge = 0xd;
+          strcpy(_FONT::sLanguageCode, "LATIN2\\");
+          break;
         case 0xb:
-          memcpy(_FONT::sLanguageCode, "CYR\\", 4);
-        *(uint32_t*)((char*)&_FONT::sLanguageCode + 4) = (uint32_t)((uint32_t)d2_load24((char*)&_FONT::sLanguageCode + 5) & 0xffffffu) << 8;
-        break;
+          strcpy(_FONT::sLanguageCode, "CYR\\");
+          break;
         default:
-          _FONT::sLanguageCode[0] = 'L';
-        _FONT::sLanguageCode[1] = 'a';
-        _FONT::sLanguageCode[2] = 't';
-        _FONT::sLanguageCode[3] = 'i';
-        _FONT::sLanguageCode[4] = 'n';
-        _FONT::sLanguageCode[5] = '\\';
-        _FONT::sLanguageCode[6] = '\0';
-        *(uint32_t*)((char*)&_FONT::sLanguageCode + 4) = (uint32_t)((uint32_t)(uint8_t)byFontCacheByte << 24 | (uint32_t)((uint32_t)d2_load24((char*)&_FONT::sLanguageCode + 4) & 0xffffffu));
+          strcpy(_FONT::sLanguageCode, "Latin\\");
+          break;
       }
 
       gpfnFontGetCharWidth = D2WINFONT_LookupGlyphEntry;
@@ -1304,11 +1281,9 @@ void __stdcall D2WINFONT_InitFontSystem() {
 
     gppDC6FontCache = &gaFontCache[1].pFontDC6;
     memset(&DisplayedTooltip, 0, 0x800);
-    szFontPath[0] = 'c';
-    szFontPath[1] = '\0';
+    strcpy(szFontPath, "c");
     D2Lang::UTF8_ConvertToWideChar((uint16_t*)gwFontHeightDefault, szFontPath, 2);
-    szFontPath[0] = 'm';
-    szFontPath[1] = '\0';
+    strcpy(szFontPath, "m");
     D2Lang::UTF8_ConvertToWideChar((uint16_t*)gnFontTableCharWidthCache, szFontPath, 2);
 }
 

@@ -1053,37 +1053,24 @@ void __stdcall RemoveCollision(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32
 }
 
 static eCollisionFlags __stdcall CollisionGrid_CheckCollision_BoundingBox(D2RoomCollisionGridStrc * pCollisionMap, D2BoundingBoxStrc * pBoundingBox, eCollisionFlags eCollisionFlag) {
-    eCollisionFlags eCellFlags;
-    int nGridXSize = pCollisionMap->sCoords.dwYStart;
-    int nRelBottom = pBoundingBox->nBottom - nGridXSize;
-    int nRelTop = pBoundingBox->nTop - nGridXSize;
-    int nRelRight = pBoundingBox->nRight - pCollisionMap->sCoords.dwXStart;
-    nGridXSize = pCollisionMap->sCoords.dwXSize;
-    int nRelLeft = pBoundingBox->nLeft - pCollisionMap->sCoords.dwXStart;
-    eCollisionFlags* pCell = pCollisionMap->pMapStart + (nGridXSize * nRelBottom + nRelLeft);
+    int nY1 = pBoundingBox->nBottom - pCollisionMap->sCoords.dwYStart;
+    int nX2 = pBoundingBox->nRight - pCollisionMap->sCoords.dwXStart;
+    int nY2 = pBoundingBox->nTop - pCollisionMap->sCoords.dwYStart;
+    int nX1 = pBoundingBox->nLeft - pCollisionMap->sCoords.dwXStart;
+    int nGridXSize = pCollisionMap->sCoords.dwXSize;
+    eCollisionFlags* pCell = pCollisionMap->pMapStart + (nGridXSize * nY1 + nX1);
+    int nRowSkip = nGridXSize + nX1 - nX2 - 1;
     eCollisionFlags eResult = COLBIT_NONE;
-    if (nRelBottom <= nRelTop) {
-      int nRowsRemaining;
-      nRowsRemaining = nRelTop - nRelBottom + 1;
-      do {
-        if (nRelLeft <= nRelRight) {
-          nRelBottom = nRelRight - nRelLeft + 1;
-          do {
-            eCellFlags = *pCell;
-            pCell++;
-            eResult |= eCellFlags & eCollisionFlag;
-            nRelBottom--;
-          } while (nRelBottom);
-        }
+    for (int nY = nY1; nY <= nY2; nY++) {
+      for (int nX = nX1; nX <= nX2; nX++) {
+        eResult |= *pCell & eCollisionFlag;
+        pCell++;
+      }
 
-        pCell = pCell + nGridXSize - 1 + (nRelLeft - nRelRight);
-        nRowsRemaining--;
-      } while (nRowsRemaining);
-
-      return eResult;
+      pCell += nRowSkip;
     }
 
-    return COLLIDE_NONE;
+    return eResult;
 }
 
 static void __stdcall CollisionGrid_RemoveCollision_BoundingBox(D2RoomCollisionGridStrc * pCollisionMap, D2BoundingBoxStrc * pBoundingBox, int32_t eCollisionFlag) {
@@ -1207,12 +1194,12 @@ int16_t __fastcall CheckCollision_BoundingBox(D2RoomStrc * pRoom, D2BoundingBoxS
     short int eCollisionAccum = CollisionGrid_CheckCollision_BoundingBox(pCollisionGrid, aBboxSplit, (eCollisionFlags)eCollisionFlag);
     if (nBboxCount > 1) {
       uint16_t eCollisionResult;
-      pBoundingBox_00 = aBboxSplit;
+      pBoundingBox_00 = &aBboxSplit[1];
       nBboxRemaining = nBboxCount - 1;
       do {
-        pBoundingBox_00++;
         eCollisionResult = CheckCollision_BoundingBox(pRoom_00, pBoundingBox_00, eCollisionFlag);
         eCollisionAccum |= eCollisionResult;
+        pBoundingBox_00++;
         nBboxRemaining--;
       } while (nBboxRemaining);
     }
@@ -1244,22 +1231,11 @@ int32_t __fastcall CheckCollision_BlockPlayer_BoundingBox(D2RoomStrc * pRoom, D2
       return 1;
     }
 
-    int nBboxIndex = 1;
-    if (1 >= nBboxCount) {
-      return 0;
-    }
-
-    D2BoundingBoxStrc* pCoords_00 = aBboxSplit;
-    do {
-      int32_t iVar1;
-      pCoords_00++;
-      iVar1 = CheckCollision_BlockPlayer_BoundingBox(pBetterRoom, pCoords_00, eCollisionFlag);
-      if (iVar1) {
+    for (int nBboxIndex = 1; nBboxIndex < nBboxCount; nBboxIndex++) {
+      if (CheckCollision_BlockPlayer_BoundingBox(pBetterRoom, &aBboxSplit[nBboxIndex], eCollisionFlag)) {
         return 1;
       }
-
-      nBboxIndex++;
-    } while (nBboxIndex < nBboxCount);
+    }
 
     return 0;
 }

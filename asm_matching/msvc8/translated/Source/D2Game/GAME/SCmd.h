@@ -397,6 +397,16 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x9E_0x9F_0xA0 {
 }; __pragma(pack(pop))
 
 #endif // D2_MODULE_D2Game
+#ifndef D2_DEFINED_D2GSPacketSrv0x40
+#define D2_DEFINED_D2GSPacketSrv0x40
+__pragma(pack(push, 1)) struct D2GSPacketSrv0x40 {
+    /* 0x00 */ uint8_t nPacketId;
+    /* 0x01 */ uint32_t dwItemGUID;
+    /* 0x05 */ eD2ItemFlag eItemFlag;
+    /* 0x09 */ BOOL bSet;
+}; __pragma(pack(pop))
+#endif // D2_DEFINED_D2GSPacketSrv0x40
+
 namespace D2Game { namespace GAME { namespace SCmd {
 
 // Function declarations
@@ -519,7 +529,7 @@ void __fastcall Send0x9DItemWeaponSwitch(struct D2ClientStrc * pClient, struct D
 // Sends opcode 0x3E item-stat-update packet to pClient. Encodes unit GUID, equipped flag, stat ID (9 bits), stat value (variable size), and stat layer/count (8 or 16 bits) into a bit-buffer inside a 34-byte stack packet, then sends it.
 void __fastcall NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, char bIsEquipped, int32_t nStatId, uint32_t nStatValue, uint16_t nStatLayerOrCount);
 void __fastcall NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, uint8_t nItemSlot, BOOL bUseUnitGUID, int32_t nParam, uint16_t nSkillId);
-void __fastcall NET_D2GS_SERVER_Send_0x40_ITEMSETFLAG(struct D2ClientStrc * pClient, struct D2UnitStrc * pTargetUnit, uint32_t dwSkillId, uint32_t dwSkillLevel);
+void __fastcall NET_D2GS_SERVER_Send_0x40_ITEMSETFLAG(struct D2ClientStrc * pClient, struct D2UnitStrc * pTargetUnit, eD2ItemFlag eItemFlag, BOOL bSet);
 void __fastcall Send0x9DItemAutoUnequip(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, eD2ItemFlag eItemFlag);
 void __fastcall NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit);
 void __fastcall Send0x9DItemInSocket(struct D2ClientStrc * pClient, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, eD2ItemFlag eItemFlag);

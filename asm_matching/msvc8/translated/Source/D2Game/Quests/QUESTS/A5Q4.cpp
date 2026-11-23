@@ -714,7 +714,7 @@ void __fastcall Q34_ClaimReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Q34_OnNihlathakAI (Betrayal of Harrogath). Nihlathak AI hook: while in intro and prev-state < 3, broadcasts state-flag 3 (Q34_NotifyQuestState) — advances the quest when the player engages Nihlathak. No QuestRecord access.
-void __fastcall Q34_OnNihlathakAI(::SGAMEDATA * pGame) {
+void __fastcall Q34_OnNihlathakAI(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_BetrayalOfHaggorath);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev < 3)) {
       return;

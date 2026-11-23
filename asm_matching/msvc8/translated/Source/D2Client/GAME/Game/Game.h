@@ -320,7 +320,7 @@ uint32_t __stdcall GetStepsOfMissileMovement();
 struct D2PoolManagerStrc * __stdcall GAME_GetClientPoolManager();
 eD2GSGameType __stdcall CLIENT_GetD2GSGameType();
 void __fastcall GAMEDATA_ExtendTimeout(int32_t nDelayMs);
-void __stdcall GAMEDATA_LoadActTiles(uint32_t nAct);
+void __stdcall GAMEDATA_LoadActTiles(uint8_t nAct);
 // ESI is not an argument: the body never reads it.
 void GAMEDATA_CheckColorTxtOverride();
 void __stdcall GAME_ToggleBloodFlag();

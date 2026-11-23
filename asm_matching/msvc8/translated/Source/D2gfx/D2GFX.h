@@ -393,7 +393,7 @@ BOOL __stdcall D2GFX_GetBackBuffer(BYTE * pBuffer);
 uint32_t __stdcall D2GFX_IsWindowActive();
 void __stdcall D2GFX_DrawRect(RECT * pRect, BYTE nPaletteIndex);
 void __stdcall D2GFX_DrawRectEx(RECT * pRect, BYTE nPaletteIndex);
-void __stdcall D2GFX_DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, DWORD dwColor, DRAWMODE nDrawMode);
+void __stdcall D2GFX_DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, BYTE nColor, DRAWMODE nDrawMode);
 void __stdcall D2GFX_DrawSolidRectAlpha(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, DWORD dwColor, DWORD nAlpha);
 void __stdcall D2GFX_DrawLine(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, DWORD nColor, DWORD nAlpha);
 void __stdcall D2GFX_ClearScreen(BOOL bPartial);

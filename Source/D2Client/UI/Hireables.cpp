@@ -580,19 +580,15 @@ void __stdcall UI_InitializeHirelingIconsUI() {
     gbHireIconsVisible = 1;
 }
 
-// Stack-slot reuse: after the colour is chosen, the low byte of the nPetType slot holds nColorMask, which is the colour passed to D2GFX_DrawSolidRectEx.
 static void __stdcall DrawHealthBar(uint32_t nRosterGUID, uint32_t nPetType, int32_t nX) {
-    int nHp = !nPetType ? GAME::Roster::GetRosterHP(nRosterGUID) : GAME::RosterPets::GetRosterPerHPPercent(nRosterGUID);
+    int nHp = nPetType ? GAME::RosterPets::GetRosterPerHPPercent(nRosterGUID) : GAME::Roster::GetRosterHP(nRosterGUID);
     if (!nHp) {
       return;
     }
 
-    uint32_t nHpPercent = nHp <= 0 ? 0 : nHp;
-    if ((int)nHpPercent >= 100) {
-      nHpPercent = 100;
-    }
+    int nHpPercent = (nHp <= 0 ? 0 : nHp) < 100 ? (nHp <= 0 ? 0 : nHp) : 100;
 
-    int nBarEndX = (int)(nHpPercent * 46) / 100 + nX;
+    int nBarEndX = nHpPercent * 46 / 100 + nX;
     if (!HealthBarColorsInitialized) {
       HealthBarColorsInitialized = true;
       HealthBarGreen = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0x80, 0);
@@ -600,16 +596,15 @@ static void __stdcall DrawHealthBar(uint32_t nRosterGUID, uint32_t nPetType, int
       HealthBarRed = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xff, 0, 0);
     }
 
-    uint8_t nColorMask = HealthBarGreen;
-    if ((int)nHpPercent < 50) {
-      nColorMask = HealthBarYellowish;
+    uint8_t nColor = HealthBarGreen;
+    if (nHpPercent < 50) {
+      nColor = HealthBarYellowish;
     }
-    if ((int)nHpPercent < 25) {
-      nColorMask = HealthBarRed;
+    if (nHpPercent < 25) {
+      nColor = HealthBarRed;
     }
 
-    nPetType = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nPetType + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)nColorMask);
-    D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nX, 14, nBarEndX, 19, nPetType, DRAW_SOLID);
+    D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nX, 14, nBarEndX, 19, nColor, DRAW_SOLID);
     D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nBarEndX, 14, nX + 46, 19, 0, DRAW_SOLID);
 }
 
@@ -719,9 +714,7 @@ static BOOL __stdcall HIRELING_DrawPortraitIcon(D2UnitStrc * pUnit, int * pnYTog
     }
 
     DrawHealthBar(nRosterGUID, 7, *pnX);
-    int nY_00 = *pnY;
-    int nY = *pnX;
-    UI_DrawHirelingNameFromUnit(UNIT::CUnit::UNITS_FindClientSideUnit(nRosterGUID, UNIT_MONSTER), nY, nY_00);
+    UI_DrawHirelingNameFromUnit(UNIT::CUnit::UNITS_FindClientSideUnit(nRosterGUID, UNIT_MONSTER), *pnX, *pnY);
     if (*pnYToggle) {
       *pnY -= *pnYToggle;
       *pnYToggle = 0;
@@ -846,12 +839,15 @@ void __stdcall UI_DrawHireableIcons() {
     DWORD bMercInvFlagChanged;
     uint16_t wszTooltip[256];
     int nPetTypeTxtOffset;
-    int aCursorState[4];
+    int nCursorX;
+    int nYToggle;
+    int nCursorY;
+    BOOL bAnyDrawn;
     char nPetIconKind;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
-    aCursorState[2] = 0x48;
-    aCursorState[0] = 0;
-    aCursorState[1] = 0xf;
+    nCursorX = 0x48;
+    nYToggle = 0;
+    nCursorY = 0xf;
     D2UnitStrc* pPlayerSaved = pPlayer;
     uint32_t nPetTypeIdx = Path::DRAW_GetTypeOfBorder();
     if (nPetTypeIdx == 3 || nPetTypeIdx == 2 || (bResult = ui::GetUIFlag(UI_ESCMENU) , bResult != 0) || (bResult = ui::GetUIFlag(UI_CONFIG) , bResult || gnHireDisplayMode == 2)) {
@@ -872,9 +868,8 @@ void __stdcall UI_DrawHireableIcons() {
       }
     }
 
-    uint32_t bAnyIconDrawn = UI_DrawPartyMembersHirelingIcons(aCursorState + 2, aCursorState, aCursorState + 1, pPlayer);
-    aCursorState[3] = HIRELING_DrawPortraitIcon(pPlayer, aCursorState, aCursorState + 2, aCursorState + 1);
-    aCursorState[3] = bAnyIconDrawn | aCursorState[3];
+    uint32_t bAnyIconDrawn = UI_DrawPartyMembersHirelingIcons(&nCursorX, &nYToggle, &nCursorY, pPlayer);
+    bAnyDrawn = bAnyIconDrawn | HIRELING_DrawPortraitIcon(pPlayer, &nYToggle, &nCursorX, &nCursorY);
     int nPetTypeCount = D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize;
     nPetTypeIdx = 0;
     if (nPetTypeCount > 0) {
@@ -886,12 +881,12 @@ void __stdcall UI_DrawHireableIcons() {
             switch (nPetIconKind) {
               case '\x01':
                 {
-                  bAnyIconDrawn = HIRELING_DrawPetIcon(pPlayerSaved, aCursorState + 1, aCursorState, nPetTypeIdx, aCursorState + 2);
+                  bAnyIconDrawn = HIRELING_DrawPetIcon(pPlayerSaved, &nCursorY, &nYToggle, nPetTypeIdx, &nCursorX);
                   break;
                 }
               case '\x02':
                 {
-                  bAnyIconDrawn = HIRELING_DrawSummonIcon(pPlayerSaved, aCursorState + 2, aCursorState, nPetTypeIdx, aCursorState + 1);
+                  bAnyIconDrawn = HIRELING_DrawSummonIcon(pPlayerSaved, &nCursorX, &nYToggle, nPetTypeIdx, &nCursorY);
                   break;
                 }
               default:
@@ -900,17 +895,17 @@ void __stdcall UI_DrawHireableIcons() {
                 }
               case '\x03':
                 {
-                  bAnyIconDrawn = HIRELING_DrawGenericPetIcon(pPlayerSaved, aCursorState + 1, aCursorState, nPetTypeIdx, aCursorState + 2);
+                  bAnyIconDrawn = HIRELING_DrawGenericPetIcon(pPlayerSaved, &nCursorY, &nYToggle, nPetTypeIdx, &nCursorX);
                   break;
                 }
             }
 
-            aCursorState[3] |= bAnyIconDrawn;
+            bAnyDrawn |= bAnyIconDrawn;
           }
         }
       }
     }
-    if (!aCursorState[3]) {
+    if (!bAnyDrawn) {
       ui::SetUIFlag(UI_HIREABLES, UI_RESET, 0);
     }
     if (gbHireIconsVisible != '\0') {

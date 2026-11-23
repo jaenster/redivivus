@@ -916,12 +916,12 @@ void __stdcall D2GFX_DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIn
     RENDERER_CurrentRenderedFunctions->nfpDrawSolidSquare(pPoint, nSize, nPaletteIndex);
 }
 
-void __stdcall D2GFX_DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, DWORD dwColor, DRAWMODE nDrawMode) {
+void __stdcall D2GFX_DrawSolidRectEx(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, BYTE nColor, DRAWMODE nDrawMode) {
     if (!(nXEnd >= nXStart && nYEnd >= nYStart)) {
       return;
     }
 
-    RENDERER_CurrentRenderedFunctions->nfpDrawSolidRectEx(nXStart, nYStart, nXEnd, nYEnd, dwColor, nDrawMode);
+    RENDERER_CurrentRenderedFunctions->nfpDrawSolidRectEx(nXStart, nYStart, nXEnd, nYEnd, nColor, nDrawMode);
 }
 
 void __stdcall D2GFX_DrawSolidRectAlpha(int32_t nXStart, int32_t nYStart, int32_t nXEnd, int32_t nYEnd, DWORD dwColor, DWORD nAlpha) {

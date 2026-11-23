@@ -8387,14 +8387,8 @@ void __stdcall UIMENU_CreateHeroSinglePlayer() {
 
 int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2IniData) {
     D2IniData_launcher = pD2IniData;
-    D2IniConfigStrc* pSkipToOpen;
-    pSkipToOpen = pD2IniData;
     D2Win::D2GFX::UI_Init();
-    BOOL bIsExpansion;
-    bIsExpansion = Fog::D2CheckExpansionGame();
-    int bSoundPlaying;
-    bSoundPlaying = D2Lang::StrTable::strtable::TABLES_LoadStrings(D2Win::Src::D2WinArchive::ReturnZero(), nullptr, bIsExpansion);
-    if (!bSoundPlaying) {
+    if (!D2Lang::StrTable::strtable::TABLES_LoadStrings(D2Win::Src::D2WinArchive::ReturnZero(), nullptr, Fog::D2CheckExpansionGame())) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x125a);
       exit(-1);
     }
@@ -8421,8 +8415,7 @@ int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2I
     D2Sound::Src::D2SoundFast::SOUND_LoadWavFile("data\\global\\sfx\\cursor\\intro\\necromancer deselect.wav");
     D2Sound::Src::D2SoundFast::SOUND_LoadWavFile("data\\global\\sfx\\cursor\\intro\\sorceress select.wav");
     D2Sound::Src::D2SoundFast::SOUND_LoadWavFile("data\\global\\sfx\\cursor\\intro\\sorceress deselect.wav");
-    bIsExpansion = Fog::D2CheckExpansionGame();
-    if (bIsExpansion) {
+    if (Fog::D2CheckExpansionGame()) {
       D2Sound::Src::D2SoundFast::SOUND_LoadWavFile("data\\global\\sfx\\cursor\\intro\\druid select.wav");
       D2Sound::Src::D2SoundFast::SOUND_LoadWavFile("data\\global\\sfx\\cursor\\intro\\druid deselect.wav");
       D2Sound::Src::D2SoundFast::SOUND_LoadWavFile("data\\global\\sfx\\cursor\\intro\\assassin select.wav");
@@ -8430,70 +8423,63 @@ int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2I
     }
 
     Launcher::gpBNetCallbacks = pD2IniData->pBNetClientCallbacks;
-    uint8_t nScreenToShow;
-    nScreenToShow = D2IniData_launcher->nScreenToShow;
+    uint8_t nScreenToShow = D2IniData_launcher->nScreenToShow;
     if (nScreenToShow == 2) {
-      bIsExpansion = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
-      OogCurrentCharSelectionMode = CHAR_SELECTION_BNET;
-      if (bIsExpansion) {
+      if (Launcher::gpBNetCallbacks->pfnIsSocketConnected()) {
+        OogCurrentCharSelectionMode = CHAR_SELECTION_BNET;
         D2Win::D2GFX::D2GFX_SetVideoMode(1);
         CharSel::UIMENU_CharacterSelectAllGameTypes();
-        goto run_menu_loop;
+      } else {
+        OogCurrentCharSelectionMode = CHAR_SELECTION_BNET;
+        D2Win::D2GFX::D2GFX_SetVideoMode(1);
+        UIMENU_MainMenuAgain();
       }
+    } else if (nScreenToShow == 4) {
+      if (Launcher::gpBNetCallbacks->pfnIsSocketConnected()) {
+        OogCurrentCharSelectionMode = CHAR_SELECTION_BNET_OPEN_Unsure;
+        D2Win::D2GFX::D2GFX_SetVideoMode(1);
+        CharSel::UIMENU_CharacterSelectAllGameTypes();
+      } else {
+        OogCurrentCharSelectionMode = CHAR_SELECTION_BNET_OPEN_Unsure;
+        D2Win::D2GFX::D2GFX_SetVideoMode(1);
+        UIMENU_MainMenuAgain();
+      }
+    } else if (nScreenToShow == 3) {
+      Launcher::LAUNCHER_InitNetworkLobbyQueue(D2IniData_launcher);
+      OogCurrentCharSelectionMode = CHAR_SELECTION_TCP_IP;
+      D2Win::D2GFX::D2GFX_SetVideoMode(1);
+      UIMENU_TCPIPOptions();
     } else {
-      if (nScreenToShow != 4) {
-        if (nScreenToShow == 3) {
-          Launcher::LAUNCHER_InitNetworkLobbyQueue(D2IniData_launcher);
-          OogCurrentCharSelectionMode = CHAR_SELECTION_TCP_IP;
-          D2Win::D2GFX::D2GFX_SetVideoMode(1);
-          UIMENU_TCPIPOptions();
-        } else {
-          Launcher::LAUNCHER_InitNetworkLobbyQueue(D2IniData_launcher);
-          if (D2IniData_launcher->bSKIPTOBNET) {
-            pSkipToOpen = 0;
-            Storm::Source::SReg::SRegLoadValue("Diablo II", "Skip To Open", 0, (int32_t*)&pSkipToOpen);
-            D2IniData_launcher->bSKIPTOBNET = false;
-            D2IniData_launcher->padding_0x35F[0] = 1;
-            D2Win::D2GFX::D2GFX_SetVideoMode(1);
-            D2gfx::D2GFX::D2GFX_UpdateWindowSize(1);
-            OogCurrentCharSelectionMode = (uint32_t)(pSkipToOpen != 0) * 2 + CHAR_SELECTION_BNET;
-            UIMENU_MainMenuAgain();
-          } else {
-            OogCurrentCharSelectionMode = CHAR_SELECTION_SP;
-            if (!D2IniData_launcher->padding_0x35F[0]) {
-              D2Win::D2GFX::D2GFX_SetVideoMode(1);
-              D2gfx::D2GFX::D2GFX_UpdateWindowSize(1);
-              /* Show intro and first screen without menus */ PlaysBlizzardNorthCutScene();
-              D2IniData_launcher->padding_0x35F[0] = 1;
-            } else {
-              D2Win::D2GFX::D2GFX_SetVideoMode(1);
-              UIMENU_MainMenu();
-            }
-          }
-        }
-
-        goto run_menu_loop;
-      }
-
-      bIsExpansion = Launcher::gpBNetCallbacks->pfnIsSocketConnected();
-      OogCurrentCharSelectionMode = CHAR_SELECTION_BNET_OPEN_Unsure;
-      if (bIsExpansion) {
+      Launcher::LAUNCHER_InitNetworkLobbyQueue(D2IniData_launcher);
+      if (D2IniData_launcher->bSKIPTOBNET) {
+        int32_t nSkipToOpen = 0;
+        Storm::Source::SReg::SRegLoadValue("Diablo II", "Skip To Open", 0, &nSkipToOpen);
+        D2IniData_launcher->bSKIPTOBNET = false;
+        D2IniData_launcher->padding_0x35F[0] = 1;
         D2Win::D2GFX::D2GFX_SetVideoMode(1);
-        CharSel::UIMENU_CharacterSelectAllGameTypes();
-        goto run_menu_loop;
+        D2gfx::D2GFX::D2GFX_UpdateWindowSize(1);
+        OogCurrentCharSelectionMode = nSkipToOpen ? CHAR_SELECTION_BNET_OPEN_Unsure : CHAR_SELECTION_BNET;
+        UIMENU_MainMenuAgain();
+      } else {
+        if (!D2IniData_launcher->padding_0x35F[0]) {
+          OogCurrentCharSelectionMode = CHAR_SELECTION_SP;
+          D2Win::D2GFX::D2GFX_SetVideoMode(1);
+          D2gfx::D2GFX::D2GFX_UpdateWindowSize(1);
+          /* Show intro and first screen without menus */ PlaysBlizzardNorthCutScene();
+          D2IniData_launcher->padding_0x35F[0] = 1;
+        } else {
+          OogCurrentCharSelectionMode = CHAR_SELECTION_SP;
+          D2Win::D2GFX::D2GFX_SetVideoMode(1);
+          UIMENU_MainMenu();
+        }
       }
     }
 
-    D2Win::D2GFX::D2GFX_SetVideoMode(1);
-    UIMENU_MainMenuAgain();
-    run_menu_loop:
     D2Win::Src::D2WinMain::D2WINMAIN_SetExitCallback(LAUNCHER_SetExitAppModeResult);
     D2Win::Src::D2WinMain::MessagePump(MAINMENU_ReturnTrue);
     D2Sound::Src::D2SoundFast::SOUND_FadeOutAllSoundEffects();
-    bSoundPlaying = D2Sound::Src::D2SoundFast::SOUND_IsAnySoundEffectPlaying();
-    while (bSoundPlaying) {
-      /* DWORD dwMilliseconds for Sleep */ Sleep(0);
-      bSoundPlaying = D2Sound::Src::D2SoundFast::SOUND_IsAnySoundEffectPlaying();
+    while (D2Sound::Src::D2SoundFast::SOUND_IsAnySoundEffectPlaying()) {
+      Sleep(0);
     }
 
     D2Sound::Src::D2SoundFast::SOUND_FreeSoundEffectBuffers();

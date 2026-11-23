@@ -14590,7 +14590,7 @@ void __fastcall AITHINK_Fn1_Nihlathak(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     int nSkillOrResult = pAiParam->bEngagedInCombat;
     D2UnitStrc* pTarget = pAiParam->pTarget;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    Quests::QUESTS::A5Q4::Q34_OnNihlathakAI(pGame);
+    Quests::QUESTS::A5Q4::Q34_OnNihlathakAI(pGame, pUnit);
     BOOL eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
     if (eState) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_inferno, 0);

@@ -63,6 +63,7 @@
 #include "Source/D2Client/UNIT/Player.h"
 #include "Source/D2Client/UNIT/CUnit.h"
 #include "Source/D2Client/GAME/Select.h"
+#include "Source/D2Client/GAME/Select.data.h"
 #include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 #include "Source/D2Client/Engine/Gfx.h"
@@ -2617,7 +2618,11 @@ extern "C" void D2CONTROL_Pump(void) {
                 // the click at -1292608,560644.
                 int32_t cx = D2Common::Units::GetScreenX(pTarget) - D2Client::UI::Path::DRAW_GetWorldOffsetX();
                 int32_t cy = D2Common::Units::GetScreenY(pTarget) - D2Client::UI::Path::DRAW_GetWorldOffsetY();
-                D2Client::GAME::Select::SetSelectedUnit_I(pTarget);
+                // SetSelectedUnit_I is file-static in Select.cpp (the original passes pUnit in
+                // EAX), so select through its public caller and put the hover lock back.
+                BOOL bCanSelect = D2Client::_Selection::bCanSelectUnit;
+                D2Client::GAME::Select::SELECT_UpdateUnitSelection(pTarget);
+                D2Client::_Selection::bCanSelectUnit = bCanSelect;
                 D2Client::UNIT::Player::ClickMap(a.x, cx, cy, 0);
                 D2TraceFmt("CLICKUNIT t=%d guid=%d -> screen %d,%d type=%d",
                            (int)a.wp, (int)a.lp, (int)cx, (int)cy, a.x);

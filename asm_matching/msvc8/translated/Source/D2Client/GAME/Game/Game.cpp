@@ -1851,32 +1851,23 @@ void __fastcall GAMEDATA_ExtendTimeout(int32_t nDelayMs) {
     gClientGameData.gdwCatchupTimeoutTick = dwCurrentTick + nDelayMs;
 }
 
-void __stdcall GAMEDATA_LoadActTiles(uint32_t nAct) {
-    int nFileIndex;
+void __stdcall GAMEDATA_LoadActTiles(uint8_t nAct) {
     char szFilename[60];
-    char byActOneBased = (char)nAct + '\x01';
-    nAct = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nAct + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byActOneBased);
-    int nLvlTypeId = 0;
-    do {
-      BOOL bIsTypeInAct;
-      bIsTypeInAct = D2Common::DATATBLS::LvlTbls::TXT_LvlTypes_CheckIfTypeIsAssignedToAct(nLvlTypeId, byActOneBased);
-      if (bIsTypeInAct) {
-        nFileIndex = 0;
-        do {
+    D2TileLibraryHashStrc* pTileLibrary;
+    nAct++;
+    for (int nLvlTypeId = 0; nLvlTypeId < 0x24; nLvlTypeId++) {
+      if (D2Common::DATATBLS::LvlTbls::TXT_LvlTypes_CheckIfTypeIsAssignedToAct(nLvlTypeId, nAct)) {
+        for (int nFileIndex = 0; nFileIndex < 0x20; nFileIndex++) {
           D2Common::DATATBLS::LvlTbls::LVLTBLS_GetLvlTypeFilename(nLvlTypeId, nFileIndex, (uint8_t*)szFilename);
           if (szFilename[0] != '0' && szFilename[0] != '\0') {
-            D2CMP::SRC::TileProjects::Alloc((D2TileLibraryHashStrc**)&nAct, szFilename);
+            D2CMP::SRC::TileProjects::Alloc(&pTileLibrary, szFilename);
           }
-
-          nFileIndex++;
-        } while (nFileIndex < 0x20);
+        }
       }
+    }
 
-      nLvlTypeId++;
-    } while (nLvlTypeId < 0x24);
-
-    D2CMP::SRC::TileProjects::Alloc((D2TileLibraryHashStrc**)&nAct, "data\\global\\tiles\\act1\\barracks\\warp.dt1");
-    D2CMP::SRC::TileProjects::Alloc((D2TileLibraryHashStrc**)&nAct, "data\\global\\tiles\\act1\\outdoors\\blank.dt1");
+    D2CMP::SRC::TileProjects::Alloc(&pTileLibrary, "data\\global\\tiles\\act1\\barracks\\warp.dt1");
+    D2CMP::SRC::TileProjects::Alloc(&pTileLibrary, "data\\global\\tiles\\act1\\outdoors\\blank.dt1");
 }
 
 // ESI is not an argument: the body never reads it.
@@ -2022,8 +2013,7 @@ void __stdcall SendExitGameRequest(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __fastcall CLIENT_AllocAct(uint8_t nActNo, int32_t nMapSeed, int32_t nAutomap, eD2LevelId eLevel) {
-    uint32_t in_register_00000005;
-    GAMEDATA_LoadActTiles((uint32_t)((uint32_t)((uint32_t)in_register_00000005 & 0xffffffu) << 8 | (uint32_t)(uint8_t)nActNo));
+    GAMEDATA_LoadActTiles(nActNo);
     if (sgpDrlgAct) {
       D2Common::DUNGEON::Dungeon::FreeAct(sgpDrlgAct);
     }

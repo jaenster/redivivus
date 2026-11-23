@@ -3410,8 +3410,6 @@ static void D2COMP_ValidateEquippedItemForClass(int32_t nEquipSlot, uint8_t * pb
 
 void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_t nPlayerClassId, uint32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText) {
     int32_t nWeaponClass;
-    D2CharSelCompFlags DVar1;
-    char* pCodeDst;
     BOOL BVar2;
     uint32_t nSlot;
     int* pSlotCode;
@@ -3443,14 +3441,13 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
 
       pCompUnit->nAnimMode = nAnimMode;
       pCompUnit->nFlags |= Fog::BitBuffer::gadwBitMasks[0];
-      DVar1 = pCompUnit->nFlags | Fog::BitBuffer::gadwBitMasks[1];
+      pCompUnit->nFlags |= Fog::BitBuffer::gadwBitMasks[1];
+      pCompUnit->nFlags |= Fog::BitBuffer::gadwBitMasks[2];
       nSlot = 0;
-      pCompUnit->nFlags = DVar1;
       pSlotCode = pCompUnit->dwComponentCodes;
-      pCompUnit->nFlags = DVar1 | Fog::BitBuffer::gadwBitMasks[2];
       do {
         pSlotCode[0x10] = 1;
-        if (*pbyEquipSlots <= 0 || *pbyEquipSlots == 0xff) {
+        if (*pbyEquipSlots <= 0 || *pbyEquipSlots >= 0xff) {
           *pSlotCode = 0;
         } else {
           D2COMP_ValidateEquippedItemForClass(nSlot, pbyEquipSlots);
@@ -3463,34 +3460,12 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
         pSlotCode++;
       } while (nSlot < 0x10);
 
-      pCodeDst = pCompUnit->nComponentTransforms + 1;
-      for (nCofResult = 0; nCofResult < 4; nCofResult++) {
-        cCodeByte = *szText;
-        pCodeDst[-1] = cCodeByte;
+      for (nCofResult = 0; nCofResult < 0x10; nCofResult++) {
+        cCodeByte = *szText++;
+        pCompUnit->nComponentTransforms[nCofResult] = cCodeByte;
         if (cCodeByte != -1) {
-          pCodeDst[-1] = cCodeByte - 1;
+          pCompUnit->nComponentTransforms[nCofResult] = cCodeByte - 1;
         }
-
-        cCodeByte = szText[1];
-        *pCodeDst = cCodeByte;
-        if (cCodeByte != -1) {
-          *pCodeDst = cCodeByte - 1;
-        }
-
-        cCodeByte = szText[2];
-        pCodeDst[1] = cCodeByte;
-        if (cCodeByte != -1) {
-          pCodeDst[1] = cCodeByte - 1;
-        }
-
-        cCodeByte = szText[3];
-        pCodeDst[2] = cCodeByte;
-        if (cCodeByte != -1) {
-          pCodeDst[2] = cCodeByte - 1;
-        }
-
-        pCodeDst += 4;
-        szText += 4;
       }
 
       BVar2 = D2COMP_ValidateAndLoadCOFForUnit(pCompUnit);
@@ -4322,23 +4297,26 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
 }
 
 D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, int32_t nAnimMode, uint8_t * pbyEquipSlots, char * szText) {
-    D2CharSelCompFlags DVar1;
-    char* pTransformByte;
     BOOL BVar2;
     uint32_t nComponentSlot;
     int* pComponentCode;
     int nRemaining;
     uint8_t bComponentIndex;
     char cTransform;
-    int32_t nErrorLine;
     D2CharSelCompStrc* pCharSelComp = D2_NEW_AT(D2CharSelCompStrc, ".\\Src\\D2Comp.cpp", 0xc70);
     if (!pCharSelComp) {
-      nErrorLine = 0xc71;
-    } else {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc71);
+      exit(-1);
+    }
+    {
       int* pCofCache;
       memset(pCharSelComp, 0, 0x234);
       pCofCache = (int*)D2_ALLOC_AT(4, ".\\Src\\D2Comp.cpp", 0x866);
-      if (pCofCache) {
+      if (!pCofCache) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x867);
+      exit(-1);
+      }
+      {
         *pCofCache = 0;
         pCharSelComp->ppCofCacheEntries = (D2CompCofListNodeStrc**)pCofCache;
         D2COMP_AllocTxt_EverythingItems();
@@ -4346,20 +4324,18 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
         if (nPlayerClassId >= 7) {
           pCharSelComp->nWeaponClass = 1;
         } else {
-          nErrorLine = D2COMP_ResolveWeaponClass(nPlayerClassId, pbyEquipSlots);
-          pCharSelComp->nWeaponClass = nErrorLine;
-          if (!nErrorLine) {
+          pCharSelComp->nWeaponClass = D2COMP_ResolveWeaponClass(nPlayerClassId, pbyEquipSlots);
+          if (!pCharSelComp->nWeaponClass) {
             return nullptr;
           }
         }
 
         pCharSelComp->nAnimMode = nAnimMode;
         pCharSelComp->nFlags |= Fog::BitBuffer::gadwBitMasks[0];
-        DVar1 = pCharSelComp->nFlags | Fog::BitBuffer::gadwBitMasks[1];
+        pCharSelComp->nFlags |= Fog::BitBuffer::gadwBitMasks[1];
+        pCharSelComp->nFlags |= Fog::BitBuffer::gadwBitMasks[2];
         nComponentSlot = 0;
-        pCharSelComp->nFlags = DVar1;
         pComponentCode = pCharSelComp->dwComponentCodes;
-        pCharSelComp->nFlags = DVar1 | Fog::BitBuffer::gadwBitMasks[2];
         do {
           pComponentCode[0x10] = 1;
           bComponentIndex = *pbyEquipSlots;
@@ -4376,34 +4352,12 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
           pComponentCode++;
         } while (nComponentSlot < 0x10);
 
-        pTransformByte = pCharSelComp->nComponentTransforms + 1;
-        for (nRemaining = 0; nRemaining < 4; nRemaining++) {
-          cTransform = *szText;
-          pTransformByte[-1] = cTransform;
+        for (nRemaining = 0; nRemaining < 0x10; nRemaining++) {
+          cTransform = *szText++;
+          pCharSelComp->nComponentTransforms[nRemaining] = cTransform;
           if (cTransform != -1) {
-            pTransformByte[-1] = cTransform - 1;
+            pCharSelComp->nComponentTransforms[nRemaining] = cTransform - 1;
           }
-
-          cTransform = szText[1];
-          *pTransformByte = cTransform;
-          if (cTransform != -1) {
-            *pTransformByte = cTransform - 1;
-          }
-
-          cTransform = szText[2];
-          pTransformByte[1] = cTransform;
-          if (cTransform != -1) {
-            pTransformByte[1] = cTransform - 1;
-          }
-
-          cTransform = szText[3];
-          pTransformByte[2] = cTransform;
-          if (cTransform != -1) {
-            pTransformByte[2] = cTransform - 1;
-          }
-
-          pTransformByte += 4;
-          szText += 4;
         }
 
         BVar2 = D2COMP_ValidateAndLoadCOFForUnit(pCharSelComp);
@@ -4424,12 +4378,7 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
         return pCharSelComp;
       }
 
-      nErrorLine = 0x867;
     }
-
-    void* nWeaponClass = Fog::Src::ErrorManager::GetInstructionPointer();
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", nWeaponClass, nErrorLine);
-    exit(-1);
 }
 
 } // namespace D2Win::Src::D2Comp

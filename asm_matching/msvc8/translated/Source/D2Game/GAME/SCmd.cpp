@@ -1602,26 +1602,21 @@ void __fastcall NET_D2GS_SERVER_Send_0x3F_SETSPELLICON(D2ClientStrc * pClient, D
     SCMD_QueuePacketForClient(pClient, &tPacket.nPacketId, 8);
 }
 
-void __fastcall NET_D2GS_SERVER_Send_0x40_ITEMSETFLAG(D2ClientStrc * pClient, D2UnitStrc * pTargetUnit, uint32_t dwSkillId, uint32_t dwSkillLevel) {
-    uint32_t dwTargetGUID;
-    uint8_t aPacketFrame[13];
+void __fastcall NET_D2GS_SERVER_Send_0x40_ITEMSETFLAG(D2ClientStrc * pClient, D2UnitStrc * pTargetUnit, eD2ItemFlag eItemFlag, BOOL bSet) {
+    D2GSPacketSrv0x40 sPacket;
+    memset(&sPacket, 0, sizeof(sPacket));
+    sPacket.nPacketId = 0x40;
+    uint32_t dwItemGUID;
     if (!pTargetUnit) {
-      dwTargetGUID = -1;
+      dwItemGUID = -1;
     } else {
-      dwTargetGUID = pTargetUnit->nUnitGUID;
+      dwItemGUID = pTargetUnit->nUnitGUID;
     }
 
-    uint32_t uVar1 = (uint32_t)dwSkillId & 0xffffffu;
-    d2_store24((char*)&aPacketFrame + 1, (uint32_t)dwTargetGUID & 0xffffffu);
-    aPacketFrame[0] = 0x40;
-    aPacketFrame[4] = (uint8_t)(dwTargetGUID >> 0x18);
-    aPacketFrame[5] = (char)uVar1;
-    aPacketFrame[6] = (char)(((uint32_t)uVar1 & 0xffffffu) >> 8);
-    aPacketFrame[7] = (char)(((uint32_t)uVar1 & 0xffffffu) >> 0x10);
-    d2_store24((char*)&aPacketFrame + 9, (uint32_t)dwSkillLevel & 0xffffffu);
-    aPacketFrame[8] = (uint8_t)(dwSkillId >> 0x18);
-    aPacketFrame[0xc] = (uint8_t)(dwSkillLevel >> 0x18);
-    SCMD_QueuePacketForClient(pClient, aPacketFrame, 0xd);
+    sPacket.dwItemGUID = dwItemGUID;
+    sPacket.eItemFlag = eItemFlag;
+    sPacket.bSet = bSet;
+    SCMD_QueuePacketForClient(pClient, (uint8_t*)&sPacket, 0xd);
 }
 
 void __fastcall Send0x9DItemAutoUnequip(D2ClientStrc * pClient, D2UnitStrc * pUnit, D2UnitStrc * pItem, eD2ItemFlag eItemFlag) {

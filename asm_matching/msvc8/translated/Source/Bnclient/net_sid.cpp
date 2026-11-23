@@ -2478,18 +2478,10 @@ void __stdcall DecodeAndLoadKeys() {
     static uint32_t g_dwCdKeyOwnerSize; D2_STATIC_GUARD_BSS(g_dwCdKeyOwnerSize, "Bnclient::_net_sid::DecodeAndLoadKeys::g_dwCdKeyOwnerSize");
     static uint32_t g_dwCdKeyExpansionSize; D2_STATIC_GUARD_BSS(g_dwCdKeyExpansionSize, "Bnclient::_net_sid::DecodeAndLoadKeys::g_dwCdKeyExpansionSize");
 
-    int32_t bDecodeResultClassic;
-    int* pKeyBuf;
-    int nXorByteIdx;
-    uint8_t byXorStep;
-    uint8_t byPathCharIdx;
-    uint32_t* pExpKeyPathSrc;
-    uint32_t* pExpKeyBuf;
-    int* pFileBuf;
     char szFileName[260];
-    uint32_t aKeyPathTable[7];
-    uint8_t abPermuteIdx[38];
-    int nPermuteOffset;
+    int i;
+    int* pFileBuf;
+    int* pResult;
     if (KeyClassic || KeyOwner) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x213);
       exit(-1);
@@ -2497,150 +2489,93 @@ void __stdcall DecodeAndLoadKeys() {
 
     sprintf(szFileName, "%s\\%s.gid", "font", "font");
     KeyClassic = (char*)NET_SID_CLIENT_LoadAndDecodeCDKeyFile((uint32_t*)szFileName, (DWORD*)&g_dwCdKeyClassicSize);
-    uint32_t* pKeyClassicBuf;
-    pKeyClassicBuf = (uint32_t*)KeyClassic;
-    if (!(uint32_t*)KeyClassic) {
-      aKeyPathTable[1] = 0x78617776;
-      aKeyPathTable[2] = 0x72696e64;
-      aKeyPathTable[3] = 0x6375736f;
-      aKeyPathTable[4] = 0x67626c66;
-      aKeyPathTable[5] = 0x2e5c74;
-      memcpy(abPermuteIdx, "\x04\x02\x10\x02\x11\x0f\r\b\x0e\x02\r\x11\t\f\x03\x11\v\n\a\t\b\a\x11\x01\x02", 0x1a);
-      memcpy(abPermuteIdx + 0x1a, "\x06\x05\x04\x03\x12\x01\x02", 8);
-      abPermuteIdx[0x22] = '\x13';
-      byXorStep = '\x04';
-      nPermuteOffset = 0;
-      do {
-        nXorByteIdx = nPermuteOffset;
-        nPermuteOffset = (int)(char)byXorStep;
-        byXorStep = abPermuteIdx[nXorByteIdx + 1];
-        szFileName[nXorByteIdx] = *(char*)((char*)aKeyPathTable + (nPermuteOffset + 4));
-        nPermuteOffset = nXorByteIdx + 1;
-      } while ((char)byXorStep < '\x13');
-
-      szFileName[nXorByteIdx + 1] = '\0';
+    if (!KeyClassic) {
+      char szAlpha[20] = "vwaxdnirosucflbgt\\.";
+      char abIdx[35] = {4, 2, 16, 2, 17, 15, 13, 8, 14, 2, 13, 17, 9, 12, 3, 17, 11, 10, 7, 9, 8, 7, 17, 1, 2, 0, 6, 5, 4, 3, 18, 1, 2, 0, 19};
+      for (i = 0; abIdx[i] < 19; i++) {
+        szFileName[i] = szAlpha[abIdx[i]];
+      }
+      szFileName[i] = '\0';
       g_dwCdKeyClassicSize = 0x400;
       Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyClassicSize, 1, (LPOVERLAPPED)0x0);
-      if (pFileBuf && g_dwCdKeyClassicSize) {
-        bDecodeResultClassic = NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyClassicSize);
-        pKeyClassicBuf = (uint32_t*)pFileBuf;
-        if (bDecodeResultClassic) {
-          goto store_classic_key;
-        }
+      if (!(pFileBuf && g_dwCdKeyClassicSize)) {
+        pResult = nullptr;
+      } else if (!NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyClassicSize)) {
         if (pFileBuf) {
           Storm::Source::SFile::SFileUnloadFile(pFileBuf);
         }
+        pResult = nullptr;
+      } else {
+        pResult = pFileBuf;
       }
-
-      pKeyClassicBuf = (uint32_t*)nullptr;
+      KeyClassic = (char*)pResult;
     }
 
-    store_classic_key:
-    KeyClassic = (char*)pKeyClassicBuf;
     sprintf(szFileName, "%s\\%s.clh", "font", "font");
     g_dwCdKeyOwnerSize = 0x400;
     Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyOwnerSize, 1, (LPOVERLAPPED)0x0);
-    if (!pFileBuf || !g_dwCdKeyOwnerSize) {
-      pKeyBuf = 0;
+    if (!(pFileBuf && g_dwCdKeyOwnerSize)) {
+      pResult = nullptr;
+    } else if (!NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyOwnerSize)) {
+      if (pFileBuf) {
+        Storm::Source::SFile::SFileUnloadFile(pFileBuf);
+      }
+      pResult = nullptr;
     } else {
-      bDecodeResultClassic = NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyOwnerSize);
-      pKeyBuf = pFileBuf;
-      if (!bDecodeResultClassic) {
-        if (pFileBuf) {
-          Storm::Source::SFile::SFileUnloadFile(pFileBuf);
-        }
-
-        pKeyBuf = 0;
-      }
+      pResult = pFileBuf;
     }
-    if (!pKeyBuf) {
-      aKeyPathTable[2] = 0x72696e64;
-      aKeyPathTable[1] = 0x78617776;
-      aKeyPathTable[3] = 0x6375736f;
-      aKeyPathTable[5] = 0x2e5c74;
-      aKeyPathTable[4] = 0x67626c66;
-      memcpy(abPermuteIdx, "\x04\x02\x10\x02\x11\x0f\r\b\x0e\x02\r\x11\t\f\x03\x11\v\n\a\t\b\a\x11\v\n\a\x06\x05\x04\x03\x12\x01\x02", 0x22);
-      abPermuteIdx[0x22] = '\x13';
-      byXorStep = '\x04';
-      nPermuteOffset = 0;
-      do {
-        nXorByteIdx = nPermuteOffset;
-        nPermuteOffset = (int)(char)byXorStep;
-        byXorStep = abPermuteIdx[nXorByteIdx + 1];
-        szFileName[nXorByteIdx] = *(char*)((char*)aKeyPathTable + (nPermuteOffset + 4));
-        nPermuteOffset = nXorByteIdx + 1;
-      } while ((char)byXorStep < '\x13');
-
-      szFileName[nXorByteIdx + 1] = '\0';
+    KeyOwner = (char*)pResult;
+    if (!KeyOwner) {
+      char szAlpha[20] = "vwaxdnirosucflbgt\\.";
+      char abIdx[35] = {4, 2, 16, 2, 17, 15, 13, 8, 14, 2, 13, 17, 9, 12, 3, 17, 11, 10, 7, 9, 8, 7, 17, 11, 10, 7, 6, 5, 4, 3, 18, 1, 2, 0, 19};
+      for (i = 0; abIdx[i] < 19; i++) {
+        szFileName[i] = szAlpha[abIdx[i]];
+      }
+      szFileName[i] = '\0';
       g_dwCdKeyOwnerSize = 0x400;
-      KeyOwner = (char*)pKeyBuf;
       Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyOwnerSize, 1, (LPOVERLAPPED)0x0);
-      if (pFileBuf && g_dwCdKeyOwnerSize) {
-        bDecodeResultClassic = NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyOwnerSize);
-        pKeyBuf = pFileBuf;
-        if (bDecodeResultClassic) {
-          goto store_owner_key;
-        }
+      if (!(pFileBuf && g_dwCdKeyOwnerSize)) {
+        pResult = nullptr;
+      } else if (!NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyOwnerSize)) {
         if (pFileBuf) {
           Storm::Source::SFile::SFileUnloadFile(pFileBuf);
         }
+        pResult = nullptr;
+      } else {
+        pResult = pFileBuf;
       }
-
-      pKeyBuf = (int*)nullptr;
+      KeyOwner = (char*)pResult;
     }
 
-    store_owner_key:
-    KeyOwner = (char*)pKeyBuf;
-    BOOL bIsExpansion;
-    bIsExpansion = BnSend::D2CheckExpansionGame();
-    pKeyBuf = (int*)KeyExpansion;
-    if (bIsExpansion) {
-      pExpKeyPathSrc = (uint32_t*)"vwaxdnirosucflbgt\\.mpyeh8";
-      pExpKeyBuf = aKeyPathTable;
-      for (nPermuteOffset = 6; nPermuteOffset; nPermuteOffset--) {
-        *pExpKeyBuf = *pExpKeyPathSrc;
-        pExpKeyPathSrc++;
-        pExpKeyBuf++;
+    if (BnSend::D2CheckExpansionGame()) {
+      char szAlpha[26] = "vwaxdnirosucflbgt\\.mpyeh8";
+      char abIdx[38] = {4, 2, 16, 2, 17, 15, 13, 8, 14, 2, 13, 17, 11, 23, 2, 7, 9, 17, 2, 19, 17, 11, 8, 12, 17, 2, 19, 14, 13, 3, 14, 8, 1, 18, 11, 8, 12, 39};
+      for (i = 0; (uint8_t)abIdx[i] < 26; i++) {
+        szFileName[i] = szAlpha[abIdx[i]];
       }
-
-      *(short int*)pExpKeyBuf = (short int)*pExpKeyPathSrc;
-      memcpy(abPermuteIdx, "\x04\x02\x10\x02\x11\x0f\r\b\x0e\x02\r\x11\v\x17\x02\a\t\x11\x02\x13\x11\v\b\f\x11\x02\x13\x0e\r\x03\x0e\b\x01\x12\v\b\f\'", 0x26);
-      byPathCharIdx = 4;
-      nPermuteOffset = 0;
-      do {
-        nXorByteIdx = nPermuteOffset;
-        szFileName[nXorByteIdx] = *(char*)((char*)aKeyPathTable + (int)(char)byPathCharIdx);
-        byPathCharIdx = abPermuteIdx[nXorByteIdx + 1];
-        nPermuteOffset = nXorByteIdx + 1;
-      } while (byPathCharIdx < 0x1a);
-
-      szFileName[nXorByteIdx + 1] = '\0';
+      szFileName[i] = '\0';
       g_dwCdKeyExpansionSize = 0x400;
       Storm::Source::SFile::SFileLoadFile(szFileName, (void**)&pFileBuf, (DWORD*)&g_dwCdKeyExpansionSize, 1, (LPOVERLAPPED)0x0);
-      if (pFileBuf && g_dwCdKeyExpansionSize) {
-        bDecodeResultClassic = NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyExpansionSize);
-        pKeyBuf = pFileBuf;
-        if (bDecodeResultClassic) {
-          goto store_expansion_key;
-        }
+      if (!(pFileBuf && g_dwCdKeyExpansionSize)) {
+        pResult = nullptr;
+      } else if (!NET_SID_CLIENT_DecodeAndValidateBuffer(pFileBuf, g_dwCdKeyExpansionSize)) {
         if (pFileBuf) {
           Storm::Source::SFile::SFileUnloadFile(pFileBuf);
         }
+        pResult = nullptr;
+      } else {
+        pResult = pFileBuf;
       }
-
-      pKeyBuf = (int*)nullptr;
+      KeyExpansion = (char*)pResult;
     }
 
-    store_expansion_key:
-    KeyExpansion = (char*)pKeyBuf;
     g_dwProductId = 0;
     if (szFileName[0] != '\0') {
-      char* pLoadedKeyBuf;
-      pLoadedKeyBuf = szFileName;
+      char* p = szFileName;
       do {
-        *pLoadedKeyBuf = '\0';
-        pLoadedKeyBuf++;
-      } while (*pLoadedKeyBuf != '\0');
+        *p = '\0';
+        p++;
+      } while (*p != '\0');
     }
 }
 

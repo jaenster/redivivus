@@ -2113,44 +2113,53 @@ BOOL __stdcall CELCMP_CopyCelDataToBuffer(DC6 * pDC6, int32_t nDirection, int32_
 }
 
 void __stdcall CELCMP_DrawCelFrameFromGfxData(D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, uint8_t * pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2) {
-    int nBottomY;
-    int nClampedBottom;
-    int nClampedTop;
-    int nDrawX_00;
-    int32_t nLine;
-    DC6* pDVar1 = pGfxData->pDC6;
-    if ((!pDVar1 || pDVar1->nVersion == 6 && !(pDVar1->nFlags & 4)) && pDstBits) {
-      DC6Block* pImageHeader;
-      pImageHeader = pGfxData->pDC6Block;
-      if (pImageHeader) {
-        nBottomY = nDrawY + pImageHeader->nOffsetY;
-        nClampedBottom = nBottomY - nClipTop;
-        nDrawX_00 = nDrawX + pImageHeader->nOffsetX;
-        nClampedTop = nClampedBottom - nClipBottom;
-        if (!(nClampedBottom >= 0 && nClampedTop < nViewportHeight)) {
-          return;
-        }
-        if (nClampedTop < 0) {
-          nClampedTop = 0;
-        }
-        if (nClampedBottom >= nViewportHeight) {
-          nClampedBottom = nViewportHeight - 1;
-        }
-        if (!(nClampedBottom - nClampedTop)) {
-          return;
-        }
-        if (!gaaCelDrawFuncTable[pDVar1->nFormat]) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e9);
-          exit(-1);
-        }
-
-        (*gaaCelDrawFuncTable[pDVar1->nFormat])((uint8_t*)pImageHeader, pDstBits + (nClampedBottom * nDstPitch + nDrawX_00), nDrawX_00, nClipLeft, nClipRight, nDstPitch, nBottomY - nClampedBottom, nClampedBottom - nClampedTop, pLookupTable1, pBlendTable, pLookupTable2);
-        return;
+    DC6* pDC6 = pGfxData->pDC6;
+    if (pDC6) {
+      if (pDC6->nVersion != 6) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4c6);
+        exit(-1);
+      }
+      if (pDC6->nFlags & 4) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4c7);
+        exit(-1);
       }
     }
+    if (!pDstBits) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ca);
+      exit(-1);
+    }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
-    exit(-1);
+    DC6Block* pBlock = pGfxData->pDC6Block;
+    if (!pBlock) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4cd);
+      exit(-1);
+    }
+
+    nDrawY += pBlock->nOffsetY;
+    int nClampedBottom = nDrawY - nClipTop;
+    nDrawX += pBlock->nOffsetX;
+    int nClampedTop = nClampedBottom - nClipBottom;
+    if (nClampedBottom < 0 || nClampedTop >= nViewportHeight) {
+      return;
+    }
+    if (nClampedTop < 0) {
+      nClampedTop = 0;
+    }
+    if (nClampedBottom >= nViewportHeight) {
+      nClampedBottom = nViewportHeight - 1;
+    }
+    int nHeight = nClampedBottom - nClampedTop;
+    if (!nHeight) {
+      return;
+    }
+
+    fpCelDrawFrameByFormat pfnDraw = gaaCelDrawFuncTable[pDC6->nFormat];
+    if (!pfnDraw) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e9);
+      exit(-1);
+    }
+
+    pfnDraw((uint8_t*)pBlock, pDstBits + (nClampedBottom * nDstPitch + nDrawX), nDrawX, nClipLeft, nClipRight, nDstPitch, nDrawY - nClampedBottom, nHeight, pLookupTable1, pBlendTable, pLookupTable2);
 }
 
 void __stdcall CELCMP_DrawCelFrameCentered(D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, int32_t nDstPitch, BYTE * pBlendTable, uint8_t byBlendColor) {

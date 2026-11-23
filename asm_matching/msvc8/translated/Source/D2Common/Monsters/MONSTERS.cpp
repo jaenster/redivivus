@@ -53,62 +53,51 @@ eMissilesId __stdcall MONSTER_GetMissileForAnimEvent(D2UnitStrc * pUnit, int32_t
     0x0
 }; D2_STATIC_GUARD(gaMonStatsMissileFieldOffsets, "D2Common::Monsters::MONSTERS::MONSTER_GetMissileForAnimEvent::gaMonStatsMissileFieldOffsets");
 
-    eD2MonsterAnimMode eAnimMode;
-    int nPrevFrameShifted;
-    int nEventFrame;
-    D2UnitStrc* pMonster = pUnit;
     if (pCurrentFrame) {
-      int32_t nEventFrameType;
       if (!pUnit->nActionFrame) {
         return ~MISSILE_Arrow;
       }
 
-      Units::GetFrameMetrics(pUnit, &pCurrentFrame, (int*)&pUnit);
-      nPrevFrameShifted = pCurrentFrame - pMonster->nAnimSpeed;
+      int nFrameCount;
+      Units::GetFrameMetrics(pUnit, &pCurrentFrame, &nFrameCount);
+      int nPrevFrame = pCurrentFrame - pUnit->nAnimSpeed;
       pCurrentFrame >>= 8;
-      nPrevFrameShifted >>= 8;
-      nEventFrame = nPrevFrameShifted;
-      if (nPrevFrameShifted >= pCurrentFrame) {
+      nPrevFrame >>= 8;
+      if (nPrevFrame >= pCurrentFrame) {
         return ~MISSILE_Arrow;
       }
 
-      while (true) {
-        nEventFrameType = Units::GetEventFrameInfo(pMonster, nEventFrame);
-        if (!(nEventFrameType != 2 && (nEventFrameType = Units::GetEventFrameInfo(pMonster, nEventFrame) , nEventFrameType != 1))) {
+      int nEventFrame;
+      for (nEventFrame = nPrevFrame; nEventFrame <= pCurrentFrame; nEventFrame++) {
+        if (Units::GetEventFrameInfo(pUnit, nEventFrame) == 2 || Units::GetEventFrameInfo(pUnit, nEventFrame) == 1) {
           break;
         }
-
-        nEventFrame++;
-        if (nEventFrame > pCurrentFrame) {
-          return ~MISSILE_Arrow;
-        }
       }
 
-      if (nEventFrame > pCurrentFrame) {
-        return ~MISSILE_Arrow;
-      }
-      if (nEventFrame <= nPrevFrameShifted) {
+      if (nEventFrame > pCurrentFrame || nEventFrame <= nPrevFrame) {
         return ~MISSILE_Arrow;
       }
     }
-    if (!pMonster) {
+
+    eD2MonsterAnimMode eAnimMode;
+    if (!pUnit) {
       eAnimMode = Death;
     } else {
-      eAnimMode = pMonster->eAnimMode.ePlayerMode;
+      eAnimMode = pUnit->eAnimMode.ePlayerMode;
     }
 
     int nMissileFieldOffset = gaMonStatsMissileFieldOffsets[eAnimMode];
     if (!nMissileFieldOffset) {
       return ~MISSILE_Arrow;
     }
-    if (pMonster) {
-      nEventFrame = pMonster->nClassId;
-      if (nEventFrame >= 0 && nEventFrame < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-        return (int)*(short int*)((char*)(ITEMS::Items::sgptDataTable->pTxtMonStats[nEventFrame].Code - 0x10) + nMissileFieldOffset);
-      }
+    D2MonStatsTxt* pMonStatsTxt;
+    if (pUnit && pUnit->nClassId >= 0 && pUnit->nClassId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+      pMonStatsTxt = &ITEMS::Items::sgptDataTable->pTxtMonStats[pUnit->nClassId];
+    } else {
+      pMonStatsTxt = nullptr;
     }
 
-    return (int)*(short int*)(intptr_t)nMissileFieldOffset;
+    return *(short int*)((char*)pMonStatsTxt + nMissileFieldOffset);
 }
 
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable1(uint8_t bParam) {

@@ -5807,10 +5807,8 @@ void DRAW_UI_NPC_INTERACTION() {
         if (pNpcUnit && pNpcUnit->nClassId == 0x202 && !gnNpcMenuDialogX) {
           if (!gnNpcMenuDialogY) {
             gnNpcMenuDialogY = 1;
-            pNpcUnit = UNIT::Player::GetPlayerUnit_UI();
-            bDead = D2Common::Seed::RANDOM_RandomNumberSelector(&pNpcUnit->sSeed, 0x1e);
-            dwNow = GetTickCount();
-            gnNpcMenuDialogWidth = dwNow + (bDead + 0x78) * 1000;
+            int nDelayMs = (D2Common::Seed::RANDOM_RandomNumberSelector(&UNIT::Player::GetPlayerUnit_UI()->sSeed, 0x1e) + 0x78) * 1000; // steer-ok: the original computes the delay before the GetTickCount call
+            gnNpcMenuDialogWidth = GetTickCount() + nDelayMs;
           }
 
           dwNow = GetTickCount();

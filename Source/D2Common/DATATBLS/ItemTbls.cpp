@@ -472,7 +472,6 @@ void __fastcall TXT_AllocTxt_MagicAffixes(D2PoolManagerStrc * pMemory) {
     int nTxtAutoMagicSize;
     int nTxtMagicPrefixSize;
     int nTxtMagicSuffixSize;
-    int nIdx = 0;
     D2BinFieldInputStrc affixes[41] = {
       {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
       {"spawnable", FIELDTYPE_CHAR, 0, 0x54, 0},
@@ -531,16 +530,9 @@ void __fastcall TXT_AllocTxt_MagicAffixes(D2PoolManagerStrc * pMemory) {
     DataTbls::UnloadBin(pTxtMagicPrefixTmp);
     DataTbls::UnloadBin(pTxtAutoMagicTmp);
     uint16_t* pStringOut = 0;
-    if (gsMagicAffixTable.nSize <= 0) {
-      return;
+    for (int nIdx = 0; nIdx < gsMagicAffixTable.nSize; nIdx++) {
+      gsMagicAffixTable.pTable[nIdx].wNameStr = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&gsMagicAffixTable.pTable[nIdx].name[0], &pStringOut);
     }
-
-    do {
-      uint16_t uVar1;
-      uVar1 = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)&gsMagicAffixTable.pTable[nIdx].name[0], &pStringOut);
-      gsMagicAffixTable.pTable[nIdx].wNameStr = uVar1;
-      nIdx++;
-    } while (nIdx < gsMagicAffixTable.nSize);
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp

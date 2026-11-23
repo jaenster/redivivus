@@ -1374,7 +1374,7 @@ BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
               *(uint32_t*)(pIniLauncher->padding_0x35F + 0x5a) = *(uint32_t*)(pSelectedChar->abEquipSlot2 + 8);
               *(uint32_t*)(pIniLauncher->padding_0x35F + 0x5e) = *(uint32_t*)(pSelectedChar->abEquipSlot2 + 0xc);
               MainMenus::D2IniData_launcher->padding_0x35F[0x62] = (uint8_t)pSelectedChar->nLevel;
-              MainMenus::D2IniData_launcher->isLadder = (bool)pSelectedChar->bAct;
+              MainMenus::D2IniData_launcher->isLadder = pSelectedChar->bAct;
               MainMenus::D2IniData_launcher->neD2PlayerStatus = pSelectedChar->nCharacterFlags;
             }
             if (pSelectedChar->nCharacterFlags & 0x20) {

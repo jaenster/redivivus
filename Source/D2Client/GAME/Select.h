@@ -40,8 +40,6 @@ namespace D2Client::GAME::Select {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
 int __stdcall SELECT_GetConstant13_X();
 int __stdcall SELECT_GetConstant13_Y();
-// Client-side unit-selection setter (__fastcall via EAX:pUnit). Updates D2Client::_Selection state to the hovered/clicked pUnit. Handles NPC overhead-text menu selection, deselect of a previously selected warp (UpdateWarpRoomDeselect), and per-type selection effects: monster (caches attackable non-NPC monster class into gnSelectConstant13_X/Y), object door (debounced 500ms, sends 'AoF'/0x3d highlight-door packet to GS via NET_D2GS_CLIENT_Send_INT), and warp (UpdateWarpRoomSelect + view dirty flag). No return; mutates global selection state and may emit a network message.
-void SetSelectedUnit_I(struct D2UnitStrc * pUnit);
 void __stdcall ClearSelectedUnit();
 void __stdcall SetCanBeSelectedToFalse();
 int __stdcall SELECT_HasSelectedUnit();

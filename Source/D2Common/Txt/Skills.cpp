@@ -2525,24 +2525,20 @@ int __stdcall SKILL_CalcAttackFrames(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return 0;
     }
-
-    BOOL bIsShapeshifted = DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit);
-    if (!bIsShapeshifted) {
+    if (!DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit)) {
       return 0;
     }
 
     int32_t nAttackSpeed = 0x13;
     D2UnitStrc* pWeapon = Units::GetWeaponBySkill(pUnit, 0);
-    if (!pWeapon) {
-      return (int)((int64_t)((int64_t)pUnit->nFrameCount & 0xffffffffffffff00U) / (int64_t)nAttackSpeed);
+    if (pWeapon) {
+      nAttackSpeed = ITEMS::Items::ITEM_CalcWeaponAttackSpeed(pUnit, pWeapon);
+      if (nAttackSpeed <= 0) {
+        return 0;
+      }
     }
 
-    nAttackSpeed = ITEMS::Items::ITEM_CalcWeaponAttackSpeed(pUnit, pWeapon);
-    if (nAttackSpeed <= 0) {
-      return 0;
-    }
-
-    return (int)((int64_t)((int64_t)pUnit->nFrameCount & 0xffffffffffffff00U) / (int64_t)nAttackSpeed);
+    return (int)(pUnit->nFrameCount & 0xffffff00) / nAttackSpeed;
 }
 
 int32_t __stdcall SKILL_GetConcentrationDamageBonus(D2UnitStrc * pUnit, int32_t nSkillId) {

@@ -4062,17 +4062,20 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4B_ForceUnitUpdate(::SGAMEDATA * pGame
     }
 
     eD2UnitType eUnitType = pPacket->eUnitType;
+    uint32_t nUnitGUID = pPacket->nUnitGUID; // steer-ok: packet fields are read together on entry, before the type check
     if (eUnitType >= UNIT_COUNT) {
       return SERVERSTATUS_BAD_DATA;
     }
 
-    D2UnitStrc* pSrcUnit = UNIT::SUnit::FindUnitFromTable(pGame, eUnitType, pPacket->nUnitGUID);
+    D2UnitStrc* pSrcUnit = UNIT::SUnit::FindUnitFromTable(pGame, eUnitType, nUnitGUID);
     if (eUnitType == UNIT_PLAYER && pSrcUnit != pUnit) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    BOOL bInNeighborRoom = pSrcUnit ? D2Common::Units::UnitFinds::AreUnitsInNeighboredRooms(pUnit, pSrcUnit) : 0;
-    if (!bInNeighborRoom) {
+    if (!pSrcUnit) {
+      return SERVERSTATUS_BAD_TARGET;
+    }
+    if (!D2Common::Units::UnitFinds::AreUnitsInNeighboredRooms(pUnit, pSrcUnit)) {
       return SERVERSTATUS_BAD_TARGET;
     }
 

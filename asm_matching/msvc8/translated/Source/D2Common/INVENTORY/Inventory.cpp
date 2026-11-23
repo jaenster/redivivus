@@ -1120,7 +1120,7 @@ int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2Uni
 // @wasnamed INVENTORY_PlaceItemInGrid - one name on two different functions.
 // @evidence Calls INVENTORY_FindItemGridPosition first, then 0063afd0 with
 // the found x/y. The explicit-position placement is 0063afd0.
-BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint32_t nPage, char * szFile, int32_t nLine) {
+BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint8_t nPage, char * szFile, int32_t nLine) {
     BOOL pResult;
     uint32_t nPageByte = nPage;
     int32_t nPageParam = eInvPage;

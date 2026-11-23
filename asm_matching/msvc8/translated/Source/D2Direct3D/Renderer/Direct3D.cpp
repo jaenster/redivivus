@@ -1051,26 +1051,19 @@ BOOL __stdcall BeginCutScene() {
 }
 
 void __fastcall SetGamma(int nGamma) {
-    int nEntryCount = nGamma;
-    uint32_t aGammaRampRed[128];
-    uint32_t aGammaRampGreen[128];
-    uint32_t aGammaRampBlue[128];
+    uint32_t aGammaRamp[384];
     if (!(gnD3DTextureCapFlags & Fog::BitBuffer::gadwBitMasks[4])) {
       return;
     }
 
-    Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(nGamma, aGammaRampRed, (double)BOOL_0074c020, 2, 0x100, 0xffff);
-    uint32_t* pGammaRampRedSrc = aGammaRampRed;
-    uint32_t* pGammaRampGreenDst = aGammaRampGreen;
-    memcpy(pGammaRampGreenDst, pGammaRampRedSrc, 0x200);
-    uint32_t* pGammaRampDst = aGammaRampRed;
-    uint32_t* pGammaRampSrc = aGammaRampBlue;
-    memcpy(pGammaRampSrc, pGammaRampDst, 0x200);
+    Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(nGamma, aGammaRamp, (double)BOOL_0074c020, 2, 0x100, 0xffff);
+    memcpy(&aGammaRamp[128], aGammaRamp, 0x200);
+    memcpy(&aGammaRamp[256], aGammaRamp, 0x200);
     if (!g_pDDGammaControl) {
       return;
     }
 
-    DWORD nResult = g_pDDGammaControl->lpVtbl->SetGammaRamp(g_pDDGammaControl, 0, aGammaRampRed);
+    DWORD nResult = g_pDDGammaControl->lpVtbl->SetGammaRamp(g_pDDGammaControl, 0, aGammaRamp);
     if (!nResult) {
       return;
     }

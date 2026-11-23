@@ -221,74 +221,78 @@ int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToCon
       int nLinkIndex;
       switch (nKeywordNumber) {
         case 3:
-          if (MonsterTbls::sgtDataTable.pTxtSkillsLink && (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtSkillsLink, szText, 0) , nLinkIndex >= 0)) {
-            break;
+          if (MonsterTbls::sgtDataTable.pTxtSkillsLink && (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtSkillsLink, szText, 0)) >= 0) {
+            *pOutHasResolvedToConstant = 1;
+            return nLinkIndex;
           }
-        DATATBLS_NormalizeCodeTo4Chars(szText, (char*)&nAST);
-        nResult = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.pTxtSkillCalcLink, nAST, 1);
-        *pOutHasResolvedToConstant = 0;
-        return nResult;
+          DATATBLS_NormalizeCodeTo4Chars(szText, (char*)&nAST);
+          nResult = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.pTxtSkillCalcLink, nAST, 1);
+          *pOutHasResolvedToConstant = 0;
+          return nResult;
         case 4:
-          if (!MonsterTbls::sgtDataTable.pTxtMissilesLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtMissilesLink, szText, 0) , nLinkIndex < 0)) {
-            DATATBLS_NormalizeCodeTo4Chars(szText, (char*)&nAST);
-            nResult = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.pTxtMissCalcLink, nAST, 1);
-            *pOutHasResolvedToConstant = 0;
-            return nResult;
+          if (MonsterTbls::sgtDataTable.pTxtMissilesLink && (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtMissilesLink, szText, 0)) >= 0) {
+            *pOutHasResolvedToConstant = 1;
+            return nLinkIndex;
           }
-        break;
+          DATATBLS_NormalizeCodeTo4Chars(szText, (char*)&nAST);
+          nResult = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.pTxtMissCalcLink, nAST, 1);
+          *pOutHasResolvedToConstant = 0;
+          return nResult;
         case 5:
-          if (!MonsterTbls::sgtDataTable.pTxtItemStatCostLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtItemStatCostLink, szText, 0) , nLinkIndex < 0)) {
-            nResult = Storm::Source::SSTR::SStrCmpI(szText, "base", 0x20);
-            if (!nResult) {
-              *pOutHasResolvedToConstant = 0;
-              return 1;
-            }
-
-            nResult = Storm::Source::SSTR::SStrCmpI(szText, "mod", 0x20);
-            if (!nResult) {
-              *pOutHasResolvedToConstant = 0;
-              return 2;
-            }
-
-            Storm::Source::SSTR::SStrCmpI(szText, "accr", 0x20);
-            *pOutHasResolvedToConstant = 0;
-            return 0;
+          if (MonsterTbls::sgtDataTable.pTxtItemStatCostLink && (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtItemStatCostLink, szText, 0)) >= 0) {
+            *pOutHasResolvedToConstant = 1;
+            return nLinkIndex;
           }
-        break;
+          if (!Storm::Source::SSTR::SStrCmpI(szText, "base", 0x20)) {
+            *pOutHasResolvedToConstant = 0;
+            return 1;
+          }
+          if (!Storm::Source::SSTR::SStrCmpI(szText, "mod", 0x20)) {
+            *pOutHasResolvedToConstant = 0;
+            return 2;
+          }
+          Storm::Source::SSTR::SStrCmpI(szText, "accr", 0x20);
+          *pOutHasResolvedToConstant = 0;
+          return 0;
         case 6:
-          if (!MonsterTbls::sgtDataTable.pTxtSkillsLink || (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtSkillsLink, szText, 0) , nLinkIndex < 0)) {
-            DATATBLS_NormalizeCodeTo4Chars(szText, (char*)&nAST);
-            nResult = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.pTxtSkillCalcLink, nAST, 1);
-            *pOutHasResolvedToConstant = 0;
-            return nResult;
+          if (MonsterTbls::sgtDataTable.pTxtSkillsLink && (nLinkIndex = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtSkillsLink, szText, 0)) >= 0) {
+            *pOutHasResolvedToConstant = 1;
+            return nLinkIndex;
           }
-        break;
-        default:
-          goto lookup_skill_calc;
+          DATATBLS_NormalizeCodeTo4Chars(szText, (char*)&nAST);
+          nResult = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.pTxtSkillCalcLink, nAST, 1);
+          *pOutHasResolvedToConstant = 0;
+          return nResult;
       }
-
-      *pOutHasResolvedToConstant = 1;
-      return nLinkIndex;
     }
 
-    lookup_skill_calc:
+    char cChar;
     cFirstChar = *szText;
     if (cFirstChar == '\0') {
-      nAST = 0x20202020;
-    } else if (szText[1] == '\0') {
-      *(uint16_t*)(char*)&nAST = (uint16_t)((uint16_t)(uint8_t)0x20 << 8 | (uint16_t)(uint8_t)cFirstChar);
-      d2_store24((char*)&nAST, (uint32_t)((uint32_t)((uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)nAST) & 0xffffffu));
-      nAST = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)nAST & 0xffffffu));
+      cChar = ' ';
+      ((char*)&nAST)[0] = cChar;
+      ((char*)&nAST)[1] = cChar;
+      ((char*)&nAST)[2] = cChar;
+      ((char*)&nAST)[3] = cChar;
     } else {
-      *(uint16_t*)(char*)&nAST = (uint16_t)((uint16_t)(uint8_t)szText[1] << 8 | (uint16_t)(uint8_t)cFirstChar);
-      if (szText[2] == '\0') {
-        d2_store24((char*)&nAST, (uint32_t)((uint32_t)((uint32_t)(uint8_t)0x20 << 16 | (uint32_t)(uint16_t)nAST) & 0xffffffu));
-        nAST = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)nAST & 0xffffffu));
+      ((char*)&nAST)[0] = cFirstChar;
+      if (szText[1] == '\0') {
+        cChar = ' ';
+        ((char*)&nAST)[1] = cChar;
+        ((char*)&nAST)[2] = cChar;
+        ((char*)&nAST)[3] = cChar;
       } else {
-        d2_store24((char*)&nAST, (uint32_t)((uint32_t)((uint32_t)(uint8_t)szText[2] << 16 | (uint32_t)(uint16_t)nAST) & 0xffffffu));
-        nAST = (uint32_t)((uint32_t)(uint8_t)0x20 << 24 | (uint32_t)((uint32_t)nAST & 0xffffffu));
-        if (szText[3] != '\0') {
-          nAST = (uint32_t)((uint32_t)(uint8_t)szText[3] << 24 | (uint32_t)((uint32_t)nAST & 0xffffffu));
+        ((char*)&nAST)[1] = szText[1];
+        if (szText[2] == '\0') {
+          cChar = ' ';
+          ((char*)&nAST)[2] = cChar;
+          ((char*)&nAST)[3] = cChar;
+        } else {
+          ((char*)&nAST)[2] = szText[2];
+          ((char*)&nAST)[3] = ' ';
+          if (szText[3] != '\0') {
+            ((char*)&nAST)[3] = szText[3];
+          }
         }
       }
     }

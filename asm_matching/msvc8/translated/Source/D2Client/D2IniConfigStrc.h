@@ -396,7 +396,7 @@ __pragma(pack(push, 1)) struct D2IniConfigStrc {
     /* 0x35D */ bool bSKIPTOBNET;
     /* 0x35E */ uint8_t nScreenToShow;
     /* 0x35F */ uint8_t padding_0x35F[99];
-    /* 0x3C2 */ bool isLadder;
+    /* 0x3C2 */ uint8_t isLadder;
     /* 0x3C3 */ uint8_t padding_0x3C3[8];
     /* 0x3CB */ eD2PlayerStatus neD2PlayerStatus;
 }; __pragma(pack(pop))

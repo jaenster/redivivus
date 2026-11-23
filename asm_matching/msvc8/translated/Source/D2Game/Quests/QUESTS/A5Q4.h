@@ -77,7 +77,7 @@ void __fastcall Q34_InitData(struct D2QuestDataStrc * pQuestData);
 // Q34_ClaimReward (Betrayal of Harrogath). Finalizes reward: sets the player's Completed bit and clears RewardAwaits for QUEST_BetrayalOfHaggorath (transition RewardAwaits -> Completed). Called when Anya's reward is collected.
 void __fastcall Q34_ClaimReward(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Q34_OnNihlathakAI (Betrayal of Harrogath). Nihlathak AI hook: while in intro and prev-state < 3, broadcasts state-flag 3 (Q34_NotifyQuestState) — advances the quest when the player engages Nihlathak. No QuestRecord access.
-void __fastcall Q34_OnNihlathakAI(::SGAMEDATA * pGame);
+void __fastcall Q34_OnNihlathakAI(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // A5Q4 (Betrayal of Harrogath) deferred-portal spawner. If field_0x89 is set and the unit is currently in Act V, spawns the LEVEL_NihlathaksTemple portal (classId 0x3c) at unit +(10,5) and clears field_0x89 on success. Handles the case where the portal could not spawn earlier (e.g. Halls of Pain waypoint not yet found). No QuestRecord access.
 void __fastcall Q34_NpcSpawnPortalInAct5(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 #endif // D2_MODULE_D2Game

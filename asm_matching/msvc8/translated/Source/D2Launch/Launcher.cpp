@@ -772,10 +772,11 @@ void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE n
     SAVEFILE.dwHeader = 0xaa55aa55;
     SAVEFILE.dwFileVersion = 0x60;
     Storm::Source::SSTR::SStrCopy(SAVEFILE.szCharacterName, szCharacterName, 0x7fffffff);
-    SAVEFILE.dwCharacterStatus = wStatusFlags | 1;
-    SAVEFILE.bCharacterLevel = 1;
     SAVEFILE.nPlayerClassId = nCharacterClass;
+    SAVEFILE.bCharacterLevel = 1;
+    SAVEFILE.dwCharacterStatus = wStatusFlags | 1;
     SAVEFILE.nCreateTime = _time32(nullptr);
+    SAVEFILE.nTime32 = SAVEFILE.nCreateTime;
     SAVEFILE.nFileSize = 0x14f;
     SAVEFILE.nConst16 = 0x10;
     SAVEFILE.nMaxSkillsCount = 0x1e;
@@ -783,69 +784,29 @@ void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE n
       SAVEFILE.dwCharacterStatus |= 0x20;
     }
 
-    SAVEFILE.nTime32 = SAVEFILE.nCreateTime;
     Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pAppearanceBuffer, 0xe);
-    SAVEFILE.pAppearance1[0] = gaNewCharDefaultAppearance[0];
-    SAVEFILE.pAppearance1[1] = gaNewCharDefaultAppearance[1];
-    SAVEFILE.pAppearance1[2] = gaNewCharDefaultAppearance[2];
-    SAVEFILE.pAppearance1[3] = gaNewCharDefaultAppearance[3];
-    SAVEFILE.pAppearance1[8] = gaNewCharDefaultAppearance[8];
-    SAVEFILE.pAppearance1[9] = gaNewCharDefaultAppearance[9];
-    SAVEFILE.pAppearance1[10] = gaNewCharDefaultAppearance[10];
-    SAVEFILE.pAppearance1[0xb] = gaNewCharDefaultAppearance[0xb];
-    SAVEFILE.pAppearance1[4] = gaNewCharDefaultAppearance[4];
-    SAVEFILE.pAppearance1[5] = gaNewCharDefaultAppearance[5];
-    SAVEFILE.pAppearance1[6] = gaNewCharDefaultAppearance[6];
-    SAVEFILE.pAppearance1[7] = gaNewCharDefaultAppearance[7];
-    SAVEFILE.pAppearance1[0xc] = gaNewCharDefaultAppearance[0xc];
-    SAVEFILE.pAppearance1[0xd] = gaNewCharDefaultAppearance[0xd];
-    SAVEFILE.pAppearance1[0xe] = gaNewCharDefaultAppearance[0xe];
-    SAVEFILE.pAppearance1[0xf] = gaNewCharDefaultAppearance[0xf];
-    int i = 0;
-    uint8_t* pbAppearanceStart = pAppearanceBuffer + 2;
-    do {
-      pbWritePtr = pbAppearanceStart;
-      *pbWritePtr = gaNewCharDefaultAppearance[i];
-      i++;
-      pbAppearanceStart = pbWritePtr + 1;
-    } while (i < 0xb);
-
-    pbWritePtr[1] = nCharacterClass + 1;
-    SAVEFILE.pAppearance2[0] = -1;
-    SAVEFILE.pAppearance2[1] = -1;
-    SAVEFILE.pAppearance2[2] = -1;
-    SAVEFILE.pAppearance2[3] = -1;
-    SAVEFILE.pAppearance2[4] = -1;
-    SAVEFILE.pAppearance2[5] = -1;
-    SAVEFILE.pAppearance2[6] = -1;
-    SAVEFILE.pAppearance2[7] = -1;
-    SAVEFILE.pAppearance2[8] = -1;
-    SAVEFILE.pAppearance2[9] = -1;
-    SAVEFILE.pAppearance2[10] = -1;
-    SAVEFILE.pAppearance2[0xb] = -1;
-    SAVEFILE.pAppearance2[0xc] = -1;
-    SAVEFILE.pAppearance2[0xd] = -1;
-    SAVEFILE.pAppearance2[0xe] = -1;
-    SAVEFILE.pAppearance2[0xf] = -1;
-    pbWritePtr[2] = 0xff;
-    pbWritePtr[3] = 0xff;
-    pbWritePtr[4] = 0xff;
-    pbWritePtr[5] = 0xff;
-    pbWritePtr[6] = 0xff;
-    pbWritePtr[7] = 0xff;
-    pbWritePtr[8] = 0xff;
-    pbWritePtr[9] = 0xff;
-    pbWritePtr[10] = 0xff;
-    pbWritePtr[0xb] = 0xff;
-    pbWritePtr[0xc] = 0xff;
-    uint32_t wStatusLow = SAVEFILE.dwCharacterStatus & 0xffff;
-    pbWritePtr[0xd] = 1;
-    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0xe, wStatusLow);
-    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr + 0x10, 0);
-    pbWritePtr[0x12] = 0xff;
-    pbWritePtr[0x13] = 0xff;
-    pbWritePtr[0x14] = 0xff;
-    pbWritePtr[0x15] = 0;
+    pbWritePtr = pAppearanceBuffer + 2;
+    memcpy(SAVEFILE.pAppearance1, gaNewCharDefaultAppearance, 0x10);
+    for (int i = 0; i < 0xb; i++) {
+      *pbWritePtr++ = gaNewCharDefaultAppearance[i];
+    }
+    *pbWritePtr++ = nCharacterClass + 1;
+    memset(SAVEFILE.pAppearance2, 0xff, 0x10);
+    memset(pbWritePtr, 0xff, 0xb);
+    pbWritePtr += 0xb;
+    *pbWritePtr = 1;
+    pbWritePtr++;
+    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr, SAVEFILE.dwCharacterStatus & 0xffff);
+    pbWritePtr += 2;
+    Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pbWritePtr, 0);
+    pbWritePtr += 2;
+    *pbWritePtr = 0xff;
+    pbWritePtr++;
+    *pbWritePtr = 0xff;
+    pbWritePtr++;
+    *pbWritePtr = 0xff;
+    pbWritePtr++;
+    *pbWritePtr = 0;
 }
 
 void __fastcall LAUNCHER_MarkCharacterHardcore(int32_t bHardcore) {

@@ -213,8 +213,22 @@ int __stdcall SELECT_GetConstant13_Y() {
     return gnSelectConstant13_Y;
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
+
 // Client-side unit-selection setter (__fastcall via EAX:pUnit). Updates D2Client::_Selection state to the hovered/clicked pUnit. Handles NPC overhead-text menu selection, deselect of a previously selected warp (UpdateWarpRoomDeselect), and per-type selection effects: monster (caches attackable non-NPC monster class into gnSelectConstant13_X/Y), object door (debounced 500ms, sends 'AoF'/0x3d highlight-door packet to GS via NET_D2GS_CLIENT_Send_INT), and warp (UpdateWarpRoomSelect + view dirty flag). No return; mutates global selection state and may emit a network message.
-void SetSelectedUnit_I(D2UnitStrc * pUnit) {
+static void SetSelectedUnit_I(D2UnitStrc * pUnit) {
     D2UnitStrc* pLookupUnit;
     BOOL bIsDoor;
     DWORD dwTickCount;
@@ -239,8 +253,8 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
     }
 
     UI::Text::TEXT_ClearNpcMenuSelection();
-    bool bSameUnitAsLast;
-    bSameUnitAsLast = false;
+    BOOL bSameUnitAsLast;
+    bSameUnitAsLast = 0;
     if (pUnit) {
       uResult = UNIT::CUnit::HitTestScreen(pUnit, 0, 0, nullptr);
       if (!uResult) {
@@ -250,8 +264,8 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
       if (!_Selection::bHasSelectedUnit) {
         goto store_selection;
       }
-      if (pUnit->eUnitType == _Selection::eSelectedUnitType && pUnit->nUnitGUID == _Selection::nSelectedUnitGUID) {
-        bSameUnitAsLast = true;
+      if (GetTypeInline(pUnit) == _Selection::eSelectedUnitType && GetGUIDInline(pUnit) == _Selection::nSelectedUnitGUID) {
+        bSameUnitAsLast = 1;
         goto store_selection;
       }
     }
@@ -269,18 +283,26 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
       _Selection::bHasSelectedUnit = (BOOL)(uintptr_t)pUnit;
       return;
     }
-    _Selection::eSelectedUnitType = pUnit->eUnitType;
-    _Selection::nSelectedUnitGUID = pUnit->nUnitGUID;
+    _Selection::eSelectedUnitType = GetTypeInline(pUnit);
+    _Selection::nSelectedUnitGUID = GetGUIDInline(pUnit);
     _Selection::bHasSelectedUnit = 1;
-    if (_Selection::eSelectedUnitType != UNIT_MONSTER) {
-      if (_Selection::eSelectedUnitType != UNIT_OBJECT) {
-        if (_Selection::eSelectedUnitType == UNIT_WARP && !bSameUnitAsLast) {
-          nWarpClassId = pUnit->nClassId;
-          D2Common::DUNGEON::Dungeon::UpdateWarpRoomSelect(D2Common::Units::UNITS_GetRoom(pUnit), nWarpClassId);
-          View::SetFlag0x1(Game::D2GameView);
-          return;
+    switch (_Selection::eSelectedUnitType) {
+      case UNIT_MONSTER:
+        if (!bSameUnitAsLast) {
+          nErrorLine = pUnit->nClassId;
+          pMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nErrorLine);
+          if (pMonStats) {
+            pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nErrorLine);
+            if (pMonStats2 && !(pMonStats->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && pMonStats->Align != '\x01' && pMonStats2->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+              if (!(pMonStats2->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
+                gnSelectConstant13_X = nErrorLine;
+              }
+              gnSelectConstant13_Y = nErrorLine;
+            }
+          }
         }
-      } else {
+        break;
+      case UNIT_OBJECT:
         bIsDoor = D2Common::Units::IsDoor(pUnit);
         if (bIsDoor && pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::GetHit) {
           dwTickCount = GetTickCount();
@@ -290,24 +312,16 @@ void SetSelectedUnit_I(D2UnitStrc * pUnit) {
             nDoorUnitGUID = _Selection::nSelectedUnitGUID;
             pUnit->dwTickCount = dwTickCount;
             /* Highlight a door? */ Msg::NET_D2GS_CLIENT_Send_INT(0x3d, nDoorUnitGUID);
-            return;
           }
         }
-      }
-    } else {
-      if (!bSameUnitAsLast) {
-        nErrorLine = pUnit->nClassId;
-        pMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nErrorLine);
-        if (pMonStats) {
-          pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(nErrorLine);
-          if (pMonStats2 && !(pMonStats->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && pMonStats->Align != '\x01' && pMonStats2->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
-            gnSelectConstant13_X = nErrorLine;
-            if (!(pMonStats2->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1])) {
-              gnSelectConstant13_Y = nErrorLine;
-            }
-          }
+        break;
+      case UNIT_WARP:
+        if (!bSameUnitAsLast) {
+          nWarpClassId = pUnit->nClassId;
+          D2Common::DUNGEON::Dungeon::UpdateWarpRoomSelect(D2Common::Units::UNITS_GetRoom(pUnit), nWarpClassId);
+          View::SetFlag0x1(Game::D2GameView);
         }
-      }
+        break;
     }
 }
 
@@ -814,12 +828,12 @@ D2UnitStrc * __fastcall SKILL_ValidateTarget(D2SkillStrc * pSkill, D2UnitStrc * 
       pPlayerUnit_lcl = SELECT_FindTargetInFacingDirection(pPlayerUnit_lcl, pSkillsTxt);
       return pPlayerUnit_lcl;
     }
-    if (!(Fog::BitBuffer::gadwBitMasks[7] & dwSkillFlags)) {
-      return pUnit;
+    if (Fog::BitBuffer::gadwBitMasks[7] & dwSkillFlags) {
+      pPlayerUnit_lcl = SELECT_GetTargetCoords(pX, pUnit, pY);
+      return pPlayerUnit_lcl;
     }
 
-    pPlayerUnit_lcl = SELECT_GetTargetCoords(pX, pUnit, pY);
-    return pPlayerUnit_lcl;
+    return pUnit;
 }
 
 void __stdcall SELECT_InitConstants() {

@@ -8566,7 +8566,7 @@ int __stdcall INVENTORY_FindItemGridPosition(struct D2InventoryStrc * pInventory
 // @wasnamed INVENTORY_PlaceItemInGrid - one name on two different functions.
 // @evidence Calls INVENTORY_FindItemGridPosition first, then 0063afd0 with
 // the found x/y. The explicit-position placement is 0063afd0.
-BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint32_t nPage, char * szFile, int32_t nLine);
+BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint8_t nPage, char * szFile, int32_t nLine);
 // Checks whether an item (pUnit) can be placed at grid position (nGridX, nGridY) on page eInvPage in pInventory without colliding with existing items. Reads item dimensions via ITEM_GetItemsTxt_nWidthAndHeight, reinitializes the grid layout, then walks the item's footprint cells. Writes collision count to *pnParam; returns 1 if all cells are clear, 0 if any cell is occupied or inputs are invalid.
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CheckGridCollisions(struct D2InventoryStrc * pInventory, struct D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, struct D2UnitStrc * * ppCollidedItemOut, int * pnCollidingItemCount, uint8_t nPage);

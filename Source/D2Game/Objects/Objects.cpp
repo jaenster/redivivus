@@ -2251,62 +2251,45 @@ static void __stdcall OBJECTS_SpawnArmorStandOrWeaponRack(::SGAMEDATA * pGame, D
     static int RackType[4] = { 0x68, 0x69, 0x6a, 0x6b }; D2_STATIC_GUARD(RackType, "D2Game::Objects::OBJECTS_SpawnArmorStandOrWeaponRack::RackType");
     static int RackTypeCount = 0x2; D2_STATIC_GUARD(RackTypeCount, "D2Game::Objects::OBJECTS_SpawnArmorStandOrWeaponRack::RackTypeCount");
 
-    BOOL nCollisionResultX;
     D2CoordStrc sSpawnCoord;
     if (nRackType >= RackTypeCount) {
       return;
     }
 
     D2SeedStrc* pCtrlSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-    uint32_t DVar1 = D2_SeedRoll(pCtrlSeed);
-    int iVar2 = (DVar1 & 1) + nRackType * 2;
-    D2ObjectsTxt* pDVar3 = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(RackType[iVar2]);
-    uint32_t nObjSizeX = pDVar3->SizeX;
-    int nXStart = pDrlgCoords->dwXStart;
-    int nYStart = pDrlgCoords->dwYStart;
-    int nXEnd = pDrlgCoords->dwXSize - nObjSizeX;
-    uint32_t nObjSizeY = pDVar3->SizeY;
-    uint32_t uVar4 = pDrlgCoords->dwYSize - nObjSizeY + nYStart;
-    if (!(DVar1 & 1)) {
-      sSpawnCoord.nY = nYStart + 1;
-      for (uVar4 = pDrlgCoords->dwXStart + nObjSizeX; uVar4 < (uint32_t)(nXEnd + nXStart); uVar4 += nObjSizeX * 2) {
-        sSpawnCoord.nX = uVar4;
-        nCollisionResultX = ROOM_CheckSpawnCollision(pRoom, pDVar3->SizeY, &pDrlgCoords->dwXStart, &sSpawnCoord.nX, nObjSizeX);
-        if (nCollisionResultX == 1) {
+    int bVertical = D2_SeedRoll(pCtrlSeed) & 1;
+    int nRackIndex = nRackType * 2;
+    int nIndex = bVertical + nRackIndex;
+    D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(RackType[nIndex]);
+    uint32_t nXEnd = pDrlgCoords->dwXSize - pObjectsTxt->SizeX + pDrlgCoords->dwXStart;
+    uint32_t nYEnd = pDrlgCoords->dwYSize - pObjectsTxt->SizeY + pDrlgCoords->dwYStart;
+    if (!bVertical) {
+      int nY = pDrlgCoords->dwYStart + 1;
+      for (uint32_t nX = pDrlgCoords->dwXStart + pObjectsTxt->SizeX; nX < nXEnd; nX += pObjectsTxt->SizeX * 2) {
+        sSpawnCoord.nX = nX;
+        sSpawnCoord.nY = nY;
+        if (ROOM_CheckSpawnCollision(pRoom, pObjectsTxt->SizeY, &pDrlgCoords->dwXStart, &sSpawnCoord.nX, pObjectsTxt->SizeX) == 1) {
           if (!pRoom) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb12);
             exit(-1);
           }
 
-          UNIT::SUnit::CreateUnit(UNIT_OBJECT, RackType[nRackType * 2], uVar4, nYStart + 1, pGame, pRoom, 1, 0, 0);
+          UNIT::SUnit::CreateUnit(UNIT_OBJECT, RackType[nRackIndex], nX, nY, pGame, pRoom, 1, 0, 0);
         }
-
-        nObjSizeX = pDVar3->SizeX;
       }
     } else {
-      uint32_t nCurY;
-      nXStart = pDrlgCoords->dwXStart + 1;
-      nCurY = nYStart + nObjSizeY;
-      sSpawnCoord.nX = nXStart;
-      if (nCurY < uVar4) {
-        do {
-          sSpawnCoord.nY = nCurY;
-          nCollisionResultX = ROOM_CheckSpawnCollision(pRoom, nObjSizeY, &pDrlgCoords->dwXStart, &sSpawnCoord.nX, pDVar3->SizeX);
-          if (nCollisionResultX == 1) {
-            if (!pRoom) {
-              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb25);
-              exit(-1);
-            }
-
-            UNIT::SUnit::CreateUnit(UNIT_OBJECT, RackType[iVar2], nXStart, nCurY, pGame, pRoom, 1, 0, 0);
+      int nX = pDrlgCoords->dwXStart + 1;
+      for (uint32_t nY = pDrlgCoords->dwYStart + pObjectsTxt->SizeY; nY < nYEnd; nY += pObjectsTxt->SizeY * 2) {
+        sSpawnCoord.nX = nX;
+        sSpawnCoord.nY = nY;
+        if (ROOM_CheckSpawnCollision(pRoom, pObjectsTxt->SizeY, &pDrlgCoords->dwXStart, &sSpawnCoord.nX, pObjectsTxt->SizeX) == 1) {
+          if (!pRoom) {
+            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb25);
+            exit(-1);
           }
 
-          nObjSizeY = pDVar3->SizeY;
-          nCurY += nObjSizeY * 2;
-          if (nCurY >= uVar4) {
-            return;
-          }
-        } while (true);
+          UNIT::SUnit::CreateUnit(UNIT_OBJECT, RackType[nIndex], nX, nY, pGame, pRoom, 1, 0, 0);
+        }
       }
     }
 }

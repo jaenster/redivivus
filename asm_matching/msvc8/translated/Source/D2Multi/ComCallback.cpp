@@ -2350,40 +2350,24 @@ BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCb
 }
 
 void __fastcall COMCALLBACK_RemoveUserFromList(char * nStrBase, uint32_t * pnCarryMask) {
-    uint8_t byHexChar;
-    uint32_t nNibble;
-    char cNibble;
     uint32_t nBitMask = 1;
     *pnCarryMask = 0;
     uint8_t* pbHexPair = (uint8_t*)(nStrBase + 1);
-    for (int nByteCount = 0; nByteCount < 8; nByteCount++) {
-      uint32_t nSum;
-      nSum = (int)(char)gaBnetCdKeyCharDecodeTable[*pbHexPair] + (char)gaBnetCdKeyCharDecodeTable[pbHexPair[-1]] * 0x18;
+    int nByteCount = 8;
+    do {
+      uint32_t nSum = (char)gaBnetCdKeyCharDecodeTable[pbHexPair[-1]] * 0x18 + (char)gaBnetCdKeyCharDecodeTable[*pbHexPair];
       if (nSum >= 0x100) {
         nSum -= 0x100;
         *pnCarryMask |= nBitMask;
       }
 
-      nNibble = nSum >> 4 & 0xf;
-      cNibble = (char)nNibble;
-      if (nNibble >= 10) {
-        byHexChar = cNibble + 0x37;
-      } else {
-        byHexChar = cNibble + 0x30;
-      }
-
-      pbHexPair[-1] = byHexChar;
-      cNibble = (char)(nSum & 0xf);
-      if ((nSum & 0xf) >= 10) {
-        byHexChar = cNibble + 0x37;
-      } else {
-        byHexChar = cNibble + 0x30;
-      }
-
-      *pbHexPair = byHexChar;
+      uint32_t nNibble = nSum >> 4 & 0xf;
+      pbHexPair[-1] = nNibble >= 10 ? nNibble + 0x37 : nNibble + 0x30;
+      nNibble = nSum & 0xf;
+      *pbHexPair = nNibble >= 10 ? nNibble + 0x37 : nNibble + 0x30;
       pbHexPair += 2;
       nBitMask *= 2;
-    }
+    } while (--nByteCount);
 }
 
 BOOL __fastcall COMCALLBACK_DetectCDKeyInMessage(char * szChatText, uint32_t * pnKeyHi, uint32_t * pnKeyLo) {

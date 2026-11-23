@@ -1470,12 +1470,13 @@ static void __stdcall DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(D2DrlgStrc * 
     eDrlgDirection eDirection;
     int nVisCount;
     D2DrlgLevelDataWildernessLevel* pLevelData;
-    for (; (int)nLevelIdStart <= (int)eLevel; nLevelIdStart += LEVEL_RogueEncampment) {
+    eD2LevelId nLevelId;
+    for (nLevelId = nLevelIdStart; (int)nLevelId <= (int)eLevel; nLevelId += LEVEL_RogueEncampment) {
       D2DrlgLevelStrc* pCurLevel;
-      pCurLevel = GetLevelAndAlloc(pDrlg, nLevelIdStart);
+      pCurLevel = GetLevelAndAlloc(pDrlg, nLevelId);
       if (pCurLevel->eDrlgType == 3) {
-        pVisArray = DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pDrlg, nLevelIdStart);
-        pWarpIds = DrlgRoom::DRLGACTMISC_GetWarpsIdIfExists(pDrlg, nLevelIdStart);
+        pVisArray = DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pDrlg, nLevelId);
+        pWarpIds = DrlgRoom::DRLGACTMISC_GetWarpsIdIfExists(pDrlg, nLevelId);
         for (nVisCount = 0; nVisCount < 8; nVisCount++) {
           if (pVisArray[nVisCount] && pWarpIds[nVisCount] == -1) {
             pLevelData = pCurLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;

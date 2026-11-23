@@ -1195,7 +1195,8 @@ uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint
 
 // Build COF parameters from unit animation/equipment - determines graphics file, weapon, armor appearance
 // @sourcefile .\ENGINE\GfxUtil.cpp
-static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit, int32_t pEquipContext, int * pOutItemClassId) {
+static BOOL __stdcall GFXUTIL_BuildCofParams(D2UnitStrc * pUnit, D2GfxDataStrc * pGfxData, int32_t pEquipContext, int * pOutItemClassId)
+{
     D2UnitStrc* pDVar1;
     int32_t nComponentIdx;
     D2GfxInfoUnkStrc* pGfxInfo;
@@ -1239,11 +1240,12 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2GfxDataStrc * pGfxData, D2UnitStr
       D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eEffectiveUnitType, &uSlotC.nEffectiveClassId, &nEffectiveMode, ".\\ENGINE\\GfxUtil.cpp", 0x2f0);
       pGfxData->eUnitType = eEffectiveUnitType;
       pGfxData->nClassId = uSlotC.nEffectiveClassId;
-      if (pEquipContext == -1) {
-        pEquipContext = nEffectiveMode;
+      nMode = pEquipContext;
+      if (nMode == -1) {
+        nMode = nEffectiveMode;
       }
 
-      pGfxData->nMode = pEquipContext;
+      pGfxData->nMode = nMode;
       if (eEffectiveUnitType > UNIT_COUNT) {
         return 0;
       }
@@ -1409,7 +1411,7 @@ int32_t __fastcall DC6_AssignParams(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit
     pGfxData->nDirection = nDirection;
     pGfxData->nFrameNumber = nFrameNumber;
     pGfxData->nComponentType = nComponentType;
-    int32_t nResult = GFXUTIL_BuildCofParams(pGfxData, pUnit, nMode, pnOutItemClassId);
+    int32_t nResult = GFXUTIL_BuildCofParams(pUnit, pGfxData, nMode, pnOutItemClassId);
     return nResult;
 }
 
@@ -1523,13 +1525,12 @@ int32_t __fastcall GFXUTIL_InitAndBuildMonsterCofParams(D2GfxDataStrc * pGfxData
 int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pbyLayerCount, uint8_t * pLayerArray, int * pOutMaxY, int32_t nPaletteShift, uint32_t nFrame) {
     int nSpriteLoaded;
     int32_t nOffsetY;
-    int32_t nDrawWorldOffsetY;
     int32_t nWorldOffsetY;
     D2GfxDataStrc sGfxData;
     int nOutItemClassId;
     int nCurLayerIdx;
     int nSpriteY;
-    uint8_t byLayerIdCheck;
+    int nLayerId;
     int nLoadedCount = 0;
     int nLayerIdx = 0;
     uint8_t* pLayerArrayBase = pbyLayerCount;
@@ -1537,8 +1538,8 @@ int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pby
       int nBuilt;
       do {
         nCurLayerIdx = nLayerIdx;
-        byLayerIdCheck = pLayerArray[nLayerIdx];
-        if (0xf < byLayerIdCheck) {
+        nLayerId = pLayerArray[nLayerIdx];
+        if (nLayerId >= 16) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x59d);
           exit(-1);
         }
@@ -1547,15 +1548,14 @@ int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pby
         sGfxData.nDirection = nPaletteShift;
         sGfxData.nFrameNumber = nFrame;
         sGfxData.pDC6 = 0;
-        sGfxData.nComponentType = byLayerIdCheck;
-        nBuilt = GFXUTIL_BuildCofParams(&sGfxData, pUnit, -1, &nOutItemClassId);
+        sGfxData.nComponentType = nLayerId;
+        nBuilt = GFXUTIL_BuildCofParams(pUnit, &sGfxData, -1, &nOutItemClassId);
         if (nBuilt) {
           nSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
           if (nSpriteLoaded && sGfxData.pDC6Block) {
             nOffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(sGfxData.pDC6Block);
-            nDrawWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
-            nSpriteY = D2Common::Units::GetScreenY(pUnit);
-            nSpriteY += nOffsetY - nDrawWorldOffsetY;
+            nOffsetY -= UI::Path::DRAW_GetWorldOffsetY();
+            nSpriteY = D2Common::Units::GetScreenY(pUnit) + nOffsetY;
             if (nSpriteY > *pOutMaxY) {
               *pOutMaxY = nSpriteY;
             }
@@ -1583,7 +1583,7 @@ int32_t __fastcall GFXUTIL_GetOverlayFrameDelay(D2UnitStrc * pUnit, D2GfxUnknown
     sGfxData.pDC6 = 0;
     sGfxData.nFrameNumber = nOverlayAnimMode;
     sGfxData.nComponentType = '\x01';
-    BOOL nWeaponClass = GFXUTIL_BuildCofParams(&sGfxData, nullptr, -1, &nOutItemClassId);
+    BOOL nWeaponClass = GFXUTIL_BuildCofParams(nullptr, &sGfxData, -1, &nOutItemClassId);
     if (!nWeaponClass) {
       return 1;
     }
@@ -1603,7 +1603,7 @@ void __fastcall GFXUTIL_GetOverlayDimensions(D2UnitStrc * pUnit, int nPaletteShi
     sGfxData.pDC6 = 0;
     sGfxData.nDirection = nPaletteShift;
     sGfxData.nComponentType = '\x01';
-    BOOL nDimension = GFXUTIL_BuildCofParams(&sGfxData, pUnit, -1, (int*)&nAnimMode);
+    BOOL nDimension = GFXUTIL_BuildCofParams(pUnit, &sGfxData, -1, (int*)&nAnimMode);
     if (!nDimension) {
       return;
     }
@@ -1623,32 +1623,25 @@ uint32_t __fastcall GFXUTIL_IsUnitSpriteOnScreen(D2UnitStrc * pUnit, int32_t nWo
     D2GfxDataStrc sGfxData;
     int nFrameMetrics2;
     int nFrameMetrics;
-    int32_t nWorldOffsetX = UI::Path::DRAW_GetWorldOffsetX();
-    int nScreenX = nWorldX - nWorldOffsetX;
-    int32_t nWorldOffsetY = UI::Path::DRAW_GetWorldOffsetY();
-    int nOriginY = nWorldY - nWorldOffsetY;
-    BOOL pGfxInfo = Gfx::GFX_IsUnitOnScreen(pUnit, nWorldX - nWorldOffsetX, nOriginY, 0, 0);
-    if (!pGfxInfo) {
+    int nScreenX = nWorldX - UI::Path::DRAW_GetWorldOffsetX();
+    int nScreenY = nWorldY - UI::Path::DRAW_GetWorldOffsetY();
+    if (!Gfx::GFX_IsUnitOnScreen(pUnit, nScreenX, nScreenY, 0, 0)) {
       return 0;
     }
 
     D2Common::Units::GetShiftedFrameMetrics(pUnit, &nFrameMetrics, &nFrameMetrics2);
     memset(&sGfxData, 0, 0x48);
-    uint8_t byDirection = D2Common::Units::GetDirection(pUnit);
-    sGfxData.nDirection = (int)byDirection;
+    int nFrameNumber = nFrameMetrics;
+    sGfxData.nDirection = D2Common::Units::GetDirection(pUnit);
     sGfxData.pDC6 = 0;
-    sGfxData.nFrameNumber = nFrameMetrics;
+    sGfxData.nFrameNumber = nFrameNumber;
     sGfxData.nComponentType = '\x01';
-    pGfxInfo = GFXUTIL_BuildCofParams(&sGfxData, pUnit, -1, &nWorldY);
-    if (!pGfxInfo) {
+    if (!GFXUTIL_BuildCofParams(pUnit, &sGfxData, -1, &nWorldY)) {
       return 0;
     }
 
-    int nCofBuilt = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
-    if (nCofBuilt && sGfxData.pDC6Block) {
-      uint32_t bOnScreen;
-      bOnScreen = GFXUTIL_IsDC6BlockOnScreen(sGfxData.pDC6Block, nScreenX, nOriginY, 0);
-      return bOnScreen;
+    if (D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1) && sGfxData.pDC6Block) {
+      return GFXUTIL_IsDC6BlockOnScreen(sGfxData.pDC6Block, nScreenX, nScreenY, 0);
     }
 
     return 0;
