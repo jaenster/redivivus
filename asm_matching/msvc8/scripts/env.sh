@@ -30,7 +30,9 @@ if [ -z "${VC8_TOOLCHAIN:-}" ]; then
 fi
 : "${VC8_SRC:=$VC8_TOOLCHAIN/vc8-src}"
 : "${VC8_WINEPREFIX:=$VC8_TOOLCHAIN/wine-vc8}"
-export VC8_TOOLCHAIN VC8_SRC VC8_WINEPREFIX
+# Only VC8_TOOLCHAIN is exported; oracle-zig derives the prefix from it. With
+# VC8_WINEPREFIX exported too, the Linux CI's precompiled header failed.
+export VC8_TOOLCHAIN
 export WINEPREFIX="$VC8_WINEPREFIX"
 export WINEDEBUG=-all BOX64_NOBANNER=1 BOX64_LOG=0
 # The compilers' own CRT must be Microsoft's, not wine's builtin msvcr80: c1xx
