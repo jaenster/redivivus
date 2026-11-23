@@ -60,7 +60,7 @@ struct __attribute__((packed)) MCPPacketClt0x01 {
     /* 0x05 */ int MCPStatus;
     /* 0x09 */ char MCPChunk1[8];
     /* 0x11 */ char MCPChunk2[48];
-    /* 0x41 */ char BnetName[0];
+    /* 0x41 */ char BnetName[1027];
 };
 
 #endif // D2_MODULE_D2MCPClient

@@ -1549,25 +1549,17 @@ int32_t __stdcall SStrToInt(char * szText) {
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_AtoiUnsigned
 uint32_t __stdcall SStrToUnsigned(char * szText) {
-    uint32_t nDigit;
-    char* pScan;
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    uint32_t nValue;
-    nValue = (int)*szText - 0x30;
+    uint32_t nValue = (int)*szText - 0x30;
     if (nValue < 10) {
-      pScan = szText + 1;
-      nDigit = (int)szText[1] - 0x30;
-      if (nDigit >= 10) {
-        return nValue;
+      uint32_t nDigit = (int)*++szText - 0x30;
+      while (nDigit < 10) {
+        szText++;
+        nValue = nValue * 10 + nDigit;
+        nDigit = (int)*szText - 0x30;
       }
-
-      do {
-        pScan++;
-        nValue = nDigit + nValue * 10;
-        nDigit = (int)*pScan - 0x30;
-      } while (nDigit < 10);
 
       return nValue;
     }
@@ -1863,68 +1855,54 @@ ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive,
 // Bob Jenkins hash over a byte buffer.
 // Name from the PowerPC 1.13c Storm traceback table (bjhash @10047b40).
 uint32_t __fastcall SSTR_bjhash(uint8_t * pData, uint32_t nLength, uint32_t nInitVal) {
-    uint32_t nA;
-    uint32_t nTmp;
-    uint32_t nB = 0x9e3779b9;
-    uint32_t nC = 0x9e3779b9;
-    uint32_t nC2 = nInitVal;
-    uint32_t nRemaining = nLength;
-    if (nLength >= 0xc) {
-      int nMix;
-      nInitVal = nLength / 0xc;
-      do {
-        nMix = pData[4] + nB + ((uint32_t)d2_load24((uint8_t*)(pData + 5)) << 8);
-        nB = pData[8] + nC2 + ((uint32_t)d2_load24((uint8_t*)(pData + 9)) << 8);
-        nC = *(int*)pData - nB - nMix + nC ^ nB >> 0xd;
-        nA = nMix - nB - nC ^ nC << 8;
-        nB = nB - nA - nC ^ nA >> 0xd;
-        nC = nC - nB - nA ^ nB >> 0xc;
-        nTmp = nA - nB - nC ^ nC << 0x10;
-        nRemaining -= 0xc;
-        nA = nB - nTmp - nC ^ nTmp >> 5;
-        nC = nC - nA - nTmp ^ nA >> 3;
-        nB = nTmp - nA - nC ^ nC << 10;
-        nC2 = nA - nB - nC ^ nB >> 0xf;
-        pData += 0xc;
-        nInitVal--;
-      } while (nInitVal);
+    uint32_t nA, nB, nC, nLen;
+    nLen = nLength;
+    nA = nB = 0x9e3779b9;
+    nC = nInitVal;
+    while (nLen >= 12) {
+      nA += (pData[0] + ((uint32_t)pData[1] << 8) + ((uint32_t)pData[2] << 16) + ((uint32_t)pData[3] << 24));
+      nB += (pData[4] + ((uint32_t)pData[5] << 8) + ((uint32_t)pData[6] << 16) + ((uint32_t)pData[7] << 24));
+      nC += (pData[8] + ((uint32_t)pData[9] << 8) + ((uint32_t)pData[10] << 16) + ((uint32_t)pData[11] << 24));
+      nA -= nB; nA -= nC; nA ^= (nC >> 13);
+      nB -= nC; nB -= nA; nB ^= (nA << 8);
+      nC -= nA; nC -= nB; nC ^= (nB >> 13);
+      nA -= nB; nA -= nC; nA ^= (nC >> 12);
+      nB -= nC; nB -= nA; nB ^= (nA << 16);
+      nC -= nA; nC -= nB; nC ^= (nB >> 5);
+      nA -= nB; nA -= nC; nA ^= (nC >> 3);
+      nB -= nC; nB -= nA; nB ^= (nA << 10);
+      nC -= nA; nC -= nB; nC ^= (nB >> 15);
+      pData += 12;
+      nLen -= 12;
     }
 
-    nA = nC2 + nLength;
-    switch (nRemaining) {
-      case 0xb:
-        nA += (uint32_t)pData[10] << 0x18;
-      case 10:
-        nA += (uint32_t)pData[9] << 0x10;
-      case 9:
-        nA += (uint32_t)pData[8] << 8;
-      case 8:
-        nB += (uint32_t)pData[7] << 0x18;
-      case 7:
-        nB += (uint32_t)pData[6] << 0x10;
-      case 6:
-        nB += (uint32_t)pData[5] << 8;
-      case 5:
-        nB += pData[4];
-      case 4:
-        nC += (uint32_t)pData[3] << 0x18;
-      case 3:
-        nC += (uint32_t)pData[2] << 0x10;
-      case 2:
-        nC += (uint32_t)pData[1] << 8;
-      case 1:
-        nC += *pData;
-      default:
-        nC = nC - nA - nB ^ nA >> 0xd;
-      nTmp = nB - nA - nC ^ nC << 8;
-      nB = nA - nTmp - nC ^ nTmp >> 0xd;
-      nC = nC - nB - nTmp ^ nB >> 0xc;
-      nA = nTmp - nB - nC ^ nC << 0x10;
-      nB = nB - nA - nC ^ nA >> 5;
-      nC = nC - nB - nA ^ nB >> 3;
-      nA = nA - nB - nC ^ nC << 10;
-      return nB - nA - nC ^ nA >> 0xf;
+    nC += nLength;
+    switch (nLen) {
+      case 11: nC += ((uint32_t)pData[10] << 24);
+      case 10: nC += ((uint32_t)pData[9] << 16);
+      case 9: nC += ((uint32_t)pData[8] << 8);
+      case 8: nB += ((uint32_t)pData[7] << 24);
+      case 7: nB += ((uint32_t)pData[6] << 16);
+      case 6: nB += ((uint32_t)pData[5] << 8);
+      case 5: nB += pData[4];
+      case 4: nA += ((uint32_t)pData[3] << 24);
+      case 3: nA += ((uint32_t)pData[2] << 16);
+      case 2: nA += ((uint32_t)pData[1] << 8);
+      case 1: nA += pData[0];
     }
+
+    {
+      nA -= nB; nA -= nC; nA ^= (nC >> 13);
+      nB -= nC; nB -= nA; nB ^= (nA << 8);
+      nC -= nA; nC -= nB; nC ^= (nB >> 13);
+      nA -= nB; nA -= nC; nA ^= (nC >> 12);
+      nB -= nC; nB -= nA; nB ^= (nA << 16);
+      nC -= nA; nC -= nB; nC ^= (nB >> 5);
+      nA -= nB; nA -= nC; nA ^= (nC >> 3);
+      nB -= nC; nB -= nA; nB ^= (nA << 10);
+      nC -= nA; nC -= nB; nC ^= (nB >> 15);
+    }
+    return nC;
 }
 
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.

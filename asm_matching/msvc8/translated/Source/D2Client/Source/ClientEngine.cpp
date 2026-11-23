@@ -1932,7 +1932,7 @@ static void __stdcall CLIENT_MonsterAi_CorpseSeekerBehavior(uint32_t nTargetDist
     return;
 }
 
-static void __stdcall CLIENT_MonsterAi_BasicChaseBehavior(uint32_t nTargetDistance, D2UnitStrc * pTarget, D2UnitStrc * pUnit) {
+static void __stdcall CLIENT_MonsterAi_BasicChaseBehavior(uint32_t nTargetDistance, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     BOOL bIsDead = D2Common::Monsters::MONSTERS::CheckIfMonsterIsDead(pUnit);
     if (bIsDead) {
       return;
@@ -1946,7 +1946,7 @@ static void __stdcall CLIENT_MonsterAi_BasicChaseBehavior(uint32_t nTargetDistan
     if ((pUnit ? pUnit->eAnimMode.ePlayerMode : Death) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
-    if (nTargetDistance < 2) {
+    if (nTargetDistance <= 1) {
       MONSTER_TryMoveTowardTarget(pUnit, 4, 1, 0, pTarget);
       return;
     }
@@ -2269,7 +2269,7 @@ void __fastcall CLIENT_DispatchMonsterAiBehavior(D2UnitStrc * pUnit) {
           CLIENT_MonsterAi_CorpseSeekerBehavior(nDistCopy, pTarget, pUnit);
         return;
         case 0x13e:
-          CLIENT_MonsterAi_BasicChaseBehavior(nDistCopy, pTarget, pUnit);
+          CLIENT_MonsterAi_BasicChaseBehavior(nDistCopy, pUnit, pTarget);
         return;
       }
     }

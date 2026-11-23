@@ -1460,7 +1460,6 @@ uint32_t __fastcall SKILLS_EvalSkillDescCalc_Chained(eD2Skills eSkill, uint8_t b
 // @sourcefile .\SKILLS\Skills.cpp
 void __stdcall SKILLS_AddOrRemoveItemSkill(struct D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill, int32_t nLevel, int32_t nCharges, int32_t bRemove);
 // Checks whether the unit satisfies a skill's weapon/ammo requirement before the skill can be used. If the skill record has flag 0x10 set it instead checks the skill's nQuantity (charge/ammo count > 0). Otherwise it branches on the skill record's weapon-requirement code: 2 and 4 require an equipped throwable weapon (or its item_throwable stat) in main/alt hand via INVENTORY_GetEquippedWeaponInfo + SKILLS_GetWeaponByHand; 5 requires a melee weapon of ITEMTYPE_Weapon and dual-wield capability. Any other code returns 1 (no requirement). Returns nonzero if the requirement is met, 0 otherwise.
-uint32_t __fastcall SKILLS_HasRequiredWeaponOrQuantity(struct D2SkillStrc * pSkill, struct D2UnitStrc * pUnit);
 // Evaluates a passive skill's elemental calc value for a specific element type (0=min fire/0x156, 1=min cold/0x157, 2=min lightning/0x158). Searches the skill's passivestat array for the matching stat ID, then calls D2GetSkillCalc on the corresponding passivecalc slot. Returns 0 if the skill/level is invalid or the element type is not found in passivestat.
 uint32_t __stdcall SKILL_GetPassiveElementCalc(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nElementType);
 #endif // D2_MODULE_D2Common

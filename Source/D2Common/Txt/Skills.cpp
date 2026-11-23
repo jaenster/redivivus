@@ -851,7 +851,7 @@ static BOOL __stdcall SKILLS_CheckWeaponRequirements(D2UnitStrc * pUnit, D2Skill
 }
 
 // Checks whether a skill's use-restriction condition is satisfied for the caster. Reads the restrict field from the skill record: 0 = requires no active poison state (returns true if not poisoned); 1 = always allowed; 2 = requires a poison state AND at least one of the skill's three state[] entries active on the unit. Returns 1 if the restriction passes, 0 otherwise. Returns 0 immediately if unit or skill pointer is null.
-static int SKILLS_CheckRestriction(D2SkillStrc * pSkillTxt, D2UnitStrc * pUnitStrc) {
+static int SKILLS_CheckRestriction(D2UnitStrc * pUnitStrc, D2SkillStrc * pSkillTxt) {
     if (!pUnitStrc || !pSkillTxt) {
       return 0;
     }
@@ -3443,7 +3443,7 @@ void __stdcall thunk_SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOw
 }
 
 // Returns nonzero if pUnit has sufficient mana (or HP under Blood Mana state) to cast pSkillStrc. Computes effective skill level, applies lvlmana+mana formula with manashift, checks STATE_blood_mana; special-cases charged skills (nCharges) and Berserk (stat cost flag 0x200 bit 3). Returns 0 or 1.
-static BOOL SKILLS_HasEnoughManaForSkill(D2SkillStrc * pSkillStrc, D2UnitStrc * pUnitStrc) {
+static BOOL SKILLS_HasEnoughManaForSkill(D2UnitStrc * pUnitStrc, D2SkillStrc * pSkillStrc) {
     int32_t nClampedLevel;
     int nEffectiveLevel;
     int nLevel;
@@ -3492,7 +3492,7 @@ static BOOL SKILLS_HasEnoughManaForSkill(D2SkillStrc * pSkillStrc, D2UnitStrc * 
 }
 
 // Checks whether the unit satisfies a skill's weapon/ammo requirement before the skill can be used. If the skill record has flag 0x10 set it instead checks the skill's nQuantity (charge/ammo count > 0). Otherwise it branches on the skill record's weapon-requirement code: 2 and 4 require an equipped throwable weapon (or its item_throwable stat) in main/alt hand via INVENTORY_GetEquippedWeaponInfo + SKILLS_GetWeaponByHand; 5 requires a melee weapon of ITEMTYPE_Weapon and dual-wield capability. Any other code returns 1 (no requirement). Returns nonzero if the requirement is met, 0 otherwise.
-uint32_t __fastcall SKILLS_HasRequiredWeaponOrQuantity(D2SkillStrc * pSkill, D2UnitStrc * pUnit) {
+static uint32_t SKILLS_HasRequiredWeaponOrQuantity(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     uint32_t bHasAmmo;
     D2UnitStrc* pAltWeapon;
     int32_t nWeaponSlot;
@@ -3683,18 +3683,18 @@ int32_t __stdcall SKILLS_CanUseSkill(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
       return 5;
     }
 
-    uint32_t bCheckResult = SKILLS_HasRequiredWeaponOrQuantity(pSkill, pUnit);
+    uint32_t bCheckResult = SKILLS_HasRequiredWeaponOrQuantity(pUnit, pSkill);
     BOOL bCheckPassed = bCheckResult ? SKILLS_CheckWeaponRequirements(pUnit, pSkill) : 0;
     if (!bCheckPassed) {
       return 2;
     }
 
-    bCheckPassed = SKILLS_HasEnoughManaForSkill(pSkill, pUnit);
+    bCheckPassed = SKILLS_HasEnoughManaForSkill(pUnit, pSkill);
     if (!bCheckPassed) {
       return 1;
     }
 
-    int iVar1 = SKILLS_CheckRestriction(pSkill, pUnit);
+    int iVar1 = SKILLS_CheckRestriction(pUnit, pSkill);
     if (!iVar1) {
       return 4;
     }

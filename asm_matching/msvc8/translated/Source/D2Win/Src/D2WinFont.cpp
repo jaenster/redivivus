@@ -673,42 +673,40 @@ void __fastcall D2WINFONT_DrawTickerText(uint16_t * wszText, int32_t nXStart, in
 }
 
 // Simplified wide string renderer without color code processing. Skips color code sequences (0xFF + 3 chars), handles newlines, draws glyphs. Uses DRAW_SOLID mode with no palette shift.
-static void D2WINFONT_DrawWideStringSimple(uint16_t * wszText, int32_t nX, int32_t nY) {
-    uint16_t wCharCode;
+static void D2WINFONT_DrawWideStringSimple(int32_t nX, uint16_t * wszText, int32_t nY) {
     D2FontGlyphStrc* pGlyphEntry;
     D2GfxDataStrc sGfxData;
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
     memset(&sGfxData, 0, 0x48);
     sGfxData.pDC6 = *gppDC6FontCache;
     sGfxData.nDirection = 0;
-    int nPositionX = nX;
+    int nStartX = nX;
     uint16_t* pCurChar = wszText;
     if (nStrLen <= 0) {
       return;
     }
 
-    do {
-      while (true) {
-        wCharCode = *pCurChar;
-        if ((uint16_t)wCharCode >= 0x100 || wCharCode != L'\xff') {
-          break;
-        }
-
-        pCurChar += 3;
+    while (true) {
+      uint16_t wCharCode = *pCurChar++;
+      int bEscape = 0;
+      if (wCharCode < 0x100) {
+        bEscape = (wCharCode == 0xff);
+      }
+      if (bEscape) {
+        pCurChar += 2;
+        continue;
       }
 
       if (wCharCode != L'\n') {
         pGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
         sGfxData.nFrameNumber = (int)*(uint16_t*)(pGlyphEntry->abUnverified + 6);
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nY, -1, DRAW_SOLID, nullptr);
-        nPositionX += (uint32_t)pGlyphEntry->abUnverified[1];
-        pCurChar++;
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nX, nY, -1, DRAW_SOLID, nullptr);
+        nX += (uint32_t)pGlyphEntry->abUnverified[1];
       } else {
         nY += (int)((uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight * -0xf) / 10;
-        nPositionX = nX;
-        pCurChar++;
+        nX = nStartX;
       }
-    } while (true);
+    }
 }
 
 void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltipX, int32_t nTooltipY, int32_t nTooltipColor, int32_t nCenterFlag) {
@@ -781,7 +779,7 @@ void __fastcall D2WINFONT_DrawTextWithOptionalBackground(uint16_t * wszText, int
 
 // Thunk/wrapper for DrawWideStringSimple. Direct passthrough.
 void __fastcall D2WINFONT_DrawWideStringSimpleThunk(uint16_t * wszText, int32_t nX, int32_t nY) {
-    D2WINFONT_DrawWideStringSimple(wszText, nX, nY);
+    D2WINFONT_DrawWideStringSimple(nX, wszText, nY);
 }
 
 // Draws text with background rectangle. Calculates text dimensions, clamps to screen bounds, draws solid rect, then renders centered text. Used for tooltips and popups.

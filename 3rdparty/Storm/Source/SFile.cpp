@@ -882,13 +882,9 @@ uint32_t __stdcall SFileAuthenticateArchiveEx(D2ArchiveStrc * pArchive, uint32_t
       DWORD dwSeekResult;
       dwSeekResult = SetFilePointer(pDVar1->hFile, pDVar1->nArchiveOffset, (PLONG)0x0, 0);
       if (dwSeekResult != -1) {
-        iVar3 = SSignature::SSignatureVerifyStream_GetSignatureLength(pSsigContext);
-        nRemaining = iVar3 + pDVar1->pMpqHeader->dwArchiveSize;
+        nRemaining = SSignature::SSignatureVerifyStream_GetSignatureLength(pSsigContext) + pDVar1->pMpqHeader->dwArchiveSize;
         while (nRemaining) {
-          nChunkSize = 0x10000;
-          if (nRemaining <= 0x10000) {
-            nChunkSize = nRemaining;
-          }
+          nChunkSize = nRemaining > 0x10000 ? 0x10000 : nRemaining;
 
           /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ nExponentLen = 0;
           /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ nRemaining -= nChunkSize;

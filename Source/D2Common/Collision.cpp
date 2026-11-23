@@ -2487,7 +2487,7 @@ void __stdcall AddCollision_Type(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eD2
     eCollisionFlags eCollisionFlag_00 = (eCollisionFlags)eCollisionFlag;
     switch (nType) {
       case COLLISION_PATTERN_NONE:
-        break;
+        return;
       case COLLISION_PATTERN_SMALL_UNIT_PRESENCE:
         AddCollision_Cross(pRoom, nX, nY, eCollisionFlag_00);
       if (eCollisionFlag) {

@@ -865,14 +865,10 @@ void __fastcall SendPlayerMove(::SGAMEDATA * pGame, D2UnitStrc * pUnitRaw, D2Cli
 }
 
 void __fastcall SendPlayerStop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, eD2MonsterAnimMode eAnimMode) {
-    int32_t wPosY;
-    int32_t wPosX;
-    uint32_t dwLastHitClass = pUnit->dwLastHitClass;
-    int32_t dwMoveMode = gaPlayerModeNetMsgTable[eAnimMode].nMoveModeByte;
-    int32_t nLifePct = D2Common::Units::GetCurrentLifePercentage(pUnit);
-    wPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
-    wPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
-    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', pUnit->nUnitGUID, (uint8_t)dwMoveMode, wPosX, wPosY, (uint8_t)dwLastHitClass, (uint8_t)nLifePct);
+    int32_t dwMoveMode = gaPlayerModeNetMsgTable[eAnimMode].nMoveModeByte; // steer-ok: the original loads it before the life-percentage call; folded, 00548350 goes from INSN_COUNT_MATCH to OUR-2 (measured)
+    uint8_t nLastHitClass = (uint8_t)pUnit->dwLastHitClass;
+    uint8_t nLifePct = (uint8_t)D2Common::Units::GetCurrentLifePercentage(pUnit);
+    GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', pUnit->nUnitGUID, (uint8_t)dwMoveMode, D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit), D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit), nLastHitClass, nLifePct);
 }
 
 void __fastcall PLRMSG_SendPlayerStopToOtherClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nModeIndex) {
@@ -1902,7 +1898,7 @@ void __fastcall PLAYER_SendInventoryFullMessage(D2UnitStrc * pUnit) {
 }
 
 // Validates player is alive, resolves dual-swing skill alternation via GetDualSwingSkill, checks skill usability (falling back to SKILL_Attack if skill has flag4 bit4 set and CanUseSkill returns 1-2 or 4). On success calls PLRMODES_MoveToLocation with the resolved skill mode; on mana-full sends inventory-full message. Returns SERVERSTATUS_OK or SERVERSTATUS_BAD_DATA.
-static eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nTargetX, int32_t nTargetY, D2SkillStrc * pSkill) {
+static eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2SkillStrc * pSkill, int32_t nTargetX, int32_t nTargetY) {
     int32_t nCanUseSkill;
     D2SkillsTxt* pSkillsTxt;
     int nSkillMode;
@@ -1944,7 +1940,7 @@ static eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit,
 
 // Extern entry for hand-written callers: CastSkillOnLocation itself keeps its unit's linkage.
 eD2ServerIncomingStatus __stdcall CastSkillOnLocation_Extern(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t nTargetX, int32_t nTargetY, D2SkillStrc * pSkill) {
-    return ::D2Game::PLAYER::PlayerMsg::CastSkillOnLocation(pUnit, pGame, nTargetX, nTargetY, pSkill);
+    return ::D2Game::PLAYER::PlayerMsg::CastSkillOnLocation(pUnit, pGame, pSkill, nTargetX, nTargetY);
 }
 
 // Server-side skill dispatch for player targeting an entity. Resolves dual-swing substitution, checks skill usability (SKILLS_CanUseSkill), and if a skill is blocked by a flags4 condition falls back to SKILL_Attack. On usability==0 with a valid mode, looks up the target unit, follows attached-unit ownership, validates melee/range weapon class against target proximity, then routes to StartModeID or PLRMODES_StartModeID. Returns 0 on success, 2 on failure.
@@ -2012,23 +2008,20 @@ static int __stdcall PLAYER_ProcessSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc
 // [op:1][x:u16][y:u16]
 // Gets left skill, increments pierce_idx, CastSkillOnLocation.
 eD2ServerIncomingStatus __fastcall SCMD_0x05_LeftSkillOnLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x05_LeftSkillOnLocation * pPacket, uint32_t nSize) {
-    int32_t nPierceIdx = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
-    if (nPierceIdx) {
-      return (eD2ServerIncomingStatus)nPierceIdx;
+    uint16_t nX;
+    uint16_t nY;
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, &nX, &nY, pUnit, &pPacket->nCmd);
+    if (nStatus) {
+      return (eD2ServerIncomingStatus)nStatus;
     }
 
-    D2SkillStrc* pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
-    if (!pLeftSkill) {
+    if (!D2Common::Units::GetLeftSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
-    uint32_t nTargetY = nSize & 0xffff;
-    uint32_t nTargetX = (uintptr_t)pPacket & 0xffff;
-    pLeftSkill = D2Common::Units::GetLeftSkill(pUnit);
-    CastSkillOnLocation(pUnit, pGame, nTargetX, nTargetY, pLeftSkill);
-    nPierceIdx = 0;
-    return (eD2ServerIncomingStatus)nPierceIdx;
+    CastSkillOnLocation(pUnit, pGame, D2Common::Units::GetLeftSkill(pUnit), nX, nY);
+    return SERVERSTATUS_OK;
 }
 
 // C->S Packet 0x06 - Left Skill on Unit (9 bytes)
@@ -2143,23 +2136,20 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0B_Keepalive(::SGAMEDATA * pGame, D2Un
 // [op:1][x:u16][y:u16]
 // Gets right skill, increments pierce_idx, CastSkillOnLocation.
 eD2ServerIncomingStatus __fastcall SCMD_0x0C_RightSkillOnLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0C_RightSkillOnLocation * pPacket, uint32_t nSize) {
-    int32_t nPierceIdx = CheckIfInrangeAndReassign(pGame, nSize, (uint16_t*)&pPacket, (uint16_t*)&nSize, pUnit, &pPacket->nCmd);
-    if (nPierceIdx) {
-      return (eD2ServerIncomingStatus)nPierceIdx;
+    uint16_t nX;
+    uint16_t nY;
+    int32_t nStatus = CheckIfInrangeAndReassign(pGame, nSize, &nX, &nY, pUnit, &pPacket->nCmd);
+    if (nStatus) {
+      return (eD2ServerIncomingStatus)nStatus;
     }
 
-    D2SkillStrc* pRightSkill = D2Common::Units::GetRightSkill(pUnit);
-    if (!pRightSkill) {
+    if (!D2Common::Units::GetRightSkill(pUnit)) {
       return SERVERSTATUS_BAD_PARAMS;
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
-    uint32_t nTargetY = nSize & 0xffff;
-    uint32_t nTargetX = (uintptr_t)pPacket & 0xffff;
-    pRightSkill = D2Common::Units::GetRightSkill(pUnit);
-    CastSkillOnLocation(pUnit, pGame, nTargetX, nTargetY, pRightSkill);
-    nPierceIdx = 0;
-    return (eD2ServerIncomingStatus)nPierceIdx;
+    CastSkillOnLocation(pUnit, pGame, D2Common::Units::GetRightSkill(pUnit), nX, nY);
+    return SERVERSTATUS_OK;
 }
 
 // C->S Packet 0x0D - Right Skill on Unit (9 bytes)

@@ -460,15 +460,14 @@ void __stdcall MCPCONNECT_CreateThread(uint32_t * pSrcState) {
     MCPThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)ThreadHandler, (LPVOID)0x0, 0, (LPDWORD)&pSrcState);
 }
 
-static char * __stdcall STRING_GetStringLength(char * szText, char * * ppszText, char * pszBufferEnd, char * szDest) {
+static char * __stdcall STRING_GetStringLength(char * szDest, char * szText, uint32_t * pnLength, uint32_t nMaxLength) {
     int nCopyDelta;
     char byChar;
-    char* pszLenBase = szText + 1;
     char* pszScan;
     int nStrLen;
     nStrLen = (int)strlen(szText);
-    *ppszText += (int)(nStrLen + 1);
-    if (*ppszText >= pszBufferEnd) {
+    *pnLength += nStrLen + 1;
+    if (*pnLength >= nMaxLength) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x26);
       exit(-1);
     }
@@ -479,7 +478,6 @@ static char * __stdcall STRING_GetStringLength(char * szText, char * * ppszText,
 
 int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnStartupInfo) {
     MCPPacketClt0x01 mcp0x01;
-    char payloadBuffer[1027];
     int32_t nLine;
     SetD2GSJoinResult(0);
     mcp0x01.MCPCookie = *pnStartupInfo;
@@ -497,16 +495,17 @@ int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnStartupInfo) {
     *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 32) = pnStartupInfo[0xe];
     *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 36) = pnStartupInfo[0xf];
     *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 40) = pnStartupInfo[0x10];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 44) = pnStartupInfo[0x11];
-    char* pStrLen = 0;
+    uint32_t pStrLen = 0;
     mcp0x01.nPacketId = '\x01';
-    STRING_GetStringLength((char*)(pnStartupInfo + 0x12), &pStrLen, (char*)0x400, payloadBuffer);
-    if ((char*)0xfffe < pStrLen + 0x41) {
+    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 44) = pnStartupInfo[0x11];
+    STRING_GetStringLength(mcp0x01.BnetName, (char*)(pnStartupInfo + 0x12), &pStrLen, 0x400);
+    uint32_t nPacketSize = pStrLen + 0x41;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5c);
       exit(-1);
     }
 
-    nLine = Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &mcp0x01.nPacketId, (uint16_t)(uintptr_t)(pStrLen + 0x41));
+    nLine = Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &mcp0x01.nPacketId, (uint16_t)nPacketSize);
     return nLine;
 }
 
@@ -514,126 +513,132 @@ void __fastcall NET_MCP_CLIENT_Send_0x02_CharCreate(char * szCharName, DWORD dwC
     MCP_CHARCREATE mcp0x02;
     SetD2GSJoinResult(0);
     MCPSTATE_SetConnectionEstablished(0);
-    char* pStrLen = 0;
+    uint32_t pStrLen = 0;
     mcp0x02.nPacketId = '\x02';
     mcp0x02.dwCharClass = dwCharClassFlags;
     mcp0x02.wCharFlags = dwUnused;
-    STRING_GetStringLength(szCharName, &pStrLen, (char*)0x400, mcp0x02.szCharName);
-    if ((char*)0xfffe < pStrLen + 7) {
+    STRING_GetStringLength(mcp0x02.szCharName, szCharName, &pStrLen, 0x400);
+    uint32_t nPacketSize = pStrLen + 7;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (char*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x7e);
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &mcp0x02.nPacketId, (uint16_t)(uintptr_t)(pStrLen + 7));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &mcp0x02.nPacketId, (uint16_t)nPacketSize);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x07_CharLogon(char * szText) {
     char byPacketId[1028];
     SetD2GSJoinResult(0);
-    char* pStrLen = 0;
+    uint32_t pStrLen = 0;
     byPacketId[0] = '\a';
-    STRING_GetStringLength(szText, &pStrLen, (char*)0x400, byPacketId + 1);
-    if ((char*)0xfffe < pStrLen + 1) {
+    STRING_GetStringLength(byPacketId + 1, szText, &pStrLen, 0x400);
+    uint32_t nPacketSize = pStrLen + 1;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9a);
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, byPacketId, (uint16_t)(uintptr_t)(pStrLen + 1));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, byPacketId, (uint16_t)nPacketSize);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x03_CreateGame(mcp0x03data * pMcpData, int16_t nRequestId) {
     MCP_CREATEGAME sPacket;
     SetD2GSJoinResult(0);
     sPacket.nGameFlags = pMcpData->nGameFlags;
+    sPacket.RequestId = nRequestId;
     sPacket.nAlways1 = pMcpData->field_0x44;
     sPacket.nDifference = pMcpData->nDifference;
-    sPacket.nMaxPlayers = pMcpData->nMaxPlayers;
-    char* pStrLen = 0;
-    sPacket.RequestId = nRequestId;
     nMcpPacketSequence = nRequestId;
+    uint32_t pStrLen = 0;
     sPacket.nPacketId = '\x03';
-    char* pszBufCursor = STRING_GetStringLength(pMcpData->szGameName, &pStrLen, (char*)0x400, sPacket.szStrings);
-    pszBufCursor = STRING_GetStringLength(pMcpData->szGamePassword, &pStrLen, (char*)0x400, pszBufCursor);
-    STRING_GetStringLength(pMcpData->szGameDescription, &pStrLen, (char*)0x400, pszBufCursor);
-    if ((char*)0xfffe < pStrLen + 10) {
+    sPacket.nMaxPlayers = pMcpData->nMaxPlayers;
+    char* pszBufCursor = STRING_GetStringLength(sPacket.szStrings, pMcpData->szGameName, &pStrLen, 0x400);
+    pszBufCursor = STRING_GetStringLength(pszBufCursor, pMcpData->szGamePassword, &pStrLen, 0x400);
+    STRING_GetStringLength(pszBufCursor, pMcpData->szGameDescription, &pStrLen, 0x400);
+    uint32_t nPacketSize = pStrLen + 10;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc1);
       exit(-1);
     }
 
     D2GSGameToken = 0;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &sPacket.nPacketId, (uint16_t)(uintptr_t)(pStrLen + 10));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &sPacket.nPacketId, (uint16_t)nPacketSize);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x04_JoinGame(char * szGameName, char * szGamePassword, uint16_t nRequestId) {
     MCPPacketCltStr byPacketId;
     SetD2GSJoinResult(0);
-    char* pStrLen = 0;
+    uint32_t pStrLen = 0;
     byPacketId.nPacketId = 4;
     byPacketId.wRequestId = nRequestId;
     nMcpPacketSequence = nRequestId;
-    char* pszBufCursor = STRING_GetStringLength(szGameName, &pStrLen, (char*)0x400, byPacketId.szData);
-    STRING_GetStringLength(szGamePassword, &pStrLen, (char*)0x400, pszBufCursor);
-    if ((char*)0xfffe < pStrLen + 3) {
+    char* pszBufCursor = STRING_GetStringLength(byPacketId.szData, szGameName, &pStrLen, 0x400);
+    STRING_GetStringLength(pszBufCursor, szGamePassword, &pStrLen, 0x400);
+    uint32_t nPacketSize = pStrLen + 3;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe9);
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)(uintptr_t)(pStrLen + 3));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)nPacketSize);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x05_GameList(char * szText, uint16_t wRequestIdArg) {
     MCPPacketClt0x05 sPacket;
     SetD2GSJoinResult(0);
     sPacket.dwGameField = *(uint32_t*)(szText + 0x14);
-    char* pStrLen = 0;
+    uint32_t pStrLen = 0;
     sPacket.nPacketId = 5;
     sPacket.wRequestId = wRequestIdArg;
     nMcpPacketSequence = wRequestIdArg;
-    STRING_GetStringLength(szText, &pStrLen, (char*)0x400, sPacket.szData);
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (short int)(uintptr_t)pStrLen + 7);
+    STRING_GetStringLength(sPacket.szData, szText, &pStrLen, 0x400);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (short int)pStrLen + 7);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x06_GameInfo(char * szText, uint16_t wRequestIdArg) {
     MCPPacketCltStr byPacketId;
     SetD2GSJoinResult(0);
-    char* pStrLen = 0;
+    uint32_t pStrLen = 0;
     byPacketId.nPacketId = 6;
     byPacketId.wRequestId = wRequestIdArg;
     nMcpPacketSequence = wRequestIdArg;
-    STRING_GetStringLength(szText, &pStrLen, (char*)0x400, byPacketId.szData);
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (short int)(uintptr_t)pStrLen + 3);
+    STRING_GetStringLength(byPacketId.szData, szText, &pStrLen, 0x400);
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (short int)pStrLen + 3);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x08(char * szText, uint16_t wRequestIdArg) {
     MCPPacketCltStr byPacketId;
     SetD2GSJoinResult(0);
-    char* pStrLen = 0;
+    uint32_t pStrLen = 0;
     byPacketId.nPacketId = 8;
     byPacketId.wRequestId = wRequestIdArg;
-    STRING_GetStringLength(szText, &pStrLen, (char*)0x400, byPacketId.szData);
-    if ((char*)0xfffe < pStrLen + 3) {
+    STRING_GetStringLength(byPacketId.szData, szText, &pStrLen, 0x400);
+    uint32_t nPacketSize = pStrLen + 3;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x148);
       exit(-1);
     }
 
     nMcpPacketSequence = wRequestIdArg;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)(uintptr_t)(pStrLen + 3));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)nPacketSize);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x09(char * szText, uint16_t wRequestIdArg) {
     MCPPacketCltStr byPacketId;
     SetD2GSJoinResult(0);
-    char* pStrLen = 0;
+    uint32_t pStrLen = 0;
     byPacketId.nPacketId = 9;
     byPacketId.wRequestId = wRequestIdArg;
-    STRING_GetStringLength(szText, &pStrLen, (char*)0x400, byPacketId.szData);
-    if ((char*)0xfffe < pStrLen + 3) {
+    STRING_GetStringLength(byPacketId.szData, szText, &pStrLen, 0x400);
+    uint32_t nPacketSize = pStrLen + 3;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x169);
       exit(-1);
     }
 
     nMcpPacketSequence = wRequestIdArg;
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)(uintptr_t)(pStrLen + 3));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)nPacketSize);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x0A_CharDelete(char * szCharName, uint16_t wRequestIdArg) {
@@ -659,16 +664,17 @@ void __fastcall NET_MCP_CLIENT_Send_0x18_CharUpgrade(char * szCharName) {
 void __fastcall NET_MCP_CLIENT_Send_0x0B(char * szText1, char * szText2) {
     char byPacketId[1028];
     SetD2GSJoinResult(0);
-    char* pStrLen = 0;
+    uint32_t pStrLen = 0;
     byPacketId[0] = '\v';
-    char* pszBufCursor = STRING_GetStringLength(szText1, &pStrLen, (char*)0x400, byPacketId + 1);
-    STRING_GetStringLength(szText2, &pStrLen, (char*)0x400, pszBufCursor);
-    if ((char*)0xfffe < pStrLen + 1) {
+    char* pszBufCursor = STRING_GetStringLength(byPacketId + 1, szText1, &pStrLen, 0x400);
+    STRING_GetStringLength(pszBufCursor, szText2, &pStrLen, 0x400);
+    uint32_t nPacketSize = pStrLen + 1;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c2);
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, byPacketId, (uint16_t)(uintptr_t)(pStrLen + 1));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, byPacketId, (uint16_t)nPacketSize);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x0C(char * szText) {
@@ -677,20 +683,21 @@ void __fastcall NET_MCP_CLIENT_Send_0x0C(char * szText) {
     struct __frame0_t {
       char byPacketId;
       char payloadBuffer[1027];
-      char* pStrLen;
+      uint32_t pStrLen;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1032, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     SetD2GSJoinResult(0);
     __frame0.pStrLen = 0;
     __frame0.byPacketId = '\f';
-    STRING_GetStringLength(szText, &__frame0.pStrLen, (char*)0x400, __frame0.payloadBuffer);
-    if ((char*)0xfffe < __frame0.pStrLen + 1) {
+    STRING_GetStringLength(__frame0.payloadBuffer, szText, &__frame0.pStrLen, 0x400);
+    uint32_t nPacketSize = __frame0.pStrLen + 1;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1de);
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &__frame0.byPacketId, (uint16_t)(uintptr_t)(__frame0.pStrLen + 1));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &__frame0.byPacketId, (uint16_t)nPacketSize);
 }
 
 void __stdcall NET_MCP_CLIENT_Send_0x0D() {
@@ -754,13 +761,14 @@ void __fastcall NET_MCP_CLIENT_Send_0x16_CharRank(char * szText, uint32_t dwFiel
     sPacket.nPacketId = 0x16;
     sPacket.dwField1 = dwField1;
     sPacket.dwField2 = dwField2;
-    STRING_GetStringLength(szText, (char**)&nTextLength, (char*)0x400, sPacket.szData);
-    if (nTextLength + 9 >= 0xffff) {
+    STRING_GetStringLength(sPacket.szData, szText, &nTextLength, 0x400);
+    uint32_t nPacketSize = nTextLength + 9;
+    if (nPacketSize >= 0xffff) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27b);
       exit(-1);
     }
 
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (uint16_t)(nTextLength + 9));
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (uint16_t)nPacketSize);
 }
 
 BOOL __fastcall NET_MCP_CLIENT_IncomingReturn(char * pBytes, size_t nSize) {

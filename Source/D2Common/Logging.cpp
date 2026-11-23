@@ -24,7 +24,7 @@ void __stdcall MISC_SafeStrncpy(char * szText, size_t nSize) {
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pchar (EBX): char*
-static void __fastcall StoreLogging(char * szFormat, va_list pArgs, FILE * pFile, uint32_t nThreadId, uint32_t nLogLevel, uint32_t nComponent, uint32_t nSubsystem, uint32_t nSequence, char * szContext) {
+static void __fastcall StoreLogging(FILE * pFile, char * szContext, char * szFormat, uint32_t nThreadId, uint32_t nLogLevel, uint32_t nComponent, uint32_t nSubsystem, uint32_t nSequence, va_list pArgs) {
     size_t nHeaderLen;
     int nMessageLen;
     char* szOutput;
@@ -32,7 +32,6 @@ static void __fastcall StoreLogging(char * szFormat, va_list pArgs, FILE * pFile
     SYSTEMTIME sLocalTime;
     char szLogLineBuf[500];
     uint32_t local_8;
-    FILE* pFileToFlush;
     char cScan;
     char* szOutput_00;
     char* szWritePos;
@@ -44,7 +43,6 @@ static void __fastcall StoreLogging(char * szFormat, va_list pArgs, FILE * pFile
       szWritePos = szLogLineBuf + nTimestampLen;
       nHeaderLen = Storm::Source::SSTR::SStrPrintf(szWritePos, 500 - nTimestampLen, "%01lu\t%01lu\t%01lu\t%02lu\t%.50s\t%.5lu\t", nThreadId, nLogLevel, nComponent, nSubsystem, szContext, nSequence);
       nMessageLen = Storm::Source::SSTR::SStrVPrintf(szWritePos + nHeaderLen, 500 - nTimestampLen - nHeaderLen, szFormat, pArgs);
-      pFileToFlush = pLogFile;
       pszNewlinePos = szWritePos + nHeaderLen + nMessageLen - 1;
       do {
         szWritePos = pszNewlinePos + 1;
@@ -56,14 +54,14 @@ static void __fastcall StoreLogging(char * szFormat, va_list pArgs, FILE * pFile
       pszNewlinePos[1] = '\0';
       szOutput = szOutput + strlen(szOutput) + 1;
       fwrite(szLogLineBuf, (intptr_t)szOutput - (intptr_t)(szLogLineBuf + 1), 1, pLogFile);
-      fflush(pFileToFlush);
+      fflush(pLogFile);
     }
 }
 
 void LOGGING_FilePrintf(FILE * pFile, uint32_t dwGame, uint32_t dwFrame, uint32_t dwClient, uint32_t dwLogType, char * szFilename, uint32_t nLine, char * szFormatString, ...) {
     va_list __va;
     va_start(__va, szFormatString);
-    StoreLogging(szFormatString, __va, pFile, dwGame, dwFrame, dwClient, dwLogType, nLine, szFilename);
+    StoreLogging(pFile, szFilename, szFormatString, dwGame, dwFrame, dwClient, dwLogType, nLine, __va);
 }
 
 void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLogType, char * szFilename, int32_t nLine, char * szFormatString, ...) {
@@ -74,7 +72,7 @@ void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLo
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0096ca30);
-    StoreLogging(szFormatString, __va, pLOGFILE, nGame, nFrame, nClient, nLogType, nLine, szFilename);
+    StoreLogging(pLOGFILE, szFilename, szFormatString, nGame, nFrame, nClient, nLogType, nLine, __va);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0096ca30);
 }
 

@@ -462,8 +462,7 @@ static int __thiscall SBMP_WriteTGA(uint8_t * pPixels, void * hFile, uint8_t * n
 }
 
 // @blizzard FlipImage (SBMP.CPP)
-static void __thiscall SBMP_FlipImage(int numRows, void * dst, uint8_t * src, int dstSize, int rowWidth, int srcStride) {
-    size_t _Size;
+static void __stdcall SBMP_FlipImage(void * dst, uint8_t * src, int dstSize, int rowWidth, int srcStride, int numRows) {
     D2_CHECKS_BEGIN;
     D2_CHECK(dst);
     D2_CHECK(src);
@@ -472,27 +471,23 @@ static void __thiscall SBMP_FlipImage(int numRows, void * dst, uint8_t * src, in
     D2_CHECK(srcStride);
     D2_CHECK(numRows);
     D2_CHECKS_END_VOID(SErr::SErrSetLastError(0x57));
-    unsigned char* pSrc = src + (numRows - 1) * srcStride;
-    void* _Dst = dst;
-    while (true) {
-      size_t sVar1;
-      sVar1 = (intptr_t)dst + (dstSize - (intptr_t)_Dst);
+    src += (numRows - 1) * srcStride;
+    uint8_t* pDstEnd = (uint8_t*)dst + dstSize;
+    do {
+      int nRemaining = pDstEnd - (uint8_t*)dst;
       numRows--;
-      _Size = rowWidth;
-      if (rowWidth >= (int)sVar1) {
-        _Size = sVar1;
+      int nCopySize = rowWidth;
+      if (rowWidth >= nRemaining) {
+        nCopySize = nRemaining;
       }
-      if (!_Size) {
+      if (!nCopySize) {
         break;
       }
 
-      SMem::SMemCopy(_Dst, (uint8_t*)pSrc, _Size);
-      pSrc = (uint8_t*)pSrc - srcStride;
-      _Dst = (void*)((char*)_Dst + _Size);
-      if (!numRows) {
-        return;
-      }
-    }
+      SMem::SMemCopy(dst, src, nCopySize);
+      dst = (uint8_t*)dst + nCopySize;
+      src -= srcStride;
+    } while (numRows);
 }
 
 // @blizzard FlushPacket (SBMP.CPP)
@@ -825,14 +820,9 @@ static int __stdcall SBMP_DetermineImageType(uint16_t magic) {
 }
 
 // @blizzard DecodeBmpFile (SBMP.CPP)
-static int __thiscall SBMP_DecodeBmpFile(int * pWidth, void * palette, D2MPQFileStrc * hFile, void * pixels, int nDstStride, int * pHeight, uint32_t * pBpp) {
-    uint8_t* pRawBits;
-    uint32_t rowWidth;
-    uint32_t srcStride;
-    tagRGBQUAD aPaletteScratch[256];
+static int __stdcall SBMP_DecodeBmpFile(D2MPQFileStrc * hFile, void * palette, void * pixels, int nDstStride, int * pWidth, int * pHeight, uint32_t * pBpp) {
     BITMAPFILEHEADER sBmpFileHeader;
     BITMAPINFOHEADER aBmpInfoExtraBuf;
-    uint32_t nHeight;
     int nResult = SFile::SFileReadFile(hFile, &sBmpFileHeader, 0xe, nullptr, (LPOVERLAPPED)0x0);
     if (!nResult) {
       return 0;
@@ -854,37 +844,33 @@ static int __thiscall SBMP_DecodeBmpFile(int * pWidth, void * palette, D2MPQFile
     if (aBmpInfoExtraBuf.biBitCount > 8) {
       palette = 0;
     } else {
-      uint8_t* pPalOut;
       if (palette) {
+        tagRGBQUAD aPaletteScratch[256];
         nResult = SFile::SFileReadFile(hFile, aPaletteScratch, 0x400, nullptr, (LPOVERLAPPED)0x0);
         if (!nResult) {
           return 0;
         }
 
-        nResult = 0;
-        pPalOut = (uint8_t*)((char*)palette + 2);
-        do {
-          pPalOut[-2] = pPalOut[(intptr_t)aPaletteScratch - (intptr_t)palette];
-          pPalOut[-1] = aPaletteScratch[nResult].rgbGreen;
-          *pPalOut = aPaletteScratch[nResult].rgbBlue;
-          pPalOut[1] = '\0';
-          nResult++;
-          pPalOut += 4;
-        } while (nResult < 0x100);
+        for (nResult = 0; nResult < 0x100; nResult++) {
+          ((uint8_t*)palette)[nResult * 4] = aPaletteScratch[nResult].rgbRed;
+          ((uint8_t*)palette)[nResult * 4 + 1] = aPaletteScratch[nResult].rgbGreen;
+          ((uint8_t*)palette)[nResult * 4 + 2] = aPaletteScratch[nResult].rgbBlue;
+          ((uint8_t*)palette)[nResult * 4 + 3] = 0;
+        }
       }
     }
     if (pixels) {
       SFile::SFileSetFilePointer(hFile, sBmpFileHeader.bfOffBits - (palette ? 0x400 : 0) - 0x36, nullptr, 1);
-      nHeight = 0x0;
-      pRawBits = (uint8_t*)SMem::SMemAlloc(aBmpInfoExtraBuf.biSizeImage, ".\\SOURCE\\SBMP.CPP", 0x1ff, 0);
+      uint32_t nHeight = 0x0;
+      uint8_t* pRawBits = (uint8_t*)SMem::SMemAlloc(aBmpInfoExtraBuf.biSizeImage, ".\\SOURCE\\SBMP.CPP", 0x1ff, 0);
       SFile::SFileReadFile(hFile, pRawBits, aBmpInfoExtraBuf.biSizeImage, &nHeight, (LPOVERLAPPED)0x0);
-      rowWidth = (int)((uint32_t)aBmpInfoExtraBuf.biBitCount * aBmpInfoExtraBuf.biWidth) >> 3;
-      srcStride = rowWidth;
+      uint32_t rowWidth = (int)((uint32_t)aBmpInfoExtraBuf.biBitCount * aBmpInfoExtraBuf.biWidth) >> 3;
+      uint32_t srcStride = rowWidth;
       if (rowWidth & 3) {
         srcStride = rowWidth - (rowWidth & 3) + 4;
       }
 
-      SBMP_FlipImage(aBmpInfoExtraBuf.biHeight, pixels, pRawBits, nDstStride, rowWidth, srcStride);
+      SBMP_FlipImage(pixels, pRawBits, nDstStride, rowWidth, srcStride, aBmpInfoExtraBuf.biHeight);
       SMem::SMemFree(pRawBits, ".\\SOURCE\\SBMP.CPP", 0x20b, 0);
       if ((uintptr_t)nHeight < aBmpInfoExtraBuf.biSizeImage) {
         return 0;
@@ -936,7 +922,7 @@ static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * 
         srcStride = rowWidth - (rowWidth & 3) + 4;
       }
 
-      SBMP_FlipImage(*(int*)(pData + 0x16), pixels, pData + (*(int*)(pData + 10) - (bHasPalette ? 0x400 : 0) - 0x36), dstSize, rowWidth, srcStride);
+      SBMP_FlipImage(pixels, pData + (*(int*)(pData + 10) - (bHasPalette ? 0x400 : 0) - 0x36), dstSize, rowWidth, srcStride, *(int*)(pData + 0x16));
     }
 
     return 1;
@@ -948,44 +934,41 @@ static int __stdcall SBMP_EncodeBmp256File(uint8_t * nPalettePtr, uint32_t nSrcS
     DWORD dwPixelBytesWritten;
     BITMAPINFOHEADER sBmpInfoHdr;
     BITMAPFILEHEADER sBmpFileHdr;
-    DWORD dwBytesWritten;
-    SMem::SMemZero(&sBmpFileHdr, 0xe);
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ sBmpFileHdr.bfSize = nSrcStride * height + 0x436;
-    /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ sBmpFileHdr.bfType = 0x4d42;
-    sBmpFileHdr.bfOffBits = 0x436;
-    WriteFile(hFile, (LPCVOID)&sBmpFileHdr, 0xe, &dwBytesWritten, (LPOVERLAPPED)0x0);
-    SMem::SMemZero(&sBmpInfoHdr, 0x28);
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ sBmpInfoHdr.biHeight = height;
-    /* DWORD nNumberOfBytesToWrite for WriteFile */ sBmpInfoHdr.biClrUsed = 0x100;
-    sBmpInfoHdr.biClrImportant = 0x100;
-    /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ sBmpInfoHdr.biSize = 0x28;
-    sBmpInfoHdr.biWidth = nSrcStride;
-    sBmpInfoHdr.biPlanes = 1;
-    sBmpInfoHdr.biBitCount = 8;
-    sBmpInfoHdr.biCompression = 0;
-    sBmpInfoHdr.biSizeImage = nSrcStride * height;
-    WriteFile(hFile, (LPCVOID)&sBmpInfoHdr, 0x28, &dwBytesWritten, (LPOVERLAPPED)0x0);
-    int nPalIndex = 0;
-    uint8_t* pSrcPalEntry = nPalettePtr + 2;
-    do {
-      pSrcPalEntry[(intptr_t)aPalette - (intptr_t)nPalettePtr] = pSrcPalEntry[-2];
-      aPalette[nPalIndex].rgbGreen = pSrcPalEntry[-1];
-      aPalette[nPalIndex].rgbBlue = *pSrcPalEntry;
-      pSrcPalEntry[(intptr_t)aPalette + (1 - (intptr_t)nPalettePtr)] = '\0';
-      nPalIndex++;
-      pSrcPalEntry += 4;
-    } while (nPalIndex < 0x100);
-
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)aPalette, 0x400, &dwBytesWritten, (LPOVERLAPPED)0x0);
-    dwBytesWritten = nSrcStride;
-    if (nSrcStride & 3) {
-      dwBytesWritten = nSrcStride - (nSrcStride & 3) + 4;
+    {
+      DWORD dwBytesWritten;
+      SMem::SMemZero(&sBmpFileHdr, 0xe);
+      /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ sBmpFileHdr.bfSize = nSrcStride * height + 0x436;
+      /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ sBmpFileHdr.bfType = 0x4d42;
+      sBmpFileHdr.bfOffBits = 0x436;
+      WriteFile(hFile, (LPCVOID)&sBmpFileHdr, 0xe, &dwBytesWritten, (LPOVERLAPPED)0x0);
+      SMem::SMemZero(&sBmpInfoHdr, 0x28);
+      /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ sBmpInfoHdr.biHeight = height;
+      /* DWORD nNumberOfBytesToWrite for WriteFile */ sBmpInfoHdr.biClrUsed = 0x100;
+      sBmpInfoHdr.biClrImportant = 0x100;
+      /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ sBmpInfoHdr.biSize = 0x28;
+      sBmpInfoHdr.biWidth = nSrcStride;
+      sBmpInfoHdr.biPlanes = 1;
+      sBmpInfoHdr.biBitCount = 8;
+      sBmpInfoHdr.biCompression = 0;
+      sBmpInfoHdr.biSizeImage = nSrcStride * height;
+      WriteFile(hFile, (LPCVOID)&sBmpInfoHdr, 0x28, &dwBytesWritten, (LPOVERLAPPED)0x0);
+      for (int i = 0; i < 0x100; i++) {
+        aPalette[i].rgbRed = nPalettePtr[i * 4];
+        aPalette[i].rgbGreen = nPalettePtr[i * 4 + 1];
+        aPalette[i].rgbBlue = nPalettePtr[i * 4 + 2];
+        aPalette[i].rgbReserved = 0;
     }
 
-    uint32_t nSize = dwBytesWritten * height;
-    void* dst = SMem::SMemAlloc(nSize, ".\\SOURCE\\SBMP.CPP", 0x294, 0);
-    SBMP_FlipImage(height, dst, (uint8_t*)pixels, nSize, dwBytesWritten, nSrcStride);
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, dst, nSize, &dwPixelBytesWritten, (LPOVERLAPPED)0x0);
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)aPalette, 0x400, &dwBytesWritten, (LPOVERLAPPED)0x0);
+    }
+    int nDstStride = nSrcStride;
+    if (nDstStride & 3) {
+      nDstStride += 4 - (nDstStride & 3);
+    }
+
+    void* dst = SMem::SMemAlloc(nDstStride * height, ".\\SOURCE\\SBMP.CPP", 0x294, 0);
+    SBMP_FlipImage(dst, (uint8_t*)pixels, nDstStride * height, nDstStride, nSrcStride, height);
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, dst, nDstStride * height, &dwPixelBytesWritten, (LPOVERLAPPED)0x0);
     SMem::SMemFree(dst, ".\\SOURCE\\SBMP.CPP", 0x29c, 0);
     return 1;
 }
@@ -1349,7 +1332,7 @@ uint32_t __stdcall SBmpLoadImage(char * pszPath, void * pPalette, void * pPixels
         switch (nFormat) {
           case 1:
             {
-              nDetectedFormat = SBMP_DecodeBmpFile((int*)pnWidth, pPalette, (D2MPQFileStrc*)pszPath, pPixels, iReadResult, (int*)pnHeight, pnBpp);
+              nDetectedFormat = SBMP_DecodeBmpFile((D2MPQFileStrc*)pszPath, pPalette, pPixels, iReadResult, (int*)pnWidth, (int*)pnHeight, pnBpp);
               break;
             }
           case 2:

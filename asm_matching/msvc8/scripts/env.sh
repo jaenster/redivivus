@@ -10,12 +10,27 @@ REPO_ROOT="$(cd "$ORACLE_ROOT/../.." && pwd)"
 SCRIPTS="$ORACLE_ROOT/scripts"
 
 # Where the toolchain lives: Microsoft's packages as downloaded, and the wine
-# prefix they are laid out in. Shared with the sibling Quake II projects'
-# toolchain directory by default, but the prefix is this project's own, so its
-# drive letters cannot collide with theirs.
-: "${VC8_TOOLCHAIN:=$HOME/q2-dev/asm-matching-toolchain}"
+# prefix they are laid out in. When VC8_TOOLCHAIN is unset, the first of the
+# known locations that exists is used; when none exists this stops with an
+# error. A guessed path that does not exist is never used: the build then
+# fails at the precompiled header and objdiff compares the objects of an
+# earlier build, reporting code that was never compiled as identical.
+# setup_toolchain.sh needs VC8_TOOLCHAIN set to where it should lay it out.
+if [ -z "${VC8_TOOLCHAIN:-}" ]; then
+    for _vc8_tc in "$HOME/code/re/diablo2/oracle/toolchain" "$HOME/q2-dev/asm-matching-toolchain"; do
+        if [ -d "$_vc8_tc" ]; then VC8_TOOLCHAIN="$_vc8_tc"; break; fi
+    done
+    unset _vc8_tc
+    if [ -z "${VC8_TOOLCHAIN:-}" ]; then
+        echo "ERROR: VC8_TOOLCHAIN is not set and no toolchain is at a known location" >&2
+        echo "  ($HOME/code/re/diablo2/oracle/toolchain, $HOME/q2-dev/asm-matching-toolchain)." >&2
+        echo "  Set VC8_TOOLCHAIN to the toolchain directory (for setup: where to lay it out)." >&2
+        exit 2
+    fi
+fi
 : "${VC8_SRC:=$VC8_TOOLCHAIN/vc8-src}"
 : "${VC8_WINEPREFIX:=$VC8_TOOLCHAIN/wine-vc8}"
+export VC8_TOOLCHAIN VC8_SRC VC8_WINEPREFIX
 export WINEPREFIX="$VC8_WINEPREFIX"
 export WINEDEBUG=-all BOX64_NOBANNER=1 BOX64_LOG=0
 # The compilers' own CRT must be Microsoft's, not wine's builtin msvcr80: c1xx

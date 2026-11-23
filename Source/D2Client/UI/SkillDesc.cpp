@@ -5674,7 +5674,7 @@ static int __stdcall SKILLDESC_FormatMissileDamage(int32_t nMinDamage, int32_t n
     return 1;
 }
 
-static void __stdcall SKILLDESC_DescLine16_MissileDamage(int32_t nMissileId, D2UnitStrc * pOwner, D2SkillsTxt * pSkillsTxt, int32_t nLevel, uint16_t * wszText) {
+static void __stdcall SKILLDESC_DescLine16_MissileDamage(D2UnitStrc * pOwner, D2SkillsTxt * pSkillsTxt, int32_t nMissileId, int32_t nLevel, uint16_t * wszText) {
     uint8_t byElemType;
     uint16_t wElemLocaleId;
     int32_t nMinDmgRaw;
@@ -5687,7 +5687,7 @@ static void __stdcall SKILLDESC_DescLine16_MissileDamage(int32_t nMissileId, D2U
     nOwner = (int)(nMinDmgRaw * 0x4b);
     ApplyPassiveFireMasteryDamage(pSkillsTxt, &nMinElemRaw, &nOwner);
     ApplyPassiveLightningMasteryDamage(pSkillsTxt, &nMinElemRaw, &nOwner);
-    nMaxDmgRaw = nMinElemRaw >> 8;
+    nMaxDmgRaw = nMinElemRaw >> 8; // steer-ok: folded into the call, 004ec620 drops from MATCH to OUR-1 (measured)
     nMaxDamage = nOwner >> 8;
     byElemType = D2Common::Units::Missile::GetElemTypeFromMissileId(nMissileId);
     switch (byElemType) {
@@ -5705,6 +5705,9 @@ static void __stdcall SKILLDESC_DescLine16_MissileDamage(int32_t nMissileId, D2U
       break;
       case 6:
         wElemLocaleId = 0xdc4;
+      break;
+      case 1:
+        wElemLocaleId = 0x10a1;
       break;
       default:
         wElemLocaleId = 0x10a1;
@@ -6778,7 +6781,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
       SKILLDESC_FormatThreeValues(nCalcA, wDescTextA, 0x10b3, wDescTextB, nSigned, pwszOutput);
       return 1;
       case 0x16:
-        SKILLDESC_DescLine16_MissileDamage((int)pSkillDescLocal->descmissile[0], pUnitLocal, pSkillsTxt, nSkillLevel, pwszOutput);
+        SKILLDESC_DescLine16_MissileDamage(pUnitLocal, pSkillsTxt, (int)pSkillDescLocal->descmissile[0], nSkillLevel, pwszOutput);
       return 1;
       case 0x17:
         nSubMissileId = pSkillDescLocal->descmissile[0];

@@ -1766,7 +1766,7 @@ static void __stdcall D2COMP_ReleaseCOFCacheEntry(int32_t bFreeData, D2CompCofCa
     D2_FREE_AT(pCacheEntry, ".\\Src\\D2Comp.cpp", 0x47a);
 }
 
-static void __stdcall D2COMP_BuildCOFFilePath(int32_t nAnimMode, uint32_t dwWeaponClassToken, char * pszDestPath, int32_t nPlayerClassId) {
+static void __stdcall D2COMP_BuildCOFFilePath(int32_t nPlayerClassId, int32_t nAnimMode, uint32_t dwWeaponClassToken, char * pszDestPath) {
     int* pArchiveHandle;
     char szHitClass[4];
     char szMode[4];
@@ -1837,7 +1837,7 @@ static uint8_t * __stdcall D2COMP_GetOrLoadCOF(D2CompCofListNodeStrc * * ppCOFLi
       D2CompCofCacheEntryStrc* nCOFCacheHandle;
       szCOFFilePath[0] = '\0';
       memset(szCOFFilePath + 1, 0, 0x103);
-      D2COMP_BuildCOFFilePath(nAnimMode, dwWeaponClassToken, szCOFFilePath, nPlayerClassId);
+      D2COMP_BuildCOFFilePath(nPlayerClassId, nAnimMode, dwWeaponClassToken, szCOFFilePath);
       if (szCOFFilePath[0] == '\0') {
         return nullptr;
       }
@@ -3611,7 +3611,7 @@ void __stdcall D2COMP_LoadGuildEmblemIcon(D2CharSelCompStrc * pCompUnit, uint8_t
     pCompUnit->nGuildEmblemColor2 = 0;
 }
 
-static void D2COMP_LoadItemPaletteFile(int32_t nPaletteSlot, char * szPaletteFilename) {
+static void D2COMP_LoadItemPaletteFile(char * szPaletteFilename, int32_t nPaletteSlot) {
     char szFullPath[256];
     D2MPQFileStrc* pFile;
     strcpy(szFullPath, "Data\\Global\\Items\\Palette\\");
@@ -3628,14 +3628,14 @@ static void D2COMP_LoadItemPaletteFile(int32_t nPaletteSlot, char * szPaletteFil
 }
 
 void __stdcall D2COMP_LoadAllItemPalettes() {
-    D2COMP_LoadItemPaletteFile(1, "grey");
-    D2COMP_LoadItemPaletteFile(2, "grey2");
-    D2COMP_LoadItemPaletteFile(3, "gold");
-    D2COMP_LoadItemPaletteFile(4, "brown");
-    D2COMP_LoadItemPaletteFile(5, "greybrown");
-    D2COMP_LoadItemPaletteFile(6, "invgrey");
-    D2COMP_LoadItemPaletteFile(7, "invgrey2");
-    D2COMP_LoadItemPaletteFile(8, "invgreybrown");
+    D2COMP_LoadItemPaletteFile("grey", 1);
+    D2COMP_LoadItemPaletteFile("grey2", 2);
+    D2COMP_LoadItemPaletteFile("gold", 3);
+    D2COMP_LoadItemPaletteFile("brown", 4);
+    D2COMP_LoadItemPaletteFile("greybrown", 5);
+    D2COMP_LoadItemPaletteFile("invgrey", 6);
+    D2COMP_LoadItemPaletteFile("invgrey2", 7);
+    D2COMP_LoadItemPaletteFile("invgreybrown", 8);
 }
 
 void __stdcall D2COMP_InitEmblemColorTables() {

@@ -421,40 +421,33 @@ static D2RoomExStrc * __stdcall DRLGMAZE_AllocRoomAndPickPreset(eDrlgDirection e
 
 // Scans the level's room list for the first non-preset room, allocates a new RoomEx at the maze tile size, attempts to place it adjacent in nDirection via ReplaceRoomWithNewRoom, and on success links both rooms, adds the new room to the level, assigns nPresetIndex/nVariant, and marks it as having a preset DS1. Returns the new room pointer or NULL on failure.
 static D2RoomExStrc * __stdcall DRLGMAZE_AddSpecialPreset(int32_t nDirection, int32_t nPresetIndex, int32_t nVariant, D2DrlgLevelStrc * pLevel) {
-    D2DrlgPresetRoomStrc* pDVar1;
-    BOOL bReplaceOk;
-    D2LvlMazeTxt* pMazeTxt;
-    D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst;
     D2RoomExStrc* pNewRoom = 0;
-    do {
-      if (!pRoomEx) {
-        return pNewRoom;
-      }
+    for (D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
       if (~(pRoomEx->pRoomExData.pRoomExDataPreset->nFlags >> 1) & 1) {
         pNewRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pRoomEx->pLevel, 2);
-        pMazeTxt = pNewRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
+        D2LvlMazeTxt* pMazeTxt = pNewRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
         pNewRoom->sCoords.WorldSize.x = pMazeTxt->SizeX;
         pNewRoom->sCoords.WorldSize.y = pMazeTxt->SizeY;
-        bReplaceOk = DRLGMAZE_PlaceRoomAdjacent(nDirection, pNewRoom, pRoomEx);
-        if (!bReplaceOk) {
+        if (!DRLGMAZE_PlaceRoomAdjacent(nDirection, pNewRoom, pRoomEx)) {
           DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pNewRoom);
           pNewRoom = 0;
         } else {
           DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pRoomEx, pNewRoom, nDirection);
           DrlgRoom::AddRoomExToLevel(pRoomEx->pLevel, pNewRoom);
           DRLGMAZE_PickRoomPreset(pRoomEx, 1);
-          pDVar1 = pNewRoom->pRoomExData.pRoomExDataPreset;
-          pDVar1->nFlags |= 2;
-          pDVar1->nLevelPrest = nPresetIndex;
-          pDVar1->nPickedFile = nVariant;
+          D2DrlgPresetRoomStrc* pPreset = pNewRoom->pRoomExData.pRoomExDataPreset;
+          pPreset->nFlags |= 2;
+          pPreset->nLevelPrest = nPresetIndex;
+          pPreset->nPickedFile = nVariant;
         }
+
         if (pNewRoom) {
-          return pNewRoom;
+          break;
         }
       }
+    }
 
-      pRoomEx = pRoomEx->pRoomExNext;
-    } while (true);
+    return pNewRoom;
 }
 
 // DRLG maze generator: builds a closed rectangular ring/grid of maze RoomEx blocks starting from pLevel->pRoomExFirst. Allocates rooms (DRLGROOMEX_AllocRoomEx), sizes them from the maze .txt (D2LvlMazeTxt SizeX/SizeY), and links them in the four cardinal directions (dir codes 1/0/3/2) via ReplaceRoomWithNewRoom + DRLGROOMEX_AllocNodesForBothRoomEx, freeing rooms whose placement fails. nGridSize sets the side length (e.g. 2 => 2x2). Finally closes the loop by linking the last room back to the first and picks presets for each room.
@@ -1374,35 +1367,30 @@ D2RoomExStrc * __fastcall DRLGMAZE_FindBottomMostRoom(D2DrlgLevelStrc * pLevel) 
 }
 
 // Finds the room in pLevel whose pRoomExData preset ID matches pDrlgReplaceRoom->nSourceLevelPrestId and replaces it in-place with the destination preset/file IDs from pDrlgReplaceRoom. If no matching room exists, falls back to ReplaceRoomWith to allocate a new adjacent room. Increments *pRoll (wrapping at 4) after any successful replacement.
-static uint32_t * __stdcall ReplaceRoom(D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, D2DrlgLevelStrc * pLevel, uint32_t * pRoll) {
-    uint32_t nNextRoll;
+static void __stdcall ReplaceRoom(D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, D2DrlgLevelStrc * pLevel, uint32_t * pRoll) {
     D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst;
-    int32_t nDestPresetId = pDrlgReplaceRoom->nDestLevelPrestId;
     int32_t nDestPickedFile = pDrlgReplaceRoom->nDestPickedFile;
-    do {
-      D2DrlgPresetRoomStrc* pDVar1;
-      if (!pRoomEx) {
-        DRLGMAZE_AddSpecialPreset(pDrlgReplaceRoom->nDirection, nDestPresetId, nDestPickedFile, pLevel);
+    int32_t nDestPresetId = pDrlgReplaceRoom->nDestLevelPrestId;
+    for (; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
+      D2DrlgPresetRoomStrc* pPreset = pRoomEx->pRoomExData.pRoomExDataPreset;
+      if (~(pPreset->nFlags >> 1) & 1 && pPreset->nLevelPrest == pDrlgReplaceRoom->nSourceLevelPrestId) {
         break;
       }
-
-      pDVar1 = pRoomEx->pRoomExData.pRoomExDataPreset;
-      if (~(pDVar1->nFlags >> 1) & 1 && pDVar1->nLevelPrest == pDrlgReplaceRoom->nSourceLevelPrestId) {
-        pDVar1->nFlags |= 2;
-        pDVar1->nLevelPrest = nDestPresetId;
-        pDVar1->nPickedFile = nDestPickedFile;
-        break;
-      }
-
-      pRoomEx = pRoomEx->pRoomExNext;
-    } while (true);
-
-    if (pRoll) {
-      nNextRoll = (int)(*pRoll + 1) % 4;
-      *pRoll = nNextRoll;
     }
 
-    return pRoll;
+    if (pRoomEx) {
+      D2DrlgPresetRoomStrc* pPreset = pRoomEx->pRoomExData.pRoomExDataPreset;
+      pPreset->nFlags |= 2;
+      pPreset->nLevelPrest = nDestPresetId;
+      pPreset->nPickedFile = nDestPickedFile;
+    } else {
+      DRLGMAZE_AddSpecialPreset(pDrlgReplaceRoom->nDirection, nDestPresetId, nDestPickedFile, pLevel);
+    }
+
+    if (pRoll) {
+      *pRoll = (int)(*pRoll + 1) % 4;
+    }
+
 }
 
 // DRLG maze room-placement routine for the Act 1 Caves level family. Advances the level RNG seed and derives a 0-3 roll, then applies up to several ReplaceRoom passes from per-level replacement tables: a base pass (gaDrlgCavesReplacements_A) plus a level-specific pass (table B for eD2LevelId 8, else C), and extra passes for level 9 (table D) and level 10 (table E). Mutates pLevel's room layout in place. __fastcall with pLevel in ESI.

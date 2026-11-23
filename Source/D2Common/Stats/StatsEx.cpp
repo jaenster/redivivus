@@ -218,7 +218,7 @@ static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatList
 }
 
 // Binary-searches the base stat array of pStatList for a packed stat key (wStatIndex:wSubIndex = nParam). If found and the ItemStatCost entry has FMIN flag set, the stat list is owned by a player/monster unit, and the raw value is below the minaccr threshold, returns minaccr left-shifted by valshift instead. Otherwise returns the raw stat value, or 0 if not found. Uses a custom calling convention (pStatList in EBX, nParam in EDI).
-static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2ItemStatCostTxt * pItemStatCostLine, D2StatListExStrc * pStatList, int32_t nStatKey) {
+static int32_t __stdcall STATLIST_LookupBaseStatWithMinAccr(D2StatListExStrc * pStatList, int32_t nStatKey, D2ItemStatCostTxt * pItemStatCostLine) {
     D2StatInfoStrc* pStatInfo = &pStatList->sStatList.sBaseStats;
     long int nStatIdx = STATLIST_BinarySearchStatById(nStatKey, pStatInfo);
     D2StatStrc* pDVar1 = nStatIdx >= 0 ? pStatInfo->pStatInfo + nStatIdx : nullptr;
@@ -485,7 +485,7 @@ int32_t __stdcall STATLIST_GetStatFromBaseArray(D2StatListExStrc * pStatList, eD
       return 0;
     }
 
-    int32_t nStatValue = STATLIST_LookupBaseStatWithMinAccr(pItemStatCostTxt, pStatList, (eUnitStat << 0x10) + (uint32_t)nLayer);
+    int32_t nStatValue = STATLIST_LookupBaseStatWithMinAccr(pStatList, (eUnitStat << 0x10) + (uint32_t)nLayer, pItemStatCostTxt);
     return nStatValue;
 }
 
@@ -502,7 +502,7 @@ int32_t __stdcall SERVER_GetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, 
       return 0;
     }
 
-    int32_t nStatValue = STATLIST_LookupBaseStatWithMinAccr(pItemStatCostTxt, pUnit->pStatsEx, (eUnitStat << 0x10) + (uint32_t)nLayer);
+    int32_t nStatValue = STATLIST_LookupBaseStatWithMinAccr(pUnit->pStatsEx, (eUnitStat << 0x10) + (uint32_t)nLayer, pItemStatCostTxt);
     return nStatValue;
 }
 
@@ -1105,7 +1105,7 @@ int32_t __stdcall STATLIST_GetMaxDurabilityFromUnit(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    int32_t nMaxDurability = STATLIST_LookupBaseStatWithMinAccr(pItemStatCostLine, pStatList, 0x490000);
+    int32_t nMaxDurability = STATLIST_LookupBaseStatWithMinAccr(pStatList, 0x49 << 0x10, pItemStatCostLine);
     if (!nMaxDurability) {
       return 0;
     }
@@ -1116,7 +1116,7 @@ int32_t __stdcall STATLIST_GetMaxDurabilityFromUnit(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    /* ID 73 = maxdurability */ nMaxDurability = STATLIST_GetStatValueByKey(pItemStatCostLine, pStatList, 0x490000);
+    /* ID 73 = maxdurability */ nMaxDurability = STATLIST_GetStatValueByKey(pItemStatCostLine, pStatList, 0x49 << 0x10);
     return nMaxDurability;
 }
 

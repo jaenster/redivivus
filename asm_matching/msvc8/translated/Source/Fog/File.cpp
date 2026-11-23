@@ -275,9 +275,9 @@ LONG __stdcall ERRORMANAGER_UnhandledExceptionFilter(_EXCEPTION_POINTERS * pExce
     }
 
     CRASH_GetExceptionName(szExceptionName, pExceptionPointers->ExceptionRecord->ExceptionCode);
-    sCrashReport.pszMessage = aMessageBuffer;
     aMessageBuffer[0] = '\0';
     sCrashReport.pszExceptionName = szExceptionName;
+    sCrashReport.pszMessage = aMessageBuffer;
     sCrashReport.dwThreadId = GetCurrentThreadId();
     sCrashReport.pExceptionPointers = pExceptionPointers;
     sCrashReport.apFrameAddrs = 0;

@@ -317,7 +317,7 @@ static void __stdcall SUNITINACTIVE_SerializeAndDeactivateItem(D2InactiveUnitLis
 
 // Locates and removes an inactive monster record matching nClassId (record +8, stored from pUnit->nClassId by SUNITINACTIVE_DeactivateMonster at 005422b1) from the bucket list indexed by byActNo in the game's inactive monster table. On match: unlinks the node, clears its minion list via ClearMinionList, frees its AI/spawn-point list, and frees the record. Searches all D2InactiveUnitListStrc chained entries in the bucket.
 // @sourcefile .\UNIT\SUnitInactive.cpp
-static void SUNITINACTIVE_RemoveInactiveMonsterByClassId(uint8_t byActNo, ::SGAMEDATA * pGame, uint16_t nClassId) {
+static void SUNITINACTIVE_RemoveInactiveMonsterByClassId(::SGAMEDATA * pGame, uint16_t nClassId, uint8_t byActNo) {
     D2InactiveMonsterRecordStrc* pCurMonster;
     D2InactiveMonsterRecordStrc** pNextLink;
     D2InactiveUnitListStrc* pInactiveList = pGame->pInactiveUnitList[byActNo];
@@ -1436,46 +1436,28 @@ void __fastcall SUNITINACTIVE_FreeAllInactiveLists(::SGAMEDATA * pGame) {
 // Removes a single inactive unit record from the per-act inactive list by unit type and class ID. For monsters (nUnitType==1) delegates to SUNITINACTIVE_RemoveInactiveMonsterByClassId; for other types walks the linked list and frees the matching D2InactiveUnitRecordStrc from the game memory pool.
 // @sourcefile .\UNIT\SUnitInactive.cpp
 void __fastcall SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(::SGAMEDATA * pGame, uint16_t nUnitType, uint16_t nClassId, uint8_t byActNo) {
-    D2InactiveUnitRecordStrc* pCurRecord;
-    D2InactiveUnitRecordStrc* pNextRecord;
     if (nUnitType == 1) {
-      SUNITINACTIVE_RemoveInactiveMonsterByClassId(byActNo, pGame, nClassId);
+      SUNITINACTIVE_RemoveInactiveMonsterByClassId(pGame, nClassId, byActNo);
       return;
     }
 
-    D2InactiveUnitListStrc* pCurListNode = pGame->pInactiveUnitList[byActNo];
-    if (!pCurListNode) {
-      return;
-    }
-
-    do {
-      D2InactiveUnitRecordStrc* pPrevRecord;
-      pPrevRecord = 0;
-      if (pCurListNode->pInactiveUnits) {
-        pNextRecord = pCurListNode->pInactiveUnits;
-        do {
-          pCurRecord = pNextRecord;
-          if (pCurRecord->eUnitType == (uint32_t)nUnitType && pCurRecord->nClassId == (uint32_t)nClassId) {
-            if (pCurRecord == pCurListNode->pInactiveUnits) {
-              pCurListNode->pInactiveUnits = pCurRecord->pNext;
-            } else {
-              pPrevRecord->pNext = pCurRecord->pNext;
-            }
-
-            D2_FREE_POOL_AT(pGame->pMemoryPool, pCurRecord, ".\\UNIT\\SUnitInactive.cpp", 0x324);
-            return;
+    for (D2InactiveUnitListStrc* pCurListNode = pGame->pInactiveUnitList[byActNo]; pCurListNode; pCurListNode = pCurListNode->pNext) {
+      D2InactiveUnitRecordStrc* pPrevRecord = nullptr;
+      for (D2InactiveUnitRecordStrc* pCurRecord = pCurListNode->pInactiveUnits; pCurRecord; pCurRecord = pCurRecord->pNext) {
+        if (pCurRecord->eUnitType == nUnitType && pCurRecord->nClassId == nClassId) {
+          if (pCurRecord == pCurListNode->pInactiveUnits) {
+            pCurListNode->pInactiveUnits = pCurRecord->pNext;
+          } else {
+            pPrevRecord->pNext = pCurRecord->pNext;
           }
 
-          pNextRecord = pCurRecord->pNext;
-          pPrevRecord = pCurRecord;
-        } while (pCurRecord->pNext);
-      }
+          D2_FREE_POOL_AT(pGame->pMemoryPool, pCurRecord, ".\\UNIT\\SUnitInactive.cpp", 0x324);
+          return;
+        }
 
-      pCurListNode = pCurListNode->pNext;
-      if (!pCurListNode) {
-        return;
+        pPrevRecord = pCurRecord;
       }
-    } while (true);
+    }
 }
 
 // The flag bit as the original's header getter returns it: a value of its own, tested in a register.

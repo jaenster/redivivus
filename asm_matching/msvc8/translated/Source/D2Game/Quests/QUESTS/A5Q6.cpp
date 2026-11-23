@@ -571,7 +571,7 @@ void __fastcall Q36_Callback_08_CompleteQuest(D2QuestDataStrc * pQuestData, D2Qu
 
 // A5Q6 Eve of Destruction. Sends the 0x50 "quest special" packet (quest 0x24) to a player's client, carrying the A5Q6-specific field (the randomly-rolled monster id from Objects_InitFn79). Used to sync the quest's special data to the client.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q6.cpp
-static void Q36_SendQuestSpecialPacket(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
+static void Q36_SendQuestSpecialPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nSendResult;
     D2GSPacketSrv0x50 sPacket;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q6.cpp", 0x243);
@@ -584,7 +584,7 @@ static void Q36_SendQuestSpecialPacket(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) 
 
 // A5Q6 Eve of Destruction. Thin per-player iterate wrapper around Q36_SendQuestSpecialPacket (sends the 0x50 quest-special packet to each player).
 BOOL __fastcall Q36_SendQuestSpecialPacketCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
-    Q36_SendQuestSpecialPacket(pUnit, pGame);
+    Q36_SendQuestSpecialPacket(pGame, pUnit);
     return 0;
 }
 
@@ -593,20 +593,18 @@ BOOL __fastcall Q36_SendQuestSpecialPacketCallback(::SGAMEDATA * pGame, D2UnitSt
 void __fastcall Q36_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL _bQuestState;
     bool bQuestState;
-    ::SGAMEDATA* pGame;
     D2BitBufferStrc* pBitBuffer;
-    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel; // steer-ok: the original reads it before the special-packet call; folded, 0058e190 goes from INSN_COUNT_MATCH to OUR-2 (measured)
     int nIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     if (nIndex == 0x6d) {
-      Q36_SendQuestSpecialPacket(pQuestArgs->pPlayer, pQuestArgs->pGame);
+      Q36_SendQuestSpecialPacket(pQuestArgs->pGame, pQuestArgs->pPlayer);
     }
     if (nOldLevel == 0x6d) {
       D2UnitDataPlayerStrc* pPlayerData;
       QUESTGUID_RemovePlayerFromQuest(pQuestData, pQuestArgs);
       if (pQuestData->nStateFlag == 2) {
-        pGame = pQuestArgs->pGame;
         pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-        pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+        pBitBuffer = pPlayerData->pQuestRecord[pQuestArgs->pGame->nDifficulty];
         /* GetQuestState(QUEST_EveOfDestruction, ==1 Completed) — abort
                          accept-progression if already done */ _bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
         if (_bQuestState == 1) {

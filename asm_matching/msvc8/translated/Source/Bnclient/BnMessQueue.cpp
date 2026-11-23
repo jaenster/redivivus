@@ -22,8 +22,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::BnMessQueue) == 0x12c, "D2_NEW_AT(B
 #endif
 
 
-static ::BnMessQueue * nLobbyChatCurrentMessage = 0; D2_STATIC_GUARD(nLobbyChatCurrentMessage, "nLobbyChatCurrentMessage");
-static ::BnMessQueue * nLobbyChatQueueMessages = 0; D2_STATIC_GUARD(nLobbyChatQueueMessages, "nLobbyChatQueueMessages");
+::BnMessQueue * nLobbyChatCurrentMessage = 0; D2_STATIC_GUARD(nLobbyChatCurrentMessage, "nLobbyChatCurrentMessage");
+::BnMessQueue * nLobbyChatQueueMessages = 0; D2_STATIC_GUARD(nLobbyChatQueueMessages, "nLobbyChatQueueMessages");
 
 namespace Bnclient {
 
@@ -102,22 +102,22 @@ BOOL __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage) 
 
 // Dequeues next Battle.net lobby chat message. Thread-safe dequeue from global linked list (nLobbyChatCurrentMessage). Copies message buffer to output, returns data size. Returns 0 if queue empty.
 size_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBufferOut) {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
-    ::BnMessQueue* pBVar2 = nLobbyChatCurrentMessage;
-    if (nLobbyChatCurrentMessage) {
-      size_t nMessageSize;
-      memcpy(pBufferOut, nLobbyChatCurrentMessage->bBuffer, nLobbyChatCurrentMessage->nDataSize);
-      *pMessageTypeOut = pBVar2->nZero;
-      nMessageSize = pBVar2->nDataSize;
-      pBVar2 = pBVar2->pNext;
+    size_t nMessageSize;
+    EnterCriticalSection(&lpCriticalSection_00882004);
+    ::BnMessQueue* pMessage = nLobbyChatCurrentMessage;
+    if (pMessage) {
+      memcpy(pBufferOut, pMessage->bBuffer, pMessage->nDataSize);
+      *pMessageTypeOut = pMessage->nZero;
+      nMessageSize = pMessage->nDataSize;
+      ::BnMessQueue* pNext = pMessage->pNext;
       D2_FREE_AT(nLobbyChatCurrentMessage, ".\\BnMessQueue.cpp", 0x86);
-      nLobbyChatCurrentMessage = pBVar2;
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882004);
-      return nMessageSize;
+      nLobbyChatCurrentMessage = pNext;
+    } else {
+      nMessageSize = 0;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882004);
-    return 0;
+    LeaveCriticalSection(&lpCriticalSection_00882004);
+    return nMessageSize;
 }
 
 int __stdcall BNMESSQUEUE_ClearAll() {

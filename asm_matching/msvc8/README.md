@@ -87,8 +87,9 @@ translation the export ships in `translated/` instead.
   MSI file key; `oracle-zig msi-paths` resolves each to
   its install path, and `vc8-layout` and `psdk-layout` lay the
   trees out. The
-  result, in its own wine prefix (`~/q2-dev/asm-matching-toolchain/wine-vc8`,
-  override with `VC8_TOOLCHAIN` / `VC8_WINEPREFIX`):
+  result, in its own wine prefix (`$VC8_TOOLCHAIN/wine-vc8`; `VC8_TOOLCHAIN` defaults to the
+  first of `~/code/re/diablo2/oracle/toolchain` and `~/q2-dev/asm-matching-toolchain` that
+  exists, and the scripts stop with an error when neither does; setup needs it set):
 
   ```
   C:\vc8\rtm\{bin,include,lib}   cl.exe 14.00.50727.42

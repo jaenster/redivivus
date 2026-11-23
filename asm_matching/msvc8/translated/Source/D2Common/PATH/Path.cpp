@@ -296,17 +296,15 @@ static void __stdcall DRLGPATH_SetPathPosition(POINT tFixed, D2RoomStrc * pRoom,
 
 // DRLGPATH_ClearPathPosition - Zeroes out a dynamic path's world and screen coordinates, resets path points, removes the unit from its room, and sets the pending-room-change flag (0x2).
 void __stdcall DRLGPATH_ClearPathPosition(D2DynamicPathStrc * pDynamicPath) {
-    pDynamicPath->Coords.tFixed.x = 0;
-    pDynamicPath->ScreenPos.x = 0;
-    D2RoomStrc* pDVar1 = pDynamicPath->pRoom;
-    pDynamicPath->Coords.tFixed.y = 0;
-    pDynamicPath->ScreenPos.y = 0;
+    static POINT gCoord_Dummy; D2_STATIC_GUARD_BSS(gCoord_Dummy, "D2Common::PATH::Path::DRLGPATH_ClearPathPosition::gCoord_Dummy");
+    pDynamicPath->Coords.tFixed = gCoord_Dummy;
+    pDynamicPath->ScreenPos = gCoord_Dummy;
     pDynamicPath->dwPathPoints = 0;
-    if (!pDVar1) {
+    if (!pDynamicPath->pRoom) {
       return;
     }
 
-    pDynamicPath->pRoomNext = pDVar1;
+    pDynamicPath->pRoomNext = pDynamicPath->pRoom;
     Unit::RemoveUnitFromRoom(pDynamicPath->pOwner);
     pDynamicPath->nFlags |= 2;
 }
