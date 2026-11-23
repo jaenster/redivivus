@@ -24,7 +24,7 @@ void __stdcall MISC_SafeStrncpy(char * szText, size_t nSize) {
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pchar (EBX): char*
-static void __fastcall StoreLogging(char * szFormat, va_list pArgs, FILE * pFile, uint32_t nThreadId, uint32_t nLogLevel, uint32_t nComponent, uint32_t nSubsystem, uint32_t nSequence, char * szContext) {
+static void __fastcall StoreLogging(FILE * pFile, uint32_t nThreadId, uint32_t nLogLevel, uint32_t nComponent, uint32_t nSubsystem, char * szContext, uint32_t nSequence, char * szFormat, va_list pArgs) {
     size_t nHeaderLen;
     int nMessageLen;
     char* szOutput;
@@ -63,7 +63,7 @@ static void __fastcall StoreLogging(char * szFormat, va_list pArgs, FILE * pFile
 void LOGGING_FilePrintf(FILE * pFile, uint32_t dwGame, uint32_t dwFrame, uint32_t dwClient, uint32_t dwLogType, char * szFilename, uint32_t nLine, char * szFormatString, ...) {
     va_list __va;
     va_start(__va, szFormatString);
-    StoreLogging(szFormatString, __va, pFile, dwGame, dwFrame, dwClient, dwLogType, nLine, szFilename);
+    StoreLogging(pFile, dwGame, dwFrame, dwClient, dwLogType, szFilename, nLine, szFormatString, __va);
 }
 
 void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLogType, char * szFilename, int32_t nLine, char * szFormatString, ...) {
@@ -74,7 +74,7 @@ void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLo
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0096ca30);
-    StoreLogging(szFormatString, __va, pLOGFILE, nGame, nFrame, nClient, nLogType, nLine, szFilename);
+    StoreLogging(pLOGFILE, nGame, nFrame, nClient, nLogType, szFilename, nLine, szFormatString, __va);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0096ca30);
 }
 
