@@ -2524,18 +2524,19 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInvento
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pGridInfo = pItemData->sInvNode.pNextItemInPage;
+        pGridInfo = pNode->pNextItemInPage;
       }
     } else {
       uint32_t nPosX;
       scan_for_match:
       if (pGridInfo) {
         while (true) {
-          if (pGridInfo->nClassId == nInventory) {
+          if (GetClassIdInline(pGridInfo) == nInventory) {
             eUnitType = pGridInfo->eUnitType;
             if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
               nPosX = pGridInfo->pPath.pStaticPath->nPosX;
@@ -2558,11 +2559,12 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInvento
           if (!pItemData) {
             break;
           }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
+          D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+          if (!pNode) {
             return nullptr;
           }
 
-          pGridInfo = pItemData->sInvNode.pNextItemInPage;
+          pGridInfo = pNode->pNextItemInPage;
           if (!pGridInfo) {
             return nullptr;
           }
