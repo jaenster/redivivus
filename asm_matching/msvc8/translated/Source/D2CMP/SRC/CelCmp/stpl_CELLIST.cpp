@@ -222,7 +222,7 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLI
       pBucketSlot = pBlock;
       do {
         nNext = &pBucketSlot->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)nNext + (int)this->m_data);
+        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)nNext + (intptr_t)this->m_data);
         if (puVar1) {
           pNewTerminator = puVar1 + 1;
           *pNewTerminator = 0;
@@ -696,7 +696,7 @@ template<> __declspec(noinline) inline void TSGrowableArray<CELLIST>::ReallocDat
       ::CELLIST* nNewNodeBase;
       pFreeListSlot = &pOldBlock->m_frames.m_terminator;
       do {
-        nNewNodeBase = (::CELLIST*)(-0x30 - (intptr_t)pOldBlock + (intptr_t)pFreeListSlot + (int)this->m_data);
+        nNewNodeBase = (::CELLIST*)(-0x30 - (intptr_t)pOldBlock + (intptr_t)pFreeListSlot + (intptr_t)this->m_data);
         if (nNewNodeBase) {
           nNewNodeBase->m_linktoslot.m_prevlink = 0;
           nNewNodeBase->m_linktoslot.m_next = 0;
@@ -972,7 +972,7 @@ template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* __fastcall TSHashTableR
 
 template<> TSExportTableSimple<::CELLIST, HCELLIST__*, 0>* TSExportTableSimple<CELLIST, HCELLIST__*, 0>::Constructor() {
     this->TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>::Constructor();
-    this->nSequence = ~(uint32_t)this & 0xfffffff;
+    this->nSequence = ~(uint32_t)(uintptr_t)this & 0xfffffff;
     this->pVtable = (TSHashTable<::CELLIST, HASHKEY_NONE>::Vtable*)(void*)TSExportTableSimple<::CELLIST, HCELLIST__*, 0>::vftable;
     this->bWrapped = 0;
     return this;
@@ -1021,7 +1021,7 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor
 
 template<> TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>* TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::Constructor() {
     this->TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>::Constructor();
-    /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ this->nSequence = ~(uint32_t)this & 0xfffffff;
+    /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ this->nSequence = ~(uint32_t)(uintptr_t)this & 0xfffffff;
     this->bWrapped = 0;
     this->pVtable = (TSHashTable<::CELLIST, HASHKEY_NONE>::Vtable*)(void*)TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::vftable;
     InitializeCriticalSection(&this->tSync.m_critsect);

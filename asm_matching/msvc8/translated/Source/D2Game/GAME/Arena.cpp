@@ -535,7 +535,7 @@ void __fastcall ARENA_SetOrClearFlags(::SGAMEDATA * pGame, uint32_t value, BOOL 
     pArenaCtrl->eArenaFlags &= ~value;
 }
 
-BOOL __stdcall NullSub() {
+BOOL __fastcall NullSub(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     return 0;
 }
 

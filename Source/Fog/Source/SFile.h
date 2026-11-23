@@ -112,7 +112,7 @@ int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot);
 uint32_t * __fastcall Unreferenced_00407260(uint32_t * pData);
 char * __fastcall Unreferenced_00407270(char * pPathStorage);
 int __fastcall Unreferenced_00407280(int param_1);
-int __fastcall Unreferenced_00407290(int param_1);
+int __fastcall Unreferenced_00407290(intptr_t param_1);
 int32_t __thiscall SFILE_CalculateBufferOffset(int32_t pThis, int32_t nBufferOffset);
 char * ERRORMANAGER_SprintfToBuffer(char * szText1, char * szText2, ...);
 char * ERRORMANAGER_SnprintfTerminated(char * szText1, size_t nSize, char * szText2, ...);

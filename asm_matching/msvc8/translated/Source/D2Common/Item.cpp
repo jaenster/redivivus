@@ -19,7 +19,7 @@ static int gaSetItemBonusStates[6] = { 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa }; D2_
 namespace D2Common {
 
 // Enables/disables the partial-set-bonus states on a set item according to how many set pieces are currently equipped. Only acts on quality==5 (set) items whose setitems.txt addFunc is nonzero. For addFunc==1 it iterates the set's other members and toggles each gaSetItemBonusStates entry disabled/enabled via STATLIST_ToggleStateDisabled based on the corresponding bit in nEquippedMask (the equipped-pieces bitmask). For addFunc==2 it derives a piece count and enables the first N bonus states while disabling the rest. Returns 1 if a set-bonus update was applied, 0 otherwise.
-void __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedMask) {
+BOOL __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedMask) {
     // Static local variables (originally global data)
     static int gnItemQualityByBaseId[64] = {
     0x0,
@@ -88,76 +88,54 @@ void __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedM
     0x6
 }; D2_STATIC_GUARD(gnItemQualityByBaseId, "D2Common::ITEM_UpdateSetItemStates::gnItemQualityByBaseId");
 
-    int32_t _nSetIndex;
-    int16_t nSetIndex;
-    int nBonusIdx;
-    eD2States* pStateEntry;
-    eD2States eState;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
-      return;
+      return FALSE;
     }
-
-    int nQuality = ITEMS::Items::GetItemQuality(pUnit);
-    if (nQuality != 5) {
-      return;
+    if (ITEMS::Items::GetItemQuality(pUnit) != 5) {
+      return FALSE;
     }
 
     D2SetItemsTxt* pSetItemTxt = ITEMS::Items::GetSetItemsLine(pUnit);
     if (!pSetItemTxt) {
-      return;
+      return FALSE;
     }
 
-    uint8_t byBonusFunc = pSetItemTxt->addFunc;
-    if (!byBonusFunc) {
-      return;
-    }
-    if (byBonusFunc != 1) {
-      if (byBonusFunc == 2) {
-        if (nEquippedMask >= 0x40) {
-          nQuality = 0;
-        } else {
-          nQuality = gnItemQualityByBaseId[nEquippedMask];
+    switch (pSetItemTxt->addFunc) {
+      case 0:
+        return FALSE;
+      case 1: {
+        int nSetIndex = ITEMS::Items::ITEM_GetTxtSetItems_setIndex(pUnit);
+        for (int i = 0; i < 6; i++) {
+          int nStateIdx = i;
+          if (i != nSetIndex) {
+            if (i > nSetIndex) {
+              nStateIdx--;
+            }
+            if (nEquippedMask & (1 << i)) {
+              Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, (eD2States)gaSetItemBonusStates[nStateIdx], 0);
+            } else {
+              Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, (eD2States)gaSetItemBonusStates[nStateIdx], 1);
+            }
+          }
         }
-
-        nQuality--;
-        for (nBonusIdx = 0; nBonusIdx < nQuality; nBonusIdx++) {
-          Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, gaSetItemBonusStates[nBonusIdx], 0);
-        }
-
-        if (nQuality < 5) {
-          pStateEntry = (eD2States*)(gaSetItemBonusStates + nQuality);
-          do {
-            Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, *pStateEntry, 1);
-            pStateEntry++;
-          } while ((intptr_t)pStateEntry < (intptr_t)((char*)&gaSetItemBonusStates + 20));
-
-          return;
-        }
+        break;
       }
-    } else {
-      bool bDisabled;
-      _nSetIndex = ITEMS::Items::ITEM_GetTxtSetItems_setIndex(pUnit);
-      nQuality = 0;
-      do {
-        nBonusIdx = nQuality * 4;
-        if (nQuality != _nSetIndex) {
-          if (_nSetIndex < nQuality) {
-            nBonusIdx += -4;
-          }
-
-          bDisabled = !(nEquippedMask & 1 << D2_SHIFT_COUNT(nQuality));
-          if (!bDisabled) {
-            eState = *(eD2States*)((char*)gaSetItemBonusStates + nBonusIdx);
-          } else {
-            eState = *(eD2States*)((char*)gaSetItemBonusStates + nBonusIdx);
-          }
-
-          Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, eState, (uint32_t)bDisabled);
+      case 2: {
+        int nCount = (nEquippedMask >= 0x40 ? 0 : gnItemQualityByBaseId[nEquippedMask]) - 1;
+        for (int i = 0; i < nCount; i++) {
+          Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, (eD2States)gaSetItemBonusStates[i], 0);
         }
-
-        nQuality++;
-      } while (nQuality < 6);
+        if (nCount < 5) {
+          int* pStateEntry = &gaSetItemBonusStates[nCount];
+          do {
+            Stats::StatsEx::STATLIST_ToggleStateDisabled(pUnit, (eD2States)*pStateEntry, 1);
+            pStateEntry++;
+          } while ((intptr_t)pStateEntry < (intptr_t)&gaSetItemBonusStates[5]);
+        }
+        break;
+      }
     }
+    return TRUE;
 }
 
 // Manages a set-bonus stat list on pUnit for the set item pUnit2. nMode=0: allocate (if needed) and apply ITEMMOD_ApplySetBonuses into one of 6 gaSetItemBonusStates slots. nMode=1: locate and free the matching stat list. Guards against applying bonuses to items that are themselves magic-or-better quality.

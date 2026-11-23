@@ -216,7 +216,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<TSExplicitList<
       pNewBuf = pBlock;
       do {
         pNext = &pNewBuf->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)pNext + (int)this->m_data);
+        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)pNext + (intptr_t)this->m_data);
         if (puVar1) {
           pNewTerminator = puVar1 + 1;
           *pNewTerminator = 0;

@@ -743,22 +743,22 @@ BOOL __stdcall D2WINEDITBOX_PlaceCaretAtPoint(D2ControlMsg * pMsg, int nX, int n
     return bCallbackResult;
 }
 
-BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
-    ::D2WinEditBox* pDVar1 = (::D2WinEditBox*)pControlMsg->pControl;
-    if (!pDVar1) {
+BOOL __stdcall Push(D2ControlMsg * pControlMsg)
+{
+    ::D2WinEditBox* pEditBox = (::D2WinEditBox*)pControlMsg->pControl;
+    if (!pEditBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7e5);
       exit(-1);
-    } else {
-      BOOL bResult;
-      if (pDVar1->sControl.neD2FormType != FORM_EditBox) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7e6);
-        exit(-1);
-      }
-
-      bResult = D2WINEDITBOX_PlaceCaretAtPoint(pControlMsg, D2WinMain::nPosX - pDVar1->nInsetX - pDVar1->sControl.dwPosX, pDVar1->sControl.dwSizeY - pDVar1->nInsetY - pDVar1->sControl.dwPosY + D2WinMain::nPosY);
-      return bResult;
     }
+    if (pEditBox->sControl.neD2FormType != FORM_EditBox) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7e6);
+      exit(-1);
+    }
+    int nY = pEditBox->sControl.dwSizeY - pEditBox->nInsetY - pEditBox->sControl.dwPosY + D2WinMain::nPosY; // steer-ok: folded into the call it loses MATCH
+    int nX = D2WinMain::nPosX - pEditBox->nInsetX - pEditBox->sControl.dwPosX; // steer-ok: folded into the call it loses MATCH
+    return D2WINEDITBOX_PlaceCaretAtPoint(pControlMsg, nX, nY);
 }
+
 
 int __stdcall D2WINEDITBOX_FilterDigitChar(uint32_t dwUnused1, uint32_t dwUnused2, char * szText) {
     if (*szText >= '0' && *szText <= '9') {

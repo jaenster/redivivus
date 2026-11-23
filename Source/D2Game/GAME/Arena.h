@@ -64,7 +64,7 @@ eD2ArenaFlags __fastcall ARENA_GetFlags(::SGAMEDATA * pGame);
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall ARENA_TestFlags(::SGAMEDATA * pGame, eD2ArenaFlags eMask);
 void __fastcall ARENA_SetOrClearFlags(::SGAMEDATA * pGame, uint32_t value, BOOL isOr);
-BOOL __stdcall NullSub();
+BOOL __fastcall NullSub(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
 // Returns bit 0x40 of pArenaCtrl->eArenaFlags (no enum name yet); halts (Arena.cpp line 39, ptArena) when there is no arena control.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 BOOL __fastcall ARENA_IsFlag0x40Set(::SGAMEDATA * pGame);

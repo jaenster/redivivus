@@ -930,7 +930,8 @@ void __stdcall PANEL_DrawBeltSlots(int32_t nFrameNumber) {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nPositionY, -1, DRAW_SOLID, nullptr);
 }
 
-static void __stdcall Draw_EquipmentNeedToRepairBody_1(int32_t bIsLeftSide, int32_t nSlotVariant, eD2BodyLocDWORD eEquipSlot, int32_t nRowBase) {
+static void __stdcall Draw_EquipmentNeedToRepairBody_1(int32_t bIsLeftSide, int32_t nSlotVariant, eD2BodyLocDWORD eEquipSlot, int32_t nRowBase)
+{
     D2GfxDataStrc sGfxData;
     int nIconFrame = nRowBase * 0xb;
     switch (eEquipSlot) {
@@ -941,25 +942,21 @@ static void __stdcall Draw_EquipmentNeedToRepairBody_1(int32_t bIsLeftSide, int3
         nIconFrame += 4;
       break;
       case BODYLOC_R_ARM:
-        if (!bIsLeftSide) {
-          if (nSlotVariant) {
-            nIconFrame += 7;
-          } else {
-            nIconFrame += 6;
-          }
-        } else {
+        if (bIsLeftSide) {
           nIconFrame += 10;
+        } else if (nSlotVariant) {
+          nIconFrame += 7;
+        } else {
+          nIconFrame += 6;
         }
       break;
       case BODYLOC_L_ARM:
-        if (!bIsLeftSide) {
-          if (nSlotVariant) {
-            nIconFrame += 5;
-          } else {
-            nIconFrame += 8;
-          }
-        } else {
+        if (bIsLeftSide) {
           nIconFrame += 9;
+        } else if (nSlotVariant) {
+          nIconFrame += 5;
+        } else {
+          nIconFrame += 8;
         }
       break;
       case BODYLOC_BELT:
@@ -967,6 +964,9 @@ static void __stdcall Draw_EquipmentNeedToRepairBody_1(int32_t bIsLeftSide, int3
       break;
       case BODYLOC_FEET:
         nIconFrame += 3;
+      break;
+      case BODYLOC_GLOVES:
+        nIconFrame += 0;
     }
 
     int nOffsetY = 0;

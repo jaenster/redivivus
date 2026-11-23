@@ -846,7 +846,7 @@ void __fastcall NET_D2GS_SERVER_Send_0xA1_0xA2_0xA0_MercExperience(D2ClientStrc 
 }
 
 // Server-to-client skill event: skill id, skill level, caster type+GUID, target type+GUID, two params. Opcode 0xA3.
-void __fastcall NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL(D2ClientStrc * pClient, uint8_t bParam1, uint16_t nSkillId, uint16_t nSkillLevel, uint8_t nCasterType, uint32_t dwValue1, uint8_t nTargetType, uint32_t dwValue2, uint32_t dwValue3, uint32_t dwValue4) {
+void __fastcall NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL(D2ClientStrc * pClient, uint8_t bParam1, uint16_t nSkillId, uint16_t nSkillLevel, int32_t nCasterType, uint32_t dwValue1, int32_t nTargetType, uint32_t dwValue2, uint32_t dwValue3, uint32_t dwValue4) {
     D2GSPacketSrv0xA3 byOpcode;
     memset(&byOpcode, 0, sizeof(byOpcode));
     byOpcode.wSkillId = nSkillId;

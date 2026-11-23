@@ -4422,7 +4422,7 @@ int __thiscall COMPRESS_EncodeBuffer(D2CompressEncoderStrc * pHuffCtx, D2BitStre
     uint32_t nBitsAvail;
     COMPRESS_InitEncoderContext(pHuffCtx, nTableSel);
     pHuffCtx->nReserved00 = (uint32_t)((char)(uintptr_t)nTableSel == '\0');
-    BITSTREAM_WriteBits(pBitStream, (uint8_t)(uint32_t)nTableSel, 8);
+    BITSTREAM_WriteBits(pBitStream, (uint8_t)(uintptr_t)nTableSel, 8);
     while (true) {
       uint32_t nSymbol;
       if (!nSrcLen) {
@@ -4498,7 +4498,7 @@ void __fastcall SCOMP_HuffmanCompress(uint8_t * pBitStreamCtx, uint32_t * pnByte
     D2BitStreamWriterStrc aBitStream;
     LINKEDLIST_InsertAfter(&aBitStream, pBitStreamCtx, *pnBytesWritten);
     HUFFMAN_InitContext(&aHuffCtx);
-    int nBytesWritten = COMPRESS_EncodeBuffer(&aHuffCtx, &aBitStream, pbSrc, nSrcLen, (int**)(uint32_t)*pbTableSel);
+    int nBytesWritten = COMPRESS_EncodeBuffer(&aHuffCtx, &aBitStream, pbSrc, nSrcLen, (int**)(uintptr_t)*pbTableSel);
     *pnBytesWritten = nBytesWritten;
     COMPRESS_DestroyEncoderContext(&aHuffCtx);
 }

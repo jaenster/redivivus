@@ -83,7 +83,7 @@ uint32_t __stdcall CLIENTMODE_WaitForQServerConnection(uint32_t dwUnused);
 void Unreferenced_0044bb70();
 int __stdcall FreeQServer();
 int __stdcall CLIENTMODE_InitializeCallback();
-bool __stdcall GameLoopFuncInitGame(uint32_t dwUnused);
+BOOL __stdcall GameLoopFuncInitGame(uint32_t dwUnused);
 int __fastcall Unreferenced_0044bc10(int param_1, char * param_2);
 // pfModes_StartServer: create/init QServer, connect to server, run MessageGameLoop for required user action; sets player count and globals.
 eD2ClientAppMode __stdcall NET_QServer_StartServer();

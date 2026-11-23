@@ -13,6 +13,15 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#if defined(_WIN64) && !defined(D2_DEFINED_D2SMemLink)
+#define D2_DEFINED_D2SMemLink
+// A free-list link of the Storm heap: the address of the next free block. The
+// block header holds it in 32 bits, beside the heap's 16-bit address tag. On
+// x64 every SMem heap is reserved below 4 GB (SMEM_AllocateHeap), so both still
+// fit and the header keeps its 8-byte layout.
+// The x86 build spells it void * (SMem.cpp), as the original did.
+typedef uint32_t D2SMemLink;
+#endif // D2_DEFINED_D2SMemLink
 
 // Forward declarations
 struct SMemHeapDetailsStrc;
@@ -30,7 +39,11 @@ union D2FogHeapBlockLinkUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
     /* 0x00 */ uint32_t dwHeapSignature;
+#ifdef _WIN64
+    /* 0x00 */ D2SMemLink pNextFree;
+#else
     /* 0x00 */ struct D2FogHeapBlockHdrStrc * pNextFree;
+#endif
 };
 
 #endif // D2_DEFINED_D2FogHeapBlockLinkUnion
@@ -50,7 +63,11 @@ struct D2FogHeapDescStrc {
     /* 0x2C */ uint32_t nCommitted; // committed bytes (VirtualAlloc MEM_COMMIT)
     /* 0x30 */ uint32_t nReserved; // reserved bytes (VirtualAlloc MEM_RESERVE)
     /* 0x34 */ int nLargeBytes; // total bytes in large (VirtualAlloc) allocations
-    /* 0x38 */ void * aFreeBins[9]; // free-list bin heads; bin = min(blockSize>>5, 8)
+#ifdef _WIN64
+    /* 0x38 */ D2SMemLink aFreeBins[9];
+#else
+    /* 0x38 */ void * aFreeBins[9];
+#endif // free-list bin heads; bin = min(blockSize>>5, 8)
     /* 0x5C */ int nSourceLine; // source line passed to SMemCreateHeapMetadata
     /* 0x60 */ char szName[64]; // heap name string (variable length, 64 is minimum alloc)
 };

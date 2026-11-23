@@ -162,14 +162,17 @@ static int32_t UI_GetCursorMaxFrames(int32_t nCursorIndex) {
     return CursorData[nCursorIndex].nMaxFrames << 8;
 }
 
-void __stdcall UI_HandleCursorMouseDown(D2UIMouseMsgStrc * pMsg) {
-    gnCursorInitialized = 0;
+void __stdcall UI_HandleCursorMouseDown(D2UIMouseMsgStrc * pMsg)
+{
     if (pMsg->nWParam == 2) {
+      gnCursorInitialized = 0;
       D2gfx::D2GFX::UpdateOSCursorVisibilty(0);
+    } else {
+      gnCursorInitialized = 0;
     }
 
-    pMsg->dwResult = 0;
     pMsg->bHandled = 0;
+    pMsg->dwResult = 0;
 }
 
 void __stdcall UI_HandleCursorMouseMove(D2UIMouseMsgStrc * pMsgEvent) {

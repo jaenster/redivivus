@@ -49,17 +49,17 @@ size_t __fastcall NET_D2GS_CLIENT_ExtractPacketSize(LPCRITICAL_SECTION * lpCriti
 }
 
 // @sourcefile .\SRC\D2Net.cpp
-void __fastcall NET_D2GS_CLIENT_FreeAllClientD2Packets(LPCRITICAL_SECTION lpCriticalSection, D2OnePacketClientStrc * * pD2PacketClient) {
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
-    D2OnePacketClientStrc* pPacket = *pD2PacketClient;
-    while (pPacket) {
-      pPacket = *pD2PacketClient;
+BOOL __fastcall NET_D2GS_CLIENT_FreeAllClientD2Packets(LPCRITICAL_SECTION lpCriticalSection, D2OnePacketClientStrc * * pD2PacketClient) {
+    EnterCriticalSection(lpCriticalSection);
+    while (*pD2PacketClient) {
+      D2OnePacketClientStrc* pPacket = *pD2PacketClient;
       *pD2PacketClient = pPacket->pD2PacketClientNext;
       D2_FREE_AT(pPacket, ".\\SRC\\D2Net.cpp", 0x5d);
-      pPacket = *pD2PacketClient;
     }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
+    LeaveCriticalSection(lpCriticalSection);
+    return TRUE;
 }
+
 
 }}} // namespace D2Net::SRC::D2Net

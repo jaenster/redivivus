@@ -2326,7 +2326,7 @@ uint16_t * __fastcall SKILLDESC_FormatMagicPrefixDesc(D2UnitStrc * pUnit, D2Gems
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
     uint16_t* pStrEnd = wszText1 + (nStrLen - 1);
     if (wszText1[nStrLen - 1] == L'\n') {
-      pStrEnd = (uint16_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
+      pStrEnd = (uint16_t*)(intptr_t)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
       wszText1[(intptr_t)pStrEnd - 1] = L'\0';
     }
 
@@ -2345,7 +2345,7 @@ uint16_t * __fastcall SKILLDESC_FormatMagicSuffixDesc(D2UnitStrc * pUnit, D2Gems
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
     uint16_t* wszOutputEnd = wszText1 + (nStrLen - 1);
     if (wszText1[nStrLen - 1] == L'\n') {
-      wszOutputEnd = (uint16_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
+      wszOutputEnd = (uint16_t*)(intptr_t)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText1);
       wszText1[(intptr_t)wszOutputEnd - 1] = L'\0';
     }
 
@@ -4016,59 +4016,59 @@ static D2UnitStrc * SKILLDESC_GetSecondaryWeapon(D2UnitStrc * pUnit) {
     return pEquippedWeapon;
 }
 
-static void __stdcall SKILLDESC_CalcDualWieldDamage(D2UnitStrc * pUnit2, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * dwParam1, int32_t * pdwParam3, int32_t * pdwParam4, int32_t * dwParam2, D2SkillStrc * pSkill, pfnSkillDescWeaponDmgCalc pfnCalcWeaponDmg, int32_t dwParam3, D2UnitStrc * pUnit) {
-    uint32_t bIsMissilePotion;
+static BOOL __stdcall SKILLDESC_CalcDualWieldDamage(D2UnitStrc * pUnit2, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * dwParam1, int32_t * pdwParam3, int32_t * pdwParam4, int32_t * dwParam2, D2SkillStrc * pSkill, pfnSkillDescWeaponDmgCalc pfnCalcWeaponDmg, int32_t dwParam3, D2UnitStrc * pUnit) {
     D2UnitStrc* nParam = pUnit;
     D2InventoryStrc* pInventory = pUnit2->pInventory;
     if (!pInventory) {
-      return;
+      return FALSE;
     }
-
-    BOOL bCheck = D2Common::Units::CanDualWield(pUnit2);
-    if (!bCheck) {
-      return;
+    if (!D2Common::Units::CanDualWield(pUnit2)) {
+      return FALSE;
     }
 
     pUnit = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 4);
-    bCheck = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pUnit);
-    if (!bCheck || (bIsMissilePotion = D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_MissilePotion) , bIsMissilePotion != 0)) {
-      pUnit = 0;
-    }
-
-    D2UnitStrc* pActiveWeapon = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
-    bCheck = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pActiveWeapon);
-    if (!bCheck || (bIsMissilePotion = D2Common::ITEMS::Items::ITEMS_IsA(pActiveWeapon, ITEMTYPE_MissilePotion) , bIsMissilePotion != 0)) {
-      pActiveWeapon = 0;
-    }
-    if (!pUnit || !pActiveWeapon) {
-      pActiveWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pInventory);
-      if (pActiveWeapon) {
-        bCheck = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pActiveWeapon);
-        if (bCheck) {
-          D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit2, pActiveWeapon, 1);
-        }
-      }
-
-      pActiveWeapon = 0;
-    } else {
-      pActiveWeapon = SKILLDESC_GetPrimaryWeapon(pUnit2);
-      if (pActiveWeapon) {
-        (*pfnCalcWeaponDmg)(pUnit2, pdwParam3, (uint32_t*)pdwParam4, dwParam2, dwParam3, (int32_t)nParam, pSkill, 0, pActiveWeapon);
+    pUnit = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pUnit) && !D2Common::ITEMS::Items::ITEMS_IsA(pUnit, ITEMTYPE_MissilePotion) ? pUnit : nullptr;
+    D2UnitStrc* pLeftWeapon = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
+    pLeftWeapon = D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pLeftWeapon) && !D2Common::ITEMS::Items::ITEMS_IsA(pLeftWeapon, ITEMTYPE_MissilePotion) ? pLeftWeapon : nullptr;
+    D2UnitStrc* pWeapon;
+    if (pUnit && pLeftWeapon) {
+      pWeapon = SKILLDESC_GetPrimaryWeapon(pUnit2);
+      if (pWeapon) {
+        (*pfnCalcWeaponDmg)(pUnit2, pdwParam3, (uint32_t*)pdwParam4, dwParam2, dwParam3, (int32_t)nParam, pSkill, 0, pWeapon);
       } else {
         *pdwParam3 = 0;
         *pdwParam4 = 0;
       }
 
-      pActiveWeapon = SKILLDESC_GetSecondaryWeapon(pUnit2);
-      if (!pActiveWeapon) {
+      pWeapon = SKILLDESC_GetSecondaryWeapon(pUnit2);
+      if (pWeapon) {
+        (*pfnCalcWeaponDmg)(pUnit2, pdwParam1, (uint32_t*)pdwParam2, dwParam1, dwParam3, (int32_t)nParam, pSkill, 0, pWeapon);
+      } else {
         *pdwParam1 = 0;
         *pdwParam2 = 0;
-        return;
       }
+    } else {
+      pWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pInventory);
+      if (pWeapon && D2Common::ITEMS::Items::ITEM_CheckIfItemIsNotBrokenAndNotDisabled(pWeapon)) {
+        D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit2, pWeapon, 1);
+      }
+
+      (*pfnCalcWeaponDmg)(pUnit2, pdwParam1, (uint32_t*)pdwParam2, dwParam1, dwParam3, (int32_t)nParam, pSkill, 0, nullptr);
     }
 
-    (*pfnCalcWeaponDmg)(pUnit2, pdwParam1, (uint32_t*)pdwParam2, dwParam1, dwParam3, (int32_t)nParam, pSkill, 0, pActiveWeapon);
+    return TRUE;
 }
+
+
+
+
+
+
+
+
+
+
+
 
 static void __stdcall SKILLDESC_CalcDualWieldDmg(D2SkillStrc * pSkill, int32_t * param_1, D2UnitStrc * pUnit, int32_t * pdwParam1, int32_t * pdwParam2, int32_t * pdwParam3, int32_t pUnit2) {
     SKILLDESC_CalcDualWieldDamage(pUnit, pdwParam1, pdwParam2, nullptr, pdwParam3, param_1, nullptr, pSkill, SKILLDESC_CalcAttackRateForWeapon, 0, (D2UnitStrc*)pUnit2);

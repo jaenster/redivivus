@@ -8650,7 +8650,7 @@ struct D2UnitStrc * __stdcall GetCarriedItem(struct D2UnitStrc * pUnit);
 int32_t __stdcall ITEM_GetGUID(struct D2UnitStrc * pUnit);
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
 int32_t __stdcall ITEM_GetItemData_eD2InventoryGridType(struct D2UnitStrc * pUnit);
-void __stdcall FreeRecursiveInventorysWithChilds(struct D2InventoryStrc * pInventory);
+BOOL __stdcall FreeRecursiveInventorysWithChilds(struct D2InventoryStrc * pInventory);
 // Determines whether two units can complete a merc-item trade by making temporary inventory copies. Allocates two scratch inventories from pMemory, copies each unit's inventory into them, then calls INVENTORY_CanTransferMercItems in both directions to find which unit is the buyer. Sets *pbMercIsBuyer accordingly (false = pUnit2 buys, true = pUnit buys). Frees both scratch inventories before returning. Returns 1 if a valid transfer direction was found, 0 otherwise.
 // @sourcefile .\INVENTORY\Inventory.cpp
 BOOL __stdcall INVENTORY_CanItemsBeTraded(struct D2PoolManagerStrc * pMemory, struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, BOOL * pnFailedSide);

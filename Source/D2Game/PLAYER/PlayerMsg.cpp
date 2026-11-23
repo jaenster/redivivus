@@ -3818,7 +3818,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x41_Resurrect(::SGAMEDATA * pGame, D2Un
       return SERVERSTATUS_OK;
     }
 
-    BOOL bArena = GAME::Arena::NullSub();
+    BOOL bArena = GAME::Arena::NullSub(pGame, pUnit);
     SKILLS::SkillsServer::SKILLS_ApplyAllPassiveStates(pUnit);
     nStatVal = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     uint32_t nValue = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
@@ -4149,11 +4149,11 @@ eD2ServerIncomingStatus __fastcall SCMD_0x51_SetHotkey(::SGAMEDATA * pGame, D2Un
       eSkill = nRawSkillData & 0x7fff;
       if ((int)eSkill > D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         eSkill = ~SKILL_Attack;
-      } else if (eSkill != ~SKILL_Attack && ((int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, nHotkeyResult) , !pSkill))) {
+      } else if (eSkill != ~SKILL_Attack && ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || (pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, eSkill, nHotkeyResult) , !pSkill))) {
         return SERVERSTATUS_BAD_PARAMS;
       }
 
-      nHotkeyResult = Player::SetHotkey(pGame, pUnit, nRawSkillData >> 0x10, (uint16_t)eSkill, (uint8_t)(nRawSkillData >> 0xf) & 1, nHotkeyResult);
+      nHotkeyResult = Player::SetHotkey(pGame, pUnit, nRawSkillData >> 0x10, (uint16_t)eSkill, (nRawSkillData >> 0xf) & 1, nHotkeyResult);
       return (nHotkeyResult ? 0xfffffffdU : 0) + SERVERSTATUS_BAD_PARAMS;
     }
 

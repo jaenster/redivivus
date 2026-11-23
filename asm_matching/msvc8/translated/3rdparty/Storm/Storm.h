@@ -12,6 +12,15 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
+#if defined(_WIN64) && !defined(D2_DEFINED_D2SMemLink)
+#define D2_DEFINED_D2SMemLink
+// A free-list link of the Storm heap: the address of the next free block. The
+// block header holds it in 32 bits, beside the heap's 16-bit address tag. On
+// x64 every SMem heap is reserved below 4 GB (SMEM_AllocateHeap), so both still
+// fit and the header keeps its 8-byte layout.
+// The x86 build spells it void * (SMem.cpp), as the original did.
+typedef uint32_t D2SMemLink;
+#endif // D2_DEFINED_D2SMemLink
 
 // Forward declarations
 struct ARGLIST;
@@ -211,7 +220,7 @@ __pragma(pack(push, 1)) struct D2CompressEncoderStrc {
     /* 0x0000 */ uint32_t nReserved00; // field at +0
     /* 0x0004 */ uint32_t nRootWeight; // set to 1 after init (root weight or ready flag)
     /* 0x0008 */ D2CompressHuffNodeStrc aNodePool[515]; // Huffman node pool: 515*24=12360 bytes, ends at +0x304f
-    /* 0x3050 */ int nFreeListBack; // +0x3050: free list intrusive back-link field
+    /* 0x3050 */ intptr_t nFreeListBack; // +0x3050: free list intrusive back-link field
     /* 0x3054 */ struct D2CompressHuffNodeStrc * pFreeListSentinel; // +0x3054: free list sentinel / head
     /* 0x3058 */ struct D2CompressHuffNodeStrc * * ppFreeListTailLink; // +0x3058: ptr-to-tail link in free list
     /* 0x305C */ int nFreeListLinkOff; // +0x305c: intrusive list link base offset
@@ -227,7 +236,11 @@ union D2FogHeapBlockLinkUnion {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
     /* 0x00 */ uint32_t dwHeapSignature;
+#ifdef _WIN64
+    /* 0x00 */ D2SMemLink pNextFree;
+#else
     /* 0x00 */ struct D2FogHeapBlockHdrStrc * pNextFree;
+#endif
 };
 #endif // D2_DEFINED_D2FogHeapBlockLinkUnion
 #ifndef D2_DEFINED_D2FogHeapBlockHdrStrc

@@ -181,7 +181,7 @@ D2QuestDataStrc * __fastcall GetQuestDataByQuestNoInternal(::SGAMEDATA * pGame, 
     return nullptr;
 }
 
-int * __fastcall Unreferenced_00543690(int param_1, int param_2) {
+int * __fastcall Unreferenced_00543690(intptr_t param_1, int param_2) {
     int* piVar1;
     int* piVar2;
     for (piVar1 = *(int**)(param_1 + 0x74); piVar1 && (piVar2 = (int*)*piVar1 , piVar2 != 0); piVar1 = (int*)piVar1[1]) {
@@ -1613,7 +1613,7 @@ BOOL __fastcall QUEST_HasPlayerParticipated(D2QuestDataStrc * pQuestData, int32_
     return 0;
 }
 
-int __fastcall Unreferenced_005452f0(int param_1) {
+int __fastcall Unreferenced_005452f0(intptr_t param_1) {
     return (uint32_t)*(uint16_t*)(param_1 + 0x80);
 }
 

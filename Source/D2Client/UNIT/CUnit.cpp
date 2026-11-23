@@ -1579,7 +1579,7 @@ D2RoomStrc * __fastcall FindRoom(int32_t nX, int32_t nY) {
 
       pRoom = D2Common::DUNGEON::Dungeon::FindRoomBySubtileCoordinates(GAME::Game::sgpDrlgAct, nX, nY);
       if (!pRoom) {
-        Storm::Source::SSTR::SStrPrintf(szErrorMsg, 0x200, "Unable to find room for unit...  hControlUnit:%8x  hUnitRoom:%8x  ghAct:%8x  nX:%d  nY:%d", (uint32_t)pControlUnit, (uint32_t)pUnitRoom, (uint32_t)GAME::Game::sgpDrlgAct, nX, nY);
+        Storm::Source::SSTR::SStrPrintf(szErrorMsg, 0x200, "Unable to find room for unit...  hControlUnit:%8x  hUnitRoom:%8x  ghAct:%8x  nX:%d  nY:%d", (uint32_t)(uintptr_t)pControlUnit, (uint32_t)(uintptr_t)pUnitRoom, (uint32_t)(uintptr_t)GAME::Game::sgpDrlgAct, nX, nY);
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13c);
         exit(-1);
       }

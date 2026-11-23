@@ -4422,7 +4422,7 @@ int __fastcall COMPRESS_EncodeBuffer(D2CompressEncoderStrc * pHuffCtx, int, D2Bi
     uint32_t nBitsAvail;
     vc8_thiscall(COMPRESS_InitEncoderContext)(pHuffCtx, nTableSel);
     pHuffCtx->nReserved00 = (uint32_t)((char)(uintptr_t)nTableSel == '\0');
-    vc8_thiscall(BITSTREAM_WriteBits)(pBitStream, (uint8_t)(uint32_t)nTableSel, 8);
+    vc8_thiscall(BITSTREAM_WriteBits)(pBitStream, (uint8_t)(uintptr_t)nTableSel, 8);
     while (true) {
       uint32_t nSymbol;
       if (!nSrcLen) {
@@ -4498,7 +4498,7 @@ void __fastcall SCOMP_HuffmanCompress(uint8_t * pBitStreamCtx, uint32_t * pnByte
     D2BitStreamWriterStrc aBitStream;
     vc8_thiscall(LINKEDLIST_InsertAfter)(&aBitStream, pBitStreamCtx, *pnBytesWritten);
     HUFFMAN_InitContext(&aHuffCtx);
-    int nBytesWritten = vc8_thiscall(COMPRESS_EncodeBuffer)(&aHuffCtx, &aBitStream, pbSrc, nSrcLen, (int**)(uint32_t)*pbTableSel);
+    int nBytesWritten = vc8_thiscall(COMPRESS_EncodeBuffer)(&aHuffCtx, &aBitStream, pbSrc, nSrcLen, (int**)(uintptr_t)*pbTableSel);
     *pnBytesWritten = nBytesWritten;
     COMPRESS_DestroyEncoderContext(&aHuffCtx);
 }

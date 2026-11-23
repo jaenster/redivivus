@@ -126,7 +126,7 @@ uint32_t * __fastcall SFILE_CopyStreamBuffer4(uint32_t * pDest, int, uint32_t * 
     return pDest;
 }
 
-int __fastcall Unreferenced_00415190(int param_1) {
+int __fastcall Unreferenced_00415190(intptr_t param_1) {
     if (param_1 && *(int*)(param_1 + 0x14c)) {
       return 1;
     }
@@ -134,7 +134,7 @@ int __fastcall Unreferenced_00415190(int param_1) {
     return 0;
 }
 
-int __fastcall Unreferenced_004151b0(int param_1) {
+int __fastcall Unreferenced_004151b0(intptr_t param_1) {
     if (param_1 && *(int*)(param_1 + 0x150)) {
       return 1;
     }
@@ -1590,7 +1590,7 @@ void __fastcall Unreferenced_00416a30(StormLinkedListStrc * pList) {
     pList->head.pNext = ~(uintptr_t)pSVar1;
 }
 
-int __fastcall Unreferenced_00416a90(int param_1) {
+int __fastcall Unreferenced_00416a90(intptr_t param_1) {
     if (param_1 && *(int*)(param_1 + 0x150)) {
       return 1;
     }
@@ -1598,7 +1598,7 @@ int __fastcall Unreferenced_00416a90(int param_1) {
     return 0;
 }
 
-int __fastcall Unreferenced_00416ab0(int param_1) {
+int __fastcall Unreferenced_00416ab0(intptr_t param_1) {
     if (param_1 && *(int*)(param_1 + 0x14c)) {
       return 1;
     }

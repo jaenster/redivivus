@@ -162,7 +162,7 @@ void __fastcall WARDEN_HandleServerPacket(void * pPacket, uint32_t nPacketLen);
 void __fastcall WARDEN_Tick(uint32_t dwTickArg);
 // @sourcefile .\WARDEN\WardenClient.cpp
 void __stdcall WARDEN_Cleanup();
-void __fastcall WARDEN_Initialize(uint32_t dwModuleParam);
+BOOL __fastcall WARDEN_Initialize(uint32_t dwModuleParam);
 void __fastcall WARDEN_SetGlobalFlag(uint32_t dwParam);
 void __fastcall WARDEN_FreeModuleLibraries(struct D2WardenModuleStrc * pModule);
 #endif // D2_MODULE_D2Client

@@ -4693,28 +4693,28 @@ D2UnitStrc * __stdcall INVENTORY_IsItemOwnedBy(D2InventoryStrc * pInventory, D2U
     return nullptr;
 }
 
-void __stdcall FreeRecursiveInventorysWithChilds(D2InventoryStrc * pInventory) {
-    if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
-      return;
+BOOL __stdcall FreeRecursiveInventorysWithChilds(D2InventoryStrc * pInventory) {
+    if (!pInventory) {
+      return 0;
+    }
+    if (pInventory->nSignatureMagic != 0x1020304) {
+      return 0;
     }
 
-    D2UnitStrc* pItem = pInventory->pFirstItem;
     pInventory->pCursorItem = 0;
     pInventory->dwPrimaryWeaponGUID = -1;
-    while (true) {
-      BOOL bRemoveResult;
-      if (!pItem) {
-        return;
+    while (pInventory->pFirstItem) {
+      if (!INVENTORY_RemoveItemFromInventory(pInventory->pFirstItem)) {
+        return 0;
       }
-
-      bRemoveResult = INVENTORY_RemoveItemFromInventory(pInventory->pFirstItem);
-      if (!bRemoveResult) {
-        break;
-      }
-
-      pItem = pInventory->pFirstItem;
     }
+
+    return 1;
 }
+
+
+
+
 
 // Copies the backpack grid (grid index 2) cell array from pUnit's inventory into pInventory. Looks up the inventory page dimensions via GetInventoryPage + GetGridDimensions, ensures both grids exist and have matching Width x Height, then memcpys the source cell pointer array. Returns 1 on success, 0 if either inventory is invalid, grids are missing, or dimensions mismatch.
 static BOOL CopyInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {

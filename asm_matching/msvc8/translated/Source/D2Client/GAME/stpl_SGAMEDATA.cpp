@@ -647,7 +647,7 @@ template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Unreferenced_00451
 
 template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::Constructor() {
     this->TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>::Constructor();
-    this->nSequence = ~(uint32_t)this & 0xfffffff;
+    this->nSequence = ~(uint32_t)(uintptr_t)this & 0xfffffff;
     this->pVtable = (TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Vtable*)(void*)TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>::vftable;
     this->bWrapped = 0;
     return this;
@@ -670,7 +670,7 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 
 template<> TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::Constructor() {
     this->TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>::Constructor();
-    /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ this->nSequence = ~(uint32_t)this & 0xfffffff;
+    /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ this->nSequence = ~(uint32_t)(uintptr_t)this & 0xfffffff;
     this->bWrapped = 0;
     this->pVtable = (TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Vtable*)(void*)TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::vftable;
     InitializeCriticalSection(&this->tSync.m_critsect);

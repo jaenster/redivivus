@@ -27,7 +27,7 @@ void __stdcall NET_GetLocalIPAddressString(char * szIpAddressOut);
 // @sourcefile .\SRC\D2Net.cpp
 size_t __fastcall NET_D2GS_CLIENT_ExtractPacketSize(LPCRITICAL_SECTION * lpCriticalSection, struct D2OnePacketClientStrc * * pD2OnePacketClient, char * pBytes, size_t nSize);
 // @sourcefile .\SRC\D2Net.cpp
-void __fastcall NET_D2GS_CLIENT_FreeAllClientD2Packets(LPCRITICAL_SECTION lpCriticalSection, struct D2OnePacketClientStrc * * pD2PacketClient);
+BOOL __fastcall NET_D2GS_CLIENT_FreeAllClientD2Packets(LPCRITICAL_SECTION lpCriticalSection, struct D2OnePacketClientStrc * * pD2PacketClient);
 #endif // D2_MODULE_D2Net
 
 }}} // namespace D2Net::SRC::D2Net

@@ -86,7 +86,7 @@ void __stdcall _NullSubRet4_Unref_006bc850(uint32_t dwArg1) {
 // this the stubbed-out varargs error-trace hook rather than a generic no-op.
 // 006bf750 - also a bare RET, but its single call site in QServerNT::AcceptThreadMain pushes
 // nothing - is _NullSub.
-void __stdcall _NullSubTrace() {
+void __cdecl _NullSubTrace(const char* szModule, const char* szFormat, ...) {
 
 }
 
@@ -1247,10 +1247,8 @@ D2QServerClientContainerStrc * __fastcall AddClient(D2QServerStrc * pQServer, SO
 
 // Removes a client from the QServer by token ID. Finds the client in the token hash bucket, unlinks it from the chain, decrements the connection count, and frees the client structure.
 static void __stdcall RemoveClient(D2QServerStrc * pQServer, uint32_t nClientToken) {
-    uint32_t nClientTokenCopy;
     D2QServerClientConnectionStrc* pClient;
     char* szClientIp;
-    char* szIpStr;
     uint32_t nBucketIdx = nClientToken & pQServer->nClientHashMask;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pQServer->pClientBucketLocks + nBucketIdx);
     D2QServerClientConnectionStrc* pPrevClient = 0;
@@ -1258,11 +1256,8 @@ static void __stdcall RemoveClient(D2QServerStrc * pQServer, uint32_t nClientTok
     while (true) {
       pClient = pFoundClient;
       if (!pClient) {
-        szIpStr = "[sRemoveClient]  Couldn\'t remove TCLIENT id = %d";
-        szClientIp = "";
-        nClientTokenCopy = nClientToken;
-        _NullSubTrace();
-        QSERVER_LOG("QSRV", "[sRemoveClient]  Couldn\'t remove TCLIENT id = %d", nClientToken, szClientIp, szIpStr, nClientTokenCopy);
+        _NullSubTrace("", "[sRemoveClient]  Couldn\'t remove TCLIENT id = %d", nClientToken);
+        QSERVER_LOG("QSRV", "[sRemoveClient]  Couldn\'t remove TCLIENT id = %d", nClientToken);
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIdx);
         return;
       }
@@ -1292,10 +1287,9 @@ static void __stdcall RemoveClient(D2QServerStrc * pQServer, uint32_t nClientTok
 
     in_addr* pClientIp = &pClient->ipAddress;
     uint32_t nHighResTime = LogManager::LOGMGR_GetHighResolutionTime();
-    int nLifeMs = nHighResTime - pClient->dwCreatedTick;
     int nRefCount = pClient->nRefCount;
     /* in_addr in for inet_ntoa */ szClientIp = inet_ntoa((in_addr)pClientIp->S_un.S_un_b);
-    QSERVER_LOG("QSRV", "[sRemoveClient]  Remove client %d %s refcount=%d life=%d", nClientToken, szClientIp, nRefCount, nLifeMs);
+    QSERVER_LOG("QSRV", "[sRemoveClient]  Remove client %d %s refcount=%d life=%d", nClientToken, szClientIp, nRefCount, nHighResTime - pClient->dwCreatedTick);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csTokenHash);
     D2QServerClientIpHashBucketTable ppIpHashBucket = pQServer->pIpHashBuckets + (pClientIp->S_un.S_addr & pQServer->nClientHashMask);
     pPrevClient = 0;
@@ -1303,8 +1297,7 @@ static void __stdcall RemoveClient(D2QServerStrc * pQServer, uint32_t nClientTok
     do {
       pClient = pFoundClient;
       if (!pClient) {
-        /* in_addr in for inet_ntoa */ inet_ntoa((in_addr)pClientIp->S_un.S_un_b);
-        _NullSubTrace();
+        _NullSubTrace("", "[sRemoveClient]  Couldn\'t remove TCLIENT %d %s from IP-hash", nClientToken, inet_ntoa((in_addr)pClientIp->S_un.S_un_b));
         break;
       }
       if (pClient->nClientToken == nClientToken) {

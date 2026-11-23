@@ -771,8 +771,8 @@ template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* TSHashTableReuse<CELLIS
 }
 
 template<> uint8_t TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::Unreferenced_00603ed0() {
-    int* in_ECX;
-    return *in_ECX - in_ECX[1];
+    const int* pFields = (const int*)this;
+    return (uint8_t)(pFields[0] - pFields[1]);
 }
 
 template<> uint32_t TSGrowableArray<CELLIST>::CalcChunkSize(uint32_t nCount) {

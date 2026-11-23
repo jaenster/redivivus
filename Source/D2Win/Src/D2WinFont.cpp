@@ -1204,7 +1204,7 @@ D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, int * p
     goto append_line_node;
 }
 
-int __fastcall Unreferenced_00502c40(int param_1) {
+int __fastcall Unreferenced_00502c40(intptr_t param_1) {
     int iVar1;
     uint32_t* puVar2 = (uint32_t*)param_1;
     for (iVar1 = 0x200; iVar1; iVar1--) {

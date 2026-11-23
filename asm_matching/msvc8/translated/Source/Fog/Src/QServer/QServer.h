@@ -413,7 +413,7 @@ void __stdcall _NullSubRet4_Unref_006bc850(uint32_t dwArg1);
 // this the stubbed-out varargs error-trace hook rather than a generic no-op.
 // 006bf750 - also a bare RET, but its single call site in QServerNT::AcceptThreadMain pushes
 // nothing - is _NullSub.
-void __stdcall _NullSubTrace();
+void __cdecl _NullSubTrace(const char* szModule, const char* szFormat, ...);
 void QSERVER_LOG(char * szModul, char * szFormatString, ...);
 void __stdcall _unused_SetupDefaultValues(int * pnQServerSettings);
 void __stdcall StartListening(struct D2QServerStrc * pQServer, uint32_t nToken);

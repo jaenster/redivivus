@@ -103,19 +103,19 @@ int32_t __fastcall NormalizeListNodePointer(int32_t pThis, int, int32_t pNodePtr
 void __stdcall ExitOrCrashCleanup();
 void __stdcall ExitOrCrashCleanUpJmp();
 void __stdcall DeleteOldLogFiles();
-void __fastcall UnlinkListNodeDouble(int * pNode);
+void __fastcall UnlinkListNodeDouble(intptr_t * pNode);
 void __fastcall InitListHead(struct StormLinkedListStrc * pListHead);
-void __fastcall InsertListNode(int * * ppListHead, int, int * * pNode, int32_t bInsertAtHead, int * * ppTarget);
+void __fastcall InsertListNode(intptr_t * * ppListHead, int, intptr_t * * pNode, int32_t bInsertAtHead, intptr_t * * ppTarget);
 void __fastcall RemoveListNode(struct StormLinkedListStrc * pListHead, int, struct StormLinkStrc * pNode);
 void __fastcall ClearListNode(uint32_t * pNode);
 void __fastcall RemoveAllListNodes(struct StormLinkedListStrc * pListHead);
-void __fastcall DestroyListWithHandler(int * pListHead);
+void __fastcall DestroyListWithHandler(intptr_t * pListHead);
 void __fastcall TeardownListFull(struct StormLinkedListStrc * pListHead);
 void __fastcall ZeroListNode(uint32_t * pNode);
 // Scalar deleting destructor: MOV ESI,ECX takes this; TEST byte [EBP+8],1 is the free flag; RET 4; returns this in EAX. Parameters were listed in STORAGE order (bFreeMemory first), which is the argument-swap shape that crashed IGNORELIST_DtorScalar; a vtable caller passes (this, bFreeMemory).
 void * __fastcall DestroyListNodeAndFree(void * pThis, int, uint8_t bFreeMemory);
 void __fastcall DestroyAllListNodes(struct StormLinkedListStrc * pListHead);
-struct D2LogRecordStrc * __fastcall AllocateAndInsertMessageNode(int * * ppListHead, int, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags);
+struct D2LogRecordStrc * __fastcall AllocateAndInsertMessageNode(intptr_t * * ppListHead, int, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags);
 void __stdcall StopLogWriterThread();
 void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose);
 // lpStartAddress parameter of CreateThread

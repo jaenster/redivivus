@@ -443,7 +443,7 @@ int __fastcall Unreferenced_00407280(int param_1) {
     return param_1 + 0x408;
 }
 
-int __fastcall Unreferenced_00407290(int param_1) {
+int __fastcall Unreferenced_00407290(intptr_t param_1) {
     return *(int*)(param_1 + 0x808);
 }
 

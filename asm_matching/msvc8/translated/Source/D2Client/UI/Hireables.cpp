@@ -586,6 +586,7 @@ static void __stdcall DrawHealthBar(uint32_t nRosterGUID, uint32_t nPetType, int
       return;
     }
 
+    int nBarRightX = nX + 46; // steer-ok: the original keeps the right edge in a stack slot across the palette calls; folded it loses MATCH here and in the three callers
     int nHpPercent = (nHp <= 0 ? 0 : nHp) < 100 ? (nHp <= 0 ? 0 : nHp) : 100;
 
     int nBarEndX = nHpPercent * 46 / 100 + nX;
@@ -605,7 +606,7 @@ static void __stdcall DrawHealthBar(uint32_t nRosterGUID, uint32_t nPetType, int
     }
 
     D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nX, 14, nBarEndX, 19, nColor, DRAW_SOLID);
-    D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nBarEndX, 14, nX + 46, 19, 0, DRAW_SOLID);
+    D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nBarEndX, 14, nBarRightX, 19, 0, DRAW_SOLID);
 }
 
 static void __stdcall UI_DrawHirelingNameFromUnit(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {

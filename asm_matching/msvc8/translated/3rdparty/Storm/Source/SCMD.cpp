@@ -519,7 +519,7 @@ static BOOL __fastcall SCMD_ProcessCurrentFlag(StormCmdProcessingStrc * pProcess
 // @blizzard ProcessFlags (SCMD.CPP)
 BOOL __fastcall SCMD_ProcessFlags(pfnSCmdErrorCallback pfnErrorCallback, char * szText, StormCmdProcessingStrc * pProcessing) {
     uint32_t nPrefixLen;
-    int nMatchNameLen;
+    intptr_t nMatchNameLen;
     char* pcDelimChar;
     BOOL BVar1;
     char* szArgLine;
@@ -527,7 +527,7 @@ BOOL __fastcall SCMD_ProcessFlags(pfnSCmdErrorCallback pfnErrorCallback, char * 
     int nFlagNameLen;
     CMDDEF* pCmdEntry;
     int nConsumed;
-    int nMatchLen;
+    intptr_t nMatchLen;
     char szMatchBuf[256];
     szMatchBuf[0] = '\0';
     char cCurChar;
@@ -545,7 +545,7 @@ BOOL __fastcall SCMD_ProcessFlags(pfnSCmdErrorCallback pfnErrorCallback, char * 
 
       pCmdEntry = 0;
       if (nPrefixLen) {
-        nMatchNameLen = nMatchLen - (int)szMatchBuf;
+        nMatchNameLen = nMatchLen - (intptr_t)szMatchBuf;
         nMatchLen = nMatchNameLen;
         do {
           uVar2 = nPrefixLen - 1;

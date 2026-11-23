@@ -88,6 +88,9 @@ foreach(list D2_SOURCES D2_HEADERS)
     list(FILTER ${list} EXCLUDE REGEX "^${CMAKE_BINARY_DIR}/")
     # The 64-bit shims are their own target below, never part of the Redivivus module.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Redivivus/x64/")
+    # D2Server (the 1.00 game-server host) is its own object library below, never part
+    # of the game executable.
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Source/D2Server/")
 endforeach()
 if(D2_ARCH_X64)
     # x86 assembly: the i686-decorated stub the 64-bit build defines in C++ instead.
@@ -276,6 +279,20 @@ if(REDIVIVUS_MODULE_LIBRARIES)
 else()
     add_executable(d2 ${D2_SOURCES})
     target_link_libraries(d2 PRIVATE d2_flags)
+endif()
+
+# ---------------------------------------------------------------------------
+# D2Server: Blizzard's 1.00 game-server host (Source/D2Server), reconstructed from
+# the 1.00 D2Server.dll. Compiled, not linked: it is not part of Game.exe, and its
+# imports from the 1.00 DLLs are not bound to the tree yet. Not built by default:
+#   cmake --build build --target d2server_objs
+# ---------------------------------------------------------------------------
+file(GLOB_RECURSE D2SERVER_SOURCES CONFIGURE_DEPENDS LIST_DIRECTORIES false
+    "${D2_ROOT}/Source/D2Server/*.cpp")
+list(SORT D2SERVER_SOURCES)
+if(D2SERVER_SOURCES)
+    add_library(d2server_objs OBJECT EXCLUDE_FROM_ALL ${D2SERVER_SOURCES})
+    target_link_libraries(d2server_objs PRIVATE d2_flags)
 endif()
 
 # ---------------------------------------------------------------------------

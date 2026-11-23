@@ -106,7 +106,7 @@ __pragma(pack(push, 1)) struct D2CompressEncoderStrc {
     /* 0x0000 */ uint32_t nReserved00; // field at +0
     /* 0x0004 */ uint32_t nRootWeight; // set to 1 after init (root weight or ready flag)
     /* 0x0008 */ D2CompressHuffNodeStrc aNodePool[515]; // Huffman node pool: 515*24=12360 bytes, ends at +0x304f
-    /* 0x3050 */ int nFreeListBack; // +0x3050: free list intrusive back-link field
+    /* 0x3050 */ intptr_t nFreeListBack; // +0x3050: free list intrusive back-link field
     /* 0x3054 */ struct D2CompressHuffNodeStrc * pFreeListSentinel; // +0x3054: free list sentinel / head
     /* 0x3058 */ struct D2CompressHuffNodeStrc * * ppFreeListTailLink; // +0x3058: ptr-to-tail link in free list
     /* 0x305C */ int nFreeListLinkOff; // +0x305c: intrusive list link base offset

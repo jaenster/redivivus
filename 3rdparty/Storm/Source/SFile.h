@@ -418,7 +418,7 @@ int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t n
 uint32_t * __thiscall SFILE_SetStreamBuffer4(uint32_t * pdwValues, uint32_t pVal0, uint32_t pVal1, uint32_t pVal2, uint32_t pVal3);
 // Copies a 4-element stream buffer structure from source to destination by copying 4 consecutive fields. Custom calling convention uses ECX for destination pointer. Used for duplicating stream buffer state.
 uint32_t * __thiscall SFILE_CopyStreamBuffer4(uint32_t * pDest, uint32_t * pSrc);
-int __fastcall Unreferenced_00415190(int param_1);
+int __fastcall Unreferenced_00415190(intptr_t param_1);
 int __fastcall Unreferenced_004151b0(int param_1);
 // Reads data from an internal buffer with bounds checking. Calculates available bytes (param3[4] - param3[1]), clamps to requested size (*param2), memcpy's from buffer (param3[0] + param3[1]), and advances read position (param3[1] += size). Returns actual bytes read.
 // @blizzard DecompressLzw_BufferRead (SFILE.CPP)
@@ -525,7 +525,7 @@ intptr_t __fastcall Unreferenced_00416a10(struct StormLinkedListStrc * pList);
 intptr_t __fastcall Unreferenced_00416a20(struct StormLinkedListStrc * pList);
 void __fastcall Unreferenced_00416a30(struct StormLinkedListStrc * pList);
 int __fastcall Unreferenced_00416a90(int param_1);
-int __fastcall Unreferenced_00416ab0(int param_1);
+int __fastcall Unreferenced_00416ab0(intptr_t param_1);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard InternalReadAligned (SFILE.CPP)
 uint32_t __stdcall SFILE_InternalReadAligned(struct D2MPQFileStrc * pArchive, uint32_t nFileOffset, uint32_t * pDstBuf, uint32_t nReadLen);

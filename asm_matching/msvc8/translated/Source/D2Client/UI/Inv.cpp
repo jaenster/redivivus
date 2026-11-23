@@ -7032,7 +7032,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
           if (pRareAffix) {
             if (pRareAffix->wNameStrId) {
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pRareAffix->wNameStrId);
-              pwRareNameSuffix = (uint8_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
+              pwRareNameSuffix = (uint8_t*)(intptr_t)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pRareAffix->wNameStrId);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszPrefix, pwLocaleStr);
             } else {
@@ -7191,7 +7191,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
           if (pPrefixAffix) {
             if (pPrefixAffix->wNameStr) {
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pPrefixAffix->wNameStr);
-              pwRareNameSuffix = (uint8_t*)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
+              pwRareNameSuffix = (uint8_t*)(intptr_t)D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwLocaleStr);
               pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(pPrefixAffix->wNameStr);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszPrefix, pwLocaleStr);
             } else {

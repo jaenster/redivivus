@@ -38,6 +38,9 @@ const EXTS = [_][]const u8{ ".h", ".hpp", ".inl", ".cpp", ".c" };
 const OBJ_EXTS = [_][]const u8{ ".obj", ".d", ".log", ".flags", ".key", ".fn.pkl", ".fn.sum" };
 const SKIP_DIRS = [_][]const u8{ ".git", ".github", ".idea", "asm_matching", "build", "cmake", "tools", "metrics" };
 const VENDORED = [_][]const u8{ "3rdparty/libbacktrace", "3rdparty/implibs" };
+/// Trees beside the game that are not part of Game.exe and are not translated: D2Server is
+/// the 1.00 game-server host, built by CMake as its own object library (d2server_objs).
+pub const NOT_GAME = [_][]const u8{"Source/D2Server"};
 const HEADERS_ONLY_BUT = "Redivivus/ghidra_version.cpp";
 
 // ---- configuration (the defaults audit.zig's Config reads too)
@@ -235,6 +238,7 @@ fn sourcesVisit(ctx: SourcesCtx, w: *proc.WalkDir) !void {
             const full = try util.join(rel, d);
             var vend = false;
             for (VENDORED) |v| vend = vend or std.mem.eql(u8, full, v);
+            for (NOT_GAME) |v| vend = vend or std.mem.eql(u8, full, v);
             if (vend) continue;
         }
         try keep.append(gpa, d);

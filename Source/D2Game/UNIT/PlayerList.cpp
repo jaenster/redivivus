@@ -204,10 +204,8 @@ uint32_t __fastcall PLAYERLIST_GetFlagsMasked(D2UnitStrc * pUnit, D2UnitStrc * p
 
 uint16_t __fastcall PLAYERLIST_GetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitPlayerListStrc* pListEntry;
-    uint16_t wPtrHigh;
     int nUnit2GUID;
-    D2UnitDataPlayerStrc* pPlayerData;
-    pPlayerData = D2Common::Units::GetPlayerData(pUnit);
+    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (!pUnit2) {
       nUnit2GUID = -1;
     } else {
@@ -223,13 +221,15 @@ uint16_t __fastcall PLAYERLIST_GetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2)
 
     pListEntry = 0;
     lookup_done:
-    wPtrHigh = (uint16_t)((uintptr_t)pListEntry >> 0x10);
     if (pUnit != pUnit2 && pListEntry) {
-      return (uint32_t)((uint32_t)(uint16_t)wPtrHigh << 16 | (uint32_t)(uint16_t)(short int)pListEntry->nRelationshipFlags);
+      return pListEntry->nRelationshipFlags;
     }
 
-    return (uint32_t)wPtrHigh << 0x10;
+    return 0;
 }
+
+
+
 
 void __fastcall SetPlayerRelationship(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nRelationship) {
     D2UnitPlayerListStrc* pListEntry;

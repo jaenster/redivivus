@@ -1142,7 +1142,7 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
       switch (pMsg->nOpcode) {
         case 0x99:
           wTargetGUIDHi = (uint16_t)pMsg->uArgs.s99.field_0x8;
-        bySendToTarget = pMsg->uArgs.s99.nSkillLevel;
+        bySendToTarget = pMsg->uArgs.s99.nSkillLevel; // steer-ok: the generator's order of the packet-field loads
         wTargetGUIDLo = pMsg->uArgs.s99.nSkillId;
         nPacketIdModifier = 1;
         DVar5 = pMsg->uArgs.s99.dwTargetGUID;
@@ -1153,8 +1153,8 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
         break;
         case 0x9a:
           wTargetGUIDHi = (uint16_t)pMsg->uArgs.s9A.field_0x8;
-        bySkillMode = pMsg->uArgs.s9A.nSkillLevel;
-        dwSkillId = (uint32_t)pMsg->uArgs.s9A.nSkillId;
+        bySkillMode = pMsg->uArgs.s9A.nSkillLevel; // steer-ok: the generator's order of the packet-field loads
+        dwSkillId = (uint32_t)pMsg->uArgs.s9A.nSkillId; // steer-ok: the generator's order of the packet-field loads
         nCastDirection = 1;
         wTargetGUIDLo = pMsg->uArgs.s9A.nTargetY;
         targetX = pMsg->uArgs.s9A.nTargetX;
@@ -1170,14 +1170,14 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
           GAME::SCmd::NET_D2GS_SERVER_Send_0xA4_PRELOAD_MONSTER(pClient, pMsg->uArgs.sA4.nClassId);
         break;
         case 0xa3:
-          GAME::SCmd::NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL(pClient, pMsg->uArgs.sA3.field_0x0, pMsg->uArgs.sA3.nSkillId, pMsg->uArgs.sA3.nSkillLevel, (uint8_t)pMsg->uArgs.sA3.eUnitType, pMsg->uArgs.sA3.nUnitGUID, (uint8_t)pMsg->uArgs.sA3.eTargetType, pMsg->uArgs.sA3.nTargetGUID, pMsg->uArgs.sA3.dwParam1, pMsg->uArgs.sA3.dwParam2);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0xA3_PROGRESSIVE_SKILL(pClient, pMsg->uArgs.sA3.field_0x0, pMsg->uArgs.sA3.nSkillId, pMsg->uArgs.sA3.nSkillLevel, pMsg->uArgs.sA3.eUnitType, pMsg->uArgs.sA3.nUnitGUID, pMsg->uArgs.sA3.eTargetType, pMsg->uArgs.sA3.nTargetGUID, pMsg->uArgs.sA3.dwParam1, pMsg->uArgs.sA3.dwParam2);
         break;
         case 0xab:
           dwTmp = D2Common::Units::CheckFlags(pUnit, UNITFLAG_UPGRLIFENHITCLASS);
         if (!dwTmp) {
           pUnitEx = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
           if (pUnitEx) {
-            pAttackTarget = pUnit;
+            pAttackTarget = pUnit; // steer-ok: the generator's order of the packet-field loads
             DVar5 = SUnit::UNITS_CheckIfCanAttackTarget(SUnit::GetGamePointer(pUnitEx), pUnitEx, pAttackTarget);
             if (DVar5) {
               GAME::SCmd::NET_D2GS_SERVER_Send_0xAB_HEALTH_UPDATE(pClient, pMsg->uArgs.sAB.nUnitType, pMsg->uArgs.sAB.nUnitGUID, pMsg->uArgs.sAB.nHpPercent128);
@@ -1191,7 +1191,7 @@ void __fastcall SERVER_UnitQueuePacketSend(D2UnitStrc * pUnit, D2ClientStrc * pC
         break;
         case '#':
           DVar5 = pMsg->uArgs.s23.dwSkillOwnerGUID;
-        wTargetX = pMsg->uArgs.s23.nSkillId;
+        wTargetX = pMsg->uArgs.s23.nSkillId; // steer-ok: the generator's order of the packet-field loads
         nSkillSlot = pMsg->uArgs.s23.nSkillSlot;
         GAME::SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(pClient, (uint8_t)D2Common::Units::GetType(pUnit), D2Common::Units::GetGUID(pUnit), nSkillSlot, wTargetX, DVar5);
         break;

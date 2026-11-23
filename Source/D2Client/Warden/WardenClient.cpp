@@ -974,16 +974,17 @@ void __stdcall WARDEN_Cleanup() {
     gpWardenResponseData = 0;
 }
 
-void __fastcall WARDEN_Initialize(uint32_t dwModuleParam) {
+BOOL __fastcall WARDEN_Initialize(uint32_t dwModuleParam) {
     WARDEN_Cleanup();
     gpWardenModuleParam = dwModuleParam;
     sgpUnknownSequence = Bnclient::NET_GetLobbyChatQueue();
     if (!sgpUnknownSequence) {
-      return;
+      return FALSE;
     }
 
     WARDEN_ResolveAndLoadModule(gabWardenModuleRc4Key, gabWardenEmbeddedModuleHash);
     WARDEN_ActivatePendingModule();
+    return TRUE;
 }
 
 void __fastcall WARDEN_SetGlobalFlag(uint32_t dwParam) {

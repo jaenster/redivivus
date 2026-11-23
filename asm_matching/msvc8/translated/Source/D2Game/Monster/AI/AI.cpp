@@ -14201,7 +14201,7 @@ void __fastcall AITHINK_Fn1_Totem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiP
     PlanNextAiMove(pGame, pUnit, 0x19);
 }
 
-void __fastcall AI_SetStoredPosition(D2AiParamStrc * pAiParam, int32_t nParam, int32_t nX, int32_t nY) {
+void __fastcall AI_SetStoredPosition(D2AiParamStrc * pAiParam, intptr_t nParam, int32_t nX, int32_t nY) {
     if (!nParam) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13b6);
       exit(-1);

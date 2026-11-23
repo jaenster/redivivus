@@ -103,19 +103,19 @@ int32_t __thiscall NormalizeListNodePointer(int32_t pThis, int32_t pNodePtr);
 void __stdcall ExitOrCrashCleanup();
 void __stdcall ExitOrCrashCleanUpJmp();
 void __stdcall DeleteOldLogFiles();
-void __fastcall UnlinkListNodeDouble(int * pNode);
+void __fastcall UnlinkListNodeDouble(intptr_t * pNode);
 void __fastcall InitListHead(struct StormLinkedListStrc * pListHead);
-void __thiscall InsertListNode(int * * ppListHead, int * * pNode, int32_t bInsertAtHead, int * * ppTarget);
+void __thiscall InsertListNode(intptr_t * * ppListHead, intptr_t * * pNode, int32_t bInsertAtHead, intptr_t * * ppTarget);
 void __thiscall RemoveListNode(struct StormLinkedListStrc * pListHead, struct StormLinkStrc * pNode);
 void __fastcall ClearListNode(uint32_t * pNode);
 void __fastcall RemoveAllListNodes(struct StormLinkedListStrc * pListHead);
-void __fastcall DestroyListWithHandler(int * pListHead);
+void __fastcall DestroyListWithHandler(intptr_t * pListHead);
 void __fastcall TeardownListFull(struct StormLinkedListStrc * pListHead);
 void __fastcall ZeroListNode(uint32_t * pNode);
 // Scalar deleting destructor: MOV ESI,ECX takes this; TEST byte [EBP+8],1 is the free flag; RET 4; returns this in EAX. Parameters were listed in STORAGE order (bFreeMemory first), which is the argument-swap shape that crashed IGNORELIST_DtorScalar; a vtable caller passes (this, bFreeMemory).
 void * __thiscall DestroyListNodeAndFree(void * pThis, uint8_t bFreeMemory);
 void __fastcall DestroyAllListNodes(struct StormLinkedListStrc * pListHead);
-struct D2LogRecordStrc * __thiscall AllocateAndInsertMessageNode(int * * ppListHead, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags);
+struct D2LogRecordStrc * __thiscall AllocateAndInsertMessageNode(intptr_t * * ppListHead, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags);
 void __stdcall StopLogWriterThread();
 void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose);
 // lpStartAddress parameter of CreateThread

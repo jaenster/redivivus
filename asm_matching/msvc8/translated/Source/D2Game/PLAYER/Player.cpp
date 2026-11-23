@@ -743,7 +743,7 @@ uint32_t __fastcall CheckItemMovePermission(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // NOTE: Register params: pGame (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 // @sourcefile .\PLAYER\Player.cpp
-int32_t __fastcall SetHotkey(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, int32_t nItemGUID) {
+int32_t __fastcall SetHotkey(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nHotkey, uint16_t wSkillId, int32_t byHand, int32_t nItemGUID) {
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\Player.cpp", 0x2f3);
     if (!pClient) {
       return 0;

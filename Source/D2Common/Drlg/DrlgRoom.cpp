@@ -358,10 +358,11 @@ int * __fastcall DRLGACTMISC_GetWarpsIdIfExists(D2DrlgStrc * pDrlg, eD2LevelId e
 }
 
 // Fetches warp-id array for level and calls TXT_LvlWarp_Setup(warpId, nDirection). Return value appears to be warpId (decompiler shows uninitialized temp).
-D2LvlWarpTxt * __fastcall DRLGLEVEL_GetWarpsIdIfExistsAndSetup(D2DrlgLevelStrc * pLevel, uint8_t nIdIndex, uint8_t nDirection) {
+D2LvlWarpTxt * __fastcall DRLGLEVEL_GetWarpsIdIfExistsAndSetup(D2DrlgLevelStrc * pLevel, uint8_t nIdIndex, uint8_t nDirection)
+{
     int* pWarpIdArray = DRLGACTMISC_GetWarpsIdIfExists(pLevel->pDrlg, pLevel->eD2LevelId);
-    D2LvlWarpTxt* pLvlWarpTxt = DATATBLS::LvlTbls::TXT_LvlWarp_Setup(pWarpIdArray[nIdIndex], nDirection);
-    return pLvlWarpTxt;
+    int nWarpId = pWarpIdArray[nIdIndex];
+    return DATATBLS::LvlTbls::TXT_LvlWarp_Setup(nWarpId, nDirection);
 }
 
 // Returns the D2LvlWarpTxt record of the warp node whose Id matches the warp unit's class id, or NULL if the node is disabled.

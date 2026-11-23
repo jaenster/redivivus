@@ -573,7 +573,7 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
             pClientFromOverlapped = (D2QServerClientConnectionStrc*)&pOverlapped[-5].Offset;
           }
           if (pClient != pClientFromOverlapped) {
-            _NullSubTrace();
+            _NullSubTrace("", "GQCS1b nClientId %d does not match overlapped ptClient 0x%08X %d", ulCompletionKey, pClient, pOverlapped[1].Internal);
           }
 
           goto handle_completion;

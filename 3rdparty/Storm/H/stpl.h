@@ -252,7 +252,7 @@ public:
     static TSHashTableReuse<T, TKey, N>* __thiscall ScalarDeletingDestructor(TSHashTableReuse<T, TKey, N>* pThis, uint32_t dwFlags);
     TSHashTableReuse<T, TKey, N>* Constructor();
     void Unreferenced_00451160();
-    static uint8_t Unreferenced_00603ed0();
+    uint8_t Unreferenced_00603ed0();
 };
 
 template<class T, class THandle, int N>

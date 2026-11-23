@@ -528,25 +528,25 @@ int __stdcall CLIENTMODE_InitializeCallback() {
     return gnClientModeInitValue;
 }
 
-bool __stdcall GameLoopFuncInitGame(uint32_t dwUnused) {
-    if (eD2GSGameType_007a0610 == GAMETYPE_SINGLEPLAYER || eD2GSGameType_007a0610 == GAMETYPE_SINGLEPLAYER_UNCAPPED) {
-      int32_t nState;
-      nState = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
-      if (nState) {
-        return false;
+BOOL __stdcall GameLoopFuncInitGame(uint32_t dwUnused) {
+    if ((eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER && eD2GSGameType_007a0610 != GAMETYPE_SINGLEPLAYER_UNCAPPED) || !D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState()) {
+      int nInitResult = D2Net::Game::Server::CreateThreadClientSocketOrSingleplayer();
+      if (!nInitResult) {
+        GAME::Game::CLIENT_ConnectionRefused(6);
+        gnClientModeInitValue = 1;
+        D2GS_Connected = 0;
+        return TRUE;
       }
+
+      return nInitResult == 2;
     }
 
-    int nInitResult = D2Net::Game::Server::CreateThreadClientSocketOrSingleplayer();
-    if (!nInitResult) {
-      GAME::Game::CLIENT_ConnectionRefused(6);
-      gnClientModeInitValue = 1;
-      D2GS_Connected = 0;
-      return true;
-    }
-
-    return nInitResult == 2;
+    return FALSE;
 }
+
+
+
+
 
 int __fastcall Unreferenced_0044bc10(int param_1, char * param_2) {
     D2Net::SRC::Client::NET_D2GS_ConnectToServer(param_1, param_2);

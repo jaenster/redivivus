@@ -187,7 +187,7 @@ int __fastcall Unreferenced_00543560(int nIndex);
 // @sourcefile .\QUESTS\QUESTS.CPP
 void __fastcall FreeQuestDataList(::SGAMEDATA * pGame, struct D2UnitQuestDataListStrc * pQuestDataList);
 struct D2QuestDataStrc * __fastcall GetQuestDataByQuestNoInternal(::SGAMEDATA * pGame, eD2QuestsInternal eQuestNoInternal);
-int * __fastcall Unreferenced_00543690(int param_1, int param_2);
+int * __fastcall Unreferenced_00543690(intptr_t param_1, int param_2);
 // Looks up quest data by internal quest ID and attaches it to a unit. For QUESTINT_TheSearchForCain attaches to the cage object (classId 0x3d) and calls Q04_SetRescueTrigger; for QUESTINT_RadamentsLair attaches to Radament (0xe5); for QUESTINT_TheSummoner runs Q14 join noop on the Summoner (0xfa). Falls through to QUEST_AttachToUnit for all others.
 BOOL __fastcall QUEST_AttachToUnitByQuestId(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2QuestsInternal nQuestNoInternal);
 void __fastcall AddGossipMessageOnMonster(struct D2QuestDataStrc * pQuestData, struct D2GSPacketSrv0x27_TextStrc * sTextMessage, int32_t nMonStatsId, int32_t nMessageIndexMaybe);
@@ -265,7 +265,7 @@ BOOL __fastcall QUESTGUID_RemovePlayerFromList(struct D2QuestGUIDStrc * pQuestGU
 // every caller passes a quest data block's sQuestGUID member.
 BOOL __fastcall QUESTGUID_SearchForValueInIntArray32(struct D2QuestGUIDStrc * pQuestGUID, int32_t iValue);
 BOOL __fastcall QUEST_HasPlayerParticipated(struct D2QuestDataStrc * pQuestData, int32_t nPlayerGUID);
-int __fastcall Unreferenced_005452f0(int param_1);
+int __fastcall Unreferenced_005452f0(intptr_t param_1);
 void __fastcall QUESTGUID_SetPlayerCountToZero(struct D2QuestGUIDStrc * pQuestGUID);
 // @wasnamed QUESTGUID_RemovePlayerFromList - one name on two different functions.
 // @evidence Takes D2QuestDataStrc + D2QuestArgStrc, resolves the player

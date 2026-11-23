@@ -3531,7 +3531,7 @@ uint32_t __fastcall WARDEN_DecryptModule(D2WardenModuleStrc * pModule, uint32_t 
               break;
             }
             if ((int)nHeaderSize < 0) {
-              /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)(nHeaderSize & 0x7fffffff));
+              /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddress = GetProcAddress(hModule, (LPCSTR)(uintptr_t)(nHeaderSize & 0x7fffffff));
               *ppFVar7 = (uint32_t)pProcAddress;
               ppFVar7++;
             } else {

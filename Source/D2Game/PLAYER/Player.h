@@ -93,7 +93,7 @@ BOOL __fastcall GOLD_DropGoldFromInventory(::SGAMEDATA * pGame, struct D2UnitStr
 uint32_t __fastcall CheckItemMovePermission(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem);
 // NOTE: Register params: pGame (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 // @sourcefile .\PLAYER\Player.cpp
-int32_t __fastcall SetHotkey(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, int32_t nItemGUID);
+int32_t __fastcall SetHotkey(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nHotkey, uint16_t wSkillId, int32_t byHand, int32_t nItemGUID);
 // IterateAllUnits callback: increments pArgs->nCount when the player's room is in level
 // pArgs->eLevelId and the player is not in mode Death/Dead. Only user: PLAYER_CountLivingPlayersInLevel.
 void __fastcall PLAYER_CountLivingPlayerInLevelCallback(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2LevelPlayerCountArgStrc * pArgs);

@@ -16,6 +16,7 @@ const builtin = @import("builtin");
 const util = @import("util.zig");
 const proc = @import("proc.zig");
 const objcache = @import("objcache.zig");
+const compile = @import("compile.zig");
 const gpa = util.gpa;
 
 const CLI = "packages/reconstruct/src/vc8/cli.ts";
@@ -137,7 +138,18 @@ pub fn translateTree(gr: []const u8, repo: []const u8, out: []const u8) ![]const
         std.process.exit(1);
     }
     var rels: std.ArrayList([]const u8) = .empty;
-    for (try proc.allFiles(out)) |p| try rels.append(gpa, try proc.relpath(p, out));
+    for (try proc.allFiles(out)) |p| {
+        const rel = try proc.relpath(p, out);
+        // The translator walks the whole checkout; what the compile leaves out (compile.NOT_GAME)
+        // is not part of the translation either.
+        var not_game = false;
+        for (compile.NOT_GAME) |ng| not_game = not_game or (std.mem.startsWith(u8, rel, ng) and rel.len > ng.len and rel[ng.len] == '/');
+        if (not_game) {
+            proc.remove(p);
+            continue;
+        }
+        try rels.append(gpa, rel);
+    }
     proc.sortStrings(rels.items);
     var text: std.ArrayList(u8) = .empty;
     try text.appendSlice(gpa, MANIFEST_HEADER);

@@ -22,9 +22,9 @@
 // reconstruction throws out of these, so the loop is the whole behaviour.
 //
 // Destruction runs back to front, as the CRT does.
-extern "C" void _eh_vector_constructor_iterator_(void* pArray, uint32_t nElementSize,
-                                                int nCount, void (__fastcall *pfnConstructor)(void*),
-                                                void (__fastcall *pfnDestructor)(void*)) {
+extern "C" void __stdcall _eh_vector_constructor_iterator_(void* pArray, uint32_t nElementSize,
+                                                          int nCount, void (__fastcall *pfnConstructor)(void*),
+                                                          void (__fastcall *pfnDestructor)(void*)) {
     (void)pfnDestructor;
     if (!pArray || !pfnConstructor) return;
     char* p = (char*)pArray;
