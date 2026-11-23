@@ -2372,50 +2372,30 @@ void __stdcall CHATDLG_DestroyLobbyChatForms() {
 }
 
 static void __stdcall CHATDLG_AddMultiLineText(::D2WinTextBox * pTextBox, int32_t bAddBlankLine, char * szText, int32_t nColor) {
-    char* pcNextLine;
     char* pcNewlinePos;
-    char cCur;
-    char* pcCur;
-    if (strlen(szText) == 0 || (int)strlen(szText) < 0) {
-      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
-    } else if (*szText != '\0') {
-      do {
-        pcCur = szText;
-        if (*szText == '\n') {
-          *pcCur = '\0';
-          pcNextLine = pcCur + 1;
-          pcNewlinePos = pcCur;
-        } else {
-          do {
-            if (*pcCur == '\0') {
-              break;
-            }
-
-            pcCur++;
-          } while (*pcCur != '\n');
-
-          pcNextLine = pcCur;
-          pcNewlinePos = 0;
-          if (*pcCur == '\n') {
-            *pcCur = '\0';
-            pcNextLine = pcCur + 1;
-            pcNewlinePos = pcCur;
-          }
+    char* pcLine;
+    if ((int)strlen(szText) > 0) {
+      while (*szText != '\0') {
+        pcNewlinePos = 0;
+        pcLine = szText;
+        while (*szText != '\n' && *szText != '\0') {
+          szText++;
         }
-
-        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, szText, nColor);
+        if (*szText == '\n') {
+          pcNewlinePos = szText;
+          *szText = '\0';
+          szText++;
+        }
+        D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, pcLine, nColor);
         if (bAddBlankLine) {
           D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
         }
         if (pcNewlinePos) {
           *pcNewlinePos = '\n';
         }
-
-        szText = pcNextLine;
-        if (*pcNextLine == '\0') {
-          return;
-        }
-      } while (true);
+      }
+    } else {
+      D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(pTextBox, "", nColor);
     }
 }
 
@@ -2495,8 +2475,8 @@ D2ChatDlgUnknown_0x10 * Unreferenced_0043e370() {
 void __stdcall CHATDLG_ProcessPendingMessages() {
     while (true) {
       D2ChatDlgUnknown_0x10* pMemoryToFree;
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077ae28);
       pMemoryToFree = 0;
+      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077ae28);
       if (gpChatMessageQueueHead) {
         pMemoryToFree = gpChatMessageQueueHead;
         gpChatMessageQueueHead = gpChatMessageQueueHead->pNext;

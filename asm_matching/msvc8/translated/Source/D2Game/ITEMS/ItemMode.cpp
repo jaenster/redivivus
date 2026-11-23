@@ -1967,7 +1967,7 @@ void __fastcall ITEMMODE_NullSub_Unref_0055d920(::SGAMEDATA * pGame, D2UnitStrc 
 
 }
 
-void __stdcall ITEMMODE_ReturnOne(uint32_t dwParam) {
+void __fastcall ITEMMODE_ReturnOne(D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t nUnused) {
 
 }
 

@@ -1632,19 +1632,21 @@ void __fastcall CloseSmacker(D2SmackerContextStrc * pContext) {
 }
 
 // DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
-static void __stdcall RENDERER_DDRAW_BlitSmackerFrame(int32_t nHeight, int32_t nWidth, D2SmackerContextStrc * pDestRect) {
+static void __stdcall RENDERER_DDRAW_BlitSmackerFrame(D2SmackerContextStrc * pDestRect, int32_t nWidth, int32_t nHeight)
+{
     uint8_t* pPixelSrc;
     int32_t nPixelCount;
+    int32_t nRowsLeft = nHeight;
     if (!gpSmackerImageBuffer) {
       return;
     }
 
     uint8_t* nDestOffset = gpRenderBackBufferBits + (pDestRect->nY - nHeight) * RENDERER_nWindowWidth + pDestRect->nX;
     uint8_t* pCurrentSrc = (uint8_t*)gpSmackerImageBuffer;
-    while (nHeight) {
-      nHeight--;
+    while (nRowsLeft) {
+      nRowsLeft--;
+      pPixelSrc = pCurrentSrc;
       if (nWidth) {
-        pPixelSrc = pCurrentSrc;
         nPixelCount = nWidth;
         do {
           nPixelCount--;
@@ -1757,12 +1759,12 @@ void __fastcall PlayerSmacker(D2SmackerContextStrc * pContext) {
           }
         }
         if (!gnRenderState && gbSmackerPaletteDirty) {
-          RENDERER_DDRAW_BlitSmackerFrame((int32_t)((Smack*)nSmackHandle)->Height, (int32_t)((Smack*)nSmackHandle)->Width, pContext);
+          RENDERER_DDRAW_BlitSmackerFrame(pContext, (int32_t)((Smack*)nSmackHandle)->Width, (int32_t)((Smack*)nSmackHandle)->Height);
         }
       }
     } else {
       if (!gnRenderState) {
-        RENDERER_DDRAW_BlitSmackerFrame(0x3c, 0x1d4, pContext);
+        RENDERER_DDRAW_BlitSmackerFrame(pContext, 0x1d4, 0x3c);
         return;
       }
     }

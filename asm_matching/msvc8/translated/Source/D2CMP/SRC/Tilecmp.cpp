@@ -153,7 +153,7 @@ void __stdcall TILECMP_AddTileToSet(D2TileCmpTileSetListStrc * pTileSetList, uin
       pDVar1->nSubIndex = nSubIndex;
       pDVar1->nRarity = nRarity;
       pDVar1->nDirection = nDirection;
-      pDVar1->dwTransparentColor = pTileSetList->dwColorKey;
+      pDVar1->sTransparentColor = pTileSetList->dwColorKey;
       pDVar1->field_0x51 = 2;
       memcpy(pDVar1->abSubTileFlags, pSubTileFlags, sizeof(pDVar1->abSubTileFlags));
       return;
@@ -163,7 +163,7 @@ void __stdcall TILECMP_AddTileToSet(D2TileCmpTileSetListStrc * pTileSetList, uin
 static BOOL __stdcall TILECMP_ValidateTilePixels(uint8_t * pTilePixels, int32_t nPitch, D2TileCmpTileSetStrc * pTile) {
     uint8_t nTileFlags = pTile->field_0x51;
     if (nTileFlags & 2) {
-      const uint8_t* pKey = reinterpret_cast<const uint8_t*>(&pTile->dwTransparentColor);
+      const uint8_t* pKey = reinterpret_cast<const uint8_t*>(&pTile->sTransparentColor);
       const int nRgbRemainder = nPitch - 0x60;
       const uint32_t nKey = ((static_cast<uint32_t>(pKey[2]) << 8) + pKey[1]) * 256 + pKey[0];
       for (int nRow = 0; nRow < 32; ++nRow) {
@@ -421,41 +421,30 @@ static void TILECMP_Generate25SubTiles(D2TileCmpTileSetStrc * pTileSet, void * p
     }
 }; D2_STATIC_GUARD(gaTileCmpSubTileOffsets, "D2CMP::SRC::Tilecmp::TILECMP_Generate25SubTiles::gaTileCmpSubTileOffsets");
 
-    D2TileCmpTileNodeStrc* pNewNode;
-    uint32_t bHasPixelData;
-    int iSubTile = 0;
-    do {
+    for (int iSubTile = 0; iSubTile < 0x19; iSubTile++) {
       char cSubTileCol;
-      D2TileCmpTileNodeStrc sSubTile = {0};
-      TILECMP_ExtractIsometricSubTile(&sSubTile, pDT1Data, (D2PaletteEntryStrc)pTileSet->dwTransparentColor, gaTileCmpSubTileOffsets[iSubTile].nPixelCol, gaTileCmpSubTileOffsets[iSubTile].nPixelRow);
+      D2TileCmpTileNodeStrc sSubTile;
+      D2TileCmpTileNodeStrc* pNewNode;
+      memset(&sSubTile, 0, sizeof(sSubTile));
+      TILECMP_ExtractIsometricSubTile(&sSubTile, pDT1Data, pTileSet->sTransparentColor, gaTileCmpSubTileOffsets[iSubTile].nPixelCol, gaTileCmpSubTileOffsets[iSubTile].nPixelRow);
       cSubTileCol = (char)(iSubTile / 5);
-      bHasPixelData = *(uint32_t*)((char*)&sSubTile + 4) & 0x10000;
-      *(uint8_t*)((char*)&sSubTile.wUnk_04 + 1) = cSubTileCol;
       *(uint8_t*)(char*)&sSubTile.wUnk_04 = (char)iSubTile + cSubTileCol * -5;
-      if (bHasPixelData) {
+      *(uint8_t*)((char*)&sSubTile.wUnk_04 + 1) = cSubTileCol;
+      if (sSubTile.wFlags & 1) {
         pNewNode = D2_NEW_AT(D2TileCmpTileNodeStrc, ".\\SRC\\Tilecmp.cpp", 0x1a7);
         if (!pNewNode) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a8);
           exit(-1);
         }
 
-        pNewNode->wOffsetX = sSubTile.wOffsetX;
-        pNewNode->wOffsetY = sSubTile.wOffsetY;
-        pNewNode->wUnk_04 = sSubTile.wUnk_04;
-        pNewNode->wFlags = sSubTile.wFlags;
-        pNewNode->wPixelSize = sSubTile.wPixelSize;
-        pNewNode->wUnk_0A = sSubTile.wUnk_0A;
-        pNewNode->pPixelBuf = sSubTile.pPixelBuf;
-        pNewNode->pNext = sSubTile.pNext;
+        *pNewNode = sSubTile;
         pNewNode->pNext = pTileSet->pNodeHead;
         pTileSet->nNodeCount++;
         pTileSet->pNodeHead = pNewNode;
         pNewNode->wOffsetX = (short int)gaTileCmpSubTileOffsets[iSubTile].nPixelCol;
         pNewNode->wOffsetY = (short int)gaTileCmpSubTileOffsets[iSubTile].nPixelRow;
       }
-
-      iSubTile++;
-    } while (iSubTile < 0x19);
+    }
 }
 
 void __stdcall TILECMP_InitTileSetFromDT1(D2TileCmpTileSetStrc * pTileSet, void * nDT1Data) {
@@ -492,7 +481,7 @@ static void __stdcall TILECMP_SerializeTileSet(D2TileCmpTileSetStrc * pSrcTileSe
     pDstEntry->nIndex = pSrcTileSet->nMainIndex;
     pDstEntry->nSubIndex = pSrcTileSet->nSubIndex;
     pDstEntry->nFrame_Rarity = pSrcTileSet->nRarity;
-    pDstEntry->transparentColorRGB24 = pSrcTileSet->dwTransparentColor;
+    pDstEntry->transparentColorRGB24 = pSrcTileSet->sTransparentColor;
     pDstEntry->nSubTiles = pSrcTileSet->nNodeCount;
     memcpy(pDstEntry->abSubTileFlags, pSrcTileSet->abSubTileFlags, 25);
     nCopiedNodes = pDstEntry->nSubTiles;

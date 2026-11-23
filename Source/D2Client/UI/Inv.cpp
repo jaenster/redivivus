@@ -7303,31 +7303,21 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
 static void __stdcall INV_FormatItemTooltipWithCost(uint16_t * wszSrc, uint16_t * wszDest) {
     BOOL bIsEthereal;
     uint16_t* pwLocaleStr;
-    int nTransactionCost_lcl;
-    uint16_t wszTooltipLineBuf[128];
-    uint16_t wszCostText[64];
     uint32_t nCostOutSlot;
+    uint16_t wszCostText[64];
     wszCostText[0] = L'\0';
-    uint16_t* pwZeroCursor = wszCostText + 1;
-    for (nTransactionCost_lcl = 0x1f; nTransactionCost_lcl; nTransactionCost_lcl--) {
-      pwZeroCursor[0] = L'\0';
-      pwZeroCursor[1] = L'\0';
-      pwZeroCursor += 2;
+    for (int i = 1; i < 64; i++) {
+      wszCostText[i] = L'\0';
     }
-
-    *pwZeroCursor = L'\0';
     uint16_t* pwSeparator = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszDest, wszSrc);
     if (g_nCurrentInventoryPage == 4) {
       bIsEthereal = D2Common::ITEMS::Items::CheckItemFlag(pItemToDescribe, ITEMFLAG_ETHEREAL, 0xccc, ".\\UI\\inv.cpp");
       if (bIsEthereal) {
-        pwZeroCursor = wszTooltipLineBuf;
-        for (nTransactionCost_lcl = 0x40; nTransactionCost_lcl; nTransactionCost_lcl--) {
-          pwZeroCursor[0] = L'\0';
-          pwZeroCursor[1] = L'\0';
-          pwZeroCursor += 2;
+        uint16_t wszTooltipLineBuf[128];
+        for (int i = 0; i < 128; i++) {
+          wszTooltipLineBuf[i] = L'\0';
         }
-
         pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x58da);
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTooltipLineBuf, pwLocaleStr);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszDest, pwSeparator);
@@ -7345,22 +7335,17 @@ static void __stdcall INV_FormatItemTooltipWithCost(uint16_t * wszSrc, uint16_t 
       D2Lang::Unicode::UNISYS::AppendToBuffer(wszDest, wszCostText);
       return;
     }
-    if (g_nCurrentInventoryPage == 4) {
-      return;
+    if (g_nCurrentInventoryPage != 4) {
+      uint16_t wszSellText[64];
+      for (int i = 0; i < 64; i++) {
+        wszSellText[i] = L'\0';
+      }
+      pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd05);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszSellText, pwLocaleStr);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDest, pwSeparator);
+      pwSeparator = ui::AppendAsWideChar(wszSellText, 1);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(wszDest, pwSeparator);
     }
-
-    pwZeroCursor = wszTooltipLineBuf + 0x40;
-    for (nTransactionCost_lcl = 0x20; nTransactionCost_lcl; nTransactionCost_lcl--) {
-      pwZeroCursor[0] = L'\0';
-      pwZeroCursor[1] = L'\0';
-      pwZeroCursor += 2;
-    }
-
-    pwLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0xd05);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTooltipLineBuf + 0x40, pwLocaleStr);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDest, pwSeparator);
-    pwSeparator = ui::AppendAsWideChar(wszTooltipLineBuf + 0x40, 1);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(wszDest, pwSeparator);
 }
 
 void __stdcall INV_ShowBookTooltip() {
@@ -7372,7 +7357,7 @@ void __stdcall INV_ShowBookTooltip() {
     uint16_t wszDescription[1024];
     uint16_t wszItemName[128];
     int nTextWidth;
-    int nTooltipHeight = 0x48cffd;
+    int nTooltipHeight;
     for (nZeroCount = 0; nZeroCount < 0x400; nZeroCount++) {
       wszDescription[nZeroCount] = L'\0';
     }
@@ -7382,13 +7367,7 @@ void __stdcall INV_ShowBookTooltip() {
       eD2ItemTypes eItemType;
       eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pItemToDescribe);
       if (eItemType == ITEMTYPE_Book) {
-        if (!pItemToDescribe) {
-          nClassId = -1;
-        } else {
-          nClassId = pItemToDescribe->nClassId;
-        }
-
-        pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
+        pItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(!pItemToDescribe ? -1 : pItemToDescribe->nClassId);
         if (!pItemsTxt) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcf5);
           exit(-1);
@@ -7417,12 +7396,11 @@ void __stdcall INV_ShowBookTooltip() {
 
         ui::MoveArgumentToEAX(wszTooltip);
         D2Win::Src::D2WinFont::TEXT_CalcTextDimensions(wszTooltip, &nTextWidth, &nTooltipHeight);
-        if (gaInventoryState != nTooltipHeight && -1 < gaInventoryState - nTooltipHeight) {
+        if (gaInventoryState - nTooltipHeight > 0) {
           D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, gaInventoryItemSlots, gaInventoryState, 0, 0);
-          return;
+        } else {
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, nInventoryContextMode, pInventoryContextUi + nTooltipHeight, 0, 0);
         }
-
-        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, nInventoryContextMode, pInventoryContextUi + nTooltipHeight, 0, 0);
         return;
       }
     }
@@ -7826,7 +7804,6 @@ void __stdcall INV_ShowTransmogrifyTooltip() {
     int iLoopCounter;
     uint16_t* pwZeroCursor;
     int aTextHeight[2];
-    aTextHeight[1] = 0x48db8d;
     for (iLoopCounter = 0; iLoopCounter < 0x400; iLoopCounter++) {
       __frame0.wszTextBuffer[iLoopCounter] = L'\0';
     }
@@ -7843,7 +7820,12 @@ void __stdcall INV_ShowTransmogrifyTooltip() {
     }
 
     D2ItemsTxt* pTransmogItemsTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nCurrentItemClassId);
-    if (pTransmogItemsTxt) {
+    if (!pTransmogItemsTxt) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe61);
+      exit(-1);
+    }
+
+    {
       {
         uint16_t* pwString;
         aTextHeight[1] = 0;
@@ -7875,18 +7857,15 @@ void __stdcall INV_ShowTransmogrifyTooltip() {
 
         ui::MoveArgumentToEAX(&__frame0.wszFullTooltip);
         D2Win::Src::D2WinFont::TEXT_CalcTextDimensions(&__frame0.wszFullTooltip, &__frame0.iTextWidth, aTextHeight);
-        if (gaInventoryState == aTextHeight[0] || gaInventoryState - aTextHeight[0] < 0) {
-          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(&__frame0.wszFullTooltip, nInventoryContextMode, pInventoryContextUi + aTextHeight[0], 0, 0);
+        if (gaInventoryState - aTextHeight[0] > 0) {
+          D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(&__frame0.wszFullTooltip, gaInventoryItemSlots, gaInventoryState, 0, 0);
           return;
         }
 
-        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(&__frame0.wszFullTooltip, gaInventoryItemSlots, gaInventoryState, 0, 0);
+        D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(&__frame0.wszFullTooltip, nInventoryContextMode, pInventoryContextUi + aTextHeight[0], 0, 0);
         return;
       }
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe61);
-    exit(-1);
 }
 
 void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {

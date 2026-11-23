@@ -89,7 +89,7 @@ struct __attribute__((packed)) D2TileCmpTileSetStrc {
     /* 0x28 */ int32_t nMainIndex; // serialized to the entry's nIndex (+0x18)
     /* 0x2C */ int32_t nSubIndex; // serialized to the entry's nSubIndex (+0x1c)
     /* 0x30 */ int32_t nRarity; // serialized to the entry's nFrame_Rarity (+0x20)
-    /* 0x34 */ uint32_t dwTransparentColor; // copied from the list's colour key by AddTileToSet; serialized to the entry's transparent colour; Generate25SubTiles keys on it
+    /* 0x34 */ D2PaletteEntryStrc sTransparentColor; // copied from the list's colour key by AddTileToSet; serialized to the entry's transparent colour; Generate25SubTiles keys on it
     /* 0x38 */ BYTE abSubTileFlags[25]; // the 25 subtile flag bytes (5x5); TILECMP_SerializeTileSet copies them (6 dwords + 1 byte) to the DT1 entry's subtile flags at +0x28. The byte after them (+0x51) is set to 2 by AddTileToSet.
     /* 0x51 */ uint8_t field_0x51;
     /* 0x52 */ uint8_t field_0x52;

@@ -53,56 +53,52 @@ static uint32_t __stdcall RENDERER_DDRAW_IsDC6OffScreen(int32_t nX, int32_t nY, 
 }
 
 // DirectDraw renderer internal helpers for sprite visibility testing, clip rect computation, debug font rendering, shadow quality query, pixel/line drawing primitives, and smacker video frame blitting.
-static BOOL __stdcall RENDERER_DDRAW_ComputeDC6ClipRect(int32_t nY, DC6Block * pDC6Block, int32_t nX, uint32_t * pOutClipRect, uint32_t * pInClipBounds) {
+static BOOL __stdcall RENDERER_DDRAW_ComputeDC6ClipRect(DC6Block * pDC6Block, int32_t nY, int32_t nX, uint32_t * pOutClipRect, uint32_t * pInClipBounds) {
     int32_t nWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
-    uint32_t nClipLeft = (int)*pInClipBounds <= 0 ? 0 : *pInClipBounds;
-    int nClipRight = pInClipBounds[1];
-    if (nClipRight >= RENDERER_nWindowWidth) {
-      nClipRight = RENDERER_nWindowWidth;
-    }
-    if ((int)nClipLeft > nClipRight) {
+    int nClipLeft = (int)pInClipBounds[0] <= 0 ? 0 : pInClipBounds[0];
+    int nClipRight = (int)pInClipBounds[1] < RENDERER_nWindowWidth ? pInClipBounds[1] : RENDERER_nWindowWidth;
+    if (nClipLeft > nClipRight) {
       return 1;
     }
 
-    int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nX + nOffsetX < nClipRight && nWidth + (nX + nOffsetX) >= (int)nClipLeft)) {
+    nX += D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
+    if (nX >= nClipRight || nWidth + nX < nClipLeft) {
       return 1;
     }
 
-    uint32_t nClipTop = (int)pInClipBounds[2] <= 0 ? 0 : pInClipBounds[2];
-    uint32_t nClipBottom = pInClipBounds[3];
-    if ((int)pInClipBounds[3] >= RENDERER_nWindowHeight) {
+    int nClipTop = (int)pInClipBounds[2] <= 0 ? 0 : pInClipBounds[2];
+    int nClipBottom = pInClipBounds[3];
+    if (nClipBottom >= RENDERER_nWindowHeight) {
       nClipBottom = RENDERER_nWindowHeight;
     }
-    if ((int)nClipTop > (int)nClipBottom) {
+    if (nClipTop > nClipBottom) {
       return 1;
     }
 
-    nWidth = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    int nDrawBottom = nY + nWidth;
-    if (nDrawBottom >= (int)nClipTop && nDrawBottom - nHeight <= (int)nClipBottom) {
-      *pOutClipRect = nClipLeft;
-      pOutClipRect[1] = nClipRight;
-      if (!(nDrawBottom > (int)nClipBottom)) {
-        pOutClipRect[2] = 0;
-      } else {
-        pOutClipRect[2] = nDrawBottom - nClipBottom - 1;
-      }
-      if (!(nDrawBottom - nHeight < (int)nClipTop)) {
-        pOutClipRect[3] = nHeight - pOutClipRect[2];
-      } else {
-        pOutClipRect[3] = nDrawBottom - pOutClipRect[2] - nClipTop + 1;
-      }
-      if ((int)pOutClipRect[3] <= 0) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xab);
-        exit(-1);
-      }
-
-      return 0;
+    nY += D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
+    if (nY < nClipTop || nY - nHeight > nClipBottom) {
+      return 1;
     }
 
-    return 1;
+    pOutClipRect[0] = nClipLeft;
+    pOutClipRect[1] = nClipRight;
+    if (nY <= nClipBottom) {
+      pOutClipRect[2] = 0;
+    } else {
+      pOutClipRect[2] = nY - nClipBottom - 1;
+    }
+    if (nY - nHeight >= nClipTop) {
+      pOutClipRect[3] = nHeight - pOutClipRect[2];
+    } else {
+      pOutClipRect[3] = nY - pOutClipRect[2] - nClipTop + 1;
+    }
+    if ((int)pOutClipRect[3] <= 0) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xab);
+      exit(-1);
+    }
+
+    return 0;
 }
 
 BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t nPosY, DWORD dwGamma, int32_t nDrawMode, BYTE * pPalette) {
@@ -226,12 +222,12 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
       return;
     }
 
-    BOOL bClipResult = RENDERER_DDRAW_ComputeDC6ClipRect(nPosY, pData->pDC6Block, nPosX, &__frame0.nClipLeft, (uint32_t*)pCropRect);
+    BOOL bClipResult = RENDERER_DDRAW_ComputeDC6ClipRect(pData->pDC6Block, nPosY, nPosX, &__frame0.nClipLeft, (uint32_t*)pCropRect);
     if (bClipResult) {
       return;
     }
 
-    int32_t nSkipTopCopy = __frame0.nSkipTop;
+    int32_t nSkipTopCopy = __frame0.nSkipTop; // steer-ok: the original reads both clip values ahead of the palette call, which can reach the escaped frame; skip-top first
     
     
     D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nClipLeft, __frame0.nClipRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, (uint8_t*)(Renderer::DirectDraw::RENDERER_DIRECTDRAW_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect)), nSkipTopCopy, (int32_t)(__frame0.nDrawHeight), bClipResult);

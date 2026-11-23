@@ -550,7 +550,7 @@ static void __stdcall PLRMODES_UnequipAndPrepareItemForDrop(::SGAMEDATA * pGame,
       D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pUnit2, ITEMCMD_BODYLOC_TAKE_ITEM, 1);
       D2Common::INVENTORY::Inventory::UpsertToUpdateList(pInventory, pUnit2);
       if (bShouldReturnItem) {
-        ITEMS::ItemMode::ITEMMODE_ReturnOne(0);
+        ITEMS::ItemMode::ITEMMODE_ReturnOne(pUnit, pUnit2, 0);
       }
 
       D2Common::ITEM_ProcessSetItemEquip(pUnit, pUnit2, 1, 1);

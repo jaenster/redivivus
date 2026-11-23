@@ -488,56 +488,52 @@ static BOOL __stdcall RENDERER_WINDOWED_ValidateDC6Visibility(DC6Block * pDC6Blo
 }
 
 // Calculates clipped crop rectangle for DC6 image rendering. Takes input crop rect + DC6 position/dimensions, clamps to window bounds, calculates top/bottom skip lines for partial draws. Outputs adjusted crop rect (nClippedLeft, nClippedRight, skipTop, visibleHeight) to pOutput array. Used to optimize blits by pre-calculating which scanlines to draw.
-static int __fastcall RENDERER_WINDOWED_CalculateCropRect(uint32_t * pCropRect, DC6Block * pDC6Block, int nPosY, int nPosX, uint32_t * pOutput) {
-    int32_t nSpriteWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
-    int32_t nOffsetX = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
-    uint32_t uClampedLeft = (int)*pCropRect <= 0 ? 0 : *pCropRect;
-    int nClippedRight = pCropRect[1];
-    if (nClippedRight >= RENDERER_nWindowWidth) {
-      nClippedRight = RENDERER_nWindowWidth;
-    }
-    if ((int)uClampedLeft > nClippedRight) {
+static int __fastcall RENDERER_WINDOWED_CalculateCropRect(DC6Block * pDC6Block, int nPosY, int nPosX, uint32_t * pOutput, uint32_t * pCropRect) {
+    int32_t nWidth = D2CMP::SRC::CelCmp::GetDC6Width(pDC6Block);
+    int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
+    int nClipLeft = (int)pCropRect[0] <= 0 ? 0 : pCropRect[0];
+    int nClipRight = (int)pCropRect[1] < RENDERER_nWindowWidth ? pCropRect[1] : RENDERER_nWindowWidth;
+    if (nClipLeft > nClipRight) {
       return 1;
     }
 
-    int32_t nSpriteHeight = D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
-    if (!(nPosX + nSpriteHeight < nClippedRight && nSpriteWidth + (nPosX + nSpriteHeight) >= (int)uClampedLeft)) {
+    nPosX += D2CMP::SRC::CelCmp::GetDC6OffsetX(pDC6Block);
+    if (nPosX >= nClipRight || nWidth + nPosX < nClipLeft) {
       return 1;
     }
 
-    uint32_t uClampedBottom = (int)pCropRect[2] <= 0 ? 0 : pCropRect[2];
-    uint32_t uClampedTop = pCropRect[3];
-    if ((int)pCropRect[3] >= RENDERER_nWindowHeight) {
-      uClampedTop = RENDERER_nWindowHeight;
+    int nClipTop = (int)pCropRect[2] <= 0 ? 0 : pCropRect[2];
+    int nClipBottom = pCropRect[3];
+    if (nClipBottom >= RENDERER_nWindowHeight) {
+      nClipBottom = RENDERER_nWindowHeight;
     }
-    if ((int)uClampedBottom > (int)uClampedTop) {
+    if (nClipTop > nClipBottom) {
       return 1;
     }
 
-    nSpriteWidth = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    int nOffsetY = nPosY + nSpriteWidth;
-    if (nOffsetY >= (int)uClampedBottom && nOffsetY - nOffsetX <= (int)uClampedTop) {
-      *pOutput = uClampedLeft;
-      pOutput[1] = nClippedRight;
-      if (!(nOffsetY > (int)uClampedTop)) {
-        pOutput[2] = 0;
-      } else {
-        pOutput[2] = nOffsetY - uClampedTop - 1;
-      }
-      if (!(nOffsetY - nOffsetX < (int)uClampedBottom)) {
-        pOutput[3] = nOffsetX - pOutput[2];
-      } else {
-        pOutput[3] = nOffsetY - pOutput[2] - uClampedBottom + 1;
-      }
-      if ((int)pOutput[3] <= 0) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd1);
-        exit(-1);
-      }
-
-      return 0;
+    nPosY += D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
+    if (nPosY < nClipTop || nPosY - nHeight > nClipBottom) {
+      return 1;
     }
 
-    return 1;
+    pOutput[0] = nClipLeft;
+    pOutput[1] = nClipRight;
+    if (nPosY <= nClipBottom) {
+      pOutput[2] = 0;
+    } else {
+      pOutput[2] = nPosY - nClipBottom - 1;
+    }
+    if (nPosY - nHeight >= nClipTop) {
+      pOutput[3] = nHeight - pOutput[2];
+    } else {
+      pOutput[3] = nPosY - pOutput[2] - nClipTop + 1;
+    }
+    if ((int)pOutput[3] <= 0) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd1);
+      exit(-1);
+    }
+
+    return 0;
 }
 
 BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, BYTE * pPalette) {
@@ -655,15 +651,14 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
       return;
     }
 
-    bOutOfBounds = RENDERER_WINDOWED_CalculateCropRect((uint32_t*)pCropRect, pData->pDC6Block, nPosY, nPosX, &__frame0.nCropLeft);
+    bOutOfBounds = RENDERER_WINDOWED_CalculateCropRect(pData->pDC6Block, nPosY, nPosX, &__frame0.nCropLeft, (uint32_t*)pCropRect);
     if (bOutOfBounds) {
       return;
     }
 
-    int32_t nClipTop_00 = __frame0.nClipTop;
-    
-    
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nCropLeft, __frame0.nCropRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, (uint8_t*)(RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect)), nClipTop_00, (int32_t)(__frame0.nClipBottom), bOutOfBounds);
+    int32_t nClipBottom_00 = __frame0.nClipBottom;
+    uint8_t* pPalettePtr = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect);
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nCropLeft, __frame0.nCropRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, pPalettePtr, __frame0.nClipTop, nClipBottom_00, bOutOfBounds);
 }
 
 void __fastcall DrawShadow(D2GfxDataStrc * pData, int nPosX, int nPosY) {

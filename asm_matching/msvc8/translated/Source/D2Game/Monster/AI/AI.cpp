@@ -3149,7 +3149,6 @@ static BOOL __stdcall MONSTERAI_FindSwitchAiTarget(int32_t bNeedLOS, int32_t bRe
         D2MonsterAiParameterStruct sNearest;
         D2AiThreatScanStrc sThreat;
     } sAiParams;
-    int32_t nSavedAlignment;
     eD2UnitType eTargetType;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -3178,25 +3177,18 @@ static BOOL __stdcall MONSTERAI_FindSwitchAiTarget(int32_t bNeedLOS, int32_t bRe
         goto no_target;
       case 3:
         nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
-      nSavedAlignment = nAlignment;
       nDistance = D2Common::Seed::RNG_GetRandomInRange(&pUnit->sSeed, 2);
       if (nAlignment == 1) {
         if (nDistance) {
-          nAlignment_00 = '\x02';
+          UNIT::SUnit::SetAlignment(pUnit, 2, 1);
         } else {
-          align_evil:
-          nAlignment_00 = '\0';
+          UNIT::SUnit::SetAlignment(pUnit, 0, 1);
         }
-
-        UNIT::SUnit::SetAlignment(pUnit, nAlignment_00, 1);
       } else if (nDistance) {
         if (!nAlignment) {
-          nAlignment_00 = '\x02';
-          UNIT::SUnit::SetAlignment(pUnit, nAlignment_00, 1);
-        } else {
-          if (nAlignment == 2) {
-            goto align_evil;
-          }
+          UNIT::SUnit::SetAlignment(pUnit, 2, 1);
+        } else if (nAlignment == 2) {
+          UNIT::SUnit::SetAlignment(pUnit, 0, 1);
         }
       }
 
@@ -3205,21 +3197,20 @@ static BOOL __stdcall MONSTERAI_FindSwitchAiTarget(int32_t bNeedLOS, int32_t bRe
       if (!bRequireLOS) {
         nForEachMode = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
         sAiParams.sThreat.nGridIndex = D2Common::DUNGEON::Dungeon::GetGridIndex(D2Common::Units::UNITS_GetRoom(pUnit), D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), nForEachMode);
-        nForEachMode = 5;
         sAiParams.sThreat.bNeedLOS = bNeedLOS;
         sAiParams.sThreat.nMaxScanRadius = 0x23;
         sAiParams.sThreat.pLowThreatUnit = 0;
         sAiParams.sThreat.nLowThreatDistance = 0x7fffffff;
+        ForEach(pGame, pUnit, (D2MonsterAiParameterStruct*)&sAiParams, nullptr, 5);
       } else {
-        nForEachMode = 6;
         sAiParams.sNearest.pLOSFlagOrSecondary = 0;
         sAiParams.sNearest.nMaxScanRadius = 0x7fffffff;
+        ForEach(pGame, pUnit, (D2MonsterAiParameterStruct*)&sAiParams, nullptr, 6);
       }
 
-      ForEach(pGame, pUnit, (D2MonsterAiParameterStruct*)&sAiParams, nullptr, nForEachMode);
       nTargetGUID = sAiParams.sNearest.nBestDistance;
       pSwitchTarget = sAiParams.sNearest.pBestUnit;
-      UNIT::SUnit::SetAlignment(pUnit, (uint8_t)nSavedAlignment, 1);
+      UNIT::SUnit::SetAlignment(pUnit, (uint8_t)nAlignment, 1);
       goto accept_live_target;
     }
 
@@ -3229,20 +3220,21 @@ static BOOL __stdcall MONSTERAI_FindSwitchAiTarget(int32_t bNeedLOS, int32_t bRe
       nTargetGUID = AI::GetDistance(pSwitchTarget, pUnit);
       if (!bRequireLOS || (bHasLOS = D2Common::Units::TestCollisionWithUnit(pSwitchTarget, pUnit, 4) , !bHasLOS)) {
         accept_live_target:
-        if (pSwitchTarget && (eTargetType = pSwitchTarget->eUnitType , (int)eTargetType >= 0)) {
-          if ((int)eTargetType > 1) {
-            if (eTargetType == UNIT_MISSILE) {
-              *ppOutUnit = pSwitchTarget;
-              *pOutDistance = nTargetGUID;
-              return 1;
-            }
-          } else {
-            bHasLOS = UNIT::SUnit::CheckForModeZeroDeath(pSwitchTarget);
-            if (!bHasLOS) {
-              *ppOutUnit = pSwitchTarget;
-              *pOutDistance = nTargetGUID;
-              return 1;
-            }
+        if (pSwitchTarget) {
+          BOOL bValidTarget = FALSE;
+          switch ((int)pSwitchTarget->eUnitType) {
+            case UNIT_PLAYER:
+            case UNIT_MONSTER:
+              bValidTarget = !UNIT::SUnit::CheckForModeZeroDeath(pSwitchTarget);
+              break;
+            case UNIT_MISSILE:
+              bValidTarget = TRUE;
+              break;
+          }
+          if (bValidTarget) {
+            *ppOutUnit = pSwitchTarget;
+            *pOutDistance = nTargetGUID;
+            return 1;
           }
         }
       }
@@ -3473,7 +3465,7 @@ D2UnitStrc * __fastcall FindTargetAndDistance(::SGAMEDATA * pGame, D2UnitStrc * 
     D2UnitStrc* pTargetTmp;
     uint32_t nDistanceTmp;
     BOOL bInMeleeRange = MONSTERAI_FindSwitchAiTarget(0, 1, &pTargetTmp, (int*)&nDistanceTmp, pGame, pUnit);
-    D2UnitStrc* pTarget = pTargetTmp;
+    D2UnitStrc* pTarget;
     if (!bInMeleeRange) {
       D2MonsterAiParameterStruct sAiParams;
       sAiParams.pBestUnit = 0;
@@ -3489,13 +3481,12 @@ D2UnitStrc * __fastcall FindTargetAndDistance(::SGAMEDATA * pGame, D2UnitStrc * 
         nDistanceTmp = sAiParams.nBestDistance;
         pTarget = sAiParams.pBestUnit;
       }
+    } else {
+      pTarget = pTargetTmp;
     }
     if (!pTarget) {
       if (pInMelee) {
-        pInMelee[0] = false;
-        pInMelee[1] = false;
-        pInMelee[2] = false;
-        pInMelee[3] = false;
+        *(BOOL*)pInMelee = FALSE;
       }
       if (pDistance) {
         *pDistance = 0x7fffffff;

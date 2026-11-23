@@ -81,7 +81,7 @@ BOOL __stdcall ITEMMODE_CheckAutoStack(::SGAMEDATA * pGame, struct D2UnitStrc * 
 // @sourcefile .\ITEMS\ItemMode.cpp
 BOOL __fastcall ITEMMODE_FindBestBodyLocForItem(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint32_t * pnBodyLoc, uint32_t bAutoEquip);
 void __fastcall ITEMMODE_NullSub_Unref_0055d920(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit);
-void __stdcall ITEMMODE_ReturnOne(uint32_t dwParam);
+void __fastcall ITEMMODE_ReturnOne(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, int32_t nUnused);
 int32_t __fastcall ITEMMODE_CheckItemRequirements(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2);
 struct D2ClientStrc * __fastcall Unreferenced_0055db80(struct D2UnitStrc * pUnit);
 // Server-side recalculation of all equipped/charm item enable states for a player (or hireling, eUnitFlags bit 9). Validates each item against the wearer's current requirements: enables qualifying active charms, disables body-slot items that fail requirements (unequipping their stats), then runs a convergence loop re-enabling items whose requirements are now met (handling primary-weapon swap and socketed/set bonuses), and re-applies set bonuses for quality-5 (set) items. Finishes by validating item quality and refreshing inventory; if bSendPacket, sends S2C 0x48 (RecalcEquippedItems2) to the owning player's client. Counterpart to the client-side 0x47/0x48 handlers.
