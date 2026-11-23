@@ -1,43 +1,19 @@
-// Target of this build, for the hand-maintained code that has to differ between
-// targets (register names in a CONTEXT, the SEH frame handler, pointer-width
-// shims, the Mac-only Storm layer). Generated code never tests these: it is one
-// source for every target.
+// Target architecture of this build, for the hand-maintained code that has to
+// differ between the 32-bit and the 64-bit executable (register names in a
+// CONTEXT, the SEH frame handler, pointer-width shims). Generated code never
+// tests these: it is one source for both targets.
 //
-// Operating system, exactly one defined, to 1:
-//   D2_OS_WIN     Windows (mingw, VC8)
-//   D2_OS_MAC     Mac OS X (Apple clang; 1.14d Mac shipped i386 built with clang-425)
-//
-// Architecture, exactly one defined, to 1:
-//   D2_ARCH_X86   32-bit x86: the 1.14d Game.exe target (mingw i686, VC8) and the
-//                 1.14d Intel Mac build
+//   D2_ARCH_X86   32-bit x86, the 1.14d Game.exe target (mingw i686, VC8)
 //   D2_ARCH_X64   64-bit x86-64 (mingw x86_64)
-//   D2_ARCH_PPC   32-bit PowerPC: the Mac builds before the Intel move
 //
-// Byte order: D2_BIG_ENDIAN is defined, to 1, on PowerPC only. The file, wire and
-// archive formats are little-endian on every target, so big-endian code swaps.
-//
-// Any other target is a hard error: nothing in the tree has been checked against it.
-//
-// Shared headers do not include this file: a new macro in a header many VC8 TUs
-// see shifts symbol numbering in unrelated functions. A shared header tests the
-// compiler's own macros (_WIN64, __APPLE__) directly; a .cpp may include this.
+// Exactly one is defined, to 1. Any other target is a hard error: nothing in the
+// tree has been checked against it.
 #pragma once
-
-#if defined(_WIN32)
-#define D2_OS_WIN 1
-#elif defined(__APPLE__) && defined(__MACH__)
-#define D2_OS_MAC 1
-#else
-#error "D2Arch.h: unsupported target operating system (expected Windows or Mac OS X)"
-#endif
 
 #if defined(_M_IX86) || defined(__i386__)
 #define D2_ARCH_X86 1
 #elif defined(_M_X64) || defined(__x86_64__)
 #define D2_ARCH_X64 1
-#elif (defined(__ppc__) || defined(__POWERPC__) || defined(_M_PPC)) && !defined(__ppc64__)
-#define D2_ARCH_PPC 1
-#define D2_BIG_ENDIAN 1
 #else
-#error "D2Arch.h: unsupported target architecture (expected x86, x86-64 or PowerPC)"
+#error "D2Arch.h: unsupported target architecture (expected x86 or x86-64)"
 #endif

@@ -1054,12 +1054,6 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
     }
 
     D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-#ifdef D2_OPENGL
-    // -opengl picks D2gfx mode 5, the D2OpenGL renderer; 1.14d never reads the flag here.
-    if (pD2IniData->bOPENGL) {
-      eD2ApplicationModeAndRenderer = RENDERED_Unused5;
-    } else
-#endif
     if (pD2IniData->b3DFX) {
       eD2ApplicationModeAndRenderer = RENDERER_Glide;
     } else {
@@ -1668,11 +1662,7 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument(&eAppMode, szRawCommandLine);
     MISC_InitD2IniAndIgnorelist(&pD2IniData, szCommandLine);
     pD2IniData.pTrueFunction = ReturnTrue;
-#ifndef D2_OPENGL
     pD2IniData.bOPENGL = false;
-#else
-    // 1.14d clears the parsed -opengl here; with the D2OpenGL renderer built in it is kept.
-#endif
     if (!pD2IniData.b3DFX) {
       pD2IniData.bD3D = !pD2IniData.bWINDOW;
     }

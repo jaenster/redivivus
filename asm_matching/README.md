@@ -11,7 +11,6 @@ where it differs.
 | oracle | target | compiler | workspace |
 |-|-|-|-|
 | **msvc8** | `Game.exe` 1.14d (Windows) | Visual C++ 2005 SP1, under wine | [`msvc8/`](../asm_matching/msvc8/README.md) |
-| **mac** | `DiabloII_macho` 1.14d (Intel Mac), the Mac-only code | Apple clang-425.0.28, native under Rosetta | [`mac/`](../asm_matching/mac/README.md) |
 
 The method is the one three Quake II reconstructions use (the Gladiator bot
 library, Rocket Arena 2 and OSP Tourney), whose VC6 and gcc 2.7.2.3 oracles
@@ -22,10 +21,10 @@ compiler was identified from the binary, not assumed:
 The live measurement is `msvc8/evidence/audit.tsv` and its `.summary`. Read
 those; this file deliberately quotes no counts.
 
-The second oracle, `mac/`, covers the code only the Mac build of 1.14 carries
-(the project README notes the Mac executable has code the Windows one does
-not). It compares instructions rather than bytes; its README says what that
-does and does not prove.
+A second oracle would come from the Mac build of 1.14, which the project
+README notes carries code the Windows executable does not: the same source
+compiled by an entirely different compiler sees different things, as the
+siblings' gcc oracles did for their Linux builds.
 
 ## Credits
 

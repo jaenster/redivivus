@@ -17,9 +17,6 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2gfx/D2GFX.data.h"
 #include "Source/D2gfx/D2GfxHelperStrc.data.h"
-#ifdef D2_OPENGL
-#include "D2OpenGL/Renderer.h"
-#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -239,14 +236,7 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     /* .nfpDrawBlendedVisTile = */ (::fpDrawBlendedVisTile)&D2gfx::fpDrawBlendedVisTile,
     /* .nfpDrawRoofTile = */ (::fpDrawRoofTile)&D2gfx::fpDrawRoofTile
 }; D2_STATIC_GUARD(D2GfxHelperStrc_0072da60, "D2gfx::D2GFX::D2GFX_Initialize::D2GfxHelperStrc_0072da60");
-    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, (D2RendererFunctionsStrc*)&D2Gdi::Renderer::Windowed::WindowedFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2DDraw::Renderer::DirectDraw::DirectDrawFunctionTable, (D2RendererFunctionsStrc*)&D2Glide::Renderer::Glide::GlideFunctionTable,
-#ifdef D2_OPENGL
-        // Mode 5 is the OpenGL renderer, empty in 1.14d Windows: here the D2OpenGL renderer restored from the Mac build.
-        &D2OpenGL::Renderer::OpenGLFunctionTable,
-#else
-        nullptr,
-#endif
-        (D2RendererFunctionsStrc*)&D2Direct3D::Renderer::Direct3DFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, (D2RendererFunctionsStrc*)&D2Gdi::Renderer::Windowed::WindowedFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2DDraw::Renderer::DirectDraw::DirectDrawFunctionTable, (D2RendererFunctionsStrc*)&D2Glide::Renderer::Glide::GlideFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2Direct3D::Renderer::Direct3DFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
     static WNDPROC gpfnWndProc; D2_STATIC_GUARD_BSS(gpfnWndProc, "D2gfx::D2GFX::D2GFX_Initialize::gpfnWndProc");
 
     WNDCLASSA wndClass;

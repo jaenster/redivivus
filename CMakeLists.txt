@@ -21,12 +21,6 @@
 cmake_minimum_required(VERSION 3.24)
 project(Redivivus LANGUAGES C CXX ASM)
 
-# Mac OS X: the Mac-only code (Storm's Mac layer), compile only. See cmake/mac.cmake.
-if(APPLE)
-    include("${CMAKE_SOURCE_DIR}/cmake/mac.cmake")
-    return()
-endif()
-
 if(NOT WIN32 OR NOT (CMAKE_SIZEOF_VOID_P EQUAL 4 OR CMAKE_SIZEOF_VOID_P EQUAL 8))
     message(FATAL_ERROR "Redivivus targets 32-bit Windows. Configure with "
         "-DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake (or a native i686 mingw-w64 g++).")
@@ -59,8 +53,6 @@ option(REDIVIVUS_DEV
     "Development build: per-call tracing and the in-process control channel, which listens on an unauthenticated TCP port." OFF)
 option(REDIVIVUS_LOUD
     "Loud build: 0xFE-filled locals, stack canaries, array index checks and guard zones between globals that report at the defect (Redivivus/d2_loud.cpp). Not for release." OFF)
-option(D2_OPENGL
-    "Build the D2OpenGL renderer: the Mac 1.14d OpenGL code, restored on WGL (D2OpenGL/). Not part of the Windows game." OFF)
 option(REDIVIVUS_LOUD_STACK_PROTECTOR
     "With REDIVIVUS_LOUD: also -fstack-protector-strong (fatal on a smashed canary). OFF gives the playable loud build." ON)
 
@@ -99,20 +91,10 @@ foreach(list D2_SOURCES D2_HEADERS)
     # D2Server (the 1.00 game-server host) is its own object library below, never part
     # of the game executable.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Source/D2Server/")
-    # Storm's Mac layer is Mac-only code: cmake/mac.cmake builds it.
-    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/3rdparty/Storm/Source/Mac/")
 endforeach()
 if(D2_ARCH_X64)
     # x86 assembly: the i686-decorated stub the 64-bit build defines in C++ instead.
     list(FILTER D2_SOURCES EXCLUDE REGEX "/Redivivus/d2_link_support\\.s$")
-endif()
-# D2OpenGL/ is a restoration from the Mac binary, built only on request. It sits outside
-# the globs above; its headers are included by tree-relative path, never by bare name, so
-# its directory stays off the include path (its globals.h and Module.h would shadow the game's).
-if(D2_OPENGL)
-    file(GLOB_RECURSE D2_OPENGL_SOURCES CONFIGURE_DEPENDS
-        LIST_DIRECTORIES false "${D2_ROOT}/D2OpenGL/*.cpp")
-    list(APPEND D2_SOURCES ${D2_OPENGL_SOURCES})
 endif()
 list(SORT D2_SOURCES)
 
@@ -387,10 +369,6 @@ target_link_libraries(d2 PRIVATE
     kernel32 user32 gdi32 advapi32 shell32 ole32 oleaut32
     winmm ws2_32 version comctl32 comdlg32 imm32 uuid
     ddraw dsound dxguid wintrust crypt32)
-if(D2_OPENGL)
-    target_link_libraries(d2 PRIVATE opengl32 glu32)
-    target_compile_definitions(d2 PRIVATE D2_OPENGL)
-endif()
 
 # Bink, Smacker and IJL were licensed DLLs, never inside Game.exe. Their import
 # libraries are built from the checked-in .def files (derived from the shipped
