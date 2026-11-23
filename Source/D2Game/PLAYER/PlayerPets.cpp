@@ -1458,7 +1458,8 @@ void __fastcall RecastPetAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2
       return;
     }
 
-    D2PetArgStrc sPetArgs = {0};
+    D2PetArgStrc sPetArgs;
+    memset(&sPetArgs, 0, sizeof(sPetArgs));
     sPetArgs.nPetType = nPetType;
     int32_t nPetGUIDValue;
     if (!pPet) {
@@ -1476,16 +1477,15 @@ void __fastcall RecastPetAndAssign(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2
     }
 
     sPetArgs.nOwnerGUID = nOwnerGUIDValue;
-    uint16_t nPetClassIdValue;
+    int32_t nPetClassIdValue;
     if (!pPet) {
-      nPetClassIdValue = 0xffff;
+      nPetClassIdValue = -1;
     } else {
-      nPetClassIdValue = (uint16_t)pPet->nClassId;
+      nPetClassIdValue = pPet->nClassId;
     }
 
     sPetArgs.nPetClassId = nPetClassIdValue;
     sPetArgs.nSeed = pPetArgs->nSeed;
-    sPetArgs._pad0A = 0;
     sPetArgs.nNameId = pPetArgs->nNameId;
     UNIT::SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYERPETS_SendPetUpdateCallback, &sPetArgs);
     return;
