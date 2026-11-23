@@ -2474,9 +2474,9 @@ void __stdcall AddCollision_Width(D2RoomStrc * pRoom, int32_t nX, int32_t nY, eD
       case COLLISION_UNIT_SIZE_BIG:
         {
           sBox.nLeft = nX - 1;
-          sBox.nRight = nX + 1;
+          sBox.nRight = sBox.nLeft + 2;
           sBox.nBottom = nY - 1;
-          sBox.nTop = nY + 1;
+          sBox.nTop = sBox.nBottom + 2;
           AddCollision_BoundingBox(pRoom, &sBox, eCollisionFlag);
           return;
         }
