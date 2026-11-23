@@ -25,38 +25,24 @@ void __stdcall MISC_SafeStrncpy(char * szText, size_t nSize) {
 
 // NOTE: Callee-saved register params inferred (medium confidence): pchar (EBX): char*
 static void __fastcall StoreLogging(FILE * pFile, uint32_t nThreadId, uint32_t nLogLevel, uint32_t nComponent, uint32_t nSubsystem, char * szContext, uint32_t nSequence, char * szFormat, va_list pArgs) {
-    size_t nHeaderLen;
-    int nMessageLen;
-    char* szOutput;
-    char* pszNewlinePos;
     SYSTEMTIME sLocalTime;
     char szLogLineBuf[500];
-    uint32_t local_8;
-    FILE* pFileToFlush;
-    char cScan;
-    char* szOutput_00;
-    char* szWritePos;
-    FILE* pLogFile = pFile;
-    if (bLOGFILE_ENABLED) {
-      size_t nTimestampLen;
-      /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&sLocalTime);
-      nTimestampLen = Storm::Source::SSTR::SStrPrintf(szLogLineBuf, 500, "%02u:%02u:%02u.%03u\t", (uint32_t)sLocalTime.wHour, (uint32_t)sLocalTime.wMinute, (uint32_t)sLocalTime.wSecond, (uint32_t)sLocalTime.wMilliseconds);
-      szWritePos = szLogLineBuf + nTimestampLen;
-      nHeaderLen = Storm::Source::SSTR::SStrPrintf(szWritePos, 500 - nTimestampLen, "%01lu\t%01lu\t%01lu\t%02lu\t%.50s\t%.5lu\t", nThreadId, nLogLevel, nComponent, nSubsystem, szContext, nSequence);
-      nMessageLen = Storm::Source::SSTR::SStrVPrintf(szWritePos + nHeaderLen, 500 - nTimestampLen - nHeaderLen, szFormat, pArgs);
-      pFileToFlush = pLogFile;
-      pszNewlinePos = szWritePos + nHeaderLen + nMessageLen - 1;
-      do {
-        szWritePos = pszNewlinePos + 1;
-        pszNewlinePos++;
-      } while (*szWritePos != '\0');
+    char* pszWrite;
+    int nRemaining;
+    int nLen;
 
-      szOutput = szLogLineBuf;
-      pszNewlinePos[0] = '\n';
-      pszNewlinePos[1] = '\0';
-      szOutput = szOutput + strlen(szOutput) + 1;
-      fwrite(szLogLineBuf, (intptr_t)szOutput - (intptr_t)(szLogLineBuf + 1), 1, pLogFile);
-      fflush(pFileToFlush);
+    if (bLOGFILE_ENABLED) {
+      /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&sLocalTime);
+      nLen = Storm::Source::SSTR::SStrPrintf(szLogLineBuf, 500, "%02u:%02u:%02u.%03u\t", (uint32_t)sLocalTime.wHour, (uint32_t)sLocalTime.wMinute, (uint32_t)sLocalTime.wSecond, (uint32_t)sLocalTime.wMilliseconds);
+      pszWrite = szLogLineBuf + nLen;
+      nRemaining = 500 - nLen;
+      nLen = Storm::Source::SSTR::SStrPrintf(pszWrite, nRemaining, "%01lu\t%01lu\t%01lu\t%02lu\t%.50s\t%.5lu\t", nThreadId, nLogLevel, nComponent, nSubsystem, szContext, nSequence);
+      pszWrite += nLen;
+      nRemaining -= nLen;
+      nLen = Storm::Source::SSTR::SStrVPrintf(pszWrite, nRemaining, szFormat, pArgs);
+      strcat(pszWrite + nLen, "\n");
+      fwrite(szLogLineBuf, strlen(szLogLineBuf), 1, pFile);
+      fflush(pFile);
     }
 }
 
