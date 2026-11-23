@@ -1738,88 +1738,68 @@ D2UnitStrc * __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc * pInv
 
 // Searches the player inventory grid for a tome (ITEMTYPE_Book) that matches pScrollItem's magic suffix and is not yet full (quantity < max stack). Iterates the stash grid's item linked list starting from pStartAfterItem (or from the beginning if NULL). Returns the first matching non-full tome, or NULL if none found. Used when auto-stacking a scroll pickup into an existing tome.
 D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(D2InventoryStrc * pInventory, D2UnitStrc * pScrollItem, D2UnitStrc * pStartAfterItem) {
-    int32_t neInventoryPage;
-    eD2ItemTypes eItemType;
-    uint16_t uVar2;
-    int32_t nBookQuantity;
-    int32_t nBookMaxStack;
     D2GridScreenCoordinates sGridDims;
-    D2UnitDataItemStrc* pItemData;
-    if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
+    if (!pInventory) {
+      return nullptr;
+    }
+    if (pInventory->nSignatureMagic != 0x1020304) {
       return nullptr;
     }
 
-    D2UnitStrc* pCurItem;
-    pCurItem = pInventory->pOwner;
-    D2GridScreenCoordinates* pGridDims;
-    pGridDims = 0;
-    if (pCurItem && pCurItem->eUnitType == UNIT_PLAYER) {
-      neInventoryPage = Units::UNITS_GetInventoryRecordId(pCurItem, '\0', 1);
+    D2UnitStrc* pItem = pInventory->pOwner;
+    D2GridScreenCoordinates* pGridDims = 0;
+    if (pItem && pItem->eUnitType == UNIT_PLAYER) {
+      int32_t neInventoryPage;
+      neInventoryPage = Units::UNITS_GetInventoryRecordId(pItem, '\0', 1);
       DATATBLS::TokTbls::GetGridDimensions(neInventoryPage, 0, &sGridDims);
       pGridDims = &sGridDims;
     }
 
-    D2InventoryGridInfoStrc* pStashGridInfo;
-    pStashGridInfo = ReinitializeInventoryGrid(2, (D2InventorySizesStrc*)pGridDims, pInventory);
+    D2InventoryGridInfoStrc* pStashGridInfo = ReinitializeInventoryGrid(2, (D2InventorySizesStrc*)pGridDims, pInventory);
     if (!pStashGridInfo) {
       return nullptr;
     }
 
-    pCurItem = pStashGridInfo->pFirstItem;
+    pItem = pStashGridInfo->pFirstItem;
     if (pStartAfterItem) {
-      while (pCurItem) {
-        if (pCurItem == pStartAfterItem) {
-          goto search_from_item;
-        }
-        if (pCurItem->eUnitType != UNIT_ITEM) {
+      while (pItem && pItem != pStartAfterItem) {
+        if (pItem->eUnitType != UNIT_ITEM) {
           return nullptr;
         }
 
-        pItemData = pCurItem->pUnitData.pUnitDataItem;
+        D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pCurItem = pItemData->sInvNode.pNextItemInPage;
+        pItem = pNode->pNextItemInPage;
       }
-    } else {
-      uint16_t uVar1;
-      search_from_item:
-      if (pCurItem) {
-        while (true) {
-          eItemType = ITEMS::Items::ITEM_GetItemData_wType(pCurItem);
-          if (eItemType == ITEMTYPE_Book) {
-            uVar1 = ITEMS::Items::GetMagicSuffix(pCurItem, 0);
-            uVar2 = ITEMS::Items::GetMagicSuffix(pScrollItem, 0);
-            if (uVar1 == uVar2) {
-              nBookQuantity = Stats::StatsEx::STATSEX_GetCurrentStat(pCurItem, UNITSTAT_quantity, 0);
-              nBookMaxStack = ITEMS::Items::ITEM_GetMaxStack(pCurItem);
-              if (nBookQuantity < nBookMaxStack) {
-                return pCurItem;
-              }
-            }
-          }
-          if (pCurItem->eUnitType != UNIT_ITEM) {
-            break;
-          }
+    }
 
-          pItemData = pCurItem->pUnitData.pUnitDataItem;
-          if (!pItemData) {
-            break;
-          }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
-            break;
-          }
-
-          pCurItem = pItemData->sInvNode.pNextItemInPage;
-          if (!pCurItem) {
-            return nullptr;
-          }
-        }
+    while (pItem) {
+      if (ITEMS::Items::ITEM_GetItemData_wType(pItem) == ITEMTYPE_Book && ITEMS::Items::GetMagicSuffix(pItem, 0) == ITEMS::Items::GetMagicSuffix(pScrollItem, 0) && Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0) < ITEMS::Items::ITEM_GetMaxStack(pItem)) {
+        return pItem;
       }
+      if (pItem->eUnitType != UNIT_ITEM) {
+        return nullptr;
+      }
+
+      D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
+      if (!pItemData) {
+        return nullptr;
+      }
+
+      D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+      if (!pNode) {
+        return nullptr;
+      }
+
+      pItem = pNode->pNextItemInPage;
     }
 
     return nullptr;
