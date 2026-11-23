@@ -210,7 +210,7 @@ static void DRLGOUTROOM_MarkBorderJunctions(D2DrlgLevelStrc * pLevel) {
 }
 
 // Spawns a corner fill preset at grid coordinates (nX, nY) to fill gaps in outdoor room layouts.
-static BOOL __stdcall DRLGOUTROOM_SpawnCornerFillPreset(int nY, int nX, D2DrlgLevelStrc * pLevel) {
+static BOOL __stdcall DRLGOUTROOM_SpawnCornerFillPreset(D2DrlgLevelStrc * pLevel, int nX, int nY) {
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     int nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nX, nY);
     switch (nGridFlags) {
@@ -275,7 +275,7 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
           }
 
           for (nX = 0; nX < pWildData->nGridCoordsWidth && !bColumnEmpty; nX++) {
-            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
+            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(pLevel, nSpawnResult, nX);
           }
 
           nSpawnResult++;
@@ -293,7 +293,7 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
           }
 
           for (nSpawnResult = 0; nSpawnResult < pWildData->nGridCoordsWidth && !bColumnEmpty; nSpawnResult++) {
-            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
+            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(pLevel, nSpawnResult, nX);
           }
 
           nX++;
