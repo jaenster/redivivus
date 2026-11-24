@@ -1712,85 +1712,42 @@ static BOOL CUBE_HasAnyItemsInCube(D2UnitStrc * pPlayer) {
 // Server-side trade initiation check between two players. Verifies neither player is already trading, the classic game is not completed (A4Q3), and both are in town. Enforces a 5-second accept-trade cooldown and a 1-second throttle on repeated trade messages. On success, sets mutual interact info, sends 0x77 TradeAction packets to both clients (initiator=0, target=1), and sets dwTradeState to 1/2 respectively.
 // @sourcefile .\PLAYER\PlrTrade.cpp
 void __fastcall CheckIfCanStartTradeWithPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit) {
-    BOOL _bIsTown;
-    bool bIsTown;
-    eD2LevelId eLevelId;
-    eD2LevelId nLevelId;
-    uint32_t nGUID;
-    D2ClientStrc* pClient;
-    uint32_t dwThrottleEnd;
-    int32_t nTradeBusy = Player::GetPlayerTradeTickOrBusy(pUnit);
-    if (nTradeBusy) {
+    if (Player::GetPlayerTradeTickOrBusy(pUnit)) {
       return;
     }
-
-    int32_t bClassicCompleted = Quests::QUESTS::A4Q3::Q27_IsClassicGameCompleted(pGame);
-    if (bClassicCompleted) {
+    if (Quests::QUESTS::A4Q3::Q27_IsClassicGameCompleted(pGame)) {
       return;
     }
 
     uint32_t dwTick = GetTickCount();
     D2UnitDataPlayerStrc* pDataOther = D2Common::Units::GetPlayerData(pOtherUnit);
     D2UnitDataPlayerStrc* pDataSelf = D2Common::Units::GetPlayerData(pUnit);
-    int32_t nOtherTradeBusy = Player::GetPlayerTradeTickOrBusy(pOtherUnit);
-    if (nOtherTradeBusy) {
+    if (Player::GetPlayerTradeTickOrBusy(pOtherUnit)) {
       if (dwTick - pDataSelf->nAiState > 1000) {
         SendEventMsg(pUnit, '\b', pDataOther->szCharName);
         pDataSelf->nAiState = dwTick;
-        return;
       }
-    } else {
-      D2RoomStrc* pRoom;
-      if (dwTick - pDataOther->nAcceptTradeTick < 5000) {
-        dwThrottleEnd = pDataSelf->nAiState + 1000;
-        if (dwThrottleEnd < dwTick) {
+    } else if (dwTick - pDataOther->nAcceptTradeTick < 5000) {
+      if (pDataSelf->nAiState + 1000 < dwTick) {
+        pDataSelf->nAiState = dwTick;
+        SendEventMsg(pUnit, '\t', pDataOther->szCharName);
+      }
+    } else if (!pDataSelf->dwTradeState && !pDataOther->dwTradeState) {
+      if (dwTick - pDataSelf->nAcceptTradeTick < 5000) {
+        if (dwTick > pDataSelf->nAiState + 1000) {
+          SendEventMsg(pUnit, '\t', nullptr);
           pDataSelf->nAiState = dwTick;
-          SendEventMsg(pUnit, '\t', pDataOther->szCharName);
-          return;
         }
-      } else if (!pDataSelf->dwTradeState && !pDataOther->dwTradeState) {
-        if (dwTick - pDataSelf->nAcceptTradeTick < 5000) {
-          if (dwTick > pDataSelf->nAiState + 1000) {
-            SendEventMsg(pUnit, '\t', nullptr);
-            pDataSelf->nAiState = dwTick;
-            return;
-          }
-        } else {
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-          _bIsTown = D2Common::DUNGEON::Dungeon::IsTownLevelId(eLevelId);
-          if (_bIsTown) {
-            pRoom = D2Common::Units::UNITS_GetRoom(pOtherUnit);
-            nLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-            _bIsTown = D2Common::DUNGEON::Dungeon::IsTownLevelId(nLevelId);
-            if (_bIsTown) {
-              if (!pOtherUnit) {
-                nGUID = -1;
-              } else {
-                nGUID = pOtherUnit->nUnitGUID;
-              }
-
-              UNIT::SUnit::SetInteractInfo(pUnit, UNIT_PLAYER, nGUID);
-              if (!pUnit) {
-                nGUID = -1;
-              } else {
-                nGUID = pUnit->nUnitGUID;
-              }
-
-              UNIT::SUnit::SetInteractInfo(pOtherUnit, UNIT_PLAYER, nGUID);
-              pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0x947);
-              GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 0);
-              pClient = UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0x948);
-              GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(pClient, 1);
-              pDataSelf->dwTradeState = 1;
-              pDataOther->dwTradeState = 2;
-              return;
-            }
-          }
-
-          UNIT::SUnit::ClearInteractInfo(pUnit);
-          UNIT::SUnit::ClearInteractInfo(pOtherUnit);
-        }
+      } else if (D2Common::DUNGEON::Dungeon::IsTownLevelId(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pUnit))) && D2Common::DUNGEON::Dungeon::IsTownLevelId(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pOtherUnit)))) {
+        UNIT::SUnit::SetInteractInfo(pUnit, UNIT_PLAYER, !pOtherUnit ? -1 : pOtherUnit->nUnitGUID);
+        UNIT::SUnit::SetInteractInfo(pOtherUnit, UNIT_PLAYER, !pUnit ? -1 : pUnit->nUnitGUID);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrTrade.cpp", 0x947), 0);
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x77_TRADEREQUEST(UNIT::SUnit::SUNIT_GetClient(pOtherUnit, ".\\PLAYER\\PlrTrade.cpp", 0x948), 1);
+        pDataSelf->dwTradeState = 1;
+        pDataOther->dwTradeState = 2;
+      } else {
+        UNIT::SUnit::ClearInteractInfo(pUnit);
+        UNIT::SUnit::ClearInteractInfo(pOtherUnit);
       }
     }
 }
