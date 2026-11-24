@@ -355,19 +355,20 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::Delete(::CELLIST * pNode) {
 }
 
 template<> __attribute__((noinline)) inline void TSExplicitList<CELLIST, -572662307>::UnlinkAll() {
-    TSLink<::CELLIST>** pPrev;
-    intptr_t nBucketIdx;
-    TSLink<::CELLIST>* nNext;
-    while ((nBucketIdx = this->m_terminator.m_next) > 0) {
-      TSLink<::CELLIST>* pBackLink;
-      nNext = *(TSLink<::CELLIST>**)(this->m_linkoffset + nBucketIdx);
-      pBackLink = (TSLink<::CELLIST>*)(this->m_linkoffset + nBucketIdx);
-      if (nNext) {
-        pPrev = (TSLink<::CELLIST>**)D2_StormNextLink(pBackLink, -1);
-        *pPrev = nNext;
-        pBackLink->m_prevlink->m_next = pBackLink->m_next;
-        pBackLink->m_prevlink = 0;
-        pBackLink->m_next = 0;
+    while (true) {
+      intptr_t nNode = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nNode) {
+        break;
+      }
+
+      TSLink<::CELLIST>* pLink = (TSLink<::CELLIST>*)(this->m_linkoffset + nNode);
+      TSLink<::CELLIST>* pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<::CELLIST>** ppNextBack = (TSLink<::CELLIST>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
     }
 }
