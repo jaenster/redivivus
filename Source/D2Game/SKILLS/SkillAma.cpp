@@ -578,10 +578,6 @@ void __fastcall SKILLS_AmazonDamagePercentCallback(D2UnitStrc * pUnit, intptr_t 
 
 // Server SrvDoFunc for Guided Arrow (skill 010). Sets UNITFLAG_SKSRVDOFUNC on the caster, selects srvmissilea or srvmissileb depending on weapon class, then spawns the Guided Arrow missile. If a damage-percent calc value is present, attaches the AmazonDamagePercentCallback. Encodes the direction delta (cursor minus caster position) into the missile's TargetY field for homing.
 BOOL __fastcall Skills_SrvDoFunc_010_GuidedArrowLaunch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    int32_t nUnitY;
-    D2SkillArgStrc sSkillArg;
-    uint32_t nCursorY;
-    uint32_t nCursorX;
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
@@ -591,58 +587,57 @@ BOOL __fastcall Skills_SrvDoFunc_010_GuidedArrowLaunch(::SGAMEDATA * pGame, D2Un
       return 0;
     }
 
-    ::SGAMEDATA* pGameSave = pGame;
     D2UnitStrc* pInitTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-    BOOL bHasTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSave, pUnit, &nCursorX, &nCursorY);
-    if (!bHasTargetPos) {
+    uint32_t nCursorX;
+    uint32_t nCursorY;
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nCursorX, &nCursorY)) {
       return 0;
     }
 
-    int32_t nUnitX = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
+    int32_t nDamagePercent = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
     eMissilesId eMissileId = (eMissilesId)pSkillTxt->srvmissile[1];
-    uint32_t nWeaponClass = D2Common::Units::GetWeaponClass(pUnit);
-    if (nWeaponClass != 1 && pSkillTxt->srvmissile[2] >= 0) {
+    if (D2Common::Units::GetWeaponClass(pUnit) != 1 && pSkillTxt->srvmissile[2] >= 0) {
       eMissileId = (eMissilesId)pSkillTxt->srvmissile[2];
     }
-    if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-      D2UnitStrc* pDamagePctMissile;
-      memset(&sSkillArg, 0, 0x5c);
-      sSkillArg.eSkillNo = eSkill;
-      sSkillArg.nUnitY = nCursorY;
-      sSkillArg.nFlags = 0x20;
-      sSkillArg.nSkillLevel = nSkillLvl;
-      sSkillArg.nUnitX = nCursorX;
-      if (nUnitX) {
-        sSkillArg.fpFunction = SKILLS_AmazonDamagePercentCallback;
-      }
-      if (!pInitTarget) {
-        sSkillArg.nFlags = 0x420;
-      }
 
-      sSkillArg.pOwner = pUnit;
-      sSkillArg.pMissile = pUnit;
-      sSkillArg.pTarget = pInitTarget;
-      sSkillArg.nMissileTxtNo = eMissileId;
-      sSkillArg.nFunctionParam = nUnitX;
-      pDamagePctMissile = MISSILES::Missiles::CreatingMissile(pGameSave, &sSkillArg);
-      if (pDamagePctMissile) {
-        if (pInitTarget) {
-          nUnitX = 1;
-          D2Common::Units::Missile::SetTargetX(pDamagePctMissile, 1);
-        } else {
-          nUnitX = 2;
-          D2Common::Units::Missile::SetTargetX(pDamagePctMissile, 2);
-        }
-
-        nUnitX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        nUnitY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        D2Common::Units::Missile::SetTargetY(pDamagePctMissile, (short int)((short int)nCursorY - (short int)nUnitY) * 0x10000 + (int)(short int)((short int)nCursorX - (short int)nUnitX));
-      }
-
-      return 1;
+    if ((int)eMissileId < 0 || (int)eMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      return 0;
     }
 
-    return 0;
+    D2SkillArgStrc sSkillArg;
+    memset(&sSkillArg, 0, 0x5c);
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nFlags = 0x20;
+    sSkillArg.pOwner = pUnit;
+    sSkillArg.pMissile = pUnit;
+    sSkillArg.pTarget = pInitTarget;
+    sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.nUnitX = nCursorX;
+    sSkillArg.nUnitY = nCursorY;
+    sSkillArg.nMissileTxtNo = eMissileId;
+    if (nDamagePercent) {
+      sSkillArg.fpFunction = SKILLS_AmazonDamagePercentCallback;
+    }
+
+    sSkillArg.nFunctionParam = nDamagePercent;
+    if (!pInitTarget) {
+      sSkillArg.nFlags = 0x420;
+    }
+
+    D2UnitStrc* pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+    if (pMissile) {
+      if (pInitTarget) {
+        D2Common::Units::Missile::SetTargetX(pMissile, 1);
+      } else {
+        D2Common::Units::Missile::SetTargetX(pMissile, 2);
+      }
+
+      int16_t nDeltaX = nCursorX - D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
+      int16_t nDeltaY = nCursorY - D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
+      D2Common::Units::Missile::SetTargetY(pMissile, nDeltaY * 0x10000 + nDeltaX);
+    }
+
+    return 1;
 }
 
 // Server-side do-function for Amazon Charged Strike (skill 11). Sets UNITFLAG_SKSRVDOFUNC on the caster, retrieves the current target, applies melee combat damage via DAMAGE_ProcessCombatQueueEntry, computes the number of charged bolts from skills.txt calc[0], then reads the charged-bolt missile type accumulated from prior Charge Up hits (SKILLASS_GetChargeUpMissile). If valid, spawns that many charged bolt missiles from the target position outward, each initialised with SKILL_InitChargedBoltPath. Returns 1 on success.
