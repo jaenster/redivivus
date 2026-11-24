@@ -5338,11 +5338,9 @@ void __fastcall SKILLDESC_DrawSkillDmgSummon(D2UnitStrc * pUnit, D2SkillStrc * p
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgProgressive(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
-    uint16_t wszLine1Text[32];
-    uint16_t wszLine2Text[32];
-    char szNumberBuffer[32];
-    SKILLDESC_DrawSkillDmgProgressive_Slotmc uSlotC;
-    char* pszFormatStr;
+    uint16_t wszPhysDmgW[32];
+    uint16_t wszElemDmgW[32];
+    char szDmgTextA[32];
     if (!pSkill) {
       return;
     }
@@ -5350,93 +5348,55 @@ void __fastcall SKILLDESC_DrawSkillDmgProgressive(D2UnitStrc * pUnit, D2SkillStr
       return;
     }
 
-    eD2Skills eSkillId;
-    eSkillId = (eD2Skills)pSkillsTxt->skill;
-    D2SkillStrc* pSkillSaved;
-    pSkillSaved = pSkill;
-    uSlotC.pSkillDescTxt = D2Common::Skills::GetSkillDescription(eSkillId);
-    int32_t nSkillLevel_00;
-    nSkillLevel_00 = nSkillLevel;
-    if (!uSlotC.pSkillDescTxt) {
+    eD2Skills eSkill = (eD2Skills)pSkillsTxt->skill;
+    D2SkillDescTxt* pSkillDescTxt = D2Common::Skills::GetSkillDescription(eSkill);
+    if (!pSkillDescTxt) {
       return;
     }
 
-    int nPhysMax;
-    nPhysMax = 0;
-    int nPhysMin;
-    nPhysMin = 0;
-    int32_t nElemColor;
-    nElemColor = 0;
-    nSkillLevel = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, uSlotC.pSkillDescTxt->ddamCalc1, eSkillId, nSkillLevel);
-    uint32_t nDamCalc2;
-    nDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, uSlotC.pSkillDescTxt->ddamCalc2, eSkillId, nSkillLevel_00);
-    D2SkillStrc* pSkill_00;
-    pSkill_00 = pSkillSaved;
-    SKILLDESC_CalcWeaponDamageRange(pUnit, &nPhysMax, &nPhysMin, &nElemColor, nDamCalc2, pSkillSaved, 0x80, nullptr, 0, nSkillLevel);
-    SKILLDESC_CalcElemDamageRange(pUnit, &nPhysMax, &nPhysMin, (uint32_t*)&nElemColor, pSkill_00);
-    int32_t nSkillSaved;
-    nSkillSaved = 0x0;
-    nSkillLevel = 0;
-    uSlotC.nElemColorIdx = 0;
-    SKILLDESC_CalcSkillElemDamage(pUnit, (int*)&nSkillSaved, &nSkillLevel, &uSlotC.nElemColorIdx, pSkillsTxt, nSkillLevel_00);
-    int32_t pSkillLevelB;
-    pSkillLevelB = nSkillSaved;
-    int nPhysMinShifted;
-    nPhysMinShifted = nPhysMin;
-    int nPhysMaxShifted;
-    nPhysMaxShifted = nPhysMax;
-    if (!nPhysMax && !nPhysMin) {
-      SKILLDESC_DrawDamageNumbers(nSkillSaved, nSkillLevel, uSlotC.nElemColorIdx, nXLeft, nY, nXRight);
+    int nPhysMinDmg = 0;
+    int nPhysMaxDmg = 0;
+    int32_t nPhysColorIdx = 0;
+    int nDamCalc1 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc1, eSkill, nSkillLevel);
+    int nDamCalc2 = D2Common::Skills::SKILLS_EvalDescCalcBytecode(pUnit, pSkillDescTxt->ddamCalc2, eSkill, nSkillLevel);
+    SKILLDESC_CalcWeaponDamageRange(pUnit, &nPhysMinDmg, &nPhysMaxDmg, &nPhysColorIdx, nDamCalc2, pSkill, 0x80, nullptr, 0, nDamCalc1);
+    SKILLDESC_CalcElemDamageRange(pUnit, &nPhysMinDmg, &nPhysMaxDmg, (uint32_t*)&nPhysColorIdx, pSkill);
+    int nElemMinDmg = 0;
+    int nElemMaxDmg = 0;
+    int32_t nElemColorIdx = 0;
+    SKILLDESC_CalcSkillElemDamage(pUnit, &nElemMinDmg, &nElemMaxDmg, &nElemColorIdx, pSkillsTxt, nSkillLevel);
+    if (!nPhysMinDmg && !nPhysMaxDmg) {
+      SKILLDESC_DrawDamageNumbers(nElemMinDmg, nElemMaxDmg, nElemColorIdx, nXLeft, nY, nXRight);
       return;
     }
-    if (!nSkillSaved && !nSkillLevel) {
-      SKILLDESC_DrawDamageNumbers(nPhysMax, nPhysMin, nElemColor, nXLeft, nY, nXRight);
+    if (!nElemMinDmg && !nElemMaxDmg) {
+      SKILLDESC_DrawDamageNumbers(nPhysMinDmg, nPhysMaxDmg, nPhysColorIdx, nXLeft, nY, nXRight);
       return;
     }
 
-    Fog::File::CONTAINER_InitializeBuffer(wszLine1Text, 2, 0x20, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-    if (nPhysMaxShifted == nPhysMinShifted) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szNumberBuffer, "%d", nPhysMaxShifted);
+    Fog::File::CONTAINER_InitializeBuffer(wszPhysDmgW, 2, 0x20, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+    if (nPhysMinDmg == nPhysMaxDmg) {
+      wsprintfA(szDmgTextA, "%d", nPhysMinDmg);
+    } else if (nPhysMinDmg < 10000 && nPhysMaxDmg < 10000) {
+      wsprintfA(szDmgTextA, "%d-%d", nPhysMinDmg, nPhysMaxDmg);
+    } else if (nPhysMinDmg >= 10000) {
+      wsprintfA(szDmgTextA, "%s%dK-%dK", "", (nPhysMinDmg + 500) / 1000, (nPhysMaxDmg + 500) / 1000);
     } else {
-      if (nPhysMaxShifted < 10000) {
-        if (nPhysMinShifted < 10000) {
-          /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szNumberBuffer, "%d-%d", nPhysMaxShifted, nPhysMinShifted);
-          goto format_second_range;
-        }
-
-        pszFormatStr = "%s%d-%dK";
-      } else {
-        nPhysMaxShifted = (nPhysMaxShifted + 500) / 1000;
-        pszFormatStr = "%s%dK-%dK";
-      }
-
-      /* LPSTR param_1 for wsprintfA */ wsprintfA(szNumberBuffer, pszFormatStr, "", nPhysMaxShifted, (nPhysMinShifted + 500) / 1000);
+      wsprintfA(szDmgTextA, "%s%d-%dK", "", nPhysMinDmg, (nPhysMaxDmg + 500) / 1000);
     }
-
-    format_second_range:
-    D2Lang::UTF8_ConvertToWideChar(wszLine1Text, szNumberBuffer, 0x20);
-    Fog::File::CONTAINER_InitializeBuffer(wszLine2Text, 2, 0x20, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-    if (pSkillLevelB == nSkillLevel) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szNumberBuffer, "%d", pSkillLevelB);
+    D2Lang::UTF8_ConvertToWideChar(wszPhysDmgW, szDmgTextA, 0x20);
+    Fog::File::CONTAINER_InitializeBuffer(wszElemDmgW, 2, 0x20, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+    if (nElemMinDmg == nElemMaxDmg) {
+      wsprintfA(szDmgTextA, "%d", nElemMinDmg);
+    } else if (nElemMinDmg < 10000 && nElemMaxDmg < 10000) {
+      wsprintfA(szDmgTextA, "%d-%d", nElemMinDmg, nElemMaxDmg);
+    } else if (nElemMinDmg >= 10000) {
+      wsprintfA(szDmgTextA, "%s%dK-%dK", "", (nElemMinDmg + 500) / 1000, (nElemMaxDmg + 500) / 1000);
     } else {
-      if (pSkillLevelB < 10000) {
-        if (nSkillLevel < 10000) {
-          /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szNumberBuffer, "%d-%d", pSkillLevelB, nSkillLevel);
-          goto draw_both_ranges;
-        }
-
-        /* LPCSTR param_2 for wsprintfA */ pszFormatStr = "%s%d-%dK";
-        wsprintfA(szNumberBuffer, "%s%d-%dK", "", pSkillLevelB, (nSkillLevel + 500) / 1000);
-      } else {
-        pSkillLevelB = (pSkillLevelB + 500) / 1000;
-        pszFormatStr = "%s%dK-%dK";
-        wsprintfA(szNumberBuffer, "%s%dK-%dK", "", pSkillLevelB, (nSkillLevel + 500) / 1000);
-      }
+      wsprintfA(szDmgTextA, "%s%d-%dK", "", nElemMinDmg, (nElemMaxDmg + 500) / 1000);
     }
-
-    draw_both_ranges:
-    D2Lang::UTF8_ConvertToWideChar(wszLine2Text, szNumberBuffer, 0x20);
-    SKILLDESC_DrawTwoLineText(wszLine1Text, wszLine2Text, nXLeft, nY, nXRight, nElemColor, uSlotC.nElemColorIdx);
+    D2Lang::UTF8_ConvertToWideChar(wszElemDmgW, szDmgTextA, 0x20);
+    SKILLDESC_DrawTwoLineText(wszPhysDmgW, wszElemDmgW, nXLeft, nY, nXRight, nPhysColorIdx, nElemColorIdx);
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgProgElem(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
