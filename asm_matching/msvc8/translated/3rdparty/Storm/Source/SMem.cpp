@@ -989,20 +989,21 @@ uint32_t __stdcall SMemGetHeapByPtr(uint8_t * pObject) {
       }
     }
 
-    BOOL pBlockBase = SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pObject, 0, nullptr, 0);
-    if (!pBlockBase) {
+    if (!SMEM_CheckValidBlock((D2FogHeapBlockHdrStrc*)pObject, 0, nullptr, 0)) {
       return 0;
     }
+
+    D2FogHeapBlockHdrStrc* pBlock;
     if (!pObject) {
-      return *(uint32_t*)(((uint32_t)*(volatile uint8_t*)0x4 << 0x10) + 4);
+      pBlock = 0;
+    } else {
+      pBlock = (D2FogHeapBlockHdrStrc*)((char*)pObject - 8);
+      if (pBlock->byFlags & 8) {
+        pBlock = ((D2FogHeapBlockHdrStrc**)pBlock)[-1];
+      }
     }
 
-    uint8_t* puVar1 = pObject - 8;
-    if (pObject[-5] & 8) {
-      puVar1 = ((uint8_t**)puVar1)[-1];
-    }
-
-    return *(uint32_t*)(((uintptr_t)*(uint16_t*)(puVar1 + 4) << 0x10) + offsetof(D2FogHeapDescStrc, nHash));
+    return ((D2FogHeapDescStrc*)((uintptr_t)*(uint16_t*)&pBlock->uLink << 0x10))->nHash;
 }
 
 int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize) {

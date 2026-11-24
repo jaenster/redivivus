@@ -6,6 +6,7 @@
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Common/Chat.h"
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Common/D2BitBufferStrc.h"
@@ -242,48 +243,9 @@ uint32_t __fastcall ReturnFirstArgument_Unref_00518b90(uint32_t * pdwParam) {
 
 // Returns the squared Euclidean distance between two units' world positions. Reads static path coords for objects/items (unit types 2, 4-5) and dynamic path coords for monsters/players. Used by monster AI range checks.
 int32_t __fastcall GetDistanceBetween(D2UnitStrc * pUnit, D2UnitStrc * pOther) {
-    int nX;
-    int nY;
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nX = 0;
-    }
-
-    eUnitType = pOther->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = pOther->pPath.pStaticPath->nPosX;
-    } else if (pOther->pPath.pDynamicPath) {
-      nY = D2Common::PATH::DynamicPath::GetXPos(pOther->pPath.pDynamicPath);
-    } else {
-      nY = 0;
-    }
-
-    nX -= nY;
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nY = 0;
-    }
-
-    eUnitType = pOther->eUnitType;
-    if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      int32_t nDistanceSq;
-      if (pOther->pPath.pDynamicPath) {
-        nDistanceSq = D2Common::PATH::DynamicPath::GetYPos(pOther->pPath.pDynamicPath);
-        return (nY - nDistanceSq) * (nY - nDistanceSq) + nX * nX;
-      }
-    } else {
-      nY -= pOther->pPath.pStaticPath->nPosY;
-    }
-
-    return nY * nY + nX * nX;
+    int nDiffX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit) - D2Common::Units::GetXPosFromDynamicPathUnitInline(pOther);
+    int nDiffY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit) - D2Common::Units::GetYPosFromDynamicPathUnitInline(pOther);
+    return nDiffY * nDiffY + nDiffX * nDiffX;
 }
 
 void __fastcall AI_Fn1_None(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
@@ -2026,29 +1988,8 @@ int32_t __fastcall AI_GetWeightedDistanceToPoint(D2UnitStrc * pUnit, int32_t nTa
 }
 
 int32_t __fastcall GetCollisionDistanceFromXY(D2UnitStrc * pUnit, int32_t nTargetX, int32_t nY) {
-    int nDiffX;
-    int nDiffY;
-    eD2UnitType eUnitTypeY;
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nDiffX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nDiffX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nDiffX = 0;
-    }
-
-    nDiffX -= nTargetX;
-    eUnitTypeY = pUnit->eUnitType;
-    if (eUnitTypeY == UNIT_OBJECT || (int)eUnitTypeY > 3 && (int)eUnitTypeY <= 5) {
-      nDiffY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nDiffY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nDiffY = 0;
-    }
-
-    nDiffY -= nY;
+    int nDiffX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit) - nTargetX;
+    int nDiffY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit) - nY;
     if (nDiffX < 0) {
       nDiffX = -nDiffX;
     }
