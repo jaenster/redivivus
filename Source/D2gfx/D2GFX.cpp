@@ -159,7 +159,11 @@ BOOL __stdcall D2GFX_GetFixAspect() {
 }
 
 void __stdcall D2GFX_SetPerspectiveCapable(BOOL bResult) {
-    D2GFXRenderedData.bPerspectiveCapable = (int)eRendererMode < 4 ? 0 : bResult;
+    if ((int)eRendererMode < 4) {
+      bResult = FALSE;
+    }
+
+    D2GFXRenderedData.bPerspectiveCapable = bResult;
 }
 
 uint32_t __stdcall IsWindowMode() {
