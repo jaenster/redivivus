@@ -270,19 +270,20 @@ template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -5726
 }
 
 template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::UnlinkAll() {
-    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>** pPrevLink;
-    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNext;
-    intptr_t nHeadOffset;
-    while ((nHeadOffset = this->m_terminator.m_next) > 0) {
-      TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNode;
-      pNext = *(TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)(this->m_linkoffset + nHeadOffset);
-      pNode = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>*)(this->m_linkoffset + nHeadOffset);
-      if (pNext) {
-        pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(pNode, -1);
-        *pPrevLink = pNext;
-        pNode->m_prevlink->m_next = pNode->m_next;
-        pNode->m_prevlink = 0;
-        pNode->m_next = 0;
+    while (true) {
+      intptr_t nNode = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nNode) {
+        break;
+      }
+
+      TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>*)(this->m_linkoffset + nNode);
+      TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>** ppNextBack = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
     }
 }
