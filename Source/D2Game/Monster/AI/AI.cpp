@@ -6,6 +6,7 @@
 #include "Source/D2Client/GAME/Game/SGAMEDATA.h"
 #include "Source/D2Client/UNIT/Monster.h"
 #include "Source/D2Common/D2Common.h"
+#include "Source/D2Common/Units.twin.inline.h"
 #include "Source/D2Common/Chat.h"
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Common/D2BitBufferStrc.h"
@@ -2026,29 +2027,8 @@ int32_t __fastcall AI_GetWeightedDistanceToPoint(D2UnitStrc * pUnit, int32_t nTa
 }
 
 int32_t __fastcall GetCollisionDistanceFromXY(D2UnitStrc * pUnit, int32_t nTargetX, int32_t nY) {
-    int nDiffX;
-    int nDiffY;
-    eD2UnitType eUnitTypeY;
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nDiffX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nDiffX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nDiffX = 0;
-    }
-
-    nDiffX -= nTargetX;
-    eUnitTypeY = pUnit->eUnitType;
-    if (eUnitTypeY == UNIT_OBJECT || (int)eUnitTypeY > 3 && (int)eUnitTypeY <= 5) {
-      nDiffY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nDiffY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nDiffY = 0;
-    }
-
-    nDiffY -= nY;
+    int nDiffX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit) - nTargetX;
+    int nDiffY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit) - nY;
     if (nDiffX < 0) {
       nDiffX = -nDiffX;
     }
