@@ -6301,50 +6301,41 @@ void __fastcall MISSILE_CltDoFn16_DiabWallMaker(D2UnitStrc * pUnit) {
 
 // Client per-frame handler for area-pattern stream missiles (017). While remaining frames &lt; CltParam1 and every 3 frames, spawns a ring/pattern of sub-missiles via MISSILE_CreatePatternAtUnitPos using the current stream range and density (doubles when range &gt; 4). Removes client-side when stream range reaches zero.
 void __fastcall MISSILE_CltDoFn17_CurseCenter(D2UnitStrc * pUnit) {
-    eMissilesId eStreamMissile;
-    uint32_t nStreamRange;
-    int32_t nRemainingFrames;
-    uint32_t nInnerRange;
-    int nDensity;
+    D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
-      D2MissilesTxt* pMissileTxt;
-      nDensity = pUnit->nClassId;
-      if (nDensity >= 0 && nDensity < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-        pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nDensity;
-        if (pMissileTxt) {
-          eStreamMissile = D2Common::Units::Missile::GetStreamMissile(pUnit);
-          if (eStreamMissile == MISSILE_Arrow) {
-            eStreamMissile = (eMissilesId)pMissileTxt->CltSubMissile1;
-          }
-          if ((int)eStreamMissile >= 0) {
-            nStreamRange = D2Common::Units::Missile::GetStreamRange(pUnit);
-            if ((int)nStreamRange > 0) {
-              nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-              if (nRemainingFrames < pMissileTxt->CltParam1) {
-                nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-                if (!(nRemainingFrames % 3)) {
-                  nInnerRange = nStreamRange;
-                  if ((int)nStreamRange > 4) {
-                    nInnerRange = (int)nStreamRange / 2;
-                  }
-
-                  nDensity = (int)nStreamRange > 4 ? 2 : 1;
-                  MISSILE_CreatePatternAtUnitPos(pUnit, nStreamRange, eStreamMissile, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nInnerRange, nDensity);
-                }
-              }
-
-              MISSILE_CltDoFn01_BasicMissile(pUnit);
-              return;
-            }
-          }
-
-          MISSILE_RemoveClientSide(pUnit);
-          return;
-        }
-      }
+      int nClassId = pUnit->nClassId;
+      pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    }
+    if (!pMissileTxt) {
+      MISSILE_RemoveClientSide(pUnit);
+      return;
     }
 
-    MISSILE_RemoveClientSide(pUnit);
+    eMissilesId eStreamMissile = D2Common::Units::Missile::GetStreamMissile(pUnit);
+    if (eStreamMissile == MISSILE_Arrow) {
+      eStreamMissile = (eMissilesId)pMissileTxt->CltSubMissile1;
+    }
+    if ((int)eStreamMissile < 0) {
+      MISSILE_RemoveClientSide(pUnit);
+      return;
+    }
+
+    int nStreamRange = D2Common::Units::Missile::GetStreamRange(pUnit);
+    if (nStreamRange <= 0) {
+      MISSILE_RemoveClientSide(pUnit);
+      return;
+    }
+
+    if (D2Common::Units::Missile::GetRemainingFrames(pUnit) < pMissileTxt->CltParam1 && !(D2Common::Units::Missile::GetRemainingFrames(pUnit) % 3)) {
+      int nInnerRange = nStreamRange;
+      if (nStreamRange > 4) {
+        nInnerRange = nStreamRange / 2;
+      }
+
+      MISSILE_CreatePatternAtUnitPos(pUnit, nStreamRange, eStreamMissile, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nInnerRange, nStreamRange > 4 ? 2 : 1);
+    }
+
+    MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
 // Client per-frame handler for bouncing/ricocheting missiles (018). After InitSteps frames, on collision spawns CltSubMissile1 at the impact position inheriting direction, precision X/Y, and Z-position from the parent missile. Always falls through to Missiles_CltDoFunc_001 for continued movement (no remove-on-hit).
