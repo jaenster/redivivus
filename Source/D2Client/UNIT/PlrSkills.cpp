@@ -841,82 +841,50 @@ void __fastcall PLRSKILLS_StateSetFn19RemFn12_SkillDelay(D2UnitStrc * pUnit, eD2
 
 // Scans all active states on pUnit to find the highest-priority one with a non-zero colorshift overlay, then applies its color palette index to pUnit->uSideData.pClientSide.nPaletteIndex (skipping colorshift 'h' in windowed mode for the local player). If pUnit is the local player and has a light map, also calls SetRGB from the winning state's light_r/g/b fields. Resets palette to 0 and light to full white (0xFF,0xFF,0xFF) if no qualifying state is found.
 void __stdcall STATES_UpdateColorShiftAndLight(D2UnitStrc * pUnit) {
-    D2LightMapStrc* pDVar2;
-    eD2States eUnitState;
-    D2UnitStrc* pLocalPlayerUnit;
-    uint32_t bIsWindowMode;
-    D2UnitStrc* pDVar3;
-    D2DataTableTxtStrc* pDataTable;
-    D2StatesTxt* pStateTxt;
-    int nTxtOffset;
-    uint8_t byColorPriority;
-    int nTxtSize = D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize;
-    int nBestStateIdx = -1;
-    int nStateIdx = 0;
-    uint8_t byBestPriority = 0;
-    if (nTxtSize > 0) {
-      D2StatesTxt* pDVar1;
-      nTxtOffset = 0;
-      pDataTable = D2Common::ITEMS::Items::sgptDataTable;
-      do {
-        if (nStateIdx >= 0 && nStateIdx < nTxtSize) {
-          pStateTxt = pDataTable->pTxtStates + nStateIdx;
-          if (pStateTxt) {
-            eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nStateIdx);
-            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
-            if (eUnitState != STATE_none) {
-              byColorPriority = (uint8_t)pStateTxt->colorpri;
-              if (byColorPriority > byBestPriority) {
-                nBestStateIdx = nStateIdx;
-                byBestPriority = byColorPriority;
-              }
-            }
-          }
-        }
-
-        nTxtSize = pDataTable->nTxtStatesSize;
-        nTxtOffset += 0x3c;
-        nStateIdx += STATE_freeze;
-      } while (nStateIdx < nTxtSize);
-
-      if (nBestStateIdx > 0) {
-        pDVar1 = nBestStateIdx < nTxtSize ? pDataTable->pTxtStates + nBestStateIdx : nullptr;
-        if (!pDVar1) {
-          return;
-        }
-        if (pDVar1->colorshift == 'h' && (pLocalPlayerUnit = Player::GetPlayerUnit_UI() , pUnit == pLocalPlayerUnit) && (bIsWindowMode = D2gfx::D2GFX::IsWindowMode() , bIsWindowMode != 0)) {
-          pUnit->uSideData.pClientSide.nPaletteIndex = 0;
-        } else {
-          pUnit->uSideData.pClientSide.nPaletteIndex = (uint32_t)(uint8_t)pDVar1->colorshift;
-        }
-
-        pDVar3 = Player::GetPlayerUnit_UI();
-        if (pUnit != pDVar3) {
-          return;
-        }
-
-        pDVar2 = pUnit->uSideData.pClientSide.pLight;
-        if (!pDVar2) {
-          return;
-        }
-
-        Draw::LightMap::SetRGB(pDVar2, pDVar1->light_r, pDVar1->light_g, pDVar1->light_b);
-        return;
+    int nBestState = -1;
+    uint8_t nBestPriority = 0;
+    for (int i = 0; i < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize; i++) {
+      D2StatesTxt* pStatesTxt = i >= 0 && i < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + i : nullptr;
+      if (pStatesTxt && D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, i) && (uint8_t)pStatesTxt->colorpri > nBestPriority) {
+        nBestState = i;
+        nBestPriority = pStatesTxt->colorpri;
       }
     }
 
+    if (nBestState > 0) {
+      D2StatesTxt* pStatesTxt = nBestState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + nBestState : nullptr;
+      if (!pStatesTxt) {
+        return;
+      }
+      if (pStatesTxt->colorshift == 'h' && pUnit == Player::GetPlayerUnit_UI() && D2gfx::D2GFX::IsWindowMode()) {
+        pUnit->uSideData.pClientSide.nPaletteIndex = 0;
+      } else {
+        pUnit->uSideData.pClientSide.nPaletteIndex = (uint8_t)pStatesTxt->colorshift;
+      }
+      if (pUnit != Player::GetPlayerUnit_UI()) {
+        return;
+      }
+
+      D2LightMapStrc* pLight = pUnit->uSideData.pClientSide.pLight;
+      if (!pLight) {
+        return;
+      }
+
+      Draw::LightMap::SetRGB(pLight, pStatesTxt->light_r, pStatesTxt->light_g, pStatesTxt->light_b);
+      return;
+    }
+
     pUnit->uSideData.pClientSide.nPaletteIndex = 0;
-    pDVar3 = Player::GetPlayerUnit_UI();
-    if (pUnit != pDVar3) {
+    if (pUnit != Player::GetPlayerUnit_UI()) {
       return;
     }
 
-    pDVar2 = pUnit->uSideData.pClientSide.pLight;
-    if (!pDVar2) {
+    D2LightMapStrc* pLight = pUnit->uSideData.pClientSide.pLight;
+    if (!pLight) {
       return;
     }
 
-    Draw::LightMap::SetRGB(pDVar2, 0xff, 0xff, 0xff);
+    Draw::LightMap::SetRGB(pLight, 0xff, 0xff, 0xff);
 }
 
 // Attaches visual overlay effects to a unit when a state is applied. Reads the States.txt row for eState, resolves cast/overlay/overlay2 IDs (randomly selecting from 1-of-N groups via the unit seed), and calls GFX_AddOverlayToUnit with the appropriate mode (3=normal, 4=cast, 8/9=linked-state). Skips if nooverlays is set or eState is out of range. For linked states, temporarily sets/clears the state flag to determine whether the cast overlay should be suppressed by a hide-state.
