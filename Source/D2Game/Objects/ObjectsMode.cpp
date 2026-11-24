@@ -2083,7 +2083,7 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
 }
 
 // Computes the effective to-hit (attack rate) for a skill+weapon pair and writes it into *pnParam. Starts from the unit's base attack rate; if no explicit weapon is provided (pUnit2==null), falls back to the equipped weapon. Missile-potion weapons force *pnParam=0. Final value combines skill's LevToHit/ToHit columns, item bonus damage, UNITSTAT_item_tohit_percent, and the character class's ToHitFactor from CharStats.txt. Halts if pSkill is null.
-static void __stdcall SKILL_GetAttackRateForWeapon(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int * pnToHit, int32_t nSkillLevel, D2UnitStrc * pUnit2) {
+static void __stdcall SKILL_GetAttackRateForWeapon(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2UnitStrc * pUnit2, int * pnToHit, int32_t nSkillLevel) {
     int32_t nAttackRate;
     nAttackRate = D2Common::Units::GetAttackRate(pUnit);
     *pnToHit = nAttackRate;
@@ -2153,7 +2153,7 @@ static int32_t __stdcall OBJMODE_GetModifiedStatValueFromShrine(eD2UnitStat eUni
         return nBoostValue;
       case UNITSTAT_tohit:
         pSkill = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_Attack, -1);
-      SKILL_GetAttackRateForWeapon(pSkill, pUnit, (int*)&eUnitStat, 1, pWeapon);
+      SKILL_GetAttackRateForWeapon(pUnit, pSkill, pWeapon, (int*)&eUnitStat, 1);
       return (int)(eUnitStat * nBoostValue) / 100;
       case UNITSTAT_mindamage:
         pWeaponBySkill = D2Common::Units::GetWeaponBySkill(pUnit, 1);
