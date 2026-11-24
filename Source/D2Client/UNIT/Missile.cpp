@@ -5611,30 +5611,25 @@ void __fastcall MISSILE_CltDoFn04_PoisonCloud(D2UnitStrc * pUnit) {
 }
 
 void __fastcall MISSILE_CltDoFn05_FireWall(D2UnitStrc * pUnit) {
-    D2MissilesTxt* pMissileTxt;
-    int nClassId;
-    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize || (pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId , !pMissileTxt)) {
+    D2MissilesTxt* pMissileTxt = 0;
+    if (pUnit) {
+      int nClassId = pUnit->nClassId;
+      pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    }
+    if (!pMissileTxt) {
       MISSILE_RemoveClientSide(pUnit);
       return;
     }
 
-    nClassId = pUnit->nGfxCurrentFrame >> 8;
-    if (nClassId == pMissileTxt->SubStart - 1) {
-      uint32_t nRandSubFrame;
-      nRandSubFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)pMissileTxt->SubStop - (uint32_t)pMissileTxt->SubStart);
-      pUnit->nGfxCurrentFrame = nRandSubFrame + nClassId << 8;
-    } else {
-      uint8_t bySubStart = pMissileTxt->SubStart;
-      uint32_t nCurFrameCheck = D2Common::Units::Missile::GetCurrentFrame(pUnit);
-      if (nCurFrameCheck == bySubStart) {
-        nCurFrameCheck = bySubStart - 3;
-        pUnit->nGfxCurrentFrame = ((int)nCurFrameCheck < 0 ? 0 : nCurFrameCheck) << 8;
-      } else {
-        int32_t nCurFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
-        if (nCurFrame < (int)(uint32_t)pMissileTxt->SubStart) {
-          pUnit->nGfxCurrentFrame = ((int)(nClassId - 2U) < 0 ? 0 : nClassId - 2U) << 8;
-        }
-      }
+    int nFrame = pUnit->nGfxCurrentFrame >> 8;
+    if (nFrame == pMissileTxt->SubStart - 1) {
+      pUnit->nGfxCurrentFrame = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)pMissileTxt->SubStop - (uint32_t)pMissileTxt->SubStart) + nFrame << 8;
+    } else if (D2Common::Units::Missile::GetCurrentFrame(pUnit) == pMissileTxt->SubStart) {
+      int nNewFrame = pMissileTxt->SubStart - 3;
+      pUnit->nGfxCurrentFrame = (nNewFrame < 0 ? 0 : nNewFrame) << 8;
+    } else if (D2Common::Units::Missile::GetCurrentFrame(pUnit) < (int)(uint32_t)pMissileTxt->SubStart) {
+      nFrame -= 2;
+      pUnit->nGfxCurrentFrame = (nFrame < 0 ? 0 : nFrame) << 8;
     }
 
     MISSILE_CltDoFn01_BasicMissile(pUnit);
