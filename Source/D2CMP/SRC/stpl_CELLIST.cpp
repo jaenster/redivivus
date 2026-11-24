@@ -139,46 +139,27 @@ template<> void __fastcall TSExplicitList<CELLIST, -572662307>::LINKEDLIST_Unlin
 }
 
 template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NONE>::Unlink(::CELLIST * pNode) {
-    TSLink<::CELLIST>** pBackLink2;
-    intptr_t nLinkField;
-    if (!pNode->m_linktoslot.m_next) {
-      return;
-    }
-
-    TSLink<::CELLIST>* pTVar1 = &pNode->m_linktoslot;
-    TSLink<::CELLIST>* nFirstEntry = pTVar1->m_prevlink;
-    if (nFirstEntry) {
-      TSLink<::CELLIST>** pBackLink;
-      nLinkField = pNode->m_linktoslot.m_next;
-      if (nLinkField < 0) {
-        pBackLink = (TSLink<::CELLIST>**)~nLinkField;
-      } else {
-        pBackLink = (TSLink<::CELLIST>**)((char*)pTVar1 + (nLinkField - nFirstEntry->m_next));
+    if (pNode->m_linktoslot.m_next) {
+      TSLink<::CELLIST>* pLink = &pNode->m_linktoslot;
+      TSLink<::CELLIST>* pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<::CELLIST>** ppNextBack = (TSLink<::CELLIST>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
 
-      *pBackLink = nFirstEntry;
-      pTVar1->m_prevlink->m_next = pNode->m_linktoslot.m_next;
-      pTVar1->m_prevlink = 0;
-      pNode->m_linktoslot.m_next = 0;
+      pLink = &pNode->m_linktofull;
+      pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<::CELLIST>** ppNextBack = (TSLink<::CELLIST>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
+      }
     }
-
-    nFirstEntry = pNode->m_linktofull.m_prevlink;
-    pTVar1 = &pNode->m_linktofull;
-    if (!nFirstEntry) {
-      return;
-    }
-
-    intptr_t nLinkField2 = pNode->m_linktofull.m_next;
-    if (nLinkField2 < 0) {
-      pBackLink2 = (TSLink<::CELLIST>**)~nLinkField2;
-    } else {
-      pBackLink2 = (TSLink<::CELLIST>**)((char*)pTVar1 + (nLinkField2 - nFirstEntry->m_next));
-    }
-
-    *pBackLink2 = nFirstEntry;
-    pTVar1->m_prevlink->m_next = pNode->m_linktofull.m_next;
-    pTVar1->m_prevlink = 0;
-    pTVar1->m_next = 0;
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::RawNext(::CELLIST * pNode) {
