@@ -6005,58 +6005,23 @@ void __fastcall MISSILE_CltDoFn12_ScreenShake(D2UnitStrc * pUnit) {
 
 // Client-side per-frame tick function for missile type 067. Checks up to three CltSubMissile slots (CltSubMissile1/2/3): when the missile's remaining frame count matches the corresponding CltParam, fires the sub-missile via CastAttack at the current missile position using the owner unit, current skill/level. Falls through to Missiles_CltDoFunc_001 for standard motion. Removes the missile client-side if the missile txt entry is missing.
 void __fastcall MISSILE_CltDoFn67_Unused(D2UnitStrc * pUnit) {
-    int32_t nRemainingFrames;
-    eD2Skills eSkillId;
-    int32_t nPosY;
-    int32_t nPosX;
-    D2UnitStrc* pOwner;
-    int nClassId;
-    short int nSubMissile;
-    D2MissilesTxt* pMissileTxt;
-    pMissileTxt = 0;
+    D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
-      nClassId = pUnit->nClassId;
+      int nClassId = pUnit->nClassId;
       pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     }
     if (!pMissileTxt) {
       MISSILE_RemoveClientSide(pUnit);
       return;
     }
-    if (pMissileTxt->CltSubMissile1 > 0) {
-      nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-      if (nRemainingFrames == pMissileTxt->CltParam1) {
-        nRemainingFrames = D2Common::Units::Missile::GetLevel(pUnit);
-        eSkillId = D2Common::Units::Missile::GetSkillId(pUnit);
-        nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        nPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        nSubMissile = pMissileTxt->CltSubMissile1;
-        pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
-        CastAttack(pOwner, (int)nSubMissile, nPosX, nPosY, eSkillId, nRemainingFrames);
-      }
+    if (pMissileTxt->CltSubMissile1 > 0 && D2Common::Units::Missile::GetRemainingFrames(pUnit) == pMissileTxt->CltParam1) {
+      CastAttack(CUnit::MISSILE_GetOwnerUnit(pUnit), (int)pMissileTxt->CltSubMissile1, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit), D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit));
     }
-    if (pMissileTxt->CltSubMissile2 > 0) {
-      nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-      if (nRemainingFrames == pMissileTxt->CltParam2) {
-        nRemainingFrames = D2Common::Units::Missile::GetLevel(pUnit);
-        eSkillId = D2Common::Units::Missile::GetSkillId(pUnit);
-        nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        nPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        nSubMissile = pMissileTxt->CltSubMissile2;
-        pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
-        CastAttack(pOwner, (int)nSubMissile, nPosX, nPosY, eSkillId, nRemainingFrames);
-      }
+    if (pMissileTxt->CltSubMissile2 > 0 && D2Common::Units::Missile::GetRemainingFrames(pUnit) == pMissileTxt->CltParam2) {
+      CastAttack(CUnit::MISSILE_GetOwnerUnit(pUnit), (int)pMissileTxt->CltSubMissile2, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit), D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit));
     }
-    if (pMissileTxt->CltSubMissile3 > 0) {
-      nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-      if (nRemainingFrames == pMissileTxt->CltParam3) {
-        nRemainingFrames = D2Common::Units::Missile::GetLevel(pUnit);
-        eSkillId = D2Common::Units::Missile::GetSkillId(pUnit);
-        nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        nPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        nSubMissile = pMissileTxt->CltSubMissile3;
-        pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
-        CastAttack(pOwner, (int)nSubMissile, nPosX, nPosY, eSkillId, nRemainingFrames);
-      }
+    if (pMissileTxt->CltSubMissile3 > 0 && D2Common::Units::Missile::GetRemainingFrames(pUnit) == pMissileTxt->CltParam3) {
+      CastAttack(CUnit::MISSILE_GetOwnerUnit(pUnit), (int)pMissileTxt->CltSubMissile3, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit), D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit));
     }
 
     MISSILE_CltDoFn01_BasicMissile(pUnit);
