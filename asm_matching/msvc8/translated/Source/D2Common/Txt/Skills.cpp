@@ -1513,15 +1513,7 @@ static int32_t SKILLS_ApplyElementalMasteryBonus(eD2ElementalDamageTypeDWORD eEl
 // Calculates the minimum elemental damage for a skill at a given level. Looks up the skill in sgptDataTable, computes base min damage from EMinLev breakpoints and EMin, then optionally evaluates the EDmgSymPerCalc formula via SKILLS_CompileSkillFormula, and if bApplyMastery is set, further scales by the caster's elemental mastery passive stat. Returns 0 if skill ID or level is invalid.
 int32_t __stdcall SERVER_MinDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, BOOL bApplyMastery) {
     int32_t nElemMasteryBonus;
-    D2DataTableTxtStrc* pDataTable = ITEMS::Items::sgptDataTable;
-    if (eSkillId < 0) {
-      return 0;
-    }
-    if (!(eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
+    D2SkillsTxt* pSkillTxt = eSkillId >= 0 && eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1530,14 +1522,14 @@ int32_t __stdcall SERVER_MinDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t
     }
 
     int32_t nDamage = SKILLS_GetValueByLevelBreakpoints(nSkillLevel, pSkillTxt->EMinLev);
-    uint32_t uCalcResult = pSkillTxt->EDmgSymPerCalc;
     nDamage = nDamage + pSkillTxt->EMin << D2_SHIFT_COUNT(pSkillTxt->HitShift);
-    if (uCalcResult != -1 && (nDamage > 0x100 || pSkillTxt->EMinLev[0]) && pDataTable->pSkillsCode && uCalcResult < (uint32_t)pDataTable->nSkillsCodeSize) {
+    uint32_t uCalcResult = pSkillTxt->EDmgSymPerCalc;
+    if (uCalcResult != -1 && (nDamage > 0x100 || pSkillTxt->EMinLev[0]) && ITEMS::Items::sgptDataTable->pSkillsCode && uCalcResult < (uint32_t)ITEMS::Items::sgptDataTable->nSkillsCodeSize) {
       D2SkillCalcContextStrc sCalcCtx;
       sCalcCtx.pUnit = pUnit;
       sCalcCtx.nSkillId = eSkillId;
       sCalcCtx.nSkillLevel = nSkillLevel;
-      uCalcResult = Fog::Skills::FOG_EvaluateCalcExpression((uint32_t*)((uint8_t*)pDataTable->pSkillsCode + uCalcResult), pDataTable->nSkillsCodeSize - uCalcResult, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
+      uCalcResult = Fog::Skills::FOG_EvaluateCalcExpression((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pSkillsCode + uCalcResult), ITEMS::Items::sgptDataTable->nSkillsCodeSize - uCalcResult, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
       if (uCalcResult) {
         nElemMasteryBonus = DATATBLS::DataTbls::D2ApplyPercent(nDamage, uCalcResult, 100);
         nDamage += nElemMasteryBonus;
@@ -1553,15 +1545,7 @@ int32_t __stdcall SERVER_MinDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t
 
 int32_t __stdcall SERVER_MaxDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t nSkillLevel, int32_t bApplyElemBonus) {
     int32_t nElemMasteryBonus;
-    D2DataTableTxtStrc* pDataTable = ITEMS::Items::sgptDataTable;
-    if (eSkillId < 0) {
-      return 0;
-    }
-    if (!(eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId;
+    D2SkillsTxt* pSkillTxt = eSkillId >= 0 && eSkillId < ITEMS::Items::sgptDataTable->nTxtSkillsCount ? ITEMS::Items::sgptDataTable->pTxtSkills + eSkillId : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -1570,14 +1554,14 @@ int32_t __stdcall SERVER_MaxDamage(D2UnitStrc * pUnit, int32_t eSkillId, int32_t
     }
 
     int32_t nDamage = SKILLS_GetValueByLevelBreakpoints(nSkillLevel, pSkillTxt->EMaxLev);
-    uint32_t uCalcResult = pSkillTxt->EDmgSymPerCalc;
     nDamage = nDamage + pSkillTxt->EMax << D2_SHIFT_COUNT(pSkillTxt->HitShift);
-    if (uCalcResult != -1 && pDataTable->pSkillsCode && uCalcResult < (uint32_t)pDataTable->nSkillsCodeSize) {
+    uint32_t uCalcResult = pSkillTxt->EDmgSymPerCalc;
+    if (uCalcResult != -1 && ITEMS::Items::sgptDataTable->pSkillsCode && uCalcResult < (uint32_t)ITEMS::Items::sgptDataTable->nSkillsCodeSize) {
       D2SkillCalcContextStrc sCalcCtx;
       sCalcCtx.pUnit = pUnit;
       sCalcCtx.nSkillId = eSkillId;
       sCalcCtx.nSkillLevel = nSkillLevel;
-      uCalcResult = Fog::Skills::FOG_EvaluateCalcExpression((uint32_t*)((uint8_t*)pDataTable->pSkillsCode + uCalcResult), pDataTable->nSkillsCodeSize - uCalcResult, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
+      uCalcResult = Fog::Skills::FOG_EvaluateCalcExpression((uint32_t*)((uint8_t*)ITEMS::Items::sgptDataTable->pSkillsCode + uCalcResult), ITEMS::Items::sgptDataTable->nSkillsCodeSize - uCalcResult, (fnSkillCalcMethod)SKILLS_DescCalcCallback_Eval, gaSkillCalcMethods, gnSkillCalcMethodCount, &sCalcCtx);
       if (uCalcResult) {
         nElemMasteryBonus = DATATBLS::DataTbls::D2ApplyPercent(nDamage, uCalcResult, 100);
         nDamage += nElemMasteryBonus;
