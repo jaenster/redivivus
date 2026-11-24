@@ -958,87 +958,75 @@ void __fastcall Objects_InitFn59_VileDogAfterglow(D2ObjectInitFnArg * pInitArg) 
 
 // Object initialisation callback for waypoint-type objects (init-fn index 12). If the object is null or in Death mode, blocks collision and schedules an animation event. Then switches on the current room's level ID to write a level-specific frame byte into the object's data slot (szCharName[4]), controlling which waypoint frame/state is active. For FrigidHighlands, ArreatPlateau, and FrozenTundra it also fires event 0xB to trigger a frame-change if the stored value differs from the new one. Horadric Tomb level is determined dynamically via GetHoradricStaffTombLevelId.
 void __fastcall Objects_InitFn12_PermanentPortal(D2ObjectInitFnArg * pInitArg) {
-    D2UnitDataObjectStrc* pUnitData;
-    eD2LevelId eLevelId;
-    eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
-    D2UnitStrc* pUnit;
-    pUnit = pInitArg->pObject;
+    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
+    D2UnitStrc* pUnit = pInitArg->pObject;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
       D2Common::Units::ChangeAnimMode(pUnit, 1);
       D2Common::Units::BlockCollisionPath(pInitArg->pObject, pInitArg->pRoom, pInitArg->nX, pInitArg->nY);
       GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 1, (pInitArg->pObjectTxt->FrameCnt[1] >> 8) + 1 + pInitArg->pGame->dwGameFrame, 0, 0);
     }
 
-    eD2LevelId eHoradricTombLevelId;
-    eHoradricTombLevelId = D2Common::DUNGEON::Dungeon::GetHoradricStaffTombLevelId(pInitArg->pGame->pAct[1]);
-    if (!false) {
-      uint8_t byPortalFrameVal;
-      switch (eLevelId) {
-        case LEVEL_RogueEncampment:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x27;
+    eD2LevelId eHoradricTombLevelId = D2Common::DUNGEON::Dungeon::GetHoradricStaffTombLevelId(pInitArg->pGame->pAct[1]);
+    switch (eLevelId) {
+      case LEVEL_RogueEncampment:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x27;
         return;
-        default:
-          goto default_case;
-        case LEVEL_MooMooFarm:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 1;
+      case LEVEL_MooMooFarm:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 1;
         return;
-        case LEVEL_Tristram:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 4;
+      case LEVEL_Tristram:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 4;
         return;
-        case LEVEL_StonyField:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x26;
+      case LEVEL_StonyField:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x26;
         return;
-        case LEVEL_ArcaneSanctuary:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x2e;
+      case LEVEL_ArcaneSanctuary:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x2e;
         return;
-        case LEVEL_CanyonOfTheMagi:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x4a;
+      case LEVEL_CanyonOfTheMagi:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x4a;
         return;
-        case LEVEL_DurielsLair:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eHoradricTombLevelId;
+      case LEVEL_DurielsLair:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eHoradricTombLevelId;
         return;
-        case LEVEL_NihlathaksTemple:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x6d;
+      case LEVEL_NihlathaksTemple:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x6d;
         return;
-        case LEVEL_Harrogath:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x79;
+      case LEVEL_Harrogath:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x79;
         return;
-        case LEVEL_Abaddon:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x6f;
+      case LEVEL_Abaddon:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x6f;
         return;
-        case LEVEL_PitOfAcheron:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x70;
+      case LEVEL_PitOfAcheron:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x70;
         return;
-        case LEVEL_InfernalPit:
-          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x75;
+      case LEVEL_InfernalPit:
+        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x75;
         return;
-        case LEVEL_FrigidHighlands:
-          pUnitData = pInitArg->pObject->pUnitData.pUnitDataObject;
-        byPortalFrameVal = 0x7d;
-        break;
-        case LEVEL_ArreatPlateau:
-          if (pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId == 0x7e) {
-            return;
-          }
-        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x7e;
-        GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 0xb, pInitArg->pGame->dwGameFrame + 1, 0, 0);
+      case LEVEL_FrigidHighlands:
+        if (pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId != 0x7d) {
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x7d;
+          GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 0xb, pInitArg->pGame->dwGameFrame + 1, 0, 0);
+        }
         return;
-        case LEVEL_FrozenTundra:
-          pUnitData = pInitArg->pObject->pUnitData.pUnitDataObject;
-        byPortalFrameVal = 0x7f;
-        break;
-      }
-
-      if (pUnitData->nShrineId != byPortalFrameVal) {
-        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = byPortalFrameVal;
-        GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 0xb, pInitArg->pGame->dwGameFrame + 1, 0, 0);
+      case LEVEL_ArreatPlateau:
+        if (pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId != 0x7e) {
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x7e;
+          GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 0xb, pInitArg->pGame->dwGameFrame + 1, 0, 0);
+        }
         return;
-      }
-    } else {
-      default_case:
-      if (eLevelId == eHoradricTombLevelId) {
-        pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x49;
-      }
+      case LEVEL_FrozenTundra:
+        if (pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId != 0x7f) {
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x7f;
+          GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 0xb, pInitArg->pGame->dwGameFrame + 1, 0, 0);
+        }
+        return;
+      default:
+        if (eLevelId == eHoradricTombLevelId) {
+          pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = 0x49;
+        }
+        return;
     }
 }
 
