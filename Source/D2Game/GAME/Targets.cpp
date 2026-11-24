@@ -213,15 +213,15 @@ void __fastcall TARGETS_FreeAllUnitNodes(::SGAMEDATA * pGame) {
       return;
     }
 
-    D2UnitNodeStrc* pNode = pGame->pUnitNodes[0];
     D2UnitNodeStrc** ppNodeSlot = pGame->pUnitNodes;
-    for (int nSlotsLeft = 0; nSlotsLeft < 10; nSlotsLeft++) {
+    D2UnitNodeStrc* pNode = *ppNodeSlot;
+    for (int i = 0; i < 10; i++) {
       if (pNode && pNode->pUnit) {
         UNIT_FreeUnitNodes(pGame, pNode->pUnit);
       }
 
-      pNode = ppNodeSlot[1];
       ppNodeSlot++;
+      pNode = *ppNodeSlot;
     }
 }
 
