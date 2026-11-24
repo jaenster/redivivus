@@ -243,48 +243,9 @@ uint32_t __fastcall ReturnFirstArgument_Unref_00518b90(uint32_t * pdwParam) {
 
 // Returns the squared Euclidean distance between two units' world positions. Reads static path coords for objects/items (unit types 2, 4-5) and dynamic path coords for monsters/players. Used by monster AI range checks.
 int32_t __fastcall GetDistanceBetween(D2UnitStrc * pUnit, D2UnitStrc * pOther) {
-    int nX;
-    int nY;
-    eD2UnitType eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nX = pUnit->pPath.pStaticPath->nPosX;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nX = 0;
-    }
-
-    eUnitType = pOther->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = pOther->pPath.pStaticPath->nPosX;
-    } else if (pOther->pPath.pDynamicPath) {
-      nY = D2Common::PATH::DynamicPath::GetXPos(pOther->pPath.pDynamicPath);
-    } else {
-      nY = 0;
-    }
-
-    nX -= nY;
-    eUnitType = pUnit->eUnitType;
-    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-      nY = pUnit->pPath.pStaticPath->nPosY;
-    } else if (pUnit->pPath.pDynamicPath) {
-      nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-    } else {
-      nY = 0;
-    }
-
-    eUnitType = pOther->eUnitType;
-    if (eUnitType != UNIT_OBJECT && ((int)eUnitType <= 3 || (int)eUnitType > 5)) {
-      int32_t nDistanceSq;
-      if (pOther->pPath.pDynamicPath) {
-        nDistanceSq = D2Common::PATH::DynamicPath::GetYPos(pOther->pPath.pDynamicPath);
-        return (nY - nDistanceSq) * (nY - nDistanceSq) + nX * nX;
-      }
-    } else {
-      nY -= pOther->pPath.pStaticPath->nPosY;
-    }
-
-    return nY * nY + nX * nX;
+    int nDiffX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit) - D2Common::Units::GetXPosFromDynamicPathUnitInline(pOther);
+    int nDiffY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit) - D2Common::Units::GetYPosFromDynamicPathUnitInline(pOther);
+    return nDiffY * nDiffY + nDiffX * nDiffX;
 }
 
 void __fastcall AI_Fn1_None(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
