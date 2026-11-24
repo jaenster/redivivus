@@ -1260,67 +1260,49 @@ BOOL __fastcall MONSTER_SpawnPredefinedAtUnit(::SGAMEDATA * pGame, D2RoomStrc * 
 
 // Spawns a random spawnable monster at (nX, nY) in pRoom. Reads the level's valid monster list from LevelsTxt; asserts nValidMonCount > 0. Picks a random starting index via the room seed, then walks the monster list cyclically until it finds an entry with isSpawn != 0 (up to nValidMonCount attempts). Fills D2UnknownCreateMonsterStrc (Neutral mode, radius 5) and calls CreateMonster. Returns TRUE if a unit was created, FALSE if no spawnable monster found or nValidMonCount==0. Halts on bad list state.
 BOOL __fastcall SpawnRandomMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
-    D2SeedStrc* pSeed;
-    D2MonStatsTxt* pMonStats;
-    D2UnknownCreateMonsterStrc sCreateParams;
-    ::SGAMEDATA* pGameSaved = pGame;
-    D2RoomStrc* pRoomSaved = pRoom;
-    eD2LevelId eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    D2LevelsTxt* pLevelTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
+    D2LevelsTxt* pLevelTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom));
     if (!pLevelTxt->nValidMonCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4f0);
       exit(-1);
     }
-    if (pRoom) {
-      pSeed = &pRoom->sSeed;
-    } else {
-      pSeed = 0;
-    }
 
-    uint32_t nMonTypeIdx = D2Common::Seed::RANDOM_RandomNumberSelector(pSeed, (uint32_t)pLevelTxt->nValidMonCount);
-    uint32_t nLevelMonCount = (uint32_t)pLevelTxt->nValidMonCount;
-    int nMonSearchAttempts = 0;
-    if (!nLevelMonCount) {
-      return 0;
-    }
-
-    do {
-      nMonTypeIdx++;
-      if ((int)nMonTypeIdx >= (int)nLevelMonCount) {
-        nMonTypeIdx = 0;
+    int nMonIndex = D2Common::Seed::RANDOM_RandomNumberSelector(pRoom ? &pRoom->sSeed : nullptr, (uint32_t)pLevelTxt->nValidMonCount);
+    int nMonCount = pLevelTxt->nValidMonCount;
+    int nClassId = -1;
+    int i;
+    for (i = 0; i < nMonCount; i++) {
+      nMonIndex++;
+      if (nMonIndex >= nMonCount) {
+        nMonIndex = 0;
       }
 
-      sCreateParams.nClassId = (int32_t)pLevelTxt->mon[nMonTypeIdx];
-      if (sCreateParams.nClassId < 0 || sCreateParams.nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
-        pMonStats = 0;
-      } else {
-        pMonStats = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + sCreateParams.nClassId;
+      nClassId = pLevelTxt->mon[nMonIndex];
+      D2MonStatsTxt* pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
+      if (pMonStatsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) {
+        break;
       }
-    } while (!(pMonStats->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && (nMonSearchAttempts++ , nMonSearchAttempts < (int)nLevelMonCount));
+    }
 
-    if (sCreateParams.nClassId == -1) {
+    if (nClassId == -1) {
       return 0;
     }
-    if (!(nMonSearchAttempts < (int)nLevelMonCount)) {
+    if (i >= nMonCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x507);
       exit(-1);
     }
 
-    {
-      D2UnitStrc* pSpawnedUnit;
-      sCreateParams.pRoom = pRoomSaved;
-      sCreateParams.nGUID = 0;
-      sCreateParams.pCoordList = 0;
-      sCreateParams.nFlags = 0;
-      sCreateParams.nY = nY;
-      sCreateParams.eMode = eD2MonsterAnimMode_ns::Neutral;
-      sCreateParams.nSpawnRadius = 5;
-      sCreateParams.pGame = pGameSaved;
-      sCreateParams.nX = nX;
-      pSpawnedUnit = CreateMonster(&sCreateParams);
-      return (uint32_t)(pSpawnedUnit != 0);
-    }
-    return 0;
+    D2UnknownCreateMonsterStrc sCreateParams;
+    sCreateParams.pRoom = pRoom;
+    sCreateParams.nGUID = 0;
+    sCreateParams.nClassId = nClassId;
+    sCreateParams.pCoordList = nullptr;
+    sCreateParams.nFlags = 0;
+    sCreateParams.eMode = eD2MonsterAnimMode_ns::Neutral;
+    sCreateParams.nSpawnRadius = 5;
+    sCreateParams.pGame = pGame;
+    sCreateParams.nX = nX;
+    sCreateParams.nY = nY;
+    return CreateMonster(&sCreateParams) != nullptr;
 }
 
 } // namespace D2Game::Monster::Create
