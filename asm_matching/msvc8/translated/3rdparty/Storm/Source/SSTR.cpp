@@ -1512,30 +1512,27 @@ uint32_t SStrVPrintf(char * szOutput, size_t nSize, char * szFormatString, va_li
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_AtoiSigned
 int32_t __stdcall SStrToInt(char * szText) {
-    char cDigit;
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    char cSign = *szText;
-    int nTest = cSign == '-';
-    if (nTest) {
+    int bNegative = *szText == '-';
+    if (bNegative) {
       szText++;
     }
 
-    uint32_t nValue = (int)*szText - 0x30;
+    uint32_t nValue = *szText - '0';
     if (nValue < 10) {
-      char* pScan;
-      pScan = szText + 1;
-      cDigit = szText[1];
-      while ((int)cDigit - 0x30U < 10) {
-        pScan++;
-        nValue = (int)cDigit - 0x30U + nValue * 10;
-        cDigit = *pScan;
+      szText++;
+      uint32_t nDigit;
+      while ((nDigit = *szText - '0') < 10) {
+        szText++;
+        nValue = nValue * 10 + nDigit;
       }
     } else {
       nValue = 0;
     }
-    if (nTest) {
+
+    if (bNegative) {
       nValue = -nValue;
     }
 
