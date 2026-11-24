@@ -7712,23 +7712,18 @@ void __fastcall MISSILE_CltDoFn57_BladeShield(D2UnitStrc * pUnit) {
 
 // Client-side per-frame tick for missile 058 (spiraling/oscillating trajectory). Every Param1 frames, reads a seeded direction bias stored in TargetX/TargetY, randomly flips it via the missile seed, computes a perpendicular offset, advances the missile position by that offset, recalculates the path, and then calls the standard frame-advance func (CltDoFunc_001). Removes the missile if data table entry is missing.
 void __fastcall MISSILE_CltDoFn58_RoyalStrikeChaosIce(D2UnitStrc * pUnit) {
-    int nNewDestX;
-    int nOffsetY;
-    int iVar1;
-    D2MissilesTxt* pMissilesTxt;
-    if (!pUnit || !(iVar1 = pUnit->nClassId , pMissilesTxt = iVar1 >= 0 && iVar1 < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + iVar1 : nullptr)) {
+    D2MissilesTxt* pMissileTxt = 0;
+    if (pUnit) {
+      int nClassId = pUnit->nClassId;
+      pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    }
+    if (!pMissileTxt) {
       MISSILE_RemoveClientSide(pUnit);
       return;
     }
 
-    iVar1 = pMissilesTxt->Param1;
-    int iVar2 = 1;
-    if (iVar1 >= 1) {
-      iVar2 = iVar1;
-    }
-
-    int32_t nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-    if (nRemainingFrames % iVar2) {
+    int nInterval = pMissileTxt->Param1 < 1 ? 1 : pMissileTxt->Param1;
+    if (D2Common::Units::Missile::GetRemainingFrames(pUnit) % nInterval) {
       MISSILE_CltDoFn01_BasicMissile(pUnit);
       return;
     }
@@ -7739,38 +7734,33 @@ void __fastcall MISSILE_CltDoFn58_RoyalStrikeChaosIce(D2UnitStrc * pUnit) {
       return;
     }
 
-    int32_t nOldTargetX = D2Common::Units::Missile::GetTargetX(pUnit);
-    D2Common::Seed::InitSeed_Param_666(pSeed, nOldTargetX);
+    D2Common::Seed::InitSeed_Param_666(pSeed, D2Common::Units::Missile::GetTargetX(pUnit));
     int32_t nTargetY = D2Common::Units::Missile::GetTargetY(pUnit);
-    int nClassId = (int)(short int)nTargetY;
-    iVar1 = (int)(short int)((uint32_t)nTargetY >> 0x10);
-    uint32_t sNewSeed = D2_SeedRoll(pSeed);
-    if (sNewSeed & 1) {
-      nNewDestX = -iVar1;
-      nOffsetY = nClassId;
+    int nOffsetX = (short int)nTargetY;
+    int nOffsetY = (short int)((uint32_t)nTargetY >> 0x10);
+    int nTurnX;
+    int nTurnY;
+    if (D2_SeedRoll(pSeed) & 1) {
+      nTurnX = -nOffsetY;
+      nTurnY = nOffsetX;
     } else {
-      nOffsetY = -nClassId;
-      nNewDestX = iVar1;
+      nTurnY = -nOffsetX;
+      nTurnX = nOffsetY;
     }
 
-    iVar2 = nNewDestX + nClassId * 4;
-    iVar1 = nOffsetY + iVar1 * 4;
-    uint32_t nNewDestY = iVar2 / 4;
-    int nNewDestYFinal = iVar1 / 4;
-    if (!nNewDestY) {
-      nNewDestY = 1;
+    int nStepX = (nTurnX + nOffsetX * 4) / 4;
+    int nStepY = (nTurnY + nOffsetY * 4) / 4;
+    if (!nStepX) {
+      nStepX = 1;
     }
-    if (!nNewDestYFinal) {
-      nNewDestYFinal = 1;
+    if (!nStepY) {
+      nStepY = 1;
     }
 
-    int32_t nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-    short int nY = (short int)nPosY + (short int)nNewDestYFinal;
-    D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, (short int)D2Common::Units::GetXPosFromDynamicPathUnit(pUnit) + (short int)nNewDestY, nY);
+    D2Common::PATH::DynamicPath::SetSP1(pUnit->pPath.pDynamicPath, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit) + nStepX, D2Common::Units::GetYPosFromDynamicPathUnit(pUnit) + nStepY);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pUnit->pPath.pDynamicPath, pUnit, 0);
-    uint32_t nTargetX = D2Common::Seed::GetSeed_nSeedLow(pSeed);
-    D2Common::Units::Missile::SetTargetX(pUnit, nTargetX);
-    D2Common::Units::Missile::SetTargetY(pUnit, nNewDestYFinal * 0x10000 + (uint32_t)(uint16_t)nNewDestY);
+    D2Common::Units::Missile::SetTargetX(pUnit, D2Common::Seed::GetSeed_nSeedLow(pSeed));
+    D2Common::Units::Missile::SetTargetY(pUnit, ((uint16_t)nStepY << 0x10) + (uint16_t)nStepX);
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
