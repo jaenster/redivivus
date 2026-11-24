@@ -2,7 +2,7 @@
 
 #include "Source/D2Win/Src/D2WinScrollbar.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
-#include "Source/D2Launch/MainMenus.h"
+#include "Source/D2Launch/Src/MainMenus.h"
 #include "Source/D2Win/Src/D2WinMain.h"
 #include "Source/D2Win/Src/D2WinTextBox.h"
 #include "Source/D2gfx/D2gfx.public.h"

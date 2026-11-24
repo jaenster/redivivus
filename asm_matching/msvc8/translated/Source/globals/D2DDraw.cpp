@@ -7,7 +7,7 @@
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2DDraw/Renderer/DirectDraw.h"
-#include "Source/D2DDraw/ddSprite.h"
+#include "Source/D2DDraw/Src/ddSprite.h"
 
 
 namespace D2Common { namespace Drlg { namespace Maze {

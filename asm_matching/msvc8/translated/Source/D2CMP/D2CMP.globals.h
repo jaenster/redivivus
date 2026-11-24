@@ -14,7 +14,7 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "3rdparty/Storm/H/stpl.h"
+#include "Source/Storm/H/stpl.h"
 
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)

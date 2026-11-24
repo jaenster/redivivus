@@ -14,7 +14,7 @@
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/D2SeedStrc.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Dungeon/Dungeon.h"
 #include "Source/D2Common/Drlg/D2DrlgCoordsStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgGridStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgLevelDataList.h"

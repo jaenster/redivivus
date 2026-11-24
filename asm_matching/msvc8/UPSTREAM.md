@@ -64,7 +64,7 @@ functions next to MONSTER_SetVelocityPercent, 005a6380), else with most of
 them - at its address among them, and keep its namespace, which is its name;
 make static what only that file then calls. Name prefixes are no evidence:
 they are the database's, and DRLGPATH_SetPathPosition (0064fb90) lies among
-Source/D2Common/PATH/Path's functions. A group whose callers lie hundreds of
+Source/D2Common/Path/Path's functions. A group whose callers lie hundreds of
 functions apart is no object - /GL, or a misread convention - and stays
 where it is (`evidence/objects.tsv` lists what is left).
 

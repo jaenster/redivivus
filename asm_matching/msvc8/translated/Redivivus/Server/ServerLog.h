@@ -18,7 +18,7 @@ inline void ServerLogV(const char * szFormat, va_list args) {
     if (!pNow || !strftime(szTime, sizeof(szTime), "%Y-%m-%d %H:%M:%S", pNow)) {
         szTime[0] = '\0';
     }
-    printf("%s d2server: ", szTime);
+    printf("%s d2host: ", szTime);
     vprintf(szFormat, args);
     putchar('\n');
     fflush(stdout);

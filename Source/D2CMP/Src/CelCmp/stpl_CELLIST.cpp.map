@@ -1,0 +1,1387 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2CMP/Src/CelCmp/stpl_CELLIST.cpp",
+  "functions": [
+    {
+      "name": "Destructor",
+      "address": "00602aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602aa0"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "intptr_t"
+      ],
+      "dh": "90d973db"
+    },
+    {
+      "name": "Destructor_Unreferenced",
+      "address": "00602ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602ae0"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "Destructor_Unreferenced",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>> *",
+        "uint32_t"
+      ],
+      "dh": "e08b13fa",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00602b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602b70"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "UnlinkAll",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "intptr_t",
+        "uint32_t"
+      ],
+      "dh": "464732dd",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "00602d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602d20"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Clear",
+        "UnlinkAll",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<TCELENTRY>",
+        "intptr_t"
+      ],
+      "dh": "8c3a34e9"
+    },
+    {
+      "name": "Destructor_Unreferenced2",
+      "address": "00602df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602df0"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "Destructor_Unreferenced2",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "uint32_t"
+      ],
+      "dh": "b66681fd",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DeleteNode",
+      "address": "00602e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602e30"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "DeleteNode",
+        "UnlinkAll",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSLink<CELLIST>",
+        "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
+        "intptr_t",
+        "uint32_t"
+      ],
+      "dh": "f2e46025",
+      "paramStorage": [
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor_Unreferenced",
+      "address": "00602ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602ec0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelCmp::CELLIST",
+      "calledFunctions": [
+        "Destructor_Unreferenced",
+        "UnlinkAll",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
+        "uint32_t"
+      ],
+      "dh": "2861e0f7",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
+    },
+    {
+      "name": "ReallocData",
+      "address": "00602f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00602f10"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "ReallocData",
+        "UnlinkAll",
+        "SMemReAlloc",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "uint32_t"
+      ],
+      "dh": "19b26e01",
+      "paramStorage": [
+        [
+          "nAlloc",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "00603060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603060"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "uint32_t"
+      ],
+      "dh": "36ac55e4"
+    },
+    {
+      "name": "Ptr",
+      "address": "006030e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006030e0"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Ptr"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "HASHKEY_NONE",
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "intptr_t",
+        "uint32_t"
+      ],
+      "dh": "12b6c854",
+      "paramStorage": [
+        [
+          "dwHashVal",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pKey",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "00603140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603140"
+        }
+      ],
+      "namespace": "TSGrowableArray<CELLIST>",
+      "calledFunctions": [
+        "Destructor",
+        "UnlinkAll",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSGrowableArray<CELLIST>",
+        "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
+        "uint32_t"
+      ],
+      "dh": "1baf6439"
+    },
+    {
+      "name": "Reserve",
+      "address": "006031f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006031f0"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Reserve",
+        "CalcChunkSize",
+        "ReallocData"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "b81dd0af",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRound",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor_UnwindThunk",
+      "address": "00603240",
+      "lines": [],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
+      ],
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Ptr",
+      "address": "00603250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603250"
+        }
+      ],
+      "namespace": "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+      "calledFunctions": [
+        "Ptr"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+        "uint32_t"
+      ],
+      "dh": "d02638f1",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor_UnwindThunk_Unref_00603270",
+      "address": "00603270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603270"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Destructor_UnwindThunk_Unref_00603270",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
+      ],
+      "dh": "c0354fac"
+    },
+    {
+      "name": "GenerateUniqueHandle",
+      "address": "00603280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603280"
+        }
+      ],
+      "namespace": "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+      "calledFunctions": [
+        "GenerateUniqueHandle",
+        "Ptr"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+        "uint32_t"
+      ],
+      "dh": "54f5aba7"
+    },
+    {
+      "name": "SetCount",
+      "address": "00603300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603300"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "SetCount",
+        "CalcChunkSize",
+        "ReallocData",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+        "TSLink<CELLIST> *",
+        "uint32_t"
+      ],
+      "dh": "17a172e7",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Lock",
+      "address": "00603400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603400"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "Lock",
+        "Ptr"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "10584e4c",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLockedHandle",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bForWriting",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "00603460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603460"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Destructor",
+        "InternalClear",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "intptr_t",
+        "pfnEHHandlerRoutine"
+      ],
+      "dh": "3ae18c40"
+    },
+    {
+      "name": "NewNode",
+      "address": "006035a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006035a0"
+        }
+      ],
+      "namespace": "TSExplicitList<CELLIST, -572662307>",
+      "calledFunctions": [
+        "NewNode",
+        "SMemAlloc",
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "uint32_t"
+      ],
+      "dh": "797c538d",
+      "paramStorage": [
+        [
+          "nLocation",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InternalNew",
+      "address": "00603610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603610"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "InternalNew",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "intptr_t",
+        "uint32_t"
+      ],
+      "dh": "f761c273",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InternalDelete",
+      "address": "006036d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006036d0"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "InternalDelete",
+        "UnlinkAll",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
+        "uint32_t"
+      ],
+      "dh": "2c38fdc1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00603730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603730"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+        "uint32_t"
+      ],
+      "dh": "6476a682",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Clear",
+      "address": "00603760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603760"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Clear",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
+      ],
+      "dh": "d5b4a672"
+    },
+    {
+      "name": "Destroy",
+      "address": "00603780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603780"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "Destroy",
+        "InternalClear",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSHashTable<CELLIST, HASHKEY_NONE>"
+      ],
+      "dh": "f0050322",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "006037b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006037b0"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "uint32_t"
+      ],
+      "dh": "8f7264e5",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "006037e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006037e0"
+        }
+      ],
+      "namespace": "TSHashObjectChunk<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSHashObjectChunk<CELLIST, HASHKEY_NONE>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>> *",
+        "intptr_t",
+        "uint32_t"
+      ],
+      "dh": "d9ba96a9",
+      "paramStorage": [
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetCount_Unreferenced",
+      "address": "00603850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603850"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "SetCount_Unreferenced",
+        "SetCount"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+        "uint32_t"
+      ],
+      "dh": "d80b8553",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InternalDelete",
+      "address": "00604150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604150"
+        }
+      ],
+      "namespace": "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "InternalDelete",
+        "UnlinkAll",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+        "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
+        "uint32_t"
+      ],
+      "dh": "6fa49bfa",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ReallocData",
+      "address": "006041b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006041b0"
+        }
+      ],
+      "namespace": "TSGrowableArray<CELLIST>",
+      "calledFunctions": [
+        "ReallocData",
+        "UnlinkAll",
+        "Destructor",
+        "SMemReAlloc",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSGrowableArray<CELLIST>",
+        "TSLink<TCELENTRY>",
+        "TSLink<TCELENTRY> *",
+        "uint32_t"
+      ],
+      "dh": "7d70cfef",
+      "paramStorage": [
+        [
+          "nAlloc",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Reserve",
+      "address": "00604350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604350"
+        }
+      ],
+      "namespace": "TSGrowableArray<CELLIST>",
+      "calledFunctions": [
+        "Reserve",
+        "CalcChunkSize",
+        "ReallocData"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<CELLIST>",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "f6dd0517",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRound",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "New",
+      "address": "006043b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006043b0"
+        }
+      ],
+      "namespace": "TSGrowableArray<CELLIST>",
+      "calledFunctions": [
+        "New",
+        "CalcChunkSize",
+        "ReallocData"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSGrowableArray<CELLIST>",
+        "uint32_t"
+      ],
+      "dh": "37c2804c"
+    },
+    {
+      "name": "ReserveNoRound",
+      "address": "00604440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604440"
+        }
+      ],
+      "namespace": "TSGrowableArray<CELLIST>",
+      "calledFunctions": [
+        "ReserveNoRound",
+        "ReallocData"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<CELLIST>",
+        "uint32_t"
+      ],
+      "dh": "04f18b09",
+      "paramStorage": [
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor_UnwindThunk_Unref_00604460",
+      "address": "00604460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604460"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Destructor_UnwindThunk_Unref_00604460",
+        "New"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
+      ],
+      "dh": "567130ca"
+    },
+    {
+      "name": "NewNode",
+      "address": "00604490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604490"
+        }
+      ],
+      "namespace": "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+      "calledFunctions": [
+        "NewNode",
+        "SMemAlloc",
+        "LinkNode"
+      ],
+      "usedTypes": [
+        "TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>",
+        "TSHashObjectChunk<CELLIST, HASHKEY_NONE>",
+        "uint32_t"
+      ],
+      "dh": "e893c0cb",
+      "paramStorage": [
+        [
+          "nLocation",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InternalNew",
+      "address": "006044f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006044f0"
+        }
+      ],
+      "namespace": "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "InternalNew",
+        "SMemAlloc"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "intptr_t",
+        "uint32_t"
+      ],
+      "dh": "d95f6372",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "pList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "MonitorFullness",
+      "address": "006045b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006045b0"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "MonitorFullness",
+        "GrowListArray"
+      ],
+      "usedTypes": [
+        "TSExplicitList<CELLIST, -572662307>",
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "46e7b6d5",
+      "paramStorage": [
+        [
+          "nSlot",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "00604640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604640"
+        }
+      ],
+      "namespace": "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "Destructor",
+        "Clear",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>>",
+        "TSLink<TSHashObjectChunk<CELLIST, HASHKEY_NONE>> *",
+        "intptr_t"
+      ],
+      "dh": "0c3ae691"
+    },
+    {
+      "name": "Destroy",
+      "address": "006046e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006046e0"
+        }
+      ],
+      "namespace": "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "Destroy",
+        "InternalClear",
+        "Clear"
+      ],
+      "usedTypes": [
+        "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>"
+      ],
+      "dh": "258e3e03",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ]
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00604700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604700"
+        }
+      ],
+      "namespace": "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>",
+        "uint32_t"
+      ],
+      "dh": "f0becb2f",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Constructor",
+      "address": "00604730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604730"
+        }
+      ],
+      "namespace": "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "TSExportTableSimple<CELLIST, HCELLIST__*, 0>"
+      ],
+      "dh": "09f918f1"
+    },
+    {
+      "name": "New",
+      "address": "00604760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604760"
+        }
+      ],
+      "namespace": "TSHashTable<CELLIST, HASHKEY_NONE>",
+      "calledFunctions": [
+        "New",
+        "MonitorFullness"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "HASHKEY_NONE",
+        "TSHashTable<CELLIST, HASHKEY_NONE>",
+        "TSLink<CELLIST>",
+        "TSLink<CELLIST> *",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "078ce7b4",
+      "paramStorage": [
+        [
+          "dwHashVal",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pKey",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExtraBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor_UnwindThunk_Unref_00604800",
+      "address": "00604800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604800"
+        }
+      ],
+      "namespace": "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>",
+      "calledFunctions": [
+        "Destructor_UnwindThunk_Unref_00604800",
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSGrowableArray<TSExplicitList<CELLIST, -572662307>>"
+      ],
+      "dh": "9ca3208a"
+    },
+    {
+      "name": "Constructor",
+      "address": "00604810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604810"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "Constructor"
+      ],
+      "usedTypes": [
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>"
+      ],
+      "dh": "c88c6aec"
+    },
+    {
+      "name": "New",
+      "address": "00604840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604840"
+        }
+      ],
+      "namespace": "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+      "calledFunctions": [
+        "New",
+        "GenerateUniqueHandle"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+        "uint32_t"
+      ],
+      "dh": "22e55dd5",
+      "paramStorage": [
+        [
+          "pHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00604870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604870"
+        }
+      ],
+      "namespace": "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExportTableSimple<CELLIST, HCELLIST__*, 0>",
+        "uint32_t"
+      ],
+      "dh": "3157942e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Destructor",
+      "address": "006048a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006048a0"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "Destructor"
+      ],
+      "usedTypes": [
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>"
+      ],
+      "dh": "4b5f1e80"
+    },
+    {
+      "name": "NewLock",
+      "address": "006048c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006048c0"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "NewLock",
+        "GenerateUniqueHandle",
+        "New"
+      ],
+      "usedTypes": [
+        "CELLIST",
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "3f6e5bb1",
+      "paramStorage": [
+        [
+          "pHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLockedHandle",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ScalarDeletingDestructor",
+      "address": "00604900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00604900"
+        }
+      ],
+      "namespace": "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+      "calledFunctions": [
+        "ScalarDeletingDestructor",
+        "Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>",
+        "uint32_t"
+      ],
+      "dh": "3d767b1c",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4 (auto)"
+        ],
+        [
+          "dwFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
+    }
+  ]
+}

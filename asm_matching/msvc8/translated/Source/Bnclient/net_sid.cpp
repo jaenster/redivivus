@@ -7,7 +7,7 @@
 #include "Source/Bnclient/BnclientRoot.h"
 #include "Source/Bnclient/Bnet.h"
 #include "Source/Bnclient/Debug.h"
-#include "Source/Bnclient/SRP.h"
+#include "Source/Bnclient/SRP/SRP.h"
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/Fog/Fog.h"
 #include "Source/globals/globals.h"

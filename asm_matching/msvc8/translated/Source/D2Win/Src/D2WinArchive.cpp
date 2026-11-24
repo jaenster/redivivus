@@ -9,7 +9,7 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2Win/D2Win.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Launch/MainMenus.data.h"
+#include "Source/D2Launch/Src/MainMenus.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

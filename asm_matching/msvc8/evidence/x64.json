@@ -1,6 +1,6 @@
 {
   "compiler": "cl 14.00.50727.42 for x64, /Zs /W3 /Wp64",
-  "commit": "f14175670b60bf5afe1b55989b1baa692bbbc6f3",
+  "commit": "53bfd4976264c3c341c5099f180f29f52718e0eb",
   "ghidra": "2139",
   "measured": "2026-11-24",
   "c4311": 86,

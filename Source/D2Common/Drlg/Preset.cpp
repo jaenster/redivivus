@@ -3,8 +3,8 @@
 #include "Source/D2Common/Drlg/Preset.h"
 #include "Source/D2CMP/D2CMP.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.h"
+#include "Source/D2Common/DataTbls/LvlTbls.h"
+#include "Source/D2Common/DataTbls/MonsterTbls.h"
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2Common/Drlg/DrlgAnim.h"
 #include "Source/D2Common/Drlg/DrlgGrid.h"
@@ -17,7 +17,7 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/MonsterTbls.inline.h"
+#include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
 #include "Source/D2Common/Drlg/Preset.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

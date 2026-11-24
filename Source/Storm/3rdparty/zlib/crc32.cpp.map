@@ -1,0 +1,285 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Storm/3rdparty/zlib/crc32.cpp",
+  "functions": [
+    {
+      "name": "get_crc_table",
+      "address": "0042d450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d450"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "get_crc_table"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "eaf14532"
+    },
+    {
+      "name": "crc32_little",
+      "address": "0042d460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d460"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_little"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "ecb38695",
+      "paramStorage": [
+        [
+          "buf",
+          "ECX:4"
+        ],
+        [
+          "len",
+          "EDX:4"
+        ],
+        [
+          "crc",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "crc32_big",
+      "address": "0042d700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d700"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_big"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "4cc28f10",
+      "paramStorage": [
+        [
+          "crc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "buf",
+          "EAX:4"
+        ],
+        [
+          "len",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "gf2_matrix_times",
+      "address": "0042d9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d9f0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "gf2_matrix_times"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "fec87cff",
+      "paramStorage": [
+        [
+          "vec",
+          "ECX:4"
+        ],
+        [
+          "mat",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "gf2_matrix_square",
+      "address": "0042da10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042da10"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "gf2_matrix_square"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "fc11a051",
+      "paramStorage": [
+        [
+          "square",
+          "EAX:4"
+        ],
+        [
+          "mat",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "crc32_combine_",
+      "address": "0042da50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042da50"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_combine_",
+        "gf2_matrix_square",
+        "_allshr"
+      ],
+      "usedTypes": [
+        "int64_t",
+        "uint32_t",
+        "uint64_t"
+      ],
+      "dh": "3dfd9576",
+      "paramStorage": [
+        [
+          "crc1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "crc2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "len2",
+          "Stack[0xc]:8"
+        ]
+      ]
+    },
+    {
+      "name": "crc32_combine",
+      "address": "0042dbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dbc0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_combine",
+        "crc32_combine_"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "56348e60",
+      "paramStorage": [
+        [
+          "crc1",
+          "ECX:4"
+        ],
+        [
+          "crc2",
+          "EDX:4"
+        ],
+        [
+          "len2",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "crc32_combine64",
+      "address": "0042dbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dbe0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32_combine64",
+        "crc32_combine_"
+      ],
+      "usedTypes": [
+        "int64_t",
+        "uint32_t"
+      ],
+      "dh": "6886a8e1",
+      "paramStorage": [
+        [
+          "crc1",
+          "ECX:4"
+        ],
+        [
+          "crc2",
+          "EDX:4"
+        ],
+        [
+          "len2",
+          "Stack[0x4]:8"
+        ]
+      ]
+    },
+    {
+      "name": "crc32",
+      "address": "0042dc00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc00"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::crc32",
+      "calledFunctions": [
+        "crc32",
+        "crc32_little"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "4408012f",
+      "paramStorage": [
+        [
+          "crc",
+          "ECX:4"
+        ],
+        [
+          "buf",
+          "EDX:4"
+        ],
+        [
+          "len",
+          "Stack[0x4]:4"
+        ]
+      ]
+    }
+  ]
+}

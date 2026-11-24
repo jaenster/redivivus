@@ -1,0 +1,48 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Storm/3rdparty/zlib/uncompr.cpp",
+  "functions": [
+    {
+      "name": "uncompress",
+      "address": "006c79c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c79c0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::uncompr",
+      "calledFunctions": [
+        "uncompress",
+        "inflateInit_",
+        "inflate",
+        "inflateEnd"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t",
+        "z_stream"
+      ],
+      "dh": "a40909d5",
+      "paramStorage": [
+        [
+          "dest",
+          "ECX:4"
+        ],
+        [
+          "destLen",
+          "EDX:4"
+        ],
+        [
+          "source",
+          "Stack[0x4]:4"
+        ],
+        [
+          "sourceLen",
+          "Stack[0x8]:4"
+        ]
+      ]
+    }
+  ]
+}

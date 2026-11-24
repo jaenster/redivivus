@@ -14,7 +14,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2CMP/D2CMP.h"
 #include "Source/D2Game/D2Game.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 
 // Forward declarations
 struct ButtonImplementation;

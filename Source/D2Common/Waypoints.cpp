@@ -2,8 +2,8 @@
 
 #include "Source/D2Common/Waypoints.h"
 #include "Source/D2Common/D2WaypointStrc.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
-#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/DataTbls/LvlTbls.h"
+#include "Source/D2Common/Skills/Skills.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"

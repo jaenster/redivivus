@@ -4,9 +4,9 @@
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Common/D2DynamicPathStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/PATH/Path.h"
+#include "Source/D2Common/Path/Path.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Units.twin.inline.h"
+#include "Source/D2Common/Units/Units.twin.inline.h"
 #include "Source/D2Game/D2Game.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

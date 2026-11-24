@@ -4,7 +4,7 @@
 // tree's identifiers. 1.14d's SHA1Final has no wipe of the context at its end.
 
 #include "Source/Bnclient/SHA1.h"
-#include "Source/Bnclient/SRP.h"
+#include "Source/Bnclient/SRP/SRP.h"
 #include "Source/Bnclient/Bnclient.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 

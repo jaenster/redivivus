@@ -9,8 +9,8 @@
 # not contain.
 #
 # The tree is one library per module (project.json "modules", read through the
-# generated Source/modules.cmake): each Blizzard module under Source/<Module>/, Storm and
-# crashy under 3rdparty/, the shared headers in Source/D2Headers/, and the
+# generated Source/modules.cmake): each Blizzard module under Source/<Module>/ (Storm
+# too), crashy under 3rdparty/, the shared headers in Source/D2Headers/, and the
 # project's own support code in Redivivus/. The executable links every library
 # whole, in the 1.14d link order. A wrong-direction include between modules is
 # reported in build/module-gates.tsv; in a module marked strict it is an error.
@@ -62,7 +62,7 @@ option(REDIVIVUS_LOUD
 option(REDIVIVUS_LOUD_STACK_PROTECTOR
     "With REDIVIVUS_LOUD: also -fstack-protector-strong (fatal on a smashed canary). OFF gives the playable loud build." ON)
 option(REDIVIVUS_SERVER
-    "Build the dedicated server (d2server.exe) from the server modules, every unit compiled with D2_TARGET_SERVER=1. The game executable leaves the default target in such a build directory." OFF)
+    "Build the dedicated server (d2host.exe) from the server modules, every unit compiled with D2_TARGET_SERVER=1. The game executable leaves the default target in such a build directory." OFF)
 
 set(D2_ROOT "${CMAKE_SOURCE_DIR}")
 set(D2_SUPPORT "${D2_ROOT}/Redivivus")
@@ -103,9 +103,10 @@ foreach(list D2_SOURCES D2_HEADERS)
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Redivivus/Server/")
     # D2OpenGL and the MacSpecific texture manager it builds on are the Mac 1.14d
     # renderer, their own object library below; the rest of MacSpecific (the Mac shell)
-    # is Mac-only, built by cmake/mac.cmake. Their directories stay off the include
-    # path too: they include by tree-relative path, and their globals.h would shadow.
-    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Source/(D2OpenGL|MacSpecific)/")
+    # is Mac-only, built by cmake/mac.cmake, and so is Source/StormMac (Storm's Mac
+    # project). Their directories stay off the include path too: they include by
+    # tree-relative path, and their globals.h would shadow.
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Source/(D2OpenGL|MacSpecific|StormMac)/")
 endforeach()
 if(D2_ARCH_X64)
     # x86 assembly: the i686-decorated stub the 64-bit build defines in C++ instead.
@@ -120,7 +121,7 @@ if(NOT REDIVIVUS_LOUD)
     list(REMOVE_ITEM D2_SOURCES "${D2_SUPPORT}/d2_loud.cpp")
 endif()
 
-# Headers are included by tree-relative path ("Source/D2Game/UNIT/SUNITNPC.h"),
+# Headers are included by tree-relative path ("Source/D2Game/Unit/SUNITNPC.h"),
 # with a handful by bare name from their own directory. link.sh puts every
 # directory on the include path; the ones that hold headers are the ones that matter.
 set(D2_INCLUDE_DIRS "${D2_ROOT}")
@@ -459,13 +460,13 @@ elseif(EXISTS "${D2_IMPLIB_DEFS}")
 endif()
 
 # ---------------------------------------------------------------------------
-# The dedicated server: d2server.exe, built from the modules a game server runs and the
+# The dedicated server: d2host.exe, built from the modules a game server runs and the
 # host in Redivivus/Server (ServerHost.h is the seam; exactly one host is linked). Every
 # unit of the build directory gets D2_TARGET_SERVER=1, so code can tell the two targets
 # apart with a positive test; the game executable built beside it would carry that too,
 # so it leaves the default target here (it can still be built by name).
 #   cmake -S . -B build-server -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake -DREDIVIVUS_SERVER=ON
-#   cmake --build build-server --target d2server
+#   cmake --build build-server --target d2host
 # The libraries link as an ordinary rescanned group, not whole: only what the server
 # reaches is pulled in, so client code the server never calls stays out.
 # ---------------------------------------------------------------------------
@@ -497,13 +498,13 @@ if(REDIVIVUS_SERVER)
         "${D2_SUPPORT}/Server/*.cpp")
     list(SORT D2_SERVER_HOST_SOURCES)
 
-    add_executable(d2server ${D2_SERVER_HOST_SOURCES} ${D2_SERVER_SUPPORT_SOURCES})
-    target_link_libraries(d2server PRIVATE d2_flags)
-    target_compile_definitions(d2server PRIVATE ${D2_ALL_MODULE_DEFS})
+    add_executable(d2host ${D2_SERVER_HOST_SOURCES} ${D2_SERVER_SUPPORT_SOURCES})
+    target_link_libraries(d2host PRIVATE d2_flags)
+    target_compile_definitions(d2host PRIVATE ${D2_ALL_MODULE_DEFS})
     string(JOIN "," D2_SERVER_LINK_GROUP ${D2_SERVER_LIBRARIES} libbacktrace)
-    target_link_libraries(d2server PRIVATE "$<LINK_GROUP:RESCAN,${D2_SERVER_LINK_GROUP}>")
-    target_link_options(d2server PRIVATE -static -static-libgcc -static-libstdc++)
-    target_link_libraries(d2server PRIVATE
+    target_link_libraries(d2host PRIVATE "$<LINK_GROUP:RESCAN,${D2_SERVER_LINK_GROUP}>")
+    target_link_options(d2host PRIVATE -static -static-libgcc -static-libstdc++)
+    target_link_libraries(d2host PRIVATE
         kernel32 user32 gdi32 advapi32 shell32 ole32 oleaut32
         winmm ws2_32 version comctl32 imm32 uuid wintrust crypt32)
 endif()

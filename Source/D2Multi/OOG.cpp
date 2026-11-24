@@ -3,7 +3,7 @@
 #include "Source/D2Multi/OOG.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Multi/ChatDlg.data.h"
+#include "Source/D2Multi/Src/ChatDlg.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

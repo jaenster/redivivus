@@ -8,7 +8,7 @@
 #include "Source/D2OpenGL/Src/globals.h"
 #include "Source/Fog/Engine/Application.h"
 #include "Source/Game/Main.h"
-#include "3rdparty/Storm/Source/SMem.h"
+#include "Source/Storm/Source/SMem.h"
 #include "Source/Fog/Src/ErrorManager.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

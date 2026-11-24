@@ -19,7 +19,7 @@
 
 #include "Source/MacSpecific/Source/MacShell/QuickDrawMac.h"
 
-#include "StormMac/H/stpl.h"
+#include "Source/StormMac/H/stpl.h"
 
 typedef int BOOL;
 

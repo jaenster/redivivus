@@ -1,0 +1,598 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Storm/3rdparty/zlib/inflate.cpp",
+  "functions": [
+    {
+      "name": "inflateResetKeep",
+      "address": "00429810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00429810"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateResetKeep"
+      ],
+      "usedTypes": [
+        "inflate_code",
+        "inflate_state",
+        "z_stream"
+      ],
+      "dh": "11e64fb7",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateReset",
+      "address": "00429880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00429880"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateReset",
+        "inflateResetKeep"
+      ],
+      "usedTypes": [
+        "inflate_state",
+        "z_stream"
+      ],
+      "dh": "d7a69d68",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateReset2",
+      "address": "004298b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004298b0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateReset2",
+        "inflateResetKeep"
+      ],
+      "usedTypes": [
+        "inflate_state",
+        "int32_t",
+        "z_stream"
+      ],
+      "dh": "15a054ae",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ],
+        [
+          "windowBits",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateInit2_",
+      "address": "00429950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00429950"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateInit2_",
+        "inflateReset2"
+      ],
+      "usedTypes": [
+        "inflate_state",
+        "int32_t",
+        "uint32_t",
+        "z_stream"
+      ],
+      "dh": "b0f7640c",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ],
+        [
+          "windowBits",
+          "EDX:4"
+        ],
+        [
+          "version",
+          "Stack[0x4]:4"
+        ],
+        [
+          "stream_size",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateInit_",
+      "address": "00429a10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00429a10"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateInit_",
+        "inflateInit2_"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "z_stream"
+      ],
+      "dh": "10596406",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ],
+        [
+          "version",
+          "EDX:4"
+        ],
+        [
+          "stream_size",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflatePrime",
+      "address": "00429a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00429a30"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflatePrime"
+      ],
+      "usedTypes": [
+        "inflate_state",
+        "int32_t",
+        "uint32_t",
+        "z_stream"
+      ],
+      "dh": "dda4b2bb",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ],
+        [
+          "bits",
+          "EDX:4"
+        ],
+        [
+          "value",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "fixedtables",
+      "address": "00429aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00429aa0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "fixedtables"
+      ],
+      "usedTypes": [
+        "inflate_state"
+      ],
+      "dh": "7e87b728",
+      "paramStorage": [
+        [
+          "state",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "updatewindow",
+      "address": "00429ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00429ac0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "updatewindow",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "inflate_state",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ],
+      "dh": "373ff81d",
+      "paramStorage": [
+        [
+          "copy",
+          "ECX:4"
+        ],
+        [
+          "end",
+          "Stack[0x4]:4"
+        ],
+        [
+          "strm",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflate",
+      "address": "00429bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00429bb0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflate",
+        "adler32",
+        "crc32",
+        "memcpy",
+        "updatewindow",
+        "inflate_table",
+        "inflate_fast"
+      ],
+      "usedTypes": [
+        "gz_header",
+        "inflate_code",
+        "inflate_state",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ],
+      "dh": "32252cb5",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ],
+        [
+          "flush",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateEnd",
+      "address": "0042b170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b170"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateEnd"
+      ],
+      "usedTypes": [
+        "z_stream"
+      ],
+      "dh": "3251df67",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateGetDictionary",
+      "address": "0042b1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b1b0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateGetDictionary",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "inflate_state",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ],
+      "dh": "f7ca5b6c",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ],
+        [
+          "dictionary",
+          "EDX:4"
+        ],
+        [
+          "dictLength",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateSetDictionary",
+      "address": "0042b220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b220"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateSetDictionary",
+        "adler32",
+        "updatewindow"
+      ],
+      "usedTypes": [
+        "inflate_state",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ],
+      "dh": "9ec28112",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ],
+        [
+          "dictionary",
+          "EDX:4"
+        ],
+        [
+          "dictLength",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateGetHeader",
+      "address": "0042b2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b2d0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateGetHeader"
+      ],
+      "usedTypes": [
+        "gz_header",
+        "inflate_state",
+        "z_stream"
+      ],
+      "dh": "5f85c0c8",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ],
+        [
+          "head",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "syncsearch",
+      "address": "0042b300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b300"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "syncsearch"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "4c3f9b84",
+      "paramStorage": [
+        [
+          "have",
+          "Stack[0x4]:4"
+        ],
+        [
+          "len",
+          "Stack[0x8]:4"
+        ],
+        [
+          "buf",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateSync",
+      "address": "0042b360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b360"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateSync",
+        "syncsearch",
+        "inflateResetKeep"
+      ],
+      "usedTypes": [
+        "inflateSync_Slotm",
+        "inflate_state",
+        "uint32_t",
+        "z_stream"
+      ],
+      "dh": "91e7f021",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateSyncPoint",
+      "address": "0042b460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b460"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateSyncPoint"
+      ],
+      "usedTypes": [
+        "z_stream"
+      ],
+      "dh": "b6a0cfc7",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateCopy",
+      "address": "0042b490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b490"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateCopy",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "inflate_state",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ],
+      "dh": "33fe4e3d",
+      "paramStorage": [
+        [
+          "dest",
+          "ECX:4"
+        ],
+        [
+          "source",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateUndermine",
+      "address": "0042b5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b5e0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateUndermine"
+      ],
+      "usedTypes": [
+        "z_stream"
+      ],
+      "dh": "39a9449d",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ],
+        [
+          "subvert",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "inflateMark",
+      "address": "0042b610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b610"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::inflate",
+      "calledFunctions": [
+        "inflateMark"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "z_stream"
+      ],
+      "dh": "faa46b62",
+      "paramStorage": [
+        [
+          "strm",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

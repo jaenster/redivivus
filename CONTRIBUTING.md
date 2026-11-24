@@ -23,7 +23,7 @@ generator is not run over the published tree at all. What that means for a pull 
 
 | | |
 |-|-|
-| **Function bodies** - pull requests welcome, under the rules below | everything under `Source/` (the module directories `Source/D2Client/`, `Source/D2Common/`, `Source/D2Game/`, `Source/Fog/`, ...), and `3rdparty/Storm/`, `3rdparty/crashy/` |
+| **Function bodies** - pull requests welcome, under the rules below | everything under `Source/` (the module directories `Source/D2Client/`, `Source/D2Common/`, `Source/D2Game/`, `Source/Fog/`, `Source/Storm/`, ...), and `3rdparty/crashy/` |
 | **Declarations** - through Ghidra, not a pull request | names, types, struct fields, prototypes and calling conventions, wherever they are spelled: the shared headers in `Source/D2Headers/`, the global data in `Source/globals/`, the unit headers |
 | **Hand-written** - pull requests welcome | `project.json` (the module table), `Redivivus/`, `3rdparty/libbacktrace/`, `3rdparty/implibs/`, `cmake/`, `docs/`, `asm_matching/`, `tools/`, `agent/`, `CMakeLists.txt`, `.github/`, `README.md` |
 

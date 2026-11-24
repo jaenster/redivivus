@@ -2,9 +2,9 @@
 
 #include "Source/D2Launch/D2LaunchRoot.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Launch/CharSel.h"
+#include "Source/D2Launch/Src/CharSel.h"
 #include "Source/D2Launch/Launcher.h"
-#include "Source/D2Launch/MainMenus.h"
+#include "Source/D2Launch/Src/MainMenus.h"
 #include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2Launch/D2Launch.globals.h"

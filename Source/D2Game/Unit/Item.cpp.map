@@ -1,0 +1,396 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Game/Unit/Item.cpp",
+  "functions": [
+    {
+      "name": "Pre0x9DAnd0x9CPacket",
+      "address": "005973f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005973f0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "Pre0x9DAnd0x9CPacket",
+        "CLIENTS_GetControlUnit",
+        "CLIENT_GetGame",
+        "GetInteractedNpc",
+        "SUNITNPC_OpenTradeScreen",
+        "Send0x9CItemHandleInShop",
+        "ITEM_CheckItemData_eD2ItemCmd",
+        "Send0x9CItemPickedFromGround",
+        "Send0x9DItemCopyToCursor",
+        "Send0x9CItemPutInContainer",
+        "Send0x9DRemoveItemFromContainer",
+        "Send0x9DItemEquip",
+        "Send0x9DIndirectSwapBodyItem",
+        "Send0x9DItemUnequip",
+        "Send0x9DItemSwapBodyItem",
+        "Send0x9CItemAddQuantity",
+        "Send0x9CItemSwapInContainer",
+        "Send0x9CItemPutInBelt",
+        "Send0x9CItemRemoveFromBelt",
+        "Send0x9CItemSwapInBelt",
+        "Send0x9CItemToCursor",
+        "Send0x9DItemWeaponSwitch",
+        "Send0x9DItemMoveToBodyLoc",
+        "CheckItemFlag",
+        "SendUpdateItemPacket",
+        "NET_D2GS_SERVER_Send_0x7D_SETITEMBROKEN",
+        "Send0x9DItemAutoUnequip"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2ItemAnimMode",
+        "uint32_t"
+      ],
+      "dh": "473ff6e2",
+      "paramStorage": [
+        [
+          "pClient",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pItem",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SendUpdatedItemsToClient",
+      "address": "00597890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00597890"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "SendUpdatedItemsToClient",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetUpdates",
+        "GetUpdatesUUid",
+        "FindUnitFromTable",
+        "Pre0x9DAnd0x9CPacket",
+        "GetNextUpdate",
+        "MONSTER_GetMercType",
+        "ITEMS_RecalcAndRefreshInventory",
+        "ITEMMODE_ReturnZero3"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2InventoryStrc",
+        "D2InventoryToBeUpdatedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "0b11a5cf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_ClearFlagsAndCommands",
+      "address": "005979b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005979b0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_ClearFlagsAndCommands",
+        "ITEM_EditItemData_eD2ItemCmd",
+        "ITEM_EditItemData_eItemFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ],
+      "dh": "3866a6c8",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HasPendingInventoryUpdates",
+      "address": "00597a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00597a20"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HasPendingInventoryUpdates",
+        "GetUpdates",
+        "GetUpdatesUUid",
+        "FindUnitFromTable",
+        "GetNextUpdate"
+      ],
+      "usedTypes": [
+        "D2InventoryToBeUpdatedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ],
+      "dh": "aa45e991",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00597aa0",
+      "address": "00597aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00597aa0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "Unreferenced_00597aa0",
+        "ITEM_CheckItemData_eD2ItemCmd",
+        "SetBodyLoc",
+        "CheckItemFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "9de0b079",
+      "paramStorage": [
+        [
+          "pItem",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_ProcessInventoryUpdates",
+      "address": "00597b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00597b00"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_ProcessInventoryUpdates",
+        "RefreshInventory",
+        "GetUpdates",
+        "GetUpdatesUUid",
+        "FindUnitFromTable",
+        "ITEM_CheckItemData_eD2ItemCmd",
+        "SetBodyLoc",
+        "CheckItemFlag",
+        "ITEM_ClearFlagsAndCommands",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetNextUpdate",
+        "FreeUpdatesFromInventory",
+        "ITEM_DeleteItemAndFreeUnit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2InventoryToBeUpdatedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "e009e040",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "MONSTER_SendNpcEnchantsToClient",
+      "address": "00597c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00597c70"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "MONSTER_SendNpcEnchantsToClient",
+        "GetMonsterFlags",
+        "GetMonUModList",
+        "GetNameSeed",
+        "CheckMonsterType",
+        "NET_D2GS_SERVER_Send_0x57_CHANGEMONSTERUNIT"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "a528b066",
+      "paramStorage": [
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "MONSTER_SendNpcHealthUpdate",
+      "address": "00597cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00597cf0"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "MONSTER_SendNpcHealthUpdate",
+        "MONSTER_GetHpPercent128",
+        "STATLIST_SetUnitStat",
+        "CheckMonsterType",
+        "NET_D2GS_SERVER_Send_0x0C_UNITCHANGE"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "046f4289",
+      "paramStorage": [
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PacketUpdateForClient",
+      "address": "00598220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00598220"
+        }
+      ],
+      "namespace": "D2Game::UNIT::Item",
+      "calledFunctions": [
+        "PacketUpdateForClient",
+        "GetYPos",
+        "GetXPos",
+        "NET_D2GS_SERVER_Send_0x15_WarpXY",
+        "UNITS_UpdateRoomClientVisibility",
+        "MONSTER_SendUpdateToClient",
+        "SERVER_UnitQueuePacketSend",
+        "PLAYER_SendHoverTextToClient",
+        "CLIENTS_GetControlUnit",
+        "NpcStateIs2",
+        "SUNITPROXY_SendProxyItemsToClient",
+        "MONSTER_GetMercType",
+        "GetOwnerUnit",
+        "SendUpdatedItemsToClient",
+        "UNITMSG_SendSoundPacketToClient",
+        "MONSTER_SendNpcHealthUpdate",
+        "STATES_HasAnyGfxFlag",
+        "PLAYER_SendStateUpdate",
+        "STATLIST_IsOverlayPending",
+        "PLAYER_SendOverlayToClient",
+        "MONSTER_SendNpcEnchantsToClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "035ec5e3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIsNew",
+          "Stack[0x8]:4"
+        ]
+      ]
+    }
+  ]
+}

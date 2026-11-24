@@ -3,17 +3,17 @@
 #include "Source/D2Client/SKILLS.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Engine/Particle.h"
-#include "Source/D2Client/SKILLS/Skills.h"
-#include "Source/D2Client/SKILLS/SkillsAss.h"
+#include "Source/D2Client/Skills/Skills.h"
+#include "Source/D2Client/Skills/SkillsAss.h"
 #include "Source/D2Client/Sound/Sound.h"
-#include "Source/D2Client/UNIT/CUnit.h"
-#include "Source/D2Client/UNIT/Missile.h"
-#include "Source/D2Client/UNIT/UnitSnd.h"
+#include "Source/D2Client/Unit/CUnit.h"
+#include "Source/D2Client/Unit/Missile.h"
+#include "Source/D2Client/Unit/UnitSnd.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units/Units.inline.h"
 
 // The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
 #ifndef min

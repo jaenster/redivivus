@@ -2,16 +2,16 @@
 
 #include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Client/D2ClientStrc.h"
-#include "Source/D2Game/GAME/Clients.h"
-#include "Source/D2Game/GAME/Server.h"
-#include "Source/D2Game/GAME/Task.h"
-#include "Source/D2Game/UNIT/SUnit.h"
+#include "Source/D2Game/Game/Clients.h"
+#include "Source/D2Game/Game/Server.h"
+#include "Source/D2Game/Game/Task.h"
+#include "Source/D2Game/Unit/SUnit.h"
 #include "Source/D2Game/D2Game.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/GAME/Clients.data.h"
-#include "Source/D2Game/GAME/Task.data.h"
+#include "Source/D2Game/Game/Clients.data.h"
+#include "Source/D2Game/Game/Task.data.h"
 #include "Source/D2Game/Quests/QUESTS.inline.h"
-#include "Source/D2Game/Quests/QUESTS/A2Q3.h"
+#include "Source/D2Game/Quests/A2Q3.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

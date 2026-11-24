@@ -10,12 +10,12 @@
 
 #include "Source/D2Game/Quests/QUESTS.h"
 #include "Source/D2Common/D2Common.h"
-#include "Source/D2Common/Units.h"
+#include "Source/D2Common/Units/Units.h"
 #include "Source/D2Common/D2BitBufferStrc.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Client/Game/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Game/PLAYER/PlayerTrade.h"
+#include "Source/D2Game/Player/PlayerTrade.h"
 
 namespace D2Game::Quests::QUESTS {
 

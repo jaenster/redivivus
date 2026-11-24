@@ -1,0 +1,3106 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Client/Unit/Item.cpp",
+  "functions": [
+    {
+      "name": "ITEM_ApplySocketableAndEquipStats",
+      "address": "004c0d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c0d20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ApplyRuneAndGemStats",
+        "ITEM_ApplySocketableAndEquipStats",
+        "ITEMS_IsA",
+        "ITEM_ProcessSetItemEquip",
+        "TXT_Items_GetLine",
+        "TXT_Gems_GetLine",
+        "ITEM_GetItemsTxt_bGemApplyType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CheckItemFlag",
+        "GetEquipedWeapon",
+        "CanDualWield",
+        "STATLIST_SetItemStatActive"
+      ],
+      "usedTypes": [
+        "D2GemsTxt",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5a9bd156",
+      "paramStorage": [
+        [
+          "bForceActive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_RemoveItemStatsFromOwner",
+      "address": "004c0ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c0ec0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_RemoveItemStatsFromOwner",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "UpdateResourceStats"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "8f596c04",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ],
+        [
+          "bRecalc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bUpdateResources",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_CreateItemFromGroundPacket",
+      "address": "004c0f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c0f20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_CreateItemFromGroundPacket",
+        "ExtractItemDetails",
+        "UNIT_CreateWarp",
+        "ITEM_LoadFromSaveData",
+        "RemoveObjectFromServerObjectTable",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "NET_D2GS_CLIENT_Send_INT"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "e55fe114",
+      "paramStorage": [
+        [
+          "nItemX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nItemY",
+          "Stack[0x8]:2"
+        ],
+        [
+          "bSendIdentRequest",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPacketData",
+          "EBX:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_CreateItemFromBodyPacket",
+      "address": "004c0ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c0ff0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_CreateItemFromBodyPacket",
+        "ExtractItemDetails",
+        "UNIT_CreateWarp",
+        "ITEM_LoadFromSaveData",
+        "RemoveObjectFromServerObjectTable",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_EditItemData_eItemFlag",
+        "CheckItemFlag",
+        "NET_D2GS_CLIENT_Send_INT"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "e37c6301",
+      "paramStorage": [
+        [
+          "nItemX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nItemY",
+          "Stack[0x8]:2"
+        ],
+        [
+          "bSendIdentRequest",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPacketData",
+          "EBX:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004c10c0",
+      "address": "004c10c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c10c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "Unreferenced_004c10c0",
+        "PLRSKILLS_CanUseSkillCheck"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "5dd7efa8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pSkill",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_CheckItemEquipRequirements",
+      "address": "004c10e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c10e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_CheckItemEquipRequirements",
+        "ITEM_CheckEquipRequirements",
+        "ITEM_GetTxtItemTypes_quiver",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEMS_IsA"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2ItemTypes",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5bf193ea",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pUnit2",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_SaveSkillSelections",
+      "address": "004c1160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1160"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_SaveSkillSelections",
+        "STATSEX_GetCurrentStat",
+        "GetLeftSkill",
+        "GetOwnerGUID",
+        "GetSkillId",
+        "GetRightSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "3584c19d",
+      "paramStorage": [
+        [
+          "pnSavedState",
+          "ESI:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_RestoreSkillSelections",
+      "address": "004c1200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1200"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_RestoreSkillSelections",
+        "GetSkillByIdAndOwner",
+        "GetLeftSkill",
+        "PLRSKILLS_CanUseSkillCheck",
+        "SelectSkillLeft",
+        "GetRightSkill",
+        "SelectSkillRight"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "319ce697",
+      "paramStorage": [
+        [
+          "pSkillSaveState",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_RemoveItemFromBodyAndRecalc",
+      "address": "004c1290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1290"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_RemoveItemFromBodyAndRecalc",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "GFX_ClearAllModeFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "fcf0f2ac",
+      "paramStorage": [
+        [
+          "nGfxComponent",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pUnit2",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_ReequipItemOnBody",
+      "address": "004c12f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c12f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_ReequipItemOnBody",
+        "GetBodyLocation",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GFX_ClearAllModeFlags",
+        "SEVER_ITEM_GetOwner",
+        "ITEM_ApplySocketableAndEquipStats",
+        "INVENTORY_UpdatePrimaryWeapon"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "int32_t"
+      ],
+      "dh": "d2cabc10",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "bApplyEquipStats",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nGfxComponent",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_RecalcAllEquippedItems_EBX",
+      "address": "004c1350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1350"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "MonsterMessage",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "ITEM_SaveSkillSelections",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "ITEM_IsActiveCharm",
+        "SEVER_ITEM_GetOwner",
+        "ITEM_CheckItemEquipRequirements",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_ApplySocketableAndEquipStats",
+        "INVENTORY_GetItemByGridOffset",
+        "CheckItemFlag",
+        "GetItemComponent",
+        "ITEM_RemoveItemFromBodyAndRecalc",
+        "GetBodyLocation",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GFX_ClearAllModeFlags",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "GetItemQuality",
+        "GetEquipedWeapon",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "ITEM_RestoreSkillSelections",
+        "IfPlayer",
+        "GFX_LoadUnitModeCof"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "1249daa8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "thunk_ITEM_RecalcAllEquippedItems_Unref_004c16c0",
+      "address": "004c16c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c16c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "thunk_ITEM_RecalcAllEquippedItems_Unref_004c16c0",
+        "ITEM_RecalcAllEquippedItems_EBX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "f3613a7d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_GetItemDropSound",
+      "address": "004c16d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c16d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_GetItemDropSound",
+        "TXT_Items_GetLine",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SetItemsTxt",
+        "D2UniqueItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "63e7c2df",
+      "paramStorage": [
+        [
+          "pnDropSfxFrame",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_GetItemUseSound",
+      "address": "004c17f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c17f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_GetItemUseSound",
+        "TXT_Items_GetLine",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2SetItemsTxt",
+        "D2UniqueItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "31125716",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_PlayItemDropSound",
+      "address": "004c18b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c18b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_PlayItemDropSound",
+        "ITEM_GetItemDropSound",
+        "SOUND_PlaySound",
+        "SOUND_SetChannelPriority"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Sounds",
+        "uint32_t"
+      ],
+      "dh": "4e936ba6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_SetAnimModeAndPlace",
+      "address": "004c1910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1910"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_SetAnimModeAndPlace",
+        "RemoveCollision_Vector",
+        "DRLGROOM_ClearUnitRoomLink",
+        "InitializeStaticPath",
+        "BlockCollisionPath",
+        "DRLGROOM_AddUnitToRoom",
+        "InitAnimMode",
+        "SOUND_PlaySound",
+        "ITEM_PlayItemDropSound",
+        "ITEM_EditItemData_eItemFlag",
+        "AllocStatListEx",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "ITEM_GetItemsTxt_bHasInv",
+        "STRUCT_CreatePlayerInventory"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "b155d6dd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bInitItemData",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_FreeItemUnit",
+      "address": "004c1a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1a70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_FreeItemUnit",
+        "FreeGfxInfo",
+        "ITEM_GetItemsTxt_bHasInv",
+        "CleanupInventory",
+        "STRUCT_FreeInventory",
+        "RemoveCollision_Vector",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsUnitInRoom",
+        "RemoveUnitFromRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "1a8c61ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_UpdateItemAnimation",
+      "address": "004c1ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1ad0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_UpdateItemAnimation",
+        "GFX_HasOverlayOfType",
+        "IsAtEndOfFrameCycle",
+        "UpdateFrame",
+        "GFX_AddOverlayToUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "916e6f49",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ItemMessage",
+      "address": "004c1b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1b80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ItemMessage",
+        "ChangeAnimMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "bef50f2c",
+      "paramStorage": [
+        [
+          "eMessageType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUpdateFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_CltRecalcAllEquippedItems",
+      "address": "004c1bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1bc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_CltRecalcAllEquippedItems",
+        "UNITS_FindClientSideUnit",
+        "ITEM_RecalcAllEquippedItems_EBX"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x47",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "33ddbeea",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "bFromNetwork",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "thunk_ITEM_RecalcAllEquippedItems_Unref_004c1be0",
+      "address": "004c1be0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1be0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "thunk_ITEM_RecalcAllEquippedItems_Unref_004c1be0",
+        "ITEM_RecalcAllEquippedItems_EBX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "cca5d266",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_CltRecalcAllEquippedItems2",
+      "address": "004c1bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1bf0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_CltRecalcAllEquippedItems",
+        "ITEM_CltRecalcAllEquippedItems2",
+        "UNITS_FindClientSideUnit",
+        "ITEM_RecalcAllEquippedItems_EBX"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x48",
+        "D2UnitStrc"
+      ],
+      "dh": "b4141944",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_RecalcAllEquippedItems_ECX",
+      "address": "004c1c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1c10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_RecalcAllEquippedItems_ECX",
+        "ITEM_RecalcAllEquippedItems_EBX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "81507c07",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_SaveWeaponHandClassId",
+      "address": "004c1c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1c20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_SaveWeaponHandClassId",
+        "ITEM_GetWeaponAnimClass"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int16_t"
+      ],
+      "dh": "8694873f",
+      "paramStorage": [
+        [
+          "eBodyLoc",
+          "BL:1"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_SetItemInBodyLocation",
+      "address": "004c1c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1c50"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_SetItemInBodyLocation",
+        "INVENTORY_GetItemByGridOffset",
+        "NullSub_2Arg",
+        "INVENTORY_GetItemAtBodyLoc"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "be243eda",
+      "paramStorage": [
+        [
+          "pInventory",
+          "ECX:4"
+        ],
+        [
+          "pItem",
+          "EDX:4"
+        ],
+        [
+          "eBodyLoc",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_RemoveEquippedItemForSwap",
+      "address": "004c1c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1c90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_RemoveEquippedItemForSwap",
+        "GetBodyLocation",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GetItemComponent",
+        "GFX_ClearAllModeFlags",
+        "GetCurrentItemOnBodyLocation",
+        "INVENTORY_RemoveItem",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "NullSub_2Arg",
+        "RemoveObjectFromServerObjectTable"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "uint32_t"
+      ],
+      "dh": "328c3350",
+      "paramStorage": [
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SOUND_GetIdFromUnit",
+      "address": "004c1d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1d60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "SOUND_GetIdFromUnit",
+        "TXT_Items_GetLine",
+        "GetItemQuality",
+        "ITEM_GetItemData_nFileIndex"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d6aba4d9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_PlayItemUseSound",
+      "address": "004c1e20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1e20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_PlayItemUseSound",
+        "ITEM_GetItemUseSound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "bb794d2a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_ResetWeaponHandClassIds",
+      "address": "004c1e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1e30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_ResetWeaponHandClassIds"
+      ],
+      "dh": "0afcf035"
+    },
+    {
+      "name": "ITEM_UpdateChargedSkillStat",
+      "address": "004c1e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1e40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_UpdateChargedSkillStat",
+        "GetStatsByFlags",
+        "STATLIST_FindStatListWithFlags",
+        "STATLIST_GetBaseStatValue",
+        "STATLIST_SetStatValueInBaseArraySafe",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "aa482686",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nSkillId",
+          "EDX:4"
+        ],
+        [
+          "nStatLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxCharge",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleStatUpdatePacket",
+      "address": "004c1f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c1f30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleStatUpdatePacket",
+        "UNITS_FindClientSideUnit",
+        "GetPlayerUnit_UI",
+        "ITEM_UpdateChargedSkillStat",
+        "STATLIST_SetUnitStat",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "CheckItemFlag",
+        "ITEM_EditItemData_eItemFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "1a4beea5",
+      "paramStorage": [
+        [
+          "nUnitGUID",
+          "ECX:4"
+        ],
+        [
+          "bSetStat",
+          "DL:1"
+        ],
+        [
+          "eUnitStat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStatParam",
+          "Stack[0xc]:2"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleItemFlagEditPacket",
+      "address": "004c2020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2020"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleItemFlagEditPacket",
+        "UNITS_FindClientSideUnit",
+        "ITEM_EditItemData_eItemFlag"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x40",
+        "D2UnitStrc"
+      ],
+      "dh": "d9bcaca4",
+      "paramStorage": [
+        [
+          "pbPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleCursorItemRemoval",
+      "address": "004c2050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2050"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleCursorItemRemoval",
+        "UNITS_FindClientSideUnit",
+        "GetPlayerUnit_UI",
+        "INVENTORY_GetHandItem",
+        "INVENTORY_SetCursorItem",
+        "ITEM_SetItemOnHand",
+        "RemoveObjectFromServerObjectTable",
+        "NPCMENU_OnCursorItemRemoved"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x42",
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "81ba9729",
+      "paramStorage": [
+        [
+          "pbPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemToCursor",
+      "address": "004c20b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c20b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemToCursor",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_CreateItemFromGroundPacket",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "8e954acf",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004c2150",
+      "address": "004c2150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2150"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "Unreferenced_004c2150"
+      ],
+      "dh": "ccc59521",
+      "paramStorage": [
+        [
+          "nInvType",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_RemoveUninterruptableState",
+      "address": "004c2180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2180"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetStatsByState",
+        "SetState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "UpdateAnimSpeed"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "aeca6965",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_ClearUnitState",
+      "address": "004c21e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c21e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_ClearUnitState",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States"
+      ],
+      "dh": "60d60584",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_RemoveClientSide",
+      "address": "004c21f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c21f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_RemoveClientSide",
+        "GetStatsByState",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "eaa29e45",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PlayerIsUnInterruptable",
+      "address": "004c2240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2240"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "PlayerIsUnInterruptable",
+        "GetStatsByFlags",
+        "GetPlayerUnit_UI",
+        "UNIT_GetUnitState"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "3ef8595e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleItemRepairBreak",
+      "address": "004c2270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2270"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleItemRepairBreak",
+        "UNITS_FindClientSideUnit",
+        "GetItemComponent",
+        "ITEM_EditItemData_eItemFlag",
+        "IfPlayer",
+        "ITEM_RemoveItemFromBodyAndRecalc",
+        "GFX_LoadUnitModeCof",
+        "ITEM_ProcessSetItemEquip",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "ITEM_ReequipItemOnBody"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x7D",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "uint32_t"
+      ],
+      "dh": "85e19010",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleItemCopyToCursor",
+      "address": "004c2340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2340"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleItemCopyToCursor",
+        "ExtractItemDetails",
+        "UNITS_FindClientSideUnit",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_CreateItemFromBodyPacket",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATLIST_SetUnitStat",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "55bcbdd5",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleUnsocketItems",
+      "address": "004c23e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c23e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "MonsterMessage",
+        "ITEM_HandleUnsocketItems",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "ITEM_IsActiveCharm",
+        "IfPlayer",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "INVENTORY_RemoveItem",
+        "INVENTORY_IsItemLocationValid",
+        "NullSub_2Arg",
+        "ITEM_ProcessSetItemEquip",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeRecursiveInventorysWithChilds"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "9e380d97",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_DropItemToGroundWithMode",
+      "address": "004c2540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2540"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_DropItemToGroundWithMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FindRoom",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "b29269ed",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bFindRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eInvPage",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nX",
+          "BX:2"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nY",
+          "DI:2"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemAddToGround",
+      "address": "004c25b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c25b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemAddToGround",
+        "ExtractItemDetails",
+        "ITEM_CreateItemFromGroundPacket",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ITEM_RemoveUninterruptableState",
+        "CheckItemFlag",
+        "ChangeAnimMode",
+        "ITEM_PlayItemDropSound"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "f3bfbd23",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemPickedFromGround",
+      "address": "004c2650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2650"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemPickedFromGround",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "ITEM_CreateItemFromGroundPacket",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "f5723b1a",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemDroppedToGround",
+      "address": "004c26f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c26f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemDroppedToGround",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "INVENTORY_GetHandItem",
+        "INVENTORY_SetCursorItem",
+        "ITEM_SetItemOnHand",
+        "ITEMFLAG_CheckFlag",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_CreateItemFromGroundPacket",
+        "ITEM_RemoveUninterruptableState",
+        "FindRoom",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "c8fd8a29",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemOnGround",
+      "address": "004c2810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2810"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemOnGround",
+        "ExtractItemDetails",
+        "UNITS_FindClientSideUnit",
+        "GetPlayerUnit_UI",
+        "IfPlayer",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GetItemComponent",
+        "GFX_ClearAllModeFlags",
+        "GetBodyLocation",
+        "GetCurrentItemOnBodyLocation",
+        "INVENTORY_RemoveItem",
+        "NullSub_2Arg",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "GFX_LoadUnitModeCof",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_CreateItemFromGroundPacket",
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "cb313bc6",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_PlaceItemInContainer",
+      "address": "004c2970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2970"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_PlaceItemInContainer",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PutItemInInventory",
+        "GetYPos",
+        "GetXPos",
+        "CLIENT_CheckExpansion",
+        "UNITS_GetInventoryRecordId",
+        "INVENTORY_PlaceItemAtCoords",
+        "GetPlayerUnit_UI",
+        "SOUND_GetIdFromUnit",
+        "SOUND_PlaySound",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "TXT_Items_GetLine",
+        "INV_StartCubeTransmuteAnim"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2Sounds",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "27fa44bc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nYPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInvPage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nItemX",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemPutInContainer",
+      "address": "004c2ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2ad0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemPutInContainer",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "ITEM_CreateItemFromGroundPacket",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "ITEM_EditItemData_eItemFlag",
+        "INVENTORY_RemoveItem",
+        "ITEM_GetContainingInventoryPage",
+        "CLIENT_CheckExpansion",
+        "UNITS_GetInventoryRecordId",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UnusedDebug",
+        "INV_ResetHoverAndContextState",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_PlaceItemInContainer",
+        "ITEM_IsActiveCharm",
+        "ITEM_ApplySocketableAndEquipStats",
+        "UI_SendMouseMoveMessage",
+        "ITEM_RemoveUninterruptableState",
+        "NPCMENU_OnItemPutInContainer"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "3bb2f16a",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemRemoveFromContainer",
+      "address": "004c2c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2c80"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemRemoveFromContainer",
+        "ExtractItemDetails",
+        "UNITS_FindClientSideUnit",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INVENTORY_RemoveItem",
+        "ITEM_GetContainingInventoryPage",
+        "CLIENT_CheckExpansion",
+        "UNITS_GetInventoryRecordId",
+        "UnusedDebug",
+        "INV_ResetHoverAndContextState",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_DropItemToGroundWithMode",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_CreateItemFromBodyPacket",
+        "ITEM_SetItemData_ePage",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RemoveUninterruptableState",
+        "SOUND_PlaySound",
+        "NPCMENU_OnItemRemovedFromContainer"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "abacd675",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemEquip",
+      "address": "004c2e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c2e90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemEquip",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "ITEM_RemoveEquippedItemForSwap",
+        "ITEM_CreateItemFromBodyPacket",
+        "SetBodyLoc",
+        "PutItemInInventory",
+        "ITEM_SetItemInBodyLocation",
+        "IfPlayer",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "GFX_SetAllGfxInfoFlags",
+        "GFX_ClearAllModeFlags",
+        "GFX_LoadUnitModeCof",
+        "ITEM_SaveWeaponHandClassId",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_ApplySocketableAndEquipStats",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "UI_SendMouseMoveMessage",
+        "ITEM_RemoveUninterruptableState",
+        "NPCMENU_OnItemEquip"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "348452e7",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemIndirectSwapBodyItem",
+      "address": "004c3070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3070"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemIndirectSwapBodyItem",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "IfPlayer",
+        "INVENTORY_GetItemByGridOffset",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GetItemComponent",
+        "GFX_ClearAllModeFlags",
+        "GetCurrentItemOnBodyLocation",
+        "INVENTORY_RemoveItem",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "NullSub_2Arg",
+        "GFX_LoadUnitModeCof",
+        "INV_ResetHoverAndContextState",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "SetBodyLoc",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RemoveUninterruptableState",
+        "ITEM_CreateItemFromBodyPacket",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_DropItemToGroundWithMode",
+        "RemoveObjectFromServerObjectTable",
+        "PutItemInInventory",
+        "ITEM_SetItemInBodyLocation",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "GFX_SetAllGfxInfoFlags",
+        "ITEM_SaveWeaponHandClassId",
+        "ITEM_ApplySocketableAndEquipStats",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "UI_SendMouseMoveMessage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "69696834",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemUnequip",
+      "address": "004c3380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3380"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemUnequip",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INVENTORY_GetItemByGridOffset",
+        "IfPlayer",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GFX_ClearAllModeFlags",
+        "GetCurrentItemOnBodyLocation",
+        "INVENTORY_RemoveItem",
+        "NullSub_2Arg",
+        "ITEM_ProcessSetItemEquip",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "GFX_LoadUnitModeCof",
+        "NPCMENU_OnItemUnequip",
+        "INV_ResetHoverAndContextState",
+        "ITEMFLAG_CheckFlag",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_DropItemToGroundWithMode",
+        "ITEM_CreateItemFromBodyPacket",
+        "SetBodyLoc",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RemoveUninterruptableState",
+        "ITEM_EditItemData_eItemFlag"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "3c663e89",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleSwapBodyEquipItem",
+      "address": "004c35f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c35f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleSwapBodyEquipItem",
+        "UNITS_FindClientSideUnit",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_CreateItemFromBodyPacket",
+        "SetBodyLoc",
+        "PutItemInInventory",
+        "ITEM_SetItemInBodyLocation",
+        "IfPlayer",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "GFX_SetAllGfxInfoFlags",
+        "ITEM_ApplySocketableAndEquipStats",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "ITEM_SaveWeaponHandClassId",
+        "GFX_LoadUnitModeCof",
+        "UI_SendMouseMoveMessage",
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "88a38906",
+      "paramStorage": [
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemDetails",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleSwapBodyUnequipItem",
+      "address": "004c3760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3760"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleSwapBodyUnequipItem",
+        "UNITS_FindClientSideUnit",
+        "INVENTORY_GetItemByGridOffset",
+        "IfPlayer",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GFX_ClearAllModeFlags",
+        "GetCurrentItemOnBodyLocation",
+        "INVENTORY_RemoveItem",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "ITEM_ProcessSetItemEquip",
+        "NullSub_2Arg",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_DropItemToGroundWithMode",
+        "RemoveObjectFromServerObjectTable",
+        "GetPlayerUnit_UI",
+        "ITEM_CreateItemFromBodyPacket",
+        "INV_ResetHoverAndContextState",
+        "SetBodyLoc",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "9d579759",
+      "paramStorage": [
+        [
+          "pPacketData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemSwapBodyItem",
+      "address": "004c3920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3920"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemSwapBodyItem",
+        "ExtractItemDetails",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_HandleSwapBodyEquipItem",
+        "ITEM_HandleSwapBodyUnequipItem"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemDetailsStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "345fc8ff",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleWeaponSwitchItems",
+      "address": "004c3980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3980"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleWeaponSwitchItems",
+        "UNITS_FindClientSideUnit",
+        "ITEMFLAG_CheckFlag",
+        "IfPlayer",
+        "ITEM_RemoveEquippedItemForSwap",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CreateItemFromBodyPacket",
+        "SetBodyLoc",
+        "PutItemInInventory",
+        "INVENTORY_GetItemAtBodyLoc",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "GFX_SetAllGfxInfoFlags",
+        "ITEM_ApplySocketableAndEquipStats",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "ITEM_SaveWeaponHandClassId",
+        "GFX_LoadUnitModeCof",
+        "UI_SendMouseMoveMessage",
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "1b1aa2f6",
+      "paramStorage": [
+        [
+          "pUnitDataItemDetails",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPacketData",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemWeaponSwitch",
+      "address": "004c3b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3b00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemWeaponSwitch",
+        "ExtractItemDetails",
+        "ITEM_HandleWeaponSwitchItems"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemDetailsStrc",
+        "uint8_t"
+      ],
+      "dh": "7009f4f8",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_HandleItemAddQuantity",
+      "address": "004c3b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3b30"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_HandleItemAddQuantity",
+        "UNITS_FindClientSideUnit",
+        "ITEM_LoadFromSaveData",
+        "RemoveObjectFromServerObjectTable",
+        "GetPlayerUnit_UI",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "ITEMFLAG_CheckFlag",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2ItemFlag",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "b9827c8a",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemInShop",
+      "address": "004c3c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3c00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemInShop",
+        "ExtractItemDetails",
+        "GetInteractedUnitGuid",
+        "UNITS_FindClientSideUnit",
+        "NPCMENU_IsShopActive",
+        "INV_ResetHoverAndContextState",
+        "INVENTORY_RemoveItem",
+        "ITEM_GetContainingInventoryPage",
+        "CLIENT_CheckExpansion",
+        "UNITS_GetInventoryRecordId",
+        "UnusedDebug",
+        "UI_SendMouseMoveMessage",
+        "RemoveObjectFromServerObjectTable",
+        "NPCMENU_OnItemInShop",
+        "ITEM_CreateItemFromGroundPacket",
+        "INVENTORY_CheckDoItemBelongToInventory",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "INVENTORY_CheckGridCollisions",
+        "ITEM_PlaceItemInContainer",
+        "thunk_SetInventoryNeedsRefresh",
+        "ITEM_RemoveUninterruptableState"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "fb9df40a",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleSwapContainerNewItem",
+      "address": "004c3e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3e00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleSwapContainerNewItem",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_CreateItemFromGroundPacket",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "PutItemInInventory",
+        "ITEM_GetContainingInventoryPage",
+        "CLIENT_CheckExpansion",
+        "UNITS_GetInventoryRecordId",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "INVENTORY_PlaceItemAtCoords",
+        "ITEM_IsActiveCharm",
+        "ITEM_ApplySocketableAndEquipStats",
+        "UI_SendMouseMoveMessage",
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "0c7eccf2",
+      "paramStorage": [
+        [
+          "pPacketData",
+          "ECX:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleSwapContainerOldItem",
+      "address": "004c3f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c3f60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleSwapContainerOldItem",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "ITEM_GetContainingInventoryPage",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "INVENTORY_RemoveItem",
+        "CLIENT_CheckExpansion",
+        "UNITS_GetInventoryRecordId",
+        "UnusedDebug",
+        "INV_ResetHoverAndContextState",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_DropItemToGroundWithMode",
+        "RemoveObjectFromServerObjectTable",
+        "ITEM_CreateItemFromGroundPacket",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "4d735e09",
+      "paramStorage": [
+        [
+          "pPacketData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitDataItemDetails",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemSwapInContainer",
+      "address": "004c40d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c40d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemSwapInContainer",
+        "ExtractItemDetails",
+        "UNITS_FindClientSideUnit",
+        "ITEM_HandleSwapContainerOldItem",
+        "ITEM_HandleSwapContainerNewItem"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "uint8_t"
+      ],
+      "dh": "ba163933",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemPutInBelt",
+      "address": "004c4130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c4130"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemPutInBelt",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "ITEM_CreateItemFromGroundPacket",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "PutItemInInventory",
+        "GetXPosFromDynamicPathUnit",
+        "INVENTORY_CanPlaceItemInBelt",
+        "ITEM_IsActiveCharm",
+        "ITEM_ApplySocketableAndEquipStats",
+        "ITEM_EditItemData_eItemFlag",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "GetXPos",
+        "PANEL_SetBeltSlotHasItem",
+        "UI_SendMouseMoveMessage",
+        "ITEM_RemoveUninterruptableState",
+        "NPCMENU_OnItemPutInBelt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "ebc275cd",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemRemoveFromBelt",
+      "address": "004c42a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c42a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemRemoveFromBelt",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "INVENTORY_RemoveItem",
+        "INVENTORY_OnBeltChanged_NoOp",
+        "PANEL_ClearBeltSlotHover",
+        "PANEL_SetBeltSlotHasItem",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_DropItemToGroundWithMode",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RemoveUninterruptableState",
+        "RemoveObjectFromServerObjectTable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "e4cdfdd2",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleSwapBeltNewItem",
+      "address": "004c43e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c43e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleSwapBeltNewItem",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_FindClientSideUnit",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "ITEMS_IsA",
+        "ITEM_ApplySocketableAndEquipStats",
+        "PutItemInInventory",
+        "GetXPosFromDynamicPathUnit",
+        "INVENTORY_CanPlaceItemInBelt",
+        "UI_SendMouseMoveMessage",
+        "ITEM_RemoveUninterruptableState"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "7a2e0685",
+      "paramStorage": [
+        [
+          "pPacket",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemDetails",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleSwapBeltOldItem",
+      "address": "004c44d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c44d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "ITEM_HandleSwapBeltOldItem",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "INVENTORY_RemoveItem",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "INVENTORY_OnBeltChanged_NoOp",
+        "ITEM_DropItemToGroundWithMode",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RemoveUninterruptableState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "36a61e76",
+      "paramStorage": [
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "itemDetails",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemSwapInBelt",
+      "address": "004c45c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c45c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemSwapInBelt",
+        "ExtractItemDetails",
+        "UNITS_FindClientSideUnit",
+        "ITEM_HandleSwapBeltOldItem",
+        "ITEM_HandleSwapBeltNewItem"
+      ],
+      "usedTypes": [
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "uint8_t"
+      ],
+      "dh": "d68c8874",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleItemCursorAssign",
+      "address": "004c4620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c4620"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_SetItemOnHand",
+        "ITEM_HandleItemCursorAssign",
+        "UNITS_FindClientSideUnit",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_RemoveUninterruptableState",
+        "UI_GetFlag",
+        "SetUIFlag",
+        "CURSOR_SetCursorItem"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x3F",
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "5bfa5a8b",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemAutoUnequip",
+      "address": "004c4740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c4740"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemAutoUnequip",
+        "ExtractItemDetails",
+        "UNITS_FindClientSideUnit",
+        "CLIENT_CheckExpansion",
+        "UNITS_GetInventoryRecordId",
+        "INVENTORY_GetItemByGridOffset",
+        "IfPlayer",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GFX_ClearAllModeFlags",
+        "GetCurrentItemOnBodyLocation",
+        "INVENTORY_RemoveItem",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "ITEM_ProcessSetItemEquip",
+        "ITEM_RemoveUninterruptableState",
+        "NullSub_2Arg",
+        "GFX_LoadUnitModeCof",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_DropItemToGroundWithMode",
+        "RemoveObjectFromServerObjectTable",
+        "GetPlayerUnit_UI",
+        "ITEM_CreateItemFromBodyPacket",
+        "INV_ResetHoverAndContextState",
+        "INVENTORY_PlaceItemAtCoords",
+        "PutItemInInventory",
+        "SetBodyLoc",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eD2InventoryGridType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "4230c038",
+      "paramStorage": [
+        [
+          "pPacketData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemInSocket",
+      "address": "004c4990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c4990"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemInSocket",
+        "ExtractItemDetails",
+        "UNITS_FindClientSideUnit",
+        "ITEM_CreateItemFromBodyPacket",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PutItemInInventory",
+        "ITEMFLAG_CheckFlag",
+        "GetPlayerUnit_UI",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_ApplySocketableAndEquipStats",
+        "ITEM_RemoveUninterruptableState"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "59dfa86e",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleItemMoveToBodyLoc",
+      "address": "004c4aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c4aa0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleItemMoveToBodyLoc",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INVENTORY_RemoveItem",
+        "CLIENT_CheckExpansion",
+        "UNITS_GetInventoryRecordId",
+        "UnusedDebug",
+        "INV_ResetHoverAndContextState",
+        "UI_SendMouseMoveMessage",
+        "ITEMFLAG_CheckFlag",
+        "ITEM_CreateItemFromBodyPacket",
+        "ITEM_SetAnimModeAndPlace",
+        "ITEM_SetItemData_ePage",
+        "RemoveObjectFromServerObjectTable",
+        "SetBodyLoc",
+        "PutItemInInventory",
+        "ITEM_SetItemInBodyLocation",
+        "IfPlayer",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "GFX_LoadUnitModeCof",
+        "ITEM_ApplySocketableAndEquipStats",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "ITEM_RemoveUninterruptableState"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eD2InventoryGridType",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "23958e53",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "HandleItemUpdateStats",
+      "address": "004c4c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c4c70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "HandleItemUpdateStats",
+        "ExtractItemDetails",
+        "GetPlayerUnit_UI",
+        "UNITS_FindClientSideUnit",
+        "INVENTORY_RemoveItem",
+        "GetEquipedWeapon",
+        "CheckItemFlag",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "RemoveObjectFromServerObjectTable",
+        "INV_ResetHoverAndContextState",
+        "CLIENT_CheckExpansion",
+        "UNITS_GetInventoryRecordId",
+        "UnusedDebug",
+        "ITEM_CreateItemFromBodyPacket",
+        "ITEM_PlaceItemInContainer",
+        "ITEM_IsActiveCharm",
+        "ITEM_ApplySocketableAndEquipStats",
+        "INVENTORY_GetItemByGridOffset",
+        "IfPlayer",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "GFX_ClearAllModeFlags",
+        "GetCurrentItemOnBodyLocation",
+        "ITEM_ProcessSetItemEquip",
+        "NullSub_2Arg",
+        "GFX_LoadUnitModeCof",
+        "SetBodyLoc",
+        "PutItemInInventory",
+        "ITEM_SetItemInBodyLocation",
+        "INVENTORY_UpdatePrimaryWeapon",
+        "GFX_SetAllGfxInfoFlags",
+        "ITEM_SaveWeaponHandClassId",
+        "ITEMFLAG_CheckFlag",
+        "INVENTORY_SetCursorItem",
+        "INVENTORY_GetHandItem",
+        "ITEM_SetItemOnHand",
+        "ITEM_RecalcAllEquippedItems_EBX",
+        "GetXPosFromDynamicPathUnit",
+        "INVENTORY_OnBeltChanged_NoOp",
+        "PANEL_SetBeltSlotHasItem",
+        "PANEL_ClearBeltSlotHover",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetXForStaticUnit",
+        "SetYForStaticUnit",
+        "INVENTORY_CanPlaceItemInBelt",
+        "NET_D2GS_CLIENT_Send_0x69",
+        "D2CLIENT_SetExitVar1",
+        "D2CLIENT_SetExitVar2",
+        "D2CLIENT_SetExitVar3ToTrue",
+        "UI_SendMouseMoveMessage",
+        "GFX_AddOverlayToUnit",
+        "ITEM_RemoveUninterruptableState"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "eD2InventoryGridType",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "62c03b6b",
+      "paramStorage": [
+        [
+          "pbPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_HandleServerItemAction",
+      "address": "004c51b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004c51b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Item",
+      "calledFunctions": [
+        "ITEM_HandleServerItemAction",
+        "UNITS_FindClientSideUnit",
+        "ITEM_RemoveUninterruptableState"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x7C",
+        "D2UnitStrc"
+      ],
+      "dh": "83987508",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

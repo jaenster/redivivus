@@ -97,7 +97,7 @@
       "namespaces": [
         "Storm"
       ],
-      "dir": "3rdparty/Storm",
+      "dir": "Source/Storm",
       "linkOrder": 3,
       "unitOrder": "original-address",
       "dependencies": [],
@@ -859,7 +859,7 @@
       "namespaces": [
         "StormMac"
       ],
-      "dir": "3rdparty/StormMac",
+      "dir": "Source/StormMac",
       "dependencies": [
         {
           "module": "Storm",

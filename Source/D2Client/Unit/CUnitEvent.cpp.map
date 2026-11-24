@@ -1,0 +1,124 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Client/Unit/CUnitEvent.cpp",
+  "functions": [
+    {
+      "name": "FreeEventList",
+      "address": "004dc0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc0c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnitEvent",
+      "calledFunctions": [
+        "FreeEventList",
+        "GetMemPool",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CUnitEventStrc",
+        "D2PoolManagerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "ca278cc3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CUNITEVENT_Alloc",
+      "address": "004dc110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc110"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnitEvent",
+      "calledFunctions": [
+        "CUNITEVENT_Alloc",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2CUnitEventStrc",
+        "D2UnitStrc",
+        "fnCUnitEventCallback"
+      ],
+      "dh": "71057839",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nClientEvent",
+          "EDX:4"
+        ],
+        [
+          "dwEventData1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwEventData2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pfnCallback",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nEventType",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nEventState",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CUNITEVENT_RemoveByTypeAndState",
+      "address": "004dc190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc190"
+        }
+      ],
+      "namespace": "D2Client::UNIT::CUnitEvent",
+      "calledFunctions": [
+        "CUNITEVENT_RemoveByTypeAndState",
+        "GetMemPool",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CUnitEventStrc",
+        "D2PoolManagerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "8297c1a1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nEventType",
+          "EDX:4"
+        ],
+        [
+          "nEventState",
+          "Stack[0x4]:4"
+        ]
+      ]
+    }
+  ]
+}

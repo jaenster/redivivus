@@ -1,0 +1,2061 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Client/Unit/Player.cpp",
+  "functions": [
+    {
+      "name": "CLIENT_SetAnimModeAndMoveToCurrentPos",
+      "address": "00460830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460830"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_SetAnimModeAndMoveToCurrentPos",
+        "UNITMODE_SetAnimMode",
+        "GetPlayerUnit_Net",
+        "GetXPos",
+        "GetYPos",
+        "PATH_MoveUnitToPoint"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "eD2UnitType"
+      ],
+      "dh": "409ac26c",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "EDX:4"
+        ],
+        [
+          "bMovePlayerUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_OnStatChanged",
+      "address": "004609f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004609f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_OnStatChanged",
+        "CLIENT_UpdateUnitLightRadius",
+        "CLIENT_SetUnitLightColor",
+        "GetSkillByIdAndOwner",
+        "GetSkillLevel",
+        "SKILL_RemoveSkillCallback",
+        "TXT_Skills_GetLine",
+        "AddSkill",
+        "STATSEX_GetCurrentStat",
+        "SEVER_ITEM_GetOwner",
+        "thunk_SKILLS_AddOrRemoveItemSkill"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "94ef58ce",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwStatIdAndSubIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwUnused2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "JoinRoomSetup",
+      "address": "00460bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460bf0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "JoinRoomSetup",
+        "CLIENT_RegisterActiveUnitInSlot",
+        "AllocDynamicPath",
+        "STRUCT_CreatePlayerInventory",
+        "STRUCT_CreateSkillsList",
+        "STRUCT_FillSkillsList",
+        "AllocStatListEx",
+        "STATLIST_SetUnitStat",
+        "DRLGROOM_IsRoomInTown",
+        "ChangeAnimMode",
+        "PATH_RemoveUnitCollision",
+        "PATH_SetUnitCollisionPattern",
+        "PATH_ChangeCollisionType",
+        "GetPlayerUnit_UI",
+        "Return0",
+        "AllocLightMap",
+        "GetRadiusX",
+        "SetLightRadius",
+        "AllocPlayerData",
+        "SetDirectionAndNewDirection",
+        "CLIENT_PreloadMonsterCofsInAdjacentRooms"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2LightMapStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "D2SkillListStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "7b8ecdfe",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_FreePlayerUnit",
+      "address": "00460d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460d50"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_FreePlayerUnit",
+        "CLIENT_UnregisterActiveUnitFromSlot",
+        "FreeGfxInfo",
+        "PATH_RemoveCollision",
+        "RemoveUnitFromRoom",
+        "STRUCT_FreePath",
+        "CleanupInventory",
+        "STRUCT_FreeInventory",
+        "SwapLightMap",
+        "FreeLightMap",
+        "GetPlayerUnit_UI",
+        "HANDSHAKE_SetClientPlayerUnit",
+        "FreePlayerData",
+        "CLIENT_PreloadMonsterCofsInAdjacentRooms"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "b43f59b4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_UpdateUnitRoomPops",
+      "address": "00460de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460de0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_UpdateUnitRoomPops",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "NeedsRoomUpdate",
+        "UpdatePops"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "3876e345",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_OnPlayerEnterRoom",
+      "address": "00460e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460e70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_OnPlayerEnterRoom",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetPlayerPortalFlags",
+        "GetPortalFlagFromLevelId",
+        "SetPlayerPortalFlags",
+        "GetNextRoom",
+        "InitRoomTileAnimation",
+        "DRLGROOM_IsRoomInTown",
+        "NPCMENU_HandlePlayerInteractionEnd",
+        "DRLGROOM_CheckLOSDraw",
+        "WEATHER_SetGlobalFlag",
+        "CLIENT_CheckWorldstoneShake"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "uint32_t"
+      ],
+      "dh": "a4785141",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_ResolvePlayerCollision",
+      "address": "00460f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00460f10"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_ResolvePlayerCollision",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "PATH_GetUnitCollisionPattern",
+        "CheckCollision_BlockAll_Type",
+        "GetUnitSizeX",
+        "GetFreeCoordinates_WithNeighboorRooms",
+        "CLIENT_TeleportUnitToPosition"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "POINT",
+        "eCollisionFlags",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "496bdbb8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_HandlePlayerDeath",
+      "address": "00461010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461010"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_HandlePlayerDeath",
+        "ITEM_ResetWeaponHandClassIds",
+        "PATH_SetCorpseCollision",
+        "SetDeadFlag",
+        "UNIT_GetUnitState",
+        "GFX_FreeNonBaseGfxInfoEntries",
+        "GFX_SetAllGfxInfoFlags",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "fe000619",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_PlayIndexedUnitSound",
+      "address": "00461070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461070"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_PlayIndexedUnitSound",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITSND_PlayPlayerSound"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "97cf08f9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSoundIndex",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_CheckSkillUsability",
+      "address": "004610c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004610c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_CheckSkillUsability",
+        "GetPlayerUnit_UI",
+        "PLRSKILLS_CanUseSkillCheck",
+        "GetSkillsTxt",
+        "SKILLS_GetSkillByEnum",
+        "CLIENT_PlayIndexedUnitSound"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillStrc *",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "263b3b6e",
+      "paramStorage": [
+        [
+          "pnUsabilityCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "ppSkill",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_ValidateSkillMessage",
+      "address": "00461180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461180"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_ValidateSkillMessage",
+        "GetSkillByIdAndOwner",
+        "PLAYER_CheckSkillUsability",
+        "GetSkillId"
+      ],
+      "usedTypes": [
+        "D2ServerMessageHandleStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint32_t"
+      ],
+      "dh": "6c51bfdb",
+      "paramStorage": [
+        [
+          "pnUsabilityCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EAX:4"
+        ],
+        [
+          "pServerMessageHandle",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_ApplyCurrentSkillFlags",
+      "address": "004611f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004611f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_ApplyCurrentSkillFlags",
+        "GetCurrentSkill",
+        "SKILL_GetFlags",
+        "SKILL_SetFlags",
+        "SKILLS_CltSetSkillFromCurrent"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "152aaf3d",
+      "paramStorage": [
+        [
+          "bIsLocalPlayer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "PlayerMessage",
+      "address": "00461250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461250"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PlayerMessage",
+        "SwapLightMap",
+        "FreeLightMap",
+        "GetPlayerUnit_UI",
+        "PLAYER_ApplyCurrentSkillFlags",
+        "SetCurrentSkill",
+        "PATH_SnapPositionToTile",
+        "PATH_RestoreVelocityAndPathType",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PATH_SetTargetUnitAndCalculate",
+        "PATH_SetTargetAndCalculate",
+        "INTERACT_AnyObject",
+        "UNITMODE_SetAnimMode",
+        "PATH_MoveUnitToPoint",
+        "IsActive",
+        "CUNIT_ClearDeadSetAttackable",
+        "UNITMODE_SendWalkToPosition",
+        "UI_CloseActivePanels",
+        "GetSelectedUnit",
+        "GAME_GetPrimaryClickState",
+        "GAME_GetMouseButtonEventState",
+        "ClearSelectedUnit",
+        "UI_ResetInputState",
+        "SELECT_UpdateUnitSelection",
+        "CLIENT_HandlePlayerDeath",
+        "SCMD_ClearPlayerTradeFields",
+        "INVENTORY_GetEquippedShield",
+        "COMPOSIT_GetWeaponClassWithTransform",
+        "UNITMODE_ShowElementalHitOverlay",
+        "UNITS_IsShapeshifted",
+        "UNITSND_DispatchModeChangeSound",
+        "PATH_SetPathType",
+        "SetDistance",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "PLAYER_ValidateSkillMessage",
+        "SKILL_ProcessCastFromPacket",
+        "SKILLS_CltStartSkillCast",
+        "CLIENT_SetAnimModeAndMoveToCurrentPos"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2LightMapStrc",
+        "D2RoomStrc",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d2bfdecf",
+      "paramStorage": [
+        [
+          "nMessageType",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eNeutralMode",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_ExecuteModeBasedAction",
+      "address": "00461700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461700"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_ExecuteModeBasedAction",
+        "GetMouseY",
+        "DRAW_GetBottomPanelY",
+        "UNITMODE_ExecuteSkillAction"
+      ],
+      "usedTypes": [
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "eD2UnitModeAction",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "ef22ffe0",
+      "paramStorage": [
+        [
+          "nActionContext",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_MovePlayerToPosition",
+      "address": "00461840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461840"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_MovePlayerToPosition",
+        "SetSP1",
+        "PATH_CalculatePath",
+        "GetLastPathPointX",
+        "GetLastPathPointY",
+        "UNITMODE_ExecuteSkillAction"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "45e806bf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "nX",
+          "CX:2"
+        ],
+        [
+          "nY",
+          "AX:2"
+        ],
+        [
+          "nSkillActionMode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_InteractWithObject",
+      "address": "00461890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461890"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_InteractWithObject",
+        "UNITS_FindClientSideUnit",
+        "TXT_Objects_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetPlayerUnit_UI",
+        "UNIT_GetUnitState",
+        "IsObjectInInteractRange",
+        "TestCollisionBetweenInteractingUnits",
+        "UNITMODE_ExecuteSkillAction",
+        "GetYPos",
+        "GetXPos",
+        "CLIENT_MovePlayerToPosition",
+        "StoreLastSkillHit"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t"
+      ],
+      "dh": "7f257206",
+      "paramStorage": [
+        [
+          "nObjectGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnderMouse",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_InteractWithUnit",
+      "address": "004619e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004619e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_InteractWithUnit",
+        "GetDistanceBetweenUnits",
+        "TestCollisionBetweenInteractingUnits",
+        "UNITMODE_ExecuteSkillAction"
+      ],
+      "usedTypes": [
+        "D2UnderMouseStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "4fd8d08a",
+      "paramStorage": [
+        [
+          "nTargetGUID",
+          "EDI:4"
+        ],
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_InteractAtTarget",
+      "address": "00461a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461a70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_InteractAtTarget",
+        "GetPlayerUnit_UI",
+        "PLAYER_InteractWithUnit"
+      ],
+      "usedTypes": [
+        "D2UnderMouseStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "f2109465",
+      "paramStorage": [
+        [
+          "pTargetUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILL_CheckAuraRange",
+      "address": "00461ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461ac0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "SKILL_CheckAuraRange",
+        "GetPlayerUnit_UI",
+        "GetSkillsTxt",
+        "GetSkillLevel",
+        "D2GetSkillCalc",
+        "GetCollisionDistance"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "9dd6d493",
+      "paramStorage": [
+        [
+          "pSkill",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pnMinX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnMinY",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_ExecuteSkillWithAura",
+      "address": "00461b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461b40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_ExecuteSkillWithAura",
+        "SKILL_CheckAuraRange",
+        "StoreLastSkillHit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CLIENT_MovePlayerToPosition",
+        "PLAYER_ExecuteModeBasedAction",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnderMouseStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "2864d3ea",
+      "paramStorage": [
+        [
+          "nTargetGUID",
+          "EAX:4"
+        ],
+        [
+          "eTargetUnitType",
+          "ECX:4"
+        ],
+        [
+          "pUnderMouse",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_ExecuteSkillAtUnit",
+      "address": "00461c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461c70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_ExecuteSkillAtUnit",
+        "PLAYER_CheckSkillUsability",
+        "SKILLS_GetSkillWeaponClass",
+        "UNITS_FindClientSideUnit",
+        "IsInMovingModeEx",
+        "IsInMeleeRange",
+        "GetSkillsTxt",
+        "PLAYER_ExecuteSkillWithAura",
+        "UNITMODE_ExecuteSkillAction",
+        "StoreLastSkillHit",
+        "PLAYER_ExecuteModeBasedAction"
+      ],
+      "usedTypes": [
+        "D2SkillStrc *",
+        "D2SkillsTxt",
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "cc3ac78c",
+      "paramStorage": [
+        [
+          "eTargetUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnderMouse",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_CheckPendingInteraction",
+      "address": "00461d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461d60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_CheckPendingInteraction",
+        "GetPlayerUnit_UI"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "1c572337",
+      "paramStorage": [
+        [
+          "nTargetType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_InteractWithUnitByType",
+      "address": "00461dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00461dc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_InteractWithUnitByType",
+        "GetPlayerUnit_UI",
+        "ZeroPathPointsSize",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "NET_D2GS_CLIENT_Send_INT_INT_INT_INT",
+        "UNITMODE_SetAnimMode",
+        "GetDistanceBetweenUnits",
+        "UNITMODE_ExecuteSkillAction",
+        "TestCollisionBetweenInteractingUnits",
+        "StoreLastSkillHit",
+        "TXT_MonStats_GetLine",
+        "TXT_Objects_GetLine",
+        "UNIT_GetUnitState",
+        "IsObjectInInteractRange",
+        "PLAYER_CheckPendingInteraction",
+        "CLIENT_MovePlayerToPosition",
+        "GAME_SetMouseButtonEventPending",
+        "GAMEDATA_GetGlobalTickCount",
+        "GAME_GetSyncTickCount",
+        "GAME_SetSyncTickCount"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "eD2States",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "af704f22",
+      "paramStorage": [
+        [
+          "eTargetUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetGUID",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnderMouse",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "INPUT_ValidateSkillAction",
+      "address": "004621d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004621d0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "INPUT_ValidateSkillAction",
+        "SKILLS_GetSkillWeaponClass",
+        "GetSkillsTxt",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "UNITSND_PlayPlayerSound",
+        "UNITS_FindClientSideUnit",
+        "SCMD_ClearPlayerTradeFields",
+        "SKILL_ValidateTarget",
+        "GetItemType",
+        "NET_D2GS_CLIENT_Send_INT",
+        "UI_DropCursorItemOnGround"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "910261c9",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "INPUT_ContinuePlayerMovement",
+      "address": "00462370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462370"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "INPUT_ContinuePlayerMovement",
+        "GetConfirmedTargetUnit",
+        "CLIENT_MovePlayerToPosition"
+      ],
+      "usedTypes": [
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode"
+      ],
+      "dh": "85310149",
+      "paramStorage": [
+        [
+          "pMouse",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_CalculateMovementTarget",
+      "address": "004623c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004623c0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_CalculateMovementTarget",
+        "GetXPos",
+        "GetYPos",
+        "WEATHER_ApproximateDistance",
+        "GetEntryIndex"
+      ],
+      "usedTypes": [
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "ba7ed499",
+      "paramStorage": [
+        [
+          "pPlayerUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMouseCtx",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILL_IsPassiveSkill",
+      "address": "00462560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462560"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "SKILL_IsPassiveSkill",
+        "GetSkillId"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "eD2Skills",
+        "uint32_t"
+      ],
+      "dh": "7dcab6b8",
+      "paramStorage": [
+        [
+          "pSkill",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "INPUT_ExecuteSkillCommand",
+      "address": "004625b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004625b0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "INPUT_ExecuteSkillCommand",
+        "INPUT_ValidateSkillAction",
+        "SKILLS_GetSkillWeaponClass",
+        "GetSkillsTxt",
+        "GetSkillMode",
+        "PLAYER_CheckSkillUsability",
+        "PLAYER_ExecuteModeBasedAction",
+        "CanInteractWith",
+        "PLAYER_InteractWithObject",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "PLAYER_InteractWithUnit",
+        "PLAYER_ExecuteSkillAtUnit",
+        "SKILL_IsPassiveSkill",
+        "PLAYER_InteractWithUnitByType",
+        "TXT_MonStats_GetLine",
+        "UNITMODE_ExecuteSkillAction",
+        "IsActive",
+        "GetSkillId",
+        "SELECT_UpdateUnitSelection",
+        "PLAYER_CalculateMovementTarget",
+        "CLIENT_MovePlayerToPosition"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "uint32_t"
+      ],
+      "dh": "2c239c66",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_ClearRecursionClick",
+      "address": "00462920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462920"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_ClearRecursionClick"
+      ],
+      "dh": "aaa8da13"
+    },
+    {
+      "name": "IsUnitNotMoving",
+      "address": "00462930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462930"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "IsUnitNotMoving"
+      ],
+      "usedTypes": [
+        "D2UnderMouseStrc",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "uint32_t"
+      ],
+      "dh": "9c5d9fbe",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "INPUT_HandleLeftClickRepeat",
+      "address": "004629a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004629a0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "INPUT_HandleLeftClickRepeat",
+        "IsUnitNotMoving",
+        "GetLeftSkill",
+        "PlayerCanBeInterrupted",
+        "GetItemType",
+        "UI_DropCursorItemOnGround",
+        "NET_D2GS_CLIENT_Send_INT",
+        "INVENTORY_GetHandItem",
+        "INPUT_ExecuteSkillCommand"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnderMouseStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "1f224281",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "WalkToCoordOrUnit",
+      "address": "00462a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462a20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "WalkToCoordOrUnit",
+        "IsUnitNotMoving",
+        "GetLeftSkill",
+        "PlayerCanBeInterrupted",
+        "GetRunAndWalkVelocityForPlayer",
+        "STATSEX_GetCurrentStat",
+        "GetVelocity",
+        "GetConfirmedTargetUnit",
+        "SetTarget",
+        "INPUT_ExecuteSkillCommand"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SkillStrc",
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "69926bb3",
+      "paramStorage": [
+        [
+          "pMouse",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "INPUT_HandleLeftClickWithPet",
+      "address": "00462b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462b40"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "INPUT_HandleLeftClickWithPet",
+        "IsUnitNotMoving",
+        "GetRosterPetGUID",
+        "UNITS_FindClientSideUnit",
+        "GetSeed",
+        "SELECT_SetPetSeedTimestamp",
+        "INPUT_ContinuePlayerMovement"
+      ],
+      "usedTypes": [
+        "D2RosterPetSeedStrc",
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "ae357b4e",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ClickMapRightSkill",
+      "address": "00462ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462ba0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "ClickMapRightSkill",
+        "IsUnitNotMoving",
+        "GetRightSkill",
+        "PlayerCanBeInterrupted",
+        "GetSkillId",
+        "INPUT_ExecuteSkillCommand"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnderMouseStrc",
+        "eD2Skills"
+      ],
+      "dh": "c07a86da",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "INPUT_HandleRightClickRepeat",
+      "address": "00462c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462c20"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "INPUT_HandleRightClickRepeat",
+        "IsUnitNotMoving",
+        "GetRightSkill",
+        "PlayerCanBeInterrupted",
+        "GetSkillId",
+        "INPUT_ExecuteSkillCommand"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnderMouseStrc",
+        "eD2Skills"
+      ],
+      "dh": "6640579c",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "INPUT_HandleRightClickWithPet",
+      "address": "00462ca0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462ca0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "INPUT_HandleRightClickWithPet",
+        "IsUnitNotMoving",
+        "GetRosterPetGUID",
+        "UNITS_FindClientSideUnit",
+        "GetSeed",
+        "SELECT_SetPetSeedTimestamp"
+      ],
+      "usedTypes": [
+        "D2RosterPetSeedStrc",
+        "D2UnderMouseStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "ca52f26b",
+      "paramStorage": [
+        [
+          "pUnderMouse",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ClickMap",
+      "address": "00462d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462d00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "ClickMap",
+        "GetUIFlag",
+        "ConvertCoordToPerspectiveView",
+        "GetPlayerUnit_UI",
+        "GetSelectedUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "STATSEX_GetCurrentStat",
+        "WalkToCoordOrUnit",
+        "ClearSelectedUnit",
+        "INPUT_HandleLeftClickWithPet",
+        "ClickMapRightSkill",
+        "SELECT_UpdateUnitSelection",
+        "INPUT_HandleRightClickRepeat",
+        "INPUT_HandleRightClickWithPet",
+        "INPUT_HandleLeftClickRepeat"
+      ],
+      "usedTypes": [
+        "D2UnderMouseStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "a36b8d0f",
+      "paramStorage": [
+        [
+          "clickType",
+          "ECX:4"
+        ],
+        [
+          "nX",
+          "EDX:4"
+        ],
+        [
+          "nY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "mouseEventFlags",
+          "Stack[0x8]:2"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_GetWeaponTypeForAnimation",
+      "address": "00462ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462ee0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_GetWeaponTypeForAnimation",
+        "GetBodyLocation",
+        "INVENTORY_GetItemByGridOffset",
+        "IsTwoHanded",
+        "GetEquipedWeapon",
+        "ITEM_GetItemsTxt_bComponent"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "uint8_t"
+      ],
+      "dh": "9c19144c",
+      "paramStorage": [
+        [
+          "pPlayerUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_HandlePlayerDeath",
+      "address": "00462f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00462f60"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_HandlePlayerDeath",
+        "UNITS_FindClientSideUnit",
+        "IsActive",
+        "UNITMODE_SetAnimMode",
+        "GetPlayerUnit_UI",
+        "PATH_SetMoveTestCollisionMask",
+        "PATH_SetUnitCollisionPattern",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "PATH_GetCollisionMaskAt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetDirection",
+        "SetDirectionAndNewDirection",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "GetCarriedItem",
+        "INVENTORY_SwapPrimaryWeaponOnRemoval",
+        "PLAYER_GetWeaponTypeForAnimation",
+        "GFX_ClearAllModeFlags",
+        "INVENTORY_RemoveItem",
+        "ITEM_RemoveItemStatsFromOwner",
+        "GetBodyLocation",
+        "NullSub_2Arg",
+        "GFX_LoadUnitModeCof",
+        "RemoveObjectFromServerObjectTable"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2GSPacketSrv0x74",
+        "D2InventoryStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "35fcf9fb",
+      "paramStorage": [
+        [
+          "pDeathMsg",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_GetAppearanceBytes",
+      "address": "004630e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004630e0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_GetAppearanceBytes",
+        "GetPlayerUnit_UI",
+        "SaveCharAppearance"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "b4e2d803",
+      "paramStorage": [
+        [
+          "pAppearanceOut",
+          "ECX:4"
+        ],
+        [
+          "nBufSize",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_GetMercAppearanceBytes",
+      "address": "00463130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463130"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_GetMercAppearanceBytes",
+        "GetPlayerUnit_UI",
+        "SaveCharAppearance"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "4c0aff83",
+      "paramStorage": [
+        [
+          "pAppearanceOut",
+          "ECX:4"
+        ],
+        [
+          "nBufSize",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_WarpPlayerAndContinueMove",
+      "address": "00463180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463180"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_WarpPlayerAndContinueMove",
+        "GetConfirmedTargetUnit",
+        "GetCooordinates",
+        "PATH_MoveUnitToRoomPosition",
+        "PlayerMessage"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "34724240",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ],
+        [
+          "nNewX",
+          "Stack[0x4]:2"
+        ],
+        [
+          "nNewY",
+          "Stack[0x8]:2"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_CancelRunAndWalk",
+      "address": "00463260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463260"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_CancelRunAndWalk",
+        "GetPlayerUnit_Net",
+        "STATSEX_GetCurrentStat",
+        "GetConfirmedTargetUnit",
+        "GetTargetUnit",
+        "PlayerMessage",
+        "GetXSP1",
+        "GetYSP1",
+        "SwapLightMap",
+        "FreeLightMap",
+        "GetPlayerUnit_UI",
+        "PLAYER_ApplyCurrentSkillFlags",
+        "SetCurrentSkill",
+        "PATH_RestoreVelocityAndPathType",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "PATH_SetTargetAndCalculate",
+        "UNITMODE_SetAnimMode",
+        "CLIENT_SetAnimModeAndMoveToCurrentPos"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2LightMapStrc",
+        "D2RoomStrc",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "uint32_t"
+      ],
+      "dh": "00a75d1d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_ProcessPlayerModeSimulation",
+      "address": "00463390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463390"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_ProcessPlayerModeSimulation",
+        "PATH_StepAndCreateTrailEffects",
+        "GetPlayerUnit_UI",
+        "CLIENT_UpdateUnitRoomPops",
+        "PlayUnitFootstepSound",
+        "GetCurrentSkill",
+        "SKILL_GetFlags",
+        "SKILL_SetFlags",
+        "SKILLS_CltSetSkillFromCurrent",
+        "IsAtEndOfFrameCycle",
+        "AdvanceAnimFrame",
+        "GFX_LoadUnitModeCof",
+        "GetXPos",
+        "GetYPos",
+        "PATH_SnapPositionToTile",
+        "PATH_RestoreVelocityAndPathType",
+        "SwapLightMap",
+        "FreeLightMap",
+        "PLAYER_ApplyCurrentSkillFlags",
+        "SetCurrentSkill",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "UNITMODE_SetAnimMode",
+        "PATH_MoveUnitToPoint",
+        "IsActive",
+        "CUNIT_ClearDeadSetAttackable",
+        "NeedsRoomUpdate",
+        "SetCurrentRoomInvalid",
+        "CLIENT_OnPlayerEnterRoom",
+        "PATH_InterpolateDirection",
+        "CLIENT_CancelRunAndWalk",
+        "STATES_HasActiveFlagState",
+        "SKILL_ProcessActiveStateEffects",
+        "CLIENT_ResolvePlayerCollision"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2LightMapStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "2ffbe38c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004637f0",
+      "address": "004637f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004637f0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "Unreferenced_004637f0"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint8_t"
+      ],
+      "dh": "d4464978",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_GetMonsterOwnerId",
+      "address": "00463810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463810"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_GetMonsterOwnerId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "WCHAR"
+      ],
+      "dh": "f420ae8d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYER_PlaceUnitInRoom",
+      "address": "00463bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463bc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "PLAYER_PlaceUnitInRoom",
+        "InitializeStaticPath",
+        "BlockCollisionPath",
+        "DRLGROOM_AddUnitToRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "59ff6234",
+      "paramStorage": [
+        [
+          "nX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "EDI:4"
+        ],
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nY",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_UpdateMonsterAllegiance",
+      "address": "00463c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463c00"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_UpdateMonsterAllegiance",
+        "UNITS_GetRoom",
+        "DRLGROOM_IncreaseAlliedCount",
+        "PATH_UpdateCollisionWidth",
+        "DRLGROOM_DecreaseAlliedCount"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "uint8_t"
+      ],
+      "dh": "6840e41f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "byOldAllegiance",
+          "DL:1"
+        ],
+        [
+          "byNewAllegiance",
+          "Stack[0x4]:1"
+        ]
+      ]
+    },
+    {
+      "name": "CLIENT_ClearServerAndClientUnitLists",
+      "address": "00463c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463c70"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_ClearServerAndClientUnitLists"
+      ],
+      "usedTypes": [
+        "D2UnitStrc *"
+      ],
+      "dh": "ad92bfd5"
+    },
+    {
+      "name": "CUNIT_UpdateClientFramesAndAI",
+      "address": "00463cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463cc0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "CLIENT_DispatchMonsterAiBehavior",
+        "OBJECT_ExecuteClientFunction",
+        "CUNIT_UpdateClientFramesAndAI",
+        "CLIENT_UpdateUnitFrame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d78f8abd",
+      "paramStorage": [
+        [
+          "pUnitHashTable",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "HANDSHAKE_SetClientPlayerUnit",
+      "address": "00463d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463d90"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "HANDSHAKE_SetClientPlayerUnit",
+        "UI_FreeAllPanelAssets",
+        "SetDirectionAndNewDirection",
+        "GAMEDATA_SetClickModifier",
+        "UI_LoadAllPanelAssets"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "6ea725b7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPlayerUnit_UI",
+      "address": "00463dd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463dd0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "GetPlayerUnit_UI"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "7ec22100"
+    },
+    {
+      "name": "GetPlayerUnit_Net",
+      "address": "00463de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463de0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "GetPlayerUnit_Net"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "dbd60632"
+    },
+    {
+      "name": "IsPlayerDead",
+      "address": "00463df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463df0"
+        }
+      ],
+      "namespace": "D2Client::UNIT::Player",
+      "calledFunctions": [
+        "IsPlayerDead"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "f5dbcc82"
+    }
+  ]
+}

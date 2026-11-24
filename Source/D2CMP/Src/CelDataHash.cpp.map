@@ -1,0 +1,233 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2CMP/Src/CelDataHash.cpp",
+  "functions": [
+    {
+      "name": "CELDATAHASH_UnlinkEntry",
+      "address": "0060aeb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060aeb0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelDataHash",
+      "calledFunctions": [
+        "CELDATAHASH_UnlinkEntry",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
+        "D2PoolManagerStrc"
+      ],
+      "dh": "84597f9d",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "pEntry",
+          "EDX:4"
+        ],
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CELDATAHASH_InitHashTable",
+      "address": "0060aee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060aee0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelDataHash",
+      "calledFunctions": [
+        "CELDATAHASH_InitHashTable",
+        "memset"
+      ],
+      "dh": "19c5730d",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GFX_FreeAllCacheEntries",
+      "address": "0060af00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060af00"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelDataHash",
+      "calledFunctions": [
+        "GFX_FreeAllCacheEntries",
+        "FreeServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "94e2c907",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CELDATAHASH_FindByFilename",
+      "address": "0060af90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060af90"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelDataHash",
+      "calledFunctions": [
+        "CELDATAHASH_FindByFilename",
+        "SStrHash"
+      ],
+      "usedTypes": [
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "3fbafc28",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "szFileName",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CELDATAHASH_AllocEntry",
+      "address": "0060b010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b010"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelDataHash",
+      "calledFunctions": [
+        "CELDATAHASH_AllocEntry",
+        "AllocServerMemory",
+        "SStrHash"
+      ],
+      "usedTypes": [
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
+        "D2PoolManagerStrc",
+        "uint32_t"
+      ],
+      "dh": "526b1f96",
+      "paramStorage": [
+        [
+          "pPoolManager",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ],
+        [
+          "nRefCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFileName",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GFX_RemoveCacheEntry",
+      "address": "0060b0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b0b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelDataHash",
+      "calledFunctions": [
+        "GFX_RemoveCacheEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2CelDataHashEntryStrc",
+        "D2CelDataHashTableStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ],
+      "dh": "d72bff2f",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IGNORELIST_Initialize_Unref_0060b130",
+      "address": "0060b130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060b130"
+        }
+      ],
+      "namespace": "D2CMP::SRC::CelDataHash",
+      "calledFunctions": [
+        "IGNORELIST_Initialize_Unref_0060b130"
+      ],
+      "dh": "61de8d36",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

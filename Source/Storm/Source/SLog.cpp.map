@@ -1,0 +1,549 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Storm/Source/SLog.cpp",
+  "functions": [
+    {
+      "name": "SLOG_FlushLog",
+      "address": "0041fa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fa40"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLOG_FlushLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc"
+      ],
+      "dh": "7fc784e6",
+      "paramStorage": [
+        [
+          "pLog",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLOG_LockLog",
+      "address": "0041fa80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fa80"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLOG_LockLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "D2SLogStrc *",
+        "LPCRITICAL_SECTION",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d7e36fb7",
+      "paramStorage": [
+        [
+          "pnSlotOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAllocate",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nHandle",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLOG_OutputIndent",
+      "address": "0041fb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fb40"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLOG_OutputIndent",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2SLogStrc"
+      ],
+      "dh": "886f1cff",
+      "paramStorage": [
+        [
+          "pLog",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLOG_OutputReturn",
+      "address": "0041fb80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fb80"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLOG_OutputReturn",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "D2SLogStrc"
+      ],
+      "dh": "9a6e881d",
+      "paramStorage": [
+        [
+          "pLog",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLOG_OutputTime",
+      "address": "0041fba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fba0"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLOG_OutputTime",
+        "GetTickCount",
+        "SStrLen",
+        "SMemCopy",
+        "SLOG_OutputIndent",
+        "SMemFill"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "_SYSTEMTIME",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "c51fcc87",
+      "paramStorage": [
+        [
+          "bHasData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLog",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLOG_UnlockDeleteLog",
+      "address": "0041fc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fc80"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLOG_UnlockDeleteLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "D2SLogStrc *",
+        "int32_t"
+      ],
+      "dh": "a3667940",
+      "paramStorage": [
+        [
+          "pTarget",
+          "EDX:4"
+        ],
+        [
+          "nSlot",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLOG_UnlockLog",
+      "address": "0041fce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fce0"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLOG_UnlockLog"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "6e9c5b6e",
+      "paramStorage": [
+        [
+          "nSlot",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLogClose",
+      "address": "0041fd00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fd00"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogClose",
+        "SLOG_LockLog",
+        "SLOG_FlushLog",
+        "SLOG_UnlockDeleteLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "uint32_t"
+      ],
+      "dh": "1781376b",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLogCreate",
+      "address": "0041fd40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fd40"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogCreate",
+        "SLOG_LockLog",
+        "SLOG_UnlockLog",
+        "SErrSetLastError"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "uint32_t"
+      ],
+      "dh": "7ee336e2",
+      "paramStorage": [
+        [
+          "szFileName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnHandleOut",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLogDump",
+      "address": "0041fdf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fdf0"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogDump",
+        "SLOG_LockLog",
+        "SLOG_OutputTime",
+        "SStrLen",
+        "SStrCopy",
+        "SLOG_OutputReturn",
+        "SLOG_FlushLog",
+        "SLOG_UnlockLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "c0a47d39",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLength",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLogFlush",
+      "address": "0041ffc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ffc0"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogFlush",
+        "SLOG_LockLog",
+        "SLOG_FlushLog",
+        "SLOG_UnlockLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "uint32_t"
+      ],
+      "dh": "b8f0dc6f",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLogFlushAll",
+      "address": "0041fff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041fff0"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogFlushAll",
+        "SLOG_FlushLog"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2SLogStrc",
+        "uint32_t"
+      ],
+      "dh": "3aa8d8ac"
+    },
+    {
+      "name": "SLogInitialize",
+      "address": "00420040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420040"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogInitialize"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "uint32_t"
+      ],
+      "dh": "618e4828"
+    },
+    {
+      "name": "SLogPend",
+      "address": "00420070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420070"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogPend",
+        "SLOG_LockLog",
+        "SLOG_OutputTime",
+        "vsprintf",
+        "SStrLen",
+        "SLOG_OutputReturn",
+        "SLOG_UnlockLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "uint32_t"
+      ],
+      "dh": "73c76053"
+    },
+    {
+      "name": "SLogSetAbsIndent",
+      "address": "004200e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004200e0"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogSetAbsIndent",
+        "SLOG_LockLog",
+        "SLOG_UnlockLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "6e0dfdb6",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nIndent",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLogSetIndent",
+      "address": "00420120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420120"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogSetIndent",
+        "SLOG_LockLog",
+        "SLOG_UnlockLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "6740890a",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDelta",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLogSetTimestamp",
+      "address": "00420160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420160"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogSetTimestamp",
+        "SLOG_LockLog",
+        "SLOG_UnlockLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "uint32_t"
+      ],
+      "dh": "f3151583",
+      "paramStorage": [
+        [
+          "nHandle",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bTimestamps",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SLogWrite",
+      "address": "00420190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420190"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogWrite",
+        "SLOG_LockLog",
+        "SLOG_OutputTime",
+        "vsprintf",
+        "SStrLen",
+        "SLOG_OutputReturn",
+        "SLOG_FlushLog",
+        "SLOG_UnlockLog"
+      ],
+      "usedTypes": [
+        "D2SLogStrc",
+        "uint32_t"
+      ],
+      "dh": "cc42a4bf"
+    },
+    {
+      "name": "SLogDestroy",
+      "address": "00420220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420220"
+        }
+      ],
+      "namespace": "Storm::Source::SLog",
+      "calledFunctions": [
+        "SLogDestroy",
+        "SLogFlushAll",
+        "SLogClose",
+        "SErrReportResourceLeak"
+      ],
+      "usedTypes": [
+        "CRITICAL_SECTION",
+        "D2SLogStrc",
+        "D2SLogStrc *"
+      ],
+      "dh": "70eca22b"
+    }
+  ]
+}

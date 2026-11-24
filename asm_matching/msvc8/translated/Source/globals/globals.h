@@ -12,8 +12,8 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Direct3D/d3dTextureCache.h"
-#include "Source/D2Launch/MainMenus.h"
+#include "Source/D2Direct3D/Src/d3dTextureCache.h"
+#include "Source/D2Launch/Src/MainMenus.h"
 
 // Forward declarations
 struct ARGLIST;

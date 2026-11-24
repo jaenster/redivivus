@@ -19,7 +19,7 @@
 #include <pthread.h>
 #include <stdlib.h>
 
-#include "StormMac/H/stpl.h"
+#include "Source/StormMac/H/stpl.h"
 
 extern "C" OSStatus DSpShutdown(void);
 

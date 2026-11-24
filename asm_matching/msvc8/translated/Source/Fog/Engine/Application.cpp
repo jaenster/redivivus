@@ -3,7 +3,7 @@
 #include "Source/Fog/Engine/Application.h"
 #include "3rdparty/crashy/crashyRoot.h"
 #include "Source/Fog/Debug.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Engine/Application.data.h"
 

@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "3rdparty/Storm/H/stpl.h"
+#include "Source/Storm/H/stpl.h"
 
 // Data types
 __pragma(pack(push, 1)) struct MappingEntryNode : public TSHashObject<MappingEntryNode, HASHKEY_STRI> {

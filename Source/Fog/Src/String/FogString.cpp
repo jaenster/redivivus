@@ -2,7 +2,7 @@
 
 #include "Source/Fog/Src/String/FogString.h"
 #include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/SMem.data.h"
 

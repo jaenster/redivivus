@@ -17,7 +17,7 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "../..");
 const BINARY_SHA256 = "1e8dd6dd3d19019cbaa29270f4abfb04960fcf1ce5d341fa520863b0d640d177";
-const SOURCE_ROOTS = ["StormMac", "Source/MacSpecific"];
+const SOURCE_ROOTS = ["Source/StormMac", "Source/MacSpecific"];
 
 // ---- arguments ----
 const argv = process.argv.slice(2);

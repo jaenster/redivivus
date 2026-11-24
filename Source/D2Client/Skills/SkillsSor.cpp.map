@@ -1,0 +1,739 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Client/Skills/SkillsSor.cpp",
+  "functions": [
+    {
+      "name": "Skills_CltDoFunc_Sor_LinearMissileCount",
+      "address": "004e2f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e2f40"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Sor_LinearMissileCount",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "D2GetSkillCalc",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetCooordinates",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "1b54aa25",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_ApplyInfernoState",
+      "address": "004e3060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3060"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltStFunc_ApplyInfernoState",
+        "UNIT_GetUnitState",
+        "GFX_AddOverlayToUnit",
+        "SOUND_PlaySound",
+        "GetStatsByState",
+        "SetSequenceFrame",
+        "STATSEX_SetStatListTimeout",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_SetExpireFunction",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "c36e1597",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLSSOR_SetInfernoFrames",
+      "address": "004e3170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3170"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "SKILLSSOR_SetInfernoFrames",
+        "SetAnimationSpeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "68a78987",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTotalFrames",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLSSOR_CltCreateInfernoMissile",
+      "address": "004e31c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e31c0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "SKILLSSOR_CltCreateInfernoMissile",
+        "GetCooordinates",
+        "UNIT_GetModuloFromSeed",
+        "D2GetSkillCalc",
+        "memset",
+        "MakeMissile",
+        "SKILLSSOR_SetInfernoFrames",
+        "UNIT_GetUnitState",
+        "SetSequenceFrame"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7cf76e0a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Sor_Inferno",
+      "address": "004e3330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3330"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Sor_Inferno",
+        "SKILLSSOR_CltCreateInfernoMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "860e1d6b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckTargetInAuraRange",
+      "address": "004e3350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3350"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckTargetInAuraRange",
+        "GetConfirmedTargetUnit",
+        "D2GetSkillCalc",
+        "GetYPos",
+        "GetXPos",
+        "GetDistanceSquaredXY",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "CanInteractWith"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "4adf3e3a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Nova",
+      "address": "004e34e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e34e0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Nova",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "MISSILETBLS_CalculateVelocity",
+        "D2GetSkillCalc",
+        "SKILL_SpawnMissilesAtTarget"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "39e49ff4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Sor_FireWall",
+      "address": "004e3590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3590"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Sor_FireWall",
+        "GetCooordinates",
+        "SKILL_CheckMissileCollisionAtTarget",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "2a6bc22a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Sor_MissileWithChargeCount",
+      "address": "004e3720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3720"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Sor_MissileWithChargeCount",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "D2GetSkillCalc",
+        "MakeMissileAtSkillTarget",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "0b05f2c7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Sor_OffsetMissileCount",
+      "address": "004e37c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e37c0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Sor_OffsetMissileCount",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "D2GetSkillCalc",
+        "GetConfirmedTargetUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "GetCooordinates",
+        "MakeMissile",
+        "SetTargetX"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "3256afd4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Sor_CollisionCheckedMissile",
+      "address": "004e3910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3910"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Sor_CollisionCheckedMissile",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "SKILL_CheckMissileCollisionAtTarget",
+        "CastAttackWithDistanceCheck"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "0d1cd2fb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltStFunc_CheckCasterHasRoomNotInTown",
+      "address": "004e39a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e39a0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltStFunc_CheckCasterHasRoomNotInTown",
+        "UNITS_GetRoom",
+        "GetCooordinates",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "DRLGROOM_IsRoomInTown"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "ad09032e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Sor_SimpleMakeMissile",
+      "address": "004e3a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3a30"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Sor_SimpleMakeMissile",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "MakeMissileAtSkillTarget"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "50368862",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLSSOR_CltCreateBlazeMissile",
+      "address": "004e3ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3ab0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "SKILLSSOR_CltCreateBlazeMissile",
+        "Get8FlagsFromDynamicPath",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "TXT_Skills_GetLine",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "UNIT_GetModuloFromSeed",
+        "MakeMissile"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "cf9ecb30",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Sor_ThunderStormBolt",
+      "address": "004e3c50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3c50"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "WEATHER_InitBlizzardState",
+        "Skills_CltDoFunc_Sor_ThunderStormBolt",
+        "GetConfirmedTargetUnit",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MakeMissile",
+        "SetPosVectorShifted",
+        "SetOffsetVector",
+        "GFX_AddOverlayToUnit"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "827ee827",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLSSOR_StateCltEventFn01_ChillingArmor",
+      "address": "004e3d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3d70"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "SKILLSSOR_StateCltEventFn01_ChillingArmor",
+        "MISSILE_GetOwnerUnit",
+        "CanInteractWith",
+        "GetMissleById",
+        "TXT_Skills_GetLine",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MakeMissile",
+        "GFX_AddOverlayToUnit"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "c4b958df",
+      "paramStorage": [
+        [
+          "nParam1",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMissile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnused",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_CltDoFunc_Sor_RandomRadiusMissile",
+      "address": "004e3eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004e3eb0"
+        }
+      ],
+      "namespace": "D2Client::SKILLS::SkillsSor",
+      "calledFunctions": [
+        "Skills_CltDoFunc_Sor_RandomRadiusMissile",
+        "SKILLSASS_GetCltMissileByAuraLevel",
+        "SKILLS_GetSkillByEnum",
+        "D2GetSkillCalc",
+        "SKILL_GetParam1",
+        "SKILL_SetParam1",
+        "UNIT_GetModuloFromSeed",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MISSILE_CreateFromUnitWithOffset"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "29f0fca7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x4]:4"
+        ]
+      ]
+    }
+  ]
+}

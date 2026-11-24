@@ -1,0 +1,2662 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Game/Skills/SkillItem.cpp",
+  "functions": [
+    {
+      "name": "SEED_RollChampionPack",
+      "address": "005bdb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bdb20"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SEED_RollChampionPack",
+        "TXT_MonStats_GetMonStats2",
+        "UNIT_GetModuloFromSeed",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2MonsterRegionFieldStrc",
+        "D2MonsterRegionFieldSubStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "f3defa41",
+      "paramStorage": [
+        [
+          "pSeed",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMonData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNumChampions",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "MONREGION_RollRandomMonsterType",
+      "address": "005bde80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bde80"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "MONREGION_RollRandomMonsterType",
+        "RANDOM_RandomNumberSelector",
+        "TXT_Levels_GetLine"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "D2MonStatsTxt",
+        "D2MonStatsTxt *",
+        "D2MonsterRegionFieldStrc",
+        "D2MonsterRegionStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "f2332eee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pMonsterRegion",
+          "EDX:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppMonStatLine",
+          "Stack[0x8]:4"
+        ],
+        [
+          "byBaseClassChance",
+          "Stack[0xc]:1"
+        ],
+        [
+          "bUseUMon",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "RollRoomSeed",
+      "address": "005bdff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bdff0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "RollRoomSeed"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SeedStrc"
+      ],
+      "dh": "b07f7a89",
+      "paramStorage": [
+        [
+          "pRoom",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "MONSTERREGION_CheckSpawnDensity",
+      "address": "005be020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005be020"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "MONSTERREGION_CheckSpawnDensity"
+      ],
+      "usedTypes": [
+        "D2MonsterRegionStrc",
+        "D2RoomStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "29eae192",
+      "paramStorage": [
+        [
+          "pMonterRegion",
+          "ECX:4"
+        ],
+        [
+          "pRoom",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_ItemSpellInit_UseStackable",
+      "address": "005be130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005be130"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_ItemSpellInit_UseStackable",
+        "ITEM_EditItemData_eItemFlag",
+        "ITEM_GetSpellIcon",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3F_SETSPELLICON"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills"
+      ],
+      "dh": "99389466",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_FindItemInInventory",
+      "address": "005be180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005be180"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_FindItemInInventory",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "879e1ba8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pOwner",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_ClearCursorFlagAndNotifyClient",
+      "address": "005be1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005be1c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_ClearCursorFlagAndNotifyClient",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "CheckItemFlag",
+        "ITEM_EditItemData_eItemFlag",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x3F_SETSPELLICON"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "e9f14d09",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_IdentifyScrollSpell",
+      "address": "005be230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005be230"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_IdentifyScrollSpell",
+        "IsInteractingWithPlayer",
+        "CheckItemFlag",
+        "SKILLITEM_FindItemInInventory",
+        "ITEMMODE_IdentifyItem"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills"
+      ],
+      "dh": "f3b4c821",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_TownPortalScrollSpell",
+      "address": "005be290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005be290"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_TownPortalScrollSpell",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetTownLevelIdFromActNo",
+        "DRLGROOM_IsRoomInTown",
+        "PLAYER_DestroyPortalPair",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SERVER_SpawnPortal",
+        "SetupUpdateEvent_AttachEventSound",
+        "PLAYER_SetUniqueId",
+        "OBJECTS_SetUnitIdInTimerArg",
+        "UNITS_FindPortalOwnerUnit",
+        "Q35_OnPlayerDeath",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_CMD_BYTE_INT"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eD2LevelId",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "f3ad3942",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_ApplyConsumableEffects",
+      "address": "005be3f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005be3f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEM_ApplyConsumableEffects",
+        "TXT_Items_GetLine",
+        "ITEMMODS_EvaluateItemFormula",
+        "GetStatsByState",
+        "STATLIST_GetFullListPtr",
+        "ITEMS_GetBonusManaBasedOnClass",
+        "ITEMS_GetBonusLifeBasedOnClass",
+        "STATSEX_GetCurrentStat",
+        "RANDOM_RandomNumberSelector",
+        "UNIT_GetModuloFromSeed",
+        "GetType",
+        "BloodGolemLifeLeech",
+        "STATLIST_AddUnitStat",
+        "GetGUID",
+        "AllocStatList",
+        "SetState",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATSEX_SetStatListTimeout",
+        "STATLIST_GetBaseStatValue",
+        "D2AddStatToStatsListEx",
+        "PLRMODES_GetHpPercent128",
+        "UnitQueuePacket0xAB",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostTxt",
+        "D2ItemsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitStat",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "9db98d0f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_ApplyConsumableEffectsSimple",
+      "address": "005be7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005be7b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEM_ApplyConsumableEffectsSimple",
+        "TXT_Items_GetLine",
+        "ITEMMODS_EvaluateItemFormula",
+        "GetStatsByState",
+        "STATLIST_GetFullListPtr",
+        "GetType",
+        "BloodGolemLifeLeech",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_AddUnitStat",
+        "GetGUID",
+        "AllocStatList",
+        "SetState",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATSEX_SetStatListTimeout",
+        "STATLIST_GetBaseStatValue",
+        "D2AddStatToStatsListEx",
+        "PLRMODES_GetHpPercent128",
+        "UnitQueuePacket0xAB",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostTxt",
+        "D2ItemsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitStat",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "03fcbe5c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_ApplyPercentRestoration",
+      "address": "005beac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005beac0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEM_ApplyPercentRestoration",
+        "TXT_Items_GetLine",
+        "ITEMMODS_EvaluateItemFormula",
+        "GetStatsByState",
+        "STATLIST_GetFullListPtr",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "GetType",
+        "BloodGolemLifeLeech",
+        "STATLIST_AddUnitStat",
+        "GetGUID",
+        "AllocStatList",
+        "SetState",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATSEX_SetStatListTimeout",
+        "STATLIST_GetBaseStatValue",
+        "D2AddStatToStatsListEx",
+        "PLRMODES_GetHpPercent128",
+        "UnitQueuePacket0xAB",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostTxt",
+        "D2ItemsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitStat",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "2d68be6e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_ApplyTimedBuffStats",
+      "address": "005beda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005beda0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEM_ApplyTimedBuffStats",
+        "TXT_Items_GetLine",
+        "ITEMMODS_EvaluateItemFormula",
+        "D2UpdateState",
+        "GetStatsByState",
+        "STATLIST_GetFullListPtr",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_SetExpireFunction",
+        "STATLIST_AttachStatListToUnit",
+        "STATSEX_SetStatListTimeout",
+        "SetEvent",
+        "TXT_ItemStatCost_GetLine",
+        "D2AddStatToStatsListEx",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2ItemStatCostTxt",
+        "D2ItemsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "eD2UnitStat",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "24cbf509",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_RefreshBuffStates",
+      "address": "005bef90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bef90"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEM_RefreshBuffStates",
+        "TXT_Items_GetLine",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "UNIT_GetUnitState",
+        "SetState",
+        "ITEM_ApplyTimedBuffStats"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2States",
+        "uint32_t"
+      ],
+      "dh": "d7d6ba0f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_pSpell08_AddItemValueToStat",
+      "address": "005bf060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf060"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_pSpell08_AddItemValueToStat",
+        "ITEM_GetItemData_nFileIndex",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_AddUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitStat"
+      ],
+      "dh": "fc6176da",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_pSpell07_OpenCube",
+      "address": "005bf0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf0c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_pSpell07_OpenCube",
+        "GetPlayerTradeTickOrBusy",
+        "GetInteractedNpc",
+        "ClearInteractInfo",
+        "ITEMMODE_RebuildBookScrollSkillQuantities",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_0x77_TRADEREQUEST",
+        "SetInteractInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "197f202f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_CastFireballOnTarget",
+      "address": "005bf170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf170"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEM_CastFireballOnTarget",
+        "TXT_Items_GetLine",
+        "GetTargetEx",
+        "SKILL_CastOnTargetUnit",
+        "GetYSP1",
+        "GetXSP1",
+        "MONSTERAI_CastItemEffectSkill"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "a2b80e4e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_CastExplosivePotionSkill",
+      "address": "005bf1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf1f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_CastExplosivePotionSkill",
+        "TXT_Items_GetLine",
+        "MONSTERAI_CastItemEffectSkill"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "uint32_t"
+      ],
+      "dh": "078a29b9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_DispatchItemSpell",
+      "address": "005bf240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf240"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_DispatchItemSpell",
+        "ITEMS_IsA",
+        "GetMagicSuffix",
+        "TXT_Books_GetLine",
+        "TXT_Items_GetLine",
+        "CheckItemFlag",
+        "SKILLITEM_ClearCursorFlagAndNotifyClient",
+        "SUNIT_GetClient",
+        "NET_D2GS_SERVER_Send_CMD_BYTE_INT",
+        "ITEM_EditItemData_eItemFlag"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ],
+      "dh": "cccdbe35",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_113_UseScrollOrBook",
+      "address": "005bf3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf3d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SERVER_UseItemAtCoords",
+        "Skills_SrvDoFunc_113_UseScrollOrBook",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "ITEMS_IsA",
+        "GetMagicSuffix",
+        "TXT_Books_GetLine",
+        "STATSEX_GetCurrentStat",
+        "ITEM_GetItemData_eD2InventoryGridType",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "SpecialItemsBonuses",
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2BooksTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "034a6e8f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILL_ProcessPeriodicAuraTick",
+      "address": "005bf510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf510"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILL_ProcessPeriodicAuraTick",
+        "EVENT_RemoveUnitTimersByType",
+        "SKILLS_CalcPerDelayInterval",
+        "SetEvent",
+        "SKILL_SpawnMissileFunction"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "bbd84458",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILL_DeactivateAura",
+      "address": "005bf5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf5d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILL_DeactivateAura",
+        "SetState",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "EVENT_RemoveUnitTimersByType"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "c5de7539",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_PhysDamageOnAttacked",
+      "address": "005bf670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf670"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_PhysDamageOnAttacked",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "memset",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "388c4d2f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_LightningDamageOnAttacked",
+      "address": "005bf720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf720"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_LightningDamageOnAttacked",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "memset",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "15b8abac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_FireDamageOnAttacked",
+      "address": "005bf7d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf7d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_FireDamageOnAttacked",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "memset",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "22ab279d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_ColdDamageWithFreezeLength",
+      "address": "005bf880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf880"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_ColdDamageWithFreezeLength",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATSEX_GetCurrentStat",
+        "memset",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "fb6d8867",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_Knockback",
+      "address": "005bf960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bf960"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_Knockback",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "TXT_MonStats_GetMonStats2"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MonStats2Txt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "e8735546",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_ChanceToFear",
+      "address": "005bfa10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bfa10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_ChanceToFear",
+        "CheckMonsterType",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "RNG_GetRandomInRange",
+        "MONSTERAI_ApplyTerrorToMonster"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "cccedde7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_ChanceToDimVision",
+      "address": "005bfaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bfaa0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_ChanceToDimVision",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATSEX_GetCurrentStat",
+        "UNIT_GetModuloFromSeed",
+        "SKILLNEC_ApplyDimVision"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "4a4170bc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_DamageToMana",
+      "address": "005bfbb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bfbb0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_DamageToMana",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATSEX_GetCurrentStat",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7490070e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_FreezeTarget",
+      "address": "005bfc60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bfc60"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_FreezeTarget",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATSEX_GetCurrentStat",
+        "memset",
+        "DAMAGE_ApplyDamageToUnit"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "f121cee1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_CalculateOpenWoundsHpRegen",
+      "address": "005bfda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bfda0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_CalculateOpenWoundsHpRegen"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "d7445ef2",
+      "paramStorage": [
+        [
+          "nLevel",
+          "ECX:4"
+        ],
+        [
+          "pValues",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_OpenWounds",
+      "address": "005bfe60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bfe60"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_OpenWounds",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATSEX_GetCurrentStat",
+        "SKILLITEM_CalculateOpenWoundsHpRegen",
+        "CheckMonsterType",
+        "SetStateWithExpiryTime"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "e93a5d2e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_CrushingBlow",
+      "address": "005bffc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005bffc0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_CrushingBlow",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "MONSTER_GetMercType",
+        "UnitIsMarkedBoss",
+        "CheckMonsterType",
+        "STATSEX_GetCurrentStat",
+        "PlayerMultiplyer",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "98c8487d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_ReplenishManaFlat",
+      "address": "005c0130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0130"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_ReplenishManaFlat",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "620f215b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_ReplenishLifeFlat",
+      "address": "005c01d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c01d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_ReplenishLifeFlat",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "9c27a7e1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_LifeDrainDemon",
+      "address": "005c0260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0260"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_LifeDrainDemon",
+        "IsDemon",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d31ce93b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_SlowTarget",
+      "address": "005c0310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0310"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_SlowTarget",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "CheckMonsterType",
+        "UnitIsMarkedBoss",
+        "MONSTER_GetMercType",
+        "SetStateWithExpiryTime",
+        "STATLIST_SetStatValue",
+        "UpdateAnimSpeed"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2StatListExStrc",
+        "D2StateExArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "22489849",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_CastOnAttack",
+      "address": "005c0470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0470"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_CastOnAttack",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "TXT_Skills_GetLine",
+        "SKILL_CastOnTargetUnit",
+        "GetYSP1",
+        "GetXSP1",
+        "MONSTERAI_CastItemEffectSkill"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d328b028",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_SkillOnGetHit",
+      "address": "005c05a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c05a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_SkillOnGetHit",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "RANDOM_RandomNumberSelector",
+        "TXT_Skills_GetLine",
+        "GetYSP1",
+        "GetXSP1",
+        "MONSTERAI_CastItemEffectSkill",
+        "SKILL_CastOnTargetUnit"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5c9407dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_CastOnDeath",
+      "address": "005c0670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0670"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_CastOnDeath",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "GetYSP1",
+        "GetXSP1",
+        "MONSTERAI_CastItemEffectSkill",
+        "SKILL_CastOnTargetUnit"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "8004025a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_SetRestInPeace",
+      "address": "005c0770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c0770"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_SetRestInPeace",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "f9142fe7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLITEM_ReanimateMonsterCallback",
+      "address": "005c07a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c07a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "SKILLITEM_ReanimateMonsterCallback",
+        "FindUnitFromTable",
+        "D2CheckIfCorpseIsConsumable",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "TXT_MonStats_GetMonStats2",
+        "PATH_GetUnitCollisionPattern",
+        "RemoveCollision_Type",
+        "SpawnMonsterAtRoomPos",
+        "GetAiGeneral",
+        "AttachCorrectAiFunctionToMonster",
+        "MONSTERAI_RescheduleThink",
+        "AssignMinionOwner",
+        "MONSTERAI_SetOwnerGUIDAndType",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SetAlignment",
+        "SetState",
+        "InitUmods",
+        "CreateUnitNode",
+        "PATH_UpdateCollisionWidth",
+        "MONMODE_InitModeChange",
+        "GetSkillByIdAndOwner",
+        "SetCurrentSkill",
+        "SetStepNum",
+        "MONSTERAI_ExecuteLifecycleTransition"
+      ],
+      "usedTypes": [
+        "D2AiGeneralStrc",
+        "D2DamageStrc",
+        "D2ModeChangeStrc",
+        "D2MonStats2Txt",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "93bd399d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pAttacker",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMonsterClassId",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nOwnerGUID",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_ReviveMonster",
+      "address": "005c09e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005c09e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_ReviveMonster",
+        "CheckMonsterType",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "RANDOM_RandomNumberSelector",
+        "SUNITEVENT_Alloc",
+        "GetOwnerUnit"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "a3c0a545",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_LaunchMissileOnOwner",
+      "address": "005cab40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cab40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_LaunchMissileOnOwner",
+        "GetOwnerUnit",
+        "UNITS_CheckIfCanAttackTarget",
+        "TXT_Skills_GetLine",
+        "GetMissleById",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "66b9882a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_ApplyFreezeDamage",
+      "address": "005cac50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cac50"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_ApplyFreezeDamage",
+        "memset",
+        "D2GetSkillCalc",
+        "DAMAGE_ApplyDamageToUnit",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7de1940b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEMEVENT_ApplyHitDamage",
+      "address": "005cad40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cad40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillItem",
+      "calledFunctions": [
+        "ITEMEVENT_ApplyHitDamage",
+        "memset",
+        "SetDamageOnEvent",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "c09639d8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "nUnitEvent",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDamage",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x14]:4"
+        ]
+      ]
+    }
+  ]
+}

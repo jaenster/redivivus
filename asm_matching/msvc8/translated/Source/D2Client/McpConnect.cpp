@@ -2,7 +2,7 @@
 
 #include "Source/D2Client/McpConnect.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2MCPClient/McpConnect.data.h"
+#include "Source/D2MCPClient/Src/McpConnect.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

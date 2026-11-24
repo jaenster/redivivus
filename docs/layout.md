@@ -7,9 +7,11 @@ source paths show where the binaries record them (for example `D2Game/Quests/`, 
 |Directory|What is in it|
 |-|-|
 |`Source/<module>/`|Blizzard's modules, one directory each, generated|
+|`Source/Storm/`|Storm, Blizzard's own library, generated|
+|`Source/StormMac/`|Storm's Mac layer, built only for the Mac comparison (`cmake/mac.cmake`)|
 |`Source/D2Headers/`|the shared headers `d2_platform.h` and `d2_enums.h`|
 |`Source/globals/`|the game's global data, generated|
-|`3rdparty/Storm/`, `3rdparty/crashy/`|Storm and the crash-report library, generated|
+|`3rdparty/crashy/`|the crash-report library, generated|
 |`Redivivus/`|hand-written support code: the host glue, tracing, the crash handler|
 |`3rdparty/libbacktrace/`, `3rdparty/implibs/`|vendored code and the import-library definitions|
 |`project.json`|the module table (below)|
@@ -25,7 +27,7 @@ with the evidence for each (the 1.13d DLL import tables), documented exceptions,
 and whether the module is strict. `Source/modules.cmake` is generated from it, and the configure
 step fails when the two disagree.
 
-Includes are rooted at the tree: `#include "Source/D2Common/ITEMS/Items.h"`. Every file
+Includes are rooted at the tree: `#include "Source/D2Common/Items/Items.h"`. Every file
 includes what it uses and forward-declares types it only points at.
 
 ## The module gates

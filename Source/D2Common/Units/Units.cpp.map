@@ -1,0 +1,5039 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Common/Units/Units.cpp",
+  "functions": [
+    {
+      "name": "GetType",
+      "address": "0044be50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044be50"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetType"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType"
+      ],
+      "dh": "c85e0b56",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CheckFlags",
+      "address": "00451f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f30"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "CheckFlags"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitFlags",
+        "uint32_t"
+      ],
+      "dh": "3257f964",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nFlagsC4",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetGUID",
+      "address": "00451f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f50"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetGUID"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "b2cf559b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetClassId",
+      "address": "00451f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f60"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetClassId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "c97671dc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetAnimMode",
+      "address": "00451f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00451f70"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetAnimMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2PlayerAnimMode"
+      ],
+      "dh": "99ebacce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetXPosFromDynamicPathUnit",
+      "address": "0045adf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045adf0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetXPosFromDynamicPathUnit",
+        "GetXPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "76937be7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetYPosFromDynamicPathUnit",
+      "address": "0045ae20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ae20"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetYPosFromDynamicPathUnit",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "601925ac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CheckFlagWithMask",
+      "address": "00463720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00463720"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "CheckFlagWithMask"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "140ad8a3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "dwMask",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetMemPool",
+      "address": "004dc0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dc0b0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "definedIn": "D2Common/Units.inline.h",
+      "calledFunctions": [
+        "GetMemPool"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "6660a5cd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Return_Unref_005fe100",
+      "address": "005fe100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005fe100"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "Return_Unref_005fe100"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "050daaae",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetDirection",
+      "address": "00620100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620100"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetDirection",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "3b5adbe5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetFirstSkill",
+      "address": "00620150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620150"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetFirstSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "fc5ae444",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetLeftSkill",
+      "address": "00620190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620190"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetLeftSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "d29d3ed9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetRightSkill",
+      "address": "006201d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006201d0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetRightSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "326a9113",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetCurrentSkill",
+      "address": "00620210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620210"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetCurrentSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "a35246ec",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetCurrentSkill",
+      "address": "00620250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620250"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetCurrentSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "42088a45",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "AllocUnit",
+      "address": "00620290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620290"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "AllocUnit",
+        "AllocServerMemory",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc",
+        "eD2UnitType"
+      ],
+      "dh": "d1290dbb",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Free",
+      "address": "00620300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620300"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "Free",
+        "STATLIST_FreeStatListMemory",
+        "SKILLS_FreeSkillList",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "98bfddbb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_SetWarpStaticPathCoords",
+      "address": "00620360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620360"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_SetWarpStaticPathCoords",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2StaticPathStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "aeeeeebf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnkX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nUnkY",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPrecisionX",
+      "address": "006203b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006203b0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetPrecisionX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "38ecef93",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPrecisionY",
+      "address": "00620410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620410"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetPrecisionY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "c714e89d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetXForStaticUnit",
+      "address": "00620470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620470"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetXForStaticUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "6947bc1c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetYForStaticUnit",
+      "address": "006204c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006204c0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetYForStaticUnit",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "cac8f702",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetUnitSizeX",
+      "address": "00620510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620510"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetUnitSizeX",
+        "TXT_MonStats_GetMonStats2",
+        "GetMissleById"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "237b04b3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetUnitSizeY",
+      "address": "006205a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006205a0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetUnitSizeY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TXT_MonStats_GetMonStats2",
+        "GetMissleById"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "3660c849",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetScreenX",
+      "address": "00620650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620650"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetScreenX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "1f9635b8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetScreenY",
+      "address": "006206b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006206b0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetScreenY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "dc2080be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetAbsoluteXDistance",
+      "address": "00620710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620710"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetAbsoluteXDistance",
+        "GetXPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "a6b42ed9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetAbsoluteYDistance",
+      "address": "00620780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620780"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetAbsoluteYDistance",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "b3b73a2c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetScreenX",
+      "address": "006207f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006207f0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetScreenX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "a2cd18a8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetX",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetScreenY",
+      "address": "00620830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620830"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetScreenY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "7518fa8f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetCoords",
+      "address": "00620870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620870"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetCoords",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetXPos",
+        "GetYPos"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "POINT",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "542410de",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetScreenCoords",
+      "address": "00620900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620900"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetScreenCoords",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetScreenX",
+        "GetScreenY"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "POINT",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "ad0d064f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPoint",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetTargetXYForWarp",
+      "address": "00620980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620980"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetTargetXYForWarp",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2StaticPathStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "1c08a98c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nTargetX",
+          "EDX:4"
+        ],
+        [
+          "nTargetY",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetCollisionType",
+      "address": "006209d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006209d0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetCollisionType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "8ec73227",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BlockCollisionPath",
+      "address": "00620a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620a70"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "BlockCollisionPath",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetUnitSizeX",
+        "GetUnitSizeY",
+        "GetCollisionType",
+        "AddCollision_Vector"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "8c4ae17a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InitializeStaticPath",
+      "address": "00620ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620ae0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "InitializeStaticPath",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CoordsMapToScreen"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2StaticPathStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "2267b723",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nY",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ResetRoom",
+      "address": "00620b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620b50"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "ResetRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetRoom"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "998da40b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_GetRoom",
+      "address": "00620bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620bb0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_GetRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "1d64ee18",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetTargetUnitForDynamicUnit",
+      "address": "00620c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620c10"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetTargetUnitForDynamicUnit",
+        "SetTarget",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "aa2ca320",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetTargetTypeFromDynamicUnit",
+      "address": "00620c70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620c70"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetTargetTypeFromDynamicUnit",
+        "GetTargetTypeAndGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "c311cd1e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetTargetGUIDFromDynamicUnit",
+      "address": "00620cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620cd0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetTargetGUIDFromDynamicUnit",
+        "GetTargetTypeAndGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7fdd7c79",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetTargetUnitForPlayerOrMonster",
+      "address": "00620d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620d30"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetTargetUnitForPlayerOrMonster",
+        "SetTarget",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "a5afdf3f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTargetUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetAnimSpeedForMonster",
+      "address": "00620d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620d80"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetAnimSpeedForMonster",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "951be670",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetRunAndWalkVelocityForPlayer",
+      "address": "00620e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620e40"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetRunAndWalkVelocityForPlayer"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "d1bbe29c",
+      "paramStorage": [
+        [
+          "nUnused",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ePlayerClassId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pWalkVelocity",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pRunVelocity",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_AddRunVelocityBonus",
+      "address": "00620e80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620e80"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_AddRunVelocityBonus",
+        "AllocStatList",
+        "STATLIST_SetStatValue",
+        "STATLIST_AttachStatListToUnit"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2PoolManagerStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "a37e8642",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EBX:4"
+        ],
+        [
+          "ePlayerClassId",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetAnimData",
+      "address": "00620f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620f00"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetAnimData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ANIMDATA_GetAnimDataForUnit"
+      ],
+      "usedTypes": [
+        "D2AnimDataRecordStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "49b6f752",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NeedsRoomUpdate",
+      "address": "00620f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620f50"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "NeedsRoomUpdate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "Get0x02Flag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "25f5a5a3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetCurrentRoomInvalid",
+      "address": "00620fa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00620fa0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetCurrentRoomInvalid",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetUnset0x02Flag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "d28b22e1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bInvalid",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "RefreshInventory",
+      "address": "00621000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621000"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "RefreshInventory",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "951eb5e2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bHasInventory",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_GetInventoryRecordId",
+      "address": "00621050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621050"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_GetInventoryRecordId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "eInventoryPage",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "8775784d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInvPage",
+          "Stack[0x8]:1"
+        ],
+        [
+          "bLoD",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetLightMap",
+      "address": "00621150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621150"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetLightMap",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2LightMapStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "18ecf151",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetAnimOrSeqMode",
+      "address": "00621190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621190"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetAnimOrSeqMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "be4cfdba",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetAnimOrSeqMode",
+      "address": "006211c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006211c0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetAnimOrSeqMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "d9fe964b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimMode",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UpdateSequenceMode",
+      "address": "00621210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621210"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UpdateSequenceMode",
+        "ANIM_GetSequenceFrameInfo"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "e3b96d3d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "nSeqMode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InitializeSequence",
+      "address": "00621260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621260"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "InitializeSequence",
+        "MERC_GetSequenceTxt",
+        "GetCounter1",
+        "GetCounter2",
+        "UpdateSequenceMode"
+      ],
+      "usedTypes": [
+        "D2MonSeqTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "82605a66",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetSequenceFrame",
+      "address": "006212c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006212c0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetSequenceFrame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "8dee14be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSequenceFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UpdateFrame",
+      "address": "00621310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621310"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UpdateFrame"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "4a4d1376",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetFrameNonRate",
+      "address": "00621330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621330"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetFrameNonRate"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "fa4480ea",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRate",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFailRate",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_GetBaseWalkVelocity",
+      "address": "00621360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621360"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_GetBaseWalkVelocity"
+      ],
+      "usedTypes": [
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "8d27e1c4",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_GetAnimFrameTime",
+      "address": "006213d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006213d0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_GetAnimFrameTime"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "d84b881f",
+      "paramStorage": [
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "nClassId",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_GetAnimTableEntry",
+      "address": "00621420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621420"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_GetAnimTableEntry"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "f766700f",
+      "paramStorage": [
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimMode",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_CanAnimModeUseVelocityModifier",
+      "address": "006214a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006214a0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_CanAnimModeUseVelocityModifier",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetCurrentSkill",
+        "SKILL_GetFlags"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "6170d90d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "ESI:4"
+        ],
+        [
+          "eUnitType",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_CanAnimModeUseAttackRate",
+      "address": "00621580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621580"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_CanAnimModeUseAttackRate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetCurrentSkill",
+        "GetSkillId",
+        "TXT_Skills_GetLine"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "f88e8cba",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "ECX:4"
+        ],
+        [
+          "eUnitType",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_IsAnimModeSpeedFixed",
+      "address": "00621630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621630"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_IsAnimModeSpeedFixed"
+      ],
+      "usedTypes": [
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "5d13376f",
+      "paramStorage": [
+        [
+          "nAnimMode",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_IsAnimSpeedSetByCastRate",
+      "address": "006216e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006216e0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_IsAnimSpeedSetByCastRate",
+        "GetCurrentSkill",
+        "GetSkillId",
+        "TXT_Skills_GetLine"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "b3b3abfd",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nAnimMode",
+          "EDX:4"
+        ],
+        [
+          "eUnitType",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetDiminishedStat",
+      "address": "00621740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621740"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetDiminishedStat",
+        "STATLIST_UnitGetStatValueUnchecked"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "d3aae9e7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetAnimationSpeed",
+      "address": "00621780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621780"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetAnimationSpeed"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "50f22b23",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSpeed",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IsAtEndOfFrameCycle",
+      "address": "006217c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006217c0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "IsAtEndOfFrameCycle",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "83abfb05",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetShiftedFrameMetrics",
+      "address": "00621810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621810"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetShiftedFrameMetrics",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "d8b83d62",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCurrentFrame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFrameCount",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetFrameMetrics",
+      "address": "00621870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621870"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetFrameMetrics"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "ae43a8de",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCurrentFrame",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pFrameCount",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetAnimActionFrame",
+      "address": "006218d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006218d0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetAnimActionFrame"
+      ],
+      "usedTypes": [
+        "D2AnimDataRecordStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "7bb56c08",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetEventFrameInfo",
+      "address": "00621920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621920"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetEventFrameInfo",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "MERC_GetSequenceTxt",
+        "ANIM_GetSequenceFrameInfo"
+      ],
+      "usedTypes": [
+        "D2MonSeqTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "54853e24",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nFrame",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "HasCollision",
+      "address": "006219c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006219c0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "HasCollision"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "6288ad2d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetSkillFromSkillId",
+      "address": "006219f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006219f0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetSkillFromSkillId",
+        "GetFirstSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "25340b72",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IsDoor",
+      "address": "00621a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621a70"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "IsDoor",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "f929bbd1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CheckIfObjectOrientationIs1",
+      "address": "00621ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621ac0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "CheckIfObjectOrientationIs1",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "54632fa7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "IsShrine",
+      "address": "00621b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621b00"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "IsShrine"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "f5f10acc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetObjectTxtRecordFromObject",
+      "address": "00621b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621b30"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetObjectTxtRecordFromObject",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "8606ebea",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetShrineTxtRecordFromObject",
+      "address": "00621b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621b70"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetShrineTxtRecordFromObject",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ShrinesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "8e1d8a5c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetShrineTxtRecordInObjectData",
+      "address": "00621bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621bb0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetShrineTxtRecordInObjectData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ShrinesTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "a9f98495",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShrinesTxt",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UpdateDirectionAndSpeed",
+      "address": "00621c00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621c00"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UpdateDirectionAndSpeed",
+        "PATH_SetDirectionToTarget"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "049a3d09",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "StoreOwnerTypeAndGUID",
+      "address": "00621c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621c30"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "StoreOwnerTypeAndGUID",
+        "SetState",
+        "GetStatsByState",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "b49333ba",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOwnerGUID",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "StoreOwnerInfo",
+      "address": "00621cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621cc0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "StoreOwnerInfo",
+        "StoreOwnerTypeAndGUID"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "fd21e8a9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nOwnerId",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "StoreOwner",
+      "address": "00621ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621ce0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "StoreOwner",
+        "SetState",
+        "GetStatsByState",
+        "STATLIST_RemoveAndRecalc",
+        "FreeStatList",
+        "StoreOwnerTypeAndGUID"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "82a42352",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwner",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "StoreLastAttacker",
+      "address": "00621d50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621d50"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "StoreLastAttacker",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "47b7302f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pKiller",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetDirectionToCoords",
+      "address": "00621dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621dc0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetDirectionToCoords",
+        "GetXPos",
+        "GetYPos",
+        "DRLGPATH_GetDirectionFromCoords"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d53fa859",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNewX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nNewY",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetOverlay",
+      "address": "00621e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621e40"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetOverlay",
+        "GetStatsByFlags",
+        "AllocStatList",
+        "STATLIST_AttachStatListToUnit",
+        "STATLIST_SetOverlayPending",
+        "STATLIST_SetStatValueSimple",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "3a702f1c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOverlay",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLayer",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetBeltType",
+      "address": "00621ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621ed0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetBeltType",
+        "TXT_Items_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "19c60e65",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetCurrentLifePercentage",
+      "address": "00621f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621f20"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetCurrentLifePercentage",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_GetMaxLifeFromUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "35b0810a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IsSoftMonster",
+      "address": "00621f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621f60"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "IsSoftMonster",
+        "TXT_MonStats_MonStats2_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "f6439621",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "AllocPlayerData",
+      "address": "00621f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00621f90"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "AllocPlayerData",
+        "AllocServerMemory",
+        "memset",
+        "GetMemPool",
+        "CreateBitBuffer",
+        "Alloc",
+        "GetPortalFlagFromLevelId",
+        "FIELDTBLS_AllocPlayerData_NoOp",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2PoolManagerStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2WaypointStrc",
+        "int32_t"
+      ],
+      "dh": "91b6ea05",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FreePlayerData",
+      "address": "00622060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622060"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "FreePlayerData",
+        "FreeQuestRecordPool",
+        "Free",
+        "FIELDTBLS_FreePlayerData_STUB",
+        "FreeServerMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "6b55a774",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetNameInPlayerData",
+      "address": "006220f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006220f0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetNameInPlayerData",
+        "SStrCopy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "bd0303f9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szName",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPlayerName",
+      "address": "00622150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622150"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetPlayerName",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "69bc5894",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPlayerData",
+      "address": "006221a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006221a0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetPlayerData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "224aa6c3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetPlayerPortalFlags",
+      "address": "006221e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006221e0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetPlayerPortalFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "6712e82f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPortalFlags",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPlayerPortalFlags",
+      "address": "00622230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622230"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetPlayerPortalFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "539ded1f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetNameOffsetFromObject",
+      "address": "00622270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622270"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetNameOffsetFromObject",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "0303131d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetObjectPortalFlags",
+      "address": "006222c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006222c0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetObjectPortalFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "e36ccbd4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetObjectPortalFlags",
+      "address": "00622300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622300"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetObjectPortalFlags",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "9c671a16",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPortalFlag",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "CheckObjectPortalFlag",
+      "address": "00622350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622350"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "CheckObjectPortalFlag",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "832a36cb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPortalFlag",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "GetOverlayHeight",
+      "address": "006223a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006223a0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetOverlayHeight",
+        "TXT_MonStats_GetMonStats2"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "6b2515df",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetDefense",
+      "address": "006223f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006223f0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetDefense",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "TXT_Skills_GetLine",
+        "INVENTORY_GetEquippedShield",
+        "D2GetSkillCalc",
+        "D2ApplyPercent"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t"
+      ],
+      "dh": "8486c7c6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetAttackRate",
+      "address": "00622560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622560"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetAttackRate",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "03e6e732",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "HasShield",
+      "address": "006225f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006225f0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "HasShield",
+        "MONSTER_GetComponentOverlay",
+        "ConvertItemCodeToClassIdAndGetItemsTxtLine"
+      ],
+      "usedTypes": [
+        "D2ItemsTxt",
+        "D2UnitStrc",
+        "eD2MonsterClassId",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "d199d393",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetBlockRate",
+      "address": "00622720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622720"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetBlockRate",
+        "INVENTORY_GetEquippedShield",
+        "STATSEX_GetCurrentStat",
+        "HasShield"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "781a9cf7",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bExpansion",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetEquippedWeapon",
+      "address": "00622830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622830"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetEquippedWeapon",
+        "INVENTORY_GetEquippedWeaponInfo"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "c9dc845e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetMeleeRange",
+      "address": "00622870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622870"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetMeleeRange",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INVENTORY_GetEquippedWeaponInfo",
+        "ITEM_GetItemsTxt_nRangeAdder",
+        "TXT_MonStats_GetMonStats2",
+        "COMPOSIT_GetWeaponClassWithTransform"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "7f9871bc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TestCollision",
+      "address": "00622920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622920"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "TestCollision"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "POINT",
+        "int32_t"
+      ],
+      "dh": "d34c9794",
+      "paramStorage": [
+        [
+          "nX1",
+          "ECX:4"
+        ],
+        [
+          "nSize2",
+          "EDX:4"
+        ],
+        [
+          "nX2",
+          "EAX:4"
+        ],
+        [
+          "nY1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x10]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TestCollisionByCoordinates",
+      "address": "006229f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006229f0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "TestCollisionByCoordinates",
+        "UNITS_GetRoom",
+        "GetXPos",
+        "GetYPos",
+        "GetUnitSizeX",
+        "TestCollision"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "a003e42a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TestCollisionWithUnit",
+      "address": "00622aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622aa0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "TestCollisionWithUnit",
+        "UNITS_GetRoom",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetUnitSizeX",
+        "TestCollision",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "f88a7c9c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TestCollisionBetweenInteractingUnits",
+      "address": "00622b50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622b50"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "TestCollisionBetweenInteractingUnits",
+        "UNITS_GetRoom",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetCollisionType",
+        "PATH_RemoveUnitCollision",
+        "GetUnitSizeX",
+        "TestCollision",
+        "PATH_AddUnitCollision"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "fc25db5f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IsInMeleeRange",
+      "address": "00622c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622c40"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "IsInMeleeRange",
+        "TXT_MonStats_GetBaseId",
+        "GetDistanceBetweenUnits",
+        "GetMeleeRange",
+        "TestCollisionWithUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "97750183",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAttackerExtendRange",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IsInMovingMode",
+      "address": "00622d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622d00"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "IsInMovingMode",
+        "GetAnimOrSeqMode",
+        "TXT_MonStats_GetBaseId",
+        "ValidateClassId",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "ac8fd993",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IsInMovingModeEx",
+      "address": "00622dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622dc0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "IsInMovingModeEx",
+        "IsInMovingMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "83f81ef4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_GetHealingCost",
+      "address": "00622de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622de0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UNITS_GetHealingCost",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_GetMaxManaFromUnit",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "97de9989",
+      "paramStorage": [
+        [
+          "nMpDeficit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetInventoryGoldLimit",
+      "address": "00622e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622e70"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetInventoryGoldLimit",
+        "STATSEX_GetCurrentStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "6c44147a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Return",
+      "address": "00622e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622e90"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "Return"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "b99c60e0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InitRightSkill",
+      "address": "00622ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622ea0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "InitRightSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetRightSkill",
+        "GetSkillId",
+        "GetOwnerGUID"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "fb3c0edb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InitLeftSkill",
+      "address": "00622f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622f10"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "InitLeftSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetLeftSkill",
+        "GetSkillId",
+        "GetOwnerGUID"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "912b4df5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InitSwitchRightSkill",
+      "address": "00622f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622f80"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "InitSwitchRightSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetRightSkill",
+        "GetSkillId",
+        "GetOwnerGUID"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "5d6f622b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InitSwitchLeftSkill",
+      "address": "00622ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00622ff0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "InitSwitchLeftSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetLeftSkill",
+        "GetSkillId",
+        "GetOwnerGUID"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "7ea6af39",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetRightSkillData",
+      "address": "00623060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623060"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetRightSkillData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "eb034d2b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRightSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRightSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetLeftSkillData",
+      "address": "006230c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006230c0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetLeftSkillData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "4c072954",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pLeftSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLeftSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetSwitchRightSkillDataResetRightSkill",
+      "address": "00623120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623120"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetSwitchRightSkillDataResetRightSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "d120c052",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShiftRightSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pShiftRightSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetSwitchLeftSkillDataResetLeftSkill",
+      "address": "006231a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006231a0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetSwitchLeftSkillDataResetLeftSkill",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "7229b3b5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShiftLeftSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pShiftLeftSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetShiftLeftSkillData",
+      "address": "00623220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623220"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetShiftLeftSkillData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "2e11142b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShiftLeftSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pShiftLeftSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetShiftRightSkillData",
+      "address": "00623290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623290"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetShiftRightSkillData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "26d19d30",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pShiftRightSkillId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pShiftRightSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetShiftLeftSkillData",
+      "address": "00623300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623300"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetShiftLeftSkillData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "9d8f2c71",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nShiftLeftSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetShiftRightSkillData",
+      "address": "00623350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623350"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetShiftRightSkillData",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "81d4225d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nShiftRightSkillOwnerGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetWeaponGUID",
+      "address": "006233a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006233a0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetWeaponGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "f986427d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWeapon",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetWeaponGUID",
+      "address": "00623410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623410"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetWeaponGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "e5b9c102",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetStashGoldLimit",
+      "address": "00623460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623460"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetStashGoldLimit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "3c0ff5eb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CanSwitchAI",
+      "address": "00623470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623470"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "CanSwitchAI",
+        "GetSomeMonsterStatFlag"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "c45d86ea",
+      "paramStorage": [
+        [
+          "nMonsterId",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetTimerArg",
+      "address": "006234c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006234c0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SetTimerArg",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TimerArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "c1c7d8b4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTimerArg",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetTimerArg",
+      "address": "006234f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006234f0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetTimerArg",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TimerArgStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "57487c24",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "AllocStaticPath",
+      "address": "00623520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623520"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "AllocStaticPath",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2StaticPathStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "b90b130d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FreeStaticPath",
+      "address": "00623570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623570"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "FreeStaticPath",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "a313af58",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CanDualWield",
+      "address": "006235a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006235a0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "CanDualWield"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "9fbcac99",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IsCorpseUseable",
+      "address": "00623600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623600"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "IsCorpseUseable",
+        "TXT_MonStats_GetMonStats2",
+        "STATES_HasUdeadFlagState"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2UnitStrc"
+      ],
+      "dh": "6880c271",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IsObjectInInteractRange",
+      "address": "00623660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623660"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "IsObjectInInteractRange",
+        "GetDistanceBetweenUnits",
+        "GetXPos",
+        "GetYPos",
+        "GetUnitSizeX",
+        "GetUnitSizeY"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "155ad3da",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pObject",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "RemoveCollision_Vector",
+      "address": "00623830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623830"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "RemoveCollision_Vector",
+        "GetYPos",
+        "GetXPos",
+        "GetCollisionType",
+        "GetUnitSizeY",
+        "GetUnitSizeX",
+        "UNITS_GetRoom"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "aa94a463",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_GetCurrentDirection",
+      "address": "006238c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006238c0"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "PATH_GetCurrentDirection",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetXPos",
+        "GetXSP1",
+        "GetYPos",
+        "GetYSP1",
+        "UpdateDirection",
+        "GetDirectionToCoords"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "9e3cb9ba",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetWeaponBySkill",
+      "address": "00623990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623990"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetWeaponBySkill",
+        "INVENTORY_GetEquippedWeaponInfo",
+        "CanDualWield",
+        "GetCurrentSkill",
+        "GetSkillsTxt",
+        "SKILL_GetFlags",
+        "INVENTORY_FindWornItemByType",
+        "ITEMS_IsA",
+        "CheckFlagWithMask",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "290afce3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNITS_GetFrameBonus",
+      "address": "00623b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623b10"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "SKILLS_GetStateTransformGfx",
+        "UNITS_GetFrameBonus",
+        "GetWeaponBySkill",
+        "ITEM_GetWeaponAnimClass",
+        "CanDualWield"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "8fd4c945",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetHitClassForPlayerOrMonster",
+      "address": "00623c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623c20"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetHitClassForPlayerOrMonster",
+        "GetWeaponBySkill",
+        "ITEM_GetItemsTxt_bHitClass",
+        "TXT_MonStats_GetMonStats2"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "3adabb3d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetWeaponClass",
+      "address": "00623c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623c60"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetWeaponClass",
+        "GetWeaponBySkill",
+        "ITEM_GetWeaponAnimClass"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "a15c413d",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "UpdateDualWieldStats",
+      "address": "00623c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623c80"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UpdateDualWieldStats",
+        "CanDualWield",
+        "GetWeaponBySkill",
+        "GetEquipedWeapon",
+        "SEVER_ITEM_GetOwner",
+        "STATLIST_SetItemStatActive",
+        "GetPrimaryWeapon"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "2fd6dcd0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetItemComponent",
+      "address": "00623d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623d60"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "GetItemComponent",
+        "GetBodyLocation",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "IsTwoHanded",
+        "CanDualWield",
+        "GetEquipedWeapon",
+        "ITEM_GetItemsTxt_bComponent"
+      ],
+      "usedTypes": [
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2BodyLoc",
+        "uint8_t"
+      ],
+      "dh": "614b0c44",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItem",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "AdvanceAnimFrame",
+      "address": "00623e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623e00"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "AdvanceAnimFrame",
+        "UNITS_GetFrameBonus",
+        "UpdateSequenceMode"
+      ],
+      "usedTypes": [
+        "D2AnimDataRecordStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "0418f0a9",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UpdateAnimSpeed",
+      "address": "00623f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00623f50"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "UpdateAnimSpeed",
+        "SKILLS_GetStateTransformGfx",
+        "SetAnimData",
+        "UNITS_IsAnimSpeedSetByCastRate",
+        "GetDiminishedStat",
+        "UNIT_GetUnitState",
+        "UNITS_GetAnimFrameTime",
+        "SetVelocities",
+        "UNITS_CanAnimModeUseVelocityModifier",
+        "STATSEX_GetCurrentStat",
+        "UNITS_GetBaseWalkVelocity",
+        "UNITS_CanAnimModeUseAttackRate",
+        "UpdateDualWieldStats",
+        "CanDualWield",
+        "INVENTORY_GetItemByGridOffset",
+        "ITEM_CheckIfItemIsNotBrokenAndNotDisabled",
+        "ITEMS_IsA",
+        "ITEMSTATS_CheckUnitHasStateFlagIndex",
+        "SKILL_CalcAttackFrames",
+        "UNITS_IsAnimModeSpeedFixed"
+      ],
+      "usedTypes": [
+        "D2AnimDataRecordStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "fc692614",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szFile",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "InitAnimMode",
+      "address": "00624390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624390"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "InitAnimMode",
+        "UNITS_GetFrameBonus",
+        "SKILLS_GetStateTransformGfx",
+        "UNITS_AddRunVelocityBonus",
+        "UpdateAnimSpeed",
+        "InitializeSequence",
+        "UNITS_IsShapeshifted",
+        "TXT_Objects_GetLine",
+        "RANDOM_RandomNumberSelector",
+        "GetMissleById",
+        "_allmul",
+        "_alldiv",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2ObjectsTxt",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ],
+      "dh": "f2f3f07b",
+      "paramStorage": [
+        [
+          "pUnitArg",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ChangeAnimMode",
+      "address": "00624690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00624690"
+        }
+      ],
+      "namespace": "D2Common::Units::Units",
+      "calledFunctions": [
+        "ChangeAnimMode",
+        "ROOM_LinkUnitToUpdateList",
+        "STATLIST_MarkUnitStatsChanged",
+        "InitAnimMode"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "c5b6743f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMode",
+          "Stack[0x8]:4"
+        ]
+      ]
+    }
+  ]
+}

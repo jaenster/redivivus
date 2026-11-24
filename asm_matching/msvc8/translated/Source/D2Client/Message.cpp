@@ -2,7 +2,7 @@
 
 #include "Source/D2Client/Message.h"
 #include "Redivivus/d2_control.h"
-#include "Source/D2Client/GAME/Record.h"
+#include "Source/D2Client/Game/Record.h"
 #include "Source/D2Client/UI/EscMenu.h"
 #include "Source/D2Client/UI/ui.h"
 #include "Source/D2gfx/D2gfx.public.h"
@@ -10,7 +10,7 @@
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Win/D2Win.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/GAME/Game/Game.data.h"
+#include "Source/D2Client/Game/Game.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

@@ -1,0 +1,302 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Game/Missiles/Missiles.cpp",
+  "functions": [
+    {
+      "name": "ITEMS_RemoveAll",
+      "address": "00557f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00557f10"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::Missiles",
+      "calledFunctions": [
+        "ITEMS_RemoveAll",
+        "GetNextUnit",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA"
+      ],
+      "dh": "c0256397",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "STRUCT_FillDataMissile",
+      "address": "0059f8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059f8a0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::Missiles",
+      "calledFunctions": [
+        "STRUCT_FillDataMissile",
+        "AllocMissileData",
+        "EVENT_ClearTimerList",
+        "EVENT_TriggerImmediate"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ],
+      "dh": "d45b086a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "dwUnitGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ClearMissileUnitData",
+      "address": "0059f8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059f8e0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::Missiles",
+      "calledFunctions": [
+        "ClearMissileUnitData",
+        "FreeMissileData",
+        "EVENT_FreeAllTimersForUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ],
+      "dh": "cf48c7dd",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "MISSILES_EvalDamageAndSetStats",
+      "address": "0059f900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059f900"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::Missiles",
+      "calledFunctions": [
+        "MISSILES_EvalDamageAndSetStats",
+        "EQUIPMENT_RecalcDualWieldWeaponStats",
+        "EvaluateMissileFormula",
+        "SetDamageStats",
+        "WEAPON_ApplyEquippedWeaponStats"
+      ],
+      "usedTypes": [
+        "D2MissileDamageDataStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "08a15d86",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit1",
+          "ESI:4"
+        ],
+        [
+          "pUnit2",
+          "EBX:4"
+        ],
+        [
+          "nLevel",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "CalculatePierce",
+      "address": "0059f940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059f940"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::Missiles",
+      "calledFunctions": [
+        "CalculatePierce",
+        "GetMissleById",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_UnitGetStatValueUnchecked",
+        "SERVER_GetUnitStat",
+        "InitSeed_Param_666",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "360d8bb5",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit2",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CreatingMissile",
+      "address": "0059fa30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059fa30"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::Missiles",
+      "calledFunctions": [
+        "CreatingMissile",
+        "GetMissleById",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "UNIT_GetUnitState",
+        "GetStatsByState",
+        "STATLIST_GetBaseStatValue",
+        "CreateUnit",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "SetActivateFrame",
+        "SetVelocities",
+        "SetSP1",
+        "SetTarget",
+        "PATH_ChangeCollisionType",
+        "PATH_SetMoveTestCollisionMask",
+        "PATH_CalculatePath",
+        "SetOwner",
+        "SetAcceleration",
+        "SetMaxVelocity",
+        "GetDistanceToXY",
+        "AllocStatListEx",
+        "SetSkill",
+        "SetLevel",
+        "MISSILES_EvalDamageAndSetStats",
+        "StoreOwner",
+        "CalculatePierce",
+        "STATLIST_SetUnitStat",
+        "GetFlags",
+        "SetFlags",
+        "MONSTER_DispatchUModMissile"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2MissilesTxt",
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "896a3c2a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pArgs",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "MISSILES_SendMissilePacket",
+      "address": "0059fee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0059fee0"
+        }
+      ],
+      "namespace": "D2Game::MISSILES::Missiles",
+      "calledFunctions": [
+        "MISSILES_SendMissilePacket",
+        "GetOwnerUnit",
+        "GetClassId",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "GetXSP1",
+        "GetYSP1",
+        "GetCurrentFrame",
+        "GetLevel",
+        "STATSEX_GetCurrentStat",
+        "NET_D2GS_SERVER_Send_0x73_MissileData"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2GSPacketSrv0x",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ],
+      "dh": "1bd56a62",
+      "paramStorage": [
+        [
+          "pClient",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nVelocity",
+          "Stack[0x8]:4"
+        ]
+      ]
+    }
+  ]
+}

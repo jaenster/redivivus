@@ -2,7 +2,7 @@
 
 #include "Source/D2Win/Src/D2WinAccountList.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Launch/MainMenus.h"
+#include "Source/D2Launch/Src/MainMenus.h"
 #include "Source/D2Win/Src/D2WinFont.h"
 #include "Source/D2Win/Src/D2WinMain.h"
 #include "Source/D2gfx/D2gfx.public.h"

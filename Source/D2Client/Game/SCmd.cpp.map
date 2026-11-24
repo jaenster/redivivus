@@ -1,0 +1,4193 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Client/Game/SCmd.cpp",
+  "functions": [
+    {
+      "name": "SCMD_Rcv_IgnoreShared_Unref_0045b090",
+      "address": "0045b090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b090"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv_IgnoreShared_Unref_0045b090"
+      ],
+      "dh": "3b055233",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv_IgnoreShared_Unref_0045b0a0",
+      "address": "0045b0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045b0a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv_IgnoreShared_Unref_0045b0a0"
+      ],
+      "dh": "5b2e5799",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_SetOrClearBitFlag",
+      "address": "0045c430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c430"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_SetOrClearBitFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "baa1169c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "dwFlagMask",
+          "EDX:4"
+        ],
+        [
+          "bSet",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetTxtMonStatsSize",
+      "address": "0045c460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c460"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "GetTxtMonStatsSize"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "4f1090d5"
+    },
+    {
+      "name": "SCMD_ClearPlayerTradeFields",
+      "address": "0045c470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c470"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_ClearPlayerTradeFields"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "a3dc5e50",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0045c4e0",
+      "address": "0045c4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c4e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "Unreferenced_0045c4e0"
+      ],
+      "dh": "78e46ca5"
+    },
+    {
+      "name": "SaveCharacter",
+      "address": "0045c520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c520"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SaveCharacter",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetAndCreateSavePath",
+        "sprintf",
+        "fopen",
+        "fwrite",
+        "fclose"
+      ],
+      "usedTypes": [
+        "FILE",
+        "int32_t"
+      ],
+      "dh": "46e5165d"
+    },
+    {
+      "name": "DownloadSave",
+      "address": "0045c620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c620"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SaveCharacter",
+        "DownloadSave",
+        "FreeClientMemory",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "fdce73d8",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_PacketHandle_from0xAF",
+      "address": "0045c850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c850"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_PacketHandle_from0xAF",
+        "DownloadSave",
+        "CLIENT_ConnectionRefused"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "2619bcde",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x01_NEWGAME",
+      "address": "0045c8b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c8b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x01_NEWGAME",
+        "CLIENT_SetDifficulty",
+        "CLIENT_SetExpansion",
+        "CLIENT_SetLadder",
+        "CLIENT_SetArenaFlags",
+        "InitializeUI"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x01",
+        "eD2ArenaFlags"
+      ],
+      "dh": "264d09a9",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x03_NEWACT",
+      "address": "0045c8e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c8e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x03_NEWACT",
+        "CLIENT_AllocAct"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x03"
+      ],
+      "dh": "624a54c3",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv_IgnoreShared",
+      "address": "0045c900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c900"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv_IgnoreShared"
+      ],
+      "dh": "59e62216",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x02_LoadSuccess",
+      "address": "0045c910",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Send_0x6B"
+      ]
+    },
+    {
+      "name": "CLIENT_GetCurrentRoomAct",
+      "address": "0045c920",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c920"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "CLIENT_GetCurrentRoomAct",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "eAct"
+      ],
+      "dh": "b6f48387"
+    },
+    {
+      "name": "CLIENT_GetUnitAct",
+      "address": "0045c960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c960"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "CLIENT_GetUnitAct",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eAct"
+      ],
+      "dh": "58a5a964",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x04_STARTACT",
+      "address": "0045c9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045c9a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "GetActNoFromLevelNumber",
+        "NET_D2GS_CLIENT_Incoming0x04_STARTACT",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GFX_UpdateGfxThrottled",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "int32_t"
+      ],
+      "dh": "ca0375e1",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x05_UnloadComplete",
+      "address": "0045ca30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ca30"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x05_UnloadComplete",
+        "thunk_WEATHER_FreeDC6Graphics",
+        "InitializeMemoryManagers",
+        "GetTickCount"
+      ],
+      "dh": "d6c4a30b",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x06_ENDGAME",
+      "address": "0045ca60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ca60"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x06_ENDGAME",
+        "GAMEDATA_GetExitFlag2",
+        "CLIENT_ConnectionRefused"
+      ],
+      "dh": "0a978d74",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x07_NEWROOM",
+      "address": "0045cab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cab0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x07_NEWROOM",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "AddRoomData"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "8b83c8a1",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x08_REMOVEROOM",
+      "address": "0045cb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cb20"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x08_REMOVEROOM",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "RemoveRoomData"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "625da031",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x09_AssignLevelWarp",
+      "address": "0045cb90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cb90"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x09_AssignLevelWarp",
+        "UNIT_CreateWarp",
+        "ANIM_ResetMonsterFrameCache"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x09",
+        "D2UnitStrc"
+      ],
+      "dh": "a0a2b742",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x51_NEWOBJECT",
+      "address": "0045cbd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cbd0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x51_NEWOBJECT",
+        "CreateObject"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x51"
+      ],
+      "dh": "d5d6eda5",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x52",
+      "address": "0045cc00",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS"
+      ],
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x0A_RemoveObject",
+      "address": "0045cc10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cc10"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x0A_RemoveObject",
+        "GetPlayerUnit_UI",
+        "GetRosterPetGUID",
+        "RemoveObjectFromServerObjectTable"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x0A",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "70be5b2f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL",
+      "address": "0045cc50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cc50"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x0B_UNITCTRL",
+        "UNITS_FindClientSideUnit",
+        "HANDSHAKE_SetClientPlayerUnit",
+        "GFX_Noop"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "72abfdb9",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x0C_UNITCHANGE",
+      "address": "0045cc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cc70"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x0C_UNITCHANGE",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x0C",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "ab1fcfc4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x0D_UNITCHANGE_XY",
+      "address": "0045ccc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ccc0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x0D_UNITCHANGE_XY",
+        "HandleMessage",
+        "SetRosterPlayerHpPercent"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x0D",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "0f696082",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x0E_UNITCHANGE_ID",
+      "address": "0045cd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cd10"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x0E_UNITCHANGE_ID",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x0E",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "18cff1b6",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x0F_UNITCHANGE_XYPOS",
+      "address": "0045cd40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cd40"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x0F_UNITCHANGE_XYPOS",
+        "PATH_MoveUnitToPoint",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x0F",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "02842637",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x10_UNITCHANGE_IDPOS",
+      "address": "0045cd90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cd90"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x10_UNITCHANGE_IDPOS",
+        "PATH_MoveUnitToPoint",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x10",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "661d6b72",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x67_UNITCHANGE_MONSTERXYPATH",
+      "address": "0045cde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cde0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x67_UNITCHANGE_MONSTERXYPATH",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x67",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "9a97ff2a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x68_UNITCHANGE_MONSTERIDPATH",
+      "address": "0045ce30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ce30"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x68_UNITCHANGE_MONSTERIDPATH",
+        "PATH_MoveUnitToPoint",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x68",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "f2b6ad8c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x69_UNITCHANGE_MONSTERXYNOPATH",
+      "address": "0045cea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cea0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "HandleMessage",
+        "NET_D2GS_CLIENT_Incoming0x69_UNITCHANGE_MONSTERXYNOPATH"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x69",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "d61b7734",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_RecvNpcStateToEntity",
+      "address": "0045cef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cef0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_RecvNpcStateToEntity",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "25a7933a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x6B_UNITCHANGE_MONSTERXYPOSITION",
+      "address": "0045cf40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cf40"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x6B_UNITCHANGE_MONSTERXYPOSITION",
+        "PATH_MoveUnitToPoint",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x6B",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "ad95280e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x6C_UNITCHANGE_MONSTERIDPOSITION",
+      "address": "0045cfb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045cfb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x6C_UNITCHANGE_MONSTERIDPOSITION",
+        "PATH_MoveUnitToPoint",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x6C",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "fb514e36",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL",
+      "address": "0045d010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d010"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL",
+        "PATH_MoveUnitToPoint",
+        "SERVER_GetUnitStat",
+        "STATLIST_SetUnitStat",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x6D",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "24c8dcb4",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x6E_UnitIgnore",
+      "address": "0045d0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d0a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x6E_UnitIgnore"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "2805989b",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x6F_UnitIgnore",
+      "address": "0045d0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d0b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x6F_UnitIgnore"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "3984932c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x70_UnitIgnore",
+      "address": "0045d0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d0c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x70_UnitIgnore"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "441c272a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x71_UnitIgnore",
+      "address": "0045d0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d0d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x71_UnitIgnore"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "08413e8f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x72_UnitIgnore",
+      "address": "0045d0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d0e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x72_UnitIgnore"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "d4a7c512",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay",
+      "address": "0045d0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d0f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "UnitDoOverlay",
+        "NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay",
+        "UNITS_FindClientSideUnit"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x11",
+        "D2UnitStrc",
+        "uint16_t"
+      ],
+      "dh": "3636cbe1",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x12_Ignore",
+      "address": "0045d130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d130"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x12_Ignore"
+      ],
+      "dh": "e9ec258c",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x13_Ignore",
+      "address": "0045d140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d140"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x13_Ignore"
+      ],
+      "dh": "f92e0e6b",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x14_Ignore",
+      "address": "0045d150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d150"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x14_Ignore"
+      ],
+      "dh": "ef6b1fd1",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x15_WarpXY",
+      "address": "0045d160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d160"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "CLIENT_TeleportUnitToPosition",
+        "NET_D2GS_CLIENT_Incoming0x15_WarpXY",
+        "UNITS_FindClientSideUnit",
+        "UNITS_GetRoom",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "PATH_UpdateCollisionWidth",
+        "PATH_SetMoveTestCollisionMask",
+        "CheckIfMonsterIsDead",
+        "PATH_ChangeCollisionType",
+        "GetPlayerUnit_UI",
+        "Return0",
+        "GAMEDATA_ExtendTimeout"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x15",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "276b3994",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x17_UNITPATH",
+      "address": "0045d260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d260"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x17_UNITPATH",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2PathPointStrc",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "47fad892",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x16_UPDATE",
+      "address": "0045d2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d2e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x16_UPDATE",
+        "UNITS_FindClientSideUnit",
+        "PATH_MoveUnitToPoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ],
+      "dh": "3c9761b2",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x28_INTERACTION_ENABLE",
+      "address": "0045d370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d370"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x28_INTERACTION_ENABLE",
+        "UI_HandleNpcInteractionPacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x28"
+      ],
+      "dh": "b3f79c09",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x62_INTERACTION_STOP",
+      "address": "0045d390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d390"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x62_INTERACTION_STOP",
+        "NPCMENU_HandleQuestItemPacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x62"
+      ],
+      "dh": "d05cccbf",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD",
+      "address": "0045d3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d3a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x29_GAMEQUESTRECORD",
+        "NPCMENU_ReadGameQuestRecord"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x29"
+      ],
+      "dh": "a4b4d9bb",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ITEM_CltRecalcEquippedFromUnit",
+      "address": "0045d3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d3b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "ITEM_CltRecalcEquippedFromUnit",
+        "ITEM_CltRecalcAllEquippedItems"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2UnitStrc"
+      ],
+      "dh": "2ab68964",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_RecalcInventoryItemStats",
+      "address": "0045d3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d3e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_RecalcInventoryItemStats",
+        "INVENTORY_GetFirstItem",
+        "INVENTORY_GetNextItem",
+        "GetCarriedItem",
+        "SEVER_ITEM_GetOwner",
+        "STATLIST_RemoveFromOwnerAndRecalc",
+        "STATLIST_SetItemStatActive",
+        "SelectSkillLeft",
+        "SelectSkillRight"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "b3ec2a13",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_HandleStatChangeEffect",
+      "address": "0045d4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d4b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_HandleStatChangeEffect",
+        "UNITMODE_SetAnimMode",
+        "CUNIT_ClearDeadSetAttackable",
+        "GetPlayerUnit_UI",
+        "ITEM_CltRecalcEquippedFromUnit",
+        "SCMD_RecalcInventoryItemStats",
+        "ITEM_RecalcAllEquippedItems_ECX"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t"
+      ],
+      "dh": "bf6aa7bc",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "eUnitStat",
+          "EAX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x9Eto0xA2",
+      "address": "0045d540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d540"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x9Eto0xA2",
+        "UNITS_FindClientSideUnit",
+        "ITEM_CltRecalcEquippedFromUnit",
+        "STATLIST_AddUnitStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "94bfafac",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL",
+      "address": "0045d5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d5e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL",
+        "UNITS_FindClientSideUnit",
+        "SKILL_ExecuteClientProgressWithAura",
+        "SKILL_ExecuteClientProgressFunc"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0xA3",
+        "D2UnitStrc",
+        "eD2Skills"
+      ],
+      "dh": "1fb5312b",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL",
+      "address": "0045d6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d6a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL",
+        "UNITS_FindClientSideUnit",
+        "SKILL_StopAndClearUninterruptable",
+        "SetState",
+        "SKILL_StopAndClearSound",
+        "SKILL_HandleTeleportLanding"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0xA5",
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint16_t"
+      ],
+      "dh": "6fe37db7",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER",
+      "address": "0045d760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d760"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xA4_PRELOAD_MONSTER",
+        "GFX_PrecacheMonsterAllModes"
+      ],
+      "dh": "6e6b3760",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA",
+      "address": "0045d780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d780"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x19_STATCHANGE_CONTROL_GOLD_BYTE_DELTA",
+        "GetPlayerUnit_Net",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "SCMD_HandleStatChangeEffect"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "98122d3a",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x20",
+      "address": "0045d880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d880"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x20",
+        "UNITS_FindClientSideUnit",
+        "STATLIST_SetUnitStat",
+        "SCMD_HandleStatChangeEffect"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x20",
+        "D2UnitStrc",
+        "uint8_t"
+      ],
+      "dh": "8d63fea1",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_DecodeRelativeCoordinates",
+      "address": "0045d8c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d8c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_DecodeRelativeCoordinates"
+      ],
+      "usedTypes": [
+        "int16_t",
+        "uint16_t"
+      ],
+      "dh": "50ea53f3",
+      "paramStorage": [
+        [
+          "nByteY",
+          "CX:2"
+        ],
+        [
+          "nBaseX",
+          "DX:2"
+        ],
+        [
+          "nBaseY",
+          "Stack[0x4]:2"
+        ],
+        [
+          "pOutX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nByteX",
+          "AX:2"
+        ]
+      ]
+    },
+    {
+      "name": "DecodeIncoming0x18",
+      "address": "0045d900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d900"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "DecodeIncoming0x18",
+        "InitBitBuffer",
+        "ReadUnsigned"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2GSPacket0x18Decoded",
+        "uint32_t"
+      ],
+      "dh": "2ee4618f",
+      "paramStorage": [
+        [
+          "pDest",
+          "ESI:4"
+        ],
+        [
+          "pBytes",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG",
+      "address": "0045d9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045d9b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG",
+        "DecodeIncoming0x18",
+        "GetPlayerUnit_Net",
+        "STATLIST_SetUnitStat",
+        "PATH_MoveUnitToPoint",
+        "UNITMODE_SetAnimMode",
+        "CUNIT_ClearDeadSetAttackable"
+      ],
+      "usedTypes": [
+        "D2GSPacket0x18Decoded",
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "ef8ca17c",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DecodeIncoming0x95",
+      "address": "0045da90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045da90"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "DecodeIncoming0x95",
+        "InitBitBuffer",
+        "ReadUnsigned"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2GSPacket0x95Decoded",
+        "uint32_t"
+      ],
+      "dh": "af292bff",
+      "paramStorage": [
+        [
+          "pDest",
+          "ESI:4"
+        ],
+        [
+          "pBytes",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM",
+      "address": "0045db20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045db20"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM",
+        "DecodeIncoming0x95",
+        "GetPlayerUnit_Net",
+        "STATLIST_SetUnitStat",
+        "PATH_MoveUnitToPoint",
+        "UNITMODE_SetAnimMode",
+        "CUNIT_ClearDeadSetAttackable"
+      ],
+      "usedTypes": [
+        "D2GSPacket0x95Decoded",
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "f7da858c",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DecodeIncoming0x96",
+      "address": "0045dbe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045dbe0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "DecodeIncoming0x96",
+        "InitBitBuffer",
+        "ReadUnsigned"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2GSPacket0x96Decoded",
+        "uint32_t"
+      ],
+      "dh": "d08ea0a1",
+      "paramStorage": [
+        [
+          "pDest",
+          "ESI:4"
+        ],
+        [
+          "pBytes",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition",
+      "address": "0045dc50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045dc50"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition",
+        "DecodeIncoming0x96",
+        "GetPlayerUnit_Net",
+        "STATLIST_SetUnitStat",
+        "PATH_MoveUnitToPoint"
+      ],
+      "usedTypes": [
+        "D2GSPacket0x96Decoded",
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "8dddf2c7",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL",
+      "address": "0045dcd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045dcd0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x21_SETSKILLLEVEL",
+        "UNITS_FindClientSideUnit",
+        "AddSkill",
+        "SPELLSEL_ClearWaitingForSkillFlag"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint16_t"
+      ],
+      "dh": "77434651",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_RecvSkillTabBonusDelta",
+      "address": "0045dd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045dd10"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_RecvSkillTabBonusDelta",
+        "UNITS_FindClientSideUnit",
+        "SKILLS_CltAdjustSkillTabBonuses"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "2b17e7ac",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x94_SETALLSKILLS",
+      "address": "0045dd60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045dd60"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x94_SETALLSKILLS",
+        "UNITS_FindClientSideUnit",
+        "AddSkill"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x94SkillStrc",
+        "D2UnitStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "d8fec003",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x22_SETSKILLITEMREFS",
+      "address": "0045ddb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ddb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x22_SETSKILLITEMREFS",
+        "UNITS_FindClientSideUnit",
+        "GetSkillByIdAndOwner",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SKILL_SetQuantity"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x22_0x23",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "5c23f070",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x23_SETSKILL",
+      "address": "0045de10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045de10"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x23_SETSKILL",
+        "UNITS_FindClientSideUnit",
+        "SelectSkillLeft",
+        "SelectSkillRight"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x23",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "0ae1688a",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER",
+      "address": "0045de50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045de50"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x98_SETSPAWNERMONSTER",
+        "CMONSTERS_SetSpawnerMonsterClass"
+      ],
+      "usedTypes": [
+        "D2SCmdPayload_u32_u16_u"
+      ],
+      "dh": "5cd0b88f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID",
+      "address": "0045de80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045de80"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x99_ITEM_SKILL_ID",
+        "UNITS_FindClientSideUnit",
+        "SKILL_ExecuteItemCastOnUnit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "7a2f7f21",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x9A_ITEM_SKILL_XY",
+      "address": "0045dec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045dec0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x9A_ITEM_SKILL_XY",
+        "UNITS_FindClientSideUnit",
+        "SKILL_ExecuteItemCastAtCoords"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "49538420",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x4C_SKILL_ID",
+      "address": "0045df00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045df00"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x4C_SKILL_ID",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x4C",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "7b0393ff",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x4D_SKILL_XY",
+      "address": "0045df60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045df60"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x4D_SKILL_XY",
+        "HandleMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x4D",
+        "D2ServerMessageHandleStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "ed1bcaac",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pBytes",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x26_CHATSTART",
+      "address": "0045dfc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045dfc0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x26_CHATSTART",
+        "SStrCopy",
+        "SStrLen",
+        "TEXT_ProcessChatMessage"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x26",
+        "MessageStrc"
+      ],
+      "dh": "51186fc4",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x76",
+      "address": "0045e050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e050"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x76",
+        "TEXT_ClearUnitHoverText"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x76"
+      ],
+      "dh": "ff130f2f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x5A",
+      "address": "0045e070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e070"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x5A",
+        "TEXT_HandleEventMessagePacket"
+      ],
+      "usedTypes": [
+        "D2Packet0x5aEventStructure"
+      ],
+      "dh": "1cbe2e94",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x27_PRESETTALK",
+      "address": "0045e0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e0a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x27_PRESETTALK",
+        "TEXT_HandleOverheadTextPacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x27"
+      ],
+      "dh": "1174f6b4",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x2A_TRANSACTION_RESULTS",
+      "address": "0045e0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e0d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x2A_TRANSACTION_RESULTS",
+        "NPCMENU_HandleTradePacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x2A"
+      ],
+      "dh": "dc8b2f70",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x2C_PLAY_SOUND",
+      "address": "0045e110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e110"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x2C_PLAY_SOUND",
+        "UNITSND_PlaySoundForMercenary"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x2C"
+      ],
+      "dh": "c11c3a9b",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x3E_ITEMUPDATESTAT",
+      "address": "0045e130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e130"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x3E_ITEMUPDATESTAT",
+        "InitBitBuffer",
+        "ReadUnsigned",
+        "ITEM_HandleStatUpdatePacket"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "da9e0a6b",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x3F",
+      "address": "0045e220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e220"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x3F",
+        "ITEM_HandleItemCursorAssign"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x3F"
+      ],
+      "dh": "d76488fe",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x40",
+      "address": "0045e240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e240"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x40",
+        "ITEM_HandleItemFlagEditPacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x40"
+      ],
+      "dh": "fbd02fa5",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x42",
+      "address": "0045e270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e270"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x42",
+        "ITEM_HandleCursorItemRemoval"
+      ],
+      "usedTypes": [
+        "D2SCmdPayload_u32_u"
+      ],
+      "dh": "1fb1b3df",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x45_Ignore",
+      "address": "0045e290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e290"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x45_Ignore"
+      ],
+      "dh": "5fb93808",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_RecvRecalcEquippedItems",
+      "address": "0045e2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e2a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_RecvRecalcEquippedItems",
+        "ITEM_CltRecalcAllEquippedItems"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x"
+      ],
+      "dh": "86e34db3",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_RecvRecalcEquippedItems2",
+      "address": "0045e2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e2d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_RecvRecalcEquippedItems2",
+        "ITEM_CltRecalcAllEquippedItems2"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x"
+      ],
+      "dh": "d79f6b90",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x53",
+      "address": "0045e300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e300"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x53",
+        "GetPlayerUnit_UI",
+        "GetCurrentRoom",
+        "DRLGENV_InitializeEnvironment",
+        "UpdateObjectAutoLightOnPeriodChange",
+        "ITEM_CltRecalcAllEquippedItems"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x53",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7fa55ef0",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x50",
+      "address": "0045e370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e370"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x50",
+        "NET_D2GS_CLIENT_Handle0x50_QuestSpecial"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x50"
+      ],
+      "dh": "73e0e2f1",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x54_Ignore",
+      "address": "0045e3b0",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "ENV_Rcv0x54_NoOp"
+      ],
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x4F",
+      "address": "0045e3c0",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x4F_INITMERCENARYLIST"
+      ],
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x4E_ADDTOMERCENARYLIST",
+      "address": "0045e3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e3d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x4E_ADDTOMERCENARYLIST",
+        "AddMercForHireToGlobalList"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x4E"
+      ],
+      "dh": "ea06de89",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x57_CHANGEMONSTERUNIT",
+      "address": "0045e400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e400"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x57_CHANGEMONSTERUNIT",
+        "UNITS_FindClientSideUnit",
+        "SetNameSeed",
+        "GetMonUModList",
+        "SetUnsetMonsterType",
+        "MONUNIQUE_ApplyModifierEffects"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x57",
+        "D2UnitStrc",
+        "uint16_t",
+        "uint8_t"
+      ],
+      "dh": "a65ae91a",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x58",
+      "address": "0045e490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e490"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x58",
+        "UI_HandleHoradricCubePacket"
+      ],
+      "usedTypes": [
+        "D2SCmdPayload_u32_u16_u"
+      ],
+      "dh": "bd24f87e",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x59_NEWPLAYERUNIT",
+      "address": "0045e4c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e4c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x59_NEWPLAYERUNIT",
+        "UNIT_CreatePlayer"
+      ],
+      "dh": "d03bbf56",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x5B",
+      "address": "0045e4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e4e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x5B",
+        "ROSTER_AllocOrUpdatePlayer"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x5B"
+      ],
+      "dh": "98cee71f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x5C",
+      "address": "0045e530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e530"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x5C",
+        "PlayerLeft"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x5C"
+      ],
+      "dh": "968fb48f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x5D",
+      "address": "0045e540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e540"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x5D",
+        "QUESTLOG_HandleQuestStatePacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketClt0x5D",
+        "D2GSPacketSrv0x5D"
+      ],
+      "dh": "d6fc156d",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x5E",
+      "address": "0045e570",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x5E_QUESTPICKS"
+      ],
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK",
+      "address": "0045e580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e580"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK",
+        "NPCMENU_MarkNpcSpeechesUpdated"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x91",
+        "uint8_t"
+      ],
+      "dh": "0e4a7ad8",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x92_CLEARINVENTORY",
+      "address": "0045e5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e5b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x92_CLEARINVENTORY",
+        "UNITS_FindClientSideUnit",
+        "ITEM_HandleUnsocketItems"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "7792faee",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x5F_PORTALFLAGS",
+      "address": "0045e5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e5d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x5F_PORTALFLAGS",
+        "GetPlayerUnit_Net",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetPlayerPortalFlags"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x5F",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "30670087",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x60_SETWARPDEST",
+      "address": "0045e610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e610"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x60_SETWARPDEST",
+        "GetPlayerUnit_Net",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "WAYPOINT_HandleActivation"
+      ],
+      "usedTypes": [
+        "D2SCmdPayload_u32_u16_u",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "e95802ef",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x61",
+      "address": "0045e660",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e660"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x61",
+        "thunk_ExitGamePlayCutScene",
+        "SetupMiniPanel"
+      ],
+      "dh": "7dbe53e3",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x63",
+      "address": "0045e670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e670"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x63",
+        "WAYPOINT_Init"
+      ],
+      "usedTypes": [
+        "D2SCmdPayload_5u32_u"
+      ],
+      "dh": "60840fbf",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x65_SCORE_UPDATE",
+      "address": "0045e6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e6b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x65_SCORE_UPDATE",
+        "ROSTER_SetArenaScore"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x65"
+      ],
+      "dh": "f7962f6a",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_Rcv0x66_Ignore",
+      "address": "0045e6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e6c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_Rcv0x66_Ignore"
+      ],
+      "dh": "90d9de4e",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x73_CreateMissile",
+      "address": "0045e6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e6d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "STATLIST_SetUnitStat",
+        "NET_D2GS_CLIENT_Incoming0x73_CreateMissile",
+        "GetPlayerUnit_Net",
+        "memset",
+        "MakeMissile",
+        "StoreOwnerInfo",
+        "SetCurrentFrame",
+        "RANDOM_RandomNumberSelector"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x73",
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "eMissilesId",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "5ef7942c",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x74",
+      "address": "0045e7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e7b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x74",
+        "PLAYER_HandlePlayerDeath"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x",
+        "D2GSPacketSrv0x74"
+      ],
+      "dh": "8c599953",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x75_UPDATEROSTER",
+      "address": "0045e7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e7e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x75_UPDATEROSTER",
+        "ROSTER_UpdatePlayerPartyInfo"
+      ],
+      "dh": "5f73a094",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x77",
+      "address": "0045e800",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x78_TRADENAME",
+      "address": "0045e810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e810"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x78_TRADENAME",
+        "TRADE_HandleTradeGoldUpdate"
+      ],
+      "usedTypes": [
+        "D2SCmdPayload_5u32_u"
+      ],
+      "dh": "be6e8aeb",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD",
+      "address": "0045e850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e850"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x79_TRADEGOLD",
+        "TRADE_HandleTradeComplete"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x79"
+      ],
+      "dh": "ca39031b",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x7A_UPDATEPET",
+      "address": "0045e860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e860"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x7A_UPDATEPET",
+        "AddRosterPet",
+        "RemoveRosterPet"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x7A"
+      ],
+      "dh": "ac7b70e6",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x81",
+      "address": "0045e890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e890"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x81",
+        "AddRosterPetMerc"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x81",
+        "D2RosterMercArg"
+      ],
+      "dh": "3c08594f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x7B_SYNCHOTKEYS",
+      "address": "0045e8d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e8d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x7B_SYNCHOTKEYS",
+        "SPELLSEL_SetSkillSlot"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x7B",
+        "uint32_t"
+      ],
+      "dh": "386da748",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x7C_SETITEMUNUSED",
+      "address": "0045e910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e910"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x7C_SETITEMUNUSED",
+        "ITEM_HandleServerItemAction"
+      ],
+      "usedTypes": [
+        "D2SCmdPayload_u32_u"
+      ],
+      "dh": "485ca013",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x7D",
+      "address": "0045e930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e930"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x7D",
+        "ITEM_HandleItemRepairBreak"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x7D"
+      ],
+      "dh": "3fd722f3",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x7E",
+      "address": "0045e970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e970"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x7E",
+        "GetPlayerUnit_UI",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "GetActNoFromLevelNumber",
+        "GFX_LoadMonsterCofArchive"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x7E",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eAct",
+        "eD2LevelId",
+        "uint32_t"
+      ],
+      "dh": "bb7833b6",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x7F",
+      "address": "0045e990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e990"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x7F",
+        "SetRosterHpAndArea",
+        "UpdateLifeAndArea"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x7F"
+      ],
+      "dh": "74ac6443",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x90_PARTYLOCUPDATE",
+      "address": "0045e9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e9c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x90_PARTYLOCUPDATE",
+        "SetRosterPosition"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x90"
+      ],
+      "dh": "bba65eb8",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x82_LINKTOWNPORTAL",
+      "address": "0045e9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045e9d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x82_LINKTOWNPORTAL",
+        "UNITS_FindClientSideUnit",
+        "SetObjectDataOwnerName",
+        "SetRosterPortalGuidAndDestArea"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x82",
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "e5aa7690",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x89",
+      "address": "0045ea30",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x89_QUESTEVENTTRIGGER"
+      ],
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x8A",
+      "address": "0045ea40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ea40"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x8A",
+        "NPCMENU_HandleMercListPacket"
+      ],
+      "usedTypes": [
+        "D2SCmdPayload_u32_u"
+      ],
+      "dh": "fba6cfa7",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x8B_PLAYERBUTTON",
+      "address": "0045ea60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ea60"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x8B_PLAYERBUTTON",
+        "SetRosterInParty"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x8B"
+      ],
+      "dh": "6ea07078",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x8C_PLAYERFLAGS",
+      "address": "0045ea70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ea70"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x8C_PLAYERFLAGS",
+        "ROSTER_SetPlayerHostileFlag"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x8C"
+      ],
+      "dh": "cc96d300",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY",
+      "address": "0045ea90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ea90"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x8D_PLAYERPARTY",
+        "SetRosterPartyId"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x8D"
+      ],
+      "dh": "bcee279c",
+      "paramStorage": [
+        [
+          "pPacket",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x8E_LINKDEADBODY",
+      "address": "0045eaa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045eaa0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x8E_LINKDEADBODY",
+        "AllocRosterOther",
+        "FreeAllRosterPlayer"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x8E"
+      ],
+      "dh": "840cd294",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x9B_DEAD_HIRELING",
+      "address": "0045eac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045eac0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x9B_DEAD_HIRELING",
+        "SetPlayersMercInfo"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0x9B"
+      ],
+      "dh": "29f74a70",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x9",
+      "address": "0045ead0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ead0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x9",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "INV_ToggleExpansionTab"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "a7e3ea2a",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x8F",
+      "address": "0045eb00",
+      "lines": [],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING"
+      ],
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x9C_ITEMEX",
+      "address": "0045eb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045eb10"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x9C_ITEMEX",
+        "HandleItemAddToGround",
+        "HandleItemPickedFromGround",
+        "HandleItemDroppedToGround",
+        "HandleItemOnGround",
+        "HandleItemPutInContainer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_D2GS_CLIENT_HandleItemAddQuantity",
+        "HandleItemInShop",
+        "HandleItemSwapInContainer",
+        "HandleItemPutInBelt",
+        "HandleItemRemoveFromBelt",
+        "HandleItemSwapInBelt",
+        "HandleItemToCursor"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "718b267c",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0x9D",
+      "address": "0045ec70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ec70"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0x9D",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "HandleItemRemoveFromContainer",
+        "HandleItemEquip",
+        "HandleItemIndirectSwapBodyItem",
+        "HandleItemUnequip",
+        "HandleItemSwapBodyItem",
+        "HandleItemAutoUnequip",
+        "HandleItemInSocket",
+        "ITEM_HandleItemMoveToBodyLoc",
+        "HandleItemUpdateStats",
+        "ITEM_HandleItemCopyToCursor",
+        "HandleItemWeaponSwitch"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "13b1a532",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xA6",
+      "address": "0045edc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045edc0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xA6",
+        "ITEMTBLS_CopyRunewordRecord"
+      ],
+      "dh": "60e4d1c9",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xA7",
+      "address": "0045ede0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ede0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xA7",
+        "UNITS_FindClientSideUnit",
+        "STATES_SetStateOnUnit",
+        "STATES_DispatchSetFunc"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0xA7",
+        "D2UnitStrc",
+        "uint8_t"
+      ],
+      "dh": "8681fd07",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX",
+      "address": "0045ee20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ee20"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xA8_UNITSTATE_ONVAL_EX",
+        "UNITS_FindClientSideUnit",
+        "STATES_SetStateOnUnit",
+        "InitBitBuffer",
+        "ReadUnsigned",
+        "ReadSigned",
+        "NET_D2GS_CLIENT_HandleAddSTatUnit",
+        "STATES_DispatchSetFunc"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2GSPacketSrv0xA8",
+        "D2ItemStatCostTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "3fbba2ae",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xA9_UNITSTATE_OFF_EX",
+      "address": "0045ef60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045ef60"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xA9_UNITSTATE_OFF_EX",
+        "UNITS_FindClientSideUnit",
+        "STATES_DispatchRemFunc",
+        "PLRSKILLS_RemoveStateFromUnit"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0xA9",
+        "D2UnitStrc",
+        "uint8_t"
+      ],
+      "dh": "d7857e45",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX",
+      "address": "0045efa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045efa0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xAA_UNITSTATE_ALL_EX",
+        "UNITS_FindClientSideUnit",
+        "InitBitBuffer",
+        "ReadUnsigned",
+        "STATES_SetStateOnUnit",
+        "ReadSigned",
+        "NET_D2GS_CLIENT_HandleAddSTatUnit",
+        "STATES_DispatchSetFunc"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2GSPacketSrv0xAA",
+        "D2ItemStatCostTxt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2Skills",
+        "eD2States",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "4af735cc",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xAB",
+      "address": "0045f120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045f120"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xAB",
+        "UNITS_FindClientSideUnit",
+        "GetPlayerUnit_Net",
+        "STATLIST_SetUnitStat",
+        "SetRosterPlayerHpPercent"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0xAB",
+        "D2UnitStrc"
+      ],
+      "dh": "cfcfdd5e",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xAC",
+      "address": "0045f190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045f190"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xAC",
+        "InitBitBuffer",
+        "ReadUnsigned",
+        "ReadSigned",
+        "PALSHIFT_LoadMonsterPalShift",
+        "UNIT_CreateMonster",
+        "ANIM_ResetMonsterFrameCache",
+        "MONSTER_GetMercType",
+        "GetPlayerUnit_UI",
+        "GetRosterPetGUID",
+        "STATLIST_SetUnitStat",
+        "StoreOwnerInfo",
+        "GetStatList",
+        "GetGUID",
+        "GetType",
+        "AllocStatList",
+        "SetState",
+        "STATLIST_AttachStatListToUnit",
+        "D2AddStatToStatsListEx"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2CreateMonsterUnitStrc",
+        "D2ItemStatCostTxt",
+        "D2MonStats2Txt",
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "edbb0cf7",
+      "paramStorage": [
+        [
+          "pPacketData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA",
+      "address": "0045f5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045f5f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA",
+        "WARDEN_HandleServerPacket"
+      ],
+      "usedTypes": [
+        "D2GSPacketSrv0xAE"
+      ],
+      "dh": "f3a293b0",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "STRUCT_CreateAndPreprareServerCmd",
+      "address": "0045f610",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045f610"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "STRUCT_CreateAndPreprareServerCmd",
+        "GetServerCmd",
+        "AllocClientMemory",
+        "SetServerCmd",
+        "memset",
+        "memcpy",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2ServerCmdStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "73eafadb",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_PutIncomingBytesIntoServerCmdStructure",
+      "address": "0045f730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045f730"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_PutIncomingBytesIntoServerCmdStructure",
+        "GetServerCmd",
+        "STRUCT_CreateAndPreprareServerCmd",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2ServerCmdStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "b3d1bd03",
+      "paramStorage": [
+        [
+          "nExpectedSize",
+          "EBX:4"
+        ],
+        [
+          "pUnit",
+          "EDI:4"
+        ],
+        [
+          "pBytes",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_D2GS_CLIENT_PacketHandle_to0xAF",
+      "address": "0045f7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045f7b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "NET_D2GS_CLIENT_PacketHandle_to0xAF",
+        "GetTickCount",
+        "NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UNITS_FindClientSideUnit",
+        "NET_D2GS_CLIENT_PutIncomingBytesIntoServerCmdStructure",
+        "DecodeIncoming0x18",
+        "DecodeIncoming0x95",
+        "DecodeIncoming0x96"
+      ],
+      "usedTypes": [
+        "D2NET_CLIENT_D2GS_ServerToClient",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "4ce3e14d",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "FreeServerCmd",
+      "address": "0045f9f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045f9f0"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "FreeServerCmd",
+        "GetServerCmd",
+        "FreeClientMemory",
+        "SetServerCmd"
+      ],
+      "usedTypes": [
+        "D2ServerCmdStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "26812e18",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SCMD_ProcessIncomingPacketBuffer",
+      "address": "0045fa40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0045fa40"
+        }
+      ],
+      "namespace": "D2Client::GAME::SCmd",
+      "calledFunctions": [
+        "SCMD_ProcessIncomingPacketBuffer",
+        "GetServerCmd",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2ServerCmdStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ],
+      "dh": "32ec21e2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

@@ -4,16 +4,16 @@
 #include "Source/D2CMP/D2CMP.h"
 #include "Source/D2Common/D2RoomStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/FieldTbls.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/DataTbls/FieldTbls.h"
+#include "Source/D2Common/Dungeon/Dungeon.h"
 #include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgTileDataStrc.h"
 #include "Source/D2Common/Drlg/Transform.h"
-#include "Source/D2Common/PATH/DynamicPath.h"
-#include "Source/D2Common/Units.h"
+#include "Source/D2Common/Path/DynamicPath.h"
+#include "Source/D2Common/Units/Units.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

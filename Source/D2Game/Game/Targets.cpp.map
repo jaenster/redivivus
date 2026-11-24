@@ -1,0 +1,215 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Game/Game/Targets.cpp",
+  "functions": [
+    {
+      "name": "TARGETS_AddTargetToTrackingList",
+      "address": "005b1880",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1880"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "TARGETS_AddTargetToTrackingList",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2NodeUnkownStrc",
+        "D2UnitNodeStrc",
+        "D2UnitNodeStrc *",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ],
+      "dh": "c013ead0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNodeUnknown",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CreateUnitNode",
+      "address": "005b1900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1900"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "CreateUnitNode",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2NodeUnkownStrc",
+        "D2UnitNodeStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ],
+      "dh": "dad77eb5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pUnknown",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTableIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "AddNodeToTable",
+      "address": "005b1990",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1990"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "AddNodeToTable",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2NodeUnkownStrc",
+        "D2UnitNodeStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ],
+      "dh": "62c12d5e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pNodeUnknown",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nNodeTableIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UNIT_FreeUnitNodes",
+      "address": "005b1a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1a20"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "UNIT_FreeUnitNodes",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitNodeStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ],
+      "dh": "60cc7168",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "MONSTER_FreeUnitNodes",
+      "address": "005b1a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1a90"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "MONSTER_FreeUnitNodes",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2UnitNodeStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ],
+      "dh": "8926bf73",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TARGETS_FreeAllUnitNodes",
+      "address": "005b1b70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005b1b70"
+        }
+      ],
+      "namespace": "D2Game::GAME::Targets",
+      "calledFunctions": [
+        "TARGETS_FreeAllUnitNodes",
+        "UNIT_FreeUnitNodes"
+      ],
+      "usedTypes": [
+        "D2UnitNodeStrc",
+        "D2UnitNodeStrc *",
+        "SGAMEDATA"
+      ],
+      "dh": "a13f2efc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

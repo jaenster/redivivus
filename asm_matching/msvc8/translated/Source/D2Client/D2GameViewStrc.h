@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/GAME/Wall2.h"
+#include "Source/D2Client/Game/Wall2.h"
 
 // Data types
 #ifndef D2_DEFINED_D2Wall2CellStrc

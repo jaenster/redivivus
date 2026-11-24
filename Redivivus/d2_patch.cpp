@@ -35,11 +35,11 @@
 #include "Redivivus/d2_patch.h"
 #include "Redivivus/d2_trace.h"
 
-#include "Source/D2CMP/SRC/LRUCache.h"
-#include "Source/D2Game/GAME/CCmd.h"
+#include "Source/D2CMP/Src/LRUCache.h"
+#include "Source/D2Game/Game/CCmd.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2Common.globals.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
+#include "Source/D2Common/DataTbls/LvlTbls.h"
 #include "Source/D2Win/D2Win.globals.h"
 #include "Source/Fog/Source/SFile.h"
 

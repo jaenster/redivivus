@@ -1,0 +1,717 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Bnclient/SRP/SHA.cpp",
+  "functions": [
+    {
+      "name": "SHA1_HashWideString",
+      "address": "0052a120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a120"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_HashWideString",
+        "SMemAlloc",
+        "SHA1Init",
+        "SHA1Update",
+        "SHA1Final",
+        "SMemFree",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2BnSha1ContextStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "de9a117e",
+      "paramStorage": [
+        [
+          "pHashOut",
+          "ECX:4"
+        ],
+        [
+          "pWideStr",
+          "EDX:4"
+        ],
+        [
+          "nLength",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntFromUnsigned",
+      "address": "0052a240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a240"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntFromUnsigned",
+        "SBigNew",
+        "SBigFromUnsigned"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "e6d10b19",
+      "paramStorage": [
+        [
+          "nValue",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_FromBigIntBytes",
+      "address": "0052a270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a270"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_FromBigIntBytes",
+        "SBigNew",
+        "SBigFromBinary"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "979ea84c",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nByteCount",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_ToBigIntBytes",
+      "address": "0052a2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a2a0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_ToBigIntBytes",
+        "SBigToBinaryBuffer",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "6c4a00e6",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ],
+        [
+          "pOutBuf",
+          "EDX:4"
+        ],
+        [
+          "nBufSize",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_CompareBigInt",
+      "address": "0052a2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a2e0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_CompareBigInt",
+        "SBIG_CompareBigBuffers_ForSha1"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t"
+      ],
+      "dh": "eb2f619f",
+      "paramStorage": [
+        [
+          "pBigA",
+          "ECX:4"
+        ],
+        [
+          "pBigB",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntCompareValue",
+      "address": "0052a2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a2f0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SBIG_CompareBigBuffers_ForSha1",
+        "SHA1_BigIntCompareValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "bcec9da7",
+      "paramStorage": [
+        [
+          "pBigInt",
+          "ECX:4"
+        ],
+        [
+          "dwValue",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntShl",
+      "address": "0052a330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a330"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SBigShl",
+        "SHA1_BigIntShl"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "0d7ad03d",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigSrc",
+          "EDX:4"
+        ],
+        [
+          "nShiftBits",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntAdd",
+      "address": "0052a350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a350"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntAdd",
+        "SBigAdd"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "3d1aca0e",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntAddValue",
+      "address": "0052a370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a370"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntAddValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigAdd",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "6be75f98",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntSub",
+      "address": "0052a3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a3b0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntSub",
+        "SBigSub"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "ca5148ac",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigIntA",
+          "EDX:4"
+        ],
+        [
+          "pBigIntB",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntSubValue",
+      "address": "0052a3d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a3d0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntSubValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigSub",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "8dd5e20a",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntMul",
+      "address": "0052a410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a410"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntMul",
+        "SBigMul"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "f64cfe93",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntMulValue",
+      "address": "0052a430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a430"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntMulValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigMul",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "7e6da243",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntDivValue",
+      "address": "0052a470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a470"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntDivValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigDiv",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "81cbfc15",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "dwDivisor",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntMod",
+      "address": "0052a4b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a4b0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntMod",
+        "SBigMod"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "296a2abb",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntModToInt",
+      "address": "0052a4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a4d0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntModToInt",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigMod",
+        "SBigToBinaryBuffer",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "4fca5dd8",
+      "paramStorage": [
+        [
+          "pBigInt",
+          "ECX:4"
+        ],
+        [
+          "dwModulus",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntMulMod",
+      "address": "0052a560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a560"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntMulMod",
+        "SBigMul",
+        "SBigMod"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "577f5084",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBigA",
+          "EDX:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntPowMod",
+      "address": "0052a590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a590"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntPowMod",
+        "SBigPowMod"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "396069a2",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBase",
+          "EDX:4"
+        ],
+        [
+          "pExponent",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntPowModValue",
+      "address": "0052a5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a5b0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntPowModValue",
+        "SBigNew",
+        "SBigFromUnsigned",
+        "SBigPowMod",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "e05c5547",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "pBase",
+          "EDX:4"
+        ],
+        [
+          "dwExponent",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0052a5f0",
+      "address": "0052a5f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a5f0"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "Unreferenced_0052a5f0",
+        "SBigIsPrime"
+      ],
+      "dh": "47454a64",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA1_BigIntFree",
+      "address": "0052a600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0052a600"
+        }
+      ],
+      "namespace": "Bnclient::SHA",
+      "calledFunctions": [
+        "SHA1_BigIntFree",
+        "SBigDel"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "560d295c",
+      "paramStorage": [
+        [
+          "pBigData",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

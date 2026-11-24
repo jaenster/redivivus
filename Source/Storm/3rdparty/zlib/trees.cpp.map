@@ -1,0 +1,776 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Storm/3rdparty/zlib/trees.cpp",
+  "functions": [
+    {
+      "name": "tr_static_init_Unref_00421040",
+      "address": "00421040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421040"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_00421040"
+      ],
+      "dh": "dc808ec1"
+    },
+    {
+      "name": "tr_static_init_Unref_00421060",
+      "address": "00421060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421060"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_00421060"
+      ],
+      "dh": "3d73605f"
+    },
+    {
+      "name": "tr_static_init_Unref_00421070",
+      "address": "00421070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421070"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_00421070"
+      ],
+      "dh": "a2d28304"
+    },
+    {
+      "name": "tr_static_init_Unref_00421080",
+      "address": "00421080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421080"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_00421080"
+      ],
+      "dh": "3a09bc87"
+    },
+    {
+      "name": "tr_static_init_Unref_004212b0",
+      "address": "004212b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004212b0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init_Unref_004212b0"
+      ],
+      "dh": "0d970019"
+    },
+    {
+      "name": "tr_static_init",
+      "address": "0042b9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b9d0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "tr_static_init"
+      ],
+      "dh": "03d0fa05"
+    },
+    {
+      "name": "init_block",
+      "address": "0042b9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042b9e0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "init_block"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "deflate_state"
+      ],
+      "dh": "83372920",
+      "paramStorage": [
+        [
+          "s",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "pqdownheap",
+      "address": "0042ba50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042ba50"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "pqdownheap"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "deflate_state",
+        "int32_t"
+      ],
+      "dh": "05af6347",
+      "paramStorage": [
+        [
+          "k",
+          "Stack[0x4]:4"
+        ],
+        [
+          "s",
+          "EAX:4"
+        ],
+        [
+          "tree",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "gen_bitlen",
+      "address": "0042bb30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042bb30"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "gen_bitlen"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "deflate_state",
+        "int32_t",
+        "static_tree_desc",
+        "tree_desc",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "8b54ee5a",
+      "paramStorage": [
+        [
+          "desc",
+          "ECX:4"
+        ],
+        [
+          "s",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "scan_tree",
+      "address": "0042bd30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042bd30"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "scan_tree"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "deflate_state",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "5f566db7",
+      "paramStorage": [
+        [
+          "max_code",
+          "ECX:4"
+        ],
+        [
+          "s",
+          "Stack[0x4]:4"
+        ],
+        [
+          "tree",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "send_tree",
+      "address": "0042be10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042be10"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "send_tree"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "deflate_state",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "1d68a387",
+      "paramStorage": [
+        [
+          "s",
+          "EAX:4"
+        ],
+        [
+          "tree",
+          "EDX:4"
+        ],
+        [
+          "max_code",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "send_all_trees",
+      "address": "0042c390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042c390"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "send_all_trees",
+        "send_tree"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "83e5f08c",
+      "paramStorage": [
+        [
+          "lcodes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dcodes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "blcodes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "s",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "_tr_tally",
+      "address": "0042c600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042c600"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "_tr_tally"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "b03f2d8a",
+      "paramStorage": [
+        [
+          "s",
+          "ECX:4"
+        ],
+        [
+          "dist",
+          "EDX:4"
+        ],
+        [
+          "lc",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "compress_block",
+      "address": "0042c6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042c6a0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "compress_block"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "deflate_state",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "ed9157c2",
+      "paramStorage": [
+        [
+          "ltree",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dtree",
+          "Stack[0x8]:4"
+        ],
+        [
+          "s",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "detect_data_type",
+      "address": "0042cab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042cab0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "detect_data_type"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "deflate_state",
+        "uint32_t"
+      ],
+      "dh": "28f87aae",
+      "paramStorage": [
+        [
+          "s",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "bi_reverse",
+      "address": "0042cb20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042cb20"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "bi_reverse"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "2e6b6598",
+      "paramStorage": [
+        [
+          "code",
+          "ECX:4"
+        ],
+        [
+          "len",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "bi_flush",
+      "address": "0042cb40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042cb40"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "bi_flush"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint8_t"
+      ],
+      "dh": "e58c24f0",
+      "paramStorage": [
+        [
+          "s",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "bi_windup",
+      "address": "0042cbc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042cbc0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "bi_windup"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "uint8_t"
+      ],
+      "dh": "e0c39d50",
+      "paramStorage": [
+        [
+          "s",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "copy_block",
+      "address": "0042cc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042cc40"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "copy_block"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "64600c61",
+      "paramStorage": [
+        [
+          "s",
+          "EAX:4"
+        ],
+        [
+          "buf",
+          "EDX:4"
+        ],
+        [
+          "len",
+          "ECX:4"
+        ],
+        [
+          "header",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "_tr_init",
+      "address": "0042ccd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042ccd0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "_tr_init",
+        "init_block"
+      ],
+      "usedTypes": [
+        "deflate_state"
+      ],
+      "dh": "ccb1085f",
+      "paramStorage": [
+        [
+          "s",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "gen_codes",
+      "address": "0042cd30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042cd30"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "gen_codes",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "e2c7a55c",
+      "paramStorage": [
+        [
+          "tree",
+          "EDI:4"
+        ],
+        [
+          "max_code",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bl_count",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "build_tree",
+      "address": "0042cdd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042cdd0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "build_tree",
+        "pqdownheap",
+        "gen_bitlen",
+        "gen_codes"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "deflate_state",
+        "int32_t",
+        "tree_desc",
+        "uint8_t"
+      ],
+      "dh": "ed00f1bd",
+      "paramStorage": [
+        [
+          "desc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "s",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "build_bl_tree",
+      "address": "0042cfd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042cfd0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "build_bl_tree",
+        "scan_tree",
+        "build_tree"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t"
+      ],
+      "dh": "d3cf4247",
+      "paramStorage": [
+        [
+          "s",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "_tr_stored_block",
+      "address": "0042d0a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d0a0"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "_tr_stored_block",
+        "copy_block"
+      ],
+      "usedTypes": [
+        "deflate_state",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "c032180b",
+      "paramStorage": [
+        [
+          "s",
+          "ECX:4"
+        ],
+        [
+          "buf",
+          "EDX:4"
+        ],
+        [
+          "stored_len",
+          "Stack[0x4]:4"
+        ],
+        [
+          "last",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "_tr_flush_bits",
+      "address": "0042d150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d150"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "_tr_flush_bits",
+        "bi_flush"
+      ],
+      "usedTypes": [
+        "deflate_state"
+      ],
+      "dh": "135538a5",
+      "paramStorage": [
+        [
+          "s",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "_tr_align",
+      "address": "0042d160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d160"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "_tr_align",
+        "bi_flush"
+      ],
+      "usedTypes": [
+        "deflate_state"
+      ],
+      "dh": "ffed38ff",
+      "paramStorage": [
+        [
+          "s",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "_tr_flush_block",
+      "address": "0042d250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042d250"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::trees",
+      "calledFunctions": [
+        "_tr_flush_block",
+        "detect_data_type",
+        "build_tree",
+        "build_bl_tree",
+        "send_all_trees",
+        "compress_block",
+        "_tr_stored_block",
+        "init_block"
+      ],
+      "usedTypes": [
+        "ct_data",
+        "deflate_state",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "z_stream"
+      ],
+      "dh": "84b851cd",
+      "paramStorage": [
+        [
+          "s",
+          "ECX:4"
+        ],
+        [
+          "buf",
+          "EDX:4"
+        ],
+        [
+          "stored_len",
+          "Stack[0x4]:4"
+        ],
+        [
+          "last",
+          "Stack[0x8]:4"
+        ]
+      ]
+    }
+  ]
+}

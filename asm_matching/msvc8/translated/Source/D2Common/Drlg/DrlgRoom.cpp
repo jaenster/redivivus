@@ -3,7 +3,7 @@
 #include "Source/D2Common/Drlg/DrlgRoom.h"
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
+#include "Source/D2Common/DataTbls/LvlTbls.h"
 #include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgCoordsStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
@@ -17,7 +17,7 @@
 #include "Source/D2Common/Drlg/OutRoom.h"
 #include "Source/D2Common/Drlg/Preset.h"
 #include "Source/D2Common/Drlg/RoomTile.h"
-#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Skills/Skills.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 

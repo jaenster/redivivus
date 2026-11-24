@@ -41,9 +41,9 @@ const VENDORED = [_][]const u8{ "3rdparty/libbacktrace", "3rdparty/implibs" };
 /// Trees beside the game that are not part of Game.exe and are not translated: D2Server is
 /// the 1.00 game-server host, built by CMake as its own object library (d2server_objs);
 /// Source/D2OpenGL is the Mac binary's renderer (Apple Clang), measured against the Mac, never
-/// here; StormMac, the Mac Storm project at the top of the tree, is Mac-only code, built by the
+/// here; Source/StormMac, the Mac Storm project, is Mac-only code, built by the
 /// Mac toolchain (d2_mac_objs), and so is Source/MacSpecific, the game's Mac shell and CD2Textures.
-pub const NOT_GAME = [_][]const u8{ "Source/D2Server", "Source/D2OpenGL", "Source/MacSpecific", "StormMac" };
+pub const NOT_GAME = [_][]const u8{ "Source/D2Server", "Source/D2OpenGL", "Source/MacSpecific", "Source/StormMac" };
 const HEADERS_ONLY_BUT = "Redivivus/ghidra_version.cpp";
 
 // ---- configuration (the defaults audit.zig's Config reads too)

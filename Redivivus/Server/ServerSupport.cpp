@@ -6,7 +6,7 @@
 
 #include <cstdint>
 
-#include "3rdparty/Storm/Source/SMem.h"
+#include "Source/Storm/Source/SMem.h"
 #include "Redivivus/d2_trace.h"
 
 // The per-opcode packet counters the engine's packet handlers bump (declared in

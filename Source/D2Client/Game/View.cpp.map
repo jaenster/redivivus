@@ -1,0 +1,919 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Client/Game/View.cpp",
+  "functions": [
+    {
+      "name": "DRAW_CoordIsInCoord",
+      "address": "00475aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475aa0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "DRAW_CoordIsInCoord"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "dff4e79a",
+      "paramStorage": [
+        [
+          "nWorldX",
+          "ECX:4"
+        ],
+        [
+          "nWorldY",
+          "EDX:4"
+        ],
+        [
+          "pOutIntensity",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutRed",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutGreen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pOutBlue",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawLight",
+      "address": "00475b20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475b20"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "DrawLight",
+        "D2GFX_DrawLight"
+      ],
+      "dh": "12c3daa3"
+    },
+    {
+      "name": "VIEW_Init",
+      "address": "00475b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475b40"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_Init",
+        "SetActCallbackFunc"
+      ],
+      "usedTypes": [
+        "uint64_t"
+      ],
+      "dh": "a7ec0278"
+    },
+    {
+      "name": "VIEW_AllocByteTable",
+      "address": "00475b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475b80"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_AllocByteTable",
+        "D2MEM_VirtualAlloc"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "bf889987",
+      "paramStorage": [
+        [
+          "nDim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00475c30",
+      "address": "00475c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475c30"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "Unreferenced_00475c30",
+        "D2MEM_VirtualFree"
+      ],
+      "dh": "f3ba134d",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "VIEW_AllocPalettePointerTable",
+      "address": "00475c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475c40"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_AllocPalettePointerTable",
+        "D2MEM_VirtualAlloc"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t *"
+      ],
+      "dh": "f5406450",
+      "paramStorage": [
+        [
+          "nDim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00475d20",
+      "address": "00475d20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475d20"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "Unreferenced_00475d20",
+        "D2MEM_VirtualFree"
+      ],
+      "dh": "7b5afa42",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "VIEW_AllocPalettePointerTable2",
+      "address": "00475d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475d30"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_AllocPalettePointerTable2",
+        "D2MEM_VirtualAlloc"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t *"
+      ],
+      "dh": "d719ad47",
+      "paramStorage": [
+        [
+          "nDim",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSteps",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00475de0",
+      "address": "00475de0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475de0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "Unreferenced_00475de0",
+        "D2MEM_VirtualFree"
+      ],
+      "dh": "ebd0005b",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "VIEW_InitLookupTables",
+      "address": "00475df0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475df0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_InitLookupTables",
+        "D2WINPAL_CopyPalette",
+        "VIEW_AllocPalettePointerTable",
+        "VIEW_AllocByteTable",
+        "VIEW_AllocPalettePointerTable2",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "3439c704"
+    },
+    {
+      "name": "VIEW_FreeDC6Images",
+      "address": "00475eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475eb0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_FreeDC6Images",
+        "DC6_FreeAndDelete"
+      ],
+      "dh": "e0de4e5a"
+    },
+    {
+      "name": "VIEW_FreeLookupTables",
+      "address": "00475ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475ef0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_FreeLookupTables",
+        "D2MEM_VirtualFree",
+        "VIEW_FreeDC6Images",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "250c2a22"
+    },
+    {
+      "name": "FreeGameView",
+      "address": "00475fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475fd0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "FreeGameView",
+        "FreeWall2",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc"
+      ],
+      "dh": "83b3d692",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetFlag0x1",
+      "address": "00475ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00475ff0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "SetFlag0x1"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc"
+      ],
+      "dh": "b33b7399",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetViewRectangleSize",
+      "address": "00476000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476000"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "SetViewRectangleSize",
+        "D2GFX_IsPerspectiveActive"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "int32_t",
+        "tagRECT"
+      ],
+      "dh": "808dc2d2",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "xLeft",
+          "EDX:4"
+        ],
+        [
+          "yTop",
+          "Stack[0x4]:4"
+        ],
+        [
+          "xRight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "yBottom",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "VIEW_GetViewRect",
+      "address": "00476070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476070"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_GetViewRect"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc"
+      ],
+      "dh": "1bf2f55d",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "pLeft",
+          "EDX:4"
+        ],
+        [
+          "pTop",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRight",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBottom",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetCenterXY",
+      "address": "004760a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004760a0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "SetCenterXY"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "uint32_t"
+      ],
+      "dh": "6b5af31a",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "x",
+          "EDX:4"
+        ],
+        [
+          "y",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetCenterXY",
+      "address": "004760c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004760c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "GetCenterXY"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc"
+      ],
+      "dh": "1c37e5d4",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "nCenterX",
+          "EDX:4"
+        ],
+        [
+          "nCenterY",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "VIEW_ConvertViewCoordsToIsometric",
+      "address": "004760e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004760e0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_ConvertViewCoordsToIsometric",
+        "DRLG_OrthToIsoCoordsDiv32",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "int32_t"
+      ],
+      "dh": "3ff8a82c",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "nOffsetX",
+          "EDX:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutY",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GAMEVIEW_PrepareScene",
+      "address": "00476140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476140"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "GAMEVIEW_PrepareScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRAW_GetTypeOfBorder",
+        "WALL2_BuildSceneDrawList"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5f5475d0",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ],
+        [
+          "nFlags",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "VIEW_GenerateRandomViewParams",
+      "address": "00476190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476190"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_GenerateRandomViewParams",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "fa30ad4e",
+      "paramStorage": [
+        [
+          "nStarIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRespawn",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRAW_Overlay_ArcaneStars",
+      "address": "00476290",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476290"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "DRAW_Overlay_ArcaneStars",
+        "SEED_InitDefault",
+        "SEED_GenerateRandomSeed",
+        "InitSeed_Param_666",
+        "D2GFX_GetColorFromCurrentPallete",
+        "VIEW_GenerateRandomViewParams",
+        "D2GFX_DrawLine",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "uint32_t"
+      ],
+      "dh": "4d10e0d9"
+    },
+    {
+      "name": "DRAW_Background_Ancients",
+      "address": "00476460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476460"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "DRAW_Background_Ancients",
+        "GetScreenX",
+        "IMAGE_LoadDC6Ex",
+        "memset",
+        "D2GFX_DrawImage",
+        "D2GFX_GetResolutionMode",
+        "SEED_InitDefault",
+        "GetTickCount",
+        "SEED_GenerateRandomSeed",
+        "InitSeed_Param_666",
+        "UNIT_GetModuloFromSeed"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "DC6",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "65650cff",
+      "paramStorage": [
+        [
+          "pPlayerUnit",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "VIEW_ToggleFrameDrawCounter",
+      "address": "004769b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004769b0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "VIEW_ToggleFrameDrawCounter"
+      ],
+      "dh": "949383d7"
+    },
+    {
+      "name": "SHAKE_UpdateShakeSoundVolume",
+      "address": "004769d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004769d0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "SHAKE_UpdateShakeSoundVolume",
+        "SOUND_PlaySound",
+        "SOUND_SetChannelPriority",
+        "SOUND_SetMasterVolume",
+        "SOUND_StopById"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d62ed24a",
+      "paramStorage": [
+        [
+          "nShakeIntensity",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetShake",
+      "address": "00476a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476a80"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "SetShake",
+        "GetTickCount"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "85432c1f",
+      "paramStorage": [
+        [
+          "nAmplitude",
+          "ECX:4"
+        ],
+        [
+          "nArg3",
+          "EDX:4"
+        ],
+        [
+          "nArg1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nArg2",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHAKE_GetShake",
+      "address": "00476ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476ac0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "SHAKE_GetShake"
+      ],
+      "dh": "c1b4bb5c",
+      "paramStorage": [
+        [
+          "pShakeX",
+          "ECX:4"
+        ],
+        [
+          "pShakeY",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHAKE_Reset",
+      "address": "00476af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476af0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "SHAKE_Reset"
+      ],
+      "dh": "9b3cdf90"
+    },
+    {
+      "name": "AllocGameView",
+      "address": "00476b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476b10"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "AllocGameView",
+        "AllocClientMemory",
+        "WALL2_OnAllocGameView_NoOp",
+        "ResetWall2Data",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "int32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "baa7e3fe"
+    },
+    {
+      "name": "ViewDraw2",
+      "address": "00476bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476bc0"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "ViewDraw2",
+        "D2GFX_UpdateScaleFactor",
+        "D2GFX_GetScaleFactor",
+        "D2GFX_IsPerspectiveActive",
+        "GetPlayerUnit_UI",
+        "GetPrecisionX",
+        "GetPrecisionY",
+        "DRLG_ScreenToWorldShift5",
+        "D2GFX_SetPerspectiveScale",
+        "gnRecordingIndex",
+        "dLightMapUpdate",
+        "dInitWallDraw",
+        "UNITS_GetRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "DRAW_Overlay_ArcaneStars",
+        "DRAW_Background_Ancients",
+        "DC6_FreeAndDelete",
+        "DRAW_WORLD_UnderFloor",
+        "dFloorDraw",
+        "DRAW_WORLD_RainEffectOnFloor",
+        "dShadowPass",
+        "dWallPass",
+        "dRoofDraw",
+        "DrawLight",
+        "D2GFX_SetDefaultScaleFactor",
+        "DRAW_Overlay_Weather",
+        "dSceneTransitionDraw"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "f45b2091",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHAKE_AdjustCenterByShake",
+      "address": "00476d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00476d40"
+        }
+      ],
+      "namespace": "D2Client::GAME::View",
+      "calledFunctions": [
+        "SHAKE_AdjustCenterByShake",
+        "GetTickCount",
+        "SHAKE_UpdateShakeSoundVolume",
+        "GetPlayerUnit_UI",
+        "RollBetweenMinAndMax"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "398dbd76",
+      "paramStorage": [
+        [
+          "pCenterX",
+          "ECX:4"
+        ],
+        [
+          "pCenterY",
+          "EDX:4"
+        ]
+      ]
+    }
+  ]
+}

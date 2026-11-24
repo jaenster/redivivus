@@ -4,11 +4,11 @@
 #include "Source/D2CMP/D2CMP.h"
 #include "Source/D2Client/Core/Archive.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
-#include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/Game/Game.h"
 #include "Source/D2Client/Sound/Sound.h"
 #include "Source/D2Client/UI/Path.h"
-#include "Source/D2Client/UNIT/CUnit.h"
-#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/Unit/CUnit.h"
+#include "Source/D2Client/Unit/Player.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Game/D2Game.h"
@@ -18,7 +18,7 @@
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Draw/Weather.data.h"
-#include "Source/D2Client/GAME/Game/Game.data.h"
+#include "Source/D2Client/Game/Game.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

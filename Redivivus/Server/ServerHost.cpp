@@ -18,9 +18,9 @@
 #include "Source/globals/globals.h"
 #include "Source/D2Client/D2IniConfigStrc.h"                // D2IniConfigStrc, filed under D2Client
 #include "Source/D2Client/D2BattleNetEventCallbackTable.h"  // the realm table, filed under D2Client
-#include "Source/D2Client/GAME/Game/SGAMEDATA.h"            // the game table's element, filed under D2Client
-#include "3rdparty/Storm/H/stpl.h"
-#include "Source/D2Game/GAME/Server.h"
+#include "Source/D2Client/Game/Game/SGAMEDATA.h"            // the game table's element, filed under D2Client
+#include "Source/Storm/H/stpl.h"
+#include "Source/D2Game/Game/Server.h"
 #include "Source/D2Net/D2Net.h"
 #include "Redivivus/Server/ServerHost.h"
 #include "Redivivus/Server/ServerLog.h"

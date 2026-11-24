@@ -1,0 +1,5341 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Storm/Source/SBig.cpp",
+  "functions": [
+    {
+      "name": "SBIG_Accumulator_AddWithCarry",
+      "address": "00420eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420eb0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_Accumulator_AddWithCarry",
+        "_allmul"
+      ],
+      "usedTypes": [
+        "ULONGLONG",
+        "int64_t",
+        "uint32_t"
+      ],
+      "dh": "12114813",
+      "paramStorage": [
+        [
+          "ullAddend",
+          "Stack[0x4]:8"
+        ],
+        [
+          "pnAccum",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_Accumulator_MulAndAdd",
+      "address": "00420f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420f30"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_Accumulator_MulAndAdd",
+        "_allmul"
+      ],
+      "usedTypes": [
+        "int64_t",
+        "uint32_t"
+      ],
+      "dh": "83de9fc3",
+      "paramStorage": [
+        [
+          "pnAccumulator",
+          "ESI:4"
+        ],
+        [
+          "nAddend",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_Accumulator_ComputeOffset",
+      "address": "00420f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420f60"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_Accumulator_ComputeOffset",
+        "_allmul"
+      ],
+      "usedTypes": [
+        "int64_t",
+        "uint32_t"
+      ],
+      "dh": "f4d51472",
+      "paramStorage": [
+        [
+          "nMultiplicand",
+          "EAX:4"
+        ],
+        [
+          "nAddend",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_DecodeDataBytes",
+      "address": "00420f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420f80"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_DecodeDataBytes"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "49eb1688",
+      "paramStorage": [
+        [
+          "nBufferLen",
+          "EDI:4"
+        ],
+        [
+          "pnReadPos",
+          "EAX:4"
+        ],
+        [
+          "pnValue",
+          "ESI:4"
+        ],
+        [
+          "pBuffer",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_Ui_Subscript",
+      "address": "00420fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420fd0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_Ui_Subscript"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Ui",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "c7c1fb1d",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_Ui_Top",
+      "address": "00420fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00420fe0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_Ui_Top"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "82ce037d",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_Uc_Subscript",
+      "address": "00421000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421000"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_Uc_Subscript"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "3af2c13e",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_GetDataPtr",
+      "address": "00421010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421010"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_GetDataPtr"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "e7add616",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_Uc_Constructor",
+      "address": "00421020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421020"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_Uc_Constructor"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "e1ae9695",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor",
+      "address": "00421030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421030"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "86e5ddb5",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00421050",
+      "address": "00421050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421050"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421050"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "fd3a63db",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00421090",
+      "address": "00421090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421090"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421090"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "4d1462a9",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Ui_CalcChunkSize",
+      "address": "004210a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004210a0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_Ui_CalcChunkSize"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "91dc43b4",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Ui_RoundToChunk",
+      "address": "004210e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004210e0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_Ui_RoundToChunk"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "c4cf8e38",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_DynArray_Resize",
+      "address": "00421110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421110"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_DynArray_Resize",
+        "SMemReAlloc"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Ui",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "712ddab6",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nNewCount",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_GetDataPtr_Unref_00421150",
+      "address": "00421150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421150"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_GetDataPtr_Unref_00421150"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "b7987f4d",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Uc_CalcChunkSize",
+      "address": "00421160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421160"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_Uc_CalcChunkSize"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "2bb445b2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Uc_RoundToChunk",
+      "address": "004211a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004211a0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_Uc_RoundToChunk"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "775b4c96",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSFixedArray_Uc_ReallocData",
+      "address": "004211c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004211c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Uc_ReallocData",
+        "SMemReAlloc",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "52db83ea",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ],
+        [
+          "nNewSize",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_UcAlt_CalcChunkSize",
+      "address": "00421240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421240"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_UcAlt_CalcChunkSize"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "67ba3513",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_UcAlt_RoundToChunk",
+      "address": "00421280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421280"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_UcAlt_RoundToChunk"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "935288ec",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004212a0",
+      "address": "004212a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004212a0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_004212a0"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "30f1c0ad",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004212c0",
+      "address": "004212c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004212c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_004212c0"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "4534e037",
+      "paramStorage": [
+        [
+          "pA",
+          "ECX:4"
+        ],
+        [
+          "pB",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_GetWord",
+      "address": "004212d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004212d0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_GetWord"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "303dc2e1",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Compare",
+      "address": "004212f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004212f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Compare"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "ae7ea441",
+      "paramStorage": [
+        [
+          "pBitSetA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitSetB",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_FindHighestBit",
+      "address": "004213b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004213b0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_FindHighestBit",
+        "SBIG_BigBuffer_GetWord"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5f7abe69",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_IsLowestBitClear",
+      "address": "00421440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421440"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_IsLowestBitClear"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "43a6a14a",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_FindLowestBit",
+      "address": "00421470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421470"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_FindLowestBit",
+        "SBIG_BigBuffer_GetWord"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "14a2b0c1",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_GetFirstWord",
+      "address": "00421510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421510"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_GetFirstWord"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "475ad120",
+      "paramStorage": [
+        [
+          "pOutWord",
+          "EDX:4"
+        ],
+        [
+          "pBitSet",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_CompareBigBuffers_ForSha1",
+      "address": "00421530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421530"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_CompareBigBuffers_ForSha1",
+        "BigBuffer_Compare"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t"
+      ],
+      "dh": "53046906",
+      "paramStorage": [
+        [
+          "pBigA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_IsLowestBitClearWrapper",
+      "address": "00421540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421540"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_IsLowestBitClearWrapper",
+        "SBIG_BigBuffer_IsLowestBitClear"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "d8b405f2",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_ArrayDwordReadAtCursor",
+      "address": "00421550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421550"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_ArrayDwordReadAtCursor",
+        "SBIG_BigBuffer_GetFirstWord"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "ff55f123",
+      "paramStorage": [
+        [
+          "dwUnused",
+          "ECX:4"
+        ],
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutWord",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor_Unref_00421570",
+      "address": "00421570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421570"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_00421570",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Ui"
+      ],
+      "dh": "f4677af2",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor_Unref_00421590",
+      "address": "00421590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421590"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_00421590",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Ui"
+      ],
+      "dh": "7557f21b",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_BigBuffer_GetDataPtr_Unref_004215b0",
+      "address": "004215b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004215b0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_BigBuffer_GetDataPtr_Unref_004215b0"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "04775877",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_Ui_Copy",
+      "address": "004215c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004215c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_Ui_Copy",
+        "SMemReAlloc"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Ui",
+        "uint32_t"
+      ],
+      "dh": "866f4e23",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Uc_Reserve",
+      "address": "00421630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421630"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_Uc_Reserve",
+        "TSGrowableArray_Uc_CalcChunkSize",
+        "TSFixedArray_Uc_ReallocData"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "b519c014",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nAdditional",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAlignToGranularity",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_ArrayByteSetCapacity",
+      "address": "00421680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421680"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_ArrayByteSetCapacity",
+        "SMemReAlloc"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "21c14635",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_ArrayByteAltSetCapacity",
+      "address": "004216b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004216b0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_ArrayByteAltSetCapacity",
+        "SMemReAlloc"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "6b140ce2",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_ReallocData",
+      "address": "004216e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004216e0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_ReallocData",
+        "SMemReAlloc",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "5e77459e",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSFixedArray_UcAlt_ReallocData",
+      "address": "00421770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421770"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_UcAlt_ReallocData",
+        "SMemReAlloc",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "576a3a6a",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor_Unref_004217f0",
+      "address": "004217f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004217f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_004217f0",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Ui"
+      ],
+      "dh": "34c36343",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor",
+      "address": "00421810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421810"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor",
+        "SMemFree"
+      ],
+      "dh": "f4387462",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00421830",
+      "address": "00421830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421830"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421830"
+      ],
+      "dh": "b0ddd7cb",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00421840",
+      "address": "00421840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421840"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421840",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Ui"
+      ],
+      "dh": "82df7e6e",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00421860",
+      "address": "00421860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421860"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_00421860"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "ae9ccc6d",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Assign",
+      "address": "00421870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421870"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Assign",
+        "TSBaseArray_Ui_Copy"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "82aac283",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "pSrcArray",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_004218a0",
+      "address": "004218a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004218a0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Unreferenced_004218a0"
+      ],
+      "dh": "0e4a5543",
+      "paramStorage": [
+        [
+          "param_1",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_ArrayByteAppendData",
+      "address": "004218b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004218b0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_ArrayByteAppendData",
+        "TSGrowableArray_Uc_CalcChunkSize",
+        "TSFixedArray_Uc_ReallocData"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "ffe28eb3",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Uc_New",
+      "address": "00421930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421930"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "New",
+        "TSGrowableArray_Uc_New",
+        "TSGrowableArray_Uc_CalcChunkSize",
+        "TSFixedArray_Uc_ReallocData"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "9f929d7c",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Uc_SetCount",
+      "address": "00421980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421980"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_Uc_SetCount",
+        "TSGrowableArray_Uc_CalcChunkSize",
+        "TSFixedArray_Uc_ReallocData"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "ba0277e3",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nNewCount",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_ArrayByteAppendByte",
+      "address": "004219d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004219d0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_ArrayByteAppendByte",
+        "SBIG_ArrayByteAppendData"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "8ceb2ee7",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "pByte",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_Uc_Copy",
+      "address": "004219f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004219f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_Uc_Copy",
+        "SMemReAlloc"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "4de27727",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Copy",
+      "address": "00421a50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421a50"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Copy",
+        "SMemReAlloc"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "bf921ced",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Ui_Reserve",
+      "address": "00421ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421ab0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_Ui_Reserve",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7c0a5ba9",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nAdditional",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAlignToGranularity",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_UcAlt_Reserve",
+      "address": "00421b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421b00"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_UcAlt_Reserve",
+        "TSGrowableArray_UcAlt_CalcChunkSize",
+        "TSFixedArray_UcAlt_ReallocData"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "ad0bb211",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ],
+        [
+          "nAdditional",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bAlignToGranularity",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Ui_Assign",
+      "address": "00421ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421ba0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_Ui_Assign",
+        "TSBaseArray_Ui_Copy"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Ui",
+        "uint32_t"
+      ],
+      "dh": "6c771d17",
+      "paramStorage": [
+        [
+          "pDest",
+          "ECX:4"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_EncodeDataBytes",
+      "address": "00421bd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421bd0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Reserve",
+        "SetCount",
+        "ReallocData",
+        "CalcChunkSize",
+        "New",
+        "BigBuffer_EncodeDataBytes",
+        "TSFixedArray_Uc_ReallocData",
+        "TSGrowableArray_Uc_CalcChunkSize"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "uint32_t"
+      ],
+      "dh": "20dad709",
+      "paramStorage": [
+        [
+          "nValue",
+          "EAX:4"
+        ],
+        [
+          "pByteBuffer",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_ToBinaryAppend",
+      "address": "00421cb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421cb0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "Reserve",
+        "SetCount",
+        "ReallocData",
+        "CalcChunkSize",
+        "New",
+        "BigBuffer_ToBinaryAppend",
+        "TSGrowableArray_Uc_CalcChunkSize",
+        "TSFixedArray_Uc_ReallocData"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "TSGrowableArray_Uc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "b1933e05",
+      "paramStorage": [
+        [
+          "pByteBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBignum",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigData_Destructor",
+      "address": "00421d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421d80"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigData_Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "BigData",
+        "pfnEHHandlerRoutine"
+      ],
+      "dh": "1db94b19",
+      "paramStorage": [
+        [
+          "pBigData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_Constructor",
+      "address": "00421e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421e10"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_Constructor"
+      ],
+      "usedTypes": [
+        "BigData",
+        "pfnEHHandlerRoutine"
+      ],
+      "dh": "3d16f6b1",
+      "paramStorage": [
+        [
+          "pBigData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_EnsureCapacity",
+      "address": "00421ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421ea0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_EnsureCapacity",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5bbe56ae",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bZeroFill",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSGrowableArray_Ui_SetCount",
+      "address": "00421f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421f10"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSGrowableArray_Ui_SetCount",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "e9e037c3",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ],
+        [
+          "nNewLen",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_AppendBytes",
+      "address": "00421f60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421f60"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_AppendBytes",
+        "TSGrowableArray_UcAlt_CalcChunkSize",
+        "TSFixedArray_UcAlt_ReallocData"
+      ],
+      "usedTypes": [
+        "TSGrowableArray_Uc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "7715cedd",
+      "paramStorage": [
+        [
+          "pByteArray",
+          "ECX:4"
+        ],
+        [
+          "nByteCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcBytes",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_GrowToIndex",
+      "address": "00421fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00421fe0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_GrowToIndex",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7a0dc45c",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_GetPtrAtOffset",
+      "address": "00422050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422050"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_GetPtrAtOffset",
+        "SBIG_GrowToIndex"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "1fbd8dbc",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_TrimToOffset",
+      "address": "00422080",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422080"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_TrimToOffset",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "6b9c7a12",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_GrowToIndexNoZero",
+      "address": "004220d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004220d0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_GrowToIndexNoZero",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "218ad9b0",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_SetOffset",
+      "address": "00422120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422120"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_SetOffset",
+        "SBIG_GrowToIndex"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t"
+      ],
+      "dh": "ee1a3635",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ],
+        [
+          "nOffset",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_TrimLeadingZeros",
+      "address": "00422140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422140"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_TrimLeadingZeros",
+        "TSBaseArray_Ui_Top",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "3ca26ae1",
+      "paramStorage": [
+        [
+          "pDwordArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_CopyAssign",
+      "address": "004221b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004221b0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_CopyAssign",
+        "TSBaseArray_Ui_Copy"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "7fec5065",
+      "paramStorage": [
+        [
+          "pDest",
+          "ECX:4"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Add_Ui",
+      "address": "004221f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004221f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Add_Ui",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "4c7ec2a8",
+      "paramStorage": [
+        [
+          "nCarry",
+          "ECX:4"
+        ],
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Add",
+      "address": "00422300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422300"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Add",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "eceb54f7",
+      "paramStorage": [
+        [
+          "pSourceA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSourceB",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_And",
+      "address": "00422440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422440"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_And",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "725b6a4b",
+      "paramStorage": [
+        [
+          "pSourceA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSourceB",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Compare_Ui",
+      "address": "00422570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422570"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Compare_Ui",
+        "SBIG_TrimLeadingZeros"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7a5ad490",
+      "paramStorage": [
+        [
+          "nValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigIntArray",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Div_Ux",
+      "address": "004225c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004225c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Div_Ux",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "_allmul",
+        "SMemZero",
+        "_aulldvrm",
+        "SBIG_TrimLeadingZeros"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int64_t",
+        "uint32_t"
+      ],
+      "dh": "34c597b7",
+      "paramStorage": [
+        [
+          "pRemainderOut",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDividend",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDivisorLo",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDivisorHi",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pQuotient",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_IsOdd",
+      "address": "00422710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422710"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_IsOdd",
+        "SBIG_TrimLeadingZeros"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "78dc4a8e",
+      "paramStorage": [
+        [
+          "pBignum",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_IsOne",
+      "address": "00422750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422750"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_IsOne",
+        "SBIG_TrimLeadingZeros"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "f9e3ebeb",
+      "paramStorage": [
+        [
+          "pBignum",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_IsZero",
+      "address": "00422780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422780"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_IsZero",
+        "SBIG_TrimLeadingZeros"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "fe0d8066",
+      "paramStorage": [
+        [
+          "pBignum",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Mul_Ux",
+      "address": "004227a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004227a0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Mul_Ux",
+        "_allmul",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int64_t",
+        "uint32_t",
+        "uint64_t"
+      ],
+      "dh": "acc53731",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMultiplierLo",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMultiplierHi",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Not",
+      "address": "004228c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004228c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Not",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "5bdd3630",
+      "paramStorage": [
+        [
+          "pSource",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDest",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Or",
+      "address": "004229d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004229d0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Or",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "420b4636",
+      "paramStorage": [
+        [
+          "pLhs",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRhs",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Set2Exp",
+      "address": "00422b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422b00"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Set2Exp",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "ef977958",
+      "paramStorage": [
+        [
+          "nBitPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_SetOne",
+      "address": "00422c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422c60"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_SetOne",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SBIG_GrowToIndex"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "d97d50b0",
+      "paramStorage": [
+        [
+          "pResult",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_SetZero",
+      "address": "00422cc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422cc0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SetCount",
+        "BigBuffer_SetZero",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "0bed27e1",
+      "paramStorage": [
+        [
+          "pResult",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Shl",
+      "address": "00422d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422d00"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Shl",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero",
+        "SBIG_TrimLeadingZeros"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int8_t",
+        "uint32_t"
+      ],
+      "dh": "6767589e",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "EDI:4"
+        ],
+        [
+          "nShiftBits",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Shr",
+      "address": "00422e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422e70"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Shr",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "int8_t",
+        "uint32_t"
+      ],
+      "dh": "9833f061",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ],
+        [
+          "nShiftBits",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Sub_Ui",
+      "address": "00422fc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00422fc0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Sub_Ui",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "3f6c1a14",
+      "paramStorage": [
+        [
+          "pSrc",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ],
+        [
+          "nSubtrahend",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Sub",
+      "address": "00423100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423100"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Sub",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "e3b7cdad",
+      "paramStorage": [
+        [
+          "pLhs",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRhs",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Xor",
+      "address": "00423250",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423250"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Xor",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "4f22812f",
+      "paramStorage": [
+        [
+          "pLhs",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRhs",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_FromBinary",
+      "address": "00423380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423380"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_FromBinary",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SBIG_GrowToIndex",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "7b5b11d0",
+      "paramStorage": [
+        [
+          "pSrcBytes",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nByteCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_FromStr",
+      "address": "004234b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004234b0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_FromStr",
+        "BigBuffer_SetZero",
+        "BigBuffer_Mul_Ux",
+        "BigBuffer_Add_Ui"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "84a9072f",
+      "paramStorage": [
+        [
+          "pResult",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_FromStream",
+      "address": "004234f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004234f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_FromStream",
+        "BigBuffer_DecodeDataBytes",
+        "BigBuffer_FromBinary"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "99a90260",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxLen",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_FromUnsigned",
+      "address": "00423540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423540"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_FromUnsigned",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "uint32_t"
+      ],
+      "dh": "03799e88",
+      "paramStorage": [
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pResult",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_ToBinary",
+      "address": "004235f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004235f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_ToBinary",
+        "BigBuffer_ToBinaryAppend"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "TSGrowableArray_Uc"
+      ],
+      "dh": "b1586918",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "ECX:4"
+        ],
+        [
+          "pOutBuffer",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_ToStr",
+      "address": "00423600",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423600"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_ToStr",
+        "TSBaseArray_Ui_Copy",
+        "BigBuffer_Div_Ux",
+        "TSFixedArray_Uc_ReallocData",
+        "BigBuffer_Compare_Ui",
+        "TSGrowableArray_Uc_CalcChunkSize"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "TSGrowableArray_Uc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "febaec02",
+      "paramStorage": [
+        [
+          "pStack",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pValue",
+          "EAX:4"
+        ],
+        [
+          "pOutBuffer",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_ToStream",
+      "address": "00423770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423770"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_ToStream",
+        "BigBuffer_ToBinary",
+        "BigBuffer_EncodeDataBytes",
+        "BigBuffer_ToBinaryAppend"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "TSGrowableArray_Uc"
+      ],
+      "dh": "566fc1ab",
+      "paramStorage": [
+        [
+          "pOutBuffer",
+          "EAX:4"
+        ],
+        [
+          "pSrcBignum",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigAdd",
+      "address": "00423790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423790"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigAdd",
+        "BigBuffer_Add"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "57fc947d",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigAnd",
+      "address": "004237b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004237b0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigAnd",
+        "BigBuffer_And"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "6e39dec3",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigCopy",
+      "address": "004237d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004237d0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SMemReAlloc",
+        "SBigCopy",
+        "TSBaseArray_Ui_Copy"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "27ba7b4b",
+      "paramStorage": [
+        [
+          "pDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigDec",
+      "address": "00423800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423800"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigDec",
+        "BigBuffer_Sub_Ui"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "62e89266",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcBignum",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_Destructor",
+      "address": "00423820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423820"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_Destructor",
+        "BigData_Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint8_t"
+      ],
+      "dh": "05bd180d",
+      "paramStorage": [
+        [
+          "pBigData",
+          "ECX:4"
+        ],
+        [
+          "byDeleteFlags",
+          "Stack[0x4]:1"
+        ]
+      ]
+    },
+    {
+      "name": "SBigFromBinary",
+      "address": "00423850",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423850"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigFromBinary",
+        "BigBuffer_FromBinary"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "257daaf4",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcBytes",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nByteCount",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigFromStr",
+      "address": "00423870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423870"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigFromStr",
+        "BigBuffer_FromStr"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "d6e7e8a2",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigFromStream",
+      "address": "00423890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423890"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigFromStream",
+        "BigBuffer_FromStream"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "745b3072",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxLen",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigFromUnsigned",
+      "address": "004238b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004238b0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigFromUnsigned",
+        "BigBuffer_FromUnsigned"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "09ddf4c4",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwValue",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigInc",
+      "address": "004238d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004238d0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigInc",
+        "BigBuffer_Add_Ui"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "29e9eb22",
+      "paramStorage": [
+        [
+          "pDstBignum",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcBignum",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigIsOdd",
+      "address": "004238f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004238f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigIsOdd",
+        "BigBuffer_IsOdd"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "c7605b99",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigIsOne",
+      "address": "00423910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423910"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigIsOne",
+        "BigBuffer_IsOne"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "1939b89e",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigIsZero",
+      "address": "00423930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423930"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigIsZero",
+        "BigBuffer_IsZero"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "c0e3ff14",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigNew",
+      "address": "00423950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423950"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SMemAlloc",
+        "SBigNew",
+        "SBIG_Constructor"
+      ],
+      "usedTypes": [
+        "BigData",
+        "BigData *",
+        "pfnEHHandlerRoutine"
+      ],
+      "dh": "0a4ff6ad",
+      "paramStorage": [
+        [
+          "ppBigData",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigNot",
+      "address": "004239e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004239e0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigNot",
+        "BigBuffer_Not"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "21097589",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigOr",
+      "address": "00423a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423a00"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigOr",
+        "BigBuffer_Or"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "b1eb07bf",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigSet2Exp",
+      "address": "00423a20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423a20"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigSet2Exp",
+        "BigBuffer_Set2Exp"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "3096bdc4",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBitIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigSetOne",
+      "address": "00423a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423a40"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigSetOne",
+        "BigBuffer_SetOne"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "ea378b48",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigSetZero",
+      "address": "00423a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423a60"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SetCount",
+        "SBigSetZero",
+        "BigBuffer_SetZero"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "ba329545",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigShl",
+      "address": "00423a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423a80"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigShl",
+        "BigBuffer_Shl"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "d1094175",
+      "paramStorage": [
+        [
+          "pnDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nShift",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigShr",
+      "address": "00423aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423aa0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigShr",
+        "BigBuffer_Shr"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "9a932519",
+      "paramStorage": [
+        [
+          "pnDst",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnSrc",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nShift",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigSub",
+      "address": "00423ac0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423ac0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigSub",
+        "BigBuffer_Sub"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "353d644e",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigToBinaryArray",
+      "address": "00423ae0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423ae0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SMemFree",
+        "SBigToBinaryArray",
+        "BigBuffer_ToBinary",
+        "SBIG_ArrayByteAppendData",
+        "TSBaseArray_Uc_Copy"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t"
+      ],
+      "dh": "3847b5e5",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDestArray",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAppend",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigToBinaryBuffer",
+      "address": "00423b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423b30"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigToBinaryBuffer",
+        "BigBuffer_ToBinary",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "df2a3f66",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDest",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigToBinaryPtr",
+      "address": "00423b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423b80"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigToBinaryPtr",
+        "BigBuffer_ToBinary"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t",
+        "uint8_t *"
+      ],
+      "dh": "15060983",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppBufferOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnSizeOut",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigToStrArray",
+      "address": "00423bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423bc0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigToStrArray",
+        "BigBuffer_ToStr",
+        "SBIG_AppendBytes",
+        "TSBaseArray_UcAlt_Copy"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t"
+      ],
+      "dh": "37eed830",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDestArray",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAppend",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigToStrBuffer",
+      "address": "00423c20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423c20"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigToStrBuffer",
+        "BigBuffer_ToStr",
+        "SStrCopy"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t"
+      ],
+      "dh": "bf834ff7",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDestLen",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigToStrPtr",
+      "address": "00423c60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423c60"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigToStrPtr",
+        "BigBuffer_ToStr"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint8_t *"
+      ],
+      "dh": "26428946",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppStringOut",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigToStreamArray",
+      "address": "00423c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423c90"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigToStreamArray",
+        "BigBuffer_ToStream",
+        "SBIG_ArrayByteAppendData",
+        "TSBaseArray_Uc_Copy"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t"
+      ],
+      "dh": "7501bf39",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDestArray",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bAppend",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigToStreamBuffer",
+      "address": "00423ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423ce0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigToStreamBuffer",
+        "BigBuffer_ToStream",
+        "SMemCopy"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "c0caeed0",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pDest",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nMaxBytes",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnSize",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigToStreamPtr",
+      "address": "00423d30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423d30"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigToStreamPtr",
+        "BigBuffer_ToStream"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t",
+        "uint8_t *"
+      ],
+      "dh": "521cf27a",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppBufferOut",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnSizeOut",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigXor",
+      "address": "00423d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423d60"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigXor",
+        "BigBuffer_Xor"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "4e6e72e2",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBIG_CopyBigNumToTemp",
+      "address": "00423d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423d80"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBIG_CopyBigNumToTemp",
+        "TSBaseArray_Ui_Copy"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack"
+      ],
+      "dh": "fa8c1614",
+      "paramStorage": [
+        [
+          "pStack",
+          "ECX:4"
+        ],
+        [
+          "pDest",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Div",
+      "address": "00423dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00423dc0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Div",
+        "SBIG_TrimLeadingZeros",
+        "TSBaseArray_Ui_Copy",
+        "BigBuffer_SetZero",
+        "SBIG_BigBuffer_FindHighestBit",
+        "BigBuffer_Shl",
+        "SBIG_GrowToIndex",
+        "SBIG_GrowToIndexNoZero",
+        "_allmul",
+        "_aulldiv",
+        "BigBuffer_Mul_Ux",
+        "BigBuffer_Sub",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero",
+        "BigBuffer_Compare",
+        "BigBuffer_Shr",
+        "BigBuffer_Div_Ux"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "int32_t",
+        "int64_t",
+        "uint32_t",
+        "uint64_t"
+      ],
+      "dh": "b4fbef1a",
+      "paramStorage": [
+        [
+          "pQuotient",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRemainder",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDivisor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pDividend",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Gcd",
+      "address": "00424180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424180"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Gcd",
+        "BigBuffer_Compare",
+        "TSBaseArray_Ui_Copy",
+        "BigBuffer_IsZero",
+        "BigBuffer_Div"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "576048be",
+      "paramStorage": [
+        [
+          "pnA",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnB",
+          "EAX:4"
+        ],
+        [
+          "pnResult",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Mul",
+      "address": "004242c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004242c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Mul",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SMemZero",
+        "SBIG_BigBuffer_GetWord",
+        "TSBaseArray_Ui_Copy"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "int32_t",
+        "int64_t",
+        "uint32_t"
+      ],
+      "dh": "a8c4b09f",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnB",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_MulMod",
+      "address": "004245f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004245f0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_MulMod",
+        "BigBuffer_Mul",
+        "BigBuffer_Div"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "uint32_t"
+      ],
+      "dh": "e5717dcf",
+      "paramStorage": [
+        [
+          "pnB",
+          "EDX:4"
+        ],
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnModulus",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Pow",
+      "address": "00424640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424640"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Pow",
+        "TSBaseArray_Ui_Copy",
+        "BigBuffer_Mul"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "uint32_t"
+      ],
+      "dh": "ad28bcbf",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExponent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Rand",
+      "address": "00424700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424700"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Rand",
+        "SBIG_TrimLeadingZeros",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SBIG_GrowToIndex",
+        "SMemZero",
+        "BigBuffer_Mul",
+        "BigBuffer_Shr",
+        "BigBuffer_Add",
+        "BigBuffer_Shl",
+        "BigBuffer_Div",
+        "TSBaseArray_Ui_Copy"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "f8cca981",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnModulus",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnInput",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_Square",
+      "address": "00424b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424b00"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_Square",
+        "TSGrowableArray_Ui_CalcChunkSize",
+        "TSFixedArray_Ui_ReallocData",
+        "SBIG_BigBuffer_GetWord",
+        "SMemZero",
+        "SBIG_Accumulator_AddWithCarry",
+        "TSBaseArray_Ui_Copy"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "uint32_t",
+        "uint64_t"
+      ],
+      "dh": "762f2111",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnInput",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigDel",
+      "address": "00424e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424e40"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigDel",
+        "BigData_Destructor",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "c9f65c88",
+      "paramStorage": [
+        [
+          "pBigData",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigDiv",
+      "address": "00424e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424e70"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigDiv",
+        "BigBuffer_Div"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "234b63aa",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigGcd",
+      "address": "00424eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424eb0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigGcd",
+        "BigBuffer_Gcd"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "943695ff",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigMod",
+      "address": "00424ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424ed0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigMod",
+        "BigBuffer_Div"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "b9b42925",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigMul",
+      "address": "00424f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424f10"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigMul",
+        "BigBuffer_Mul"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "c6a2792b",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigMulMod",
+      "address": "00424f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424f30"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigMulMod",
+        "BigBuffer_MulMod"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "020e6423",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigA",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBigB",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigPow",
+      "address": "00424f50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424f50"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigPow",
+        "BigBuffer_Pow"
+      ],
+      "usedTypes": [
+        "BigData",
+        "uint32_t"
+      ],
+      "dh": "3970d11a",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nExponent",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigRand",
+      "address": "00424f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424f70"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigRand",
+        "BigBuffer_Rand"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "a4e4eda5",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pInput",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigSquare",
+      "address": "00424f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424f90"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigSquare",
+        "BigBuffer_Square"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "ca3de515",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBigSrc",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_InvMod",
+      "address": "00424fb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00424fb0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_InvMod",
+        "TSBaseArray_Ui_Copy",
+        "BigBuffer_SetOne",
+        "BigBuffer_SetZero",
+        "BigBuffer_IsZero",
+        "BigBuffer_Div",
+        "BigBuffer_Mul",
+        "BigBuffer_Add",
+        "BigBuffer_Sub"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "uint32_t"
+      ],
+      "dh": "8fb3df24",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnModulus",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnInput",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_PowMod",
+      "address": "00425150",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425150"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_PowMod",
+        "SBIG_TrimLeadingZeros",
+        "BigBuffer_SetOne",
+        "BigBuffer_MulMod",
+        "BigBuffer_Square",
+        "BigBuffer_Div",
+        "TSBaseArray_Ui_Copy"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "uint32_t"
+      ],
+      "dh": "1fe16312",
+      "paramStorage": [
+        [
+          "pnResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnExponent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnModulus",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pStack",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigInvMod",
+      "address": "00425310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425310"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigInvMod",
+        "BigBuffer_InvMod"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "c21dfb1c",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pInput",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigPowMod",
+      "address": "00425330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425330"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigPowMod",
+        "BigBuffer_PowMod"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "1cf774d5",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pExponent",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pModulus",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_IsPrime",
+      "address": "00425350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425350"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_IsPrime",
+        "SBIG_TrimLeadingZeros",
+        "BigBuffer_IsZero",
+        "BigBuffer_FromUnsigned",
+        "BigBuffer_Div",
+        "BigBuffer_Div_Ux",
+        "BigBuffer_IsOne",
+        "BigBuffer_Sub_Ui",
+        "TSBaseArray_Ui_Copy",
+        "SBIG_BigBuffer_FindLowestBit",
+        "BigBuffer_Shr",
+        "BigBuffer_Compare",
+        "BigBuffer_PowMod",
+        "BigBuffer_MulMod"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "9cf0cd6a",
+      "paramStorage": [
+        [
+          "pStack",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnCandidate",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigIsPrime",
+      "address": "004255c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004255c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigIsPrime",
+        "BigBuffer_IsPrime"
+      ],
+      "usedTypes": [
+        "BigData"
+      ],
+      "dh": "30408539",
+      "paramStorage": [
+        [
+          "pBigNum",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BigBuffer_FindPrime",
+      "address": "004255e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004255e0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "BigBuffer_FindPrime",
+        "BigBuffer_Set2Exp",
+        "BigBuffer_Add",
+        "BigBuffer_Div",
+        "SBIG_BigBuffer_IsLowestBitClear",
+        "BigBuffer_Add_Ui",
+        "BigBuffer_Sub_Ui",
+        "BigBuffer_IsPrime",
+        "BigBuffer_IsOne",
+        "BigBuffer_Gcd",
+        "BigBuffer_Compare",
+        "BigBuffer_Sub"
+      ],
+      "usedTypes": [
+        "BigBuffer",
+        "BigStack",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "93206262",
+      "paramStorage": [
+        [
+          "nBitLength",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnLowerBound",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnCoprimeWith",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pStack",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnPrime",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SBigFindPrime",
+      "address": "00425700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00425700"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "SBigFindPrime",
+        "BigBuffer_FindPrime"
+      ],
+      "usedTypes": [
+        "BigData",
+        "int32_t"
+      ],
+      "dh": "4faedebc",
+      "paramStorage": [
+        [
+          "pResult",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nBitLength",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLowerBound",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pCoprimeWith",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0044df10",
+      "address": "0044df10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0044df10"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0044df10"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "acd1e957",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_00450870",
+      "address": "00450870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00450870"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_00450870"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "30eb7324",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0047f930",
+      "address": "0047f930",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0047f930"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0047f930"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "df76b801",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0051d2c0",
+      "address": "0051d2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d2c0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0051d2c0"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "e6cf56d5",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_00601e00",
+      "address": "00601e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00601e00"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_00601e00"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "e3d0fb51",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_00603f40",
+      "address": "00603f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00603f40"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_00603f40"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "27312d9a",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0060e200",
+      "address": "0060e200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e200"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0060e200"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "e30b442f",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSBaseArray_UcAlt_Constructor_Unref_0060e220",
+      "address": "0060e220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060e220"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "TSBaseArray_UcAlt_Constructor_Unref_0060e220"
+      ],
+      "usedTypes": [
+        "BigBuffer"
+      ],
+      "dh": "1c154516",
+      "paramStorage": [
+        [
+          "pBitSet",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6c9f58",
+      "address": "006c9f58",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9f58"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9f58",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ],
+      "dh": "894b54a7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6c9f88",
+      "address": "006c9f88",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9f88"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9f88",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ],
+      "dh": "90c42eb7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6c9fc1",
+      "address": "006c9fc1",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9fc1"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9fc1",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ],
+      "dh": "dca38cd7",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "__GSHandlerCheck_EH_6c9ff0",
+      "address": "006c9ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006c9ff0"
+        }
+      ],
+      "namespace": "Storm::Source::SBig",
+      "calledFunctions": [
+        "__GSHandlerCheck_EH_6c9ff0",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "EHExceptionRecord",
+        "EHRegistrationNode",
+        "_CONTEXT",
+        "_EXCEPTION_DISPOSITION"
+      ],
+      "dh": "f1134e59",
+      "paramStorage": [
+        [
+          "pExceptionRecord",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRegistrationNode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pContext",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pDispatcherContext",
+          "Stack[0x10]:4"
+        ]
+      ]
+    }
+  ]
+}

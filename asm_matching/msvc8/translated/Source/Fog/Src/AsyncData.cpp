@@ -4,7 +4,7 @@
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Source/SFile.h"
 #include "Source/Fog/Src/ErrorManager.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

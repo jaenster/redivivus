@@ -13,7 +13,7 @@
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/Fog/Src/Safesock.h"
 #include "Redivivus/d2_trace.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"

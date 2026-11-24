@@ -2,10 +2,10 @@
 
 #include "Source/D2Common/D2CommonRoot.h"
 #include "Source/D2Common/D2RoomExStrc.h"
-#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/Items/Items.h"
 #include "Source/D2Common/Seed.h"
 #include "Source/D2Common/Units/Missile.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Seed.inline.h"

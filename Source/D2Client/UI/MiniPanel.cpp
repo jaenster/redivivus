@@ -3,16 +3,16 @@
 #include "Source/D2Client/UI/MiniPanel.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Core/Archive.h"
-#include "Source/D2Client/Cursor.h"
+#include "Source/D2Client/Engine/Cursor.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
-#include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/Game/Game.h"
 #include "Source/D2Client/Sound/Sound.h"
 #include "Source/D2Client/UI/CmdTbl.h"
 #include "Source/D2Client/UI/EscMenu.h"
 #include "Source/D2Client/UI/Panel.h"
 #include "Source/D2Client/UI/QuestLog.h"
 #include "Source/D2Client/UI/ui.h"
-#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/Unit/Player.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Lang/D2Lang.h"
@@ -23,7 +23,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/EscMenu.data.h"
 #include "Source/D2Client/UI/MiniPanel.data.h"
-#include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

@@ -24,7 +24,7 @@
 #include "Source/D2OpenGL/Src/oglSprite.h"
 #include "Source/D2OpenGL/Src/oglVertex.h"
 #include "Source/D2OpenGL/Src/MacDisplayDevice.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2gfx/Src/D2GFX.h"
 #include "Source/D2OpenGL/Src/oglSmack.h"
 
 namespace D2OpenGL::Renderer {

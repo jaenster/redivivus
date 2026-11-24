@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/ITEMS/ItemMods.h"
+#include "Source/D2Common/Items/ItemMods.h"
 
 // Data types
 #ifndef D2_DEFINED_D2MagicAffixTxt

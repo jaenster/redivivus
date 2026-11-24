@@ -1,0 +1,2719 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Game/Skills/SkillMonst.cpp",
+  "functions": [
+    {
+      "name": "SKILLMONST_SrvStFn42_FireHit",
+      "address": "005cae40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cae40"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn42_FireHit",
+        "GetTargetEx",
+        "SKILLBAR_SrvStFn32_StrikeWithAuraState",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "MONSTER_RecalculateCombatStats",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "71dd8ed5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_083_MonsterMeleeAttack",
+      "address": "005caf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005caf30"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_083_MonsterMeleeAttack",
+        "GetTargetEx",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "DAMAGE_RemoveDamageListEntry",
+        "SKILLS_SrvStartSkill"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "4115da77",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn43_MaggotEgg",
+      "address": "005caf80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005caf80"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn43_MaggotEgg",
+        "PATH_SetCorpseCollision"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "ac794fd2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_084_SpawnMinionsAndSuicide",
+      "address": "005cafa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cafa0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SERVER_KillMonster",
+        "Skills_SrvDoFunc_084_SpawnMinionsAndSuicide",
+        "SKILLS_GetSummonMonsterClassId",
+        "GetCurrentSkill",
+        "D2GetSkillCalc",
+        "SpawnMonsterAtUnit"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "13516156",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_085_FireUpgradedMissile",
+      "address": "005cb0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cb0c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_085_FireUpgradedMissile",
+        "MONSTERTBLS_GetUpgradeDataByMonStatsId",
+        "CreatingAMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "0e4d1d2f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn44_MaggotUp",
+      "address": "005cb170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cb170"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn44_MaggotUp",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "SUNIT_RelocateUnit",
+        "AddCollision_Type"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2CollisionShapeType",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "87f3d470",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn45_MaggotDown",
+      "address": "005cb270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cb270"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn45_MaggotDown",
+        "GetYPos",
+        "GetXPos",
+        "UNITS_GetRoom",
+        "RemoveCollision_Type"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eCollisionFlags",
+        "eD2CollisionShapeType",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "532e4446",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_086_SelfHeal",
+      "address": "005cb300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cb300"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_086_SelfHeal",
+        "GetShiftedFrameMetrics",
+        "D2GetSkillCalc",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_GetMaxLifeFromUnit",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "fd9b10ab",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_087_SpawnBehindTarget",
+      "address": "005cb3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cb3c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_087_SpawnBehindTarget",
+        "SKILLS_GetSummonMonsterClassId",
+        "GetTargetEx",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit",
+        "GetDirectionToCoords",
+        "MONSTERS_GetGfxOffsetTable2",
+        "MONSTERS_GetCompositeDimensions",
+        "UNITS_GetRoom",
+        "SpawnMonsterAtRoomPos"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d9e1bb8e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn46_AndrialSpray",
+      "address": "005cb4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cb4d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn46_AndrialSpray",
+        "GetTargetEx",
+        "GetCurrentSkill",
+        "GetXPos",
+        "SKILL_SetParam1",
+        "GetYPos",
+        "SKILL_SetParam2"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "8d87f425",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_088_FireMissileFromBodyPart",
+      "address": "005cb580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cb580"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_088_FireMissileFromBodyPart",
+        "GetCurrentSkill",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "SKILLS_GetTargetOrCursorPos",
+        "GetDirectionToCoords",
+        "MONSTERS_GetGfxOffsetTable2",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "MONSTERS_GetCompositeDimensions",
+        "GetShiftedFrameMetrics",
+        "memset",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "a92c0c32",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn47_Jump",
+      "address": "005cb730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cb730"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn47_Jump",
+        "GetCurrentSkill",
+        "UNIT_GetUnitState",
+        "GetTargetEx",
+        "GetXSP1",
+        "GetYSP1",
+        "SKILL_SetParam4",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage",
+        "SKILL_SetParam3",
+        "PATH_GetUnitCollisionPattern",
+        "AddCollision_Type",
+        "SetUninterruptableState",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetFlags"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "39c3138d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_089_ChargeLeapAttack",
+      "address": "005cb940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cb940"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_089_ChargeLeapAttack",
+        "GetCurrentSkill",
+        "EVENT_RemoveUnitTimersByType",
+        "SKILL_GetParam4",
+        "SKILL_GetParam3",
+        "FindUnitFromTable",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "SKILL_GetFlags",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "TXT_MonStats_GetBaseId",
+        "ValidateClassId",
+        "SetSequenceFrame",
+        "SKILL_SetFlags",
+        "SetUninterruptableState",
+        "PATH_GetUnitCollisionPattern",
+        "UNITS_GetRoom",
+        "RemoveCollision_Type",
+        "PATH_ChangeCollisionType",
+        "PATH_SetMoveTestCollisionMask",
+        "PATH_SetPathType",
+        "PATH_SnapPositionToTile",
+        "OverwriteDistanceAndMaxDistance",
+        "SetStepNum",
+        "SetTarget",
+        "SetSP1",
+        "SetDistance",
+        "PATH_CalculatePath",
+        "SKILLS_GetUnitWalkVelocity",
+        "SetVelocities"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int16_t",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "1bad6941",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn48_SwarmMove",
+      "address": "005cbbf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cbbf0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn48_SwarmMove",
+        "GetTargetEx",
+        "GetCurrentSkill",
+        "OverwriteDistanceAndMaxDistance",
+        "PATH_SetPathType",
+        "PATH_CalculatePath",
+        "GetPathPointsSize",
+        "SKILL_SetFlags"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "372c41ec",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_090_SetAnimFrameFromCalc",
+      "address": "005cbc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cbc80"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_090_SetAnimFrameFromCalc",
+        "GetCurrentSkill",
+        "SKILL_GetFlags",
+        "SKILL_SetFlags",
+        "D2GetSkillCalc",
+        "SetSequenceFrame"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "3b70b66f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn49_NestSpawn",
+      "address": "005cbd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cbd10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn49_NestSpawn",
+        "GetCurrentSkill",
+        "SKILLS_GetSummonMonsterClassId",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3",
+        "SKILL_SetParam4",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "AddCollision_Type",
+        "SetUninterruptableState",
+        "EVENT_RemoveUnitTimersByType"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "c93fc8e9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_091_SpawnMinionAtCoords",
+      "address": "005cbe00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cbe00"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_091_SpawnMinionAtCoords",
+        "GetCurrentSkill",
+        "EVENT_RemoveUnitTimersByType",
+        "SetUninterruptableState",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "SKILL_GetParam3",
+        "SKILL_GetParam4",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "RemoveCollision_Type",
+        "SpawnMonsterAtRoomPos",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2MonsterAnimMode",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "1e7ccabf",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn50_QuickStrike",
+      "address": "005cbf30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cbf30"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn50_QuickStrike",
+        "GetTargetEx",
+        "memset",
+        "DAMAGE_CalculateAndApplyDamage"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "b8540123",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvDoFunc092_MeleeHitThenMissile",
+      "address": "005cbf90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cbf90"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvDoFunc092_MeleeHitThenMissile",
+        "GetTargetEx",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "DAMAGE_RemoveDamageListEntry",
+        "MONSTER_GetMissileForAnimEvent",
+        "CreatingAMissile"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "0b110e9e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_093_FireLeadingMissile",
+      "address": "005cc050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc050"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_093_FireLeadingMissile",
+        "GetTargetEx",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "memset",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "81afe215",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn51_Submerge",
+      "address": "005cc1d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc1d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn51_Submerge"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "e3d0ece0",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_094_ResetAnimFrame",
+      "address": "005cc1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc1f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_094_ResetAnimFrame",
+        "GetShiftedFrameMetrics"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "a7ba879e",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn52_Emerge",
+      "address": "005cc220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc220"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn52_Emerge"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "94c2508b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn53_MonInferno",
+      "address": "005cc240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc240"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn53_MonInferno",
+        "GetCurrentSkill",
+        "D2GetSkillCalc",
+        "SKILL_SetParam1",
+        "UNIT_GetUnitState",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "ba68e6d5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_UpdateInfernoAnimationParameters",
+      "address": "005cc2e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc2e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_UpdateInfernoAnimationParameters",
+        "D2GetSkillCalc",
+        "OverwriteDistanceAndMaxDistance",
+        "SetAnimationSpeed",
+        "SetTotalFrames",
+        "SetCurrentFrame"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2UnitStrc",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "4a616b24",
+      "paramStorage": [
+        [
+          "eSkill",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pMissileUnit",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_TriggerModeChange",
+      "address": "005cc3b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc3b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_TriggerModeChange",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ],
+      "dh": "dcb9749c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ESI:4"
+        ],
+        [
+          "pGame",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLS_SetInfernoFrame",
+      "address": "005cc440",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc440"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLS_SetInfernoFrame",
+        "SetSequenceFrame"
+      ],
+      "usedTypes": [
+        "D2MonStats2Txt",
+        "D2SkillsTxt",
+        "D2UnitStrc"
+      ],
+      "dh": "bec7ebff",
+      "paramStorage": [
+        [
+          "pSkillsTxt",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_095_MonInferno",
+      "address": "005cc4e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc4e0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_095_MonInferno",
+        "GetCurrentSkill",
+        "GetMissleById",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SKILLS_GetTargetOrCursorPos",
+        "CreatingMissile",
+        "SKILLMONST_UpdateInfernoAnimationParameters",
+        "SKILLS_SetInfernoFrame",
+        "SKILL_GetParam1",
+        "UNIT_GetUnitState",
+        "D2GetSkillCalc",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SKILLMONST_TriggerModeChange"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "b1ec1d8b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_152_DiabLight",
+      "address": "005cc690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc690"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_152_DiabLight",
+        "GetCurrentSkill",
+        "GetMissleById",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SKILLS_GetTargetOrCursorPos",
+        "CreatingMissile",
+        "SKILLMONST_UpdateInfernoAnimationParameters",
+        "SKILLS_SetInfernoFrame",
+        "SKILL_GetParam1",
+        "UNIT_GetUnitState",
+        "D2GetSkillCalc",
+        "EVENT_RemoveUnitTimersByType",
+        "SetEvent",
+        "SKILLMONST_TriggerModeChange"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "31f6d38b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_096_HealTarget",
+      "address": "005cc840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc840"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_096_HealTarget",
+        "GetTargetEx",
+        "D2GetSkillCalc",
+        "RANDOM_RandomNumberSelector",
+        "STATLIST_GetMaxLifeFromUnit",
+        "D2ApplyPercent",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "82351216",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_ResurrectUnit",
+      "address": "005cc960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cc960"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_ResurrectUnit",
+        "UNITS_GetRoom",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_SetUnitStat",
+        "MONSTERAI_RescheduleThink",
+        "DecreaseMonKillCount",
+        "AttachToUnit",
+        "PATH_ChangeCollisionType",
+        "PATH_UpdateCollisionWidth",
+        "GetYPos",
+        "GetXPos",
+        "PATH_GetUnitCollisionPattern",
+        "AddCollision_Type"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2CollisionShapeType",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "4eec43ee",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_097_ResurrectDeadMonster",
+      "address": "005ccb10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ccb10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_097_ResurrectDeadMonster",
+        "GetTargetEx",
+        "CheckIfMonsterIsDead",
+        "STATES_HasHideFlagState",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "UNITS_GetRoom",
+        "PATH_GetUnitCollisionPattern",
+        "CheckCollision_BlockPlayer_Type",
+        "SetTarget",
+        "SKILLMONST_ResurrectUnit",
+        "MONSTERAI_GetResurrectMode",
+        "MONMODE_InitModeChange",
+        "MONSTERAI_ExecuteLifecycleTransition",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2ModeChangeStrc",
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2CollisionShapeType",
+        "eD2MonsterAnimMode",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "f49060e1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_098_TeleportToStoredPosition",
+      "address": "005ccc80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ccc80"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_098_TeleportToStoredPosition",
+        "GetXSP1",
+        "GetYSP1",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "GetOwnerUnit",
+        "SUNIT_RelocateUnit",
+        "ROOM_LinkUnitToUpdateList"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "2bab2dd2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_099_FireMissileRing8Dir",
+      "address": "005ccd10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ccd10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_099_FireMissileRing8Dir",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "64b2476b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_100_FreezingMeleeAttack",
+      "address": "005cce80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cce80"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_100_FreezingMeleeAttack",
+        "GetTargetEx",
+        "memset",
+        "SKILLS_GetElementalLength",
+        "SetDamageOnEvent",
+        "DAMAGE_ApplyDamageToUnit",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetHitCalculation",
+        "SetOverlay"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "cdd1eaf3",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_101_FireDirectionalMissile",
+      "address": "005ccfa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ccfa0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_101_FireDirectionalMissile",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "GetTargetEx",
+        "GetXSP1",
+        "GetYSP1",
+        "PATH_SetDirectionToTarget",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "3d427a97",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_RandomizeMissilePath",
+      "address": "005cd110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cd110"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_RandomizeMissilePath",
+        "GetTotalFrames",
+        "SetTotalFrames",
+        "SetCurrentFrame",
+        "GetXSP1",
+        "InitSeed_Param_666",
+        "PATH_SetPathType",
+        "OverwriteDistanceAndMaxDistance",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2SeedStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "intptr_t",
+        "uint32_t"
+      ],
+      "dh": "a0974a19",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nMissileIdx",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_102_FireRandomMultiMissile",
+      "address": "005cd1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cd1c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_102_FireRandomMultiMissile",
+        "D2GetSkillCalc",
+        "memset",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SKILLS_GetTargetOrCursorPos",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "80bde6d7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn54_DiabRun",
+      "address": "005cd2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cd2c0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn54_DiabRun",
+        "GetCurrentSkill",
+        "GetTargetEx",
+        "SKILL_SetFlags",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SetTarget",
+        "GetYPos",
+        "GetXPos",
+        "SetSP1"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "30b264b7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_103_ChargeAndMeleeStrike",
+      "address": "005cd380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cd380"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_103_ChargeAndMeleeStrike",
+        "GetCurrentSkill",
+        "SKILL_GetFlags",
+        "SKILL_SetFlags",
+        "SetSequenceFrame",
+        "GetShiftedFrameMetrics",
+        "SKILL_GetParam1",
+        "SKILL_GetParam2",
+        "FindUnitFromTable",
+        "IsInMeleeRange",
+        "memset",
+        "SKILLS_CalcToHitAndApply",
+        "SKILLS_AddRandomSkillDamage",
+        "SetDamageOnEvent",
+        "DAMAGE_ApplyDamageToUnit",
+        "STATSEX_GetCurrentStat",
+        "SERVER_GetHitCalculation",
+        "D2GetSkillCalc",
+        "D2ApplyPercent",
+        "SetVelocities",
+        "PATH_SetPathType",
+        "PATH_CalculatePath"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2DynamicPathStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "3db388e7",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_104_SpawnPredefinedAtTarget",
+      "address": "005cd5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cd5d0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_104_SpawnPredefinedAtTarget",
+        "SKILLS_GetSummonMonsterClassId",
+        "GetTargetEx",
+        "GetYSP1",
+        "GetXSP1",
+        "FindUnitFromTable",
+        "UNITS_GetRoom",
+        "DRLGROOM_IsRoomInTown",
+        "MONSTER_SpawnPredefinedAtUnit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "fdb01c94",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_105_FireParallelMissileVolley",
+      "address": "005cd6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cd6a0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_105_FireParallelMissileVolley",
+        "SKILLS_GetTargetOrCursorPos",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "D2GetSkillCalc",
+        "memset",
+        "CreatingMissile"
+      ],
+      "usedTypes": [
+        "D2SkillArgStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5a6d348c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_106_FireMissileRingOnTarget",
+      "address": "005cd870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cd870"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_106_FireMissileRingOnTarget",
+        "GetTargetEx",
+        "MISSILETBLS_CalculateVelocity",
+        "SKILLS_CreateMissileRing"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "9255a231",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn55_Mosquito",
+      "address": "005cd910",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cd910"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn55_Mosquito",
+        "GetCurrentSkill",
+        "GetTargetEx",
+        "SEED_InitDefault",
+        "InitSeed_Param_666",
+        "D2GetSkillCalc",
+        "RANDOM_RandomNumberSelector",
+        "SKILL_SetParam1",
+        "SKILL_SetParam2",
+        "SKILL_SetParam3"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "ced79bbc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_107_LeechMeleeMultiHit",
+      "address": "005cda00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cda00"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_107_LeechMeleeMultiHit",
+        "GetCurrentSkill",
+        "SKILL_GetParam2",
+        "SKILL_GetParam3",
+        "FindUnitFromTable",
+        "IsInMeleeRange",
+        "SKILL_GetParam1",
+        "memset",
+        "SKILL_CalcMinDamage",
+        "SKILL_CalcMaxDamage",
+        "SKILLS_AddRandomSkillDamage",
+        "SetDamageOnEvent",
+        "RANDOM_RandomNumberSelector",
+        "SKILLS_GetElementalLength",
+        "D2GetSkillCalc",
+        "D2ApplyPercent",
+        "STATSEX_GetCurrentStat",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_SetUnitStat",
+        "DAMAGE_ApplyDamageToUnit",
+        "SERVER_GetHitCalculation",
+        "SKILL_SetParam1",
+        "SetSequenceFrame"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "9b39717d",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_108_DevourMinionForHP",
+      "address": "005cdc10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cdc10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_108_DevourMinionForHP",
+        "GetTargetEx",
+        "MONSTER_GetMercType",
+        "STATLIST_GetMaxLifeFromUnit",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "STATSEX_GetCurrentStat",
+        "D2GetSkillCalc",
+        "D2ApplyPercent",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2RoomStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5dd780c8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_GetMonFrenzySequenceFrame",
+      "address": "005cdd30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cdd30"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_109_MonsterFrenzyAttack",
+        "SKILLMONST_GetMonFrenzySequenceFrame",
+        "MERC_GetSequenceTxt",
+        "GetCounter1",
+        "ANIM_GetEventFrame"
+      ],
+      "usedTypes": [
+        "D2MonSeqTxt",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "b16487bf",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SingleTargetSkillAttack",
+      "address": "005cddd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cddd0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SingleTargetSkillAttack",
+        "SetTargetUnitForDynamicUnit",
+        "memset",
+        "SKILLS_CalcToHit",
+        "DAMAGE_CalculateHitCheck",
+        "D2GetSkillCalc",
+        "SetDamageOnEvent",
+        "DAMAGE_CalculateAndApplyDamage",
+        "DAMAGE_ProcessCombatQueueEntry",
+        "GetCurrentSkill",
+        "SKILL_SetParam1"
+      ],
+      "usedTypes": [
+        "D2DamageStrc",
+        "D2SkillStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "fa550bea",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pTarget",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SrvStFn64_MonFrenzy",
+      "address": "005cdf00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cdf00"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SrvStFn64_MonFrenzy",
+        "GetTargetEx"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t"
+      ],
+      "dh": "b449d6e4",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_109_MonsterFrenzyAttack",
+      "address": "005cdf10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cdf10"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_109_MonsterFrenzyAttack",
+        "GetCurrentSkill",
+        "GetTargetEx",
+        "DAMAGE_RemoveDamageListEntry",
+        "SKILLMONST_GetMonFrenzySequenceFrame",
+        "SKILLS_SrvStartSkill",
+        "SKILLMONST_SingleTargetSkillAttack",
+        "SKILL_GetParam1",
+        "SKILLBAR_ApplyFrenzyStack"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "acb68c05",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_148_FireMissileBodyPart10",
+      "address": "005cdfb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005cdfb0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_148_FireMissileBodyPart10",
+        "GetTargetEx",
+        "GetMissleById",
+        "SKILLS_CreateMissileFromUnit",
+        "CreatingAMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "752c0814",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_149_FireMissileBodyPart11",
+      "address": "005ce0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ce0b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_149_FireMissileBodyPart11",
+        "GetTargetEx",
+        "GetMissleById",
+        "SKILLS_CreateMissileFromUnit",
+        "CreatingAMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "46764240",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_110_FireArrowModMissile",
+      "address": "005ce1b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ce1b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLS_CreateMissileFromUnit",
+        "Skills_SrvDoFunc_110_FireArrowModMissile",
+        "GetTargetEx",
+        "SKILL_GetArrowModifierSkill",
+        "GetMissleById",
+        "CreatingAMissile"
+      ],
+      "usedTypes": [
+        "D2MissilesTxt",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "eMissilesId",
+        "int32_t"
+      ],
+      "dh": "054f32c2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_112_RandomCurse",
+      "address": "005ce2b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ce2b0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_112_RandomCurse",
+        "D2GetSkillCalc",
+        "memset",
+        "SKILLS_GetParam45WithDiminishing",
+        "SKILLS_ApplyEffectToUnitsInRange"
+      ],
+      "usedTypes": [
+        "D2SeedStrc",
+        "D2SkillAuraCtxStrc",
+        "D2SkillsTxt",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "59c33c6a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILLMONST_SpiderLayTrail",
+      "address": "005ce4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ce4f0"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "SKILLMONST_SpiderLayTrail",
+        "Get8FlagsFromDynamicPath",
+        "UpdateDirection",
+        "MONSTERS_GetGfxOffsetTable2",
+        "MONSTERS_GetCompositeDimensions",
+        "SKILLS_GetSkillByEnum",
+        "GetSkillLevel",
+        "GetXPos",
+        "GetYPos",
+        "UNITS_GetRoom",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "memset",
+        "CreatingMissile",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2SkillArgStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "b39da4e5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Skills_SrvDoFunc_111_ApplyFetishAura",
+      "address": "005ce670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005ce670"
+        }
+      ],
+      "namespace": "D2Game::SKILLS::SkillMonst",
+      "calledFunctions": [
+        "Skills_SrvDoFunc_111_ApplyFetishAura",
+        "SKILLS_GetTargetOrCursorPos",
+        "SKILLS_FindUnitsInRange",
+        "UNITS_CheckIfCanAttackTarget",
+        "SKILLNEC_ValidateAttackableTarget",
+        "SKILLS_SetStateWithCurse",
+        "SKILLS_FreeUnitFindData"
+      ],
+      "usedTypes": [
+        "D2SkillsTxt",
+        "D2UnitFindDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d2e6833b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLvl",
+          "Stack[0x8]:4"
+        ]
+      ]
+    }
+  ]
+}

@@ -76,7 +76,7 @@ set(D2_MODULE_Fog_UNITS
     Source/Fog/Src/String/FogString.cpp  # 00411320, 1 run
     Source/Fog/Src/D2QSSocket.cpp  # 006bc010, 2 runs
     Source/Fog/Src/DataArrays.cpp  # 006bca10, 2 runs
-    Source/Fog/Src/Excel.cpp  # 006bcda0, 1 run
+    Source/Fog/Src/Excel/Excel.cpp  # 006bcda0, 1 run
     Source/Fog/Skills.cpp  # 006c0b80, 1 run
     Source/Fog/Src/D2QSQueue.cpp  # 006c1f60, 1 run
     Source/Fog/Src/QServer/QServerNT.cpp  # 006c2110, 1 run
@@ -109,12 +109,12 @@ set(D2_MODULE_Game_UNITS
     Source/Game/Main.cpp  # 00405410 (outside the module's runs), 2 runs
 )
 
-set(D2_MODULE_Storm_DIR "3rdparty/Storm")
+set(D2_MODULE_Storm_DIR "Source/Storm")
 set(D2_MODULE_Storm_KIND "3rdparty")
 set(D2_MODULE_Storm_DEPENDS )
 set(D2_MODULE_Storm_IMPORTS )
 set(D2_MODULE_Storm_LOADS )
-set(D2_MODULE_Storm_PUBLIC "3rdparty/Storm/Storm.h")
+set(D2_MODULE_Storm_PUBLIC "Source/Storm/Storm.h")
 set(D2_MODULE_Storm_SEES Storm D2Hell D2Headers Redivivus)
 set(D2_MODULE_Storm_EXCEPTIONS )
 set(D2_MODULE_Storm_STRICT OFF)
@@ -122,33 +122,33 @@ set(D2_MODULE_Storm_GENERATED ON)
 set(D2_MODULE_Storm_DATA "Source/globals/Storm.cpp")
 set(D2_MODULE_Storm_UNIT_ORDER "original-address")
 set(D2_MODULE_Storm_UNITS
-    3rdparty/Storm/Source/SMem.cpp  # 00411620, 2 runs
-    3rdparty/Storm/Source/SSTR.cpp  # 00413490, 3 runs
-    3rdparty/Storm/Source/SReg.cpp  # 00414930, 1 run
-    3rdparty/Storm/Source/SFile.cpp  # 00415140, 17 runs
-    3rdparty/Storm/Source/SEVT.cpp  # 004177c0, 23 runs
-    3rdparty/Storm/Source/SSystem.cpp  # 0041beb0, 5 runs
-    3rdparty/Storm/Source/SErr.cpp  # 0041c0e0, 9 runs
-    3rdparty/Storm/WindowHandle.cpp  # 0041c2a0, 8 runs
-    3rdparty/Storm/Source/SComp.cpp  # 0041c3d0, 10 runs
-    3rdparty/Storm/Source/SSignature.cpp  # 0041d320, 4 runs
-    3rdparty/Storm/Source/SLog.cpp  # 0041fa40, 1 run
-    3rdparty/Storm/StormRoot.cpp  # 00420290, 1 run
-    3rdparty/Storm/Source/SBig.cpp  # 00420eb0, 15 runs
-    3rdparty/Storm/3rdparty/zlib/trees.cpp  # 00421040, 4 runs
-    3rdparty/Storm/3rdparty/zlib/deflate.cpp  # 00427160 (outside the module's runs), 1 run
-    3rdparty/Storm/3rdparty/zlib/inflate.cpp  # 00429810 (outside the module's runs), 1 run
-    3rdparty/Storm/3rdparty/zlib/adler32.cpp  # 0042b660 (outside the module's runs), 1 run
-    3rdparty/Storm/3rdparty/zlib/crc32.cpp  # 0042d450 (outside the module's runs), 1 run
-    3rdparty/Storm/3rdparty/zlib/zutil.cpp  # 0042dc30 (outside the module's runs), 1 run
-    3rdparty/Storm/3rdparty/zlib/inffast.cpp  # 0042dca0 (outside the module's runs), 1 run
-    3rdparty/Storm/3rdparty/zlib/inftrees.cpp  # 0042e120 (outside the module's runs), 1 run
-    3rdparty/Storm/3rdparty/PKWARE/explode.cpp  # 006b01b0, 1 run
-    3rdparty/Storm/3rdparty/PKWARE/implode.cpp  # 006b0870, 1 run
-    3rdparty/Storm/Source/SCMD.cpp  # 006c3cb0, 9 runs
-    3rdparty/Storm/Source/stpl_CMDDEF.cpp  # 006c4040, 5 runs
-    3rdparty/Storm/Source/SBMP.cpp  # 006c50d0, 1 run
-    3rdparty/Storm/3rdparty/zlib/uncompr.cpp  # 006c79c0 (outside the module's runs), 1 run
+    Source/Storm/Source/SMem.cpp  # 00411620, 2 runs
+    Source/Storm/Source/SSTR.cpp  # 00413490, 3 runs
+    Source/Storm/Source/SReg.cpp  # 00414930, 1 run
+    Source/Storm/Source/SFile.cpp  # 00415140, 17 runs
+    Source/Storm/Source/SEVT.cpp  # 004177c0, 23 runs
+    Source/Storm/Source/SSystem.cpp  # 0041beb0, 5 runs
+    Source/Storm/Source/SErr.cpp  # 0041c0e0, 9 runs
+    Source/Storm/WindowHandle.cpp  # 0041c2a0, 8 runs
+    Source/Storm/Source/SComp.cpp  # 0041c3d0, 10 runs
+    Source/Storm/Source/SSignature.cpp  # 0041d320, 4 runs
+    Source/Storm/Source/SLog.cpp  # 0041fa40, 1 run
+    Source/Storm/StormRoot.cpp  # 00420290, 1 run
+    Source/Storm/Source/SBig.cpp  # 00420eb0, 15 runs
+    Source/Storm/3rdparty/zlib/trees.cpp  # 00421040, 4 runs
+    Source/Storm/3rdparty/zlib/deflate.cpp  # 00427160 (outside the module's runs), 1 run
+    Source/Storm/3rdparty/zlib/inflate.cpp  # 00429810 (outside the module's runs), 1 run
+    Source/Storm/3rdparty/zlib/adler32.cpp  # 0042b660 (outside the module's runs), 1 run
+    Source/Storm/3rdparty/zlib/crc32.cpp  # 0042d450 (outside the module's runs), 1 run
+    Source/Storm/3rdparty/zlib/zutil.cpp  # 0042dc30 (outside the module's runs), 1 run
+    Source/Storm/3rdparty/zlib/inffast.cpp  # 0042dca0 (outside the module's runs), 1 run
+    Source/Storm/3rdparty/zlib/inftrees.cpp  # 0042e120 (outside the module's runs), 1 run
+    Source/Storm/3rdparty/PKWARE/explode.cpp  # 006b01b0, 1 run
+    Source/Storm/3rdparty/PKWARE/implode.cpp  # 006b0870, 1 run
+    Source/Storm/Source/SCMD.cpp  # 006c3cb0, 9 runs
+    Source/Storm/Source/stpl_CMDDEF.cpp  # 006c4040, 5 runs
+    Source/Storm/Source/SBMP.cpp  # 006c50d0, 1 run
+    Source/Storm/3rdparty/zlib/uncompr.cpp  # 006c79c0 (outside the module's runs), 1 run
 )
 
 # D2Client -> Storm (import): 1.13d D2Client import table: 50 symbol(s) from Storm; also in 1.13c, 1.10f
@@ -181,13 +181,13 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/McpConnect.cpp  # 0044b1f0 (outside the module's runs), 1 run
     Source/D2Client/ClientModeInGame.cpp  # 0044b430, 5 runs
     Source/D2Client/D2ClientRoot.cpp  # 0044b550, 39 runs
-    Source/D2Client/GAME/Game/Game.cpp  # 0044b870, 26 runs
-    Source/D2Client/GAME/Server.cpp  # 0044cf20, 1 run
-    Source/D2Client/GAME/stpl_SGAMEDATA.cpp  # 0044dd90, 7 runs
-    Source/D2Client/GAME/Game/SGAMEDATA.cpp  # 0044fbb0, 2 runs
-    Source/D2Client/GAME/Game/stpl_SGAMEDATA.cpp  # 0044fbe0, 3 runs
-    Source/D2Client/Lng.cpp  # 004512c0, 1 run
-    Source/D2Client/GAME/Record.cpp  # 00451400, 1 run
+    Source/D2Client/Game/Game.cpp  # 0044b870, 26 runs
+    Source/D2Client/Game/Server.cpp  # 0044cf20, 1 run
+    Source/D2Client/Game/stpl_SGAMEDATA.cpp  # 0044dd90, 7 runs
+    Source/D2Client/Game/Game/SGAMEDATA.cpp  # 0044fbb0, 2 runs
+    Source/D2Client/Game/Game/stpl_SGAMEDATA.cpp  # 0044fbe0, 3 runs
+    Source/D2Client/Core/Lng.cpp  # 004512c0, 1 run
+    Source/D2Client/Game/Record.cpp  # 00451400, 1 run
     Source/D2Client/Message.cpp  # 00451a90, 1 run
     Source/D2Client/DataTbls/MonsterTbls.cpp  # 00451fb0, 1 run
     Source/D2Client/UI/ui.cpp  # 00452090, 33 runs
@@ -198,36 +198,36 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/Engine.cpp  # 0045ae50, 8 runs
     Source/D2Client/UI/Path.cpp  # 0045ae60, 4 runs
     Source/D2Client/UI/Text.cpp  # 0045afe0, 9 runs
-    Source/D2Client/GAME/SCmd.cpp  # 0045b090, 3 runs
+    Source/D2Client/Game/SCmd.cpp  # 0045b090, 3 runs
     Source/D2Client/Archive.cpp  # 0045b960, 4 runs
-    Source/D2Client/UNIT/Player.cpp  # 00460830, 6 runs
-    Source/D2Client/UNIT/CUnit.cpp  # 00463940, 5 runs
-    Source/D2Client/GAME/Select.cpp  # 00466dc0, 2 runs
-    Source/D2Client/Cursor.cpp  # 00467df0, 3 runs
+    Source/D2Client/Unit/Player.cpp  # 00460830, 6 runs
+    Source/D2Client/Unit/CUnit.cpp  # 00463940, 5 runs
+    Source/D2Client/Game/Select.cpp  # 00466dc0, 2 runs
+    Source/D2Client/Engine/Cursor.cpp  # 00467df0, 3 runs
     Source/D2Client/UI/Panel.cpp  # 00468f40, 6 runs
-    Source/D2Client/GAME/Msg.cpp  # 00468f90, 2 runs
+    Source/D2Client/Game/Msg.cpp  # 00468f90, 2 runs
     Source/D2Client/UI/CmdTbl.cpp  # 00469000, 5 runs
     Source/D2Client/Source/ClientEngine.cpp  # 0046aee0, 4 runs
     Source/D2Client/Engine/Gfx.cpp  # 0046db30, 5 runs
-    Source/D2Client/SRC/CelCmp.cpp  # 0046f360, 2 runs
+    Source/D2Client/Src/CelCmp.cpp  # 0046f360, 2 runs
     Source/D2Client/Units.cpp  # 0046f950, 2 runs
     Source/D2Client/Draw/Weather.cpp  # 004722f0, 2 runs
     Source/D2Client/Draw/LightMap.cpp  # 004740d0, 1 run
-    Source/D2Client/GAME/View.cpp  # 00475aa0, 1 run
-    Source/D2Client/GAME/PalShift.cpp  # 00476e30, 1 run
-    Source/D2Client/GAME/Rendering.cpp  # 004776c0, 4 runs
+    Source/D2Client/Game/View.cpp  # 00475aa0, 1 run
+    Source/D2Client/Game/PalShift.cpp  # 00476e30, 1 run
+    Source/D2Client/Game/Rendering.cpp  # 004776c0, 4 runs
     Source/D2Client/UI/Chat.cpp  # 00477970, 3 runs
     Source/D2Client/Core/Archive.cpp  # 004788b0, 1 run
-    Source/D2Client/GAME/RosterPets.cpp  # 00478a50, 1 run
-    Source/D2Client/GAME/Roster.cpp  # 004792e0, 1 run
+    Source/D2Client/Game/RosterPets.cpp  # 00478a50, 1 run
+    Source/D2Client/Game/Roster.cpp  # 004792e0, 1 run
     Source/D2Client/UI/EscMenu.cpp  # 0047cc90, 11 runs
-    Source/D2Client/GAME/Sound.cpp  # 0047cd80, 8 runs
+    Source/D2Client/Game/Sound.cpp  # 0047cd80, 8 runs
     Source/D2Client/Sound/Sound.cpp  # 0047ce30, 8 runs
     Source/D2Client/UI/MiniPanel.cpp  # 0047e720, 3 runs
     Source/D2Client/Warden/WardenClient.cpp  # 0047f8c0, 5 runs
     Source/D2Client/Warden/NWardenClient/Library.cpp  # 0047fc30, 1 run
-    Source/D2Client/UNIT/Path.cpp  # 00480420, 1 run
-    Source/D2Client/UNIT/UnitMode.cpp  # 00480930, 1 run
+    Source/D2Client/Unit/Path.cpp  # 00480420, 1 run
+    Source/D2Client/Unit/UnitMode.cpp  # 00480930, 1 run
     Source/D2Client/Sound/SoundHdr.cpp  # 00481720, 2 runs
     Source/D2Client/SkillHelpers.cpp  # 004834a0, 1 run
     Source/D2Client/UI/Inv.cpp  # 004835b0, 5 runs
@@ -239,9 +239,9 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UI/QuestLog.cpp  # 004a18f0, 3 runs
     Source/D2Client/UI/SkillDesc.cpp  # 004a4260, 2 runs
     Source/D2Client/UI/SpellSel.cpp  # 004a8a30, 1 run
-    Source/D2Client/UNIT/MonUnique.cpp  # 004ac740, 4 runs
-    Source/D2Client/UNIT/Monster.cpp  # 004add90, 4 runs
-    Source/D2Client/UNIT/Object.cpp  # 004b1d50, 2 runs
+    Source/D2Client/Unit/MonUnique.cpp  # 004ac740, 4 runs
+    Source/D2Client/Unit/Monster.cpp  # 004add90, 4 runs
+    Source/D2Client/Unit/Object.cpp  # 004b1d50, 2 runs
     Source/D2Client/UI/npcmenu/Merc.cpp  # 004b3240, 5 runs
     Source/D2Client/UI/Dialog.cpp  # 004b70f0, 2 runs
     Source/D2Client/UI/Trade.cpp  # 004b8a30, 2 runs
@@ -256,28 +256,28 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UI/ListBox/ListBoxWrapper.cpp  # 004becc0, 2 runs
     Source/D2Client/UI/UseItem.cpp  # 004bfa70, 2 runs
     Source/D2Client/UI/ShowItems.cpp  # 004c0640, 3 runs
-    Source/D2Client/UNIT/Item.cpp  # 004c0d20, 2 runs
-    Source/D2Client/SKILLS/Skills.cpp  # 004c51e0, 1 run
-    Source/D2Client/SKILLS/SkillsBar.cpp  # 004c7c90, 1 run
-    Source/D2Client/SKILLS/SkillsPal.cpp  # 004c9490, 1 run
-    Source/D2Client/UNIT/UnitSnd.cpp  # 004ca2c0, 1 run
-    Source/D2Client/UNIT/Missile.cpp  # 004cc800, 2 runs
-    Source/D2Client/UNIT/PlrSkills.cpp  # 004d84c0, 3 runs
+    Source/D2Client/Unit/Item.cpp  # 004c0d20, 2 runs
+    Source/D2Client/Skills/Skills.cpp  # 004c51e0, 1 run
+    Source/D2Client/Skills/SkillsBar.cpp  # 004c7c90, 1 run
+    Source/D2Client/Skills/SkillsPal.cpp  # 004c9490, 1 run
+    Source/D2Client/Unit/UnitSnd.cpp  # 004ca2c0, 1 run
+    Source/D2Client/Unit/Missile.cpp  # 004cc800, 2 runs
+    Source/D2Client/Unit/PlrSkills.cpp  # 004d84c0, 3 runs
     Source/D2Client/Engine/Particle.cpp  # 004da000, 2 runs
     Source/D2Client/Engine/GfxUtil.cpp  # 004da720, 3 runs
-    Source/D2Client/UNIT/CUnitEvent.cpp  # 004dc0c0, 1 run
-    Source/D2Client/UNIT/PlayerList.cpp  # 004dc270, 1 run
-    Source/D2Client/GAME/Wall2.cpp  # 004dc510, 3 runs
-    Source/D2Client/GAME/Draw.cpp  # 004dde80, 1 run
-    Source/D2Client/SKILLS/SkillsMon.cpp  # 004e0a30, 1 run
-    Source/D2Client/SKILLS/SkillsSor.cpp  # 004e2f40, 2 runs
+    Source/D2Client/Unit/CUnitEvent.cpp  # 004dc0c0, 1 run
+    Source/D2Client/Unit/PlayerList.cpp  # 004dc270, 1 run
+    Source/D2Client/Game/Wall2.cpp  # 004dc510, 3 runs
+    Source/D2Client/Game/Draw.cpp  # 004dde80, 1 run
+    Source/D2Client/Skills/SkillsMon.cpp  # 004e0a30, 1 run
+    Source/D2Client/Skills/SkillsSor.cpp  # 004e2f40, 2 runs
     Source/D2Client/Utils.cpp  # 004e4020, 3 runs
-    Source/D2Client/SKILLS/SkillsEMon.cpp  # 004efcf0, 2 runs
+    Source/D2Client/Skills/SkillsEMon.cpp  # 004efcf0, 2 runs
     Source/D2Client/SKILLS.cpp  # 004f1430, 4 runs
-    Source/D2Client/SKILLS/SkillsDru.cpp  # 004f1640, 1 run
-    Source/D2Client/SKILLS/SkillsAss.cpp  # 004f2010, 2 runs
-    Source/D2Client/SKILLS/SkillsNec.cpp  # 004f34d0, 1 run
-    Source/D2Client/SKILLS/SkillsAma.cpp  # 004f4140, 1 run
+    Source/D2Client/Skills/SkillsDru.cpp  # 004f1640, 1 run
+    Source/D2Client/Skills/SkillsAss.cpp  # 004f2010, 2 runs
+    Source/D2Client/Skills/SkillsNec.cpp  # 004f34d0, 1 run
+    Source/D2Client/Skills/SkillsAma.cpp  # 004f4140, 1 run
     Source/D2Client/net_sid.cpp  # 00523ac0 (outside the module's runs), 2 runs
     Source/D2Client/Renderer/Direct3D.cpp  # 006b1d80 (outside the module's runs), 2 runs
     Source/D2Client/UI/Button.cpp  # 006ca0d8 (outside the module's runs), 1 run
@@ -308,9 +308,9 @@ set(D2_MODULE_D2Launch_GENERATED ON)
 set(D2_MODULE_D2Launch_DATA "Source/globals/D2Launch.cpp")
 set(D2_MODULE_D2Launch_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Launch_UNITS
-    Source/D2Launch/MainMenus.cpp  # 0042e5d0, 10 runs
+    Source/D2Launch/Src/MainMenus.cpp  # 0042e5d0, 10 runs
     Source/D2Launch/D2LaunchRoot.cpp  # 0042f7a0, 7 runs
-    Source/D2Launch/CharSel.cpp  # 00437a20, 3 runs
+    Source/D2Launch/Src/CharSel.cpp  # 00437a20, 3 runs
     Source/D2Launch/Launcher.cpp  # 0043b490, 2 runs
 )
 
@@ -334,10 +334,10 @@ set(D2_MODULE_D2Multi_GENERATED ON)
 set(D2_MODULE_D2Multi_DATA "Source/globals/D2Multi.cpp")
 set(D2_MODULE_D2Multi_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Multi_UNITS
-    Source/D2Multi/ChatDlg.cpp  # 0043cc30, 16 runs
+    Source/D2Multi/Src/ChatDlg.cpp  # 0043cc30, 16 runs
     Source/D2Multi/OOG.cpp  # 0043d9a0, 2 runs
     Source/D2Multi/OOGUtilities.cpp  # 0043da50, 10 runs
-    Source/D2Multi/ComCallback.cpp  # 0043db90, 5 runs
+    Source/D2Multi/Src/ComCallback.cpp  # 0043db90, 5 runs
     Source/D2Multi/OOG/ChatDlg.cpp  # 0043ed50, 2 runs
     Source/D2Multi/D2MultiRoot.cpp  # 0043f970, 6 runs
 )
@@ -358,7 +358,7 @@ set(D2_MODULE_D2MCPClient_GENERATED ON)
 set(D2_MODULE_D2MCPClient_DATA "Source/globals/D2MCPClient.cpp")
 set(D2_MODULE_D2MCPClient_UNIT_ORDER "original-address")
 set(D2_MODULE_D2MCPClient_UNITS
-    Source/D2MCPClient/McpConnect.cpp  # 00449ad0, 6 runs
+    Source/D2MCPClient/Src/McpConnect.cpp  # 00449ad0, 6 runs
 )
 
 # D2gfx -> Storm (import): 1.13d D2gfx import table: 4 symbol(s) from Storm; also in 1.13c, 1.10f
@@ -380,7 +380,7 @@ set(D2_MODULE_D2gfx_GENERATED ON)
 set(D2_MODULE_D2gfx_DATA "Source/globals/D2gfx.cpp")
 set(D2_MODULE_D2gfx_UNIT_ORDER "original-address")
 set(D2_MODULE_D2gfx_UNITS
-    Source/D2gfx/D2GFX.cpp  # 004f5030, 7 runs
+    Source/D2gfx/Src/D2GFX.cpp  # 004f5030, 7 runs
     Source/D2gfx/D2GfxHelperStrc.cpp  # 004f7e70, 1 run
 )
 
@@ -442,10 +442,10 @@ set(D2_MODULE_D2Glide_DATA "Source/globals/D2Glide.cpp")
 set(D2_MODULE_D2Glide_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Glide_UNITS
     Source/D2Glide/Renderer/Glide.cpp  # 00508f90, 1 run
-    Source/D2Glide/glTextureCache.cpp  # 0050e890, 1 run
-    Source/D2Glide/glSubtileCache.cpp  # 0050ed90, 1 run
-    Source/D2Glide/glFloorCache.cpp  # 0050f320, 1 run
-    Source/D2Glide/glBlocks.cpp  # 0050f870, 1 run
+    Source/D2Glide/Src/glTextureCache.cpp  # 0050e890, 1 run
+    Source/D2Glide/Src/glSubtileCache.cpp  # 0050ed90, 1 run
+    Source/D2Glide/Src/glFloorCache.cpp  # 0050f320, 1 run
+    Source/D2Glide/Src/glBlocks.cpp  # 0050f870, 1 run
 )
 
 # D2DDraw -> Storm (import): 1.13d D2DDraw import table: 7 symbol(s) from Storm; also in 1.13c, 1.10f
@@ -466,7 +466,7 @@ set(D2_MODULE_D2DDraw_DATA "Source/globals/D2DDraw.cpp")
 set(D2_MODULE_D2DDraw_UNIT_ORDER "original-address")
 set(D2_MODULE_D2DDraw_UNITS
     Source/D2DDraw/Renderer/DirectDraw.cpp  # 00510020, 6 runs
-    Source/D2DDraw/ddSprite.cpp  # 00511df0, 1 run
+    Source/D2DDraw/Src/ddSprite.cpp  # 00511df0, 1 run
 )
 
 # D2Sound -> Storm (import): 1.13d D2Sound import table: 13 symbol(s) from Storm; also in 1.13c, 1.10f
@@ -537,9 +537,9 @@ set(D2_MODULE_Bnclient_UNITS
     Source/Bnclient/BnSend.cpp  # 0051a490, 5 runs
     Source/Bnclient/BnDownload.cpp  # 0051e440, 3 runs
     Source/Bnclient/net_sid.cpp  # 00520580, 4 runs
-    Source/Bnclient/SRP.cpp  # 00527dc0, 4 runs
+    Source/Bnclient/SRP/SRP.cpp  # 00527dc0, 4 runs
     Source/Bnclient/SHA1.cpp  # 00528c90, 1 run
-    Source/Bnclient/SHA.cpp  # 0052a120, 1 run
+    Source/Bnclient/SRP/SHA.cpp  # 0052a120, 1 run
 )
 
 # D2Lang -> Storm (import): 1.13d D2Lang import table: 9 symbol(s) from Storm; also in 1.13c, 1.10f
@@ -577,9 +577,9 @@ set(D2_MODULE_D2Net_GENERATED ON)
 set(D2_MODULE_D2Net_DATA "Source/globals/D2Net.cpp")
 set(D2_MODULE_D2Net_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Net_UNITS
-    Source/D2Net/SRC/Client.cpp  # 0052a610, 1 run
-    Source/D2Net/SRC/D2Net.cpp  # 0052afe0, 2 runs
-    Source/D2Net/Game/Server.cpp  # 0052b050, 2 runs
+    Source/D2Net/Src/Client.cpp  # 0052a610, 1 run
+    Source/D2Net/Src/D2Net.cpp  # 0052afe0, 2 runs
+    Source/D2Net/Src/Server.cpp  # 0052b050, 2 runs
 )
 
 # D2Game -> Storm (import): 1.13d D2Game import table: 10 symbol(s) from Storm; also in 1.13c, 1.10f
@@ -602,114 +602,114 @@ set(D2_MODULE_D2Game_DATA "Source/globals/D2Game.cpp")
 set(D2_MODULE_D2Game_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Game_UNITS
     Source/D2Game/Archive.cpp  # 0045c370 (outside the module's runs), 1 run
-    Source/D2Game/GAME/Server.cpp  # 0052be20, 24 runs
+    Source/D2Game/Game/Server.cpp  # 0052be20, 24 runs
     Source/D2Game/D2GameRoot.cpp  # 0052cbb0, 19 runs
-    Source/D2Game/GAME/stpl_SGAMEDATA.cpp  # 0052e470, 4 runs
-    Source/D2Game/PLAYER/PlayerSave.cpp  # 00530f40, 2 runs
-    Source/D2Game/PLAYER/Player.cpp  # 00534800, 1 run
-    Source/D2Game/UNIT/sunitproxy.cpp  # 00535e80, 1 run
-    Source/D2Game/GAME/Clients.cpp  # 005376c0, 9 runs
-    Source/D2Game/ITEMS/ItemMode.cpp  # 00538350, 6 runs
-    Source/D2Game/GAME/Level.cpp  # 0053a500, 4 runs
-    Source/D2Game/GAME/Server/ServerCmd.cpp  # 0053b0e0, 2 runs
-    Source/D2Game/PLAYER/PlayerModes.cpp  # 0053b210, 3 runs
-    Source/D2Game/GAME/SCmd.cpp  # 0053b280, 4 runs
-    Source/D2Game/GAME/CCmd.cpp  # 0053eff0, 1 run
-    Source/D2Game/GAME/Arena.cpp  # 0053f470, 1 run
-    Source/D2Game/UNIT/Party.cpp  # 0053ff00, 1 run
-    Source/D2Game/GAME/Event.cpp  # 00540b70, 1 run
-    Source/D2Game/UNIT/Monster.cpp  # 00541830, 1 run
-    Source/D2Game/UNIT/SUnitInactive.cpp  # 00541890, 1 run
+    Source/D2Game/Game/stpl_SGAMEDATA.cpp  # 0052e470, 4 runs
+    Source/D2Game/Player/PlayerSave.cpp  # 00530f40, 2 runs
+    Source/D2Game/Player/Player.cpp  # 00534800, 1 run
+    Source/D2Game/Unit/sunitproxy.cpp  # 00535e80, 1 run
+    Source/D2Game/Game/Clients.cpp  # 005376c0, 9 runs
+    Source/D2Game/Items/ItemMode.cpp  # 00538350, 6 runs
+    Source/D2Game/Game/Level.cpp  # 0053a500, 4 runs
+    Source/D2Game/Game/Server/ServerCmd.cpp  # 0053b0e0, 2 runs
+    Source/D2Game/Player/PlayerModes.cpp  # 0053b210, 3 runs
+    Source/D2Game/Game/SCmd.cpp  # 0053b280, 4 runs
+    Source/D2Game/Game/CCmd.cpp  # 0053eff0, 1 run
+    Source/D2Game/Game/Arena.cpp  # 0053f470, 1 run
+    Source/D2Game/Unit/Party.cpp  # 0053ff00, 1 run
+    Source/D2Game/Game/Event.cpp  # 00540b70, 1 run
+    Source/D2Game/Unit/Monster.cpp  # 00541830, 1 run
+    Source/D2Game/Unit/SUnitInactive.cpp  # 00541890, 1 run
     Source/D2Game/Quests/QUESTS.cpp  # 00543520, 7 runs
     Source/D2Game/Objects/ObjectsRgn.cpp  # 00546c60, 1 run
     Source/D2Game/Monster/MonsterRegion.cpp  # 005475e0, 1 run
-    Source/D2Game/PLAYER/PlayerMsg.cpp  # 00547f50, 2 runs
+    Source/D2Game/Player/PlayerMsg.cpp  # 00547f50, 2 runs
     Source/D2Game/Monsters/Spawn.cpp  # 0054dac0, 1 run
     Source/D2Game/Objects/Objects.cpp  # 0054f0d0, 3 runs
-    Source/D2Game/UNIT/SUnit.cpp  # 00552d80, 3 runs
-    Source/D2Game/ITEMS/Items/Drop.cpp  # 00555cc0, 3 runs
-    Source/D2Game/MISSILES/Missiles.cpp  # 00557f10, 2 runs
-    Source/D2Game/UNIT/PlayerList.cpp  # 0055b110, 1 run
-    Source/D2Game/GAME/Task.cpp  # 00564210, 5 runs
-    Source/D2Game/PLAYER/PlayerTrade.cpp  # 00564cd0, 1 run
-    Source/D2Game/PLAYER/PlayerSave2.cpp  # 00568d60, 1 run
-    Source/D2Game/SKILLS/SkillsServer.cpp  # 0056b3e0, 2 runs
-    Source/D2Game/UNIT/SUnitMsg.cpp  # 005706a0, 1 run
-    Source/D2Game/PLAYER/PlayerIntro.cpp  # 00572360, 1 run
+    Source/D2Game/Unit/SUnit.cpp  # 00552d80, 3 runs
+    Source/D2Game/Items/Items/Drop.cpp  # 00555cc0, 3 runs
+    Source/D2Game/Missiles/Missiles.cpp  # 00557f10, 2 runs
+    Source/D2Game/Unit/PlayerList.cpp  # 0055b110, 1 run
+    Source/D2Game/Game/Task.cpp  # 00564210, 5 runs
+    Source/D2Game/Player/PlayerTrade.cpp  # 00564cd0, 1 run
+    Source/D2Game/Player/PlayerSave2.cpp  # 00568d60, 1 run
+    Source/D2Game/Skills/SkillsServer.cpp  # 0056b3e0, 2 runs
+    Source/D2Game/Unit/SUnitMsg.cpp  # 005706a0, 1 run
+    Source/D2Game/Player/PlayerIntro.cpp  # 00572360, 1 run
     Source/D2Game/Monster/MonsterAI.cpp  # 005726c0, 1 run
     Source/D2Game/Monster/Monster.cpp  # 00573470, 1 run
-    Source/D2Game/PLAYER/PlayerPets.cpp  # 00574410, 2 runs
-    Source/D2Game/UNIT/SUNITNPC.cpp  # 00576070, 1 run
-    Source/D2Game/UNIT/SUnitDmg.cpp  # 0057a830, 1 run
+    Source/D2Game/Player/PlayerPets.cpp  # 00574410, 2 runs
+    Source/D2Game/Unit/SUNITNPC.cpp  # 00576070, 1 run
+    Source/D2Game/Unit/SUnitDmg.cpp  # 0057a830, 1 run
     Source/D2Game/Objects/ObjectsMode.cpp  # 00581250, 1 run
-    Source/D2Game/Quests/QUESTS/Quest40.cpp  # 00586b30, 2 runs
-    Source/D2Game/Quests/QUESTS/A5Q1.cpp  # 00586c80, 1 run
-    Source/D2Game/Quests/QUESTS/A5Q2.cpp  # 005879d0, 1 run
-    Source/D2Game/Quests/QUESTS/A5Q3.cpp  # 00588eb0, 2 runs
-    Source/D2Game/Quests/QUESTS/A5Q4.cpp  # 0058aea0, 1 run
-    Source/D2Game/Quests/QUESTS/A5Q5.cpp  # 0058bd50, 1 run
-    Source/D2Game/Quests/QUESTS/A5Q6.cpp  # 0058d770, 1 run
+    Source/D2Game/Quests/Quests/Quest40.cpp  # 00586b30, 2 runs
+    Source/D2Game/Quests/A5Q1.cpp  # 00586c80, 1 run
+    Source/D2Game/Quests/A5Q2.cpp  # 005879d0, 1 run
+    Source/D2Game/Quests/A5Q3.cpp  # 00588eb0, 2 runs
+    Source/D2Game/Quests/A5Q4.cpp  # 0058aea0, 1 run
+    Source/D2Game/Quests/A5Q5.cpp  # 0058bd50, 1 run
+    Source/D2Game/Quests/A5Q6.cpp  # 0058d770, 1 run
     Source/D2Game/Ai/AiGeneral.cpp  # 0058ebc0, 1 run
-    Source/D2Game/Quests/QUESTS/Quest37.cpp  # 0058f870, 1 run
-    Source/D2Game/Quests/QUESTS/A1Q0.cpp  # 0058fa90, 1 run
-    Source/D2Game/Quests/QUESTS/A1Q1.cpp  # 0058fbe0, 1 run
-    Source/D2Game/Quests/QUESTS/A1Q2.cpp  # 00590810, 1 run
-    Source/D2Game/Quests/QUESTS/A1Q3.cpp  # 005912e0, 2 runs
-    Source/D2Game/Quests/QUESTS/A1Q4.cpp  # 00592090, 2 runs
-    Source/D2Game/Quests/QUESTS/A1Q5.cpp  # 00594740, 1 run
-    Source/D2Game/Quests/QUESTS/A1Q6.cpp  # 00595a50, 1 run
-    Source/D2Game/Quests/QUESTS/A1Q7.cpp  # 00596a90, 1 run
-    Source/D2Game/UNIT/Item.cpp  # 005973f0, 2 runs
+    Source/D2Game/Quests/Quests/Quest37.cpp  # 0058f870, 1 run
+    Source/D2Game/Quests/Quests/A1Q0.cpp  # 0058fa90, 1 run
+    Source/D2Game/Quests/A1Q1.cpp  # 0058fbe0, 1 run
+    Source/D2Game/Quests/A1Q2.cpp  # 00590810, 1 run
+    Source/D2Game/Quests/A1Q3.cpp  # 005912e0, 2 runs
+    Source/D2Game/Quests/A1Q4.cpp  # 00592090, 2 runs
+    Source/D2Game/Quests/A1Q5.cpp  # 00594740, 1 run
+    Source/D2Game/Quests/A1Q6.cpp  # 00595a50, 1 run
+    Source/D2Game/Quests/Quests/A1Q7.cpp  # 00596a90, 1 run
+    Source/D2Game/Unit/Item.cpp  # 005973f0, 2 runs
     Source/D2Game/Monster/MonsterMsg.cpp  # 00597d70, 1 run
-    Source/D2Game/Quests/QUESTS/Quest38.cpp  # 005983e0, 1 run
-    Source/D2Game/Quests/QUESTS/A2Q0.cpp  # 00598640, 1 run
-    Source/D2Game/Quests/QUESTS/A2Q1.cpp  # 005988b0, 1 run
-    Source/D2Game/Quests/QUESTS/A2Q2.cpp  # 00599420, 2 runs
-    Source/D2Game/Quests/QUESTS/A2Q3.cpp  # 00599f50, 4 runs
-    Source/D2Game/Quests/QUESTS/A2Q4.cpp  # 0059aca0, 2 runs
-    Source/D2Game/Quests/QUESTS/A2Q5.cpp  # 0059bb40, 1 run
-    Source/D2Game/Quests/QUESTS/A2Q6.cpp  # 0059c330, 3 runs
-    Source/D2Game/Quests/QUESTS/A2Q7.cpp  # 0059d7c0, 3 runs
-    Source/D2Game/Quests/QUESTS/A2Q8.cpp  # 0059e3c0, 1 run
-    Source/D2Game/ITEMS/Items.cpp  # 0059f840, 1 run
+    Source/D2Game/Quests/Quests/Quest38.cpp  # 005983e0, 1 run
+    Source/D2Game/Quests/A2Q0.cpp  # 00598640, 1 run
+    Source/D2Game/Quests/A2Q1.cpp  # 005988b0, 1 run
+    Source/D2Game/Quests/A2Q2.cpp  # 00599420, 2 runs
+    Source/D2Game/Quests/A2Q3.cpp  # 00599f50, 4 runs
+    Source/D2Game/Quests/A2Q4.cpp  # 0059aca0, 2 runs
+    Source/D2Game/Quests/A2Q5.cpp  # 0059bb40, 1 run
+    Source/D2Game/Quests/A2Q6.cpp  # 0059c330, 3 runs
+    Source/D2Game/Quests/A2Q7.cpp  # 0059d7c0, 3 runs
+    Source/D2Game/Quests/A2Q8.cpp  # 0059e3c0, 1 run
+    Source/D2Game/Items/Items.cpp  # 0059f840, 1 run
     Source/D2Game/Monster/Monsters.cpp  # 005a0000, 4 runs
     Source/D2Game/Monsters/Umod.cpp  # 005a0ce0, 1 run
-    Source/D2Game/PLAYER/PlayerScreen.cpp  # 005a5690, 1 run
+    Source/D2Game/Player/PlayerScreen.cpp  # 005a5690, 1 run
     Source/D2Game/Monster/MonsterMode.cpp  # 005a6190, 2 runs
-    Source/D2Game/GAME/Event/Dispatch/Monster.cpp  # 005a7ef0, 1 run
-    Source/D2Game/MISSILES/MissilesMode/SrvDoFunc.cpp  # 005a8730, 1 run
-    Source/D2Game/MISSILES/MissilesMode.cpp  # 005a88e0, 3 runs
-    Source/D2Game/Monster/AI/AI.cpp  # 005b0bd0, 11 runs
-    Source/D2Game/GAME/Targets.cpp  # 005b1880, 1 run
+    Source/D2Game/Game/Event/Dispatch/Monster.cpp  # 005a7ef0, 1 run
+    Source/D2Game/Missiles/MissilesMode/SrvDoFunc.cpp  # 005a8730, 1 run
+    Source/D2Game/Missiles/MissilesMode.cpp  # 005a88e0, 3 runs
+    Source/D2Game/Monster/Ai/AI.cpp  # 005b0bd0, 11 runs
+    Source/D2Game/Game/Targets.cpp  # 005b1880, 1 run
     Source/D2Game/Monster/Create.cpp  # 005b1bc0, 2 runs
-    Source/D2Game/Quests/QUESTS/A4Q0.cpp  # 005b36a0, 1 run
-    Source/D2Game/Quests/QUESTS/A4Q1.cpp  # 005b37f0, 1 run
-    Source/D2Game/Quests/QUESTS/A4Q2.cpp  # 005b4390, 2 runs
-    Source/D2Game/Quests/QUESTS/A4Q3.cpp  # 005b5750, 2 runs
-    Source/D2Game/Quests/QUESTS/A4Q4.cpp  # 005b6940, 1 run
-    Source/D2Game/Quests/QUESTS/Quest39.cpp  # 005b6c60, 1 run
-    Source/D2Game/Quests/QUESTS/A3Q0.cpp  # 005b6ed0, 1 run
-    Source/D2Game/Quests/QUESTS/A3Q1.cpp  # 005b70b0, 2 runs
-    Source/D2Game/Quests/QUESTS/A3Q2.cpp  # 005b7f90, 3 runs
-    Source/D2Game/Quests/QUESTS/A3Q3.cpp  # 005b8b20, 1 run
-    Source/D2Game/Quests/QUESTS/A3Q4.cpp  # 005b9d90, 1 run
-    Source/D2Game/Quests/QUESTS/A3Q5.cpp  # 005bac70, 1 run
-    Source/D2Game/Quests/QUESTS/A3Q6.cpp  # 005bbf80, 1 run
-    Source/D2Game/Quests/QUESTS/A3Q7.cpp  # 005bce80, 2 runs
-    Source/D2Game/SKILLS/SkillItem.cpp  # 005bdb20, 2 runs
-    Source/D2Game/UNIT/SUnitEvent.cpp  # 005c0a90, 1 run
-    Source/D2Game/SKILLS/Items.cpp  # 005c0d00, 1 run
-    Source/D2Game/SKILLS/SkillNec.cpp  # 005c2ff0, 1 run
-    Source/D2Game/SKILLS/SkillDruid.cpp  # 005c6910, 2 runs
-    Source/D2Game/SKILLS/SkillSor.cpp  # 005c8bc0, 2 runs
-    Source/D2Game/SKILLS/SkillMonst.cpp  # 005cae40, 1 run
-    Source/D2Game/SKILLS/SkillPal.cpp  # 005ce790, 1 run
-    Source/D2Game/SKILLS/SkillEMonst.cpp  # 005d10c0, 1 run
-    Source/D2Game/SKILLS/SkillAss.cpp  # 005d30a0, 2 runs
-    Source/D2Game/SKILLS/SkillBar.cpp  # 005d7ea0, 1 run
-    Source/D2Game/SKILLS/SkillAma.cpp  # 005da8b0, 1 run
-    Source/D2Game/Monster/AI/BloodRaven.cpp  # 005df680, 1 run
-    Source/D2Game/Monster/AI/Baal.cpp  # 005ef5e0, 2 runs
+    Source/D2Game/Quests/Quests/A4Q0.cpp  # 005b36a0, 1 run
+    Source/D2Game/Quests/A4Q1.cpp  # 005b37f0, 1 run
+    Source/D2Game/Quests/A4Q2.cpp  # 005b4390, 2 runs
+    Source/D2Game/Quests/A4Q3.cpp  # 005b5750, 2 runs
+    Source/D2Game/Quests/Quests/A4Q4.cpp  # 005b6940, 1 run
+    Source/D2Game/Quests/Quests/Quest39.cpp  # 005b6c60, 1 run
+    Source/D2Game/Quests/A3Q0.cpp  # 005b6ed0, 1 run
+    Source/D2Game/Quests/A3Q1.cpp  # 005b70b0, 2 runs
+    Source/D2Game/Quests/A3Q2.cpp  # 005b7f90, 3 runs
+    Source/D2Game/Quests/A3Q3.cpp  # 005b8b20, 1 run
+    Source/D2Game/Quests/A3Q4.cpp  # 005b9d90, 1 run
+    Source/D2Game/Quests/A3Q5.cpp  # 005bac70, 1 run
+    Source/D2Game/Quests/A3Q6.cpp  # 005bbf80, 1 run
+    Source/D2Game/Quests/A3Q7.cpp  # 005bce80, 2 runs
+    Source/D2Game/Skills/SkillItem.cpp  # 005bdb20, 2 runs
+    Source/D2Game/Unit/SUnitEvent.cpp  # 005c0a90, 1 run
+    Source/D2Game/Skills/Items.cpp  # 005c0d00, 1 run
+    Source/D2Game/Skills/SkillNec.cpp  # 005c2ff0, 1 run
+    Source/D2Game/Skills/SkillDruid.cpp  # 005c6910, 2 runs
+    Source/D2Game/Skills/SkillSor.cpp  # 005c8bc0, 2 runs
+    Source/D2Game/Skills/SkillMonst.cpp  # 005cae40, 1 run
+    Source/D2Game/Skills/SkillPal.cpp  # 005ce790, 1 run
+    Source/D2Game/Skills/SkillEMonst.cpp  # 005d10c0, 1 run
+    Source/D2Game/Skills/SkillAss.cpp  # 005d30a0, 2 runs
+    Source/D2Game/Skills/SkillBar.cpp  # 005d7ea0, 1 run
+    Source/D2Game/Skills/SkillAma.cpp  # 005da8b0, 1 run
+    Source/D2Game/Monster/Ai/BloodRaven.cpp  # 005df680, 1 run
+    Source/D2Game/Monster/Ai/Baal.cpp  # 005ef5e0, 2 runs
     Source/D2Game/Seed.cpp  # no function
 )
 
@@ -728,29 +728,29 @@ set(D2_MODULE_D2CMP_GENERATED ON)
 set(D2_MODULE_D2CMP_DATA "Source/globals/D2CMP.cpp")
 set(D2_MODULE_D2CMP_UNIT_ORDER "original-address")
 set(D2_MODULE_D2CMP_UNITS
-    Source/D2CMP/SRC/SpriteCache.cpp  # 005fde10, 5 runs
+    Source/D2CMP/Src/SpriteCache.cpp  # 005fde10, 5 runs
     Source/D2CMP/D2CMPRoot.cpp  # 005fde50, 6 runs
-    Source/D2CMP/SRC/TileProjects.cpp  # 006006b0, 1 run
+    Source/D2CMP/Src/TileProjects.cpp  # 006006b0, 1 run
     Source/D2CMP/Pallete.cpp  # 006008d0, 1 run
-    Source/D2CMP/SRC/CelCmp.cpp  # 00600c90, 12 runs
-    Source/D2CMP/SRC/stpl_CELLIST.cpp  # 00601b80, 17 runs
-    Source/D2CMP/SRC/stpl_TCELENTRY.cpp  # 00601fa0, 6 runs
-    Source/D2CMP/SRC/CelCmp/TCELENTRY.cpp  # 00602a40, 1 run
-    Source/D2CMP/SRC/CelCmp/stpl_CELLIST.cpp  # 00602aa0, 5 runs
-    Source/D2CMP/SRC/CelCmp/CELLIST.cpp  # 00602b20, 4 runs
-    Source/D2CMP/SRC/CelCmp/stpl_TCELENTRY.cpp  # 00602bf0, 1 run
-    Source/D2CMP/SRC/stpl_MappingEntryNode.cpp  # 00604070, 1 run
-    Source/D2CMP/DUNGEON/Dungeon.cpp  # 00604a40, 1 run
+    Source/D2CMP/Src/CelCmp.cpp  # 00600c90, 12 runs
+    Source/D2CMP/Src/stpl_CELLIST.cpp  # 00601b80, 17 runs
+    Source/D2CMP/Src/stpl_TCELENTRY.cpp  # 00601fa0, 6 runs
+    Source/D2CMP/Src/CelCmp/TCELENTRY.cpp  # 00602a40, 1 run
+    Source/D2CMP/Src/CelCmp/stpl_CELLIST.cpp  # 00602aa0, 5 runs
+    Source/D2CMP/Src/CelCmp/CELLIST.cpp  # 00602b20, 4 runs
+    Source/D2CMP/Src/CelCmp/stpl_TCELENTRY.cpp  # 00602bf0, 1 run
+    Source/D2CMP/Src/stpl_MappingEntryNode.cpp  # 00604070, 1 run
+    Source/D2CMP/Dungeon/Dungeon.cpp  # 00604a40, 1 run
     Source/D2CMP/Draw.cpp  # 00604df0, 1 run
-    Source/D2CMP/SRC/FastCmp.cpp  # 00606a10, 1 run
-    Source/D2CMP/SRC/LRUCache.cpp  # 00609020, 1 run
-    Source/D2CMP/SRC/Tilecmp.cpp  # 006094b0, 1 run
-    Source/D2CMP/SRC/GfxHash.cpp  # 0060a9d0, 2 runs
-    Source/D2CMP/SRC/CelDataHash.cpp  # 0060aeb0, 1 run
-    Source/D2CMP/SRC/Codec.cpp  # 0060b200, 1 run
-    Source/D2CMP/SRC/FindTiles.cpp  # 0060cd70, 1 run
-    Source/D2CMP/SRC/Raw.cpp  # 0060d190, 1 run
-    Source/D2CMP/SRC/SubTile.cpp  # 0060d310, 2 runs
+    Source/D2CMP/Src/FastCmp.cpp  # 00606a10, 1 run
+    Source/D2CMP/Src/LRUCache.cpp  # 00609020, 1 run
+    Source/D2CMP/Src/Tilecmp.cpp  # 006094b0, 1 run
+    Source/D2CMP/Src/GfxHash.cpp  # 0060a9d0, 2 runs
+    Source/D2CMP/Src/CelDataHash.cpp  # 0060aeb0, 1 run
+    Source/D2CMP/Src/Codec.cpp  # 0060b200, 1 run
+    Source/D2CMP/Src/FindTiles.cpp  # 0060cd70, 1 run
+    Source/D2CMP/Src/Raw.cpp  # 0060d190, 1 run
+    Source/D2CMP/Src/SubTile.cpp  # 0060d310, 2 runs
 )
 
 # D2Common -> Storm (import): 1.13d D2Common import table: 19 symbol(s) from Storm; also in 1.13c, 1.10f
@@ -787,49 +787,49 @@ set(D2_MODULE_D2Common_UNITS
     Source/D2Common/Chat/Ignorelist/stpl_MappingEntryNode.cpp  # 0060ee60, 19 runs
     Source/D2Common/Chat/Ignorelist/StringEntryNode.cpp  # 0060f160, 1 run
     Source/D2Common/Logging/ProfCore.cpp  # 00611600, 4 runs
-    Source/D2Common/INVENTORY/Inventory.cpp  # 00611610, 11 runs
-    Source/D2Common/DATATBLS/DataTbls.cpp  # 00611760, 2 runs
-    Source/D2Common/DUNGEON/Dungeon.cpp  # 006194a0, 3 runs
+    Source/D2Common/Inventory/Inventory.cpp  # 00611610, 11 runs
+    Source/D2Common/DataTbls/DataTbls.cpp  # 00611760, 2 runs
+    Source/D2Common/Dungeon/Dungeon.cpp  # 006194a0, 3 runs
     Source/D2Common/D2CommonRoot.cpp  # 0061bb50, 5 runs
     Source/D2Common/Environment.cpp  # 0061bb80, 1 run
-    Source/D2Common/DATATBLS/LvlTbls.cpp  # 0061c540, 1 run
-    Source/D2Common/Units.cpp  # 00620100, 2 runs
-    Source/D2Common/Logging.cpp  # 00624700, 2 runs
+    Source/D2Common/DataTbls/LvlTbls.cpp  # 0061c540, 1 run
+    Source/D2Common/Units/Units.cpp  # 00620100, 2 runs
+    Source/D2Common/Logging/Logging.cpp  # 00624700, 2 runs
     Source/D2Common/Src/LogManager.cpp  # 00624b50, 1 run
     Source/D2Common/Stats/StatsEx.cpp  # 00624b90, 1 run
-    Source/D2Common/ITEMS/Items.cpp  # 00627c20, 5 runs
-    Source/D2Common/DATATBLS/ItemTbls.cpp  # 006314a0, 3 runs
-    Source/D2Common/DATATBLS/ItemStats.cpp  # 00639db0, 1 run
+    Source/D2Common/Items/Items.cpp  # 00627c20, 5 runs
+    Source/D2Common/DataTbls/ItemTbls.cpp  # 006314a0, 3 runs
+    Source/D2Common/DataTbls/ItemStats.cpp  # 00639db0, 1 run
     Source/D2Common/Monsters/MONSTERS.cpp  # 0063db80, 3 runs
-    Source/D2Common/DATATBLS/ObjectTbls.cpp  # 0063f690, 1 run
+    Source/D2Common/DataTbls/ObjectTbls.cpp  # 0063f690, 1 run
     Source/D2Common/Collision.cpp  # 00641530, 3 runs
     Source/D2Common/Drlg/Drlg.cpp  # 00641f20, 17 runs
     Source/D2Common/Txt/Cube.cpp  # 006429d0, 11 runs
     Source/D2Common/Drlg/Transform.cpp  # 00643260, 1 run
-    Source/D2Common/Txt/Skills.cpp  # 00643580, 7 runs
-    Source/D2Common/PATH/Path.cpp  # 00647fb0, 3 runs
-    Source/D2Common/PATH/DynamicPath.cpp  # 00648120, 3 runs
+    Source/D2Common/Skills/Skills.cpp  # 00643580, 7 runs
+    Source/D2Common/Path/Path.cpp  # 00647fb0, 3 runs
+    Source/D2Common/Path/DynamicPath.cpp  # 00648120, 3 runs
     Source/D2Common/Units/Missile.cpp  # 0064a100, 2 runs
     Source/D2Common/Unit.cpp  # 0064bf60, 1 run
-    Source/D2Common/COMPOSIT/Composit.cpp  # 0064efe0, 1 run
-    Source/D2Common/DATATBLS/MonsterTbls.cpp  # 00650eb0, 4 runs
+    Source/D2Common/Composit/Composit.cpp  # 0064efe0, 1 run
+    Source/D2Common/DataTbls/MonsterTbls.cpp  # 00650eb0, 4 runs
     Source/D2Common/Units/UnitFinds.cpp  # 0065a590, 1 run
-    Source/D2Common/DATATBLS/TokTbls.cpp  # 0065adc0, 2 runs
-    Source/D2Common/QuestRecord.cpp  # 0065c310, 1 run
-    Source/D2Common/ITEMS/ItemMods.cpp  # 0065c660, 1 run
-    Source/D2Common/DATATBLS/BeltsTbls.cpp  # 00660290, 1 run
+    Source/D2Common/DataTbls/TokTbls.cpp  # 0065adc0, 2 runs
+    Source/D2Common/QuestRecord/QuestRecord.cpp  # 0065c310, 1 run
+    Source/D2Common/Items/ItemMods.cpp  # 0065c660, 1 run
+    Source/D2Common/DataTbls/BeltsTbls.cpp  # 00660290, 1 run
     Source/D2Common/Waypoints.cpp  # 00660d90, 1 run
-    Source/D2Common/Chat.cpp  # 00661110, 2 runs
-    Source/D2Common/Text.cpp  # 00661240, 1 run
-    Source/D2Common/DATATBLS/MissileTbls.cpp  # 006617b0, 1 run
+    Source/D2Common/Chat/Chat.cpp  # 00661110, 2 runs
+    Source/D2Common/Text/Text.cpp  # 00661240, 1 run
+    Source/D2Common/DataTbls/MissileTbls.cpp  # 006617b0, 1 run
     Source/D2Common/Merc.cpp  # 006632c0, 2 runs
     Source/D2Common/Item.cpp  # 00663a20, 1 run
     Source/D2Common/Units/MissileStream.cpp  # 00663d40, 1 run
-    Source/D2Common/DATATBLS/OverlayTbls.cpp  # 00664150, 1 run
-    Source/D2Common/DATATBLS/ArenaTbls.cpp  # 006649b0, 2 runs
+    Source/D2Common/DataTbls/OverlayTbls.cpp  # 00664150, 1 run
+    Source/D2Common/DataTbls/ArenaTbls.cpp  # 006649b0, 2 runs
     Source/D2Common/Drlg/Preset.cpp  # 00665930, 5 runs
-    Source/D2Common/DATATBLS/FieldTbls.cpp  # 0066a2b0, 2 runs
-    Source/D2Common/DATATBLS/AnimTbls.cpp  # 0066a770, 1 run
+    Source/D2Common/DataTbls/FieldTbls.cpp  # 0066a2b0, 2 runs
+    Source/D2Common/DataTbls/AnimTbls.cpp  # 0066a770, 1 run
     Source/D2Common/Drlg/DrlgRoom.cpp  # 0066ab00, 3 runs
     Source/D2Common/Drlg/DrlgWarp.cpp  # 0066af30, 1 run
     Source/D2Common/Drlg/DrlgLogic.cpp  # 0066c580, 1 run
@@ -866,9 +866,9 @@ set(D2_MODULE_D2Direct3D_DATA "Source/globals/D2Direct3D.cpp")
 set(D2_MODULE_D2Direct3D_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Direct3D_UNITS
     Source/D2Direct3D/Renderer/Direct3D.cpp  # 006b1b60, 4 runs
-    Source/D2Direct3D/d3dTextureCache.cpp  # 006ba420, 1 run
-    Source/D2Direct3D/d3dSubtileCache.cpp  # 006ba9a0, 1 run
-    Source/D2Direct3D/d3dFloorCache.cpp  # 006bafc0, 1 run
+    Source/D2Direct3D/Src/d3dTextureCache.cpp  # 006ba420, 1 run
+    Source/D2Direct3D/Src/d3dSubtileCache.cpp  # 006ba9a0, 1 run
+    Source/D2Direct3D/Src/d3dFloorCache.cpp  # 006bafc0, 1 run
 )
 
 # D2Gdi -> Storm (import): 1.13d D2Gdi import table: 3 symbol(s) from Storm; also in 1.13c, 1.10f

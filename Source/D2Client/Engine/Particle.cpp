@@ -3,7 +3,7 @@
 #include "Source/D2Client/Engine/Particle.h"
 #include "Source/D2Client/D2GfxInfoStrc.h"
 #include "Source/D2Client/Engine/Gfx.h"
-#include "Source/D2Client/UNIT/CUnit.h"
+#include "Source/D2Client/Unit/CUnit.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/Fog/Fog.h"

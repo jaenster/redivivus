@@ -2,14 +2,14 @@
 
 #include "Source/D2gfx/D2GfxHelperStrc.h"
 #include "Source/D2Client/D2GfxSettingsStrc.h"
-#include "Source/D2Client/GAME/Draw.h"
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2Client/Game/Draw.h"
+#include "Source/D2gfx/Src/D2GFX.h"
 #include "Source/globals/globals.h"
 #include "Source/D2CMP/D2CMP.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2gfx/D2gfx.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2gfx/D2GFX.data.h"
+#include "Source/D2gfx/Src/D2GFX.data.h"
 #include "Source/D2gfx/D2GfxHelperStrc.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

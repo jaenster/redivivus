@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Launch/MainMenus.h"
+#include "Source/D2Launch/Src/MainMenus.h"
 
 // Forward declarations
 struct DC6;

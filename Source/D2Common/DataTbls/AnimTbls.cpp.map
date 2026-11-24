@@ -1,0 +1,252 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Common/DataTbls/AnimTbls.cpp",
+  "functions": [
+    {
+      "name": "TXT_AllocTxt_AnimTbls",
+      "address": "0066a770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a770"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::AnimTbls",
+      "calledFunctions": [
+        "TXT_AllocTxt_AnimTbls",
+        "AllocServerMemory",
+        "memset",
+        "D2FILE_AllocAndLoadD2File",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2AnimDataBucketStrc",
+        "D2AnimDataBucketStrc *",
+        "D2AnimDataStrc",
+        "D2PoolManagerStrc",
+        "uint32_t"
+      ],
+      "dh": "635856a9",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ANIMDATA_FreeAnimDataRecord",
+      "address": "0066a830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a830"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::AnimTbls",
+      "calledFunctions": [
+        "ANIMDATA_FreeAnimDataRecord",
+        "FreeClientMemory",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2AnimDataStrc"
+      ],
+      "dh": "f802a8c7",
+      "paramStorage": [
+        [
+          "pAnimData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ANIMDATA_CompareNames",
+      "address": "0066a890",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a890"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::AnimTbls",
+      "calledFunctions": [
+        "ANIMDATA_CompareNames",
+        "SSTR_StringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "7c54a479",
+      "paramStorage": [
+        [
+          "pdwName1",
+          "EDI:4"
+        ],
+        [
+          "pdwName2",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "ANIMDATA_GetRecordByNameHash",
+      "address": "0066a8f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a8f0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::AnimTbls",
+      "calledFunctions": [
+        "ANIMDATA_GetRecordByNameHash",
+        "TXT_AnimTbls_Get",
+        "SSTR_StringLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2AnimDataRecordStrc",
+        "D2AnimDataStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "05870ec9",
+      "paramStorage": [
+        [
+          "szCofName",
+          "EBX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ANIMDATA_GetAnimDataForUnit",
+      "address": "0066a9b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066a9b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::AnimTbls",
+      "calledFunctions": [
+        "ANIMDATA_GetAnimDataForUnit",
+        "COMPOSIT_BuildCofPath",
+        "ANIMDATA_GetRecordByNameHash",
+        "TXT_AnimTbls_Get",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2AnimDataRecordStrc",
+        "D2InventoryStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "e84700d1",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nClassId",
+          "EDX:4"
+        ],
+        [
+          "nCofMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWeaponClass",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pInventory",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ANIMDATA_SetAnimSpeedForUnit",
+      "address": "0066aa20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066aa20"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::AnimTbls",
+      "calledFunctions": [
+        "ANIMDATA_SetAnimSpeedForUnit",
+        "COMPOSIT_GetCofPathWithTransform",
+        "ANIMDATA_GetRecordByNameHash",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2AnimDataRecordStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "925d6684",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAnimSpeed",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ANIMDATA_GetFramesSpeedAndTrigger",
+      "address": "0066aa80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066aa80"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::AnimTbls",
+      "calledFunctions": [
+        "ANIMDATA_GetFramesSpeedAndTrigger",
+        "ANIMDATA_GetRecordByNameHash",
+        "TXT_AnimTbls_Get"
+      ],
+      "usedTypes": [
+        "D2AnimDataRecordStrc",
+        "D2AnimDataStrc",
+        "uint32_t"
+      ],
+      "dh": "cd3e1091",
+      "paramStorage": [
+        [
+          "pszName",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnFrameCount",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnAnimSpeed",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnTriggerFrame",
+          "Stack[0x10]:4"
+        ]
+      ]
+    }
+  ]
+}

@@ -3,14 +3,14 @@
 #include "Source/D2Common/Units/UnitFinds.h"
 #include "Source/D2Common/Collision.h"
 #include "Source/D2Common/D2RoomStrc.h"
-#include "Source/D2Common/DATATBLS/FieldTbls.h"
+#include "Source/D2Common/DataTbls/FieldTbls.h"
 #include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
-#include "Source/D2Common/Units.h"
+#include "Source/D2Common/Units/Units.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Common/Units.inline.h"
-#include "Source/D2Common/Units.twin.inline.h"
+#include "Source/D2Common/Units/Units.inline.h"
+#include "Source/D2Common/Units/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

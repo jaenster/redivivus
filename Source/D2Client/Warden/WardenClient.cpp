@@ -3,13 +3,13 @@
 #include "Source/D2Client/Warden/WardenClient.h"
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/GAME/Msg.h"
+#include "Source/D2Client/Game/Msg.h"
 #include "Source/Fog/Fog.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/Bnclient/Bnclient.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/GAME/Sound.data.h"
+#include "Source/D2Client/Game/Sound.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

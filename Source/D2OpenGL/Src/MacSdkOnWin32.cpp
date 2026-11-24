@@ -14,10 +14,10 @@
 #include <cstring>
 #include <new>
 
-#include "Source/D2gfx/D2GFX.h"
+#include "Source/D2gfx/Src/D2GFX.h"
 #include "Source/Fog/Src/DataArrays.h"
 #include "Source/Fog/Src/ErrorManager.h"
-#include "Source/D2CMP/SRC/SpriteCache.h"
+#include "Source/D2CMP/Src/SpriteCache.h"
 
 namespace D2OpenGL {
 

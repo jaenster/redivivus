@@ -5,10 +5,10 @@
 #include "Source/D2Common/Chat/Ignorelist/MappingEntryNode.h"
 #include "Source/D2Common/Chat/Ignorelist/StringEntryNode.h"
 #include "Source/Fog/Fog.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/Chat.h"
+#include "Source/D2Common/Chat/Chat.h"
 #include "Source/D2Common/Chat/Ignorelist/ChatIgnoreList.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

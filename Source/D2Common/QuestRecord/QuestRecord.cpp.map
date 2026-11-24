@@ -1,0 +1,330 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Common/QuestRecord/QuestRecord.cpp",
+  "functions": [
+    {
+      "name": "GetQuestState",
+      "address": "0065c310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c310"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "GetQuestState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CheckBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t"
+      ],
+      "dh": "d7ab6c43",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuestId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eQuestState",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetQuestState",
+      "address": "0065c360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c360"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "SetQuestState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t"
+      ],
+      "dh": "15b3d6cf",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuestId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eQuestState",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UnsetQuestState",
+      "address": "0065c3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c3a0"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "UnsetQuestState",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UnsetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2QuestState",
+        "eD2Quests",
+        "int32_t"
+      ],
+      "dh": "14b3bd34",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuestId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "eQuestState",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UnsetQuestStepStates",
+      "address": "0065c3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c3e0"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "UnsetQuestStepStates",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UnsetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "eD2Quests",
+        "int32_t"
+      ],
+      "dh": "60ef1779",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nQuestId",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CreateBitBuffer",
+      "address": "0065c430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c430"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "CreateBitBuffer",
+        "AllocServerMemory",
+        "memset",
+        "InitBitBuffer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2PoolManagerStrc",
+        "uint8_t"
+      ],
+      "dh": "403b36c4",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FreeQuestRecordPool",
+      "address": "0065c490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c490"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "FreeQuestRecordPool",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2PoolManagerStrc"
+      ],
+      "dh": "d13c2735",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ReadQuestRecordFromBuffer",
+      "address": "0065c4d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c4d0"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "ReadQuestRecordFromBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "UnsetBitAtOffset",
+        "CheckBitAtOffset",
+        "SetBitAtOffset"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "int16_t",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "c11947c7",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0xc]:2"
+        ],
+        [
+          "bResetQuestFlags",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CopyQuestBitBuffer",
+      "address": "0065c560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c560"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord::QuestRecord",
+      "calledFunctions": [
+        "CopyQuestBitBuffer",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "int16_t",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "ac258977",
+      "paramStorage": [
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOutputBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nLength",
+          "Stack[0xc]:2"
+        ],
+        [
+          "dwParam",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0065c5a0",
+      "address": "0065c5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0065c5a0"
+        }
+      ],
+      "namespace": "D2Common::QuestRecord",
+      "calledFunctions": [
+        "Unreferenced_0065c5a0"
+      ],
+      "usedTypes": [
+        "D2PropertiesTxt",
+        "int32_t"
+      ],
+      "dh": "e5e7268a",
+      "paramStorage": [
+        [
+          "nPropertyIndex",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

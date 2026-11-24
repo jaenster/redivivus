@@ -2,9 +2,9 @@
 
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2Client/GAME/Game/SGAMEDATA.h"
+#include "Source/D2Client/Game/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
+#include "Source/D2Common/DataTbls/LvlTbls.h"
 #include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
@@ -28,13 +28,13 @@
 #include "Source/D2Common/Drlg/TileSub.h"
 #include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Common/Seed.h"
-#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Skills/Skills.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Drlg/Drlg.data.h"
 #include "Source/D2Common/Drlg/OutPlace.data.h"
-#include "Source/D2Common/Txt/Skills.inline.h"
+#include "Source/D2Common/Skills/Skills.inline.h"
 
 // The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
 #ifndef min

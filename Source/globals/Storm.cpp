@@ -4,8 +4,8 @@
  */
 
 #include "Source/globals/globals.h"
-#include "3rdparty/Storm/Storm.h"
-#include "3rdparty/Storm/Storm.globals.h"
+#include "Source/Storm/Storm.h"
+#include "Source/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
 

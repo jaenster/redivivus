@@ -2,10 +2,10 @@
 
 #include "Source/D2Client/Sound/SoundHdr.h"
 #include "Source/D2Client/D2ClientRoot.h"
-#include "Source/D2Client/GAME/Sound.h"
-#include "Source/D2Client/GAME/Wall2.h"
+#include "Source/D2Client/Game/Sound.h"
+#include "Source/D2Client/Game/Wall2.h"
 #include "Source/D2Client/Sound/Sound.h"
-#include "Source/D2Client/UNIT/Player.h"
+#include "Source/D2Client/Unit/Player.h"
 #include "Source/D2Client/Utils.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Hell/D2Hell.h"

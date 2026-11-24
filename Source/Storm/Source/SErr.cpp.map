@@ -1,0 +1,1054 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Storm/Source/SErr.cpp",
+  "functions": [
+    {
+      "name": "SErrSetBlizzardErrorFunction",
+      "address": "0041c0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c0e0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrSetBlizzardErrorFunction"
+      ],
+      "usedTypes": [
+        "pfnBlizzardError"
+      ],
+      "dh": "af99d974",
+      "paramStorage": [
+        [
+          "pfnFunc",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SERR_AddStormFacility",
+      "address": "0041c0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c0f0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrRegisterMessageSource",
+        "SERR_AddStormFacility",
+        "StormGetInstance"
+      ],
+      "usedTypes": [
+        "D2SErrMessageSourceStrc",
+        "D2SErrMessageSourceStrc *",
+        "uint16_t"
+      ],
+      "dh": "d8bfd66b",
+      "paramStorage": [
+        [
+          "wModuleId",
+          "Stack[0x4]:2"
+        ]
+      ]
+    },
+    {
+      "name": "SERR_AddStormMessages",
+      "address": "0041c140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c140"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_AddStormMessages",
+        "SERR_AddStormFacility"
+      ],
+      "dh": "78dc1e2d"
+    },
+    {
+      "name": "SERR_GetString",
+      "address": "0041c170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c170"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_GetString",
+        "StormGetInstance"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "bd8976f6",
+      "paramStorage": [
+        [
+          "nErrorIndex",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SERR_InternalEnterCriticalSection",
+      "address": "0041c1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c1a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_InternalEnterCriticalSection"
+      ],
+      "dh": "b46cdbaa"
+    },
+    {
+      "name": "SERR_InternalLeaveCriticalSection",
+      "address": "0041c1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c1e0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "dh": "d1eddcfa"
+    },
+    {
+      "name": "SERR_UndecorateObjectName",
+      "address": "0041c1f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c1f0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SERR_UndecorateObjectName",
+        "SStrLen",
+        "strpbrk",
+        "SStrCopy",
+        "SStrPack"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "c1f6ac41",
+      "paramStorage": [
+        [
+          "szMangled",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxLen",
+          "EBX:4"
+        ],
+        [
+          "szText",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "SErrPrepareAppFatal",
+      "address": "0041c2c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c2c0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrPrepareAppFatal",
+        "SERR_InternalEnterCriticalSection",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "a7f857f8",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCallbackParam",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SErrRegisterMessageSource",
+      "address": "0041c2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c2f0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrRegisterMessageSource",
+        "SERR_InternalEnterCriticalSection",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "D2SErrMessageSourceStrc",
+        "uint16_t"
+      ],
+      "dh": "e9eb5269",
+      "paramStorage": [
+        [
+          "wModuleId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "dwModuleBase",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam2",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SErrSetLastError",
+      "address": "0041c340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c340"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrSetLastError"
+      ],
+      "dh": "f23d876f",
+      "paramStorage": [
+        [
+          "dwErrCode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListOffsetToPointer",
+      "address": "0041c3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c3a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListOffsetToPointer"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "intptr_t",
+        "uint32_t"
+      ],
+      "dh": "98334035",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "pBase",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0041c410",
+      "address": "0041c410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c410"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "Unreferenced_0041c410"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
+      ],
+      "dh": "8fc1e2af",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SErrGetErrorStr",
+      "address": "0041c430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c430"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrGetErrorStr",
+        "SErrSetLastError",
+        "SERR_InternalEnterCriticalSection",
+        "SERR_AddStormMessages",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "94a293d7",
+      "paramStorage": [
+        [
+          "dwMessageId",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListGetPointer",
+      "address": "0041c560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c560"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListGetPointer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "f1d11485",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListUnlinkAndInsert",
+      "address": "0041c580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c580"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListUnlinkAndInsert"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "1d33c949",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppTarget",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListGetNext",
+      "address": "0041c630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c630"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListGetNext"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkedListStrc",
+        "uint32_t"
+      ],
+      "dh": "3ae5cb1a",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0041c650",
+      "address": "0041c650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c650"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0041c650"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "abc03e62",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListUnlink",
+      "address": "0041c690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c690"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListUnlink"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "StormLinkedListStrc",
+        "uint32_t"
+      ],
+      "dh": "fee31410",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0041c6e0",
+      "address": "0041c6e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c6e0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "Unreferenced_0041c6e0"
+      ],
+      "usedTypes": [
+        "StormLinkedListStrc"
+      ],
+      "dh": "7f6ee8bf",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListGetData",
+      "address": "0041c700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c700"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListGetData"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkedListStrc",
+        "intptr_t"
+      ],
+      "dh": "f05579d2",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0041c730",
+      "address": "0041c730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c730"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0041c730"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "2416444e",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "UnlinkAll",
+      "address": "0041c770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c770"
+        }
+      ],
+      "namespace": "TSList<HANDLER, TSGetLink<HANDLER>>",
+      "calledFunctions": [
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "TSLink<HANDLER>",
+        "TSLink<HANDLER> *",
+        "TSList<HANDLER, TSGetLink<HANDLER>>",
+        "uint32_t"
+      ],
+      "dh": "a08bfc53"
+    },
+    {
+      "name": "TSList_HANDLER_Destructor",
+      "address": "0041c7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c7b0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "TSList_HANDLER_Destructor",
+        "UnlinkAll"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "StormLinkedListStrc",
+        "uint32_t"
+      ],
+      "dh": "d34568a8",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0041c7f0",
+      "address": "0041c7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c7f0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "Unreferenced_0041c7f0"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "ef423eb3",
+      "paramStorage": [
+        [
+          "pLink",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "LINKEDLIST_UnlinkSelf_Unref_0041c800",
+      "address": "0041c800",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c800"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "LINKEDLIST_UnlinkSelf_Unref_0041c800"
+      ],
+      "usedTypes": [
+        "StormLinkStrc"
+      ],
+      "dh": "894845bb",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListAllocNode",
+      "address": "0041c840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c840"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListAllocNode",
+        "SMemAlloc",
+        "SSYSTEM_ListUnlinkAndInsert"
+      ],
+      "usedTypes": [
+        "int *",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "e8fc4810",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "nInsertMode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDataSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAllocFlags",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListFreeNode",
+      "address": "0041c8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c8a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListFreeNode",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "b6eb9bf6",
+      "paramStorage": [
+        [
+          "pNode",
+          "ECX:4"
+        ],
+        [
+          "bFreeMemory",
+          "Stack[0x4]:1"
+        ]
+      ]
+    },
+    {
+      "name": "SErrRegisterHandler",
+      "address": "0041c900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c900"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrRegisterHandler",
+        "SERR_InternalEnterCriticalSection",
+        "SMemAlloc",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "int32_t",
+        "pfnSErrDisplayCallback",
+        "uint32_t"
+      ],
+      "dh": "4cb49bac",
+      "paramStorage": [
+        [
+          "pfnCallback",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSList_HANDLER_Clear",
+      "address": "0041c9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041c9c0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "TSList_HANDLER_Clear",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "HANDLER",
+        "StormLinkStrc",
+        "StormLinkedListStrc",
+        "uint32_t"
+      ],
+      "dh": "dfd48850",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SSYSTEM_ListRemoveAndFree",
+      "address": "0041ca10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041ca10"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SSYSTEM_ListRemoveAndFree",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "HANDLER",
+        "StormLinkStrc",
+        "StormLinkStrc *",
+        "StormLinkedListStrc",
+        "uint32_t"
+      ],
+      "dh": "a83703db",
+      "paramStorage": [
+        [
+          "pList",
+          "ECX:4"
+        ],
+        [
+          "pNode",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SErrDisplayError",
+      "address": "0041caf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041caf0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrDisplayError",
+        "__security_check_cookie",
+        "SERR_InternalEnterCriticalSection",
+        "SMemZero",
+        "SStrCopy",
+        "SStrChrR",
+        "SErrGetErrorStr",
+        "SERR_GetString",
+        "SERR_UndecorateObjectName",
+        "SStrLen",
+        "SStrPrintf",
+        "WND_GetActiveWindow",
+        "SERR_InternalLeaveCriticalSection",
+        "__break",
+        "SSYSTEM_SetShutdownFlag"
+      ],
+      "usedTypes": [
+        "LPDWORD",
+        "StormSErrHandlerNode",
+        "_WIN32_FIND_DATAA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "b0c3ba90",
+      "paramStorage": [
+        [
+          "nErrorCode",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pStackTrace",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTraceFlags",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pCustomMsg",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nMessageFlags",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nExitCode",
+          "Stack[0x18]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SErrDisplayErrorFmt",
+      "address": "0041cfb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041cfb0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrDisplayErrorFmt",
+        "vsprintf",
+        "SErrDisplayError",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "46e95db2"
+    },
+    {
+      "name": "SErrReportNamedResourceLeak",
+      "address": "0041d010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d010"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SRegLoadValue",
+        "SErrReportNamedResourceLeak",
+        "SStrPrintf",
+        "SErrDisplayError",
+        "__security_check_cookie"
+      ],
+      "dh": "f1a942fb",
+      "paramStorage": [
+        [
+          "szMessage",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SErrUnregisterHandler",
+      "address": "0041d110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d110"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrUnregisterHandler",
+        "SERR_InternalEnterCriticalSection",
+        "SSYSTEM_ListRemoveAndFree",
+        "SERR_InternalLeaveCriticalSection"
+      ],
+      "usedTypes": [
+        "HANDLER",
+        "pfnSErrDisplayCallback"
+      ],
+      "dh": "61de90bb",
+      "paramStorage": [
+        [
+          "nCallbackId",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SErrDisplayAppFatal",
+      "address": "0041d160",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d160"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrDisplayAppFatal",
+        "SERR_InternalEnterCriticalSection",
+        "SMemZero",
+        "SERR_InternalLeaveCriticalSection",
+        "vsprintf",
+        "SErrDisplayError"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "97e49e60"
+    },
+    {
+      "name": "SErrReportResourceLeak",
+      "address": "0041d1e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0041d1e0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "SErrReportResourceLeak",
+        "SErrReportNamedResourceLeak"
+      ],
+      "dh": "1eaefab2",
+      "paramStorage": [
+        [
+          "szMessage",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "StaticInit_gStormErrorCallbackList",
+      "address": "006ca8a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006ca8a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "StaticInit_gStormErrorCallbackList",
+        "atexit"
+      ],
+      "dh": "8ba0cd97"
+    },
+    {
+      "name": "StaticFini_gStormErrorCallbackList",
+      "address": "006cb2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006cb2a0"
+        }
+      ],
+      "namespace": "Storm::Source::SErr",
+      "calledFunctions": [
+        "StaticFini_gStormErrorCallbackList",
+        "UnlinkAll"
+      ],
+      "dh": "9ef2b988"
+    }
+  ]
+}

@@ -9,7 +9,7 @@
 #endif
 
 #include "Source/D2Client/Archive.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

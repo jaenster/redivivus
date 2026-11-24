@@ -1,0 +1,120 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Storm/3rdparty/zlib/zutil.cpp",
+  "functions": [
+    {
+      "name": "zlibVersion",
+      "address": "0042dc30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc30"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zlibVersion"
+      ],
+      "dh": "6aacbb91"
+    },
+    {
+      "name": "zlibCompileFlags",
+      "address": "0042dc40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc40"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zlibCompileFlags"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "f459aae8"
+    },
+    {
+      "name": "zError",
+      "address": "0042dc50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc50"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zError"
+      ],
+      "dh": "62ac60f3",
+      "paramStorage": [
+        [
+          "err",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "zcalloc",
+      "address": "0042dc70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc70"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zcalloc",
+        "malloc"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "e4a38d89",
+      "paramStorage": [
+        [
+          "opaque",
+          "ECX:4"
+        ],
+        [
+          "items",
+          "EDX:4"
+        ],
+        [
+          "size",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "zcfree",
+      "address": "0042dc90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0042dc90"
+        }
+      ],
+      "namespace": "Storm::_3rdparty::zlib::zutil",
+      "calledFunctions": [
+        "zcfree",
+        "free"
+      ],
+      "dh": "87e07f60",
+      "paramStorage": [
+        [
+          "opaque",
+          "ECX:4"
+        ],
+        [
+          "ptr",
+          "EDX:4"
+        ]
+      ]
+    }
+  ]
+}

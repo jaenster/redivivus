@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DUNGEON/Dungeon.h"
+#include "Source/D2Common/Dungeon/Dungeon.h"
 
 // Forward declarations
 struct D2DrlgAnimTileGridStrc;

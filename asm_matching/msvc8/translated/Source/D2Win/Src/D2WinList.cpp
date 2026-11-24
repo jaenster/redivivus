@@ -3,7 +3,7 @@
 #include "Source/D2Win/Src/D2WinList.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Launch/MainMenus.h"
+#include "Source/D2Launch/Src/MainMenus.h"
 #include "Source/D2Win/Src/D2WinArchive.h"
 #include "Source/D2Win/Src/D2WinFont.h"
 #include "Source/D2Win/Src/D2WinMain.h"

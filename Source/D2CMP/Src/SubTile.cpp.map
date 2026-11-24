@@ -1,0 +1,449 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2CMP/Src/SubTile.cpp",
+  "functions": [
+    {
+      "name": "SUBTILE_CountRunLength",
+      "address": "0060d310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d310"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CountRunLength",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "69371b9b",
+      "paramStorage": [
+        [
+          "byRunValue",
+          "CL:1"
+        ],
+        [
+          "pCur",
+          "EDX:4"
+        ],
+        [
+          "pEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMaxRunLen",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbAtEnd",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pbExactMatch",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SUBTILE_CompressToRLE",
+      "address": "0060d430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d430"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CompressToRLE",
+        "AllocClientMemory",
+        "SUBTILE_CountRunLength",
+        "SUBTILE_CountRunLengthForByte"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "81390fa7",
+      "paramStorage": [
+        [
+          "pDataStart",
+          "ECX:4"
+        ],
+        [
+          "ppCompressedEnd",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SUBTILE_AllocAndCompress",
+      "address": "0060d510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d510"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_AllocAndCompress",
+        "SUBTILE_CompressToRLE",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "b40cdf18",
+      "paramStorage": [
+        [
+          "pRawData",
+          "ECX:4"
+        ],
+        [
+          "bIsRaw",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SUBTILE_ConvertToIndexed",
+      "address": "0060d5b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d5b0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_ConvertToIndexed",
+        "AllocClientMemory",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "pfnRGBToPaletteIndex",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "2aa22978",
+      "paramStorage": [
+        [
+          "pDstFrame",
+          "ECX:4"
+        ],
+        [
+          "pSrcFrame",
+          "EDX:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnGetPaletteIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SUBTILE_ConvertRGBToIndexed",
+      "address": "0060d6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d6f0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_ConvertRGBToIndexed",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "pfnRGBToPaletteIndex",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "3d40a7cc",
+      "paramStorage": [
+        [
+          "pSrcRGBData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRGBDataSize",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pfnGetPaletteIndex",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0060d7c0",
+      "address": "0060d7c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d7c0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "Unreferenced_0060d7c0"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "c157abb0",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SUBTILE_CheckIfIsometricEmpty",
+      "address": "0060d7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d7e0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CheckIfIsometricEmpty"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "72f03827",
+      "paramStorage": [
+        [
+          "pSubTileData",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SUBTILE_CompressIsometricShape",
+      "address": "0060d840",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d840"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CompressIsometricShape",
+        "AllocClientMemory",
+        "memset",
+        "SUBTILE_CountRunLength",
+        "SUBTILE_CountRunLengthForByte",
+        "memcpy",
+        "FreeClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "d32a3fb2",
+      "paramStorage": [
+        [
+          "pSubTileEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPixelData",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SUBTILE_ExtractIsometricPixels",
+      "address": "0060d9c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060d9c0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_ExtractIsometricPixels",
+        "AllocClientMemory",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "memcpy"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "7eb9e38a",
+      "paramStorage": [
+        [
+          "pSubTileEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSrcPixelData",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SUBTILE_CompressWithColorKey",
+      "address": "0060da80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060da80"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_CompressWithColorKey",
+        "SUBTILE_ConvertRGBToIndexed",
+        "SUBTILE_CheckIfIsometricEmpty",
+        "SUBTILE_ExtractIsometricPixels",
+        "SUBTILE_CompressIsometricShape",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "pfnRGBToPaletteIndex",
+        "uint32_t"
+      ],
+      "dh": "ff914834",
+      "paramStorage": [
+        [
+          "pfnGetPaletteIndex",
+          "ECX:4"
+        ],
+        [
+          "pSrcSubTile",
+          "EAX:4"
+        ],
+        [
+          "pDstSubTile",
+          "EDI:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SUBTILE_RecompressExisting",
+      "address": "0060db20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060db20"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "SUBTILE_RecompressExisting",
+        "SUBTILE_CheckIfIsometricEmpty",
+        "SUBTILE_ExtractIsometricPixels",
+        "SUBTILE_CompressIsometricShape",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "uint8_t"
+      ],
+      "dh": "ef64daca",
+      "paramStorage": [
+        [
+          "pSubTileEntry",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CELCMP_CompressAllFramesWithColorKey",
+      "address": "0060db60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060db60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::SubTile",
+      "calledFunctions": [
+        "CELCMP_CompressAllFramesWithColorKey",
+        "SUBTILE_CompressWithColorKey",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "D2TileLibraryEntryStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "33b1b023",
+      "paramStorage": [
+        [
+          "pSrcCelFile",
+          "ECX:4"
+        ],
+        [
+          "pDstCelFile",
+          "EDX:4"
+        ],
+        [
+          "dwColorKey",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pfnGetPaletteIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
+    }
+  ]
+}

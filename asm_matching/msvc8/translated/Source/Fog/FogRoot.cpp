@@ -2,7 +2,7 @@
 
 #include "Source/Fog/FogRoot.h"
 #include "Source/Fog/Source/SFile.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/FogRoot.data.h"
 

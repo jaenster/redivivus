@@ -2,7 +2,7 @@
 
 #include "Source/D2Common/Drlg/Outdoors.h"
 #include "Source/D2Common/D2UnkOutdoorStrc.h"
-#include "Source/D2Common/DATATBLS/LvlTbls.h"
+#include "Source/D2Common/DataTbls/LvlTbls.h"
 #include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgOrthStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgVertexStrc.h"

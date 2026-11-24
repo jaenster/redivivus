@@ -4,7 +4,7 @@
  */
 
 #include "Source/D2CMP/D2CMP.globals.h"
-#include "3rdparty/Storm/H/stpl.h"
+#include "Source/Storm/H/stpl.h"
 #include "Source/D2Headers/d2_platform.h"
 
 

@@ -2,12 +2,12 @@
 
 #include "Source/D2Common/Monsters/MONSTERS.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/Units.h"
+#include "Source/D2Common/Units/Units.h"
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/globals/globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Monsters/MONSTERS.inline.h"
-#include "Source/D2Common/Units.inline.h"
+#include "Source/D2Common/Units/Units.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

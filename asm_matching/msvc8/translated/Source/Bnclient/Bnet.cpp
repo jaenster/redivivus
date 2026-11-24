@@ -2,7 +2,7 @@
 
 #include "Source/Bnclient/Bnet.h"
 #include "Source/Bnclient/BnclientRoot.h"
-#include "3rdparty/Storm/Storm.h"
+#include "Source/Storm/Storm.h"
 #include "Source/Bnclient/Bnclient.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 

@@ -1,0 +1,1880 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Game/Player/PlayerSave2.cpp",
+  "functions": [
+    {
+      "name": "PLRSAVE_GetTime32",
+      "address": "00568d60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568d60"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "_time32",
+        "PLRSAVE_GetTime32"
+      ],
+      "usedTypes": [
+        "__time32_t"
+      ],
+      "dh": "d021af23",
+      "paramStorage": [
+        [
+          "pTime",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_00568d70",
+      "address": "00568d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568d70"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "Unreferenced_00568d70"
+      ],
+      "dh": "995cc0e5"
+    },
+    {
+      "name": "FindEndOfString",
+      "address": "00568d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568d80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "FindEndOfString"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "90d014cb",
+      "paramStorage": [
+        [
+          "szString",
+          "ECX:4"
+        ],
+        [
+          "nMaxSize",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYERSAVE2_LoadOldSavegame_ReturnZero",
+      "address": "00568db0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568db0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "PLAYERSAVE2_LoadOldSavegame_ReturnZero"
+      ],
+      "dh": "0a96c52a"
+    },
+    {
+      "name": "GetItemIndexInList",
+      "address": "00568dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568dc0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "GetItemIndexInList",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int16_t",
+        "int32_t"
+      ],
+      "dh": "f98cc5c2",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nItemGUID",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveMercData",
+      "address": "00568e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568e60"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveMercData",
+        "SERVER_GetUnitPetByTypeId",
+        "GetPlayersPetData",
+        "STATSEX_GetCurrentStat",
+        "GetHirelingText",
+        "CheckForModeZeroDeath"
+      ],
+      "usedTypes": [
+        "D2HirelingTxt",
+        "D2PetDataStrc",
+        "D2SaveFileHeaderStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "cc487e59",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSaveHeader",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveHeader",
+      "address": "00568f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00568f20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveHeader",
+        "SUNIT_GetClient",
+        "GetCharName",
+        "__security_check_cookie",
+        "memset",
+        "SStrCopy",
+        "GetCharacterStatus",
+        "GetPlayerClassId",
+        "STATSEX_GetCurrentStat",
+        "GetCreateTime",
+        "_time32",
+        "ReturnFFFFFFFF",
+        "HasWeaponSwapped",
+        "GetHotKey",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetItemIndexInList",
+        "GetLeftSkill",
+        "GetSkillId",
+        "GetOwnerGUID",
+        "GetRightSkill",
+        "GetShiftLeftSkillData",
+        "GetShiftRightSkillData",
+        "GetAct",
+        "SaveCharAppearance",
+        "SaveMercData",
+        "GetGuildInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SaveFileHeaderStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int16_t",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "e987bef9",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveQuests",
+      "address": "00569320",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00569320"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveQuests",
+        "GetPlayerData",
+        "memset",
+        "CopyQuestBitBuffer"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc *",
+        "D2SaveFileQuestsStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "char[96]",
+        "int32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "ad612697",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveWaypoints",
+      "address": "005693e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005693e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveWaypoints",
+        "GetPlayerData",
+        "memset",
+        "CopyWaypoint"
+      ],
+      "usedTypes": [
+        "D2SaveFileWaypointsStrc",
+        "D2SaveWaypointListEntryStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2WaypointStrc *",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "01cae5ac",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveNPC",
+      "address": "00569490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00569490"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveNPC",
+        "GetPlayerData",
+        "memset",
+        "PLAYERINTRO_CopyIntroToBuffer",
+        "PLAYERINTRO_CopyIntro2ToBuffer"
+      ],
+      "usedTypes": [
+        "D2SaveFileNpcStrc",
+        "D2UnitDataPlayerInteractedNPCStrc *",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *",
+        "uint8_t[8]"
+      ],
+      "dh": "00eafa57",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveStats",
+      "address": "00569540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00569540"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveStats",
+        "InitBitBuffer",
+        "CopyStatsToBuffer",
+        "WriteValueToBitBuffer",
+        "GetNextPositon"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2DataTableTxtStrc",
+        "D2ItemStatCostTxt",
+        "D2StatStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "aaf67956",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveSkills",
+      "address": "005696f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005696f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveSkills",
+        "SUNIT_GetClient",
+        "GetPlayerClassId",
+        "AmountOfSkillsByClassId",
+        "SKILLS_GetClassSkillByIndex",
+        "GetSkillByIdAndOwner",
+        "GetSkillLevel"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "a9468b91",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pStartAddress",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveItems",
+      "address": "005697b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005697b0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveItems",
+        "GetCopyInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "801c0407",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pnOffset",
+          "Stack[0x4]:4"
+        ],
+        [
+          "byPage",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bParam1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bParam2",
+          "Stack[0x10]:4"
+        ],
+        [
+          "param_1",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveCorpseItems",
+      "address": "005697f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005697f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveCorpseItems",
+        "INVENTORY_GetCorpse",
+        "INVENTORY_GetNextCorpse",
+        "ROOMCORPSE_GetGUID",
+        "FindUnitFromTable",
+        "ITEM_ItemsInItem",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "ITEMS_IsA",
+        "GetPlayerData",
+        "CalculateTransactionCost_Thunk",
+        "INVENTORY_GetNextItem",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "SaveItems"
+      ],
+      "usedTypes": [
+        "D2CorpseStrc",
+        "D2InventoryStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "874939dc",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppWritePos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndAddress",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bPage1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bPage2",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveMercItems",
+      "address": "005699a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005699a0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveMercItems",
+        "SERVER_GetUnitPetByTypeId",
+        "GetCopyInventory"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "f6404293",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppWritePos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bUnk1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUnk2",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SaveGolemItems",
+      "address": "00569a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00569a00"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SaveGolemItems",
+        "SERVER_GetUnitPetByTypeId",
+        "GetSkillByIdAndOwner",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "SAVE_SerializeItemIfValid"
+      ],
+      "usedTypes": [
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "char *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "eb47aab6",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppWritePos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bPage1",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bPage2",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "MakeSaveFile",
+      "address": "00569ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00569ad0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "MakeSaveFile",
+        "SaveHeader",
+        "SaveQuests",
+        "SaveWaypoints",
+        "SaveNPC",
+        "SaveStats",
+        "SaveSkills",
+        "SaveItems",
+        "SaveCorpseItems",
+        "SaveMercItems",
+        "SaveGolemItems",
+        "CalculateChecksum",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "a14bd18b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pSaveBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStartOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nBufferSize",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bUnk1",
+          "Stack[0x10]:4"
+        ],
+        [
+          "bUnk2",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CalculateGetFlags",
+      "address": "00569d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00569d80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "CalculateGetFlags",
+        "ARENA_GetFlags"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "FILETIME",
+        "SGAMEDATA",
+        "eD2ArenaFlags",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "8654c01c",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "dwCharacterStatus",
+          "DX:2"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetHotkey",
+      "address": "00569ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00569ec0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SetHotkey"
+      ],
+      "usedTypes": [
+        "D2SaveHotKeyStrc",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "ad71bf84",
+      "paramStorage": [
+        [
+          "pSaveHotKey",
+          "ECX:4"
+        ],
+        [
+          "pnSkillId",
+          "EDX:4"
+        ],
+        [
+          "pnHand",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemIndex",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYERSAVE_LinkPlayerToUnit",
+      "address": "00569f20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00569f20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "PLAYERSAVE_LinkPlayerToUnit",
+        "SERVER_LinkServerPlayerUnitToClient",
+        "SetClient",
+        "GetCharName",
+        "SetNameInPlayerData",
+        "SetSeed",
+        "ChangeAnimMode",
+        "GetPlayerData"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ],
+      "dh": "f6cf7423",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pClient",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYERSAVE_CreateNewCharacter",
+      "address": "00569f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00569f80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "PLAYERSAVE_CreateNewCharacter",
+        "SetCientFlag0x01",
+        "GetPlayerClassId",
+        "CreateUnit",
+        "PLAYERSAVE_LinkPlayerToUnit",
+        "ReturnVoid",
+        "SERVER_SendInitUnitPacket",
+        "GetAct",
+        "PLAYER_InitBaseStats",
+        "PLAYER_CreateAllStarterItems",
+        "GetPlayerData",
+        "SKILLS_GetSkillByEnum",
+        "Server_SelectSkill",
+        "QUEST_OnPlayerJoinGame"
+      ],
+      "usedTypes": [
+        "D2CharStatsTxt",
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "74345f64",
+      "paramStorage": [
+        [
+          "pSaveContext",
+          "EAX:4"
+        ],
+        [
+          "pGameStrc",
+          "EBX:4"
+        ],
+        [
+          "dwArg1",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYERSAVE_ParseHeaderAndCreateUnit",
+      "address": "0056a090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a090"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "PLAYERSAVE_ParseHeaderAndCreateUnit",
+        "SetFileFlags",
+        "CalculateChecksum",
+        "GetCharName",
+        "_stricmp",
+        "CalculateGetFlags",
+        "SetClassOfClient",
+        "SetWeaponSwap",
+        "SetCreateTime",
+        "CLIENT_SetAct",
+        "CreateUnit",
+        "PLAYERSAVE_LinkPlayerToUnit",
+        "CLIENT_GetGame",
+        "SERVER_SendInitUnitPacket",
+        "SetHotkey",
+        "SetGotkeyInfo",
+        "GetPlayerData",
+        "SetGuildInfo"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SaveFileHeaderStrc",
+        "D2SaveFileHeaderStrc *",
+        "D2SaveHotKeyStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "ac132205",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "ppSaveFileHeader",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pHeader",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pOutUnit",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLRSAVE_ReadQuestsFromBuffer",
+      "address": "0056a370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a370"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "PLRSAVE_ReadQuestsFromBuffer",
+        "GetPlayerData",
+        "ReadQuestRecordFromBuffer"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int *",
+        "uint32_t"
+      ],
+      "dh": "8ebf39d1",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppQuestBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnBytesRead",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ReadWaypoints",
+      "address": "0056a3e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a3e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "ReadWaypoints",
+        "GetPlayerData",
+        "CopyWaypointBits"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "D2WaypointStrc *",
+        "SGAMEDATA",
+        "short *",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "f18d0d49",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LoadPlayerIntro",
+      "address": "0056a470",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a470"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "LoadPlayerIntro",
+        "GetPlayerData",
+        "PLAYERINTRO_CopyIntroData8Bytes",
+        "PLAYERINTRO_CopyIntroDataIndirect"
+      ],
+      "usedTypes": [
+        "D2UnitDataPlayerInteractedNPCStrc *",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "short *",
+        "uint32_t"
+      ],
+      "dh": "22ad9c23",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ReadStatsLong",
+      "address": "0056a4f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a4f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "ReadStatsLong",
+        "InitBitBuffer",
+        "ReadUnsigned",
+        "GetNextPositon",
+        "ReadSigned",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2ItemStatCostTxt",
+        "D2UnitStrc",
+        "eD2UnitStat",
+        "int32_t",
+        "short *",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "6573cf32",
+      "paramStorage": [
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFileVersion",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ReadStats",
+      "address": "0056a620",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a620"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "ReadStats",
+        "ReadStatsLong",
+        "SAVE_CalculateChecksum",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2UnitStat",
+        "int32_t",
+        "short *",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "caa8e94d",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFormat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStatCount",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLRSAVE_SetSkillIfNonZero",
+      "address": "0056a6f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a6f0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "PLRSAVE_SetSkillIfNonZero",
+        "SetSkill"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "eD2Skills",
+        "uint8_t"
+      ],
+      "dh": "0d4c95bd",
+      "paramStorage": [
+        [
+          "dwParam",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "eSkill",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkillLevel",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "LoadHardSkills",
+      "address": "0056a710",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a710"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "LoadHardSkills",
+        "SUNIT_GetClient",
+        "GetPlayerClassId",
+        "SKILLS_GetClassSkillByIndex",
+        "AmountOfSkillsByClassId",
+        "SetSkill",
+        "NET_D2GS_SERVER_Send_0x94_SETALLSKILLS",
+        "SKILLS_UpdatePassivesAndPets"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "eD2Skills",
+        "int32_t",
+        "short *",
+        "uint32_t"
+      ],
+      "dh": "32ee8f3f",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFileVersion",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSkillCount",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLRSAVE_LoadItemsFromBuffer",
+      "address": "0056a7e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a7e0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "PLRSAVE_LoadItemsFromBuffer",
+        "PLRSAVE_DispatchItemLoadByFormat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "53ddea69",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppItemList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemMode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nFormat",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnLoadResult",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLRSAVE_LoadCorpseFromBuffer",
+      "address": "0056a830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056a830"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "PLRSAVE_LoadCorpseFromBuffer",
+        "SUNIT_GetClient",
+        "GetClassId",
+        "CreateUnit",
+        "SetClient",
+        "GetCharName",
+        "SetNameInPlayerData",
+        "SetSeed",
+        "SetState",
+        "GetGUID",
+        "INVENTORY_SetOwnerGUID",
+        "PLRSAVE_LoadItemsFromBuffer",
+        "INVENTORY_AddCorpse",
+        "NET_D2GS_SERVER_Send_0x8E_CorpseAssign_Sender"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint16_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "711a510a",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppCorpseList",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pOwnerUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwFileVersion",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pnErrorCode",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LoadMerc",
+      "address": "0056aa50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056aa50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "LoadMerc",
+        "GetHirelingText",
+        "CreateMerc",
+        "PETS_UpdatePetData",
+        "STATSEX_GetCurrentStat",
+        "TXT_Experience_GetMaxLevel",
+        "STATLIST_SetUnitStat",
+        "UnitQueuePacket0x9E",
+        "GetBaseExperience",
+        "MERC_ApplyLevelStats",
+        "SERVERUNIT_RemovePetFromUnit",
+        "FreeCombatAndChangeAnimMode",
+        "MONSTER_RemoveAiAndRegenTimers",
+        "STRUCT_CreatePlayerInventory",
+        "FreeServerUnit"
+      ],
+      "usedTypes": [
+        "D2HirelingTxt",
+        "D2MercSaveDataStrc",
+        "D2PetDataStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "62e5b490",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pMercSaveData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwFileVersion",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LoadMerc2",
+      "address": "0056ac10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056ac10"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "LoadMerc2",
+        "PLRSAVE_LoadItemsFromBuffer",
+        "ITEMS_RecalcAndRefreshInventory",
+        "ITEMMODE_ReturnZero3",
+        "CheckForModeZeroDeath",
+        "STATLIST_GetMaxLifeFromUnit",
+        "STATLIST_SetUnitStat"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "3e5aa3c8",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pPlayer",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnit2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwFileVersion",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnErrorCode",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CreateItemIronGolemItem",
+      "address": "0056ace0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056ace0"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "CreateItemIronGolemItem",
+        "ReadInfoFromStreamVersioned",
+        "ITEM_CreateFromSaveData",
+        "TASK_Nop",
+        "FreeServerUnit",
+        "ChangeAnimMode",
+        "GetGUID",
+        "PutItemInItem",
+        "ITEM_GetItemData_eD2ItemFlag",
+        "CalculateRunewordByItem",
+        "ITEM_RemoveItemFromCurrentLocation"
+      ],
+      "usedTypes": [
+        "CreateItemIronGolemItem_Slotm",
+        "D2RuneTableStrc",
+        "D2UnitDataItemDetailsStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eD2ItemFlag",
+        "int32_t",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "33a1819f",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppGolemItem",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "LoadGolem",
+      "address": "0056ae50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056ae50"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "LoadGolem",
+        "SKILLS_GetSkillByEnum",
+        "SetCurrentSkill",
+        "CreateItemIronGolemItem",
+        "ChangeAnimMode",
+        "SUNIT_GetClient",
+        "SetGolem"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2SkillStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t",
+        "uint8_t",
+        "uint8_t *"
+      ],
+      "dh": "2f6af84b",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "ppReadPos",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEndBuf",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "HOTKEY_GetAssignedItemGUID",
+      "address": "0056af20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056af20"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "HOTKEY_GetAssignedItemGUID",
+        "INVENTORY_GetFirstItem",
+        "GetCarriedItem",
+        "INVENTORY_GetNextItem"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ],
+      "dh": "d4213222",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nHotkeyIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetStatsAndHotkeys",
+      "address": "0056af80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056af80"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "SetStatsAndHotkeys",
+        "SUNIT_GetClient",
+        "GetPlayerData",
+        "STATSEX_GetCurrentStat",
+        "GetInventoryGoldLimit",
+        "STATLIST_SetUnitStat",
+        "GetStashGoldLimit",
+        "STATLIST_GetMaxStaminaFromUnit",
+        "GetHotKey",
+        "HOTKEY_GetAssignedItemGUID",
+        "SetGotkeyInfo",
+        "Server_SelectSkill",
+        "SERVER_GetUnitStat",
+        "TXT_Experience_GetLineLevel",
+        "HasWeaponSwapped",
+        "NET_D2GS_SERVER_Send_0x97_WeaponSwitch"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "2e9211b7",
+      "paramStorage": [
+        [
+          "pGameStrc",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "nHitpoints",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nMana",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PLAYERSAVE_LoadModernFormat",
+      "address": "0056b180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0056b180"
+        }
+      ],
+      "namespace": "D2Game::PLAYER::PlayerSave2",
+      "calledFunctions": [
+        "PLAYERSAVE_LoadModernFormat",
+        "PLAYERSAVE_ParseHeaderAndCreateUnit",
+        "PLRSAVE_ReadQuestsFromBuffer",
+        "ReadWaypoints",
+        "LoadPlayerIntro",
+        "ReadStats",
+        "STATSEX_GetCurrentStat",
+        "LoadHardSkills",
+        "PLRSAVE_LoadItemsFromBuffer",
+        "PLRSAVE_LoadCorpseFromBuffer",
+        "LoadMerc",
+        "LoadMerc2",
+        "SendMercPackets",
+        "LoadGolem",
+        "SetStatsAndHotkeys",
+        "PLAYERSAVE_CreateNewCharacter",
+        "UNITS_GetRoom",
+        "AllocDrlgDelete",
+        "FreeServerUnit",
+        "SERVER_LinkServerPlayerUnitToClient"
+      ],
+      "usedTypes": [
+        "D2ClientStrc",
+        "D2RoomStrc",
+        "D2SaveFileHeaderStrc",
+        "D2UnitStrc",
+        "D2UnitStrc *",
+        "SGAMEDATA",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "22f8dbf5",
+      "paramStorage": [
+        [
+          "pGame",
+          "ECX:4"
+        ],
+        [
+          "pClient",
+          "EDX:4"
+        ],
+        [
+          "pSaveHeader",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSaveDataOffset",
+          "Stack[0x8]:4"
+        ],
+        [
+          "ppUnit",
+          "Stack[0xc]:4"
+        ],
+        [
+          "dwParam6",
+          "Stack[0x10]:4"
+        ],
+        [
+          "dwParam7",
+          "Stack[0x14]:4"
+        ],
+        [
+          "dwParam8",
+          "Stack[0x18]:4"
+        ]
+      ]
+    }
+  ]
+}

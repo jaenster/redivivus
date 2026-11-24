@@ -1,0 +1,193 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Game/Quests/Quests/A1Q7.cpp",
+  "functions": [
+    {
+      "name": "Q07_Callback00_NpcActivate",
+      "address": "00596a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596a90"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_Callback00_NpcActivate",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_GetQuestRecordState",
+        "GetPlayerData",
+        "GetQuestState",
+        "UNIT_GetModuloFromSeed",
+        "AddGossipMessageOnMonster"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestArgStrc",
+        "D2QuestDataStrc",
+        "D2SeedStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "uint32_t"
+      ],
+      "dh": "9e183884",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Q07_Callback08_MonsterKilled",
+      "address": "00596ba0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596ba0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_Callback08_MonsterKilled"
+      ],
+      "usedTypes": [
+        "D2QuestArgStrc",
+        "D2QuestDataStrc"
+      ],
+      "dh": "615ab13e",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pQuestArgs",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Q07_StatusFilter",
+      "address": "00596bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596bb0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_StatusFilter"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "b8eb180a",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "pUnit",
+          "EDX:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBufferEx",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pbyStatusCode",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Q07_ActiveFilter",
+      "address": "00596bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596bc0"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_ActiveFilter",
+        "GetQuestDataByQuestNoInternal",
+        "QUEST_GetQuestRecordState",
+        "GetPlayerData",
+        "GetQuestState"
+      ],
+      "usedTypes": [
+        "D2BitBufferStrc",
+        "D2QuestDataStrc",
+        "D2UnitDataPlayerStrc",
+        "D2UnitStrc",
+        "SGAMEDATA",
+        "int32_t"
+      ],
+      "dh": "6245e3bb",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ],
+        [
+          "nTargetClassId",
+          "EDX:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBitBuffer",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pUnitEx",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Q07_InitData",
+      "address": "00596c40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00596c40"
+        }
+      ],
+      "namespace": "D2Game::Quests::QUESTS::A1Q7",
+      "calledFunctions": [
+        "Q07_InitData",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2QuestDataStrc"
+      ],
+      "dh": "7a640d2b",
+      "paramStorage": [
+        [
+          "pQuestData",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

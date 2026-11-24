@@ -13,7 +13,7 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/PLAYER/Player.h"
+#include "Source/D2Game/Player/Player.h"
 
 // Data types
 __pragma(pack(push, 1)) struct D2CharStatsTxt {

@@ -2,10 +2,10 @@
 
 #include "Source/D2Client/UI/Help.h"
 #include "Source/D2Client/Core/Archive.h"
-#include "Source/D2Client/Cursor.h"
+#include "Source/D2Client/Engine/Cursor.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Client/Engine/Gfx.h"
-#include "Source/D2Client/GAME/Game/Game.h"
+#include "Source/D2Client/Game/Game.h"
 #include "Source/D2Client/UI/CmdTbl.h"
 #include "Source/D2Client/UI/EscMenu.h"
 #include "Source/D2Client/UI/Party.h"

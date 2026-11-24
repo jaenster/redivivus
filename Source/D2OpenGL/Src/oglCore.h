@@ -9,7 +9,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2OpenGL/Src/placeholder_types.h"
 #include "Source/D2OpenGL/Src/MacSdkOnWin32.h"
-#include "Source/D2Client/GAME/Draw.h"
+#include "Source/D2Client/Game/Draw.h"
 
 // Forward declarations
 struct D2GfxDataStrc;

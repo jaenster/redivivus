@@ -1,0 +1,217 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Common/DataTbls/ArenaTbls.cpp",
+  "functions": [
+    {
+      "name": "TXT_LoadArenaTxt",
+      "address": "006649b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006649b0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ArenaTbls",
+      "calledFunctions": [
+        "TXT_LoadArenaTxt",
+        "CompileTxt"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ],
+      "dh": "7bf44e7e",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetArenaTxtRecord",
+      "address": "00664ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664ab0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ArenaTbls",
+      "calledFunctions": [
+        "GetArenaTxtRecord",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2ArenaTxt",
+        "int32_t"
+      ],
+      "dh": "2cbe118f",
+      "paramStorage": [
+        [
+          "nArenaType",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "FreeArenaTxt",
+      "address": "00664af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664af0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ArenaTbls",
+      "calledFunctions": [
+        "FreeArenaTxt",
+        "UnloadBin"
+      ],
+      "dh": "ed941d60"
+    },
+    {
+      "name": "TXT_BuildCharTemplateLevelIndex",
+      "address": "00664b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664b10"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ArenaTbls",
+      "calledFunctions": [
+        "TXT_BuildCharTemplateLevelIndex",
+        "memset",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharTemplateTxt",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "00c0e080",
+      "paramStorage": [
+        [
+          "pCharTemplateTxt",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCount",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "TXT_LoadCharTemplateTxt",
+      "address": "00664b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00664b80"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ArenaTbls",
+      "calledFunctions": [
+        "TXT_LoadCharTemplateTxt",
+        "CompileTxt",
+        "TXT_BuildCharTemplateLevelIndex"
+      ],
+      "usedTypes": [
+        "D2BinFieldInputStrc",
+        "D2PoolManagerStrc"
+      ],
+      "dh": "642e41f8",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "FreeCharTemplateTxt",
+      "address": "00665740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00665740"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ArenaTbls",
+      "calledFunctions": [
+        "FreeCharTemplateTxt",
+        "UnloadBin"
+      ],
+      "dh": "365611e4"
+    },
+    {
+      "name": "TXT_CharTemplate_GetLine",
+      "address": "00665770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00665770"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ArenaTbls",
+      "calledFunctions": [
+        "TXT_CharTemplate_GetLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2CharTemplateTxt"
+      ],
+      "dh": "2ddd036b",
+      "paramStorage": [
+        [
+          "nTemplate",
+          "ECX:4"
+        ],
+        [
+          "nLevelIndex",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetClassFromCharTemplateTxt",
+      "address": "006657c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006657c0"
+        }
+      ],
+      "namespace": "D2Common::DATATBLS::ArenaTbls",
+      "calledFunctions": [
+        "GetClassFromCharTemplateTxt",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "caa458c6",
+      "paramStorage": [
+        [
+          "nTemplate",
+          "ECX:4"
+        ],
+        [
+          "nLevel",
+          "EDX:4"
+        ]
+      ]
+    }
+  ]
+}

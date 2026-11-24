@@ -3,13 +3,13 @@
 #include "Source/D2Common/Item.h"
 #include "Source/D2Common/D2StatListExStrc.h"
 #include "Source/D2Common/D2UnitStrc.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.h"
-#include "Source/D2Common/INVENTORY/Inventory.h"
-#include "Source/D2Common/ITEMS/Items.h"
+#include "Source/D2Common/DataTbls/ItemTbls.h"
+#include "Source/D2Common/Inventory/Inventory.h"
+#include "Source/D2Common/Items/Items.h"
 #include "Source/D2Common/Stats/StatsEx.h"
-#include "Source/D2Common/Txt/Skills.h"
+#include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Common/DATATBLS/ItemTbls.inline.h"
+#include "Source/D2Common/DataTbls/ItemTbls.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

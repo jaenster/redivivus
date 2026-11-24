@@ -30,7 +30,7 @@ whose path contains it, or the function of that name.
 
 A function or global is paired with the original by the comment on the line
 before its definition, `// 1.14d mac: <addr>`, in any source under
-`StormMac/`. A declaration in a header may carry the comment
+`Source/StormMac/`. A declaration in a header may carry the comment
 too, which names a function or global that lives outside the reconstructed code.
 
 For each function our object's instructions are compared with the original's,
@@ -61,7 +61,7 @@ instruction), then per source file and for the whole run the count and share
 of functions that are instruction-identical:
 
 ```
-== StormMac/Win32Mac/Source/Win32/Win32_utils.cpp: 40/55 same (72.7%)
+== Source/StormMac/Win32Mac/Source/Win32/Win32_utils.cpp: 40/55 same (72.7%)
 == total 77/92 instruction-identical (83.7%)
 ```
 
@@ -73,4 +73,4 @@ code as a whole. `--tsv` writes the per-function rows for tracking.
 Instruction identity is not byte identity: an encoding choice (a short versus a
 long jump) that prints the same is not seen, and neither is data. Function
 order and alignment inside the TU are not compared, and neither is which TU a
-function sits in, since that is settled from other evidence (StormMac/README.md).
+function sits in, since that is settled from other evidence (Source/StormMac/README.md).

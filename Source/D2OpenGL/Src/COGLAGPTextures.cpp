@@ -5,7 +5,7 @@
 #include "Source/D2OpenGL/Src/globals.h"
 #include "Source/Fog/Engine/Application.h"
 #include "Source/Game/Main.h"
-#include "3rdparty/Storm/Source/SMem.h"
+#include "Source/Storm/Source/SMem.h"
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Src/ErrorManager.h"
 

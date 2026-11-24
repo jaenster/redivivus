@@ -1,0 +1,309 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2CMP/Src/GfxHash.cpp",
+  "functions": [
+    {
+      "name": "GFXHASH_UnlinkCacheEntry",
+      "address": "0060a9d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060a9d0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_UnlinkCacheEntry",
+        "CELCMP_GetPixelDataFreeCallback",
+        "ASYNCDATA_GetResult",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory",
+        "ASYNCDATA_Free"
+      ],
+      "usedTypes": [
+        "D2AsyncData_Line0x128",
+        "D2CelCacheBlockStrc",
+        "D2GfxHashEntryStrc",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "pfnCelPixelDataFree",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "e2c2d846",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GFXHASH_InitHashTable",
+      "address": "0060aaf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060aaf0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_InitHashTable",
+        "memset"
+      ],
+      "dh": "92d98bae",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GFX_UnlinkCacheEntry",
+      "address": "0060ab10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ab10"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFX_UnlinkCacheEntry",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GFXHASH_UnlinkCacheEntry"
+      ],
+      "usedTypes": [
+        "D2GfxHashEntryStrc",
+        "D2PoolManagerStrc",
+        "int32_t"
+      ],
+      "dh": "1d5a9539",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "IGNORELIST_Initialize_Unref_0060ab70",
+      "address": "0060ab70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ab70"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "IGNORELIST_Initialize_Unref_0060ab70"
+      ],
+      "dh": "7ab9a0d3",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GFXHASH_CalcDirectionIndex",
+      "address": "0060ab80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ab80"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_CalcDirectionIndex",
+        "CELCMP_GetDirectionFrameTableIndex"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ],
+      "dh": "14338fb0",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ECX:4"
+        ],
+        [
+          "pnDirectionDivisor",
+          "EDX:4"
+        ],
+        [
+          "pCelEntry",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GFXHASH_CalcHashKey",
+      "address": "0060ac60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ac60"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_CalcHashKey",
+        "GFXHASH_CalcDirectionIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SStrHash"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "273c6ee3",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ECX:4"
+        ],
+        [
+          "pnDirectionDivisor",
+          "EDX:4"
+        ],
+        [
+          "pnDirectionIndex",
+          "EDI:4"
+        ],
+        [
+          "pCelEntry",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GFXHASH_FindEntryByGfxData",
+      "address": "0060ace0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060ace0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFXHASH_FindEntryByGfxData",
+        "GFXHASH_CalcHashKey"
+      ],
+      "usedTypes": [
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "D2GfxHashEntryStrc",
+        "eD2UnitType",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "444baea4",
+      "paramStorage": [
+        [
+          "pHashTable",
+          "ECX:4"
+        ],
+        [
+          "pGfxData",
+          "EDX:4"
+        ],
+        [
+          "pnDirIdx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnFrameStep",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCelEntry",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GFX_AllocCacheEntry",
+      "address": "0060adc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0060adc0"
+        }
+      ],
+      "namespace": "D2CMP::SRC::GfxHash",
+      "calledFunctions": [
+        "GFX_AllocCacheEntry",
+        "AllocServerMemory",
+        "GFXHASH_CalcHashKey"
+      ],
+      "usedTypes": [
+        "D2CelCacheBlockStrc",
+        "D2CelFileCacheEntryStrc",
+        "D2GfxDataStrc",
+        "D2GfxHashEntryStrc",
+        "D2PoolManagerStrc",
+        "eD2UnitType",
+        "uint32_t"
+      ],
+      "dh": "64b33965",
+      "paramStorage": [
+        [
+          "pMemory",
+          "ECX:4"
+        ],
+        [
+          "pHashTable",
+          "EDX:4"
+        ],
+        [
+          "pCacheBlock",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pGfxData",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCelEntry",
+          "Stack[0xc]:4"
+        ]
+      ]
+    }
+  ]
+}

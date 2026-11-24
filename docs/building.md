@@ -41,14 +41,14 @@ compiles the tree into the executable directly instead.
 The three licensed DLLs the executable imports, and the experimental 64-bit build with its
 FFmpeg-backed stand-ins for them, are covered in [building-x64.md](building-x64.md).
 
-A separate build directory can build `d2server.exe`, a console program that loads the game
+A separate build directory can build `d2host.exe`, a console program that loads the game
 data and runs the game-server loop with no window, renderer or sound. It is built from the
 modules a game server uses (Fog, Storm, D2Hell, D2Lang, D2Net, D2Game, D2CMP, D2Common) and
 its host in `Redivivus/Server/`; the option is off by default and does not change `d2.exe`:
 
 ```sh
 cmake -S . -B build-server -G Ninja -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake -DREDIVIVUS_SERVER=ON
-cmake --build build-server --target d2server
+cmake --build build-server --target d2host
 ```
 
 Run it from the Diablo II folder (it opens the data archives there); `-exitafter <seconds>`

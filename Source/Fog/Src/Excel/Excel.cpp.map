@@ -1,0 +1,589 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Fog/Src/Excel/Excel.cpp",
+  "functions": [
+    {
+      "name": "TXT_FreeBinFieldExcel",
+      "address": "006bcda0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bcda0"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "TXT_FreeBinFieldExcel",
+        "FreeClientMemory",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2BinFieldExcelStrc"
+      ],
+      "dh": "4020a7b6",
+      "paramStorage": [
+        [
+          "pBinFieldExcel",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TXT_GetLinesCountFromBinFieldExcel",
+      "address": "006bcde0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bcde0"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "TXT_GetLinesCountFromBinFieldExcel"
+      ],
+      "usedTypes": [
+        "D2BinFieldExcelStrc"
+      ],
+      "dh": "5ad8a2b1",
+      "paramStorage": [
+        [
+          "pBinFieldExcel",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FOG_ParseBinField",
+      "address": "006bce20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bce20"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "FOG_ParseBinField",
+        "SMemZero",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SStrHash",
+        "SStrCmpI"
+      ],
+      "usedTypes": [
+        "D2BinFieldExcelStrc",
+        "D2BinFieldHashNodeStrc",
+        "D2BinFieldInputStrc",
+        "D2BinFieldInputStrc *",
+        "eD2BinFieldInputType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7d879653",
+      "paramStorage": [
+        [
+          "pOutMapping",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBinFieldExcel",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pBinFieldInput",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "STRUCT_CreateTxtLinkStrc",
+      "address": "006bd040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd040"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "STRUCT_CreateTxtLinkStrc",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2TxtLinkStrc"
+      ],
+      "dh": "2c7a1aa2",
+      "paramStorage": [
+        [
+          "szFile",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLine",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "STRUCT_FreeTxtLinkNode",
+      "address": "006bd070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd070"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "STRUCT_FreeTxtLinkNode",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2TxtLinkNodeStrc"
+      ],
+      "dh": "55e8fb9e",
+      "paramStorage": [
+        [
+          "pTxtLinkNode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "STRUCT_FreeTxtLink",
+      "address": "006bd0b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd0b0"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "STRUCT_FreeTxtLink",
+        "STRUCT_FreeTxtLinkNode",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2TxtLinkNodeStrc",
+        "D2TxtLinkStrc"
+      ],
+      "dh": "ec86818e",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetClassIdFromName",
+      "address": "006bd130",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd130"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "GetClassIdFromName"
+      ],
+      "usedTypes": [
+        "D2TxtLinkStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "18484b73",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pItemsTxt",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FOG_GetTxtLinkRecord",
+      "address": "006bd180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd180"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "FOG_GetTxtLinkRecord"
+      ],
+      "usedTypes": [
+        "D2TxtLinkStrc",
+        "D2TxtLinkSub0x08Strc",
+        "uint32_t"
+      ],
+      "dh": "1f86b06d",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRecordId",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pResult",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FOG_AddTxtLinkRecord",
+      "address": "006bd230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd230"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "FOG_AddTxtLinkRecord",
+        "ReAllocServerMemory",
+        "memset",
+        "memmove",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TxtLinkStrc",
+        "D2TxtLinkSub0x08Strc",
+        "uint32_t"
+      ],
+      "dh": "be2394fe",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nItemCode",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FOG_GetRecordField",
+      "address": "006bd330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd330"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "FOG_GetRecordField"
+      ],
+      "usedTypes": [
+        "D2TxtLinkNodeStrc"
+      ],
+      "dh": "650d7c06",
+      "paramStorage": [
+        [
+          "pClientSideData",
+          "ECX:4"
+        ],
+        [
+          "nLinkIndex",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "FOG_ParseIntField",
+      "address": "006bd380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd380"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "FOG_ParseIntField",
+        "FOG_GetRecordField"
+      ],
+      "usedTypes": [
+        "D2TxtLinkStrc"
+      ],
+      "dh": "7c13c54e",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nLinkIndex",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nParam2",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetLinkNodeIndex",
+      "address": "006bd3c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd3c0"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "GetLinkNodeIndex",
+        "SStrCopy",
+        "SMemStringToUppercase",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2TxtLinkNodeStrc",
+        "D2TxtLinkStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "3dfa7942",
+      "paramStorage": [
+        [
+          "pLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szItemCode",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwParam3",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FOG_ValidateBytePtr",
+      "address": "006bd490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd490"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "FOG_ValidateBytePtr",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "cc10cf10",
+      "paramStorage": [
+        [
+          "pbyte",
+          "EAX:4"
+        ],
+        [
+          "pKey",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "FOG_ParseStringField",
+      "address": "006bd500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd500"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "FOG_ParseStringField",
+        "AllocServerMemory",
+        "memset",
+        "SStrCopy",
+        "SMemStringToUppercase",
+        "FOG_ValidateBytePtr",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TxtLinkStrc"
+      ],
+      "dh": "55771c7d",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szText",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FOG_ParseTxtLink",
+      "address": "006bd5a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd5a0"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "FOG_ParseTxtLink",
+        "GetLinkNodeIndex",
+        "AllocServerMemory",
+        "memset",
+        "SStrCopy",
+        "SMemStringToUppercase",
+        "FOG_ValidateBytePtr",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2TxtLinkStrc"
+      ],
+      "dh": "e71ed158",
+      "paramStorage": [
+        [
+          "pTxtLink",
+          "ECX:4"
+        ],
+        [
+          "szText",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "STRUCT_CreateBinFieldExcelAndFillData",
+      "address": "006bd640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd640"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "STRUCT_CreateBinFieldExcelAndFillData",
+        "AllocServerMemory",
+        "FreeClientMemory",
+        "FreeServerMemory",
+        "SStrCmp",
+        "SMemCopy",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BinFieldExcelStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "17e57bdf",
+      "paramStorage": [
+        [
+          "pD2Archive",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TXT_ParseDataAndPutIntoStructure",
+      "address": "006bd780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bd780"
+        }
+      ],
+      "namespace": "Fog::Src::Excel::Excel",
+      "calledFunctions": [
+        "TXT_ParseDataAndPutIntoStructure",
+        "FOG_ParseBinField",
+        "FOG_AddTxtLinkRecord",
+        "FOG_ParseStringField",
+        "FOG_ParseTxtLink",
+        "__security_check_cookie",
+        "UnsetBitAtOffset",
+        "SetBitAtOffset",
+        "GetClassIdFromName",
+        "GetLinkNodeIndex",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2BinFieldExcelStrc",
+        "D2BinFieldInputStrc",
+        "D2TxtCodeBufUnion",
+        "PFN_TxtFieldLinker",
+        "PFN_TxtKeyToWord",
+        "eD2BinFieldInputType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "960f4b2f",
+      "paramStorage": [
+        [
+          "pBinFieldExcel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pBinFieldInput",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pRecord",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nLinesCount",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nEndOffset",
+          "Stack[0x14]:4"
+        ]
+      ]
+    }
+  ]
+}
