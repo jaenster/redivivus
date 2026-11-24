@@ -2206,11 +2206,8 @@ static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt 
 }
 
 void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint16_t * wszText) {
-    int32_t nPercentApplied;
     uint16_t wszArmorValue[10];
     char szNumBuffer[12];
-    int32_t nUnit;
-    D2UnitStrc* pEffectiveUnit = pUnit;
     if (!pUnit) {
       return;
     }
@@ -2228,67 +2225,57 @@ void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     uint32_t nPrevStatActive = 0;
-    D2UnitStrc* pOwnerUnit = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItemToDescribe, &nPrevStatActive);
-    uint32_t nPeriodOfDay = (uint32_t)(pOwnerUnit != 0);
-    if (pOwnerUnit && pEffectiveUnit != pOwnerUnit) {
-      pEffectiveUnit = pOwnerUnit;
-      pUnit = pOwnerUnit;
+    D2UnitStrc* pOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItemToDescribe, &nPrevStatActive);
+    BOOL bHasOwner = pOwner != nullptr;
+    if (pOwner && pUnit != pOwner) {
+      pUnit = pOwner;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pEffectiveUnit, pItemToDescribe, 1);
-    int32_t nArmorClass = D2Common::Stats::StatsEx::STATLIST_GetDefenseFromUnit(pItemToDescribe);
-    if (!nPeriodOfDay) {
+    D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pItemToDescribe, 1);
+    int nArmorClass = D2Common::Stats::StatsEx::STATLIST_GetDefenseFromUnit(pItemToDescribe);
+    if (!bHasOwner) {
       D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pItemToDescribe);
     } else {
-      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pOwnerUnit, pItemToDescribe, nPrevStatActive);
+      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pOwner, pItemToDescribe, nPrevStatActive);
     }
 
-    pEffectiveUnit = pUnit2;
-    int bIsModified = 0;
-    int32_t nServerOrMod = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit2, UNITSTAT_armorclass, 0);
-    if (nServerOrMod != nArmorClass) {
-      bIsModified = 1;
+    BOOL bIsModified = FALSE;
+    if (D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit2, UNITSTAT_armorclass, 0) != nArmorClass) {
+      bIsModified = TRUE;
     }
 
-    int nByTimeMod = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pEffectiveUnit, UNITSTAT_item_armor_bytime, 0);
-    if (nByTimeMod && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x10c && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-86832 && pUnit->pDrlgAct) {
-      nPeriodOfDay = 0;
-      nServerOrMod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, (int32_t*)&nPeriodOfDay);
-      nServerOrMod = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nByTimeMod, nServerOrMod, nPeriodOfDay, nullptr, nullptr, nullptr);
-      nArmorClass += nServerOrMod;
-      if (nServerOrMod) {
-        bIsModified = 1;
+    int nArmorByTime = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_armor_bytime, 0);
+    if (nArmorByTime && (int)UNITSTAT_item_armor_bytime < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && &D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[UNITSTAT_item_armor_bytime] && pUnit->pDrlgAct) {
+      int nBaseTime = 0;
+      int nPeriod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+      int nTimeBonus = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nArmorByTime, nPeriod, nBaseTime, nullptr, nullptr, nullptr);
+      nArmorClass += nTimeBonus;
+      if (nTimeBonus) {
+        bIsModified = TRUE;
       }
     }
 
-    nByTimeMod = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_armorpercent_bytime, 0);
-    if (nByTimeMod && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x10d && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-87156) {
-      D2DrlgActStrc** ppDVar1;
-      ppDVar1 = &pUnit->pDrlgAct;
-      if (*ppDVar1) {
-        nUnit = 0x0;
-        nServerOrMod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(*ppDVar1, (int32_t*)&nUnit);
-        nServerOrMod = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nByTimeMod, nServerOrMod, nUnit, nullptr, nullptr, nullptr);
-        nPercentApplied = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nArmorClass, nServerOrMod, 100);
-        nArmorClass += nPercentApplied;
-        if (nServerOrMod) {
-          bIsModified = 1;
-        }
+    int nArmorPercentByTime = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_armorpercent_bytime, 0);
+    if (nArmorPercentByTime && (int)UNITSTAT_item_armorpercent_bytime < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && &D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[UNITSTAT_item_armorpercent_bytime] && pUnit->pDrlgAct) {
+      int nBaseTime = 0;
+      int nPeriod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+      int nTimeBonus = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nArmorPercentByTime, nPeriod, nBaseTime, nullptr, nullptr, nullptr);
+      nArmorClass += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nArmorClass, nTimeBonus, 100);
+      if (nTimeBonus) {
+        bIsModified = TRUE;
       }
     }
 
-    uint16_t* pwLabelStr = D2Lang::StrTable::strtable::GetLocaleString(0xd85);
-    uint16_t* pwTextAlias = wszText;
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwLabelStr);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(pwTextAlias, pwColorPrefix);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, D2Lang::StrTable::strtable::GetLocaleString(0xd85));
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorPrefix);
     Storm::Source::SSTR::SStrPrintf(szNumBuffer, 10, "%i", nArmorClass);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszArmorValue, szNumBuffer, 9);
     if (bIsModified) {
       ui::AppendAsWideChar(wszArmorValue, 3);
     }
 
-    D2Lang::Unicode::UNISYS::AppendToBuffer(pwTextAlias, wszArmorValue);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(pwTextAlias, pwColorSuffix);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszArmorValue);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorSuffix);
 }
 
 // Appends quantity text to item tooltip for stackable items (arrows, bolts, keys, etc.). Checks item's quantity stat (UNITSTAT_quantity) or max stack size, formats the number, and appends it to the output buffer with proper separators.
