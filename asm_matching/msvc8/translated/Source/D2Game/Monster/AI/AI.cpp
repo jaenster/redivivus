@@ -18523,39 +18523,32 @@ void __fastcall AITHINK_Fn1_Fetish(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Ai
 
 // Hell Meteor (Infector of Souls variant) AI tick. If Skill1 is valid and passes a difficulty-scaled RNG check, computes a random offset from the unit's current X/Y position (using TreasureClass width field) and casts Skill1 at that displaced coordinate via SERVER_UNIT_CastSkill — effectively firing a meteor at a randomized nearby map location. Otherwise idles via PlanNextAiMove.
 void __fastcall AITHINK_Fn1_HellMeteor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
-    int nMeteorPosX;
-    eD2UnitType eUnitType;
-    uint32_t newSeed;
-    int nAiParam;
     D2MonStatsTxt* pMonStats = pAiParam->pMonStats;
-    if (pMonStats->aSkill[0] >= 0) {
-      uint32_t nRandSpawnOffset;
-      newSeed = D2_SeedRoll(&pUnit->sSeed);
-      if ((int)(newSeed % 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
-        eUnitType = pUnit->eUnitType;
-        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          nAiParam = pUnit->pPath.pStaticPath->nPosX;
-        } else if (pUnit->pPath.pDynamicPath) {
-          nAiParam = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
-        } else {
-          nAiParam = 0x0;
-        }
-
-        nRandSpawnOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pMonStats->aip[2][pGame->nDifficulty] * 2);
-        nMeteorPosX = nAiParam + (nRandSpawnOffset - (int)pMonStats->aip[2][pGame->nDifficulty]);
-        eUnitType = pUnit->eUnitType;
-        if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-          nAiParam = pUnit->pPath.pStaticPath->nPosY;
-        } else if (pUnit->pPath.pDynamicPath) {
-          nAiParam = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
-        } else {
-          nAiParam = 0x0;
-        }
-
-        nRandSpawnOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pMonStats->aip[2][pGame->nDifficulty] * 2);
-        SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], nullptr, nMeteorPosX, nAiParam + (nRandSpawnOffset - (int)pMonStats->aip[2][pGame->nDifficulty]));
-        return;
+    if (pMonStats->aSkill[0] >= 0 && (int)(D2_SeedRoll(&pUnit->sSeed) % 100) < (int)pMonStats->aip[0][pGame->nDifficulty]) {
+      int nUnitX;
+      eD2UnitType eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nUnitX = pUnit->pPath.pStaticPath->nPosX;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nUnitX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nUnitX = 0x0;
       }
+
+      int nMeteorPosX = nUnitX - (int)pMonStats->aip[2][pGame->nDifficulty] + D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pMonStats->aip[2][pGame->nDifficulty] * 2);
+      int nUnitY;
+      eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
+        nUnitY = pUnit->pPath.pStaticPath->nPosY;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nUnitY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+      } else {
+        nUnitY = 0x0;
+      }
+
+      int nMeteorPosY = nUnitY - (int)pMonStats->aip[2][pGame->nDifficulty] + D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, pMonStats->aip[2][pGame->nDifficulty] * 2); // steer-ok: the original computes the Y coordinate before loading the skill and mode arguments
+      SERVER_UNIT_CastSkill(pGame, pUnit, pMonStats->aSkMode[0], (int)pMonStats->aSkill[0], nullptr, nMeteorPosX, nMeteorPosY);
+      return;
     }
 
     PlanNextAiMove(pGame, pUnit, (int)pMonStats->aip[1][pGame->nDifficulty]);
