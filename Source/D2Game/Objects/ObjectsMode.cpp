@@ -2123,8 +2123,7 @@ static void __stdcall SKILL_GetAttackRateForWeapon(D2UnitStrc * pUnit, D2SkillSt
 static int32_t __stdcall OBJMODE_GetModifiedStatValueFromShrine(eD2UnitStat eUnitStat, int32_t nBoostValue, D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill;
     D2UnitStrc* pWeaponBySkill;
-    int nHandedness;
-    eD2UnitStat eUnitStat_00;
+    BOOL bDual;
     D2UnitStrc* pWeapon = 0;
     if (pUnit && pUnit->pInventory) {
       pWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory);
@@ -2153,19 +2152,21 @@ static int32_t __stdcall OBJMODE_GetModifiedStatValueFromShrine(eD2UnitStat eUni
       return (int)(eUnitStat * nBoostValue) / 100;
       case UNITSTAT_mindamage:
         pWeaponBySkill = D2Common::Units::GetWeaponBySkill(pUnit, 1);
-      if (!pWeaponBySkill && !pWeapon || (nHandedness = D2Common::INVENTORY::Inventory::INVENTORY_GetWeaponHandedness(pUnit, pUnit->pInventory) , nHandedness != 2)) {
-        eUnitStat_00 = UNITSTAT_mindamage;
-      } else {
-        eUnitStat_00 = UNITSTAT_secondary_mindamage;
+      bDual = 0;
+      if (pWeaponBySkill || pWeapon) {
+        bDual = D2Common::INVENTORY::Inventory::INVENTORY_GetWeaponHandedness(pUnit, pUnit->pInventory) == 2;
       }
 
-      break;
-      default:
-        eUnitStat_00 = eUnitStat;
-      break;
+      if (bDual) {
+        eUnitStat = (eD2UnitStat)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_secondary_mindamage, 0);
+      } else {
+        eUnitStat = (eD2UnitStat)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mindamage, 0);
+      }
+
+      return (int)(eUnitStat * nBoostValue) / 100;
     }
 
-    eUnitStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat_00, 0);
+    eUnitStat = (eD2UnitStat)D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
     return (int)(eUnitStat * nBoostValue) / 100;
 }
 
