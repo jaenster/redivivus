@@ -4205,21 +4205,9 @@ static void __stdcall SKILLDESC_DrawSingleNumber(int32_t nColorIdx, int32_t nScr
 }
 
 static void __stdcall SKILLDESC_DrawSkillDmgPhysical(D2UnitStrc * pUnit, D2SkillStrc * pSkillRecord, D2SkillsTxt * pSkillsTxt, int32_t nItemClassId, pfnSkillDescWeaponDmgCalc pfnCalcWeaponDmg, int32_t nExtraFlags, int pCompareUnit, int32_t nScreenX, int32_t nScreenY, int32_t nScreenZ, int32_t nElemDmg) {
-    // Frame slots -20..-4 are ONE object: &nElemDmgTypeFlag is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int32_t nElemDmgTypeFlag;
-      int32_t nMainMinDmg;
-      int32_t nOffhandMaxDmg;
-      int32_t nDmgTypeFlag;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
     uint16_t wszMainDmgW[32];
     uint16_t wszOffhandDmgW[32];
     char szDmgTextA[32];
-    int nMinDmgScaled;
-    char* szFmt;
     if (!pSkillRecord) {
       return;
     }
@@ -4230,86 +4218,61 @@ static void __stdcall SKILLDESC_DrawSkillDmgPhysical(D2UnitStrc * pUnit, D2Skill
       return;
     }
 
-    int nElemMinDmg;
-    nElemMinDmg = 0;
-    int nElemMaxDmg;
-    nElemMaxDmg = 0;
-    __frame0.nDmgTypeFlag = 0;
-    __frame0.nElemDmgTypeFlag = 0;
+    int nElemMinDmg = 0;
+    int nElemMaxDmg = 0;
+    int32_t nMainColorIdx = 0;
+    int32_t nOffhandColorIdx = 0;
     if (nElemDmg) {
-      SKILLDESC_CalcSkillElemDamage(pUnit, &nElemMinDmg, &nElemMaxDmg, &__frame0.nDmgTypeFlag, pSkillsTxt, nItemClassId);
+      SKILLDESC_CalcSkillElemDamage(pUnit, &nElemMinDmg, &nElemMaxDmg, &nMainColorIdx, pSkillsTxt, nItemClassId);
     }
 
-    uint32_t nSrcDamPct;
-    nSrcDamPct = (uint32_t)pSkillsTxt->SrcDam;
-    __frame0.nElemDmgTypeFlag = __frame0.nDmgTypeFlag;
-    __frame0.nMainMinDmg = 0;
-    nElemDmg = 0;
-    nItemClassId = 0;
-    __frame0.nOffhandMaxDmg = 0;
-    SKILLDESC_CalcDualWieldDamage(pUnit, &__frame0.nMainMinDmg, &nElemDmg, &__frame0.nDmgTypeFlag, &nItemClassId, &__frame0.nOffhandMaxDmg, &__frame0.nElemDmgTypeFlag, pSkillRecord, pfnCalcWeaponDmg, nExtraFlags, (D2UnitStrc*)pCompareUnit);
-    if (__frame0.nMainMinDmg && nElemDmg) {
-      __frame0.nMainMinDmg = (int)(__frame0.nMainMinDmg * nSrcDamPct) / 128 + nElemMinDmg;
-      nElemDmg = (int)(nElemDmg * nSrcDamPct) / 128 + nElemMaxDmg;
+    int nSrcDamage = pSkillsTxt->SrcDam;
+    nOffhandColorIdx = nMainColorIdx;
+    int32_t nMainMinDmg = 0;
+    int32_t nMainMaxDmg = 0;
+    int32_t nOffhandMinDmg = 0;
+    int32_t nOffhandMaxDmg = 0;
+    SKILLDESC_CalcDualWieldDamage(pUnit, &nMainMinDmg, &nMainMaxDmg, &nMainColorIdx, &nOffhandMinDmg, &nOffhandMaxDmg, &nOffhandColorIdx, pSkillRecord, pfnCalcWeaponDmg, nExtraFlags, (D2UnitStrc*)pCompareUnit);
+    if (nMainMinDmg && nMainMaxDmg) {
+      nMainMinDmg = nMainMinDmg * nSrcDamage / 128 + nElemMinDmg;
+      nMainMaxDmg = nMainMaxDmg * nSrcDamage / 128 + nElemMaxDmg;
     }
-    if (nItemClassId && __frame0.nOffhandMaxDmg) {
-      nItemClassId = (int)(nItemClassId * nSrcDamPct) / 128 + nElemMinDmg;
-      __frame0.nOffhandMaxDmg = (int)(__frame0.nOffhandMaxDmg * nSrcDamPct) / 128 + nElemMaxDmg;
+    if (nOffhandMinDmg && nOffhandMaxDmg) {
+      nOffhandMinDmg = nOffhandMinDmg * nSrcDamage / 128 + nElemMinDmg;
+      nOffhandMaxDmg = nOffhandMaxDmg * nSrcDamage / 128 + nElemMaxDmg;
     }
-    if (!__frame0.nMainMinDmg && !nElemDmg) {
-      SKILLDESC_DrawDamageNumbers(nItemClassId, __frame0.nOffhandMaxDmg, __frame0.nElemDmgTypeFlag, nScreenX, nScreenY, nScreenZ);
+    if (!nMainMinDmg && !nMainMaxDmg) {
+      SKILLDESC_DrawDamageNumbers(nOffhandMinDmg, nOffhandMaxDmg, nOffhandColorIdx, nScreenX, nScreenY, nScreenZ);
       return;
     }
-    if (!nItemClassId && !__frame0.nOffhandMaxDmg) {
-      SKILLDESC_DrawDamageNumbers(__frame0.nMainMinDmg, nElemDmg, __frame0.nDmgTypeFlag, nScreenX, nScreenY, nScreenZ);
+    if (!nOffhandMinDmg && !nOffhandMaxDmg) {
+      SKILLDESC_DrawDamageNumbers(nMainMinDmg, nMainMaxDmg, nMainColorIdx, nScreenX, nScreenY, nScreenZ);
       return;
     }
 
     Fog::File::CONTAINER_InitializeBuffer(wszMainDmgW, 2, 0x20, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-    if (__frame0.nMainMinDmg == nElemDmg) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d", __frame0.nMainMinDmg);
+    if (nMainMinDmg == nMainMaxDmg) {
+      wsprintfA(szDmgTextA, "%d", nMainMinDmg);
+    } else if (nMainMinDmg < 10000 && nMainMaxDmg < 10000) {
+      wsprintfA(szDmgTextA, "%d-%d", nMainMinDmg, nMainMaxDmg);
+    } else if (nMainMinDmg >= 10000) {
+      wsprintfA(szDmgTextA, "%s%dK-%dK", "", (nMainMinDmg + 500) / 1000, (nMainMaxDmg + 500) / 1000);
     } else {
-      if (__frame0.nMainMinDmg < 10000) {
-        if (nElemDmg < 10000) {
-          /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d-%d", __frame0.nMainMinDmg, nElemDmg);
-          goto format_second_range;
-        }
-
-        /* LPCSTR param_2 for wsprintfA */ szFmt = "%s%d-%dK";
-        /* LPSTR param_1 for wsprintfA */ nMinDmgScaled = __frame0.nMainMinDmg;
-        wsprintfA(szDmgTextA, "%s%d-%dK", "", nMinDmgScaled, (nElemDmg + 500) / 1000);
-      } else {
-        nMinDmgScaled = (__frame0.nMainMinDmg + 500) / 1000;
-        szFmt = "%s%dK-%dK";
-        wsprintfA(szDmgTextA, "%s%dK-%dK", "", nMinDmgScaled, (nElemDmg + 500) / 1000);
-      }
+      wsprintfA(szDmgTextA, "%s%d-%dK", "", nMainMinDmg, (nMainMaxDmg + 500) / 1000);
     }
-
-    format_second_range:
     D2Lang::UTF8_ConvertToWideChar(wszMainDmgW, szDmgTextA, 0x20);
     Fog::File::CONTAINER_InitializeBuffer(wszOffhandDmgW, 2, 0x20, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-    if (nItemClassId == __frame0.nOffhandMaxDmg) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d", nItemClassId);
+    if (nOffhandMinDmg == nOffhandMaxDmg) {
+      wsprintfA(szDmgTextA, "%d", nOffhandMinDmg);
+    } else if (nOffhandMinDmg < 10000 && nOffhandMaxDmg < 10000) {
+      wsprintfA(szDmgTextA, "%d-%d", nOffhandMinDmg, nOffhandMaxDmg);
+    } else if (nOffhandMinDmg >= 10000) {
+      wsprintfA(szDmgTextA, "%s%dK-%dK", "", (nOffhandMinDmg + 500) / 1000, (nOffhandMaxDmg + 500) / 1000);
     } else {
-      if (nItemClassId < 10000) {
-        if (__frame0.nOffhandMaxDmg < 10000) {
-          /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szDmgTextA, "%d-%d", nItemClassId, __frame0.nOffhandMaxDmg);
-          goto draw_both_ranges;
-        }
-
-        /* LPCSTR param_2 for wsprintfA */ szFmt = "%s%d-%dK";
-        /* LPSTR param_1 for wsprintfA */ nMinDmgScaled = nItemClassId;
-        wsprintfA(szDmgTextA, "%s%d-%dK", "", nMinDmgScaled, (__frame0.nOffhandMaxDmg + 500) / 1000);
-      } else {
-        nMinDmgScaled = (nItemClassId + 500) / 1000;
-        szFmt = "%s%dK-%dK";
-        wsprintfA(szDmgTextA, "%s%dK-%dK", "", nMinDmgScaled, (__frame0.nOffhandMaxDmg + 500) / 1000);
-      }
+      wsprintfA(szDmgTextA, "%s%d-%dK", "", nOffhandMinDmg, (nOffhandMaxDmg + 500) / 1000);
     }
-
-    draw_both_ranges:
     D2Lang::UTF8_ConvertToWideChar(wszOffhandDmgW, szDmgTextA, 0x20);
-    SKILLDESC_DrawTwoLineText(wszMainDmgW, wszOffhandDmgW, nScreenX, nScreenY, nScreenZ, __frame0.nDmgTypeFlag, __frame0.nElemDmgTypeFlag);
+    SKILLDESC_DrawTwoLineText(wszMainDmgW, wszOffhandDmgW, nScreenX, nScreenY, nScreenZ, nMainColorIdx, nOffhandColorIdx);
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgElemental(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
