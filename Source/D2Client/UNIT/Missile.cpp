@@ -3428,65 +3428,40 @@ int32_t __fastcall MISSILE_CltHitFn32_FireHead(D2UnitStrc * pUnit, D2UnitStrc * 
 
 // Client-side hit function for missile type 033 (scatter/multi-shot on impact). On hit, spawns CltHitSubMissile1 sub-missiles around the impact point. The spread count comes from CltHitPar1 (default modulo 3). Each sub-missile gets a pseudo-random offset derived from the missile's own seed and a direction angle clamped so it never fires straight back. Requires a valid owner unit; no-ops and returns 1 if any precondition fails.
 int32_t __fastcall MISSILE_CltHitFn33_MephistoFlyingRocks(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    D2MissilesTxt* pMissileTxt;
-    D2UnitStrc* pOwnerUnit;
-    uint32_t nOffsetX;
-    uint32_t nOffsetY;
-    uint32_t nModulo;
-    D2SeedStrc* pSeed;
-    D2SkillArgStrc sSkillArg;
-    int nCount;
-    int nClassId;
-    uint32_t DVar1;
-    pMissileTxt = 0;
+    D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
-      nClassId = pUnit->nClassId;
+      int nClassId = pUnit->nClassId;
       pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     }
-    if (!pMissileTxt) {
-      return 1;
-    }
-    if (pMissileTxt->CltHitSubMissile1 < 0) {
+    if (!pMissileTxt || pMissileTxt->CltHitSubMissile1 < 0) {
       return 1;
     }
 
-    pOwnerUnit = CUnit::MISSILE_GetOwnerUnit(pUnit);
-    if (!pOwnerUnit) {
+    D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
+    if (!pOwner) {
       return 1;
     }
 
+    D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->CltHitSubMissile1;
     sSkillArg.nFlags = 0x102;
-    sSkillArg.pOwner = pOwnerUnit;
+    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->CltHitSubMissile1;
+    sSkillArg.pOwner = pOwner;
     sSkillArg.pMissile = pUnit;
     sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
-    nModulo = 3;
-    if (pMissileTxt->cHitPar1 >= 3) {
-      nModulo = pMissileTxt->cHitPar1;
-    }
-
-    nCount = D2Common::Units::Missile::GetTargetX(pUnit);
-    if (nCount <= 0) {
-      return 1;
-    }
-
-    pSeed = &pUnit->sSeed;
-    do {
-      DVar1 = D2_SeedRoll(pSeed);
-      sSkillArg.nSkillLevel = DVar1 % 5 + 1;
-      nOffsetX = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, nModulo * 2 + 1);
-      sSkillArg.nUnitX = nOffsetX - nModulo;
-      nOffsetY = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, nModulo * 2 + 1);
-      sSkillArg.nUnitY = nOffsetY - nModulo;
-      if (!(nOffsetX - nModulo) && !sSkillArg.nUnitY) {
-        nOffsetX = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, nModulo);
-        sSkillArg.nUnitX = nOffsetX + 1;
+    int nRange = pMissileTxt->cHitPar1 < 3 ? 3 : pMissileTxt->cHitPar1;
+    int nCount = D2Common::Units::Missile::GetTargetX(pUnit);
+    for (int i = 0; i < nCount; i++) {
+      D2SeedStrc* pSeed = &pUnit->sSeed;
+      sSkillArg.nSkillLevel = D2_SeedRoll(pSeed) % 5 + 1;
+      sSkillArg.nUnitX = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, nRange * 2 + 1) - nRange;
+      sSkillArg.nUnitY = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, nRange * 2 + 1) - nRange;
+      if (!sSkillArg.nUnitX && !sSkillArg.nUnitY) {
+        sSkillArg.nUnitX = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, nRange) + 1;
       }
 
       Missile::MakeMissile(&sSkillArg);
-      nCount--;
-    } while (nCount);
+    }
 
     return 1;
 }
