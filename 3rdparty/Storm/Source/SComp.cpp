@@ -479,139 +479,117 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
 }
 
 static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uint8_t * pIn, uint32_t nChannels, int32_t nInSize) {
-    uint32_t nStepSize;
-    uint32_t nDelta;
-    int aChannelState[4];
-    uint8_t byCode;
-    short int nSample;
-    int* pnStepIndex;
-    uint8_t* pInBase = pIn;
-    aChannelState[2] = 0x2c;
-    aChannelState[3] = 0x2c;
-    uint8_t* pInCur = pIn + 2;
-    uint32_t nChannel = 0;
-    short int* pOutStart = pOut;
+    int aPredicted[2];
+    int aStepIndex[2];
+    short* pOutStart = pOut;
     uint8_t* pInEnd = pIn + nInSize;
-    if (nChannels > 0) {
-      do {
-        nSample = *(short int*)pInCur;
-        pInCur += 2;
-        aChannelState[nChannel] = (int)nSample;
+    uint8_t* pInStart = pIn;
+    aStepIndex[0] = 0x2c;
+    aStepIndex[1] = 0x2c;
+    pIn += 2;
+    for (uint32_t i = 0; i < nChannels; i++) {
+      aPredicted[i] = *(short*)pIn;
+      pIn += 2;
+      if (nOutSize < 2) {
+        return (intptr_t)pOut - (intptr_t)pOutStart;
+      }
+
+      nOutSize -= 2;
+      *pOut = (short)aPredicted[i];
+      pOut++;
+    }
+
+    uint32_t nChannel = nChannels - 1;
+    while (pIn < pInEnd) {
+      if (nChannels == 2) {
+        nChannel = nChannel == 0;
+      }
+
+      uint8_t byCode = *pIn;
+      pIn++;
+      if (byCode & 0x80) {
+        switch (byCode & 0x7f) {
+          case 0:
+            if (aStepIndex[nChannel]) {
+              aStepIndex[nChannel]--;
+            }
+            if (nOutSize < 2) {
+              return (intptr_t)pOut - (intptr_t)pOutStart;
+            }
+
+            *pOut = (short)aPredicted[nChannel];
+            pOut++;
+            nOutSize -= 2;
+            continue;
+          case 1:
+            aStepIndex[nChannel] += 8;
+            if (aStepIndex[nChannel] > 0x58) {
+              aStepIndex[nChannel] = 0x58;
+            }
+            break;
+          case 2:
+            aStepIndex[nChannel] -= 8;
+            if (aStepIndex[nChannel] < 0) {
+              aStepIndex[nChannel] = 0;
+            }
+            break;
+          default:
+            continue;
+        }
+
+        if (nChannels == 2) {
+          nChannel = nChannel == 0;
+        }
+      } else {
+        uint32_t nStepSize = gdwADPCMCoefficient[aStepIndex[nChannel]];
+        uint32_t nDelta = nStepSize >> D2_SHIFT_COUNT(pInStart[1]);
+        if (byCode & 1) {
+          nDelta += nStepSize;
+        }
+        if (byCode & 2) {
+          nDelta += nStepSize >> 1;
+        }
+        if (byCode & 4) {
+          nDelta += nStepSize >> 2;
+        }
+        if (byCode & 8) {
+          nDelta += nStepSize >> 3;
+        }
+        if (byCode & 0x10) {
+          nDelta += nStepSize >> 4;
+        }
+        if (byCode & 0x20) {
+          nDelta += nStepSize >> 5;
+        }
+
+        int nPredicted = aPredicted[nChannel];
+        if (byCode & 0x40) {
+          nPredicted -= nDelta;
+          if (nPredicted <= -0x8000) {
+            nPredicted = -0x8000;
+          }
+        } else {
+          nPredicted += nDelta;
+          if (nPredicted >= 0x7fff) {
+            nPredicted = 0x7fff;
+          }
+        }
+
+        aPredicted[nChannel] = nPredicted;
         if (nOutSize < 2) {
           return (intptr_t)pOut - (intptr_t)pOutStart;
         }
 
         nOutSize -= 2;
-        *pOut = nSample;
-        nChannel++;
+        *pOut = (short)aPredicted[nChannel];
         pOut++;
-      } while (nChannel < nChannels);
-    }
-
-    nChannel = nChannels - 1;
-    if (pInCur < pIn + nInSize) {
-      int nPredicted;
-      do {
-        if (nChannels == 2) {
-          nChannel = (uint32_t)!nChannel;
+        aStepIndex[nChannel] += gnSSCompDeflateFlags[byCode & 0x1f];
+        if (aStepIndex[nChannel] < 0) {
+          aStepIndex[nChannel] = 0;
+        } else if (aStepIndex[nChannel] > 0x58) {
+          aStepIndex[nChannel] = 0x58;
         }
-
-        byCode = *pInCur;
-        pInCur++;
-        if (byCode & 0x80) {
-          nStepSize = byCode & 0x7f;
-          if (byCode & 0x7f) {
-            switch (nStepSize) {
-              case 1:
-                {
-                  aChannelState[nChannel + 2] += 8;
-                  if (0x58 < aChannelState[nChannel + 2]) {
-                    aChannelState[nChannel + 2] = 0x58;
-                  }
-
-                  break;
-                }
-              default:
-                {
-                  continue;
-                }
-              case 2:
-                {
-                  pnStepIndex = aChannelState + (nChannel + 2);
-                  *pnStepIndex += -8;
-                  if (*pnStepIndex < 0) {
-                    aChannelState[nChannel + 2] = 0;
-                  }
-
-                  break;
-                }
-            }
-
-            if (nChannels == 2) {
-              nChannel = (uint32_t)!nChannel;
-            }
-          } else {
-            if (aChannelState[nChannel + 2]) {
-              aChannelState[nChannel + 2]--;
-            }
-            if (nOutSize < 2) {
-              break;
-            }
-
-            *pOut = (short int)aChannelState[nChannel];
-            pOut++;
-            nOutSize -= 2;
-          }
-        } else {
-          nStepSize = gdwADPCMCoefficient[aChannelState[nChannel + 2]];
-          nDelta = nStepSize >> D2_SHIFT_COUNT(pInBase[1]);
-          if (byCode & 1) {
-            nDelta += nStepSize;
-          }
-          if (byCode & 2) {
-            nDelta += nStepSize >> 1;
-          }
-          if (byCode & 4) {
-            nDelta += nStepSize >> 2;
-          }
-          if (byCode & 8) {
-            nDelta += nStepSize >> 3;
-          }
-          if (byCode & 0x10) {
-            nDelta += nStepSize >> 4;
-          }
-          if (byCode & 0x20) {
-            nDelta += nStepSize >> 5;
-          }
-          if (byCode & 0x40) {
-            nPredicted = aChannelState[nChannel] - nDelta;
-            if (nPredicted <= -0x8000) {
-              nPredicted = -0x8000;
-            }
-          } else {
-            nPredicted = aChannelState[nChannel] + nDelta;
-            if (nPredicted >= 0x7fff) {
-              nPredicted = 0x7fff;
-            }
-          }
-
-          aChannelState[nChannel] = nPredicted;
-          if (nOutSize < 2) {
-            break;
-          }
-
-          nOutSize -= 2;
-          *pOut = (short int)aChannelState[nChannel];
-          pOut++;
-          pnStepIndex = aChannelState + (nChannel + 2);
-          *pnStepIndex += gnSSCompDeflateFlags[byCode & 0x1f];
-          if (*pnStepIndex < 0) {
-            aChannelState[nChannel + 2] = 0;
-          } else if (aChannelState[nChannel + 2] > 0x58) {
-            aChannelState[nChannel + 2] = 0x58;
-          }
-        }
-      } while (pInCur < pInEnd);
+      }
     }
 
     return (intptr_t)pOut - (intptr_t)pOutStart;
