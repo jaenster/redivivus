@@ -18,6 +18,14 @@
 #include "Source/D2Common/Units.inline.h"
 #include "Source/D2Game/SKILLS/SkillSor.h"
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -614,79 +622,55 @@ BOOL __fastcall SKILLDRUID_SrvStFn56_FeralRageMaul(::SGAMEDATA * pGame, D2UnitSt
 // Server DoFunc for Druid skill Feral Rage (skill 120). Validates the skill is active as the unit's current skill, marks the unit UNITFLAG_SKSRVDOFUNC, and processes any pending combat queue entry against the current target. If a hit occurred (nParam1 != 0): computes or retrieves the aura state stat-list, extends its timeout, increments the frenzy stack counter (UNITSTAT_skill_frenzy) up to the calc[1] cap, writes modifierlist_skill/level stats, and applies aura stats via D2SetAurastatsFromSkills. Refreshes the aura GFX toggle. Returns 1 on success, 0 if preconditions fail.
 // @sourcefile .\SKILLS\SkillDruid.cpp
 BOOL __fastcall Skills_SrvDoFunc_120_FeralRage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    eD2Skills eCurrentSkill;
-    D2UnitStrc* pTarget;
-    int32_t nFrenzyCount;
-    D2StatListExStrc* pStatsEx;
-    eD2UnitType eUnitType;
-    int nFrenzyStacks;
-    int32_t nCurFrenzyStacks;
-    int32_t nUnitGUID;
-    D2SkillsTxt* pSkillTxt;
-    pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (pSkillTxt && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-      D2SkillStrc* pSkill;
-      pSkill = D2Common::Units::GetCurrentSkill(pUnit);
-      if (pSkill) {
-        eCurrentSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\SkillDruid.cpp", 0x2af);
-        if (eCurrentSkill == eSkill) {
-          if (pUnit) {
-            pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-          }
-
-          pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
-          if (pTarget) {
-            UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
-          }
-
-          nFrenzyCount = D2Common::Skills::SKILL_GetParam1(pSkill);
-          if (!nFrenzyCount) {
-            return 1;
-          }
-
-          nUnitGUID = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->auralencalc, eSkill, nSkillLvl);
-          nFrenzyStacks = pGame->dwGameFrame + nUnitGUID;
-          pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
-          if (!pStatsEx) {
-            if (!pUnit) {
-              nUnitGUID = -1;
-              eUnitType = UNIT_COUNT;
-            } else {
-              nUnitGUID = pUnit->nUnitGUID;
-              eUnitType = pUnit->eUnitType;
-            }
-
-            pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nFrenzyStacks, eUnitType, nUnitGUID);
-            if (!pStatsEx) {
-              return 1;
-            }
-
-            D2Common::Stats::StatsEx::SetState(pStatsEx, (int)pSkillTxt->aurastate);
-            D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatsEx, SkillsServer::DefaultExpireFunction);
-            D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
-            D2Common::DATATBLS::ItemStats::SetState(pUnit, (int)pSkillTxt->aurastate, 1);
-          }
-
-          D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatsEx, nFrenzyStacks);
-          GAME::Event::SetEvent(pGame, pUnit, 0xc, nFrenzyStacks, 0, 0);
-          D2Common::DATATBLS::ItemStats::D2StatesTogglegfx(pUnit, (int)pSkillTxt->aurastate, 1);
-          nUnitGUID = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
-          nFrenzyStacks = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatsEx, UNITSTAT_skill_frenzy, 0);
-          if (nUnitGUID >= nFrenzyStacks + 1) {
-            nUnitGUID = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatsEx, UNITSTAT_skill_frenzy, 0);
-            nUnitGUID += 1;
-          }
-
-          D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_skill_frenzy, nUnitGUID, 0);
-          D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_skill, eSkill, 0);
-          D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_level, nSkillLvl, 0);
-          D2SetAurastatsFromSkills(pUnit, pStatsEx, pSkillTxt, eSkill, nUnitGUID);
-          return 1;
-        }
-      }
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt || pSkillTxt->aurastate < 0 || pSkillTxt->aurastate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      return 0;
     }
 
-    return 0;
+    D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
+    if (!pSkill) {
+      return 0;
+    }
+    if (D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\SkillDruid.cpp", 0x2af) != eSkill) {
+      return 0;
+    }
+    if (pUnit) {
+      pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
+    }
+
+    D2UnitStrc* pTarget = UNIT::SUnit::GetTargetEx(pGame, pUnit);
+    if (pTarget) {
+      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pTarget, 0);
+    }
+    if (!D2Common::Skills::SKILL_GetParam1(pSkill)) {
+      return 1;
+    }
+
+    int nDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->auralencalc, eSkill, nSkillLvl); // steer-ok: the original loads dwGameFrame into a register of its own and adds the aura length to it
+    int nExpireFrame = pGame->dwGameFrame + nDuration;
+    D2StatListExStrc* pStatsEx = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillTxt->aurastate);
+    if (!pStatsEx) {
+      pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireFrame, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
+      if (!pStatsEx) {
+        return 1;
+      }
+
+      D2Common::Stats::StatsEx::SetState(pStatsEx, (int)pSkillTxt->aurastate);
+      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStatsEx, SkillsServer::DefaultExpireFunction);
+      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
+      D2Common::DATATBLS::ItemStats::SetState(pUnit, (int)pSkillTxt->aurastate, 1);
+    }
+
+    D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatsEx, nExpireFrame);
+    GAME::Event::SetEvent(pGame, pUnit, 0xc, nExpireFrame, 0, 0);
+    D2Common::DATATBLS::ItemStats::D2StatesTogglegfx(pUnit, (int)pSkillTxt->aurastate, 1);
+    int nMaxFrenzy = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
+    int nFrenzy = min(nMaxFrenzy, D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatsEx, UNITSTAT_skill_frenzy, 0) + 1); // steer-ok: windef.h min/max macros
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_skill_frenzy, nFrenzy, 0);
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_skill, eSkill, 0);
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_modifierlist_level, nSkillLvl, 0);
+    D2SetAurastatsFromSkills(pUnit, pStatsEx, pSkillTxt, eSkill, nFrenzy);
+    return 1;
 }
 
 // Server StFunc for Druid skill index 57: validates the active skill matches eSkill and that the skill's auratarget state is active on the caster. Performs a to-hit check; on hit, evaluates damage calcs (calc[0], optional elemental calc[3]) and sets Param1=1. Aborts early (returns 0) if the required aura state is not present. Likely the follow-up hit step for a shapeshifter skill gated on an active buff.
