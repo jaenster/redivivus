@@ -7106,44 +7106,28 @@ void __fastcall MISSILE_CltDoFn30_TowerChestSpawner(D2UnitStrc * pUnit) {
 
 // Client-side tick for Paladin Holy Bolt homing missile. Validates the missile belongs to the owner's current active skill (via gnPaladinSkillIndexTable). On collision (8-flags set), spawns a sub-missile (CltSubMissile1) and re-targets the path toward the owner via PATH_SetPathTarget. Removes the missile from the client hash if the skill check fails or owner is missing.
 void __fastcall MISSILE_CltDoFn44_Distraction(D2UnitStrc * pUnit) {
-    D2MissilesTxt* pMissileTxt;
-    D2SkillStrc* pSkill;
-    eD2Skills eOwnerSkillId;
-    eD2Skills eMissileSkillId;
-    uint32_t uCollFlags;
-    int32_t nMissileLevel;
+    D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
       int nClassId = pUnit->nClassId;
       pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
-      if (pMissileTxt && pMissileTxt->CltSubMissile1 >= 0) {
-        D2UnitStrc* pOwner;
-        pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
-        if (pOwner) {
-          pSkill = D2Common::Units::GetCurrentSkill(pOwner);
-          if (pSkill) {
-            eOwnerSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\Missile.cpp", 0x8ed);
-            eMissileSkillId = D2Common::Units::Missile::GetSkillId(pUnit);
-            if (eOwnerSkillId == eMissileSkillId) {
-              uCollFlags = D2Common::PATH::Path::Get8FlagsFromDynamicPath(pUnit->pPath.pDynamicPath);
-              if (uCollFlags) {
-                nMissileLevel = D2Common::Units::Missile::GetLevel(pUnit);
-                MakeMissileAtXY(pUnit, (int)pMissileTxt->CltSubMissile1, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), nMissileLevel);
-              }
-
-              D2Common::PATH::Path::PATH_MoveUnitToUnitPosition(pUnit, pOwner);
-              MISSILE_CltDoFn01_BasicMissile(pUnit);
-              return;
-            }
+    }
+    if (pMissileTxt && pMissileTxt->CltSubMissile1 >= 0) {
+      D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
+      if (pOwner) {
+        D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pOwner);
+        if (pSkill && D2Common::Skills::GetSkillId(pSkill, ".\\UNIT\\Missile.cpp", 0x8ed) == D2Common::Units::Missile::GetSkillId(pUnit)) {
+          if (D2Common::PATH::Path::Get8FlagsFromDynamicPath(pUnit->pPath.pDynamicPath)) {
+            MakeMissileAtXY(pUnit, (int)pMissileTxt->CltSubMissile1, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit));
           }
+
+          D2Common::PATH::Path::PATH_MoveUnitToUnitPosition(pUnit, pOwner);
+          MISSILE_CltDoFn01_BasicMissile(pUnit);
+          return;
         }
       }
-
-      CUnit::UNITS_RemoveFromClientHashTable(pUnit->nUnitGUID, pUnit->eUnitType);
-      return;
     }
 
-    CUnit::UNITS_RemoveFromClientHashTable(-1, 6);
-    return;
+    CUnit::UNITS_RemoveFromClientHashTable(!pUnit ? -1 : pUnit->nUnitGUID, !pUnit ? UNIT_COUNT : pUnit->eUnitType);
 }
 
 void __fastcall MISSILE_CltDoFn45_DistractionFog(D2UnitStrc * pUnit) {
