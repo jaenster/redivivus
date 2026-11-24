@@ -3170,7 +3170,7 @@ static BOOL __stdcall SKILLDESC_FormatMinMaxRange(int32_t nMinVal, int32_t nMaxV
     return 1;
 }
 
-static BOOL __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText, int32_t bPrefixSign, uint16_t nSuffixLabelId, uint16_t nPrefixLabelId) {
+static BOOL __stdcall SKILLDESC_FormatMinMaxRangeLabelsFirst(int32_t nMinVal, int32_t nMaxVal, uint16_t * wszText, int32_t bPrefixSign, uint16_t nPrefixLabelId, uint16_t nSuffixLabelId) {
     uint16_t wszRangeStr[32];
     char szBuf[32];
     if (nMinVal == nMaxVal) {
@@ -6529,12 +6529,18 @@ static uint32_t __stdcall SKILLDESC_FormatValueWithSign(int32_t pThis, uint16_t 
 static uint32_t __fastcall SKILLDESC_DescLineB_SignedFormat(int32_t nSkillLevel, int32_t nSkillId, D2UnitStrc * pUnitStrc, uint16_t * wszText, D2SkillsTxt * pSkillsTxt) {
     int32_t nSynergy = D2Common::Skills::SKILLS_GetElementalLength(pUnitStrc, nSkillId, nSkillLevel, 0);
     if (nSynergy) {
+      int32_t nStrIndex;
       switch (pSkillsTxt->EType) {
         case ELEMENTAL_COLD:
-          return SKILLDESC_FormatValueWithSign(nSynergy, 0x10a9, 0, wszText);
+          nStrIndex = 0x10a9;
+          break;
         case ELEMENTAL_POISON:
-          return SKILLDESC_FormatValueWithSign(nSynergy, 0x10aa, 0, wszText);
+          nStrIndex = 0x10aa;
+          break;
+        default:
+          return 0;
       }
+      return SKILLDESC_FormatValueWithSign(nSynergy, nStrIndex, 0, wszText);
     }
 
     return 0;
@@ -7004,7 +7010,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
         SKILLDESC_FormatValueWithSign(nCalcA, wDescTextA, 1, pwszOutput);
       return 1;
       case 0x3a:
-        SKILLDESC_FormatMinMaxRangeLabelsFirst(nCalcA, nCalcB, pwszOutput, 1, wDescTextB, wDescTextA);
+        SKILLDESC_FormatMinMaxRangeLabelsFirst(nCalcA, nCalcB, pwszOutput, 1, wDescTextA, wDescTextB);
       return 1;
       case 0x3b:
         if (wDescTextB != 0x1506) {
@@ -7026,7 +7032,7 @@ BOOL __fastcall SKILLDESC_ProcessDescLine(D2UnitStrc * pUnit, uint16_t * pwszOut
       SKILLDESC_FormatDecimalWithStrings(wDescTextA, wDescTextB, nCalcB, nCalcA, pwszOutput, 0);
       return 1;
       case 0x3e:
-        SKILLDESC_FormatMinMaxRangeLabelsFirst(nCalcA, nCalcB, pwszOutput, 0, wDescTextB, wDescTextA);
+        SKILLDESC_FormatMinMaxRangeLabelsFirst(nCalcA, nCalcB, pwszOutput, 0, wDescTextA, wDescTextB);
       return 1;
       case 0x3f:
         SKILLDESC_DescLine3F_SignedPctRange(nCalcA, wDescTextB, 1, 1, wDescTextA, pwszOutput);

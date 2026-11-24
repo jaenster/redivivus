@@ -256,7 +256,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
                 }
               }
 
-              D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
+              if (pTimerMethods.fpFunctionExByType[2]) {
+                pTimerMethods.fpFunctionExByType[2](pGame, pUnit, 0, 0);
+              }
               return;
             }
 
@@ -273,7 +275,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
                 }
               }
 
-              D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
+              if (pTimerMethods.fpFunctionExByType[2]) {
+                pTimerMethods.fpFunctionExByType[2](pGame, pUnit, 0, 0);
+              }
               return;
             }
 
@@ -290,7 +294,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
                 }
               }
 
-              D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
+              if (pTimerMethods.fpFunctionExByType[2]) {
+                pTimerMethods.fpFunctionExByType[2](pGame, pUnit, 0, 0);
+              }
               return;
             }
 
@@ -307,7 +313,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
                 }
               }
 
-              D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
+              if (pTimerMethods.fpFunctionExByType[2]) {
+                pTimerMethods.fpFunctionExByType[2](pGame, pUnit, 0, 0);
+              }
               return;
             }
             if (nResolvedBaseId == 0x76) {
@@ -320,7 +328,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
                   }
                 }
 
-                D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
+                if (pTimerMethods.fpFunctionExByType[2]) {
+                  pTimerMethods.fpFunctionExByType[2](pGame, pUnit, 0, 0);
+                }
                 return;
               }
             } else if (nResolvedBaseId == 0x193) {
@@ -332,7 +342,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
                 }
               }
 
-              D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
+              if (pTimerMethods.fpFunctionExByType[2]) {
+                pTimerMethods.fpFunctionExByType[2](pGame, pUnit, 0, 0);
+              }
               return;
             }
           }
@@ -342,7 +354,9 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
       D2Common::Units::ChangeAnimMode(pUnit, 1);
       eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze);
       if ((!eUnitState || (eUnitState = UNIT::SUnit::CheckForModeZeroDeath(pUnit) , eUnitState != 0)) && true) {
-        D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
+        if (pTimerMethods.fpFunctionExByType[2]) {
+          pTimerMethods.fpFunctionExByType[2](pGame, pUnit, 0, 0);
+        }
         return;
       }
     } else {
@@ -376,12 +390,11 @@ void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, D2UnitStrc * p
     D2ModeChangeStrc sMonsterKill;
     memset(&sMonsterKill, 0, sizeof(sMonsterKill));
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
-    uint8_t byAnimMode2 = 'd';
+    int32_t byAnimMode2 = 'd';
     sMonsterKill.pUnit = pUnit;
     if (pUnit) {
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
-      byAnimMode2 = 'd';
       if (pMonStats2 && pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0]) {
         byAnimMode2 = 'e';
       }
@@ -398,7 +411,9 @@ void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, D2UnitStrc * p
       }
     }
 
-    D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
+    if (pTimerMethods.fpFunctionExByType[2]) {
+      pTimerMethods.fpFunctionExByType[2](pGame, pUnit, 0, 0);
+    }
 }
 
 // Handles a monster's death triggered by its attacker. Clears current skill, builds a D2MonsterKillStrc with victim/attacker (via GetTargetEx), selects death animation mode ('d' normal or 'e' for undead via MvFlags1), then calls MONSTERAI_ExecuteLifecycleTransition. If the monster is frozen and not in mode-0 death it returns early; otherwise drives the monster AI death function.
@@ -408,12 +423,11 @@ void __fastcall MONMODE_EndTrappedSoulSkill(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2ModeChangeStrc killStrc;
     memset(&killStrc, 0, sizeof(killStrc));
     killStrc.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
-    uint8_t byAnimMode2 = 'd';
+    int32_t byAnimMode2 = 'd';
     killStrc.pUnit = pUnit;
     if (pUnit) {
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
-      byAnimMode2 = 'd';
       if (pMonStats2 && pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0]) {
         byAnimMode2 = 'e';
       }
@@ -430,7 +444,9 @@ void __fastcall MONMODE_EndTrappedSoulSkill(::SGAMEDATA * pGame, D2UnitStrc * pU
       }
     }
 
-    D2Game::Monster::AI::MONSTERAI_ExecuteAiFunction(pGame, pUnit, 0, 0);
+    if (pTimerMethods.fpFunctionExByType[2]) {
+      pTimerMethods.fpFunctionExByType[2](pGame, pUnit, 0, 0);
+    }
 }
 
 BOOL __fastcall MONMODE_ProcessWalkWithTrails(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

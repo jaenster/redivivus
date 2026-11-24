@@ -3543,16 +3543,16 @@ void __fastcall OBJMODE_HandleObjectDeactivation(::SGAMEDATA * pGame, D2UnitStrc
 
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
 void __fastcall OBJMODE_OnWaypointFinish(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
-    if ((pUnit ? pUnit->nClassId : -1) != 0x151) {
-      D2Common::Units::ChangeAnimMode(pUnit, 0);
-    } else {
+    if ((pUnit ? pUnit->nClassId : -1) == 0x151) {
       D2TimerArgStrc* pTimerArg;
       pTimerArg = D2Common::Units::GetTimerArg(pUnit);
       if (pTimerArg->pTimerList) {
         *(uint32_t*)pTimerArg->pTimerList = -1;
-        return;
       }
+      return;
     }
+
+    D2Common::Units::ChangeAnimMode(pUnit, 0);
 }
 
 // Completes the two-phase town-portal link: given the GUID of a blue portal stub and the destination level, locates the stub object (classId 0x3b), verifies it is unlinked and has an owner unit, then stores the destination level in the portal's component data, sets the linked flag, frees the owner stub unit, and calls LinkPortal to establish the bidirectional connection. Halts with an internal error if preconditions fail.

@@ -995,7 +995,7 @@ void __fastcall AUTOMAP_UpdatePartyNamesCallback(D2EscMenuItemStrc * pItem, D2UI
     UI::Automap::AUTOMAP_SetPartyNames(pItem->nImageIndex);
 }
 
-static void SOUND_LocalizeSoundPath(char * szFormat, char * pszOutPath, char * pTmp) {
+static void SOUND_LocalizeSoundPath(char * pszOutPath, char * szFormat, char * pTmp) {
     D2MPQFileStrc* pFile;
     char szLangAbbrev[4];
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
@@ -1129,7 +1129,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
       if (bConnectionLost) {
         bVideoLoaded = 1;
         if (gdwSoundHeaderCacheIndex[nCutsceneId].bHasAltSoundPath) {
-          SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
+          SOUND_LocalizeSoundPath(szSoundPath, "%s\\video\\%s\\%s", szVideoPath);
         } else {
           sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
         }
@@ -1176,7 +1176,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
             sprintf(szVideoPath, gdwSoundHeaderCacheIndex[6].pszVideoPath, "640x146");
           }
           if (gdwSoundHeaderCacheIndex[6].bHasAltSoundPath) {
-            SOUND_LocalizeSoundPath("%s\\video\\%s\\%s", szSoundPath, szVideoPath);
+            SOUND_LocalizeSoundPath(szSoundPath, "%s\\video\\%s\\%s", szVideoPath);
           } else {
             sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
           }

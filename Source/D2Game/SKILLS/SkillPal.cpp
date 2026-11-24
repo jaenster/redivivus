@@ -750,7 +750,6 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     uint32_t dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
-    uint16_t wSkillId = (uint16_t)eSkill;
     if (dwSkillFlags & 1) {
       int32_t nAttackFrame = 0;
       if (pUnit && pUnit->eUnitType == UNIT_MONSTER && dwSkillFlags & 2) {
@@ -761,13 +760,13 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
         if (bInMeleeRange) {
           D2Common::Skills::SKILL_SetFlags(pSkill, 0);
           UNIT::SUnit::UNITS_SetupAnimTimerEventsFromFrame(pGame, pUnit, nAttackFrameIdx + 1);
-          UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
+          UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
           return 1;
         }
       }
       if (dwSkillFlags & 2) {
         D2Common::Skills::SKILL_SetFlags(pSkill, 0);
-        UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
+        UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
         D2UnitStrc* pTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, 3, 3, nTargetGUID, nullptr);
         if (pTarget) {
           bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
@@ -808,7 +807,7 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2Common::Skills::SKILL_SetFlags(pSkill, 0);
     D2Common::Skills::SKILL_SetParam1(pSkill, 0);
     D2Common::Skills::SKILL_SetParam2(pSkill, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
+    UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
     UNIT::SUnit::UNITS_SetupAnimTimerEventsFromFrame(pGame, pUnit, nAttackFrameIdx);
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;

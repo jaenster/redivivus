@@ -93,7 +93,7 @@ uint16_t __stdcall TILEPROJECT_GetMainIndex(D2TileLibraryEntryStrc * pComp24) {
       exit(-1);
     }
 
-    return (uint32_t)((uint32_t)(uint16_t)(short int)((uintptr_t)pComp24 >> 0x10) << 16 | (uint32_t)(uint16_t)pComp24->nRoofHeight);
+    return pComp24->nRoofHeight;
 }
 
 char * __stdcall TILEPROJECT_GetAnimatedSubstDataPtr(D2TileLibraryEntryStrc * pComp24) {

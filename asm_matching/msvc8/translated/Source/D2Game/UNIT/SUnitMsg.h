@@ -193,7 +193,7 @@ void __fastcall UnitQueuePacket0xAB(struct D2UnitStrc * pUnit, uint8_t nHpPercen
 void __fastcall SERVER_SendUnitMessagePacket(struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint16_t wArg1, uint16_t wArg2, uint32_t dwParam1, uint32_t dwParam2, uint8_t byParam);
 // Clears STATE_skill_move on pUnit, allocates a D2SUnitMsgStrc (packet 0xA5) from the unit's memory pool, fills in the unit type, GUID, and wParam, appends it to the unit's message queue (pMsgFirst/pMsgLast), then calls ROOM_LinkUnitToUpdateList to schedule the unit for a network update.
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0xA5(struct D2UnitStrc * pUnit, uint16_t wSkillId);
+void __fastcall UnitQueuePacket0xA5(struct D2UnitStrc * pUnit, int wSkillId);
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall SERVER_UnitQueuePacket0xA4(struct D2UnitStrc * pUnit, int32_t nClassId);
 // @sourcefile .\UNIT\SUnitMsg.cpp

@@ -1160,7 +1160,7 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
     int32_t nManaCap;
     D2SkillsTxt* pSkillTxt;
     uint32_t* pAbsorbEntry;
-    bool bNotMonsterOnly;
+    BOOL bNotMonsterOnly;
     short int eSkillAuraState;
     int32_t nValue;
     if (!pUnit) {
@@ -1185,9 +1185,9 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
               nSkillLvl = 1;
             }
 
-            bNotMonsterOnly = true;
+            bNotMonsterOnly = TRUE;
             if (pTarget && (pTarget->eUnitType != UNIT_MONSTER || (bIsMerc = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pTarget) , bIsMerc != 0))) {
-              bNotMonsterOnly = false;
+              bNotMonsterOnly = FALSE;
             }
 
             eSkill = SKILL_Attack;
@@ -1206,7 +1206,8 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
                   eSkill += nAbsorbAmt;
                   *pnDamageField = nValue - nAbsorbAmt;
                   nValue = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nAbsorbAmt, nSkillLvl, 0x10);
-                  nCurMana = (int)(nCurMana - nValue) <= 0 ? 0 : nCurMana - nValue;
+                  nCurMana -= nValue;
+                  nCurMana = (int)nCurMana <= 0 ? 0 : nCurMana;
                 }
               }
 

@@ -39,7 +39,7 @@ void __fastcall MONUMOD_RollNameSeed(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     pUnit->pUnitData.pUnitDataMonster->nNameSeed = (uint16_t)sSeedNext;
 }
 
-static void UMOD_IncreaseMonsterHp(uint32_t nUmodConstant, D2UnitStrc * pUnit) {
+static void UMOD_IncreaseMonsterHp(D2UnitStrc * pUnit, uint32_t nUmodConstant) {
     int nHpBonus;
     int nBaseHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     if (nBaseHp > 0x100000) {
@@ -80,7 +80,7 @@ void __fastcall MONUMOD_ApplyHpBonus(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     }
     if (!bUnique) {
       nUmodConst = GetUmodConstant(byDifficulty + 1);
-      UMOD_IncreaseMonsterHp(nUmodConst, pUnit);
+      UMOD_IncreaseMonsterHp(pUnit, nUmodConst);
       return;
     }
 
@@ -92,7 +92,7 @@ void __fastcall MONUMOD_ApplyHpBonus(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
     }
 
     nUmodConst = GetUmodConstant(nUmodConstIdx);
-    UMOD_IncreaseMonsterHp(nUmodConst, pUnit);
+    UMOD_IncreaseMonsterHp(pUnit, nUmodConst);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hpregen, 0, 0);
 }
 
@@ -280,7 +280,7 @@ void __fastcall MONUMOD_ApplyPossessed(D2UnitStrc * pUnit, int32_t nIndex, BOOL 
       pMonsterData->eMonsterType |= MONTYPE_POSSESSED;
     }
 
-    UMOD_IncreaseMonsterHp(100, pUnit);
+    UMOD_IncreaseMonsterHp(pUnit, 100);
     MONUMOD_ApplyChampionStats(pUnit, nIndex, bUnique);
 }
 
@@ -294,7 +294,7 @@ void __fastcall MONUMOD_ApplyBerserk(D2UnitStrc * pUnit, int32_t nIndex, BOOL bU
       return;
     }
 
-    UMOD_IncreaseMonsterHp(-75, pUnit);
+    UMOD_IncreaseMonsterHp(pUnit, -75);
     int32_t nDamageBonus = 300;
     int32_t nHitBonus = nDamageBonus;
     D2DifficultyLevelsTxt* pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels(pGame->nDifficulty);

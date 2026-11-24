@@ -1575,33 +1575,35 @@ static void __stdcall INV_FormatEtherealSocketedText(D2UnitStrc * pUnit, uint16_
 }
 
 // Formats personalized item text by appending the player's name in possessive form (e.g., "John's Sword"). Checks if item has PLAYERNAME flag and quality is NOT Set/Unique, then converts the stored char* player name to wide string and applies language-specific possessive formatting.
-static void INV_FormatPlayerNameOnItem(uint16_t * wszText, D2UnitStrc * pUnit) {
+static BOOL INV_FormatPlayerNameOnItem(uint16_t * wszText, D2UnitStrc * pUnit) {
     uint16_t* pwIterator;
     uint16_t wszPossessiveBuffer[512];
     uint16_t wszPlayerNameBuffer[512];
     BOOL bHasPlayerName = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_PLAYERNAME, 0x6ea, ".\\UI\\inv.cpp");
-    if (!bHasPlayerName) {
-      return;
+    if (bHasPlayerName) {
+
+      int nQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
+      if (nQuality >= 0x5 && nQuality <= 0x9) {
+        return 0;
+      }
+
+      for (nQuality = 0; nQuality < 0x200; nQuality++) {
+        wszPlayerNameBuffer[nQuality] = L'\0';
+      }
+
+      int32_t nMaxCharsToCopy = 0x20;
+      for (nQuality = 0; nQuality < 0x200; nQuality++) {
+        wszPossessiveBuffer[nQuality] = L'\0';
+      }
+
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszPlayerNameBuffer, D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit), nMaxCharsToCopy);
+      uint32_t nLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
+      D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName(wszPossessiveBuffer, wszPlayerNameBuffer, wszText, 0x200, nLanguageCode);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszPossessiveBuffer);
+      return 1;
     }
 
-    int nQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-    if (nQuality >= 0x5 && nQuality <= 0x9) {
-      return;
-    }
-
-    for (nQuality = 0; nQuality < 0x200; nQuality++) {
-      wszPlayerNameBuffer[nQuality] = L'\0';
-    }
-
-    int32_t nMaxCharsToCopy = 0x20;
-    for (nQuality = 0; nQuality < 0x200; nQuality++) {
-      wszPossessiveBuffer[nQuality] = L'\0';
-    }
-
-    D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszPlayerNameBuffer, D2Common::ITEMS::Items::ITEM_GetItemData_szPlayerName(pUnit), nMaxCharsToCopy);
-    uint32_t nLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-    D2Lang::Unicode::UNISYS::UNICODE_FormatPossessiveName(wszPossessiveBuffer, wszPlayerNameBuffer, wszText, 0x200, nLanguageCode);
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, wszPossessiveBuffer);
+    return 0;
 }
 
 static BOOL __stdcall INV_FormatPlayerNameWithBase(uint16_t * wszText1, uint16_t * wszText2, D2UnitStrc * pUnit) {
@@ -4619,7 +4621,7 @@ void __fastcall INV_InitTradeMode(int32_t nTradeMode) {
     gbInvTradeCancelClicked = 0;
 }
 
-static BOOL __stdcall INV_IsMouseOverAcceptTradeBtn(int32_t nMouseY, int32_t nMouseX) {
+static BOOL __stdcall INV_IsMouseOverAcceptTradeBtn(int32_t nMouseX, int32_t nMouseY) {
     if (nMouseX > gnPanelOffsetX + 0xdf && nMouseX < gnPanelOffsetX + 0xff && nMouseY > gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY < gnPanelOffsetY - 0x40 + ScreenSizeY) {
       return 1;
     }
@@ -4697,10 +4699,10 @@ void __stdcall INV_HandleTradeLeftClick(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    nBodyLoc = INV_IsMouseOverAcceptTradeBtn(nMouseY, nMouseX);
+    nBodyLoc = INV_IsMouseOverAcceptTradeBtn(nMouseX, nMouseY);
     if (nBodyLoc) {
       if (gbTradeConfirmationPending && gbInventoryDragInProgress) {
-        Trade::AcceptTrade();
+        Trade::AcceptTrade(0);
       }
 
       gShopTradeUIState = 0;
@@ -4730,23 +4732,23 @@ void __stdcall INV_HandleTradeLeftClick(D2UIMouseMsgStrc * pMsg) {
       if (nBodyLoc && !gbInvGoldDialogOpen) {
         ui::UI_ShowGoldTransactionDialog(2);
       }
-      if (!gShopTradeUIState) {
+      if (gShopTradeUIState) {
+        gShopTradeUIState = 0;
+        if (gbInventoryDragInProgress) {
+          if (gbTradeConfirmationPending == 1) {
+            gbTradeConfirmationPending = 0;
+            Trade::CancelTrade();
+          }
+        } else {
+          if (gbInvTradeCancelClicked && gbInvTradeAcceptClicked) {
+            gbInvTradeAcceptClicked = 0;
+          }
+        }
+
+        gbInvTradeCancelClicked = 0;
+      } else {
         goto consume_and_reset_trade;
       }
-
-      gShopTradeUIState = 0;
-      if (gbInventoryDragInProgress) {
-        if (gbTradeConfirmationPending == 1) {
-          gbTradeConfirmationPending = 0;
-          Trade::CancelTrade();
-        }
-      } else {
-        if (gbInvTradeCancelClicked && gbInvTradeAcceptClicked) {
-          gbInvTradeAcceptClicked = 0;
-        }
-      }
-
-      gbInvTradeCancelClicked = 0;
     }
 
     gbInventoryDragInProgress = 0;
@@ -10937,7 +10939,7 @@ void __stdcall INPUT_TradeScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
       gbInvTradeAcceptClicked = 0;
       Trade::CancelTrade();
     } else {
-      nHitTest = INV_IsMouseOverAcceptTradeBtn(nMouseY, nMouseX);
+      nHitTest = INV_IsMouseOverAcceptTradeBtn(nMouseX, nMouseY);
       if (!nHitTest) {
         nHitTest = INV_IsMouseOverCancelTradeBtn(nMouseY, nMouseX);
         if (nHitTest) {

@@ -445,7 +445,7 @@ static void ITEM_SaveSkillSelections(int * pnSavedState, D2UnitStrc * pUnit) {
 }
 
 // Restores a player's left- and right-skill selections from a saved skill state (pSkillSaveState). For each hand: if the saved skill is not SKILL_Attack and the skill exists and differs from the current selection, calls PLRSKILLS_CanUseSkillCheck and, if usable (not error codes 2 or 7), re-selects it via SelectSkillLeft/SelectSkillRight. Typically called after an item swap.
-static void ITEM_RestoreSkillSelections(int * pSkillSaveState, D2UnitStrc * pUnit) {
+static void ITEM_RestoreSkillSelections(D2UnitStrc * pUnit, int * pSkillSaveState) {
     D2SkillStrc* pSkillLeft;
     D2SkillStrc* pCurrentSkill;
     int32_t nCanUseResult;
@@ -576,7 +576,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
       return;
     }
 
-    bool bVar2 = false;
+    BOOL bVar2 = FALSE;
     ITEM_SaveSkillSelections(nSkillState, pUnit);
     for (pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory); pEquipItem; pEquipItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pEquipItem)) {
       pCarriedItem = D2Common::INVENTORY::Inventory::GetCarriedItem(pEquipItem);
@@ -611,7 +611,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
               D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pEquipItem, ITEMFLAG_DISABLED, 1);
               byItemComponent = D2Common::Units::GetItemComponent(pUnit, pEquipItem);
               ITEM_RemoveItemFromBodyAndRecalc((uint32_t)byItemComponent, pEquipItem, pUnit);
-              bVar2 = true;
+              bVar2 = TRUE;
             }
           }
         }
@@ -654,7 +654,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
                 }
 
                 bIterRemaining = true;
-                bVar2 = true;
+                bVar2 = TRUE;
               }
             }
           }
@@ -689,7 +689,7 @@ static void ITEM_RecalcAllEquippedItems_EBX(D2UnitStrc * pUnit) {
       nBodyLocIter++;
     } while (nBodyLocIter < 0xb);
 
-    ITEM_RestoreSkillSelections(nSkillState, pUnit);
+    ITEM_RestoreSkillSelections(pUnit, nSkillState);
     if (!bVar2) {
       return;
     }

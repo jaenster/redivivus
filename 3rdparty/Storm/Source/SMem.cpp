@@ -34,7 +34,7 @@ static uint32_t g_SMemInitialized = 0; D2_STATIC_GUARD(g_SMemInitialized, "g_SMe
 namespace Storm::Source::SMem {
 
 // @blizzard FatalError (SMEM.CPP)
-static void SMEM_FatalError(uint32_t * pnName, uint32_t nErrorCode, int32_t nSourceLine) {
+static void SMEM_FatalError(uint32_t nErrorCode, uint32_t * pnName, int32_t nSourceLine) {
     SErr::SErrDisplayError(nErrorCode, pnName, nSourceLine, nullptr, 0, 1);
     /* UINT uExitCode for ExitProcess */ ExitProcess(1);
 }
@@ -189,17 +189,17 @@ static LPVOID SMEM_ReserveBelow4G(SIZE_T nReserveSize) {
 static D2FogHeapDescStrc * __stdcall SMEM_AllocateHeap(int32_t nSourceLine, uint32_t dwHash, int32_t nBucketIndex, uint32_t dwPageAlignMask, SIZE_T nCommitSize, SIZE_T nReserveSize, uint32_t * pnName) {
     int nNameLenBytes;
 #if D2_ARCH_X64
-    D2FogHeapDescStrc* pHeapBlock = (D2FogHeapDescStrc*)SMEM_ReserveBelow4G(nReserveSize);
+    D2FogHeapDescStrc* pHeapBlock = (D2FogHeapDescStrc*)SMEM_ReserveBelow4G(nReserveSize); // steer-ok: the x64 spelling of the one declaration below
 #else
     D2FogHeapDescStrc* pHeapBlock = (D2FogHeapDescStrc*)VirtualAlloc((LPVOID)0x0, nReserveSize, 0x2000, 1);
 #endif
     if (!pHeapBlock) {
-      SMEM_FatalError(pnName, 8, nSourceLine);
+      SMEM_FatalError(8, pnName, nSourceLine);
     }
 
     LPVOID pCommitted = VirtualAlloc(pHeapBlock, nCommitSize, 0x1000, 4);
     if (!pCommitted) {
-      SMEM_FatalError(pnName, 8, nSourceLine);
+      SMEM_FatalError(8, pnName, nSourceLine);
     }
     if (pnName) {
       nNameLenBytes = SSTR::SStrLen((char*)pnName);
@@ -231,8 +231,7 @@ static D2FogHeapDescStrc * __stdcall SMEM_AllocateHeap(int32_t nSourceLine, uint
       pHeapBlock->szName[0] = '\0';
     }
 
-    uint32_t dwHeapSignature = (uint32_t)((uint32_t)(uint16_t)0x6f6d << 16 | (uint32_t)(uint16_t)(short int)((uintptr_t)pHeapBlock >> 0x10));
-    pHeapBlock->dwSignature = dwHeapSignature;
+    pHeapBlock->dwSignature = (uint32_t)((uint32_t)(uint16_t)0x6f6d << 16 | (uint32_t)(uint16_t)(short int)((uintptr_t)pHeapBlock >> 0x10));
     g_SMemHeapBuckets[nBucketIndex] = pHeapBlock;
     return pHeapBlock;
 }
@@ -792,7 +791,7 @@ int32_t __stdcall SMemFindNextBlock(uint32_t nHeapId, uint8_t * pPrevBlock, uint
     } else {
       pStopBlock = (D2FogHeapBlockHdrStrc*)(pPrevBlock - 8);
       if (pPrevBlock[-5] & 8) {
-        pStopBlock = *(D2FogHeapBlockHdrStrc**)(pPrevBlock - 0xc);
+        pStopBlock = ((D2FogHeapBlockHdrStrc**)pStopBlock)[-1];
       }
     }
 
@@ -953,7 +952,7 @@ int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD d
     } else {
       pBlock = (D2FogHeapBlockHdrStrc*)((char*)pObject - 8);
       if (*(uint8_t*)((char*)pObject - 5) & 8) {
-        pBlock = *(D2FogHeapBlockHdrStrc**)((char*)pObject - 0xc);
+        pBlock = ((D2FogHeapBlockHdrStrc**)pBlock)[-1];
       }
     }
 
@@ -1000,7 +999,7 @@ uint32_t __stdcall SMemGetHeapByPtr(uint8_t * pObject) {
 
     uint8_t* puVar1 = pObject - 8;
     if (pObject[-5] & 8) {
-      puVar1 = *(uint8_t**)(pObject - (sizeof(D2FogLargeBlockHdrStrc) - offsetof(D2FogLargeBlockHdrStrc, pAllocBlock)));
+      puVar1 = ((uint8_t**)puVar1)[-1];
     }
 
     return *(uint32_t*)(((uintptr_t)*(uint16_t*)(puVar1 + 4) << 0x10) + offsetof(D2FogHeapDescStrc, nHash));
@@ -1025,7 +1024,7 @@ int32_t __stdcall SMemGetSize(void * pObject, uint32_t * pnFile, int32_t nSize) 
     } else {
       pBlock = (D2FogHeapBlockHdrStrc*)((char*)pObject - 8);
       if (*(uint8_t*)((char*)pObject - 5) & 8) {
-        pBlock = *(D2FogHeapBlockHdrStrc**)((char*)pObject - 0xc);
+        pBlock = ((D2FogHeapBlockHdrStrc**)pBlock)[-1];
       }
     }
 
@@ -1348,7 +1347,7 @@ static uint32_t * __stdcall SMEM_SatisfyAllocRequest(D2FogHeapDescStrc * pHeap, 
         *pnLockIndex = -1;
       }
 
-      SMEM_FatalError((uint32_t*)pHeap->szName, 8, pHeap->nSourceLine);
+      SMEM_FatalError(8, (uint32_t*)pHeap->szName, pHeap->nSourceLine);
     }
     if (pHeap) {
       uint32_t* pMemory;
@@ -1378,10 +1377,10 @@ static uint32_t * __stdcall SMEM_SatisfyAllocRequest(D2FogHeapDescStrc * pHeap, 
       *pnLockIndex = -1;
     }
     if (pHeap->szName[0] == '\0') {
-      SMEM_FatalError((uint32_t*)"SMemHeapAlloc()", 8, -1);
+      SMEM_FatalError(8, (uint32_t*)"SMemHeapAlloc()", -1);
     }
 
-    SMEM_FatalError((uint32_t*)pHeap->szName, 8, pHeap->nSourceLine);
+    SMEM_FatalError(8, (uint32_t*)pHeap->szName, pHeap->nSourceLine);
 }
 
 static uint32_t * __stdcall SMemReallocCore(int * pnLockIndex, uint32_t * pHeap, uint32_t * pOldObject, uint16_t * pBlock, uint8_t byFlags, uint32_t nNewSize) {
@@ -1442,12 +1441,12 @@ void * __stdcall SMemAlloc(uint32_t nSize, char * szFile, uint32_t nLine, uint32
                          Call as stdcall, not cdecl. */ if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
-        SMEM_FatalError((uint32_t*)"SMemAlloc()", 0x8510007d, -1);
+        SMEM_FatalError(0x8510007d, (uint32_t*)"SMemAlloc()", -1);
       }
     }
 
     uint32_t nLineSaved;
-    nLineSaved = nLine;
+    nLineSaved = nLine; // steer-ok: nLine's slot is reused for the bucket index below, so the line is copied first
     uint32_t nHeapId;
     nHeapId = SMEM_GetHandleByCaller((int*)szFile, nLine);
     uint32_t nBucketIndex;
@@ -1503,7 +1502,7 @@ uint32_t * __stdcall SMemHeapAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t dw
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
-        SMEM_FatalError((uint32_t*)"SMemHeapAlloc()", 0x8510007d, -1);
+        SMEM_FatalError(0x8510007d, (uint32_t*)"SMemHeapAlloc()", -1);
       }
     }
 
@@ -1515,7 +1514,7 @@ uint32_t * __stdcall SMemHeapAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t dw
       nHeapId = nBucketIndex;
       if (!pHeap) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(DebugMemoryCriticalSection + nBucketIndex);
-        SMEM_FatalError((uint32_t*)"SMemHeapAlloc()", 6, -1);
+        SMEM_FatalError(6, (uint32_t*)"SMemHeapAlloc()", -1);
       }
       if (pHeap->nHash == nHeapIdSaved) {
         break;
@@ -1542,7 +1541,7 @@ uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t 
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
-        SMEM_FatalError((uint32_t*)"SMemHeapReAlloc()", 0x8510007d, -1);
+        SMEM_FatalError(0x8510007d, (uint32_t*)"SMemHeapReAlloc()", -1);
       }
     }
 
@@ -1553,7 +1552,7 @@ uint32_t * __stdcall SMemHeapReAlloc(uint32_t nHeapId, uint32_t nSize, uint32_t 
       if (bIsValid) {
         pBlockHeader = (D2FogHeapBlockHdrStrc*)(pResult - 2);
         if (*(uint8_t*)((char*)pResult - 5) & 8) {
-          pBlockHeader = ((D2FogLargeBlockHdrStrc*)((uint8_t*)pResult - sizeof(D2FogLargeBlockHdrStrc)))->pAllocBlock;
+          pBlockHeader = ((D2FogHeapBlockHdrStrc**)pBlockHeader)[-1];
         }
         if (*(uint32_t*)(((uintptr_t)*(uint16_t*)&pBlockHeader->uLink << 0x10) + offsetof(D2FogHeapDescStrc, nHash)) != nHeapId) {
           return nullptr;
@@ -1579,7 +1578,7 @@ uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSou
     if (!g_SMemInitialized) {
       SMemInitialize();
       if (!g_SMemInitialized) {
-        SMEM_FatalError((uint32_t*)"SMemReAlloc()", 0x8510007d, -1);
+        SMEM_FatalError(0x8510007d, (uint32_t*)"SMemReAlloc()", -1);
       }
     }
 
@@ -1589,7 +1588,7 @@ uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSou
       if (bIsValid) {
         pBlockHdr = (D2FogHeapBlockHdrStrc*)(pBlock - 2);
         if (*(uint8_t*)((char*)pBlock - 5) & 8) {
-          pBlockHdr = ((D2FogLargeBlockHdrStrc*)((uint8_t*)pBlock - sizeof(D2FogLargeBlockHdrStrc)))->pAllocBlock;
+          pBlockHdr = ((D2FogHeapBlockHdrStrc**)pBlockHdr)[-1];
         }
 
         pHeap = SMEM_LockHeapByBlockPtr((uint32_t*)&nSourceFile, pBlockHdr);

@@ -1469,21 +1469,21 @@ void __stdcall UI_DrawPartyMembers() {
     BOOL bHasHostile;
     int32_t dwColor;
     int nMemberIndex;
-    bool bSameParty;
+    BOOL bSameParty;
     pUiParty = Party::pUiParty;
     int32_t nY = 0x5a;
     D2RosterStrc* pRoster = GAME::Roster::GetNextRosterPlayer(nullptr);
     uint16_t nMyPartyId = GAME::Roster::GetRosterPartyId(pRoster);
     pRoster = GAME::Roster::GetNextRosterPlayer(pRoster);
-    for (nMemberIndex = 0; pUiParty && (dwColor = 0 , pRoster != 0) && nMemberIndex < 8; nMemberIndex++) {
+    for (nMemberIndex = 0; pUiParty && (dwColor = 0 , pRoster != 0) && nMemberIndex < 8; ) {
       uint16_t nPartyId;
-      bSameParty = false;
+      bSameParty = 0;
       nPartyId = GAME::Roster::GetRosterPartyId(pRoster);
       nPartyIdCheck = GAME::Roster::GetRosterPartyId(pRoster);
       if (nPartyIdCheck != 0xffff) {
         if (nMyPartyId == nPartyId) {
           dwColor = 2;
-          bSameParty = true;
+          bSameParty = 1;
         } else {
           dwColor = 8;
         }
@@ -1495,10 +1495,10 @@ void __stdcall UI_DrawPartyMembers() {
       }
 
       D2Win::Src::D2WinFont::SetAndReturnLastFont(0);
-      if (nPartyId != 0xffff) {
-        UI_DrawPartyMemberName(pUiParty->szPlayerName, nY, dwColor, 1);
-      } else {
+      if (nPartyId == 0xffff) {
         UI_DrawPartyMemberName(pUiParty->szPlayerName, nY, dwColor, 0);
+      } else {
+        UI_DrawPartyMemberName(pUiParty->szPlayerName, nY, dwColor, 1);
       }
 
       UI_DrawPartyMemberClass(nY + 0xc, pUiParty->nCharType, dwColor);
@@ -1515,6 +1515,7 @@ void __stdcall UI_DrawPartyMembers() {
       }
 
       pUiParty = pUiParty->pNext;
+      nMemberIndex++;
       nY += 0x26;
       pRoster = GAME::Roster::GetNextRosterPlayer(pRoster);
       D2Win::Src::D2WinFont::SetAndReturnLastFont(1);

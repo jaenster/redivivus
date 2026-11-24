@@ -1175,7 +1175,7 @@ static void PLRMODES_CheckSwapWeaponSkill(eD2Skills * peSkillId, D2UnitStrc * pU
 }
 
 // After a weapon swap or action completes, restores the player's left and right skill slots to their pre-swap values (stored in peSkillId[0..3]: right skill id, left skill id, right owner, left owner). Skips SKILL_Attack (default). Calls Server_SelectSkill only if the skill is known, not currently selected, and is usable (excludes error codes 2 and 7).
-static void PLRMODES_RestoreSwappedSkill(eD2Skills * peSkillId, D2UnitStrc * pUnit) {
+static void PLRMODES_RestoreSwappedSkill(D2UnitStrc * pUnit, eD2Skills * peSkillId) {
     D2SkillStrc* pSkill;
     D2SkillStrc* pCurrentSkill;
     int32_t nCanUse;
@@ -1250,7 +1250,7 @@ void __fastcall PLRMODES_CheckWeaponQuantityAndDurability(::SGAMEDATA * pGame, D
       PLRMODES_HandleDepletedAmmoOrThrowable(pGame, pWeaponItem, pUnit);
     }
 
-    PLRMODES_RestoreSwappedSkill((eD2Skills*)aSwappedSkillState, pUnit);
+    PLRMODES_RestoreSwappedSkill(pUnit, (eD2Skills*)aSwappedSkillState);
 }
 
 // Iterates a player's inventory looking for equipped weapons (eInvGridType==3) with zero durability that are not already broken. For each such weapon, sets the ITEMFLAG_BROKEN flag via ITEMMODE_SendItemUpdate and broadcasts the item state change. Sets a unit update flag on the first break found. No-op if pUnit is null or not a player.

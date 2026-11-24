@@ -740,13 +740,12 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
 
     ::SGAMEDATA* pGame2 = pGame;
     D2SkillStrc* pCurrentSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
-    uint16_t wSkillId = (uint16_t)eSkill;
     if (!pCurrentSkill) {
-      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
+      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
       return 0;
     }
     if (bHasTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame2, pUnit, &nTargetX, &nTargetY) , !bHasTargetPos) {
-      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
+      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
       return 0;
     }
 
@@ -759,7 +758,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     if (pNearbyTarget) {
       bHasTargetPos = D2Common::Units::IsInMeleeRange(pUnit, pNearbyTarget, 0);
       if (bHasTargetPos) {
-        UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
+        UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
         bHasTargetPos = SkillsServer::SKILLS_ForceAttackTarget(pGame2, pUnit, pNearbyTarget);
         return bHasTargetPos;
       }
@@ -773,7 +772,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
 
     D2DynamicPathStrc* pDynPath = pUnit->pPath.pDynamicPath;
     if (!pDynPath) {
-      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
+      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
       return 0;
     }
 
@@ -782,7 +781,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynPath, 7);
     uint32_t bPathOk = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynPath, pUnit, 0);
     if (!bPathOk) {
-      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
+      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
       D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, nCollisionPattern);
       return 0;
     }
@@ -793,7 +792,7 @@ BOOL __fastcall SKILLBAR_SrvStFn38_Whirlwind(::SGAMEDATA * pGame, D2UnitStrc * p
     D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, 0x401);
     int32_t nCalcResult = D2Common::PATH::DynamicPath::GetPathPoint(pDynPath, &pPathPoints);
     if (nCalcResult <= 0) {
-      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, wSkillId);
+      UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
       D2Common::PATH::DynamicPath::PATH_SetMoveTestCollisionMask(pDynPath, nCollisionPattern);
       return 0;
     }
@@ -935,7 +934,7 @@ static int32_t __stdcall SKILLAMZ_CreatePlagueJavelinClouds(::SGAMEDATA * pGame,
 void __fastcall SKILL_DeactivateAndRestoreCollision(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2SkillStrc * pSkill, eD2Skills eSkill, int32_t nCollideX, int32_t nCollideY) {
     D2Common::Skills::SKILL_SetFlags(pSkill, 0);
     UNIT::SUnit::SetUninterruptableState(pUnit, 0);
-    UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, (uint16_t)eSkill);
+    UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (!pDynamicPath) {
       return;
@@ -1540,7 +1539,7 @@ static BOOL __stdcall SKILLBAR_UpdateLeap(::SGAMEDATA * pGame, D2SkillStrc * pSk
 
         UNIT::SUnit::SetUninterruptableState(pUnit, 0);
         eCurrentSkill = D2Common::Skills::GetSkillId(pSkill, ".\\SKILLS\\SkillBar.cpp", 0x737);
-        UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, (uint16_t)eCurrentSkill);
+        UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eCurrentSkill);
         return 1;
       }
     }

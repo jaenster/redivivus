@@ -21,6 +21,12 @@
 cmake_minimum_required(VERSION 3.24)
 project(Redivivus LANGUAGES C CXX ASM)
 
+# Mac OS X: the Mac-only code (Storm's Mac layer), compile only. See cmake/mac.cmake.
+if(APPLE)
+    include("${CMAKE_SOURCE_DIR}/cmake/mac.cmake")
+    return()
+endif()
+
 if(NOT WIN32 OR NOT (CMAKE_SIZEOF_VOID_P EQUAL 4 OR CMAKE_SIZEOF_VOID_P EQUAL 8))
     message(FATAL_ERROR "Redivivus targets 32-bit Windows. Configure with "
         "-DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake (or a native i686 mingw-w64 g++).")
@@ -91,6 +97,11 @@ foreach(list D2_SOURCES D2_HEADERS)
     # D2Server (the 1.00 game-server host) is its own object library below, never part
     # of the game executable.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Source/D2Server/")
+    # D2OpenGL and the MacSpecific texture manager it builds on are the Mac 1.14d
+    # renderer, their own object library below; the rest of MacSpecific (the Mac shell)
+    # is Mac-only, built by cmake/mac.cmake. Their directories stay off the include
+    # path too: they include by tree-relative path, and their globals.h would shadow.
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Source/(D2OpenGL|MacSpecific)/")
 endforeach()
 if(D2_ARCH_X64)
     # x86 assembly: the i686-decorated stub the 64-bit build defines in C++ instead.
@@ -293,6 +304,22 @@ list(SORT D2SERVER_SOURCES)
 if(D2SERVER_SOURCES)
     add_library(d2server_objs OBJECT EXCLUDE_FROM_ALL ${D2SERVER_SOURCES})
     target_link_libraries(d2server_objs PRIVATE d2_flags)
+endif()
+
+# ---------------------------------------------------------------------------
+# D2OpenGL: the OpenGL renderer of the Mac 1.14d build (Source/D2OpenGL/Src, with its
+# texture manager base in Source/MacSpecific/Source/CD2Textures), with the Mac system
+# calls restored on Win32/WGL. Compiled, not linked: the game does not reference it.
+# Not built by default:
+#   cmake --build build --target d2opengl_objs
+# ---------------------------------------------------------------------------
+file(GLOB_RECURSE D2OPENGL_SOURCES CONFIGURE_DEPENDS LIST_DIRECTORIES false
+    "${D2_ROOT}/Source/D2OpenGL/*.cpp"
+    "${D2_ROOT}/Source/MacSpecific/Source/CD2Textures/*.cpp")
+list(SORT D2OPENGL_SOURCES)
+if(D2OPENGL_SOURCES)
+    add_library(d2opengl_objs OBJECT EXCLUDE_FROM_ALL ${D2OPENGL_SOURCES})
+    target_link_libraries(d2opengl_objs PRIVATE d2_flags)
 endif()
 
 # ---------------------------------------------------------------------------

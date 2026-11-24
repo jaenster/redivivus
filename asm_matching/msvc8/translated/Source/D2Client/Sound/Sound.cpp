@@ -63,14 +63,13 @@ float __stdcall SOUND_CalculateAngle2(float fParam1, float fParam2) {
 }
 
 float __stdcall SOUND_CalculatePanning(float fParam1, float fParam2, float fParam3) {
-    if (fParam2 < fParam1) {
-      fParam2 = fParam1;
+    if (fParam2 > fParam1) {
+      fParam1 = fParam2;
     }
-    if (!(fParam3 <= fParam2)) {
-      return fParam2;
+    if (fParam3 <= fParam1) {
+      fParam1 = fParam3;
     }
-
-    return fParam3;
+    return fParam1;
 }
 
 D2SoundChannelStrc * __stdcall SOUND_GetChannelArray() {

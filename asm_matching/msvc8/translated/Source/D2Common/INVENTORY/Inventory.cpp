@@ -124,7 +124,7 @@ static void INVENTORY_UnlinkItemFromList(D2UnitStrc * * pItemListHead, D2UnitStr
     pNode->pPrevItem = 0;
 }
 
-static BOOL __stdcall INVENTORY_IsGridRectEmpty(int32_t nStartRow, uint8_t byWidth, int32_t nStartCol, uint8_t byHeight, D2InventoryGridInfoStrc * pGridInfo) {
+static BOOL __stdcall INVENTORY_IsGridRectEmpty(uint8_t byWidth, int32_t nStartCol, uint8_t byHeight, D2InventoryGridInfoStrc * pGridInfo, int32_t nStartRow) {
     D2UnitStrc** pRowCells;
     for (int nRow = nStartRow; nRow < nStartRow + byHeight; nRow++) {
       pRowCells = &pGridInfo->pGridCells[nRow * pGridInfo->bWidth];
@@ -584,7 +584,7 @@ static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_
     }
 
     BOOL nGUID;
-    nGUID = INVENTORY_IsGridRectEmpty(nnY, byItemW, nnX, (uint8_t)nItemH, ReinitializeInventoryGrid(nGridPage, pInvSizeInfo, pInventory));
+    nGUID = INVENTORY_IsGridRectEmpty(byItemW, nnX, (uint8_t)nItemH, ReinitializeInventoryGrid(nGridPage, pInvSizeInfo, pInventory), nnY);
     if (!nGUID) {
       return 0;
     }
@@ -755,7 +755,7 @@ D2UnitStrc * __stdcall INVENTORY_GetLastItem(D2InventoryStrc * pInventory) {
 static uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint8_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo) {
     if ((int)((uint32_t)nGridCol + nX) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nY) <= (int)(uint32_t)pGridInfo->bHeight) {
       uint32_t bFits;
-      bFits = INVENTORY_IsGridRectEmpty(nY, nGridCol, nX, byItemHeight, pGridInfo);
+      bFits = INVENTORY_IsGridRectEmpty(nGridCol, nX, byItemHeight, pGridInfo, nY);
       return bFits;
     }
 
@@ -867,7 +867,7 @@ static uint32_t __stdcall INVENTORY_FindBestPlacementWithScore(int * ppnOutX, in
 
       do {
         if (!pGridInfo->pGridCells[(uint32_t)pGridInfo->bWidth * nCurRow + nCurCol] && (int)((uint32_t)byItemWidth + nCurCol) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nCurRow) <= (int)(uint32_t)pGridInfo->bHeight) {
-          bFits = INVENTORY_IsGridRectEmpty(nCurRow, byItemWidth, nCurCol, byItemHeight, pGridInfo);
+          bFits = INVENTORY_IsGridRectEmpty(byItemWidth, nCurCol, byItemHeight, pGridInfo, nCurRow);
           if (bFits) {
             nScore = INVENTORY_CalcGridPlacementScore(byItemHeight, pGridInfo, nCurCol, byItemWidth, nCurRow);
             if ((uint8_t)nScore > (uint8_t)((uint32_t)nBestScorePacked >> 24)) {
@@ -905,7 +905,7 @@ static BOOL __stdcall INVENTORY_FindFirstEmptySlot(int * pnOutX, int * pnOutY, u
         pGridCell = (int32_t*)(pGridInfo->pGridCells + nX);
         do {
           if (!*pGridCell && (int)((uint32_t)byItemWidth + nX) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nY) <= (int)nGridRows) {
-            bFits = INVENTORY_IsGridRectEmpty(nY, byItemWidth, nX, byItemHeight, pGridInfo);
+            bFits = INVENTORY_IsGridRectEmpty(byItemWidth, nX, byItemHeight, pGridInfo, nY);
             if (bFits) {
               *pnOutX = nX;
               *pnOutY = nY;
@@ -958,7 +958,7 @@ static uint32_t __stdcall INVENTORY_FindBestGridPosition(int * ppnOutX, int * pn
       if (nGridWidth) {
         do {
           if (!pGridInfo->pGridCells[nGridWidth * nY + pnCurCol] && (int)((uint32_t)byItemWidth + pnCurCol) <= (int)nGridWidth && (int)((uint32_t)byItemHeight + nY) <= (int)(uint32_t)pGridInfo->bHeight) {
-            bRectEmpty = INVENTORY_IsGridRectEmpty(nY, byItemWidth, pnCurCol, byItemHeight, pGridInfo);
+            bRectEmpty = INVENTORY_IsGridRectEmpty(byItemWidth, pnCurCol, byItemHeight, pGridInfo, nY);
             if (bRectEmpty) {
               nPlacementScore = INVENTORY_CalcGridPlacementScore(byItemHeight, pGridInfo, pnCurCol, byItemWidth, nY);
               if ((uint8_t)nPlacementScore > (uint8_t)((uint32_t)nBestScore >> 24)) {
@@ -1001,7 +1001,7 @@ static BOOL __stdcall INVENTORY_FindBestGridPositionNonPlayer(int * pnOutX, int 
         pCell = pGridInfo->pGridCells + nX;
         do {
           if (!*pCell && (int)((uint32_t)byItemWidth + nX) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nY) <= (int)nGridHeight) {
-            bRectEmpty = INVENTORY_IsGridRectEmpty(nY, byItemWidth, nX, byItemHeight, pGridInfo);
+            bRectEmpty = INVENTORY_IsGridRectEmpty(byItemWidth, nX, byItemHeight, pGridInfo, nY);
             if (bRectEmpty) {
               *pnOutX = nX;
               *pnOutY = nY;

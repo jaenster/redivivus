@@ -4507,11 +4507,11 @@ void __fastcall UNITSND_DispatchModeChangeSound(D2UnitStrc * pUnit, int32_t nAni
           UNITSND_PlayGetHitSound(pUnit);
         return;
         case 0xc:
-          if (nClassId != 6) {
-            Sound::SOUND_PlaySound(SOUND_WEAPON_1HS_LARGE_1, pUnit, 0, 0, 0);
+          if (nClassId == 6) {
+            Sound::SOUND_PlaySound(SOUND_WEAPON_1HS_LARGE_1, pUnit, 4, 0, 0);
             return;
           }
-        Sound::SOUND_PlaySound(SOUND_WEAPON_1HS_LARGE_1, pUnit, 4, 0, 0);
+        Sound::SOUND_PlaySound(SOUND_WEAPON_1HS_LARGE_1, pUnit, 0, 0, 0);
         return;
         case 7:
 
@@ -4540,16 +4540,16 @@ void __fastcall UNITSND_DispatchModeChangeSound(D2UnitStrc * pUnit, int32_t nAni
       }
 
       switch (nAnimMode) {
+        case 4:
+
+        case 5:
+          goto play_attack_sound;
         case 0:
 
         case 3:
 
         case 0xd:
           goto play_mode_change_sound;
-        case 4:
-
-        case 5:
-          goto play_attack_sound;
         case 8:
 
         case 9:

@@ -282,7 +282,7 @@ uint16_t * __stdcall TRADE_GetTradeWindowPtr() {
     return gwszTradePartnerName;
 }
 
-void __stdcall AcceptTrade() {
+void __fastcall AcceptTrade(int32_t nUnused) {
     g_nTradeWindowState = 7;
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 4, *(uint16_t*)((char*)&gnTradePlayerGoldAmount + 2), (int16_t)gnTradePlayerGoldAmount);
     gdwTradeThrottleTimestamp = -1;

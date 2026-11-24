@@ -1715,7 +1715,7 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
     }
 
     uint32_t nSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
-    bool bCastHandled = true;
+    BOOL bCastHandled = 1;
     if (nSkillFlags & 1) {
       bResult = Path::PATH_StepAndCreateTrailEffects(pUnit);
       if (bResult) {
@@ -1724,7 +1724,7 @@ static void MONSTER_ProcessSkillAnimation(D2UnitStrc * pUnit) {
         }
 
         SKILLS::Skills::SKILLS_CltSetSkillFromCurrent(pUnit);
-        bCastHandled = false;
+        bCastHandled = 0;
       }
     }
 

@@ -1186,36 +1186,38 @@ void __fastcall Q35_BootAllPlayersFromSummit(::SGAMEDATA * pGame) {
 BOOL __fastcall OBJOP_A5Q5_AncientsAltarActivate(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pUnit;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_RiteOfPassage);
-    if (pQuestData) {
-      D2QuestDataA5Q5Strc* pQuestSpecificData;
+    if (!pQuestData) {
+      return 0;
+    }
+
+    D2QuestDataA5Q5Strc* pQuestSpecificData;
+    pUnit = pOperation->sArg.pVictim;
+    pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
+    if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
+      if (pQuestData->bIsNotIntroduction == '\0') {
+        if (pQuestSpecificData->nResurrectionCount > 0) {
+          UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q35_BootPlayerFromSummit);
+        }
+
+        QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x4e22);
+      } else if (pQuestData->nStateFlag < 4) {
+        if (pQuestSpecificData->nResurrectionCount > 0) {
+          UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q35_BootPlayerFromSummit);
+        }
+
+        QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x4e22);
+        if (pQuestData->nStateFlag < 2) {
+          QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q5.cpp", 0x59f);
+        }
+        if (pQuestData->nStateFlagPrev != 3) {
+          QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q35_NotifyQuestState, 1);
+        }
+      }
+
       pUnit = pOperation->sArg.pVictim;
-      pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
       if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
-        if (pQuestData->bIsNotIntroduction == '\0') {
-          if (pQuestSpecificData->nResurrectionCount > 0) {
-            UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q35_BootPlayerFromSummit);
-          }
-
-          QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x4e22);
-        } else if (pQuestData->nStateFlag < 4) {
-          if (pQuestSpecificData->nResurrectionCount > 0) {
-            UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q35_BootPlayerFromSummit);
-          }
-
-          QUEST_SendNpcInfoPacket(pOperation->pAttacker, pOperation->sArg.pVictim, 0x4e22);
-          if (pQuestData->nStateFlag < 2) {
-            QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q5.cpp", 0x59f);
-          }
-          if (pQuestData->nStateFlagPrev != 3) {
-            QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q35_NotifyQuestState, 1);
-          }
-        }
-
-        pUnit = pOperation->sArg.pVictim;
-        if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
-          D2Common::Units::ChangeAnimMode(pUnit, 1);
-          pQuestSpecificData->nAltarObjectMode = 2;
-        }
+        D2Common::Units::ChangeAnimMode(pUnit, 1);
+        pQuestSpecificData->nAltarObjectMode = 2;
       }
     }
 

@@ -1414,7 +1414,7 @@ static int __stdcall UNITS_IsAnimModeSpeedFixed(int32_t nAnimMode, int32_t nClas
 }
 
 // @sourcefile .\UNITS\Units.cpp
-static BOOL UNITS_IsAnimSpeedSetByCastRate(D2UnitStrc * pUnit, int32_t nAnimMode, eD2UnitType eUnitType) {
+static BOOL UNITS_IsAnimSpeedSetByCastRate(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nAnimMode) {
     switch (eUnitType) {
       case UNIT_PLAYER:
         if (nAnimMode == 10) {
@@ -3705,7 +3705,7 @@ void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine)
     D2AnimDataRecordStrc* pDVar1;
     pDVar1 = pUnit_00->pAnimData;
     BOOL bCanDualWield;
-    bCanDualWield = UNITS_IsAnimSpeedSetByCastRate(pUnit_00, nAnimMode, (eD2UnitType)pUnit);
+    bCanDualWield = UNITS_IsAnimSpeedSetByCastRate(pUnit_00, (eD2UnitType)pUnit, nAnimMode);
     if (bCanDualWield) {
       nFastStat = GetDiminishedStat(pUnit_00, 2);
       nBaseFrameTime = nFastStat + 100;

@@ -3251,7 +3251,10 @@ D2ArchiveStrc * __thiscall SFILE_FreeArchiveRecord1(D2ArchiveStrc * pArchive, ui
 }
 
 uint32_t __stdcall SFILE_GetOpenFlags() {
-    uint32_t dwFlags = (uint32_t)((gnSFileDirectAccessFlags & 1) != 0);
+    uint32_t dwFlags = 0;
+    if (gnSFileDirectAccessFlags & 1) {
+      dwFlags = 1;
+    }
     if (gnSFileDirectAccessFlags & 2) {
       dwFlags |= 2;
     }

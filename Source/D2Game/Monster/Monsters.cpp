@@ -1086,7 +1086,7 @@ void __thiscall MONSTER_RollAndAssignUMods(D2UnitStrc * pThis, ::SGAMEDATA * pGa
 }
 
 // Copies transferable MonUMod enchantments from pSrcUnit to pDstUnit's MonUModList. If bAppend is false, finds the first empty slot in the destination list; if true, starts at slot 0. Only copies entries where the MonUModTxt xfer flag is set. Silently exits if either unit is not a valid monster with unit data. Used when spawning minions to inherit boss enchantments.
-static void __stdcall MONSTER_TransferEnchantments(D2UnitStrc * pDstUnit, BOOL bAppend, D2UnitStrc * pSrcUnit) {
+static void __stdcall MONSTER_TransferEnchantments(D2UnitStrc * pSrcUnit, BOOL bAppend, D2UnitStrc * pDstUnit) {
     uint8_t* pSrcEnchants;
     uint8_t* nDstOffset;
     uint8_t* pDstSlot;
@@ -1233,12 +1233,11 @@ static void __stdcall MONSTER_SpawnMinionsForBoss(D2RoomCoordListStrc * pCoordLi
       return;
     }
 
-    uint32_t nCountRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMinionCountMax - nMinionCountMin + 1);
-    nMinionCountMin = nCountRoll + nMinionCountMin;
-    for (int32_t i = 0; i < nMinionCountMin; i++) {
-      D2UnitStrc* pMinion = !pCoordList ? Monster::Create::SpawnMonsterAtUnit(pGame, pUnit, nMinion1ClassId, eD2MonsterAnimMode_ns::Neutral, 3, 0x40) : Monster::Create::SpawnMonsterAtCoordList(pGame, pCoordList, pUnit, nMinion1ClassId, eD2MonsterAnimMode_ns::Neutral, 3, 0x40);
+    int32_t nMinionCount = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMinionCountMax - nMinionCountMin + 1) + nMinionCountMin;
+    for (int32_t i = 0; i < nMinionCount; i++) {
+      D2UnitStrc* pMinion = pCoordList ? Monster::Create::SpawnMonsterAtCoordList(pGame, pCoordList, pUnit, nMinion1ClassId, eD2MonsterAnimMode_ns::Neutral, 3, 0x40) : Monster::Create::SpawnMonsterAtUnit(pGame, pUnit, nMinion1ClassId, eD2MonsterAnimMode_ns::Neutral, 3, 0x40);
       if (pMinion) {
-        MONSTER_TransferEnchantments(pMinion, 0, pUnit);
+        MONSTER_TransferEnchantments(pUnit, 0, pMinion);
         bSetOwner = 0;
         bAddToList = 0;
         eUnitType = UNIT_MONSTER;

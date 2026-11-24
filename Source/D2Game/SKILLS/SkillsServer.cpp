@@ -750,23 +750,20 @@ void __fastcall SKILLS_InvokeCallbackNoTarget(::SGAMEDATA * pGame, D2UnitStrc * 
     (*pfnCallback)(&sContext, pUnit);
 }
 
-static BOOL SKILLS_IsRoomInRange(D2RoomStrc * pRoom, int32_t nX, int32_t nRadius, int32_t nY) {
+static BOOL SKILLS_IsRoomInRange(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nRadius) {
     D2DrlgRoomCoordsStrc roomCoords;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
     if (!(nX + nRadius < roomCoords.dwXStart)) {
-      if (nY + nRadius < roomCoords.dwYStart && nY - nRadius > roomCoords.dwYSize + roomCoords.dwYStart) {
-        return 0;
+      if (nY + nRadius >= roomCoords.dwYStart || nY - nRadius <= roomCoords.dwYSize + roomCoords.dwYStart) {
+        return 1;
       }
-    } else {
-      if (nX - nRadius > roomCoords.dwXSize + roomCoords.dwXStart) {
-        return 0;
-      }
-      if (nY + nRadius < roomCoords.dwYStart && nY - nRadius > roomCoords.dwYSize + roomCoords.dwYStart) {
-        return 0;
+    } else if (nX - nRadius <= roomCoords.dwXSize + roomCoords.dwXStart) {
+      if (nY + nRadius >= roomCoords.dwYStart || nY - nRadius <= roomCoords.dwYSize + roomCoords.dwYStart) {
+        return 1;
       }
     }
 
-    return 1;
+    return 0;
 }
 
 // Iterates all units in adjacent rooms within nRadius of (nX,nY), applying a caller-supplied callback (pfnCallback) to each eligible target. Filters by target flags (dwTargetFlags, SKILLS_CheckTargetFlags mask, default 0x583), skips town rooms if bit 0x2000 set, and respects noaura flag on monsters when bSkipNoAuraMonsters != 0. Core server-side AoE dispatch used by auras and area skills.
@@ -814,7 +811,7 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     do {
       BOOL bInTown;
       if (!(dwTargetFlags & 0x2000) || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(ppRoomList[nCallbackArg]) , !bInTown)) {
-        bInTown = SKILLS_IsRoomInRange(ppRoomList[nCallbackArg], nX, nRadius, nY);
+        bInTown = SKILLS_IsRoomInRange(ppRoomList[nCallbackArg], nX, nY, nRadius);
         if (bInTown) {
           pNextUnit = ppRoomList[nCallbackArg]->pUnitList;
           while (pTarget = pNextUnit) {
@@ -3098,7 +3095,7 @@ uint32_t __fastcall SKILLS_ApplyEffectToUnitsInRange(::SGAMEDATA * pGame, uint32
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoom, &ppRoomList, &nAdjacentRooms);
     for (int nRoomIndex = 0; nRoomIndex < nAdjacentRooms; nRoomIndex++) {
       if (!(nTargetFlags & 0x2000) || (bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(ppRoomList[nRoomIndex]) , !bIsInTown)) {
-        bIsInTown = SKILLS_IsRoomInRange(ppRoomList[nRoomIndex], nTargetX, nRadius, nTargetY);
+        bIsInTown = SKILLS_IsRoomInRange(ppRoomList[nRoomIndex], nTargetX, nTargetY, nRadius);
         if (bIsInTown) {
           for (pCurUnit = ppRoomList[nRoomIndex]->pUnitList; pCurUnit; pCurUnit = pCurUnit->pRoomNext) {
             eType = pCurUnit->eUnitType;

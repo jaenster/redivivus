@@ -3400,8 +3400,23 @@ void __fastcall DrawPerspectiveImage(D2GfxDataStrc * pData, int nPosX, int nPosY
 
 BOOL __fastcall DrawImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DWORD dwGamma, int nDrawMode, BYTE * pPalette) {
     D2D3DSpriteInfoStrc aSpriteInfo;
-    BOOL nExtractResult = RENDERER_D3D_ExtractSpriteInfo(pData, &aSpriteInfo);
-    if (!(nExtractResult && aSpriteInfo.nOffsetX + nPosX <= RENDERER_nWindowWidth && aSpriteInfo.nWidth + (aSpriteInfo.nOffsetX + nPosX) >= 0 && aSpriteInfo.nOffsetY + nPosY >= 0 && aSpriteInfo.nOffsetY + nPosY - aSpriteInfo.nHeight < RENDERER_nWindowHeight)) {
+    if (!RENDERER_D3D_ExtractSpriteInfo(pData, &aSpriteInfo)) {
+      return 0;
+    }
+
+    int32_t nX = aSpriteInfo.nOffsetX + nPosX;
+    if (nX > RENDERER_nWindowWidth) {
+      return 0;
+    }
+    if (aSpriteInfo.nWidth + nX < 0) {
+      return 0;
+    }
+
+    int32_t nY = aSpriteInfo.nOffsetY + nPosY;
+    if (nY < 0) {
+      return 0;
+    }
+    if (nY - aSpriteInfo.nHeight >= RENDERER_nWindowHeight) {
       return 0;
     }
 
@@ -3444,12 +3459,10 @@ BOOL __fastcall DrawShiftedImage(D2GfxDataStrc * pData, int nPosX, int nPosY, DW
 
     RENDERER_D3D_CalculateTextureSize(&aSpriteInfo);
     int32_t bTextureUploaded = RENDERER_DIRECT3D_UploadTextureToCache(&aSpriteInfo, nullptr, 0, 1);
-    if (!bTextureUploaded) {
-      return 0;
+    if (bTextureUploaded) {
+      uint8_t nAlpha = SetDrawModeAndGetAlpha(nDrawMode);
+      RENDERER_DIRECT3D_DrawPalettedQuad(&aSpriteInfo, nPosX, nPosY, dwGamma, nGlobalPaletteShift, nAlpha, 0);
     }
-
-    uint8_t nAlpha = SetDrawModeAndGetAlpha(nDrawMode);
-    RENDERER_DIRECT3D_DrawPalettedQuad(&aSpriteInfo, nPosX, nPosY, dwGamma, nGlobalPaletteShift, nAlpha, 0);
     return 1;
 }
 

@@ -27,7 +27,7 @@ void * gpCurrentExceptionContext = 0; D2_GLOBAL_GUARD(gpCurrentExceptionContext,
 
 namespace Fog::File {
 
-static size_t STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * szSrc);
+static size_t STRING_CopyStringBounded(char * szDest, char * szSrc, int32_t nDestSize);
 static bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext);
 
 void __stdcall CONTAINER_InitializeBuffer(void * pBuffer, int32_t nTypeSize, int32_t nBufferSize, CONTAINER_TypeInitialValue fpInitValueCallback) {
@@ -330,7 +330,7 @@ static bool __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSi
       *szDest = '\0';
     } else {
       size_t sVar1;
-      sVar1 = STRING_CopyStringBounded(nDestSize, szDest, szSrcPath);
+      sVar1 = STRING_CopyStringBounded(szDest, szSrcPath, nDestSize);
       if (sVar1 >= nDestSize) {
         return false;
       }
@@ -401,7 +401,7 @@ bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(int nUnused, char * sz
       *pTerminator = '\\';
     }
 
-    size_t pEnd = STRING_CopyStringBounded(0x400, szPath, "BlizzardError");
+    size_t pEnd = STRING_CopyStringBounded(szPath, "BlizzardError", 0x400);
     return pEnd < 0x400;
 }
 
@@ -410,7 +410,7 @@ static LPWSTR Unreferenced_00404100(LPWSTR szString, uint16_t wChar) {
     return pszLastChar;
 }
 
-static size_t STRING_CopyStringBounded(int32_t nDestSize, char * szDest, char * szSrc) {
+static size_t STRING_CopyStringBounded(char * szDest, char * szSrc, int32_t nDestSize) {
     char* pSrcScan = szSrc;
     if (nDestSize != 0) {
       uint32_t nRemaining = static_cast<uint32_t>(nDestSize) - 1;

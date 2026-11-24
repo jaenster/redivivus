@@ -28,7 +28,7 @@ void __stdcall TRADE_CloseTrade();
 void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(uint8_t * pBytes);
 void __fastcall TRADE_HandleTradeGoldUpdate(uint8_t * pPacket);
 uint16_t * __stdcall TRADE_GetTradeWindowPtr();
-void __stdcall AcceptTrade();
+void __fastcall AcceptTrade(int32_t nUnused);
 void __stdcall CancelTrade();
 void StaticInit_gwszTradePartnerName();
 #endif // D2_MODULE_D2Client

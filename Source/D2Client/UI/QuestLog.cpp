@@ -1595,7 +1595,7 @@ void __stdcall QUESTLOG_FreeQuestImages_Thunk() {
     ::D2Client::UI::QuestLog::FreeQuestImages();
 }
 
-static bool QUESTLOG_HitTestCloseButton(int32_t nPanelY, int32_t nPanelX) {
+static bool QUESTLOG_HitTestCloseButton(int32_t nPanelX, int32_t nPanelY) {
     if (nPanelX >= 0xe6 && nPanelX <= 0x103 && nPanelY >= 0x187 && nPanelY <= 0x1a7) {
       return true;
     }
@@ -1625,7 +1625,7 @@ static int32_t QUESTLOG_HitTestQuestIcon(int32_t nY, int32_t nX) {
     return -1;
 }
 
-static bool QUESTLOG_HitTestOpenButton(int32_t nPanelY, int32_t nPanelX) {
+static bool QUESTLOG_HitTestOpenButton(int32_t nPanelX, int32_t nPanelY) {
     if (nPanelX >= 0x116 && nPanelX <= 0x139 && nPanelY >= 0x188 && nPanelY <= 0x1a9) {
       return true;
     }
@@ -2765,11 +2765,10 @@ void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
     DWORD dwResolutionMode;
     dwResolutionMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (dwResolutionMode == 2) {
-      nClickThresholdY = Inv::ScreenSizeY - 0x2f;
-    } else {
-      nClickThresholdY = Inv::ScreenSizeY - 0x31;
-    }
-    if (nClickThresholdY < nMouseYRaw) {
+      if (nMouseYRaw > Inv::ScreenSizeY - 0x2f) {
+        return;
+      }
+    } else if (nMouseYRaw > Inv::ScreenSizeY - 0x31) {
       return;
     }
 
@@ -2790,11 +2789,11 @@ void __stdcall QUESTLOG_OnMouseDown(D2UIMouseMsgStrc * pMsg) {
       } else {
         uVar2 = QUESTLOG_HitTestQuestIcon(nPanelRelX, nPanelRelY);
         if (uVar2 == -1 || (int)uVar2 >= gQuestLog.nQuestLogQuestCount) {
-          bVar1 = QUESTLOG_HitTestOpenButton(nPanelRelY, nPanelRelX);
+          bVar1 = QUESTLOG_HitTestOpenButton(nPanelRelX, nPanelRelY);
           if (bVar1) {
             gQuestLog.bQuestLogOpenBtnPressed = 1;
           } else {
-            bVar1 = QUESTLOG_HitTestCloseButton(nPanelRelY, nPanelRelX);
+            bVar1 = QUESTLOG_HitTestCloseButton(nPanelRelX, nPanelRelY);
             if (!bVar1) {
               goto consume_click;
             }

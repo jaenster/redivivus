@@ -1020,39 +1020,14 @@ void __fastcall SERVER_SendUnitMessagePacket(D2UnitStrc * pUnit, D2UnitStrc * pT
 
 // Clears STATE_skill_move on pUnit, allocates a D2SUnitMsgStrc (packet 0xA5) from the unit's memory pool, fills in the unit type, GUID, and wParam, appends it to the unit's message queue (pMsgFirst/pMsgLast), then calls ROOM_LinkUnitToUpdateList to schedule the unit for a network update.
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0xA5(D2UnitStrc * pUnit, uint16_t wSkillId) {
-    D2PoolManagerStrc* pMemory;
-    int nUnitGUID;
+void __fastcall UnitQueuePacket0xA5(D2UnitStrc * pUnit, int wSkillId) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_skill_move, 0);
-    if (!pUnit) {
-      pMemory = 0;
-    } else {
-      pMemory = pUnit->pMemory;
-    }
-
-    D2SUnitMsgStrc* pMsg = (D2SUnitMsgStrc*)D2_ALLOC_POOL_AT(pMemory, 0x14, ".\\UNIT\\SUnitMsg.cpp", 0x30f);
-    pMsg->nOpcode = '\0';
-    pMsg->pad_0x5[0] = '\0';
-    pMsg->pad_0x5[1] = '\0';
-    pMsg->pad_0x5[2] = '\0';
-    *(uint32_t*)&pMsg->uArgs.sA5.nUnitType = 0;
-    pMsg->uArgs.sA5.nUnitGUID = 0;
-    *(uint32_t*)&pMsg->uArgs.sA5.nSkillId = 0;
+    D2SUnitMsgStrc* pMsg = (D2SUnitMsgStrc*)D2_ALLOC_POOL_AT(!pUnit ? nullptr : pUnit->pMemory, 0x14, ".\\UNIT\\SUnitMsg.cpp", 0x30f);
+    memset(&pMsg->nOpcode, 0, 0x10);
     pMsg->pNext = 0;
     pMsg->nOpcode = 0xa5;
-    uint8_t byUnitType = '\x06';
-    if (pUnit) {
-      byUnitType = (uint8_t)pUnit->eUnitType;
-    }
-
-    pMsg->uArgs.sA5.nUnitType = byUnitType;
-    if (!pUnit) {
-      nUnitGUID = -1;
-    } else {
-      nUnitGUID = pUnit->nUnitGUID;
-    }
-
-    pMsg->uArgs.sA5.nUnitGUID = nUnitGUID;
+    pMsg->uArgs.sA5.nUnitType = !pUnit ? 6 : pUnit->eUnitType;
+    pMsg->uArgs.sA5.nUnitGUID = !pUnit ? -1 : pUnit->nUnitGUID;
     pMsg->uArgs.sA5.nSkillId = wSkillId;
     if (!pUnit->pMsgFirst) {
       pUnit->pMsgFirst = pMsg;
