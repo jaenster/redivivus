@@ -95,30 +95,15 @@ static uint16_t pBetaRealmNames[7][256] = {}; D2_STATIC_GUARD(pBetaRealmNames, "
 namespace D2Launch::CharSel {
 
 static BOOL CHARSEL_FindRealmByName(char * szText) {
-    char* pszRealmName;
-    int32_t nCmp;
-    int nIndex = 0;
-    while (true) {
-      int nRealmCount;
-      nRealmCount = MainMenus::MAINMENU_GetRealmCount();
-      if (nIndex >= nRealmCount) {
+    for (int i = 0;; i++) {
+      char* szRealmName = i < MainMenus::MAINMENU_GetRealmCount() ? MainMenus::MAINMENU_GetRealmName(i) : nullptr;
+      if (!szRealmName) {
         return 0;
       }
-
-      pszRealmName = MainMenus::MAINMENU_GetRealmName(nIndex);
-      if (!pszRealmName) {
-        break;
-      }
-
-      nCmp = Storm::Source::SSTR::SStrCmpI(szText, pszRealmName, 0x7fffffff);
-      if (!nCmp) {
+      if (!Storm::Source::SSTR::SStrCmpI(szText, szRealmName, 0x7fffffff)) {
         return 1;
       }
-
-      nIndex++;
     }
-
-    return 0;
 }
 
 // Looks up SStrHash(szName, 0, 0) in the gpRealmCharListCache list (entry +0 hash, +4 value, +8 expiry tick, +0xc next) and returns the cached data copy (entry +4, as stored by CHARSEL_CacheRealmData) of the first entry whose hash matches and whose expiry tick is >= GetTickCount(); 0 if none.
