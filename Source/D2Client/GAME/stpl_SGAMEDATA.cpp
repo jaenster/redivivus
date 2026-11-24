@@ -251,19 +251,20 @@ void __thiscall UnlinkNode_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>*
 }
 
 template<> __attribute__((noinline)) inline void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
-    TSLink<::SGAMEDATA>** pPrevLink;
-    intptr_t nHeadOffset;
-    TSLink<::SGAMEDATA>* pNext;
-    while ((nHeadOffset = this->m_terminator.m_next) > 0) {
-      TSLink<::SGAMEDATA>* pNode;
-      pNext = *(TSLink<::SGAMEDATA>**)(this->m_linkoffset + nHeadOffset);
-      pNode = (TSLink<::SGAMEDATA>*)(this->m_linkoffset + nHeadOffset);
-      if (pNext) {
-        pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pNode, -1);
-        *pPrevLink = pNext;
-        pNode->m_prevlink->m_next = pNode->m_next;
-        pNode->m_prevlink = 0;
-        pNode->m_next = 0;
+    while (true) {
+      intptr_t nNode = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nNode) {
+        break;
+      }
+
+      TSLink<::SGAMEDATA>* pLink = (TSLink<::SGAMEDATA>*)(this->m_linkoffset + nNode);
+      TSLink<::SGAMEDATA>* pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<::SGAMEDATA>** ppNextBack = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
     }
 }
