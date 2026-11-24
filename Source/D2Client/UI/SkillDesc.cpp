@@ -5201,37 +5201,33 @@ void __fastcall SKILLDESC_DrawSkillDmgKick(D2UnitStrc * pUnit, D2SkillStrc * pSk
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgFist(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
-    int nElemTypeOut;
-    int32_t nMinDmgBonused;
-    int32_t nMaxDmgBonused;
-    D2SkillsTxt* pSkillDescTxt = pSkillsTxt;
     if (!(pSkill && pSkillsTxt)) {
       return;
     }
 
-    BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    int nSkillsTxt = 0x0;
-    int nElemMinDmg = 0;
-    int32_t nElemMaxDmg = 0;
-    if (bIsExpansion) {
-      SKILLDESC_CalcSkillElemDamage(pUnit, &nSkillsTxt, &nElemMinDmg, &nElemMaxDmg, pSkillDescTxt, nSkillLevel);
-      nMaxDmgBonused = D2Common::Skills::SKILL_GetConcentrationDamageBonus(pUnit, (int)pSkillDescTxt->skill);
-      nMinDmgBonused = nSkillsTxt + 48 + (nMaxDmgBonused * nSkillsTxt / 100 - 0x30);
-      nMaxDmgBonused = nElemMinDmg + nMaxDmgBonused * nElemMinDmg / 100;
-      nElemTypeOut = nElemMaxDmg;
+    if (GAME::Game::CLIENT_CheckExpansion()) {
+      int nMinDmg = 0;
+      int nMaxDmg = 0;
+      int nColor = 0;
+      SKILLDESC_CalcSkillElemDamage(pUnit, &nMinDmg, &nMaxDmg, &nColor, pSkillsTxt, nSkillLevel);
+      int nBonus = D2Common::Skills::SKILL_GetConcentrationDamageBonus(pUnit, (int)pSkillsTxt->skill);
+      nMinDmg += nMinDmg * nBonus / 100;
+      nMaxDmg += nMaxDmg * nBonus / 100;
+      SKILLDESC_DrawDamageNumbers(nMinDmg, nMaxDmg, nColor, nXLeft, nY, nXRight);
     } else {
-      SKILLDESC_CalcSkillElemDamage(pUnit, &nSkillsTxt, &nElemMaxDmg, &nElemMinDmg, pSkillDescTxt, nSkillLevel);
-      nElemTypeOut = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
-      if (nElemTypeOut <= -0x5a) {
-        nElemTypeOut = -0x5a;
+      int nMinDmg = 0;
+      int nMaxDmg = 0;
+      int nColor = 0;
+      SKILLDESC_CalcSkillElemDamage(pUnit, &nMinDmg, &nMaxDmg, &nColor, pSkillsTxt, nSkillLevel);
+      int nBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
+      if (nBonus <= -0x5a) {
+        nBonus = -0x5a;
       }
 
-      nMinDmgBonused = nSkillsTxt + 48 + (nElemTypeOut * nSkillsTxt / 100 - 0x30);
-      nMaxDmgBonused = nElemMaxDmg + nElemTypeOut * nElemMaxDmg / 100;
-      nElemTypeOut = nElemMinDmg;
+      nMinDmg += nMinDmg * nBonus / 100;
+      nMaxDmg += nMaxDmg * nBonus / 100;
+      SKILLDESC_DrawDamageNumbers(nMinDmg, nMaxDmg, nColor, nXLeft, nY, nXRight);
     }
-
-    SKILLDESC_DrawDamageNumbers(nMinDmgBonused, nMaxDmgBonused, nElemTypeOut, nXLeft, nY, nXRight);
 }
 
 // @sourcefile .\UI\SkillDesc.cpp
