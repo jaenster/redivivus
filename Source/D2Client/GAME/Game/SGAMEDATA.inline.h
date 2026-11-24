@@ -561,46 +561,33 @@ template<> inline void __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Internal
 
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE>::InternalNew (STORM.H)
 template<> inline ::SGAMEDATA * __thiscall TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalNew(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSLink<::SGAMEDATA>* ppSlot;
-    ::SGAMEDATA* pNode = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
-    if (pNode) {
-      pNode->m_linktoslot.m_prevlink = 0;
-      pNode->m_linktoslot.m_next = 0;
-      pNode->m_linktofull.m_prevlink = 0;
-      pNode->m_linktofull.m_next = 0;
-      ppSlot = (TSLink<::SGAMEDATA>*)(pNode->szGameName + (pList->m_linkoffset - 0x2a));
+    ::SGAMEDATA* pAlloc = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
+    ::SGAMEDATA* pNewEntry;
+    if (pAlloc) {
+      pAlloc->m_linktoslot.m_prevlink = 0;
+      pAlloc->m_linktoslot.m_next = 0;
+      pAlloc->m_linktofull.m_prevlink = 0;
+      pAlloc->m_linktofull.m_next = 0;
+      pNewEntry = pAlloc;
     } else {
-      pNode = 0;
-      ppSlot = &pList->m_terminator;
+      pNewEntry = 0;
     }
 
-    TSLink<::SGAMEDATA>* pExisting = ppSlot->m_prevlink;
-    if (pExisting) {
-      char* ppPrevLink;
-      ppPrevLink = (char*)D2_StormNextLink(ppSlot, -1);
-      *(TSLink<::SGAMEDATA>**)ppPrevLink = (TSLink<::SGAMEDATA>*)pExisting;
-      ppSlot->m_prevlink->m_next = ppSlot->m_next;
-      ppSlot->m_prevlink = 0;
-      ppSlot->m_next = 0;
+    TSLink<::SGAMEDATA>* pLink = pNewEntry ? (TSLink<::SGAMEDATA>*)((intptr_t)pNewEntry + pList->m_linkoffset) : &pList->m_terminator;
+
+    if (pLink->m_prevlink) {
+      *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1) = pLink->m_prevlink;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
     }
 
-    pExisting = &pList->m_terminator;
-    ppSlot->m_prevlink = pExisting;
-    ppSlot->m_next = pList->m_terminator.m_next;
-    intptr_t dwNext2 = pList->m_terminator.m_next;
-    intptr_t nLinkOffset = pList->m_linkoffset;
-    if (dwNext2 < 0) {
-      *(TSLink<::SGAMEDATA>**)~dwNext2 = (TSLink<::SGAMEDATA>*)ppSlot;
-    } else {
-      if (nLinkOffset < 0) {
-        nLinkOffset = (intptr_t)pExisting - pExisting->m_prevlink->m_next;
-      }
-
-      *(TSLink<::SGAMEDATA>**)(dwNext2 + nLinkOffset) = (TSLink<::SGAMEDATA>*)ppSlot;
-    }
-
-    pExisting->m_next = (intptr_t)pNode;
-    return pNode;
+    TSLink<::SGAMEDATA>* pTerminator = &pList->m_terminator;
+    pLink->m_prevlink = pTerminator;
+    pLink->m_next = pTerminator->m_next;
+    *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pTerminator, pList->m_linkoffset) = pLink;
+    pTerminator->m_next = (intptr_t)pNewEntry;
+    return pNewEntry;
 }
 
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE>::Destroy (STORM.H)
