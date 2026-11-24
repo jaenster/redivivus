@@ -517,50 +517,40 @@ void __fastcall MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall(D2UnitStrc
 
 // Client-side hit function for missile type 046 (spiral sub-missile burst). On collision, spawns a circular grid of sub-missiles (HitSubMissile1) centred on the missile's position using SKILLS_CreateMissilespiralGrid. Sub-missile count = (level-1)*HitPar2+HitPar1, falling back to skill calc[3] if less than 1. Uses MISSILES_SetPathFromTotalFramesCallbackAlt as the path callback. Always returns 1.
 int32_t __fastcall MISSILE_CltHitFn46_CatapultChargedBall(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    D2UnitStrc* pOwner;
-    int32_t nCount;
-    eD2Skills eSkill;
-    D2SkillsTxt* pSkillTxt;
-    D2SkillArgStrc sSkillArg;
-    int nClassId;
-    D2MissilesTxt* pMissileTxt;
-    pMissileTxt = 0;
+    D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
-      nClassId = pUnit->nClassId;
+      int nClassId = pUnit->nClassId;
       pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     }
-    if (!pMissileTxt) {
-      return 1;
-    }
-    if (pMissileTxt->HitSubMissile1 < 0) {
+    if (!pMissileTxt || pMissileTxt->HitSubMissile1 < 0) {
       return 1;
     }
 
-    pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
+    D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (!pOwner) {
       return 1;
     }
 
+    D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, 0x5c);
     sSkillArg.nFlags = 3;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->HitSubMissile1;
     sSkillArg.pOwner = pOwner;
+    sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->HitSubMissile1;
     sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
     sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
     sSkillArg.fpFunction = MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall;
-    nCount = D2Common::Units::Missile::GetLevel(pUnit);
-    nCount = (nCount - 1) * pMissileTxt->cHitPar2 + pMissileTxt->cHitPar1;
+    int32_t nCount = (D2Common::Units::Missile::GetLevel(pUnit) - 1) * pMissileTxt->cHitPar2 + pMissileTxt->cHitPar1;
     if (nCount <= 0) {
-      eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
-      nCount = D2Common::Units::Missile::GetLevel(pUnit);
-      pSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
+      eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
+      int32_t nLevel = D2Common::Units::Missile::GetLevel(pUnit);
+      D2SkillsTxt* pSkillTxt = D2Common::Skills::TXT_Skills_GetLine(eSkill);
       if (!pSkillTxt) {
         return 1;
       }
 
-      nCount = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->calc[3], eSkill, nCount);
+      nCount = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->calc[3], eSkill, nLevel);
       if (nCount < 1) {
         nCount = 1;
       }
