@@ -473,18 +473,21 @@ template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NO
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
-    if (pNewEntry) {
-      TSLink<::TCELENTRY>* pTVar1;
-      pNewEntry->m_linktoslot.m_prevlink = 0;
-      pNewEntry->m_linktoslot.m_next = 0;
-      pNewEntry->m_linktofull.m_prevlink = 0;
-      pNewEntry->m_linktofull.m_next = 0;
-      pTVar1 = &pNewEntry->m_frames.m_terminator;
-      pTVar1->m_next = 0;
-      pTVar1->m_prevlink = pTVar1;
-      pNewEntry->m_frames.m_linkoffset = 0;
-      pNewEntry->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
+    ::CELLIST* pAlloc = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewEntry;
+    if (pAlloc) {
+      pAlloc->m_linktoslot.m_prevlink = 0;
+      pAlloc->m_linktoslot.m_next = 0;
+      pAlloc->m_linktofull.m_prevlink = 0;
+      pAlloc->m_linktofull.m_next = 0;
+      TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pFrames = &pAlloc->m_frames;
+      TSLink<::TCELENTRY>* pTerminator = &pFrames->m_terminator;
+      pTerminator->m_prevlink = 0;
+      pTerminator->m_next = 0;
+      pTerminator->m_prevlink = pTerminator;
+      pFrames->m_linkoffset = 0;
+      pFrames->m_terminator.m_next = ~(uintptr_t)pTerminator;
+      pNewEntry = pAlloc;
     } else {
       pNewEntry = 0;
     }
