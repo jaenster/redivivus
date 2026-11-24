@@ -134,46 +134,27 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::Next
 }
 
 template<> __attribute__((noinline)) inline void TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink(::StringEntryNode * pNode) {
-    TSLink<::StringEntryNode>** pPrevLink2;
-    intptr_t nNextLink;
-    if (!pNode->m_linktoslot.m_next) {
-      return;
-    }
-
-    TSLink<::StringEntryNode>* pTVar1 = &pNode->m_linktoslot;
-    TSLink<::StringEntryNode>* nHeadEntry = pTVar1->m_prevlink;
-    if (nHeadEntry) {
-      TSLink<::StringEntryNode>** pPrevLink;
-      nNextLink = pNode->m_linktoslot.m_next;
-      if (nNextLink < 0) {
-        pPrevLink = (TSLink<::StringEntryNode>**)~nNextLink;
-      } else {
-        pPrevLink = (TSLink<::StringEntryNode>**)((char*)pTVar1 + (nNextLink - nHeadEntry->m_next));
+    if (pNode->m_linktoslot.m_next) {
+      TSLink<::StringEntryNode>* pLink = &pNode->m_linktoslot;
+      TSLink<::StringEntryNode>* pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<::StringEntryNode>** ppNextBack = (TSLink<::StringEntryNode>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
 
-      *pPrevLink = nHeadEntry;
-      pTVar1->m_prevlink->m_next = pNode->m_linktoslot.m_next;
-      pTVar1->m_prevlink = 0;
-      pNode->m_linktoslot.m_next = 0;
+      pLink = &pNode->m_linktofull;
+      pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<::StringEntryNode>** ppNextBack = (TSLink<::StringEntryNode>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
+      }
     }
-
-    nHeadEntry = pNode->m_linktofull.m_prevlink;
-    pTVar1 = &pNode->m_linktofull;
-    if (!nHeadEntry) {
-      return;
-    }
-
-    intptr_t nNextLink2 = pNode->m_linktofull.m_next;
-    if (nNextLink2 < 0) {
-      pPrevLink2 = (TSLink<::StringEntryNode>**)~nNextLink2;
-    } else {
-      pPrevLink2 = (TSLink<::StringEntryNode>**)((char*)pTVar1 + (nNextLink2 - nHeadEntry->m_next));
-    }
-
-    *pPrevLink2 = nHeadEntry;
-    pTVar1->m_prevlink->m_next = pNode->m_linktofull.m_next;
-    pTVar1->m_prevlink = 0;
-    pTVar1->m_next = 0;
 }
 
 template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Delete(::StringEntryNode * pNode) {
