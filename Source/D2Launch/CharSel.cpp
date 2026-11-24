@@ -1978,14 +1978,8 @@ void Unreferenced_0043a7e0() {
 }
 
 void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
-    int nRealmCount;
-    char* szRealmName;
-    int32_t nNameCmpResult;
-    int nRealmIndex;
     if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
-      BOOL bIsExpansion;
-      bIsExpansion = Fog::D2CheckExpansionGame();
-      if (bIsExpansion) {
+      if (Fog::D2CheckExpansionGame()) {
         UIMENU_ItsLikeRealmSelectionMenuButOffsetToRightSide();
       } else {
         gpCtlRealmSelectionPanel = MainMenus::FORMS_CreateAnyFormFromList(0x73);
@@ -2005,25 +1999,16 @@ void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
 
       D2Win::Src::D2WinTextBox::SetText(gpCtlRealmSelectionLabel, D2Lang::StrTable::strtable::GetLocaleString(0x2b31), 0, false, 0);
       D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLinePadding(gpControlRealmSelect, -6, 0);
-      nRealmIndex = 0;
-      while (true) {
-        nRealmCount = MainMenus::MAINMENU_GetRealmCount();
-        if (nRealmIndex >= nRealmCount) {
-          break;
-        }
-
-        szRealmName = MainMenus::MAINMENU_GetRealmName(nRealmIndex);
+      for (int i = 0;; i++) {
+        char* szRealmName = i < MainMenus::MAINMENU_GetRealmCount() ? MainMenus::MAINMENU_GetRealmName(i) : nullptr;
         if (!szRealmName) {
           break;
         }
 
         D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsiSimple(gpWinTextBoxRealmSelect, szRealmName);
-        nNameCmpResult = Storm::Source::SSTR::SStrCmpI(PreferredClosedRealm, szRealmName, 0x7fffffff);
-        if (!nNameCmpResult) {
-          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpWinTextBoxRealmSelect, nRealmIndex);
+        if (!Storm::Source::SSTR::SStrCmpI(PreferredClosedRealm, szRealmName, 0x7fffffff)) {
+          D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpWinTextBoxRealmSelect, i);
         }
-
-        nRealmIndex++;
       }
 
       CHARSEL_ClearCharDetailUI();
