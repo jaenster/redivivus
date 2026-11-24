@@ -317,44 +317,30 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044f9f0() {
 }
 
 template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly) {
-    TSExplicitList<::SGAMEDATA, -572662307>* pTVar1;
-    ::SGAMEDATA* pGame;
-    TSLink<::SGAMEDATA>* pNode;
-    TSLink<::SGAMEDATA>** pPrevLink;
-    TSLink<::SGAMEDATA>* pNext;
-    int nChunkBase;
     this->nFullnessIndicator = 0;
     this->tFullList.UnlinkAll();
-    uint32_t pBucketIdx = 0;
-    if (this->tSlotListArray.m_count <= 0) {
-      return;
-    }
-
-    do {
+    for (uint32_t i = 0; i < this->tSlotListArray.m_count; i++) {
       while (true) {
-        pTVar1 = this->tSlotListArray.m_data;
-        pGame = *(::SGAMEDATA**)&pTVar1[pBucketIdx].m_terminator.m_next;
-        if ((intptr_t)pGame <= 0) {
+        TSExplicitList<::SGAMEDATA, -572662307>* pList = &this->tSlotListArray.m_data[i];
+        ::SGAMEDATA* pNode = pList->m_terminator.m_next > 0 ? (::SGAMEDATA*)pList->m_terminator.m_next : nullptr;
+        if (!pNode) {
           break;
         }
         if (bUnlinkOnly) {
-          nChunkBase = pTVar1[pBucketIdx].m_linkoffset;
-          pNext = *(TSLink<::SGAMEDATA>**)(pGame->szGameName + (nChunkBase - 0x2a));
-          pNode = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (nChunkBase - 0x2a));
-          if (pNext) {
-            pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pNode, -1);
-            *pPrevLink = pNext;
-            pNode->m_prevlink->m_next = pNode->m_next;
-            pNode->m_prevlink = 0;
-            pNode->m_next = 0;
+          TSLink<::SGAMEDATA>* pLink = (TSLink<::SGAMEDATA>*)((intptr_t)pNode + pList->m_linkoffset);
+          TSLink<::SGAMEDATA>* pPrevLink = pLink->m_prevlink;
+          if (pPrevLink) {
+            TSLink<::SGAMEDATA>** ppNextBack = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1);
+            *ppNextBack = pPrevLink;
+            pLink->m_prevlink->m_next = pLink->m_next;
+            pLink->m_prevlink = 0;
+            pLink->m_next = 0;
           }
         } else {
-          this->pVtable->InternalDelete(this, pGame);
+          this->pVtable->InternalDelete(this, pNode);
         }
       }
-
-      pBucketIdx++;
-    } while (pBucketIdx < this->tSlotListArray.m_count);
+    }
 }
 
 // Unreferenced copy of the destructor: unlinks every node, then the terminator.
