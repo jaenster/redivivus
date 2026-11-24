@@ -127,17 +127,7 @@ void __stdcall SetTotalFrames(D2UnitStrc * pUnit, int32_t nTotalFrames) {
     if (!pUnitDataMissile) {
       return;
     }
-    if (nTotalFrames > -0x8000) {
-      if (nTotalFrames >= 0x7fff) {
-        nTotalFrames = 0x7fff;
-      }
-
-      pUnitDataMissile->nTotalFrames = (int16_t)nTotalFrames;
-      return;
-    }
-
-    pUnitDataMissile->nTotalFrames = -0x8000;
-    return;
+    pUnitDataMissile->nTotalFrames = (int16_t)min(max(nTotalFrames, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 }
 
 int32_t __stdcall GetTotalFrames(D2UnitStrc * pUnit) {
