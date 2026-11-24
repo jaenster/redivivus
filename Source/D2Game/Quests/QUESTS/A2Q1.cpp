@@ -573,16 +573,8 @@ void __fastcall Q09_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpStatusFilter = 0;
     pQuestData->nInitNo = 4;
     pQuestData->fpActiveFilter = Q09_ActiveFilter;
-    pQuestSpecificData->bRadamentKilled = false;
     memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
-    pQuestSpecificData->bEndCallbackScheduled = false;
-    pQuestSpecificData->field_0xB = 0;
-    pQuestSpecificData->nBookOfSkillDropCount = 0;
-    pQuestSpecificData->bRewardPending = false;
-    pQuestSpecificData->field_0x11 = 0;
-    pQuestSpecificData->field_0x12 = 0;
-    pQuestSpecificData->field_0x13 = 0;
-    pQuestSpecificData->pRadamentRoom = 0;
+    pQuestSpecificData->pRadamentRoom = nullptr;
     pQuestSpecificData->bRadamentKilled = false;
 }
 
