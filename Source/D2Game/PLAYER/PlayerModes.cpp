@@ -222,14 +222,18 @@ BOOL PLRMODES_CanInterruptCurrentMode_Extern(uint32_t nNewMode, ::SGAMEDATA * pG
     return ::D2Game::PLAYER::PlayerModes::PLRMODES_CanInterruptCurrentMode(nNewMode, pGame, pUnit);
 }
 
+// GetAnimMode as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2PlayerAnimMode GetAnimModeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eAnimMode.ePlayerMode;
+    }
+    return (eD2PlayerAnimMode)0;
+}
+
 // Attempts to cancel current player mode and initiate movement to a target location. Validates unit state, checks for blocking modes, and dispatches path-finding for the move.
 // @sourcefile .\PLAYER\PlrModes.cpp
 int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int nModeIndex, int bCheckInterrupt, D2SkillStrc * pSkill) {
-    int32_t nConcPct;
-    uint32_t nConcRandRoll;
-    int32_t iVar1;
-    BOOL eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable);
-    if (eStunState) {
+    if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uninterruptable)) {
       return 0;
     }
     if (!pUnit) {
@@ -255,70 +259,45 @@ int __fastcall PLRMODES_TryCancelModeAndMoveToLocation(::SGAMEDATA * pGame, D2Un
     if (!pSkillTxt) {
       return 1;
     }
-    if (pSkill == pActiveSkill) {
-      switch (pSkillTxt->srvdofunc) {
-        case 0x43:
-          {
-            return 1;
-          }
-        case 0x4c:
-          {
-            return 1;
-          }
-      }
+    if (pSkill == pActiveSkill && (pSkillTxt->srvdofunc == 0x43 || pSkillTxt->srvdofunc == 0x4c)) {
+      return 1;
     }
     if (pSkillTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
-      D2StatListExStrc* pConcStatList;
-      eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentration);
-      if (!eStunState) {
-        eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentrate);
-        if (!eStunState) {
+      if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentration)) {
+        D2StatListExStrc* pConcStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_concentration); // steer-ok: the original calls GetStatsByState before pushing the other STATLIST_GetBaseStatValue arguments
+        int32_t nConcPct = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pConcStatList, UNITSTAT_skill_concentration, 0); // steer-ok: the original reads the concentration percentage before rolling the seed
+        if ((int)D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100) >= nConcPct && !D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentrate)) {
           return 1;
         }
-      } else {
-        pConcStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_concentration);
-        nConcPct = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pConcStatList, UNITSTAT_skill_concentration, 0);
-        nConcRandRoll = D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 100);
-        if ((int)nConcRandRoll >= nConcPct) {
-          eStunState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentrate);
-          if (!eStunState) {
-            return 1;
-          }
-        }
+      } else if (!D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_concentrate)) {
+        return 1;
       }
-      if (pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
-        return 0;
+      if (GetAnimModeInline(pUnit) == eD2PlayerAnimMode_ns::Neutral) {
+        PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 1, 0, 0, 1);
+        return 1;
       }
-    } else {
-      if (pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
-        switch (nModeIndex) {
-          case 7:
 
-          case 8:
-
-          case 10:
-
-          case 0xb:
-
-          case 0xd:
-
-          case 0x12:
-            {
-              iVar1 = PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit);
-              if (iVar1) {
-                return 1;
-              }
-
-              return 0;
-            }
-          default:
-            return 0;
-        }
-      }
+      return 0;
+    }
+    if (GetAnimModeInline(pUnit) == eD2PlayerAnimMode_ns::Neutral) {
+      PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 1, 0, 0, 1);
+      return 1;
     }
 
-    PLRMODES_MoveToLocation(pGame, pUnit, nullptr, 1, 0, 0, 1);
-    return 1;
+    switch (nModeIndex) {
+      case 7:
+      case 8:
+      case 10:
+      case 0xb:
+      case 0xd:
+      case 0x12:
+        if (PLRMODES_HasAnimEventLastOrComing5Frames(pGame, pUnit)) {
+          return 1;
+        }
+        break;
+    }
+
+    return 0;
 }
 
 void __fastcall PLRMODES_SetIdleMode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nMode, int32_t nX, int32_t nY) {
