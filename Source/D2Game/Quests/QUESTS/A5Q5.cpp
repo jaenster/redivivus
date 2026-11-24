@@ -1002,7 +1002,7 @@ int __fastcall Q35_GetAncientsState(::SGAMEDATA * pGame) {
 }
 
 // [A5Q5 = Rite of Passage] Q35_Noop: empty stub.
-void __stdcall Q35_Noop() {
+void __fastcall Q35_Noop(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit) {
 
 }
 

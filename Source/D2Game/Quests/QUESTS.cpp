@@ -2023,7 +2023,7 @@ void __fastcall QUEST_OnUniqueMonsterSpawned(::SGAMEDATA * pGame, D2UnitStrc * p
       return;
     }
 
-    A5Q5::Q35_Noop();
+    A5Q5::Q35_Noop(pGame, pUnit);
 }
 
 uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId eSourceLevelId, eD2LevelId eDestLevelId) {
