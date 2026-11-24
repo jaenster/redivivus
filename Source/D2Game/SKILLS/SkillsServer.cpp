@@ -4175,29 +4175,25 @@ void __fastcall SKILLS_PeriodicSkillsCallback(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 void __fastcall SKILLS_PeriodicStatsCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, int32_t nSkillId) {
-    int nAuraLevel;
-    short int nAuraState;
     D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
-    if (pSkillsTxt) {
-      BOOL bModeZeroDeath;
-      nAuraState = pSkillsTxt->aurastate;
-      if (nAuraState >= 0 && (int)nAuraState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-        bModeZeroDeath = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-        if (!bModeZeroDeath) {
-          nAuraLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_aura, (uint16_t)nSkillId);
-          if (nAuraLevel <= 0) {
-            GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nOwnerGUID);
-            return;
-          }
-
-          SKILL_SpawnMissileFunction(pGame, pUnit, nSkillId, nAuraLevel, 1, 1, 0);
-          SKILLS_SetPeriodicStatOrSkillTimer(pGame, pUnit, nOwnerGUID, nSkillId, nAuraLevel, 0);
-          return;
-        }
-      }
+    if (!pSkillsTxt || pSkillsTxt->aurastate < 0 || pSkillsTxt->aurastate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nOwnerGUID);
+      return;
     }
 
-    GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nOwnerGUID);
+    if (UNIT::SUnit::CheckForModeZeroDeath(pUnit)) {
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nOwnerGUID);
+      return;
+    }
+
+    int nAuraLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_aura, (uint16_t)nSkillId);
+    if (nAuraLevel <= 0) {
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_PERIODICSTATS, nOwnerGUID);
+      return;
+    }
+
+    SKILL_SpawnMissileFunction(pGame, pUnit, nSkillId, nAuraLevel, 1, 1, 0);
+    SKILLS_SetPeriodicStatOrSkillTimer(pGame, pUnit, nOwnerGUID, nSkillId, nAuraLevel, 0);
 }
 
 // Server-side initialiser for a passive aura skill on pUnit. Validates the skill record has the aura flag and a valid aurastate, checks the unit has the skill at level >= 1, then either attaches a new stat-list carrying the aura state/level modifiers (normal auras) or spawns the aura's missile function (skills with flags2 bit 0x80). Finishes by setting the periodic skill timer.
