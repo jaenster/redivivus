@@ -13,60 +13,30 @@ namespace D2Game::Quests::QUESTS::Quest37 {
 
 // Quest 37 (Anya rescue / Prison of Ice) NPC-gossip callback. When a specific NPC (monster stats IDs 0x93, 0x94, 0x96, or 0x9a — Act V town NPCs) delivers one of two expected message indices, marks that NPC as spoken-with via PLAYER_SetSpokenWithNPC to advance the intro-dialogue tracking.
 void __fastcall Q37_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    bool bMsgMatch;
-    int32_t nMonStatsId;
-    nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
-    uint16_t nMessageIndex;
-    nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
+    int32_t nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     switch (nMonStatsId) {
       case 0x94:
-        if (nMessageIndex != 0xb) {
-          bMsgMatch = false;
-          if (nMessageIndex == 0xc) {
-            bMsgMatch = true;
-          }
-
-          goto check_msg_matched;
+        if (nMessageIndex == 0xb || nMessageIndex == 0xc) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      break;
-      default:
-        return;
+        break;
       case 0x93:
-        if (nMessageIndex != 0x2d) {
-          bMsgMatch = false;
-          if (nMessageIndex == 0x2e) {
-            bMsgMatch = true;
-          }
-
-          check_msg_matched:
-          if (!bMsgMatch) {
-            return;
-          }
+        if (nMessageIndex == 0x2d || nMessageIndex == 0x2e) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      break;
+        break;
       case 0x9a:
-        if (nMessageIndex != 0x24) {
-          bMsgMatch = false;
-          if (nMessageIndex == 0x25) {
-            bMsgMatch = true;
-          }
-
-          goto check_msg_matched;
+        if (nMessageIndex == 0x24 || nMessageIndex == 0x25) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      break;
+        break;
       case 0x96:
-        if (nMessageIndex != 0x18) {
-          bMsgMatch = false;
-          if (nMessageIndex == 0x19) {
-            bMsgMatch = true;
-          }
-
-          goto check_msg_matched;
+        if (nMessageIndex == 0x18 || nMessageIndex == 0x19) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      break;
+        break;
     }
-
-    PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
 }
 
 // A5Q4 "Betrayal of Harrogath" gossip callback (index 0): fired when a player interacts with an NPC companion (Qual-Kehk 0x93, Malah 0x94, Larzuk 0x96, Nihlathak 0x9a, or the ghost variants). Maps the target NPC class ID to an expected player class; if the player has not yet spoken with this NPC (PLAYER_CheckIfSpokenWithNPC), queues a class-matched (flag=1) or generic (flag=0) gossip message via AddGossipMessageOnMonster. Returns without action for unrecognized NPCs or already-spoken interactions.
