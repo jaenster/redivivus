@@ -259,51 +259,30 @@ template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor() {
 }
 
 template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {
-    TSExplicitList<::StringEntryNode, -572662307>* pTVar1;
-    ::StringEntryNode* pNode;
-    TSLink<::StringEntryNode>* pSlot;
-    TSLink<::StringEntryNode>** pPrevLink;
-    intptr_t nNextLink;
-    TSLink<::StringEntryNode>* pHeadEntry;
-    int nLinkOffset;
     this->nFullnessIndicator = 0;
     this->tFullList.UnlinkAll();
-    uint32_t iBucket = 0;
-    if (this->tSlotListArray.m_count <= 0) {
-      return;
-    }
-
-    do {
+    for (uint32_t i = 0; i < this->tSlotListArray.m_count; i++) {
       while (true) {
-        pTVar1 = this->tSlotListArray.m_data;
-        pNode = *(::StringEntryNode**)&pTVar1[iBucket].m_terminator.m_next;
-        if ((intptr_t)pNode <= 0) {
+        TSExplicitList<::StringEntryNode, -572662307>* pList = &this->tSlotListArray.m_data[i];
+        ::StringEntryNode* pNode = pList->m_terminator.m_next > 0 ? (::StringEntryNode*)pList->m_terminator.m_next : nullptr;
+        if (!pNode) {
           break;
         }
         if (bUnlinkOnly) {
-          nLinkOffset = pTVar1[iBucket].m_linkoffset;
-          pHeadEntry = *(TSLink<::StringEntryNode>**)((intptr_t)&pNode->m_hashval + nLinkOffset);
-          pSlot = (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + nLinkOffset);
-          if (pHeadEntry) {
-            nNextLink = pSlot->m_next;
-            if (nNextLink < 0) {
-              pPrevLink = (TSLink<::StringEntryNode>**)~nNextLink;
-            } else {
-              pPrevLink = (TSLink<::StringEntryNode>**)((char*)pSlot + (nNextLink - pHeadEntry->m_next));
-            }
-
-            *pPrevLink = pHeadEntry;
-            pSlot->m_prevlink->m_next = pSlot->m_next;
-            pSlot->m_prevlink = 0;
-            pSlot->m_next = 0;
+          TSLink<::StringEntryNode>* pLink = (TSLink<::StringEntryNode>*)((intptr_t)pNode + pList->m_linkoffset);
+          TSLink<::StringEntryNode>* pPrevLink = pLink->m_prevlink;
+          if (pPrevLink) {
+            TSLink<::StringEntryNode>** ppNextBack = (TSLink<::StringEntryNode>**)D2_StormNextLink(pLink, -1);
+            *ppNextBack = pPrevLink;
+            pLink->m_prevlink->m_next = pLink->m_next;
+            pLink->m_prevlink = 0;
+            pLink->m_next = 0;
           }
         } else {
           this->pVtable->InternalDelete(this, pNode);
         }
       }
-
-      iBucket++;
-    } while (iBucket < this->tSlotListArray.m_count);
+    }
 }
 
 // stpl-orphan: a COMDAT copy in TSExplicitList<StringEntryNode, -572662307> that no member owns
