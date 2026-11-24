@@ -1176,15 +1176,7 @@ BOOL __fastcall Skills_SrvDoFunc_152_DiabLight(::SGAMEDATA * pGame, D2UnitStrc *
 
 // SrvDoFunc 96: heals the target by a random percentage between calc[0] and calc[1] of its max HP (clamped 0-100%), adds the result to current HP, and clamps to max HP. Sets UNITFLAG_SKSRVDOFUNC on caster. Returns FALSE if no valid target or skill record.
 BOOL __fastcall Skills_SrvDoFunc_096_HealTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    eD2Skills eSkillOrig = eSkill;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
       return 0;
     }
@@ -1197,36 +1189,15 @@ BOOL __fastcall Skills_SrvDoFunc_096_HealTarget(::SGAMEDATA * pGame, D2UnitStrc 
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    eD2Skills nHealRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
-    eSkill = (int)nHealRange <= 0 ? 0 : nHealRange;
-    if ((int)eSkill >= 100) {
-      eSkill = SKILL_ResistFire;
-    }
-
-    nHealRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkillOrig, nSkillLvl);
-    nHealRange = (int)nHealRange <= 0 ? 0 : nHealRange;
-    eSkillOrig = eSkill;
-    if ((int)nHealRange < (int)eSkill) {
-      eSkillOrig = nHealRange;
-    }
-
-    uint32_t nHealPct = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, eSkill - eSkillOrig);
-    int nValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
-    int32_t nNewHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, nHealPct + eSkillOrig, 100);
-    int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
-    nCurHp = nNewHp + nCurHp;
-    int nMaxHp = nCurHp;
-    if (nCurHp <= 1) {
-      nMaxHp = 1;
-    }
-    if (nMaxHp < nValue) {
-      nValue = nCurHp;
-      if (nCurHp <= 1) {
-        nValue = 1;
-      }
-    }
-
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, nValue, 0);
+    int nMaxHealPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[1], eSkill, nSkillLvl);
+    nMaxHealPct = min(max(nMaxHealPct, 0), 100); // steer-ok: windef.h min/max macros
+    int nMinHealPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
+    nMinHealPct = min(max(nMinHealPct, 0), nMaxHealPct); // steer-ok: windef.h min/max macros
+    int nHealPct = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nMaxHealPct - nMinHealPct) + nMinHealPct;
+    int nMaxHitpoints = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pTarget);
+    int nHitpoints = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHitpoints, nHealPct, 100) + D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0);
+    nHitpoints = min(max(nHitpoints, 1), nMaxHitpoints); // steer-ok: windef.h min/max macros
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTarget, UNITSTAT_hitpoints, nHitpoints, 0);
     return 1;
 }
 
