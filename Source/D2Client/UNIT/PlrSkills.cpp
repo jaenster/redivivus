@@ -457,11 +457,8 @@ void __fastcall PLRSKILLS_StateRemFn05_CycloneArmor(D2UnitStrc * pUnit, eD2State
 
 // State set-callback for Bone Armor (and similar tiered-overlay states). Reads current bonearmor and bonearmormax stats from the state's stat list to compute a tier (1–3) based on remaining fraction. Compares to the previously stored tier (shortparam1). If tier increased, calls States_RemFunc05 then adds the appropriate overlay+lightning-overlay pairs via GFX_AddOverlayToUnit. If tier decreased, removes the no-longer-applicable overlays via STATES_RemoveOverlayById. Up to three overlay slots (pDVar1->overlay[0..2]) are supported.
 void __fastcall PLRSKILLS_StateSetFn08_CycloneArmor(D2UnitStrc * pUnit, eD2States eState) {
-    eOverlayId eOverlay3;
-    eOverlayId eOverlay1;
-    eOverlayId eOverlay2;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
-    if (!pDVar1) {
+    D2StatesTxt* pStatesTxt = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+    if (!pStatesTxt) {
       return;
     }
 
@@ -472,59 +469,47 @@ void __fastcall PLRSKILLS_StateSetFn08_CycloneArmor(D2UnitStrc * pUnit, eD2State
 
     int nBoneArmor = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_bonearmor, 0);
     int nBoneArmorMax = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_bonearmormax, 0);
-    if (pDVar1->overlay[0] >= 0) {
-      eOverlay1 = (eOverlayId)pDVar1->overlay[0];
-    } else {
-      eOverlay1 = ~OVERLAY_null;
-    }
-    if (pDVar1->overlay[1] >= 0) {
-      eOverlay2 = (eOverlayId)pDVar1->overlay[1];
-    } else {
-      eOverlay2 = ~OVERLAY_null;
-    }
-    if (pDVar1->overlay[2] >= 0) {
-      eOverlay3 = (eOverlayId)pDVar1->overlay[2];
-    } else {
-      eOverlay3 = ~OVERLAY_null;
-    }
-
+    int nOverlay1 = pStatesTxt->overlay[0] >= 0 ? pStatesTxt->overlay[0] : -1;
+    int nOverlay2 = pStatesTxt->overlay[1] >= 0 ? pStatesTxt->overlay[1] : -1;
+    int nOverlay3 = pStatesTxt->overlay[2] >= 0 ? pStatesTxt->overlay[2] : -1;
     int nPrevTier = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_shortparam1, 0);
-    int nValue = 3;
-    if (nBoneArmor < nBoneArmorMax / 3) {
-      nValue = 2;
+    int nOneThird = nBoneArmorMax / 3;
+    int nTwoThirds = nOneThird * 2; // steer-ok: the original computes both tier boundaries before the first compare, as in STATES_CalcDamageSeverityTier
+    int nNewTier = 3;
+    if (nBoneArmor < nOneThird) {
+      nNewTier = 2;
     }
-    if (nBoneArmor < nBoneArmorMax / 3 * 2) {
-      nValue--;
+    if (nBoneArmor < nTwoThirds) {
+      nNewTier--;
     }
 
-    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_shortparam1, nValue, 0);
-    if (nValue > nPrevTier) {
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_shortparam1, nNewTier, 0);
+    if (nNewTier > nPrevTier) {
       PLRSKILLS_StateRemFn05_CycloneArmor(pUnit, eState);
-      if (eOverlay3 != ~OVERLAY_null && nValue >= 3) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay3, 3, 0, 0, 0, 0, 0);
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay3 + OVERLAY_lightning, 3, 0, 0, 0, 0, 0);
+      if (nOverlay3 != -1 && nNewTier >= 3) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay3, 3, 0, 0, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay3 + 1, 3, 0, 0, 0, 0, 0);
       }
-      if (eOverlay2 != ~OVERLAY_null && nValue >= 2) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay2, 3, 0, 0, 0, 0, 0);
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay2 + OVERLAY_lightning, 3, 0, 0, 0, 0, 0);
+      if (nOverlay2 != -1 && nNewTier >= 2) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay2, 3, 0, 0, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay2 + 1, 3, 0, 0, 0, 0, 0);
       }
-      if (eOverlay1 != ~OVERLAY_null && nValue >= 1) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay1, 3, 0, 0, 0, 0, 0);
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay1 + OVERLAY_lightning, 3, 0, 0, 0, 0, 0);
-        return;
+      if (nOverlay1 != -1 && nNewTier >= 1) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay1, 3, 0, 0, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay1 + 1, 3, 0, 0, 0, 0, 0);
       }
     } else {
-      if (eOverlay3 != OVERLAY_null && nValue <= 2) {
-        STATES_RemoveOverlayById(pUnit, eOverlay3);
-        STATES_RemoveOverlayById(pUnit, eOverlay3 + OVERLAY_lightning);
+      if (nOverlay3 && nNewTier <= 2) {
+        STATES_RemoveOverlayById(pUnit, nOverlay3);
+        STATES_RemoveOverlayById(pUnit, nOverlay3 + 1);
       }
-      if (eOverlay2 != OVERLAY_null && nValue <= 1) {
-        STATES_RemoveOverlayById(pUnit, eOverlay2);
-        STATES_RemoveOverlayById(pUnit, eOverlay2 + OVERLAY_lightning);
+      if (nOverlay2 && nNewTier <= 1) {
+        STATES_RemoveOverlayById(pUnit, nOverlay2);
+        STATES_RemoveOverlayById(pUnit, nOverlay2 + 1);
       }
-      if (eOverlay1 != OVERLAY_null && (int)eOverlay1 <= 1) {
-        STATES_RemoveOverlayById(pUnit, eOverlay1);
-        STATES_RemoveOverlayById(pUnit, eOverlay1 + OVERLAY_lightning);
+      if (nOverlay1 && nOverlay1 <= 1) {
+        STATES_RemoveOverlayById(pUnit, nOverlay1);
+        STATES_RemoveOverlayById(pUnit, nOverlay1 + 1);
       }
     }
 }
