@@ -5051,72 +5051,51 @@ void __fastcall SKILLDESC_DrawSkillDmgBow(D2UnitStrc * pUnit, D2SkillStrc * pSki
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgThrow(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
-    uint32_t uShieldClassId;
-    int nStrDexBonus;
-    int32_t nDmgBonusTotal;
-    D2UnitStrc* pShieldUnit;
     if (!(pSkill && pSkillsTxt)) {
       return;
     }
 
-    BOOL bHasAttackSpeedState = D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedShield(pUnit->pInventory, &pShieldUnit);
-    if (!bHasAttackSpeedState) {
+    D2UnitStrc* pShield;
+    if (!D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedShield(pUnit->pInventory, &pShield)) {
       return;
     }
-    if (!pShieldUnit) {
-      uShieldClassId = -1;
-    } else {
-      uShieldClassId = pShieldUnit->nClassId;
-    }
 
-    D2ItemsTxt* pShieldTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(uShieldClassId);
-    uint32_t uMaxDmgShield = (uint32_t)pShieldTxt->nMaxDam;
-    uint32_t uMinDmgShield = (uint32_t)pShieldTxt->nMinDam;
+    D2ItemsTxt* pShieldTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(!pShield ? -1 : pShield->nClassId);
+    int nMaxDamage = pShieldTxt->nMaxDam;
+    int nMinDamage = pShieldTxt->nMinDam;
     D2SkillStrc* pHolyShield = D2Common::Skills::GetSkillByIdAndOwner(pUnit, SKILL_HolyShield, -1);
-    if (pHolyShield) {
-      bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_holyshield);
-      if (bHasAttackSpeedState) {
-        nStrDexBonus = D2Common::Skills::GetSkillLevel(pUnit, pHolyShield, 1);
-        nDmgBonusTotal = D2Common::Skills::SKILL_CalcMinDamage(pUnit, 0x75, nStrDexBonus, 1);
-        uMinDmgShield += nDmgBonusTotal >> 8;
-        nDmgBonusTotal = D2Common::Skills::SKILL_CalcMaxDamage(pUnit, 0x75, nStrDexBonus, 1);
-        uMaxDmgShield += nDmgBonusTotal >> 8;
-      }
+    if (pHolyShield && D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_holyshield)) {
+      int nHolyShieldLevel = D2Common::Skills::GetSkillLevel(pUnit, pHolyShield, 1);
+      nMinDamage += D2Common::Skills::SKILL_CalcMinDamage(pUnit, SKILL_HolyShield, nHolyShieldLevel, 1) >> 8;
+      nMaxDamage += D2Common::Skills::SKILL_CalcMaxDamage(pUnit, SKILL_HolyShield, nHolyShieldLevel, 1) >> 8;
     }
 
-    int32_t nElemType = 0;
-    nDmgBonusTotal = D2Common::Skills::MISSILE_GetBoltSpeed((int)pSkillsTxt->skill, nSkillLevel);
-    int16_t sStrBonus = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wStrBonus(pShieldUnit);
-    if (sStrBonus) {
-      nStrDexBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0);
-      nDmgBonusTotal += nStrDexBonus * sStrBonus / 100;
+    int nColor = 0;
+    int nDamageBonus = D2Common::Skills::MISSILE_GetBoltSpeed((int)pSkillsTxt->skill, nSkillLevel);
+    int nStatBonus = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wStrBonus(pShield);
+    if (nStatBonus) {
+      nDamageBonus += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_strength, 0) * nStatBonus / 100;
     }
 
-    sStrBonus = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wDexBonus(pShieldUnit);
-    if (sStrBonus) {
-      nStrDexBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
-      nDmgBonusTotal += nStrDexBonus * sStrBonus / 100;
+    nStatBonus = D2Common::ITEMS::Items::ITEM_GetItemsTxt_wDexBonus(pShield);
+    if (nStatBonus) {
+      nDamageBonus += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0) * nStatBonus / 100;
     }
 
-    nStrDexBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
-    nStrDexBonus = nDmgBonusTotal + nStrDexBonus;
-    int nDmgPercentTotal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_mindamage_percent, 0);
-    int nMinDmgPercBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_maxdamage_percent, 0);
-    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasDamBlueFlagState(pUnit);
-    if (bHasAttackSpeedState) {
-      nElemType = 3;
+    nDamageBonus += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_damagepercent, 0);
+    int nMinDamagePercent = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_mindamage_percent, 0);
+    int nMaxDamagePercent = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_item_maxdamage_percent, 0);
+    if (D2Common::DATATBLS::ItemStats::STATES_HasDamBlueFlagState(pUnit)) {
+      nColor = 3;
+    }
+    if (D2Common::DATATBLS::ItemStats::STATES_HasDamRedFlagState(pUnit)) {
+      nColor = 1;
+    }
+    if (nDamageBonus <= -0x5a) {
+      nDamageBonus = -0x5a;
     }
 
-    bHasAttackSpeedState = D2Common::DATATBLS::ItemStats::STATES_HasDamRedFlagState(pUnit);
-    nDmgBonusTotal = 1;
-    if (!bHasAttackSpeedState) {
-      nDmgBonusTotal = nElemType;
-    }
-    if (nStrDexBonus <= -0x5a) {
-      nStrDexBonus = -0x5a;
-    }
-
-    SKILLDESC_DrawDamageNumbers((int)(nStrDexBonus * uMinDmgShield + nDmgPercentTotal) / 100 + uMinDmgShield, (int)(nStrDexBonus * uMaxDmgShield + nMinDmgPercBonus) / 100 + uMaxDmgShield, nDmgBonusTotal, nXLeft, nY, nXRight);
+    SKILLDESC_DrawDamageNumbers((nDamageBonus * nMinDamage + nMinDamagePercent) / 100 + nMinDamage, (nDamageBonus * nMaxDamage + nMaxDamagePercent) / 100 + nMaxDamage, nColor, nXLeft, nY, nXRight);
 }
 
 void __fastcall SKILLDESC_DrawSkillDmgKick(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2SkillsTxt * pSkillsTxt, int32_t nSkillLevel, int32_t nXLeft, int32_t nY, int32_t nXRight) {
