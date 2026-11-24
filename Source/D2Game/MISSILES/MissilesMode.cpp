@@ -4872,43 +4872,27 @@ int __fastcall MISSMODE_SrvDoFn07_GuidedMissile(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Server missile tick function 008. Reads the missile's level and MissilesTxt Param2/Param3 to compute a spawn count and minimum period, then calls MISSILES_SpawnPeriodicRandom with the SubMissile1 type and derived parameters. Falls through to Missiles_SrvDoFunc_001 for standard movement/collision processing. Used by periodic-burst missile types (e.g. Teeth/splinter patterns).
 int __fastcall MISSMODE_SrvDoFn08_MonBlizzCenter(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int32_t nMinPeriod;
-    int nLevelDivParam3;
     D2MissilesTxt* pMissilesTxt;
-    if (!pUnit || (nLevelDivParam3 = pUnit->nClassId , nLevelDivParam3 < 0) || nLevelDivParam3 >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-      pMissilesTxt = 0;
+    int nMissileClassId;
+    if (!pUnit || (nMissileClassId = pUnit->nClassId) < 0 || nMissileClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+      pMissilesTxt = nullptr;
     } else {
-      pMissilesTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nLevelDivParam3;
-      if (pMissilesTxt) {
-        goto spawn_submissiles;
-      }
+      pMissilesTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId;
     }
-    if (*(volatile uint8_t*)0x18 < 0) {
+    if (!pMissilesTxt && pMissilesTxt->SubMissile1 < 0) {
       return 2;
     }
 
-    spawn_submissiles:
-    nMinPeriod = D2Common::Units::Missile::GetLevel(pUnit);
-    nLevelDivParam3 = pMissilesTxt->Param3;
-    if (nLevelDivParam3 < 1) {
-      nLevelDivParam3 = 1;
+    int nLevelStep = D2Common::Units::Missile::GetLevel(pUnit);
+    int nLevelDivisor = pMissilesTxt->Param3;
+    if (nLevelDivisor < 1) {
+      nLevelDivisor = 1;
     }
 
-    nLevelDivParam3 = nMinPeriod / nLevelDivParam3;
-    int nSpawnCount = 2;
-    if (nLevelDivParam3 >= 2) {
-      nSpawnCount = nLevelDivParam3;
-    }
-
-    nLevelDivParam3 = pMissilesTxt->Param2 - nLevelDivParam3;
-    nMinPeriod = 3;
-    if (nLevelDivParam3 >= 3) {
-      nMinPeriod = nLevelDivParam3;
-    }
-
-    MISSILES_SpawnPeriodicRandom(pGame, pMissilesTxt->Param1 + nSpawnCount, (int)pMissilesTxt->SubMissile1, 5, nMinPeriod, pUnit);
-    nLevelDivParam3 = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
-    return nLevelDivParam3;
+    nLevelStep /= nLevelDivisor;
+    int nSpawnCount = pMissilesTxt->Param1 + max(2, nLevelStep); // steer-ok: the original computes the spawn count before the period argument (windef.h max)
+    MISSILES_SpawnPeriodicRandom(pGame, nSpawnCount, (int)pMissilesTxt->SubMissile1, 5, max(3, pMissilesTxt->Param2 - nLevelStep), pUnit); // steer-ok: windef.h min/max macros
+    return MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
 }
 
 // Server-side missile do-function #9: if the missile still has a nonzero direction (8-flag from dynamic path), spawns SubMissile1 at the missile's current position using a D2SkillArgStrc built from the owner, skill ID, and skill level. Then always delegates to Missiles_SrvDoFunc_001 for standard missile advancement/expiry.
