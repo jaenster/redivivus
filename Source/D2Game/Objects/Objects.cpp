@@ -1068,6 +1068,8 @@ void __fastcall Objects_InitFn05_Door(D2ObjectInitFnArg * pInitArg) {
 
 }
 
+static inline eD2PlayerAnimMode GetAnimModeInline(D2UnitStrc * pUnit);
+
 void __fastcall Objects_InitFn11_TownPortal(D2ObjectInitFnArg * pInitArg) {
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
     eAct eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
@@ -1078,7 +1080,7 @@ void __fastcall Objects_InitFn11_TownPortal(D2ObjectInitFnArg * pInitArg) {
     }
 
     pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = (uint8_t)eLevelId;
-    if (!(pInitArg->pObject && pInitArg->pObject->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral)) {
+    if (GetAnimModeInline(pInitArg->pObject) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
 
