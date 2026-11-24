@@ -142,19 +142,19 @@ static void SOUND_ReleaseChannel(D2SoundChannelStrc * pChannel) {
 }
 
 int __fastcall Unreferenced_004b9560(int nChannelHandle) {
-    D2SoundChannelStrc* pDVar2;
+    D2SoundChannelStrc* pChannel;
     if (nChannelHandle) {
-      D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
-      for (; pDVar1; pDVar1 = pDVar1->pNext) {
-        pDVar2 = pDVar1->pChannel;
-        if (pDVar2->nChannelHandle == nChannelHandle) {
-          return (uint32_t)(pDVar2 != 0);
+      for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+        pChannel = pNode->pChannel;
+        if (pChannel->nChannelHandle == nChannelHandle) {
+          goto found;
         }
       }
     }
 
-    pDVar2 = 0;
-    return (uint32_t)(pDVar2 != 0);
+    pChannel = nullptr;
+    found:
+    return pChannel != nullptr;
 }
 
 uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle) {
