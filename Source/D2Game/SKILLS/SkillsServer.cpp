@@ -4198,74 +4198,38 @@ void __fastcall SKILLS_PeriodicStatsCallback(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Server-side initialiser for a passive aura skill on pUnit. Validates the skill record has the aura flag and a valid aurastate, checks the unit has the skill at level >= 1, then either attaches a new stat-list carrying the aura state/level modifiers (normal auras) or spawns the aura's missile function (skills with flags2 bit 0x80). Finishes by setting the periodic skill timer.
 static void __stdcall SKILLS_InitAuraSkill(::SGAMEDATA * pGame, eD2Skills eSkill, D2UnitStrc * pUnit) {
-    D2PoolManagerStrc* pMemory;
-    eD2UnitType eOwnerUnitType;
-    int32_t dwOwnerGUID;
-    if ((int)eSkill < 0) {
-      return;
-    }
-    if ((int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt || !(pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) || pSkillsTxt->aurastate < 0 || pSkillsTxt->aurastate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       return;
     }
 
-    D2SkillsTxt* pSkillsTxt;
-    pSkillsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
-    if (!pSkillsTxt) {
-      return;
-    }
-    if (!(pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5])) {
-      return;
-    }
-    if (pSkillsTxt->aurastate < 0) {
-      return;
-    }
-    if ((int)pSkillsTxt->aurastate >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-      return;
-    }
-
-    D2SkillStrc* pSkill;
-    pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
+    D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     if (!pSkill) {
       return;
     }
 
-    int nSkillLevel;
-    nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+    int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
     if (nSkillLevel <= 0) {
       return;
     }
     if (pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[7]) {
       SKILL_SpawnMissileFunction(pGame, pUnit, eSkill, nSkillLevel, 1, 0, 0);
     } else {
-      D2StatListExStrc* pStatList;
       D2Common::DATATBLS::ItemStats::SetState(pUnit, (int)pSkillsTxt->aurastate, 1);
-      pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillsTxt->aurastate);
+      D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)pSkillsTxt->aurastate);
       if (!pStatList) {
-        if (!pUnit) {
-          dwOwnerGUID = -1;
-          eOwnerUnitType = UNIT_COUNT;
-          pMemory = 0;
-        } else {
-          dwOwnerGUID = pUnit->nUnitGUID;
-          eOwnerUnitType = pUnit->eUnitType;
-          pMemory = pUnit->pMemory;
-        }
-
-        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pMemory, 0, 0, eOwnerUnitType, dwOwnerGUID);
-        if (!pStatList) {
-          goto start_periodic_timer;
-        }
+        pStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(!pUnit ? nullptr : pUnit->pMemory, 0, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       }
-
-      D2Common::Stats::StatsEx::SetState(pStatList, (int)pSkillsTxt->aurastate);
-      D2Common::Stats::StatsEx::SetSkillId(pStatList, eSkill);
-      D2Common::Stats::StatsEx::SetSkillLevel(pStatList, nSkillLevel);
-      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_modifierlist_skill, eSkill, 0);
-      D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_modifierlist_level, nSkillLevel, 0);
+      if (pStatList) {
+        D2Common::Stats::StatsEx::SetState(pStatList, (int)pSkillsTxt->aurastate);
+        D2Common::Stats::StatsEx::SetSkillId(pStatList, eSkill);
+        D2Common::Stats::StatsEx::SetSkillLevel(pStatList, nSkillLevel);
+        D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
+        D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_modifierlist_skill, eSkill, 0);
+        D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_modifierlist_level, nSkillLevel, 0);
+      }
     }
 
-    start_periodic_timer:
     SKILLS_SetPeriodicSkillTimer(pGame, pUnit, eSkill, nSkillLevel, 1);
 }
 
