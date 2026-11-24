@@ -5062,7 +5062,7 @@ void __stdcall INV_HandleStashRightClick(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __fastcall INV_SetStashNpcGuid(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->nClassId == 0x10b)) {
+    if ((!pUnit ? -1 : pUnit->nClassId) != 0x10b) {
       return;
     }
 
@@ -5071,17 +5071,11 @@ void __fastcall INV_SetStashNpcGuid(D2UnitStrc * pUnit) {
       return;
     }
 
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    D2RoomStrc* pPlayerRoom = D2Common::Units::UNITS_GetRoom(pPlayerUnit_lcl);
+    D2RoomStrc* pPlayerRoom = D2Common::Units::UNITS_GetRoom(UNIT::Player::GetPlayerUnit_UI());
     if (!pPlayerRoom) {
       return;
     }
-
-    eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pPlayerRoom);
-    eAct ePlayerAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
-    eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    eAct eNpcAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevelId);
-    if (ePlayerAct != eNpcAct) {
+    if (D2Common::Drlg::GetActNoFromLevelNumber(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pPlayerRoom)) != D2Common::Drlg::GetActNoFromLevelNumber(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom))) {
       return;
     }
 
