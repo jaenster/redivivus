@@ -389,75 +389,49 @@ bool __fastcall Q12_SequenceFilter(D2QuestDataStrc * pQuestData) {
 
 // A2Q4 - Callback_13 (load/sync handler). Reconstructs in-memory quest stateFlag from the persisted record on game load. If TaintedSun Completed(0) -> mark journal fields. If Sanctuary Completed(0) or RewardAwaits(1): set record JustCompleted(0xd) and mark journal done. If player holds the quest item -> stateFlag 1. Else map step bits to stateFlag: Step0x05->4/4, Step0x04->4/3, Step0x03->3/3, Step0x02->2/2. Also checks HoradricStaff Completed(0) to mark the journal entry.
 void __fastcall Q12_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    ::SGAMEDATA* pGame;
-    pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pQuestSpecificData;
-    pQuestSpecificData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = pQuestSpecificData->pQuestRecord[pGame->nDifficulty];
-    D2QuestDataA2Q4Strc* pQuestItemHst;
-    pQuestItemHst = pQuestData->pQuestSpecificData.pA2Q4;
-    BOOL bQuestState;
-    bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_Completed);
-    if (bQuestState) {
-      pQuestItemHst->bDrognanSummonerHint = 1;
-      pQuestItemHst->nPortalPlacedState = 2;
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
+    D2QuestDataA2Q4Strc* pA2Q4Data = pQuestData->pQuestSpecificData.pA2Q4;
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheTaintedSun, QUESTSTATE_Completed)) {
+      pA2Q4Data->bDrognanSummonerHint = 1;
+      pA2Q4Data->nPortalPlacedState = 2;
     }
-
-    /* GetQuestState Sanctuary Completed(0) - if done, force JustCompleted on load
-                          */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed);
-    /* GetQuestState RewardAwaits(1) - reward pending -> force JustCompleted on load
-                          */ if (bQuestState == 1 || (bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits) , bQuestState == 1)) {
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed) == 1 || D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_RewardAwaits) == 1) {
       QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_TheArcaneSanctuary, QUESTSTATE_JustCompleted);
-      pQuestItemHst->nPortalPlacedState = 2;
-      pQuestItemHst->bDrognanSummonerHint = 1;
+      pA2Q4Data->bDrognanSummonerHint = 1;
+      pA2Q4Data->nPortalPlacedState = 2;
       return;
     }
-
-    D2UnitStrc* pPlayerData;
-    pPlayerData = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20747368);
-    if (pPlayerData) {
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20747368)) {
       pQuestData->nStateFlagPrev = 1;
       pQuestData->nStateFlag = 1;
     }
 
-    /* GetQuestState Step0x05 - reconstruct stateFlag 4/prev 4 from record */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x05);
-    if (bQuestState == 1) {
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x05) == 1) {
       pQuestData->nStateFlagPrev = 4;
       pQuestData->nStateFlag = 4;
-    } else {
-      /* GetQuestState Step0x04 - reconstruct stateFlag 4/prev 3 from record */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x04);
-      if (bQuestState == 1) {
-        pQuestData->nStateFlagPrev = 3;
-        pQuestData->nStateFlag = 4;
-      } else {
-        /* GetQuestState Step0x03 - reconstruct stateFlag 3/prev 3 from record */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x03);
-        if (bQuestState == 1) {
-          pQuestData->nStateFlagPrev = 3;
-          pQuestData->nStateFlag = 3;
-        } else {
-          /* GetQuestState Step0x02 - reconstruct stateFlag 2/prev 2 from record */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x02);
-          if (bQuestState != 1) {
-            goto check_horadric_staff_done;
-          }
-
-          pQuestData->nStateFlagPrev = 2;
-          pQuestData->nStateFlag = 2;
-        }
-      }
+      pA2Q4Data->bDrognanSummonerHint = 1;
+      pA2Q4Data->nPortalPlacedState = 2;
+    } else if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x04) == 1) {
+      pQuestData->nStateFlagPrev = 3;
+      pQuestData->nStateFlag = 4;
+      pA2Q4Data->bDrognanSummonerHint = 1;
+      pA2Q4Data->nPortalPlacedState = 2;
+    } else if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x03) == 1) {
+      pQuestData->nStateFlagPrev = 3;
+      pQuestData->nStateFlag = 3;
+      pA2Q4Data->bDrognanSummonerHint = 1;
+      pA2Q4Data->nPortalPlacedState = 2;
+    } else if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Step0x02) == 1) {
+      pQuestData->nStateFlagPrev = 2;
+      pQuestData->nStateFlag = 2;
+      pA2Q4Data->bDrognanSummonerHint = 1;
+      pA2Q4Data->nPortalPlacedState = 2;
     }
 
-    pQuestItemHst->nPortalPlacedState = 2;
-    pQuestItemHst->bDrognanSummonerHint = 1;
-    check_horadric_staff_done:
-    /* GetQuestState TheHoradricStaff(0xa) Completed(0) - prerequisite -> mark
-                         journal */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Completed);
-    if (bQuestState != 1) {
-      return;
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheHoradricStaff, QUESTSTATE_Completed) == 1) {
+      pA2Q4Data->bDrognanSummonerHint = 1;
+      pA2Q4Data->nPortalPlacedState = 2;
     }
-
-    pQuestItemHst->nPortalPlacedState = 2;
-    pQuestItemHst->bDrognanSummonerHint = 1;
 }
 
 // A2Q4 - OnHoradricStaffAssembled. Entry point fired when the Horadric Staff is assembled (the prerequisite that unlocks the Arcane Sanctuary). If quest not yet introduced -> OnJournalActivate (open the Sanctuary entrance). Otherwise set stateFlag 1 if zero, and if no prior progress broadcast quest state 1 via QUEST_SetStateAndBroadcast(NotifyArcaneComplete).

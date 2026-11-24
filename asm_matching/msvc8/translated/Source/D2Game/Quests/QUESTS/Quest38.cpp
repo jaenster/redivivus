@@ -15,93 +15,50 @@ namespace D2Game { namespace Quests { namespace QUESTS { namespace Quest38 {
 
 // Quest 38 (Duriel quest, Act 2) NPC dialogue callback. Checks whether a spoken NPC message index matches a known "first-time spoken" message for each Act 2 NPC (Warriv, Drognan, Fara, Greiz, Elzix, Geglash, Lysander, Meshif). If it does, calls PLAYER_SetSpokenWithNPC to record that the player has heard this NPC's intro, driving quest-info updates and conversation-state tracking.
 void __fastcall Q38_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    bool bNpcMatch;
-    eD2MonsterClassId nMonStatsId;
-    nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
-    uint16_t wMessageIndex;
-    wMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
+    eD2MonsterClassId nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    uint16_t wMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     switch (nMonStatsId) {
       case MonsterUnitElzix:
-        if (wMessageIndex == 0xcc) {
-          goto mark_spoken;
+        if (wMessageIndex == 0xcc || wMessageIndex == 0xcb) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      bNpcMatch = false;
-      if (wMessageIndex == 0xcb) {
-        bNpcMatch = true;
-      }
-
-      break;
+        break;
       case MonsterUnitGeglash:
-        if (wMessageIndex == 0xe7) {
-          goto mark_spoken;
+        if (wMessageIndex == 0xe7 || wMessageIndex == 0xe6) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      bNpcMatch = false;
-      if (wMessageIndex == 0xe6) {
-        bNpcMatch = true;
-      }
-
-      break;
+        break;
       case MonsterUnitMeshif:
-        if (wMessageIndex == 0xf2) {
-          goto mark_spoken;
+        if (wMessageIndex == 0xf2 || wMessageIndex == 0xf1) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      bNpcMatch = false;
-      if (wMessageIndex == 0xf1) {
-        bNpcMatch = true;
-      }
-
-      break;
+        break;
       case MonsterUnitFara:
-        if (wMessageIndex == 0x108) {
-          goto mark_spoken;
+        if (wMessageIndex == 0x108 || wMessageIndex == 0x107) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      bNpcMatch = false;
-      if (wMessageIndex == 0x107) {
-        bNpcMatch = true;
-      }
-
-      break;
+        break;
       case MonsterUnitDrognan:
-        if (wMessageIndex != 0x11e) {
-          bNpcMatch = false;
-          if (wMessageIndex == 0x11d) {
-            bNpcMatch = true;
-          }
-
-          break;
+        if (wMessageIndex == 0x11e || wMessageIndex == 0x11d) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      goto mark_spoken;
+        break;
       case MonsterUnitGreiz:
-        bNpcMatch = false;
-      if (wMessageIndex == 0xbe) {
-        bNpcMatch = true;
-      }
-
-      break;
+        if (wMessageIndex == 0xbe) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
+        }
+        break;
       case MonsterUnitWarrivAct2:
-        bNpcMatch = false;
-      if (wMessageIndex == 0xd7) {
-        bNpcMatch = true;
-      }
-
-      break;
-      default:
-        return;
+        if (wMessageIndex == 0xd7) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
+        }
+        break;
       case MonsterUnitLysander:
-        bNpcMatch = false;
-      if (wMessageIndex == 0x112) {
-        bNpcMatch = true;
-      }
-
-      break;
+        if (wMessageIndex == 0x112) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
+        }
+        break;
     }
-
-    if (!bNpcMatch) {
-      return;
-    }
-
-    mark_spoken:
-    PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
 }
 
 // A2Q5 "Sisters to the Slaughter" (or equivalent Act II quest) gossip callback (index 0): maps Act II NPC class IDs (Warriv, Greiz, Lysander, Drognan, Fara, Elzix, Geglash, Meshif) to expected player classes. If the player has not yet spoken with the NPC (PLAYER_CheckIfSpokenWithNPC), queues a class-matched (flag=1) or generic (flag=0) gossip message via AddGossipMessageOnMonster. Mirrors the Q37 pattern for Act II NPCs.
