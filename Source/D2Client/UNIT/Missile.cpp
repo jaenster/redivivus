@@ -5720,59 +5720,42 @@ void __fastcall MISSILE_CltDoFn06_FireWallMaker(D2UnitStrc * pUnit) {
 
 // Client per-frame handler for homing/seeking missiles (007). Confirms and validates the tracked target; periodically recalculates the path toward the target (every CltParam1 frames, default 5) when within collision distance 4–24. Removes the missile if in town. Falls through to Missiles_CltDoFunc_001 for standard motion.
 void __fastcall MISSILE_CltDoFn07_Homing(D2UnitStrc * pUnit) {
-    D2RoomStrc* pRoom;
-    BOOL bIsInTown;
-    uint32_t nTargetFlags;
-    D2UnitStrc* pUnit_01;
-    int bTargetInactive;
-    uint32_t bCanInteract;
-    int32_t nCollisionDist;
-    int nRecalcInterval;
-    D2MissilesTxt* pMissileTxt;
+    D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
-      D2UnitStrc* pUnit_00;
-      nRecalcInterval = pUnit->nClassId;
-      if (nRecalcInterval >= 0 && nRecalcInterval < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-        pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles;
-        if (pMissileTxt + nRecalcInterval) {
-          pUnit_00 = CUnit::MISSILE_GetOwnerUnit(pUnit);
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-          if (!bIsInTown) {
-            nTargetFlags = D2Common::Units::Missile::GetTargetX(pUnit);
-            if (nTargetFlags & 1) {
-              Path::ConfirmTarget(pUnit);
-              pUnit_01 = D2Common::PATH::DynamicPath::GetTargetUnit(pUnit->pPath.pDynamicPath);
-              if (pUnit_01) {
-                bTargetInactive = CUnit::IsActive(pUnit_01);
-                if (bTargetInactive || pUnit_00 && (bCanInteract = CUnit::CanInteractWith(pUnit_00, pUnit_01) , !bCanInteract)) {
-                  pUnit_01 = 0;
-                }
-              }
+      int nClassId = pUnit->nClassId;
+      pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    }
+    if (!pMissileTxt) {
+      MISSILE_RemoveClientSide(pUnit);
+      return;
+    }
 
-              nRecalcInterval = pMissileTxt[nRecalcInterval].CltParam1;
-              if (nRecalcInterval <= 0) {
-                nRecalcInterval = 5;
-              }
-              if (pUnit_01) {
-                nCollisionDist = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-                if (!(nCollisionDist % nRecalcInterval)) {
-                  nCollisionDist = D2Common::Collision::GetCollisionDistance(pUnit, pUnit_01);
-                  if (nCollisionDist >= 0x4 && nCollisionDist <= 0x18) {
-                    D2Common::PATH::DynamicPath::PATH_CalculatePath(pUnit->pPath.pDynamicPath, pUnit, 0);
-                  }
-                }
-              }
-            }
+    D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
+    if (D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(D2Common::Units::UNITS_GetRoom(pUnit))) {
+      MISSILE_RemoveClientSide(pUnit);
+      return;
+    }
 
-            MISSILE_CltDoFn01_BasicMissile(pUnit);
-            return;
-          }
+    if (D2Common::Units::Missile::GetTargetX(pUnit) & 1) {
+      Path::ConfirmTarget(pUnit);
+      D2UnitStrc* pTarget = D2Common::PATH::DynamicPath::GetTargetUnit(pUnit->pPath.pDynamicPath);
+      if (pTarget && (CUnit::IsActive(pTarget) || pOwner && !CUnit::CanInteractWith(pOwner, pTarget))) {
+        pTarget = 0;
+      }
+
+      int nRecalcInterval = pMissileTxt->CltParam1;
+      if (nRecalcInterval <= 0) {
+        nRecalcInterval = 5;
+      }
+      if (pTarget && !(D2Common::Units::Missile::GetRemainingFrames(pUnit) % nRecalcInterval)) {
+        int32_t nCollisionDist = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
+        if (nCollisionDist >= 0x4 && nCollisionDist <= 0x18) {
+          D2Common::PATH::DynamicPath::PATH_CalculatePath(pUnit->pPath.pDynamicPath, pUnit, 0);
         }
       }
     }
 
-    MISSILE_RemoveClientSide(pUnit);
+    MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
 // Client per-frame handler for missile 008. After InitSteps frames have elapsed, if the dynamic path reports a collision, spawns CltSubMissile1 at the current position with nSubLoopMult copies (CltParam1, min 1) and a custom init callback (MISSILE_InitializeVisual). Falls through to Missiles_CltDoFunc_001; removes client-side if missile data is invalid.
