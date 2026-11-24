@@ -320,23 +320,23 @@ template<> __declspec(noinline) inline void TSGrowableArray<CELLIST>::Destructor
     Storm::Source::SMem::SMemFree(this->m_data, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
 }
 
+static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g);
+
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
-    uint32_t uRequiredSize = nCount + this->m_count;
-    if (uRequiredSize <= this->m_alloc) {
+    nCount = nCount + this->m_count;
+    if (nCount <= this->m_alloc) {
       return;
     }
     if (bRound) {
-      uint32_t uNormalizeStep;
-      uNormalizeStep = this->m_chunk;
-      if (!uNormalizeStep) {
-        uNormalizeStep = this->CalcChunkSize(uRequiredSize);
+      uint32_t nGranularity = this->m_chunk;
+      if (!nGranularity) {
+        nGranularity = this->CalcChunkSize(nCount);
       }
-      if (uRequiredSize % uNormalizeStep) {
-        uRequiredSize = uNormalizeStep - uRequiredSize % uNormalizeStep + uRequiredSize;
-      }
+
+      nCount = D2_RoundUp(nCount, nGranularity);
     }
 
-    this->ReallocData(uRequiredSize);
+    this->ReallocData(nCount);
 }
 
 // stpl-orphan: a COMDAT copy in TSGrowableArray<TSExplicitList<CELLIST, -572662307>> that no member owns
@@ -473,18 +473,21 @@ template<> __declspec(noinline) inline void TSHashTable<CELLIST, HASHKEY_NONE>::
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
-    if (pNewEntry) {
-      TSLink<::TCELENTRY>* pTVar1;
-      pNewEntry->m_linktoslot.m_prevlink = 0;
-      pNewEntry->m_linktoslot.m_next = 0;
-      pNewEntry->m_linktofull.m_prevlink = 0;
-      pNewEntry->m_linktofull.m_next = 0;
-      pTVar1 = &pNewEntry->m_frames.m_terminator;
-      pTVar1->m_next = 0;
-      pTVar1->m_prevlink = pTVar1;
-      pNewEntry->m_frames.m_linkoffset = 0;
-      pNewEntry->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
+    ::CELLIST* pAlloc = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewEntry;
+    if (pAlloc) {
+      pAlloc->m_linktoslot.m_prevlink = 0;
+      pAlloc->m_linktoslot.m_next = 0;
+      pAlloc->m_linktofull.m_prevlink = 0;
+      pAlloc->m_linktofull.m_next = 0;
+      TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pFrames = &pAlloc->m_frames;
+      TSLink<::TCELENTRY>* pTerminator = &pFrames->m_terminator;
+      pTerminator->m_prevlink = 0;
+      pTerminator->m_next = 0;
+      pTerminator->m_prevlink = pTerminator;
+      pFrames->m_linkoffset = 0;
+      pFrames->m_terminator.m_next = ~(uintptr_t)pTerminator;
+      pNewEntry = pAlloc;
     } else {
       pNewEntry = 0;
     }
@@ -763,37 +766,33 @@ template<> void TSGrowableArray<CELLIST>::Reserve(uint32_t nCount, int32_t bRoun
 }
 
 template<> __declspec(noinline) inline ::CELLIST * TSGrowableArray<CELLIST>::New() {
-    uint32_t nAlignStep;
-    uint32_t nNextCount = this->m_count + 1;
-    if (nNextCount > this->m_alloc) {
-      nAlignStep = this->m_chunk;
-      if (!nAlignStep) {
-        nAlignStep = this->CalcChunkSize(nNextCount);
-      }
-      if (nNextCount % nAlignStep) {
-        nNextCount = nAlignStep - nNextCount % nAlignStep + nNextCount;
+    uint32_t nNeeded = this->m_count + 1;
+    if (nNeeded > this->m_alloc) {
+      uint32_t nGranularity = this->m_chunk;
+      if (!nGranularity) {
+        nGranularity = this->CalcChunkSize(nNeeded);
       }
 
-      this->ReallocData(nNextCount);
+      nNeeded = D2_RoundUp(nNeeded, nGranularity);
+      this->ReallocData(nNeeded);
     }
 
-    ::CELLIST* pNewNode = this->m_data + this->m_count;
-    if (pNewNode) {
-      TSLink<::TCELENTRY>* pTVar1;
-      pNewNode->m_linktoslot.m_prevlink = 0;
-      pNewNode->m_linktoslot.m_next = 0;
-      pNewNode->m_linktofull.m_prevlink = 0;
-      pNewNode->m_linktofull.m_next = 0;
-      pTVar1 = &pNewNode->m_frames.m_terminator;
-      pTVar1->m_next = 0;
-      pTVar1->m_prevlink = pTVar1;
-      pNewNode->m_frames.m_linkoffset = 0;
-      pNewNode->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
+    ::CELLIST* pNewEntry = this->m_data + this->m_count;
+    if (pNewEntry) {
+      pNewEntry->m_linktoslot.m_prevlink = 0;
+      pNewEntry->m_linktoslot.m_next = 0;
+      pNewEntry->m_linktofull.m_prevlink = 0;
+      pNewEntry->m_linktofull.m_next = 0;
+      TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pFrames = &pNewEntry->m_frames;
+      TSLink<::TCELENTRY>* pTerminator = &pFrames->m_terminator;
+      pTerminator->m_prevlink = 0;
+      pTerminator->m_next = 0;
+      pTerminator->m_prevlink = pTerminator;
+      pFrames->m_linkoffset = 0;
+      pFrames->m_terminator.m_next = ~(uintptr_t)pTerminator;
     }
 
-    nNextCount = this->m_count;
-    this->m_count = nNextCount + 1;
-    return this->m_data + nNextCount;
+    return &this->m_data[this->m_count++];
 }
 
 template<> void TSGrowableArray<CELLIST>::ReserveNoRound(uint32_t nCount) {
