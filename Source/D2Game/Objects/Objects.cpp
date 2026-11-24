@@ -1089,12 +1089,11 @@ void __fastcall Objects_InitFn11_TownPortal(D2ObjectInitFnArg * pInitArg) {
 }
 
 void __fastcall Objects_InitFn51_TrappedSoul(D2ObjectInitFnArg * pInitArg) {
-    D2UnitStrc* pUnit = pInitArg->pObject;
-    if (!(pUnit && (pUnit->eAnimMode.ePlayerMode == Walk || pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral))) {
+    if (GetAnimModeInline(pInitArg->pObject) != Walk && GetAnimModeInline(pInitArg->pObject) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
 
-    GAME::Event::SetEvent(pInitArg->pGame, pUnit, 9, pInitArg->pGame->dwGameFrame + 0x23, 0, 0);
+    GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 9, pInitArg->pGame->dwGameFrame + 0x23, 0, 0);
 }
 
 static BOOL __stdcall ROOM_CheckSpawnCollision(D2RoomStrc * pRoom, uint32_t nSizeY, int * pnRoomCoords, int * pnSpawnCoord, uint32_t nSizeX) {
