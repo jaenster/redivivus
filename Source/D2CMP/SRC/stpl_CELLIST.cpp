@@ -374,19 +374,20 @@ template<> __attribute__((noinline)) inline void TSExplicitList<CELLIST, -572662
 }
 
 template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::UnlinkAll() {
-    TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>** pPrev;
-    intptr_t nBucketIdx;
-    TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* nNext;
-    while ((nBucketIdx = this->m_terminator.m_next) > 0) {
-      TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pBackLink;
-      nNext = *(TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)(this->m_linkoffset + nBucketIdx);
-      pBackLink = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>*)(this->m_linkoffset + nBucketIdx);
-      if (nNext) {
-        pPrev = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)D2_StormNextLink(pBackLink, -1);
-        *pPrev = nNext;
-        pBackLink->m_prevlink->m_next = pBackLink->m_next;
-        pBackLink->m_prevlink = 0;
-        pBackLink->m_next = 0;
+    while (true) {
+      intptr_t nNode = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nNode) {
+        break;
+      }
+
+      TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pLink = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>*)(this->m_linkoffset + nNode);
+      TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>** ppNextBack = (TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
     }
 }
