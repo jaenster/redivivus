@@ -766,37 +766,33 @@ template<> void TSGrowableArray<CELLIST>::Reserve(uint32_t nCount, int32_t bRoun
 }
 
 template<> __attribute__((noinline)) inline ::CELLIST * TSGrowableArray<CELLIST>::New() {
-    uint32_t nAlignStep;
-    uint32_t nNextCount = this->m_count + 1;
-    if (nNextCount > this->m_alloc) {
-      nAlignStep = this->m_chunk;
-      if (!nAlignStep) {
-        nAlignStep = this->CalcChunkSize(nNextCount);
-      }
-      if (nNextCount % nAlignStep) {
-        nNextCount = nAlignStep - nNextCount % nAlignStep + nNextCount;
+    uint32_t nNeeded = this->m_count + 1;
+    if (nNeeded > this->m_alloc) {
+      uint32_t nGranularity = this->m_chunk;
+      if (!nGranularity) {
+        nGranularity = this->CalcChunkSize(nNeeded);
       }
 
-      this->ReallocData(nNextCount);
+      nNeeded = D2_RoundUp(nNeeded, nGranularity);
+      this->ReallocData(nNeeded);
     }
 
-    ::CELLIST* pNewNode = this->m_data + this->m_count;
-    if (pNewNode) {
-      TSLink<::TCELENTRY>* pTVar1;
-      pNewNode->m_linktoslot.m_prevlink = 0;
-      pNewNode->m_linktoslot.m_next = 0;
-      pNewNode->m_linktofull.m_prevlink = 0;
-      pNewNode->m_linktofull.m_next = 0;
-      pTVar1 = &pNewNode->m_frames.m_terminator;
-      pTVar1->m_next = 0;
-      pTVar1->m_prevlink = pTVar1;
-      pNewNode->m_frames.m_linkoffset = 0;
-      pNewNode->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
+    ::CELLIST* pNewEntry = this->m_data + this->m_count;
+    if (pNewEntry) {
+      pNewEntry->m_linktoslot.m_prevlink = 0;
+      pNewEntry->m_linktoslot.m_next = 0;
+      pNewEntry->m_linktofull.m_prevlink = 0;
+      pNewEntry->m_linktofull.m_next = 0;
+      TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pFrames = &pNewEntry->m_frames;
+      TSLink<::TCELENTRY>* pTerminator = &pFrames->m_terminator;
+      pTerminator->m_prevlink = 0;
+      pTerminator->m_next = 0;
+      pTerminator->m_prevlink = pTerminator;
+      pFrames->m_linkoffset = 0;
+      pFrames->m_terminator.m_next = ~(uintptr_t)pTerminator;
     }
 
-    nNextCount = this->m_count;
-    this->m_count = nNextCount + 1;
-    return this->m_data + nNextCount;
+    return &this->m_data[this->m_count++];
 }
 
 template<> void TSGrowableArray<CELLIST>::ReserveNoRound(uint32_t nCount) {
