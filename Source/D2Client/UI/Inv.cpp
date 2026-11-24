@@ -1803,8 +1803,6 @@ static void __stdcall INV_FormatReqDexText(D2ItemsTxt * pItemsTxt, int32_t nReqA
 }
 
 static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat eMinDmgStat, eD2UnitStat eMaxDmgStat, int * pnOutMin, int * pnOutMax, int * pbOutModified, D2UnitStrc * pItem) {
-    int32_t nUnit;
-    D2UnitStrc* pStatOwner = pUnit;
     *pnOutMin = 1;
     *pnOutMax = 2;
     if (!(pUnit && pItem)) {
@@ -1812,54 +1810,49 @@ static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat 
     }
 
     uint32_t nPrevStatActive = 0;
-    D2UnitStrc* pOwnerUnit = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItemToDescribe, &nPrevStatActive);
-    if (pOwnerUnit && pOwnerUnit != pStatOwner) {
-      pStatOwner = pOwnerUnit;
-      pUnit = pOwnerUnit;
+    D2UnitStrc* pOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItemToDescribe, &nPrevStatActive);
+    BOOL bHasOwner = pOwner != nullptr;
+    if (pOwner && pOwner != pUnit) {
+      pUnit = pOwner;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pStatOwner, pItem, 1);
+    D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pItem, 1);
     int nMinDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, eMinDmgStat, 0);
     int nMaxDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, eMaxDmgStat, 0);
-    if (!pOwnerUnit) {
-      D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pStatOwner, pItem);
+    if (!bHasOwner) {
+      D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pItem);
     } else {
-      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pStatOwner, pItem, nPrevStatActive);
+      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pItem, nPrevStatActive);
     }
 
-    int32_t nServerMin = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pItem, eMinDmgStat, 0);
-    int32_t nServerMax = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pItem, eMaxDmgStat, 0);
-    if (nServerMin < nMinDamage || nServerMax < nMaxDamage) {
+    int nBaseMinDamage = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pItem, eMinDmgStat, 0);
+    int nBaseMaxDamage = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pItem, eMaxDmgStat, 0);
+    if (nBaseMinDamage < nMinDamage || nBaseMaxDamage < nMaxDamage) {
       *pbOutModified = 1;
     }
     if (nMaxDamage <= nMinDamage) {
       nMaxDamage = nMinDamage;
     }
 
-    int nByTimeBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_bytime, 0);
-    if (nByTimeBonus && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x110 && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-88128 && pUnit->pDrlgAct) {
-      eMinDmgStat = UNITSTAT_strength;
-      nServerMin = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, (int32_t*)&eMinDmgStat);
-      nServerMin = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nByTimeBonus, nServerMin, eMinDmgStat, nullptr, nullptr, nullptr);
-      nMaxDamage += nServerMin;
-      if (nServerMin) {
+    int nMaxDamageByTime = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_bytime, 0);
+    if (nMaxDamageByTime && (int)UNITSTAT_item_maxdamage_bytime < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && &D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[UNITSTAT_item_maxdamage_bytime] && pUnit->pDrlgAct) {
+      int nBaseTime = 0;
+      int nPeriod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+      int nTimeBonus = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nMaxDamageByTime, nPeriod, nBaseTime, nullptr, nullptr, nullptr);
+      nMaxDamage += nTimeBonus;
+      if (nTimeBonus) {
         *pbOutModified = 1;
       }
     }
 
-    nByTimeBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_percent_bytime, 0);
-    if (nByTimeBonus && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x111 && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-88452) {
-      D2DrlgActStrc** ppDVar1;
-      ppDVar1 = &pUnit->pDrlgAct;
-      if (*ppDVar1) {
-        nUnit = 0x0;
-        nServerMin = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(*ppDVar1, (int32_t*)&nUnit);
-        nServerMin = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nByTimeBonus, nServerMin, nUnit, nullptr, nullptr, nullptr);
-        nServerMax = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDamage, nServerMin, 100);
-        nMaxDamage += nServerMax;
-        if (nServerMin) {
-          *pbOutModified = 1;
-        }
+    int nMaxDamagePercentByTime = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_percent_bytime, 0);
+    if (nMaxDamagePercentByTime && (int)UNITSTAT_item_maxdamage_percent_bytime < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && &D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[UNITSTAT_item_maxdamage_percent_bytime] && pUnit->pDrlgAct) {
+      int nBaseTime = 0;
+      int nPeriod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+      int nTimeBonus = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nMaxDamagePercentByTime, nPeriod, nBaseTime, nullptr, nullptr, nullptr);
+      nMaxDamage += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDamage, nTimeBonus, 100);
+      if (nTimeBonus) {
+        *pbOutModified = 1;
       }
     }
 
