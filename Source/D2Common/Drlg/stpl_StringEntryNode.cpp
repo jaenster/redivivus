@@ -182,19 +182,20 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Delete(::StringEntry
 }
 
 template<> __attribute__((noinline)) inline void TSExplicitList<StringEntryNode, -572662307>::UnlinkAll() {
-    TSLink<::StringEntryNode>** pPrevLink;
-    TSLink<::StringEntryNode>* pHeadEntry;
-    intptr_t nSlotOffset;
-    while ((nSlotOffset = this->m_terminator.m_next) > 0) {
-      TSLink<::StringEntryNode>* pSlot;
-      pHeadEntry = *(TSLink<::StringEntryNode>**)(this->m_linkoffset + nSlotOffset);
-      pSlot = (TSLink<::StringEntryNode>*)(this->m_linkoffset + nSlotOffset);
-      if (pHeadEntry) {
-        pPrevLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pSlot, -1);
-        *pPrevLink = pHeadEntry;
-        pSlot->m_prevlink->m_next = pSlot->m_next;
-        pSlot->m_prevlink = 0;
-        pSlot->m_next = 0;
+    while (true) {
+      intptr_t nNode = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
+      if (!nNode) {
+        break;
+      }
+
+      TSLink<::StringEntryNode>* pLink = (TSLink<::StringEntryNode>*)(this->m_linkoffset + nNode);
+      TSLink<::StringEntryNode>* pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<::StringEntryNode>** ppNextBack = (TSLink<::StringEntryNode>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
     }
 }
