@@ -147,17 +147,7 @@ void __stdcall SetCurrentFrame(D2UnitStrc * pUnit, int32_t nCurrentFrame) {
     if (!pUnitDataMissile) {
       return;
     }
-    if (nCurrentFrame > -0x8000) {
-      if (nCurrentFrame >= 0x7fff) {
-        nCurrentFrame = 0x7fff;
-      }
-
-      pUnitDataMissile->nCurrentFrame = (int16_t)nCurrentFrame;
-      return;
-    }
-
-    pUnitDataMissile->nCurrentFrame = -0x8000;
-    return;
+    pUnitDataMissile->nCurrentFrame = (int16_t)min(max(nCurrentFrame, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 }
 
 int32_t __stdcall GetCurrentFrame(D2UnitStrc * pUnit) {
