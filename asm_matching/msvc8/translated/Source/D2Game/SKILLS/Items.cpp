@@ -286,17 +286,12 @@ void __fastcall StaffMod(D2UnitStrc * pUnit, D2ItemGenContextStrc * pItemData) {
 
     eD2Skills eFirstClassSkill = D2Common::Skills::SKILLS_GetClassSkillByIndex(nClassId, 0);
     eD2Skills eSkill = pItemData->nItemLevel;
-    uint16_t wItemVersion = D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit);
-    if (!wItemVersion) {
+    if (!D2Common::ITEMS::Items::ITEM_GetItemData_wItemVersion(pUnit)) {
       ITEMMOD_RollStaffModSkills(pUnit, eSkill, eFirstClassSkill);
       return;
     }
-    if ((pItemData->nFlags & ITEMFLAG_REMOVED) != ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) {
-      STAFFMOD_RollStaffModSkills(pUnit, eSkill, eFirstClassSkill, pItemData->nItemLevel);
-      return;
-    }
 
-    STAFFMOD_RollStaffModSkills(pUnit, eSkill, eFirstClassSkill, 0);
+    STAFFMOD_RollStaffModSkills(pUnit, eSkill, eFirstClassSkill, pItemData->nFlags & ITEMFLAG_REMOVED ? pItemData->nItemLevel : 0);
 }
 
 // Rolls one magic affix for items with wItemVersion 0 (pre-1.08 legacy items): counts eligible rows and picks one uniformly with RollBetweenMinAndMax on the item seed. Called by the version dispatchers 0x005c18e0/0x005c1940 and the rare/prefix rollers.
