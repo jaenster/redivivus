@@ -19,51 +19,30 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 #endif
 
 template<> __declspec(noinline) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {
-    TSExplicitList<::MappingEntryNode, -572662307>* pTVar1;
-    ::MappingEntryNode* pNode;
-    TSLink<::MappingEntryNode>* pSlot;
-    TSLink<::MappingEntryNode>** pPrevLink;
-    TSLink<::MappingEntryNode>* pHeadEntry;
-    intptr_t nNextLink;
-    int nLinkOffset;
     this->nFullnessIndicator = 0;
     this->tFullList.UnlinkAll();
-    uint32_t iBucket = 0;
-    if (this->tSlotListArray.m_count <= 0) {
-      return;
-    }
-
-    do {
+    for (uint32_t i = 0; i < this->tSlotListArray.m_count; i++) {
       while (true) {
-        pTVar1 = this->tSlotListArray.m_data;
-        pNode = *(::MappingEntryNode**)&pTVar1[iBucket].m_terminator.m_next;
-        if ((intptr_t)pNode <= 0) {
+        TSExplicitList<::MappingEntryNode, -572662307>* pList = &this->tSlotListArray.m_data[i];
+        ::MappingEntryNode* pNode = pList->m_terminator.m_next > 0 ? (::MappingEntryNode*)pList->m_terminator.m_next : nullptr;
+        if (!pNode) {
           break;
         }
         if (bUnlinkOnly) {
-          nLinkOffset = pTVar1[iBucket].m_linkoffset;
-          pHeadEntry = *(TSLink<::MappingEntryNode>**)((intptr_t)&pNode->m_hashval + nLinkOffset);
-          pSlot = (TSLink<::MappingEntryNode>*)((intptr_t)&pNode->m_hashval + nLinkOffset);
-          if (pHeadEntry) {
-            nNextLink = pSlot->m_next;
-            if (nNextLink < 0) {
-              pPrevLink = (TSLink<::MappingEntryNode>**)~nNextLink;
-            } else {
-              pPrevLink = (TSLink<::MappingEntryNode>**)((char*)pSlot + (nNextLink - pHeadEntry->m_next));
-            }
-
-            *pPrevLink = pHeadEntry;
-            pSlot->m_prevlink->m_next = pSlot->m_next;
-            pSlot->m_prevlink = 0;
-            pSlot->m_next = 0;
+          TSLink<::MappingEntryNode>* pLink = (TSLink<::MappingEntryNode>*)((intptr_t)pNode + pList->m_linkoffset);
+          TSLink<::MappingEntryNode>* pPrevLink = pLink->m_prevlink;
+          if (pPrevLink) {
+            TSLink<::MappingEntryNode>** ppNextBack = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pLink, -1);
+            *ppNextBack = pPrevLink;
+            pLink->m_prevlink->m_next = pLink->m_next;
+            pLink->m_prevlink = 0;
+            pLink->m_next = 0;
           }
         } else {
           vc8_thiscall(this->pVtable->InternalDelete)(this, pNode);
         }
       }
-
-      iBucket++;
-    } while (iBucket < this->tSlotListArray.m_count);
+    }
 }
 
 // stpl-orphan: a COMDAT copy in TSExplicitList<MappingEntryNode, -572662307> that no member owns

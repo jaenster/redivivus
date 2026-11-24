@@ -520,25 +520,6 @@ namespace D2Client { namespace GAME { namespace Game {
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-char s___AUSGAMEDATA___0070f56c[16] = {
-    '.',
-    '?',
-    'A',
-    'U',
-    'S',
-    'G',
-    'A',
-    'M',
-    'E',
-    'D',
-    'A',
-    'T',
-    'A',
-    '@',
-    '@',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AUSGAMEDATA___0070f56c, "D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c");
-
 // also labelled: lpCriticalSection_QSERVERLoopRelated, lpCriticalSection_007a0468
 _RTL_CRITICAL_SECTION gHostGameStateCs = {0}; D2_GLOBAL_GUARD(gHostGameStateCs, "D2Client::GAME::Game::gHostGameStateCs");
 
@@ -561,57 +542,6 @@ namespace D2Client {
 // Initialized data (arrays, structs, tables)
 // =============================================================================
 
-char s___AV__TSExplicitList_USGAMEDATA__0070f584[48] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'E',
-    'x',
-    'p',
-    'l',
-    'i',
-    'c',
-    'i',
-    't',
-    'L',
-    'i',
-    's',
-    't',
-    '@',
-    'U',
-    'S',
-    'G',
-    'A',
-    'M',
-    'E',
-    'D',
-    'A',
-    'T',
-    'A',
-    '@',
-    '@',
-    '$',
-    '0',
-    '?',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'C',
-    'D',
-    '@',
-    '@',
-    '@',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSExplicitList_USGAMEDATA__0070f584, "D2Client::s___AV__TSExplicitList_USGAMEDATA__0070f584");
-
 D2ClientLightPulseStrc gRoomLightPulse = {0}; D2_GLOBAL_GUARD(gRoomLightPulse, "D2Client::gRoomLightPulse");
 
 // =============================================================================
@@ -630,65 +560,6 @@ namespace D2Client { namespace GAME { namespace Record {
 // =============================================================================
 // Initialized data (arrays, structs, tables)
 // =============================================================================
-
-char s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4[56] = {
-    '.',
-    '?',
-    'A',
-    'V',
-    '?',
-    '$',
-    'T',
-    'S',
-    'H',
-    'a',
-    's',
-    'h',
-    'O',
-    'b',
-    'j',
-    'e',
-    'c',
-    't',
-    'C',
-    'h',
-    'u',
-    'n',
-    'k',
-    '@',
-    'U',
-    'S',
-    'G',
-    'A',
-    'M',
-    'E',
-    'D',
-    'A',
-    'T',
-    'A',
-    '@',
-    '@',
-    'V',
-    'H',
-    'A',
-    'S',
-    'H',
-    'K',
-    'E',
-    'Y',
-    '_',
-    'N',
-    'O',
-    'N',
-    'E',
-    '@',
-    '@',
-    '@',
-    '@',
-    '\x00',
-    '\x00',
-    '\x00'
-}; D2_GLOBAL_GUARD(s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, "D2Client::GAME::Record::s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4");
 
 }}} // namespace D2Client::GAME::Record
 

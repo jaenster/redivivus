@@ -930,7 +930,7 @@ void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
                          shared record fresh-complete once council is fully cleared */ QUEST_SetQuestRecordState(pQuestData->pGame, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
         }
       }
-    } else if (pTargetUnit) {
+    } else if (pQuestArgs->pTarget) {
       pTargetUnit->eUnitFlags |= UNITFLAG_NOTC;
       return;
     }

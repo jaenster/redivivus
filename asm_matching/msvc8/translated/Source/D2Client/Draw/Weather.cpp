@@ -951,11 +951,12 @@ static void WEATHER_UpdateParticleCount(D2SeedStrc * pSeed) {
 
     int nChangeRate = nWeatherParticleCountAct5 != 0 ? 0x1U : 0x2U;
     if (gnWeatherRngParam < gnWeatherParticleOffsetYModulo) {
-      gnWeatherParticleOffsetYModulo -= nChangeRate;
-      if (gnWeatherRngParam > gnWeatherParticleOffsetYModulo) {
+      if (gnWeatherRngParam > gnWeatherParticleOffsetYModulo - nChangeRate) {
         gnWeatherParticleOffsetYModulo = gnWeatherRngParam;
+      } else {
+        gnWeatherParticleOffsetYModulo -= nChangeRate;
       }
-    } else if (gnWeatherParticleOffsetYModulo < gnWeatherRngParam) {
+    } else if (gnWeatherRngParam > gnWeatherParticleOffsetYModulo) {
       nChangeRate += gnWeatherParticleOffsetYModulo;
       gnWeatherParticleOffsetYModulo = gnWeatherRngParam;
       if (gnWeatherRngParam >= nChangeRate) {

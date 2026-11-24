@@ -2199,7 +2199,7 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
             dwRealmToken = pRemovedClient->dwPlayerData;
             bUnlock = pRemovedClient->dwSave;
             wCharLevel = pRemovedClient->nCharacterStatus;
-            BattleNetServerService->fpLeaveGame(nStrCmp, nNameHashBucket, nExpHi, nExpHiShift, (int)wCharLevel, pRemovedClient->szCharName, (uint8_t*)&pRemovedClient->nStartSkill, bUnlock, 0, 0, pRemovedClient->szAccName, dwRealmToken, 0, 0, 0, 0, 0, (uint8_t*)&pRemovedClient->ftFileTime);
+            BattleNetServerService->fpLeaveGame(&pRemovedClient->pRealm, (int)pGame->nServerToken, nStrCmp, nNameHashBucket, nExpHi, nExpHiShift, (int)wCharLevel, pRemovedClient->szCharName, (uint8_t*)&pRemovedClient->nStartSkill, bUnlock, 0, 0, pRemovedClient->szAccName, dwRealmToken, 0, 0, 0, 0, 0, (uint8_t*)&pRemovedClient->ftFileTime);
           }
         }
       } else {
@@ -2218,7 +2218,7 @@ void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t b
             nExpHi = 0;
             nNameHashBucket = 0;
             nStrCmp = 0;
-            BattleNetServerService->fpLeaveGame(nStrCmp, nNameHashBucket, nExpHi, nExpHiShift, (int)wCharLevel, pRemovedClient->szCharName, (uint8_t*)&pRemovedClient->nStartSkill, bUnlock, 0, 0, pRemovedClient->szAccName, dwRealmToken, 0, 0, 0, 0, 0, (uint8_t*)&pRemovedClient->ftFileTime);
+            BattleNetServerService->fpLeaveGame(&pRemovedClient->pRealm, (int)pGame->nServerToken, nStrCmp, nNameHashBucket, nExpHi, nExpHiShift, (int)wCharLevel, pRemovedClient->szCharName, (uint8_t*)&pRemovedClient->nStartSkill, bUnlock, 0, 0, pRemovedClient->szAccName, dwRealmToken, 0, 0, 0, 0, 0, (uint8_t*)&pRemovedClient->ftFileTime);
           }
         }
       }

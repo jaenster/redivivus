@@ -81,6 +81,89 @@ pub fn bareName(name0: []const u8) []const u8 {
     return name[cut..];
 }
 
+/// `name` with every template argument list emptied: `C<A, D<E>>::f` -> `C<>::f`.
+fn collapseTemplateArgs(name: []const u8) ![]const u8 {
+    var out: std.ArrayList(u8) = .empty;
+    var depth: usize = 0;
+    for (name) |ch| {
+        if (ch == '<') {
+            if (depth == 0) try out.append(gpa, '<');
+            depth += 1;
+        } else if (ch == '>' and depth > 0) {
+            depth -= 1;
+            if (depth == 0) try out.append(gpa, '>');
+        } else if (depth == 0) try out.append(gpa, ch);
+    }
+    return out.items;
+}
+
+/// The innermost-but-one scope of `q` that is a template instantiation: for
+/// `C<A, B>::f` it is `C<A, B>`. Null when the class is no template.
+fn templateClass(q: []const u8) ?[]const u8 {
+    const name = q[0 .. std.mem.indexOfScalar(u8, q, '(') orelse q.len];
+    var depth: i64 = 0;
+    var start: usize = 0;
+    var last: ?[]const u8 = null;
+    var i: usize = 0;
+    while (i < name.len) : (i += 1) {
+        const ch = name[i];
+        if (ch == '<') depth += 1 else if (ch == '>') depth -= 1 else if (ch == ':' and depth == 0 and std.mem.startsWith(u8, name[i..], "::")) {
+            last = name[start..i];
+            start = i + 2;
+            i += 1;
+        }
+    }
+    const cls = last orelse return null;
+    return if (std.mem.indexOfScalar(u8, cls, '<') != null) cls else null;
+}
+
+/// The first template argument of `c` (`C<A, B>` -> `A`), trimmed.
+fn firstTemplateArg(cls: []const u8) []const u8 {
+    const open = std.mem.indexOfScalar(u8, cls, '<') orelse return "";
+    var depth: i64 = 0;
+    var i = open + 1;
+    while (i < cls.len) : (i += 1) {
+        const ch = cls[i];
+        if (ch == '<') depth += 1 else if (ch == '>') {
+            if (depth == 0) break;
+            depth -= 1;
+        } else if (ch == ',' and depth == 0) break;
+    }
+    return std.mem.trim(u8, cls[open + 1 .. i], " ");
+}
+
+/// The ways MSVC mangles template argument `a` at the start of an argument list
+/// (`S` -> `US@@`/`VS@@`, `D<S>` -> `V?$D@US@@`, `S*` -> `PAUS@@`); empty for an
+/// argument that pins nothing down (a number).
+fn argManglings(a: []const u8, out: *std.ArrayList([]const u8)) !void {
+    if (a.len == 0 or a[0] == '-' or std.ascii.isDigit(a[0])) return try out.append(gpa, "");
+    if (std.mem.indexOfScalar(u8, a, '<')) |lt| {
+        var subs: std.ArrayList([]const u8) = .empty;
+        try argManglings(firstTemplateArg(a), &subs);
+        const head = std.mem.trim(u8, a[0..lt], " ");
+        for (subs.items) |sub| for ([_][]const u8{ "V", "U" }) |k| try out.append(gpa, try fmt("{s}?${s}@{s}", .{ k, head, sub }));
+        return;
+    }
+    if (std.mem.endsWith(u8, a, "*")) {
+        const t = std.mem.trim(u8, a[0 .. a.len - 1], " ");
+        for ([_][]const u8{ "PAU", "PAV" }) |k| try out.append(gpa, try fmt("{s}{s}@@", .{ k, t }));
+        return;
+    }
+    for ([_][]const u8{ "U", "V" }) |k| try out.append(gpa, try fmt("{s}{s}@@", .{ k, a }));
+}
+
+/// Whether `symbol` mangles the class `q` names with `q`'s first template argument.
+/// True when `q`'s class is no template.
+fn templateArgsAgree(symbol: []const u8, q: []const u8) !bool {
+    const cls = templateClass(q) orelse return true;
+    const head = std.mem.trim(u8, cls[0 .. std.mem.indexOfScalar(u8, cls, '<').?], " ");
+    const head_last = if (std.mem.lastIndexOf(u8, head, "::")) |p| head[p + 2 ..] else head;
+    var alts: std.ArrayList([]const u8) = .empty;
+    try argManglings(firstTemplateArg(cls), &alts);
+    for (alts.items) |alt| if (std.mem.indexOf(u8, symbol, try fmt("?${s}@{s}", .{ head_last, alt })) != null) return true;
+    return false;
+}
+
 /// re.search(r'_(00[4-6][0-9a-f]{5}|[4-6][0-9a-f]{5})$', name)
 fn nameAddress(name: []const u8) ?u32 {
     const H = struct {
@@ -611,6 +694,26 @@ pub const Matcher = struct {
             exact = i;
         };
         if (ne == 1) return exact;
+        // A COMDAT template member: our names print the template as `C<>`, the source
+        // map spells its arguments; compare the two with the arguments left out, and
+        // tell the instantiations apart by the first argument the symbol mangles.
+        if (std.mem.indexOfScalar(u8, q, '<') != null) {
+            const want = try collapseTemplateArgs(q);
+            var member: ?u32 = null;
+            var nm: usize = 0;
+            for (cands) |i| {
+                const full = m.fns[i].f.name;
+                const have = try collapseTemplateArgs(full[0 .. std.mem.indexOfScalar(u8, full, '(') orelse full.len]);
+                if (std.mem.eql(u8, have, want) or
+                    (std.mem.endsWith(u8, have, want) and std.mem.endsWith(u8, have[0 .. have.len - want.len], "::")))
+                {
+                    if (!try templateArgsAgree(m.fns[i].f.symbol, q)) continue;
+                    nm += 1;
+                    member = i;
+                }
+            }
+            if (nm == 1) return member;
+        }
         const ns = if (std.mem.endsWith(u8, q, n)) q[0 .. q.len - n.len] else q;
         const suffix = try fmt("::{s}", .{b});
         var near: ?u32 = null;

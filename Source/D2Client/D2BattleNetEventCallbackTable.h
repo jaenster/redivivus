@@ -79,12 +79,12 @@ typedef void (__fastcall *fnUpdateGameInformation)(WORD nGameId, char * szCharNa
 #define D2_DEFINED_D2BattleNetEventCallbackTable
 struct D2BattleNetEventCallbackTable {
     /* 0x00 */ void (__fastcall *fpCloseGame)(uint32_t, uint32_t, uint32_t, uint32_t);
-    /* 0x04 */ void (*fpLeaveGame)(int, int, int, int, int, void *, void *, int, int, int, void *, int, int, int, int, int, int, void *);
+    /* 0x04 */ void (__fastcall *fpLeaveGame)(uint32_t *, int, int, int, int, int, int, void *, void *, int, int, int, void *, int, int, int, int, int, int, void *); // ECX &pClient->pRealm, EDX pGame->nServerToken; 18 stack arguments, callee pops (CleanUpClient 0053a1bb)
     /* 0x08 */ void (__fastcall *fpGetDatabaseCharacter)(struct D2ClientStrc *, LPCSTR, DWORD, LPCSTR);
     /* 0x0C */ void (__fastcall *fpSaveDatabaseCharacter)(uint32_t *, char *, char *, void *, int, uint32_t); // offset 0x0C - saves character data to BNet database with account ID, save buffer, size, token
     /* 0x10 */ uint8_t * fpServerLogMessage;
     /* 0x14 */ void (__fastcall *fpEnterGame)(uint16_t, char *, uint16_t, uint32_t, uint32_t);
-    /* 0x18 */ int (*fpFindPlayerToken)(int, void *, void *, void *, void *, void *, void *);
+    /* 0x18 */ int (__fastcall *fpFindPlayerToken)(char *, uint32_t, int, void *, void *, void *, void *, void *, void *); // ECX szCharName, EDX game hash; 7 stack arguments, callee pops (NET_D2GS_SERVER_IsValidChecks 0052c795)
     /* 0x1C */ uint8_t * fpSaveDatabaseGuild;
     /* 0x20 */ void (__fastcall *fpUnlockDatabaseCharacter)(uint32_t *, char *, char *);
     /* 0x24 */ uint8_t * fpReserved1;

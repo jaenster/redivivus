@@ -328,7 +328,7 @@ BOOL __stdcall DRLGENV_UpdatePeriodOfDay(D2DrlgActStrc * pDrlgAct, D2RoomStrc * 
     int nNextTimeIndexWrapped;
     int bIsEclipse;
     D2DrlgEnvironmentStrc* pEnv = DUNGEON::Dungeon::DRLGENV_GetEnvironmentFromAct(pDrlgAct);
-    int nPrevEnvironmentData = pEnv->nEnvironmentData;
+    int nPrevEnvironmentData = pEnv->nEnvironmentData; // steer-ok: the value before the updates, compared after them
     eD2LevelId nDrlgAct = (eD2LevelId)0x0;
     if (pRoom) {
       nDrlgAct = DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);

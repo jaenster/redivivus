@@ -549,34 +549,32 @@ int __stdcall GetItemType() {
 }
 
 void __stdcall UI_HandleMousePositionUpdate(D2UIMouseMsgStrc * pMsg) {
-    int32_t nMaxFrames;
-    int nClampedX;
-    int nClampedY;
-    int nSavedMouseX;
-    MouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
-    MouseY = (int)pMsg->uLParam.sMousePos.nMouseY;
+    int nMouseX;
+    int nMouseY;
+    BOOL bClamped;
+    // steer-ok: the original reads both coordinates before its first global store
+    nMouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
+    nMouseY = (int)pMsg->uLParam.sMousePos.nMouseY;
     gnCursorInitialized = 1;
-    uint32_t bWindowActive = D2gfx::D2GFX::D2GFX_IsWindowActive();
-    if (bWindowActive) {
-      int nMaxX;
-      bWindowActive = Fog::Src::ErrorManager::GetErrorState();
-      nClampedX = MouseX;
-      if (!bWindowActive) {
-        nMaxX = UI::ui::ScreenSizeX - 1;
-        if (MouseX > nMaxX) {
-          MouseX = nMaxX;
-        }
-
-        nSavedMouseX = MouseX;
-        nClampedY = UI::Inv::ScreenSizeY - 1;
-        if (MouseY > UI::Inv::ScreenSizeY - 1 || (nClampedY = MouseY , nMaxX < nClampedX)) {
-          /* int Y for SetCursorPos */ MouseY = nClampedY;
-          nClampedX = MouseY;
-          /* int X for SetCursorPos */ SetCursorPos(MouseX, MouseY);
-          MouseX = nSavedMouseX;
-          MouseY = nClampedX;
-          return;
-        }
+    MouseX = nMouseX;
+    MouseY = nMouseY;
+    if (D2gfx::D2GFX::D2GFX_IsWindowActive() && !Fog::Src::ErrorManager::GetErrorState()) {
+      bClamped = FALSE;
+      if (MouseX > UI::ui::ScreenSizeX - 1) {
+        MouseX = UI::ui::ScreenSizeX - 1;
+        bClamped = TRUE;
+      }
+      if (MouseY > UI::Inv::ScreenSizeY - 1) {
+        MouseY = UI::Inv::ScreenSizeY - 1;
+        bClamped = TRUE;
+      }
+      if (bClamped) {
+        nMouseY = MouseY;
+        nMouseX = MouseX;
+        /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(MouseX, MouseY);
+        MouseX = nMouseX;
+        MouseY = nMouseY;
+        return;
       }
     }
 
@@ -586,8 +584,7 @@ void __stdcall UI_HandleMousePositionUpdate(D2UIMouseMsgStrc * pMsg) {
       ItemTypeOnHand = 3;
       nCursorDataIndex = 2;
       gCursorAnimationFrame = 0;
-      nMaxFrames = UI_GetCursorMaxFrames(2);
-      gCursorAnimationFrame = nMaxFrames - 0x100;
+      gCursorAnimationFrame = UI_GetCursorMaxFrames(2) - 0x100;
     }
 
     pMsg->bHandled = 0;

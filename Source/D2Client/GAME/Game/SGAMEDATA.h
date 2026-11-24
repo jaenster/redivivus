@@ -231,3 +231,5 @@ namespace D2Client::GAME::Game {
 #endif // D2_MODULE_D2Client
 
 } // namespace D2Client::GAME::Game
+
+#include "Source/D2Client/GAME/Game/SGAMEDATA.inline.h"

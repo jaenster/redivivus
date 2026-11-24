@@ -8062,8 +8062,6 @@ BOOL __stdcall MAINMENUS_OnPressReturnToMainMenu_ForCreditsAndMainMenuAgain(D2Co
 
 // Password change confirmation handler. Reads text inputs, compares new password fields, validates length (2-20 chars). Checks gbPasswordChangeInProgress state, calls launcher EnterEmailMessagePumper on success.
 BOOL __stdcall MAINMENU_HandlePasswordChange(D2ControlStrc * pControl) {
-    int nPumpResult;
-    uint16_t wErrorStringId;
     if (!pControl) {
       UIMENU_YouWereDisconnectedFromBattleNet2();
       return 1;
@@ -8075,44 +8073,47 @@ BOOL __stdcall MAINMENU_HandlePasswordChange(D2ControlStrc * pControl) {
     uint16_t* wszConfirmPassword = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpCtlChangePasswordInput->sControl);
     uint16_t* wszConfirmPasswordRaw = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpBnetPasswordConfirmEditBox->sControl);
     D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(gszPasswordChangeNewPasswordMB, (uint16_t*)wszNewPasswordRaw, 0x100);
-    int32_t nLenOrCmp = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszCurrentPassword);
-    if (nLenOrCmp < 2) {
-      wErrorStringId = 0x1460;
-    } else if (nLenOrCmp > 0xf) {
-      wErrorStringId = 0x1461;
-    } else {
-      nLenOrCmp = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNoCase((uint16_t*)wszConfirmPassword, (uint16_t*)wszConfirmPasswordRaw);
-      if (nLenOrCmp) {
-        wErrorStringId = 0x1462;
-      } else {
-        nLenOrCmp = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszConfirmPassword);
-        if (nLenOrCmp < 2) {
-          wErrorStringId = 0x1463;
-        } else {
-          if (nLenOrCmp <= 0x14) {
-            gnBNetBusyFlag = 0;
-            nPumpResult = Launcher::EnterEmailMessagePumper(D2IniData_launcher, 0, 1);
-            if (!nPumpResult) {
-              if (gnBNetBusyFlag) {
-                UIMENU_ChangePassword();
-                return 1;
-              }
-            } else {
-              Storm::Source::SReg::SRegSaveString("Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
-              FORMS_DestroyList();
-              MAINMENU_CloseAndLaunchCharSelect();
-            }
-
-            return 1;
-          }
-
-          wErrorStringId = 0x1464;
-        }
-      }
+    int32_t nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszCurrentPassword);
+    if (nLength < 2) {
+      uint16_t* wszError = D2Lang::StrTable::strtable::GetLocaleString(0x1460); // steer-ok: the original fetches the message before it pushes the popup flag argument
+      MAINMENU_ShowPopupDialog(wszError, UIMENU_ChangePassword, 1);
+      return 1;
+    }
+    if (nLength > 0xf) {
+      uint16_t* wszError = D2Lang::StrTable::strtable::GetLocaleString(0x1461); // steer-ok: the original fetches the message before it pushes the popup flag argument
+      MAINMENU_ShowPopupDialog(wszError, UIMENU_ChangePassword, 1);
+      return 1;
+    }
+    if (D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNoCase((uint16_t*)wszConfirmPassword, (uint16_t*)wszConfirmPasswordRaw)) {
+      uint16_t* wszError = D2Lang::StrTable::strtable::GetLocaleString(0x1462); // steer-ok: the original fetches the message before it pushes the popup flag argument
+      MAINMENU_ShowPopupDialog(wszError, UIMENU_ChangePassword, 1);
+      return 1;
     }
 
-    wszCurrentPassword = D2Lang::StrTable::strtable::GetLocaleString(wErrorStringId);
-    MAINMENU_ShowPopupDialog(wszCurrentPassword, UIMENU_ChangePassword, 1);
+    nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszConfirmPassword);
+    if (nLength < 2) {
+      uint16_t* wszError = D2Lang::StrTable::strtable::GetLocaleString(0x1463); // steer-ok: the original fetches the message before it pushes the popup flag argument
+      MAINMENU_ShowPopupDialog(wszError, UIMENU_ChangePassword, 1);
+      return 1;
+    }
+    if (nLength > 0x14) {
+      uint16_t* wszError = D2Lang::StrTable::strtable::GetLocaleString(0x1464); // steer-ok: the original fetches the message before it pushes the popup flag argument
+      MAINMENU_ShowPopupDialog(wszError, UIMENU_ChangePassword, 1);
+      return 1;
+    }
+
+    gnBNetBusyFlag = 0;
+    if (!Launcher::EnterEmailMessagePumper(D2IniData_launcher, 0, 1)) {
+      if (gnBNetBusyFlag) {
+        UIMENU_ChangePassword();
+      }
+
+      return 1;
+    }
+
+    Storm::Source::SReg::SRegSaveString("Diablo II", "Last BNet", 0, D2IniData_launcher->szLastBnetAccount);
+    FORMS_DestroyList();
+    MAINMENU_CloseAndLaunchCharSelect();
     return 1;
 }
 

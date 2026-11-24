@@ -65,71 +65,61 @@ static void SKILLSOR_OnInfernoExpire(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     GAME::Event::SetEvent(pGame, pUnit, 1, pGame->dwGameFrame + nFrames, 0, 0);
 }
 
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
+
 // Per-tick server handler for the Sorceress Inferno skill. Validates the skill/missile records, retrieves the cursor target position, then spawns an Inferno missile each tick for as many frames as the calc specifies. For monsters using Inferno it manages the inferno state and schedules the end-anim event via SetEvent; for players it sets up the anim timer events.
 BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl2, eMissilesId eMissileId) {
-    BOOL _bHasTarget;
-    bool bHasTarget;
-    eD2States eInfernoState;
-    int32_t nTotalFrames;
-    D2SkillArgStrc sSkillArg;
-    int32_t nCalcDuration;
-    uint32_t nTargetY;
-    uint32_t nTargetX;
-    D2SkillsTxt* pSkillTxtBase = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
-    if (!(pSkillTxtBase && (int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt || (int)eMissileId < 0 || (int)eMissileId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       return 0;
     }
 
-    _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY);
-    if (!_bHasTarget) {
+    uint32_t nTargetX;
+    uint32_t nTargetY;
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY)) {
       return 0;
     }
 
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
-    if (pSkill) {
-      int32_t nCalcFrames;
-      nCalcFrames = D2Common::Skills::SKILL_GetParam1(pSkill);
-      if (nCalcFrames) {
-        nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtBase->calc[0], eSkill, nSkillLvl2);
-        if (nTotalFrames < 1) {
-          nTotalFrames = 1;
-        }
+    if (!pSkill) {
+      return 0;
+    }
 
-        memset(&sSkillArg, 0, 0x5c);
-        sSkillArg.eSkillNo = eSkill;
-        sSkillArg.nMissileTxtNo = eMissileId;
-        sSkillArg.nSkillLevel = nSkillLvl2;
-        sSkillArg.nUnitY = nTargetY;
-        sSkillArg.nFlags = 0x8020;
-        sSkillArg.nUnitX = nTargetX;
-        sSkillArg.pOwner = pUnit;
-        sSkillArg.pMissile = pUnit;
-        sSkillArg.nTotalFrames = nTotalFrames;
-        MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+    if (D2Common::Skills::SKILL_GetParam1(pSkill)) {
+      int32_t nTotalFrames = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl2);
+      if (nTotalFrames < 1) {
+        nTotalFrames = 1;
       }
 
-      D2Common::Skills::SKILL_SetParam1(pSkill, 1);
-      if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-        pUnit->nGfxCurrentFrame = 0xb00;
-        nCalcFrames = D2Common::Skills::SKILL_GetParam1(pSkill);
-        if (pGame->dwGameFrame < nCalcFrames) {
-          eInfernoState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno);
-          if (eInfernoState != STATE_none) {
-            GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-            GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + 2, 4, 0);
-            return 1;
-          }
-        }
+      D2SkillArgStrc sSkillArg;
+      memset(&sSkillArg, 0, 0x5c);
+      sSkillArg.nMissileTxtNo = eMissileId;
+      sSkillArg.eSkillNo = eSkill;
+      sSkillArg.nSkillLevel = nSkillLvl2;
+      sSkillArg.nFlags = 0x8020;
+      sSkillArg.pOwner = pUnit;
+      sSkillArg.pMissile = pUnit;
+      sSkillArg.nUnitX = nTargetX;
+      sSkillArg.nUnitY = nTargetY;
+      sSkillArg.nTotalFrames = nTotalFrames;
+      MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+    }
 
-        SKILLSOR_OnInfernoExpire(pUnit, pGame);
-        return 1;
-      }
-
+    D2Common::Skills::SKILL_SetParam1(pSkill, 1);
+    if (GetTypeInline(pUnit) != UNIT_MONSTER) {
       UNIT::SUnit::UNITS_SetupAnimTimerEventsWithDelay(pGame, pUnit, 1);
       return 1;
     }
 
-    return 0;
+    pUnit->nGfxCurrentFrame = 0xb00;
+    if (pGame->dwGameFrame < D2Common::Skills::SKILL_GetParam1(pSkill) && D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_inferno) != STATE_none) {
+      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+      GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + 2, 4, 0);
+      return 1;
+    }
+
+    SKILLSOR_OnInfernoExpire(pUnit, pGame);
+    return 1;
 }
 
 // Starts or sustains a channelled Inferno cast. On first call (no STATE_inferno stat list), allocates a stat list, schedules a 0xC event at frame+20, attaches it, sets the expire callback, and activates STATE_inferno. On subsequent calls, refreshes the stat-list timeout to frame+6, reschedules the event, and calls INFERNO_CastInfernoTick to spawn the next missile tick. For monster casters, param1 is set to game-frame + calc[1] duration.

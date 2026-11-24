@@ -225,15 +225,13 @@ BOOL __stdcall ITEM_ProcessSetItemEquip(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
     }
 
     D2UnitStrc* pOwnerUnit = INVENTORY::Inventory::INVENTORY_IsItemOwnedBy(pUnit->pInventory, pUnit2);
-    uint32_t nSetMask = 0;
-    if (pOwnerUnit) {
-      int32_t iVar1;
-      iVar1 = INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pOwnerUnit);
-      if (iVar1 != 3) {
-        nSetMask = 0;
-      } else {
-        nSetMask = ITEMS::Items::ITEMS_GetEquippedSetItemsMask(pUnit, pUnit2, 1);
-      }
+    uint32_t nSetMask;
+    if (!pOwnerUnit) {
+      nSetMask = 0;
+    } else if (INVENTORY::Inventory::ITEM_GetItemData_eD2InventoryGridType(pOwnerUnit) != 3) {
+      nSetMask = 0;
+    } else {
+      nSetMask = ITEMS::Items::ITEMS_GetEquippedSetItemsMask(pUnit, pUnit2, 1);
     }
     if (bUpdateStates || !nEquipMode) {
       ITEM_UpdateSetItemStates(pUnit2, nSetMask);

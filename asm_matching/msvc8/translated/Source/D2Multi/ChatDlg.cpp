@@ -3597,15 +3597,10 @@ void __fastcall UIMENU_DrawTitleOnCenterSmaller(uint16_t * wszTitle, ChatDlgCall
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
     pForm = FORMS_CreateAnyFormFromListEx(0x22);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
-    ::D2WinTextBox* pDVar2 = (::D2WinTextBox*)FORMS_CreateAnyFormFromListEx(0x24);
-    D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pDVar2, 1);
-    D2Win::Src::D2WinTextBox::SetText(pDVar2, wszTitle, 0, false, 0);
-    gpfnChatDlgCallback = pCallback;
-    if (pCallback) {
-      return;
-    }
-
-    gpfnChatDlgCallback = CHATDLG_DestroyListCallback;
+    ::D2WinTextBox* pTitleTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromListEx(0x24);
+    D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTitleTextBox, 1);
+    D2Win::Src::D2WinTextBox::SetText(pTitleTextBox, wszTitle, 0, false, 0);
+    gpfnChatDlgCallback = pCallback ? pCallback : CHATDLG_DestroyListCallback;
 }
 
 void __fastcall UIMENU_PrintSmallTitleOnCenterScreen(uint16_t * wszText, ChatDlgCallback pCallback) {

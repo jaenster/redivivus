@@ -61,6 +61,8 @@ option(REDIVIVUS_LOUD
     "Loud build: 0xFE-filled locals, stack canaries, array index checks and guard zones between globals that report at the defect (Redivivus/d2_loud.cpp). Not for release." OFF)
 option(REDIVIVUS_LOUD_STACK_PROTECTOR
     "With REDIVIVUS_LOUD: also -fstack-protector-strong (fatal on a smashed canary). OFF gives the playable loud build." ON)
+option(REDIVIVUS_SERVER
+    "Build the dedicated server (d2server.exe) from the server modules, every unit compiled with D2_TARGET_SERVER=1. The game executable leaves the default target in such a build directory." OFF)
 
 set(D2_ROOT "${CMAKE_SOURCE_DIR}")
 set(D2_SUPPORT "${D2_ROOT}/Redivivus")
@@ -97,6 +99,8 @@ foreach(list D2_SOURCES D2_HEADERS)
     # D2Server (the 1.00 game-server host) is its own object library below, never part
     # of the game executable.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Source/D2Server/")
+    # The dedicated-server host (Redivivus/Server) is its own executable below.
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Redivivus/Server/")
     # D2OpenGL and the MacSpecific texture manager it builds on are the Mac 1.14d
     # renderer, their own object library below; the rest of MacSpecific (the Mac shell)
     # is Mac-only, built by cmake/mac.cmake. Their directories stay off the include
@@ -452,4 +456,54 @@ elseif(EXISTS "${D2_IMPLIB_DEFS}")
     add_custom_target(d2_implibs DEPENDS ${D2_IMPLIBS})
     add_dependencies(d2 d2_implibs)
     target_link_libraries(d2 PRIVATE ${D2_IMPLIBS})
+endif()
+
+# ---------------------------------------------------------------------------
+# The dedicated server: d2server.exe, built from the modules a game server runs and the
+# host in Redivivus/Server (ServerHost.h is the seam; exactly one host is linked). Every
+# unit of the build directory gets D2_TARGET_SERVER=1, so code can tell the two targets
+# apart with a positive test; the game executable built beside it would carry that too,
+# so it leaves the default target here (it can still be built by name).
+#   cmake -S . -B build-server -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake -DREDIVIVUS_SERVER=ON
+#   cmake --build build-server --target d2server
+# The libraries link as an ordinary rescanned group, not whole: only what the server
+# reaches is pulled in, so client code the server never calls stays out.
+# ---------------------------------------------------------------------------
+if(REDIVIVUS_SERVER)
+    if(NOT REDIVIVUS_MODULE_LIBRARIES)
+        message(FATAL_ERROR "REDIVIVUS_SERVER needs REDIVIVUS_MODULE_LIBRARIES=ON")
+    endif()
+    target_compile_definitions(d2_flags INTERFACE D2_TARGET_SERVER=1)
+    set_target_properties(d2 PROPERTIES EXCLUDE_FROM_ALL ON)
+
+    set(D2_SERVER_MODULES crashy Fog Storm D2Hell D2Lang D2Net D2Game D2CMP D2Common d2_root)
+    set(D2_SERVER_LIBRARIES)
+    foreach(m IN LISTS D2_SERVER_MODULES)
+        if(TARGET ${m} AND m IN_LIST D2_MODULE_LIBRARIES_LINKED)
+            list(APPEND D2_SERVER_LIBRARIES ${m})
+        endif()
+    endforeach()
+
+    # The project's support code, compiled into the executable so its constructors run,
+    # minus the game's static-init list: the server has its own in Redivivus/Server. The
+    # tracer only traces in a development build and probes D2gfx state; outside one the
+    # server leaves it out and holds its packet counters in Redivivus/Server.
+    get_target_property(D2_SERVER_SUPPORT_SOURCES Redivivus SOURCES)
+    list(FILTER D2_SERVER_SUPPORT_SOURCES EXCLUDE REGEX "/Redivivus/d2_static_init\\.cpp$")
+    if(NOT REDIVIVUS_DEV)
+        list(FILTER D2_SERVER_SUPPORT_SOURCES EXCLUDE REGEX "/Redivivus/d2_trace\\.cpp$")
+    endif()
+    file(GLOB D2_SERVER_HOST_SOURCES CONFIGURE_DEPENDS LIST_DIRECTORIES false
+        "${D2_SUPPORT}/Server/*.cpp")
+    list(SORT D2_SERVER_HOST_SOURCES)
+
+    add_executable(d2server ${D2_SERVER_HOST_SOURCES} ${D2_SERVER_SUPPORT_SOURCES})
+    target_link_libraries(d2server PRIVATE d2_flags)
+    target_compile_definitions(d2server PRIVATE ${D2_ALL_MODULE_DEFS})
+    string(JOIN "," D2_SERVER_LINK_GROUP ${D2_SERVER_LIBRARIES} libbacktrace)
+    target_link_libraries(d2server PRIVATE "$<LINK_GROUP:RESCAN,${D2_SERVER_LINK_GROUP}>")
+    target_link_options(d2server PRIVATE -static -static-libgcc -static-libstdc++)
+    target_link_libraries(d2server PRIVATE
+        kernel32 user32 gdi32 advapi32 shell32 ole32 oleaut32
+        winmm ws2_32 version comctl32 imm32 uuid wintrust crypt32)
 endif()

@@ -309,20 +309,19 @@ void __fastcall DATATBLS_CompileSkillCode(char * szText, char * pRecord, int32_t
     if (!pRecord) {
       return;
     }
-    if (szText) {
-      nByteCodeLen = Fog::Skills::SKILLS_ParseCalcExpression(szText, aByteCodeBuf, 0x400, DATATBLS_CalcExpr_ParseTokenType, DATATBLS_CalcExpr_GetArgCount, DATATBLS_LookupCalcCode);
-      if ((int)nByteCodeLen > 0) {
-        nCompiledLen = DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pSkillsCode, &MonsterTbls::sgtDataTable.nSkillsCodeSize, &MonsterTbls::sgtDataTable.nSkillsCodeCapacity, aByteCodeBuf, nByteCodeLen);
-        *(uint32_t*)(pRecord + nOffset) = nCompiledLen;
-        return;
-      }
+    if (!szText) {
+      *(uint32_t*)(pRecord + nOffset) = -1;
+      return;
     }
 
-    char* pCodeField = pRecord + nOffset;
-    pCodeField[0] = -1;
-    pCodeField[1] = -1;
-    pCodeField[2] = -1;
-    pCodeField[3] = -1;
+    nByteCodeLen = Fog::Skills::SKILLS_ParseCalcExpression(szText, aByteCodeBuf, 0x400, DATATBLS_CalcExpr_ParseTokenType, DATATBLS_CalcExpr_GetArgCount, DATATBLS_LookupCalcCode);
+    if ((int)nByteCodeLen <= 0) {
+      *(uint32_t*)(pRecord + nOffset) = -1;
+      return;
+    }
+
+    nCompiledLen = DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pSkillsCode, &MonsterTbls::sgtDataTable.nSkillsCodeSize, &MonsterTbls::sgtDataTable.nSkillsCodeCapacity, aByteCodeBuf, nByteCodeLen);
+    *(uint32_t*)(pRecord + nOffset) = nCompiledLen;
 }
 
 void __fastcall DATATBLS_CompileSkillDescCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
@@ -332,20 +331,19 @@ void __fastcall DATATBLS_CompileSkillDescCode(char * szText, char * pRecord, int
     if (!pRecord) {
       return;
     }
-    if (szText) {
-      nByteCodeLen = Fog::Skills::SKILLS_ParseCalcExpression(szText, aByteCodeBuf, 0x400, DATATBLS_CalcExpr_ParseTokenType, DATATBLS_CalcExpr_GetArgCount, DATATBLS_LookupCalcCode);
-      if ((int)nByteCodeLen > 0) {
-        nCompiledLen = DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pSkillDescCode, &MonsterTbls::sgtDataTable.nSkillDescCodeSize, &MonsterTbls::sgtDataTable.nSkillDescCodeCapacity, aByteCodeBuf, nByteCodeLen);
-        *(uint32_t*)(pRecord + nOffset) = nCompiledLen;
-        return;
-      }
+    if (!szText) {
+      *(uint32_t*)(pRecord + nOffset) = -1;
+      return;
     }
 
-    char* pCodeField = pRecord + nOffset;
-    pCodeField[0] = -1;
-    pCodeField[1] = -1;
-    pCodeField[2] = -1;
-    pCodeField[3] = -1;
+    nByteCodeLen = Fog::Skills::SKILLS_ParseCalcExpression(szText, aByteCodeBuf, 0x400, DATATBLS_CalcExpr_ParseTokenType, DATATBLS_CalcExpr_GetArgCount, DATATBLS_LookupCalcCode);
+    if ((int)nByteCodeLen <= 0) {
+      *(uint32_t*)(pRecord + nOffset) = -1;
+      return;
+    }
+
+    nCompiledLen = DATATBLS_AppendDataToBuffer(&MonsterTbls::sgtDataTable.pSkillDescCode, &MonsterTbls::sgtDataTable.nSkillDescCodeSize, &MonsterTbls::sgtDataTable.nSkillDescCodeCapacity, aByteCodeBuf, nByteCodeLen);
+    *(uint32_t*)(pRecord + nOffset) = nCompiledLen;
 }
 
 D2AnimDataStrc * __stdcall TXT_GetCharStatsTable() {

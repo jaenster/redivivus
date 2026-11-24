@@ -626,7 +626,7 @@ BOOL __fastcall NET_D2GS_SERVER_IsValidChecks(int32_t nClientID, uint16_t nGameT
                   exit(-1);
                 }
 
-                /* Here is the bnetserver server asked how to see/find the players token */ nFindTokenResult = BattleNetServerService->fpFindPlayerToken((int)nGameToken, byRef1, (uint8_t*)byRef2, (uint8_t*)byRef3, (uint8_t*)byRef4, (uint8_t*)byRef5, (uint8_t*)byRef6);
+                /* Here is the bnetserver server asked how to see/find the players token */ nFindTokenResult = BattleNetServerService->fpFindPlayerToken(pPlayerName, gameHash, (int)nGameToken, byRef1, (uint8_t*)byRef2, (uint8_t*)byRef3, (uint8_t*)byRef4, (uint8_t*)byRef5, (uint8_t*)byRef6);
                 if (!nFindTokenResult) {
                   return 0;
                 }

@@ -351,14 +351,8 @@ void __fastcall PLRSKILLS_StateRemFn03_BoneArmor(D2UnitStrc * pUnit, eD2States e
 
 // Bone Armor state update callback. Computes a 3-tier armor tier from current vs. max bone armor values (UNITSTAT_bonearmor/bonearmormax), stores the new tier in shortparam1, then adds or removes tier-keyed overlays via GFX_AddOverlayToUnit / STATES_RemoveOverlayById. Called each tick while Bone Armor state is active.
 void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(D2UnitStrc * pUnit, eD2States eState) {
-    int nTierDrop;
-    eOverlayId eCastOverlay;
-    eOverlayId eOverlay4;
-    eOverlayId eOverlay3;
-    int nOverlay2;
-    eOverlayId eOverlay1;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
-    if (!pDVar1) {
+    D2StatesTxt* pStatesTxt = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+    if (!pStatesTxt) {
       return;
     }
 
@@ -369,58 +363,38 @@ void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(D2UnitStrc * pUnit, eD2States e
 
     int nBoneArmor = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_bonearmor, 0);
     int nBoneArmorMax = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_bonearmormax, 0);
-    if (pDVar1->castoverlay >= 0) {
-      eCastOverlay = (eOverlayId)pDVar1->castoverlay;
-    } else {
-      eCastOverlay = ~OVERLAY_null;
-    }
-    if (pDVar1->overlay[0] >= 0) {
-      eOverlay1 = (eOverlayId)pDVar1->overlay[0];
-    } else {
-      eOverlay1 = ~OVERLAY_null;
-    }
-    if (pDVar1->overlay[1] >= 0) {
-      nOverlay2 = (int)pDVar1->overlay[1];
-    } else {
-      nOverlay2 = -1;
-    }
-    if (pDVar1->overlay[2] >= 0) {
-      eOverlay3 = (eOverlayId)pDVar1->overlay[2];
-    } else {
-      eOverlay3 = ~OVERLAY_null;
-    }
-    if (pDVar1->overlay[3] >= 0) {
-      eOverlay4 = (eOverlayId)pDVar1->overlay[3];
-    } else {
-      eOverlay4 = ~OVERLAY_null;
-    }
-
+    int nCastOverlay = pStatesTxt->castoverlay >= 0 ? pStatesTxt->castoverlay : -1;
+    int nOverlay1 = pStatesTxt->overlay[0] >= 0 ? pStatesTxt->overlay[0] : -1;
+    int nOverlay2 = pStatesTxt->overlay[1] >= 0 ? pStatesTxt->overlay[1] : -1;
+    int nOverlay3 = pStatesTxt->overlay[2] >= 0 ? pStatesTxt->overlay[2] : -1;
+    int nOverlay4 = pStatesTxt->overlay[3] >= 0 ? pStatesTxt->overlay[3] : -1;
     int nPrevTier = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_shortparam1, 0);
+    int nOneThird = nBoneArmorMax / 3;
+    int nTwoThirds = nOneThird * 2; // steer-ok: the original computes both tier boundaries before the first compare, as in STATES_CalcDamageSeverityTier
     int nNewTier = 3;
-    if (nBoneArmor < nBoneArmorMax / 3) {
+    if (nBoneArmor < nOneThird) {
       nNewTier = 2;
     }
-    if (nBoneArmor < nBoneArmorMax / 3 * 2) {
+    if (nBoneArmor < nTwoThirds) {
       nNewTier--;
     }
 
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_shortparam1, nNewTier, 0);
     if (nNewTier > nPrevTier) {
       PLRSKILLS_StateRemFn03_BoneArmor(pUnit, eState);
-      if (eOverlay3 != ~OVERLAY_null && nNewTier >= 3) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay3, 7, 0, 0, 0, 0, 0);
+      if (nOverlay3 != -1 && nNewTier >= 3) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay3, 7, 0, 0, 0, 0, 0);
       }
-      if (eOverlay4 != ~OVERLAY_null && nNewTier >= 2) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay4, 7, 0, 0, 0, 0, 0);
+      if (nOverlay4 != -1 && nNewTier >= 2) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay4, 7, 0, 0, 0, 0, 0);
       }
-      if (eCastOverlay != ~OVERLAY_null && eOverlay1 != ~OVERLAY_null && nOverlay2 != -1) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eCastOverlay, 4, 0, eOverlay1, nOverlay2, 0, 0);
-        return;
+      if (nCastOverlay != -1 && nOverlay1 != -1 && nOverlay2 != -1) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nCastOverlay, 4, 0, nOverlay1, nOverlay2, 0, 0);
       }
     } else if (nNewTier < nPrevTier) {
-      nTierDrop = nPrevTier - nNewTier;
+      int nTierDrop = nPrevTier - nNewTier;
       do {
-        STATES_RemoveOverlayById(pUnit, eOverlay1);
+        STATES_RemoveOverlayById(pUnit, nOverlay1);
         STATES_RemoveOverlayById(pUnit, nOverlay2);
         nTierDrop--;
       } while (nTierDrop);
@@ -483,11 +457,8 @@ void __fastcall PLRSKILLS_StateRemFn05_CycloneArmor(D2UnitStrc * pUnit, eD2State
 
 // State set-callback for Bone Armor (and similar tiered-overlay states). Reads current bonearmor and bonearmormax stats from the state's stat list to compute a tier (1–3) based on remaining fraction. Compares to the previously stored tier (shortparam1). If tier increased, calls States_RemFunc05 then adds the appropriate overlay+lightning-overlay pairs via GFX_AddOverlayToUnit. If tier decreased, removes the no-longer-applicable overlays via STATES_RemoveOverlayById. Up to three overlay slots (pDVar1->overlay[0..2]) are supported.
 void __fastcall PLRSKILLS_StateSetFn08_CycloneArmor(D2UnitStrc * pUnit, eD2States eState) {
-    eOverlayId eOverlay3;
-    eOverlayId eOverlay1;
-    eOverlayId eOverlay2;
-    D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
-    if (!pDVar1) {
+    D2StatesTxt* pStatesTxt = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
+    if (!pStatesTxt) {
       return;
     }
 
@@ -498,59 +469,47 @@ void __fastcall PLRSKILLS_StateSetFn08_CycloneArmor(D2UnitStrc * pUnit, eD2State
 
     int nBoneArmor = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_bonearmor, 0);
     int nBoneArmorMax = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_bonearmormax, 0);
-    if (pDVar1->overlay[0] >= 0) {
-      eOverlay1 = (eOverlayId)pDVar1->overlay[0];
-    } else {
-      eOverlay1 = ~OVERLAY_null;
-    }
-    if (pDVar1->overlay[1] >= 0) {
-      eOverlay2 = (eOverlayId)pDVar1->overlay[1];
-    } else {
-      eOverlay2 = ~OVERLAY_null;
-    }
-    if (pDVar1->overlay[2] >= 0) {
-      eOverlay3 = (eOverlayId)pDVar1->overlay[2];
-    } else {
-      eOverlay3 = ~OVERLAY_null;
-    }
-
+    int nOverlay1 = pStatesTxt->overlay[0] >= 0 ? pStatesTxt->overlay[0] : -1;
+    int nOverlay2 = pStatesTxt->overlay[1] >= 0 ? pStatesTxt->overlay[1] : -1;
+    int nOverlay3 = pStatesTxt->overlay[2] >= 0 ? pStatesTxt->overlay[2] : -1;
     int nPrevTier = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, UNITSTAT_shortparam1, 0);
-    int nValue = 3;
-    if (nBoneArmor < nBoneArmorMax / 3) {
-      nValue = 2;
+    int nOneThird = nBoneArmorMax / 3;
+    int nTwoThirds = nOneThird * 2; // steer-ok: the original computes both tier boundaries before the first compare, as in STATES_CalcDamageSeverityTier
+    int nNewTier = 3;
+    if (nBoneArmor < nOneThird) {
+      nNewTier = 2;
     }
-    if (nBoneArmor < nBoneArmorMax / 3 * 2) {
-      nValue--;
+    if (nBoneArmor < nTwoThirds) {
+      nNewTier--;
     }
 
-    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_shortparam1, nValue, 0);
-    if (nValue > nPrevTier) {
+    D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_shortparam1, nNewTier, 0);
+    if (nNewTier > nPrevTier) {
       PLRSKILLS_StateRemFn05_CycloneArmor(pUnit, eState);
-      if (eOverlay3 != ~OVERLAY_null && nValue >= 3) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay3, 3, 0, 0, 0, 0, 0);
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay3 + OVERLAY_lightning, 3, 0, 0, 0, 0, 0);
+      if (nOverlay3 != -1 && nNewTier >= 3) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay3, 3, 0, 0, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay3 + 1, 3, 0, 0, 0, 0, 0);
       }
-      if (eOverlay2 != ~OVERLAY_null && nValue >= 2) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay2, 3, 0, 0, 0, 0, 0);
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay2 + OVERLAY_lightning, 3, 0, 0, 0, 0, 0);
+      if (nOverlay2 != -1 && nNewTier >= 2) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay2, 3, 0, 0, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay2 + 1, 3, 0, 0, 0, 0, 0);
       }
-      if (eOverlay1 != ~OVERLAY_null && nValue >= 1) {
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay1, 3, 0, 0, 0, 0, 0);
-        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay1 + OVERLAY_lightning, 3, 0, 0, 0, 0, 0);
-        return;
+      if (nOverlay1 != -1 && nNewTier >= 1) {
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay1, 3, 0, 0, 0, 0, 0);
+        Engine::Gfx::GFX_AddOverlayToUnit(pUnit, nOverlay1 + 1, 3, 0, 0, 0, 0, 0);
       }
     } else {
-      if (eOverlay3 != OVERLAY_null && nValue <= 2) {
-        STATES_RemoveOverlayById(pUnit, eOverlay3);
-        STATES_RemoveOverlayById(pUnit, eOverlay3 + OVERLAY_lightning);
+      if (nOverlay3 && nNewTier <= 2) {
+        STATES_RemoveOverlayById(pUnit, nOverlay3);
+        STATES_RemoveOverlayById(pUnit, nOverlay3 + 1);
       }
-      if (eOverlay2 != OVERLAY_null && nValue <= 1) {
-        STATES_RemoveOverlayById(pUnit, eOverlay2);
-        STATES_RemoveOverlayById(pUnit, eOverlay2 + OVERLAY_lightning);
+      if (nOverlay2 && nNewTier <= 1) {
+        STATES_RemoveOverlayById(pUnit, nOverlay2);
+        STATES_RemoveOverlayById(pUnit, nOverlay2 + 1);
       }
-      if (eOverlay1 != OVERLAY_null && (int)eOverlay1 <= 1) {
-        STATES_RemoveOverlayById(pUnit, eOverlay1);
-        STATES_RemoveOverlayById(pUnit, eOverlay1 + OVERLAY_lightning);
+      if (nOverlay1 && nOverlay1 <= 1) {
+        STATES_RemoveOverlayById(pUnit, nOverlay1);
+        STATES_RemoveOverlayById(pUnit, nOverlay1 + 1);
       }
     }
 }
@@ -882,82 +841,50 @@ void __fastcall PLRSKILLS_StateSetFn19RemFn12_SkillDelay(D2UnitStrc * pUnit, eD2
 
 // Scans all active states on pUnit to find the highest-priority one with a non-zero colorshift overlay, then applies its color palette index to pUnit->uSideData.pClientSide.nPaletteIndex (skipping colorshift 'h' in windowed mode for the local player). If pUnit is the local player and has a light map, also calls SetRGB from the winning state's light_r/g/b fields. Resets palette to 0 and light to full white (0xFF,0xFF,0xFF) if no qualifying state is found.
 void __stdcall STATES_UpdateColorShiftAndLight(D2UnitStrc * pUnit) {
-    D2LightMapStrc* pDVar2;
-    eD2States eUnitState;
-    D2UnitStrc* pLocalPlayerUnit;
-    uint32_t bIsWindowMode;
-    D2UnitStrc* pDVar3;
-    D2DataTableTxtStrc* pDataTable;
-    D2StatesTxt* pStateTxt;
-    int nTxtOffset;
-    uint8_t byColorPriority;
-    int nTxtSize = D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize;
-    int nBestStateIdx = -1;
-    int nStateIdx = 0;
-    uint8_t byBestPriority = 0;
-    if (nTxtSize > 0) {
-      D2StatesTxt* pDVar1;
-      nTxtOffset = 0;
-      pDataTable = D2Common::ITEMS::Items::sgptDataTable;
-      do {
-        if (nStateIdx >= 0 && nStateIdx < nTxtSize) {
-          pStateTxt = pDataTable->pTxtStates + nStateIdx;
-          if (pStateTxt) {
-            eUnitState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, nStateIdx);
-            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
-            if (eUnitState != STATE_none) {
-              byColorPriority = (uint8_t)pStateTxt->colorpri;
-              if (byColorPriority > byBestPriority) {
-                nBestStateIdx = nStateIdx;
-                byBestPriority = byColorPriority;
-              }
-            }
-          }
-        }
-
-        nTxtSize = pDataTable->nTxtStatesSize;
-        nTxtOffset += 0x3c;
-        nStateIdx += STATE_freeze;
-      } while (nStateIdx < nTxtSize);
-
-      if (nBestStateIdx > 0) {
-        pDVar1 = nBestStateIdx < nTxtSize ? pDataTable->pTxtStates + nBestStateIdx : nullptr;
-        if (!pDVar1) {
-          return;
-        }
-        if (pDVar1->colorshift == 'h' && (pLocalPlayerUnit = Player::GetPlayerUnit_UI() , pUnit == pLocalPlayerUnit) && (bIsWindowMode = D2gfx::D2GFX::IsWindowMode() , bIsWindowMode != 0)) {
-          pUnit->uSideData.pClientSide.nPaletteIndex = 0;
-        } else {
-          pUnit->uSideData.pClientSide.nPaletteIndex = (uint32_t)(uint8_t)pDVar1->colorshift;
-        }
-
-        pDVar3 = Player::GetPlayerUnit_UI();
-        if (pUnit != pDVar3) {
-          return;
-        }
-
-        pDVar2 = pUnit->uSideData.pClientSide.pLight;
-        if (!pDVar2) {
-          return;
-        }
-
-        Draw::LightMap::SetRGB(pDVar2, pDVar1->light_r, pDVar1->light_g, pDVar1->light_b);
-        return;
+    int nBestState = -1;
+    uint8_t nBestPriority = 0;
+    for (int i = 0; i < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize; i++) {
+      D2StatesTxt* pStatesTxt = i >= 0 && i < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + i : nullptr;
+      if (pStatesTxt && D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, i) && (uint8_t)pStatesTxt->colorpri > nBestPriority) {
+        nBestState = i;
+        nBestPriority = pStatesTxt->colorpri;
       }
     }
 
+    if (nBestState > 0) {
+      D2StatesTxt* pStatesTxt = nBestState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + nBestState : nullptr;
+      if (!pStatesTxt) {
+        return;
+      }
+      if (pStatesTxt->colorshift == 'h' && pUnit == Player::GetPlayerUnit_UI() && D2gfx::D2GFX::IsWindowMode()) {
+        pUnit->uSideData.pClientSide.nPaletteIndex = 0;
+      } else {
+        pUnit->uSideData.pClientSide.nPaletteIndex = (uint8_t)pStatesTxt->colorshift;
+      }
+      if (pUnit != Player::GetPlayerUnit_UI()) {
+        return;
+      }
+
+      D2LightMapStrc* pLight = pUnit->uSideData.pClientSide.pLight;
+      if (!pLight) {
+        return;
+      }
+
+      Draw::LightMap::SetRGB(pLight, pStatesTxt->light_r, pStatesTxt->light_g, pStatesTxt->light_b);
+      return;
+    }
+
     pUnit->uSideData.pClientSide.nPaletteIndex = 0;
-    pDVar3 = Player::GetPlayerUnit_UI();
-    if (pUnit != pDVar3) {
+    if (pUnit != Player::GetPlayerUnit_UI()) {
       return;
     }
 
-    pDVar2 = pUnit->uSideData.pClientSide.pLight;
-    if (!pDVar2) {
+    D2LightMapStrc* pLight = pUnit->uSideData.pClientSide.pLight;
+    if (!pLight) {
       return;
     }
 
-    Draw::LightMap::SetRGB(pDVar2, 0xff, 0xff, 0xff);
+    Draw::LightMap::SetRGB(pLight, 0xff, 0xff, 0xff);
 }
 
 // Attaches visual overlay effects to a unit when a state is applied. Reads the States.txt row for eState, resolves cast/overlay/overlay2 IDs (randomly selecting from 1-of-N groups via the unit seed), and calls GFX_AddOverlayToUnit with the appropriate mode (3=normal, 4=cast, 8/9=linked-state). Skips if nooverlays is set or eState is out of range. For linked states, temporarily sets/clears the state flag to determine whether the cast overlay should be suppressed by a hide-state.

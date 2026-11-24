@@ -210,27 +210,19 @@ static void DRLGOUTROOM_MarkBorderJunctions(D2DrlgLevelStrc * pLevel) {
 }
 
 // Spawns a corner fill preset at grid coordinates (nX, nY) to fill gaps in outdoor room layouts.
-static BOOL __stdcall DRLGOUTROOM_SpawnCornerFillPreset(int nY, int nX, D2DrlgLevelStrc * pLevel) {
+static BOOL __stdcall DRLGOUTROOM_SpawnCornerFillPreset(D2DrlgLevelStrc * pLevel, int nX, int nY) {
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    int nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nX, nY);
-    switch (nGridFlags) {
+    switch (DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nX, nY)) {
       case 0x10:
-        {
-          nGridFlags = 0x19;
-          break;
-        }
+        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, 0x19, -1, 0);
+        break;
       case 0x11:
-        {
-          nGridFlags = 0x18;
-          break;
-        }
+        Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, 0x18, -1, 0);
+        break;
       default:
-        {
-          return 0;
-        }
+        return 0;
     }
 
-    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, nGridFlags, -1, 0);
     pWildData->dwFlags |= 0x40;
     return 1;
 }
@@ -275,7 +267,7 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
           }
 
           for (nX = 0; nX < pWildData->nGridCoordsWidth && !bColumnEmpty; nX++) {
-            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
+            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(pLevel, nSpawnResult, nX);
           }
 
           nSpawnResult++;
@@ -293,7 +285,7 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
           }
 
           for (nSpawnResult = 0; nSpawnResult < pWildData->nGridCoordsWidth && !bColumnEmpty; nSpawnResult++) {
-            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(nX, nSpawnResult, pLevel);
+            bColumnEmpty = DRLGOUTROOM_SpawnCornerFillPreset(pLevel, nSpawnResult, nX);
           }
 
           nX++;
@@ -314,9 +306,8 @@ void __stdcall DRLGOUTROOM_FillBorderCornersAndPresets(D2DrlgLevelStrc * pLevel)
     nSpawnResult = pWildData->nGridCoordsWidth;
     int nGridWidth = pWildData->nGridCoordsHeight;
     sNewSeed = D2_SeedRoll(&pLevel->sSeed);
-    bool bVar1 = !(sNewSeed & 1);
     int nX_00 = 3;
-    if (bVar1) {
+    if (!(sNewSeed & 1)) {
       nX_00 = nSpawnResult - (~(dwFlags >> 4) & 1 | 4);
     }
 

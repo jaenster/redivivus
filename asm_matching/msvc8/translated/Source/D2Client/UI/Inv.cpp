@@ -1803,8 +1803,6 @@ static void __stdcall INV_FormatReqDexText(D2ItemsTxt * pItemsTxt, int32_t nReqA
 }
 
 static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat eMinDmgStat, eD2UnitStat eMaxDmgStat, int * pnOutMin, int * pnOutMax, int * pbOutModified, D2UnitStrc * pItem) {
-    int32_t nUnit;
-    D2UnitStrc* pStatOwner = pUnit;
     *pnOutMin = 1;
     *pnOutMax = 2;
     if (!(pUnit && pItem)) {
@@ -1812,54 +1810,49 @@ static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat 
     }
 
     uint32_t nPrevStatActive = 0;
-    D2UnitStrc* pOwnerUnit = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItemToDescribe, &nPrevStatActive);
-    if (pOwnerUnit && pOwnerUnit != pStatOwner) {
-      pStatOwner = pOwnerUnit;
-      pUnit = pOwnerUnit;
+    D2UnitStrc* pOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItemToDescribe, &nPrevStatActive);
+    BOOL bHasOwner = pOwner != nullptr; // steer-ok: the original stores SETNZ of the owner to a frame slot before the swap
+    if (pOwner && pOwner != pUnit) {
+      pUnit = pOwner;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pStatOwner, pItem, 1);
+    D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pItem, 1);
     int nMinDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, eMinDmgStat, 0);
     int nMaxDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, eMaxDmgStat, 0);
-    if (!pOwnerUnit) {
-      D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pStatOwner, pItem);
+    if (!bHasOwner) {
+      D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pItem);
     } else {
-      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pStatOwner, pItem, nPrevStatActive);
+      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pItem, nPrevStatActive);
     }
 
-    int32_t nServerMin = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pItem, eMinDmgStat, 0);
-    int32_t nServerMax = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pItem, eMaxDmgStat, 0);
-    if (nServerMin < nMinDamage || nServerMax < nMaxDamage) {
+    int nBaseMinDamage = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pItem, eMinDmgStat, 0);
+    int nBaseMaxDamage = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pItem, eMaxDmgStat, 0);
+    if (nBaseMinDamage < nMinDamage || nBaseMaxDamage < nMaxDamage) {
       *pbOutModified = 1;
     }
     if (nMaxDamage <= nMinDamage) {
       nMaxDamage = nMinDamage;
     }
 
-    int nByTimeBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_bytime, 0);
-    if (nByTimeBonus && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x110 && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-88128 && pUnit->pDrlgAct) {
-      eMinDmgStat = UNITSTAT_strength;
-      nServerMin = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, (int32_t*)&eMinDmgStat);
-      nServerMin = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nByTimeBonus, nServerMin, eMinDmgStat, nullptr, nullptr, nullptr);
-      nMaxDamage += nServerMin;
-      if (nServerMin) {
+    int nMaxDamageByTime = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_bytime, 0);
+    if (nMaxDamageByTime && (int)UNITSTAT_item_maxdamage_bytime < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && &D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[UNITSTAT_item_maxdamage_bytime] && pUnit->pDrlgAct) {
+      int nBaseTime = 0;
+      int nPeriod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+      int nTimeBonus = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nMaxDamageByTime, nPeriod, nBaseTime, nullptr, nullptr, nullptr);
+      nMaxDamage += nTimeBonus;
+      if (nTimeBonus) {
         *pbOutModified = 1;
       }
     }
 
-    nByTimeBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_percent_bytime, 0);
-    if (nByTimeBonus && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x111 && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-88452) {
-      D2DrlgActStrc** ppDVar1;
-      ppDVar1 = &pUnit->pDrlgAct;
-      if (*ppDVar1) {
-        nUnit = 0x0;
-        nServerMin = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(*ppDVar1, (int32_t*)&nUnit);
-        nServerMin = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nByTimeBonus, nServerMin, nUnit, nullptr, nullptr, nullptr);
-        nServerMax = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDamage, nServerMin, 100);
-        nMaxDamage += nServerMax;
-        if (nServerMin) {
-          *pbOutModified = 1;
-        }
+    int nMaxDamagePercentByTime = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_item_maxdamage_percent_bytime, 0);
+    if (nMaxDamagePercentByTime && (int)UNITSTAT_item_maxdamage_percent_bytime < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && &D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[UNITSTAT_item_maxdamage_percent_bytime] && pUnit->pDrlgAct) {
+      int nBaseTime = 0;
+      int nPeriod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+      int nTimeBonus = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nMaxDamagePercentByTime, nPeriod, nBaseTime, nullptr, nullptr, nullptr);
+      nMaxDamage += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxDamage, nTimeBonus, 100);
+      if (nTimeBonus) {
+        *pbOutModified = 1;
       }
     }
 
@@ -2213,11 +2206,8 @@ static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt 
 }
 
 void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint16_t * wszText) {
-    int32_t nPercentApplied;
     uint16_t wszArmorValue[10];
     char szNumBuffer[12];
-    int32_t nUnit;
-    D2UnitStrc* pEffectiveUnit = pUnit;
     if (!pUnit) {
       return;
     }
@@ -2235,67 +2225,57 @@ void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2,
     uint16_t* pwColorPrefix = D2Lang::StrTable::strtable::GetLocaleString(0xf9b);
     uint16_t* pwColorSuffix = D2Lang::StrTable::strtable::GetLocaleString(0xf9e);
     uint32_t nPrevStatActive = 0;
-    D2UnitStrc* pOwnerUnit = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItemToDescribe, &nPrevStatActive);
-    uint32_t nPeriodOfDay = (uint32_t)(pOwnerUnit != 0);
-    if (pOwnerUnit && pEffectiveUnit != pOwnerUnit) {
-      pEffectiveUnit = pOwnerUnit;
-      pUnit = pOwnerUnit;
+    D2UnitStrc* pOwner = D2Common::Stats::StatsEx::SEVER_ITEM_GetOwner(pItemToDescribe, &nPrevStatActive);
+    BOOL bHasOwner = pOwner != nullptr; // steer-ok: the original stores SETNZ of the owner to a frame slot before the swap
+    if (pOwner && pUnit != pOwner) {
+      pUnit = pOwner;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pEffectiveUnit, pItemToDescribe, 1);
-    int32_t nArmorClass = D2Common::Stats::StatsEx::STATLIST_GetDefenseFromUnit(pItemToDescribe);
-    if (!nPeriodOfDay) {
+    D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pUnit, pItemToDescribe, 1);
+    int nArmorClass = D2Common::Stats::StatsEx::STATLIST_GetDefenseFromUnit(pItemToDescribe);
+    if (!bHasOwner) {
       D2Common::Stats::StatsEx::STATLIST_RemoveFromOwnerAndRecalc(pUnit, pItemToDescribe);
     } else {
-      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pOwnerUnit, pItemToDescribe, nPrevStatActive);
+      D2Common::Stats::StatsEx::STATLIST_SetItemStatActive(pOwner, pItemToDescribe, nPrevStatActive);
     }
 
-    pEffectiveUnit = pUnit2;
-    int bIsModified = 0;
-    int32_t nServerOrMod = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit2, UNITSTAT_armorclass, 0);
-    if (nServerOrMod != nArmorClass) {
-      bIsModified = 1;
+    BOOL bIsModified = FALSE;
+    if (D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit2, UNITSTAT_armorclass, 0) != nArmorClass) {
+      bIsModified = TRUE;
     }
 
-    int nByTimeMod = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pEffectiveUnit, UNITSTAT_item_armor_bytime, 0);
-    if (nByTimeMod && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x10c && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-86832 && pUnit->pDrlgAct) {
-      nPeriodOfDay = 0;
-      nServerOrMod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, (int32_t*)&nPeriodOfDay);
-      nServerOrMod = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nByTimeMod, nServerOrMod, nPeriodOfDay, nullptr, nullptr, nullptr);
-      nArmorClass += nServerOrMod;
-      if (nServerOrMod) {
-        bIsModified = 1;
+    int nArmorByTime = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_armor_bytime, 0);
+    if (nArmorByTime && (int)UNITSTAT_item_armor_bytime < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && &D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[UNITSTAT_item_armor_bytime] && pUnit->pDrlgAct) {
+      int nBaseTime = 0;
+      int nPeriod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+      int nTimeBonus = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nArmorByTime, nPeriod, nBaseTime, nullptr, nullptr, nullptr);
+      nArmorClass += nTimeBonus;
+      if (nTimeBonus) {
+        bIsModified = TRUE;
       }
     }
 
-    nByTimeMod = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_armorpercent_bytime, 0);
-    if (nByTimeMod && D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x10d && D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost != (D2ItemStatCostTxt*)-87156) {
-      D2DrlgActStrc** ppDVar1;
-      ppDVar1 = &pUnit->pDrlgAct;
-      if (*ppDVar1) {
-        nUnit = 0x0;
-        nServerOrMod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(*ppDVar1, (int32_t*)&nUnit);
-        nServerOrMod = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nByTimeMod, nServerOrMod, nUnit, nullptr, nullptr, nullptr);
-        nPercentApplied = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nArmorClass, nServerOrMod, 100);
-        nArmorClass += nPercentApplied;
-        if (nServerOrMod) {
-          bIsModified = 1;
-        }
+    int nArmorPercentByTime = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_item_armorpercent_bytime, 0);
+    if (nArmorPercentByTime && (int)UNITSTAT_item_armorpercent_bytime < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && &D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost[UNITSTAT_item_armorpercent_bytime] && pUnit->pDrlgAct) {
+      int nBaseTime = 0;
+      int nPeriod = D2Common::Environment::DRLGENV_GetPeriodOfDayFromAct(pUnit->pDrlgAct, &nBaseTime);
+      int nTimeBonus = D2Common::ITEMS::ItemMods::ITEMMODS_GetByTimeAdjustment(nArmorPercentByTime, nPeriod, nBaseTime, nullptr, nullptr, nullptr);
+      nArmorClass += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nArmorClass, nTimeBonus, 100);
+      if (nTimeBonus) {
+        bIsModified = TRUE;
       }
     }
 
-    uint16_t* pwLabelStr = D2Lang::StrTable::strtable::GetLocaleString(0xd85);
-    uint16_t* pwTextAlias = wszText;
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, pwLabelStr);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(pwTextAlias, pwColorPrefix);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszText, D2Lang::StrTable::strtable::GetLocaleString(0xd85));
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorPrefix);
     Storm::Source::SSTR::SStrPrintf(szNumBuffer, 10, "%i", nArmorClass);
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszArmorValue, szNumBuffer, 9);
     if (bIsModified) {
       ui::AppendAsWideChar(wszArmorValue, 3);
     }
 
-    D2Lang::Unicode::UNISYS::AppendToBuffer(pwTextAlias, wszArmorValue);
-    D2Lang::Unicode::UNISYS::AppendToBuffer(pwTextAlias, pwColorSuffix);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszArmorValue);
+    D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorSuffix);
 }
 
 // Appends quantity text to item tooltip for stackable items (arrows, bolts, keys, etc.). Checks item's quantity stat (UNITSTAT_quantity) or max stack size, formats the number, and appends it to the output buffer with proper separators.

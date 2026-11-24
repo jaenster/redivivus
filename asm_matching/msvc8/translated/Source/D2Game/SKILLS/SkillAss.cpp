@@ -573,21 +573,12 @@ int32_t __fastcall SKILLASS_GetChargeUpMissile(D2UnitStrc * pUnit, int32_t nSkil
     }
 
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, (int)eAuraState);
-    if (pStatList) {
-      int nChargeLevel;
-      nChargeLevel = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, (int)pSkillTxt->aurastat[0], 0);
-      if (nChargeLevel > 1) {
-        if (nChargeLevel >= 3) {
-          nChargeLevel = 3;
-        }
-
-        return (int)pSkillTxt->srvmissile[nChargeLevel];
-      }
-
+    if (!pStatList) {
       return (int)pSkillTxt->srvmissile[1];
     }
 
-    return (int)pSkillTxt->srvmissile[1];
+    int nChargeLevel = D2Common::Stats::StatsEx::STATLIST_GetBaseStatValue(pStatList, (int)pSkillTxt->aurastat[0], 0);
+    return (int)pSkillTxt->srvmissile[min(max(nChargeLevel, 1), 3)]; // steer-ok: windef.h min/max macros
 }
 
 // Returns the charge-level-indexed prgcalc value for a charge-up skill. If the skill has the charge-up flag (bit 2) and a valid aurastate with an active stat list, selects prgcalc[0..2] by clamped charge level (1/2/3); otherwise falls back to prgcalc[0]. Returns 0 if skill id is out of range.

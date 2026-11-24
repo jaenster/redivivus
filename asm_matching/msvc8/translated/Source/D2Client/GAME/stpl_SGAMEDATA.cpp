@@ -61,23 +61,6 @@ TSLink<::SGAMEDATA>* __fastcall NextLink_Unreferenced(TSLink<::SGAMEDATA>* pThis
     return (TSLink<::SGAMEDATA>*)(nOffset + nLinkOffset);
 }
 
-template<> uint32_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::CalcChunkSize(uint32_t nCount) {
-    if (nCount < 0x15) {
-      while (nCount & nCount - 1) {
-        nCount &= nCount - 1;
-      }
-
-      if (nCount < 1) {
-        return 1;
-      }
-    } else {
-      this->m_chunk = 0x15;
-      nCount = 0x15;
-    }
-
-    return nCount;
-}
-
 // Static: rounds nValue up to a multiple of nMultiple.
 // Byte-identical to 0060e2e0; T by adjacency to this instantiation's CalcChunkSize 0044df30 (no xrefs).
 template<> uint32_t __stdcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::RoundToMultiple(uint32_t nValue, uint32_t nMultiple) {
@@ -200,32 +183,6 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSExplicitList<SGAMEDATA, -5
     return this;
 }
 
-template<> __declspec(noinline) inline void TSHashObject<SGAMEDATA, HASHKEY_NONE>::Destructor() {
-    TSLink<::SGAMEDATA>** pBackLink2;
-    TSLink<::SGAMEDATA>* pFullLink = &this->m_linktofull;
-    TSLink<::SGAMEDATA>* pPreviousLink = pFullLink->m_prevlink;
-    if (pPreviousLink) {
-      TSLink<::SGAMEDATA>** pBackLink;
-      pBackLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pFullLink, -1);
-      *pBackLink = pPreviousLink;
-      pFullLink->m_prevlink->m_next = pFullLink->m_next;
-      pFullLink->m_prevlink = 0;
-      pFullLink->m_next = 0;
-    }
-
-    TSLink<::SGAMEDATA>* pSlotLink = &this->m_linktoslot;
-    pPreviousLink = pSlotLink->m_prevlink;
-    if (!pPreviousLink) {
-      return;
-    }
-
-    pBackLink2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pSlotLink, -1);
-    *pBackLink2 = pPreviousLink;
-    pSlotLink->m_prevlink->m_next = pSlotLink->m_next;
-    pSlotLink->m_prevlink = 0;
-    pSlotLink->m_next = 0;
-}
-
 // Unreferenced copy of UnlinkNode: unlinks pNode and clears its link.
 // Byte-identical to TSExplicitList<CELLIST,..>::UnlinkNode 006022a0; T not proven (no xrefs), filed with the SGAMEDATA block.
 // stpl-orphan: a COMDAT copy in TSExplicitList<SGAMEDATA, -572662307> that no member owns
@@ -248,42 +205,6 @@ void __fastcall UnlinkNode_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>*
     pNodeLink->m_prevlink->m_next = pNodeLink->m_next;
     pNodeLink->m_prevlink = 0;
     pNodeLink->m_next = 0;
-}
-
-template<> __declspec(noinline) inline void TSExplicitList<SGAMEDATA, -572662307>::UnlinkAll() {
-    TSLink<::SGAMEDATA>** pPrevLink;
-    intptr_t nHeadOffset;
-    TSLink<::SGAMEDATA>* pNext;
-    while ((nHeadOffset = this->m_terminator.m_next) > 0) {
-      TSLink<::SGAMEDATA>* pNode;
-      pNext = *(TSLink<::SGAMEDATA>**)(this->m_linkoffset + nHeadOffset);
-      pNode = (TSLink<::SGAMEDATA>*)(this->m_linkoffset + nHeadOffset);
-      if (pNext) {
-        pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pNode, -1);
-        *pPrevLink = pNext;
-        pNode->m_prevlink->m_next = pNode->m_next;
-        pNode->m_prevlink = 0;
-        pNode->m_next = 0;
-      }
-    }
-}
-
-template<> __declspec(noinline) inline void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::UnlinkAll() {
-    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>** pPrevLink;
-    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNext;
-    intptr_t nHeadOffset;
-    while ((nHeadOffset = this->m_terminator.m_next) > 0) {
-      TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pNode;
-      pNext = *(TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)(this->m_linkoffset + nHeadOffset);
-      pNode = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>*)(this->m_linkoffset + nHeadOffset);
-      if (pNext) {
-        pPrevLink = (TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>**)D2_StormNextLink(pNode, -1);
-        *pPrevLink = pNext;
-        pNode->m_prevlink->m_next = pNode->m_next;
-        pNode->m_prevlink = 0;
-        pNode->m_next = 0;
-      }
-    }
 }
 
 // Changes the link offset; when it differs, unlinks every node first and resets the terminator.
@@ -312,47 +233,6 @@ template<> StormLinkedListStrc * __fastcall TSExplicitList<SGAMEDATA, -572662307
 
 template<> void TSExplicitList<SGAMEDATA, -572662307>::Unreferenced_0044f9f0() {
     ((TSHashObject<::SGAMEDATA, HASHKEY_NONE>*)this)->Destructor();
-}
-
-template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly) {
-    TSExplicitList<::SGAMEDATA, -572662307>* pTVar1;
-    ::SGAMEDATA* pGame;
-    TSLink<::SGAMEDATA>* pNode;
-    TSLink<::SGAMEDATA>** pPrevLink;
-    TSLink<::SGAMEDATA>* pNext;
-    int nChunkBase;
-    this->nFullnessIndicator = 0;
-    this->tFullList.UnlinkAll();
-    uint32_t pBucketIdx = 0;
-    if (this->tSlotListArray.m_count <= 0) {
-      return;
-    }
-
-    do {
-      while (true) {
-        pTVar1 = this->tSlotListArray.m_data;
-        pGame = *(::SGAMEDATA**)&pTVar1[pBucketIdx].m_terminator.m_next;
-        if ((intptr_t)pGame <= 0) {
-          break;
-        }
-        if (bUnlinkOnly) {
-          nChunkBase = pTVar1[pBucketIdx].m_linkoffset;
-          pNext = *(TSLink<::SGAMEDATA>**)(pGame->szGameName + (nChunkBase - 0x2a));
-          pNode = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (nChunkBase - 0x2a));
-          if (pNext) {
-            pPrevLink = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pNode, -1);
-            *pPrevLink = pNext;
-            pNode->m_prevlink->m_next = pNode->m_next;
-            pNode->m_prevlink = 0;
-            pNode->m_next = 0;
-          }
-        } else {
-          vc8_thiscall(this->pVtable->InternalDelete)(this, pGame);
-        }
-      }
-
-      pBucketIdx++;
-    } while (pBucketIdx < this->tSlotListArray.m_count);
 }
 
 // Unreferenced copy of the destructor: unlinks every node, then the terminator.
@@ -427,12 +307,6 @@ TSExplicitList<::SGAMEDATA, -572662307>* __fastcall CopyConstructor_Unreferenced
     pThis->m_linkoffset = nListId;
     pThis->m_terminator.m_next = ~(uintptr_t)pTVar1;
     return pThis;
-}
-
-// @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0>::InternalDelete (STORM.H)
-template<> void __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDelete(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, ::SGAMEDATA * pNode) {
-    pNode->Destructor();
-    Storm::Source::SMem::SMemFree(pNode, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
 }
 
 template<> __declspec(noinline) inline void TSGrowableArray<SGAMEDATA>::ReallocData(uint32_t nAlloc) {
@@ -553,93 +427,6 @@ template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashOb
     return pChunk;
 }
 
-// @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0>::InternalNew (STORM.H)
-template<> ::SGAMEDATA * __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalNew(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSLink<::SGAMEDATA>* ppSlot;
-    ::SGAMEDATA* pGame = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
-    if (pGame) {
-      pGame->m_linktoslot.m_prevlink = 0;
-      pGame->m_linktoslot.m_next = 0;
-      pGame->m_linktofull.m_prevlink = 0;
-      pGame->m_linktofull.m_next = 0;
-      ppSlot = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (pList->m_linkoffset - 0x2a));
-    } else {
-      pGame = 0;
-      ppSlot = &pList->m_terminator;
-    }
-
-    TSLink<::SGAMEDATA>* pExisting = ppSlot->m_prevlink;
-    if (pExisting) {
-      char* pPrevLink;
-      pPrevLink = (char*)D2_StormNextLink(ppSlot, -1);
-      *(TSLink<::SGAMEDATA>**)pPrevLink = (TSLink<::SGAMEDATA>*)pExisting;
-      ppSlot->m_prevlink->m_next = ppSlot->m_next;
-      ppSlot->m_prevlink = 0;
-      ppSlot->m_next = 0;
-    }
-
-    pExisting = &pList->m_terminator;
-    ppSlot->m_prevlink = pExisting;
-    ppSlot->m_next = pList->m_terminator.m_next;
-    intptr_t pTailLink2 = pList->m_terminator.m_next;
-    intptr_t pHeadOffset = pList->m_linkoffset;
-    if (pTailLink2 < 0) {
-      *(TSLink<::SGAMEDATA>**)~pTailLink2 = (TSLink<::SGAMEDATA>*)ppSlot;
-    } else {
-      if (pHeadOffset < 0) {
-        pHeadOffset = (intptr_t)pExisting - pExisting->m_prevlink->m_next;
-      }
-
-      *(TSLink<::SGAMEDATA>**)(pTailLink2 + pHeadOffset) = (TSLink<::SGAMEDATA>*)ppSlot;
-    }
-
-    pExisting->m_next = (intptr_t)pGame;
-    return pGame;
-}
-
-// @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0>::Destroy (STORM.H)
-template<> void __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destroy(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int) {
-    pThis->InternalClear(0);
-    pThis->tChunkList.Clear();
-    pThis->tReuseList.Clear();
-}
-
-// @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0> scalar deleting destructor (STORM.H)
-template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::ScalarDeletingDestructor(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, uint32_t dwFlags) {
-    pThis->Destructor();
-    if (dwFlags & 1 && pThis) {
-      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
-    }
-
-    return pThis;
-}
-
-template<> __declspec(noinline) inline TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Constructor() {
-    this->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Constructor();
-    this->pVtable = (TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Vtable*)(void*)TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>::vftable;
-    TSExplicitList<::SGAMEDATA, -572662307>* pReuseList = &this->tReuseList;
-    this->tReuseList.m_terminator.m_next = 0;
-    TSLink<::SGAMEDATA>* pListHead = &this->tReuseList.m_terminator;
-    pListHead->m_prevlink = pListHead;
-    this->tReuseList.m_terminator.m_next = ~(uintptr_t)pListHead;
-    pReuseList->m_linkoffset = -0x22222223;
-    this->tChunkList.m_terminator.m_next = 0;
-    TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pTVar1 = &this->tChunkList.m_terminator;
-    pTVar1->m_prevlink = pTVar1;
-    this->tChunkList.m_linkoffset = 0x10;
-    this->tChunkList.m_terminator.m_next = ~(uintptr_t)pTVar1;
-    this->nChunkSize = 0x10;
-    if (pReuseList->m_linkoffset != 4) {
-      pReuseList->UnlinkAll();
-      pListHead = &this->tReuseList.m_terminator;
-      pListHead->m_prevlink = pListHead;
-      pReuseList->m_linkoffset = 4;
-      this->tReuseList.m_terminator.m_next = ~(uintptr_t)pListHead;
-    }
-
-    return this;
-}
-
 // JMP thunk
 template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Unreferenced_00451160() {
     this->Destructor();
@@ -677,21 +464,6 @@ template<> TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCri
     return this;
 }
 
-// @blizzard TSExportTableSync<SGAMEDATA,HSGAMEDATA__*,HSGAMEDATALOCK__*,CCritSect,0> scalar deleting destructor (STORM.H)
-template<> TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* __fastcall TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::ScalarDeletingDestructor(TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pThis, int, uint32_t dwFlags) {
-    /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&pThis->tSync.m_critsect);
-    pThis->TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>::Destructor();
-    if (dwFlags & 1 && pThis) {
-      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
-    }
-
-    return pThis;
-}
-
 // Static data members
 
-template<> void * TSHashTable<SGAMEDATA, HASHKEY_NONE>::vftable[4] = { (void*)&TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalDelete, (void*)&TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalNew, (void*)&TSHashTable<SGAMEDATA, HASHKEY_NONE>::ScalarDeletingDestructor, (void*)&TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destroy };
-
 template<> void * TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::vftable[4] = { (void*)&TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDelete, (void*)&TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalNew, (void*)&TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::ScalarDeletingDestructor, (void*)&TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destroy };
-
-template<> void * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::vftable[4] = { (void*)&TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDelete, (void*)&TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalNew, (void*)&TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::ScalarDeletingDestructor, (void*)&TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destroy };

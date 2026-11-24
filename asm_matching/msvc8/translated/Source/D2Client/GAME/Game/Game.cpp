@@ -3010,11 +3010,6 @@ void __fastcall TSIntrusiveList_Clear_Unreferenced_Unref_006c4140(StormLinkedLis
     pListHead->head.pNext = ~(uintptr_t)pSVar1;
 }
 
-// compiler-generated C++ EH handler; its frame is never registered with the OS
-_EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6ca026(EHExceptionRecord * pExceptionRecord, EHRegistrationNode * pRegistrationNode, _CONTEXT * pContext, void * pDispatcherContext) {
-    return ExceptionContinueSearch;
-}
-
 static void * keep_0044d320 = (0 ? (GAMEDATA_IsMouseInRect(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 }}} // namespace D2Client::GAME::Game

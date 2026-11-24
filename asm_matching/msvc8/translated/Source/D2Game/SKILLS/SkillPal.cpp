@@ -1021,51 +1021,50 @@ BOOL __fastcall SKILPAL_SrvStFn35_Vengeance(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // Server do-function for skill 73 (Fist of the Heavens). Resolves the charge-up missile via SKILLASS_GetChargeUpMissile, gets the target/cursor position, spawns the FotH missile via CreatingMissile with path type 0xE (arcing), then applies Concentration aura magic-damage bonus to the missile's magicmindam/magicmaxdam stats if active. Returns 1 on success, 0 on invalid skill or no target.
 BOOL __fastcall Skills_SrvDoFunc_073_BlessedHammer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2SkillArgStrc sSkillArg;
+    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillsTxt) {
+      return 0;
+    }
+
+    eMissilesId eMissileId = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
+    if ((int)eMissileId <= 0) {
+      return 0;
+    }
+
+    uint32_t nTargetX;
     uint32_t nTargetY;
-    eD2Skills eSkillSlot;
-    if ((int)eSkill < 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount || !(D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill)) {
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nTargetY)) {
       return 0;
     }
 
-    ::SGAMEDATA* pGameSaved = pGame;
-    eMissilesId eSkillId = SkillAss::SKILLASS_GetChargeUpMissile(pUnit, eSkill);
-    if ((int)eSkillId <= 0) {
-      return 0;
-    }
-
-    BOOL bGotTargetPos = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSaved, pUnit, &eSkillSlot, &nTargetY);
-    if (!bGotTargetPos) {
-      return 0;
-    }
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
+    D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, 0x5c);
-    sSkillArg.nUnitY = nTargetY;
-    sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nFlags = 0x20;
-    sSkillArg.nUnitX = eSkillSlot;
-    sSkillArg.eSkillNo = eSkill;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
-    sSkillArg.nMissileTxtNo = eSkillId;
-    D2UnitStrc* pUnit_00 = MISSILES::Missiles::CreatingMissile(pGameSaved, &sSkillArg);
-    if (!pUnit_00) {
+    sSkillArg.nUnitX = nTargetX;
+    sSkillArg.nUnitY = nTargetY;
+    sSkillArg.nSkillLevel = nSkillLvl;
+    sSkillArg.eSkillNo = eSkill;
+    sSkillArg.nMissileTxtNo = eMissileId;
+    D2UnitStrc* pMissile = MISSILES::Missiles::CreatingMissile(pGame, &sSkillArg);
+    if (!pMissile) {
       return 0;
     }
 
-    D2DynamicPathStrc* pDynamicPath = pUnit_00->pPath.pDynamicPath;
+    D2DynamicPathStrc* pDynamicPath = pMissile->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 0xe);
-    D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit_00, 0);
+    D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pMissile, 0);
     int32_t nConcentrationBonusPct = D2Common::Skills::SKILL_GetConcentrationDamageBonus(pUnit, eSkill);
     if (nConcentrationBonusPct) {
-      int32_t nConcentrationBonus;
-      nConcentrationBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmindam, 0), nConcentrationBonusPct + 100, 100);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmindam, nConcentrationBonus, 0);
-      nConcentrationBonusPct = D2Common::DATATBLS::DataTbls::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, 0), nConcentrationBonusPct + 100, 100);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_magicmaxdam, nConcentrationBonusPct, 0);
+      int32_t nConcentrationBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMissile, UNITSTAT_magicmindam, 0), nConcentrationBonusPct + 100, 100);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_magicmindam, nConcentrationBonus, 0);
+      nConcentrationBonus = D2Common::DATATBLS::DataTbls::D2ApplyPercent(D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMissile, UNITSTAT_magicmaxdam, 0), nConcentrationBonusPct + 100, 100);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMissile, UNITSTAT_magicmaxdam, nConcentrationBonus, 0);
     }
 
     return 1;

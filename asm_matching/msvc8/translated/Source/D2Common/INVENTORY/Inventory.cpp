@@ -1609,83 +1609,68 @@ D2UnitStrc * __stdcall INVENTORY_GetHandItem(D2InventoryStrc * pInventory) {
 
 // Searches the stash inventory page for the first item that is socketable with pUnit1 (the socketing reagent) and has remaining stack capacity (quantity &lt; maxStack). If pUnit2 is non-null, scanning starts after pUnit2 in the page-linked list (used to resume past a previously checked item). Returns the matching D2UnitStrc* or null if none found.
 D2UnitStrc * __stdcall INVENTORY_FindBackpackItemForStack(D2InventoryStrc * pInventory, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
-    int _bSocketable;
-    int32_t bStackMatches;
-    bool bSocketable;
-    int32_t nItemMaxStack;
     D2GridScreenCoordinates sGridDims;
-    D2UnitDataItemStrc* pItemData;
-    if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
+    if (!pInventory) {
+      return nullptr;
+    }
+    if (pInventory->nSignatureMagic != 0x1020304) {
       return nullptr;
     }
 
-    D2UnitStrc* pCurItem;
-    pCurItem = pInventory->pOwner;
-    D2GridScreenCoordinates* pGridDims;
-    pGridDims = 0;
-    if (pCurItem && pCurItem->eUnitType == UNIT_PLAYER) {
+    D2UnitStrc* pItem = pInventory->pOwner;
+    D2GridScreenCoordinates* pGridDims = 0;
+    if (pItem && pItem->eUnitType == UNIT_PLAYER) {
       int32_t neInventoryPage;
-      neInventoryPage = Units::UNITS_GetInventoryRecordId(pCurItem, '\0', 1);
+      neInventoryPage = Units::UNITS_GetInventoryRecordId(pItem, '\0', 1);
       DATATBLS::TokTbls::GetGridDimensions(neInventoryPage, 0, &sGridDims);
       pGridDims = &sGridDims;
     }
 
-    D2InventoryGridInfoStrc* pStashGridInfo;
-    pStashGridInfo = ReinitializeInventoryGrid(2, (D2InventorySizesStrc*)pGridDims, pInventory);
+    D2InventoryGridInfoStrc* pStashGridInfo = ReinitializeInventoryGrid(2, (D2InventorySizesStrc*)pGridDims, pInventory);
     if (!pStashGridInfo) {
       return nullptr;
     }
 
-    pCurItem = pStashGridInfo->pFirstItem;
+    pItem = pStashGridInfo->pFirstItem;
     if (pUnit2) {
-      while (pCurItem) {
-        if (pCurItem == pUnit2) {
-          goto search_from_item;
-        }
-        if (pCurItem->eUnitType != UNIT_ITEM) {
+      while (pItem && pItem != pUnit2) {
+        if (pItem->eUnitType != UNIT_ITEM) {
           return nullptr;
         }
 
-        pItemData = pCurItem->pUnitData.pUnitDataItem;
+        D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pCurItem = pItemData->sInvNode.pNextItemInPage;
+        pItem = pNode->pNextItemInPage;
       }
-    } else {
-      search_from_item:
-      if (pCurItem) {
-        while (true) {
-          bStackMatches = ITEMS::Items::ITEMS_AreStackablesEqual(pCurItem, pUnit1);
-          if (bStackMatches) {
-            _bSocketable = Stats::StatsEx::STATSEX_GetCurrentStat(pCurItem, UNITSTAT_quantity, 0);
-            nItemMaxStack = ITEMS::Items::ITEM_GetMaxStack(pCurItem);
-            if (_bSocketable < nItemMaxStack) {
-              return pCurItem;
-            }
-          }
-          if (pCurItem->eUnitType != UNIT_ITEM) {
-            break;
-          }
+    }
 
-          pItemData = pCurItem->pUnitData.pUnitDataItem;
-          if (!pItemData) {
-            break;
-          }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
-            break;
-          }
-
-          pCurItem = pItemData->sInvNode.pNextItemInPage;
-          if (!pCurItem) {
-            return nullptr;
-          }
-        }
+    while (pItem) {
+      if (ITEMS::Items::ITEMS_AreStackablesEqual(pItem, pUnit1) && Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0) < ITEMS::Items::ITEM_GetMaxStack(pItem)) {
+        return pItem;
       }
+      if (pItem->eUnitType != UNIT_ITEM) {
+        return nullptr;
+      }
+
+      D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
+      if (!pItemData) {
+        return nullptr;
+      }
+
+      D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+      if (!pNode) {
+        return nullptr;
+      }
+
+      pItem = pNode->pNextItemInPage;
     }
 
     return nullptr;
@@ -1753,88 +1738,68 @@ D2UnitStrc * __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc * pInv
 
 // Searches the player inventory grid for a tome (ITEMTYPE_Book) that matches pScrollItem's magic suffix and is not yet full (quantity < max stack). Iterates the stash grid's item linked list starting from pStartAfterItem (or from the beginning if NULL). Returns the first matching non-full tome, or NULL if none found. Used when auto-stacking a scroll pickup into an existing tome.
 D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(D2InventoryStrc * pInventory, D2UnitStrc * pScrollItem, D2UnitStrc * pStartAfterItem) {
-    int32_t neInventoryPage;
-    eD2ItemTypes eItemType;
-    uint16_t uVar2;
-    int32_t nBookQuantity;
-    int32_t nBookMaxStack;
     D2GridScreenCoordinates sGridDims;
-    D2UnitDataItemStrc* pItemData;
-    if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
+    if (!pInventory) {
+      return nullptr;
+    }
+    if (pInventory->nSignatureMagic != 0x1020304) {
       return nullptr;
     }
 
-    D2UnitStrc* pCurItem;
-    pCurItem = pInventory->pOwner;
-    D2GridScreenCoordinates* pGridDims;
-    pGridDims = 0;
-    if (pCurItem && pCurItem->eUnitType == UNIT_PLAYER) {
-      neInventoryPage = Units::UNITS_GetInventoryRecordId(pCurItem, '\0', 1);
+    D2UnitStrc* pItem = pInventory->pOwner;
+    D2GridScreenCoordinates* pGridDims = 0;
+    if (pItem && pItem->eUnitType == UNIT_PLAYER) {
+      int32_t neInventoryPage;
+      neInventoryPage = Units::UNITS_GetInventoryRecordId(pItem, '\0', 1);
       DATATBLS::TokTbls::GetGridDimensions(neInventoryPage, 0, &sGridDims);
       pGridDims = &sGridDims;
     }
 
-    D2InventoryGridInfoStrc* pStashGridInfo;
-    pStashGridInfo = ReinitializeInventoryGrid(2, (D2InventorySizesStrc*)pGridDims, pInventory);
+    D2InventoryGridInfoStrc* pStashGridInfo = ReinitializeInventoryGrid(2, (D2InventorySizesStrc*)pGridDims, pInventory);
     if (!pStashGridInfo) {
       return nullptr;
     }
 
-    pCurItem = pStashGridInfo->pFirstItem;
+    pItem = pStashGridInfo->pFirstItem;
     if (pStartAfterItem) {
-      while (pCurItem) {
-        if (pCurItem == pStartAfterItem) {
-          goto search_from_item;
-        }
-        if (pCurItem->eUnitType != UNIT_ITEM) {
+      while (pItem && pItem != pStartAfterItem) {
+        if (pItem->eUnitType != UNIT_ITEM) {
           return nullptr;
         }
 
-        pItemData = pCurItem->pUnitData.pUnitDataItem;
+        D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pCurItem = pItemData->sInvNode.pNextItemInPage;
+        pItem = pNode->pNextItemInPage;
       }
-    } else {
-      uint16_t uVar1;
-      search_from_item:
-      if (pCurItem) {
-        while (true) {
-          eItemType = ITEMS::Items::ITEM_GetItemData_wType(pCurItem);
-          if (eItemType == ITEMTYPE_Book) {
-            uVar1 = ITEMS::Items::GetMagicSuffix(pCurItem, 0);
-            uVar2 = ITEMS::Items::GetMagicSuffix(pScrollItem, 0);
-            if (uVar1 == uVar2) {
-              nBookQuantity = Stats::StatsEx::STATSEX_GetCurrentStat(pCurItem, UNITSTAT_quantity, 0);
-              nBookMaxStack = ITEMS::Items::ITEM_GetMaxStack(pCurItem);
-              if (nBookQuantity < nBookMaxStack) {
-                return pCurItem;
-              }
-            }
-          }
-          if (pCurItem->eUnitType != UNIT_ITEM) {
-            break;
-          }
+    }
 
-          pItemData = pCurItem->pUnitData.pUnitDataItem;
-          if (!pItemData) {
-            break;
-          }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
-            break;
-          }
-
-          pCurItem = pItemData->sInvNode.pNextItemInPage;
-          if (!pCurItem) {
-            return nullptr;
-          }
-        }
+    while (pItem) {
+      if (ITEMS::Items::ITEM_GetItemData_wType(pItem) == ITEMTYPE_Book && ITEMS::Items::GetMagicSuffix(pItem, 0) == ITEMS::Items::GetMagicSuffix(pScrollItem, 0) && Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_quantity, 0) < ITEMS::Items::ITEM_GetMaxStack(pItem)) {
+        return pItem;
       }
+      if (pItem->eUnitType != UNIT_ITEM) {
+        return nullptr;
+      }
+
+      D2UnitDataItemStrc* pItemData = pItem->pUnitData.pUnitDataItem;
+      if (!pItemData) {
+        return nullptr;
+      }
+
+      D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+      if (!pNode) {
+        return nullptr;
+      }
+
+      pItem = pNode->pNextItemInPage;
     }
 
     return nullptr;
@@ -2488,8 +2453,6 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInvento
     eD2UnitType eUnitType;
     D2UnitDataItemStrc* pItemData;
     int nInventory;
-    D2InventoryStrc* pInventory_00;
-    pInventory_00 = pInventory;
     if (!pInventory) {
       return nullptr;
     }
@@ -2504,7 +2467,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInvento
     }
 
     D2InventoryGridInfoStrc* pDVar1;
-    pDVar1 = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory_00);
+    pDVar1 = ReinitializeInventoryGrid(0, &gsInventoryBodyLocGridSize, pInventory);
     if (!pDVar1) {
       return nullptr;
     }
@@ -2524,18 +2487,19 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInvento
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pGridInfo = pItemData->sInvNode.pNextItemInPage;
+        pGridInfo = pNode->pNextItemInPage;
       }
     } else {
       uint32_t nPosX;
       scan_for_match:
       if (pGridInfo) {
         while (true) {
-          if (pGridInfo->nClassId == nInventory) {
+          if (GetClassIdInline(pGridInfo) == nInventory) {
             eUnitType = pGridInfo->eUnitType;
             if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
               nPosX = pGridInfo->pPath.pStaticPath->nPosX;
@@ -2558,11 +2522,12 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInMain(D2InventoryStrc * pInvento
           if (!pItemData) {
             break;
           }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
+          D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+          if (!pNode) {
             return nullptr;
           }
 
-          pGridInfo = pItemData->sInvNode.pNextItemInPage;
+          pGridInfo = pNode->pNextItemInPage;
           if (!pGridInfo) {
             return nullptr;
           }
@@ -2580,8 +2545,6 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInvent
     eD2UnitType eUnitType;
     D2UnitDataItemStrc* pItemData;
     int nInventory;
-    D2InventoryStrc* pInventory_00;
-    pInventory_00 = pInventory;
     if (!pInventory) {
       return nullptr;
     }
@@ -2596,7 +2559,7 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInvent
     }
 
     D2InventoryGridInfoStrc* pDVar1;
-    pDVar1 = ReinitializeInventoryGrid(2, &gsInventoryBodyLocGridSize, pInventory_00);
+    pDVar1 = ReinitializeInventoryGrid(2, &gsInventoryBodyLocGridSize, pInventory);
     if (!pDVar1) {
       return nullptr;
     }
@@ -2616,18 +2579,19 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInvent
         if (!pItemData) {
           return nullptr;
         }
-        if (pItemData == (D2UnitDataItemStrc*)-92) {
+        D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+        if (!pNode) {
           return nullptr;
         }
 
-        pCurItem = pItemData->sInvNode.pNextItemInPage;
+        pCurItem = pNode->pNextItemInPage;
       }
     } else {
       uint32_t nPosX;
       search_from_item:
       if (pCurItem) {
         while (true) {
-          if (pCurItem->nClassId == nInventory) {
+          if (GetClassIdInline(pCurItem) == nInventory) {
             eUnitType = pCurItem->eUnitType;
             if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
               nPosX = pCurItem->pPath.pStaticPath->nPosX;
@@ -2650,11 +2614,12 @@ D2UnitStrc * __stdcall INVENTORY_FindItemByCodeInStash(D2InventoryStrc * pInvent
           if (!pItemData) {
             break;
           }
-          if (pItemData == (D2UnitDataItemStrc*)-92) {
+          D2ItemInventoryNodeStrc* pNode = &pItemData->sInvNode;
+          if (!pNode) {
             return nullptr;
           }
 
-          pCurItem = pItemData->sInvNode.pNextItemInPage;
+          pCurItem = pNode->pNextItemInPage;
           if (!pCurItem) {
             return nullptr;
           }

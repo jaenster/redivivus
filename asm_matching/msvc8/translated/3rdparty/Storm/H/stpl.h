@@ -484,7 +484,7 @@ template<> TSExportTableSync<::CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSec
 template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::Destructor();
 template<> TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::Constructor();
 // @blizzard TSExportTableSync<SGAMEDATA,HSGAMEDATA__*,HSGAMEDATALOCK__*,CCritSect,0> scalar deleting destructor (STORM.H)
-template<> TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* __fastcall TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::ScalarDeletingDestructor(TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pThis, int, uint32_t dwFlags);
+template<> inline TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* __fastcall TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::ScalarDeletingDestructor(TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>* pThis, int, uint32_t dwFlags);
 template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::SyncLeaveLock(int32_t nLockedHandle);
 template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::Unlock(int32_t nLockedHandle);
 template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::DeleteUnlock(::SGAMEDATA * pNode, int32_t nLockedHandle);
@@ -545,7 +545,7 @@ template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::C
 // Byte-identical to TSGrowableArray<TSExplicitList<CELLIST,..>>::OperatorIndex 00601cc0; T from the 0xc stride, the only 12-byte array element in this block.
 template<> TSExplicitList<::SGAMEDATA, -572662307>* TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::OperatorIndex(uint32_t nIndex);
 template<> uint8_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044de40();
-template<> uint32_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::CalcChunkSize(uint32_t nCount);
+template<> inline uint32_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::CalcChunkSize(uint32_t nCount);
 // Static: rounds nValue up to a multiple of nMultiple.
 // Byte-identical to 0060e2e0; T by adjacency to this instantiation's CalcChunkSize 0044df30 (no xrefs).
 template<> uint32_t __stdcall TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::RoundToMultiple(uint32_t nValue, uint32_t nMultiple);
@@ -645,14 +645,14 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New
 template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly);
 template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destructor();
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE>::InternalDelete (STORM.H)
-template<> void __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalDelete(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int, ::SGAMEDATA * pNode);
+template<> inline void __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalDelete(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int, ::SGAMEDATA * pNode);
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE>::InternalNew (STORM.H)
-template<> ::SGAMEDATA * __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalNew(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags);
+template<> inline ::SGAMEDATA * __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalNew(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags);
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE>::Destroy (STORM.H)
-template<> void __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destroy(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int);
+template<> inline void __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Destroy(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int);
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE> scalar deleting destructor (STORM.H)
-template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::ScalarDeletingDestructor(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int, uint32_t dwFlags);
-template<> TSHashTable<::SGAMEDATA, HASHKEY_NONE>* TSHashTable<SGAMEDATA, HASHKEY_NONE>::Constructor();
+template<> inline TSHashTable<::SGAMEDATA, HASHKEY_NONE>* __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::ScalarDeletingDestructor(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int, uint32_t dwFlags);
+template<> inline TSHashTable<::SGAMEDATA, HASHKEY_NONE>* TSHashTable<SGAMEDATA, HASHKEY_NONE>::Constructor();
 template<> void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Clear();
 // Unlinks a SGAMEDATA from up to two intrusive hash-table chains (pHashLink1/pHashLink2 with their corresponding nHashLinkOffset fields). For each non-null link, computes the back-pointer using the stored offset, patches the predecessor's next pointer to skip this node, then zeroes the game's own link field and offset. Called during game teardown to remove the game from name/token lookup tables before freeing memory.
 template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink(::SGAMEDATA * pNode);
@@ -717,15 +717,15 @@ template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* __fastcall TSHashTableR
 // const TSHashTableReuse<struct SGAMEDATA,class HASHKEY_NONE,0>::vftable
 
 template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDestroy();
-template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destructor();
+template<> inline void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destructor();
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0>::InternalDelete (STORM.H)
-template<> void __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDelete(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, ::SGAMEDATA * pNode);
+template<> inline void __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDelete(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, ::SGAMEDATA * pNode);
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0>::InternalNew (STORM.H)
-template<> ::SGAMEDATA * __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalNew(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags);
+template<> inline ::SGAMEDATA * __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalNew(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags);
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0>::Destroy (STORM.H)
-template<> void __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destroy(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int);
+template<> inline void __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destroy(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int);
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0> scalar deleting destructor (STORM.H)
-template<> TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::ScalarDeletingDestructor(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, uint32_t dwFlags);
+template<> inline TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::ScalarDeletingDestructor(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, uint32_t dwFlags);
 template<> __declspec(noinline) inline TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Constructor();
 template<> void TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Unreferenced_00451160();
 
