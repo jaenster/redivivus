@@ -2084,9 +2084,7 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
 
 // Computes the effective to-hit (attack rate) for a skill+weapon pair and writes it into *pnParam. Starts from the unit's base attack rate; if no explicit weapon is provided (pUnit2==null), falls back to the equipped weapon. Missile-potion weapons force *pnParam=0. Final value combines skill's LevToHit/ToHit columns, item bonus damage, UNITSTAT_item_tohit_percent, and the character class's ToHitFactor from CharStats.txt. Halts if pSkill is null.
 static void __stdcall SKILL_GetAttackRateForWeapon(D2UnitStrc * pUnit, D2SkillStrc * pSkill, D2UnitStrc * pUnit2, int * pnToHit, int32_t nSkillLevel) {
-    int32_t nAttackRate;
-    nAttackRate = D2Common::Units::GetAttackRate(pUnit);
-    *pnToHit = nAttackRate;
+    *pnToHit = D2Common::Units::GetAttackRate(pUnit);
     if (!pSkill) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x963);
       exit(-1);
@@ -2098,18 +2096,16 @@ static void __stdcall SKILL_GetAttackRateForWeapon(D2UnitStrc * pUnit, D2SkillSt
       }
     }
 
-    eD2ItemTypes eItemType;
-    eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit2);
-    if (eItemType == ITEMTYPE_MissilePotion) {
+    if (D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit2) == ITEMTYPE_MissilePotion) {
       *pnToHit = 0;
     }
 
     apply_tohit_bonuses:
-    nAttackRate = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit, pUnit2, pSkill, 0);
-    int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_tohit_percent, 0);
+    int nBonus = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit, pUnit2, pSkill, 0) + D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_tohit_percent, 0);
     D2SkillsTxt* pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill);
-    int nComputedToHit = *pnToHit + ((nSkillLevel - 1) * pSkillsTxt->LevToHit + pSkillsTxt->ToHit + nAttackRate + iVar1) * *pnToHit / 100;
-    *pnToHit = nComputedToHit;
+    int nToHit = *pnToHit;
+    nToHit += ((nSkillLevel - 1) * pSkillsTxt->LevToHit + pSkillsTxt->ToHit + nBonus) * nToHit / 100;
+    *pnToHit = nToHit;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
     }
@@ -2120,7 +2116,7 @@ static void __stdcall SKILL_GetAttackRateForWeapon(D2UnitStrc * pUnit, D2SkillSt
       return;
     }
 
-    *pnToHit = pCharStatsTxt->ToHitFactor + nComputedToHit;
+    *pnToHit = pCharStatsTxt->ToHitFactor + nToHit;
 }
 
 // Returns a shrine's effective stat bonus for the given unit stat. For most stats (resistances, stamina, experience, etc.) returns nParam unchanged. For UNITSTAT_tohit, computes the attack rate via SKILL_GetAttackRateForWeapon. For UNITSTAT_mindamage, resolves whether to use primary or secondary min-damage stat based on dual-wield handedness, then fetches the raw stat value and scales it as (statValue * nParam) / 100.
