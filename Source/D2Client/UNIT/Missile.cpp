@@ -2229,24 +2229,23 @@ int32_t __fastcall MISSILE_CltHitFn02_GasCloud(D2UnitStrc * pUnit, D2UnitStrc * 
 
 // Client-side hit function for missile type 003 (dual sub-missile on hit). Spawns CltHitSubMissile1 unconditionally. If CltHitSubMissile2 is valid, picks a random sub-missile ID in [CltHitSubMissile2, CltHitSubMissile3] via SEED_RollRangeInclusive, spawns it, then immediately marks it dead (SetDeadFlag) — used for visual-only secondary effects. Always returns 1.
 int32_t __fastcall MISSILE_CltHitFn03_PotionExplode(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    eMissilesId nSubMissileId;
-    int nClassId;
-    D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
-    if (!(pMissileTxt && pMissileTxt->CltHitSubMissile1 >= 0)) {
+    D2MissilesTxt* pMissileTxt = 0;
+    if (pUnit) {
+      int nClassId = pUnit->nClassId;
+      pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    }
+    if (!pMissileTxt || pMissileTxt->CltHitSubMissile1 < 0) {
       return 1;
     }
 
-    int32_t nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-    MakeMissileAtXY(pUnit, (int)pMissileTxt->CltHitSubMissile1, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), nSkillLevel);
+    MakeMissileAtXY(pUnit, (int)pMissileTxt->CltHitSubMissile1, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit));
     if (pMissileTxt->CltHitSubMissile2 >= 0) {
-      D2UnitStrc* pSubMissile;
-      nSubMissileId = (eMissilesId)pMissileTxt->CltHitSubMissile2;
+      eMissilesId nSubMissileId = (eMissilesId)pMissileTxt->CltHitSubMissile2;
       if (pMissileTxt->CltHitSubMissile3 > pMissileTxt->CltHitSubMissile2) {
         nSubMissileId = D2Game::Seed::SEED_RollRangeInclusive(&pUnit->sSeed, (int)pMissileTxt->CltHitSubMissile2, (int)pMissileTxt->CltHitSubMissile3);
       }
 
-      nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-      pSubMissile = MakeMissileAtXY(pUnit, nSubMissileId, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), nSkillLevel);
+      D2UnitStrc* pSubMissile = MakeMissileAtXY(pUnit, nSubMissileId, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit));
       if (pSubMissile) {
         CUnit::SetDeadFlag(pSubMissile);
       }
