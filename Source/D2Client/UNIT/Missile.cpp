@@ -2962,38 +2962,24 @@ uint32_t __fastcall MISSILE_Create8DirectionalClient(D2UnitStrc * pUnit, D2UnitS
 }
 
 int32_t __fastcall MISSILE_CltHitFn28_PantherPotGreen(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    D2UnitStrc* pOwner;
-    int nClassId;
-    D2UnitStrc* pHitTarget;
-    D2MissilesTxt* pMissileTxt;
-    pMissileTxt = 0;
+    D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
-      nClassId = pUnit->nClassId;
+      int nClassId = pUnit->nClassId;
       pMissileTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
     }
-    if (!pMissileTxt) {
-      return 1;
-    }
-    if (pMissileTxt->CltHitSubMissile1 < 0) {
+    if (!pMissileTxt || pMissileTxt->CltHitSubMissile1 < 0) {
       return 1;
     }
 
-    pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
+    D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (!pOwner) {
       return 1;
     }
-
-    pHitTarget = pTarget;
     if (!pTarget) {
-      pHitTarget = pUnit;
+      pTarget = pUnit;
     }
 
-    nClassId = pMissileTxt->cHitPar1;
-    if (nClassId < 1) {
-      nClassId = 1;
-    }
-
-    MISSILE_Create8DirectionalClient(pOwner, pHitTarget, (int)pMissileTxt->CltHitSubMissile1, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), nClassId);
+    MISSILE_Create8DirectionalClient(pOwner, pTarget, (int)pMissileTxt->CltHitSubMissile1, D2Common::Units::Missile::GetSkillId(pUnit), D2Common::Units::Missile::GetLevel(pUnit), pMissileTxt->cHitPar1 < 1 ? 1 : pMissileTxt->cHitPar1);
     return 1;
 }
 
