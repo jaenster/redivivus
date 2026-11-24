@@ -320,23 +320,23 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Destr
     Storm::Source::SMem::SMemFree(this->m_data, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
 }
 
+static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g);
+
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
-    uint32_t uRequiredSize = nCount + this->m_count;
-    if (uRequiredSize <= this->m_alloc) {
+    nCount = nCount + this->m_count;
+    if (nCount <= this->m_alloc) {
       return;
     }
     if (bRound) {
-      uint32_t uNormalizeStep;
-      uNormalizeStep = this->m_chunk;
-      if (!uNormalizeStep) {
-        uNormalizeStep = this->CalcChunkSize(uRequiredSize);
+      uint32_t nGranularity = this->m_chunk;
+      if (!nGranularity) {
+        nGranularity = this->CalcChunkSize(nCount);
       }
-      if (uRequiredSize % uNormalizeStep) {
-        uRequiredSize = uNormalizeStep - uRequiredSize % uNormalizeStep + uRequiredSize;
-      }
+
+      nCount = D2_RoundUp(nCount, nGranularity);
     }
 
-    this->ReallocData(uRequiredSize);
+    this->ReallocData(nCount);
 }
 
 // stpl-orphan: a COMDAT copy in TSGrowableArray<TSExplicitList<CELLIST, -572662307>> that no member owns
