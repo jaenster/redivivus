@@ -569,6 +569,14 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
 static void __stdcall MONSTER_SendNpcHealthUpdate(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
     uint8_t nHitClass = (uint8_t)pUnit->dwLastHitClass;
     uint8_t byHpPct = Monsters::MONSTER_GetHpPercent128(pUnit);
@@ -617,6 +625,32 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_11(D2UnitStrc * p) 
     return p->eUnitFlags >> 11 & 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_16(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 16 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+// steer-ok: generated-form FlagBit getter
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_0(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 0 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+// steer-ok: generated-form FlagBit getter
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_0(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 0 & 1;
+}
+
 // Server-side per-unit update flush: emits all pending network packets for one unit to one client (pClient) based on the unit's eUnitFlags/eUnitFlagsEx. Sends a 0x15 reassign packet on UNITFLAGEX_TELEPORTED (with current x/y) and refreshes room visibility; flushes monster update (DOUPDATE), queued unit messages, hover text, proxy/merc inventory items (HASINV), sound, NPC health, and (when nIsNew==0) state/overlay/enchant updates. Reads STATES_HasAnyGfxFlag / STATLIST_HasChangedStats to decide state/overlay sends, and clears UNITFLAG_MONMODEISCHANGING.
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nIsNew) {
     int32_t wPosX;
@@ -627,13 +661,13 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     uint32_t nMercType;
     if (pUnit) {
       int32_t wPosY;
-      if (pUnit->eUnitFlagsEx & UNITFLAGEX_TELEPORTED) {
+      if (FlagBit_D2UnitStrc_eUnitFlagsEx_16(pUnit)) {
         wPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
         wPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, wPosX, wPosY, '\x01');
+        GAME::SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', GetTypeInline(pUnit), GetGUIDInline(pUnit), wPosX, wPosY, '\x01');
         SUnit::UNITS_UpdateRoomClientVisibility(pGame, pUnit, nullptr);
       }
-      if (pUnit->eUnitFlags & UNITFLAG_DOUPDATE) {
+      if (FlagBit_D2UnitStrc_eUnitFlags_0(pUnit)) {
         D2Game::Monster::MonsterMsg::MONSTER_SendUpdateToClient(pGame, pUnit, pClient);
       }
 
@@ -645,7 +679,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       if (FlagBit_D2UnitStrc_eUnitFlags_8(pUnit)) {
         SUnitMsg::PLAYER_SendHoverTextToClient(pUnit, pClient);
       }
-      if (pUnit->eUnitFlagsEx & UNITFLAGEX_HASINV) {
+      if (FlagBit_D2UnitStrc_eUnitFlagsEx_0(pUnit)) {
         pPlayer = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
         if (pPlayer) {
           bIsInNpcState2 = D2Game::Monster::MonsterAI::NpcStateIs2(pUnit, pPlayer);
