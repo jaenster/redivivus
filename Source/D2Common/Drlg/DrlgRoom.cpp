@@ -661,42 +661,28 @@ int __fastcall DRLGROOM_CoordsWithinDistance(D2DrlgCoordsStrc * pCoords1, D2Drlg
 
 // Returns true if two DRLG room coordinate rects are adjacent or overlapping within nMaxDist tiles. When nMaxDist==0, tests for direct overlap; when nMaxDist>0, accepts rooms separated by up to that many tiles in exactly one axis while touching in the other. Used by DefineRoomsNear and DRLGROOMEX_LinkNearRoomByDirection to find spatially neighbouring rooms.
 BOOL __fastcall DRLGCOORDS_IsAdjacentOrOverlapping(D2DrlgCoordsStrc * pDrlgCoords, D2DrlgCoordsStrc * pCoordinatesAndSizeB, int32_t nMaxDist) {
-    int nDistY;
-    int nDistX;
-    bool bSignedGreater;
-    int nPosA = pDrlgCoords->WorldPosition.x;
-    int nPosB = pCoordinatesAndSizeB->WorldPosition.x;
-    if (nPosA > nPosB || (nDistX = nPosB - pDrlgCoords->WorldSize.x - nPosA , nPosA > nPosB)) {
-      nDistX = nPosA - pCoordinatesAndSizeB->WorldSize.x - nPosB;
+    int nDistX = 0;
+    int nDistY = 0;
+    if (pDrlgCoords->WorldPosition.x <= pCoordinatesAndSizeB->WorldPosition.x) {
+      nDistX = pCoordinatesAndSizeB->WorldPosition.x - pDrlgCoords->WorldSize.x - pDrlgCoords->WorldPosition.x;
     }
-
-    nPosA = pDrlgCoords->WorldPosition.y;
-    nPosB = pCoordinatesAndSizeB->WorldPosition.y;
-    if (nPosA > nPosB || (nDistY = nPosB - pDrlgCoords->WorldSize.y - nPosA , nPosA > nPosB)) {
-      nDistY = nPosA - pCoordinatesAndSizeB->WorldSize.y - nPosB;
+    if (pDrlgCoords->WorldPosition.x > pCoordinatesAndSizeB->WorldPosition.x) {
+      nDistX = pDrlgCoords->WorldPosition.x - pCoordinatesAndSizeB->WorldSize.x - pCoordinatesAndSizeB->WorldPosition.x;
+    }
+    if (pDrlgCoords->WorldPosition.y <= pCoordinatesAndSizeB->WorldPosition.y) {
+      nDistY = pCoordinatesAndSizeB->WorldPosition.y - pDrlgCoords->WorldSize.y - pDrlgCoords->WorldPosition.y;
+    }
+    if (pDrlgCoords->WorldPosition.y > pCoordinatesAndSizeB->WorldPosition.y) {
+      nDistY = pDrlgCoords->WorldPosition.y - pCoordinatesAndSizeB->WorldSize.y - pCoordinatesAndSizeB->WorldPosition.y;
     }
     if (!nMaxDist) {
-      if (nDistX > 0) {
-        return 0;
-      }
-
-      bSignedGreater = nDistY > 0;
-    } else {
-      if (!nDistX && nDistY <= nMaxDist) {
-        return 1;
-      }
-      if (nDistY) {
-        return 0;
-      }
-
-      nDistY = nDistX - nMaxDist;
-      bSignedGreater = nDistX > nMaxDist;
+      return nDistX <= 0 && nDistY <= 0;
     }
-    if (!bSignedGreater) {
+    if (nDistX == 0 && nDistY <= nMaxDist) {
       return 1;
     }
 
-    return 0;
+    return nDistY == 0 && nDistX <= nMaxDist;
 }
 
 BOOL __fastcall DRLGROOM_IsRoomClearOfOthers(D2DrlgLevelStrc * pLevel, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomEx2, int32_t nDistance) {

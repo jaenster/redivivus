@@ -1636,18 +1636,16 @@ BOOL __stdcall PATH_RemoveUnitCollision(D2UnitStrc * pUnit, int32_t bForce) {
 }
 
 static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * pUnit) {
-    uint32_t nPathPoints;
     int ePathType = pDynamicPath->ePathType;
     switch (ePathType) {
       case 4:
         {
-          nPathPoints = PATH_BuildDirectPathToTarget(pDynamicPath);
-          if (!nPathPoints) {
-            pDynamicPath->nFlags &= -33;
-            return 0;
+          if (PATH_BuildDirectPathToTarget(pDynamicPath)) {
+            pDynamicPath->nFlags |= 0x20;
+            return pDynamicPath->dwPathPoints;
           }
-
-          break;
+          pDynamicPath->nFlags &= -33;
+          return 0;
         }
       case 10:
         {
@@ -1656,9 +1654,8 @@ static int32_t PATH_CalculateMissilePath(D2DynamicPathStrc * pDynamicPath, D2Uni
         }
       case 0xe:
         {
-          Drlg::Path::DRLGPATH_BuildCircularPathPoints(pDynamicPath);
-          pDynamicPath->nFlags |= 0x20;
-          return pDynamicPath->dwPathPoints;
+          Drlg::Path::DRLGPATH_BuildCircularPathPoints(pDynamicPath, &pUnit->sSeed);
+          break;
         }
       default:
         {

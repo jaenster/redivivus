@@ -37,6 +37,25 @@ static uint32_t gbBinkVideoShouldStop = 0; D2_STATIC_GUARD(gbBinkVideoShouldStop
 
 namespace D2Direct3D::d3dFloorCache {
 
+static inline D3DFloorCacheNodeStrc* __fastcall D3DFLOOR_PopUsedHead(D3DFloorCacheStrc * pCache) {
+    D3DFloorCacheNodeStrc* pNode = pCache->pUsedHead;
+    if (!pNode) {
+      return 0;
+    }
+
+    D3DFloorCacheNodeStrc* pNextUsed = pNode->pNext;
+    pCache->pUsedHead = pNextUsed;
+    if (pNextUsed) {
+      pNextUsed->pPrev = 0;
+    } else {
+      pCache->pUsedTail = 0;
+    }
+
+    pNode->pNext = 0;
+    pNode->pPrev = 0;
+    return pNode;
+}
+
 int __fastcall D3DFLOOR_Initialize(D3DFloorCacheStrc * pCache, int nBaseMemoryUsed, int nAvailableMemory, uint32_t dwTextureSize) {
     D3DFloorCacheNodeStrc* pCurrentNode;
     uint32_t uNodeCountCandidate = (uint32_t)(nAvailableMemory - nBaseMemoryUsed) / dwTextureSize;
@@ -221,37 +240,25 @@ void __fastcall D3DFLOOR_PromoteNodeToMRU(D3DFloorCacheStrc * pCache, int nIndex
 
 // Evicts the least-recently-used node of a D3D floor-texture cache: unlinks the head of the used list, clears its tile's nTextureCacheIndex, appends it to the free list. D3D twin of GLFLOOR_EvictLRU (0050f6d0) without the null-tile halt.
 // Provenance: 1.14d asm 006bb330..006bb38a; no references (EnsureAvailableNode inlines the same body).
-void __fastcall D3DFLOOR_EvictLRU(D3DFloorCacheStrc * pCache) {
+inline void __fastcall D3DFLOOR_EvictLRU(D3DFloorCacheStrc * pCache) {
+    D3DFloorCacheNodeStrc* pEvictNode;
     if (!pCache->nUsedCount) {
       return;
     }
 
-    D3DFloorCacheNodeStrc* pEvictNode = pCache->pUsedHead;
+    pEvictNode = D3DFLOOR_PopUsedHead(pCache);
     if (pEvictNode) {
-      D3DFloorCacheNodeStrc* pNextNode;
-      pNextNode = pEvictNode->pNext;
-      pCache->pUsedHead = pNextNode;
-      if (pNextNode) {
-        pNextNode->pPrev = 0;
-      } else {
-        pCache->pUsedTail = 0;
-      }
-
-      pEvictNode->pNext = 0;
-      pEvictNode->pPrev = 0;
       if (pEvictNode->pTile) {
         pEvictNode->pTile->nTextureCacheIndex = 0;
         pEvictNode->pTile = 0;
       }
       if (!pCache->pFreeHead) {
-        pCache->nUsedCount--;
         pCache->pFreeHead = pEvictNode;
-        pCache->pFreeTail = pEvictNode;
-        return;
+      } else {
+        pCache->pFreeTail->pNext = pEvictNode;
+        pEvictNode->pPrev = pCache->pFreeTail;
       }
 
-      pCache->pFreeTail->pNext = pEvictNode;
-      pEvictNode->pPrev = pCache->pFreeTail;
       pCache->pFreeTail = pEvictNode;
     }
 
@@ -295,7 +302,6 @@ void __fastcall D3DFLOOR_Free(D3DFloorCacheStrc * pCache, BOOL bInvalidateAll) {
     IUnknown* pIface2;
     IUnknown* pIface;
     D3DFloorCacheNodeStrc* pCurNode;
-    D3DFloorCacheNodeStrc* pNextNode;
     if (!pCache) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x60);
       exit(-1);
@@ -306,59 +312,23 @@ void __fastcall D3DFLOOR_Free(D3DFloorCacheStrc * pCache, BOOL bInvalidateAll) {
         exit(-1);
       }
     } else {
-      int nNodeByteOffset;
-      nNodeIndex = 0;
-      if (-1 < pCache->nMaxNodes - 1) {
-        nNodeByteOffset = 0;
-        do {
-          pCurNode = pCache->pNodeBuffer;
-          pIface = *(IUnknown**)&pCurNode[nNodeIndex].pSurface;
-          if (pIface) {
-            pIface->Release();
-            *(uint32_t*)&pCurNode[nNodeIndex].pSurface = 0;
-          }
+      for (nNodeIndex = 0; nNodeIndex <= pCache->nMaxNodes - 1; nNodeIndex++) {
+        pCurNode = &pCache->pNodeBuffer[nNodeIndex];
+        pIface = *(IUnknown**)&pCurNode->pSurface;
+        if (pIface) {
+          pIface->Release();
+          *(uint32_t*)&pCurNode->pSurface = 0;
+        }
 
-          pIface2 = *(IUnknown**)&pCurNode[nNodeIndex].pTexture;
-          if (pIface2) {
-            pIface2->Release();
-            *(uint32_t*)&pCurNode[nNodeIndex].pTexture = 0;
-          }
-
-          nNodeIndex++;
-          nNodeByteOffset += 0x18;
-        } while (nNodeIndex <= pCache->nMaxNodes - 1);
+        pIface2 = *(IUnknown**)&pCurNode->pTexture;
+        if (pIface2) {
+          pIface2->Release();
+          *(uint32_t*)&pCurNode->pTexture = 0;
+        }
       }
-      if (bInvalidateAll && pCache->nUsedCount) {
-        nNodeByteOffset = pCache->nUsedCount;
-        while (nNodeByteOffset) {
-          pCurNode = pCache->pUsedHead;
-          if (pCurNode) {
-            pNextNode = pCurNode->pNext;
-            pCache->pUsedHead = pNextNode;
-            if (pNextNode) {
-              pNextNode->pPrev = 0;
-            } else {
-              pCache->pUsedTail = 0;
-            }
-
-            pCurNode->pNext = 0;
-            pCurNode->pPrev = 0;
-            if (pCurNode->pTile) {
-              pCurNode->pTile->nTextureCacheIndex = 0;
-              pCurNode->pTile = 0;
-            }
-            if (!pCache->pFreeHead) {
-              pCache->pFreeHead = pCurNode;
-            } else {
-              pCache->pFreeTail->pNext = pCurNode;
-              pCurNode->pPrev = pCache->pFreeTail;
-            }
-
-            pCache->pFreeTail = pCurNode;
-          }
-
-          pCache->nUsedCount--;
-          nNodeByteOffset = pCache->nUsedCount;
+      if (bInvalidateAll) {
+        while (pCache->nUsedCount) {
+          D3DFLOOR_EvictLRU(pCache);
         }
       }
       if (pCache->pNodeBuffer) {

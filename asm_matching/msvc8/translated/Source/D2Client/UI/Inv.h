@@ -205,7 +205,7 @@ void __stdcall INV_ConsumeInputEvent(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_HandleShopEnterKey(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_HandleShopRightClick(struct D2UIMouseMsgStrc * pMsg);
 void __stdcall INV_HandleShopReturnAction();
-void __stdcall INV_HandleInventoryMouseMove(struct D2UIMouseMsgStrc * pMsg);
+BOOL __stdcall INV_HandleInventoryMouseMove(struct D2UIMouseMsgStrc * pMsg);
 BOOL __stdcall INV_HandleInventoryLeftClick(struct D2UIMouseMsgStrc * pMsg);
 BOOL __fastcall INV_HandleInventoryLeftDown(struct D2UIMouseMsgStrc * pMsg);
 // Loads shop tab UI images (invshop1.dc6, invshop2.dc6, invshop3.dc6) from DATA\GLOBAL directory. Constructs file paths using format strings from global text pool and loads DC6 graphics via IMAGE_LoadDC6Ex. Third tab only loads in Expansion mode.

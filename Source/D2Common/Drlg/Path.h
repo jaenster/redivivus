@@ -222,7 +222,7 @@ int32_t __fastcall PATH_FindPathForceMove(struct D2PathTypeArg * pPathTypeArg);
 // Pathfinding callback that computes a knockback destination for a unit. Derives displacement from source to target using the dominant-axis normalisation scaled by half the path's nDist, then raycasts (Bresenham) the resulting endpoint back through collision geometry. Writes the final reachable point into pDynamicPath->PathPoints[0] and sets dwPathPoints=1. Returns 1 if the unit actually moved, 0 if blocked at source.
 int32_t __fastcall PATH_FindPathKnockback(struct D2PathTypeArg * pPathTypeArg);
 // Builds a circular set of path points around the origin using sin/cos lookup tables. Generates up to 77 waypoints in a spiral pattern, stored in the static path structure. Used for circular movement patterns.
-int32_t __fastcall DRLGPATH_BuildCircularPathPoints(struct D2DynamicPathStrc * pStaticPath);
+int32_t __fastcall DRLGPATH_BuildCircularPathPoints(struct D2DynamicPathStrc * pStaticPath, struct D2SeedStrc * pSeed);
 // Builds a set of randomized path waypoints using a seed-based random direction offset. Computes direction triplets and applies random perturbations to create organic-looking movement paths.
 void __fastcall DRLGPATH_BuildRandomizedPathPoints(struct D2DynamicPathStrc * pPathStrc, struct D2SeedStrc * pDynamicPath);
 // Scales a direction vector by a velocity factor (fixed-point). Computes a normalized velocity direction and validates the resulting magnitude does not exceed 0x200000.

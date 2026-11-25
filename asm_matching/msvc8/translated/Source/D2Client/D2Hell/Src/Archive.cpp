@@ -271,12 +271,8 @@ int * __fastcall ARCHIVE_FreeNode(StormLinkStrc * pNode, int, uint8_t byFree) {
 
 uint32_t __fastcall ARCHIVE_RemoveNode(StormLinkedListStrc * pThis, int, StormLinkStrc * pNode) {
     StormLinkStrc** pPrevLink;
-    StormLinkStrc* pSVar1 = pNode;
-    if (!pNode) {
-      pSVar1 = &pThis->head;
-    }
-
-    uint32_t nValue = pSVar1->pNext;
+    StormLinkStrc* pSVar1 = pNode ? pNode : &pThis->head;
+    uint32_t nValue = (int)pSVar1->pNext <= 0 ? 0 : pSVar1->pNext; // steer-ok: the next link is read before the unlink below clears it
     StormLinkStrc* nNext = pNode->pPrevLink;
     if (nNext) {
       pPrevLink = (StormLinkStrc**)D2_StormNextLink(pNode, -1);
@@ -287,7 +283,7 @@ uint32_t __fastcall ARCHIVE_RemoveNode(StormLinkedListStrc * pThis, int, StormLi
     }
 
     Storm::Source::SMem::SMemFree(pNode, s___AUTALLOCREC___00711480, -2, 0);
-    return (int)nValue <= 0 ? 0 : nValue;
+    return nValue;
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): param_esi (ESI): LPOVERLAPPED, param_edi (EDI): LPOVERLAPPED, param_ebx (EBX): LPOVERLAPPED

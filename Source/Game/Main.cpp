@@ -1509,7 +1509,7 @@ static uint32_t __stdcall ERRORMANAGER_TryGetProcAddress(HMODULE hModule, FARPRO
     return 1;
 }
 
-void __stdcall LIB_LoadAdvapi32() {
+BOOL __stdcall LIB_LoadAdvapi32() {
     pfnAllocateAndInitializeSid pfnAllocateSid;
     pfnInitializeAcl pInitializeAcl;
     pfnAddAccessDeniedAce pAddAccessDeniedAce;
@@ -1525,6 +1525,7 @@ void __stdcall LIB_LoadAdvapi32() {
     sSidAuthority.Value[5] = '\x01';
     HANDLE hProcess = GetCurrentProcess();
     PSID pSid = (PSID)0x0;
+    BOOL bResult = FALSE;
     HMODULE hModule = LoadLibraryA("advapi32.dll");
     if (hModule) {
       /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pfnAllocateSid = (pfnAllocateAndInitializeSid)GetProcAddress(hModule, "AllocateAndInitializeSid");
@@ -1541,7 +1542,9 @@ void __stdcall LIB_LoadAdvapi32() {
                 if (nResult) {
                   nResult = (*pAddAccessDeniedAce)(aclBuf, 2, -266338306, pSid);
                   if (nResult) {
-                    (*pSetSecurityInfo)(hProcess, 6, 0x80000004, (PSID)0x0, (PSID)0x0, aclBuf, nullptr);
+                    if ((*pSetSecurityInfo)(hProcess, 6, 0x80000004, (PSID)0x0, (PSID)0x0, aclBuf, nullptr) == 0) {
+                      bResult = TRUE;
+                    }
                   }
                 }
               }
@@ -1555,6 +1558,7 @@ void __stdcall LIB_LoadAdvapi32() {
     if (pSid) {
       /* PSID pSid for FreeSid */ FreeSid(pSid);
     }
+    return bResult;
 }
 
 // @sourcefile .\Main.cpp

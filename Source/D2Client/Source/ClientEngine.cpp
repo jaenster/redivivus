@@ -1135,8 +1135,8 @@ static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32
     }
 
     eD2CollisionUnitSize nMonsterSizeX = (eD2CollisionUnitSize)pMonStatsExTxt->SizeX;
-    int nAttempts = 0;
-    while (true) {
+    int nAttempts;
+    for (nAttempts = 0; nAttempts < 10; nAttempts++) {
       eCollisionFlags eCollision;
       nRandOffset = D2_SeedRollLimited(pSeed, nXRange);
       nSpawnX = nRandOffset + nXStart;
@@ -1145,11 +1145,6 @@ static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32
       eCollision = D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, nSpawnX, nY, nMonsterSizeX, 0x3f11);
       if (eCollision == COLLIDE_NONE) {
         break;
-      }
-
-      nAttempts++;
-      if (nAttempts >= 10) {
-        return;
       }
     }
 

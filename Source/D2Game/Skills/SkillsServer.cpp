@@ -753,17 +753,10 @@ void __fastcall SKILLS_InvokeCallbackNoTarget(::SGAMEDATA * pGame, D2UnitStrc * 
 static BOOL SKILLS_IsRoomInRange(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nRadius) {
     D2DrlgRoomCoordsStrc roomCoords;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &roomCoords);
-    if (!(nX + nRadius < roomCoords.dwXStart)) {
-      if (nY + nRadius >= roomCoords.dwYStart || nY - nRadius <= roomCoords.dwYSize + roomCoords.dwYStart) {
-        return 1;
-      }
-    } else if (nX - nRadius <= roomCoords.dwXSize + roomCoords.dwXStart) {
-      if (nY + nRadius >= roomCoords.dwYStart || nY - nRadius <= roomCoords.dwYSize + roomCoords.dwYStart) {
-        return 1;
-      }
+    if (!(nX + nRadius >= roomCoords.dwXStart ? (nY + nRadius >= roomCoords.dwYStart || nY - nRadius <= roomCoords.dwYSize + roomCoords.dwYStart) : (nX - nRadius <= roomCoords.dwXSize + roomCoords.dwXStart && (nY + nRadius >= roomCoords.dwYStart || nY - nRadius <= roomCoords.dwYSize + roomCoords.dwYStart)))) {
+      return 0;
     }
-
-    return 0;
+    return 1;
 }
 
 // Iterates all units in adjacent rooms within nRadius of (nX,nY), applying a caller-supplied callback (pfnCallback) to each eligible target. Filters by target flags (dwTargetFlags, SKILLS_CheckTargetFlags mask, default 0x583), skips town rooms if bit 0x2000 set, and respects noaura flag on monsters when bSkipNoAuraMonsters != 0. Core server-side AoE dispatch used by auras and area skills.

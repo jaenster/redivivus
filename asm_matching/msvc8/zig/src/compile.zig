@@ -43,7 +43,9 @@ const VENDORED = [_][]const u8{ "3rdparty/libbacktrace", "3rdparty/implibs" };
 /// Source/D2OpenGL is the Mac binary's renderer (Apple Clang), measured against the Mac, never
 /// here; Source/StormMac, the Mac Storm project, is Mac-only code, built by the
 /// Mac toolchain (d2_mac_objs), and so is Source/MacSpecific, the game's Mac shell and CD2Textures.
-pub const NOT_GAME = [_][]const u8{ "Source/D2Server", "Source/D2OpenGL", "Source/MacSpecific", "Source/StormMac" };
+/// Source/D2Rave and Source/D2Uni are the classic Mac PowerPC renderers and Redivivus/Platform
+/// their stub headers.
+pub const NOT_GAME = [_][]const u8{ "Source/D2Server", "Source/D2OpenGL", "Source/MacSpecific", "Source/StormMac", "Source/D2Rave", "Source/D2Uni", "Redivivus/Platform" };
 const HEADERS_ONLY_BUT = "Redivivus/ghidra_version.cpp";
 
 // ---- configuration (the defaults audit.zig's Config reads too)

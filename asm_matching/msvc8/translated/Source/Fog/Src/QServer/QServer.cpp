@@ -268,7 +268,7 @@ void __fastcall SweepExpiredHackEntries(D2QServerStrc * pQServer) {
     D2QServerHacklistEntryStrc* pNextEntry;
     int nNewPrimaryTtl;
     uint32_t nBucketIndex;
-    bool bAnyExpired;
+    BOOL bAnyExpired;
     uint32_t nTtlSec;
     D2QServerHacklistEntryStrc* pEntry;
     D2QServerHacklistEntryStrc* pPrevEntry;
@@ -285,7 +285,7 @@ void __fastcall SweepExpiredHackEntries(D2QServerStrc * pQServer) {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ nElapsedSecs /= 1000;
-    bAnyExpired = false;
+    bAnyExpired = FALSE;
     EnterCriticalSection(&pQServer->csHacklist);
     pQServer->dwLastHacklistSweepTick = dwTickCountLog;
     for (nBucketIndex = 0; nBucketIndex < pQServer->nHacklistBucketCount; nBucketIndex++) {
@@ -304,13 +304,13 @@ void __fastcall SweepExpiredHackEntries(D2QServerStrc * pQServer) {
           if (nTtlSec > nElapsedSecs) {
             pPrevEntry->nSecondaryTtlSec = nTtlSec - nElapsedSecs;
           } else {
-            nNewPrimaryTtl = 0;
             pPrevEntry->nSecondaryTtlSec = 0;
             if (nElapsedSecs < 0x78) {
-              nNewPrimaryTtl = 0x78 - nElapsedSecs;
+              pPrevEntry->nPrimaryTtlSec = 0x78 - nElapsedSecs;
+            } else {
+              pPrevEntry->nPrimaryTtlSec = 0;
             }
 
-            pPrevEntry->nPrimaryTtlSec = nNewPrimaryTtl;
             pPrevEntry->nPrimaryTtlSec += nElapsedSecs;
           }
         }
@@ -324,16 +324,16 @@ void __fastcall SweepExpiredHackEntries(D2QServerStrc * pQServer) {
               pNextEntry->pNext = pEntry;
               pPrevEntry->pNext = pQServer->pHacklistEntryFreeList;
               pQServer->pHacklistEntryFreeList = pPrevEntry;
+              pPrevEntry = pNextEntry;
             } else {
               pQServer->ppHacklistBuckets[nBucketIndex] = pQServer->ppHacklistBuckets[nBucketIndex]->pNext;
               pPrevEntry->pNext = pQServer->pHacklistEntryFreeList;
               pQServer->pHacklistEntryFreeList = pPrevEntry;
-              pNextEntry = 0;
+              pPrevEntry = 0;
             }
 
             pQServer->nHacklistSize--;
-            bAnyExpired = true;
-            pPrevEntry = pNextEntry;
+            bAnyExpired = TRUE;
           }
         }
       }

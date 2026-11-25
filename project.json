@@ -896,6 +896,75 @@
       ],
       "exceptions": [],
       "strict": false
+    },
+    "D2Rave": {
+      "kind": "dll-module",
+      "target": "mac",
+      "namespaces": [
+        "D2Rave"
+      ],
+      "dir": "Source/D2Rave",
+      "dependencies": [
+        {
+          "module": "D2gfx",
+          "via": "import",
+          "evidence": "classic Mac PowerPC build (the includes of Source/D2Rave)"
+        },
+        {
+          "module": "Redivivus",
+          "via": "import",
+          "evidence": "classic Mac PowerPC build (the includes of Source/D2Rave)"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
+    },
+    "D2Uni": {
+      "kind": "dll-module",
+      "target": "mac",
+      "namespaces": [
+        "D2Uni"
+      ],
+      "dir": "Source/D2Uni",
+      "dependencies": [
+        {
+          "module": "D2gfx",
+          "via": "import",
+          "evidence": "classic Mac PowerPC build (the includes of Source/D2Uni)"
+        },
+        {
+          "module": "Storm",
+          "via": "import",
+          "evidence": "classic Mac PowerPC build (the includes of Source/D2Uni)"
+        },
+        {
+          "module": "D2CMP",
+          "via": "import",
+          "evidence": "classic Mac PowerPC build (the includes of Source/D2Uni)"
+        },
+        {
+          "module": "D2Common",
+          "via": "import",
+          "evidence": "classic Mac PowerPC build (the includes of Source/D2Uni)"
+        },
+        {
+          "module": "D2Client",
+          "via": "import",
+          "evidence": "classic Mac PowerPC build (the includes of Source/D2Uni)"
+        },
+        {
+          "module": "D2Multi",
+          "via": "import",
+          "evidence": "classic Mac PowerPC build (the includes of Source/D2Uni)"
+        },
+        {
+          "module": "Redivivus",
+          "via": "import",
+          "evidence": "classic Mac PowerPC build (the includes of Source/D2Uni)"
+        }
+      ],
+      "exceptions": [],
+      "strict": false
     }
   }
 }

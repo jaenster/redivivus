@@ -2778,25 +2778,14 @@ static int __stdcall SKILLDESC_FormatDecimalValue(uint16_t * wszText, int32_t bP
 }
 
 static void __stdcall SKILLDESC_FormatDamageRange(int32_t bPrefixSign, uint16_t * wszText, int32_t bUseFormat, int32_t nMinDamage, int32_t nMaxDamage) {
-    char* pszPrefix;
     char szBuf[32];
-    if (bUseFormat) {
-      if (nMinDamage >= 10000) {
-        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBuf, "%s%dK-%dK", bPrefixSign ? (char*)"+" : (char*)"", (nMinDamage + 500) / 1000, (nMaxDamage + 500) / 1000);
-        D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
-        return;
-      }
-      if (nMaxDamage >= 10000) {
-        /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szBuf, "%s%d-%dK", bPrefixSign ? (char*)"+" : (char*)"", nMinDamage, (nMaxDamage + 500) / 1000);
-        D2Lang::UTF8_ConvertToWideChar(wszText, szBuf, 0x20);
-        return;
-      }
-    }
-    if (bPrefixSign) {
-      pszPrefix = "+%d-%d";
+    if (bUseFormat && nMinDamage < 10000 && nMaxDamage >= 10000) {
+      wsprintfA(szBuf, "%s%d-%dK", bPrefixSign ? (char*)"+" : (char*)"", nMinDamage, (nMaxDamage + 500) / 1000);
+    } else if (bUseFormat && nMinDamage >= 10000) {
+      wsprintfA(szBuf, "%s%dK-%dK", bPrefixSign ? (char*)"+" : (char*)"", (nMinDamage + 500) / 1000, (nMaxDamage + 500) / 1000);
+    } else if (bPrefixSign) {
       wsprintfA(szBuf, "+%d-%d", nMinDamage, nMaxDamage);
     } else {
-      /* LPCSTR param_2 for wsprintfA */ pszPrefix = "%d-%d";
       wsprintfA(szBuf, "%d-%d", nMinDamage, nMaxDamage);
     }
 

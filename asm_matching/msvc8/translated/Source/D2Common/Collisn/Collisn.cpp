@@ -1813,16 +1813,16 @@ void __stdcall RemoveCollision_Width(D2RoomStrc * pRoom, int32_t nX, int32_t nY,
     }
 
     switch (nWidth) {
+      case COLLISION_UNIT_SIZE_NONE:
       case COLLISION_UNIT_SIZE_POINT:
         COLLISN_ClearCellMask(pRoom, nX, nY, (eCollisionFlags)eCollisionFlag);
-      return;
+        return;
       case COLLISION_UNIT_SIZE_SMALL:
         RemoveCollision_Cross(pRoom, nX, nY, eCollisionFlag);
-      return;
+        return;
       case COLLISION_UNIT_SIZE_BIG:
         RemoveCollision_BoundingBox1(pRoom, nX, nY, eCollisionFlag);
-      case COLLISION_UNIT_SIZE_NONE:
-        break;
+        return;
     }
 }
 
@@ -1892,10 +1892,10 @@ eCollisionFlags __fastcall RemoveGetCollision_Type(D2RoomStrc * pRoom, int32_t n
     eCollisionFlags eCollisionResult = CheckCollision_BlockAll_Type(pRoom, nCheckX, nCheckY, nType, eCheckCollisionFlag);
     if (eCollisionResult == COLBIT_NONE) {
       AddCollision_Type(pRoom, nCheckX, nCheckY, nType, eCollisionFlag);
-      return COLLIDE_NONE;
+    } else {
+      AddCollision_Type(pRoom, nX, nY, nType, eCollisionFlag);
     }
 
-    AddCollision_Type(pRoom, nX, nY, nType, eCollisionFlag);
     return eCollisionResult;
 }
 

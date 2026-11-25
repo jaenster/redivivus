@@ -231,12 +231,55 @@ void __fastcall D3DSUBTILE_InvalidateByIndex(D3DSubtileCacheStrc * pCache, int n
     pCache->nUsedCount--;
 }
 
+static inline D3DSubtileCacheNodeStrc* __fastcall D3DSUBTILE_PopUsedHead(D3DSubtileCacheStrc * pCache) {
+    D3DSubtileCacheNodeStrc* pNode = pCache->pUsedHead;
+    if (!pNode) {
+      return 0;
+    }
+
+    D3DSubtileCacheNodeStrc* pNextUsed = pNode->pNext;
+    pCache->pUsedHead = pNextUsed;
+    if (pNextUsed) {
+      pNextUsed->pPrev = 0;
+    } else {
+      pCache->pUsedTail = 0;
+    }
+
+    pNode->pNext = 0;
+    pNode->pPrev = 0;
+    return pNode;
+}
+
+static inline void __fastcall D3DSUBTILE_EvictLRU(D3DSubtileCacheStrc * pCache) {
+    D3DSubtileCacheNodeStrc* pNode;
+    if (!pCache->nUsedCount) {
+      return;
+    }
+
+    pNode = D3DSUBTILE_PopUsedHead(pCache);
+    if (pNode) {
+      if (pNode->pSubTile) {
+        pNode->pSubTile->nTextureCacheIndex = 0;
+        pNode->pSubTile = 0;
+      }
+      if (!pCache->pFreeHead) {
+        pCache->pFreeHead = pNode;
+      } else {
+        pCache->pFreeTail->pNext = pNode;
+        pNode->pPrev = pCache->pFreeTail;
+      }
+
+      pCache->pFreeTail = pNode;
+    }
+
+    pCache->nUsedCount--;
+}
+
 // @sourcefile .\Src\d3dSubtileCache.cpp
 void __fastcall D3DSUBTILE_Free(D3DSubtileCacheStrc * pCache, BOOL bInvalidateAll) {
     int nNodeIndex;
     IUnknown* pComIface;
     IUnknown* pComIface2;
-    D3DSubtileCacheNodeStrc* pNextUsed;
     D3DSubtileCacheNodeStrc* pNode;
     if (!pCache) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x60);
@@ -248,59 +291,23 @@ void __fastcall D3DSUBTILE_Free(D3DSubtileCacheStrc * pCache, BOOL bInvalidateAl
         exit(-1);
       }
     } else {
-      int nNodeByteOffset;
-      nNodeIndex = 0;
-      if (-1 < pCache->nMaxNodes - 1) {
-        nNodeByteOffset = 0;
-        do {
-          pNode = pCache->pNodeBuffer;
-          pComIface = *(IUnknown**)&pNode[nNodeIndex].pTexture;
-          if (pComIface) {
-            pComIface->Release();
-            *(uint32_t*)&pNode[nNodeIndex].pTexture = 0;
-          }
+      for (nNodeIndex = 0; nNodeIndex <= pCache->nMaxNodes - 1; nNodeIndex++) {
+        pNode = &pCache->pNodeBuffer[nNodeIndex];
+        pComIface = *(IUnknown**)&pNode->pTexture;
+        if (pComIface) {
+          pComIface->Release();
+          *(uint32_t*)&pNode->pTexture = 0;
+        }
 
-          pComIface2 = *(IUnknown**)&pNode[nNodeIndex].pSurface;
-          if (pComIface2) {
-            pComIface2->Release();
-            *(uint32_t*)&pNode[nNodeIndex].pSurface = 0;
-          }
-
-          nNodeIndex++;
-          nNodeByteOffset += 0x18;
-        } while (nNodeIndex <= pCache->nMaxNodes - 1);
+        pComIface2 = *(IUnknown**)&pNode->pSurface;
+        if (pComIface2) {
+          pComIface2->Release();
+          *(uint32_t*)&pNode->pSurface = 0;
+        }
       }
-      if (bInvalidateAll && pCache->nUsedCount) {
-        nNodeByteOffset = pCache->nUsedCount;
-        while (nNodeByteOffset) {
-          pNode = pCache->pUsedHead;
-          if (pNode) {
-            pNextUsed = pNode->pNext;
-            pCache->pUsedHead = pNextUsed;
-            if (pNextUsed) {
-              pNextUsed->pPrev = 0;
-            } else {
-              pCache->pUsedTail = 0;
-            }
-
-            pNode->pNext = 0;
-            pNode->pPrev = 0;
-            if (pNode->pSubTile) {
-              pNode->pSubTile->nTextureCacheIndex = 0;
-              pNode->pSubTile = 0;
-            }
-            if (!pCache->pFreeHead) {
-              pCache->pFreeHead = pNode;
-            } else {
-              pCache->pFreeTail->pNext = pNode;
-              pNode->pPrev = pCache->pFreeTail;
-            }
-
-            pCache->pFreeTail = pNode;
-          }
-
-          pCache->nUsedCount--;
-          nNodeByteOffset = pCache->nUsedCount;
+      if (bInvalidateAll) {
+        while (pCache->nUsedCount) {
+          D3DSUBTILE_EvictLRU(pCache);
         }
       }
       if (pCache->pNodeBuffer) {

@@ -41,7 +41,7 @@ static void __stdcall BNDOWNLOAD_WriteFileWithTimestamp(LPCSTR pThis, LPCVOID pD
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
 }
 
-static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, char * pszSrcFileName, LPSTR szText) {
+static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, LPSTR szText, char * pszSrcFileName) {
     void* lpBuffer;
     HANDLE hFile;
     char cTmp2;
@@ -72,9 +72,9 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, char * ps
           if (hFile != (HANDLE)-1) {
             Fog::Source::SFile::thunk_WriteFile(hFile, lpBuffer, dwFileSize, (LPDWORD)&pArchive, (LPOVERLAPPED)0x0);
             Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
+            pMpqFile = 1;
           }
 
-          pMpqFile = (hFile != (HANDLE)-1);
           Storm::Source::SMem::SMemFree(lpBuffer, ".\\BnDownload.cpp", 0x111, 0);
         }
       }
@@ -183,7 +183,7 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
 
         Storm::Source::SFile::SFileAuthenticateArchive(__frame0.pArchive, &__frame0.dwAuthResult);
         if (!__frame0.dwAuthResult || __frame0.dwAuthResult >= 5) {
-          BVar1 = NET_CopyDllFromArchive(__frame0.pArchive, lpFileName_00881c58, __frame0.szDllPath);
+          BVar1 = NET_CopyDllFromArchive(__frame0.pArchive, __frame0.szDllPath, lpFileName_00881c58);
           if (BVar1) {
             bSigValid = D2Hell::D2FILE_VerifyFileSignature(__frame0.szDllPath);
             if (bSigValid != '\0') {
@@ -1050,7 +1050,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
 
           Storm::Source::SFile::SFileAuthenticateArchive(pArchiveHandle, &__frame0.dwAuthResult);
           if (!__frame0.dwAuthResult || __frame0.dwAuthResult >= 5) {
-            BVar1 = NET_CopyDllFromArchive(pArchiveHandle, szDestPath, __frame1.cTempDllPath);
+            BVar1 = NET_CopyDllFromArchive(pArchiveHandle, __frame1.cTempDllPath, szDestPath);
             if (!BVar1) {
               Debug::DEBUG_Trace("<ERROR: Failed to extract ExtraWork DLL!>");
             } else {

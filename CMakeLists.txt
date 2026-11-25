@@ -107,6 +107,10 @@ foreach(list D2_SOURCES D2_HEADERS)
     # project). Their directories stay off the include path too: they include by
     # tree-relative path, and their globals.h would shadow.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Source/(D2OpenGL|MacSpecific|StormMac)/")
+    # D2Rave and D2Uni are the classic Mac PowerPC renderers (RAVE, and DrawSprocket with
+    # QuickDraw), and Redivivus/Platform holds the stub headers they are checked against:
+    # none belongs to any build here. cmake/check-macppc.sh syntax-checks them.
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/(Source/D2Rave|Source/D2Uni|Redivivus/Platform)/")
 endforeach()
 if(D2_ARCH_X64)
     # x86 assembly: the i686-decorated stub the 64-bit build defines in C++ instead.

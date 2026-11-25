@@ -4479,14 +4479,17 @@ void __stdcall INV_HandleShopReturnAction() {
     gnItemDescTitleMaxWidth = 0;
 }
 
-void __stdcall INV_HandleInventoryMouseMove(D2UIMouseMsgStrc * pMsg) {
-    gnInvMouseX = (int)pMsg->uLParam.sMousePos.nMouseX;
-    gnInvMouseY = (int)pMsg->uLParam.sMousePos.nMouseY;
-    if (!(gnInvMouseX >= pInventoryScreenCoordinates.nLeft && gnInvMouseX < pInventoryScreenCoordinates.nRight && gnInvMouseY >= pInventoryScreenCoordinates.nTop && gnInvMouseY <= pInventoryScreenCoordinates.nBottom)) {
-      return;
+BOOL __stdcall INV_HandleInventoryMouseMove(D2UIMouseMsgStrc * pMsg) {
+    int nX = pMsg->uLParam.sMousePos.nMouseX;
+    int nY = pMsg->uLParam.sMousePos.nMouseY;
+    gnInvMouseX = nX;
+    gnInvMouseY = nY;
+    if (nX >= pInventoryScreenCoordinates.nLeft && nX < pInventoryScreenCoordinates.nRight && nY >= pInventoryScreenCoordinates.nTop && nY <= pInventoryScreenCoordinates.nBottom) {
+      INV_HandleMouseMove(pMsg);
+      return TRUE;
     }
 
-    INV_HandleMouseMove(pMsg);
+    return FALSE;
 }
 
 BOOL __stdcall INV_HandleInventoryLeftClick(D2UIMouseMsgStrc * pMsg) {

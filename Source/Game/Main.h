@@ -51,7 +51,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, struct D2IniConfigStrc * pD2
 BOOL __stdcall ReturnTrue();
 void __fastcall D2INIT_CheckCommandLineOrLoadItFromRegistry(char * * ppszText);
 void __stdcall CreateRegedit();
-void __stdcall LIB_LoadAdvapi32();
+BOOL __stdcall LIB_LoadAdvapi32();
 // lpHandlerProc parameter of RegisterServiceCtrlHandlerA
 void __stdcall ERRORMANAGER_ServiceControlHandler(int32_t nServiceControl);
 // Early app bootstrap: set log path, parse cmdline/registry for app mode, init INI, then ApplicationMain.

@@ -337,7 +337,7 @@ void __fastcall GetMinAndMaxCoordinatesFromLevel(struct D2DrlgLevelStrc * pLevel
 void __fastcall DRLGLEVEL_AdjustRoomCoordinates(struct D2DrlgLevelStrc * pLevel);
 struct D2RoomExStrc * __fastcall GetRoomOfCoord(struct D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY);
 BOOL __fastcall LEVEL_CheckIfLevelIsTown(eD2LevelId eLevel);
-BOOL __stdcall DRLG_ReturnZero();
+BOOL __fastcall DRLG_ReturnZero(eD2LevelId eLevelId);
 int __fastcall Unreferenced_00642770(eD2LevelId eLevel);
 int __fastcall GetRoomByCoordsByLevel(struct D2DrlgStrc * pDrlg, int32_t nX, int32_t nY);
 // Allocates or returns existing D2DrlgActWarpsInfoStrc for a level. Copies Vis[8] and Warp[8] from LevelDefs.txt into nTargetArea[8] and nWarpId[8]. Linked list stored at pDrlg->pWarpsInfo (offset 0x90). Size: 0x48 bytes. Source: Drlg.cpp line 0x3E0.

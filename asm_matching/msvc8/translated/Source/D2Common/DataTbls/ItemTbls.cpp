@@ -426,44 +426,45 @@ int32_t __stdcall TXT_Items_ConvertItemCodeToItemClassId(uint32_t szTag) {
 // TXT field linker: resolves a string value to an integer ID by trying in order: numeric parse, skills.txt lookup, monstypes.txt lookup, states.txt lookup. Writes the resolved ID (or 0 on failure) to nRecordBase+nFieldOffset. Used when a skills.txt/itemtypes.txt field can reference any of those three tables.
 void __fastcall ITEMTBLS_ParseSkillMonTypeOrStateId(char * szValue, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
     char cFirstChar;
+    int32_t nId;
     if (!pRecord) {
       return;
     }
+
+    int32_t* pIdField = (int32_t*)(pRecord + nOffset);
     if (szValue) {
-      int32_t nId;
       cFirstChar = *szValue;
       if (cFirstChar != '\0') {
         if (cFirstChar == '-' || cFirstChar >= '0' && cFirstChar <= '9') {
           nId = atoi(szValue);
-          *(int32_t*)(pRecord + nOffset) = nId;
-          return;
+          goto store_id;
         }
         if (MonsterTbls::sgtDataTable.pTxtSkillsLink) {
           nId = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtSkillsLink, szValue, 0);
           if (nId >= 0) {
-            *(int32_t*)(pRecord + nOffset) = nId;
-            return;
+            goto store_id;
           }
         }
         if (MonsterTbls::sgtDataTable.pTxtMonTypeLink) {
           nId = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtMonTypeLink, szValue, 0);
           if (nId >= 0) {
-            *(int32_t*)(pRecord + nOffset) = nId;
-            return;
+            goto store_id;
           }
         }
         if (MonsterTbls::sgtDataTable.pTxtStatesLink) {
           nId = Fog::Src::Excel::GetLinkNodeIndex(MonsterTbls::sgtDataTable.pTxtStatesLink, szValue, 0);
           if (nId >= 0) {
-            *(int32_t*)(pRecord + nOffset) = nId;
-            return;
+            goto store_id;
           }
         }
       }
     }
 
-    char* pIdField = pRecord + nOffset;
-    *(uint32_t*)pIdField = 0;
+    *pIdField = 0;
+    return;
+
+    store_id:
+    *pIdField = nId;
 }
 
 // Loads and concatenates the magicsuffix/magicprefix/automagic .txt files into a single pTxtMagicAffixes table. Builds a D2BinFieldInputStrc descriptor array (name/spawnable/level/itypeN/etypeN/modNcode..max, etc.), calls DataTbls::CompileTxt for each of the three files (0x90-byte rows), allocates one combined server buffer (count*0x90), memcpys the three blocks in order (suffix, prefix, automagic), frees the temporaries, then resolves each row's display-name string id via STRTABLE_LookupString. Sets global nTxtMagicAffixesSize/pTxtMagicAffixes. Part of D2Common item-data table initialization.

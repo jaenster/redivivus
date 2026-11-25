@@ -700,7 +700,7 @@ BOOL __fastcall LEVEL_CheckIfLevelIsTown(eD2LevelId eLevel) {
     return 0;
 }
 
-BOOL __stdcall DRLG_ReturnZero() {
+BOOL __fastcall DRLG_ReturnZero(eD2LevelId eLevelId) {
     return 0;
 }
 

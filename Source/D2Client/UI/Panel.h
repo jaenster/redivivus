@@ -87,7 +87,7 @@ void __stdcall PANEL_DrawBeltSlots(int32_t nFrameNumber);
 void __stdcall DRAW_EquipmentNeedArrows();
 void __stdcall Draw_EquipmentNeedToRepairBody();
 void __stdcall PANEL_DrawPanelLayout();
-int Unreferenced_00498310();
+void Unreferenced_00498310();
 void __stdcall PANEL_DrawLife();
 void __stdcall DRAW_UI_BorderLeft();
 void __stdcall DRAW_UI_BorderRight();

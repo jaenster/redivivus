@@ -3542,8 +3542,11 @@ void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
         UNITSND_UpdatePositionalAudio(pUnit);
       }
 
-      nClassId = GetSndUnitClassId(pUnit);
-      if (pUnit->uSideData.pClientSide.bUnitSfx || nClassId == 0x3b) {
+      BOOL bIsClass3b = FALSE;
+      if (GetSndUnitClassId(pUnit) == 0x3b) {
+        bIsClass3b = TRUE;
+      }
+      if (pUnit->uSideData.pClientSide.bUnitSfx || bIsClass3b) {
         eSpecialSound = UNITSND_GetModeChangeSound(pUnit->uSideData.pClientSide.nSfxMode, pUnit, nUnitMode);
         if (eSpecialSound != SOUND_NONE) {
           Sound::SOUND_PlaySound(eSpecialSound, pUnit, 0, 0, 0);
@@ -3566,18 +3569,20 @@ void __fastcall UpdateUnitSfxOnModeChange(D2UnitStrc * pUnit) {
       nBaseId = -1;
     }
 
-    bool bIsWalkOrRunMode;
-    bIsWalkOrRunMode = false;
+    BOOL bIsWalkOrRunMode;
+    bIsWalkOrRunMode = FALSE;
     if (nUnitMode == 1 || nUnitMode == 2 || nUnitMode == 0xf) {
-      bIsWalkOrRunMode = true;
+      bIsWalkOrRunMode = TRUE;
     }
     if (nBaseId == 0x6e) {
-      if (nUnitMode == 8) {
-        goto try_neutral_sound;
+      if (nUnitMode != 8) {
+        goto test_walk;
       }
+      goto try_neutral_sound;
     } else if (nBaseId == 0x88 && nUnitMode == 0xb) {
       goto try_neutral_sound;
     }
+    test_walk:
     if (!bIsWalkOrRunMode) {
       return;
     }

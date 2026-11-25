@@ -1409,11 +1409,10 @@ BOOL __fastcall RENDERER_GLIDE_DrawShadowTilePerspective(D2TileLibraryEntryStrc 
 }
 
 BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, int32_t nDrawMode, int32_t nScreenPanels) {
-    BOOL bResult = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
-    if (bResult) {
+    BOOL bResult = FALSE;
+    if (D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0)) {
       RENDERER_GLIDE_SetColorCombine(1);
-      bResult = RENDERER_GLIDE_AreBlendedShadowsEnabled();
-      if (bResult) {
+      if (RENDERER_GLIDE_AreBlendedShadowsEnabled()) {
         RENDERER_GLIDE_SetAlphaBlendMode(4);
         (*GLIDEDLL_grConstantColorValue_4)(0xc0);
       } else {
@@ -1421,17 +1420,14 @@ BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, in
       }
 
       RENDERER_GLIDE_SetTextureFiltering(1);
-      bResult = RENDERER_GLIDE_IsPerspectiveEnabled();
-      if (bResult) {
+      if (RENDERER_GLIDE_IsPerspectiveEnabled()) {
         bResult = RENDERER_GLIDE_DrawShadowTilePerspective(pTile, nPosX, nPosY, (uint8_t)nDrawMode, nScreenPanels);
-        return bResult;
+      } else {
+        bResult = RENDERER_GLIDE_DrawShadowTileSimple(pTile, nPosX, nPosY, (uint8_t)nDrawMode, nScreenPanels);
       }
-
-      bResult = RENDERER_GLIDE_DrawShadowTileSimple(pTile, nPosX, nPosY, (uint8_t)nDrawMode, nScreenPanels);
-      return bResult;
     }
 
-    return 0;
+    return bResult;
 }
 
 BOOL __fastcall RENDERER_GLIDE_DrawWallTileSimple(int32_t nScreenPanels, int, D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc * pColorTable) {
@@ -1617,8 +1613,8 @@ static int32_t __stdcall RENDERER_GLIDE_DrawWallTilePerspective(int32_t nScreenP
 }
 
 static BOOL __stdcall RENDERER_GLIDE_DrawTransparentWallTile(int32_t nPosX, int32_t nPosY, D2GfxLightStrc * pLight, uint8_t nColor, D2TileLibraryEntryStrc * pTileLibraryEntry, int32_t nScreenPanels) {
-    BOOL bPerspective = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTileLibraryEntry, 1, 0);
-    if (bPerspective) {
+    BOOL bResult = FALSE;
+    if (D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTileLibraryEntry, 1, 0)) {
       RENDERER_GLIDE_SetColorCombine(1);
       if (nColor == 0xff) {
         RENDERER_GLIDE_SetAlphaBlendMode(1);
@@ -1628,18 +1624,14 @@ static BOOL __stdcall RENDERER_GLIDE_DrawTransparentWallTile(int32_t nPosX, int3
       }
 
       RENDERER_GLIDE_SetTextureFiltering(1);
-      bPerspective = RENDERER_GLIDE_IsPerspectiveEnabled();
-      if (bPerspective) {
-        int32_t nDrawResult;
-        nDrawResult = RENDERER_GLIDE_DrawWallTilePerspective(nScreenPanels, pTileLibraryEntry, nPosX, nPosY, pLight);
-        return nDrawResult;
+      if (RENDERER_GLIDE_IsPerspectiveEnabled()) {
+        bResult = RENDERER_GLIDE_DrawWallTilePerspective(nScreenPanels, pTileLibraryEntry, nPosX, nPosY, pLight);
+      } else {
+        bResult = vc8_thiscall(RENDERER_GLIDE_DrawWallTileSimple)(nScreenPanels, pTileLibraryEntry, nPosX, nPosY, pLight);
       }
-
-      bPerspective = vc8_thiscall(RENDERER_GLIDE_DrawWallTileSimple)(nScreenPanels, pTileLibraryEntry, nPosX, nPosY, pLight);
-      return bPerspective;
     }
 
-    return 0;
+    return bResult;
 }
 
 BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc * pLight, int32_t nScreenPanels, int32_t nAlpha) {
@@ -1648,23 +1640,19 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX,
 }
 
 BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, D2GfxLightStrc * pLight, int32_t nScreenPanels) {
-    BOOL bResult = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
-    if (bResult) {
+    BOOL bResult = FALSE;
+    if (D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0)) {
       RENDERER_GLIDE_SetColorCombine(1);
       RENDERER_GLIDE_SetAlphaBlendMode(1);
       RENDERER_GLIDE_SetTextureFiltering(1);
-      bResult = RENDERER_GLIDE_IsPerspectiveEnabled();
-      if (bResult) {
-        int32_t nDrawn;
-        nDrawn = RENDERER_GLIDE_DrawWallTilePerspective(nScreenPanels, pTile, nPosX, nPosY, pLight);
-        return nDrawn;
+      if (RENDERER_GLIDE_IsPerspectiveEnabled()) {
+        bResult = RENDERER_GLIDE_DrawWallTilePerspective(nScreenPanels, pTile, nPosX, nPosY, pLight);
+      } else {
+        bResult = vc8_thiscall(RENDERER_GLIDE_DrawWallTileSimple)(nScreenPanels, pTile, nPosX, nPosY, pLight);
       }
-
-      bResult = vc8_thiscall(RENDERER_GLIDE_DrawWallTileSimple)(nScreenPanels, pTile, nPosX, nPosY, pLight);
-      return bResult;
     }
 
-    return 0;
+    return bResult;
 }
 
 void RENDERER_GLIDE_InitGroundTileVertices() {

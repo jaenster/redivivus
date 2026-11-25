@@ -2440,15 +2440,29 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnDirectionalSubMissiles(::SGAMEDATA * pG
 }
 
 // Server hit callback: spawns the missile's HitSubMissile1 as a stationary child at the parent missile's current map position. Duration comes from Missiles.txt sHitPar1 or skill calc[0] (min 5 frames). Uses flag 0x8001 (stationary + fixed lifetime). Always returns 1 (missile continues/pierces after spawning child).
+// GetMissleById as its callers inlined it.
+static inline D2MissilesTxt* GetMissilesTxtInline(int nMissileId) {
+    if (nMissileId >= 0 && nMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
+        return D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId;
+    }
+    return nullptr;
+}
+
+// TXT_Skills_GetLine as its callers inlined it.
+static inline D2SkillsTxt* GetSkillsTxtInline(eD2Skills eSkill) {
+    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
+        return D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    }
+    return nullptr;
+}
+
 BOOL __fastcall Missiles_SrvHitFunc_SpawnStationarySubMissileAtPos(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
-    int nClassId;
-    D2MissilesTxt* pMissileTxtTmp = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
-    if (!(pMissileTxtTmp && pMissileTxtTmp->HitSubMissile1 >= 0)) {
+    D2SkillArgStrc sSkillArg;
+    D2MissilesTxt* pMissileTxt = GetMissilesTxtInline(GetClassIdInline(pUnit));
+    if (!pMissileTxt || pMissileTxt->HitSubMissile1 < 0) {
       return 1;
     }
 
-    ::SGAMEDATA* pGameSave = pGame;
-    D2MissilesTxt* pMissileTxt = pMissileTxtTmp;
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     if (!pOwner) {
       return 1;
@@ -2456,13 +2470,13 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnStationarySubMissileAtPos(::SGAMEDATA *
 
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
     int32_t nSkillLvl = D2Common::Units::Missile::GetLevel(pUnit);
-    if ((int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount && D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill) {
-      D2SkillArgStrc sSkillArg;
-      sSkillArg.nTotalFrames = pMissileTxtTmp->sHitPar1;
-      if ((int32_t)sSkillArg.nTotalFrames <= 0) {
-        sSkillArg.nTotalFrames = D2Common::Skills::D2GetSkillCalc(pOwner, D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill].calc[0], eSkill, nSkillLvl);
-        if (sSkillArg.nTotalFrames < 5) {
-          sSkillArg.nTotalFrames = 5;
+    D2SkillsTxt* pSkillTxt = GetSkillsTxtInline(eSkill);
+    if (pSkillTxt) {
+      int nTotalFrames = pMissileTxt->sHitPar1;
+      if (nTotalFrames <= 0) {
+        nTotalFrames = D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->calc[0], eSkill, nSkillLvl);
+        if (nTotalFrames < 5) {
+          nTotalFrames = 5;
         }
       }
 
@@ -2470,11 +2484,12 @@ BOOL __fastcall Missiles_SrvHitFunc_SpawnStationarySubMissileAtPos(::SGAMEDATA *
       sSkillArg.pOwner = pOwner;
       sSkillArg.nFlags = 0x8001;
       sSkillArg.nMissileTxtNo = (eMissilesId)pMissileTxt->HitSubMissile1;
+      sSkillArg.nTotalFrames = nTotalFrames;
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
       sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-      Missiles::CreatingMissile(pGameSave, &sSkillArg);
+      Missiles::CreatingMissile(pGame, &sSkillArg);
     }
 
     return 1;
@@ -4897,27 +4912,17 @@ int __fastcall MISSMODE_SrvDoFn08_MonBlizzCenter(::SGAMEDATA * pGame, D2UnitStrc
 
 // Server-side missile do-function #9: if the missile still has a nonzero direction (8-flag from dynamic path), spawns SubMissile1 at the missile's current position using a D2SkillArgStrc built from the owner, skill ID, and skill level. Then always delegates to Missiles_SrvDoFunc_001 for standard missile advancement/expiry.
 int __fastcall MISSMODE_SrvDoFn09_BatLightningBolt(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
+    D2SkillArgStrc sSkillArg;
     int32_t nUnitPosX;
     D2MissilesTxt* pMissilesTxt;
     eD2UnitType eUnitType;
-    int nMissileTxtId;
     int32_t nUnitPosY;
-    nUnitPosY = 0;
-    if (!pUnit || (nMissileTxtId = pUnit->nClassId , nMissileTxtId < 0) || nMissileTxtId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-      pMissilesTxt = 0;
-    } else {
-      pMissilesTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileTxtId;
-      if (pMissilesTxt) {
-        goto spawn_submissile;
-      }
-    }
-    if (*(volatile uint8_t*)0x18 < 0) {
+    pMissilesTxt = GetMissilesTxtInline(GetClassIdInline(pUnit));
+    if (!pMissilesTxt && pMissilesTxt->SubMissile1 < 0) {
       return 2;
     }
 
-    spawn_submissile:
     eUnitType = pUnit->eUnitType;
-    ::SGAMEDATA* pGameArg = pGame;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nUnitPosX = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
@@ -4931,24 +4936,24 @@ int __fastcall MISSMODE_SrvDoFn09_BatLightningBolt(::SGAMEDATA * pGame, D2UnitSt
       nUnitPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
       nUnitPosY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
+    } else {
+      nUnitPosY = 0;
     }
 
     uint32_t nPathDirFlags = D2Common::PATH::Path::Get8FlagsFromDynamicPath(pUnit->pPath.pDynamicPath);
     if (nPathDirFlags) {
-      D2SkillArgStrc sSkillArg;
       memset(&sSkillArg, 0, 0x5c);
       sSkillArg.nFlags = 1;
-      sSkillArg.pOwner = UNIT::SUnit::GetOwnerUnit(pGameArg, pUnit);
+      sSkillArg.pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
       sSkillArg.nX = nUnitPosX;
       sSkillArg.nY = nUnitPosY;
       sSkillArg.eSkillNo = D2Common::Units::Missile::GetSkillId(pUnit);
       sSkillArg.nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
       sSkillArg.nMissileTxtNo = (eMissilesId)pMissilesTxt->SubMissile1;
-      Missiles::CreatingMissile(pGameArg, &sSkillArg);
+      Missiles::CreatingMissile(pGame, &sSkillArg);
     }
 
-    nMissileTxtId = MISSMODE_SrvDoFn01_BasicMissile(pGameArg, pUnit);
-    return nMissileTxtId;
+    return MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
 }
 
 // Server-side per-tick function for periodic-spray missiles (e.g. Hydra). Reads the missile's skill ID and level, then evaluates skills.txt calc[0] (spawn count) and calc[1] (spawn interval) via D2GetSkillCalc on the owning unit. Calls MISSILES_SpawnPeriodicRandom with SubMissile1 as the child missile class and COLLIDE_WALL|COLLIDE_BLOCK_PLAYER flags, then chains to Missiles_SrvDoFunc_001 for standard movement.
@@ -5854,138 +5859,88 @@ int __fastcall MISSILESMODE_SrvDoFn28_Volcano(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server missile per-frame function for life-regeneration missiles (e.g. life-tap / healing missile types). On the frame matching Param1 (the trigger frame from missiles.txt), if the owner is alive and their current HP is below max, computes a skill-calc percentage of max HP and adds it to current HP (capped at max). If a ProgOverlay is configured for the missile, applies it to the owner. Always forwards to Missiles_SrvDoFunc_001 for standard missile tick processing.
 int __fastcall MISSILESMODE_SrvDoFn29_RecyclerDelay(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int32_t nSkillLevel;
-    int32_t nMissileId;
-    int nMaxHpShifted;
+    int nSkillLevel;
+    int nValue;
+    int nMaxValue;
     short int nProgOverlay;
-    if (!pUnit) {
-      return 2;
-    }
-
-    int nMissileClassId = pUnit->nClassId;
-    if (nMissileClassId < 0) {
-      return 2;
-    }
-    if (!(nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
-      return 2;
-    }
-
-    D2MissilesTxt* pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId;
+    D2MissilesTxt* pMissileTxt = GetMissilesTxtInline(GetClassIdInline(pUnit));
     if (!pMissileTxt) {
       return 2;
     }
 
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
-    if ((int)eSkill < 0) {
-      return 2;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 2;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-    if (!(pSkillTxt + eSkill)) {
+    D2SkillsTxt* pSkillTxt = GetSkillsTxtInline(eSkill);
+    if (!pSkillTxt) {
       return 2;
     }
 
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (pOwner) {
-      BOOL bOwnerDead;
-      bOwnerDead = UNIT::SUnit::CheckForModeZeroDeath(pOwner);
-      if (!bOwnerDead) {
-        nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-        nMissileId = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-        if (nMissileId == pMissileTxt->Param1) {
-          nMissileClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_hitpoints, 0);
-          nMissileId = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pOwner);
-          nMaxHpShifted = nMissileId >> 8;
-          if (nMissileClassId >> 8 < nMaxHpShifted) {
-            nSkillLevel = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxHpShifted, D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt[eSkill].calc[0], eSkill, nSkillLevel), 100);
-            nMissileClassId = (nMissileClassId >> 8) + nSkillLevel;
-            if (nMissileClassId >= nMaxHpShifted) {
-              nMissileClassId = nMaxHpShifted;
-            }
+    if (!pOwner || UNIT::SUnit::CheckForModeZeroDeath(pOwner)) {
+      return MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
+    }
 
-            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pOwner, UNITSTAT_hitpoints, nMissileClassId << 8, 0);
-            nProgOverlay = pMissileTxt->ProgOverlay;
-            if (nProgOverlay > 0 && (int)nProgOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
-              D2Common::Units::SetOverlay(pOwner, (int)nProgOverlay, 0);
-            }
-          }
+    nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+    if (D2Common::Units::Missile::GetRemainingFrames(pUnit) == pMissileTxt->Param1) {
+      nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_hitpoints, 0) >> 8;
+      nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pOwner) >> 8;
+      if (nValue < nMaxValue) {
+        nValue += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxValue, D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->calc[0], eSkill, nSkillLevel), 100);
+        if (nValue >= nMaxValue) {
+          nValue = nMaxValue;
+        }
+
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pOwner, UNITSTAT_hitpoints, nValue << 8, 0);
+        nProgOverlay = pMissileTxt->ProgOverlay;
+        if (nProgOverlay > 0 && (int)nProgOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
+          D2Common::Units::SetOverlay(pOwner, (int)nProgOverlay, 0);
         }
       }
     }
 
-    nMissileClassId = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
-    return nMissileClassId;
+    return MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
 }
 
 // Server missile per-frame function for mana-regeneration missiles (mana-tap / mana-restore missile types). Identical structure to Missiles_SrvDoFunc_029 but operates on UNITSTAT_mana instead of UNITSTAT_hitpoints: on the Param1 trigger frame, if owner mana is below max, adds a skill-calc percentage of max mana (capped at max). Applies ProgOverlay if configured, then forwards to Missiles_SrvDoFunc_001.
 int __fastcall MISSILESMODE_SrvDoFn33_VineRecyclerDelay(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int32_t nSkillLevel;
-    int32_t nMissileId;
+    int nSkillLevel;
     int nValue;
+    int nMaxValue;
     short int nProgOverlay;
-    if (!pUnit) {
-      return 2;
-    }
-
-    int nMissileClassId = pUnit->nClassId;
-    if (nMissileClassId < 0) {
-      return 2;
-    }
-    if (!(nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize)) {
-      return 2;
-    }
-
-    D2MissilesTxt* pMissileTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId;
+    D2MissilesTxt* pMissileTxt = GetMissilesTxtInline(GetClassIdInline(pUnit));
     if (!pMissileTxt) {
       return 2;
     }
 
     eD2Skills eSkill = D2Common::Units::Missile::GetSkillId(pUnit);
-    if ((int)eSkill < 0) {
-      return 2;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 2;
-    }
-
-    D2SkillsTxt* pSkillTxtBase = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
-    if (!(pSkillTxtBase + eSkill)) {
+    D2SkillsTxt* pSkillTxt = GetSkillsTxtInline(eSkill);
+    if (!pSkillTxt) {
       return 2;
     }
 
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (pOwner) {
-      BOOL bOwnerDead;
-      bOwnerDead = UNIT::SUnit::CheckForModeZeroDeath(pOwner);
-      if (!bOwnerDead) {
-        nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-        nMissileId = D2Common::Units::Missile::GetRemainingFrames(pUnit);
-        if (nMissileId == pMissileTxt->Param1) {
-          nMissileClassId = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_mana, 0);
-          nMissileId = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pOwner);
-          nValue = nMissileId >> 8;
-          if (nMissileClassId >> 8 < nValue) {
-            nSkillLevel = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nValue, D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxtBase[eSkill].calc[0], eSkill, nSkillLevel), 100);
-            nMissileClassId = (nMissileClassId >> 8) + nSkillLevel;
-            if (nMissileClassId >= nValue) {
-              nMissileClassId = nValue;
-            }
+    if (!pOwner || UNIT::SUnit::CheckForModeZeroDeath(pOwner)) {
+      return MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
+    }
 
-            D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pOwner, UNITSTAT_mana, nMissileClassId << 8, 0);
-            nProgOverlay = pMissileTxt->ProgOverlay;
-            if (nProgOverlay > 0 && (int)nProgOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
-              D2Common::Units::SetOverlay(pOwner, (int)nProgOverlay, 0);
-            }
-          }
+    nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+    if (D2Common::Units::Missile::GetRemainingFrames(pUnit) == pMissileTxt->Param1) {
+      nValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_mana, 0) >> 8;
+      nMaxValue = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pOwner) >> 8;
+      if (nValue < nMaxValue) {
+        nValue += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nMaxValue, D2Common::Skills::D2GetSkillCalc(pOwner, pSkillTxt->calc[0], eSkill, nSkillLevel), 100);
+        if (nValue >= nMaxValue) {
+          nValue = nMaxValue;
+        }
+
+        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pOwner, UNITSTAT_mana, nValue << 8, 0);
+        nProgOverlay = pMissileTxt->ProgOverlay;
+        if (nProgOverlay > 0 && (int)nProgOverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize) {
+          D2Common::Units::SetOverlay(pOwner, (int)nProgOverlay, 0);
         }
       }
     }
 
-    nMissileClassId = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
-    return nMissileClassId;
+    return MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
 }
 
 // Server per-frame tick for missile type 030 (aura-linked orbiting sub-missile spawner). Each Param1 frames, spawns a sub-missile (SubMissile1) at a random offset (±Param2) around the target unit. If the owner has an aura target-state, threads the aura stat-list pointer into the spawned missile's TargetX slot. Calls Missiles_SrvDoFunc_001 for standard motion/hit processing each frame.

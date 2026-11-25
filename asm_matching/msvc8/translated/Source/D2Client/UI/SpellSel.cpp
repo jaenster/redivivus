@@ -623,19 +623,20 @@ void __fastcall SPELLSEL_DrawSkillIcon(short * pSkillId, int32_t nSlotIndex, int
     vc8_thiscall(SPELLSEL_DrawSkillLevel)(nSkillId, nIconX, nIconY);
 }
 
-static int32_t __stdcall SPELLSEL_RegisterSkillSlot(int32_t nGridX, int32_t nSlotIndex, int32_t bLeftHand, int32_t nGridY, D2SkillStrc * pSkill, int32_t nSlotX) {
+static int32_t __stdcall SPELLSEL_RegisterSkillSlot(int32_t nSlotIndex, int32_t bLeftHand, int32_t nGridY, D2SkillStrc * pSkill, int32_t nSlotX) {
     gSpellSelGridRegion.aSkillGrid[gSpellSelGridRegion.sGridIndex[0]] = nSlotX;
     gSpellSelGridRegion.aSkillGridRow2[gSpellSelGridRegion.sGridIndex[0]] = nSlotIndex;
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\UI\\spellsel.cpp", 0x23d);
     gSpellSelGridRegion.aLeftHandSlots[gSpellSelGridRegion.sGridIndex[0]] = eSkillId;
     D2Common::Skills::SKILLS_GetSkillData(pSkill, gSpellSelGridRegion.aRightHandSlots + gSpellSelGridRegion.sGridIndex[0], nullptr, nullptr, nullptr);
-    gSpellSelGridRegion.sGridIndex[0]++;
     *(uint32_t*)((char*)&gSpellSelGridRegion.sGridIndex + 1) = nGridY;
+    gSpellSelGridRegion.sGridIndex[0]++;
     if (!bLeftHand) {
-      return nSlotX - 0x30;
+      nSlotX -= 0x30;
+    } else {
+      nSlotX += 0x30;
     }
-
-    return nSlotX + 0x30;
+    return nSlotX;
 }
 
 int __fastcall SPELLSEL_FindChargedSkill1(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
@@ -1080,7 +1081,7 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
                         SpellSel::SPELLSEL_DrawSkillIcon(&pSkillsTxt->skill, nOwnerGUID, nChargesLeft, nGlobalPaletteShift, nCurX, nCurY, bWeaponSwap);
                       }
 
-                      nCurX = SPELLSEL_RegisterSkillSlot(bWeaponSwap, nCurY, bWeaponSwap, nGlobalPaletteShift, pCurSkill, nCurX);
+                      nCurX = SPELLSEL_RegisterSkillSlot(nCurY, bWeaponSwap, nGlobalPaletteShift, pCurSkill, nCurX);
                     } else {
                       if (!nChargeQty) {
                         nCanUse = nChargesLeft;

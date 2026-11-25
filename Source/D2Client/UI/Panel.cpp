@@ -1242,18 +1242,15 @@ void __stdcall PANEL_DrawPanelLayout() {
     D2Win::Src::D2WinFont::DRAW_text(wszMpText, ui::ScreenSizeX - nTextWidth / 2 - 0x50, Inv::ScreenSizeY - 0x5f, 0, 0);
 }
 
-int Unreferenced_00498310() {
+void Unreferenced_00498310() {
     D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();
-    eD2LevelId eVar1 = LEVEL_None;
     if (pRoom) {
-      eVar1 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      if (gpPanelBorderImage != eVar1) {
-        gpPanelBorderImage = eVar1;
+      eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+      if (gpPanelBorderImage != eLevelId) {
+        gpPanelBorderImage = eLevelId;
         gbPanelBorderDrawn = 0x3c;
       }
     }
-
-    return eVar1;
 }
 
 void __stdcall PANEL_DrawLife() {

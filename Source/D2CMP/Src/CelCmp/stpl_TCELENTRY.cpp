@@ -32,12 +32,8 @@ template<> void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::Clear() {
 }
 
 template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::DeleteNode(::TCELENTRY * ptr) {
-    ::TCELENTRY* pTVar1 = ptr;
-    if (!ptr) {
-      pTVar1 = (::TCELENTRY*)&this->m_terminator;
-    }
-
-    intptr_t uReturnLink = pTVar1->m_link.m_next;
+    ::TCELENTRY* pTVar1 = ptr ? ptr : (::TCELENTRY*)&this->m_terminator;
+    intptr_t uReturnLink = pTVar1->m_link.m_next <= 0 ? 0 : pTVar1->m_link.m_next; // steer-ok: the next link is read before the unlink below clears it
     TSLink<::TCELENTRY>* nNext = ptr->m_link.m_prevlink;
     if (nNext) {
       TSLink<::TCELENTRY>** pTargetLink;
@@ -49,5 +45,5 @@ template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::DeleteNode(::T
     }
 
     Storm::Source::SMem::SMemFree(ptr, D2CMP::SRC::CelCmp::s___AUTCELENTRY___00741f14, -2, 0);
-    return (::TCELENTRY*)(uReturnLink <= 0 ? 0 : uReturnLink);
+    return (::TCELENTRY*)uReturnLink;
 }

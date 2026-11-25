@@ -1444,14 +1444,15 @@ size_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t
     } while (true);
 }
 
-void __stdcall BnetReadFunction(uint32_t dwThreadParam) {
+DWORD __stdcall BnetReadFunction(uint32_t dwThreadParam) {
+    DWORD dwResult = 1;
     int32_t nBytesRead;
     DWORD dwCurrentTick;
     char chRecvBuf[8196];
     LONG lInterlockedResult = InterlockedIncrement((LONG*)&Destination_00881bf4);
     if (lInterlockedResult > 1) {
       /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881bf4);
-      return;
+      return 1;
     }
 
     int nPollResult = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
@@ -1462,7 +1463,7 @@ void __stdcall BnetReadFunction(uint32_t dwThreadParam) {
 
     DWORD dwLastKeepaliveTick = GetTickCount();
     size_t pBufPos = 0;
-    D2NetDataStrc* pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0);
+    D2NetDataStrc* pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     do {
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (!pSafesock) {
         break;
@@ -1477,7 +1478,7 @@ void __stdcall BnetReadFunction(uint32_t dwThreadParam) {
       }
 
       nPollResult = Fog::Src::Safesock::Safesock_PollReadReady(pSafesock);
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0);
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (!pSafesock) {
         break;
       }
@@ -1493,6 +1494,7 @@ void __stdcall BnetReadFunction(uint32_t dwThreadParam) {
         nBytesRead = Fog::Src::Safesock::WSASocket2_Read(pSafesock, chRecvBuf + pBufPos, 0x2000 - pBufPos);
         if (nBytesRead <= 0) {
           _net_sid::SID_SetReadyFlag();
+          dwResult = 0;
           break;
         }
 
@@ -1505,10 +1507,11 @@ void __stdcall BnetReadFunction(uint32_t dwThreadParam) {
         dwLastKeepaliveTick = dwCurrentTick;
       }
 
-      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0);
+      /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     } while (true);
 
     /* LONG * lpAddend for InterlockedDecrement */ InterlockedDecrement((LONG*)&Destination_00881bf4);
+    return dwResult;
 }
 
 uint32_t __fastcall BNCLIENT_GetSocketPeerName(sockaddr * pSockAddr, int * pAddrLen) {

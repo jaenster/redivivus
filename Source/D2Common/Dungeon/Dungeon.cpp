@@ -1434,15 +1434,7 @@ BOOL __stdcall DRLGROOM_IsRoomInTown(D2RoomStrc * pRoom) {
 }
 
 int32_t __stdcall Return0(D2RoomStrc * pRoom) {
-    if (!pRoom) {
-      eD2LevelId eLevelId;
-      eLevelId = Drlg::DRLG_ReturnZero();
-      return eLevelId;
-    }
-
-    Drlg::DrlgRoom::GetLevelId(pRoom->pRoomEx);
-    BOOL nZero = Drlg::DRLG_ReturnZero();
-    return nZero;
+    return Drlg::DRLG_ReturnZero(!pRoom ? LEVEL_None : Drlg::DrlgRoom::GetLevelId(pRoom->pRoomEx));
 }
 
 BOOL __stdcall DRLGROOM_IsUpdateLocked(D2RoomStrc * pRoom) {
@@ -3244,7 +3236,7 @@ int32_t __fastcall PATH_FindPathKnockback(D2PathTypeArg * pPathTypeArg) {
 }
 
 // Builds a circular set of path points around the origin using sin/cos lookup tables. Generates up to 77 waypoints in a spiral pattern, stored in the static path structure. Used for circular movement patterns.
-int32_t __fastcall DRLGPATH_BuildCircularPathPoints(D2DynamicPathStrc * pStaticPath) {
+int32_t __fastcall DRLGPATH_BuildCircularPathPoints(D2DynamicPathStrc * pStaticPath, D2SeedStrc * pSeed) {
     uint16_t nNewX;
     uint32_t nPackedCurX;
     float fVar1;
