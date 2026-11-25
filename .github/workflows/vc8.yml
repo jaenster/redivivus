@@ -123,7 +123,7 @@ jobs:
           $rsp  = $incs | ForEach-Object { "/I`"$_`"" }
           $rsp += $forced | ForEach-Object { "/FI`"$_`"" }
           # DEFAULT_CFLAGS + TOOL_CFLAGS from asm_matching/msvc8/zig/src/compile.zig
-          $rsp += "/c /nologo /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /Z7 /D WIN32 /D NDEBUG /D _WINDOWS"
+          $rsp += "/c /nologo /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /Z7 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X86=1 /D D2_TARGET_CLIENT=1"
           Set-Content -Path cl.rsp -Value ($rsp -join "`n") -Encoding ascii
           Write-Host "include directories: $($incs.Count)"
 
