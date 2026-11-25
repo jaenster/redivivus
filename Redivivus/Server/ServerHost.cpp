@@ -22,6 +22,7 @@
 #include "Source/Storm/H/stpl.h"
 #include "Source/D2Game/Game/Server.h"
 #include "Source/D2Net/D2Net.h"
+#include "Redivivus/Server/ServerData.h"
 #include "Redivivus/Server/ServerHost.h"
 #include "Redivivus/Server/ServerLog.h"
 
@@ -143,7 +144,15 @@ DWORD ExitAfterMilliseconds() {
     return nSeconds > 0 ? (DWORD)nSeconds * 1000 : 0;
 }
 
+// The APPMODE_server row's run function. Like the client's, it loads the data first and
+// returns the next app mode: APPMODE_mode0, which ends ApplicationMain's loop.
 int32_t __fastcall RunServerHost(D2IniConfigStrc * pIni) {
+    if (!ServerData_Load(pIni)) {
+        // Nothing of the server is up yet; leave with a failure code, as the game's own
+        // dispatch does on a halt (ApplicationRunCurrentMode, exit(-1)).
+        exit(1);
+    }
+
     D2Game::GAME::Server::SetupAsBnetServer(BuildCallbackTable());
     D2Net::Game::Server::QSERVER_CreateAndInit(CONNECTIONTYPE_SERVER, GAMETYPE_BNET);
     D2Net::Game::Server::NET_HACK_SetUseQServerHack(0);
@@ -184,7 +193,8 @@ int32_t __fastcall RunServerHost(D2IniConfigStrc * pIni) {
     D2Game::GAME::Server::QSERVER_DispatchAndCleanup(nullptr, 1);
     D2Net::Game::Server::NET_QServer_FreeAndSend0xB0ToEveryone();
     D2Game::GAME::Server::SetupAsBnetServer(nullptr);
-    return 0;
+    ServerData_Free();
+    return APPMODE_mode0;
 }
 
 fnAppModeRun gpfnServerHostRun = &RunServerHost;

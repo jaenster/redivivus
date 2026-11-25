@@ -7,7 +7,8 @@
 // table, ApplicationRunCurrentMode calls table[0](pD2IniConfig), then destroy(). The
 // APPMODE_server row ships empty. Before 1.14 the same row was D2Server.dll:
 // QueryInterface() returned its table and the host called table[0](config). A server
-// host here is exactly that row.
+// host here is exactly that row: Game/Main.cpp fills it with these two functions when
+// it is compiled with D2_TARGET_SERVER, and d2host runs the game's own WinMain.
 //
 // The default host (ServerHost.cpp) is a minimal public one. Other hosts implement
 // the same two functions and are chosen at link time; exactly one is linked.
@@ -17,8 +18,9 @@
 
 namespace Redivivus { namespace Server {
 
-// Returns the host's function table; table[0] runs the server until it shuts down
-// and returns the process exit code. Called once, after the command line is parsed.
+// Returns the host's function table; table[0] loads the data, runs the server until it
+// shuts down and returns the next app mode (APPMODE_mode0). Called once, from
+// ApplicationRunCurrentMode, after the game has parsed the command line and D2.ini.
 fnAppModeRun * __fastcall ServerHost_Init(HMODULE hModule);
 
 // Called once after table[0] returns.

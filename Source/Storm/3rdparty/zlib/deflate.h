@@ -159,7 +159,6 @@ struct __attribute__((packed)) deflate_state {
 namespace Storm::_3rdparty::zlib::deflate {
 
 // Function declarations
-uint32_t __fastcall read_buf(z_stream * strm, uint8_t * buf, uint32_t size);
 uint32_t __fastcall deflate(z_stream * strm, int32_t flush);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)

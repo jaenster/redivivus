@@ -2136,51 +2136,58 @@ static uint32_t __stdcall crc32_big(uint32_t crc, uint8_t * buf, uint32_t len) {
     0xda5e5abf,
     0xed3498be
 }; D2_STATIC_GUARD(gdwCrc32Table4, "Storm::_3rdparty::zlib::crc32::crc32_big::gdwCrc32Table4");
-
-    uint32_t nBlockCount;
-    uint32_t dwCrc = ~(((crc & 0xff00) + (crc << 0x10) << 8) + ((crc >> 0x10 & 0xff) << 8) + (crc >> 0x18));
-    for (; len && (uintptr_t)buf & 3; buf++) {
-      dwCrc = dwCrc << 8 ^ gdwCrc32TableBase[dwCrc >> 0x18 ^ (uint32_t)*buf];
-      len--;
+    unsigned c;
+    const unsigned *buf4;
+    c = ((((unsigned)crc >> 24) & 0xff) + (((unsigned)crc >> 8) & 0xff00) + (((unsigned)crc & 0xff00) << 8) +
+         (((unsigned)crc & 0xff) << 24));
+    c = ~c;
+    while (len && ((ptrdiff_t)buf & 3)) {
+        c = gdwCrc32TableBase[(c >> 24) ^ *buf++] ^ (c << 8);
+        len--;
     }
-
-    uint32_t* pdwData = (uint32_t*)(buf - 4);
-    if (len >= 0x20) {
-      nBlockCount = len >> 5;
-      do {
-        dwCrc ^= pdwData[1];
-        dwCrc = gdwCrc32Table4[dwCrc >> 0x10 & 0xff] ^ gdwCrc32Table3_b[dwCrc >> 8 & 0xff] ^ gdwCrc32Table5[dwCrc >> 0x18] ^ gdwCrc32TableBase[dwCrc & 0xff] ^ pdwData[2];
-        dwCrc = gdwCrc32Table4[dwCrc >> 0x10 & 0xff] ^ gdwCrc32Table3_b[dwCrc >> 8 & 0xff] ^ gdwCrc32Table5[dwCrc >> 0x18] ^ gdwCrc32TableBase[dwCrc & 0xff] ^ pdwData[3];
-        dwCrc = gdwCrc32Table4[dwCrc >> 0x10 & 0xff] ^ gdwCrc32Table3_b[dwCrc >> 8 & 0xff] ^ gdwCrc32Table5[dwCrc >> 0x18] ^ gdwCrc32TableBase[dwCrc & 0xff] ^ pdwData[4];
-        dwCrc = gdwCrc32Table4[dwCrc >> 0x10 & 0xff] ^ gdwCrc32Table3_b[dwCrc >> 8 & 0xff] ^ gdwCrc32Table5[dwCrc >> 0x18] ^ gdwCrc32TableBase[dwCrc & 0xff] ^ pdwData[5];
-        dwCrc = gdwCrc32Table4[dwCrc >> 0x10 & 0xff] ^ gdwCrc32Table3_b[dwCrc >> 8 & 0xff] ^ gdwCrc32Table5[dwCrc >> 0x18] ^ gdwCrc32TableBase[dwCrc & 0xff] ^ pdwData[6];
-        dwCrc = gdwCrc32Table4[dwCrc >> 0x10 & 0xff] ^ gdwCrc32Table3_b[dwCrc >> 8 & 0xff] ^ gdwCrc32Table5[dwCrc >> 0x18] ^ gdwCrc32TableBase[dwCrc & 0xff] ^ pdwData[7];
-        pdwData += 8;
-        len -= 0x20;
-        dwCrc = gdwCrc32Table4[dwCrc >> 0x10 & 0xff] ^ gdwCrc32Table3_b[dwCrc >> 8 & 0xff] ^ gdwCrc32Table5[dwCrc >> 0x18] ^ gdwCrc32TableBase[dwCrc & 0xff] ^ *pdwData;
-        dwCrc = gdwCrc32Table4[dwCrc >> 0x10 & 0xff] ^ gdwCrc32Table3_b[dwCrc >> 8 & 0xff] ^ gdwCrc32Table5[dwCrc >> 0x18] ^ gdwCrc32TableBase[dwCrc & 0xff];
-        nBlockCount--;
-      } while (nBlockCount);
+    buf4 = (unsigned *)(const void *)buf;
+    buf4--;
+    while (len >= 32) {
+        c ^= *++buf4;
+        c = gdwCrc32TableBase[c & 0xff] ^ gdwCrc32Table3_b[(c >> 8) & 0xff] ^ gdwCrc32Table4[(c >> 16) & 0xff] ^
+            gdwCrc32Table5[c >> 24];
+        c ^= *++buf4;
+        c = gdwCrc32TableBase[c & 0xff] ^ gdwCrc32Table3_b[(c >> 8) & 0xff] ^ gdwCrc32Table4[(c >> 16) & 0xff] ^
+            gdwCrc32Table5[c >> 24];
+        c ^= *++buf4;
+        c = gdwCrc32TableBase[c & 0xff] ^ gdwCrc32Table3_b[(c >> 8) & 0xff] ^ gdwCrc32Table4[(c >> 16) & 0xff] ^
+            gdwCrc32Table5[c >> 24];
+        c ^= *++buf4;
+        c = gdwCrc32TableBase[c & 0xff] ^ gdwCrc32Table3_b[(c >> 8) & 0xff] ^ gdwCrc32Table4[(c >> 16) & 0xff] ^
+            gdwCrc32Table5[c >> 24];
+        c ^= *++buf4;
+        c = gdwCrc32TableBase[c & 0xff] ^ gdwCrc32Table3_b[(c >> 8) & 0xff] ^ gdwCrc32Table4[(c >> 16) & 0xff] ^
+            gdwCrc32Table5[c >> 24];
+        c ^= *++buf4;
+        c = gdwCrc32TableBase[c & 0xff] ^ gdwCrc32Table3_b[(c >> 8) & 0xff] ^ gdwCrc32Table4[(c >> 16) & 0xff] ^
+            gdwCrc32Table5[c >> 24];
+        c ^= *++buf4;
+        c = gdwCrc32TableBase[c & 0xff] ^ gdwCrc32Table3_b[(c >> 8) & 0xff] ^ gdwCrc32Table4[(c >> 16) & 0xff] ^
+            gdwCrc32Table5[c >> 24];
+        c ^= *++buf4;
+        c = gdwCrc32TableBase[c & 0xff] ^ gdwCrc32Table3_b[(c >> 8) & 0xff] ^ gdwCrc32Table4[(c >> 16) & 0xff] ^
+            gdwCrc32Table5[c >> 24];
+        len -= 32;
     }
-    if (len >= 4) {
-      nBlockCount = len >> 2;
-      do {
-        dwCrc ^= pdwData[1];
-        pdwData++;
-        dwCrc = gdwCrc32Table4[dwCrc >> 0x10 & 0xff] ^ gdwCrc32Table3_b[dwCrc >> 8 & 0xff] ^ gdwCrc32Table5[dwCrc >> 0x18] ^ gdwCrc32TableBase[dwCrc & 0xff];
+    while (len >= 4) {
+        c ^= *++buf4;
+        c = gdwCrc32TableBase[c & 0xff] ^ gdwCrc32Table3_b[(c >> 8) & 0xff] ^ gdwCrc32Table4[(c >> 16) & 0xff] ^
+            gdwCrc32Table5[c >> 24];
         len -= 4;
-        nBlockCount--;
-      } while (nBlockCount);
     }
-
-    pdwData++;
-    for (; len; len--) {
-      dwCrc = dwCrc << 8 ^ gdwCrc32TableBase[dwCrc >> 0x18 ^ (uint32_t)(uint8_t)*pdwData];
-      pdwData = (uint32_t*)((char*)pdwData + 1);
-    }
-
-    dwCrc = ~dwCrc;
-    return ((dwCrc & 0xff00) + (dwCrc << 0x10) << 8) + (dwCrc >> 0x10 & 0xff) * 0x100 + (dwCrc >> 0x18);
+    buf4++;
+    buf = (unsigned char *)buf4;
+    if (len)
+        do {
+            c = gdwCrc32TableBase[(c >> 24) ^ *buf++] ^ (c << 8);
+        } while (--len);
+    c = ~c;
+    return (uint32_t)(((((c) >> 24) & 0xff) + (((c) >> 8) & 0xff00) + (((c) & 0xff00) << 8) + (((c) & 0xff) << 24)));
 }
 
 uint32_t __fastcall gf2_matrix_times(uint32_t vec, uint32_t * mat) {
@@ -2201,95 +2208,46 @@ static void gf2_matrix_square(uint32_t * square, uint32_t * mat) {
         square[n] = gf2_matrix_times(mat[n], mat);
 }
 
-uint32_t __stdcall crc32_combine_(uint32_t crc1, uint32_t crc2, int64_t len2) {
-    uint32_t* pdwCol;
-    uint32_t dwAccum;
-    uint32_t adwMatOdd[32];
-    uint32_t adwMatEven[32];
-    if (len2 < 1 && true) {
-      return crc1;
+static uint32_t __stdcall crc32_combine_(uint32_t crc1, uint32_t crc2, int64_t len2) {
+    int n;
+    uint32_t row;
+    uint32_t even[32]; /* even-power-of-two zeros operator */
+    uint32_t odd[32];  /* odd-power-of-two zeros operator */
+    /* degenerate case (also disallow negative lengths) */
+    if (len2 <= 0)
+        return crc1;
+    /* put operator for one zero bit in odd */
+    odd[0] = 0xedb88320UL; /* CRC-32 polynomial */
+    row = 1;
+    for (n = 1; n < 32; n++) {
+        odd[n] = row;
+        row <<= 1;
     }
-
-    uint32_t dwBits = 1;
-    adwMatEven[0] = 0xedb88320;
-    int nIndex = 1;
+    /* put operator for two zero bits in even */
+    gf2_matrix_square(even, odd);
+    /* put operator for four zero bits in odd */
+    gf2_matrix_square(odd, even);
+    /* apply len2 zeros to crc1 (first square will put the operator for one
+       zero byte, eight zero bits, in even) */
     do {
-      adwMatEven[nIndex] = dwBits;
-      nIndex++;
-      dwBits *= 2;
-    } while (nIndex < 0x20);
-
-    gf2_matrix_square(adwMatOdd, adwMatEven);
-    gf2_matrix_square(adwMatEven, adwMatOdd);
-    do {
-      uint64_t qwLength;
-      nIndex = 0;
-      do {
-        dwAccum = 0;
-        pdwCol = adwMatEven;
-        for (dwBits = *(uint32_t*)((char*)adwMatEven + nIndex); dwBits; dwBits >>= 1) {
-          if (dwBits & 1) {
-            dwAccum ^= *pdwCol;
-          }
-
-          pdwCol++;
-        }
-
-        *(uint32_t*)((char*)adwMatOdd + nIndex) = dwAccum;
-        nIndex += 4;
-      } while (nIndex < 0x80);
-
-      if (len2 & 1U) {
-        pdwCol = adwMatOdd;
-        dwAccum = 0;
-        for (dwBits = crc1; crc1 = dwAccum , dwBits != 0; dwBits >>= 1) {
-          if (dwBits & 1) {
-            crc1 ^= *pdwCol;
-          }
-
-          pdwCol++;
-          dwAccum = crc1;
-        }
-      }
-
-      qwLength = _allshr(1, len2);
-      if (!qwLength) {
-        break;
-      }
-
-      nIndex = 0;
-      do {
-        dwAccum = 0;
-        pdwCol = adwMatOdd;
-        for (dwBits = *(uint32_t*)((char*)adwMatOdd + nIndex); dwBits; dwBits >>= 1) {
-          if (dwBits & 1) {
-            dwAccum ^= *pdwCol;
-          }
-
-          pdwCol++;
-        }
-
-        *(uint32_t*)((char*)adwMatEven + nIndex) = dwAccum;
-        nIndex += 4;
-      } while (nIndex < 0x80);
-
-      if (qwLength & 1) {
-        pdwCol = adwMatEven;
-        dwAccum = 0;
-        for (dwBits = crc1; crc1 = dwAccum , dwBits != 0; dwBits >>= 1) {
-          if (dwBits & 1) {
-            crc1 ^= *pdwCol;
-          }
-
-          pdwCol++;
-          dwAccum = crc1;
-        }
-      }
-
-      len2 = _allshr(1, qwLength);
-    } while (len2);
-
-    return crc1 ^ crc2;
+        /* apply zeros operator for this bit of len2 */
+        gf2_matrix_square(even, odd);
+        if (len2 & 1)
+            crc1 = gf2_matrix_times(crc1, even);
+        len2 >>= 1;
+        /* if no more bits set, then done */
+        if (len2 == 0)
+            break;
+        /* another iteration of the loop with odd and even swapped */
+        gf2_matrix_square(odd, even);
+        if (len2 & 1)
+            crc1 = gf2_matrix_times(crc1, odd);
+        len2 >>= 1;
+        /* if no more bits set, then done */
+    } while (len2 != 0);
+    /* return combined crc */
+    crc1 ^= crc2;
+    return crc1;
 }
 
 uint32_t __fastcall crc32_combine(uint32_t crc1, uint32_t crc2, int32_t len2) {

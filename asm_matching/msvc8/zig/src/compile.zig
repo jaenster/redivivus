@@ -23,7 +23,7 @@ const ts_translate = @import("ts_translate.zig");
 const coff = @import("coff.zig");
 const gpa = util.gpa;
 
-const DEFAULT_CFLAGS = "/O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS";
+const DEFAULT_CFLAGS = "/O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X86=1 /D D2_TARGET_CLIENT=1";
 const TOOL_CFLAGS = "/Z7";
 const SUPPORT = "Redivivus";
 pub const PCH_HEADER = "oracle_pch.h";

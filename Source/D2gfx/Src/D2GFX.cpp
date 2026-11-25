@@ -17,6 +17,26 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2gfx/Src/D2GFX.data.h"
 #include "Source/D2gfx/D2GfxHelperStrc.data.h"
+#if D2_OS_WIN
+#if D2_RENDERER_OPENGL
+#include "Source/D2OpenGL/Src/D2gfxRenderer.h"
+#endif
+#elif D2_OS_MAC
+#if D2_ARCH_PPC
+#include "Source/D2Rave/D2Rave.h"
+#include "Source/D2Uni/D2Uni.h"
+#elif D2_ARCH_X86
+#include "Source/D2OpenGL/Src/D2gfxRenderer.h"
+#else
+#error "D2GFX.cpp: unsupported Mac architecture"
+#endif
+#elif D2_OS_LINUX
+#if D2_RENDERER_OPENGL
+#include "Source/D2OpenGL/Src/D2gfxRenderer.h"
+#endif
+#else
+#error "D2GFX.cpp: define one of D2_OS_WIN, D2_OS_MAC or D2_OS_LINUX"
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -240,7 +260,44 @@ BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2Rende
     /* .nfpDrawBlendedVisTile = */ (::fpDrawBlendedVisTile)&D2gfx::fpDrawBlendedVisTile,
     /* .nfpDrawRoofTile = */ (::fpDrawRoofTile)&D2gfx::fpDrawRoofTile
 }; D2_STATIC_GUARD(D2GfxHelperStrc_0072da60, "D2gfx::D2GFX::D2GFX_Initialize::D2GfxHelperStrc_0072da60");
+    // The video drivers, indexed by eD2RendererMode (the binaries' DISPLAYTYPE_*: SOFTWARE 2,
+    // GLIDE 4, OPENGL 5, RAVE 7 are attested). Each target lists the rows it ships.
+#if D2_TARGET_CLIENT
+#if D2_OS_WIN
+#if D2_RENDERER_OPENGL
+    // The shipped rows plus D2OpenGL in the OpenGL slot 1.14d leaves empty.
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, (D2RendererFunctionsStrc*)&D2Gdi::Renderer::Windowed::WindowedFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2DDraw::Renderer::DirectDraw::DirectDrawFunctionTable, (D2RendererFunctionsStrc*)&D2Glide::Renderer::Glide::GlideFunctionTable, &D2OpenGL::Renderer::OpenGLFunctionTable, (D2RendererFunctionsStrc*)&D2Direct3D::Renderer::Direct3DFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#else
     static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, (D2RendererFunctionsStrc*)&D2Gdi::Renderer::Windowed::WindowedFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2DDraw::Renderer::DirectDraw::DirectDrawFunctionTable, (D2RendererFunctionsStrc*)&D2Glide::Renderer::Glide::GlideFunctionTable, nullptr, (D2RendererFunctionsStrc*)&D2Direct3D::Renderer::Direct3DFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#endif
+#elif D2_OS_MAC
+#if D2_ARCH_PPC
+    // Classic Mac PowerPC (1.09d selector 103f3bc0, eight rows): 2 software (D2Uni, 103f367c),
+    // 4 Glide (103f1c20), 5 OpenGL (103f21b0), 7 RAVE (D2Rave, 103f26b0). The PPC Glide and PPC OpenGL renderers are not
+    // reconstructed, so their rows stay empty.
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[8] = { nullptr, nullptr, &UniFunctionTable, nullptr, nullptr /* PPC Glide renderer */, nullptr /* PPC OpenGL renderer */, nullptr, &D2Rave::Renderer::RaveFunctionTable }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#elif D2_ARCH_X86
+    // Mac 1.14d (002b4975, selector 003c817c): OpenGL at 5 is the only row.
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, nullptr, nullptr, nullptr, &D2OpenGL::Renderer::OpenGLFunctionTable, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#else
+#error "D2GFX.cpp: no video driver rows for this Mac architecture"
+#endif
+#elif D2_OS_LINUX
+#if D2_RENDERER_OPENGL
+    // D2OpenGL in the OpenGL slot is the only Linux video driver.
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, nullptr, nullptr, nullptr, &D2OpenGL::Renderer::OpenGLFunctionTable, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#else
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#endif
+#else
+#error "D2GFX.cpp: no video driver rows for this operating system"
+#endif
+#elif D2_TARGET_SERVER
+    // The server renders nothing and does not link D2gfx.
+    static D2RendererFunctionsStrc * RENDERER_RenderedFunctionsSelector[7] = { nullptr, nullptr, nullptr, nullptr, nullptr, nullptr, nullptr }; D2_STATIC_GUARD(RENDERER_RenderedFunctionsSelector, "D2gfx::D2GFX::D2GFX_Initialize::RENDERER_RenderedFunctionsSelector");
+#else
+#error "D2GFX.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
     static WNDPROC gpfnWndProc; D2_STATIC_GUARD_BSS(gpfnWndProc, "D2gfx::D2GFX::D2GFX_Initialize::gpfnWndProc");
 
     WNDCLASSA wndClass;

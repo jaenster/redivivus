@@ -19,6 +19,8 @@ add_library(d2_mac_objs OBJECT ${D2_MAC_SOURCES})
 target_include_directories(d2_mac_objs PRIVATE
     "${CMAKE_SOURCE_DIR}"
     "${CMAKE_SOURCE_DIR}/Source/D2Headers")
+# The target axes (Source/D2Headers/D2Arch.h): Mac OS X, i386, the client.
+target_compile_definitions(d2_mac_objs PRIVATE D2_OS_MAC=1 D2_ARCH_X86=1 D2_TARGET_CLIENT=1)
 target_compile_options(d2_mac_objs PRIVATE
     -Os -fstack-protector -fpascal-strings
     $<$<COMPILE_LANGUAGE:CXX>:-std=gnu++11 -stdlib=libc++>

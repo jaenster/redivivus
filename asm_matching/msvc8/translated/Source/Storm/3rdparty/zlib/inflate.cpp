@@ -2872,7 +2872,7 @@ static void __fastcall fixedtables(inflate_state * state) {
     state->distbits = 5;
 }
 
-static BOOL __stdcall updatewindow(uint32_t copy, uint8_t * end, z_stream * strm) {
+static BOOL __stdcall updatewindow(z_stream * strm, uint8_t * end, uint32_t copy) {
     struct inflate_state *state;
     unsigned dist;
     state = (struct inflate_state *)strm->state;
@@ -2916,7 +2916,6 @@ static BOOL __stdcall updatewindow(uint32_t copy, uint8_t * end, z_stream * strm
 }
 
 int32_t __fastcall inflate(z_stream * strm, int32_t flush) {
-    // Static local variables (originally global data)
     static uint16_t gwZlibInflateWindow[19] = {
     0x10,
     0x11,
@@ -2938,1181 +2937,964 @@ int32_t __fastcall inflate(z_stream * strm, int32_t flush) {
     0x1,
     0xf
 }; D2_STATIC_GUARD(gwZlibInflateWindow, "Storm::_3rdparty::zlib::inflate::inflate::gwZlibInflateWindow");
-
-    int nHeadHave;
-    uint32_t uVar1;
-    uint8_t* pNextInCur;
-    uint8_t* pFrom;
-    uint32_t nCheck;
-    BOOL nTmp;
-    uint32_t nInConsumed;
-    uint32_t nFinalCheck;
-    uint8_t bVar2;
-    uint8_t byShift3;
-    uint8_t byShift;
-    inflate_code iVar3;
-    uint8_t byOp;
-    uint16_t nLenVal;
-    uint32_t nBitsTmp;
-    uint32_t nFrom;
-    uint32_t nCopy;
-    gz_header* pGzHead;
-    uint8_t* pbExtra;
-    if (!strm) {
-      return -2;
-    }
-
-    inflate_state* pState;
-    pState = (inflate_state*)strm->state;
-    if (!pState || !strm->next_out || !strm->next_in && strm->avail_in) {
-      return -2;
-    }
-    if (pState->mode == 0xb) {
-      pState->mode = 0xc;
-    }
-
-    uint8_t* pNextOut;
-    pNextOut = strm->next_out;
-    uint32_t nAvailOutStart;
-    nAvailOutStart = strm->avail_out;
-    uint8_t* pNextIn;
-    pNextIn = strm->next_in;
-    uint32_t nIn;
-    nIn = strm->avail_in;
-    uint32_t nHold;
-    nHold = pState->hold;
-    uint32_t eState;
-    eState = pState->mode;
-    uint32_t nBits;
-    nBits = pState->bits;
-    int nRet;
-    nRet = 0;
-    uint32_t nAvailOut;
-    nAvailOut = nAvailOutStart;
-    inflate_code pHere;
-    pHere = (inflate_code)nHold;
-    uint32_t nAvailIn;
-    nAvailIn = nIn;
-    if (eState > 0x1e) {
-      return -2;
-    }
-
-    for (; eState <= 0x1e; eState = pState->mode) {
-      uint8_t abHdrScratch[4];
-      switch (eState) {
+    struct inflate_state *state;
+    unsigned char *next;   /* next input */
+    unsigned char *put;    /* next output */
+    unsigned have, left;   /* available input and output */
+    unsigned long hold;    /* bit buffer */
+    unsigned bits;         /* bits in bit buffer */
+    unsigned in, out;      /* save starting available input and output */
+    unsigned copy;         /* number of stored or match bytes to copy */
+    unsigned char *from;   /* where to copy match bytes from */
+    inflate_code here;     /* current decoding table entry */
+    inflate_code last;     /* parent table entry */
+    unsigned len;          /* length to copy for repeats, bits to drop */
+    int ret;               /* return code */
+    unsigned char hbuf[4]; /* buffer for gzip header crc calculation */
+    if (strm == 0 || strm->state == 0 || strm->next_out == 0 || (strm->next_in == 0 && strm->avail_in != 0))
+        return (-2);
+    state = (struct inflate_state *)strm->state;
+    if (state->mode == 11)
+        state->mode = 12; /* skip check */
+    do {
+        put = strm->next_out;
+        left = strm->avail_out;
+        next = strm->next_in;
+        have = strm->avail_in;
+        hold = state->hold;
+        bits = state->bits;
+    } while (0);
+    in = have;
+    out = left;
+    ret = 0;
+    for (;;)
+        switch (state->mode) {
         case 0:
-          if (!pState->wrap) {
-            pState->mode = 0xc;
-          } else {
-            for (; nBits < 0x10; nBits += 8) {
-              if (!nAvailIn) {
-                goto inf_leave;
-              }
-
-              bVar2 = *pNextIn;
-              nAvailIn--;
-              pNextIn++;
-              nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-              pHere = (inflate_code)nHold;
-            }
-
-            if (!(pState->wrap & 2) || nHold != 0x8b1f) {
-              pState->flags = 0;
-              if (pState->head) {
-                pState->head->done = -1;
-              }
-              if (!(pState->wrap & 1) || (((uint32_t)(uint8_t)nHold << 8) + (nHold >> 8)) % 0x1f) {
-                strm->msg = "incorrect header check";
-              } else {
-                if (((uint8_t)nHold & 0xf) == 8) {
-                  pHere = (inflate_code)(nHold >> 4);
-                  nBits -= 4;
-                  eState = ((uint32_t)d2_bits_of(pHere) & 0xf) + 8;
-                  if (!pState->wbits) {
-                    pState->wbits = eState;
-                  } else if (eState > pState->wbits) {
-                    strm->msg = "invalid window size";
-                    nHold = (uint32_t)d2_bits_of(pHere);
-                    pState->mode = 0x1d;
-                    break;
-                  }
-
-                  pState->dmax = 1 << (int8_t)eState;
-                  nBits = adler32::adler32(0, nullptr, 0);
-                  pState->check = nBits;
-                  strm->adler = nBits;
-                  pState->mode = ~(nHold >> 0xc) & 2 | 9;
-                  nHold = 0;
-                  pHere.op = '\0';
-                  pHere.bits = '\0';
-                  pHere.val = 0;
-                  nBits = 0;
-                  break;
-                }
-
-                strm->msg = "unknown compression method";
-              }
-
-              pState->mode = 0x1d;
-              break;
-            }
-
-            nBits = crc32::crc32(0, nullptr, 0);
-            pState->check = nBits;
-            abHdrScratch[0] = '\x1f';
-            abHdrScratch[1] = 0x8b;
-            nBits = crc32::crc32(pState->check, abHdrScratch, 2);
-            nHold = 0;
-            pState->check = nBits;
-            pHere.op = '\0';
-            pHere.bits = '\0';
-            pHere.val = 0;
-            nBits = 0;
-            pState->mode = 1;
-          }
-        break;
-        case 1:
-          for (; nBits < 0x10; nBits += 8) {
-            if (!nAvailIn) {
-              goto inf_leave;
-            }
-
-            bVar2 = *pNextIn;
-            nAvailIn--;
-            pNextIn++;
-            nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-            pHere = (inflate_code)nHold;
-          }
-        pState->flags = nHold;
-        if ((uint8_t)nHold != '\b') {
-          strm->msg = "unknown compression method";
-        } else {
-          if (!(nHold & 0xe000)) {
-            if (pState->head) {
-              pState->head->text = nHold >> 8 & 1;
-            }
-            if (pState->flags & 0x200U) {
-              abHdrScratch[1] = (uint8_t)(nHold >> 8);
-              abHdrScratch[0] = (uint8_t)nHold;
-              nBits = crc32::crc32(pState->check, abHdrScratch, 2);
-              pState->check = nBits;
-            }
-
-            nHold = 0;
-            nBits = 0;
-            pState->mode = 2;
-            do {
-              if (!nAvailIn) {
-                goto inf_leave;
-              }
-
-              bVar2 = *pNextIn;
-              nAvailIn--;
-              byShift = (uint8_t)nBits;
-              pNextIn++;
-              nBits += 8;
-              nHold += (uint32_t)bVar2 << D2_SHIFT_COUNT(byShift);
-              case_TIME:
-              ;
-            } while (nBits < 0x20);
-
-            if (pState->head) {
-              pState->head->time = nHold;
-            }
-            if (pState->flags & 0x200U) {
-              abHdrScratch[0] = (uint8_t)nHold;
-              abHdrScratch[1] = (uint8_t)(nHold >> 8);
-              abHdrScratch[2] = (uint8_t)(nHold >> 0x10);
-              abHdrScratch[3] = (uint8_t)(nHold >> 0x18);
-              nBits = crc32::crc32(pState->check, abHdrScratch, 4);
-              pState->check = nBits;
-            }
-
-            nHold = 0;
-            nBits = 0;
-            pState->mode = 3;
-            do {
-              if (!nAvailIn) {
-                goto inf_leave;
-              }
-
-              bVar2 = *pNextIn;
-              nAvailIn--;
-              byShift = (uint8_t)nBits;
-              pNextIn++;
-              nBits += 8;
-              nHold += (uint32_t)bVar2 << D2_SHIFT_COUNT(byShift);
-              case_OS:
-              ;
-            } while (nBits < 0x10);
-
-            if (pState->head) {
-              pState->head->xflags = nHold & 0xff;
-              pState->head->os = nHold >> 8;
-            }
-            if (pState->flags & 0x200U) {
-              abHdrScratch[0] = (uint8_t)nHold;
-              abHdrScratch[1] = (uint8_t)(nHold >> 8);
-              nBits = crc32::crc32(pState->check, abHdrScratch, 2);
-              pState->check = nBits;
-            }
-
-            nHold = 0;
-            pHere.op = '\0';
-            pHere.bits = '\0';
-            pHere.val = 0;
-            nBits = 0;
-            pState->mode = 4;
-            goto case_EXLEN;
-          }
-
-          strm->msg = "unknown header flags set";
-        }
-
-        pState->mode = 0x1d;
-        break;
-        case 2:
-          goto case_TIME;
-        case 3:
-          goto case_OS;
-        case 4:
-          case_EXLEN:
-          if (!(pState->flags & 0x400U)) {
-            if (pState->head) {
-              pState->head->extra = 0;
-            }
-          } else {
-            for (; nBits < 0x10; nBits += 8) {
-              if (!nAvailIn) {
-                goto inf_leave;
-              }
-
-              bVar2 = *pNextIn;
-              nAvailIn--;
-              pNextIn++;
-              nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-            }
-
-            pState->length = nHold;
-            if (pState->head) {
-              pState->head->extra_len = nHold;
-            }
-            if (pState->flags & 0x200U) {
-              abHdrScratch[0] = (uint8_t)nHold;
-              abHdrScratch[1] = (uint8_t)(nHold >> 8);
-              nBits = crc32::crc32(pState->check, abHdrScratch, 2);
-              pState->check = nBits;
-            }
-
-            nHold = 0;
-            pHere.op = '\0';
-            pHere.bits = '\0';
-            pHere.val = 0;
-            nBits = 0;
-          }
-        pState->mode = 5;
-        case 5:
-          if (!(pState->flags & 0x400U)) {
-            enter_name:
-            pState->length = 0;
-            pState->mode = 6;
-            case_NAME:
-            if (!(pState->flags & 0x800U)) {
-              if (pState->head) {
-                pState->head->name = 0;
-              }
-
-              enter_comment:
-              pState->length = 0;
-              pState->mode = 7;
-              case_COMMENT:
-              if (!(pState->flags & 0x1000U)) {
-                if (pState->head) {
-                  pState->head->comment = 0;
-                }
-
-                enter_hcrc:
-                pState->mode = 8;
-                case_HCRC:
-                if (pState->flags & 0x200U) {
-                  for (; nBits < 0x10; nBits += 8) {
-                    if (!nAvailIn) {
-                      goto inf_leave;
-                    }
-
-                    bVar2 = *pNextIn;
-                    nAvailIn--;
-                    pNextIn++;
-                    nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-                    pHere = (inflate_code)nHold;
-                  }
-
-                  if (nHold != (uint16_t)pState->check) {
-                    strm->msg = "header crc mismatch";
-                    pState->mode = 0x1d;
-                    break;
-                  }
-
-                  nHold = 0;
-                  pHere.op = '\0';
-                  pHere.bits = '\0';
-                  pHere.val = 0;
-                  nBits = 0;
-                }
-                if (pState->head) {
-                  pState->head->hcrc = pState->flags >> 9 & 1;
-                  pState->head->done = 1;
-                }
-
-                uVar1 = crc32::crc32(0, nullptr, 0);
-                pState->check = uVar1;
-                strm->adler = uVar1;
-                pState->mode = 0xb;
+            if (state->wrap == 0) {
+                state->mode = 12;
                 break;
-              }
-              if (nAvailIn) {
-                eState = 0;
+            }
+            do {
+                while (bits < (unsigned)(16))
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+            } while (0);
+            if ((state->wrap & 2) && hold == 0x8b1f) { /* gzip header */
+                state->check = crc32::crc32(0L, 0, 0);
                 do {
-                  byOp = pNextIn[eState];
-                  eState++;
-                  pGzHead = pState->head;
-                  if (pGzHead && pGzHead->comment && pState->length < pGzHead->comm_max) {
-                    pGzHead->comment[pState->length] = byOp;
-                    pState->length++;
-                  }
-                } while (byOp != '\0' && eState < nAvailIn);
-
-                if (pState->flags & 0x200U) {
-                  uVar1 = crc32::crc32(pState->check, pNextIn, eState);
-                  pState->check = uVar1;
-                }
-
-                nAvailIn -= eState;
-                pNextIn += eState;
-                if (byOp == '\0') {
-                  goto enter_hcrc;
-                }
-              }
-            } else if (nAvailIn) {
-              eState = 0;
-              do {
-                byOp = pNextIn[eState];
-                eState++;
-                pGzHead = pState->head;
-                if (pGzHead && pGzHead->name && pState->length < pGzHead->name_max) {
-                  pGzHead->name[pState->length] = byOp;
-                  pState->length++;
-                }
-              } while (byOp != '\0' && eState < nAvailIn);
-
-              if (pState->flags & 0x200U) {
-                uVar1 = crc32::crc32(pState->check, pNextIn, eState);
-                pState->check = uVar1;
-              }
-
-              nAvailIn -= eState;
-              pNextIn += eState;
-              if (byOp == '\0') {
-                goto enter_comment;
-              }
-            }
-          } else {
-            eState = pState->length;
-            if (pState->length > nAvailIn) {
-              eState = nAvailIn;
-            }
-            if (eState) {
-              if (pState->head) {
-                pbExtra = pState->head->extra;
-                if (pbExtra) {
-                  nHeadHave = pState->head->extra_len - pState->length;
-                  nBitsTmp = pState->head->extra_max;
-                  uVar1 = eState;
-                  if (nHeadHave + eState > nBitsTmp) {
-                    uVar1 = nBitsTmp - nHeadHave;
-                  }
-
-                  memcpy(pbExtra + nHeadHave, pNextIn, uVar1);
-                }
-              }
-              if (pState->flags & 0x200U) {
-                uVar1 = crc32::crc32(pState->check, pNextIn, eState);
-                pState->check = uVar1;
-              }
-
-              nAvailIn -= eState;
-              pNextIn += eState;
-              pState->length -= eState;
-            }
-            if (!pState->length) {
-              goto enter_name;
-            }
-          }
-        inf_leave:
-        strm->next_out = pNextOut;
-        strm->next_in = pNextIn;
-        strm->avail_out = nAvailOut;
-        strm->avail_in = nAvailIn;
-        pState->hold = nHold;
-        pState->bits = nBits;
-        if (!pState->wsize && (nAvailOutStart == strm->avail_out || pState->mode >= 0x1d || pState->mode >= 0x1a && flush == 4) || (nTmp = updatewindow(nAvailOutStart - strm->avail_out, strm->next_out, strm) , !nTmp)) {
-          nInConsumed = nIn - strm->avail_in;
-          nAvailOutStart -= strm->avail_out;
-          strm->total_in += nInConsumed;
-          strm->total_out += nAvailOutStart;
-          pState->total += nAvailOutStart;
-          if (pState->wrap && nAvailOutStart) {
-            if (pState->flags) {
-              nFinalCheck = crc32::crc32(pState->check, strm->next_out - nAvailOutStart, nAvailOutStart);
-            } else {
-              nFinalCheck = adler32::adler32(pState->check, strm->next_out - nAvailOutStart, nAvailOutStart);
-            }
-
-            /* nFinalCheck: adler32/crc32 of the bytes written self call */ pState->check = nFinalCheck;
-            strm->adler = nFinalCheck;
-          }
-
-          nHeadHave = pState->mode;
-          if (nHeadHave == 0x13 || (nFrom = 0 , nHeadHave == 0xe)) {
-            nFrom = 0x100;
-          }
-
-          strm->data_type = (nHeadHave == 0xb ? 0x80 : 0) + ((pState->last ? 0x40 : 0) + pState->bits);
-          if ((nInConsumed || nAvailOutStart) && flush != 4) {
-            return nRet;
-          }
-          if (nRet) {
-            return nRet;
-          }
-
-          return -5;
-        }
-
-        pState->mode = 0x1e;
-        return -4;
-        case 6:
-          goto case_NAME;
-        case 7:
-          goto case_COMMENT;
-        case 8:
-          goto case_HCRC;
-        case 9:
-          for (; nBits < 0x20; nBits += 8) {
-            if (!nAvailIn) {
-              goto inf_leave;
-            }
-
-            bVar2 = *pNextIn;
-            nAvailIn--;
-            pNextIn++;
-            nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-            pHere = (inflate_code)nHold;
-          }
-        nBits = ((nHold & 0xff00) + (nHold << 0x10) << 8) + (((uint32_t)d2_bits_of(pHere) >> 0x10 & 0xff) << 8) + (nHold >> 0x18);
-        pState->check = nBits;
-        strm->adler = nBits;
-        nHold = 0;
-        nBits = 0;
-        pState->mode = 10;
-        case 10:
-          if (!pState->havedict) {
-            strm->next_out = pNextOut;
-            strm->avail_out = nAvailOut;
-            strm->next_in = pNextIn;
-            strm->avail_in = nAvailIn;
-            pState->bits = nBits;
-            pState->hold = nHold;
-            return 2;
-          }
-        uVar1 = adler32::adler32(0, nullptr, 0);
-        pState->check = uVar1;
-        strm->adler = uVar1;
-        pState->mode = 0xb;
-        case_TYPE:
-        if (flush == 5 || flush == 6) {
-          goto inf_leave;
-        }
-        case_TYPEDO:
-        if (pState->last) {
-          nHold >>= (int8_t)(nBits & 7);
-          nBits -= nBits & 7;
-          pState->mode = 0x1a;
-          pHere = (inflate_code)nHold;
-          break;
-        }
-        for (; nBits < 3; nBits += 8) {
-          if (!nAvailIn) {
-            goto inf_leave;
-          }
-
-          bVar2 = *pNextIn;
-          nAvailIn--;
-          pNextIn++;
-          nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-        }
-
-        pState->last = nHold & 1;
-        switch (nHold >> 1 & 3) {
-          case 0:
-            nHold >>= 3;
-          pState->mode = 0xd;
-          nBits -= 3;
-          pHere = (inflate_code)nHold;
-          continue;
-          case 1:
-            pState->lencode = (inflate_code*)lenfix;
-          pState->lenbits = 9;
-          pState->distcode = (inflate_code*)distfix;
-          pState->distbits = 5;
-          pState->mode = 0x13;
-          if (flush == 6) {
-            nHold >>= 3;
-            nBits -= 3;
-            goto inf_leave;
-          }
-
-          break;
-          case 2:
-            nHold >>= 3;
-          pState->mode = 0x10;
-          nBits -= 3;
-          pHere = (inflate_code)nHold;
-          continue;
-          case 3:
-            strm->msg = "invalid block type";
-          pState->mode = 0x1d;
-        }
-
-        nHold >>= 3;
-        nBits -= 3;
-        pHere = (inflate_code)nHold;
-        break;
-        case 0xb:
-          goto case_TYPE;
-        case 0xc:
-          goto case_TYPEDO;
-        case 0xd:
-          nHold >>= (int8_t)(nBits & 7);
-        for (nBits -= nBits & 7; nBits < 0x20; nBits += 8) {
-          if (!nAvailIn) {
-            goto inf_leave;
-          }
-
-          bVar2 = *pNextIn;
-          nAvailIn--;
-          pNextIn++;
-          nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-        }
-
-        eState = nHold & 0xffff;
-        if (eState == ~nHold >> 0x10) {
-          nHold = 0;
-          nBits = 0;
-          pState->length = eState;
-          pHere.op = '\0';
-          pHere.bits = '\0';
-          pHere.val = 0;
-          pState->mode = 0xe;
-          if (flush != 6) {
-            goto case_COPY_;
-          }
-
-          goto inf_leave;
-        }
-
-        strm->msg = "invalid stored block lengths";
-        pHere = (inflate_code)nHold;
-        pState->mode = 0x1d;
-        break;
-        case 0xe:
-          case_COPY_:
-          pState->mode = 0xf;
-        case 0xf:
-          nCopy = pState->length;
-        if (!nCopy) {
-          pState->mode = 0xb;
-          break;
-        }
-        if (nCopy > nAvailIn) {
-          nCopy = nAvailIn;
-        }
-        if (nCopy > nAvailOut) {
-          nCopy = nAvailOut;
-        }
-        if (nCopy) {
-          memcpy(pNextOut, pNextIn, nCopy);
-          nAvailIn -= nCopy;
-          pNextIn += nCopy;
-          nAvailOut -= nCopy;
-          pNextOut += nCopy;
-          pState->length -= nCopy;
-          break;
-        }
-
-        goto inf_leave;
-        case 0x10:
-          for (; nBits < 0xe; nBits += 8) {
-            if (!nAvailIn) {
-              goto inf_leave;
-            }
-
-            bVar2 = *pNextIn;
-            nAvailIn--;
-            pNextIn++;
-            nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-          }
-        pState->nlen = (nHold & 0x1f) + 0x101;
-        nBitsTmp = nHold >> 10;
-        eState = (nHold >> 5 & 0x1f) + 1;
-        nHold >>= 0xe;
-        nBits -= 0xe;
-        pState->ndist = eState;
-        pState->ncode = (nBitsTmp & 0xf) + 4;
-        pHere = (inflate_code)nHold;
-        if (pState->nlen <= 0x11e && eState <= 0x1e) {
-          pState->have = 0;
-          pState->mode = 0x11;
-          goto case_LENLENS;
-        }
-
-        strm->msg = "too many length or distance symbols";
-        pState->mode = 0x1d;
-        break;
-        case 0x11:
-          case_LENLENS:
-          pFrom = pNextIn;
-        while (pState->have < pState->ncode) {
-          for (; nBits < 3; nBits += 8) {
-            if (!nAvailIn) {
-              goto inf_leave;
-            }
-
-            bVar2 = *pNextIn;
-            nAvailIn--;
-            pNextIn++;
-            nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-            pFrom = pNextIn;
-          }
-
-          pState->lens[gwZlibInflateWindow[pState->have]] = (uint16_t)nHold & 7;
-          pState->have++;
-          nHold >>= 3;
-          nBits -= 3;
-          pHere = (inflate_code)nHold;
-        }
-
-        pNextIn = pFrom;
-        eState = pState->have;
-        while (eState < 0x13) {
-          pState->lens[gwZlibInflateWindow[pState->have]] = 0;
-          pState->have++;
-          eState = pState->have;
-        }
-
-        pState->next = pState->codes;
-        pState->lencode = pState->codes;
-        pState->lenbits = 7;
-        nRet = inftrees::inflate_table(0, pState->lens, 0x13, (inflate_code**)&pState->next, &pState->lenbits, pState->work);
-        if (!nRet) {
-          pState->have = 0;
-          pState->mode = 0x12;
-          goto case_CODELENS;
-        }
-
-        strm->msg = "invalid code lengths set";
-        pState->mode = 0x1d;
-        break;
-        case 0x12:
-          case_CODELENS:
-          pNextInCur = pNextIn;
-        while (pState->have < pState->ndist + pState->nlen) {
-          iVar3 = pState->lencode[(1 << D2_SHIFT_COUNT(pState->lenbits)) - 1U & nHold];
-          while (((uint32_t)d2_bits_of(iVar3) >> 8 & 0xff) > nBits) {
-            pNextIn = pNextInCur;
-            if (!nAvailIn) {
-              goto inf_leave;
-            }
-
-            bVar2 = *pNextInCur;
-            nAvailIn--;
-            byShift = (uint8_t)nBits;
-            pNextInCur++;
-            nBits += 8;
-            nHold += (uint32_t)bVar2 << D2_SHIFT_COUNT(byShift);
-            iVar3 = pState->lencode[(1 << D2_SHIFT_COUNT(pState->lenbits)) - 1U & nHold];
-            pNextIn = pNextInCur;
-          }
-
-          nLenVal = iVar3.val;
-          bVar2 = iVar3.bits;
-          if (nLenVal < 0x10) {
-            pHere = (inflate_code)(nHold >> D2_SHIFT_COUNT(bVar2));
-            nBits -= (uint32_t)d2_bits_of(iVar3) >> 8 & 0xff;
-            pState->lens[pState->have] = nLenVal;
-            pState->have++;
-          } else {
-            if (nLenVal == 0x10) {
-              while (nBits < ((uint32_t)d2_bits_of(iVar3) >> 8 & 0xff) + 2) {
-                pNextIn = pNextInCur;
-                if (!nAvailIn) {
-                  goto inf_leave;
-                }
-
-                byShift = *pNextInCur;
-                nAvailIn--;
-                byShift3 = (uint8_t)nBits;
-                pNextInCur++;
-                nBits += 8;
-                nHold += (uint32_t)byShift << D2_SHIFT_COUNT(byShift3);
-                pNextIn = pNextInCur;
-              }
-
-              nHold >>= D2_SHIFT_COUNT(bVar2);
-              nBits -= (uint32_t)d2_bits_of(iVar3) >> 8 & 0xff;
-              if (!pState->have) {
-                strm->msg = "invalid bit length repeat";
-                pHere = (inflate_code)nHold;
-                pState->mode = 0x1d;
+                    hbuf[0] = (unsigned char)(hold);
+                    hbuf[1] = (unsigned char)((hold) >> 8);
+                    state->check = crc32::crc32(state->check, hbuf, 2);
+                } while (0);
+                do {
+                    hold = 0;
+                    bits = 0;
+                } while (0);
+                state->mode = 1;
                 break;
-              }
-
-              nLenVal = pState->lens[pState->have - 1];
-              nCopy = (nHold & 3) + 3;
-              pHere = (inflate_code)(nHold >> 2);
-              nBits -= 2;
-            } else {
-              eState = (uint32_t)d2_bits_of(iVar3) >> 8 & 0xff;
-              if (nLenVal == 0x11) {
-                while (nBits < eState + 3) {
-                  pNextIn = pNextInCur;
-                  if (!nAvailIn) {
-                    goto inf_leave;
-                  }
-
-                  byShift = *pNextInCur;
-                  nAvailIn--;
-                  byShift3 = (uint8_t)nBits;
-                  pNextInCur++;
-                  nBits += 8;
-                  nHold += (uint32_t)byShift << D2_SHIFT_COUNT(byShift3);
-                  pNextIn = pNextInCur;
-                }
-
-                nBitsTmp = nHold >> D2_SHIFT_COUNT(bVar2);
-                nCopy = (nBitsTmp & 7) + 3;
-                pHere = (inflate_code)(nBitsTmp >> 3);
-                nHeadHave = -3;
-              } else {
-                while (nBits < eState + 7) {
-                  pNextIn = pNextInCur;
-                  if (!nAvailIn) {
-                    goto inf_leave;
-                  }
-
-                  byShift = *pNextInCur;
-                  nAvailIn--;
-                  byShift3 = (uint8_t)nBits;
-                  pNextInCur++;
-                  nBits += 8;
-                  nHold += (uint32_t)byShift << D2_SHIFT_COUNT(byShift3);
-                  pNextIn = pNextInCur;
-                }
-
-                nBitsTmp = nHold >> D2_SHIFT_COUNT(bVar2);
-                nCopy = (nBitsTmp & 0x7f) + 0xb;
-                pHere = (inflate_code)(nBitsTmp >> 7);
-                nHeadHave = -7;
-              }
-
-              nBits += nHeadHave - eState;
-              nLenVal = 0;
             }
-            if (pState->have + nCopy > pState->ndist + pState->nlen) {
-              strm->msg = "invalid bit length repeat";
-              nHold = (uint32_t)d2_bits_of(pHere);
-              pState->mode = 0x1d;
-              break;
+            state->flags = 0; /* expect zlib header */
+            if (state->head != 0)
+                state->head->done = -1;
+            if (!(state->wrap & 1) || /* check if zlib header allowed */
+                ((((unsigned)hold & ((1U << (8)) - 1)) << 8) + (hold >> 8)) % 31) {
+                strm->msg = (char *)"incorrect header check";
+                state->mode = 29;
+                break;
             }
-
-            for (; nCopy; nCopy--) {
-              pState->lens[pState->have] = nLenVal;
-              pState->have++;
+            if (((unsigned)hold & ((1U << (4)) - 1)) != 8) {
+                strm->msg = (char *)"unknown compression method";
+                state->mode = 29;
+                break;
             }
-          }
-
-          nHold = (uint32_t)d2_bits_of(pHere);
-        }
-
-        if (pState->mode != 0x1d) {
-          if (!pState->lens[0x100]) {
-            strm->msg = "invalid code -- missing end-of-block";
-          } else {
-            pState->next = pState->codes;
-            pState->lencode = pState->codes;
-            pState->lenbits = 9;
-            nRet = inftrees::inflate_table(1, pState->lens, pState->nlen, (inflate_code**)&pState->next, &pState->lenbits, pState->work);
-            if (nRet) {
-              strm->msg = "invalid literal/lengths set";
-            } else {
-              pState->distcode = (inflate_code*)pState->next;
-              pState->distbits = 6;
-              nRet = inftrees::inflate_table(2, pState->lens + pState->nlen, pState->ndist, (inflate_code**)&pState->next, &pState->distbits, pState->work);
-              if (!nRet) {
-                pState->mode = 0x13;
-                if (flush != 6) {
-                  goto case_LEN_;
-                }
-
-                goto inf_leave;
-              }
-
-              strm->msg = "invalid distances set";
+            do {
+                hold >>= (4);
+                bits -= (unsigned)(4);
+            } while (0);
+            len = ((unsigned)hold & ((1U << (4)) - 1)) + 8;
+            if (state->wbits == 0)
+                state->wbits = len;
+            else if (len > state->wbits) {
+                strm->msg = (char *)"invalid window size";
+                state->mode = 29;
+                break;
             }
-          }
-
-          pState->mode = 0x1d;
-          break;
-        }
-
-        break;
-        case 0x13:
-          case_LEN_:
-          pState->mode = 0x14;
-        case 0x14:
-          if (nAvailIn >= 6 && nAvailOut >= 0x102) {
-            strm->avail_out = nAvailOut;
-            strm->next_out = pNextOut;
-            strm->avail_in = nAvailIn;
-            strm->next_in = pNextIn;
-            pState->hold = nHold;
-            pState->bits = nBits;
-            inffast::inflate_fast(strm, nAvailOutStart);
-            pNextOut = strm->next_out;
-            nAvailOut = strm->avail_out;
-            nHold = pState->hold;
-            nBits = pState->bits;
-            pNextIn = strm->next_in;
-            nAvailIn = strm->avail_in;
-            pHere = (inflate_code)nHold;
-            if (pState->mode == 0xb) {
-              pState->back = -1;
-            }
-
+            state->dmax = 1U << len;
+            ;
+            strm->adler = state->check = adler32::adler32(0L, 0, 0);
+            state->mode = hold & 0x200 ? 9 : 11;
+            do {
+                hold = 0;
+                bits = 0;
+            } while (0);
             break;
-          }
-        pState->back = 0;
-        pHere = pState->lencode[(1 << D2_SHIFT_COUNT(pState->lenbits)) - 1U & nHold];
-        while (((uint32_t)d2_bits_of(pHere) >> 8 & 0xff) > nBits) {
-          if (!nAvailIn) {
-            goto inf_leave;
-          }
-
-          bVar2 = *pNextIn;
-          nAvailIn--;
-          byShift = (uint8_t)nBits;
-          pNextIn++;
-          nBits += 8;
-          nHold += (uint32_t)bVar2 << D2_SHIFT_COUNT(byShift);
-          pHere = pState->lencode[(1 << D2_SHIFT_COUNT(pState->lenbits)) - 1U & nHold];
-        }
-
-        byOp = pHere.op;
-        if (byOp != '\0' && !((uint32_t)d2_bits_of(pHere) & 0xf0)) {
-          bVar2 = pHere.bits;
-          iVar3 = pState->lencode[(((1 << D2_SHIFT_COUNT(byOp + bVar2)) - 1U & nHold) >> D2_SHIFT_COUNT(bVar2)) + ((uint32_t)d2_bits_of(pHere) >> 0x10)];
-          while (((uint32_t)d2_bits_of(pState->lencode[(((1 << D2_SHIFT_COUNT(byOp + bVar2)) - 1U & nHold) >> D2_SHIFT_COUNT(bVar2)) + ((uint32_t)d2_bits_of(pHere) >> 0x10)]) >> 8 & 0xff) + ((uint32_t)d2_bits_of(pHere) >> 8 & 0xff) > nBits) {
-            if (!nAvailIn) {
-              goto inf_leave;
+        case 1:
+            do {
+                while (bits < (unsigned)(16))
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+            } while (0);
+            state->flags = (int)(hold);
+            if ((state->flags & 0xff) != 8) {
+                strm->msg = (char *)"unknown compression method";
+                state->mode = 29;
+                break;
             }
-
-            byShift = *pNextIn;
-            nAvailIn--;
-            pNextIn++;
-            nHold += (uint32_t)byShift << D2_SHIFT_COUNT(nBits);
-            nBits += 8;
-            iVar3 = pState->lencode[(((1 << D2_SHIFT_COUNT(byOp + bVar2)) - 1U & nHold) >> D2_SHIFT_COUNT(bVar2)) + ((uint32_t)d2_bits_of(pHere) >> 0x10)];
-          }
-
-          pHere = iVar3;
-          nHold >>= D2_SHIFT_COUNT(bVar2);
-          nBits -= bVar2;
-          pState->back = (uint32_t)bVar2;
-        }
-
-        eState = (uint32_t)d2_bits_of(pHere) >> 8 & 0xff;
-        pState->back += eState;
-        nHold >>= D2_SHIFT_COUNT(pHere.bits);
-        nBits -= eState;
-        pState->length = (uint32_t)d2_bits_of(pHere) >> 0x10;
-        if (pHere.op == '\0') {
-          pState->mode = 0x19;
-          pHere = (inflate_code)nHold;
-          break;
-        }
-        if ((uint32_t)d2_bits_of(pHere) & 0x20) {
-          pState->back = -1;
-          pState->mode = 0xb;
-          pHere = (inflate_code)nHold;
-          break;
-        }
-        if ((uint32_t)d2_bits_of(pHere) & 0x40) {
-          strm->msg = "invalid literal/length code";
-          pHere = (inflate_code)nHold;
-          pState->mode = 0x1d;
-          break;
-        }
-
-        pState->extra = (uint32_t)d2_bits_of(pHere) & 0xf;
-        pState->mode = 0x15;
-        case_LENEXT:
-        if (pState->extra) {
-          while (nBits < pState->extra) {
-            if (!nAvailIn) {
-              goto inf_leave;
+            if (state->flags & 0xe000) {
+                strm->msg = (char *)"unknown header flags set";
+                state->mode = 29;
+                break;
             }
-
-            bVar2 = *pNextIn;
-            nAvailIn--;
-            byShift = (uint8_t)nBits;
-            pNextIn++;
-            nBits += 8;
-            nHold += (uint32_t)bVar2 << D2_SHIFT_COUNT(byShift);
-          }
-
-          uVar1 = pState->extra;
-          nBits -= uVar1;
-          pState->length += (1 << D2_SHIFT_COUNT(uVar1)) - 1U & nHold;
-          nHold >>= D2_SHIFT_COUNT(uVar1);
-          pState->back += uVar1;
-        }
-        pState->was = pState->length;
-        pState->mode = 0x16;
-        case_DIST:
-        pHere = pState->distcode[(1 << D2_SHIFT_COUNT(pState->distbits)) - 1U & nHold];
-        while (((uint32_t)d2_bits_of(pHere) >> 8 & 0xff) > nBits) {
-          if (!nAvailIn) {
-            goto inf_leave;
-          }
-
-          bVar2 = *pNextIn;
-          nAvailIn--;
-          byShift = (uint8_t)nBits;
-          pNextIn++;
-          nBits += 8;
-          nHold += (uint32_t)bVar2 << D2_SHIFT_COUNT(byShift);
-          pHere = pState->distcode[(1 << D2_SHIFT_COUNT(pState->distbits)) - 1U & nHold];
-        }
-
-        if (!((uint32_t)d2_bits_of(pHere) & 0xf0)) {
-          bVar2 = pHere.bits;
-          iVar3 = pState->distcode[(((1 << D2_SHIFT_COUNT(pHere.op + bVar2)) - 1U & nHold) >> D2_SHIFT_COUNT(bVar2)) + ((uint32_t)d2_bits_of(pHere) >> 0x10)];
-          while (((uint32_t)d2_bits_of(pState->distcode[(((1 << D2_SHIFT_COUNT(pHere.op + bVar2)) - 1U & nHold) >> D2_SHIFT_COUNT(bVar2)) + ((uint32_t)d2_bits_of(pHere) >> 0x10)]) >> 8 & 0xff) + ((uint32_t)d2_bits_of(pHere) >> 8 & 0xff) > nBits) {
-            if (!nAvailIn) {
-              goto inf_leave;
+            if (state->head != 0)
+                state->head->text = (int)((hold >> 8) & 1);
+            if (state->flags & 0x0200)
+                do {
+                    hbuf[0] = (unsigned char)(hold);
+                    hbuf[1] = (unsigned char)((hold) >> 8);
+                    state->check = crc32::crc32(state->check, hbuf, 2);
+                } while (0);
+            do {
+                hold = 0;
+                bits = 0;
+            } while (0);
+            state->mode = 2;
+        case 2:
+            do {
+                while (bits < (unsigned)(32))
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+            } while (0);
+            if (state->head != 0)
+                state->head->time = hold;
+            if (state->flags & 0x0200)
+                do {
+                    hbuf[0] = (unsigned char)(hold);
+                    hbuf[1] = (unsigned char)((hold) >> 8);
+                    hbuf[2] = (unsigned char)((hold) >> 16);
+                    hbuf[3] = (unsigned char)((hold) >> 24);
+                    state->check = crc32::crc32(state->check, hbuf, 4);
+                } while (0);
+            do {
+                hold = 0;
+                bits = 0;
+            } while (0);
+            state->mode = 3;
+        case 3:
+            do {
+                while (bits < (unsigned)(16))
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+            } while (0);
+            if (state->head != 0) {
+                state->head->xflags = (int)(hold & 0xff);
+                state->head->os = (int)(hold >> 8);
             }
-
-            byShift = *pNextIn;
-            nAvailIn--;
-            pNextIn++;
-            nHold += (uint32_t)byShift << D2_SHIFT_COUNT(nBits);
-            nBits += 8;
-            iVar3 = pState->distcode[(((1 << D2_SHIFT_COUNT(pHere.op + bVar2)) - 1U & nHold) >> D2_SHIFT_COUNT(bVar2)) + ((uint32_t)d2_bits_of(pHere) >> 0x10)];
-          }
-
-          pHere = iVar3;
-          nHold >>= D2_SHIFT_COUNT(bVar2);
-          nBits -= bVar2;
-          pState->back += (uint32_t)bVar2;
-        }
-
-        eState = (uint32_t)d2_bits_of(pHere) >> 8 & 0xff;
-        pState->back += eState;
-        nHold >>= D2_SHIFT_COUNT(pHere.bits);
-        nBits -= eState;
-        if ((uint32_t)d2_bits_of(pHere) & 0x40) {
-          strm->msg = "invalid distance code";
-          pHere = (inflate_code)nHold;
-          pState->mode = 0x1d;
-          break;
-        }
-
-        pState->extra = (uint32_t)d2_bits_of(pHere) & 0xf;
-        pState->offset = (uint32_t)d2_bits_of(pHere) >> 0x10;
-        pState->mode = 0x17;
-        pHere = (inflate_code)nHold;
-        case_DISTEXT:
-        if (pState->extra) {
-          while (nBits < pState->extra) {
-            if (!nAvailIn) {
-              goto inf_leave;
+            if (state->flags & 0x0200)
+                do {
+                    hbuf[0] = (unsigned char)(hold);
+                    hbuf[1] = (unsigned char)((hold) >> 8);
+                    state->check = crc32::crc32(state->check, hbuf, 2);
+                } while (0);
+            do {
+                hold = 0;
+                bits = 0;
+            } while (0);
+            state->mode = 4;
+        case 4:
+            if (state->flags & 0x0400) {
+                do {
+                    while (bits < (unsigned)(16))
+                        do {
+                            if (have == 0)
+                                goto inf_leave;
+                            have--;
+                            hold += (unsigned long)(*next++) << bits;
+                            bits += 8;
+                        } while (0);
+                } while (0);
+                state->length = (unsigned)(hold);
+                if (state->head != 0)
+                    state->head->extra_len = (unsigned)hold;
+                if (state->flags & 0x0200)
+                    do {
+                        hbuf[0] = (unsigned char)(hold);
+                        hbuf[1] = (unsigned char)((hold) >> 8);
+                        state->check = crc32::crc32(state->check, hbuf, 2);
+                    } while (0);
+                do {
+                    hold = 0;
+                    bits = 0;
+                } while (0);
+            } else if (state->head != 0)
+                state->head->extra = 0;
+            state->mode = 5;
+        case 5:
+            if (state->flags & 0x0400) {
+                copy = state->length;
+                if (copy > have)
+                    copy = have;
+                if (copy) {
+                    if (state->head != 0 && state->head->extra != 0) {
+                        len = state->head->extra_len - state->length;
+                        memcpy(state->head->extra + len, next,
+                               len + copy > state->head->extra_max ? state->head->extra_max - len : copy);
+                    }
+                    if (state->flags & 0x0200)
+                        state->check = crc32::crc32(state->check, next, copy);
+                    have -= copy;
+                    next += copy;
+                    state->length -= copy;
+                }
+                if (state->length)
+                    goto inf_leave;
             }
-
-            bVar2 = *pNextIn;
-            nAvailIn--;
-            byShift = (uint8_t)nBits;
-            pNextIn++;
-            nBits += 8;
-            nHold += (uint32_t)bVar2 << D2_SHIFT_COUNT(byShift);
-          }
-
-          uVar1 = pState->extra;
-          nBits -= uVar1;
-          pState->offset += (1 << D2_SHIFT_COUNT(uVar1)) - 1U & nHold;
-          nHold >>= D2_SHIFT_COUNT(uVar1);
-          pState->back += uVar1;
-          pHere = (inflate_code)nHold;
-        }
-        pState->mode = 0x18;
-        case_MATCH:
-        if (nAvailOut) {
-          nCopy = pState->offset;
-          if (nCopy > nAvailOutStart - nAvailOut) {
-            nCopy -= nAvailOutStart - nAvailOut;
-            if (nCopy > pState->whave && pState->sane) {
-              strm->msg = "invalid distance too far back";
-              pState->mode = 0x1d;
-              break;
+            state->length = 0;
+            state->mode = 6;
+        case 6:
+            if (state->flags & 0x0800) {
+                if (have == 0)
+                    goto inf_leave;
+                copy = 0;
+                do {
+                    len = (unsigned)(next[copy++]);
+                    if (state->head != 0 && state->head->name != 0 && state->length < state->head->name_max)
+                        state->head->name[state->length++] = len;
+                } while (len && copy < have);
+                if (state->flags & 0x0200)
+                    state->check = crc32::crc32(state->check, next, copy);
+                have -= copy;
+                next += copy;
+                if (len)
+                    goto inf_leave;
+            } else if (state->head != 0)
+                state->head->name = 0;
+            state->length = 0;
+            state->mode = 7;
+        case 7:
+            if (state->flags & 0x1000) {
+                if (have == 0)
+                    goto inf_leave;
+                copy = 0;
+                do {
+                    len = (unsigned)(next[copy++]);
+                    if (state->head != 0 && state->head->comment != 0 &&
+                        state->length < state->head->comm_max)
+                        state->head->comment[state->length++] = len;
+                } while (len && copy < have);
+                if (state->flags & 0x0200)
+                    state->check = crc32::crc32(state->check, next, copy);
+                have -= copy;
+                next += copy;
+                if (len)
+                    goto inf_leave;
+            } else if (state->head != 0)
+                state->head->comment = 0;
+            state->mode = 8;
+        case 8:
+            if (state->flags & 0x0200) {
+                do {
+                    while (bits < (unsigned)(16))
+                        do {
+                            if (have == 0)
+                                goto inf_leave;
+                            have--;
+                            hold += (unsigned long)(*next++) << bits;
+                            bits += 8;
+                        } while (0);
+                } while (0);
+                if (hold != (state->check & 0xffff)) {
+                    strm->msg = (char *)"header crc mismatch";
+                    state->mode = 29;
+                    break;
+                }
+                do {
+                    hold = 0;
+                    bits = 0;
+                } while (0);
             }
-
-            eState = pState->wnext;
-            if (nCopy > eState) {
-              nCopy -= eState;
-              nHeadHave = pState->wsize - nCopy;
-            } else {
-              nHeadHave = eState - nCopy;
+            if (state->head != 0) {
+                state->head->hcrc = (int)((state->flags >> 9) & 1);
+                state->head->done = 1;
             }
-
-            pFrom = pState->window + nHeadHave;
-            nFrom = pState->length;
-            if (nCopy > nFrom) {
-              nCopy = nFrom;
+            strm->adler = state->check = crc32::crc32(0L, 0, 0);
+            state->mode = 11;
+            break;
+        case 9:
+            do {
+                while (bits < (unsigned)(32))
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+            } while (0);
+            strm->adler = state->check = ((((hold) >> 24) & 0xff) + (((hold) >> 8) & 0xff00) +
+                                          (((hold) & 0xff00) << 8) + (((hold) & 0xff) << 24));
+            do {
+                hold = 0;
+                bits = 0;
+            } while (0);
+            state->mode = 10;
+        case 10:
+            if (state->havedict == 0) {
+                do {
+                    strm->next_out = put;
+                    strm->avail_out = left;
+                    strm->next_in = next;
+                    strm->avail_in = have;
+                    state->hold = hold;
+                    state->bits = bits;
+                } while (0);
+                return 2;
             }
-          } else {
-            pFrom = pNextOut - nCopy;
-            nFrom = pState->length;
-            nCopy = nFrom;
-          }
-          if (nCopy > nAvailOut) {
-            nCopy = nAvailOut;
-          }
-
-          nAvailOut -= nCopy;
-          pState->length = nFrom - nCopy;
-          do {
-            *pNextOut = *pFrom;
-            pNextOut++;
-            pFrom++;
-            nCopy--;
-          } while (nCopy);
-
-          if (!pState->length) {
-            pState->mode = 0x14;
-          }
-
-          break;
-        }
-        goto inf_leave;
-        case 0x15:
-          goto case_LENEXT;
-        case 0x16:
-          goto case_DIST;
-        case 0x17:
-          goto case_DISTEXT;
-        case 0x18:
-          goto case_MATCH;
-        case 0x19:
-          if (!nAvailOut) {
-            goto inf_leave;
-          }
-        *pNextOut = (uint8_t)pState->length;
-        pNextOut++;
-        nAvailOut--;
-        pState->mode = 0x14;
-        break;
-        case 0x1a:
-          if (pState->wrap) {
-            for (; nBits < 0x20; nBits += 8) {
-              if (!nAvailIn) {
+            strm->adler = state->check = adler32::adler32(0L, 0, 0);
+            state->mode = 11;
+        case 11:
+            if (flush == 5 || flush == 6)
                 goto inf_leave;
-              }
-
-              bVar2 = *pNextIn;
-              nAvailIn--;
-              pNextIn++;
-              nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-              pHere = (inflate_code)nHold;
+        case 12:
+            if (state->last) {
+                do {
+                    hold >>= bits & 7;
+                    bits -= bits & 7;
+                } while (0);
+                state->mode = 26;
+                break;
             }
-
-            nAvailOutStart -= nAvailOut;
-            strm->total_out += nAvailOutStart;
-            pState->total += nAvailOutStart;
-            if (nAvailOutStart) {
-              if (pState->flags) {
-                nCheck = crc32::crc32(pState->check, pNextOut - nAvailOutStart, nAvailOutStart);
-              } else {
-                nCheck = adler32::adler32(pState->check, pNextOut - nAvailOutStart, nAvailOutStart);
-              }
-
-              pState->check = nCheck;
-              strm->adler = nCheck;
+            do {
+                while (bits < (unsigned)(3))
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+            } while (0);
+            state->last = ((unsigned)hold & ((1U << (1)) - 1));
+            do {
+                hold >>= (1);
+                bits -= (unsigned)(1);
+            } while (0);
+            switch (((unsigned)hold & ((1U << (2)) - 1))) {
+            case 0: /* stored block */
+                ;
+                state->mode = 13;
+                break;
+            case 1: /* fixed block */
+                fixedtables(state);
+                ;
+                state->mode = 19; /* decode codes */
+                if (flush == 6) {
+                    do {
+                        hold >>= (2);
+                        bits -= (unsigned)(2);
+                    } while (0);
+                    goto inf_leave;
+                }
+                break;
+            case 2: /* dynamic block */
+                ;
+                state->mode = 16;
+                break;
+            case 3:
+                strm->msg = (char *)"invalid block type";
+                state->mode = 29;
             }
-
-            nAvailOutStart = nAvailOut;
-            eState = nHold;
-            if (!pState->flags) {
-              eState = ((nHold & 0xff00) + (nHold << 0x10) << 8) + (((uint32_t)d2_bits_of(pHere) >> 0x10 & 0xff) << 8) + (nHold >> 0x18);
+            do {
+                hold >>= (2);
+                bits -= (unsigned)(2);
+            } while (0);
+            break;
+        case 13:
+            do {
+                hold >>= bits & 7;
+                bits -= bits & 7;
+            } while (0); /* go to byte boundary */
+            do {
+                while (bits < (unsigned)(32))
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+            } while (0);
+            if ((hold & 0xffff) != ((hold >> 16) ^ 0xffff)) {
+                strm->msg = (char *)"invalid stored block lengths";
+                state->mode = 29;
+                break;
             }
-            if (eState != pState->check) {
-              strm->msg = "incorrect data check";
-              pState->mode = 0x1d;
-              break;
-            }
-
-            nHold = 0;
-            pHere.op = '\0';
-            pHere.bits = '\0';
-            pHere.val = 0;
-            nBits = 0;
-          }
-        pState->mode = 0x1b;
-        case 0x1b:
-          if (pState->wrap && pState->flags) {
-            for (; nBits < 0x20; nBits += 8) {
-              if (!nAvailIn) {
+            state->length = (unsigned)hold & 0xffff;
+            ;
+            do {
+                hold = 0;
+                bits = 0;
+            } while (0);
+            state->mode = 14;
+            if (flush == 6)
                 goto inf_leave;
-              }
-
-              bVar2 = *pNextIn;
-              nAvailIn--;
-              pNextIn++;
-              nHold += (uint32_t)bVar2 << (uint8_t)nBits;
-              pHere = (inflate_code)nHold;
+        case 14:
+            state->mode = 15;
+        case 15:
+            copy = state->length;
+            if (copy) {
+                if (copy > have)
+                    copy = have;
+                if (copy > left)
+                    copy = left;
+                if (copy == 0)
+                    goto inf_leave;
+                memcpy(put, next, copy);
+                have -= copy;
+                next += copy;
+                left -= copy;
+                put += copy;
+                state->length -= copy;
+                break;
+            };
+            state->mode = 11;
+            break;
+        case 16:
+            do {
+                while (bits < (unsigned)(14))
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+            } while (0);
+            state->nlen = ((unsigned)hold & ((1U << (5)) - 1)) + 257;
+            do {
+                hold >>= (5);
+                bits -= (unsigned)(5);
+            } while (0);
+            state->ndist = ((unsigned)hold & ((1U << (5)) - 1)) + 1;
+            do {
+                hold >>= (5);
+                bits -= (unsigned)(5);
+            } while (0);
+            state->ncode = ((unsigned)hold & ((1U << (4)) - 1)) + 4;
+            do {
+                hold >>= (4);
+                bits -= (unsigned)(4);
+            } while (0);
+            if (state->nlen > 286 || state->ndist > 30) {
+                strm->msg = (char *)"too many length or distance symbols";
+                state->mode = 29;
+                break;
+            };
+            state->have = 0;
+            state->mode = 17;
+        case 17:
+            while (state->have < state->ncode) {
+                do {
+                    while (bits < (unsigned)(3))
+                        do {
+                            if (have == 0)
+                                goto inf_leave;
+                            have--;
+                            hold += (unsigned long)(*next++) << bits;
+                            bits += 8;
+                        } while (0);
+                } while (0);
+                state->lens[gwZlibInflateWindow[state->have++]] =
+                    (unsigned short)((unsigned)hold & ((1U << (3)) - 1));
+                do {
+                    hold >>= (3);
+                    bits -= (unsigned)(3);
+                } while (0);
             }
-
-            if (nHold != pState->total) {
-              strm->msg = "incorrect length check";
-              pState->mode = 0x1d;
-              break;
+            while (state->have < 19)
+                state->lens[gwZlibInflateWindow[state->have++]] = 0;
+            state->next = state->codes;
+            state->lencode = (inflate_code *)(state->next);
+            state->lenbits = 7;
+            ret = inftrees::inflate_table(0, state->lens, 19, (inflate_code **)&(state->next),
+                                          &(state->lenbits), state->work);
+            if (ret) {
+                strm->msg = (char *)"invalid code lengths set";
+                state->mode = 29;
+                break;
+            };
+            state->have = 0;
+            state->mode = 18;
+        case 18:
+            while (state->have < state->nlen + state->ndist) {
+                for (;;) {
+                    here = state->lencode[((unsigned)hold & ((1U << (state->lenbits)) - 1))];
+                    if ((unsigned)(here.bits) <= bits)
+                        break;
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+                }
+                if (here.val < 16) {
+                    do {
+                        hold >>= (here.bits);
+                        bits -= (unsigned)(here.bits);
+                    } while (0);
+                    state->lens[state->have++] = here.val;
+                } else {
+                    if (here.val == 16) {
+                        do {
+                            while (bits < (unsigned)(here.bits + 2))
+                                do {
+                                    if (have == 0)
+                                        goto inf_leave;
+                                    have--;
+                                    hold += (unsigned long)(*next++) << bits;
+                                    bits += 8;
+                                } while (0);
+                        } while (0);
+                        do {
+                            hold >>= (here.bits);
+                            bits -= (unsigned)(here.bits);
+                        } while (0);
+                        if (state->have == 0) {
+                            strm->msg = (char *)"invalid bit length repeat";
+                            state->mode = 29;
+                            break;
+                        }
+                        len = state->lens[state->have - 1];
+                        copy = 3 + ((unsigned)hold & ((1U << (2)) - 1));
+                        do {
+                            hold >>= (2);
+                            bits -= (unsigned)(2);
+                        } while (0);
+                    } else if (here.val == 17) {
+                        do {
+                            while (bits < (unsigned)(here.bits + 3))
+                                do {
+                                    if (have == 0)
+                                        goto inf_leave;
+                                    have--;
+                                    hold += (unsigned long)(*next++) << bits;
+                                    bits += 8;
+                                } while (0);
+                        } while (0);
+                        do {
+                            hold >>= (here.bits);
+                            bits -= (unsigned)(here.bits);
+                        } while (0);
+                        len = 0;
+                        copy = 3 + ((unsigned)hold & ((1U << (3)) - 1));
+                        do {
+                            hold >>= (3);
+                            bits -= (unsigned)(3);
+                        } while (0);
+                    } else {
+                        do {
+                            while (bits < (unsigned)(here.bits + 7))
+                                do {
+                                    if (have == 0)
+                                        goto inf_leave;
+                                    have--;
+                                    hold += (unsigned long)(*next++) << bits;
+                                    bits += 8;
+                                } while (0);
+                        } while (0);
+                        do {
+                            hold >>= (here.bits);
+                            bits -= (unsigned)(here.bits);
+                        } while (0);
+                        len = 0;
+                        copy = 11 + ((unsigned)hold & ((1U << (7)) - 1));
+                        do {
+                            hold >>= (7);
+                            bits -= (unsigned)(7);
+                        } while (0);
+                    }
+                    if (state->have + copy > state->nlen + state->ndist) {
+                        strm->msg = (char *)"invalid bit length repeat";
+                        state->mode = 29;
+                        break;
+                    }
+                    while (copy--)
+                        state->lens[state->have++] = (unsigned short)len;
+                }
             }
-
-            nHold = 0;
-            nBits = 0;
-          }
-        pState->mode = 0x1c;
-        case_DONE:
-        nRet = 1;
-        goto inf_leave;
-        case 0x1c:
-          goto case_DONE;
-        case 0x1d:
-          nRet = -3;
-        goto inf_leave;
-        case 0x1e:
-          return -4;
-      }
-    }
-
-    return -2;
+            /* handle error breaks in while */
+            if (state->mode == 29)
+                break;
+            /* check for end-of-block code (better have one) */
+            if (state->lens[256] == 0) {
+                strm->msg = (char *)"invalid code -- missing end-of-block";
+                state->mode = 29;
+                break;
+            }
+            /* build code tables -- note: do not change the lenbits or distbits
+               values here (9 and 6) without reading the comments in inftrees.h
+               concerning the ENOUGH constants, which depend on those values */
+            state->next = state->codes;
+            state->lencode = (inflate_code *)(state->next);
+            state->lenbits = 9;
+            ret = inftrees::inflate_table(1, state->lens, state->nlen, (inflate_code **)&(state->next),
+                                          &(state->lenbits), state->work);
+            if (ret) {
+                strm->msg = (char *)"invalid literal/lengths set";
+                state->mode = 29;
+                break;
+            }
+            state->distcode = (inflate_code *)(state->next);
+            state->distbits = 6;
+            ret = inftrees::inflate_table(2, state->lens + state->nlen, state->ndist,
+                                          (inflate_code **)&(state->next), &(state->distbits), state->work);
+            if (ret) {
+                strm->msg = (char *)"invalid distances set";
+                state->mode = 29;
+                break;
+            };
+            state->mode = 19;
+            if (flush == 6)
+                goto inf_leave;
+        case 19:
+            state->mode = 20;
+        case 20:
+            if (have >= 6 && left >= 258) {
+                do {
+                    strm->next_out = put;
+                    strm->avail_out = left;
+                    strm->next_in = next;
+                    strm->avail_in = have;
+                    state->hold = hold;
+                    state->bits = bits;
+                } while (0);
+                inffast::inflate_fast(strm, out);
+                do {
+                    put = strm->next_out;
+                    left = strm->avail_out;
+                    next = strm->next_in;
+                    have = strm->avail_in;
+                    hold = state->hold;
+                    bits = state->bits;
+                } while (0);
+                if (state->mode == 11)
+                    state->back = -1;
+                break;
+            }
+            state->back = 0;
+            for (;;) {
+                here = state->lencode[((unsigned)hold & ((1U << (state->lenbits)) - 1))];
+                if ((unsigned)(here.bits) <= bits)
+                    break;
+                do {
+                    if (have == 0)
+                        goto inf_leave;
+                    have--;
+                    hold += (unsigned long)(*next++) << bits;
+                    bits += 8;
+                } while (0);
+            }
+            if (here.op && (here.op & 0xf0) == 0) {
+                last = here;
+                for (;;) {
+                    here =
+                        state->lencode[last.val +
+                                       (((unsigned)hold & ((1U << (last.bits + last.op)) - 1)) >> last.bits)];
+                    if ((unsigned)(last.bits + here.bits) <= bits)
+                        break;
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+                }
+                do {
+                    hold >>= (last.bits);
+                    bits -= (unsigned)(last.bits);
+                } while (0);
+                state->back += last.bits;
+            }
+            do {
+                hold >>= (here.bits);
+                bits -= (unsigned)(here.bits);
+            } while (0);
+            state->back += here.bits;
+            state->length = (unsigned)here.val;
+            if ((int)(here.op) == 0) {
+                ;
+                state->mode = 25;
+                break;
+            }
+            if (here.op & 32) {
+                ;
+                state->back = -1;
+                state->mode = 11;
+                break;
+            }
+            if (here.op & 64) {
+                strm->msg = (char *)"invalid literal/length code";
+                state->mode = 29;
+                break;
+            }
+            state->extra = (unsigned)(here.op) & 15;
+            state->mode = 21;
+        case 21:
+            if (state->extra) {
+                do {
+                    while (bits < (unsigned)(state->extra))
+                        do {
+                            if (have == 0)
+                                goto inf_leave;
+                            have--;
+                            hold += (unsigned long)(*next++) << bits;
+                            bits += 8;
+                        } while (0);
+                } while (0);
+                state->length += ((unsigned)hold & ((1U << (state->extra)) - 1));
+                do {
+                    hold >>= (state->extra);
+                    bits -= (unsigned)(state->extra);
+                } while (0);
+                state->back += state->extra;
+            };
+            state->was = state->length;
+            state->mode = 22;
+        case 22:
+            for (;;) {
+                here = state->distcode[((unsigned)hold & ((1U << (state->distbits)) - 1))];
+                if ((unsigned)(here.bits) <= bits)
+                    break;
+                do {
+                    if (have == 0)
+                        goto inf_leave;
+                    have--;
+                    hold += (unsigned long)(*next++) << bits;
+                    bits += 8;
+                } while (0);
+            }
+            if ((here.op & 0xf0) == 0) {
+                last = here;
+                for (;;) {
+                    here =
+                        state->distcode[last.val + (((unsigned)hold & ((1U << (last.bits + last.op)) - 1)) >>
+                                                    last.bits)];
+                    if ((unsigned)(last.bits + here.bits) <= bits)
+                        break;
+                    do {
+                        if (have == 0)
+                            goto inf_leave;
+                        have--;
+                        hold += (unsigned long)(*next++) << bits;
+                        bits += 8;
+                    } while (0);
+                }
+                do {
+                    hold >>= (last.bits);
+                    bits -= (unsigned)(last.bits);
+                } while (0);
+                state->back += last.bits;
+            }
+            do {
+                hold >>= (here.bits);
+                bits -= (unsigned)(here.bits);
+            } while (0);
+            state->back += here.bits;
+            if (here.op & 64) {
+                strm->msg = (char *)"invalid distance code";
+                state->mode = 29;
+                break;
+            }
+            state->offset = (unsigned)here.val;
+            state->extra = (unsigned)(here.op) & 15;
+            state->mode = 23;
+        case 23:
+            if (state->extra) {
+                do {
+                    while (bits < (unsigned)(state->extra))
+                        do {
+                            if (have == 0)
+                                goto inf_leave;
+                            have--;
+                            hold += (unsigned long)(*next++) << bits;
+                            bits += 8;
+                        } while (0);
+                } while (0);
+                state->offset += ((unsigned)hold & ((1U << (state->extra)) - 1));
+                do {
+                    hold >>= (state->extra);
+                    bits -= (unsigned)(state->extra);
+                } while (0);
+                state->back += state->extra;
+            };
+            state->mode = 24;
+        case 24:
+            if (left == 0)
+                goto inf_leave;
+            copy = out - left;
+            if (state->offset > copy) { /* copy from window */
+                copy = state->offset - copy;
+                if (copy > state->whave) {
+                    if (state->sane) {
+                        strm->msg = (char *)"invalid distance too far back";
+                        state->mode = 29;
+                        break;
+                    }
+                }
+                if (copy > state->wnext) {
+                    copy -= state->wnext;
+                    from = state->window + (state->wsize - copy);
+                } else
+                    from = state->window + (state->wnext - copy);
+                if (copy > state->length)
+                    copy = state->length;
+            } else { /* copy from output */
+                from = put - state->offset;
+                copy = state->length;
+            }
+            if (copy > left)
+                copy = left;
+            left -= copy;
+            state->length -= copy;
+            do {
+                *put++ = *from++;
+            } while (--copy);
+            if (state->length == 0)
+                state->mode = 20;
+            break;
+        case 25:
+            if (left == 0)
+                goto inf_leave;
+            *put++ = (unsigned char)(state->length);
+            left--;
+            state->mode = 20;
+            break;
+        case 26:
+            if (state->wrap) {
+                do {
+                    while (bits < (unsigned)(32))
+                        do {
+                            if (have == 0)
+                                goto inf_leave;
+                            have--;
+                            hold += (unsigned long)(*next++) << bits;
+                            bits += 8;
+                        } while (0);
+                } while (0);
+                out -= left;
+                strm->total_out += out;
+                state->total += out;
+                if (out)
+                    strm->adler = state->check =
+                        (state->flags ? crc32::crc32(state->check, put - out, out)
+                                      : adler32::adler32(state->check, put - out, out));
+                out = left;
+                if ((state->flags ? hold
+                                  : ((((hold) >> 24) & 0xff) + (((hold) >> 8) & 0xff00) +
+                                     (((hold) & 0xff00) << 8) + (((hold) & 0xff) << 24))) != state->check) {
+                    strm->msg = (char *)"incorrect data check";
+                    state->mode = 29;
+                    break;
+                }
+                do {
+                    hold = 0;
+                    bits = 0;
+                } while (0);
+                ;
+            }
+            state->mode = 27;
+        case 27:
+            if (state->wrap && state->flags) {
+                do {
+                    while (bits < (unsigned)(32))
+                        do {
+                            if (have == 0)
+                                goto inf_leave;
+                            have--;
+                            hold += (unsigned long)(*next++) << bits;
+                            bits += 8;
+                        } while (0);
+                } while (0);
+                if (hold != (state->total & 0xffffffffUL)) {
+                    strm->msg = (char *)"incorrect length check";
+                    state->mode = 29;
+                    break;
+                }
+                do {
+                    hold = 0;
+                    bits = 0;
+                } while (0);
+                ;
+            }
+            state->mode = 28;
+        case 28:
+            ret = 1;
+            goto inf_leave;
+        case 29:
+            ret = (-3);
+            goto inf_leave;
+        case 30:
+            return (-4);
+        case 31:
+        default:
+            return (-2);
+        }
+    /*
+       Return from inflate(), updating the total counts and the check value.
+       If there was no progress during the inflate() call, return a buffer
+       error.  Call updatewindow() to create and/or update the window state.
+       Note: a memory error from inflate() is non-recoverable.
+     */
+inf_leave:
+    do {
+        strm->next_out = put;
+        strm->avail_out = left;
+        strm->next_in = next;
+        strm->avail_in = have;
+        state->hold = hold;
+        state->bits = bits;
+    } while (0);
+    if (state->wsize || (out != strm->avail_out && state->mode < 29 && (state->mode < 26 || flush != 4)))
+        if (updatewindow(strm, strm->next_out, out - strm->avail_out)) {
+            state->mode = 30;
+            return (-4);
+        }
+    in -= strm->avail_in;
+    out -= strm->avail_out;
+    strm->total_in += in;
+    strm->total_out += out;
+    state->total += out;
+    if (state->wrap && out)
+        strm->adler = state->check =
+            (state->flags ? crc32::crc32(state->check, strm->next_out - out, out)
+                          : adler32::adler32(state->check, strm->next_out - out, out));
+    strm->data_type = state->bits + (state->last ? 64 : 0) + (state->mode == 11 ? 128 : 0) +
+                      (state->mode == 19 || state->mode == 14 ? 256 : 0);
+    if (((in == 0 && out == 0) || flush == 4) && ret == 0)
+        ret = (-5);
+    return ret;
 }
 
 int __fastcall inflateEnd(z_stream * strm) {
@@ -4162,7 +3944,7 @@ int __fastcall inflateSetDictionary(z_stream * strm, uint8_t * dictionary, uint3
     }
     /* copy dictionary to window using updatewindow(), which will amend the
        existing dictionary if appropriate */
-    ret = updatewindow(dictLength, dictionary + dictLength, strm);
+    ret = updatewindow(strm, dictionary + dictLength, dictLength);
     if (ret) {
         state->mode = 30 /* MEM */;
         return (-4);

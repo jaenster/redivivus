@@ -49,7 +49,7 @@ pub fn main(args: []const []const u8) !void {
 
 // ---- compile
 
-const CFLAGS = "/O2 /Oy- /Ob1 /EHsc /GS /MT /W3 /Wp64 /D WIN32 /D NDEBUG /D _WINDOWS";
+const CFLAGS = "/O2 /Oy- /Ob1 /EHsc /GS /MT /W3 /Wp64 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X64=1 /D D2_TARGET_CLIENT=1";
 
 /// The path as wine sees it through Z: (= /).
 fn zpath(path: []const u8) ![]const u8 {

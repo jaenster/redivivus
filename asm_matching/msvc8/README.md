@@ -481,8 +481,11 @@ is where a library member lands that only a later pass of the linker pulls in.
 The default (`DEFAULT_CFLAGS` in `zig/src/compile.zig`; `audit.zig`'s `Config` reads the same settings):
 
 ```
-/O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS
+/O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X86=1 /D D2_TARGET_CLIENT=1
 ```
+
+The three `D2_*` defines are the target axes (Windows, x86, the client; Source/D2Headers/D2Arch.h).
+They select the Windows client's branch of every target guard and change no code.
 
 Every flag in it is either established (`/O2`: byte-identical functions;
 `/MT`: the static CRT) or measured: [evidence/flags.md](evidence/flags.md)
@@ -492,7 +495,7 @@ module. Before 1.14 every module was its own project with its own settings,
 so a flag may also apply to some modules only. An A/B:
 
 ```sh
-X='/O2 /Oy- /Ob1 /EHsc /GS- /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS'   # e.g. no /GS
+X='/O2 /Oy- /Ob1 /EHsc /GS- /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X86=1 /D D2_TARGET_CLIENT=1'   # e.g. no /GS
 ORACLE_CFLAGS="$X" asm_matching/msvc8/oracle build    # into build/experiment-sp1-<hash>/
 ORACLE_CFLAGS="$X" asm_matching/msvc8/oracle audit    # same map, that build's code
 asm_matching/msvc8/oracle abcompare asm_matching/msvc8/evidence/audit.tsv \

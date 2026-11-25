@@ -796,7 +796,11 @@ namespace Storm { namespace _3rdparty { namespace zlib { namespace crc32 {
 uint32_t __fastcall crc32(uint32_t crc, uint8_t * buf, uint32_t len);
 }}}} // namespace Storm::_3rdparty::zlib::crc32
 namespace Storm { namespace _3rdparty { namespace zlib { namespace deflate {
+// read_buf is file-static in deflate.cpp (VC8 gives it a register convention); the declaration
+// stays for the other units, whose code generation is sensitive to this header's contents.
+#ifndef D2_ZLIB_DEFLATE_UNIT
 uint32_t __fastcall read_buf(z_stream * strm, uint8_t * buf, uint32_t size);
+#endif
 uint32_t __fastcall deflate(z_stream * strm, int32_t flush);
 }}}} // namespace Storm::_3rdparty::zlib::deflate
 namespace Storm { namespace _3rdparty { namespace zlib { namespace inflate {

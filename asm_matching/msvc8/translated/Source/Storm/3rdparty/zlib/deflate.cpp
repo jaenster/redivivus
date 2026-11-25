@@ -3,6 +3,7 @@
 // Altered source: the bodies taken from zlib are preprocessed and renamed to this tree's
 // identifiers. The zlib licence and the details are in README.md beside this file.
 
+#define D2_ZLIB_DEFLATE_UNIT /* read_buf is file-static here; see Storm.h */
 #include "Source/Storm/3rdparty/zlib/deflate.h"
 #include "Source/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
@@ -315,35 +316,22 @@ int __fastcall deflateCopy(z_stream * dest, z_stream * source) {
     return 0;
 }
 
-uint32_t __fastcall read_buf(z_stream * strm, uint8_t * buf, uint32_t size) {
-    uint32_t dwChecksum;
-    uint32_t nAvailIn = strm->avail_in;
-    uint32_t _Size = nAvailIn;
-    if (nAvailIn > size) {
-      _Size = size;
+static uint32_t read_buf(z_stream * strm, uint8_t * buf, uint32_t size) {
+    unsigned len = strm->avail_in;
+    if (len > size)
+        len = size;
+    if (len == 0)
+        return 0;
+    strm->avail_in -= len;
+    memcpy(buf, strm->next_in, len);
+    if (((deflate_state *)strm->state)->wrap == 1) {
+        strm->adler = adler32::adler32(strm->adler, buf, len);
+    } else if (((deflate_state *)strm->state)->wrap == 2) {
+        strm->adler = crc32::crc32(strm->adler, buf, len);
     }
-    if (!_Size) {
-      return 0;
-    }
-
-    strm->avail_in = nAvailIn - _Size;
-    memcpy(buf, strm->next_in, _Size);
-    int nWrap = *(int*)((char*)strm->state + 0x18);
-    if (nWrap == 1) {
-      dwChecksum = adler32::adler32(strm->adler, buf, _Size);
-      strm->next_in += _Size;
-      strm->total_in += _Size;
-      strm->adler = dwChecksum;
-      return _Size;
-    }
-    if (nWrap == 2) {
-      dwChecksum = crc32::crc32(strm->adler, buf, _Size);
-      strm->adler = dwChecksum;
-    }
-
-    strm->next_in += _Size;
-    strm->total_in += _Size;
-    return _Size;
+    strm->next_in += len;
+    strm->total_in += len;
+    return len;
 }
 
 static void lm_init(deflate_state * s) {
@@ -826,177 +814,115 @@ int32_t __fastcall deflate_slow(deflate_state * s, int32_t flush) {
 }
 
 static block_state __stdcall deflate_rle(int32_t flush, deflate_state * s) {
-    uint8_t* pScanCur;
-    uint8_t* pScanNext;
-    uint8_t* pBlockStart;
-    bool bBlockFull;
-    uint32_t nMatchLen;
-    uint8_t byLit;
-    uint32_t nBlockStartOff;
-    int nBlockStartOff2;
-    uint32_t* pPendingCountField;
-    deflate_state* pPendingState;
-    z_stream* pStream;
-    do {
-      uint32_t nCopyLen;
-      nCopyLen = s->lookahead;
-      if (nCopyLen <= 0x102) {
-        fill_window(s);
-        nCopyLen = s->lookahead;
-        if (nCopyLen <= 0x102 && !flush) {
-          return need_more;
+    int bflush;            /* set if current block must be flushed */
+    unsigned prev;         /* byte at distance one to match */
+    uint8_t *scan, *strend; /* scan goes up to strend for length of run */
+    for (;;) {
+        /* Make sure that we always have enough lookahead, except
+         * at the end of the input file. We need MAX_MATCH bytes
+         * for the longest run, plus one for the unrolled loop.
+         */
+        if (s->lookahead <= 258) {
+            fill_window(s);
+            if (s->lookahead <= 258 && flush == 0) {
+                return need_more;
+            }
+            if (s->lookahead == 0)
+                break; /* flush the current block */
         }
-        if (!nCopyLen) {
-          s->insert = 0;
-          if (flush == 4) {
-            nBlockStartOff2 = s->block_start;
-            if (nBlockStartOff2 >= 0) {
-              pBlockStart = s->window + nBlockStartOff2;
-            } else {
-              pBlockStart = 0;
-            }
-
-            trees::_tr_flush_block(s, (char*)pBlockStart, s->strstart - nBlockStartOff2, 1);
-            s->block_start = s->strstart;
-            flush_pending(s->strm);
-            return s->strm->avail_out ? finish_done : finish_started;
-          }
-          if (!s->last_lit) {
-            return block_done;
-          }
-
-          nBlockStartOff2 = s->block_start;
-          if (nBlockStartOff2 >= 0) {
-            pBlockStart = s->window + nBlockStartOff2;
-          } else {
-            pBlockStart = 0;
-          }
-
-          trees::_tr_flush_block(s, (char*)pBlockStart, s->strstart - nBlockStartOff2, 0);
-          s->block_start = s->strstart;
-          flush_pending(s->strm);
-          if (!s->strm->avail_out) {
-            return need_more;
-          }
-
-          return block_done;
-        }
-      }
-
-      s->match_length = 0;
-      if (nCopyLen >= 3 && s->strstart > 0) {
-        pBlockStart = s->window + s->strstart;
-        byLit = pBlockStart[-1];
-        if (byLit == *pBlockStart && byLit == pBlockStart[1] && byLit == pBlockStart[2]) {
-          pScanCur = pBlockStart + 2;
-          do {
-            pScanNext = pScanCur + 1;
-            if (byLit != pScanCur[1]) {
-              break;
-            }
-
-            pScanNext = pScanCur + 2;
-            if (byLit != pScanCur[2]) {
-              break;
-            }
-
-            pScanNext = pScanCur + 3;
-            if (byLit != pScanCur[3]) {
-              break;
-            }
-
-            pScanNext = pScanCur + 4;
-            if (byLit != pScanCur[4]) {
-              break;
-            }
-
-            pScanNext = pScanCur + 5;
-            if (byLit != pScanCur[5]) {
-              break;
-            }
-
-            pScanNext = pScanCur + 6;
-            if (byLit != pScanCur[6]) {
-              break;
-            }
-
-            pScanNext = pScanCur + 7;
-            if (byLit != pScanCur[7]) {
-              break;
-            }
-
-            pScanNext = pScanCur + 8;
-            if (byLit != pScanCur[8]) {
-              break;
-            }
-
-            pScanCur = pScanNext;
-          } while (pScanNext < pBlockStart + 0x102);
-
-          nMatchLen = (intptr_t)pScanNext + (0x102 - (intptr_t)(pBlockStart + 0x102));
-          s->match_length = nMatchLen;
-          if (nMatchLen > s->lookahead) {
-            s->match_length = s->lookahead;
-          }
-        }
-      }
-      if (s->match_length >= 3) {
-        nBlockStartOff = s->match_length;
-        s->d_buf[s->last_lit] = 1;
-        byLit = (char)nBlockStartOff - 3;
-        s->l_buf[s->last_lit] = byLit;
-        s->last_lit++;
-        s->dyn_ltree[_length_code[byLit] + 0x101].fc++;
-        s->dyn_dtree[0].fc++;
-        nBlockStartOff = s->match_length;
-        bBlockFull = s->last_lit == s->lit_bufsize - 1;
+        /* See how many times the previous byte repeats */
         s->match_length = 0;
-        s->lookahead -= nBlockStartOff;
-        s->strstart += nBlockStartOff;
-      } else {
-        byLit = s->window[s->strstart];
-        s->d_buf[s->last_lit] = 0;
-        s->l_buf[s->last_lit] = byLit;
-        s->last_lit++;
-        s->dyn_ltree[byLit].fc++;
-        bBlockFull = s->last_lit == s->lit_bufsize - 1;
-        s->lookahead--;
-        s->strstart++;
-      }
-      if (bBlockFull) {
-        nBlockStartOff2 = s->block_start;
-        if (nBlockStartOff2 >= 0) {
-          pBlockStart = s->window + nBlockStartOff2;
+        if (s->lookahead >= 3 && s->strstart > 0) {
+            scan = s->window + s->strstart - 1;
+            prev = *scan;
+            if (prev == *++scan && prev == *++scan && prev == *++scan) {
+                strend = s->window + s->strstart + 258;
+                do {
+                } while (prev == *++scan && prev == *++scan && prev == *++scan && prev == *++scan &&
+                         prev == *++scan && prev == *++scan && prev == *++scan && prev == *++scan &&
+                         scan < strend);
+                s->match_length = 258 - (int)(strend - scan);
+                if (s->match_length > s->lookahead)
+                    s->match_length = s->lookahead;
+            }
+        }
+        /* Emit match if have run of MIN_MATCH or longer, else emit literal */
+        if (s->match_length >= 3) {
+            {
+                uint8_t len = (uint8_t)(s->match_length - 3);
+                uint16_t dist = (uint16_t)(1);
+                s->d_buf[s->last_lit] = dist;
+                s->l_buf[s->last_lit++] = len;
+                dist--;
+                s->dyn_ltree[_length_code[len] + 256 + 1].fc++;
+                s->dyn_dtree[dist < 256 ? (uint32_t)_dist_code[dist] : (uint32_t)_dist_code[256 + (dist >> 7)]].fc++;
+                bflush = (s->last_lit == s->lit_bufsize - 1);
+            };
+            s->lookahead -= s->match_length;
+            s->strstart += s->match_length;
+            s->match_length = 0;
         } else {
-          pBlockStart = 0;
+            /* No match, output a literal byte */
+            {
+                unsigned char cc = (s->window[s->strstart]);
+                s->d_buf[s->last_lit] = 0;
+                s->l_buf[s->last_lit++] = cc;
+                s->dyn_ltree[cc].fc++;
+                bflush = (s->last_lit == s->lit_bufsize - 1);
+            };
+            s->lookahead--;
+            s->strstart++;
         }
-
-        trees::_tr_flush_block(s, (char*)pBlockStart, s->strstart - nBlockStartOff2, 0);
-        pStream = s->strm;
-        s->block_start = s->strstart;
-        pPendingState = (deflate_state*)pStream->state;
-        trees::_tr_flush_bits(pPendingState);
-        nCopyLen = pPendingState->pending;
-        if (pPendingState->pending > pStream->avail_out) {
-          nCopyLen = pStream->avail_out;
-        }
-        if (nCopyLen) {
-          memcpy(pStream->next_out, pPendingState->pending_out, nCopyLen);
-          pStream->next_out += nCopyLen;
-          pPendingState->pending_out += nCopyLen;
-          pStream->total_out += nCopyLen;
-          pStream->avail_out -= nCopyLen;
-          pPendingCountField = &pPendingState->pending;
-          *pPendingCountField -= nCopyLen;
-          if (!*pPendingCountField) {
-            pPendingState->pending_out = pPendingState->pending_buf;
-          }
-        }
-        if (!s->strm->avail_out) {
-          return need_more;
-        }
-      }
-    } while (true);
+        if (bflush)
+            {
+                {
+                    trees::_tr_flush_block(s,
+                                           (s->block_start >= 0L
+                                                ? (char *)&s->window[(unsigned)s->block_start]
+                                                : (char *)0),
+                                           (uint32_t)((long)s->strstart - s->block_start), (0));
+                    s->block_start = s->strstart;
+                    flush_pending(s->strm);
+                    ;
+                };
+                if (s->strm->avail_out == 0)
+                    return (0) ? finish_started : need_more;
+            };
+    }
+    s->insert = 0;
+    if (flush == 4) {
+        {
+            {
+                trees::_tr_flush_block(s,
+                                       (s->block_start >= 0L
+                                            ? (char *)&s->window[(unsigned)s->block_start]
+                                            : (char *)0),
+                                       (uint32_t)((long)s->strstart - s->block_start), (1));
+                s->block_start = s->strstart;
+                flush_pending(s->strm);
+                ;
+            };
+            if (s->strm->avail_out == 0)
+                return (1) ? finish_started : need_more;
+        };
+        return finish_done;
+    }
+    if (s->last_lit)
+        {
+            {
+                trees::_tr_flush_block(s,
+                                       (s->block_start >= 0L
+                                            ? (char *)&s->window[(unsigned)s->block_start]
+                                            : (char *)0),
+                                       (uint32_t)((long)s->strstart - s->block_start), (0));
+                s->block_start = s->strstart;
+                flush_pending(s->strm);
+                ;
+            };
+            if (s->strm->avail_out == 0)
+                return (0) ? finish_started : need_more;
+        };
+    return block_done;
 }
 
 static block_state __stdcall deflate_huff(int32_t flush, deflate_state * s) {
@@ -1581,6 +1507,7 @@ int __fastcall deflateInit_(z_stream * strm, uint32_t level, char * version, int
     /* To do: ignore strm->next_in if we use it as window */
 }
 
+static void * keep_00427700 = (0 ? (read_buf(*(z_stream * *)0, *(uint8_t * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 static void * keep_00427420 = (0 ? (putShortMSB(*(deflate_state * *)0, *(uint32_t *)0), (void *)0) : (void *)0);
 
 }}}} // namespace Storm::_3rdparty::zlib::deflate

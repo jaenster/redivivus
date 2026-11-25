@@ -2665,24 +2665,23 @@ static void __stdcall send_all_trees(int32_t lcodes, int32_t dcodes, int32_t blc
 
 uint32_t __fastcall _tr_tally(deflate_state * s, int32_t dist, int32_t lc) {
     s->d_buf[s->last_lit] = (uint16_t)dist;
-    s->l_buf[s->last_lit] = (uint8_t)lc;
-    s->last_lit++;
-    if (!dist) {
-      s->dyn_ltree[lc].fc++;
+    s->l_buf[s->last_lit++] = (uint8_t)lc;
+    if (dist == 0) {
+        /* lc is the unmatched char */
+        s->dyn_ltree[lc].fc++;
     } else {
-      uint8_t byDistCode;
-      s->matches++;
-      s->dyn_ltree[_length_code[lc] + 0x101].fc++;
-      if (dist - 1U < 0x100) {
-        byDistCode = *(uint8_t*)((char*)_dist_code + dist - 1);
-      } else {
-        byDistCode = _dist_code[(dist - 1U >> 7) + 0x100];
-      }
-
-      s->dyn_dtree[byDistCode].fc++;
+        unsigned code;
+        s->matches++;
+        /* Here, lc is the match length - MIN_MATCH */
+        dist--; /* dist = match distance - 1 */
+        s->dyn_ltree[_length_code[(unsigned)lc] + 256 + 1].fc++;
+        if ((unsigned)dist < 256)
+            code = _dist_code[(unsigned)dist];
+        else
+            code = _dist_code[256 + ((unsigned)dist >> 7)];
+        s->dyn_dtree[code].fc++;
     }
-
-    return (uint32_t)(s->last_lit == s->lit_bufsize - 1);
+    return (s->last_lit == s->lit_bufsize - 1);
 }
 
 static void __stdcall compress_block(ct_data * ltree, ct_data * dtree, deflate_state * s) {
@@ -3000,120 +2999,96 @@ static static_tree_desc static_bl_desc = {
 }
 
 static void __stdcall gen_codes(ct_data * tree, int32_t max_code, uint16_t * bl_count) {
-    uint32_t nCodeIn;
-    uint32_t nReversedPrev;
-    uint32_t nLen;
-    uint32_t nLowBit;
-    uint16_t awNextCode[16];
-    uint32_t nReversed;
-    int nBits = 1;
-    uint16_t wCode = 0;
-    do {
-      wCode = (bl_count[nBits - 1] + wCode) * 2;
-      awNextCode[nBits] = wCode;
-      nBits++;
-    } while (nBits <= 0xf);
-
-    for (nBits = 0; nBits <= max_code; nBits++) {
-      nLen = (uint32_t)tree[nBits].dl;
-      if (nLen) {
-        nCodeIn = (uint32_t)awNextCode[nLen];
-        awNextCode[nLen]++;
-        nReversed = 0;
-        do {
-          nReversedPrev = nReversed;
-          nLowBit = nCodeIn & 1;
-          nLen--;
-          nCodeIn >>= 1;
-          nReversed = (nReversedPrev | nLowBit) * 2;
-        } while ((int)nLen > 0);
-
-        tree[nBits].fc = (uint16_t)nReversedPrev | (uint16_t)nLowBit;
-      }
+    uint16_t next_code[15 + 1]; /* next code value for each bit length */
+    uint16_t code = 0;          /* running code value */
+    int bits;                   /* bit index */
+    int n;                      /* code index */
+    /* The distribution counts are first used to generate the code values
+     * without bit reversal.
+     */
+    for (bits = 1; bits <= 15; bits++) {
+        next_code[bits] = code = (code + bl_count[bits - 1]) << 1;
+    }
+    /* Check that the bit counts in bl_count are consistent. The last code
+     * must be all ones.
+     */
+    for (n = 0; n <= max_code; n++) {
+        int len = tree[n].dl;
+        if (len == 0)
+            continue;
+        /* Now reverse the bits */
+        tree[n].fc = (uint16_t)bi_reverse(next_code[len]++, len);
     }
 }
 
 static void __stdcall build_tree(tree_desc * desc, deflate_state * s) {
-    int32_t nNodeM;
-    int nNodeSecond;
-    ct_data* tree = desc->dyn_tree;
-    int nNode = desc->stat_desc->elems;
-    ct_data* pStatTree = desc->stat_desc->static_tree;
-    int nIndex = 0;
-    int nMaxCode = -1;
-    s->heap_len = 0;
-    s->heap_max = 0x23d;
-    if (nNode > 0) {
-      do {
-        if (tree[nIndex].fc) {
-          s->heap_len++;
-          s->heap[s->heap_len] = nIndex;
-          s->depth[nIndex] = '\0';
-          nMaxCode = nIndex;
+    ct_data *tree = desc->dyn_tree;
+    const ct_data *stree = desc->stat_desc->static_tree;
+    int elems = desc->stat_desc->elems;
+    int n, m;          /* iterate over heap elements */
+    int max_code = -1; /* largest code with non zero frequency */
+    int node;          /* new node being created */
+    /* Construct the initial heap, with least frequent element in
+     * heap[SMALLEST]. The sons of heap[n] are heap[2*n] and heap[2*n+1].
+     * heap[0] is not used.
+     */
+    s->heap_len = 0, s->heap_max = (2 * (256 + 1 + 29) + 1);
+    for (n = 0; n < elems; n++) {
+        if (tree[n].fc != 0) {
+            s->heap[++(s->heap_len)] = max_code = n;
+            s->depth[n] = 0;
         } else {
-          tree[nIndex].dl = 0;
+            tree[n].dl = 0;
         }
-
-        nIndex++;
-      } while (nIndex < nNode);
     }
-
-    nIndex = s->heap_len;
-    while (nIndex < 2) {
-      if (nMaxCode < 2) {
-        nIndex = nMaxCode + 1;
-        nMaxCode = nIndex;
-      } else {
-        nIndex = 0;
-      }
-
-      s->heap_len++;
-      s->heap[s->heap_len] = nIndex;
-      tree[nIndex].fc = 1;
-      s->depth[nIndex] = '\0';
-      s->opt_len--;
-      if (pStatTree) {
-        s->static_len -= (uint32_t)pStatTree[nIndex].dl;
-      }
-
-      nIndex = s->heap_len;
+    /* The pkzip format requires that at least one distance code exists,
+     * and that at least one bit should be sent even if there is only one
+     * possible code. So to avoid special checks later on we force at least
+     * two codes of non zero frequency.
+     */
+    while (s->heap_len < 2) {
+        node = s->heap[++(s->heap_len)] = (max_code < 2 ? ++max_code : 0);
+        tree[node].fc = 1;
+        s->depth[node] = 0;
+        s->opt_len--;
+        if (stree)
+            s->static_len -= stree[node].dl;
+        /* node is 0 or 1 so it does not have extra bits */
     }
-
-    desc->max_code = nMaxCode;
-    for (nIndex = s->heap_len / 2; nIndex >= 1; nIndex--) {
-      pqdownheap(nIndex, s, tree);
-    }
-
+    desc->max_code = max_code;
+    /* The elements heap[heap_len/2+1 .. heap_len] are leaves of the tree,
+     * establish sub-heaps of increasing lengths:
+     */
+    for (n = s->heap_len / 2; n >= 1; n--)
+        pqdownheap(n, s, tree);
+    /* Construct the Huffman tree by repeatedly combining the least two
+     * frequent nodes.
+     */
+    node = elems; /* next internal node of the tree */
     do {
-      uint8_t byMaxDepth;
-      nNodeM = s->heap[s->heap_len];
-      nIndex = s->heap[1];
-      s->heap_len--;
-      s->heap[1] = nNodeM;
-      pqdownheap(1, s, tree);
-      nNodeSecond = s->heap[1];
-      s->heap_max--;
-      s->heap[s->heap_max] = nIndex;
-      s->heap_max--;
-      s->heap[s->heap_max] = nNodeSecond;
-      tree[nNode].fc = tree[nNodeSecond].fc + tree[nIndex].fc;
-      byMaxDepth = s->depth[nIndex];
-      if (s->depth[nIndex] < s->depth[nNodeSecond]) {
-        byMaxDepth = s->depth[nNodeSecond];
-      }
-
-      s->depth[nNode] = byMaxDepth + 1;
-      tree[nNodeSecond].dl = (uint16_t)nNode;
-      tree[nIndex].dl = (uint16_t)nNode;
-      s->heap[1] = nNode;
-      nNode++;
-      pqdownheap(1, s, tree);
+        {
+            n = s->heap[1];
+            s->heap[1] = s->heap[s->heap_len--];
+            pqdownheap(1, s, tree);
+        };                /* n = node of least frequency */
+        m = s->heap[1]; /* m = node of next least frequency */
+        s->heap[--(s->heap_max)] = n; /* keep the nodes sorted by frequency */
+        s->heap[--(s->heap_max)] = m;
+        /* Create a new node father of n and m */
+        tree[node].fc = tree[n].fc + tree[m].fc;
+        s->depth[node] = (uint8_t)((s->depth[n] >= s->depth[m] ? (int)s->depth[n] : (int)s->depth[m]) + 1);
+        tree[n].dl = tree[m].dl = (uint16_t)node;
+        /* and insert the new node in the heap */
+        s->heap[1] = node++;
+        pqdownheap(1, s, tree);
     } while (s->heap_len >= 2);
-
-    s->heap_max--;
-    s->heap[s->heap_max] = s->heap[1];
-    gen_bitlen(desc, s);
-    gen_codes(tree, nMaxCode, s->bl_count);
+    s->heap[--(s->heap_max)] = s->heap[1];
+    /* At this point, the fields freq and dad are set. We can now
+     * generate the bit lengths.
+     */
+    gen_bitlen((tree_desc *)desc, s);
+    /* The field len is now set, we can generate the bit codes */
+    gen_codes((ct_data *)tree, max_code, s->bl_count);
 }
 
 static int32_t build_bl_tree(deflate_state * s) {

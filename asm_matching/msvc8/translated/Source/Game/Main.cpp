@@ -16,6 +16,12 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Launch/D2LaunchRoot.h"
 #include "Source/Game/Main.data.h"
+#if D2_TARGET_CLIENT
+#elif D2_TARGET_SERVER
+#include "Redivivus/Server/ServerHost.h"
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -917,6 +923,13 @@ void __fastcall MISC_InitD2IniAndIgnorelist(D2IniConfigStrc * D2IniData, char * 
 // Dispatch current app mode via ApplicationBootstrapArray: init -> run -> shutdown for selected mode.
 int32_t __stdcall ApplicationRunCurrentMode(D2IniConfigStrc * pD2IniData) {
     // Static local variables (originally global data)
+    // One row per app mode. Before 1.14 each mode was a DLL Game.exe loaded and asked for its
+    // table (QueryInterface); the mode names are the command-line words above. 0 "modstate0"
+    // (none.dll; also the loop's quit value), 1 "client" (D2Client.dll), 2 "server"
+    // (D2Server.dll), 3 "multiplayer" (D2Multi.dll), 4 "launcher" (D2Launch.dll), 5 "expand"
+    // (D2EClient.dll, already in 1.00, part of D2Client in 1.14d); 1.00 also had 6 "multilan"
+    // (D2MultiLAN.dll). The server target puts its host in D2Server.dll's row.
+#if D2_TARGET_CLIENT
     static D2AppModeBootstrapStrc sModStateFunc[6] = {
     {
         /* .init = */ nullptr,
@@ -943,6 +956,36 @@ int32_t __stdcall ApplicationRunCurrentMode(D2IniConfigStrc * pD2IniData) {
         /* .destroy = */ &D2Client::ClientModeInGame::AppModeClientShutdown
     }
 }; D2_STATIC_GUARD(sModStateFunc, "Game::Main::ApplicationRunCurrentMode::sModStateFunc");
+#elif D2_TARGET_SERVER
+    static D2AppModeBootstrapStrc sModStateFunc[6] = {
+    {
+        /* .init = */ nullptr,
+        /* .destroy = */ nullptr
+    },
+    {
+        /* .init = */ nullptr,
+        /* .destroy = */ nullptr
+    },
+    {
+        /* .init = */ &Redivivus::Server::ServerHost_Init,
+        /* .destroy = */ &Redivivus::Server::ServerHost_Shutdown
+    },
+    {
+        /* .init = */ nullptr,
+        /* .destroy = */ nullptr
+    },
+    {
+        /* .init = */ nullptr,
+        /* .destroy = */ nullptr
+    },
+    {
+        /* .init = */ nullptr,
+        /* .destroy = */ nullptr
+    }
+}; D2_STATIC_GUARD(sModStateFunc, "Game::Main::ApplicationRunCurrentMode::sModStateFunc");
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
 
     int32_t modeResult;
     if ((uint32_t)(geModState - APPMODE_client) <= 4) {
@@ -1042,6 +1085,7 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
     Fog::Return();
     Fog::Src::D2Net::NET_SERVER_SentPacketLog_Clear();
     if (geModState != APPMODE_server) {
+#if D2_TARGET_CLIENT
       bMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadAllDataMpqFiles();
       if (!bMpqLoaded || (bMpqLoaded = D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)D2Win::Src::D2WinArchive::MessageBoxA_InsertPlayDisc, (::fpRequiredUserAction)D2Win::Src::D2WinArchive::MessageBoxA_InsertExpansionDisc, 0, pD2IniData) , !bMpqLoaded)) {
         D2Win::Src::D2WinArchive::MPQ_UnloadAllDataMpqFiles();
@@ -1051,9 +1095,19 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       bMpqLoaded = Fog::D2CheckExpansionGame();
       *(BOOL*)pD2IniData->bD2ExpMpqExistsOrLanugageCode = bMpqLoaded;
       SystemSurvey_WriteProductLanugageToLocaleFile();
+#elif D2_TARGET_SERVER
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
     }
 
     D2Lang::StrTable::strtable::MISC_GetLanguageCode();
+#if D2_OS_WIN
+#if D2_RENDERER_OPENGL
+    if (pD2IniData->bOPENGL) {
+      eD2ApplicationModeAndRenderer = RENDERED_Unused5;
+    } else
+#endif
     if (pD2IniData->b3DFX) {
       eD2ApplicationModeAndRenderer = RENDERER_Glide;
     } else {
@@ -1063,10 +1117,20 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
         eD2ApplicationModeAndRenderer = (pD2IniData->bD3D ? 3 : 0) + RENDERED_DirectDraw;
       }
     }
+#elif D2_OS_MAC
+    // The Mac 1.14d (0019ebbe) has only the OpenGL row and always asks for it.
+    eD2ApplicationModeAndRenderer = RENDERED_Unused5;
+#elif D2_OS_LINUX
+    // OpenGL is the only Linux row (D2_RENDERER_OPENGL).
+    eD2ApplicationModeAndRenderer = RENDERED_Unused5;
+#else
+#error "Main.cpp: define one of D2_OS_WIN, D2_OS_MAC or D2_OS_LINUX"
+#endif
 
     int bExpansionMode = *(int*)pD2IniData->bD2ExpMpqExistsOrLanugageCode;
     uint32_t bWindowed = (uint32_t)pD2IniData->bWINDOW;
     if (geModState != APPMODE_server) {
+#if D2_TARGET_CLIENT
       HWND hWnd;
       bMpqLoaded = D2Win::Src::D2WinMain::D2GFX_PreSetupBeforeCreatingWindow(hInstance, eD2ApplicationModeAndRenderer, bWindowed, (uint32_t)!pD2IniData->bNOCOMPRESS);
       if (!bMpqLoaded) {
@@ -1091,11 +1155,16 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
           ((intptr_t (__stdcall *)(HWND))pfnKeyhook)(hWnd);
         }
       }
+#elif D2_TARGET_SERVER
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
 
       bWindowCreated = true;
     } else {
       bWindowCreated = false;
     }
+#if D2_TARGET_CLIENT
     if (pD2IniData->bQUALITY) {
       D2gfx::D2GFX::D2GFX_ToggleLowQuality();
     }
@@ -1105,22 +1174,37 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
     if (pD2IniData->bVSYNC) {
       D2gfx::D2GFX::D2GFX_EnableVSync();
     }
+#elif D2_TARGET_SERVER
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
 
     __frame0.nFixedAspectRatio = 1;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "Fixed Aspect Ratio", 0, &__frame0.nFixedAspectRatio);
+#if D2_TARGET_CLIENT
     if (pD2IniData->bASPECT || __frame0.nFixedAspectRatio != 1) {
       D2gfx::D2GFX::D2GFX_DisableFixAspect();
     }
+#elif D2_TARGET_SERVER
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
     if (!*(int*)pD2IniData->bD2ExpMpqExistsOrLanugageCode) {
       Storm::Source::SReg::SRegSaveValue("Diablo II", "Resolution", 0, 0);
     }
+#if D2_TARGET_CLIENT
     if (!pD2IniData->bNOSOUND && geModState != APPMODE_server) {
       D2Sound::Sound::SOUND_Initialize(*(uint32_t*)pD2IniData->bD2ExpMpqExistsOrLanugageCode, (uint32_t)pD2IniData->bSOUNDBKG);
       __frame0.bSoundInit = 1;
     }
+#elif D2_TARGET_SERVER
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
 
     while (geModState != APPMODE_mode0) {
       if (geModState == APPMODE_server) {
+#if D2_TARGET_CLIENT
         if (__frame0.bSoundInit) {
           D2Sound::Sound::SOUND_ShutdownDirectSound();
           __frame0.bSoundInit = 0;
@@ -1131,11 +1215,16 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
           __frame0.dwTmp = 0;
           bWindowCreated = false;
         }
+#elif D2_TARGET_SERVER
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
       }
 
       geModState = ApplicationRunCurrentMode(pD2IniData);
     }
 
+#if D2_TARGET_CLIENT
     if (__frame0.bSoundInit) {
       D2Sound::Sound::SOUND_ShutdownDirectSound();
     }
@@ -1145,6 +1234,11 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
     }
 
     D2Win::Src::D2WinArchive::MPQ_UnloadAllDataMpqFiles();
+#elif D2_TARGET_SERVER
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
+#if D2_TARGET_CLIENT
     if (ghKeyhookDll) {
       /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pfnKeyhook = GetProcAddress(ghKeyhookDll, "UninstallKeyboardHook");
       if (pfnKeyhook) {
@@ -1153,9 +1247,18 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
 
       /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(ghKeyhookDll);
     }
+#elif D2_TARGET_SERVER
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
 
     Fog::Src::AsyncData::STRUCT_FreeAsyncData();
+#if D2_TARGET_CLIENT
     D2MCPClient::McpConnect::FreeMCP();
+#elif D2_TARGET_SERVER
+#else
+#error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
+#endif
     if (pD2IniData->pBNetClientCallbacks) {
       pD2IniData->pBNetClientCallbacks->pfnDisconnect();
     }
@@ -1666,7 +1769,11 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     CLIENT_CheckIfApplicationModeIsInCommandLineAndSetItToArgument(&eAppMode, szRawCommandLine);
     MISC_InitD2IniAndIgnorelist(&pD2IniData, szCommandLine);
     pD2IniData.pTrueFunction = ReturnTrue;
+#if D2_RENDERER_OPENGL
+    // -opengl stays set: ApplicationMain selects the OpenGL row for it.
+#else
     pD2IniData.bOPENGL = false;
+#endif
     if (!pD2IniData.b3DFX) {
       pD2IniData.bD3D = !pD2IniData.bWINDOW;
     }

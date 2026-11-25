@@ -517,164 +517,55 @@ char * __fastcall NET_SID_CLIENT_GetCdKeyByType(int32_t nProductType) {
 // SHA-0 block transform (plain XOR schedule, no rotate). Every state rotate is SHL|SAR on a signed word, so for negative words it differs from both SHA-0 and SHA-1.
 // Name per redivivus issue #36 (asm-verified hash variant, 00523ba0..00523be3).
 void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
-    uint32_t uA;
-    uint32_t uTmp;
-    uint32_t W[80];
-    int nRoundBaseIdx;
-    uint32_t uXorTmp;
-    W[0] = pShaCtx[7];
-    W[3] = pShaCtx[10];
-    W[1] = pShaCtx[8];
-    W[2] = pShaCtx[9];
-    W[6] = pShaCtx[0xd];
-    W[4] = pShaCtx[0xb];
-    W[5] = pShaCtx[0xc];
-    W[9] = pShaCtx[0x10];
-    W[7] = pShaCtx[0xe];
-    W[8] = pShaCtx[0xf];
-    W[0xc] = pShaCtx[0x13];
-    W[10] = pShaCtx[0x11];
-    W[0xb] = pShaCtx[0x12];
-    W[0xf] = pShaCtx[0x16];
-    W[0xd] = pShaCtx[0x14];
-    W[0xe] = pShaCtx[0x15];
-    uint32_t* pMsgSchedule = W + 8;
-    uint32_t nExpandIdx;
-    for (nExpandIdx = 0; nExpandIdx < 0x10; nExpandIdx++) {
-      pMsgSchedule[9] = pMsgSchedule[-7] ^ pMsgSchedule[6] ^ pMsgSchedule[1] ^ pMsgSchedule[-5];
-      uA = pMsgSchedule[-8] ^ pMsgSchedule[5] ^ pMsgSchedule[-6] ^ *pMsgSchedule;
-      pMsgSchedule[8] = uA;
-      pMsgSchedule[10] = pMsgSchedule[7] ^ pMsgSchedule[-4] ^ pMsgSchedule[2] ^ pMsgSchedule[-6];
-      pMsgSchedule[0xb] = pMsgSchedule[-3] ^ pMsgSchedule[3] ^ pMsgSchedule[-5] ^ uA;
-      pMsgSchedule += 4;
+    int W[80];
+    int i;
+    int a, b, c, d, e, t;
+    for (i = 0; i < 16; i++)
+        W[i] = pShaCtx[7 + i];
+    for (i = 16; i < 80; i++)
+        W[i] = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
+    a = pShaCtx[0];
+    b = pShaCtx[1];
+    c = pShaCtx[2];
+    d = pShaCtx[3];
+    e = pShaCtx[4];
+    for (i = 0; i < 20; i++) {
+        t = ((a << 5) | (a >> 27)) + ((b & c) | (~b & d)) + e + W[i] + 0x5A827999;
+        e = d;
+        d = c;
+        c = (b << 30) | (b >> 2);
+        b = a;
+        a = t;
     }
-
-    uA = *pShaCtx;
-    uint32_t uB = pShaCtx[1];
-    uint32_t uC = pShaCtx[2];
-    uint32_t uE = pShaCtx[3];
-    int uD = uA;
-    uint32_t uPrev = pShaCtx[4];
-    nExpandIdx = 0;
-    do {
-      uTmp = uPrev;
-      uXorTmp = nExpandIdx;
-      uPrev = uE;
-      uTmp = (~uB & uE | uC & uB) + ((int)uA >> 0x1b | uA << 5) + W[nExpandIdx] + 0x5a827999 + uTmp;
-      uB = uB << 0x1e | (int)uB >> 2;
-      nExpandIdx = uC;
-      uD = uTmp;
-      uPrev = uC;
-      uE = (~uA & uC | uB & uA) + ((int)uTmp >> 0x1b | uTmp << 5) + W[uXorTmp + 1] + 0x5a827999 + uE;
-      uA = uA << 0x1e | (int)uA >> 2;
-      nExpandIdx = uB;
-      uD = uE;
-      uC = (~uTmp & uB | uA & uTmp) + ((int)uE >> 0x1b | uE << 5) + W[uXorTmp + 2] + 0x5a827999 + uC;
-      uPrev = uB;
-      uTmp = uTmp << 0x1e | (int)uTmp >> 2;
-      nExpandIdx = uA;
-      uD = uC;
-      uB = (~uE & uA | uTmp & uE) + ((int)uC >> 0x1b | uC << 5) + W[uXorTmp + 3] + 0x5a827999 + uB;
-      uPrev = uA;
-      uE = uE << 0x1e | (int)uE >> 2;
-      nExpandIdx = uTmp;
-      uD = uB;
-      uB = uD;
-      uA = (~uC & uTmp | uE & uC) + ((int)uB >> 0x1b | uB << 5) + W[uXorTmp + 4] + 0x5a827999 + uA;
-      uPrev = uTmp;
-      uC = (int)uC >> 2 | uC << 0x1e;
-      uD = uA;
-      nExpandIdx = uXorTmp + 5;
-    } while ((int)(uXorTmp + 5) < 0x14);
-
-    int nRound = 0x14;
-    do {
-      uTmp = ((int)uA >> 0x1b | uA << 5) + (uE ^ uC ^ uB) + W[nRound] + 0x6ed9eba1 + uPrev;
-      uPrev = uE;
-      uB = uB << 0x1e | (int)uB >> 2;
-      uD = uTmp;
-      uE = ((int)uTmp >> 0x1b | uTmp << 5) + (uC ^ uB ^ uA) + W[nRound + 1] + 0x6ed9eba1 + uE;
-      uPrev = uC;
-      uA = uA << 0x1e | (int)uA >> 2;
-      uD = uE;
-      uXorTmp = ((int)uE >> 0x1b | uE << 5) + (uB ^ uA ^ uTmp) + W[nRound + 2] + 0x6ed9eba1 + uC;
-      uPrev = uB;
-      uTmp = uTmp << 0x1e | (int)uTmp >> 2;
-      uD = uXorTmp;
-      uB = ((int)uXorTmp >> 0x1b | uXorTmp << 5) + (uA ^ uTmp ^ uE) + W[nRound + 3] + 0x6ed9eba1 + uB;
-      uPrev = uA;
-      uE = uE << 0x1e | (int)uE >> 2;
-      uD = uB;
-      nRoundBaseIdx = nRound + 4;
-      uPrev = uTmp;
-      uC = uXorTmp << 0x1e | (int)uXorTmp >> 2;
-      nRound += 5;
-      uA = ((int)uB >> 0x1b | uB << 5) + (uTmp ^ uE ^ uXorTmp) + W[nRoundBaseIdx] + 0x6ed9eba1 + uA;
-      uD = uA;
-    } while (nRound < 0x28);
-
-    nExpandIdx = 0x28;
-    do {
-      uTmp = uPrev;
-      uXorTmp = nExpandIdx;
-      uPrev = uE;
-      uTmp = ((uC | uB) & uE | uC & uB) + ((int)uA >> 0x1b | uA << 5) + W[nExpandIdx] - 0x70e44324 + uTmp;
-      nExpandIdx = uC;
-      uB = uB << 0x1e | (int)uB >> 2;
-      uD = uTmp;
-      uE = ((uB | uA) & uC | uB & uA) + ((int)uTmp >> 0x1b | uTmp << 5) + W[uXorTmp + 1] - 0x70e44324 + uE;
-      uPrev = uC;
-      uA = uA << 0x1e | (int)uA >> 2;
-      nExpandIdx = uB;
-      uD = uE;
-      uC = ((uA | uTmp) & uB | uA & uTmp) + ((int)uE >> 0x1b | uE << 5) + W[uXorTmp + 2] - 0x70e44324 + uC;
-      uPrev = uB;
-      uTmp = uTmp << 0x1e | (int)uTmp >> 2;
-      nExpandIdx = uA;
-      uD = uC;
-      uB = ((uTmp | uE) & uA | uTmp & uE) + ((int)uC >> 0x1b | uC << 5) + W[uXorTmp + 3] - 0x70e44324 + uB;
-      uPrev = uA;
-      uE = uE << 0x1e | (int)uE >> 2;
-      nExpandIdx = uTmp;
-      uD = uB;
-      uA = ((uE | uC) & uTmp | uE & uC) + ((int)uB >> 0x1b | uB << 5) + W[uXorTmp + 4] - 0x70e44324 + uA;
-      uPrev = uTmp;
-      uC = (int)uC >> 2 | uC << 0x1e;
-      uD = uA;
-      nExpandIdx = uXorTmp + 5;
-    } while ((int)(uXorTmp + 5) < 0x3c);
-
-    nRound = 0x3c;
-    do {
-      uTmp = ((int)uA >> 0x1b | uA << 5) + (uE ^ uC ^ uB) + W[nRound] - 0x359d3e2a + uPrev;
-      uPrev = uE;
-      uB = uB << 0x1e | (int)uB >> 2;
-      uD = uTmp;
-      uE = ((int)uTmp >> 0x1b | uTmp << 5) + (uC ^ uB ^ uA) + W[nRound + 1] - 0x359d3e2a + uE;
-      uPrev = uC;
-      uA = uA << 0x1e | (int)uA >> 2;
-      uD = uE;
-      uXorTmp = ((int)uE >> 0x1b | uE << 5) + (uB ^ uA ^ uTmp) + W[nRound + 2] - 0x359d3e2a + uC;
-      uPrev = uB;
-      uTmp = uTmp << 0x1e | (int)uTmp >> 2;
-      uD = uXorTmp;
-      uB = ((int)uXorTmp >> 0x1b | uXorTmp << 5) + (uA ^ uTmp ^ uE) + W[nRound + 3] - 0x359d3e2a + uB;
-      uPrev = uA;
-      uE = uE << 0x1e | (int)uE >> 2;
-      uD = uB;
-      nRoundBaseIdx = nRound + 4;
-      uPrev = uTmp;
-      uC = uXorTmp << 0x1e | (int)uXorTmp >> 2;
-      nRound += 5;
-      uA = ((int)uB >> 0x1b | uB << 5) + (uTmp ^ uE ^ uXorTmp) + W[nRoundBaseIdx] - 0x359d3e2a + uA;
-      uD = uA;
-    } while (nRound < 0x50);
-
-    pShaCtx[2] += uC;
-    pShaCtx[3] += uE;
-    pShaCtx[1] += uB;
-    *pShaCtx += uA;
-    pShaCtx[4] += uTmp;
+    for (i = 20; i < 40; i++) {
+        t = ((a << 5) | (a >> 27)) + (b ^ c ^ d) + e + W[i] + 0x6ED9EBA1;
+        e = d;
+        d = c;
+        c = (b << 30) | (b >> 2);
+        b = a;
+        a = t;
+    }
+    for (i = 40; i < 60; i++) {
+        t = ((a << 5) | (a >> 27)) + ((b & c) | (b & d) | (c & d)) + e + W[i] + 0x8F1BBCDC;
+        e = d;
+        d = c;
+        c = (b << 30) | (b >> 2);
+        b = a;
+        a = t;
+    }
+    for (i = 60; i < 80; i++) {
+        t = ((a << 5) | (a >> 27)) + (b ^ c ^ d) + e + W[i] + 0xCA62C1D6;
+        e = d;
+        d = c;
+        c = (b << 30) | (b >> 2);
+        b = a;
+        a = t;
+    }
+    pShaCtx[0] += a;
+    pShaCtx[1] += b;
+    pShaCtx[2] += c;
+    pShaCtx[3] += d;
+    pShaCtx[4] += e;
 }
 
 void __stdcall NET_SID_CLIENT_ClearSHAContexts() {

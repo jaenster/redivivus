@@ -1,27 +1,27 @@
-tree 6eb690bab; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS; Source/D2Client/ /GS-; Source/D2DDraw/ /GS-; Source/D2Direct3D/ /GS-; Source/D2Gdi/ /GS-; Source/D2Glide/ /GS-; Source/D2Launch/ /GS-; Source/D2Launch/Engine/ ; Source/D2MCPClient/ /GS-; Source/D2Multi/ /GS-; Source/D2Sound/ /GS-; Source/D2Win/ /GS-; Source/D2gfx/ /GS-; Source/D2Hell/ /Y- /O1 /Oy- /Ob1; 3rdparty/crashy/ /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT; Source/Storm/3rdparty/zlib/ /Y- /Ob2
-Without the C runtime: 11766 of 14900 functions MATCH (78.97%), 1396427 of 2612801 bytes (53.45%)
+tree 84a9791e8; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X86=1 /D D2_TARGET_CLIENT=1; Source/D2Client/ /GS-; Source/D2DDraw/ /GS-; Source/D2Direct3D/ /GS-; Source/D2Gdi/ /GS-; Source/D2Glide/ /GS-; Source/D2Launch/ /GS-; Source/D2Launch/Engine/ ; Source/D2MCPClient/ /GS-; Source/D2Multi/ /GS-; Source/D2Sound/ /GS-; Source/D2Win/ /GS-; Source/D2gfx/ /GS-; Source/D2Hell/ /Y- /O1 /Oy- /Ob1; 3rdparty/crashy/ /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT; Source/Storm/3rdparty/zlib/ /Y- /Ob2
+Without the C runtime: 11776 of 14900 functions MATCH (79.03%), 1406546 of 2612801 bytes (53.83%)
   runtime left out: 987 functions (145381 bytes): libmap pairs, the library run 00681a48..006b00b3, import thunks, runtime.tsv
   prebuilt library left out: 16 functions (4397 bytes): byte-identical to the prebuilt library objects in prebuilt.tsv
   compiler EH code left out: 117 functions (2245 bytes): __ehhandler stubs and the unwind funclets their FuncInfo names
 byte kinds of the headline total: 2612801 bytes
-  kind whole       1396427  53.45% functions that compile to the original bytes (MATCH)
-  kind ident        685437  26.23% already right, but the function still differs elsewhere
-  kind operand      247576   9.48% same instruction, other registers or offsets
-  kind differ       248695   9.52% instructions with no matching partner
-  kind noncode       20093   0.77% switch tables and padding in functions that still differ
+  kind whole       1406546  53.83% functions that compile to the original bytes (MATCH)
+  kind ident        682486  26.12% already right, but the function still differs elsewhere
+  kind operand      244928   9.37% same instruction, other registers or offsets
+  kind differ       244384   9.35% instructions with no matching partner
+  kind noncode       19884   0.76% switch tables and padding in functions that still differ
   kind uncompared    14573   0.56% original functions with no counterpart compared
 whole binary:
 original functions: 16020 (2764824 bytes of code)
 mapped and compared: 15236
-  MATCH              12366
+  MATCH              12376
   REF_DIFF               3
   INSN_MATCH            87
   INSN_COUNT_MATCH     417
-  OUR+-N              2363
+  OUR+-N              2353
   QUARANTINE             0
   MISSING                0
-matched code: 1498404 bytes (54.20% of the original)
+matched code: 1508523 bytes (54.56% of the original)
   of which the statically linked runtime (libmap.tsv): 676 compared (131358 bytes), 597 MATCH (101938 bytes)
 pairings by funcmap tier: sourcemap 14530, lib-exact 510, lib-order 93, lib-similar 41, lib-votes 32, exact 16, votes 7, bracket 3, calls 3, align 1
-globals seen at aligned instructions: 3160, of which consistent 3107 (datamap.tsv)
+globals seen at aligned instructions: 3165, of which consistent 3112 (datamap.tsv)
 self-check, names carrying their own address: 894 agree, 0 elsewhere

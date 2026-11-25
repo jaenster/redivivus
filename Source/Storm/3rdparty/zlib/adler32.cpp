@@ -227,30 +227,30 @@ uint32_t __fastcall adler32(uint32_t adler, uint8_t * buf, uint32_t len) {
     return adler | (sum2 << 16);
 }
 
-static uint32_t __stdcall adler32_combine_(uint32_t nAdler1, uint32_t nAdler2, int64_t nLen2) {
-    if (nLen2 < 0x100000000 && (nLen2 < 0 || false)) {
-      return -1;
-    }
-
-    int64_t nLen2Mod = nLen2 % 0xfff1;
-    uint32_t nSum2 = (uint32_t)(uint16_t)nAdler1 * (int)nLen2Mod;
-    uint32_t nSum1 = (uint32_t)(uint16_t)nAdler1 + 0xfff0 + (uint16_t)nAdler2;
-    nSum2 = nSum2 + 0xfff1 + ((nAdler1 >> 0x10) + nSum2 / 0xfff1 * -0xfff1 + (nAdler2 >> 0x10) - (int)nLen2Mod);
-    uint32_t nSum1Mod = nSum1;
-    if (nSum1 >= 0xfff1) {
-      nSum1Mod = nSum1 - 0xfff1;
-      if (nSum1Mod >= 0xfff1) {
-        nSum1Mod = nSum1 - 0x1ffe2;
-      }
-    }
-    if (nSum2 >= 0x1ffe2) {
-      nSum2 -= 0x1ffe2;
-    }
-    if (nSum2 >= 0xfff1) {
-      nSum2 -= 0xfff1;
-    }
-
-    return nSum2 << 0x10 | nSum1Mod;
+static uint32_t __stdcall adler32_combine_(uint32_t adler1, uint32_t adler2, int64_t len2) {
+    uint32_t sum1;
+    uint32_t sum2;
+    unsigned rem;
+    /* for negative len, return invalid adler32 as a clue for debugging */
+    if (len2 < 0)
+        return 0xffffffffUL;
+    /* the derivation of this formula is left as an exercise for the reader */
+    len2 %= 65521;
+    rem = (unsigned)len2;
+    sum1 = adler1 & 0xffff;
+    sum2 = rem * sum1;
+    sum2 %= 65521;
+    sum1 += (adler2 & 0xffff) + 65521 - 1;
+    sum2 += ((adler1 >> 16) & 0xffff) + ((adler2 >> 16) & 0xffff) + 65521 - rem;
+    if (sum1 >= 65521)
+        sum1 -= 65521;
+    if (sum1 >= 65521)
+        sum1 -= 65521;
+    if (sum2 >= ((unsigned long)65521 << 1))
+        sum2 -= ((unsigned long)65521 << 1);
+    if (sum2 >= 65521)
+        sum2 -= 65521;
+    return sum1 | (sum2 << 16);
 }
 
 uint32_t __fastcall adler32_combine(uint32_t adler1, uint32_t adler2, uint32_t len2) {

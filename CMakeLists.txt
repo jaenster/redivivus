@@ -61,6 +61,8 @@ option(REDIVIVUS_LOUD
     "Loud build: 0xFE-filled locals, stack canaries, array index checks and guard zones between globals that report at the defect (Redivivus/d2_loud.cpp). Not for release." OFF)
 option(REDIVIVUS_LOUD_STACK_PROTECTOR
     "With REDIVIVUS_LOUD: also -fstack-protector-strong (fatal on a smashed canary). OFF gives the playable loud build." ON)
+option(REDIVIVUS_OPENGL
+    "Link the D2OpenGL renderer into the game as video mode 5 (-opengl), defining D2_RENDERER_OPENGL=1. Not part of the 1.14d Windows build." OFF)
 option(REDIVIVUS_SERVER
     "Build the dedicated server (d2host.exe) from the server modules, every unit compiled with D2_TARGET_SERVER=1. The game executable leaves the default target in such a build directory." OFF)
 
@@ -167,6 +169,22 @@ if(REDIVIVUS_PERMISSIVE)
 endif()
 if(REDIVIVUS_DEV)
     target_compile_definitions(d2_flags INTERFACE REDIVIVUS_DEV)
+endif()
+# The target axes (Source/D2Headers/D2Arch.h), from the toolchain: the operating system,
+# the architecture, and the product. Exactly one of D2_TARGET_CLIENT and D2_TARGET_SERVER
+# is defined; REDIVIVUS_SERVER (below) selects the server.
+target_compile_definitions(d2_flags INTERFACE D2_OS_WIN=1)
+if(D2_ARCH_X64)
+    target_compile_definitions(d2_flags INTERFACE D2_ARCH_X64=1)
+else()
+    target_compile_definitions(d2_flags INTERFACE D2_ARCH_X86=1)
+endif()
+if(NOT REDIVIVUS_SERVER)
+    target_compile_definitions(d2_flags INTERFACE D2_TARGET_CLIENT=1)
+endif()
+# Optional renderers, each a positive flag. The server renders nothing.
+if(REDIVIVUS_OPENGL AND NOT REDIVIVUS_SERVER)
+    target_compile_definitions(d2_flags INTERFACE D2_RENDERER_OPENGL=1)
 endif()
 
 # The loud build: every game TU gets the checks, the code that reports them does
@@ -329,6 +347,12 @@ list(SORT D2OPENGL_SOURCES)
 if(D2OPENGL_SOURCES)
     add_library(d2opengl_objs OBJECT EXCLUDE_FROM_ALL ${D2OPENGL_SOURCES})
     target_link_libraries(d2opengl_objs PRIVATE d2_flags)
+    # REDIVIVUS_OPENGL links it into the game: D2GFX_Initialize's mode-5 row and
+    # ApplicationMain's -opengl choice are compiled in with D2_RENDERER_OPENGL.
+    if(REDIVIVUS_OPENGL AND NOT REDIVIVUS_SERVER)
+        target_sources(d2 PRIVATE $<TARGET_OBJECTS:d2opengl_objs>)
+        target_link_libraries(d2 PRIVATE opengl32 glu32)
+    endif()
 endif()
 
 # ---------------------------------------------------------------------------
@@ -481,7 +505,7 @@ if(REDIVIVUS_SERVER)
     target_compile_definitions(d2_flags INTERFACE D2_TARGET_SERVER=1)
     set_target_properties(d2 PROPERTIES EXCLUDE_FROM_ALL ON)
 
-    set(D2_SERVER_MODULES crashy Fog Storm D2Hell D2Lang D2Net D2Game D2CMP D2Common d2_root)
+    set(D2_SERVER_MODULES crashy Fog Game Storm D2Hell D2Lang D2Net D2Game D2CMP D2Common d2_root)
     set(D2_SERVER_LIBRARIES)
     foreach(m IN LISTS D2_SERVER_MODULES)
         if(TARGET ${m} AND m IN_LIST D2_MODULE_LIBRARIES_LINKED)

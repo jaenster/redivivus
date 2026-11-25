@@ -22,7 +22,6 @@ uint32_t __fastcall crc32(uint32_t crc, uint8_t * buf, uint32_t len);
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 uint32_t * get_crc_table();
 uint32_t __fastcall gf2_matrix_times(uint32_t vec, uint32_t * mat);
-uint32_t __stdcall crc32_combine_(uint32_t crc1, uint32_t crc2, int64_t len2);
 uint32_t __fastcall crc32_combine(uint32_t crc1, uint32_t crc2, int32_t len2);
 uint32_t __fastcall crc32_combine64(uint32_t crc1, uint32_t crc2, int64_t len2);
 #endif // D2_MODULE_Storm
