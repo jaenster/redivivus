@@ -281,12 +281,36 @@ uint32_t __fastcall SKILLNEC_IsReviveOrRaiseSkeleton(eD2Skills eSkill) {
     return 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 2 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_3(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 3 & 1;
+}
+
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_1(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 1 & 1;
+}
+
 uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     uint32_t nCheckResult;
     if (!pTarget) {
       return 0;
     }
-    if (pTarget->eUnitType == UNIT_MONSTER) {
+    if (GetTypeInline(pTarget) == UNIT_MONSTER) {
       nCheckResult = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(pTarget->nClassId, 2);
       if (!nCheckResult) {
         return 0;
@@ -298,14 +322,13 @@ uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, D2Uni
       }
     }
 
-    eD2UnitFlags eFlags = pTarget->eUnitFlags;
-    if (!(eFlags >> 2 & 1)) {
+    if (!FlagBit_D2UnitStrc_eUnitFlags_2(pTarget)) {
       return 0;
     }
-    if (!(eFlags >> 3 & 1)) {
+    if (!FlagBit_D2UnitStrc_eUnitFlags_3(pTarget)) {
       return 0;
     }
-    if (!(eFlags >> 1 & 1)) {
+    if (!FlagBit_D2UnitStrc_eUnitFlags_1(pTarget)) {
       return 0;
     }
 
