@@ -46,7 +46,6 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
-
 #ifndef RECON_FPTD_fnUnitIterCallback
 #define RECON_FPTD_fnUnitIterCallback
 typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
@@ -229,7 +228,7 @@ static int gnInvUnusedClearedOnClick = 0; D2_STATIC_GUARD(gnInvUnusedClearedOnCl
 static uint32_t gShopTradeUIState = 0; D2_STATIC_GUARD(gShopTradeUIState, "gShopTradeUIState");
 uint32_t gnInvMercBodySlot2 = 0; D2_GLOBAL_GUARD(gnInvMercBodySlot2, "gnInvMercBodySlot2");
 static uint32_t gbInvRecipeScrollOpen = 0; D2_STATIC_GUARD(gbInvRecipeScrollOpen, "gbInvRecipeScrollOpen");
-static uint8_t gpInvRecipeScrollImage[8192] = {}; D2_STATIC_GUARD(gpInvRecipeScrollImage, "gpInvRecipeScrollImage");
+static uint16_t gpInvRecipeScrollImage[4096] = {}; D2_STATIC_GUARD(gpInvRecipeScrollImage, "gpInvRecipeScrollImage");
 
 namespace D2Client::UI::Inv {
 
@@ -387,18 +386,14 @@ static BOOL __stdcall IsInTradePage2ScreenRange(int32_t nX, int32_t nY) {
 }
 
 static BOOL IsInBankPageScreenRange(int32_t nX, int32_t nY) {
-    BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    int nRight = pBankPageGridScreenCoordinates.nRight;
-    int nTop = pBankPageGridScreenCoordinates.nTop;
-    int nBottom = pBankPageGridScreenCoordinates.nBottom;
-    int nLeft = pBankPageGridScreenCoordinates.nPixelLeft;
-    if (bIsExpansion) {
-      nRight = pBigBankPageGridScreenCoordinates.nRight;
-      nTop = pBigBankPageGridScreenCoordinates.nTop;
-      nBottom = pBigBankPageGridScreenCoordinates.nBottom;
-      nLeft = pBigBankPageGridScreenCoordinates.nPixelLeft;
+    if (GAME::Game::CLIENT_CheckExpansion()) {
+      if (nX > pBigBankPageGridScreenCoordinates.nPixelLeft && nX <= pBigBankPageGridScreenCoordinates.nRight && nY >= pBigBankPageGridScreenCoordinates.nTop && nY <= pBigBankPageGridScreenCoordinates.nBottom) {
+        return 1;
+      }
+
+      return 0;
     }
-    if (nX > nLeft && nX <= nRight && nY >= nTop && nY <= nBottom) {
+    if (nX > pBankPageGridScreenCoordinates.nPixelLeft && nX <= pBankPageGridScreenCoordinates.nRight && nY >= pBankPageGridScreenCoordinates.nTop && nY <= pBankPageGridScreenCoordinates.nBottom) {
       return 1;
     }
 
@@ -2998,6 +2993,22 @@ int __stdcall INV_CheckActionThrottle() {
 int Unreferenced_00486d70() {
     return (uint32_t)(g_nCurrentInventoryPage != 0xb);
 }
+
+} // namespace D2Client::UI::Inv
+
+namespace D2Client::UI::ui {
+
+int __stdcall INV_IsCurrentInventoryPage1Or2() {
+    if (Inv::g_nCurrentInventoryPage != 1 && Inv::g_nCurrentInventoryPage != 2) {
+      return 0;
+    }
+
+    return 1;
+}
+
+} // namespace D2Client::UI::ui
+
+namespace D2Client::UI::Inv {
 
 static BOOL INV_IsMouseOverGoldButton(int32_t nX, int32_t nY) {
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
@@ -6598,7 +6609,7 @@ void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
 }
 
 void __thiscall CloseScrollOfWhatever(uint16_t * pThis, int32_t nColor) {
-    D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)gpInvRecipeScrollImage, pThis);
+    D2Lang::Unicode::UNISYS::STRING_CopyWideString(gpInvRecipeScrollImage, pThis);
     gbInvRecipeScrollOpen = nColor;
     ui::SetUIFlag(UI_RECIPESCROLL, UI_SET, 0);
 }
@@ -6628,7 +6639,7 @@ void __stdcall INV_DrawRecipeScroll() {
     sGfxData.nFrameNumber = 3;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gnPanelOffsetX + 0x100, gnPanelOffsetY - 0x30 + ScreenSizeY, -1, DRAW_SOLID, nullptr);
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(4);
-    D2Win::Src::D2WinFont::DRAW_text((uint16_t*)gpInvRecipeScrollImage, gnPanelOffsetX + 0x50, 0x82 - gnPanelOffsetY, gbInvRecipeScrollOpen, 0);
+    D2Win::Src::D2WinFont::DRAW_text(gpInvRecipeScrollImage, gnPanelOffsetX + 0x50, 0x82 - gnPanelOffsetY, gbInvRecipeScrollOpen, 0);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
@@ -11248,10 +11259,8 @@ void __stdcall DrawMercInventory() {
 }
 
 void StaticInit_gpInvRecipeScrollImage() {
-    int nDwordsRemaining;
-    uint8_t* pInvRecipeBuf;
-    for (nDwordsRemaining = 0; nDwordsRemaining < 0x2000; nDwordsRemaining++) {
-      gpInvRecipeScrollImage[nDwordsRemaining] = 0;
+    for (int nIndex = 0; nIndex < 0x1000; nIndex++) {
+      gpInvRecipeScrollImage[nIndex] = 0;
     }
 }
 

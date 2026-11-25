@@ -11,7 +11,7 @@
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Client/D2GfxInfoStrc.h"
 #include "Source/D2Client/D2LightMapStrc.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Engine/GfxUtil.h"
 #include "Source/D2Client/Engine/Particle.h"
@@ -121,8 +121,8 @@
 #include "Source/D2Client/D2GfxMemoryStrc.h"
 #include "Source/D2Client/D2GfxSettingsStrc.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Draw/dLightMap.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Draw.h"
 #include "Source/D2Client/Game/Game.h"
@@ -210,7 +210,7 @@
 #include "Source/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Bnclient/BNGatewayAccess.h"
-#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/dLightMap.h"
 #include "Source/D2Client/Game/Game.data.h"
 #include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
 #include "Source/D2Common/Skills/Skills.inline.h"
@@ -220,7 +220,6 @@
 #include "Source/D2Game/Skills/SkillAss.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
-
 
 #ifndef RECON_FPTD_fnUnitIterCallback
 #define RECON_FPTD_fnUnitIterCallback
@@ -568,6 +567,55 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
 
     return 0;
 }
+
+} // namespace D2Client::UNIT::CUnit
+
+namespace D2Client {
+
+// SelectProc=2 handler: target must be a consumable corpse (basic check). Forwards to D2CheckIfCorpseIsConsumable(pTargetUnit, bCheckDead=0). pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+int __fastcall SKILL_SelectProc_IsCorpseConsumableBasic(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
+    uint32_t bConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
+    return bConsumable;
+}
+
+// GetType as its callers inlined it: two returns, the value in a register of its own.
+static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->eUnitType;
+    }
+    return (eD2UnitType)6;
+}
+
+// SelectProc=3 handler: target must be a consumable corpse that can be converted and is not monsterId 0x4e (Bone Golem/special). Used for Raise Skeleton-type skills. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
+    if (!pTargetUnit) {
+      return 0;
+    }
+
+    uint32_t bIsConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
+    if (!bIsConsumable) {
+      return 0;
+    }
+
+    int bCanBeConverted = UNIT::Monster::MONSTER_CanBeConverted(pTargetUnit);
+    if (!bCanBeConverted) {
+      return 0;
+    }
+    if (GetTypeInline(pTargetUnit) != UNIT_MONSTER) {
+      return 0;
+    }
+
+    int32_t nMonStatsId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pTargetUnit);
+    if (!(nMonStatsId < 0 || nMonStatsId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nMonStatsId != 0x4e)) {
+      return 0;
+    }
+
+    return 1;
+}
+
+} // namespace D2Client
+
+namespace D2Client::UNIT::CUnit {
 
 // Calls the skill's SelectProc handler with ECX = pUnit (the caster, loaded at 004642e7) and EDX = pTargetUnit, which is never written here and reaches the handler unchanged (1.14d asm).
 static uint32_t __stdcall SKILL_ExecuteSelectProc(D2UnitStrc * pUnit, eD2Skills eSkill, D2UnitStrc * pTargetUnit) {
@@ -1271,13 +1319,6 @@ uint32_t __fastcall SKILL_IsTargetOwnedPet(D2UnitStrc * pUnit, int * pnSkillPara
 
     nOwnerGUID = GAME::RosterPets::GetRosterOwnerGUID(pnSkillParams[3]);
     return (uint32_t)(nOwnerGUID == pUnit->nUnitGUID);
-}
-
-static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
-    if (pUnit) {
-        return pUnit->eUnitType;
-    }
-    return (eD2UnitType)6;
 }
 // Returns 1 if pUnit has an allied-targeting skill (flags4 bit 2 set in skills.txt) equipped in either hand AND the skill target (pnSkillParams[3]) is in the same party/owned-by the caster. Returns 0 for non-player units unless pnSkillParams[1] matches. Used by skill targeting logic to allow friendly-fire bypass.
 // @sourcefile .\UNIT\CUnit.cpp

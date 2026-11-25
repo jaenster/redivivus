@@ -179,7 +179,7 @@ void __fastcall UNITMSG_SendSoundPacketToClient(struct D2UnitStrc * pUnit, struc
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall UnitQueuePacket0x99(struct D2UnitStrc * pUnit, int32_t nSkillId, uint8_t byArg1, uint8_t byArg2, uint32_t dwTargetGUID, uint8_t bParam);
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0x9A(struct D2UnitStrc * pUnit, uint16_t wSkillId, uint8_t byArg1, uint16_t wArg2, uint16_t wTargetY, uint8_t bParam);
+void __fastcall UnitQueuePacket0x9A(struct D2UnitStrc * pUnit, int32_t nSkillId, uint8_t byArg1, uint16_t wArg2, uint16_t wTargetY, uint8_t bParam);
 // Allocates a 0x14-byte D2SUnitMsgStrc with packet id 0x9E (stat update) and enqueues it on pUnit's message list. Payload: unit GUID (4B), stat id (1B), new stat value (4B). Asserts eUnitStat <= 0xFE. Calls ROOM_LinkUnitToUpdateList to mark unit dirty.
 // @sourcefile .\UNIT\SUnitMsg.cpp
 void __fastcall UnitQueuePacket0x9E(struct D2UnitStrc * pUnit, uint16_t eUnitStat, uint32_t dwStatValue);

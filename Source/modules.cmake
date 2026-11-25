@@ -180,6 +180,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/ComCallback.cpp  # 004497f0 (outside the module's runs), 1 run
     Source/D2Client/McpConnect.cpp  # 0044b1f0 (outside the module's runs), 1 run
     Source/D2Client/ClientModeInGame.cpp  # 0044b430, 5 runs
+    Source/D2Client/Core/WINMAIN.cpp  # 0044b440, 1 run
     Source/D2Client/D2ClientRoot.cpp  # 0044b550, 39 runs
     Source/D2Client/Game/Game.cpp  # 0044b870, 26 runs
     Source/D2Client/Game/Server.cpp  # 0044cf20, 1 run
@@ -199,7 +200,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UI/Path.cpp  # 0045ae60, 4 runs
     Source/D2Client/UI/Text.cpp  # 0045afe0, 9 runs
     Source/D2Client/Game/SCmd.cpp  # 0045b090, 3 runs
-    Source/D2Client/Archive.cpp  # 0045b960, 4 runs
+    Source/D2Client/D2Hell/Src/Archive.cpp  # 0045b960, 4 runs
     Source/D2Client/Unit/Player.cpp  # 00460830, 6 runs
     Source/D2Client/Unit/CUnit.cpp  # 00463940, 5 runs
     Source/D2Client/Game/Select.cpp  # 00466dc0, 2 runs
@@ -210,9 +211,8 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/Source/ClientEngine.cpp  # 0046aee0, 4 runs
     Source/D2Client/Engine/Gfx.cpp  # 0046db30, 5 runs
     Source/D2Client/Src/CelCmp.cpp  # 0046f360, 2 runs
-    Source/D2Client/Units.cpp  # 0046f950, 2 runs
-    Source/D2Client/Draw/Weather.cpp  # 004722f0, 2 runs
-    Source/D2Client/Draw/LightMap.cpp  # 004740d0, 1 run
+    Source/D2Client/Game/Env.cpp  # 004722f0, 2 runs
+    Source/D2Client/Draw/dLightMap.cpp  # 004740d0, 1 run
     Source/D2Client/Game/View.cpp  # 00475aa0, 1 run
     Source/D2Client/Game/PalShift.cpp  # 00476e30, 1 run
     Source/D2Client/Game/Rendering.cpp  # 004776c0, 4 runs
@@ -238,6 +238,7 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UI/Waypoint.cpp  # 0049c490, 1 run
     Source/D2Client/UI/QuestLog.cpp  # 004a18f0, 3 runs
     Source/D2Client/UI/SkillDesc.cpp  # 004a4260, 2 runs
+    Source/D2Client/UI/char.cpp  # 004a70c0, 1 run
     Source/D2Client/UI/SpellSel.cpp  # 004a8a30, 1 run
     Source/D2Client/Unit/MonUnique.cpp  # 004ac740, 4 runs
     Source/D2Client/Unit/Monster.cpp  # 004add90, 4 runs
@@ -245,11 +246,11 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/UI/npcmenu/Merc.cpp  # 004b3240, 5 runs
     Source/D2Client/UI/Dialog.cpp  # 004b70f0, 2 runs
     Source/D2Client/UI/Trade.cpp  # 004b8a30, 2 runs
+    Source/D2Client/Sound/SoundInst.cpp  # 004b93f0, 1 run
     Source/D2Client/UI/UIWidget.cpp  # 004babe0, 2 runs
     Source/D2Client/UI/Button/ButtonImplementation.cpp  # 004babf0, 3 runs
     Source/D2Client/UI/Button/ButtonWrapper.cpp  # 004badd0, 2 runs
-    Source/D2Client/UI/Editbox/EditBoxImplementation.cpp  # 004bb170, 2 runs
-    Source/D2Client/UI/Editbox/EditBoxWrapper.cpp  # 004bb9f0, 2 runs
+    Source/D2Client/UI/editbox.cpp  # 004bb170, 1 run
     Source/D2Client/UI/Spinner/SpinnerImplementation.cpp  # 004bbe10, 2 runs
     Source/D2Client/UI/Spinner/SpinnerWrapper.cpp  # 004bc1f0, 2 runs
     Source/D2Client/UI/ListBox/ListBoxImplementation.cpp  # 004be090, 7 runs
@@ -268,7 +269,8 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/Unit/CUnitEvent.cpp  # 004dc0c0, 1 run
     Source/D2Client/Unit/PlayerList.cpp  # 004dc270, 1 run
     Source/D2Client/Game/Wall2.cpp  # 004dc510, 3 runs
-    Source/D2Client/Game/Draw.cpp  # 004dde80, 1 run
+    Source/D2Client/Draw/dFloor.cpp  # 004dde00, 1 run
+    Source/D2Client/Game/Draw.cpp  # 004ded10, 1 run
     Source/D2Client/Skills/SkillsMon.cpp  # 004e0a30, 1 run
     Source/D2Client/Skills/SkillsSor.cpp  # 004e2f40, 2 runs
     Source/D2Client/Utils.cpp  # 004e4020, 3 runs
@@ -281,7 +283,6 @@ set(D2_MODULE_D2Client_UNITS
     Source/D2Client/net_sid.cpp  # 00523ac0 (outside the module's runs), 2 runs
     Source/D2Client/Renderer/Direct3D.cpp  # 006b1d80 (outside the module's runs), 2 runs
     Source/D2Client/UI/Button.cpp  # 006ca0d8 (outside the module's runs), 1 run
-    Source/D2Client/UI/Editbox.cpp  # 006ca138 (outside the module's runs), 1 run
     Source/D2Client/UI/Spinner.cpp  # 006ca198 (outside the module's runs), 1 run
     Source/D2Client/UI/ListBox.cpp  # 006ca263 (outside the module's runs), 1 run
 )
@@ -441,7 +442,14 @@ set(D2_MODULE_D2Glide_GENERATED ON)
 set(D2_MODULE_D2Glide_DATA "Source/globals/D2Glide.cpp")
 set(D2_MODULE_D2Glide_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Glide_UNITS
-    Source/D2Glide/Renderer/Glide.cpp  # 00508f90, 1 run
+    Source/D2Glide/Renderer/Glide.cpp  # 00508f90, 7 runs
+    Source/D2Glide/Src/glCore.cpp  # 00508fe0, 3 runs
+    Source/D2Glide/Src/glSprite.cpp  # 0050a0c0, 1 run
+    Source/D2Glide/Src/glDebugFont.cpp  # 0050b860, 1 run
+    Source/D2Glide/Src/glEngine.cpp  # 0050bf50, 1 run
+    Source/D2Glide/Src/glVertex.cpp  # 0050db20, 1 run
+    Source/D2Glide/Src/glPerspective.cpp  # 0050dc80, 1 run
+    Source/D2Glide/Src/glSmack.cpp  # 0050df10, 1 run
     Source/D2Glide/Src/glTextureCache.cpp  # 0050e890, 1 run
     Source/D2Glide/Src/glSubtileCache.cpp  # 0050ed90, 1 run
     Source/D2Glide/Src/glFloorCache.cpp  # 0050f320, 1 run
@@ -528,16 +536,18 @@ set(D2_MODULE_Bnclient_GENERATED ON)
 set(D2_MODULE_Bnclient_DATA "Source/globals/Bnclient.cpp")
 set(D2_MODULE_Bnclient_UNIT_ORDER "original-address")
 set(D2_MODULE_Bnclient_UNITS
-    Source/Bnclient/BNGatewayAccess.cpp  # 00517e60, 1 run
-    Source/Bnclient/BnclientRoot.cpp  # 00518b60, 6 runs
+    Source/Bnclient/BNetGW.cpp  # 00517e60, 1 run
     Source/Bnclient/Debug.cpp  # 00518ba0, 4 runs
     Source/Bnclient/BnMessQueue.cpp  # 00518c20, 2 runs
     Source/Bnclient/Bnet.cpp  # 00518c70, 3 runs
     Source/Bnclient/Cache.cpp  # 00518de0, 3 runs
     Source/Bnclient/BnSend.cpp  # 0051a490, 5 runs
+    Source/Bnclient/BNNews.cpp  # 0051d260, 1 run
     Source/Bnclient/BnDownload.cpp  # 0051e440, 3 runs
-    Source/Bnclient/net_sid.cpp  # 00520580, 4 runs
+    Source/Bnclient/net_sid.cpp  # 005205f0, 4 runs
+    Source/Bnclient/grid.cpp  # 00522c30, 1 run
     Source/Bnclient/SRP/SRP.cpp  # 00527dc0, 4 runs
+    Source/Bnclient/BnclientRoot.cpp  # 00528530, 1 run
     Source/Bnclient/SHA1.cpp  # 00528c90, 1 run
     Source/Bnclient/SRP/SHA.cpp  # 0052a120, 1 run
 )
@@ -783,8 +793,6 @@ set(D2_MODULE_D2Common_UNITS
     Source/D2Common/Drlg/stpl_StringEntryNode.cpp  # 0060e2a0, 10 runs
     Source/D2Common/Drlg/stpl_MappingEntryNode.cpp  # 0060e300, 9 runs
     Source/D2Common/Chat/Ignorelist/MappingEntryNode.cpp  # 0060ed30, 3 runs
-    Source/D2Common/Chat/Ignorelist/stpl_StringEntryNode.cpp  # 0060ed60, 15 runs
-    Source/D2Common/Chat/Ignorelist/stpl_MappingEntryNode.cpp  # 0060ee60, 19 runs
     Source/D2Common/Chat/Ignorelist/StringEntryNode.cpp  # 0060f160, 1 run
     Source/D2Common/Logging/ProfCore.cpp  # 00611600, 4 runs
     Source/D2Common/Inventory/Inventory.cpp  # 00611610, 11 runs
@@ -808,25 +816,27 @@ set(D2_MODULE_D2Common_UNITS
     Source/D2Common/Drlg/Transform.cpp  # 00643260, 1 run
     Source/D2Common/Skills/Skills.cpp  # 00643580, 7 runs
     Source/D2Common/Path/Path.cpp  # 00647fb0, 3 runs
-    Source/D2Common/Path/DynamicPath.cpp  # 00648120, 3 runs
     Source/D2Common/Units/Missile.cpp  # 0064a100, 2 runs
-    Source/D2Common/Unit.cpp  # 0064bf60, 1 run
+    Source/D2Common/Units/UnitRoom.cpp  # 0064bf60, 1 run
+    Source/D2Common/Collisn/Collisn.cpp  # 0064c4c0, 2 runs
     Source/D2Common/Composit/Composit.cpp  # 0064efe0, 1 run
+    Source/D2Common/Path/Step.cpp  # 0064fad0, 1 run
     Source/D2Common/DataTbls/MonsterTbls.cpp  # 00650eb0, 4 runs
     Source/D2Common/Units/UnitFinds.cpp  # 0065a590, 1 run
     Source/D2Common/DataTbls/TokTbls.cpp  # 0065adc0, 2 runs
+    Source/D2Common/DataTbls/InvTbls.cpp  # 0065b660, 1 run
     Source/D2Common/QuestRecord/QuestRecord.cpp  # 0065c310, 1 run
     Source/D2Common/Items/ItemMods.cpp  # 0065c660, 1 run
-    Source/D2Common/DataTbls/BeltsTbls.cpp  # 00660290, 1 run
-    Source/D2Common/Waypoints.cpp  # 00660d90, 1 run
+    Source/D2Common/DataTbls/BeltTbls.cpp  # 00660290, 1 run
+    Source/D2Common/Waypoint/Waypoint.cpp  # 00660d90, 1 run
     Source/D2Common/Chat/Chat.cpp  # 00661110, 2 runs
     Source/D2Common/Text/Text.cpp  # 00661240, 1 run
     Source/D2Common/DataTbls/MissileTbls.cpp  # 006617b0, 1 run
     Source/D2Common/Merc.cpp  # 006632c0, 2 runs
     Source/D2Common/Item.cpp  # 00663a20, 1 run
-    Source/D2Common/Units/MissileStream.cpp  # 00663d40, 1 run
+    Source/D2Common/Units/MisStream.cpp  # 00663d40, 1 run
     Source/D2Common/DataTbls/OverlayTbls.cpp  # 00664150, 1 run
-    Source/D2Common/DataTbls/ArenaTbls.cpp  # 006649b0, 2 runs
+    Source/D2Common/DataTbls/Arena.cpp  # 006649b0, 2 runs
     Source/D2Common/Drlg/Preset.cpp  # 00665930, 5 runs
     Source/D2Common/DataTbls/FieldTbls.cpp  # 0066a2b0, 2 runs
     Source/D2Common/DataTbls/AnimTbls.cpp  # 0066a770, 1 run
@@ -840,6 +850,7 @@ set(D2_MODULE_D2Common_UNITS
     Source/D2Common/Drlg/Maze.cpp  # 00670880, 1 run
     Source/D2Common/Drlg/OutPlace.cpp  # 006755c0, 4 runs
     Source/D2Common/Drlg/Path.cpp  # 00678b10, 1 run
+    Source/D2Common/Path/PathWF.cpp  # 0067bbf0, 1 run
     Source/D2Common/Drlg/DrlgVer.cpp  # 0067cdd0, 1 run
     Source/D2Common/Drlg/OutRoom.cpp  # 0067d610, 1 run
     Source/D2Common/Drlg/OutSiege.cpp  # 0067da70, 1 run
@@ -866,9 +877,14 @@ set(D2_MODULE_D2Direct3D_DATA "Source/globals/D2Direct3D.cpp")
 set(D2_MODULE_D2Direct3D_UNIT_ORDER "original-address")
 set(D2_MODULE_D2Direct3D_UNITS
     Source/D2Direct3D/Renderer/Direct3D.cpp  # 006b1b60, 4 runs
+    Source/D2Direct3D/Src/d3dCore.cpp  # 006b4fd0, 1 run
+    Source/D2Direct3D/Src/d3dSprite.cpp  # 006b5b10, 1 run
+    Source/D2Direct3D/Src/d3dEngine.cpp  # 006b72a0, 1 run
+    Source/D2Direct3D/Src/d3dSmack.cpp  # 006b9a10, 1 run
     Source/D2Direct3D/Src/d3dTextureCache.cpp  # 006ba420, 1 run
     Source/D2Direct3D/Src/d3dSubtileCache.cpp  # 006ba9a0, 1 run
     Source/D2Direct3D/Src/d3dFloorCache.cpp  # 006bafc0, 1 run
+    Source/D2Direct3D/Src/d3dBlocks.cpp  # 006bb5e0, 1 run
 )
 
 # D2Gdi -> Storm (import): 1.13d D2Gdi import table: 3 symbol(s) from Storm; also in 1.13c, 1.10f

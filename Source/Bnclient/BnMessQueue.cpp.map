@@ -260,6 +260,33 @@
           "ECX:4"
         ]
       ]
+    },
+    {
+      "name": "NET_SID_CLIENT_GetStateAndClear",
+      "address": "00520580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00520580"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_GetStateAndClear",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "682595eb",
+      "paramStorage": [
+        [
+          "pOutState",
+          "ECX:4"
+        ]
+      ]
     }
   ]
 }

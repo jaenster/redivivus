@@ -2,7 +2,7 @@
 
 #include "Source/D2Client/Unit/Object.h"
 #include "Source/D2Client/Core/Archive.h"
-#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/dLightMap.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/SCmd.h"
 #include "Source/D2Client/Sound/Sound.h"

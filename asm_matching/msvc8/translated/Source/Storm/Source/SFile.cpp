@@ -186,18 +186,13 @@ int32_t __stdcall SFILE_DecompressLzw(uint8_t * pDstData, uint8_t * pSrcData, in
 }
 
 // @blizzard Decrypt (SFILE.CPP)
-static void SFILE_Decrypt(uint32_t nSeed, uint32_t * pData, uint32_t nByteLen) {
-    uint32_t nDwordsRem;
-    uint32_t nDecrypted;
-    int nKey = -0x11111112;
-    for (nDwordsRem = nByteLen >> 2; nDwordsRem; nDwordsRem--) {
-      uint32_t uVar1;
-      uVar1 = g_pStormMpqCryptTable[(nSeed & 0xff) + 0x400];
-      *pData ^= nKey + uVar1 + nSeed;
-      nDecrypted = *pData;
-      pData++;
-      nSeed = nSeed >> 0xb | (~nSeed << 0x15) + 0x11111111;
-      nKey = (nKey + uVar1) * 0x21 + 3 + nDecrypted;
+static void SFILE_Decrypt(uint32_t * pData, uint32_t nByteLen, uint32_t nSeed) {
+    uint32_t nKey = 0xeeeeeeee;
+    uint32_t nCount = nByteLen >> 2;
+    while (nCount--) {
+      nKey += g_pStormMpqCryptTable[0x400 + (nSeed & 0xff)];
+      nKey += (*pData++ ^= nKey + nSeed) + (nKey << 5) + 3;
+      nSeed = (nSeed >> 0xb) | ((nSeed << 0x15) ^ 0xffe00000) + 0x11111111;
     }
 }
 
@@ -1644,7 +1639,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
             return 0;
           }
           if (pArchive->pBlockEntry->dwFlags & 0x10000) {
-            SFILE_Decrypt(pArchive->nDecryptKey - 1, pArchive->pSectorTable, __frame0.nReadCount);
+            SFILE_Decrypt(pArchive->pSectorTable, __frame0.nReadCount, pArchive->nDecryptKey - 1);
           }
 
           nCount = 0;
@@ -1728,7 +1723,7 @@ uint32_t __stdcall SFILE_InternalReadAligned(D2MPQFileStrc * pArchive, uint32_t 
               }
             }
 
-            SFILE_Decrypt(pMPQFileSaved->nDecryptKey + __frame0.nReadCount, (uint32_t*)((intptr_t)__frame0.pReadBuffer + nCursor), nSectorIndex & -4);
+            SFILE_Decrypt((uint32_t*)((intptr_t)__frame0.pReadBuffer + nCursor), nSectorIndex & -4, pMPQFileSaved->nDecryptKey + __frame0.nReadCount);
             nCursor += nSectorIndex;
             __frame0.nReadCount++;
             nSectorSize = __frame0.nBaseOffset;
@@ -5492,13 +5487,13 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
     SFILE_ReadFileChecked(__frame0.uSlot8.pnHashTableSize, pOutputBuf, ppArchive->pMpqHeader->dwHashTableSize << 4, (uint32_t*)__frame0.uSlotC.pszArchivePath, ppArchive->hFile, &__frame0.nBytesRead, ppArchive->pMpqHeader->dwHashTablePos + ppArchive->nArchiveOffset);
     nHashKey = SFILE_Hash(3, "(hash table)");
     D2ArchiveStrc* pListNode = __frame0.pSavedArchive;
-    SFILE_Decrypt(nHashKey, &__frame0.pSavedArchive->pHashTable->dwHashA, __frame0.pSavedArchive->pMpqHeader->dwHashTableSize << 4);
+    SFILE_Decrypt(&__frame0.pSavedArchive->pHashTable->dwHashA, __frame0.pSavedArchive->pMpqHeader->dwHashTableSize << 4, nHashKey);
     D2MPQBlockEntryStrc* pOutputBuf_00 = (D2MPQBlockEntryStrc*)SMem::SMemAlloc(pListNode->pMpqHeader->dwBlockTableSize * 0x2c, ".\\SOURCE\\SFILE.CPP", 0x1133, 0);
     pListNode->pBlockTable = pOutputBuf_00;
     SFILE_ReadFileChecked(__frame0.uSlot8.pnHashTableSize, pOutputBuf_00, pListNode->pMpqHeader->dwBlockTableSize << 4, (uint32_t*)__frame0.uSlotC.pszArchivePath, pListNode->hFile, &__frame0.nBytesRead, pListNode->pMpqHeader->dwBlockTablePos + pListNode->nArchiveOffset);
     nHashKey = SFILE_Hash(3, "(block table)");
     pListNode = __frame0.pSavedArchive;
-    SFILE_Decrypt(nHashKey, &__frame0.pSavedArchive->pBlockTable->dwFilePos, __frame0.pSavedArchive->pMpqHeader->dwBlockTableSize << 4);
+    SFILE_Decrypt(&__frame0.pSavedArchive->pBlockTable->dwFilePos, __frame0.pSavedArchive->pMpqHeader->dwBlockTableSize << 4, nHashKey);
     vc8_thiscall(SFILE_ShiftSectorTable)(pListNode->pBlockTable, pListNode->pMpqHeader->dwBlockTableSize);
     if (pListNode->nArchiveOffset) {
       nBlockIndex = 0;

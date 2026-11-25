@@ -93,6 +93,41 @@
       ]
     },
     {
+      "name": "PATH_FindAlternateAroundObstacle",
+      "address": "00648120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648120"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_FindAlternateAroundObstacle",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGPATH_GetDirectionTripletPacked",
+        "CheckCollision_BlockPlayer_Type",
+        "PATH_ExtendPathEndpoint"
+      ],
+      "usedTypes": [
+        "D2PathTypeArg",
+        "D2RoomStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "3e0489bc",
+      "paramStorage": [
+        [
+          "pPathState",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
       "name": "PATH_GetScreenVelocity",
       "address": "00648300",
       "lines": [
@@ -128,100 +163,200 @@
       ]
     },
     {
-      "name": "DRLGPATH_UpdateUnitRoom",
-      "address": "0064fad0",
+      "name": "PATH_CanMonsterPathInArea",
+      "address": "006483a0",
       "lines": [
         {
           "line": 1,
-          "address": "0064fad0"
+          "address": "006483a0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "DRLGPATH_UpdateUnitRoom",
+        "PATH_CanMonsterPathInArea",
+        "MONSTER_CanBeInTown",
         "DRLGROOM_FindBetterNearbyRoom",
-        "RemoveUnitFromRoom",
-        "DRLGROOM_AddUnitToRoom",
-        "ROOM_LinkUnitToUpdateList"
+        "DRLGROOM_IsRoomInTown"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc",
         "D2RoomStrc",
         "D2UnitStrc",
-        "uint16_t"
+        "uint16_t",
+        "uint32_t"
       ],
-      "dh": "6472b080",
+      "dh": "7d155d7b",
       "paramStorage": [
         [
-          "pRoom",
-          "Stack[0x4]:4"
+          "pUnit",
+          "ECX:4"
         ],
         [
-          "pDynamicPath",
-          "EDI:4"
+          "pPathData",
+          "ESI:4"
         ]
       ]
     },
     {
-      "name": "DRLGPATH_SetPathPosition",
-      "address": "0064fb90",
+      "name": "STRUCT_FreePath",
+      "address": "00648460",
       "lines": [
         {
           "line": 1,
-          "address": "0064fb90"
+          "address": "00648460"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "DRLGPATH_SetPathPosition",
-        "DRLGROOM_FindBetterNearbyRoom",
-        "DRLG_MapWorldToScreenCoords",
-        "DRLGPATH_UpdateUnitRoom"
+        "STRUCT_FreePath",
+        "FreeServerMemory"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2RoomStrc",
-        "D2UnitStrc",
-        "uint32_t"
+        "D2PoolManagerStrc"
       ],
-      "dh": "f12d22fd",
+      "dh": "38a6f30c",
       "paramStorage": [
         [
-          "nOffsetX",
+          "pMemory",
           "Stack[0x4]:4"
         ],
         [
-          "nOffsetY",
+          "pPath",
           "Stack[0x8]:4"
-        ],
+        ]
+      ]
+    },
+    {
+      "name": "PATH_GetMoveTestCollisionMaskFromMonStats",
+      "address": "00648480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648480"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_GetMoveTestCollisionMaskFromMonStats"
+      ],
+      "usedTypes": [
+        "D2MonStatsTxt",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "ed5717e7",
+      "paramStorage": [
         [
-          "pRoom",
-          "Stack[0xc]:4"
-        ],
-        [
-          "pDynamicPath",
+          "pUnit",
           "EAX:4"
         ]
       ]
     },
     {
-      "name": "DRLGPATH_ClearPathPosition",
-      "address": "0064fc20",
+      "name": "PATH_GetDynamicPathField",
+      "address": "006484e0",
       "lines": [
         {
           "line": 1,
-          "address": "0064fc20"
+          "address": "006484e0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "DRLGPATH_ClearPathPosition",
-        "RemoveUnitFromRoom"
+        "PATH_GetDynamicPathField"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc"
+        "D2MonStats2Txt",
+        "int32_t",
+        "uint32_t"
       ],
-      "dh": "7624d8c9",
+      "dh": "68357d2b",
+      "paramStorage": [
+        [
+          "nMonStatsIdx",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetInteractSize",
+      "address": "00648580",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648580"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetInteractSize",
+        "MONSTER_CanBeInTown",
+        "TXT_MonStats_GetFlagsByBitOffset"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5e4e9306",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSizeX",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_SetDirection",
+      "address": "006485f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006485f0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_SetDirection"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "eD2UnitType",
+        "uint8_t"
+      ],
+      "dh": "19e24489",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "ECX:4"
+        ],
+        [
+          "bRawDirection",
+          "DL:1"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_InterpolateDirection",
+      "address": "00648640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648640"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_InterpolateDirection"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "248b508a",
       "paramStorage": [
         [
           "pDynamicPath",
@@ -230,511 +365,768 @@
       ]
     },
     {
-      "name": "DRLGPATH_CalcDirectionVector",
-      "address": "0064fc60",
+      "name": "SetVelocities",
+      "address": "00648690",
       "lines": [
         {
           "line": 1,
-          "address": "0064fc60"
+          "address": "00648690"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "DRLGPATH_CalcDirectionVector"
+        "SetVelocities"
       ],
       "usedTypes": [
-        "POINT",
-        "uint32_t"
+        "D2DynamicPathStrc",
+        "int32_t"
       ],
-      "dh": "00de20ce",
+      "dh": "5da1e3a3",
       "paramStorage": [
         [
-          "pPoint",
-          "ECX:4"
-        ],
-        [
-          "pnDirection",
-          "EDX:4"
-        ],
-        [
-          "nFromXfp",
+          "pDynamicPath",
           "Stack[0x4]:4"
         ],
         [
-          "nFromYfp",
+          "nValue",
           "Stack[0x8]:4"
         ],
         [
-          "nToXfp",
+          "szFile",
           "Stack[0xc]:4"
         ],
         [
-          "nToYfp",
+          "nLine",
           "Stack[0x10]:4"
         ]
       ]
     },
     {
-      "name": "DRLGPATH_CalcPathDirection",
-      "address": "0064fd70",
+      "name": "GetVelocity",
+      "address": "006486c0",
       "lines": [
         {
           "line": 1,
-          "address": "0064fd70"
+          "address": "006486c0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "DRLGPATH_CalcPathDirection",
-        "DRLGPATH_CalcDirectionVector"
+        "GetVelocity"
       ],
       "usedTypes": [
-        "POINT",
-        "uint32_t"
+        "D2DynamicPathStrc",
+        "int32_t"
       ],
-      "dh": "448da48f",
+      "dh": "d06457a3",
       "paramStorage": [
         [
-          "pPoint",
-          "ECX:4"
-        ],
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetMaxVelocity",
+      "address": "006486d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006486d0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetMaxVelocity"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "4d800dfb",
+      "paramStorage": [
         [
-          "pnDirection",
-          "EDX:4"
-        ],
-        [
-          "nFromX",
+          "pDynamicPath",
           "Stack[0x4]:4"
         ],
         [
-          "nFromY",
+          "nMaxVelocity",
           "Stack[0x8]:4"
         ]
       ]
     },
     {
-      "name": "DRLGPATH_GetDirectionFromCoords",
-      "address": "0064fdc0",
+      "name": "GetMaxVelocity",
+      "address": "006486f0",
       "lines": [
         {
           "line": 1,
-          "address": "0064fdc0"
+          "address": "006486f0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "DRLGPATH_GetDirectionFromCoords",
-        "DRLGPATH_CalcDirectionVector"
+        "GetMaxVelocity"
       ],
       "usedTypes": [
-        "POINT",
-        "int32_t",
-        "uint32_t"
+        "D2DynamicPathStrc",
+        "int32_t"
       ],
-      "dh": "a883336c",
+      "dh": "e7e80419",
       "paramStorage": [
         [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetAcceleration",
+      "address": "00648700",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648700"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetAcceleration"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "f51c63e9",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAcceleration",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetAcceleration",
+      "address": "00648720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648720"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetAcceleration"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "ddc7c27c",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ZeroPathPointsSize",
+      "address": "00648730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648730"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "ZeroPathPointsSize"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc"
+      ],
+      "dh": "a66d846f",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetUnsetFlags0x20",
+      "address": "00648750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648750"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetUnsetFlags0x20"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "4cdcb5ed",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_GetFlags0x20",
+      "address": "00648770",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648770"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_GetFlags0x20"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint32_t"
+      ],
+      "dh": "f1f68ed6",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPathPointsSize",
+      "address": "00648780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648780"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetPathPointsSize"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "d26a5c97",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetPathPointsSize",
+      "address": "00648790",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648790"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetPathPointsSize"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "9ce44c4c",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSize",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_GetPathPointIndex",
+      "address": "006487c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006487c0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_GetPathPointIndex"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "95085b3b",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPathPoint",
+      "address": "006487d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006487d0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetPathPoint"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc *",
+        "int32_t"
+      ],
+      "dh": "85b99e4c",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pPathPoint",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetDirection",
+      "address": "006487f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006487f0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetDirection"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "8ffb9f16",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "UpdateDirection",
+      "address": "00648810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648810"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "UpdateDirection"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "f18ac07f",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_SetNewDirection",
+      "address": "00648820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648820"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_SetNewDirection",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "a418abb0",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bRawDirection",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "SetDirectionAndNewDirection",
+      "address": "006488a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006488a0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetDirectionAndNewDirection"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "079955a4",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDirection",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "GetXPos",
+      "address": "006488c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006488c0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetXPos",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "ca35fa5f",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetYPos",
+      "address": "00648900",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648900"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetYPos",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "3615ab12",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPrecisionX",
+      "address": "00648940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648940"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetPrecisionX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "90374c0d",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPrecisionY",
+      "address": "00648970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648970"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetPrecisionY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "53a5d129",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetPrecisionX",
+      "address": "006489a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006489a0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetPrecisionX"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "2a16237b",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
           "nX",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetPrecisionY",
+      "address": "006489b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006489b0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetPrecisionY"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "229dc7e0",
+      "paramStorage": [
+        [
+          "pDynamicPath",
           "Stack[0x4]:4"
         ],
         [
           "nY",
           "Stack[0x8]:4"
-        ],
-        [
-          "nNewX",
-          "Stack[0xc]:4"
-        ],
-        [
-          "nNewY",
-          "Stack[0x10]:4"
         ]
       ]
     },
     {
-      "name": "PATH_ComputeDirectionFromPreciseCoords",
-      "address": "0064fe10",
+      "name": "GetScreenX",
+      "address": "006489c0",
       "lines": [
         {
           "line": 1,
-          "address": "0064fe10"
+          "address": "006489c0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "PATH_ComputeDirectionFromPreciseCoords",
-        "DRLGPATH_CalcDirectionVector"
-      ],
-      "usedTypes": [
-        "uint32_t"
-      ],
-      "dh": "df6e45cd",
-      "paramStorage": [
-        [
-          "nFromXfp",
-          "Stack[0x4]:4"
-        ],
-        [
-          "nFromYfp",
-          "Stack[0x8]:4"
-        ],
-        [
-          "nToXfp",
-          "Stack[0xc]:4"
-        ],
-        [
-          "nToYfp",
-          "Stack[0x10]:4"
-        ]
-      ]
-    },
-    {
-      "name": "DRLGPATH_AdvanceAlongPathPoints",
-      "address": "0064fe40",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0064fe40"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "DRLGPATH_AdvanceAlongPathPoints",
-        "DRLGPATH_CalcDirectionVector",
-        "PATH_SetDirection"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "POINT",
-        "int32_t",
-        "uint32_t"
-      ],
-      "dh": "ae73c033",
-      "paramStorage": [
-        [
-          "pDynamicPath",
-          "ECX:4"
-        ],
-        [
-          "bSetDirOnWaypoint",
-          "EDX:4"
-        ],
-        [
-          "bForceDirection",
-          "Stack[0x4]:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_CheckCollisionOnStep",
-      "address": "0064ff90",
-      "lines": [
-        {
-          "line": 1,
-          "address": "0064ff90"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "RemoveGetCollision_Width",
-        "PATH_CheckCollisionOnStep",
-        "UpdateCollision_Type",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "RemoveGetCollision_Type"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "eCollisionFlags",
-        "int32_t",
-        "uint32_t"
-      ],
-      "dh": "7eae441a",
-      "paramStorage": [
-        [
-          "nPackedNewPos",
-          "Stack[0x4]:4"
-        ],
-        [
-          "nPackedOldPos",
-          "Stack[0x8]:4"
-        ],
-        [
-          "pDynamicPath",
-          "ESI:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_ComputeDirectMovementVector",
-      "address": "00650090",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00650090"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_ComputeDirectMovementVector"
+        "GetScreenX"
       ],
       "usedTypes": [
         "D2DynamicPathStrc"
       ],
-      "dh": "f8875494",
+      "dh": "e59ab172",
       "paramStorage": [
         [
-          "pVelOut",
-          "Stack[0x4]:4"
-        ],
-        [
           "pDynamicPath",
-          "ESI:4"
+          "Stack[0x4]:4"
         ]
       ]
     },
     {
-      "name": "PATH_TraceCollisionPath",
-      "address": "00650150",
+      "name": "GetScreenY",
+      "address": "006489d0",
       "lines": [
         {
           "line": 1,
-          "address": "00650150"
+          "address": "006489d0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "PATH_TraceCollisionPath",
-        "DRLGPATH_NormalizeFixedPointPair",
-        "PATH_CheckCollisionOnStep"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "int32_t",
-        "uint16_t",
-        "uint32_t"
-      ],
-      "dh": "076791cb",
-      "paramStorage": [
-        [
-          "nStartX",
-          "Stack[0x4]:4"
-        ],
-        [
-          "nStartY",
-          "Stack[0x8]:4"
-        ],
-        [
-          "pFinalCoords",
-          "Stack[0xc]:4"
-        ],
-        [
-          "pNumStepsTraced",
-          "Stack[0x10]:4"
-        ],
-        [
-          "pDynamicPath",
-          "EAX:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_UpdateVelocityWithAcceleration",
-      "address": "006502d0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006502d0"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_UpdateVelocityWithAcceleration"
+        "GetScreenY"
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
         "int32_t"
       ],
-      "dh": "9aa1e877",
+      "dh": "77bac88b",
       "paramStorage": [
-        [
-          "nStepScale",
-          "ECX:4"
-        ],
         [
           "pDynamicPath",
-          "EAX:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_RecalculatePath",
-      "address": "00650350",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00650350"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_RecalculatePath",
-        "GetDistanceCastedToInt",
-        "ROOM_LinkUnitToUpdateList",
-        "AddToDistance",
-        "PATH_CalculatePath"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2UnitStrc",
-        "int32_t",
-        "uint32_t"
-      ],
-      "dh": "9369ea2b",
-      "paramStorage": [
-        [
-          "pUnit",
           "Stack[0x4]:4"
-        ],
-        [
-          "bHasTargetUnit",
-          "Stack[0x8]:4"
         ]
       ]
     },
     {
-      "name": "PATH_CheckIfTargetReached",
-      "address": "006503f0",
+      "name": "SetScreenX",
+      "address": "006489e0",
       "lines": [
         {
           "line": 1,
-          "address": "006503f0"
+          "address": "006489e0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "PATH_CheckIfTargetReached",
-        "PATH_RecalculatePath",
-        "GetDistanceBetweenUnits",
-        "DRLGPATH_GetMissileTargetPosition"
+        "SetScreenX"
       ],
       "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2PathPointStrc",
-        "D2UnitStrc",
-        "eD2UnitType",
-        "int32_t",
-        "uint32_t"
+        "D2DynamicPathStrc"
       ],
-      "dh": "dbc216c7",
+      "dh": "b2b73680",
       "paramStorage": [
         [
           "pDynamicPath",
-          "ESI:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_CheckPathCollision",
-      "address": "006504f0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "006504f0"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_CheckPathCollision"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2UnitStrc",
-        "eD2UnitType"
-      ],
-      "dh": "800eb3c0",
-      "paramStorage": [
-        [
-          "pUnit",
           "ECX:4"
         ],
         [
-          "pDynamicPath",
+          "nScreenX",
           "EDX:4"
         ]
       ]
     },
     {
-      "name": "PATH_HasReachedTarget",
-      "address": "00650540",
+      "name": "SetScreenY",
+      "address": "006489f0",
       "lines": [
         {
           "line": 1,
-          "address": "00650540"
+          "address": "006489f0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "PATH_HasReachedTarget",
-        "GetDistanceBetweenUnits"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2UnitStrc",
-        "int32_t"
-      ],
-      "dh": "63d20338",
-      "paramStorage": [
-        [
-          "pUnit",
-          "Stack[0x4]:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_SnapPositionToTile",
-      "address": "00650590",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00650590"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_SnapPositionToTile",
-        "DRLGPATH_SetPathPosition"
+        "SetScreenY"
       ],
       "usedTypes": [
         "D2DynamicPathStrc"
       ],
-      "dh": "16f86c91",
+      "dh": "89827158",
       "paramStorage": [
         [
           "pDynamicPath",
-          "Stack[0x4]:4"
+          "ECX:4"
+        ],
+        [
+          "nScreenY",
+          "EDX:4"
         ]
       ]
     },
     {
-      "name": "Get8FlagsFromDynamicPath",
-      "address": "006505c0",
+      "name": "GetXSP1",
+      "address": "00648a00",
       "lines": [
         {
           "line": 1,
-          "address": "006505c0"
+          "address": "00648a00"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "Get8FlagsFromDynamicPath"
+        "GetXSP1"
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
         "uint32_t"
       ],
-      "dh": "7c407ba1",
+      "dh": "02270f34",
       "paramStorage": [
         [
           "pDynamicPath",
@@ -743,122 +1135,1535 @@
       ]
     },
     {
-      "name": "PATH_MoveUnitToUnitPosition",
-      "address": "006505e0",
+      "name": "GetYSP1",
+      "address": "00648a10",
       "lines": [
         {
           "line": 1,
-          "address": "006505e0"
+          "address": "00648a10"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "PATH_MoveUnitToUnitPosition",
-        "DRLGPATH_SetPathPosition",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
+        "GetYSP1"
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
-        "D2UnitStrc",
-        "int32_t"
-      ],
-      "dh": "3234cf66",
-      "paramStorage": [
-        [
-          "pUnit",
-          "Stack[0x4]:4"
-        ],
-        [
-          "pTargetUnit",
-          "Stack[0x8]:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_ComputeMovementStep",
-      "address": "00650660",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00650660"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_ComputeMovementStep",
-        "PATH_ComputeDirectMovementVector",
-        "PATH_TraceCollisionPath",
-        "PATH_RecalculatePath"
-      ],
-      "usedTypes": [
-        "D2CoordStrc",
-        "D2DynamicPathStrc",
-        "D2UnitStrc",
         "uint32_t"
       ],
-      "dh": "607ea931",
+      "dh": "1544a8a5",
       "paramStorage": [
         [
-          "pnOutX",
+          "pDynamicPath",
           "Stack[0x4]:4"
-        ],
-        [
-          "pnOutY",
-          "Stack[0x8]:4"
-        ],
-        [
-          "pSkillsTxt",
-          "EAX:4"
         ]
       ]
     },
     {
-      "name": "PATH_ResetPathState",
-      "address": "006507b0",
+      "name": "GetXSP3",
+      "address": "00648a20",
       "lines": [
         {
           "line": 1,
-          "address": "006507b0"
+          "address": "00648a20"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "PATH_ResetPathState",
-        "DRLGPATH_SetPathPosition"
+        "GetXSP3"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint32_t"
+      ],
+      "dh": "4ebe3d05",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetYSP3",
+      "address": "00648a30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648a30"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetYSP3"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint32_t"
+      ],
+      "dh": "3cd36fda",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetLastPathPointX",
+      "address": "00648a40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648a40"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetLastPathPointX"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "fdadd835",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetLastPathPointY",
+      "address": "00648a60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648a60"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetLastPathPointY"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "929779ae",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetRoom",
+      "address": "00648a80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648a80"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetRoom"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc"
+      ],
+      "dh": "bc7240a8",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetRoom",
+      "address": "00648a90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648a90"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetRoom"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc"
+      ],
+      "dh": "0539fe99",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pRoom",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetNextRoom",
+      "address": "00648aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648aa0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetNextRoom"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc"
+      ],
+      "dh": "1720d47b",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ResetNextRoom",
+      "address": "00648ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648ab0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "ResetNextRoom"
       ],
       "usedTypes": [
         "D2DynamicPathStrc"
       ],
-      "dh": "b9fd4f84",
+      "dh": "5d7005e9",
       "paramStorage": [
         [
           "pDynamicPath",
-          "ESI:4"
+          "Stack[0x4]:4"
         ]
       ]
     },
     {
-      "name": "Unreferenced_00650800",
-      "address": "00650800",
+      "name": "SetSP1",
+      "address": "00648ad0",
       "lines": [
         {
           "line": 1,
-          "address": "00650800"
+          "address": "00648ad0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "Unreferenced_00650800",
-        "PATH_ResetPathState"
+        "SetSP1"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int16_t"
+      ],
+      "dh": "d89bd882",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:2"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:2"
+        ]
+      ]
+    },
+    {
+      "name": "SetSP1Shifted",
+      "address": "00648b00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648b00"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetSP1Shifted",
+        "DRLG_ScreenToWorldNoShift"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "c05e54f2",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nY",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Get0x02Flag",
+      "address": "00648b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648b30"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "Get0x02Flag"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint32_t"
+      ],
+      "dh": "3eccb28d",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetUnset0x02Flag",
+      "address": "00648b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648b40"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetUnset0x02Flag"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc"
+      ],
+      "dh": "a15f88c7",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSetUnset",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetUnset0x04Flag",
+      "address": "00648b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648b60"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetUnset0x04Flag"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc"
+      ],
+      "dh": "d9df8c27",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSetUnset",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Get0x04Flag",
+      "address": "00648b80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648b80"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "Get0x04Flag"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint32_t"
+      ],
+      "dh": "0619d4e9",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetTarget",
+      "address": "00648b90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648b90"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetTarget"
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
         "D2UnitStrc"
       ],
-      "dh": "1645d0f0",
+      "dh": "10855b4d",
       "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnit",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetTargetTypeAndGUID",
+      "address": "00648bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648bb0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetTargetTypeAndGUID",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "eD2UnitType",
+        "int32_t"
+      ],
+      "dh": "3bbea9a6",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pUnitType",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTargetGUID",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetTargetUnit",
+      "address": "00648bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648bf0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetTargetUnit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "691419c3",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetCollisionType",
+      "address": "00648c10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648c10"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetCollisionType"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "bbdacb3d",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_ChangeCollisionType",
+      "address": "00648c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648c30"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_ChangeCollisionType",
+        "RemoveCollision_Type",
+        "RemoveCollision_Width",
+        "AddCollision_Width",
+        "AddCollision_Type"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "23befbfe",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eCollisionFlag",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_GetMoveTestCollisionMask",
+      "address": "00648cd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648cd0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_GetMoveTestCollisionMask"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "4b03bb2d",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_SetMoveTestCollisionMask",
+      "address": "00648ce0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648ce0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_SetMoveTestCollisionMask"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "92185a02",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCollisionMask",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_SetPathType",
+      "address": "00648cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648cf0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_SetPathType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "2ee690e1",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ePathType",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_RestoreVelocityAndPathType",
+      "address": "00648dc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648dc0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_RestoreVelocityAndPathType",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PATH_SetPathType"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "482e3582",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetPathType",
+      "address": "00648e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648e30"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetPathType"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc"
+      ],
+      "dh": "58e23e8c",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetDistance",
+      "address": "00648e40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648e40"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetDistance"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "0b027511",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDistance",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "GetDistance",
+      "address": "00648e60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648e60"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetDistance"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "39a00094",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "OverwriteDistanceAndMaxDistance",
+      "address": "00648e70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648e70"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "OverwriteDistanceAndMaxDistance"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "cdbd96f0",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDistance",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "GetMaxDistance",
+      "address": "00648ea0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648ea0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetMaxDistance"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "12637d0d",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CheckAndGetCollisionFlag",
+      "address": "00648eb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648eb0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "CheckAndGetCollisionFlag",
+        "CheckCollision_BlockAll_Width"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "eCollisionFlags"
+      ],
+      "dh": "3ca9069e",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetCollisionFlag",
+      "address": "00648ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648ef0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetCollisionFlag"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "eCollisionFlags"
+      ],
+      "dh": "de1069cb",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetIdaStarVariable",
+      "address": "00648f00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648f00"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetIdaStarVariable",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "ecc1b5a8",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bIdaStarVal",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "GetInitCoords",
+      "address": "00648f40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648f40"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetInitCoords",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathPointStrc *",
+        "int32_t"
+      ],
+      "dh": "51ce8a40",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "ppPathPoints",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetLastInitCoordX",
+      "address": "00648f90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648f90"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetLastInitCoordX",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "3833b2d1",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetLastInitCoordY",
+      "address": "00648fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00648fe0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetLastInitCoordY",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "51ced8d9",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetUnsetFlags0x40",
+      "address": "00649030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649030"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetUnsetFlags0x40"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "2c5a6b2b",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ResetSP2",
+      "address": "00649050",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649050"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "ResetSP2"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc"
+      ],
+      "dh": "78f8acb2",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetStepNum",
+      "address": "00649070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649070"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetStepNum"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "47cd97c5",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nStepNum",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "GetStepNum",
+      "address": "006490a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006490a0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetStepNum"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "1a55d278",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_SetMissileOffsets",
+      "address": "006490c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006490c0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_SetMissileOffsets"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint8_t"
+      ],
+      "dh": "1dc9a9de",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSubOffset",
+          "Stack[0x8]:1"
+        ],
+        [
+          "bOffset",
+          "Stack[0xc]:1"
+        ]
+      ]
+    },
+    {
+      "name": "SetDistanceWithChecks",
+      "address": "006490e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006490e0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "SetDistanceWithChecks",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "88e903fd",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nDistance",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetDistanceCastedToInt",
+      "address": "00649120",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649120"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetDistanceCastedToInt"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint32_t"
+      ],
+      "dh": "86dfb2c4",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "AddToDistance",
+      "address": "00649140",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649140"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "AddToDistance"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "int32_t"
+      ],
+      "dh": "c4ad4cae",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nValue",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_GetUnitCollisionPattern",
+      "address": "00649180",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649180"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_GetUnitCollisionPattern"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "0ebb761e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_SetUnitCollisionPattern",
+      "address": "00649190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649190"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_SetUnitCollisionPattern"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "87ebf97c",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nCollisionPattern",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_SetOrClearFlag0x2000",
+      "address": "006491b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006491b0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_SetOrClearFlag0x2000",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "de70b50e",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSet",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_PeriodicPathRecalc",
+      "address": "00649210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649210"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_PeriodicPathRecalc",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PATH_HasReachedTarget",
+        "GetTargetUnit",
+        "PATH_RecalculatePath",
+        "ChangeAnimMode"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "bfc9510a",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetDistanceSquaredXY",
+      "address": "006492a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006492a0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "GetDistanceSquaredXY"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "6d9b237c",
+      "paramStorage": [
+        [
+          "x1",
+          "Stack[0x4]:4"
+        ],
+        [
+          "y1",
+          "Stack[0x8]:4"
+        ],
+        [
+          "x2",
+          "Stack[0xc]:4"
+        ],
+        [
+          "y2",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_HasRemainingDistance",
+      "address": "006492c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006492c0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_HasRemainingDistance"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "uint32_t"
+      ],
+      "dh": "4c4d1b83",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_BuildDirectPathToTarget",
+      "address": "006492f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006492f0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_BuildDirectPathToTarget",
+        "GetXPos",
+        "GetYPos",
+        "DRLGPATH_AdvanceAlongPathPoints"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "d6709355",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_AddUnitCollision",
+      "address": "00649400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649400"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "AddCollision_Type",
+        "AddCollision_Vector",
+        "AddCollision_Width",
+        "PATH_AddUnitCollision",
+        "GetYPos",
+        "GetXPos",
+        "GetCollisionType",
+        "UNITS_GetRoom",
+        "GetUnitSizeY",
+        "GetUnitSizeX",
+        "GetYPosFromDynamicPathUnit",
+        "GetXPosFromDynamicPathUnit"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "fd5d68da",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_RemoveUnitCollision",
+      "address": "00649560",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649560"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_RemoveUnitCollision",
+        "GetYPos",
+        "GetXPos",
+        "GetCollisionType",
+        "GetUnitSizeX",
+        "UNITS_GetRoom",
+        "RemoveCollision_Width",
+        "HasCollision",
+        "GetUnitSizeY",
+        "RemoveCollision_Vector",
+        "RemoveCollision_Type"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2PlayerAnimMode",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "dcdbd1e3",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bForce",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_CalculateMissilePath",
+      "address": "00649760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649760"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_CalculateMissilePath",
+        "PATH_BuildDirectPathToTarget",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGPATH_BuildCircularPathPoints",
+        "DRLGPATH_BuildRandomizedPathPoints"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "3c41e3c2",
+      "paramStorage": [
+        [
+          "pDynamicPath",
+          "EAX:4"
+        ],
         [
           "pUnit",
           "ECX:4"
@@ -866,156 +2671,85 @@
       ]
     },
     {
-      "name": "PATH_AdvanceUnitAlongPath",
-      "address": "00650840",
+      "name": "PATH_ResolveTargetPosition",
+      "address": "006498a0",
       "lines": [
         {
           "line": 1,
-          "address": "00650840"
+          "address": "006498a0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "PATH_AdvanceUnitAlongPath",
-        "PATH_CheckIfTargetReached",
-        "PATH_UpdateVelocityWithAcceleration",
-        "PATH_ComputeMovementStep",
-        "DRLGPATH_SetPathPosition",
+        "PATH_ResolveTargetPosition",
+        "GetXPos",
+        "GetYPos",
+        "DRLGPATH_ApplyMissileOffset",
+        "IsDoor",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "CheckIfObjectOrientationIs1"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PathTypeArg",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "fdc1e404",
+      "paramStorage": [
+        [
+          "pPathTypeArg",
+          "EBX:4"
+        ],
+        [
+          "nDistMax",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_CalculatePath",
+      "address": "00649970",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649970"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_CanMonsterPathInArea",
+        "PATH_CalculatePath",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PATH_CalculateMissilePath",
+        "GetXPosFromDynamicPathUnit",
+        "GetYPosFromDynamicPathUnit",
+        "PATH_ResolveTargetPosition",
+        "DRLGROOM_FindBetterNearbyRoom",
+        "PATH_RemoveUnitCollision",
+        "GetUnitSizeX",
+        "CheckCollision_BlockPlayer_Type",
+        "PATH_FindAlternateAroundObstacle",
+        "PATH_AddUnitCollision",
         "DRLGPATH_AdvanceAlongPathPoints",
-        "PATH_ResetPathState"
+        "PATH_CheckPathPointsInRoom"
       ],
       "usedTypes": [
-        "D2CoordStrc",
         "D2DynamicPathStrc",
+        "D2PathTypeArg",
         "D2UnitStrc",
-        "uint32_t"
-      ],
-      "dh": "8fa50684",
-      "paramStorage": [
-        [
-          "pUnit",
-          "Stack[0x4]:4"
-        ],
-        [
-          "pExternalPath",
-          "Stack[0x8]:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_MoveUnitToPosition",
-      "address": "00650910",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00650910"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_MoveUnitToPosition",
-        "UpdateCollision_Type",
-        "RemoveCollision_Type",
-        "RemoveCollision_Width",
-        "UpdateGetCollision_Width",
-        "DRLGPATH_SetPathPosition",
-        "DRLGROOM_FindBetterNearbyRoom",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "PATH_ResetPathState"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2RoomStrc",
-        "eCollisionFlags",
         "int32_t",
         "uint16_t",
         "uint32_t"
       ],
-      "dh": "c7205e71",
-      "paramStorage": [
-        [
-          "pRoom",
-          "Stack[0x4]:4"
-        ],
-        [
-          "nTargetPos",
-          "Stack[0x8]:4"
-        ],
-        [
-          "pPath",
-          "EAX:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_MoveObjectToPosition",
-      "address": "00650aa0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00650aa0"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_MoveObjectToPosition",
-        "UpdateCollision_Type",
-        "RemoveCollision_Type",
-        "RemoveCollision_Width",
-        "UpdateCollision_Width",
-        "DRLGPATH_SetPathPosition",
-        "DRLGROOM_FindBetterNearbyRoom",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit",
-        "PATH_ResetPathState"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2RoomStrc",
-        "int32_t",
-        "uint16_t",
-        "uint32_t"
-      ],
-      "dh": "6b2ce7ef",
-      "paramStorage": [
-        [
-          "pRoom",
-          "Stack[0x4]:4"
-        ],
-        [
-          "nTargetPos",
-          "Stack[0x8]:4"
-        ],
-        [
-          "pPath",
-          "EAX:4"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_GetCollisionMaskAt",
-      "address": "00650be0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00650be0"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_GetCollisionMaskAt",
-        "PATH_MoveUnitToPosition"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2RoomStrc",
-        "D2UnitStrc",
-        "uint16_t"
-      ],
-      "dh": "f9bfd313",
+      "dh": "1f84f4ce",
       "paramStorage": [
         [
           "pDynamicPath",
@@ -1026,184 +2760,269 @@
           "Stack[0x8]:4"
         ],
         [
-          "pRoom",
+          "bIgnoreAreaCheck",
           "Stack[0xc]:4"
-        ],
-        [
-          "wPosX",
-          "Stack[0x10]:2"
-        ],
-        [
-          "wPosY",
-          "Stack[0x14]:2"
         ]
       ]
     },
     {
-      "name": "PATH_GetCollisionTypeAt",
-      "address": "00650c20",
+      "name": "PATH_UpdateCollisionWidth",
+      "address": "00649ca0",
       "lines": [
         {
           "line": 1,
-          "address": "00650c20"
+          "address": "00649ca0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "PATH_GetCollisionTypeAt",
-        "PATH_MoveObjectToPosition"
+        "PATH_UpdateCollisionWidth",
+        "UNITS_GetRoom",
+        "PATH_RemoveUnitCollision",
+        "GetInteractSize",
+        "PATH_AddUnitCollision"
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
         "D2RoomStrc",
         "D2UnitStrc",
-        "int32_t"
+        "eD2CollisionShapeType"
       ],
-      "dh": "ec296f7c",
+      "dh": "f5e2f174",
       "paramStorage": [
         [
-          "pDynamicPath",
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "AllocDynamicPath",
+      "address": "00649d00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649d00"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "AllocDynamicPath",
+        "AllocServerMemory",
+        "memset",
+        "GetUnitSizeX",
+        "GetInteractSize",
+        "PATH_SetPathType",
+        "TXT_MonStats_GetBaseId",
+        "PATH_GetMoveTestCollisionMaskFromMonStats",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "PATH_AddUnitCollision",
+        "DRLGROOM_AddUnitToRoom",
+        "DRLG_MapWorldToScreenCoords"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2PoolManagerStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "eD2UnitType",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "1235dd70",
+      "paramStorage": [
+        [
+          "pMemory",
           "Stack[0x4]:4"
         ],
         [
-          "dwUnused",
+          "pRoom",
           "Stack[0x8]:4"
         ],
         [
-          "pRoom",
+          "nX",
           "Stack[0xc]:4"
         ],
         [
-          "wPosX",
+          "nY",
           "Stack[0x10]:4"
         ],
         [
-          "wPosY",
+          "pUnit",
           "Stack[0x14]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x18]:4"
         ]
       ]
     },
     {
-      "name": "PATH_MoveUnitToRoomPosition",
-      "address": "00650c60",
+      "name": "PATH_SetDirectionToTarget",
+      "address": "00649ef0",
       "lines": [
         {
           "line": 1,
-          "address": "00650c60"
+          "address": "00649ef0"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "PATH_MoveUnitToRoomPosition",
-        "PATH_MoveUnitToPosition"
+        "PATH_SetDirectionToTarget",
+        "PATH_ComputeDirectionFromPreciseCoords",
+        "PATH_SetDirection"
       ],
       "usedTypes": [
         "D2DynamicPathStrc",
-        "D2RoomStrc",
-        "D2UnitStrc",
-        "uint16_t"
-      ],
-      "dh": "f62de938",
-      "paramStorage": [
-        [
-          "pDynamicPath",
-          "Stack[0x4]:4"
-        ],
-        [
-          "dwUnused",
-          "Stack[0x8]:4"
-        ],
-        [
-          "pRoom",
-          "Stack[0xc]:4"
-        ],
-        [
-          "wPosX",
-          "Stack[0x10]:2"
-        ],
-        [
-          "wPosY",
-          "Stack[0x14]:2"
-        ]
-      ]
-    },
-    {
-      "name": "PATH_TestLineOfSight",
-      "address": "00650ca0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "00650ca0"
-        }
-      ],
-      "namespace": "D2Common::PATH::Path",
-      "calledFunctions": [
-        "PATH_TestLineOfSight",
-        "UpdateGetCollision_Type",
-        "DRLGPATH_SetPathPosition",
-        "DRLGROOM_FindBetterNearbyRoom",
-        "PATH_ResetPathState",
-        "GetInstructionPointer",
-        "ERROR_UnrecoverableInternalError_Halt",
-        "exit"
-      ],
-      "usedTypes": [
-        "D2DynamicPathStrc",
-        "D2RoomStrc",
         "int32_t",
-        "uint16_t"
+        "uint32_t",
+        "uint8_t"
       ],
-      "dh": "aaa61c4f",
+      "dh": "a8512889",
       "paramStorage": [
         [
           "pDynamicPath",
           "Stack[0x4]:4"
-        ],
-        [
-          "pbCollisionType",
-          "Stack[0x8]:4"
-        ],
-        [
-          "pRoom",
-          "Stack[0xc]:4"
         ],
         [
           "nTargetX",
-          "Stack[0x10]:4"
+          "Stack[0x8]:4"
         ],
         [
           "nTargetY",
-          "Stack[0x14]:4"
+          "Stack[0xc]:4"
+        ],
+        [
+          "bImmediate",
+          "Stack[0x10]:4"
         ]
       ]
     },
     {
-      "name": "IsAllyOf",
-      "address": "00650d70",
+      "name": "PATH_RemoveCollision",
+      "address": "00649f50",
       "lines": [
         {
           "line": 1,
-          "address": "00650d70"
+          "address": "00649f50"
         }
       ],
-      "namespace": "D2Common::PATH::Path",
+      "namespace": "D2Common::PATH::DynamicPath",
       "calledFunctions": [
-        "IsAllyOf",
-        "STATSEX_GetAlignment"
+        "PATH_RemoveCollision",
+        "PATH_RemoveUnitCollision"
       ],
       "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "b2e22c13",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_SetCorpseCollision",
+      "address": "00649f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649f70"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_SetCorpseCollision",
+        "PATH_RemoveUnitCollision",
+        "PATH_ChangeCollisionType",
+        "PATH_AddUnitCollision",
+        "PATH_SnapPositionToTile",
+        "AddCollision_Vector"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
         "D2UnitStrc",
         "int32_t"
       ],
-      "dh": "1c835394",
+      "dh": "d9035af7",
       "paramStorage": [
         [
           "pUnit",
           "Stack[0x4]:4"
         ],
         [
-          "pRosterUnit",
+          "bServer",
           "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PATH_RestoreMonsterCollision",
+      "address": "00649ff0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00649ff0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "PATH_RestoreMonsterCollision",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetUnitSizeX",
+        "GetInteractSize",
+        "TXT_MonStats_GetBaseId",
+        "UNITS_GetRoom",
+        "PATH_ChangeCollisionType",
+        "PATH_RemoveUnitCollision",
+        "PATH_AddUnitCollision"
+      ],
+      "usedTypes": [
+        "D2DynamicPathStrc",
+        "D2RoomStrc",
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "e13969c8",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bSkip",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "thunk_PATH_AddUnitCollision",
+      "address": "0064a0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0064a0e0"
+        }
+      ],
+      "namespace": "D2Common::PATH::DynamicPath",
+      "calledFunctions": [
+        "thunk_PATH_AddUnitCollision",
+        "PATH_AddUnitCollision"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "00f84e64",
+      "paramStorage": [
+        [
+          "pUnit",
+          "Stack[0x4]:4"
         ]
       ]
     }

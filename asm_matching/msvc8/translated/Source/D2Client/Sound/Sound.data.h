@@ -16,6 +16,5 @@
 // Forward declarations
 struct D2SoundChannelNodeStrc;
 
-extern D2SoundChannelNodeStrc * gpActiveSoundChannelsHead;
 extern int pAudioDeviceContext;
 extern int32_t int32_t_007c8c98;

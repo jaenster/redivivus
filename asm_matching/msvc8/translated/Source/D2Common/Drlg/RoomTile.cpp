@@ -14,6 +14,32 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
 #include "Source/D2Common/Drlg/Preset.data.h"
+#include "Source/D2Client/Game/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgOrthStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgTileGridStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgVertexStrc.h"
+#include "Source/D2Common/Drlg/DrlgAnim.h"
+#include "Source/D2Common/Drlg/DrlgLogic.h"
+#include "Source/D2Common/Drlg/DrlgVer.h"
+#include "Source/D2Common/Drlg/Maze.h"
+#include "Source/D2Common/Drlg/OutPlace.h"
+#include "Source/D2Common/Drlg/OutRoom.h"
+#include "Source/D2Common/Drlg/Outdoors.h"
+#include "Source/D2Common/Drlg/Path.h"
+#include "Source/D2Common/Drlg/TileSub.h"
+#include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Common/Seed.h"
+#include "Source/D2Common/Skills/Skills.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/Drlg/Drlg.data.h"
+#include "Source/D2Common/Drlg/OutPlace.data.h"
+#include "Source/D2Common/Skills/Skills.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -37,6 +63,128 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgTileLinkStrc) == 0xc, "D2_NEW
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgTileGridStrc) == 0x2c, "D2_NEW_AT(D2DrlgTileGridStrc): the 32-bit layout must be the 0x2c bytes 1.14d allocates");
 
+
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef RECON_FPTD_fAutoMap
+#define RECON_FPTD_fAutoMap
+typedef void (__stdcall *fAutoMap)(D2RoomStrc * pDrlgRoomEx);
+#endif
+
+#ifndef RECON_FPTD_fTownAutoMap
+#define RECON_FPTD_fTownAutoMap
+typedef void (__stdcall *fTownAutoMap)(eD2LevelId eD2LevelId, int FileIndex, int nCenterX, int nCenterY);
+#endif
+
+#ifndef RECON_FPTD_fpLevelDataFn1
+#define RECON_FPTD_fpLevelDataFn1
+typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknown, int nIndexMax);
+#endif
+
+#ifndef RECON_FPTD_fpLevelDataFn2
+#define RECON_FPTD_fpLevelDataFn2
+typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
+#endif
+
+
+namespace D2Common { namespace Drlg {
+
+// Propagates tile animation data from one room's tile list to another. Copies animation frame data from the source room's tiles to the destination room's tiles. From DrlgAnim.cpp.
+void __fastcall DRLGANIM_PropagateAnimationData(D2RoomExStrc * pRoomExSrc, D2RoomExStrc * pRoomExDst) {
+    D2DrlgAnimTileGridStrc* pDVar1;
+    int i;
+    D2DrlgTileGridStrc* pRoomTiles;
+    if (!pRoomExDst) {
+      return;
+    }
+
+    int nCurrentFrame = 0;
+    if (pRoomExSrc) {
+      for (i = 0; i < pRoomExSrc->nDrlgRoomsExNearCount; i++) {
+        if (pRoomExSrc->ppDrlgRoomsExNear[i]->pRoomTiles && pRoomExSrc->ppDrlgRoomsExNear[i]->pRoomTiles->pAnimTiles) {
+          nCurrentFrame = pRoomExSrc->ppDrlgRoomsExNear[i]->pRoomTiles->pAnimTiles->nCurrentFrame;
+          break;
+        }
+      }
+    }
+
+    for (i = 0; i < pRoomExDst->nDrlgRoomsExNearCount; i++) {
+      pRoomTiles = pRoomExDst->ppDrlgRoomsExNear[i]->pRoomTiles;
+      if (pRoomTiles) {
+        for (pDVar1 = pRoomTiles->pAnimTiles; pDVar1; pDVar1 = pDVar1->pNext) {
+          pDVar1->nCurrentFrame = nCurrentFrame;
+        }
+      }
+    }
+}
+
+// Looks up tile library entry by type/index/subindex, randomly selects variant.
+// @blizzard FindHTile
+D2TileLibraryEntryStrc * __fastcall DRLG_FindHTile(D2RoomExStrc * pRoomEx, int nTileType, uint32_t nGridFlags) {
+    int nRarityEntry;
+    uint8_t nMainIndex;
+    uint32_t nRaritySum;
+    uint32_t nRandom;
+    D2TileLibraryEntryStrc* aTileResults[40];
+    if (nGridFlags) {
+      nMainIndex = (uint8_t)(nGridFlags >> 0x14) & 0x3f;
+      nRaritySum = nGridFlags >> 8;
+    } else {
+      nMainIndex = 0;
+      nRaritySum = 0;
+    }
+
+    uint32_t nTileMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_LookupTilesInAllProjects(pRoomEx->apTiles, nTileType, (uint32_t)nMainIndex, (uint8_t)nRaritySum, aTileResults, 0x28);
+    if (!nTileMatchCount) {
+      nTileMatchCount = D2CMP::DUNGEON::Dungeon::TILEPROJECT_LookupTilesInAllProjects(pRoomEx->apTiles, 10, 0, 0, aTileResults, 0x28);
+      if (!nTileMatchCount) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x73);
+        exit(-1);
+      }
+
+      return aTileResults[0];
+    }
+
+    nRaritySum = 0;
+    if (nTileMatchCount > 0) {
+      nRandom = 0;
+      do {
+        if (!aTileResults[nRandom]) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7c);
+          exit(-1);
+        }
+
+        nRarityEntry = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetAnimatedTileDataPtr(aTileResults[nRandom]);
+        nRandom++;
+        nRaritySum += nRarityEntry;
+      } while (nRandom < nTileMatchCount);
+    }
+
+    nRandom = D2_SeedRollLimited(&pRoomEx->sSeed, nRaritySum);
+    int nSelectedIndex = 0;
+    nRarityEntry = nRandom + 1;
+    if (nRaritySum) {
+      int nEntryRarity;
+      for (; nTileMatchCount > 1 && nRarityEntry > 0; nRarityEntry -= nEntryRarity) {
+        nEntryRarity = D2CMP::DUNGEON::Dungeon::TILEPROJECT_GetAnimatedTileDataPtr(aTileResults[nSelectedIndex]);
+        nSelectedIndex++;
+      }
+
+      if (nSelectedIndex) {
+        nSelectedIndex--;
+      }
+    }
+
+    return aTileResults[nSelectedIndex];
+}
+
+}} // namespace D2Common::Drlg
 
 namespace D2Common { namespace Drlg { namespace RoomTile {
 
@@ -1222,6 +1370,445 @@ void __fastcall DRLGROOMTILE_FreeRoomTilesAll(D2RoomExStrc * pRoomEx) {
     pRoomEx->pRoomTiles = 0;
 }
 
+}}} // namespace D2Common::Drlg::RoomTile
+
+namespace D2Common { namespace Drlg {
+
+void __fastcall FreeRoomEx(D2RoomExStrc * pRoomEx, BOOL bServerSide) {
+    D2DrlgRoomExRoomTileNodeStrc* pAnimTileGrid;
+    D2DrlgStrc* pDrlg = pRoomEx->pLevel->pDrlg;
+    if (!bServerSide && pRoomEx->pRoom) {
+      DUNGEON::Dungeon::DRLGROOM_RemoveRoomFromAct(pDrlg->pAct, pRoomEx->pRoom);
+    }
+
+    pRoomEx->pRoom = 0;
+    DrlgLogic::FreeDrlgCoordList(pRoomEx);
+    if (!(pRoomEx->eRoomExFlags & 0x100000U)) {
+      return;
+    }
+
+    pRoomEx->eRoomExFlags ^= 0x100000;
+    pDrlg->nRoomDataFreeGeneration++;
+    RoomTile::DRLGROOMTILE_FreeRoomTilesAll(pRoomEx);
+    switch (pRoomEx->nPresetType) {
+      case 1:
+        {
+          OutRoom::DRLGOUTROOM_FreeOutRoomEx(pRoomEx);
+          break;
+        }
+      case 2:
+        {
+          Preset::DRLGPRESET_FreePresetRoomGridsFromRoomEx(pRoomEx);
+          break;
+        }
+    }
+
+    for (pAnimTileGrid = pRoomEx->pRoomTileNodes; pAnimTileGrid; pAnimTileGrid = pAnimTileGrid->pRoomTileNext) {
+      pAnimTileGrid->pTileListClearedOnSelect = 0;
+      pAnimTileGrid->pTileListSetOnSelect = 0;
+    }
+
+    if (!bServerSide) {
+      return;
+    }
+
+    pRoomEx->eRoomExFlags |= 0x200000;
+}
+
+// Loads DT1 tile files from LvlTypes.txt based on nDT1Mask, plus Blank/InvisWal/Warp.dt1.
+void __fastcall DRLGROOMEX_InitTileData(D2RoomExStrc * pRoomEx) {
+    uint32_t nMaskBitIndex;
+    char pathBuf[260];
+    D2LvlTypesTxt* pLvlTypesLine = DATATBLS::LvlTbls::TXT_LvlTypes_GetLine(pRoomEx->pLevel->nLevelType);
+    uint32_t nDT1Mask = pRoomEx->nDT1Mask;
+    for (nMaskBitIndex = 0; nDT1Mask && nMaskBitIndex < 0x20; nMaskBitIndex++) {
+      if (nDT1Mask & 1) {
+        D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pRoomEx->apTiles, pLvlTypesLine->File[nMaskBitIndex]);
+      }
+
+      nDT1Mask >>= 1;
+    }
+
+    pathBuf[0] = '\0';
+    memset(pathBuf + 1, 0, 0x103);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pathBuf, "%s\\Tiles\\Act1\\Outdoors\\Blank.dt1", "DATA\\GLOBAL");
+    void** pTileProject = pRoomEx->apTiles;
+    D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pTileProject, pathBuf);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pathBuf, "%s\\Tiles\\Act1\\Barracks\\InvisWal.dt1", "DATA\\GLOBAL");
+    D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pTileProject, pathBuf);
+    /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pathBuf, "%s\\Tiles\\Act1\\Barracks\\Warp.dt1", "DATA\\GLOBAL");
+    D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pTileProject, pathBuf);
+    pRoomEx->eRoomExFlags |= 0x1000000;
+}
+
+// Gets secondary floor grid flags at the given Y coordinate. Checks if the misc grid's sub-grid flag is set before reading from the embedded coords grid at 0xF4.
+static int __stdcall DRLGOUTDOOR_GetSecondaryFloorGridFlags(D2LvlSubTxt * pLvlSub, int32_t nGridY, int32_t nGridX) {
+    if (pLvlSub->pDrlgFile->nFloorLayers) {
+      int nFlags;
+      nFlags = DrlgGrid::GetGridFlags(&pLvlSub->pFloorGrid, nGridX, nGridY);
+      return nFlags;
+    }
+
+    return 0;
+}
+
+// Paste preset units from a LvlSub definition into the active outdoor room. Converts bounds to world coordinates, then for each preset check if it falls inside the sub-rect and spawn a new preset unit offset into the room’s local space.
+static void __stdcall DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(int32_t roomX, int32_t roomY, D2DrlgWallLayerGridsStrc * pRoomCtx, D2PoolManagerStrc * pMemory, D2LvlSubTxt * pLvlSub, int * pRect) {
+    D2PresetUnitStrc* pCurrentPreset;
+    int presetY1;
+    int rectX0 = *pRect;
+    int rectY0 = pRect[1];
+    int rectX1 = pRect[2];
+    int rectY1 = pRect[3];
+    int worldYBase = roomX;
+    int worldXBase = roomY;
+    Transform::CoordsRoomToWorld(&worldYBase, &worldXBase);
+    Transform::CoordsRoomToWorld(&rectX0, &rectY0);
+    Transform::CoordsRoomToWorld(&rectX1, &rectY1);
+    int presetY0 = rectY0;
+    int presetX0 = rectX0;
+    for (pCurrentPreset = pLvlSub->pDrlgFile->pPresetUnit; pCurrentPreset; pCurrentPreset = pCurrentPreset->pPresetUnitNext) {
+      int presetX1;
+      presetX1 = pCurrentPreset->nPosX;
+      if (presetX1 > presetX0) {
+        presetY1 = pCurrentPreset->nPosY;
+        if (presetY1 > presetY0 && presetX1 < rectX1 + presetX0 && presetY1 < rectY1 + presetY0) {
+          DrlgRoom::AllocPresetUnit(pRoomCtx->pRoomEx, pMemory, pCurrentPreset->eType, pCurrentPreset->nClassId, pCurrentPreset->nMode, presetX1 - presetX0 + worldYBase, presetY1 - presetY0 + worldXBase);
+          presetX0 = rectX0;
+          presetY0 = rectY0;
+        }
+      }
+    }
+}
+
+// Applies a LvlSub DS1 patch to the outdoor room: copies floor/wall/shadow flags into the room’s grids, grows the room tile array for flagged shadow tiles, and spawns shadow tiles plus preset units from the sub file.
+void __stdcall DRLGOUTDOOR_ApplyLvlSubTileData(D2PoolManagerStrc * pMemory, int32_t baseX, int32_t baseY, D2DrlgWallLayerGridsStrc * pRoomCtx, int * pRect, D2LvlSubTxt * pSubTxt, int32_t rectOffsetY) {
+    uint32_t uGridFlags;
+    int nXDelta;
+    int nFlag;
+    int nSubY;
+    D2DrlgGridStrc* pDrlgGrid_00;
+    int wallLayersRemaining;
+    int gridCol;
+    int32_t gridRow;
+    D2DrlgGridStrc* pDrlgGrid;
+    D2DrlgWallLayerGridsStrc* pWallCtx;
+    int nSubXBase = *pRect + rectOffsetY;
+    int nWallLayers = pSubTxt->pDrlgFile->nWallLayers;
+    D2RoomExStrc* pRoomEx = pRoomCtx->pRoomEx;
+    D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
+    int nRectY1 = pRect[1];
+    int shadowTileCount = 0;
+    for (rectOffsetY = 0; rectOffsetY < pRect[3]; rectOffsetY++) {
+      for (nSubY = 0; nSubY < pRect[2]; nSubY++) {
+        uGridFlags = DrlgGrid::GetGridFlags(&pSubTxt->pShadowGrid, nSubY + nSubXBase, rectOffsetY + nRectY1);
+        if (uGridFlags & 0x8000000) {
+          shadowTileCount++;
+        }
+      }
+    }
+
+    RoomTile::DRLGROOMTILE_GrowTileDataArray(pMemory, pTileGrid, shadowTileCount);
+    rectOffsetY = 0;
+    if (pRect[3] > 0) {
+      int nSubRow;
+      gridRow = baseY;
+      do {
+        gridCol = 0;
+        if (pRect[2] > 0) {
+          nSubRow = nRectY1 - baseY + gridRow;
+          nXDelta = baseX - nSubXBase;
+          nSubY = nSubXBase;
+          do {
+            if (pSubTxt->pDrlgFile->nFloorLayers) {
+              uGridFlags = DrlgGrid::GetGridFlags(&pSubTxt->pFloorGrid, nSubY, nSubRow);
+            } else {
+              uGridFlags = 0;
+            }
+            if (uGridFlags & 2) {
+              DrlgGrid::AlterGridFlag(pRoomCtx->pFloorGrid, nXDelta + nSubY, gridRow, uGridFlags | 0x80, 3);
+            }
+            if (nWallLayers > 0) {
+              pDrlgGrid_00 = pSubTxt->pTileTypeGrid;
+              pWallCtx = pRoomCtx;
+              wallLayersRemaining = nWallLayers;
+              do {
+                uGridFlags = DrlgGrid::GetGridFlags(pDrlgGrid_00 + 4, nSubY, nSubRow);
+                if (uGridFlags & 1 && pWallCtx->apWallGrids[0]) {
+                  DrlgGrid::AlterGridFlag(pWallCtx->apWallGrids[0], nXDelta + nSubY, gridRow, uGridFlags, 3);
+                }
+
+                nFlag = DrlgGrid::GetGridFlags(pDrlgGrid_00, nSubY, nSubRow);
+                if (nFlag) {
+                  pDrlgGrid = pWallCtx->apTileTypeGrids[0];
+                  if (pDrlgGrid) {
+                    DrlgGrid::AlterGridFlag(pDrlgGrid, nXDelta + nSubY, gridRow, nFlag, 3);
+                  }
+                }
+
+                pDrlgGrid_00++;
+                wallLayersRemaining--;
+                pWallCtx = (D2DrlgWallLayerGridsStrc*)pWallCtx->apTileTypeGrids;
+              } while (wallLayersRemaining);
+            }
+
+            uGridFlags = DrlgGrid::GetGridFlags(&pSubTxt->pShadowGrid, nSubY, nSubRow);
+            if (uGridFlags & 0x8000000) {
+              RoomTile::DRLGROOMTILE_CreateShadowTileFromGrid(pRoomEx, pRoomEx->sCoords.WorldPosition.x + gridCol + baseX, pRoomEx->sCoords.WorldPosition.y + rectOffsetY + baseY, uGridFlags);
+            }
+
+            gridCol++;
+            nSubY++;
+          } while (gridCol < pRect[2]);
+        }
+
+        gridRow++;
+        rectOffsetY++;
+      } while (rectOffsetY < pRect[3]);
+    }
+
+    DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(baseX, baseY, pRoomCtx, pMemory, pSubTxt, pRect);
+}
+
+// Checks whether a DS1 sub-tile strip can be placed at a given offset in an outdoor level room. For each cell in the strip, compares tile-type flags from the sub-tile grid against those of the destination room grids; if floor or wall special bits differ the function returns 0 (no match), otherwise 1. Called during outdoor level generation to validate sub-tile placement before objects are applied.
+static BOOL __stdcall DRLGOUTDOOR_MatchSubTileTypes(int32_t nRoomX, int32_t nRoomY, D2DrlgWallLayerGridsStrc * pDrlgUnkn, D2LvlSubTxt * pLvlSubTxt, int * pnGroupEntry) {
+    int nSubTileType;
+    int nRoomTileType;
+    uint32_t uSubFlags;
+    uint32_t uRoomFlags;
+    uint32_t floorFlag;
+    int row;
+    int nY;
+    for (row = 0; row < pnGroupEntry[3]; row++) {
+      int nCol;
+      nCol = 0;
+      if (pnGroupEntry[2] > 0) {
+        nY = row + nRoomY;
+        do {
+          nSubTileType = DrlgGrid::GetGridFlags(pLvlSubTxt->pTileTypeGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
+          nRoomTileType = DrlgGrid::GetGridFlags(pDrlgUnkn->apTileTypeGrids[0], nRoomX + nCol, nY);
+          if (nSubTileType != nRoomTileType) {
+            return 0;
+          }
+          if (pLvlSubTxt->pDrlgFile->nFloorLayers) {
+            floorFlag = DrlgGrid::GetGridFlags(&pLvlSubTxt->pFloorGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
+          } else {
+            floorFlag = 0;
+          }
+          if (floorFlag & 2) {
+            uSubFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->pFloorGrid, nCol + nRoomX, nY);
+            if (!(uSubFlags & 2)) {
+              return 0;
+            }
+            if ((uSubFlags ^ floorFlag) & 0x3f0ff00) {
+              return 0;
+            }
+          }
+          if (pLvlSubTxt->pDrlgFile->nWallLayers) {
+            uSubFlags = DrlgGrid::GetGridFlags(pLvlSubTxt->pWallGrid, *pnGroupEntry + nCol, pnGroupEntry[1] + row);
+          } else {
+            uSubFlags = 0;
+          }
+          if (uSubFlags & 1) {
+            uRoomFlags = DrlgGrid::GetGridFlags(pDrlgUnkn->apWallGrids[0], nCol + nRoomX, nY);
+            if (!(uRoomFlags & 1)) {
+              return 0;
+            }
+            if ((uRoomFlags ^ uSubFlags) & 0x3f0ff00) {
+              return 0;
+            }
+          }
+
+          nCol++;
+        } while (nCol < pnGroupEntry[2]);
+      }
+    }
+
+    return 1;
+}
+
+// Iterates all substitution groups in a DRLG level-sub file and attempts to place each group's tile pattern on the outdoor room grid. Act 1: sweeps interior grid positions, applies overlap-checked tiles directly. Act 2: matches tile types and applies a randomly selected variant (using pSubTxt probability and the room seed) at each matching grid cell. Writes tile data via DRLGOUTDOOR_ApplyLvlSubTileData.
+void __stdcall CheckAll(D2DrlgWallLayerGridsStrc * pWallLayerGrids, D2LvlSubTxt * pSubTxt) {
+    D2SeedStrc DVar2;
+    BOOL bOverlapOk;
+    int nMaxX;
+    uint32_t nVariantIdx;
+    int nCellX;
+    int* pGroupEntry;
+    int32_t nColIter;
+    int nRowIter;
+    D2RoomExStrc* pDVar1 = pWallLayerGrids->pRoomEx;
+    D2PoolManagerStrc* pMemory = pDVar1->pLevel->pDrlg->pMemoryPool;
+    D2DrlgFileStrc* pFile = pSubTxt->pDrlgFile;
+    int local_28_groupOffset = 0;
+    if (pFile->nSubstGroups <= 0) {
+      return;
+    }
+
+    do {
+      int nMaxY;
+      pGroupEntry = &pFile->pSubstGroups[local_28_groupOffset].tBox.nPosX;
+      nMaxX = pDVar1->sCoords.WorldSize.x - pGroupEntry[2] + 1;
+      nMaxY = pDVar1->sCoords.WorldSize.y - pGroupEntry[3] + 1;
+      if (nMaxX > 0 && nMaxY > 0) {
+        switch (pFile->nAct) {
+          case 1:
+            for (nRowIter = 1; nRowIter < nMaxY; nRowIter++) {
+              for (nCellX = 1; nCellX < nMaxX; nCellX++) {
+                bOverlapOk = Outdoors::DRLGOUTDOOR_CheckSubTileOverlap(nCellX, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt);
+                if (bOverlapOk) {
+                  DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nCellX, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt, 0);
+                }
+              }
+            }
+            break;
+          case 2:
+            for (nRowIter = 0; nRowIter < nMaxY; nRowIter++) {
+              for (nColIter = 0; nColIter < nMaxX; nColIter++) {
+                bOverlapOk = DRLGOUTDOOR_MatchSubTileTypes(nColIter, nRowIter, pWallLayerGrids, pSubTxt, pGroupEntry);
+                if (bOverlapOk) {
+                  DVar2 = D2_SEED_NEXT(pDVar1->sSeed);
+                  pDVar1->sSeed = DVar2;
+                  if (pSubTxt->Prob[pWallLayerGrids->nSubTypeIndex] < (int)(DVar2.nSeedLow % 100)) {
+                    nVariantIdx = pGroupEntry[5];
+                    nVariantIdx = D2_SeedRollLimited(&pDVar1->sSeed, nVariantIdx);
+                    DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nColIter, nRowIter, pWallLayerGrids, pGroupEntry, pSubTxt, (pGroupEntry[2] + 1) * (nVariantIdx + 1));
+                  }
+                }
+              }
+            }
+            break;
+        }
+      }
+
+      local_28_groupOffset++;
+    } while (local_28_groupOffset < pFile->nSubstGroups);
+}
+
+// DRLG outdoor preset placement - place multiple preset objects without overlap checking all positions
+void __stdcall DoNotCheckAll(D2DrlgWallLayerGridsStrc * pRoomCtx, D2LvlSubTxt * pSubTxt) {
+    uint32_t nMaxX;
+    int bOverlapOk;
+    BOOL BVar1;
+    int nPosY;
+    uint32_t nRandIdxB;
+    int nPosX;
+    uint32_t nTotalPositions;
+    int nShuffleGridY;
+    uint32_t nMaxXSaved;
+    int nTrialCount;
+    D2DrlgSubstGroupStrc* pSubstGroup;
+    uint32_t nTrialIter;
+    uint32_t nMaxY;
+    uint32_t nShuffleRem;
+    D2RoomExStrc* pRoomEx;
+    pRoomEx = pRoomCtx->pRoomEx;
+    D2PoolManagerStrc* pMemory;
+    pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
+    D2DrlgFileStrc* pDsOneFile;
+    pDsOneFile = pSubTxt->pDrlgFile;
+    if (!pSubTxt->pDrlgFile->nSubstGroups || pSubTxt->Max[pRoomCtx->nSubTypeIndex] <= 0) {
+      return;
+    }
+
+    int nMaxRemaining;
+    nMaxRemaining = pSubTxt->Max[pRoomCtx->nSubTypeIndex];
+    while (true) {
+      int aShuffledCoordinates[513];
+      nMaxX = pDsOneFile->nSubstGroups;
+      nMaxX = D2_SeedRollLimited(&pRoomEx->sSeed, nMaxX);
+      nMaxY = pRoomEx->sCoords.WorldSize.y - pDsOneFile->pSubstGroups[nMaxX].tBox.nHeight;
+      pSubstGroup = pDsOneFile->pSubstGroups + nMaxX;
+      nMaxX = pRoomEx->sCoords.WorldSize.x - pSubstGroup->tBox.nWidth;
+      if ((int)(nMaxX + 1) > 1 && (int)(nMaxY + 1) > 1) {
+        nTrialCount = pSubTxt->Trials[pRoomCtx->nSubTypeIndex];
+        if (nTrialCount == -1) {
+          nTotalPositions = nMaxY * nMaxX;
+          nTrialIter = nMaxX;
+          if (nTotalPositions) {
+            nPosX = 0;
+            if ((int)nTotalPositions > 0) {
+              do {
+                bOverlapOk = nPosX / (int)nTrialIter;
+                nPosY = nPosX % (int)nTrialIter;
+                nPosX++;
+                aShuffledCoordinates[nPosX * 2 - 2] = nPosY;
+                aShuffledCoordinates[nPosX * 2 - 1] = bOverlapOk;
+                nMaxY = nTotalPositions;
+              } while (nPosX < (int)nTotalPositions);
+
+              do {
+                nMaxX = D2_SeedRollLimited(&pRoomEx->sSeed, nTotalPositions);
+                nRandIdxB = D2_SeedRollLimited(&pRoomEx->sSeed, nTotalPositions);
+                nShuffleRem = nMaxY - 1;
+                nMaxY = nShuffleRem;
+                nPosX = aShuffledCoordinates[nMaxX * 2];
+                nShuffleGridY = aShuffledCoordinates[nMaxX * 2 + 1];
+                aShuffledCoordinates[nMaxX * 2] = aShuffledCoordinates[nRandIdxB * 2];
+                aShuffledCoordinates[nMaxX * 2 + 1] = aShuffledCoordinates[nRandIdxB * 2 + 1];
+                bOverlapOk = nShuffleGridY;
+                aShuffledCoordinates[nRandIdxB * 2] = nPosX;
+                aShuffledCoordinates[nRandIdxB * 2 + 1] = bOverlapOk;
+              } while (nShuffleRem);
+            }
+
+            nMaxY = 0;
+            if ((int)nTotalPositions > 0) {
+              do {
+                nTrialIter = aShuffledCoordinates[nMaxY * 2 + 1] + 1;
+                nPosX = aShuffledCoordinates[nMaxY * 2] + 1;
+                BVar1 = Outdoors::DRLGOUTDOOR_CheckSubTileOverlap(nPosX, nTrialIter, pRoomCtx, (int*)pSubstGroup, pSubTxt);
+                nMaxX = nTrialIter;
+                if (BVar1) {
+                  goto apply_subst_tiles;
+                }
+
+                nMaxY++;
+              } while ((int)nMaxY < (int)nTotalPositions);
+            }
+          }
+        } else {
+          nTrialIter = 0;
+          if (nTrialCount > 0) {
+            do {
+              nMaxXSaved = nMaxX;
+              nMaxX = D2_SeedRollLimited(&pRoomEx->sSeed, nMaxXSaved);
+              nPosX = nMaxX + 1;
+              nMaxX = D2_SeedRollLimited(&pRoomEx->sSeed, nMaxY);
+              BVar1 = Outdoors::DRLGOUTDOOR_CheckSubTileOverlap(nPosX, nMaxX + 1, pRoomCtx, (int*)pSubstGroup, pSubTxt);
+              nMaxX++;
+              if (BVar1) {
+                goto apply_subst_tiles;
+              }
+
+              nTrialIter++;
+              nMaxX = nMaxXSaved;
+            } while ((int)nTrialIter < nTrialCount);
+          }
+        }
+      }
+
+      goto next_placement;
+      apply_subst_tiles:
+      DRLGOUTDOOR_ApplyLvlSubTileData(pMemory, nPosX, nMaxX, pRoomCtx, (int*)pSubstGroup, pSubTxt, 0);
+      next_placement:
+      nMaxRemaining--;
+      if (!nMaxRemaining) {
+        return;
+      }
+    }
+}
+
+}} // namespace D2Common::Drlg
+
+namespace D2Common { namespace Drlg { namespace RoomTile {
+
 static void * keep_0066dc10 = (0 ? (DRLGROOMTILE_WorldToTileScreenPos(*(int * *)0, *(D2RoomExStrc * *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
 
 }}} // namespace D2Common::Drlg::RoomTile
+
+namespace D2Common { namespace Drlg {
+
+static void * keep_0066f350 = (0 ? (DRLGOUTDOOR_GetSecondaryFloorGridFlags(*(D2LvlSubTxt * *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+
+}} // namespace D2Common::Drlg

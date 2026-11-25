@@ -6,11 +6,79 @@
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2CMP/D2CMP.h"
+#include "Source/D2Client/Game/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/DataTbls/LvlTbls.h"
+#include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgOrthStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgTileGridStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgVertexStrc.h"
+#include "Source/D2Common/Drlg/DrlgAnim.h"
+#include "Source/D2Common/Drlg/DrlgGrid.h"
+#include "Source/D2Common/Drlg/DrlgLogic.h"
+#include "Source/D2Common/Drlg/DrlgRoom.h"
+#include "Source/D2Common/Drlg/DrlgVer.h"
+#include "Source/D2Common/Drlg/DrlgWarp.h"
+#include "Source/D2Common/Drlg/Maze.h"
+#include "Source/D2Common/Drlg/OutPlace.h"
+#include "Source/D2Common/Drlg/OutRoom.h"
+#include "Source/D2Common/Drlg/Path.h"
+#include "Source/D2Common/Drlg/RoomTile.h"
+#include "Source/D2Common/Drlg/TileSub.h"
+#include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Common/Seed.h"
+#include "Source/D2Common/Skills/Skills.h"
+#include "Source/D2Common/Drlg/Drlg.data.h"
+#include "Source/D2Common/Drlg/OutPlace.data.h"
+#include "Source/D2Common/Skills/Skills.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
 #define D2_ALLOC_POOL_AT(pPool, size, szFile, nLine) Fog::Memory::AllocServerMemory((pPool), (size), (szFile), (nLine), 0)
+#endif
+
+
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef D2_FREE_POOL_AT
+#define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
+#endif
+
+#ifndef D2_NEW_POOL_AT
+#define D2_NEW_POOL_AT(pPool, T, szFile, nLine) ((T*)D2_ALLOC_POOL_AT((pPool), sizeof(T), (szFile), (nLine)))
+#endif
+
+#ifndef RECON_FPTD_fAutoMap
+#define RECON_FPTD_fAutoMap
+typedef void (__stdcall *fAutoMap)(D2RoomStrc * pDrlgRoomEx);
+#endif
+
+#ifndef RECON_FPTD_fTownAutoMap
+#define RECON_FPTD_fTownAutoMap
+typedef void (__stdcall *fTownAutoMap)(eD2LevelId eD2LevelId, int FileIndex, int nCenterX, int nCenterY);
+#endif
+
+#ifndef RECON_FPTD_fpLevelDataFn1
+#define RECON_FPTD_fpLevelDataFn1
+typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknown, int nIndexMax);
+#endif
+
+#ifndef RECON_FPTD_fpLevelDataFn2
+#define RECON_FPTD_fpLevelDataFn2
+typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
 #endif
 
 
@@ -82,6 +150,92 @@ void __fastcall BuildJungle(D2DrlgLevelStrc * pLevel) {
       }
     }
 }
+
+}}} // namespace D2Common::Drlg::OutJung
+
+namespace D2Common { namespace Drlg {
+
+// Places border presets (Type A pattern) for Act 3 Kurast outdoor levels. Spawns north/south edge presets (0x25D-0x25E) with special portal variants, east/west walls (0x25F-0x260), and four corner presets (0x261-0x264). Called by BuildKurast.
+void __fastcall DRLGOUTJUNG_BuildKurastDocktownBorders(D2DrlgLevelStrc * pLevel) {
+    int nXIter;
+    int nYIter;
+    const int nX = pLevel->sCoordinatesAndSize.WorldSize.x / 8 - 1;
+    const int nY = pLevel->sCoordinatesAndSize.WorldSize.y / 8 - 1;
+    const int nEastEntranceX = nX / 2;
+    const int nPortalX = pLevel->pDrlg->bJungleInterlink ? 1 : nX - 1;
+
+    for (nXIter = 1; nXIter < nX; nXIter++) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nXIter, 0, nXIter == nPortalX ? 0x265U : 0x25dU, -1, 0);
+    }
+
+    for (nYIter = 1; nYIter < nX; nYIter = nYIter + 1 + (uint32_t)(nYIter == nEastEntranceX)) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nYIter, nY, nYIter == nEastEntranceX ? 0x266U : 0x25eU, -1, 0);
+    }
+
+    for (nYIter = 1; nYIter < nY; nYIter++) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nYIter, 0x25f, -1, 0);
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, nYIter, 0x260, -1, 0);
+    }
+
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, 0, 0x262, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, 0, 0x261, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, nY, 0x264, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, 0x263, -1, 0);
+}
+
+// Places border presets (Type B pattern) for Act 3 Kurast outdoor levels. Similar to Type A but with different preset IDs (0x26B-0x272) and swapped portal placement logic on the borders. Called by BuildKurast.
+void __fastcall DRLGOUTJUNG_BuildKurastUpperBorders(D2DrlgLevelStrc * pLevel) {
+    int nIter;
+    int nX = pLevel->sCoordinatesAndSize.WorldSize.x / 8 - 1;
+    int nY = pLevel->sCoordinatesAndSize.WorldSize.y / 8 - 1;
+    int nPortalX1 = pLevel->pDrlg->bJungleInterlink ? 1 : nX - 1;
+    int nPortalX2 = pLevel->pDrlg->bJungleInterlink ? nX - 1 : 1;
+    for (nIter = 1; nIter < nX; nIter++) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, 0, nIter == nPortalX2 ? 0x273U : 0x26bU, -1, 0);
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, nY, nIter == nPortalX1 ? 0x274U : 0x26cU, -1, 0);
+    }
+
+    for (nIter = 1; nIter < nY; nIter++) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nIter, 0x26d, -1, 0);
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, nIter, 0x26e, -1, 0);
+    }
+
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, 0, 0x270, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, 0, 0x26f, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, nY, 0x272, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, 0x271, -1, 0);
+}
+
+// Places border presets (Type C pattern) for Act 3 Kurast outdoor levels. Uses preset IDs 0x27C-0x283. The north edge has centered portal variants while the south edge uses offset-based variants. Called by BuildKurast.
+void __fastcall DRLGOUTJUNG_BuildKurastCausewayBorders(D2DrlgLevelStrc * pLevel) {
+    int nIter;
+    const int nX = pLevel->sCoordinatesAndSize.WorldSize.x / 8 - 1;
+    const int nY = pLevel->sCoordinatesAndSize.WorldSize.y / 8 - 1;
+    const int nPortalX = pLevel->pDrlg->bJungleInterlink ? nX - 1 : 1;
+    const int nEntranceX = nX / 2;
+
+    for (nIter = 1; nIter < nX; nIter = nIter + 1 + (uint32_t)(nIter == nEntranceX)) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, 0, nIter == nEntranceX ? 0x284U : 0x27cU, -1, 0);
+    }
+
+    for (nIter = 1; nIter < nX; nIter++) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nIter, nY, nIter == nPortalX ? 0x285U : 0x27dU, -1, 0);
+    }
+
+    for (nIter = 1; nIter < nY; nIter++) {
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nIter, 0x27e, -1, 0);
+      Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, nIter, 0x27f, -1, 0);
+    }
+
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, 0, 0x281, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, 0, 0x280, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 0, nY, 0x283, -1, 0);
+    Outdoors::SpawnOutdoorLevelPresetEx(pLevel, nX, nY, 0x282, -1, 0);
+}
+
+}} // namespace D2Common::Drlg
+
+namespace D2Common { namespace Drlg { namespace OutJung {
 
 // DRLG outdoor-jungle generator: scatters random level presets (preset ids nLevelPrestId1..nLevelPrestId2) across every cell of the level's DRLG grid. Allocates a temp (x,y) cell list from the server memory pool, Fisher-Yates shuffles it with the level seed, then for each cell rolls a random preset id in range and, if TestOutdoorLevelPreset passes, places it via SpawnOutdoorLevelPresetEx. Stops after a4 placements (if a4>0). Frees the temp buffer on exit. Side-effects: advances pLevel->sSeed, spawns DS1 presets into the level.
 // @sourcefile .\DRLG\OutJung.cpp

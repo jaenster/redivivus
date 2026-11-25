@@ -1,0 +1,422 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Direct3D/Src/d3dEngine.cpp",
+  "functions": [
+    {
+      "name": "RENDERER_D3D_CreateFontTextures",
+      "address": "006b72a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b72a0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_CreateFontTextures",
+        "RENDERER_D3D_CreateSystemMemoryTexture",
+        "memset",
+        "DIRECTD3D_LogError",
+        "RENDERER_D3D_CreateSurfaceWithTexture",
+        "RENDERER_D3D_CopySurfacePixels",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "COLORREF",
+        "DDSURFACEDESC",
+        "HBITMAP",
+        "HFONT",
+        "IDirect3DTexture2",
+        "IDirect3DTexture2 *",
+        "IDirectDrawSurface7",
+        "IDirectDrawSurface7 *",
+        "tagRECT"
+      ],
+      "dh": "ce2ba457"
+    },
+    {
+      "name": "Unreferenced_006b74f0",
+      "address": "006b74f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b74f0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "Unreferenced_006b74f0",
+        "DIRECTD3D_LogError",
+        "SetPalette"
+      ],
+      "dh": "4b511025",
+      "paramStorage": [
+        [
+          "pPalette",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_DrawGlyph",
+      "address": "006b7530",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7530"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_DrawGlyph"
+      ],
+      "dh": "21c519d4",
+      "paramStorage": [
+        [
+          "cGlyph",
+          "AL:1"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawString",
+      "address": "006b7630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7630"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawString",
+        "RENDERER_D3D_SetBlendMode",
+        "SetBlendMode",
+        "RENDERER_D3D_SetTextureFilterMode",
+        "RENDERER_D3D_DrawGlyph"
+      ],
+      "usedTypes": [
+        "va_list"
+      ],
+      "dh": "588c05dd",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ],
+        [
+          "szFormat",
+          "Stack[0x4]:4"
+        ],
+        [
+          "va",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_InitializeFontSystem",
+      "address": "006b76d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b76d0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_InitializeFontSystem",
+        "RENDERER_D3D_CreateFontTextures"
+      ],
+      "dh": "1fd5469d",
+      "paramStorage": [
+        [
+          "nBaseOffset",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_IsShadowBlendingEnabled",
+      "address": "006b77a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b77a0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_IsShadowBlendingEnabled"
+      ],
+      "dh": "a4113d79"
+    },
+    {
+      "name": "DrawSolidRectEx",
+      "address": "006b77b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b77b0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawSolidRectEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RENDERER_D3D_SetBlendMode",
+        "SetBlendMode",
+        "RENDERER_D3D_SetTextureFilterMode",
+        "PALETTE_GetColorByIndex"
+      ],
+      "usedTypes": [
+        "D2D3DVertexStrc",
+        "uint32_t"
+      ],
+      "dh": "f3074785",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawSolidRectAlpha",
+      "address": "006b7980",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7980"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawSolidRectAlpha",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RENDERER_D3D_SetBlendMode",
+        "SetBlendMode",
+        "RENDERER_D3D_SetTextureFilterMode",
+        "PALETTE_GetColorByIndex"
+      ],
+      "usedTypes": [
+        "D2D3DVertexStrc",
+        "uint32_t"
+      ],
+      "dh": "d22943e8",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
+    },
+    {
+      "name": "DrawLine",
+      "address": "006b7b30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7b30"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawLine",
+        "PALETTE_GetColorByIndex",
+        "RENDERER_D3D_SetBlendMode",
+        "SetBlendMode",
+        "RENDERER_D3D_SetTextureFilterMode"
+      ],
+      "usedTypes": [
+        "D2D3DVertexStrc",
+        "uint32_t"
+      ],
+      "dh": "0612296a",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
+    },
+    {
+      "name": "DrawRect",
+      "address": "006b7c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7c90"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawRect",
+        "DrawLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "RECT",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "8700ed69",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawRectEx",
+      "address": "006b7d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7d80"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawRectEx",
+        "DrawLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "RECT",
+        "uint32_t"
+      ],
+      "dh": "4ded1608",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawSolidRect",
+      "address": "006b7ed0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7ed0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawSolidRect",
+        "DrawSolidRectEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "RECT"
+      ],
+      "dh": "1998fab0",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "DL:1"
+        ]
+      ]
+    }
+  ]
+}

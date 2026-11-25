@@ -1,0 +1,183 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Direct3D/Src/d3dBlocks.cpp",
+  "functions": [
+    {
+      "name": "D3D_CreateSystemMemoryTexturesForTiles",
+      "address": "006bb5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb5e0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_CreateSystemMemoryTexturesForTiles",
+        "RENDERER_D3D_CreateSystemMemoryTexture",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "f7e2903c"
+    },
+    {
+      "name": "D3D_FreeSystemMemoryTexturesForTiles",
+      "address": "006bb640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb640"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_FreeSystemMemoryTexturesForTiles"
+      ],
+      "dh": "bb33b585"
+    },
+    {
+      "name": "D3D_DecompressRLESubtileToBuffer",
+      "address": "006bb6b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb6b0"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_DecompressRLESubtileToBuffer",
+        "memset"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "0b04d1e8",
+      "paramStorage": [
+        [
+          "pDest",
+          "EAX:4"
+        ],
+        [
+          "pSrc",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "D3D_RenderTileComponentsToPixelBuffer",
+      "address": "006bb720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb720"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_RenderTileComponentsToPixelBuffer",
+        "memset"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "uint16_t",
+        "uint8_t"
+      ],
+      "dh": "1b754952",
+      "paramStorage": [
+        [
+          "pTileEntry",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pwDstPixels",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nPitchPixels",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "D3D_RenderFloorTileToTexture",
+      "address": "006bb870",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bb870"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_RenderFloorTileToTexture",
+        "SPRITECACHE_AllocEntry",
+        "D3DFLOOR_EnsureAvailableNode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "DIRECTD3D_LogError",
+        "D3D_RenderTileComponentsToPixelBuffer",
+        "RENDERER_D3D_CopySurfacePixels",
+        "D3DFLOOR_PromoteNodeToMRU"
+      ],
+      "usedTypes": [
+        "D2TileLibraryEntryStrc",
+        "D3DFloorCacheNodeStrc",
+        "DDSURFACEDESC",
+        "IDirect3DTexture2",
+        "int32_t"
+      ],
+      "dh": "7c541948",
+      "paramStorage": [
+        [
+          "pTileLibraryEntry",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "D3D_RenderSubtileToTexture",
+      "address": "006bba00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006bba00"
+        }
+      ],
+      "namespace": "D2Direct3D::d3dFloorCache",
+      "calledFunctions": [
+        "D3D_RenderSubtileToTexture",
+        "D3DSUBTILE_PromoteNodeToMRU",
+        "D3D_DecompressRLESubtileToBuffer",
+        "D3DSUBTILE_EnsureAvailableNode",
+        "memset",
+        "DIRECTD3D_LogError",
+        "RENDERER_D3D_ConvertPalettedTo16Bit",
+        "RENDERER_D3D_CopySurfacePixels",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2GroundSubTileStrc",
+        "D3DSubtileCacheNodeStrc",
+        "DDSURFACEDESC",
+        "int32_t"
+      ],
+      "dh": "44f8dc65",
+      "paramStorage": [
+        [
+          "pSubTile",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

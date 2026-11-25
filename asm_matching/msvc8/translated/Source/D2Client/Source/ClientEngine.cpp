@@ -79,8 +79,8 @@
 #include "Source/D2Client/D2GfxMemoryStrc.h"
 #include "Source/D2Client/D2GfxSettingsStrc.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Draw/dLightMap.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Draw.h"
 #include "Source/D2Client/Game/Game.h"
@@ -251,11 +251,10 @@ void __stdcall DenOfEvilSpecific(D2RoomStrc * pRoom) {
         return;
       }
 
-      nRandCoord = D2_SeedRollLimited(&pPlayer->sSeed, sRoomCoords.dwXSize);
-      sSkillArg.nX = nRandCoord + sRoomCoords.dwXStart;
+      nSavedX = D2_SeedRollLimited(&pPlayer->sSeed, sRoomCoords.dwXSize) + sRoomCoords.dwXStart; // steer-ok: X is kept in a slot across the Y roll
       nRandCoord = D2_SeedRollLimited(&pPlayer->sSeed, sRoomCoords.dwYSize);
+      sSkillArg.nX = nSavedX;
       sSkillArg.nY = nRandCoord + sRoomCoords.dwYStart;
-      nSavedX = sSkillArg.nX;
       eCollision = D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, sSkillArg.nX, sSkillArg.nY, COLLIDE_WALL | COLLIDE_BLOCK_PLAYER);
       if (eCollision == COLLIDE_NONE) {
         UNIT::Missile::MakeMissile(&sSkillArg);

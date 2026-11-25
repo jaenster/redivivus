@@ -67,7 +67,7 @@
 #include "Source/D2Common/Drlg/Transform.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 #include "Source/D2Client/Engine/Gfx.h"
-#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/dLightMap.h"
 #include "Source/D2Client/Game/Game.h"
 #include "Source/D2Client/Engine/Cursor.h"
 

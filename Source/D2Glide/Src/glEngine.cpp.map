@@ -1,0 +1,262 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Glide/Src/glEngine.cpp",
+  "functions": [
+    {
+      "name": "DrawSolidRectEx",
+      "address": "0050bf50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050bf50"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawSolidRectEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RENDERER_GLIDE_SetColorCombine",
+        "RENDERER_GLIDE_SetAlphaBlendMode",
+        "RENDERER_GLIDE_ScalePaletteValue"
+      ],
+      "usedTypes": [
+        "D2GlideVertexStrc",
+        "GrColor_t",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "892095b5",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawSolidRectAlpha",
+      "address": "0050c0f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050c0f0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawSolidRectAlpha",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RENDERER_GLIDE_SetColorCombine",
+        "RENDERER_GLIDE_SetAlphaBlendMode",
+        "RENDERER_GLIDE_ScalePaletteValue"
+      ],
+      "usedTypes": [
+        "D2GlideVertexStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "203b97fe",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
+    },
+    {
+      "name": "DrawLine",
+      "address": "0050c270",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050c270"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawLine",
+        "RENDERER_GLIDE_ScalePaletteValue",
+        "RENDERER_GLIDE_SetColorCombine",
+        "RENDERER_GLIDE_SetAlphaBlendMode"
+      ],
+      "usedTypes": [
+        "D2GlideVertexStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "945a861e",
+      "paramStorage": [
+        [
+          "nXStart",
+          "ECX:4"
+        ],
+        [
+          "nYStart",
+          "EDX:4"
+        ],
+        [
+          "nXEnd",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nYEnd",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:1"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x10]:1"
+        ]
+      ]
+    },
+    {
+      "name": "DrawRect",
+      "address": "0050c3a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050c3a0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawRect",
+        "DrawLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "RECT",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "e3fe9c0e",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawRectEx",
+      "address": "0050c490",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050c490"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawRectEx",
+        "DrawLine",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "RECT",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "849c9bd1",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawSolidRect",
+      "address": "0050c5e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050c5e0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawSolidRect",
+        "DrawSolidRectEx",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "RECT",
+        "int32_t"
+      ],
+      "dh": "369aec90",
+      "paramStorage": [
+        [
+          "pRect",
+          "ECX:4"
+        ],
+        [
+          "nPaletteIndex",
+          "DL:1"
+        ]
+      ]
+    }
+  ]
+}

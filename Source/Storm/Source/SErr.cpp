@@ -262,24 +262,21 @@ uint32_t __stdcall SErrGetErrorStr(DWORD dwMessageId, LPSTR szText, DWORD nBuffe
       SERR_AddStormMessages();
     }
 
-    HMODULE lpSource = (HMODULE)0x0;
-    uint16_t* pModuleEntry = &gpErrorModuleList->wModuleId;
-    do {
-      if (!(D2SErrMessageSourceStrc*)pModuleEntry) {
-        break;
+    uint16_t wFacility = (uint16_t)((dwMessageId >> 0x10) & 0xfff);
+    HMODULE hModule = (HMODULE)0x0;
+    {
+      D2SErrMessageSourceStrc* pCur = gpErrorModuleList;
+      while (pCur && pCur->wModuleId != wFacility) {
+        pCur = pCur->pNext;
       }
-      if (((D2SErrMessageSourceStrc*)pModuleEntry)->wModuleId == ((uint16_t)(dwMessageId >> 0x10) & 0xfff)) {
-        lpSource = ((D2SErrMessageSourceStrc*)pModuleEntry)->hModule;
-        break;
+      if (pCur) {
+        hModule = pCur->hModule;
       }
-
-      pModuleEntry = &((D2SErrMessageSourceStrc*)pModuleEntry)->pNext->wModuleId;
-    } while (true);
+    }
 
     SERR_InternalLeaveCriticalSection();
-    /* va_list * Arguments for FormatMessageA */ /* DWORD nSize for FormatMessageA */ /* LPSTR lpBuffer for FormatMessageA */ /* DWORD dwLanguageId for FormatMessageA */ /* DWORD dwMessageId for FormatMessageA */ /* LPCVOID lpSource for FormatMessageA */ /* DWORD dwFlags for FormatMessageA */ *szText = '\0';
-    DWORD dwResult = FormatMessageA(lpSource ? 0x800 : 0x1000, (LPCVOID)lpSource, dwMessageId, 0x400, szText, nBufferSize, nullptr);
-    return (uint32_t)(dwResult != 0);
+    *szText = '\0';
+    return FormatMessageA(hModule ? 0x800 : 0x1000, (LPCVOID)hModule, dwMessageId, 0x400, szText, nBufferSize, nullptr) != 0;
 }
 
 int32_t __thiscall SSYSTEM_ListGetPointer(int32_t pList, int32_t pNode) {

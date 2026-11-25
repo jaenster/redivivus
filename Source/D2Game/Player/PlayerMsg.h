@@ -506,10 +506,9 @@ struct __attribute__((packed)) D2GSPacketClt0x38_NpcMenuSelect {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct D2GSPacketClt0x3A_AllocStatPoint {
+struct __attribute__((packed)) D2GSPacketClt0x3A_AllocStatPoint {
     /* 0x00 */ uint8_t nCmd; // opcode 0x3A
-    /* 0x01 */ uint8_t nStatId; // stat index 0-15 (low byte of u16)
-    /* 0x02 */ uint8_t nRepeatCount; // repeat count 0-99 (high byte of u16; actual repeats = nRepeatCount+1)
+    /* 0x01 */ uint16_t wStatPacked; // low byte: stat index 0-15; high byte: repeat count 0-99 (repeats = count+1). The handler reads it as one word.
 };
 
 #endif // D2_MODULE_D2Game

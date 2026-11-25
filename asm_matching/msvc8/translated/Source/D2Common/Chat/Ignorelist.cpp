@@ -6,6 +6,13 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Chat/Chat.h"
+#include "Source/Storm/Storm.h"
+#include "Source/Storm/H/stpl.h"
+#include "Source/D2CMP/Src/CelCmp/CELLIST.h"
+#include "Source/D2Client/Game/Game/SGAMEDATA.h"
+#include "Source/D2Common/Chat/Ignorelist/StringEntryNode.h"
+#include "Source/D2Common/D2Common.globals.h"
+#include "Source/D2Common/Chat/Ignorelist/ChatIgnoreList.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -16,6 +23,7 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 #endif
 
 static ::IgnoreList * gpIgnoreList = 0; D2_STATIC_GUARD(gpIgnoreList, "gpIgnoreList");
+
 
 namespace D2Common { namespace Chat { namespace Ignorelist {
 
@@ -54,6 +62,19 @@ void __stdcall IGNORELIST_Shutdown() {
 
     gpIgnoreList = 0;
 }
+
+}}} // namespace D2Common::Chat::Ignorelist
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+int32_t __fastcall CloseAppendFile(::IgnoreList * pThis, int) {
+    int nResult = fclose(pThis->pAppendFile);
+    return nResult;
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+namespace D2Common { namespace Chat { namespace Ignorelist {
 
 void __fastcall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, int, char * szText, char * pszDstBuf, int32_t nBufLen) {
     char cCurrent = *szText;
@@ -138,6 +159,1923 @@ int __fastcall IGNORELIST_ParsePattern(::IgnoreList * pThis, int, char * szText1
     Storm::Source::SSTR::SStrCopy(szText2, cPatternBuf, nBufferSize);
     return 0;
 }
+
+}}} // namespace D2Common::Chat::Ignorelist
+
+// D2_RoundUp, rounding up to a granularity, as its callers inlined it: the parameter changed and returned.
+static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
+    if (n % g) {
+        n = g - n % g + n;
+    }
+    return n;
+}
+template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Clear() {
+    this->InternalClear(0);
+}
+
+template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::DeleteNode(::StringEntryNode * pNode) {
+    TSLink<::StringEntryNode>* pNextBucketSlot = !pNode ? &this->tFullList.m_terminator : (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + this->tFullList.m_linkoffset);
+    intptr_t pNextLink = pNextBucketSlot->m_next;
+    this->Unlink(pNode);
+    vc8_thiscall(this->pVtable->InternalDelete)(this, pNode);
+    return (::StringEntryNode*)(pNextLink <= 0 ? 0 : pNextLink);
+}
+
+template<> void TSExplicitList<StringEntryNode, -572662307>::Destructor() {
+    TSLink<::StringEntryNode>** pPrevLink;
+    this->UnlinkAll();
+    TSLink<::StringEntryNode>* pTVar1 = &this->m_terminator;
+    TSLink<::StringEntryNode>* nHeadEntry = pTVar1->m_prevlink;
+    if (!nHeadEntry) {
+      return;
+    }
+
+    pPrevLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1);
+    *pPrevLink = nHeadEntry;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+}
+template<> __declspec(noinline) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {
+    this->nFullnessIndicator = 0;
+    this->tFullList.UnlinkAll();
+    for (uint32_t i = 0; i < this->tSlotListArray.m_count; i++) {
+      while (true) {
+        TSExplicitList<::MappingEntryNode, -572662307>* pList = &this->tSlotListArray.m_data[i];
+        ::MappingEntryNode* pNode = pList->m_terminator.m_next > 0 ? (::MappingEntryNode*)pList->m_terminator.m_next : nullptr;
+        if (!pNode) {
+          break;
+        }
+        if (bUnlinkOnly) {
+          TSLink<::MappingEntryNode>* pLink = (TSLink<::MappingEntryNode>*)((intptr_t)pNode + pList->m_linkoffset);
+          TSLink<::MappingEntryNode>* pPrevLink = pLink->m_prevlink;
+          if (pPrevLink) {
+            TSLink<::MappingEntryNode>** ppNextBack = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pLink, -1);
+            *ppNextBack = pPrevLink;
+            pLink->m_prevlink->m_next = pLink->m_next;
+            pLink->m_prevlink = 0;
+            pLink->m_next = 0;
+          }
+        } else {
+          vc8_thiscall(this->pVtable->InternalDelete)(this, pNode);
+        }
+      }
+    }
+}
+
+// stpl-orphan: a COMDAT copy in TSExplicitList<MappingEntryNode, -572662307> that no member owns
+void __fastcall Destructor_Unreferenced(TSExplicitList<::MappingEntryNode, -572662307>* pThis, int) {
+    TSLink<::MappingEntryNode>** pPrevLink;
+    pThis->UnlinkAll();
+    TSLink<::MappingEntryNode>* pTVar1 = &pThis->m_terminator;
+    TSLink<::MappingEntryNode>* nHeadEntry = pTVar1->m_prevlink;
+    if (!nHeadEntry) {
+      return;
+    }
+
+    pPrevLink = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
+    *pPrevLink = nHeadEntry;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+}
+
+template<> void TSExplicitList<MappingEntryNode, -572662307>::ChangeLinkOffset(int32_t nLinkOffset) {
+    if (nLinkOffset == this->m_linkoffset) {
+      return;
+    }
+
+    this->UnlinkAll();
+    TSLink<::MappingEntryNode>* pTVar1 = &this->m_terminator;
+    pTVar1->m_prevlink = pTVar1;
+    this->m_linkoffset = nLinkOffset;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
+}
+
+// @sourcefile .\Chat\Ignorelist.cpp
+template<> ::MappingEntryNode * TSExplicitList<MappingEntryNode, -572662307>::DeleteNode(::MappingEntryNode * pNode) {
+    TSLink<::MappingEntryNode>* pLink = pNode ? (TSLink<::MappingEntryNode>*)((intptr_t)pNode + this->m_linkoffset) : &this->m_terminator;
+    ::MappingEntryNode* pNextNode = (::MappingEntryNode*)(pLink->m_next <= 0 ? 0 : pLink->m_next);
+    if (pNode->szMappedValue) {
+      Storm::Source::SMem::SMemFree(pNode->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x11, 0);
+    }
+
+    pNode->Destructor();
+    Storm::Source::SMem::SMemFree(pNode, D2Common::Chat::Ignorelist::MappingEntryNode::s___AUMappingEntryNode___0074362c, -2, 0);
+    return pNextNode;
+}
+
+template<> TSExplicitList<::StringEntryNode, -572662307>* TSExplicitList<StringEntryNode, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags) {
+    this->UnlinkAll();
+    TSLink<::StringEntryNode>* pLink = &this->m_terminator;
+    TSLink<::StringEntryNode>* pPrev = pLink->m_prevlink;
+    if (pPrev) {
+      *(TSLink<::StringEntryNode>**)D2_StormNextLink(pLink, -1) = pPrev;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
+    }
+
+    if (dwFlags & 1 && this) {
+      Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
+    }
+
+    return this;
+}
+
+template<> void TSExplicitList<StringEntryNode, -572662307>::Unreferenced_0060f020() {
+    if (!this) {
+      return;
+    }
+
+    TSLink<::StringEntryNode>* pTVar1 = &this->m_terminator;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+    this->m_terminator.m_prevlink = pTVar1;
+    this->m_linkoffset = -0x22222223;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
+}
+
+// stpl-orphan: a COMDAT copy in TSExplicitList<MappingEntryNode, -572662307> that no member owns
+TSExplicitList<::MappingEntryNode, -572662307>* __fastcall CopyConstructor_Unreferenced(TSExplicitList<::MappingEntryNode, -572662307>* pThis, int, TSExplicitList<::MappingEntryNode, -572662307>* pSource) {
+    TSLink<::MappingEntryNode>* pHead = &pThis->m_terminator;
+    pHead->m_prevlink = 0;
+    pHead->m_next = 0;
+    uint32_t dwInitCapacity = pSource->m_linkoffset;
+    pHead->m_prevlink = pHead;
+    pThis->m_linkoffset = dwInitCapacity;
+    pThis->m_terminator.m_next = ~(uintptr_t)pHead;
+    return pThis;
+}
+
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+// Writes the ignore list to its file: one ignored name pattern per line, then each ignored account prefixed with '!'.
+int32_t __fastcall SaveToFile(::IgnoreList * pThis, int) {
+    intptr_t uEntryOffset;
+    intptr_t uAccountEntry;
+    FILE* pFile = fopen(pThis->szIgnoreFilePath, "w");
+    if (!pFile) {
+      return 0;
+    }
+
+    uint32_t uVar1 = pThis->tIgnoredPatterns.tFullList.m_terminator.m_next;
+    for (uEntryOffset = (int)uVar1 <= 0 ? 0 : uVar1; 0 < uEntryOffset; uEntryOffset = *(int*)(pThis->tIgnoredPatterns.tFullList.m_linkoffset + uEntryOffset + 4)) {
+      fprintf(pFile, "%s\n", *(uint32_t*)(uEntryOffset + 0x14));
+    }
+
+    uVar1 = pThis->tIgnoredAccounts.tFullList.m_terminator.m_next;
+    for (uAccountEntry = (int)uVar1 <= 0 ? 0 : uVar1; 0 < uAccountEntry; uAccountEntry = *(int*)(pThis->tIgnoredAccounts.tFullList.m_linkoffset + uAccountEntry + 4)) {
+      fprintf(pFile, "!%s\n", *(uint32_t*)(uAccountEntry + 0x14));
+    }
+
+    fclose(pFile);
+    return 1;
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+template<> void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Clear() {
+    this->InternalClear(0);
+}
+
+template<> void TSExplicitList<MappingEntryNode, -572662307>::Destructor() {
+    TSLink<::MappingEntryNode>** pListHead;
+    this->UnlinkAll();
+    TSLink<::MappingEntryNode>* pTVar1 = &this->m_terminator;
+    TSLink<::MappingEntryNode>* nHead = pTVar1->m_prevlink;
+    if (!nHead) {
+      return;
+    }
+
+    pListHead = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
+    *pListHead = nHead;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+}
+
+template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Ptr(uint32_t dwHashVal, ::HASHKEY_STRI * pKey) {
+    int32_t nCmpResult;
+    intptr_t uFirstEntry = this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_terminator.m_next;
+    ::MappingEntryNode* pEntry = (::MappingEntryNode*)(uFirstEntry <= 0 ? 0 : uFirstEntry);
+    while (true) {
+      if ((intptr_t)pEntry < 1) {
+        return nullptr;
+      }
+      if (pEntry->m_hashval == dwHashVal) {
+        nCmpResult = Storm::Source::SSTR::SStrCmpI(pEntry->m_key.szString, pKey->szString, 0x7fffffff);
+        if (!nCmpResult) {
+          break;
+        }
+      }
+
+      pEntry = *(::MappingEntryNode**)((intptr_t)&pEntry->m_linktoslot.m_prevlink + this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_linkoffset);
+    }
+
+    return pEntry;
+}
+
+template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::DeleteNode(::StringEntryNode * pNode) {
+    TSLink<::StringEntryNode>* pNextLink = !pNode ? &this->m_terminator : (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + this->m_linkoffset);
+    intptr_t uNextEntry = pNextLink->m_next;
+    pNode->Destructor();
+    Storm::Source::SMem::SMemFree(pNode, D2Common::Chat::Ignorelist::StringEntryNode::s___AUStringEntryNode___0074364c, -2, 0);
+    return (::StringEntryNode*)(uNextEntry <= 0 ? 0 : uNextEntry);
+}
+
+// stpl-orphan: a COMDAT copy in TSExplicitList<StringEntryNode, -572662307> that no member owns
+void __fastcall Destructor_UnreferencedCopy(TSExplicitList<::StringEntryNode, -572662307>* pThis, int) {
+    TSLink<::StringEntryNode>** pListHead;
+    pThis->UnlinkAll();
+    TSLink<::StringEntryNode>* pTVar1 = &pThis->m_terminator;
+    TSLink<::StringEntryNode>* nHead = pTVar1->m_prevlink;
+    if (!nHead) {
+      return;
+    }
+
+    pListHead = (TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1);
+    *pListHead = nHead;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+}
+
+template<> TSExplicitList<::MappingEntryNode, -572662307>* TSExplicitList<MappingEntryNode, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags) {
+    this->UnlinkAll();
+    TSLink<::MappingEntryNode>* pLink = &this->m_terminator;
+    TSLink<::MappingEntryNode>* pPrev = pLink->m_prevlink;
+    if (pPrev) {
+      *(TSLink<::MappingEntryNode>**)D2_StormNextLink(pLink, -1) = pPrev;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
+    }
+
+    if (dwFlags & 1 && this) {
+      Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
+    }
+
+    return this;
+}
+
+template<> void TSExplicitList<MappingEntryNode, -572662307>::Unreferenced_0060f360() {
+    if (!this) {
+      return;
+    }
+
+    TSLink<::MappingEntryNode>* pTVar1 = &this->m_terminator;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+    this->m_terminator.m_prevlink = pTVar1;
+    this->m_linkoffset = -0x22222223;
+    this->m_terminator.m_next = ~(uintptr_t)pTVar1;
+}
+
+template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::ReallocData(uint32_t nAlloc) {
+    TSExplicitList<::StringEntryNode, -572662307>* pBucket;
+    TSExplicitList<::StringEntryNode, -572662307>* pNewList;
+    TSLink<::StringEntryNode>** pPrevLink2;
+    TSLink<::StringEntryNode>* pTVar2;
+    TSLink<::StringEntryNode>* pNewTerminator;
+    TSLink<::StringEntryNode>* uHead;
+    uint32_t uLink;
+    uint32_t uNewCount;
+    uint32_t nCapacityOrig = nAlloc;
+    TSExplicitList<::StringEntryNode, -572662307>* pBlock = this->m_data;
+    if (nAlloc < this->m_count) {
+      TSLink<::StringEntryNode>** pPrevLink;
+      pBucket = pBlock + nAlloc;
+      do {
+        pTVar2 = &pBucket->m_terminator;
+        ((TSExplicitList<::StringEntryNode, -572662307>*)((char*)(pTVar2 - 1) + 4))->UnlinkAll();
+        uHead = pTVar2->m_prevlink;
+        if (uHead) {
+          uLink = pTVar2->m_next;
+          pPrevLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar2, -1);
+          *pPrevLink = uHead;
+          pTVar2->m_prevlink->m_next = pTVar2->m_next;
+          pTVar2->m_prevlink = 0;
+          pTVar2->m_next = 0;
+        }
+
+        nAlloc++;
+        pBucket = (TSExplicitList<::StringEntryNode, -572662307>*)(pTVar2 + 1);
+      } while (nAlloc < this->m_count);
+    }
+
+    this->m_alloc = nCapacityOrig;
+    pBucket = (TSExplicitList<::StringEntryNode, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, nCapacityOrig * 0xc, D2Common::s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0x10);
+    this->m_data = pBucket;
+    if (pBucket) {
+      return;
+    }
+
+    pBucket = (TSExplicitList<::StringEntryNode, -572662307>*)Storm::Source::SMem::SMemAlloc(nCapacityOrig * 0xc, D2Common::s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0);
+    this->m_data = pBucket;
+    if (!pBlock) {
+      return;
+    }
+
+    nAlloc = this->m_count;
+    if (nCapacityOrig < this->m_count) {
+      nAlloc = nCapacityOrig;
+    }
+    if (nAlloc > 0) {
+      pBucket = pBlock;
+      do {
+        uHead = &pBucket->m_terminator;
+        pNewList = (TSExplicitList<::StringEntryNode, -572662307>*)((char*)this->m_data + ((char*)pBucket - (char*)pBlock));
+        if (pNewList) {
+          pNewTerminator = &pNewList->m_terminator;
+          pNewTerminator->m_prevlink = 0;
+          pNewTerminator->m_next = 0;
+          uNewCount = *(uint32_t*)((char*)(uHead - 1) + 4);
+          pNewTerminator->m_prevlink = pNewTerminator;
+          pNewList->m_linkoffset = uNewCount;
+          pNewTerminator->m_next = ~(intptr_t)pNewTerminator;
+        }
+
+        ((TSExplicitList<::StringEntryNode, -572662307>*)((char*)(uHead - 1) + 4))->UnlinkAll();
+        pTVar2 = uHead->m_prevlink;
+        if (pTVar2) {
+          uLink = uHead->m_next;
+          pPrevLink2 = (TSLink<::StringEntryNode>**)D2_StormNextLink(uHead, -1);
+          *pPrevLink2 = pTVar2;
+          uHead->m_prevlink->m_next = uHead->m_next;
+          uHead->m_prevlink = 0;
+          uHead->m_next = 0;
+        }
+
+        pBucket = (TSExplicitList<::StringEntryNode, -572662307>*)(uHead + 1);
+        nAlloc--;
+      } while (nAlloc);
+    }
+
+    Storm::Source::SMem::SMemFree(pBlock, D2Common::s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0);
+}
+
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+void __fastcall ClearAccountMappings(::IgnoreList * pThis, int) {
+    pThis->tAccountMappings.InternalClear(0);
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Ptr(char * szKey) {
+    char* pszText = szKey;
+    uint32_t nExState = -1;
+    pfnEHHandlerRoutine pExHandler = D2Common::Chat::__GSHandlerCheck_EH_6ca2b8;
+    void* pExSave = ExceptionList;
+    ExceptionList = &pExSave;
+    char* pszDupKey = Storm::Source::SSTR::SStrDup(szKey);
+    ::HASHKEY_STRI* ppszSearchKey = (::HASHKEY_STRI*)&szKey;
+    nExState = 0;
+    szKey = pszDupKey;
+    uint32_t uHash = Storm::Source::SSTR::SStrHash(pszText, 0, 0);
+    uint32_t* pFoundEntry = (uint32_t*)this->Ptr(uHash, ppszSearchKey);
+    if (pszDupKey) {
+      Storm::Source::SMem::SMemFree(pszDupKey, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
+    }
+
+    ExceptionList = pExSave;
+    return (::MappingEntryNode*)pFoundEntry;
+}
+
+template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Ptr(uint32_t dwHashVal, ::HASHKEY_STRI * pKey) {
+    int32_t nCmpResult;
+    intptr_t uFirstEntry = this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_terminator.m_next;
+    ::StringEntryNode* pEntry = (::StringEntryNode*)(uFirstEntry <= 0 ? 0 : uFirstEntry);
+    while (true) {
+      if ((intptr_t)pEntry < 1) {
+        return nullptr;
+      }
+      if (pEntry->m_hashval == dwHashVal) {
+        nCmpResult = Storm::Source::SSTR::SStrCmpI(pEntry->m_key.szString, pKey->szString, 0x7fffffff);
+        if (!nCmpResult) {
+          break;
+        }
+      }
+
+      pEntry = *(::StringEntryNode**)((intptr_t)&pEntry->m_linktoslot.m_prevlink + this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_linkoffset);
+    }
+
+    return pEntry;
+}
+
+template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::Destructor() {
+    TSExplicitList<::StringEntryNode, -572662307>* pBucket;
+    TSLink<::StringEntryNode>* nHead;
+    uint32_t nBucketIdx = 0;
+    if (this->m_count > 0) {
+      TSLink<::StringEntryNode>* pTVar1;
+      do {
+        pBucket = &this->m_data[nBucketIdx];
+        pBucket->UnlinkAll();
+        pTVar1 = &pBucket->m_terminator;
+        nHead = pTVar1->m_prevlink;
+        if (nHead) {
+          *(TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1) = nHead;
+          pTVar1->m_prevlink->m_next = pTVar1->m_next;
+          pTVar1->m_prevlink = 0;
+          pTVar1->m_next = 0;
+        }
+
+        nBucketIdx++;
+      } while (nBucketIdx < this->m_count);
+    }
+    if (!this->m_data) {
+      return;
+    }
+
+    Storm::Source::SMem::SMemFree(this->m_data, D2Common::s___AV__TSExplicitList_UStringEntr_0074366c, -2, 0);
+}
+
+// stpl-orphan: a COMDAT copy in TSExplicitList<MappingEntryNode, -572662307> that no member owns
+void __fastcall Destructor_UnreferencedCopy(TSExplicitList<::MappingEntryNode, -572662307>* pThis, int) {
+    TSLink<::MappingEntryNode>** pListHead;
+    pThis->UnlinkAll();
+    TSLink<::MappingEntryNode>* pTVar1 = &pThis->m_terminator;
+    TSLink<::MappingEntryNode>* nHead = pTVar1->m_prevlink;
+    if (!nHead) {
+      return;
+    }
+
+    pListHead = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
+    *pListHead = nHead;
+    pTVar1->m_prevlink->m_next = pTVar1->m_next;
+    pTVar1->m_prevlink = 0;
+    pTVar1->m_next = 0;
+}
+
+template<> void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
+    nCount = nCount + this->m_count;
+    if (nCount <= this->m_alloc) {
+      return;
+    }
+    if (bRound) {
+      uint32_t uAllocGranularity;
+      uAllocGranularity = this->m_chunk;
+      if (!uAllocGranularity) {
+        uAllocGranularity = this->CalcChunkSize(nCount);
+      }
+
+      nCount = D2_RoundUp(nCount, uAllocGranularity);
+    }
+
+    this->ReallocData(nCount);
+}
+
+template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::ReallocData(uint32_t nAlloc) {
+    TSExplicitList<::MappingEntryNode, -572662307>* pBucket;
+    TSExplicitList<::MappingEntryNode, -572662307>* pNewList;
+    TSLink<::MappingEntryNode>** pPrevLink2;
+    TSLink<::MappingEntryNode>* pTVar2;
+    TSLink<::MappingEntryNode>* pNewTerminator;
+    TSLink<::MappingEntryNode>* uHeadEntry;
+    uint32_t uLinkOffset;
+    uint32_t uNewCount;
+    uint32_t uSavedSize = nAlloc;
+    TSExplicitList<::MappingEntryNode, -572662307>* pBlock = this->m_data;
+    if (nAlloc < this->m_count) {
+      TSLink<::MappingEntryNode>** pPrevLink;
+      pBucket = pBlock + nAlloc;
+      do {
+        pTVar2 = &pBucket->m_terminator;
+        ((TSExplicitList<::MappingEntryNode, -572662307>*)((char*)(pTVar2 - 1) + 4))->UnlinkAll();
+        uHeadEntry = pTVar2->m_prevlink;
+        if (uHeadEntry) {
+          uLinkOffset = pTVar2->m_next;
+          pPrevLink = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar2, -1);
+          *pPrevLink = uHeadEntry;
+          pTVar2->m_prevlink->m_next = pTVar2->m_next;
+          pTVar2->m_prevlink = 0;
+          pTVar2->m_next = 0;
+        }
+
+        nAlloc++;
+        pBucket = (TSExplicitList<::MappingEntryNode, -572662307>*)(pTVar2 + 1);
+      } while (nAlloc < this->m_count);
+    }
+
+    this->m_alloc = uSavedSize;
+    pBucket = (TSExplicitList<::MappingEntryNode, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, uSavedSize * 0xc, D2Common::Chat::Ignorelist::s___AV__TSExplicitList_UMappingEnt_007436ac, -2, 0x10);
+    this->m_data = pBucket;
+    if (pBucket) {
+      return;
+    }
+
+    pBucket = (TSExplicitList<::MappingEntryNode, -572662307>*)Storm::Source::SMem::SMemAlloc(uSavedSize * 0xc, D2Common::Chat::Ignorelist::s___AV__TSExplicitList_UMappingEnt_007436ac, -2, 0);
+    this->m_data = pBucket;
+    if (!pBlock) {
+      return;
+    }
+
+    nAlloc = this->m_count;
+    if (uSavedSize < this->m_count) {
+      nAlloc = uSavedSize;
+    }
+    if (nAlloc > 0) {
+      pBucket = pBlock;
+      do {
+        uHeadEntry = &pBucket->m_terminator;
+        pNewList = (TSExplicitList<::MappingEntryNode, -572662307>*)((char*)this->m_data + ((char*)pBucket - (char*)pBlock));
+        if (pNewList) {
+          pNewTerminator = &pNewList->m_terminator;
+          pNewTerminator->m_prevlink = 0;
+          pNewTerminator->m_next = 0;
+          uNewCount = *(uint32_t*)((char*)(uHeadEntry - 1) + 4);
+          pNewTerminator->m_prevlink = pNewTerminator;
+          pNewList->m_linkoffset = uNewCount;
+          pNewTerminator->m_next = ~(intptr_t)pNewTerminator;
+        }
+
+        ((TSExplicitList<::MappingEntryNode, -572662307>*)((char*)(uHeadEntry - 1) + 4))->UnlinkAll();
+        pTVar2 = uHeadEntry->m_prevlink;
+        if (pTVar2) {
+          uLinkOffset = uHeadEntry->m_next;
+          pPrevLink2 = (TSLink<::MappingEntryNode>**)D2_StormNextLink(uHeadEntry, -1);
+          *pPrevLink2 = pTVar2;
+          uHeadEntry->m_prevlink->m_next = uHeadEntry->m_next;
+          uHeadEntry->m_prevlink = 0;
+          uHeadEntry->m_next = 0;
+        }
+
+        pBucket = (TSExplicitList<::MappingEntryNode, -572662307>*)(uHeadEntry + 1);
+        nAlloc--;
+      } while (nAlloc);
+    }
+
+    Storm::Source::SMem::SMemFree(pBlock, D2Common::Chat::Ignorelist::s___AV__TSExplicitList_UMappingEnt_007436ac, -2, 0);
+}
+
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+int32_t __fastcall GetMappedValue(::IgnoreList * pThis, int, char * szKey, char * szOut, int32_t nOutSize) {
+    ::MappingEntryNode* pEntry = pThis->tAccountMappings.Ptr(szKey);
+    if (pEntry) {
+      Storm::Source::SSTR::SStrCopy(szOut, pEntry->szMappedValue, nOutSize);
+      return 1;
+    }
+
+    return 0;
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Ptr(char * szKey) {
+    char* pszText = szKey;
+    uint32_t nExState = -1;
+    pfnEHHandlerRoutine pExHandler = D2Common::Chat::__GSHandlerCheck_EH_6ca2e8;
+    void* pExSave = ExceptionList;
+    ExceptionList = &pExSave;
+    char* pDupStr = Storm::Source::SSTR::SStrDup(szKey);
+    ::HASHKEY_STRI* ppszKey = (::HASHKEY_STRI*)&szKey;
+    nExState = 0;
+    szKey = pDupStr;
+    uint32_t uHash = Storm::Source::SSTR::SStrHash(pszText, 0, 0);
+    ::StringEntryNode* pEntry = this->Ptr(uHash, ppszKey);
+    if (pDupStr) {
+      Storm::Source::SMem::SMemFree(pDupStr, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
+    }
+
+    ExceptionList = pExSave;
+    return pEntry;
+}
+
+// stpl-orphan: a COMDAT copy in TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>> that no member owns
+// JMP thunk
+void __fastcall thunk_Destructor(TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>> * pThis, int) {
+    pThis->Destructor();
+}
+
+template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::Destructor() {
+    TSExplicitList<::MappingEntryNode, -572662307>* pBucket;
+    TSLink<::MappingEntryNode>* nHead;
+    uint32_t nBucketIdx = 0;
+    if (this->m_count > 0) {
+      TSLink<::MappingEntryNode>* pTVar1;
+      do {
+        pBucket = &this->m_data[nBucketIdx];
+        pBucket->UnlinkAll();
+        pTVar1 = &pBucket->m_terminator;
+        nHead = pTVar1->m_prevlink;
+        if (nHead) {
+          *(TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1) = nHead;
+          pTVar1->m_prevlink->m_next = pTVar1->m_next;
+          pTVar1->m_prevlink = 0;
+          pTVar1->m_next = 0;
+        }
+
+        nBucketIdx++;
+      } while (nBucketIdx < this->m_count);
+    }
+    if (!this->m_data) {
+      return;
+    }
+
+    Storm::Source::SMem::SMemFree(this->m_data, D2Common::Chat::Ignorelist::s___AV__TSExplicitList_UMappingEnt_007436ac, -2, 0);
+}
+
+template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::SetCount(uint32_t nCount) {
+    if (nCount > this->m_count) {
+      uint32_t nGranularity;
+      if (nCount > this->m_alloc) {
+        nGranularity = this->m_chunk;
+        if (!nGranularity) {
+          nGranularity = this->CalcChunkSize(nCount);
+        }
+
+        uint32_t nAligned = nCount;
+        if (nCount % nGranularity) {
+          nAligned = nGranularity - nCount % nGranularity + nCount;
+        }
+
+        this->ReallocData(nAligned);
+      }
+
+      const uint32_t nOldCount = this->m_count;
+      if (nOldCount < nCount) {
+        int nByteOffset = nOldCount * sizeof(*this->m_data);
+        int nRemaining = nCount - nOldCount;
+        do {
+          TSExplicitList<::StringEntryNode, -572662307>* pInitSlot = reinterpret_cast<TSExplicitList<::StringEntryNode, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
+          if (pInitSlot) {
+            TSLink<::StringEntryNode>* pTerminator = &pInitSlot->m_terminator;
+            pTerminator->m_prevlink = 0;
+            pTerminator->m_next = 0;
+            pInitSlot->m_terminator.m_prevlink = pTerminator;
+            pInitSlot->m_linkoffset = -0x22222223;
+            pInitSlot->m_terminator.m_next = ~reinterpret_cast<intptr_t>(pTerminator);
+          }
+
+          nByteOffset += sizeof(*this->m_data);
+          nRemaining--;
+        } while (nRemaining);
+      }
+    } else if (nCount < this->m_count) {
+      uint32_t nIndex = nCount;
+      int nByteOffset = nCount * sizeof(*this->m_data);
+      do {
+        TSExplicitList<::StringEntryNode, -572662307>* pSlotI = reinterpret_cast<TSExplicitList<::StringEntryNode, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
+        pSlotI->UnlinkAll();
+        TSLink<::StringEntryNode>* pTerminator = &pSlotI->m_terminator;
+        TSLink<::StringEntryNode>* pPrevious = pTerminator->m_prevlink;
+        if (pPrevious) {
+          TSLink<::StringEntryNode>** pBackLink = reinterpret_cast<TSLink<::StringEntryNode>**>(D2_StormNextLink(pTerminator, -1));
+          *pBackLink = pPrevious;
+          pTerminator->m_prevlink->m_next = pTerminator->m_next;
+          pTerminator->m_prevlink = 0;
+          pTerminator->m_next = 0;
+        }
+
+        nIndex++;
+        nByteOffset += sizeof(*this->m_data);
+      } while (nIndex < this->m_count);
+
+      this->m_count = nCount;
+      return;
+    }
+
+    this->m_count = nCount;
+}
+
+template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
+    nCount = nCount + this->m_count;
+    if (nCount <= this->m_alloc) {
+      return;
+    }
+    if (bRound) {
+      uint32_t uGranularity;
+      uGranularity = this->m_chunk;
+      if (!uGranularity) {
+        uGranularity = this->CalcChunkSize(nCount);
+      }
+
+      nCount = D2_RoundUp(nCount, uGranularity);
+    }
+
+    this->ReallocData(nCount);
+}
+
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+int32_t __fastcall RemoveByPattern(::IgnoreList * pThis, int, char * szPattern) {
+    int _bIsEnabled;
+    bool bIsEnabled;
+    char szParsed[256];
+    if (szPattern && *szPattern != '\0') {
+      ::StringEntryNode* pEntry;
+      _bIsEnabled = vc8_thiscall(pThis->_vfptr->GetPersistentSetting)(pThis);
+      if (_bIsEnabled) {
+        szParsed[0] = '\0';
+        memset(szParsed + 1, 0, 0xff);
+        vc8_thiscall(IGNORELIST_ParsePattern)(pThis, szPattern, szParsed, 0x100);
+        if (szParsed[0] != '\0') {
+          pEntry = pThis->tIgnoredPatterns.Ptr(szParsed);
+          if (pEntry) {
+            pThis->tIgnoredPatterns.Unlink(pEntry);
+            vc8_thiscall(IgnoreList::SaveToFile)(pThis);
+            return 1;
+          }
+        }
+      }
+    }
+
+    return 0;
+}
+
+int32_t __fastcall RemoveByAccountName(::IgnoreList * pThis, int, char * szAccountName) {
+    int _bIsEnabled;
+    bool bIsEnabled;
+    if (!(szAccountName && *szAccountName != '\0')) {
+      return 0;
+    }
+
+    _bIsEnabled = vc8_thiscall(pThis->_vfptr->GetPersistentSetting)(pThis);
+    if (_bIsEnabled) {
+      ::StringEntryNode* pEntry;
+      pEntry = pThis->tIgnoredAccounts.Ptr(szAccountName);
+      if (pEntry) {
+        pThis->tIgnoredAccounts.Unlink(pEntry);
+        vc8_thiscall(IgnoreList::SaveToFile)(pThis);
+        return 1;
+      }
+
+      return 0;
+    }
+
+    return 0;
+}
+
+// Returns whether the account name is on the ignore list. It tail-calls Fog::Debug::GuardStack, which returns its argument, so the result is already in EAX; typed void the reconstruction dropped every return value and callers tested an unassigned local.
+int32_t __fastcall CheckAccountNameIgnored(::IgnoreList * pThis, int, char * szAccountName) {
+    int _bIsEnabled;
+    bool bIsEnabled;
+    ::StringEntryNode* pCurEntry;
+    char szAccountLower[256];
+    char szPatternLower[256];
+    intptr_t nFirstLink;
+    if (szAccountName && *szAccountName != '\0') {
+      char* pcMatch;
+      _bIsEnabled = vc8_thiscall(pThis->_vfptr->GetPersistentSetting)(pThis);
+      if (_bIsEnabled) {
+        pCurEntry = pThis->tIgnoredAccounts.Ptr(szAccountName);
+        if (!pCurEntry) {
+          Storm::Source::SSTR::SStrCopy(szAccountLower, szAccountName, 0x7fffffff);
+          Storm::Source::SSTR::SStrLower(szAccountLower);
+          nFirstLink = pThis->tIgnoredAccounts.tFullList.m_terminator.m_next;
+          pCurEntry = (::StringEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
+          while (true) {
+            if ((intptr_t)pCurEntry <= 0) {
+              return 0;
+            }
+
+            Storm::Source::SSTR::SStrCopy(szPatternLower, pCurEntry->m_key.szString, 0x7fffffff);
+            Storm::Source::SSTR::SStrLower(szPatternLower);
+            pcMatch = strstr(szAccountLower, szPatternLower);
+            if (pcMatch) {
+              break;
+            }
+
+            pCurEntry = pThis->tIgnoredAccounts.Next(pCurEntry);
+          }
+        }
+
+        return 1;
+      }
+    }
+
+    return 0;
+}
+
+int32_t __fastcall CheckCharNameIgnored(::IgnoreList * pThis, int, char * szCharName) {
+    int _bIsEnabled;
+    bool bIsEnabled;
+    if (!(szCharName && *szCharName != '\0')) {
+      return 0;
+    }
+
+    _bIsEnabled = vc8_thiscall(pThis->_vfptr->GetPersistentSetting)(pThis);
+    if (_bIsEnabled) {
+      ::StringEntryNode* pEntry;
+      pEntry = pThis->tIgnoredPatterns.Ptr(szCharName);
+      return (uint32_t)(pEntry != 0);
+    }
+
+    return 0;
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+template<> __declspec(noinline) inline void TSHashTable<StringEntryNode, HASHKEY_STRI>::Destructor() {
+    pfnEHHandlerRoutine pExHandler = D2Common::Chat::__GSHandlerCheck_EH_6ca326;
+    void* pExSave = ExceptionList;
+    ExceptionList = &pExSave;
+    this->pVtable = (TSHashTable<::StringEntryNode, ::HASHKEY_STRI>::Vtable*)(void*)TSHashTable<::StringEntryNode, ::HASHKEY_STRI>::vftable;
+    int32_t nExState = 1;
+    this->InternalClear(1);
+    this->tSlotListArray.Destructor();
+    this->tFullList.UnlinkAll();
+    TSLink<::StringEntryNode>* pHead = this->tFullList.m_terminator.m_prevlink;
+    TSLink<::StringEntryNode>* pTVar1 = &this->tFullList.m_terminator;
+    if (pHead) {
+      TSLink<::StringEntryNode>** pListHead;
+      pListHead = (TSLink<::StringEntryNode>**)D2_StormNextLink(pTVar1, -1);
+      *pListHead = pHead;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
+      pTVar1->m_prevlink = 0;
+      pTVar1->m_next = 0;
+    }
+
+    ExceptionList = pExSave;
+}
+
+template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
+    ::StringEntryNode* pNodeNew = (::StringEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, D2Common::Chat::Ignorelist::StringEntryNode::s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
+    ::StringEntryNode* pNode;
+    if (pNodeNew) {
+      pNodeNew->m_linktoslot.m_prevlink = 0;
+      pNodeNew->m_linktoslot.m_next = 0;
+      pNodeNew->m_linktofull.m_prevlink = 0;
+      pNodeNew->m_linktofull.m_next = 0;
+      pNodeNew->m_key.szString = 0;
+      pNode = pNodeNew;
+    } else {
+      pNode = 0;
+    }
+    if (nLocation) {
+      this->LinkNode(pNode, nLocation, nullptr);
+    }
+
+    return pNode;
+}
+
+// @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI>::InternalNew (STORM.H)
+template<> ::StringEntryNode * __fastcall TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalNew(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, int, TSExplicitList<::StringEntryNode, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
+    TSLink<::StringEntryNode>* pBucketHead;
+    ::StringEntryNode* pNode = (::StringEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, D2Common::Chat::Ignorelist::StringEntryNode::s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
+    if (pNode) {
+      pNode->m_linktoslot.m_prevlink = 0;
+      pNode->m_linktoslot.m_next = 0;
+      pNode->m_linktofull.m_prevlink = 0;
+      pNode->m_linktofull.m_next = 0;
+      pNode->m_key.szString = 0;
+      pBucketHead = (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + pList->m_linkoffset);
+    } else {
+      pNode = 0;
+      pBucketHead = &pList->m_terminator;
+    }
+
+    TSLink<::StringEntryNode>* pHeadEntry = pBucketHead->m_prevlink;
+    if (pHeadEntry) {
+      TSLink<::StringEntryNode>** pPrev;
+      pPrev = (TSLink<::StringEntryNode>**)D2_StormNextLink(pBucketHead, -1);
+      *pPrev = pHeadEntry;
+      pBucketHead->m_prevlink->m_next = pBucketHead->m_next;
+      pBucketHead->m_prevlink = 0;
+      pBucketHead->m_next = 0;
+    }
+
+    pHeadEntry = &pList->m_terminator;
+    pBucketHead->m_prevlink = pHeadEntry;
+    pBucketHead->m_next = pList->m_terminator.m_next;
+    intptr_t dwNext2 = pList->m_terminator.m_next;
+    intptr_t pNext = pList->m_linkoffset;
+    if (dwNext2 < 0) {
+      *(TSLink<::StringEntryNode>**)~dwNext2 = (TSLink<::StringEntryNode>*)pBucketHead;
+    } else {
+      if (pNext < 0) {
+        pNext = (intptr_t)pHeadEntry - pHeadEntry->m_prevlink->m_next;
+      }
+
+      *(TSLink<::StringEntryNode>**)(dwNext2 + pNext) = (TSLink<::StringEntryNode>*)pBucketHead;
+    }
+
+    pHeadEntry->m_next = (intptr_t)pNode;
+    return pNode;
+}
+
+// @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI>::InternalDelete (STORM.H)
+template<> void __fastcall TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalDelete(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, int, ::StringEntryNode * pNode) {
+    pNode->Destructor();
+    Storm::Source::SMem::SMemFree(pNode, D2Common::Chat::Ignorelist::StringEntryNode::s___AUStringEntryNode___0074364c, -2, 0);
+}
+
+template<> TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>> * TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags) {
+    this->Destructor();
+    if (dwFlags & 1 && this) {
+      Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
+    }
+
+    return this;
+}
+
+template<> void TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>::Clear() {
+    this->Destructor();
+    this->m_alloc = 0;
+    this->m_count = 0;
+    this->m_data = 0;
+}
+
+// @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI>::Destroy (STORM.H)
+template<> void __fastcall TSHashTable<StringEntryNode, HASHKEY_STRI>::Destroy(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, int) {
+    pThis->InternalClear(1);
+    pThis->nFullnessIndicator = 0;
+    pThis->nSlotMask = 0;
+    TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>>* pArray = &pThis->tSlotListArray;
+    pArray->Destructor();
+    pArray->m_alloc = 0;
+    pArray->m_count = 0;
+    pArray->m_data = 0;
+}
+
+// @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI> scalar deleting destructor (STORM.H)
+template<> TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* __fastcall TSHashTable<StringEntryNode, HASHKEY_STRI>::ScalarDeletingDestructor(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, int, uint32_t dwFlags) {
+    pThis->Destructor();
+    if (dwFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
+    }
+
+    return pThis;
+}
+
+// stpl-orphan: a COMDAT copy in TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>> that no member owns
+// JMP thunk
+void __fastcall thunk_Destructor(TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>> * pThis, int) {
+    pThis->Destructor();
+}
+
+// stpl-orphan: a COMDAT copy in TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>> that no member owns
+void __fastcall SetCount_Unreferenced(TSGrowableArray<TSExplicitList<StringEntryNode, -572662307>> * pThis, int, uint32_t nCount) {
+    pThis->SetCount(nCount);
+}
+
+template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::SetCount(uint32_t nCount) {
+    if (nCount > this->m_count) {
+      uint32_t nGranularity;
+      if (nCount > this->m_alloc) {
+        nGranularity = this->m_chunk;
+        if (!nGranularity) {
+          nGranularity = this->CalcChunkSize(nCount);
+        }
+
+        uint32_t nAligned = nCount;
+        if (nCount % nGranularity) {
+          nAligned = nGranularity - nCount % nGranularity + nCount;
+        }
+
+        this->ReallocData(nAligned);
+      }
+
+      const uint32_t nOldCount = this->m_count;
+      if (nOldCount < nCount) {
+        int nByteOffset = nOldCount * sizeof(*this->m_data);
+        int nRemaining = nCount - nOldCount;
+        do {
+          TSExplicitList<::MappingEntryNode, -572662307>* pInitSlot = reinterpret_cast<TSExplicitList<::MappingEntryNode, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
+          if (pInitSlot) {
+            TSLink<::MappingEntryNode>* pTerminator = &pInitSlot->m_terminator;
+            pTerminator->m_prevlink = 0;
+            pTerminator->m_next = 0;
+            pInitSlot->m_terminator.m_prevlink = pTerminator;
+            pInitSlot->m_linkoffset = -0x22222223;
+            pInitSlot->m_terminator.m_next = ~reinterpret_cast<intptr_t>(pTerminator);
+          }
+
+          nByteOffset += sizeof(*this->m_data);
+          nRemaining--;
+        } while (nRemaining);
+      }
+    } else if (nCount < this->m_count) {
+      uint32_t nIndex = nCount;
+      int nByteOffset = nCount * sizeof(*this->m_data);
+      do {
+        TSExplicitList<::MappingEntryNode, -572662307>* pSlotI = reinterpret_cast<TSExplicitList<::MappingEntryNode, -572662307>*>(reinterpret_cast<char*>(this->m_data) + nByteOffset);
+        pSlotI->UnlinkAll();
+        TSLink<::MappingEntryNode>* pTerminator = &pSlotI->m_terminator;
+        TSLink<::MappingEntryNode>* pPrevious = pTerminator->m_prevlink;
+        if (pPrevious) {
+          TSLink<::MappingEntryNode>** pBackLink = reinterpret_cast<TSLink<::MappingEntryNode>**>(D2_StormNextLink(pTerminator, -1));
+          *pBackLink = pPrevious;
+          pTerminator->m_prevlink->m_next = pTerminator->m_next;
+          pTerminator->m_prevlink = 0;
+          pTerminator->m_next = 0;
+        }
+
+        nIndex++;
+        nByteOffset += sizeof(*this->m_data);
+      } while (nIndex < this->m_count);
+
+      this->m_count = nCount;
+      return;
+    }
+
+    this->m_count = nCount;
+}
+
+// [override: patch]
+template<> __declspec(noinline) inline void TSHashTable<StringEntryNode, HASHKEY_STRI>::GrowListArray() {
+    TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis = this;
+    // The values VC8 kept in nIterCount's one frame slot, one member each: a frame object reaches the slot.
+    union nIterCount_u {
+      uint32_t nIterCount2;
+      uint32_t nIterLeft;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(nIterCount_u) == 4, "nIterCount_u must stay one 4-byte frame slot");
+    TSLink<::StringEntryNode>* pBucket;
+    TSLink<::StringEntryNode>* ppTempHead;
+    TSExplicitList<::StringEntryNode, -572662307>* pPrevPtr;
+    TSLink<::StringEntryNode>** pBackPtr;
+    int nBucketOffset;
+    TSExplicitList<::StringEntryNode, -572662307> tempList;
+    nIterCount_u nIterCount;
+    int nBucketByteOff;
+    intptr_t nBucketNextLink;
+    TSLink<::StringEntryNode>* pPrevLink;
+    tempList.m_terminator.m_prevlink = &tempList.m_terminator;
+    uint32_t nOldBucketCount = pThis->nSlotMask + 1;
+    uint32_t dwNewBucketCount = nOldBucketCount * 2;
+    intptr_t nCurEntry = ~(uintptr_t)tempList.m_terminator.m_prevlink;
+    tempList.m_linkoffset = -0x22222223;
+    tempList.m_terminator.m_next = nCurEntry;
+    TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* nHashTableBase = pThis;
+    tempList.UnlinkAll();
+    tempList.m_terminator.m_prevlink = &tempList.m_terminator;
+    tempList.m_linkoffset = 4;
+    tempList.m_terminator.m_next = nCurEntry;
+    nIterCount.nIterCount2 = 0;
+    if (nOldBucketCount) {
+      TSLink<::StringEntryNode>** pBackLink1;
+      nBucketByteOff = 0;
+      ppTempHead = tempList.m_terminator.m_prevlink;
+      do {
+        while (0 < (nBucketNextLink = pThis->tSlotListArray.m_data[nBucketByteOff].m_terminator.m_next)) {
+          pBucket = (TSLink<::StringEntryNode>*)(nBucketNextLink + 4);
+          pPrevLink = pBucket->m_prevlink;
+          if (pPrevLink) {
+            pBackLink1 = (TSLink<::StringEntryNode>**)D2_StormNextLink(pBucket, -1);
+            *pBackLink1 = pPrevLink;
+            pBucket->m_prevlink->m_next = *(intptr_t*)(nBucketNextLink + 8);
+            pBucket->m_prevlink = 0;
+            *(uint32_t*)(nBucketNextLink + 8) = 0;
+            ppTempHead = tempList.m_terminator.m_prevlink;
+          }
+
+          pBucket->m_prevlink = ppTempHead;
+          *(intptr_t*)(nBucketNextLink + 8) = ppTempHead->m_next;
+          ppTempHead->m_next = nBucketNextLink;
+          ppTempHead = pBucket;
+          tempList.m_terminator.m_prevlink = pBucket;
+          pThis = nHashTableBase;
+        }
+
+        nBucketByteOff++;
+        nIterCount.nIterCount2++;
+        pThis = nHashTableBase;
+      } while (nIterCount.nIterCount2 < nOldBucketCount);
+    }
+
+    uint32_t dwCurEntry = dwNewBucketCount;
+    pThis->tSlotListArray.SetCount(dwNewBucketCount);
+    if (dwCurEntry) {
+      nBucketOffset = 0;
+      nIterCount.nIterLeft = dwCurEntry;
+      do {
+        pPrevPtr = &pThis->tSlotListArray.m_data[nBucketOffset];
+        if (pPrevPtr->m_linkoffset != 4) {
+          pPrevPtr->UnlinkAll();
+          ppTempHead = &pPrevPtr->m_terminator;
+          ppTempHead->m_prevlink = ppTempHead;
+          pPrevPtr->m_linkoffset = 4;
+          pPrevPtr->m_terminator.m_next = ~(uintptr_t)ppTempHead;
+        }
+
+        nBucketOffset++;
+        nIterCount.nIterLeft -= 1;
+      } while (nIterCount.nIterLeft);
+
+      nIterCount.nIterCount2 = 0;
+      dwCurEntry = dwNewBucketCount;
+    }
+
+    pThis->nSlotMask = dwCurEntry - 1;
+    while (0 < tempList.m_terminator.m_next) {
+      int nSavedNode = tempList.m_terminator.m_next;
+      pPrevPtr = pThis->tSlotListArray.m_data + (*(uint32_t*)tempList.m_terminator.m_next & pThis->nSlotMask);
+      pBucket = (TSLink<::StringEntryNode>*)(pPrevPtr->m_linkoffset + tempList.m_terminator.m_next);
+      ppTempHead = pBucket->m_prevlink;
+      if (ppTempHead) {
+        nOldBucketCount = pBucket->m_next;
+        pBackPtr = (TSLink<::StringEntryNode>**)D2_StormNextLink(pBucket, -1);
+        *pBackPtr = ppTempHead;
+        pBucket->m_prevlink->m_next = pBucket->m_next;
+        pBucket->m_prevlink = 0;
+        pBucket->m_next = 0;
+      }
+
+      ppTempHead = pPrevPtr->m_terminator.m_prevlink;
+      pBucket->m_prevlink = ppTempHead;
+      pBucket->m_next = ppTempHead->m_next;
+      ppTempHead->m_next = nSavedNode;
+      pPrevPtr->m_terminator.m_prevlink = pBucket;
+    }
+
+    tempList.UnlinkAll();
+    if (!tempList.m_terminator.m_prevlink) {
+      return;
+    }
+    if (tempList.m_terminator.m_next < 0) {
+      *(TSLink<::StringEntryNode>**)~tempList.m_terminator.m_next = tempList.m_terminator.m_prevlink;
+    } else {
+      *(TSLink<::StringEntryNode>**)(tempList.m_terminator.m_next + (intptr_t)&tempList + (4 - tempList.m_terminator.m_prevlink->m_next)) = tempList.m_terminator.m_prevlink;
+    }
+
+    tempList.m_terminator.m_prevlink->m_next = tempList.m_terminator.m_next;
+}
+
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+// Returns whether the player name is on the ignore list. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the result is already in EAX; typed void the reconstruction dropped it.
+int32_t __fastcall CheckIgnored(::IgnoreList * pThis, int, char * szPlayerName) {
+    int32_t _bIsEnabled;
+    bool bIsEnabled;
+    bool bFound;
+    char szSuffix[256];
+    if (!(!szPlayerName || *szPlayerName == '\0')) {
+      char szPrefix[256];
+      _bIsEnabled = vc8_thiscall(pThis->_vfptr->GetPersistentSetting)(pThis);
+      if (_bIsEnabled) {
+        szSuffix[0] = '\0';
+        memset(szSuffix + 1, 0, 0xff);
+        szPrefix[0] = '\0';
+        memset(szPrefix + 1, 0, 0xff);
+        vc8_thiscall(IGNORELIST_ExtractPrefix)(pThis, szPlayerName, szPrefix, 0x100);
+        vc8_thiscall(pThis->_vfptr->GetMappedValue)(pThis, szPrefix, szSuffix, 0x100);
+        if (szSuffix[0] == '\0') {
+          vc8_thiscall(IGNORELIST_ExtractSuffix)(pThis, szPlayerName, szSuffix, 0x100);
+          if (szSuffix[0] != '\0') {
+            goto check_alternate_name;
+          }
+        } else {
+          check_alternate_name:
+          _bIsEnabled = vc8_thiscall(CheckCharNameIgnored)(pThis, szSuffix);
+          if (_bIsEnabled) {
+            return 1;
+          }
+        }
+        if (szPrefix[0] != '\0') {
+          _bIsEnabled = vc8_thiscall(CheckCharNameIgnored)(pThis, szPrefix);
+          if (_bIsEnabled) {
+            return 1;
+          }
+        }
+      }
+    }
+
+    return 0;
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+template<> TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* TSHashTable<StringEntryNode, HASHKEY_STRI>::Constructor() {
+    this->pVtable = (TSHashTable<::StringEntryNode, ::HASHKEY_STRI>::Vtable*)(void*)TSHashTable<::StringEntryNode, ::HASHKEY_STRI>::vftable;
+    TSExplicitList<::StringEntryNode, -572662307>* pBucketEntry = &this->tFullList;
+    this->tFullList.m_terminator.m_next = 0;
+    TSLink<::StringEntryNode>* pTVar1 = &this->tFullList.m_terminator;
+    pTVar1->m_prevlink = pTVar1;
+    pBucketEntry->m_linkoffset = -0x22222223;
+    this->tFullList.m_terminator.m_next = ~(uintptr_t)pTVar1;
+    this->tSlotListArray.m_alloc = 0;
+    this->tSlotListArray.m_count = 0;
+    this->tSlotListArray.m_data = 0;
+    this->tSlotListArray.m_chunk = 0;
+    this->nFullnessIndicator = 0;
+    if (pBucketEntry->m_linkoffset != 0xc) {
+      pBucketEntry->UnlinkAll();
+      pTVar1 = &this->tFullList.m_terminator;
+      pTVar1->m_prevlink = pTVar1;
+      pBucketEntry->m_linkoffset = 0xc;
+      this->tFullList.m_terminator.m_next = ~(uintptr_t)pTVar1;
+    }
+
+    this->nSlotMask = 3;
+    this->tSlotListArray.SetCount(4);
+    uint32_t nBucketIter = 0;
+    do {
+      pBucketEntry = &this->tSlotListArray.m_data[nBucketIter];
+      if (pBucketEntry->m_linkoffset != 4) {
+        pBucketEntry->UnlinkAll();
+        pTVar1 = &pBucketEntry->m_terminator;
+        pTVar1->m_prevlink = pTVar1;
+        pBucketEntry->m_linkoffset = 4;
+        pBucketEntry->m_terminator.m_next = ~(uintptr_t)pTVar1;
+      }
+
+      nBucketIter++;
+    } while (nBucketIter <= this->nSlotMask);
+
+    return this;
+}
+
+template<> __declspec(noinline) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::Destructor() {
+    pfnEHHandlerRoutine pExHandler = D2Common::Chat::__GSHandlerCheck_EH_6ca366;
+    void* pExSave = ExceptionList;
+    ExceptionList = &pExSave;
+    this->pVtable = (TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>::Vtable*)(void*)TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>::vftable;
+    int32_t nExState = 1;
+    this->InternalClear(1);
+    this->tSlotListArray.Destructor();
+    this->tFullList.UnlinkAll();
+    TSLink<::MappingEntryNode>* pHead = this->tFullList.m_terminator.m_prevlink;
+    TSLink<::MappingEntryNode>* pTVar1 = &this->tFullList.m_terminator;
+    if (pHead) {
+      TSLink<::MappingEntryNode>** pListHead;
+      pListHead = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pTVar1, -1);
+      *pListHead = pHead;
+      pTVar1->m_prevlink->m_next = pTVar1->m_next;
+      pTVar1->m_prevlink = 0;
+      pTVar1->m_next = 0;
+    }
+
+    ExceptionList = pExSave;
+}
+
+template<> ::MappingEntryNode * TSExplicitList<MappingEntryNode, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
+    ::MappingEntryNode* pNodeNew = (::MappingEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1c, D2Common::Chat::Ignorelist::MappingEntryNode::s___AUMappingEntryNode___0074362c, -2, dwFlags | 8);
+    ::MappingEntryNode* pNode;
+    if (pNodeNew) {
+      pNodeNew->m_linktoslot.m_prevlink = 0;
+      pNodeNew->m_linktoslot.m_next = 0;
+      pNodeNew->m_linktofull.m_prevlink = 0;
+      pNodeNew->m_linktofull.m_next = 0;
+      pNodeNew->m_key.szString = 0;
+      pNodeNew->szMappedValue = 0;
+      pNode = pNodeNew;
+    } else {
+      pNode = 0;
+    }
+    if (nLocation) {
+      this->LinkNode(pNode, nLocation, nullptr);
+    }
+
+    return pNode;
+}
+
+// @sourcefile .\Chat\Ignorelist.cpp
+// @blizzard TSHashTable<MappingEntryNode,HASHKEY_STRI>::InternalDelete (STORM.H)
+template<> void __fastcall TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalDelete(TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* pThis, int, ::MappingEntryNode * pNode) {
+    if (pNode->szMappedValue) {
+      Storm::Source::SMem::SMemFree(pNode->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x11, 0);
+    }
+
+    pNode->Destructor();
+    Storm::Source::SMem::SMemFree(pNode, D2Common::Chat::Ignorelist::MappingEntryNode::s___AUMappingEntryNode___0074362c, -2, 0);
+}
+
+// @blizzard TSHashTable<MappingEntryNode,HASHKEY_STRI>::InternalNew (STORM.H)
+template<> ::MappingEntryNode * __fastcall TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalNew(TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* pThis, int, TSExplicitList<::MappingEntryNode, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
+    TSLink<::MappingEntryNode>* pBucketHead;
+    ::MappingEntryNode* pNode = (::MappingEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1c, D2Common::Chat::Ignorelist::MappingEntryNode::s___AUMappingEntryNode___0074362c, -2, dwFlags | 8);
+    if (pNode) {
+      pNode->m_linktoslot.m_prevlink = 0;
+      pNode->m_linktoslot.m_next = 0;
+      pNode->m_linktofull.m_prevlink = 0;
+      pNode->m_linktofull.m_next = 0;
+      pNode->m_key.szString = 0;
+      pNode->szMappedValue = 0;
+      pBucketHead = (TSLink<::MappingEntryNode>*)((intptr_t)&pNode->m_hashval + pList->m_linkoffset);
+    } else {
+      pNode = 0;
+      pBucketHead = &pList->m_terminator;
+    }
+
+    TSLink<::MappingEntryNode>* pHeadEntry = pBucketHead->m_prevlink;
+    if (pHeadEntry) {
+      TSLink<::MappingEntryNode>** pPrev;
+      pPrev = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pBucketHead, -1);
+      *pPrev = pHeadEntry;
+      pBucketHead->m_prevlink->m_next = pBucketHead->m_next;
+      pBucketHead->m_prevlink = 0;
+      pBucketHead->m_next = 0;
+    }
+
+    pHeadEntry = &pList->m_terminator;
+    pBucketHead->m_prevlink = pHeadEntry;
+    pBucketHead->m_next = pList->m_terminator.m_next;
+    intptr_t dwNext2 = pList->m_terminator.m_next;
+    intptr_t pNext = pList->m_linkoffset;
+    if (dwNext2 < 0) {
+      *(TSLink<::MappingEntryNode>**)~dwNext2 = (TSLink<::MappingEntryNode>*)pBucketHead;
+    } else {
+      if (pNext < 0) {
+        pNext = (intptr_t)pHeadEntry - pHeadEntry->m_prevlink->m_next;
+      }
+
+      *(TSLink<::MappingEntryNode>**)(dwNext2 + pNext) = (TSLink<::MappingEntryNode>*)pBucketHead;
+    }
+
+    pHeadEntry->m_next = (intptr_t)pNode;
+    return pNode;
+}
+
+template<> TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>> * TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::ScalarDeletingDestructor(uint32_t dwFlags) {
+    this->Destructor();
+    if (dwFlags & 1 && this) {
+      Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
+    }
+
+    return this;
+}
+
+template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::Clear() {
+    this->Destructor();
+    this->m_alloc = 0;
+    this->m_count = 0;
+    this->m_data = 0;
+}
+
+// @blizzard TSHashTable<MappingEntryNode,HASHKEY_STRI>::Destroy (STORM.H)
+template<> void __fastcall TSHashTable<MappingEntryNode, HASHKEY_STRI>::Destroy(TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* pThis, int) {
+    pThis->InternalClear(1);
+    pThis->nFullnessIndicator = 0;
+    pThis->nSlotMask = 0;
+    TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>* pArray = &pThis->tSlotListArray;
+    pArray->Destructor();
+    pArray->m_alloc = 0;
+    pArray->m_count = 0;
+    pArray->m_data = 0;
+}
+
+// @blizzard TSHashTable<MappingEntryNode,HASHKEY_STRI> scalar deleting destructor (STORM.H)
+template<> TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* __fastcall TSHashTable<MappingEntryNode, HASHKEY_STRI>::ScalarDeletingDestructor(TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* pThis, int, uint32_t dwFlags) {
+    pThis->Destructor();
+    if (dwFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
+    }
+
+    return pThis;
+}
+
+// stpl-orphan: a COMDAT copy in TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>> that no member owns
+void __fastcall SetCount_Unreferenced(TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>> * pThis, int, uint32_t nCount) {
+    pThis->SetCount(nCount);
+}
+
+// Check load factor and rehash the string entry hash table if chain length exceeds threshold
+template<> __declspec(noinline) inline int32_t TSHashTable<StringEntryNode, HASHKEY_STRI>::MonitorFullness(uint32_t nSlot) {
+    TSLink<::StringEntryNode>* pTVar1;
+    if (this->nSlotMask >= 0x3ff) {
+      return 0;
+    }
+    if (this->nFullnessIndicator > 3) {
+      this->nFullnessIndicator -= 3;
+    } else {
+      this->nFullnessIndicator = 0;
+    }
+
+    intptr_t uEntry = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
+    uEntry = uEntry <= 0 ? 0 : uEntry;
+    while (true) {
+      TSExplicitList<::StringEntryNode, -572662307>* pChainLink;
+      if (uEntry <= 0) {
+        return 0;
+      }
+
+      this->nFullnessIndicator++;
+      if (this->nFullnessIndicator > 0xd) {
+        break;
+      }
+
+      pChainLink = this->tSlotListArray.m_data + nSlot;
+      if (uEntry) {
+        pTVar1 = (TSLink<::StringEntryNode>*)(pChainLink->m_linkoffset + uEntry);
+      } else {
+        pTVar1 = &pChainLink->m_terminator;
+      }
+
+      uEntry = pTVar1->m_next;
+    }
+
+    this->nFullnessIndicator = 0;
+    this->GrowListArray();
+    return 1;
+}
+
+// [override: patch]
+template<> __declspec(noinline) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::GrowListArray() {
+    TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* pThis = this;
+    // The values VC8 kept in nIterCount's one frame slot, one member each: a frame object reaches the slot.
+    union nIterCount_u {
+      uint32_t nIterCount2;
+      uint32_t pIterCount;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(nIterCount_u) == 4, "nIterCount_u must stay one 4-byte frame slot");
+    TSLink<::MappingEntryNode>* pBucket;
+    TSLink<::MappingEntryNode>* ppTempListHead;
+    TSExplicitList<::MappingEntryNode, -572662307>* pPrevPtr;
+    TSLink<::MappingEntryNode>** pBackPtr;
+    int nBucketOffset;
+    TSExplicitList<::MappingEntryNode, -572662307> tempList;
+    nIterCount_u nIterCount;
+    int nBucketByteOff;
+    intptr_t nBucketNextLink;
+    TSLink<::MappingEntryNode>* pPrevLink;
+    tempList.m_terminator.m_prevlink = &tempList.m_terminator;
+    uint32_t nOldBucketCount = pThis->nSlotMask + 1;
+    uint32_t nNewBucketCount = nOldBucketCount * 2;
+    intptr_t nCurEntry = ~(uintptr_t)tempList.m_terminator.m_prevlink;
+    tempList.m_linkoffset = -0x22222223;
+    tempList.m_terminator.m_next = nCurEntry;
+    TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* nHashTableBase = pThis;
+    tempList.UnlinkAll();
+    tempList.m_terminator.m_prevlink = &tempList.m_terminator;
+    tempList.m_linkoffset = 4;
+    tempList.m_terminator.m_next = nCurEntry;
+    nIterCount.nIterCount2 = 0;
+    if (nOldBucketCount) {
+      TSLink<::MappingEntryNode>** pBackLink1;
+      nBucketByteOff = 0;
+      ppTempListHead = tempList.m_terminator.m_prevlink;
+      do {
+        while (0 < (nBucketNextLink = pThis->tSlotListArray.m_data[nBucketByteOff].m_terminator.m_next)) {
+          pBucket = (TSLink<::MappingEntryNode>*)(nBucketNextLink + 4);
+          pPrevLink = pBucket->m_prevlink;
+          if (pPrevLink) {
+            pBackLink1 = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pBucket, -1);
+            *pBackLink1 = pPrevLink;
+            pBucket->m_prevlink->m_next = *(intptr_t*)(nBucketNextLink + 8);
+            pBucket->m_prevlink = 0;
+            *(uint32_t*)(nBucketNextLink + 8) = 0;
+            ppTempListHead = tempList.m_terminator.m_prevlink;
+          }
+
+          pBucket->m_prevlink = ppTempListHead;
+          *(intptr_t*)(nBucketNextLink + 8) = ppTempListHead->m_next;
+          ppTempListHead->m_next = nBucketNextLink;
+          ppTempListHead = pBucket;
+          tempList.m_terminator.m_prevlink = pBucket;
+          pThis = nHashTableBase;
+        }
+
+        nBucketByteOff++;
+        nIterCount.nIterCount2++;
+        pThis = nHashTableBase;
+      } while (nIterCount.nIterCount2 < nOldBucketCount);
+    }
+
+    uint32_t pCurEntry = nNewBucketCount;
+    pThis->tSlotListArray.SetCount(nNewBucketCount);
+    if (pCurEntry) {
+      nBucketOffset = 0;
+      nIterCount.pIterCount = pCurEntry;
+      do {
+        pPrevPtr = &pThis->tSlotListArray.m_data[nBucketOffset];
+        if (pPrevPtr->m_linkoffset != 4) {
+          pPrevPtr->UnlinkAll();
+          ppTempListHead = &pPrevPtr->m_terminator;
+          ppTempListHead->m_prevlink = ppTempListHead;
+          pPrevPtr->m_linkoffset = 4;
+          pPrevPtr->m_terminator.m_next = ~(uintptr_t)ppTempListHead;
+        }
+
+        nBucketOffset++;
+        nIterCount.pIterCount = nIterCount.pIterCount - 1;
+      } while (nIterCount.pIterCount);
+
+      nIterCount.nIterCount2 = 0;
+      pCurEntry = nNewBucketCount;
+    }
+
+    pThis->nSlotMask = pCurEntry - 1;
+    while (0 < tempList.m_terminator.m_next) {
+      int nSavedNode = tempList.m_terminator.m_next;
+      pPrevPtr = pThis->tSlotListArray.m_data + (*(uint32_t*)tempList.m_terminator.m_next & pThis->nSlotMask);
+      pBucket = (TSLink<::MappingEntryNode>*)(pPrevPtr->m_linkoffset + tempList.m_terminator.m_next);
+      ppTempListHead = pBucket->m_prevlink;
+      if (ppTempListHead) {
+        nOldBucketCount = pBucket->m_next;
+        pBackPtr = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pBucket, -1);
+        *pBackPtr = ppTempListHead;
+        pBucket->m_prevlink->m_next = pBucket->m_next;
+        pBucket->m_prevlink = 0;
+        pBucket->m_next = 0;
+      }
+
+      ppTempListHead = pPrevPtr->m_terminator.m_prevlink;
+      pBucket->m_prevlink = ppTempListHead;
+      pBucket->m_next = ppTempListHead->m_next;
+      ppTempListHead->m_next = nSavedNode;
+      pPrevPtr->m_terminator.m_prevlink = pBucket;
+    }
+
+    tempList.UnlinkAll();
+    if (!tempList.m_terminator.m_prevlink) {
+      return;
+    }
+    if (tempList.m_terminator.m_next < 0) {
+      *(TSLink<::MappingEntryNode>**)~tempList.m_terminator.m_next = tempList.m_terminator.m_prevlink;
+    } else {
+      *(TSLink<::MappingEntryNode>**)(tempList.m_terminator.m_next + (intptr_t)&tempList + (4 - tempList.m_terminator.m_prevlink->m_next)) = tempList.m_terminator.m_prevlink;
+    }
+
+    tempList.m_terminator.m_prevlink->m_next = tempList.m_terminator.m_next;
+}
+
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+void __fastcall Destructor(::IgnoreList * pThis, int) {
+    pfnEHHandlerRoutine pExHandler = __GSHandlerCheck_EH_6ca3b9;
+    void* pExSave = ExceptionList;
+    ExceptionList = &pExSave;
+    pThis->_vfptr = (IgnoreListVtable*)(void*)IgnoreList::vftable;
+    int nSehState = 3;
+    pThis->tIgnoredPatterns.InternalClear(0);
+    pThis->tAccountMappings.InternalClear(0);
+    nSehState = (int)((uint32_t)nSehState & 0xffffff00u | 2u);
+    pThis->tAccountMappings.Destructor();
+    nSehState = (int)((uint32_t)nSehState & 0xffffff00u | 1u);
+    pThis->tIgnoredAccounts.Destructor();
+    nSehState = (uint32_t)(uint32_t)((uint32_t)nSehState >> 8 & 0xffffffu) << 8;
+    pThis->tIgnoredPatterns.Destructor();
+    pThis->_vfptr = (IgnoreListVtable*)(void*)ChatIgnoreList::vftable;
+    ExceptionList = pExSave;
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+template<> TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>* TSHashTable<MappingEntryNode, HASHKEY_STRI>::Constructor() {
+    this->pVtable = (TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>::Vtable*)(void*)TSHashTable<::MappingEntryNode, ::HASHKEY_STRI>::vftable;
+    TSExplicitList<::MappingEntryNode, -572662307>* pBucketNode = &this->tFullList;
+    this->tFullList.m_terminator.m_next = 0;
+    TSLink<::MappingEntryNode>* pTVar1 = &this->tFullList.m_terminator;
+    pTVar1->m_prevlink = pTVar1;
+    pBucketNode->m_linkoffset = -0x22222223;
+    this->tFullList.m_terminator.m_next = ~(uintptr_t)pTVar1;
+    this->tSlotListArray.m_alloc = 0;
+    this->tSlotListArray.m_count = 0;
+    this->tSlotListArray.m_data = 0;
+    this->tSlotListArray.m_chunk = 0;
+    this->nFullnessIndicator = 0;
+    if (pBucketNode->m_linkoffset != 0xc) {
+      pBucketNode->UnlinkAll();
+      pTVar1 = &this->tFullList.m_terminator;
+      pTVar1->m_prevlink = pTVar1;
+      pBucketNode->m_linkoffset = 0xc;
+      this->tFullList.m_terminator.m_next = ~(uintptr_t)pTVar1;
+    }
+
+    this->nSlotMask = 3;
+    this->tSlotListArray.SetCount(4);
+    uint32_t nBucketIter = 0;
+    do {
+      pBucketNode = &this->tSlotListArray.m_data[nBucketIter];
+      if (pBucketNode->m_linkoffset != 4) {
+        pBucketNode->UnlinkAll();
+        pTVar1 = &pBucketNode->m_terminator;
+        pTVar1->m_prevlink = pTVar1;
+        pBucketNode->m_linkoffset = 4;
+        pBucketNode->m_terminator.m_next = ~(uintptr_t)pTVar1;
+      }
+
+      nBucketIter++;
+    } while (nBucketIter <= this->nSlotMask);
+
+    return this;
+}
+
+template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::New(uint32_t dwHashVal, ::HASHKEY_STRI * pKey, uint32_t nExtraBytes, uint32_t dwFlags) {
+    TSLink<::StringEntryNode>* pListNode;
+    uint32_t nBucketIdx = dwHashVal & this->nSlotMask;
+    int32_t bRehashed = this->MonitorFullness(nBucketIdx);
+    if (bRehashed) {
+      nBucketIdx = dwHashVal & this->nSlotMask;
+    }
+
+    TSExplicitList<::StringEntryNode, -572662307>* pSlotList = this->tSlotListArray.m_data + nBucketIdx; // steer-ok: the original computes the slot list argument before loading nExtraBytes and dwFlags (TSHashTable::New argument order)
+    ::StringEntryNode* pEntry = vc8_thiscall(this->pVtable->InternalNew)(this, pSlotList, nExtraBytes, dwFlags);
+    if (pEntry) {
+      pListNode = (TSLink<::StringEntryNode>*)((intptr_t)&pEntry->m_hashval + this->tFullList.m_linkoffset);
+    } else {
+      pListNode = &this->tFullList.m_terminator;
+    }
+
+    TSLink<::StringEntryNode>* pTVar1 = pListNode->m_prevlink;
+    if (pTVar1) {
+      TSLink<::StringEntryNode>** pBackLink;
+      nBucketIdx = pListNode->m_next;
+      pBackLink = (TSLink<::StringEntryNode>**)D2_StormNextLink(pListNode, -1);
+      *pBackLink = pTVar1;
+      pListNode->m_prevlink->m_next = pListNode->m_next;
+      pListNode->m_prevlink = 0;
+      pListNode->m_next = 0;
+    }
+
+    pTVar1 = this->tFullList.m_terminator.m_prevlink;
+    pListNode->m_prevlink = pTVar1;
+    pListNode->m_next = pTVar1->m_next;
+    pTVar1->m_next = (intptr_t)pEntry;
+    this->tFullList.m_terminator.m_prevlink = pListNode;
+    pEntry->m_hashval = dwHashVal;
+    char* pDupStr = pEntry->m_key.szString;
+    if (pDupStr) {
+      Storm::Source::SMem::SMemFree(pDupStr, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
+    }
+
+    pDupStr = Storm::Source::SSTR::SStrDup(pKey->szString);
+    pEntry->m_key.szString = pDupStr;
+    return pEntry;
+}
+
+// Check load factor and rehash the mapping entry hash table if chain length exceeds threshold
+template<> __declspec(noinline) inline int32_t TSHashTable<MappingEntryNode, HASHKEY_STRI>::MonitorFullness(uint32_t nSlot) {
+    TSLink<::MappingEntryNode>* pTVar1;
+    if (this->nSlotMask >= 0x3ff) {
+      return 0;
+    }
+    if (this->nFullnessIndicator > 3) {
+      this->nFullnessIndicator -= 3;
+    } else {
+      this->nFullnessIndicator = 0;
+    }
+
+    intptr_t nChainLen = this->tSlotListArray.m_data[nSlot].m_terminator.m_next;
+    nChainLen = nChainLen <= 0 ? 0 : nChainLen;
+    while (true) {
+      TSExplicitList<::MappingEntryNode, -572662307>* pNode;
+      if (nChainLen <= 0) {
+        return 0;
+      }
+
+      this->nFullnessIndicator++;
+      if (this->nFullnessIndicator > 0xd) {
+        break;
+      }
+
+      pNode = this->tSlotListArray.m_data + nSlot;
+      if (nChainLen) {
+        pTVar1 = (TSLink<::MappingEntryNode>*)(pNode->m_linkoffset + nChainLen);
+      } else {
+        pTVar1 = &pNode->m_terminator;
+      }
+
+      nChainLen = pTVar1->m_next;
+    }
+
+    this->nFullnessIndicator = 0;
+    this->GrowListArray();
+    return 1;
+}
+
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+::IgnoreList * __fastcall ScalarDeletingDestructor(::IgnoreList * pThis, int, uint32_t nFlags) {
+    vc8_thiscall(IgnoreList::Destructor)(pThis);
+    if (nFlags & 1 && pThis) {
+      Storm::Source::SMem::SMemFree(pThis, "delete", -1, 0);
+    }
+
+    return pThis;
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::New(char * szKey, uint32_t nExtraBytes, uint32_t dwFlags) {
+    char* pszText = szKey;
+    uint32_t nSehState = -1;
+    pfnEHHandlerRoutine pSehHandler = D2Common::Chat::__GSHandlerCheck_EH_6ca3e8;
+    void* pPrevExceptionList = ExceptionList;
+    ExceptionList = &pPrevExceptionList;
+    char* pObject = Storm::Source::SSTR::SStrDup(szKey);
+    ::HASHKEY_STRI* dwSavedCompareArg1 = (::HASHKEY_STRI*)&szKey;
+    nSehState = 0;
+    szKey = pObject;
+    uint32_t dwSavedCompareArg2 = nExtraBytes;
+    uint32_t dwFlags_00 = dwFlags;
+    uint32_t dwHash = Storm::Source::SSTR::SStrHash(pszText, 0, 0);
+    ::StringEntryNode* pEntry = this->New(dwHash, dwSavedCompareArg1, dwSavedCompareArg2, dwFlags_00);
+    if (pObject) {
+      Storm::Source::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
+    }
+
+    ExceptionList = pPrevExceptionList;
+    return pEntry;
+}
+
+template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New(uint32_t dwHashVal, ::HASHKEY_STRI * pKey, uint32_t nExtraBytes, uint32_t dwFlags) {
+    TSLink<::MappingEntryNode>* pListNode;
+    uint32_t nBucketIdx = dwHashVal & this->nSlotMask;
+    int32_t bRehashed = this->MonitorFullness(nBucketIdx);
+    if (bRehashed) {
+      nBucketIdx = dwHashVal & this->nSlotMask;
+    }
+
+    TSExplicitList<::MappingEntryNode, -572662307>* pSlotList = this->tSlotListArray.m_data + nBucketIdx; // steer-ok: the original computes the slot list argument before loading nExtraBytes and dwFlags (TSHashTable::New argument order)
+    ::MappingEntryNode* pEntry = vc8_thiscall(this->pVtable->InternalNew)(this, pSlotList, nExtraBytes, dwFlags);
+    if (pEntry) {
+      pListNode = (TSLink<::MappingEntryNode>*)((intptr_t)&pEntry->m_hashval + this->tFullList.m_linkoffset);
+    } else {
+      pListNode = &this->tFullList.m_terminator;
+    }
+
+    TSLink<::MappingEntryNode>* pTVar1 = pListNode->m_prevlink;
+    if (pTVar1) {
+      TSLink<::MappingEntryNode>** pBackLink;
+      nBucketIdx = pListNode->m_next;
+      pBackLink = (TSLink<::MappingEntryNode>**)D2_StormNextLink(pListNode, -1);
+      *pBackLink = pTVar1;
+      pListNode->m_prevlink->m_next = pListNode->m_next;
+      pListNode->m_prevlink = 0;
+      pListNode->m_next = 0;
+    }
+
+    pTVar1 = this->tFullList.m_terminator.m_prevlink;
+    pListNode->m_prevlink = pTVar1;
+    pListNode->m_next = pTVar1->m_next;
+    pTVar1->m_next = (intptr_t)pEntry;
+    this->tFullList.m_terminator.m_prevlink = pListNode;
+    pEntry->m_hashval = dwHashVal;
+    char* pDupStr = pEntry->m_key.szString;
+    if (pDupStr) {
+      Storm::Source::SMem::SMemFree(pDupStr, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e9, 0);
+    }
+
+    pDupStr = Storm::Source::SSTR::SStrDup(pKey->szString);
+    pEntry->m_key.szString = pDupStr;
+    return pEntry;
+}
+
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+// Adds a name pattern to the ignore list and returns the result. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the value is already in EAX; typed void the reconstruction dropped it.
+int32_t __fastcall AddByPattern(::IgnoreList * pThis, int, char * szPattern) {
+    ::StringEntryNode* pExistingEntry;
+    char szParsedPattern[256];
+    if (szPattern && *szPattern != '\0') {
+      int32_t bCanAdd;
+      bCanAdd = vc8_thiscall(pThis->_vfptr->GetPersistentSetting)(pThis);
+      if (bCanAdd) {
+        szParsedPattern[0] = '\0';
+        memset(szParsedPattern + 1, 0, 0xff);
+        vc8_thiscall(IGNORELIST_ParsePattern)(pThis, szPattern, szParsedPattern, 0x100);
+        if (szParsedPattern[0] != '\0') {
+          pExistingEntry = pThis->tIgnoredPatterns.Ptr(szParsedPattern);
+          if (!pExistingEntry) {
+            pThis->tIgnoredPatterns.New(szParsedPattern, 0, 0);
+            vc8_thiscall(AppendLineToFile)(pThis, szParsedPattern);
+          }
+
+          return 1;
+        }
+      }
+    }
+
+    return 0;
+}
+
+// Adds an account name to the ignore list and returns the result. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the value is already in EAX; typed void the reconstruction dropped it.
+int32_t __fastcall AddByAccountName(::IgnoreList * pThis, int, char * szAccountName) {
+    ::StringEntryNode* pExistingEntry;
+    char cIgnorePrefix[256];
+    if (szAccountName && *szAccountName != '\0') {
+      int32_t bCanAdd;
+      bCanAdd = vc8_thiscall(pThis->_vfptr->GetPersistentSetting)(pThis);
+      if (bCanAdd && *szAccountName != '\0') {
+        pExistingEntry = pThis->tIgnoredAccounts.Ptr(szAccountName);
+        if (!pExistingEntry) {
+          pThis->tIgnoredAccounts.New(szAccountName, 0, 0);
+          memset(cIgnorePrefix + 1, 0, 0xff);
+          cIgnorePrefix[0] = '!';
+          Storm::Source::SSTR::SStrPack(cIgnorePrefix, szAccountName, 0x100);
+          vc8_thiscall(AppendLineToFile)(pThis, cIgnorePrefix);
+        }
+
+        return 1;
+      }
+    }
+
+    return 0;
+}
+
+void __fastcall LoadFromFile(::IgnoreList * pThis, int) {
+    uint32_t nLineLen;
+    TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pHashTable;
+    uint32_t pszIter;
+    char szLineBuf[256];
+    FILE* pFile = fopen(pThis->szIgnoreFilePath, "rt");
+    if (pFile) {
+      char* pszLine;
+      szLineBuf[0] = '\0';
+      memset(szLineBuf + 1, 0, 0xff);
+      pszLine = fgets(szLineBuf, 0x100, pFile);
+      while (pszLine) {
+        pszIter = 0;
+        nLineLen = Storm::Source::SSTR::SStrLen(szLineBuf);
+        if (nLineLen > 0) {
+          do {
+            if (szLineBuf[pszIter] == '\r' || szLineBuf[pszIter] == '\n') {
+              szLineBuf[pszIter] = '\0';
+            }
+
+            pszIter++;
+            nLineLen = Storm::Source::SSTR::SStrLen(szLineBuf);
+          } while (pszIter < nLineLen);
+        }
+        if (szLineBuf[0] == '!' && szLineBuf[1] != '\0') {
+          pszLine = szLineBuf + 1;
+          pHashTable = &pThis->tIgnoredAccounts;
+          pHashTable->New(pszLine, 0, 0);
+        } else {
+          pszLine = szLineBuf;
+          pHashTable = &pThis->tIgnoredPatterns;
+          pHashTable->New(pszLine, 0, 0);
+        }
+
+        pszLine = fgets(szLineBuf, 0x100, pFile);
+      }
+
+      fclose(pFile);
+    }
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New(char * szKey, uint32_t nExtraBytes, uint32_t dwFlags) {
+    char* pszText = szKey;
+    uint32_t nSehState = -1;
+    pfnEHHandlerRoutine pExceptionLabel = D2Common::Chat::__GSHandlerCheck_EH_6ca418;
+    void* pPrevExceptionList = ExceptionList;
+    ExceptionList = &pPrevExceptionList;
+    char* pObject = Storm::Source::SSTR::SStrDup(szKey);
+    ::HASHKEY_STRI* pKey = (::HASHKEY_STRI*)&szKey;
+    nSehState = 0;
+    szKey = pObject;
+    uint32_t dwExtraData1 = nExtraBytes;
+    uint32_t dwExtraData2 = dwFlags;
+    uint32_t dwHash = Storm::Source::SSTR::SStrHash(pszText, 0, 0);
+    ::MappingEntryNode* pszDup = this->New(dwHash, pKey, dwExtraData1, dwExtraData2);
+    if (pObject) {
+      Storm::Source::SMem::SMemFree(pObject, "d:\\diablo2\\Diablo2\\3rdparty\\storm\\h\\stpl.h", 0x5e4, 0);
+    }
+
+    ExceptionList = pPrevExceptionList;
+    return pszDup;
+}
+
+
+namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
+
+::IgnoreList * __fastcall Constructor(::IgnoreList * pThis, int) {
+    // Frame slots -284..-12 are ONE object: &nPersistentIgnore is passed out and the callee reaches the rest by byte offset.
+    // Separate locals let the compiler reorder them, so the run is one struct.
+    struct __frame0_t {
+      int32_t nPersistentIgnore;
+      char szExePath[260];
+      uint32_t local_14;
+      void* pPrevExceptionList;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 272, "frame group __frame0_t must reproduce the Ghidra frame layout");
+    __frame0_t __frame0;
+    pfnEHHandlerRoutine pExceptionLabel = __GSHandlerCheck_EH_6ca475;
+    __frame0.pPrevExceptionList = ExceptionList;
+    ExceptionList = &__frame0.pPrevExceptionList;
+    uint32_t nSehState = 0;
+    pThis->_vfptr = (IgnoreListVtable*)(void*)IgnoreList::vftable;
+    pThis->tIgnoredPatterns.Constructor();
+    pThis->tIgnoredAccounts.Constructor();
+    pThis->tAccountMappings.Constructor();
+    nSehState = (uint32_t)((uint32_t)((uint32_t)nSehState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)3);
+    pThis->pAppendFile = 0;
+    pThis->nPersistentIgnore = 1;
+    Fog::Source::SFile::SFILE_GetExecutableDirectory(__frame0.szExePath, 0x104);
+    Storm::Source::SMem::SMemZero(pThis->szIgnoreFilePath, 0x104);
+    char* pszLastBackslash = Storm::Source::SSTR::SStrChrR(__frame0.szExePath, '\\');
+    if (pszLastBackslash) {
+      pszLastBackslash[1] = '\0';
+    }
+
+    Storm::Source::SSTR::SStrPack(__frame0.szExePath, "ignorelist", 0x104);
+    Storm::Source::SSTR::SStrCopy(pThis->szIgnoreFilePath, __frame0.szExePath, 0x104);
+    __frame0.nPersistentIgnore = 1;
+    Storm::Source::SReg::SRegLoadValue("Diablo II", "Persistent Ignore", 0, &__frame0.nPersistentIgnore);
+    pThis->nPersistentIgnore = __frame0.nPersistentIgnore;
+    vc8_thiscall(LoadFromFile)(pThis);
+    ExceptionList = __frame0.pPrevExceptionList;
+    return pThis;
+}
+
+}}}} // namespace D2Common::Chat::Ignorelist::IgnoreList
+
+namespace D2Common { namespace Chat { namespace Ignorelist {
 
 // @sourcefile .\Chat\Ignorelist.cpp
 BOOL __fastcall AddAccountMapping(::IgnoreList * pThis, int, char * szRaw, int32_t nRawLen) {

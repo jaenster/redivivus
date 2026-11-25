@@ -20,3 +20,8 @@ extern uint32_t g_dwNewsTimestamp;
 namespace Bnclient::BnSend {
 extern char s___AUItem_NewsTable___0072ff8c[24];
 } // namespace Bnclient::BnSend
+extern uint32_t g_pfnNewsChannelCallback;
+extern pfnNewsEntryCallback g_pfnMotdCallback;
+extern pfnVoidNoArgCallback g_pfnNewsCallback;
+extern D2BnNewsTableStrc g_nNewsMaxCacheSize;
+extern uint32_t g_nFirstUnreadNewsIndex;

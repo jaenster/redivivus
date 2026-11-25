@@ -33,14 +33,14 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2RendererCoreStrc) == 0x18, "D2_NE
 
 
 RGBQUAD prgbq_00989c40[256] = {0}; D2_GLOBAL_GUARD(prgbq_00989c40, "prgbq_00989c40");
-BYTE * gpGlidePaletteTableData[72] = {0}; D2_GLOBAL_GUARD(gpGlidePaletteTableData, "gpGlidePaletteTableData");
+static BYTE * gpGlidePaletteTableData[72] = {0}; D2_STATIC_GUARD(gpGlidePaletteTableData, "gpGlidePaletteTableData");
 HPALETTE RENDERER_WINDOWED_hPalette = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_hPalette, "RENDERER_WINDOWED_hPalette");
-HBITMAP RENDERER_WINDOWED_hDIBitmap = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_hDIBitmap, "RENDERER_WINDOWED_hDIBitmap");
-uint32_t RENDERER_WINDOWED_nScaleOffsetY = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_nScaleOffsetY, "RENDERER_WINDOWED_nScaleOffsetY");
-uint32_t RENDERER_WINDOWED_nScaleWidth = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_nScaleWidth, "RENDERER_WINDOWED_nScaleWidth");
-HFONT RENDERER_WINDOWED_hDebugFont = 0; D2_GLOBAL_GUARD(RENDERER_WINDOWED_hDebugFont, "RENDERER_WINDOWED_hDebugFont");
-D2SmackerGlideBufferStrc gnSmackerGlideYOffset = {0}; D2_GLOBAL_GUARD(gnSmackerGlideYOffset, "gnSmackerGlideYOffset");
-uint32_t gnSmackerDecodeState = 0; D2_GLOBAL_GUARD(gnSmackerDecodeState, "gnSmackerDecodeState");
+static HBITMAP RENDERER_WINDOWED_hDIBitmap = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_hDIBitmap, "RENDERER_WINDOWED_hDIBitmap");
+static uint32_t RENDERER_WINDOWED_nScaleOffsetY = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_nScaleOffsetY, "RENDERER_WINDOWED_nScaleOffsetY");
+static uint32_t RENDERER_WINDOWED_nScaleWidth = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_nScaleWidth, "RENDERER_WINDOWED_nScaleWidth");
+static HFONT RENDERER_WINDOWED_hDebugFont = 0; D2_STATIC_GUARD(RENDERER_WINDOWED_hDebugFont, "RENDERER_WINDOWED_hDebugFont");
+static D2SmackerGlideBufferStrc gnSmackerGlideYOffset = {0}; D2_STATIC_GUARD(gnSmackerGlideYOffset, "gnSmackerGlideYOffset");
+static uint32_t gnSmackerDecodeState = 0; D2_STATIC_GUARD(gnSmackerDecodeState, "gnSmackerDecodeState");
 
 namespace D2Gdi { namespace Renderer { namespace Windowed {
 

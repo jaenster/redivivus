@@ -322,6 +322,39 @@
       ]
     },
     {
+      "name": "MONUNIQUE_Clt_ClearMonsterOverride",
+      "address": "004acd50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004acd50"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "MONUNIQUE_Clt_ClearMonsterOverride"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t"
+      ],
+      "dh": "03c5ad47",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eModifier",
+          "EDX:4"
+        ],
+        [
+          "bApply",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
       "name": "MONUNIQUE_ApplyModifierBloodRaven",
       "address": "004acd70",
       "lines": [
@@ -491,6 +524,53 @@
         ],
         [
           "bApply",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "MONUNIQUE_DispatchDeathEffect",
+      "address": "004ad2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ad2f0"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "MONUNIQUE_DispatchDeathEffect",
+        "CLIENT_BossDeath_Izual",
+        "CLIENT_SpawnTowerMistEffect",
+        "CLIENT_BossDeath_Andariel",
+        "CLIENT_BossDeath_Duriel",
+        "CLIENT_BossDeath_Radament",
+        "CLIENT_BossDeath_Mephisto",
+        "CLIENT_StoreUnitGuidForQuestTracking",
+        "CLIENT_SpawnOverseerControlMissile",
+        "CLIENT_BossDeath_BloodRaven",
+        "CLIENT_BossDeath_SandMaggotQueen",
+        "CLIENT_SpawnOrbMistEffect",
+        "CLIENT_SpawnAncientDeathMissile",
+        "CLIENT_BossDeath_Baal"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "a6d6b447",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "nUMod",
+          "EDX:4"
+        ],
+        [
+          "bIsChampion",
           "Stack[0x4]:4"
         ]
       ]

@@ -326,7 +326,7 @@ void __fastcall _TableNullSub21(void * pParam);
 uint8_t * __stdcall _TableNullSub22();
 uint8_t * __stdcall _TableNullSub23();
 void __stdcall _TableNullSub24(uint32_t dwArg1, uint32_t dwArg2, uint32_t dwArg3, uint32_t dwArg4);
-void Unreferenced_0052bfc0();
+uint8_t * Unreferenced_0052bfc0();
 int Unreferenced_0052bfe0();
 uint32_t __fastcall SERVER_IsTokenValid(uint16_t nToken);
 void __stdcall SetupAsBnetServer(struct D2BattleNetEventCallbackTable * pBnetCallbacks);

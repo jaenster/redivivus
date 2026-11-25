@@ -831,18 +831,15 @@ void __fastcall UnitQueuePacket0x99(D2UnitStrc * pUnit, int32_t nSkillId, uint8_
 }
 
 // @sourcefile .\UNIT\SUnitMsg.cpp
-void __fastcall UnitQueuePacket0x9A(D2UnitStrc * pUnit, uint16_t wSkillId, uint8_t byArg1, uint16_t wArg2, uint16_t wTargetY, uint8_t bParam) {
-    D2PoolManagerStrc* pAllocPool = 0;
-    if (pUnit) {
-      pAllocPool = pUnit->pMemory;
-    }
+void __fastcall UnitQueuePacket0x9A(D2UnitStrc * pUnit, int32_t nSkillId, uint8_t byArg1, uint16_t wArg2, uint16_t wTargetY, uint8_t bParam) {
+    D2PoolManagerStrc* pAllocPool = !pUnit ? nullptr : pUnit->pMemory;
 
     D2SUnitMsgStrc* pMsg = (D2SUnitMsgStrc*)D2_ALLOC_POOL_AT(pAllocPool, 0x14, ".\\UNIT\\SUnitMsg.cpp", 0x29b);
     pMsg->uArgs.s9A.nSkillLevel = byArg1;
     pMsg->uArgs.s9A.nTargetX = wArg2;
     pMsg->nOpcode = 0x9a;
     pMsg->pNext = 0;
-    pMsg->uArgs.s9A.nSkillId = wSkillId;
+    pMsg->uArgs.s9A.nSkillId = nSkillId;
     pMsg->uArgs.s9A.nTargetY = wTargetY;
     pMsg->uArgs.s9A.field_0x8 = bParam;
     if (!pUnit->pMsgFirst) {

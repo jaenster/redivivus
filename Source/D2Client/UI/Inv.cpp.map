@@ -1738,6 +1738,21 @@
       "dh": "84cc9883"
     },
     {
+      "name": "INV_IsCurrentInventoryPage1Or2",
+      "address": "00486d80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00486d80"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "INV_IsCurrentInventoryPage1Or2"
+      ],
+      "dh": "f78ddc7d"
+    },
+    {
       "name": "INV_IsMouseOverGoldButton",
       "address": "00486da0",
       "lines": [

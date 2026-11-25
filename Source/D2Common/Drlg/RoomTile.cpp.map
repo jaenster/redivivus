@@ -4,6 +4,77 @@
   "file": "Source/D2Common/Drlg/RoomTile.cpp",
   "functions": [
     {
+      "name": "DRLGANIM_PropagateAnimationData",
+      "address": "0066d750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d750"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGANIM_PropagateAnimationData"
+      ],
+      "usedTypes": [
+        "D2DrlgTileGridStrc",
+        "D2RoomExStrc",
+        "D2RoomExStrc *"
+      ],
+      "dh": "0d4dd893",
+      "paramStorage": [
+        [
+          "pRoomExSrc",
+          "ECX:4"
+        ],
+        [
+          "pRoomExDst",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLG_FindHTile",
+      "address": "0066d820",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066d820"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLG_FindHTile",
+        "TILEPROJECT_LookupTilesInAllProjects",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "TILEPROJECT_GetAnimatedTileDataPtr"
+      ],
+      "usedTypes": [
+        "D2RoomExStrc",
+        "D2SeedStrc",
+        "D2TileLibraryEntryStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "ad0fc772",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "nTileType",
+          "EDX:4"
+        ],
+        [
+          "nGridFlags",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
       "name": "CreatesPresets",
       "address": "0066d9e0",
       "lines": [
@@ -1352,6 +1423,335 @@
         [
           "pRoomEx",
           "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "FreeRoomEx",
+      "address": "0066f1a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066f1a0"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "FreeRoomEx",
+        "DRLGROOM_RemoveRoomFromAct",
+        "FreeDrlgCoordList",
+        "DRLGROOMTILE_FreeRoomTilesAll",
+        "DRLGOUTROOM_FreeOutRoomEx",
+        "DRLGPRESET_FreePresetRoomGridsFromRoomEx"
+      ],
+      "usedTypes": [
+        "D2DrlgRoomExRoomTileNodeStrc",
+        "D2DrlgStrc",
+        "D2RoomExStrc"
+      ],
+      "dh": "5ef18e90",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ],
+        [
+          "bServerSide",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLGROOMEX_InitTileData",
+      "address": "0066f240",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066f240"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGROOMEX_InitTileData",
+        "TXT_LvlTypes_GetLine",
+        "TILEPROJECT_AllocSlot",
+        "memset",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "D2LvlTypesTxt",
+        "D2RoomExStrc",
+        "uint32_t"
+      ],
+      "dh": "ce8c0d96",
+      "paramStorage": [
+        [
+          "pRoomEx",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_GetSecondaryFloorGridFlags",
+      "address": "0066f350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066f350"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGOUTDOOR_GetSecondaryFloorGridFlags",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "5e4496b6",
+      "paramStorage": [
+        [
+          "pLevelCtx",
+          "EAX:4"
+        ],
+        [
+          "nGridY",
+          "EDX:4"
+        ],
+        [
+          "nGridX",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_CopyPresetUnitsFromSubTxt",
+      "address": "0066fa10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066fa10"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGOUTDOOR_CopyPresetUnitsFromSubTxt",
+        "CoordsRoomToWorld",
+        "AllocPresetUnit"
+      ],
+      "usedTypes": [
+        "D2DrlgWallLayerGridsStrc",
+        "D2LvlSubTxt",
+        "D2PoolManagerStrc",
+        "D2PresetUnitStrc",
+        "int32_t"
+      ],
+      "dh": "f39eb420",
+      "paramStorage": [
+        [
+          "roomX",
+          "ECX:4"
+        ],
+        [
+          "roomY",
+          "EDX:4"
+        ],
+        [
+          "pRoomCtx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pMemory",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pLvlSub",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pRect",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_ApplyLvlSubTileData",
+      "address": "0066fad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066fad0"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGOUTDOOR_ApplyLvlSubTileData",
+        "GetGridFlags",
+        "DRLGROOMTILE_GrowTileDataArray",
+        "AlterGridFlag",
+        "DRLGROOMTILE_CreateShadowTileFromGrid",
+        "DRLGOUTDOOR_CopyPresetUnitsFromSubTxt"
+      ],
+      "usedTypes": [
+        "D2DrlgGridStrc",
+        "D2DrlgTileGridStrc",
+        "D2DrlgWallLayerGridsStrc",
+        "D2LvlSubTxt",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "6e743e4c",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "baseX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "baseY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pRoomCtx",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pRect",
+          "Stack[0x14]:4"
+        ],
+        [
+          "pSubTxt",
+          "Stack[0x18]:4"
+        ],
+        [
+          "rectOffsetY",
+          "Stack[0x1c]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLGOUTDOOR_MatchSubTileTypes",
+      "address": "0066fe00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066fe00"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGOUTDOOR_MatchSubTileTypes",
+        "GetGridFlags"
+      ],
+      "usedTypes": [
+        "D2DrlgWallLayerGridsStrc",
+        "D2LvlSubTxt",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "56784f5c",
+      "paramStorage": [
+        [
+          "nRoomX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nRoomY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pDrlgUnkn",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pLvlSubTxt",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pnGroupEntry",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "CheckAll",
+      "address": "0066ff50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0066ff50"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "CheckAll",
+        "DRLGOUTDOOR_CheckSubTileOverlap",
+        "DRLGOUTDOOR_ApplyLvlSubTileData",
+        "DRLGOUTDOOR_MatchSubTileTypes"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc",
+        "D2DrlgWallLayerGridsStrc",
+        "D2LvlSubTxt",
+        "D2PoolManagerStrc",
+        "int32_t",
+        "uint32_t",
+        "uint64_t"
+      ],
+      "dh": "8bc96f75",
+      "paramStorage": [
+        [
+          "pWallLayerGrids",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSubTxt",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DoNotCheckAll",
+      "address": "00670170",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670170"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DoNotCheckAll",
+        "DRLGOUTDOOR_CheckSubTileOverlap",
+        "DRLGOUTDOOR_ApplyLvlSubTileData"
+      ],
+      "usedTypes": [
+        "D2DrlgFileStrc",
+        "D2DrlgSubstGroupStrc",
+        "D2DrlgWallLayerGridsStrc",
+        "D2LvlSubTxt",
+        "D2PoolManagerStrc",
+        "D2RoomExStrc",
+        "D2SeedStrc",
+        "int32_t",
+        "int64_t",
+        "uint32_t",
+        "uint64_t"
+      ],
+      "dh": "f68ea7a6",
+      "paramStorage": [
+        [
+          "pRoomCtx",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pSubTxt",
+          "Stack[0x8]:4"
         ]
       ]
     }

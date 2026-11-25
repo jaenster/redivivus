@@ -133,35 +133,20 @@ template<> ::SGAMEDATA * TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::Ptr(u
 
 // Generates a unique 32-bit game token by incrementing nNextGameToken monotonic counter. If counter wraps to zero, sets nTokenCounterWrapped flag and validates uniqueness via hash-map lookup. Returns token only when confirmed not to collide with any existing game in the hash map.
 template<> __attribute__((noinline)) inline uint32_t TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::GenerateUniqueHandle() {
-    uint32_t nGeneratedToken;
-    uint32_t* pNextToken;
     while (true) {
-      ::SGAMEDATA* pGame;
-      while (true) {
-        pNextToken = &this->nSequence;
-        (*pNextToken)++;
-        if (*pNextToken) {
-          break;
-        }
-
+      uint32_t& nSequence = this->nSequence;
+      const uint32_t nHandle = ++nSequence;
+      if (!nHandle) {
         this->bWrapped = 1;
+        continue;
       }
-
       if (!this->bWrapped) {
-        break;
+        return nHandle;
       }
-
-      pGame = this->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Ptr(this->nSequence, &this->tKey);
-      if (!pGame) {
-        /*    This suposed to only give back the token, but actually its gets used as
-                         the game object. Might be
-                            that the token is just the first value of the pointer, and its just the
-                         actual entire game
-                            structure thats in it */ return this->nSequence;
+      if (!this->TSHashTable<::SGAMEDATA, HASHKEY_NONE>::Ptr(nHandle, &this->tKey)) {
+        return this->nSequence;
       }
     }
-
-    return this->nSequence;
 }
 
 template<> ::SGAMEDATA * TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::Lock(uint32_t nHandle, int32_t * pLockedHandle, int32_t bForWriting) {

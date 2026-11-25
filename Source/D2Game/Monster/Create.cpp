@@ -927,15 +927,15 @@ D2UnitStrc * __fastcall CreateMonster(D2UnknownCreateMonsterStrc * pMonsterSpawn
 
 D2UnitStrc * __fastcall SpawnMonsterAtRoomPos(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, uint32_t nClassId, eD2MonsterAnimMode eMode, int32_t nSpawnRadius, int16_t nFlags) {
     D2UnknownCreateMonsterStrc sMonsterSpawnData;
-    sMonsterSpawnData.pRoom = pRoom;
-    sMonsterSpawnData.pGame = pGame;
     sMonsterSpawnData.nGUID = 0;
     sMonsterSpawnData.nClassId = nClassId;
-    sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
-    sMonsterSpawnData.pCoordList = 0;
-    sMonsterSpawnData.nX = nX;
     sMonsterSpawnData.eMode = eMode;
+    sMonsterSpawnData.pRoom = pRoom;
+    sMonsterSpawnData.nSpawnRadius = nSpawnRadius;
+    sMonsterSpawnData.pGame = pGame;
+    sMonsterSpawnData.pCoordList = 0;
     sMonsterSpawnData.nFlags = nFlags;
+    sMonsterSpawnData.nX = nX;
     sMonsterSpawnData.nY = nY;
     D2UnitStrc* pUnit = CreateMonster(&sMonsterSpawnData);
     return pUnit;
@@ -995,15 +995,15 @@ D2UnitStrc * __fastcall SpawnMonsterInRoomCoordList(::SGAMEDATA * pGame, D2RoomS
 // Thin wrapper: builds a spawn-args struct and tail-calls CreateMonster (already fixed to return D2UnitStrc*), but drops the call's result as a bare statement. Passes it straight through.
 D2UnitStrc * __fastcall SpawnMonsterAtRoomPosSimple(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nClassId, eD2MonsterAnimMode eMode, int16_t nFlags) {
     D2UnknownCreateMonsterStrc sMonsterSpawnData;
-    sMonsterSpawnData.pGame = pGame;
     sMonsterSpawnData.nGUID = 0;
     sMonsterSpawnData.nClassId = nClassId;
-    sMonsterSpawnData.pRoom = pRoom;
-    sMonsterSpawnData.pCoordList = 0;
-    sMonsterSpawnData.nX = nX;
     sMonsterSpawnData.eMode = eMode;
+    sMonsterSpawnData.pRoom = pRoom;
     sMonsterSpawnData.nSpawnRadius = -1;
+    sMonsterSpawnData.pGame = pGame;
+    sMonsterSpawnData.pCoordList = 0;
     sMonsterSpawnData.nFlags = nFlags;
+    sMonsterSpawnData.nX = nX;
     sMonsterSpawnData.nY = nY;
     D2UnitStrc* pMonster = CreateMonster(&sMonsterSpawnData);
     return pMonster;

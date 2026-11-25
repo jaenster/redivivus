@@ -1,0 +1,722 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Direct3D/Src/d3dSprite.cpp",
+  "functions": [
+    {
+      "name": "RENDERER_D3D_ReleaseTexturePools",
+      "address": "006b5b10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5b10"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_ReleaseTexturePools",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "IDirect3DTexture2",
+        "IDirectDrawSurface7"
+      ],
+      "dh": "bc2336a7"
+    },
+    {
+      "name": "D3D_PixelDataFreeCallback_ClearCacheNodes",
+      "address": "006b5bb0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5bb0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "D3D_PixelDataFreeCallback_ClearCacheNodes"
+      ],
+      "dh": "e7b06cca",
+      "paramStorage": [
+        [
+          "pCacheIndices",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_ExtractSpriteInfo",
+      "address": "006b5c80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5c80"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_ExtractSpriteInfo",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetDC6Width",
+        "GetDC6OffsetX",
+        "GetDC6Height",
+        "GetDC6OffsetY",
+        "LOGFILE_WriteStringToFile"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2GfxDataStrc",
+        "int32_t"
+      ],
+      "dh": "7e910db4",
+      "paramStorage": [
+        [
+          "pSprite",
+          "ESI:4"
+        ],
+        [
+          "pOutput",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_CalculateTextureSize",
+      "address": "006b5cf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5cf0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_CalculateTextureSize"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc"
+      ],
+      "dh": "4e079582",
+      "paramStorage": [
+        [
+          "pStruct",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_DIRECT3D_UploadTextureToCache",
+      "address": "006b5d40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5d40"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_DIRECT3D_UploadTextureToCache",
+        "CELCMP_GetDC6BlockPixelData",
+        "D3DTEXCACHE_InvalidateByIndex",
+        "RENDERER_DIRECT3D_ErrorLog",
+        "D3DTEXCACHE_EnsureAvailableNode",
+        "memset",
+        "CELCMP_DrawCelFrame",
+        "DIRECTD3D_LogError",
+        "RENDERER_D3D_ConvertPalettedTo16Bit",
+        "RENDERER_D3D_CopySurfacePixels",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "DDSURFACEDESC",
+        "IDirect3DTexture2",
+        "IDirectDrawSurface7",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "a1d5a164",
+      "paramStorage": [
+        [
+          "pTexInfo",
+          "ECX:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOutlineColor",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nMode",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_DrawShadowQuad",
+      "address": "006b61a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b61a0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_DrawShadowQuad",
+        "RENDERER_D3D_IsPerspectiveEnabled"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2D3DVertexStrc",
+        "uint8_t"
+      ],
+      "dh": "ece6541d",
+      "paramStorage": [
+        [
+          "pTextureInfo",
+          "EAX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0xc]:1"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_DIRECT3D_DrawPalettedQuad",
+      "address": "006b63f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b63f0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_DIRECT3D_DrawPalettedQuad",
+        "RENDERER_D3D_SetBlendMode",
+        "RENDERER_D3D_SetTextureFilterMode",
+        "RENDERER_D3D_IsPerspectiveEnabled",
+        "RENDERER_D3D_SetTextureStageColor"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2D3DVertexStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "3fd45f85",
+      "paramStorage": [
+        [
+          "pTextureInfo",
+          "EAX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nAlpha",
+          "Stack[0x14]:1"
+        ],
+        [
+          "nParam6",
+          "Stack[0x18]:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetDrawModeAndGetAlpha",
+      "address": "006b6680",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b6680"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "SetDrawModeAndGetAlpha",
+        "SetBlendMode"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "b53daa4a",
+      "paramStorage": [
+        [
+          "nDrawMode",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawPerspectiveImage",
+      "address": "006b6730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b6730"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "SetDrawModeAndGetAlpha",
+        "DrawPerspectiveImage",
+        "RENDERER_D3D_ExtractSpriteInfo",
+        "RENDERER_D3D_CalculateTextureSize",
+        "AdjustPerspectivePosition",
+        "RENDERER_DIRECT3D_UploadTextureToCache",
+        "RENDERER_D3D_SetBlendMode",
+        "RENDERER_D3D_SetTextureFilterMode",
+        "RENDERER_D3D_SetTextureStageColor"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2D3DVertexStrc",
+        "D2GfxDataStrc",
+        "int32_t"
+      ],
+      "dh": "12c3a7f5",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawImage",
+      "address": "006b6b40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b6b40"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawImage",
+        "RENDERER_D3D_ExtractSpriteInfo",
+        "RENDERER_D3D_CalculateTextureSize",
+        "SetDrawModeAndGetAlpha",
+        "RENDERER_DIRECT3D_UploadTextureToCache",
+        "RENDERER_DIRECT3D_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2GfxDataStrc",
+        "int32_t"
+      ],
+      "dh": "c0b7ac1e",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawShiftedImage",
+      "address": "006b6bf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b6bf0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawShiftedImage",
+        "RENDERER_D3D_ExtractSpriteInfo",
+        "RENDERER_D3D_CalculateTextureSize",
+        "RENDERER_DIRECT3D_UploadTextureToCache",
+        "SetDrawModeAndGetAlpha",
+        "RENDERER_DIRECT3D_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2GfxDataStrc",
+        "int32_t"
+      ],
+      "dh": "70d01e0f",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawVerticalCropImage",
+      "address": "006b6c90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b6c90"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawVerticalCropImage",
+        "SetDrawModeAndGetAlpha",
+        "RENDERER_D3D_ExtractSpriteInfo",
+        "RENDERER_D3D_CalculateTextureSize",
+        "RENDERER_DIRECT3D_UploadTextureToCache",
+        "RENDERER_DIRECT3D_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2GfxDataStrc",
+        "int32_t"
+      ],
+      "dh": "e18b2535",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkipLines",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawLines",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_ClipSpriteToRect",
+      "address": "006b6d70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b6d70"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_ClipSpriteToRect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RenderClipOutStrc",
+        "uint32_t"
+      ],
+      "dh": "41e0e249",
+      "paramStorage": [
+        [
+          "pClipResult",
+          "EAX:4"
+        ],
+        [
+          "pSpriteInfo",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pClipRect",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawClippedImage",
+      "address": "006b6ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b6ee0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawClippedImage",
+        "SetDrawModeAndGetAlpha",
+        "RENDERER_D3D_ExtractSpriteInfo",
+        "RENDERER_D3D_CalculateTextureSize",
+        "RENDERER_DIRECT3D_UploadTextureToCache",
+        "RENDERER_D3D_ClipSpriteToRect",
+        "RENDERER_DIRECT3D_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2GfxDataStrc",
+        "D2RenderClipOutStrc",
+        "int32_t"
+      ],
+      "dh": "5b7fb9f9",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCropRect",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawShadow",
+      "address": "006b7000",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7000"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawShadow",
+        "RENDERER_D3D_ExtractSpriteInfo",
+        "RENDERER_D3D_CalculateTextureSize",
+        "RENDERER_DIRECT3D_UploadTextureToCache",
+        "RENDERER_D3D_SetBlendMode",
+        "RENDERER_D3D_IsShadowBlendingEnabled",
+        "SetBlendMode",
+        "RENDERER_D3D_SetTextureFilterMode",
+        "RENDERER_D3D_DrawShadowQuad"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2GfxDataStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "5f1e1226",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawImageFast",
+      "address": "006b7090",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7090"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DrawImageFast",
+        "SetBlendMode",
+        "RENDERER_D3D_ExtractSpriteInfo",
+        "RENDERER_D3D_CalculateTextureSize",
+        "RENDERER_DIRECT3D_UploadTextureToCache",
+        "RENDERER_DIRECT3D_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2D3DSpriteInfoStrc",
+        "D2GfxDataStrc",
+        "int32_t"
+      ],
+      "dh": "17462b44",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "DebugFillBackBuffer",
+      "address": "006b7100",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7100"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "DebugFillBackBuffer"
+      ],
+      "dh": "5a1671b0",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_InitializeTexturePools",
+      "address": "006b7110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b7110"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_InitializeTexturePools",
+        "AllocClientMemory",
+        "RENDERER_D3D_CreateSystemMemoryTexture",
+        "RENDERER_DIRECT3D_ErrorLog",
+        "CELCMP_SetPixelDataFreeCallback",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D3DVERTEXBUFFERDESC",
+        "int32_t"
+      ],
+      "dh": "63bf06e4"
+    }
+  ]
+}

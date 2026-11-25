@@ -1,0 +1,39 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Glide/Src/glVertex.cpp",
+  "functions": [
+    {
+      "name": "RENDERER_GLIDE_AllocLightingTable",
+      "address": "0050db20",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050db20"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_AllocLightingTable",
+        "AllocClientMemory"
+      ],
+      "dh": "25c77e93"
+    },
+    {
+      "name": "RENDERER_GLIDE_FreeLightingTable",
+      "address": "0050db40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050db40"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_FreeLightingTable",
+        "FreeClientMemory"
+      ],
+      "dh": "d0d759a2"
+    }
+  ]
+}

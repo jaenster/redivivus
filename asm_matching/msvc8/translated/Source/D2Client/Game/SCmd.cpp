@@ -24,7 +24,7 @@
 #include "Source/D2Client/D2GSPacketSrv0x8E.h"
 #include "Source/D2Client/D2GSPacketSrv0x91.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Game.h"
 #include "Source/D2Client/Game/Game/SGAMEDATA.h"
@@ -129,8 +129,8 @@
 #include "Source/D2Client/D2GfxMemoryStrc.h"
 #include "Source/D2Client/D2GfxSettingsStrc.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Draw/dLightMap.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Draw.h"
 #include "Source/D2Client/Game/Game.h"
@@ -2131,13 +2131,13 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x20(D2GSPacketSrv0x20 * pBytes) {
     SCMD_HandleStatChangeEffect(pUnit, (eD2UnitStat)eStatAttribute, nValue);
 }
 
-static void __stdcall SCMD_DecodeRelativeCoordinates(uint16_t nByteY, int16_t nBaseX, int16_t nBaseY, short * pOutX, short * pOutY, uint16_t nByteX) {
-    uint16_t nDeltaX = (uint8_t)nByteX;
-    uint16_t nDeltaY = (uint8_t)nByteY;
-    if (0x80 < nDeltaX) {
+static void __stdcall SCMD_DecodeRelativeCoordinates(uint8_t nByteX, uint8_t nByteY, int16_t nBaseX, int16_t nBaseY, short * pOutX, short * pOutY) {
+    int nDeltaX = nByteX;
+    int nDeltaY = nByteY;
+    if (nDeltaX > 0x80) {
       nDeltaX -= 0x100;
     }
-    if (0x80 < nDeltaY) {
+    if (nDeltaY > 0x80) {
       nDeltaY -= 0x100;
     }
 
@@ -3736,6 +3736,6 @@ void __fastcall SCMD_ProcessIncomingPacketBuffer(D2UnitStrc * pUnit) {
     pServerCmd->nUsedBuffersCount = 0;
 }
 
-static void * keep_0045d8c0 = (0 ? (SCMD_DecodeRelativeCoordinates(*(uint16_t *)0, *(int16_t *)0, *(int16_t *)0, *(short * *)0, *(short * *)0, *(uint16_t *)0), (void *)0) : (void *)0);
+static void * keep_0045d8c0 = (0 ? (SCMD_DecodeRelativeCoordinates(*(uint8_t *)0, *(uint8_t *)0, *(int16_t *)0, *(int16_t *)0, *(short * *)0, *(short * *)0), (void *)0) : (void *)0);
 
 }}} // namespace D2Client::GAME::SCmd

@@ -869,6 +869,41 @@
       ]
     },
     {
+      "name": "MISSILES_StatExpireCallback_ClearState",
+      "address": "004cd380",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004cd380"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "MISSILES_StatExpireCallback_ClearState",
+        "SetState"
+      ],
+      "usedTypes": [
+        "D2StatListExStrc",
+        "D2UnitStrc",
+        "eD2States"
+      ],
+      "dh": "591755ce",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "eState",
+          "EDX:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
       "name": "MISSILE_RemoveClientSide",
       "address": "004cd390",
       "lines": [

@@ -40,8 +40,8 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2RosterStrc) == 0x84, "D2_NEW_AT(D
 
 namespace D2Client::GAME::Roster {
 D2RosterStrc * gpRosterPlayers = 0; D2_GLOBAL_GUARD(gpRosterPlayers, "D2Client::GAME::Roster::gpRosterPlayers");
-D2RosterStrc * gpRosterOther = 0; D2_GLOBAL_GUARD(gpRosterOther, "D2Client::GAME::Roster::gpRosterOther");
-D2RosterPartyListStrc * pRosterPartyList = 0; D2_GLOBAL_GUARD(pRosterPartyList, "D2Client::GAME::Roster::pRosterPartyList");
+static D2RosterStrc * gpRosterOther = 0; D2_STATIC_GUARD(gpRosterOther, "D2Client::GAME::Roster::gpRosterOther");
+static D2RosterPartyListStrc * pRosterPartyList = 0; D2_STATIC_GUARD(pRosterPartyList, "D2Client::GAME::Roster::pRosterPartyList");
 } // namespace D2Client::GAME::Roster
 
 namespace D2Client::GAME::Roster {

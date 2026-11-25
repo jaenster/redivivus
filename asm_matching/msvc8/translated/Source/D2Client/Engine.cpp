@@ -4,7 +4,7 @@
 #include "Source/D2Client/Core/Archive.h"
 #include "Source/D2Client/Engine/Cursor.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/dLightMap.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Game.h"
 #include "Source/D2Client/Game/Msg.h"

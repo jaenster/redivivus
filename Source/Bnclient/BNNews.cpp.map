@@ -1,0 +1,582 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Bnclient/BNNews.cpp",
+  "functions": [
+    {
+      "name": "BNNEWS_SetNewsChannel",
+      "address": "0051d260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d260"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_SetNewsChannel",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "a9fbfd7d",
+      "paramStorage": [
+        [
+          "bIsClassic",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_GetNewsEntryByIndex",
+      "address": "0051d2a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d2a0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_GetNewsEntryByIndex"
+      ],
+      "dh": "1ff49d17",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "nIndex",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_RoundToPowerOfTwo",
+      "address": "0051d2f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d2f0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_RoundToPowerOfTwo"
+      ],
+      "usedTypes": [
+        "D2BnNewsTableStrc",
+        "uint32_t"
+      ],
+      "dh": "5a36e270",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwSize",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_RoundUpToMultiple",
+      "address": "0051d330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d330"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_RoundUpToMultiple"
+      ],
+      "dh": "b53e891a",
+      "paramStorage": [
+        [
+          "dwValue",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwMultiple",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0051d350",
+      "address": "0051d350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d350"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051d350"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "5fa08765",
+      "paramStorage": [
+        [
+          "pDst",
+          "ECX:4"
+        ],
+        [
+          "pSrc",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_SaveToCache",
+      "address": "0051d370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d370"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_SaveToCache",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory",
+        "CACHE_WriteData",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "_FILETIME",
+        "_SYSTEMTIME",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "8590764a"
+    },
+    {
+      "name": "BNNEWS_InvokeCallbacks",
+      "address": "0051d510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d510"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_InvokeCallbacks"
+      ],
+      "dh": "da70752e"
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor_Unref_0051d570",
+      "address": "0051d570",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d570"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_0051d570",
+        "SMemFree"
+      ],
+      "dh": "ef0f2622",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_DestroyNewsTable",
+      "address": "0051d590",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d590"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_DestroyNewsTable",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2BnNewsTableStrc",
+        "uint8_t"
+      ],
+      "dh": "8fbf10ae",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "bFreeMemory",
+          "Stack[0x4]:1"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_ReallocateNewsTable",
+      "address": "0051d5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d5d0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_ReallocateNewsTable",
+        "SMemReAlloc",
+        "SMemAlloc",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2BnNewsEntryStrc",
+        "D2BnNewsTableStrc",
+        "uint32_t"
+      ],
+      "dh": "6d18c57e",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwNewCapacity",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "TSFixedArray_Ui_Destructor_Unref_0051d670",
+      "address": "0051d670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d670"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "TSFixedArray_Ui_Destructor_Unref_0051d670",
+        "SMemFree"
+      ],
+      "dh": "0b70a21b",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0051d690",
+      "address": "0051d690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d690"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051d690"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "aaec7181",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_ClearNewsTable",
+      "address": "0051d6a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d6a0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_ClearNewsTable",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2BnNewsTableStrc"
+      ],
+      "dh": "fa4077f0",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_EnsureCapacityWithGrowth",
+      "address": "0051d6d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d6d0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_EnsureCapacityWithGrowth",
+        "BNNEWS_RoundToPowerOfTwo",
+        "BNNEWS_ReallocateNewsTable"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "60311edf",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwAdditionalCount",
+          "Stack[0x4]:4"
+        ],
+        [
+          "bGrow",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0051d720",
+      "address": "0051d720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d720"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051d720"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "05b41e8f",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0051d730",
+      "address": "0051d730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d730"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "Unreferenced_0051d730",
+        "SMemFree"
+      ],
+      "dh": "1b9a3931",
+      "paramStorage": [
+        [
+          "pArray",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_Shutdown",
+      "address": "0051d750",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d750"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_Shutdown",
+        "SMemFree"
+      ],
+      "dh": "90a8c939"
+    },
+    {
+      "name": "BNNEWS_AllocateNewsEntry",
+      "address": "0051d7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d7a0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_AllocateNewsEntry",
+        "BNNEWS_RoundToPowerOfTwo",
+        "BNNEWS_ReallocateNewsTable"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "2244413d",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_EnsureCapacity",
+      "address": "0051d7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d7f0"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_EnsureCapacity",
+        "BNNEWS_ReallocateNewsTable"
+      ],
+      "usedTypes": [
+        "D2BnNewsTableStrc",
+        "uint32_t"
+      ],
+      "dh": "b9240856",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwAdditionalCount",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_SetNewsEntryCount",
+      "address": "0051d810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d810"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_SetNewsEntryCount",
+        "BNNEWS_RoundToPowerOfTwo",
+        "BNNEWS_ReallocateNewsTable"
+      ],
+      "usedTypes": [
+        "D2BnNewsTableStrc",
+        "uint32_t"
+      ],
+      "dh": "f608de4e",
+      "paramStorage": [
+        [
+          "pNewsTable",
+          "ECX:4"
+        ],
+        [
+          "dwNewCount",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_Incoming0x46",
+      "address": "0051d860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051d860"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "NET_SID_CLIENT_Incoming0x46",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "strncpy",
+        "BNNEWS_SetNewsEntryCount",
+        "BNNEWS_SaveToCache",
+        "BNNEWS_InvokeCallbacks"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "f7b5ea6f",
+      "paramStorage": [
+        [
+          "pBytes",
+          "ECX:4"
+        ],
+        [
+          "nSize",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "BNNEWS_LoadCachedNews",
+      "address": "0051da30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0051da30"
+        }
+      ],
+      "namespace": "Bnclient::BnSend",
+      "calledFunctions": [
+        "BNNEWS_LoadCachedNews",
+        "CACHE_ReadData",
+        "BNNEWS_SetNewsEntryCount",
+        "BNNEWS_ReallocateNewsTable",
+        "BNNEWS_RoundToPowerOfTwo",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2BnNewsEntryStrc",
+        "uint32_t"
+      ],
+      "dh": "6866f8c4"
+    }
+  ]
+}

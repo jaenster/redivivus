@@ -5,8 +5,8 @@
 #include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/D2LightMapStrc.h"
 #include "Source/D2Client/D2UnderMouseStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Draw/dLightMap.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Game.h"
@@ -91,8 +91,8 @@
 #include "Source/D2Client/D2GfxMemoryStrc.h"
 #include "Source/D2Client/D2GfxSettingsStrc.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Draw/dLightMap.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Draw.h"
 #include "Source/D2Client/Game/Game.h"
@@ -1108,7 +1108,7 @@ static void __stdcall PLAYER_ExecuteModeBasedAction(int32_t nActionContext, D2Un
     }
 }
 
-static BOOL __stdcall CLIENT_MovePlayerToPosition(D2UnitStrc * pUnit, int nX, int nY, int32_t nSkillActionMode) {
+static BOOL __stdcall CLIENT_MovePlayerToPosition(int32_t nSkillActionMode, int nX, int nY, D2UnitStrc * pUnit) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, nX, nY);
     uint32_t bHasPath = D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -1124,7 +1124,7 @@ static BOOL __stdcall CLIENT_MovePlayerToPosition(D2UnitStrc * pUnit, int nX, in
 
 // Extern entry for hand-written callers: CLIENT_MovePlayerToPosition itself keeps its unit's linkage.
 BOOL __stdcall CLIENT_MovePlayerToPosition_Extern(D2UnitStrc * pUnit, int16_t nX, int16_t nY, int32_t nSkillActionMode) {
-    return ::D2Client::UNIT::Player::CLIENT_MovePlayerToPosition(pUnit, nX, nY, nSkillActionMode);
+    return ::D2Client::UNIT::Player::CLIENT_MovePlayerToPosition(nSkillActionMode, nX, nY, pUnit);
 }
 
 // Client-side handler for a player attempting to interact with a world object (by unit ID nParam1). Looks up the object, checks the just_portaled curse state for waypoints (classId 0x3b). If within range and line-of-sight, executes UNITMODEACTION_ITEM_INTERACT; otherwise moves the player toward the object's tile position. Stores last skill hit via D2Client for the interaction. Returns without action if object not found.
@@ -1170,7 +1170,7 @@ static void __stdcall PLAYER_InteractWithObject(int32_t nObjectGUID, D2UnderMous
     nY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pObject);
     pObject = pUnderMouse->pTarget;
     nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pObject);
-    CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, nX, nY, pUnderMouse->nMoveActionType);
+    CLIENT_MovePlayerToPosition(pUnderMouse->nMoveActionType, nX, nY, pUnderMouse->pPlayer);
     if (!bCanInteract) {
       return;
     }
@@ -1281,7 +1281,7 @@ static int PLAYER_ExecuteSkillWithAura(D2UnderMouseStrc * pUnderMouse, eD2UnitTy
         nDstY = nDstY * nStepsRemaining / nTotalDist;
         nDstX = nDstX * nStepsRemaining / nTotalDist;
         nSrcYPos += nDstY;
-        CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, nDstX + nSrcXPos, nSrcYPos, pUnderMouse->nMoveActionType);
+        CLIENT_MovePlayerToPosition(pUnderMouse->nMoveActionType, nDstX + nSrcXPos, nSrcYPos, pUnderMouse->pPlayer);
         return 1;
       }
     }
@@ -1461,7 +1461,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
               if (!bCollides) {
                 nTargetY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnderMouse->pTarget);
                 nTargetX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnderMouse->pTarget);
-                CLIENT_MovePlayerToPosition(pUnderMouse->pPlayer, nTargetX, nTargetY, pUnderMouse->nMoveActionType);
+                CLIENT_MovePlayerToPosition(pUnderMouse->nMoveActionType, nTargetX, nTargetY, pUnderMouse->pPlayer);
                 if (bCanInteract) {
                   D2Common::Skills::StoreLastSkillHit(0x13, pUnderMouse->pPlayer, eTargetUnitType, nTargetGUID);
                   GAME::Game::GAME_SetMouseButtonEventPending();
@@ -1659,7 +1659,7 @@ static void INPUT_ContinuePlayerMovement(D2UnderMouseStrc * pMouse) {
         return;
     }
 
-    CLIENT_MovePlayerToPosition(pUnit, pMouse->nX, pMouse->nY, nSkillActionMode);
+    CLIENT_MovePlayerToPosition(nSkillActionMode, pMouse->nX, pMouse->nY, pUnit);
 }
 
 // Computes the effective movement target for a player unit given the current mouse context. Reads the player's current tile position (static or dynamic path), computes the X/Y delta to the mouse cursor, clamps the minimum step distance based on mouse context flags (e.g. run/walk/attack modifiers), and writes the adjusted target back into pMouseCtx. Returns 1 if the movement should be committed (delta large enough and run-frame throttle not exceeded), 0 otherwise.
@@ -1858,7 +1858,7 @@ static void INPUT_ExecuteSkillCommand(D2UnderMouseStrc * pUnderMouse) {
 
       bRoomInTown = PLAYER_CalculateMovementTarget(pUnderMouse->pPlayer, pUnderMouse);
       if (bRoomInTown) {
-        CLIENT_MovePlayerToPosition(pPlayerUnit_lcl, (int16_t)pUnderMouse->nX, (int16_t)pUnderMouse->nY, pUnderMouse->nMoveActionType);
+        CLIENT_MovePlayerToPosition(pUnderMouse->nMoveActionType, (int16_t)pUnderMouse->nX, (int16_t)pUnderMouse->nY, pPlayerUnit_lcl);
         GAME::Select::SELECT_UpdateUnitSelection(nullptr);
         return;
       }

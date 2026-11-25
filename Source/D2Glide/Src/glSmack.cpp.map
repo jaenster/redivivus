@@ -1,0 +1,256 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Glide/Src/glSmack.cpp",
+  "functions": [
+    {
+      "name": "GLSMACK_AllocBuffers",
+      "address": "0050df10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050df10"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GLSMACK_AllocBuffers",
+        "AllocClientMemory"
+      ],
+      "dh": "4228ae02"
+    },
+    {
+      "name": "GLSMACK_FreeBuffers",
+      "address": "0050df70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050df70"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GLSMACK_FreeBuffers",
+        "FreeClientMemory"
+      ],
+      "dh": "1d45befa"
+    },
+    {
+      "name": "GLSMACK_AllocTextureMemory",
+      "address": "0050dfe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050dfe0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GLSMACK_AllocTextureMemory"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "ba5e27e4",
+      "paramStorage": [
+        [
+          "dwBaseAddr",
+          "ECX:4"
+        ],
+        [
+          "dwTexSize",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GLSMACK_DestroyNoop",
+      "address": "0050e030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050e030"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GLSMACK_DestroyNoop"
+      ],
+      "dh": "9aa80ede"
+    },
+    {
+      "name": "CloseSmacker",
+      "address": "0050e040",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050e040"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "CloseSmacker"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc"
+      ],
+      "dh": "705219f6",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GLSMACK_ConvertPaletteToRGB565",
+      "address": "0050e070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050e070"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GLSMACK_ConvertPaletteToRGB565"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "2d5e0e01",
+      "paramStorage": [
+        [
+          "pRgbPalette",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GLSMACK_UploadTextures",
+      "address": "0050e330",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050e330"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GLSMACK_UploadTextures"
+      ],
+      "dh": "73cde900"
+    },
+    {
+      "name": "GLSMACK_DrawSmackerQuad",
+      "address": "0050e370",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050e370"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GLSMACK_DrawSmackerQuad",
+        "RENDERER_GLIDE_SetColorCombine",
+        "RENDERER_GLIDE_SetAlphaBlendMode",
+        "RENDERER_GLIDE_SetTextureFiltering",
+        "RENDERER_GLIDE_SetTextureMode"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc",
+        "int32_t"
+      ],
+      "dh": "0c648d90",
+      "paramStorage": [
+        [
+          "pSmackerData",
+          "ECX:4"
+        ],
+        [
+          "nOffsetY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nAlpha",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DecodeSmacker",
+      "address": "0050e5d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050e5d0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DecodeSmacker",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "memset",
+        "GLSMACK_UploadTextures",
+        "SFileLoadFileEx",
+        "SBmpDecodeImage",
+        "SMemFree",
+        "memmove",
+        "GLSMACK_ConvertPaletteToRGB565"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "221c6a0b",
+      "paramStorage": [
+        [
+          "szSmacker",
+          "ECX:4"
+        ],
+        [
+          "pBuffer",
+          "EDX:4"
+        ],
+        [
+          "nVersion",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PlayerSmacker",
+      "address": "0050e7f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050e7f0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "PlayerSmacker",
+        "CloseSmacker",
+        "GLSMACK_ConvertPaletteToRGB565",
+        "GLSMACK_UploadTextures",
+        "GLSMACK_DrawSmackerQuad"
+      ],
+      "usedTypes": [
+        "D2SmackerContextStrc"
+      ],
+      "dh": "eea75d39",
+      "paramStorage": [
+        [
+          "pContext",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

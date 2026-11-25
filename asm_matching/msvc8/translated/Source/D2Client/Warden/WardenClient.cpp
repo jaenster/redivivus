@@ -90,16 +90,16 @@ static uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t 
     return 0;
 }
 
-static void __stdcall WARDEN_ComputeModuleHash(char * szModuleName, uint8_t * pHashOut, uint32_t nSplitOffset, uint32_t nTotalLen, uint8_t * pModuleData) {
+static void __stdcall WARDEN_ComputeModuleHash(char * szModuleName, uint8_t * pHashOut, uint8_t * pModuleData, uint32_t nSplitOffset, uint32_t nTotalLen) {
     uint8_t szUpperName[1024];
     D2Sha1ContextStrc sha1Ctx;
     Storm::Source::SSignature::Sha1_Initialize(&sha1Ctx);
     if (nSplitOffset) {
       vc8_thiscall(Storm::Source::SSignature::Sha1_Append)(&sha1Ctx, pModuleData + nSplitOffset, nTotalLen - nSplitOffset);
-      nTotalLen = nSplitOffset;
+      vc8_thiscall(Storm::Source::SSignature::Sha1_Append)(&sha1Ctx, pModuleData, nSplitOffset);
+    } else {
+      vc8_thiscall(Storm::Source::SSignature::Sha1_Append)(&sha1Ctx, pModuleData, nTotalLen);
     }
-
-    vc8_thiscall(Storm::Source::SSignature::Sha1_Append)(&sha1Ctx, pModuleData, nTotalLen);
     Storm::Source::SSTR::SStrCopy((char*)szUpperName, szModuleName, 0x400);
     Storm::Source::SSTR::SStrUpper((char*)szUpperName);
     uint32_t nNameLen = Storm::Source::SSTR::SStrLen((char*)szUpperName);
@@ -140,7 +140,7 @@ static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szMod
     __frame0.pExpectedHash = pHashBuf;
     Storm::Source::SMem::SMemFill(pHashBuf, nKeySize, 0xbb);
     pHashBuf[nKeySize - 1] = '\v';
-    WARDEN_ComputeModuleHash(szModuleName, pHashBuf, nSigDataLen, nSigOffset, pData);
+    WARDEN_ComputeModuleHash(szModuleName, pHashBuf, pData, nSigDataLen, nSigOffset);
     uint8_t* pDecryptedSig = (uint8_t*)Storm::Source::SMem::SMemAlloc(nKeySize, ".\\WARDEN\\WardenClient.cpp", 0xb5, 0);
     Storm::Source::SMem::SMemCopy(pDecryptedSig, pData + nSigOffset + 4, nKeySize);
     Storm::Source::SBig::SBigNew(&__frame0.pBnResult);

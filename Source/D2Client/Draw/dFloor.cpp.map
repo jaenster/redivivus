@@ -1,0 +1,596 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Client/Draw/dFloor.cpp",
+  "functions": [
+    {
+      "name": "DRAW_ShouldDrawEdges",
+      "address": "004dde00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dde00"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "DRAW_ShouldDrawEdges",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetLine",
+        "D2GFX_GetResolutionMode"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "D2RoomStrc",
+        "eD2LevelId",
+        "int32_t"
+      ],
+      "dh": "5502a9ac",
+      "paramStorage": [
+        [
+          "nParam",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DFLOOR_IsPointInRect",
+      "address": "004dde40",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dde40"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "DFLOOR_IsPointInRect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "RECT"
+      ],
+      "dh": "dfb2cd54",
+      "paramStorage": [
+        [
+          "pRect",
+          "EAX:4"
+        ],
+        [
+          "nX",
+          "ECX:4"
+        ],
+        [
+          "nY",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRAW_UpdateTileVisibilityBounds",
+      "address": "004dde80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dde80"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "DRAW_UpdateTileVisibilityBounds"
+      ],
+      "usedTypes": [
+        "D2DrawFloorStrc",
+        "D2DrlgTileDataStrc",
+        "int32_t"
+      ],
+      "dh": "04ec406d",
+      "paramStorage": [
+        [
+          "pDrawFloor",
+          "ECX:4"
+        ],
+        [
+          "pActSub18",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nWorldY",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetIntensityFlagsForTile",
+      "address": "004ddef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ddef0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "GetIntensityFlagsForTile",
+        "DRLGENV_GetIntensityFromAct",
+        "DRLGENV_GetLightColorFromAct",
+        "DRAW_CoordIsInCoord"
+      ],
+      "usedTypes": [
+        "D2GfxLightExStrc",
+        "int32_t"
+      ],
+      "dh": "18df2ba3",
+      "paramStorage": [
+        [
+          "nTileX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nIndoorFlag",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pLightGrid",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRAW_CalcRoofLightGridOrtho",
+      "address": "004ddfd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ddfd0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "DRAW_CalcRoofLightGridOrtho"
+      ],
+      "usedTypes": [
+        "D2GfxLightExStrc",
+        "int32_t"
+      ],
+      "dh": "5d450c9b",
+      "paramStorage": [
+        [
+          "pLightEntry",
+          "ECX:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "bBorderOnly",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nSplitSide",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRAW_CalcRoofLightOrtho",
+      "address": "004de070",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004de070"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "DRAW_CalcRoofLightOrtho",
+        "DRLGENV_GetIntensityFromAct",
+        "DRLGENV_GetLightColorFromAct",
+        "DRAW_CoordIsInCoord"
+      ],
+      "usedTypes": [
+        "D2GfxLightExStrc",
+        "int32_t"
+      ],
+      "dh": "0af2d9eb",
+      "paramStorage": [
+        [
+          "pLightGrid",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nIndoorFlag",
+          "Stack[0x18]:4"
+        ],
+        [
+          "nSplitSide",
+          "Stack[0x1c]:4"
+        ],
+        [
+          "bBorderOnly",
+          "Stack[0x20]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRAW_CalcRoofLightGridPerspective",
+      "address": "004de190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004de190"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "DRAW_CalcRoofLightGridPerspective",
+        "D2GFX_AdjustPerspectivePosition"
+      ],
+      "usedTypes": [
+        "D2GfxLightExStrc",
+        "int32_t"
+      ],
+      "dh": "2601918e",
+      "paramStorage": [
+        [
+          "pLightEntry",
+          "ECX:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDepth",
+          "Stack[0xc]:4"
+        ],
+        [
+          "bBorderOnly",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSplitSide",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRAW_CalcRoofLightPerspective",
+      "address": "004de260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004de260"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "D2GFX_AdjustPerspectivePosition",
+        "DRAW_CoordIsInCoord",
+        "DRAW_CalcRoofLightPerspective",
+        "DRLGENV_GetIntensityFromAct",
+        "DRLGENV_GetLightColorFromAct"
+      ],
+      "usedTypes": [
+        "D2GfxLightExStrc",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "182c2cd3",
+      "paramStorage": [
+        [
+          "nRow",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDepth",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nSplitSide",
+          "Stack[0x14]:4"
+        ],
+        [
+          "bBorderOnly",
+          "Stack[0x18]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawFloorTile",
+      "address": "004de410",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004de410"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "DrawFloorTile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetCurrentEngine",
+        "GetIntensityFlagsForTile",
+        "DRAW_CalcRoofLightOrtho",
+        "DRAW_CalcRoofLightGridOrtho",
+        "DRAW_CalcRoofLightPerspective",
+        "DRAW_CalcRoofLightGridPerspective",
+        "D2GFX_DrawGroundTile",
+        "RollBetweenMinAndMax",
+        "WEATHER_SpawnSplash",
+        "WEATHER_SpawnBubble",
+        "DRAW_UpdateTileVisibilityBounds"
+      ],
+      "usedTypes": [
+        "D2DrawFloorStrc",
+        "D2DrlgTileDataStrc",
+        "D2GameViewStrc",
+        "D2GfxLightExStrc",
+        "D2TileLibraryEntryStrc",
+        "int32_t"
+      ],
+      "dh": "987fae72",
+      "paramStorage": [
+        [
+          "pFloor",
+          "ECX:4"
+        ],
+        [
+          "pTileData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pParam",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nScreenX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenY",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x14]:4"
+        ],
+        [
+          "nWorldY",
+          "Stack[0x18]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRAW_DrawEdgeFloorTile",
+      "address": "004de630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004de630"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "DRAW_DrawEdgeFloorTile",
+        "CoordsMapToScreen",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetTileDataFromAct",
+        "DrawFloorTile"
+      ],
+      "usedTypes": [
+        "D2DrawFloorStrc",
+        "D2DrlgTileDataStrc",
+        "int32_t"
+      ],
+      "dh": "1506cc21",
+      "paramStorage": [
+        [
+          "pDrawFloor",
+          "ECX:4"
+        ],
+        [
+          "nWorldX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nParam",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawSubTile",
+      "address": "004de6c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004de6c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "DrawSubTile",
+        "DRAW_DrawEdgeFloorTile"
+      ],
+      "usedTypes": [
+        "D2DrawFloorStrc",
+        "int32_t"
+      ],
+      "dh": "9f0ee186",
+      "paramStorage": [
+        [
+          "pDrawFloor",
+          "ECX:4"
+        ],
+        [
+          "nTileX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nTileY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nStepX",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nStepY",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawFloorByViewAndFloor",
+      "address": "004de730",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004de730"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "DrawFloorByViewAndFloor",
+        "D2GFX_GetLowQuality",
+        "D2GFX_IsPerspectiveActive",
+        "gnRecordingIndex",
+        "WEATHER_FloatPassthrough",
+        "DRAW_GetTypeOfBorder",
+        "GetCurrentRoom",
+        "DRLGROOM_GetLevelIdFromRoom",
+        "TXT_Levels_GetLine",
+        "D2GFX_GetResolutionMode",
+        "WEATHER_GetCurrentLevelWeatherFlags",
+        "GetPlayerUnit_UI",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRLGROOM_GetAdjacentRoomsList",
+        "DRLGROOM_GetRoomCoordinates",
+        "DRLGROOM_GetFloorTilesFromRoom",
+        "DrawFloorTile",
+        "GetPlayerUnit_Net",
+        "GetXPos",
+        "GetYPos",
+        "DrawSubTile"
+      ],
+      "usedTypes": [
+        "D2DrawFloorStrc",
+        "D2DrlgRoomCoordsStrc",
+        "D2DrlgTileDataStrc",
+        "D2GameViewStrc",
+        "D2LevelsTxt",
+        "D2RoomStrc",
+        "D2RoomStrc *",
+        "D2UnitStrc",
+        "eD2LevelId",
+        "eD2UnitType",
+        "uint32_t"
+      ],
+      "dh": "999a5a53",
+      "paramStorage": [
+        [
+          "pDrawFloor",
+          "ECX:4"
+        ],
+        [
+          "pGameView",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "dRoofDraw",
+      "address": "004dea70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dea70"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "dRoofDraw",
+        "GetTickCount",
+        "GetCurrentEngine",
+        "D2GFX_IsPerspectiveActive",
+        "D2GFX_GetLowQuality",
+        "DRAW_GetTypeOfBorder",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetIntensityFlagsForTile",
+        "DRAW_CalcRoofLightOrtho",
+        "DRAW_CalcRoofLightPerspective",
+        "D2GFX_DrawGroundTile"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2GameViewStrc",
+        "D2GfxLightExStrc",
+        "D2TileLibraryEntryStrc",
+        "D2Wall2DrawEntryStrc",
+        "D2Wall2DrawEntryStrc *",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "4c2ed4c3",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
+    }
+  ]
+}

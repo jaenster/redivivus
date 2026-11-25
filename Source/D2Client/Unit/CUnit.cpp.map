@@ -547,6 +547,69 @@
       ]
     },
     {
+      "name": "SKILL_SelectProc_IsCorpseConsumableBasic",
+      "address": "00464220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464220"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "D2CheckIfCorpseIsConsumable",
+        "SKILL_SelectProc_IsCorpseConsumableBasic"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "uint32_t"
+      ],
+      "dh": "4fe8c752",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SKILL_SelectProc_IsConvertibleCorpse",
+      "address": "00464230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00464230"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "SKILL_SelectProc_IsConvertibleCorpse",
+        "D2CheckIfCorpseIsConsumable",
+        "MONSTER_CanBeConverted",
+        "TXT_MonStats_GetBaseId"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "7e1614c2",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pTargetUnit",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
       "name": "SKILL_ExecuteSelectProc",
       "address": "004642b0",
       "lines": [

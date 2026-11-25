@@ -1,0 +1,656 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/Bnclient/grid.cpp",
+  "functions": [
+    {
+      "name": "NET_SID_CLIENT_EncodeCDKeyHash",
+      "address": "00522c30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00522c30"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_EncodeCDKeyHash",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "srand",
+        "rand",
+        "_time32",
+        "NET_SID_CLIENT_InitSHAContext",
+        "NET_SID_CLIENT_SHA1Compress",
+        "NET_SID_CLIENT_ClearSHAContexts",
+        "NET_SID_CLIENT_SetupIDEAKey",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "4e8d0107",
+      "paramStorage": [
+        [
+          "pThis",
+          "ECX:4"
+        ],
+        [
+          "nSeed",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_DecodeCDKeyHash",
+      "address": "00522e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00522e10"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_DecodeCDKeyHash",
+        "NET_SID_CLIENT_EncodeCDKeyHash",
+        "__security_check_cookie",
+        "NET_SID_CLIENT_GetSHAState",
+        "NET_SID_CLIENT_IDEAEncryptDecrypt",
+        "NET_SID_CLIENT_SHA1Compress",
+        "NET_SID_CLIENT_ClearIDEAContexts",
+        "NET_SID_CLIENT_ClearSHAContexts",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "ec2bc5e5",
+      "paramStorage": [
+        [
+          "pnData",
+          "ECX:4"
+        ],
+        [
+          "nDataSize",
+          "EDX:4"
+        ],
+        [
+          "szCDKey",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_CalculateAlignedBufferSize",
+      "address": "00523020",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00523020"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_CalculateAlignedBufferSize",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d87f8f72",
+      "paramStorage": [
+        [
+          "nDataSize",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_EncodeBuffer",
+      "address": "00523060",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00523060"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_EncodeBuffer",
+        "NET_SID_CLIENT_CalculateAlignedBufferSize",
+        "NET_SID_CLIENT_EncodeCDKeyHash",
+        "memcpy",
+        "memset",
+        "NET_SID_CLIENT_GetSHAState",
+        "NET_SID_CLIENT_SHA1Compress",
+        "NET_SID_CLIENT_IDEAEncryptDecrypt",
+        "NET_SID_CLIENT_ClearIDEAContexts",
+        "NET_SID_CLIENT_ClearSHAContexts",
+        "__security_check_cookie",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "365847d8",
+      "paramStorage": [
+        [
+          "pdwData",
+          "ECX:4"
+        ],
+        [
+          "nDataSize",
+          "EDX:4"
+        ],
+        [
+          "nBufferAlignment",
+          "Stack[0x4]:4"
+        ],
+        [
+          "szCDKey",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_DecodeAndValidateBuffer",
+      "address": "005232b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005232b0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_DecodeAndValidateBuffer",
+        "NET_SID_CLIENT_GenerateRandomString",
+        "NET_SID_CLIENT_DecodeCDKeyHash",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "5512c3a5",
+      "paramStorage": [
+        [
+          "pnData",
+          "ECX:4"
+        ],
+        [
+          "nDataSize",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_LoadAndDecodeCDKeyFile",
+      "address": "00523480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00523480"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_LoadAndDecodeCDKeyFile",
+        "SFileLoadFile",
+        "NET_SID_CLIENT_DecodeAndValidateBuffer",
+        "SFileUnloadFile"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "4a93d46f",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ],
+        [
+          "pdwFileSize",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DecodeAndLoadKeys",
+      "address": "005234d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005234d0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "DecodeAndLoadKeys",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "sprintf",
+        "NET_SID_CLIENT_LoadAndDecodeCDKeyFile",
+        "SFileLoadFile",
+        "NET_SID_CLIENT_DecodeAndValidateBuffer",
+        "SFileUnloadFile",
+        "D2CheckExpansionGame",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "c3d99eb5"
+    },
+    {
+      "name": "FreeKeys",
+      "address": "005239c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005239c0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "FreeKeys",
+        "SFileUnloadFile"
+      ],
+      "dh": "460d5a93"
+    },
+    {
+      "name": "NET_SID_CLIENT_GetProductId",
+      "address": "00523a00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00523a00"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_GetProductId"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "42b02e83"
+    },
+    {
+      "name": "NET_SID_CLIENT_GetCdKeyByType",
+      "address": "00523ab0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00523ab0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_GetCdKeyByType"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "e592c7a1",
+      "paramStorage": [
+        [
+          "nProductType",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SHA0_Transform",
+      "address": "00523af0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00523af0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "SHA0_Transform"
+      ],
+      "usedTypes": [
+        "uint32_t"
+      ],
+      "dh": "e6933403",
+      "paramStorage": [
+        [
+          "pShaCtx",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_ClearSHAContexts",
+      "address": "005241a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005241a0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_ClearSHAContexts",
+        "memset"
+      ],
+      "dh": "63e60d1b"
+    },
+    {
+      "name": "NET_SID_CLIENT_GetSHAState",
+      "address": "005241c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005241c0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_GetSHAState"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "40fd7e30",
+      "paramStorage": [
+        [
+          "nCtxIndex",
+          "ECX:4"
+        ],
+        [
+          "pdwStateOut",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_SHA1Compress",
+      "address": "00524200",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524200"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_SHA1Compress",
+        "SHA0_Transform"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "8cfe4417",
+      "paramStorage": [
+        [
+          "nCtxIndex",
+          "ECX:4"
+        ],
+        [
+          "pdwBlock",
+          "EDX:4"
+        ],
+        [
+          "pdwOutHash",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_InitSHAContext",
+      "address": "00524280",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524280"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_InitSHAContext"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "9023ec38",
+      "paramStorage": [
+        [
+          "nCtxIndex",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_IDEAMultInverse",
+      "address": "005242f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005242f0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_IDEAMultInverse"
+      ],
+      "usedTypes": [
+        "uint32_t",
+        "uint64_t"
+      ],
+      "dh": "3903fda9",
+      "paramStorage": [
+        [
+          "value",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_IDEAExpandKey",
+      "address": "00524360",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524360"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_IDEAExpandKey"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "8d92bb03",
+      "paramStorage": [
+        [
+          "pUserKey",
+          "ECX:4"
+        ],
+        [
+          "pExpandedSubkeys",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_IDEAInvertKey",
+      "address": "005243e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005243e0"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_IDEAInvertKey",
+        "NET_SID_CLIENT_IDEAMultInverse",
+        "__security_check_cookie"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "6d4b90d4",
+      "paramStorage": [
+        [
+          "pEncryptKey",
+          "ECX:4"
+        ],
+        [
+          "pDecryptKey",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_IDEACrypt",
+      "address": "00524540",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524540"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_IDEACrypt"
+      ],
+      "usedTypes": [
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "adecdb9d",
+      "paramStorage": [
+        [
+          "pPlaintext",
+          "ECX:4"
+        ],
+        [
+          "pCiphertext",
+          "EDX:4"
+        ],
+        [
+          "pSubkeys",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_ClearIDEAContexts",
+      "address": "00524740",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524740"
+        }
+      ],
+      "namespace": "Bnclient::_net_sid",
+      "calledFunctions": [
+        "NET_SID_CLIENT_ClearIDEAContexts",
+        "memset"
+      ],
+      "dh": "c04312dc"
+    },
+    {
+      "name": "NET_SID_CLIENT_IDEAEncryptDecrypt",
+      "address": "00524760",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524760"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "NET_SID_CLIENT_IDEAEncryptDecrypt",
+        "NET_SID_CLIENT_IDEACrypt"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "f58b2158",
+      "paramStorage": [
+        [
+          "nKeyScheduleIdx",
+          "ECX:4"
+        ],
+        [
+          "pPlaintext",
+          "EDX:4"
+        ],
+        [
+          "pCiphertext",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "NET_SID_CLIENT_SetupIDEAKey",
+      "address": "00524780",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00524780"
+        }
+      ],
+      "namespace": "Bnclient",
+      "calledFunctions": [
+        "NET_SID_CLIENT_SetupIDEAKey",
+        "NET_SID_CLIENT_IDEAExpandKey",
+        "__security_check_cookie",
+        "NET_SID_CLIENT_IDEAInvertKey"
+      ],
+      "usedTypes": [
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "ae2165b5",
+      "paramStorage": [
+        [
+          "nKeyScheduleIdx",
+          "ECX:4"
+        ],
+        [
+          "bEncryptMode",
+          "EDX:4"
+        ],
+        [
+          "pdwKeyMaterial",
+          "Stack[0x4]:4"
+        ]
+      ]
+    }
+  ]
+}

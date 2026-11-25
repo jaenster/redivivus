@@ -2948,40 +2948,15 @@ static void bi_windup(deflate_state * s) {
 }
 
 static void __stdcall copy_block(deflate_state * s, uint8_t * buf, int32_t len, int32_t header) {
-    uint8_t byLenHi;
-    if (s->bi_valid > 8) {
-      s->pending_buf[s->pending] = (uint8_t)s->bi_buf;
-      byLenHi = *(uint8_t*)((intptr_t)&s->bi_buf + 1);
-      s->pending++;
-      s->pending_buf[s->pending] = byLenHi;
-      s->pending++;
-      s->bi_buf = 0;
-      s->bi_valid = 0;
-    } else {
-      if (s->bi_valid > 0) {
-        s->pending_buf[s->pending] = (uint8_t)s->bi_buf;
-        s->pending++;
-      }
-
-      s->bi_buf = 0;
-      s->bi_valid = 0;
-    }
+    bi_windup(s);
     if (header) {
-      s->pending_buf[s->pending] = (uint8_t)len;
-      s->pending++;
-      byLenHi = (uint8_t)(len >> 8);
-      s->pending_buf[s->pending] = byLenHi;
-      s->pending++;
-      s->pending_buf[s->pending] = ~(uint8_t)len;
-      s->pending++;
-      s->pending_buf[s->pending] = ~byLenHi;
-      s->pending++;
+        s->pending_buf[s->pending++] = (unsigned char)(len & 0xff);
+        s->pending_buf[s->pending++] = (unsigned char)((unsigned short)len >> 8);
+        s->pending_buf[s->pending++] = (unsigned char)(~len & 0xff);
+        s->pending_buf[s->pending++] = (unsigned char)((unsigned short)~len >> 8);
     }
-
-    for (; len; len--) {
-      s->pending_buf[s->pending] = *buf;
-      s->pending++;
-      buf++;
+    while (len--) {
+        s->pending_buf[s->pending++] = *buf++;
     }
 }
 
@@ -3165,21 +3140,17 @@ static int32_t build_bl_tree(deflate_state * s) {
 }
 
 void __fastcall _tr_stored_block(deflate_state * s, char * buf, uint32_t stored_len, int32_t last) {
-    int nBitCount = s->bi_valid;
-    if (nBitCount > 0xd) {
-      uint8_t byBitBufHi;
-      s->bi_buf |= (uint16_t)(last << D2_SHIFT_COUNT(nBitCount));
-      s->pending_buf[s->pending] = (uint8_t)s->bi_buf;
-      byBitBufHi = *(uint8_t*)((intptr_t)&s->bi_buf + 1);
-      s->pending++;
-      s->pending_buf[s->pending] = byBitBufHi;
-      nBitCount = s->bi_valid;
-      s->pending++;
-      s->bi_valid = nBitCount - 0xd;
-      s->bi_buf = (uint16_t)last >> D2_SHIFT_COUNT(0x10U - nBitCount);
+    int len = 3;
+    if (s->bi_valid > 0x10 - len) {
+      int val = last;
+      s->bi_buf |= (uint16_t)(val << D2_SHIFT_COUNT(s->bi_valid));
+      s->pending_buf[s->pending++] = (uint8_t)(s->bi_buf & 0xff);
+      s->pending_buf[s->pending++] = (uint8_t)((uint16_t)s->bi_buf >> 8);
+      s->bi_buf = (uint16_t)val >> D2_SHIFT_COUNT(0x10 - s->bi_valid);
+      s->bi_valid += len - 0x10;
     } else {
-      s->bi_valid = nBitCount + 3;
-      s->bi_buf |= (uint16_t)(last << D2_SHIFT_COUNT(nBitCount));
+      s->bi_buf |= (uint16_t)(last << D2_SHIFT_COUNT(s->bi_valid));
+      s->bi_valid += len;
     }
 
     copy_block(s, (uint8_t*)buf, stored_len, 1);

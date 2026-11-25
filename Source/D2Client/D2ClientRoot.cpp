@@ -3,7 +3,7 @@
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/ClientModeInGame.h"
 #include "Source/D2Client/Core/Archive.h"
-#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/dLightMap.h"
 #include "Source/D2Client/Engine.h"
 #include "Source/D2Client/Game/Game.h"
 #include "Source/D2Client/Game/Game/SGAMEDATA.h"
@@ -75,10 +75,6 @@ typedef D2WardenModuleObjectStrc * (__fastcall *pfnWardenCreateInterface)(::Ward
 
 static eD2ArenaFlags CLIENT_ArenaFlags = ARENAFLAG_ClientUpdate; D2_STATIC_GUARD(CLIENT_ArenaFlags, "CLIENT_ArenaFlags");
 static eD2PlayerClassIDDWORD eD2PlayerClassIDDWORD_00712f00 = CLASS_SORCERESS; D2_STATIC_GUARD(eD2PlayerClassIDDWORD_00712f00, "eD2PlayerClassIDDWORD_00712f00");
-static char gbCutsceneActive = 0; D2_STATIC_GUARD(gbCutsceneActive, "gbCutsceneActive");
-static uint8_t gbLoggerStateInactive = 0; D2_STATIC_GUARD(gbLoggerStateInactive, "gbLoggerStateInactive");
-static uint8_t gbItemDescDirtyFlag = 0; D2_STATIC_GUARD(gbItemDescDirtyFlag, "gbItemDescDirtyFlag");
-static uint8_t geCutsceneCurrentSoundId = 0; D2_STATIC_GUARD(geCutsceneCurrentSoundId, "geCutsceneCurrentSoundId");
 static uint8_t aQuestAvailabilityPacket[37] = {}; D2_STATIC_GUARD(aQuestAvailabilityPacket, "aQuestAvailabilityPacket");
 static uint32_t gdwWarpFadeExpireTime = 0; D2_STATIC_GUARD(gdwWarpFadeExpireTime, "gdwWarpFadeExpireTime");
 
@@ -86,18 +82,6 @@ namespace D2Client {
 
 void __stdcall CMD_AutomapCenterOnPlayer_Unref_0040d530() {
     Fog::Debug::CleanupSymbolsWithRefcount(1);
-}
-
-// @sourcefile .\CORE\WINMAIN.CPP
-BOOL __stdcall WINMAIN_TestMemoryAccess(CMDPARAMS * pParams, char * szCmdLine) {
-    uint8_t* pPage;
-    uint8_t* pMemory = (uint8_t*)D2_ALLOC_AT(0x6000000, ".\\CORE\\WINMAIN.CPP", 0x121);
-    for (pPage = pMemory; pPage < pMemory + 0x6000000; pPage += 0x1000) {
-      *pPage = 0;
-    }
-
-    D2_FREE_AT(pMemory, ".\\CORE\\WINMAIN.CPP", 0x124);
-    return 1;
 }
 
 // Triggers end-game congrats flow: set gShowEndGameCongrats, reset beta index, send exit packet, set ExitVar3.
@@ -143,45 +127,12 @@ int __fastcall SKILL_SelectProc_IsSelectableCorpse2(D2UnitStrc * pUnit, D2UnitSt
     return bIsSelectableCorpse;
 }
 
-// SelectProc=2 handler: target must be a consumable corpse (basic check). Forwards to D2CheckIfCorpseIsConsumable(pTargetUnit, bCheckDead=0). pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
-int __fastcall SKILL_SelectProc_IsCorpseConsumableBasic(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    uint32_t bConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
-    return bConsumable;
-}
-
 // GetType as its callers inlined it: two returns, the value in a register of its own.
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     if (pUnit) {
         return pUnit->eUnitType;
     }
     return (eD2UnitType)6;
-}
-
-// SelectProc=3 handler: target must be a consumable corpse that can be converted and is not monsterId 0x4e (Bone Golem/special). Used for Raise Skeleton-type skills. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
-int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
-    if (!pTargetUnit) {
-      return 0;
-    }
-
-    uint32_t bIsConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
-    if (!bIsConsumable) {
-      return 0;
-    }
-
-    int bCanBeConverted = UNIT::Monster::MONSTER_CanBeConverted(pTargetUnit);
-    if (!bCanBeConverted) {
-      return 0;
-    }
-    if (GetTypeInline(pTargetUnit) != UNIT_MONSTER) {
-      return 0;
-    }
-
-    int32_t nMonStatsId = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pTargetUnit);
-    if (!(nMonStatsId < 0 || nMonStatsId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || nMonStatsId != 0x4e)) {
-      return 0;
-    }
-
-    return 1;
 }
 
 // SelectProc=4 handler: target must be a corpse valid for revive (Necromancer Revive). Thunk forwarding to SKILLS_IsCorpseValidForRevive. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
@@ -995,391 +946,8 @@ void __fastcall AUTOMAP_UpdatePartyNamesCallback(D2EscMenuItemStrc * pItem, D2UI
     UI::Automap::AUTOMAP_SetPartyNames(pItem->nImageIndex);
 }
 
-static void SOUND_LocalizeSoundPath(char * pszOutPath, char * szFormat, char * pTmp) {
-    D2MPQFileStrc* pFile;
-    char szLangAbbrev[4];
-    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
-    sprintf(pszOutPath, szFormat, "DATA\\LOCAL", szLangAbbrev, pTmp);
-    int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
-    if (bOpened) {
-      Storm::Source::SFile::SFileCloseFile(pFile);
-      return;
-    }
-
-    uint32_t dwLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
-    if (dwLanguageCode) {
-      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "ENG", pTmp);
-      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
-      if (bOpened) {
-        Storm::Source::SFile::SFileCloseFile(pFile);
-        return;
-      }
-    } else {
-      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "CHI", pTmp);
-      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile);
-      if (bOpened) {
-        Storm::Source::SFile::SFileCloseFile(pFile);
-      }
-    }
-}
-
-// The ECX slot that carries a function pointer was one variable holding three callees with two
-// different conventions - fpRequiredUserAction (BOOL __cdecl(void)), UI_ShowPopupDialog and
-// NET_D2GS_CLIENT_Send_0x6D_PING (void __stdcall(void)). Typing it void * split it into two register
-// variables with disjoint live ranges: pfnCallback, which reaches MPQ_LoadVideoMpqFiles, and pfFrame,
-// which reaches D2GFX_PlayCutScene and only ever holds PING or 0. void * is the honest type for both -
-// it is what D2GFX_PlayCutScene declares for the parameter - and no call is made through either slot
-// here.
-// Passes LOADER_RunInsertDiscPopup by address.
-void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
-    // Static local variables (originally global data)
-    static int gnCutsceneCount = 0x8; D2_STATIC_GUARD(gnCutsceneCount, "D2Client::ExitGamePlayCutScene::gnCutsceneCount");
-    static uint8_t bExitCutsceneActive; D2_STATIC_GUARD_BSS(bExitCutsceneActive, "D2Client::ExitGamePlayCutScene::bExitCutsceneActive");
-
-    char* pszSrcName;
-    char* pPathCursor;
-    HANDLE hFile;
-    DWORD dwResult;
-    void* pfnCallback;
-    int32_t nExitCodeEcx2;
-    nExitCodeEcx2 = nCutsceneId;
-    int32_t nExitCodeEcx3;
-    nExitCodeEcx3 = nCutsceneId;
-    int bMpqLoaded;
-    char szInstallPath[260];
-    char szSoundPath[260];
-    char szVideoPath[260];
-    int bVideoLoaded;
-    int32_t nErrorLine;
-    int nCurrentCutsceneId;
-    nCurrentCutsceneId = nCutsceneId;
-    if (nCutsceneId >= gnCutsceneCount) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xef);
-      exit(-1);
-    }
-
-    gbItemDescDirtyFlag = 1;
-    Sound::SoundHdr::SOUNDHDR_UpdateRegistryVersion(nCutsceneId);
-    if (bExitCutsceneActive != '\0') {
-      return;
-    }
-    if (nCutsceneId >= gnCutsceneCount) {
-      GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x48);
-      gbItemDescDirtyFlag = 0;
-      return;
-    }
-
-    int32_t nPlayMode;
-    nPlayMode = 0;
-    if (gdwSoundHeaderCacheIndex[nCutsceneId].bCharacterAnimationPlayed) {
-      if (gbLoggerStateInactive != '\0') {
-        sprintf(szVideoPath, gdwSoundHeaderCacheIndex[nCutsceneId].pszVideoPath, "640x292");
-      } else {
-        nPlayMode = 2;
-        sprintf(szVideoPath, gdwSoundHeaderCacheIndex[nCutsceneId].pszVideoPath, "640x146");
-      }
-    } else {
-      pszSrcName = gdwSoundHeaderCacheIndex[nCutsceneId].pszVideoPath;
-      strcpy(szVideoPath, pszSrcName);
-    }
-
-    Sound::SoundHdr::Cleanup();
-    GAME::Wall2::WALL2_ResetAmbientSound();
-    D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    BOOL bConnectionLost;
-    bConnectionLost = 0;
-    int bCutscenePlayed;
-    bCutscenePlayed = 0;
-    if (nCurrentCutsceneId == 7) {
-      bConnectionLost = 1;
-      Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, 0x104);
-      pszSrcName = (char*)((uint8_t*)&szInstallPath - 1);
-      do {
-        pPathCursor = pszSrcName;
-        pszSrcName = pPathCursor + 1;
-      } while (pPathCursor[1] != '\0');
-
-      /* HANDLE hTemplateFile for CreateFileA */ /* DWORD dwFlagsAndAttributes for CreateFileA */ memcpy(pPathCursor + 1, "d2game.dll", 0xb);
-      /* DWORD dwCreationDisposition for CreateFileA */ /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateFileA */ /* DWORD dwShareMode for CreateFileA */ /* DWORD dwDesiredAccess for CreateFileA */ /* LPCSTR lpFileName for CreateFileA */ hFile = CreateFileA(szInstallPath, 0, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x80, (HANDLE)0x0);
-      if (hFile != (HANDLE)-1) {
-        /* HANDLE hObject for CloseHandle */ CloseHandle(hFile);
-        goto load_and_play;
-      }
-
-      GAME::Game::SetPendingExitCutsceneId(0);
-      finish_and_exit_game:
-      GAME::Game::SetPendingExitCutsceneId(0);
-      gbCutsceneActive = '\0';
-      GAME::Game::SetExitCutscenePlayed();
-      nErrorLine = nExitCodeEcx3;
-    } else {
-      if (nCurrentCutsceneId == 6) {
-        bConnectionLost = 1;
-      }
-
-      load_and_play:
-      Engine::LOADER_SetConnectionLostFlag(bConnectionLost);
-      pfnCallback = (void*)(BOOL (*)())Engine::fpRequiredUserAction;
-      if (!bConnectionLost) {
-        pfnCallback = (void*)UI::ui::UI_ShowPopupDialog;
-      }
-
-      bConnectionLost = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)pfnCallback, 0, bConnectionLost);
-      bMpqLoaded = 0;
-      if (bConnectionLost) {
-        bVideoLoaded = 1;
-        if (gdwSoundHeaderCacheIndex[nCutsceneId].bHasAltSoundPath) {
-          SOUND_LocalizeSoundPath(szSoundPath, "%s\\video\\%s\\%s", szVideoPath);
-        } else {
-          sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
-        }
-
-        bExitCutsceneActive = '\x01';
-        DRAW_WORLD_ClearWarpFadeTimer();
-        UI::ui::SetUIFlag(UI_NODRAW, UI_SET, 0);
-        dwResult = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
-        if (dwResult) {
-          if (gbCutsceneActive != '\0') {
-            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, 0);
-          } else {
-            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
-          }
-
-          bCutscenePlayed = 1;
-        }
-        if (nCurrentCutsceneId != 5 || geCutsceneCurrentSoundId == '\0') {
-          dwResult = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-          D2Win::D2GFX::SetResolutionModeWithEndCutScene(dwResult);
-          UI::ui::SetUIFlag(UI_NODRAW, UI_RESET, 0);
-          bExitCutsceneActive = '\0';
-          bMpqLoaded = bVideoLoaded;
-          goto check_chained_cutscene;
-        }
-
-        unload_before_chained:
-        D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-        play_chained_cutscene:
-        if (bCutscenePlayed) {
-          dwResult = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-          D2Win::D2GFX::SetResolutionModeWithEndCutScene(dwResult);
-        }
-        Engine::LOADER_SetConnectionLostFlag(1);
-        bConnectionLost = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, 0, 1);
-        if (bConnectionLost) {
-          nCurrentCutsceneId = 6;
-          if (gbLoggerStateInactive != '\0') {
-            pszSrcName = "640x292";
-            sprintf(szVideoPath, gdwSoundHeaderCacheIndex[6].pszVideoPath, "640x292");
-          } else {
-            pszSrcName = "640x146";
-            nPlayMode = 2;
-            sprintf(szVideoPath, gdwSoundHeaderCacheIndex[6].pszVideoPath, "640x146");
-          }
-          if (gdwSoundHeaderCacheIndex[6].bHasAltSoundPath) {
-            SOUND_LocalizeSoundPath(szSoundPath, "%s\\video\\%s\\%s", szVideoPath);
-          } else {
-            sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
-          }
-
-          dwResult = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
-          if (dwResult) {
-            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
-            Sound::SoundHdr::SOUNDHDR_UpdateRegistryVersion(6);
-          }
-        }
-
-        dwResult = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-        D2Win::D2GFX::SetResolutionModeWithEndCutScene(dwResult);
-        UI::ui::SetUIFlag(UI_NODRAW, UI_RESET, 0);
-        bExitCutsceneActive = '\0';
-        geCutsceneCurrentSoundId = '\0';
-        D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette(4);
-      } else {
-        check_chained_cutscene:
-        if (geCutsceneCurrentSoundId != '\0') {
-          if (bMpqLoaded) {
-            goto unload_before_chained;
-          }
-
-          goto play_chained_cutscene;
-        }
-      }
-
-      GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x48);
-      if (gbCutsceneActive == '\0') {
-        if (nCurrentCutsceneId != 7) {
-          goto reload_media_mpqs;
-        }
-
-        goto finish_and_exit_game;
-      }
-
-      gbCutsceneActive = '\0';
-      nErrorLine = nExitCodeEcx2;
-    }
-
-    GAME::Game::D2CLIENT_ExitGame(nErrorLine);
-    reload_media_mpqs:
-    D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
-    D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, (::fpRequiredUserAction)LOADER_RunInsertDiscPopup, 0, ClientModeInGame::D2IniData_client);
-    gbItemDescDirtyFlag = 0;
-}
-
-void __stdcall INV_SetItemDescFlag() {
-    gbCutsceneActive = '\x01';
-}
-
-void __stdcall INV_ResetItemDescFlags() {
-    gbCutsceneActive = '\0';
-    BOOL nLoggerState = Fog::Src::LogManager::GetLoggerState_Stub();
-    gbLoggerStateInactive = !nLoggerState;
-    geCutsceneCurrentSoundId = '\0';
-    gbItemDescDirtyFlag = 0;
-}
-
-void __stdcall INV_SetItemDescHighlight() {
-    geCutsceneCurrentSoundId = '\x01';
-}
-
-uint8_t __stdcall INV_GetItemDescDirtyFlag() {
-    return gbItemDescDirtyFlag;
-}
-
-void __fastcall MONUNIQUE_Clt_ClearMonsterOverride(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply) {
-    if (!(GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
-      return;
-    }
-
-    pUnit->pUnitData.pUnitDataMonster->nDurielUnk = 0;
-}
-
-void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {
-    /* @data MONUNIQUE_DispatchDeathEffect_body
-                         @wasnamed MONUNIQUE_DispatchDeathEffect
-                         @evidence A stray label two bytes inside the function
-                         MONUNIQUE_DispatchDeathEffect @004ad2f0, carrying the function's own name.
-                         Not a second object. */ if (!pUnit) {
-      return;
-    }
-
-    uint32_t nClassId = pUnit->nClassId;
-    switch (nClassId) {
-      case 0x9c:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_BossDeath_Andariel(pUnit);
-        }
-        break;
-      case 0x2d:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_SpawnTowerMistEffect(pUnit);
-        }
-        break;
-      case 0xe5:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_BossDeath_Radament(pUnit);
-        }
-        break;
-      case 0xd3:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_BossDeath_Duriel(pUnit);
-        }
-        break;
-      case 0xf2:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_BossDeath_Mephisto(pUnit);
-        }
-        break;
-      case 0xf3:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_StoreUnitGuidForQuestTracking(pUnit);
-        }
-        break;
-      case 0x100:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_BossDeath_Izual(pUnit);
-        }
-        break;
-      case 0x16e:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_SpawnOrbMistEffect(pUnit);
-        }
-        break;
-      case 0x11c:
-        if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Skill2) {
-          Source::ClientEngine::CLIENT_BossDeath_SandMaggotQueen(pUnit);
-        }
-        break;
-      case 0x10b:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_BossDeath_BloodRaven(pUnit);
-        }
-        break;
-      case 0x1df:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_SpawnOverseerControlMissile(pUnit);
-        }
-        break;
-      case 0x220:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_BossDeath_Baal();
-        }
-        break;
-      case 0x21c:
-      case 0x21d:
-      case 0x21e:
-        if (pUnit->eAnimMode.ePlayerMode == Death) {
-          Source::ClientEngine::CLIENT_SpawnAncientDeathMissile(pUnit);
-        }
-        break;
-    }
-}
-
 void __fastcall MONUNIQUE_Clt_SpawnPainWormDeathExplosion(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {
     UNIT::MonUnique::MONUNIQUE_PregnantCorpseBurst(pUnit);
-}
-
-void __fastcall MONSTER_FreeMonsterPath(D2UnitStrc * pUnit) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
-      return;
-    }
-
-    D2UnitDataMonsterStrc* nMonsterData = pUnit->pUnitData.pUnitDataMonster;
-    if (!(nMonsterData && nMonsterData->pPathParamOrName.wszMonsterName)) {
-      return;
-    }
-
-    D2_FREE_AT(nMonsterData->pPathParamOrName.wszMonsterName, ".\\UNIT\\Monster.cpp", 0x66);
-    nMonsterData->pPathParamOrName.wszMonsterName = 0;
-}
-
-int __stdcall NPCMENU_GetCurrentMenuId() {
-    GAME::Select::ClearSelectedUnit();
-    Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
-    UI::Dialog::FreeDialogStrc(UI::Dialog::gpNpcTradeErrorDialog);
-    UI::Dialog::gpNpcTradeErrorDialog = 0;
-    if (_Interaction::geNpcUiState == NPCUI_TRADE_REJECTED) {
-      if (UI::npcmenu::gnNpcMenuTransactionType == 5) {
-        UI::npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
-        UI::ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
-        return 1;
-      }
-
-      UI::npcmenu::NPCMENU_OpenInteractionDialog();
-      return 1;
-    }
-    if (UI::npcmenu::gnNpcMenuTransactionType == 6) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd55);
-      exit(-1);
-    } else {
-      if (_Interaction::geNpcUiState == 8) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd56);
-        exit(-1);
-      }
-
-      _Interaction::geNpcUiState = NPCUI_SHOP;
-      UI::Inv::INV_ExitIdentifyMode();
-      return 1;
-    }
 }
 
 void __fastcall TRADE_HandleTradeComplete(int32_t nValue, char bIsGoldAmount) {
@@ -1554,10 +1122,6 @@ void __stdcall SOUND_ClearGlobalState() {
     memset(UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags, 0, 0x1000);
 }
 
-void __fastcall MISSILES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam) {
-    D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
-}
-
 void __stdcall DRAW_WORLD_SetWarpFadeTimer() {
     DWORD dwTickCount = GetTickCount();
     gdwWarpFadeExpireTime = dwTickCount + 500;
@@ -1617,39 +1181,6 @@ int __fastcall CUNITEVENT_DispatchCallbacks(int nClientEvent, D2UnitStrc * pOwne
       pEvent = pNextCallback;
     }
     return dwResult;
-}
-
-BOOL __stdcall DRAW_ShouldDrawEdges(int32_t nParam) {
-    D2LevelsTxt* pLevelTxt;
-    DWORD dwResMode;
-    D2RoomStrc* pRoom = UNIT::CUnit::GetCurrentRoom();
-    if (pRoom) {
-      eD2LevelId eLevel;
-      eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      pLevelTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
-      if (pLevelTxt->DrawEdges != '\0' && !nParam) {
-        dwResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
-        if (dwResMode == 2) {
-          return 1;
-        }
-      }
-    }
-
-    return 0;
-}
-
-// TRUE when left <= nX < right and top <= nY < bottom; halts (dFloor.cpp line 118, ptRect) on a NULL rect.
-// Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
-static BOOL __stdcall DFLOOR_IsPointInRect(RECT * pRect, int nX, int nY) {
-    if (!pRect) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x76);
-      exit(-1);
-    }
-    if (nX >= pRect->left && nX < pRect->right && nY >= pRect->top && nY < pRect->bottom) {
-      return 1;
-    }
-
-    return 0;
 }
 
 int32_t __fastcall UI_GetDialogLineCount(int16_t nDialogId) {
@@ -3624,14 +3155,6 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
-int __fastcall SKILLSCLT_CheckSkillIsValid(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
-    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
-      return 0;
-    }
-
-    return (uint32_t)(GetClassIdInline(pUnit) == 0x1d4);
-}
-
 void __fastcall SKILLSASS_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
@@ -3647,6 +3170,5 @@ _EXCEPTION_DISPOSITION SehHandler_6ca238(EHExceptionRecord * pExceptionRecord, E
 }
 
 static void * keep_00468b20 = (0 ? (CMD_SelectSkillHotkeySlot(*(int *)0), (void *)0) : (void *)0);
-static void * keep_004dde40 = (0 ? (DFLOOR_IsPointInRect(*(RECT * *)0, *(int *)0, *(int *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client

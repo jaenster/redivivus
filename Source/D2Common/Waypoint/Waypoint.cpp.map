@@ -1,0 +1,293 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Common/Waypoint/Waypoint.cpp",
+  "functions": [
+    {
+      "name": "FindLevelIdByWaypointId",
+      "address": "00660d90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660d90"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "FindLevelIdByWaypointId",
+        "TXT_Levels_GetLine"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "eD2LevelId",
+        "uint16_t"
+      ],
+      "dh": "b8a2d3a8",
+      "paramStorage": [
+        [
+          "nWaypointId",
+          "Stack[0x4]:2"
+        ],
+        [
+          "pLevelId",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "FindWaypointIdByLevelId",
+      "address": "00660e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660e00"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "FindWaypointIdByLevelId",
+        "TXT_Levels_GetLine"
+      ],
+      "usedTypes": [
+        "D2LevelsTxt",
+        "eD2LevelId",
+        "int16_t",
+        "uint8_t"
+      ],
+      "dh": "e6b41589",
+      "paramStorage": [
+        [
+          "eLevel",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWaypointId",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CheckWaypoint",
+      "address": "00660e50",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660e50"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "CheckWaypoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t",
+        "uint32_t"
+      ],
+      "dh": "5d332ca9",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWaypointId",
+          "Stack[0x8]:2"
+        ]
+      ]
+    },
+    {
+      "name": "EnableWaypoint",
+      "address": "00660ec0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660ec0"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "EnableWaypoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "17475d3a",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWaypointId",
+          "Stack[0x8]:2"
+        ]
+      ]
+    },
+    {
+      "name": "Alloc",
+      "address": "00660f30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660f30"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "Alloc",
+        "AllocServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2WaypointStrc"
+      ],
+      "dh": "6b5ec44e",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "WAYPOINT_UpgradeSignature",
+      "address": "00660f80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660f80"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "WAYPOINT_UpgradeSignature",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "uint16_t"
+      ],
+      "dh": "e2f05c7b",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Free",
+      "address": "00660fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00660fd0"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "Free",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "FreeServerMemory"
+      ],
+      "usedTypes": [
+        "D2PoolManagerStrc",
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "5d72e3a6",
+      "paramStorage": [
+        [
+          "pMemory",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWaypoint",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CopyWaypointBits",
+      "address": "00661030",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00661030"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "CopyWaypointBits",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t",
+        "uint8_t"
+      ],
+      "dh": "b94c5ade",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nWaypointBits",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "CopyWaypoint",
+      "address": "006610b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006610b0"
+        }
+      ],
+      "namespace": "D2Common::Waypoints",
+      "calledFunctions": [
+        "CopyWaypoint",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2WaypointStrc",
+        "int32_t",
+        "uint16_t"
+      ],
+      "dh": "2b1954aa",
+      "paramStorage": [
+        [
+          "pWaypoint",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pEntry",
+          "Stack[0x8]:4"
+        ]
+      ]
+    }
+  ]
+}

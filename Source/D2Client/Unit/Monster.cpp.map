@@ -276,6 +276,32 @@
       ]
     },
     {
+      "name": "MONSTER_FreeMonsterPath",
+      "address": "004ae0e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004ae0e0"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "MONSTER_FreeMonsterPath",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "D2UnitDataMonsterStrc",
+        "D2UnitStrc"
+      ],
+      "dh": "952c737f",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "GetMonsterAi",
       "address": "004ae110",
       "lines": [

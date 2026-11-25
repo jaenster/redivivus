@@ -513,20 +513,21 @@ void __fastcall Q03_CheckPlayerHasMalus(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Q03_CheckPartyHasMalus (A1Q3) — returns whether the player (or anyone in their party) holds the Horadric Malus. Fast path: true if the player carries it. Else if not partied, false. Otherwise clears field_0xA0 and runs Q03_CheckPlayerHasMalus over all party members, returning field_0xA0. Read-only on record.
-static BOOL Q03_CheckPartyHasMalus(D2UnitStrc * pUnitStrc, D2QuestDataStrc * pQuestData) {
+static BOOL Q03_CheckPartyHasMalus(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnitStrc) {
     D2UnitStrc* pMalusItem = ITEMS::Items::Drop::HasQuestItem(UNIT::SUnit::GetGamePointer(pUnitStrc), pUnitStrc, 0x206d6468);
     if (pMalusItem) {
       return 1;
     }
 
     D2QuestDataA1Q3Strc* pQuestSpecific = pQuestData->pQuestSpecificData.pA1Q3;
-    if (UNIT::SUnit::GetPartyId(pUnitStrc) == 0xffff) {
+    uint16_t nPartyId = UNIT::SUnit::GetPartyId(pUnitStrc);
+    if (nPartyId == 0xffff) {
       return 0;
     }
 
     pQuestSpecific->bPartyHasMalus = false;
-    UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, UNIT::SUnit::GetPartyId(pUnitStrc), (::fpExecuteOnUnitFunction)Q03_CheckPlayerHasMalus, nullptr);
-    return (uint32_t)pQuestSpecific->bPartyHasMalus;
+    UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestData->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q03_CheckPlayerHasMalus, nullptr);
+    return pQuestSpecific->bPartyHasMalus != 0;
 }
 
 // Q03_StatusFilter (A1Q3) — computes the quest-log/journal display status code (*nUnknown) for this player. If RewardAwaits bit set -> code 0x0a. Else if nobody in party holds the Malus: in-introduction branch maps record state to a code — JustCompleted -> 0x10a (if RewardAwaits) else 0xd; CannotCompleteQuestInGame -> 0x0c; nStateFlag<5 -> nStateFlagPrev; else (flag>=5) if record JustCompleted, code = 0x04 + (level>=8 ? 8 : 0). If someone holds the Malus and quest not Completed -> code 0x02. Read-only on record.
@@ -539,7 +540,7 @@ bool __fastcall Q03_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
       return true;
     }
 
-    bQuestState = Q03_CheckPartyHasMalus(pUnit, pQuestData);
+    bQuestState = Q03_CheckPartyHasMalus(pQuestData, pUnit);
     if (bQuestState) {
       /* GetQuestState(Completed=0) — party holds Malus & not done => status 0x02 */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBufferEx, QUEST_ToolsOfTheTrade, QUESTSTATE_Completed);
       if (!bQuestState) {

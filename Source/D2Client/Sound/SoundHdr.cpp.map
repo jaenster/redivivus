@@ -857,6 +857,184 @@
       ]
     },
     {
+      "name": "SOUND_FileExists",
+      "address": "00482e00",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00482e00"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_FileExists",
+        "SFileOpenFileEx",
+        "SFileCloseFile"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc"
+      ],
+      "dh": "9ea89b04",
+      "paramStorage": [
+        [
+          "szFileName",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SOUND_LocalizeSoundPath",
+      "address": "00482e30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00482e30"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "SOUND_LocalizeSoundPath",
+        "TABLES_GetLangAbbreviation",
+        "sprintf",
+        "SFileOpenFileEx",
+        "SFileCloseFile",
+        "MISC_GetLanguageCode"
+      ],
+      "usedTypes": [
+        "D2MPQFileStrc",
+        "uint32_t"
+      ],
+      "dh": "dc1953a2",
+      "paramStorage": [
+        [
+          "szFormat",
+          "EBX:4"
+        ],
+        [
+          "pszOutPath",
+          "ESI:4"
+        ],
+        [
+          "pTmp",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "ExitGamePlayCutScene",
+      "address": "00482ef0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00482ef0"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "fpRequiredUserAction",
+        "NET_D2GS_CLIENT_Send_0x6D_PING",
+        "ExitGamePlayCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SOUNDHDR_UpdateRegistryVersion",
+        "NET_D2GS_CLIENT_Send_CMD",
+        "sprintf",
+        "Cleanup",
+        "WALL2_ResetAmbientSound",
+        "MPQ_UnloadAllMediaMpqFiles",
+        "SFILE_GetInstallPath",
+        "SetPendingExitCutsceneId",
+        "SetExitCutscenePlayed",
+        "LOADER_SetConnectionLostFlag",
+        "MPQ_LoadVideoMpqFiles",
+        "SOUND_LocalizeSoundPath",
+        "DRAW_WORLD_ClearWarpFadeTimer",
+        "SetUIFlag",
+        "BeginCutSceneAtResolutionMode0",
+        "D2GFX_PlayCutScene",
+        "D2GFX_GetResolutionMode",
+        "SetResolutionModeWithEndCutScene",
+        "D2WINPAL_LoadActPalette",
+        "D2CLIENT_ExitGame",
+        "MPQ_LoadAllMediaMpqFiles"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "78d3d29f",
+      "paramStorage": [
+        [
+          "nCutsceneId",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "INV_SetItemDescFlag",
+      "address": "00483300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00483300"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "INV_SetItemDescFlag"
+      ],
+      "dh": "74db1ac0"
+    },
+    {
+      "name": "INV_ResetItemDescFlags",
+      "address": "00483310",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00483310"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "INV_ResetItemDescFlags",
+        "GetLoggerState_Stub"
+      ],
+      "dh": "179676a3"
+    },
+    {
+      "name": "INV_SetItemDescHighlight",
+      "address": "00483340",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00483340"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "INV_SetItemDescHighlight"
+      ],
+      "dh": "de29891b"
+    },
+    {
+      "name": "INV_GetItemDescDirtyFlag",
+      "address": "00483350",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00483350"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "INV_GetItemDescDirtyFlag"
+      ],
+      "usedTypes": [
+        "uint8_t"
+      ],
+      "dh": "8948f000"
+    },
+    {
       "name": "Cleanup_Unref_00522c20",
       "address": "00522c20",
       "lines": [

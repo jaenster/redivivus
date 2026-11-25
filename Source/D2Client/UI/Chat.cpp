@@ -114,7 +114,7 @@ namespace D2Client::UI::Chat {
 // also labelled: ChatValue
 uint16_t gwszChatInputText[257] = {}; D2_GLOBAL_GUARD(gwszChatInputText, "D2Client::UI::Chat::gwszChatInputText");
 } // namespace D2Client::UI::Chat
-static uint8_t gaChatHistoryBuffer[4112] = {}; D2_STATIC_GUARD(gaChatHistoryBuffer, "gaChatHistoryBuffer");
+static uint16_t gaChatHistoryBuffer[8][0x101] = {}; D2_STATIC_GUARD(gaChatHistoryBuffer, "gaChatHistoryBuffer");
 // also labelled: gpIMECompositionString
 uint16_t gwcIMECompositionString[32] = {}; D2_GLOBAL_GUARD(gwcIMECompositionString, "gwcIMECompositionString");
 
@@ -688,10 +688,8 @@ void __stdcall DRAW_UI_ChatInput() {
 }
 
 void __stdcall CHAT_RestoreFromHistory() {
-    uint8_t* pHistoryBytes = reinterpret_cast<uint8_t*>(gaChatHistoryBuffer);
-    int nHistoryOffset = gnChatHistoryScrollIndex * 0x202;
-    memcpy(gwszChatInputText, pHistoryBytes + nHistoryOffset, sizeof(gwszChatInputText));
-    gnChatInputTextCursorPosition = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)(pHistoryBytes + nHistoryOffset));
+    memcpy(gwszChatInputText, gaChatHistoryBuffer[gnChatHistoryScrollIndex], sizeof(gwszChatInputText));
+    gnChatInputTextCursorPosition = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gaChatHistoryBuffer[gnChatHistoryScrollIndex]);
 }
 
 static void __fastcall CHAT_AddToHistory(uint16_t * pwSrc) {
@@ -713,7 +711,7 @@ static void __fastcall CHAT_AddToHistory(uint16_t * pwSrc) {
     }
 
     gnChatHistoryScrollIndex = gnChatHistoryReadIndex;
-    memcpy(gaChatHistoryBuffer + gnChatHistoryReadIndex * 0x202, pwSrc, 0x202);
+    memcpy(gaChatHistoryBuffer[gnChatHistoryReadIndex], pwSrc, sizeof(gaChatHistoryBuffer[0]));
 }
 
 void __stdcall CHAT_ScrollHistory(int32_t nDirection) {
@@ -1496,11 +1494,10 @@ void StaticInit_gwszChatInputText() {
 }
 
 void StaticInit_gaChatHistoryBuffer() {
-    int nDwordsRemaining;
-    uint8_t* pChatHistoryBuf = gaChatHistoryBuffer;
-    for (nDwordsRemaining = 0x404; nDwordsRemaining; nDwordsRemaining--) {
-      memset(pChatHistoryBuf, 0, 4 * sizeof(pChatHistoryBuf[0]));
-      pChatHistoryBuf += 4;
+    for (int nEntry = 0; nEntry < 8; nEntry++) {
+      for (int nChar = 0; nChar < 0x101; nChar++) {
+        gaChatHistoryBuffer[nEntry][nChar] = 0;
+      }
     }
 }
 

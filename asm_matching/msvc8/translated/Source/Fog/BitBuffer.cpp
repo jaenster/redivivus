@@ -31,11 +31,8 @@ BOOL __stdcall CheckBitAtOffset(char * pBuffer, int32_t nOffset) {
     return (uint32_t)(uint8_t)pBuffer[nOffset >> 3] & gadwBitMasks[nOffset & 7];
 }
 
-// NOTE: Return type changed void→uint8_t (1 callers, MEDIUM confidence)
-uint8_t __stdcall UnsetBitAtOffset(char * pBuffer, int32_t nOffset) {
-    uint32_t dwInvMask = gadwInvBitMasks[nOffset & 7];
-    pBuffer[nOffset >> 3] &= (uint8_t)dwInvMask;
-    return (uint8_t)dwInvMask;
+void __stdcall UnsetBitAtOffset(char * pBuffer, int32_t nOffset) {
+    pBuffer[nOffset >> 3] &= (uint8_t)gadwInvBitMasks[nOffset & 7];
 }
 
 void __stdcall XorBitAtOffset(char * pBuffer, int32_t nOffset) {

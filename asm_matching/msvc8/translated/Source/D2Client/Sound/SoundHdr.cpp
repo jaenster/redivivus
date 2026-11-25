@@ -13,10 +13,22 @@
 #include "Source/D2Win/D2Win.h"
 #include "Source/Fog/Fog.h"
 #include "Source/Bnclient/Bnclient.h"
+#include "Source/D2Client/Engine.h"
+#include "Source/D2Client/Game/Game.h"
+#include "Source/D2Client/Game/Msg.h"
+#include "Source/D2Client/UI/ui.h"
+#include "Source/D2Lang/StrTable/strtable.h"
+#include "Source/D2gfx/Src/D2GFX.h"
+#include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Sound/SoundHdr.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
+
+#ifndef RECON_FPTD_fpRequiredUserAction
+#define RECON_FPTD_fpRequiredUserAction
+typedef BOOL (*fpRequiredUserAction)();
+#endif
 
 #ifndef D2_ALLOC_AT
 #define D2_ALLOC_AT(size, szFile, nLine) Fog::Memory::AllocClientMemory((size), (szFile), (nLine), 0)
@@ -25,7 +37,6 @@
 #ifndef D2_FREE_AT
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
-
 
 static float FLOAT_006d9108 = 400; D2_STATIC_GUARD(FLOAT_006d9108, "FLOAT_006d9108");
 D2CutsceneDescStrc gdwSoundHeaderCacheIndex[8] = {
@@ -100,6 +111,11 @@ static int gnSoundEvictedAudioVolume = 0; D2_STATIC_GUARD(gnSoundEvictedAudioVol
 static uint32_t gnSoundAsyncLoadCount = 0; D2_STATIC_GUARD(gnSoundAsyncLoadCount, "gnSoundAsyncLoadCount");
 static uint32_t gnSoundBufferMaxBytes = 0; D2_STATIC_GUARD(gnSoundBufferMaxBytes, "gnSoundBufferMaxBytes");
 static uint32_t gnSoundBufferBytesLoaded = 0; D2_STATIC_GUARD(gnSoundBufferBytesLoaded, "gnSoundBufferBytesLoaded");
+
+static char gbCutsceneActive = 0; D2_STATIC_GUARD(gbCutsceneActive, "gbCutsceneActive");
+static uint8_t gbLoggerStateInactive = 0; D2_STATIC_GUARD(gbLoggerStateInactive, "gbLoggerStateInactive");
+static uint8_t gbItemDescDirtyFlag = 0; D2_STATIC_GUARD(gbItemDescDirtyFlag, "gbItemDescDirtyFlag");
+static uint8_t geCutsceneCurrentSoundId = 0; D2_STATIC_GUARD(geCutsceneCurrentSoundId, "geCutsceneCurrentSoundId");
 
 namespace D2Client { namespace Sound { namespace SoundHdr {
 
@@ -509,55 +525,46 @@ void __fastcall SOUNDHDR_FreeSoundBuffer(int32_t nSoundId) {
 }
 
 BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMultiPass, int32_t bRespectRecency) {
-    int nId;
-    D2SoundsTxt* pSound;
-    D2ClientSoundChannelStrc* pPlaying;
-    int nPass;
-    bool bFreedAny;
-    int nNowVolume = gnCurrentGameAudioVolume;
     uint32_t nBytesTarget = gnSoundBufferBytesLoaded - nBytesNeeded;
-    D2SoundsTxt* pSoundsBase = pTxtSounds;
-    while (true) {
-      D2SoundListNodeStrc* pDVar1;
-      if (gnSoundBufferBytesLoaded <= nBytesTarget) {
-        return 1;
-      }
-
-      bFreedAny = false;
-      nPass = 0;
-      pDVar1 = gpSoundLRUListHead;
-      do {
-        if (pDVar1) {
-          nId = pDVar1->nItemKey;
-          if (!pSoundsBase || nId < 0 || nId >= nTxtSoundsSize) {
+    int nNowVolume = gnCurrentGameAudioVolume;
+    while (gnSoundBufferBytesLoaded > nBytesTarget) {
+      BOOL bFreedAny = FALSE;
+      for (int nPass = 0; nPass <= 1; nPass++) {
+        for (D2SoundListNodeStrc* pNode = gpSoundLRUListHead; pNode; pNode = pNode->pNext) {
+          int nId = pNode->nItemKey;
+          D2SoundsTxt* pSound;
+          if (!pTxtSounds || nId < 0 || nId >= nTxtSoundsSize) {
             pSound = 0;
           } else {
-            pSound = pSoundsBase + nId;
+            pSound = pTxtSounds + nId;
           }
-          if (!nPass && (pSound->nRefCount || pSound->Cache) || bRespectRecency && nNowVolume - pSound->nLRUTimestamp < 0x2ee || (pPlaying = GAME::Sound::SOUND_FindPlayingByIdSafe(nId) , pSoundsBase = pTxtSounds , pPlaying != 0)) {
-            pDVar1 = pDVar1->pNext;
+          if (!nPass && (pSound->nRefCount || pSound->Cache)) {
+            continue;
+          }
+          if (bRespectRecency && nNowVolume - pSound->nLRUTimestamp < 0x2ee) {
+            continue;
+          }
+
+          if (GAME::Sound::SOUND_FindPlayingByIdSafe(nId)) {
             continue;
           }
 
           SOUNDHDR_FreeSoundBuffer(nId);
-          bFreedAny = true;
-          pSoundsBase = pTxtSounds;
+          bFreedAny = TRUE;
+          break;
         }
+
         if (!bMultiPass) {
           break;
         }
-
-        nPass++;
-        pDVar1 = gpSoundLRUListHead;
-        if (nPass > 1) {
-          break;
-        }
-      } while (true);
+      }
 
       if (!bFreedAny) {
-        return 0;
+        return FALSE;
       }
     }
+
+    return TRUE;
 }
 
 float __fastcall SOUNDHDR_GetFalloffMin(int32_t nSoundId) {
@@ -916,6 +923,280 @@ void __fastcall SOUNDHDR_UpdateRegistryVersion(int32_t nSoundHeaderIndex) {
     sprintf(szVersionString, "%d.%d.%d.%d", 0xd8, 0x94, 0xf6, dwVersionBuild);
     Storm::Source::SReg::SRegSaveString("Diablo II", "Aux Battle.net", 0, szVersionString);
 }
+
+}}} // namespace D2Client::Sound::SoundHdr
+
+namespace D2Client { namespace Sound {
+
+BOOL __fastcall SOUND_FileExists(char * szFileName) {
+    D2MPQFileStrc* pFile;
+    int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, 0, (void**)&pFile);
+    if (!bOpened) {
+      return 0;
+    }
+
+    Storm::Source::SFile::SFileCloseFile(pFile);
+    return 1;
+}
+
+}} // namespace D2Client::Sound
+
+namespace D2Client {
+
+static void SOUND_LocalizeSoundPath(char * pszOutPath, char * szFormat, char * pTmp) {
+    char szLangAbbrev[4];
+    D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
+    sprintf(pszOutPath, szFormat, "DATA\\LOCAL", szLangAbbrev, pTmp);
+    {
+      D2MPQFileStrc* pFile;
+      if (Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile)) {
+        Storm::Source::SFile::SFileCloseFile(pFile);
+        return;
+      }
+    }
+
+    uint32_t dwLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
+    if (dwLanguageCode) {
+      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "ENG", pTmp);
+      D2MPQFileStrc* pFile;
+      if (Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile)) {
+        Storm::Source::SFile::SFileCloseFile(pFile);
+        return;
+      }
+    } else {
+      sprintf(pszOutPath, szFormat, "DATA\\LOCAL", "CHI", pTmp);
+      D2MPQFileStrc* pFile;
+      if (Storm::Source::SFile::SFileOpenFileEx(nullptr, pszOutPath, 0, (void**)&pFile)) {
+        Storm::Source::SFile::SFileCloseFile(pFile);
+      }
+    }
+}
+
+// The ECX slot that carries a function pointer was one variable holding three callees with two
+// different conventions - fpRequiredUserAction (BOOL __cdecl(void)), UI_ShowPopupDialog and
+// NET_D2GS_CLIENT_Send_0x6D_PING (void __stdcall(void)). Typing it void * split it into two register
+// variables with disjoint live ranges: pfnCallback, which reaches MPQ_LoadVideoMpqFiles, and pfFrame,
+// which reaches D2GFX_PlayCutScene and only ever holds PING or 0. void * is the honest type for both -
+// it is what D2GFX_PlayCutScene declares for the parameter - and no call is made through either slot
+// here.
+// Passes LOADER_RunInsertDiscPopup by address.
+void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
+    // Static local variables (originally global data)
+    static int gnCutsceneCount = 0x8; D2_STATIC_GUARD(gnCutsceneCount, "D2Client::ExitGamePlayCutScene::gnCutsceneCount");
+    static uint8_t bExitCutsceneActive; D2_STATIC_GUARD_BSS(bExitCutsceneActive, "D2Client::ExitGamePlayCutScene::bExitCutsceneActive");
+
+    char* pszSrcName;
+    char* pPathCursor;
+    HANDLE hFile;
+    DWORD dwResult;
+    void* pfnCallback;
+    int32_t nExitCodeEcx2;
+    nExitCodeEcx2 = nCutsceneId;
+    int32_t nExitCodeEcx3;
+    nExitCodeEcx3 = nCutsceneId;
+    int bMpqLoaded;
+    char szInstallPath[260];
+    char szSoundPath[260];
+    char szVideoPath[260];
+    int bVideoLoaded;
+    int32_t nErrorLine;
+    int nCurrentCutsceneId;
+    nCurrentCutsceneId = nCutsceneId;
+    if (nCutsceneId >= gnCutsceneCount) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xef);
+      exit(-1);
+    }
+
+    gbItemDescDirtyFlag = 1;
+    Sound::SoundHdr::SOUNDHDR_UpdateRegistryVersion(nCutsceneId);
+    if (bExitCutsceneActive != '\0') {
+      return;
+    }
+    if (nCutsceneId >= gnCutsceneCount) {
+      GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x48);
+      gbItemDescDirtyFlag = 0;
+      return;
+    }
+
+    int32_t nPlayMode;
+    nPlayMode = 0;
+    if (gdwSoundHeaderCacheIndex[nCutsceneId].bCharacterAnimationPlayed) {
+      if (gbLoggerStateInactive != '\0') {
+        sprintf(szVideoPath, gdwSoundHeaderCacheIndex[nCutsceneId].pszVideoPath, "640x292");
+      } else {
+        nPlayMode = 2;
+        sprintf(szVideoPath, gdwSoundHeaderCacheIndex[nCutsceneId].pszVideoPath, "640x146");
+      }
+    } else {
+      pszSrcName = gdwSoundHeaderCacheIndex[nCutsceneId].pszVideoPath;
+      strcpy(szVideoPath, pszSrcName);
+    }
+
+    Sound::SoundHdr::Cleanup();
+    GAME::Wall2::WALL2_ResetAmbientSound();
+    D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
+    BOOL bConnectionLost;
+    bConnectionLost = 0;
+    int bCutscenePlayed;
+    bCutscenePlayed = 0;
+    if (nCurrentCutsceneId == 7) {
+      bConnectionLost = 1;
+      Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, 0x104);
+      pszSrcName = (char*)((uint8_t*)&szInstallPath - 1);
+      do {
+        pPathCursor = pszSrcName;
+        pszSrcName = pPathCursor + 1;
+      } while (pPathCursor[1] != '\0');
+
+      /* HANDLE hTemplateFile for CreateFileA */ /* DWORD dwFlagsAndAttributes for CreateFileA */ memcpy(pPathCursor + 1, "d2game.dll", 0xb);
+      /* DWORD dwCreationDisposition for CreateFileA */ /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateFileA */ /* DWORD dwShareMode for CreateFileA */ /* DWORD dwDesiredAccess for CreateFileA */ /* LPCSTR lpFileName for CreateFileA */ hFile = CreateFileA(szInstallPath, 0, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x80, (HANDLE)0x0);
+      if (hFile != (HANDLE)-1) {
+        /* HANDLE hObject for CloseHandle */ CloseHandle(hFile);
+        goto load_and_play;
+      }
+
+      GAME::Game::SetPendingExitCutsceneId(0);
+      finish_and_exit_game:
+      GAME::Game::SetPendingExitCutsceneId(0);
+      gbCutsceneActive = '\0';
+      GAME::Game::SetExitCutscenePlayed();
+      nErrorLine = nExitCodeEcx3;
+    } else {
+      if (nCurrentCutsceneId == 6) {
+        bConnectionLost = 1;
+      }
+
+      load_and_play:
+      Engine::LOADER_SetConnectionLostFlag(bConnectionLost);
+      pfnCallback = (void*)(BOOL (*)())Engine::fpRequiredUserAction;
+      if (!bConnectionLost) {
+        pfnCallback = (void*)UI::ui::UI_ShowPopupDialog;
+      }
+
+      bConnectionLost = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)pfnCallback, 0, bConnectionLost);
+      bMpqLoaded = 0;
+      if (bConnectionLost) {
+        bVideoLoaded = 1;
+        if (gdwSoundHeaderCacheIndex[nCutsceneId].bHasAltSoundPath) {
+          SOUND_LocalizeSoundPath(szSoundPath, "%s\\video\\%s\\%s", szVideoPath);
+        } else {
+          sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
+        }
+
+        bExitCutsceneActive = '\x01';
+        DRAW_WORLD_ClearWarpFadeTimer();
+        UI::ui::SetUIFlag(UI_NODRAW, UI_SET, 0);
+        dwResult = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
+        if (dwResult) {
+          if (gbCutsceneActive != '\0') {
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, 0);
+          } else {
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
+          }
+
+          bCutscenePlayed = 1;
+        }
+        if (nCurrentCutsceneId != 5 || geCutsceneCurrentSoundId == '\0') {
+          dwResult = D2gfx::D2GFX::D2GFX_GetResolutionMode();
+          D2Win::D2GFX::SetResolutionModeWithEndCutScene(dwResult);
+          UI::ui::SetUIFlag(UI_NODRAW, UI_RESET, 0);
+          bExitCutsceneActive = '\0';
+          bMpqLoaded = bVideoLoaded;
+          goto check_chained_cutscene;
+        }
+
+        unload_before_chained:
+        D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
+        play_chained_cutscene:
+        if (bCutscenePlayed) {
+          dwResult = D2gfx::D2GFX::D2GFX_GetResolutionMode();
+          D2Win::D2GFX::SetResolutionModeWithEndCutScene(dwResult);
+        }
+        Engine::LOADER_SetConnectionLostFlag(1);
+        bConnectionLost = D2Win::Src::D2WinArchive::MPQ_LoadVideoMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, 0, 1);
+        if (bConnectionLost) {
+          nCurrentCutsceneId = 6;
+          if (gbLoggerStateInactive != '\0') {
+            pszSrcName = "640x292";
+            sprintf(szVideoPath, gdwSoundHeaderCacheIndex[6].pszVideoPath, "640x292");
+          } else {
+            pszSrcName = "640x146";
+            nPlayMode = 2;
+            sprintf(szVideoPath, gdwSoundHeaderCacheIndex[6].pszVideoPath, "640x146");
+          }
+          if (gdwSoundHeaderCacheIndex[6].bHasAltSoundPath) {
+            SOUND_LocalizeSoundPath(szSoundPath, "%s\\video\\%s\\%s", szVideoPath);
+          } else {
+            sprintf(szSoundPath, "%s\\video\\%s", "DATA\\GLOBAL", szVideoPath);
+          }
+
+          dwResult = D2Win::D2GFX::BeginCutSceneAtResolutionMode0();
+          if (dwResult) {
+            D2gfx::D2GFX::D2GFX_PlayCutScene(szSoundPath, nPlayMode, (void*)GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING);
+            Sound::SoundHdr::SOUNDHDR_UpdateRegistryVersion(6);
+          }
+        }
+
+        dwResult = D2gfx::D2GFX::D2GFX_GetResolutionMode();
+        D2Win::D2GFX::SetResolutionModeWithEndCutScene(dwResult);
+        UI::ui::SetUIFlag(UI_NODRAW, UI_RESET, 0);
+        bExitCutsceneActive = '\0';
+        geCutsceneCurrentSoundId = '\0';
+        D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette(4);
+      } else {
+        check_chained_cutscene:
+        if (geCutsceneCurrentSoundId != '\0') {
+          if (bMpqLoaded) {
+            goto unload_before_chained;
+          }
+
+          goto play_chained_cutscene;
+        }
+      }
+
+      GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x48);
+      if (gbCutsceneActive == '\0') {
+        if (nCurrentCutsceneId != 7) {
+          goto reload_media_mpqs;
+        }
+
+        goto finish_and_exit_game;
+      }
+
+      gbCutsceneActive = '\0';
+      nErrorLine = nExitCodeEcx2;
+    }
+
+    GAME::Game::D2CLIENT_ExitGame(nErrorLine);
+    reload_media_mpqs:
+    D2Win::Src::D2WinArchive::MPQ_UnloadAllMediaMpqFiles();
+    D2Win::Src::D2WinArchive::MPQ_LoadAllMediaMpqFiles((::fpRequiredUserAction)Engine::fpRequiredUserAction, (::fpRequiredUserAction)LOADER_RunInsertDiscPopup, 0, ClientModeInGame::D2IniData_client);
+    gbItemDescDirtyFlag = 0;
+}
+
+void __stdcall INV_SetItemDescFlag() {
+    gbCutsceneActive = '\x01';
+}
+
+void __stdcall INV_ResetItemDescFlags() {
+    gbCutsceneActive = '\0';
+    BOOL nLoggerState = Fog::Src::LogManager::GetLoggerState_Stub();
+    gbLoggerStateInactive = !nLoggerState;
+    geCutsceneCurrentSoundId = '\0';
+    gbItemDescDirtyFlag = 0;
+}
+
+void __stdcall INV_SetItemDescHighlight() {
+    geCutsceneCurrentSoundId = '\x01';
+}
+
+uint8_t __stdcall INV_GetItemDescDirtyFlag() {
+    return gbItemDescDirtyFlag;
+}
+
+} // namespace D2Client
+
+namespace D2Client { namespace Sound { namespace SoundHdr {
 
 void __stdcall Cleanup_Unref_00522c20() {
     Bnclient::_net_sid::NET_SID_CLIENT_ClearIDEAContexts();

@@ -802,6 +802,7 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     sContext.pGame = pGame;
     sContext.pUnit = pUnit;
     sContext.nHitCount = 0;
+    nRadiusSq = nRadius * nRadius;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pCurRoom, &ppRoomList, &nRoomCount);
     int nCallbackArg = 0x0;
     if ((uint32_t)nRoomCount <= 0) {
@@ -836,7 +837,7 @@ void __fastcall SKILLS_ApplyAreaEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
               }
 
               nDistanceSq = D2Common::PATH::DynamicPath::GetDistanceSquaredXY(nX, nY, nTargetX, nTargetY);
-              if (nRadius * nRadius >= nDistanceSq) {
+              if (nRadiusSq >= nDistanceSq) {
                 nTargetFlags = SKILLS_CheckTargetFlags(pOwnerUnit, pTarget, dwTargetFlags);
                 if (nTargetFlags && (!bSkipNoAuraMonsters || pTarget->eUnitType != UNIT_MONSTER || (bInTown = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetFlagsByBitOffset(pTarget->nClassId, noaura) , !bInTown))) {
                   nTargetFlags = (*pfnCallback)(&sContext, pTarget);

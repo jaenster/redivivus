@@ -153,35 +153,27 @@ namespace D2Game::PLAYER::PlayerSave {
 // Reconstructs a D2UnitStrc item from a D2UnknownItemRelatedStruct loaded out of a save file. Fills a D2ItemGenContextStrc (format, level, classId, position, quality, seeds, flags, item code string) and calls ITEM_CreateItemInstance, then sets the item's file index and page. Called during player load to restore inventory items.
 static D2UnitStrc * PLRSAVE_CreateItemFromSaveData(::SGAMEDATA * pGame, D2UnknownItemRelatedStruct * pItemRelated) {
     D2ItemGenContextStrc sItemGenCtx;
-    char cStrChar;
     memset(&sItemGenCtx, 0, 0x84);
     sItemGenCtx.wItemFormat = pItemRelated->wItemFormat;
     sItemGenCtx.nItemLevel = pItemRelated->nItemLevel;
     sItemGenCtx.nItemClassid = pItemRelated->nItemClassid;
-    sItemGenCtx.nPosX = pItemRelated->nPosX;
     sItemGenCtx.dwMode = (int)(uint8_t)pItemRelated->Mode;
-    sItemGenCtx.nQuantity = pItemRelated->nPriceMaybe;
+    sItemGenCtx.nPosX = pItemRelated->nPosX;
     sItemGenCtx.nPosY = pItemRelated->nPosY;
-    sItemGenCtx.eQuality = (eD2ItemQuality)(uint8_t)pItemRelated->eQuality;
-    sItemGenCtx.nInitSeed = pItemRelated->nInitSeed;
-    sItemGenCtx.durability = pItemRelated->durability;
-    sItemGenCtx.dwFileIndex = pItemRelated->dwFileIndex;
-    sItemGenCtx.maxDurability = pItemRelated->maxDurability;
-    sItemGenCtx.nModSeed = pItemRelated->nModSeed;
-    sItemGenCtx.neD2ItemFlag = pItemRelated->neD2ItemFlag;
-    char* pSrcField = pItemRelated->szCustomName;
+    sItemGenCtx.pGame = pGame;
     sItemGenCtx.pDrlgRoom = 0;
     sItemGenCtx.usually_one = 1;
+    sItemGenCtx.eQuality = (eD2ItemQuality)(uint8_t)pItemRelated->eQuality;
+    sItemGenCtx.nQuantity = pItemRelated->nPriceMaybe;
+    sItemGenCtx.durability = pItemRelated->durability;
+    sItemGenCtx.maxDurability = pItemRelated->maxDurability;
+    sItemGenCtx.nInitSeed = pItemRelated->nInitSeed;
+    sItemGenCtx.nModSeed = pItemRelated->nModSeed;
+    sItemGenCtx.neD2ItemFlag = pItemRelated->neD2ItemFlag;
+    sItemGenCtx.dwFileIndex = pItemRelated->dwFileIndex;
     sItemGenCtx.bFromCustomData = 1;
-    intptr_t nCopyOffset = 0x58 - (intptr_t)pSrcField;
-    do {
-      cStrChar = *pSrcField;
-      pSrcField[(intptr_t)&sItemGenCtx + nCopyOffset] = cStrChar;
-      pSrcField++;
-    } while (cStrChar != '\0');
-
+    strcpy(sItemGenCtx.szCustomName, pItemRelated->szCustomName);
     sItemGenCtx.bGrade = pItemRelated->bGrade;
-    sItemGenCtx.pGame = pGame;
     D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
     if (!pCreatedItem) {
       return nullptr;

@@ -39,7 +39,6 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
-
 #ifndef RECON_FPTD_D2NpcMenuOptionFunc
 #define RECON_FPTD_D2NpcMenuOptionFunc
 typedef int (__stdcall *D2NpcMenuOptionFunc)();
@@ -6167,6 +6166,44 @@ void __stdcall NPCMENU_OpenInteractionDialog() {
       Dialog::AddStringData(Dialog::gpNpcInteractionDialog, D2Lang::StrTable::strtable::GetLocaleString(0x102e), 0xf, 0, 0, 1, pfnGambleOnClick, nCallbackParam);
     }
 }
+
+}}} // namespace D2Client::UI::npcmenu
+
+namespace D2Client {
+
+int __stdcall NPCMENU_GetCurrentMenuId() {
+    GAME::Select::ClearSelectedUnit();
+    Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
+    UI::Dialog::FreeDialogStrc(UI::Dialog::gpNpcTradeErrorDialog);
+    UI::Dialog::gpNpcTradeErrorDialog = 0;
+    if (_Interaction::geNpcUiState == NPCUI_TRADE_REJECTED) {
+      if (UI::npcmenu::gnNpcMenuTransactionType == 5) {
+        UI::npcmenu::NPCMENU_CloseNpcInteraction(_Interaction::nCurrentInteractedNpcGUID);
+        UI::ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
+        return 1;
+      }
+
+      UI::npcmenu::NPCMENU_OpenInteractionDialog();
+      return 1;
+    }
+    if (UI::npcmenu::gnNpcMenuTransactionType == 6) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd55);
+      exit(-1);
+    } else {
+      if (_Interaction::geNpcUiState == 8) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd56);
+        exit(-1);
+      }
+
+      _Interaction::geNpcUiState = NPCUI_SHOP;
+      UI::Inv::INV_ExitIdentifyMode();
+      return 1;
+    }
+}
+
+} // namespace D2Client
+
+namespace D2Client { namespace UI { namespace npcmenu {
 
 void __stdcall NPCMENU_ShowMainMenuDialog() {
     int nCharIdx;

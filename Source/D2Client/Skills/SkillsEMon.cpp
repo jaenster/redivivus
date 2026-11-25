@@ -21,7 +21,6 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
-
 #ifndef RECON_FPTD_fpMissileSrvDoFuncData
 #define RECON_FPTD_fpMissileSrvDoFuncData
 typedef int (__fastcall *fpMissileSrvDoFuncData)(D2UnitStrc * pUnit, void * pContext);
@@ -769,6 +768,29 @@ BOOL __fastcall Skills_CltDoFunc_EMon_HomingToOwner(D2UnitStrc * pUnit, eD2Skill
     D2Common::PATH::Path::PATH_MoveUnitToUnitPosition(pUnit, pOwnerUnit);
     return 1;
 }
+
+} // namespace D2Client::SKILLS::SkillsEMon
+
+namespace D2Client {
+
+static inline int GetClassIdInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nClassId;
+    }
+    return (int)(-1);
+}
+
+int __fastcall SKILLSCLT_CheckSkillIsValid(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
+    if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
+      return 0;
+    }
+
+    return (uint32_t)(GetClassIdInline(pUnit) == 0x1d4);
+}
+
+} // namespace D2Client
+
+namespace D2Client::SKILLS::SkillsEMon {
 
 // Client-side do-function for the Evil Monster vine-attack skill. Ensures the monster has a SKILL_VineAttack skill entry (creating it if absent), then increments the hit-count param. In Neutral anim mode fires a collision-based hit (MISSILE_ClientHitExplode) when range or hit-count threshold is reached, then selects missile type cltmissiled; in Walk mode picks randomly between cltmissilec variants. Spawns the chosen missile via SKILLSEMON_CltCreateMissileAtUnit when the fire condition is met, resetting params.
 // @sourcefile .\SKILLS\SkillsEMon.cpp

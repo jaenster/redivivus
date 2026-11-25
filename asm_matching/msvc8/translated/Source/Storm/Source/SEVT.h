@@ -117,7 +117,7 @@ BOOL SEvtDestroy();
 // @rename-basis Behaviour. It is the push half of a per-event handler-table stack: allocate, copy, chain the previous table, install. SEvtPopState 004269c0 is the exact inverse and is the only other user of that [3] predecessor link. The PPC SEvt module has exactly these two state functions and no other save/restore pair.
 // @former-name SEVT_SnapshotEventHandlers
 // @sourcefile .\SOURCE\SEVT.CPP
-void __stdcall SEvtPushState(uint32_t nEventId, uintptr_t nSubId);
+BOOL __stdcall SEvtPushState(uint32_t nEventId, uintptr_t nSubId);
 // Registers an event handler: allocates a handler node keyed by dwKey and links it into the handler table for (dwEventId, dwSubId); pfnHandler must be non-NULL and dwReserved zero. SEvtDispatch matches its key argument against the stored key.
 // Storm export SEvtRegisterHandler (export name list and Mac PPC 1.10b traceback).
 int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uintptr_t dwSubId, uint32_t dwKey, int dwReserved, pfnSEvtHandler pfnHandler);
@@ -145,7 +145,7 @@ void __fastcall Unreferenced_004269a0(struct StormLinkedListStrc * pList);
 // @oracle-source PEF traceback-table function name .SEvtPopState @10017bd0 in Mac PPC 1.10b Storm. Internal (not in the 337-name export table), but a first-party compiler-emitted symbol.
 // @rename-basis Behaviour. The exact inverse of SEvtPushState 00426370: it consumes the [3] predecessor link that only PushState writes. Two arguments (eventId, subId), so it names no handler. Not SEvtUnregisterType - it delegates to it in the no-predecessor case, so it cannot be it.
 // @former-name SEVT_UndoLastRegistration
-void __stdcall SEvtPopState(uint32_t nEventId, uintptr_t nSubId);
+BOOL __stdcall SEvtPopState(uint32_t nEventId, uintptr_t nSubId);
 uint32_t __fastcall LINKEDLIST_GetCount(int * pList);
 uint32_t * __fastcall Unreferenced_00426a70(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00426a80(struct StormLinkStrc * pNode);

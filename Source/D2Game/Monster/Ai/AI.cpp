@@ -22433,7 +22433,7 @@ BOOL __fastcall MONSTERAI_CastItemEffectSkill(D2UnitStrc * pUnit, eD2Skills eSki
       nEffectiveY = nCoordY;
     }
 
-    UNIT::SUnitMsg::UnitQueuePacket0x9A(pUnit, (uint16_t)eSkill, (uint8_t)nSubSkill, (uint16_t)nEffectiveX, (uint16_t)nEffectiveY, (uint8_t)nParam2);
+    UNIT::SUnitMsg::UnitQueuePacket0x9A(pUnit, eSkill, (uint8_t)nSubSkill, (uint16_t)nEffectiveX, (uint16_t)nEffectiveY, (uint8_t)nParam2);
     return 1;
 }
 

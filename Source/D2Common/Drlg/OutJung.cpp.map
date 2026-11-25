@@ -37,6 +37,81 @@
       ]
     },
     {
+      "name": "DRLGOUTJUNG_BuildKurastDocktownBorders",
+      "address": "0067ead0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067ead0"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGOUTJUNG_BuildKurastDocktownBorders",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ],
+      "dh": "65e1ddec",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLGOUTJUNG_BuildKurastUpperBorders",
+      "address": "0067ec30",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067ec30"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGOUTJUNG_BuildKurastUpperBorders",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ],
+      "dh": "4a80b3f9",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRLGOUTJUNG_BuildKurastCausewayBorders",
+      "address": "0067ed70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0067ed70"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGOUTJUNG_BuildKurastCausewayBorders",
+        "SpawnOutdoorLevelPresetEx"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc"
+      ],
+      "dh": "00787057",
+      "paramStorage": [
+        [
+          "pLevel",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "SpawnRandomPreset",
       "address": "0067eed0",
       "lines": [

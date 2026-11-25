@@ -303,18 +303,13 @@ static uint32_t CACHE_ComputeCRC32(int32_t nByteLen, uint8_t * pbData) {
     return ~dwCrcAccum;
 }
 
-static void CACHE_DecryptBlock(uint32_t dwKey, uint32_t * pdwData, uint32_t nByteLen) {
-    uint32_t nLoopCount;
-    uint32_t dwPlain;
-    int nSeed = -0x11111112;
-    for (nLoopCount = nByteLen >> 2; nLoopCount; nLoopCount--) {
-      uint32_t uVar1;
-      uVar1 = g_pCacheCryptTable[(dwKey & 0xff) + 0x400];
-      *pdwData ^= nSeed + uVar1 + dwKey;
-      dwPlain = *pdwData;
-      pdwData++;
-      dwKey = dwKey >> 0xb | (~dwKey << 0x15) + 0x11111111;
-      nSeed = (nSeed + uVar1) * 0x21 + 3 + dwPlain;
+static void CACHE_DecryptBlock(uint32_t * pdwData, uint32_t nByteLen, uint32_t dwKey) {
+    uint32_t nAdjust = 0xeeeeeeee;
+    uint32_t nCount = nByteLen >> 2;
+    while (nCount--) {
+      nAdjust += g_pCacheCryptTable[0x400 + (dwKey & 0xff)];
+      nAdjust += (*pdwData++ ^= nAdjust + dwKey) + (nAdjust << 5) + 3;
+      dwKey = (dwKey >> 0xb) | ((dwKey << 0x15) ^ 0xffe00000) + 0x11111111;
     }
 }
 
@@ -688,7 +683,7 @@ int32_t __stdcall CACHE_Open() {
             }
 
             nTableSize = CACHE_HashString(3, "(hash table)");
-            CACHE_DecryptBlock(nTableSize, (uint32_t*)gpCacheBufferPoolFirst, nTableByteSize);
+            CACHE_DecryptBlock((uint32_t*)gpCacheBufferPoolFirst, nTableByteSize, nTableSize);
             nCrc32 = gpCacheFileHeader->nBlockTableSize;
             if (nCrc32 < 0x400) {
               nCrc32 = 0x400;
@@ -715,7 +710,7 @@ int32_t __stdcall CACHE_Open() {
             }
 
             nTableSize = CACHE_HashString(3, "(block table)");
-            CACHE_DecryptBlock(nTableSize, (uint32_t*)gpCacheBlockTable, nTableByteSize);
+            CACHE_DecryptBlock((uint32_t*)gpCacheBlockTable, nTableByteSize, nTableSize);
             break;
           }
       }

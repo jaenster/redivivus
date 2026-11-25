@@ -27,7 +27,6 @@
 #define D2_ALLOC_AT(size, szFile, nLine) Fog::Memory::AllocClientMemory((size), (szFile), (nLine), 0)
 #endif
 
-
 #ifndef RECON_FPTD_fnInterlockedCompareExchange
 #define RECON_FPTD_fnInterlockedCompareExchange
 typedef LONG (__stdcall *fnInterlockedCompareExchange)(LONG * Destination, LONG Exchange, LONG Comperand);
@@ -41,7 +40,6 @@ typedef void (__fastcall *pfnNewsEntryCallback)(uint32_t dwEntryId, char * szMes
 typedef void (__stdcall *pfnVoidNoArgCallback)();
 #endif
 
-static char * szBnNewsChannelName = (char*)"BNNews-D2DV"; D2_STATIC_GUARD(szBnNewsChannelName, "szBnNewsChannelName");
 namespace Bnclient::BnSend {
 char s___AUItem_NewsTable___0072ff8c[24] = {
     '.',
@@ -87,11 +85,11 @@ static long Target_00881bfc = 0; D2_STATIC_GUARD(Target_00881bfc, "Target_00881b
 // also labelled: lpAddend_00881c00
 static LONG * Destination_00881c00 = 0; D2_STATIC_GUARD(Destination_00881c00, "Destination_00881c00");
 static uint32_t g_nBNetThreadInitFlag = 0; D2_STATIC_GUARD(g_nBNetThreadInitFlag, "g_nBNetThreadInitFlag");
-static uint32_t g_pfnNewsChannelCallback = 0; D2_STATIC_GUARD(g_pfnNewsChannelCallback, "g_pfnNewsChannelCallback");
-static pfnNewsEntryCallback g_pfnMotdCallback = (pfnNewsEntryCallback)0; D2_STATIC_GUARD(g_pfnMotdCallback, "g_pfnMotdCallback");
-static pfnVoidNoArgCallback g_pfnNewsCallback = (pfnVoidNoArgCallback)0; D2_STATIC_GUARD(g_pfnNewsCallback, "g_pfnNewsCallback");
-static D2BnNewsTableStrc g_nNewsMaxCacheSize = {}; D2_STATIC_GUARD(g_nNewsMaxCacheSize, "g_nNewsMaxCacheSize");
-static uint32_t g_nFirstUnreadNewsIndex = 0; D2_STATIC_GUARD(g_nFirstUnreadNewsIndex, "g_nFirstUnreadNewsIndex");
+uint32_t g_pfnNewsChannelCallback = 0; D2_GLOBAL_GUARD(g_pfnNewsChannelCallback, "g_pfnNewsChannelCallback");
+pfnNewsEntryCallback g_pfnMotdCallback = (pfnNewsEntryCallback)0; D2_GLOBAL_GUARD(g_pfnMotdCallback, "g_pfnMotdCallback");
+pfnVoidNoArgCallback g_pfnNewsCallback = (pfnVoidNoArgCallback)0; D2_GLOBAL_GUARD(g_pfnNewsCallback, "g_pfnNewsCallback");
+D2BnNewsTableStrc g_nNewsMaxCacheSize = {}; D2_GLOBAL_GUARD(g_nNewsMaxCacheSize, "g_nNewsMaxCacheSize");
+uint32_t g_nFirstUnreadNewsIndex = 0; D2_GLOBAL_GUARD(g_nFirstUnreadNewsIndex, "g_nFirstUnreadNewsIndex");
 uint32_t g_dwNewsTimestamp = 0; D2_GLOBAL_GUARD(g_dwNewsTimestamp, "g_dwNewsTimestamp");
 
 namespace Bnclient::BnSend {
@@ -507,6 +505,7 @@ int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoo
 
 BOOL __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * szGamePassword, char * szGameDescription, int32_t nFlags) {
     SID_C2S_StartAdvex3 adwHeader;
+    adwHeader.dwState = 0;
     adwHeader.dwTimeSinceStart = 0;
     adwHeader.dwGameType = nFlags;
     adwHeader.dwProviderVersion = 0;
@@ -520,12 +519,15 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * s
     if (!szGameDescription) {
       szGameDescription = "";
     }
+    if (*szGamePassword) {
+      adwHeader.dwState = 1;
+    }
 
-    adwHeader.dwState = (uint32_t)(*szGamePassword != '\0');
-    uint32_t nGameNameLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings, szGameName, 0x100);
-    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings + (nGameNameLen + 1), szGamePassword, 0x100);
-    uint32_t nDescLen = Storm::Source::SSTR::SStrCopy(adwHeader.szStrings + nPasswordLen + nGameNameLen + 2, szGameDescription, 0x100);
-    NET_SID_CLIENT_Send(0x1c, (char*)&adwHeader, (size_t)(adwHeader.szStrings + nPasswordLen + nGameNameLen + 2 + (nDescLen + 0x15 - (intptr_t)adwHeader.szStrings)));
+    char* pCursor = adwHeader.szStrings;
+    pCursor += Storm::Source::SSTR::SStrCopy(pCursor, szGameName, 0x100) + 1;
+    pCursor += Storm::Source::SSTR::SStrCopy(pCursor, szGamePassword, 0x100) + 1;
+    size_t nPacketSize = pCursor - adwHeader.szStrings + Storm::Source::SSTR::SStrCopy(pCursor, szGameDescription, 0x100) + 0x15;
+    NET_SID_CLIENT_Send(0x1c, (char*)&adwHeader, nPacketSize);
     return 1;
 }
 
@@ -599,6 +601,23 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szTex
     NET_SID_CLIENT_Send(0x22, (char*)adwHeader, pCursor - szData + nPasswordLen + 9);
     return 1;
 }
+
+} // namespace Bnclient::BnSend
+
+namespace Bnclient {
+
+// @sourcefile .\BnSend.cpp
+void BNSEND_FreeUserProfileData() {
+    if (gpBNetWriteUserData) {
+      D2_FREE_AT(gpBNetWriteUserData, ".\\BnSend.cpp", 0x3b2);
+    }
+
+    gpBNetWriteUserData = 0;
+}
+
+} // namespace Bnclient
+
+namespace Bnclient::BnSend {
 
 // @sourcefile .\BnSend.cpp
 void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, size_t nDataSize) {
@@ -1401,7 +1420,6 @@ size_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t
     int nBytesProcessed;
     char* pScanPtr = pBytes;
     do {
-      uint32_t wPacketSize;
       if (*pScanPtr != -1) {
         nBytesProcessed = (intptr_t)pScanPtr - (intptr_t)pBytes;
         do {
@@ -1413,9 +1431,12 @@ size_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t
           nBytesProcessed++;
         } while (*pScanPtr != -1);
       }
-      if (pBytes + (nSize - (intptr_t)pScanPtr) < (char*)0x4 || (wPacketSize = (uint32_t)*(uint16_t*)(pScanPtr + 2) , (int)(pBytes - pScanPtr + nSize) < (int)wPacketSize)) {
-        memcpy(pBytes, pScanPtr, (size_t)(pBytes + (nSize - (intptr_t)pScanPtr)));
-        return (size_t)(pBytes + (nSize - (intptr_t)pScanPtr));
+      uint16_t wPacketSize = *(uint16_t*)(pScanPtr + 2);
+      size_t nRemaining = pBytes - pScanPtr + nSize;
+      if (nRemaining < 4 || (int)nRemaining < (int)wPacketSize) {
+        size_t nLeftover = pBytes - pScanPtr + nSize;
+        memcpy(pBytes, pScanPtr, nLeftover);
+        return nLeftover;
       }
 
       _net_sid::NET_SID_CLIENT_IncomingPacketHandler(pScanPtr[1], pScanPtr + 4, wPacketSize - 4);
@@ -1907,561 +1928,6 @@ HANDLE __fastcall ConnectingToBattleNet() {
     }
 
     return (HANDLE)0x0;
-}
-
-void __fastcall BNNEWS_SetNewsChannel(int bIsClassic) {
-    if (g_pfnNewsChannelCallback) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2f);
-      exit(-1);
-    }
-
-    szBnNewsChannelName = "BNNews-D2DV";
-    if (bIsClassic) {
-      return;
-    }
-
-    szBnNewsChannelName = "BNNews-D2XP";
-}
-
-int __thiscall BNNEWS_GetNewsEntryByIndex(int * pNewsTable, int nIndex) {
-    return nIndex * 0x408 + pNewsTable[2];
-}
-
-uint32_t __thiscall BNNEWS_RoundToPowerOfTwo(D2BnNewsTableStrc * pNewsTable, uint32_t dwSize) {
-    if (dwSize < 8) {
-      while (dwSize & dwSize - 1) {
-        dwSize &= dwSize - 1;
-      }
-
-      if (dwSize < 1) {
-        return 1;
-      }
-    } else {
-      pNewsTable->nGrowStep = 8;
-      dwSize = 8;
-    }
-
-    return dwSize;
-}
-
-DWORD __stdcall BNNEWS_RoundUpToMultiple(DWORD dwValue, DWORD dwMultiple) {
-    if (dwValue % dwMultiple) {
-      dwValue += dwMultiple - dwValue % dwMultiple;
-    }
-
-    return dwValue;
-}
-
-void __fastcall Unreferenced_0051d350(uint32_t * pDst, uint32_t * pSrc) {
-    if (!pDst) {
-      return;
-    }
-
-    memcpy(pDst, pSrc, 0x102 * sizeof(uint32_t));
-}
-
-// @sourcefile .\BNNews.cpp
-void __stdcall BNNEWS_SaveToCache() {
-    char* pStrScan;
-    uint32_t nEntryIndex;
-    char* pEntryText;
-    int nEntryDiff;
-    _SYSTEMTIME stSystemTime;
-    intptr_t nTextLen;
-    _FILETIME ftWriteTime;
-    char* pStrScanEnd;
-    char cStrChar;
-    intptr_t nDestOffset;
-    int nStrScanEnd;
-    uint32_t nUnreadCount = g_nNewsMaxCacheSize.nCount;
-    ftWriteTime.dwHighDateTime = g_nNewsMaxCacheSize.nCount - g_nFirstUnreadNewsIndex;
-    if (ftWriteTime.dwHighDateTime >= 0x100) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13b);
-      exit(-1);
-    }
-
-    size_t nTotalSize = 8;
-    size_t nAccumSize = 8;
-    if (g_nFirstUnreadNewsIndex < g_nNewsMaxCacheSize.nCount) {
-      pEntryText = g_nNewsMaxCacheSize.pEntries[g_nFirstUnreadNewsIndex].szText;
-      nEntryIndex = g_nFirstUnreadNewsIndex;
-      do {
-        pStrScanEnd = pEntryText + 1;
-        int nStrLen;
-        nStrLen = (int)strlen(pEntryText);
-        if ((int)nStrLen >= 0x400) {
-          return;
-        }
-
-        nTotalSize = nTotalSize + 5 + (int)nStrLen;
-        nEntryIndex++;
-        pEntryText += 0x408;
-        nAccumSize = nTotalSize;
-      } while (nEntryIndex < g_nNewsMaxCacheSize.nCount);
-    }
-
-    nTotalSize = nAccumSize;
-    uint32_t* pMemoryToFree = (uint32_t*)D2_ALLOC_AT(nAccumSize, ".\\BNNews.cpp", 0x154);
-    if (!pMemoryToFree) {
-      return;
-    }
-
-    *pMemoryToFree = g_dwNewsTimestamp;
-    pMemoryToFree[1] = ftWriteTime.dwHighDateTime;
-    uint32_t* pWritePtr = pMemoryToFree + 2;
-    if (g_nFirstUnreadNewsIndex < nUnreadCount) {
-      D2BnNewsEntryStrc* pDVar1;
-      nEntryDiff = g_nFirstUnreadNewsIndex * 0x408;
-      nStrScanEnd = (int)(nUnreadCount - g_nFirstUnreadNewsIndex);
-      do {
-        pDVar1 = g_nNewsMaxCacheSize.pEntries;
-        pEntryText = g_nNewsMaxCacheSize.pEntries->szText + nEntryDiff;
-        *pWritePtr = *(uint32_t*)(g_nNewsMaxCacheSize.pEntries->szText + (nEntryDiff - 4));
-        pStrScan = pEntryText;
-        pStrScan = pStrScan + strlen(pStrScan) + 1;
-        nTextLen = (intptr_t)pStrScan - (intptr_t)(pDVar1->szText + (nEntryDiff + 1));
-        nDestOffset = 4 - (intptr_t)pEntryText;
-        do {
-          cStrChar = *pEntryText;
-          pEntryText[(intptr_t)pWritePtr + nDestOffset] = cStrChar;
-          pEntryText++;
-        } while (cStrChar != '\0');
-
-        nEntryDiff += 0x408;
-        nStrScanEnd--;
-        pWritePtr = (uint32_t*)((char*)pWritePtr + (nTextLen + 5));
-      } while (nStrScanEnd);
-
-      pStrScanEnd = 0;
-      nTotalSize = nAccumSize;
-    }
-
-    uint32_t* pCacheBlock = pMemoryToFree;
-    /* LPSYSTEMTIME lpSystemTime for GetSystemTime */ GetSystemTime(&stSystemTime);
-    /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ SystemTimeToFileTime(&stSystemTime, &ftWriteTime);
-    Cache::CACHE_WriteData(szBnNewsChannelName, (LPCVOID)pMemoryToFree, nTotalSize, (uint32_t*)&ftWriteTime.dwLowDateTime, -1, -1);
-    D2_FREE_AT(pMemoryToFree, ".\\BNNews.cpp", 0x17b);
-}
-
-// Calls g_pfnMotdCallback(dwEntryId in ECX, szMessage in EDX) once per unread news entry.
-void __stdcall BNNEWS_InvokeCallbacks() {
-    if (g_pfnNewsCallback) {
-      (*g_pfnNewsCallback)();
-    }
-    if (!g_pfnMotdCallback) {
-      return;
-    }
-
-    int nUnreadCount = g_nNewsMaxCacheSize.nCount - g_nFirstUnreadNewsIndex;
-    if (nUnreadCount <= 0) {
-      return;
-    }
-
-    int nEntryByteOffset = g_nNewsMaxCacheSize.nCount * 0x408;
-    do {
-      (*g_pfnMotdCallback)(*(uint32_t*)(nEntryByteOffset - 0x404 + (char*)g_nNewsMaxCacheSize.pEntries), (char*)(nEntryByteOffset - 0x400 + (char*)g_nNewsMaxCacheSize.pEntries));
-      nEntryByteOffset += -0x408;
-      nUnreadCount--;
-    } while (nUnreadCount);
-}
-
-void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d570(void * pArray) {
-    if (!*(void**)((char*)pArray + 8)) {
-      return;
-    }
-
-    Storm::Source::SMem::SMemFree(*(void**)((char*)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
-}
-
-void * __thiscall BNNEWS_DestroyNewsTable(D2BnNewsTableStrc * pNewsTable, uint8_t bFreeMemory) {
-    if (pNewsTable->pEntries) {
-      Storm::Source::SMem::SMemFree(pNewsTable->pEntries, s___AUItem_NewsTable___0072ff8c, -2, 0);
-    }
-    if (bFreeMemory & 1) {
-      Storm::Source::SMem::SMemFree(pNewsTable, "delete", -1, 0);
-    }
-
-    return pNewsTable;
-}
-
-void __thiscall BNNEWS_ReallocateNewsTable(D2BnNewsTableStrc * pNewsTable, uint32_t dwNewCapacity) {
-    D2BnNewsEntryStrc* pBlock = pNewsTable->pEntries;
-    pNewsTable->nCapacity = dwNewCapacity;
-    D2BnNewsEntryStrc* pFallbackAlloc = (D2BnNewsEntryStrc*)Storm::Source::SMem::SMemReAlloc(&pBlock->dwFlags, dwNewCapacity * 0x408, s___AUItem_NewsTable___0072ff8c, -2, 0x10);
-    pNewsTable->pEntries = pFallbackAlloc;
-    if (pFallbackAlloc) {
-      return;
-    }
-
-    pFallbackAlloc = (D2BnNewsEntryStrc*)Storm::Source::SMem::SMemAlloc(dwNewCapacity * 0x408, s___AUItem_NewsTable___0072ff8c, -2, 0);
-    pNewsTable->pEntries = pFallbackAlloc;
-    if (!pBlock) {
-      return;
-    }
-
-    uint32_t nCopyCount = pNewsTable->nCount;
-    if (dwNewCapacity < pNewsTable->nCount) {
-      nCopyCount = dwNewCapacity;
-    }
-
-    for (uint32_t i = 0; i < nCopyCount; i++) {
-      D2BnNewsEntryStrc* pSlot = &pNewsTable->pEntries[i];
-      if (pSlot) {
-        *pSlot = pBlock[i];
-      }
-    }
-
-    Storm::Source::SMem::SMemFree(pBlock, s___AUItem_NewsTable___0072ff8c, -2, 0);
-}
-
-void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d670(void * pArray) {
-    if (!*(void**)((char*)pArray + 8)) {
-      return;
-    }
-
-    Storm::Source::SMem::SMemFree(*(void**)((char*)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
-}
-
-uint32_t * __fastcall Unreferenced_0051d690(uint32_t * pData) {
-    *pData = 0;
-    pData[1] = 0;
-    pData[2] = 0;
-    pData[3] = 0;
-    return pData;
-}
-
-void __fastcall BNNEWS_ClearNewsTable(D2BnNewsTableStrc * pNewsTable) {
-    if (pNewsTable->pEntries) {
-      Storm::Source::SMem::SMemFree(pNewsTable->pEntries, s___AUItem_NewsTable___0072ff8c, -2, 0);
-    }
-
-    pNewsTable->nCapacity = 0;
-    pNewsTable->nCount = 0;
-    pNewsTable->pEntries = 0;
-}
-
-// D2_RoundUp, rounding up to a granularity, as its callers inlined it: the parameter changed and returned.
-static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
-    if (n % g) {
-        n = g - n % g + n;
-    }
-    return n;
-}
-
-void __thiscall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, uint32_t dwAdditionalCount, int bGrow) {
-    dwAdditionalCount = dwAdditionalCount + pNewsTable[1];
-    if (dwAdditionalCount <= *pNewsTable) {
-      return;
-    }
-    if (bGrow) {
-      uint32_t nGrowStep;
-      nGrowStep = pNewsTable[3];
-      if (!nGrowStep) {
-        nGrowStep = BNNEWS_RoundToPowerOfTwo((D2BnNewsTableStrc*)pNewsTable, dwAdditionalCount);
-      }
-
-      dwAdditionalCount = D2_RoundUp(dwAdditionalCount, nGrowStep);
-    }
-
-    BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, dwAdditionalCount);
-}
-
-uint32_t * __fastcall Unreferenced_0051d720(uint32_t * pData) {
-    *pData = 0;
-    pData[1] = 0;
-    pData[2] = 0;
-    pData[3] = 0;
-    return pData;
-}
-
-void __fastcall Unreferenced_0051d730(void * pArray) {
-    if (!*(void**)((char*)pArray + 8)) {
-      return;
-    }
-
-    Storm::Source::SMem::SMemFree(*(void**)((char*)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
-}
-
-BOOL __stdcall BNNEWS_Shutdown() {
-    g_pfnMotdCallback = 0;
-    g_pfnNewsCallback = 0;
-    if (g_nNewsMaxCacheSize.pEntries) {
-      Storm::Source::SMem::SMemFree(g_nNewsMaxCacheSize.pEntries, s___AUItem_NewsTable___0072ff8c, -2, 0);
-    }
-
-    g_nNewsMaxCacheSize.nCapacity = 0;
-    g_nNewsMaxCacheSize.nCount = 0;
-    g_nNewsMaxCacheSize.pEntries = 0;
-    g_pfnNewsChannelCallback = 0;
-    return 1;
-}
-
-int __fastcall BNNEWS_AllocateNewsEntry(uint32_t * pNewsTable) {
-    uint32_t nNewCount = pNewsTable[1] + 1;
-    if (nNewCount > *pNewsTable) {
-      uint32_t nPageSize = pNewsTable[3];
-      if (!nPageSize) {
-        nPageSize = BNNEWS_RoundToPowerOfTwo((D2BnNewsTableStrc*)pNewsTable, nNewCount);
-      }
-
-      uint32_t nNewCapacity = nNewCount;
-      if (nNewCount % nPageSize) {
-        nNewCapacity = nPageSize - nNewCount % nPageSize + nNewCount;
-      }
-
-      BNNEWS_ReallocateNewsTable((D2BnNewsTableStrc*)pNewsTable, nNewCapacity);
-    }
-
-    return pNewsTable[1]++ * 0x408 + pNewsTable[2];
-}
-
-void __thiscall BNNEWS_EnsureCapacity(D2BnNewsTableStrc * pNewsTable, uint32_t dwAdditionalCount) {
-    uint32_t nRequired = pNewsTable->nCount + dwAdditionalCount;
-    if (nRequired <= pNewsTable->nCapacity) {
-      return;
-    }
-
-    BNNEWS_ReallocateNewsTable(pNewsTable, nRequired);
-}
-
-void __thiscall BNNEWS_SetNewsEntryCount(D2BnNewsTableStrc * pNewsTable, uint32_t dwNewCount) {
-    uint32_t nAlignedCount;
-    if (dwNewCount > pNewsTable->nCount && dwNewCount > pNewsTable->nCapacity) {
-      uint32_t nPageSize;
-      nPageSize = pNewsTable->nGrowStep;
-      if (!nPageSize) {
-        nPageSize = BNNEWS_RoundToPowerOfTwo(pNewsTable, dwNewCount);
-      }
-
-      nAlignedCount = dwNewCount;
-      if (dwNewCount % nPageSize) {
-        nAlignedCount = nPageSize - dwNewCount % nPageSize + dwNewCount;
-      }
-
-      BNNEWS_ReallocateNewsTable(pNewsTable, nAlignedCount);
-    }
-
-    pNewsTable->nCount = dwNewCount;
-}
-
-// BATTLE.NET NEWS PARSER (SID_NEWS_INFO 0x46)
-// Parses news entries from Battle.net packet containing: count(1), unknown(4), motd_timestamp(4), timestamp(4), then array of entries. Each entry: entry_id(4), message(null-terminated). Maintains sorted cache (up to 256 entries) in gpBNetNewsCache, each 0x408 bytes with entry_id at +4 and message at +8. Special case: entry_id=0 triggers callback g_pfnMotdCallback for MOTD. Sorts by entry_id descending, calculates first unread index (g_nFirstUnreadNewsIndex) based on motd_timestamp, saves to disk cache, and invokes UI callbacks.
-BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, size_t nSize) {
-    int iVar1;
-    uint32_t* puVar2;
-    int nCacheByteOffset;
-    uint32_t dwCachedEntryId;
-    int iVar3;
-    int nCopyCount;
-    uint32_t nInsertIndex;
-    uint32_t* pSrcEntry;
-    uint32_t* pMessageText;
-    char* pDstEntry;
-    uint32_t dwEntryId;
-    uint32_t nEntryCount;
-    nEntryCount = (uint32_t)*pBytes;
-    uint32_t dwMotdTimestamp;
-    dwMotdTimestamp = *(uint32_t*)(pBytes + 5);
-    uint32_t dwNewestNewsTimestamp;
-    dwNewestNewsTimestamp = *(uint32_t*)(pBytes + 9);
-    uint32_t* pEntryData;
-    pEntryData = (uint32_t*)(pBytes + 0xd);
-    if (nEntryCount > 0x100) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x77);
-      exit(-1);
-    }
-
-    for (; nEntryCount > 0; nEntryCount--) {
-      dwEntryId = *pEntryData;
-      pMessageText = pEntryData + 1;
-      pEntryData = pMessageText;
-      do {
-        nInsertIndex = *pEntryData;
-        pEntryData = (uint32_t*)((char*)pEntryData + 1);
-      } while ((char)nInsertIndex != '\0');
-
-      if (dwEntryId) {
-        if (g_nNewsMaxCacheSize.nCount) {
-          puVar2 = &g_nNewsMaxCacheSize.pEntries[g_nNewsMaxCacheSize.nCount].dwTimestamp;
-          nInsertIndex = g_nNewsMaxCacheSize.nCount;
-          do {
-            dwCachedEntryId = puVar2[-0x102];
-            nInsertIndex--;
-            if (dwCachedEntryId <= dwEntryId && dwEntryId != dwCachedEntryId) {
-              goto insert_news_entry;
-            }
-            if (dwEntryId == dwCachedEntryId) {
-              puVar2[-0x103] = 0;
-              strncpy((char*)(puVar2 - 0x101), (char*)pMessageText, 0x400);
-              goto next_news_entry;
-            }
-
-            puVar2 += -0x102;
-          } while (nInsertIndex);
-        }
-
-        nInsertIndex = -1;
-        insert_news_entry:
-        nInsertIndex++;
-        BNNEWS_SetNewsEntryCount(&g_nNewsMaxCacheSize, g_nNewsMaxCacheSize.nCount + 1);
-        dwCachedEntryId = g_nNewsMaxCacheSize.nCount - 1;
-        if (dwCachedEntryId > nInsertIndex) {
-          nCacheByteOffset = dwCachedEntryId * 0x408;
-          iVar3 = dwCachedEntryId - nInsertIndex;
-          do {
-            iVar1 = nCacheByteOffset - 8;
-            nCacheByteOffset += -0x408;
-            iVar3--;
-            pSrcEntry = (uint32_t*)(g_nNewsMaxCacheSize.pEntries->szText + iVar1 - 0x408);
-            pDstEntry = g_nNewsMaxCacheSize.pEntries->szText + iVar1;
-            for (nCopyCount = 0x102; nCopyCount; nCopyCount--) {
-              *(uint32_t*)pDstEntry = *pSrcEntry;
-              pSrcEntry++;
-              pDstEntry += 4;
-            }
-          } while (iVar3);
-        }
-
-        g_nNewsMaxCacheSize.pEntries[nInsertIndex].dwFlags = 0;
-        g_nNewsMaxCacheSize.pEntries[nInsertIndex].dwTimestamp = dwEntryId;
-        strncpy(g_nNewsMaxCacheSize.pEntries[nInsertIndex].szText, (char*)pMessageText, 0x400);
-      } else {
-        if (g_pfnMotdCallback) {
-          (*g_pfnMotdCallback)(0, (char*)pMessageText);
-        }
-      }
-
-      next_news_entry:
-      ;
-    }
-
-    g_nFirstUnreadNewsIndex = 0;
-    if (g_nNewsMaxCacheSize.nCount > 0) {
-      puVar2 = &g_nNewsMaxCacheSize.pEntries->dwTimestamp;
-      do {
-        if (*puVar2 >= dwMotdTimestamp) {
-          break;
-        }
-
-        g_nFirstUnreadNewsIndex++;
-        puVar2 += 0x102;
-      } while (g_nFirstUnreadNewsIndex < g_nNewsMaxCacheSize.nCount);
-    }
-
-    g_dwNewsTimestamp = dwNewestNewsTimestamp;
-    BNNEWS_SaveToCache();
-    BNNEWS_InvokeCallbacks();
-    return 1;
-}
-
-// @sourcefile .\BNNews.cpp
-BOOL __stdcall BNNEWS_LoadCachedNews() {
-    // Frame slots -28..-4 are ONE object: &dwCacheDataSize is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      DWORD dwCacheDataSize;
-      uint32_t nTotalEntries;
-      uint32_t nLastEntryId;
-      uint32_t bLoadSuccess;
-      uint32_t* pCacheData;
-      uint32_t nEntriesRead;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 24, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    uint32_t nPageSize;
-    D2BnNewsEntryStrc* pNewEntry;
-    char* pStrEnd;
-    int nStrLen;
-    char* pMsgText;
-    uint32_t nEntryCount;
-    uint32_t* pEntryData;
-    uint32_t adwCacheHeader[2];
-    char* pDstText;
-    __frame0.bLoadSuccess = 0;
-    __frame0.pCacheData = 0;
-    BOOL bCacheReadOk;
-    bCacheReadOk = Cache::CACHE_ReadData(szBnNewsChannelName, adwCacheHeader, &__frame0.pCacheData, &__frame0.dwCacheDataSize);
-    if (bCacheReadOk) {
-      uint32_t uVar1;
-      g_dwNewsTimestamp = *__frame0.pCacheData;
-      nEntryCount = __frame0.pCacheData[1];
-      pEntryData = __frame0.pCacheData + 2;
-      __frame0.nTotalEntries = nEntryCount;
-      if (nEntryCount <= 0x100) {
-        BNNEWS_SetNewsEntryCount(&g_nNewsMaxCacheSize, 0);
-        if (g_nNewsMaxCacheSize.nCount + nEntryCount > g_nNewsMaxCacheSize.nCapacity) {
-          BNNEWS_ReallocateNewsTable(&g_nNewsMaxCacheSize, g_nNewsMaxCacheSize.nCount + nEntryCount);
-        }
-
-        g_nFirstUnreadNewsIndex = 0;
-        __frame0.nLastEntryId = 0;
-        __frame0.nEntriesRead = 0;
-        if (nEntryCount > 0) {
-          do {
-            nEntryCount = g_nNewsMaxCacheSize.nCount + 1;
-            if (nEntryCount > g_nNewsMaxCacheSize.nCapacity) {
-              nPageSize = g_nNewsMaxCacheSize.nGrowStep;
-              if (!g_nNewsMaxCacheSize.nGrowStep) {
-                nPageSize = BNNEWS_RoundToPowerOfTwo(&g_nNewsMaxCacheSize, nEntryCount);
-              }
-              if (nEntryCount % nPageSize) {
-                nEntryCount = nPageSize - nEntryCount % nPageSize + nEntryCount;
-              }
-
-              BNNEWS_ReallocateNewsTable(&g_nNewsMaxCacheSize, nEntryCount);
-            }
-
-            pNewEntry = g_nNewsMaxCacheSize.pEntries + g_nNewsMaxCacheSize.nCount;
-            g_nNewsMaxCacheSize.nCount++;
-            pNewEntry->dwFlags = 0;
-            pMsgText = (char*)(pEntryData + 1);
-            pNewEntry->dwTimestamp = *pEntryData;
-            pStrEnd = pMsgText;
-            do {
-              uVar1 = *pStrEnd;
-              pStrEnd++;
-            } while ((char)uVar1 != '\0');
-
-            nStrLen = pStrEnd - pMsgText - 1;
-            if (nStrLen >= 0x400) {
-              goto reset_news_table;
-            }
-
-            pDstText = pNewEntry->szText;
-            do {
-              uVar1 = *pMsgText;
-              *pDstText = (char)uVar1;
-              pDstText++;
-              pMsgText++;
-            } while ((char)uVar1 != '\0');
-
-            nPageSize = pNewEntry->dwTimestamp;
-            pEntryData = (uint32_t*)((char*)pEntryData + (nStrLen + 5));
-            nEntryCount = __frame0.nTotalEntries;
-          } while (__frame0.nLastEntryId <= nPageSize && (__frame0.nEntriesRead++ , __frame0.nLastEntryId = nPageSize , __frame0.nEntriesRead < __frame0.nTotalEntries));
-        }
-
-        __frame0.bLoadSuccess = (uint32_t)(__frame0.nEntriesRead == nEntryCount);
-        if (__frame0.bLoadSuccess) {
-          goto free_cache_buffer;
-        }
-      }
-    }
-
-    reset_news_table:
-    if (g_nNewsMaxCacheSize.pEntries) {
-      Storm::Source::SMem::SMemFree(g_nNewsMaxCacheSize.pEntries, s___AUItem_NewsTable___0072ff8c, -2, 0);
-    }
-    g_nNewsMaxCacheSize.nCapacity = 0;
-    g_nNewsMaxCacheSize.nCount = 0;
-    g_nNewsMaxCacheSize.pEntries = 0;
-    g_nFirstUnreadNewsIndex = 0;
-    g_dwNewsTimestamp = 0;
-    free_cache_buffer:
-    if (__frame0.pCacheData) {
-      Storm::Source::SMem::SMemFree(__frame0.pCacheData, ".\\BNNews.cpp", 299, 0);
-    }
-    return __frame0.bLoadSuccess;
 }
 
 int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback) {

@@ -4,9 +4,69 @@
 #include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
 #include "Source/D2Common/Drlg/DrlgRoom.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Game/D2Game.h"
+#include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/DataTbls/LvlTbls.h"
+#include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgCoordsStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgOrthStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgTileDataStrc.h"
+#include "Source/D2Common/Drlg/Drlg.h"
+#include "Source/D2Common/Drlg/DrlgLogic.h"
+#include "Source/D2Common/Drlg/OutPlace.h"
+#include "Source/D2Common/Drlg/OutRoom.h"
+#include "Source/D2Common/Drlg/Preset.h"
+#include "Source/D2Common/Drlg/RoomTile.h"
+#include "Source/D2Common/Skills/Skills.h"
+#include "Source/Fog/Fog.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+
+#ifndef D2_ALLOC_POOL_AT
+#define D2_ALLOC_POOL_AT(pPool, size, szFile, nLine) Fog::Memory::AllocServerMemory((pPool), (size), (szFile), (nLine), 0)
+#endif
+
+#ifndef D2_NEW_POOL_AT
+#define D2_NEW_POOL_AT(pPool, T, szFile, nLine) ((T*)D2_ALLOC_POOL_AT((pPool), sizeof(T), (szFile), (nLine)))
+#endif
+
+#ifndef D2_FREE_POOL_AT
+#define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
+#endif
+
+#ifndef D2_REALLOC_POOL_AT
+#define D2_REALLOC_POOL_AT(pPool, p, size, szFile, nLine) Fog::Memory::ReAllocServerMemory((pPool), (p), (size), (szFile), (nLine), 0)
+#endif
+
+
+namespace D2Common { namespace Drlg { namespace DrlgRoom {
+
+// Returns warp-id array for a level. Prefer pDrlg->pWarpsInfo override list; otherwise use LevelDefs.txt Warp[]. Halts if warps list exists but lacks terminator.
+int * __fastcall DRLGACTMISC_GetWarpsIdIfExists(D2DrlgStrc * pDrlg, eD2LevelId eLevel) {
+    D2LevelDefsTxt* pLevelDefs;
+    D2DrlgActWarpsInfoStrc* pWarpsInfo = pDrlg->pWarpsInfo;
+    while (true) {
+      if (!pWarpsInfo) {
+        pLevelDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(eLevel);
+        return pLevelDefs->Warp;
+      }
+      if (pWarpsInfo->nLevelId == LEVEL_None) {
+        break;
+      }
+      if (eLevel == pWarpsInfo->nLevelId) {
+        return pWarpsInfo->nWarpId;
+      }
+
+      pWarpsInfo = pWarpsInfo->pNext;
+    }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a2);
+    exit(-1);
+}
+
+}}} // namespace D2Common::Drlg::DrlgRoom
 
 namespace D2Common { namespace Drlg { namespace DrlgWarp {
 
@@ -17,3 +77,171 @@ int __fastcall DRLGWARP_GetWarpDestinationFromArray(D2DrlgLevelStrc * pLevel, ui
 }
 
 }}} // namespace D2Common::Drlg::DrlgWarp
+
+namespace D2Common { namespace Drlg { namespace DrlgRoom {
+
+// Fetches warp-id array for level and calls TXT_LvlWarp_Setup(warpId, nDirection). Return value appears to be warpId (decompiler shows uninitialized temp).
+D2LvlWarpTxt * __fastcall DRLGLEVEL_GetWarpsIdIfExistsAndSetup(D2DrlgLevelStrc * pLevel, uint8_t nIdIndex, uint8_t nDirection)
+{
+    int* pWarpIdArray = DRLGACTMISC_GetWarpsIdIfExists(pLevel->pDrlg, pLevel->eD2LevelId);
+    int nWarpId = pWarpIdArray[nIdIndex];
+    return DATATBLS::LvlTbls::TXT_LvlWarp_Setup(nWarpId, nDirection);
+}
+
+// Returns the D2LvlWarpTxt record of the warp node whose Id matches the warp unit's class id, or NULL if the node is disabled.
+D2LvlWarpTxt * __fastcall DRLGROOM_GetLvlWarpTxtForWarpUnit(D2RoomExStrc * pRoomEx, D2UnitStrc * pUnit) {
+    uint32_t nClassId;
+    D2DrlgRoomExRoomTileNodeStrc* pTileGrid = pRoomEx->pRoomTileNodes;
+    if (!pUnit) {
+      nClassId = -1;
+    } else {
+      nClassId = pUnit->nClassId;
+    }
+
+    while (pTileGrid) {
+      if (pTileGrid->pLvlWarpTxt->Id == (uint8_t)nClassId) {
+        if (!pTileGrid->bEnabled) {
+          return nullptr;
+        }
+
+        return pTileGrid->pLvlWarpTxt;
+      }
+
+      pTileGrid = pTileGrid->pRoomTileNext;
+    }
+
+    return nullptr;
+}
+
+// Finds the Nth occurrence of a level ID in the vis array. Used to resolve which vis slot corresponds to a specific warp when multiple warps connect to the same level.
+static int DRLGWARP_FindNthVisEntryForLevel(D2DrlgStrc * pDrlg, eD2LevelId eLevelIdVis, eD2LevelId eLevelId, int nOccurrenceIndex) {
+    int* pVisArray = DRLGWARP_GetVisArrayFromLevelId(pDrlg, eLevelIdVis);
+    int nMatchCount = 0;
+    for (uint8_t nVisIndex = 0; nVisIndex < 8; nVisIndex++) {
+      if (pVisArray[nVisIndex] == eLevelId) {
+        if (nMatchCount == nOccurrenceIndex) {
+          return nVisIndex;
+        }
+
+        nMatchCount++;
+      }
+    }
+
+    return -1;
+}
+
+void __fastcall Unreferenced_0066b010(D2RoomExStrc * pRoomEx) {
+    D2PresetUnitStrc* pDVar1;
+    for (pDVar1 = GetPresetUnits(pRoomEx); pDVar1 && pDVar1->eType != UNIT_WARP; pDVar1 = pDVar1->pPresetUnitNext) {}
+}
+
+// Ensure both levels are allocated+initialized. For each matching visibility-slot pair between eLevel and eLevelTarget, find a room in each level with the corresponding warp flag bit (slot+4), init both rooms, and locate UNIT_WARP preset units. Repeats up to 8 pairs; returns if no matching vis slots.
+void __fastcall DRLGWARP_InitWarpConnectionsBetweenLevels(D2DrlgStrc * pDrlg, uint8_t nActNo, eD2LevelId eLevel, eD2LevelId eLevelTarget) {
+    int* pVisArray;
+    D2PresetUnitStrc* pPresetUnit;
+    uint8_t nVisSlot;
+    int nMatchIndex;
+    uint32_t nDstVisSlot;
+    D2RoomExStrc* pDstRoomEx;
+    uint32_t nSrcVisSlot;
+    D2RoomExStrc* pSrcRoomEx;
+    OutPlace::DRLGACTMISC_AllocDrlgLevelForAct(pDrlg, nActNo);
+    D2DrlgLevelStrc* pSrcLevel;
+    pSrcLevel = GetLevelAndAlloc(pDrlg, eLevel);
+    if (!pSrcLevel->pRoomExFirst) {
+      D2Common::Drlg::InitLevel(pSrcLevel);
+    }
+
+    D2DrlgLevelStrc* pDstLevel;
+    pDstLevel = GetLevelAndAlloc(pDrlg, eLevelTarget);
+    if (!pDstLevel->pRoomExFirst) {
+      D2Common::Drlg::InitLevel(pDstLevel);
+    }
+
+    int nPairIndex;
+    nPairIndex = 0;
+    do {
+      pVisArray = DRLGWARP_GetVisArrayFromLevelId(pDrlg, eLevel);
+      nMatchIndex = 0;
+      nSrcVisSlot = 0;
+      do {
+        if (pVisArray[nSrcVisSlot] == eLevelTarget) {
+          if (nMatchIndex == nPairIndex) {
+            goto find_dst_vis_slot;
+          }
+
+          nMatchIndex++;
+        }
+
+        nVisSlot = (char)nSrcVisSlot + 1;
+        nSrcVisSlot = (uint32_t)nVisSlot;
+      } while (nVisSlot < 8);
+
+      nSrcVisSlot = -1;
+      find_dst_vis_slot:
+      pVisArray = DRLGWARP_GetVisArrayFromLevelId(pDrlg, eLevelTarget);
+      nMatchIndex = 0;
+      nDstVisSlot = 0;
+      do {
+        if (pVisArray[nDstVisSlot] == eLevel) {
+          if (nMatchIndex == nPairIndex) {
+            goto find_src_warp_room;
+          }
+
+          nMatchIndex++;
+        }
+
+        nVisSlot = (char)nDstVisSlot + 1;
+        nDstVisSlot = (uint32_t)nVisSlot;
+      } while (nVisSlot < 8);
+
+      nDstVisSlot = -1;
+      find_src_warp_room:
+      if (nSrcVisSlot == -1) {
+        return;
+      }
+      if (nDstVisSlot == -1) {
+        return;
+      }
+
+      DRLGACTMISC_GetWarpsIdIfExists(pSrcLevel->pDrlg, pSrcLevel->eD2LevelId);
+      DRLGACTMISC_GetWarpsIdIfExists(pDstLevel->pDrlg, pDstLevel->eD2LevelId);
+      for (pSrcRoomEx = pSrcLevel->pRoomExFirst; pSrcRoomEx; pSrcRoomEx = pSrcRoomEx->pRoomExNext) {
+        if (pSrcRoomEx->eRoomExFlags & 1 << D2_SHIFT_COUNT(nSrcVisSlot + 4U)) {
+          goto find_dst_warp_room;
+        }
+      }
+
+      pSrcRoomEx = 0;
+      find_dst_warp_room:
+      for (pDstRoomEx = pDstLevel->pRoomExFirst; pDstRoomEx; pDstRoomEx = pDstRoomEx->pRoomExNext) {
+        if (pDstRoomEx->eRoomExFlags & 1 << D2_SHIFT_COUNT(nDstVisSlot + 4U)) {
+          goto init_warp_rooms;
+        }
+      }
+      pDstRoomEx = 0;
+      init_warp_rooms:
+      DUNGEON::Dungeon::InitRoomEx(pSrcRoomEx);
+      DUNGEON::Dungeon::InitRoomEx(pDstRoomEx);
+      for (pPresetUnit = GetPresetUnits(pSrcRoomEx); pPresetUnit && pPresetUnit->eType != UNIT_WARP; pPresetUnit = pPresetUnit->pPresetUnitNext) {}
+
+      for (pPresetUnit = GetPresetUnits(pDstRoomEx); pPresetUnit && pPresetUnit->eType != UNIT_WARP; pPresetUnit = pPresetUnit->pPresetUnitNext) {}
+
+      nPairIndex++;
+      if (nPairIndex >= 8) {
+        return;
+      }
+    } while (true);
+}
+
+}}} // namespace D2Common::Drlg::DrlgRoom
+
+namespace D2Common { namespace Drlg { namespace DrlgWarp {
+
+}}} // namespace D2Common::Drlg::DrlgWarp
+
+namespace D2Common { namespace Drlg { namespace DrlgRoom {
+
+static void * keep_0066afb0 = (0 ? (DRLGWARP_FindNthVisEntryForLevel(*(D2DrlgStrc * *)0, *(eD2LevelId *)0, *(eD2LevelId *)0, *(int *)0), (void *)0) : (void *)0);
+
+}}} // namespace D2Common::Drlg::DrlgRoom

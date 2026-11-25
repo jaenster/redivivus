@@ -1427,6 +1427,198 @@ void __fastcall PlaceAct1245OutdoorBorders(D2DrlgLevelStrc * pLevel) {
     } while (true);
 }
 
+// Lays out a connected group of DRLG levels from a level-data list. Seeds a temporary placement struct from the DRLG seed, fills each node's world size from LevelDefs (per difficulty), then drives a placement callback per node with backtracking (failed placement rewinds to the previous node). Second pass allocates each level (GetLevelAndAlloc), copies computed world position/size, sets the preset file for Rogue Encampment (1) / Lut Gholein (0x28) from the placement direction, and for Black Marsh (6) picks the Outer Cloister (0x1b) layout file via seed advance, invokes the optional per-level callback, and wires prev/next warp connections (skipped for act 4). Inputs: level-data list, two optional callbacks, target DRLG.
+static void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData, fpLevelDataFn1 fnPlacementValidator, fpLevelDataFn2 fnLevelDataCallback, D2DrlgStrc * pDrlg) {
+    uint64_t uVar1;
+    BOOL bPlacementResult;
+    int nCoordsOffset;
+    D2DrlgLevelStrc* pDrlgLevel;
+    D2DrlgLevelStrc* pOuterCloisterLevel;
+    uint32_t nSeedLoTmp;
+    uint32_t nSeedLow;
+    uint32_t nLayoutIdx;
+    D2DrlgActWarpsInfoStrc* pDrlgActWarpsInfoCurrent1;
+    D2DrlgActWarpsInfoStrc* pDrlgActWarpsInfoPrev;
+    D2DrlgActWarpsInfoStrc* pWarpsInfoCurrent2;
+    D2DrlgActWarpsInfoStrc* pWarpsInfoTmp;
+    int nDifficulty;
+    int nSeedHi;
+    int nNodeOffset;
+    D2DrlgLevelPlacementStrc pLevelUnknown;
+    eD2LevelId eD2LevelIdPrev;
+    eD2LevelId eD2LevelIdNext;
+    int eLevelIdCurrentSlot;
+    D2DrlgLevelDataEntry* pCurLevelDataList;
+    eD2DrlgType eDrlgType;
+    D2DrlgLevelDataPresetArea* pOuterCloisterLevelData;
+    uint32_t lSeedProductB;
+    eD2LevelId eLevelIdCurrent;
+    int64_t lSeedProductA;
+    int nNodeEntryOffset;
+    memset(&pLevelUnknown, 0, 500);
+    int nIndexMax;
+    nIndexMax = 0;
+    do {
+      pLevelUnknown.aStepCounter[nIndexMax] = -1;
+      pLevelUnknown.aFlipState[nIndexMax] = -1;
+      pLevelUnknown.aCurrentDir[nIndexMax] = -1;
+      pLevelUnknown.aInitialDir[nIndexMax] = -1;
+      nIndexMax++;
+    } while (nIndexMax < 0xf);
+
+    pLevelUnknown.sSeed.nSeedLow = pDrlg->nSeed.nSeedLow;
+    pLevelUnknown.sSeed.nSeedHigh = pDrlg->nSeed.nSeedHigh;
+    eD2LevelId nLevelId;
+    nLevelId = pLevelData->aEntry[0].neD2LevelId;
+    pLevelUnknown.pLevelData = pLevelData;
+    if (nLevelId != LEVEL_None) {
+      D2LevelDefsTxt* pLevelDefs;
+      nNodeOffset = 0;
+      nCoordsOffset = 0;
+      do {
+        pLevelDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(nLevelId);
+        nDifficulty = (int)pDrlg->nDifficulty;
+        *(int*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.x + nCoordsOffset) = pLevelDefs->SizeX[nDifficulty];
+        nNodeEntryOffset = nNodeOffset * 0x10; // steer-ok: generated temporary, untouched; the body is pinned because it moved into OutPlace as a static
+        *(int*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.y + nCoordsOffset) = pLevelDefs->SizeY[nDifficulty];
+        nLevelId = pLevelData->aEntry[nNodeOffset + 1].neD2LevelId;
+        nNodeOffset++;
+        nCoordsOffset = nNodeEntryOffset + 0x10;
+      } while (nLevelId != LEVEL_None);
+    }
+
+    nNodeOffset = 0;
+    eD2LevelId* peLevelIdEntry;
+    peLevelIdEntry = &pLevelData->aEntry[0].neD2LevelId;
+    if (pLevelData->aEntry[0].neD2LevelId != LEVEL_None) {
+      pCurLevelDataList = pLevelData->aEntry;
+      do {
+        pLevelUnknown.neD2LevelId = *peLevelIdEntry;
+        pLevelUnknown.nCurrentNode = nNodeOffset;
+        bPlacementResult = pCurLevelDataList->nfpLevelDataEntry(&pLevelUnknown);
+        if (!bPlacementResult) {
+          pCurLevelDataList--;
+          pLevelUnknown.aStepCounter[nNodeOffset] = -1;
+          pLevelUnknown.aFlipState[nNodeOffset] = -1;
+          pLevelUnknown.aCurrentDir[nNodeOffset] = -1;
+          pLevelUnknown.aInitialDir[nNodeOffset] = -1;
+          nNodeOffset--;
+          peLevelIdEntry += -4;
+        } else if (!fnPlacementValidator || (nCoordsOffset = (*fnPlacementValidator)(&pLevelUnknown, nNodeOffset) , nCoordsOffset != 0)) {
+          pCurLevelDataList++;
+          nNodeOffset++;
+          peLevelIdEntry += 4;
+        }
+      } while (*peLevelIdEntry != LEVEL_None);
+    }
+
+    /* Parameter slot dies here: EBP+0xc stops being fnPlacementValidator and
+                         becomes the second pass's node index, starting at 0. */ fnPlacementValidator = 0;
+    if (pLevelData->aEntry[0].neD2LevelId == LEVEL_None) {
+      return;
+    }
+
+    nNodeOffset = 0;
+    D2DrlgLevelDataList* pLevelData1;
+    pLevelData1 = pLevelData;
+    do {
+      nCoordsOffset = pLevelData1->aEntry[0].nNodeLevelEntryIdPrev;
+      eLevelIdCurrent = pLevelData1->aEntry[0].neD2LevelId;
+      if (nCoordsOffset == -1) {
+        eD2LevelIdPrev = LEVEL_None;
+      } else {
+        eD2LevelIdPrev = pLevelData->aEntry[nCoordsOffset].neD2LevelId;
+      }
+
+      nCoordsOffset = pLevelData1->aEntry[0].nNodeLevelEntryIdNext;
+      if (nCoordsOffset == -1) {
+        eD2LevelIdNext = LEVEL_None;
+      } else {
+        eD2LevelIdNext = pLevelData->aEntry[nCoordsOffset].neD2LevelId;
+      }
+
+      pDrlgLevel = GetLevelAndAlloc(pDrlg, eLevelIdCurrent);
+      eDrlgType = pDrlgLevel->eDrlgType;
+      pDrlgLevel->sCoordinatesAndSize.WorldPosition.x = *(LONG*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldPosition.x + nNodeOffset);
+      pDrlgLevel->sCoordinatesAndSize.WorldPosition.y = *(LONG*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldPosition.y + nNodeOffset);
+      pDrlgLevel->sCoordinatesAndSize.WorldSize.x = *(LONG*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.x + nNodeOffset);
+      /* pDrlgLevel spilled into EBP-0x4, the slot the placement loop used as its list
+                         cursor. */ pDrlgLevel->sCoordinatesAndSize.WorldSize.y = *(LONG*)((intptr_t)&pLevelUnknown.aCoordsAndSize[0].WorldSize.y + nNodeOffset);
+      if (eDrlgType == DRLGTYPE_PresetArea) {
+        switch (pDrlgLevel->eD2LevelId) {
+          case 1:
+            {
+              /* aCurrentDir[index] - base EBP-0x108 is &aCurrentDir[0]. */ nNodeOffset = pLevelUnknown.aCurrentDir[(intptr_t)fnPlacementValidator];
+              break;
+            }
+          default:
+            {
+              goto pick_outer_cloister_file;
+            }
+          case 0x28:
+            {
+              /* aCurrentDir[index+1] - base EBP-0x104 is &aCurrentDir[1], index scaled by 4.
+                          */ nNodeOffset = pLevelUnknown.aCurrentDir[(intptr_t)((uint8_t*)fnPlacementValidator + 1)];
+              break;
+            }
+        }
+
+        pDrlgLevel->pDrlgLevelData.pDrlgLevelPresetData->nPickedFile = nNodeOffset;
+      }
+
+      pick_outer_cloister_file:
+      if (pDrlgLevel->eD2LevelId == 6) {
+        pOuterCloisterLevel = GetLevelAndAlloc(pDrlg, 0x1b);
+        pOuterCloisterLevelData = pOuterCloisterLevel->pDrlgLevelData.pDrlgLevelPresetData;
+        if (pLevelUnknown.aCurrentDir[(intptr_t)fnPlacementValidator] != 1) {
+          if (pLevelUnknown.aCurrentDir[(intptr_t)fnPlacementValidator] != 3) {
+            goto link_level_warps;
+          }
+
+          lSeedProductA = (uint64_t)pDrlg->nSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pDrlg->nSeed.nSeedHigh;
+          nSeedLow = (uint32_t)lSeedProductA;
+          pDrlg->nSeed.nSeedLow = nSeedLow;
+          nSeedHi = (int)((uint64_t)lSeedProductA >> 0x20);
+          nLayoutIdx = ~nSeedLow & 1;
+        } else {
+          uVar1 = (uint64_t)pDrlg->nSeed.nSeedLow * 0x6ac690c5 + (uint64_t)pDrlg->nSeed.nSeedHigh;
+          nSeedHi = (int)(uVar1 >> 0x20);
+          pDrlg->nSeed.nSeedLow = (uint32_t)uVar1;
+          nLayoutIdx = (uVar1 & 1) != 0 ? 1 : 2;
+        }
+
+        pDrlg->nSeed.nSeedHigh = nSeedHi;
+        pOuterCloisterLevelData->nPickedFile = nLayoutIdx;
+      }
+      link_level_warps:
+      if (fnLevelDataCallback) {
+        (*fnLevelDataCallback)(pDrlgLevel, fnPlacementValidator, pLevelUnknown.aCurrentDir);
+      }
+      if (pDrlg->nActNo != 4) {
+        if (eD2LevelIdPrev != LEVEL_None) {
+          pDrlgActWarpsInfoCurrent1 = DRLGACT_AllocWarpsInfo(pDrlg, eLevelIdCurrent);
+          pDrlgActWarpsInfoPrev = DRLGACT_AllocWarpsInfo(pDrlg, eD2LevelIdPrev);
+          DRLGACT_SetWarpConnection(pDrlgActWarpsInfoCurrent1, eD2LevelIdPrev, -1, -1);
+          DRLGACT_SetWarpConnection(pDrlgActWarpsInfoPrev, eLevelIdCurrent, -1, -1);
+        }
+        if (eD2LevelIdNext != LEVEL_None) {
+          pWarpsInfoCurrent2 = DRLGACT_AllocWarpsInfo(pDrlg, eLevelIdCurrent);
+          pWarpsInfoTmp = DRLGACT_AllocWarpsInfo(pDrlg, eD2LevelIdNext);
+          DRLGACT_SetWarpConnection(pWarpsInfoCurrent2, eD2LevelIdNext, -1, -1);
+          DRLGACT_SetWarpConnection(pWarpsInfoTmp, eLevelIdCurrent, -1, -1);
+        }
+      }
+
+      /* Node index++ in the reused parameter slot; EDI = index*0x10 is the byte
+                         offset into pLevelUnknown.aCoordsAndSize (stride 16), recomputed every
+                         iteration so the aCurrentDir[] read at 0067747d/00677489 cannot leak into it.
+                          */ fnPlacementValidator = (fpLevelDataFn1)((uint8_t*)fnPlacementValidator + 1);
+      nNodeOffset = (int)fnPlacementValidator * 0x10;
+      /* Second pass cursor advances by ONE 16-byte entry (EDI = index*0x10 added to
+                         pLevelData), not by a whole list. */ pLevelData1 = (D2DrlgLevelDataList*)(pLevelData->aEntry + (intptr_t)fnPlacementValidator);
+    } while (((D2DrlgLevelDataEntry*)pLevelData1)->neD2LevelId != LEVEL_None);
+}
+
 // Coordinate-adjacency warp connector over level range [eLevelFirst, nLevelLast]. For each ordered pair (outer,inner) in the range, alloc both levels and outer's warps-info; if outer!=inner and their coords are adjacent/overlapping (DRLGCOORDS_IsAdjacentOrOverlapping(...,-1)), set a warp connection (DRLGACT_SetWarpConnection(pWarps,inner,-1,-1)). Range params eLevelFirst(stack:0x4)/nLevelLast(stack:0x8) were dropped phantom stack params; pDrlgStrc in EBX (callee-saved). Act5 callers pass 0x6f..0x70 (recovered from call site 00678a96: PUSH 0x70; PUSH 0x6f; MOV EBX,ESI).
 static void __stdcall DRLGACT_SetWarpConnectionsBetweenTwoAreas(D2DrlgStrc * pDrlgStrc, eD2LevelId eLevelFirst, int nLevelLast) {
     D2DrlgActWarpsInfoStrc* pDrlgActWarpsInfo;
@@ -2391,38 +2583,21 @@ static void DRLGActMisc_InitAct5(D2DrlgStrc * pDrlg) {
 // Act-specific level setup dispatcher: moves pDrlg to EAX and tail-jumps through a 5-entry table to DRLGActMisc_InitAct1..InitAct5 by nActNo; nActNo above 4 returns.
 // 1.14d: jump table at 00678afc, stubs 00678ae1..00678af5.
 void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(D2DrlgStrc * pDrlg, eAct nActNo) {
-    D2DrlgLevelStrc* pLevel;
     switch (nActNo) {
       case ACT_I:
-        DRLGLEVEL_ParseLevelData(&ACT1_D2DrlgLevelData1, (fpLevelDataFn1)DRLGPLACE_ACT1_ValidatePlacementList1, (fpLevelDataFn2)ACT1_fpLevelDataFn2_A, pDrlg);
-      DRLGLEVEL_ParseLevelData(&ACT1_D2DrlgLevelData2, (fpLevelDataFn1)DRLGPLACE_ACT1_ValidatePlacementList2WithGap, (fpLevelDataFn2)ACT1_fpLevelDataFn2_A, pDrlg);
-      DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_BurialGrounds, LEVEL_RogueEncampment);
-      return;
+        DRLGActMisc_InitAct1(pDrlg);
+        return;
       case ACT_II:
-        DRLGLEVEL_ParseLevelData(&ACT2_D2DrlgLevelData1, (fpLevelDataFn1)DRLGPLACE_ACT2_ValidatePlacementList1, nullptr, pDrlg);
-      DRLGLEVEL_ParseLevelData(&ACT2_D2DrlgLevelData2, (fpLevelDataFn1)DRLGPLACE_ACT2_ValidatePlacementList2, nullptr, pDrlg);
-      DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_CanyonOfTheMagi, LEVEL_LutGholein);
-      return;
+        DRLGActMisc_InitAct2(pDrlg);
+        return;
       case ACT_III:
         DRLGActMisc_InitAct3(pDrlg);
-      return;
+        return;
       case ACT_IV:
-        DRLGLEVEL_ParseLevelData(&ACT4_D2DrlgLevelData1, (fpLevelDataFn1)DRLGPLACE_ACT4_ValidatePlacementList1, nullptr, pDrlg);
-      DRLGLEVEL_ParseLevelData(&ACT4_D2DrlgLevelData2, (fpLevelDataFn1)DRLGPLACE_ACT4_ValidatePlacementList2, nullptr, pDrlg);
-      pLevel = GetLevelAndAlloc(pDrlg, 0x68);
-      pLevel->pDrlgLevelData.pTxtLvlMaze->Level |= gdwDrlgLevelPlacementFlags;
-      DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_CityOfTheDamned, LEVEL_ThePandemoniumFortress);
-      return;
+        DRLGActMisc_InitAct4(pDrlg);
+        return;
       case ACT_V:
-        DRLGLEVEL_ParseLevelData(&ACT5_D2DrlgLevelData1, nullptr, nullptr, pDrlg);
-      DRLGLEVEL_ParseLevelData(&ACT5_D2DrlgLevelData2, nullptr, nullptr, pDrlg);
-      DRLGACT_SetWarpConnectionsBetweenTwoAreas(pDrlg, LEVEL_FrigidHighlands, 0x70);
-      DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(pDrlg, LEVEL_ArreatPlateau, LEVEL_FrigidHighlands);
-      DRLGACT_SetWarpConnectionsBetweenTwoAreas(pDrlg, LEVEL_BloodyFoothills, 0x6f);
-      DRLGACT_SetWarpConnectionsBetweenTwoAreas(pDrlg, LEVEL_Harrogath, 0x6e);
-      DRLGLEVEL_ParseLevelData(&ACT5_D2DrlgLevelData3, (fpLevelDataFn1)DRLGPLACE_ACT5_ValidatePlacementList3, nullptr, pDrlg);
-      return;
-      default:
+        DRLGActMisc_InitAct5(pDrlg);
         return;
     }
 }
@@ -2525,10 +2700,6 @@ void __fastcall InitAct3OutdoorLevel(D2DrlgLevelStrc * pLevel) {
 }
 
 static void * keep_00677640 = (0 ? (DRLGLEVEL_AllocOrthForAdjacentLevel(*(D2DrlgLevelStrc * *)0, *(eD2LevelId *)0), (void *)0) : (void *)0);
-static void * keep_00677750 = (0 ? (DRLGActMisc_InitAct1(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
-static void * keep_00677790 = (0 ? (DRLGActMisc_InitAct2(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
 static void * keep_00677870 = (0 ? (Unreferenced_00677870(*(void * *)0, *(void * *)0), (void *)0) : (void *)0);
-static void * keep_00678a20 = (0 ? (DRLGActMisc_InitAct4(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
-static void * keep_00678a70 = (0 ? (DRLGActMisc_InitAct5(*(D2DrlgStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg::OutPlace

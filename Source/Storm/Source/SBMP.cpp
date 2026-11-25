@@ -984,47 +984,40 @@ static void __stdcall SBMP_ClearBlock(D2GifLzwEncoderStrc * pState, uint8_t * * 
 
 // @blizzard CompressGifByte (SBMP.CPP)
 static void __stdcall SBMP_CompressGifByte(D2GifLzwEncoderStrc * pState, uint8_t * * pDstBuf, uint32_t nNewCode) {
+    int nHashIndex;
     int nProbeStep;
+    uint32_t nDictKey;
     if (pState->bFirst) {
       pState->nLastCode = nNewCode;
       pState->bFirst = 0;
       return;
     }
 
-    int nHashIndex = (nNewCode << 4) + pState->nLastCode;
+    nHashIndex = (nNewCode << 4) + pState->nLastCode;
     if (nHashIndex >= 0x138b) {
-      nHashIndex += -0x138b;
+      nHashIndex -= 0x138b;
     }
 
-    uint32_t nExistingCode = pState->pHashTable[nHashIndex];
-    int* pCodeSlot = pState->pHashTable + nHashIndex;
-    uint32_t nDictKey = pState->nLastCode << 8 | nNewCode;
-    if (nExistingCode) {
-      uint32_t* pKeySlot;
-      pKeySlot = pState->pCodeTable + nHashIndex;
+    nDictKey = pState->nLastCode << 8 | nNewCode;
+    if (pState->pHashTable[nHashIndex]) {
       if (pState->pCodeTable[nHashIndex] == nDictKey) {
-        pState->nLastCode = nExistingCode;
+        pState->nLastCode = pState->pHashTable[nHashIndex];
         return;
       }
-      if (!nHashIndex) {
+      if (nHashIndex == 0) {
         nProbeStep = 1;
       } else {
         nProbeStep = 0x138b - nHashIndex;
       }
-
-      while (true) {
+      for (;;) {
         nHashIndex -= nProbeStep;
-        pCodeSlot += -nProbeStep;
-        pKeySlot += -nProbeStep;
         if (nHashIndex < 0) {
           nHashIndex += 0x138b;
-          pCodeSlot += 0x138b;
-          pKeySlot += 0x138b;
         }
-        if (!*pCodeSlot) {
+        if (!pState->pHashTable[nHashIndex]) {
           break;
         }
-        if (*pKeySlot == nDictKey) {
+        if (pState->pCodeTable[nHashIndex] == nDictKey) {
           pState->nLastCode = pState->pHashTable[nHashIndex];
           return;
         }
@@ -1033,16 +1026,12 @@ static void __stdcall SBMP_CompressGifByte(D2GifLzwEncoderStrc * pState, uint8_t
 
     SBMP_Output(pState, pDstBuf, pState->nLastCode);
     if (pState->nNextCode < 0x1000) {
-      pState->pHashTable[nHashIndex] = pState->nNextCode;
-      pState->nNextCode++;
+      pState->pHashTable[nHashIndex] = pState->nNextCode++;
       pState->pCodeTable[nHashIndex] = nDictKey;
-      pState->nLastCode = nNewCode;
-      return;
+    } else {
+      SBMP_ClearBlock(pState, pDstBuf);
     }
-
-    SBMP_ClearBlock(pState, pDstBuf);
-    nExistingCode = nNewCode;
-    pState->nLastCode = nExistingCode;
+    pState->nLastCode = nNewCode;
 }
 
 // @blizzard CompressGifImage (SBMP.CPP)

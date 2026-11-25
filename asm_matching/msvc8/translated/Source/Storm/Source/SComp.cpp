@@ -303,22 +303,22 @@ void __fastcall BITSTREAM_WriteLiteralByte(D2CompressEncoderStrc * pHuffState, i
     vc8_thiscall(BITSTREAM_WriteBits)(pBitStream, nCode, nBits);
 }
 
-static void SCOMP_SelectADPCMParams(uint8_t * pnBitsPerSample, uint32_t nChannels, uint32_t * pnStepShift) {
-    if (nChannels > 0) {
-      if (nChannels <= 2) {
+static void SCOMP_SelectADPCMParams(uint32_t nChannels, uint8_t * pnBitsPerSample, uint32_t * pnStepShift) {
+    switch (nChannels) {
+      case 1:
+      case 2:
         *pnBitsPerSample = '\x04';
         *pnStepShift = 6;
-        return;
-      }
-      if (nChannels == 3) {
+        break;
+      case 3:
         *pnBitsPerSample = '\x06';
         *pnStepShift = 8;
-        return;
-      }
+        break;
+      default:
+        *pnBitsPerSample = '\x05';
+        *pnStepShift = 7;
+        break;
     }
-
-    *pnBitsPerSample = '\x05';
-    *pnStepShift = 7;
 }
 
 // Encodes PCM audio samples to ADPCM format with dynamic bit rate adjustment
@@ -806,7 +806,7 @@ void __fastcall SCOMP_Bzip2Decompress(uint8_t * pDst, uint32_t * pnDstLen, uint8
 
 // @blizzard AdpcmMonoCompress (SCOMP.CPP)
 void __fastcall SCOMP_AdpcmMonoCompress(short * pDst, uint32_t * pnDstLen, short * pSrc, uint32_t nSrcLen, uint32_t * pUserData, uint32_t nBitsPerSample) {
-    SCOMP_SelectADPCMParams((uint8_t*)&pUserData, nBitsPerSample, pUserData);
+    SCOMP_SelectADPCMParams(nBitsPerSample, (uint8_t*)&pUserData, pUserData);
     uint32_t pDstEnd = SCOMP_ADPCMEncode(*pnDstLen, pSrc, nSrcLen, 1, (uint8_t)(uintptr_t)pUserData, pDst);
     *pnDstLen = pDstEnd;
 }
@@ -819,7 +819,7 @@ void __fastcall SCOMP_AdpcmMonoDecompress(short * pDst, uint32_t * pnDstLen, uin
 
 // @blizzard AdpcmStereoCompress (SCOMP.CPP)
 void __fastcall SCOMP_AdpcmStereoCompress(short * pDst, uint32_t * pnDstLen, short * pSrc, uint32_t nSrcLen, uint32_t * pUserData, uint32_t nBitsPerSample) {
-    SCOMP_SelectADPCMParams((uint8_t*)&pUserData, nBitsPerSample, pUserData);
+    SCOMP_SelectADPCMParams(nBitsPerSample, (uint8_t*)&pUserData, pUserData);
     uint32_t pDstEnd = SCOMP_ADPCMEncode(*pnDstLen, pSrc, nSrcLen, 2, (uint8_t)(uintptr_t)pUserData, pDst);
     *pnDstLen = pDstEnd;
 }

@@ -169,30 +169,20 @@ uint32_t __fastcall SEVT_NextPowerOf2(uint32_t nValue) {
 // @sourcefile .\SOURCE\SEVT.CPP
 // @blizzard CopyIdHashTable (SEVT.CPP)
 void __stdcall SEVT_CopyIdHashTable(D2SevtHandlerTableStrc * pDstTable, D2SevtHandlerTableStrc * pSrcTable) {
-    D2SevtHandlerNodeStrc* pNewHandler;
-    D2SevtHandlerNodeStrc* pSrcHandler;
-    uint32_t uVar1 = pSrcTable->nBucketCount;
-    pDstTable->nBucketCount = uVar1;
+    pDstTable->nBucketCount = pSrcTable->nBucketCount;
     pDstTable->nHandlerCount = pSrcTable->nHandlerCount;
-    D2SevtHandlerNodeStrc** ppDstCursor = (D2SevtHandlerNodeStrc**)SMem::SMemAlloc(uVar1 * 4, ".\\SOURCE\\SEVT.CPP", 0x3e, 0);
-    uint32_t nBucket = 0;
-    pDstTable->pBuckets = ppDstCursor;
-    if (pSrcTable->nBucketCount <= 0) {
-      return;
-    }
-
-    do {
-      ppDstCursor = pDstTable->pBuckets + nBucket;
-      for (pSrcHandler = pSrcTable->pBuckets[nBucket]; pSrcHandler; pSrcHandler = pSrcHandler->pNext) {
-        pNewHandler = (D2SevtHandlerNodeStrc*)SMem::SMemAlloc(0x10, ".\\SOURCE\\SEVT.CPP", 0x45, 0);
-        *ppDstCursor = pNewHandler;
-        SMem::SMemCopy(pNewHandler, pSrcHandler, 0x10);
+    pDstTable->pBuckets = (D2SevtHandlerNodeStrc**)SMem::SMemAlloc(pDstTable->nBucketCount * sizeof(D2SevtHandlerNodeStrc*), ".\\SOURCE\\SEVT.CPP", 0x3e, 0);
+    for (uint32_t nBucket = 0; nBucket < pSrcTable->nBucketCount; ++nBucket) {
+      D2SevtHandlerNodeStrc* pSrcHandler = pSrcTable->pBuckets[nBucket];
+      D2SevtHandlerNodeStrc** ppDstCursor = pDstTable->pBuckets + nBucket;
+      while (pSrcHandler) {
+        *ppDstCursor = (D2SevtHandlerNodeStrc*)SMem::SMemAlloc(0x10, ".\\SOURCE\\SEVT.CPP", 0x45, 0);
+        SMem::SMemCopy(*ppDstCursor, pSrcHandler, 0x10);
+        pSrcHandler = pSrcHandler->pNext;
         ppDstCursor = &(*ppDstCursor)->pNext;
       }
-
-      nBucket++;
       *ppDstCursor = 0;
-    } while (nBucket < pSrcTable->nBucketCount);
+    }
 }
 
 // @sourcefile .\SOURCE\SEVT.CPP
@@ -221,23 +211,16 @@ static void SEVT_DeleteIdHashTable(D2SevtHandlerTableStrc * pTable) {
 }
 
 // @blizzard FindTypeHashEntry (SEVT.CPP)
-static D2SevtTypeEntryStrc * SEVT_FindTypeHashEntry(uintptr_t nSubId, uint32_t nEventId) {
-    D2SevtTypeEntryStrc* pEvent;
-    if (!gpEventHashBuckets || !gaEventRegistryHead) {
-      pEvent = 0;
-    } else {
-      pEvent = gpEventHashBuckets[(nEventId ^ nSubId) & gaEventRegistryHead - 1];
-      if (pEvent) {
-        while (pEvent->dwType != nEventId || pEvent->dwSubType != nSubId) {
-          pEvent = pEvent->pNext;
-          if (!pEvent) {
-            return nullptr;
-          }
-        }
-      }
+static D2SevtTypeEntryStrc * SEVT_FindTypeHashEntry(uint32_t nEventId, uintptr_t nSubId) {
+    if (!(gpEventHashBuckets && gaEventRegistryHead)) {
+      return nullptr;
     }
 
-    return pEvent;
+    D2SevtTypeEntryStrc* pEntry = gpEventHashBuckets[(nEventId ^ nSubId) & (gaEventRegistryHead - 1)];
+    while (pEntry && (pEntry->dwType != nEventId || pEntry->dwSubType != nSubId)) {
+      pEntry = pEntry->pNext;
+    }
+    return pEntry;
 }
 
 // Destroys all registered event handlers and cleans up the global event hash table. Iterates through all hash buckets, frees handler tables for each event, deallocates event structures, and resets global state. Thread-safe via critical section.
@@ -277,32 +260,33 @@ BOOL SEvtDestroy() {
 // @rename-basis Behaviour. It is the push half of a per-event handler-table stack: allocate, copy, chain the previous table, install. SEvtPopState 004269c0 is the exact inverse and is the only other user of that [3] predecessor link. The PPC SEvt module has exactly these two state functions and no other save/restore pair.
 // @former-name SEVT_SnapshotEventHandlers
 // @sourcefile .\SOURCE\SEVT.CPP
-void __stdcall SEvtPushState(uint32_t nEventId, uintptr_t nSubId) {
-    D2SevtTypeEntryStrc* pEvent;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
-    if (gpEventHashBuckets && gaEventRegistryHead) {
-      D2SevtHandlerTableStrc* ppSnapshot;
-      pEvent = gpEventHashBuckets[(nEventId ^ nSubId) & gaEventRegistryHead - 1];
-      if (pEvent) {
-        while (pEvent->dwType != nEventId || pEvent->dwSubType != nSubId) {
-          pEvent = pEvent->pNext;
-          if (!pEvent) {
-            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077930c);
-            return;
-          }
+BOOL __stdcall SEvtPushState(uint32_t nEventId, uintptr_t nSubId) {
+    BOOL bSuccess = FALSE;
+    EnterCriticalSection(&lpCriticalSection_0077930c);
+    do {
+      D2SevtTypeEntryStrc* pTypeEntry;
+      if (!(gpEventHashBuckets && gaEventRegistryHead)) {
+        pTypeEntry = nullptr;
+      } else {
+        D2SevtTypeEntryStrc* pEntry = gpEventHashBuckets[(nEventId ^ nSubId) & (gaEventRegistryHead - 1)];
+        while (pEntry && (pEntry->dwType != nEventId || pEntry->dwSubType != nSubId)) {
+          pEntry = pEntry->pNext;
         }
-
-        if (pEvent) {
-          ppSnapshot = (D2SevtHandlerTableStrc*)SMem::SMemAlloc(0x10, ".\\SOURCE\\SEVT.CPP", 0x11c, 0);
-          SEVT_CopyIdHashTable(ppSnapshot, pEvent->pHandlerTable);
-          ppSnapshot->pPrevState = pEvent->pHandlerTable;
-          pEvent->pHandlerTable = ppSnapshot;
-          gnSevtSnapshotActive = 1;
-        }
+        pTypeEntry = pEntry;
       }
-    }
+      if (!pTypeEntry) {
+        break;
+      }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077930c);
+      D2SevtHandlerTableStrc* pNewTable = (D2SevtHandlerTableStrc*)SMem::SMemAlloc(0x10, ".\\SOURCE\\SEVT.CPP", 0x11c, 0);
+      SEVT_CopyIdHashTable(pNewTable, pTypeEntry->pHandlerTable);
+      pNewTable->pPrevState = pTypeEntry->pHandlerTable;
+      pTypeEntry->pHandlerTable = pNewTable;
+      gnSevtSnapshotActive = 1;
+      bSuccess = TRUE;
+    } while (false);
+    LeaveCriticalSection(&lpCriticalSection_0077930c);
+    return bSuccess;
 }
 
 // Registers an event handler: allocates a handler node keyed by dwKey and links it into the handler table for (dwEventId, dwSubId); pfnHandler must be non-NULL and dwReserved zero. SEvtDispatch matches its key argument against the stored key.
@@ -328,7 +312,7 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uintptr_t dwSubId, uint32_
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
-    D2SevtTypeEntryStrc* pEvent = SEVT_FindTypeHashEntry(dwSubId, dwEventId);
+    D2SevtTypeEntryStrc* pEvent = SEVT_FindTypeHashEntry(dwEventId, dwSubId);
     if (!pEvent) {
       D2SevtTypeEntryStrc* pDVar2;
       ppDVar6 = gpEventHashBuckets;
@@ -467,51 +451,42 @@ int __stdcall SEvtRegisterHandler(uint32_t dwEventId, uintptr_t dwSubId, uint32_
 // @former-name SEVT_RemoveEventCallback (invented)
 // @note Ghidra types node[0]/node[2]/node[3] through a bogus FILE* (_ptr/_base/_flag); the record is {key, priority, pfnHandler, next}.
 BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uintptr_t nSubId, uint32_t dwKey, pfnSEvtHandler pfnHandler) {
-    int _bRemoved;
-    uint32_t nBucket;
-    D2SevtHandlerNodeStrc** ppHandlerLink;
-    bool bRemoved;
-    D2SevtTypeEntryStrc* pEvent;
-    D2SevtHandlerTableStrc* pHandlerTable;
-    D2SevtHandlerNodeStrc* pHandler;
-    D2SevtHandlerNodeStrc* pHandlerLink;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ _bRemoved = 0;
+    BOOL bSuccess = FALSE;
     EnterCriticalSection(&lpCriticalSection_0077930c);
-    if (gpEventHashBuckets && gaEventRegistryHead) {
-      uint32_t* puVar1;
-      for (pEvent = gpEventHashBuckets[(nEventId ^ nSubId) & gaEventRegistryHead - 1]; pEvent; pEvent = pEvent->pNext) {
-        if (pEvent->dwType == nEventId && pEvent->dwSubType == nSubId) {
-          if (pEvent) {
-            pHandlerTable = pEvent->pHandlerTable;
-            if (pHandlerTable->pBuckets && pHandlerTable->nBucketCount) {
-              nBucket = pHandlerTable->nBucketCount - 1 & dwKey;
-              ppHandlerLink = pHandlerTable->pBuckets + nBucket;
-              pHandlerLink = pHandlerTable->pBuckets[nBucket];
-              while (pHandlerLink) {
-                pHandler = *ppHandlerLink;
-                if (pHandler->dwKey == dwKey && (!pfnHandler || pHandler->pfnHandler == pfnHandler)) {
-                  *ppHandlerLink = pHandler->pNext;
-                  SMem::MISC_OperatorDeleteShim(pHandler);
-                  gnSevtSnapshotActive = 1;
-                  _bRemoved = 1;
-                  puVar1 = &pEvent->pHandlerTable->nHandlerCount;
-                  (*puVar1)--;
-                } else {
-                  ppHandlerLink = &pHandler->pNext;
-                }
+    do {
+      D2SevtTypeEntryStrc* pTypeEntry;
+      if (!(gpEventHashBuckets && gaEventRegistryHead)) {
+        pTypeEntry = nullptr;
+      } else {
+        D2SevtTypeEntryStrc* pEntry = gpEventHashBuckets[(nEventId ^ nSubId) & (gaEventRegistryHead - 1)];
+        while (pEntry && (pEntry->dwType != nEventId || pEntry->dwSubType != nSubId)) {
+          pEntry = pEntry->pNext;
+        }
+        pTypeEntry = pEntry;
+      }
+      if (!pTypeEntry) {
+        break;
+      }
 
-                pHandlerLink = *ppHandlerLink;
-              }
-            }
-          }
-
-          break;
+      if (!(pTypeEntry->pHandlerTable->pBuckets && pTypeEntry->pHandlerTable->nBucketCount)) {
+        break;
+      }
+      D2SevtHandlerNodeStrc** ppNext = pTypeEntry->pHandlerTable->pBuckets + (dwKey & (pTypeEntry->pHandlerTable->nBucketCount - 1));
+      while (*ppNext) {
+        if ((*ppNext)->dwKey == dwKey && (!pfnHandler || (*ppNext)->pfnHandler == pfnHandler)) {
+          D2SevtHandlerNodeStrc* pCur = *ppNext;
+          *ppNext = pCur->pNext;
+          SMem::MISC_OperatorDeleteShim(pCur);
+          gnSevtSnapshotActive = 1;
+          bSuccess = TRUE;
+          --pTypeEntry->pHandlerTable->nHandlerCount;
+        } else {
+          ppNext = &(*ppNext)->pNext;
         }
       }
-    }
-
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077930c);
-    return _bRemoved;
+    } while (false);
+    LeaveCriticalSection(&lpCriticalSection_0077930c);
+    return bSuccess;
 }
 
 // Removes an entire event type and all of its handlers.
@@ -520,58 +495,46 @@ BOOL __stdcall SEvtUnregisterHandler(uint32_t nEventId, uintptr_t nSubId, uint32
 // @rename-basis Behaviour plus argument count, both confirmed against the PPC. Two arguments here, and .SEvtUnregisterType reads only r3 and r4 and then computes "xor r28, r26, r27" - the same eventId ^ subId bucket hash this function uses. With two arguments it cannot name a handler. It walks the event's whole stack of handler tables freeing each with SEVT_FreeEventHandlerTable, then unlinks and frees the event record from its hash bucket and decrements gnSevtRegisteredEventCount. Removing the (eventId, subId) entry itself is what "type" means here.
 // @former-name SEVT_UnregisterEvent (invented)
 BOOL __stdcall SEvtUnregisterType(uint32_t nEventId, uintptr_t nSubId) {
-    int _bRemoved;
-    D2SevtTypeEntryStrc* pEvent;
-    bool bRemoved;
-    D2SevtTypeEntryStrc** ppEventLink;
-    D2SevtHandlerTableStrc* ppHandlerTable;
-    D2SevtTypeEntryStrc* pCurEvent;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ _bRemoved = 0;
+    BOOL bSuccess = FALSE;
     EnterCriticalSection(&lpCriticalSection_0077930c);
-    if (gpEventHashBuckets && gaEventRegistryHead) {
-      uint32_t nBucket;
-      pEvent = gpEventHashBuckets[gaEventRegistryHead - 1 & (nEventId ^ nSubId)];
-      if (pEvent) {
-        while (pEvent->dwType != nEventId || pEvent->dwSubType != nSubId) {
-          pEvent = pEvent->pNext;
-          if (!pEvent) {
-            /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077930c);
-            return 0;
-          }
+    do {
+      D2SevtTypeEntryStrc* pTypeEntry;
+      if (!(gpEventHashBuckets && gaEventRegistryHead)) {
+        pTypeEntry = nullptr;
+      } else {
+        D2SevtTypeEntryStrc* pEntry = gpEventHashBuckets[(nEventId ^ nSubId) & (gaEventRegistryHead - 1)];
+        while (pEntry && (pEntry->dwType != nEventId || pEntry->dwSubType != nSubId)) {
+          pEntry = pEntry->pNext;
         }
+        pTypeEntry = pEntry;
+      }
+      if (!pTypeEntry) {
+        break;
+      }
 
-        if (pEvent) {
-          ppHandlerTable = pEvent->pHandlerTable;
-          while (ppHandlerTable) {
-            pEvent->pHandlerTable = ppHandlerTable->pPrevState;
-            SEVT_DeleteIdHashTable(ppHandlerTable);
-            ppHandlerTable = pEvent->pHandlerTable;
-          }
+      D2SevtHandlerTableStrc* pCurTable;
+      while ((pCurTable = pTypeEntry->pHandlerTable) != nullptr) {
+        pTypeEntry->pHandlerTable = pCurTable->pPrevState;
+        SEVT_DeleteIdHashTable(pCurTable);
+      }
 
-          nBucket = gaEventRegistryHead - 1 & (nEventId ^ nSubId);
-          ppEventLink = gpEventHashBuckets + nBucket;
-          pCurEvent = gpEventHashBuckets[nBucket];
-          while (pCurEvent) {
-            pCurEvent = *ppEventLink;
-            if (pCurEvent == pEvent) {
-              *ppEventLink = pCurEvent->pNext;
-              SMem::MISC_OperatorDeleteShim(pCurEvent);
-              gnSevtRegisteredEventCount--;
-            } else {
-              ppEventLink = &pCurEvent->pNext;
-            }
-
-            pCurEvent = *ppEventLink;
-          }
-
-          gnSevtSnapshotActive = 1;
-          _bRemoved = 1;
+      D2SevtTypeEntryStrc** ppNext = gpEventHashBuckets + ((nEventId ^ nSubId) & (gaEventRegistryHead - 1));
+      while (*ppNext) {
+        if (*ppNext == pTypeEntry) {
+          D2SevtTypeEntryStrc* pCur = *ppNext;
+          *ppNext = pCur->pNext;
+          SMem::MISC_OperatorDeleteShim(pCur);
+          --gnSevtRegisteredEventCount;
+        } else {
+          ppNext = &(*ppNext)->pNext;
         }
       }
-    }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0077930c);
-    return _bRemoved;
+      gnSevtSnapshotActive = 1;
+      bSuccess = TRUE;
+    } while (false);
+    LeaveCriticalSection(&lpCriticalSection_0077930c);
+    return bSuccess;
 }
 
 void * __fastcall Unreferenced_00426900(StormLinkStrc * pLink) {
@@ -620,30 +583,36 @@ void __fastcall Unreferenced_004269a0(StormLinkedListStrc * pList) {
 // @oracle-source PEF traceback-table function name .SEvtPopState @10017bd0 in Mac PPC 1.10b Storm. Internal (not in the 337-name export table), but a first-party compiler-emitted symbol.
 // @rename-basis Behaviour. The exact inverse of SEvtPushState 00426370: it consumes the [3] predecessor link that only PushState writes. Two arguments (eventId, subId), so it names no handler. Not SEvtUnregisterType - it delegates to it in the no-predecessor case, so it cannot be it.
 // @former-name SEVT_UndoLastRegistration
-void __stdcall SEvtPopState(uint32_t nEventId, uintptr_t nSubId) {
-    D2SevtHandlerTableStrc* pPrevHandlerTable;
-    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_0077930c);
-    if (gpEventHashBuckets && gaEventRegistryHead) {
-      D2SevtTypeEntryStrc* pNode;
-      for (pNode = gpEventHashBuckets[(nEventId ^ nSubId) & gaEventRegistryHead - 1]; pNode; pNode = pNode->pNext) {
-        if (pNode->dwType == nEventId && pNode->dwSubType == nSubId) {
-          if (pNode) {
-            pPrevHandlerTable = pNode->pHandlerTable->pPrevState;
-            if (!pPrevHandlerTable) {
-              SEvtUnregisterType(nEventId, nSubId);
-            } else {
-              SEVT_DeleteIdHashTable(pNode->pHandlerTable);
-              pNode->pHandlerTable = pPrevHandlerTable;
-            }
-          }
-
-          break;
+BOOL __stdcall SEvtPopState(uint32_t nEventId, uintptr_t nSubId) {
+    BOOL bSuccess = FALSE;
+    EnterCriticalSection(&lpCriticalSection_0077930c);
+    do {
+      D2SevtTypeEntryStrc* pTypeEntry;
+      if (!(gpEventHashBuckets && gaEventRegistryHead)) {
+        pTypeEntry = nullptr;
+      } else {
+        D2SevtTypeEntryStrc* pEntry = gpEventHashBuckets[(nEventId ^ nSubId) & (gaEventRegistryHead - 1)];
+        while (pEntry && (pEntry->dwType != nEventId || pEntry->dwSubType != nSubId)) {
+          pEntry = pEntry->pNext;
         }
+        pTypeEntry = pEntry;
       }
-    }
+      if (!pTypeEntry) {
+        break;
+      }
 
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gnSevtSnapshotActive = 1;
+      if (!pTypeEntry->pHandlerTable->pPrevState) {
+        bSuccess = SEvtUnregisterType(nEventId, nSubId);
+        break;
+      }
+
+      D2SevtHandlerTableStrc* pNext = pTypeEntry->pHandlerTable->pPrevState;
+      SEVT_DeleteIdHashTable(pTypeEntry->pHandlerTable);
+      pTypeEntry->pHandlerTable = pNext;
+    } while (false);
+    gnSevtSnapshotActive = 1;
     LeaveCriticalSection(&lpCriticalSection_0077930c);
+    return bSuccess;
 }
 
 uint32_t __fastcall LINKEDLIST_GetCount(int * pList) {
@@ -1020,7 +989,7 @@ BOOL __stdcall SEvtDispatch(uint32_t dwEventId, uintptr_t dwSubId, uint32_t dwKe
       }
       if (!pHandlerNode || gnSevtSnapshotActive) {
         pHandlerNode = 0;
-        pEventEntry = SEVT_FindTypeHashEntry(dwSubId, dwEventId);
+        pEventEntry = SEVT_FindTypeHashEntry(dwEventId, dwSubId);
         if (pEventEntry) {
           pDVar1 = pEventEntry->pHandlerTable;
           if (pDVar1->pBuckets && pDVar1->nBucketCount) {

@@ -1,0 +1,352 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Direct3D/Src/d3dCore.cpp",
+  "functions": [
+    {
+      "name": "RENDERER_D3D_InitializeDevice",
+      "address": "006b4fd0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b4fd0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_InitializeDevice",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DIRECTD3D_LogError",
+        "RENDERER_D3D_ReleaseDevice",
+        "memset",
+        "RENDERER_D3D_SetTextureFilterMode",
+        "RENDERER_D3D_AllocateTextureCaches",
+        "D3D_CreateSystemMemoryTexturesForTiles",
+        "RENDERER_D3D_InitGroundTileCache",
+        "RENDERER_DIRECT3D_ErrorLog"
+      ],
+      "usedTypes": [
+        "D3DVIEWPORT",
+        "DDSCAPS",
+        "DDSURFACEDESC"
+      ],
+      "dh": "8ffb0b1b",
+      "paramStorage": [
+        [
+          "nResolutionMode",
+          "EAX:4"
+        ],
+        [
+          "hWnd",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_006b5520",
+      "address": "006b5520",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5520"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "Unreferenced_006b5520",
+        "RENDERER_D3D_ClearBackbuffer"
+      ],
+      "dh": "607ad97e"
+    },
+    {
+      "name": "Release",
+      "address": "006b5550",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5550"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "Release",
+        "RENDERER_D3D_ReleaseSmackerBuffer",
+        "RENDERER_D3D_ReleaseDevice",
+        "FreeClientMemory"
+      ],
+      "dh": "b3b80d65"
+    },
+    {
+      "name": "CreateWindow",
+      "address": "006b55e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b55e0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "CreateWindow",
+        "RENDERER_D3D_InitializeDevice",
+        "RENDERER_D3D_ClearBackbuffer"
+      ],
+      "dh": "45aba728",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "EndCutScene",
+      "address": "006b5630",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5630"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "EndCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RENDERER_D3D_ReleaseDevice",
+        "CreateWindow"
+      ],
+      "dh": "24a8b918",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "nWindowState",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "PlayCutScene",
+      "address": "006b56c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b56c0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "PlayCutScene",
+        "RENDERER_D3D_ClearBackbuffer",
+        "D3D_PlayBinkVideo"
+      ],
+      "dh": "7f77fe6e",
+      "paramStorage": [
+        [
+          "szFile",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "fpFrame",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "BeginScene",
+      "address": "006b5720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5720"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "BeginScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "ClearScreen",
+        "SetGlobalLight",
+        "RENDERER_DIRECT3D_ErrorLog"
+      ],
+      "dh": "8190ce3f",
+      "paramStorage": [
+        [
+          "bClear",
+          "ECX:4"
+        ],
+        [
+          "nRed",
+          "DL:1"
+        ],
+        [
+          "nGreen",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nBlue",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "EndScene1",
+      "address": "006b57d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b57d0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "EndScene1",
+        "RENDERER_DIRECT3D_ErrorLog",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "dh": "004796f5"
+    },
+    {
+      "name": "ResizeWindow",
+      "address": "006b5830",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b5830"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "ResizeWindow",
+        "RENDERER_D3D_ReleaseDevice",
+        "RENDERER_D3D_InitializeDevice",
+        "RENDERER_D3D_ClearBackbuffer"
+      ],
+      "dh": "7607c7c1",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "bForceResize",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_D3D_CreateSurfaceWithTexture",
+      "address": "006b58a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b58a0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "RENDERER_D3D_CreateSurfaceWithTexture",
+        "memset",
+        "DIRECTD3D_LogError",
+        "RENDERER_DIRECT3D_ErrorLog"
+      ],
+      "usedTypes": [
+        "DDSURFACEDESC",
+        "IDirectDrawSurface7 *",
+        "uint32_t",
+        "void *"
+      ],
+      "dh": "97ee77fd",
+      "paramStorage": [
+        [
+          "ppSurface",
+          "ECX:4"
+        ],
+        [
+          "ppTexture",
+          "EDX:4"
+        ],
+        [
+          "nWidth",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nHeight",
+          "Stack[0x8]:4"
+        ]
+      ]
+    },
+    {
+      "name": "thunk_Release",
+      "address": "006b5990",
+      "lines": [],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "Release"
+      ]
+    },
+    {
+      "name": "InitPerspective",
+      "address": "006b59a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "006b59a0"
+        }
+      ],
+      "namespace": "D2Direct3D::Renderer::Direct3D",
+      "calledFunctions": [
+        "InitPerspective",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DIRECTD3D_LogError",
+        "atexit",
+        "RENDERER_D3D_InitLightingTable",
+        "RENDERER_D3D_InitPerspectiveTransformTable",
+        "RENDERER_D3D_InitPerspectiveVertexBuffer",
+        "RENDERER_D3D_InitSmackerVertexBuffer",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2GfxHelperStrc",
+        "D2GfxSettingsStrc",
+        "IDirectDraw1",
+        "uint8_t"
+      ],
+      "dh": "5d81be8f",
+      "paramStorage": [
+        [
+          "pSettings",
+          "ECX:4"
+        ],
+        [
+          "pHelpers",
+          "EDX:4"
+        ]
+      ]
+    }
+  ]
+}

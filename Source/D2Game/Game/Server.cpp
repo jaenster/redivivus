@@ -270,12 +270,12 @@ void __stdcall _TableNullSub24(uint32_t dwArg1, uint32_t dwArg2, uint32_t dwArg3
 
 }
 
-void Unreferenced_0052bfc0() {
+uint8_t * Unreferenced_0052bfc0() {
     if (!IsBattleNetServer) {
-      return;
+      return &gaTableNullSub15_Data;
     }
 
-    BattleNetServerService->fpLoadComplete();
+    return BattleNetServerService->fpLoadComplete();
 }
 
 int Unreferenced_0052bfe0() {

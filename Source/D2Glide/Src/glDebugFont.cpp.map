@@ -1,0 +1,83 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Glide/Src/glDebugFont.cpp",
+  "functions": [
+    {
+      "name": "RENDERER_GLIDE_InitDebugFont",
+      "address": "0050b860",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b860"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_InitDebugFont",
+        "AllocClientMemory",
+        "FreeClientMemory"
+      ],
+      "usedTypes": [
+        "FxU",
+        "GrChipID_t",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "ba934e62",
+      "paramStorage": [
+        [
+          "dwTexMemStart",
+          "ECX:4"
+        ],
+        [
+          "nTexMemAlignment",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_GenerateDebugFont",
+      "address": "0050b9e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b9e0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_GenerateDebugFont",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "COLORREF",
+        "HBITMAP",
+        "HDC",
+        "HFONT",
+        "int32_t",
+        "tagRECT"
+      ],
+      "dh": "91a8843f"
+    },
+    {
+      "name": "RENDERER_GLIDE_FreeDebugFont",
+      "address": "0050bb70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050bb70"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_FreeDebugFont",
+        "FreeClientMemory"
+      ],
+      "dh": "12dcdf7c"
+    }
+  ]
+}

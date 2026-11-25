@@ -69,18 +69,13 @@ uint32_t __fastcall DAMAGE_CheckMonsterTypeVsMonsterType(uint32_t nMonTypeA, int
     return 0;
 }
 
-static uint32_t __stdcall DAMAGE_RollPhysicalDamageRange(int32_t nDamageRange, int32_t nMinPctBonus, D2UnitStrc * pUnit, int32_t nDamageMin, int32_t nRangePctBonus, uint32_t nDamageAccum) {
-    uint32_t nRandRoll;
-    int nAdjustedMin;
+static uint32_t __stdcall DAMAGE_RollPhysicalDamageRange(int32_t nMinPctBonus, D2UnitStrc * pUnit, int32_t nDamageMin, int32_t nDamageRange, int32_t nRangePctBonus, uint32_t nDamageAccum) {
     if (nDamageRange > 0) {
-      int32_t nMinBonusAmt;
-      nMinBonusAmt = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamageMin, nMinPctBonus, 100);
-      nAdjustedMin = nDamageMin + nMinBonusAmt;
-      nMinBonusAmt = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamageRange, nRangePctBonus, 100);
-      nDamageAccum += nAdjustedMin;
-      if (nDamageRange + nMinBonusAmt > nAdjustedMin) {
-        nRandRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nDamageRange + nMinBonusAmt - nAdjustedMin);
-        nDamageAccum += nRandRoll;
+      nDamageMin += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamageMin, nMinPctBonus, 100);
+      nDamageRange += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamageRange, nRangePctBonus, 100);
+      nDamageAccum += nDamageMin;
+      if (nDamageRange > nDamageMin) {
+        nDamageAccum += D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nDamageRange - nDamageMin);
       }
     }
 
@@ -101,7 +96,7 @@ static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitS
       nRangePctBonus += nBonusStat;
     }
 
-    uint32_t nResult = DAMAGE_RollPhysicalDamageRange(nDamageBase * 0x100, nMinPctBonus, pUnit, nMinDamage << 8, nRangePctBonus, nDamageAccum);
+    uint32_t nResult = DAMAGE_RollPhysicalDamageRange(nMinPctBonus, pUnit, nMinDamage << 8, nDamageBase * 0x100, nRangePctBonus, nDamageAccum);
     return nResult;
 }
 
@@ -889,7 +884,7 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc 
     }
 
     uVar1 = (uint32_t)byScale;
-    nElemRoll = DAMAGE_RollPhysicalDamageRange(nPoisMinStat, nPoisMastery, pUnit, nStatValue, nPoisMastery, pDmgStrc->dwPoisDamage);
+    nElemRoll = DAMAGE_RollPhysicalDamageRange(nPoisMastery, pUnit, nStatValue, nPoisMinStat, nPoisMastery, pDmgStrc->dwPoisDamage);
     nStatValue = (int)(nElemRoll * uVar1) / 128;
     pDmgStrc->dwPoisDamage = nStatValue;
     if (nStatValue) {
@@ -917,7 +912,7 @@ void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc 
     nStatValue = pDmgStrc->dwBurnDmg;
     nElemRoll = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, 1);
     nLeechPct = nStatValue * (uint32_t)byScale + 0x13c + nElemRoll;
-    nWeaponScalePct = (int)nLeechPct < 0 ? 0 : nLeechPct;
+    nWeaponScalePct = (int)nLeechPct < 0 ? 0 : nLeechPct; // steer-ok: generated temporary, untouched; the body is pinned for the RollPhysicalDamageRange argument order
     pDmgStrc->dwBurnDmg += nWeaponScalePct / 128;
     if (pDmgStrc->dwBurnLen) {
       nStatValue = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firelength, 0);

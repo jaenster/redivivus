@@ -247,7 +247,7 @@ static D2StatInfoStrc * STATLIST_GetEffectiveStatsArray(D2StatListExStrc * pStat
 }
 
 // Binary-searches pStatEx's stat array for the packed stat key (wStatIndex:wSubIndex == nParam), returns its nStatValue. If the ItemStatCost record has ITEMSTATCOSTFLAG_FMIN set and the owning unit is a player or monster and the found value is below minaccr, returns minaccr left-shifted by valshift instead. Returns 0 if stat not found.
-static int32_t __stdcall STATLIST_GetStatValueByKey(D2ItemStatCostTxt * pItemStatCostLine, D2StatListExStrc * pStatEx, int32_t nStatKey) {
+static int32_t __stdcall STATLIST_GetStatValueByKey(D2StatListExStrc * pStatEx, int32_t nStatKey, D2ItemStatCostTxt * pItemStatCostLine) {
     const uint32_t nListFlags = pStatEx->sStatList.nFlags;
     D2StatInfoStrc* pStatInfoArray = (nListFlags & 0x80000000) ? &pStatEx->sFullStats : &pStatEx->sStatList.sBaseStats;
 
@@ -516,7 +516,7 @@ int32_t __stdcall STATLIST_GetStatValueByIdAndLayer(D2StatListExStrc * pStatsEx,
       return 0;
     }
 
-    int32_t nStatValue = STATLIST_GetStatValueByKey(pItemStatCostTxt, pStatsEx, (eUnitStat << 0x10) + (uint32_t)nLayer);
+    int32_t nStatValue = STATLIST_GetStatValueByKey(pStatsEx, (eUnitStat << 0x10) + (uint32_t)nLayer, pItemStatCostTxt);
     return nStatValue;
 }
 
@@ -535,7 +535,7 @@ int __stdcall STATSEX_GetCurrentStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, 
       return 0;
     }
 
-    int nValue = STATLIST_GetStatValueByKey(pItemStatCostTxt, pUnit->pStatsEx, (eUnitStat << 0x10) + (uint32_t)nLayer);
+    int nValue = STATLIST_GetStatValueByKey(pUnit->pStatsEx, (eUnitStat << 0x10) + (uint32_t)nLayer, pItemStatCostTxt);
     return nValue;
 }
 
@@ -1064,7 +1064,7 @@ int32_t __stdcall STATLIST_GetMaxLifeFromUnit(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x70000);
+    return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x70000, pCostLine);
 }
 
 int32_t __stdcall STATLIST_GetMaxManaFromUnit(D2UnitStrc * pUnit) {
@@ -1076,7 +1076,7 @@ int32_t __stdcall STATLIST_GetMaxManaFromUnit(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x90000);
+    return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x90000, pCostLine);
 }
 
 int32_t __stdcall STATLIST_GetMaxStaminaFromUnit(D2UnitStrc * pUnit) {
@@ -1088,7 +1088,7 @@ int32_t __stdcall STATLIST_GetMaxStaminaFromUnit(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0xb0000);
+    return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0xb0000, pCostLine);
 }
 
 int32_t __stdcall STATLIST_GetMaxDurabilityFromUnit(D2UnitStrc * pUnit) {
@@ -1116,7 +1116,7 @@ int32_t __stdcall STATLIST_GetMaxDurabilityFromUnit(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    /* ID 73 = maxdurability */ nMaxDurability = STATLIST_GetStatValueByKey(pItemStatCostLine, pStatList, 0x49 << 0x10);
+    /* ID 73 = maxdurability */ nMaxDurability = STATLIST_GetStatValueByKey(pStatList, 0x49 << 0x10, pItemStatCostLine);
     return nMaxDurability;
 }
 
@@ -1130,7 +1130,7 @@ int32_t __stdcall STATLIST_GetMaxDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckS
       if (!pCostLine) {
         return 0;
       }
-      return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x180000);
+      return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x180000, pCostLine);
     }
     if (!pUnit) {
       return 0;
@@ -1140,7 +1140,7 @@ int32_t __stdcall STATLIST_GetMaxDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckS
     if (!pCostLine) {
       return 0;
     }
-    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x160000);
+    return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x160000, pCostLine);
 }
 
 int32_t __stdcall STATLIST_GetMinDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage) {
@@ -1153,7 +1153,7 @@ int32_t __stdcall STATLIST_GetMinDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckS
       if (!pCostLine) {
         return 0;
       }
-      return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x170000);
+      return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x170000, pCostLine);
     }
     if (!pUnit) {
       return 0;
@@ -1163,7 +1163,7 @@ int32_t __stdcall STATLIST_GetMinDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckS
     if (!pCostLine) {
       return 0;
     }
-    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x150000);
+    return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x150000, pCostLine);
 }
 
 int32_t __stdcall STATLIST_GetMaxThrowDamageFromUnit(D2UnitStrc * pUnit) {
@@ -1175,7 +1175,7 @@ int32_t __stdcall STATLIST_GetMaxThrowDamageFromUnit(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0xa00000);
+    return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0xa00000, pCostLine);
 }
 
 int32_t __stdcall STATLIST_GetMinThrowDamageFromUnit(D2UnitStrc * pUnit) {
@@ -1187,7 +1187,7 @@ int32_t __stdcall STATLIST_GetMinThrowDamageFromUnit(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x9f0000);
+    return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x9f0000, pCostLine);
 }
 
 int32_t __stdcall STATLIST_GetDefenseFromUnit(D2UnitStrc * pUnit) {
@@ -1199,7 +1199,7 @@ int32_t __stdcall STATLIST_GetDefenseFromUnit(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    return STATLIST_GetStatValueByKey(pCostLine, pUnit->pStatsEx, 0x1f0000);
+    return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x1f0000, pCostLine);
 }
 
 int32_t __stdcall STATLIST_GetStatForDamageCalc(D2UnitStrc * pUnit2, D2UnitStrc * pUnit, eD2UnitStat eUnitStat) {
@@ -1372,7 +1372,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
           if (wBaseStat != 0xffff) {
             pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((eD2UnitStat)wBaseStat);
             if (pItemStatCostLine) {
-              nApplyResult3 = STATLIST_GetStatValueByKey(nullptr, pStatList, (uint32_t)wBaseStat << 0x10);
+              nApplyResult3 = STATLIST_GetStatValueByKey(pStatList, (uint32_t)wBaseStat << 0x10, nullptr);
               byValShift = pItemStatCostLine->valshift;
               add_opbase_scaled:
               nApplyResult3 >>= D2_SHIFT_COUNT(byValShift);
@@ -1395,7 +1395,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
           if (wBaseStat != 0xffff) {
             pItemStatCostLine = DATATBLS::ItemStats::TXT_ItemStatCost_GetLine((eD2UnitStat)wBaseStat);
             if (pItemStatCostLine) {
-              nApplyResult3 = STATLIST_GetStatValueByKey(nullptr, pStatList, (uint32_t)wBaseStat << 0x10);
+              nApplyResult3 = STATLIST_GetStatValueByKey(pStatList, (uint32_t)wBaseStat << 0x10, nullptr);
               byValShift = pItemStatCostLine->valshift;
               add_opbase_scaled_percent:
               nApplyResult3 >>= D2_SHIFT_COUNT(byValShift);
@@ -1603,7 +1603,7 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
           case '\x03':
             eOwnerType = pStatList->sStatList.eOwnerType;
           if ((eOwnerType == UNIT_PLAYER || eOwnerType == UNIT_MONSTER) && (uint16_t)pOpBaseStatCur->nOpBaseStat != 0xffff) {
-            nRelatedVal = STATLIST_GetStatValueByKey(nullptr, pStatList, (uint32_t)(uint16_t)pOpBaseStatCur->nOpBaseStat << 0x10);
+            nRelatedVal = STATLIST_GetStatValueByKey(pStatList, (uint32_t)(uint16_t)pOpBaseStatCur->nOpBaseStat << 0x10, nullptr);
             if (nRelatedVal > 0) {
               bAllRelatedZero = false;
             }
@@ -2393,7 +2393,7 @@ void __stdcall UpdateResourceStats(D2UnitStrc * pUnit) {
     if (ITEMS::Items::sgptDataTable->nTxtItemStatCostSize <= 0xa || !(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 10)) {
       nMinShiftedStatVal = 0;
     } else {
-      /* ID 10 = stamina */ nMinShiftedStatVal = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 10, pStatsEx, 0xa0000);
+      /* ID 10 = stamina */ nMinShiftedStatVal = STATLIST_GetStatValueByKey(pStatsEx, 0xa0000, ITEMS::Items::sgptDataTable->pTxtItemStatCost + 10);
     }
 
     int32_t nTxtMaxResource = STATLIST_GetMaxStaminaFromUnit(pUnit);
@@ -2407,7 +2407,7 @@ void __stdcall UpdateResourceStats(D2UnitStrc * pUnit) {
     } else if (ITEMS::Items::sgptDataTable->nTxtItemStatCostSize <= 8 || !(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 8)) {
       nMinShiftedStatVal = 0;
     } else {
-      /* ID 8 = mana */ nMinShiftedStatVal = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 8, pStatsEx, 0x80000);
+      /* ID 8 = mana */ nMinShiftedStatVal = STATLIST_GetStatValueByKey(pStatsEx, 0x80000, ITEMS::Items::sgptDataTable->pTxtItemStatCost + 8);
     }
 
     nTxtMaxResource = STATLIST_GetMaxManaFromUnit(pUnit);
@@ -2421,7 +2421,7 @@ void __stdcall UpdateResourceStats(D2UnitStrc * pUnit) {
     } else if (ITEMS::Items::sgptDataTable->nTxtItemStatCostSize <= 6 || !(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 6)) {
       nMinShiftedStatVal = 0;
     } else {
-      /* ID 6 = hitpoints */ nMinShiftedStatVal = STATLIST_GetStatValueByKey(ITEMS::Items::sgptDataTable->pTxtItemStatCost + 6, pStatsEx, 0x60000);
+      /* ID 6 = hitpoints */ nMinShiftedStatVal = STATLIST_GetStatValueByKey(pStatsEx, 0x60000, ITEMS::Items::sgptDataTable->pTxtItemStatCost + 6);
     }
 
     nTxtMaxResource = STATLIST_GetMaxLifeFromUnit(pUnit);

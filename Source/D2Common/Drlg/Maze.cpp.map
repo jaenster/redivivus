@@ -4,6 +4,34 @@
   "file": "Source/D2Common/Drlg/Maze.cpp",
   "functions": [
     {
+      "name": "DRLGMAZE_IsPresetSingleFile",
+      "address": "00670810",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00670810"
+        }
+      ],
+      "namespace": "D2Common::Drlg",
+      "calledFunctions": [
+        "DRLGMAZE_IsPresetSingleFile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgLevelStrc",
+        "int32_t"
+      ],
+      "dh": "66685b56",
+      "paramStorage": [
+        [
+          "pDrlgMap",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "DRLGMAZE_PlaceRoomAdjacent",
       "address": "00670880",
       "lines": [

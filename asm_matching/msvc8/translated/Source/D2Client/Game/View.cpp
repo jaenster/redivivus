@@ -6,11 +6,14 @@
 #include "Source/D2Client/D2GameViewStrc.h"
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Client/D2LightMapStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Draw/dLightMap.h"
+#include "Source/D2Client/Engine/Gfx.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Game/Draw.h"
 #include "Source/D2Client/Game/Game.h"
+#include "Source/D2Client/Game/Rendering.h"
 #include "Source/D2Client/Sound/Sound.h"
+#include "Source/D2Sound/D2Sound.h"
 #include "Source/D2Client/UI/Path.h"
 #include "Source/D2Client/Unit/Player.h"
 #include "Source/D2Common/D2Common.h"
@@ -21,9 +24,10 @@
 #include "Source/D2gfx/D2gfx.public.h"
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/Draw/LightMap.data.h"
+#include "Source/D2Client/Draw/dLightMap.data.h"
 #include "Source/D2Client/Game/Game.data.h"
 #include "Source/D2Client/Game/View.data.h"
+#include "Source/D2Client/Game/Draw.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -40,7 +44,6 @@
 #endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2GameViewStrc) == 0xeabc, "D2_NEW_AT(D2GameViewStrc): the 32-bit layout must be the 0xeabc bytes 1.14d allocates");
-
 
 static D2SeedStrc * gpArcaneStarsSeed = (D2SeedStrc *)&gArcaneStarSeed; D2_STATIC_GUARD(gpArcaneStarsSeed, "gpArcaneStarsSeed");
 namespace D2Client { namespace GAME { namespace View {
@@ -958,3 +961,418 @@ void __fastcall SHAKE_AdjustCenterByShake(uint32_t * pCenterX, uint32_t * pCente
 }
 
 }}} // namespace D2Client::GAME::View
+
+namespace D2Client { namespace GAME { namespace Draw {
+
+// Client-side render pass: iterates the under-floor wall-tile node list in a Wall2 cell, expires fade transitions whose timer has elapsed, then draws each visible tile (flag mask 0x1c000 set, 0x408 clear) via D2GFX_DrawWallTile or D2GFX_DrawTransWallTile depending on alpha. Samples DRAW_CoordIsInCoord for per-light RGBA values and fills a local D2GfxLightStrc array. Accounts for perspective vs. isometric screen-coordinate calculation.
+static void __stdcall WALL2_DrawUnderFloorTiles(D2GameViewStrc * pViewData, D2Wall2CellStrc * pWall2Cell) {
+    uint8_t nAlpha;
+    uint8_t byMaskedIntensity;
+    int nScreenX;
+    uint32_t nLightIdx;
+    int nScreenY;
+    int32_t* pIntensityRow;
+    bool bMoreLights;
+    D2GfxLightStrc aWallLightSamples[8];
+    uint32_t dwAlphaByte;
+    uint32_t nLightCount;
+    uint32_t dwAlpha;
+    D2Wall2DrawEntryStrc* pWallTileNode;
+    uint8_t byColorRG[2];
+    uint8_t byBlue;
+    D2DrlgTileDataStrc* pTileEntry;
+    if (!pWall2Cell->pUnderFloorList) {
+      return;
+    }
+
+    uint32_t nBorderType = UI::Path::DRAW_GetTypeOfBorder();
+    uint32_t bIsPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
+    uint32_t dwTickCount = GetTickCount();
+    for (pWallTileNode = pWall2Cell->pUnderFloorList; pWallTileNode; pWallTileNode = pWallTileNode->pNext) {
+      D2GfxLightStrc sLight;
+      pTileEntry = (D2DrlgTileDataStrc*)pWallTileNode->pData;
+      if (pTileEntry->nTransitionFlags & 4U && dwTickCount >= (uint32_t)pTileEntry->nFadeEndTime) {
+        pTileEntry->nFlags |= 8;
+        pTileEntry->nTransitionFlags &= -5;
+      }
+      if (!(pTileEntry->nFlags & 0x408U) && pTileEntry->nFlags & 0x1c000U) {
+        nScreenX = pTileEntry->pTileLibraryEntry->nDirection;
+        nLightCount = gnIntensityTableModes[nScreenX];
+        if (pTileEntry->nTransitionFlags & 1) {
+          pIntensityRow = aIntensityTable_Mode1 + nScreenX * 0xc;
+        } else {
+          pIntensityRow = aIntensityTable_Mode0 + nScreenX * 0xc;
+        }
+
+        nLightIdx = 0;
+        if (nLightCount > 0) {
+          do {
+            View::DRAW_CoordIsInCoord(pWallTileNode->nX + pIntensityRow[nLightIdx * 2] * 8, pWallTileNode->nY + pIntensityRow[nLightIdx * 2 + 1] * 8, (uint8_t*)&dwAlpha, byColorRG, byColorRG + 1, &byBlue);
+            byMaskedIntensity = (uint8_t)dwAlpha ? (uint8_t)dwAlpha : 0;
+            dwAlpha = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&dwAlpha + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byMaskedIntensity);
+            sLight.nRed = byColorRG[0];
+            sLight.nGreen = byColorRG[1];
+            sLight.nBlue = byBlue;
+            sLight.nIntensity = byMaskedIntensity;
+            bMoreLights = nLightIdx + 1 < nLightCount;
+            aWallLightSamples[nLightIdx] = sLight;
+            nLightIdx++;
+          } while (bMoreLights);
+        }
+
+        nAlpha = pTileEntry->nCurrentAlpha;
+        dwAlphaByte = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&dwAlphaByte + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)nAlpha);
+        if (bIsPerspective) {
+          nScreenX = pWallTileNode->nX;
+          nScreenY = pWallTileNode->nY;
+        } else {
+          nScreenX = pViewData->pView.left - pViewData->nCenterX + pTileEntry->nScreenX;
+          nScreenY = pTileEntry->nScreenY - pViewData->nCenterY + pViewData->pView.top;
+        }
+        if (nAlpha != 0xff) {
+          nScreenX = D2gfx::D2GFX::D2GFX_DrawTransWallTile(pTileEntry->pTileLibraryEntry, nScreenX, nScreenY, aWallLightSamples, nBorderType, nAlpha);
+        } else {
+          nScreenX = D2gfx::D2GFX::D2GFX_DrawWallTile(pTileEntry->pTileLibraryEntry, nScreenX, nScreenY, aWallLightSamples, nBorderType);
+        }
+        if (nScreenX) {
+          pTileEntry->nFlags |= 0x20000;
+        }
+      }
+    }
+}
+
+// Draws all wall tiles in DRLG with alpha blending. Iterates wall tile linked list, applies alpha fading effects, checks viewport clipping, calls D2GFX_DrawTransWallTile for blended tiles.
+void __stdcall WALL2_DrawWallTilesWithAlpha(D2Wall2CellStrc * pWall2Cell, uint32_t eRenderPass, D2GameViewStrc * pCameraView) {
+    uint8_t byMaskedIntensity;
+    int32_t nPosX;
+    D2GfxLightStrc sLight;
+    int32_t nScreenY;
+    int32_t* pIntensityRow;
+    uint32_t nLightIdx;
+    bool bMoreLights;
+    D2GfxLightStrc aWallLightSamples[8];
+    uint32_t dwAlphaByte;
+    uint32_t nLightCount;
+    uint32_t dwAlphaPacked;
+    D2Wall2DrawEntryStrc* pWallTileNode;
+    uint8_t byRed;
+    uint8_t byBlue;
+    D2DrlgTileDataStrc* pTileEntry;
+    int32_t nErrLineOrAddr;
+    uint32_t nBorderType = UI::Path::DRAW_GetTypeOfBorder();
+    uint32_t bIsPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
+    int nFadeCalc = Rendering::GetCurrentEngine();
+    uint32_t dwTickCount = GetTickCount();
+    uint32_t bIs3DEngine = (uint32_t)(nFadeCalc >= 4);
+    if (!eRenderPass || eRenderPass == 1) {
+      uint8_t nAlpha;
+      pWallTileNode = pWall2Cell->pWallList;
+      while (true) {
+        if (!pWallTileNode) {
+          return;
+        }
+
+        pTileEntry = (D2DrlgTileDataStrc*)pWallTileNode->pData;
+        if (pTileEntry->nTileType == 0xf) {
+          break;
+        }
+        if (pTileEntry->nTransitionFlags & 2U) {
+          if (!bIs3DEngine || dwTickCount >= (uint32_t)pTileEntry->nFadeEndTime) {
+            pTileEntry->nCurrentAlpha = pTileEntry->nAlphaEnd;
+            pTileEntry->nTransitionFlags &= -3;
+          } else {
+            nFadeCalc = ((uint32_t)pTileEntry->nAlphaEnd - (uint32_t)pTileEntry->nAlphaStart) * (dwTickCount - pTileEntry->nFadeEndTime + 500);
+            pTileEntry->nCurrentAlpha = (char)(nFadeCalc / 500) + pTileEntry->nAlphaStart;
+          }
+          if (pTileEntry->nCurrentAlpha == '\0') {
+            pTileEntry->nFlags |= 0x400;
+          } else {
+            pTileEntry->nFlags &= -1025;
+          }
+        }
+        if (pTileEntry->nTransitionFlags & 4U && dwTickCount >= (uint32_t)pTileEntry->nFadeEndTime) {
+          pTileEntry->nFlags |= 8;
+          pTileEntry->nTransitionFlags &= -5;
+        }
+        if (!(pTileEntry->nFlags & 0x408U) && eRenderPass != ((pTileEntry->nFlags & 0x1c000U) != 0)) {
+          nFadeCalc = pTileEntry->pTileLibraryEntry->nDirection;
+          nLightCount = gnIntensityTableModes[nFadeCalc];
+          if (pTileEntry->nTransitionFlags & 1) {
+            pIntensityRow = aIntensityTable_Mode1 + nFadeCalc * 0xc;
+          } else {
+            pIntensityRow = aIntensityTable_Mode0 + nFadeCalc * 0xc;
+          }
+
+          nLightIdx = 0;
+          if (nLightCount > 0) {
+            do {
+              View::DRAW_CoordIsInCoord(pWallTileNode->nX + pIntensityRow[nLightIdx * 2] * 8, pWallTileNode->nY + pIntensityRow[nLightIdx * 2 + 1] * 8, (uint8_t*)&dwAlphaPacked, &byRed, &byBlue, (uint8_t*)((intptr_t)&pWall2Cell + 3));
+              byMaskedIntensity = (uint8_t)dwAlphaPacked ? (uint8_t)dwAlphaPacked : 0;
+              sLight.nBlue = *(uint8_t*)((char*)&pWall2Cell + 3);
+              sLight.nGreen = byBlue;
+              dwAlphaPacked = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&dwAlphaPacked + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byMaskedIntensity);
+              sLight.nRed = byRed;
+              sLight.nIntensity = byMaskedIntensity;
+              bMoreLights = nLightIdx + 1 < nLightCount;
+              aWallLightSamples[nLightIdx] = sLight;
+              nLightIdx++;
+            } while (bMoreLights);
+          }
+
+          nAlpha = pTileEntry->nCurrentAlpha;
+          dwAlphaByte = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&dwAlphaByte + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)nAlpha);
+          if (bIsPerspective) {
+            nPosX = pWallTileNode->nX;
+            nScreenY = pWallTileNode->nY;
+          } else {
+            nPosX = pCameraView->pView.left - pCameraView->nCenterX + pTileEntry->nScreenX;
+            nScreenY = pTileEntry->nScreenY - pCameraView->nCenterY + pCameraView->pView.top;
+          }
+          if (nAlpha != 0xff) {
+            nFadeCalc = D2gfx::D2GFX::D2GFX_DrawTransWallTile(pTileEntry->pTileLibraryEntry, nPosX, nScreenY, aWallLightSamples, nBorderType, nAlpha);
+          } else {
+            nFadeCalc = D2gfx::D2GFX::D2GFX_DrawWallTile(pTileEntry->pTileLibraryEntry, nPosX, nScreenY, aWallLightSamples, nBorderType);
+          }
+          if (nFadeCalc) {
+            pTileEntry->nFlags |= 0x20000;
+          }
+        }
+
+        pWallTileNode = pWallTileNode->pNext;
+      }
+
+      nErrLineOrAddr = 0xf9;
+    } else {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf3);
+      exit(-1);
+    }
+
+    void* nScreenX = Fog::Src::ErrorManager::GetInstructionPointer();
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", nScreenX, nErrLineOrAddr);
+    exit(-1);
+}
+
+// Per-frame world renderer for one game view: walks the Wall2 cell grid (nWall2GridDim^2 cells). For each cell it draws the wall-tile list, advancing each tile's fade animation (nCurrentAlpha interpolated between nAlphaStart/nAlphaEnd until nFadeEndTime, with the 3D-engine path), gathering per-tile light samples (DRAW_CoordIsInCoord into a D2GfxLightStrc[8]), computing screen coords (perspective vs ortho via the view center), and blitting via D2GFX_DrawWallTile or D2GFX_DrawTransWallTile depending on alpha. It then walks the cell's unit list and renders each unit through DRAW_WORLD_Unit with its sampled light color. Pure client draw; mutates only per-tile draw/state flags and alpha.
+void __fastcall dWallPass(D2GameViewStrc * pGameView) {
+    uint8_t nAlpha;
+    uint8_t byAlpha;
+    int nEngine;
+    int32_t nScreenX;
+    int32_t nScreenY;
+    uint32_t nLightIdx;
+    D2Wall2DrawEntryStrc** pCellEntry;
+    bool bMoreLights;
+    D2GfxLightStrc aLightSamples[8];
+    int nSavedCellIdx;
+    uint32_t transparancy;
+    D2GameViewStrc* pGameViewSaved;
+    uint32_t isPerspective;
+    uint32_t nLightCount;
+    uint32_t bIs3DEngine;
+    D2Wall2DrawEntryStrc** pSavedCellEntry;
+    uint32_t nBorderType;
+    uint32_t dwCoordPacked;
+    DWORD timer;
+    D2Wall2DrawEntryStrc* pWallNode;
+    uint8_t byIntensity;
+    uint8_t byRed;
+    uint8_t byGreen;
+    uint8_t byBlue;
+    uint8_t byColorRG[2];
+    uint8_t byBlueTmp;
+    D2DrlgTileDataStrc* pWallTile;
+    int32_t* pIntensityTable;
+    D2Wall2DrawEntryStrc* sLightEntry;
+    int nFadeCalc = pGameView->sWall2.nWall2GridDim;
+    nFadeCalc *= nFadeCalc;
+    if (!nFadeCalc) {
+      return;
+    }
+
+    pCellEntry = &pGameView->sWall2.pWall2->pWallList;
+    pGameViewSaved = pGameView;
+    do {
+      D2GfxLightStrc sLight;
+      nFadeCalc--;
+      nSavedCellIdx = nFadeCalc;
+      pSavedCellEntry = pCellEntry;
+      if (*pCellEntry) {
+        nBorderType = UI::Path::DRAW_GetTypeOfBorder();
+        isPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
+        nEngine = Rendering::GetCurrentEngine();
+        timer = GetTickCount();
+        pWallNode = *pCellEntry;
+        bIs3DEngine = (uint32_t)(nEngine >= 4);
+        if (pWallNode) {
+          do {
+            pWallTile = (D2DrlgTileDataStrc*)pWallNode->pData;
+            if (pWallTile->nTileType == 0xf) {
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf9);
+              exit(-1);
+            }
+            if (pWallTile->nTransitionFlags & 2U) {
+              if (!bIs3DEngine || timer >= (uint32_t)pWallTile->nFadeEndTime) {
+                pWallTile->nCurrentAlpha = pWallTile->nAlphaEnd;
+                pWallTile->nTransitionFlags &= -3;
+              } else {
+                nFadeCalc = ((uint32_t)pWallTile->nAlphaEnd - (uint32_t)pWallTile->nAlphaStart) * (timer - pWallTile->nFadeEndTime + 500);
+                pWallTile->nCurrentAlpha = (char)(nFadeCalc / 500) + pWallTile->nAlphaStart;
+              }
+              if (pWallTile->nCurrentAlpha == '\0') {
+                pWallTile->nFlags |= 0x400;
+              } else {
+                pWallTile->nFlags &= -1025;
+              }
+            }
+            if (pWallTile->nTransitionFlags & 4U && timer >= (uint32_t)pWallTile->nFadeEndTime) {
+              pWallTile->nFlags |= 8;
+              pWallTile->nTransitionFlags &= -5;
+            }
+            if (!(pWallTile->nFlags & 0x408U) && pWallTile->nFlags & 0x1c000U) {
+              nFadeCalc = pWallTile->pTileLibraryEntry->nDirection;
+              nLightCount = gnIntensityTableModes[nFadeCalc];
+              if (pWallTile->nTransitionFlags & 1) {
+                pIntensityTable = aIntensityTable_Mode1 + nFadeCalc * 0xc;
+              } else {
+                pIntensityTable = aIntensityTable_Mode0 + nFadeCalc * 0xc;
+              }
+
+              nLightIdx = 0;
+              if (nLightCount > 0) {
+                do {
+                  View::DRAW_CoordIsInCoord(pWallNode->nX + pIntensityTable[nLightIdx * 2] * 8, pWallNode->nY + pIntensityTable[nLightIdx * 2 + 1] * 8, (uint8_t*)&dwCoordPacked, byColorRG, byColorRG + 1, &byBlueTmp);
+                  byAlpha = (uint8_t)dwCoordPacked ? (uint8_t)dwCoordPacked : 0;
+                  /* Here we can fake our trans for walls if it is transparentable */ dwCoordPacked = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&dwCoordPacked + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byAlpha);
+                  sLight.nRed = byColorRG[0];
+                  sLight.nGreen = byColorRG[1];
+                  sLight.nBlue = byBlueTmp;
+                  sLight.nIntensity = byAlpha;
+                  bMoreLights = nLightIdx + 1 < nLightCount;
+                  aLightSamples[nLightIdx] = sLight;
+                  nLightIdx++;
+                } while (bMoreLights);
+              }
+
+              nAlpha = pWallTile->nCurrentAlpha;
+              transparancy = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&transparancy + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)nAlpha);
+              if (isPerspective) {
+                nScreenX = pWallNode->nX;
+                nScreenY = pWallNode->nY;
+              } else {
+                nScreenX = pGameViewSaved->pView.left - pGameViewSaved->nCenterX + pWallTile->nScreenX;
+                nScreenY = pWallTile->nScreenY - pGameViewSaved->nCenterY + pGameViewSaved->pView.top;
+              }
+              if (nAlpha != 0xff) {
+                nFadeCalc = D2gfx::D2GFX::D2GFX_DrawTransWallTile(pWallTile->pTileLibraryEntry, nScreenX, nScreenY, aLightSamples, nBorderType, nAlpha);
+              } else {
+                nFadeCalc = D2gfx::D2GFX::D2GFX_DrawWallTile(pWallTile->pTileLibraryEntry, nScreenX, nScreenY, aLightSamples, nBorderType);
+              }
+              if (nFadeCalc) {
+                pWallTile->nFlags |= 0x20000;
+              }
+            }
+
+            pWallNode = pWallNode->pNext;
+          } while (pWallNode);
+
+          pWallNode = 0;
+          nFadeCalc = nSavedCellIdx;
+          pCellEntry = pSavedCellEntry;
+        }
+      }
+
+      for (sLightEntry = pCellEntry[1]; sLightEntry; sLightEntry = sLightEntry->pNext) {
+        View::DRAW_CoordIsInCoord(sLightEntry->nX, sLightEntry->nY, &byIntensity, &byRed, &byGreen, &byBlue);
+        Wall2::DRAW_WORLD_Unit((D2UnitStrc*)sLightEntry->pData, (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)byBlue << 8 | (uint16_t)(uint8_t)byGreen) << 8 | (uint32_t)(uint8_t)byRed) << 8 | (uint32_t)(uint8_t)byIntensity), 0);
+      }
+
+      pCellEntry += 9;
+    } while (nFadeCalc);
+}
+
+void __fastcall DRAW_WORLD_UnderFloor(D2GameViewStrc * pGameView) {
+    int nGridCount = pGameView->sWall2.nWall2GridDim;
+    D2Wall2CellStrc* pWall2Entry = pGameView->sWall2.pWall2;
+    nGridCount *= nGridCount;
+    while (nGridCount) {
+      nGridCount--;
+      WALL2_DrawUnderFloorTiles(pGameView, pWall2Entry);
+      pWall2Entry++;
+    }
+}
+
+// Differs from its sibling dWallPass in: node list taken from cell+0x10 (dWallPass uses the third slot); the (*node & 3) == 0 test selecting
+// between light-sample -> DRAW_WORLD_Unit and the shadow-tile branch; and the trailing alpha wall-tile
+// call made with render pass constant 1 (dWallPass passes 0), guarded on the same cell slot. Cell
+// stride 0x24; grid loop is nWall2GridDim^2. In ViewDraw2 it is the call guarded by view flag bit 8.
+// @wasnamed DRAW_WORLD_Shadows
+// Iterates every Wall2 grid cell and renders all shadow-list nodes for that cell. For each node: if flags==0, samples lighting via DRAW_CoordIsInCoord and calls DRAW_WORLD_Unit; if flag bit 1 set, calls DrawUnitShadows; if flag bit 0 set and not perspective, calls D2GFX_DrawShadowTile with view-relative coords; if perspective, calls D2GFX_DrawShadowTile with raw node coords. After shadows, draws any alpha wall tiles for the cell.
+void __fastcall dShadowPass(D2GameViewStrc * pGameView) {
+    uint32_t nScreenPanels;
+    uint32_t bIsPerspective;
+    D2Wall2CellStrc* pWall2Entry;
+    uint8_t byIntensity;
+    uint8_t byRed;
+    uint8_t byGreen;
+    uint8_t byBlue;
+    D2DrlgTileDataStrc* pWallTileEntry;
+    D2Wall2DrawEntryStrc* pShadowNode;
+    int nGridCount = pGameView->sWall2.nWall2GridDim;
+    nGridCount *= nGridCount;
+    pWall2Entry = pGameView->sWall2.pWall2;
+    nScreenPanels = UI::Path::DRAW_GetTypeOfBorder();
+    while (nGridCount) {
+      nGridCount--;
+      for (pShadowNode = pWall2Entry->pShadowPassList; pShadowNode; pShadowNode = pShadowNode->pNext) {
+        if (!(pShadowNode->dwType & 3)) {
+          View::DRAW_CoordIsInCoord(pShadowNode->nX, pShadowNode->nY, &byIntensity, &byRed, &byGreen, &byBlue);
+          Wall2::DRAW_WORLD_Unit((D2UnitStrc*)pShadowNode->pData, (uint32_t)((uint32_t)((uint32_t)((uint32_t)(uint16_t)((uint16_t)(uint8_t)byBlue << 8 | (uint16_t)(uint8_t)byGreen) << 8 | (uint32_t)(uint8_t)byRed) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byIntensity), 0);
+        } else {
+          bIsPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
+          if (pShadowNode->dwType & 1) {
+            if (bIsPerspective) {
+              pWallTileEntry = (D2DrlgTileDataStrc*)pShadowNode->pData;
+              D2gfx::D2GFX::D2GFX_DrawShadowTile(pWallTileEntry->pTileLibraryEntry, pShadowNode->nX, pShadowNode->nY, 4, nScreenPanels);
+            } else {
+              pWallTileEntry = (D2DrlgTileDataStrc*)pShadowNode->pData;
+              D2gfx::D2GFX::D2GFX_DrawShadowTile(pWallTileEntry->pTileLibraryEntry, pGameView->pView.left - pGameView->nCenterX + pWallTileEntry->nScreenX, pWallTileEntry->nScreenY - pGameView->nCenterY + pGameView->pView.top, 4, nScreenPanels);
+            }
+          } else {
+            if (pShadowNode->dwType & 2) {
+              Engine::Gfx::DrawUnitShadows((D2UnitStrc*)pShadowNode->pData);
+            }
+          }
+        }
+      }
+
+      if (pWall2Entry->pWallList) {
+        WALL2_DrawWallTilesWithAlpha(pWall2Entry, 1, pGameView);
+      }
+
+      pWall2Entry++;
+    }
+}
+
+}}} // namespace D2Client::GAME::Draw
+
+namespace D2Client { namespace Sound {
+
+BOOL __stdcall SOUND_IsDirectSoundAvailable() {
+    if (!GAME::Sound::pAudioMixerInterface) {
+      return 0;
+    }
+
+    DWORD DVar1 = D2Sound::SOUND_GetPrimaryBufferModeFlag();
+    return DVar1;
+}
+
+BOOL __stdcall SOUND_IsEaxAvailable() {
+    if (!GAME::Sound::pAudioMixerInterface) {
+      return 0;
+    }
+
+    DWORD DVar1 = D2Sound::SOUND_GetSound3DFlag();
+    return DVar1;
+}
+
+}} // namespace D2Client::Sound

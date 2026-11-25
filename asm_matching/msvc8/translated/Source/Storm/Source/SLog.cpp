@@ -113,13 +113,12 @@ static void __stdcall SLOG_OutputTime(int32_t bHasData, D2SLogStrc * pLog) {
     }
     if (bHasData) {
       SMem::SMemCopy(pLog->acBuffer + pLog->nUsed, gszSLogTimeStr, gnSLogTimeStrLen + 1);
-      pLog->nUsed += gnSLogTimeStrLen;
     } else {
       SMem::SMemFill(pLog->acBuffer + pLog->nUsed, gnSLogTimeStrLen, 0x20);
-      uint32_t nTimestampPrefixLen = gnSLogTimeStrLen;
-      pLog->acBuffer[pLog->nUsed + gnSLogTimeStrLen] = '\0';
-      pLog->nUsed += nTimestampPrefixLen;
+      pLog->acBuffer[pLog->nUsed + gnSLogTimeStrLen] = 0;
     }
+
+    pLog->nUsed += gnSLogTimeStrLen;
 
     SLOG_OutputIndent(pLog);
 }

@@ -1958,13 +1958,17 @@ BOOL __stdcall INVENTORY_FindBeltSlotForPotion(D2InventoryStrc * pInventory, D2U
 int __stdcall INVENTORY_PlacePotionInBelt(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     int32_t nBeltSlot = 0;
     BOOL bFoundSlot = INVENTORY_FindBeltSlotForPotion(pInventory, pUnit, &nBeltSlot);
-    if (bFoundSlot && pInventory && pUnit && pUnit->eUnitType == UNIT_ITEM && nBeltSlot >= 0 && nBeltSlot < 0x10) {
-      int32_t nPlaceResult;
-      nPlaceResult = INVENTORY_PlaceItemInGrid(nBeltSlot, 0, 1, 0, pUnit, pInventory);
-      return nPlaceResult;
+    if (!bFoundSlot || !pInventory || !pUnit || pUnit->eUnitType != UNIT_ITEM) {
+      return 0;
+    }
+    if (nBeltSlot < 0) {
+      return 0;
+    }
+    if (nBeltSlot >= 0x10) {
+      return 0;
     }
 
-    return 0;
+    return INVENTORY_PlaceItemInGrid(nBeltSlot, 0, 1, 0, pUnit, pInventory);
 }
 
 D2UnitStrc * __stdcall INVENTORY_GetItemInBeltSlot(D2InventoryStrc * pInventory, uint32_t nBeltSlot) {

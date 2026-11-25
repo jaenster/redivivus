@@ -3578,20 +3578,18 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3A_AllocStatPoint(::SGAMEDATA * pGame,
       return SERVERSTATUS_BAD_PARAMS;
     }
 
-    uint16_t wStatPacked = (uint16_t)((uint32_t)(uint8_t)pPacket->nStatId | (uint32_t)(uint8_t)pPacket->nRepeatCount << 8);
-    int nRemaining = (wStatPacked >> 8) + 1;
-    if ((wStatPacked & 0xff) <= 0xf && wStatPacked >> 8 <= 99) {
-      BOOL nAssignResult;
-      do {
-        if (!nRemaining) {
-          return SERVERSTATUS_OK;
-        }
-
+    uint16_t wStatPacked = pPacket->wStatPacked;
+    uint32_t nRemaining = (wStatPacked >> 8) + 1;
+    int nStatId = wStatPacked & 0xff;
+    if (nStatId >= 0 && nStatId < 0x10 && nRemaining >= 1 && nRemaining <= 100) {
+      while (nRemaining) {
         nRemaining--;
-        nAssignResult = UNIT::SUnitMsg::PLAYER_AssignStatPoint(pUnit, wStatPacked & 0xff);
-      } while (nAssignResult);
+        if (!UNIT::SUnitMsg::PLAYER_AssignStatPoint(pUnit, nStatId)) {
+          return SERVERSTATUS_BAD_DATA;
+        }
+      }
 
-      return SERVERSTATUS_BAD_DATA;
+      return SERVERSTATUS_OK;
     }
 
     return SERVERSTATUS_BAD_PARAMS;

@@ -234,7 +234,6 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithMinions(::SGAMEDATA * pGame,
     int32_t nFoundY;
     bool bActive;
     int32_t nObjClassId;
-    ::SGAMEDATA* pGameCopy;
     if (byGroupSizeMin && byGroupSizeMax && byGroupSizeMax >= byGroupSizeMin) {
       D2UnitStrc* pUnit;
       bFoundPos = SPAWN_FindRandomPositionForMonster(pGame, pRoom, pCoordList, nClassId, &nFoundX, &nFoundY, 1);
@@ -247,6 +246,8 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithMinions(::SGAMEDATA * pGame,
         return nullptr;
       }
 
+      byGroupSizeMin--;
+      byGroupSizeMax--;
       bFoundPos = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(nClassId, objCol);
       if (bFoundPos) {
         bHasObjColFlag = D2Common::DATATBLS::MonsterTbls::ValidateClassId(nClassId);
@@ -254,13 +255,12 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithMinions(::SGAMEDATA * pGame,
           nMinionCount = 0;
           nObjClassId = 0;
           bActive = true;
-          pGameCopy = pGame;
-          UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x232, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit), pGameCopy, pRoom, bActive, nObjClassId, nMinionCount);
+          UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0x232, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit), D2Common::Units::GetYPosFromDynamicPathUnit(pUnit), pGame, pRoom, bActive, nObjClassId, nMinionCount);
         }
       }
 
-      nMinionCount = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, (uint32_t)(uint8_t)(byGroupSizeMax - 1) - (uint32_t)(uint8_t)(byGroupSizeMin - 1) + 1);
-      for (nMinionIdx = nMinionCount + (uint8_t)(byGroupSizeMin - 1); nMinionIdx > 0; nMinionIdx--) {
+      nMinionCount = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, byGroupSizeMax - byGroupSizeMin + 1);
+      for (nMinionIdx = nMinionCount + byGroupSizeMin; nMinionIdx > 0; nMinionIdx--) {
         Monster::Create::SpawnMonsterAtCoordList(pGame, pCoordList, pUnit, nClassId, eD2MonsterAnimMode_ns::Neutral, 3, 0);
       }
 

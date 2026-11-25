@@ -30,7 +30,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TileLibraryHashNodeStrc) == 0x14,
 namespace D2CMP::SRC::FindTiles {
 
 // Computes a 0-127 hash byte in AL/EAX (masked and range-checked before the halt-on-overflow guard); the caller reads it as a hash-table index (nHashIdx).
-int __fastcall FINDTILE_ComputeHash(int cSubIndex, int cIndex, char cTileSubType) {
+int __fastcall FINDTILE_ComputeHash(int cSubIndex, int cIndex, int cTileSubType) {
     uint32_t uVar1 = (int)(uint8_t)((char)cSubIndex * '\x02' - cTileSubType + (char)cIndex) % 128;
     if ((uint8_t)uVar1 >= 0x80) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e);
@@ -138,8 +138,8 @@ static void FINDTILE_AllocHashEntry(D2TileLibraryEntryStrc * pTileData, D2TileLi
 void __fastcall FINDTILE_Register(D2TileLibraryHashStrc * pHashTable, D2TileLibraryEntryStrc * pTileData) {
     D2TileLibraryHashNodeStrc* pHashEntry;
     D2TileLibraryHashNodeStrc** pHashSlot;
-    bool bFound;
-    bFound = true;
+    BOOL bFound;
+    bFound = TRUE;
     if (!pHashTable) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa5);
       exit(-1);
@@ -150,29 +150,22 @@ void __fastcall FINDTILE_Register(D2TileLibraryHashStrc * pHashTable, D2TileLibr
         exit(-1);
       }
 
-      nHashIdx = FINDTILE_ComputeHash(pTileData->nSubIndex, pTileData->nIndex, (char)pTileData->nOrientation);
+      nHashIdx = FINDTILE_ComputeHash(pTileData->nSubIndex, pTileData->nIndex, pTileData->nOrientation);
       pHashSlot = pHashTable->pNodes + (uint32_t)(uint8_t)nHashIdx;
       pHashEntry = *pHashSlot;
-      if (pHashEntry) {
-        do {
-          if (!bFound) {
-            goto add_to_existing_entry;
-          }
-          if (pHashEntry->nSubIndex == pTileData->nSubIndex && pHashEntry->nIndex == pTileData->nIndex && pHashEntry->nOrientation == pTileData->nOrientation) {
-            bFound = false;
-          } else {
-            pHashEntry = pHashEntry->pNext;
-          }
-        } while (pHashEntry);
-
-        if (!bFound) {
-          add_to_existing_entry:
-          FINDTILE_AddTileToChain(pHashEntry, pTileData);
-          return;
+      while (pHashEntry && bFound) {
+        if (pHashEntry->nSubIndex == pTileData->nSubIndex && pHashEntry->nIndex == pTileData->nIndex && pHashEntry->nOrientation == pTileData->nOrientation) {
+          bFound = FALSE;
+        } else {
+          pHashEntry = pHashEntry->pNext;
         }
       }
 
-      FINDTILE_AllocHashEntry(pTileData, pHashSlot);
+      if (bFound) {
+        FINDTILE_AllocHashEntry(pTileData, pHashSlot);
+      } else {
+        FINDTILE_AddTileToChain(pHashEntry, pTileData);
+      }
       return;
     }
 }

@@ -274,7 +274,7 @@ template<> void TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::
 
 template<> TSExplicitList<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>, 16>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::Constructor() {
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pTVar1 = &this->m_terminator;
-    pTVar1->m_prevlink = 0;
+    this->m_terminator.m_prevlink = 0;
     pTVar1->m_next = 0;
     pTVar1->m_prevlink = pTVar1;
     this->m_linkoffset = 0x10;

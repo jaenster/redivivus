@@ -914,6 +914,232 @@
           "EDX:4"
         ]
       ]
+    },
+    {
+      "name": "WALL2_DrawUnderFloorTiles",
+      "address": "004dedf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004dedf0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "WALL2_DrawUnderFloorTiles",
+        "DRAW_GetTypeOfBorder",
+        "D2GFX_IsPerspectiveActive",
+        "GetTickCount",
+        "DRAW_CoordIsInCoord",
+        "D2GFX_DrawWallTile",
+        "D2GFX_DrawTransWallTile"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2GameViewStrc",
+        "D2GfxLightStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "bd487ce4",
+      "paramStorage": [
+        [
+          "pViewData",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pWall2Cell",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "WALL2_DrawWallTilesWithAlpha",
+      "address": "004def80",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004def80"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "WALL2_DrawWallTilesWithAlpha",
+        "DRAW_GetTypeOfBorder",
+        "D2GFX_IsPerspectiveActive",
+        "GetCurrentEngine",
+        "GetTickCount",
+        "DRAW_CoordIsInCoord",
+        "D2GFX_DrawWallTile",
+        "D2GFX_DrawTransWallTile",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2GameViewStrc",
+        "D2GfxLightStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "83c98b23",
+      "paramStorage": [
+        [
+          "pWall2Cell",
+          "Stack[0x4]:4"
+        ],
+        [
+          "eRenderPass",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pCameraView",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "dWallPass",
+      "address": "004df1c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df1c0"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "dWallPass",
+        "DRAW_GetTypeOfBorder",
+        "D2GFX_IsPerspectiveActive",
+        "GetCurrentEngine",
+        "GetTickCount",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "DRAW_CoordIsInCoord",
+        "D2GFX_DrawWallTile",
+        "D2GFX_DrawTransWallTile",
+        "DRAW_WORLD_Unit"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2GameViewStrc",
+        "D2GfxLightStrc",
+        "D2Wall2DrawEntryStrc",
+        "D2Wall2DrawEntryStrc *",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "8b0e979c",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DRAW_WORLD_UnderFloor",
+      "address": "004df480",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df480"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "DRAW_WORLD_UnderFloor",
+        "WALL2_DrawUnderFloorTiles"
+      ],
+      "usedTypes": [
+        "D2GameViewStrc",
+        "D2Wall2CellStrc"
+      ],
+      "dh": "5ffffc75",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "dShadowPass",
+      "address": "004df510",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df510"
+        }
+      ],
+      "namespace": "D2Client::GAME::Draw",
+      "calledFunctions": [
+        "dShadowPass",
+        "DRAW_GetTypeOfBorder",
+        "DRAW_CoordIsInCoord",
+        "DRAW_WORLD_Unit",
+        "D2GFX_IsPerspectiveActive",
+        "DrawUnitShadows",
+        "D2GFX_DrawShadowTile",
+        "WALL2_DrawWallTilesWithAlpha"
+      ],
+      "usedTypes": [
+        "D2DrlgTileDataStrc",
+        "D2GameViewStrc",
+        "D2Wall2CellStrc",
+        "D2Wall2DrawEntryStrc",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "f125cf97",
+      "paramStorage": [
+        [
+          "pGameView",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SOUND_IsDirectSoundAvailable",
+      "address": "004df940",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df940"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_IsDirectSoundAvailable",
+        "SOUND_GetPrimaryBufferModeFlag"
+      ],
+      "dh": "6bed95b1"
+    },
+    {
+      "name": "SOUND_IsEaxAvailable",
+      "address": "004df960",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004df960"
+        }
+      ],
+      "namespace": "D2Client::Sound",
+      "calledFunctions": [
+        "SOUND_IsEaxAvailable",
+        "SOUND_GetSound3DFlag"
+      ],
+      "dh": "b2aeaeb5"
     }
   ]
 }

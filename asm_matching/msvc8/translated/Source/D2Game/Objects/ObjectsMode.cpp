@@ -174,6 +174,8 @@
 #include "Source/D2Game/Quests/A5Q3.h"
 #include "Source/D2Game/Quests/A5Q6.h"
 #include "Source/Fog/Src/Safesock.h"
+#include "Source/D2Game/Quests/QUESTS.inline.h"
+#include "Source/D2Game/Player/PlayerMsg.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -2740,37 +2742,22 @@ BOOL __fastcall OBJOP_A2Q4_ArcaneSanctuaryPortal(D2ObjectOperateFnArg * pOperati
 
 // Object operate-fn (index 46): activates the portal to Act 4 (Pandemonium Fortress). Guards: victim object must be alive (not Death mode) and the attacker must have QUEST_TheGuardian in JustCompleted or Completed state. Calls QUEST_HandleKhalimsWillCompletion, and if the victim is in DuranceOfHateLevel3 also unlocks the ThePandemoniumFortress waypoint and calls InitLevel to load Act 4. Returns 0.
 BOOL __fastcall Objects_OperateFn46_PortalToAct4(D2ObjectOperateFnArg * pOperation) {
-    BOOL _bQuestDone;
-    bool bQuestDone;
-    bool nWaypointFound;
-    int32_t nWaypointId = (int32_t)pOperation;
-    D2UnitStrc* pVictim = pOperation->sArg.pVictim;
+    int32_t nWaypointId;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-    if (!(pVictim && pVictim->eAnimMode.ePlayerMode != Death)) {
+    if (GetAnimModeInline(pOperation->sArg.pVictim) == Death) {
       return 0;
     }
 
-    ::SGAMEDATA* pGame = pOperation->sArg.pGame;
-    D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
-    _bQuestDone = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TheGuardian, QUESTSTATE_JustCompleted);
-    if (!_bQuestDone) {
-      pGame = pOperation->sArg.pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
-      _bQuestDone = D2Common::QuestRecord::GetQuestState(pPlayerData->pQuestRecord[pGame->nDifficulty], QUEST_TheGuardian, QUESTSTATE_Completed);
-      if (!_bQuestDone) {
-        return 0;
-      }
+    if (!D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pOperation->sArg.pGame, pOperation->pAttacker), QUEST_TheGuardian, QUESTSTATE_JustCompleted)
+        && !D2Common::QuestRecord::GetQuestState(Quests::QUESTS::GetQuestBitBufferInline(pOperation->sArg.pGame, pOperation->pAttacker), QUEST_TheGuardian, QUESTSTATE_Completed)) {
+      return 0;
     }
 
     Quests::QUESTS::QUEST_HellPortalActChange(pOperation->sArg.pGame, pOperation->pAttacker, eLevelId, pOperation->sArg.pVictim);
     if (eLevelId == LEVEL_DuranceOfHateLevel3) {
-      D2WaypointStrc* pWaypoint;
-      pGame = pOperation->sArg.pGame;
-      pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
-      pWaypoint = pPlayerData->pWaypoint[pGame->nDifficulty];
-      _bQuestDone = D2Common::Waypoints::FindWaypointIdByLevelId(LEVEL_ThePandemoniumFortress, (int16_t*)&nWaypointId);
-      if (_bQuestDone) {
+      D2WaypointStrc* pWaypoint = PLAYER::PlayerMsg::GetWaypointsForCurrentDifficultyInline(pOperation->sArg.pGame, pOperation->pAttacker);
+      if (D2Common::Waypoints::FindWaypointIdByLevelId(LEVEL_ThePandemoniumFortress, (int16_t*)&nWaypointId)) {
         D2Common::Waypoints::EnableWaypoint(pWaypoint, (uint16_t)nWaypointId);
       }
 

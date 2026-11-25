@@ -876,6 +876,35 @@
       ]
     },
     {
+      "name": "SKILLSCLT_CheckSkillIsValid",
+      "address": "004f0f10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004f0f10"
+        }
+      ],
+      "namespace": "D2Client",
+      "calledFunctions": [
+        "SKILLSCLT_CheckSkillIsValid"
+      ],
+      "usedTypes": [
+        "D2UnitStrc",
+        "SGAMEDATA"
+      ],
+      "dh": "f78d30f0",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ],
+        [
+          "pGame",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
       "name": "Skills_CltDoFunc_EMon_VineAttack",
       "address": "004f0f30",
       "lines": [

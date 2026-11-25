@@ -10,6 +10,34 @@
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2CMP/D2CMP.h"
+#include "Source/D2Client/Game/Game/SGAMEDATA.h"
+#include "Source/D2Common/D2UnitStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgOrthStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgRoomCoordsStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgTileGridStrc.h"
+#include "Source/D2Common/Drlg/D2DrlgVertexStrc.h"
+#include "Source/D2Common/Drlg/DrlgAnim.h"
+#include "Source/D2Common/Drlg/DrlgGrid.h"
+#include "Source/D2Common/Drlg/DrlgLogic.h"
+#include "Source/D2Common/Drlg/DrlgVer.h"
+#include "Source/D2Common/Drlg/DrlgWarp.h"
+#include "Source/D2Common/Drlg/OutPlace.h"
+#include "Source/D2Common/Drlg/OutRoom.h"
+#include "Source/D2Common/Drlg/Outdoors.h"
+#include "Source/D2Common/Drlg/Path.h"
+#include "Source/D2Common/Drlg/RoomTile.h"
+#include "Source/D2Common/Drlg/TileSub.h"
+#include "Source/D2Common/Drlg/Transform.h"
+#include "Source/D2Common/Seed.h"
+#include "Source/D2Common/Skills/Skills.h"
+#include "Source/D2Common/Drlg/Drlg.data.h"
+#include "Source/D2Common/Drlg/OutPlace.data.h"
+#include "Source/D2Common/Skills/Skills.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -27,6 +55,54 @@
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgLevelLinkNodeStrc) == 0x10, "D2_NEW_AT(D2DrlgLevelLinkNodeStrc): the 32-bit layout must be the 0x10 bytes 1.14d allocates");
 
+
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
+#ifndef RECON_FPTD_fAutoMap
+#define RECON_FPTD_fAutoMap
+typedef void (__stdcall *fAutoMap)(D2RoomStrc * pDrlgRoomEx);
+#endif
+
+#ifndef RECON_FPTD_fTownAutoMap
+#define RECON_FPTD_fTownAutoMap
+typedef void (__stdcall *fTownAutoMap)(eD2LevelId eD2LevelId, int FileIndex, int nCenterX, int nCenterY);
+#endif
+
+#ifndef RECON_FPTD_fpLevelDataFn1
+#define RECON_FPTD_fpLevelDataFn1
+typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknown, int nIndexMax);
+#endif
+
+#ifndef RECON_FPTD_fpLevelDataFn2
+#define RECON_FPTD_fpLevelDataFn2
+typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
+#endif
+
+
+namespace D2Common { namespace Drlg {
+
+// Returns whether the room's selected preset is a single-file type.
+BOOL __fastcall DRLGMAZE_IsPresetSingleFile(D2DrlgLevelStrc * pDrlgMap) {
+    if (!pDrlgMap) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c);
+      exit(-1);
+    } else {
+      if (!pDrlgMap->pDrlgLevelData.pTxtLvlMaze) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1e);
+        exit(-1);
+      }
+
+      return (uint32_t)(pDrlgMap->pDrlgLevelData.pTxtLvlMaze->Rooms[pDrlgMap->pDrlg->nDifficulty] == 1);
+    }
+}
+
+}} // namespace D2Common::Drlg
 
 namespace D2Common { namespace Drlg { namespace Maze {
 
@@ -95,16 +171,17 @@ static int __stdcall DRLGMAZE_PlaceRoomAdjacent(int nDirection, D2RoomExStrc * p
 }
 
 // Directly sets a room's preset ID and variant in pRoomExData. Writes nPresetId and nVariant (stack arg) to the room data, and sets or clears the 'has preset' flag based on bHasPreset (stack arg). Returns the room pointer. No callers found (dead code).
-static void __stdcall DRLGMAZE_SetRoomPresetDirect(D2RoomExStrc * pRoomEx, int nPresetId, int32_t nVariant, int32_t bHasPreset) {
+static D2RoomExStrc * __stdcall DRLGMAZE_SetRoomPresetDirect(D2RoomExStrc * pRoomEx, int nPresetId, int32_t nVariant, int32_t bHasPreset) {
     D2DrlgPresetRoomStrc* pDVar1 = pRoomEx->pRoomExData.pRoomExDataPreset;
     pDVar1->nLevelPrest = nPresetId;
     pDVar1->nPickedFile = nVariant;
     if (bHasPreset) {
       pDVar1->nFlags &= -3;
-      return;
+      return pRoomEx;
     }
 
     pDVar1->nFlags |= 2;
+    return pRoomEx;
 }
 
 // Selects the maze/preset .ds1 room file for a DRLG room based on its connectivity and level type. Walks the room's orth (connection) list to build a 4-bit direction bitmask (SE=1,SW=2,NW=4,NE=8), then maps that mask to a global preset index using the room's level-type: most level types add a fixed base offset to the mask, while special types (0xE,0xF,0x17,0x20,0x23) index gaMazePresetLookup/gaMazePresetLookupExt tables, with extra per-eD2LevelId overrides (e.g. specific Worldstone/Throne rooms). Writes the chosen preset index and variant into pRoomEx->pRoomExData[0]/[1] and sets a placement flag in [3]. Returns pRoomEx.
@@ -1367,7 +1444,7 @@ D2RoomExStrc * __fastcall DRLGMAZE_FindBottomMostRoom(D2DrlgLevelStrc * pLevel) 
 }
 
 // Finds the room in pLevel whose pRoomExData preset ID matches pDrlgReplaceRoom->nSourceLevelPrestId and replaces it in-place with the destination preset/file IDs from pDrlgReplaceRoom. If no matching room exists, falls back to ReplaceRoomWith to allocate a new adjacent room. Increments *pRoll (wrapping at 4) after any successful replacement.
-static void __stdcall ReplaceRoom(D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, D2DrlgLevelStrc * pLevel, uint32_t * pRoll) {
+static void __stdcall ReplaceRoom(D2DrlgLevelStrc * pLevel, D2DrlgReplaceRoomStrc * pDrlgReplaceRoom, uint32_t * pRoll) {
     D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst;
     int32_t nDestPickedFile = pDrlgReplaceRoom->nDestPickedFile;
     int32_t nDestPresetId = pDrlgReplaceRoom->nDestLevelPrestId;
@@ -1527,25 +1604,22 @@ static void Caves(D2DrlgLevelStrc * pLevel) {
     }
 }; D2_STATIC_GUARD(gaDrlgCavesReplacements_E, "D2Common::Drlg::Maze::Caves::gaDrlgCavesReplacements_E");
 
-    D2DrlgReplaceRoomStrc* pReplaceTable;
     uint32_t sNewSeed = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRoll = sNewSeed & 3;
-    ReplaceRoom(gaDrlgCavesReplacements_A + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, gaDrlgCavesReplacements_A + nRoll, &nRoll);
     if (pLevel->eD2LevelId == 8) {
-      pReplaceTable = gaDrlgCavesReplacements_B;
+      ReplaceRoom(pLevel, &gaDrlgCavesReplacements_B[nRoll], &nRoll);
     } else {
-      pReplaceTable = gaDrlgCavesReplacements_C;
+      ReplaceRoom(pLevel, &gaDrlgCavesReplacements_C[nRoll], &nRoll);
     }
-
-    ReplaceRoom(pReplaceTable + nRoll, pLevel, &nRoll);
     if (pLevel->eD2LevelId == 9) {
-      ReplaceRoom(gaDrlgCavesReplacements_D + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgCavesReplacements_D + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId != 10) {
       return;
     }
 
-    ReplaceRoom(gaDrlgCavesReplacements_E + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, gaDrlgCavesReplacements_E + nRoll, &nRoll);
 }
 
 // DRLG maze layout pass for Act 1 Crypt/Mausoleum tombs. Advances the level's LCG seed once, derives a 2-bit roll (seed &amp; 3), and applies room-replacement templates from the gaDrlgCryptReplacements_A..D tables keyed by that roll. Which extra template set applies depends on eD2LevelId: set B for level 0x12 (Crypt), set C for 0x13/0x85 (Mausoleum/special), set D for the 0x15..0x18 range. Mutates pLevel->sSeed and selects rooms in place.
@@ -1658,18 +1732,18 @@ static void Crypt(D2DrlgLevelStrc * pLevel) {
 
     uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRoll = DVar1 & 3;
-    ReplaceRoom(gaDrlgCryptReplacements_A + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, gaDrlgCryptReplacements_A + nRoll, &nRoll);
     if (pLevel->eD2LevelId == 0x12) {
-      ReplaceRoom(gaDrlgCryptReplacements_B + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgCryptReplacements_B + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == 0x13 || pLevel->eD2LevelId == 0x85) {
-      ReplaceRoom(gaDrlgCryptReplacements_C + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgCryptReplacements_C + nRoll, &nRoll);
     }
     if (!(pLevel->eD2LevelId >= 0x15 && pLevel->eD2LevelId <= 0x18)) {
       return;
     }
 
-    ReplaceRoom(gaDrlgCryptReplacements_D + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, gaDrlgCryptReplacements_D + nRoll, &nRoll);
 }
 
 // Catacombs (Act1 Jail/Catacombs maze) preset-room roller. Advances the level's RNG seed (LCG: low*0x6AC690C5 + high) and takes nRoll = seedLow &amp; 3 to pick one of 4 variants. Always replaces the 'E' room set, then conditionally replaces an additional set keyed on the level id (0x1d->C, 0x1e->D, 0x1f->A else ->B) by calling ReplaceRoom with the matching gaDrlgCatacombsRollRooms_* table + nRoll. Side effect: mutates pLevel->sSeed and swaps preset rooms in the level. Server-side D2Common DRLG maze generation.
@@ -1808,19 +1882,19 @@ static void RollRooms(D2DrlgLevelStrc * pLevel) {
 
     uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRoll = DVar1 & 3;
-    ReplaceRoom(gaDrlgCatacombsRollRooms_E + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, gaDrlgCatacombsRollRooms_E + nRoll, &nRoll);
     if (pLevel->eD2LevelId == 0x1d) {
-      ReplaceRoom(gaDrlgCatacombsRollRooms_C + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgCatacombsRollRooms_C + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == 0x1e) {
-      ReplaceRoom(gaDrlgCatacombsRollRooms_D + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgCatacombsRollRooms_D + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == 0x1f) {
-      ReplaceRoom(gaDrlgCatacombsRollRooms_A + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgCatacombsRollRooms_A + nRoll, &nRoll);
       return;
     }
 
-    ReplaceRoom(gaDrlgCatacombsRollRooms_B + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, gaDrlgCatacombsRollRooms_B + nRoll, &nRoll);
 }
 
 // Randomly selects and places variant rooms for the Act 1 Catacombs level during maze generation. Advances the level seed (LCG step), picks a variant index (seed & 3) from gaDrlgCatacombsReplacements_A, and calls ReplaceRoom. For level 0x23 (Catacombs 4), also applies a second replacement set (gaDrlgCatacombsReplacements_B) for the special room layout.
@@ -1881,12 +1955,12 @@ static void DRLGMAZE_ReplaceCatacombsRooms(D2DrlgLevelStrc * pDrlgLevelStrc) {
 
     uint32_t sNewSeed = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
     uint32_t nVariant = sNewSeed & 3;
-    ReplaceRoom(gaDrlgCatacombsReplacements_A + nVariant, pDrlgLevelStrc, &nVariant);
+    ReplaceRoom(pDrlgLevelStrc, gaDrlgCatacombsReplacements_A + nVariant, &nVariant);
     if (pDrlgLevelStrc->eD2LevelId != 0x23) {
       return;
     }
 
-    ReplaceRoom(gaDrlgCatacombsReplacements_B + nVariant, pDrlgLevelStrc, &nVariant);
+    ReplaceRoom(pDrlgLevelStrc, gaDrlgCatacombsReplacements_B + nVariant, &nVariant);
 }
 
 // DRLG maze generator for the Act 2 Sewers level group. Advances the level seed twice to pick a random connection direction and a 0-3 layout variant. Dispatches on eD2LevelId: for the main sewer level (0x2F) it builds the room chain by allocating RoomEx rooms from the top-most and right-most anchor rooms, sizing each from its DrlgLevelData, replacing/linking them (ReplaceRoomWithNewRoom + AllocNodesForBothRoomEx), picking presets, and appending extra rooms in the chosen directions, finishing with a variant-selected ReplaceRoom from gaDrlgSewerReplacements_C. The other levels (0x30/0x31/0x41) just apply variant-indexed ReplaceRoom table entries (area + A/B/C/D replacement tables) to stamp the maze layout. No return value.
@@ -2117,20 +2191,20 @@ static void DRLGMAZE_GenerateSewerLevel(D2DrlgLevelStrc * pDrlgLevelStrc) {
         DRLGMAZE_PickRoomPreset(pRoomEx, 1);
       }
 
-      ReplaceRoom(gaDrlgSewerReplacements_C + nVariant, pDrlgLevelStrc, &nVariant);
+      ReplaceRoom(pDrlgLevelStrc, gaDrlgSewerReplacements_C + nVariant, &nVariant);
       return;
       case 0x30:
-        ReplaceRoom(gaDrlgSewerAreaReplacements + nVariant, pDrlgLevelStrc, &nVariant);
-      ReplaceRoom(gaDrlgSewerReplacements_D + nVariant, pDrlgLevelStrc, &nVariant);
-      ReplaceRoom(gaDrlgSewerReplacements_C + nVariant, pDrlgLevelStrc, &nVariant);
+        ReplaceRoom(pDrlgLevelStrc, gaDrlgSewerAreaReplacements + nVariant, &nVariant);
+      ReplaceRoom(pDrlgLevelStrc, gaDrlgSewerReplacements_D + nVariant, &nVariant);
+      ReplaceRoom(pDrlgLevelStrc, gaDrlgSewerReplacements_C + nVariant, &nVariant);
       return;
       case 0x31:
-        ReplaceRoom(gaDrlgSewerAreaReplacements + nVariant, pDrlgLevelStrc, &nVariant);
-      ReplaceRoom(gaDrlgSewerReplacements_A + nVariant, pDrlgLevelStrc, &nVariant);
+        ReplaceRoom(pDrlgLevelStrc, gaDrlgSewerAreaReplacements + nVariant, &nVariant);
+      ReplaceRoom(pDrlgLevelStrc, gaDrlgSewerReplacements_A + nVariant, &nVariant);
       return;
       case 0x41:
-        ReplaceRoom(gaDrlgSewerAreaReplacements + nVariant, pDrlgLevelStrc, &nVariant);
-      ReplaceRoom(gaDrlgSewerReplacements_B + nVariant, pDrlgLevelStrc, &nVariant);
+        ReplaceRoom(pDrlgLevelStrc, gaDrlgSewerAreaReplacements + nVariant, &nVariant);
+      ReplaceRoom(pDrlgLevelStrc, gaDrlgSewerReplacements_B + nVariant, &nVariant);
     }
 }
 
@@ -2381,36 +2455,36 @@ static void ReplaceAreas(D2DrlgLevelStrc * pLevel) {
     }
 
     if (pLevel->eD2LevelId >= 0x37 && pLevel->eD2LevelId <= 0x3a) {
-      ReplaceRoom(gaDrlgReplaceAreas_A + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgReplaceAreas_A + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == 0x39) {
-      ReplaceRoom(gaDrlgReplaceAreas_B + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgReplaceAreas_B + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == 0x3b || pLevel->eD2LevelId == 0x3d) {
-      ReplaceRoom(gaDrlgAreaReplacementsB + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgAreaReplacementsB + nRoll, &nRoll);
     }
 
     eD2LevelId nLevelId = pLevel->eD2LevelId;
     if ((int)nLevelId >= 0x42 && (int)nLevelId <= 0x48 && nLevelId != pLevel->pDrlg->nStaffTombLevel) {
-      ReplaceRoom(gaDrlgAreaReplacementsB + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgAreaReplacementsB + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == 0x3b) {
-      ReplaceRoom(gaDrlgReplaceAreas_C + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgReplaceAreas_C + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == 0x3c) {
-      ReplaceRoom(gaDrlgReplaceAreas_D + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgReplaceAreas_D + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == 0x3b || pLevel->eD2LevelId == 0x3d) {
-      ReplaceRoom(gaDrlgReplaceAreas_E + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgReplaceAreas_E + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == pLevel->pDrlg->nStaffTombLevel) {
-      /* Put orfice stuff here */ ReplaceRoom(gaDrlgReplaceAreas_F + nRoll, pLevel, &nRoll);
+      /* Put orfice stuff here */ ReplaceRoom(pLevel, gaDrlgReplaceAreas_F + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId != pLevel->pDrlg->nBossTombLevel) {
       return;
     }
 
-    ReplaceRoom(gaDrlgReplaceAreas_G + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, gaDrlgReplaceAreas_G + nRoll, &nRoll);
 }
 
 // Act 2 maze generator for Lair-type levels (Arcane Sanctuary). Advances the level seed, then applies ReplaceRoom substitutions from lookup tables. For level 0x40 (Arcane Sanctuary), uses a fixed replacement set that ensures the Staff of Kings room is always placed at the correct staircase location; other levels pick from gaDrlgLairReplacements_A/B using the rolled seed value.
@@ -2481,20 +2555,18 @@ static void Lair(D2DrlgLevelStrc * pLevel) {
     /* .nDirection = */ 0x1
 }; D2_STATIC_GUARD(D2DrlgReplaceRoomStrc_006f00e8, "D2Common::Drlg::Maze::Lair::D2DrlgReplaceRoomStrc_006f00e8");
 
-    D2DrlgReplaceRoomStrc* pReplaceEntry;
     uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRoll = DVar1 & 3;
     if (pLevel->eD2LevelId == 0x40) {
-      ReplaceRoom(&D2DrlgReplaceRoomStrc_006f00e8, pLevel, &nRoll);
+      ReplaceRoom(pLevel, &D2DrlgReplaceRoomStrc_006f00e8, &nRoll);
       nRoll = 3;
       /* The staff is always located in the "upper" version of the normally stairs
-                         location of lvl 1/2 */ pReplaceEntry = &D2DrlgReplaceRoomStrc_006f00d8;
+                         location of lvl 1/2 */ ReplaceRoom(pLevel, &D2DrlgReplaceRoomStrc_006f00d8, &nRoll);
     } else {
-      pReplaceEntry = gaDrlgLairReplacements_A + nRoll;
+      ReplaceRoom(pLevel, &gaDrlgLairReplacements_A[nRoll], &nRoll);
     }
 
-    ReplaceRoom(pReplaceEntry, pLevel, &nRoll);
-    ReplaceRoom(gaDrlgLairReplacements_B + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, gaDrlgLairReplacements_B + nRoll, &nRoll);
 }
 
 void __fastcall PickSummonerLocation(D2DrlgLevelStrc * pLevel) {
@@ -2528,7 +2600,7 @@ void __fastcall PickSummonerLocation(D2DrlgLevelStrc * pLevel) {
 
     uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRoll = DVar1 & 3;
-    ReplaceRoom(AncientPickLocation + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, AncientPickLocation + nRoll, &nRoll);
 }
 
 // Rolls the Act 3 dungeon layout for pLevel: advances the level seed via the standard LCG and uses the low 2 bits to select one of 4 preset pairs from DRLG_ACT3_DUNGEON_PRESETS / DRLG_ACT3_DUNGEON_PRESETS2, then calls ReplaceRoom twice to substitute the chosen room templates into the level.
@@ -2589,8 +2661,8 @@ static void DungeonRoll(D2DrlgLevelStrc * pLevel) {
 
     uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRoll = DVar1 & 3;
-    ReplaceRoom(DRLG_ACT3_DUNGEON_PRESETS + nRoll, pLevel, &nRoll);
-    ReplaceRoom(DRLG_ACT3_DUNGEON_PRESETS2 + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, DRLG_ACT3_DUNGEON_PRESETS + nRoll, &nRoll);
+    ReplaceRoom(pLevel, DRLG_ACT3_DUNGEON_PRESETS2 + nRoll, &nRoll);
 }
 
 // Randomises Act 3 Sewer room templates for pDrlgLevelStrc: advances the level seed via the standard LCG, uses the low 2 bits to pick a variant, then calls ReplaceRoom twice using DRLG_ACT3_SEWERS_REPLACE_ONE and DRLG_ACT3_SEWERS_REPLACE_TWO preset arrays.
@@ -2651,8 +2723,8 @@ static void DRLGMAZE_ReplaceSewerRooms(D2DrlgLevelStrc * pDrlgLevelStrc) {
 
     uint32_t sNewSeed = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
     uint32_t nVariant = sNewSeed & 3;
-    ReplaceRoom(DRLG_ACT3_SEWERS_REPLACE_ONE + nVariant, pDrlgLevelStrc, &nVariant);
-    ReplaceRoom(DRLG_ACT3_SEWERS_REPLACE_TWO + nVariant, pDrlgLevelStrc, &nVariant);
+    ReplaceRoom(pDrlgLevelStrc, DRLG_ACT3_SEWERS_REPLACE_ONE + nVariant, &nVariant);
+    ReplaceRoom(pDrlgLevelStrc, DRLG_ACT3_SEWERS_REPLACE_TWO + nVariant, &nVariant);
 }
 
 // Selects and places the variant room tiles for the Durance of Hate maze (Act 3, levels 0x65/100). Advances the level RNG seed, uses the low 2 bits to pick among 4 entry-tile variants, then calls ReplaceRoom for entry (always), waypoint+exit (level 0x65 only), or exit only (level 100). Controls which pre-set room template is placed in the generated dungeon layout.
@@ -2739,16 +2811,16 @@ static void DRLGMAZE_ReplaceDuranceRooms(D2DrlgLevelStrc * pLevel) {
 
     uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRoll = DVar1 & 3;
-    ReplaceRoom(DRLG_DURA_ENTRY + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, DRLG_DURA_ENTRY + nRoll, &nRoll);
     if (pLevel->eD2LevelId == 0x65) {
-      ReplaceRoom(DRLG_DURA_WAYPOINT + nRoll, pLevel, &nRoll);
-      ReplaceRoom(DRLG_DURA_EXIT + nRoll, pLevel, &nRoll);
+      ReplaceRoom(pLevel, DRLG_DURA_WAYPOINT + nRoll, &nRoll);
+      ReplaceRoom(pLevel, DRLG_DURA_EXIT + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId != 100) {
       return;
     }
 
-    ReplaceRoom(DRLG_DURA_EXIT + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, DRLG_DURA_EXIT + nRoll, &nRoll);
 }
 
 // Randomises the stair/Nilathak spawn layout for the Halls of Pain / Halls of Vaught area (Act 5 Temple levels 0x7b-0x7c). Rolls a seed-derived value mod 3 to pick one of three room replacement sets, then calls ReplaceRoom with gaDrlgRoomReplacementsA (non-Vaught) and/or gaDrlgRoomReplacementsB (level 0x7b only). Halts with an internal error if the Vaught level did not have its replacement applied by replacement set A.
@@ -2803,10 +2875,10 @@ static void ReplaceRooms(D2DrlgLevelStrc * pLevel) {
 
     int32_t nRetValAfterA;
     uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
-    uint32_t nRollMod3 = DVar1 % 3;
-    uint32_t nRoll = nRollMod3;
+    uint32_t nRoll = DVar1 % 3;
+    uint32_t nRollMod3 = nRoll;
     if (pLevel->eD2LevelId != 0x7c) {
-      ReplaceRoom(gaDrlgRoomReplacementsA + nRollMod3, pLevel, &nRoll);
+      ReplaceRoom(pLevel, gaDrlgRoomReplacementsA + nRollMod3, &nRoll);
     }
     if (pLevel->eD2LevelId != 0x7b) {
       return;
@@ -2816,7 +2888,7 @@ static void ReplaceRooms(D2DrlgLevelStrc * pLevel) {
       exit(-1);
     }
 
-    ReplaceRoom(gaDrlgRoomReplacementsB + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, gaDrlgRoomReplacementsB + nRoll, &nRoll);
 }
 
 // Places the red portal / next-level room presets for Act 5 Worldstone levels during maze generation. Advances the level seed (LCG step), picks a variant (seed & 3) from DRLG_WORLDSTONE_REPLACEMENT, calls ReplaceRoom. For level 0x81 (Worldstone Keep 3), also places waypoint rooms from DRLG_WORLDSTONE_WAYPOINT_ROOMS.
@@ -2877,12 +2949,12 @@ static void PutRedNextLevelAreasInPlace(D2DrlgLevelStrc * pLevel) {
 
     uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRoll = DVar1 & 3;
-    ReplaceRoom(DRLG_WORLDSTONE_REPLACEMENT + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, DRLG_WORLDSTONE_REPLACEMENT + nRoll, &nRoll);
     if (pLevel->eD2LevelId != 0x81) {
       return;
     }
 
-    ReplaceRoom(DRLG_WORLDSTONE_WAYPOINT_ROOMS + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, DRLG_WORLDSTONE_WAYPOINT_ROOMS + nRoll, &nRoll);
 }
 
 // DRLG Act1 maze generator for the Barracks level. Resolves the parent Jail level (id 0x1b) and its exit variant (0/1/2), allocates the connector room in the matching direction (SW/NW/SE) via DRLGMAZE_AllocRoomExAndPickPreset + AllocDrlgOrth, and computes the X/Y offset needed to align the Barracks to that jail exit. Then seed-rolls to pick one of two replacement-room sets (gaDrlgBarracksReplacements_A/_B) and applies both via ReplaceRoom. Translates every room in the level by the computed offset, recomputes the level's bounding box (GetMinAndMaxCoordinatesFromLevel) and stores its world position/size. Mutates pDrlgLevelStrc->sSeed and room coords. Calls an indirect dispatch (gapfnBarracksFindEdgeRoom) to pick the jail exit room.
@@ -2983,14 +3055,14 @@ static void __stdcall DRLGMAZE_GenerateBarracksLayout(D2DrlgLevelStrc * pDrlgLev
 
     uint32_t DVar1 = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
     if (DVar1 & 1) {
-      ReplaceRoom(gaDrlgBarracksReplacements_A + nJailExitVariant, pDrlgLevelStrc, &nJailExitVariant);
+      ReplaceRoom(pDrlgLevelStrc, gaDrlgBarracksReplacements_A + nJailExitVariant, &nJailExitVariant);
       pReplaceData = gaDrlgBarracksReplacements_B + nJailExitVariant;
     } else {
-      ReplaceRoom(gaDrlgBarracksReplacements_B + nJailExitVariant, pDrlgLevelStrc, &nJailExitVariant);
+      ReplaceRoom(pDrlgLevelStrc, gaDrlgBarracksReplacements_B + nJailExitVariant, &nJailExitVariant);
       pReplaceData = gaDrlgBarracksReplacements_A + nJailExitVariant;
     }
 
-    ReplaceRoom(pReplaceData, pDrlgLevelStrc, &nJailExitVariant);
+    ReplaceRoom(pDrlgLevelStrc, pReplaceData, &nJailExitVariant);
     for (pJailRoom = pDrlgLevelStrc->pRoomExFirst; pJailRoom; pJailRoom = pJailRoom->pRoomExNext) {
       int64_t* pWorldPosY;
       pJailRoom->sCoords.WorldPosition.x += nOffsetX;
@@ -3080,7 +3152,7 @@ static void DRLGMAZE_GenerateRiverOfFlames(D2DrlgLevelStrc * pDrlgLevelStrc) {
     int nRoomPosX = pNewRoom->sCoords.WorldPosition.x;
     int nChaosLevelX = pChaosLevel->sCoordinatesAndSize.WorldPosition.x;
     uint32_t DVar2 = D2_SeedRoll(&pDrlgLevelStrc->sSeed);
-    ReplaceRoom(gaDrlgRiverOfFlamesReplacements + (DVar2 & 1), pDrlgLevelStrc, nullptr);
+    ReplaceRoom(pDrlgLevelStrc, gaDrlgRiverOfFlamesReplacements + (DVar2 & 1), nullptr);
     DRLGMAZE_ExpandRoomsWithPresets(pDrlgLevelStrc, 0x344, pNewRoom);
     for (pNewRoom = pDrlgLevelStrc->pRoomExFirst; pNewRoom; pNewRoom = pNewRoom->pRoomExNext) {
       pNewRoom->sCoords.WorldPosition.x += nRoomSizeX * 2 - nRoomPosX + nChaosLevelX;
@@ -3234,19 +3306,19 @@ static void DRLGMAZE_ReplaceIceCavesRooms(D2DrlgLevelStrc * pLevel) {
 
     uint32_t DVar1 = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nRoll = DVar1 & 3;
-    ReplaceRoom(DRLG_ICECAVES_REPLACE_ONE + nRoll, pLevel, &nRoll);
-    ReplaceRoom(DRLG_ICECAVES_REPLACE_TWO + nRoll, pLevel, &nRoll);
-    ReplaceRoom(DRLG_ICECAVES_REPLACE_THREE + nRoll, pLevel, &nRoll);
+    ReplaceRoom(pLevel, DRLG_ICECAVES_REPLACE_ONE + nRoll, &nRoll);
+    ReplaceRoom(pLevel, DRLG_ICECAVES_REPLACE_TWO + nRoll, &nRoll);
+    ReplaceRoom(pLevel, DRLG_ICECAVES_REPLACE_THREE + nRoll, &nRoll);
     int nLevelId = pLevel->eD2LevelId;
     switch (nLevelId) {
       case 0x73:
         {
-          ReplaceRoom(DRLG_ICECAVES_REPLACE_FOUR + nRoll, pLevel, &nRoll);
+          ReplaceRoom(pLevel, DRLG_ICECAVES_REPLACE_FOUR + nRoll, &nRoll);
         }
       case 0x71:
         case 0x76:
           {
-            ReplaceRoom(DRLG_ICECAVES_REPLACE_FIVE + nRoll, pLevel, &nRoll);
+            ReplaceRoom(pLevel, DRLG_ICECAVES_REPLACE_FIVE + nRoll, &nRoll);
             return;
           }
       default:

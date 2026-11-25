@@ -1756,6 +1756,32 @@
       ]
     },
     {
+      "name": "IfPlayer",
+      "address": "0046f950",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0046f950"
+        }
+      ],
+      "namespace": "D2Client::Units",
+      "calledFunctions": [
+        "IfPlayer",
+        "IsActive",
+        "PlayerMessage"
+      ],
+      "usedTypes": [
+        "D2UnitStrc"
+      ],
+      "dh": "757d27be",
+      "paramStorage": [
+        [
+          "pUnit",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
       "name": "GFX_GetGfxMemory",
       "address": "0046f980",
       "lines": [

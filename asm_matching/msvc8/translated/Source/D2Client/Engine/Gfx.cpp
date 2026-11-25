@@ -8,7 +8,7 @@
 #include "Source/D2Client/D2GfxDataStrc.h"
 #include "Source/D2Client/D2GfxInfoStrc.h"
 #include "Source/D2Client/D2LightMapStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/dLightMap.h"
 #include "Source/D2Client/Engine/GfxUtil.h"
 #include "Source/D2Client/Engine/Particle.h"
 #include "Source/D2Client/Game/Game.h"
@@ -92,8 +92,8 @@
 #include "Source/D2Client/D2GfxMemoryStrc.h"
 #include "Source/D2Client/D2GfxSettingsStrc.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Draw/dLightMap.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Draw.h"
 #include "Source/D2Client/Game/Game.h"
@@ -180,7 +180,7 @@
 #include "Source/Storm/Source/SMem.h"
 #include "Source/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/Draw/Weather.data.h"
+#include "Source/D2Client/Game/Env.data.h"
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Client/Unit/PlrSkills.h"
 #include "Source/D2Common/DataTbls/MissileTbls.inline.h"
@@ -221,7 +221,6 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2GfxInfoStrc) == 0x3c, "D2_NEW_AT(
 #endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2GfxUnknown_0xa8) == 0xa8, "D2_NEW_AT(D2GfxUnknown_0xa8): the 32-bit layout must be the 0xa8 bytes 1.14d allocates");
-
 
 static uint32_t gaMonsterModePrecacheEntries[15] = {
     0xc,
@@ -1727,6 +1726,23 @@ void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFl
       nIndex++;
     } while (nIndex < gnMonsterModePrecacheCount);
 }
+
+}}} // namespace D2Client::Engine::Gfx
+
+namespace D2Client { namespace Units {
+
+void __fastcall IfPlayer(D2UnitStrc * pUnit) {
+    int bIsActive = UNIT::CUnit::IsActive(pUnit);
+    if (!(!bIsActive && pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
+      return;
+    }
+
+    UNIT::Player::PlayerMessage(7, pUnit, nullptr, 1);
+}
+
+}} // namespace D2Client::Units
+
+namespace D2Client { namespace Engine { namespace Gfx {
 
 int __stdcall GFX_GetGfxMemory() {
     // Static local variables (originally global data)

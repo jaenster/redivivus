@@ -141,48 +141,44 @@ static void __stdcall SCMD_ConvertString(CMDDEF * cmdDef, char * str, uint32_t *
 
 // @blizzard GenerateError (SCMD.CPP)
 static void __stdcall SCMD_GenerateError(uint32_t errorCode, pfnSCmdErrorCallback pfnCallback, char * szItem) {
-    UINT uID;
-    int nMsgIdx;
-    CMDERROR sCallbackArgs;
     char szFmtBuf[256];
-    char szMsgBuf[256];
-    if (errorCode != 0x6e) {
-      if (errorCode != 0x85100065) {
-        if (errorCode != 0x8510006d) {
+    {
+      int nMsgIdx;
+      UINT uID;
+      switch (errorCode) {
+        case 0x85100065:
+          nMsgIdx = 0;
+          uID = 0x5201;
+          break;
+        case 0x8510006d:
+          nMsgIdx = 1;
+          uID = 0x5202;
+          break;
+        case 0x6e:
+          nMsgIdx = 2;
+          uID = 0x5203;
+          break;
+        default:
           return;
-        }
-
-        nMsgIdx = 1;
-        uID = 0x5202;
-      } else {
-        nMsgIdx = 0;
-        uID = 0x5201;
       }
-    } else {
-      nMsgIdx = 2;
-      uID = 0x5203;
-    }
-
-    int cchBufferMax = 0x100;
-    char* lpBuffer = szMsgBuf;
-    /* LPSTR lpBuffer for LoadStringA */ /* UINT uID for LoadStringA */ szMsgBuf[0] = '\0';
-    HMODULE hInstance = SSystem::StormGetInstance();
-    /* HINSTANCE hInstance for LoadStringA */ LoadStringA(hInstance, uID, lpBuffer, cchBufferMax);
-    if (szMsgBuf[0] == '\0') {
-      SSTR::SStrCopy(szMsgBuf, gaSCMD_FallbackMessages[nMsgIdx], 0x100);
-    }
-
-    char* pcFmtMarker = strstr(szMsgBuf, "%s");
-    if (pcFmtMarker) {
-      /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szFmtBuf, szMsgBuf, szItem);
-    } else {
-      SSTR::SStrCopy(szFmtBuf, szMsgBuf, 0x100);
-    }
-    if (szFmtBuf[0] != '\0') {
-      SSTR::SStrPack(szFmtBuf, "\n", 0x100);
+      char szMsgBuf[256];
+      szMsgBuf[0] = '\0';
+      LoadStringA(SSystem::StormGetInstance(), uID, szMsgBuf, 0x100);
+      if (!szMsgBuf[0]) {
+        SSTR::SStrCopy(szMsgBuf, gaSCMD_FallbackMessages[nMsgIdx], 0x100);
+      }
+      if (strstr(szMsgBuf, "%s")) {
+        wsprintfA(szFmtBuf, szMsgBuf, szItem);
+      } else {
+        SSTR::SStrCopy(szFmtBuf, szMsgBuf, 0x100);
+      }
+      if (szFmtBuf[0]) {
+        SSTR::SStrPack(szFmtBuf, "\n", 0x100);
+      }
     }
 
     SErr::SErrSetLastError(errorCode);
+    CMDERROR sCallbackArgs;
     sCallbackArgs.dwErrorCode = errorCode;
     sCallbackArgs.pszItem = szItem;
     sCallbackArgs.pszErrorText = szFmtBuf;
@@ -488,31 +484,17 @@ static BOOL __fastcall SCMD_PerformConversion(char * str, CMDDEF * cmdDef, int *
 
 // @blizzard ProcessCurrentFlag (SCMD.CPP)
 static BOOL __thiscall SCMD_ProcessCurrentFlag(StormCmdProcessingStrc * pProcessing, char * szArgLine, int * outConsumed) {
-    int nMaxConsumed;
-    int nArgConsumed;
     *outConsumed = 0;
     CMDDEF* cmdDef = pProcessing->pCmdDef;
     pProcessing->pCmdDef = 0;
-    if (!cmdDef) {
-      return 1;
-    }
-
-    do {
-      BOOL nParseResult;
-      nParseResult = SCMD_PerformConversion(szArgLine, cmdDef, &nArgConsumed);
-      if (!nParseResult) {
+    while (cmdDef) {
+      int nArgConsumed;
+      if (!SCMD_PerformConversion(szArgLine, cmdDef, &nArgConsumed)) {
         return 0;
       }
-
-      nMaxConsumed = *outConsumed;
-      if (*outConsumed <= nArgConsumed) {
-        nMaxConsumed = nArgConsumed;
-      }
-
-      *outConsumed = nMaxConsumed;
+      *outConsumed = *outConsumed > nArgConsumed ? *outConsumed : nArgConsumed;
       cmdDef = SCMD_FindFlagDef((intptr_t)cmdDef->pNext <= 0 ? nullptr : cmdDef->pNext, pProcessing->szName, pProcessing->nNameLen);
-    } while (cmdDef);
-
+    }
     return 1;
 }
 
@@ -599,40 +581,37 @@ BOOL __fastcall SCMD_ProcessFlags(pfnSCmdErrorCallback pfnErrorCallback, char * 
 }
 
 // @blizzard ProcessToken (SCMD.CPP)
-static BOOL __fastcall SCMD_ProcessToken(CMDDEF * * cmdDefPtr, char * str, StormCmdProcessingStrc * pProcessing, int noFileExpand, pfnSCmdUnknownArgCallback unknownCb, pfnSCmdErrorCallback errorCb) {
-    BOOL bParseResult;
+static BOOL __fastcall SCMD_ProcessToken(char * str, int noFileExpand, StormCmdProcessingStrc * pProcessing, CMDDEF * * cmdDefPtr, pfnSCmdUnknownArgCallback unknownCb, pfnSCmdErrorCallback errorCb) {
     if (*str == '@' && !noFileExpand) {
-      bParseResult = SCMD_ProcessFile(str + 1, pProcessing, cmdDefPtr, unknownCb, errorCb);
-      return bParseResult;
+      return SCMD_ProcessFile(str + 1, pProcessing, cmdDefPtr, unknownCb, errorCb);
     }
 
-    char* pszSwitchChar = SSTR::SStrChr("-/", *str);
-    if (pszSwitchChar && !noFileExpand) {
+    if (SSTR::SStrChr("-/", *str) && !noFileExpand) {
       pProcessing->pCmdDef = 0;
-      bParseResult = SCMD_ProcessFlags(errorCb, str + 1, pProcessing);
-      return bParseResult;
-    }
-    if (pProcessing->pCmdDef) {
-      bParseResult = SCMD_ProcessCurrentFlag(pProcessing, str, (int*)&errorCb);
-      return bParseResult;
-    }
-    if (*cmdDefPtr) {
-      bParseResult = SCMD_PerformConversion(str, *cmdDefPtr, (int*)&errorCb);
-      if (bParseResult) {
-        *cmdDefPtr = (intptr_t)(*cmdDefPtr)->pNext <= 0 ? nullptr : (*cmdDefPtr)->pNext;
-        return 1;
-      }
-    } else {
-      int iVar1;
-      if (unknownCb) {
-        iVar1 = (*unknownCb)(str);
-        return iVar1;
-      }
-      if (errorCb) {
-        SCMD_GenerateError(0x85100065, errorCb, str);
-      }
+      return SCMD_ProcessFlags(errorCb, str + 1, pProcessing);
     }
 
+    if (pProcessing->pCmdDef) {
+      int nDataChars;
+      return SCMD_ProcessCurrentFlag(pProcessing, str, &nDataChars);
+    }
+
+    if (*cmdDefPtr) {
+      int nDataChars;
+      if (!SCMD_PerformConversion(str, *cmdDefPtr, &nDataChars)) {
+        return 0;
+      }
+      *cmdDefPtr = (intptr_t)(*cmdDefPtr)->pNext <= 0 ? nullptr : (*cmdDefPtr)->pNext;
+      return 1;
+    }
+
+    if (unknownCb) {
+      return (*unknownCb)(str);
+    }
+
+    if (errorCb) {
+      SCMD_GenerateError(0x85100065, errorCb, str);
+    }
     return 0;
 }
 
@@ -789,28 +768,17 @@ BOOL __stdcall SCmdRegisterArgList(ARGLIST * pArgList, uint32_t nCount) {
 
 // @blizzard ProcessString (SCMD.CPP)
 BOOL __fastcall SCMD_ProcessString(char * * ppszCursor, StormCmdProcessingStrc * pProcessing, CMDDEF * * pCmdList, pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback) {
-    BOOL bDispatchResult;
-    int nTokenLen;
-    char* pszPos;
-    char szTokenBuf[256];
-    char cCursorChar = **ppszCursor;
-    while (cCursorChar != '\0') {
-      pszPos = *ppszCursor;
-      nTokenLen = 0;
-      SSTR::SStrTokenize(&pszPos, szTokenBuf, 0x100, " ,;\"\t\n\r\x1a", (uint32_t*)&nTokenLen);
-      if (szTokenBuf[0] != '\0') {
-        bDispatchResult = SCMD_ProcessToken(pCmdList, szTokenBuf, pProcessing, nTokenLen, pfnUnknownCallback, pfnErrorCallback);
-        if (!bDispatchResult) {
-          break;
-        }
+    while (**ppszCursor) {
+      char* pszNext = *ppszCursor;
+      char szTokenBuf[256];
+      BOOL bQuoted = FALSE;
+      SSTR::SStrTokenize(&pszNext, szTokenBuf, 0x100, " ,;\"\t\n\r\x1a", (uint32_t*)&bQuoted);
+      if (szTokenBuf[0] && !SCMD_ProcessToken(szTokenBuf, bQuoted, pProcessing, pCmdList, pfnUnknownCallback, pfnErrorCallback)) {
+        break;
       }
-
-      *ppszCursor = pszPos;
-      cCursorChar = *pszPos;
+      *ppszCursor = pszNext;
     }
-
-    cCursorChar = **ppszCursor;
-    return (uint32_t)(cCursorChar == '\0');
+    return !**ppszCursor;
 }
 
 // Returns TRUE when the registered command with this id has a non-zero value. Looks the id up with SCMD_FindCommandValueById 006c4d70 and normalises the result to 0/1 with NEG/SBB/NEG.
@@ -829,61 +797,32 @@ BOOL __stdcall SCmdGetBool(int nCmdId) {
 // @rename-basis Behaviour plus a cross-architecture body match. .SCmdProcess reads r3..r6, i.e. exactly four arguments, and is the target of the two-argument command-line wrapper at 10008640 which supplies its own second argument as the literal 1. This function has the same four arguments and is likewise the target of SCmdProcessCommandLine 006c50b0, which calls it as (GetCommandLineA(), 1, arg1, arg2) - the same literal 1 in the same slot, which is the skip-argv[0] flag.
 // @former-name SCMD_ParseCommandLine (also resolves a duplicate-name collision: 006c4a00 carried the same name)
 int __stdcall SCmdProcess(char * szCommandLine, int bSkipFirstToken, pfnSCmdUnknownArgCallback pfnUnknownCallback, pfnSCmdErrorCallback pfnErrorCallback) {
-    // Frame slots -36..-8 are ONE object: &pCmdList is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      CMDDEF* pCmdList;
-      StormCmdProcessingStrc sProcessing;
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 28, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    int bSuccess;
-    CMDDEF* nCmdNode;
-    char* pszCursor;
-    pszCursor = szCommandLine;
     D2_CHECKS_BEGIN;
     D2_CHECK(szCommandLine);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
-    BOOL BVar1;
     if (bSkipFirstToken) {
-      SSTR::SStrTokenize(&pszCursor, nullptr, 0, " ,;\"\t\n\r\x1a", nullptr);
+      SSTR::SStrTokenize(&szCommandLine, nullptr, 0, " ,;\"\t\n\r\x1a", nullptr);
     }
 
-    SMem::SMemZero(&__frame0.sProcessing, 0x18);
-    __frame0.pCmdList = (CMDDEF*)(gStormCmdListHeadBackslash.head.pNext <= 0 ? 0 : gStormCmdListHeadBackslash.head.pNext);
-    BVar1 = SCMD_ProcessString(&pszCursor, &__frame0.sProcessing, &__frame0.pCmdList, pfnUnknownCallback, pfnErrorCallback);
-    if (BVar1) {
-      bSuccess = 1;
-      nCmdNode = __frame0.pCmdList;
-      while (true) {
-        while (true) {
-          if (!nCmdNode || !bSuccess) {
-            goto report_missing_required_arg;
-          }
-          if ((nCmdNode->nArgTypeFlags & 0x3000000) != 0x2000000) {
-            break;
-          }
-
-          bSuccess = 0;
-        }
-
-        if ((intptr_t)nCmdNode->pNext <= 0) {
-          break;
-        }
-
-        nCmdNode = nCmdNode->pNext;
-        __frame0.pCmdList = nCmdNode;
-      }
-
-      __frame0.pCmdList = 0;
-      report_missing_required_arg:
-      if (pfnErrorCallback && !bSuccess) {
-        SCMD_GenerateError(0x8510006d, pfnErrorCallback, "");
-      }
-      return bSuccess;
+    StormCmdProcessingStrc sProcessing;
+    SMem::SMemZero(&sProcessing, sizeof(sProcessing));
+    CMDDEF* pNextArg = (CMDDEF*)(gStormCmdListHeadBackslash.head.pNext <= 0 ? 0 : gStormCmdListHeadBackslash.head.pNext);
+    if (!SCMD_ProcessString(&szCommandLine, &sProcessing, &pNextArg, pfnUnknownCallback, pfnErrorCallback)) {
+      return 0;
     }
 
-    return 0;
+    BOOL bAllFilled = TRUE;
+    while (pNextArg && bAllFilled) {
+      if ((pNextArg->nArgTypeFlags & 0x3000000) == 0x2000000) {
+        bAllFilled = FALSE;
+      } else {
+        pNextArg = (intptr_t)pNextArg->pNext <= 0 ? nullptr : pNextArg->pNext;
+      }
+    }
+    if (pfnErrorCallback && !bAllFilled) {
+      SCMD_GenerateError(0x8510006d, pfnErrorCallback, "");
+    }
+    return bAllFilled;
 }
 
 // Processes the process's own command line: GetCommandLineA() then SCmdProcess(cmdline, 1, arg1, arg2).

@@ -4,7 +4,7 @@
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/D2LightMapStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/dLightMap.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Engine/Particle.h"
 #include "Source/D2Client/Game/Game.h"
@@ -97,8 +97,8 @@
 #include "Source/D2Client/D2GfxMemoryStrc.h"
 #include "Source/D2Client/D2GfxSettingsStrc.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Draw/dLightMap.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Draw.h"
 #include "Source/D2Client/Game/Game.h"
@@ -198,7 +198,6 @@
 #ifndef D2_FREE_AT
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
-
 
 #ifndef RECON_FPTD_fnMonUniqueModCallback
 #define RECON_FPTD_fnMonUniqueModCallback
@@ -672,6 +671,28 @@ void __fastcall MONSTER_SetMonStatsTxtAndType(D2UnitStrc * pUnit, uint16_t wPara
     int nClassId = pUnit->nClassId;
     pDVar1->pMonStatsTxt = nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : 0;
 }
+
+}}} // namespace D2Client::UNIT::Monster
+
+namespace D2Client {
+
+void __fastcall MONSTER_FreeMonsterPath(D2UnitStrc * pUnit) {
+    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
+      return;
+    }
+
+    D2UnitDataMonsterStrc* nMonsterData = pUnit->pUnitData.pUnitDataMonster;
+    if (!(nMonsterData && nMonsterData->pPathParamOrName.wszMonsterName)) {
+      return;
+    }
+
+    D2_FREE_AT(nMonsterData->pPathParamOrName.wszMonsterName, ".\\UNIT\\Monster.cpp", 0x66);
+    nMonsterData->pPathParamOrName.wszMonsterName = 0;
+}
+
+} // namespace D2Client
+
+namespace D2Client { namespace UNIT { namespace Monster {
 
 // Returns the address of the monster data's AI slot (+0x30). The client never allocates a server AI there; it uses the slot as an int think-delay in frames, decremented each update and reloaded with 5..0x20.
 // Provenance: 1.14d asm 004ae123 LEA EAX,[ECX+0x30]; all 13 callers store small integers through it.

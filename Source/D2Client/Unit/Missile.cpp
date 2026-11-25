@@ -4,7 +4,7 @@
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/D2ClientStrc.h"
 #include "Source/D2Client/D2LightMapStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
+#include "Source/D2Client/Draw/dLightMap.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Engine/Particle.h"
 #include "Source/D2Client/Game/Game.h"
@@ -90,8 +90,8 @@
 #include "Source/D2Client/D2GfxMemoryStrc.h"
 #include "Source/D2Client/D2GfxSettingsStrc.h"
 #include "Source/D2Client/D2IniConfigStrc.h"
-#include "Source/D2Client/Draw/LightMap.h"
-#include "Source/D2Client/Draw/Weather.h"
+#include "Source/D2Client/Draw/dLightMap.h"
+#include "Source/D2Client/Game/Env.h"
 #include "Source/D2Client/Engine/Gfx.h"
 #include "Source/D2Client/Game/Draw.h"
 #include "Source/D2Client/Game/Game.h"
@@ -193,7 +193,6 @@
 #include "Source/D2Common/Units/Units.twin.inline.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
-
 
 static D2Missile032SpreadStrc gaMissile032SpreadConstData[6] = {
     {
@@ -819,6 +818,18 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) 
     }
     return p->eUnitFlags >> 21 & 1;
 }
+
+} // namespace D2Client::UNIT::Missile
+
+namespace D2Client {
+
+void __fastcall MISSILES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam) {
+    D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
+}
+
+} // namespace D2Client
+
+namespace D2Client::UNIT::Missile {
 
 void __fastcall MISSILE_RemoveClientSide(D2UnitStrc * pUnit) {
     short int sTravelSound;

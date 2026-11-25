@@ -365,7 +365,7 @@ struct D2BattleNetEventCallbackTable {
     /* 0x30 */ void (__fastcall *fpReserved2_systemMsg)(struct D2BNetSystemInfoStrc *);
     /* 0x34 */ int (*fpSetGameData)();
     /* 0x38 */ void (__fastcall *fpRelockDatabaseCharacter)(uint32_t *, char *, char *);
-    /* 0x3C */ void (*fpLoadComplete)();
+    /* 0x3C */ uint8_t * (*fpLoadComplete)();
     /* 0x40 */ uint8_t * fpReserved3; // slot 16, offset 0x40 - never referenced in Game.exe
     /* 0x44 */ uint8_t * fpReserved4; // slot 17, offset 0x44 - never referenced in Game.exe
     /* 0x48 */ uint8_t * fpReserved5; // slot 18, offset 0x48 - never referenced in Game.exe

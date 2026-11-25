@@ -97,15 +97,13 @@ static void DATATBLS_NormalizeCodeTo4Chars(char * szText1, char * szText2) {
 }
 
 int32_t __fastcall DATATBLS_LookupStringId(char * szKey) {
-    uint16_t* pwszResult = (uint16_t*)szKey;
-    uint16_t uVar1 = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szKey, &pwszResult);
-    uint32_t nResult = (uint32_t)uVar1;
-    if (uVar1) {
-      return nResult;
+    uint16_t* pwszResult;
+    uint32_t nStringId = D2Lang::StrTable::strtable::STRTABLE_LookupString((uint8_t*)szKey, &pwszResult);
+    if (!(uint16_t)nStringId) {
+      nStringId = 0x1506;
     }
 
-    nResult = 0x1506;
-    return nResult;
+    return nStringId;
 }
 
 uint32_t __stdcall DATATBLS_GetCompCodeByIndex(int32_t nIndex) {

@@ -4966,28 +4966,29 @@ BOOL __fastcall MAINMENU_CheckFileExists(char * szFileName) {
 }
 
 static void MAINMENU_GetLocalizedFilePath(char * szPathFormat, char * szOutPath, char * szResolution) {
-    D2MPQFileStrc* pFileHandle;
     char szLangAbbrev[4];
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
     sprintf(szOutPath, szPathFormat, "DATA\\LOCAL", szLangAbbrev, szResolution);
-    int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szOutPath, 0, (void**)&pFileHandle);
-    if (bOpened) {
-      Storm::Source::SFile::SFileCloseFile(pFileHandle);
-      return;
+    {
+      D2MPQFileStrc* pFileHandle;
+      if (Storm::Source::SFile::SFileOpenFileEx(nullptr, szOutPath, 0, (void**)&pFileHandle)) {
+        Storm::Source::SFile::SFileCloseFile(pFileHandle);
+        return;
+      }
     }
 
     uint32_t nLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
     if (nLanguageCode) {
       sprintf(szOutPath, szPathFormat, "DATA\\LOCAL", "ENG", szResolution);
-      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szOutPath, 0, (void**)&pFileHandle);
-      if (bOpened) {
+      D2MPQFileStrc* pFileHandle;
+      if (Storm::Source::SFile::SFileOpenFileEx(nullptr, szOutPath, 0, (void**)&pFileHandle)) {
         Storm::Source::SFile::SFileCloseFile(pFileHandle);
         return;
       }
     } else {
       sprintf(szOutPath, szPathFormat, "DATA\\LOCAL", "CHI", szResolution);
-      bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szOutPath, 0, (void**)&pFileHandle);
-      if (bOpened) {
+      D2MPQFileStrc* pFileHandle;
+      if (Storm::Source::SFile::SFileOpenFileEx(nullptr, szOutPath, 0, (void**)&pFileHandle)) {
         Storm::Source::SFile::SFileCloseFile(pFileHandle);
       }
     }

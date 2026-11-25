@@ -1,0 +1,749 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Glide/Src/glCore.cpp",
+  "functions": [
+    {
+      "name": "BeginScene",
+      "address": "00508fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00508fe0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "BeginScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "SetGlobalLight"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "2f25763a",
+      "paramStorage": [
+        [
+          "bClear",
+          "ECX:4"
+        ],
+        [
+          "nRed",
+          "DL:1"
+        ],
+        [
+          "nGreen",
+          "Stack[0x4]:1"
+        ],
+        [
+          "nBlue",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "SetGamma",
+      "address": "005090b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005090b0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "SetGamma",
+        "SMemAlloc",
+        "FOG_FillArrayWithRandomInts",
+        "SMemFree"
+      ],
+      "usedTypes": [
+        "D2FloatIntUnion",
+        "FxU",
+        "FxU32",
+        "int32_t"
+      ],
+      "dh": "9fecc27f",
+      "paramStorage": [
+        [
+          "nGamma",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "CheckGamma",
+      "address": "00509190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509190"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "CheckGamma"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "e96e8e58"
+    },
+    {
+      "name": "EndScene1",
+      "address": "005091a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005091a0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "EndScene1",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "2dba11b8"
+    },
+    {
+      "name": "EndScene2",
+      "address": "005091e0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005091e0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "EndScene2"
+      ],
+      "dh": "e32b2758"
+    },
+    {
+      "name": "GetBackBuffer",
+      "address": "00509210",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509210"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GetBackBuffer"
+      ],
+      "usedTypes": [
+        "FxBool",
+        "GrLfbInfo_t",
+        "uint16_t",
+        "uint8_t"
+      ],
+      "dh": "03719099",
+      "paramStorage": [
+        [
+          "pBuffer",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetScreenSize",
+      "address": "005092f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005092f0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GetScreenSize"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "6222fe47",
+      "paramStorage": [
+        [
+          "pWidth",
+          "ECX:4"
+        ],
+        [
+          "pHeight",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetPalette",
+      "address": "00509300",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509300"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "SetPalette"
+      ],
+      "usedTypes": [
+        "LPPALETTEENTRY",
+        "uint32_t"
+      ],
+      "dh": "28ad8a13",
+      "paramStorage": [
+        [
+          "pPalette",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_ScalePaletteValue",
+      "address": "005093f0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005093f0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_ScalePaletteValue"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "15e6d010",
+      "paramStorage": [
+        [
+          "nPaletteIndex",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "SetPaletteTable",
+      "address": "00509400",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509400"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "SetPaletteTable"
+      ],
+      "usedTypes": [
+        "BYTE *"
+      ],
+      "dh": "bf714bf4",
+      "paramStorage": [
+        [
+          "ppPaletteTable",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "ActivateWindow",
+      "address": "00509420",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509420"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "ActivateWindow"
+      ],
+      "dh": "f33b5aa4"
+    },
+    {
+      "name": "SetOption",
+      "address": "00509430",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509430"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "SetOption"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "e638bd2c",
+      "paramStorage": [
+        [
+          "nOption",
+          "ECX:4"
+        ],
+        [
+          "nValue",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_SetTextureMode",
+      "address": "00509460",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509460"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_SetTextureMode"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "b27ca819",
+      "paramStorage": [
+        [
+          "nTextureMode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_SetColorCombine",
+      "address": "005094b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005094b0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_SetColorCombine"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "2f5d33a4",
+      "paramStorage": [
+        [
+          "nCombineMode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_SetAlphaBlendMode",
+      "address": "00509500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509500"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_SetAlphaBlendMode"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "37510658",
+      "paramStorage": [
+        [
+          "nAlphaBlendMode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_SetTextureFiltering",
+      "address": "005095d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "005095d0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_SetTextureFiltering"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "9608618a",
+      "paramStorage": [
+        [
+          "nFilteringMode",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "GetRenderStatistics",
+      "address": "00509640",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509640"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GetRenderStatistics"
+      ],
+      "dh": "2435040e"
+    },
+    {
+      "name": "RENDERER_GLIDE_IsPerspectiveMode",
+      "address": "00509650",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509650"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_IsPerspectiveMode"
+      ],
+      "dh": "caa86a58"
+    },
+    {
+      "name": "RENDERER_GLIDE_InitTextureMemory",
+      "address": "00509670",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509670"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_InitTextureMemory",
+        "GLSMACK_AllocTextureMemory",
+        "GLTEXCACHE_Initialize",
+        "RENDERER_GLIDE_InitDebugFont",
+        "GLFLOOR_Initialize",
+        "GLSUBTILE_Initialize",
+        "RENDERER_GLIDE_InitSpriteCache",
+        "GFX_SetSpriteCacheFreeCallback",
+        "LOGFILE_WriteStringToFile"
+      ],
+      "usedTypes": [
+        "FxU",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "fb78bef4"
+    },
+    {
+      "name": "Unreferenced_00509a70",
+      "address": "00509a70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509a70"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "Unreferenced_00509a70"
+      ],
+      "dh": "c56a2b20"
+    },
+    {
+      "name": "RENDERER_GLIDE_DestroyWindow",
+      "address": "00509aa0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509aa0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_DestroyWindow",
+        "GLSMACK_DestroyNoop",
+        "GLFLOOR_Destroy",
+        "GLSUBTILE_Destroy",
+        "GLTEXCACHE_Destroy",
+        "RENDERER_GLIDE_FreeSpriteBuffers",
+        "RENDERER_GLIDE_FreeDebugFont"
+      ],
+      "usedTypes": [
+        "FxBool"
+      ],
+      "dh": "d3060c2d"
+    },
+    {
+      "name": "PlayCutScene",
+      "address": "00509b60",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509b60"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "PlayCutScene",
+        "GLBLOCKS_PlayBinkVideo"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "8d3f2b92",
+      "paramStorage": [
+        [
+          "szFile",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "fpFrame",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_InitWindow",
+      "address": "00509bc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509bc0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_InitWindow",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RENDERER_GLIDE_GenerateDebugFont",
+        "LOGFILE_WriteStringToFile",
+        "RENDERER_GLIDE_InitTextureMemory"
+      ],
+      "usedTypes": [
+        "FxI",
+        "FxU",
+        "GrScreenRefresh_t",
+        "GrScreenResolution_t",
+        "int32_t"
+      ],
+      "dh": "4aad1bf6",
+      "paramStorage": [
+        [
+          "nParam",
+          "EAX:4"
+        ],
+        [
+          "dwWindowHandle",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "Release",
+      "address": "00509e10",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509e10"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "Release",
+        "GLSMACK_FreeBuffers",
+        "RENDERER_GLIDE_DestroyWindow",
+        "GLBLOCKS_FreeBlockBuffers",
+        "RENDERER_GLIDE_FreePerspectiveLUT",
+        "RENDERER_GLIDE_FreeLightingTable",
+        "FreeClientMemory"
+      ],
+      "dh": "3aac703d"
+    },
+    {
+      "name": "CreateWindow",
+      "address": "00509e90",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509e90"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "CreateWindow",
+        "RENDERER_GLIDE_InitWindow"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "e712b639",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "EndCutScene",
+      "address": "00509ee0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509ee0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "EndCutScene",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "RENDERER_GLIDE_DestroyWindow",
+        "CreateWindow"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "dc415825",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "nResolutionMode",
+          "EDX:4"
+        ],
+        [
+          "nWindowState",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "ResizeWindow",
+      "address": "00509f70",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509f70"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "ResizeWindow",
+        "RENDERER_GLIDE_DestroyWindow",
+        "RENDERER_GLIDE_InitWindow"
+      ],
+      "dh": "a984f0f7",
+      "paramStorage": [
+        [
+          "hWnd",
+          "ECX:4"
+        ],
+        [
+          "bForceResize",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "thunk_Release",
+      "address": "00509fd0",
+      "lines": [],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "Release"
+      ]
+    },
+    {
+      "name": "BeginCutScene",
+      "address": "00509fe0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "00509fe0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "BeginCutScene",
+        "ResizeWindow",
+        "SetGamma"
+      ],
+      "dh": "55f46ba0"
+    },
+    {
+      "name": "InitPerspective",
+      "address": "0050a010",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a010"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "InitPerspective",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GLBLOCKS_AllocBlockBuffers",
+        "RENDERER_GLIDE_AllocPerspectiveLUT",
+        "RENDERER_GLIDE_AllocLightingTable",
+        "atexit",
+        "RENDERER_GLIDE_BuildLightingTable",
+        "RENDERER_GLIDE_BuildPerspectiveLUT",
+        "RENDERER_GLIDE_InitPerspectiveTables",
+        "RENDERER_GLIDE_InitGroundTileVertices",
+        "GLSMACK_AllocBuffers",
+        "AllocClientMemory"
+      ],
+      "usedTypes": [
+        "D2GfxHelperStrc",
+        "D2GfxSettingsStrc",
+        "int32_t"
+      ],
+      "dh": "30840a11",
+      "paramStorage": [
+        [
+          "pSettings",
+          "ECX:4"
+        ],
+        [
+          "pHelpers",
+          "EDX:4"
+        ]
+      ]
+    }
+  ]
+}

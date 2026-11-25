@@ -1,0 +1,736 @@
+{
+  "source": "Redivivus, https://github.com/jaenster/redivivus (MIT, the Redivivus contributors)",
+  "version": 2,
+  "file": "Source/D2Glide/Src/glSprite.cpp",
+  "functions": [
+    {
+      "name": "RENDERER_GLIDE_FreeSpriteBuffers",
+      "address": "0050a0c0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a0c0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_FreeSpriteBuffers",
+        "FreeClientMemory"
+      ],
+      "dh": "0a9512b4"
+    },
+    {
+      "name": "GLIDE_PixelDataFreeCallback_ClearCacheNodes",
+      "address": "0050a110",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a110"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "GLIDE_PixelDataFreeCallback_ClearCacheNodes"
+      ],
+      "dh": "7ea1ea29",
+      "paramStorage": [
+        [
+          "pCacheIndices",
+          "ECX:4"
+        ]
+      ]
+    },
+    {
+      "name": "Unreferenced_0050a220",
+      "address": "0050a220",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a220"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "Unreferenced_0050a220"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "2a754c65",
+      "paramStorage": [
+        [
+          "nValue",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_GetSpriteMetadata",
+      "address": "0050a260",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a260"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_GetSpriteMetadata",
+        "SPRITECACHE_GetOrLoadSprite",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit",
+        "GetDC6Width",
+        "GetDC6OffsetX",
+        "GetDC6Height",
+        "GetDC6OffsetY"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "GlideTexInfoStrc",
+        "int32_t"
+      ],
+      "dh": "bc2c1edc",
+      "paramStorage": [
+        [
+          "pGfxData",
+          "ESI:4"
+        ],
+        [
+          "ppMetadata",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_CalculateTextureSize",
+      "address": "0050a2d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a2d0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_CalculateTextureSize",
+        "RENDERER_GLIDE_IsPerspectiveEnabled"
+      ],
+      "usedTypes": [
+        "GlideTexInfoStrc",
+        "uint32_t"
+      ],
+      "dh": "f6fda6ac",
+      "paramStorage": [
+        [
+          "pTexInfo",
+          "EDI:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_UploadTextureToCache",
+      "address": "0050a450",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a450"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_UploadTextureToCache",
+        "CELCMP_GetDC6BlockPixelData",
+        "GLTEXCACHE_PromoteNodeToMRU",
+        "RENDERER_GLIDE_SetTextureMode",
+        "GLTEXCACHE_EnsureCapacity",
+        "memset",
+        "CELCMP_DrawCelFrame",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "GlideTexInfoStrc",
+        "GrTexInfo",
+        "int32_t",
+        "uint8_t"
+      ],
+      "dh": "80572d06",
+      "paramStorage": [
+        [
+          "pTexInfo",
+          "ESI:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nOutlineColor",
+          "Stack[0x8]:1"
+        ],
+        [
+          "nMode",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_DrawShadowQuad",
+      "address": "0050a7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a7b0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_DrawShadowQuad",
+        "RENDERER_GLIDE_IsPerspectiveEnabled"
+      ],
+      "usedTypes": [
+        "GlideTexInfoStrc",
+        "int32_t"
+      ],
+      "dh": "2aedee9a",
+      "paramStorage": [
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pTexInfo",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_DrawPalettedQuad",
+      "address": "0050a9a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050a9a0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_DrawPalettedQuad",
+        "RENDERER_GLIDE_SetColorCombine",
+        "RENDERER_GLIDE_SetTextureFiltering",
+        "RENDERER_GLIDE_ApplyColorLighting",
+        "RENDERER_GLIDE_IsPerspectiveEnabled"
+      ],
+      "usedTypes": [
+        "GlideTexInfoStrc",
+        "int32_t",
+        "uint32_t",
+        "uint8_t"
+      ],
+      "dh": "fb78862a",
+      "paramStorage": [
+        [
+          "pGlideQuad",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x8]:4"
+        ],
+        [
+          "dwColor",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nParam3",
+          "Stack[0x10]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_SetDrawMode",
+      "address": "0050abf0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050abf0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_SetDrawMode",
+        "RENDERER_GLIDE_SetAlphaBlendMode"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "71cfcac6",
+      "paramStorage": [
+        [
+          "nDrawMode",
+          "ESI:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawPerspectiveImage",
+      "address": "0050acc0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050acc0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawPerspectiveImage",
+        "RENDERER_GLIDE_GetSpriteMetadata",
+        "RENDERER_GLIDE_CalculateTextureSize",
+        "RENDERER_GLIDE_IsPerspectiveEnabled",
+        "AdjustPerspectivePosition",
+        "RENDERER_GLIDE_UploadTextureToCache",
+        "RENDERER_GLIDE_SetDrawMode",
+        "RENDERER_GLIDE_SetColorCombine",
+        "RENDERER_GLIDE_SetTextureFiltering",
+        "RENDERER_GLIDE_ApplyColorLighting"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "GlideTexInfoStrc",
+        "int32_t"
+      ],
+      "dh": "4d5a38ba",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nScreenMode",
+          "Stack[0x10]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x14]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawImage",
+      "address": "0050b0d0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b0d0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawImage",
+        "RENDERER_GLIDE_GetSpriteMetadata",
+        "RENDERER_GLIDE_CalculateTextureSize",
+        "RENDERER_GLIDE_UploadTextureToCache",
+        "RENDERER_GLIDE_SetDrawMode",
+        "RENDERER_GLIDE_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "GlideTexInfoStrc",
+        "int32_t"
+      ],
+      "dh": "766c31f8",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "pPalette",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawShiftedImage",
+      "address": "0050b190",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b190"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawShiftedImage",
+        "RENDERER_GLIDE_GetSpriteMetadata",
+        "RENDERER_GLIDE_CalculateTextureSize",
+        "RENDERER_GLIDE_UploadTextureToCache",
+        "RENDERER_GLIDE_SetDrawMode",
+        "RENDERER_GLIDE_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "GlideTexInfoStrc",
+        "int32_t"
+      ],
+      "dh": "803c1615",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "dwGamma",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nGlobalPaletteShift",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawVerticalCropImage",
+      "address": "0050b230",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b230"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawVerticalCropImage",
+        "RENDERER_GLIDE_SetDrawMode",
+        "RENDERER_GLIDE_GetSpriteMetadata",
+        "RENDERER_GLIDE_CalculateTextureSize",
+        "RENDERER_GLIDE_UploadTextureToCache",
+        "RENDERER_GLIDE_IsPerspectiveEnabled",
+        "RENDERER_GLIDE_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "GlideTexInfoStrc",
+        "int32_t"
+      ],
+      "dh": "f93a2e8a",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nSkipLines",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawLines",
+          "Stack[0xc]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0x10]:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_CalculateClipRect",
+      "address": "0050b390",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b390"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_CalculateClipRect",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "D2RenderClipOutStrc",
+        "GlideTexInfoStrc",
+        "int32_t",
+        "uint32_t"
+      ],
+      "dh": "d448a9a0",
+      "paramStorage": [
+        [
+          "nScreenX",
+          "ECX:4"
+        ],
+        [
+          "nScreenY",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pnClipBounds",
+          "Stack[0x8]:4"
+        ],
+        [
+          "pnOutRect",
+          "EAX:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawClippedImage",
+      "address": "0050b500",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b500"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawClippedImage",
+        "RENDERER_GLIDE_SetDrawMode",
+        "RENDERER_GLIDE_GetSpriteMetadata",
+        "RENDERER_GLIDE_CalculateTextureSize",
+        "RENDERER_GLIDE_UploadTextureToCache",
+        "RENDERER_GLIDE_CalculateClipRect",
+        "RENDERER_GLIDE_IsPerspectiveEnabled",
+        "RENDERER_GLIDE_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "D2RenderClipOutStrc",
+        "GlideTexInfoStrc",
+        "int32_t"
+      ],
+      "dh": "f315a6f4",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "pCropRect",
+          "Stack[0x8]:4"
+        ],
+        [
+          "nDrawMode",
+          "Stack[0xc]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawShadow",
+      "address": "0050b690",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b690"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawShadow",
+        "RENDERER_GLIDE_GetSpriteMetadata",
+        "RENDERER_GLIDE_CalculateTextureSize",
+        "RENDERER_GLIDE_UploadTextureToCache",
+        "RENDERER_GLIDE_SetColorCombine",
+        "RENDERER_GLIDE_AreBlendedShadowsEnabled",
+        "RENDERER_GLIDE_SetAlphaBlendMode",
+        "RENDERER_GLIDE_SetTextureFiltering",
+        "RENDERER_GLIDE_DrawShadowQuad"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "GlideTexInfoStrc",
+        "int32_t"
+      ],
+      "dh": "eb3f2f7e",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ]
+      ]
+    },
+    {
+      "name": "DrawImageFast",
+      "address": "0050b720",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b720"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DrawImageFast",
+        "RENDERER_GLIDE_SetAlphaBlendMode",
+        "RENDERER_GLIDE_GetSpriteMetadata",
+        "RENDERER_GLIDE_CalculateTextureSize",
+        "RENDERER_GLIDE_UploadTextureToCache",
+        "RENDERER_GLIDE_DrawPalettedQuad"
+      ],
+      "usedTypes": [
+        "D2GfxDataStrc",
+        "GlideTexInfoStrc",
+        "int32_t"
+      ],
+      "dh": "de7fbf0b",
+      "paramStorage": [
+        [
+          "pData",
+          "ECX:4"
+        ],
+        [
+          "nPosX",
+          "EDX:4"
+        ],
+        [
+          "nPosY",
+          "Stack[0x4]:4"
+        ],
+        [
+          "nPaletteIndex",
+          "Stack[0x8]:1"
+        ]
+      ]
+    },
+    {
+      "name": "DebugFillBackBuffer",
+      "address": "0050b7a0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b7a0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "DebugFillBackBuffer"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "35ac9aba",
+      "paramStorage": [
+        [
+          "nPosX",
+          "ECX:4"
+        ],
+        [
+          "nPosY",
+          "EDX:4"
+        ]
+      ]
+    },
+    {
+      "name": "RENDERER_GLIDE_InitSpriteCache",
+      "address": "0050b7b0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "0050b7b0"
+        }
+      ],
+      "namespace": "D2Glide::Renderer::Glide",
+      "calledFunctions": [
+        "RENDERER_GLIDE_InitSpriteCache",
+        "AllocClientMemory",
+        "CELCMP_SetPixelDataFreeCallback",
+        "RENDERER_GLIDE_IsPerspectiveMode",
+        "GetInstructionPointer",
+        "ERROR_UnrecoverableInternalError_Halt",
+        "exit"
+      ],
+      "usedTypes": [
+        "int32_t"
+      ],
+      "dh": "ac9f3923"
+    }
+  ]
+}

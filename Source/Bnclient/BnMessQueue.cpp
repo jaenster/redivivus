@@ -21,7 +21,6 @@ static_assert(sizeof(void*) != 4 || sizeof(::BnMessQueue) == 0x12c, "D2_NEW_AT(B
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
-
 ::BnMessQueue * nLobbyChatCurrentMessage = 0; D2_STATIC_GUARD(nLobbyChatCurrentMessage, "nLobbyChatCurrentMessage");
 ::BnMessQueue * nLobbyChatQueueMessages = 0; D2_STATIC_GUARD(nLobbyChatQueueMessages, "nLobbyChatQueueMessages");
 
@@ -169,3 +168,25 @@ int __fastcall SID_SetStateFlag2(uint32_t nData) {
 }
 
 } // namespace Bnclient
+
+namespace Bnclient::_net_sid {
+
+int __fastcall NET_SID_CLIENT_GetStateAndClear(int * pOutState) {
+    if (!pOutState) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe2);
+      exit(-1);
+    }
+
+    /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
+    *pOutState = g_nBattleNetConnectionState;
+    pOutState[1] = g_nBattleNetConnectionData;
+    if (g_nBattleNetConnectionState == 0x1b) {
+      pOutState[1] = (int)g_szBnetConnectionStateString;
+    }
+
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ g_nBattleNetConnectionState = 0;
+    LeaveCriticalSection(&lpCriticalSection_00882004);
+    return 1;
+}
+
+} // namespace Bnclient::_net_sid
