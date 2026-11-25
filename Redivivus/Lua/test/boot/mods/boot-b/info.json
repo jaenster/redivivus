@@ -1,0 +1,1 @@
+{ "name": "boot-b", "version": "0.3.0", "dependencies": ["boot-a >= 1.0", "? boot-old"] }

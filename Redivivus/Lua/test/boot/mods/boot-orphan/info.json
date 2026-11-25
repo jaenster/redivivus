@@ -1,0 +1,1 @@
+{ "name": "boot-orphan", "version": "0.1.0", "dependencies": ["missing-mod"] }

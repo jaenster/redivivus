@@ -1,0 +1,24 @@
+LuaJIT, vendored as source for the Lua mod host (Redivivus/Lua).
+
+Upstream:  https://github.com/LuaJIT/LuaJIT (branch v2.1)
+Commit:    96f7b297326e9fd454b7186c6858b2773f94a0dc (2026-11-19)
+Version:   LuaJIT 2.1.1795119671 (.relver holds the commit time, as git archive writes it)
+License:   MIT, see COPYRIGHT (carried unchanged from upstream)
+
+Everything here except this file is `git archive 96f7b297326e` of upstream, unmodified:
+  git -C <LuaJIT clone> archive 96f7b297326e9fd454b7186c6858b2773f94a0dc | tar -x -C 3rdparty/luajit
+
+How it is built: with its own Makefile, never from a hand-written source list.
+cmake/luajit-make.sh copies this directory into the build directory and runs
+  make -C src BUILDMODE=static [CROSS=<prefix>] [TARGET_SYS=<sys>] HOST_CC=<cc> XCFLAGS=... libluajit.a
+there; cmake/luajit.cmake (the `luajit` target) calls it.
+The build defines LUAJIT_ENABLE_CHECKHOOK (CMake option D2_LUAJIT_CHECKHOOK, default ON):
+compiled traces then check the hook mask, which the host's time budget depends on.
+
+LuaJIT's build compiles and runs host tools (minilua, buildvm) on the build machine, and
+buildvm must have the target's pointer size. A 64-bit target builds anywhere with a native
+cc; a 32-bit target needs a 32-bit host compiler ("gcc -m32" on x86 Linux). A Mac has none,
+so for the i686-w64-mingw32 target the script runs the same make in a linux/amd64 container
+(debian:trixie pinned by digest, gcc-multilib and Debian's i686 mingw-w64), and the library
+stays in the build directory. LUAJIT_HOST_CC overrides the host compiler, LUAJIT_DOCKER=1
+forces the container.

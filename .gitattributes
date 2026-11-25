@@ -1,0 +1,2 @@
+# Vendored upstream source is kept byte for byte (LuaJIT ships CRLF .bat files).
+3rdparty/luajit/** -text

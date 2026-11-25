@@ -16,6 +16,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Launch/D2LaunchRoot.h"
 #include "Source/Game/Main.data.h"
+#include "Redivivus/Lua/d2_lua.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1653,6 +1654,7 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     Storm::Source::SSTR::SStrPrintf(szVersionString, 0x104, "v%d.%02d", 1, 0xe);
     Fog::Source::SFile::FILETOOLS_SetLogFilePathWithoutDateAndExtension2("D2");
     Fog::Src::ErrorManager::ERRORMANAGER_InitErrorManager("Diablo II", szVersionString, 1);
+    D2LUA_Boot();
     HANDLE hDiabloOkEvent = OpenEventA(2, 1, "DIABLO_II_OK");
     if (hDiabloOkEvent) {
       /* HANDLE hEvent for SetEvent */ SetEvent(hDiabloOkEvent);
@@ -1672,6 +1674,7 @@ void __fastcall PreInitApplication(int32_t argc, char * * argv) {
     }
 
     ApplicationMain(WinMain_hInstance, &pD2IniData, eAppMode);
+    D2LUA_Shutdown();
 }
 
 // ServiceMain for the DIABLO2SRV service. Registers the control handler, reports

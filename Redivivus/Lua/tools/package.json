@@ -1,0 +1,21 @@
+{
+  "name": "@redivivus/lua-tools",
+  "private": true,
+  "type": "module",
+  "description": "The Lua API generator and the mod CLI (rdvmod) for Redivivus.",
+  "engines": { "node": ">=22.18" },
+  "bin": { "rdvmod": "./src/cli.ts" },
+  "scripts": {
+    "gen": "node src/gen.ts",
+    "gen:check": "node src/gen.ts --check"
+  },
+  "dependencies": {
+    "@typescript-to-lua/language-extensions": "1.19.0",
+    "lua-types": "2.14.1",
+    "typescript": "6.0.2",
+    "typescript-to-lua": "1.37.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1"
+  }
+}

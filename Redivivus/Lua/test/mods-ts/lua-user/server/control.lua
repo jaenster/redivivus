@@ -1,0 +1,6 @@
+local actions = require("__first-mod__/shared/actions")
+script.start(function()
+  local gave = actions.walk(3)
+  log("lua script: ts action gave", gave)
+  log("lua script: done")
+end)

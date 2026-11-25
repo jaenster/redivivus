@@ -1,0 +1,7 @@
+{
+  "name": "type-tests",
+  "version": "0.1.0",
+  "title": "Type-level tests: every @ts-expect-error must be an error",
+  "author": "Redivivus",
+  "dependencies": ["first-mod"]
+}
