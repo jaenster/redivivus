@@ -120,7 +120,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
     ::SGAMEDATA* pGame = (::SGAMEDATA*)pQuestData->pQuestSpecificData.pA1Q3;
     if (nMsgIndex == 0xa3) {
-      int16_t nPartyId;
+      uint16_t nPartyId;
       /* GetQuestState(Completed=0) — bail if already done */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ToolsOfTheTrade, QUESTSTATE_Completed);
       if (!bQuestState) {
         pA1Q3Data = pQuestData->pQuestSpecificData.pA1Q3;
@@ -138,7 +138,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
           QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x206d6468);
           pA1Q3Data->nQuestItemCount--;
           nPartyId = UNIT::SUnit::GetPartyId(pQuestArgs->pPlayer);
-          if (nPartyId != -1) {
+          if (nPartyId != 0xffff) {
             UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestArgs->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q03_AutoCompleteIfHighLevel, nullptr);
           }
           if (pQuestData->bIsNotIntroduction != '\0') {
@@ -154,10 +154,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
               }
 
               pQuestData->fpSequenceFilter(pQuestData);
-              QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
-              return;
-            }
-            if (pA1Q3Data->bSequenceReady) {
+            } else if (pA1Q3Data->bSequenceReady) {
               pNextQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
               if (pNextQuestData) {
                 /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
