@@ -147,7 +147,7 @@ void _CD2Textures_D2(::CD2Textures * pThis) {
 // Allocates a texture entry with power-of-two dimensions: evicts least-recently-used entries until enough memory is free, records size and owner, adds its memory to the used total and appends it to the used list. Returns the entry id.
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002b10e6
-int CreateTexture(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey) {
+int CreateTexture(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey) {
     int nPow2Width;
     int nPow2Height;
     int iVar2 = 2;
@@ -277,7 +277,7 @@ D2TextureNodeStrc * CD2TEXTURES_AllocEntry(::CD2Textures * pThis) {
 // Records the owner kind and pointer on the entry and writes the entry id back into the owner's slot for kinds 1-3.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002b13b8
-void CD2TEXTURES_SetEntryOwner(::CD2Textures * pThis, D2TextureNodeStrc * pNode, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey) {
+void CD2TEXTURES_SetEntryOwner(::CD2Textures * pThis, D2TextureNodeStrc * pNode, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey) {
     void* pvVar1;
     pNode->nOwnerType = nOwnerType;
     switch (nOwnerType) {

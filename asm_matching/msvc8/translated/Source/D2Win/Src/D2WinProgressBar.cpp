@@ -61,7 +61,7 @@ BOOL __fastcall Draw(::D2WinProgressBar * pProgressBar) {
 ::D2WinProgressBar * __fastcall D2WinProgressBar(int32_t dwPosX, int32_t dwPosY, int32_t dwSizeX, int32_t dwSizeY) {
     uint32_t uVar1;
     ::D2WinProgressBar* pNewBar = D2_NEW_AT(::D2WinProgressBar, ".\\Src\\D2WinProgressBar.cpp", 0x1a);
-    memset(pNewBar, 0, 0x44);
+    memset(pNewBar, 0, sizeof(*pNewBar));
     pNewBar->sControl.neD2FormType = FORM_ProgressBar;
     pNewBar->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     uVar1 = pNewBar->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];

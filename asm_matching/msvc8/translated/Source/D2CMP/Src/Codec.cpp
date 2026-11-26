@@ -314,6 +314,7 @@ static void __stdcall CODEC_CalculateFrameBounds(uint32_t * pFrameData, int32_t 
     int nMaxYExtent = -0x80000000;
     int nMaxX = -0x80000000;
     int iVar2 = 0x7fffffff;
+#if D2_ARCH_X86
     if (pFrameArray < pFrameArray + uVar1) {
       uint32_t* pFrameEntry;
       pFrameEntry = &pFrameArray->nStride;
@@ -347,6 +348,42 @@ static void __stdcall CODEC_CalculateFrameBounds(uint32_t * pFrameData, int32_t 
       } while (nFramesLeft);
     }
 
+#elif D2_ARCH_X64
+    if (pFrameArray < pFrameArray + uVar1) {
+      // The x86 body walks the component records as dwords from &nStride; on x64 the records hold
+      // two pointers, so the same fields are read through the record.
+      D2CodecFrameComponentStrc* pComp = pFrameArray;
+      nFramesLeft = (int)uVar1;
+      do {
+        uVar1 = pComp->nHeight;
+        if (pComp->nStride) {
+          nMinY = 0;
+        } else {
+          nMinY = pComp->nWidth;
+        }
+
+        nMaxX = pComp->nXOffset2 - nMinY;
+        if ((int)uVar1 < (int)nMinXLeft) {
+          nMinXLeft = uVar1;
+        }
+        if ((int)(uVar1 + pComp->nYOffset) > nMaxXAccum) {
+          nMaxXAccum = uVar1 + pComp->nYOffset;
+        }
+        if (nMaxX < nMinYAccum) {
+          nMinYAccum = nMaxX;
+        }
+        if ((int)(nMaxX + pComp->nWidth) > nMaxYExtent) {
+          nMaxYExtent = nMaxX + pComp->nWidth;
+        }
+
+        pComp++;
+        nFramesLeft--;
+        nMaxX = nMaxXAccum;
+        iVar2 = nMinYAccum;
+      } while (nFramesLeft);
+    }
+
+#endif
     pOutBounds->nMinY = iVar2;
     pOutBounds->nHeight = nMaxYExtent - iVar2;
     pOutBounds->nMinX = nMinXLeft;
@@ -727,7 +764,12 @@ BOOL __fastcall CODEC_EncodeRLE(D2CodecFrameComponentStrc * pSrcImage, DC6Block 
     uint32_t nRunLen;
     int nNonZeroEnd;
     uint8_t* pSrcRow = pSrcImage->pSrcRow;
-    uint32_t nRowStride = pSrcImage->nStrideValue0;
+#if D2_ARCH_X86
+    uint32_t nRowStride = pSrcImage->nStrideValue0; // steer-ok: one declaration per arch branch, read below
+#elif D2_ARCH_X64
+    // Negated below for a bottom-up image; signed so the step widens to a negative pointer offset.
+    int32_t nRowStride = (int32_t)pSrcImage->nStrideValue0;
+#endif
     if (!pSrcImage->nStride) {
       pSrcRow += (pSrcImage->nWidth - 1) * nRowStride;
       nRowStride = -nRowStride;
@@ -955,7 +997,12 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
       do {
         __frame0.local_334.nLocal_334 = *(uint32_t*)((intptr_t)pdwCompressedData + (*(int*)pbVar7 - *(int*)local_318.pLocal_318));
         *__frame0.uSlot338.pnDirSizeOut = (uint32_t)*pnSize;
+#if D2_ARCH_X86
         *pnSize += __frame0.local_334.nLocal_334;
+#elif D2_ARCH_X64
+        // The stored direction size counts 0x20-byte frame headers; the native DC6Block is wider.
+        *pnSize += __frame0.local_334.nLocal_334 + aFrameHeaderInfo[3] * (sizeof(DC6Block) - 0x20);
+#endif
         __frame0.uSlot338.pnDirSizeOut++;
         pbVar7 += 4;
         local_314--;

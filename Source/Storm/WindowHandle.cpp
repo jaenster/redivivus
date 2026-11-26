@@ -655,7 +655,7 @@ BigBuffer * __thiscall WND_EntryArray_AllocOrReuse(BigStack * pThis, BigBuffer *
 }
 
 void StaticInit_gWndTrackingList() {
-    gpWndTrackingListHead.head.pNext = ~(uintptr_t)((char*)&gpWndTrackingListHead + 4);
+    gpWndTrackingListHead.head.pNext = ~(uintptr_t)&gpWndTrackingListHead.head;
     atexit(StaticFini_gWndTrackingList);
 }
 

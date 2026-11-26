@@ -985,7 +985,7 @@ void __fastcall AllocDrlgFile(D2DrlgFileStrc * * ppDrlgFile, D2PoolManagerStrc *
 
     pCacheNode = D2_NEW_POOL_AT(nullptr, D2DrlgFileCacheNodeStrc, ".\\DRLG\\Preset.cpp", 0x4e0);
     *ppDrlgFile = D2_NEW_POOL_AT(nullptr, D2DrlgFileStrc, ".\\DRLG\\Preset.cpp", 0x4e1);
-    memset(*ppDrlgFile, 0, 0x5c);
+    memset(*ppDrlgFile, 0, sizeof(D2DrlgFileStrc));
     strcpy(pCacheNode->szName, szFile);
     D2DrlgFileCacheNodeStrc* pHead = gpDrlgFileCache;
     pCacheNode->nRefCount = 1;

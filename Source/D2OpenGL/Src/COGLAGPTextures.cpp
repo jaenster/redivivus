@@ -569,7 +569,7 @@ void ConvertPixels(::COGLAGPTextures * pThis, int nTexWidth, int nTexHeight, int
 // Creates a texture entry for a sprite: picks the smallest size bucket that fits, frees a slot in it, converts the pixels into that slot's staging memory, uploads them and appends the entry to the list. Returns the entry id.
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002e6e00
-int CreateTexture(::COGLAGPTextures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey) {
+int CreateTexture(::COGLAGPTextures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey) {
     uint8_t* pBVar2;
     int nTexHeight;
     int nTexWidth;

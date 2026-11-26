@@ -32,7 +32,7 @@ extern uint8_t g_IDEAKeySchedules[312];
 namespace Bnclient { namespace _net_sid {
 extern uint8_t gaNetSidSubstitutionBox[480];
 extern char g_szBnetConnectionStateString[128];
-extern uint32_t g_nBattleNetConnectionData;
+extern uintptr_t g_nBattleNetConnectionData;
 extern char * KeyClassic;
 extern char * KeyExpansion;
 extern char * KeyOwner;

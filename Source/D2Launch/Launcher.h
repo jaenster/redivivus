@@ -22,7 +22,7 @@ struct D2IniConfigStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Launch)
-struct __attribute__((packed)) D2OogErrorDataStrc {
+struct D2OogErrorDataStrc {
     /* 0x00 */ eOogErrorCode eErrorCode; // Error dialog type to display
     /* 0x04 */ void * pCustomData; // Optional: Character name or custom error string (used by codes 6, 10, 27)
 };

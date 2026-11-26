@@ -160,7 +160,7 @@ BOOL __fastcall SID_SetStateFlag1(int32_t nState) {
     return 1;
 }
 
-int __fastcall SID_SetStateFlag2(uint32_t nData) {
+int __fastcall SID_SetStateFlag2(uintptr_t nData) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     _net_sid::g_nBattleNetConnectionData = nData;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882004);
@@ -171,7 +171,7 @@ int __fastcall SID_SetStateFlag2(uint32_t nData) {
 
 namespace Bnclient::_net_sid {
 
-int __fastcall NET_SID_CLIENT_GetStateAndClear(int * pOutState) {
+int __fastcall NET_SID_CLIENT_GetStateAndClear(intptr_t * pOutState) {
     if (!pOutState) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe2);
       exit(-1);
@@ -179,9 +179,9 @@ int __fastcall NET_SID_CLIENT_GetStateAndClear(int * pOutState) {
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     *pOutState = g_nBattleNetConnectionState;
-    pOutState[1] = g_nBattleNetConnectionData;
+    pOutState[1] = (intptr_t)g_nBattleNetConnectionData;
     if (g_nBattleNetConnectionState == 0x1b) {
-      pOutState[1] = (int)g_szBnetConnectionStateString;
+      pOutState[1] = (intptr_t)g_szBnetConnectionStateString;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ g_nBattleNetConnectionState = 0;

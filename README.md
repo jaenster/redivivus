@@ -13,10 +13,10 @@ At this commit (Ghidra database v2139):
 
 - Builds strict (`-std=c++17`, no `-fpermissive`) and links with no undefined symbol.
 - Single player works. A full playthrough has been completed on the Visual C++ 2005 build.
-- Functions whose machine code is identical to 1.14d, compiled with Visual C++ 2005 SP1: 11,854 of 14,900 (79.6%), of which 3,139 hand-written.
+- Functions whose machine code is identical to 1.14d, compiled with Visual C++ 2005 SP1: 11,854 of 14,900 (79.6%), of which 3,167 hand-written.
 - Code bytes identical: 1,416,014 of 2,612,801 (54.20%).
 - Initialised data identical (tables, globals, initialisers): 341,588 of 344,485 bytes (99.16%), 1,725 of 1,966 symbols.
-- A 64-bit build links (mingw x86-64, `-fpermissive`) and has never been run; 27 pointer-width casts left, from 7,955.
+- A 64-bit build links (mingw x86-64, strict); its dedicated server loads the game data and shuts down cleanly under Wine. 7 pointer-width casts left, from 7,955.
 
 What is compared, what is left out, and the chart: [BYTE-MATCHING.md](BYTE-MATCHING.md). The names, types
 and structure layouts are reconstructions from the Ghidra databases; the function bodies are maintained in

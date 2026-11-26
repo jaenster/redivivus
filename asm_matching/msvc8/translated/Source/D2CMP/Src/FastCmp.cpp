@@ -1278,7 +1278,12 @@ void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t 
     } else {
       uint8_t bRLEToken;
       if ((uint32_t)(nStartRow + nRowCount) <= *(uint32_t*)(pImageHeader + 8)) {
+#if D2_ARCH_X86
         pbRLEData = FASTCMP_SkipRLERows(pImageHeader + 0x20, nStartRow);
+#elif D2_ARCH_X64
+        // The native block header is wider than the 0x20 bytes on disk (nNextBlock is pointer-sized).
+        pbRLEData = FASTCMP_SkipRLERows((uint8_t*)((DC6Block*)pImageHeader)->data, nStartRow);
+#endif
         if (!(*pImageHeader & 1)) {
           nDstPitch = -nDstPitch;
         }

@@ -488,7 +488,7 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
 
     ::CD2Textures** ppCVar2;
     ppCVar2 = PTR_PTR_003963b0;
-    (*PTR_PTR_003963b0)->vptr->CreateTexture(*PTR_PTR_003963b0, pvVar5, nPitch, iVar6, 3, pvVar3, nSlot, (int)pPalette);
+    (*PTR_PTR_003963b0)->vptr->CreateTexture(*PTR_PTR_003963b0, pvVar5, nPitch, iVar6, 3, pvVar3, nSlot, (intptr_t)pPalette);
     OGL_SetTextureFilter(1);
     iVar6 = *(int*)((uint8_t*)pvVar3 + nSlot * 8 + 4);
     pThis = *ppCVar2;

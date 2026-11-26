@@ -94,7 +94,7 @@ BOOL __fastcall D2WINANIMIMAGE_HitTest(::D2WinAnimImage * pAnimImage) {
       pDC6 = *pFrameEntry;
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pDC6;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -199,7 +199,7 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
       exit(-1);
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     if (!(pAnimImage->sControl.pDC6 || pAnimImage->pAnimFrames)) {
       return 1;
@@ -323,7 +323,7 @@ BOOL __stdcall D2WINANIMIMAGE_SetAnimate(::D2WinAnimImage * pAnimImage, BOOL bAn
     uint32_t dwState;
     DWORD dwTick;
     ::D2WinAnimImage* pNewAnimImage = D2_NEW_AT(::D2WinAnimImage, ".\\D2WinAnimImage.cpp", 0x1c);
-    memset(pNewAnimImage, 0, 0x60);
+    memset(pNewAnimImage, 0, sizeof(*pNewAnimImage));
     pNewAnimImage->sControl.neD2FormType = FORM_Image;
     pNewAnimImage->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     dwState = pNewAnimImage->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];

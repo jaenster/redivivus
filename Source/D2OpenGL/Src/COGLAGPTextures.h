@@ -32,7 +32,7 @@ typedef void (*ConvertPixels_fn)(::CD2Textures * pThis, int nTexWidth, int nTexH
 #endif
 #ifndef RECON_FPTD_CreateTexture_fn
 #define RECON_FPTD_CreateTexture_fn
-typedef int (*CreateTexture_fn)(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey);
+typedef int (*CreateTexture_fn)(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey);
 #endif
 #ifndef RECON_FPTD_EndFrame_fn
 #define RECON_FPTD_EndFrame_fn
@@ -59,7 +59,7 @@ typedef bool (*UploadTexture_fn)(::CD2Textures * pThis, struct D2TextureNodeStrc
 struct COGLAGPTexturesVtable {
     /* 0x00 */ void (*_COGLAGPTextures)(::COGLAGPTextures *);
     /* 0x04 */ void (*_COGLAGPTextures_D0)(::COGLAGPTextures *);
-    /* 0x08 */ int (*CreateTexture)(::CD2Textures *, void *, int, int, int, void *, int, int);
+    /* 0x08 */ int (*CreateTexture)(::CD2Textures *, void *, int, int, int, void *, int, intptr_t);
     /* 0x0C */ void (*EndFrame)(::CD2Textures *);
     /* 0x10 */ int (*GetFreeMemory)(::CD2Textures *, bool);
     /* 0x14 */ bool (*UploadTexture)(::CD2Textures *, struct D2TextureNodeStrc *, void *);
@@ -163,7 +163,7 @@ bool IsTextureBound(::COGLAGPTextures * pThis, struct D2TextureNodeStrc * pNode)
 void ConvertPixels(::COGLAGPTextures * pThis, int nTexWidth, int nTexHeight, int nSrcWidth, int nSrcHeight, BYTE * pSrc); // 1.14d mac: 002e6c32
 // Creates a texture entry for a sprite: picks the smallest size bucket that fits, frees a slot in it, converts the pixels into that slot's staging memory, uploads them and appends the entry to the list. Returns the entry id.
 // Described from the Mac body (no Windows twin).
-int CreateTexture(::COGLAGPTextures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey); // 1.14d mac: 002e6e00
+int CreateTexture(::COGLAGPTextures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey); // 1.14d mac: 002e6e00
 // Chooses a slot to reuse in the given size bucket by advancing its round-robin cursor: it prefers a free slot, then one whose occupying entry has a zero status field, otherwise a slot from a global counter cycling through 0-3. It then releases the entry in the chosen slot, first waiting for that entry's texture with glFinishObjectAPPLE when the slot was forced.
 // Described from the Mac body (no Windows twin).
 void COGLAGPTEXTURES_AcquireSlot(::COGLAGPTextures * pThis, int nClass); // 1.14d mac: 002e6fa4

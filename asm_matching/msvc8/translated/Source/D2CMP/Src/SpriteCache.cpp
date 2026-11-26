@@ -823,7 +823,12 @@ static DC6Block * __stdcall SPRITECACHE_FindFrameBlock(D2GfxDataStrc * pGfxData,
         return nullptr;
       }
 
+#if D2_ARCH_X86
       nFrameOffset = nFrameOffset + 0x23 + pFrameBlock->nLength + pFrameBlock->nAllocSize;
+#elif D2_ARCH_X64
+      // Decoded frames carry the native block header (pointer-sized nNextBlock), then the RLE data and 3 bytes.
+      nFrameOffset = nFrameOffset + (int)sizeof(DC6Block) + 3 + pFrameBlock->nLength + pFrameBlock->nAllocSize;
+#endif
       if (nFrameOffset < 0) {
         return nullptr;
       }
@@ -898,7 +903,11 @@ static void __stdcall SPRITECACHE_LoadAndCacheDC6(D2CelFileCacheEntryStrc * pCel
         *(void**)(pFrameDataBase + (nFrameDataOffset + 0x18)) = (void*)pFrameSlot;
         pFrameSlot = (void*)((char*)pFrameSlot + 0x2c);
         nFrameIdx++;
+#if D2_ARCH_X86
         nFrameDataOffset = nFrameDataOffset + 0x23 + *(int*)(pFrameDataBase + nFrameDataOffset + 0x1c) + *(int*)(pFrameDataBase + (nFrameDataOffset + 0x14));
+#elif D2_ARCH_X64
+        nFrameDataOffset = nFrameDataOffset + (int)sizeof(DC6Block) + 3 + ((DC6Block*)(pFrameDataBase + nFrameDataOffset))->nLength + ((DC6Block*)(pFrameDataBase + nFrameDataOffset))->nAllocSize;
+#endif
       } while (nFrameIdx < (uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount);
     }
 

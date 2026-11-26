@@ -43,7 +43,7 @@ int __stdcall BNMESSQUEUE_ClearAll();
 BOOL __fastcall BNMESSQUEUE_SetStateIfZero(int32_t nState);
 int __fastcall BNMESSQUEUE_SetStateWithString(int32_t nState, char * szMessage);
 BOOL __fastcall SID_SetStateFlag1(int32_t nState);
-int __fastcall SID_SetStateFlag2(uint32_t nData);
+int __fastcall SID_SetStateFlag2(uintptr_t nData);
 #endif // D2_MODULE_Bnclient
 
 } // namespace Bnclient

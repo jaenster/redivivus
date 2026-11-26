@@ -6036,12 +6036,12 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9ec8(EHExceptionRecord * pException
 }
 
 void StaticInit_gMpqArchiveList() {
-    gMpqArchiveList.head.pNext = ~(uintptr_t)((char*)&gMpqArchiveList + 4);
+    gMpqArchiveList.head.pNext = ~(uintptr_t)&gMpqArchiveList.head;
     atexit(StaticFini_gMpqArchiveList);
 }
 
 void StaticInit_gSFileAsyncReqQueue() {
-    gSFileAsyncReqQueue.head.pNext = ~(uintptr_t)((char*)&gSFileAsyncReqQueue + 4);
+    gSFileAsyncReqQueue.head.pNext = ~(uintptr_t)&gSFileAsyncReqQueue.head;
     atexit(StaticFini_gSFileAsyncReqQueue);
 }
 
@@ -6051,17 +6051,17 @@ void StaticInit_CriticalSection_00779068() {
 }
 
 void StaticInit_gSFileOpenFileList() {
-    gSFileOpenFileList.head.pNext = ~(uintptr_t)((char*)&gSFileOpenFileList + 4);
+    gSFileOpenFileList.head.pNext = ~(uintptr_t)&gSFileOpenFileList.head;
     atexit(StaticFini_gSFileOpenFileList);
 }
 
 void StaticInit_gSFileAudioStreamList() {
-    gSFileAudioStreamList.head.pNext = ~(uintptr_t)((char*)&gSFileAudioStreamList + 4);
+    gSFileAudioStreamList.head.pNext = ~(uintptr_t)&gSFileAudioStreamList.head;
     atexit(StaticFini_gSFileAudioStreamList);
 }
 
 void StaticInit_gSFileStreamRecordList() {
-    gSFileStreamRecordList.head.pNext = ~(uintptr_t)((char*)&gSFileStreamRecordList + 4);
+    gSFileStreamRecordList.head.pNext = ~(uintptr_t)&gSFileStreamRecordList.head;
     atexit(StaticFini_gSFileStreamRecordList);
 }
 

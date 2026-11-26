@@ -244,7 +244,7 @@ BOOL __fastcall Draw(::D2WinList * pList) {
         } while (nTextWidth);
       }
 
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.nFrameNumber = pList->sEntriesControl.nCursorFrame;
       sGfxData.nDirection = 0;
       sGfxData.pDC6 = gpPentSpinCursorDC6;
@@ -485,7 +485,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     D2WinListEntry* pTailEntry;
     int32_t nPnFontType;
     ::D2WinList* pList = D2_NEW_AT(::D2WinList, ".\\Src\\D2WinList.cpp", 0x2e);
-    memset(pList, 0, 0x6c);
+    memset(pList, 0, sizeof(*pList));
     pList->sControl.neD2FormType = FORM_List;
     int* pItemCountPtr = &pList->sControl.dwState;
     *pItemCountPtr |= Fog::BitBuffer::gadwBitMasks[0];

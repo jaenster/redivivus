@@ -31,7 +31,7 @@ typedef void (*ConvertPixels_fn)(::CD2Textures * pThis, int nTexWidth, int nTexH
 #endif
 #ifndef RECON_FPTD_CreateTexture_fn
 #define RECON_FPTD_CreateTexture_fn
-typedef int (*CreateTexture_fn)(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey);
+typedef int (*CreateTexture_fn)(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey);
 #endif
 #ifndef RECON_FPTD_EndFrame_fn
 #define RECON_FPTD_EndFrame_fn
@@ -95,7 +95,7 @@ struct __attribute__((packed)) D2AGPTextureRecordStrc {
 struct CD2TexturesVtable {
     /* 0x00 */ void (*_CD2Textures)(::CD2Textures *);
     /* 0x04 */ void (*_CD2Textures_D0)(::CD2Textures *);
-    /* 0x08 */ int (*CreateTexture)(::CD2Textures *, void *, int, int, int, void *, int, int);
+    /* 0x08 */ int (*CreateTexture)(::CD2Textures *, void *, int, int, int, void *, int, intptr_t);
     /* 0x0C */ void (*EndFrame)(::CD2Textures *);
     /* 0x10 */ int (*GetFreeMemory)(::CD2Textures *, bool);
     /* 0x14 */ bool (*UploadTexture)(::CD2Textures *, struct D2TextureNodeStrc *, void *);
@@ -115,7 +115,7 @@ struct __attribute__((packed)) D2TextureNodeStrc {
     /* 0x18 */ int nOwnerType;
     /* 0x1C */ void * pOwner;
     /* 0x20 */ int nOwnerIndex;
-    /* 0x24 */ int nOwnerKey;
+    /* 0x24 */ intptr_t nOwnerKey;
     /* 0x28 */ struct D2TextureNodeStrc * pNext;
     /* 0x2C */ struct D2TextureNodeStrc * pPrev;
 };
@@ -146,7 +146,7 @@ void _CD2Textures(::CD2Textures * pThis); // 1.14d mac: 002b1064
 void _CD2Textures_D2(::CD2Textures * pThis); // 1.14d mac: 002b106e
 // Allocates a texture entry with power-of-two dimensions: evicts least-recently-used entries until enough memory is free, records size and owner, adds its memory to the used total and appends it to the used list. Returns the entry id.
 // Described from the Mac body (no Windows twin).
-int CreateTexture(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey); // 1.14d mac: 002b10e6
+int CreateTexture(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey); // 1.14d mac: 002b10e6
 // Frees a texture entry: vtable release, clears the owner back-reference, subtracts its memory, unlinks it from the used list and appends it to the free list. NULL means evict the LRU entry.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 void CD2TEXTURES_ReleaseEntry(::CD2Textures * pThis, struct D2TextureNodeStrc * pNode); // 1.14d mac: 002b1290
@@ -155,7 +155,7 @@ void CD2TEXTURES_ReleaseEntry(::CD2Textures * pThis, struct D2TextureNodeStrc * 
 struct D2TextureNodeStrc * CD2TEXTURES_AllocEntry(::CD2Textures * pThis); // 1.14d mac: 002b1372
 // Records the owner kind and pointer on the entry and writes the entry id back into the owner's slot for kinds 1-3.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
-void CD2TEXTURES_SetEntryOwner(::CD2Textures * pThis, struct D2TextureNodeStrc * pNode, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey); // 1.14d mac: 002b13b8
+void CD2TEXTURES_SetEntryOwner(::CD2Textures * pThis, struct D2TextureNodeStrc * pNode, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey); // 1.14d mac: 002b13b8
 // Appends a node to a doubly-linked head/tail list (next +0x28, prev +0x2c).
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 void CD2TEXTURES_ListAppend(::CD2Textures * pThis, struct D2TextureNodeStrc * * ppHead, struct D2TextureNodeStrc * * ppTail, struct D2TextureNodeStrc * pNode); // 1.14d mac: 002b14b4

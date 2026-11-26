@@ -147,8 +147,8 @@ void __stdcall NET_SID_CLIENT_ClearSHAContexts();
 void __stdcall NET_SID_CLIENT_ClearIDEAContexts();
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-int __fastcall NET_SID_CLIENT_GetStateAndClear(int * pOutState);
-int __fastcall SID_GetState(int * pOutState);
+int __fastcall NET_SID_CLIENT_GetStateAndClear(intptr_t * pOutState);
+int __fastcall SID_GetState(intptr_t * pOutState);
 int __fastcall NET_SID_CLIENT_SetChannelName(char * szChannelName);
 void * __stdcall NET_SID_CLIENT_GetChannelNamePtr();
 // BATTLE.NET SID_CHATEVENT (0x0F) HANDLER

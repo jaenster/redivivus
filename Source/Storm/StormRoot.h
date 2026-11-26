@@ -56,7 +56,7 @@ struct __attribute__((packed)) D2StormAsyncOpStrc {
 #endif // D2_DEFINED_D2StormAsyncOpStrc
 #ifndef D2_DEFINED_StormLinkedListStrc
 #define D2_DEFINED_StormLinkedListStrc
-struct __attribute__((packed)) StormLinkedListStrc {
+struct StormLinkedListStrc {
     /* 0x00 */ int32_t nLinkOffset; // byte offset from an item pointer to its StormLinkStrc
     /* 0x04 */ StormLinkStrc head; // sentinel link; empty list = {&head, ~(int)&head}
 };

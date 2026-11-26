@@ -193,7 +193,7 @@ void __stdcall D2WinPopup() {
     }
 
     ::D2WinPopup* pNewPopup = D2_NEW_AT(::D2WinPopup, ".\\Src\\D2WinPopup.cpp", 0x29);
-    memset(pNewPopup, 0, 0x468);
+    memset(pNewPopup, 0, sizeof(*pNewPopup));
     pNewPopup->sControl.neD2FormType = FORM_Popup;
     pNewPopup->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     pNewPopup->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];

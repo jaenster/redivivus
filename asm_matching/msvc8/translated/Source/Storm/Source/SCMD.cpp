@@ -655,10 +655,10 @@ uint32_t __stdcall SCmdDestroy() {
         pListHead = &gStormCmdListHeadBackslash;
       }
 
-      for (pNode = pListHead->head.pNext; pNode > 0; pNode = *(int*)(pNode + 4)) {
-        if ((*(uint32_t*)(pNode + 8) & 0x30000) == 0x20000 && *(void**)(pNode + 0x3c)) {
-          SMem::SMemFree(*(void**)(pNode + 0x3c), ".\\SOURCE\\SCMD.CPP", 0x212, 0);
-          *(uint32_t*)(pNode + 0x3c) = 0;
+      for (pNode = pListHead->head.pNext; pNode > 0; pNode = (intptr_t)((CMDDEF*)pNode)->pNext) {
+        if ((((CMDDEF*)pNode)->nArgTypeFlags & 0x30000) == 0x20000 && ((CMDDEF*)pNode)->uValue.szStringValue) {
+          SMem::SMemFree(((CMDDEF*)pNode)->uValue.szStringValue, ".\\SOURCE\\SCMD.CPP", 0x212, 0);
+          ((CMDDEF*)pNode)->uValue.szStringValue = 0;
         }
       }
 
@@ -837,12 +837,12 @@ void __stdcall SCmdProcessCommandLine(pfnSCmdUnknownArgCallback pfnUnknownCallba
 }
 
 void StaticInit_gStormCmdListBackslash() {
-    gStormCmdListHeadBackslash.head.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadBackslash + 4);
+    gStormCmdListHeadBackslash.head.pNext = ~(uintptr_t)&gStormCmdListHeadBackslash.head;
     atexit(StaticFini_gStormCmdListBackslash);
 }
 
 void StaticInit_gStormCmdListSlash() {
-    gStormCmdListHeadSlash.head.pNext = ~(uintptr_t)((char*)&gStormCmdListHeadSlash + 4);
+    gStormCmdListHeadSlash.head.pNext = ~(uintptr_t)&gStormCmdListHeadSlash.head;
     atexit(StaticFini_gStormCmdListSlash);
 }
 

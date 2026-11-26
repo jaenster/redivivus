@@ -790,7 +790,7 @@ FILE * __fastcall FindOrOpenLogFileSlot(uint8_t * szFileName, uint32_t * pnSlotI
           if (nEmptySlot < 0) {
             nEmptySlot = nSlot;
           }
-        } else if (!*(int*)((char*)globalOpenFileHandleArray + nSlotOffset)) {
+        } else if (!*(FILE**)((char*)globalOpenFileHandleArray + nSlotOffset * (sizeof(FILE*) / sizeof(int)))) {
           nFreeHandleSlotTmp = nSlot;
           if ((int)nFreeHandleSlot >= 0) {
             nFreeHandleSlotTmp = nFreeHandleSlot;

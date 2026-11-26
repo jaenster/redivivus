@@ -583,7 +583,7 @@ void StaticInit_CriticalSection_0088caa8() {
 
 // Constructs the 32 task-queue critical sections in aTaskQueueCriticalSections through the compiler's array iterator, InitCriticalSection per element; THREADING_DeleteCriticalSection_Thunk is the matching destructor.
 void StaticInit_aTaskQueueCriticalSections() {
-    _eh_vector_constructor_iterator_(aTaskQueueCriticalSections, 0x18, 0x20, (void (__fastcall *)(void*))Fog::Src::LogManager::InitCriticalSection, Fog::THREADING_DeleteCriticalSection_Thunk);
+    _eh_vector_constructor_iterator_(aTaskQueueCriticalSections, sizeof(CRITICAL_SECTION), 0x20, (void (__fastcall *)(void*))Fog::Src::LogManager::InitCriticalSection, Fog::THREADING_DeleteCriticalSection_Thunk);
     atexit(StaticFini_aTaskQueueCriticalSections);
 }
 
@@ -592,7 +592,7 @@ void StaticFini_CriticalSection_0088caa8() {
 }
 
 void StaticFini_aTaskQueueCriticalSections() {
-    _eh_vector_destructor_iterator_(aTaskQueueCriticalSections, 0x18, 0x20, Fog::THREADING_DeleteCriticalSection_Thunk);
+    _eh_vector_destructor_iterator_(aTaskQueueCriticalSections, sizeof(CRITICAL_SECTION), 0x20, Fog::THREADING_DeleteCriticalSection_Thunk);
 }
 
 static void * keep_00564390 = (0 ? (TASK_EnterQueueCriticalSection(*(uint32_t *)0), (void *)0) : (void *)0);

@@ -1546,7 +1546,7 @@ char __stdcall BNCLIENT_GetProtocolVersionChar() {
 }
 
 BOOL __stdcall BNCLIENT_IsSocketConnected() {
-    int nSIDState[2];
+    intptr_t nSIDState[2];
     _net_sid::SID_GetState(nSIDState);
     BOOL nReadyFlag = _net_sid::SID_GetReadyFlag();
     if (!nReadyFlag && !nSIDState[0]) {
@@ -1573,7 +1573,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     // Frame slots -8496..-8 are ONE object: &nSIDState is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
-      int nSIDState;
+      intptr_t nSIDState;
       int nSelectTimeouts;
       int nCandidateCount;
       char* pszNextServer;
@@ -1602,7 +1602,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     int nLoopCounter;
     fd_set fdWriteSet;
     fd_set fdExceptSet;
-    int nSIDStateCheck[2];
+    intptr_t nSIDStateCheck[2];
     timeval tvTimeout;
     int nAddrLen;
     uint8_t* pCandidateSlotNext;

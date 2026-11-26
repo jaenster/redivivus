@@ -927,7 +927,7 @@ void __stdcall SErrReportResourceLeak(char * szMessage) {
 }
 
 void StaticInit_gStormErrorCallbackList() {
-    gnStormErrorCallbackCount.head.pNext = ~(uintptr_t)((char*)&gnStormErrorCallbackCount + 4);
+    gnStormErrorCallbackCount.head.pNext = ~(uintptr_t)&gnStormErrorCallbackCount.head;
     atexit(StaticFini_gStormErrorCallbackList);
 }
 

@@ -32,7 +32,7 @@ typedef void (*ConvertPixels_fn)(::CD2Textures * pThis, int nTexWidth, int nTexH
 #endif
 #ifndef RECON_FPTD_CreateTexture_fn
 #define RECON_FPTD_CreateTexture_fn
-typedef int (*CreateTexture_fn)(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey);
+typedef int (*CreateTexture_fn)(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey);
 #endif
 #ifndef RECON_FPTD_EndFrame_fn
 #define RECON_FPTD_EndFrame_fn
@@ -59,7 +59,7 @@ typedef bool (*UploadTexture_fn)(::CD2Textures * pThis, struct D2TextureNodeStrc
 struct COGLTexturesVtable {
     /* 0x00 */ void (*_COGLTextures)(::COGLTextures *);
     /* 0x04 */ void (*_COGLTextures_D0)(::COGLTextures *);
-    /* 0x08 */ int (*CreateTexture)(::CD2Textures *, void *, int, int, int, void *, int, int);
+    /* 0x08 */ int (*CreateTexture)(::CD2Textures *, void *, int, int, int, void *, int, intptr_t);
     /* 0x0C */ void (*EndFrame)(::CD2Textures *);
     /* 0x10 */ int (*GetFreeMemory)(::CD2Textures *, bool);
     /* 0x14 */ bool (*UploadTexture)(::CD2Textures *, struct D2TextureNodeStrc *, void *);

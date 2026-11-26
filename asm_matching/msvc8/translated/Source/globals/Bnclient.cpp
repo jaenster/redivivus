@@ -608,7 +608,7 @@ char g_szBnetConnectionStateString[128] = {0}; D2_GLOBAL_GUARD(g_szBnetConnectio
 // Initialized scalars
 // =============================================================================
 
-uint32_t g_nBattleNetConnectionData = 0; D2_GLOBAL_GUARD(g_nBattleNetConnectionData, "Bnclient::_net_sid::g_nBattleNetConnectionData");
+uintptr_t g_nBattleNetConnectionData = 0; D2_GLOBAL_GUARD(g_nBattleNetConnectionData, "Bnclient::_net_sid::g_nBattleNetConnectionData");
 
 }} // namespace Bnclient::_net_sid
 

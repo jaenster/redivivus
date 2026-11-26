@@ -36,7 +36,7 @@ struct D2TextureNodeStrc;
 struct D2TileLibraryEntryStrc;
 typedef bool (*IsTextureBound_fn)(::CD2Textures * pThis, D2TextureNodeStrc * pNode);
 typedef bool (*UploadTexture_fn)(::CD2Textures * pThis, D2TextureNodeStrc * pNode, void * pPixels);
-typedef int (*CreateTexture_fn)(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, int nOwnerKey);
+typedef int (*CreateTexture_fn)(::CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey);
 typedef int (*GetFreeMemory_fn)(::CD2Textures * pThis, bool bExcludeReserve);
 typedef void (*BindTexture_fn)(::CD2Textures * pThis, D2TextureNodeStrc * pNode);
 typedef void (*CD2Textures_DeletingDtor_fn)(::CD2Textures * pThis);

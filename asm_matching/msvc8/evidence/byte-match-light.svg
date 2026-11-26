@@ -20,17 +20,17 @@
 <text x="416" y="112" font-size="12" fill="#59636e">functions that compile to the original bytes (MATCH)</text>
 <rect x="24" y="127" width="14" height="14" rx="2" fill="#79b8ff" stroke="#d1d9e0"/>
 <text x="46" y="138" font-size="13" fill="#1f2328">Matching instructions</text>
-<text x="334" y="138" font-size="13" text-anchor="end" fill="#1f2328">692,851</text>
+<text x="334" y="138" font-size="13" text-anchor="end" fill="#1f2328">692,847</text>
 <text x="398" y="138" font-size="13" text-anchor="end" fill="#1f2328">26.52%</text>
 <text x="416" y="138" font-size="12" fill="#59636e">already right, but the function still differs elsewhere</text>
 <rect x="24" y="153" width="14" height="14" rx="2" fill="#e3b341" stroke="#d1d9e0"/>
 <text x="46" y="164" font-size="13" fill="#1f2328">Same instruction, other operands</text>
-<text x="334" y="164" font-size="13" text-anchor="end" fill="#1f2328">233,247</text>
+<text x="334" y="164" font-size="13" text-anchor="end" fill="#1f2328">233,253</text>
 <text x="398" y="164" font-size="13" text-anchor="end" fill="#1f2328">8.93%</text>
 <text x="416" y="164" font-size="12" fill="#59636e">same instruction, other registers or offsets</text>
 <rect x="24" y="179" width="14" height="14" rx="2" fill="#d1d5da" stroke="#d1d9e0"/>
 <text x="46" y="190" font-size="13" fill="#1f2328">Different instructions</text>
-<text x="334" y="190" font-size="13" text-anchor="end" fill="#1f2328">237,268</text>
+<text x="334" y="190" font-size="13" text-anchor="end" fill="#1f2328">237,266</text>
 <text x="398" y="190" font-size="13" text-anchor="end" fill="#1f2328">9.08%</text>
 <text x="416" y="190" font-size="12" fill="#59636e">instructions with no matching partner</text>
 <rect x="24" y="205" width="14" height="14" rx="2" fill="#eceff3" stroke="#d1d9e0"/>

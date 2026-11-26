@@ -39,12 +39,12 @@ char * KeyClassic = 0; D2_GLOBAL_GUARD(KeyClassic, "Bnclient::_net_sid::KeyClass
 char * KeyExpansion = 0; D2_GLOBAL_GUARD(KeyExpansion, "Bnclient::_net_sid::KeyExpansion");
 char * KeyOwner = 0; D2_GLOBAL_GUARD(KeyOwner, "Bnclient::_net_sid::KeyOwner");
 
-int __fastcall SID_GetState(int * pOutState) {
+int __fastcall SID_GetState(intptr_t * pOutState) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     *pOutState = g_nBattleNetConnectionState;
-    pOutState[1] = g_nBattleNetConnectionData;
+    pOutState[1] = (intptr_t)g_nBattleNetConnectionData;
     if (g_nBattleNetConnectionState == 0x1b) {
-      pOutState[1] = (int)g_szBnetConnectionStateString;
+      pOutState[1] = (intptr_t)g_szBnetConnectionStateString;
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00882004);
@@ -485,7 +485,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CDKey3(char * pBytes, uint32_t nSize) {
       case 4:
         SID_SetStateFlag1(6);
       Storm::Source::SSTR::SStrCopy(gszCDKeyInUseByUsername, pBytes + 4, 0x100);
-      SID_SetStateFlag2((uint32_t)gszCDKeyInUseByUsername);
+      SID_SetStateFlag2((uintptr_t)gszCDKeyInUseByUsername);
       break;
     }
 
@@ -731,7 +731,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
               nByteIndex = nByteIndex >> 4 & 0xf;
               SID_SetStateFlag1(nByteIndex != 0 ? 0xaU : 0x6U);
               Storm::Source::SSTR::SStrCopy(gszCDKeyInUseByUsername, &pPacketData->szAdditionalInfo, 0x100);
-              SID_SetStateFlag2((uint32_t)gszCDKeyInUseByUsername);
+              SID_SetStateFlag2((uintptr_t)gszCDKeyInUseByUsername);
               Debug::DEBUG_Trace("CD Key is in use by %s (%ld)", gszCDKeyInUseByUsername, nByteIndex);
               break;
             }

@@ -1310,7 +1310,7 @@ BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame
     }
 
     int32_t nSpawnX = D2Common::Units::GetXPosFromDynamicPathUnit(pCorpse);
-    sPet.pSkillTxt = (D2SkillsTxt*)D2Common::Units::GetYPosFromDynamicPathUnit(pCorpse);
+    sPet.nSlotValue = D2Common::Units::GetYPosFromDynamicPathUnit(pCorpse);
     eD2UnitType eUnitType = pCorpse->eUnitType;
     int nUnitGUID = pCorpse->nUnitGUID;
     D2Common::DUNGEON::Dungeon::AllocDrlgDelete(D2Common::Units::UNITS_GetRoom(pCorpse), eUnitType, nUnitGUID);
@@ -1320,7 +1320,7 @@ BOOL __fastcall Skills_SrvDoFunc_031_RaiseSkeletonFromCorpse(::SGAMEDATA * pGame
     sPet.classId = nMonsterClassId;
     sPet.nMode = nSummonMode;
     sPet.nX = nSpawnX;
-    sPet.nY2 = (uint32_t)(uintptr_t)sPet.pSkillTxt;
+    sPet.nY2 = (uint32_t)sPet.nSlotValue;
     sPet.nType = sPet.nPetType;
     sPet.nFlags = 1;
     sPet.pPlayer = pUnit;
@@ -1573,7 +1573,7 @@ BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    sPetCastParams.classId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, (int*)&sPetCastParams.pSkillTxt, nullptr, nullptr);
+    sPetCastParams.classId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &sPetCastParams.nSlotValue, nullptr, nullptr);
     if (sPetCastParams.classId < 0) {
       return 0;
     }
@@ -1590,7 +1590,7 @@ BOOL __fastcall Skills_SrvDoFunc_057_IronGolem(::SGAMEDATA * pGame, D2UnitStrc *
     sPetCastParams.nFunctionId = 0;
     sPetCastParams.nType = (uint32_t)byPetTypeIdx;
     sPetCastParams.pPlayer = pUnit;
-    sPetCastParams.nMode = (uint32_t)(uintptr_t)sPetCastParams.pSkillTxt;
+    sPetCastParams.nMode = (uint32_t)sPetCastParams.nSlotValue;
     sPetCastParams.nFlags = 1;
     sPetCastParams.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     sPetCastParams.nY2 = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
@@ -1792,7 +1792,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
     uint32_t nTargetX;
     short int nSrvMissileId;
     int32_t nHalfRadius;
-    sCastPetArgs.nPetType = (int32_t)pGame;
+    sCastPetArgs.pGameSlot = pGame;
     BOOL bInTown = SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, &nTargetX, &nCursorYRaw);
     if (!bInTown) {
       return 0;
@@ -1896,7 +1896,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
 
       sSkillArg.nUnitX = nTargetX - nDirOffsetY;
       sSkillArg.nUnitY = iVar1 + nCursorYRaw;
-      pMissile = MISSILES::Missiles::CreatingMissile((::SGAMEDATA*)sCastPetArgs.nPetType, &sSkillArg);
+      pMissile = MISSILES::Missiles::CreatingMissile(sCastPetArgs.pGameSlot, &sSkillArg);
       if (pMissile) {
         D2Common::Units::Missile::SetTargetX(pMissile, pGolem->nUnitGUID);
         D2Common::Units::Missile::SetTargetY(pMissile, nHalfRadius);
@@ -1904,7 +1904,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
 
       sSkillArg.nUnitX = nDirOffsetY + nTargetX;
       sSkillArg.nUnitY = nCursorYRaw - iVar1;
-      pMissile = MISSILES::Missiles::CreatingMissile((::SGAMEDATA*)sCastPetArgs.nPetType, &sSkillArg);
+      pMissile = MISSILES::Missiles::CreatingMissile(sCastPetArgs.pGameSlot, &sSkillArg);
       if (pMissile) {
         D2Common::Units::Missile::SetTargetX(pMissile, pGolem->nUnitGUID);
         D2Common::Units::Missile::SetTargetY(pMissile, nHalfRadius);
@@ -1929,8 +1929,8 @@ static D2UnitStrc * __stdcall SKILLNEC_CreateSummonAtPosition(::SGAMEDATA * pGam
       return nullptr;
     }
 
-    sSummonParams.pSkillTxt = (D2SkillsTxt*)SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &sSummonParams.nPetType, nullptr, nullptr);
-    if ((intptr_t)sSummonParams.pSkillTxt < 0) {
+    sSummonParams.nSlotValue = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &sSummonParams.nPetType, nullptr, nullptr);
+    if (sSummonParams.nSlotValue < 0) {
       return nullptr;
     }
 
@@ -1948,7 +1948,7 @@ static D2UnitStrc * __stdcall SKILLNEC_CreateSummonAtPosition(::SGAMEDATA * pGam
 
     sSummonParams.nType = (uint32_t)byPetTypeIdx;
     sSummonParams.nSkillCalc = sSummonParams.nFunctionId;
-    sSummonParams.classId = (int32_t)sSummonParams.pSkillTxt;
+    sSummonParams.classId = sSummonParams.nSlotValue;
     sSummonParams.nMode = sSummonParams.nPetType;
     sSummonParams.nFlags = 9;
     sSummonParams.pPlayer = pUnit;

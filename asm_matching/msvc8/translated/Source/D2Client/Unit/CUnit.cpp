@@ -1714,10 +1714,21 @@ void __fastcall CLIENT_TeleportUnitToPosition(D2UnitStrc * pUnit, int32_t nX, in
           D2gfx::D2GFX::D2GFX_SetPerspectiveCapable(bNotVar1);
           if (pCurrentRoom) {
             eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pCurrentRoom);
+#if D2_ARCH_X86
+            // The compiler kept the current room's level record in ptFreePos.y's slot.
             ptFreePos.y = (LONG)D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevelId);
+#elif D2_ARCH_X64
+            // A level record no longer fits a LONG slot: it gets its own local.
+            D2LevelsTxt* pCurrentLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevelId);
+#endif
             eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
             pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevelId);
-            if (*(char*)(ptFreePos.y + 2) != pLevelsTxt->Pal) {
+#if D2_ARCH_X86
+            if (*(char*)(ptFreePos.y + 2) != pLevelsTxt->Pal)
+#elif D2_ARCH_X64
+            if (pCurrentLevelsTxt->Pal != pLevelsTxt->Pal)
+#endif
+            {
               D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette(pLevelsTxt->Pal);
               D2CMP::Pallete::PALETTE_SetAct((uint32_t)(uint8_t)pLevelsTxt->Pal);
             }

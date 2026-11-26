@@ -1305,7 +1305,7 @@ void __fastcall LINKEDLIST_UnlinkSelf_Unref_006c4070(StormLinkStrc * pNode) {
 }
 
 void StaticInit_gSevtBreakCmdList() {
-    gpSevtBreakCmdListHead.head.pNext = ~(uintptr_t)((char*)&gpSevtBreakCmdListHead + 4);
+    gpSevtBreakCmdListHead.head.pNext = ~(uintptr_t)&gpSevtBreakCmdListHead.head;
     atexit(StaticFini_gSevtBreakCmdList);
 }
 

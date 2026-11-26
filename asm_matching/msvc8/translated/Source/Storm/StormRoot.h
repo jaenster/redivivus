@@ -56,10 +56,10 @@ __pragma(pack(push, 1)) struct D2StormAsyncOpStrc {
 #endif // D2_DEFINED_D2StormAsyncOpStrc
 #ifndef D2_DEFINED_StormLinkedListStrc
 #define D2_DEFINED_StormLinkedListStrc
-__pragma(pack(push, 1)) struct StormLinkedListStrc {
+struct StormLinkedListStrc {
     /* 0x00 */ int32_t nLinkOffset; // byte offset from an item pointer to its StormLinkStrc
     /* 0x04 */ StormLinkStrc head; // sentinel link; empty list = {&head, ~(int)&head}
-}; __pragma(pack(pop))
+};
 
 #endif // D2_DEFINED_StormLinkedListStrc
 namespace Storm {

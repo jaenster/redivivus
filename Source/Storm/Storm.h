@@ -124,7 +124,7 @@ struct BigBuffer {
 #endif // D2_DEFINED_BigBuffer
 #ifndef D2_DEFINED_StormLinkStrc
 #define D2_DEFINED_StormLinkStrc
-struct __attribute__((packed)) StormLinkStrc {
+struct StormLinkStrc {
     /* 0x00 */ struct StormLinkStrc * pPrevLink; // points at the previous node's link, or at the list head's own link
     /* 0x04 */ intptr_t pNext; // pointer to the NEXT ITEM (not its link); end of list is ~(int)&headLink, i.e. negative
 };
@@ -690,7 +690,7 @@ struct static_tree_desc {
 #endif // D2_DEFINED_static_tree_desc
 #ifndef D2_DEFINED_StormLinkedListStrc
 #define D2_DEFINED_StormLinkedListStrc
-struct __attribute__((packed)) StormLinkedListStrc {
+struct StormLinkedListStrc {
     /* 0x00 */ int32_t nLinkOffset; // byte offset from an item pointer to its StormLinkStrc
     /* 0x04 */ StormLinkStrc head; // sentinel link; empty list = {&head, ~(int)&head}
 };

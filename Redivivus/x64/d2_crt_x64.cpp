@@ -1,4 +1,4 @@
-// The one x86-only link definition the 64-bit build has to spell differently.
+// The link definitions the 64-bit build has to spell differently.
 //
 // Redivivus/d2_link_support.s defines _Wrappers::CRT_ExceptionFilter1 as an
 // i686 stub (the decorated symbol, `xorl %eax,%eax; ret`); that file is x86
@@ -28,3 +28,17 @@ void CRT_ExceptionFilter1(EHExceptionRecord*, EHRegistrationNode*, CONTEXT*, voi
 extern "C" unsigned short __cdecl _rotl16(unsigned short value, unsigned char shift) {
     return (unsigned short)((value << shift) | (value >> (16 - shift)));
 }
+
+// Fog's LOGMGR_GetTime32 and D2Common's SEED_GetTime32 copy VC8's inline time(),
+// which calls _time32. The UCRT exports it; the x86-64 msvcrt.dll import library
+// of older mingw-w64 (the distro packages CI uses) does not, so the import slot
+// is filled here from _time64, which every msvcrt exports.
+#include <time.h>
+#if !defined(_UCRT)
+static __time32_t __cdecl d2_time32(__time32_t* pTime) {
+    __time32_t nTime = (__time32_t)_time64(nullptr);
+    if (pTime) *pTime = nTime;
+    return nTime;
+}
+extern "C" __time32_t(__cdecl* __imp__time32)(__time32_t*) = d2_time32;
+#endif

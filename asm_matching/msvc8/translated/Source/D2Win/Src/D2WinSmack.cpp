@@ -184,7 +184,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 ::D2WinSmack * __fastcall D2WinSmack(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, OnPress pfnOnPress) {
     uint32_t dwState;
     ::D2WinSmack* pSmack = D2_NEW_AT(::D2WinSmack, ".\\Src\\D2WinSmack.cpp", 0x23);
-    memset(pSmack, 0, 0x150);
+    memset(pSmack, 0, sizeof(*pSmack));
     pSmack->sControl.neD2FormType = FORM_Smack;
     pSmack->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     dwState = pSmack->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];

@@ -2482,7 +2482,7 @@ static int32_t __stdcall D2COMP_LoadLayerSpritesAndCalcHeight(uint8_t * pbLayerC
           exit(-1);
         }
 
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.pDC6 = 0;
         sGfxData.nDirection = (int)bPaletteShift;
         sGfxData.nFrameNumber = nFrameNumber;
@@ -2565,7 +2565,7 @@ void __fastcall D2COMP_DrawUnitShadow(D2CharSelCompStrc * pCompUnit) {
           }
 
           while ((byComponent = nLayerCount[nLayerIndex]) < 0x10) {
-            memset(&sGfxData, 0, 0x48);
+            memset(&sGfxData, 0, sizeof(sGfxData));
             D2COMP_InitComponentEntry((uint32_t)pCompUnit->nAnimSpeed, nWeaponClass, pCompUnit, byComponent, nullptr, &sGfxData);
             D2gfx::D2GFX::D2GFX_DrawShadow(&sGfxData, nPositionX - 2, nPositionY);
             nLayerIndex++;
@@ -2620,7 +2620,7 @@ void __fastcall D2COMP_DrawCompositeUnit(D2CharSelCompStrc * pCompUnit, int32_t 
           exit(-1);
         }
 
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.nFrameNumber = gnPentaSpinCursorFrame;
         sGfxData.pDC6 = pUniqueCursorDC6;
         sGfxData.nDirection = 0;
@@ -2631,7 +2631,7 @@ void __fastcall D2COMP_DrawCompositeUnit(D2CharSelCompStrc * pCompUnit, int32_t 
       if (pUniqueCursorDC6) {
         sPalShift.abyRemap[1] = pCompUnit->nGuildEmblemColor1;
         sPalShift.abyRemap[2] = pCompUnit->nGuildEmblemColor2;
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.pDC6 = pUniqueCursorDC6;
         sGfxData.nDirection = 0;
         sGfxData.nFrameNumber = 0;
@@ -2670,7 +2670,7 @@ void __fastcall D2COMP_DrawCompositeUnit(D2CharSelCompStrc * pCompUnit, int32_t 
           if (*pLayerFlags > 0) {
             do {
               nComponentType = (uint32_t)nLayerTypeListOffset[nLayerIndex];
-              memset(&sGfxData, 0, 0x48);
+              memset(&sGfxData, 0, sizeof(sGfxData));
               bVar3 = D2COMP_ValidateComponentType((uint32_t)pCompUnit->nNumDirections, pCompUnit->nAnimSpeed);
               uVar2 = nComponentType;
               sGfxData.nFrameNumber = nWeaponClass;
@@ -2716,7 +2716,7 @@ void __fastcall D2COMP_DrawCompositeUnit(D2CharSelCompStrc * pCompUnit, int32_t 
             exit(-1);
           }
 
-          memset(&sGfxData, 0, 0x48);
+          memset(&sGfxData, 0, sizeof(sGfxData));
           sGfxData.nFrameNumber = gnUniqueCursorFrame;
           sGfxData.pDC6 = pUniqueCursorDC6;
           sGfxData.nDirection = 0;
@@ -3126,6 +3126,22 @@ int32_t __stdcall D2COMP_IsItemTypeDescendant(int32_t nItemType, int32_t nAncest
       }
 
       nQueueCount = nQueueTail - 1;
+#if D2_ARCH_X64
+      // The 1.14d itemtypes/weapons/armor/misc .bin records are 0xec/0x250 bytes, read here with the
+      // older 0xe4/0x1a8 strides, so the item types are misread and can index far outside the table.
+      // The 32-bit build reads that out-of-range memory unnoticed; on x64 it is unmapped, so such an
+      // index is taken to have no parent types.
+      if ((uint32_t)iVar1 >= gnD2CompCompressionBufferSize) {
+        if (nQueueCount >= 0x40) {
+          break;
+        }
+        nQueueTail = nQueueCount;
+        if (!nQueueCount) {
+          return 0;
+        }
+        continue;
+      }
+#endif
       if (gpItemTypesTxt[iVar1].equiv1) {
         sEquiv2 = gpItemTypesTxt[iVar1].equiv2;
         nQueueHead[nQueueTail - 1] = (int)gpItemTypesTxt[iVar1].equiv1;
@@ -4310,7 +4326,7 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
     }
     {
       int* pCofCache;
-      memset(pCharSelComp, 0, 0x234);
+      memset(pCharSelComp, 0, sizeof(*pCharSelComp));
       pCofCache = (int*)D2_ALLOC_AT(4, ".\\Src\\D2Comp.cpp", 0x866);
       if (!pCofCache) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x867);

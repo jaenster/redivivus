@@ -2016,7 +2016,7 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
       Fog::File::CONTAINER_InitializeBuffer(awszDisplayText, 2, 300, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
       pDC6Bg = pEditBox->sControl.pDC6;
       if (pDC6Bg) {
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.pDC6 = pDC6Bg;
         sGfxData.nDirection = 0;
         sGfxData.nFrameNumber = 0;
@@ -2130,7 +2130,7 @@ BOOL __fastcall DrawFlag0x8(::D2WinEditBox * pEditBox) {
 // @sourcefile .\Src\D2WinEditBox.cpp
 ::D2WinEditBox * __fastcall D2WinEditBox(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int32_t nInsetX, int32_t nInsetY, DC6 * pDC6, fpD2WinEditBoxSubmit pfnSubmit, OnPress pfnOnPress, uint32_t nFlags, uint32_t * pFontIds) {
     ::D2WinEditBox* pNewEditBox = D2_NEW_AT(::D2WinEditBox, ".\\Src\\D2WinEditBox.cpp", 0x39);
-    memset(pNewEditBox, 0, 0x284);
+    memset(pNewEditBox, 0, sizeof(*pNewEditBox));
     pNewEditBox->sControl.neD2FormType = FORM_EditBox;
     pNewEditBox->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     pNewEditBox->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];

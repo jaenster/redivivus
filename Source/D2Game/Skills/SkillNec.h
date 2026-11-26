@@ -76,8 +76,15 @@ struct D2MonsterCastPetStrc {
     /* 0x18 */ uint32_t nY2;
     /* 0x1C */ uint32_t nType;
     /* 0x20 */ uint32_t nSkillCalc;
-    /* 0x24 */ int32_t nPetType;
-    /* 0x28 */ struct D2SkillsTxt * pSkillTxt; // Not a coordinate. Skills_SrvDoFunc_015_SummonDecoy @005dc000 stores sgptDataTable->pTxtSkills + eSkill here and later dereferences it as (sSummonParams.nY)->calc[1] and ->calc[2].
+    /* 0x24 */ union {
+        int32_t nPetType;
+        ::SGAMEDATA * pGameSlot; // Skills_SrvDoFunc_060_SummonBoneWall keeps pGame in this word
+        struct D2SkillsTxt * pPetSkillTxt; // Skills_SrvDoFunc_016_SummonValkyrie keeps its skill row here
+    };
+    /* 0x28 */ union {
+        struct D2SkillsTxt * pSkillTxt; // Not a coordinate. Skills_SrvDoFunc_015_SummonDecoy @005dc000 stores sgptDataTable->pTxtSkills + eSkill here and later dereferences it as (sSummonParams.nY)->calc[1] and ->calc[2].
+        int32_t nSlotValue; // the integer the other summon skills keep here: a class id, pet mode, lifetime or corpse Y
+    };
 };
 
 #endif // D2_DEFINED_D2MonsterCastPetStrc

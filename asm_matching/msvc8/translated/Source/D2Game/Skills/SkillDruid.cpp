@@ -64,7 +64,7 @@ BOOL __fastcall Skills_SrvDoFunc_114_SummonRaven(::SGAMEDATA * pGame, D2UnitStrc
     sSummonParams.nType = (uint32_t)byPetType;
     sSummonParams.pPlayer = pUnit;
     sSummonParams.nMode = sSummonParams.nPetType;
-    sSummonParams.pSkillTxt = (D2SkillsTxt*)sSummonParams.classId;
+    sSummonParams.nSlotValue = sSummonParams.classId;
     sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl);
     D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sSummonParams);
     if (pSummon) {
@@ -117,7 +117,7 @@ BOOL __fastcall Skills_SrvDoFunc_115_SummonPoisonCreeper(::SGAMEDATA * pGame, D2
     sCastPetParams.nType = (uint32_t)byPetType;
     sCastPetParams.pPlayer = pUnit;
     sCastPetParams.nMode = 8;
-    sCastPetParams.pSkillTxt = (D2SkillsTxt*)sCastPetParams.classId;
+    sCastPetParams.nSlotValue = sCastPetParams.classId;
     sCastPetParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl);
     D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sCastPetParams);
     if (pSummon) {
@@ -481,7 +481,7 @@ BOOL __fastcall Skills_SrvDoFunc_119_SummonDireWolf(::SGAMEDATA * pGame, D2UnitS
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSaved, pUnit, (uint32_t*)&sPetCast.nPetType, (uint32_t*)&sPetCast.pSkillTxt);
+    _bHasTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSaved, pUnit, (uint32_t*)&sPetCast.nPetType, (uint32_t*)&sPetCast.nSlotValue);
     if (!_bHasTarget) {
       return 0;
     }
@@ -546,7 +546,7 @@ BOOL __fastcall SKILLDRUID_CreateSummon(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     sPetCast.nType = (uint32_t)byPetType;
     sPetCast.pPlayer = pUnit;
     sPetCast.nMode = sPetCast.nPetType;
-    sPetCast.pSkillTxt = (D2SkillsTxt*)sPetCast.classId;
+    sPetCast.nSlotValue = sPetCast.classId;
     sPetCast.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl2);
     D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sPetCast);
     if (pSummon) {

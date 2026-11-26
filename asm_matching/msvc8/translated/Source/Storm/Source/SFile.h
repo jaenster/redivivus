@@ -283,10 +283,10 @@ union SFILE_s_OpenArchive_Slotmc {
 #endif // D2_MODULE_Storm
 #ifndef D2_DEFINED_StormLinkStrc
 #define D2_DEFINED_StormLinkStrc
-__pragma(pack(push, 1)) struct StormLinkStrc {
+struct StormLinkStrc {
     /* 0x00 */ struct StormLinkStrc * pPrevLink; // points at the previous node's link, or at the list head's own link
     /* 0x04 */ intptr_t pNext; // pointer to the NEXT ITEM (not its link); end of list is ~(int)&headLink, i.e. negative
-}; __pragma(pack(pop))
+};
 
 #endif // D2_DEFINED_StormLinkStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)

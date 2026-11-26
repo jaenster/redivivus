@@ -151,7 +151,7 @@ BOOL __fastcall Draw(::D2WinImage * pImage) {
       nTileRowY = pImage->sControl.dwSizeY;
       nTilesY = (nTileRowY + 0xff >> 8) - 1;
       nTilesX = pImage->sControl.dwSizeX + 0xff >> 8;
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.pDC6 = pImage->sControl.pDC6;
       sGfxData.nFrameNumber = pImage->nFrame;
       sGfxData.nDirection = 0;
@@ -257,7 +257,7 @@ BOOL __fastcall Draw(D2WinImageEx * pImageEx) {
       int nBorderX;
       nBorderX = pImageEx->nBorderX;
       nBorderY = pImageEx->nBorderY;
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.pDC6 = pImageEx->sImage.sControl.pDC6;
       sNinePatch.nUScale[2] = 0x100 - nBorderX;
       sNinePatch.nUScale[3] = 0x100;
@@ -335,7 +335,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 ::D2WinImage * __fastcall D2WinImage(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, OnPress pfnOnPress, D2WinImageHitArea * pHitAreas, ::Key pKey) {
     uint32_t dwState;
     ::D2WinImage* pNewImage = D2_NEW_AT(::D2WinImage, ".\\Src\\D2WinImage.cpp", 0x1d);
-    memset(pNewImage, 0, 0x4c);
+    memset(pNewImage, 0, sizeof(*pNewImage));
     pNewImage->sControl.neD2FormType = FORM_Image;
     pNewImage->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     dwState = pNewImage->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
@@ -362,7 +362,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 // @sourcefile .\Src\D2WinImage.cpp
 D2WinImageEx * __fastcall D2WINIMAGE_CreateImageEx(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, int32_t nBorderX, int32_t nBorderY) {
     D2WinImageEx* pNewImageEx = D2_NEW_AT(D2WinImageEx, ".\\Src\\D2WinImage.cpp", 0x3b);
-    memset(pNewImageEx, 0, 0x54);
+    memset(pNewImageEx, 0, sizeof(*pNewImageEx));
     pNewImageEx->sImage.sControl.neD2FormType = FORM_Image;
     pNewImageEx->sImage.sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     pNewImageEx->sImage.sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];

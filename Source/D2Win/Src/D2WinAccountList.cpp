@@ -232,7 +232,7 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
 ::D2WinAccountList * __fastcall D2WinAccountList(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int32_t nUserData, uint32_t * pdwFontData) {
     uint32_t dwControlState;
     ::D2WinAccountList* pNewList = D2_NEW_AT(::D2WinAccountList, ".\\Src\\D2WinAccountList.cpp", 0x24);
-    memset(pNewList, 0, 0x58);
+    memset(pNewList, 0, sizeof(*pNewList));
     pNewList->sControl.neD2FormType = FORM_AccountList;
     pNewList->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     dwControlState = pNewList->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];

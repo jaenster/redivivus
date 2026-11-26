@@ -128,7 +128,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::UnlinkNode(::String
 }
 
 template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::Next(::StringEntryNode * pNode) {
-    TSLink<::StringEntryNode>* pLink = pNode ? (TSLink<::StringEntryNode>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset) - 4) : &this->m_terminator;
+    TSLink<::StringEntryNode>* pLink = pNode ? (TSLink<::StringEntryNode>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset) - offsetof(::StringEntryNode, m_linktoslot)) : &this->m_terminator;
     intptr_t nFirstLink = pLink->m_next;
     return (::StringEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
 }
@@ -205,7 +205,7 @@ TSExplicitList<::StringEntryNode, -572662307>* __thiscall CopyConstructor_Unrefe
 }
 
 template<> ::StringEntryNode * TSHashTable<StringEntryNode, HASHKEY_STRI>::Next(::StringEntryNode * pNode) {
-    TSLink<::StringEntryNode>* pLink = pNode ? (TSLink<::StringEntryNode>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->tFullList.m_linkoffset) - 4) : &this->tFullList.m_terminator;
+    TSLink<::StringEntryNode>* pLink = pNode ? (TSLink<::StringEntryNode>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->tFullList.m_linkoffset) - offsetof(::StringEntryNode, m_linktoslot)) : &this->tFullList.m_terminator;
     intptr_t nFirstLink = pLink->m_next;
     return (::StringEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
 }

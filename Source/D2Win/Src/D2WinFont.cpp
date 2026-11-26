@@ -387,7 +387,7 @@ static void __stdcall D2WINFONT_DrawWideString(uint16_t * wszText, int32_t nX, i
       nPositionX = nX + (nWidth - nLineWidth >> 1);
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = *gppDC6FontCache;
     sGfxData.nDirection = 0;
     int iVar1 = 0;
@@ -459,7 +459,7 @@ static void __stdcall D2WINFONT_DrawWideStringWithDrawMode(int32_t nX, uint16_t 
       nPositionX = nX + (nWidth - nLineWidth >> 1);
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = *gppDC6FontCache;
     sGfxData.nDirection = 0;
     if (nStrLen <= 0) {
@@ -533,7 +533,7 @@ void __fastcall D2WINFONT_DrawVerticalCroppedText(uint16_t * wszText, int32_t nX
     eRendererModeVal = D2gfx::D2GFX::D2GFX_GetRendererMode();
     int32_t nTotalStrLen;
     nTotalStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     if (nTotalStrLen <= 0) {
       return;
@@ -610,7 +610,7 @@ void __fastcall D2WINFONT_DrawTickerText(uint16_t * wszText, int32_t nXStart, in
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
     int nCharIdx = 0;
     int nPositionX = nXStart + nScrollOffsetX;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = *gppDC6FontCache;
     sGfxData.nDirection = 0;
     if (nStrLen <= 0) {
@@ -678,7 +678,7 @@ static void D2WINFONT_DrawWideStringSimple(int32_t nX, uint16_t * wszText, int32
     D2FontGlyphStrc* pGlyphEntry;
     D2GfxDataStrc sGfxData;
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = *gppDC6FontCache;
     sGfxData.nDirection = 0;
     int nStartX = nX;
@@ -893,7 +893,7 @@ void __fastcall IMAGE_DrawDC6ImageOnScreen(DC6 * pDC6, int32_t nPosX, int32_t nP
     int nDrawX;
     uint32_t nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(pDC6);
     uint32_t nTotalWidth = 0;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pDC6;
     sGfxData.nDirection = 0;
     if (nAlignment == 1 || (nDrawX = nPosX , nAlignment == 2)) {

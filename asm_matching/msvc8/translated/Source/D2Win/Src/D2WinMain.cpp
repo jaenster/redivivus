@@ -583,14 +583,14 @@ void __stdcall DrawCursorOOG() {
     static uint32_t gnCursorDrawPosY; D2_STATIC_GUARD_BSS(gnCursorDrawPosY, "D2Win::Src::D2WinMain::DrawCursorOOG::gnCursorDrawPosY");
 
     D2GfxDataStrc sGfxData;
-    DC6* pDVar1 = gpCursorDC6;
+    DC6* pDVar1 = gpCursorDC6; // steer-ok: generated form, kept as emitted
     if (!(gpCursorDC6 && gbCursorVisible)) {
       return;
     }
 
     gnCursorDrawPosX = nPosX;
     gnCursorDrawPosY = nPosY;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nFrameNumber = D2GFX::gnCursorDC6FrameNumber;
     sGfxData.pDC6 = pDVar1;
     sGfxData.nDirection = 0;
@@ -639,7 +639,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
       int nPositionX;
       D2gfx::D2GFX::D2GFX_ClearScreen(0);
       if (gpOutOfGameBackgroundDC6) {
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.pDC6 = gpOutOfGameBackgroundDC6;
         sGfxData.nDirection = 0;
         sGfxData.nFrameNumber = 0;

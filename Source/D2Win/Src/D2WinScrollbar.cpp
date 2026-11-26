@@ -307,7 +307,7 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
 
       dwState = pScrollbar->sControl.dwState;
       if (Fog::BitBuffer::gadwBitMasks[2] & dwState && Fog::BitBuffer::gadwBitMasks[0] & dwState) {
-        pDC6 = pScrollbar->sControl.pDC6;
+        pDC6 = pScrollbar->sControl.pDC6; // steer-ok: generated form, kept as emitted
         nLine = pScrollbar->sControl.dwPosX;
         nDrawY = pScrollbar->sControl.dwPosY - 1;
         if (!pScrollbar->nMaxValue) {
@@ -324,7 +324,7 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
           D2WinScrollbar::Push(&pScrollbarArg);
         }
 
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.pDC6 = pDC6;
         sGfxData.nDirection = 0;
         sGfxData.nFrameNumber = pScrollbar->bDownArrowPressed != 0 ? 0x3U : 0x1U;
@@ -353,7 +353,7 @@ BOOL __fastcall Draw(::D2WinScrollbar * pScrollbar) {
 
 ::D2WinScrollbar * __fastcall D2WinScrollbar(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, OnPress pfnOnPress) {
     ::D2WinScrollbar* pNewScrollbar = D2_NEW_AT(::D2WinScrollbar, ".\\Src\\D2WinScrollbar.cpp", 0x1c);
-    memset(pNewScrollbar, 0, 0x60);
+    memset(pNewScrollbar, 0, sizeof(*pNewScrollbar));
     pNewScrollbar->sControl.neD2FormType = FORM_Scrollbar;
     pNewScrollbar->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     pNewScrollbar->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];

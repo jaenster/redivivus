@@ -2429,14 +2429,14 @@ BOOL __fastcall Skills_SrvDoFunc_049_SummonShadowClone(::SGAMEDATA * pGame, D2Un
     SKILLASS_ApplyLevelScaledBuffs(pGame, pSkillTxtSaved, eSkill, nSkillLvl, pSummon);
     int32_t nLifetime;
     nLifetime = D2Common::Skills::GetSkillParam4(eSkill, nSkillLvl);
-    sSummonCast.pSkillTxt = (D2SkillsTxt*)nLifetime;
+    sSummonCast.nSlotValue = nLifetime;
     if (nLifetime <= 1) {
-      sSummonCast.pSkillTxt = (D2SkillsTxt*)0x1;
+      sSummonCast.nSlotValue = 1;
     }
 
     int32_t nMaxLifetime;
     nMaxLifetime = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-    if ((intptr_t)sSummonCast.pSkillTxt < nMaxLifetime) {
+    if (sSummonCast.nSlotValue < nMaxLifetime) {
       nMaxLifetime = 1;
       if (1 < nLifetime) {
         goto equip_and_activate_clone;

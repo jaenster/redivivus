@@ -609,7 +609,7 @@ uint32_t __stdcall CLIENT_ConnectToBattleNet() {
     }
 
     MainMenus::FORMS_DestroyListJmp();
-    gpBNetCallbacks->pfnGetStateAndClear((int*)&sBNetConnectState);
+    gpBNetCallbacks->pfnGetStateAndClear((intptr_t*)&sBNetConnectState);
     gnBNetConnectInProgress = 0;
     if (sBNetConnectState.eErrorCode) {
       nErrorResult = ShowOogErrorDialog(&sBNetConnectState);
@@ -638,7 +638,7 @@ int __fastcall EnterEmailMessagePumper(D2IniConfigStrc * pIniConfig, int32_t bCr
     }
 
     MainMenus::UIMENU_PleaseWaitWithCancelButton();
-    gpBNetCallbacks->pfnGetStateAndClear((int*)&sBnetErrorState);
+    gpBNetCallbacks->pfnGetStateAndClear((intptr_t*)&sBnetErrorState);
     if (bCreateAccount && !sBnetErrorState.eErrorCode) {
       gpBNetCallbacks->pfnSendCreateAccountRequest(pIniConfig->szLastBnetAccount, pIniConfig->szLastKnownIpTcpIp);
       D2Win::Src::D2WinMain::MessagePump(LAUNCHER_HandleBnetConnect_1);
@@ -713,7 +713,7 @@ int __fastcall EnterEmailMessagePumper(D2IniConfigStrc * pIniConfig, int32_t bCr
       }
     }
 
-    gpBNetCallbacks->pfnGetStateAndClear((int*)&sBnetErrorState);
+    gpBNetCallbacks->pfnGetStateAndClear((intptr_t*)&sBnetErrorState);
     MainMenus::FORMS_DestroyListJmp();
     if (sBnetErrorState.eErrorCode) {
       nResult = ShowOogErrorDialog(&sBnetErrorState);

@@ -122,7 +122,7 @@ BOOL __stdcall Key(D2ControlMsg * pTimer) {
 ::D2WinTimer * __fastcall D2WinTimer(int32_t nTimeoutInSeconds, OnPress pfnOnPress) {
     DWORD dwCreationTick;
     ::D2WinTimer* pTimer = D2_NEW_AT(::D2WinTimer, ".\\Src\\D2WinTimer.cpp", 0x1c);
-    memset(pTimer, 0, 0x48);
+    memset(pTimer, 0, sizeof(*pTimer));
     pTimer->sControl.neD2FormType = FORM_Timer;
     pTimer->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     pTimer->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[2];

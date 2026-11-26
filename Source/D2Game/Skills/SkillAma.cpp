@@ -980,8 +980,8 @@ BOOL __fastcall Skills_SrvDoFunc_016_SummonValkyrie(::SGAMEDATA * pGame, D2UnitS
       return 0;
     }
 
-    sSummonParams.nPetType = (int32_t)pSkillTxt;
-    sSummonParams.classId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, (int*)&sSummonParams.pSkillTxt, nullptr, nullptr);
+    sSummonParams.pPetSkillTxt = pSkillTxt;
+    sSummonParams.classId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &sSummonParams.nSlotValue, nullptr, nullptr);
     if (sSummonParams.classId < 0) {
       return 0;
     }
@@ -999,7 +999,7 @@ BOOL __fastcall Skills_SrvDoFunc_016_SummonValkyrie(::SGAMEDATA * pGame, D2UnitS
     sSummonParams.nSkillCalc = 0;
     sSummonParams.nFunctionId = 0;
     sSummonParams.nType = (uint32_t)byPetType;
-    sSummonParams.nMode = (uint32_t)(uintptr_t)sSummonParams.pSkillTxt;
+    sSummonParams.nMode = (uint32_t)sSummonParams.nSlotValue;
     sSummonParams.pPlayer = pUnit;
     sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl);
     pValkyrie = SkillsServer::SKILL_CreateSummon(pGame, &sSummonParams);
@@ -1008,7 +1008,7 @@ BOOL __fastcall Skills_SrvDoFunc_016_SummonValkyrie(::SGAMEDATA * pGame, D2UnitS
     }
 
     SkillNec::SKILLS_SetSummonBaseStats(pGame, pUnit, pValkyrie, 0, nSkillLvl);
-    nSummonBuffParam = D2Common::Skills::D2GetSkillCalc(pUnit, ((int*)(sSummonParams.nPetType + 0x138))[1], eSkill, nSkillLvl);
+    nSummonBuffParam = D2Common::Skills::D2GetSkillCalc(pUnit, sSummonParams.pPetSkillTxt->calc[1], eSkill, nSkillLvl);
     SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pValkyrie, eSkill, nSkillLvl, nSummonBuffParam);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pValkyrie, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::SetEvent(pGame, pValkyrie, 2, pGame->dwGameFrame + 0x14, 0, 0);

@@ -3417,7 +3417,7 @@ char * __fastcall FOG_FindCharInString(char * szText, char cSearchChar) {
 // LINKEDLIST_GetNodePointer return ~0xff8d05e7 == 0x0072fa18, i.e. a write to
 // the ORIGINAL image address. Address-relative, not a constant.
 void StaticInit_gFaultHandlerList() {
-    gFaultHandlerList.head.pNext = ~(uintptr_t)((char*)&gFaultHandlerList + 4);
+    gFaultHandlerList.head.pNext = ~(uintptr_t)&gFaultHandlerList.head;
     atexit(StaticFini_gFaultHandlerList);
 }
 

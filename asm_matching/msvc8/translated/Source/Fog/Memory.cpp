@@ -238,7 +238,7 @@ static void __stdcall InsertBlockIntoSortedArray(D2PoolBlockStrc * pBlock, D2Poo
     }
 
     if (nLow < (int)nManager->nBlocks) {
-      memmove(pSortedArray + nLow + 1, pSortedArray + nLow, (nManager->nBlocks - nLow) * 8);
+      memmove(pSortedArray + nLow + 1, pSortedArray + nLow, (nManager->nBlocks - nLow) * sizeof(D2PoolBlockEntryStrc));
     }
 
     pSortedArray[nLow].pBlock = pBlock;
@@ -266,7 +266,7 @@ static void __stdcall RemoveBlockFromSortedArray(D2PoolBlockStrc * pBlock, D2Poo
         } else if (nKey <= pBlock->pCommit) {
           if ((int)nMid < (int)(nCount - 1)) {
             pArrayElem += nMid;
-            memmove(pArrayElem, pArrayElem + 1, (nCount - nMid) * 8 - 8);
+            memmove(pArrayElem, pArrayElem + 1, (nCount - nMid) * sizeof(D2PoolBlockEntryStrc) - sizeof(D2PoolBlockEntryStrc));
           }
 
           nManager->nBlocks--;

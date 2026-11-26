@@ -1,13 +1,13 @@
-tree 89b9d34ae-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X86=1 /D D2_TARGET_CLIENT=1; Source/D2Client/ /GS-; Source/D2DDraw/ /GS-; Source/D2Direct3D/ /GS-; Source/D2Gdi/ /GS-; Source/D2Glide/ /GS-; Source/D2Launch/ /GS-; Source/D2Launch/Engine/ ; Source/D2MCPClient/ /GS-; Source/D2Multi/ /GS-; Source/D2Sound/ /GS-; Source/D2Win/ /GS-; Source/D2gfx/ /GS-; Source/D2Hell/ /Y- /O1 /Oy- /Ob1; 3rdparty/crashy/ /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT; Source/Storm/3rdparty/zlib/ /Y- /Ob2
+tree 1e59bce82-dirty; compiler sp1; flags /O2 /Oy- /Ob1 /EHsc /GS /MT /W1 /D WIN32 /D NDEBUG /D _WINDOWS /D D2_OS_WIN=1 /D D2_ARCH_X86=1 /D D2_TARGET_CLIENT=1; Source/D2Client/ /GS-; Source/D2DDraw/ /GS-; Source/D2Direct3D/ /GS-; Source/D2Gdi/ /GS-; Source/D2Glide/ /GS-; Source/D2Launch/ /GS-; Source/D2Launch/Engine/ ; Source/D2MCPClient/ /GS-; Source/D2Multi/ /GS-; Source/D2Sound/ /GS-; Source/D2Win/ /GS-; Source/D2gfx/ /GS-; Source/D2Hell/ /Y- /O1 /Oy- /Ob1; 3rdparty/crashy/ /Y- /DWINSOCK_API_LINKAGE=DECLSPEC_IMPORT; Source/Storm/3rdparty/zlib/ /Y- /Ob2
 Without the C runtime: 11854 of 14900 functions MATCH (79.56%), 1416014 of 2612801 bytes (54.20%)
   runtime left out: 987 functions (145381 bytes): libmap pairs, the library run 00681a48..006b00b3, import thunks, runtime.tsv
   prebuilt library left out: 16 functions (4397 bytes): byte-identical to the prebuilt library objects in prebuilt.tsv
   compiler EH code left out: 117 functions (2245 bytes): __ehhandler stubs and the unwind funclets their FuncInfo names
 byte kinds of the headline total: 2612801 bytes
   kind whole       1416014  54.20% functions that compile to the original bytes (MATCH)
-  kind ident        692851  26.52% already right, but the function still differs elsewhere
-  kind operand      233247   8.93% same instruction, other registers or offsets
-  kind differ       237268   9.08% instructions with no matching partner
+  kind ident        692847  26.52% already right, but the function still differs elsewhere
+  kind operand      233253   8.93% same instruction, other registers or offsets
+  kind differ       237266   9.08% instructions with no matching partner
   kind noncode       18864   0.72% switch tables and padding in functions that still differ
   kind uncompared    14557   0.56% original functions with no counterpart compared
 whole binary:

@@ -66,3 +66,38 @@ jobs:
           path: ${{ runner.temp }}/reports/
           retention-days: 30
           if-no-files-found: ignore
+
+  # The 64-bit dedicated server: link only, nothing runs. FFmpeg's headers are a
+  # compile-time dependency of every 64-bit configure (Redivivus/x64/), so the
+  # distro's dev package stands in for the include/ of a Windows FFmpeg build.
+  mingw-x86_64-d2host:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install the toolchain
+        run: |
+          sudo apt-get update -qq
+          sudo apt-get install -y -qq g++-mingw-w64-x86-64 binutils-mingw-w64-x86-64 cmake ninja-build ccache libavformat-dev
+
+      - name: Restore the compile cache
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/ccache
+          key: ccache-mingw-x86_64-d2host-${{ github.sha }}
+          restore-keys: ccache-mingw-x86_64-d2host-
+
+      - name: Configure (strict, server only)
+        run: |
+          inc=$(dirname "$(dirname "$(find /usr/include -path '*/libavformat/avformat.h' -print -quit)")")
+          cmake -G Ninja -S . -B build64 \
+            -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-x86_64.cmake \
+            -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+            -DREDIVIVUS_SERVER=ON -DREDIVIVUS_MODULE_LIBRARIES=ON -DREDIVIVUS_OPENGL=OFF \
+            -DREDIVIVUS_PERMISSIVE=OFF -DREDIVIVUS_FFMPEG_INCLUDE="$inc"
+
+      - name: Link d2host
+        run: |
+          export CCACHE_DIR=$HOME/.cache/ccache CCACHE_MAXSIZE=2G CCACHE_COMPRESS=true
+          ninja -C build64 d2host
+          x86_64-w64-mingw32-objdump -f build64/d2host.exe | grep -q 'pei-x86-64'

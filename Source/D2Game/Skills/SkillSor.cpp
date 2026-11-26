@@ -1256,8 +1256,8 @@ BOOL __fastcall Skills_SrvDoFunc_144_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUn
     if (pSkillTxt) {
       D2RoomStrc* pRoom;
       pGameSaved = pGame;
-      sSummonParams.pSkillTxt = (D2SkillsTxt*)SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, iHydraIdx, nSkillLvl, &nAnimMode, nullptr, nullptr);
-      if ((intptr_t)sSummonParams.pSkillTxt >= 0) {
+      sSummonParams.nSlotValue = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, iHydraIdx, nSkillLvl, &nAnimMode, nullptr, nullptr);
+      if (sSummonParams.nSlotValue >= 0) {
         nPetType = (BOOL)pSkillTxt->pettype;
         if (nPetType >= 0 && nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
           pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -1293,7 +1293,7 @@ BOOL __fastcall Skills_SrvDoFunc_144_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUn
                   nPetType = 0;
                   iHydraIdx = SKILL_Attack;
                   do {
-                    sSummonParams.classId = (int)sSummonParams.pSkillTxt->srvprgfunc + (iHydraIdx - SKILL_Nova);
+                    sSummonParams.classId = sSummonParams.nSlotValue + (int)iHydraIdx;
                     sSummonParams.nX = gnSkillMissileCount_Hydra[iHydraIdx] + nSpawnX;
                     sSummonParams.nY2 = gnAuraDamageScale_ManaAbsorb[iHydraIdx] + nSpawnY;
                     pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sSummonParams);

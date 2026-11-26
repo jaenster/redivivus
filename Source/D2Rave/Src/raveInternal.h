@@ -105,7 +105,7 @@ int FOG_RegisterExitCallback(void (*pfnCallback)());
 // 1.14d names for the same functions; PPC addresses in comments.
 class CD2Textures;
 int CreateTexture(CD2Textures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner,
-                  int nOwnerIndex, int nOwnerKey);                                        // 102cdc78
+                  int nOwnerIndex, intptr_t nOwnerKey);                                        // 102cdc78
 void CD2TEXTURES_ReleaseById(CD2Textures * pThis, int nTextureId);                       // 102cdc2c
 void CD2TEXTURES_TouchEntry(CD2Textures * pThis, int nTextureId);                        // 102cdb00
 void EndFrame(CD2Textures * pThis);                                                      // 102cdad8

@@ -691,7 +691,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
       bVar3 = D2WinPalette::D2GFX_GetColorFromCurrentPallete(0x40, 0x40, 0x40);
       pBgDC6 = pTextBox->sControl.pDC6;
       if (pBgDC6) {
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.pDC6 = pBgDC6;
         sGfxData.nDirection = 0;
         sGfxData.nFrameNumber = 0;
@@ -1167,7 +1167,7 @@ int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox) {
     int nScrollbarPosX;
     int nScrollbarPosY;
     ::D2WinTextBox* pNew = D2_NEW_AT(::D2WinTextBox, ".\\Src\\D2WinTextBox.cpp", 99);
-    memset(pNew, 0, 0xac);
+    memset(pNew, 0, sizeof(*pNew));
     if (dwStyleFlags & 4 && !pnScrollbarRect) {
       nWidth += -0x1a;
     }

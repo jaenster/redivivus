@@ -310,7 +310,7 @@ BOOL __fastcall Draw(::D2WinButton * pButton) {
       nTileRowCount = pButton->sControl.dwPosX;
       nLastTileRow = (nFrameOffset + 0xff >> 8) - 1;
       nTileCols = pButton->sControl.dwSizeX + 0xff >> 8;
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.pDC6 = pButton->sControl.pDC6;
       sGfxData.nDirection = 0;
       if (nLastTileRow > 0) {
@@ -517,7 +517,7 @@ BOOL __stdcall D2WINBUTTON_HandleHotkey(D2ControlMsg * pControlMsg) {
     uint32_t dwState;
     int nTileFrames;
     ::D2WinButton* pNewButton = D2_NEW_AT(::D2WinButton, ".\\Src\\D2WinButton.cpp", 0x24);
-    memset(pNewButton, 0, 0x274);
+    memset(pNewButton, 0, sizeof(*pNewButton));
     pNewButton->sControl.neD2FormType = FORM_Button;
     pNewButton->sControl.dwState |= Fog::BitBuffer::gadwBitMasks[0];
     dwState = pNewButton->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];

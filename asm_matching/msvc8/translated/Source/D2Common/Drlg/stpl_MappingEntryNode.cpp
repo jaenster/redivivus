@@ -57,7 +57,7 @@ template<> TSLink<::MappingEntryNode>* TSExplicitList<MappingEntryNode, -5726623
 }
 
 template<> ::MappingEntryNode * TSExplicitList<MappingEntryNode, -572662307>::Next(::MappingEntryNode * pNode) {
-    TSLink<::MappingEntryNode>* pLink = pNode ? (TSLink<::MappingEntryNode>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset) - 4) : &this->m_terminator;
+    TSLink<::MappingEntryNode>* pLink = pNode ? (TSLink<::MappingEntryNode>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset) - offsetof(::MappingEntryNode, m_linktoslot)) : &this->m_terminator;
     intptr_t nFirstLink = pLink->m_next;
     return (::MappingEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
 }
@@ -163,7 +163,7 @@ template<> void TSHashObject<MappingEntryNode, HASHKEY_STRI>::Destructor() {
 }
 
 template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Next(::MappingEntryNode * pNode) {
-    TSLink<::MappingEntryNode>* pLink = pNode ? (TSLink<::MappingEntryNode>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->tFullList.m_linkoffset) - 4) : &this->tFullList.m_terminator;
+    TSLink<::MappingEntryNode>* pLink = pNode ? (TSLink<::MappingEntryNode>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->tFullList.m_linkoffset) - offsetof(::MappingEntryNode, m_linktoslot)) : &this->tFullList.m_terminator;
     intptr_t nFirstLink = pLink->m_next;
     return (::MappingEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
 }
