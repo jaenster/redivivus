@@ -13,7 +13,9 @@ source paths show where the binaries record them (for example `D2Game/Quests/`, 
 |`Source/globals/`|the game's global data, generated|
 |`3rdparty/crashy/`|the crash-report library, generated|
 |`Redivivus/`|hand-written support code: the host glue, tracing, the crash handler|
+|`Redivivus/Lua/`|the mod host and its runtime, built with `-DREDIVIVUS_MODS=ON` (`Redivivus/Lua/README.md`)|
 |`3rdparty/libbacktrace/`, `3rdparty/implibs/`|vendored code and the import-library definitions|
+|`3rdparty/luajit/`|LuaJIT 2.1, vendored unmodified for the mod host (`3rdparty/luajit/PROVENANCE`)|
 |`project.json`|the module table (below)|
 
 ## Modules

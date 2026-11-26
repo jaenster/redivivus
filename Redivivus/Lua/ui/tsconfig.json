@@ -1,0 +1,18 @@
+{
+  "compilerOptions": {
+    "target": "ES2022",
+    "lib": ["ES2022"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "moduleDetection": "force",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true,
+    "jsx": "react",
+    "jsxFactory": "h",
+    "jsxFragmentFactory": "Fragment",
+    "types": ["node"],
+    "paths": { "redivivus:ui": ["../core/ui/index.ts"], "redivivus:enums": ["../core/redivivus/enums.ts"] }
+  },
+  "include": ["../core/ui", "../core/redivivus/enums.ts", "../builtin/mods", "screens", "host", "test"]
+}

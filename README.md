@@ -53,7 +53,9 @@ databases and applied with you as the git author. The rules, the tools and which
 
 ## License
 
-MIT, see [LICENSE](LICENSE). Code under `3rdparty/libbacktrace/` keeps its own license.
+MIT, see [LICENSE](LICENSE). Vendored code keeps its own license: `3rdparty/libbacktrace/`, and
+`3rdparty/luajit/` (LuaJIT, MIT, see its `COPYRIGHT`). The TypeScriptToLua runtime library the mod
+host embeds is MIT, see `Redivivus/Lua/generated/lualib_bundle.LICENSE`.
 
 The `.cpp.map` files map every function and line back to its address in 1.14d `Game.exe`. They
 are part of this work under the same license: if you use them, credit Redivivus and link here.

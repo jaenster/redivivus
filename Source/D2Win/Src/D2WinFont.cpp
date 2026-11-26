@@ -14,6 +14,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Win/Src/D2WinFont.data.h"
+#include "Redivivus/Lua/d2_lua_hooks.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -1453,3 +1454,5 @@ namespace D2Win::Src::D2WinFont {
 D2TooltipTextStrc DisplayedTooltip = {}; D2_GLOBAL_GUARD(DisplayedTooltip, "D2Win::Src::D2WinFont::DisplayedTooltip");
 
 } // namespace D2Win::Src::D2WinFont
+
+D2LUA_WINFONT_ACCESS()

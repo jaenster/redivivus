@@ -1,0 +1,1 @@
+{ "name": "alpha", "version": "1.2.0", "title": "Alpha", "author": "test", "dependencies": ["redivivus >= 0.1"] }

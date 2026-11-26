@@ -1,0 +1,2 @@
+{ "name": "lua-user", "version": "0.1.0", "title": "A plain Lua mod using a TypeScript action", "author": "test",
+  "dependencies": ["first-mod"] }

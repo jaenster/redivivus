@@ -1,0 +1,22 @@
+{
+    "runtime.version": "LuaJIT",
+    "runtime.builtin": {
+        "debug": "disable",
+        "ffi": "disable",
+        "io": "disable",
+        "jit": "disable",
+        "jit.profile": "disable",
+        "jit.util": "disable",
+        "os": "disable",
+        "package": "disable",
+        "string.buffer": "disable",
+        "table.clear": "disable",
+        "table.new": "disable",
+        "utf8": "disable",
+        "bit32": "disable"
+    },
+    "workspace.library": [
+        "redivivus"
+    ],
+    "diagnostics.globals": []
+}

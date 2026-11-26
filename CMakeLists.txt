@@ -67,6 +67,8 @@ option(REDIVIVUS_X64_LOWMEM_SMOKE
     "64-bit smoke test only: link d2 and d2host without large-address awareness, high-entropy VA or ASLR at a low image base, so every address stays below 2 GB and a pointer the code still truncates to 32 bits survives. Never a release setting." OFF)
 option(REDIVIVUS_SERVER
     "Build the dedicated server (d2host.exe) from the server modules, every unit compiled with D2_TARGET_SERVER=1. The game executable leaves the default target in such a build directory." OFF)
+option(REDIVIVUS_MODS
+    "Mods: the mod runtime (Redivivus/Lua, on LuaJIT from 3rdparty/luajit) built, every unit compiled with D2_FEATURE_MODS=1." OFF)
 
 set(D2_ROOT "${CMAKE_SOURCE_DIR}")
 set(D2_SUPPORT "${D2_ROOT}/Redivivus")
@@ -97,6 +99,12 @@ foreach(list D2_SOURCES D2_HEADERS)
     # Vendored C library, built as its own target below; its headers (config.h,
     # internal.h) must not land on the game's include path.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/3rdparty/libbacktrace/")
+    # LuaJIT source, built by its own Makefile (cmake/luajit.cmake).
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/3rdparty/luajit/")
+    # The Lua host's own test program has a main(); it is a target of its own below.
+    list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Redivivus/Lua/test/")
+    # The Lua tools' node_modules (packages for the generator and the mod CLI) hold no game code.
+    list(FILTER ${list} EXCLUDE REGEX "/node_modules/")
     list(FILTER ${list} EXCLUDE REGEX "^${CMAKE_BINARY_DIR}/")
     # The 64-bit shims are their own target below, never part of the Redivivus module.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/Redivivus/x64/")
@@ -127,6 +135,9 @@ if(NOT REDIVIVUS_DEV)
 endif()
 if(NOT REDIVIVUS_LOUD)
     list(REMOVE_ITEM D2_SOURCES "${D2_SUPPORT}/d2_loud.cpp")
+endif()
+if(NOT REDIVIVUS_MODS)
+    list(FILTER D2_SOURCES EXCLUDE REGEX "^${D2_SUPPORT}/Lua/")
 endif()
 
 # Headers are included by tree-relative path ("Source/D2Game/Unit/SUNITNPC.h"),
@@ -187,6 +198,9 @@ endif()
 # Optional renderers, each a positive flag. The server renders nothing.
 if(REDIVIVUS_OPENGL AND NOT REDIVIVUS_SERVER)
     target_compile_definitions(d2_flags INTERFACE D2_RENDERER_OPENGL=1)
+endif()
+if(REDIVIVUS_MODS)
+    target_compile_definitions(d2_flags INTERFACE D2_FEATURE_MODS=1)
 endif()
 
 # The loud build: every game TU gets the checks, the code that reports them does
@@ -394,6 +408,29 @@ target_include_directories(libbacktrace PRIVATE "${D2_BACKTRACE}")
 target_compile_options(libbacktrace PRIVATE -g -w)
 target_link_libraries(d2 PRIVATE libbacktrace)
 
+# ---------------------------------------------------------------------------
+# Mods: the Lua mod runtime (Redivivus/Lua) with LuaJIT 2.1 from source
+# (3rdparty/luajit), built by its own Makefile for this toolchain's target: see
+# cmake/luajit.cmake. A 32-bit target from a Mac builds LuaJIT in docker.
+# The host on its own, for a run without the game:
+#   cmake --build build-lua --target d2_lua_host_test
+#   wine build-lua/d2_lua_host_test.exe
+# ---------------------------------------------------------------------------
+if(REDIVIVUS_MODS)
+    include("${D2_ROOT}/cmake/luajit.cmake")
+    target_link_libraries(d2 PRIVATE luajit)
+    # The host's units are compiled in whichever module library owns Redivivus/ (or in d2):
+    # they get LuaJIT's generated headers, and every game unit waits for the LuaJIT make.
+    file(GLOB _lua_host_sources "${D2_SUPPORT}/Lua/*.cpp" "${D2_SUPPORT}/Lua/generated/*.cpp" "${D2_SUPPORT}/Lua/engine/*.cpp")
+    set_property(SOURCE ${_lua_host_sources} APPEND PROPERTY INCLUDE_DIRECTORIES "${D2_LUAJIT_OUT}/src")
+    add_dependencies(d2_flags luajit_make)
+    include("${D2_ROOT}/cmake/lua-api.cmake")
+    if(D2_LUA_API_CHECK)
+        add_dependencies(d2_flags ${D2_LUA_API_CHECK})
+    endif()
+    add_subdirectory("${D2_SUPPORT}/Lua/test" "${CMAKE_BINARY_DIR}/lua-host-test")
+endif()
+
 if(NOT REDIVIVUS_BUILD_ID)
     execute_process(COMMAND git describe --always --dirty --tags
         WORKING_DIRECTORY "${D2_ROOT}"
@@ -556,6 +593,9 @@ if(REDIVIVUS_SERVER)
     if(REDIVIVUS_X64_LOWMEM_SMOKE)
         target_link_options(d2host PRIVATE ${D2_X64_LOWMEM_LINK})
         add_custom_command(TARGET d2host POST_BUILD COMMAND ${D2_X64_LOWMEM_POST} "$<TARGET_FILE:d2host>")
+    endif()
+    if(REDIVIVUS_MODS)
+        target_link_libraries(d2host PRIVATE luajit)
     endif()
     target_link_libraries(d2host PRIVATE
         kernel32 user32 gdi32 advapi32 shell32 ole32 oleaut32

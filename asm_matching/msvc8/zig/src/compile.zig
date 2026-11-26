@@ -37,7 +37,7 @@ const QHEADER = "file\tline\tfunction_line\tfunction\terror\n";
 const EXTS = [_][]const u8{ ".h", ".hpp", ".inl", ".cpp", ".c" };
 const OBJ_EXTS = [_][]const u8{ ".obj", ".d", ".log", ".flags", ".key", ".fn.pkl", ".fn.sum" };
 const SKIP_DIRS = [_][]const u8{ ".git", ".github", ".idea", "asm_matching", "build", "cmake", "tools", "metrics" };
-const VENDORED = [_][]const u8{ "3rdparty/libbacktrace", "3rdparty/implibs" };
+const VENDORED = [_][]const u8{ "3rdparty/libbacktrace", "3rdparty/implibs", "3rdparty/luajit" };
 /// Trees beside the game that are not part of Game.exe and are not translated: D2Server is
 /// the 1.00 game-server host, built by CMake as its own object library (d2server_objs);
 /// Source/D2OpenGL is the Mac binary's renderer (Apple Clang), measured against the Mac, never

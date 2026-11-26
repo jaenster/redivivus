@@ -1,0 +1,1 @@
+{ "name": "menumod", "version": "2.0.1", "title": "Menu Mod", "author": "test", "licence": "MIT", "dependencies": ["redivivus >= 0.1", "? gone-mod"] }

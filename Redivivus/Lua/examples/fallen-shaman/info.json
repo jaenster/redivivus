@@ -1,0 +1,7 @@
+{
+  "name": "fallen-shaman",
+  "version": "0.1.0",
+  "title": "Fallen Shaman (the stock AI, translated to TypeScript)",
+  "author": "Redivivus",
+  "dependencies": ["redivivus >= 0.1"]
+}

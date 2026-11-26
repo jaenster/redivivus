@@ -187,6 +187,7 @@
 #include "Source/D2Game/Skills/SkillAss.h"
 #include "Source/D2Game/Seed.inline.h"
 #include "Source/Fog/Src/Safesock.h"
+#include "Redivivus/Lua/d2_lua_hooks.h"
 
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
@@ -1701,6 +1702,7 @@ D2AiListStrc * __fastcall MONSTERAI_GetAiFunctionFromTable(D2UnitStrc * pUnit, i
     D2MonStatsTxt* pMonStatsTxt = !pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster ? 0 : pUnit->pUnitData.pUnitDataMonster->pMonStatsTxt;
     if (!nFunctionId) {
       short int wAiIndex = pMonStatsTxt->AI;
+      D2LUA_AI_OVERLAY(pUnit, wAiIndex);
       if (wAiIndex >= 0 && (uint16_t)wAiIndex < 148) {
         return arrGeneralAiList + wAiIndex;
       }
@@ -1726,6 +1728,7 @@ D2AiListStrc * __fastcall MONSTERAI_GetAiFunctionFromTable(D2UnitStrc * pUnit, i
       }
     }
     short int wAiIndex = pMonStatsTxt->AI;
+    D2LUA_AI_OVERLAY(pUnit, wAiIndex);
     if (wAiIndex >= 0 && (uint16_t)wAiIndex < 148) {
       return arrGeneralAiList + wAiIndex;
     }

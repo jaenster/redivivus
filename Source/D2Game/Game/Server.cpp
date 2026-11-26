@@ -37,6 +37,7 @@
 #include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/Game/Server.data.h"
 #include "Source/D2Game/Objects/Objects.data.h"
+#include "Redivivus/Lua/d2_lua_hooks.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -656,6 +657,7 @@ void __fastcall GAME_DestroyGame(uint32_t nGameToken, ::SGAMEDATA * pGame) {
     } while ((intptr_t)pnTokenEntry < (intptr_t)(gaQServerGameTokens + 1024));
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerGameListCs);
+    D2LUA_GAME_END(pGame);
     Monster::MonsterRegion::FreeMonsterRegion(pGame->pMemoryPool, pGame->pMonsterRegion);
     Objects::ObjectsRgn::FreeObjectControl(pGame);
     Quests::QUESTS::FreeQuestControl(pGame);
@@ -1330,6 +1332,7 @@ void __fastcall ServerGameLoop(::SGAMEDATA * pGame) {
     UpdatePerformanceMetrics(pGame);
     InitNewRooms(pGame);
     Event::EVENT_DispatchAllTimers(pGame);
+    D2LUA_TICK(pGame);
     UpdateClients(pGame);
     Level::ProcessUnitUpdateFlags(pGame);
     Clients::FreePendingDrlgDeletes(pGame);

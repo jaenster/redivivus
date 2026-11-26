@@ -1,0 +1,7 @@
+{
+  "name": "first-mod",
+  "version": "0.1.0",
+  "title": "First mod (TypeScript example)",
+  "author": "Redivivus",
+  "dependencies": ["redivivus >= 0.1"]
+}

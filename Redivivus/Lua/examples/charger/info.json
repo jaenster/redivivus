@@ -1,0 +1,7 @@
+{
+  "name": "charger",
+  "version": "0.1.0",
+  "title": "Charger (a monster AI in TypeScript)",
+  "author": "Redivivus",
+  "dependencies": ["redivivus >= 0.1"]
+}

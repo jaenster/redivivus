@@ -1,0 +1,7 @@
+{
+  "name": "ui-mod",
+  "version": "0.1.0",
+  "title": "UI mod (a TSX panel on redivivus:ui)",
+  "author": "Redivivus",
+  "dependencies": ["redivivus >= 0.1"]
+}

@@ -135,6 +135,7 @@
 #include "Source/D2Common/Units/Units.inline.h"
 #include "Source/D2Game/Game/Event/Dispatch/Monster.h"
 #include "Source/D2Game/Quests/Quests/Quest40.h"
+#include "Redivivus/Lua/d2_lua_hooks.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -381,6 +382,7 @@ static void __stdcall MONSTERMODE_OnDeath(uint8_t nDirection, ::SGAMEDATA * pGam
     }
 
     D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pDynamicPath, nDirection);
+    D2LUA_MONSTER_DIED(pGame, pUnit);
     MONSTER_RemoveAiAndRegenTimers(pGame, pUnit);
 }
 
