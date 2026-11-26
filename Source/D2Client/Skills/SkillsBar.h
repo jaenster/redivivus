@@ -40,7 +40,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_GrimWard(struct D2UnitStrc * pUnit, eD2Skil
 // @sourcefile .\SKILLS\SkillsBar.cpp
 BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // @sourcefile .\SKILLS\SkillsBar.cpp
-void __fastcall SKILL_SetupLeapPath(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
+int32_t __fastcall SKILL_SetupLeapPath(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 // Creates the client-side arc particle effect for Barbarian Leap. Computes remaining distance to destination (skill param1/param2), derives frame count from velocity, looks up the Z arc offset from the gaLeapArcParticleOffsetZ table based on distance, clamps to 500 minimum, allocates a particle on pUnit, sets its upward velocity offset, and initializes the projectile arc over nLeapFrames frames.
 void __fastcall SKILL_CreateLeapArcParticle(struct D2UnitStrc * pUnit, struct D2SkillStrc * pSkill);
 // Client-side landing handler for Barbarian Leap (and general teleport). Checks whether the unit's current collision type already matches the expected post-land type; if not, reads the destination X/Y from skill param1/param2 (or from path if no active skill), removes the stale collision at that position, teleports the unit to the destination via CLIENT_TeleportUnitToPosition, then calls SKILLS_PlaySkillSound to restore collision/path state.

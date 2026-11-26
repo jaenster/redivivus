@@ -622,7 +622,7 @@ static void __stdcall DRLGORTH_InsertSorted(D2DrlgOrthStrc * * pRoomEx, D2DrlgOr
 // @sourcefile .\DRLG\DrlgRoom.cpp
 void __fastcall AllocDrlgOrth(D2DrlgOrthStrc * * pRoomEx, D2DrlgLevelStrc * pLevel, eDrlgDirection neDrlgDirection, BOOL bIsDrlgTypePresetArea) {
     D2DrlgOrthStrc* pOrth = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgOrthStrc, ".\\DRLG\\DrlgRoom.cpp", 0x15f);
-    pOrth->pNext = 0;
+    memset(pOrth, 0, sizeof(D2DrlgOrthStrc));
     pOrth->pLink.pLevel = pLevel;
     pOrth->neDrlgDirection = neDrlgDirection;
     pOrth->bIsDrlgTypePresetArea = bIsDrlgTypePresetArea;

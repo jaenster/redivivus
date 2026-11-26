@@ -117,7 +117,7 @@ int32_t __thiscall AddByPattern(::IgnoreList * pThis, char * szPattern);
 int32_t __thiscall AddByAccountName(::IgnoreList * pThis, char * szAccountName);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-int32_t __thiscall CloseAppendFile(::IgnoreList * pThis);
+void __thiscall CloseAppendFile(::IgnoreList * pThis);
 int32_t __thiscall AppendLineToFile(::IgnoreList * pThis, char * szLine);
 // Writes the ignore list to its file: one ignored name pattern per line, then each ignored account prefixed with '!'.
 int32_t __thiscall SaveToFile(::IgnoreList * pThis);

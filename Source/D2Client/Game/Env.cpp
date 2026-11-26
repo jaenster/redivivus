@@ -144,12 +144,12 @@ void __stdcall LoadCustomSettingsPerAreaAct5() {
     }
 
     gnWeatherParticleState = gnWeatherOffsetXModulo;
-    gnWeatherTransitionProgress = 0;
-    if (nWeatherParticleCountAct5) {
-      return;
+    if (!nWeatherParticleCountAct5) {
+      D2_SeedRoll(pSeed);
+      gnWeatherTransitionProgress = 0;
+    } else {
+      gnWeatherTransitionProgress = 0;
     }
-
-    D2_SeedRoll(pSeed);
 }
 
 // Re-initialises the pEnvironmentParticles data array and halts (Env.cpp line 347, spParticleData->nTotalCount == 0) if entries remain in use.

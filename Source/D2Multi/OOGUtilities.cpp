@@ -1150,27 +1150,17 @@ void __stdcall UIMENU_DestroyLobbyAndJoinGameForms() {
 // Loads the MAX_PLAYER registry value (key "Diablo II", default 4) into gUIGameListMaxPlayersEditBox. If the value is missing it saves the default. Only a value in 1..8 is printed into the edit box.
 // Provenance: asm 004431b0..0044321f; called at 0044642b right after OOGUTIL_LoadLevelRestrictionSetting.
 void __stdcall OOGUTIL_LoadMaxPlayersSetting() {
-    // Frame slots -12..-4 are ONE object: &nMaxPlayers is passed out and the callee reaches the rest by byte offset.
-    // Separate locals let the compiler reorder them, so the run is one struct.
-    struct __frame0_t {
-      int32_t nMaxPlayers;
-      char szMaxPlayers[4];
-    };
-    static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 8, "frame group __frame0_t must reproduce the Ghidra frame layout");
-    __frame0_t __frame0;
-    __frame0.nMaxPlayers = 4;
-    int bRegReadOk = Storm::Source::SReg::SRegLoadValue("Diablo II", "MAX_PLAYER", 0, &__frame0.nMaxPlayers);
-    if (!bRegReadOk) {
-      Storm::Source::SReg::SRegSaveValue("Diablo II", "MAX_PLAYER", 0, __frame0.nMaxPlayers);
+    int32_t nMaxPlayers = 4;
+    if (!Storm::Source::SReg::SRegLoadValue("Diablo II", "MAX_PLAYER", 0, &nMaxPlayers)) {
+      Storm::Source::SReg::SRegSaveValue("Diablo II", "MAX_PLAYER", 0, nMaxPlayers);
     }
 
-    strcpy(__frame0.szMaxPlayers, "4");
-    if (!(__frame0.nMaxPlayers < 9 && __frame0.nMaxPlayers > 0)) {
-      return;
+    char szMaxPlayers[2] = "4";
+    int nPlayers = nMaxPlayers;
+    if (nPlayers < 9 && nPlayers > 0) {
+      sprintf(szMaxPlayers, "%d", nPlayers);
+      D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUIGameListMaxPlayersEditBox, szMaxPlayers);
     }
-
-    sprintf(__frame0.szMaxPlayers, "%d", __frame0.nMaxPlayers);
-    D2Win::Src::D2WinEditBox::D2WINEDITBOX_SetTextFromAnsi(gUIGameListMaxPlayersEditBox, __frame0.szMaxPlayers);
 }
 
 void __stdcall OOGUTIL_UpdateGameListFilter() {

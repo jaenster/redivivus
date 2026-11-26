@@ -70,9 +70,8 @@ void __stdcall IGNORELIST_Shutdown() {
 
 namespace D2Common::Chat::Ignorelist::IgnoreList {
 
-int32_t __thiscall CloseAppendFile(::IgnoreList * pThis) {
-    int nResult = fclose(pThis->pAppendFile);
-    return nResult;
+void __thiscall CloseAppendFile(::IgnoreList * pThis) {
+    fclose(pThis->pAppendFile);
 }
 
 } // namespace D2Common::Chat::Ignorelist::IgnoreList

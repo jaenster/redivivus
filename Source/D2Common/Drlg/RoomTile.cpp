@@ -564,7 +564,8 @@ void __fastcall DRLGROOMTILE_CompactTileDataArray(D2RoomExStrc * pRoomEx) {
     }
 
     pTileGrid->sRoomTiles.pRoofTiles = (D2DrlgTileDataStrc*)D2_REALLOC_POOL_AT(pMemory, pTileGrid->sRoomTiles.pRoofTiles, nRoofCount * sizeof(D2DrlgTileDataStrc), ".\\DRLG\\RoomTile.cpp", 0x25f);
-    for (nRoofCount = 0; nRoofCount < pTileGrid->nShadows - 1; nRoofCount++) {
+    const int& nShadows = pTileGrid->nShadows;
+    for (nRoofCount = 0; nRoofCount < nShadows - 1; nRoofCount++) {
       pTileGrid->sRoomTiles.pRoofTiles[nRoofCount].pNext = &pTileGrid->sRoomTiles.pRoofTiles[nRoofCount + 1];
     }
 
@@ -634,49 +635,43 @@ static BOOL __stdcall DRLGROOMTILE_CreateExitWarp(D2RoomExStrc * pRoomEx, int32_
 
 // NOTE: Callee-saved register params inferred (medium confidence): pRoomExStrc (EDI): D2RoomExStrc*
 static void __stdcall DRLGROOMTILE_SetupWarpTile(D2RoomExStrc * pRoomExStrc, D2DrlgTileDataStrc * pTileData, uint32_t nGridInfo, int nTileType) {
-    D2LvlWarpTxt* pDVar1;
-    BOOL BVar2;
-    D2TileLibraryEntryStrc* pTileLibEntry;
-    D2DrlgTileDataStrc* pWallTile;
-    uint32_t nGridFlags;
+    const uint8_t nOrientation = (uint8_t)(nGridInfo >> 8);
+    D2DrlgCoordsStrc* const pCoords = &pRoomExStrc->sCoords;
     D2DrlgRoomExRoomTileNodeStrc* pWarpCacheHead = pRoomExStrc->pRoomTileNodes;
-    char nOrientation = (char)(nGridInfo >> 8);
-    int nWarpDest = DrlgWarp::DRLGWARP_GetWarpDestinationFromArray(pRoomExStrc->pLevel, (uint8_t)(nGridInfo >> 0x14) & 0x3f);
-    do {
-      if (!pWarpCacheHead) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2b1);
-        exit(-1);
-      }
-      if (pWarpCacheHead->pLvlWarpTxt->Id == nWarpDest) {
-        if (!(nOrientation != '\0' && nOrientation != '\x04' || (BVar2 = DRLGROOMTILE_CreateExitWarp(pRoomExStrc, pTileData->nPosX + pRoomExStrc->sCoords.WorldPosition.x, nTileType, nGridInfo, pRoomExStrc->sCoords.WorldPosition.y + pTileData->nPosY) , BVar2 != 0))) {
-          return;
-        }
+    const int nWarpDest = DrlgWarp::DRLGWARP_GetWarpDestinationFromArray(pRoomExStrc->pLevel, (nGridInfo >> 0x14) & 0x3f);
+    while (pWarpCacheHead && pWarpCacheHead->pLvlWarpTxt->Id != nWarpDest) {
+      pWarpCacheHead = pWarpCacheHead->pRoomTileNext;
+    }
 
-        DRLGROOMTILE_SetWarpTileDirection(pWarpCacheHead, nTileType);
-        pTileData->pNext = pWarpCacheHead->pTileListSetOnSelect;
-        pWarpCacheHead->pTileListSetOnSelect = pTileData;
-        pDVar1 = pWarpCacheHead->pLvlWarpTxt;
-        if (!pDVar1) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2cb);
-          exit(-1);
-        }
-        if (!pDVar1->LitVersion) {
-          return;
-        }
+    if (!pWarpCacheHead) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2b1);
+      exit(-1);
+    }
 
-        nGridFlags = pDVar1->Tiles << 8 | nGridInfo;
-        pTileLibEntry = DRLG_FindHTile(pRoomExStrc, nTileType, nGridFlags);
-        pWallTile = DRLGROOMTILE_CreateWallTileData(pRoomExStrc, &pWarpCacheHead->pTileListClearedOnSelect, pTileData->nPosX + pRoomExStrc->sCoords.WorldPosition.x, pRoomExStrc->sCoords.WorldPosition.y + pTileData->nPosY, nGridFlags, pTileLibEntry, nTileType);
-        if (!pWallTile) {
-          return;
-        }
-
-        pWallTile->nFlags |= 8;
+    if (nOrientation == 0 || nOrientation == 4) {
+      if (!DRLGROOMTILE_CreateExitWarp(pRoomExStrc, pTileData->nPosX + pCoords->WorldPosition.x, nTileType, nGridInfo, pCoords->WorldPosition.y + pTileData->nPosY)) {
         return;
       }
+    }
 
-      pWarpCacheHead = pWarpCacheHead->pRoomTileNext;
-    } while (true);
+    DRLGROOMTILE_SetWarpTileDirection(pWarpCacheHead, nTileType);
+    pTileData->pNext = pWarpCacheHead->pTileListSetOnSelect;
+    pWarpCacheHead->pTileListSetOnSelect = pTileData;
+
+    D2LvlWarpTxt* pLvlWarpTxt = pWarpCacheHead->pLvlWarpTxt;
+    if (!pLvlWarpTxt) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2cb);
+      exit(-1);
+    }
+
+    if (pLvlWarpTxt->LitVersion) {
+      const uint32_t nGridFlags = pLvlWarpTxt->Tiles << 8 | nGridInfo;
+      D2TileLibraryEntryStrc* pTileLibEntry = DRLG_FindHTile(pRoomExStrc, nTileType, nGridFlags);
+      D2DrlgTileDataStrc* pWallTile = DRLGROOMTILE_CreateWallTileData(pRoomExStrc, &pWarpCacheHead->pTileListClearedOnSelect, pTileData->nPosX + pCoords->WorldPosition.x, pCoords->WorldPosition.y + pTileData->nPosY, nGridFlags, pTileLibEntry, nTileType);
+      if (pWallTile) {
+        pWallTile->nFlags |= 8;
+      }
+    }
 }
 
 // Initializes the warp-tile cache entries for a room tile. Extracts the warp destination index from the packed tile flags, locates the matching warp-cache entry via the tile data list, sets the warp direction, then appends up to 4 floor tile entries (one per warp sub-position using gaWarpTileOffsetX/Y) into the room's tile grid and links them into the warp cache. Sets the 0x800000 room flag to mark warp cache as initialized.
@@ -764,13 +759,18 @@ static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_FindTileAtPosition(int nFlags
 
     for (D2DrlgTileLinkStrc* pTileLink = pRoomEx->pRoomTiles->pMapLinks; pTileLink; pTileLink = pTileLink->pNext) {
       D2DrlgTileDataStrc* pTileData = pTileLink->pTileData;
-      if ((*(int*)pTileLink && bFloor) || (!*(int*)pTileLink && !bFloor)) {
-        for (; pTileData; pTileData = pTileData->pNext) {
-          if (pTileData->nPosX + pRoomEx->sCoords.WorldPosition.x == nX && pRoomEx->sCoords.WorldPosition.y + pTileData->nPosY == nY && pTileData->nTileType != 4 && (pTileData->nTileType == 0xd || !(nFlags & 0x8000000U))) {
-            if (!(pTileData->nFlags & 0x1c000U)) {
-              return pTileData;
-            }
-            if (((uint32_t)pTileData->nFlags >> 0xe & 7) - 1 == ((uint32_t)nFlags >> 0x12 & 3)) {
+      if (*(int*)pTileLink) {
+        if (!bFloor) {
+          continue;
+        }
+      } else if (bFloor) {
+        continue;
+      }
+
+      for (; pTileData; pTileData = pTileData->pNext) {
+        if (pRoomEx->sCoords.WorldPosition.x + pTileData->nPosX == nX && pRoomEx->sCoords.WorldPosition.y + pTileData->nPosY == nY) {
+          if (pTileData->nTileType != 4 && (pTileData->nTileType == 0xd || !(nFlags & 0x8000000U))) {
+            if (!(pTileData->nFlags & 0x1c000U) || ((uint32_t)pTileData->nFlags >> 0xe & 7) - 1 == ((uint32_t)nFlags >> 0x12 & 3)) {
               return pTileData;
             }
           }
@@ -1263,14 +1263,15 @@ void __fastcall DRLGROOMTILE_GrowTileDataArray(D2PoolManagerStrc * pMemory, D2Dr
       return;
     }
 
-    pTileGrid->sRoomTiles.pRoofTiles = (D2DrlgTileDataStrc*)D2_REALLOC_POOL_AT(pMemory, pTileGrid->sRoomTiles.pRoofTiles, (pTileGrid->sRoomTiles.nRoofTilesCount + nAdditionalTiles) * sizeof(D2DrlgTileDataStrc), ".\\DRLG\\RoomTile.cpp", 0x561);
+    D2DrlgRoomTilesStrc* pRoomTiles = &pTileGrid->sRoomTiles;
+    pRoomTiles->pRoofTiles = (D2DrlgTileDataStrc*)D2_REALLOC_POOL_AT(pMemory, pRoomTiles->pRoofTiles, (nAdditionalTiles + pRoomTiles->nRoofTilesCount) * sizeof(D2DrlgTileDataStrc), ".\\DRLG\\RoomTile.cpp", 0x561);
     int nIndex;
     for (nIndex = 0; nIndex < pTileGrid->nShadows - 1; nIndex++) {
-      pTileGrid->sRoomTiles.pRoofTiles[nIndex].pNext = &pTileGrid->sRoomTiles.pRoofTiles[nIndex + 1];
+      pRoomTiles->pRoofTiles[nIndex].pNext = &pRoomTiles->pRoofTiles[nIndex + 1];
     }
 
-    pTileGrid->sRoomTiles.pRoofTiles[nIndex].pNext = 0;
-    pTileGrid->sRoomTiles.nRoofTilesCount += nAdditionalTiles;
+    pRoomTiles->pRoofTiles[nIndex].pNext = 0;
+    pRoomTiles->nRoofTilesCount += nAdditionalTiles;
 }
 
 int __fastcall Unreferenced_0066f030(D2RoomStrc * pRoom) {

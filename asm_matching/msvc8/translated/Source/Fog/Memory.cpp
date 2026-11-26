@@ -315,11 +315,9 @@ static LPVOID * __stdcall AllocatePoolBlock(D2PoolStrc * pPool, D2PoolManagerStr
     D2PoolBlockStrc* pBlockHeader = (D2PoolBlockStrc*)malloc(nNewCapacity + sizeof(D2PoolBlockStrc));
     uint8_t* pRegion = (uint8_t*)VirtualAlloc((LPVOID)0x0, pPool->nSize, 0x1000, 4);
     if (pBlockHeader && pRegion) {
-      pBlockHeader->nBlocks = 0;
-      pBlockHeader->pPrev = 0;
-      pBlockHeader->pNext = 0;
+      memset(&pBlockHeader->nBlocks, 0, sizeof(pBlockHeader->nBlocks) + sizeof(pBlockHeader->pPrev) + sizeof(pBlockHeader->pNext));
       pBlockHeader->pUsage = (DWORD*)(pBlockHeader + 1);
-      memset(pBlockHeader + 1, 0, nNewCapacity);
+      memset(pBlockHeader->pUsage, 0, nNewCapacity);
       pBlockHeader->pCommit = pRegion;
       pBlockHeader->pPool = pPool;
       pPool->nAllocBlock++;

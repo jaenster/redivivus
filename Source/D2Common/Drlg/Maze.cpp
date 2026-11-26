@@ -2458,8 +2458,7 @@ static void ReplaceAreas(D2DrlgLevelStrc * pLevel) {
       ReplaceRoom(pLevel, gaDrlgAreaReplacementsB + nRoll, &nRoll);
     }
 
-    eD2LevelId nLevelId = pLevel->eD2LevelId;
-    if ((int)nLevelId >= 0x42 && (int)nLevelId <= 0x48 && nLevelId != pLevel->pDrlg->nStaffTombLevel) {
+    if ((int)pLevel->eD2LevelId >= 0x42 && (int)pLevel->eD2LevelId <= 0x48 && pLevel->eD2LevelId != pLevel->pDrlg->nStaffTombLevel) {
       ReplaceRoom(pLevel, gaDrlgAreaReplacementsB + nRoll, &nRoll);
     }
     if (pLevel->eD2LevelId == 0x3b) {

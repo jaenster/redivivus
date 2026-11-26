@@ -476,9 +476,9 @@ void __fastcall ITEMTBLS_ParseSkillMonTypeOrStateId(char * szValue, char * pReco
 // Loads and concatenates the magicsuffix/magicprefix/automagic .txt files into a single pTxtMagicAffixes table. Builds a D2BinFieldInputStrc descriptor array (name/spawnable/level/itypeN/etypeN/modNcode..max, etc.), calls DataTbls::CompileTxt for each of the three files (0x90-byte rows), allocates one combined server buffer (count*0x90), memcpys the three blocks in order (suffix, prefix, automagic), frees the temporaries, then resolves each row's display-name string id via STRTABLE_LookupString. Sets global nTxtMagicAffixesSize/pTxtMagicAffixes. Part of D2Common item-data table initialization.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_MagicAffixes(D2PoolManagerStrc * pMemory) {
-    int nTxtAutoMagicSize;
-    int nTxtMagicPrefixSize;
     int nTxtMagicSuffixSize;
+    int nTxtMagicPrefixSize;
+    int nTxtAutoMagicSize;
     D2BinFieldInputStrc affixes[41] = {
       {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
       {"spawnable", FIELDTYPE_CHAR, 0, 0x54, 0},
@@ -525,7 +525,7 @@ void __fastcall TXT_AllocTxt_MagicAffixes(D2PoolManagerStrc * pMemory) {
     void* pTxtMagicSuffixTmp = DataTbls::CompileTxt(pMemory, "magicsuffix", affixes, &nTxtMagicSuffixSize, 0x90);
     void* pTxtMagicPrefixTmp = DataTbls::CompileTxt(pMemory, "magicprefix", affixes, &nTxtMagicPrefixSize, 0x90);
     void* pTxtAutoMagicTmp = DataTbls::CompileTxt(pMemory, "automagic", affixes, &nTxtAutoMagicSize, 0x90);
-    gsMagicAffixTable.nSize = nTxtMagicPrefixSize + nTxtAutoMagicSize + nTxtMagicSuffixSize;
+    gsMagicAffixTable.nSize = nTxtMagicSuffixSize + nTxtMagicPrefixSize + nTxtAutoMagicSize;
     gsMagicAffixTable.pTable = (D2MagicAffixTxt*)D2_ALLOC_POOL_AT(nullptr, gsMagicAffixTable.nSize * 0x90, ".\\DATATBLS\\ItemTbls.cpp", 0x297);
     gsMagicAffixTable.pSuffixStart = gsMagicAffixTable.pTable;
     memcpy(gsMagicAffixTable.pTable, pTxtMagicSuffixTmp, nTxtMagicSuffixSize * 0x90);
@@ -572,7 +572,8 @@ D2MagicAffixTxt * __stdcall TXT_magicaffixes_GetLine(int32_t nAffixIndex) {
 // Loads and compiles the rare-affix data tables. Defines the shared field schema (name, version, itype1-7, etype1-4 with itemtypes linker) and compiles both raresuffix.txt and rareprefix.txt via CompileTxt (row stride 0x48), then allocates one combined buffer (pTxtRareAffixes = suffix rows followed by prefix rows) and frees the temporaries. Finally resolves each row's name string into its string-table id (STRTABLE_LookupString) stored at row offset 0xc. Populates globals pTxtRareAffixes/pTxtRareSuffix/pTxtRarePrefix and nTxtRareAffixesSize.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_RareAffixes(D2PoolManagerStrc * pMemory) {
-    int anRareAffixCount[2]; // Prefix count first, suffix count second.
+    int nTxtRareSuffixSize;
+    int nTxtRarePrefixSize;
     D2BinFieldInputStrc rareaffixes[14] = {
       {"name", FIELDTYPE_ASCII, 0x1f, 0x26, 0},
       {"version", FIELDTYPE_SHORT, 0, 0xe, 0},
@@ -589,14 +590,14 @@ void __fastcall TXT_AllocTxt_RareAffixes(D2PoolManagerStrc * pMemory) {
       {"etype4", FIELDTYPE_CODE_SHORT, 0, 0x24, &MonsterTbls::sgtDataTable.pTxtItemTypesLink},
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
-    void* pTxtRareSuffixTmp = DataTbls::CompileTxt(pMemory, "raresuffix", rareaffixes, &anRareAffixCount[1], 0x48);
-    void* pTxtRarePrefixTmp = DataTbls::CompileTxt(pMemory, "rareprefix", rareaffixes, &anRareAffixCount[0], 0x48);
-    gsRareAffixTable.nSize = anRareAffixCount[0] + anRareAffixCount[1];
+    void* pTxtRareSuffixTmp = DataTbls::CompileTxt(pMemory, "raresuffix", rareaffixes, &nTxtRareSuffixSize, 0x48);
+    void* pTxtRarePrefixTmp = DataTbls::CompileTxt(pMemory, "rareprefix", rareaffixes, &nTxtRarePrefixSize, 0x48);
+    gsRareAffixTable.nSize = nTxtRareSuffixSize + nTxtRarePrefixSize;
     gsRareAffixTable.pTable = (D2RareAffixTxt*)D2_ALLOC_POOL_AT(nullptr, gsRareAffixTable.nSize * 0x48, ".\\DATATBLS\\ItemTbls.cpp", 0x2f4);
     gsRareAffixTable.pSuffixStart = gsRareAffixTable.pTable;
-    memcpy(gsRareAffixTable.pTable, pTxtRareSuffixTmp, anRareAffixCount[1] * 0x48);
-    gsRareAffixTable.pPrefixStart = gsRareAffixTable.pSuffixStart + anRareAffixCount[1];
-    memcpy(gsRareAffixTable.pPrefixStart, pTxtRarePrefixTmp, anRareAffixCount[0] * 0x48);
+    memcpy(gsRareAffixTable.pTable, pTxtRareSuffixTmp, nTxtRareSuffixSize * 0x48);
+    gsRareAffixTable.pPrefixStart = gsRareAffixTable.pSuffixStart + nTxtRareSuffixSize;
+    memcpy(gsRareAffixTable.pPrefixStart, pTxtRarePrefixTmp, nTxtRarePrefixSize * 0x48);
     DataTbls::UnloadBin(pTxtRareSuffixTmp);
     DataTbls::UnloadBin(pTxtRarePrefixTmp);
     uint16_t* pStringOut = 0;
@@ -1665,10 +1666,6 @@ int TXT_Gamble_SortFunction(const D2GambleTxt * pEntry1, const D2GambleTxt * pEn
 // One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and the per-level row counts (anLevelLimit) (per-level upper-bound cache for [1..99]).
 // @sourcefile .\DATATBLS\ItemTbls.cpp
 void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
-    int32_t nItemClassId;
-    int nLevelCacheIdx;
-    int* pGambleEntry;
-    int nIdx;
     D2BinFieldInputStrc gamble[2] = {
       {"code", FIELDTYPE_RAW4, 0, 0, 0},
       {"end", FIELDTYPE_END, 0, 0, 0}
@@ -1676,21 +1673,17 @@ void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
     D2GambleTxt* pTxtGamble = (D2GambleTxt*)DataTbls::CompileTxt(pMemory, "gamble", gamble, &nTxtGambleSize.nSize, 0xc);
     if (nTxtGambleSize.nSize) {
       nTxtGambleSize.pTable = (int*)D2_ALLOC_POOL_AT(nullptr, nTxtGambleSize.nSize * 4, ".\\DATATBLS\\ItemTbls.cpp", 0x7db);
-      nIdx = 0;
-      if (nTxtGambleSize.nSize > 0) {
-        pGambleEntry = &pTxtGamble->nItemClassId;
-        do {
-          nItemClassId = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.sTxtItemsLink, *(uint32_t*)((D2GambleTxt*)(pGambleEntry - 2))->szCode, 0);
-          if (nItemClassId < 0 || !(gsItemsTable.pItems + nItemClassId)) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7e0);
-            exit(-1);
-          }
+      for (int nIdx = 0; nIdx < nTxtGambleSize.nSize; nIdx++) {
+        const uint32_t dwItemCode = *(uint32_t*)pTxtGamble[nIdx].szCode;
+        const int32_t nItemClassId = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.sTxtItemsLink, dwItemCode, 0);
+        D2ItemsTxt* pItemsTxt;
+        if (nItemClassId < 0 || (pItemsTxt = gsItemsTable.pItems + nItemClassId) == 0) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7e0);
+          exit(-1);
+        }
 
-          pGambleEntry[-1] = (uint32_t)(uint8_t)gsItemsTable.pItems[nItemClassId].nLevel;
-          *pGambleEntry = nItemClassId;
-          nIdx++;
-          pGambleEntry += 3;
-        } while (nIdx < nTxtGambleSize.nSize);
+        pTxtGamble[nIdx].nLevel = (uint8_t)pItemsTxt->nLevel;
+        pTxtGamble[nIdx].nItemClassId = nItemClassId;
       }
 
       qsort(pTxtGamble, nTxtGambleSize.nSize, 0xc, (int (*)(const void*, const void*))TXT_Gamble_SortFunction);
@@ -1698,34 +1691,22 @@ void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
       nTxtGambleSize.pTable = 0;
     }
 
-    for (nIdx = 0; nIdx < nTxtGambleSize.nSize; nIdx++) {
+    for (int nIdx = 0; nIdx < nTxtGambleSize.nSize; nIdx++) {
       nTxtGambleSize.pTable[nIdx] = pTxtGamble[nIdx].nItemClassId;
     }
 
     nTxtGambleSize.anLevelLimit[0] = 2;
-    nIdx = 1;
-    do {
-      nTxtGambleSize.anLevelLimit[nIdx] = nTxtGambleSize.nSize;
-      nLevelCacheIdx = 0;
-      if (nTxtGambleSize.nSize > 0) {
-        pGambleEntry = &pTxtGamble->nLevel;
-        do {
-          if (nIdx < *pGambleEntry) {
-            nTxtGambleSize.anLevelLimit[nIdx] = nLevelCacheIdx;
-            break;
-          }
-
-          nLevelCacheIdx++;
-          pGambleEntry += 3;
-        } while (nLevelCacheIdx < nTxtGambleSize.nSize);
+    for (int nLevel = 1; nLevel < 100; nLevel++) {
+      nTxtGambleSize.anLevelLimit[nLevel] = nTxtGambleSize.nSize;
+      for (int nEntry = 0; nEntry < nTxtGambleSize.nSize; nEntry++) {
+        if (nLevel < pTxtGamble[nEntry].nLevel) {
+          nTxtGambleSize.anLevelLimit[nLevel] = nEntry;
+          break;
+        }
       }
+    }
 
-      nIdx++;
-      if (nIdx >= 100) {
-        DataTbls::UnloadBin(pTxtGamble);
-        return;
-      }
-    } while (true);
+    DataTbls::UnloadBin(pTxtGamble);
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp

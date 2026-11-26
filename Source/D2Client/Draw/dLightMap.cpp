@@ -527,54 +527,51 @@ void __stdcall LIGHTMAP_ClearToBlack() {
     LIGHTMAP_FillGridRect(0, 0, 0, 0x2f, 0x2f);
 }
 
-static void __stdcall LIGHTMAP_AddLightToCell(int nX, int nIntensity, uint8_t nRed, uint8_t nGreen, uint8_t nBlue, int nY) {
-    uint32_t nNewGreen;
-    uint32_t nFalloff;
-    uint32_t nCellY = (nY >> 3) - gnLightmapWorldRefreshFlag;
-    if (nCellY > 0x2f) {
+static void __stdcall LIGHTMAP_AddLightToCell(int nIntensity, uint8_t nRed, uint8_t nGreen, uint8_t nBlue, int nY, int nX) {
+    const int nGridX = (nX >> 3) - gnLightmapWorldRefreshFlag;
+    if ((uint32_t)nGridX > 0x2f) {
       return;
     }
 
-    uint32_t nCellX = (nX >> 3) - gnLightmapBufferState;
-    if (nCellX > 0x2f) {
+    const int nGridY = (nY >> 3) - gnLightmapBufferState;
+    if ((uint32_t)nGridY > 0x2f) {
       return;
     }
 
-    int nCellOffset = nCellX * 0x30 + nCellY;
-    nCellX = (uint32_t)gaLightMapCells[nCellOffset].nCellIntensity;
-    nCellY = nCellX + nIntensity;
-    if (nCellY >= 0xff) {
-      nCellY = 0xff;
+    D2LightMapCellStrc* pCell = &gaLightMapCells[nGridY * 0x30 + nGridX];
+    const int nOld = pCell->nCellIntensity;
+    uint32_t nNew = (uint32_t)(nOld + nIntensity);
+    if (nNew >= 0xff) {
+      nNew = 0xff;
     }
+
     if (gbLightmapColorEnabled) {
-      uint32_t nNewRed;
-      nFalloff = gnLightmapInterpolationState[nCellY + 1];
-      nNewRed = (gaLightMapCells[nCellOffset].nRed * nCellX + (uint32_t)nRed * nIntensity) * nFalloff >> 0x10;
-      if ((int32_t)nNewRed > 0xff) {
+      const uint32_t nFalloff = gnLightmapInterpolationState[nNew + 1];
+      int nNewRed = (pCell->nRed * nOld + nRed * nIntensity) * nFalloff >> 0x10;
+      if (nNewRed > 0xff) {
         nNewRed = 0xff;
       }
 
-      nNewGreen = (gaLightMapCells[nCellOffset].nGreen * nCellX + (uint32_t)nGreen * nIntensity) * nFalloff >> 0x10;
-      if ((int32_t)nNewGreen > 0xff) {
+      int nNewGreen = (pCell->nGreen * nOld + nGreen * nIntensity) * nFalloff >> 0x10;
+      if (nNewGreen > 0xff) {
         nNewGreen = 0xff;
       }
 
-      nCellX = (gaLightMapCells[nCellOffset].nBlue * nCellX + (uint32_t)nBlue * nIntensity) * nFalloff >> 0x10;
-      if ((int32_t)nCellX > 0xff) {
-        nCellX = 0xff;
+      int nNewBlue = (pCell->nBlue * nOld + nBlue * nIntensity) * nFalloff >> 0x10;
+      if (nNewBlue > 0xff) {
+        nNewBlue = 0xff;
       }
 
-      gaLightMapCells[nCellOffset].nCellIntensity = (uint8_t)nCellY;
-      gaLightMapCells[nCellOffset].nRed = (uint8_t)nNewRed;
-      gaLightMapCells[nCellOffset].nGreen = (uint8_t)nNewGreen;
-      gaLightMapCells[nCellOffset].nBlue = (uint8_t)nCellX;
-      return;
+      pCell->nCellIntensity = (uint8_t)nNew;
+      pCell->nRed = (uint8_t)nNewRed;
+      pCell->nGreen = (uint8_t)nNewGreen;
+      pCell->nBlue = (uint8_t)nNewBlue;
+    } else {
+      pCell->nRed = 0;
+      pCell->nGreen = 0;
+      pCell->nBlue = 0;
+      pCell->nCellIntensity = (uint8_t)nNew;
     }
-
-    gaLightMapCells[nCellOffset].nRed = 0;
-    gaLightMapCells[nCellOffset].nGreen = 0;
-    gaLightMapCells[nCellOffset].nBlue = 0;
-    gaLightMapCells[nCellOffset].nCellIntensity = (uint8_t)nCellY;
 }
 
 static void __stdcall LIGHTMAP_ApplyPointLight(int nQuality, D2LightMapStrc * pLightMap) {
@@ -650,7 +647,7 @@ static void __stdcall LIGHTMAP_ApplyPointLight(int nQuality, D2LightMapStrc * pL
         nApproxDist = WEATHER_ApproximateDistanceCustomCC(nApproxDist, nDistY);
         nIntensity = (int)((nLightRadius - nApproxDist) * (int)((nGamma << 0x10) / nLightRadius)) >> 0x10;
         if (nIntensity > 0) {
-          LIGHTMAP_AddLightToCell(nQuality, nIntensity, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nCurX);
+          LIGHTMAP_AddLightToCell(nIntensity, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nQuality, nCurX);
         }
 
         nYCount--;
@@ -937,7 +934,7 @@ static void LIGHTMAP_ApplyStaticLightWithShadow(D2LightMapStrc * pLightMap) {
 
           nGridCellX = (8 - ((int)*uSlot28.pBufferCell >> 1)) * ((int)((pLightMap->nRadiusX - (nDistX >> 10)) * (int)((nGamma << 0x10) / nRadius)) >> 0x10) >> 3;
           if (nGridCellX > 0) {
-            LIGHTMAP_AddLightToCell(nYBase, nGridCellX, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nStartY);
+            LIGHTMAP_AddLightToCell(nGridCellX, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nYBase, nStartY);
           }
         }
 
@@ -1165,7 +1162,7 @@ static void LIGHTMAP_ApplyLightWithPixelMap(D2LightMapStrc * pLightMap) {
             nDistX = Weather::WEATHER_ApproximateDistance(nDistX, nDistY);
             nIntensity = ((int)((pLightMap->nRadiusX - nDistX) * (int)((nGamma << 0x10) / nRadius)) >> 0x10) * (8 - (nIntensity >> 1)) >> 3;
             if (nIntensity > 0) {
-              LIGHTMAP_AddLightToCell(nYCoord, nIntensity, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nCurX);
+              LIGHTMAP_AddLightToCell(nIntensity, pLightMap->nRed, pLightMap->nGreen, pLightMap->nBlue, nYCoord, nCurX);
             }
           }
 

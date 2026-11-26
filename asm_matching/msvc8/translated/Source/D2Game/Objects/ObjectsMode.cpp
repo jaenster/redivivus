@@ -517,11 +517,10 @@ static void __stdcall OBJMODE_TriggerProximityEffect(::SGAMEDATA * pGame, D2Unit
     D2ObjectsTxt* pObjTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassIdOrDist);
     D2Common::Units::GetCoords(pUnit, &ptUnitCoords);
     for (pTarget = pRoom->pUnitList; pTarget; pTarget = pTarget->pRoomNext) {
-      if (pTarget->eUnitType == UNIT_PLAYER && pTarget->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Dead) {
-        nClassIdOrDist = D2Common::Collision::GetCollisionDistance(pUnit, pTarget);
-        if (nClassIdOrDist <= pObjTxt->Parm[0] + 1) {
-          Monster::AI::MONSTERAI_CalculateCounterAttackDamage(pGame, pUnit, pTarget, 1);
-        }
+      const eD2UnitType eType = pTarget ? pTarget->eUnitType : UNIT_COUNT;
+      const int nMode = pTarget ? (int)pTarget->eAnimMode.ePlayerMode : 0;
+      if (eType == UNIT_PLAYER && nMode != eD2PlayerAnimMode_ns::Dead && D2Common::Collision::GetCollisionDistance(pUnit, pTarget) <= pObjTxt->Parm[0] + 1) {
+        Monster::AI::MONSTERAI_CalculateCounterAttackDamage(pGame, pUnit, pTarget, 1);
       }
     }
 }
@@ -1106,36 +1105,23 @@ BOOL __fastcall OBJOP_UseStairAlias(D2ObjectOperateFnArg * pOperation) {
 
 // Object operate-fn for breakable containers (barrels, chests that shatter). Returns 1 early if the object is alive (not in Death mode). Otherwise marks the object updated, removes its collision, clears or sets UNITFLAG_TARGETABLE based on the txt Selectable flag for the current anim mode, and if Mode[2] is set schedules the opening animation frame event. Always returns 1.
 BOOL __fastcall OBJOP_OpenSlimeDoor(D2ObjectOperateFnArg * pOperation) {
-    eD2ObjectAnimMode eAnimMode;
-    D2UnitStrc* pVictimUnit = pOperation->sArg.pVictim;
-    if (pVictimUnit && pVictimUnit->eAnimMode.ePlayerMode != Death) {
-      return 1;
-    }
-
-    D2Common::Units::ChangeAnimMode(pVictimUnit, 1);
-    D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
-    pVictimUnit = pOperation->sArg.pVictim;
-    if (!pVictimUnit) {
-      eAnimMode = eD2ObjectAnimMode_ns::Neutral;
-    } else {
-      eAnimMode = pVictimUnit->eAnimMode.ePlayerMode;
-    }
-
-    D2ObjectsTxt* pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-    pVictimUnit = pOperation->sArg.pVictim;
-    if (pVictimUnit) {
-      if (pObjectTxt->Selectable[eAnimMode]) {
-        pVictimUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
-      } else {
-        pVictimUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
+    if (!pOperation->sArg.pVictim || pOperation->sArg.pVictim->eAnimMode.ePlayerMode == Death) {
+      D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
+      D2Common::Units::RemoveCollision_Vector(pOperation->sArg.pVictim);
+      const eD2ObjectAnimMode eAnimMode = !pOperation->sArg.pVictim ? eD2ObjectAnimMode_ns::Neutral : (eD2ObjectAnimMode)pOperation->sArg.pVictim->eAnimMode.ePlayerMode;
+      const int bSelectable = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId)->Selectable[eAnimMode];
+      D2UnitStrc* pVictimUnit = pOperation->sArg.pVictim;
+      if (pVictimUnit) {
+        if (bSelectable) {
+          pVictimUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
+        } else {
+          pVictimUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
+        }
       }
-    }
 
-    pObjectTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId);
-    if (pObjectTxt->Mode[2]) {
-      ::SGAMEDATA* pGame;
-      pGame = pOperation->sArg.pGame;
-      GAME::Event::SetEvent(pGame, pOperation->sArg.pVictim, 1, (D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId)->FrameCnt[1] >> 8) + 1 + pGame->dwGameFrame, 0, 0);
+      if (D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId)->Mode[2]) {
+        GAME::Event::SetEvent(pOperation->sArg.pGame, pOperation->sArg.pVictim, 1, (D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(pOperation->nObjectClassId)->FrameCnt[1] >> 8) + pOperation->sArg.pGame->dwGameFrame + 1, 0, 0);
+      }
     }
 
     return 1;
@@ -1855,14 +1841,14 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
         sItemGenCtx.pUnit = 0;
         sItemGenCtx.pSeed = 0;
         sItemGenCtx.pGame = pArguments->sArg.pGame;
-        sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
+        sItemGenCtx.wItemFormat = pArguments->sArg.pGame->wItemFormat;
         sItemGenCtx.nItemClassid = nItemClassId;
-        sItemGenCtx.nPosX = ptSpawnPos.x;
-        sItemGenCtx.eQuality = QUALITY_INVALID;
         sItemGenCtx.dwMode = 3;
+        sItemGenCtx.nPosX = ptSpawnPos.x;
         sItemGenCtx.nPosY = ptSpawnPos.y;
         sItemGenCtx.pDrlgRoom = pSpawnRoom;
         sItemGenCtx.usually_one = 1;
+        sItemGenCtx.eQuality = QUALITY_INVALID;
         sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pArguments->pAttacker, LEVEL_None);
         sItemGenCtx.nPresetQuantity = 1;
         D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
@@ -1915,13 +1901,13 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
       }
 
       sSkillArg.nY = nY;
-      sSkillArg.nUnitX = aOffsetX[iMissileIdx] + sSkillArg.nX;
-      sSkillArg.nUnitY = aOffsetY[iMissileIdx] + sSkillArg.nY;
+      sSkillArg.nUnitX = sSkillArg.nX + aOffsetX[iMissileIdx];
+      sSkillArg.nUnitY = sSkillArg.nY + aOffsetY[iMissileIdx];
       sSkillArg.pOwner = pArguments->pAttacker;
       sSkillArg.pMissile = pArguments->sArg.pVictim;
       sSkillArg.nParticleParam = 1;
       sSkillArg.nMissileTxtNo = MISSILE_Explosivepotion;
-      int nSkillLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(sSkillArg.pOwner, UNITSTAT_level, 0) / 5;
+      int nSkillLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pArguments->pAttacker, UNITSTAT_level, 0) / 5;
       if (nSkillLevel < 1) {
         nSkillLevel = 1;
       } else if (nSkillLevel > 8) {
@@ -1969,14 +1955,14 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
         sItemGenCtx.pUnit = 0;
         sItemGenCtx.pSeed = 0;
         sItemGenCtx.pGame = pArguments->sArg.pGame;
-        sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
+        sItemGenCtx.wItemFormat = pArguments->sArg.pGame->wItemFormat;
         sItemGenCtx.nItemClassid = nItemClassId;
-        sItemGenCtx.nPosX = ptSpawnPos.x;
-        sItemGenCtx.eQuality = QUALITY_INVALID;
         sItemGenCtx.dwMode = 3;
+        sItemGenCtx.nPosX = ptSpawnPos.x;
         sItemGenCtx.nPosY = ptSpawnPos.y;
         sItemGenCtx.pDrlgRoom = pSpawnRoom;
         sItemGenCtx.usually_one = 1;
+        sItemGenCtx.eQuality = QUALITY_INVALID;
         sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pArguments->pAttacker, LEVEL_None);
         sItemGenCtx.nPresetQuantity = 1;
         D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
@@ -2029,13 +2015,13 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
       }
 
       sSkillArg.nY = nY;
-      sSkillArg.nUnitX = aOffsetX[iMissileIdx] + sSkillArg.nX;
-      sSkillArg.nUnitY = aOffsetY[iMissileIdx] + sSkillArg.nY;
+      sSkillArg.nUnitX = sSkillArg.nX + aOffsetX[iMissileIdx];
+      sSkillArg.nUnitY = sSkillArg.nY + aOffsetY[iMissileIdx];
       sSkillArg.pOwner = pArguments->pAttacker;
       sSkillArg.pMissile = pArguments->sArg.pVictim;
       sSkillArg.nParticleParam = 1;
       sSkillArg.nMissileTxtNo = MISSILE_Chokinggaspoition;
-      int nSkillLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(sSkillArg.pOwner, UNITSTAT_level, 0) / 5;
+      int nSkillLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pArguments->pAttacker, UNITSTAT_level, 0) / 5;
       if (nSkillLevel < 1) {
         nSkillLevel = 1;
       } else if (nSkillLevel > 8) {
@@ -2564,44 +2550,37 @@ BOOL __fastcall OBJOP_OperateFunction11(D2ObjectOperateFnArg * pOperation) {
 
 // Server entry-point for a player interacting with a world object. Looks up the object unit by nUnitId/pUId, reads its ObjectsTxt record, and guards against interaction while the player is trading, has interact state set, or is holding a cursor item (except for class 0x10b). Dispatches to OBJECTSOPERATEFN[pTxt->OperateFn] with a fully populated D2ObjectOperateFnArg. Skips classes 0x79, 0x7a, and 0x16. Halts with an unrecoverable error if OperateFn >= 0x65.
 BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUnitId, DWORD pUId, int * pTxt) {
-    D2UnitDataPlayerStrc* pPlayerData;
-    D2UnitStrc* pCursorItem_lcl;
-    BOOL bResult;
-    D2ObjectOperateFnArg sOperation;
-    eD2UnitType eInteractType;
     *pTxt = 1;
     D2UnitStrc* pUnit_00 = UNIT::SUnit::FindUnitFromTable(pGame, nUnitId & 0xffff, pUId);
-    if (!pUnit_00) {
-      nUnitId = -1;
-    } else {
-      nUnitId = pUnit_00->nClassId;
-    }
-
+    const int nClassId = !pUnit_00 ? -1 : pUnit_00->nClassId;
     D2ObjectsTxt* pObjTxt = D2Common::Units::GetObjectTxtRecordFromObject(pUnit_00);
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER && ((bResult = UNIT::SUnit::GetInteractInfo(pUnit, &eInteractType, (uint32_t*)&pUId) , bResult || (pPlayerData = D2Common::Units::GetPlayerData(pUnit) , pPlayerData->bCutscenePending != 0)) || (pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory) , pCursorItem_lcl && nUnitId != 0x10b))) {
-      return 0;
-    }
-
-    uint8_t byOperateFn = (uint8_t)pObjTxt->OperateFn;
-    if (byOperateFn < 0x65) {
-      D2RoomStrc* pRoom;
-      if (nUnitId != 0x79 && nUnitId != 0x7a && nUnitId != 0x16 && OBJECTSOPERATEFN[byOperateFn]) {
-        sOperation.sArg.pGame = pGame;
-        sOperation.sArg.pVictim = pUnit_00;
-        sOperation.pAttacker = pUnit;
-        pRoom = D2Common::Units::UNITS_GetRoom(pUnit_00);
-        sOperation.pSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
-        sOperation.nObjectClassId = nUnitId;
-        bResult = (*OBJECTSOPERATEFN[(uint8_t)pObjTxt->OperateFn])(&sOperation);
-        return bResult;
+    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+      eD2UnitType eInteractType;
+      if (UNIT::SUnit::GetInteractInfo(pUnit, &eInteractType, (uint32_t*)&pUId) || D2Common::Units::GetPlayerData(pUnit)->bCutscenePending) {
+        return 0;
       }
-      if (byOperateFn < 0x65) {
+
+      D2InventoryStrc* pInventory = pUnit->pInventory;
+      if (D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory) && nClassId != 0x10b) {
         return 0;
       }
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcf8);
-    exit(-1);
+    if ((uint8_t)pObjTxt->OperateFn < 0x65 && nClassId != 0x79 && nClassId != 0x7a && nClassId != 0x16 && OBJECTSOPERATEFN[(uint8_t)pObjTxt->OperateFn]) {
+      D2ObjectOperateFnArg sOperation;
+      sOperation.sArg.pGame = pGame;
+      sOperation.sArg.pVictim = pUnit_00;
+      sOperation.pAttacker = pUnit;
+      sOperation.pSeed = ObjectsRgn::GetObjectControlSeed(pGame, D2Common::Units::UNITS_GetRoom(pUnit_00));
+      sOperation.nObjectClassId = nClassId;
+      return (*OBJECTSOPERATEFN[(uint8_t)pObjTxt->OperateFn])(&sOperation);
+    }
+
+    if (!((uint8_t)pObjTxt->OperateFn < 0x65)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcf8);
+      exit(-1);
+    }
+    return 0;
 }
 
 ::SGAMEDATA * __fastcall Interact(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nObjectType, DWORD nGid) {

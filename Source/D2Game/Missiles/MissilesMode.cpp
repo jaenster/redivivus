@@ -5065,83 +5065,61 @@ int __fastcall MISSMODE_SrvDoFn12_DiabWallMaker(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Server do-tick handler for missile type 013 (Necromancer summon-via-missile). Each tick: resolves owner, reads remaining-summon count from TargetY; if count &gt; 0 and direction flags != 0, looks up skill from missile, computes monster class via SKILLS_GetSummonMonsterClassId, finds the target monster from TargetX GUID, fills D2MonsterCastPetStrc and calls SKILL_CreateSummon to spawn one minion. Assigns minion owner, adds to minion list, applies umods (0xf), applies necro summon buffs, stores owner, adds to target table, decrements TargetY. Falls through to Missiles_SrvDoFunc_001 when done or on failure.
 int __fastcall MISSILESMODE_SrvDoFn13_BoneWallMaker(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    int nFallbackResult;
-    D2MonsterCastPetStrc sMonsterCastPet;
-    D2UnitStrc* pSummonOwner;
-    int32_t nSkillLevel;
-    D2SkillsTxt* pSummonedMinion;
-    eD2Skills eSkillId;
-    uint8_t byPetTypeIdx;
-    D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
-    if (!pOwner) {
+    if (!UNIT::SUnit::GetOwnerUnit(pGame, pUnit) || !D2Common::Units::Missile::GetTargetY(pUnit)) {
       return 2;
     }
-
-    int32_t nRemainingMinions = D2Common::Units::Missile::GetTargetY(pUnit);
-    if (nRemainingMinions) {
-      uint32_t nDirFlags;
-      nDirFlags = D2Common::PATH::Path::Get8FlagsFromDynamicPath(pUnit->pPath.pDynamicPath);
-      if (!nDirFlags) {
-        nFallbackResult = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
-        return nFallbackResult;
-      }
-
-      pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
+    if (D2Common::PATH::Path::Get8FlagsFromDynamicPath(pUnit->pPath.pDynamicPath)) {
+      D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
       if (!pOwner) {
         return 2;
       }
 
-      pSummonOwner = pOwner;
-      eSkillId = D2Common::Units::Missile::GetSkillId(pUnit);
-      nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
-      pSummonedMinion = D2Common::Skills::TXT_Skills_GetLine(eSkillId);
-      if (!pSummonedMinion) {
+      const eD2Skills eSkillId = D2Common::Units::Missile::GetSkillId(pUnit);
+      const int32_t nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
+      D2SkillsTxt* pSkillsTxt = D2Common::Skills::TXT_Skills_GetLine(eSkillId);
+      if (!pSkillsTxt) {
         return 2;
       }
 
-      sMonsterCastPet.classId = SKILLS::SkillsServer::SKILLS_GetSummonMonsterClassId(pOwner, 0, eSkillId, nSkillLevel, &sMonsterCastPet.nPetType, nullptr, nullptr);
-      if (sMonsterCastPet.classId < 0) {
+      int nSpawnMode;
+      const int32_t nClassId = SKILLS::SkillsServer::SKILLS_GetSummonMonsterClassId(pOwner, 0, eSkillId, nSkillLevel, &nSpawnMode, nullptr, nullptr);
+      if (nClassId < 0) {
         return 0;
       }
 
-      byPetTypeIdx = pSummonedMinion->pettype;
-      if ((int)(uint32_t)byPetTypeIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
-        byPetTypeIdx = 0;
+      uint8_t byPetType = pSkillsTxt->pettype;
+      if (byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
+        byPetType = 0;
       }
 
-      nDirFlags = D2Common::Units::Missile::GetTargetX(pUnit);
-      pSummonedMinion = (D2SkillsTxt*)UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nDirFlags);
-      if (pSummonedMinion) {
-        sMonsterCastPet.nX = 0;
-        sMonsterCastPet.nY2 = 0;
-        sMonsterCastPet.nType = 0;
-        sMonsterCastPet.nSkillCalc = 0;
+      D2UnitStrc* pTarget = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, D2Common::Units::Missile::GetTargetX(pUnit));
+      if (pTarget) {
+        D2MonsterCastPetStrc sMonsterCastPet;
+        memset(&sMonsterCastPet, 0, sizeof(sMonsterCastPet));
         sMonsterCastPet.nFlags = 0xd;
         sMonsterCastPet.pPlayer = pOwner;
+        sMonsterCastPet.classId = nClassId;
         sMonsterCastPet.nFunctionId = 0;
-        sMonsterCastPet.nMode = sMonsterCastPet.nPetType;
+        sMonsterCastPet.nMode = nSpawnMode;
         sMonsterCastPet.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
         sMonsterCastPet.nY2 = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        sMonsterCastPet.nType = (uint32_t)byPetTypeIdx;
-        pOwner = SKILLS::SkillsServer::SKILL_CreateSummon(pGame, &sMonsterCastPet);
-        if (pOwner) {
-          Ai::AiGeneral::AssignMinionOwner(pGame, pOwner, *(int32_t*)&pSummonedMinion->charclass, UNIT_MONSTER, 0, 0);
-          Ai::AiGeneral::AddMinionToList(pGame, (D2UnitStrc*)pSummonedMinion, pOwner);
-          Monsters::InitUmods(pGame, pOwner, 0xf, 0);
-          SKILLS::SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pSummonOwner, pOwner, eSkillId, nSkillLevel, 0);
-          D2Common::Units::StoreOwner(pOwner, pSummonOwner);
-          GAME::Targets::AddNodeToTable(pGame, pOwner, nullptr, 9);
-          nRemainingMinions = D2Common::Units::Missile::GetTargetY(pUnit);
-          nRemainingMinions -= 1;
-          D2Common::Units::Missile::SetTargetY(pUnit, nRemainingMinions);
+        sMonsterCastPet.nType = byPetType;
+        D2UnitStrc* pSummon = SKILLS::SkillsServer::SKILL_CreateSummon(pGame, &sMonsterCastPet);
+        if (pSummon) {
+          Ai::AiGeneral::AssignMinionOwner(pGame, pSummon, !pTarget ? -1 : pTarget->nUnitGUID, UNIT_MONSTER, 0, 0);
+          Ai::AiGeneral::AddMinionToList(pGame, pTarget, pSummon);
+          Monsters::InitUmods(pGame, pSummon, 0xf, 0);
+          SKILLS::SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pOwner, pSummon, eSkillId, nSkillLevel, 0);
+          D2Common::Units::StoreOwner(pSummon, pOwner);
+          GAME::Targets::AddNodeToTable(pGame, pSummon, nullptr, 9);
+          int32_t nCount = D2Common::Units::Missile::GetTargetY(pUnit);
+          --nCount;
+          D2Common::Units::Missile::SetTargetY(pUnit, nCount);
         }
       }
-
-      nFallbackResult = MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
-      return nFallbackResult;
     }
 
-    return 2;
+    return MISSMODE_SrvDoFn01_BasicMissile(pGame, pUnit);
 }
 
 // Per-tick server update: every Param1 frames dispatches a secondary skill do-function (missiles.txt Param2 index) via SKILLS_DispatchSrvDoFunc for the missile's skill+level, then calls SrvDoFunc_001. Acts as a periodic skill trigger embedded in a missile's flight.
@@ -5563,11 +5541,10 @@ int __fastcall MISSILESMODE_SrvDoFn22_LightningTrailingJavelin(::SGAMEDATA * pGa
           nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
           nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
           if (nRemainingFrames < 2) {
-            nDirOrCoord = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath);
-            nClassId = nDirOrCoord - nPosX;
-            nDirOrCoord = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath);
-            D2Common::Units::Missile::SetTargetX(pUnit, -(nDirOrCoord - nPosY));
-            D2Common::Units::Missile::SetTargetY(pUnit, nClassId);
+            const int nParam1 = D2Common::PATH::DynamicPath::GetXSP1(pUnit->pPath.pDynamicPath) - nPosX;
+            const int nParam2 = D2Common::PATH::DynamicPath::GetYSP1(pUnit->pPath.pDynamicPath) - nPosY;
+            D2Common::Units::Missile::SetTargetX(pUnit, -nParam2);
+            D2Common::Units::Missile::SetTargetY(pUnit, nParam1);
             pGame = pGameLocal;
           }
 

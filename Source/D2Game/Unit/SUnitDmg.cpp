@@ -83,21 +83,19 @@ static uint32_t __stdcall DAMAGE_RollPhysicalDamageRange(int32_t nMinPctBonus, D
 }
 
 static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitStat, eD2UnitStat eStat1, int32_t nMinPctBonus, int32_t nRangePctBonus, uint32_t nDamageAccum, D2UnitStrc * pUnit, eD2UnitStat eStat2) {
-    int nDamageBase = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat2, 0);
-    if (nDamageBase * 0x100 < 8) {
+    const int nMaxDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat2, 0) << 8;
+    if (nMaxDamage < 8) {
       return (int)nDamageAccum < 0 ? 0 : nDamageAccum;
     }
 
-    int nMinDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0);
+    const int nMinDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eUnitStat, 0) << 8;
     if (eStat1 != ~UNITSTAT_strength) {
-      int nBonusStat;
-      nBonusStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat1, 0);
+      const int nBonusStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat1, 0);
       nMinPctBonus += nBonusStat;
       nRangePctBonus += nBonusStat;
     }
 
-    uint32_t nResult = DAMAGE_RollPhysicalDamageRange(nMinPctBonus, pUnit, nMinDamage << 8, nDamageBase * 0x100, nRangePctBonus, nDamageAccum);
-    return nResult;
+    return DAMAGE_RollPhysicalDamageRange(nMinPctBonus, pUnit, nMinDamage, nMaxDamage, nRangePctBonus, nDamageAccum);
 }
 
 static int32_t __stdcall DAMAGE_ApplyHealingToUnit(int32_t nHealAmount, D2UnitStrc * pUnit) {
@@ -176,70 +174,42 @@ static uint32_t DAMAGE_DrainStaminaFromUnit(uint32_t nStaminaDrain, D2UnitStrc *
 
 // Applies the STATE_stunned state to pUnit2 for nParam game-frames. Skips if nParam &lt; 1, if the target is a non-stunable monster (boss, zero-velocity, or rolls against a 90% stun-chance for monster-type 8), or clamps mercs to 13 frames and others to 250. Re-uses an existing stun stat-list if present (updates timeout + event), otherwise allocates a new one and attaches it.
 static void __stdcall DAMAGE_ApplyStun(D2UnitStrc * pUnit, int32_t nStunFrames, D2UnitStrc * pUnit2) {
-    D2MonStatsTxt* pVictimMonStats;
-    uint32_t nCheckResult;
-    D2StatListExStrc* pStunStatList;
-    eD2UnitType eAttackerType;
-    int32_t nAttackerGUID;
-    uint32_t sSeedResult;
     if (nStunFrames <= 0) {
       return;
     }
     if (pUnit2 && pUnit2->eUnitType == UNIT_MONSTER) {
-      uint32_t nMonCheck;
-      nMonCheck = Monsters::CheckMonsterType(pUnit2, 8);
-      if (nMonCheck) {
-        sSeedResult = D2_SeedRoll(&pUnit->sSeed);
-        if ((int)(sSeedResult % 100) < 0x5a) {
-          return;
-        }
-      }
-
-      nMonCheck = D2Common::Monsters::MONSTERS::UnitIsMarkedBoss(nullptr, pUnit2);
-      if (nMonCheck) {
+      if (Monsters::CheckMonsterType(pUnit2, 8) && (int)(D2_SeedRoll(&pUnit->sSeed) % 100) < 0x5a) {
         return;
       }
-
-      pVictimMonStats = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId);
-      if (!pVictimMonStats->Velocity) {
+      if (D2Common::Monsters::MONSTERS::UnitIsMarkedBoss(nullptr, pUnit2)) {
         return;
       }
-
-      nCheckResult = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit2);
-      if (nCheckResult && nStunFrames >= 0xd) {
+      if (!D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId)->Velocity) {
+        return;
+      }
+      if (D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit2) && nStunFrames >= 0xd) {
         nStunFrames = 0xd;
-        goto apply_stun;
+      } else if (nStunFrames > 0xfa) {
+        nStunFrames = 0xfa;
       }
-    }
-    if (nStunFrames > 0xfa) {
+    } else if (nStunFrames > 0xfa) {
       nStunFrames = 0xfa;
     }
 
-    apply_stun:
-    pStunStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit2, STATE_stunned);
+    D2StatListExStrc* pStunStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit2, STATE_stunned);
     ::SGAMEDATA* pGame = SUnit::GetGamePointer(pUnit);
-    int nTimeout = pGame->dwGameFrame + nStunFrames;
+    const int nTimeout = pGame->dwGameFrame + nStunFrames;
     if (!pStunStatList) {
-      if (!pUnit) {
-        eAttackerType = UNIT_COUNT;
-        nAttackerGUID = -1;
-      } else {
-        eAttackerType = pUnit->eUnitType;
-        nAttackerGUID = pUnit->nUnitGUID;
-      }
-
-      pStunStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nTimeout, eAttackerType, nAttackerGUID);
+      D2StatListExStrc* pNewStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nTimeout, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       GAME::Event::SetEvent(pGame, pUnit2, 0xc, nTimeout, 0, 0);
-      D2Common::Stats::StatsEx::SetState(pStunStatList, STATE_stunned);
-      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pStunStatList, SKILLS::SkillsServer::DefaultExpireFunction);
-      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pStunStatList, 1);
+      D2Common::Stats::StatsEx::SetState(pNewStatList, STATE_stunned);
+      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pNewStatList, SKILLS::SkillsServer::DefaultExpireFunction);
+      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pNewStatList, 1);
       D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_stunned, 1);
-      return;
+    } else {
+      D2Common::Stats::StatsEx::SetTimeout_WithFlag(pStunStatList, nTimeout);
+      GAME::Event::SetEvent(pGame, pUnit2, 0xc, nTimeout, 0, 0);
     }
-
-    D2Common::Stats::StatsEx::SetTimeout_WithFlag(pStunStatList, nTimeout);
-    GAME::Event::SetEvent(pGame, pUnit2, 0xc, nTimeout, 0, 0);
-    return;
 }
 
 // Applies poison damage-over-time to pUnit2. nParam1=drain rate (UNITSTAT_hpregen penalty per frame), nParam2=duration in frames. If no existing STATE_poison stat list, allocates a new one and sets it up with the attacker's GUID/type and expiry event. If one already exists, extends duration and stacks rate if the new hit is stronger. Triggers STATREGEN timer for monster targets.
@@ -368,74 +338,55 @@ int32_t __fastcall DAMAGE_GetMonsterColdEffect(::SGAMEDATA * pGame, D2UnitStrc *
 // Applies cold slow to pUnit2 for nParam frames, sourced from attacker pUnit. Looks up MonStats ColdEffect per difficulty; divides duration for cold-immune monsters. Creates or extends STATE_cold stat list (velocity/attack/anim rate penalties), schedules expiry event, and probabilistically sets STATE_shatter on eligible monsters.
 // @sourcefile .\UNIT\SUnitDmg.cpp
 static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, D2UnitStrc * pUnit2) {
-    BOOL _bCanShatter;
-    bool bCanShatter;
-    eD2UnitType eUnitType;
-    int pExistingColdList;
-    int32_t nAttackerGUID;
-    int nColdEffectPct;
-    int32_t nMonClassId;
     if (nColdLength <= 0) {
       return;
     }
 
     D2StatListExStrc* pColdStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit2, STATE_cold);
     ::SGAMEDATA* pGame = SUnit::GetGamePointer(pUnit);
-    D2MonStatsTxt* pMonStatsTxt;
-    if (!pUnit2 || pUnit2->eUnitType != UNIT_MONSTER || !(nMonClassId = pUnit2->nClassId , pMonStatsTxt = nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr)) {
+    int nColdEffectPct;
+    if (!pUnit2 || pUnit2->eUnitType != UNIT_MONSTER) {
       nColdEffectPct = -0x32;
     } else {
-      nColdEffectPct = (int)pMonStatsTxt->aColdEffect[pGame->nDifficulty];
-      if (!nColdEffectPct) {
-        return;
+      const int nMonClassId = pUnit2->nClassId;
+      D2MonStatsTxt* pMonStatsTxt = nMonClassId >= 0 && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId : nullptr;
+      if (!pMonStatsTxt) {
+        nColdEffectPct = -0x32;
+      } else {
+        nColdEffectPct = (int)pMonStatsTxt->aColdEffect[pGame->nDifficulty];
       }
+    }
+    if (!nColdEffectPct) {
+      return;
     }
     if (pUnit2 && pUnit2->eUnitType == UNIT_MONSTER && nColdEffectPct < 0) {
-      D2DifficultyLevelsTxt* pDiffLevels;
-      pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
-      if (pDiffLevels->MonsterColdDivisor) {
-        nColdLength /= pDiffLevels->MonsterColdDivisor;
+      const int nColdDivisor = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty)->MonsterColdDivisor;
+      if (nColdDivisor) {
+        nColdLength /= nColdDivisor;
       }
     }
-    if (nColdLength <= 1) {
-      nColdLength = 1;
-    }
 
-    int32_t nExpireFrame = pGame->dwGameFrame + nColdLength;
+    nColdLength = nColdLength > 1 ? nColdLength : 1;
+    const int32_t nExpireFrame = pGame->dwGameFrame + nColdLength;
     if (!pColdStatList) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_cold, 1);
-      if (!pUnit) {
-        nAttackerGUID = -1;
-        eUnitType = UNIT_COUNT;
-      } else {
-        nAttackerGUID = pUnit->nUnitGUID;
-        eUnitType = pUnit->eUnitType;
-      }
-
-      pColdStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireFrame, eUnitType, nAttackerGUID);
+      D2StatListExStrc* pNewStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireFrame, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
       GAME::Event::SetEvent(pGame, pUnit2, 0xc, nExpireFrame, 0, 0);
-      D2Common::Stats::StatsEx::SetState(pColdStatList, STATE_cold);
-      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pColdStatList, DAMAGE_OnColdExpire);
-      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pColdStatList, 1);
-      D2Common::Stats::StatsEx::STATLIST_SetStatValue(pColdStatList, UNITSTAT_velocitypercent, nColdEffectPct, 0);
-      D2Common::Stats::StatsEx::STATLIST_SetStatValue(pColdStatList, UNITSTAT_attackrate, nColdEffectPct, 0);
-      D2Common::Stats::StatsEx::STATLIST_SetStatValue(pColdStatList, UNITSTAT_other_animrate, nColdEffectPct, 0);
+      D2Common::Stats::StatsEx::SetState(pNewStatList, STATE_cold);
+      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pNewStatList, DAMAGE_OnColdExpire);
+      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pNewStatList, 1);
+      D2Common::Stats::StatsEx::STATLIST_SetStatValue(pNewStatList, UNITSTAT_velocitypercent, nColdEffectPct, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetStatValue(pNewStatList, UNITSTAT_attackrate, nColdEffectPct, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetStatValue(pNewStatList, UNITSTAT_other_animrate, nColdEffectPct, 0);
       D2Common::Units::UpdateAnimSpeed(pUnit2, ".\\UNIT\\SUnitDmg.cpp", 0x1dc);
-    } else {
-      pExistingColdList = D2Common::Stats::StatsEx::STATLIST_GetExpireFrame(pColdStatList);
-      if (pExistingColdList < nExpireFrame) {
-        D2Common::Stats::StatsEx::SetTimeout_WithFlag(pColdStatList, nExpireFrame);
-        GAME::Event::SetEvent(pGame, pUnit2, 0xc, nExpireFrame, 0, 0);
-      }
+    } else if (D2Common::Stats::StatsEx::STATLIST_GetExpireFrame(pColdStatList) < nExpireFrame) {
+      D2Common::Stats::StatsEx::SetTimeout_WithFlag(pColdStatList, nExpireFrame);
+      GAME::Event::SetEvent(pGame, pUnit2, 0xc, nExpireFrame, 0, 0);
     }
 
-    uint32_t sSeedResult = D2_SeedRoll(&pUnit2->sSeed);
-    if ((int)(sSeedResult % 100) < 0x14 && pUnit2 && pUnit2->eUnitType == UNIT_MONSTER) {
-      _bCanShatter = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit2->nClassId, deadCol);
-      if (!_bCanShatter) {
-        D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_shatter, 1);
-        return;
-      }
+    if ((int)(D2_SeedRoll(&pUnit2->sSeed) % 100) < 0x14 && pUnit2 && pUnit2->eUnitType == UNIT_MONSTER && !D2Common::DATATBLS::MonsterTbls::TXT_MonStats_MonStats2_GetFlagsByBitOffset(pUnit2->nClassId, deadCol)) {
+      D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_shatter, 1);
+      return;
     }
 
     D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_shatter, 0);
@@ -482,105 +433,74 @@ void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2Stat
 
 // Server-side application of the Freeze effect to a target (pUnit2) from attacker pUnit for nParam frames. Players and bosses/special/uninterruptable/merc monsters fall back to DAMAGE_ApplyCold instead of being frozen. For eligible monsters: bails if a monster delay-by-difficulty check passes, divides duration by the difficulty's MonsterFreezeDivisor, and computes an expire game-frame. Creates+attaches a STATE_freeze statlist with expire callback SUNITDMG_StatExpireCallback_ResumeAI (or extends an existing freeze's timeout to the later expiry). Fires game events: event 0xc with the expire frame, an AITHINK timer trigger, and event 2 one frame after expiry to resume AI. Halts via Fog::ErrorManager on a zero freeze divisor or a non-monster reaching the event stage.
 static void __stdcall DAMAGE_ApplyFreeze(D2UnitStrc * pUnit, int32_t nFreezeFrames, D2UnitStrc * pUnit2) {
-    BOOL eFrozenState;
-    uint32_t nCheckResult;
-    int32_t nFreezeDelay;
-    int32_t nMonStatsId;
-    int32_t nAttackerGUID;
-    D2UnitStrc* pVictimCopy;
     if (nFreezeFrames <= 0) {
       return;
     }
 
-    eD2UnitType eTargetType = UNIT_COUNT;
+    int nTargetType = UNIT_COUNT;
     if (pUnit2) {
-      eTargetType = pUnit2->eUnitType;
+      nTargetType = pUnit2->eUnitType;
     }
 
-    switch (eTargetType) {
+    switch (nTargetType) {
       case UNIT_PLAYER:
-        {
+        DAMAGE_ApplyCold(pUnit, nFreezeFrames, pUnit2);
+        return;
+      case UNIT_MONSTER:
+        if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_uninterruptable)) {
+          return;
+        }
+        if (D2Common::Monsters::MONSTERS::UnitIsMarkedBoss(D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(!pUnit2 ? -1 : pUnit2->nClassId), pUnit2) || Monsters::CheckMonsterType(pUnit2, 8)) {
           DAMAGE_ApplyCold(pUnit, nFreezeFrames, pUnit2);
           return;
         }
-      case UNIT_MONSTER:
-        {
-          eFrozenState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit2, STATE_uninterruptable);
-          if (eFrozenState) {
-            return;
-          }
-          if (!pUnit2) {
-            nMonStatsId = -1;
-          } else {
-            nMonStatsId = pUnit2->nClassId;
-          }
-
-          pVictimCopy = pUnit2;
-          nCheckResult = D2Common::Monsters::MONSTERS::UnitIsMarkedBoss(D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nMonStatsId), pVictimCopy);
-          if (nCheckResult || (nCheckResult = Monsters::CheckMonsterType(pUnit2, 8) , nCheckResult != 0)) {
-            DAMAGE_ApplyCold(pUnit, nFreezeFrames, pUnit2);
-            return;
-          }
-
-          nCheckResult = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit2);
-          if (nCheckResult) {
-            DAMAGE_ApplyCold(pUnit, nFreezeFrames, pUnit2);
-            return;
-          }
-
-          break;
+        if (D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit2)) {
+          DAMAGE_ApplyCold(pUnit, nFreezeFrames, pUnit2);
+          return;
         }
+        break;
     }
 
     D2StatListExStrc* pFreezeStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit2, STATE_freeze);
     ::SGAMEDATA* pGame = SUnit::GetGamePointer(pUnit);
-    int32_t nDelayCheckResult = DAMAGE_GetMonsterColdEffect(pGame, pUnit2);
-    if (nDelayCheckResult >= 0) {
+    if (DAMAGE_GetMonsterColdEffect(pGame, pUnit2) >= 0) {
       return;
     }
-    if (pUnit2 && pUnit2->eUnitType == UNIT_MONSTER) {
-      D2DifficultyLevelsTxt* pDiffLevels;
-      pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels((uint32_t)pGame->nDifficulty);
-      if (!pDiffLevels->MonsterFreezeDivisor) {
+    if ((!pUnit2 ? UNIT_COUNT : pUnit2->eUnitType) == UNIT_MONSTER) {
+      const uint8_t nDifficulty = pGame->nDifficulty;
+      const int nFreezeDivisor = D2Common::DATATBLS::DataTbls::GetDifficultyLevels(nDifficulty)->MonsterFreezeDivisor;
+      if (!nFreezeDivisor) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x254);
         exit(-1);
       }
 
-      nFreezeFrames /= pDiffLevels->MonsterFreezeDivisor;
+      nFreezeFrames /= nFreezeDivisor;
     }
 
-    int32_t nFreezeExpireFrame = pGame->dwGameFrame + nFreezeFrames;
+    int nExpireFrame = pGame->dwGameFrame + nFreezeFrames;
     if (!pFreezeStatList) {
       D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_freeze, 1);
-      if (!pUnit) {
-        nAttackerGUID = -1;
-        eTargetType = UNIT_COUNT;
-      } else {
-        nAttackerGUID = pUnit->nUnitGUID;
-        eTargetType = pUnit->eUnitType;
-      }
-
-      pFreezeStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nFreezeExpireFrame, eTargetType, nAttackerGUID);
-      D2Common::Stats::StatsEx::SetState(pFreezeStatList, STATE_freeze);
-      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pFreezeStatList, SUNITDMG_StatExpireCallback_ResumeAI);
-      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pFreezeStatList, 1);
-      nFreezeDelay = nFreezeExpireFrame;
+      D2StatListExStrc* pNewStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nExpireFrame, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
+      D2Common::Stats::StatsEx::SetState(pNewStatList, STATE_freeze);
+      D2Common::Stats::StatsEx::STATLIST_SetExpireFunction(pNewStatList, SUNITDMG_StatExpireCallback_ResumeAI);
+      D2Common::Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit2, pNewStatList, 1);
     } else {
-      nFreezeDelay = D2Common::Stats::StatsEx::STATLIST_GetExpireFrame(pFreezeStatList);
-      if (nFreezeDelay < nFreezeExpireFrame) {
-        D2Common::Stats::StatsEx::SetTimeout_WithFlag(pFreezeStatList, nFreezeExpireFrame);
-        nFreezeDelay = nFreezeExpireFrame;
+      const int nListExpireFrame = D2Common::Stats::StatsEx::STATLIST_GetExpireFrame(pFreezeStatList);
+      if (nListExpireFrame < nExpireFrame) {
+        D2Common::Stats::StatsEx::SetTimeout_WithFlag(pFreezeStatList, nExpireFrame);
+      } else {
+        nExpireFrame = nListExpireFrame;
       }
     }
 
-    GAME::Event::SetEvent(pGame, pUnit2, 0xc, nFreezeDelay, 0, 0);
+    GAME::Event::SetEvent(pGame, pUnit2, 0xc, nExpireFrame, 0, 0);
     if ((pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x276);
       exit(-1);
     }
 
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit2, UNITEVENTCALLBACK_AITHINK, 0);
-    GAME::Event::SetEvent(pGame, pUnit2, 2, pGame->dwGameFrame + 1 + nFreezeFrames, 0, 0);
+    GAME::Event::SetEvent(pGame, pUnit2, 2, pGame->dwGameFrame + nFreezeFrames + 1, 0, 0);
 }
 
 // Computes the physical damage total in nParam throughout the body; the only caller (DAMAGE_CalculateOffensiveDamage) assigns the never-set local nPhysDmgResult straight from this call's result into pDmgStrc->dwPhysDamage, proving the value is meant to flow back. The final D2ApplyPercent(nParam,...) call (when bParam!=0x80) also drops its own int32_t return, which is this function's true final value.
@@ -715,31 +635,34 @@ static void DAMAGE_ApplyUndeadBonusDamage(D2DamageStrc * pDamage, D2UnitStrc * p
     }
 }
 
+static inline D2MonStatsTxt * DAMAGE_GetUnitMonStatsTxt(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+      const int nClassId = pUnit->nClassId;
+      return nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId : nullptr;
+    }
+    return nullptr;
+}
+
+static inline uint32_t DAMAGE_MonTypeMatches(int nMonType1, int nMonType2) {
+    if (nMonType1 > 0 && nMonType1 < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize && nMonType2 > 0 && nMonType2 < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize) {
+      return ((uint32_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtMonTypeUnknown)[(nMonType1 >> 5) + nMonType2 * D2Common::ITEMS::Items::sgptDataTable->nMonTypeEquivRowDwords] & Fog::BitBuffer::gadwBitMasks[nMonType1 & 0x1f];
+    }
+    return 0;
+}
+
 static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2DamageStrc * pDamage, D2UnitStrc * pTarget) {
-    int i;
-    D2StatStrc anBonusValues[128];
-    if ((pTarget ? pTarget->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
-      return;
-    }
-
-    int nMonTypeCount = pTarget->nClassId;
-    D2MonStatsTxt* pMonStatsTxt = nMonTypeCount >= 0 && nMonTypeCount < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonTypeCount : nullptr;
-    if (!pMonStatsTxt) {
-      return;
-    }
-
-    short int nMonTypeCountShort = pMonStatsTxt->MonType;
-    if (nMonTypeCountShort <= 0) {
-      return;
-    }
-
-    nMonTypeCount = (int)nMonTypeCountShort;
-    int32_t nBonusCount = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, anBonusValues, 0x80);
-    for (i = 0; i < nBonusCount; i++) {
-      uint32_t nMonTypeId;
-      nMonTypeId = (uint32_t)(uint16_t)anBonusValues[i].uKey.sKey.wSubIndex;
-      if (nMonTypeId && (int)nMonTypeId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize && nMonTypeCount > 0 && nMonTypeCount < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize && *(uint32_t*)((uint8_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtMonTypeUnknown + (D2Common::ITEMS::Items::sgptDataTable->nMonTypeEquivRowDwords * nMonTypeCount + ((int)nMonTypeId >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[nMonTypeId & 0x1f]) {
-        pDamage->dwEnDmgPct += anBonusValues[i].nStatValue;
+    const int nType = pTarget ? pTarget->eUnitType : UNIT_COUNT;
+    if (nType == UNIT_MONSTER) {
+      D2MonStatsTxt* pMonStatsTxt = DAMAGE_GetUnitMonStatsTxt(pTarget);
+      if (pMonStatsTxt && pMonStatsTxt->MonType > 0) {
+        D2StatStrc anBonusValues[128];
+        const int nMonType = pMonStatsTxt->MonType;
+        const int32_t nBonusCount = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, anBonusValues, 0x80);
+        for (int i = 0; i < nBonusCount; ++i) {
+          if (DAMAGE_MonTypeMatches((uint16_t)anBonusValues[i].uKey.sKey.wSubIndex, nMonType)) {
+            pDamage->dwEnDmgPct += anBonusValues[i].nStatValue;
+          }
+        }
       }
     }
 }
@@ -2714,6 +2637,17 @@ static void __stdcall DAMAGE_ApplyIgnoreAndFractionalAC(int * pnHitChance, int *
     *pnHitChance += nIgnoreACFlag;
 }
 
+static inline int DAMAGE_GetUnitType(D2UnitStrc * pUnit) {
+    return pUnit ? pUnit->eUnitType : UNIT_COUNT;
+}
+
+static inline D2MonStatsTxt * DAMAGE_GetMonStatsTxt(D2UnitStrc * pUnit) {
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+      return D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
+    }
+    return nullptr;
+}
+
 // TO-HIT CALCULATION: AR vs AC formula with level penalty.
 // Formula:
 //   AR_final = AR + (AR * ToHit_bonus%)
@@ -2724,120 +2658,77 @@ static void __stdcall DAMAGE_ApplyIgnoreAndFractionalAC(int * pnHitChance, int *
 // Always 5% minimum, 95% maximum hit chance.
 // Checked BEFORE block/dodge/avoid/evade (all independent rolls).
 BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, int32_t bIsRangedAttack) {
-    int nAcTotal;
-    D2UnitStrc* pActiveWeapon;
-    uint32_t nToHitStat;
-    int nToHitBonusStat;
-    int32_t nHitChance;
-    int nDexBonus;
-    D2StatStrc aMonTypeStatEntries[128];
-    int32_t nAttackerLevel;
-    int32_t nDefenderLevel;
-    int32_t nBaseAR;
-    short int nMonType;
-    uint32_t sSeedResult;
     if (!pUnit2 || !pUnit) {
       return 0;
     }
 
-    D2UnitStrc* pDefender = pUnit2;
-    int iVar1 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_level, 0);
-    int32_t nAR = D2Common::Units::GetDefense(pUnit2);
+    const int nDefenderLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_level, 0);
+    int nTotalAC = D2Common::Units::GetDefense(pUnit2);
     if (bIsRangedAttack) {
-      nAcTotal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_armorclass_vs_missile, 0);
+      nTotalAC += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_armorclass_vs_missile, 0);
     } else {
-      nAcTotal = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_armorclass_vs_hth, 0);
+      nTotalAC += D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_armorclass_vs_hth, 0);
     }
 
-    int32_t nTotalAC = nAR + nAcTotal;
-    int iVar2 = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
-    int32_t nToHitBonus = 0;
-    if (pUnit->eUnitType == UNIT_PLAYER) {
-      D2MonStatsTxt* pMonStatsTxt;
-      nBaseAR = D2Common::Units::GetAttackRate(pUnit);
-      DAMAGE_ApplyIgnoreAndFractionalAC(&nBaseAR, &nTotalAC, pUnit, pUnit2);
+    const int nAttackerLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+    int nAttackRate = 0;
+    int nToHitBonus = 0;
+    const int nAttackerType = DAMAGE_GetUnitType(pUnit);
+    if (nAttackerType == UNIT_PLAYER) {
+      nAttackRate = D2Common::Units::GetAttackRate(pUnit);
+      DAMAGE_ApplyIgnoreAndFractionalAC(&nAttackRate, &nTotalAC, pUnit, pUnit2);
       if (!bIsRangedAttack) {
-        pActiveWeapon = PLAYER::Player::PLAYER_GetActiveWeaponForSkill(pUnit);
+        D2UnitStrc* pActiveWeapon = PLAYER::Player::PLAYER_GetActiveWeaponForSkill(pUnit);
         if (pActiveWeapon) {
           nToHitBonus = D2Common::Skills::SKILLS_GetItemBonusDamage(pUnit, pActiveWeapon, nullptr, 0);
         }
       }
 
-      nAR = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_tohit_percent, 0);
-      nToHitBonus += nAR + nToHitBonusExtra;
-      nAcTotal = nTotalAC;
-      nDexBonus = nBaseAR;
-      if (pUnit2->eUnitType == UNIT_MONSTER) {
-        pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit2->nClassId);
-        nAcTotal = nTotalAC;
-        nDexBonus = nBaseAR;
-        if (pMonStatsTxt) {
-          nMonType = pMonStatsTxt->MonType;
-          if (nMonType > 0) {
-            nAR = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb3, aMonTypeStatEntries, 0x80);
-            nHitChance = 0;
-            nAcTotal = nTotalAC;
-            nDexBonus = nBaseAR;
-            if (nAR > 0) {
-              do {
-                nToHitStat = DAMAGE_CheckMonsterTypeVsMonsterType((uint32_t)(uint16_t)aMonTypeStatEntries[nHitChance].uKey.sKey.wSubIndex, (int)nMonType);
-                if (nToHitStat) {
-                  nToHitBonus += aMonTypeStatEntries[nHitChance].nStatValue;
-                }
-
-                nHitChance++;
-                nAcTotal = nTotalAC;
-                nDexBonus = nBaseAR;
-              } while (nHitChance < nAR);
+      nToHitBonus += nToHitBonusExtra + D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_tohit_percent, 0);
+      {
+        D2MonStatsTxt* pMonStatsTxt = DAMAGE_GetMonStatsTxt(pUnit2);
+        if (pMonStatsTxt && pMonStatsTxt->MonType > 0) {
+          const int nMonType = pMonStatsTxt->MonType;
+          D2StatStrc aMonTypeStatEntries[128];
+          const int nStats = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb3, aMonTypeStatEntries, 0x80);
+          for (int i = 0; i < nStats; ++i) {
+            if (DAMAGE_CheckMonsterTypeVsMonsterType((uint16_t)aMonTypeStatEntries[i].uKey.sKey.wSubIndex, nMonType)) {
+              nToHitBonus += aMonTypeStatEntries[i].nStatValue;
             }
           }
         }
       }
     } else {
-      nDexBonus = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_tohit, 0);
-      nToHitBonusStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
+      nAttackRate = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_tohit, 0);
+      nAttackRate += nToHitBonusExtra + 5 * D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
       nToHitBonus = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_tohit_percent, 0);
-      nAcTotal = nAR + nAcTotal;
-      nDexBonus += nToHitBonusExtra + nToHitBonusStat * 5;
     }
 
-    nAR = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDexBonus, nToHitBonus, 100);
-    nDexBonus += nAR;
-    if (nAcTotal < 0) {
-      nDexBonus -= nAcTotal;
-      nAcTotal = 0;
+    nAttackRate += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nAttackRate, nToHitBonus, 100);
+    if (nTotalAC < 0) {
+      nAttackRate -= nTotalAC;
+      nTotalAC = 0;
     }
-    if (nDexBonus < 0) {
-      nAcTotal -= nDexBonus;
-      nDexBonus = 0;
+    if (nAttackRate < 0) {
+      nTotalAC -= nAttackRate;
+      nAttackRate = 0;
     }
-    if (nAcTotal < 0) {
-      nAcTotal = 0;
-    }
-
-    nToHitBonusStat = 100;
-    if (nAcTotal + nDexBonus) {
-      nToHitBonusStat = nDexBonus * 100 / (nAcTotal + nDexBonus);
+    if (nTotalAC < 0) {
+      nTotalAC = 0;
     }
 
-    iVar1 = nToHitBonusStat * iVar2 * 2 / (iVar2 + iVar1);
-    if (iVar1 > 5) {
-      if (iVar1 >= 0x5f) {
-        iVar1 = 0x5f;
-      }
-    } else {
-      iVar1 = 5;
+    const int nDivisor = nAttackRate + nTotalAC;
+    int nToHitFactor = 100;
+    if (nDivisor) {
+      nToHitFactor = 100 * nAttackRate / nDivisor;
     }
 
-    sSeedResult = D2_SeedRoll(&pUnit->sSeed);
-    nDexBonus = sSeedResult % 100;
-    pActiveWeapon = pDefender;
-    nAcTotal = iVar1;
-    iVar2 = nDexBonus;
-    SUnit::GetGamePointer(pUnit);
-    D2Game::nullsub(pActiveWeapon, nAcTotal, iVar2);
-    if (!(nDexBonus >= iVar1)) {
-      DAMAGE_CheckPreventHealAndSetState(pDefender, pUnit);
+    int nChanceToHit = 2 * nAttackerLevel * nToHitFactor / (nDefenderLevel + nAttackerLevel);
+    nChanceToHit = (nChanceToHit > 5 ? nChanceToHit : 5) < 95 ? (nChanceToHit > 5 ? nChanceToHit : 5) : 95;
+    const int nRoll = D2_SeedRoll(&pUnit->sSeed) % 100;
+    D2Game::nullsub(SUnit::GetGamePointer(pUnit), pUnit, pUnit2, nChanceToHit, nRoll);
+    if (nRoll < nChanceToHit) {
+      DAMAGE_CheckPreventHealAndSetState(pUnit2, pUnit);
       return 1;
     }
 
@@ -2874,11 +2765,7 @@ void __fastcall DAMAGE_CalculateAndApplyDamage(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Returns the highest weapon-type-conditional skill damage bonus (stat 0x15C) applicable to the unit's currently equipped weapons (left and right arm slots). Iterates all bonus entries; an entry with ITEMTYPE_None1 matches unconditionally. Returns 0 if unit is null or no matching bonus is found.
 static int32_t DAMAGE_GetPassiveWeaponBlock(D2UnitStrc * pUnit) {
-    eD2ItemTypes eItemType;
-    D2StatStrc aStatEntries[32];
-    int32_t nStatCount;
-    int nBonusVal;
-    int i = 0;
+    int i;
     if (!pUnit) {
       return 0;
     }
@@ -2891,19 +2778,23 @@ static int32_t DAMAGE_GetPassiveWeaponBlock(D2UnitStrc * pUnit) {
       pLeftWeapon = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 5);
     }
 
-    int32_t iVar1 = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0x15c, aStatEntries, 0x20);
+    D2StatStrc aStatEntries[32];
+    const int32_t nCount = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0x15c, aStatEntries, 0x20);
     int32_t nBestBonus = 0;
-    if (iVar1 > 0) {
-      uint32_t bTypeMatch;
-      do {
-        eItemType = (eD2ItemTypes)(uint16_t)aStatEntries[i].uKey.sKey.wSubIndex;
-        nBonusVal = aStatEntries[i].nStatValue;
-        if (eItemType == ITEMTYPE_None1 || (pLeftWeapon && (bTypeMatch = D2Common::ITEMS::Items::ITEMS_IsA(pLeftWeapon, eItemType) , bTypeMatch != 0) || pRightWeapon && (bTypeMatch = D2Common::ITEMS::Items::ITEMS_IsA(pRightWeapon, eItemType) , bTypeMatch != 0)) && nBonusVal > nBestBonus) {
+    for (i = 0; i < nCount; ++i) {
+      const int nItemType = (uint16_t)aStatEntries[i].uKey.sKey.wSubIndex;
+      const int nBonusVal = aStatEntries[i].nStatValue;
+      if (nItemType <= 0) {
+        nBestBonus = nBonusVal;
+      } else if (pLeftWeapon && D2Common::ITEMS::Items::ITEMS_IsA(pLeftWeapon, (eD2ItemTypes)nItemType)) {
+        if (nBonusVal > nBestBonus) {
           nBestBonus = nBonusVal;
         }
-
-        i++;
-      } while (i < iVar1);
+      } else if (pRightWeapon && D2Common::ITEMS::Items::ITEMS_IsA(pRightWeapon, (eD2ItemTypes)nItemType)) {
+        if (nBonusVal > nBestBonus) {
+          nBestBonus = nBonusVal;
+        }
+      }
     }
 
     return nBestBonus;
@@ -3262,19 +3153,13 @@ static uint32_t __stdcall SERVER_CalculateExperienceForUnit(::SGAMEDATA * pGame,
     int32_t nXpAfterLevelPenalty;
     if (baseExperience > 0x7fffff) {
       baseExperience = 0x7fffff;
-    } else {
-      if (baseExperience <= 0) {
-        return 1;
-      }
     }
-    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
-      nXpAfterLevelPenalty = 0;
-    } else {
-      nXpAfterLevelPenalty = pUnit->nClassId;
+    if (baseExperience <= 0) {
+      return 1;
     }
 
-    nXpAfterLevelPenalty = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(nXpAfterLevelPenalty);
-    if (nPlayerLevel >= nXpAfterLevelPenalty) {
+    const int nClassId = (pUnit && pUnit->eUnitType == UNIT_PLAYER) ? pUnit->nClassId : 0;
+    if (nPlayerLevel >= D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(nClassId)) {
       return 0;
     }
 
@@ -3545,33 +3430,27 @@ void __fastcall SERVER_KillExperience(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     }
 
     int32_t attackerLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pPlayerOwner, UNITSTAT_level, 0);
-    uint16_t partyId = SUnit::GetPartyId(pPlayerOwner);
-    if (partyId != 0xffff) {
+    if (SUnit::GetPartyId(pPlayerOwner) != 0xffff) {
       SERVER_PartyShareExperience(baseExperience, pPlayerOwner, pGame, pVictim, attackerLevel, victimLevel);
-      return;
+    } else {
+      SERVER_PlayerUpdateExperience(pGame, attackerLevel, SERVER_CalculateExperienceForUnit(pGame, victimLevel, baseExperience, pPlayerOwner, attackerLevel), pPlayerOwner);
     }
-
-    int nExperience = SERVER_CalculateExperienceForUnit(pGame, victimLevel, baseExperience, pPlayerOwner, attackerLevel);
-    SERVER_PlayerUpdateExperience(pGame, attackerLevel, nExperience, pPlayerOwner);
 }
 
 void __fastcall DAMAGE_AwardKillExperience(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nXpGain) {
-    if (!(pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER))) {
+    if (!pUnit || (pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER)) {
       return;
     }
 
-    int32_t nKillerLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
+    const int32_t nKillerLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_level, 0);
     if (pUnit->eUnitType == UNIT_PLAYER) {
       SERVER_PlayerUpdateExperience(pGame, nKillerLevel, nXpGain, pUnit);
-      return;
+    } else {
+      D2UnitStrc* pMercOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
+      if (pMercOwner && pMercOwner->eUnitType == UNIT_PLAYER) {
+        SERVER_SEND_MercExperience(nXpGain, pUnit, pGame, pMercOwner, nKillerLevel);
+      }
     }
-
-    D2UnitStrc* pMercOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
-    if (!(pMercOwner && pMercOwner->eUnitType == UNIT_PLAYER)) {
-      return;
-    }
-
-    SERVER_SEND_MercExperience(nXpGain, pUnit, pGame, pMercOwner, nKillerLevel);
 }
 
 // Forces a player or mercenary unit to reach nTargetLevel by granting the required XP delta. For players, reads the Experience.txt threshold and calls SERVER_PlayerUpdateExperience with the deficit. For merc monsters, locates the owner's pet data and HirelingTxt record, then calls SERVER_SEND_MercExperience to synchronise. No-ops if unit is already at or above nTargetLevel.

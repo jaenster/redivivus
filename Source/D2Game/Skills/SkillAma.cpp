@@ -898,42 +898,31 @@ BOOL __fastcall Skills_SrvDoFunc_014_LightningStrike(::SGAMEDATA * pGame, D2Unit
 
 // Server do-function for Amazon skill 0x0F (Decoy). Looks up the monster class to summon via SKILLS_GetSummonMonsterClassId, spawns it with SKILL_CreateSummon, sets its owner, copies a percentage of the caster's max HP as decoy HP (via calc[2]), copies the caster's level, applies revive/buff logic, schedules a despawn event (calc[1] frames), attaches the unit to the target node table, and sets overlay 0xAB. Returns 1 on success.
 BOOL __fastcall Skills_SrvDoFunc_015_SummonDecoy(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2MonsterCastPetStrc sSummonParams;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
-    sSummonParams.pSkillTxt = pSkillTxt;
-    sSummonParams.classId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &sSummonParams.nPetType, nullptr, nullptr);
-    if (sSummonParams.classId < 0) {
+    int nSpawnMode;
+    const int32_t nClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &nSpawnMode, nullptr, nullptr);
+    if (nClassId < 0) {
       return 0;
     }
 
-    uint8_t byPetTypeTxt = pSkillTxt->pettype;
-    uint8_t byPetType = byPetTypeTxt;
-    if ((int)(uint32_t)byPetTypeTxt >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
+    uint8_t byPetType = pSkillTxt->pettype;
+    if (byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
       byPetType = 0;
     }
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    sSummonParams.nFlags = 0;
-    sSummonParams.nX = 0;
-    sSummonParams.nY2 = 0;
-    sSummonParams.nSkillCalc = 0;
+    D2MonsterCastPetStrc sSummonParams = {};
+    sSummonParams.classId = nClassId;
     sSummonParams.nFunctionId = 0;
-    sSummonParams.nType = (uint32_t)byPetType;
-    sSummonParams.nMode = sSummonParams.nPetType;
     sSummonParams.pPlayer = pUnit;
+    sSummonParams.nMode = nSpawnMode;
+    sSummonParams.nType = byPetType;
     sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl);
     D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGame, &sSummonParams);
     if (!pSummon) {
@@ -942,15 +931,15 @@ BOOL __fastcall Skills_SrvDoFunc_015_SummonDecoy(::SGAMEDATA * pGame, D2UnitStrc
 
     D2Common::Units::StoreOwner(pSummon, pUnit);
     int32_t nDecoyHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-    nDecoyHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDecoyHp, D2Common::Skills::D2GetSkillCalc(pUnit, sSummonParams.pSkillTxt->calc[2], eSkill, nSkillLvl), 100);
+    nDecoyHp = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDecoyHp, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[2], eSkill, nSkillLvl), 100);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_hitpoints, nDecoyHp, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_maxhp, nDecoyHp, 0);
-    int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
+    const int nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_level, nLevel, 0);
     SkillNec::SKILLS_SetSummonBaseStats(pGame, pUnit, pSummon, 0, nSkillLvl);
     SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pSummon, eSkill, nSkillLvl, 0);
-    int32_t nHpPct = D2Common::Skills::D2GetSkillCalc(pUnit, sSummonParams.pSkillTxt->calc[1], eSkill, nSkillLvl);
-    GAME::Event::SetEvent(pGame, pSummon, 7, pGame->dwGameFrame + nHpPct, 0, 0);
+    const int32_t nDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
+    GAME::Event::SetEvent(pGame, pSummon, 7, pGame->dwGameFrame + nDuration, 0, 0);
     Monsters::InitUmods(pGame, pSummon, 0x15, 0);
     D2Common::Units::SetOverlay(pSummon, 0xab, 0);
     GAME::Targets::CreateUnitNode(pGame, pSummon, nullptr, pUnit->nNodeTableIndex);
@@ -959,17 +948,7 @@ BOOL __fastcall Skills_SrvDoFunc_015_SummonDecoy(::SGAMEDATA * pGame, D2UnitStrc
 
 // Summon Valkyrie do-func. Looks up the Valkyrie monster class via SKILLS_GetSummonMonsterClassId, creates the pet unit via SKILL_CreateSummon, then: revives the corpse slot via SKILLNEC_ReviveCorpseAsMinion, applies summon buffs, fires the AI-think timer event, applies the STATE_valkyrie aura state, stores the owner, and adds the unit to the target node table.
 BOOL __fastcall Skills_SrvDoFunc_016_SummonValkyrie(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2UnitStrc* pValkyrie;
-    int32_t nSummonBuffParam;
-    D2MonsterCastPetStrc sSummonParams;
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if (!((int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
@@ -980,36 +959,32 @@ BOOL __fastcall Skills_SrvDoFunc_016_SummonValkyrie(::SGAMEDATA * pGame, D2UnitS
       return 0;
     }
 
-    sSummonParams.pPetSkillTxt = pSkillTxt;
-    sSummonParams.classId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &sSummonParams.nSlotValue, nullptr, nullptr);
-    if (sSummonParams.classId < 0) {
+    int nSpawnMode;
+    const int32_t nClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &nSpawnMode, nullptr, nullptr);
+    if (nClassId < 0) {
       return 0;
     }
 
-    uint8_t byPetTypeTxt = pSkillTxt->pettype;
-    uint8_t byPetType = byPetTypeTxt;
-    if ((int)(uint32_t)byPetTypeTxt >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
+    uint8_t byPetType = pSkillTxt->pettype;
+    if (byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
       byPetType = 0;
     }
 
     pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
-    sSummonParams.nFlags = 0;
-    sSummonParams.nX = 0;
-    sSummonParams.nY2 = 0;
-    sSummonParams.nSkillCalc = 0;
+    D2MonsterCastPetStrc sSummonParams = {};
+    sSummonParams.classId = nClassId;
     sSummonParams.nFunctionId = 0;
-    sSummonParams.nType = (uint32_t)byPetType;
-    sSummonParams.nMode = (uint32_t)sSummonParams.nSlotValue;
     sSummonParams.pPlayer = pUnit;
+    sSummonParams.nMode = nSpawnMode;
+    sSummonParams.nType = byPetType;
     sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl);
-    pValkyrie = SkillsServer::SKILL_CreateSummon(pGame, &sSummonParams);
+    D2UnitStrc* pValkyrie = SkillsServer::SKILL_CreateSummon(pGame, &sSummonParams);
     if (!pValkyrie) {
       return 0;
     }
 
     SkillNec::SKILLS_SetSummonBaseStats(pGame, pUnit, pValkyrie, 0, nSkillLvl);
-    nSummonBuffParam = D2Common::Skills::D2GetSkillCalc(pUnit, sSummonParams.pPetSkillTxt->calc[1], eSkill, nSkillLvl);
-    SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pValkyrie, eSkill, nSkillLvl, nSummonBuffParam);
+    SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pValkyrie, eSkill, nSkillLvl, D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl));
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pValkyrie, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::SetEvent(pGame, pValkyrie, 2, pGame->dwGameFrame + 0x14, 0, 0);
     D2Common::DATATBLS::ItemStats::SetState(pValkyrie, STATE_valkyrie, 1);

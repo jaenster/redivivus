@@ -43,7 +43,7 @@ struct D2DrlgActStrc * __stdcall QSERVER_GetActFromFirstActiveGame(int32_t nActI
 int __stdcall QSERVER_CountMonstersInFirstActiveGame();
 struct D2RoomStrc * __stdcall QSERVER_FindRoomInFirstActiveGame(uint8_t byActIndex, int32_t nSubtileX, int32_t nSubtileY);
 void __stdcall GAME_ClearGlobalFlag_Thunk();
-void __stdcall nullsub(struct D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwUnused3);
+void __fastcall nullsub(::SGAMEDATA * pGame, struct D2UnitStrc * pAttacker, struct D2UnitStrc * pDefender, int32_t nChance, int32_t nRoll);
 // @wasnamed nullsub - one name on two different functions.
 // @evidence RET 0x10 (c2 10 00) - four dword arguments.
 // Registers: pGame (ECX) and pUnit (EDX) are passed by the callers but not read.

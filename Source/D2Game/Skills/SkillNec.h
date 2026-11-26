@@ -76,15 +76,6 @@ struct D2MonsterCastPetStrc {
     /* 0x18 */ uint32_t nY2;
     /* 0x1C */ uint32_t nType;
     /* 0x20 */ uint32_t nSkillCalc;
-    /* 0x24 */ union {
-        int32_t nPetType;
-        ::SGAMEDATA * pGameSlot; // Skills_SrvDoFunc_060_SummonBoneWall keeps pGame in this word
-        struct D2SkillsTxt * pPetSkillTxt; // Skills_SrvDoFunc_016_SummonValkyrie keeps its skill row here
-    };
-    /* 0x28 */ union {
-        struct D2SkillsTxt * pSkillTxt; // Not a coordinate. Skills_SrvDoFunc_015_SummonDecoy @005dc000 stores sgptDataTable->pTxtSkills + eSkill here and later dereferences it as (sSummonParams.nY)->calc[1] and ->calc[2].
-        int32_t nSlotValue; // the integer the other summon skills keep here: a class id, pet mode, lifetime or corpse Y
-    };
 };
 
 #endif // D2_DEFINED_D2MonsterCastPetStrc
@@ -152,7 +143,7 @@ uint32_t __fastcall SKILLNEC_ValidateAttackableTarget(::SGAMEDATA * pGame, struc
 void __thiscall SKILLNEC_AssignCurseAiBehavior(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, int32_t nSkillId, int32_t pNecroSkillArg);
 int32_t __fastcall SKILLNEC_ClampResistPenalty(struct D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue);
 // Applies a Necromancer curse (e.g. Dim Vision, Taunt, Terror, Attract and resist-penalty curses) to a target unit. If the curse requires AI registration, validates the target is an attackable monster of non-good alignment and that the corpse-consume gate passes. Clamps the primary resist-penalty stat; if attackable, builds a D2StateExArgStrc (skill, level, duration, aura state, optional expire-callback SKILLNEC_OnCurseExpire selected branchlessly) and applies the curse state via SetStateWithExpiryTime. Adds up to 5 extra clamped stats to the state's stat list, optionally registers curse AI behavior, updates anim speed, and fires aura target/aura events. Returns 1 on success, 0 if rejected.
-void __fastcall SKILLNEC_ApplyCurseToUnit(struct D2UnitStrc * pUnit, struct D2NecroSkillArgStrc * pNecroSkillArg);
+int32_t __fastcall SKILLNEC_ApplyCurseToUnit(struct D2UnitStrc * pUnit, struct D2NecroSkillArgStrc * pNecroSkillArg);
 // Server-side do-function for Necromancer curse skills (e.g. Amplify Damage, Decrepify, Lower Resist). Reads aurastat[0..5], auralencalc, aurarangecalc, and auratargetstate from Skills.txt, applies a difficulty-based duration divisor for revive/skeleton curses, then calls SKILLS_ApplyEffectToUnitsInRange with SKILLNEC_ApplyCurseToUnit as the per-unit callback. Marks the caster with UNITFLAG_SKSRVDOFUNC. Returns FALSE if Skills.txt entry is invalid.
 BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl);
 // Applies the Dim Vision curse (skill 0x47) to pTarget. Calculates the duration via auralencalc and divides by the difficulty's AiCurseDivisor, then iterates up to 6 aurastat/aurastatcalc entries to build a D2NecroSkillArgStrc and calls SKILLNEC_ApplyCurseToUnit. Sets bUpdateAnimSpeed if any stat has ITEMSTATCOSTFLAG_UPDATEANIMRATE.

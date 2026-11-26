@@ -2378,87 +2378,53 @@ static void __stdcall SKILLASS_ApplyLevelScaledBuffs(::SGAMEDATA * pGame, D2Skil
 
 // Server skill DoFunc #49 (Assassin Sentry-type summons, e.g. shadow/sentry): summons a monster for pUnit. Validates eSkill, resolves the summon class id and pet type from the skill's pettype/petmax columns, builds a D2MonsterCastPetStrc and calls SKILL_CreateSummon. Sets the summon's level to the caster's, applies level-scaled buffs, equips summon items, kicks off its AI think + periodic events, applies the skill's aurastate to the summon, stores the caster as owner, and—if the skill has an auralencalc lifetime—schedules an expiry event and inits umods. Returns 1 on success, 0 if the skill is invalid or the summon could not be created. Sets UNITFLAG_SKSRVDOFUNC on the caster.
 BOOL __fastcall Skills_SrvDoFunc_049_SummonShadowClone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    D2MonsterCastPetStrc sSummonCast;
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
-    if ((int)eSkill < 0) {
-      return 0;
-    }
-    if ((int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
-      return 0;
-    }
 
-    D2SkillsTxt* pSkillTxt;
-    pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
       return 0;
     }
 
-    D2SkillsTxt* pSkillTxtSaved;
-    pSkillTxtSaved = pSkillTxt;
-    sSummonCast.classId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &sSummonCast.nPetType, nullptr, nullptr);
-    if (sSummonCast.classId < 0) {
+    int nSpawnMode;
+    const int32_t nClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &nSpawnMode, nullptr, nullptr);
+    if (nClassId < 0) {
       return 0;
     }
 
-    uint8_t byPetType;
-    byPetType = pSkillTxt->pettype;
-    uint8_t byPetTypeClamped;
-    byPetTypeClamped = byPetType;
-    if ((int)(uint32_t)byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
-      byPetTypeClamped = 0;
+    uint8_t byPetType = pSkillTxt->pettype;
+    if (byPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
+      byPetType = 0;
     }
 
-    sSummonCast.nFlags = 0;
-    sSummonCast.nX = 0;
-    sSummonCast.nY2 = 0;
-    sSummonCast.nSkillCalc = 0;
+    D2MonsterCastPetStrc sSummonCast = {};
+    sSummonCast.classId = nClassId;
     sSummonCast.nFunctionId = 0;
-    sSummonCast.nType = (uint32_t)byPetTypeClamped;
-    sSummonCast.nMode = sSummonCast.nPetType;
     sSummonCast.pPlayer = pUnit;
+    sSummonCast.nMode = nSpawnMode;
+    sSummonCast.nType = byPetType;
     sSummonCast.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl);
-    D2UnitStrc* pSummon;
-    pSummon = SkillsServer::SKILL_CreateSummon(pGame, &sSummonCast);
+    D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGame, &sSummonCast);
     if (!pSummon) {
       return 0;
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSummon, UNITSTAT_level, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 0);
-    SKILLASS_ApplyLevelScaledBuffs(pGame, pSkillTxtSaved, eSkill, nSkillLvl, pSummon);
-    int32_t nLifetime;
-    nLifetime = D2Common::Skills::GetSkillParam4(eSkill, nSkillLvl);
-    sSummonCast.nSlotValue = nLifetime;
-    if (nLifetime <= 1) {
-      sSummonCast.nSlotValue = 1;
-    }
-
-    int32_t nMaxLifetime;
-    nMaxLifetime = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-    if (sSummonCast.nSlotValue < nMaxLifetime) {
-      nMaxLifetime = 1;
-      if (1 < nLifetime) {
-        goto equip_and_activate_clone;
-      }
-    } else {
-      nMaxLifetime = D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
-    }
-
-    nLifetime = nMaxLifetime;
-    equip_and_activate_clone:
-    SKILLASS_EquipSummonItems(pGame, pUnit, pSummon, eSkill, nSkillLvl, nLifetime, 0);
+    SKILLASS_ApplyLevelScaledBuffs(pGame, pSkillTxt, eSkill, nSkillLvl, pSummon);
+    int32_t nLevel = D2Common::Skills::GetSkillParam4(eSkill, nSkillLvl);
+    nLevel = (nLevel > 1 ? nLevel : 1) < D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0) ? (nLevel > 1 ? nLevel : 1) : D2Common::DATATBLS::DataTbls::TXT_Experience_GetMaxLevel(0);
+    SKILLASS_EquipSummonItems(pGame, pUnit, pSummon, eSkill, nSkillLvl, nLevel, 0);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pSummon, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::SetEvent(pGame, pSummon, 2, pGame->dwGameFrame + 0x14, 0, 0);
-    short int eAuraState = pSkillTxtSaved->aurastate;
-    if (eAuraState > 0 && (int)eAuraState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-      D2Common::DATATBLS::ItemStats::SetState(pSummon, (int)eAuraState, 1);
+    if (pSkillTxt->aurastate > 0 && (int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
+      D2Common::DATATBLS::ItemStats::SetState(pSummon, (int)pSkillTxt->aurastate, 1);
     }
 
     D2Common::Units::StoreOwner(pSummon, pUnit);
-    nMaxLifetime = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxtSaved->auralencalc, eSkill, nSkillLvl);
-    if (nMaxLifetime > 0) {
-      GAME::Event::SetEvent(pGame, pSummon, 7, pGame->dwGameFrame + nMaxLifetime, 0, 0);
+    const int32_t nDuration = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->auralencalc, eSkill, nSkillLvl);
+    if (nDuration > 0) {
+      GAME::Event::SetEvent(pGame, pSummon, 7, pGame->dwGameFrame + nDuration, 0, 0);
       Monsters::InitUmods(pGame, pSummon, 0x15, 0);
     }
 

@@ -1910,11 +1910,11 @@ D2StatListExStrc * __stdcall AllocStatListEx(D2UnitStrc * pUnit, uint32_t dwFlag
     D2StatListExStrc* pStatsEx = D2_NEW_POOL_AT(pUnit->pMemory, D2StatListExStrc, ".\\Stats\\StatsEx.cpp", 0x586);
     memset(pStatsEx, 0, 100);
     pStatsEx->sStatList.pMemory = pUnit->pMemory;
-    pStatsEx->sStatList.eOwnerType = pUnit->eUnitType;
-    pStatsEx->sStatList.nOwnerGUID = pUnit->nUnitGUID;
+    pStatsEx->sStatList.eOwnerType = !pUnit ? UNIT_COUNT : pUnit->eUnitType;
+    pStatsEx->sStatList.nOwnerGUID = !pUnit ? -1 : pUnit->nUnitGUID;
+    pStatsEx->sStatList.nFlags = dwFlags & 1 | 0x80000000;
     pStatsEx->fpCallback = pfnStatChangeCb;
     pStatsEx->pGame = pGame;
-    pStatsEx->sStatList.nFlags = dwFlags & 1 | 0x80000000;
     pStatsEx->pOwner = pUnit;
     int nStatesSizePadded = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
     size_t nStateFlagsAllocSize = nStatesSizePadded / 32 * 8;

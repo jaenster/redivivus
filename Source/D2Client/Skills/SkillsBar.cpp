@@ -475,18 +475,16 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
 }
 
 // @sourcefile .\SKILLS\SkillsBar.cpp
-void __fastcall SKILL_SetupLeapPath(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
-    uint32_t nRunVelocity;
-    D2CharStatsTxt* pCharStatsTxt;
+int32_t __fastcall SKILL_SetupLeapPath(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (!pDynamicPath) {
-      return;
+      return 0;
     }
 
-    int32_t nDestX = D2Common::Skills::SKILL_GetParam1(pSkill);
-    int32_t nDestY = D2Common::Skills::SKILL_GetParam2(pSkill);
-    if (!(nDestX && nDestY)) {
-      return;
+    const int32_t nDestX = D2Common::Skills::SKILL_GetParam1(pSkill);
+    const int32_t nDestY = D2Common::Skills::SKILL_GetParam2(pSkill);
+    if (!nDestX || !nDestY) {
+      return 0;
     }
 
     D2Common::Skills::SKILL_SetFlags(pSkill, 0x1101);
@@ -494,21 +492,23 @@ void __fastcall SKILL_SetupLeapPath(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     D2Common::PATH::DynamicPath::PATH_ChangeCollisionType(pDynamicPath, 0);
     D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nDestX, (int16_t)nDestY);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 9);
-    if (pUnit->eUnitType == UNIT_MONSTER) {
-      D2MonStatsTxt* pMonStatsTxt;
-      pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(pUnit->nClassId);
+    const int nUnitType = pUnit ? pUnit->eUnitType : UNIT_COUNT;
+    const int nClassId = pUnit->nClassId;
+    int nVelocity;
+    if (nUnitType == UNIT_MONSTER) {
+      D2MonStatsTxt* pMonStatsTxt = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetLine(nClassId);
       if (!pMonStatsTxt) {
-        return;
+        return 0;
       }
 
-      nRunVelocity = (uint32_t)pMonStatsTxt->Run;
+      nVelocity = pMonStatsTxt->Run << 8;
     } else {
-      pCharStatsTxt = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(pUnit->nClassId);
-      nRunVelocity = (uint32_t)pCharStatsTxt->RunVelocity;
+      nVelocity = D2Common::DATATBLS::DataTbls::INV_GetCharStatsTxtLine(nClassId)->RunVelocity << 8;
     }
 
-    D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, nRunVelocity << 8, ".\\SKILLS\\SkillsBar.cpp", 0x237);
+    D2Common::PATH::DynamicPath::SetVelocities(pDynamicPath, nVelocity, ".\\SKILLS\\SkillsBar.cpp", 0x237);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
+    return 1;
 }
 
 // Creates the client-side arc particle effect for Barbarian Leap. Computes remaining distance to destination (skill param1/param2), derives frame count from velocity, looks up the Z arc offset from the gaLeapArcParticleOffsetZ table based on distance, clamps to 500 minimum, allocates a particle on pUnit, sets its upward velocity offset, and initializes the projectile arc over nLeapFrames frames.

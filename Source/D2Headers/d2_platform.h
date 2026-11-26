@@ -574,6 +574,8 @@ static inline intptr_t D2_StormNextLink(const void* pLink, intptr_t nLinkOffset)
 #define D2_CHECKS_END(fail, r) if (!d2Checks_) { fail; return r; } D2_CHECKS_ASSUME_(d2Checks_); } while (0)
 #define D2_CHECKS_END_VOID(fail) if (!d2Checks_) { fail; return; } D2_CHECKS_ASSUME_(d2Checks_); } while (0)
 #define D2_CHECK_BLANK(c, blank) if (c) blank; else d2Checks_ = 0
+// The same check with the failing test first, as some Storm entry points lay it out.
+#define D2_CHECK_ELSE_BLANK(c, blank) if (!(c)) d2Checks_ = 0; else blank
 
 // Diablo 2 PRNG — LCG with multiplier 0x6AC690C5
 #define D2_SEED_NEXT(seed) ((D2SeedStrc)((uint64_t)(uint32_t)(seed).nSeedLow * 0x6ac690c5u + (uint64_t)(uint32_t)(seed).nSeedHigh))

@@ -478,71 +478,78 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
     return (uint32_t)((intptr_t)pOutCur - (intptr_t)pOutStart);
 }
 
-static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uint8_t * pIn, uint32_t nChannels, int32_t nInSize) {
+static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uint8_t * pIn, int32_t nInSize, uint32_t nChannels) {
     int aPredicted[2];
     int aStepIndex[2];
-    short* pOutStart = pOut;
-    uint8_t* pInEnd = pIn + nInSize;
-    uint8_t* pInStart = pIn;
+    uint8_t* pInBase = pIn;
+    short int* pOutStart = pOut;
     aStepIndex[0] = 0x2c;
     aStepIndex[1] = 0x2c;
+    uint8_t* pInEnd = pIn + nInSize;
     pIn += 2;
     for (uint32_t i = 0; i < nChannels; i++) {
-      aPredicted[i] = *(short*)pIn;
+      aPredicted[i] = *(short int*)pIn;
       pIn += 2;
       if (nOutSize < 2) {
-        return (intptr_t)pOut - (intptr_t)pOutStart;
+        return (uint32_t)((char*)pOut - (char*)pOutStart);
       }
 
       nOutSize -= 2;
-      *pOut = (short)aPredicted[i];
+      *pOut = (short int)aPredicted[i];
       pOut++;
     }
 
-    uint32_t nChannel = nChannels - 1;
+    int nChannel = nChannels - 1;
     while (pIn < pInEnd) {
       if (nChannels == 2) {
-        nChannel = nChannel == 0;
+        nChannel = (nChannel == 0);
       }
 
-      uint8_t byCode = *pIn;
-      pIn++;
+      const uint8_t byCode = *pIn++;
       if (byCode & 0x80) {
+        int bSameChannel = 0;
         switch (byCode & 0x7f) {
           case 0:
             if (aStepIndex[nChannel]) {
               aStepIndex[nChannel]--;
             }
             if (nOutSize < 2) {
-              return (intptr_t)pOut - (intptr_t)pOutStart;
+              return (uint32_t)((char*)pOut - (char*)pOutStart);
             }
 
-            *pOut = (short)aPredicted[nChannel];
+            *pOut = (short int)aPredicted[nChannel];
             pOut++;
             nOutSize -= 2;
-            continue;
+            break;
+
           case 1:
             aStepIndex[nChannel] += 8;
             if (aStepIndex[nChannel] > 0x58) {
               aStepIndex[nChannel] = 0x58;
             }
+
+            bSameChannel = 1;
             break;
+
           case 2:
             aStepIndex[nChannel] -= 8;
             if (aStepIndex[nChannel] < 0) {
               aStepIndex[nChannel] = 0;
             }
+
+            bSameChannel = 1;
             break;
+
           default:
             continue;
         }
 
-        if (nChannels == 2) {
-          nChannel = nChannel == 0;
+        if (bSameChannel && nChannels == 2) {
+          nChannel = (nChannel == 0);
         }
       } else {
-        uint32_t nStepSize = gdwADPCMCoefficient[aStepIndex[nChannel]];
-        uint32_t nDelta = nStepSize >> D2_SHIFT_COUNT(pInStart[1]);
+        const uint32_t nStepSize = gdwADPCMCoefficient[aStepIndex[nChannel]];
+        uint32_t nDelta = nStepSize >> D2_SHIFT_COUNT(pInBase[1]);
         if (byCode & 1) {
           nDelta += nStepSize;
         }
@@ -577,11 +584,11 @@ static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uin
 
         aPredicted[nChannel] = nPredicted;
         if (nOutSize < 2) {
-          return (intptr_t)pOut - (intptr_t)pOutStart;
+          return (uint32_t)((char*)pOut - (char*)pOutStart);
         }
 
         nOutSize -= 2;
-        *pOut = (short)aPredicted[nChannel];
+        *pOut = (short int)aPredicted[nChannel];
         pOut++;
         aStepIndex[nChannel] += gnSSCompDeflateFlags[byCode & 0x1f];
         if (aStepIndex[nChannel] < 0) {
@@ -592,7 +599,7 @@ static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uin
       }
     }
 
-    return (intptr_t)pOut - (intptr_t)pOutStart;
+    return (uint32_t)((char*)pOut - (char*)pOutStart);
 }
 
 // @blizzard PkwareBufferRead (SCOMP.CPP)
@@ -782,28 +789,26 @@ void __fastcall SCOMP_Bzip2Decompress(uint8_t * pDst, uint32_t * pnDstLen, uint8
 
 // @blizzard AdpcmMonoCompress (SCOMP.CPP)
 void __fastcall SCOMP_AdpcmMonoCompress(short * pDst, uint32_t * pnDstLen, short * pSrc, uint32_t nSrcLen, uint32_t * pUserData, uint32_t nBitsPerSample) {
-    SCOMP_SelectADPCMParams(nBitsPerSample, (uint8_t*)&pUserData, pUserData);
-    uint32_t pDstEnd = SCOMP_ADPCMEncode(*pnDstLen, pSrc, nSrcLen, 1, (uint8_t)(uintptr_t)pUserData, pDst);
-    *pnDstLen = pDstEnd;
+    uint8_t nLevel;
+    SCOMP_SelectADPCMParams(nBitsPerSample, &nLevel, pUserData);
+    *pnDstLen = SCOMP_ADPCMEncode(*pnDstLen, pSrc, nSrcLen, 1, nLevel, pDst);
 }
 
 // @blizzard AdpcmMonoDecompress (SCOMP.CPP)
 void __fastcall SCOMP_AdpcmMonoDecompress(short * pDst, uint32_t * pnDstLen, uint8_t * pSrc, int32_t nSrcLen, void * pUserData) {
-    uint32_t pDstEnd = SCOMP_ADPCMDecode(pDst, *pnDstLen, pSrc, 1, nSrcLen);
-    *pnDstLen = pDstEnd;
+    *pnDstLen = SCOMP_ADPCMDecode(pDst, *pnDstLen, pSrc, nSrcLen, 1);
 }
 
 // @blizzard AdpcmStereoCompress (SCOMP.CPP)
 void __fastcall SCOMP_AdpcmStereoCompress(short * pDst, uint32_t * pnDstLen, short * pSrc, uint32_t nSrcLen, uint32_t * pUserData, uint32_t nBitsPerSample) {
-    SCOMP_SelectADPCMParams(nBitsPerSample, (uint8_t*)&pUserData, pUserData);
-    uint32_t pDstEnd = SCOMP_ADPCMEncode(*pnDstLen, pSrc, nSrcLen, 2, (uint8_t)(uintptr_t)pUserData, pDst);
-    *pnDstLen = pDstEnd;
+    uint8_t nLevel;
+    SCOMP_SelectADPCMParams(nBitsPerSample, &nLevel, pUserData);
+    *pnDstLen = SCOMP_ADPCMEncode(*pnDstLen, pSrc, nSrcLen, 2, nLevel, pDst);
 }
 
 // @blizzard AdpcmStereoDecompress (SCOMP.CPP)
 void __fastcall SCOMP_AdpcmStereoDecompress(short * pDst, uint32_t * pnDstLen, uint8_t * pSrc, int32_t nSrcLen, void * pUserData) {
-    uint32_t pDstEnd = SCOMP_ADPCMDecode(pDst, *pnDstLen, pSrc, 2, nSrcLen);
-    *pnDstLen = pDstEnd;
+    *pnDstLen = SCOMP_ADPCMDecode(pDst, *pnDstLen, pSrc, nSrcLen, 2);
 }
 
 // @sourcefile .\SOURCE\SCOMP.CPP

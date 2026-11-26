@@ -88,7 +88,6 @@ static void ITEM_ToggleHandState(D2UnitStrc * pUnit) {
 }
 
 BOOL __stdcall TEXT_HandleMouseMove() {
-    int nPlayerGUID;
     if (ui::gnPlayerCashDisplay == 2) {
     Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
     Dialog::gpHoradricCubeDialog = Dialog::AllocDialogStrc(0x96, 0x82, TEXT_EmptyCallback, nullptr, 1, 0, 1, 0, 0, 0, 1);
@@ -96,19 +95,12 @@ BOOL __stdcall TEXT_HandleMouseMove() {
     Dialog::AddStringData(Dialog::gpHoradricCubeDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd19), 0xf, 0, 0, 1, 0, 0);
     ui::gnPlayerCashDisplay = 3;
     if (!nHoradricCubeUIState) {
-      D2UnitStrc* pPlayerUnit_lcl;
-      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-      if (!pPlayerUnit_lcl) {
-        nPlayerGUID = -1;
-      } else {
-        nPlayerGUID = pPlayerUnit_lcl->nUnitGUID;
-      }
-
+      D2UnitStrc* pPlayerUnit = UNIT::Player::GetPlayerUnit_UI();
+      int nPlayerGUID = !pPlayerUnit ? -1 : pPlayerUnit->nUnitGUID;
       GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nPlayerGUID, ui::gnNpcShopActiveTab, gnCursorItemUnitId, 3);
-      return 1;
+    } else {
+      npcmenu::SubmitItem(gnCursorItemUnitId);
     }
-
-    npcmenu::SubmitItem(gnCursorItemUnitId);
     return 1;
     }
 

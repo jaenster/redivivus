@@ -252,8 +252,9 @@ DC6 * __fastcall ARCHIVE_LoadSpellsClassSkillicon(short * pSkillId) {
       return pSpellsClassSkillicon[nD2PlayerClassID].pD2Archive;
     }
 
-    uint32_t nCharClass = D2Common::Skills::SKILLS_GetCharClassFromSkillId((int)*pSkillId);
-    if (nCharClass <= 6) {
+    int nCharClass = *pSkillId;
+    nCharClass = D2Common::Skills::SKILLS_GetCharClassFromSkillId(nCharClass);
+    if (nCharClass >= 0 && nCharClass <= 6) {
       DC6* pNewArchive;
       if (!pSpellsClassSkillicon[nCharClass].pD2Archive) {
         pNewArchive = ui::ARCHIVE_LoadOverlayImageUsedInGame(pSpellsClassSkillicon[nCharClass].szSpelliconPath);
@@ -1339,7 +1340,8 @@ static int32_t SPELLSEL_GetSkillTreeColumnOffset(char cSkillColumn) {
 }
 
 void __fastcall SPELLSEL_DrawTabHeader(uint16_t * pThis, int, int32_t nYOffset) {
-    ui::UI_DrawTextCentered(WindowSizeX - Inv::gnPanelOffsetX - 0x5a, Inv::gnPanelOffsetY + Inv::ScreenSizeY - 0x1e0 + nYOffset, WindowSizeX - Inv::gnPanelOffsetX, pThis, 0);
+    const int nRight = WindowSizeX - Inv::gnPanelOffsetX;
+    ui::UI_DrawTextCentered(nRight - 0x5a, Inv::ScreenSizeY + Inv::gnPanelOffsetY + nYOffset - 0x1e0, nRight, pThis, 0);
 }
 
 void __stdcall SPELLSEL_DrawSkilltreeBackground(DC6 * pDC6, int32_t nSkillTreeTab) {

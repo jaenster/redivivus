@@ -1582,40 +1582,25 @@ void __fastcall MONSTER_CorpseExplodeFixed(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 // Fires a Death Nova missile ring from a Shadow Warrior/Master minion when bShouldTrigger != 0. Selects the missile skill based on the owner's ShadowWarrior skill level (clamped to SKILL_Kick..SKILL_PoisonJavelin), then overrides to SKILL_Kick if the unit's life percentage exceeds 10%. Calls SKILLS_CreateMissileRing with missile id 0x5A at the calculated velocity.
 void __fastcall MONSTER_ShadowDeathNova(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t bShouldTrigger) {
-    int nSkillLvl;
-    int32_t nLifePct;
-    int32_t eSkill;
     if (!bShouldTrigger) {
       return;
     }
 
-    D2UnitStrc* pOwner;
-    pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
+    int32_t nSkillLevel = 1;
+    D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
     if (pOwner) {
-      D2SkillStrc* pSkill;
-      pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pOwner, SKILL_ShadowWarrior);
+      D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pOwner, SKILL_ShadowWarrior);
       if (pSkill) {
-        nSkillLvl = D2Common::Skills::GetSkillLevel(pOwner, pSkill, 1);
-        eSkill = nSkillLvl / 2 + 1;
-        if (eSkill > 1) {
-          if (eSkill >= 0xf) {
-            eSkill = 0xf;
-          }
-
-          goto fire_death_nova;
-        }
+        nSkillLevel = D2Common::Skills::GetSkillLevel(pOwner, pSkill, 1) / 2 + 1;
       }
     }
 
-    eSkill = 1;
-    fire_death_nova:
-    nLifePct = D2Common::Units::GetCurrentLifePercentage(pUnit);
-    if (nLifePct > 10) {
-      eSkill = 1;
+    nSkillLevel = (nSkillLevel > 1 ? nSkillLevel : 1) < 15 ? (nSkillLevel > 1 ? nSkillLevel : 1) : 15;
+    if (D2Common::Units::GetCurrentLifePercentage(pUnit) > 10) {
+      nSkillLevel = 1;
     }
 
-    nLifePct = D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(0x5a, 0);
-    SKILLS::SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, MISSILE_Nova, SKILL_Attack, eSkill, nLifePct);
+    SKILLS::SkillsServer::SKILLS_CreateMissileRing(pGame, pUnit, pUnit, MISSILE_Nova, SKILL_Attack, nSkillLevel, D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(0x5a, 0));
 }
 
 // Server-side: emits the radial lightning-bolt nova fired by a lightning-enchanted unique monster when it is hit (row 17 column 2, run by timer event 7 that MONSTER_LightningEnchantedModeChange schedules on GetHit; also called directly by MONSTER_CastLightningUniqueBoltsIfNotGetHit). When bShouldTrigger is set and at least 10 game frames have passed since the last burst (stored in the monster's data field), sets the monster's lightning-enchant flag bit, records the current game frame, computes skill level = unit level/2 (min 1), then builds a D2SkillArgStrc at the unit's position and spawns MISSILE_Lightunique charged bolts using SKILL_InitChargedBoltPath. Offsets are taken from the gnElementalDamageScale_LightningUnique / gnEnchantmentApplyScale_Lightning tables (4 directions x 2 bolts each). If <10 frames elapsed it instead clears the enchant flag bit and returns. No return value.
@@ -2537,42 +2522,35 @@ void __fastcall MONUMOD_TickAlwaysRunAi(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
 // Dispatches an event to all of a unique/champion monster's unique-modifier (MonUMod) handlers. Reads the monster's MonUModList (up to 9 mod slots) and, for each active mod, looks up g_MonsterUModHandlerTable[modId] and calls the handler for the requested event: nParam==5 invokes the per-mod init handler (pfnHandlerInit), otherwise invokes pfnHandlerN indexed by nParam (the event/phase). Passes the mod id and a champion flag (derived from the monster's quest-record byte) to each handler. No-op for non-monster units or units with no mod list. Drives unique-monster modifier behavior (e.g. extra-strong, fire-enchanted) at various lifecycle points.
 static void __stdcall MONSTER_DispatchUniqueModifiers(::SGAMEDATA * pGame, D2UnitStrc * pMissile, int32_t nEvent, D2UnitStrc * pUnit) {
-    uint32_t nSecurityCookie;
-    int nUModSlot = 0;
-    if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || !pUnit->pUnitData.pUnitDataMonster) {
-      nSecurityCookie = 0;
+    uint32_t bUnique;
+    D2UnitDataMonsterStrc* pMonData = pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0;
+    if (!pMonData) {
+      bUnique = 0;
     } else {
-      nSecurityCookie = (uint8_t)((uint8_t)pUnit->pUnitData.pUnitDataMonster->eMonsterType >> 3) & 1;
+      bUnique = (uint16_t)(pMonData->eMonsterType & 8) != 0;
     }
-    if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
+
+    pMonData = pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0;
+    uint8_t* pUModList = pMonData ? pMonData->MonUModList : 0;
+    if (!pUModList || !*pUModList) {
       return;
     }
 
-    uint8_t* pUModList = pUnit->pUnitData.pUnitDataMonster->MonUModList;
-    if (!(pUModList && *pUModList)) {
-      return;
-    }
     if (nEvent != 5) {
-      do {
-        fpMonsterUModHandler pfnHandler = (&g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnModeStart)[nEvent];
+      for (int i = 0; i < 9; ++i) {
+        fpMonsterUModHandler pfnHandler = (&g_MonsterUModHandlerTable[pUModList[i]].pfnModeStart)[nEvent];
         if (pfnHandler) {
-          (*pfnHandler)(pGame, pUnit, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
+          (*pfnHandler)(pGame, pUnit, (uint32_t)pUModList[i], bUnique);
         }
-
-        nUModSlot++;
-      } while (nUModSlot < 9);
-
-      return;
-    }
-
-    do {
-      fpMonsterUModHandler pfnHandler2 = g_MonsterUModHandlerTable[pUModList[nUModSlot]].pfnMissile;
-      if (pfnHandler2) {
-        pfnHandler2(pGame, pMissile, (uint32_t)pUModList[nUModSlot], nSecurityCookie);
       }
-
-      nUModSlot++;
-    } while (nUModSlot < 9);
+    } else {
+      for (int i = 0; i < 9; ++i) {
+        fpMonsterUModHandler pfnHandler = (&g_MonsterUModHandlerTable[pUModList[i]].pfnModeStart)[nEvent];
+        if (pfnHandler) {
+          (*pfnHandler)(pGame, pMissile, (uint32_t)pUModList[i], bUnique);
+        }
+      }
+    }
 }
 
 void __fastcall MONSTER_DispatchUModModeStart(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {

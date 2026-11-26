@@ -1832,8 +1832,9 @@ bool __stdcall QUESTLOG_IsPointInQuestLog(int32_t nX, int32_t nY) {
 }
 
 void __stdcall QUESTLOG_OnQuestLogMouseDown(D2UIMouseMsgStrc * pMsg) {
-    bool bVar1 = QUESTLOG_IsPointInQuestLog((uint32_t)pMsg->uLParam.sMousePos.nMouseX, (uint32_t)pMsg->uLParam.sMousePos.nMouseY);
-    if (bVar1) {
+    const int nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    const int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
+    if (QUESTLOG_IsPointInQuestLog(nMouseX, nMouseY)) {
       gQuestLog.bQuestLogWindowOpen = '\x01';
       Sound::SOUND_PlaySound(SOUND_CURSOR_BUTTON_CLICK, nullptr, 0, 0, 0);
       pMsg->bHandled = 1;

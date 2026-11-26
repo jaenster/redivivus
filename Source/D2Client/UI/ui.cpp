@@ -3888,59 +3888,47 @@ void __stdcall DRAW_UI_DeathMessage() {
 }
 
 void __fastcall UI_DrawPlayerNameOverhead(D2UnitStrc * pUnit) {
-    uint16_t wszName[128];
-    tagRECT rcView;
-    BOOL bIsPartied;
-    int nHpBarValue;
-    int nViewLeft;
-    int nViewTop;
-    int nViewRight;
-    int nViewBottom;
-    int nCenterY;
-    int nCenterX;
-    POINT ptScreen;
-    uint32_t eBorderType = Path::DRAW_GetTypeOfBorder();
+    const uint32_t eBorderType = Path::DRAW_GetTypeOfBorder();
     if (eBorderType == 3) {
       return;
     }
-
-    D2UnitStrc* pLocalPlayer = UNIT::Player::GetPlayerUnit_UI();
-    if (pUnit == pLocalPlayer) {
+    if (pUnit == UNIT::Player::GetPlayerUnit_UI()) {
       return;
     }
 
-    GAME::View::VIEW_GetViewRect(GAME::Game::D2GameView, &nViewLeft, &nViewTop, &nViewRight, &nViewBottom);
+    tagRECT rcGameView;
+    GAME::View::VIEW_GetViewRect(GAME::Game::D2GameView, (int*)&rcGameView.left, (int*)&rcGameView.top, (int*)&rcGameView.right, (int*)&rcGameView.bottom);
+    int nCenterX;
+    int nCenterY;
     GAME::View::GetCenterXY(GAME::Game::D2GameView, &nCenterX, &nCenterY);
-    /* int yBottom for SetRect */ /* int xRight for SetRect */ /* int yTop for SetRect */ /* int xLeft for SetRect */ /* LPRECT lprc for SetRect */ SetRect(&rcView, nCenterX, nCenterY, nViewRight - nViewLeft + nCenterX, nViewBottom - nViewTop + nCenterY);
+    tagRECT rcView;
+    SetRect(&rcView, nCenterX, nCenterY, rcGameView.right - rcGameView.left + nCenterX, rcGameView.bottom - rcGameView.top + nCenterY);
+    POINT ptScreen;
     D2Common::Units::GetScreenCoords(pUnit, &ptScreen);
+    ptScreen.y = ptScreen.y - rcView.top - 0x46;
     ptScreen.x -= rcView.left;
-    ptScreen.y += -0x46 - rcView.top;
     switch (eBorderType) {
       case 1:
-        {
-          ptScreen.x -= ScreenSizeX / 4;
-          if (ptScreen.x > ScreenSizeX / 2) {
-            return;
-          }
-
-          break;
+        ptScreen.x -= ScreenSizeX / 4;
+        if (ptScreen.x > ScreenSizeX / 2) {
+          return;
         }
+        break;
       case 2:
-        {
-          ptScreen.x += ScreenSizeX / 4;
-          if (ptScreen.x < ScreenSizeX / 2) {
-            return;
-          }
-
-          break;
+        ptScreen.x += ScreenSizeX / 4;
+        if (ptScreen.x < ScreenSizeX / 2) {
+          return;
         }
+        break;
     }
-
-    if (!(ptScreen.y > 0 && ptScreen.y < ScreenSizeX && ptScreen.x > -0x32 && ptScreen.x < Inv::ScreenSizeY + 0x32)) {
+    if (ptScreen.y <= 0 || ptScreen.y >= ScreenSizeX || ptScreen.x <= -0x32 || ptScreen.x >= Inv::ScreenSizeY + 0x32) {
       return;
     }
 
+    uint16_t wszName[128];
     Fog::File::CONTAINER_InitializeBuffer(wszName, 2, 0x80, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+    BOOL bIsPartied;
+    int nHpBarValue;
     UI_FormatPlayerNameAndStatus(pUnit, wszName, 0x80, &bIsPartied, &nHpBarValue);
 }
 
@@ -6272,7 +6260,7 @@ void __stdcall nullSub_CharonGameDraw_Unref_00463d70() {
 
 }
 
-void __stdcall nullSub_CharonGameDraw() {
+void __fastcall nullSub_CharonGameDraw(int32_t nArg1, int32_t nArg2) {
 
 }
 
@@ -6886,11 +6874,23 @@ static int UI_IsMouseInControlConfigArea(int32_t nMouseX, int32_t nMouseY) {
     return 0;
 }
 
+// The control-config panel geometry, recomputed at each use.
+static inline int UI_GetConfigPanelLeft() {
+    return (ScreenSizeX - 0x26c) / 2;
+}
+
+static inline int UI_GetConfigPanelRight() {
+    return UI_GetConfigPanelLeft() + (ScreenSizeX - UI_GetConfigPanelLeft() * 2);
+}
+
+static inline int UI_GetConfigListTop() {
+    return (WindowSizeY - 0x1a4) / 2;
+}
+
 static int UI_IsMouseOnUpArrow(int32_t nMouseX, int32_t nMouseY) {
-    int nScreenLeftMargin = (ScreenSizeX - 0x26c) / 2;
-    if (nMouseX >= ScreenSizeX - nScreenLeftMargin - 0x1f && nMouseX <= ScreenSizeX - nScreenLeftMargin - 0x12) {
-      nScreenLeftMargin = (WindowSizeY - 0x1a4) / 2;
-      if (nMouseY >= nScreenLeftMargin + 0x23 && nMouseY <= nScreenLeftMargin + 0x2f) {
+    if (nMouseX >= UI_GetConfigPanelRight() - 0x1f && nMouseX <= UI_GetConfigPanelRight() - 0x12) {
+      const int nTop = UI_GetConfigListTop();
+      if (nMouseY >= nTop + 0x23 && nMouseY <= nTop + 0x2f) {
         return 1;
       }
     }
@@ -6899,10 +6899,9 @@ static int UI_IsMouseOnUpArrow(int32_t nMouseX, int32_t nMouseY) {
 }
 
 static int UI_IsMouseOnDownArrow(int32_t nMouseX, int32_t nMouseY) {
-    int nLeftMargin = (ScreenSizeX - 0x26c) / 2;
-    if (nMouseX >= ScreenSizeX - nLeftMargin - 0x1f && nMouseX <= ScreenSizeX - nLeftMargin - 0x12) {
-      nLeftMargin = (WindowSizeY - 0x1a4) / 2;
-      if (nMouseY >= nLeftMargin + 0x125 && nMouseY <= nLeftMargin + 0x131) {
+    if (nMouseX >= UI_GetConfigPanelRight() - 0x1f && nMouseX <= UI_GetConfigPanelRight() - 0x12) {
+      const int nTop = UI_GetConfigListTop();
+      if (nMouseY >= nTop + 0x125 && nMouseY <= nTop + 0x131) {
         return 1;
       }
     }
@@ -6911,27 +6910,30 @@ static int UI_IsMouseOnDownArrow(int32_t nMouseX, int32_t nMouseY) {
 }
 
 static int UI_IsMouseOnScrollBar(int32_t nMouseX, int32_t nMouseY) {
-    int nLeftMargin = (ScreenSizeX - 0x26c) / 2;
-    if (nMouseX >= ScreenSizeX - nLeftMargin - 0x1f && nMouseX <= ScreenSizeX - nLeftMargin - 0x12 && nMouseY > (WindowSizeY - 0x1a4) / 2 + 0x2f && nMouseY < gnUICtrlConfigScrollPosition) {
-      return 1;
+    if (nMouseX >= UI_GetConfigPanelRight() - 0x1f && nMouseX <= UI_GetConfigPanelRight() - 0x12) {
+      if (nMouseY > UI_GetConfigListTop() + 0x2f && nMouseY < gnUICtrlConfigScrollPosition) {
+        return 1;
+      }
     }
 
     return 0;
 }
 
 static int UI_IsMouseOnScrollThumb(int32_t nMouseX, int32_t nMouseY) {
-    int nLeftMargin = (ScreenSizeX - 0x26c) / 2;
-    if (nMouseX >= ScreenSizeX - nLeftMargin - 0x1f && nMouseX <= ScreenSizeX - nLeftMargin - 0x12 && nMouseY >= gnUICtrlConfigScrollPosition && nMouseY <= gnUICtrlConfigScrollPosition + gnUICtrlConfigScrollMaxLines * 0xc) {
-      return 1;
+    if (nMouseX >= UI_GetConfigPanelRight() - 0x1f && nMouseX <= UI_GetConfigPanelRight() - 0x12) {
+      if (nMouseY >= gnUICtrlConfigScrollPosition && nMouseY <= gnUICtrlConfigScrollPosition + gnUICtrlConfigScrollMaxLines * 0xc) {
+        return 1;
+      }
     }
 
     return 0;
 }
 
 static int UI_IsMouseBelowScrollThumb(int32_t nMouseX, int32_t nMouseY) {
-    int nLeftEdge = (ScreenSizeX - 0x26c) / 2;
-    if (nMouseX >= ScreenSizeX - nLeftEdge - 0x1f && nMouseX <= ScreenSizeX - nLeftEdge - 0x12 && nMouseY < (WindowSizeY - 0x1a4) / 2 + 0x125 && nMouseY > gnUICtrlConfigScrollPosition + gnUICtrlConfigScrollMaxLines * 0xc) {
-      return 1;
+    if (nMouseX >= UI_GetConfigPanelRight() - 0x1f && nMouseX <= UI_GetConfigPanelRight() - 0x12) {
+      if (nMouseY < UI_GetConfigListTop() + 0x125 && nMouseY > gnUICtrlConfigScrollPosition + gnUICtrlConfigScrollMaxLines * 0xc) {
+        return 1;
+      }
     }
 
     return 0;
@@ -8689,41 +8691,30 @@ void __stdcall UI_FreeHoradricCubeAssets() {
 }
 
 void __stdcall PACKET_SendUnitInteraction0x44(D2UIMouseMsgStrc * pMsg) {
-    D2UnitStrc* pPlayerOrCursorItem;
-    int nUnitType;
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
-    if (gnPlayerCashDisplay != 1) {
-      if (gnPlayerCashDisplay != 2) {
+    const int nMode = gnPlayerCashDisplay;
+    if (nMode != 1) {
+      if (nMode != 2) {
         return;
       }
 
-      pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
-      if (pPlayerOrCursorItem) {
-        pPlayerOrCursorItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerOrCursorItem->pInventory);
-      } else {
-        pPlayerOrCursorItem = 0;
-      }
-
-      Cursor::ITEM_SetItemOnHand(pPlayerOrCursorItem);
+      D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
+      D2InventoryStrc* pInventory = pPlayer ? pPlayer->pInventory : nullptr;
+      Cursor::ITEM_SetItemOnHand(pPlayer ? D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory) : nullptr);
     }
 
     if (!UseItem::nHoradricCubeUIState) {
-      pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
-      if (!pPlayerOrCursorItem) {
-        nUnitType = -1;
-      } else {
-        nUnitType = pPlayerOrCursorItem->nUnitGUID;
-      }
-
-      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nUnitType, gnNpcShopActiveTab, 0, 2);
+      D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
+      const int nUnitGUID = !pPlayer ? -1 : pPlayer->nUnitGUID;
+      const int nTab = gnNpcShopActiveTab;
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nUnitGUID, nTab, 0, 2);
       UseItem::UI_CloseHoradricCubeWindow();
-      return;
+    } else {
+      npcmenu::NPCMENU_CloseStashUI();
+      UseItem::UI_CloseHoradricCubeWindow();
     }
-
-    npcmenu::NPCMENU_CloseStashUI();
-    UseItem::UI_CloseHoradricCubeWindow();
 }
 
 void __stdcall DRAW_UI_CASH() {
@@ -8859,9 +8850,9 @@ BOOL __stdcall thunk_NPCSHOP_IsRepairTabActive() {
 }
 
 static BOOL NPCSHOP_GetActiveTabIndex(int32_t nMouseX, int32_t nMouseY) {
-    int nTabIdx;
     BOOL bHandled = 0;
-    for (nTabIdx = 0; nTabIdx < UseItem::nCashDisplayItemCount; nTabIdx++) {
+    int nCount;
+    for (int nTabIdx = 0; nTabIdx < (nCount = UseItem::nCashDisplayItemCount); nTabIdx++) {
       if (gaNpcCashTabs[nTabIdx].bVisible && nMouseX >= gaNpcCashTabs[nTabIdx].nHitBoxX1 && nMouseX <= gaNpcCashTabs[nTabIdx].nHitBoxX2 && nMouseY >= gaNpcCashTabs[nTabIdx].nHitBoxY1 && nMouseY <= gaNpcCashTabs[nTabIdx].nHitBoxY2) {
         Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
         if (!nTabIdx) {
@@ -8874,16 +8865,9 @@ static BOOL NPCSHOP_GetActiveTabIndex(int32_t nMouseX, int32_t nMouseY) {
       }
     }
 
-    if (UseItem::nCashDisplayItemCount > 0) {
-      uint8_t* pHitTestState;
-      pHitTestState = &gaNpcCashTabs[0].nHitTestState;
-      nTabIdx = UseItem::nCashDisplayItemCount;
-      do {
-        pHitTestState[1] = 0;
-        *pHitTestState = 0;
-        pHitTestState += 0x28;
-        nTabIdx--;
-      } while (nTabIdx);
+    for (int nTabIdx = 0; nTabIdx < nCount; nTabIdx++) {
+      gaNpcCashTabs[nTabIdx].bVisible = 0;
+      gaNpcCashTabs[nTabIdx].nHitTestState = 0;
     }
 
     return bHandled;

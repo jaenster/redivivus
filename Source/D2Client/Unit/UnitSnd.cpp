@@ -2495,26 +2495,38 @@ int gaAmbientMusicLevelSetTable[168] = {
 namespace D2Client::UNIT::UnitSnd {
 
 static DWORD GetSndUnitClassId(D2UnitStrc * pUnit) {
-    eD2UnitType eUnitType = pUnit ? pUnit->eUnitType : UNIT_COUNT;
-    DWORD nClassId = !pUnit ? -1 : pUnit->nClassId;
-
-    int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-    if (eUnitType == UNIT_PLAYER) {
-      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, (int*)&nClassId, &nAnimMode, ".\\UNIT\\UnitSnd.cpp", 0xb01);
+    eD2UnitType eUnitType;
+    int nClassId;
+    int32_t nAnimMode;
+    eD2UnitType eTypeValue = UNIT_COUNT;
+    if (pUnit) {
+      eTypeValue = pUnit->eUnitType;
     }
-
+    eUnitType = eTypeValue;
+    const int nClassValue = !pUnit ? -1 : pUnit->nClassId;
+    nClassId = nClassValue;
+    nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    if (!eUnitType) {
+      D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\UNIT\\UnitSnd.cpp", 0xb01);
+    }
     return nClassId;
 }
 
 static eD2UnitType GetSndUnitType(D2UnitStrc * pUnit) {
-    eD2UnitType eUnitType = pUnit ? pUnit->eUnitType : UNIT_COUNT;
-    int nClassId = !pUnit ? -1 : pUnit->nClassId;
-
-    int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-    if (eUnitType == UNIT_PLAYER) {
+    eD2UnitType eUnitType;
+    int nClassId;
+    int32_t nAnimMode;
+    eD2UnitType eTypeValue = UNIT_COUNT;
+    if (pUnit) {
+      eTypeValue = pUnit->eUnitType;
+    }
+    eUnitType = eTypeValue;
+    const int nClassValue = !pUnit ? -1 : pUnit->nClassId;
+    nClassId = nClassValue;
+    nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    if (!eUnitType) {
       D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\UNIT\\UnitSnd.cpp", 0xb0d);
     }
-
     return eUnitType;
 }
 
@@ -4468,54 +4480,53 @@ static void __stdcall UNITSND_PlayModeChangeSound(int32_t nMode, D2UnitStrc * pU
 
 // Dispatches the appropriate sound event when a unit changes animation mode. For players: plays mode-change, attack, or get-hit sounds keyed on mode and class (e.g. Druid kick at mode 0xF, Assassin at 0x10). For monsters: applies MonSounds CvtMo/CvtTgt remapping, then plays mode-change, attack, skill, or stop-combat sound. nMode==0 uses the unit's current mode.
 void __fastcall UNITSND_DispatchModeChangeSound(D2UnitStrc * pUnit, int32_t nAnimMode, int32_t nMode) {
-    D2MonSoundsTxt* pMonSoundsLine;
-    eD2UnitType eUnitType;
-    eUnitType = GetSndUnitType(pUnit);
-    DWORD nClassId;
-    nClassId = GetSndUnitClassId(pUnit);
+    int32_t nAttackMode;
+    const eD2UnitType eUnitType = GetSndUnitType(pUnit);
+    const DWORD nClassId = GetSndUnitClassId(pUnit);
     if (!nMode) {
       nAnimMode = GetSndUnitMode(pUnit);
     }
+
     if (eUnitType == UNIT_PLAYER) {
       switch (nAnimMode) {
         case 0xf:
           if (nClassId == 4) {
-            UNITSND_PlayAttackSound(pUnit, 0xf, 1);
-            return;
+            nAttackMode = 0xf;
+            goto play_attack_sound;
           }
-        break;
+          break;
         case 0x10:
           if (nClassId == 6) {
-            UNITSND_PlayAttackSound(pUnit, 0x10, 1);
-            return;
+            nAttackMode = 0x10;
+            goto play_attack_sound;
           }
-        break;
+          break;
         case 9:
           UNITSND_PlayGetHitSound(pUnit);
-        return;
+          break;
         case 0xc:
           if (nClassId == 6) {
             Sound::SOUND_PlaySound(SOUND_WEAPON_1HS_LARGE_1, pUnit, 4, 0, 0);
-            return;
+          } else {
+            Sound::SOUND_PlaySound(SOUND_WEAPON_1HS_LARGE_1, pUnit, 0, 0, 0);
           }
-        Sound::SOUND_PlaySound(SOUND_WEAPON_1HS_LARGE_1, pUnit, 0, 0, 0);
-        return;
+          break;
         case 7:
-
         case 8:
-          play_attack_sound:
-          UNITSND_PlayAttackSound(pUnit, nAnimMode, 1);
-        return;
+          nAttackMode = nAnimMode;
+          goto play_attack_sound;
         case 0:
-
         case 4:
-
         case 0x13:
-          play_mode_change_sound:
           UNITSND_PlayModeChangeSound(nAnimMode, pUnit);
+          break;
+      }
+    } else if (eUnitType == UNIT_MONSTER) {
+      D2MonSoundsTxt* pMonSoundsLine = TxtGetSoundIdLineFromUnit(pUnit);
+      if (!pMonSoundsLine) {
         return;
       }
-    } else if (eUnitType == UNIT_MONSTER && (pMonSoundsLine = TxtGetSoundIdLineFromUnit(pUnit) , pMonSoundsLine != 0)) {
+
       if (nAnimMode == (uint32_t)pMonSoundsLine->CvtMo1 && pMonSoundsLine->CvtSk1 < 0) {
         nAnimMode = (int32_t)pMonSoundsLine->CvtTgt1;
       }
@@ -4528,28 +4539,29 @@ void __fastcall UNITSND_DispatchModeChangeSound(D2UnitStrc * pUnit, int32_t nAni
 
       switch (nAnimMode) {
         case 4:
-
         case 5:
+          nAttackMode = nAnimMode;
           goto play_attack_sound;
         case 0:
-
         case 3:
-
         case 0xd:
-          goto play_mode_change_sound;
+          UNITSND_PlayModeChangeSound(nAnimMode, pUnit);
+          break;
         case 8:
-
         case 9:
-
         case 10:
-
         case 0xb:
           UNITSND_PlayMonsterSkillSound(pUnit, nAnimMode);
-        return;
+          break;
         case 0xc:
           UNITSND_StopAllCombatSounds(pUnit);
+          break;
       }
     }
+    return;
+
+    play_attack_sound:
+    UNITSND_PlayAttackSound(pUnit, nAttackMode, 1);
 }
 
 static void * keep_004caaa0 = (0 ? (UNITSND_Unused_Placeholder_3(*(uint8_t *)0, *(D2UnitStrc * *)0), (void *)0) : (void *)0);

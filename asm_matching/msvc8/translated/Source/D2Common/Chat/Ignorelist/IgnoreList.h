@@ -117,7 +117,7 @@ int32_t __fastcall AddByPattern(::IgnoreList * pThis, int, char * szPattern);
 int32_t __fastcall AddByAccountName(::IgnoreList * pThis, int, char * szAccountName);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-int32_t __fastcall CloseAppendFile(::IgnoreList * pThis, int);
+void __fastcall CloseAppendFile(::IgnoreList * pThis, int);
 int32_t __fastcall AppendLineToFile(::IgnoreList * pThis, int, char * szLine);
 // Writes the ignore list to its file: one ignored name pattern per line, then each ignored account prefixed with '!'.
 int32_t __fastcall SaveToFile(::IgnoreList * pThis, int);

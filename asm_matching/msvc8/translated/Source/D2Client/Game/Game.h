@@ -137,7 +137,7 @@ void __fastcall TSIntrusiveList_Clear_Unref_00426ac0(struct StormLinkedListStrc 
 void __stdcall GAME_SetAppModeContinue();
 void __fastcall GAMEDATA_TimerInitWithTickCount(uint32_t * pTimerStruct, int, uint32_t dwDurationMs);
 int __fastcall Unreferenced_0044be10(int * pPair);
-void __fastcall GAMEDATA_SetByteInUshort(uint16_t * pWord, uint8_t byteValue);
+uint16_t __fastcall GAMEDATA_SetByteInUshort(uint16_t * pWord, uint16_t byteValue);
 // Setter for gRunKeyDown (run modifier).
 void __fastcall SetRunKeyDown(BOOL bRunKeyDown);
 BOOL __stdcall GAME_GetRunKeyDown();
@@ -146,7 +146,7 @@ BOOL __stdcall GetGlobalAlwaysRun();
 void __fastcall GAMEDATA_SetClickModifier(int32_t bModifierDown);
 BOOL __stdcall GAME_GetClickModifierDown();
 // Compute mouse click modifier flags (run/always-run, modifier key).
-uint32_t __stdcall GetMouseClickFlags();
+uint16_t __stdcall GetMouseClickFlags();
 void __stdcall GAME_SetMouseButtonEventPending();
 uint32_t __stdcall GAME_GetPrimaryClickState();
 int __stdcall GAME_GetMouseButtonEventState();

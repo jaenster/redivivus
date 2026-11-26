@@ -587,13 +587,14 @@ void __fastcall NET_MCP_CLIENT_Send_0x04_JoinGame(char * szGameName, char * szGa
 void __fastcall NET_MCP_CLIENT_Send_0x05_GameList(char * szText, uint16_t wRequestIdArg) {
     MCPPacketClt0x05 sPacket;
     SetD2GSJoinResult(0);
-    sPacket.dwGameField = *(uint32_t*)(szText + 0x14);
     uint32_t pStrLen = 0;
     sPacket.nPacketId = 5;
     sPacket.wRequestId = wRequestIdArg;
+    sPacket.dwGameField = *(uint32_t*)(szText + 0x14);
     nMcpPacketSequence = wRequestIdArg;
     STRING_GetStringLength(sPacket.szData, szText, &pStrLen, 0x400);
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (short int)pStrLen + 7);
+    pStrLen += 7;
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (short int)pStrLen);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x06_GameInfo(char * szText, uint16_t wRequestIdArg) {
@@ -604,7 +605,8 @@ void __fastcall NET_MCP_CLIENT_Send_0x06_GameInfo(char * szText, uint16_t wReque
     byPacketId.wRequestId = wRequestIdArg;
     nMcpPacketSequence = wRequestIdArg;
     STRING_GetStringLength(byPacketId.szData, szText, &pStrLen, 0x400);
-    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (short int)pStrLen + 3);
+    pStrLen += 3;
+    Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (short int)pStrLen);
 }
 
 void __fastcall NET_MCP_CLIENT_Send_0x08(char * szText, uint16_t wRequestIdArg) {

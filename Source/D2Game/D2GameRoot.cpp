@@ -111,7 +111,7 @@ void __stdcall GAME_ClearGlobalFlag_Thunk() {
     GAME_ClearGlobalFlag();
 }
 
-void __stdcall nullsub(D2UnitStrc * dwUnused1, uint32_t dwUnused2, uint32_t dwUnused3) {
+void __fastcall nullsub(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, D2UnitStrc * pDefender, int32_t nChance, int32_t nRoll) {
 
 }
 

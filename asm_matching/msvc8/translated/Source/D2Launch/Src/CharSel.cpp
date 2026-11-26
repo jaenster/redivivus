@@ -1758,22 +1758,14 @@ void __stdcall CHARSEL_ShowWaitTimeout() {
 }
 
 BOOL __stdcall CHARSEL_InitRealmSelection() {
-    uint16_t* pwszLocaleStr;
-    ::D2WinTextBox* pTitleForm;
-    int32_t nRegResult;
-    BOOL nTextLine;
-    D2BNetGatewayAccessStr* pBNetGateway;
-    char* pszRealmName;
     uint16_t wErrorStrId;
-    uint8_t nTextArg8;
     gnCharSelBNetLoadState = 0;
     if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       MainMenus::MAINMENU_QueryAndBuildRealmList();
       int nRealmCount = MainMenus::MAINMENU_GetRealmCount();
       if (nRealmCount != -1) {
-        ::D2WinTimer* pTimerForm;
-        if (nRealmCount) {
-          pTimerForm = (::D2WinTimer*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x7a);
+        if (nRealmCount != 0) {
+          ::D2WinTimer* pTimerForm = (::D2WinTimer*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x7a);
           D2Win::Src::D2WinTimer::D2WINTIMER_DisableSpaceKey((int*)pTimerForm);
           D2Win::Src::D2WinTimer::D2WINTIMER_SetRepeating(pTimerForm);
           gpCharSelStatusTextBox = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x94);
@@ -1781,54 +1773,35 @@ BOOL __stdcall CHARSEL_InitRealmSelection() {
           MainMenus::FORMS_CreateAnyFormFromListExEx(0x69);
           gpControlRealmSelectDropdown = MainMenus::FORMS_CreateAnyFormFromListExEx(0x6b);
           gpControlCharSelList = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x6c);
-          nRealmCount = 0;
-          nTextArg8 = 0;
-          nRegResult = 4;
-          pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(0x2b32);
-          pTitleForm = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x6a);
-          D2Win::Src::D2WinTextBox::SetText(pTitleForm, pwszLocaleStr, nRegResult, (bool)nTextArg8, nRealmCount);
-          nRegResult = Storm::Source::SReg::SRegLoadString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm, 0x100);
-          if (nRegResult) {
-            nTextLine = CHARSEL_FindRealmByName(PreferredClosedRealm);
-            if (nTextLine) {
-              return 1;
+          D2Win::Src::D2WinTextBox::SetText((::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x6a), D2Lang::StrTable::strtable::GetLocaleString(0x2b32), 4, false, 0);
+          if (!Storm::Source::SReg::SRegLoadString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm, 0x100) || !CHARSEL_FindRealmByName(PreferredClosedRealm)) {
+            D2BNetGatewayAccessStr* pBNetGateway = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
+            const int nGatewayIdx = pBNetGateway->nCurGatewayIdx;
+            Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, Bnclient::BNGatewayAccess::Realm(pBNetGateway, nGatewayIdx), 0x7fffffff);
+            Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
+            if (!CHARSEL_FindRealmByName(PreferredClosedRealm)) {
+              char* pszRealmName = MainMenus::MAINMENU_GetRealmCount() > 0 ? MainMenus::MAINMENU_GetRealmName(0) : 0;
+              Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, pszRealmName, 0x7fffffff);
+              Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
             }
           }
-
-          pBNetGateway = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
-          Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, Bnclient::BNGatewayAccess::Realm(pBNetGateway, pBNetGateway->nCurGatewayIdx), 0x7fffffff);
-          Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
-          nTextLine = CHARSEL_FindRealmByName(PreferredClosedRealm);
-          if (nTextLine) {
-            return 1;
-          }
-
-          nRealmCount = MainMenus::MAINMENU_GetRealmCount();
-          if (nRealmCount > 0) {
-            pszRealmName = MainMenus::MAINMENU_GetRealmName(0);
-          } else {
-            pszRealmName = 0;
-          }
-
-          Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, pszRealmName, 0x7fffffff);
-          Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
-          return 1;
+        } else {
+          Launcher::LAUNCHER_DisconnectFromBnet();
+          wErrorStrId = 0x14aa;
+          goto fail;
         }
-
-        Launcher::LAUNCHER_DisconnectFromBnet();
-        wErrorStrId = 0x14aa;
       } else {
         Launcher::LAUNCHER_DisconnectFromBnet();
         wErrorStrId = 0x14e3;
+        goto fail;
       }
-
-      pwszLocaleStr = D2Lang::StrTable::strtable::GetLocaleString(wErrorStrId);
-      MainMenus::MAINMENU_ShowPopupWithCancel(pwszLocaleStr, MainMenus::UIMENU_MainMenu);
-      return 0;
     }
 
-    gnCharSelBNetLoadState = 0;
     return 1;
+
+fail:
+    MainMenus::MAINMENU_ShowPopupWithCancel(D2Lang::StrTable::strtable::GetLocaleString(wErrorStrId), MainMenus::UIMENU_MainMenu);
+    return 0;
 }
 
 // @sourcefile .\Src\CharSel.cpp
@@ -2312,7 +2285,6 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     D2BNetGatewayAccessStr* pGatewayAccess;
     char* szRealmName;
     int nSlotY;
-    uint8_t byTmp;
     BOOL bIsExpansion;
     bIsExpansion = Fog::D2CheckExpansionGame();
     if (bIsExpansion) {
@@ -2372,7 +2344,6 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     nSlotIndex = 0;
     memset(gaCharSelScreenSlotControls, 0, 8 * sizeof(gaCharSelScreenSlotControls[0]));
     if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
-      int32_t nRegResult;
       gnCharSelScreenSlotCount = 4;
       nSlotY = 0xf6;
       do {
@@ -2391,27 +2362,21 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
       MainMenus::FORMS_CreateAnyFormFromListExEx(0x65);
       gpControlRealmSelectDropdown = MainMenus::FORMS_CreateAnyFormFromListExEx(0x67);
       gpControlCharSelList = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x68);
-      nSlotIndex = 0;
-      byTmp = 0;
-      nRegResult = 4;
-      /* Current Realm */ /* Current Realm */ /* Current Realm */ pwszLabel = D2Lang::StrTable::strtable::GetLocaleString(0x2b32);
-      pSlotControl = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x66);
-      D2Win::Src::D2WinTextBox::SetText(pSlotControl, pwszLabel, nRegResult, (bool)byTmp, nSlotIndex);
-      nRegResult = Storm::Source::SReg::SRegLoadString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm, 0x100);
-      if (nRegResult) {
+      D2Win::Src::D2WinTextBox::SetText((::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x66), D2Lang::StrTable::strtable::GetLocaleString(0x2b32) /* Current Realm */, 4, false, 0);
+      bIsExpansion = 0;
+      if (Storm::Source::SReg::SRegLoadString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm, 0x100)) {
         bIsExpansion = CHARSEL_FindRealmByName(PreferredClosedRealm);
-        if (bIsExpansion) {
-          goto load_char_list;
-        }
       }
 
-      pGatewayAccess = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
-      Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, Bnclient::BNGatewayAccess::Realm(pGatewayAccess, pGatewayAccess->nCurGatewayIdx), 0x7fffffff);
-      Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
-      bIsExpansion = CHARSEL_FindRealmByName(PreferredClosedRealm);
-      if (!bIsExpansion) {
-        nSlotIndex = MainMenus::MAINMENU_GetRealmCount();
-        if (nSlotIndex > 0) {
+      if (bIsExpansion == 0) {
+        pGatewayAccess = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
+        Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, Bnclient::BNGatewayAccess::Realm(pGatewayAccess, pGatewayAccess->nCurGatewayIdx), 0x7fffffff);
+        Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
+        bIsExpansion = CHARSEL_FindRealmByName(PreferredClosedRealm);
+      }
+
+      if (bIsExpansion == 0) {
+        if (MainMenus::MAINMENU_GetRealmCount() > 0) {
           szRealmName = MainMenus::MAINMENU_GetRealmName(0);
         } else {
           szRealmName = 0;
@@ -2436,7 +2401,6 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
       D2Win::Src::D2WinButton::D2WINBUTTON_SetBounds(gpCtlCharSelOKButton, 0x27a, 0x32, 0x1d, 0x14);
     }
 
-    load_char_list:
     gpaCharSelCharacterList = (::D2WinImage*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x96);
     gpControlCharSelImage = (::D2WinImage*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x97);
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive((D2ControlStrc*)gpControlCharSelImage, 0);

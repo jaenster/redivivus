@@ -510,7 +510,7 @@ BOOL __fastcall MONSTERAI_CanSwitchAi(struct D2UnitStrc * pUnit, int32_t nAiSpec
 // 5. Set bEngagedInCombat if in melee range
 struct D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiGeneralStrc * pMonsterAiGeneral, int32_t * pnDistanceToTarget, BOOL * bEngagedInCombat);
 // Finds the nearest valid target unit and computes distance. Returns the target unit pointer and writes distance and melee-range flag to output parameters.
-struct D2UnitStrc * __fastcall FindTargetAndDistance(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * pDistance, bool * pInMelee);
+struct D2UnitStrc * __fastcall FindTargetAndDistance(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, uint32_t * pDistance, BOOL * pInMelee);
 // Applies the Terror state to a target monster on behalf of pUnit. Guards: target must be alive, a UNIT_MONSTER, not uninterruptable, CanSwitchAI, not monster-type 10, and AI_CanApplyColdState must pass. Calls SetStateWithExpiryTime(STATE_terror, SKILL_Terror, nTerrorDurationFrames), redirects the target's path toward pUnit, reassigns AI to mode 0xb, then fires UNITEVENTCALLBACK_AITHINK and schedules a frame-advance event.
 void __fastcall MONSTERAI_ApplyTerrorToMonster(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTargetMonster, uint32_t nUnused, uint32_t nUnused2, int32_t nTerrorDurationFrames);
 struct D2UnitStrc * __fastcall MONSTERAI_FindTargetInRange(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2AiGeneralStrc * pAiGeneral, int * pDistanceOut, BOOL * bResult, int32_t nMaxDistance);

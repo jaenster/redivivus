@@ -4956,8 +4956,7 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
 
 BOOL __fastcall MAINMENU_CheckFileExists(char * szFileName) {
     D2MPQFileStrc* pFileHandle;
-    int bOpened = Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, 0, (void**)&pFileHandle);
-    if (!bOpened) {
+    if (!Storm::Source::SFile::SFileOpenFileEx(nullptr, szFileName, 0, (void**)&pFileHandle)) {
       return 0;
     }
 
@@ -6811,32 +6810,27 @@ int __stdcall MAINMENU_PollMCPCreateGamePump(int nFrameIndex) {
     return 1;
 }
 
-static int __stdcall MAINMENU_SetMultilineText(uint16_t * wszText, ::D2WinTextBox * pTextBox, int32_t nColor, uint8_t bCentered) {
-    int nClearCount;
+static int __stdcall MAINMENU_SetMultilineText(uint16_t * wszText, ::D2WinTextBox * pTextBox, int32_t nColor, bool bCentered) {
     uint16_t wszBuffer[1024];
-    for (nClearCount = 0; nClearCount < 0x400; nClearCount++) {
+    for (int nClearCount = 0; nClearCount < 0x400; nClearCount++) {
       wszBuffer[nClearCount] = L'\0';
     }
 
     D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszBuffer, wszText, 0x400);
-    uint16_t* pwszLineStart = wszBuffer;
-    uint16_t* pwszCursor = pwszLineStart;
-    if (wszBuffer[0] == L'\0') {
-      return 1;
-    }
-
-    do {
+    uint16_t* pwszCursor = wszBuffer;
+    uint16_t* pwszLineStart = pwszCursor;
+    while (*pwszCursor) {
       if (*pwszCursor == L'\n') {
         *pwszCursor = L'\0';
-        D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, (bool)bCentered, 0);
+        D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, bCentered, 0);
         pwszLineStart = pwszCursor + 1;
       }
 
       pwszCursor++;
-    } while (*pwszCursor != L'\0');
+    }
 
     if (pwszLineStart < pwszCursor) {
-      D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, (bool)bCentered, 0);
+      D2Win::Src::D2WinTextBox::SetText(pTextBox, pwszLineStart, nColor, bCentered, 0);
     }
 
     return 1;
@@ -6851,7 +6845,7 @@ void __fastcall UIMENU_CreatePopupWithContent(uint16_t * wszTitle, uint16_t * ws
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xe9);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
-    MAINMENU_SetMultilineText(wszTitle, pTextBox, 0, '\0');
+    MAINMENU_SetMultilineText(wszTitle, pTextBox, 0, false);
     pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xea);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
     MAINMENU_SetMultilineText(wszContent, pTextBox, 0, '\0');
@@ -6867,7 +6861,7 @@ void __fastcall UIMENU_CreatePopupWithContentAndFooter(uint16_t * wszTitle, uint
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xed);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
-    MAINMENU_SetMultilineText(wszTitle, pTextBox, 0, '\0');
+    MAINMENU_SetMultilineText(wszTitle, pTextBox, 0, false);
     if (wszFooter && *wszFooter != L'\0') {
       pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xef);
       D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
@@ -6948,7 +6942,7 @@ void __fastcall UIMENU_CreateSmallPopup(uint16_t * wszTitle, pfnUIMenuInstance p
     D2Win::Src::D2WinMain::SetUnsetFlag0x08(pForm, 1);
     ::D2WinTextBox* pTextBox = (::D2WinTextBox*)FORMS_CreateAnyFormFromList(0xf9);
     D2Win::Src::D2WinMain::SetUnsetFlag0x08((D2ControlStrc*)pTextBox, 1);
-    MAINMENU_SetMultilineText(wszTitle, pTextBox, 0, '\0');
+    MAINMENU_SetMultilineText(wszTitle, pTextBox, 0, false);
     gpCurrentUIMenuInstance = pfnMenuInstance;
 }
 
@@ -7002,15 +6996,13 @@ void __stdcall MAINMENU_PlayD2Intro() {
     char szResolution[8];
     GetAndDispatchAllPossible();
     int32_t nCutSceneFlags = 0;
-    BOOL bWidescreen = Fog::Src::LogManager::GetLoggerState_Stub();
-    if (!bWidescreen) {
-      memcpy(szResolution + 4, "292", 4);
+    if (!Fog::Src::LogManager::GetLoggerState_Stub()) {
+      strcpy(szResolution, "640x292");
     } else {
       nCutSceneFlags = 2;
-      memcpy(szResolution + 4, "146", 4);
+      strcpy(szResolution, "640x146");
     }
 
-    memcpy(szResolution, "640x", 4);
     MAINMENU_GetLocalizedFilePath("%s\\video\\%s\\d2intro%s.bik", szVideoPath, szResolution);
     D2gfx::D2GFX::D2GFX_PlayCutScene(szVideoPath, nCutSceneFlags, nullptr);
     UIMENU_MainScreenBeforeMenu();

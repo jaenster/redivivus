@@ -365,30 +365,58 @@ static uint32_t __stdcall CACHE_HashString(int32_t nHashType, char * szText) {
 }
 
 void __stdcall CACHE_InitCryptTable() {
-    if (!g_pCacheCryptTable) {
+    uint32_t* pTable = g_pCacheCryptTable;
+    if (!pTable) {
       return;
     }
 
-    uint32_t uSeed1 = 0x100001;
-    uint32_t* pEntry = g_pCacheCryptTable + 0x200;
-    for (int nCount = 0; nCount < 0x100; nCount++) {
-      uint32_t uSeed2;
-      uSeed1 = (uSeed1 * 0x7d + 3) % 0x2aaaab;
-      uSeed2 = (uSeed1 * 0x7d + 3) % 0x2aaaab;
-      pEntry[-0x200] = uSeed1 << 0x10 | (uint16_t)uSeed2;
-      uSeed1 = (uSeed2 * 0x7d + 3) % 0x2aaaab;
-      uSeed2 = (uSeed1 * 0x7d + 3) % 0x2aaaab;
-      pEntry[-0x100] = uSeed1 << 0x10 | (uint16_t)uSeed2;
-      uSeed1 = (uSeed2 * 0x7d + 3) % 0x2aaaab;
-      uSeed2 = (uSeed1 * 0x7d + 3) % 0x2aaaab;
-      *pEntry = uSeed1 << 0x10 | (uint16_t)uSeed2;
-      uSeed1 = (uSeed2 * 0x7d + 3) % 0x2aaaab;
-      uSeed2 = (uSeed1 * 0x7d + 3) % 0x2aaaab;
-      pEntry[0x100] = uSeed1 << 0x10 | (uint16_t)uSeed2;
-      uSeed2 = (uSeed2 * 0x7d + 3) % 0x2aaaab;
-      uSeed1 = (uSeed2 * 0x7d + 3) % 0x2aaaab;
-      pEntry[0x200] = uSeed2 << 0x10 | (uint16_t)uSeed1;
-      pEntry++;
+    uint32_t uSeed = 0x100001;
+    for (uint32_t i = 0; i < 0x100; i++) {
+      {
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uHigh = uSeed & 0xffff;
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uValue = uHigh << 0x10;
+        uValue |= uSeed & 0xffff;
+        uint32_t* pEntry = &pTable[i];
+        *pEntry = uValue;
+      }
+      {
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uHigh = uSeed & 0xffff;
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uValue = uHigh << 0x10;
+        uValue |= uSeed & 0xffff;
+        uint32_t* pEntry = &pTable[i + 0x100];
+        *pEntry = uValue;
+      }
+      {
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uHigh = uSeed & 0xffff;
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uValue = uHigh << 0x10;
+        uValue |= uSeed & 0xffff;
+        uint32_t* pEntry = &pTable[i + 0x200];
+        *pEntry = uValue;
+      }
+      {
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uHigh = uSeed & 0xffff;
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uValue = uHigh << 0x10;
+        uValue |= uSeed & 0xffff;
+        uint32_t* pEntry = &pTable[i + 0x300];
+        *pEntry = uValue;
+      }
+      {
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uHigh = uSeed & 0xffff;
+        uSeed = (uSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t uValue = uHigh << 0x10;
+        uValue |= uSeed & 0xffff;
+        uint32_t* pEntry = &pTable[i + 0x400];
+        *pEntry = uValue;
+      }
     }
 }
 

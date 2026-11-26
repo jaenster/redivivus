@@ -641,12 +641,13 @@ int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
     if (nMissileId < 0 && pUnit) {
       nMissileId = pUnit->nClassId;
     }
+    int32_t nMissileLevel = nLevel;
     if (nLevel <= 0 && pUnit) {
       D2UnitDataMissileStrc* pUnitDataMissile;
       if (pUnit->eUnitType == UNIT_MISSILE && (pUnitDataMissile = pUnit->pUnitData.pUnitDataMissile , pUnitDataMissile != 0)) {
-        nLevel = (int32_t)pUnitDataMissile->nSkillLevel;
+        nMissileLevel = (int32_t)pUnitDataMissile->nSkillLevel;
       } else {
-        nLevel = 0;
+        nMissileLevel = 0;
       }
     }
 
@@ -655,13 +656,11 @@ int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
       return 0;
     }
 
-    int32_t nLevDamBonus = Skills::SKILLS_GetValueByLevelBreakpoints(nLevel, &pMissileTxt->MinLevDam1);
-    int nValue = nLevDamBonus + pMissileTxt->MinDamage;
+    int nValue = pMissileTxt->MinDamage + Skills::SKILLS_GetValueByLevelBreakpoints(nMissileLevel, &pMissileTxt->MinLevDam1);
     if (pMissileTxt->DmgSymPerCalc != -1) {
-      nLevDamBonus = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->DmgSymPerCalc, nMissileId, nLevel);
-      if (nLevDamBonus) {
-        nLevDamBonus = DATATBLS::DataTbls::D2ApplyPercent(nValue, nLevDamBonus, 100);
-        nValue += nLevDamBonus;
+      int32_t nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->DmgSymPerCalc, nMissileId, nMissileLevel);
+      if (nPercent) {
+        nValue += DATATBLS::DataTbls::D2ApplyPercent(nValue, nPercent, 100);
       }
     }
 
@@ -676,11 +675,12 @@ int32_t __stdcall GetMaxDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
     if (nMissileId < 0 && pUnit) {
       nMissileId = pUnit->nClassId;
     }
+    int32_t nMissileLevel = nLevel;
     if (nLevel <= 0 && pUnit) {
       if (pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
-        nLevel = (int32_t)pUnit->pUnitData.pUnitDataMissile->nSkillLevel;
+        nMissileLevel = (int32_t)pUnit->pUnitData.pUnitDataMissile->nSkillLevel;
       } else {
-        nLevel = 0;
+        nMissileLevel = 0;
       }
     }
 
@@ -689,13 +689,11 @@ int32_t __stdcall GetMaxDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
       return 0;
     }
 
-    int32_t nLevDamBonus = Skills::SKILLS_GetValueByLevelBreakpoints(nLevel, &pMissileTxt->MaxLevDam1);
-    int nValue = nLevDamBonus + pMissileTxt->MaxDamage;
+    int nValue = pMissileTxt->MaxDamage + Skills::SKILLS_GetValueByLevelBreakpoints(nMissileLevel, &pMissileTxt->MaxLevDam1);
     if (pMissileTxt->DmgSymPerCalc != -1) {
-      nLevDamBonus = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->DmgSymPerCalc, nMissileId, nLevel);
-      if (nLevDamBonus) {
-        nLevDamBonus = DATATBLS::DataTbls::D2ApplyPercent(nValue, nLevDamBonus, 100);
-        nValue += nLevDamBonus;
+      int32_t nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->DmgSymPerCalc, nMissileId, nMissileLevel);
+      if (nPercent) {
+        nValue += DATATBLS::DataTbls::D2ApplyPercent(nValue, nPercent, 100);
       }
     }
 
@@ -719,11 +717,12 @@ int32_t __stdcall GetMinElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
     if (nMissileId < 0 && pUnit) {
       nMissileId = pUnit->nClassId;
     }
+    int32_t nMissileLevel = nLevel;
     if (nLevel <= 0 && pUnit) {
       if (pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
-        nLevel = (int32_t)pUnit->pUnitData.pUnitDataMissile->nSkillLevel;
+        nMissileLevel = (int32_t)pUnit->pUnitData.pUnitDataMissile->nSkillLevel;
       } else {
-        nLevel = 0;
+        nMissileLevel = 0;
       }
     }
 
@@ -732,13 +731,11 @@ int32_t __stdcall GetMinElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
       return 0;
     }
 
-    int32_t nLevDamBonus = Skills::SKILLS_GetValueByLevelBreakpoints(nLevel, &pMissileTxt->MinELev1);
-    int nValue = nLevDamBonus + pMissileTxt->EMin;
+    int nValue = pMissileTxt->EMin + Skills::SKILLS_GetValueByLevelBreakpoints(nMissileLevel, &pMissileTxt->MinELev1);
     if (pMissileTxt->EDmgSymPerCalc != -1) {
-      nLevDamBonus = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->EDmgSymPerCalc, nMissileId, nLevel);
-      if (nLevDamBonus) {
-        nLevDamBonus = DATATBLS::DataTbls::D2ApplyPercent(nValue, nLevDamBonus, 100);
-        nValue += nLevDamBonus;
+      int32_t nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->EDmgSymPerCalc, nMissileId, nMissileLevel);
+      if (nPercent) {
+        nValue += DATATBLS::DataTbls::D2ApplyPercent(nValue, nPercent, 100);
       }
     }
 
@@ -753,11 +750,12 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
     if (nMissileId < 0 && pUnit) {
       nMissileId = pUnit->nClassId;
     }
+    int32_t nMissileLevel = nLevel;
     if (nLevel <= 0 && pUnit) {
       if (pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
-        nLevel = (int32_t)pUnit->pUnitData.pUnitDataMissile->nSkillLevel;
+        nMissileLevel = (int32_t)pUnit->pUnitData.pUnitDataMissile->nSkillLevel;
       } else {
-        nLevel = 0;
+        nMissileLevel = 0;
       }
     }
 
@@ -766,13 +764,11 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
       return 0;
     }
 
-    int32_t nLevDamBonus = Skills::SKILLS_GetValueByLevelBreakpoints(nLevel, &pMissileTxt->MaxELev1);
-    int nValue = nLevDamBonus + pMissileTxt->EMax;
+    int nValue = pMissileTxt->EMax + Skills::SKILLS_GetValueByLevelBreakpoints(nMissileLevel, &pMissileTxt->MaxELev1);
     if (pMissileTxt->EDmgSymPerCalc != -1) {
-      nLevDamBonus = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->EDmgSymPerCalc, nMissileId, nLevel);
-      if (nLevDamBonus) {
-        nLevDamBonus = DATATBLS::DataTbls::D2ApplyPercent(nValue, nLevDamBonus, 100);
-        nValue += nLevDamBonus;
+      int32_t nPercent = MISSILE_EvalMissileCalc(pUnit, pOwner, pMissileTxt->EDmgSymPerCalc, nMissileId, nMissileLevel);
+      if (nPercent) {
+        nValue += DATATBLS::DataTbls::D2ApplyPercent(nValue, nPercent, 100);
       }
     }
 
@@ -789,16 +785,14 @@ int32_t __stdcall GetElementalLength(D2UnitStrc * nUnused, D2UnitStrc * pUnit, i
       return pMissileTxt->ELen;
     }
     if (nLevel > 0x10) {
-      nLevLenBonus = (nLevel - 0x10) * pMissileTxt->ELevLen3 + pMissileTxt->ELevLen2 * 8;
+      nLevLenBonus = 7 * pMissileTxt->ELevLen1 + 8 * pMissileTxt->ELevLen2 + (nLevel - 0x10) * pMissileTxt->ELevLen3;
+    } else if (nLevel > 8) {
+      nLevLenBonus = 7 * pMissileTxt->ELevLen1 + (nLevel - 8) * pMissileTxt->ELevLen2;
     } else {
-      if (nLevel <= 8) {
-        return pMissileTxt->ELen + (nLevel - 1) * pMissileTxt->ELevLen1;
-      }
-
-      nLevLenBonus = (nLevel - 8) * pMissileTxt->ELevLen2;
+      nLevLenBonus = (nLevel - 1) * pMissileTxt->ELevLen1;
     }
 
-    return pMissileTxt->ELen + (nLevLenBonus + pMissileTxt->ELevLen1 * 7);
+    return pMissileTxt->ELen + nLevLenBonus;
 }
 
 // Resolves a numeric parameter from a missile's Missiles.txt row, selected by nParamId. Validates pUnit is a UNIT_MISSILE (or null) and nMissileId is in range, then switch(nParamId) returns either a raw txt column (Param1-5, CltParam1-5, sHitPar/cHitPar 1-3, dParam1-2, level), a computed elemental/physical min/max damage (via GetMin/MaxElemDamage / GetMin/MaxDamage, some >>8 fixed-point), a range (LevRange*level+Range), or a per-level scaling (linear param1+(lvl-1)*param2 or SKILLS_CalcDiminishingReturns). Returns 0 if validation fails or nParamId is unhandled. Used by missile damage/behavior calc.
@@ -815,43 +809,62 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
 
     switch (nParamId) {
       case '\0':
-        return pMissileTxt->Param1;
+        nResult = pMissileTxt->Param1;
+        break;
       case '\x01':
-        return pMissileTxt->Param2;
+        nResult = pMissileTxt->Param2;
+        break;
       case '\x02':
-        return pMissileTxt->Param3;
+        nResult = pMissileTxt->Param3;
+        break;
       case '\x03':
-        return pMissileTxt->Param4;
+        nResult = pMissileTxt->Param4;
+        break;
       case '\x04':
-        return pMissileTxt->Param5;
+        nResult = pMissileTxt->Param5;
+        break;
       case '\x05':
-        return pMissileTxt->CltParam1;
+        nResult = pMissileTxt->CltParam1;
+        break;
       case '\x06':
-        return pMissileTxt->CltParam2;
+        nResult = pMissileTxt->CltParam2;
+        break;
       case '\a':
-        return pMissileTxt->CltParam3;
+        nResult = pMissileTxt->CltParam3;
+        break;
       case '\b':
-        return pMissileTxt->CltParam4;
+        nResult = pMissileTxt->CltParam4;
+        break;
       case '\t':
-        return pMissileTxt->CltParam5;
+        nResult = pMissileTxt->CltParam5;
+        break;
       case '\n':
-        return pMissileTxt->sHitPar1;
+        nResult = pMissileTxt->sHitPar1;
+        break;
       case '\v':
-        return pMissileTxt->sHitPar2;
+        nResult = pMissileTxt->sHitPar2;
+        break;
       case '\f':
-        return pMissileTxt->sHitPar3;
+        nResult = pMissileTxt->sHitPar3;
+        break;
       case '\r':
-        return pMissileTxt->cHitPar1;
+        nResult = pMissileTxt->cHitPar1;
+        break;
       case '\x0e':
-        return pMissileTxt->cHitPar2;
+        nResult = pMissileTxt->cHitPar2;
+        break;
       case '\x0f':
-        return pMissileTxt->cHitPar3;
+        nResult = pMissileTxt->cHitPar3;
+        break;
       case '\x10':
-        return pMissileTxt->dParam1;
+        nResult = pMissileTxt->dParam1;
+        break;
       case '\x11':
-        return pMissileTxt->dParam2;
+        nResult = pMissileTxt->dParam2;
+        break;
       case '\x12':
-        return nLevel;
+        nResult = nLevel;
+        break;
       case '\x13':
         nResult = GetMinElemDamage(pUnit, pOwner, nMissileId, nLevel);
       return nResult >> 8;
@@ -860,13 +873,13 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
       return nResult >> 8;
       case '\x15':
         nResult = GetElementalLength(pUnit, pOwner, nMissileId, nLevel);
-      return nResult;
+        break;
       case '\x16':
         nResult = GetMinElemDamage(pUnit, pOwner, nMissileId, nLevel);
-      return nResult;
+        break;
       case '\x17':
         nResult = GetMaxElemDamage(pUnit, pOwner, nMissileId, nLevel);
-      return nResult;
+        break;
       case '\x18':
         nResult = GetMinDamage(pUnit, pOwner, nMissileId, nLevel);
       return nResult >> 8;
@@ -875,50 +888,61 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
       return nResult >> 8;
       case '\x1a':
         nResult = GetMinDamage(pUnit, pOwner, nMissileId, nLevel);
-      return nResult;
+        break;
       case '\x1b':
         nResult = GetMaxDamage(pUnit, pOwner, nMissileId, nLevel);
-      return nResult;
+        break;
       case '\x1c':
-        return pMissileTxt->LevRange * nLevel + (int)pMissileTxt->Range;
+        nResult = pMissileTxt->LevRange * nLevel + (int)pMissileTxt->Range;
+        break;
       case '\x1d':
-        return (nLevel - 1) * pMissileTxt->Param2 + pMissileTxt->Param1;
+        nResult = pMissileTxt->Param1 + (nLevel - 1) * pMissileTxt->Param2;
+        break;
       case '\x1e':
         nResult = Skills::SKILLS_CalcDiminishingReturns(nLevel, pMissileTxt->Param1, pMissileTxt->Param2);
-      return nResult;
+        break;
       case '\x1f':
-        return (nLevel - 1) * pMissileTxt->Param4 + pMissileTxt->Param3;
+        nResult = pMissileTxt->Param3 + (nLevel - 1) * pMissileTxt->Param4;
+        break;
       case ' ':
         nResult = Skills::SKILLS_CalcDiminishingReturns(nLevel, pMissileTxt->Param3, pMissileTxt->Param4);
-      return nResult;
+        break;
       case '!':
-        return (nLevel - 1) * pMissileTxt->CltParam2 + pMissileTxt->CltParam1;
+        nResult = pMissileTxt->CltParam1 + (nLevel - 1) * pMissileTxt->CltParam2;
+        break;
       case '\"':
         nResult = Skills::SKILLS_CalcDiminishingReturns(nLevel, pMissileTxt->CltParam1, pMissileTxt->CltParam2);
-      return nResult;
+        break;
       case '#':
-        return (nLevel - 1) * pMissileTxt->CltParam4 + pMissileTxt->CltParam3;
+        nResult = pMissileTxt->CltParam3 + (nLevel - 1) * pMissileTxt->CltParam4;
+        break;
       case '$':
         nResult = Skills::SKILLS_CalcDiminishingReturns(nLevel, pMissileTxt->CltParam3, pMissileTxt->CltParam4);
-      return nResult;
+        break;
       case '%':
-        return (nLevel - 1) * pMissileTxt->sHitPar2 + pMissileTxt->sHitPar1;
+        nResult = pMissileTxt->sHitPar1 + (nLevel - 1) * pMissileTxt->sHitPar2;
+        break;
       case '&':
         nResult = Skills::SKILLS_CalcDiminishingReturns(nLevel, pMissileTxt->sHitPar1, pMissileTxt->sHitPar2);
-      return nResult;
+        break;
       case '\'':
-        return (nLevel - 1) * pMissileTxt->cHitPar2 + pMissileTxt->cHitPar1;
+        nResult = pMissileTxt->cHitPar1 + (nLevel - 1) * pMissileTxt->cHitPar2;
+        break;
       case '(':
         nResult = Skills::SKILLS_CalcDiminishingReturns(nLevel, pMissileTxt->cHitPar1, pMissileTxt->cHitPar2);
-      return nResult;
+        break;
       case ')':
-        return (nLevel - 1) * pMissileTxt->dParam2 + pMissileTxt->dParam1;
+        nResult = pMissileTxt->dParam1 + (nLevel - 1) * pMissileTxt->dParam2;
+        break;
       case '*':
         nResult = Skills::SKILLS_CalcDiminishingReturns(nLevel, pMissileTxt->dParam1, pMissileTxt->dParam2);
-      return nResult;
+        break;
+      default:
+        nResult = 0;
+        break;
     }
 
-    return 0;
+    return nResult;
 }
 
 int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t nOperand3, void * pContext) {

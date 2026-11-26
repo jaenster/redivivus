@@ -466,11 +466,17 @@ static int __thiscall SBMP_WriteTGA(uint8_t * pPixels, void * hFile, uint8_t * n
 static void __stdcall SBMP_FlipImage(void * dst, uint8_t * src, int dstSize, int rowWidth, int srcStride, int numRows) {
     D2_CHECKS_BEGIN;
     D2_CHECK(dst);
+    D2_CHECKS_ASSUME_(dst);
     D2_CHECK(src);
+    D2_CHECKS_ASSUME_(src);
     D2_CHECK(dstSize);
+    D2_CHECKS_ASSUME_(dstSize);
     D2_CHECK(rowWidth);
+    D2_CHECKS_ASSUME_(rowWidth);
     D2_CHECK(srcStride);
+    D2_CHECKS_ASSUME_(srcStride);
     D2_CHECK(numRows);
+    D2_CHECKS_ASSUME_(numRows);
     D2_CHECKS_END_VOID(SErr::SErrSetLastError(0x57));
     src += (numRows - 1) * srcStride;
     uint8_t* pDstEnd = (uint8_t*)dst + dstSize;
@@ -1436,8 +1442,11 @@ uint32_t __stdcall SBmpAllocLoadImage(char * szText, void * pPalette, void * * p
 
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
+    D2_CHECKS_ASSUME_(szText);
     D2_CHECK(*szText != '\0');
+    D2_CHECKS_ASSUME_(*szText != '\0');
     D2_CHECK(ppOutputBuf);
+    D2_CHECKS_ASSUME_(ppOutputBuf);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     int32_t iOpenResult;
     iOpenResult = SFile::SFileOpenFile(szText, &hArchiveFile);

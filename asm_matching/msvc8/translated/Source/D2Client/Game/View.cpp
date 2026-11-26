@@ -421,25 +421,14 @@ void __fastcall GAMEVIEW_PrepareScene(D2GameViewStrc * pGameView, uint32_t nFlag
 }
 
 void __stdcall VIEW_GenerateRandomViewParams(int32_t nStarIndex, int32_t bRespawn) {
-    uint32_t nStarXPos;
-    uint32_t nYPos;
-    uint32_t seed;
+    int32_t* const pStarX = &gaArcaneStarXPos[nStarIndex];
     D2SeedStrc* pStarSeed = gpArcaneStarsSeed;
-    if (bRespawn) {
-      seed = D2_SeedRoll(gpArcaneStarsSeed);
-      nStarXPos = (seed & 7) - 1 + UI::SpellSel::WindowSizeX;
-    } else {
-      nStarXPos = D2Common::Seed::UNIT_GetModuloFromSeed(gpArcaneStarsSeed, UI::SpellSel::WindowSizeX);
-    }
-
-    int nWindowHeight = UI::ui::WindowSizeY;
-    gaArcaneStarXPos[nStarIndex] = nStarXPos;
-    nYPos = D2_SeedRollLimited(pStarSeed, nWindowHeight);
-    gaArcaneStarYPos[nStarIndex] = nYPos;
-    seed = D2_SeedRoll(pStarSeed);
-    gaArcaneStarXVelocity[nStarIndex] = (int)(seed / 5) * 5 - seed - 1;
-    seed = D2_SeedRoll(pStarSeed);
-    gaArcaneStarColors[nStarIndex] = gaArcaneStarColorTable[seed & 7];
+    const int32_t nStarXPos = bRespawn ? (D2_SeedRoll(pStarSeed) & 7) + UI::SpellSel::WindowSizeX - 1 : D2Common::Seed::UNIT_GetModuloFromSeed(pStarSeed, UI::SpellSel::WindowSizeX);
+    const int nWindowHeight = UI::ui::WindowSizeY;
+    *pStarX = nStarXPos;
+    gaArcaneStarYPos[nStarIndex] = D2_SeedRollLimited(pStarSeed, nWindowHeight);
+    gaArcaneStarXVelocity[nStarIndex] = -(int)(D2_SeedRoll(pStarSeed) % 5) - 1;
+    gaArcaneStarColors[nStarIndex] = gaArcaneStarColorTable[D2_SeedRoll(pStarSeed) & 7];
 }
 
 // Renders the animated star-field overlay used in the Arcane Sanctuary. On first call, seeds a PRNG from SHAKE_StartTickcount, generates 8 brightness-graduated palette entries into gaArcaneStarColorTable, then calls VIEW_GenerateRandomViewParams for each of the 256 stars. Each frame, draws all 256 stars as single-pixel lines using D2GFX_DrawLine. Every 40 ms (tick delta > 0x28), advances each star's X position by its velocity; stars that fall off-screen are re-randomised via VIEW_GenerateRandomViewParams.
@@ -898,49 +887,39 @@ void __fastcall ViewDraw2(D2GameViewStrc * pGameView) {
 
 // Applies screen-shake offset to the camera center point. Computes shake magnitude from elapsed ticks using a three-phase envelope (fade-in over Arg3, sustain over Arg1, fade-out over Arg2). Rolls random X/Y offsets from the player unit seed and adds them to *pCenterX/*pCenterY. Updates the global shake-sound volume proportionally; zeros shake state when the envelope expires.
 void __fastcall SHAKE_AdjustCenterByShake(uint32_t * pCenterX, uint32_t * pCenterY) {
-    uint32_t nShakeMagnitude;
-    DWORD nCurrentTickCount;
-    nCurrentTickCount = GetTickCount();
-    uint32_t nTicks;
-    nTicks = nCurrentTickCount - SHAKE_StartTickcount;
-    uint32_t nSoundIntensity;
-    nSoundIntensity = 0;
-    if (nTicks > SHAKE_Arg2 + SHAKE_Arg1 + SHAKE_Arg3) {
-      SHAKE_UpdateShakeSoundVolume(0);
+    const uint32_t nTicks = GetTickCount() - SHAKE_StartTickcount;
+    const uint32_t nFadeIn = SHAKE_Arg3;
+    const uint32_t nHold = SHAKE_Arg1;
+    const uint32_t nFadeOut = SHAKE_Arg2;
+    uint32_t nShakeMagnitude = 0;
+    if (nTicks > nFadeOut + nHold + nFadeIn) {
+      SHAKE_UpdateShakeSoundVolume(nShakeMagnitude);
       SHAKE_Amplitude = 0;
       SHAKE_OFFSET_X = 0;
       SHAKE_OFFSET_Y = 0;
       return;
     }
-    if (nTicks < SHAKE_Arg3) {
-      if (!SHAKE_Arg3) {
-        goto update_sound;
-      }
 
-      nShakeMagnitude = SHAKE_Amplitude * nTicks / SHAKE_Arg3;
-    } else {
+    if (nTicks < nFadeIn) {
+      if (nFadeIn) {
+        nShakeMagnitude = SHAKE_Amplitude * nTicks / nFadeIn;
+      }
+    } else if (nTicks < nHold + nFadeIn) {
       nShakeMagnitude = SHAKE_Amplitude;
-      if (nTicks >= SHAKE_Arg1 + SHAKE_Arg3) {
-        if (!SHAKE_Arg2) {
-          goto update_sound;
-        }
-
-        nShakeMagnitude = (uint32_t)((uint32_t)((uint32_t)(int)(SHAKE_Arg2 - nTicks + SHAKE_Arg1 + SHAKE_Arg3) * (int)SHAKE_Amplitude) / SHAKE_Arg2);
-      }
+    } else if (nFadeOut) {
+      nShakeMagnitude = (nFadeOut - nTicks + nHold + nFadeIn) * SHAKE_Amplitude / nFadeOut;
     }
 
-    nSoundIntensity = nShakeMagnitude;
     if (nShakeMagnitude) {
-      D2UnitStrc* pPlayerUnit_lcl;
-      pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-      SHAKE_OFFSET_X = D2Game::Seed::RollBetweenMinAndMax(&pPlayerUnit_lcl->sSeed, -nShakeMagnitude, nShakeMagnitude * 2);
-      SHAKE_OFFSET_Y = D2Game::Seed::RollBetweenMinAndMax(&pPlayerUnit_lcl->sSeed, -nShakeMagnitude, nShakeMagnitude * 2);
+      D2SeedStrc* pSeed = &UNIT::Player::GetPlayerUnit_UI()->sSeed;
+      SHAKE_OFFSET_X = D2Game::Seed::RollBetweenMinAndMax(pSeed, -nShakeMagnitude, nShakeMagnitude * 2);
+      const uint32_t nOffsetY = D2Game::Seed::RollBetweenMinAndMax(pSeed, -nShakeMagnitude, nShakeMagnitude * 2);
       *pCenterX += SHAKE_OFFSET_X;
-      *pCenterY += SHAKE_OFFSET_Y;
+      *pCenterY += nOffsetY;
+      SHAKE_OFFSET_Y = nOffsetY;
     }
 
-    update_sound:
-    SHAKE_UpdateShakeSoundVolume(nSoundIntensity);
+    SHAKE_UpdateShakeSoundVolume(nShakeMagnitude);
 }
 
 }}} // namespace D2Client::GAME::View

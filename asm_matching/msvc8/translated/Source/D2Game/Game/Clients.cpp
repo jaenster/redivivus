@@ -1623,98 +1623,82 @@ int __fastcall CLIENT_GetLangId(D2ClientStrc * pClient) {
 }
 
 // Places player unit into the game world (state 3→waiting rooms). Spawns unit at town coordinates (or provided room), sends ReassignPlayer packet, loads corpses from inventory (resurrects mercs or places corpse objects), restores iron golem from save if present. Core of server-side join flow after character load.
-void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
-    eD2LevelId eLevelId;
-    uint32_t dwCorpseGUID;
-    eD2UnitType pCorpsePlayerData;
-    D2UnitStrc* pUnit_00;
-    uint32_t nSpawnUnitSizeX;
-    D2RoomStrc* pCorpseRoom;
-    D2SkillStrc* pSkill;
-    D2DrlgRoomCoordsStrc sRoomCoords;
-    POINT ptCorpsePos;
-    int32_t nSpawnX;
-    int32_t nSpawnY;
-    int32_t nErrorLine;
-    eD2LevelId nRoom;
-    D2DrlgActStrc** pX;
-    ::SGAMEDATA* pGame_00 = pGame;
-    if (!(pGame && pUnit && pClient)) {
+void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nXArg, int32_t nYArg) {
+    if (!pGame || !pUnit || !pClient) {
       return;
     }
 
-    uint8_t bActNo = GetAct(pClient);
+    const uint8_t bActNo = GetAct(pClient);
+    int32_t nSpawnX;
+    int32_t nSpawnY;
     if (!pRoom) {
-      pX = pGame_00->pAct + bActNo;
-      nRoom = (eD2LevelId)D2Common::DUNGEON::Dungeon::GetTownLevelIdFromAct(pGame_00->pAct[bActNo]);
-      dwCorpseGUID = D2Common::Units::GetUnitSizeX(pUnit);
-      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(*pX, nRoom, 0, &nSpawnX, &nSpawnY, dwCorpseGUID);
+      const eD2LevelId eTownLevelId = (eD2LevelId)D2Common::DUNGEON::Dungeon::GetTownLevelIdFromAct(pGame->pAct[bActNo]);
+      pRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame->pAct[bActNo], eTownLevelId, 0, &nSpawnX, &nSpawnY, D2Common::Units::GetUnitSizeX(pUnit));
       if (!pRoom) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a1);
         exit(-1);
       }
 
+      D2DrlgRoomCoordsStrc sRoomCoords;
       D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
       SCmd::NET_D2GS_SERVER_Send_0x07_MapReveal(pClient, D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom), (uint16_t)sRoomCoords.sTileRect.left, (uint16_t)sRoomCoords.sTileRect.top);
     } else {
-      nSpawnX = nX;
-      nSpawnY = nY;
+      nSpawnX = nXArg;
+      nSpawnY = nYArg;
     }
 
     CLIENT_SetRoom(pClient, pRoom);
-    UNIT::SUnit::UNITS_PlaceUnitInRoom(pUnit, nSpawnX, nSpawnY, pGame_00, pRoom, 0);
+    UNIT::SUnit::UNITS_PlaceUnitInRoom(pUnit, nSpawnX, nSpawnY, pGame, pRoom, 0);
     pClient->fClientFlags &= -2;
-    SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', pUnit->eUnitType, pUnit->nUnitGUID, (uint16_t)nSpawnX, (uint16_t)nSpawnY, '\x01');
-    SCmd::NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof(pClient, pGame_00->dwMonSeed);
-    pRoom = (D2RoomStrc*)D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory);
-    while (pRoom) {
-      dwCorpseGUID = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID((D2CorpseStrc*)pRoom);
-      pCorpsePlayerData = D2Common::INVENTORY::Inventory::CORPSE_GetData((D2CorpseStrc*)pRoom);
-      if (pCorpsePlayerData == UNIT_PLAYER) {
-        nErrorLine = D2Common::INVENTORY::Inventory::CORPSE_GetMercClassId((D2CorpseStrc*)pRoom);
-        pRoom = (D2RoomStrc*)D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse((D2CorpseStrc*)pRoom);
+    const uint32_t nUnitGUID = pUnit->nUnitGUID;
+    const eD2UnitType eUnitType = pUnit ? pUnit->eUnitType : UNIT_COUNT;
+    SCmd::NET_D2GS_SERVER_Send_0x15_WarpXY(pClient, '\x15', eUnitType, nUnitGUID, (uint16_t)nSpawnX, (uint16_t)nSpawnY, '\x01');
+    SCmd::NET_D2GS_SERVER_Send_0x7E_LoadMonsterCof(pClient, pGame->dwMonSeed);
+
+    D2CorpseStrc* pCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetCorpse(pUnit->pInventory);
+    while (pCorpse) {
+      const uint32_t dwCorpseGUID = D2Common::INVENTORY::Inventory::ROOMCORPSE_GetGUID(pCorpse);
+      if (D2Common::INVENTORY::Inventory::CORPSE_GetData(pCorpse) == UNIT_PLAYER) {
+        const uint16_t wMercName = (uint16_t)D2Common::INVENTORY::Inventory::CORPSE_GetMercClassId(pCorpse);
+        pCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pCorpse);
         D2Common::INVENTORY::Inventory::INVENTORY_RemoveCorpse(pUnit->pInventory, dwCorpseGUID, 0);
-        if (dwCorpseGUID && (uint16_t)nErrorLine) {
-          UNIT::SUNITNPC::CreateMerc(pGame_00, pUnit, (uint16_t)nErrorLine, dwCorpseGUID, 0xffff, 0, 0);
+        if (dwCorpseGUID && wMercName) {
+          UNIT::SUNITNPC::CreateMerc(pGame, pUnit, wMercName, dwCorpseGUID, 0xffff, 0, 0);
         }
       } else {
-        pUnit_00 = UNIT::SUnit::FindUnitFromTable(pGame_00, UNIT_PLAYER, dwCorpseGUID);
-        if (pUnit_00) {
-          eLevelId = D2Common::DUNGEON::Dungeon::GetTownLevelIdFromActNo(bActNo);
-          nX = 0;
-          nY = 0;
-          nSpawnUnitSizeX = D2Common::Units::GetUnitSizeX(pUnit_00);
-          pCorpseRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame_00->pAct[bActNo], eLevelId, 0, &nX, &nY, nSpawnUnitSizeX);
-          ptCorpsePos.x = nX;
-          ptCorpsePos.y = nY;
-          PLAYER::Player::PLAYER_PlaceCorpse(pGame_00, pCorpseRoom, dwCorpseGUID, &ptCorpsePos);
+        D2UnitStrc* pCorpsePlayer = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_PLAYER, dwCorpseGUID);
+        if (pCorpsePlayer) {
+          const eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::GetTownLevelIdFromActNo(bActNo);
+          int32_t nCorpseX = 0;
+          int32_t nCorpseY = 0;
+          D2RoomStrc* pCorpseRoom = D2Common::DUNGEON::Dungeon::SpawnUnit(pGame->pAct[bActNo], eLevelId, 0, &nCorpseX, &nCorpseY, D2Common::Units::GetUnitSizeX(pCorpsePlayer));
+          POINT ptCorpsePos;
+          ptCorpsePos.x = nCorpseX;
+          ptCorpsePos.y = nCorpseY;
+          PLAYER::Player::PLAYER_PlaceCorpse(pGame, pCorpseRoom, dwCorpseGUID, &ptCorpsePos);
         }
 
-        pRoom = (D2RoomStrc*)D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse((D2CorpseStrc*)pRoom);
+        pCorpse = D2Common::INVENTORY::Inventory::INVENTORY_GetNextCorpse(pCorpse);
       }
     }
 
-    UNIT::SUNITNPC::SUNITNPC_UpdateHirelingPosition(pGame_00, pUnit);
-    dwCorpseGUID = pClient->dwGolemGUID;
-    if (!(dwCorpseGUID && dwCorpseGUID != -1)) {
-      return;
-    }
-
-    pRoom = (D2RoomStrc*)UNIT::SUnit::FindUnitFromTable(pGame_00, UNIT_ITEM, dwCorpseGUID);
-    if ((D2UnitStrc*)pRoom) {
-      pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, SKILL_IronGolem);
-      if (pSkill) {
-        nX = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-        nErrorLine = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
-        D2Common::Units::SetXForStaticUnit((D2UnitStrc*)pRoom, nErrorLine);
-        nErrorLine = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-        D2Common::Units::SetYForStaticUnit((D2UnitStrc*)pRoom, nErrorLine);
-        D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, (D2UnitStrc*)pRoom);
-        SKILLS::SkillsServer::SKILL_SpawnMissileFunction(pGame_00, pUnit, SKILL_IronGolem, nX, 1, 0, 0);
+    UNIT::SUNITNPC::SUNITNPC_UpdateHirelingPosition(pGame, pUnit);
+    const uint32_t dwGolemGUID = pClient->dwGolemGUID;
+    if (dwGolemGUID && dwGolemGUID != -1) {
+      D2UnitStrc* pGolemItem = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_ITEM, dwGolemGUID);
+      if (pGolemItem) {
+        D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, SKILL_IronGolem);
+        if (pSkill) {
+          const int32_t nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
+          D2Common::Units::SetXForStaticUnit(pGolemItem, D2Common::Units::GetXPosFromDynamicPathUnit(pUnit));
+          D2Common::Units::SetYForStaticUnit(pGolemItem, D2Common::Units::GetYPosFromDynamicPathUnit(pUnit));
+          D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pGolemItem);
+          SKILLS::SkillsServer::SKILL_SpawnMissileFunction(pGame, pUnit, SKILL_IronGolem, nSkillLevel, 1, 0, 0);
+        }
       }
-    }
 
-    pClient->dwGolemGUID = -1;
+      pClient->dwGolemGUID = -1;
+    }
 }
 
 // Main client join handler: validates expansion/hardcore compatibility, loads or creates player unit, sends handshake packet (0x0B), portal flags (0x5F), stats, items, hotkeys, selected skills (left/right), life/mana/stamina. Computes A5Q3 resist bonuses if expansion. Returns error code on validation failure (kicks client). State 1→loading character data.

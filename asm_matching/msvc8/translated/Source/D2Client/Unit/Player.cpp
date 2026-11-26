@@ -2444,14 +2444,12 @@ BOOL __fastcall PLAYER_GetMercAppearanceBytes(uint32_t * pAppearanceOut, uint32_
 
 // Teleports a player unit to a new room/position (via PATH_CheckCollisionFlags) and, if the unit was in a movement mode, re-issues the appropriate walk/run PlayerMessage to resume movement toward the previous target unit or coordinates.
 void __fastcall CLIENT_WarpPlayerAndContinueMove(D2UnitStrc * pUnit, D2RoomStrc * pRoom, uint16_t nNewX, uint16_t nNewY) {
-    D2ServerMessageHandleStrc sMoveMessage;
     eD2PlayerAnimMode eAnimMode = pUnit->eAnimMode.ePlayerMode;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2UnitStrc* pTargetUnit = 0;
     int bWasMoveMode = 0;
     int32_t nDestX = 0;
     int32_t nDestY = 0;
-    D2RoomStrc* pTargetRoom = pRoom;
     if ((int)eAnimMode >= 2 && ((int)eAnimMode <= 3 || eAnimMode == TownWalk)) {
       bWasMoveMode = 1;
       pTargetUnit = CUnit::GetConfirmedTargetUnit(pUnit);
@@ -2460,22 +2458,20 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(D2UnitStrc * pUnit, D2RoomStrc 
       }
     }
 
-    D2Common::PATH::Path::PATH_MoveUnitToRoomPosition(pDynamicPath, pUnit, pTargetRoom, nNewX, nNewY);
-    if (!bWasMoveMode) {
-      return;
+    D2Common::PATH::Path::PATH_MoveUnitToRoomPosition(pDynamicPath, pUnit, pRoom, nNewX, nNewY);
+    if (bWasMoveMode) {
+      D2ServerMessageHandleStrc sMoveMessage;
+      memset(&sMoveMessage, 0, sizeof(sMoveMessage));
+      if (pTargetUnit) {
+        sMoveMessage.nSkillId = pTargetUnit->eUnitType;
+        sMoveMessage.nItemId = pTargetUnit->nUnitGUID;
+        PlayerMessage(eAnimMode == eD2PlayerAnimMode_ns::Run ? 0x18 : 0, pUnit, &sMoveMessage, 0);
+      } else {
+        sMoveMessage.nSkillId = nDestX;
+        sMoveMessage.nItemId = nDestY;
+        PlayerMessage(eAnimMode == eD2PlayerAnimMode_ns::Run ? 0x17 : 0x1, pUnit, &sMoveMessage, 0);
+      }
     }
-
-    memset(&sMoveMessage, 0, sizeof(sMoveMessage));
-    if (pTargetUnit) {
-      sMoveMessage.nItemId = pTargetUnit->nUnitGUID;
-      sMoveMessage.nSkillId = pTargetUnit->eUnitType;
-      PlayerMessage(eAnimMode == eD2PlayerAnimMode_ns::Run ? 0x18 : 0, pUnit, &sMoveMessage, 0);
-      return;
-    }
-
-    sMoveMessage.nItemId = nDestY;
-    sMoveMessage.nSkillId = nDestX;
-    PlayerMessage(eAnimMode != eD2PlayerAnimMode_ns::Run ? 0x1 : 0x17, pUnit, &sMoveMessage, 0);
 }
 
 // Client-side stamina-depletion handler for the local player. When the player's stamina hits 0, cancels any active run/walk: if chasing a unit target, re-issues a follow message; otherwise captures the current destination, frees any pending light map, resets the current skill, and transitions the unit to Walk or TownWalk mode (or falls back to CLIENT_SetAnimModeAndMoveToCurrentPos if no valid path target). No-ops for non-local or non-zero stamina units.

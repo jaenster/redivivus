@@ -58,21 +58,16 @@ static inline D3DFloorCacheNodeStrc* __fastcall D3DFLOOR_PopUsedHead(D3DFloorCac
 
 int __fastcall D3DFLOOR_Initialize(D3DFloorCacheStrc * pCache, int nBaseMemoryUsed, int nAvailableMemory, uint32_t dwTextureSize) {
     D3DFloorCacheNodeStrc* pCurrentNode;
-    uint32_t uNodeCountCandidate = (uint32_t)(nAvailableMemory - nBaseMemoryUsed) / dwTextureSize;
-    pCache->nMaxNodes = uNodeCountCandidate;
-    if ((int)uNodeCountCandidate >= 0x400) {
-      uNodeCountCandidate = 0x400;
-    }
-
-    pCache->nMaxNodes = uNodeCountCandidate;
-    D3DFloorCacheNodeStrc* pNodeBuffer = (D3DFloorCacheNodeStrc*)D2_ALLOC_AT(uNodeCountCandidate * sizeof(D3DFloorCacheNodeStrc), ".\\Src\\d3dFloorCache.cpp", 0x2d);
-    pCache->pNodeBuffer = pNodeBuffer;
-    if (!pNodeBuffer) {
+    pCache->nMaxNodes = (uint32_t)(nAvailableMemory - nBaseMemoryUsed) / dwTextureSize;
+    pCache->nMaxNodes = pCache->nMaxNodes < 0x400 ? pCache->nMaxNodes : 0x400;
+    int nSize = pCache->nMaxNodes * sizeof(D3DFloorCacheNodeStrc);
+    pCache->pNodeBuffer = (D3DFloorCacheNodeStrc*)D2_ALLOC_AT(nSize, ".\\Src\\d3dFloorCache.cpp", 0x2d);
+    if (!pCache->pNodeBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e);
       exit(-1);
     }
 
-    memset(pNodeBuffer, 0, uNodeCountCandidate * sizeof(*pNodeBuffer));
+    memset(pCache->pNodeBuffer, 0, nSize);
     for (int nNodeIndex = 0; nNodeIndex <= pCache->nMaxNodes - 1; nNodeIndex++) {
       BOOL bSurfaceCreated;
       pCurrentNode = &pCache->pNodeBuffer[nNodeIndex];

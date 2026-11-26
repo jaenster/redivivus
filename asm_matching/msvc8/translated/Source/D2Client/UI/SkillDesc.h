@@ -115,8 +115,8 @@ void __fastcall SKILLDESC_BuildStatBuffDesc(struct D2UnitStrc * pUnit, uint16_t 
 void __fastcall SKILLDESC_AppendStatBuffText(struct D2UnitStrc * pUnit, uint16_t * wszOutputBuffer, int32_t nMaxBufferSize, int32_t bAppendNewline, uint16_t * wszPrefixText);
 void __fastcall SKILLDESC_AppendItemBuffText(struct D2UnitStrc * pUnit, struct D2UnitStrc * pItem, uint16_t * wszOutputBuffer, int32_t nMaxBufferSize);
 void __fastcall SKILLDESC_AppendSetBonusTextByStateValue(struct D2UnitStrc * pUnit, struct D2UnitStrc * pUnit2, uint16_t * wszOutputBuffer, int32_t nMaxBufferSize);
-uint16_t * __fastcall SKILLDESC_FormatMagicPrefixDesc(struct D2UnitStrc * pUnit, struct D2GemsTxt * pD2MagicAffixTxt, uint32_t nMagicAffixId, uint16_t * wszText1, int32_t nMaxBufferSize, uint16_t * wszText2);
-uint16_t * __fastcall SKILLDESC_FormatMagicSuffixDesc(struct D2UnitStrc * pUnit, struct D2GemsTxt * pD2MagicAffixTxt, uint32_t nMagicAffixId, uint16_t * wszText1, int32_t nMaxBufferSize, uint16_t * wszText2);
+void __fastcall SKILLDESC_FormatMagicPrefixDesc(struct D2UnitStrc * pUnit, struct D2GemsTxt * pD2MagicAffixTxt, uint32_t nMagicAffixId, uint16_t * wszText1, int32_t nMaxBufferSize, uint16_t * wszText2);
+void __fastcall SKILLDESC_FormatMagicSuffixDesc(struct D2UnitStrc * pUnit, struct D2GemsTxt * pD2MagicAffixTxt, uint32_t nMagicAffixId, uint16_t * wszText1, int32_t nMaxBufferSize, uint16_t * wszText2);
 void __fastcall SKILLDESC_BuildMagicAffixDesc(struct D2UnitStrc * pUnit, uint16_t * wszText, int32_t nMaxBufferSize);
 uint16_t __fastcall SKILLDESC_GetStatNameString(int32_t nSkillId, int32_t nStatOffset);
 int32_t __stdcall SKILLDESC_GetAuraBonusDamage();

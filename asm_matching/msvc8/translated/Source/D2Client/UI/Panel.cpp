@@ -1515,7 +1515,6 @@ static BOOL __fastcall PANEL_CheckEquipmentClickable(D2ItemsTxt * pItemTxt, D2Un
 }
 
 static void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2InventoryStrc * pInventory, int32_t bToMercenary) {
-    uint32_t bIsPotionType;
     D2GridScreenCoordinates sGridCoords;
     BOOL bClickable = GAME::Game::CLIENT_CheckExpansion();
     if (!bClickable) {
@@ -1540,51 +1539,39 @@ static void __stdcall ClickBeltRight(uint32_t nBeltSlot, D2UnitStrc * pUnit, D2I
       return;
     }
 
-    D2ItemsTxt* pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pItem->nClassId);
+    const int nClassId = pItem->nClassId;
+    D2ItemsTxt* pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
     if (!pItemTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa64);
       exit(-1);
     }
-
-    bClickable = PANEL_CheckEquipmentClickable(pItemTxt, pUnit, pItem);
-    if (bClickable != 1) {
+    if (PANEL_CheckEquipmentClickable(pItemTxt, pUnit, pItem) != 1) {
       return;
     }
-
-    bClickable = UNIT::PlayerIsUnInterruptable(pItem);
-    if (bClickable) {
+    if (UNIT::PlayerIsUnInterruptable(pItem)) {
       return;
     }
 
     GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x26, pItem->nUnitGUID, bToMercenary, 0);
     UNIT::ITEM_RemoveClientSide(pItem);
     if (bToMercenary) {
-      nErrorLine = GAME::RosterPets::GetRosterPetGUID(pUnit, 7, 0);
-      if (nErrorLine != -1) {
-        bIsPotionType = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_HealingPotion);
-        if (!bIsPotionType) {
-          bIsPotionType = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_ThawingPotion);
-          if (!bIsPotionType) {
-            bIsPotionType = D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_AntidotePotion);
-            if (!bIsPotionType) {
-              UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nErrorLine, '\x01', 0x55);
-              gpPanelBeltSlot = 0;
-              return;
-            }
-          }
+      const int nPetGUID = GAME::RosterPets::GetRosterPetGUID(pUnit, 7, 0);
+      if (nPetGUID != -1) {
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_HealingPotion) || D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_ThawingPotion) || D2Common::ITEMS::Items::ITEMS_IsA(pItem, ITEMTYPE_AntidotePotion)) {
+          UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nPetGUID, '\x01', 0x54);
+        } else {
+          UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nPetGUID, '\x01', 0x55);
         }
-
-        UNIT::UnitSnd::UNITSND_PlaySoundForMercenary(nErrorLine, '\x01', 0x54);
         gpPanelBeltSlot = 0;
         return;
       }
+
+      Sound::SOUND_PlaySound(UNIT::ITEM_PlayItemUseSound(pItem), nullptr, 0, 0, 0);
+      gpPanelBeltSlot = 0;
+      return;
     }
 
-    int32_t nSoundArg3 = 0;
-    int32_t nVolume = 0;
-    nErrorLine = 0;
-    eD2Sounds nSoundId = UNIT::ITEM_PlayItemUseSound(pItem);
-    Sound::SOUND_PlaySound(nSoundId, nullptr, nErrorLine, nVolume, nSoundArg3);
+    Sound::SOUND_PlaySound(UNIT::ITEM_PlayItemUseSound(pItem), nullptr, 0, 0, 0);
     gpPanelBeltSlot = 0;
 }
 

@@ -64,7 +64,7 @@ uint32_t __stdcall PATH_RecalculatePath(struct D2UnitStrc * pUnit, int32_t bHasT
 BOOL __fastcall PATH_CheckPathCollision(struct D2UnitStrc * pUnit, struct D2DynamicPathStrc * pDynamicPath);
 BOOL __stdcall PATH_HasReachedTarget(struct D2UnitStrc * pUnit);
 struct D2DynamicPathStrc * __fastcall Unreferenced_00650800(struct D2UnitStrc * pUnit);
-BOOL __stdcall PATH_TestLineOfSight(struct D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, struct D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY);
+BOOL __stdcall PATH_TestLineOfSight(struct D2DynamicPathStrc * pDynamicPath, struct D2UnitStrc * pUnit, struct D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY);
 #endif // D2_MODULE_D2Common
 // 12 internal functions (defined in .cpp)
 

@@ -1232,99 +1232,78 @@ BOOL __fastcall ITEMEVENT_SorAuraManaAbsorb(::SGAMEDATA * pGame, uint32_t nUnitE
 }
 
 // Server-side skill DoFunc 144 (Hydra). Spawns the 3 Hydra heads for caster pUnit. Validates the skill row, resolves the summon monster class via SKILLS_GetSummonMonsterClassId and the pettype, finds the cast target/cursor position and a valid (non-town) room nearby. If the caster is a mercenary it retargets to the merc's owner. Computes the Hydra lifetime (TXT_Skills_GetSkillRange + current game frame) and a per-head skill calc (petmax), then loops 3 times creating a summon via SKILL_CreateSummon at offsets from gnSkillMissileCount_Hydra / gnAuraDamageScale_ManaAbsorb, assigning each its skill (SetSkill), summon buffs, an expiry timer (SetDwArgsIfNotNeg0x29a), and alignment inherited from a monster caster. Returns TRUE if at least one head was created, else FALSE.
-BOOL __fastcall Skills_SrvDoFunc_144_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills iHydraIdx, int32_t nSkillLvl) {
+BOOL __fastcall Skills_SrvDoFunc_144_Hydra(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static uint32_t gnSkillMissileCount_Hydra[3] = { 0xffffffff, 0x0, 0x1 }; D2_STATIC_GUARD(gnSkillMissileCount_Hydra, "D2Game::SKILLS::SkillSor::Skills_SrvDoFunc_144_Hydra::gnSkillMissileCount_Hydra");
 
-    BOOL _bGotTarget;
-    bool bGotTarget;
-    uint32_t bIsMerc;
-    D2UnitStrc* pSummon;
-    D2AiGeneralStrc* pSummonAi;
-    eD2UnitType eOwnerUnitType;
-    int32_t nSkillRange;
-    uint32_t nAlignmentHi;
-    D2SkillsTxt* pSkillTxt;
-    D2MonsterCastPetStrc sSummonParams;
+    D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    if (!pSkillTxt) {
+      return 0;
+    }
+
     int nAnimMode;
-    BOOL nPetType;
-    uint32_t nSpawnY;
-    uint32_t nSpawnX;
-    ::SGAMEDATA* pGameSaved;
-    eD2Skills eSkillOrig = iHydraIdx;
-    pSkillTxt = (int)iHydraIdx >= 0 && (int)iHydraIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + iHydraIdx : nullptr;
-    if (pSkillTxt) {
-      D2RoomStrc* pRoom;
-      pGameSaved = pGame;
-      sSummonParams.nSlotValue = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, iHydraIdx, nSkillLvl, &nAnimMode, nullptr, nullptr);
-      if (sSummonParams.nSlotValue >= 0) {
-        nPetType = (BOOL)pSkillTxt->pettype;
-        if (nPetType >= 0 && nPetType < D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
-          pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-          if (pRoom) {
-            _bGotTarget = SkillsServer::SKILLS_GetTargetOrCursorPos(pGameSaved, pUnit, &nSpawnX, &nSpawnY);
-            if (_bGotTarget) {
-              pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnX, nSpawnY);
-              if (pRoom) {
-                _bGotTarget = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
-                if (!_bGotTarget) {
-                  if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-                    bIsMerc = D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit);
-                    if (bIsMerc) {
-                      pSummon = Ai::AiGeneral::GetOwnerUnit(pUnit);
-                      if (pSummon) {
-                        pUnit = pSummon;
-                      }
-                    }
-                  }
+    const int32_t nClassId = SkillsServer::SKILLS_GetSummonMonsterClassId(pUnit, 0, eSkill, nSkillLvl, &nAnimMode, nullptr, nullptr);
+    if (nClassId < 0) {
+      return 0;
+    }
 
-                  nSkillRange = D2Common::Skills::TXT_Skills_GetSkillRange(iHydraIdx, nSkillLvl);
-                  sSummonParams.nPetType = nSkillRange + pGameSaved->dwGameFrame;
-                  sSummonParams.classId = 0;
-                  sSummonParams.nX = 0;
-                  sSummonParams.nY2 = 0;
-                  sSummonParams.nSkillCalc = 0;
-                  sSummonParams.nFlags = 1;
-                  sSummonParams.pPlayer = pUnit;
-                  sSummonParams.nFunctionId = 0;
-                  sSummonParams.nMode = nAnimMode;
-                  sSummonParams.nType = nPetType;
-                  sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, iHydraIdx, nSkillLvl);
-                  nPetType = 0;
-                  iHydraIdx = SKILL_Attack;
-                  do {
-                    sSummonParams.classId = sSummonParams.nSlotValue + (int)iHydraIdx;
-                    sSummonParams.nX = gnSkillMissileCount_Hydra[iHydraIdx] + nSpawnX;
-                    sSummonParams.nY2 = gnAuraDamageScale_ManaAbsorb[iHydraIdx] + nSpawnY;
-                    pSummon = SkillsServer::SKILL_CreateSummon(pGameSaved, &sSummonParams);
-                    if (pSummon) {
-                      SkillsServer::SetSkill(pSummon, eSkillOrig, nSkillLvl, 1);
-                      SkillNec::SKILLNEC_ApplySummonBuffs(pGameSaved, pUnit, pSummon, eSkillOrig, nSkillLvl, 0);
-                      nPetType = 1;
-                      pSummonAi = UNIT::Monster::GetAiGeneral(pSummon);
-                      if (pSummonAi) {
-                        Monster::AI::SetDwArgsIfNotNeg0x29a(pSummonAi, sSummonParams.nPetType, -0x29a, -0x29a);
-                      }
+    const int nPetType = (char)pSkillTxt->pettype;
+    if (nPetType < 0 || nPetType >= D2Common::ITEMS::Items::sgptDataTable->nTxtPetTypeSize) {
+      return 0;
+    }
 
-                      eOwnerUnitType = D2Common::Units::GetType(pUnit);
-                      if (eOwnerUnitType == UNIT_MONSTER) {
-                        UNIT::SUnit::SetAlignment(pSummon, (uint8_t)D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit), eOwnerUnitType);
-                      }
-                    }
+    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
+    if (!pRoom) {
+      return 0;
+    }
 
-                    iHydraIdx += SKILL_Kick;
-                  } while ((int)iHydraIdx < 3);
+    int nSpawnX;
+    int nSpawnY;
+    if (!SkillsServer::SKILLS_GetTargetOrCursorPos(pGame, pUnit, (uint32_t*)&nSpawnX, (uint32_t*)&nSpawnY)) {
+      return 0;
+    }
 
-                  return nPetType;
-                }
-              }
-            }
-          }
+    pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nSpawnX, nSpawnY);
+    if (!pRoom || D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+      return 0;
+    }
+    if (pUnit && pUnit->eUnitType == UNIT_MONSTER && D2Common::Monsters::MONSTERS::MONSTER_GetMercType(pUnit)) {
+      D2UnitStrc* pOwner = Ai::AiGeneral::GetOwnerUnit(pUnit);
+      if (pOwner) {
+        pUnit = pOwner;
+      }
+    }
+
+    const int32_t nExpireFrame = pGame->dwGameFrame + D2Common::Skills::TXT_Skills_GetSkillRange(eSkill, nSkillLvl);
+    D2MonsterCastPetStrc sSummonParams;
+    memset(&sSummonParams, 0, sizeof(sSummonParams));
+    sSummonParams.nFlags |= 1;
+    sSummonParams.pPlayer = pUnit;
+    sSummonParams.nFunctionId = 0;
+    sSummonParams.nMode = nAnimMode;
+    sSummonParams.nType = nPetType;
+    sSummonParams.nSkillCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->petmax, eSkill, nSkillLvl);
+    BOOL bResult = 0;
+    for (int i = 0; i < 3; i += 1) {
+      sSummonParams.classId = nClassId + i;
+      sSummonParams.nX = nSpawnX + gnSkillMissileCount_Hydra[i];
+      sSummonParams.nY2 = nSpawnY + gnAuraDamageScale_ManaAbsorb[i];
+      D2UnitStrc* pSummon = SkillsServer::SKILL_CreateSummon(pGame, &sSummonParams);
+      if (pSummon) {
+        SkillsServer::SetSkill(pSummon, eSkill, nSkillLvl, 1);
+        SkillNec::SKILLNEC_ApplySummonBuffs(pGame, pUnit, pSummon, eSkill, nSkillLvl, 0);
+        bResult = 1;
+        D2AiGeneralStrc* pSummonAi = UNIT::Monster::GetAiGeneral(pSummon);
+        if (pSummonAi) {
+          Monster::AI::SetDwArgsIfNotNeg0x29a(pSummonAi, nExpireFrame, -0x29a, -0x29a);
+        }
+        if (D2Common::Units::GetType(pUnit) == UNIT_MONSTER) {
+          UNIT::SUnit::SetAlignment(pSummon, (uint8_t)D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit), 1);
         }
       }
     }
 
-    return 0;
+    return bResult;
 }
 
 } // namespace D2Game::SKILLS::SkillSor

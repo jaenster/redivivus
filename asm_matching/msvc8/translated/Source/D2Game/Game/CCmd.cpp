@@ -193,6 +193,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
 // Lag = delayed response, never desync.
 void __fastcall NET_D2GS_SERVER_ProcessClientMessage_InGame(char * pBytes, uint32_t nSize) {
     int32_t nClientId = *(int32_t*)pBytes;
+    char* pPacket = pBytes + 4;
     ::SGAMEDATA* pGame = Server::NET_SERVER_FindGameByClientId(nClientId);
     if (!pGame) {
       Server::SRVLog(9, "[ProcessClientMessage] Client %d is not in any game", nClientId);
@@ -208,8 +209,8 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_InGame(char * pBytes, uint3
     DWORD dwTick = GetTickCount();
     pClient->dwTimeOut = dwTick;
     D2UnitStrc* pUnit = Clients::CLIENTS_GetControlUnit(pClient, 0);
-    if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
-      PLAYER::PlayerMsg::NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck(pGame, pUnit, pBytes + 4, nSize);
+    if (pUnit && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_PLAYER) {
+      PLAYER::PlayerMsg::NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck(pGame, pUnit, pPacket, nSize);
     }
 
     Server::Unlock(pGame);

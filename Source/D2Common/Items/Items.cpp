@@ -1961,11 +1961,13 @@ int32_t __stdcall BARBARIAN_CheckItemData_b1or2Handed_isTrue(D2UnitStrc * pUnit,
 }
 
 static char ITEMS_ValidateItemQualityCode(int32_t nCode, uint32_t nQuality) {
-    if (nCode >= 0x1 && nCode <= 0x8 && nQuality <= 0x14) {
-      return (char)(nCode * 32 + (nQuality & 0x1f));
+    if (nCode <= 0 || nCode >= 9 || (int32_t)nQuality < 0 || (int32_t)nQuality >= 0x15) {
+      return '\0';
     }
 
-    return '\0';
+    uint8_t nPacked = nQuality & 0x1f;
+    nPacked += nCode << 5;
+    return (char)nPacked;
 }
 
 static BOOL ITEMS_HasSocketedItems(D2UnitStrc * pItem) {

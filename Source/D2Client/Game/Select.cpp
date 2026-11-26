@@ -381,24 +381,14 @@ static BOOL __stdcall SELECT_IsWarpDoubleClicked(uint32_t dwUnused, int32_t nCli
 }
 
 static void __stdcall SELECT_ScreenToWorldCoords(int * pnX, int * pnY) {
-    int32_t nWorldOffset;
-    uint32_t bPerspective = D2gfx::D2GFX::D2GFX_IsPerspectiveActive();
-    if (bPerspective) {
-      int nAdjustedY;
-      nAdjustedY = *pnY - *pnY / 0x28;
-      *pnY = nAdjustedY;
-      *pnX = (0x28 - nAdjustedY / 4) * (*pnX - UI::ui::ScreenSizeX / 2) / (UI::ui::ScreenSizeX / 2) + *pnX;
-      nWorldOffset = UI::Path::DRAW_GetWorldOffsetX();
-      *pnX += nWorldOffset;
-      nWorldOffset = UI::Path::DRAW_GetWorldOffsetY();
-      *pnY += nWorldOffset;
-      return;
+    if (D2gfx::D2GFX::D2GFX_IsPerspectiveActive()) {
+      *pnY -= *pnY / 0x28;
+      const int nHalfWidth = UI::ui::ScreenSizeX / 2;
+      *pnX += (0x28 - *pnY / 4) * (*pnX - nHalfWidth) / nHalfWidth;
     }
 
-    nWorldOffset = UI::Path::DRAW_GetWorldOffsetX();
-    *pnX += nWorldOffset;
-    nWorldOffset = UI::Path::DRAW_GetWorldOffsetY();
-    *pnY += nWorldOffset;
+    *pnX += UI::Path::DRAW_GetWorldOffsetX();
+    *pnY += UI::Path::DRAW_GetWorldOffsetY();
 }
 
 // Client-side mouse-input gate for the selection system. If the UI border type is 3 (full-screen/npc-scroll), handles NPC menu deselection and warp deselection, then returns 1 (input consumed). Otherwise reads raw mouse X/Y, clamps to the playable area excluding the HUD exclusion rect and split-screen half, projects through SELECT_ScreenToWorldCoords, and returns 0 (pass through). Clears the selected unit when the cursor is over UI chrome.
@@ -524,8 +514,8 @@ static uint32_t __stdcall SELECT_IsUnitBehindDoor(D2UnitStrc * pUnit, D2UnitStrc
 }
 
 static int32_t SELECT_GetDistanceSquared(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    int32_t nDiffX = D2Common::Units::GetScreenX(pUnit2) - D2Common::Units::GetScreenX(pUnit);
-    int32_t nDiffY = D2Common::Units::GetScreenY(pUnit2) - D2Common::Units::GetScreenY(pUnit);
+    const int32_t nDiffX = D2Common::Units::GetScreenX(pUnit) - D2Common::Units::GetScreenX(pUnit2);
+    const int32_t nDiffY = D2Common::Units::GetScreenY(pUnit) - D2Common::Units::GetScreenY(pUnit2);
     return nDiffY * nDiffY + nDiffX * nDiffX;
 }
 
@@ -862,21 +852,18 @@ D2UnitStrc * __stdcall GetSelectedUnit() {
 
 void __fastcall SELECT_UpdateUnitSelection(D2UnitStrc * pUnit) {
     if (pUnit) {
-      uint32_t bIsOnScreen = UNIT::CUnit::HitTestScreen(pUnit, 0, 0, nullptr);
-      _Selection::bCanSelectUnit = 0;
-      if (bIsOnScreen) {
+      if (UNIT::CUnit::HitTestScreen(pUnit, 0, 0, nullptr)) {
+        _Selection::bCanSelectUnit = 0;
         SetSelectedUnit_I(pUnit);
         _Selection::bCanSelectUnit = 1;
-        return;
+      } else {
+        _Selection::bCanSelectUnit = 0;
+        _Selection::bHasSelectedUnit = 0;
       }
-
+    } else {
       _Selection::bHasSelectedUnit = 0;
-      return;
+      _Selection::bCanSelectUnit = 1;
     }
-
-    _Selection::bHasSelectedUnit = 0;
-    _Selection::bCanSelectUnit = 1;
-    return;
 }
 
 // Client-side hover/selection update: recomputes which unit the cursor is over. No-op while bCanSelectUnit lock is set. Reads mouse via SELECT_HandleMouseInput; if the currently selected unit still passes HitTestScreen it is kept. Otherwise scans the player's room plus adjacent rooms, hit-testing every candidate and choosing the best by per-unit-type priority (gnSelectTimeout), with special handling: skips items when suppressed, demotes dead monsters and attached-state monsters, resolves OBJECT vs door occlusion (SELECT_IsUnitBehindDoor / SELECT_IsDoorBlockingUnit), and breaks ties by squared distance to the player. Commits the winner via SetSelectedUnit_I. Resets the warp double-click id when the player changes room.

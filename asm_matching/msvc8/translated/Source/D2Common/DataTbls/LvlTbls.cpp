@@ -1639,44 +1639,34 @@ static int32_t LVLTBLS_GetAutomapLevelId(char * szLevelName) {
     }
 }; D2_STATIC_GUARD(gaAutomapLevelNames, "D2Common::DATATBLS::LvlTbls::LVLTBLS_GetAutomapLevelId::gaAutomapLevelNames");
 
-    int nLevelId = 0;
-    if (*szLevelName != '0') {
-      char (*pEntry)[16] = gaAutomapLevelNames;
-      do {
-        if (!strcmp(szLevelName, *pEntry)) {
+    if (szLevelName[0] != '0') {
+      for (int nLevelId = 0; nLevelId < 36; nLevelId++) {
+        if (!strcmp(szLevelName, gaAutomapLevelNames[nLevelId])) {
           return nLevelId;
         }
-
-        pEntry++;
-        nLevelId++;
-      } while ((intptr_t)pEntry < (intptr_t)&gaAutomapLevelNames[sizeof(gaAutomapLevelNames) / sizeof(gaAutomapLevelNames[0])]);
+      }
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a5);
       exit(-1);
     }
 
-    return nLevelId;
+    return 0;
 }
 
 // Linear search through a hardcoded table of tile-name strings (e.g. "fl") to resolve an automap tile name to its integer tile ID. Returns 0 if the name starts with '0' or matches the first entry; halts with an internal error if the table end is overrun. In: szTileName (EDI). Out: matching tile ID or 0.
 static int32_t LVLTBLS_GetAutomapTileId(char * szTileName) {
-    int nTileId = 0;
-    if (*szTileName != '0') {
-      char (*pEntry)[8] = gaAutomapTileNames;
-      do {
-        if (!strcmp(szTileName, *pEntry)) {
+    if (szTileName[0] != '0') {
+      for (int nTileId = 0; nTileId < 20; nTileId++) {
+        if (!strcmp(szTileName, gaAutomapTileNames[nTileId])) {
           return nTileId;
         }
-
-        pEntry++;
-        nTileId++;
-      } while ((intptr_t)pEntry < (intptr_t)&gaAutomapTileNames[sizeof(gaAutomapTileNames) / sizeof(gaAutomapTileNames[0])]);
+      }
 
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4d0);
       exit(-1);
     }
 
-    return nTileId;
+    return 0;
 }
 
 // Loads and compiles automap.txt into the runtime AutoMap level tables. Initializes the data-table seed, declares the column schema (LevelName, TileName, Style, Start/EndSequence, Cel1-4), and compiles it via CompileTxt. Allocates a 32-byte-per-row AutoMapLvlTbls array, then per row resolves the automap level id and tile id, copies style/sequence and cel fields, and counts the valid (non -1) cels (halts if a row has zero cels). Then resets the gpaAutoMapRelated index table to -1 and builds, per level type, the start index + count of contiguous same-type rows. Side effects: allocates server memory, fills global automap tables; unrecoverable-halt on bad rows. Server-side D2Common DataTbls (LvlTbls).
@@ -1715,9 +1705,9 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
       D2AutoMapLvlTbls* pLvlRow = &pAutoMapLvlTbls_lcl[nTxtRow];
       pLvlRow->nLevelType = LVLTBLS_GetAutomapLevelId(pTxtRow->LevelName);
       pLvlRow->nOrientation = LVLTBLS_GetAutomapTileId(pTxtRow->TileName);
-      *(uint8_t*)&pLvlRow->nIndex = pTxtRow->Style;
-      *((uint8_t*)&pLvlRow->nIndex + 1) = pTxtRow->StartSequence;
-      *((uint8_t*)&pLvlRow->nIndex + 2) = pTxtRow->EndSequence;
+      pLvlRow->nStyle = pTxtRow->Style;
+      pLvlRow->nStartSequence = pTxtRow->StartSequence;
+      pLvlRow->nEndSequence = pTxtRow->EndSequence;
       pLvlRow->nCellNo[0] = pTxtRow->Cell[0];
       pLvlRow->nCellNo[1] = pTxtRow->Cell[1];
       pLvlRow->nCellNo[2] = pTxtRow->Cell[2];
@@ -1789,10 +1779,11 @@ int32_t __fastcall GetRandomCellNo(int32_t nLevelType, int32_t nOrientation, int
     }
 
     for (int i = nFirst; i < nCount; i++) {
-      D2AutoMapLvlTbls* pEntry = &pAutoMapLvlTbls[i];
-      uint8_t* pSeq = (uint8_t*)&pEntry->nIndex;
-      if (pEntry->nLevelType == nLevelType && pEntry->nOrientation == nOrientation && (pSeq[0] == 0xff || pSeq[0] == nIndex) && (pSeq[1] == 0xff || pSeq[1] <= nSubIndex && pSeq[2] >= nSubIndex)) {
-        return pAutoMapLvlTbls[i].nCellNo[Seed::RANDOM_RandomNumberSelector(psDataTableSeed, pAutoMapLvlTbls[i].nSize)];
+      if (pAutoMapLvlTbls[i].nLevelType == nLevelType && pAutoMapLvlTbls[i].nOrientation == nOrientation
+        && (pAutoMapLvlTbls[i].nStyle == 0xff || pAutoMapLvlTbls[i].nStyle == nIndex)
+        && (pAutoMapLvlTbls[i].nStartSequence == 0xff || (pAutoMapLvlTbls[i].nStartSequence <= nSubIndex && pAutoMapLvlTbls[i].nEndSequence >= nSubIndex))) {
+        D2AutoMapLvlTbls* pEntries = pAutoMapLvlTbls;
+        return pEntries[i].nCellNo[Seed::RANDOM_RandomNumberSelector(psDataTableSeed, pAutoMapLvlTbls[i].nSize)];
       }
     }
 

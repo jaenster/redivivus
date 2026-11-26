@@ -239,7 +239,7 @@ static uint32_t gaMonsterModePrecacheEntries[15] = {
     0xa,
     0xb
 }; D2_STATIC_GUARD(gaMonsterModePrecacheEntries, "gaMonsterModePrecacheEntries");
-static uint32_t gnMonsterModePrecacheCount = 0xf; D2_STATIC_GUARD(gnMonsterModePrecacheCount, "gnMonsterModePrecacheCount");
+static int32_t gnMonsterModePrecacheCount = 0xf; D2_STATIC_GUARD(gnMonsterModePrecacheCount, "gnMonsterModePrecacheCount");
 static D2ClientSpriteLoadStatusStrc gaSpriteLoadStatusTable[7] = {}; D2_STATIC_GUARD(gaSpriteLoadStatusTable, "gaSpriteLoadStatusTable");
 static D2CofCacheStrc gMonsterCofCache = {}; D2_STATIC_GUARD(gMonsterCofCache, "gMonsterCofCache");
 namespace D2Client::Engine::Gfx {
@@ -561,17 +561,10 @@ void __stdcall GFX_RemoveOverlayFromUnit(D2UnitStrc * pUnit, D2GfxUnknown_0xa8 *
     }
 
     D2GfxUnknown_0xa8* pPrev = 0;
-    D2GfxUnknown_0xa8* pCur = pGfxInfo->pOverlayList;
-    if (!pGfxInfo->pOverlayList) {
-      return;
-    }
-
-    while ((pMemoryToFree = pCur) != pOverlay) {
-      pCur = pMemoryToFree->pNext;
+    pMemoryToFree = pGfxInfo->pOverlayList;
+    while (pMemoryToFree && pMemoryToFree != pOverlay) {
       pPrev = pMemoryToFree;
-      if (!pMemoryToFree->pNext) {
-        return;
-      }
+      pMemoryToFree = pMemoryToFree->pNext;
     }
 
     if (!pMemoryToFree) {
@@ -980,17 +973,19 @@ static uint8_t * __stdcall GFX_LoadCompositCof(uint8_t * * pnOutCofData, uint32_
 
 // @sourcefile .\ENGINE\Gfx.cpp
 static void GFX_LoadMonsterModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
-    uint8_t* nOutCofData;
+    eD2UnitType eUnitType;
+    int32_t nAnimMode;
     int nClassId;
-    eD2UnitType eUnitType = UNIT_COUNT;
+
+    eD2UnitType eTypeValue = UNIT_COUNT;
     if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
+      eTypeValue = pUnit->eUnitType;
     }
 
-    int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    eUnitType = eTypeValue;
+    const int nClassValue = !pUnit ? -1 : pUnit->nClassId;
+    nClassId = nClassValue;
+    nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\ENGINE\\Gfx.cpp", 0x464);
     uint32_t bHasComponent = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nClassId, nComponent);
     if (bHasComponent) {
@@ -999,8 +994,8 @@ static void GFX_LoadMonsterModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
         return;
       }
 
-      uint8_t* bLoaded = GFX_LoadCompositCof(&nOutCofData, nComponent, pUnit);
-      if (!bLoaded) {
+      uint8_t* nOutCofData;
+      if (!GFX_LoadCompositCof(&nOutCofData, nComponent, pUnit)) {
         return;
       }
 
@@ -1014,32 +1009,31 @@ static void GFX_LoadMonsterModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
 
 // @sourcefile .\ENGINE\Gfx.cpp
 static void GFX_LoadObjectModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
-    bool bHasComponent;
-    uint8_t* bLoaded;
     uint8_t* nCofDataResult;
+    eD2UnitType eUnitType;
+    int32_t nAnimMode;
     int nClassId;
-    eD2UnitType eUnitType = UNIT_COUNT;
+
+    eD2UnitType eTypeValue = UNIT_COUNT;
     if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
+      eTypeValue = pUnit->eUnitType;
     }
 
-    int32_t nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    eUnitType = eTypeValue;
+    const int nClassValue = !pUnit ? -1 : pUnit->nClassId;
+    nClassId = nClassValue;
+    nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nAnimMode, ".\\ENGINE\\Gfx.cpp", 0x4be);
     D2ObjectsTxt* pObjectsTxt = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
     if (!pObjectsTxt) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4c2);
       exit(-1);
     } else if (pObjectsTxt->Mode[nComponent] == 1) {
-      bHasComponent = (bool)GfxUtil::GFXUTIL_GetGfxInfoComponent(pUnit, nComponent);
-      if (bHasComponent) {
+      if (GfxUtil::GFXUTIL_GetGfxInfoComponent(pUnit, nComponent)) {
         return;
       }
 
-      bLoaded = GFX_LoadCompositCof(&nCofDataResult, nComponent, pUnit);
-      if (!bLoaded) {
+      if (!GFX_LoadCompositCof(&nCofDataResult, nComponent, pUnit)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4d4);
         exit(-1);
       }
@@ -1691,40 +1685,27 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
 }
 
 void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFlags) {
-    uint32_t nModeId;
     D2MonStatsTxt* pMonStats = nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterClassId : nullptr;
     if (!pMonStats) {
       return;
     }
 
-    int nIndex = (int)pMonStats->MonStatsEx;
+    D2MonStatsTxt* pMonStatsAgain = nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterClassId : nullptr;
+    int nIndex = (int)pMonStatsAgain->MonStatsEx;
     D2MonStats2Txt* pMonStatsEx = nIndex >= 0 && nIndex < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nIndex : nullptr;
     if (!pMonStatsEx) {
       return;
     }
 
-    nIndex = 0;
-    D2MonStatsTxt* pSavedMonStats = pMonStats;
-    D2MonStats2Txt* pSavedMonStatsEx = pMonStatsEx;
-    int32_t nSavedFlags = nFlags;
-    int32_t nSavedClassId = nMonsterClassId;
-    if ((int32_t)gnMonsterModePrecacheCount <= 0) {
-      return;
-    }
-
-    do {
-      short int aCofBuffer[26];
-      nModeId = gaMonsterModePrecacheEntries[nIndex];
-      if ((uint8_t)Fog::BitBuffer::gadwBitMasks[nModeId & 7] & pMonStatsEx->mDT[(int)nModeId >> 3]) {
+    for (int nModeIdx = 0; nModeIdx < gnMonsterModePrecacheCount; ++nModeIdx) {
+      const int nModeId = gaMonsterModePrecacheEntries[nModeIdx];
+      if (pMonStatsEx->mDT[nModeId >> 3] & Fog::BitBuffer::gadwBitMasks[nModeId & 7]) {
+        short int aCofBuffer[26];
         memset(aCofBuffer, 0, 0x34);
-        aCofBuffer[0] = (short int)nSavedClassId;
-        GFX_PrecacheMonsterCofSprites(pMonStats, nModeId, nSavedFlags, aCofBuffer);
-        pMonStatsEx = pSavedMonStatsEx;
-        pMonStats = pSavedMonStats;
+        aCofBuffer[0] = (short int)nMonsterClassId;
+        GFX_PrecacheMonsterCofSprites(pMonStats, nModeId, nFlags, aCofBuffer);
       }
-
-      nIndex++;
-    } while (nIndex < gnMonsterModePrecacheCount);
+    }
 }
 
 } // namespace D2Client::Engine::Gfx
@@ -1765,23 +1746,26 @@ D2MonsterCofStatusEntryStrc * __fastcall GFX_GetModeStatusEntry(int32_t nClassId
 
 // @sourcefile .\ENGINE\Gfx.cpp
 static void GFX_LoadMonsterModeCofByState(D2UnitStrc * pUnit, uint32_t nAnimMode) {
+    eD2UnitType eUnitType;
     int nClassId;
-    eD2UnitType eUnitType = UNIT_COUNT;
+    int32_t nSeqMode;
+
+    eD2UnitType eTypeValue = UNIT_COUNT;
     if (pUnit) {
-      eUnitType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
+      eTypeValue = pUnit->eUnitType;
     }
 
-    uint32_t nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
-    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, (int*)&nSeqMode, ".\\ENGINE\\Gfx.cpp", 0x498);
+    eUnitType = eTypeValue;
+    const int nClassValue = !pUnit ? -1 : pUnit->nClassId;
+    nClassId = nClassValue;
+    nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
+    D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eUnitType, &nClassId, &nSeqMode, ".\\ENGINE\\Gfx.cpp", 0x498);
+    const uint32_t nSeqModeOrig = nSeqMode;
     if (nAnimMode == 0xe) {
-      nAnimMode = nSeqMode;
+      nAnimMode = nSeqModeOrig;
     }
 
-    uint32_t bHasModeFlag = D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nClassId, nAnimMode);
-    if (!bHasModeFlag) {
+    if (!D2Common::DATATBLS::MonsterTbls::GetSomeMonsterStatFlag(nClassId, nAnimMode)) {
       return;
     }
     if (nAnimMode == 0xc) {
@@ -1791,7 +1775,6 @@ static void GFX_LoadMonsterModeCofByState(D2UnitStrc * pUnit, uint32_t nAnimMode
       return;
     }
     if (nAnimMode == 0xe) {
-      uint32_t nSeqModeOrig = nSeqMode;
       nAnimMode = nSeqModeOrig;
     }
 
@@ -1997,31 +1980,27 @@ static void __stdcall GFX_AsyncLoadMonsterSprites(int32_t nAsyncBlockId, int32_t
 }
 
 static void __stdcall GFX_PrecacheMonsterModeSprites(int32_t nAsyncBlockId, D2UnitStrc * pUnit) {
-    DWORD nClassId = Source::ClientEngine::CLIENT_GetEffectiveClassId(pUnit);
-    if (!((int)nClassId >= 0 && (int)nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
+    const int nClassId = (int)Source::ClientEngine::CLIENT_GetEffectiveClassId(pUnit);
+    if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
       return;
     }
 
-    int nMonStatsExId = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
-    D2MonStats2Txt* pMonStatsEx = nMonStatsExId >= 0 && nMonStatsExId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExId : nullptr;
+    const int nMonStatsExId = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].MonStatsEx;
+    if (nMonStatsExId < 0 || nMonStatsExId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize) {
+      return;
+    }
+
+    D2MonStats2Txt* pMonStatsEx = &D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx[nMonStatsExId];
     if (!pMonStatsEx) {
       return;
     }
 
-    uint32_t nModeIdx = 0;
-    if (gnMonsterModePrecacheCount <= 0) {
-      return;
-    }
-
-    do {
-      int32_t pModeEntry;
-      pModeEntry = gaMonsterModePrecacheEntries[nModeIdx];
-      if ((uint8_t)Fog::BitBuffer::gadwBitMasks[pModeEntry & 7] & pMonStatsEx->mDT[(uint32_t)pModeEntry >> 3]) {
-        GFX_AsyncLoadMonsterSprites(nAsyncBlockId, pModeEntry, pUnit);
+    for (uint32_t nModeIdx = 0; nModeIdx < gnMonsterModePrecacheCount; ++nModeIdx) {
+      const uint32_t nModeId = gaMonsterModePrecacheEntries[nModeIdx];
+      if (pMonStatsEx->mDT[nModeId >> 3] & Fog::BitBuffer::gadwBitMasks[nModeId & 7]) {
+        GFX_AsyncLoadMonsterSprites(nAsyncBlockId, nModeId, pUnit);
       }
-
-      nModeIdx++;
-    } while (nModeIdx < gnMonsterModePrecacheCount);
+    }
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp

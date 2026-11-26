@@ -19,7 +19,9 @@ namespace Storm::Source::SReg {
 int32_t __stdcall SRegGetBaseKey(uint8_t byFlags, char * szText, int32_t nBufSize) {
     D2_CHECKS_BEGIN;
     D2_CHECK(szText);
+    D2_CHECKS_ASSUME_(szText);
     D2_CHECK(nBufSize);
+    D2_CHECKS_ASSUME_(nBufSize);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (byFlags & 2) {
       SSTR::SStrCopy(szText, "Software\\Battle.net\\", nBufSize);
@@ -200,9 +202,13 @@ static int __stdcall SREG_InternalSaveEntry(char * pszSubKey, LPCSTR szValueName
 int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD byFlags) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pszSubKey);
+    D2_CHECKS_ASSUME_(pszSubKey);
     D2_CHECK(*pszSubKey != '\0');
+    D2_CHECKS_ASSUME_(*pszSubKey != '\0');
     D2_CHECK(szValueName);
+    D2_CHECKS_ASSUME_(szValueName);
     D2_CHECK(*szValueName != '\0');
+    D2_CHECKS_ASSUME_(*szValueName != '\0');
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     int nResult = SREG_InternalDeleteEntry(byFlags, pszSubKey, szValueName);
     return nResult;
@@ -217,9 +223,13 @@ int32_t __stdcall SRegDeleteValue(char * pszSubKey, LPCSTR szValueName, DWORD by
 int32_t __stdcall SRegLoadData(uint32_t * pszSubKey, char * szValueName, int32_t nFlags, LPBYTE pbData, DWORD dwBufSize, uint32_t * * ppdwDataLen) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pszSubKey);
+    D2_CHECKS_ASSUME_(pszSubKey);
     D2_CHECK((char)*pszSubKey != '\0');
+    D2_CHECKS_ASSUME_((char)*pszSubKey != '\0');
     D2_CHECK(szValueName);
+    D2_CHECKS_ASSUME_(szValueName);
     D2_CHECK(*szValueName != '\0');
+    D2_CHECKS_ASSUME_(*szValueName != '\0');
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     uint32_t** ppdwDataLenActual = ppdwDataLen;
     if (!ppdwDataLen) {
@@ -242,11 +252,17 @@ int32_t __stdcall SRegLoadString(char * szSubKey, char * szValueName, int32_t nF
     DWORD dwDataLen;
     D2_CHECKS_BEGIN;
     D2_CHECK(szSubKey);
+    D2_CHECKS_ASSUME_(szSubKey);
     D2_CHECK(*szSubKey != '\0');
+    D2_CHECKS_ASSUME_(*szSubKey != '\0');
     D2_CHECK(szValueName);
+    D2_CHECKS_ASSUME_(szValueName);
     D2_CHECK(*szValueName != '\0');
+    D2_CHECKS_ASSUME_(*szValueName != '\0');
     D2_CHECK(szOutBuf);
+    D2_CHECKS_ASSUME_(szOutBuf);
     D2_CHECK(dwOutBufSize);
+    D2_CHECKS_ASSUME_(dwOutBufSize);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     BOOL bReadOk;
     bReadOk = SREG_InternalLoadEntry(&dwType, (LPBYTE)szOutBuf, szSubKey, (uint8_t)nFlags, dwOutBufSize, szValueName, &dwDataLen);
@@ -292,10 +308,15 @@ int __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t 
     __frame0.pnOutVal = (uint32_t*)pnOut;
     D2_CHECKS_BEGIN;
     D2_CHECK(pTree);
+    D2_CHECKS_ASSUME_(pTree);
     D2_CHECK(*pTree != '\0');
+    D2_CHECKS_ASSUME_(*pTree != '\0');
     D2_CHECK(pKey);
+    D2_CHECKS_ASSUME_(pKey);
     D2_CHECK(*pKey != '\0');
+    D2_CHECKS_ASSUME_(*pKey != '\0');
     D2_CHECK(pnOut);
+    D2_CHECKS_ASSUME_(pnOut);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     BOOL bReadOk;
     *(uint32_t*)(char*)&__frame0.valueBuf &= -256;
@@ -330,9 +351,13 @@ int __stdcall SRegLoadValue(char * pTree, char * pKey, uint8_t byFlags, int32_t 
 int32_t __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nFlags, BYTE * pbData, DWORD dwDataLen) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pszSubKey);
+    D2_CHECKS_ASSUME_(pszSubKey);
     D2_CHECK(*pszSubKey != '\0');
+    D2_CHECKS_ASSUME_(*pszSubKey != '\0');
     D2_CHECK(szValueName);
+    D2_CHECKS_ASSUME_(szValueName);
     D2_CHECK(*szValueName != '\0');
+    D2_CHECKS_ASSUME_(*szValueName != '\0');
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (!pbData) {
       pbData = (uint8_t*)"";
@@ -351,10 +376,15 @@ int32_t __stdcall SRegSaveData(char * pszSubKey, LPCSTR szValueName, uint32_t nF
 int32_t __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t nFlags, char * pszValue) {
     D2_CHECKS_BEGIN;
     D2_CHECK(pszSubKey);
+    D2_CHECKS_ASSUME_(pszSubKey);
     D2_CHECK(*pszSubKey != '\0');
+    D2_CHECKS_ASSUME_(*pszSubKey != '\0');
     D2_CHECK(szValueName);
+    D2_CHECKS_ASSUME_(szValueName);
     D2_CHECK(*szValueName != '\0');
+    D2_CHECKS_ASSUME_(*szValueName != '\0');
     D2_CHECK(pszValue);
+    D2_CHECKS_ASSUME_(pszValue);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     uint32_t pStrEnd = SSTR::SStrLen(pszValue);
     pStrEnd += 1;
@@ -371,9 +401,13 @@ int32_t __stdcall SRegSaveString(char * pszSubKey, LPCSTR szValueName, int32_t n
 BOOL __stdcall SRegSaveValue(char * szRegistry, LPCSTR szRegistryKey, int32_t nFlags, int32_t nValue) {
     D2_CHECKS_BEGIN;
     D2_CHECK(szRegistry);
+    D2_CHECKS_ASSUME_(szRegistry);
     D2_CHECK(*szRegistry != '\0');
+    D2_CHECKS_ASSUME_(*szRegistry != '\0');
     D2_CHECK(szRegistryKey);
+    D2_CHECKS_ASSUME_(szRegistryKey);
     D2_CHECK(*szRegistryKey != '\0');
+    D2_CHECKS_ASSUME_(*szRegistryKey != '\0');
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     int nResult = SREG_InternalSaveEntry(szRegistry, szRegistryKey, 4, (uint8_t*)&nValue, 4, nFlags);
     return nResult;

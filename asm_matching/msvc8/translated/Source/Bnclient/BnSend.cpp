@@ -597,8 +597,9 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szTex
     adwHeader[1] = 0xe;
     char* pCursor = szData;
     pCursor += Storm::Source::SSTR::SStrCopy(pCursor, szText1, 0x100) + 1;
-    uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(pCursor, szText2, 0x100);
-    NET_SID_CLIENT_Send(0x22, (char*)adwHeader, (uint32_t)(pCursor - szData + nPasswordLen + 9));
+    uint32_t nLength = Storm::Source::SSTR::SStrCopy(pCursor, szText2, 0x100);
+    nLength += (pCursor - szData) + 9;
+    NET_SID_CLIENT_Send(0x22, (char*)adwHeader, nLength);
     return 1;
 }
 
@@ -2554,9 +2555,7 @@ void __stdcall BNNEWS_DecodeCDKeys() {
 
 // High-level CD key hash helper. Gets server token, retrieves CD key by type (0=classic, 1=expansion), and prepares hash structure for SID_AUTH_CHECK.
 void __fastcall BNSEND_HashCDKeyByType(D2CDKeyHashStrc * pOutHash, uint32_t nToken, int32_t nCDKeyType) {
-    
-    
-    BNSEND_PrepareCDKeyHash(nToken, (char*)(_net_sid::NET_SID_CLIENT_GetCdKeyByType(nCDKeyType)), (uint32_t)(BNSEND_GetServerToken()), pOutHash);
+    BNSEND_PrepareCDKeyHash(nToken, _net_sid::NET_SID_CLIENT_GetCdKeyByType(nCDKeyType), BNSEND_GetServerToken(), pOutHash);
 }
 
 int __fastcall BNSEND_SendRawBytes(void * pBytes, uint32_t nSize) {

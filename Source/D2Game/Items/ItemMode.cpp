@@ -1008,8 +1008,9 @@ void __fastcall ITEMMODE_UnequipItemStats(::SGAMEDATA * pGame, D2UnitStrc * pIte
       D2Common::ITEM_ProcessSetItemEquip(pUnit, pItem, 1, 0);
     }
 
+    const eD2UnitType eUnitType = pUnit ? pUnit->eUnitType : UNIT_COUNT;
     pItemOwner = 0;
-    if (pUnit->eUnitType == UNIT_PLAYER) {
+    if (eUnitType == UNIT_PLAYER) {
       pItemOwner = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pUnit->pInventory);
     }
 
@@ -1977,27 +1978,20 @@ static void __stdcall ITEMMODE_CheckCanPickup(::SGAMEDATA * pGame, D2UnitStrc * 
       return;
     }
 
-    eD2BodyLoc eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pUnit2);
-    if (!(eBodyLoc != BODYLOC_SWAPPED_R_ARM && eBodyLoc != BODYLOC_SWAPPED_L_ARM)) {
+    const eD2BodyLoc eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pUnit2);
+    if (eBodyLoc == BODYLOC_SWAPPED_R_ARM || eBodyLoc == BODYLOC_SWAPPED_L_ARM) {
       return;
     }
 
     D2Common::INVENTORY::Inventory::INVENTORY_UpdatePrimaryWeapon(pInventory, pUnit2);
-    int32_t nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit2);
-    if (nSeqMode != 1) {
-      uint32_t bIsActiveCharm;
-      nSeqMode = D2Common::Units::GetAnimOrSeqMode(pUnit2);
-      if (nSeqMode) {
-        return;
-      }
-
-      bIsActiveCharm = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pUnit2, pUnit);
-      if (!bIsActiveCharm) {
-        return;
-      }
+    if (D2Common::Units::GetAnimOrSeqMode(pUnit2) == 1) {
+      ITEMMODE_AddStatsList(pGame, pUnit2, pUnit, 1);
+      return;
     }
 
-    ITEMMODE_AddStatsList(pGame, pUnit2, pUnit, 1);
+    if (D2Common::Units::GetAnimOrSeqMode(pUnit2) == 0 && D2Common::ITEMS::Items::ITEM_IsActiveCharm(pUnit2, pUnit)) {
+      ITEMMODE_AddStatsList(pGame, pUnit2, pUnit, 1);
+    }
 }
 
 // @sourcefile .\ITEMS\ItemMode.cpp
@@ -2624,10 +2618,12 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
           exit(-1);
         } else {
           nCombinedQty = nSrcQty + nDstQty;
+          BOOL bRemoveSource = TRUE;
           if ((int)nCombinedQty > (int)nMaxStack) {
             D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit1, UNITSTAT_quantity, nMaxStack, 0);
             GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x1155), pUnit1, '\x01', 0x46, nMaxStack, 0);
             nMaxStack = nDstQty - nMaxStack + nSrcQty;
+            bRemoveSource = FALSE;
             if (!((int)nMaxStack >= 0)) {
               Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1158);
               exit(-1);
@@ -2643,9 +2639,6 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
                 ITEMMODE_UpdateBookSkillQuantity(nSrcQty - nDstQty, pUnit2, pUnit1);
               }
             }
-
-            D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit1, ITEMFLAG_IGNORE, 1);
-            return;
           } else {
             nMaxStack = D2Common::ITEMS::Items::ITEM_CheckIfItemHasDurability(pUnit);
             if (nMaxStack) {
@@ -2670,12 +2663,15 @@ static void __stdcall ITEMMODE_MergeStackableItems(::SGAMEDATA * pGame, D2UnitSt
                 ITEMMODE_UpdateBookSkillQuantity(nSrcQty, pUnit2, pUnit1);
               }
             }
+          }
 
+          if (bRemoveSource) {
             D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pOwnerInventory, nullptr);
             pClient = UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\ITEMS\\ItemMode.cpp", 0x1184);
             GAME::SCmd::NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM(pClient, pUnit2);
             Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pUnit);
-            return;
+          } else {
+            D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit1, ITEMFLAG_IGNORE, 1);
           }
         }
       }
@@ -3164,46 +3160,32 @@ void __fastcall ITEMMODE_RemoveExpiredStatLists(::SGAMEDATA * pGame, D2UnitStrc 
 BOOL __fastcall ITEMMODE_ConsumeKey(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pCurItem;
     D2UnitStrc* pKey;
-    uint32_t bIsKey;
-    int nKeyQty;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x15f3);
       exit(-1);
     } else {
-      eInventoryPage eInvPage;
       if (!pUnit) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x15f4);
         exit(-1);
       }
 
       SERVER_ITEM_SendStackableUsagePackets(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x15f7);
-      pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pUnit->pInventory);
-      while (true) {
-        if (!pCurItem) {
-          return 0;
-        }
-
+      D2InventoryStrc* pInventory = pUnit->pInventory;
+      for (pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory); pCurItem; pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem)) {
         pKey = D2Common::INVENTORY::Inventory::GetCarriedItem(pCurItem);
-        bIsKey = D2Common::ITEMS::Items::ITEMS_IsA(pKey, ITEMTYPE_Key);
-        if (bIsKey) {
-          eInvPage = D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pKey);
-          if (eInvPage == INVPAGE_INVENTORY) {
-            break;
+        if (D2Common::ITEMS::Items::ITEMS_IsA(pKey, ITEMTYPE_Key) && D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pKey) == INVPAGE_INVENTORY) {
+          if (D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pKey, UNITSTAT_quantity, 0) - 1 > 0) {
+            D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pKey, UNITSTAT_quantity, -1, 0);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1605), pKey, '\x01', 0x46, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pKey, UNITSTAT_quantity, 0), 0);
+          } else {
+            ITEMMODE_ConsumeItem(pGame, pKey, pUnit);
           }
+
+          return 1;
         }
-
-        pCurItem = D2Common::INVENTORY::Inventory::INVENTORY_GetNextItem(pCurItem);
       }
 
-      nKeyQty = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pKey, UNITSTAT_quantity, 0);
-      if (nKeyQty - 1 > 0) {
-        D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pKey, UNITSTAT_quantity, -1, 0);
-        GAME::SCmd::NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\ITEMS\\ItemMode.cpp", 0x1605), pKey, '\x01', 0x46, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pKey, UNITSTAT_quantity, 0), 0);
-      } else {
-        ITEMMODE_ConsumeItem(pGame, pKey, pUnit);
-      }
-
-      return 1;
+      return 0;
     }
 }
 

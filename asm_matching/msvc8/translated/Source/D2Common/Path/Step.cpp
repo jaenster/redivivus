@@ -1522,13 +1522,10 @@ BOOL __stdcall PATH_MoveUnitToRoomPosition(D2DynamicPathStrc * pDynamicPath, D2U
     return 1;
 }
 
-BOOL __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, int * pbCollisionType, D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY) {
+BOOL __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nTargetX, int32_t nTargetY) {
     D2RoomStrc* pBetterRoom;
-    if (!pbCollisionType) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50d);
-      exit(-1);
-    }
-    if (!(!*pbCollisionType || *pbCollisionType == 1)) {
+    const eD2UnitType eUnitType = pUnit ? pUnit->eUnitType : UNIT_COUNT;
+    if (!(eUnitType == UNIT_PLAYER || eUnitType == UNIT_MONSTER)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50d);
       exit(-1);
     }

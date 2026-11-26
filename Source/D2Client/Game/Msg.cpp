@@ -46,7 +46,7 @@ int __stdcall RENDERING_GetEngineMode() {
 }
 
 // Client-side sender for opcode 0x67 (game join/create handshake). Fills D2GSPacketClt0x67 with game name, game type (SP/open-bnet/LAN/open), char class (or arena default), language code, arena flags (initialising to ClientUpdate|Expansion if zero), difficulty, and saved character name, then dispatches via NET_D2GS_CLIENT_SendPacketAfterChecks.
-void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName) {
+void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName, uint32_t nArenaFlags) {
     D2GSPacketClt0x67 packet;
     packet.nId = 0x67;
     Storm::Source::SSTR::SStrCopy(packet.szGameName, szGameName, 0x7fffffff);

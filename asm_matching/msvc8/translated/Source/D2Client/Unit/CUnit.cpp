@@ -2310,11 +2310,13 @@ D2UnitStrc * __fastcall UNIT_CreatePlayer(int32_t nUnitGuid, int32_t nClassId, i
       return nullptr;
     }
 
-    BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
-    if (bIsExpansion) {
-      pUnit->eUnitFlagsEx |= UNITFLAGEX_ISEXPANSION;
-    } else {
-      pUnit->eUnitFlagsEx &= ~UNITFLAGEX_ISEXPANSION;
+    const BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
+    if (pUnit) {
+      if (bIsExpansion) {
+        pUnit->eUnitFlagsEx |= UNITFLAGEX_ISEXPANSION;
+      } else {
+        pUnit->eUnitFlagsEx &= ~UNITFLAGEX_ISEXPANSION;
+      }
     }
 
     pUnit->nClassId = nClassId;
@@ -2322,15 +2324,12 @@ D2UnitStrc * __fastcall UNIT_CreatePlayer(int32_t nUnitGuid, int32_t nClassId, i
     pUnit->nUnitGUID = nUnitGuid;
     pUnit->dwTickCount = 0;
     pUnit->pMemory = 0;
-    if (!nX && !nY) {
-      pRoom = 0;
-    } else {
-      eAct eActNo;
+    if (nX || nY) {
       pRoom = FindRoom(nX, nY);
-      eLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
-      eActNo = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
-      pUnit->nAct = eActNo;
+      pUnit->nAct = D2Common::Drlg::GetActNoFromLevelNumber(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom));
       pUnit->pDrlgAct = GAME::Game::sgpDrlgAct;
+    } else {
+      pRoom = 0;
     }
 
     D2Common::Seed::SEED_InitDefault(&pUnit->sSeed);

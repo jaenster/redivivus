@@ -1,11 +1,11 @@
 libcmt.lib + libcpmt.lib functions (sp1): 8595, of which our image links 1198
-original functions the funcmap leaves unpaired: 1459 (160770 bytes)
+original functions the funcmap leaves unpaired: 1457 (160688 bytes)
 paired with a library function: 676 (131358 bytes), of which our image links 673
   lib-exact     510
   lib-order      93
   lib-similar    41
   lib-votes      32
-still unpaired: 659 (29412 bytes)
+still unpaired: 657 (29330 bytes)
   among the library code (00681a48..006b00a0): 132 (13693 bytes)
   import thunks (jmp [__imp_X], made by the linker): 53 (318 bytes)
-  elsewhere: 474 (15401 bytes)
+  elsewhere: 472 (15319 bytes)

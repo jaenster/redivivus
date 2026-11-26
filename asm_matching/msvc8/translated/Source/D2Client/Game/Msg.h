@@ -168,7 +168,7 @@ namespace D2Client { namespace GAME { namespace Msg {
 void __stdcall NET_SendPacket0x3f_0x1a();
 int __stdcall RENDERING_GetEngineMode();
 // Client-side sender for opcode 0x67 (game join/create handshake). Fills D2GSPacketClt0x67 with game name, game type (SP/open-bnet/LAN/open), char class (or arena default), language code, arena flags (initialising to ClientUpdate|Expansion if zero), difficulty, and saved character name, then dispatches via NET_D2GS_CLIENT_SendPacketAfterChecks.
-void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName);
+void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName, uint32_t nArenaFlags);
 void __stdcall NET_D2GS_CLIENT_Send_0x6B();
 // Client-side keep-alive ping sender. Throttled to once per 5 seconds (gdwLastPingSentTick). Computes an anti-cheat/Warden checksum by reading 2 bytes each from two offsets in a named module via ReadProcessMemory; sends packet 0x6D containing the current tick, the computed checksum (obfuscated), and half the game data delay. Updates gnPacketSendCount_0x69 and _gbNetworkPacketSyncFlag after send.
 void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING();

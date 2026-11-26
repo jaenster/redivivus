@@ -72,7 +72,11 @@ static void __stdcall MISSILES_EvalDamageAndSetStats(D2UnitStrc * pUnit, D2UnitS
 
 static void __stdcall CalculatePierce(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2SeedStrc sSeedState;
-    if (!(pUnit2 && pUnit && pUnit->eUnitType == UNIT_MISSILE && (pUnit2->eUnitType == UNIT_PLAYER || pUnit2->eUnitType == UNIT_MONSTER))) {
+    if (!pUnit2 || !pUnit || pUnit->eUnitType != UNIT_MISSILE) {
+      return;
+    }
+
+    if (pUnit2->eUnitType != UNIT_PLAYER && pUnit2->eUnitType != UNIT_MONSTER) {
       return;
     }
 
@@ -81,26 +85,20 @@ static void __stdcall CalculatePierce(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
       return;
     }
 
-    int nPierceStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_skill_pierce, 0);
-    nPierceStat += D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit2, UNITSTAT_item_pierce, 0);
+    const int nPierceStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit2, UNITSTAT_skill_pierce, 0) + D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit2, UNITSTAT_item_pierce, 0);
     if (!nPierceStat) {
       return;
     }
 
-    int32_t nPierceIdx = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit2, UNITSTAT_pierce_idx, 0);
-    D2Common::Seed::InitSeed_Param_666(&sSeedState, nPierceIdx);
+    D2Common::Seed::InitSeed_Param_666(&sSeedState, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit2, UNITSTAT_pierce_idx, 0));
     int nPierceCount = 0;
-    while (true) {
-      if (nPierceCount >= 4) {
+    for (;;) {
+      const int nRoll = nPierceCount < 4 ? (int)(D2_SeedRoll(&sSeedState) % 100) : nPierceStat;
+      if (nRoll >= nPierceStat) {
         break;
       }
 
-      D2_SeedRoll(&sSeedState);
-      if ((int)(sSeedState.nSeedLow % 100) >= nPierceStat) {
-        break;
-      }
-
-      nPierceCount++;
+      ++nPierceCount;
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, nPierceCount, 0);

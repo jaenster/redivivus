@@ -206,7 +206,7 @@ void * __fastcall MoveArgumentToEAX_Unref_0045ba90(void * pParam);
 uint32_t __stdcall DRAW_IsCharScreenOkPressed();
 BOOL __stdcall UI_ShowPopupDialog();
 void __stdcall nullSub_CharonGameDraw_Unref_00463d70();
-void __stdcall nullSub_CharonGameDraw();
+void __fastcall nullSub_CharonGameDraw(int32_t nArg1, int32_t nArg2);
 void __stdcall UI_ToggleHelpScreen();
 void __stdcall UI_ToggleBeltRows();
 int __stdcall INV_IsCurrentInventoryPage1Or2();

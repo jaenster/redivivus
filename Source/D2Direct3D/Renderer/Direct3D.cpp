@@ -2621,22 +2621,19 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int
 }
 
 BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pLight, int nScreenPanels) {
-    BOOL BVar1 = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
-    if (BVar1) {
+    BOOL bResult = 0;
+    if (D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0)) {
       RENDERER_D3D_SetBlendMode(1);
       SetBlendMode(1);
       RENDERER_D3D_SetTextureFilterMode(1);
-      BVar1 = RENDERER_D3D_IsPerspectiveEnabled();
-      if (BVar1) {
-        BVar1 = RENDERER_D3D_RenderWallTileWithPerspective(nScreenPanels, pTile, nPosX, nPosY, pLight, 0xff);
-        return BVar1;
+      if (RENDERER_D3D_IsPerspectiveEnabled()) {
+        bResult = RENDERER_D3D_RenderWallTileWithPerspective(nScreenPanels, pTile, nPosX, nPosY, pLight, 0xff);
+      } else {
+        bResult = RENDERER_D3D_BuildWallTileVerticesNoPerspective(nScreenPanels, pTile, nPosX, nPosY, pLight, 0xff);
       }
-
-      BVar1 = RENDERER_D3D_BuildWallTileVerticesNoPerspective(nScreenPanels, pTile, nPosX, nPosY, pLight, 0xff);
-      return BVar1;
     }
 
-    return 0;
+    return bResult;
 }
 
 // Creates ground tile vertex buffer (6x6 grid = 36 vertices) and index buffer (60 indices for 5x5 tile strips) for perspective tile rendering. Calculates texture coordinates based on window dimensions (gnD3DTextureCacheBlockSize, gnD3DTextureCacheCount). Each vertex has position adjustment flags at corners (±1 in X/Y) for isometric diamond shape. Index buffer stored at gaD3DGroundTileIndexBuffer.

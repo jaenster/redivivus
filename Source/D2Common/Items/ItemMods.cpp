@@ -1746,9 +1746,14 @@ void __stdcall ITEMMOD_RollGemRuneType(D2UnitStrc * pUnit) {
     D2SeedStrc* pSeed = Items::GetItemSeed(pUnit);
     nTableSize = D2_SeedRollLimited(pSeed, nTableSize);
     Items::ITEM_SetItemData_nFileIndex(pUnit, gaGemRuneTypeIds[nTableSize]);
-    int nValue = 1;
-    if (gaGemRuneTypeIds[nTableSize] == 9 || gaGemRuneTypeIds[nTableSize] == 7) {
-      nValue = (D2_SeedRoll(Items::GetItemSeed(pUnit)) & 3) + 1 << 8;
+    const uint32_t nFileIndex = gaGemRuneTypeIds[nTableSize];
+    int nValue;
+    if (nFileIndex == 9) {
+      nValue = ((D2_SeedRoll(Items::GetItemSeed(pUnit)) & 3) + 1) << 8;
+    } else if (nFileIndex == 7) {
+      nValue = ((D2_SeedRoll(Items::GetItemSeed(pUnit)) & 3) + 1) << 8;
+    } else {
+      nValue = 1;
     }
 
     Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_value, nValue, 0);

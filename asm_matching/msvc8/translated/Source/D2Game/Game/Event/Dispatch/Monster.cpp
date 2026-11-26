@@ -387,15 +387,14 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
 void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    D2ModeChangeStrc sMonsterKill;
-    memset(&sMonsterKill, 0, sizeof(sMonsterKill));
+    D2ModeChangeStrc sMonsterKill = {0};
     sMonsterKill.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
-    int32_t byAnimMode2 = 'd';
     sMonsterKill.pUnit = pUnit;
+    int32_t byAnimMode2 = 'd';
     if (pUnit) {
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
-      if (pMonStats2 && pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0]) {
+      if (pMonStats2 ? (uint32_t)pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0] : 0) {
         byAnimMode2 = 'e';
       }
     }
@@ -420,15 +419,14 @@ void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, D2UnitStrc * p
 void __fastcall MONMODE_EndTrappedSoulSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
-    D2ModeChangeStrc killStrc;
-    memset(&killStrc, 0, sizeof(killStrc));
+    D2ModeChangeStrc killStrc = {0};
     killStrc.nUnitMode = eD2MonsterAnimMode_ns::Skill1;
-    int32_t byAnimMode2 = 'd';
     killStrc.pUnit = pUnit;
+    int32_t byAnimMode2 = 'd';
     if (pUnit) {
       D2MonStats2Txt* pMonStats2;
       pMonStats2 = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId);
-      if (pMonStats2 && pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0]) {
+      if (pMonStats2 ? (uint32_t)pMonStats2->A1mv[1] & Fog::BitBuffer::gadwBitMasks[0] : 0) {
         byAnimMode2 = 'e';
       }
     }

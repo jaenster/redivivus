@@ -398,8 +398,17 @@ void __fastcall NpcState_MoveState0To1(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     UNIT::SUNITNPC::SUNITNPC_OnInteractHeal(pGame, pUnit, pTargetUnit);
 }
 
+// The monster's AI block as the original's header accessor returns it.
+static inline D2MonsterAiStrc * GetMonsterAiInline(D2UnitStrc * pUnit) {
+    if ((!pUnit ? (eD2UnitType)6 : pUnit->eUnitType) == UNIT_MONSTER) {
+        D2UnitDataMonsterStrc* pData = pUnit->pUnitData.pUnitDataMonster;
+        return !pData ? nullptr : pData->pMonsterAi;
+    }
+    return nullptr;
+}
+
 void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {
-    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMonster ? 0 : pNpc->pUnitData.pUnitDataMonster->pMonsterAi;
+    D2MonsterAiStrc* pMonsterAi = GetMonsterAiInline(pNpc);
     D2MonsterAiSubStrc* pAiSub = pMonsterAi->pAiSub;
     while (pAiSub) {
       if (pAiSub->pUnit == pUnit) {
@@ -420,7 +429,7 @@ void __fastcall NpcState_MoveState1To2(D2UnitStrc * pNpc, D2UnitStrc * pUnit) {
 }
 
 uint32_t __fastcall NpcStateIs2(D2UnitStrc * pNpc, D2UnitStrc * pPlayer) {
-    D2MonsterAiStrc* pMonsterAi = !pNpc || pNpc->eUnitType != UNIT_MONSTER || !pNpc->pUnitData.pUnitDataMonster ? 0 : pNpc->pUnitData.pUnitDataMonster->pMonsterAi;
+    D2MonsterAiStrc* pMonsterAi = GetMonsterAiInline(pNpc);
     D2MonsterAiSubStrc* pAiSub = pMonsterAi->pAiSub;
     while (true) {
       if (!pAiSub) {

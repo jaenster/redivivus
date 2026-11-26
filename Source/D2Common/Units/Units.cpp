@@ -427,7 +427,7 @@ void __stdcall Free(D2UnitStrc * pUnit) {
     switch (pUnit->eUnitType) {
       case UNIT_MONSTER:
         {
-          D2_FREE_POOL_AT(pUnit->pMemory, pUnit->pUnitData.pUnitDataMonster, ".\\UNITS\\Units.cpp", 0x69a);
+          D2_FREE_POOL_AT(!pUnit ? nullptr : pUnit->pMemory, pUnit->pUnitData.pUnitDataMonster, ".\\UNITS\\Units.cpp", 0x69a);
           break;
         }
     }
@@ -1872,7 +1872,6 @@ BOOL __stdcall IsSoftMonster(D2UnitStrc * pUnit) {
 // Allocates and zero-initialises a D2UnitDataPlayerStrc (0x16C bytes) for pUnit if not already present. For each of the 3 acts, allocates a quest-bit buffer and a waypoint record. Sets the initial portal flags to the Rogue Encampment default and zeroes the trade tick. Halts if pUnit is null or player data already exists. Calls FIELDTBLS_AllocPlayerData_STUB for cube/recipe table setup.
 // @sourcefile .\UNITS\Units.cpp
 void __stdcall AllocPlayerData(D2UnitStrc * pUnit) {
-    D2PoolManagerStrc* pMemPool;
     D2BitBufferStrc* pQuestBuf;
     D2WaypointStrc* pWaypoint;
     int iActIdx;
@@ -1891,16 +1890,12 @@ void __stdcall AllocPlayerData(D2UnitStrc * pUnit) {
       pUnit->pUnitData.pUnitDataPlayer = pUnitDataPlayer;
       memset(pUnitDataPlayer, 0, 0x16c);
       pUnit->pUnitData.pUnitDataPlayer->szCharName[0] = '\0';
-      iActIdx = 0x1c;
-      do {
-        pMemPool = GetMemPool(pUnit);
-        pQuestBuf = QuestRecord::CreateBitBuffer(pMemPool);
-        *(D2BitBufferStrc**)(pUnit->pUnitData.pUnitDataPlayer->szCharName + (iActIdx - 0xc)) = (D2BitBufferStrc*)pQuestBuf;
-        pMemPool = GetMemPool(pUnit);
-        pWaypoint = Waypoints::Alloc(pMemPool);
-        *(D2WaypointStrc**)(pUnit->pUnitData.pUnitDataPlayer->szCharName + iActIdx) = (D2WaypointStrc*)pWaypoint;
-        iActIdx += 4;
-      } while (iActIdx < 0x28);
+      for (iActIdx = 0; iActIdx < 3; iActIdx++) {
+        pQuestBuf = (D2BitBufferStrc*)QuestRecord::CreateBitBuffer(GetMemPool(pUnit));
+        pUnit->pUnitData.pUnitDataPlayer->pQuestRecord[iActIdx] = pQuestBuf;
+        pWaypoint = (D2WaypointStrc*)Waypoints::Alloc(GetMemPool(pUnit));
+        pUnit->pUnitData.pUnitDataPlayer->pWaypoint[iActIdx] = pWaypoint;
+      }
 
       nLine = DUNGEON::Dungeon::GetPortalFlagFromLevelId(LEVEL_RogueEncampment);
       pUnit->pUnitData.pUnitDataPlayer->nPortalFlags = nLine;
@@ -2150,6 +2145,20 @@ int32_t __stdcall GetDefense(D2UnitStrc * pUnit) {
     return nBaseArmor;
 }
 
+static inline int32_t GetToHitFactorInline(D2UnitStrc * pUnit) {
+    if (pUnit->eUnitType != UNIT_PLAYER) {
+      return 0;
+    }
+
+    const int nClassId = pUnit->nClassId;
+    D2CharStatsTxt* pCharStatsTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? ITEMS::Items::sgptDataTable->pTxtCharStats + nClassId : nullptr;
+    if (!pCharStatsTxt) {
+      return 0;
+    }
+
+    return pCharStatsTxt->ToHitFactor;
+}
+
 int32_t __stdcall GetAttackRate(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x107f);
@@ -2158,18 +2167,9 @@ int32_t __stdcall GetAttackRate(D2UnitStrc * pUnit) {
 
     int nToHit = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_tohit, 0);
     int nDexterity = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_dexterity, 0);
-    nToHit = (nDexterity - 7) * 5 + nToHit;
-    if (pUnit->eUnitType != UNIT_PLAYER) {
-      return nToHit;
-    }
-
-    nDexterity = pUnit->nClassId;
-    D2CharStatsTxt* pCharStatsTxt = nDexterity >= 0 && nDexterity < ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? ITEMS::Items::sgptDataTable->pTxtCharStats + nDexterity : nullptr;
-    if (!pCharStatsTxt) {
-      return nToHit;
-    }
-
-    return pCharStatsTxt->ToHitFactor + nToHit;
+    nDexterity -= 7;
+    nToHit += 5 * nDexterity;
+    return nToHit + GetToHitFactorInline(pUnit);
 }
 
 // Returns 1 if the monster unit is considered to have a shield for block/defense purposes. Hard-codes TRUE for Diablo, DoomKnight, and DiabloClone; FALSE for Wolf. For other monsters, reads the body component slot 7 code, resolves it via MONSTER_GetComponentOverlay, then looks up the item code: returns 1 if the resolved item's wType is 2 (shield base type). Returns 0 on any lookup failure.

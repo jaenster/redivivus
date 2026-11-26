@@ -15,6 +15,13 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Gdi/Renderer/Windowed.data.h"
 
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_AT
@@ -754,95 +761,59 @@ BOOL __stdcall RENDERER_WINDOWED_CheckBlendedShadowsEnabled() {
 }
 
 void __fastcall DrawSolidRectEx(int nXStart, int nYStart, int nXEnd, int nYEnd, BYTE dwColor, int nDrawMode) {
-    uint8_t* pbPixel;
-    int nRowsLeft;
     int nBlendMode;
     uint8_t* pPaletteTable = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&nBlendMode);
-    uint32_t uMaxX = RENDERER_nWindowWidth - 1;
-    uint32_t uClampedYStart = nXStart <= 0 ? 0 : nXStart;
-    if ((int)uClampedYStart >= (int)uMaxX) {
-      uClampedYStart = uMaxX;
-    }
-
-    uint32_t uClampedXStart = nXEnd <= 0 ? 0 : nXEnd;
-    if ((int)uClampedXStart < (int)uMaxX) {
-      uMaxX = uClampedXStart;
-    }
-    if (uClampedYStart == uMaxX) {
+    const int nX1 = min(max(nXStart, 0), RENDERER_nWindowWidth - 1); // steer-ok: windef.h min/max macros
+    const int nX2 = min(max(nXEnd, 0), RENDERER_nWindowWidth - 1); // steer-ok: windef.h min/max macros
+    if (nX1 == nX2) {
       return;
     }
 
-    uint32_t uClampedXEnd = RENDERER_nWindowHeight - 1;
-    uClampedXStart = nYStart <= 0 ? 0 : nYStart;
-    if ((int)uClampedXStart >= (int)uClampedXEnd) {
-      uClampedXStart = uClampedXEnd;
-    }
-
-    uint32_t uMaxY = nYEnd <= 0 ? 0 : nYEnd;
-    if ((int)uMaxY >= (int)uClampedXEnd) {
-      uMaxY = uClampedXEnd;
-    }
-    if (uMaxY == uClampedXStart) {
+    const int nY1 = min(max(nYStart, 0), RENDERER_nWindowHeight - 1); // steer-ok: windef.h min/max macros
+    const int nY2 = min(max(nYEnd, 0), RENDERER_nWindowHeight - 1); // steer-ok: windef.h min/max macros
+    if (nY2 == nY1) {
       return;
     }
-    if ((int)uClampedXStart > (int)uMaxY) {
+    if (!(nY2 > nY1)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32);
       exit(-1);
     }
 
-    int nWidth = uMaxY - uClampedXStart;
-    uint8_t* pbScanline = gpRenderBackBufferBits + (uClampedYStart + RENDERER_nWindowWidth * uClampedXStart);
+    uint8_t* pScanline = gpRenderBackBufferBits + RENDERER_nWindowWidth * nY1 + nX1;
+    int nRows = nY2 - nY1;
     switch (nBlendMode) {
-      case 1:
-        {
-          while (nWidth) {
-            nWidth--;
-            pbPixel = pbScanline;
-            for (nRowsLeft = uMaxX - uClampedYStart; nRowsLeft; nRowsLeft--) {
-              *pbPixel = pPaletteTable[*pbPixel];
-              pbPixel++;
-            }
-
-            pbScanline += RENDERER_nWindowWidth;
-          }
-
-          break;
-        }
-      case 2:
-        {
-          if (nWidth) {
-            do {
-              nWidth--;
-              if (uMaxX - uClampedYStart) {
-                pbPixel = pbScanline;
-                nRowsLeft = uMaxX - uClampedYStart;
-                do {
-                  nRowsLeft--;
-                  *pbPixel = pPaletteTable[((uint32_t)*pbPixel << 8) + (uint32_t)dwColor];
-                  pbPixel++;
-                } while (nRowsLeft);
-              }
-
-              pbScanline += RENDERER_nWindowWidth;
-            } while (nWidth);
-
-            return;
-          }
-
-          break;
-        }
       default:
-        {
-          if (nWidth) {
-            do {
-              nWidth--;
-              memset(pbScanline, (uint32_t)dwColor, uMaxX - uClampedYStart);
-              pbScanline += RENDERER_nWindowWidth;
-            } while (nWidth);
-
-            return;
-          }
+        while (nRows--) {
+          memset(pScanline, dwColor, nX2 - nX1);
+          pScanline += RENDERER_nWindowWidth;
         }
+        break;
+
+      case 2:
+        while (nRows--) {
+          uint8_t* pbPixel = pScanline;
+          int nPixelCount = nX2 - nX1;
+          while (nPixelCount--) {
+            *pbPixel = pPaletteTable[(*pbPixel << 8) + dwColor];
+            pbPixel++;
+          }
+
+          pScanline += RENDERER_nWindowWidth;
+        }
+        break;
+
+      case 1:
+        while (nRows--) {
+          uint8_t* pbPixel = pScanline;
+          int nPixelCount = nX2 - nX1;
+          while (nPixelCount--) {
+            *pbPixel = pPaletteTable[*pbPixel];
+            pbPixel++;
+          }
+
+          pScanline += RENDERER_nWindowWidth;
+        }
+        break;
     }
 }
 
@@ -1033,77 +1004,70 @@ void __fastcall RENDERER_WINDOWED_DrawLineBresenham(POINT * pnEndPoint, POINT * 
 }
 
 void __fastcall DrawRect(RECT * pRect, int nPaletteIndex) {
-    uint8_t byColorParam;
-    POINT nMidX;
-    POINT nRight;
-    POINT nTopX;
-    POINT nTop;
-    nTop.x = pRect->left;
-    if (nTop.x > pRect->right) {
+    if (!(pRect->left <= pRect->right)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x126);
       exit(-1);
-    } else {
-      uint32_t uHeight;
-      nRight.y = pRect->bottom;
-      nMidX.y = pRect->top;
-      if (!(nMidX.y <= nRight.y)) {
-        nTop.y = nRight.y;
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x127);
-        exit(-1);
-      }
+    }
+    int nBottom = pRect->bottom;
+    if (!(pRect->top <= nBottom)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x127);
+      exit(-1);
+    }
 
-      uHeight = pRect->right - nTop.x;
-      if (!(uHeight && nRight.y - nMidX.y)) {
-        return;
-      }
-
-      nTopX.x = pRect->right;
-      nTopX.y = pRect->top + ((uint32_t)(nRight.y - nMidX.y) >> 1);
-      nMidX.x = (uHeight >> 1) + nTop.x;
-      byColorParam = (uint8_t)nPaletteIndex;
-      nRight.x = nMidX.x;
-      nTop.y = nTopX.y;
-      RENDERER_WINDOWED_DrawLineBresenham(&nTopX, &nMidX, byColorParam);
-      RENDERER_WINDOWED_DrawLineBresenham(&nRight, &nTopX, byColorParam);
-      RENDERER_WINDOWED_DrawLineBresenham(&nTop, &nRight, byColorParam);
-      RENDERER_WINDOWED_DrawLineBresenham(&nMidX, &nTop, byColorParam);
+    uint32_t nWidth = pRect->right - pRect->left;
+    uint32_t nHeight = nBottom - pRect->top;
+    if (!nWidth || !nHeight) {
       return;
     }
+
+    POINT ptTop;
+    POINT ptLeft;
+    POINT ptBottom;
+    ptTop.x = pRect->left + (nWidth >> 1);
+    POINT ptRight;
+    ptTop.y = pRect->top;
+    ptRight.x = pRect->right;
+    ptRight.y = pRect->top + (nHeight >> 1);
+    ptBottom.x = pRect->left + (nWidth >> 1);
+    ptBottom.y = nBottom;
+    ptLeft.x = pRect->left;
+    ptLeft.y = pRect->top + (nHeight >> 1);
+    RENDERER_WINDOWED_DrawLineBresenham(&ptTop, &ptRight, nPaletteIndex);
+    RENDERER_WINDOWED_DrawLineBresenham(&ptRight, &ptBottom, nPaletteIndex);
+    RENDERER_WINDOWED_DrawLineBresenham(&ptBottom, &ptLeft, nPaletteIndex);
+    RENDERER_WINDOWED_DrawLineBresenham(&ptLeft, &ptTop, nPaletteIndex);
 }
 
 void __fastcall DrawRectEx(RECT * pRect, int nPaletteIndex) {
-    POINT nX1;
-    POINT nX1_copy;
-    POINT nX2_save;
-    POINT nX2_copy;
-    nX1.x = pRect->left;
-    if (nX1.x > pRect->right) {
+    const int nLeft = pRect->left;
+    if (!(nLeft <= pRect->right)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x142);
       exit(-1);
-    } else {
-      uint8_t byColorParam;
-      nX1_copy.y = pRect->top;
-      if (!(nX1_copy.y <= pRect->bottom)) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x143);
-        exit(-1);
-      }
-      if (!(pRect->right != nX1.x && pRect->bottom != nX1_copy.y)) {
-        return;
-      }
-
-      nX2_save.x = pRect->right;
-      nX1.y = pRect->bottom;
-      byColorParam = (uint8_t)nPaletteIndex;
-      nX1_copy.x = nX1.x;
-      nX2_save.y = nX1.y;
-      nX2_copy.x = nX2_save.x;
-      nX2_copy.y = nX1_copy.y;
-      RENDERER_WINDOWED_DrawLineBresenham(&nX2_copy, &nX1_copy, byColorParam);
-      RENDERER_WINDOWED_DrawLineBresenham(&nX2_save, &nX2_copy, byColorParam);
-      RENDERER_WINDOWED_DrawLineBresenham(&nX1, &nX2_save, byColorParam);
-      RENDERER_WINDOWED_DrawLineBresenham(&nX1_copy, &nX1, byColorParam);
+    }
+    const int nTop = pRect->top;
+    if (!(nTop <= pRect->bottom)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x143);
+      exit(-1);
+    }
+    const uint32_t nWidth = pRect->right - nLeft;
+    const uint32_t nHeight = pRect->bottom - nTop;
+    if (!nWidth || !nHeight) {
       return;
     }
+
+    POINT aCorners[4];
+    aCorners[1].x = nLeft;
+    aCorners[1].y = pRect->top;
+    aCorners[3].x = pRect->right;
+    aCorners[3].y = pRect->top;
+    aCorners[2].x = pRect->right;
+    aCorners[2].y = pRect->bottom;
+    aCorners[0].x = nLeft;
+    aCorners[0].y = pRect->bottom;
+    RENDERER_WINDOWED_DrawLineBresenham(&aCorners[1], &aCorners[3], nPaletteIndex);
+    RENDERER_WINDOWED_DrawLineBresenham(&aCorners[3], &aCorners[2], nPaletteIndex);
+    RENDERER_WINDOWED_DrawLineBresenham(&aCorners[2], &aCorners[0], nPaletteIndex);
+    RENDERER_WINDOWED_DrawLineBresenham(&aCorners[0], &aCorners[1], nPaletteIndex);
 }
 
 void __fastcall DrawSolidRect(tagRECT * pRect, uint8_t nPaletteIndex) {
@@ -1191,157 +1155,104 @@ void __fastcall RENDERER_WINDOWED_ClearScreen(int nParam, BYTE nRed, BYTE nGreen
 }
 
 BOOL __fastcall DrawShadowTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int32_t nPosY, int32_t nDrawMode, int32_t nScreenPanels) {
-    int nScreenY;
-    BOOL nVisCount = 0;
-    BOOL bAllocOk = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
-    if (!bAllocOk) {
-      return 0;
-    }
-
-    int iVar1 = RENDERER_nWindowHeight + 0x20;
-    int nClipLeft = -0x20;
-    int nClipRight = RENDERER_nWindowWidth;
-    switch (nScreenPanels) {
-      case 1:
-        {
-          nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+    BOOL bAnyDrawn = 0;
+    if (D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0)) {
+      int nClipLeft = -0x20;
+      int nClipRight = RENDERER_nWindowWidth;
+      const int nClipBottom = RENDERER_nWindowHeight + 0x20;
+      switch (nScreenPanels) {
+        case 1:
+          nClipRight -= RENDERER_nWindowWidth / 2;
           break;
-        }
-      case 2:
-        {
+        case 2:
           nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
           break;
-        }
-    }
+      }
 
-    int nTileIndex = 0;
-    if (pTile->nSubTiles > 0) {
-      int nScreenX;
-      do {
-        nScreenX = pTile->pSubTiles[nTileIndex].nOffsetX + nPosX;
-        nScreenY = pTile->pSubTiles[nTileIndex].nOffsetY + nPosY;
-        if (nScreenX >= nClipLeft && nScreenX < nClipRight && nScreenY >= -0x20 && nScreenY < iVar1) {
-          nVisCount = 1;
-          bAllocOk = RENDERER_WINDOWED_CheckBlendedShadowsEnabled();
-          if (bAllocOk) {
-            D2GfxRendereInitFunctionsStrc->nfpDrawBlendedVisTile(pTile->pSubTiles[nTileIndex].pPixelData, nScreenX, nScreenY, 0xc0);
+      for (int i = 0; i < pTile->nSubTiles; i++) {
+        D2GroundSubTileStrc* pSubTile = &pTile->pSubTiles[i];
+        const int nSubtileX = pSubTile->nOffsetX + nPosX;
+        const int nSubtileY = pTile->pSubTiles[i].nOffsetY + nPosY;
+        if (nSubtileX >= nClipLeft && nSubtileX < nClipRight && nSubtileY >= -0x20 && nSubtileY < nClipBottom) {
+          bAnyDrawn = 1;
+          if (RENDERER_WINDOWED_CheckBlendedShadowsEnabled()) {
+            D2GfxRendereInitFunctionsStrc->nfpDrawBlendedVisTile(pTile->pSubTiles[i].pPixelData, nSubtileX, nSubtileY, 0xc0);
           } else {
-            D2GfxRendereInitFunctionsStrc->nfpDrawVisTile(pTile->pSubTiles[nTileIndex].pPixelData, nScreenX, nScreenY);
+            D2GfxRendereInitFunctionsStrc->nfpDrawVisTile(pTile->pSubTiles[i].pPixelData, nSubtileX, nSubtileY);
           }
         }
-
-        nTileIndex++;
-      } while (nTileIndex < pTile->nSubTiles);
-
-      return nVisCount;
+      }
     }
 
-    return 0;
+    return bAnyDrawn;
 }
 
 BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha) {
-    int iVar1;
-    int a3;
-    int nScreenX;
-    short int* psTileEntry;
-    uint32_t aCornerLight[4];
-    int nClipLeft;
-    int nClipRight;
-    BOOL nLightIdx = 0;
-    BOOL nTileY = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
-    if (nTileY) {
-      int bAllocOk;
-      iVar1 = RENDERER_nWindowHeight + 0x20;
-      nClipLeft = -0x20;
-      nClipRight = RENDERER_nWindowWidth;
+    BOOL bAnyDrawn = 0;
+    if (D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0)) {
+      int nClipLeft = -0x20;
+      int nClipRight = RENDERER_nWindowWidth;
+      const int nClipBottom = RENDERER_nWindowHeight + 0x20;
       switch (nScreenPanels) {
         case 1:
-          {
-            nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
-            break;
-          }
+          nClipRight -= RENDERER_nWindowWidth / 2;
+          break;
         case 2:
-          {
-            nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
-            break;
-          }
+          nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
+          break;
       }
 
-      nScreenPanels = 0;
-      if (pTile->nSubTiles > 0) {
-        do {
-          a3 = pTile->pSubTiles[nScreenPanels].nOffsetY + nPosY;
-          nScreenX = pTile->pSubTiles[nScreenPanels].nOffsetX + nPosX;
-          if (nScreenX >= nClipLeft && nScreenX < nClipRight && a3 >= -0x20 && a3 < iVar1) {
-            psTileEntry = &pTile->pSubTiles[nScreenPanels].nOffsetX;
-            bAllocOk = (int)*psTileEntry >> 5;
-            aCornerLight[0] = (uint32_t)pLight[bAllocOk].nIntensity;
-            aCornerLight[1] = (uint32_t)pLight[bAllocOk + 1].nIntensity;
-            aCornerLight[2] = aCornerLight[1];
-            aCornerLight[3] = aCornerLight[0];
-            D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile((int)(intptr_t)((D2GroundSubTileStrc*)psTileEntry)->pPixelData, nScreenX, a3, aCornerLight, nAlpha);
-            nLightIdx = 1;
-          }
-
-          nScreenPanels++;
-        } while (nScreenPanels < pTile->nSubTiles);
+      for (int i = 0; i < pTile->nSubTiles; i++) {
+        const int nSubtileX = pTile->pSubTiles[i].nOffsetX + nPosX;
+        const int nSubtileY = pTile->pSubTiles[i].nOffsetY + nPosY;
+        if (nSubtileX >= nClipLeft && nSubtileX < nClipRight && nSubtileY >= -0x20 && nSubtileY < nClipBottom) {
+          const int nLightIndex = pTile->pSubTiles[i].nOffsetX >> 5;
+          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles;
+          uint32_t aCornerLight[4];
+          bAnyDrawn = 1;
+          aCornerLight[0] = pLight[nLightIndex].nIntensity;
+          aCornerLight[3] = pLight[nLightIndex].nIntensity;
+          aCornerLight[1] = pLight[nLightIndex + 1].nIntensity;
+          aCornerLight[2] = pLight[nLightIndex + 1].nIntensity;
+          D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile((int)(intptr_t)pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight, nAlpha);
+        }
       }
     }
 
-    return nLightIdx;
+    return bAnyDrawn;
 }
 
 BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPosY, D2GfxLightStrc * pLight, int nScreenPanels) {
-    int a3;
-    int nScreenX;
-    short int* psTileEntry;
-    uint32_t aCornerLight[4];
-    BOOL bDrawn = 0;
-    BOOL nTileY = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
-    if (!nTileY) {
-      return 0;
-    }
-
-    int iVar1 = RENDERER_nWindowHeight + 0x20;
-    int nClipLeft = -0x20;
-    int nClipRight = RENDERER_nWindowWidth;
-    switch (nScreenPanels) {
-      case 1:
-        {
-          nClipRight = RENDERER_nWindowWidth - RENDERER_nWindowWidth / 2;
+    BOOL bAnyDrawn = 0;
+    if (D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0)) {
+      int nClipLeft = -0x20;
+      int nClipRight = RENDERER_nWindowWidth;
+      const int nClipBottom = RENDERER_nWindowHeight + 0x20;
+      switch (nScreenPanels) {
+        case 1:
+          nClipRight -= RENDERER_nWindowWidth / 2;
           break;
-        }
-      case 2:
-        {
+        case 2:
           nClipLeft = RENDERER_nWindowWidth / 2 - 0x20;
           break;
+      }
+
+      for (int i = 0; i < pTile->nSubTiles; i++) {
+        const int nSubtileX = pTile->pSubTiles[i].nOffsetX + nPosX;
+        const int nSubtileY = pTile->pSubTiles[i].nOffsetY + nPosY;
+        if (nSubtileX >= nClipLeft && nSubtileX < nClipRight && nSubtileY >= -0x20 && nSubtileY < nClipBottom) {
+          const int nLightIndex = pTile->pSubTiles[i].nOffsetX >> 5;
+          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles;
+          uint32_t aCornerLight[4];
+          aCornerLight[3] = aCornerLight[0] = pLight[nLightIndex].nIntensity;
+          aCornerLight[2] = aCornerLight[1] = pLight[nLightIndex + 1].nIntensity;
+          bAnyDrawn = 1;
+          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile((int)(intptr_t)pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight);
         }
+      }
     }
 
-    nScreenPanels = 0;
-    if (pTile->nSubTiles > 0) {
-      int bAllocOk;
-      do {
-        a3 = pTile->pSubTiles[nScreenPanels].nOffsetY + nPosY;
-        nScreenX = pTile->pSubTiles[nScreenPanels].nOffsetX + nPosX;
-        if (nScreenX >= nClipLeft && nScreenX < nClipRight && a3 >= -0x20 && a3 < iVar1) {
-          psTileEntry = &pTile->pSubTiles[nScreenPanels].nOffsetX;
-          bAllocOk = (int)*psTileEntry >> 5;
-          aCornerLight[0] = (uint32_t)pLight[bAllocOk].nIntensity;
-          aCornerLight[1] = (uint32_t)pLight[bAllocOk + 1].nIntensity;
-          bDrawn = 1;
-          aCornerLight[2] = aCornerLight[1];
-          aCornerLight[3] = aCornerLight[0];
-          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile((int)(intptr_t)((D2GroundSubTileStrc*)psTileEntry)->pPixelData, nScreenX, a3, aCornerLight);
-        }
-
-        nScreenPanels++;
-      } while (nScreenPanels < pTile->nSubTiles);
-
-      return bDrawn;
-    }
-
-    return 0;
+    return bAnyDrawn;
 }
 
 void __fastcall SetDefaultPerspectiveFactor_Unref_006c95c0() {
@@ -1349,34 +1260,22 @@ void __fastcall SetDefaultPerspectiveFactor_Unref_006c95c0() {
 }
 
 BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLight, int nPosX, int nPosY, int nWorldXpos, int nWorldYpos, BYTE nAlpha, int nScreenPanels, void * pTileData) {
-    int nPanelOffsetX;
     BOOL bDrawResult = D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
     if (bDrawResult) {
-      int a2 = nPosX - 0x50;
+      nPosX -= 0x50;
       switch (nScreenPanels) {
         case 1:
-          {
-            nPanelOffsetX = -(RENDERER_nWindowWidth / 4);
-            break;
-          }
-        default:
-          {
-            bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile(pTile, a2, nPosY, pLight);
-            return bDrawResult;
-          }
+          nPosX -= RENDERER_nWindowWidth / 4;
+          break;
         case 2:
-          {
-            nPanelOffsetX = RENDERER_nWindowWidth / 4;
-            break;
-          }
+          nPosX += RENDERER_nWindowWidth / 4;
+          break;
       }
 
-      a2 += nPanelOffsetX;
-      bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile(pTile, a2, nPosY, pLight);
-      return bDrawResult;
+      bDrawResult = D2GfxRendereInitFunctionsStrc->nfpDrawGroundTile(pTile, nPosX, nPosY, pLight);
     }
 
-    return 0;
+    return bDrawResult;
 }
 
 // @sourcefile .\Src\gdiSmack.cpp

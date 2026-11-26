@@ -101,3 +101,54 @@ jobs:
           export CCACHE_DIR=$HOME/.cache/ccache CCACHE_MAXSIZE=2G CCACHE_COMPRESS=true
           ninja -C build64 d2host
           x86_64-w64-mingw32-objdump -f build64/d2host.exe | grep -q 'pei-x86-64'
+
+  # Visual Studio 2026 (cl 19.5x): the CMakePresets.json debugging build, x86 and x64.
+  # Build only, nothing runs and nothing is published. The 64-bit game executable reads
+  # FFmpeg's struct layouts at compile time (Redivivus/x64/), so the headers of a Windows
+  # FFmpeg shared build are fetched for it.
+  msvc:
+    runs-on: windows-2025-vs2026
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - preset: msvc-x86-debug
+            vcvars: amd64_x86
+          - preset: msvc-x64-debug
+            vcvars: amd64
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Visual Studio environment
+        shell: pwsh
+        run: |
+          $vs = & "${env:ProgramFiles(x86)}\Microsoft Visual Studio\Installer\vswhere.exe" -latest -products * `
+                  -requires Microsoft.VisualStudio.Component.VC.Tools.x86.x64 -property installationPath
+          cmd /c "`"$vs\VC\Auxiliary\Build\vcvarsall.bat`" ${{ matrix.vcvars }} >nul && set" | ForEach-Object {
+            if ($_ -match '^([^=]+)=(.*)$') { "$($Matches[1])=$($Matches[2])" | Out-File $env:GITHUB_ENV -Append -Encoding utf8 }
+          }
+
+      - name: FFmpeg headers (x64)
+        if: matrix.preset == 'msvc-x64-debug'
+        shell: pwsh
+        run: |
+          $zip = "$env:RUNNER_TEMP\ffmpeg.zip"
+          Invoke-WebRequest -UseBasicParsing -OutFile $zip `
+            https://github.com/BtbN/FFmpeg-Builds/releases/download/latest/ffmpeg-n8.1-latest-win64-lgpl-shared-8.1.zip
+          Expand-Archive $zip "$env:RUNNER_TEMP\ffmpeg"
+          $inc = (Get-ChildItem "$env:RUNNER_TEMP\ffmpeg\*\include" -Directory | Select-Object -First 1).FullName
+          "REDIVIVUS_FFMPEG_INCLUDE=$inc" | Out-File $env:GITHUB_ENV -Append -Encoding utf8
+
+      - name: Configure
+        run: cmake --preset ${{ matrix.preset }}
+
+      - name: Build d2.exe
+        run: cmake --build --preset ${{ matrix.preset }}
+
+      - name: Check the PDB is referenced
+        shell: pwsh
+        run: |
+          $exe = "out/build/${{ matrix.preset }}/d2.exe"
+          $hdr = dumpbin /headers $exe | Out-String
+          if ($hdr -notmatch 'Format: RSDS.*\.pdb') { Write-Error "no CodeView/PDB entry in $exe"; exit 1 }
+          ($hdr -split "`n") | Select-String 'RSDS'

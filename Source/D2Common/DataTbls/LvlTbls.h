@@ -31,7 +31,10 @@ typedef uint8_t eD2Difficulty;
 struct D2AutoMapLvlTbls {
     /* 0x00 */ int nLevelType;
     /* 0x04 */ int nOrientation;
-    /* 0x08 */ int nIndex;
+    /* 0x08 */ uint8_t nStyle; // 0xff = any style
+    /* 0x09 */ uint8_t nStartSequence; // 0xff = any sequence
+    /* 0x0A */ uint8_t nEndSequence;
+    /* 0x0B */ uint8_t pad0x0B;
     /* 0x0C */ int nCellNo[4];
     /* 0x1C */ int nSize;
 };

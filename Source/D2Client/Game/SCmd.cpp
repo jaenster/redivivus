@@ -1188,21 +1188,30 @@ void __stdcall SaveCharacter() {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x25);
       exit(-1);
     }
-    if (!(D2Game::Save::nRawSaveBufferSize >= 8 && *(int*)D2Game::Save::pRawSaveBuffer == -0x55aa55ab)) {
+    const uint32_t nSize = D2Game::Save::nRawSaveBufferSize;
+    if (nSize < 8) {
       return;
     }
-    /* Version ID */ if (*(uint32_t*)(D2Game::Save::pRawSaveBuffer + 4) <= 91) {
-      if (D2Game::Save::nRawSaveBufferSize < 0x82) {
+
+    uint8_t* pBuffer = D2Game::Save::pRawSaveBuffer;
+    const uint32_t dwMagic = *(uint32_t*)pBuffer;
+    const uint32_t dwVersion = *(uint32_t*)(pBuffer + 4);
+    if (dwMagic != 0xaa55aa55) {
+      return;
+    }
+
+    if (dwVersion <= 91) {
+      if (nSize < 0x82) {
         return;
       }
 
-      ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = *(eD2PlayerStatus*)(D2Game::Save::pRawSaveBuffer + 0x18);
+      ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = *(eD2PlayerStatus*)(pBuffer + 0x18);
     } else {
-      if (D2Game::Save::nRawSaveBufferSize < 0x14f) {
+      if (nSize < 0x14f) {
         return;
       }
 
-      ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = *(eD2PlayerStatus*)(D2Game::Save::pRawSaveBuffer + 0x24);
+      ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = *(eD2PlayerStatus*)(pBuffer + 0x24);
     }
 
     Fog::Source::SFile::GetAndCreateSavePath(szFilePath, 0x400);
@@ -1219,40 +1228,30 @@ void __stdcall SaveCharacter() {
 // Processes one chunk of an in-flight character save upload from the client (SCmd handler). Allocates or reuses D2Game::Save::pRawSaveBuffer on the first chunk (pBytes[2]==0 skips realloc). Appends pBytes[1] bytes from the packet payload into the buffer, advancing nRawSaveBufferSize. When nRawSaveBufferSize reaches the declared total length (pBytes+3), calls SaveCharacter() and frees the buffer.
 // @sourcefile .\GAME\SCmd.cpp
 static void DownloadSave(char * pBytes) {
-    uint8_t* pDst;
-    if (D2Game::Save::pRawSaveBuffer) {
-      if (pBytes[2] == '\0') {
-        goto append_chunk;
-      }
-
+    if (D2Game::Save::pRawSaveBuffer && pBytes[2]) {
       D2_FREE_AT(D2Game::Save::pRawSaveBuffer, ".\\GAME\\SCmd.cpp", 0x5b);
       D2Game::Save::pRawSaveBuffer = 0;
       D2Game::Save::nRawSaveBufferSize = 0;
     }
 
-    D2Game::Save::pRawSaveBuffer = (uint8_t*)D2_ALLOC_AT(*(size_t*)(pBytes + 3), ".\\GAME\\SCmd.cpp", 0x62);
-    append_chunk:
-    pDst = D2Game::Save::pRawSaveBuffer + D2Game::Save::nRawSaveBufferSize;
-    int i = 0;
-    if ((uint8_t)pBytes[1] > '\0') {
-      intptr_t nByteOffset;
-      nByteOffset = 7 - (intptr_t)pDst;
-      do {
-        *pDst = pDst[(intptr_t)(pBytes + nByteOffset)];
-        i++;
-        pDst++;
-      } while (i < (int)(uint32_t)(uint8_t)pBytes[1]);
+    if (!D2Game::Save::pRawSaveBuffer) {
+      D2Game::Save::pRawSaveBuffer = (uint8_t*)D2_ALLOC_AT(*(size_t*)(pBytes + 3), ".\\GAME\\SCmd.cpp", 0x62);
     }
 
-    D2Game::Save::nRawSaveBufferSize += (uint32_t)(uint8_t)pBytes[1];
-    if (*(int*)(pBytes + 3) != D2Game::Save::nRawSaveBufferSize) {
-      return;
+    uint32_t nSize = D2Game::Save::nRawSaveBufferSize;
+    uint8_t* pDst = D2Game::Save::pRawSaveBuffer + nSize;
+    const uint8_t* pSrc = (const uint8_t*)pBytes + 7;
+    for (int i = 0; i < (uint8_t)pBytes[1]; i++) {
+      pDst[i] = pSrc[i];
     }
 
-    SaveCharacter();
-    D2_FREE_AT(D2Game::Save::pRawSaveBuffer, ".\\GAME\\SCmd.cpp", 0x71);
-    D2Game::Save::pRawSaveBuffer = 0;
-    D2Game::Save::nRawSaveBufferSize = 0;
+    D2Game::Save::nRawSaveBufferSize += (uint8_t)pBytes[1];
+    if (*(uint32_t*)(pBytes + 3) == D2Game::Save::nRawSaveBufferSize) {
+      SaveCharacter();
+      D2_FREE_AT(D2Game::Save::pRawSaveBuffer, ".\\GAME\\SCmd.cpp", 0x71);
+      D2Game::Save::pRawSaveBuffer = 0;
+      D2Game::Save::nRawSaveBufferSize = 0;
+    }
 }
 
 // CLIENT CONNECTION PACKET HANDLER (0xAF-0xB4)
@@ -1687,19 +1686,24 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x6C_UNITCHANGE_MONSTERIDPOSITION(D2Unit
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x6D_UNITCHANGE_MONSTERNEUTRAL(D2UnitStrc * pUnit, D2GSPacketSrv0x6D * pBytes) {
-    D2ServerMessageHandleStrc sMsg;
-    if (!(pUnit && pBytes)) {
+    if (!pUnit) {
+      return;
+    }
+    if (!pBytes) {
       return;
     }
 
-    sMsg.nItemId = (uint32_t)pBytes->wY;
-    sMsg.nTargetUnitType = (uint32_t)pBytes->nHpPercent128;
-    sMsg.nSkillId = (uint32_t)pBytes->wX;
+    const uint16_t nX = pBytes->wX;
+    const uint16_t nY = pBytes->wY;
+    D2ServerMessageHandleStrc sMsg;
+    sMsg.nSkillId = nX;
+    sMsg.nItemId = nY;
+    sMsg.nTargetUnitType = pBytes->nHpPercent128;
     sMsg.nTargetUnitId = 2;
     sMsg.nSkillLvl = 0;
     sMsg.nMaxDistance = 4;
     sMsg.nTargetX = 0;
-    UNIT::Path::PATH_MoveUnitToPoint(pUnit, pBytes->wX, sMsg.nItemId, 0, 0, 0);
+    UNIT::Path::PATH_MoveUnitToPoint(pUnit, nX, nY, 0, 0, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_pierce_idx, D2Common::Stats::StatsEx::SERVER_GetUnitStat(pUnit, UNITSTAT_pierce_idx, 0) + 1, 0);
     UNIT::UnitMode::HandleMessage(7, pUnit, &sMsg, 1);
 }
@@ -1973,30 +1977,33 @@ static void __stdcall SCMD_HandleStatChangeEffect(D2UnitStrc * pUnit, eD2UnitSta
 
 // Server→client handler for stat-update opcodes 0x9E–0xA2 targeting a monster unit. Decodes the stat id (byte 1) and a value (bytes 6+, width varies by opcode: byte/word/dword). Opcodes 0xA1/0xA2 add to the stat (STATLIST_AddUnitStat); others set it (STATLIST_SetUnitStat). If the stat is UNITSTAT_level, also triggers ITEM_CltRecalcEquippedFromUnit to refresh item-level requirements.
 void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes) {
+    int32_t bIsAdd = 0;
     uint32_t nValue;
-    BOOL bIsAdd;
-    bool bVar1 = false;
+    eD2UnitStat eUnitStat;
     switch (*pBytes) {
       case 0x9e:
         nValue = (uint32_t)pBytes[6];
-      break;
+        eUnitStat = (eD2UnitStat)pBytes[1];
+        break;
       case 0xa0:
         nValue = *(uint32_t*)(pBytes + 6);
-      break;
+        eUnitStat = (eD2UnitStat)pBytes[1];
+        break;
       case 0xa1:
         nValue = (uint32_t)pBytes[6];
-      bVar1 = true;
-      break;
+        bIsAdd = 1;
+        eUnitStat = (eD2UnitStat)pBytes[1];
+        break;
       case 0xa2:
-        bVar1 = true;
+        bIsAdd = 1;
       case 0x9f:
         nValue = (uint32_t)*(uint16_t*)(pBytes + 6);
-      break;
+        eUnitStat = (eD2UnitStat)pBytes[1];
+        break;
       default:
         return;
     }
 
-    eD2UnitStat eUnitStat = (eD2UnitStat)pBytes[1];
     D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(*(int32_t*)(pBytes + 2), UNIT_MONSTER);
     if (!pUnit) {
       return;
@@ -2004,12 +2011,11 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9Eto0xA2(uint8_t * pBytes) {
     if (eUnitStat == UNITSTAT_level) {
       ITEM_CltRecalcEquippedFromUnit(pUnit);
     }
-    if (bVar1) {
+    if (bIsAdd) {
       D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, eUnitStat, nValue, 0);
-      return;
+    } else {
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, 0);
     }
-
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, eUnitStat, nValue, 0);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(D2GSPacketSrv0xA3 * pBytes) {
@@ -2019,17 +2025,20 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xA3_PROGRESSIVE_SKILL(D2GSPacketSrv0xA3
     }
 
     D2UnitStrc* pTargetUnit = UNIT::CUnit::UNITS_FindClientSideUnit(pBytes->dwValue2, (eD2UnitType)pBytes->nTargetType);
-    eD2Skills eSkill = (eD2Skills)(short int)pBytes->wSkillId;
-    D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
+    const int nTargetX = pBytes->dwValue3;
+    const int nTargetY = pBytes->dwValue4;
+    const short nSkillId = (short)pBytes->wSkillId;
+    const short nSkillLevel = (short)pBytes->wSkillLevel;
+    D2SkillsTxt* pSkillsTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillsTxt) {
       return;
     }
-    if (pSkillsTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[2]) {
-      SKILLS::Skills::SKILL_ExecuteClientProgressWithAura(pUnit, pTargetUnit, eSkill, (int)(short int)pBytes->wSkillLevel, pBytes->dwValue3, pBytes->dwValue4, (uint32_t)pBytes->nParam2);
-      return;
-    }
 
-    SKILLS::Skills::SKILL_ExecuteClientProgressFunc(pUnit, pTargetUnit, eSkill, (int)(short int)pBytes->wSkillLevel, pBytes->dwValue3, pBytes->dwValue4, pBytes->nParam2);
+    if (pSkillsTxt->aFlagBytes[0] & Fog::BitBuffer::gadwBitMasks[2]) {
+      SKILLS::Skills::SKILL_ExecuteClientProgressWithAura(pUnit, pTargetUnit, (eD2Skills)nSkillId, nSkillLevel, nTargetX, nTargetY, pBytes->nParam2);
+    } else {
+      SKILLS::Skills::SKILL_ExecuteClientProgressFunc(pUnit, pTargetUnit, (eD2Skills)nSkillId, nSkillLevel, nTargetX, nTargetY, pBytes->nParam2);
+    }
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0xA5_FORCESTOPSKILL(D2GSPacketSrv0xA5 * pBytes) {
@@ -2178,23 +2187,23 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x18_PLAYERCOMMONSTATCHANGE_BIG(char * p
       return;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, (uint32_t)sDecoded.nHP << 8, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, (uint32_t)sDecoded.nMP << 8, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, (uint32_t)sDecoded.nStamina << 8, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hpregen, (uint32_t)sDecoded.nHPRegen, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_manarecovery, (uint32_t)sDecoded.nMPRegen, 0);
-    uint32_t nDeltaX = (uint32_t)sDecoded.dX;
-    uint32_t nDeltaY = (uint32_t)sDecoded.dY;
-    if ((int32_t)nDeltaX > 0x80) {
+    int nHitpoints = sDecoded.nHP << 8;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nHitpoints, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, sDecoded.nMP << 8, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, sDecoded.nStamina << 8, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hpregen, sDecoded.nHPRegen, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_manarecovery, sDecoded.nMPRegen, 0);
+    int nDeltaX = sDecoded.dX;
+    int nDeltaY = sDecoded.dY;
+    if (nDeltaX > 0x80) {
       nDeltaX -= 0x100;
     }
-    if ((int32_t)nDeltaY > 0x80) {
+    if (nDeltaY > 0x80) {
       nDeltaY -= 0x100;
     }
 
-    int nPackedY = (uint32_t)((uint32_t)(uint8_t)sDecoded.dY << 24 | (uint32_t)((uint32_t)((uint32_t)(uint8_t)sDecoded.dX << 16 | (uint32_t)(uint16_t)sDecoded.nY) & 0xffffffu));
-    UNIT::Path::PATH_MoveUnitToPoint(pUnit, sDecoded.nX, nPackedY, 0, (uint16_t)(nDeltaX + (uint32_t)((uint32_t)(uint16_t)sDecoded.nY << 16 | (uint32_t)(uint16_t)sDecoded.nX)), (uint16_t)(nDeltaY + nPackedY));
-    if (!(sDecoded.nHP && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead)) {
+    UNIT::Path::PATH_MoveUnitToPoint(pUnit, sDecoded.nX, sDecoded.nY, 0, (uint16_t)(sDecoded.nX + nDeltaX), (uint16_t)(sDecoded.nY + nDeltaY));
+    if (!(nHitpoints && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead)) {
       return;
     }
 
@@ -2231,26 +2240,24 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x95_PLAYERCOMMONSTATCHANGE_MEDIUM(char 
       return;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, (uint32_t)sDecoded.nHP << 8, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, (uint32_t)sDecoded.nMP << 8, 0);
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, (uint32_t)sDecoded.nStamina << 8, 0);
-    uint32_t nDeltaX = (uint32_t)sDecoded.dX;
-    uint32_t nDeltaY = (uint32_t)sDecoded.dY;
-    if ((int32_t)nDeltaX > 0x80) {
+    int nHitpoints = sDecoded.nHP << 8;
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_hitpoints, nHitpoints, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_mana, sDecoded.nMP << 8, 0);
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, sDecoded.nStamina << 8, 0);
+    int nDeltaX = sDecoded.dX;
+    int nDeltaY = sDecoded.dY;
+    if (nDeltaX > 0x80) {
       nDeltaX -= 0x100;
     }
-    if ((int32_t)nDeltaY > 0x80) {
+    if (nDeltaY > 0x80) {
       nDeltaY -= 0x100;
     }
 
-    int nPackedY = (uint32_t)((uint32_t)(uint8_t)sDecoded.dY << 24 | (uint32_t)((uint32_t)((uint32_t)(uint8_t)sDecoded.dX << 16 | (uint32_t)(uint16_t)sDecoded.nY) & 0xffffffu));
-    UNIT::Path::PATH_MoveUnitToPoint(pUnit, sDecoded.nX, nPackedY, 0, (uint16_t)(nDeltaX + (uint32_t)((uint32_t)(uint16_t)sDecoded.nY << 16 | (uint32_t)(uint16_t)sDecoded.nX)), (uint16_t)(nDeltaY + nPackedY));
-    if (!(sDecoded.nHP && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead)) {
-      return;
+    UNIT::Path::PATH_MoveUnitToPoint(pUnit, sDecoded.nX, sDecoded.nY, 0, (uint16_t)(sDecoded.nX + nDeltaX), (uint16_t)(sDecoded.nY + nDeltaY));
+    if (nHitpoints && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Dead) {
+      UNIT::UnitMode::UNITMODE_SetAnimMode(pUnit, TownNeutral);
+      UNIT::CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
     }
-
-    UNIT::UnitMode::UNITMODE_SetAnimMode(pUnit, TownNeutral);
-    UNIT::CUnit::CUNIT_ClearDeadSetAttackable(pUnit);
 }
 
 static void __stdcall DecodeIncoming0x96(D2GSPacket0x96Decoded * pDest, char * pBytes) {
@@ -2278,18 +2285,17 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x96_UpdateStaminaAndPosition(char * pBy
       return;
     }
 
-    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, (uint32_t)sDecoded.nStamina << 8, 0);
-    uint32_t nDeltaX = (uint32_t)sDecoded.dX;
-    uint32_t nDeltaY = (uint32_t)sDecoded.dY;
-    if ((int32_t)nDeltaX > 0x80) {
+    D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, sDecoded.nStamina << 8, 0);
+    int nDeltaX = sDecoded.dX;
+    int nDeltaY = sDecoded.dY;
+    if (nDeltaX > 0x80) {
       nDeltaX -= 0x100;
     }
-    if ((int32_t)nDeltaY > 0x80) {
+    if (nDeltaY > 0x80) {
       nDeltaY -= 0x100;
     }
 
-    int nPackedY = (uint32_t)((uint32_t)(uint8_t)sDecoded.dY << 24 | (uint32_t)((uint32_t)((uint32_t)(uint8_t)sDecoded.dX << 16 | (uint32_t)(uint16_t)sDecoded.nY) & 0xffffffu));
-    UNIT::Path::PATH_MoveUnitToPoint(pUnit, sDecoded.nX, nPackedY, 0, (uint16_t)(nDeltaX + (uint32_t)((uint32_t)(uint16_t)sDecoded.nY << 16 | (uint32_t)(uint16_t)sDecoded.nX)), (uint16_t)(nDeltaY + nPackedY));
+    UNIT::Path::PATH_MoveUnitToPoint(pUnit, sDecoded.nX, sDecoded.nY, 0, (uint16_t)(sDecoded.nX + nDeltaX), (uint16_t)(sDecoded.nY + nDeltaY));
 }
 
 // @sourcefile .\GAME\SCmd.cpp
@@ -2482,46 +2488,35 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x2C_PLAY_SOUND(D2GSPacketSrv0x2C * pByt
 // Server→client SCMD 0x3E bit-packed stat-update handler. Reads a bitstream from pBytes+2 (length = pBytes[1]-2): decodes a variable-width unit GUID (8/16/32-bit), a signed flag, a 9-bit stat id, a variable-width value (8/16/32-bit), and a variable-width param (8/16-bit). Dispatches to ITEM_HandleStatUpdatePacket to apply the stat to the target item unit.
 void __fastcall NET_D2GS_CLIENT_Incoming0x3E_ITEMUPDATESTAT(char * pBytes) {
     D2BitBufferStrc bitBuf;
-    int32_t nBits;
     Fog::BitBuffer::InitBitBuffer(&bitBuf, (uint8_t*)(pBytes + 2), (uint8_t)pBytes[1] - 2);
-    uint32_t nUnitGUID = Fog::BitBuffer::ReadUnsigned(&bitBuf, 1);
-    if (!nUnitGUID) {
-      nBits = 8;
+    uint32_t nUnitGUID;
+    if (!Fog::BitBuffer::ReadUnsigned(&bitBuf, 1)) {
+      nUnitGUID = Fog::BitBuffer::ReadUnsigned(&bitBuf, 8);
+    } else if (!Fog::BitBuffer::ReadUnsigned(&bitBuf, 1)) {
+      nUnitGUID = Fog::BitBuffer::ReadUnsigned(&bitBuf, 0x10);
     } else {
-      nUnitGUID = Fog::BitBuffer::ReadUnsigned(&bitBuf, 1);
-      if (!nUnitGUID) {
-        nBits = 0x10;
-      } else {
-        nBits = 0x20;
-      }
+      nUnitGUID = Fog::BitBuffer::ReadUnsigned(&bitBuf, 0x20);
     }
 
-    nUnitGUID = Fog::BitBuffer::ReadUnsigned(&bitBuf, nBits);
-    uint32_t bSigned = Fog::BitBuffer::ReadUnsigned(&bitBuf, 1);
-    eD2UnitStat eStatId = Fog::BitBuffer::ReadUnsigned(&bitBuf, 9);
-    uint32_t nStatValue = Fog::BitBuffer::ReadUnsigned(&bitBuf, 1);
-    if (!nStatValue) {
-      nBits = 8;
+    const uint8_t bSigned = Fog::BitBuffer::ReadUnsigned(&bitBuf, 1);
+    const eD2UnitStat eStatId = Fog::BitBuffer::ReadUnsigned(&bitBuf, 9);
+    uint32_t nStatValue;
+    if (!Fog::BitBuffer::ReadUnsigned(&bitBuf, 1)) {
+      nStatValue = Fog::BitBuffer::ReadUnsigned(&bitBuf, 8);
+    } else if (!Fog::BitBuffer::ReadUnsigned(&bitBuf, 1)) {
+      nStatValue = Fog::BitBuffer::ReadUnsigned(&bitBuf, 0x10);
     } else {
-      nStatValue = Fog::BitBuffer::ReadUnsigned(&bitBuf, 1);
-      if (!nStatValue) {
-        nBits = 0x10;
-      } else {
-        nBits = 0x20;
-      }
+      nStatValue = Fog::BitBuffer::ReadUnsigned(&bitBuf, 0x20);
     }
 
-    nStatValue = Fog::BitBuffer::ReadUnsigned(&bitBuf, nBits);
-    uint32_t nStatParam = Fog::BitBuffer::ReadUnsigned(&bitBuf, 1);
-    if (!nStatParam) {
-      nBits = 8;
+    uint16_t nStatParam;
+    if (!Fog::BitBuffer::ReadUnsigned(&bitBuf, 1)) {
       nStatParam = Fog::BitBuffer::ReadUnsigned(&bitBuf, 8);
     } else {
-      nBits = 0x10;
       nStatParam = Fog::BitBuffer::ReadUnsigned(&bitBuf, 0x10);
     }
 
-    UNIT::ITEM_HandleStatUpdatePacket(nUnitGUID, (char)bSigned, eStatId, nStatValue, (uint16_t)nStatParam);
+    UNIT::ITEM_HandleStatUpdatePacket(nUnitGUID, bSigned, eStatId, nStatValue, nStatParam);
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x3F(D2GSPacketSrv0x3F * pBytes) {

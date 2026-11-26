@@ -39,9 +39,8 @@ void __fastcall SSIG_FreeBigNum(void * * pBigNum) {
 }
 
 static BOOL __stdcall SSIG_FindSignatureMarker(uint32_t nTotalSize, int32_t nOffset, uint8_t * pBuffer, int * pnFoundOffset) {
-    int nMarkerOffset = nTotalSize - nOffset - 4;
-    *pnFoundOffset = nMarkerOffset;
-    if (nTotalSize >= nOffset + 4U && *(int*)(pBuffer + nMarkerOffset) == 0x5349474e) {
+    *pnFoundOffset = nTotalSize - nOffset - 4;
+    if (nTotalSize >= nOffset + 4U && *(int*)(pBuffer + *pnFoundOffset) == 0x5349474e) {
       return 1;
     }
 

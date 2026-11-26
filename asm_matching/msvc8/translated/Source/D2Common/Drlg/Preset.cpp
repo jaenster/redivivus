@@ -2439,18 +2439,17 @@ void __fastcall DRLGPRESET_FreeDrlgFile(D2DrlgFileStrc * pDrlgFile) {
       D2_FREE_POOL_AT(nullptr, pDrlgFile->pSubstGroups, ".\\DRLG\\Preset.cpp", 0x4f9);
     }
 
-    D2PresetUnitStrc* pPresetUnit = pDrlgFile->pPresetUnit;
-    while (pPresetUnit) {
-      D2PresetUnitStrc* pNext;
-      pPath = pPresetUnit->pMapAI;
+    D2PresetUnitStrc* pNext = pDrlgFile->pPresetUnit;
+    while (pNext) {
+      D2PresetUnitStrc* pPresetUnit = pNext;
       pNext = pPresetUnit->pPresetUnitNext;
+      pPath = pPresetUnit->pMapAI;
       if (pPath) {
         D2_FREE_POOL_AT(nullptr, pPath->pPosition, ".\\DRLG\\Preset.cpp", 0x597);
         D2_FREE_POOL_AT(nullptr, pPath, ".\\DRLG\\Preset.cpp", 0x598);
       }
 
       D2_FREE_POOL_AT(nullptr, pPresetUnit, ".\\DRLG\\Preset.cpp", 0x56b);
-      pPresetUnit = pNext;
     }
 
     D2_FREE_POOL_AT(nullptr, pDrlgFile, ".\\DRLG\\Preset.cpp", 0x505);

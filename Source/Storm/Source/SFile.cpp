@@ -219,30 +219,57 @@ static uint32_t __stdcall SFILE_Hash(int32_t nHashKind, char * szText) {
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard InitializeHashSource (SFILE.CPP)
 static void SFILE_InitializeHashSource(uint32_t nSeed) {
-    uint32_t nLo;
     if (!g_pStormMpqCryptTable) {
       g_pStormMpqCryptTable = (uint32_t*)SMem::SMemAlloc(0x1400, ".\\SOURCE\\SFILE.CPP", 0x340, 0);
     }
 
-    uint32_t* pCryptEntry = g_pStormMpqCryptTable + 0x200;
-    for (int nEntriesLeft = 0; nEntriesLeft < 0x100; nEntriesLeft++) {
-      uint32_t nHi;
-      nHi = (nSeed * 0x7d + 3) % 0x2aaaab;
-      nLo = (nHi * 0x7d + 3) % 0x2aaaab;
-      pCryptEntry[-0x200] = nHi << 0x10 | (uint16_t)nLo;
-      nHi = (nLo * 0x7d + 3) % 0x2aaaab;
-      nLo = (nHi * 0x7d + 3) % 0x2aaaab;
-      pCryptEntry[-0x100] = nHi << 0x10 | (uint16_t)nLo;
-      nHi = (nLo * 0x7d + 3) % 0x2aaaab;
-      nLo = (nHi * 0x7d + 3) % 0x2aaaab;
-      *pCryptEntry = nHi << 0x10 | (uint16_t)nLo;
-      nHi = (nLo * 0x7d + 3) % 0x2aaaab;
-      nLo = (nHi * 0x7d + 3) % 0x2aaaab;
-      pCryptEntry[0x100] = nHi << 0x10 | (uint16_t)nLo;
-      nHi = (nLo * 0x7d + 3) % 0x2aaaab;
-      nSeed = (nHi * 0x7d + 3) % 0x2aaaab;
-      pCryptEntry[0x200] = nHi << 0x10 | (uint16_t)nSeed;
-      pCryptEntry++;
+    uint32_t* pCryptTable = g_pStormMpqCryptTable;
+    for (uint32_t i = 0; i < 0x100; i++) {
+      {
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nHi = nSeed & 0xffff;
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nValue = nHi << 0x10;
+        nValue |= nSeed & 0xffff;
+        uint32_t* pCryptEntry = &pCryptTable[i];
+        *pCryptEntry = nValue;
+      }
+      {
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nHi = nSeed & 0xffff;
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nValue = nHi << 0x10;
+        nValue |= nSeed & 0xffff;
+        uint32_t* pCryptEntry = &pCryptTable[i + 0x100];
+        *pCryptEntry = nValue;
+      }
+      {
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nHi = nSeed & 0xffff;
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nValue = nHi << 0x10;
+        nValue |= nSeed & 0xffff;
+        uint32_t* pCryptEntry = &pCryptTable[i + 0x200];
+        *pCryptEntry = nValue;
+      }
+      {
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nHi = nSeed & 0xffff;
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nValue = nHi << 0x10;
+        nValue |= nSeed & 0xffff;
+        uint32_t* pCryptEntry = &pCryptTable[i + 0x300];
+        *pCryptEntry = nValue;
+      }
+      {
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nHi = nSeed & 0xffff;
+        nSeed = (nSeed * 0x7d + 3) % 0x2aaaab;
+        uint32_t nValue = nHi << 0x10;
+        nValue |= nSeed & 0xffff;
+        uint32_t* pCryptEntry = &pCryptTable[i + 0x400];
+        *pCryptEntry = nValue;
+      }
     }
 }
 
@@ -919,7 +946,9 @@ uint32_t __stdcall SFILE_ComputeFileHash(LPCSTR szFileName) {
     LPCSTR szFileNameLocal = szFileName;
     D2_CHECKS_BEGIN;
     D2_CHECK(szFileName);
+    D2_CHECKS_ASSUME_(szFileName);
     D2_CHECK(*szFileName != '\0');
+    D2_CHECKS_ASSUME_(*szFileName != '\0');
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     HANDLE hFileResult = CreateFileA(szFileNameLocal, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x8000000, (HANDLE)0x0);
@@ -2802,7 +2831,9 @@ BOOL __stdcall SFileDdaSetVolume(D2MPQFileStrc * hFile, int32_t lVolume, int32_t
 int __stdcall SFILE_OpenFileInternal(D2ArchiveStrc * pArchive, char * szFileName, uint8_t bSearchFlags) {
     D2_CHECKS_BEGIN;
     D2_CHECK(szFileName);
+    D2_CHECKS_ASSUME_(szFileName);
     D2_CHECK(*szFileName != '\0');
+    D2_CHECKS_ASSUME_(*szFileName != '\0');
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     SFILE_EnsureHashSource();
@@ -3720,17 +3751,19 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
     D2ArchiveStrc* pFileArchive;
     uint32_t* pdwBlockFlags;
     uint32_t nBlockEntry;
-    uint32_t nResult = -1;
+    uint32_t nResult;
     char* pFileName = szFileName;
+    D2_CHECKS_BEGIN;
     if (!phFile) {
-      nResult = 0;
+      d2Checks_ = 0;
     } else {
       *phFile = 0;
     }
-    if (!(nResult & (szFileName != 0 ? (uint32_t)-1 : 0) & (*szFileName != '\0' ? (uint32_t)-1 : 0))) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
+    D2_CHECK(szFileName);
+    D2_CHECKS_ASSUME_(szFileName);
+    D2_CHECK(*szFileName != '\0');
+    D2_CHECKS_ASSUME_(*szFileName != '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     SFILE_EnsureHashSource();
@@ -4901,6 +4934,7 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
 
     D2_CHECKS_BEGIN;
     D2_CHECK(pOutputBuffer);
+    D2_CHECKS_ASSUME_(pOutputBuffer);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     int nReadResult;
@@ -5292,6 +5326,7 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
     uint32_t nChunkFound = dwBufferBytes;
     D2_CHECKS_BEGIN;
     D2_CHECK(dwBufferBytes);
+    D2_CHECKS_ASSUME_(dwBufferBytes);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (!g_pDirectSound) {
       SErr::SErrSetLastError(0x85100071);
@@ -5597,17 +5632,13 @@ int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t n
     int bOpened;
     D2ArchiveStrc* pArchive;
     char szFullPath[260];
-    uint32_t bValidArgs;
-    bValidArgs = -1;
-    if (!ppArchive) {
-      bValidArgs = 0;
-    } else {
-      *ppArchive = 0;
-    }
-    if (!(bValidArgs & (szArchiveName != 0 ? (uint32_t)-1 : 0) & (*szArchiveName != '\0' ? (uint32_t)-1 : 0))) {
-      SErr::SErrSetLastError(0x57);
-      return 0;
-    }
+    D2_CHECKS_BEGIN;
+    D2_CHECK_ELSE_BLANK(ppArchive, *ppArchive = 0);
+    D2_CHECK(szArchiveName);
+    D2_CHECKS_ASSUME_(szArchiveName);
+    D2_CHECK(*szArchiveName != '\0');
+    D2_CHECKS_ASSUME_(*szArchiveName != '\0');
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
     SFILE_EnsureHashSource();

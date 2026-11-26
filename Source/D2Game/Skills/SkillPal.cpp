@@ -244,8 +244,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
       if (pStatList) {
         nGameFrame = pGame->dwGameFrame;
         nPoisonExpire = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatList);
-        nNewPoisonExpire = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nPoisonExpire - nGameFrame, nPercent, 100);
-        nNewPoisonExpire += nGameFrame;
+        nNewPoisonExpire = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nPoisonExpire - nGameFrame, nPercent, 100) + nGameFrame;
         D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nNewPoisonExpire);
         GAME::Event::SetEvent(pGame, pUnit, 0xc, nNewPoisonExpire, 0, 0);
         bReduced = 1;
@@ -262,8 +261,7 @@ BOOL __stdcall SKILLPAL_ReducePoisonAndCurseDuration(::SGAMEDATA * pGame, D2Unit
           if (bIsCurseState) {
             nGameFrame = pGame->dwGameFrame;
             nCurseExpire = D2Common::Stats::StatsEx::STATLIST_GetFullListPtr(pStatList);
-            nNewCurseExpire = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nCurseExpire - nGameFrame, nPercent, 100);
-            nNewCurseExpire += nGameFrame;
+            nNewCurseExpire = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nCurseExpire - nGameFrame, nPercent, 100) + nGameFrame;
             D2Common::Stats::StatsEx::STATSEX_SetStatListTimeout(pStatList, nNewCurseExpire);
             GAME::Event::SetEvent(pGame, pUnit, 0xc, nNewCurseExpire, 0, 0);
           }
@@ -725,9 +723,6 @@ int32_t __fastcall SKILLPAL_GetAttackFrameIndex(D2UnitStrc * pUnit) {
 
 // Server skill do-func 67 (Paladin Charge). Runs the multi-stage charge state machine on pUnit toward a SKILL_GetParam1/Param2-stored target: when the charge flag is unset it performs the charge-hit (queues 0xA5 anim packet, area-hits to find a target via SKILLS_FindNextUnitInAreaByGUID, checks melee range, builds a D2DamageStrc with to-hit/skill-calc/elemental damage, applies it and sets the hit overlay). When in-progress it advances the charge: re-finds/locks the target in skill params or steps the charge anim each frame, scheduling ENDANIM/MODECHANGE timer events. Returns 1 if it acted/continued, 0 to end the skill.
 BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
-    BOOL bInMeleeRange;
-    eD2MonsterAnimMode eMode;
-    D2DamageStrc sDamage;
     D2SkillsTxt* pDVar1 = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pDVar1) {
       return 0;
@@ -737,75 +732,57 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
     if (!pSkill) {
       return 0;
     }
-
-    D2MonSeqTxt* pSeqTxt = D2Common::Merc::MERC_GetSequenceTxt(pUnit);
-    if (pSeqTxt) {
+    if (D2Common::Merc::MERC_GetSequenceTxt(pUnit)) {
       D2Common::Merc::GetCounter2(pUnit);
     }
 
-    int32_t nAttackFrameIdx = SKILLPAL_GetAttackFrameIndex(pUnit);
-    eD2UnitType eTargetUnitType = D2Common::Skills::SKILL_GetParam1(pSkill);
-    uint32_t nTargetGUID = D2Common::Skills::SKILL_GetParam2(pSkill);
+    const int32_t nAttackFrameIdx = SKILLPAL_GetAttackFrameIndex(pUnit);
+    const eD2UnitType eTargetUnitType = D2Common::Skills::SKILL_GetParam1(pSkill);
+    const uint32_t nTargetGUID = D2Common::Skills::SKILL_GetParam2(pSkill);
     D2UnitStrc* pHitTarget = 0;
     if (eTargetUnitType != UNIT_COUNT) {
       pHitTarget = UNIT::SUnit::FindUnitFromTable(pGame, eTargetUnitType, nTargetGUID);
     }
 
-    uint32_t dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
+    const uint32_t dwSkillFlags = D2Common::Skills::SKILL_GetFlags(pSkill);
     if (dwSkillFlags & 1) {
-      int32_t nAttackFrame = 0;
-      if (pUnit && pUnit->eUnitType == UNIT_MONSTER && dwSkillFlags & 2) {
-        nAttackFrame = 3;
+      int32_t nRange = 0;
+      if (pUnit && pUnit->eUnitType == UNIT_MONSTER && (dwSkillFlags & 2)) {
+        nRange = 3;
       }
-      if (pHitTarget) {
-        bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, nAttackFrame);
-        if (bInMeleeRange) {
-          D2Common::Skills::SKILL_SetFlags(pSkill, 0);
-          UNIT::SUnit::UNITS_SetupAnimTimerEventsFromFrame(pGame, pUnit, nAttackFrameIdx + 1);
-          UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
-          return 1;
-        }
+      if (pHitTarget && D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, nRange)) {
+        D2Common::Skills::SKILL_SetFlags(pSkill, 0);
+        UNIT::SUnit::UNITS_SetupAnimTimerEventsFromFrame(pGame, pUnit, nAttackFrameIdx + 1);
+        UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
+        return 1;
       }
       if (dwSkillFlags & 2) {
         D2Common::Skills::SKILL_SetFlags(pSkill, 0);
         UNIT::SUnitMsg::UnitQueuePacket0xA5(pUnit, eSkill);
-        D2UnitStrc* pTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, 3, 3, nTargetGUID, nullptr);
-        if (pTarget) {
-          bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pTarget, 0);
-          if (bInMeleeRange) {
-            D2Common::Skills::SKILL_SetParam1(pSkill, pTarget->eUnitType);
-            D2Common::Skills::SKILL_SetParam2(pSkill, pTarget->nUnitGUID);
-            return 1;
+        pHitTarget = SkillsServer::SKILLS_FindNextUnitInAreaByGUID(pGame, pUnit, 0, 0, 3, 3, nTargetGUID, nullptr);
+        if (pHitTarget && D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, 0)) {
+          D2Common::Skills::SKILL_SetParam1(pSkill, D2Common::Units::GetType(pHitTarget));
+          D2Common::Skills::SKILL_SetParam2(pSkill, D2Common::Units::GetGUID(pHitTarget));
+        } else {
+          if (!pUnit || pUnit->eUnitType != UNIT_MONSTER || D2Common::DATATBLS::MonsterTbls::ValidateClassId(D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit)) != 0x1b4 || D2Common::DATATBLS::MonsterTbls::ValidateClassId(D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit)) != 0x1b9) {
+            GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
+            GAME::Event::SetEvent(pGame, pUnit, 1, pGame->dwGameFrame + 1, 0, 0);
           }
+          return 0;
         }
-        if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-          nAttackFrameIdx = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
-          nAttackFrameIdx = D2Common::DATATBLS::MonsterTbls::ValidateClassId(nAttackFrameIdx);
-          if (nAttackFrameIdx == 0x1b4) {
-            nAttackFrameIdx = D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetBaseId(pUnit);
-            nAttackFrameIdx = D2Common::DATATBLS::MonsterTbls::ValidateClassId(nAttackFrameIdx);
-            if (nAttackFrameIdx == 0x1b9) {
-              return 0;
-            }
-          }
+      } else {
+        if (pGame->dwGameFrame - (pUnit->nGfxCurrentFrame >> 8) >= nAttackFrameIdx) {
+          UNIT::SUnit::UNITS_SetupAnimTimerEventsFromFrame(pGame, pUnit, 0);
+          D2Common::Skills::SKILL_SetFlags(pSkill, 1);
         }
 
-        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_ENDANIM, 0);
-        GAME::Event::SetEvent(pGame, pUnit, 1, pGame->dwGameFrame + 1, 0, 0);
-        return 0;
+        GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
+        GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + 1, 1, 0);
+        pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
       }
-      if (pGame->dwGameFrame - (pUnit->nGfxCurrentFrame >> 8) >= nAttackFrameIdx) {
-        UNIT::SUnit::UNITS_SetupAnimTimerEventsFromFrame(pGame, pUnit, 0);
-        D2Common::Skills::SKILL_SetFlags(pSkill, 1);
-      }
-
-      GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_MODECHANGE, 0);
-      GAME::Event::SetEvent(pGame, pUnit, 0, pGame->dwGameFrame + 1, 1, 0);
-      pUnit->eUnitFlags &= ~UNITFLAG_SKSRVDOFUNC;
       return 1;
     }
 
-    uint16_t wHitResult;
     D2Common::Skills::SKILL_SetFlags(pSkill, 0);
     D2Common::Skills::SKILL_SetParam1(pSkill, 0);
     D2Common::Skills::SKILL_SetParam2(pSkill, 0);
@@ -823,52 +800,52 @@ BOOL __fastcall Skills_SrvDoFunc_067_Charge(::SGAMEDATA * pGame, D2UnitStrc * pU
       }
     }
 
-    bInMeleeRange = D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, pUnit && pUnit->eUnitType == UNIT_MONSTER ? 3 : 0);
-    if (!bInMeleeRange) {
-      return 1;
-    }
-
-    bInMeleeRange = UNIT::SUnit::CheckForModeZeroDeath(pUnit);
-    if (bInMeleeRange) {
-      return 1;
-    }
-
-    memset(&sDamage, 0, sizeof(sDamage));
-    if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
-      sDamage.wResultFlags = 9;
-    } else {
-      wHitResult = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pHitTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
-      sDamage.wResultFlags = wHitResult | 8;
-    }
-
-    sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[0], eSkill, nSkillLvl);
-    if ((uint8_t)pDVar1->EType > ELEMENTAL_NONE) {
-      sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[3], eSkill, nSkillLvl);
-      if (sDamage.dwConvPct > 0) {
-        sDamage.nConvType = pDVar1->EType;
-      }
-    }
-
-    SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
+    int32_t nRange = 0;
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
-      nAttackFrameIdx = D2Common::DATATBLS::MonsterTbls::ValidateClassId(pUnit->nClassId);
-      if (nAttackFrameIdx != 0x49) {
-        if (nAttackFrameIdx == 0xd3 || nAttackFrameIdx == 0x1b4) {
-          eMode = eD2MonsterAnimMode_ns::Attack2;
-        } else {
-          eMode = eD2MonsterAnimMode_ns::Attack1;
-        }
+      nRange = 3;
+    }
+    if (D2Common::Units::IsInMeleeRange(pUnit, pHitTarget, nRange) && !UNIT::SUnit::CheckForModeZeroDeath(pUnit)) {
+      D2DamageStrc sDamage;
+      memset(&sDamage, 0, sizeof(sDamage));
+      if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
+        sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pHitTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0) | 8;
       } else {
-        eMode = eD2MonsterAnimMode_ns::Skill1;
+        sDamage.wResultFlags = 9;
       }
 
-      Monsters::MONSTER_RecalculateCombatStats(pUnit, eMode);
+      sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[0], eSkill, nSkillLvl);
+      if ((uint8_t)pDVar1->EType > ELEMENTAL_NONE) {
+        sDamage.dwConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pDVar1->calc[3], eSkill, nSkillLvl);
+        if (sDamage.dwConvPct > 0) {
+          sDamage.nConvType = pDVar1->EType;
+        }
+      }
+
+      SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
+      if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
+        eD2MonsterAnimMode eMode;
+        switch (D2Common::DATATBLS::MonsterTbls::ValidateClassId(pUnit->nClassId)) {
+          case 0x49:
+            eMode = eD2MonsterAnimMode_ns::Skill1;
+            break;
+          case 0xd3:
+          case 0x1b4:
+            eMode = eD2MonsterAnimMode_ns::Attack2;
+            break;
+          default:
+            eMode = eD2MonsterAnimMode_ns::Attack1;
+            break;
+        }
+
+        Monsters::MONSTER_RecalculateCombatStats(pUnit, eMode);
+      }
+
+      sDamage.dwHitClass = 0x70;
+      UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pHitTarget, &sDamage, pDVar1->SrcDam);
+      UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pHitTarget, 0);
+      D2Common::Units::SetOverlay(pHitTarget, 0x93, 0);
     }
 
-    sDamage.dwHitClass = 0x70;
-    UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pHitTarget, &sDamage, pDVar1->SrcDam);
-    UNIT::SUnitDmg::DAMAGE_ProcessCombatQueueEntry(pGame, pUnit, pHitTarget, 0);
-    D2Common::Units::SetOverlay(pHitTarget, 0x93, 0);
     return 1;
 }
 

@@ -285,31 +285,26 @@ uint32_t __fastcall AI_BAAL_IsUnitInRange(D2UnitStrc * pUnit, int * pCandidate) 
 
 // @sourcefile .\Ai\AiBaal.cpp
 static BOOL AI_BAAL_IsSkillPowerful(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
-    bool bSignedLessOrEqual;
     if (!pSkill) {
       return 0;
     }
 
     eD2Skills eSkillId = D2Common::Skills::GetSkillId(pSkill, ".\\Ai\\AiBaal.cpp", 0x131);
-    if (eSkillId != SKILL_Blizzard && eSkillId != SKILL_Meteor) {
-      int nSkillLevel;
-      if (eSkillId == SKILL_FireWall) {
-        nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-        bSignedLessOrEqual = nSkillLevel <= 3;
-      } else {
-        if (eSkillId != SKILL_ImmolationArrow) {
-          return 0;
-        }
+    if (eSkillId == SKILL_Blizzard || eSkillId == SKILL_Meteor) {
+      return 1;
+    }
 
-        nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-        bSignedLessOrEqual = nSkillLevel <= 7;
+    if (eSkillId == SKILL_FireWall) {
+      if (D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1) > 3) {
+        return 1;
       }
-      if (bSignedLessOrEqual) {
-        return 0;
+    } else if (eSkillId == SKILL_ImmolationArrow) {
+      if (D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1) > 7) {
+        return 1;
       }
     }
 
-    return 1;
+    return 0;
 }
 
 // @sourcefile .\Ai\AiBaal.cpp

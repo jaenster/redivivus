@@ -621,16 +621,11 @@ uint32_t __fastcall SOUND_FindChannelForSound(D2UnitStrc * pUnit) {
     return (uint32_t)(pChannel != 0);
 }
 
-int Unreferenced_004b9eb0() {
-    uint32_t uVar1 = SoundHdr::SOUNDHDR_GetGlobal3();
-    uint32_t uVar2 = uVar1 / 3;
-    if (!(uVar1 % 3)) {
-      eD2Sounds nSoundId;
-      nSoundId = _Utils::RollRandomNumber(0xb76, 0x1230);
-      uVar2 = SOUND_PlaySound(nSoundId, nullptr, 0, 0, 0);
+void Unreferenced_004b9eb0() {
+    if (SoundHdr::SOUNDHDR_GetGlobal3() % 3 == 0) {
+      const eD2Sounds nSoundId = _Utils::RollRandomNumber(0xb76, 0x1230);
+      SOUND_PlaySound(nSoundId, nullptr, 0, 0, 0);
     }
-
-    return uVar2;
 }
 
 void __fastcall SOUND_StopChannelGracefully(int32_t nSoundId, int32_t nFadeTarget, int32_t nFadeDelay, uint32_t nFadeDuration) {

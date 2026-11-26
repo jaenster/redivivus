@@ -2222,41 +2222,32 @@ static void ITEM_ApplyGoldBonus(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 
 // Calculates the game-frame at which a ground item should despawn. Quest items never expire (returns 0). Unique/set quality: +30000 frames. High-tier quality (5–9): +45000. Gold &gt;10000: +45000. Socketable items: +30000. All others: +15000.
 int32_t __fastcall ITEM_CalculateDespawnTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    uint32_t _bSocketable;
-    BOOL bSocketable;
-    int32_t nGoldAmount;
-    int32_t iVar1 = D2Common::ITEMS::Items::IsQuestItem(pUnit);
-    if (iVar1) {
+    if (D2Common::ITEMS::Items::IsQuestItem(pUnit)) {
       return 0;
     }
 
-    int nDespawnFrame = D2Common::ITEMS::Items::GetItemQuality(pUnit);
-    if (nDespawnFrame != 4) {
-      eD2ItemTypes eItemType;
-      if (nDespawnFrame >= 0x5 && nDespawnFrame <= 0x9) {
+    const int nQuality = D2Common::ITEMS::Items::GetItemQuality(pUnit);
+    if (nQuality != 4) {
+      if (nQuality > 4 && nQuality <= 9) {
         return pGame->dwGameFrame + 45000;
       }
 
-      eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit);
-      if (eItemType == ITEMTYPE_Gold) {
-        nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-        nDespawnFrame = pGame->dwGameFrame;
-        if (nGoldAmount > 10000) {
-          return nDespawnFrame + 45000;
+      if (D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit) == ITEMTYPE_Gold) {
+        if (D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0) > 10000) {
+          return pGame->dwGameFrame + 45000;
         }
-      } else {
-        _bSocketable = D2Common::ITEMS::Items::ITEM_IsSocketable(pUnit);
-        nDespawnFrame = pGame->dwGameFrame;
-        if (_bSocketable) {
-          return nDespawnFrame + 30000;
-        }
+
+        return pGame->dwGameFrame + 15000;
       }
 
-      return nDespawnFrame + 15000;
+      if (D2Common::ITEMS::Items::ITEM_IsSocketable(pUnit)) {
+        return pGame->dwGameFrame + 30000;
+      }
+
+      return pGame->dwGameFrame + 15000;
     }
 
-    nDespawnFrame = pGame->dwGameFrame;
-    return nDespawnFrame + 30000;
+    return pGame->dwGameFrame + 30000;
 }
 
 void __fastcall DropItem(::SGAMEDATA * pGame, D2UnitStrc * pSourceUnit, D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t x, int32_t y) {
@@ -2660,18 +2651,18 @@ D2UnitStrc * __fastcall DROP_SpawnGoldInRoom(::SGAMEDATA * pGame, D2RoomStrc * p
     if (pSpawnRoom) {
       D2UnitStrc* pUnit;
       memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
-      sItemGenCtx.wItemFormat = pGame->wItemFormat;
+      sItemGenCtx.pUnit = 0;
       sItemGenCtx.pSeed = pRoomSeed;
+      sItemGenCtx.wItemFormat = pGame->wItemFormat;
+      sItemGenCtx.pGame = pGame;
       sItemGenCtx.nItemClassid = gnGoldItemClassId;
       sItemGenCtx.nPosX = ptSpawnPos.x;
       sItemGenCtx.nPosY = ptSpawnPos.y;
-      sItemGenCtx.pUnit = 0;
       sItemGenCtx.dwMode = 3;
+      sItemGenCtx.pDrlgRoom = pSpawnRoom;
       sItemGenCtx.usually_one = 1;
       sItemGenCtx.eQuality = QUALITY_INVALID;
-      sItemGenCtx.pGame = pGame;
       sItemGenCtx.nItemLevel = nMonsterLevel;
-      sItemGenCtx.pDrlgRoom = pSpawnRoom;
       pUnit = ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
       if (pUnit) {
         D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_NEW, 0);
@@ -2709,14 +2700,14 @@ D2UnitStrc * __fastcall DROP_SpawnArmorItem(::SGAMEDATA * pGame, D2RoomStrc * pR
       pSpawnRoom = FindBestSpotToSpawnItem(pRoom, &ptCandidatePos, &ptSpawnPos, 1, 1);
       if (pSpawnRoom) {
         memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
+        sItemGenCtx.pUnit = pSourceUnit;
+        sItemGenCtx.pSeed = pRoomSeed;
         sItemGenCtx.wItemFormat = pGame->wItemFormat;
         sItemGenCtx.nFlags |= ITEMFLAG_ADDED;
-        sItemGenCtx.pSeed = pRoomSeed;
-        sItemGenCtx.pUnit = pSourceUnit;
-        sItemGenCtx.nPosX = ptSpawnPos.x;
-        sItemGenCtx.nPosY = ptSpawnPos.y;
         sItemGenCtx.pGame = pGame;
         sItemGenCtx.nItemClassid = nRolledClassId;
+        sItemGenCtx.nPosX = ptSpawnPos.x;
+        sItemGenCtx.nPosY = ptSpawnPos.y;
         sItemGenCtx.dwMode = 3;
         sItemGenCtx.pDrlgRoom = pSpawnRoom;
         sItemGenCtx.usually_one = 1;
@@ -2783,19 +2774,19 @@ D2UnitStrc * __fastcall DROP_SpawnWeaponItem(::SGAMEDATA * pGame, D2RoomStrc * p
       pCoordsIn = D2Common::Collision::GetFreeCoordinates_WithFieldCoords(pRoomSaved, &ptSpawnPos, &ptCandidatePos, 1, 0x3e01, 0x801, 1);
       if (pCoordsIn) {
         memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
+        sItemGenCtx.pUnit = pUnit;
+        sItemGenCtx.pSeed = pRoomSeed;
         sItemGenCtx.wItemFormat = pGame->wItemFormat;
         sItemGenCtx.nFlags |= ITEMFLAG_ADDED;
-        sItemGenCtx.pSeed = pRoomSeed;
-        sItemGenCtx.pUnit = pUnit;
-        sItemGenCtx.nPosY = ptSpawnPos.y;
-        sItemGenCtx.pDrlgRoom = pCoordsIn;
+        sItemGenCtx.pGame = pGame;
+        sItemGenCtx.nItemClassid = nItemClassId;
         sItemGenCtx.dwMode = 3;
         sItemGenCtx.nPosX = ptSpawnPos.x;
+        sItemGenCtx.nPosY = ptSpawnPos.y;
+        sItemGenCtx.pDrlgRoom = pCoordsIn;
         sItemGenCtx.usually_one = 1;
         sItemGenCtx.eQuality = QUALITY_INVALID;
-        sItemGenCtx.pGame = pGame;
         sItemGenCtx.nItemLevel = nEffectiveMonLevel;
-        sItemGenCtx.nItemClassid = nItemClassId;
         return ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
       }
     }

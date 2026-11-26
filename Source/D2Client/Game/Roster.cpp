@@ -241,44 +241,31 @@ D2RosterStrc * Unreferenced_004796b0() {
 
 // Insertion-sorts a D2RosterStrc singly-linked list descending by nArenaScore (used as level proxy). Takes the head of an unsorted list via EAX, returns the head of the sorted list. Operates in-place by relinking pNext pointers; does not allocate.
 static D2RosterStrc * ROSTER_SortByLevel(D2RosterStrc * pRoster) {
-    D2RosterStrc* pCur;
-    D2RosterStrc* pPrev;
-    D2RosterStrc* pScan;
-    D2RosterStrc** ppNextLink;
-    D2RosterStrc* pNextRoster = 0;
-    do {
-      D2RosterStrc* pSavedNext;
-      if (!pRoster) {
-        return pNextRoster;
-      }
-
-      ppNextLink = &pRoster->pNext;
-      pSavedNext = *ppNextLink;
-      if (pNextRoster) {
-        pScan = pNextRoster;
-        pPrev = 0;
-        do {
-          pCur = pScan;
-          if (pRoster->nArenaScore > pCur->nArenaScore) {
-            break;
-          }
-
-          pScan = pCur->pNext;
-          pPrev = pCur;
-        } while (pCur->pNext);
-
-        if (pPrev) {
-          *ppNextLink = pPrev->pNext;
-          pPrev->pNext = pRoster;
-          pRoster = pSavedNext;
-          continue;
+    D2RosterStrc* pSorted = 0;
+    D2RosterStrc* pCurrent = pRoster;
+    while (pCurrent) {
+      pRoster = pCurrent->pNext;
+      D2RosterStrc* pPrev = 0;
+      for (D2RosterStrc* pScan = pSorted; pScan; pScan = pScan->pNext) {
+        if (pCurrent->nArenaScore > pScan->nArenaScore) {
+          break;
         }
+
+        pPrev = pScan;
       }
 
-      *ppNextLink = pNextRoster;
-      pNextRoster = pRoster;
-      pRoster = pSavedNext;
-    } while (true);
+      if (pPrev) {
+        pCurrent->pNext = pPrev->pNext;
+        pPrev->pNext = pCurrent;
+      } else {
+        pCurrent->pNext = pSorted;
+        pSorted = pCurrent;
+      }
+
+      pCurrent = pRoster;
+    }
+
+    return pSorted;
 }
 
 D2RosterStrc * Unreferenced_00479740() {
@@ -337,151 +324,122 @@ void __stdcall FreeRosterPartyList() {
 }
 
 static void ROSTER_CollectPartiesIntoPartyList(D2RosterPartyListStrc * pRosterPartyList) {
-    D2RosterStrc** ppNextLink;
-    D2RosterStrc* ppRosterNext;
-    D2RosterStrc* pNextRoster = 0;
-    D2RosterStrc* pPrev = gpRosterPlayers;
-    while (pPrev) {
-      if (pPrev->nPartyId == pRosterPartyList->nPartyId) {
-        ppNextLink = &pPrev->pNext;
-        ppRosterNext = *ppNextLink;
-        if (pNextRoster) {
-          pNextRoster->pNext = ppRosterNext;
+    D2RosterStrc* pRoster = gpRosterPlayers;
+    D2RosterStrc* pPrev = 0;
+    while (pRoster) {
+      if (pRoster->nPartyId == pRosterPartyList->nPartyId) {
+        D2RosterStrc** ppNextLink = &pRoster->pNext;
+        D2RosterStrc* pMove = pRoster;
+        pRoster = *ppNextLink;
+        if (pPrev) {
+          pPrev->pNext = pRoster;
           *ppNextLink = pRosterPartyList->pOwner;
-          pRosterPartyList->pOwner = pPrev;
-          pPrev = ppRosterNext;
+          pRosterPartyList->pOwner = pMove;
         } else {
           *ppNextLink = pRosterPartyList->pOwner;
-          gpRosterPlayers = ppRosterNext;
-          pRosterPartyList->pOwner = pPrev;
-          pPrev = ppRosterNext;
+          gpRosterPlayers = pRoster;
+          pRosterPartyList->pOwner = pMove;
         }
       } else {
-        pNextRoster = pPrev;
-        pPrev = pPrev->pNext;
+        pPrev = pRoster;
+        pRoster = pRoster->pNext;
       }
     }
 }
 
 // Insertion-sorts the global pRosterPartyList singly-linked list ascending by nPartyId. Rebuilds the list in-place by relinking pNext pointers and reassigns the global head when done. No allocation; operates on the existing D2RosterPartyListStrc chain.
 void __stdcall ROSTER_SortPartyListsByPartyId() {
-    D2RosterPartyListStrc* pScanNode;
-    D2RosterPartyListStrc* pInsertAfter;
-    D2RosterPartyListStrc* pScan;
-    D2RosterPartyListStrc* pNextParty2 = 0;
-    do {
-      D2RosterPartyListStrc* pNextParty;
-      if (!pRosterPartyList) {
-        pRosterPartyList = pNextParty2;
-        return;
-      }
-
-      pNextParty = pRosterPartyList->pNext;
-      if (pNextParty2) {
-        pScan = pNextParty2;
-        pInsertAfter = 0;
-        do {
-          pScanNode = pScan;
-          if (pRosterPartyList->nPartyId < pScanNode->nPartyId) {
-            break;
-          }
-
-          pScan = pScanNode->pNext;
-          pInsertAfter = pScanNode;
-        } while (pScanNode->pNext);
-
-        if (pInsertAfter) {
-          pRosterPartyList->pNext = pInsertAfter->pNext;
-          pInsertAfter->pNext = pRosterPartyList;
-          pRosterPartyList = pNextParty;
-          continue;
+    D2RosterPartyListStrc* pList = pRosterPartyList;
+    D2RosterPartyListStrc* pSorted = 0;
+    D2RosterPartyListStrc* pCurrent;
+    while ((pCurrent = pList) != 0) {
+      pList = pList->pNext;
+      D2RosterPartyListStrc* pInsertAfter = 0;
+      for (D2RosterPartyListStrc* pScan = pSorted; pScan; pScan = pScan->pNext) {
+        if (pCurrent->nPartyId < pScan->nPartyId) {
+          break;
         }
+
+        pInsertAfter = pScan;
       }
 
-      pRosterPartyList->pNext = pNextParty2;
-      pNextParty2 = pRosterPartyList;
-      pRosterPartyList = pNextParty;
-    } while (true);
+      if (pInsertAfter) {
+        pCurrent->pNext = pInsertAfter->pNext;
+        pInsertAfter->pNext = pCurrent;
+      } else {
+        pCurrent->pNext = pSorted;
+        pSorted = pCurrent;
+      }
+    }
+
+    pRosterPartyList = pSorted;
 }
 
 // Promotes the party entry matching nPartyId to the front of pRosterPartyList, then within that party's pOwner chain promotes the roster node matching nRosterGUID to the front. Used to prioritize a specific player in the party display order. No-ops if nPartyId is -1 or the entries are not found.
-static void __stdcall ROSTER_MoveRosterPlayerToFrontOfParty(uint16_t nPartyId, int32_t nRosterGUID) {
-    D2RosterPartyListStrc* pCurrentRoster;
-    D2RosterStrc* pCurrent;
-    D2RosterStrc* pPrevious;
-    D2RosterStrc* pNext;
-    D2RosterPartyListStrc* pList = pRosterPartyList;
+static void __stdcall ROSTER_MoveRosterPlayerToFrontOfParty(int32_t nRosterGUID, uint16_t nPartyId) {
+    D2RosterPartyListStrc* pHead = pRosterPartyList;
+    D2RosterPartyListStrc* pParty = pHead;
     D2RosterPartyListStrc* pPrevParty = 0;
+    D2RosterStrc* pPrevious = 0;
     if (nPartyId == 0xffff) {
       return;
     }
 
-    while (pCurrentRoster = pList) {
-      if (pCurrentRoster->nPartyId == nPartyId) {
-        if (pPrevParty) {
-          pPrevParty->pNext = pCurrentRoster->pNext;
-          pCurrentRoster->pNext = pRosterPartyList;
-          pRosterPartyList = pCurrentRoster;
-        }
+    while (pParty ? pParty->nPartyId != nPartyId : false) {
+      pPrevParty = pParty;
+      pParty = pParty->pNext;
+    }
 
-        pNext = pCurrentRoster->pOwner;
-        pPrevious = 0;
-        while (true) {
-          pCurrent = pNext;
-          if (!pCurrent) {
-            return;
-          }
-          if (pCurrent->nRosterGUID == nRosterGUID) {
-            break;
-          }
+    if (!pParty) {
+      return;
+    }
 
-          pNext = pCurrent->pNext;
-          pPrevious = pCurrent;
-        }
+    if (pPrevParty) {
+      pPrevParty->pNext = pParty->pNext;
+      pParty->pNext = pHead;
+      pRosterPartyList = pParty;
+    }
 
-        if (!pPrevious) {
-          return;
-        }
+    D2RosterStrc* pCurrent = pParty->pOwner;
+    while (pCurrent ? pCurrent->nRosterGUID != nRosterGUID : false) {
+      pPrevious = pCurrent;
+      pCurrent = pCurrent->pNext;
+    }
 
-        pPrevious->pNext = pCurrent->pNext;
-        pCurrent->pNext = pCurrentRoster->pOwner;
-        pCurrentRoster->pOwner = pCurrent;
-        return;
-      }
+    if (!pCurrent) {
+      return;
+    }
 
-      pPrevParty = pCurrentRoster;
-      pList = pCurrentRoster->pNext;
+    if (pPrevious) {
+      pPrevious->pNext = pCurrent->pNext;
+      pCurrent->pNext = pParty->pOwner;
+      pParty->pOwner = pCurrent;
     }
 }
 
 // @sourcefile .\GAME\Roster.cpp
 void __stdcall ROSTER_GroupPlayersIntoParties() {
-    D2RosterPartyListStrc* pRosterPartyList;
-    uint16_t nPartyId;
-    D2RosterPartyListStrc* pPartyListHead;
-    pPartyListHead = Roster::pRosterPartyList;
-    do {
-      if (!gpRosterPlayers) {
-        return;
-      }
-
-      nPartyId = gpRosterPlayers->nPartyId;
-      for (pRosterPartyList = pPartyListHead; pRosterPartyList; pRosterPartyList = pRosterPartyList->pNext) {
+    while (gpRosterPlayers) {
+      const uint16_t nPartyId = gpRosterPlayers->nPartyId;
+      D2RosterPartyListStrc* pRosterPartyList = Roster::pRosterPartyList;
+      while (pRosterPartyList) {
         if (pRosterPartyList->nPartyId == nPartyId) {
-          goto move_members_into_party;
+          break;
         }
+
+        pRosterPartyList = pRosterPartyList->pNext;
       }
 
-      pRosterPartyList = D2_NEW_AT(D2RosterPartyListStrc, ".\\GAME\\Roster.cpp", 0x1fc);
-      *(uint32_t*)pRosterPartyList = 0;
-      pRosterPartyList->pOwner = 0;
-      pRosterPartyList->nPartyId = nPartyId;
-      pRosterPartyList->pNext = Roster::pRosterPartyList;
-      pPartyListHead = pRosterPartyList;
-      Roster::pRosterPartyList = pRosterPartyList;
-      move_members_into_party:
+      if (!pRosterPartyList) {
+        pRosterPartyList = D2_NEW_AT(D2RosterPartyListStrc, ".\\GAME\\Roster.cpp", 0x1fc);
+        memset(pRosterPartyList, 0, 8);
+        pRosterPartyList->nPartyId = nPartyId;
+        pRosterPartyList->pNext = Roster::pRosterPartyList;
+        Roster::pRosterPartyList = pRosterPartyList;
+      }
+
       ROSTER_CollectPartiesIntoPartyList(pRosterPartyList);
-    } while (true);
+    }
 }
 
 void __stdcall ROSTER_SortAllParties() {
@@ -557,7 +515,7 @@ void __stdcall ROSTER_RebuildPlayerParty() {
 
     ROSTER_GroupPlayersIntoParties();
     ROSTER_SortAllParties();
-    ROSTER_MoveRosterPlayerToFrontOfParty(nPartyId, nRosterGUID);
+    ROSTER_MoveRosterPlayerToFrontOfParty(nRosterGUID, nPartyId);
     ROSTER_FlattenPartyListsIntoSingleRosterChain();
     FreeRosterPartyList();
     if (nPartyId != 0xffff) {
@@ -998,8 +956,7 @@ uint32_t __fastcall ROSTER_CheckPlayerNotHostile(int32_t nRosterGUID) {
         nUnitGUID = pPlayerUnit_lcl->nUnitGUID;
       }
 
-      bIsHostile = UNIT::PlayerList::GetFlag(nUnitGUID, pRoster->nRosterGUID, 4);
-      return (uint32_t)!bIsHostile;
+      return !UNIT::PlayerList::GetFlag(nUnitGUID, pRoster->nRosterGUID, 4);
     }
 
     return 1;

@@ -645,15 +645,16 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 
     UNIT::SUnit::SetSparklyChestFlag(pUnit, '\0');
     if (pUnit) {
-      nAnimModeOrGUID = pUnit->eAnimMode.ePlayerMode;
       pUnit->eUnitFlags &= ~UNITFLAG_ISVALIDTARGET;
       pUnit->pHoverText = 0;
-      if (nAnimModeOrGUID >= 8) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x240);
-        exit(-1);
-      }
+      nAnimModeOrGUID = pUnit->eAnimMode.ePlayerMode;
     } else {
       nAnimModeOrGUID = 0;
+    }
+
+    if (nAnimModeOrGUID >= 8) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x240);
+      exit(-1);
     }
     if (pObjectsTxt->IsAttackable) {
       if (pUnit) {
@@ -689,12 +690,12 @@ void __fastcall OBJECT_InitializeObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
         }
 
         s0x00.pGame = pGameCopy;
-        s0x00.nX = nX;
-        s0x00.pSeed = pSeed;
-        s0x00.nY = nY;
         s0x00.pObject = pUnit;
         s0x00.pRoom = pRoom;
+        s0x00.pSeed = pSeed;
         s0x00.pObjectTxt = pObjectsTxt;
+        s0x00.nX = nX;
+        s0x00.nY = nY;
         (*OBJECTSINITFN[pObjectsTxt->InitFn])(&s0x00);
       }
       if (pObjectsTxt->Selectable[nAnimModeOrGUID]) {

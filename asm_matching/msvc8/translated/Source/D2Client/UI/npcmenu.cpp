@@ -3726,54 +3726,32 @@ int32_t __stdcall GetInteractedUnitClassId() {
 }
 
 void __stdcall NPCMENU_SelectRandomDialogOption(D2NPCSpeechStrc * pSpeech) {
-    D2SpeechBankStrc* pDVar1;
-    BOOL BVar2;
-    int nPlayerClassId;
+    int* const pnGossip = &pSpeech->nGossip;
     int nRetryCount = 10;
-    D2UnitStrc* pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
-    if (!pPlayerUnit_lcl) {
-      nPlayerClassId = -1;
-    } else {
-      nPlayerClassId = pPlayerUnit_lcl->nClassId;
-    }
+    D2UnitStrc* pPlayerUnit = UNIT::Player::GetPlayerUnit_UI();
+    const int nPlayerClassId = !pPlayerUnit ? -1 : pPlayerUnit->nClassId;
 
     do {
-      uint32_t nOptionCount;
-      nOptionCount = pSpeech->nCount;
-      nRetryCount--;
-      nOptionCount = D2_SeedRollLimited(&pPlayerUnit_lcl->sSeed, nOptionCount);
-      pSpeech->nGossip = nOptionCount;
-      if ((int)nOptionCount >= 2) {
-        pDVar1 = pSpeech->pBank;
-        if (pDVar1[nOptionCount].nPlayerClass == nPlayerClassId || pDVar1[nOptionCount].nPlayerClass == 7) {
-          if (pDVar1[nOptionCount].bQuestCondition == '\0') {
+      --nRetryCount;
+      *pnGossip = D2_SeedRollLimited(&pPlayerUnit->sSeed, pSpeech->nCount);
+      if (*pnGossip >= 2) {
+        if (pSpeech->pBank[*pnGossip].nPlayerClass == nPlayerClassId || pSpeech->pBank[*pnGossip].nPlayerClass == 7) {
+          if (!pSpeech->pBank[*pnGossip].bQuestCondition) {
             return;
           }
 
-          BVar2 = D2Common::QuestRecord::GetQuestState(gpNpcMenuBitBuffer, pDVar1[nOptionCount].eQuest, QUESTSTATE_Completed);
-          if (BVar2 == pSpeech->pBank[pSpeech->nGossip].nQuestCompleted) {
-            if (pSpeech->pBank != gaNpcSpeechBank_725cb0) {
-              return;
+          if (D2Common::QuestRecord::GetQuestState(gpNpcMenuBitBuffer, pSpeech->pBank[*pnGossip].eQuest, QUESTSTATE_Completed) == pSpeech->pBank[*pnGossip].nQuestCompleted) {
+            if (pSpeech->pBank == gaNpcSpeechBank_725cb0 && pSpeech->pBank[*pnGossip].wStringId == 0xff
+                && D2Common::QuestRecord::GetQuestState(gpGameQuestRecord, QUEST_TheArcaneSanctuary, QUESTSTATE_JustCompleted) == 1) {
+              *pnGossip = 2;
             }
-            if (gaNpcSpeechBank_725cb0[pSpeech->nGossip].wStringId != 0xff) {
-              return;
-            }
-
-            BVar2 = D2Common::QuestRecord::GetQuestState(gpGameQuestRecord, QUEST_TheArcaneSanctuary, QUESTSTATE_JustCompleted);
-            if (BVar2 != 1) {
-              return;
-            }
-
-            pSpeech->nGossip = 2;
             return;
           }
         }
       }
-      if (!nRetryCount) {
-        pSpeech->nGossip = 2;
-        return;
-      }
-    } while (true);
+    } while (nRetryCount);
+
+    *pnGossip = 2;
 }
 
 void __stdcall NPCMENU_RandomizeAllNpcDialogs() {

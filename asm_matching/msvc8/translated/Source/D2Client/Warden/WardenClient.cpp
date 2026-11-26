@@ -78,7 +78,7 @@ void __fastcall WARDEN_RC4Decrypt(D2RC4StateStrc * pState, int, uint8_t * pData,
     }
 }
 
-static uint32_t __stdcall WARDEN_CheckSignatureMagic(uint32_t nTotalLen, int32_t nDataLen, uint8_t * pBuffer, int * pnSigOffset) {
+static uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nTotalLen, int32_t nDataLen, uint8_t * pBuffer, int * pnSigOffset) {
     int nSigOffset = nTotalLen - nDataLen - 4;
     *pnSigOffset = nSigOffset;
     if (nTotalLen >= nDataLen + 4U) {
@@ -527,31 +527,33 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
       ppModule->nLoadedLibraryCount = 0;
       ppModule->pModuleObject = 0;
       ppModule->pfnCreateInterface = 0;
-      bDecryptOk = WARDEN_DecryptModule(ppModule, dwUnusedEDX, pDecompressed, nDecompressedSize);
-      if ((char)bDecryptOk == '\0') {
-        nErrLine = 0x1a0;
-        Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1a0, 0);
-      } else {
-        pLoadedLib = vc8_thiscall(WARDEN_DecryptBuffer)(ppModule, 1);
-        ppModule->pfnCreateInterface = pLoadedLib;
-        if (pLoadedLib) {
-          Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1b0, 0);
-          gpWardenPendingModule = ppModule;
-          return 1;
-        }
+    }
+    if (!ppModule) {
+      Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x199, 0);
+      return 0;
+    }
 
-        WARDEN_FreeModuleLibraries(ppModule);
-        nErrLine = 0x1aa;
-        Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1aa, 0);
-      }
-
+    bDecryptOk = WARDEN_DecryptModule(ppModule, dwUnusedEDX, pDecompressed, nDecompressedSize);
+    if (!(char)bDecryptOk) {
+      Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1a0, 0);
       WARDEN_FreeModuleLibraries(ppModule);
       Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
       return 0;
     }
 
-    Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x199, 0);
-    return 0;
+    pLoadedLib = vc8_thiscall(WARDEN_DecryptBuffer)(ppModule, 1);
+    ppModule->pfnCreateInterface = pLoadedLib;
+    if (!pLoadedLib) {
+      WARDEN_FreeModuleLibraries(ppModule);
+      Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1aa, 0);
+      WARDEN_FreeModuleLibraries(ppModule);
+      Storm::Source::SMem::SMemFree(ppModule, ".\\WARDEN\\WardenClient.cpp", 0x117, 0);
+      return 0;
+    }
+
+    Storm::Source::SMem::SMemFree(pDecompressed, ".\\WARDEN\\WardenClient.cpp", 0x1b0, 0);
+    gpWardenPendingModule = ppModule;
+    return 1;
 }
 
 // Loads the Warden module whose 16-byte hash is pModuleHash (EBX). If it equals
@@ -992,22 +994,19 @@ void __fastcall WARDEN_SetGlobalFlag(uint32_t dwParam) {
 }
 
 void __fastcall WARDEN_FreeModuleLibraries(D2WardenModuleStrc * pModule) {
-    LPVOID pModuleBase = pModule->pLibrary;
-    if (!pModuleBase) {
+    if (!pModule->pLibrary) {
       return;
     }
 
-    int nImportTableOffset = *(int*)((char*)pModuleBase + 0x1c);
-    uint32_t nModuleCount = pModule->nLoadedLibraryCount;
-    while ((int)nModuleCount > 0) {
-      HMODULE hLibModule;
+    uint8_t * pImportTable = (uint8_t*)pModule->pLibrary + *(uint32_t*)((uint8_t*)pModule->pLibrary + 0x1c);
+    HMODULE (__stdcall * pfnGetModuleHandleA)(LPCSTR) = GetModuleHandleA;
+    while ((int)pModule->nLoadedLibraryCount > 0) {
       pModule->nLoadedLibraryCount--;
-      /* LPCSTR lpModuleName for GetModuleHandleA */ hLibModule = GetModuleHandleA((LPCSTR)(*(int*)((char*)pModuleBase + (int)pModule->nLoadedLibraryCount * 8 + nImportTableOffset) + (intptr_t)pModule->pLibrary));
-      /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(hLibModule);
-      nModuleCount = pModule->nLoadedLibraryCount;
+      LPCSTR szLibName = (LPCSTR)((uint8_t*)pModule->pLibrary + *(uint32_t*)(pImportTable + (int)pModule->nLoadedLibraryCount * 8));
+      FreeLibrary(pfnGetModuleHandleA(szLibName));
     }
 
-    /* DWORD dwFreeType for VirtualFree */ /* SIZE_T dwSize for VirtualFree */ /* LPVOID lpAddress for VirtualFree */ VirtualFree(pModule->pLibrary, 0, 0x8000);
+    VirtualFree(pModule->pLibrary, 0, 0x8000);
     pModule->pLibrary = (LPVOID)0x0;
     pModule->nImageSize = 0;
 }

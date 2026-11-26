@@ -224,18 +224,19 @@ int32_t __fastcall D2WINFONT_GetStringPixelWidthN(uint16_t * pwszString, int32_t
 }
 
 int32_t __fastcall D2WINFONT_GetStringPixelWidth(uint16_t * pwszString, int32_t nSize) {
-    D2FontGlyphStrc* pGlyphEntry;
-    int i;
+    int nCount = 0;
     int nWidth = 0;
-    uint16_t wCurChar = *pwszString;
-    for (i = 0; wCurChar != L'\0' && i < nSize; i++) {
-      if (*pwszString != L'\n') {
-        pGlyphEntry = (*gpfnFontGetCharWidth)(*pwszString);
-        nWidth += (uint32_t)pGlyphEntry->abUnverified[1];
+    for (uint16_t* pwszChar = pwszString; *pwszChar; pwszChar++) {
+      if (nCount >= nSize) {
+        break;
       }
 
-      pwszString++;
-      wCurChar = *pwszString;
+      const uint16_t wChar = *pwszChar;
+      if (wChar != L'\n') {
+        nWidth += (*gpfnFontGetCharWidth)(wChar)->abUnverified[1];
+      }
+
+      nCount++;
     }
 
     return nWidth;
@@ -248,93 +249,80 @@ int32_t __fastcall DRAW_text0(uint16_t * wszText) {
 }
 
 static int32_t TEXT_CalculateTextWidth(uint16_t * szBuffer) {
-    int32_t nColorCmpResult;
-    D2FontGlyphStrc* pGlyphEntry;
-    int32_t nStrLen;
-    int nCharPos = 0;
     if (!szBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x20d);
       exit(-1);
     }
 
-    nStrLen = 0;
+    int nLineWidth = 0;
     int nMaxLineWidth = 0;
-    int32_t nLineWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(szBuffer);
-    if (nLineWidth > 0) {
-      uint16_t wCharCode;
-      do {
-        wCharCode = *szBuffer;
-        if (wCharCode == L'\0') {
-          break;
-        }
-        if (wCharCode == L'\n') {
-          if (nStrLen > nMaxLineWidth) {
-            nMaxLineWidth = nStrLen;
-          }
-
-          nStrLen = 0;
-          szBuffer++;
-        } else {
-          if (wCharCode < 0x100 && wCharCode == L'\xff') {
-            szBuffer++;
-            nColorCmpResult = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNNoCase(szBuffer, gnFontTableCharWidthCache, 1);
-            if (!nColorCmpResult) {
-              pGlyphEntry = (*gpfnFontGetCharWidth)(gnFontTableCharWidthCache[0]);
-              nStrLen += (uint32_t)pGlyphEntry->abUnverified[1];
-            }
-
-            szBuffer += 2;
-            nCharPos += 2;
-          } else {
-            pGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
-            nStrLen += (uint32_t)pGlyphEntry->abUnverified[1];
-            szBuffer++;
-          }
-        }
-
-        nCharPos++;
-      } while (nCharPos < nLineWidth);
-
-      if (nMaxLineWidth > nStrLen) {
-        nStrLen = nMaxLineWidth;
+    const int nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(szBuffer);
+    for (int nCharPos = 0; nCharPos < nStrLen; nCharPos++) {
+      const uint16_t wCharCode = *szBuffer;
+      if (!wCharCode) {
+        break;
       }
+      if (wCharCode == L'\n') {
+        if (nLineWidth > nMaxLineWidth) {
+          nMaxLineWidth = nLineWidth;
+        }
+
+        nLineWidth = 0;
+        szBuffer++;
+        continue;
+      }
+
+      const int bColorCode = wCharCode < 0x100 ? wCharCode == 0xff : 0;
+      if (bColorCode) {
+        szBuffer++;
+        if (!D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNNoCase(szBuffer, gnFontTableCharWidthCache, 1)) {
+          nLineWidth += (*gpfnFontGetCharWidth)(*(const int*)gnFontTableCharWidthCache)->abUnverified[1];
+        }
+
+        szBuffer += 2;
+        nCharPos += 2;
+        continue;
+      }
+
+      nLineWidth += (*gpfnFontGetCharWidth)(wCharCode)->abUnverified[1];
+      szBuffer++;
     }
 
-    return nStrLen;
+    if (nMaxLineWidth > nLineWidth) {
+      nLineWidth = nMaxLineWidth;
+    }
+
+    return nLineWidth;
 }
 
 static int32_t D2WINFONT_GetFirstLinePixelWidth(uint16_t * pwszString) {
-    int32_t nColorCmpResult;
-    D2FontGlyphStrc* pGlyphEntry;
-    int nCharPos;
-    int32_t nLineWidth;
     if (!pwszString) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x23c);
       exit(-1);
     }
 
-    int32_t nPixelWidth = 0;
-    nLineWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)pwszString);
-    for (nCharPos = 0; nCharPos < nLineWidth; nCharPos++) {
-      uint16_t wCharCode;
-      wCharCode = *pwszString;
-      if (wCharCode == 10) {
-        return nPixelWidth;
+    int nPixelWidth = 0;
+    const int nLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength((uint16_t*)pwszString);
+    for (int nCharPos = 0; nCharPos < nLength; nCharPos++) {
+      const uint16_t wCharCode = *pwszString;
+      if (wCharCode == L'\n') {
+        break;
       }
-      if (wCharCode < 0x100 && wCharCode == 0xff) {
-        nColorCmpResult = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNNoCase(pwszString + 1, gnFontTableCharWidthCache, 1);
-        if (!nColorCmpResult) {
-          pGlyphEntry = (*gpfnFontGetCharWidth)(gnFontTableCharWidthCache[0]);
-          nPixelWidth += (uint32_t)pGlyphEntry->abUnverified[1];
+
+      const int bColorCode = wCharCode < 0x100 ? wCharCode == 0xff : 0;
+      if (bColorCode) {
+        pwszString++;
+        if (!D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNNoCase(pwszString, gnFontTableCharWidthCache, 1)) {
+          nPixelWidth += (*gpfnFontGetCharWidth)(*(const int*)gnFontTableCharWidthCache)->abUnverified[1];
         }
 
         nCharPos += 2;
-        pwszString += 3;
-      } else {
-        pGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
-        nPixelWidth += (uint32_t)pGlyphEntry->abUnverified[1];
-        pwszString++;
+        pwszString += 2;
+        continue;
       }
+
+      nPixelWidth += (*gpfnFontGetCharWidth)(wCharCode)->abUnverified[1];
+      pwszString++;
     }
 
     return nPixelWidth;
