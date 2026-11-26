@@ -1468,6 +1468,15 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_9(D2UnitStrc * p) {
     return p->eUnitFlags >> 9 & 1;
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+// steer-ok: generated-form FlagBit getter
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_31(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlags >> 31 & 1;
+}
+
 // Decides the fate of a dead or inactivating monster and either saves it as an inactive unit or frees it. Determines bShouldSave from many gates: whether the unit is truly dead (CheckForModeZeroDeath), the level's saveMonsters flag, the resurrect flag, a Kick-mode seeded RNG roll (advances and writes the room seed), passive-state presence, alignment==2, low node-table index (frees AI nodes and saves when alive), special class ids 0x16b/0x16c, monster-type bit 0x18, minion ownership (delegates dead pets to PETS_HandleDeadPet), an eUnitFlags bit, and the monstats2 byRestore field (0 => don't save, 2 => force save). If a pet record resulted, marks UNITFLAGEX_HASBEENDELETED and conditionally saves then clears the room link and returns; otherwise conditionally saves and then frees the server unit. Server-side unit cleanup; custom register args (pUnit@ESI, pGame on stack).
 static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nMonStatsExIdx;
@@ -1481,19 +1490,21 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
     eD2PlayerAnimMode eAnimMode;
     eAnimMode = pUnit->eAnimMode.ePlayerMode;
     BOOL bIsDead;
-    bIsDead = SUnit::CheckForModeZeroDeath(pUnit);
-    bool bIsDeadBool;
-    bIsDeadBool = bIsDead != 0;
+    bIsDead = FALSE;
+    if (SUnit::CheckForModeZeroDeath(pUnit)) {
+      bIsDead = TRUE;
+    }
+
+    BOOL bShouldSave;
+    bShouldSave = FALSE;
     int pPetRecord;
     pPetRecord = 0;
-    eD2LevelId eLevelId;
-    eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pUnitRoom);
-    int32_t nAlignmentOrSave;
-    nAlignmentOrSave = D2Common::Drlg::TXT_LevelDefs_GetSaveMonsters(eLevelId);
-    bool bIsResurrect;
-    bIsResurrect = (pUnit->eUnitFlags & UNITFLAG_ISRESURRECT) != 0;
-    bool bShouldSave;
-    bShouldSave = bIsResurrect || nAlignmentOrSave;
+    if (D2Common::Drlg::TXT_LevelDefs_GetSaveMonsters(D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pUnitRoom))) {
+      bShouldSave = TRUE;
+    }
+    if (pUnit->eUnitFlags & UNITFLAG_ISRESURRECT) {
+      bShouldSave = TRUE;
+    }
     if (eAnimMode == Kick) {
       if (pUnitRoom) {
         pRoomSeed = &pUnitRoom->sSeed;
@@ -1502,61 +1513,54 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
       }
 
       sNewSeed = D2_SeedRoll(pRoomSeed);
-      bShouldSave = bIsResurrect || nAlignmentOrSave;
       if (sNewSeed % 3 != 0) {
-        bShouldSave = false;
+        bShouldSave = FALSE;
       }
     }
-    if (bIsDeadBool) {
-      int32_t nAlignment;
-      nMonStatsExIdx = D2Common::DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit);
-      if (nMonStatsExIdx) {
-        bShouldSave = false;
+    if (bIsDead) {
+      if (D2Common::DATATBLS::ItemStats::STATES_HasUdeadFlagState(pUnit)) {
+        bShouldSave = FALSE;
       }
-
-      nAlignment = D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit);
-      if (nAlignment == 2) {
-        bShouldSave = false;
+      if (D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit) == 2) {
+        bShouldSave = FALSE;
       }
     }
     if (pUnit->nNodeTableIndex < 8) {
-      if (!bIsDeadBool) {
-        bShouldSave = true;
+      if (!bIsDead) {
+        bShouldSave = TRUE;
         SUnit::SetAlignment(pUnit, '\0', 1);
         GAME::Targets::MONSTER_FreeUnitNodes(pGame, pUnit);
         goto apply_remaining_save_gates;
       }
 
-      bShouldSave = false;
+      bShouldSave = FALSE;
     }
-    if (bIsDeadBool && (pUnit->nClassId == 0x16b || pUnit->nClassId == 0x16c)) {
-      bShouldSave = false;
+    if (bIsDead && (pUnit->nClassId == 0x16b || pUnit->nClassId == 0x16c)) {
+      bShouldSave = FALSE;
     }
 
     apply_remaining_save_gates:
     dwMonTypeFlags = Monsters::CheckMonsterType(pUnit, 0x18);
-    if (dwMonTypeFlags && bIsDeadBool) {
-      bShouldSave = false;
+    if (dwMonTypeFlags && bIsDead) {
+      bShouldSave = FALSE;
     }
-    if ((int)pUnit->eUnitFlags < 0) {
+    if (FlagBit_D2UnitStrc_eUnitFlags_31(pUnit)) {
       pOwnerUnit = Ai::AiGeneral::GetOwnerUnit(pUnit);
-      if (!pOwnerUnit || pOwnerUnit->eUnitType != UNIT_PLAYER) {
-        bShouldSave = false;
-      } else {
+      if (pOwnerUnit && pOwnerUnit->eUnitType == UNIT_PLAYER) {
         pPetRecord = PLAYER::PlayerPets::PETS_HandleDeadPet(pGame, pOwnerUnit, pUnit);
-        bShouldSave = false;
       }
+      bShouldSave = FALSE;
     }
     if (FlagBit_D2UnitStrc_eUnitFlags_9(pUnit)) {
-      bShouldSave = false;
+      bShouldSave = FALSE;
     }
 
     nMonStatsExIdx = pUnit->nClassId;
     D2MonStats2Txt* pMonStatsExTxt;
     if (nMonStatsExIdx < 0 || nMonStatsExIdx >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(nMonStatsExIdx = (int)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsExIdx].MonStatsEx , pMonStatsExTxt = nMonStatsExIdx >= 0 && nMonStatsExIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsExSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStatsEx + nMonStatsExIdx : nullptr) || (cMonStatsExField = pMonStatsExTxt->byRestore , !cMonStatsExField)) {
-      bShouldSave = false;
+      bShouldSave = FALSE;
     } else if (cMonStatsExField == 2) {
-      bShouldSave = true;
+      bShouldSave = TRUE;
     }
     if (pPetRecord) {
       pUnit->eUnitFlagsEx |= UNITFLAGEX_HASBEENDELETED;

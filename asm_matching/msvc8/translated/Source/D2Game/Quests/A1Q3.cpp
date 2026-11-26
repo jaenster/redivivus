@@ -154,10 +154,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
               }
 
               pQuestData->fpSequenceFilter(pQuestData);
-              QUEST_SendNpcGossipPacket(pQuestArgs->pGame, pQuestArgs->pPlayer, pQuestArgs->pTarget);
-              return;
-            }
-            if (pA1Q3Data->bSequenceReady) {
+            } else if (pA1Q3Data->bSequenceReady) {
               pNextQuestData = GetQuestDataByQuestNoInternal(pQuestData->pGame, pQuestData->nSequenceQuestId);
               if (pNextQuestData) {
                 /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)pQuestData->fpSequenceFilter);
