@@ -69,6 +69,10 @@ option(REDIVIVUS_SERVER
     "Build the dedicated server (d2host.exe) from the server modules, every unit compiled with D2_TARGET_SERVER=1. The game executable leaves the default target in such a build directory." OFF)
 option(REDIVIVUS_MODS
     "Mods: the mod runtime (Redivivus/Lua, on LuaJIT from 3rdparty/luajit) built, every unit compiled with D2_FEATURE_MODS=1." OFF)
+if(REDIVIVUS_MODS AND D2_ARCH_X64)
+    message(FATAL_ERROR "REDIVIVUS_MODS is 32-bit only: a 64-bit build with mods has never "
+        "been verified. Configure it with cmake/mingw-i686.cmake, or turn REDIVIVUS_MODS off.")
+endif()
 
 set(D2_ROOT "${CMAKE_SOURCE_DIR}")
 set(D2_SUPPORT "${D2_ROOT}/Redivivus")
