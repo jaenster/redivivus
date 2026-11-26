@@ -1,3 +1,6 @@
+1	Redivivus/Lua/d2_lua_json.cpp
+4	Redivivus/Lua/d2_lua_pattern.cpp
+1	Redivivus/Lua/d2_lua_runtime.cpp
 1	Redivivus/d2_control.cpp
 1	Redivivus/d2_patch.cpp
 1	Redivivus/x64/test/x64deps_test.cpp

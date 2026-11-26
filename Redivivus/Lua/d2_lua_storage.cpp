@@ -52,9 +52,11 @@ static void PutU64(std::string* pOut, uint64_t n) {
     }
 }
 
+static_assert(sizeof(double) == sizeof(uint64_t), "a number is stored as its 64-bit pattern");
+
 static void PutNumber(std::string* pOut, double d) {
     uint64_t nBits;
-    memcpy(&nBits, &d, 8);
+    memcpy(&nBits, &d, sizeof(nBits));
     PutU64(pOut, nBits);
 }
 
@@ -233,7 +235,7 @@ static bool ReadValue(Reader* pR, int nDepth) {
     case kNumber: {
         uint64_t nBits = GetU(pR, 8);
         double d;
-        memcpy(&d, &nBits, 8);
+        memcpy(&d, &nBits, sizeof(d));
         lua_pushnumber(L, d);
         return true;
     }
