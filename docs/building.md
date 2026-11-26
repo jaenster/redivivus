@@ -22,7 +22,7 @@ flags, see [original-compilers.md](original-compilers.md).
   and Ninja.
   - macOS: `brew install mingw-w64 cmake ninja`
   - Debian/Ubuntu: `apt install g++-mingw-w64-i686 cmake ninja-build`
-  - Windows: an MSYS2 MinGW32 shell
+  - Windows: see [Building on Windows](#building-on-windows)
 
 ## Build
 
@@ -33,6 +33,39 @@ cmake --build build
 
 That produces `build/d2.exe`, a 32-bit Windows executable. `tools/check-build.sh` does
 the same from a clean clone and checks the result; CI runs it on every push.
+
+### Building on Windows
+
+The tree builds with GCC 13 on mingw-w64 11 headers, which is what CI uses (Ubuntu 24.04,
+`g++-mingw-w64-i686`). The current MSYS2 MinGW32 packages do not build it: their mingw-w64
+v15 headers have no `threadlocinfo` and declare `_EXCEPTION_DISPOSITION` as an enum, which
+clashes with the generated headers.
+
+Two routes work:
+
+- **The CI toolchain in Docker or WSL.** Use Ubuntu 24.04 and the Debian/Ubuntu line above,
+  then the commands under [Build](#build). In Docker, a bind mount from a Windows drive makes
+  the compiler's reads slow. Copying the tree into the container or a named volume first makes
+  the build several times faster.
+- **Natively, with a [WinLibs](https://winlibs.com) GCC 13 build for i686 on mingw-w64 11.**
+  Tested: `13.3.0posix-11.0.1-msvcrt-r1`, which also ships `ninja`. You also need CMake 3.24
+  or later; the one bundled with Visual Studio works. Put the toolchain's `bin` on `PATH`, then:
+
+  ```powershell
+  cmake -S . -B build -G Ninja -DCMAKE_TOOLCHAIN_FILE=cmake/mingw-i686.cmake `
+    "-DCMAKE_C_FLAGS=-D_WIN32_WINNT=0x0A00" "-DCMAKE_CXX_FLAGS=-D_WIN32_WINNT=0x0A00"
+  cmake --build build
+  ```
+
+  WinLibs' headers default `_WIN32_WINNT` to Windows XP, which leaves
+  `GetModuleFileNameExA` and `GetModuleInformation` unresolved at link time. The define gives
+  the same headers as the Ubuntu package.
+
+  Use `PATH` rather than a full path in `D2_TOOL_PREFIX`: the toolchain file appends `gcc` and
+  `g++` without `.exe`, and CMake rejects the result.
+
+  This is not the CI compiler (GCC 13.3 with posix threads, against 13.2 with win32 threads),
+  so use the CI toolchain when a build has to match CI's.
 
 Each module under `Source/` and `3rdparty/` builds into its own static library, and the
 executable links them whole in the order of the 1.14d link. `-DREDIVIVUS_MODULE_LIBRARIES=OFF`
