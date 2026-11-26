@@ -816,8 +816,8 @@ void __fastcall FreeMonsterAi(::SGAMEDATA * pGame, D2AiGeneralStrc * pAiGeneral)
     if (!pAiGeneral) {
       return;
     }
-    if ((D2AiGeneralStrc*)pAiGeneral->pMapAi) {
-      D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, (D2AiGeneralStrc*)pAiGeneral->pMapAi);
+    if (pAiGeneral->pMapAi) {
+      D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pAiGeneral->pMapAi);
     }
 
     D2MonsterDataMinionList* pMemoryToFree = pAiGeneral->pMinionList;

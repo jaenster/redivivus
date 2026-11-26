@@ -1025,9 +1025,9 @@ D2MapAIStrc * __fastcall DRLGPRESET_TransferMapAI(D2MapAIStrc * * ppSrcMapAI, D2
 }
 
 // @sourcefile .\DRLG\Preset.cpp
-void __fastcall DRLGPRESET_FreeSpawnPointList(D2PoolManagerStrc * pMemory, D2AiGeneralStrc * pAiGeneral) {
-    D2_FREE_POOL_AT(pMemory, (void*)pAiGeneral->fpFunction, ".\\DRLG\\Preset.cpp", 0x597);
-    D2_FREE_POOL_AT(pMemory, pAiGeneral, ".\\DRLG\\Preset.cpp", 0x598);
+void __fastcall DRLGPRESET_FreeSpawnPointList(D2PoolManagerStrc * pMemory, D2MapAIStrc * pMapAI) {
+    D2_FREE_POOL_AT(pMemory, pMapAI->pPosition, ".\\DRLG\\Preset.cpp", 0x597);
+    D2_FREE_POOL_AT(pMemory, pMapAI, ".\\DRLG\\Preset.cpp", 0x598);
 }
 
 static void __stdcall CreatePresetObject_Unused(int32_t nPosX, int32_t nClassId, D2PoolManagerStrc * pMemory, int32_t nPosY, D2DrlgMapStrc * pDrlgMap) {

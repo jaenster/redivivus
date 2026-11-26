@@ -155,9 +155,9 @@ static uint32_t gnMonsterStateFlagMask2 = 0x2; D2_STATIC_GUARD(gnMonsterStateFla
 namespace D2Game::UNIT::SUnitInactive {
 
 // @sourcefile .\UNIT\SUnitInactive.cpp
-static void SUNITINACTIVE_FreeInactiveMonster(::SGAMEDATA * pGame, D2InventoryToBeUpdatedStrc * pUnit) {
-    if ((D2AiGeneralStrc*)pUnit[4].pNext) {
-      D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, (D2AiGeneralStrc*)pUnit[4].pNext);
+static void SUNITINACTIVE_FreeInactiveMonster(::SGAMEDATA * pGame, D2InactiveMonsterRecordStrc * pUnit) {
+    if (pUnit->pMapAi) {
+      D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pUnit->pMapAi);
     }
 
     D2_FREE_POOL_AT(pGame->pMemoryPool, pUnit, ".\\UNIT\\SUnitInactive.cpp", 0x8c);
@@ -339,8 +339,8 @@ static void SUNITINACTIVE_RemoveInactiveMonsterByClassId(::SGAMEDATA * pGame, ui
               pPrevMonster->pNext = pCurMonster->pNext;
               Ai::AiGeneral::ClearMinionList(pGame, pCurMonster->pMinionList);
             }
-            if (pCurMonster->pAiGeneral) {
-              D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pCurMonster->pAiGeneral);
+            if (pCurMonster->pMapAi) {
+              D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pCurMonster->pMapAi);
             }
 
             D2_FREE_POOL_AT(pGame->pMemoryPool, pCurMonster, ".\\UNIT\\SUnitInactive.cpp", 0x8c);
@@ -364,8 +364,8 @@ static void SUNITINACTIVE_FreeInactiveMonsterList(::SGAMEDATA * pGame, D2Inactiv
       D2InactiveMonsterRecordStrc* pCurMonster = pNextMonster;
       pNextMonster = pCurMonster->pNext;
       Ai::AiGeneral::ClearMinionList(pGame, pCurMonster->pMinionList);
-      if (pCurMonster->pAiGeneral) {
-        D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pCurMonster->pAiGeneral);
+      if (pCurMonster->pMapAi) {
+        D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pCurMonster->pMapAi);
       }
 
       D2_FREE_POOL_AT(pGame->pMemoryPool, pCurMonster, ".\\UNIT\\SUnitInactive.cpp", 0x8c);
@@ -456,8 +456,8 @@ static void __stdcall SUNITINACTIVE_RestoreMonsterStateFromInactive(::SGAMEDATA 
       }
 
       ppMapAi = Ai::AiGeneral::GetMonsterMapAi(pUnit);
-      if (pInactiveMonRec->pAiGeneral) {
-        D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI((D2MapAIStrc**)&pInactiveMonRec->pAiGeneral, ppMapAi);
+      if (pInactiveMonRec->pMapAi) {
+        D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(&pInactiveMonRec->pMapAi, ppMapAi);
       }
     }
     if ((nMonStatsIdx == 0x10b || nMonStatsIdx == 0xf3 || pInactiveMonRec->nTypeFlags & 0x800 && pInactiveMonRec->nBossNo == 6) && (pInactiveMonRec->nAiArgument || pInactiveMonRec->nAiArgument2)) {
@@ -572,7 +572,7 @@ static void SUNITINACTIVE_SaveMonsterStateToInactive(D2InactiveMonsterRecordStrc
 
       ppMapAi = Ai::AiGeneral::GetMonsterMapAi(pUnit);
       if (*ppMapAi) {
-        D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(ppMapAi, (D2MapAIStrc**)&pInactiveMonsterRecord->pAiGeneral);
+        D2Common::Drlg::Preset::DRLGPRESET_TransferMapAI(ppMapAi, &pInactiveMonsterRecord->pMapAi);
       }
     }
     if (nMonStatsIdx == 0x10b || nMonStatsIdx == 0xf3 || pInactiveMonsterRecord->nTypeFlags & 0x800 && pInactiveMonsterRecord->nBossNo == 6) {
@@ -1006,8 +1006,8 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
           }
         }
       }
-      if (pInactiveMonRec->pAiGeneral) {
-        D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pInactiveMonRec->pAiGeneral);
+      if (pInactiveMonRec->pMapAi) {
+        D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pInactiveMonRec->pMapAi);
       }
 
       D2_FREE_POOL_AT(pGame->pMemoryPool, pInactiveMonRec, ".\\UNIT\\SUnitInactive.cpp", 0x8c);
@@ -1648,7 +1648,7 @@ void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 }
 
-static void * keep_00541890 = (0 ? (SUNITINACTIVE_FreeInactiveMonster(*(::SGAMEDATA * *)0, *(D2InventoryToBeUpdatedStrc * *)0), (void *)0) : (void *)0);
+static void * keep_00541890 = (0 ? (SUNITINACTIVE_FreeInactiveMonster(*(::SGAMEDATA * *)0, *(D2InactiveMonsterRecordStrc * *)0), (void *)0) : (void *)0);
 static void * keep_00541de0 = (0 ? (SUNITINACTIVE_AllocInactiveListForRoom(*(::SGAMEDATA * *)0, *(int32_t *)0, *(D2RoomStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Game::UNIT::SUnitInactive

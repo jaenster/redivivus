@@ -8426,7 +8426,7 @@ struct D2MapAIStrc * __fastcall DRLGPRESET_CopyMapAI(struct D2PoolManagerStrc * 
 // Moves a D2MapAIStrc*: *ppDst = *ppSrc, *ppSrc = NULL. Every caller passes GetMonsterMapAi() (D2MapAIStrc**) on one side.
 struct D2MapAIStrc * __fastcall DRLGPRESET_TransferMapAI(struct D2MapAIStrc * * ppSrcMapAI, struct D2MapAIStrc * * ppDstMapAI);
 // @sourcefile .\DRLG\Preset.cpp
-void __fastcall DRLGPRESET_FreeSpawnPointList(struct D2PoolManagerStrc * pMemory, struct D2AiGeneralStrc * pAiGeneral);
+void __fastcall DRLGPRESET_FreeSpawnPointList(struct D2PoolManagerStrc * pMemory, struct D2MapAIStrc * pMapAI);
 } // namespace D2Common::Drlg::Preset
 namespace D2Common::Drlg::Transform {
 void __stdcall CoordsMapToScreen(int32_t * pX, int32_t * pY);

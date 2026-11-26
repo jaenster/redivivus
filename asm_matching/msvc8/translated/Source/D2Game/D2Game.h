@@ -617,7 +617,7 @@ struct D2InactiveMonsterRecordStrc {
     /* 0x18 */ uint32_t nTypeFlags;
     /* 0x1C */ int nOwnerId; // owner monster id, -1 if none
     /* 0x20 */ struct D2MonsterDataMinionList * pMinionList;
-    /* 0x24 */ struct D2AiGeneralStrc * pAiGeneral;
+    /* 0x24 */ struct D2MapAIStrc * pMapAi;
     /* 0x28 */ int nAiCmdType;
     /* 0x2C */ int eLevelId;
     /* 0x30 */ uint16_t nNameSeed;

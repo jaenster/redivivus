@@ -5078,7 +5078,7 @@ void __stdcall ResetNPCSpeeches() {
     do {
       pbSpeechEntry[-1] = false;
       *pbSpeechEntry = '\0';
-      pbSpeechEntry += 0x16;
+      pbSpeechEntry += sizeof(D2NPCSpeechStrc);
       nSpeechCount--;
     } while (nSpeechCount);
 }
@@ -5515,12 +5515,12 @@ void __fastcall NPCMENU_HandlePlayerInteractionEnd(D2UnitStrc * pUnit) {
             exit(-1);
           }
 
-          NPCMENU_SelectRandomDialogOption((D2NPCSpeechStrc*)(pCurrentSpeech - 0x11));
+          NPCMENU_SelectRandomDialogOption((D2NPCSpeechStrc*)(pCurrentSpeech - offsetof(D2NPCSpeechStrc, field5_0x11)));
         }
 
         pCurrentSpeech[4] = true;
         nSpeechEntryIdx++;
-        pCurrentSpeech += 0x16;
+        pCurrentSpeech += sizeof(D2NPCSpeechStrc);
       } while (nSpeechEntryIdx < D2NPCSpeechCount);
     }
     pPlayer = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
