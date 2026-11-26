@@ -5,6 +5,7 @@
 #include "Source/Storm/Source/SMem.h"
 #include "Source/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || sizeof(CMDDEF) == 0x40, "SMemAlloc(sizeof(CMDDEF)): the 32-bit layout must be the 0x40 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -142,7 +143,7 @@ template<> void TSList<CMDDEF, TSGetLink<CMDDEF>>::Destructor() {
 }
 
 template<> CMDDEF * TSList<CMDDEF, TSGetLink<CMDDEF>>::NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags) {
-    CMDDEF* pNewNodeNew = (CMDDEF*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x40, s___AUCMDDEF___0074c47c, -2, dwFlags | 8);
+    CMDDEF* pNewNodeNew = (CMDDEF*)Storm::Source::SMem::SMemAlloc(nExtraBytes + (uint32_t)sizeof(CMDDEF), s___AUCMDDEF___0074c47c, -2, dwFlags | 8);
     CMDDEF* pNewNode;
     if (pNewNodeNew) {
       pNewNodeNew->pPrev = 0;

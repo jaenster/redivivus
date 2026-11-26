@@ -768,7 +768,7 @@ static __time32_t __stdcall LAUNCHER_GetTime32(__time32_t * pTime) {
 
 void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE nCharacterClass, uint8_t * pAppearanceBuffer, uint16_t wStatusFlags) {
     uint8_t* pbWritePtr;
-    memset(&SAVEFILE, 0, 0x14f);
+    memset(&SAVEFILE, 0, sizeof(SAVEFILE));
     SAVEFILE.dwHeader = 0xaa55aa55;
     SAVEFILE.dwFileVersion = 0x60;
     Storm::Source::SSTR::SStrCopy(SAVEFILE.szCharacterName, szCharacterName, 0x7fffffff);
@@ -786,7 +786,7 @@ void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE n
 
     Fog::Save::SAVEFILE_WriteEncodedInt14Bit(pAppearanceBuffer, 0xe);
     pbWritePtr = pAppearanceBuffer + 2;
-    memcpy(SAVEFILE.pAppearance1, gaNewCharDefaultAppearance, 0x10);
+    memcpy(SAVEFILE.pAppearance1, gaNewCharDefaultAppearance, sizeof(SAVEFILE.pAppearance1));
     for (int i = 0; i < 0xb; i++) {
       *pbWritePtr++ = gaNewCharDefaultAppearance[i];
     }

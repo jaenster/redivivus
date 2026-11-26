@@ -1462,8 +1462,8 @@ void __fastcall D2WINTEXTBOX_SetLineCellTextWDirect(::D2WinTextBox * pTextBox, u
 BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint16_t * wszText, int32_t nLineStyle, int32_t nAlignment) {
     uint16_t* pSecondLine;
     int nAvailWidth;
-    size_t nPrevCharCount;
-    size_t nWrapCharCount;
+    int32_t nPrevCharCount;
+    int32_t nWrapCharCount;
     uint16_t wszIndentBuf[6];
     uint16_t* pWorkBuf;
     int32_t nTotalLen;
@@ -1512,7 +1512,7 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
           if (nLine >= nMaxPixelWidth) {
             nWrapCharCount = nPrevCharCount;
             if (pLastSpace) {
-              nWrapCharCount = (intptr_t)pLastSpace - (intptr_t)pFirstLine >> 1;
+              nWrapCharCount = (int32_t)(pLastSpace - pFirstLine);
               pCharCursor = pLastSpace;
             }
 

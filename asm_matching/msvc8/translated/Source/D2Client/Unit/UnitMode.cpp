@@ -42,7 +42,7 @@
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Player/Player.h"
 #include "Source/D2Game/Player/PlayerTrade.h"

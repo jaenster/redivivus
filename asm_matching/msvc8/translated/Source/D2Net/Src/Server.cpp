@@ -231,7 +231,7 @@ int __stdcall CreateThreadClientSocketOrSingleplayer() {
     return 1;
 }
 
-int32_t __fastcall HandleIncomingPacketBuffer(D2QServerStrc * pQServer, char * pBytes, size_t nSize) {
+int32_t __fastcall HandleIncomingPacketBuffer(D2QServerStrc * pQServer, char * pBytes, uint32_t nSize) {
     SRC::Client::NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(pBytes, nSize);
     return 1;
 }
@@ -314,25 +314,25 @@ void NET_QServer_FreeAndSend0xB0ToEveryone() {
     gpQServer = 0;
 }
 
-int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode1(char * pBytes, size_t nSize) {
+int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode1(char * pBytes, uint32_t nSize) {
     int nResult = Fog::Src::DequeueModePacket(gpQServer, 1, pBytes, nSize);
     return nResult;
 }
 
-int32_t __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode0(char * pBytes, size_t nSize) {
+int32_t __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode0(char * pBytes, uint32_t nSize) {
     int nResult = Fog::Src::DequeueModePacket(gpQServer, 0, pBytes, nSize);
     return nResult;
 }
 
-int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode2(char * pBytes, size_t nSize) {
+int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode2(char * pBytes, uint32_t nSize) {
     int nResult = Fog::Src::DequeueModePacket(gpQServer, 2, pBytes, nSize);
     return nResult;
 }
 
 // Low-level server-to-client packet send. In single-player mode, loops the packet back via NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket. In multiplayer: skips logging/compression for opcode 0xAF (handshake) or nMode==2; otherwise compresses the packet (up to 1032 bytes) and sends via QServer::SendPacketByClientId with a 1- or 2-byte length prefix. Halts if raw packet exceeds 0x204 bytes.
-int32_t __stdcall NET_D2GS_SERVER_SendPacketToClient(uint8_t nMode, int32_t nClientId, char * pBytes, size_t nSize) {
+int32_t __stdcall NET_D2GS_SERVER_SendPacketToClient(uint8_t nMode, int32_t nClientId, char * pBytes, uint32_t nSize) {
     int nSendResult;
-    size_t pbCompressedSize;
+    uint32_t pbCompressedSize;
     uint32_t nSize_00;
     char pBuffer[1034];
     if (nSize > 0x204) {
@@ -346,7 +346,7 @@ int32_t __stdcall NET_D2GS_SERVER_SendPacketToClient(uint8_t nMode, int32_t nCli
       return nSize;
     }
     if (nMode != '\0' || *pBytes != -0x51) {
-      size_t pbCompressedEnd;
+      uint32_t pbCompressedEnd;
       Fog::Src::D2Net::NET_D2GS_SERVER_LogSentPacket(pBytes, nSize);
       if (nMode != '\x02') {
         pbCompressedEnd = Fog::Src::D2Net::NET_D2GS_SERVER_CompressPacket(pBuffer + 2, 1032, pBytes, nSize);

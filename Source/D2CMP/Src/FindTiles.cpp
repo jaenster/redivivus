@@ -25,6 +25,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TileLibraryHashStrc) == 0x200, "D
 static_assert(sizeof(void*) != 4 || sizeof(::D2TileLibraryHashRefStrc) == 0x8, "D2_NEW_AT(D2TileLibraryHashRefStrc): the 32-bit layout must be the 0x8 bytes 1.14d allocates");
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2TileLibraryHashNodeStrc) == 0x14, "D2_NEW_AT(D2TileLibraryHashNodeStrc): the 32-bit layout must be the 0x14 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(::D2TileLibraryHashStrc) == 0x200, "memset(sizeof(D2TileLibraryHashStrc)): the 32-bit table must be the 0x200 bytes 1.14d clears");
 
 
 namespace D2CMP::SRC::FindTiles {
@@ -47,7 +48,7 @@ D2TileLibraryHashStrc * __stdcall FINDTILE_AllocHashTable() {
       exit(-1);
     }
 
-    memset(pHashTable, 0, 0x200);
+    memset(pHashTable, 0, sizeof(*pHashTable));
     return pHashTable;
 }
 

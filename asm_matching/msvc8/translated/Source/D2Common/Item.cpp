@@ -139,24 +139,24 @@ BOOL __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedM
 }
 
 // Manages a set-bonus stat list on pUnit for the set item pUnit2. nMode=0: allocate (if needed) and apply ITEMMOD_ApplySetBonuses into one of 6 gaSetItemBonusStates slots. nMode=1: locate and free the matching stat list. Guards against applying bonuses to items that are themselves magic-or-better quality.
-void __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nMode) {
+BOOL __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nMode) {
     D2StatListExStrc* pStatList;
     int nExistingSetId;
     eD2States eState;
     if (!(nMode <= 1 && pUnit && (pUnit2 ? pUnit2->eUnitType : UNIT_COUNT) == UNIT_ITEM)) {
-      return;
+      return 0;
     }
 
     int nSetId;
     nSetId = ITEMS::Items::GetItemQuality(pUnit2);
     if (nSetId != 5) {
-      return;
+      return 0;
     }
     if (pUnit->eUnitType == UNIT_ITEM) {
       int32_t iVar1;
       iVar1 = ITEMS::Items::ITEM_CheckItemData_ItemQualityIsMagicOrBetter(pUnit);
       if (iVar1) {
-        return;
+        return 0;
       }
     }
 
@@ -164,12 +164,12 @@ void __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUn
     D2SetItemsTxt* pSetItemTxt;
     pSetItemTxt = DATATBLS::ItemTbls::GetSetItemsLine(nSetId);
     if (!pSetItemTxt) {
-      return;
+      return 0;
     }
 
     nSetId = (int)pSetItemTxt->set;
     if (!(nSetId >= 0 && nSetId < ITEMS::Items::sgptDataTable->nTxtSetsSize)) {
-      return;
+      return 0;
     }
 
     int nFreeSlot;
@@ -198,7 +198,7 @@ void __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUn
     } while (nBonusSlotIdx < 6);
 
     if (nMode == 1 || nFreeSlot < 0) {
-      return;
+      return 0;
     }
 
     eState = gaSetItemBonusStates[nFreeSlot];
@@ -206,14 +206,18 @@ void __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUn
     Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatList, 1);
     Stats::StatsEx::SetState(pStatList, eState);
     apply_or_remove_set_bonus:
-    if (!nMode) {
-      Stats::StatsEx::STATLIST_AddStatValue(pStatList, UNITSTAT_value, nSetId, 0);
-      ITEMS::ItemMods::ITEMMOD_ApplySetBonuses(pUnit, pUnit2, eState);
-    } else if (nMode == 1) {
-      Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
-      Stats::StatsEx::FreeStatList(&pStatList->sStatList);
-      return;
+    switch (nMode) {
+      case 0:
+        Stats::StatsEx::STATLIST_AddStatValue(pStatList, UNITSTAT_value, nSetId, 0);
+        ITEMS::ItemMods::ITEMMOD_ApplySetBonuses(pUnit, pUnit2, eState);
+        break;
+      case 1:
+        Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
+        Stats::StatsEx::FreeStatList(&pStatList->sStatList);
+        return 1;
     }
+
+    return 1;
 }
 
 BOOL __stdcall ITEM_ProcessSetItemEquip(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nEquipMode, int32_t bUpdateStates) {

@@ -26,8 +26,8 @@ int * __stdcall TILEPROJECT_AllocSlot(void * pTileProject, char * szFilename) {
 
     D2TileLibraryHeaderStrc* pDVar1;
     for (i = 0; i < 0x20; i++) {
-      if (!*(int*)((uint8_t*)pTileProject + i * 4)) {
-        pDVar1 = SRC::TileProjects::Alloc((D2TileLibraryHashStrc**)((uint8_t*)pTileProject + i * 4), szFilename);
+      if (!((D2TileLibraryHashStrc**)pTileProject)[i]) {
+        pDVar1 = SRC::TileProjects::Alloc((D2TileLibraryHashStrc**)pTileProject + i, szFilename);
         break;
       }
     }
@@ -39,18 +39,18 @@ int * __stdcall TILEPROJECT_AllocSlot(void * pTileProject, char * szFilename) {
     return &pDVar1->nVersion;
 }
 
-void __stdcall TILEPROJECT_FreeSlot(int32_t * pnProjectIds, D2TileLibraryHeaderStrc * pTileLibrary) {
+void __stdcall TILEPROJECT_FreeSlot(D2TileLibraryHashStrc * * ppProjectSlots, D2TileLibraryHeaderStrc * pTileLibrary) {
     if (!pTileLibrary) {
       return;
     }
 
-    int nProjectId = SRC::TileProjects::TILEPROJECT_GetProjectId(pTileLibrary->szLibraryName);
-    if (!nProjectId) {
+    D2TileLibraryHashStrc* pProjectId = SRC::TileProjects::TILEPROJECT_GetProjectId(pTileLibrary->szLibraryName);
+    if (!pProjectId) {
       return;
     }
 
     int nSlotIndex = 0;
-    while (pnProjectIds[nSlotIndex] != nProjectId) {
+    while (ppProjectSlots[nSlotIndex] != pProjectId) {
       nSlotIndex++;
       if (nSlotIndex < 0x20) {
         continue;
@@ -59,7 +59,7 @@ void __stdcall TILEPROJECT_FreeSlot(int32_t * pnProjectIds, D2TileLibraryHeaderS
       return;
     }
 
-    pnProjectIds[nSlotIndex] = 0;
+    ppProjectSlots[nSlotIndex] = 0;
 }
 
 uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int32_t nTileType, int32_t nTileSubType, int32_t nSubIndex, D2TileLibraryEntryStrc * * pnFoundTiles, uint32_t nMaxTiles) {

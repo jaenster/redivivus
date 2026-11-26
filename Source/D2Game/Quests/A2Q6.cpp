@@ -958,7 +958,7 @@ void __fastcall Q14_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // A2Q6 "The Seven Tombs" — Q14_InitData: per-game quest init. Allocates the 0x68-byte A2Q6 specific-data block, wires the state-handler table (slot0=Callback_00 gossip, 2=Callback_02, 3=Callback_03, 8=Callback_08 chamber-enter, 0xa=Callback_10 participation, 0xb=Callback_11 main dialogue, 0xd=Callback_13 join, 0xe=Callback_14 staff-cleanup), sets fpStatusFilter/fpActiveFilter/fpSequenceFilter, nQuestIdReal=QUEST_TheSevenTombs, nInitNo=4, the NPC gossip table (Jerhyn 0xc9 / string 0x1ae), zeroes the block, nStateFlag=0. No record reads/writes here.
 void __fastcall Q14_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q14_Callback03_ChangedLevel;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q14_Callback00_NpcActivate;
@@ -978,7 +978,7 @@ void __fastcall Q14_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->nInitNo = 4;
     pQuestData->fpActiveFilter = (QUESTACTIVE)Q14_ActiveFilter;
     pQuestData->fpSequenceFilter = Q14_SequenceFilter;
-    memset(pQuestSpecificData, 0, 0x68);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     pQuestSpecificData->bTombEntered = 0;
     pQuestSpecificData->field_0x2 = 0;
     pQuestSpecificData->bPortalTimerArmed = 0;

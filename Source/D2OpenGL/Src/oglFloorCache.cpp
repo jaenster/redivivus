@@ -255,7 +255,7 @@ BOOL OGL_DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLigh
       } while (iVar4);
 
       glEnd();
-      papDVar18 = (D2OGLVertexStrc* (*)[12])((int)papDVar18 + 0x30);
+      papDVar18++;
       BVar7++;
     } while (BVar7 != 5);
 

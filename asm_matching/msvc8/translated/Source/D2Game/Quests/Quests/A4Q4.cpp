@@ -115,7 +115,7 @@ bool __fastcall Q30_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // NOT one of the 3 public Act-4 quests). Wires fpStatusFilter=Q30_StatusFilter, fpActiveFilter=Q30_ActiveFilter.
 // No quest-state reads/writes here — pure registration.
 void __fastcall Q30_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q30_Callback00_NpcActivate;
     pQuestData->pNpcMessages = A4Q4::aNpcGossipData;
     pQuestData->bIsActive = '\x01';

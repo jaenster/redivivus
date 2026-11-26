@@ -114,7 +114,7 @@ bool __fastcall Q07_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // A1Q7 Q07_InitData: registers this hidden Act 1 slot. Zeroes sStateFunctions (0x3c bytes), installs Q07_Callback_00 at state[0] and Q07_Callback_08 at state[8], points pNpcMessages at aNpcGossipData (1 entry: Akara 0x10a, string 0x3b, menu=1), marks bIsActive, clears state flags, sets nQuestIdReal=QUEST_UnknownDuplicate2, and installs Q07_StatusFilter / Q07_ActiveFilter. Confirms slot identity: a SpokeTo-Akara gossip pseudo-quest, not a real journal quest.
 void __fastcall Q07_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q07_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q07_Callback08_MonsterKilled;
     pQuestData->pNpcMessages = A1Q7::aNpcGossipData;

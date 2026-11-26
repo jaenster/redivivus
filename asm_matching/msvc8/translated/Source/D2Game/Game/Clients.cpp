@@ -34,7 +34,7 @@
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Arena.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Game/Level.h"
@@ -466,7 +466,8 @@ static void __stdcall CLIENT_AddUnitToProximitySortedList(int32_t nX, D2UnitStrc
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
       return;
     }
-    if (false || false) {
+    eD2UnitType eUnitType = pUnit->eUnitType;
+    if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nDeltaX = pUnit->pPath.pStaticPath->nPosX;
     } else if (pUnit->pPath.pDynamicPath) {
       nDeltaX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
@@ -479,7 +480,7 @@ static void __stdcall CLIENT_AddUnitToProximitySortedList(int32_t nX, D2UnitStrc
       nDeltaX = -nDeltaX;
     }
 
-    eD2UnitType eUnitType = pUnit->eUnitType;
+    eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nDeltaY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {
@@ -1124,18 +1125,13 @@ uint32_t __fastcall QSERVER_IsClientAllowedToJoin(uint32_t nClientId, uint32_t n
 void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32_t dwClientTick, uint32_t dwUnused) {
     DWORD dwNowTick;
     uint32_t nSamplesToAvg;
-    uint32_t nRemaining;
-    uint32_t dwPingAccumHi;
     D2ClientStrc* pClient;
-    uint32_t nSampleCount;
-    bool bCarry;
     uint64_t qwNewAvgPing;
     int64_t qwPingAccum;
     ::SGAMEDATA* pGame = Server::NET_SERVER_FindGameByClientId(nClientId);
     if (pGame) {
       pClient = pGame->pClient;
       if (pClient) {
-        D2QServerClientStrcExt* pQSExt;
         while (pClient->nClientNo != nClientId) {
           pClient = pClient->pNext;
           if (!pClient) {
@@ -1148,24 +1144,15 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
         pClient->tQServerExt.dwPingSamples[pClient->tQServerExt.nHeartbeatSampleCount & 0xf] = dwNowTick - dwSendTick - dwClientTick;
         pClient->tQServerExt.nHeartbeatSampleCount++;
         nSamplesToAvg = pClient->tQServerExt.nHeartbeatSampleCount;
-        nSampleCount = 0;
-        dwPingAccumHi = 0;
+        uint64_t qwPingSum = 0;
         if (nSamplesToAvg > 0x10) {
           nSamplesToAvg = 0x10;
         }
-        if ((int)nSamplesToAvg > 0) {
-          pQSExt = &pClient->tQServerExt;
-          nRemaining = nSamplesToAvg;
-          do {
-            bCarry = (uint32_t)((uint32_t)nSampleCount + (uint32_t)pQSExt->dwPingSamples[0]) < (uint32_t)nSampleCount;
-            nSampleCount += pQSExt->dwPingSamples[0];
-            dwPingAccumHi += bCarry;
-            pQSExt = (D2QServerClientStrcExt*)(pQSExt->dwPingSamples + 1);
-            nRemaining--;
-          } while (nRemaining);
+        for (int nSample = 0; nSample < (int)nSamplesToAvg; nSample++) {
+          qwPingSum += pClient->tQServerExt.dwPingSamples[nSample];
         }
 
-        qwNewAvgPing = _aulldiv(nSampleCount, dwPingAccumHi, nSamplesToAvg, (int)nSamplesToAvg >> 0x1f);
+        qwNewAvgPing = qwPingSum / (int)nSamplesToAvg;
         pClient->tQServerExt.qwAveragePingTicks = qwNewAvgPing;
         SCmd::NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(pClient, dwSendTick);
         pClient->dwTimeOut = dwNowTick;
@@ -1274,7 +1261,7 @@ BOOL __fastcall CLIENTS_IsCharacterNameFree(char * szCharName, char * szCharName
 
 // Appends an incoming save-data chunk to the client's in-progress save buffer. Looks up the client by nClientId in the QServer bucket table (under critical section), allocates pSaveGame on the first chunk, memcpys the chunk, advances nSaveOpenSize. When nSaveOpenSize reaches nTotalSize the save is complete: sets fClientFlags bit 3, runs PLAYERSAVE_CRC32MissileTable, and returns 1. Returns 0 if the QServer tables are uninitialised or the client is not found.
 // @sourcefile .\GAME\Clients.cpp
-int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size_t size, size_t nTotalSize, uint32_t dwSaveFlags, uint32_t dwParam1, uint32_t dwParam2) {
+int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, uint32_t size, uint32_t nTotalSize, uint32_t dwSaveFlags, uint32_t dwParam1, uint32_t dwParam2) {
     D2SaveFileHeaderStrc* pSaveBuffer;
     uint32_t pSavePacketList;
     BOOL bComplete = 0;
@@ -1323,7 +1310,7 @@ D2SaveFileHeaderStrc * __fastcall GetSaveGame(D2ClientStrc * pClient) {
     return pClient->pSaveGame;
 }
 
-size_t __fastcall GetSaveGameSize(D2ClientStrc * pClient) {
+uint32_t __fastcall GetSaveGameSize(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb5f);
       exit(-1);
@@ -1333,7 +1320,7 @@ size_t __fastcall GetSaveGameSize(D2ClientStrc * pClient) {
 }
 
 // @sourcefile .\GAME\Clients.cpp
-void __fastcall CopySafeBuffer(D2ClientStrc * pClient, void * pSaveBuffer, size_t nSaveSize) {
+void __fastcall CopySafeBuffer(D2ClientStrc * pClient, void * pSaveBuffer, uint32_t nSaveSize) {
     D2SaveFileHeaderStrc* pNewSaveGame;
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb69);
@@ -1829,22 +1816,12 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
 
       pPlayerData = D2Common::Units::GetPlayerData(pPlayerUnitOut);
       if (pPlayerData) {
-        if (!pPlayerUnitOut) {
-          uPortalFlags = -1;
-          byUnitType = '\x06';
-        } else {
-          uPortalFlags = pPlayerUnitOut->nUnitGUID;
-          byUnitType = pPlayerUnitOut->eUnitType;
-        }
+        uPortalFlags = !pPlayerUnitOut ? -1 : pPlayerUnitOut->nUnitGUID;
+        byUnitType = !pPlayerUnitOut ? '\x06' : pPlayerUnitOut->eUnitType;
 
         SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(pClient, byUnitType, uPortalFlags, '\x01', (short int)pPlayerData->eLeftSkillId, pPlayerData->nLeftSkillOwnerGUID);
-        if (!pPlayerUnitOut) {
-          uPortalFlags = -1;
-          byUnitType = '\x06';
-        } else {
-          uPortalFlags = pPlayerUnitOut->nUnitGUID;
-          byUnitType = pPlayerUnitOut->eUnitType;
-        }
+        uPortalFlags = !pPlayerUnitOut ? -1 : pPlayerUnitOut->nUnitGUID;
+        byUnitType = !pPlayerUnitOut ? '\x06' : pPlayerUnitOut->eUnitType;
 
         SCmd::NET_D2GS_SERVER_Send_0x23_SetSkill(pClient, byUnitType, uPortalFlags, '\0', (short int)pPlayerData->eRightSkillId, pPlayerData->nRightSkillOwnerGUID);
       }
@@ -1872,7 +1849,7 @@ D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, 
     if (gQServerClientTablesInitialized && pGame && pGame->nClientsCount < 8) {
       uint16_t wNameHash;
       pClient = D2_NEW_POOL_AT(pGame->pMemoryPool, D2ClientStrc, ".\\GAME\\Clients.cpp", 0x347);
-      memset(pClient, 0, 0x518);
+      memset(pClient, 0, sizeof(*pClient));
       pClient->nClientNo = nClientId;
       dwTick = GetTickCount();
       pClient->dwTimeOut = dwTick + 180000;

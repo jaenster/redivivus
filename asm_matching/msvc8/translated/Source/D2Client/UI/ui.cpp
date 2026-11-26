@@ -90,7 +90,7 @@
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/Unit/SUnitDmg.h"
@@ -3721,7 +3721,7 @@ void __fastcall DRAW_Direct_RectFrame(RECT * pRect) {
     int nRectTop = pRect->top;
     int nRightEdge = pRect->bottom - nRectTop + 1 + nRectTop;
     int nFrameCounter = 0;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     int nLimit = nRightX - 0xd;
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = pDC6_Frame;
@@ -4815,7 +4815,7 @@ DC6 * __stdcall GetBuySellBtnDC6() {
 }
 
 // @sourcefile .\UI\ui.cpp
-void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, size_t * pSize) {
+void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, DWORD * pSize) {
     char szNameCopy[260];
     DWORD dwBytesRead;
     strcpy(szNameCopy, szFilename);
@@ -4933,13 +4933,7 @@ uint32_t __stdcall DRAW_IsDialogActive() {
 }
 
 uint32_t * __fastcall Unreferenced_004549d0(uint32_t * pData) {
-    int iVar1;
-    uint32_t* puVar2 = pData;
-    for (iVar1 = 0x28; iVar1; iVar1--) {
-      *puVar2 = 0;
-      puVar2++;
-    }
-
+    memset(pData, 0, 0xa0);
     return pData;
 }
 
@@ -7458,7 +7452,7 @@ void __stdcall DRAW_ConfigControlsMenu() {
       nTmpX = nMouseX;
     } while (nLoopIter < 0xf);
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = gpUICtrlConfigScrollbarDC6;
     nTmpY = 0;
     sGfxData.nFrameNumber = 0xd;
@@ -7817,7 +7811,7 @@ void __stdcall INPUT_ConfigKeyBind(D2UIMouseMsgStrc * pMsg) {
     int nPendingKeyStrId;
     nPendingKeyStrId = 0;
     if (!(pMsg->uLParam.nLParam & 0x40000000U)) {
-      uint32_t pTargetKey;
+      WPARAM pTargetKey;
       if (pMsg->nWParam == 0x1b) {
         UI_ConfigKeyBindModeDisable(1);
         Sound::SOUND_PlaySound(SOUND_CURSOR_PASS, nullptr, 0, 0, 0);
@@ -8095,8 +8089,8 @@ int __stdcall UI_GetNewSkillPointsCount() {
 void __stdcall INPUT_StatScreenButtonDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     int bOnButton;
-    uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
-    uint16_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (!(eResMode != 2 || (bEscMenuOpen = GetUIFlag(UI_ESCMENU) , !bEscMenuOpen))) {
       return;
@@ -8127,8 +8121,8 @@ void __stdcall INPUT_StatScreenButtonDown(D2UIMouseMsgStrc * pMsg) {
 void __stdcall INPUT_SkillTreeButtonDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     int bOnButton;
-    uint16_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
-    uint16_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
+    uint32_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (!(eResMode != 2 || (bEscMenuOpen = GetUIFlag(UI_ESCMENU) , !bEscMenuOpen))) {
       return;
@@ -8289,7 +8283,7 @@ void __stdcall UI_DrawLevelUpButtonLeft() {
       return;
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
     sGfxData.nFrameNumber = 2;
@@ -8328,7 +8322,7 @@ void __stdcall DRAW_UI_NewStatPoints_II() {
       nBaseX = 0x28;
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = gpUIStatLevelUpButtonImages;
     sGfxData.nFrameNumber = 0;
@@ -8346,7 +8340,7 @@ void __stdcall DRAW_UI_NewStatPoints_II() {
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBaseX, Inv::ScreenSizeY - 0x69, -1, DRAW_SOLID, nullptr);
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
@@ -8423,7 +8417,7 @@ void __stdcall UI_DrawLevelUpButtonRight() {
       return;
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
     sGfxData.nFrameNumber = 2;
@@ -8462,7 +8456,7 @@ void __stdcall Draw_UI_NewStatPoints() {
       iVar2 = ScreenSizeX - ScreenSizeX / 2;
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = gpUIStatLevelUpButtonImages;
     sGfxData.nFrameNumber = 0;
@@ -8480,7 +8474,7 @@ void __stdcall Draw_UI_NewStatPoints() {
       D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, iVar2 - 0x49, Inv::ScreenSizeY - 0x69, -1, DRAW_SOLID, nullptr);
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = gpUIStatLevelUpPanelImages;
     eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
@@ -8537,10 +8531,6 @@ void __fastcall UI_DrawTextCentered(int32_t nPositionXStart, int32_t nPositionY,
     }
 
     D2Win::Src::D2WinFont::DRAW_text(wszMessage, nPositionXStart, nPositionY, dwColor, 0);
-}
-
-void __stdcall CHAR_FreePanelAssets_NoOp() {
-
 }
 
 void __stdcall CHAR_FreePanelAssets_NoOp_Unref_004b3330() {
@@ -8704,42 +8694,36 @@ void __stdcall PACKET_SendUnitInteraction0x44(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
-    switch (gnPlayerCashDisplay) {
-      default:
-        {
-          return;
-        }
-      case 2:
-        {
-          pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
-          if (pPlayerOrCursorItem) {
-            pPlayerOrCursorItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerOrCursorItem->pInventory);
-          } else {
-            pPlayerOrCursorItem = 0;
-          }
+    if (gnPlayerCashDisplay != 1) {
+      if (gnPlayerCashDisplay != 2) {
+        return;
+      }
 
-          Cursor::ITEM_SetItemOnHand(pPlayerOrCursorItem);
-        }
-      case 1:
-        {
-          if (!UseItem::nHoradricCubeUIState) {
-            pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
-            if (!pPlayerOrCursorItem) {
-              nUnitType = -1;
-            } else {
-              nUnitType = pPlayerOrCursorItem->nUnitGUID;
-            }
+      pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
+      if (pPlayerOrCursorItem) {
+        pPlayerOrCursorItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pPlayerOrCursorItem->pInventory);
+      } else {
+        pPlayerOrCursorItem = 0;
+      }
 
-            GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nUnitType, gnNpcShopActiveTab, 0, 2);
-            UseItem::UI_CloseHoradricCubeWindow();
-            return;
-          }
-
-          npcmenu::NPCMENU_CloseStashUI();
-          UseItem::UI_CloseHoradricCubeWindow();
-          return;
-        }
+      Cursor::ITEM_SetItemOnHand(pPlayerOrCursorItem);
     }
+
+    if (!UseItem::nHoradricCubeUIState) {
+      pPlayerOrCursorItem = UNIT::Player::GetPlayerUnit_UI();
+      if (!pPlayerOrCursorItem) {
+        nUnitType = -1;
+      } else {
+        nUnitType = pPlayerOrCursorItem->nUnitGUID;
+      }
+
+      GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT_INT(0x44, nUnitType, gnNpcShopActiveTab, 0, 2);
+      UseItem::UI_CloseHoradricCubeWindow();
+      return;
+    }
+
+    npcmenu::NPCMENU_CloseStashUI();
+    UseItem::UI_CloseHoradricCubeWindow();
 }
 
 void __stdcall DRAW_UI_CASH() {
@@ -8768,7 +8752,7 @@ void __stdcall DRAW_UI_CASH() {
         return;
       }
 
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       bDC6Loaded = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nDC6Handle, '\x01', -1);
       if (!bDC6Loaded) {
         return;

@@ -21,7 +21,7 @@ struct ConsoleCommand {
     char szDescription[0x100];      // 0x104
 };
 #pragma pack(pop)
-static_assert(sizeof(ConsoleCommand) == 0x204, "ConsoleCommand is 0x204 bytes");
+static_assert(sizeof(void*) != 4 || sizeof(ConsoleCommand) == 0x204, "ConsoleCommand is 0x204 bytes");
 
 static HWND HWND_10026c64 = nullptr;                                  // 1.00 D2Server: 10026c64
 
@@ -76,7 +76,7 @@ HWND __stdcall GetConsoleDialogHwnd() {
 
 // 1.00 D2Server: 10002d00
 BOOL __fastcall CreateConsoleDialog(HWND hParent) {
-    HINSTANCE hInstance = (HINSTANCE)GetWindowLongA(hParent, GWL_HINSTANCE);
+    HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtrA(hParent, GWLP_HINSTANCE);
     if (HWND_10026c64) {
         return FALSE;
     }

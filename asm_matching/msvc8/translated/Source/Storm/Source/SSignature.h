@@ -78,7 +78,7 @@ void __fastcall SSignatureVerifyStream_Begin(struct D2SsigContextStrc * * ppCont
 uint32_t __fastcall SSignatureVerifyStream_GetSignatureLength(struct D2SsigContextStrc * pContext);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_UpdateHash. Storm export (PPC vector 100cdfd4 -> 100a3af0). Basis: callee set {Sha1::Append, BlockMoveData} == 1.14d {Sha1_Append, SSYSTEM_Memmove, STORM_Memcpy}; PPC reads r3,r4,r5 = 3 args == 3 params here.
-void __fastcall SSignatureVerifyStream_ProvideData(struct D2SsigContextStrc * pContext, uint8_t * pData, size_t nDataLen);
+void __fastcall SSignatureVerifyStream_ProvideData(struct D2SsigContextStrc * pContext, uint8_t * pData, uint32_t nDataLen);
 struct BigData * * __fastcall SSIG_InitRSAPair(struct BigData * * pRSAPair);
 void __fastcall SSIG_FreeRSAPair(struct BigData * * pRSAPair);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
@@ -91,7 +91,7 @@ int __fastcall SSignatureVerifyStream_Finish(struct D2SsigContextStrc * pContext
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_SignDataBlock. Storm export (PPC vector 100cdfe4 -> 100a3890). It is a VERIFY, not a sign. Basis: PPC body = inline Begin (operator new + SMemAlloc + Sha1::Initialize) then bl SSignatureVerifyStream_ProvideData then bl SSignatureVerifyStream_Finish; this function = SSignatureVerifyStream_Begin -> ...ProvideData -> ...Finish, the same three steps with MSVC keeping Begin out of line. PPC reads r3..r8 = 6 args == 6 params here.
 // Returns Finish's result in EAX (tail at 0041d7fe..0041d806 leaves it untouched): nonzero if the signature verifies. The nExponentLen stack slot is reused as the Begin context out-parameter.
-int __fastcall SSignatureVerify(uint8_t * pData, size_t nDataLen, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen);
+int __fastcall SSignatureVerify(uint8_t * pData, uint32_t nDataLen, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen);
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_SHA1_Round1, filed under SBig. CONFIRMED CORRECT as to operation and ordering - one of the few Storm names in this database that survived checking. Body: E += rol(A,5) + ((~B & D) | (B & C)) + 0x5A827999 + W; B = rol(B,30). That is Ch with K1, i.e. SHA-1 rounds 0..19. No PPC counterpart: MWCC inlined every round into Sha1::Pump, so these four are MSVC out-of-line COMDAT copies with zero callers in this build. Kept the descriptive name (uppercase SHA1_, deliberately unlike the oracle-derived Sha1_ methods) and moved to the SSignature module.
 void __fastcall SHA1_Round1(uint32_t nA, uint32_t * pnB, uint32_t nC, uint32_t nD, int * pnE, int * pnW);

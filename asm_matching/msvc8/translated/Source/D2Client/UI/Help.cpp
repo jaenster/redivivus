@@ -88,7 +88,7 @@ void __stdcall LoadBorder() {
 
 void __stdcall DrawBorderClassic() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pHelpBorder;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -111,7 +111,7 @@ void __stdcall DrawBorderClassic() {
 
 void __stdcall DrawBorderXpac() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pHelpBorder;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -142,7 +142,7 @@ void __stdcall HELP_DrawDarkOverlay_B() {
 
 void __stdcall DrawYellowBullet() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     int nPositionY = 0x49;
     sGfxData.pDC6 = HelpYellowBullet;
     sGfxData.nDirection = 0;
@@ -157,7 +157,7 @@ void __stdcall DrawYellowBullet() {
 
 void __stdcall DrawWhiteBulletClassic() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = HelpWhiteBullet;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -192,7 +192,7 @@ void __stdcall DrawWhiteBulletClassic() {
 
 void __stdcall DrawWhiteBulletXpac() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = HelpWhiteBullet;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -233,7 +233,7 @@ void __stdcall DrawWhiteBulletXpac() {
 
 void __stdcall DrawSellBtn() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = gpHelpCloseButton != 0 ? 11 : 10;
@@ -359,7 +359,7 @@ void __stdcall HELP_DrawHelpButton() {
 
     gpHelpScrollButtonUp = 0;
     if (!GetSeenHelpMenuValue()) {
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       HELP_DrawHelpButtonTooltip();
       sGfxData.pDC6 = gpUIStatLevelUpButtonImages;
       sGfxData.nDirection = 0;

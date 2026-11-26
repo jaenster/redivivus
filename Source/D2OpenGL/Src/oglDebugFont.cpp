@@ -83,7 +83,7 @@ void OGL_DrawString(int nX, int nY, char * szFormat, char * va) {
     int local_14 = *(int*)PTR____stack_chk_guard_003961fc;
     vsprintf(local_214, szFormat, va);
     __bzero(local_614, 0x400);
-    D2Lang::UTF8_ConvertToWideChar((uint16_t*)(int)local_614, local_214, 0x200);
+    D2Lang::UTF8_ConvertToWideChar((uint16_t*)local_614, local_214, 0x200);
     int32_t nFontId = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
     D2Win::Src::D2WinFont::DRAW_text((uint16_t*)local_614, nX, nY + 0xc, 0, 0);
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nFontId);
@@ -279,8 +279,8 @@ void OGL_DrawRect(RECT * pRect, BYTE nPaletteIndex) {
     void* pvVar1;
     int nRectLeft;
     if (pRect->right < pRect->left) {
-      int32_t nErrorAddr;
-      nErrorAddr = (int32_t)Fog::Src::ErrorManager::GetInstructionPointer();
+      void* nErrorAddr;
+      nErrorAddr = Fog::Src::ErrorManager::GetInstructionPointer();
       fp_fatal("Unrecoverable internal error %08x line %d", nErrorAddr, 0xb6);
     }
 
@@ -374,8 +374,8 @@ void OGL_DrawRectEx(RECT * pRect, BYTE nPaletteIndex) {
 void OGL_DrawSolidRect(RECT * pRect, BYTE nPaletteIndex) {
     void* pvVar1;
     if (pRect->right < pRect->left) {
-      int32_t nErrorAddr;
-      nErrorAddr = (int32_t)Fog::Src::ErrorManager::GetInstructionPointer();
+      void* nErrorAddr;
+      nErrorAddr = Fog::Src::ErrorManager::GetInstructionPointer();
       fp_fatal("Unrecoverable internal error %08x line %d", nErrorAddr, 0xfd);
     }
 

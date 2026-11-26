@@ -580,7 +580,7 @@ void __fastcall PLRSKILLS_StateSetFn10_Redeemed(D2UnitStrc * pUnit, eD2States eS
       return;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
     sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[1];
@@ -800,7 +800,7 @@ void __fastcall PLRSKILLS_StateSetFn17_RestInPeace(D2UnitStrc * pUnit, eD2States
       return;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
     sSkillArg.nMissileTxtNo = (eMissilesId)pDVar1->missile;
@@ -822,7 +822,7 @@ void __fastcall PLRSKILLS_StateSetFn18_CorpseExp(D2UnitStrc * pUnit, eD2States e
       return;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
     sSkillArg.nMissileTxtNo = (eMissilesId)pDVar1->missile;

@@ -178,7 +178,7 @@ void __stdcall UI_DrawDialogBackground();
 void __fastcall UI_RegisterAutoMapEventHandlers(int32_t bRegister);
 struct DC6 * __stdcall GetBuySellBtnDC6();
 // @sourcefile .\UI\ui.cpp
-void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, size_t * pSize);
+void * __fastcall UI_LoadFileToMemory(LPCSTR szFilename, DWORD * pSize);
 void __stdcall PALETTE_LoadLoadingScreenPalette();
 void __fastcall SetActNo(int32_t nActNo);
 int32_t __stdcall DRAW_GetLoadedActNo();

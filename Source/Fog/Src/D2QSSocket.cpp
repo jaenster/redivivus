@@ -42,7 +42,7 @@ void __stdcall QSSOCKET_SetCallbackHandler1(D2QSSocketStrc * pQSSocket, void * f
     pQSSocket->pHandlerContext = pContext;
 }
 
-int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(D2NetDataStrc * pSafesocket, char * pBytes, size_t nSize) {
+int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(D2NetDataStrc * pSafesocket, char * pBytes, uint32_t nSize) {
     if (!pSafesocket || pSafesocket->bBlocked) {
       return -1;
     }
@@ -102,15 +102,15 @@ static int __stdcall ProcessReceivedData(D2QSSocketStrc * pQServerStrc, void * p
     uint32_t nPacketSize;
     uint8_t* pMessage;
     uint32_t nPacketLen;
-    size_t _Size;
+    uint32_t _Size;
     uint8_t* _Src = (uint8_t*)pBuffer;
     do {
       int iVar1;
       nPacketLen = (uint32_t)*(uint16_t*)(_Src + pQServerStrc->nSizeFieldOffset);
       iVar2 = pQServerStrc->nHeaderSize;
-      iVar1 = (intptr_t)pBuffer + (nBufferSize - (intptr_t)_Src);
+      iVar1 = (int)((intptr_t)pBuffer + (nBufferSize - (intptr_t)_Src));
       if (iVar1 < iVar2 || iVar1 < (int)nPacketLen) {
-        _Size = (intptr_t)pBuffer + (nBufferSize - (intptr_t)_Src);
+        _Size = (uint32_t)((intptr_t)pBuffer + (nBufferSize - (intptr_t)_Src));
         memcpy(pBuffer, _Src, _Size);
         return _Size;
       }

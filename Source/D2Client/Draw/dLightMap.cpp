@@ -663,32 +663,28 @@ static void __stdcall LIGHTMAP_ApplyPointLight(int nQuality, D2LightMapStrc * pL
 }
 
 static void __fastcall LIGHTMAP_SampleGridToBuffer(D2LightMapStrc * pLightMap) {
-    uint8_t nCollisionVal;
-    int nCellY;
-    int nCellX;
-    int nCurX = pLightMap->nRadiusX;
-    int nStartX = pLightMap->nGridX - (pLightMap->nGridX & 7U) - nCurX;
-    int nYCoord = pLightMap->nGridY - (pLightMap->nGridY & 7U) - nCurX;
-    int nCellSpan = nCurX * 2 >> 3;
+    int nRadius = pLightMap->nRadiusX;
+    int nStartX = pLightMap->nGridX - (pLightMap->nGridX & 7U) - nRadius;
+    int nYCoord = pLightMap->nGridY - (pLightMap->nGridY & 7U) - nRadius;
+    int nCellSpan = nRadius * 2 >> 3;
     if (nCellSpan < 0) {
       return;
     }
 
     nCellSpan++;
-    uint32_t* pBufferCell = gaLightmapInterpBuffer + (0x20 - (nCurX >> 3)) * 0x41;
-    nCurX = nStartX;
-    int nXLeft = nCellSpan;
-    int nYRowsLeft = nCellSpan;
-    uint32_t* pBufferRow = pBufferCell;
-    do {
-      do {
-        nCellX = (nCurX >> 3) - gnLightmapWorldRefreshFlag;
+    uint32_t* pBufferRow = gaLightmapInterpBuffer + (0x20 - (nRadius >> 3)) * 0x41;
+    for (int nYRowsLeft = nCellSpan; nYRowsLeft; nYRowsLeft--) {
+      uint32_t* pBufferCell = pBufferRow;
+      int nCurX = nStartX;
+      for (int nXLeft = nCellSpan; nXLeft; nXLeft--) {
+        uint8_t nCollisionVal;
+        int nCellX = (nCurX >> 3) - gnLightmapWorldRefreshFlag;
         if (nCellX < 0) {
           nCollisionVal = 1;
         } else if (nCellX >= 0x30) {
           nCollisionVal = 1;
         } else {
-          nCellY = (nYCoord >> 3) - gnLightmapBufferState;
+          int nCellY = (nYCoord >> 3) - gnLightmapBufferState;
           if (nCellY < 0) {
             nCollisionVal = 1;
           } else if (nCellY >= 0x30) {
@@ -700,17 +696,12 @@ static void __fastcall LIGHTMAP_SampleGridToBuffer(D2LightMapStrc * pLightMap) {
 
         *pBufferCell = (uint32_t)nCollisionVal << 4;
         pBufferCell++;
-        nXLeft--;
         nCurX += 8;
-      } while (nXLeft);
+      }
 
       nYCoord += 8;
-      pBufferCell = pBufferRow + 0x40;
-      nYRowsLeft--;
-      nCurX = nStartX;
-      nXLeft = nCellSpan;
-      pBufferRow = pBufferCell;
-    } while (nYRowsLeft);
+      pBufferRow += 0x40;
+    }
 }
 
 static void __stdcall LIGHTMAP_ComputeInterpolationDir(int nSrcX, int nSrcY, D2LightMapStrc * pLightMap) {

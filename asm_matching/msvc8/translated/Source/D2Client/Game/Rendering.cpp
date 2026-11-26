@@ -151,7 +151,7 @@ void __stdcall DRAW_UI_FPSStats() {
     D2gfx::D2GFX::D2GFX_DrawString(10, 2, "%d FPS  %d Skip", fps, nStat);
     nStatValue = Game::GetPing();
     D2gfx::D2GFX::D2GFX_DrawString(0xa0, 2, "Ping: %d", nStatValue);
-    /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ memStatus.dwLength = 0x20;
+    /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ memStatus.dwLength = sizeof(memStatus);
     GlobalMemoryStatus(&memStatus);
     D2gfx::D2GFX::D2GFX_DrawString(10, 0x10, "Phys:%d/%dm", (memStatus.dwTotalPhys - memStatus.dwAvailPhys >> 0x14) + 1, (memStatus.dwTotalPhys >> 0x14) + 1);
     D2gfx::D2GFX::D2GFX_DrawString(0xa0, 0x10, "Page:%d/%dm", (memStatus.dwTotalPageFile - memStatus.dwAvailPageFile >> 0x14) + 1, (memStatus.dwTotalPageFile >> 0x14) + 1);

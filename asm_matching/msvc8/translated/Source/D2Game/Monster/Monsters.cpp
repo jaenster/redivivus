@@ -45,7 +45,7 @@
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 #include "Source/D2Game/D2DamageStrc.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Game/Targets.h"
@@ -778,7 +778,7 @@ int32_t __fastcall MONSTER_GetBossNo(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 // Checks whether a MonUMod.txt unique modifier entry is eligible to be applied to pUnit. Rejects if disabled or version &gt; 99 in non-expansion mode. Rejects if the monster has any excluded monster type (exclude1/exclude2). Respects the fpick field: 1=boss-only, 2=excludes melee/no-multishot monsters, 3=requires a different boss flag. Returns 1 if eligible, 0 otherwise.
 static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTxt, int32_t bExpansion, D2UnitStrc * pUnit) {
     uint32_t _bHasFlag;
-    bool bHasFlag;
+    BOOL bHasFlag;
     int32_t nClassId;
     if (pD2MonUModTxt->enabled == '\0') {
       return 0;
@@ -803,7 +803,7 @@ static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTx
       pExclude++;
     } while (nExcludeIdx < 2);
 
-    char eFpick = pD2MonUModTxt->fpick;
+    uint8_t eFpick = pD2MonUModTxt->fpick;
     switch (eFpick) {
       case '\x01':
         {
@@ -862,7 +862,7 @@ static BOOL __stdcall MONSTER_CanApplyUniqueModifier(D2MonUModTxt * pD2MonUModTx
 // Selects a champion unique-modifier (UMod) index for a monster using weighted random selection. Iterates the MonUMod txt table, filters entries by applicability to this unit and difficulty, accumulates weights into a candidate list (max 256), then rolls via UNIT_GetModuloFromSeed. Returns the chosen UMod index, or 0 if none qualify.
 static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     BOOL _bCanApply;
-    bool bCanApply;
+    BOOL bCanApply;
     int aCandidateTable[513];
     uint16_t wCpick;
     int nCandidates = 0;
@@ -929,7 +929,7 @@ static int32_t MONSTER_SelectChampionMod(D2UnitStrc * pUnit, ::SGAMEDATA * pGame
 // Randomly selects one unique/champion modifier index from pTxtMonUmod for pUnit. Filters candidates by difficulty-tier cpick weight, champion flag, MONSTER_CanApplyUniqueModifier eligibility, and whether the slot in pD2MonUModTxt is already occupied. Performs a weighted random draw using the unit's seed; returns the selected modifier index (0-based) or 0 on failure.
 static int32_t __stdcall MONUMOD_RollRandomModifier(D2UnitStrc * pUnit, uint8_t * pUsedUModFlags, ::SGAMEDATA * pGame) {
     BOOL _bCanApply;
-    bool bCanApply;
+    BOOL bCanApply;
     uint32_t nRoll;
     int nCandidates;
     int nUmodIdx;
@@ -1509,7 +1509,7 @@ void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
       bIsMultiplayer = 1;
     }
 
-    memset(&sMonStats, 0, 0x38);
+    memset(&sMonStats, 0, sizeof(sMonStats));
     int32_t nMonStatsId = pUnit->nClassId;
     D2MonStatsInitStrc* pScaledStats = &sMonStats;
     D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonStatsId, bIsMultiplayer, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 1, pScaledStats);
@@ -1520,22 +1520,12 @@ void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
 
     uint32_t nDamageAdjusted = D2Common::DATATBLS::DataTbls::D2ApplyPercent(sMonStats.nMaxHP, pDiffLevels->MonsterCEDamagePercent, 100);
     eD2Difficulty byDifficulty = pGame->nDifficulty;
-    switch (byDifficulty) {
-      case DIFFICULTY_NORMAL:
-        {
-          nDamageAdjusted -= (int)nDamageAdjusted / 4;
-          break;
-        }
-      case DIFFICULTY_NIGHTMARE:
-        {
-          nDamageAdjusted += (int)nDamageAdjusted / -3;
-          break;
-        }
-      case DIFFICULTY_HELL:
-        {
-          nDamageAdjusted = (int)nDamageAdjusted / 8;
-          break;
-        }
+    if (byDifficulty == DIFFICULTY_NORMAL) {
+      nDamageAdjusted -= (int)nDamageAdjusted / 4;
+    } else if (byDifficulty == DIFFICULTY_NIGHTMARE) {
+      nDamageAdjusted += (int)nDamageAdjusted / -3;
+    } else if (byDifficulty == DIFFICULTY_HELL) {
+      nDamageAdjusted = (int)nDamageAdjusted / 8;
     }
 
     if ((int)nDamageAdjusted > 0x100000) {
@@ -1551,7 +1541,7 @@ void __fastcall MONSTER_CorpseExplode(::SGAMEDATA * pGame, D2UnitStrc * pUnit, u
     }
 
     uint32_t nRandDamage = D2Common::Seed::RANDOM_RandomNumberSelector(&pUnit->sSeed, nDamageAdjusted - nMinDamage);
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.dwPhysDamage = nRandDamage + nMinDamage << 6;
     sDamage.dwFireDmg = sDamage.dwPhysDamage;
     UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pCorpseMissile, nPosX, nPosY, pGame->nDifficulty + 4, &sDamage, 0, 0, nullptr, 0x581);
@@ -1584,7 +1574,7 @@ void __fastcall MONSTER_CorpseExplodeFixed(::SGAMEDATA * pGame, D2UnitStrc * pUn
       return;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.dwPhysDamage = 0x6400;
     sDamage.dwFireDmg = 0x6400;
     UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pMissile, nPosX, nPosY, 6, &sDamage, 0, 0, nullptr, 0x583);
@@ -1677,7 +1667,7 @@ void __fastcall MONSTER_CastLightningUniqueBolts(::SGAMEDATA * pGame, D2UnitStrc
         nSkillLevel = 1;
       }
 
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       eUnitType = pUnit->eUnitType;
       sSkillArg.nFlags = 0x21;
       sSkillArg.pOwner = pUnit;
@@ -1892,7 +1882,7 @@ void __fastcall MONSTER_BugLightningDeathBolts(::SGAMEDATA * pGame, D2UnitStrc *
     D2SkillArgStrc sSkillArg;
     int nDirX;
     int nDirY;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     eD2UnitType eUnitType = pUnit->eUnitType;
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
@@ -2060,87 +2050,58 @@ void __fastcall MONSTER_StealPotionFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // Routes a monster's death event to its boss-specific handler based on nClassId. Handles Bloodraven (ranged special), Radament (ring attack), Mephisto (death missile), Izual (melee skill), Andariel (ranged short), Overseer (ranged normal), Uber Mephisto/Baal/Diablo (loot drop check), and no-op uber variants. Only triggers the handler if the unit is actually in Death anim mode (except Overseer/Uber which check null too).
 void __fastcall MONSTER_DispatchSpecialDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
-    eD2MonsterClassId nMonClassId;
-    if (!pUnit) {
-      nMonClassId = ~MonsterUnitSkeleton1;
-    } else {
-      nMonClassId = pUnit->nClassId;
-      if (nMonClassId < (MonsterUnitMeshif2 | MonsterUnitHorror)) {
-        if (nMonClassId == MonsterUnitBloodraven) {
-          if (pUnit->eAnimMode.ePlayerMode != Death) {
-            return;
-          }
-
-          Monster::AI::QUESTFX_BloodRavenDeath(pGame, pUnit);
-          return;
+    switch (!pUnit ? ~MonsterUnitSkeleton1 : (eD2MonsterClassId)pUnit->nClassId) {
+      case MonsterUnitAndariel:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Monster::AI::QUESTFX_AndarielDeath(pGame, pUnit);
         }
-
-        switch (nMonClassId) {
-          case MonsterUnitAndariel:
-            {
-              if (pUnit->eAnimMode.ePlayerMode != Death) {
-                return;
-              }
-
-              Monster::AI::QUESTFX_AndarielDeath(pGame, pUnit);
-              return;
-            }
-          default:
-            return;
-          case MonsterUnitRadament:
-            if (pUnit->eAnimMode.ePlayerMode != Death) {
-              return;
-            }
+        break;
+      case MonsterUnitRadament:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
           Monster::AI::QUESTFX_RadamentDeath(pGame, pUnit);
-          return;
-          case MonsterUnitMephisto:
-            if (pUnit->eAnimMode.ePlayerMode != Death) {
-              return;
-            }
-          Monster::AI::AI_Mephisto_SpawnDeathMissile(pGame, pUnit);
-          return;
-          case MonsterUnitIzual:
-            if (pUnit->eAnimMode.ePlayerMode != Death) {
-              return;
-            }
-          Monster::AI::QUESTFX_IzualDeath(pGame, pUnit);
-          return;
         }
-      }
-    }
-
-    switch (nMonClassId) {
+        break;
+      case MonsterUnitMephisto:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Monster::AI::AI_Mephisto_SpawnDeathMissile(pGame, pUnit);
+        }
+        break;
+      case MonsterUnitIzual:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Monster::AI::QUESTFX_IzualDeath(pGame, pUnit);
+        }
+        break;
+      case MonsterUnitBloodraven:
+        if (pUnit->eAnimMode.ePlayerMode == Death) {
+          Monster::AI::QUESTFX_BloodRavenDeath(pGame, pUnit);
+        }
+        break;
       case MonsterUnitTownguard2 | MonsterUnitHorror:
-
       case MonsterUnitTownguard2 | MonsterUnitZombie:
-
       case MonsterUnitTownguard2 | MonsterUnitHungryDead:
         if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
           Monster::AI::MONSTERAI_Noop();
-          return;
         }
-      break;
+        break;
       case MonsterUnitOverSeer:
         if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
           Monster::AI::QUESTFX_ShenkDeath(pGame, pUnit);
-          return;
         }
-      break;
+        break;
       case MonsterUnitUberMephisto:
-
       case MonsterUnitUberDiablo:
-
       case MonsterUnitUberBaal:
         if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
           Monster::AI::AI_UberTristram_CheckDeathAndDropLoot(pGame, pUnit);
         }
+        break;
     }
 }
 
 // Death handler for the Andariel Queen Bee / Spider Queen: spawns MISSILE_Queenpoisoncloud in four cardinal directions (±X, ±Y) from the unit's position. Each direction fires 2 missiles via CreatingMissile with SKILL_InitChargedBoltPath as the path function and the unit's level as the toHit value. Called as a fastcall death callback with pGame and pUnit.
 void __fastcall MONSTER_QueenPoisonCloudDeath(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwUnused1, int32_t dwUnused2) {
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
@@ -2458,7 +2419,7 @@ void __fastcall MONSTER_AoEPhysicalDamage(::SGAMEDATA * pGame, D2UnitStrc * pUni
     nDmgRoll = D2_SeedRollLimited(&pUnit->sSeed, nDmgRange);
     int nClassId = (int)pMonStatsTxt->aEl1MinD[0] + nDmgRoll << 8;
     nRadius = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0) * pMonStatsTxt->aip[2][pGame->nDifficulty];
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     eD2UnitType eUnitType = pUnit->eUnitType;
     sDamage.dwFireDmg = nClassId;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -2521,7 +2482,7 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       bIsMultiplayer = 1;
     }
 
-    memset(&sMonStats, 0, 0x38);
+    memset(&sMonStats, 0, sizeof(sMonStats));
     if (!pUnit) {
       nMonClassId = -1;
     } else {
@@ -2530,7 +2491,7 @@ void __fastcall MONSTER_SuicideExplosion(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonClassId, bIsMultiplayer, nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), 8, &sMonStats);
     int nDamage = sMonStats.nA1MinD + D2_SeedRollLimited(&pUnit->sSeed, sMonStats.nA1MaxD - sMonStats.nA1MinD) << 8;
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags |= 8;
     sDamage.dwPhysDamage = nDamage;
     if (nExplodeType == 1) {
@@ -2939,7 +2900,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
     D2AiGeneralStrc* pMonsterAiGeneral;
     int nDiffUModCount;
     uint8_t abUsedUMods[256];
-    bool bHasAuraEnchant;
+    BOOL bHasAuraEnchant;
     eD2QuestsInternal eQuestId;
     if (pGame->nDifficulty >= 3) {
       return nullptr;
@@ -2973,7 +2934,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
 
     MONSTER_SetMonsterDataField0x26(pUnit, (int16_t)nClassId);
     memset(abUsedUMods, 0, D2Common::ITEMS::Items::sgptDataTable->nTxtMonUmodSize);
-    bHasAuraEnchant = false;
+    bHasAuraEnchant = FALSE;
     nUModCount = CountActiveUMods(pUModList);
     if (nUModCount >= 5) {
       return pUnit;
@@ -2988,7 +2949,7 @@ D2UnitStrc * __fastcall SPAWN_UniqueMonster(::SGAMEDATA * pGame, D2RoomStrc * pR
         break;
       }
       if (nUModIdx == 0x1e) {
-        bHasAuraEnchant = true;
+        bHasAuraEnchant = TRUE;
         *pUModList = (uint8_t)nUModIdx;
         abUsedUMods[nUModIdx] = '\x01';
         pUModList++;
@@ -3171,8 +3132,11 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, eD2MonsterAni
       int nPetBonusMinDmg;
       int nPetBonusMaxDmg;
       int nPetBonusToHit;
-      int nElModeFieldOffset;
-      int bExpansion;
+      intptr_t nElModeFieldOffset; // -0xbe - pMonStats: added to pElMode it leaves 0x40 + element slot, the nStatFlags argument
+      union {
+        int bExpansion;
+        intptr_t nElTypeFieldOffset; // the same slot after the game flag is consumed: -0xfe - pMonStats, rebases pElModeCur onto aElType
+      };
       ::SGAMEDATA* pGame;
       int nScalingMode;
       uint8_t* pElModeCur;
@@ -3299,9 +3263,9 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, eD2MonsterAni
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_maxdamage, nDamage, 0);
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatsEx, UNITSTAT_tohit, nToHit, 0);
     __frame0.pElChance = __frame0.pMonStats->aElPct[0] + __frame0.nDifficultyIdx;
-    __frame0.nElModeFieldOffset = -0xbe - (int)__frame0.pMonStats;
+    __frame0.nElModeFieldOffset = -0xbe - (intptr_t)__frame0.pMonStats;
     pElMode = __frame0.pMonStats->aElMode;
-    __frame0.bExpansion = -0xfe - (int)__frame0.pMonStats;
+    __frame0.nElTypeFieldOffset = -0xfe - (intptr_t)__frame0.pMonStats;
     do {
       __frame0.pUnitSaved = pUnit;
       pUnitEl = __frame0.pUnitSaved;
@@ -3314,7 +3278,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, eD2MonsterAni
         nClassId = __frame0.bIsMultiplayer;
         nElDifficultyIdx = __frame0.nDifficultyIdx;
         nElClassId = D2Common::Units::GetClassId(pUnitEl);
-        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nElClassId, nClassId, nElDifficultyIdx, nLevel, (uint32_t)pElMode, pScaledStats);
+        D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nElClassId, nClassId, nElDifficultyIdx, nLevel, (uint32_t)(uintptr_t)pElMode, pScaledStats); // pElMode holds 0x40 + slot here, not an address
         __frame0.nElLengthScaled = sMonStats.nElDur;
         nLevel = sMonStats.nElMaxD;
         nDamage = sMonStats.nElMinD;
@@ -3324,7 +3288,7 @@ void __fastcall MONSTER_RecalculateCombatStats(D2UnitStrc * pUnit, eD2MonsterAni
           __frame0.nElLengthScaled = sMonStats.nElDur * __frame0.nExpansionMod / 128 + sMonStats.nElDur;
         }
 
-        eElementType = __frame0.pElModeCur[(intptr_t)(__frame0.pMonStats->aElType + __frame0.bExpansion)];
+        eElementType = __frame0.pElModeCur[(intptr_t)(__frame0.pMonStats->aElType + __frame0.nElTypeFieldOffset)];
         if (eElementType == ELEMENTAL_RANDOM) {
           nElDifficultyIdx = D2Common::Seed::UNIT_GetModuloFromSeed(&__frame0.pUnitSaved->sSeed, 5);
           eElementType = (eD2ElementalDamageType)nElDifficultyIdx;
@@ -3407,7 +3371,7 @@ void __fastcall MONSTER_AttackTarget(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
       return;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     uint32_t nHitCheckFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, 0, 0);
     sDamage.wResultFlags = (uint16_t)nHitCheckFlags;
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, 0x80);

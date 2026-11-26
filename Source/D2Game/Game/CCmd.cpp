@@ -191,7 +191,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(D2GSClientMsgEnve
 // Validates action → executes or queues timer → state change in next tick
 // NO client-side prediction - server is single source of truth.
 // Lag = delayed response, never desync.
-void __fastcall NET_D2GS_SERVER_ProcessClientMessage_InGame(char * pBytes, size_t nSize) {
+void __fastcall NET_D2GS_SERVER_ProcessClientMessage_InGame(char * pBytes, uint32_t nSize) {
     int32_t nClientId = *(int32_t*)pBytes;
     ::SGAMEDATA* pGame = Server::NET_SERVER_FindGameByClientId(nClientId);
     if (!pGame) {

@@ -413,26 +413,31 @@ void __fastcall Q10_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
     int dwItemCode = pItemTxt->dwCode;
     if (dwItemCode == 0x20317274 && !bStep0x03Set) {
       pQuestData->nStateFlagPrev = 1;
-    } else {
-      if (dwItemCode != 0x20706976 && dwItemCode != 0x20786f62) {
-        if (dwItemCode != 0x2066736d) {
-          return;
-        }
-        if (!bStep0x03Set) {
-          pQuestData->nStateFlagPrev = 6;
-          Q10_NotifyHoradricStaffActive(pQuestData->pGame, pQuestArgs->pPlayer);
-          return;
-        }
-
+    } else if (dwItemCode == 0x20706976) {
+      if (bStep0x03Set) {
         pQuestData->nStateFlagPrev = 2;
-        Q10_NotifyHoradricStaffActive(pQuestData->pGame, pQuestArgs->pPlayer);
-        return;
+      } else {
+        pQuestData->nStateFlagPrev = 6;
       }
+    } else if (dwItemCode == 0x20786f62) {
       if (!bStep0x03Set) {
         pQuestData->nStateFlagPrev = 6;
       } else {
         pQuestData->nStateFlagPrev = 2;
       }
+    } else {
+      if (dwItemCode != 0x2066736d) {
+        return;
+      }
+      if (!bStep0x03Set) {
+        pQuestData->nStateFlagPrev = 6;
+        Q10_NotifyHoradricStaffActive(pQuestData->pGame, pQuestArgs->pPlayer);
+        return;
+      }
+
+      pQuestData->nStateFlagPrev = 2;
+      Q10_NotifyHoradricStaffActive(pQuestData->pGame, pQuestArgs->pPlayer);
+      return;
     }
 
     D2UnitStrc* pUnit = pQuestArgs->pPlayer;
@@ -940,7 +945,7 @@ void __fastcall Q10_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 //  [0xa]=Callback_10  [0xb]=Callback_11 (dialog advance)  [0xd]=Callback_13 (recount)
 //  [0xe]=Callback_14 (item gained). Sets nStateFlagPrev=0xd initial. No QuestRecord I/O.
 void __fastcall Q10_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->pNpcMessages = A2Q2::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     D2QuestDataA2Q2Strc* pQuestSpecificData = D2_NEW_POOL_AT(pQuestData->pGame->pMemoryPool, D2QuestDataA2Q2Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q2.cpp", 0x3ed);
@@ -959,7 +964,7 @@ void __fastcall Q10_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q10_Callback13_PlayerStartedGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xe] = Q10_Callback14_PlayerJoinedGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[9] = Q10_Callback09_PlayerDroppedWithQuestItem;
-    memset(pQuestSpecificData, 0, 0x30);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     pQuestData->nStateFlagPrev = 0xd;
 }
 

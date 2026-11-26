@@ -157,7 +157,7 @@ bool __fastcall Q39_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // InitData for quest slot 39, an act-intro "ActIntroduced" pseudo-quest (nQuestIdReal=QUEST_ActIntroduced). Zeroes the 0x3c state-handler table, installs state-0 handler Q39_Callback_00 (NPC gossip while pending) and state-0xb handler Q39_Callback_11 (dialog complete), points pNpcMessages at aNpcGossipData, marks the slot active, and wires Q39_StatusFilter/Q39_ActiveFilter. Not a journaled player quest.
 void __fastcall Q39_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q39_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q39_Callback11_ScrollMessage;
     pQuestData->pNpcMessages = Quest39::aNpcGossipData;

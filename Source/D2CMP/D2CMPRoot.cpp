@@ -35,7 +35,7 @@ void __fastcall SPRITECACHE_LRU_FreeEntryCallback(D2LRUCacheNodeStrc * pEntry) {
 void __fastcall SPRITECACHE_LRU_RemoveCacheEntryCallback(D2LRUCacheNodeStrc * pEntry) {
     D2CelDataHashEntryStrc* pEntry_00 = (D2CelDataHashEntryStrc*)pEntry->pUserData;
     pEntry_00->pData = 0;
-    SRC::CelDataHash::GFX_RemoveCacheEntry((D2PoolManagerStrc*)gCelDataCacheLru.pAllocator, (D2CelDataHashTableStrc*)gaCelDataHashTable, pEntry_00);
+    SRC::CelDataHash::GFX_RemoveCacheEntry((D2PoolManagerStrc*)gCelDataCacheLru.pAllocator, &gaCelDataHashTable, pEntry_00);
 }
 
 uint32_t __stdcall CELCMP_AllocateCelListKey(uint32_t nFormat, uint32_t dwNumDirections, void * * ppRawData, int32_t bRawData) {

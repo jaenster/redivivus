@@ -23,6 +23,7 @@ struct D2QServerStrc;
 union SocketThreadMain_Slotm634 {
     /* 0x00 */ LPCRITICAL_SECTION pScanClientLock;
     /* 0x00 */ uint32_t nSelectResult;
+    /* 0x00 */ SOCKET hSocketCur;
 };
 
 #endif // D2_MODULE_Fog

@@ -993,7 +993,7 @@ void __stdcall INV_DrawSocketedItems(D2UnitStrc * pUnit, D2GridScreenCoordinates
       int nPositionY;
       nPositionX = (int)((gaSocketOffsets[iVar1][nSocketIndex].nX - 1) * (uint32_t)pGridCoords->nCellWidth) / 2 + nBaseX;
       nPositionY = (int)((*(int*)(iVar1 * 0x30 + (char*)((char*)&gaSocketOffsets + 4) + nSocketIndex * 8) + 1) * (uint32_t)pGridCoords->nCellHeight) / 2 + nBaseY;
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.pDC6 = Panel::GemSocket;
       sGfxData.nDirection = 0;
       sGfxData.nFrameNumber = 0;
@@ -3103,47 +3103,52 @@ static void __stdcall INV_UpdateItemUnderCursor(D2UnitStrc * pUnit, D2InventoryS
     int nCellX;
     int nCellY;
     uint32_t nOverlayHeight;
+    uint32_t nOverlayWidth;
+    uint8_t nCursorWidth;
+    uint8_t nCursorHeight;
+    uint8_t nItemWidth;
+    uint8_t nItemHeight;
     BOOL bExpansion = GAME::Game::CLIENT_CheckExpansion();
     int32_t nYPos = D2Common::Units::UNITS_GetInventoryRecordId(pUnit, (uint8_t)nPage, bExpansion);
     uint32_t nCol = (nMouseX - pGridLayout->nPixelLeft) / (uint32_t)pGridLayout->nCellWidth;
     uint32_t nRow = (uint32_t)(nMouseY - pGridLayout->nTop) / (uint32_t)pGridLayout->nCellHeight;
     if (pCursorItem) {
-      D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pCursorItem, (char*)((intptr_t)&nPage + 3), (char*)((intptr_t)&pUnit + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
-      Engine::GfxUtil::GFXUTIL_GetOverlayDimensions(pCursorItem, 0, 0, (uint32_t*)&pInventory, &nOverlayHeight);
-      bool bCentered = !(nPage & 0x1000000);
+      D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pCursorItem, (char*)&nCursorWidth, (char*)&nCursorHeight, "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
+      Engine::GfxUtil::GFXUTIL_GetOverlayDimensions(pCursorItem, 0, 0, &nOverlayWidth, &nOverlayHeight);
+      bool bCentered = !(nCursorWidth & 1);
       if (bCentered) {
-        nCol = (((uintptr_t)pInventory >> 2) - pGridLayout->nPixelLeft + nMouseX) / (uint32_t)pGridLayout->nCellWidth;
+        nCol = ((nOverlayWidth >> 2) - pGridLayout->nPixelLeft + nMouseX) / (uint32_t)pGridLayout->nCellWidth;
       }
 
       uint8_t byGridWidth = pGridLayout->nGridCols;
-      if (*(uint8_t*)((char*)&nPage + 3) == byGridWidth) {
+      if (nCursorWidth == byGridWidth) {
         nCol = (uint32_t)(byGridWidth >> 1);
       }
 
-      bCentered = !((uintptr_t)pUnit & 0x1000000);
+      bCentered = !(nCursorHeight & 1);
       if (bCentered) {
         nRow = ((nOverlayHeight >> 2) - pGridLayout->nTop + nMouseY) / (uint32_t)pGridLayout->nCellHeight;
       }
 
       uint8_t byGridHeight = pGridLayout->nGridRows;
-      if (*(uint8_t*)((char*)&pUnit + 3) == byGridHeight) {
+      if (nCursorHeight == byGridHeight) {
         nRow = (uint32_t)(byGridHeight >> 1);
       }
-      if (*(uint8_t*)((char*)&nPage + 3) > 1) {
-        nCol -= *(uint8_t*)((char*)&nPage + 3) >> 1;
+      if (nCursorWidth > 1) {
+        nCol -= nCursorWidth >> 1;
         if ((int)nCol < 0) {
           nCol = 0;
         }
-        if ((int)(*(uint8_t*)((char*)&nPage + 3) + nCol) > (int)(uint32_t)byGridWidth) {
+        if ((int)(nCursorWidth + nCol) > (int)(uint32_t)byGridWidth) {
           return;
         }
       }
-      if (1 < *(uint8_t*)((char*)&pUnit + 3)) {
-        nRow -= *(uint8_t*)((char*)&pUnit + 3) >> 1;
+      if (1 < nCursorHeight) {
+        nRow -= nCursorHeight >> 1;
         if ((int)nRow < 0) {
           nRow = 0;
         }
-        if ((int)(*(uint8_t*)((char*)&pUnit + 3) + nRow) > (int)(uint32_t)byGridHeight) {
+        if ((int)(nCursorHeight + nRow) > (int)(uint32_t)byGridHeight) {
           return;
         }
       }
@@ -3161,15 +3166,15 @@ static void __stdcall INV_UpdateItemUnderCursor(D2UnitStrc * pUnit, D2InventoryS
     if (pItemAtCell) {
       gbInvItemUnderCursorExists = 1;
       if (pItemAtCell != gpInvHoveredItem) {
-        D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItemAtCell, (char*)((intptr_t)&pCursorItem + 3), (char*)((intptr_t)&nMouseX + 3), "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
+        D2Common::ITEMS::Items::ITEM_GetItemsTxt_nWidthAndHeight(pItemAtCell, (char*)&nItemWidth, (char*)&nItemHeight, "d:\\diablo2\\Diablo2\\Source\\D2Common/CmnItems.h", 0x6dc);
         nMouseY = D2Common::Units::GetXPosFromDynamicPathUnit(pItemAtCell);
         nYPos = D2Common::Units::GetYPosFromDynamicPathUnit(pItemAtCell);
-        gaInventoryItemSlots = ((uintptr_t)pCursorItem >> 0x18) * (uint32_t)pGridLayout->nCellWidth / 2 + (uint32_t)pGridLayout->nCellWidth * nMouseY + pGridLayout->nPixelLeft;
+        gaInventoryItemSlots = (uint32_t)nItemWidth * (uint32_t)pGridLayout->nCellWidth / 2 + (uint32_t)pGridLayout->nCellWidth * nMouseY + pGridLayout->nPixelLeft;
         nInventoryContextMode = gaInventoryItemSlots;
         pItemToDescribe = pItemAtCell;
         gpInvHoveredItem = pItemAtCell;
         gaInventoryState = (uint32_t)pGridLayout->nCellHeight * nYPos + pGridLayout->nTop;
-        pInventoryContextUi = ((nMouseX >> 0x18) + nYPos) * (uint32_t)pGridLayout->nCellHeight + pGridLayout->nTop;
+        pInventoryContextUi = (nItemHeight + nYPos) * (uint32_t)pGridLayout->nCellHeight + pGridLayout->nTop;
         return;
       }
     } else {
@@ -3414,7 +3419,7 @@ void __stdcall INV_HandleMouseMove(D2UIMouseMsgStrc * pMsg) {
     CurrentInventoryPage = bySavedPage;
 }
 
-static int32_t __stdcall ClickItemRight(int32_t nMouseY, int32_t nMouseX, uint8_t nPage, D2UnitStrc * pPlayer, D2InventoryStrc * pInventory) {
+static int32_t __stdcall ClickItemRight(int32_t nMouseX, int32_t nMouseY, uint8_t nPage, D2UnitStrc * pPlayer, D2InventoryStrc * pInventory) {
     uint32_t nCol;
     uint32_t nRowOffset;
     int32_t nPosX;
@@ -3422,7 +3427,6 @@ static int32_t __stdcall ClickItemRight(int32_t nMouseY, int32_t nMouseX, uint8_
     uint32_t nSendResult;
     D2ItemsTxt* pItemsTxt;
     uint8_t* pTmp;
-    uint32_t nCellHeightDivisor;
     int nCellX;
     int nCellY;
     eD2UnitType eUnitType;
@@ -3430,22 +3434,19 @@ static int32_t __stdcall ClickItemRight(int32_t nMouseY, int32_t nMouseX, uint8_
     int32_t nInvPageFull = D2Common::Units::UNITS_GetInventoryRecordId(pPlayer, nPage, bExpansion);
     if (nPage == '\0') {
       nCol = (uint32_t)(nMouseX - pInventoryGridScreenCoordinated.nPixelLeft) / (uint32_t)pInventoryGridScreenCoordinated.nCellWidth;
-      nRowOffset = nMouseY - pInventoryGridScreenCoordinated.nTop;
-      nCellHeightDivisor = (uint32_t)pInventoryGridScreenCoordinated.nCellHeight;
+      nRowOffset = (uint32_t)(nMouseY - pInventoryGridScreenCoordinated.nTop) / (uint32_t)pInventoryGridScreenCoordinated.nCellHeight;
     } else {
       bExpansion = GAME::Game::CLIENT_CheckExpansion();
       if (bExpansion) {
         nCol = (uint32_t)(nMouseX - pBigBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBigBankPageGridScreenCoordinates.nCellWidth;
-        nRowOffset = nMouseY - pBigBankPageGridScreenCoordinates.nTop;
-        nCellHeightDivisor = (uint32_t)pBigBankPageGridScreenCoordinates.nCellHeight;
+        nRowOffset = (uint32_t)(nMouseY - pBigBankPageGridScreenCoordinates.nTop) / (uint32_t)pBigBankPageGridScreenCoordinates.nCellHeight;
       } else {
         nCol = (uint32_t)(nMouseX - pBankPageGridScreenCoordinates.nPixelLeft) / (uint32_t)pBankPageGridScreenCoordinates.nCellWidth;
-        nRowOffset = nMouseY - pBankPageGridScreenCoordinates.nTop;
-        nCellHeightDivisor = (uint32_t)pBankPageGridScreenCoordinates.nCellHeight;
+        nRowOffset = (uint32_t)(nMouseY - pBankPageGridScreenCoordinates.nTop) / (uint32_t)pBankPageGridScreenCoordinates.nCellHeight;
       }
     }
 
-    D2UnitStrc* pItemAtCell = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory, nCol, nRowOffset / nCellHeightDivisor, &nCellX, &nCellY, nInvPageFull, nPage);
+    D2UnitStrc* pItemAtCell = D2Common::INVENTORY::Inventory::GetUnitAndXAndY(pInventory, nCol, nRowOffset, &nCellX, &nCellY, nInvPageFull, nPage);
     if (!pItemAtCell) {
       return 0;
     }
@@ -3914,7 +3915,7 @@ void __fastcall DRAW_UI_INVENTORY_Gold(int32_t nGoldPanelMode) {
     nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
     int nTextY;
     nTextY = 0;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     uint16_t nLayer;
     nLayer = 0;
@@ -4041,7 +4042,7 @@ void __stdcall DRAW_UI_Inventory_DrawShop() {
       DrawShopRelated = 0;
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = gpNpcMenuShopInventoryDC6;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -4266,8 +4267,8 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
     nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY;
     nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
-    bool bButtonHandled;
-    bButtonHandled = false;
+    BOOL bButtonHandled;
+    bButtonHandled = FALSE;
     gbInvPanelButtonPressed = 0;
     gnInvUnusedClearedOnClick = 0;
     D2UnitStrc* pUnit;
@@ -4329,12 +4330,12 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
             wButtonSelection = ((D2NpcShopButtonStrc*)((char*)pButton - 0xa))->wCurrentSelection;
             if (wButtonSelection == 0xe) {
               INV_ResetHoverAndContextState();
-              bButtonHandled = false;
+              bButtonHandled = FALSE;
             } else if (wButtonSelection == 0xc) {
               INV_ResetHoverAndContextState();
-              bButtonHandled = false;
+              bButtonHandled = FALSE;
             } else {
-              bButtonHandled = true;
+              bButtonHandled = TRUE;
               if (wButtonSelection == 0x12) {
                 dwArg7 = 1;
                 dwArg6 = 1;
@@ -6109,7 +6110,7 @@ void __stdcall INV_DrawHirelingEmptySlots(D2UnitStrc * pUnit) {
     bool bTwoHanded;
     D2GfxDataStrc sGfxData;
     D2UnitStrc* pLArmItem;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     D2InventoryStrc* pInventory;
     pInventory = pUnit->pInventory;
     if (!pInventory || (pRArmItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, 3) , !pRArmItem)) {
@@ -6630,7 +6631,7 @@ void __stdcall INV_DrawRecipeScroll() {
     }
 
     DC6* pScrollImage = gpInvCubeRecipeScrollImage;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pScrollImage;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -7234,7 +7235,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
                 pwLocaleStr2 += 4;
               }
 
-              for (nCopyLen = (intptr_t)pAffixNameTail - (intptr_t)pPrefixAffix & 3; nCopyLen; nCopyLen--) {
+              for (nCopyLen = (uint32_t)((intptr_t)pAffixNameTail - (intptr_t)pPrefixAffix) & 3; nCopyLen; nCopyLen--) {
                 *pwLocaleStr2 = *pAffixCopyPtr;
                 pAffixCopyPtr++;
                 pwLocaleStr2++;
@@ -7500,30 +7501,16 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
       wszAttackSpeed[nSetItemLoopIdx] = L'\0';
     }
 
-    uint16_t* pwLocaleStr = wszSetBonusList;
-    for (nSetItemLoopIdx = 0x100; nSetItemLoopIdx; nSetItemLoopIdx--) {
-      pwLocaleStr[0] = L'\0';
-      pwLocaleStr[1] = L'\0';
-      pwLocaleStr += 2;
-    }
+    uint16_t* pwLocaleStr;
+    memset(wszSetBonusList, 0, sizeof(wszSetBonusList));
 
     for (nSetItemLoopIdx = 0; nSetItemLoopIdx < 0x400; nSetItemLoopIdx++) {
       wszStatBuffs[nSetItemLoopIdx] = L'\0';
     }
 
-    pwLocaleStr = wszItemBuffs;
-    for (nSetItemLoopIdx = 0x100; nSetItemLoopIdx; nSetItemLoopIdx--) {
-      pwLocaleStr[0] = L'\0';
-      pwLocaleStr[1] = L'\0';
-      pwLocaleStr += 2;
-    }
+    memset(wszItemBuffs, 0, sizeof(wszItemBuffs));
 
-    pwLocaleStr = wszItemBuffsAlt;
-    for (nSetItemLoopIdx = 0x100; nSetItemLoopIdx; nSetItemLoopIdx--) {
-      pwLocaleStr[0] = L'\0';
-      pwLocaleStr[1] = L'\0';
-      pwLocaleStr += 2;
-    }
+    memset(wszItemBuffsAlt, 0, sizeof(wszItemBuffsAlt));
 
     for (nSetItemLoopIdx = 0; nSetItemLoopIdx < 0x100; nSetItemLoopIdx++) {
       wszClassReq[nSetItemLoopIdx] = L'\0';
@@ -7980,20 +7967,13 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
       wszAttackSpeed[nTmp] = L'\0';
     }
 
-    uint16_t* pwClear;
-    pwClear = szItemName;
-    for (nTmp = 0x200; nTmp; nTmp--) {
-      pwClear[0] = L'\0';
-      pwClear[1] = L'\0';
-      pwClear += 2;
+    for (nTmp = 0; nTmp < 1024; nTmp++) {
+      szItemName[nTmp] = L'\0';
     }
 
     uint16_t* pwTmp;
-    pwTmp = wszStatBuffs;
-    for (nTmp = 0x800; nTmp; nTmp--) {
-      pwTmp[0] = L'\0';
-      pwTmp[1] = L'\0';
-      pwTmp += 2;
+    for (nTmp = 0; nTmp < 4096; nTmp++) {
+      wszStatBuffs[nTmp] = L'\0';
     }
 
     int32_t nReturnValue;
@@ -8583,7 +8563,7 @@ void __stdcall DRAW_UI_Inventory() {
 
     int bIsTwoHandedEquipped;
     bIsTwoHandedEquipped = g_nCurrentInventoryPage;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     if (bIsTwoHandedEquipped >= 0xc) {
       uint32_t bIsPlayerDead;
@@ -10245,7 +10225,7 @@ void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
           }
         }
       } else {
-        nClickResult = ClickItemLeft(pUnit, pInventory, nMouseX, nMouseY, pMsg->nWParam, (D2InventoryLayout*)&pInventoryGridScreenCoordinated, '\0');
+        nClickResult = ClickItemLeft(pUnit, pInventory, nMouseX, nMouseY, (DWORD)pMsg->nWParam, (D2InventoryLayout*)&pInventoryGridScreenCoordinated, '\0');
         bHandled = true;
       }
 
@@ -10277,7 +10257,7 @@ void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
       if (g_nCurrentInventoryPage != 0xb) {
         if (g_nCurrentInventoryPage != 0xc) {
           if (g_nCurrentInventoryPage == 0xe && nMouseX >= pTransmogrifyBoxGridScreenCoordinates.nPixelLeft && nMouseX <= pTransmogrifyBoxGridScreenCoordinates.nRight && nMouseY >= pTransmogrifyBoxGridScreenCoordinates.nTop && nMouseY <= pTransmogrifyBoxGridScreenCoordinates.nBottom) {
-            targetItem = pMsg->nWParam;
+            targetItem = (uint32_t)pMsg->nWParam;
             pInvLayout = &pTransmogrifyBoxGridScreenCoordinates;
             byTmpAl = '\x03';
             click_storage_grid:
@@ -10306,7 +10286,7 @@ void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
           }
           if (nMouseX >= nGridLeftX && nMouseX <= nSocketGuid && nMouseY >= (int)nClickResult && nMouseY <= nGridBottom) {
             bResult = GAME::Game::CLIENT_CheckExpansion();
-            targetItem = pMsg->nWParam;
+            targetItem = (uint32_t)pMsg->nWParam;
             if (bResult) {
               pInvLayout = &pBigBankPageGridScreenCoordinates;
             } else {
@@ -10328,7 +10308,7 @@ void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
         return;
       }
 
-      bResult = ClickItemLeft(pUnit, pInventory, nMouseX, nMouseY, pMsg->nWParam, (D2InventoryLayout*)&pTradePage2GridScreenCoordinates, '\x02');
+      bResult = ClickItemLeft(pUnit, pInventory, nMouseX, nMouseY, (DWORD)pMsg->nWParam, (D2InventoryLayout*)&pTradePage2GridScreenCoordinates, '\x02');
       pMsg->dwResult = 0;
       pMsg->bHandled = 1;
       gbInvItemUnderCursorExists = 0;
@@ -10385,7 +10365,7 @@ void __stdcall INPUT_InventoryRightClick(D2UIMouseMsgStrc * pMsg) {
       pMsg->bHandled = 0;
     } else {
       int32_t iVar1;
-      iVar1 = ClickItemRight(nMouseY, nMouseX, '\0', pPlayerUnit_lcl, pInventory);
+      iVar1 = ClickItemRight(nMouseX, nMouseY, '\0', pPlayerUnit_lcl, pInventory);
       if (iVar1) {
         goto resume_shop_and_consume;
       }
@@ -10566,7 +10546,7 @@ void __stdcall INV_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
 
           bResult = IsInBankPageScreenRange(nMouseX, nMouseY);
           if (bResult) {
-            ClickItemRight(nMouseY, nMouseX, '\x04', pMyUnit, pMyUnit->pInventory);
+            ClickItemRight(nMouseX, nMouseY, '\x04', pMyUnit, pMyUnit->pInventory);
             goto consume_click;
           }
         }
@@ -10592,7 +10572,7 @@ void __stdcall INV_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
           pMyUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nMsg, UNIT_MONSTER);
           if (pMyUnit) {
             if (pItemToDescribe) {
-              nCallResult = npcmenu::ShopAction(pMyUnit, pItemToDescribe, 0, nMouseX, nMouseY, pMouseMsg->nWParam, 1, 0);
+              nCallResult = npcmenu::ShopAction(pMyUnit, pItemToDescribe, 0, nMouseX, nMouseY, (DWORD)pMouseMsg->nWParam, 1, 0);
               if (nCallResult) {
                 Cursor::ITEM_SetItemOnHand(nullptr);
               }
@@ -10713,7 +10693,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          dwMode = pUnderMouse2->nWParam;
+          dwMode = (DWORD)pUnderMouse2->nWParam;
           pCursorItem_lcl = Cursor::GetCursorItem();
           if (!pCursorItem_lcl) {
             return;
@@ -10818,7 +10798,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
             if (bHasNpcGuid) {
               pCursorItem_lcl = UNIT::CUnit::UNITS_FindClientSideUnit(nMsg, UNIT_MONSTER);
               if (pCursorItem_lcl) {
-                ClickItemLeft(pCursorItem_lcl, pCursorItem_lcl->pInventory, x, y, pUnderMouse2->nWParam, (D2InventoryLayout*)&pNpcInventoryGridScreenCoordinates, CurrentInventoryPage);
+                ClickItemLeft(pCursorItem_lcl, pCursorItem_lcl->pInventory, x, y, (DWORD)pUnderMouse2->nWParam, (D2InventoryLayout*)&pNpcInventoryGridScreenCoordinates, CurrentInventoryPage);
               }
             }
           }
@@ -11238,7 +11218,7 @@ void __stdcall DrawMercInventory() {
     }
 
     InitializeiInventoryPages();
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = gpInvMercBodyImage;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;

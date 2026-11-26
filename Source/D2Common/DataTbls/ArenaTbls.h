@@ -13,13 +13,38 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/Player/Player.h"
 
 // Forward declarations
 struct D2ArenaTxt;
 struct D2PoolManagerStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2ArenaTxt
+#define D2_DEFINED_D2ArenaTxt
+struct D2ArenaTxt {
+    /* 0x00 */ int dwSuicide;
+    /* 0x04 */ int dwPlayerKill;
+    /* 0x08 */ int dwPlayerKillPercent;
+    /* 0x0C */ int dwMonsterKill;
+    /* 0x10 */ int dwPlayerDeath;
+    /* 0x14 */ int dwPlayerDeathPercent;
+    /* 0x18 */ int dwMonsterDeath;
+};
+
+#endif // D2_DEFINED_D2ArenaTxt
+#ifndef D2_DEFINED_D2CharItemStrc
+#define D2_DEFINED_D2CharItemStrc
+struct D2CharItemStrc {
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+
+    /* 0x00 */ int dwItemCode;
+    /* 0x04 */ char nBodyLoc;
+    /* 0x05 */ char nItemCount;
+    /* 0x06 */ uint8_t field_0x6;
+    /* 0x07 */ uint8_t field_0x7;
+};
+
+#endif // D2_DEFINED_D2CharItemStrc
 struct __attribute__((packed)) D2CharTemplateTxt {
     /* 0x00 */ char Name[29];
     /* 0x1D */ uint8_t field_0x1d;

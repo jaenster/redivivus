@@ -81,7 +81,7 @@ typedef int32_t (__fastcall *fpD2QServerPacketClassifier)(uint8_t * pbPacket, si
 #endif
 #ifndef RECON_FPTD_fpD2QServerSinglePlayerSendHook
 #define RECON_FPTD_fpD2QServerSinglePlayerSendHook
-typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(struct D2QServerStrc * pQServer, char * pBytes, size_t nSize);
+typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(struct D2QServerStrc * pQServer, char * pBytes, uint32_t nSize);
 #endif
 #ifndef RECON_FPTD_fpD2QServerSourceLineHook
 #define RECON_FPTD_fpD2QServerSourceLineHook
@@ -92,7 +92,7 @@ typedef int32_t (__fastcall *fpD2QServerSourceLineHook)(struct D2QServerStrc * p
 #ifndef D2_DEFINED_D2AsyncDataCallbackStrc
 #define D2_DEFINED_D2AsyncDataCallbackStrc
 struct __attribute__((packed)) D2AsyncDataCallbackStrc {
-    /* 0x00 */ uint32_t (__stdcall *pfnCallback)(void *, size_t, struct D2AsyncDataCallbackStrc *); // called with (pReadBuffer, nReadSize, &tCallback) when the read completes
+    /* 0x00 */ uint32_t (__stdcall *pfnCallback)(void *, uint32_t, struct D2AsyncDataCallbackStrc *); // called with (pReadBuffer, nReadSize, &tCallback) when the read completes
     /* 0x04 */ uint32_t aUserData[4];
     /* 0x14 */ void * pResultBuffer; // non-NULL after the callback: replaces the read buffer (0040a505)
     /* 0x18 */ size_t nResultSize; // becomes nReadSize with pResultBuffer
@@ -107,7 +107,7 @@ struct __attribute__((packed)) D2AsyncData_Line0x128 {
     /* 0x1C */ D2AsyncDataCallbackStrc tCallback; // copy of the caller's completion block
     /* 0x38 */ struct D2AsyncDataSlotStrc * pSlot;
     /* 0x3C */ void * pReadBuffer; // result/read buffer; ASYNCDATA_GetResult returns this. Also the key SFILE_SetRequestPriorityByBuffer matches against each Storm request's buffer base (request +0x24, SFILE_IssueRequest)
-    /* 0x40 */ size_t nReadSize;
+    /* 0x40 */ uint32_t nReadSize;
     /* 0x44 */ int nPriority; // Storm read priority, always <= 0 here (ASYNCDATA_SetPriority halts on > 0, 0040a88d); ASYNCDATA_WaitForCompletion passes 1 directly to SFILE_SetRequestPriorityByBuffer to mark the reads urgent.
     /* 0x48 */ int nFlags;
     /* 0x4C */ int nPriorityBeforeDefer; // nPriority saved when ASYNCDATA_SetPriority defers a change (0040a8b3); ASYNCDATA_DeferPriorityUpdates re-applies nPriority on flush only if it differs (0040a933)
@@ -127,7 +127,7 @@ struct __attribute__((packed)) D2AsyncDataSlotStrc {
 struct __attribute__((packed)) D2BinFieldInputStrc {
     /* 0x00 */ char * szName;
     /* 0x04 */ eD2BinFieldInputType eType;
-    /* 0x08 */ size_t nSize;
+    /* 0x08 */ uint32_t nSize;
     /* 0x0C */ int nOffset;
     /* 0x10 */ void * fpLinker; // by eType: struct D2TxtLinkStrc** (CODE*/NAME*), PFN_TxtKeyToWord* (KEY_WORD), PFN_TxtFieldLinker* (LINKER_*)
 };
@@ -235,9 +235,9 @@ struct D2HighResTimestampStrc {
 #define D2_DEFINED_D2PoolStrc
 struct __attribute__((packed)) D2PoolStrc {
     /* 0x00 */ CRITICAL_SECTION pSync;
-    /* 0x18 */ size_t nBlockSize;
-    /* 0x1C */ size_t nBlocks;
-    /* 0x20 */ size_t nSize;
+    /* 0x18 */ uint32_t nBlockSize;
+    /* 0x1C */ uint32_t nBlocks;
+    /* 0x20 */ uint32_t nSize;
     /* 0x24 */ size_t nAllocBlock;
     /* 0x28 */ struct D2PoolBlockStrc * pBlocks;
     /* 0x2C */ struct D2PoolBlockStrc * pTail;
@@ -248,10 +248,10 @@ struct __attribute__((packed)) D2PoolStrc {
 struct __attribute__((packed)) D2PoolManagerStrc {
     /* 0x0000 */ int nPoolId; // related to pool count..
     /* 0x0004 */ CRITICAL_SECTION pSync;
-    /* 0x001C */ size_t nPools;
+    /* 0x001C */ uint32_t nPools;
     /* 0x0020 */ D2PoolStrc pPools[40];
-    /* 0x07A0 */ size_t nBlocks;
-    /* 0x07A4 */ size_t nTotalBlocks;
+    /* 0x07A0 */ uint32_t nBlocks;
+    /* 0x07A4 */ uint32_t nTotalBlocks;
     /* 0x07A8 */ struct D2PoolBlockEntryStrc * pBlocks;
     /* 0x07AC */ BYTE * pOverflow[1023];
     /* 0x17A8 */ DWORD dwMemory;
@@ -307,7 +307,7 @@ struct D2PoolBlockEntryStrc {
 struct __attribute__((packed)) D2PoolBlockStrc {
     /* 0x00 */ BYTE * pCommit;
     /* 0x04 */ DWORD * pUsage;
-    /* 0x08 */ size_t nBlocks;
+    /* 0x08 */ uint32_t nBlocks;
     /* 0x0C */ struct D2PoolBlockStrc * pPrev;
     /* 0x10 */ struct D2PoolBlockStrc * pNext;
     /* 0x14 */ struct D2PoolStrc * pPool;
@@ -484,7 +484,7 @@ struct __attribute__((packed)) D2QServerStrc {
     /* 0xBC0 */ int32_t (__fastcall *pfnPacketClassifier)(uint8_t *, size_t, uint32_t *, int *, int *, int *, uint32_t, uint32_t, uint32_t); // Inbound packet classifier/parser callback
     /* 0xBC4 */ int32_t (__fastcall *pfnOnClientAcceptedHook)(struct D2QServerStrc *, uint32_t, char *, int); // Optional source-line hook on successful accept
     /* 0xBC8 */ int32_t (__fastcall *pfnOnClientFreedHook)(struct D2QServerStrc *, uint32_t, char *, int); // Optional source-line hook before client free
-    /* 0xBCC */ int32_t (__fastcall *pfnSinglePlayerSendHook)(struct D2QServerStrc *, char *, size_t); // Singleplayer packet-send callback
+    /* 0xBCC */ int32_t (__fastcall *pfnSinglePlayerSendHook)(struct D2QServerStrc *, char *, uint32_t); // Singleplayer packet-send callback
     /* 0xBD0 */ int bUseQServerHack; // BOOL - use QServer hack mode
     /* 0xBD4 */ HANDLE hEmptyEvent;
     /* 0xBD8 */ HANDLE aAcceptThreadHandles[4];
@@ -661,7 +661,7 @@ void __stdcall SetBitAtOffset(char * pBuffer, uint32_t nOffset);
 BOOL __stdcall CheckBitAtOffset(char * pBuffer, int32_t nOffset);
 // NOTE: Return type changed void→uint8_t (1 callers, MEDIUM confidence)
 void __stdcall UnsetBitAtOffset(char * pBuffer, int32_t nOffset);
-void __stdcall InitBitBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, size_t nSize);
+void __stdcall InitBitBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, uint32_t nSize);
 int32_t __stdcall GetNextPositon(struct D2BitBufferStrc * pBitBuffer);
 void __stdcall WriteValueToBitBuffer(struct D2BitBufferStrc * pBitBuffer, int32_t nValue, int32_t nSizeInBits);
 uint32_t __stdcall ReadUnsigned(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);
@@ -752,7 +752,7 @@ int __fastcall SFILE_GetExecutableDirectory(char * szText, DWORD nSize);
 int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize);
 int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen);
 BOOL __stdcall GetUseDirectCommand();
-void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize);
+void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize);
 struct D2SystemInfoStrc * __stdcall SFILE_GetGlobalPointer();
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 } // namespace Fog::Source::SFile
@@ -764,7 +764,7 @@ int __stdcall SwapWorkerSlotValue(struct D2QServerStrc * pQServer, int nWorkerIn
 int __stdcall GetConnectedClients(struct D2QServerStrc * pQServer);
 void __stdcall SetPerIpConnectionLimit(struct D2QServerStrc * pQServer, int nPerIpConnectionLimit);
 DWORD __stdcall WaitForEmptyEvent(struct D2QServerStrc * pQServer, DWORD dwTimeoutMs);
-int __stdcall DequeueModePacket(struct D2QServerStrc * pQServer, int nMode, char * pBytes, size_t nSize);
+int __stdcall DequeueModePacket(struct D2QServerStrc * pQServer, int nMode, char * pBytes, uint32_t nSize);
 // Variant of WaitForEmptyEvent 006be4e0 with the same parameter list (D2QServerStrc*, DWORD). It handles pQServer->bUseNtLocalMode by calling
 // QServerNT::PumpIoCompletionQueues(pQServer, dwParam) instead of bailing out, and it narrows
 // the result to BOOL - (WaitForSingleObject(hEmptyEvent, dwParam) == WAIT_OBJECT_0).
@@ -774,7 +774,7 @@ int __stdcall DequeueModePacket(struct D2QServerStrc * pQServer, int nMode, char
 uint32_t __stdcall WaitForEmptyEventOrPumpIo(struct D2QServerStrc * pQServer, DWORD dwTimeoutMs);
 void __stdcall GetClientIpStringByClientId(struct D2QServerStrc * pQServer, int nClientId, char * szIpAddress, int nBufferSize);
 uint32_t __stdcall GetClientIpByToken(struct D2QServerStrc * pQServer, uint32_t nToken);
-uint32_t __stdcall GetClientSocketByToken(struct D2QServerStrc * pQServer, uint32_t nClientToken);
+SOCKET __stdcall GetClientSocketByToken(struct D2QServerStrc * pQServer, uint32_t nClientToken);
 void __stdcall QSHackUnlistIP(struct D2QServerStrc * pQServer, in_addr pIp, char * szFile2, uint32_t nLine);
 void __stdcall SetHacklistLineHook(struct D2QServerStrc * pQServer, fpD2QServerLineHook pfnHook);
 void __stdcall SetReservedHook(struct D2QServerStrc * pQServer, void * pfnHook);
@@ -801,7 +801,7 @@ struct D2QServerStrc * __stdcall NET_QServer_Init(eD2GSConnectionType neD2GSConn
 // Shuts down and frees QServer structure. Optionally broadcasts final packet to all clients before cleanup. Closes all worker threads, frees hash-map buckets, deletes critical sections, closes sockets, and invokes WSACleanup. Iterates through mode packet free list and hacklist free list to release all pooled allocations.
 // @sourcefile .\Src\QServer\QServer.cpp
 int __stdcall Shutdown(struct D2QServerStrc * pQServer, char * pBytes, int nSize);
-int __stdcall SendPacketByClientId(struct D2QServerStrc * pQServer, int nClientId, char * pBytes, size_t nSize);
+int __stdcall SendPacketByClientId(struct D2QServerStrc * pQServer, int nClientId, char * pBytes, uint32_t nSize);
 void __stdcall BanClient(struct D2QServerStrc * pQServer, int nClientId, char * szFile, int nLine);
 void __stdcall DisconnectAndBanIp(struct D2QServerStrc * pQServer, uint32_t nIpAddress, char * szFile, int nLine);
 // @wasnamed CloseRemoteConnection - one name on two different functions.
@@ -813,19 +813,19 @@ namespace Fog::Src::AsyncData {
 // Registers: nEnable in ECX; nReserved (EDX) is 0 at the only call site and not read.
 void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved);
 void __stdcall STRUCT_FreeAsyncData();
-struct D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(struct D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, size_t nReadSize, void * pReadBuffer, struct D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nLine);
+struct D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(struct D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, uint32_t nReadSize, void * pReadBuffer, struct D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nLine);
 uint32_t __fastcall ASYNCDATA_IsComplete(struct D2AsyncData_Line0x128 * pAsyncData);
 void * __fastcall ASYNCDATA_GetResult(struct D2AsyncData_Line0x128 * pAsyncData);
 // Returns pAsyncData->nReadSize (+0x40; set by STRUCT_AllocAsyncData_Line0x128 and by the completion copy); halts on a bad tag.
 // The SOUNDHDR callers add the result to their loaded-byte counters.
-size_t __fastcall ASYNCDATA_GetReadSize(struct D2AsyncData_Line0x128 * pAsyncData);
+uint32_t __fastcall ASYNCDATA_GetReadSize(struct D2AsyncData_Line0x128 * pAsyncData);
 void __fastcall ASYNCDATA_Free(struct D2AsyncData_Line0x128 * pAsyncData);
 } // namespace Fog::Src::AsyncData
 namespace Fog::Src::D2Net {
 void __stdcall NET_SERVER_SentPacketLog_Clear();
-void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize);
-size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize);
-int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize);
+void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, uint32_t nSize);
+uint32_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, uint32_t nBufferSize, char * pBytes, uint32_t nBytesSize);
+int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, uint32_t nBufferSize, char * pBytes, uint32_t nBytesSize);
 } // namespace Fog::Src::D2Net
 namespace Fog::Src::D2QSSocket {
 void __stdcall QSSOCKET_SetCallbackHandler1(struct D2QSSocketStrc * pQSSocket, void * fpCallback, void * pContext);
@@ -867,7 +867,7 @@ void __fastcall ERRORMANAGER_InitErrorManager(char * dwUnused1, char * szText, B
 namespace Fog::Src::Excel {
 // @sourcefile .\Src\Excel\Excel.cpp
 void __stdcall TXT_FreeBinFieldExcel(struct D2BinFieldExcelStrc * pBinFieldExcel);
-size_t __stdcall TXT_GetLinesCountFromBinFieldExcel(struct D2BinFieldExcelStrc * pBinFieldExcel);
+uint32_t __stdcall TXT_GetLinesCountFromBinFieldExcel(struct D2BinFieldExcelStrc * pBinFieldExcel);
 struct D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLine);
 // @sourcefile .\Src\Excel\Excel.cpp
 void __stdcall STRUCT_FreeTxtLink(struct D2TxtLinkStrc * pTxtLink);
@@ -881,7 +881,7 @@ int __stdcall FOG_ParseStringField(struct D2TxtLinkStrc * pTxtLink, char * szTex
 struct D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(char * pD2Archive, size_t nSize);
 // Two passes over the txt rows: pass 1 resolves link-type columns (CODE*/NAME_I*), pass 2 parses every
 // mapped column into the record and pass 2b default-fills the mapped fields that had no column.
-void __stdcall TXT_ParseDataAndPutIntoStructure(struct D2BinFieldExcelStrc * pBinFieldExcel, struct D2BinFieldInputStrc * pBinFieldInput, char * pRecord, size_t nLinesCount, int nEndOffset);
+void __stdcall TXT_ParseDataAndPutIntoStructure(struct D2BinFieldExcelStrc * pBinFieldExcel, struct D2BinFieldInputStrc * pBinFieldInput, char * pRecord, uint32_t nLinesCount, int nEndOffset);
 } // namespace Fog::Src::Excel
 namespace Fog::Src::LogManager {
 BOOL __stdcall GetLoggerState_Stub();
@@ -902,8 +902,8 @@ int __stdcall WSACleanup();
 struct D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szConnectionAlias, uint32_t dwFlags);
 // @sourcefile .\Src\Safesock.cpp
 void __fastcall Free(struct D2NetDataStrc * pNetData);
-int32_t __fastcall WSASocket2_Read(struct D2NetDataStrc * pNetData, char * pBuffer, size_t nSize);
-int32_t __fastcall WSASocket2_Send(struct D2NetDataStrc * pNetData, char * pBytes, size_t nSize);
+int32_t __fastcall WSASocket2_Read(struct D2NetDataStrc * pNetData, char * pBuffer, uint32_t nSize);
+int32_t __fastcall WSASocket2_Send(struct D2NetDataStrc * pNetData, char * pBytes, uint32_t nSize);
 int __fastcall Safesock_PollReadReady(struct D2NetDataStrc * pNetData);
 int32_t __fastcall GetPeerNameDoesReturn(struct D2NetDataStrc * pNetData, sockaddr * pName, int * pNameLen);
 uint32_t __fastcall GetSockNameDoesReturn(struct D2NetDataStrc * pNetData, sockaddr * pName, int * pNameLen);

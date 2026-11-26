@@ -56,11 +56,11 @@ static uint8_t gabWardenModuleRc4Key[16] = {
     0xd4,
     0xb0
 }; D2_STATIC_GUARD(gabWardenModuleRc4Key, "gabWardenModuleRc4Key");
-static uint32_t gpWardenModuleParam = -0x1; D2_STATIC_GUARD(gpWardenModuleParam, "gpWardenModuleParam");
+uint32_t gpWardenModuleParam = -0x1; D2_STATIC_GUARD(gpWardenModuleParam, "gpWardenModuleParam");
 static void * gpWardenResponseData = 0; D2_STATIC_GUARD(gpWardenResponseData, "gpWardenResponseData");
 static uint32_t gnWardenResponseSize = 0; D2_STATIC_GUARD(gnWardenResponseSize, "gnWardenResponseSize");
-static D2WardenModuleStrc * gpWardenActiveModule = 0; D2_STATIC_GUARD(gpWardenActiveModule, "gpWardenActiveModule");
-static D2WardenModuleStrc * gpWardenPendingModule = 0; D2_STATIC_GUARD(gpWardenPendingModule, "gpWardenPendingModule");
+D2WardenModuleStrc * gpWardenActiveModule = 0; D2_STATIC_GUARD(gpWardenActiveModule, "gpWardenActiveModule");
+D2WardenModuleStrc * gpWardenPendingModule = 0; D2_STATIC_GUARD(gpWardenPendingModule, "gpWardenPendingModule");
 static D2BNetClientCallbacksStrc * sgpUnknownSequence = 0; D2_STATIC_GUARD(sgpUnknownSequence, "sgpUnknownSequence");
 
 namespace D2Client { namespace Warden {
@@ -78,7 +78,7 @@ void __fastcall WARDEN_RC4Decrypt(D2RC4StateStrc * pState, int, uint8_t * pData,
     }
 }
 
-static uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nDataLen, uint32_t nTotalLen, uint8_t * pBuffer, int * pnSigOffset) {
+static uint32_t __stdcall WARDEN_CheckSignatureMagic(uint32_t nTotalLen, int32_t nDataLen, uint8_t * pBuffer, int * pnSigOffset) {
     int nSigOffset = nTotalLen - nDataLen - 4;
     *pnSigOffset = nSigOffset;
     if (nTotalLen >= nDataLen + 4U) {
@@ -109,7 +109,7 @@ static void __stdcall WARDEN_ComputeModuleHash(char * szModuleName, uint8_t * pH
 
 // Verifies a Warden module's RSA signature: checks the 'NGIS' tag at the end of the module, builds the expected padded SHA-1 hash of the module and its name, decrypts the trailing signature with the supplied modulus and exponent (SBigPowMod) and returns TRUE when the two match.
 // Source file WARDEN/WardenClient.cpp (__FILE__ literal, 4 sites).
-static BOOL __stdcall WARDEN_VerifyModuleSignature(size_t nKeySize, char * szModuleName, uint8_t * pData, void * pModulus, void * pExponent, uint32_t nExponentLen, uint32_t nSigDataLen, uint32_t nTotalLen) {
+static BOOL __stdcall WARDEN_VerifyModuleSignature(uint32_t nKeySize, char * szModuleName, uint8_t * pData, void * pModulus, void * pExponent, uint32_t nExponentLen, uint32_t nSigDataLen, uint32_t nTotalLen) {
     // Frame slots -24..-4 are ONE object: &pExpectedHash is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -520,7 +520,7 @@ static BOOL __stdcall WARDEN_DecryptAndLoadModule(void * pSrcData, void * pRc4Ke
     }
 
     Storm::Source::SMem::SMemFree(pDecrypted, ".\\WARDEN\\WardenClient.cpp", 0x193, 0);
-    ppModule = (D2WardenModuleStrc*)Storm::Source::SMem::SMemAlloc(0x14, ".\\WARDEN\\WardenClient.cpp", 0x10d, 0);
+    ppModule = (D2WardenModuleStrc*)Storm::Source::SMem::SMemAlloc(sizeof(D2WardenModuleStrc), ".\\WARDEN\\WardenClient.cpp", 0x10d, 0);
     if (ppModule) {
       ppModule->pLibrary = 0;
       ppModule->nImageSize = 0;
@@ -1012,6 +1012,6 @@ void __fastcall WARDEN_FreeModuleLibraries(D2WardenModuleStrc * pModule) {
     pModule->nImageSize = 0;
 }
 
-static void * keep_0047f950 = (0 ? (WARDEN_CheckSignatureMagic(*(int32_t *)0, *(uint32_t *)0, *(uint8_t * *)0, *(int * *)0), (void *)0) : (void *)0);
+static void * keep_0047f950 = (0 ? (WARDEN_CheckSignatureMagic(*(uint32_t *)0, *(int32_t *)0, *(uint8_t * *)0, *(int * *)0), (void *)0) : (void *)0);
 
 }} // namespace D2Client::Warden

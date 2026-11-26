@@ -117,8 +117,8 @@ void __fastcall D2WINFONT_DrawTextWithOffsetBackground(uint16_t * wszText, int32
 // Draws text with background progress bar. If nProgressPercent is non-zero, draws filled portion in dark color. Calculates text dimensions, clamps to screen, draws layered rectangles (filled + unfilled), renders centered text.
 void __fastcall D2WINFONT_DrawTextWithProgressBar(uint16_t * wszText, uint32_t nX, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nAlignMode, int32_t nProgressPercent);
 // @sourcefile .\Src\D2WinFont.cpp
-struct D2TextLineStrc * __stdcall D2WINFONT_AllocWordWrapNode(uint16_t * pwszText, size_t nSize, int32_t bTrimLeadingSpace);
-int __fastcall Unreferenced_00502c40(intptr_t param_1);
+struct D2TextLineStrc * __stdcall D2WINFONT_AllocWordWrapNode(uint16_t * pwszText, uint32_t nSize, int32_t bTrimLeadingSpace);
+intptr_t __fastcall Unreferenced_00502c40(intptr_t param_1);
 void __stdcall D2WINFONT_InitFontSystem();
 void StaticInit_DisplayedTooltip();
 void StaticInit_gwFontHeightDefault();

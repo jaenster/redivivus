@@ -240,8 +240,8 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6A() {
 
 // Reads a character save file (.d2s) from disk into a memory buffer. Constructs the full file path from the save directory and character name, opens the file in binary read mode, seeks to end to get file size, allocates a client memory buffer of that size, rewinds to start, reads the entire file contents into the buffer, and returns the buffer pointer with size written to the output parameter.
 // @sourcefile .\GAME\Msg.cpp
-static uint8_t * MSG_ReadSaveFileToBuffer(size_t * pnFileSize) {
-    size_t nFileSize;
+static uint8_t * MSG_ReadSaveFileToBuffer(uint32_t * pnFileSize) {
+    uint32_t nFileSize;
     uint8_t* pBuffer;
     char szFilePath[1024];
     char szFullPath[500];
@@ -306,7 +306,7 @@ void __fastcall LOADING_AnimateProgressBar(int32_t nCurrentChunk, int32_t nTotal
 void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
     int nBytesCopied;
     D2GSPacketClt0x6C sPacket;
-    size_t nChunkIndex = 0;
+    uint32_t nChunkIndex = 0;
     uint8_t* pReadPtr = MSG_ReadSaveFileToBuffer(&nChunkIndex);
     if (!pReadPtr) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x232);
@@ -316,7 +316,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
       LOADING_AnimateProgressBar(0, 0);
     }
 
-    size_t nFileSize = nChunkIndex;
+    uint32_t nFileSize = nChunkIndex;
     int nTotalChunks = (int)nChunkIndex / 0xff;
     nChunkIndex = 0;
     uint8_t* pSrcByte = pReadPtr;

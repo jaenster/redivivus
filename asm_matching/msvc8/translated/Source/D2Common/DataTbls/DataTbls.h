@@ -29,6 +29,36 @@ typedef uint32_t eD2Skills;
 typedef uint32_t eD2States;
 typedef uint32_t eD2UnitType;
 
+// Data types
+#ifndef D2_DEFINED_D2DifficultyLevelsTxt
+#define D2_DEFINED_D2DifficultyLevelsTxt
+struct D2DifficultyLevelsTxt {
+    /* 0x00 */ int ResistPenalty;
+    /* 0x04 */ int DeathExpPenalty;
+    /* 0x08 */ int UberCodeOddsNormal;
+    /* 0x0C */ int UberCodeOddsGood;
+    /* 0x10 */ int MonsterSkillBonus;
+    /* 0x14 */ int MonsterFreezeDivisor;
+    /* 0x18 */ int MonsterColdDivisor;
+    /* 0x1C */ int AiCurseDivisor;
+    /* 0x20 */ int UltraCodeOddsNormal;
+    /* 0x24 */ int UltraCodeOddsGood;
+    /* 0x28 */ int LifeStealDivisor;
+    /* 0x2C */ int ManaStealDivisor;
+    /* 0x30 */ int UniqueDamageBonus;
+    /* 0x34 */ int ChampionDamageBonus;
+    /* 0x38 */ int HireableBossDamagePercent;
+    /* 0x3C */ int MonsterCEDamagePercent;
+    /* 0x40 */ int StaticFieldMin;
+    /* 0x44 */ int GambleRare;
+    /* 0x48 */ int GambleSet;
+    /* 0x4C */ int GambleUnique;
+    /* 0x50 */ int GambleUber;
+    /* 0x54 */ int GambleUltra;
+};
+
+#endif // D2_DEFINED_D2DifficultyLevelsTxt
+
 namespace D2Common { namespace DATATBLS { namespace DataTbls {
 
 // Function declarations
@@ -55,7 +85,7 @@ void __stdcall TXT_InitTxtFiles(struct D2PoolManagerStrc * pMemory, int32_t nZer
 int32_t __fastcall DATATBLS_LookupStringId(char * szKey);
 uint32_t __stdcall DATATBLS_GetCompCodeByIndex(int32_t nIndex);
 // @sourcefile .\DATATBLS\DataTbls.cpp
-int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * ppBuffer, int * pnSize, int * pnCapacity, void * pSrc, size_t nSize);
+int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * ppBuffer, int * pnSize, int * pnCapacity, void * pSrc, uint32_t nSize);
 int __fastcall DATATBLS_CalcExpr_ParseTokenType(char * szKey);
 int __fastcall DATATBLS_CalcExpr_GetArgCount(int nFunctionIndex);
 // Resolves a text code to a table row index for the given code type/subtype. For nCodeType==1 it dispatches on nSubType: 3=skills link, 4=missiles link, 5=itemstatcost link (with special-cased base/mod/accr names), 6=skill-calc link; on link-table miss it normalizes szText to a packed 4-char code and looks it up via Excel link tables. Writes the resolved type tag into *pdwOutType (1 = found via link index, 0 = resolved via class-id/code fallback). Returns the table index (or -1/0 on failure). __fastcall.
@@ -69,8 +99,8 @@ void __fastcall DATATBLS_BuildStatesDataBitMask(struct D2StatesDataTbls * pState
 void __fastcall DATATBLS_BuildStatesDataList(struct D2AllStatesDataTbl * * ppAllStatesData, short * pCounter, uint32_t nFlag);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __fastcall TXT_States_AllocItemTypesStateDataTable(struct D2AllStatesDataTbl * * ppAllStatesData, short * pCounter, int32_t nOffset);
-char * __stdcall GetUnitClassIdToName(struct D2UnitStrc * pUnit, char * szResult, size_t nSize);
-char * __stdcall GetNameByClassIdAndType(eD2UnitType eUnitType, int16_t nClassId, char * szResult, size_t nSize);
+char * __stdcall GetUnitClassIdToName(struct D2UnitStrc * pUnit, char * szResult, uint32_t nSize);
+char * __stdcall GetNameByClassIdAndType(eD2UnitType eUnitType, int16_t nClassId, char * szResult, uint32_t nSize);
 void __stdcall StoreDataTables(char * szFileName, void * pWriteBuffer, size_t nSize, uint32_t nRecordCount);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void * __fastcall ARCHIVE_LoadDataTables(struct D2PoolManagerStrc * pMemory, char * szTableName, char * szExtension, uint32_t * pSize, char * szFile, int32_t nLine);
@@ -79,8 +109,20 @@ void * __fastcall ARCHIVE_LoadDataTables(struct D2PoolManagerStrc * pMemory, cha
 void * __stdcall CompileTxt(struct D2PoolManagerStrc * pMemory, char * szTableName, struct D2BinFieldInputStrc * pBinFieldInput, int * nTxtTableSize, int32_t nEndOffset);
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __stdcall UnloadBin(void * pTxtTable);
+#if defined(_WIN64)
+// A compiled .bin table keeps the 32-bit record layout on disk. A record type that holds
+// runtime pointers is wider on a 64-bit build, so WidenBinTable copies each 32-bit record's
+// data spans into a native record and leaves the pointer fields zero. The result follows the
+// same allocation convention as CompileTxt, so UnloadBin frees it.
+struct D2BinRecordSpanStrc {
+    int32_t nSrcOffset; // byte offset in the 32-bit (on-disk) record
+    int32_t nDstOffset; // byte offset in the native record
+    int32_t nSize;      // bytes copied
+};
+void * WidenBinTable(void * pTxtTable, int32_t nRecords, int32_t nSrcStride, size_t nDstStride, const D2BinRecordSpanStrc * pSpans, int32_t nSpans);
+#endif
 // Populates the wide-string class-name field in every row of the CharStats txt table. For each row, looks up the string-table key via STRTABLE_GetStringByKey; if not found, formats a fallback like "&lt;keyname&gt;" and writes the wide string (up to nWstringSize chars) into the destination field at the computed struct offset.
-void __fastcall TXT_CharStats_DefineWideStringClass(struct D2CharStatsTxt * pTxtCharStats, int32_t nTxtCharStatsSize, int32_t nStructStride, int32_t nSrcFieldOffset, int32_t nDstFieldOffset, size_t nWstringSize);
+void __fastcall TXT_CharStats_DefineWideStringClass(struct D2CharStatsTxt * pTxtCharStats, int32_t nTxtCharStatsSize, int32_t nStructStride, int32_t nSrcFieldOffset, int32_t nDstFieldOffset, uint32_t nWstringSize);
 // Shutdown teardown for the miscellaneous data tables in sgtDataTable. Always frees compcode (table + its TxtLink); then, only when bUseTxt is set, frees the remaining misc txt tables and their TxtLinks: playerclass, bodylocs, storepage, elemtypes, hitclass, colors, hiredesc, monmode, plrmode, monai, monplace, skillcalc, misscalc, skillsheader, events. The base-pointer fixup before FreeServerMemory differs by table (-1 or -2 element offset) and the source-line code passed to the allocator depends on whether gpaMiscTxtTables is set (aggregate vs individual allocation), mirroring how each was allocated.
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __stdcall DATATBLS_FreeMiscTxtTables();

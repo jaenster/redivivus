@@ -185,7 +185,7 @@ void __fastcall Free(D2NetDataStrc * pNetData) {
     D2_FREE_AT(pNetData, ".\\Src\\Safesock.cpp", 0x183);
 }
 
-int32_t __fastcall WSASocket2_Read(D2NetDataStrc * pNetData, char * pBuffer, size_t nSize) {
+int32_t __fastcall WSASocket2_Read(D2NetDataStrc * pNetData, char * pBuffer, uint32_t nSize) {
     int nWSAError;
     if (pNetData && !pNetData->bBlocked) {
       int nBytesRead;
@@ -204,11 +204,11 @@ int32_t __fastcall WSASocket2_Read(D2NetDataStrc * pNetData, char * pBuffer, siz
     return 0;
 }
 
-int32_t __fastcall WSASocket2_Send(D2NetDataStrc * pNetData, char * pBytes, size_t nSize) {
+int32_t __fastcall WSASocket2_Send(D2NetDataStrc * pNetData, char * pBytes, uint32_t nSize) {
     int nWSAError;
     CRITICAL_SECTION* lpCriticalSection;
     if (pNetData && !pNetData->bBlocked) {
-      size_t nBytesSent;
+      int nBytesSent;
       lpCriticalSection = &pNetData->pSync;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
       /* int flags for send */ /* int len for send */ /* char * buf for send */ /* SOCKET s for send */ nBytesSent = send(pNetData->hSocket, pBytes, nSize, 0);
@@ -237,7 +237,7 @@ int32_t __fastcall WSASocket2_Send(D2NetDataStrc * pNetData, char * pBytes, size
     return 0;
 }
 
-int32_t __fastcall WSASocket2_SendOrCloseOnTimeout(D2NetDataStrc * pNetData, char * pBytes, size_t nSize) {
+int32_t __fastcall WSASocket2_SendOrCloseOnTimeout(D2NetDataStrc * pNetData, char * pBytes, uint32_t nSize) {
     int nBytesSent = send(pNetData->hSocket, pBytes, nSize, 0);
     int nWSAError = WSAGetLastError();
     if (nBytesSent == -1 && nWSAError == 0x274c) {
@@ -430,20 +430,20 @@ char * __fastcall inet_nameToIp(char * szText) {
 
 int __fastcall SAFESOCK_SetSocketNonBlocking(D2NetDataStrc * pNetData, u_long bNonBlocking) {
     u_long nIoctlArg = bNonBlocking;
-    /* u_long * argp for ioctlsocket */ /* long cmd for ioctlsocket */ /* SOCKET s for ioctlsocket */ unsigned int hSocket = pNetData->hSocket;
+    /* u_long * argp for ioctlsocket */ /* long cmd for ioctlsocket */ /* SOCKET s for ioctlsocket */ SOCKET hSocket = pNetData->hSocket;
     ioctlsocket(hSocket, -0x7ffb9982, &nIoctlArg);
     return 1;
 }
 
 void __fastcall SAFESOCK_EnableNonBlocking(D2NetDataStrc * pNetData) {
     u_long nIoctlArg = 1;
-    unsigned int hSocket = pNetData->hSocket;
+    SOCKET hSocket = pNetData->hSocket;
     ioctlsocket(hSocket, -0x7ffb9982, &nIoctlArg);
 }
 
 void __fastcall SAFESOCK_DisableNonBlocking(D2NetDataStrc * pNetData) {
     u_long nIoctlArg = 0;
-    unsigned int hSocket = pNetData->hSocket;
+    SOCKET hSocket = pNetData->hSocket;
     ioctlsocket(hSocket, -0x7ffb9982, &nIoctlArg);
 }
 

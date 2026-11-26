@@ -33,7 +33,7 @@
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Game/SCmd.h"
@@ -403,7 +403,6 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
     int32_t nBitPos;
     D2StatListExStrc* pStatListEx;
     uint32_t nMaxVal;
-    D2DataTableTxtStrc* pDataTable;
     int32_t nBitPosCheck;
     uint32_t nClampedVal;
     uint32_t* pFlagDword;
@@ -470,13 +469,12 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
               } else {
                 Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, 1, 1);
                 nStatBufIdx = 0;
-                pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 if (nBitPosCheck > 0) {
                   do {
                     nStatId = (int)aStatBuf[nStatBufIdx].uKey.sKey.wStatIndex;
                     nStatValue = aStatBuf[nStatBufIdx].nStatValue;
                     nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].uKey.sKey.wSubIndex;
-                    pItemStatCost = nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
+                    pItemStatCost = nStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + nStatId : nullptr;
                     if (pItemStatCost) {
                       bySendBits = pItemStatCost->sendBits;
                       if (bySendBits > 0) {
@@ -511,7 +509,6 @@ void __fastcall PLAYER_SendStateListToClient(D2UnitStrc * pUnit, D2ClientStrc * 
                         }
 
                         Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nValue, (uint32_t)pItemStatCost->sendBits);
-                        pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                       }
                     }
 
@@ -555,7 +552,6 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
     int32_t nCopiedStats;
     uint32_t nMaxVal;
     uint32_t nClampedVal;
-    D2DataTableTxtStrc* pDataTable;
     int nFlagDwordCount;
     D2ItemStatCostTxt* pItemStatCost;
     uint32_t nValue;
@@ -620,13 +616,12 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
                       sPacket.nUnitGUID = nUnitGUID;
                       Fog::BitBuffer::InitBitBuffer(&bitBuf, sPacket.aBitStream, 0xf4);
                       nStatBufIdx = 0;
-                      pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                       if (nCopiedStats > 0) {
                         do {
                           nStatId = (int)aStatBuf[nStatBufIdx].uKey.sKey.wStatIndex;
                           nStatValue = aStatBuf[nStatBufIdx].nStatValue;
                           nStatSubIndex = (uint32_t)(uint16_t)aStatBuf[nStatBufIdx].uKey.sKey.wSubIndex;
-                          pItemStatCost = nStatId < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + nStatId : nullptr;
+                          pItemStatCost = nStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + nStatId : nullptr;
                           if (pItemStatCost) {
                             bySendBits = pItemStatCost->sendBits;
                             if (bySendBits > 0) {
@@ -661,7 +656,6 @@ void __fastcall PLAYER_SendStateDeltaToClient(D2UnitStrc * pUnit, D2ClientStrc *
                               }
 
                               Fog::BitBuffer::WriteValueToBitBuffer(&bitBuf, nValue, (uint32_t)pItemStatCost->sendBits);
-                              pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                             }
                           }
 
@@ -752,7 +746,7 @@ void __fastcall PLAYER_SendHoverTextToClient(D2UnitStrc * pUnit, D2ClientStrc * 
           sPacket.szName[0] = '\0';
           sPacket.nMessageType = '\x05';
           sPacket.nLanguage = D2Common::Chat::GetLanguageCode(pHoverText);
-          memset(sPacket.szMessage, 0, 0x100);
+          memset(sPacket.szMessage, 0, sizeof(sPacket.szMessage));
           D2Common::Chat::TEXT_CopyHoverMessageString(pHoverText, sPacket.szMessage);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x26_CHATSTART(pClient, &sPacket);
           return;

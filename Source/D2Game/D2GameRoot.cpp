@@ -177,10 +177,11 @@ void __stdcall TASK_InitializeClock() {
 // Task queue: calculates time until next scheduled task. Enters critical section for task slot (nParam & 0x1F), reads first task timestamp from priority queue, and returns delta from current timestamp.
 int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot) {
     int nTimeDelta = 100;
-    EnterCriticalSection(aTaskQueueCriticalSections + (nQueueSlot & 0x1f));
-    D2TaskQueueSlotStrc* pTaskSlot = GAME::Task::gaTaskQueueHeadArray[nQueueSlot & 0x1f];
+    int nSlot = nQueueSlot & 0x1f;
+    EnterCriticalSection(aTaskQueueCriticalSections + nSlot);
+    D2TaskQueueSlotStrc* pTaskSlot = GAME::Task::gaTaskQueueHeadArray[nSlot];
     if (!pTaskSlot) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + (nQueueSlot & 0x1f));
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + nSlot);
       return 100;
     }
 

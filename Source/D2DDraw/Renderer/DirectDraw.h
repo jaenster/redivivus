@@ -468,7 +468,7 @@ void __fastcall PerspectiveScalePosition(int32_t nPosX, int32_t nPosY, int32_t n
 void __fastcall SetDefaultPerspectiveFactor();
 int * __fastcall GetRenderStatistics();
 BOOL __fastcall ActivateWindow();
-BOOL __fastcall SetOption(int32_t nOption, int32_t nValue);
+BOOL __fastcall SetOption(int32_t nOption, intptr_t nValue);
 void __fastcall DirectDrawErrorHandler(char * szContext, int32_t nErrorCode);
 BOOL __stdcall InternalCutsceneWindow();
 void __fastcall PlayCutScene(char * szFile, int32_t nResolutionMode, void * fpFrame);

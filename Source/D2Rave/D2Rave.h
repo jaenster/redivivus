@@ -35,7 +35,7 @@ int RaveBlit();
 int RaveChangeRes(int nUnused, int nMode);
 int RaveScreenGrab(uint8_t * pDest);
 int RaveSetFullScreen(int bFullScreen);
-int RaveSetOption(unsigned int nOption, int nValue);
+int RaveSetOption(unsigned int nOption, intptr_t nValue);
 int RaveCutsceneCreateWindow();
 void RavePlayCutscene(const char * szFile, int nMode, void (*pfnFrame)());
 int RaveCheckCutscene();

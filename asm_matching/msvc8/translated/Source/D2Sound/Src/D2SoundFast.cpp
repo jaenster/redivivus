@@ -31,41 +31,25 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2SoundWavCacheEntryStrc) == 0x60, 
 
 namespace D2Sound { namespace Src { namespace D2SoundFast {
 int gnAmbientSoundEntryCount = 0x8; D2_GLOBAL_GUARD(gnAmbientSoundEntryCount, "D2Sound::Src::D2SoundFast::gnAmbientSoundEntryCount");
-int gAmbientSoundTable[16] = {
-    (int)(uintptr_t)(char*)"data\\global\\music\\common\\options.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act1\\caves.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act1\\monastery.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act1\\crypt.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\harem.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\tombs.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\spider.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\kurastsewer.wav",
-    0x0
+D2AmbientSoundEntryStrc gAmbientSoundTable[8] = {
+    { (char*)"data\\global\\music\\common\\options.wav", 0x0 },
+    { (char*)"data\\global\\music\\act1\\caves.wav", 0x0 },
+    { (char*)"data\\global\\music\\act1\\monastery.wav", 0x0 },
+    { (char*)"data\\global\\music\\act1\\crypt.wav", 0x0 },
+    { (char*)"data\\global\\music\\act2\\harem.wav", 0x0 },
+    { (char*)"data\\global\\music\\act2\\tombs.wav", 0x0 },
+    { (char*)"data\\global\\music\\act3\\spider.wav", 0x0 },
+    { (char*)"data\\global\\music\\act3\\kurastsewer.wav", 0x0 }
 }; D2_GLOBAL_GUARD(gAmbientSoundTable, "D2Sound::Src::D2SoundFast::gAmbientSoundTable");
-int gaAmbientSoundEntryTable[16] = {
-    (int)(uintptr_t)(char*)"data\\global\\music\\introedit.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act5\\icecaves.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act5\\xtemple.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\desert.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act2\\sewer.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\kurast.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act3\\kurastsewer.wav",
-    0x0,
-    (int)(uintptr_t)(char*)"data\\global\\music\\act4\\diablo.wav",
-    0x0
+D2AmbientSoundEntryStrc gaAmbientSoundEntryTable[8] = {
+    { (char*)"data\\global\\music\\introedit.wav", 0x0 },
+    { (char*)"data\\global\\music\\act5\\icecaves.wav", 0x0 },
+    { (char*)"data\\global\\music\\act5\\xtemple.wav", 0x0 },
+    { (char*)"data\\global\\music\\act2\\desert.wav", 0x0 },
+    { (char*)"data\\global\\music\\act2\\sewer.wav", 0x0 },
+    { (char*)"data\\global\\music\\act3\\kurast.wav", 0x0 },
+    { (char*)"data\\global\\music\\act3\\kurastsewer.wav", 0x0 },
+    { (char*)"data\\global\\music\\act4\\diablo.wav", 0x0 }
 }; D2_GLOBAL_GUARD(gaAmbientSoundEntryTable, "D2Sound::Src::D2SoundFast::gaAmbientSoundEntryTable");
 uint32_t gnAmbientSoundCount = 0x8; D2_GLOBAL_GUARD(gnAmbientSoundCount, "D2Sound::Src::D2SoundFast::gnAmbientSoundCount");
 }}} // namespace D2Sound::Src::D2SoundFast
@@ -89,7 +73,7 @@ static D2SoundWavCacheEntryStrc * gpWavFileCacheListHead = 0; D2_STATIC_GUARD(gp
 
 namespace D2Sound { namespace Src { namespace D2SoundFast {
 
-static int * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
+static D2AmbientSoundEntryStrc * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
     if (!gbAmbientSoundLangInitialized) {
       gbAmbientSoundLangInitialized = 1;
       gnAmbientSoundLanguageCode = SOUND_GetLanguageCode();
@@ -100,18 +84,18 @@ static int * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
     }
 
     {
-      int* pAmbientEntry;
+      D2AmbientSoundEntryStrc* pAmbientEntry;
       if (!(nIndex < gnAmbientSoundEntryCount)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
         exit(-1);
       }
 
-      pAmbientEntry = gaAmbientSoundEntryTable + nIndex * 2;
+      pAmbientEntry = gaAmbientSoundEntryTable + nIndex;
       if (gnAmbientSoundLanguageCode) {
         return pAmbientEntry;
       }
 
-      pAmbientEntry = gAmbientSoundTable + nIndex * 2;
+      pAmbientEntry = gAmbientSoundTable + nIndex;
       return pAmbientEntry;
     }
 }
@@ -137,7 +121,7 @@ void __stdcall SOUND_ResetAmbientSoundFlags() {
     DWORD dwLangCode = gnAmbientSoundLanguageCode;
 
     do {
-      int* pEntry;
+      D2AmbientSoundEntryStrc* pEntry;
       if (!gbAmbientSoundLangInitialized) {
         gbAmbientSoundLangInitialized = 1;
         dwLangCode = SOUND_GetLanguageCode();
@@ -152,13 +136,13 @@ void __stdcall SOUND_ResetAmbientSoundFlags() {
         exit(-1);
       }
 
-      pEntry = gaAmbientSoundEntryTable + i * 2;
+      pEntry = gaAmbientSoundEntryTable + i;
       if (!dwLangCode) {
-        pEntry = gAmbientSoundTable + i * 2;
+        pEntry = gAmbientSoundTable + i;
       }
 
       i++;
-      pEntry[1] = 0;
+      pEntry->bPlayed = 0;
     } while (i < gnAmbientSoundEntryCount);
 }
 
@@ -205,7 +189,7 @@ void __stdcall SOUND_FadeOutMusic() {
 
 int __stdcall SOUND_PlayNextAmbientSound() {
     uint32_t dwVolume;
-    int* pAmbientEntry;
+    D2AmbientSoundEntryStrc* pAmbientEntry;
     BOOL BVar1;
     int nRandIdx;
     DWORD dwLanguageCode;
@@ -227,7 +211,7 @@ int __stdcall SOUND_PlayNextAmbientSound() {
       if (nAmbientCount > 0) {
         do {
           pAmbientEntry = SOUND_GetAmbientSoundEntry(nAmbientIdx);
-          if (!pAmbientEntry[1]) {
+          if (!pAmbientEntry->bPlayed) {
             goto play_unplayed_track;
           }
 
@@ -264,11 +248,11 @@ int __stdcall SOUND_PlayNextAmbientSound() {
             exit(-1);
           }
 
-          pAmbientEntry = gaAmbientSoundEntryTable + nRandIdx * 2;
+          pAmbientEntry = gaAmbientSoundEntryTable + nRandIdx;
           if (!dwLanguageCode) {
-            pAmbientEntry = gAmbientSoundTable + nRandIdx * 2;
+            pAmbientEntry = gAmbientSoundTable + nRandIdx;
           }
-          if (pAmbientEntry[1]) {
+          if (pAmbientEntry->bPlayed) {
             nRandIdx++;
             if (nRandIdx >= nAmbientCount) {
               nRandIdx = 0;
@@ -285,8 +269,8 @@ int __stdcall SOUND_PlayNextAmbientSound() {
         nAmbientCount = gnAmbientSoundEntryCount;
       }
       bHasStreamBuffer = gpMusicStreamBuffer != 0;
-      szSoundFile = (char*)*pAmbientEntry;
-      pAmbientEntry[1] = 1;
+      szSoundFile = pAmbientEntry->szFilename;
+      pAmbientEntry->bPlayed = 1;
       if (bHasStreamBuffer) {
         dwVolume = D2SoundSmp::SOUNDSMP_GetEffectiveVolume();
         nAmbientCount = gnAmbientSoundEntryCount;

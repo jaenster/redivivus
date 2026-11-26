@@ -4,11 +4,9 @@
 #include "Source/D2Common/Drlg/Outdoors.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
-#include "Source/D2Game/D2Game.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2Client/Game/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DataTbls/LvlTbls.h"
 #include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
@@ -78,7 +76,7 @@ typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknow
 
 #ifndef RECON_FPTD_fpLevelDataFn2
 #define RECON_FPTD_fpLevelDataFn2
-typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
+typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, int nNodeIndex, int * param_1_00);
 #endif
 
 

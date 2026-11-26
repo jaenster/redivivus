@@ -934,7 +934,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
           break;
         }
 
-        iVar1 = (intptr_t)lp - (intptr_t)__frame0.pDumpData;
+        iVar1 = (int)(lp - __frame0.pDumpData);
         if (!*(int*)(pDumpHeader + 8)) {
           iVar1 = *(int*)pDumpHeader + iVar1;
         }
@@ -959,7 +959,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
           for (nColumn = 0; nColumn < nChunkLen; nColumn++) {
             pLineCursor = __frame0.szLineBuf;
             pLineCursor = pLineCursor + strlen(pLineCursor) + 1;
-            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1)), 0x100 - ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1)), nColumn & 3 ? (char*)"%02X" : (char*)" %02X", (uint32_t)lp[nColumn]);
+            Storm::Source::SSTR::SStrPrintf(__frame0.szLineBuf + ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1)), (uint32_t)(0x100 - ((intptr_t)pLineCursor - (intptr_t)(__frame0.szLineBuf + 1))), nColumn & 3 ? (char*)"%02X" : (char*)" %02X", (uint32_t)lp[nColumn]);
           }
 
           pDumpHeader = __frame0.pDumpHeaderSaved;
@@ -1009,7 +1009,7 @@ void __stdcall CloseStaleLogFileHandles() {
     do {
       if (globalOpenFileHandleArray[nSlotOffset] && (dwNow - (int)gLogFileLastWriteTimeArray[nSlotOffset] > 15000 || dwNow - (int)gLogFileLastAccessTimeArray[nSlotOffset] > 5000)) {
         fclose(globalOpenFileHandleArray[nSlotOffset]);
-        *(uint32_t*)&globalOpenFileHandleArray[nSlotOffset] = 0;
+        globalOpenFileHandleArray[nSlotOffset] = nullptr;
       }
 
       nSlotOffset++;
@@ -1153,7 +1153,7 @@ char * __fastcall ReadLogFileRange(uint8_t * szFileName, int32_t nStartOffset, i
 
 // Writes one log record to its log file, prefixed with the record's time of day.
 void __fastcall LogToFile(D2LogRecordStrc * pLogRecord) {
-    D2LogRecordStrc* nSlot;
+    uint32_t nSlot;
     if (pLogRecord->nType != 1) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x2a1);
       exit(-1);
@@ -1162,7 +1162,7 @@ void __fastcall LogToFile(D2LogRecordStrc * pLogRecord) {
     D2LogRecordStrc* szFileName = pLogRecord + 1;
     uint32_t nMsgLen = Storm::Source::SSTR::SStrLen((char*)szFileName);
     uint8_t* szText = (uint8_t*)((intptr_t)&szFileName->tLink.pPrevLink + nMsgLen + 1);
-    FILE* pFile = FindOrOpenLogFileSlot((uint8_t*)szFileName, (uint32_t*)&nSlot);
+    FILE* pFile = FindOrOpenLogFileSlot((uint8_t*)szFileName, &nSlot);
     if (!pFile) {
       return;
     }
@@ -1172,7 +1172,7 @@ void __fastcall LogToFile(D2LogRecordStrc * pLogRecord) {
 
     fwrite(szText, Storm::Source::SSTR::SStrLen((char*)szText), 1, pFile);
     DWORD dwNow = GetTickCount();
-    gLogFileLastAccessTimeArray[(intptr_t)nSlot] = dwNow;
+    gLogFileLastAccessTimeArray[nSlot] = dwNow;
 }
 
 uint32_t * __fastcall Unreferenced_0040f810(uint32_t * pData) {
@@ -1206,7 +1206,7 @@ int32_t __thiscall NormalizeListNodePointer(int32_t pThis, int32_t pNodePtr) {
 
 void __stdcall ExitOrCrashCleanup() {
     DWORD dwTickCountC;
-    uint32_t nQueueCount;
+    intptr_t nQueueCount; // the queue head link word (a TSLink pointer or tag), tested for non-zero
     if (!gLogManagerInitialized) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x1c8);
       exit(-1);
@@ -1508,7 +1508,7 @@ void __stdcall StopLogWriterThread() {
     LeaveCriticalSection(&gLogMessageQueueCS);
 }
 
-void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose) {
+void EnqueueLogMessage(char * szText1, char * szText2, void * pData, uint32_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose) {
     BOOL bIsBadPtr;
     StormLinkStrc** pPrevLink;
     if (!(!gLogWriterThreadStopFlag && gLogManagerInitialized)) {

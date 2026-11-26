@@ -42,8 +42,8 @@ namespace D2Game::GAME::Server::ServerCmd {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 void __fastcall WriteValueBySize(struct D2BitBufferStrc * pBitBuffer, uint32_t nValue);
 void __fastcall Unreferenced_0053b140(struct D2BitBufferStrc * pBitBuffer, uint16_t nValue);
-int __fastcall Unreferenced_0053b180(struct D2UnitStrc * pUnit);
-void thunk_NET_D2GS_SERVER_SendPacketToClient(char * szText, size_t nSize);
+int * __fastcall Unreferenced_0053b180(struct D2UnitStrc * pUnit);
+void thunk_NET_D2GS_SERVER_SendPacketToClient(char * szText, uint32_t nSize);
 int __fastcall SERVERCMD_SendBufferToClient(int32_t nClientId, uint16_t wGuildFlags, uint16_t wUniqueCode, char * szPlayerName);
 void __fastcall NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated(int32_t nClientId);
 void __fastcall SERVERCMD_SendSingleBytePacket(int32_t nClientId);

@@ -37,6 +37,16 @@ struct D2AutoMapLvlTbls {
 };
 
 #endif // D2_DEFINED_D2AutoMapLvlTbls
+#ifndef D2_DEFINED_D2AutomapRelatedTxt
+#define D2_DEFINED_D2AutomapRelatedTxt
+struct D2AutomapRelatedTxt {
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+
+    /* 0x00 */ int nIndex;
+    /* 0x04 */ int nCount;
+};
+
+#endif // D2_DEFINED_D2AutomapRelatedTxt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct __attribute__((packed)) D2AutomapTxt {
     /* 0x00 */ char LevelName[16];

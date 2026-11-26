@@ -126,7 +126,7 @@ int __fastcall CB_OnPacket_0x0C_CreateGame(MCP_GTM_CB_GameReq * pPkt, uint32_t n
     if (pPkt->nCmd != 0x0C) {
         return 0;
     }
-    D2GAME_10048(pPkt->dwToken, &pPkt->pGameName, pPkt->wField0B, pPkt->wField09, pPkt->wField0D, pPkt->aPayload);
+    D2GAME_10048(pPkt->dwToken, reinterpret_cast<char **>(&pPkt->dwGameNameRef), pPkt->wField0B, pPkt->wField09, pPkt->wField0D, pPkt->aPayload);
     return 1;
 }
 
@@ -138,7 +138,7 @@ int __fastcall CB_OnPacket_0x0D_JoinGame(MCP_GTM_CB_GameReq * pPkt, uint32_t nLe
     if (pPkt->nCmd != 0x0D) {
         return 0;
     }
-    D2GAME_10049(pPkt->dwToken, &pPkt->pGameName, pPkt->wField0B, pPkt->wField09, pPkt->wField0D, pPkt->aPayload);
+    D2GAME_10049(pPkt->dwToken, reinterpret_cast<char **>(&pPkt->dwGameNameRef), pPkt->wField0B, pPkt->wField09, pPkt->wField0D, pPkt->aPayload);
     return 1;
 }
 

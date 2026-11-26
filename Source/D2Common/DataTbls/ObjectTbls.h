@@ -20,6 +20,138 @@ struct D2ObjectsTxt;
 struct D2PoolManagerStrc;
 struct D2ShrinesTxt;
 
+// Data types
+#ifndef D2_DEFINED_D2ObjGroupTxt
+#define D2_DEFINED_D2ObjGroupTxt
+struct D2ObjGroupTxt {
+    /* 0x00 */ uint32_t dwId[8];
+    /* 0x20 */ uint8_t nDensity[8];
+    /* 0x28 */ uint8_t nProbability[8];
+    /* 0x30 */ uint8_t nShrines;
+    /* 0x31 */ uint8_t nWells;
+    /* 0x32 */ uint16_t pad0x32;
+};
+
+#endif // D2_DEFINED_D2ObjGroupTxt
+#ifndef D2_DEFINED_D2ShrinesTxt
+#define D2_DEFINED_D2ShrinesTxt
+struct D2ShrinesTxt {
+    /* 0x00 */ uint8_t nCode;
+    /* 0x01 */ uint8_t pad0x01[3];
+    /* 0x04 */ uint32_t dwArg0;
+    /* 0x08 */ uint32_t dwArg1;
+    /* 0x0C */ uint32_t dwDurationInFrames;
+    /* 0x10 */ uint8_t nResetTimeInMins;
+    /* 0x11 */ uint8_t nRarity;
+    /* 0x12 */ char szViewname[32];
+    /* 0x32 */ char szNiftyphrase[128];
+    /* 0xB2 */ uint8_t nEffectClass;
+    /* 0xB3 */ uint8_t pad0xB3;
+    /* 0xB4 */ uint32_t dwLevelMin;
+};
+
+#endif // D2_DEFINED_D2ShrinesTxt
+#ifndef D2_DEFINED_D2ObjectsTxt
+#define D2_DEFINED_D2ObjectsTxt
+struct __attribute__((packed)) D2ObjectsTxt {
+    /* 0x000 */ char Name[64];
+    /* 0x040 */ uint16_t NameWideString[64];
+    /* 0x0C0 */ char Token[2];
+    /* 0x0C2 */ uint8_t field_0xc2;
+    /* 0x0C3 */ char SpawnMax;
+    /* 0x0C4 */ bool Selectable[8];
+    /* 0x0CC */ char TrapProb;
+    /* 0x0CD */ uint8_t field_0xcd;
+    /* 0x0CE */ uint8_t field_0xce;
+    /* 0x0CF */ uint8_t field_0xcf;
+    /* 0x0D0 */ int SizeX;
+    /* 0x0D4 */ int SizeY;
+    /* 0x0D8 */ uint32_t FrameCnt[8]; // per-mode frame count, 24.8 fixed point; read with an unsigned >> 8
+    /* 0x0F8 */ short FrameDelta[8];
+    /* 0x108 */ bool CycleAnim[8];
+    /* 0x110 */ char Lit[8];
+    /* 0x118 */ bool BlocksLight[8];
+    /* 0x120 */ bool HasCollision[8];
+    /* 0x128 */ bool IsAttackable;
+    /* 0x129 */ uint8_t Start[8];
+    /* 0x131 */ char OrderFlag[8];
+    /* 0x139 */ bool EnvEffect;
+    /* 0x13A */ bool IsDoor;
+    /* 0x13B */ bool BlocksVis;
+    /* 0x13C */ char Orientation;
+    /* 0x13D */ bool PreOperate;
+    /* 0x13E */ char Trans;
+    /* 0x13F */ bool Mode[8];
+    /* 0x147 */ uint8_t field_0x147;
+    /* 0x148 */ int Xoffset;
+    /* 0x14C */ int Yoffset;
+    /* 0x150 */ bool Draw;
+    /* 0x151 */ bool HD;
+    /* 0x152 */ bool TR;
+    /* 0x153 */ bool LG;
+    /* 0x154 */ bool RA;
+    /* 0x155 */ bool LA;
+    /* 0x156 */ bool RH;
+    /* 0x157 */ bool LH;
+    /* 0x158 */ bool SH;
+    /* 0x159 */ bool S1;
+    /* 0x15A */ bool S2;
+    /* 0x15B */ bool S3;
+    /* 0x15C */ bool S4;
+    /* 0x15D */ bool S5;
+    /* 0x15E */ bool S6;
+    /* 0x15F */ bool S7;
+    /* 0x160 */ bool S8;
+    /* 0x161 */ char TotalPieces;
+    /* 0x162 */ uint8_t XSpace;
+    /* 0x163 */ uint8_t YSpace;
+    /* 0x164 */ char Red;
+    /* 0x165 */ char Green;
+    /* 0x166 */ char Blue;
+    /* 0x167 */ char SubClass;
+    /* 0x168 */ int NameOffset;
+    /* 0x16C */ uint8_t field_0x16c;
+    /* 0x16D */ bool MonsterOK;
+    /* 0x16E */ char OperateRange;
+    /* 0x16F */ uint8_t ShrineFunction; // read zero-extended (movzx) by OBJECT_DispatchShrineServerActivate 004bd5c0
+    /* 0x170 */ char Act;
+    /* 0x171 */ bool Lockable;
+    /* 0x172 */ bool Gore;
+    /* 0x173 */ bool Restore;
+    /* 0x174 */ bool RestoreVirgins;
+    /* 0x175 */ bool Sync;
+    /* 0x176 */ uint8_t field_0x176;
+    /* 0x177 */ uint8_t field_0x177;
+    /* 0x178 */ int Parm[8]; // Objects.txt Parm0..Parm7; the bin field table (TXT loader 00640965..) stores Parm0 at +0x178, Parm7 at +0x194; +0x176/+0x177 are padding after Sync
+    /* 0x198 */ char nTgtFX;
+    /* 0x199 */ char nTgtFY;
+    /* 0x19A */ char nTgtBX;
+    /* 0x19B */ char nTgtBY;
+    /* 0x19C */ char Damage;
+    /* 0x19D */ bool CollisionSubst;
+    /* 0x19E */ uint8_t field_0x19e;
+    /* 0x19F */ uint8_t field_0x19f;
+    /* 0x1A0 */ int Left;
+    /* 0x1A4 */ int Top;
+    /* 0x1A8 */ int Width;
+    /* 0x1AC */ int Height;
+    /* 0x1B0 */ char Beta;
+    /* 0x1B1 */ uint8_t InitFn;
+    /* 0x1B2 */ uint8_t PopulateFn;
+    /* 0x1B3 */ char OperateFn;
+    /* 0x1B4 */ eD2ObjectClientFn ClientFn;
+    /* 0x1B5 */ bool Overlay;
+    /* 0x1B6 */ char BlockMissile;
+    /* 0x1B7 */ bool DrawUnder;
+    /* 0x1B8 */ bool OpenWarp;
+    /* 0x1B9 */ uint8_t field_0x1b9;
+    /* 0x1BA */ uint8_t field_0x1ba;
+    /* 0x1BB */ uint8_t field_0x1bb;
+    /* 0x1BC */ int AutoMap;
+};
+
+#endif // D2_DEFINED_D2ObjectsTxt
+
 namespace D2Common::DATATBLS::ObjectTbls {
 
 // Function declarations

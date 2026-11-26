@@ -54,22 +54,30 @@ struct D2GfxHashEntryStrc {
 };
 
 #endif // D2_DEFINED_D2GfxHashEntryStrc
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
+// The sprite hash table: 0x2000 bucket heads behind 0x2000 dwords, the layout of D2CelDataHashTableStrc at 16x the size.
+// 1.14d clears all 0x10000 bytes; no GfxHash function reads the dwords.
+struct D2GfxHashTableStrc {
+    /* 0x0000 */ uint32_t adwBucketState[0x2000];
+    /* 0x8000 */ struct D2GfxHashEntryStrc * apBuckets[0x2000];
+};
+#endif // D2_MODULE_D2CMP
 namespace D2CMP::SRC::GfxHash {
 
 // Function declarations
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-// Unlinks hash entry pEntry from its bucket (pHashTable + 0x8000 + [pEntry+0]*4 -> [pEntry+0x2c]), frees the cache block's
+// Unlinks hash entry pEntry from its bucket (pHashTable->apBuckets[pEntry->nHashKey] -> pEntry->pNext), frees the cache block's
 // async frame buffer (+0x20 -> tDecode) and the entry itself. The entry node struct (+0 hash, +0x20 cache block, +0x28/+0x2c links) is untyped.
 // @sourcefile .\SRC\GfxHash.cpp
-void __thiscall GFXHASH_UnlinkCacheEntry(uint8_t * pHashTable, struct D2PoolManagerStrc * pMemory, struct D2GfxHashEntryStrc * pEntry);
-void __fastcall GFXHASH_InitHashTable(void * pHashTable);
-void __fastcall GFX_UnlinkCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, struct D2GfxHashEntryStrc * pEntry);
-void __fastcall IGNORELIST_Initialize_Unref_0060ab70(void * pHashTable);
+void __thiscall GFXHASH_UnlinkCacheEntry(struct D2GfxHashTableStrc * pHashTable, struct D2PoolManagerStrc * pMemory, struct D2GfxHashEntryStrc * pEntry);
+void __fastcall GFXHASH_InitHashTable(struct D2GfxHashTableStrc * pHashTable);
+void __fastcall GFX_UnlinkCacheEntry(struct D2PoolManagerStrc * pMemory, struct D2GfxHashTableStrc * pHashTable, struct D2GfxHashEntryStrc * pEntry);
+void __fastcall IGNORELIST_Initialize_Unref_0060ab70(struct D2GfxHashTableStrc * pHashTable);
 uint32_t __fastcall GFXHASH_CalcDirectionIndex(struct D2GfxDataStrc * pGfxData, uint32_t * pnDirectionDivisor, struct D2CelFileCacheEntryStrc * pCelEntry);
-struct D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(uint8_t * pHashTable, struct D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, struct D2CelFileCacheEntryStrc * pCelEntry);
+struct D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(struct D2GfxHashTableStrc * pHashTable, struct D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, struct D2CelFileCacheEntryStrc * pCelEntry);
 // @sourcefile .\SRC\GfxHash.cpp
-struct D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(struct D2PoolManagerStrc * pMemory, void * pHashTable, struct D2CelCacheBlockStrc * pCacheBlock, struct D2GfxDataStrc * pGfxData, struct D2CelFileCacheEntryStrc * pCelEntry);
+struct D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(struct D2PoolManagerStrc * pMemory, struct D2GfxHashTableStrc * pHashTable, struct D2CelCacheBlockStrc * pCacheBlock, struct D2GfxDataStrc * pGfxData, struct D2CelFileCacheEntryStrc * pCelEntry);
 #endif // D2_MODULE_D2CMP
 // 1 internal function (defined in .cpp)
 

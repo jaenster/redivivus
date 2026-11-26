@@ -38,7 +38,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_LinearMissileCount(D2UnitStrc * pUnit, eD2S
     }
 
     int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxtBase->calc[0], eSkill, nSkillLvl);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -151,7 +151,7 @@ D2UnitStrc * __fastcall SKILLSSOR_CltCreateInfernoMissile(D2UnitStrc * pUnit, eD
         nTotalFrames = 1;
       }
 
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x8020;
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pUnit;
@@ -316,7 +316,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_FireWall(D2UnitStrc * pUnit, eD2Skills eSki
       }
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nX = nCoordsX;
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
@@ -389,7 +389,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_OffsetMissileCount(D2UnitStrc * pUnit, eD2S
       nOffsetY = D2Common::Units::GetYPosFromDynamicPathUnit(pMissileUnit) - D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit) + nOffsetX;
@@ -522,7 +522,7 @@ void __fastcall SKILLSSOR_CltCreateBlazeMissile(D2UnitStrc * pUnit) {
 
     int32_t nUnitX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     int32_t nUnitY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = nUnitX;
@@ -578,7 +578,7 @@ BOOL __fastcall Skills_CltDoFunc_Sor_ThunderStormBolt(D2UnitStrc * pUnit, eD2Ski
     D2UnitStrc* pTargetUnit = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (pTargetUnit && pUnit) {
       D2UnitStrc* pMissileUnit;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.pOwner = pUnit;
       sSkillArg.nFlags = 1;
       sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit);
@@ -638,7 +638,7 @@ int32_t __fastcall SKILLSSOR_StateCltEventFn01_ChillingArmor(int32_t nParam1, D2
 
       eMissileId = (eMissilesId)pSkillTxt->cltmissile[1];
       if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
-        memset(&sSkillArg, 0, 0x5c);
+        memset(&sSkillArg, 0, sizeof(sSkillArg));
         sSkillArg.eSkillNo = eSkill;
         sSkillArg.nFlags = 0x20;
         sSkillArg.pOwner = pUnit;

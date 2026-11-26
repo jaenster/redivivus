@@ -174,7 +174,7 @@ void __fastcall Q40_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
 // Quest-slot initializer for internal quest 40 (nQuestIdReal=QUEST_ActIntroduced, the "act intro" gossip pseudo-quest). Zeroes the 0x3C-byte state-function table on the D2QuestDataStrc, installs the gossip dispatch handlers (slot 0 = Q40_Callback_00, slot 0xB = Q40_Callback_11), points pNpcMessages at the act's aNpcGossipData, marks the quest active with cleared state flags, sets no per-game scratch (pQuestSpecificData=NULL), and registers the status/active filters (Q40_StatusFilter/Q40_ActiveFilter). No journal/reward; a dialog gate only.
 void __fastcall Q40_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q40_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q40_Callback11_ScrollMessage;
     pQuestData->pNpcMessages = Quest40::aNpcGossipData;

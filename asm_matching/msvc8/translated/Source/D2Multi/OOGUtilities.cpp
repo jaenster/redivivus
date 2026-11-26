@@ -1164,8 +1164,7 @@ void __stdcall OOGUTIL_LoadMaxPlayersSetting() {
       Storm::Source::SReg::SRegSaveValue("Diablo II", "MAX_PLAYER", 0, __frame0.nMaxPlayers);
     }
 
-    __frame0.szMaxPlayers[0] = '4';
-    __frame0.szMaxPlayers[1] = '\0';
+    strcpy(__frame0.szMaxPlayers, "4");
     if (!(__frame0.nMaxPlayers < 9 && __frame0.nMaxPlayers > 0)) {
       return;
     }
@@ -1340,7 +1339,7 @@ void __stdcall OOGUTIL_RefreshGameList() {
     pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpOogGameNameEditControl->sControl);
     if (pwszValue) {
       D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szValue, (uint16_t*)pwszValue, 0x10);
-      int nNameLen = strlen(szValue);
+      int nNameLen = (int)strlen(szValue);
       if (szValue[0] != ' ' && nNameLen >= 1 && szValue[nNameLen - 1] != ' ') {
         bNameValid = 1;
       }
@@ -2583,7 +2582,7 @@ BOOL __stdcall NET_MCP_CLIENT_PrepareGameCreatePacket(D2ControlStrc * pControl) 
       pwszDescription = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListGamePasswordEditBox->sControl);
       bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
       if (bHasPeerName) {
-        *(uint32_t*)(char*)&szTempBuffer = (uint32_t)(uintptr_t)D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
+        *(uint16_t**)(char*)&szTempBuffer = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl); // the 8-byte buffer holds the text pointer
         *(uint8_t*)((char*)&sGameCreatePacket + 68) = 1;
         bCallResult = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
         if (bCallResult) {
@@ -2595,7 +2594,7 @@ BOOL __stdcall NET_MCP_CLIENT_PrepareGameCreatePacket(D2ControlStrc * pControl) 
           sGameCreatePacket.nDifference = -1;
         }
 
-        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szNumberBuffer, (uint16_t*)*(uint32_t*)(char*)&szTempBuffer, 3);
+        D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szNumberBuffer, *(uint16_t**)(char*)&szTempBuffer, 3);
         nParsedValue = atoi(szNumberBuffer);
         sGameCreatePacket.nMaxPlayers = (char)nParsedValue;
       }

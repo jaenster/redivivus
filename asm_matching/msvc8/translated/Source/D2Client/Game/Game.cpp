@@ -546,7 +546,7 @@ void __stdcall INPUT_HandleMouseWheel(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    short int nWheelDelta = pMsg->nWParam >> 16;
+    short int nWheelDelta = GET_WHEEL_DELTA_WPARAM(pMsg->nWParam); // steer-ok: winuser.h macro
     gnMouseWheelScrollAccumulator += nWheelDelta;
     if (abs(gnMouseWheelScrollAccumulator) >= 0x78) {
       UI::CmdTbl::CMD_InvokeCallbackByParam(gnMouseWheelScrollAccumulator / 0x78);
@@ -585,7 +585,7 @@ void __stdcall INPUT_HandlePageUpDown(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    short int nScrollDir = pMsg->nWParam >> 16;
+    short int nScrollDir = GET_WHEEL_DELTA_WPARAM(pMsg->nWParam); // steer-ok: winuser.h macro
     if (nScrollDir == 1) {
       UI::CmdTbl::CMD_InvokeCallback_0x1152();
     } else if (nScrollDir == 2) {
@@ -602,7 +602,7 @@ void __stdcall INPUT_HandleScrollToEnd(D2UIMouseMsgStrc * pMsg) {
       return;
     }
 
-    short int nScrollDir = pMsg->nWParam >> 16;
+    short int nScrollDir = GET_WHEEL_DELTA_WPARAM(pMsg->nWParam); // steer-ok: winuser.h macro
     if (nScrollDir == 1) {
       UI::CmdTbl::CMDTBL_InvokeMouseRightButtonHandler();
     } else if (nScrollDir == 2) {
@@ -642,7 +642,7 @@ void __stdcall INPUT_HandlePassthrough(D2UIMouseMsgStrc * pMsg) {
 // Handle mouse button event: clear selection/UI, update run key, and normalize queued click state.
 void __stdcall HandleMouseButtonEvent(D2UIMouseMsgStrc * pMouseEvent) {
     SHORT keyState;
-    _Message::gnLastMouseButtonEventType = pMouseEvent->nWParam;
+    _Message::gnLastMouseButtonEventType = (uint32_t)pMouseEvent->nWParam;
     if (pMouseEvent->nWParam) {
       UI::ui::SetUIFlag(UI_HOLDALT, UI_RESET, 0);
       gClickModifierDown = 0;
@@ -690,7 +690,7 @@ void __stdcall GAMEDATA_CheckAutomapCenterOnLoad() {
 }
 
 void __stdcall NET_D2GS_CLIENT_HandleAllNonVariableSizePackets() {
-    size_t iSize;
+    uint32_t iSize;
     uint8_t pBytes[512];
     do {
       iSize = D2Net::SRC::Client::NET_D2GS_CLIENT_ExtractPacketSize_from0xAE((char*)pBytes, 0x200);
@@ -794,7 +794,7 @@ void __stdcall GAME_FreeClientSideStructures() {
     D2Client::Draw::LightMap::LIGHTMAP_FreeAll();
     D2Client::Draw::Weather::Free();
     Fog::Memory::FreeMemoryPool(gClientGameData.gpClientPoolManager);
-    memset(&gClientGameData, 0, 0x80);
+    memset(&gClientGameData, 0, sizeof(gClientGameData));
     D2_FREE_AT(D2GameGame0x546, ".\\GAME\\Game.cpp", 0x599);
 }
 
@@ -1054,8 +1054,8 @@ void __stdcall GAMEDATA_SendPeriodicPing() {
     }
 
     Msg::NET_D2GS_CLIENT_Send_0x6D_PING();
-    gClientGameData.TickToSendPingToServer = dwCurrentTick + 5000;
     gClientGameData.dwGlobalTickCountD = dwCurrentTick;
+    gClientGameData.TickToSendPingToServer = dwCurrentTick + 5000;
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x8F_HEARTBEAT_PING(char * pBytes) {
@@ -1250,7 +1250,7 @@ uint32_t __stdcall DrawBetaScreen(uint32_t dwUnused) {
           D2Win::Src::D2WinPalette::D2WINPAL_LoadActPalette(gBetaScreenEntries[gBetaScreenIndex].paletteIndex);
         }
 
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.pDC6 = gBetaScreenEntries[gBetaScreenIndex].cachedImage;
         sGfxData.nDirection = 0;
         sGfxData.nFrameNumber = 0;
@@ -1962,7 +1962,8 @@ int32_t __fastcall GAMEDATA_TimerGetRemaining(int32_t * pTimerStruct) {
     return *pTimerStruct - dwNow + pTimerStruct[1];
 }
 
-uint32_t __fastcall GAMEDATA_CheckTimerExpired(D2ClientTimerStrc * pTimer) {
+// The timer test shared by the load-screen and enter-game code, inlined at each use.
+static inline uint32_t TIMER_IsExpired(D2ClientTimerStrc * pTimer) {
     if (pTimer->dwDurationMs) {
       int nRemaining;
       DWORD dwNow = GetTickCount();
@@ -1980,20 +1981,13 @@ uint32_t __fastcall GAMEDATA_CheckTimerExpired(D2ClientTimerStrc * pTimer) {
     return 1;
 }
 
+uint32_t __fastcall GAMEDATA_CheckTimerExpired(D2ClientTimerStrc * pTimer) {
+    return TIMER_IsExpired(pTimer);
+}
+
 // Timer helper: checks [start,duration] pair, clears when expired, returns active status.
 uint32_t __fastcall Timer_IsActiveAndUpdate(D2ClientTimerStrc * pTimer) {
-    if (pTimer->dwDurationMs) {
-      DWORD nowTick = GetTickCount();
-      if (nowTick >= pTimer->dwStartTick + pTimer->dwDurationMs) {
-        pTimer->dwStartTick = 0;
-        pTimer->dwDurationMs = 0;
-        return 0;
-      }
-
-      return (uint32_t)(pTimer->dwStartTick - nowTick + pTimer->dwDurationMs != 0);
-    }
-
-    return 0;
+    return !TIMER_IsExpired(pTimer);
 }
 
 // Send exit-game request (0x69) if not already exiting; updates exit flags.
@@ -2055,7 +2049,7 @@ void __stdcall GAME_InitClientSide() {
     gEndGameUiState.congratzOkClicked = 0;
     gLevelLoadInProgress = 0;
     gClickModifierDown = 0;
-    memset(&gClientGameData, 0, 0x80);
+    memset(&gClientGameData, 0, sizeof(gClientGameData));
     Fog::Memory::InitializePoolSystem(&gClientGameData.gpClientPoolManager, "Client Pool System", 0x40000, 0x1000);
     UNIT::Player::HANDSHAKE_SetClientPlayerUnit(nullptr);
     GAMEDATA_CheckColorTxtOverride();
@@ -2118,21 +2112,9 @@ void __fastcall CLIENT_ConnectionRefused(int32_t nReason) {
 
 // While load timer active, draw loading message; otherwise cleanup after loading act.
 uint32_t __stdcall LoadingScreen_TickOrCleanup(uint32_t dwArg1) {
-    int nRemainingMs;
-    if (gLoadTimerDurationMs.dwDurationMs) {
-      DWORD DVar1;
-      DVar1 = GetTickCount();
-      if (!(DVar1 < gLoadTimerDurationMs.dwDurationMs + gLoadTimerDurationMs.dwStartTick)) {
-        gLoadTimerDurationMs.dwStartTick = 0;
-        gLoadTimerDurationMs.dwDurationMs = 0;
-        nRemainingMs = 0;
-      } else {
-        nRemainingMs = gLoadTimerDurationMs.dwDurationMs - DVar1 + gLoadTimerDurationMs.dwStartTick;
-      }
-      if (nRemainingMs) {
-        DrawLoadingMessage();
-        return 0;
-      }
+    if (!TIMER_IsExpired(&gLoadTimerDurationMs)) {
+      DrawLoadingMessage();
+      return 0;
     }
 
     UI::ui::CleanupAfterLoadingAct();
@@ -2285,7 +2267,7 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
         gpCongratzOkButtonDC6 = Core::Archive::IMAGE_LoadDC6Ex(szPathPal, 0);
       }
 
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.pDC6 = gpCongratsBgDC6;
       sGfxData.nDirection = 0;
       D2Win::Src::D2WinPalette::DRAW_SetOrReloadPalleteMain();
@@ -2336,7 +2318,7 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
       GAMEDATA_DrawLoadingScreenText();
       GAMEDATA_DrawCharacterPortrait();
       D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.pDC6 = gpCongratzOkButtonDC6;
       sGfxData.nDirection = 0;
       sGfxData.nFrameNumber = (int)(gbMinimapClickValid != 0);
@@ -2368,8 +2350,8 @@ uint32_t __stdcall DRAW_Congratz(uint32_t dwUnused) {
 }
 
 void __stdcall GAMEDATA_ShowEndGameCutscene() {
-    gEndGameUiState.showCutscene = 1;
     ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus = CLIENT_nDifficulty + 1 << 0xa | ClientModeInGame::D2IniData_client->eCTEMP_eD2PlayerStatus & 0xe0ff;
+    gEndGameUiState.showCutscene = 1;
 }
 
 void __fastcall TSIntrusiveList_Clear(StormLinkedListStrc * pListHead) {
@@ -2747,24 +2729,10 @@ eD2ClientAppMode __stdcall pfModes_EnterGame() {
 static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D2Client::GAME::Game::pfModes_EnterGame::gdwHostGameThreadId");
     static BOOL gbExitingGamePadding; D2_STATIC_GUARD_BSS(gbExitingGamePadding, "D2Client::GAME::Game::pfModes_EnterGame::gbExitingGamePadding");
 
-    int nRecordResult;
     int32_t byPlayerStatus;
     tagMSG sMsg;
-    if (!gLoadTimerDurationMs.dwDurationMs) {
+    if (TIMER_IsExpired(&gLoadTimerDurationMs)) {
       ClientModeInGame::D2CLIENT_SetExitVar1(1);
-    } else {
-      DWORD dwNow;
-      dwNow = GetTickCount();
-      if (!(dwNow < gLoadTimerDurationMs.dwDurationMs + gLoadTimerDurationMs.dwStartTick)) {
-        gLoadTimerDurationMs.dwStartTick = 0;
-        gLoadTimerDurationMs.dwDurationMs = 0;
-        nRecordResult = 0;
-      } else {
-        nRecordResult = gLoadTimerDurationMs.dwDurationMs - dwNow + gLoadTimerDurationMs.dwStartTick;
-      }
-      if (!nRecordResult) {
-        ClientModeInGame::D2CLIENT_SetExitVar1(1);
-      }
     }
 
     GetTickCount();

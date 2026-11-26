@@ -44,7 +44,7 @@ void __stdcall BNMESSQUEUE_Shutdown() {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&lpCriticalSection_00882004);
 }
 
-int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, size_t nSize) {
+int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, uint32_t nSize) {
     ::BnMessQueue* pNewMessage = D2_NEW_AT(::BnMessQueue, ".\\BnMessQueue.cpp", 0x37);
     if (nSize > 0x120) {
       nSize = 0x120;
@@ -79,7 +79,7 @@ BOOL __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage) 
     ::BnMessQueue* pNewMessage = D2_NEW_AT(::BnMessQueue, ".\\BnMessQueue.cpp", 0x5c);
     Storm::Source::SSTR::SStrCopy(pNewMessage->bBuffer, szMessage, 0x120);
     size_t nDataSize = strlen(pNewMessage->bBuffer) + 1;
-    pNewMessage->nDataSize = nDataSize;
+    pNewMessage->nDataSize = (uint32_t)nDataSize;
     pNewMessage->nZero = nEventType;
     pNewMessage->pNext = 0;
     if (nDataSize > 0x120) {
@@ -100,8 +100,8 @@ BOOL __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage) 
 }
 
 // Dequeues next Battle.net lobby chat message. Thread-safe dequeue from global linked list (nLobbyChatCurrentMessage). Copies message buffer to output, returns data size. Returns 0 if queue empty.
-size_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBufferOut) {
-    size_t nMessageSize;
+uint32_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBufferOut) {
+    uint32_t nMessageSize;
     EnterCriticalSection(&lpCriticalSection_00882004);
     ::BnMessQueue* pMessage = nLobbyChatCurrentMessage;
     if (pMessage) {

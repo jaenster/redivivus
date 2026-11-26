@@ -64,7 +64,7 @@ struct GDevice {
     void *gdCCXData, *gdCCXMask, *gdExt;
 };
 #pragma pack(pop)
-static_assert(offsetof(GDevice, gdRect) == 0x22 && sizeof(GDevice) == 0x3e, "QuickDraw GDevice");
+static_assert(sizeof(void*) != 4 || (offsetof(GDevice, gdRect) == 0x22 && sizeof(GDevice) == 0x3e), "QuickDraw GDevice");
 typedef GDevice *GDPtr;
 typedef GDPtr *GDHandle;
 
@@ -209,7 +209,7 @@ void MAC_SettleWait(void);
 int MAC_GetBinkSurfaceType(CGDirectDisplayID nDisplay);
 void MAC_OnWindowZoom(void);
 // Storm's Win32 layer on the Mac: the Win32 calls, with its own handle types
-int CloseHandle(uintptr_t hObject);
+int CloseHandle(void *hObject);
 intptr_t SendMessageA(void *hWnd, uint32_t nMsg, uintptr_t wParam, intptr_t lParam);
 int SetRect(void *pRect, int nLeft, int nTop, int nRight, int nBottom);
 // Mac 00134d0f: loads a tile's sprite into the cache. Windows' SPRITECACHE_AllocEntry

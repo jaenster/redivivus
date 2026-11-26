@@ -297,7 +297,7 @@ namespace D2Net::SRC::Client {
 // Initialized scalars
 // =============================================================================
 
-uint32_t CLIENT_SocketToServer = -0x1; D2_GLOBAL_GUARD(CLIENT_SocketToServer, "D2Net::SRC::Client::CLIENT_SocketToServer");
+SOCKET CLIENT_SocketToServer = -0x1; D2_GLOBAL_GUARD(CLIENT_SocketToServer, "D2Net::SRC::Client::CLIENT_SocketToServer");
 LPDWORD lpThreadId_00882b30 = 0; D2_GLOBAL_GUARD(lpThreadId_00882b30, "D2Net::SRC::Client::lpThreadId_00882b30");
 int gbClientConnected = 0; D2_GLOBAL_GUARD(gbClientConnected, "D2Net::SRC::Client::gbClientConnected");
 

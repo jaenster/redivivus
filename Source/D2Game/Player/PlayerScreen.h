@@ -45,7 +45,7 @@ void __fastcall PARTYSCREEN_UpdateSquelchRelation(::SGAMEDATA * pGame, struct D2
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2PartyJoinArgsStrc * pPartyJoinArgs);
 // Processes acceptance of a party invite between pUnit (acceptor) and pInvitee (inviter). Allocates bidirectional player-list entries, checks PLAYERLIST_IsPartied result: if not fully partied sends 0x8B relationship packets and returns. Otherwise allocates a new party (if invitee has none) or joins the existing one via PARTY_AddUnitToParty, refreshes all relationship states, sends a join event (bParam=8) to acceptor's client, and iterates all units to assign them to the party.
-void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pInvitee, uint32_t dwUnused1, int * pnError);
 // @wasnamed PARTYSCREEN_AcceptPartyInvite - one name on two different functions.
 // @evidence The PLAYERLIST_IsPartied==4 path: calls
 // SetPlayerRelationship in both directions and SendPlayerEvent type 6. It never touches party
@@ -53,9 +53,9 @@ void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, struct D2Unit
 // @caveat neither has xrefs (both are dispatch-table entries), so which one Blizzard called
 // 'AcceptPartyInvite' is inferred from behaviour, not proven. What would settle it: the party-screen
 // packet handler table that references them, or the SendPlayerEvent event-code enum (6 vs 8).
-void __fastcall PARTYSCREEN_CancelPartyInvite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall PARTYSCREEN_CancelPartyInvite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pInvitee, uint32_t dwUnused1, int * pnError);
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t dwUnused1, uint32_t dwUnused2);
+void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget, uint32_t dwUnused1, int * pnError);
 // @sourcefile .\PLAYER\PartyScreen.cpp
 void __fastcall PARTY_SendPlayerLeftEvent(::SGAMEDATA * dwUnused, struct D2UnitStrc * pUnit, struct D2UnitStrc * pOther);
 void __fastcall SendPlayerPartyInfo(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pTarget);

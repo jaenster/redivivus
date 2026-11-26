@@ -6,6 +6,8 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2CMP/Src/CelCmp.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(::CELLIST) == 0x38, "SMemAlloc(sizeof(CELLIST)): the 32-bit layout must be the 0x38 bytes 1.14d allocates");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -49,16 +51,15 @@ void __fastcall Destructor_Unreferenced(TSExplicitList<TSHashObjectChunk<::CELLI
 
 template<> TSExplicitList<::CELLIST, -572662307>* TSExplicitList<CELLIST, -572662307>::ScalarDeletingDestructor(uint32_t dwFlags) {
     this->UnlinkAll();
-    TSLink<::CELLIST>* nNext = this->m_terminator.m_prevlink;
-    TSLink<::CELLIST>* pTVar1 = &this->m_terminator;
-    if (nNext) {
-      TSLink<::CELLIST>** pBackLink;
-      pBackLink = (TSLink<::CELLIST>**)D2_StormNextLink(pTVar1, -1);
-      *pBackLink = nNext;
-      pTVar1->m_prevlink->m_next = pTVar1->m_next;
-      pTVar1->m_prevlink = 0;
-      pTVar1->m_next = 0;
+    TSLink<::CELLIST>* pLink = &this->m_terminator;
+    TSLink<::CELLIST>* pPrev = pLink->m_prevlink;
+    if (pPrev) {
+      *(TSLink<::CELLIST>**)D2_StormNextLink(pLink, -1) = pPrev;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
     }
+
     if (dwFlags & 1 && this) {
       Storm::Source::SMem::SMemFree(this, "delete", -1, 0);
     }
@@ -171,13 +172,13 @@ void __fastcall Destructor_Unreferenced(::CELLIST * pThis, int) {
 
 template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::ReallocData(uint32_t nAlloc) {
     TSExplicitList<::CELLIST, -572662307>* pBucketSlot;
-    uint32_t* puVar1;
+    TSExplicitList<::CELLIST, -572662307>* puVar1; // a slot list sits one pointer-sized word (its int link offset, padded) before its terminator
     TSLink<::CELLIST>** pBackLink2;
     TSLink<::CELLIST>* pTVar2;
     TSLink<::CELLIST>* nNext;
-    uint32_t* pNewTerminator;
-    uint32_t uLinkOffset;
-    uint32_t uNewSize;
+    TSLink<::CELLIST>* pNewTerminator;
+    intptr_t uLinkOffset; // steer-ok: generated form, kept as emitted
+    int uNewSize;
     uint32_t nSavedNewCount = nAlloc;
     TSExplicitList<::CELLIST, -572662307>* pBlock = this->m_data;
     if (nAlloc < this->m_count) {
@@ -185,7 +186,7 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLI
       pBucketSlot = pBlock + nAlloc;
       do {
         pTVar2 = &pBucketSlot->m_terminator;
-        ((TSExplicitList<::CELLIST, -572662307>*)((char*)(pTVar2 - 1) + 4))->UnlinkAll();
+        ((TSExplicitList<::CELLIST, -572662307>*)((intptr_t*)pTVar2 - 1))->UnlinkAll();
         nNext = pTVar2->m_prevlink;
         if (nNext) {
           uLinkOffset = pTVar2->m_next;
@@ -202,13 +203,13 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLI
     }
 
     this->m_alloc = nSavedNewCount;
-    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, nSavedNewCount * 0xc, D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0x10);
+    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, nSavedNewCount * sizeof(TSExplicitList<::CELLIST, -572662307>), D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0x10);
     this->m_data = pBucketSlot;
     if (pBucketSlot) {
       return;
     }
 
-    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemAlloc(nSavedNewCount * 0xc, D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
+    pBucketSlot = (TSExplicitList<::CELLIST, -572662307>*)Storm::Source::SMem::SMemAlloc(nSavedNewCount * sizeof(TSExplicitList<::CELLIST, -572662307>), D2CMP::s___AV__TSExplicitList_UCELLIST____00741f44, -2, 0);
     this->m_data = pBucketSlot;
     if (!pBlock) {
       return;
@@ -222,18 +223,18 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<CELLI
       pBucketSlot = pBlock;
       do {
         nNext = &pBucketSlot->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)nNext + (intptr_t)this->m_data);
+        puVar1 = (TSExplicitList<::CELLIST, -572662307>*)(-(intptr_t)sizeof(intptr_t) - (intptr_t)pBlock + (intptr_t)nNext + (intptr_t)this->m_data);
         if (puVar1) {
-          pNewTerminator = puVar1 + 1;
-          *pNewTerminator = 0;
-          puVar1[2] = 0;
-          uNewSize = *(uint32_t*)((char*)(nNext - 1) + 4);
-          *pNewTerminator = (uint32_t)(uintptr_t)pNewTerminator;
-          *puVar1 = uNewSize;
-          puVar1[2] = ~(uint32_t)pNewTerminator;
+          pNewTerminator = &puVar1->m_terminator;
+          pNewTerminator->m_prevlink = 0;
+          puVar1->m_terminator.m_next = 0;
+          uNewSize = ((TSExplicitList<::CELLIST, -572662307>*)((intptr_t*)nNext - 1))->m_linkoffset;
+          pNewTerminator->m_prevlink = pNewTerminator;
+          puVar1->m_linkoffset = uNewSize;
+          puVar1->m_terminator.m_next = ~(intptr_t)pNewTerminator;
         }
 
-        ((TSExplicitList<::CELLIST, -572662307>*)((char*)(nNext - 1) + 4))->UnlinkAll();
+        ((TSExplicitList<::CELLIST, -572662307>*)((intptr_t*)nNext - 1))->UnlinkAll();
         pTVar2 = nNext->m_prevlink;
         if (pTVar2) {
           uLinkOffset = nNext->m_next;
@@ -320,23 +321,30 @@ template<> __declspec(noinline) inline void TSGrowableArray<CELLIST>::Destructor
     Storm::Source::SMem::SMemFree(this->m_data, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
 }
 
+// D2_RoundUp, rounding up to a granularity, as its callers inlined it: the parameter changed and returned.
+static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
+    if (n % g) {
+        n = g - n % g + n;
+    }
+    return n;
+}
+
 template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Reserve(uint32_t nCount, int32_t bRound) {
-    uint32_t uRequiredSize = nCount + this->m_count;
-    if (uRequiredSize <= this->m_alloc) {
+    nCount = nCount + this->m_count;
+    if (nCount <= this->m_alloc) {
       return;
     }
     if (bRound) {
-      uint32_t uNormalizeStep;
-      uNormalizeStep = this->m_chunk;
-      if (!uNormalizeStep) {
-        uNormalizeStep = this->CalcChunkSize(uRequiredSize);
+      uint32_t nAlignStep;
+      nAlignStep = this->m_chunk;
+      if (!nAlignStep) {
+        nAlignStep = this->CalcChunkSize(nCount);
       }
-      if (uRequiredSize % uNormalizeStep) {
-        uRequiredSize = uNormalizeStep - uRequiredSize % uNormalizeStep + uRequiredSize;
-      }
+
+      nCount = D2_RoundUp(nCount, nAlignStep);
     }
 
-    this->ReallocData(uRequiredSize);
+    this->ReallocData(nCount);
 }
 
 // stpl-orphan: a COMDAT copy in TSGrowableArray<TSExplicitList<CELLIST, -572662307>> that no member owns
@@ -473,18 +481,20 @@ template<> __declspec(noinline) inline void TSHashTable<CELLIST, HASHKEY_NONE>::
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
-    if (pNewEntry) {
+    ::CELLIST* pNewEntryAlloc = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::CELLIST), D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewEntry;
+    if (pNewEntryAlloc) {
       TSLink<::TCELENTRY>* pTVar1;
-      pNewEntry->m_linktoslot.m_prevlink = 0;
-      pNewEntry->m_linktoslot.m_next = 0;
-      pNewEntry->m_linktofull.m_prevlink = 0;
-      pNewEntry->m_linktofull.m_next = 0;
-      pTVar1 = &pNewEntry->m_frames.m_terminator;
+      pNewEntryAlloc->m_linktoslot.m_prevlink = 0;
+      pNewEntryAlloc->m_linktoslot.m_next = 0;
+      pNewEntryAlloc->m_linktofull.m_prevlink = 0;
+      pNewEntryAlloc->m_linktofull.m_next = 0;
+      pTVar1 = &pNewEntryAlloc->m_frames.m_terminator;
       pTVar1->m_next = 0;
       pTVar1->m_prevlink = pTVar1;
-      pNewEntry->m_frames.m_linkoffset = 0;
-      pNewEntry->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
+      pNewEntryAlloc->m_frames.m_linkoffset = 0;
+      pNewEntryAlloc->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
+      pNewEntry = pNewEntryAlloc;
     } else {
       pNewEntry = 0;
     }
@@ -499,7 +509,7 @@ template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLo
 template<> ::CELLIST * __fastcall TSHashTable<CELLIST, HASHKEY_NONE>::InternalNew(TSHashTable<::CELLIST, HASHKEY_NONE>* pThis, int, TSExplicitList<::CELLIST, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
     TSLink<::CELLIST>* pInsertPoint;
     TSLink<::CELLIST>** pPrevLink;
-    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewEntry = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::CELLIST), D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     if (pNewEntry) {
       TSLink<::TCELENTRY>* pTVar1;
       pNewEntry->m_linktoslot.m_prevlink = 0;
@@ -651,7 +661,7 @@ template<> __declspec(noinline) inline void TSGrowableArray<CELLIST>::ReallocDat
     TSLink<::TCELENTRY>** pFreeListEntry;
     TSLink<::TCELENTRY>* pFreeListSlot;
     int nAllocPolicy;
-    uint32_t nCopyCount;
+    intptr_t nCopyCount; // steer-ok: generated form, kept as emitted
     TSLink<::TCELENTRY>* pActiveNext;
     uint32_t nNewCapacityValue = nAlloc;
     ::CELLIST* pOldBlock = this->m_data;
@@ -676,13 +686,13 @@ template<> __declspec(noinline) inline void TSGrowableArray<CELLIST>::ReallocDat
     }
 
     this->m_alloc = nNewCapacityValue;
-    ::CELLIST* pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBlock, nNewCapacityValue * 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0x10);
+    ::CELLIST* pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBlock, nNewCapacityValue * sizeof(::CELLIST), D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0x10);
     this->m_data = pFallbackBlock;
     if (pFallbackBlock) {
       return;
     }
 
-    pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nNewCapacityValue * 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
+    pFallbackBlock = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nNewCapacityValue * sizeof(::CELLIST), D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
     this->m_data = pFallbackBlock;
     if (!pOldBlock) {
       return;
@@ -736,13 +746,6 @@ template<> __declspec(noinline) inline void TSGrowableArray<CELLIST>::ReallocDat
     Storm::Source::SMem::SMemFree(pOldBlock, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
 }
 
-// D2_RoundUp, rounding up to a granularity, as its callers inlined it: the parameter changed and returned.
-static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
-    if (n % g) {
-        n = g - n % g + n;
-    }
-    return n;
-}
 
 template<> void TSGrowableArray<CELLIST>::Reserve(uint32_t nCount, int32_t bRound) {
     nCount = nCount + this->m_count;
@@ -763,17 +766,15 @@ template<> void TSGrowableArray<CELLIST>::Reserve(uint32_t nCount, int32_t bRoun
 }
 
 template<> __declspec(noinline) inline ::CELLIST * TSGrowableArray<CELLIST>::New() {
-    uint32_t nAlignStep;
     uint32_t nNextCount = this->m_count + 1;
     if (nNextCount > this->m_alloc) {
+      uint32_t nAlignStep;
       nAlignStep = this->m_chunk;
       if (!nAlignStep) {
         nAlignStep = this->CalcChunkSize(nNextCount);
       }
-      if (nNextCount % nAlignStep) {
-        nNextCount = nAlignStep - nNextCount % nAlignStep + nNextCount;
-      }
 
+      nNextCount = D2_RoundUp(nNextCount, nAlignStep);
       this->ReallocData(nNextCount);
     }
 
@@ -791,9 +792,7 @@ template<> __declspec(noinline) inline ::CELLIST * TSGrowableArray<CELLIST>::New
       pNewNode->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
     }
 
-    nNextCount = this->m_count;
-    this->m_count = nNextCount + 1;
-    return this->m_data + nNextCount;
+    return &this->m_data[this->m_count++];
 }
 
 template<> void TSGrowableArray<CELLIST>::ReserveNoRound(uint32_t nCount) {
@@ -834,7 +833,7 @@ template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSExplicitList<TSHashObje
 template<> ::CELLIST * __fastcall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalNew(TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* pThis, int, TSExplicitList<::CELLIST, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
     TSLink<::CELLIST>* ppInsertSlot;
     TSLink<::CELLIST>** pBackLink;
-    ::CELLIST* pNewNode = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pNewNode = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::CELLIST), D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     if (pNewNode) {
       TSLink<::TCELENTRY>* pTVar1;
       pNewNode->m_linktoslot.m_prevlink = 0;
@@ -998,7 +997,7 @@ template<> __declspec(noinline) inline ::CELLIST * TSHashTable<CELLIST, HASHKEY_
     TSLink<::CELLIST>* pTVar1 = ppBucketSlot->m_prevlink;
     if (pTVar1) {
       TSLink<::CELLIST>** pBackLink;
-      nBucketIndex = ppBucketSlot->m_next;
+      intptr_t nUnlinkedNext = ppBucketSlot->m_next;
       pBackLink = (TSLink<::CELLIST>**)D2_StormNextLink(ppBucketSlot, -1);
       *pBackLink = pTVar1;
       ppBucketSlot->m_prevlink->m_next = ppBucketSlot->m_next;

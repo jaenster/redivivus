@@ -686,7 +686,7 @@ static BOOL __stdcall UI_DrawPartyMembersHirelingIcons(int * pnY, int * pnYOffse
                   *pnY += 10;
                 }
 
-                memset(&sGfxData, 0, 0x48);
+                memset(&sGfxData, 0, sizeof(sGfxData));
                 sGfxData.pDC6 = pClassIcon;
                 D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, *pnX, 0x3c, -1, DRAW_TRANSPARENT, nullptr);
                 *pnX += 0x38;
@@ -707,7 +707,7 @@ static BOOL __stdcall UI_DrawPartyMembersHirelingIcons(int * pnY, int * pnYOffse
 
 static BOOL __stdcall HIRELING_DrawPortraitIcon(D2UnitStrc * pUnit, int * pnYToggle, int * pnY, int * pnX) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     int32_t nRosterGUID;
     sGfxData.pDC6 = GetRosterIcon(pUnit, 7, &nRosterGUID, nullptr);
     if (!sGfxData.pDC6) {
@@ -749,7 +749,7 @@ static BOOL __stdcall HIRELING_DrawPortraitIcon(D2UnitStrc * pUnit, int * pnYTog
 
 static BOOL __stdcall HIRELING_DrawPetIcon(D2UnitStrc * pUnit, int * nX, int * pnYToggle, uint32_t nPetType, int * nY) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     int32_t nRosterGUID;
     sGfxData.pDC6 = GetRosterIcon(pUnit, nPetType, &nRosterGUID, nullptr);
     if (!sGfxData.pDC6) {
@@ -781,7 +781,7 @@ static BOOL __stdcall HIRELING_DrawSummonIcon(D2UnitStrc * pUnit, int32_t * nY, 
     }
 
     int32_t nRosterCountSaved = nRosterCount;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     uint32_t nSingleFlag = 0;
     sGfxData.pDC6 = GetRosterIcon(pUnit, nSkillId, &nRosterGUIDOut, &nSingleFlag);
     if (!sGfxData.pDC6) {
@@ -811,7 +811,7 @@ static BOOL __stdcall HIRELING_DrawSummonIcon(D2UnitStrc * pUnit, int32_t * nY, 
 
 static BOOL __stdcall HIRELING_DrawGenericPetIcon(D2UnitStrc * pUnit, int * pnX, int * pnYToggle, uint32_t nPetType, int * pnY) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     int32_t nRosterGUID;
     sGfxData.pDC6 = GetRosterIcon(pUnit, nPetType, &nRosterGUID, nullptr);
     if (!sGfxData.pDC6) {
@@ -844,7 +844,7 @@ void __stdcall UI_DrawHireableIcons() {
     int nYToggle;
     int nCursorY;
     BOOL bAnyDrawn;
-    char nPetIconKind;
+    uint8_t nPetIconKind;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     nCursorX = 0x48;
     nYToggle = 0;
@@ -878,7 +878,7 @@ void __stdcall UI_DrawHireableIcons() {
         if ((int)nPetTypeIdx >= 0 && (int)nPetTypeIdx < nPetTypeCount) {
           pPetTypeRow = D2Common::ITEMS::Items::sgptDataTable->pTxtPetType->baseicon + nPetTypeTxtOffset - 0xf;
           if (pPetTypeRow) {
-            nPetIconKind = pPetTypeRow[0xe];
+            nPetIconKind = (uint8_t)pPetTypeRow[0xe];
             switch (nPetIconKind) {
               case '\x01':
                 {

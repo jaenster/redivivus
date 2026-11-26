@@ -224,12 +224,12 @@ int __fastcall GetRepeatDelta(::SpinnerWrapper * pThis, int, int nUnused) {
 }
 
 ::SpinnerWrapper * __fastcall Constructor(::SpinnerWrapper * pThis, int, int nPosX, int nPosY, BOOL bHorizontal, fpSpinnerRepeatAction pfnRepeatAction) {
-    pfnEHHandlerRoutine puExcHandler = SehHandler_6ca203;
+    pfnEHHandlerRoutine puExcHandler = SehHandler_6ca203; // steer-ok: generated form, kept as emitted
     void* pExcList = ExceptionList;
     uint32_t nExcState = 0;
     ExceptionList = &pExcList;
     pThis->pVtable = (SpinnerWrapperVtable*)(void*)SpinnerWrapper::vftable;
-    ::SpinnerImplementation* ppSpinner = (::SpinnerImplementation*)Storm::Source::SMem::SMemAlloc(0x54, "new", -1, 0);
+    ::SpinnerImplementation* ppSpinner = (::SpinnerImplementation*)Storm::Source::SMem::SMemAlloc(sizeof(::SpinnerImplementation), "new", -1, 0);
     nExcState = (uint32_t)((uint32_t)((uint32_t)nExcState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (ppSpinner) {
       ppSpinner = vc8_thiscall(SpinnerImplementation::Constructor)(ppSpinner, nPosX, nPosY, bHorizontal, pfnRepeatAction);

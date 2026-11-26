@@ -371,7 +371,7 @@ struct D2AutoMapLvlTbls {
 struct __attribute__((packed)) D2BinFieldExcelStrc {
     /* 0x00 */ char * pD2Archive;
     /* 0x04 */ char * pDataStart; // Pointer to start of data rows in the TSV buffer (after the header row)
-    /* 0x08 */ size_t nLinesCount; // Number of data lines (rows), excluding header and Expansion-tagged rows
+    /* 0x08 */ uint32_t nLinesCount; // Number of data lines (rows), excluding header and Expansion-tagged rows
     /* 0x0C */ int nColumnCount; // Number of tab-separated columns counted in the header row
 };
 #endif // D2_DEFINED_D2BinFieldExcelStrc
@@ -379,9 +379,9 @@ struct __attribute__((packed)) D2BinFieldExcelStrc {
 #define D2_DEFINED_D2BitBufferStrc
 struct __attribute__((packed)) D2BitBufferStrc {
     /* 0x00 */ uint8_t * pBuffer;
-    /* 0x04 */ size_t nBitsInBuffer;
-    /* 0x08 */ size_t nCurrentPos;
-    /* 0x0C */ size_t nBitsAtPos;
+    /* 0x04 */ uint32_t nBitsInBuffer;
+    /* 0x08 */ uint32_t nCurrentPos;
+    /* 0x0C */ uint32_t nBitsAtPos;
     /* 0x10 */ BOOL bEnd;
 };
 #endif // D2_DEFINED_D2BitBufferStrc
@@ -7219,11 +7219,11 @@ struct __attribute__((packed)) D2SetItemsTxt {
 #define D2_DEFINED_D2SetsTxtPStrc
 struct D2SetsTxtPStrc {
     /* 0x00 */ int pcodea;
-    /* 0x04 */ void * pparama;
+    /* 0x04 */ int pparama; // property parameter (FIELDTYPE_LINKER_INT), not a pointer
     /* 0x08 */ int pmina;
     /* 0x0C */ int pmaxa;
     /* 0x10 */ int pcodeb;
-    /* 0x14 */ void * pparamb;
+    /* 0x14 */ int pparamb; // property parameter (FIELDTYPE_LINKER_INT), not a pointer
     /* 0x18 */ int pminb;
     /* 0x1C */ int pmaxb;
 };

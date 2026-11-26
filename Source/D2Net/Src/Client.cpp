@@ -66,11 +66,11 @@ int32_t __stdcall NET_CLIENT_IsConnected() {
 }
 
 // lpStartAddress parameter of CreateThread
+static sockaddr_in gClientSockAddr; D2_STATIC_GUARD_BSS(gClientSockAddr, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::gClientSockAddr");
 DWORD __stdcall CLIENT_ServerConnectionThread_lpStartAddress(void * lpThreadParam) {
     // Static local variables (originally global data)
     // also labelled: sockaddr_in
-static sockaddr_in gClientSockAddr; D2_STATIC_GUARD_BSS(gClientSockAddr, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::gClientSockAddr");
-    static WSADATA gWSAData = {}; D2_STATIC_GUARD(gWSAData, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::gWSAData");
+    static WSADATA gWSAData; D2_STATIC_GUARD_BSS(gWSAData, "D2Net::SRC::Client::CLIENT_ServerConnectionThread_lpStartAddress::gWSAData");
 
     /* LPWSADATA lpWSAData for WSAStartup */ /* WORD wVersionRequired for WSAStartup */ gbClientConnectionShutdown = 0;
     WSAStartup(0x101, &gWSAData);
@@ -145,19 +145,19 @@ void __stdcall NET_CLIENT_ShutdownConnection() {
     WSAGetLastError();
 }
 
-size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_to0xAE(char * pBytes, size_t nSize) {
-    size_t nPacketSize = ::D2Net::SRC::D2Net::NET_D2GS_CLIENT_ExtractPacketSize((LPCRITICAL_SECTION*)&lpCriticalSection_00882ce8, &pD2PacketClient_to_0xAE, pBytes, nSize);
+uint32_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_to0xAE(char * pBytes, uint32_t nSize) {
+    uint32_t nPacketSize = ::D2Net::SRC::D2Net::NET_D2GS_CLIENT_ExtractPacketSize((LPCRITICAL_SECTION*)&lpCriticalSection_00882ce8, &pD2PacketClient_to_0xAE, pBytes, nSize);
     return nPacketSize;
 }
 
-size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, size_t nSize) {
-    size_t nPacketSize = ::D2Net::SRC::D2Net::NET_D2GS_CLIENT_ExtractPacketSize((LPCRITICAL_SECTION*)&lpCriticalSection_00882ce8, &pD2PacketClient_from_0xAF, pBytes, nSize);
+uint32_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, uint32_t nSize) {
+    uint32_t nPacketSize = ::D2Net::SRC::D2Net::NET_D2GS_CLIENT_ExtractPacketSize((LPCRITICAL_SECTION*)&lpCriticalSection_00882ce8, &pD2PacketClient_from_0xAF, pBytes, nSize);
     return nPacketSize;
 }
 
 // @sourcefile .\SRC\Client.cpp
 int __stdcall NET_D2GS_CLIENT_ParseRecvBufferIntoPacketQueues() {
-    size_t nRemaining = pD2PacketsClientBuffer->nCount;
+    uint32_t nRemaining = pD2PacketsClientBuffer->nCount;
     char* pCursor = pD2PacketsClientBuffer->pBytes;
     int bHasCompressionPacket = 0;
     while (nRemaining >= 1) {
@@ -380,7 +380,7 @@ void __fastcall NET_CLIENT_SendPacketToServer(void * pUnused, uint16_t nPacketSi
     ::D2Net::Game::Server::NET_EnqueueLocalClientPacket(pPacket, nPacketSize);
 }
 
-static int32_t NET_SendPacketToD2GSOnline(char * pBytes, size_t nSize) {
+static int32_t NET_SendPacketToD2GSOnline(char * pBytes, uint32_t nSize) {
     int32_t nSendResult = send(::D2Net::SRC::Client::CLIENT_SocketToServer, pBytes, nSize, 0);
     if (nSendResult == -1) {
       BOOL BVar1;
@@ -398,7 +398,7 @@ static int32_t NET_SendPacketToD2GSOnline(char * pBytes, size_t nSize) {
     return nSendResult;
 }
 
-uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(size_t nSize, int32_t Unused, char * pBytes) {
+uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(uint32_t nSize, int32_t Unused, char * pBytes) {
     uint32_t nSendResult;
     if (!pD2PacketsClientBuffer) {
       return 0;
@@ -446,7 +446,7 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
       }
 
       memcpy(pNewPacket, pBytes, (size_t)nPacketSize);
-      pNewPacket->nSize = (size_t)nPacketSize;
+      pNewPacket->nSize = (uint32_t)(uintptr_t)nPacketSize; // the packet size was written into this slot as a uint32_t
       nErrorLine = GetTickCount();
       pNewPacket->nTickCount = nErrorLine;
       pNewPacket->pD2PacketClientNext = 0;

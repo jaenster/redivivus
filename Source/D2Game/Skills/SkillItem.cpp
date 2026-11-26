@@ -43,7 +43,7 @@
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 #include "Source/D2Game/D2DamageStrc.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/Event.h"
@@ -407,7 +407,7 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
             pComponents = pMonStats2->aComponents;
             pSlot = pMonData->aArray;
             if (!pMonData->pad) {
-              nFreeSlots = (intptr_t)pComponents - (intptr_t)pSlot;
+              nFreeSlots = (int)((intptr_t)pComponents - (intptr_t)pSlot);
               for (nMaxRetries = 0; nMaxRetries < 0x10; nMaxRetries++) {
                 byCompCount = *(uint8_t*)(nFreeSlots + (char*)pSlot);
                 if (byCompCount <= 1) {
@@ -885,8 +885,8 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
 
     BOOL bApplied;
     bApplied = 0;
-    bool bHpModified;
-    bHpModified = false;
+    BOOL bHpModified;
+    bHpModified = FALSE;
     for (iStatEntry = 0; iStatEntry < 3; iStatEntry++) {
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + (iStatEntry * 2 + 0x3e));
       if ((int)eUnitStat < 0 || (int)eUnitStat >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
@@ -928,7 +928,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
           switch (eUnitStat) {
             case UNITSTAT_hitpoints:
               {
-                bHpModified = true;
+                bHpModified = TRUE;
                 LAB_005be567:
                 eUnitType = D2Common::Units::GetType(pUnit);
                 if (eUnitType == UNIT_PLAYER) {
@@ -1055,8 +1055,8 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
 
     BOOL bApplied;
     bApplied = 0;
-    bool bHpModified;
-    bHpModified = false;
+    BOOL bHpModified;
+    bHpModified = FALSE;
     for (iStatEntry = 0; iStatEntry < 3; iStatEntry++) {
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + (iStatEntry * 2 + 0x3e));
       if ((int)eUnitStat < 0 || (int)eUnitStat >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
@@ -1075,7 +1075,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
           switch (eUnitStat) {
             case UNITSTAT_hitpoints:
               {
-                bHpModified = true;
+                bHpModified = TRUE;
                 LAB_005be8d3:
                 eUnitType = D2Common::Units::GetType(pUnit);
                 if (eUnitType == UNIT_PLAYER) {
@@ -1196,7 +1196,7 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
     }
 
     BOOL bApplied = 0;
-    bool bHpModified = false;
+    BOOL bHpModified = FALSE;
     for (iStatSlot = 0; iStatSlot < 3; iStatSlot++) {
       eUnitStat = (eD2UnitStat)*(short int*)(pItemTxt->szSetInvFile + (iStatSlot * 2 + 0x3e));
       pStatCost = (int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
@@ -1212,7 +1212,7 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
           switch (eUnitStat) {
             case UNITSTAT_hitpoints:
               {
-                bHpModified = true;
+                bHpModified = TRUE;
                 eUnitType = D2Common::Units::GetType(pUnit);
                 if (eUnitType == UNIT_PLAYER) {
                   nStatScaled = SkillNec::BloodGolemLifeLeech(pGame, pUnit, nStatScaled);
@@ -1739,7 +1739,7 @@ BOOL __fastcall ITEMEVENT_PhysDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
       return 0;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags |= 0x4021;
     sDamage.dwPhysDamage = nMinDmg << 8;
     sDamage.dwHitClass = 0x8d;
@@ -1762,7 +1762,7 @@ BOOL __fastcall ITEMEVENT_LightningDamageOnAttacked(::SGAMEDATA * pGame, uint32_
       return 0;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags |= 0x4021;
     sDamage.dwLtngDamage = nMinDmg << 8;
     sDamage.dwHitClass = 0x4d;
@@ -1785,7 +1785,7 @@ BOOL __fastcall ITEMEVENT_FireDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
       return 0;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags |= 0x4021;
     sDamage.dwFireDmg = nMinStatValue << 8;
     sDamage.dwHitClass = 0x2d;
@@ -1816,7 +1816,7 @@ BOOL __fastcall ITEMEVENT_ColdDamageWithFreezeLength(::SGAMEDATA * pGame, uint32
       nUnit = (int)((nAttackerLvl - nTargetLvl) * 10 + 0x19);
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags |= 0x4021;
     sDamage.dwColdDmg = nMinDmg << 8;
     sDamage.dwColdLength = nUnit;
@@ -1978,7 +1978,7 @@ BOOL __fastcall ITEMEVENT_FreezeTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 
     int nFreezeLength = (nChancePct - nRoll) * 2 + 0x19;
     nFreezeLength = min(max(nFreezeLength, 0x19), 0xfa); // steer-ok: windef.h min/max macros
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.dwFrzLength = nFreezeLength;
     UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pTarget, 1, &sDamage);
     return 1;
@@ -2570,7 +2570,7 @@ BOOL __fastcall ITEMEVENT_LaunchMissileOnOwner(::SGAMEDATA * pGame, uint32_t nUn
     D2MissilesTxt* pMissileTxt = D2Common::DATATBLS::MissileTbls::GetMissleById(pTarget->nClassId);
     if (pMissileTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
       D2SkillArgStrc sSkillArg;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x20;
       sSkillArg.pOwner = pUnitSaved;
       sSkillArg.pMissile = pUnitSaved;
@@ -2608,7 +2608,7 @@ BOOL __fastcall ITEMEVENT_ApplyFreezeDamage(::SGAMEDATA * pGame, uint32_t nUnitE
       nLevel = 1;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags |= 0x20;
     sDamage.dwFrzLength = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nLevel);
     UNIT::SUnitDmg::DAMAGE_ApplyDamageToUnit(pGame, pUnit, pTarget, 1, &sDamage);
@@ -2640,7 +2640,7 @@ BOOL __fastcall ITEMEVENT_ApplyHitDamage(::SGAMEDATA * pGame, uint32_t nUnitEven
       nUnit = 0x1;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     SkillsServer::SetDamageOnEvent(pCaster, &sDamage, eSkill, nUnit);
     sDamage.dwHitClass |= 0xd;
     sDamage.nHitClassActiveSet = 1;

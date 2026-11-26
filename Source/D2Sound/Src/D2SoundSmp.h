@@ -103,7 +103,7 @@ void __fastcall SOUNDSMP_CalculateVolumeAndPan(uint32_t * pnVolume, uint32_t * p
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Sound)
 void __fastcall SOUNDSMP_WriteToBuffer(struct D2SoundSmpStrc * ppSoundSmp, int nWritePos, int nLockOffset, int nBytesToWrite);
-BOOL __fastcall SOUNDSMP_ClearBuffer(struct IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, size_t nBytesToClear);
+BOOL __fastcall SOUNDSMP_ClearBuffer(struct IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, uint32_t nBytesToClear);
 // Returns pSoundSmp->nVolume, the value SOUNDSMP_SetVolume stores; halts (line 740) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
 int __fastcall SOUNDSMP_GetVolume(struct D2SoundSmpStrc * pSoundSmp);

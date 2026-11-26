@@ -32,8 +32,8 @@ void __fastcall CELDATAHASH_UnlinkEntry(D2CelDataHashTableStrc * pHashTable, D2C
     D2_FREE_POOL_AT(pMemory, pEntry, ".\\SRC\\CelDataHash.cpp", 0x3a);
 }
 
-void __fastcall CELDATAHASH_InitHashTable(void * pHashTable) {
-    memset(pHashTable, 0, 0x1000);
+void __fastcall CELDATAHASH_InitHashTable(D2CelDataHashTableStrc * pHashTable) {
+    memset(pHashTable, 0, sizeof(*pHashTable));
 }
 
 // @sourcefile .\SRC\CelDataHash.cpp
@@ -128,7 +128,7 @@ void __fastcall GFX_RemoveCacheEntry(D2PoolManagerStrc * pMemory, D2CelDataHashT
     D2_FREE_POOL_AT(pMemory, pEntry, ".\\SRC\\CelDataHash.cpp", 0x3a);
 }
 
-void __fastcall IGNORELIST_Initialize_Unref_0060b130(void * pHashTable) {
+void __fastcall IGNORELIST_Initialize_Unref_0060b130(D2CelDataHashTableStrc * pHashTable) {
 
 }
 

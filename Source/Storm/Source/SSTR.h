@@ -41,13 +41,13 @@ char * __stdcall SStrChrR(char * szText, char cTarget);
 // call to the CRT strncmp. The case-sensitive half of the only Cmp/CmpI pair in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringCaseSensitive
-int32_t __stdcall SStrCmp(char * str_1, char * str_2, size_t nMaxCount);
+int32_t __stdcall SStrCmp(char * str_1, char * str_2, uint32_t nMaxCount);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrCmpI(const char *, const char *, unsigned long)
 // @oracle-basis Identical to SStrCmp except it calls _strnicmp. The case-insensitive half of the pair.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringNoCaseSensitive
-int32_t __stdcall SStrCmpI(char * str_1, char * str_2, size_t nMaxCount);
+int32_t __stdcall SStrCmpI(char * str_1, char * str_2, uint32_t nMaxCount);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrCopy(char *, const char *, unsigned long)
 // @oracle-basis Three parameters (dst, src, dstsize). Bounded copy with the word-at-a-time zero-byte trick, always
@@ -77,14 +77,14 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
 // va_list and is SStrVPrintf.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_printfToPointer
-size_t SStrPrintf(char * szOutput, size_t nSize, char * Format, ...);
+uint32_t SStrPrintf(char * szOutput, uint32_t nSize, char * Format, ...);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrVPrintf(char *, unsigned long, const char *, char *)
 // @oracle-basis Four parameters, the fourth an explicit va_list; same NULL guard and same internal worker as
 // SStrPrintf. The va_list/varargs split is exactly what separates the two API names.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Vsnprintf
-uint32_t SStrVPrintf(char * szOutput, size_t nSize, char * szFormatString, va_list vaArgs);
+uint32_t SStrVPrintf(char * szOutput, uint32_t nSize, char * szFormatString, va_list vaArgs);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrTokenize(const char **, char *, unsigned long, const char *, int *)
 // @oracle-basis Parameter-for-parameter with the API signature: (char **cursor, char *tokenOut, unsigned long maxLen,

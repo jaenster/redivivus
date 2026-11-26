@@ -7,6 +7,7 @@
 #include "Source/Fog/Src/QServer/QServer.h"
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2QServerClientPacketStrc) == 8, "D2_ALLOC_AT(... + sizeof(D2QServerClientPacketStrc)): the 32-bit layout must be the 8 bytes 1.14d allocates");
 
 // Forward declarations (used only by pointer here)
 struct QServer;
@@ -115,8 +116,8 @@ static BOOL __stdcall BeginAsyncReadForClient(D2QServerStrc * pQServer, D2QServe
     }
 }
 
-static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStructAndCopyBytesThere(D2QServerClientConnectionStrc * pQServerClient, char * pBytes, size_t nSize) {
-    D2QServerClientPacketStrc* pNewPacket = (D2QServerClientPacketStrc*)D2_ALLOC_AT(nSize + 8, ".\\Src\\QServer\\QServerNT.cpp", 0x440);
+static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStructAndCopyBytesThere(D2QServerClientConnectionStrc * pQServerClient, char * pBytes, uint32_t nSize) {
+    D2QServerClientPacketStrc* pNewPacket = (D2QServerClientPacketStrc*)D2_ALLOC_AT(nSize + sizeof(D2QServerClientPacketStrc), ".\\Src\\QServer\\QServerNT.cpp", 0x440);
     memcpy(pNewPacket + 1, pBytes, nSize);
     pNewPacket->nPacketSize = nSize;
     pNewPacket->pQServerClientPacketNext = 0;

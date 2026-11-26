@@ -244,7 +244,7 @@ void __fastcall D2GFX_SetOverlayMode(DWORD dwMode) {
     gnGfxOverlayMode = dwMode;
 }
 
-BOOL __fastcall D2GFX_SetOption(int32_t nOption, int32_t nValue) {
+BOOL __fastcall D2GFX_SetOption(int32_t nOption, intptr_t nValue) {
     BOOL bResult = RENDERER_CurrentRenderedFunctions->nfpSetOption(nOption, nValue);
     return bResult;
 }
@@ -509,7 +509,7 @@ BOOL __stdcall D2GFX_CreateWindow(BOOL bWindowed, int32_t nResolution) {
 
       /* int nIndex for GetSystemMetrics */ nSystemMetricsX = GetSystemMetrics(0);
       if (nSystemMetricsX < 800) {
-        memset(&sDevMode, 0, 0x9c);
+        memset(&sDevMode, 0, sizeof(sDevMode));
         /* DWORD dwFlags for ChangeDisplaySettingsA */ /* DEVMODEA * lpDevMode for ChangeDisplaySettingsA */ sDevMode.dmSize = 0x9c;
         sDevMode.dmBitsPerPel = 8;
         sDevMode.dmPelsWidth = 800;

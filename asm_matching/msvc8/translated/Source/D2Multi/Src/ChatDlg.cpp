@@ -2262,7 +2262,7 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
     char* pszDst = pszTitlePrefix;
     if (pszTitlePrefix) {
       pszDst = pszDst + strlen(pszDst) + 1;
-      nCopyBytes = (intptr_t)pszDst - (intptr_t)pszTitlePrefix;
+      nCopyBytes = (uint32_t)((intptr_t)pszDst - (intptr_t)pszTitlePrefix);
       pszDst = (char*)((char*)sLevelLineText.wszLevelLine + 199);
       do {
         pszCopyCur = pszDst + 1;

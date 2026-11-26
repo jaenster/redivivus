@@ -829,7 +829,7 @@ int __fastcall INI_ParseCommandLineArg(uint8_t * pbArgName, char * szCmdLine, ch
     strcpy((char*)pbArgName, pCursor);
     uint8_t* pbScan = pbArgName;
     pbScan = pbScan + strlen((char*)pbScan) + 1;
-    nCmdLen = (intptr_t)pbScan - (intptr_t)(pbArgName + 1);
+    nCmdLen = (int)(pbScan - (pbArgName + 1));
     uint8_t byChar = *pbArgName;
     pbScan = pbArgName;
     while (byChar) {
@@ -1020,7 +1020,7 @@ void __stdcall SystemSurvey_WriteProductLanugageToLocaleFile() {
     if (bAppDataPathOk) {
       Storm::Source::SSTR::SStrPack(szLocaleFilePath, "System Survey\\ProductData\\", 0x104);
       szBufferOutput = szLocaleFilePath + Storm::Source::SSTR::SStrLen(szLocaleFilePath);
-      const intptr_t nRemaining = szLocaleFilePath + sizeof(szLocaleFilePath) - szBufferOutput;
+      const int32_t nRemaining = (int32_t)(szLocaleFilePath + sizeof(szLocaleFilePath) - szBufferOutput);
       Storm::Source::SSTR::SStrCopy(szBufferOutput, "D2DV\\locale", nRemaining);
       Fog::Source::SFile::SafeCreateDirectoryTree(szLocaleFilePath);
       pLocaleFile = fopen(szLocaleFilePath, "w");

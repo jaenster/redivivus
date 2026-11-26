@@ -39,7 +39,7 @@ void __stdcall NET_SERVER_SentPacketLog_Clear() {
     Source::SSComp::COMPRESS_BuildHuffmanDecodeTable(Source::SSComp::gabHuffmanCodeLengths);
 }
 
-void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize) {
+void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, uint32_t nSize) {
     uint32_t nByteValue;
     uint32_t nByteIndex;
     uint64_t* pByteCountEntry;
@@ -75,15 +75,15 @@ void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, size_t nSize) {
     *(uint32_t*)((char*)&gnSentPacketHeaderBytes + 4) += (uint32_t)bCarry;
 }
 
-size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize) {
+uint32_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, uint32_t nBufferSize, char * pBytes, uint32_t nBytesSize) {
     uint32_t nNumBits;
     uint8_t* pOutCur;
     uint8_t byPending = 0;
     int nBitsFree = 8;
     uint8_t* pOut = (uint8_t*)pBuffer;
-    size_t nBufferLeft = nBufferSize;
+    uint32_t nBufferLeft = nBufferSize;
     if (!nBytesSize) {
-      return (intptr_t)pOut - (intptr_t)pBuffer;
+      return (uint32_t)((intptr_t)pOut - (intptr_t)pBuffer);
     }
 
     do {
@@ -116,7 +116,7 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
     } while (nBytesSize);
 
     if (nBitsFree >= 8) {
-      return (intptr_t)pOut - (intptr_t)pBuffer;
+      return (uint32_t)((intptr_t)pOut - (intptr_t)pBuffer);
     }
     if (!nBufferLeft) {
       return 0;
@@ -124,10 +124,10 @@ size_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, size_t nBufferS
 
     *pOut = byPending;
     pOut++;
-    return (intptr_t)pOut - (intptr_t)pBuffer;
+    return (uint32_t)((intptr_t)pOut - (intptr_t)pBuffer);
 }
 
-int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBufferSize, char * pBytes, size_t nBytesSize) {
+int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, uint32_t nBufferSize, char * pBytes, uint32_t nBytesSize) {
     // Static local variables (originally global data)
     static uint32_t gadwHuffmanBitMasks[16] = {
     0x0,
@@ -152,7 +152,7 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
     uint32_t uBitBuffer = 0;
     int nBitsAvail = 0x20;
     uint8_t* pOut = (uint8_t*)pBuffer;
-    size_t nBufferLeft = nBufferSize;
+    uint32_t nBufferLeft = nBufferSize;
     while (true) {
       uint8_t byCodeLen;
       for (; nBitsAvail >= 8 && nBytesSize > 0; nBytesSize--) {
@@ -179,7 +179,7 @@ int32_t __fastcall NET_D2GS_CLIENT_DecompressPacket(char * pBuffer, size_t nBuff
       nBufferLeft--;
     }
 
-    return (intptr_t)pOut - (intptr_t)pBuffer;
+    return (int32_t)((intptr_t)pOut - (intptr_t)pBuffer);
 }
 
 }}} // namespace Fog::Src::D2Net

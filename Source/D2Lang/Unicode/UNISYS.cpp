@@ -418,9 +418,9 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
               wszNumBuf[0] = L'\0';
             memset(wszNumBuf + 1, 0, 14 * sizeof(wszNumBuf[0]));
             if (wszFmtBuf[2] == L'd') {
-              _itoa((int)pArgSave, szNumBuf, 10);
+              _itoa((int)(intptr_t)pArgSave, szNumBuf, 10); // the vararg slot holds an int for %d: its low 32 bits on x64
             } else {
-              _ultoa((uint32_t)pArgSave, szNumBuf, 10);
+              _ultoa((uint32_t)(uintptr_t)pArgSave, szNumBuf, 10);
             }
 
             UTF8_ConvertToWideChar(wszNumBuf, szNumBuf, 0xf);
@@ -438,7 +438,7 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
             }
 
             pFmtSpec = wszNumBuf;
-            nCopyLen = (intptr_t)wszDst - (intptr_t)pFmtSpec;
+            nCopyLen = (int)((intptr_t)wszDst - (intptr_t)pFmtSpec);
             do {
               wFmtChar = *pFmtSpec;
               *(uint16_t*)(nCopyLen + (char*)pFmtSpec) = wFmtChar;
@@ -464,7 +464,7 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
               return;
             }
 
-            nCopyLen = (intptr_t)wszDst - (intptr_t)pArgSave;
+            nCopyLen = (int)((intptr_t)wszDst - (intptr_t)pArgSave);
             do {
               *(uint16_t*)(nCopyLen + (char*)pArgSave) = *pArgSave;
               wChar = *pArgSave;
@@ -481,7 +481,7 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
             }
 
             pFmtSpec = wszFmtBuf;
-            nDstOffset = (intptr_t)wszDst - (intptr_t)pFmtSpec;
+            nDstOffset = (int)((intptr_t)wszDst - (intptr_t)pFmtSpec);
             do {
               wFmtChar = *pFmtSpec;
               *(uint16_t*)(nDstOffset + (char*)pFmtSpec) = wFmtChar;
@@ -867,7 +867,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         pszSuffix = szSuffix;
         pszSuffix = pszSuffix + strlen(pszSuffix) + 1;
         append_possessive_suffix:
-        STRING_CopyCharToWCharWithSetMaxSize(wszScratch + 4, szSuffix, (intptr_t)pszSuffix - (intptr_t)(szSuffix + 1));
+        STRING_CopyCharToWCharWithSetMaxSize(wszScratch + 4, szSuffix, (int32_t)((intptr_t)pszSuffix - (intptr_t)(szSuffix + 1)));
         pWszSuffix = wszScratch + 4;
         append_joiner:
         AppendToBuffer(wszText1, pWszSuffix);
@@ -908,7 +908,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         goto append_last_part;
       }
 
-      STRING_CopyCharToWCharWithSetMaxSize(wszScratch + 4, szSuffix, (intptr_t)pszSuffix - (intptr_t)(szSuffix + 1));
+      STRING_CopyCharToWCharWithSetMaxSize(wszScratch + 4, szSuffix, (int32_t)((intptr_t)pszSuffix - (intptr_t)(szSuffix + 1)));
       AppendToBuffer(wszText1, wszScratch + 4);
       wszSuffix = wszText2;
       append_last_part:
@@ -987,12 +987,12 @@ BOOL __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
     }
 
     nOffset = 0;
-    bool bFoundMarker = false;
+    BOOL bFoundMarker = FALSE;
     do {
       if ((pFileData + 6)[nOffset] != '\x1a') {
         nOffset++;
       } else {
-        bFoundMarker = true;
+        bFoundMarker = TRUE;
       }
       if (nOffset >= 0x28) {
         D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0x79);
@@ -1275,7 +1275,7 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nMaxCh
 
 int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile) {
     if (!gpUnicodeCodeToMapTable) {
-      return strlen(szText);
+      return (int32_t)strlen(szText);
     }
 
     int nCount = 0;

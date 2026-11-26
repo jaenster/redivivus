@@ -42,7 +42,7 @@ template<> TSExplicitList<::SGAMEDATA, -572662307>* TSGrowableArray<TSExplicitLi
     return this->m_data + nIndex;
 }
 
-template<> uint8_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044de40() {
+template<> uint32_t TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Unreferenced_0044de40() {
     return 4;
 }
 

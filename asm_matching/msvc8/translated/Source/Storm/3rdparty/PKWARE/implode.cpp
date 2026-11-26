@@ -918,7 +918,7 @@ void WriteCmpData(TCmpStruct * pCmp) {
           nDictSize = nNextMatchLen;
         }
 
-        nDictSize = (intptr_t)pbWindowEnd - (intptr_t)pbWindowCursor;
+        nDictSize = (uint32_t)(pbWindowEnd - pbWindowCursor);
         if (nDictSize >= 2 && (nDictSize != 2 || pCmp->distance < 0x100)) {
           emit_match:
           OutputBits(pCmp, (uint32_t)pCmp->nChBits[nDictSize + 0xfe], (uint32_t)pCmp->nChCodes[nDictSize + 0xfe]);
@@ -969,11 +969,11 @@ int FindRep(TCmpStruct * pCmpState, uint8_t * pbSrcPos) {
     int nBestLen = 1;
     uint32_t nHashIdx = (uint32_t)pCmpState->phash_to_index[(uint32_t)pbSrcPos[1] * 5 + (uint32_t)*pbSrcPos * 4];
     uint16_t* pChainLinkEntry = pCmpState->phash_offs + nHashIdx;
-    if ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes - 0x27cb)) {
+    if ((uintptr_t)*pChainLinkEntry < (uintptr_t)(pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes - 0x27cb))) {
       do {
         pChainLinkEntry++;
         nHashIdx++;
-      } while ((uint8_t*)(uint32_t)*pChainLinkEntry < pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes - 0x27cb));
+      } while ((uintptr_t)*pChainLinkEntry < (uintptr_t)(pbSrcPos + (-(intptr_t)pCmpState - pCmpState->dsize_bytes - 0x27cb)));
 
       pCmpState->phash_to_index[(uint32_t)pbSrcPos[1] * 5 + (uint32_t)*pbSrcPos * 4] = (uint16_t)nHashIdx;
     }

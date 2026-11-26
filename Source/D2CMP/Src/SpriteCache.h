@@ -32,7 +32,7 @@ typedef void (__fastcall *fnSpriteCacheEntryRelease)(void * pHashEntry);
 #endif
 #ifndef RECON_FPTD_fnSpriteDecodeComplete
 #define RECON_FPTD_fnSpriteDecodeComplete
-typedef uint32_t (__stdcall *fnSpriteDecodeComplete)(uint32_t * pReadBuffer, size_t nReadSize, struct D2SpriteDecodeRequestStrc * pRequest);
+typedef uint32_t (__stdcall *fnSpriteDecodeComplete)(uint32_t * pReadBuffer, uint32_t nReadSize, struct D2SpriteDecodeRequestStrc * pRequest);
 #endif
 #ifndef RECON_FPTD_pfnLruFreeEntry
 #define RECON_FPTD_pfnLruFreeEntry
@@ -91,7 +91,7 @@ struct D2SpriteCacheEntryStrc {
 #ifndef D2_DEFINED_D2SpriteDecodeRequestStrc
 #define D2_DEFINED_D2SpriteDecodeRequestStrc
 struct __attribute__((packed)) D2SpriteDecodeRequestStrc {
-    /* 0x00 */ uint32_t (__stdcall *pfnComplete)(uint32_t *, size_t, struct D2SpriteDecodeRequestStrc *);
+    /* 0x00 */ uint32_t (__stdcall *pfnComplete)(uint32_t *, uint32_t, struct D2SpriteDecodeRequestStrc *);
     /* 0x04 */ uint8_t * pCelHeader;
     /* 0x08 */ struct D2CelDecodeStateStrc * pDecodeState;
     /* 0x0C */ int32_t nStartFrame;
@@ -151,7 +151,7 @@ void __fastcall GFX_AllocSpriteCache(struct D2GfxMemoryStrc * pGfxMemory, struct
 struct D2SpriteCacheEntryStrc * __fastcall SPRITECACHE_EvictEntry(struct D2GfxMemoryStrc * pGfxMemory, struct D2SpriteCacheEntryStrc * pCandidate, uint32_t bPreferOld);
 void __fastcall SPRITECACHE_AllocateMemory(struct D2GfxMemoryStrc * pCache, struct D2SpriteCacheEntryStrc * pEntry);
 void __fastcall SPRITECACHE_FreeMemory(struct D2GfxMemoryStrc * pGfxMemory, struct D2SpriteCacheEntryStrc * pCacheEntry, int32_t nFreedSize, uint32_t bEvictPriority);
-uint32_t __stdcall SPRITECACHE_DecodeFrameByIndex(uint32_t * pReadBuffer, size_t nReadSize, struct D2SpriteDecodeRequestStrc * pRequest);
+uint32_t __stdcall SPRITECACHE_DecodeFrameByIndex(uint32_t * pReadBuffer, uint32_t nReadSize, struct D2SpriteDecodeRequestStrc * pRequest);
 // @sourcefile .\SRC\SpriteCache.cpp
 void __fastcall SPRITECACHE_ReleaseMemory(struct D2GfxMemoryStrc * pGfxMemory);
 // @sourcefile .\SRC\SpriteCache.cpp

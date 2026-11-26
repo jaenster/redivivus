@@ -101,20 +101,24 @@ static void SOUND_ReleaseChannel(D2SoundChannelStrc * pChannel) {
     pChannel->pListNode = 0;
 }
 
-int __fastcall Unreferenced_004b9560(int nChannelHandle) {
-    D2SoundChannelStrc* pDVar2;
-    if (nChannelHandle) {
-      D2SoundChannelNodeStrc* pDVar1 = gpActiveSoundChannelsHead;
-      for (; pDVar1; pDVar1 = pDVar1->pNext) {
-        pDVar2 = pDVar1->pChannel;
-        if (pDVar2->nChannelHandle == nChannelHandle) {
-          return (uint32_t)(pDVar2 != 0);
-        }
+// Unreferenced_004b9440 as this caller inlined it: the found channel, or null, is tested once.
+static inline D2SoundChannelStrc * FindChannelInline(int nChannelHandle) {
+    if (!nChannelHandle) {
+      return nullptr;
+    }
+
+    for (D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead; pNode; pNode = pNode->pNext) {
+      D2SoundChannelStrc* pChannel = pNode->pChannel;
+      if (pChannel->nChannelHandle == nChannelHandle) {
+        return pChannel;
       }
     }
 
-    pDVar2 = 0;
-    return (uint32_t)(pDVar2 != 0);
+    return nullptr;
+}
+
+int __fastcall Unreferenced_004b9560(int nChannelHandle) {
+    return FindChannelInline(nChannelHandle) != nullptr;
 }
 
 uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle) {
@@ -177,7 +181,7 @@ int32_t __fastcall SOUND_IsChannelPlaying(int32_t nSoundGroup) {
     return nCount;
 }
 
-D2SoundChannelStrc * __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, int32_t pListKey, D2SoundChannelStrc * nExcludeChannel) {
+D2SoundChannelStrc * __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, intptr_t pListKey, D2SoundChannelStrc * nExcludeChannel) {
     D2SoundChannelNodeStrc* pDVar1;
     BOOL bInList;
     D2SoundChannelStrc* nChannelData;
@@ -766,7 +770,7 @@ void __fastcall SOUND_UpdateAllChannels(uint32_t nFrameTime) {
     BOOL bUiFlag;
     D2SoundChannelStrc* pTrackedUnit;
     D2SoundChannelStrc* pChanEntry;
-    int32_t nStreamListKey;
+    intptr_t nStreamListKey;
     D2SoundChannelNodeStrc* puSortHead;
     int nFadeSize;
     float fIndoorsSmoothed;

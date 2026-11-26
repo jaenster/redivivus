@@ -51,7 +51,7 @@ void __fastcall SKILLNEC_ApplyBloodCost(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
     }
 
     int32_t nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.dwHitFlags |= 0x1000;
     sDamage.wResultFlags |= 4;
     sDamage.dwPhysDamage = nMaxHp / 8;
@@ -95,7 +95,7 @@ BOOL __fastcall Skills_SrvStFunc_16_ApplyHitAndDamage(::SGAMEDATA * pGame, D2Uni
       return 0;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
       sDamage.dwEnDmgPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->calc[0], eSkill, nSkillLvl);
@@ -519,7 +519,7 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
         uSlotC.nCurseDuration = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, uSlotC.nCurseDuration);
       }
 
-      memset(&sNecroArg, 0, 0x68);
+      memset(&sNecroArg, 0, sizeof(sNecroArg));
       iStatIdx = 0;
       sNecroArg.eSkill = eSkill;
       sNecroArg.nSkillLvl = nSkillLvl;
@@ -589,7 +589,7 @@ void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       nCalc /= pDiffLevels->AiCurseDivisor;
     }
 
-    memset(&sNecroArg, 0, 0x68);
+    memset(&sNecroArg, 0, sizeof(sNecroArg));
     int iAuraStatIdx;
     iAuraStatIdx = 0;
     int* pAuraStatCalcCursor;
@@ -829,7 +829,7 @@ BOOL __fastcall Skills_SrvDoFunc_061_CastConvertAoE(::SGAMEDATA * pGame, D2UnitS
       nRadius = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurarangecalc, eSkill, nSkillLvl);
       nDurationCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->auralencalc, eSkill, nSkillLvl);
       nDurationCalc = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nDurationCalc);
-      memset(&pGameArg, 0, 0x68);
+      memset(&pGameArg, 0, sizeof(pGameArg));
       pGameArg.pGame = pGame;
       pGameArg.pCaster = pUnit;
       pGameArg.nDurationInFrames = nDurationCalc;
@@ -1055,28 +1055,23 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
     int* pPassiveCalcCursor = pSkillsTxt->passivecalc;
     short int* pPassiveStatCursor = pSkillsTxt->passivestat;
     int iStatLoop = 5;
-    D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     do {
       if ((short int)*pPassiveStatCursor >= 0) {
         eStatId = (eD2UnitStat)(short int)*pPassiveStatCursor;
-        if ((int)eStatId < pDataTable->nTxtItemStatCostSize && (int)eStatId >= 0) {
-          pStatCostTxt = pDataTable->pTxtItemStatCost + eStatId;
+        if ((int)eStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && (int)eStatId >= 0) {
+          pStatCostTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatId;
           if (pStatCostTxt) {
             nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pPassiveCalcCursor, eSkill, nSkillLvl);
             D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pSummonStatList, eStatId, nStatCalc, 0);
-            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             if (pStatCostTxt->itemevent1 > 0) {
               fEventSearchResult = UNIT::SUnitEvent::UNITEVENT_FindByCallbackParams(pGame, pSummonStatList, 2, D2Common::Units::GetGUID(pSummonStatList), eStatId);
-              pDataTable = D2Common::ITEMS::Items::sgptDataTable;
               if (!fEventSearchResult) {
                 nStatCalc = D2Common::Units::GetGUID(pSummonStatList);
                 SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (int)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
                 nTxtValue = pStatCostTxt->itemevent2;
-                pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 if (nTxtValue > 0) {
                   nStatCalc = D2Common::Units::GetGUID(pSummonStatList);
                   SkillsServer::D2SetAuraEvent(pGame, pSummonStatList, (int)nTxtValue, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
-                  pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 }
               }
             }
@@ -1096,11 +1091,10 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
     do {
       if ((short int)*pAuraStatCursor >= 0) {
         eStatId = (eD2UnitStat)(short int)*pAuraStatCursor;
-        if ((int)eStatId < pDataTable->nTxtItemStatCostSize && (int)eStatId >= 0) {
-          pStatCostTxt = pDataTable->pTxtItemStatCost + eStatId;
+        if ((int)eStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize && (int)eStatId >= 0) {
+          pStatCostTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStatId;
           if (pStatCostTxt) {
             nStatCalc = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraCalcCursor, eSkill, nSkillLvl);
-            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             if (nStatCalc) {
               if (!pSummonStatList) {
                 nSummonGUID = D2Common::Units::GetGUID(pSummon);
@@ -1113,19 +1107,15 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
               }
 
               D2Common::Stats::StatsEx::D2AddStatToStatsListEx((D2StatListExStrc*)pSummonStatList, eStatId, nStatCalc, 0);
-              pDataTable = D2Common::ITEMS::Items::sgptDataTable;
               if (pStatCostTxt->itemevent1 > 0) {
                 fEventSearchResult = UNIT::SUnitEvent::UNITEVENT_FindByCallbackParams(pGame, pSummon, 2, D2Common::Units::GetGUID(pSummon), eStatId);
-                pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                 if (!fEventSearchResult) {
                   nStatCalc = D2Common::Units::GetGUID(pSummon);
                   SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)pStatCostTxt->itemevent1, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc1, 2, nStatCalc);
                   nTxtValue = pStatCostTxt->itemevent2;
-                  pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                   if (nTxtValue > 0) {
                     nStatCalc = D2Common::Units::GetGUID(pSummon);
                     SkillsServer::D2SetAuraEvent(pGame, pSummon, (int)nTxtValue, eStatId << 0x10, 0, (int)pStatCostTxt->itemeventfunc2, 2, nStatCalc);
-                    pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                   }
                 }
               }
@@ -1140,7 +1130,7 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
     } while (iStatLoop < 6);
 
     nTxtValue = pSkillsTxt->aurastate;
-    if (nTxtValue > 0 && (int)nTxtValue <= pDataTable->nTxtStatesSize) {
+    if (nTxtValue > 0 && (int)nTxtValue <= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
       D2Common::DATATBLS::ItemStats::SetState(pSummon, (int)nTxtValue, 1);
       if (pSummonStatList) {
         D2Common::Stats::StatsEx::SetState((D2StatListExStrc*)pSummonStatList, (int)pSkillsTxt->aurastate);
@@ -1453,7 +1443,7 @@ BOOL __fastcall Skills_SrvDoFunc_055_CorpseExplosion(::SGAMEDATA * pGame, D2Unit
       nDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamage, nPercent, nCorpseMaxHp);
     }
 
-    memset(&damageEvent, 0, 0x70);
+    memset(&damageEvent, 0, sizeof(damageEvent));
     uint32_t nEleConvPct;
     nEleConvPct = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillData->calc[2], eSkill, nSkillLvl);
     uint32_t nEleConvPctClamped;
@@ -1668,29 +1658,14 @@ static void __stdcall SKILLNEC_ReviveCorpse(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     ptRevivePos.y = yValue;
-    BOOL bAllowNeighborRooms = 1;
-    nX = 0x3c01;
-    nPosY = D2Common::Units::GetUnitSizeX(pUnit);
-    POINT* pPtRevivePos = &ptRevivePos;
-    D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
-    pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(pRoom, pPtRevivePos, nPosY, nX, bAllowNeighborRooms);
+    D2RoomStrc* pRoom = D2Common::Collision::GetFreeCoordinates_WithNeighboorRooms(D2Common::Units::UNITS_GetRoom(pUnit), &ptRevivePos, D2Common::Units::GetUnitSizeX(pUnit), 0x3c01, 1);
     if (!pRoom) {
       return;
     }
 
     pUnit->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC | UNITFLAG_ISVALIDTARGET | UNITFLAG_CANBEATTACKED | UNITFLAG_TARGETABLE;
     Monster::MONSTERAI_RescheduleThink(pGame, pUnit);
-    sKillStrc.nUnitMode = Death;
-    sKillStrc.pUnit = 0;
-    sKillStrc.pTargetUnit = 0;
-    sKillStrc.nTargetX = 0;
-    sKillStrc.nTargetY = 0;
-    sKillStrc.nAnimatedMode1 = '\0';
-    sKillStrc.nAnimatedMode2 = '\0';
-    sKillStrc.nUnknown1 = '\0';
-    sKillStrc.nUnknown2 = '\0';
-    sKillStrc.nMonType1 = 0;
-    sKillStrc.nMonType2 = 0;
+    memset(&sKillStrc, 0, sizeof(sKillStrc));
     Monster::MonsterMode::MONMODE_InitModeChange(pUnit, eD2MonsterAnimMode_ns::Neutral, &sKillStrc);
     Monster::MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &sKillStrc, 1);
     SkillsServer::SKILLS_FreeMonsterMinions(pUnit);
@@ -1756,7 +1731,7 @@ BOOL __fastcall Skills_SrvDoFunc_058_ReviveCorpseCheck(::SGAMEDATA * pGame, D2Un
       local_14 = 1;
     }
 
-    memset(&local_4c, 0, 0x38);
+    memset(&local_4c, 0, sizeof(local_4c));
     int32_t iVar3 = pTarget->nClassId;
     D2MonStatsInitStrc* pOutStats = &local_4c;
     D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(iVar3, local_14, (uint32_t)pGame->nDifficulty, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_level, 0), 1, pOutStats);
@@ -1885,7 +1860,7 @@ BOOL __fastcall Skills_SrvDoFunc_060_SummonBoneWall(::SGAMEDATA * pGame, D2UnitS
         return 1;
       }
 
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nX = nTargetX;
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nFlags = 0x21;
@@ -2161,7 +2136,7 @@ BOOL __fastcall ITEMEVENT_AuraThornsWithLifeSteal(::SGAMEDATA * pGame, uint32_t 
           }
 
           nThornsCalc = D2Common::Skills::D2GetSkillCalc(pOwnerUnit, nThornsOrCalcIdx, eSkill, nSkillLvl);
-          memset(&sDamage, 0, 0x70);
+          memset(&sDamage, 0, sizeof(sDamage));
           sDamage.dwPhysDamage = D2Common::DATATBLS::DataTbls::D2ApplyPercent(pDamage->dwPhysDamage, nThornsCalc, 100);
           sDamage.wResultFlags = sDamage.wResultFlags | pSkillTxt->ResultFlags | 0x20U;
           sDamage.dwHitFlags |= pSkillTxt->HitFlags;

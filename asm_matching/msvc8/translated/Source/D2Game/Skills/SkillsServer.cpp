@@ -47,7 +47,7 @@
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 #include "Source/D2Game/D2DamageStrc.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/Event.h"
@@ -1437,7 +1437,6 @@ uint32_t __fastcall IsSkillBoundToClass(D2UnitStrc * pUnit, int32_t nSkillId) {
 BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRemoveOnly) {
     BOOL nStateGroup;
     D2StatListExStrc* pStatList;
-    D2DataTableTxtStrc* pDataTable;
     eD2States eState_00;
     int32_t bDidRemoveState;
     int nStateTxtStride;
@@ -1454,26 +1453,22 @@ BOOL __fastcall D2UpdateState(D2UnitStrc * pUnit, eD2States eState, int32_t bRem
           bDidRemoveState = 0;
           if (nStateCount > 0) {
             nStateTxtStride = 0;
-            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
             do {
               if (eState_00 != eState || bRemoveOnly) {
-                if ((int)eState_00 < 0 || (int)eState_00 >= pDataTable->nTxtStatesSize) {
+                if ((int)eState_00 < 0 || (int)eState_00 >= D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
                   pStateTxt = 0;
                 } else {
-                  pStateTxt = (uint8_t*)&pDataTable->pTxtStates[nStateTxtStride].state;
+                  pStateTxt = (uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtStates[nStateTxtStride].state;
                 }
                 if (*(short int*)(pStateTxt + 0x1e) == sStateGroup) {
                   nStateGroup = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, eState_00);
-                  pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                   if (nStateGroup) {
                     bDidRemoveState = 1;
                     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState_00, 0);
                     pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState_00);
-                    pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                     if (pStatList) {
                       D2Common::Stats::StatsEx::STATLIST_RemoveAndRecalc(pUnit, pStatList);
                       D2Common::Stats::StatsEx::FreeStatList(&pStatList->sStatList);
-                      pDataTable = D2Common::ITEMS::Items::sgptDataTable;
                     }
                   }
                 }
@@ -1645,7 +1640,7 @@ BOOL __fastcall SKILLS_SrvStFn02_Kick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, e
       pSkillTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags = 9;
     sDamage.dwHitFlags = 2;
     sDamage.dwPhysDamage = pSkillTxt->MinDam << D2_SHIFT_COUNT(pSkillTxt->HitShift);
@@ -2166,7 +2161,7 @@ void __fastcall SKILLS_CreateMissileRing(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }; D2_STATIC_GUARD(ganMissileRingYOffsets, "D2Game::SKILLS::SkillsServer::SKILLS_CreateMissileRing::ganMissileRingYOffsets");
 
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     eD2UnitType eTargetUnitType = pTargetUnit->eUnitType;
     sSkillArg.nFlags = 3;
     int nXValue;
@@ -2248,7 +2243,7 @@ void __fastcall SKILLS_CreateMissileStar(::SGAMEDATA * pGame, int32_t nMissileCo
 }
 
 // Server-side: gives a player a temporary weapon item in the free weapon hand for skills that require one. Inspects the player's R_ARM/L_ARM body-loc items; if a hand is empty (or the held item is not a one-handed weapon) it generates a normal-quality item of szItemCode via ITEM_CreateItemInstance at the appropriate ilvl and equips it to that body location (BODYLOC_R_ARM=4 / L_ARM=5) via SERVER_EquipItemToBodyLoc. No-op for non-player units. Halts with Fog error 0xf4c (bad item code) or 0xf55 (item creation failed).
-int32_t __fastcall SKILLS_SpawnWeaponForHand(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * szItemCode) {
+int32_t __fastcall SKILLS_SpawnWeaponForHand(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwItemCode) {
     D2ItemGenContextStrc sItemGenCtx;
     eD2BodyLocDWORD eBodyLoc;
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER) {
@@ -2266,11 +2261,11 @@ int32_t __fastcall SKILLS_SpawnWeaponForHand(::SGAMEDATA * pGame, D2UnitStrc * p
       return 0;
     }
 
-    memset(&sItemGenCtx, 0, 0x84);
+    memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
     sItemGenCtx.pUnit = pUnit;
     sItemGenCtx.pGame = pGame;
     sItemGenCtx.wItemFormat = pGame->wItemFormat;
-    sItemGenCtx.nItemClassid = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId((uint32_t)szItemCode);
+    sItemGenCtx.nItemClassid = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(dwItemCode);
     if (sItemGenCtx.nItemClassid == -1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf4c);
       exit(-1);
@@ -2465,7 +2460,7 @@ D2UnitStrc * __fastcall SKILLS_DropItemByCode(::SGAMEDATA * pGame, D2UnitStrc * 
       pNewPosition = &ptSpawnPos;
       pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptOrigPos, pNewPosition, nMinDistance, bSearchNeighbors);
       if (pRoom) {
-        memset(&sItemGenCtx, 0, 0x84);
+        memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
         sItemGenCtx.wItemFormat = pGame->wItemFormat;
         sItemGenCtx.nItemClassid = nItemClassId;
         sItemGenCtx.pUnit = pUnit;
@@ -3335,7 +3330,7 @@ D2UnitStrc * __fastcall CreatingAMissile(::SGAMEDATA * pGame, eMissilesId nSrvMi
     int nOwnerCoord;
     int32_t nAmmoRemaining;
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     eD2UnitType eUnitType = pUnit->eUnitType;
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
@@ -3408,7 +3403,7 @@ D2UnitStrc * __fastcall SKILLS_CreateMissileAtTarget(::SGAMEDATA * pGame, D2Unit
       return nullptr;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nFlags = 1;
@@ -3426,7 +3421,7 @@ D2UnitStrc * __fastcall SKILLS_CreateMissileFromUnit(::SGAMEDATA * pGame, eMissi
     bool bHasTarget;
     D2UnitStrc* pMissile;
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     eD2UnitType eUnitType = pUnit->eUnitType;
     sSkillArg.nFlags = 0x420;
     sSkillArg.pOwner = pUnit;
@@ -3554,7 +3549,7 @@ BOOL __fastcall Skills_SrvDoFunc_001_ShootArrow(::SGAMEDATA * pGame, D2UnitStrc 
       return 0;
     }
 
-    memset(&DStack_74, 0, 0x70);
+    memset(&DStack_74, 0, sizeof(DStack_74));
     DStack_74.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pWeapon, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_progressive_tohit, 0), 0);
     DStack_74.dwHitFlags |= 2;
     SkillAss::SKILLASS_ApplyProgressiveDamageToTarget(pUnit, &DStack_74);

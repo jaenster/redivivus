@@ -22,6 +22,13 @@
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Sound/SoundHdr.data.h"
+#include "Source/D2Headers/D2Arch.h"
+
+// sounds.txt is parsed at load (no .bin); every parsed column sits before the runtime pointers, so
+// the field offsets hold on every target and only the record stride is native.
+#if D2_ARCH_X86
+static_assert(sizeof(D2SoundsTxt) == 0x8e, "D2SoundsTxt: the 32-bit record must be the 0x8e bytes 1.14d allocates per row");
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -347,10 +354,10 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
       pD2File = (char*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, pD2File, nLine);
       pBinExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pD2File, nFileSize);
       nTxtSoundsSize = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinExcel);
-      pSounds = (D2SoundsTxt*)D2_ALLOC_AT(nTxtSoundsSize * 0x8e, ".\\Sound\\SoundHdr.cpp", 0x106);
+      pSounds = (D2SoundsTxt*)D2_ALLOC_AT(nTxtSoundsSize * sizeof(D2SoundsTxt), ".\\Sound\\SoundHdr.cpp", 0x106);
       pTxtSounds = pSounds;
-      memset(pSounds, 0, nTxtSoundsSize * 0x8e);
-      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinExcel, sounds, pSounds->Filename, nTxtSoundsSize, 0x8e);
+      memset(pSounds, 0, nTxtSoundsSize * sizeof(D2SoundsTxt));
+      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinExcel, sounds, pSounds->Filename, nTxtSoundsSize, sizeof(D2SoundsTxt));
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinExcel);
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\soundenviron.txt", "DATA\\GLOBAL\\EXCEL");
       nLine = 0x10d;
@@ -371,9 +378,9 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
         pSoundRow = &pTxtSounds[1].Group_Size;
         do {
           if (nGroupStart && nIdx >= nGroupStart && nIdx < nGroupSize + nGroupStart) {
-            *(int*)(pSoundRow + 0x23) = nGroupStart;
+            *(int*)(pSoundRow + (offsetof(D2SoundsTxt, nGroupStartIndex) - offsetof(D2SoundsTxt, Group_Size))) = nGroupStart;
           } else {
-            *(int*)(pSoundRow + 0x23) = nIdx;
+            *(int*)(pSoundRow + (offsetof(D2SoundsTxt, nGroupStartIndex) - offsetof(D2SoundsTxt, Group_Size))) = nIdx;
           }
           if (*pSoundRow) {
             nGroupStart = nIdx;
@@ -384,15 +391,15 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
 
           uint8_t nBlocks = 0;
           do {
-            if (*(int*)(pSoundRow + (nBlocks * 4 + 0x17)) == -1) {
+            if (*(int*)(pSoundRow + (nBlocks * 4 + (offsetof(D2SoundsTxt, Block) - offsetof(D2SoundsTxt, Group_Size)))) == -1) {
               break;
             }
             nBlocks++;
           } while (nBlocks < 3);
 
-          pSoundRow[0x43] = nBlocks;
+          pSoundRow[offsetof(D2SoundsTxt, nBlockCount) - offsetof(D2SoundsTxt, Group_Size)] = nBlocks;
           nIdx++;
-          pSoundRow += 0x8e;
+          pSoundRow += sizeof(D2SoundsTxt);
         } while (nIdx < nTxtSoundsSize);
       }
 
@@ -531,7 +538,7 @@ BOOL __stdcall SOUNDHDR_EvictLeastRecentlyUsed(int32_t nBytesNeeded, int32_t bMu
       BOOL bFreedAny = FALSE;
       for (int nPass = 0; nPass <= 1; nPass++) {
         for (D2SoundListNodeStrc* pNode = gpSoundLRUListHead; pNode; pNode = pNode->pNext) {
-          int nId = pNode->nItemKey;
+          int nId = (int)pNode->nItemKey;
           D2SoundsTxt* pSound;
           if (!pTxtSounds || nId < 0 || nId >= nTxtSoundsSize) {
             pSound = 0;

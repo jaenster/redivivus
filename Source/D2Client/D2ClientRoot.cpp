@@ -745,7 +745,7 @@ void __stdcall ClientLight_UpdateRoomLightPulse() {
       return;
     }
 
-    memset(&gRoomLightPulse, 0, 0x2c);
+    memset(&gRoomLightPulse, 0, sizeof(gRoomLightPulse));
 }
 
 int32_t __fastcall RNG_GetRandomInRangeWithMin(uint32_t * pSeed, int32_t nMin, int32_t nRange) {
@@ -3024,6 +3024,7 @@ uint32_t __fastcall WARDEN_DecryptModule(D2WardenModuleStrc * pModule, uint32_t 
           bCopyPass = !bCopyPass;
         }
 
+#if D2_ARCH_X86
         pRelocationEntry = (uint8_t*)(((uint32_t*)ppInputSaved->pLibrary)[2] + (char*)ppInputSaved->pLibrary);
         nRelOffset = 0;
         nRelocationCount = 0;
@@ -3074,6 +3075,10 @@ uint32_t __fastcall WARDEN_DecryptModule(D2WardenModuleStrc * pModule, uint32_t 
 
           ppInputSaved->nLoadedLibraryCount++;
         }
+#else
+        // The module is an x86 image: its relocations and import slots are 32-bit, and an x64 process cannot run it.
+        goto release_if_failed;
+#endif
 
         nHeaderSize = 0;
         while (true) {

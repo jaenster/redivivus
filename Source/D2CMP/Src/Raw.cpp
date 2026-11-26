@@ -8,6 +8,7 @@
 #include "Source/D2Win/DC6Block.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Headers/D2Arch.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -22,7 +23,7 @@ void __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, DC6 * pCelFile) {
     uint32_t nDirAngle;
     uint32_t nDirIndex;
     ::TCELENTRY* nDirCount;
-    size_t nFrameDataSize;
+    uint32_t nFrameDataSize;
     uint32_t nFramesPerDir = pRawFile->nFrameCount / pRawFile->nDirections;
     uint32_t iFrame = 0;
     intptr_t nFirstLink = pRawFile->m_frames.m_terminator.m_next;
@@ -30,7 +31,7 @@ void __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, DC6 * pCelFile) {
     for (nDirCount = (::TCELENTRY*)(nFirstLink <= 0 ? 0 : nFirstLink); 0 < (intptr_t)nDirCount; nDirCount = (::TCELENTRY*)nDirCount->m_link.m_next) {
       DC6Block* pNewFrame;
       nFrameDataSize = nDirCount->nWidth * nDirCount->nHeight * 3;
-      pNewFrame = (DC6Block*)D2_ALLOC_AT(nFrameDataSize + 0x23, ".\\SRC\\Raw.cpp", 0x22);
+      pNewFrame = (DC6Block*)D2_ALLOC_AT(nFrameDataSize + sizeof(DC6Block) + 3, ".\\SRC\\Raw.cpp", 0x22);
       pNewFrame->nFlip = nDirCount->dwArg7;
       pNewFrame->nWidth = nDirCount->nWidth;
       pNewFrame->nHeight = nDirCount->nHeight;
@@ -49,7 +50,11 @@ void __fastcall RAW_CreateCelFrames(::CELLIST * pRawFile, DC6 * pCelFile) {
 
       nDirIndex = CelCmp::CELCMP_GetDirectionFrameTableIndex(nDirAngle, uVar1);
       uVar1 = iFrame % nFramesPerDir;
+#if D2_ARCH_X86
       *(DC6Block**)(pCelFile[1].nTerm + (nDirIndex * nFramesPerDir + uVar1) * 4 - 0xc) = (DC6Block*)pNewFrame;
+#elif D2_ARCH_X64
+      pCelFile->pBlocks[nDirIndex * nFramesPerDir + uVar1] = pNewFrame;
+#endif
       iFrame++;
     }
 }

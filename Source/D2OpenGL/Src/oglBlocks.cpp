@@ -91,8 +91,8 @@ using namespace D2OpenGL::MacDisplayDevice;
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002dee38
 void OGLBLOCKS_AllocBuffers() {
-    DAT_00552590 = (uint32_t)(uintptr_t)D2_ALLOC_AT(0x400, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglBlocks.cpp", 0x31);
-    DAT_00552594 = (uint32_t)(uintptr_t)D2_ALLOC_AT(0x1000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglBlocks.cpp", 0x32);
+    DAT_00552590 = (uint8_t*)D2_ALLOC_AT(0x400, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglBlocks.cpp", 0x31);
+    DAT_00552594 = (uint8_t*)D2_ALLOC_AT(0x1000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglBlocks.cpp", 0x32);
     PTR_00552598 = (BYTE*)D2_ALLOC_AT(0x20000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglBlocks.cpp", 0x33);
 }
 

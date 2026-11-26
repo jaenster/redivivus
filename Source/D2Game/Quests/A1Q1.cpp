@@ -543,7 +543,7 @@ void __fastcall Q01_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // A1Q1 (Den of Evil) init (Q01_InitData) -- registers the quest. Allocates the A1Q1-specific data block, wires up the state-handler callback table (slot 0=Q01_Callback_00 gossip-line, 2=Q01_Callback_02 accept-ack, 3=Q01_Callback_03 entered-Den, 8=Q01_Callback_08 monster-kill/clear, 0x0a=Q01_Callback_10 player-left, 0x0b=Q01_Callback_11 Akara-dialog, 0x0d=Q01_Callback_13 reload), sets the Akara gossip table (NPC 0x94, string 0x40), and configures: nQuestIdReal=QUEST_DenOfEvil, nSubQuestId=QUEST_Respec (free respec), fpActiveFilter=Q01_ActiveFilter, fpSequenceFilter=Q01_SequenceFilter, nSequenceQuestId=QUEST_SistersBurialGrounds (next quest), initial nStateFlag=1. No quest-record state ops here -- pure registration.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q1.cpp
 void __fastcall Q01_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q01_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q01_Callback03_ChangedLevel;
@@ -555,7 +555,7 @@ void __fastcall Q01_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->pNpcMessages = A1Q1::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 1;
-    D2QuestDataA1Q1Strc** pQuestSpecificData = (D2QuestDataA1Q1Strc**)D2_ALLOC_POOL_AT(pGame->pMemoryPool, 0x8c, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q1.cpp", 0x2ee);
+    D2QuestDataA1Q1Strc** pQuestSpecificData = (D2QuestDataA1Q1Strc**)D2_ALLOC_POOL_AT(pGame->pMemoryPool, sizeof(D2QuestDataA1Q1Strc), "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q1.cpp", 0x2ee);
     pQuestData->pQuestSpecificData.pA1Q1 = (D2QuestDataA1Q1Strc*)pQuestSpecificData;
     pQuestData->nQuestIdReal = QUEST_DenOfEvil;
     pQuestData->nSubQuestId = QUEST_Respec;

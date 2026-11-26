@@ -39,6 +39,24 @@ typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, struct D2Un
 #endif
 
 // Data types
+#ifndef D2_DEFINED_D2GemsTxt
+#define D2_DEFINED_D2GemsTxt
+struct __attribute__((packed)) D2GemsTxt {
+    /* 0x00 */ char name[32]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x20 */ char letter[6]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x26 */ uint8_t field_0x26;
+    /* 0x27 */ uint8_t field_0x27;
+    /* 0x28 */ int code; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x2C */ uint8_t field_0x2c;
+    /* 0x2D */ uint8_t field_0x2d;
+    /* 0x2E */ char nummods; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x2F */ char transform; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x30 */ D2MagixAffixModStrc aWeaponMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x60 */ D2MagixAffixModStrc aHelmMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x90 */ D2MagixAffixModStrc aShieldMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
+};
+
+#endif // D2_DEFINED_D2GemsTxt
 #ifndef D2_DEFINED_D2ItemCalcContextStrc
 #define D2_DEFINED_D2ItemCalcContextStrc
 struct D2ItemCalcContextStrc {
@@ -47,6 +65,14 @@ struct D2ItemCalcContextStrc {
 };
 
 #endif // D2_DEFINED_D2ItemCalcContextStrc
+#ifndef D2_DEFINED_D2ItemsEventMethodStrc
+#define D2_DEFINED_D2ItemsEventMethodStrc
+struct D2ItemsEventMethodStrc {
+    /* 0x00 */ int (__fastcall *pfnMethod)(int32_t, int32_t, uint32_t, void *); // Skill-calc operator. All 11 handlers across the two tables are __fastcall with RET 0x8: two operands in ECX/EDX, a third operand and the context pointer on the stack. The old fnSkillCalcMethod (2 params) belongs to SKILLS_CompileSkillFormula's pFunction parameter, not to this slot.
+    /* 0x04 */ int nArgCount; // Number of stack args to pop before call (0=none, 1=one, 2=two, 3=three+return)
+};
+
+#endif // D2_DEFINED_D2ItemsEventMethodStrc
 #ifndef D2_DEFINED_D2ItemsTxt
 #define D2_DEFINED_D2ItemsTxt
 struct D2ItemsTxt {
@@ -250,6 +276,16 @@ struct D2ItemsTxt {
 };
 
 #endif // D2_DEFINED_D2ItemsTxt
+#ifndef D2_DEFINED_D2ItemWeaponClassCodeStrc
+#define D2_DEFINED_D2ItemWeaponClassCodeStrc
+struct D2ItemWeaponClassCodeStrc {
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+
+    /* 0x00 */ uint32_t dwCode; // ItemsTxt wclass code, e.g. 'bow ', '1hs '
+    /* 0x04 */ uint32_t nWeaponClass; // value ITEM_GetWeaponAnimClass returns for that code
+};
+
+#endif // D2_DEFINED_D2ItemWeaponClassCodeStrc
 #ifndef D2_DEFINED_D2MagicAffixTableStrc
 #define D2_DEFINED_D2MagicAffixTableStrc
 struct D2MagicAffixTableStrc {
@@ -325,6 +361,24 @@ struct D2RunesTxtTableStrc {
 };
 
 #endif // D2_DEFINED_D2RunesTxtTableStrc
+#ifndef D2_DEFINED_D2UnitDataItemDetailsStrc
+#define D2_DEFINED_D2UnitDataItemDetailsStrc
+struct __attribute__((packed)) D2UnitDataItemDetailsStrc {
+    /* 0x00 */ uint32_t classId;
+    /* 0x04 */ uint16_t x;
+    /* 0x06 */ uint16_t y;
+    /* 0x08 */ uint8_t nAnimMode;
+    /* 0x09 */ uint8_t reserved_09;
+    /* 0x0A */ uint8_t reserved_0A;
+    /* 0x0B */ uint8_t reserved_0B;
+    /* 0x0C */ eD2ItemFlag flags;
+    /* 0x10 */ uint8_t nInvPage;
+    /* 0x11 */ uint8_t nBodyLoc;
+    /* 0x12 */ uint16_t reserved_12_13;
+    /* 0x14 */ uint32_t usedSockets;
+};
+
+#endif // D2_DEFINED_D2UnitDataItemDetailsStrc
 #ifndef D2_DEFINED_D2RuneTableStrc
 #define D2_DEFINED_D2RuneTableStrc
 struct __attribute__((packed)) D2RuneTableStrc {

@@ -78,7 +78,7 @@ int __stdcall FIELDTBLS_InitFieldData(D2ExpFieldFileStrc * pArchive, uint32_t dw
 
     uint32_t nHeight = pArchive->nHeight;
     uint32_t nWidth = pArchive->nWidth;
-    size_t nAllocSize = nWidth * nHeight;
+    uint32_t nAllocSize = nWidth * nHeight;
     uint8_t* pFieldData = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\FieldTbls.cpp", 0x3e);
     if (!pFieldData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x40);

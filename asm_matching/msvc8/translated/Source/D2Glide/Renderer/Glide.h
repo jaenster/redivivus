@@ -149,7 +149,7 @@ void __fastcall SetPalette(LPPALETTEENTRY pPalette);
 int32_t __fastcall RENDERER_GLIDE_ScalePaletteValue(int32_t nPaletteIndex);
 void __fastcall SetPaletteTable(BYTE * * ppPaletteTable);
 BOOL __fastcall ActivateWindow();
-BOOL __fastcall SetOption(int32_t nOption, int32_t nValue);
+BOOL __fastcall SetOption(int32_t nOption, intptr_t nValue);
 void __fastcall RENDERER_GLIDE_SetTextureMode(int32_t nTextureMode);
 void __fastcall RENDERER_GLIDE_SetColorCombine(int32_t nCombineMode);
 void __fastcall RENDERER_GLIDE_SetAlphaBlendMode(int32_t nAlphaBlendMode);

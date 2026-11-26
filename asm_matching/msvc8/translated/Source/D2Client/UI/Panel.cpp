@@ -243,7 +243,7 @@ void __stdcall FreePanelImages() {
 
 void __stdcall PANEL_DrawHostileIndicator() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     BOOL bSuppressed = 0;
     int nYOffset = 0;
     BOOL bUIFlag = GAME::Roster::ROSTER_CheckAnyPlayerHostileToMe();
@@ -474,7 +474,7 @@ void __stdcall PANEL_DrawHealthOrb() {
       }
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = Hlthmana;
     sGfxData.nFrameNumber = 0;
@@ -523,7 +523,7 @@ void __stdcall PANEL_DrawManaOrb() {
     }
 
     int nPercentHideFromBottom = nMana * 0x50 / nMaxMana;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = Hlthmana;
     sGfxData.nFrameNumber = 1;
@@ -620,7 +620,7 @@ void __stdcall PANEL_DrawRunButton() {
     D2GfxDataStrc sGfxData;
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = runbutton;
     sGfxData.nDirection = 0;
     BOOL bAlwaysRun = GAME::Game::GetGlobalAlwaysRun();
@@ -720,7 +720,7 @@ void __stdcall PANEL_DrawMenuButton() {
     int nMouseY;
     int nMouseX;
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = menubutton;
     sGfxData.nDirection = 0;
     BOOL bMiniPanel;
@@ -913,7 +913,7 @@ void __stdcall PANEL_DrawBeltSlots(int32_t nFrameNumber) {
       nSlotIndex++;
     } while (nSlotIndex < 6);
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = Invwarn;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = nFrameNumber;
@@ -970,7 +970,7 @@ static void __stdcall Draw_EquipmentNeedToRepairBody_1(int32_t bIsLeftSide, int3
     }
 
     int nOffsetY = 0;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = DuroIcon;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = nIconFrame;
@@ -1269,7 +1269,7 @@ void __stdcall PANEL_DrawLife() {
 
 static void PANEL_DrawCharacterInfo(int32_t nPanelOffsetY) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     DWORD eResolutionMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     switch (eResolutionMode) {
       case 2:
@@ -1331,7 +1331,7 @@ static void PANEL_DrawCharacterInfo(int32_t nPanelOffsetY) {
 
 void __stdcall DRAW_UI_BorderLeft() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     if (!_00BorderFrame) {
       _00BorderFrame = ui::ARCHIVE_LoadOverlayImageUsedInGame("Panel\\800BorderFrame");
     }
@@ -1357,7 +1357,7 @@ void __stdcall DRAW_UI_BorderRight() {
     }
 
     DC6* pDVar1 = _00BorderFrame;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pDVar1;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 5;
@@ -1850,7 +1850,7 @@ void __stdcall PANEL_DrawBottomPanel() {
         break;
       }
 
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       nDrawY = 0;
       sGfxData.nDirection = 0;
       sGfxData.nFrameNumber = 0;
@@ -2333,7 +2333,7 @@ void __stdcall INPUT_PanelRightClick(D2UIMouseMsgStrc * pMsg) {
             return;
           }
 
-          ClickBeltRight(bIsDeadOrSlot, pPlayer, pPlayer->pInventory, pMsg->nWParam >> 2 & 1);
+          ClickBeltRight(bIsDeadOrSlot, pPlayer, pPlayer->pInventory, (int32_t)(pMsg->nWParam >> 2 & 1));
           Storm::SMsgBreakHandlerChain(pMsg);
           return;
         }

@@ -84,7 +84,7 @@
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
 #include "Source/D2Game/D2CreateMonsterUnitStrc.h"
 #include "Source/D2Game/D2GameRoot.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Monster/Monsters.h"
 #include "Source/D2Game/Objects/Objects.h"
@@ -508,7 +508,7 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
       return 0;
     }
 
-    memset(&spriteParams, 0, 0x48);
+    memset(&spriteParams, 0, sizeof(spriteParams));
     int32_t nOffset = -1;
     int* pFrameCountOut = &__frame0.nFrameCountOut;
     uint32_t nFrameLocal = nFrame;
@@ -2171,27 +2171,23 @@ void __fastcall UNITS_RemoveFromClientHashTable(uint32_t dwUnitGUID, int32_t nUn
 
 // Inserts a newly allocated unit into the server-side hash table. If insertion fails due to a GUID collision, evicts the existing unit and retries. If the retry also fails, frees pUnit and returns null. Returns pUnit on success.
 static D2UnitStrc * FinalizeCreation(D2UnitStrc * pUnit) {
-    uint32_t bInserted = InsertIntoHashTable(pUnit);
-    if (bInserted) {
-      return pUnit;
-    }
-
-    D2UnitStrc* pExisting = FindUnit(ServerSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
-    if (pExisting == pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c6);
-      exit(-1);
-    }
-    if (pExisting) {
-      D2UnitStrc* (*papDVar1)[128] = !FlagBit_D2UnitStrc_eUnitFlags_21(pExisting) ? ServerSideUnitHashTables : ClientSideUnitHashTables;
-      CUnit::RemoveObject(pExisting->nUnitGUID, pExisting->eUnitType, papDVar1[pExisting->eUnitType], pExisting->nUnitGUID & 0x7f);
-      bInserted = InsertIntoHashTable(pUnit);
-      if (bInserted) {
-        return pUnit;
+    if (!InsertIntoHashTable(pUnit)) {
+      D2UnitStrc* pExisting = FindUnit(ServerSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
+      if (pExisting == pUnit) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1c6);
+        exit(-1);
       }
+      if (pExisting) {
+        CUnit::RemoveObject(pExisting->nUnitGUID, pExisting->eUnitType, FlagBit_D2UnitStrc_eUnitFlags_21(pExisting) ? ClientSideUnitHashTables[pExisting->eUnitType] : ServerSideUnitHashTables[pExisting->eUnitType], pExisting->nUnitGUID & 0x7f);
+        if (InsertIntoHashTable(pUnit)) {
+          return pUnit;
+        }
+      }
+
+      FreeAny(pUnit);
+      pUnit = 0;
     }
 
-    FreeAny(pUnit);
-    pUnit = 0;
     return pUnit;
 }
 

@@ -134,7 +134,7 @@ void __fastcall DrawScrollbar(::ListBoxImplementation * pThis, int) {
 
     nFirstVisible = pThis->nScrollBarY + 0xd;
     nVisibleCount = pThis->nScrollBarX - 1;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     int nThumbTop = nFirstVisible + nItemCount * 0xc;
     sGfxData.pDC6 = UNIT::Object::gpMessageLogDC6;
     sGfxData.nDirection = 0;
@@ -506,7 +506,7 @@ void __fastcall Draw(::ListBoxImplementation * pThis, int) {
     nPrevFontId = D2Win::Src::D2WinFont::SetAndReturnLastFont(pThis->nDefaultFont);
     int nScrollOffset;
     nScrollOffset = 0;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = UNIT::Object::gpMessageLogDC6;
     sGfxData.nFrameNumber = pThis->bScrollUpPressed != 0 ? 0xbU : 0x9U;
     sGfxData.nDirection = 0;

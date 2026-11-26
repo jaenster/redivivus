@@ -120,7 +120,7 @@ namespace D2Launch::CharSel {
 // Provenance: asm 00437a70..00437aa8; unreferenced in 1.14d.
 void * __fastcall CHARSEL_GetCachedRealmData(char * szName);
 // @sourcefile .\Src\CharSel.cpp
-void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, size_t nDataSize);
+void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, uint32_t nDataSize);
 // @sourcefile .\Src\CharSel.cpp
 void __stdcall CHARSEL_FreeCachedRealmData();
 void __stdcall UIMENU_ItsLikeRealmSelectionMenuButOffsetToRightSide();

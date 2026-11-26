@@ -45,7 +45,7 @@ uint32_t __stdcall CELCMP_GetPaletteShiftValue(uint32_t nPaletteIndex, uint32_t 
 uint32_t __stdcall CELCMP_GetFrameDecodeHandlerReverse(uint32_t nGameDirection, uint32_t nLevelOfRotation);
 void __stdcall CELCMP_FixupPointersAndPrepare(struct DC6 * pDC6, struct DC6 * * ppDC6Out, char * szFile, int32_t nLine, int32_t nExpectedFormat, char * szName);
 void __stdcall CELCMP_DrawCelFrame(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, uint32_t nDstPitch, BYTE * pRenderArg1, BYTE * pRenderArg2, BYTE * pPalette);
-void __stdcall CELCMP_DrawCelFrameFromGfxData(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, uint8_t * pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2);
+void __stdcall CELCMP_DrawCelFrameFromGfxData(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, uint8_t * pLookupTable1, uint8_t * pBlendTable, int32_t nClipTop, int32_t nClipBottom, uint8_t * pLookupTable2);
 void __stdcall CELCMP_DrawCelFrameCentered(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, int32_t nDstPitch, BYTE * pBlendTable, uint8_t byBlendColor);
 struct DC6Block * __stdcall CELCMP_GetDC6BlockFromGfxData(struct D2GfxDataStrc * pGfxData);
 int32_t __stdcall GetDC6Width(struct DC6Block * pDC6Block);
@@ -55,7 +55,7 @@ int32_t __stdcall GetDC6OffsetY(struct DC6Block * pDC6Block);
 int32_t __stdcall IMAGE_GetFramesCount(struct DC6 * pDC6);
 void __stdcall CELCMP_SetPixelDataFreeCallback(pfnCelPixelDataFree pfnFreeCallback);
 BOOL __stdcall DeleteCellFile(struct DC6 * pDC6);
-int __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
+uint8_t * __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
 void __stdcall GFX_SetSpriteCacheFreeCallback(pfnLruFreeEntry pfnFreeEntry);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
@@ -72,7 +72,7 @@ void __stdcall CELCMP_FreeCelFileMemory(void * pCelFile);
 void __stdcall CELCMP_InvokeFormatSpecificCleanup(struct DC6 * pDC6, BYTE * pPaletteRemap);
 BOOL __stdcall CELCMP_CopyCelDataToBuffer(struct DC6 * pDC6, int32_t nDirection, int32_t nFrame, void * pDstBuffer);
 uint32_t __stdcall CELCMP_ValidateGfxDataIndexInRange(struct D2GfxDataStrc * pGfxData);
-int32_t __stdcall CELCMP_GetDC6BlockDataPointer(int32_t pFrameBlock);
+intptr_t __stdcall CELCMP_GetDC6BlockDataPointer(intptr_t pFrameBlock);
 int32_t __stdcall CELCMP_GetDC6DirectionCount(int * pDC6File);
 pfnCelPixelDataFree __stdcall CELCMP_GetPixelDataFreeCallback();
 void Unreferenced_00601b40();

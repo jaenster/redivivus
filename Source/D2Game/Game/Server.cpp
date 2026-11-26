@@ -812,7 +812,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, in
     char* pSendBuffer;
     int32_t nClientId;
     if (BattleNetServerService) {
-      size_t nSize;
+      uint32_t nSize;
       nClientId = *(int32_t*)pBytes;
       if (!false) {
         switch (pBytes[5]) {
@@ -865,7 +865,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, in
               *(uint32_t*)((char*)&sPacketFF01 + 189) = sSystemInfo.dw0xEC;
               *(uint32_t*)((char*)&sPacketFF01.sHead + 177) = sSystemInfo.dw0xB4;
               *(uint32_t*)((char*)&sPacketFF01.sHead + 185) = sSystemInfo.dw0xC0;
-              /* Input Data */ /* Destination */ pSrcInts = sSystemInfo.aSomeInts;
+              /* Input Data */ /* Destination */ pSrcInts = sSystemInfo.aSomeInts; // steer-ok: generated form, kept as emitted
               pDstInts = sPacketFF01.aSomeInts;
               /* Set Array length */ /* Copy operation */ memcpy(pDstInts, pSrcInts, 32);
               *(uint32_t*)((char*)&sPacketFF01 + 225) = sSystemInfo.dw0x110;
@@ -879,7 +879,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, in
               sPacketFF01.field20_0xff = sSystemInfo.adw0xD6[2];
               sPacketFF01.field21_0x103 = sSystemInfo.adw0xD6[3];
               sPacketFF01.field22_0x107 = sSystemInfo.adw0xD6[4];
-              memset(sPacketFF01.nZeroed, 0, 0x4a);
+              memset(sPacketFF01.nZeroed, 0, sizeof(sPacketFF01.nZeroed));
               nSize = 0xbd;
               switch (sPacketFF01.sHead.nPacketSubType) {
                 case 1:
@@ -909,7 +909,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, in
 // Multiplayer: Async via QServer packet queue
 // Connects client input → server validation → game state changes.
 void NET_D2GS_SERVER_HandleAnyIncomingPacket() {
-    size_t nSizeMode1;
+    uint32_t nSizeMode1;
     int nSizeMode2;
     char pBytes[512];
     while (true) {
@@ -1315,7 +1315,7 @@ void __fastcall ServerGameLoop(::SGAMEDATA * pGame) {
                          will cause a crash */ if (nUpdateTickMode == 1) {
       *(volatile uint8_t*)0x0 = 0;
     } else if (nUpdateTickMode == 2) {
-      *(volatile uint8_t*)0xc0000001 = 0;
+      *(volatile uint8_t*)(uintptr_t)0xc0000001 = 0;
     } else {
       if (nUpdateTickMode == 3) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe1c);
@@ -1524,7 +1524,7 @@ static void __stdcall GAME_TrackGameStatistics(D2Game_Line0x13af * pStatRoot, in
       return;
     }
 
-    memset(pNewNode, 0, 0x90);
+    memset(pNewNode, 0, sizeof(*pNewNode));
     pNewNode->nValue = nNodeValue;
     pNewNode->nWins = 0;
     pNewNode->nLosses = 0;
@@ -2721,7 +2721,7 @@ void __fastcall SetGameName(::SGAMEDATA * pGame, char * szGameName, uint32_t dwF
     }
 
     memcpy(szDedupeName, szGameName, nBaseNameLen);
-    sprintf(szDedupeName + nBaseNameLen, "~%d", szGameName, 0);
+    sprintf(szDedupeName + nBaseNameLen, "~%d", (int)(intptr_t)szGameName, 0); // 1.14d formats the name pointer here (its low 32 bits), not a counter
     int nDedupeIdx = 1;
     bNameAvailable = GAME_CheckIfGameNameExistsSafely(szDedupeName);
     if (!bNameAvailable) {
@@ -3281,16 +3281,16 @@ uint32_t __stdcall GAME_CreateBattleNetGame(char * szGameName, char * szGamePass
       exit(-1);
     }
 
-    LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION)D2_ALLOC_POOL_AT(nullptr, 0x18, ".\\GAME\\Game.cpp", 0x31c);
+    LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION)D2_ALLOC_POOL_AT(nullptr, sizeof(CRITICAL_SECTION), ".\\GAME\\Game.cpp", 0x31c);
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ pGame->lpCriticalSection = lpCriticalSection;
     InitializeCriticalSection(lpCriticalSection);
     Fog::Memory::InitializePoolSystem(&pGame->pMemoryPool, szGameName, 0x8000, 0x1000);
-    memset(pGame->pUnitList, 0, 0x200);
-    memset(pGame->pUnitList + 1, 0, 0x200);
-    memset(pGame->pUnitList + 2, 0, 0x200);
-    memset(pGame->pUnitList + 3, 0, 0x200);
-    memset(pGame->pUnitList + 4, 0, 0x200);
-    memset(pGame->fUniqueSpawn, 0, 0x200);
+    memset(pGame->pUnitList, 0, sizeof(*pGame->pUnitList));
+    memset(pGame->pUnitList + 1, 0, sizeof(*(pGame->pUnitList + 1)));
+    memset(pGame->pUnitList + 2, 0, sizeof(*(pGame->pUnitList + 2)));
+    memset(pGame->pUnitList + 3, 0, sizeof(*(pGame->pUnitList + 3)));
+    memset(pGame->pUnitList + 4, 0, sizeof(*(pGame->pUnitList + 4)));
+    memset(pGame->fUniqueSpawn, 0, sizeof(pGame->fUniqueSpawn));
     pGame->nServerToken = (uint16_t)nQServerToken;
     pGame->bGameIsSetup = 1;
     SetGameName(pGame, szGameName, 0);
@@ -3363,16 +3363,16 @@ void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName
       return;
     }
 
-    LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION)D2_ALLOC_POOL_AT(nullptr, 0x18, ".\\GAME\\Game.cpp", 0x4d9);
+    LPCRITICAL_SECTION lpCriticalSection = (LPCRITICAL_SECTION)D2_ALLOC_POOL_AT(nullptr, sizeof(CRITICAL_SECTION), ".\\GAME\\Game.cpp", 0x4d9);
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ pGame->lpCriticalSection = lpCriticalSection;
     InitializeCriticalSection(lpCriticalSection);
     pGame->pMemoryPool = 0;
-    memset(pGame->pUnitList, 0, 0x200);
-    memset(pGame->pUnitList + 1, 0, 0x200);
-    memset(pGame->pUnitList + 2, 0, 0x200);
-    memset(pGame->pUnitList + 3, 0, 0x200);
-    memset(pGame->pUnitList + 4, 0, 0x200);
-    memset(pGame->fUniqueSpawn, 0, 0x200);
+    memset(pGame->pUnitList, 0, sizeof(*pGame->pUnitList));
+    memset(pGame->pUnitList + 1, 0, sizeof(*(pGame->pUnitList + 1)));
+    memset(pGame->pUnitList + 2, 0, sizeof(*(pGame->pUnitList + 2)));
+    memset(pGame->pUnitList + 3, 0, sizeof(*(pGame->pUnitList + 3)));
+    memset(pGame->pUnitList + 4, 0, sizeof(*(pGame->pUnitList + 4)));
+    memset(pGame->fUniqueSpawn, 0, sizeof(pGame->fUniqueSpawn));
     pGame->bGameIsSetup = 1;
     uint16_t uVar1 = QSERVER_GenerateToken();
     pGame->nServerToken = uVar1;

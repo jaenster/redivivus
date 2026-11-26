@@ -300,7 +300,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge(D2UnitStrc * p
     int32_t nChargeCount = D2Common::Skills::SKILL_GetParam1(pSkill);
     if (nChargeCount <= 0) {
       D2UnitStrc* pMissileUnit;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.nUnitY = nUnitY;
       sSkillArg.nFlags = 0x20;
@@ -387,7 +387,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_StreamMissile(D2UnitStrc * pUnit,
     }
 
     int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pOwnerUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.pOwner = pOwnerUnit;
     sSkillArg.nFlags = 1;
     sSkillArg.nX = nPosX;

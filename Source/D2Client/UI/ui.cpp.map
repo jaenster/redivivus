@@ -4674,21 +4674,6 @@
       ]
     },
     {
-      "name": "CHAR_FreePanelAssets_NoOp",
-      "address": "004a7ad0",
-      "lines": [
-        {
-          "line": 1,
-          "address": "004a7ad0"
-        }
-      ],
-      "namespace": "D2Client::UI::ui",
-      "calledFunctions": [
-        "CHAR_FreePanelAssets_NoOp"
-      ],
-      "dh": "937e2d4a"
-    },
-    {
       "name": "CHAR_FreePanelAssets_NoOp_Unref_004b3330",
       "address": "004b3330",
       "lines": [

@@ -790,7 +790,7 @@ static uint8_t * __stdcall SKILLS_EmitFormulaBytecode(uint8_t * pWritePtr, D2Ski
     int nWriteOffset;
     if (pOperatorStack->nTop > 0) {
       uint8_t opcode;
-      nWriteOffset = (intptr_t)pWritePtr - (intptr_t)pBuffer;
+      nWriteOffset = (int)(pWritePtr - pBuffer);
       do {
         opcode = pOperatorStack->abTokenTypes[pOperatorStack->nTop - 1];
         if (opcode == 1 || bToken == 1 || opcode >= 0x17 || gaCalcOpcodePrecedence[opcode] < bToken) {
@@ -954,7 +954,7 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
         return 0;
         case 1:
           if (__frame0.sOpStack.nTop > 0) {
-            nBytesWritten = (intptr_t)pbWritePtr - (intptr_t)pbByteCodeOutput;
+            nBytesWritten = (int)(pbWritePtr - pbByteCodeOutput);
             while (true) {
               iVar1 = __frame0.sOpStack.nTop;
               __frame0.aTokenBuf = __frame0.sOpStack.abTokenTypes[__frame0.sOpStack.nTop - 1];
@@ -979,7 +979,7 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
                   return 0;
                 }
 
-                byFuncIdx = (uint8_t)nFunctionArg;
+                byFuncIdx = (uint8_t)nFunctionArg; // steer-ok: generated text, unchanged; the body is pinned for its x64 type edit
                 *pbFinalWrite = byFuncIdx;
                 pbWritePtr += 2;
                 break;
@@ -1090,12 +1090,12 @@ int __stdcall SKILLS_ParseCalcExpression(char * szExpressionString, uint8_t * pb
     if (pbWritePtr) {
       uint32_t nConstValue;
       if (!bHasVarRef) {
-        nConstValue = FOG_EvaluateCalcExpression((uint32_t*)pbByteCodeOutput, (intptr_t)pbWritePtr - (intptr_t)pbByteCodeOutput, nullptr, nullptr, 0, nullptr);
+        nConstValue = FOG_EvaluateCalcExpression((uint32_t*)pbByteCodeOutput, (int)(pbWritePtr - pbByteCodeOutput), nullptr, nullptr, 0, nullptr);
         pbWritePtr = SKILLS_WriteValueToBuffer(pbByteCodeOutput, nConstValue, nMaxOutputSize, (D2QuestDataA5Q2Strc*)&__frame0.sOpStack, pbByteCodeOutput);
         pbWritePtr = SKILLS_EmitFormulaBytecode(pbWritePtr, &__frame0.sOpStack, pbByteCodeOutput, nMaxOutputSize, 0, nullptr, 0);
       }
 
-      return (intptr_t)pbWritePtr - (intptr_t)pbByteCodeOutput;
+      return (int)(pbWritePtr - pbByteCodeOutput);
     }
 
     *pbByteCodeOutput = 0;

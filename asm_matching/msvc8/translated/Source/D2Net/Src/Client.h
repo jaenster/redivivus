@@ -1331,7 +1331,7 @@ struct D2GameClients_Line0x347 {
 #define D2_DEFINED_D2OnePacketClientStrc
 __pragma(pack(push, 1)) struct D2OnePacketClientStrc {
     /* 0x000 */ char pBytes[516];
-    /* 0x204 */ size_t nSize;
+    /* 0x204 */ uint32_t nSize;
     /* 0x208 */ DWORD nTickCount;
     /* 0x20C */ struct D2OnePacketClientStrc * pD2PacketClientNext;
 }; __pragma(pack(pop))
@@ -1355,9 +1355,9 @@ void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType
 // Shuts down client-server connection. Frees packet buffer, sets shutdown flag, waits for thread (6s timeout), frees both packet queues (0xAF/0xAE), deletes critical section, closes socket for non-singleplayer.
 // @sourcefile .\SRC\Client.cpp
 void __stdcall NET_CLIENT_ShutdownConnection();
-size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_to0xAE(char * pBytes, size_t nSize);
-size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, size_t nSize);
-uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(size_t nSize, int32_t Unused, char * pBytes);
+uint32_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_to0xAE(char * pBytes, uint32_t nSize);
+uint32_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, uint32_t nSize);
+uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(uint32_t nSize, int32_t Unused, char * pBytes);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Net)
 // Sets client connection timeout value in gnNetConnectionTimeoutMs. Thread-safe update via critical section. Only applies to non-singleplayer modes.

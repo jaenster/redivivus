@@ -10,7 +10,6 @@
 
 #include "Source/D2Common/DataTbls/MonsterTbls.h"
 #include "Source/D2Common/D2Common.h"
-#include "Source/D2Client/Unit/Monster.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Headers/d2_platform.h"
 

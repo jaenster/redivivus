@@ -451,7 +451,7 @@ void OGL_SetPaletteTable(BYTE * * pPaletteTable) {
     // Static local variables (originally global data)
     static BYTE * PTR_ARRAY_005525a8[72] = {}; D2_STATIC_GUARD(PTR_ARRAY_005525a8, "D2OpenGL::oglCore::OGL_SetPaletteTable::PTR_ARRAY_005525a8");
 
-    Storm::Source::SMem::SMemCopy(PTR_ARRAY_005525a8, pPaletteTable, 0x120);
+    Storm::Source::SMem::SMemCopy(PTR_ARRAY_005525a8, pPaletteTable, sizeof(PTR_ARRAY_005525a8));
     PTR_005e9e20 = PTR_ARRAY_005525a8;
 }
 

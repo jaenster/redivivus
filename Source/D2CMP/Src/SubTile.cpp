@@ -86,7 +86,7 @@ char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, uint32_t * ppCompress
           pDstPtr++;
         } else {
           nLiteralCount = SUBTILE_CountRunLengthForByte(pDataStart, pRowEnd, '\0', 0x7f, &bAtEnd, &bExactMatch);
-          cZeroRunLen = (char)nRunLength;
+          cZeroRunLen = (char)nRunLength; // steer-ok: generated form, kept as emitted
           *pDstPtr = cZeroRunLen;
           pDstPtr[1] = (char)nLiteralCount;
           pDstPtr += 2;
@@ -113,7 +113,7 @@ char * __fastcall SUBTILE_CompressToRLE(char * pDataStart, uint32_t * ppCompress
 
       pRowStart = pNextRowStart;
       if (iRow >= 0x20) {
-        *ppCompressedEnd = (intptr_t)pDstPtr - (intptr_t)pWorkBuf;
+        *ppCompressedEnd = (uint32_t)((intptr_t)pDstPtr - (intptr_t)pWorkBuf);
         return pWorkBuf;
       }
     } while (true);

@@ -13,9 +13,21 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/Player/Player.h"
 
 // Data types
+#ifndef D2_DEFINED_D2CharItemStrc
+#define D2_DEFINED_D2CharItemStrc
+struct D2CharItemStrc {
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+
+    /* 0x00 */ int dwItemCode;
+    /* 0x04 */ char nBodyLoc;
+    /* 0x05 */ char nItemCount;
+    /* 0x06 */ uint8_t field_0x6;
+    /* 0x07 */ uint8_t field_0x7;
+};
+
+#endif // D2_DEFINED_D2CharItemStrc
 __pragma(pack(push, 1)) struct D2CharStatsTxt {
     /* 0x00 */ uint16_t wszClass[16];
     /* 0x20 */ char szClass[16];

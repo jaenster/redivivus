@@ -772,7 +772,7 @@ bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 // Q18_InitData — Lam Esen's Tome constructor. Zeroes the state-handler table, wires NPC gossip table, sets nQuestIdReal=QUEST_LamEsensTome, nInitNo=4, the status/active/sequence filters, nSequenceQuestId=QUEST_BladeOfTheOldReligion, allocates the 0xA0 quest-specific struct, and registers the state-handler callbacks (idx 0,3,4,5,9,0xb,0xd,0xe,10 -> Q18_Callback_*). Defaults bCanComplete=true. No quest-record access.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
 void __fastcall Q18_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->pNpcMessages = A3Q1::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;
@@ -793,7 +793,7 @@ void __fastcall Q18_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[0xe] = Q18_Callback14_PlayerJoinedGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q18_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[9] = Q18_Callback09_PlayerDroppedWithQuestItem;
-    memset(pQuestSpecificData, 0, 0xa0);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     pQuestSpecificData->bCheckPartyForTome = false;
     pQuestSpecificData->bNotifiedPlayers = '\0';
     pQuestSpecificData->bCanComplete = '\x01';

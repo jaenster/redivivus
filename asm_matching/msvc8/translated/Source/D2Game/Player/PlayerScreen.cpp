@@ -39,32 +39,39 @@ void __fastcall SendPlayerEvent(D2ClientStrc * pThis, int, uint32_t pUnitGid, ui
     sEventPacket.nColor = '\x03';
     sEventPacket.nArgTypes = nPartyEventCode;
     switch (nPartyEventCode) {
-      case '\x01':
-
-      case '\x02':
+      case 1:
         sEventPacket.nColor = '\x04';
-      break;
-      case '\x03':
+        break;
+      case 2:
+        sEventPacket.nColor = '\x04';
+        break;
+      case 3:
         sEventPacket.nColor = '\b';
-      break;
-      case '\x04':
+        break;
+      case 4:
         sEventPacket.nColor = '\0';
-      break;
-      case '\x05':
-
-      case '\a':
-
-      case '\b':
+        break;
+      case 5:
         sEventPacket.nColor = '\x02';
-      break;
-      case '\x06':
-
-      case '\t':
-
-      case '\n':
-
-      case '\v':
+        break;
+      case 6:
         sEventPacket.nColor = '\t';
+        break;
+      case 7:
+        sEventPacket.nColor = '\x02';
+        break;
+      case 8:
+        sEventPacket.nColor = '\x02';
+        break;
+      case 9:
+        sEventPacket.nColor = '\t';
+        break;
+      case 10:
+        sEventPacket.nColor = '\t';
+        break;
+      case 11:
+        sEventPacket.nColor = '\t';
+        break;
     }
 
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG(pThis, &sEventPacket);
@@ -191,7 +198,7 @@ void __fastcall AssignPlayerToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2P
 }
 
 // Processes acceptance of a party invite between pUnit (acceptor) and pInvitee (inviter). Allocates bidirectional player-list entries, checks PLAYERLIST_IsPartied result: if not fully partied sends 0x8B relationship packets and returns. Otherwise allocates a new party (if invitee has none) or joins the existing one via PARTY_AddUnitToParty, refreshes all relationship states, sends a join event (bParam=8) to acceptor's client, and iterates all units to assign them to the party.
-void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pInvitee, uint32_t dwUnused1, int * pnError) {
     // Frame slots -16..-4 are ONE object: &pIterArg0 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -234,7 +241,7 @@ void __fastcall PARTYSCREEN_AcceptPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * 
 // @caveat neither has xrefs (both are dispatch-table entries), so which one Blizzard called
 // 'AcceptPartyInvite' is inferred from behaviour, not proven. What would settle it: the party-screen
 // packet handler table that references them, or the SendPlayerEvent event-code enum (6 vs 8).
-void __fastcall PARTYSCREEN_CancelPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pInvitee, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall PARTYSCREEN_CancelPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pInvitee, uint32_t dwUnused1, int * pnError) {
     uint32_t nInviterGUID;
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pInvitee);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pInvitee, pUnit);
@@ -268,7 +275,7 @@ void __fastcall PARTYSCREEN_CancelPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // @sourcefile .\PLAYER\PartyScreen.cpp
-void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t dwUnused1, uint32_t dwUnused2) {
+void __fastcall PARTYSCREEN_SendPartyInvite(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t dwUnused1, int * pnError) {
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pUnit, pTarget);
     UNIT::PlayerList::PLAYERLIST_AddPlayerEntry(pGame, pTarget, pUnit);
     uint16_t uVar1 = UNIT::PlayerList::PLAYERLIST_IsPartied(pUnit, pTarget);
@@ -463,15 +470,15 @@ eD2ServerIncomingStatus __fastcall PARTYSCREEN_DispatchAction(::SGAMEDATA * pGam
     // Static local variables (originally global data)
     static pfnPartyScreenAction gaPartyScreenActionTable[10] = {
     nullptr,
-    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetCorpseLootPermission,
-    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateMuteRelation,
-    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateSquelchRelation,
-    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_ToggleHostile,
+    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SetCorpseLootPermission,
+    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateMuteRelation,
+    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_UpdateSquelchRelation,
+    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_ToggleHostile,
     nullptr,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_SendPartyInvite,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_CancelPartyInvite,
     &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_AcceptPartyInvite,
-    (pfnPartyScreenAction)&D2Game::PLAYER::PlayerScreen::PARTYSCREEN_LeaveParty
+    &D2Game::PLAYER::PlayerScreen::PARTYSCREEN_LeaveParty
 }; D2_STATIC_GUARD(gaPartyScreenActionTable, "D2Game::PLAYER::PlayerScreen::PARTYSCREEN_DispatchAction::gaPartyScreenActionTable");
 
     int nError = 0;
@@ -484,7 +491,7 @@ eD2ServerIncomingStatus __fastcall PARTYSCREEN_DispatchAction(::SGAMEDATA * pGam
         return SERVERSTATUS_BAD_PARAMS;
       }
 
-      (*gaPartyScreenActionTable[nActionIndex])(pGame, pUnit, pActingUnit, dwArg, (uintptr_t)&nError);
+      (*gaPartyScreenActionTable[nActionIndex])(pGame, pUnit, pActingUnit, dwArg, &nError);
       if (nError) {
         return SERVERSTATUS_BAD_PARAMS;
       }

@@ -124,7 +124,7 @@ void __fastcall ASYNCDATA_CancelAndCleanup(D2AsyncData_Line0x128 * pAsyncData) {
     D2_FREE_POOL_AT(pAsyncData->pMemory, pAsyncData->pReadBuffer, ".\\Src\\AsyncData.cpp", 0xd7);
     nResultSize = pAsyncData->tCallback.nResultSize;
     pAsyncData->pReadBuffer = pAsyncData->tCallback.pResultBuffer;
-    pAsyncData->nReadSize = nResultSize;
+    pAsyncData->nReadSize = (uint32_t)nResultSize;
     memset(&pAsyncData->tCallback, 0, sizeof(pAsyncData->tCallback));
 }
 
@@ -177,7 +177,7 @@ D2AsyncDataSlotStrc * __stdcall ASYNCDATA_AllocSlot() {
     return nullptr;
 }
 
-D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, size_t nReadSize, void * pReadBuffer, D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nLine) {
+D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, uint32_t nReadSize, void * pReadBuffer, D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nLine) {
     DWORD nSeekResult;
     D2AsyncDataSlotStrc* pSlot;
     int i;
@@ -406,7 +406,7 @@ void * __fastcall ASYNCDATA_GetResult(D2AsyncData_Line0x128 * pAsyncData) {
 
 // Returns pAsyncData->nReadSize (+0x40; set by STRUCT_AllocAsyncData_Line0x128 and by the completion copy); halts on a bad tag.
 // The SOUNDHDR callers add the result to their loaded-byte counters.
-size_t __fastcall ASYNCDATA_GetReadSize(D2AsyncData_Line0x128 * pAsyncData) {
+uint32_t __fastcall ASYNCDATA_GetReadSize(D2AsyncData_Line0x128 * pAsyncData) {
     if (!pAsyncData) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x271);
       exit(-1);
@@ -421,7 +421,7 @@ size_t __fastcall ASYNCDATA_GetReadSize(D2AsyncData_Line0x128 * pAsyncData) {
 }
 
 // __thiscall shape (ECX=this, RET 8). Frees the old buffer at +0x3c then stores [EBP+8]->+0x3c (pReadBuffer, void*) and [EBP+0xc]->+0x40 (nReadSize, size_t).
-void __fastcall ASYNCDATA_SetResult(D2AsyncData_Line0x128 * pAsyncData, int, void * pNewBuffer, size_t nNewSize) {
+void __fastcall ASYNCDATA_SetResult(D2AsyncData_Line0x128 * pAsyncData, int, void * pNewBuffer, uint32_t nNewSize) {
     if (!pAsyncData) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x27e);
       exit(-1);

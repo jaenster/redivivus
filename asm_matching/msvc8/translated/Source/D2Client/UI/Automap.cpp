@@ -58,7 +58,7 @@
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/Player/Player.h"
@@ -282,7 +282,7 @@ static uint32_t gnAutoMapCellPriority[2048] = {0}; D2_STATIC_GUARD(gnAutoMapCell
 namespace D2Client { namespace UI { namespace Automap {
 uint32_t MiniMapType = 0; D2_GLOBAL_GUARD(MiniMapType, "D2Client::UI::Automap::MiniMapType");
 uint16_t * pClientAutomapCellActual = 0; D2_GLOBAL_GUARD(pClientAutomapCellActual, "D2Client::UI::Automap::pClientAutomapCellActual");
-size_t nAutomapCellListSize = 0; D2_GLOBAL_GUARD(nAutomapCellListSize, "D2Client::UI::Automap::nAutomapCellListSize");
+int32_t nAutomapCellListSize = 0; D2_GLOBAL_GUARD(nAutomapCellListSize, "D2Client::UI::Automap::nAutomapCellListSize");
 D2AutomapLayerStrc * sgpAutomapLayer = 0; D2_GLOBAL_GUARD(sgpAutomapLayer, "D2Client::UI::Automap::sgpAutomapLayer");
 D2AutomapLayerStrc * sgpAutomapLayerEx = 0; D2_GLOBAL_GUARD(sgpAutomapLayerEx, "D2Client::UI::Automap::sgpAutomapLayerEx");
 DC6 * pAutoMapDC6[4] = {0}; D2_GLOBAL_GUARD(pAutoMapDC6, "D2Client::UI::Automap::pAutoMapDC6");
@@ -520,60 +520,55 @@ void __stdcall AUTOMAP_RebalanceTreeRight(D2AutomapCellStrc * * ppRootNode) {
     D2AutomapCellStrc* pNode = *ppRootNode;
     D2AutomapCellStrc* pChild = pNode->pLess;
     D2AutomapCellStrc** ppChildSlot = &pNode->pLess;
-    switch (pChild->wWeight) {
-      case -1:
-        {
-          pNode->wWeight = 0;
-          pChild->wWeight = 0;
-          pChild = *ppChildSlot;
-          if (!pChild) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x245);
-            exit(-1);
-          }
-
-          *ppChildSlot = pChild->pMore;
-          pChild->pMore = pNode;
-          *ppRootNode = pChild;
-          return;
-        }
-      case 1:
-        {
-          pGrandChild = pChild->pMore;
-          nBalanceFactor = (int)pGrandChild->wWeight;
-          if (nBalanceFactor != -1) {
-            if (nBalanceFactor) {
-              if (nBalanceFactor == 1) {
-                pNode->wWeight = 0;
-                pChild->wWeight = -1;
-              }
-            } else {
-              pNode->wWeight = 0;
-              pChild->wWeight = 0;
-            }
-          } else {
-            pNode->wWeight = 1;
-            pChild->wWeight = 0;
-          }
-
-          pGrandChild->wWeight = 0;
-          AUTOMAP_RotateCellRight(nBalanceFactor, ppChildSlot);
-          pChild = *ppChildSlot;
-          if (!pChild) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x245);
-            exit(-1);
-          }
-
-          *ppChildSlot = pChild->pMore;
-          pChild->pMore = pNode;
-          *ppRootNode = pChild;
-          return;
-        }
-      default:
-        {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x259);
+    if (pChild->wWeight == -1 || pChild->wWeight == 1) {
+      if (pChild->wWeight == -1) {
+        pNode->wWeight = 0;
+        pChild->wWeight = 0;
+        pChild = *ppChildSlot;
+        if (!pChild) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x245);
           exit(-1);
         }
+
+        *ppChildSlot = pChild->pMore;
+        pChild->pMore = pNode;
+        *ppRootNode = pChild;
+        return;
+      }
+
+      pGrandChild = pChild->pMore;
+      nBalanceFactor = (int)pGrandChild->wWeight;
+      if (nBalanceFactor != -1) {
+        if (nBalanceFactor) {
+          if (nBalanceFactor == 1) {
+            pNode->wWeight = 0;
+            pChild->wWeight = -1;
+          }
+        } else {
+          pNode->wWeight = 0;
+          pChild->wWeight = 0;
+        }
+      } else {
+        pNode->wWeight = 1;
+        pChild->wWeight = 0;
+      }
+
+      pGrandChild->wWeight = 0;
+      AUTOMAP_RotateCellRight(nBalanceFactor, ppChildSlot);
+      pChild = *ppChildSlot;
+      if (!pChild) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x245);
+        exit(-1);
+      }
+
+      *ppChildSlot = pChild->pMore;
+      pChild->pMore = pNode;
+      *ppRootNode = pChild;
+      return;
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x259);
+    exit(-1);
 }
 
 // AVL tree left rebalance: handles single left rotation (right-right case) and double left-right rotation based on grandchild balance factor. Halts on unexpected balance states.
@@ -583,66 +578,61 @@ void __stdcall AUTOMAP_RebalanceTreeLeft(D2AutomapCellStrc * * ppCell) {
     D2AutomapCellStrc* pCell = *ppCell;
     D2AutomapCellStrc* pRight = pCell->pMore;
     D2AutomapCellStrc** ppMore = &pCell->pMore;
-    switch (pRight->wWeight) {
-      case -1:
-        {
-          pRightLeft = pRight->pLess;
-          nGrandChildWeight = (int)pRightLeft->wWeight;
-          switch (nGrandChildWeight) {
-            case -1:
-              {
-                pCell->wWeight = 0;
-                pRight->wWeight = 1;
-                break;
-              }
-            case 0:
-              {
-                pCell->wWeight = 0;
-                pRight->wWeight = 0;
-                break;
-              }
-            case 1:
-              {
-                pCell->wWeight = -1;
-                pRight->wWeight = 0;
-                break;
-              }
-          }
-
-          pRightLeft->wWeight = 0;
-          AUTOMAP_RotateCellLeft(nGrandChildWeight, ppMore);
-          pRight = *ppMore;
-          if (!pRight) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x234);
-            exit(-1);
-          }
-
-          *ppMore = pRight->pLess;
-          pRight->pLess = pCell;
-          *ppCell = pRight;
-          return;
-        }
-      case 1:
-        {
-          pCell->wWeight = 0;
-          pRight->wWeight = 0;
-          pRight = *ppMore;
-          if (!pRight) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x234);
-            exit(-1);
-          }
-
-          *ppMore = pRight->pLess;
-          pRight->pLess = pCell;
-          *ppCell = pRight;
-          return;
-        }
-      default:
-        {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x294);
+    if (pRight->wWeight == -1 || pRight->wWeight == 1) {
+      if (pRight->wWeight == 1) {
+        pCell->wWeight = 0;
+        pRight->wWeight = 0;
+        pRight = *ppMore;
+        if (!pRight) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x234);
           exit(-1);
         }
+
+        *ppMore = pRight->pLess;
+        pRight->pLess = pCell;
+        *ppCell = pRight;
+        return;
+      }
+
+      pRightLeft = pRight->pLess;
+      nGrandChildWeight = (int)pRightLeft->wWeight;
+      switch (nGrandChildWeight) {
+        case -1:
+          {
+            pCell->wWeight = 0;
+            pRight->wWeight = 1;
+            break;
+          }
+        case 0:
+          {
+            pCell->wWeight = 0;
+            pRight->wWeight = 0;
+            break;
+          }
+        case 1:
+          {
+            pCell->wWeight = -1;
+            pRight->wWeight = 0;
+            break;
+          }
+      }
+
+      pRightLeft->wWeight = 0;
+      AUTOMAP_RotateCellLeft(nGrandChildWeight, ppMore);
+      pRight = *ppMore;
+      if (!pRight) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x234);
+        exit(-1);
+      }
+
+      *ppMore = pRight->pLess;
+      pRight->pLess = pCell;
+      *ppCell = pRight;
+      return;
     }
+
+    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x294);
+    exit(-1);
 }
 
 int __fastcall Unreferenced_00457ac0(D2AutomapCellStrc * pCellA, D2AutomapCellStrc * pCellB) {
@@ -1852,7 +1842,7 @@ void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtx
           }
           if (nPosX >= apDC6Layers->nClipLeft && nPosX <= apDC6Layers->nClipRight) {
             nDrawMode = 5;
-            memset(&sGfxData, 0, 0x48);
+            memset(&sGfxData, 0, sizeof(sGfxData));
             sGfxData.nFrameNumber = (int)pCell->nCellNo;
             sGfxData.pDC6 = apDC6Layers->pDC6;
             sGfxData.nDirection = 0;
@@ -2821,8 +2811,8 @@ static void __stdcall AUTOMAP_DrawXMarker(int32_t nX, DWORD nColor, int32_t nY) 
 // Source: .\\UI\\automap.cpp
 // @sourcefile .\UI\automap.cpp
 static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
-    int16_t nMyPartyId;
-    int16_t nUnitPartyId;
+    uint16_t nMyPartyId;
+    uint16_t nUnitPartyId;
     int nTemp;
     BOOL eUnitState;
     uint32_t bHasColor;
@@ -2975,7 +2965,7 @@ static void AUTOMAP_DrawUnitMarker(D2UnitStrc * pUnit) {
 
           pMyPlayer = UNIT::Player::GetPlayerUnit_UI();
           nMyPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pMyPlayer);
-          if (nMyPartyId != -1) {
+          if (nMyPartyId != 0xffff) {
             nUnitPartyId = UNIT::CUnit::GetPlayerUnitPartyId(pUnit);
             if (nMyPartyId == nUnitPartyId) {
               return;

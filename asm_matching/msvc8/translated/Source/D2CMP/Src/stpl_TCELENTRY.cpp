@@ -5,6 +5,8 @@
 #include "Source/D2CMP/D2CMP.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(::TCELENTRY) == 0x24, "SMemAlloc(sizeof(TCELENTRY)): the 32-bit layout must be the 0x24 bytes 1.14d allocates");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -140,7 +142,7 @@ template<> TSList<::TCELENTRY, TSGetLink<TCELENTRY>>* TSList<TCELENTRY, TSGetLin
 }
 
 template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::TCELENTRY* pNewEntryNew = (::TCELENTRY*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x24, D2CMP::SRC::CelCmp::s___AUTCELENTRY___00741f14, -2, dwFlags | 8);
+    ::TCELENTRY* pNewEntryNew = (::TCELENTRY*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::TCELENTRY), D2CMP::SRC::CelCmp::s___AUTCELENTRY___00741f14, -2, dwFlags | 8);
     ::TCELENTRY* pNewEntry;
     if (pNewEntryNew) {
       pNewEntryNew->m_link.m_prevlink = 0;

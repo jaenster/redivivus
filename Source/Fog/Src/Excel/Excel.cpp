@@ -11,6 +11,7 @@
 #include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/Excel/Excel.data.h"
+#include "Source/D2Headers/D2Arch.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -86,7 +87,7 @@ void __stdcall TXT_FreeBinFieldExcel(D2BinFieldExcelStrc * pBinFieldExcel) {
     D2_FREE_POOL_AT(nullptr, pBinFieldExcel, ".\\Src\\Excel\\Excel.cpp", 0x9b);
 }
 
-size_t __stdcall TXT_GetLinesCountFromBinFieldExcel(D2BinFieldExcelStrc * pBinFieldExcel) {
+uint32_t __stdcall TXT_GetLinesCountFromBinFieldExcel(D2BinFieldExcelStrc * pBinFieldExcel) {
     return pBinFieldExcel->nLinesCount;
 }
 
@@ -95,9 +96,13 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
     uint32_t nHashKey;
     int32_t nFieldByteOffset;
     uint32_t nBoolRunLen;
+#if D2_ARCH_X86
     int nOutputCount;
+#endif
     D2BinFieldHashNodeStrc* pDVar2;
+#if D2_ARCH_X86
     D2BinFieldInputStrc** pHashNodeSlot;
+#endif
     D2BinFieldHashNodeStrc aFieldHashNodes[280];
     D2BinFieldHashNodeStrc* aHashBuckets[256];
     D2BinFieldHashNodeStrc* pHashNode;
@@ -173,8 +178,16 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
             nFieldByteOffset = Storm::Source::SSTR::SStrCmpI(pColNameIter, pHashNode->pField->szName, 0x7fffffff);
             if (!nFieldByteOffset) {
               pHashNode->nHash = 0;
+              // The field's index in pBinFieldInput. 1.14d divides the byte offset by 0x14, the 32-bit
+              // sizeof(D2BinFieldInputStrc); on 64-bit the element difference is the index.
+#if D2_ARCH_X86
               nErrorAddress = (intptr_t)pHashNode->pField - (intptr_t)pBinFieldInput;
               pOutMapping[nOutputIndex] = (short int)(nErrorAddress / 0x14);
+#elif D2_ARCH_X64
+              pOutMapping[nOutputIndex] = (short int)(pHashNode->pField - pBinFieldInput);
+#else
+#error "Excel.cpp: no field index form for this architecture"
+#endif
               goto next_column;
             }
           }
@@ -195,6 +208,8 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
       } while (nColumnIndex < (uint32_t)pBinFieldExcel->nColumnCount);
     }
     if (nFieldCount > 0) {
+#if D2_ARCH_X86
+      // 1.14d walks the nodes as a DWORD array: [-1] is nHash, stride 3 is sizeof(D2BinFieldHashNodeStrc).
       pHashNodeSlot = &aFieldHashNodes[0].pField;
       do {
         if (pHashNodeSlot[-1]) {
@@ -206,13 +221,28 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
         pHashNodeSlot += 3;
         nFieldCount--;
       } while (nFieldCount);
+#elif D2_ARCH_X64
+      // On 64-bit the node has padding after nHash, so walk it as nodes.
+      D2BinFieldHashNodeStrc* pFieldNode = aFieldHashNodes;
+      do {
+        if (pFieldNode->nHash) {
+          pOutMapping[nErrorAddress] = (short int)(pFieldNode->pField - pBinFieldInput);
+          nErrorAddress++;
+        }
+
+        pFieldNode++;
+        nFieldCount--;
+      } while (nFieldCount);
+#else
+#error "Excel.cpp: no field node walk for this architecture"
+#endif
     }
 
     return nErrorAddress;
 }
 
 D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLine) {
-    D2TxtLinkStrc* structTxtLink = (D2TxtLinkStrc*)Memory::AllocServerMemory(nullptr, 0x10, szFile, nLine, 0);
+    D2TxtLinkStrc* structTxtLink = (D2TxtLinkStrc*)Memory::AllocServerMemory(nullptr, sizeof(D2TxtLinkStrc), szFile, nLine, 0);
     memset(structTxtLink, 0, sizeof(*structTxtLink));
     return structTxtLink;
 }
@@ -473,14 +503,14 @@ static void __fastcall FOG_ValidateBytePtr(uint8_t * pbyte, uint8_t * pKey) {
       pbVar1 = *(uint8_t**)pbyte;
       nCmpResult = strcmp((char*)pKey, (char*)pbVar1);
       if (nCmpResult < 0) {
-        pbyte = pbVar1 + 0x24;
+        pbyte = pbVar1 + offsetof(D2TxtLinkNodeStrc, pPrevious);
       } else {
         if (nCmpResult <= 0) {
           D2_FREE_POOL_AT(nullptr, pKey, ".\\Src\\Excel\\Excel.cpp", 0x4a7);
           return;
         }
 
-        pbyte = pbVar1 + 0x28;
+        pbyte = pbVar1 + offsetof(D2TxtLinkNodeStrc, pNext);
       }
 
       nCmpResult = *(int*)pbyte;
@@ -500,8 +530,8 @@ int __stdcall FOG_ParseStringField(D2TxtLinkStrc * pTxtLink, char * szText) {
         exit(-1);
       }
 
-      pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, 0x2c, ".\\Src\\Excel\\Excel.cpp", 0x4b9);
-      memset(pKey, 0, 0x2c);
+      pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, sizeof(D2TxtLinkNodeStrc), ".\\Src\\Excel\\Excel.cpp", 0x4b9);
+      memset(pKey, 0, sizeof(D2TxtLinkNodeStrc));
       Storm::Source::SSTR::SStrCopy((char*)pKey, szText, 0x20);
       String::FogString::SMemStringToUppercase((char*)pKey, 0x20);
       *(int*)(pKey + 0x20) = pTxtLink->nRecords;
@@ -526,8 +556,8 @@ int __fastcall FOG_ParseTxtLink(D2TxtLinkStrc * pTxtLink, char * szText) {
 
       nRecordIndex = GetLinkNodeIndex(pTxtLink, szText, 0);
       if (nRecordIndex < 0) {
-        pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, 0x2c, ".\\Src\\Excel\\Excel.cpp", 0x4d9);
-        memset(pKey, 0, 0x2c);
+        pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, sizeof(D2TxtLinkNodeStrc), ".\\Src\\Excel\\Excel.cpp", 0x4d9);
+        memset(pKey, 0, sizeof(D2TxtLinkNodeStrc));
         Storm::Source::SSTR::SStrCopy((char*)pKey, szText, 0x20);
         String::FogString::SMemStringToUppercase((char*)pKey, 0x20);
         *(int*)(pKey + 0x20) = pTxtLink->nRecords;
@@ -636,7 +666,7 @@ D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(char * pD2
 
 // Two passes over the txt rows: pass 1 resolves link-type columns (CODE*/NAME_I*), pass 2 parses every
 // mapped column into the record and pass 2b default-fills the mapped fields that had no column.
-void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldExcel, D2BinFieldInputStrc * pBinFieldInput, char * pRecord, size_t nLinesCount, int nEndOffset) {
+void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldExcel, D2BinFieldInputStrc * pBinFieldInput, char * pRecord, uint32_t nLinesCount, int nEndOffset) {
     uint16_t uVar1;
     int nMappedFieldCount;
     int nLinkIndex;
@@ -664,7 +694,7 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
     PFN_TxtFieldLinker pfnDefaultLinker;
     eD2BinFieldInputType eFieldType3;
     int nOffset;
-    size_t nFieldSize;
+    uint32_t nFieldSize;
     int nColumnCount;
     int nFillOffset;
     size_t nNameSize;

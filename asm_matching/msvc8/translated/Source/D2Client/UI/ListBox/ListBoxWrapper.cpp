@@ -120,12 +120,12 @@ int __fastcall OnMouseWheel(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pM
 }
 
 ::ListBoxWrapper * __fastcall Constructor(::ListBoxWrapper * pThis, int, int nPosX, int nPosY, int nWidth, int nHeight, int nItemSpacing, int nDefaultColor, int nDefaultFont, fpListBoxItemActivated pfnOnItemActivated, bool bTallRows) {
-    pfnEHHandlerRoutine pSehHandler = SehHandler_6ca263;
+    pfnEHHandlerRoutine pSehHandler = SehHandler_6ca263; // steer-ok: generated form, kept as emitted
     void* pPrevSehFrame = ExceptionList;
     uint32_t nSehState = 0;
     ExceptionList = &pPrevSehFrame;
     pThis->pVtable = (ListBoxWrapperVtable*)(void*)ListBoxWrapper::vftable;
-    ::ListBoxImplementation* pListBox = (::ListBoxImplementation*)Storm::Source::SMem::SMemAlloc(0x180776, "new", -1, 0);
+    ::ListBoxImplementation* pListBox = (::ListBoxImplementation*)Storm::Source::SMem::SMemAlloc(sizeof(::ListBoxImplementation), "new", -1, 0);
     nSehState = (uint32_t)((uint32_t)((uint32_t)nSehState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (pListBox) {
       pListBox = vc8_thiscall(ListBoxImplementation::Constructor)(pListBox, nPosX, nPosY, nWidth, nHeight, nItemSpacing, nDefaultColor, nDefaultFont, pfnOnItemActivated, bTallRows);

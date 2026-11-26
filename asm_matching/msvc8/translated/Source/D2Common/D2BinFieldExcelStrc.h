@@ -20,7 +20,7 @@
 __pragma(pack(push, 1)) struct D2BinFieldExcelStrc {
     /* 0x00 */ char * pD2Archive;
     /* 0x04 */ char * pDataStart; // Pointer to start of data rows in the TSV buffer (after the header row)
-    /* 0x08 */ size_t nLinesCount; // Number of data lines (rows), excluding header and Expansion-tagged rows
+    /* 0x08 */ uint32_t nLinesCount; // Number of data lines (rows), excluding header and Expansion-tagged rows
     /* 0x0C */ int nColumnCount; // Number of tab-separated columns counted in the header row
 }; __pragma(pack(pop))
 

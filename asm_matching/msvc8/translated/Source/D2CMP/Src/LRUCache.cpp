@@ -4,6 +4,8 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2LRUCacheNodeStrc) == 0x14, "D2_ALLOC_POOL_AT(n * sizeof(D2LRUCacheNodeStrc)): the 32-bit layout must be the 0x14 bytes 1.14d allocates per node");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -28,33 +30,33 @@ namespace D2CMP { namespace SRC { namespace LRUCache {
 
 // @sourcefile .\SRC\LRUCache.cpp
 void __fastcall LRUCACHE_Init(D2LRUCacheStrc * pCache, D2PoolManagerStrc * pMemory, uint32_t dwBufSize, pfnLruFreeEntry pfnFreeEntry, int32_t nMaxCount) {
-    int nEntryIndex;
+    intptr_t nEntryIndex;
     pCache->dwBufSize = dwBufSize;
     pCache->pfnFreeEntry = pfnFreeEntry;
     pCache->nMaxCount = nMaxCount;
     pCache->pAllocator = pMemory;
     pCache->nBytesUsed = 0;
-    D2LRUCacheNodeStrc* pEntryArray = (D2LRUCacheNodeStrc*)D2_ALLOC_POOL_AT(pMemory, nMaxCount * 0x14, ".\\SRC\\LRUCache.cpp", 0x30);
+    D2LRUCacheNodeStrc* pEntryArray = (D2LRUCacheNodeStrc*)D2_ALLOC_POOL_AT(pMemory, nMaxCount * sizeof(D2LRUCacheNodeStrc), ".\\SRC\\LRUCache.cpp", 0x30);
     pCache->pNodeBuffer = pEntryArray;
-    memset(pEntryArray, 0, nMaxCount * 0x14);
+    memset(pEntryArray, 0, nMaxCount * sizeof(D2LRUCacheNodeStrc));
     uint32_t nEntryIdx = 0;
     if ((uint32_t)pCache->nMaxCount > 0) {
-      uint32_t* pNodeFields;
+      D2LRUCacheNodeStrc* pNodeFields;
       nEntryIndex = 0;
       do {
-        pNodeFields = (uint32_t*)((intptr_t)&pCache->pNodeBuffer->pBuf + nEntryIndex);
+        pNodeFields = (D2LRUCacheNodeStrc*)((intptr_t)&pCache->pNodeBuffer->pBuf + nEntryIndex);
         if (nEntryIdx < pCache->nMaxCount - 1U) {
-          pNodeFields[3] = (uint32_t)(uintptr_t)(pNodeFields + 5);
+          pNodeFields->pNext = pNodeFields + 1;
         }
         if (nEntryIdx > 0) {
-          pNodeFields[4] = (intptr_t)&pCache->pNodeBuffer[-1].pBuf + nEntryIndex;
+          pNodeFields->pPrev = (D2LRUCacheNodeStrc*)((intptr_t)&pCache->pNodeBuffer[-1].pBuf + nEntryIndex);
         }
 
         nEntryIdx++;
-        *pNodeFields = 0;
-        pNodeFields[1] = 0;
-        pNodeFields[2] = 0;
-        nEntryIndex += 0x14;
+        pNodeFields->pBuf = 0;
+        pNodeFields->nBufSize = 0;
+        pNodeFields->pUserData = 0;
+        nEntryIndex += sizeof(D2LRUCacheNodeStrc);
       } while (nEntryIdx < (uint32_t)pCache->nMaxCount);
     }
 

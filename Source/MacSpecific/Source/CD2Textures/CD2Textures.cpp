@@ -32,9 +32,9 @@ void CD2TEXTURES_Construct(::CD2Textures * pThis, int nMaxWidth, int nMaxHeight,
     pThis->nTextureOverhead = nTextureOverhead;
     pThis->nMemoryBudget = nMemoryBudget;
     pThis->nNodeCount = 0x800;
-    D2TextureNodeStrc* pDVar1 = (D2TextureNodeStrc*)D2_ALLOC_AT(0x18000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../MacSpecific/Source/CD2Textures/CD2Textures.cpp", 0x69);
+    D2TextureNodeStrc* pDVar1 = (D2TextureNodeStrc*)D2_ALLOC_AT(0x800 * sizeof(D2TextureNodeStrc), "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../MacSpecific/Source/CD2Textures/CD2Textures.cpp", 0x69);
     pThis->pNodes = pDVar1;
-    Storm::Source::SMem::SMemZero(pDVar1, 0x18000);
+    Storm::Source::SMem::SMemZero(pDVar1, 0x800 * sizeof(D2TextureNodeStrc));
     pThis->pUsedTail = 0;
     pThis->pUsedHead = 0;
     pThis->pFreeHead = pThis->pNodes;
@@ -80,7 +80,7 @@ void CD2TEXTURES_Init(::CD2Textures * pThis, int nBytesPerPixel) {
       pDest = D2_ALLOC_AT(nAllocSize, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../MacSpecific/Source/CD2Textures/CD2Textures.cpp", 0xb8);
       pThis->pStagingAlloc = pDest;
       Storm::Source::SMem::SMemZero(pDest, nAllocSize);
-      pThis->pStaging = (uint8_t*)((int)pThis->pStagingAlloc + 0x1fU & -32);
+      pThis->pStaging = (uint8_t*)((uintptr_t)pThis->pStagingAlloc + 0x1fU & -32);
     } else {
       pThis->pStagingAlloc = 0;
       pThis->pStaging = 0;
@@ -239,15 +239,15 @@ void CD2TEXTURES_ReleaseEntry(::CD2Textures * pThis, D2TextureNodeStrc * pNode) 
     if (pOwner) {
       nOwnerKind = pNode->nOwnerType;
       if (nOwnerKind == 3) {
-        *(uint32_t*)((int)pOwner + pNode->nOwnerIndex * 8 + 4) = 0;
+        *(uint32_t*)((char*)pOwner + pNode->nOwnerIndex * 8 + 4) = 0;
       } else if (nOwnerKind == 2) {
-        *(uint16_t*)((int)pOwner + 4) = 0;
+        *(uint16_t*)((char*)pOwner + 4) = 0;
       } else {
         if (nOwnerKind != 1) {
           goto LAB_002b1325;
         }
 
-        *(uint16_t*)((int)pOwner + 0x42) = 0;
+        *(uint16_t*)((char*)pOwner + 0x42) = 0;
       }
 
       pNode->pOwner = 0;
@@ -286,36 +286,36 @@ void CD2TEXTURES_SetEntryOwner(::CD2Textures * pThis, D2TextureNodeStrc * pNode,
       break;
       case 1:
         pNode->pOwner = pOwner;
-      if (*(short int*)((int)pOwner + 0x42)) {
+      if (*(short int*)((char*)pOwner + 0x42)) {
         pvVar1 = Fog::Src::ErrorManager::GetInstructionPointer();
         fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0x34f);
         pOwner = pNode->pOwner;
       }
 
-      *(short int*)((int)pOwner + 0x42) = (short int)pNode->nId;
+      *(short int*)((char*)pOwner + 0x42) = (short int)pNode->nId;
       break;
       case 2:
         pNode->pOwner = pOwner;
-      if (*(short int*)((int)pOwner + 4)) {
+      if (*(short int*)((char*)pOwner + 4)) {
         pvVar1 = Fog::Src::ErrorManager::GetInstructionPointer();
         fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0x355);
         pOwner = pNode->pOwner;
       }
 
-      *(short int*)((int)pOwner + 4) = (short int)pNode->nId;
+      *(short int*)((char*)pOwner + 4) = (short int)pNode->nId;
       break;
       case 3:
         pNode->pOwner = pOwner;
       pNode->nOwnerIndex = nOwnerIndex;
       pNode->nOwnerKey = nOwnerKey;
-      if (*(int*)((int)pOwner + nOwnerIndex * 8 + 4)) {
+      if (*(int*)((char*)pOwner + nOwnerIndex * 8 + 4)) {
         pvVar1 = Fog::Src::ErrorManager::GetInstructionPointer();
         fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0x35e);
         pOwner = pNode->pOwner;
         nOwnerIndex = pNode->nOwnerIndex;
       }
 
-      *(int*)((int)pOwner + nOwnerIndex * 8 + 4) = pNode->nId;
+      *(int*)((char*)pOwner + nOwnerIndex * 8 + 4) = pNode->nId;
     }
 }
 
@@ -472,12 +472,12 @@ void CD2TEXTURES_GrowEntries(::CD2Textures * pThis) {
         pDVar4 = pThis->pNodes;
         piVar1 = *(int**)((uintptr_t)&pDVar4->nId + iVar2);
         if (piVar1) {
-          *(int**)((int)pDest->field_0x20 + iVar2 - 0x20) = pDest->field_0x20 + *piVar1 * 0xc - 0x14;
+          *(int**)((char*)pDest->field_0x20 + iVar2 - 0x20) = pDest->field_0x20 + *piVar1 * 0xc - 0x14;
         }
 
-        piVar1 = *(int**)((int)pDVar4 + iVar2 - 4);
+        piVar1 = *(int**)((char*)pDVar4 + iVar2 - 4);
         if (piVar1) {
-          *(int**)((int)pDest->field_0x20 + iVar2 - 0x24) = pDest->field_0x20 + *piVar1 * 0xc - 0x14;
+          *(int**)((char*)pDest->field_0x20 + iVar2 - 0x24) = pDest->field_0x20 + *piVar1 * 0xc - 0x14;
         }
 
         iVar2 += 0x30;

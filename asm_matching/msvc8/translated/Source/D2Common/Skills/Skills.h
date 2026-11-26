@@ -180,6 +180,14 @@ struct D2HitClassTxt {
 };
 
 #endif // D2_DEFINED_D2HitClassTxt
+#ifndef D2_DEFINED_D2ItemsEventMethodStrc
+#define D2_DEFINED_D2ItemsEventMethodStrc
+struct D2ItemsEventMethodStrc {
+    /* 0x00 */ int (__fastcall *pfnMethod)(int32_t, int32_t, uint32_t, void *); // Skill-calc operator. All 11 handlers across the two tables are __fastcall with RET 0x8: two operands in ECX/EDX, a third operand and the context pointer on the stack. The old fnSkillCalcMethod (2 params) belongs to SKILLS_CompileSkillFormula's pFunction parameter, not to this slot.
+    /* 0x04 */ int nArgCount; // Number of stack args to pop before call (0=none, 1=one, 2=two, 3=three+return)
+};
+
+#endif // D2_DEFINED_D2ItemsEventMethodStrc
 #ifndef D2_DEFINED_D2ItemStatCostOpRelationStrc
 #define D2_DEFINED_D2ItemStatCostOpRelationStrc
 struct D2ItemStatCostOpRelationStrc {
@@ -634,11 +642,11 @@ struct D2SetItemsTxtEntry {
 #define D2_DEFINED_D2SetsTxtPStrc
 struct D2SetsTxtPStrc {
     /* 0x00 */ int pcodea;
-    /* 0x04 */ void * pparama;
+    /* 0x04 */ int pparama; // property parameter (FIELDTYPE_LINKER_INT), not a pointer
     /* 0x08 */ int pmina;
     /* 0x0C */ int pmaxa;
     /* 0x10 */ int pcodeb;
-    /* 0x14 */ void * pparamb;
+    /* 0x14 */ int pparamb; // property parameter (FIELDTYPE_LINKER_INT), not a pointer
     /* 0x18 */ int pminb;
     /* 0x1C */ int pmaxb;
 };

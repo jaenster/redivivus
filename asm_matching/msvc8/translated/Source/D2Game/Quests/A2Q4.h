@@ -22,6 +22,7 @@ struct D2ObjectOperateFnArg;
 struct D2QuestArgStrc;
 struct D2QuestDataA2Q4Strc;
 struct D2QuestDataStrc;
+struct D2RoomStrc;
 struct D2UnitStrc;
 struct SGAMEDATA;
 
@@ -56,9 +57,9 @@ void __fastcall Q12_Callback13_PlayerStartedGame(struct D2QuestDataStrc * pQuest
 // A2Q4 - OnHoradricStaffAssembled. Entry point fired when the Horadric Staff is assembled (the prerequisite that unlocks the Arcane Sanctuary). If quest not yet introduced -> OnJournalActivate (open the Sanctuary entrance). Otherwise set stateFlag 1 if zero, and if no prior progress broadcast quest state 1 via QUEST_SetStateAndBroadcast(NotifyArcaneComplete).
 void __fastcall Q12_OnHoradricStaffAssembled(::SGAMEDATA * pGame);
 // A2Q4 - StubNoop1. Empty quest-table slot stub (returns nothing). No quest-state effect.
-void __stdcall A2Q4_OnJerhynCreated_NoOp(uint32_t dwArg1, uint32_t dwArg2);
+void __fastcall A2Q4_OnJerhynCreated_NoOp(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 // A2Q4 - StubNoop2. Empty quest-table slot stub. No quest-state effect.
-void __stdcall A2Q4_OnAct2Guard2Created_NoOp(uint32_t dwArg1, uint32_t dwArg2);
+void __fastcall A2Q4_OnAct2Guard2Created_NoOp(::SGAMEDATA * pGame, struct D2RoomStrc * pRoom, int32_t nX, int32_t nY);
 // A2Q4 - CheckJerhynGateOpen. One-shot edge detector: returns 1 the first time Jerhyn's initial-talk flag is set and the gate has not yet been opened (then latches bJerhynGateOpened). Used to open the Lut Gholein palace harem gate once Jerhyn has been spoken to.
 BOOL __fastcall Q12_CheckJerhynGateOpen(::SGAMEDATA * pGame);
 // A2Q4 - BlockHaremRoomForPlayerAccess. Spawns a blocking object (classId 0x13e) just in front of the player to wall off the harem/palace room until the quest opens it. Tries player-pos offset, then a fallback offset; on success marks the substruct occupied and records the object GUID.

@@ -14,7 +14,6 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
 #include "Source/D2Common/Drlg/Preset.data.h"
-#include "Source/D2Client/Game/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
@@ -89,7 +88,7 @@ typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknow
 
 #ifndef RECON_FPTD_fpLevelDataFn2
 #define RECON_FPTD_fpLevelDataFn2
-typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
+typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, int nNodeIndex, int * param_1_00);
 #endif
 
 
@@ -278,7 +277,7 @@ static void __stdcall DRLGROOMTILE_SetWallTileFlags(D2DrlgTileDataStrc * pTileDa
     if (nRawTileFlags & 8) {
       pTileData->nFlags |= 4;
     }
-    if ((int)nRawTileFlags < 0) {
+    if (nRawTileFlags & 0x80000000) {
       pTileData->nFlags |= 8;
     } else {
       pTileData->nFlags &= -9;
@@ -330,8 +329,8 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * p
     pTileGrid->nWalls++;
     int nScreenX = nPosX;
     pTileData->nPosX = nPosX - pRoomEx->sCoords.WorldPosition.x;
-    int nScreenY = nPosY + 1;
     pTileData->nPosY = nPosY - pRoomEx->sCoords.WorldPosition.y;
+    int nScreenY = nPosY + 1;
     Transform::CoordsMiniMapToScreen(&nScreenX, &nScreenY);
     pTileData->nScreenY = nScreenY + 0x28;
     pTileData->pTileLibraryEntry = pTileLibEntry;
@@ -365,7 +364,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * p
     if (nGridFlags & 8) {
       pShadowTile->nFlags |= 4;
     }
-    if ((int)nGridFlags < 0) {
+    if (nGridFlags & 0x80000000) {
       pShadowTile->nFlags |= 8;
     } else {
       pShadowTile->nFlags &= -9;
@@ -405,8 +404,8 @@ void __fastcall DRLGROOMTILE_FillTileData(D2RoomExStrc * pRoomEx, D2DrlgTileData
     if (pRoomEx) {
       int32_t nTileLibEntry;
       pTileData->nPosX = nPosX - pRoomEx->sCoords.WorldPosition.x;
-      nTileLibEntry = (int32_t)(nPosY + 1);
       pTileData->nPosY = nPosY - pRoomEx->sCoords.WorldPosition.y;
+      nTileLibEntry = (int32_t)(nPosY + 1);
       Transform::CoordsMiniMapToScreen(&nPosX, &nTileLibEntry);
       pTileData->nScreenX = nPosX;
       pTileData->nScreenY = nTileLibEntry + 40;
@@ -428,7 +427,7 @@ void __fastcall DRLGROOMTILE_FillTileData(D2RoomExStrc * pRoomEx, D2DrlgTileData
     if (nGridFlags & 8) {
       pTileData->nFlags |= 4;
     }
-    if ((int)nGridFlags < 0) {
+    if (nGridFlags & 0x80000000) {
       pTileData->nFlags |= 8;
     } else {
       pTileData->nFlags &= -9;
@@ -484,8 +483,8 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc *
     pTileGrid->nShadows++;
     int nScreenX = nPosX;
     pTileData->nPosX = nPosX - pRoomEx->sCoords.WorldPosition.x;
-    nPosX = nPosY + 1;
     pTileData->nPosY = nPosY - pRoomEx->sCoords.WorldPosition.y;
+    nPosX = nPosY + 1;
     Transform::CoordsMiniMapToScreen(&nScreenX, &nPosX);
     pTileData->nScreenY = nPosX + 0x28;
     pTileData->nAlphaStart = 0xff;
@@ -511,7 +510,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc *
     if (nGridFlags & 8) {
       pTileData->nFlags |= 4;
     }
-    if ((int)nGridFlags < 0) {
+    if (nGridFlags & 0x80000000) {
       pTileData->nFlags |= 8;
     } else {
       pTileData->nFlags &= -9;
@@ -560,22 +559,13 @@ void __fastcall DRLGROOMTILE_CompactTileDataArray(D2RoomExStrc * pRoomEx) {
       return;
     }
 
-    int nTileOffset;
     if (pTileGrid->sRoomTiles.nRoofTilesCount <= nRoofCount) {
       return;
     }
 
-    pReallocated = (D2DrlgTileDataStrc*)D2_REALLOC_POOL_AT(pMemory, pTileGrid->sRoomTiles.pRoofTiles, nRoofCount * 0x30, ".\\DRLG\\RoomTile.cpp", 0x25f);
-    pTileGrid->sRoomTiles.pRoofTiles = pReallocated;
-    nRoofCount = 0;
-    if (pTileGrid->nShadows != 1 && -1 < pTileGrid->nShadows - 1) {
-      nTileOffset = 0;
-      do {
-        pReallocated = pTileGrid->sRoomTiles.pRoofTiles;
-        *(int*)((intptr_t)&pReallocated->pNext + nTileOffset) = (intptr_t)&pReallocated[1].nScreenX + nTileOffset;
-        nRoofCount++;
-        nTileOffset += 0x30;
-      } while (nRoofCount < pTileGrid->nShadows - 1);
+    pTileGrid->sRoomTiles.pRoofTiles = (D2DrlgTileDataStrc*)D2_REALLOC_POOL_AT(pMemory, pTileGrid->sRoomTiles.pRoofTiles, nRoofCount * sizeof(D2DrlgTileDataStrc), ".\\DRLG\\RoomTile.cpp", 0x25f);
+    for (nRoofCount = 0; nRoofCount < pTileGrid->nShadows - 1; nRoofCount++) {
+      pTileGrid->sRoomTiles.pRoofTiles[nRoofCount].pNext = &pTileGrid->sRoomTiles.pRoofTiles[nRoofCount + 1];
     }
 
     pTileGrid->sRoomTiles.pRoofTiles[nRoofCount].pNext = 0;
@@ -762,7 +752,6 @@ static void __stdcall DRLGROOMTILE_InitWarpCacheTiles(uint32_t nPackedTileFlags,
 
 // Searches a room's tile links for a tile at the given X/Y position matching the specified floor/wall type and orientation flags.
 static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_FindTileAtPosition(int nFlags, D2RoomExStrc * pRoomEx, int bFloor, int32_t nX, int nY) {
-    D2DrlgTileDataStrc* pTileData;
     if (!pRoomEx->pRoomTiles) {
       return nullptr;
     }
@@ -773,21 +762,10 @@ static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_FindTileAtPosition(int nFlags
       return nullptr;
     }
 
-    D2DrlgTileLinkStrc* pTileLink;
-    pTileLink = pRoomEx->pRoomTiles->pMapLinks;
-    do {
-      if (!pTileLink) {
-        return nullptr;
-      }
-
-      pTileData = pTileLink->pTileData;
-      if (!*(int*)pTileLink) {
-        if (!bFloor) {
-          goto scan_tile_list;
-        }
-      } else if (bFloor) {
-        scan_tile_list:
-        while (pTileData) {
+    for (D2DrlgTileLinkStrc* pTileLink = pRoomEx->pRoomTiles->pMapLinks; pTileLink; pTileLink = pTileLink->pNext) {
+      D2DrlgTileDataStrc* pTileData = pTileLink->pTileData;
+      if ((*(int*)pTileLink && bFloor) || (!*(int*)pTileLink && !bFloor)) {
+        for (; pTileData; pTileData = pTileData->pNext) {
           if (pTileData->nPosX + pRoomEx->sCoords.WorldPosition.x == nX && pRoomEx->sCoords.WorldPosition.y + pTileData->nPosY == nY && pTileData->nTileType != 4 && (pTileData->nTileType == 0xd || !(nFlags & 0x8000000U))) {
             if (!(pTileData->nFlags & 0x1c000U)) {
               return pTileData;
@@ -796,13 +774,11 @@ static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_FindTileAtPosition(int nFlags
               return pTileData;
             }
           }
-
-          pTileData = pTileData->pNext;
         }
       }
+    }
 
-      pTileLink = pTileLink->pNext;
-    } while (true);
+    return nullptr;
 }
 
 // Searches the given room and all its near rooms for a tile at the specified position matching the given flags. Returns the tile data and sets the output room pointer.
@@ -1143,10 +1119,10 @@ void __fastcall InitRoomTiles(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2
     eD2GridCellFlags nCellFlags;
     int nColIdx;
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
-    int nXOffset = pRoomEx->sCoords.WorldPosition.x;
     int nXMax = (uint32_t)!bKillEdgeX + pRoomEx->sCoords.WorldSize.x;
-    int nYOffset = pRoomEx->sCoords.WorldPosition.y;
+    int nXOffset = pRoomEx->sCoords.WorldPosition.x;
     int maxTile = (uint32_t)!bKillEdgeY + pRoomEx->sCoords.WorldSize.y;
+    int nYOffset = pRoomEx->sCoords.WorldPosition.y;
     for (bKillEdgeX = 0; bKillEdgeX < maxTile; bKillEdgeX++) {
       for (nColIdx = 0; nColIdx < nXMax; nColIdx++) {
         nFlags = DrlgGrid::GetGridFlags(pGrid, nColIdx, bKillEdgeX);
@@ -1265,18 +1241,18 @@ void __fastcall DRLGROOMTILE_AllocTileDataArrays(D2RoomExStrc * pRoomEx) {
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     D2DrlgRoomTilesStrc* pRoomTiles = &pRoomEx->pRoomTiles->sRoomTiles;
     if (pRoomTiles->nFloorTilesCount) {
-      pRoomTiles->pFloorTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, pRoomTiles->nFloorTilesCount * 0x30, ".\\DRLG\\RoomTile.cpp", 0x545);
-      memset(pRoomTiles->pFloorTiles, 0, pRoomTiles->nFloorTilesCount * 0x30);
+      pRoomTiles->pFloorTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, pRoomTiles->nFloorTilesCount * sizeof(D2DrlgTileDataStrc), ".\\DRLG\\RoomTile.cpp", 0x545);
+      memset(pRoomTiles->pFloorTiles, 0, pRoomTiles->nFloorTilesCount * sizeof(D2DrlgTileDataStrc));
     }
 
     if (pRoomTiles->nWallTilesCount) {
-      pRoomTiles->pWallTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, pRoomTiles->nWallTilesCount * 0x30, ".\\DRLG\\RoomTile.cpp", 0x54b);
-      memset(pRoomTiles->pWallTiles, 0, pRoomTiles->nWallTilesCount * 0x30);
+      pRoomTiles->pWallTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, pRoomTiles->nWallTilesCount * sizeof(D2DrlgTileDataStrc), ".\\DRLG\\RoomTile.cpp", 0x54b);
+      memset(pRoomTiles->pWallTiles, 0, pRoomTiles->nWallTilesCount * sizeof(D2DrlgTileDataStrc));
     }
 
     if (pRoomTiles->nRoofTilesCount && !pRoomTiles->pRoofTiles) {
-      pRoomTiles->pRoofTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, pRoomTiles->nRoofTilesCount * 0x30, ".\\DRLG\\RoomTile.cpp", 0x551);
-      memset(pRoomTiles->pRoofTiles, 0, pRoomTiles->nRoofTilesCount * 0x30);
+      pRoomTiles->pRoofTiles = (D2DrlgTileDataStrc*)D2_ALLOC_POOL_AT(pMemory, pRoomTiles->nRoofTilesCount * sizeof(D2DrlgTileDataStrc), ".\\DRLG\\RoomTile.cpp", 0x551);
+      memset(pRoomTiles->pRoofTiles, 0, pRoomTiles->nRoofTilesCount * sizeof(D2DrlgTileDataStrc));
     }
 }
 
@@ -1287,18 +1263,10 @@ void __fastcall DRLGROOMTILE_GrowTileDataArray(D2PoolManagerStrc * pMemory, D2Dr
       return;
     }
 
-    D2DrlgTileDataStrc* pReallocated = (D2DrlgTileDataStrc*)D2_REALLOC_POOL_AT(pMemory, pTileGrid->sRoomTiles.pRoofTiles, (pTileGrid->sRoomTiles.nRoofTilesCount + nAdditionalTiles) * 0x30, ".\\DRLG\\RoomTile.cpp", 0x561);
-    pTileGrid->sRoomTiles.pRoofTiles = pReallocated;
-    int nIndex = 0;
-    if (pTileGrid->nShadows != 1 && -1 < pTileGrid->nShadows - 1) {
-      int nByteOffset;
-      nByteOffset = 0;
-      do {
-        pReallocated = pTileGrid->sRoomTiles.pRoofTiles;
-        *(int*)((intptr_t)&pReallocated->pNext + nByteOffset) = (intptr_t)&pReallocated[1].nScreenX + nByteOffset;
-        nIndex++;
-        nByteOffset += 0x30;
-      } while (nIndex < pTileGrid->nShadows - 1);
+    pTileGrid->sRoomTiles.pRoofTiles = (D2DrlgTileDataStrc*)D2_REALLOC_POOL_AT(pMemory, pTileGrid->sRoomTiles.pRoofTiles, (pTileGrid->sRoomTiles.nRoofTilesCount + nAdditionalTiles) * sizeof(D2DrlgTileDataStrc), ".\\DRLG\\RoomTile.cpp", 0x561);
+    int nIndex;
+    for (nIndex = 0; nIndex < pTileGrid->nShadows - 1; nIndex++) {
+      pTileGrid->sRoomTiles.pRoofTiles[nIndex].pNext = &pTileGrid->sRoomTiles.pRoofTiles[nIndex + 1];
     }
 
     pTileGrid->sRoomTiles.pRoofTiles[nIndex].pNext = 0;

@@ -58813,7 +58813,7 @@ void __fastcall UI_SLIDER_ApplyAutomapMode(D2EscMenuItemStrc * pItem, D2UIMouseM
 
 void __fastcall UI_SLIDER_InitAutomapMode(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t nAutomapMode;
-    D2_UNINIT(nAutomapMode, (uint32_t)pItem);
+    D2_UNINIT(nAutomapMode, (uint32_t)(uintptr_t)pItem);
     Storm::Source::SReg::SRegLoadValue("Diablo II", "AutoMapMode", 0, (int32_t*)&nAutomapMode);
     if (nAutomapMode > 2) {
       nAutomapMode = 0;
@@ -58835,7 +58835,7 @@ void __fastcall UI_SLIDER_ApplyAutomapFade(D2EscMenuItemStrc * pItem, D2UIMouseM
 
 void __fastcall UI_SLIDER_InitAutomapFade(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     uint32_t nAutomapFade;
-    D2_UNINIT(nAutomapFade, (uint32_t)pItem);
+    D2_UNINIT(nAutomapFade, (uint32_t)(uintptr_t)pItem);
     Storm::Source::SReg::SRegLoadValue("Diablo II", "AutoMapFade", 0, (int32_t*)&nAutomapFade);
     if (nAutomapFade > 4) {
       nAutomapFade = 0;
@@ -59222,8 +59222,8 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
       exit(-1);
     }
     if (!pMenuTable) {
-      ESCMENU_LoadLocalizedImages_HaltTail(0x4e9);
-      return;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e9);
+      exit(-1);
     }
 
     szImagePath[0] = '\0';
@@ -59246,7 +59246,8 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
           if (nSubImageCount == 1) {
             nSubImageCount = pMenuTable[nItemIndex].nSubImageCount;
             if (nSubImageCount <= 0 || nSubImageCount > 4) {
-              ESCMENU_LoadLocalizedImages_HaltTail(0x4fe);
+              Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4fe);
+              exit(-1);
             }
 
             nSubImageIndex = 0;
@@ -59254,7 +59255,8 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
               pSubImagePath = pMenuTable[nItemIndex].szSubImage1Path;
               do {
                 if (*pSubImagePath == '\0') {
-                  ESCMENU_LoadLocalizedImages_HaltTail(0x501);
+                  Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x501);
+                  exit(-1);
                 }
 
                 sprintf(szImagePath, "%s\\UI\\%s\\%s", "DATA\\LOCAL", szLangAbbrev, pSubImagePath);
@@ -59319,7 +59321,7 @@ void __stdcall ESCMENU_Initialize() {
     gpEscMenuOptBarCDC6 = Core::Archive::IMAGE_LoadDC6Ex(szWidgetPath, 0);
     sprintf(szWidgetPath, "%s\\UI\\Widgets\\OptSkull", "DATA\\GLOBAL");
     gpEscMenuOptSkullDC6 = Core::Archive::IMAGE_LoadDC6Ex(szWidgetPath, 0);
-    memset(&sStarGfxData, 0, 0x48);
+    memset(&sStarGfxData, 0, sizeof(sStarGfxData));
     sStarGfxData.pDC6 = ui::UI_GetCursorIconIndex();
     uint32_t nStarFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(sStarGfxData.pDC6);
     int32_t nMaxStarWidth = 0;
@@ -59557,7 +59559,7 @@ void __stdcall ESCMENU_DrawProgressBar(D2EscMenuItemStrc * pMenuItem, int32_t nB
     }
 
     D2Win::Src::D2WinFont::IMAGE_DrawDC6ImageOnScreen(pDecorationDC6, nScreenCenterX, nItemCount, nBarWidth, eDrawMode, -1);
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = gpEscMenuOptSkullDC6;
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nBarLeftX, nItemCount - (uint32_t)!bIsFilled - 1, -1, eDrawMode, nullptr);
 }
@@ -59665,7 +59667,7 @@ void __stdcall DRAW_EscMenu() {
         } while (nItemIndex < gpEscMenuItemCount->nItemCount);
       }
 
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.pDC6 = ui::UI_GetCursorIconIndex();
       if (DRAW_RotatingStarPosition) {
         sGfxData.nFrameNumber = 8 - DRAW_RotatingStarPosition;

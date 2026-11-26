@@ -90,7 +90,7 @@
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/Unit/SUnitDmg.h"
@@ -610,7 +610,7 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
       return 0;
     }
 
-    memset(&sMonStats, 0, 0x38);
+    memset(&sMonStats, 0, sizeof(sMonStats));
     int nMonLevel;
     nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIndex];
     D2MonStatsInitStrc* pMonScaledStats;
@@ -618,13 +618,13 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
     D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIndex, nMonLevel, 8, pMonScaledStats);
     nMonLevel = sMonStats.nTH;
     if (!sMonStats.nTH) {
-      memset(&sMonStats, 0, 0x38);
+      memset(&sMonStats, 0, sizeof(sMonStats));
       nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIndex];
       pMonScaledStats = &sMonStats;
       D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIndex, nMonLevel, 0x10, pMonScaledStats);
       nMonLevel = sMonStats.nTH;
       if (!sMonStats.nTH) {
-        memset(&sMonStats, 0, 0x38);
+        memset(&sMonStats, 0, sizeof(sMonStats));
         nMonLevel = (int)pMonStatsTxt->aLevel[nDifficultyIndex];
         pMonScaledStats = &sMonStats;
         D2Common::DATATBLS::MonsterTbls::MONSTER_CalculateLevelScaledStats(nMonIdx, GAME::Game::GAMEDATA_GetLadderOrGameType(), nDifficultyIndex, nMonLevel, 0x20, pMonScaledStats);
@@ -852,6 +852,10 @@ void __stdcall UI_PrecomputeStatDescriptionWidths() {
     } while (nOffset < 15);
 }
 
+void __stdcall CHAR_FreePanelAssets_NoOp() {
+
+}
+
 static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowerEnabled, int32_t nMouseX, int32_t nMouseY) {
     // Static local variables (originally global data)
     static int gaStatWindowRowLayout[12] = {
@@ -1075,7 +1079,7 @@ void __stdcall DRAW_UI_StatWindow_I() {
     uint16_t wCurChar;
     D2UnitStrc* pPlayer;
     pPlayer = UNIT::Player::GetPlayerUnit_UI();
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = Panel::InvChar;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;

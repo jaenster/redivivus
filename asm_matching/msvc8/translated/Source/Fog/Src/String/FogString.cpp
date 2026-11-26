@@ -56,7 +56,7 @@ void __fastcall SMemStringToUppercase(char * szText, int32_t nMaxLen) {
     }
 }
 
-uint8_t * __fastcall SMemEscapeString(uint8_t * pbDst, uint8_t * pbSrc, size_t nBufSize, uint8_t byQuoteChar) {
+uint8_t * __fastcall SMemEscapeString(uint8_t * pbDst, uint8_t * pbSrc, uint32_t nBufSize, uint8_t byQuoteChar) {
     uint8_t* pbWrite;
     uint8_t* pbWrite2;
     uint8_t byHexDigit;

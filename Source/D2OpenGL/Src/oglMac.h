@@ -68,7 +68,7 @@ BOOL OGL_MacStartCutscene(BYTE * * ppBuffer, int * pnPitch, void * pUnused); // 
 // Counterpart of the above. Tears down video state and frees the buffer.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 BOOL OGL_MacReleaseCutSceneBuffer(); // 1.14d mac: 002e1bf5
-BOOL OGL_SetOption(int nOption, int nValue); // 1.14d mac: 002e1c3c
+BOOL OGL_SetOption(int nOption, intptr_t nValue); // 1.14d mac: 002e1c3c
 // Carbon window event handler installed in MacOpenWindow. Handles moved, activate and close (sends WM_CLOSE).
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 OSStatus OGL_MacWindowEventHandler(EventHandlerCallRef hCallRef, EventRef hEvent, void * pUserData); // 1.14d mac: 002e1d14

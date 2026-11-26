@@ -147,8 +147,8 @@ namespace D2Client { namespace UI { namespace ShowItems {
 
 BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX) {
     int nOverlapDelta;
-    bool bOverlapX;
-    bool bOverlapY;
+    BOOL bOverlapX;
+    BOOL bOverlapY;
     int nScreenBottom = Inv::ScreenSizeY - 0x30;
     if (*pnX < nMinX) {
       *pnRight += nMinX - *pnX;
@@ -185,14 +185,14 @@ BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, in
     int nTooltipIdx = *pnX;
     do {
       if (nTooltipIdx > (int)(uint32_t)gaGroundItemLabels[iEntry].nRight || *pnRight < (int)(uint32_t)gaGroundItemLabels[iEntry].nLeft) {
-        bOverlapX = false;
+        bOverlapX = FALSE;
       } else {
-        bOverlapX = true;
+        bOverlapX = TRUE;
       }
       if (nOverlapDelta > (int)(uint32_t)gaGroundItemLabels[iEntry].nBottom || *pnBottom < (int)(uint32_t)gaGroundItemLabels[iEntry].nTop) {
-        bOverlapY = false;
+        bOverlapY = FALSE;
       } else {
-        bOverlapY = true;
+        bOverlapY = TRUE;
       }
       if (bOverlapX && bOverlapY) {
         if (nPlacementMode <= 6) {

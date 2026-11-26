@@ -6917,8 +6917,8 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     D2MercForHire* pMercForHire;
     uint32_t pNullSentinel;
     void** ppvVar2 = &ExceptionList;
-    int32_t nEHState = -1;
-    pfnEHHandlerRoutine pSehHandler = __GSHandlerCheck_EH_6ca09b;
+    int32_t nEHState = -1; // steer-ok: generated form, kept as emitted
+    pfnEHHandlerRoutine pSehHandler = __GSHandlerCheck_EH_6ca09b; // steer-ok: generated form, kept as emitted
     void* pSehFrame = ExceptionList;
     ExceptionList = &pSehFrame;
     if (Dialog::gpNpcInteractionDialog) {
@@ -6956,7 +6956,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     int32_t nMercSeed = 1;
     fpDialogFunc pfnCloseCallback = NPCMENU_MercListDrawCallback;
     Dialog::AddStringData(Dialog::gpNpcMercListDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd48), 0x13b, 0, 0, 1, pfnCloseCallback, nMercSeed);
-    ::ListBoxWrapper* ppListBox = (::ListBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
+    ::ListBoxWrapper* ppListBox = (::ListBoxWrapper*)Storm::Source::SMem::SMemAlloc(sizeof(::ListBoxWrapper), "new", -1, 0);
     nEHState = 0;
     if (ppListBox) {
       gpNpcMenuMercListBox = vc8_thiscall(ListBox::ListBoxWrapper::Constructor)(ppListBox, (ui::ScreenSizeX - 0x1ea) / 2, ui::WindowSizeY / 2 - 0xa0, 0x1ea, 0x118, 6, 0, 1, (fpListBoxItemActivated)Merc::NPCMENU_ShowMercResurrectDialog, false);
@@ -6982,11 +6982,11 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
         nMercAct = D2Common::Merc::GetMercAct(GAME::Game::CLIENT_CheckExpansion(), 0, nNameStringId);
         bVar1 = GAME::Game::GetDificulity();
         nMercActRolled = pMercForHire->nSeed;
-        nDifficulty = (uint32_t)bVar1;
+        nDifficulty = (uint32_t)bVar1; // steer-ok: generated form, kept as emitted
         pHireData = &mercHireData;
         bIsExpansion = D2Common::Merc::RollMercStats(GAME::Game::CLIENT_CheckExpansion(), UNIT::Player::GetPlayerUnit_UI(), nMercActRolled, nMercAct, nDifficulty, pHireData);
         nMercTypeDescIdx = mercHireData.nHireDescription;
-        nDialogY = mercHireData.nDefense;
+        nDialogY = mercHireData.nDefense; // steer-ok: generated form, kept as emitted
         nMercSeed = mercHireData.nHp;
         nMercActRolled = mercHireData.nLevel;
         if (!bIsExpansion) {
@@ -7103,7 +7103,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     } while ((int)nMercLoopIdx < 10);
 
     if (!nActiveMercCount) {
-      pListBoxVtbl = gpNpcMenuMercListBox->pVtable;
+      pListBoxVtbl = gpNpcMenuMercListBox->pVtable; // steer-ok: generated form, kept as emitted
       dwListBoxFontArg = 0xe;
       dwListBoxEnabledArg = 1;
       dwListBoxColorArg = 0;

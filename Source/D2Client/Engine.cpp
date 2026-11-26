@@ -105,7 +105,7 @@ static BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY,
 
 void __stdcall DrawPopupOk(int32_t bDiscPrompt) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     if (bDiscPrompt) {
       sGfxData.pDC6 = (DC6*)IMG_popupok_DiscPrompt;
     } else {
@@ -135,7 +135,7 @@ void __stdcall LOADER_CheckForInsertedDiscs() {
 
 void __stdcall DrawOkCancel(int32_t nFrameNumber) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = (DC6*)IMG_okcancelbtn;
     sGfxData.nFrameNumber = nFrameNumber;
     sGfxData.nDirection = 0;
@@ -246,7 +246,7 @@ void __stdcall LOADER_DrawConnectionLostMessage() {
 
 void __stdcall LOADER_DrawOkCancelButtons(int32_t nOkFrame, int32_t nCancelFrame) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = (DC6*)IMG_okcancelbtn;
     sGfxData.nFrameNumber = nOkFrame;
     sGfxData.nDirection = 0;

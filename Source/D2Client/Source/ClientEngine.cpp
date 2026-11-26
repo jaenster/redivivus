@@ -47,7 +47,7 @@
 #include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Common/Units/UnitFinds.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Unit/SUnitDmg.h"
 #include "Source/D2Game/Unit/SUnitMsg.h"
@@ -236,7 +236,7 @@ void __stdcall DenOfEvilSpecific(D2RoomStrc * pRoom) {
       return;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x2003;
     sSkillArg.pOwner = pPlayer;
     sSkillArg.eSkillNo = SKILL_Attack;
@@ -542,7 +542,7 @@ void __fastcall CLIENT_SpawnAncientDeathMissile(D2UnitStrc * pUnit) {
       return;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x420;
     sSkillArg.nMissileTxtNo = MISSILE_AncientDeathCenter;
     sSkillArg.pOwner = pUnit;
@@ -624,7 +624,7 @@ void __fastcall HandleIncoming0x89(int32_t nEventId) {
 
 void __fastcall CLIENT_BossDeath_BloodRaven(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nMissileTxtNo = MISSILE_Brdeathcontrol;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -634,7 +634,7 @@ void __fastcall CLIENT_BossDeath_BloodRaven(D2UnitStrc * pUnit) {
       D2Common::Units::Missile::SetTargetX(pMissile, 0x32);
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nMissileTxtNo = MISSILE_Brdeathspirits1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -692,7 +692,7 @@ void __fastcall CLIENT_SpawnTowerMistEffect(D2UnitStrc * pUnit) {
       nY += -0xf;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x420;
     sSkillArg.nMissileTxtNo = MISSILE_Towermist;
     sSkillArg.pOwner = pUnit;
@@ -759,7 +759,7 @@ void __fastcall CLIENT_SpawnOrbMistEffect(D2UnitStrc * pUnit) {
       nTargetY = nY - 0xf;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x420;
     sSkillArg.nMissileTxtNo = MISSILE_Orbmist;
     sSkillArg.pOwner = pUnit;
@@ -777,7 +777,7 @@ void __fastcall CLIENT_SpawnOrbMistEffect(D2UnitStrc * pUnit) {
 
 void __fastcall CLIENT_BossDeath_Mephisto(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nMissileTxtNo = MISSILE_Mephistodeathcontrol;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -788,13 +788,13 @@ void __fastcall CLIENT_BossDeath_Mephisto(D2UnitStrc * pUnit) {
       D2Common::Units::Missile::SetTargetY(pMissile, 0x4b);
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.pOwner = pUnit;
     sSkillArg.nSkillLevel = 1;
     sSkillArg.pMissile = pUnit;
     sSkillArg.nMissileTxtNo = MISSILE_Mephistoholedelay;
     UNIT::Missile::MakeMissile(&sSkillArg);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nMissileTxtNo = MISSILE_Mephistodonotdraw;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -804,7 +804,7 @@ void __fastcall CLIENT_BossDeath_Mephisto(D2UnitStrc * pUnit) {
 
 void __fastcall CLIENT_BossDeath_Andariel(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nMissileTxtNo = MISSILE_Andycontrol0;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -890,7 +890,7 @@ void __fastcall CLIENT_BossDeath_Duriel(D2UnitStrc * pBossUnit) {
 void __fastcall CLIENT_BossDeath_Izual(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     GAME::Wall2::WALL2_ScheduleSoundSequence(0x1253, 0, 0xfa, 0, 0, 0, 0);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nMissileTxtNo = MISSILE_IzualControl;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -1055,7 +1055,7 @@ void __stdcall CLIENT_InitializeQuestStateGlobals() {
     gnGameEndTime = 0;
     gnQuestMonsterUnitId = -1;
     gbWorldstoneShouldShake = 0;
-    memset(&gRoomLightPulse, 0, 0x2c);
+    memset(&gRoomLightPulse, 0, sizeof(gRoomLightPulse));
 }
 
 void __fastcall CLIENT_SetQuestGameEndTimer(int32_t nSeconds) {

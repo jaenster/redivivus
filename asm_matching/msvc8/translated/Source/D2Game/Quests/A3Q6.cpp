@@ -594,25 +594,16 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q23_Callback10_PlayerLeavesGame;
     D2QuestDataA3Q6Strc* pQuestSpecificDataSaved = pQuestSpecificData;
     if (bIsNotIntroduction) {
-      D2UnitDataPlayerStrc* pAttackerPlayerData;
       if (pQuestArgs->pPlayer) {
-        /* local8 is D2GameStrc* here */ uSlot8.pGameDifficulty = pQuestData->pGame;
-        pAttackerPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-        _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[uSlot8.pGameDifficulty->nDifficulty], QUEST_TheGuardian, QUESTSTATE_Completed);
+        _bQuestState = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), QUEST_TheGuardian, QUESTSTATE_Completed);
         if (!_bQuestState) {
           QUEST_StubEmpty(pQuestData, pQuestArgs, 0x3e);
-          pGameInner = pQuestData->pGame;
-          pAttackerPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-          _bQuestState = D2Common::QuestRecord::GetQuestState(pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty], QUEST_TheGuardian, QUESTSTATE_Step0x11);
+          _bQuestState = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer), QUEST_TheGuardian, QUESTSTATE_Step0x11);
           if (!_bQuestState) {
-            piParticipantCount = &pQuestData->pQuestSpecificData.pA3Q6->nPlayerCount;
-            (*piParticipantCount)++;
+            pQuestData->pQuestSpecificData.pA3Q6->nPlayerCount++;
           }
 
-          pGameInner = pQuestData->pGame;
-          pAttackerPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-          Q23_SetGuardianQuestComplete(pQuestArgs->pGame, pQuestArgs->pPlayer, pAttackerPlayerData->pQuestRecord[pGameInner->nDifficulty]);
-          pQuestSpecificData = pQuestSpecificDataSaved;
+          Q23_SetGuardianQuestComplete(pQuestArgs->pGame, pQuestArgs->pPlayer, GetQuestBitBufferInline(pQuestData->pGame, pQuestArgs->pPlayer));
         }
       }
 
@@ -850,7 +841,7 @@ void __fastcall Q23_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // Sets nQuestIdReal=QUEST_TheGuardian (this confirms the file is "The Guardian", kill Mephisto, opens Act4).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q6.cpp
 void __fastcall Q23_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->pNpcMessages = A3Q6::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
@@ -868,7 +859,7 @@ void __fastcall Q23_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpActiveFilter = Q23_ActiveFilter;
     D2QuestDataA3Q6Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA3Q6Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q6.cpp", 0x380);
     pQuestData->pQuestSpecificData.pA3Q6 = pQuestSpecificData;
-    memset(pQuestSpecificData, 0, 0x34);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
 }
 
 }}}} // namespace D2Game::Quests::QUESTS::A3Q6

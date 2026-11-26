@@ -614,36 +614,33 @@ void __fastcall NET_SID_CLIENT_InitSHAContext(int32_t nCtxIndex) {
     pCtx->nBitCountHigh = 0;
 }
 
-uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t value) {
-    uint64_t modResult;
-    uint32_t tempDividend;
-    if (value <= 1) {
-      return value;
+uint32_t __fastcall NET_SID_CLIENT_IDEAMultInverse(uint32_t x) {
+    uint32_t t0, t1, q, y;
+    if (x <= 1) {
+      return x;
     }
 
-    int x = (int)(0x10001 / value);
-    uint32_t remainder = (uint32_t)(0x10001 % value);
-    if (remainder == 1) {
-      return 1U - x & 0xffff;
+    t1 = 0x10001 / x;
+    y = 0x10001 % x;
+    if (y == 1) {
+      return (1 - t1) & 0xffff;
     }
 
-    uint32_t y = 1;
+    t0 = 1;
     do {
-      uint32_t quotient;
-      quotient = value / remainder;
-      modResult = (uint64_t)(value % remainder);
-      value = (uint32_t)modResult;
-      y += quotient * x;
-      if (value == 1) {
-        return y;
+      q = x / y;
+      x = x % y;
+      t0 += q * t1;
+      if (x == 1) {
+        return t0;
       }
 
-      tempDividend = remainder;
-      remainder = (uint32_t)((uint64_t)tempDividend % modResult);
-      x += (int)((uint64_t)tempDividend / modResult) * y;
-    } while (remainder != 1);
+      q = y / x;
+      y = y % x;
+      t1 += q * t0;
+    } while (y != 1);
 
-    return 1U - x & 0xffff;
+    return (1 - t1) & 0xffff;
 }
 
 void __fastcall NET_SID_CLIENT_IDEAExpandKey(uint16_t * pUserKey, uint16_t * pExpandedSubkeys) {

@@ -92,7 +92,7 @@ BOOL __fastcall INFERNO_CastInfernoTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
       }
 
       D2SkillArgStrc sSkillArg;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.eSkillNo = eSkill;
       sSkillArg.nSkillLevel = nSkillLvl2;
@@ -310,7 +310,7 @@ void __fastcall SKILL_InitChargedBoltPath(D2UnitStrc * pUnit, intptr_t nMissileI
     }
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + nMissileIdx);
+    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + (int32_t)nMissileIdx);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 10);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, (uint8_t)nFrameCount);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -334,7 +334,7 @@ BOOL __fastcall Skills_SrvDoFunc_017_ChargedBolt(::SGAMEDATA * pGame, D2UnitStrc
     }
 
     int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -477,7 +477,7 @@ uint32_t __fastcall SKILLSOR_ApplyStaticFieldToUnit(D2SkillCallbackContextStrc *
       nHpDrain = *pDmgEvent;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     eStatType = ~UNITSTAT_strength;
     eElemType = pDmgEvent[4];
     SkillsServer::SERVER_AppendDamageToUnitEvent(pAttackerUnit, &sDamage, eElemType, nHpDrain, pDmgEvent[3], &eStatType, (int*)&eElemType);
@@ -488,7 +488,7 @@ uint32_t __fastcall SKILLSOR_ApplyStaticFieldToUnit(D2SkillCallbackContextStrc *
       }
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     SkillsServer::SERVER_AppendDamageToUnitEvent(pAttackerUnit, &sDamage, eElemType, nHpDrain, pDmgEvent[3], nullptr, nullptr);
     pVictimLoop = pVictimSaved; // steer-ok: the original loads the next victim before the damage call
     sDamage.dwHitClass |= 0xd;
@@ -590,7 +590,7 @@ BOOL __fastcall Skills_SrvDoFunc_021_Telekenis(::SGAMEDATA * pGame, D2UnitStrc *
         __frame0.bKnockback = 1;
       }
 
-      memset(&sDamage, 0, 0x70);
+      memset(&sDamage, 0, sizeof(sDamage));
       SkillsServer::SKILLS_AddRandomSkillDamage(pUnit, &sDamage.dwHitFlags, eSkill, nSkillLvl);
       SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
       pGameHit = __frame0.pGameSaved;
@@ -755,7 +755,7 @@ void __fastcall BlazePath(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
     int32_t nPosX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
     int32_t nPosY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLvlSaved;
     sSkillArg.nFlags = 0x21;
@@ -806,7 +806,7 @@ BOOL __fastcall Skills_SrvDoFunc_024_FireWall(::SGAMEDATA * pGame, D2UnitStrc * 
     BOOL bIsInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
     if (!bIsInTown) {
       int32_t nUnitX;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nSkillLevel = nSkillLvl;
       sSkillArg.nFlags = 0x21;
       sSkillArg.pOwner = pUnit;

@@ -1088,7 +1088,7 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x66_WardenResponse_ReturnOk(::SGAM
 // Alive-check bypass: opcodes 0x14, 0x15, 0x3C, 0x43, 0x66
 // Dead-only: opcode 0x41 (Resurrect) checks for dead state
 // Validates fpHandler with IsBadCodePtr before call.
-eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * pBytes, size_t nSize);
+eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, char * pBytes, uint32_t nSize);
 // Broadcasts a PvP kill-message (opcode 0x5a) to the game when a player is killed. Resolves the killer: if a monster, walks up to its owner player. Copies victim and killer names into fixed-length buffers (16 chars each); for monster killers it stores the boss number instead of a name. For player killers it encodes the killer's char name. Calls BroadcastEventMessage to send the assembled packet to all clients. Halts with an internal error if pVictim is not a player unit.
 // @sourcefile .\PLAYER\PlrMsg.cpp
 void __fastcall PLAYERMSG_BroadcastPlayerSlain(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pVictim);

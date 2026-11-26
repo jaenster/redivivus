@@ -71,6 +71,63 @@ struct D2GambleTableStrc {
 };
 
 #endif // D2_DEFINED_D2GambleTableStrc
+#ifndef D2_DEFINED_D2GemsTxt
+#define D2_DEFINED_D2GemsTxt
+struct __attribute__((packed)) D2GemsTxt {
+    /* 0x00 */ char name[32]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x20 */ char letter[6]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x26 */ uint8_t field_0x26;
+    /* 0x27 */ uint8_t field_0x27;
+    /* 0x28 */ int code; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x2C */ uint8_t field_0x2c;
+    /* 0x2D */ uint8_t field_0x2d;
+    /* 0x2E */ char nummods; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x2F */ char transform; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x30 */ D2MagixAffixModStrc aWeaponMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x60 */ D2MagixAffixModStrc aHelmMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x90 */ D2MagixAffixModStrc aShieldMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
+};
+
+#endif // D2_DEFINED_D2GemsTxt
+#ifndef D2_DEFINED_D2ItemRatioTxt
+#define D2_DEFINED_D2ItemRatioTxt
+struct D2ItemRatioTxt {
+    /* 0x00 */ int Unique; // d2bs binfields FIELDTYPE_INT
+    /* 0x04 */ int UniqueDivisor; // d2bs binfields FIELDTYPE_INT
+    /* 0x08 */ int UniqueMin; // d2bs binfields FIELDTYPE_INT
+    /* 0x0C */ int Rare; // d2bs binfields FIELDTYPE_INT
+    /* 0x10 */ int RareDivisor; // d2bs binfields FIELDTYPE_INT
+    /* 0x14 */ int RareMin; // d2bs binfields FIELDTYPE_INT
+    /* 0x18 */ int Set; // d2bs binfields FIELDTYPE_INT
+    /* 0x1C */ int SetDivisor; // d2bs binfields FIELDTYPE_INT
+    /* 0x20 */ int SetMin; // d2bs binfields FIELDTYPE_INT
+    /* 0x24 */ int Magic; // d2bs binfields FIELDTYPE_INT
+    /* 0x28 */ int MagicDivisor; // d2bs binfields FIELDTYPE_INT
+    /* 0x2C */ int MagicMin; // d2bs binfields FIELDTYPE_INT
+    /* 0x30 */ int HiQuality; // d2bs binfields FIELDTYPE_INT
+    /* 0x34 */ int HiQualityDivisor; // d2bs binfields FIELDTYPE_INT
+    /* 0x38 */ int Normal; // d2bs binfields FIELDTYPE_INT
+    /* 0x3C */ int NormalDivisor; // d2bs binfields FIELDTYPE_INT
+    /* 0x40 */ short Version; // d2bs binfields FIELDTYPE_SHORT
+    /* 0x42 */ char Uber; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x43 */ char Class_Specific; // d2bs binfields FIELDTYPE_CHAR
+};
+
+#endif // D2_DEFINED_D2ItemRatioTxt
+#ifndef D2_DEFINED_D2ItemsTableStrc
+#define D2_DEFINED_D2ItemsTableStrc
+struct D2ItemsTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2ItemsTxt * pItems;
+    /* 0x08 */ struct D2ItemsTxt * pWeapons;
+    /* 0x0C */ int nWeaponsSize;
+    /* 0x10 */ struct D2ItemsTxt * pArmor;
+    /* 0x14 */ int nArmorSize;
+    /* 0x18 */ struct D2ItemsTxt * pMisc;
+    /* 0x1C */ int nMiscSize;
+};
+
+#endif // D2_DEFINED_D2ItemsTableStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2ItemStatCostDescPriorityStrc {
     D2ItemStatCostDescPriorityStrc() = default;
@@ -83,6 +140,22 @@ struct D2ItemStatCostDescPriorityStrc {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2LowQualityItemsTxt
+#define D2_DEFINED_D2LowQualityItemsTxt
+struct D2LowQualityItemsTxt {
+    /* 0x00 */ char Name[32]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x20 */ uint16_t wNameStringId;
+};
+
+#endif // D2_DEFINED_D2LowQualityItemsTxt
+#ifndef D2_DEFINED_D2LowQualityItemsTableStrc
+#define D2_DEFINED_D2LowQualityItemsTableStrc
+struct D2LowQualityItemsTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2LowQualityItemsTxt * pTable;
+};
+
+#endif // D2_DEFINED_D2LowQualityItemsTableStrc
 #ifndef D2_DEFINED_D2QualityItemsTableStrc
 #define D2_DEFINED_D2QualityItemsTableStrc
 struct D2QualityItemsTableStrc {
@@ -116,6 +189,16 @@ struct __attribute__((packed)) D2QualityItemsTxt {
 };
 
 #endif // D2_DEFINED_D2QualityItemsTxt
+#ifndef D2_DEFINED_D2RareAffixTableStrc
+#define D2_DEFINED_D2RareAffixTableStrc
+struct D2RareAffixTableStrc {
+    /* 0x00 */ int nSize; // row count; TXT_RareAffixes_GetLine bounds-checks against this
+    /* 0x04 */ struct D2RareAffixTxt * pTable; // base of the 0x48-byte row array
+    /* 0x08 */ struct D2RareAffixTxt * pSuffixStart; // first suffix row; GetMaxToRoll(0) iterates from here to pPrefixStart
+    /* 0x0C */ struct D2RareAffixTxt * pPrefixStart; // first prefix row; GetMaxToRoll(1) iterates from here to the end of the table
+};
+
+#endif // D2_DEFINED_D2RareAffixTableStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 union TXT_AllocTxt_itemstatcost_Slotm8 {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }

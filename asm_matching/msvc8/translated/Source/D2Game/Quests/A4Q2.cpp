@@ -890,7 +890,7 @@ void __fastcall Q27_Callback_08_KillHandler(D2QuestDataStrc * pQuestData, D2Ques
 // [A4Q3 Terror's End] Quest init. Allocates the 0x4c-byte A4Q2 quest-specific struct, wires callback slots (0x00 gossip-text, 0x02 talk-Tyrael, 0x03 gossip-choice, 0x08 monster-kill, 0x0b NPC-gossip, 0x0d load, 0x0e cleanup), installs NPC gossip table (Tyrael 0x16f / string 0x2a9), sets nQuestIdReal=QUEST_TerrorsEnd, nInitNo=4, ActiveFilter=Q27_ActiveFilter, SequenceFilter=Q27_SequenceFilter.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
 void __fastcall Q27_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pSVar1 = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q27_Callback_08_KillHandler;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q27_Callback03_ChangedLevel;
@@ -909,7 +909,7 @@ void __fastcall Q27_InitData(D2QuestDataStrc * pQuestData) {
     D2QuestDataA4Q2Strc* pQuestSpecificData = D2_NEW_POOL_AT(pSVar1->pMemoryPool, D2QuestDataA4Q2Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x418);
     pQuestData->pQuestSpecificData.pA4Q2 = pQuestSpecificData;
     pQuestData->fpSequenceFilter = Q27_SequenceFilter;
-    memset(pQuestSpecificData, 0, 0x4c);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
 }
 
 // [A4Q3 Terror's End] Object init-fn (seal object): records which seal/lever was touched into the A4Q2 struct; if all 5 seals + 3 bosses are accounted for, triggers Q27_ActivateAllSealsKillChaos and arms the spawn-Diablo timer (QuitGameAfterDia).

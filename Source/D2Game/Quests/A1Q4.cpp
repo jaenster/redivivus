@@ -1264,7 +1264,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
     D2QuestDataStrc* pGame;
     pGame = __frame0.pQuestData;
     if (!pRoomListEnd) {
-      bQuestState = !(pSubData->nStoneAttemptCount & 0x3fU);
+      bQuestState = !(pSubData->nStoneAttemptCount % 64);
       if (bQuestState) {
         _bQuestStateAlt = D2Common::QuestRecord::GetQuestState(pBitBuffer_00, QUEST_TheSearchForCain, QUESTSTATE_Step0x03);
         if (!_bQuestStateAlt) {
@@ -1410,11 +1410,11 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
     advance_quest_step:
     pDVar1 = __frame0.pQuestData;
     if (__frame0.pQuestData->nStateFlagPrev < 4) {
-      int16_t nPartyId;
+      uint16_t nPartyId;
       __frame0.pQuestData->nQuestPacketFlags = '\0';
       QUEST_SetStateAndBroadcast(__frame0.pQuestData, 4, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q04_NotifyQuestStateToPlayer, 1);
       nPartyId = UNIT::SUnit::GetPartyId(pOperation->pAttacker);
-      if (nPartyId != -1) {
+      if (nPartyId != 0xffff) {
         UNIT::Party::ExecuteFunctionForEveryPartyMember(pOperation->sArg.pGame, nPartyId, (::fpExecuteOnUnitFunction)Q04_HandleNpcInteraction, nullptr);
       }
 
@@ -1430,7 +1430,6 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
 BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation) {
     D2QuestDataA1Q4Strc* pDVar1;
-    D2UnitDataPlayerStrc* pPlayerData;
     BOOL BVar2;
     D2UnitStrc* pScrollItemEx;
     int32_t nItemCount;
@@ -1457,8 +1456,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateInifussTree(D2ObjectOperateFnArg * pOperation
     }
 
     pGame = pOperation->sArg.pGame;
-    pPlayerData = D2Common::Units::GetPlayerData(pOperation->pAttacker);
-    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    pBitBuffer = GetQuestBitBufferInline(pGame, pOperation->pAttacker);
     BVar2 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSearchForCain, QUESTSTATE_Completed);
     if (BVar2 == 1) {
       return 0;
@@ -2377,7 +2375,7 @@ void __fastcall Q04_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // Installs the Akara NPC gossip table and zero-inits all sub-flags/lists.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q4.cpp
 void __fastcall Q04_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q04_Callback03_ChangedLevel;
     pQuestData->sStateFunctions.fpQuestStateHandler[4] = Q04_Callback04_ItemPickedUp;
@@ -2401,7 +2399,7 @@ void __fastcall Q04_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->nSequenceQuestId = QUEST_ToolsOfTheTrade;
     D2QuestDataA1Q4Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA1Q4Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q4.cpp", 0x95f);
     pQuestData->pQuestSpecificData.pA1Q4 = pQuestSpecificData;
-    memset(pQuestSpecificData, 0, 0x1bc);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     pQuestSpecificData->nScrollActivationStep = 0;
     pQuestSpecificData->sSub.bStoneOrderRolled = 0;
     pQuestSpecificData->sSub.bScrollDeciphered = 0;

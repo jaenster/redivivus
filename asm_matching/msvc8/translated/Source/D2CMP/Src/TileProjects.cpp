@@ -51,6 +51,8 @@ static char gszSrcFileTileProjects[23] = {
     '\x00'
 }; D2_STATIC_GUARD(gszSrcFileTileProjects, "gszSrcFileTileProjects");
 
+static_assert(sizeof(void*) != 4 || sizeof(::D2TileProjectStrc) == 0x110, "memset(sizeof(D2TileProjectStrc)): the 32-bit layout must be the 0x110 bytes 1.14d clears");
+
 namespace D2CMP { namespace SRC { namespace TileProjects {
 
 // @sourcefile .\SRC\TileProjects.cpp
@@ -91,10 +93,10 @@ static D2TileProjectStrc * TILEPROJECT_FindByFilename(char * szFilename) {
     } while (true);
 }
 
-int __stdcall TILEPROJECT_GetProjectId(char * szText) {
+D2TileLibraryHashStrc * __stdcall TILEPROJECT_GetProjectId(char * szText) {
     D2TileProjectStrc* pTileProjectNode = TILEPROJECT_FindByFilename(szText);
     if (pTileProjectNode) {
-      return (int)pTileProjectNode->pHash;
+      return pTileProjectNode->pHash;
     }
 
     return 0;
@@ -112,7 +114,7 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
       return pExistingNode->pTileLibrary;
     }
 
-    size_t nFileSize = SpriteCache::SPRITECACHE_LoadFromFile(szFilename);
+    uint32_t nFileSize = SpriteCache::SPRITECACHE_LoadFromFile(szFilename);
     D2TileLibraryHeaderStrc* pTileBuffer = (D2TileLibraryHeaderStrc*)D2_ALLOC_AT(nFileSize, ".\\SRC\\TileProjects.cpp", 0x6b);
     if (!pTileBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6c);
@@ -131,7 +133,7 @@ D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char
         exit(-1);
       }
 
-      memset(pExistingNode, 0, 0x110);
+      memset(pExistingNode, 0, sizeof(*pExistingNode));
       pExistingNode->pNext = gpTileProjectListHead;
       pExistingNode->pTileLibrary = pTileData;
       pExistingNode->pHash = pNewHash;

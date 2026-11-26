@@ -45,7 +45,7 @@
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Arena.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/Event.h"
@@ -1401,7 +1401,7 @@ void __fastcall SetUninterruptableState(D2UnitStrc * pUnit, int32_t bSet) {
         D2Common::DATATBLS::ItemStats::SetState(pUnit, STATE_death_delay, 0);
         pKillerUnit = GetKillerUnit(pGame, pUnit);
         if (pKillerUnit) {
-          memset(&sDamage, 0, 0x70);
+          memset(&sDamage, 0, sizeof(sDamage));
           sDamage.wResultFlags |= 2;
           SUnitDmg::SERVER_GetHitCalculation(pGame, pKillerUnit, pUnit, &sDamage);
         } else {
@@ -1697,9 +1697,12 @@ void __fastcall UNITS_RelocateUnitToRoom(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     D2ObjectsTxt* pObjTxt;
     int32_t iVar1;
     D2RoomStrc* pUnitRoom;
-    uint32_t nErrorLine;
-    if (!pGame || !pUnit) {
-      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nErrorLine);
+    if (!pGame) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45c);
+      exit(-1);
+    }
+    if (!pUnit) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45d);
       exit(-1);
     }
 
@@ -2170,7 +2173,7 @@ D2UnitStrc * __fastcall CreateUnit(eD2UnitType eUnitType, int32_t nClassId, int3
                          in room and applies corpse collision.
                          Source file UNIT/SUnit.cpp (__FILE__ literal at 005553b4). */ pObjectData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2UnitDataObjectStrc, ".\\UNIT\\SUnit.cpp", 0x264);
         pAllocUnit->pUnitData.pUnitDataObject = pObjectData;
-        memset(pObjectData, 0, 0x38);
+        memset(pObjectData, 0, sizeof(*pObjectData));
         pDVar1 = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
         pAllocUnit->pUnitData.pUnitDataObject->pTxtObjectsLine = pDVar1;
         pAllocUnit->eAnimMode.eObjectMode = nInitialMode;
@@ -2251,10 +2254,7 @@ static void ClearInteractOnFreePlayer(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     switch (pInteractedUnit->eUnitType) {
       case UNIT_MONSTER:
         {
-          pMonsterAi = 0;
-          if (pInteractedUnit->pUnitData.pUnitDataMonster) {
-            pMonsterAi = pInteractedUnit->pUnitData.pUnitDataMonster->pMonsterAi;
-          }
+          pMonsterAi = pInteractedUnit->pUnitData.pUnitDataMonster ? pInteractedUnit->pUnitData.pUnitDataMonster->pMonsterAi : 0;
 
           D2Game::Monster::MonsterAI::FreeSpecificAiForUnit(pGame, pUnit, pMonsterAi);
           sunitproxy::SUNITPROXY_RemovePlayerFromNpc(pGame, pUnit, pInteractedUnit);
@@ -2263,16 +2263,16 @@ static void ClearInteractOnFreePlayer(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
       case UNIT_OBJECT:
         {
           Objects::ObjectsMode::OBJMODE_OnWaypointFinish(pGame, pInteractedUnit);
-          pUnit->uSideData.pServerSide.dwInteractGUID = -1;
-          pUnit->uSideData.pServerSide.dwInteractType = UNIT_COUNT;
           pUnit->uSideData.pServerSide.bInteracting = 0;
+          pUnit->uSideData.pServerSide.dwInteractType = UNIT_COUNT;
+          pUnit->uSideData.pServerSide.dwInteractGUID = -1;
           return;
         }
     }
 
-    pUnit->uSideData.pServerSide.dwInteractGUID = -1;
-    pUnit->uSideData.pServerSide.dwInteractType = UNIT_COUNT;
     pUnit->uSideData.pServerSide.bInteracting = 0;
+    pUnit->uSideData.pServerSide.dwInteractType = UNIT_COUNT;
+    pUnit->uSideData.pServerSide.dwInteractGUID = -1;
 }
 
 void __fastcall UNITS_UnlinkUnitFromRoom(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, int32_t bDisallowNotify) {
@@ -2426,7 +2426,7 @@ D2UnitStrc * __fastcall SpawnUnitByType(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
               return pDVar1;
             }
 
-            memset(&sItemGenCtx, 0, 0x84);
+            memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
             sItemGenCtx.eQuality = QUALITY_NORMAL;
             sItemGenCtx.nItemLevel = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
             bItemInitOk = ITEMS::Items::Drop::ITEM_InitItemBaseStats(pGame, &pCreatedUnit, &sItemGenCtx, 1);

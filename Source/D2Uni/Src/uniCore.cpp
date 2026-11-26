@@ -133,7 +133,7 @@ void __fastcall UniClearCaches() {
 // ppc 1.10b: 10058bf0 (1.00 10087ef8, 1.13d 1005ec60, carbon 1.10b 103a8060, carbon 1.13d 103d77f0)
 // Mac slot 15 / Windows 12. A 12-way switch (1.10b jump table 104422b4). On the Mac options 1, 2,
 // 3 and 10 pass a pointer in nValue.
-BOOL __fastcall UniSetOption(int nOption, int nValue) {
+BOOL __fastcall UniSetOption(int nOption, intptr_t nValue) {
     switch (nOption) {
         case 0:
             // The device to run on.

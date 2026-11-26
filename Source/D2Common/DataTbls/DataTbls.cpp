@@ -20,9 +20,9 @@
 #include "Source/D2Lang/D2Lang.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Common/D2Common.globals.h"
-#include "Source/D2Game/D2Game.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Logging/ProfCore.data.h"
+#include "Source/D2Headers/D2Arch.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -134,27 +134,23 @@ int32_t __stdcall TXT_Experience_GetMaxLevel(int32_t ePlayerClass) {
 
 // Computes nLevel (EAX) throughout the search loop and falls to bare return; the two known callers (UpdateGameInfo, SERVER_PlayerUpdateExperience) both feed the result straight into an unassigned nNewLevel used to gate a level-up branch.
 int __stdcall DATATBLS_GetLevelFromExperience(int32_t ePlayerClass, uint32_t nExperience) {
-    int nClassIdClamped;
-    int nLevel;
     if (ePlayerClass < 0 || ePlayerClass >= 7) {
       ePlayerClass = 0;
     }
-    if (ePlayerClass < 0 || (nClassIdClamped = ePlayerClass , ePlayerClass >= 7)) {
-      nClassIdClamped = 0;
-    }
 
+    int nMaxLevel = MonsterTbls::sgtDataTable.pTxtExperience->Class[ePlayerClass < 0 || ePlayerClass >= 7 ? 0 : ePlayerClass];
     int* pExpEntry = MonsterTbls::sgtDataTable.pTxtExperience[1].Class + ePlayerClass;
-    uint32_t nExpThreshold = *pExpEntry;
-    for (nLevel = 0; nExperience >= nExpThreshold && nLevel < MonsterTbls::sgtDataTable.pTxtExperience->Class[nClassIdClamped]; nLevel++) {
+    int nLevel = 0;
+    while (nExperience >= (uint32_t)*pExpEntry && nLevel < nMaxLevel) {
       pExpEntry += 8;
-      nExpThreshold = *pExpEntry;
+      nLevel++;
     }
 
     return nLevel;
 }
 
 // @sourcefile .\DATATBLS\DataTbls.cpp
-int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * ppBuffer, int * pnSize, int * pnCapacity, void * pSrc, size_t nSize) {
+int32_t __fastcall DATATBLS_AppendDataToBuffer(void * * ppBuffer, int * pnSize, int * pnCapacity, void * pSrc, uint32_t nSize) {
     while ((int)(*pnSize + nSize) >= *pnCapacity) {
       void* pRealloced;
       *pnCapacity += 0x400;
@@ -301,7 +297,7 @@ int __fastcall DATATBLS_LookupCalcCode(char * szText, int * pOutHasResolvedToCon
 }
 
 void __fastcall DATATBLS_CompileSkillCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
-    size_t nByteCodeLen;
+    uint32_t nByteCodeLen;
     uint32_t nCompiledLen;
     uint8_t aByteCodeBuf[1024];
     if (!pRecord) {
@@ -323,7 +319,7 @@ void __fastcall DATATBLS_CompileSkillCode(char * szText, char * pRecord, int32_t
 }
 
 void __fastcall DATATBLS_CompileSkillDescCode(char * szText, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
-    size_t nByteCodeLen;
+    uint32_t nByteCodeLen;
     uint32_t nCompiledLen;
     uint8_t aByteCodeBuf[1024];
     if (!pRecord) {
@@ -429,7 +425,7 @@ static void GetPlayerClassIdToName(int32_t nClassId, char * szResult, size_t nSi
     szResult[nSize - 1] = '\0';
 }
 
-static void GetMonsterClassIdToName(int32_t nClassId, char * szResult, size_t nSize) {
+static void GetMonsterClassIdToName(int32_t nClassId, char * szResult, uint32_t nSize) {
     uint16_t wNameStr;
     if ((int)nSize <= 0) {
       return;
@@ -465,7 +461,7 @@ static void GetObjectClassIdToName(int32_t nClassId, char * szResult, size_t nSi
     szResult[nSize - 1] = '\0';
 }
 
-static void GetItemClassIdToName(int32_t nClassId, char * szResult, size_t nSize) {
+static void GetItemClassIdToName(int32_t nClassId, char * szResult, uint32_t nSize) {
     D2ItemsTxt* pTxtItem = ItemTbls::TXT_Items_GetLine(nClassId);
     if (pTxtItem && pTxtItem->wNameStr != 0x1506) {
       uint16_t* pwszLocaleName;
@@ -490,36 +486,36 @@ static void GetMissileClassIdToName(int32_t nClassId, char * szResult, size_t nS
     szResult[nSize - 1] = '\0';
 }
 
-char * __stdcall GetUnitClassIdToName(D2UnitStrc * pUnit, char * szResult, size_t nSize) {
+char * __stdcall GetUnitClassIdToName(D2UnitStrc * pUnit, char * szResult, uint32_t nSize) {
     *szResult = '\0';
-    if (pUnit) {
-      switch (pUnit->eUnitType) {
-        case UNIT_PLAYER:
-          GetPlayerClassIdToName(pUnit->nClassId, szResult, nSize);
-        return szResult;
-        case UNIT_MONSTER:
-          GetMonsterClassIdToName(pUnit->nClassId, szResult, nSize);
-        return szResult;
-        case UNIT_OBJECT:
-          GetObjectClassIdToName(pUnit->nClassId, szResult, nSize);
-        return szResult;
-        case UNIT_MISSILE:
-          GetMissileClassIdToName(pUnit->nClassId, szResult, nSize);
-        return szResult;
-        case UNIT_ITEM:
-          GetItemClassIdToName(pUnit->nClassId, szResult, nSize);
-        return szResult;
-        default:
-          printf(szResult, "Invalid Unit");
-        return szResult;
-      }
+    if (!pUnit) {
+      printf(szResult, "NULL Unit");
+      return szResult;
     }
 
-    printf(szResult, "NULL Unit");
-    return szResult;
+    switch (pUnit->eUnitType) {
+      case UNIT_PLAYER:
+        GetPlayerClassIdToName(pUnit->nClassId, szResult, nSize);
+      return szResult;
+      case UNIT_MONSTER:
+        GetMonsterClassIdToName(pUnit->nClassId, szResult, nSize);
+      return szResult;
+      case UNIT_OBJECT:
+        GetObjectClassIdToName(pUnit->nClassId, szResult, nSize);
+      return szResult;
+      case UNIT_MISSILE:
+        GetMissileClassIdToName(pUnit->nClassId, szResult, nSize);
+      return szResult;
+      case UNIT_ITEM:
+        GetItemClassIdToName(pUnit->nClassId, szResult, nSize);
+      return szResult;
+      default:
+        printf(szResult, "Invalid Unit");
+      return szResult;
+    }
 }
 
-char * __stdcall GetNameByClassIdAndType(eD2UnitType eUnitType, int16_t nClassId, char * szResult, size_t nSize) {
+char * __stdcall GetNameByClassIdAndType(eD2UnitType eUnitType, int16_t nClassId, char * szResult, uint32_t nSize) {
     *szResult = '\0';
     switch (eUnitType) {
       case UNIT_PLAYER:
@@ -572,7 +568,7 @@ void * __fastcall ARCHIVE_LoadDataTables(D2PoolManagerStrc * pMemory, char * szT
 void * __stdcall CompileTxt(D2PoolManagerStrc * pMemory, char * szTableName, D2BinFieldInputStrc * pBinFieldInput, int * nTxtTableSize, int32_t nEndOffset) {
     int nStrCmpResult;
     D2BinFieldExcelStrc* pBinField;
-    size_t nTxtLineCount;
+    uint32_t nTxtLineCount;
     void* pDataTable;
     void* pParsedData;
     int32_t nRecordCount;
@@ -655,8 +651,44 @@ void __stdcall UnloadBin(void * pTxtTable) {
     D2_FREE_POOL_AT(nullptr, pTxtTable, ".\\DATATBLS\\DataTbls.cpp", 0x926);
 }
 
+#if D2_ARCH_X64
+// Allocates the native table with the header UnloadBin expects, copies each record's spans out of
+// the 32-bit table and frees the 32-bit table.
+void * WidenBinTable(void * pTxtTable, int32_t nRecords, int32_t nSrcStride, size_t nDstStride, const D2BinRecordSpanStrc * pSpans, int32_t nSpans) {
+    if (!pTxtTable) {
+      return pTxtTable;
+    }
+
+    size_t nHeaderSize = gbTxtAllocCountHeader ? sizeof(int32_t) : 0;
+    size_t nAllocSize = nHeaderSize + (size_t)nRecords * nDstStride;
+    char* pAlloc = (char*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\DataTbls.cpp", __LINE__);
+    if (!pAlloc) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), __LINE__);
+      exit(-1);
+    }
+
+    memset(pAlloc, 0, nAllocSize);
+    if (gbTxtAllocCountHeader) {
+      *(int32_t*)pAlloc = nRecords;
+    }
+
+    char* pDstTable = pAlloc + nHeaderSize;
+    const char* pSrcTable = (const char*)pTxtTable;
+    for (int32_t i = 0; i < nRecords; i++) {
+      const char* pSrc = pSrcTable + (size_t)i * nSrcStride;
+      char* pDst = pDstTable + (size_t)i * nDstStride;
+      for (int32_t j = 0; j < nSpans; j++) {
+        memcpy(pDst + pSpans[j].nDstOffset, pSrc + pSpans[j].nSrcOffset, pSpans[j].nSize);
+      }
+    }
+
+    UnloadBin(pTxtTable);
+    return pDstTable;
+}
+#endif
+
 // Populates the wide-string class-name field in every row of the CharStats txt table. For each row, looks up the string-table key via STRTABLE_GetStringByKey; if not found, formats a fallback like "&lt;keyname&gt;" and writes the wide string (up to nWstringSize chars) into the destination field at the computed struct offset.
-void __fastcall TXT_CharStats_DefineWideStringClass(D2CharStatsTxt * pTxtCharStats, int32_t nTxtCharStatsSize, int32_t nStructStride, int32_t nSrcFieldOffset, int32_t nDstFieldOffset, size_t nWstringSize) {
+void __fastcall TXT_CharStats_DefineWideStringClass(D2CharStatsTxt * pTxtCharStats, int32_t nTxtCharStatsSize, int32_t nStructStride, int32_t nSrcFieldOffset, int32_t nDstFieldOffset, uint32_t nWstringSize) {
     int i;
     uint16_t wszTmpBuf[512];
     uint16_t wszSrcBuf[512];

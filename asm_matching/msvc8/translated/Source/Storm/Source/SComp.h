@@ -45,7 +45,7 @@ struct D2BitStreamReaderStrc {
 #endif // D2_MODULE_Storm
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct D2BitStreamWriterStrc {
-    /* 0x00 */ uint32_t nPad00; // unused/padding observed at +0
+    /* 0x00 */ uint8_t * pOutStart; // output buffer start; written by the init (0041d920), not read back
     /* 0x04 */ int nBytesRemaining; // remaining byte capacity in output buffer
     /* 0x08 */ uint8_t * pOutPtr; // current output write pointer
     /* 0x0C */ uint32_t nBitAccum; // bit accumulator (packed bits shift in here)
@@ -152,7 +152,7 @@ void __fastcall COMPRESS_DestroyEncoderContext(struct D2CompressEncoderStrc * pE
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041c3d0(struct StormLinkStrc * pNode);
 struct D2BitStreamReaderStrc * __fastcall LINKEDLIST_Unlink(struct D2BitStreamReaderStrc * pList, int, uint32_t * pNode);
 int __fastcall Unreferenced_0041d8a0(struct D2BitStreamReader32Strc * pReader);
-uint32_t __fastcall BITBUFFER_PeekBits(uint16_t * * pBitBuffer, int, uint16_t * nBitCount, uint32_t nMask);
+uint32_t __fastcall BITBUFFER_PeekBits(struct D2BitStreamReaderStrc * pBitBuf, int, uint32_t nBits, uint32_t nMask);
 void __fastcall LINKEDLIST_Clear(uint8_t * pBitBuffer, int, int32_t nBits);
 struct D2BitStreamWriterStrc * __fastcall LINKEDLIST_InsertAfter(struct D2BitStreamWriterStrc * pList, int, uint8_t * pNode, int32_t pNewNode);
 int32_t __fastcall BITBUFFER_GetRemainingBits(int * pBitStream);
@@ -173,7 +173,7 @@ void __fastcall SCOMP_PkwareDecompress(void * pOutBuf, uint32_t * pdwOutLength, 
 void * __fastcall SCOMP_ArenaAlloc(struct D2ScompArenaStrc * pArenaState, int32_t nItems, int32_t nItemSize);
 // @sourcefile .\SOURCE\SCOMP.CPP
 void __fastcall SCOMP_ArenaFree(struct D2ScompArenaStrc * pArenaState, void * pBlock);
-void __fastcall SCOMP_ZlibCompressWithLevel(uint8_t * pDst, uint32_t * pnDstLen, uint32_t pSrc, uint32_t nSrcLen, uint32_t * pUserData, int32_t nLevel);
+void __fastcall SCOMP_ZlibCompressWithLevel(uint8_t * pDst, uint32_t * pnDstLen, uint8_t * pSrc, uint32_t nSrcLen, uint32_t * pUserData, int32_t nLevel);
 void __fastcall SCOMP_Bzip2Decompress(uint8_t * pDst, uint32_t * pnDstLen, uint8_t * pSrc, uint32_t nSrcLen, void * pUserData);
 // @blizzard AdpcmMonoCompress (SCOMP.CPP)
 void __fastcall SCOMP_AdpcmMonoCompress(short * pDst, uint32_t * pnDstLen, short * pSrc, uint32_t nSrcLen, uint32_t * pUserData, uint32_t nBitsPerSample);
@@ -196,15 +196,15 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
 // @sourcefile .\SOURCE\SCOMP.CPP
 BOOL __stdcall SCOMP_CleanupTempBuffer();
 struct StormLinkStrc * __fastcall HUFFMAN_GetDecodedOffset(struct StormLinkStrc * pNode, int, intptr_t pBase);
-int __fastcall Unreferenced_0041e930(struct StormLinkStrc * pLink);
-int32_t __fastcall Unreferenced_0041e940(void * pHandle);
+intptr_t __fastcall Unreferenced_0041e930(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_0041e940(void * pHandle);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041e970(struct StormLinkStrc * pNode);
 void __fastcall Unreferenced_0041e9b0(struct StormLinkedListStrc * pList);
 int __fastcall Unreferenced_0041e9d0(int * pValueA, int * pValueB);
 uint32_t __fastcall BITBUFFER_ReadBits(struct D2BitStreamReaderStrc * pBitBuf, int, uint32_t nBits, uint32_t nMask);
 void __stdcall SCOMP_DecompressSimple(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSize);
-int __fastcall Unreferenced_0041ea40(struct StormLinkStrc * pLink);
-uint32_t __fastcall Unreferenced_0041ea50(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_0041ea40(struct StormLinkStrc * pLink);
+uintptr_t __fastcall Unreferenced_0041ea50(struct StormLinkStrc * pLink);
 struct StormLinkStrc * __fastcall Unreferenced_0041ea60(struct StormLinkStrc * pLink);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041ea70(struct StormLinkStrc * pNode);
 void __fastcall LINKEDLIST_NodeDestructor_Unref_0041eae0(struct StormLinkStrc * pNode);
@@ -219,14 +219,14 @@ void __fastcall LINKEDLIST_UnlinkAll(struct StormLinkedListStrc * pList);
 void * __fastcall LINKEDLIST_LinkBefore(void * pNode);
 void __fastcall LINKEDLIST_NodeDestructor(struct StormLinkStrc * pNode);
 struct D2CompressHuffNodeStrc * __fastcall HUFFMAN_AllocateNode(struct D2HuffmanContextStrc * pThis, int, int32_t nInsertMode);
-void __fastcall COMPRESS_InitEncoderContext(struct D2CompressEncoderStrc * pEncoder, int, int * * pTableSel);
+void __fastcall COMPRESS_InitEncoderContext(struct D2CompressEncoderStrc * pEncoder, int, uint32_t nTableSel);
 void __fastcall COMPRESS_UpdateFrequencies(struct D2CompressEncoderStrc * pEncoder, int, struct D2CompressHuffNodeStrc * pSymbolNode);
 void __fastcall COMPRESS_FlushEncoderState(struct StormLinkedListStrc * pEncoder);
 // Initialise a Huffman encoder/decoder context: zero all linked-list sentinels, set epoch to 1, clear node-count and quick-table epoch
 struct D2CompressEncoderStrc * __fastcall HUFFMAN_InitContext(struct D2CompressEncoderStrc * pEncoder);
 void __fastcall COMPRESS_EncodeSymbol(struct D2CompressEncoderStrc * pEncoder, int, int nSymbol);
 int __fastcall HUFFMAN_DecompressBlock(struct D2HuffmanContextStrc * pDecoderCtx, int, uint8_t * pDst, int32_t nDstMax, struct D2BitStreamReaderStrc * pBitBuf);
-int __fastcall COMPRESS_EncodeBuffer(struct D2CompressEncoderStrc * pHuffCtx, int, struct D2BitStreamWriterStrc * pBitStream, uint8_t * pbSrc, int32_t nSrcLen, int * * nTableSel);
+int __fastcall COMPRESS_EncodeBuffer(struct D2CompressEncoderStrc * pHuffCtx, int, struct D2BitStreamWriterStrc * pBitStream, uint8_t * pbSrc, int32_t nSrcLen, uint32_t nTableSel);
 struct D2CompressEncoderStrc * __fastcall HUFFMAN_Constructor(struct D2CompressEncoderStrc * pEncoder);
 struct D2HuffmanContextStrc * __fastcall HUFFMAN_ConstructorWithTable(struct D2HuffmanContextStrc * pHuffCtx);
 // @blizzard HuffmanCompress (SCOMP.CPP)

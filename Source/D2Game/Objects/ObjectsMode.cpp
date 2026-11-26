@@ -50,7 +50,7 @@
 #include "Source/D2Common/Units/UnitFinds.h"
 #include "Source/D2Common/Waypoints.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/Event.h"
@@ -1262,8 +1262,8 @@ void __fastcall OBJMODE_SpawnSiegeMonsterD(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 static void __stdcall OBJMODE_DispatchOperateCallback(D2ObjectOperateFnArg * pOperation, uint8_t nFunctionId) {
     BOOL _bBadCallback;
-    bool bBadCallback;
-    bool bActAllowed;
+    BOOL bBadCallback;
+    BOOL bActAllowed;
     D2RoomStrc* pRoom;
     int32_t nErrorLine;
     uint32_t uFunctionIdx = (uint32_t)nFunctionId;
@@ -1548,15 +1548,19 @@ static BOOL __stdcall Shrines_GemShrine_SpawnGem(int32_t nItemClassId, D2UnitStr
     POINT ptUnitCoords;
     POINT ptSpawnPos;
     D2ItemGenContextStrc sItemGenCtx;
-    D2UnitStrc* pNewGemItem;
+    eD2ItemFlag eGemItemFlags;
     D2UnitStrc* pOldGemItem;
     D2Common::Units::GetCoords(pUnit2, &ptUnitCoords);
     uint8_t bSearchNeighbors = 1;
     uint32_t uSearchFlag = 1;
     POINT* pNewPosition = &ptSpawnPos;
-    D2UnitStrc* pSpawnedItem = (D2UnitStrc*)ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit2), &ptUnitCoords, pNewPosition, uSearchFlag, bSearchNeighbors);
-    if (pSpawnedItem) {
-      memset(&sItemGenCtx, 0, 0x84);
+    union uSpawnSlot_u {
+      D2UnitStrc* pSpawnedItem;
+      uint32_t nGemItemFlags; // the same frame slot once the gem is spawned: the item flag word ITEM_SetServerSideFlag fills
+    } uSpawnSlot;
+    uSpawnSlot.pSpawnedItem = (D2UnitStrc*)ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit2), &ptUnitCoords, pNewPosition, uSearchFlag, bSearchNeighbors);
+    if (uSpawnSlot.pSpawnedItem) {
+      memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
       sItemGenCtx.pUnit = 0;
       sItemGenCtx.pSeed = 0;
       sItemGenCtx.wItemFormat = pGame->wItemFormat;
@@ -1565,31 +1569,31 @@ static BOOL __stdcall Shrines_GemShrine_SpawnGem(int32_t nItemClassId, D2UnitStr
       sItemGenCtx.dwMode = 3;
       sItemGenCtx.nPosX = ptSpawnPos.x;
       sItemGenCtx.nPosY = ptSpawnPos.y;
-      sItemGenCtx.pDrlgRoom = (D2RoomStrc*)pSpawnedItem;
+      sItemGenCtx.pDrlgRoom = (D2RoomStrc*)uSpawnSlot.pSpawnedItem;
       sItemGenCtx.usually_one = 1;
       sItemGenCtx.eQuality = QUALITY_NORMAL;
       sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pUnit2, LEVEL_None);
-      pSpawnedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
-      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pSpawnedItem, UNITSTAT_quantity, 1, 0);
-      D2Common::Unit::ROOM_LinkUnitToUpdateList(pSpawnedItem);
-      if (pSpawnedItem) {
-        pSpawnedItem->eUnitFlags |= UNITFLAG_DOUPDATE;
+      uSpawnSlot.pSpawnedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
+      D2Common::Stats::StatsEx::STATLIST_SetUnitStat(uSpawnSlot.pSpawnedItem, UNITSTAT_quantity, 1, 0);
+      D2Common::Unit::ROOM_LinkUnitToUpdateList(uSpawnSlot.pSpawnedItem);
+      if (uSpawnSlot.pSpawnedItem) {
+        uSpawnSlot.pSpawnedItem->eUnitFlags |= UNITFLAG_DOUPDATE;
       }
 
       BVar1 = 1;
       if (pUnit) {
-        pSpawnedItem = 0;
-        D2Common::ITEMS::Items::ITEM_SetServerSideFlag((uint32_t*)&pSpawnedItem, 0x20, 1);
+        uSpawnSlot.pSpawnedItem = 0;
+        D2Common::ITEMS::Items::ITEM_SetServerSideFlag(&uSpawnSlot.nGemItemFlags, 0x20, 1);
         D2Common::ITEMS::Items::ITEM_SetItemData_ePreviousPage(pUnit, D2Common::ITEMS::Items::ITEM_GetContainingInventoryPage(pUnit));
         pOldGemItem = pUnit;
-        pNewGemItem = pSpawnedItem;
-        GAME::SCmd::Send0x9DRemoveItemFromContainer(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\OBJECTS\\ObjMode.cpp", 0x80f), pUnit2, pOldGemItem, (eD2ItemFlag)pNewGemItem);
+        eGemItemFlags = (eD2ItemFlag)uSpawnSlot.nGemItemFlags;
+        GAME::SCmd::Send0x9DRemoveItemFromContainer(UNIT::SUnit::SUNIT_GetClient(pUnit2, ".\\OBJECTS\\ObjMode.cpp", 0x80f), pUnit2, pOldGemItem, eGemItemFlags);
         ITEMS::ItemMode::ITEMMODE_DeleteItemFromInventory(pGame, pUnit2, pUnit, 0);
         return 1;
       }
     } else {
       BVar1 = 0;
-      pSpawnedItem = 0;
+      uSpawnSlot.pSpawnedItem = 0;
     }
 
     return BVar1;
@@ -1725,7 +1729,7 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
       nNegColOffset = -5;
       nUnitIdx = 5;
       do {
-        memset(&sSkillArg, 0, 0x5c);
+        memset(&sSkillArg, 0, sizeof(sSkillArg));
         pTargetUnit = pArguments->sArg.pVictim;
         sSkillArg.nFlags = 3;
         eUnitType = pTargetUnit->eUnitType;
@@ -1822,38 +1826,17 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
     int nLevel;
     uint32_t nCollisionMask;
     POINT ptAttackerCoords;
-    int aMissileOffsets[13];
+    int aOffsetX[6];
+    int aOffsetY[6];
     POINT ptSpawnPos;
     int nPotionSpawnIdx;
-    D2ItemGenContextStrc sItemGenCtx;
     uint8_t bSearchNeighbors;
-    eD2UnitType eUnitType;
-    int64_t lSeedProduct;
     POINT* pNewPosition;
-    D2SeedStrc sNewSeed;
-    uint32_t uSeedHigh = pTxtShrines->dwArg1 - pTxtShrines->dwArg0;
-    D2UnitStrc* pCreatedItem = pArguments->sArg.pVictim;
-    D2SeedStrc* pSeed = &pCreatedItem->sSeed;
-    if ((int)uSeedHigh <= 0) {
-      uSeedHigh = 0;
-    } else if (uSeedHigh & uSeedHigh - 1) {
-      lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-      ptSpawnPos.y = (LONG)((uint64_t)lSeedProduct >> 0x20);
-      sNewSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pCreatedItem->sSeed.nSeedHigh);
-      pSeed->nSeedHigh = sNewSeed.nSeedHigh;
-      pSeed->nSeedLow = sNewSeed.nSeedLow;
-      uSeedHigh = sNewSeed.nSeedLow % uSeedHigh;
-    } else {
-      lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-      ptSpawnPos.y = (LONG)((uint64_t)lSeedProduct >> 0x20);
-      sNewSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pCreatedItem->sSeed.nSeedHigh);
-      pSeed->nSeedHigh = sNewSeed.nSeedHigh;
-      pSeed->nSeedLow = sNewSeed.nSeedLow;
-      uSeedHigh = uSeedHigh - 1 & sNewSeed.nSeedLow;
-    }
-
-    aMissileOffsets[0xc] = pTxtShrines->dwArg0 + uSeedHigh;
-    for (nPotionSpawnIdx = 0; nPotionSpawnIdx < aMissileOffsets[0xc]; nPotionSpawnIdx++) {
+    int nRange = pTxtShrines->dwArg1 - pTxtShrines->dwArg0;
+    D2UnitStrc* pVictim = pArguments->sArg.pVictim;
+    D2SeedStrc* pSeed = &pVictim->sSeed;
+    int nPotions = pTxtShrines->dwArg0 + D2_SeedRollLimited(pSeed, nRange);
+    for (nPotionSpawnIdx = 0; nPotionSpawnIdx < nPotions; nPotionSpawnIdx++) {
       int32_t nItemClassId;
       nItemClassId = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(0x206d706f);
       if (nItemClassId == -1) {
@@ -1867,21 +1850,22 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
       pNewPosition = &ptSpawnPos;
       pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pArguments->pAttacker), &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
       if (pSpawnRoom) {
-        memset(&sItemGenCtx, 0, 0x84);
-        sItemGenCtx.pGame = pArguments->sArg.pGame;
+        D2ItemGenContextStrc sItemGenCtx;
+        memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
         sItemGenCtx.pUnit = 0;
         sItemGenCtx.pSeed = 0;
-        sItemGenCtx.nPosY = ptSpawnPos.y;
+        sItemGenCtx.pGame = pArguments->sArg.pGame;
+        sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
+        sItemGenCtx.nItemClassid = nItemClassId;
+        sItemGenCtx.nPosX = ptSpawnPos.x;
         sItemGenCtx.eQuality = QUALITY_INVALID;
         sItemGenCtx.dwMode = 3;
-        sItemGenCtx.nPosX = ptSpawnPos.x;
-        sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
-        sItemGenCtx.usually_one = 1;
-        sItemGenCtx.nItemClassid = nItemClassId;
+        sItemGenCtx.nPosY = ptSpawnPos.y;
         sItemGenCtx.pDrlgRoom = pSpawnRoom;
+        sItemGenCtx.usually_one = 1;
         sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pArguments->pAttacker, LEVEL_None);
         sItemGenCtx.nPresetQuantity = 1;
-        pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
+        D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCreatedItem, UNITSTAT_quantity, 1, 0);
         D2Common::Unit::ROOM_LinkUnitToUpdateList(pCreatedItem);
         if (pCreatedItem) {
@@ -1891,61 +1875,61 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
     }
 
     int iMissileIdx = 0;
-    aMissileOffsets[6] = -6;
-    aMissileOffsets[7] = -6;
-    aMissileOffsets[8] = 0;
-    aMissileOffsets[9] = 0;
-    aMissileOffsets[10] = 6;
-    aMissileOffsets[0xb] = 6;
-    aMissileOffsets[0] = 6;
-    aMissileOffsets[1] = -6;
-    aMissileOffsets[2] = 6;
-    aMissileOffsets[3] = -6;
-    aMissileOffsets[4] = 6;
-    aMissileOffsets[5] = -6;
+    aOffsetX[0] = -6;
+    aOffsetX[1] = -6;
+    aOffsetX[2] = 0;
+    aOffsetX[3] = 0;
+    aOffsetX[4] = 6;
+    aOffsetX[5] = 6;
+    aOffsetY[0] = 6;
+    aOffsetY[1] = -6;
+    aOffsetY[2] = 6;
+    aOffsetY[3] = -6;
+    aOffsetY[4] = 6;
+    aOffsetY[5] = -6;
     do {
-      memset(&sItemGenCtx.usually_one, 0, 0x5c);
-      pCreatedItem = pArguments->sArg.pVictim;
-      sItemGenCtx.usually_one = 0x520;
-      sItemGenCtx.wItemFormat = 0;
-      eUnitType = pCreatedItem->eUnitType;
-      uint32_t maxDurabilityValue;
+      D2SkillArgStrc sSkillArg;
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
+      D2UnitStrc* pUnit = pArguments->sArg.pVictim;
+      sSkillArg.nFlags = 0x520;
+      eD2UnitType eUnitType = pUnit->eUnitType;
+      int nX;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        maxDurabilityValue = pCreatedItem->pPath.pStaticPath->nPosX;
-      } else if (pCreatedItem->pPath.pDynamicPath) {
-        maxDurabilityValue = D2Common::PATH::DynamicPath::GetXPos(pCreatedItem->pPath.pDynamicPath);
+        nX = pUnit->pPath.pStaticPath->nPosX;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
       } else {
-        maxDurabilityValue = 0;
+        nX = 0;
       }
 
-      sItemGenCtx.maxDurability = maxDurabilityValue;
-      pCreatedItem = pArguments->sArg.pVictim;
-      eUnitType = pCreatedItem->eUnitType;
-      uint32_t dwFileIndexValue;
+      sSkillArg.nX = nX;
+      pUnit = pArguments->sArg.pVictim;
+      eUnitType = pUnit->eUnitType;
+      int nY;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        dwFileIndexValue = pCreatedItem->pPath.pStaticPath->nPosY;
-      } else if (pCreatedItem->pPath.pDynamicPath) {
-        dwFileIndexValue = D2Common::PATH::DynamicPath::GetYPos(pCreatedItem->pPath.pDynamicPath);
+        nY = pUnit->pPath.pStaticPath->nPosY;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
       } else {
-        dwFileIndexValue = 0;
+        nY = 0;
       }
 
-      sItemGenCtx.dwFileIndex = dwFileIndexValue;
-      sItemGenCtx.neD2ItemFlag = aMissileOffsets[iMissileIdx + 6] + sItemGenCtx.maxDurability;
-      sItemGenCtx.nInitSeed = aMissileOffsets[iMissileIdx] + sItemGenCtx.dwFileIndex;
-      sItemGenCtx.bFromCustomData = (int)pArguments->pAttacker;
-      sItemGenCtx.eQuality = (eD2ItemQuality)pArguments->sArg.pVictim;
-      sItemGenCtx.nModSeed = 1;
-      sItemGenCtx.durability = 0x2d;
-      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat((D2UnitStrc*)sItemGenCtx.bFromCustomData, UNITSTAT_level, 0);
-      *(uint32_t*)(char*)&sItemGenCtx.szCustomName = nLevel / 5;
-      if ((int)*(uint32_t*)(char*)&sItemGenCtx.szCustomName < 1) {
-        *(uint32_t*)(char*)&sItemGenCtx.szCustomName = 1;
-      } else if ((int)*(uint32_t*)(char*)&sItemGenCtx.szCustomName > 8) {
-        *(uint32_t*)(char*)&sItemGenCtx.szCustomName = 8;
+      sSkillArg.nY = nY;
+      sSkillArg.nUnitX = aOffsetX[iMissileIdx] + sSkillArg.nX;
+      sSkillArg.nUnitY = aOffsetY[iMissileIdx] + sSkillArg.nY;
+      sSkillArg.pOwner = pArguments->pAttacker;
+      sSkillArg.pMissile = pArguments->sArg.pVictim;
+      sSkillArg.nParticleParam = 1;
+      sSkillArg.nMissileTxtNo = MISSILE_Explosivepotion;
+      int nSkillLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(sSkillArg.pOwner, UNITSTAT_level, 0) / 5;
+      if (nSkillLevel < 1) {
+        nSkillLevel = 1;
+      } else if (nSkillLevel > 8) {
+        nSkillLevel = 8;
       }
+      sSkillArg.nSkillLevel = nSkillLevel;
 
-      MISSILES::Missiles::CreatingMissile(pArguments->sArg.pGame, (D2SkillArgStrc*)&sItemGenCtx.usually_one);
+      MISSILES::Missiles::CreatingMissile(pArguments->sArg.pGame, &sSkillArg);
       iMissileIdx++;
     } while (iMissileIdx < 6);
 }
@@ -1956,38 +1940,17 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
     int nLevel;
     uint32_t nCollisionMask;
     POINT ptAttackerCoords;
-    int aMissileOffsets[13];
+    int aOffsetX[6];
+    int aOffsetY[6];
     POINT ptSpawnPos;
     int nPotionSpawnIdx;
-    D2ItemGenContextStrc sItemGenCtx;
     uint8_t bSearchNeighbors;
-    eD2UnitType eUnitType;
-    int64_t lSeedProduct;
     POINT* pNewPosition;
-    D2SeedStrc sNewSeed;
-    uint32_t uSeedHigh = pTxtShrines->dwArg1 - pTxtShrines->dwArg0;
-    D2UnitStrc* pCreatedItem = pArguments->sArg.pVictim;
-    D2SeedStrc* pSeed = &pCreatedItem->sSeed;
-    if ((int)uSeedHigh <= 0) {
-      uSeedHigh = 0;
-    } else if (uSeedHigh & uSeedHigh - 1) {
-      lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-      ptSpawnPos.y = (LONG)((uint64_t)lSeedProduct >> 0x20);
-      sNewSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pCreatedItem->sSeed.nSeedHigh);
-      pSeed->nSeedHigh = sNewSeed.nSeedHigh;
-      pSeed->nSeedLow = sNewSeed.nSeedLow;
-      uSeedHigh = sNewSeed.nSeedLow % uSeedHigh;
-    } else {
-      lSeedProduct = (uint64_t)pSeed->nSeedLow * 0x6ac690c5;
-      ptSpawnPos.y = (LONG)((uint64_t)lSeedProduct >> 0x20);
-      sNewSeed = (D2SeedStrc)(lSeedProduct + (uint64_t)pCreatedItem->sSeed.nSeedHigh);
-      pSeed->nSeedHigh = sNewSeed.nSeedHigh;
-      pSeed->nSeedLow = sNewSeed.nSeedLow;
-      uSeedHigh = uSeedHigh - 1 & sNewSeed.nSeedLow;
-    }
-
-    aMissileOffsets[0xc] = pTxtShrines->dwArg0 + uSeedHigh;
-    for (nPotionSpawnIdx = 0; nPotionSpawnIdx < aMissileOffsets[0xc]; nPotionSpawnIdx++) {
+    int nRange = pTxtShrines->dwArg1 - pTxtShrines->dwArg0;
+    D2UnitStrc* pVictim = pArguments->sArg.pVictim;
+    D2SeedStrc* pSeed = &pVictim->sSeed;
+    int nPotions = pTxtShrines->dwArg0 + D2_SeedRollLimited(pSeed, nRange);
+    for (nPotionSpawnIdx = 0; nPotionSpawnIdx < nPotions; nPotionSpawnIdx++) {
       int32_t nItemClassId;
       nItemClassId = D2Common::DATATBLS::ItemTbls::TXT_Items_ConvertItemCodeToItemClassId(0x206d7067);
       if (nItemClassId == -1) {
@@ -2001,21 +1964,22 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
       pNewPosition = &ptSpawnPos;
       pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pArguments->pAttacker), &ptAttackerCoords, pNewPosition, nCollisionMask, bSearchNeighbors);
       if (pSpawnRoom) {
-        memset(&sItemGenCtx, 0, 0x84);
-        sItemGenCtx.pGame = pArguments->sArg.pGame;
+        D2ItemGenContextStrc sItemGenCtx;
+        memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
         sItemGenCtx.pUnit = 0;
         sItemGenCtx.pSeed = 0;
-        sItemGenCtx.nPosY = ptSpawnPos.y;
+        sItemGenCtx.pGame = pArguments->sArg.pGame;
+        sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
+        sItemGenCtx.nItemClassid = nItemClassId;
+        sItemGenCtx.nPosX = ptSpawnPos.x;
         sItemGenCtx.eQuality = QUALITY_INVALID;
         sItemGenCtx.dwMode = 3;
-        sItemGenCtx.nPosX = ptSpawnPos.x;
-        sItemGenCtx.wItemFormat = sItemGenCtx.pGame->wItemFormat;
-        sItemGenCtx.usually_one = 1;
-        sItemGenCtx.nItemClassid = nItemClassId;
+        sItemGenCtx.nPosY = ptSpawnPos.y;
         sItemGenCtx.pDrlgRoom = pSpawnRoom;
+        sItemGenCtx.usually_one = 1;
         sItemGenCtx.nItemLevel = ITEMS::Items::Drop::GetLevel(pArguments->pAttacker, LEVEL_None);
         sItemGenCtx.nPresetQuantity = 1;
-        pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
+        D2UnitStrc* pCreatedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pArguments->sArg.pGame, &sItemGenCtx, 0);
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pCreatedItem, UNITSTAT_quantity, 1, 0);
         D2Common::Unit::ROOM_LinkUnitToUpdateList(pCreatedItem);
         if (pCreatedItem) {
@@ -2025,61 +1989,61 @@ void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, 
     }
 
     int iMissileIdx = 0;
-    aMissileOffsets[6] = -6;
-    aMissileOffsets[7] = -6;
-    aMissileOffsets[8] = 0;
-    aMissileOffsets[9] = 0;
-    aMissileOffsets[10] = 6;
-    aMissileOffsets[0xb] = 6;
-    aMissileOffsets[0] = 6;
-    aMissileOffsets[1] = -6;
-    aMissileOffsets[2] = 6;
-    aMissileOffsets[3] = -6;
-    aMissileOffsets[4] = 6;
-    aMissileOffsets[5] = -6;
+    aOffsetX[0] = -6;
+    aOffsetX[1] = -6;
+    aOffsetX[2] = 0;
+    aOffsetX[3] = 0;
+    aOffsetX[4] = 6;
+    aOffsetX[5] = 6;
+    aOffsetY[0] = 6;
+    aOffsetY[1] = -6;
+    aOffsetY[2] = 6;
+    aOffsetY[3] = -6;
+    aOffsetY[4] = 6;
+    aOffsetY[5] = -6;
     do {
-      memset(&sItemGenCtx.usually_one, 0, 0x5c);
-      pCreatedItem = pArguments->sArg.pVictim;
-      sItemGenCtx.usually_one = 0x520;
-      sItemGenCtx.wItemFormat = 0;
-      eUnitType = pCreatedItem->eUnitType;
-      uint32_t maxDurabilityValue;
+      D2SkillArgStrc sSkillArg;
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
+      D2UnitStrc* pUnit = pArguments->sArg.pVictim;
+      sSkillArg.nFlags = 0x520;
+      eD2UnitType eUnitType = pUnit->eUnitType;
+      int nX;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        maxDurabilityValue = pCreatedItem->pPath.pStaticPath->nPosX;
-      } else if (pCreatedItem->pPath.pDynamicPath) {
-        maxDurabilityValue = D2Common::PATH::DynamicPath::GetXPos(pCreatedItem->pPath.pDynamicPath);
+        nX = pUnit->pPath.pStaticPath->nPosX;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nX = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
       } else {
-        maxDurabilityValue = 0;
+        nX = 0;
       }
 
-      sItemGenCtx.maxDurability = maxDurabilityValue;
-      pCreatedItem = pArguments->sArg.pVictim;
-      eUnitType = pCreatedItem->eUnitType;
-      uint32_t dwFileIndexValue;
+      sSkillArg.nX = nX;
+      pUnit = pArguments->sArg.pVictim;
+      eUnitType = pUnit->eUnitType;
+      int nY;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
-        dwFileIndexValue = pCreatedItem->pPath.pStaticPath->nPosY;
-      } else if (pCreatedItem->pPath.pDynamicPath) {
-        dwFileIndexValue = D2Common::PATH::DynamicPath::GetYPos(pCreatedItem->pPath.pDynamicPath);
+        nY = pUnit->pPath.pStaticPath->nPosY;
+      } else if (pUnit->pPath.pDynamicPath) {
+        nY = D2Common::PATH::DynamicPath::GetYPos(pUnit->pPath.pDynamicPath);
       } else {
-        dwFileIndexValue = 0;
+        nY = 0;
       }
 
-      sItemGenCtx.dwFileIndex = dwFileIndexValue;
-      sItemGenCtx.neD2ItemFlag = aMissileOffsets[iMissileIdx + 6] + sItemGenCtx.maxDurability;
-      sItemGenCtx.nInitSeed = aMissileOffsets[iMissileIdx] + sItemGenCtx.dwFileIndex;
-      sItemGenCtx.bFromCustomData = (int)pArguments->pAttacker;
-      sItemGenCtx.eQuality = (eD2ItemQuality)pArguments->sArg.pVictim;
-      sItemGenCtx.nModSeed = 1;
-      sItemGenCtx.durability = 0x30;
-      nLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat((D2UnitStrc*)sItemGenCtx.bFromCustomData, UNITSTAT_level, 0);
-      *(uint32_t*)(char*)&sItemGenCtx.szCustomName = nLevel / 5;
-      if ((int)*(uint32_t*)(char*)&sItemGenCtx.szCustomName < 1) {
-        *(uint32_t*)(char*)&sItemGenCtx.szCustomName = 1;
-      } else if ((int)*(uint32_t*)(char*)&sItemGenCtx.szCustomName > 8) {
-        *(uint32_t*)(char*)&sItemGenCtx.szCustomName = 8;
+      sSkillArg.nY = nY;
+      sSkillArg.nUnitX = aOffsetX[iMissileIdx] + sSkillArg.nX;
+      sSkillArg.nUnitY = aOffsetY[iMissileIdx] + sSkillArg.nY;
+      sSkillArg.pOwner = pArguments->pAttacker;
+      sSkillArg.pMissile = pArguments->sArg.pVictim;
+      sSkillArg.nParticleParam = 1;
+      sSkillArg.nMissileTxtNo = MISSILE_Chokinggaspoition;
+      int nSkillLevel = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(sSkillArg.pOwner, UNITSTAT_level, 0) / 5;
+      if (nSkillLevel < 1) {
+        nSkillLevel = 1;
+      } else if (nSkillLevel > 8) {
+        nSkillLevel = 8;
       }
+      sSkillArg.nSkillLevel = nSkillLevel;
 
-      MISSILES::Missiles::CreatingMissile(pArguments->sArg.pGame, (D2SkillArgStrc*)&sItemGenCtx.usually_one);
+      MISSILES::Missiles::CreatingMissile(pArguments->sArg.pGame, &sSkillArg);
       iMissileIdx++;
     } while (iMissileIdx < 6);
 }
@@ -2497,7 +2461,7 @@ BOOL __fastcall OBJOP_SpawnWeaponDrop(D2ObjectOperateFnArg * pOperation) {
 // Iterator callback (EDI = SGAMEDATA**) that applies counter-attack damage from a source object to all nearby units in its room. For each unit in the room: players not in Dead mode within range 3 take MONSTERAI_CalculateCounterAttackDamage; monsters not in Kick mode within range 3 take the same; explosive-barrel objects (pHashLink1==0xb, Death mode) within collision distance 3 are detonated via OBJOP_DetonateExplosiveBarrel. Passes the constructed sOperation for barrel detonation.
 static int OBJMODE_ApplyCounterAttackToNearbyUnits(D2ObjectOperateFnArg * ppGame) {
     uint32_t _bInRange;
-    bool bInRange;
+    BOOL bInRange;
     int32_t nCollisionDist;
     D2ObjectOperateFnArg sOperation;
     POINT ptPos;
@@ -2797,7 +2761,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 12, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    bool bResult;
+    BOOL bResult;
     uint32_t nVictimOwnerGUID;
     int16_t nAttackerPartyId;
     uint16_t nPortalOwnerPartyId;
@@ -2984,13 +2948,8 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
       UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pOperation->pAttacker, UNITEVENTCALLBACK_PERIODICSKILLS, nullptr);
       PLAYER::PlayerModes::PLRMODES_MoveToLocation(pOperation->sArg.pGame, pOperation->pAttacker, nullptr, 2, (int32_t)((int)(nDestX + 4) + 1), nDestY + 5, 0);
       pUnit = pOperation->pAttacker;
-      if (!pUnit) {
-        nCollisionFlagsArg = -1;
-        byAttackerUnitType = '\x06';
-      } else {
-        nCollisionFlagsArg = pUnit->nUnitGUID;
-        byAttackerUnitType = pUnit->eUnitType;
-      }
+      nCollisionFlagsArg = !pUnit ? -1 : pUnit->nUnitGUID;
+      byAttackerUnitType = !pUnit ? '\x06' : pUnit->eUnitType;
 
       GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', byAttackerUnitType, nCollisionFlagsArg, '\x01', (short int)nDestX + 5, (short int)nDestY + 5, '\0', '\0');
       pPortalOwner = __frame0.pPortalOwnerObj;
@@ -3051,7 +3010,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
 
 // Object-operate callback that activates a portal object (e.g. Duriel's lair portal or a Rift). Only processes UNIT_PLAYER attackers; halts otherwise. Sets portal flags |= 5 on the victim object. Determines destination level (LEVEL_DurielsLair for classId 100, or Components[0] for classId 0x179). Calls SpawnUnit on the destination act, finds free collision-safe coordinates, then relocates the attacking player to that position via SUNIT_RelocateUnit. Halts with an internal error if the act index is out of range, no room is found, or relocation fails.
 BOOL __fastcall OBJOP_ActivatePortalObject(D2ObjectOperateFnArg * pOperation) {
-    bool bRelocated;
+    BOOL bRelocated;
     eAct eDestAct;
     uint32_t nUnitSizeX;
     D2RoomStrc* pRoom;
@@ -3687,7 +3646,7 @@ static BOOL __stdcall OBJMODE_ApplyWellHealing(::SGAMEDATA * pGame, D2ObjectsTxt
 }
 
 BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
-    uint8_t bVar1;
+    int nDefaultSize;
     eD2UnitType eHealedType;
     uint8_t nDoubledSize;
     D2ObjectsTxt* pTxtObjects = D2Common::Units::GetObjectTxtRecordFromObject(pOperation->sArg.pVictim);
@@ -3702,10 +3661,10 @@ BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
       byChargesLeft--;
       nDoubledSize = OBJECT_GetDoubledTxtSize(pTxtObjects);
       if (byChargesLeft <= nDoubledSize) {
-        bVar1 = OBJECT_GetDefaultSize();
-        if (!(int)(byChargesLeft % (int)(nDoubledSize / (int)(uint32_t)bVar1))) {
-          bVar1 = OBJECT_GetDefaultSize();
-          D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, (uint32_t)bVar1 - (int)(byChargesLeft / pTxtObjects->Parm[2]));
+        nDefaultSize = OBJECT_GetDefaultSize();
+        if (!(int)(byChargesLeft % (int)(nDoubledSize / nDefaultSize))) {
+          nDefaultSize = OBJECT_GetDefaultSize();
+          D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, nDefaultSize - (int)(byChargesLeft / pTxtObjects->Parm[2]));
         }
       }
 
@@ -3736,7 +3695,7 @@ D2UnitStrc * __fastcall SpawnDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint3
       pNewPosition = &ptSpawnPos;
       pRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptUnitPos, pNewPosition, nSearchRadius, bCheckNeighbors);
       if (pRoom) {
-        memset(&sItemGenCtx, 0, 0x84);
+        memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
         sItemGenCtx.wItemFormat = pGame->wItemFormat;
         sItemGenCtx.nItemClassid = nItemClassId;
         sItemGenCtx.pUnit = pUnit;
@@ -3774,7 +3733,7 @@ D2UnitStrc * __fastcall OBJMODE_DropItemAtPosition(::SGAMEDATA * pGame, D2UnitSt
       return nullptr;
     }
 
-    memset(&sItemGenCtx, 0, 0x84);
+    memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
     sItemGenCtx.wItemFormat = pGame->wItemFormat;
     sItemGenCtx.nItemClassid = nItemClassId;
     sItemGenCtx.pUnit = pUnit;

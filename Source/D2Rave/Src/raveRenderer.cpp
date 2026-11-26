@@ -91,7 +91,7 @@ BOOL __fastcall ActivateWindow(BOOL bActive) {
 }
 
 // Win 12 / Mac 15
-BOOL __fastcall SetOption(int nOption, int nValue) {
+BOOL __fastcall SetOption(int nOption, intptr_t nValue) {
     return RaveSetOption((unsigned int)nOption, nValue);
 }
 

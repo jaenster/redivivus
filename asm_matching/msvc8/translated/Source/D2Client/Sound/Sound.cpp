@@ -19,6 +19,14 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 
 static LONG * lpAddend_007c8a74 = 0; D2_STATIC_GUARD(lpAddend_007c8a74, "lpAddend_007c8a74");
 int pAudioDeviceContext = 0; D2_GLOBAL_GUARD(pAudioDeviceContext, "pAudioDeviceContext");
@@ -49,13 +57,8 @@ float __stdcall SOUND_CalculateAngle2(float fParam1, float fParam2) {
 }
 
 float __stdcall SOUND_CalculatePanning(float fParam1, float fParam2, float fParam3) {
-    if (fParam2 > fParam1) {
-      fParam1 = fParam2;
-    }
-    if (fParam3 <= fParam1) {
-      fParam1 = fParam3;
-    }
-    return fParam1;
+    float fLow = max(fParam1, fParam2); // steer-ok: windef.h min/max macros
+    return min(fLow, fParam3); // steer-ok: windef.h min/max macros
 }
 
 void __fastcall SOUND_StopById(int32_t nChannelHandle) {

@@ -42,7 +42,7 @@
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Common/Waypoints.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Arena.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/Event.h"
@@ -157,6 +157,8 @@
 #include "Source/D2Game/Skills/SkillAss.h"
 #include "Source/D2Game/Seed.inline.h"
 #include "Source/Fog/Src/Safesock.h"
+#include "Source/D2Headers/D2Arch.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2NpcProxyInventoryStrc) == 0xc, "D2_ALLOC_POOL_AT(sizeof(D2NpcProxyInventoryStrc)): the 32-bit layout must be the 0xc bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -2152,7 +2154,7 @@ void __fastcall GAMBLE_GenerateGambleInventory(::SGAMEDATA * pGame, D2UnitStrc *
     }
 
     D2NpcProxyInventoryStrc* pGambleEntry;
-    pGambleEntry = (D2NpcProxyInventoryStrc*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, 0xc, ".\\UNIT\\SUNITNPC.CPP", 0xd94);
+    pGambleEntry = (D2NpcProxyInventoryStrc*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, sizeof(D2NpcProxyInventoryStrc), ".\\UNIT\\SUNITNPC.CPP", 0xd94);
     if (!pGambleEntry) {
       return;
     }
@@ -2534,7 +2536,7 @@ BOOL __fastcall SUNITNPC_DiscardTradeListRolls(::SGAMEDATA * pGame, D2UnitStrc *
     uint32_t dwItemCode;
     D2SeedStrc* pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame);
     int nAttempts = 0;
-    uint32_t nLevel = SUNITNPC_GetActCappedLevel(pGame, pUnit, (int32_t)pPlayer);
+    uint32_t nLevel = SUNITNPC_GetActCappedLevel(pGame, pUnit, (int32_t)(intptr_t)pPlayer); // 1.14d passes the player pointer as the level; the result only feeds the ignored nLevel of the roll
     while ((nAttempts < 5 ? SUNITNPC_RollTradeListItemCode(pGame, pUnit, pNpcControl, nLevel, &dwItemCode, &dwTradeEntryValue) : 0) != 0) {
       ++nAttempts;
     }
@@ -2733,7 +2735,7 @@ BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, D2UnitStrc * pPlay
 }
 
 // Handles a player trade action with an NPC (buy/repair). Looks up the NPC's game proxy, marks it active, processes the NPC action, then conditionally resets the proxy and triggers item repair (single item if nParam!=0, all items if nParam==0) for repairable NPC types. Refreshes inventory after repair. Skips class IDs 0x96, 0xC6, and 0x203 (non-repairing NPCs).
-void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc, int32_t bIsRepair, int32_t nMode) {
+void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc, D2ClientStrc * pClient, int32_t nMode) {
     int nNpcDataIdx;
     if (!pNpc) {
       return;
@@ -2752,7 +2754,7 @@ void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUn
     if (!(nNpcClassId != 0x96 && nNpcClassId != 0x203 && nNpcClassId != 0xc6)) {
       return;
     }
-    if (bIsRepair && !nMode && pNpcData->sTrade.bRefillStorePending) {
+    if (pClient && !nMode && pNpcData->sTrade.bRefillStorePending) {
       pNpcData->sTrade.bRefillStorePending = 0;
       sunitproxy::SUNITPROXY_ResetNpcProxy(pGame, pNpcData, pNpc);
       SUNITNPC_FillNpcStore(pGame, pPlayer, pNpc, &pNpcData->sTrade);
@@ -3117,7 +3119,16 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     // Frame slots -248..-8 are ONE object: &pClient is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
+#if D2_ARCH_X86
+      // The 0x58 ITEMACCEPT packet is built in place over pClient: id and guid low 24 bits, then byGuidHigh, byMenuType.
+      union {
+        D2ClientStrc* pClient;
+        uint32_t dwPacketHead;
+      };
+#elif D2_ARCH_X64
       D2ClientStrc* pClient;
+      uint32_t dwPacketHead; // the packet head gets its own slot: pClient no longer fits the 4 bytes before byGuidHigh
+#endif
       uint8_t byGuidHigh;
       uint8_t byMenuType;
       uint8_t __pad6[2];
@@ -3209,7 +3220,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
 
       start_trade:
       D2Game::Monster::MonsterAI::NpcState_MoveState1To2(pClonedItem, pUnit);
-      SUNITNPC_HandleTradeAction(pGame, pUnit, pClonedItem, (int32_t)__frame0.pClient, 0);
+      SUNITNPC_HandleTradeAction(pGame, pUnit, pClonedItem, __frame0.pClient, 0);
       return 0;
     }
     if (pQState == QUESTSTATE_Step0x02) {
@@ -3227,7 +3238,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
       }
 
       D2Game::Monster::MonsterAI::NpcState_MoveState1To2(pClonedItem, pUnit);
-      SUNITNPC_HandleTradeAction(pGame, pUnit, pClonedItem, (int32_t)__frame0.pClient, 1);
+      SUNITNPC_HandleTradeAction(pGame, pUnit, pClonedItem, __frame0.pClient, 1);
       return 0;
     }
     if (pQState == QUESTSTATE_Step0x03) {
@@ -3239,9 +3250,9 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     }
 
     __frame0.byGuidHigh = (uint8_t)(guid >> 0x18);
-    d2_store24((char*)&__frame0.pClient + 1, (uint32_t)guid & 0xffffffu);
+    d2_store24((char*)&__frame0.dwPacketHead + 1, (uint32_t)guid & 0xffffffu);
     /* Charsi */ if (sUseMenuPkt.y == 0x9a) {
-      __frame0.pClient = (D2ClientStrc*)(uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&__frame0.pClient + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x58);
+      __frame0.dwPacketHead = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&__frame0.dwPacketHead + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x58);
       pUseClient = SUnit::SUNIT_GetClient(pUnit, ".\\UNIT\\SUNITNPC.CPP", 0xb59);
       bQuestState = UnitHasItemInInventory(nGuid, pUnit);
       if (!bQuestState) {
@@ -3260,7 +3271,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
         bQuestState = D2Common::ITEMS::Items::IsValidImbumeItem(pItem);
         if (!bQuestState) {
           __frame0.byMenuType = '\a';
-          GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pUseClient, (D2GSPacketSrv0x58*)&__frame0.pClient);
+          GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pUseClient, (D2GSPacketSrv0x58*)&__frame0.dwPacketHead);
           ITEMS::ItemMode::SERVER_DropItemFromPlayer(pGame, pUnit, nGuid);
           return 0;
         }
@@ -3289,7 +3300,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
           pClonedItem = ITEMS::Items::Drop::ITEM_CreateItemInstance(pGame, &__frame0.sItemGenCtx, 0);
           if (!pClonedItem) {
             __frame0.byMenuType = '\a';
-            GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pUseClient, (D2GSPacketSrv0x58*)&__frame0.pClient);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pUseClient, (D2GSPacketSrv0x58*)&__frame0.dwPacketHead);
           } else {
             SUNITNPC_RepairItem(pGame, pClonedItem, nullptr);
             ITEMS::ItemMode::ITEMMODE_SetItemIdentified(pGame, pClonedItem, pUnit);
@@ -3310,7 +3321,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
 
             Quests::QUESTS::A1Q3::DeactivateToolsOfTrade(pGame, pUnit);
             __frame0.byMenuType = '\x06';
-            GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pUseClient, (D2GSPacketSrv0x58*)&__frame0.pClient);
+            GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pUseClient, (D2GSPacketSrv0x58*)&__frame0.dwPacketHead);
           }
 
           return 0;
@@ -3318,7 +3329,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
       }
 
       __frame0.byMenuType = '\a';
-      GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pUseClient, (D2GSPacketSrv0x58*)&__frame0.pClient);
+      GAME::SCmd::NET_D2GS_SERVER_Send_0x58_ITEMACCEPT(pUseClient, (D2GSPacketSrv0x58*)&__frame0.dwPacketHead);
       ITEMS::ItemMode::SERVER_DropItemFromPlayer(pGame, pUnit, nGuid);
       return 0;
     }
@@ -3438,7 +3449,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
         return 0;
       }
 
-      /* Personalizing item */ PStack_108.x = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&__frame0.pClient + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x58);
+      /* Personalizing item */ PStack_108.x = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&__frame0.dwPacketHead + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x58);
       *(uint8_t*)(char*)&PStack_108.y = __frame0.byGuidHigh;
       __frame0.pClient = bSingleAiMonster;
       __frame0.byGuidHigh = bySavedGuidHigh;
@@ -3506,7 +3517,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
       return 0;
     }
 
-    /* Socketing item */ PStack_108.x = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&__frame0.pClient + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x58);
+    /* Socketing item */ PStack_108.x = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&__frame0.dwPacketHead + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)0x58);
     *(uint8_t*)(char*)&PStack_108.y = __frame0.byGuidHigh;
     __frame0.pClient = bSingleAiMonster;
     __frame0.byGuidHigh = bySavedGuidHigh;

@@ -221,11 +221,11 @@ static void __stdcall DAMAGE_ApplyStun(D2UnitStrc * pUnit, int32_t nStunFrames, 
     int nTimeout = pGame->dwGameFrame + nStunFrames;
     if (!pStunStatList) {
       if (!pUnit) {
-        nAttackerGUID = -1;
         eAttackerType = UNIT_COUNT;
+        nAttackerGUID = -1;
       } else {
-        nAttackerGUID = pUnit->nUnitGUID;
         eAttackerType = pUnit->eUnitType;
+        nAttackerGUID = pUnit->nUnitGUID;
       }
 
       pStunStatList = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 2, nTimeout, eAttackerType, nAttackerGUID);
@@ -735,13 +735,11 @@ static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2D
 
     nMonTypeCount = (int)nMonTypeCountShort;
     int32_t nBonusCount = D2Common::Stats::StatsEx::STATLIST_GetItemStatBonusValues(pUnit, 0xb4, anBonusValues, 0x80);
-    D2DataTableTxtStrc* pDataTbl = D2Common::ITEMS::Items::sgptDataTable;
     for (i = 0; i < nBonusCount; i++) {
       uint32_t nMonTypeId;
       nMonTypeId = (uint32_t)(uint16_t)anBonusValues[i].uKey.sKey.wSubIndex;
-      if (nMonTypeId && (int)nMonTypeId < pDataTbl->nTxtMonTypeSize && nMonTypeCount > 0 && nMonTypeCount < pDataTbl->nTxtMonTypeSize && *(uint32_t*)((uint8_t*)pDataTbl->pTxtMonTypeUnknown + (pDataTbl->nMonTypeEquivRowDwords * nMonTypeCount + ((int)nMonTypeId >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[nMonTypeId & 0x1f]) {
+      if (nMonTypeId && (int)nMonTypeId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize && nMonTypeCount > 0 && nMonTypeCount < D2Common::ITEMS::Items::sgptDataTable->nTxtMonTypeSize && *(uint32_t*)((uint8_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtMonTypeUnknown + (D2Common::ITEMS::Items::sgptDataTable->nMonTypeEquivRowDwords * nMonTypeCount + ((int)nMonTypeId >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[nMonTypeId & 0x1f]) {
         pDamage->dwEnDmgPct += anBonusValues[i].nStatValue;
-        pDataTbl = D2Common::ITEMS::Items::sgptDataTable;
       }
     }
 }
@@ -1698,6 +1696,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     int nDamageOrHp;
     uint32_t eEventType;
     eD2UnitType eVictimType;
+    eD2UnitType eAttackerType; // was kept in the pVictim parameter slot
     D2UnitStrc* pUnit_00;
     pUnit_00 = pVictim;
     uint32_t bCanAttack;
@@ -1715,9 +1714,9 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       return;
     }
     if (!pUnit) {
-      pVictim = (D2UnitStrc*)0x6;
+      eAttackerType = UNIT_COUNT;
     } else {
-      pVictim = (D2UnitStrc*)pUnit->eUnitType;
+      eAttackerType = pUnit->eUnitType;
     }
     if (!pUnit_00) {
       eVictimType = UNIT_COUNT;
@@ -1767,7 +1766,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
     pDamage->dwPhysDamage = nDamageOrHp;
     DAMAGE_ApplyLifeAndManaLeech(pGame, pUnit_00, pUnit, pDamage);
-    if (pVictim == (D2UnitStrc*)0x1 && pDamage->wResultFlags & 1) {
+    if (eAttackerType == UNIT_MONSTER && pDamage->wResultFlags & 1) {
       Monsters::MONSTER_DispatchUModOnAttack(pGame, pUnit);
     }
 
@@ -3213,22 +3212,19 @@ int32_t __fastcall DAMAGE_SafeShiftMultiply(int32_t nMultiplicand, int32_t nMult
 }
 
 static int32_t __stdcall XP_ApplyLevelExpRatio(int32_t nLevel, int32_t nExperience) {
-    if (nExperience <= 0) {
-      return nExperience;
+    if (nExperience > 0) {
+      DWORD nExpRatioLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetExpRatio(nLevel);
+      DWORD nExpRatioBase = D2Common::DATATBLS::DataTbls::TXT_Experience_GetExpRatio(0);
+      if (nExpRatioBase - 1 <= 0x1e) {
+        uint8_t byShift = (uint8_t)nExpRatioBase;
+        if (nExperience > 0x7fffffff >> D2_SHIFT_COUNT((char)((int)nExpRatioLevel >> D2_SHIFT_COUNT(byShift)) + byShift)) {
+          return (nExperience >> D2_SHIFT_COUNT(byShift)) * nExpRatioLevel;
+        }
+
+        nExperience = (int)(nExpRatioLevel * nExperience) >> D2_SHIFT_COUNT(byShift);
+      }
     }
 
-    DWORD nExpRatioLevel = D2Common::DATATBLS::DataTbls::TXT_Experience_GetExpRatio(nLevel);
-    DWORD nExpRatioBase = D2Common::DATATBLS::DataTbls::TXT_Experience_GetExpRatio(0);
-    if (!(nExpRatioBase - 1 <= 0x1e)) {
-      return nExperience;
-    }
-
-    uint8_t byShift = (uint8_t)nExpRatioBase;
-    if (nExperience > 0x7fffffff >> D2_SHIFT_COUNT((char)((int)nExpRatioLevel >> D2_SHIFT_COUNT(byShift)) + byShift)) {
-      return (nExperience >> D2_SHIFT_COUNT(byShift)) * nExpRatioLevel;
-    }
-
-    nExperience = (int)(nExpRatioLevel * nExperience) >> D2_SHIFT_COUNT(byShift);
     return nExperience;
 }
 
@@ -3389,7 +3385,7 @@ static void __stdcall SERVER_PartyShareExperience(int32_t nBaseExperience, D2Uni
     uint32_t nXpShareRatio;
     D2PartyExperienceStrc sParty;
     D2UnitStrc* pPartyPlayer;
-    memset(&sParty, 0, 0x4c);
+    memset(&sParty, 0, sizeof(sParty));
     sParty.pVictim = pVictim;
     Party::PARTY_IteratePartyMembersInSameLevel(pGame, pUnit, (pfnPartyMemberFilter)ExperienceLoopOverPlayers, &sParty);
     if (!(sParty.nPlayers > 0 && sParty.nPlayerLevelSum > 0)) {

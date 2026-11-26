@@ -63,6 +63,8 @@ option(REDIVIVUS_LOUD_STACK_PROTECTOR
     "With REDIVIVUS_LOUD: also -fstack-protector-strong (fatal on a smashed canary). OFF gives the playable loud build." ON)
 option(REDIVIVUS_OPENGL
     "Link the D2OpenGL renderer into the game as video mode 5 (-opengl), defining D2_RENDERER_OPENGL=1. Not part of the 1.14d Windows build." OFF)
+option(REDIVIVUS_X64_LOWMEM_SMOKE
+    "64-bit smoke test only: link d2 and d2host without large-address awareness, high-entropy VA or ASLR at a low image base, so every address stays below 2 GB and a pointer the code still truncates to 32 bits survives. Never a release setting." OFF)
 option(REDIVIVUS_SERVER
     "Build the dedicated server (d2host.exe) from the server modules, every unit compiled with D2_TARGET_SERVER=1. The game executable leaves the default target in such a build directory." OFF)
 
@@ -498,6 +500,19 @@ endif()
 # The libraries link as an ordinary rescanned group, not whole: only what the server
 # reaches is pulled in, so client code the server never calls stays out.
 # ---------------------------------------------------------------------------
+if(REDIVIVUS_X64_LOWMEM_SMOKE)
+    if(NOT D2_ARCH_X64)
+        message(FATAL_ERROR "REDIVIVUS_X64_LOWMEM_SMOKE is for the 64-bit build only")
+    endif()
+    # GNU ld has no --disable-large-address-aware for PE32+; the flag is cleared after the link.
+    find_package(Python3 REQUIRED COMPONENTS Interpreter)
+    set(D2_X64_LOWMEM_LINK -Wl,--disable-high-entropy-va -Wl,--disable-dynamicbase
+        -Wl,--image-base=0x400000)
+    set(D2_X64_LOWMEM_POST "${Python3_EXECUTABLE}" "${D2_ROOT}/cmake/pe-clear-laa.py")
+    target_link_options(d2 PRIVATE ${D2_X64_LOWMEM_LINK})
+    add_custom_command(TARGET d2 POST_BUILD COMMAND ${D2_X64_LOWMEM_POST} "$<TARGET_FILE:d2>")
+endif()
+
 if(REDIVIVUS_SERVER)
     if(NOT REDIVIVUS_MODULE_LIBRARIES)
         message(FATAL_ERROR "REDIVIVUS_SERVER needs REDIVIVUS_MODULE_LIBRARIES=ON")
@@ -527,11 +542,21 @@ if(REDIVIVUS_SERVER)
     list(SORT D2_SERVER_HOST_SOURCES)
 
     add_executable(d2host ${D2_SERVER_HOST_SOURCES} ${D2_SERVER_SUPPORT_SOURCES})
+    if(D2_ARCH_X64)
+        # The x86 link takes _Wrappers::CRT_ExceptionFilter1 from d2_link_support.s;
+        # on x64 it is d2_crt_x64.cpp, the one piece of d2_x64deps the server needs.
+        target_sources(d2host PRIVATE "${D2_SUPPORT}/x64/d2_crt_x64.cpp")
+        target_include_directories(d2host PRIVATE "${D2_ROOT}/Source/D2Headers")
+    endif()
     target_link_libraries(d2host PRIVATE d2_flags)
     target_compile_definitions(d2host PRIVATE ${D2_ALL_MODULE_DEFS})
     string(JOIN "," D2_SERVER_LINK_GROUP ${D2_SERVER_LIBRARIES} libbacktrace)
     target_link_libraries(d2host PRIVATE "$<LINK_GROUP:RESCAN,${D2_SERVER_LINK_GROUP}>")
     target_link_options(d2host PRIVATE -static -static-libgcc -static-libstdc++)
+    if(REDIVIVUS_X64_LOWMEM_SMOKE)
+        target_link_options(d2host PRIVATE ${D2_X64_LOWMEM_LINK})
+        add_custom_command(TARGET d2host POST_BUILD COMMAND ${D2_X64_LOWMEM_POST} "$<TARGET_FILE:d2host>")
+    endif()
     target_link_libraries(d2host PRIVATE
         kernel32 user32 gdi32 advapi32 shell32 ole32 oleaut32
         winmm ws2_32 version comctl32 imm32 uuid wintrust crypt32)

@@ -19,6 +19,7 @@
 #include "Source/D2Win/D2WinImageEx.h"
 #include "Source/D2Win/D2WinScrollbar.h"
 #include "Source/D2Win/D2WinTimer.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2RealmCharListCacheEntryStrc) == 0x10, "SMemAlloc(sizeof(D2RealmCharListCacheEntryStrc)): the 32-bit layout must be the 0x10 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -127,7 +128,7 @@ void * __fastcall CHARSEL_GetCachedRealmData(char * szName) {
 }
 
 // @sourcefile .\Src\CharSel.cpp
-void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, size_t nDataSize) {
+void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, uint32_t nDataSize) {
     void* pCopy;
     DWORD dwTick;
     uint32_t nHash = Storm::Source::SSTR::SStrHash(szRealmName, 0, 0);
@@ -144,7 +145,7 @@ void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, size_t 
       }
     }
 
-    pEntry = (D2RealmCharListCacheEntryStrc*)Storm::Source::SMem::SMemAlloc(0x10, ".\\Src\\CharSel.cpp", 0xfa, 0);
+    pEntry = (D2RealmCharListCacheEntryStrc*)Storm::Source::SMem::SMemAlloc(sizeof(D2RealmCharListCacheEntryStrc), ".\\Src\\CharSel.cpp", 0xfa, 0);
     pEntry->nHash = nHash;
     pCopy = Storm::Source::SMem::SMemAlloc(nDataSize, ".\\Src\\CharSel.cpp", 0xfc, 0);
     pEntry->pData = pCopy;
@@ -627,7 +628,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
             pCharNameSrc = pCharEntry;
             if (pcCopySrc) {
               pcSrc = pcSrc + strlen(pcSrc) + 1;
-              dwCompFlags = (intptr_t)pcSrc - (intptr_t)pcCopySrc;
+              dwCompFlags = (uint32_t)((intptr_t)pcSrc - (intptr_t)pcCopySrc);
               pcSrc = (char*)((char*)sLineBuf.wszLineBuf + 199);
               do {
                 pcNextChar = pcSrc + 1;
@@ -653,7 +654,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
               pCharEntry = (D2CharSelStrc*)(pcCopySrc + 1);
             } while (*pcSrc != '\0');
 
-            dwCompFlags = (intptr_t)(pcCopySrc + 1) - (intptr_t)pCharNameSrc;
+            dwCompFlags = (uint32_t)((intptr_t)(pcCopySrc + 1) - (intptr_t)pCharNameSrc);
             pcSrc = (char*)((char*)sLineBuf.wszLineBuf + 199);
             do {
               pcCopySrc = pcSrc + 1;
@@ -968,7 +969,7 @@ void __stdcall CHARSEL_DestroyAllCharEntries() {
 }
 
 int __fastcall Unreferenced_00438f40(char * szName) {
-    int nLen = strlen(szName);
+    int nLen = (int)strlen(szName);
     if (nLen >= 2 && nLen <= 15 && szName[nLen - 1] != '-' && *szName != '_') {
       return 1;
     }
@@ -1006,7 +1007,7 @@ BOOL __stdcall CHARSEL_EnumerateLocalSaves() {
       }
 
       *pDst = '\0';
-      uint32_t nLen = strlen(gszLocalSaveFilenameBuffer);
+      uint32_t nLen = (uint32_t)strlen(gszLocalSaveFilenameBuffer);
       if (nLen - 2 <= 0xd && gszLocalSaveFilenameBuffer[nLen - 1] != '-' && gszLocalSaveFilenameBuffer[0] != '_') {
         if (Launcher::LAUNCHER_LoadCharacterAppearanceFromD2s(gszLocalSaveFilenameBuffer, abSaveData)) {
           SAVEFILE_ParseSaveData(nullptr, gszLocalSaveFilenameBuffer, (char*)abSaveData, 0, findData.ftLastWriteTime);
@@ -2115,7 +2116,7 @@ void __stdcall CHARSEL_ParseRealmCharList(char * szRealmName, char * szText, int
     }
 
     if (bShouldCache) {
-      CHARSEL_CacheRealmData(szRealmName, pRecordHeader, (intptr_t)aSaveData - (intptr_t)pRecordHeader);
+      CHARSEL_CacheRealmData(szRealmName, pRecordHeader, (uint32_t)((intptr_t)aSaveData - (intptr_t)pRecordHeader));
     }
     if (nCharCount >= *(uint16_t*)(pRecordHeader + 1)) {
       gnCharSelLoadedCharCount = 1;

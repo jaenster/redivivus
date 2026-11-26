@@ -3517,31 +3517,31 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
       case '\0':
         pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe37);
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLocale);
-      if (nLine < 0x104) {
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
-        pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe37);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
-        TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
-        return;
+      if (nLine >= 0x104) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x114c);
+        exit(-1);
       }
 
-      nLine = 0x114c;
-      break;
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
+      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe37);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
+      TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
+      return;
       case '\x01':
         pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe38);
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLocale);
-      if (nLine < 0x104) {
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
-        pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe38);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
-        TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
-        return;
+      if (nLine >= 0x104) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1152);
+        exit(-1);
       }
 
-      nLine = 0x1152;
-      break;
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
+      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe38);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
+      TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
+      return;
       case '\x02':
         pPlayerUnit_lcl = UNIT::Player::GetPlayerUnit_UI();
       if (pPlayerUnit_lcl) {
@@ -3556,85 +3556,85 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
 
       pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe39);
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLocale);
-      if (nLine < 0x104) {
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-        if (strlen(pMessageCtx->szName2) != 0) {
-          Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3b), awszName, awszName2);
-          TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
-          return;
-        }
+      if (nLine >= 0x104) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x115c);
+        exit(-1);
+      }
 
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe39), awszName);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
+      if (strlen(pMessageCtx->szName2) != 0) {
+        Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3b), awszName, awszName2);
         TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
         return;
       }
 
-      nLine = 0x115c;
-      break;
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe39), awszName);
+      TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
+      return;
       case '\x03':
         pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe3a);
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLocale);
-      if (nLine < 0x104) {
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-        if (strlen(pMessageCtx->szName2) != 0) {
-          Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-          D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
-          D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3c), awszName, awszName2);
-          TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
-          return;
-        }
+      if (nLine >= 0x104) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x116a);
+        exit(-1);
+      }
 
-        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3a), awszName);
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
+      if (strlen(pMessageCtx->szName2) != 0) {
+        Fog::File::CONTAINER_InitializeBuffer(awszName2, 2, 0x10, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
+        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName2, pMessageCtx->szName2, 0x10);
+        D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3c), awszName, awszName2);
         TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
         return;
       }
 
-      nLine = 0x116a;
-      break;
+      D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x132, awszMessage, D2Lang::StrTable::strtable::GetLocaleString(0xe3a), awszName);
+      TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
+      return;
       case '\x04':
         pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe3d);
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLocale);
-      if (nLine < 0x104) {
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
-        pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe3d);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
-        TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
-        return;
+      if (nLine >= 0x104) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1178);
+        exit(-1);
       }
 
-      nLine = 0x1178;
-      break;
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
+      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe3d);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
+      TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
+      return;
       case '\r':
         pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe44);
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLocale);
-      if (nLine < 0x104) {
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
-        pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe44);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
-        TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
-        return;
+      if (nLine >= 0x104) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x117e);
+        exit(-1);
       }
 
-      nLine = 0x117e;
-      break;
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
+      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe44);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
+      TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
+      return;
       case '\x05':
         pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe3e);
       nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszLocale);
-      if (nLine < 0x104) {
-        D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
-        D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
-        pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe3e);
-        D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
-        TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
-        return;
+      if (nLine >= 0x104) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1184);
+        exit(-1);
       }
 
-      nLine = 0x1184;
-      break;
+      D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(awszMessage, awszName);
+      pwszLocale = D2Lang::StrTable::strtable::GetLocaleString(0xe3e);
+      D2Lang::Unicode::UNISYS::AppendToBuffer(awszMessage, pwszLocale);
+      TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
+      return;
       case '\x06':
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(awszName, pszName, 0x10);
       byKillSubType = pMessageCtx->nArgTypes;
@@ -3738,9 +3738,6 @@ void __fastcall TEXT_HandleEventMessagePacket(D2Packet0x5aEventStructure * pMess
       TEXT_PrintGameString(awszMessage, pMessageCtx->nColor);
       return;
     }
-
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
-    exit(-1);
 }
 
 void __fastcall TEXT_FreeHoverText(D2HoverTextStrc * pHover) {
@@ -6139,7 +6136,7 @@ void __stdcall TEXT_DrawScrollBackground() {
     }
 
     DC6* pScrollBgImage = gpQuestScrollImageBg;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pScrollBgImage;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -6196,7 +6193,7 @@ void __stdcall TEXT_DrawQuestScrollAnimation(int32_t bDraw) {
     }
 
     int nFrameIdx = 0;
-    memset(&sGfxData2, 0, 0x48);
+    memset(&sGfxData2, 0, sizeof(sGfxData2));
     TEXT_DrawScrollBackground();
     if (!gpQuestScrollImageBottom) {
       szImagePath[0] = '\0';
@@ -6255,7 +6252,7 @@ void __stdcall TEXT_DrawQuestScrollAnimation(int32_t bDraw) {
 
           nLineIdx = (uint32_t)nLineValue;
           D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData2, gaTextDrawAnimPos[nLineIdx * 2] + Inv::gnPanelOffsetX, gaTextDrawAnimPos[nLineIdx * 2 + 1] - Inv::gnPanelOffsetY, -1, eDrawMode, nullptr);
-          memset(&sGfxData, 0, 0x48);
+          memset(&sGfxData, 0, sizeof(sGfxData));
           sGfxData.pDC6 = gpQuestScrollImageTop;
           sGfxData.nFrameNumber = (int)nElapsed >= 0x15 ? 0 : nElapsed;
           D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, gaTextAnimBounds[nLineIdx * 2] + Inv::gnPanelOffsetX, gaTextAnimBounds[nLineIdx * 2 + 1] - Inv::gnPanelOffsetY, -1, DRAW_LIGHTTRANSPARENT, nullptr);
@@ -6383,8 +6380,8 @@ int __stdcall TEXT_CloseMessageLogDialog() {
 void __stdcall TEXT_OpenMessageLogDialog() {
     fpDialogFunc pfnCloseCallback;
     int32_t nEntryIdx;
-    uint32_t nSehTryLevel = -1;
-    pfnEHHandlerRoutine puStack12 = __GSHandlerCheck_EH_6ca07b;
+    uint32_t nSehTryLevel = -1; // steer-ok: generated form, kept as emitted
+    pfnEHHandlerRoutine puStack12 = __GSHandlerCheck_EH_6ca07b; // steer-ok: generated form, kept as emitted
     void* pSavedExceptionList = ExceptionList;
     if (!Dialog::DialogHandle) {
       ::ListBoxWrapper* pLogListAlloc;
@@ -6395,7 +6392,7 @@ void __stdcall TEXT_OpenMessageLogDialog() {
       nEntryIdx = 1;
       pfnCloseCallback = TEXT_CloseMessageLogDialog;
       Dialog::AddStringData(Dialog::DialogHandle, D2Lang::StrTable::strtable::GetLocaleString(0x1030), Inv::ScreenSizeY - 0xa5, 0, 0, 1, pfnCloseCallback, nEntryIdx);
-      pLogListAlloc = (::ListBoxWrapper*)Storm::Source::SMem::SMemAlloc(0xc, "new", -1, 0);
+      pLogListAlloc = (::ListBoxWrapper*)Storm::Source::SMem::SMemAlloc(sizeof(::ListBoxWrapper), "new", -1, 0);
       nSehTryLevel = 0;
       if (pLogListAlloc) {
         gpTextMessageLogHead = ListBox::ListBoxWrapper::Constructor(pLogListAlloc, 5, 0x41, ui::ScreenSizeX - 0x14, Inv::ScreenSizeY - 200, 2, 0, 0xd, nullptr, true);

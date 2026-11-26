@@ -16,6 +16,7 @@
 
 // Forward declarations
 struct D2TileLibraryEntryStrc;
+struct D2TileLibraryHashStrc;
 struct D2TileLibraryHeaderStrc;
 
 namespace D2CMP::DUNGEON::Dungeon {
@@ -33,7 +34,7 @@ int __stdcall TILEPROJECT_GetRoofHeightIndex(struct D2TileLibraryEntryStrc * pTi
 BYTE * __stdcall TILE_GetTileFlags(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-void __stdcall TILEPROJECT_FreeSlot(int32_t * pnProjectIds, struct D2TileLibraryHeaderStrc * pTileLibrary);
+void __stdcall TILEPROJECT_FreeSlot(struct D2TileLibraryHashStrc * * ppProjectSlots, struct D2TileLibraryHeaderStrc * pTileLibrary);
 int __stdcall TILEPROJECT_GetTileDataPtr(struct D2TileLibraryEntryStrc * pTileLibraryEntry);
 uint32_t __stdcall TILEPROJECT_GetTileOrientationIndex(uint32_t * pnOrientationIndex);
 #endif // D2_MODULE_D2CMP

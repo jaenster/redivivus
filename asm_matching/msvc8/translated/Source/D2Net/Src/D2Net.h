@@ -25,7 +25,7 @@ namespace D2Net { namespace SRC { namespace D2Net {
 // Gets local IP address as string. Calls getsockname on CLIENT_SocketToServer, converts sockaddr to string via inet_ntoa, copies to output buffer.
 void __stdcall NET_GetLocalIPAddressString(char * szIpAddressOut);
 // @sourcefile .\SRC\D2Net.cpp
-size_t __fastcall NET_D2GS_CLIENT_ExtractPacketSize(LPCRITICAL_SECTION * lpCriticalSection, struct D2OnePacketClientStrc * * pD2OnePacketClient, char * pBytes, size_t nSize);
+uint32_t __fastcall NET_D2GS_CLIENT_ExtractPacketSize(LPCRITICAL_SECTION * lpCriticalSection, struct D2OnePacketClientStrc * * pD2OnePacketClient, char * pBytes, uint32_t nSize);
 // @sourcefile .\SRC\D2Net.cpp
 BOOL __fastcall NET_D2GS_CLIENT_FreeAllClientD2Packets(LPCRITICAL_SECTION lpCriticalSection, struct D2OnePacketClientStrc * * pD2PacketClient);
 #endif // D2_MODULE_D2Net

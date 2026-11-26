@@ -306,16 +306,16 @@ static int __stdcall FindMPQOnCd(char * pszMpqName, int * pnPriority, D2ArchiveS
     return bOpenArchiveCdOk;
 }
 
-static int * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pnPriority, int * ppArchive, LPSTR szText) {
+static D2ArchiveStrc * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pnPriority, D2ArchiveStrc * pArchive, LPSTR szText) {
     uint32_t nFlags = 2;
-    if (ppArchive) {
+    if (pArchive) { // on entry the slot is the "also search the CD" flag
       nFlags = 3;
     }
 
     Storm::Source::SSTR::SStrCopy(szText, pszMpqName, 0x7fffffff);
-    int bOpenedFromCd = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, nFlags, (D2ArchiveStrc**)&ppArchive);
+    int bOpenedFromCd = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, nFlags, &pArchive);
     if (bOpenedFromCd) {
-      return ppArchive;
+      return pArchive;
     }
 
     DWORD nModuleFileNameLen = GetModuleFileNameA((HMODULE)0x0, szText, 0x104);
@@ -329,16 +329,16 @@ static int * __stdcall FindMpqFromDiskOrCd(char * pszMpqName, int * pnPriority, 
     }
 
     Storm::Source::SSTR::SStrPack(szText, pszMpqName, 0x7fffffff);
-    bOpenedFromCd = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, nFlags, (D2ArchiveStrc**)&ppArchive);
+    bOpenedFromCd = Storm::Source::SFile::SFileOpenArchive(szText, pnPriority, nFlags, &pArchive);
     if (bOpenedFromCd) {
-      return ppArchive;
+      return pArchive;
     }
 
     {
-      bOpenedFromCd = FindMPQOnCd(pszMpqName, pnPriority, (D2ArchiveStrc**)&ppArchive, szText);
-      ppArchive = bOpenedFromCd ? (int*)ppArchive : nullptr;
+      bOpenedFromCd = FindMPQOnCd(pszMpqName, pnPriority, &pArchive, szText);
+      pArchive = bOpenedFromCd ? pArchive : nullptr;
     }
-    return ppArchive;
+    return pArchive;
 }
 
 // @sourcefile .\SRC\Archive.cpp
@@ -348,7 +348,7 @@ D2FogArchiveStrc * __fastcall ARCHIVE_LoadMPQ(char * szMpqFileName, int32_t nZer
     pFogArchive->hArchive = 0;
     while (true) {
       D2ArchiveStrc* pArchive;
-      pArchive = (D2ArchiveStrc*)FindMpqFromDiskOrCd(szMpqFileName, (int*)nTimeTBC, (int*)nZero, pFogArchive->szArchivePath);
+      pArchive = FindMpqFromDiskOrCd(szMpqFileName, (int*)(intptr_t)nTimeTBC, (D2ArchiveStrc*)(intptr_t)nZero, pFogArchive->szArchivePath);
       pFogArchive->hArchive = pArchive;
       if (pArchive) {
         return pFogArchive;
@@ -496,9 +496,9 @@ void __thiscall LINKEDLIST_InsertNode(StormLinkedListStrc * pList, void * pNewIt
     }
 }
 
-int32_t __thiscall LINKEDLIST_GetNodeAt(int * pList, void * nOffset) {
+intptr_t __thiscall LINKEDLIST_GetNodeAt(int * pList, void * nOffset) {
     StormLinkStrc* pListNode = LINKEDLIST_GetOffset((StormLinkedListStrc*)pList, nOffset);
-    int nNodeValue = pListNode->pNext;
+    intptr_t nNodeValue = pListNode->pNext;
     if (nNodeValue > 0) {
       return nNodeValue;
     }
@@ -516,7 +516,7 @@ void __thiscall LINKEDLIST_RemoveNode(int * pList, StormFaultHandlerNodeStrc * p
 // @evidence Calls LINKEDLIST_GetOffset(nOffset,p) then returns node[+4].
 // It counts nothing. 00426a60 is the real count (returns max(pList[+8],0)).
 // @caveat no xrefs - an inlined Storm TS-list template instance. Name is body-derived, not recovered.
-int32_t __thiscall LINKEDLIST_GetNodeLinkAtOffset(int * pList, void * nOffset) {
+intptr_t __thiscall LINKEDLIST_GetNodeLinkAtOffset(int * pList, void * nOffset) {
     StormLinkStrc* pListNode = LINKEDLIST_GetOffset((StormLinkedListStrc*)pList, nOffset);
     return pListNode->pNext;
 }
@@ -593,8 +593,8 @@ void __fastcall TSList_TMESSAGESOURCE_Clear(StormLinkedListStrc * pListHead) {
     }
 }
 
-int32_t __thiscall LINKEDLIST_FindNode(int * pList, void * pNode) {
-    int32_t nNodeValue = LINKEDLIST_GetNodeAt(pList, pNode);
+intptr_t __thiscall LINKEDLIST_FindNode(int * pList, void * pNode) {
+    intptr_t nNodeValue = LINKEDLIST_GetNodeAt(pList, pNode);
     LINKEDLIST_DetachNode((FILE*)pNode, 0);
     Storm::Source::SMem::SMemFree(pNode, s___AUTMESSAGESOURCE___0072f9fc, -2, 0);
     return nNodeValue;
@@ -823,7 +823,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
       if ((int)nVerifyResult > 0) {
         pWideStr = (LPWSTR)Game::Main::MISC_OperatorNewShim(-(uint32_t)((int)((uint64_t)nVerifyResult * 2 >> 0x20) != 0) | (uint32_t)((uint64_t)nVerifyResult * 2));
         /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(0, 0, szText, -1, pWideStr, nVerifyResult);
-        memset(&sWvtFileInfo, 0, 0x10);
+        memset(&sWvtFileInfo, 0, sizeof(sWvtFileInfo));
         sWvtFileInfo.cbStruct = 0x10;
         sWvtFileInfo.hFile = (HANDLE)0x0;
         sWvtFileInfo.pgKnownSubject = 0;
@@ -839,7 +839,7 @@ int32_t __fastcall D2FILE_VerifySignatureWinTrust(LPCSTR szText) {
         sActionGuid.Data4[6] = 0x95;
         sActionGuid.Data4[7] = 0xee;
         sWvtFileInfo.pcwszFilePath = pWideStr;
-        memset(&sWvtData, 0, 0x30);
+        memset(&sWvtData, 0, sizeof(sWvtData));
         sWvtData.pUnion = &sWvtFileInfo;
         /* LPVOID pWVTData for WinVerifyTrust */ /* GUID * pgActionID for WinVerifyTrust */ /* HWND hwnd for WinVerifyTrust */ sWvtData.cbStruct = 0x30;
         sWvtData.pPolicyCallbackData = 0;

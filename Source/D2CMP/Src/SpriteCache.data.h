@@ -20,5 +20,5 @@ typedef void (__fastcall *pfnLruFreeEntry)(void * pEntry);
 
 extern char gszExtDc6[5];
 extern pfnLruFreeEntry gpfnSpriteCacheFreeEntry;
-extern BYTE gaCelDataHashTable[4096];
+extern struct D2CelDataHashTableStrc gaCelDataHashTable;
 extern D2LRUCacheStrc gCelDataCacheLru;

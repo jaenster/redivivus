@@ -214,7 +214,7 @@ int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * sz
 BOOL __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint32_t dwExeChecksum, char * szExeInfoStr);
 int __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning();
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, size_t nSize);
+void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, uint32_t nSize);
 // @sourcefile .\BnSend.cpp
 void BNSEND_FreeRealmQueryData();
 char * __fastcall NET_SID_CLIENT_Send_0x41_QueryAdURL(uint32_t dwAdId);
@@ -241,7 +241,7 @@ void __stdcall BNSEND_FreeGameListData();
 void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * szText2, uint32_t dwParam1, uint32_t dwParam2);
 BOOL __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szText2);
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, size_t nDataSize);
+void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, uint32_t nDataSize);
 // SID_LOGONREALMEX (0x3E) client request sender. Computes double-SHA1 password hash for realm logon. Packet format: (DWORD)ClientToken, (BYTE[20])PasswordHash, (STRING)RealmName. Hash computed as SHA1(SHA1(ClientToken, ServerToken, Password)). Sends request, waits for 0x3E response containing MCP server connection info. Increments gnBNetRealmClientToken client token counter.
 void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char * szPassword);
 void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo();
@@ -249,7 +249,7 @@ int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t bReques
 // @sourcefile .\BnSend.cpp
 uint32_t __fastcall NET_SID_CLIENT_Send_0x27_WriteUserData(char * szAccount, uint32_t nCount, char * * pszKeys, char * * pszValues);
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreReadUserData(uint8_t * pbReadData, size_t nSize);
+void __fastcall BNSEND_StoreReadUserData(uint8_t * pbReadData, uint32_t nSize);
 // @sourcefile .\BnSend.cpp
 uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint32_t nCount, uint32_t nRequestId, char * * pszKeys);
 // Retrieves stored user data from previous SID_READUSERDATA (0x26) response. Copies string array data into output buffers.
@@ -259,11 +259,11 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * sz
 BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szText2, char * szNewEmail);
 BOOL __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash();
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreRealmQueryData(uint8_t * pbRealmData, size_t nSize);
+void __fastcall BNSEND_StoreRealmQueryData(uint8_t * pbRealmData, uint32_t nSize);
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, size_t nSize);
+void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, uint32_t nSize);
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, size_t nSize);
+void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, uint32_t nSize);
 void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LONG nComperand);
 int Unreferenced_0051bea0();
 BOOL __stdcall D2CheckExpansionGame();
@@ -286,12 +286,12 @@ int __fastcall BNCLIENT_EnterChatAndJoinChannel(char * szUsername, char * szStat
 int __stdcall thunk_NET_SID_CLIENT_Send_0x10_LeaveChat();
 BOOL __stdcall BNSEND_Disconnect();
 int __fastcall Unreferenced_0051c570(char * szText);
-int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t nSizeNoHeader);
+int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, uint32_t nSizeNoHeader);
 void __fastcall Unreferenced_0051c6b0(char * szText);
 void __fastcall BNCLIENT_ParseAndEnqueueChatMessages(char * szMessageText);
 // BATTLE.NET PACKET DISPATCH LOOP
 // Iterates over received network buffer, scanning for 0xFF packet start markers and dispatching complete packets to NET_SID_CLIENT_IncomingPacketHandler. For each packet: validates 4-byte header (0xFF, ID, size_lo, size_hi), checks if buffer contains full packet based on 2-byte little-endian size field, dispatches packet data (excluding 4-byte header) to handler, advances buffer pointer by packet size. Returns pointer to remaining unparsed buffer data for next iteration.
-size_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t nSize);
+uint32_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, uint32_t nSize);
 DWORD __stdcall BnetReadFunction(uint32_t dwThreadParam);
 uint32_t __fastcall BNCLIENT_GetSocketPeerName(sockaddr * pSockAddr, int * pAddrLen);
 // Thread-safe wrapper around Fog::Safesock::GetSockNameDoesReturn. Returns local socket address info for Battle.net connection. Used by SID_AUTH_INFO sender.
@@ -330,7 +330,7 @@ void __thiscall BNNEWS_EnsureCapacity(struct D2BnNewsTableStrc * pNewsTable, uin
 void __thiscall BNNEWS_SetNewsEntryCount(struct D2BnNewsTableStrc * pNewsTable, uint32_t dwNewCount);
 // BATTLE.NET NEWS PARSER (SID_NEWS_INFO 0x46)
 // Parses news entries from Battle.net packet containing: count(1), unknown(4), motd_timestamp(4), timestamp(4), then array of entries. Each entry: entry_id(4), message(null-terminated). Maintains sorted cache (up to 256 entries) in gpBNetNewsCache, each 0x408 bytes with entry_id at +4 and message at +8. Special case: entry_id=0 triggers callback g_pfnMotdCallback for MOTD. Sorts by entry_id descending, calculates first unread index (g_nFirstUnreadNewsIndex) based on motd_timestamp, saves to disk cache, and invokes UI callbacks.
-BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, size_t nSize);
+BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, uint32_t nSize);
 // @sourcefile .\BNNews.cpp
 BOOL __stdcall BNNEWS_LoadCachedNews();
 int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback);
@@ -344,7 +344,7 @@ int Unreferenced_0051e240();
 void __stdcall BNNEWS_DecodeCDKeys();
 // High-level CD key hash helper. Gets server token, retrieves CD key by type (0=classic, 1=expansion), and prepares hash structure for SID_AUTH_CHECK.
 void __fastcall BNSEND_HashCDKeyByType(struct D2CDKeyHashStrc * pOutHash, uint32_t nToken, int32_t nCDKeyType);
-int __fastcall BNSEND_SendRawBytes(void * pBytes, size_t nSize);
+int __fastcall BNSEND_SendRawBytes(void * pBytes, uint32_t nSize);
 int __fastcall BNSEND_SendString(char * szString);
 BOOL __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwRequestId);
 void StaticInit_gpBNetNewsCache();

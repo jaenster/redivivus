@@ -75,7 +75,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
       do {
         pLevelObjRng = D2_NEW_POOL_AT(pGame->pMemoryPool, D2ObjectRngStrc, ".\\OBJECTS\\objrgn.cpp", 0x36);
         pLevelsTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(eLevel);
-        memset(pLevelObjRng, 0, 0x90);
+        memset(pLevelObjRng, 0, sizeof(*pLevelObjRng));
         pLevelObjRng->nMonClassId = -1;
         pLevelObjRng->nAct = pLevelsTxt->Act;
         pLevelObjRng->nLevelRooms = 0x7fffffff;
@@ -96,7 +96,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
       }
     }
 
-    memset(pObjectControl->aObjectTypeCount, 0, 200);
+    memset(pObjectControl->aObjectTypeCount, 0, sizeof(pObjectControl->aObjectTypeCount));
     memset(pObjectControl->sShrinesRng.aShrinesRng, 0, 8 * sizeof(pObjectControl->sShrinesRng.aShrinesRng[0]));
     uSlotC.nShrineClassIdxLoop = 0;
     uSlot8.pShrinesRngIter = &pObjectControl->sShrinesRng;

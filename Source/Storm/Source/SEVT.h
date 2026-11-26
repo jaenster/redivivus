@@ -96,7 +96,7 @@ uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041c4e0(int * pList);
 uint32_t * __fastcall Unreferenced_0041c4f0(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041c500(struct StormLinkStrc * pNode);
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_0041eab0(int * pList);
-int32_t __fastcall Unreferenced_0041eac0(void * pHandle);
+intptr_t __fastcall Unreferenced_0041eac0(void * pHandle);
 uint32_t __fastcall LINKEDLIST_GetCount_Unref_00420490(int * pList);
 uint32_t * __fastcall Unreferenced_004204a0(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_004204b0(struct StormLinkStrc * pNode);
@@ -137,7 +137,7 @@ BOOL __stdcall SEvtUnregisterType(uint32_t nEventId, uintptr_t nSubId);
 void * __fastcall Unreferenced_00426900(struct StormLinkStrc * pLink);
 uint32_t __fastcall LINKEDLIST_GetNextOffset(int * pList);
 // Calculates the offset position of a node within a linked list structure. Handles both forward and backward traversal using signed offset values. Returns the absolute position when given a node pointer and its offset metadata.
-uint32_t __thiscall LINKEDLIST_GetNodeOffset(struct StormLinkStrc * pListInfo, intptr_t pNode);
+uintptr_t __thiscall LINKEDLIST_GetNodeOffset(struct StormLinkStrc * pListInfo, intptr_t pNode);
 void __fastcall LINKEDLIST_UnlinkSelf(struct StormLinkStrc * pNode);
 void __fastcall Unreferenced_004269a0(struct StormLinkedListStrc * pList);
 // Pops the handler table most recently pushed for an event type. Finds the (eventId, subId) event, frees its current handler table and reinstates the predecessor stored at table[3]; when there is no predecessor it calls SEvtUnregisterType to remove the event entirely.
@@ -165,7 +165,7 @@ int32_t __thiscall LINKEDLIST_GetNextOrHead(int32_t pThis, int32_t nNode);
 // false one.
 void __thiscall LINKEDLIST_LinkNode(int * * pList, int * * ppNodeSlot, int32_t nInsertMode, int * * ppTargetList);
 // Retrieves the count field from a linked list node with bitwise masking. Returns count masked with sign-extend logic to handle special count encodings. Used for size queries on list structures.
-uint32_t __thiscall LINKEDLIST_GetCountMasked(struct StormLinkedListStrc * pThis, struct StormLinkStrc * nNode);
+uintptr_t __thiscall LINKEDLIST_GetCountMasked(struct StormLinkedListStrc * pThis, struct StormLinkStrc * nNode);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00426bd0(struct StormLinkStrc * pNode);
 void __thiscall LINKEDLIST_GetHead(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pListHead);
 struct StormLinkedListStrc * __fastcall Unreferenced_00426c60(struct StormLinkedListStrc * pList);

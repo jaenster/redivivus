@@ -3,10 +3,14 @@
 #include "Source/D2Common/Logging/ProfCore.h"
 #include "Source/D2Common/DataTbls/MonsterTbls.h"
 #include "Source/D2Common/Logging/Logging.h"
-#include "Source/globals/globals.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Logging/ProfCore.data.h"
+
+#ifndef RECON_FPTD_fpProfCoreInitCb
+#define RECON_FPTD_fpProfCoreInitCb
+typedef int32_t (*fpProfCoreInitCb)();
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 

@@ -12,6 +12,8 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Storm/Source/SErr.data.h"
 #include "Source/Storm/Source/SFile.data.h"
+static_assert(sizeof(void*) != 4 || sizeof(::HANDLER) == 0xc, "SMemAlloc(sizeof(HANDLER)): the 32-bit layout must be the 0xc bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(SErrAppFatalContextStrc) == 0xc, "SMemZero(sizeof(SErrAppFatalContextStrc)): the 32-bit layout must be the 0xc bytes 1.14d clears");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -227,9 +229,9 @@ void __stdcall SErrSetLastError(DWORD dwErrCode) {
     SetLastError(dwErrCode);
 }
 
-uint32_t __thiscall SSYSTEM_ListOffsetToPointer(StormLinkStrc * pNode, intptr_t pBase) {
-    uint32_t nOffset = pNode->pNext;
-    if ((int)nOffset < 0) {
+uintptr_t __thiscall SSYSTEM_ListOffsetToPointer(StormLinkStrc * pNode, intptr_t pBase) {
+    uintptr_t nOffset = pNode->pNext;
+    if ((intptr_t)nOffset < 0) {
       return ~nOffset;
     }
     if (pBase < 0) {
@@ -328,7 +330,7 @@ void __thiscall SSYSTEM_ListUnlinkAndInsert(int * * pList, int * * pNode, int32_
     }
 }
 
-uint32_t __thiscall SSYSTEM_ListGetNext(StormLinkedListStrc * pList, StormLinkStrc * pNode) {
+uintptr_t __thiscall SSYSTEM_ListGetNext(StormLinkedListStrc * pList, StormLinkStrc * pNode) {
     if (!pNode) {
       pNode = &pList->head;
     }
@@ -470,7 +472,7 @@ void __fastcall LINKEDLIST_UnlinkSelf_Unref_0041c800(StormLinkStrc * pNode) {
 }
 
 int * * __thiscall SSYSTEM_ListAllocNode(int * * pList, int32_t nInsertMode, int32_t nDataSize, uint32_t nAllocFlags) {
-    int** pNodeNew = (int**)SMem::SMemAlloc(nDataSize + 0xc, gszSSystemListAllocTag, -2, nAllocFlags | 8);
+    int** pNodeNew = (int**)SMem::SMemAlloc(nDataSize + (uint32_t)sizeof(::HANDLER), gszSSystemListAllocTag, -2, nAllocFlags | 8);
     int** pNode;
     if (pNodeNew) {
       *pNodeNew = 0;
@@ -510,10 +512,10 @@ int * __thiscall SSYSTEM_ListFreeNode(StormLinkStrc * pNode, uint8_t bFreeMemory
 // @pairs-with SErrUnregisterHandler 0041d110, which walks the same list and removes the node whose +8 equals its argument.
 void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
     StormLinkStrc** pPrevLink;
-    uint32_t* pPrevSlot;
+    StormLinkStrc** pPrevSlot;
     StormLinkStrc* pNewCallback;
     SERR_InternalEnterCriticalSection();
-    StormLinkStrc* pNode = (StormLinkStrc*)SMem::SMemAlloc(0xc, gszSSystemListAllocTag, -2, 0x8000008);
+    StormLinkStrc* pNode = (StormLinkStrc*)SMem::SMemAlloc(sizeof(::HANDLER), gszSSystemListAllocTag, -2, 0x8000008);
     if (pNode) {
       pNode->pPrevLink = 0;
       pNode->pNext = 0;
@@ -532,11 +534,11 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
       pNode->pNext = 0;
     }
 
-    pNode->pPrevLink = (StormLinkStrc*)((char*)&gnStormErrorCallbackCount + 4);
+    pNode->pPrevLink = &gnStormErrorCallbackCount.head;
     pNode->pNext = gnStormErrorCallbackCount.head.pNext;
     int32_t t2_c0 = gnStormErrorCallbackCount.nLinkOffset;
     if (gnStormErrorCallbackCount.head.pNext < 0) {
-      pPrevSlot = (uint32_t*)~gnStormErrorCallbackCount.head.pNext;
+      pPrevSlot = (StormLinkStrc**)~gnStormErrorCallbackCount.head.pNext;
     } else {
       intptr_t nListOffset;
       nListOffset = t2_c0;
@@ -544,10 +546,10 @@ void __stdcall SErrRegisterHandler(pfnSErrDisplayCallback pfnCallback) {
         nListOffset = (intptr_t)&gnStormErrorCallbackCount.head - gnStormErrorCallbackCount.head.pPrevLink->pNext;
       }
 
-      pPrevSlot = (uint32_t*)(gnStormErrorCallbackCount.head.pNext + nListOffset);
+      pPrevSlot = (StormLinkStrc**)(gnStormErrorCallbackCount.head.pNext + nListOffset);
     }
 
-    *pPrevSlot = (uint32_t)(uintptr_t)pNode;
+    *pPrevSlot = pNode;
     gnStormErrorCallbackCount.head.pNext = (intptr_t)pNewCallback;
     *(pfnSErrDisplayCallback*)(pNewCallback + 1) = (pfnSErrDisplayCallback)pfnCallback;
     SERR_InternalLeaveCriticalSection();
@@ -643,7 +645,7 @@ int __stdcall SErrDisplayError(uint32_t nErrorCode, uint32_t * pStackTrace, int3
     /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ __frame0.szModuleFile[0] = '\0';
     __frame0.szModuleName[0] = '\0';
     GetModuleFileNameA((HMODULE)0x0, __frame0.szModuleFile, 0x104);
-    SMem::SMemZero(&__frame0.findData, 0x140);
+    SMem::SMemZero(&__frame0.findData, sizeof(__frame0.findData));
     HANDLE hFindHandle;
     hFindHandle = FindFirstFileA(__frame0.szModuleFile, &__frame0.findData);
     if (hFindHandle) {
@@ -868,18 +870,23 @@ void __stdcall SErrReportNamedResourceLeak(char * szMessage, char * szText) {
     }
 }
 
+// TSList<T>::Head(): the first node, or NULL when the next link is the terminator.
+static inline void* STORMLIST_Head(const StormLinkedListStrc* pList) {
+    return pList->head.pNext > 0 ? (void*)pList->head.pNext : nullptr;
+}
+
 // Under the error critical section, walks gpStormErrorCallbackListHead and removes every node whose handler slot (+8) equals the argument.
 // @was SSYSTEM_UnregisterErrorCallback (pass 6, 2026.08.28)
 // @oracle Storm 1.10b PPC export SErrUnregisterHandler, code vector 10015330 (TVector 100cbee4).
 // @oracle-basis Callee set {EnterCriticalSection, <free>, LeaveCriticalSection} with arity 1, operating on the same list SErrRegisterHandler 0041c900 builds. The oracle calls SMemFree directly; MSVC factored the unlink+free into SSYSTEM_ListRemoveAndFree 0041ca10, which calls SMemFree - the same operation one level down. SSYSTEM_ListRemoveAndFree has this function as its only caller.
 void __stdcall SErrUnregisterHandler(pfnSErrDisplayCallback nCallbackId) {
     SERR_InternalEnterCriticalSection();
-    ::HANDLER* piEntry = (::HANDLER*)(gnStormErrorCallbackCount.head.pNext <= 0 ? 0 : gnStormErrorCallbackCount.head.pNext);
-    while ((intptr_t)piEntry > 0) {
+    // ITERATELIST: the macro's second loop variable iterate_delete marks the node to delete before the step.
+    for (::HANDLER *piEntry = (::HANDLER*)STORMLIST_Head(&gnStormErrorCallbackCount), *iterate_delete = nullptr;
+         (intptr_t)piEntry > 0;
+         iterate_delete ? (piEntry = SSYSTEM_ListRemoveAndFree(&gnStormErrorCallbackCount, &piEntry->m_link), iterate_delete = nullptr, piEntry) : piEntry = (::HANDLER*)piEntry->m_link.pNext) {
       if (piEntry->pfnHandler == nCallbackId) {
-        piEntry = SSYSTEM_ListRemoveAndFree(&gnStormErrorCallbackCount, &piEntry->m_link);
-      } else {
-        piEntry = (::HANDLER*)piEntry->m_link.pNext;
+        iterate_delete = piEntry;
       }
     }
 
@@ -900,7 +907,7 @@ void __stdcall SErrDisplayAppFatal(char * szText, ...) {
     uint32_t* pContextCallback = 0;
     uint32_t nContextParam = 0;
     if (gpSSystemThreadContextCallback.dwThreadId == dwCurrentThreadId_lcl) {
-      SMem::SMemZero(&gpSSystemThreadContextCallback, 0xc);
+      SMem::SMemZero(&gpSSystemThreadContextCallback, sizeof(gpSSystemThreadContextCallback));
       pContextCallback = (uint32_t*)pSavedCallback;
       nContextParam = nSavedContextParam;
     }
@@ -926,14 +933,14 @@ void StaticInit_gStormErrorCallbackList() {
 
 // Runs at exit: removes every element from the Storm error callback list, then unlinks the list head itself.
 void StaticFini_gStormErrorCallbackList() {
-    uint32_t* pBackLink;
+    StormLinkStrc** pBackLink;
     ((TSList<::HANDLER, TSGetLink<::HANDLER>>*)&gnStormErrorCallbackCount)->UnlinkAll();
     if (!gnStormErrorCallbackCount.head.pPrevLink) {
       return;
     }
 
-    pBackLink = (uint32_t*)D2_StormNextLink((char*)&gnStormErrorCallbackCount + 4, -1);
-    *pBackLink = (uint32_t)(uintptr_t)gnStormErrorCallbackCount.head.pPrevLink;
+    pBackLink = (StormLinkStrc**)D2_StormNextLink(&gnStormErrorCallbackCount.head, -1);
+    *pBackLink = gnStormErrorCallbackCount.head.pPrevLink;
     gnStormErrorCallbackCount.head.pPrevLink->pNext = gnStormErrorCallbackCount.head.pNext;
     gnStormErrorCallbackCount.head.pPrevLink = 0;
     gnStormErrorCallbackCount.head.pNext = 0;

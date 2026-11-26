@@ -88,7 +88,7 @@ void __stdcall D2COMP_AllocSmallClientBlock();
 int __stdcall D2COMP_GetWeaponClassCodeIndex(int32_t nWeaponClassCode);
 void __stdcall D2COMP_FreeServerMemory(void * pMemory);
 void * __stdcall D2COMP_LoadExcelTxtFile(struct D2PoolManagerStrc * pMemory, char * szFileBaseName, char * szFileExt, uint32_t * pnSize);
-void * __stdcall LoadTxt(struct D2PoolManagerStrc * pMemory, char * szTxtName, struct D2BinFieldInputStrc * pBinFields, size_t * pSize, int32_t nLineLength);
+void * __stdcall LoadTxt(struct D2PoolManagerStrc * pMemory, char * szTxtName, struct D2BinFieldInputStrc * pBinFields, uint32_t * pSize, int32_t nLineLength);
 void __fastcall D2COMP_AllocTxt_Items(struct D2PoolManagerStrc * pMemory);
 void __fastcall D2COMP_LoadItemTypesTxt(struct D2PoolManagerStrc * pMemory);
 void __stdcall Unreferenced_005049d0();

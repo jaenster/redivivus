@@ -25,6 +25,51 @@ typedef uint32_t eD2ItemTypes;
 typedef uint32_t eD2UnitType;
 
 // Data types
+#ifndef D2_DEFINED_D2ArmTypeTxt
+#define D2_DEFINED_D2ArmTypeTxt
+struct __attribute__((packed)) D2ArmTypeTxt {
+    /* 0x00 */ char name[32];
+    /* 0x20 */ char token[4];
+    /* 0x24 */ uint8_t field_0x24;
+    /* 0x25 */ uint8_t field_0x25;
+    /* 0x26 */ uint8_t field_0x26;
+    /* 0x27 */ uint8_t field_0x27;
+    /* 0x28 */ uint8_t field_0x28;
+    /* 0x29 */ uint8_t field_0x29;
+    /* 0x2A */ uint8_t field_0x2a;
+    /* 0x2B */ uint8_t field_0x2b;
+    /* 0x2C */ uint8_t field_0x2c;
+    /* 0x2D */ uint8_t field_0x2d;
+    /* 0x2E */ uint8_t field_0x2e;
+    /* 0x2F */ uint8_t field_0x2f;
+    /* 0x30 */ uint8_t field_0x30;
+    /* 0x31 */ uint8_t field_0x31;
+    /* 0x32 */ uint8_t field_0x32;
+    /* 0x33 */ uint8_t field_0x33;
+};
+
+#endif // D2_DEFINED_D2ArmTypeTxt
+#ifndef D2_DEFINED_D2BeltsEntryStrc
+#define D2_DEFINED_D2BeltsEntryStrc
+struct D2BeltsEntryStrc {
+    /* 0x00 */ int nLeft;
+    /* 0x04 */ int nRight;
+    /* 0x08 */ int nTop;
+    /* 0x0C */ int nBottom;
+};
+
+#endif // D2_DEFINED_D2BeltsEntryStrc
+#ifndef D2_DEFINED_D2BeltsTxt
+#define D2_DEFINED_D2BeltsTxt
+struct __attribute__((packed)) D2BeltsTxt {
+    /* 0x00 */ uint8_t nIndex;
+    /* 0x01 */ uint8_t pad0x01[3];
+    /* 0x04 */ uint8_t nBoxes;
+    /* 0x05 */ uint8_t pad0x05[3];
+    /* 0x08 */ D2BeltsEntryStrc beltBoxes[16];
+};
+
+#endif // D2_DEFINED_D2BeltsTxt
 #ifndef D2_DEFINED_D2CorpseStrc
 #define D2_DEFINED_D2CorpseStrc
 struct __attribute__((packed)) D2CorpseStrc {
@@ -129,6 +174,28 @@ struct __attribute__((packed)) D2InventoryTxt {
 };
 
 #endif // D2_DEFINED_D2InventoryTxt
+#ifndef D2_DEFINED_D2ItemsTableStrc
+#define D2_DEFINED_D2ItemsTableStrc
+struct D2ItemsTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2ItemsTxt * pItems;
+    /* 0x08 */ struct D2ItemsTxt * pWeapons;
+    /* 0x0C */ int nWeaponsSize;
+    /* 0x10 */ struct D2ItemsTxt * pArmor;
+    /* 0x14 */ int nArmorSize;
+    /* 0x18 */ struct D2ItemsTxt * pMisc;
+    /* 0x1C */ int nMiscSize;
+};
+
+#endif // D2_DEFINED_D2ItemsTableStrc
+#ifndef D2_DEFINED_D2ItemTypeDefaultSlotStrc
+#define D2_DEFINED_D2ItemTypeDefaultSlotStrc
+struct D2ItemTypeDefaultSlotStrc {
+    /* 0x00 */ int nItemTypeEquiv;
+    /* 0x04 */ char szItemCode[4];
+};
+
+#endif // D2_DEFINED_D2ItemTypeDefaultSlotStrc
 namespace D2Common::INVENTORY::Inventory {
 
 // Function declarations

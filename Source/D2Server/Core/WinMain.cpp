@@ -248,11 +248,11 @@ INT_PTR __stdcall ServerWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM l
         return 0;
     }
     if (uMsg == WM_DESTROY) {
-        SetWindowLongA(GetDlgItem(hWnd, IDC_CONSOLELINE), GWL_WNDPROC, (LONG)(intptr_t)g_pfnConsoleInputOrigProc);
+        SetWindowLongPtrA(GetDlgItem(hWnd, IDC_CONSOLELINE), GWLP_WNDPROC, (LONG_PTR)g_pfnConsoleInputOrigProc);
         return 0;
     }
     if (uMsg == WM_INITDIALOG) {
-        g_pfnConsoleInputOrigProc = (WNDPROC)(intptr_t)SetWindowLongA(GetDlgItem(hWnd, IDC_CONSOLELINE), GWL_WNDPROC, (LONG)(intptr_t)Display::ConsoleInputProc);
+        g_pfnConsoleInputOrigProc = (WNDPROC)SetWindowLongPtrA(GetDlgItem(hWnd, IDC_CONSOLELINE), GWLP_WNDPROC, (LONG_PTR)Display::ConsoleInputProc);
         return TRUE;
     }
     if (uMsg != WM_COMMAND) {

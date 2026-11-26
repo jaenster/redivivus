@@ -256,7 +256,7 @@ void sRaveBlocksInit();
 // ---------------------------------------------------------------------------------------------
 // raveCore.cpp
 // ---------------------------------------------------------------------------------------------
-int RaveSetOption(unsigned int nOption, int nValue);
+int RaveSetOption(unsigned int nOption, intptr_t nValue);
 int RaveSetFullScreen(int bFullScreen);
 int RaveLocalToGlobal(Point * pPoint);
 int RaveGlobalToLocal(Point * pPoint);

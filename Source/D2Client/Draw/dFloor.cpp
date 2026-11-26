@@ -261,13 +261,14 @@ static void __stdcall DRAW_CalcRoofLightGridPerspective(D2GfxLightExStrc * pLigh
 }
 
 // Fills a 6×6 grid of D2GfxLightExStrc light entries for a roof tile in perspective (3D) mode. Reads ambient intensity and RGB colour from the act DRLG environment, then for each grid point calls D2GFX_AdjustPerspectivePosition (depth != 0) or DRAW_CoordIsInCoord (depth == 0, orthographic fallback) to compute screen-space XY. Applies a horizontal split-screen offset when nSplitSide is 1 (left half) or 2 (right half). bBorderOnly restricts writes to the 4 border rows/columns.
-void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int32_t nTileY, int32_t nDepth, int32_t nSplitSide, int32_t bBorderOnly) {
+void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * pLightBuffer, int32_t nTileX, int32_t nTileY, int32_t nDepth, int32_t nSplitSide, int32_t bBorderOnly) {
+    int nRow;
     int nCol;
     uint8_t byRed;
     uint8_t byBlue;
     uint8_t byGreen;
     int* pScreenX;
-    D2GfxLightExStrc* pLightEntry = (D2GfxLightExStrc*)nRow;
+    D2GfxLightExStrc* pLightEntry = (D2GfxLightExStrc*)pLightBuffer;
     int32_t nIntensity = D2Common::Environment::DRLGENV_GetIntensityFromAct(Game::sgpDrlgAct);
     uint8_t byIntensity = (uint8_t)nIntensity;
     int nScreenHalfAdj = 0;
@@ -291,9 +292,9 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
       do {
         nCol = 0;
         do {
-          if (!bBorderOnly || (!nCol || nCol == 5) && (!nRow || nRow == (uint8_t*)0x5)) {
+          if (!bBorderOnly || (!nCol || nCol == 5) && (!nRow || nRow == 5)) {
             pXAdjust = &pLightEntry->nX;
-            D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nCol + nTileX) * 0x10000, (int)(nRow + nTileY) * 0x10000, nDepth, pXAdjust, &pLightEntry->nY);
+            D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nCol + nTileX) * 0x10000, (nRow + nTileY) * 0x10000, nDepth, pXAdjust, &pLightEntry->nY);
             *pXAdjust += nScreenHalfAdj;
             pLightEntry->sLight.nIntensity = byIntensity;
             pLightEntry->sLight.nRed = byGreen;
@@ -306,7 +307,7 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
         } while (nCol < 6);
 
         nRow++;
-      } while ((intptr_t)nRow < 6);
+      } while (nRow < 6);
 
       return;
     }
@@ -314,11 +315,11 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
     do {
       nSplitSide = 0;
       do {
-        if (!bBorderOnly || (!nSplitSide || nSplitSide == 5) && (!nRow || nRow == (uint8_t*)0x5)) {
+        if (!bBorderOnly || (!nSplitSide || nSplitSide == 5) && (!nRow || nRow == 5)) {
           pScreenX = &pLightEntry->nX;
-          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nSplitSide + nTileX) * 0x10000, (int)(nRow + nTileY) * 0x10000, 0, pScreenX, &pLightEntry->nY);
+          D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nSplitSide + nTileX) * 0x10000, (nRow + nTileY) * 0x10000, 0, pScreenX, &pLightEntry->nY);
           *pScreenX += nScreenHalfAdj;
-          View::DRAW_CoordIsInCoord((nSplitSide + nTileX) * 8, (int)(nRow + nTileY) * 8, (uint8_t*)pLightEntry, (uint8_t*)((char*)pLightEntry + 1), (uint8_t*)((char*)pLightEntry + 2), (uint8_t*)((char*)pLightEntry + 3));
+          View::DRAW_CoordIsInCoord((nSplitSide + nTileX) * 8, (nRow + nTileY) * 8, (uint8_t*)pLightEntry, (uint8_t*)((char*)pLightEntry + 1), (uint8_t*)((char*)pLightEntry + 2), (uint8_t*)((char*)pLightEntry + 3));
         }
 
         nSplitSide++;
@@ -326,7 +327,7 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * nRow, int32_t nTileX, int
       } while (nSplitSide < 6);
 
       nRow++;
-    } while ((intptr_t)nRow < 6);
+    } while (nRow < 6);
 }
 
 // Renders a single floor tile during the game draw pass. Skips tiles with flags 0x408 (hidden/special) or outside the extended view rect, and skips non-zero-orientation tiles. Computes a per-tile light intensity array (8x8 for software render, 6x6 for 3D) via GetIntensityFlagsForTile or DRAW_CalcRoofLight* variants (ortho vs perspective, normal vs grid-lit). Calls D2GFX_DrawGroundTile to blit. For wet-floor tiles (flag 0x2) may spawn weather splashes or bubbles via WEATHER_Spawn*. Updates tile visibility bounds after drawing.
@@ -521,28 +522,29 @@ void __thiscall DrawFloorByViewAndFloor(D2DrawFloorStrc * pDrawFloor, D2GameView
     }
 
     int nRoomIdx = 0;
+    uint32_t nFloorLayer;
     uint32_t bNoFilter = (uint32_t)!pLevelTxt->FloorFilter;
     bDrawEdges = nTileCount;
     if (nRoomCount > 0) {
       do {
         D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(ppRooms[nRoomIdx], &sRoomCoords);
-        pGameView = (D2GameViewStrc*)0x1;
+        nFloorLayer = 1;
         do {
-          if (bNoFilter || (nErrLine = (void*)0x1 , pGameView != (D2GameViewStrc*)0x1)) {
+          if (bNoFilter || (nErrLine = (void*)0x1 , nFloorLayer != 1)) {
             nErrLine = 0;
           }
 
           pTile = D2Common::DUNGEON::Dungeon::DRLGROOM_GetFloorTilesFromRoom(ppRooms[nRoomIdx], &nTileCount);
           for (; nTileCount; nTileCount--) {
-            if ((D2GameViewStrc*)((uint32_t)pTile->nFlags >> 0xe & 7) == pGameView) {
+            if (((uint32_t)pTile->nFlags >> 0xe & 7) == nFloorLayer) {
               DrawFloorTile(pDrawFloor, pTile, nErrLine, pDrawFloor->nX + pTile->nScreenX, pTile->nScreenY + pDrawFloor->nY, sRoomCoords.dwXStart + pTile->nPosX * 5, sRoomCoords.dwYStart + pTile->nPosY * 5);
             }
 
             pTile++;
           }
 
-          pGameView = (D2GameViewStrc*)((intptr_t)&pGameView->nFlags + 1);
-        } while (pGameView < (D2GameViewStrc*)0x3);
+          nFloorLayer++;
+        } while (nFloorLayer < 3);
 
         nRoomIdx++;
         bDrawEdges = 0;

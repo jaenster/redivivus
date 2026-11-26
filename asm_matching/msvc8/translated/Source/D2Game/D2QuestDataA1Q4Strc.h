@@ -36,7 +36,7 @@ struct D2QuestDataA1Q4SubStrc {
     /* 0x20 */ int32_t nScrollItemGUID;
     /* 0x24 */ int32_t nPlayerGUID;
     /* 0x28 */ uint32_t nPortalGUID;
-    /* 0x2C */ int16_t nStoneAttemptCount; // Cairn-stone wrong-attempt counter (masked &0x3f, incremented per click); OBJOP_A1Q4_ActivateHoradricMalusSmith
+    /* 0x2C */ uint16_t nStoneAttemptCount; // Cairn-stone wrong-attempt counter (masked &0x3f, incremented per click); OBJOP_A1Q4_ActivateHoradricMalusSmith
     /* 0x2E */ bool bRogueGuardTimerArmed;
     /* 0x2F */ uint8_t bTreeObjectSaved;
     /* 0x30 */ uint8_t bCairnStonesObjectSaved;

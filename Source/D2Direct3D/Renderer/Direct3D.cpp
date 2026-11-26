@@ -679,12 +679,12 @@ BOOL __fastcall ActivateWindow() {
     return 0;
 }
 
-BOOL __fastcall SetOption(int nOption, int nValue) {
+BOOL __fastcall SetOption(int nOption, intptr_t nValue) {
     if (nOption != 0xb) {
       return 0;
     }
 
-    BOOL_0074c020 = nValue;
+    BOOL_0074c020 = (BOOL)nValue;
     return 1;
 }
 
@@ -808,8 +808,8 @@ uint32_t __stdcall DIRECT3D_GetPerspectiveMode() {
     return g_bPerspectiveMode;
 }
 
-void __fastcall DIRECT3D_SetPerspectiveMode(size_t nSize) {
-    g_bPerspectiveMode = nSize;
+void __fastcall DIRECT3D_SetPerspectiveMode(uint32_t bPerspective) {
+    g_bPerspectiveMode = bPerspective;
 }
 
 void __fastcall RENDERER_D3D_SaveDeviceConfigToRegistry(uint32_t nRenderMode, int nDeviceIndex) {

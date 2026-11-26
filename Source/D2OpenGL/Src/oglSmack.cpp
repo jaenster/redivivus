@@ -155,7 +155,7 @@ void OGL_DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pContext, char n
     int iVar6;
     uint8_t* pPalDst;
     int iVar9;
-    size_t nImgWidth;
+    uint32_t nImgWidth;
     short int local_35c[36];
     uint8_t byPalette0[2];
     uint8_t local_312[766];
@@ -165,7 +165,7 @@ void OGL_DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pContext, char n
     uint32_t* puVar2 = PTR_00552b80;
     int iVar8 = 0;
     do {
-      memset_pattern16((void*)((int)puVar2 + iVar8), &DAT_00334bc0, 0x400);
+      memset_pattern16((void*)((uint8_t*)puVar2 + iVar8), &DAT_00334bc0, 0x400);
       puVar3 = PTR_00552b84;
       iVar8 += 0x400;
     } while (iVar8 != 0x10000);
@@ -174,7 +174,7 @@ void OGL_DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pContext, char n
     GLuint* pGVar7 = (GLuint*)&DAT_00552b88;
     uint32_t** ppuVar10 = &PTR_00552b80;
     do {
-      memset_pattern16((void*)((int)puVar3 + iVar8), &DAT_00334bc0, 0x400);
+      memset_pattern16((void*)((uint8_t*)puVar3 + iVar8), &DAT_00334bc0, 0x400);
       iVar8 += 0x400;
     } while (iVar8 != 0x10000);
 
@@ -201,7 +201,7 @@ void OGL_DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pContext, char n
         fp_fatal("Unrecoverable internal error %08x line %d", pvVar5, 0xd9);
       }
       if (bFileLoadOk && __frame0.local_770) {
-        iVar8 = Storm::Source::SBMP::SBmpDecodeImage(2, __frame0.local_770, __frame0.dwFileSize, (void*)(int)__frame0.abImgBuf, (uint8_t*)(int)PTR_00552b7c, 0x6db0, &nImgWidth, &__frame0.nImgHeight, &__frame0.nImgBpp);
+        iVar8 = Storm::Source::SBMP::SBmpDecodeImage(2, __frame0.local_770, __frame0.dwFileSize, (void*)__frame0.abImgBuf, PTR_00552b7c, 0x6db0, &nImgWidth, &__frame0.nImgHeight, &__frame0.nImgBpp);
         Storm::Source::SMem::SMemFree(__frame0.local_770, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglSmack.cpp", 0xec, 0);
         if (iVar8 && nImgWidth == 0x1d4 && __frame0.nImgHeight == 0x3c && __frame0.nImgBpp == 8) {
           iVar8 = 0x3b;

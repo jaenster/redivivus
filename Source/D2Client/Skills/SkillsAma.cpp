@@ -15,6 +15,14 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+// The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
+#ifndef min
+#define min(a, b) (((a) < (b)) ? (a) : (b))
+#endif
+#ifndef max
+#define max(a, b) (((a) > (b)) ? (a) : (b))
+#endif
+
 
 namespace D2Client::SKILLS::SkillsAma {
 
@@ -65,13 +73,7 @@ BOOL __fastcall Skills_CltStFunc_CheckAmmoFindClosestTarget(D2UnitStrc * pUnit, 
       nMaxCount = nCalcMin;
     }
 
-    int nCalc0 = pFoundTarget;
-    if (pFoundTarget <= nMaxCount) {
-      nCalc0 = nMaxCount;
-    }
-    if (nCalc0 >= nCalcMin || (nCalcMin = nMaxCount , pFoundTarget <= nMaxCount)) {
-      pFoundTarget = nCalcMin;
-    }
+    pFoundTarget = min(max(pFoundTarget, nMaxCount), nCalcMin); // steer-ok: windef.h min/max macros
 
     D2Common::Skills::SKILL_SetParam1(pSkill, pFoundTarget);
     if (pConfirmedTarget) {
@@ -249,7 +251,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_MultiShotArrows(D2UnitStrc * pUnit, eD2Skil
       Skills::SKILL_ComputePerpendicularUnitVector(&nDirX, &nDirY);
       nTargetX -= nDirX * nArrowCount / 2;
       nTargetY -= nDirY * nArrowCount / 2;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x820;
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pUnit;
@@ -298,7 +300,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills e
     }
 
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nUnitX = nTargetX;
     sSkillArg.nFlags = 0x20;
     sSkillArg.pOwner = pUnit;
@@ -348,7 +350,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_LinearMissileSpray(D2UnitStrc * pUnit, eD2S
       int32_t nUnitX = nTargetX * 2 - D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
       int32_t nUnitY = nTargetY * 2 - D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
       int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nUnitX = nUnitX;
       sSkillArg.pOwner = pUnit;
       sSkillArg.nX = nTargetX;
@@ -421,7 +423,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill
       return 0;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -545,7 +547,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_PiercingShot(D2UnitStrc * pUnit, eD2Skills 
     }
 
     nSearchRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x20;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pConfirmedTarget;

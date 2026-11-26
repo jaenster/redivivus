@@ -166,7 +166,7 @@ void __fastcall SOUNDSMP_WriteToBuffer(D2SoundSmpStrc * ppSoundSmp, int nWritePo
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
 }
 
-BOOL __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, size_t nBytesToClear) {
+BOOL __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, uint32_t nBytesToClear) {
     void* pLockedBuf = 0;
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x14b);
@@ -268,7 +268,7 @@ D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSamplePa
     }
 
     D2SoundSmpStrc* pSoundSmp = D2_NEW_AT(D2SoundSmpStrc, ".\\Src\\D2SoundSmp.cpp", 0x1d9);
-    memset(pSoundSmp, 0, 0x60);
+    memset(pSoundSmp, 0, sizeof(*pSoundSmp));
     BOOL bCreated = SOUNDSMP_CreateSoundBuffer(nSoundFlags, pSoundSmp);
     if (!bCreated) {
       D2_FREE_AT(pSoundSmp, ".\\Src\\D2SoundSmp.cpp", 0x1e0);
@@ -485,8 +485,8 @@ void __fastcall SOUNDSMP_SetEaxObstruction(D2SoundSmpStrc * pSoundSmp, float fOb
 
     fObstruction = 1.0 - fObstruction;
     float fVar2 = SOUNDSMP_ClampVolume(0.0, 1.0, fObstruction);
-    fObstruction = (float)(int)fVar2;
-    pSoundSmp->pEaxInterface->lpVtbl->Set(pSoundSmp->pEaxInterface, gEAXPropertyGuid_Obstruction, 7, nullptr, 0, &fObstruction, 4);
+    int nEaxLevel = (int)fVar2;
+    pSoundSmp->pEaxInterface->lpVtbl->Set(pSoundSmp->pEaxInterface, gEAXPropertyGuid_Obstruction, 7, nullptr, 0, &nEaxLevel, 4);
 }
 
 // Set the EAX room-level obstruction on the 3D sound buffer; clamps to -10000 for DS3D or passes a float to the EAX property set
@@ -730,7 +730,7 @@ static void SOUNDSMP_ReleaseInterfaces(D2SoundSmpStrc * ppnParam) {
       ppnParam->pDSBuffer = 0;
     }
 
-    memset(ppnParam, 0, 0x60);
+    memset(ppnParam, 0, sizeof(*ppnParam));
 }
 
 // @sourcefile .\Src\D2SoundSmp.cpp

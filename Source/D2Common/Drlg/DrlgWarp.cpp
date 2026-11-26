@@ -4,7 +4,6 @@
 #include "Source/D2Common/Drlg/D2DrlgLevelStrc.h"
 #include "Source/D2Common/Drlg/DrlgRoom.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DataTbls/LvlTbls.h"
 #include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"

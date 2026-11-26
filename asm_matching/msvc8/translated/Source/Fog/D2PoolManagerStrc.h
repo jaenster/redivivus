@@ -29,10 +29,10 @@ struct D2PoolBlockEntryStrc {
 __pragma(pack(push, 1)) struct D2PoolManagerStrc {
     /* 0x0000 */ int nPoolId; // related to pool count..
     /* 0x0004 */ CRITICAL_SECTION pSync;
-    /* 0x001C */ size_t nPools;
+    /* 0x001C */ uint32_t nPools;
     /* 0x0020 */ D2PoolStrc pPools[40];
-    /* 0x07A0 */ size_t nBlocks;
-    /* 0x07A4 */ size_t nTotalBlocks;
+    /* 0x07A0 */ uint32_t nBlocks;
+    /* 0x07A4 */ uint32_t nTotalBlocks;
     /* 0x07A8 */ struct D2PoolBlockEntryStrc * pBlocks;
     /* 0x07AC */ BYTE * pOverflow[1023];
     /* 0x17A8 */ DWORD dwMemory;

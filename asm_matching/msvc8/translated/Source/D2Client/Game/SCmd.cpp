@@ -93,7 +93,7 @@
 #include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Game/D2CreateMonsterUnitStrc.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Game/SCmd.h"
 #include "Source/D2Game/Game/Server.h"
@@ -1260,7 +1260,7 @@ static void DownloadSave(char * pBytes) {
 //   0xB0: Connection terminated (D2GS_Connected = 0)
 //   0xB3: Save file download (DownloadSave)
 //   0xB4: Connection refused (maps server reason 1-0x1A to client error codes)
-void __fastcall NET_D2GS_CLIENT_PacketHandle_from0xAF(uint8_t * pBytes, size_t nSize) {
+void __fastcall NET_D2GS_CLIENT_PacketHandle_from0xAF(uint8_t * pBytes, uint32_t nSize) {
     if (!(nSize != -1 && true)) {
       return;
     }
@@ -1817,8 +1817,8 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x17_UNITPATH(D2UnitStrc * pUnit, char *
       exit(-1);
     }
 
-    sPathPoint.nX = *(uint16_t*)(uint32_t)*(uint16_t*)(pBytes + 8);
-    sPathPoint.nY = *(uint16_t*)(uint32_t)*(uint16_t*)(pBytes + 10);
+    sPathPoint.nX = *(uint16_t*)(uintptr_t)*(uint16_t*)(pBytes + 8);
+    sPathPoint.nY = *(uint16_t*)(uintptr_t)*(uint16_t*)(pBytes + 10);
     sMsg.nSkillId = (uint32_t)((uint8_t)pBytes[6] >> 1);
     sMsg.nItemId = (uint32_t)(uintptr_t)&sPathPoint;
     UNIT::UnitMode::HandleMessage((uint32_t)(uint8_t)pBytes[7], pUnit, &sMsg, 1);
@@ -3556,7 +3556,7 @@ static void __stdcall NET_D2GS_CLIENT_PutIncomingBytesIntoServerCmdStructure(siz
 // Size table: NET_D2GS_CLIENT_INCOMING_SIZE at 0x00730AE8
 // Unit extraction: packets 0x67-0x6D use offset+1 (monster), others use type@+1 guid@+2
 // Special decode: 0x18 (HP), 0x95/0x96 (Mana/Stamina)
-void __fastcall NET_D2GS_CLIENT_PacketHandle_to0xAF(char * pBytes, size_t nSize) {
+void __fastcall NET_D2GS_CLIENT_PacketHandle_to0xAF(char * pBytes, uint32_t nSize) {
     // Static local variables (originally global data)
     static uint8_t gbyLastProcessedPacketId; D2_STATIC_GUARD_BSS(gbyLastProcessedPacketId, "D2Client::GAME::SCmd::NET_D2GS_CLIENT_PacketHandle_to0xAF::gbyLastProcessedPacketId");
     static uint32_t gnTotalPacketBytesProcessed; D2_STATIC_GUARD_BSS(gnTotalPacketBytesProcessed, "D2Client::GAME::SCmd::NET_D2GS_CLIENT_PacketHandle_to0xAF::gnTotalPacketBytesProcessed");

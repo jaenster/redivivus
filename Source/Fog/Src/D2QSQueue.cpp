@@ -5,6 +5,7 @@
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2QSQueueEntryStrc) == 8, "D2_ALLOC_AT(... + sizeof(D2QSQueueEntryStrc)): the 32-bit layout must be the 8 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -53,7 +54,7 @@ void __fastcall FOG_EnqueueMessage(D2QSQueueStrc * pClientSideData, void * pMess
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pClientSideData->csLock);
-    D2QSQueueEntryStrc* puMsgEntry = (D2QSQueueEntryStrc*)D2_ALLOC_AT(wMsgSize + 8, ".\\Src\\D2QSQueue.cpp", 0x4e);
+    D2QSQueueEntryStrc* puMsgEntry = (D2QSQueueEntryStrc*)D2_ALLOC_AT(wMsgSize + sizeof(D2QSQueueEntryStrc), ".\\Src\\D2QSQueue.cpp", 0x4e);
     puMsgEntry->wMsgSize = wMsgSize;
     puMsgEntry->pNext = 0;
     memcpy(puMsgEntry + 1, pMessage, (uint32_t)wMsgSize);

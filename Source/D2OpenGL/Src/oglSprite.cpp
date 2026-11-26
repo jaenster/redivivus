@@ -110,9 +110,9 @@ void OGLSPRITE_Init() {
       fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0x60);
     }
 
-    DAT_00552bc0 = (uint32_t)(uintptr_t)D2_ALLOC_AT(0x10000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglSprite.cpp", 0x62);
-    DAT_00552bc4 = (uint32_t)(uintptr_t)D2_ALLOC_AT(0x10000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglSprite.cpp", 99);
-    DAT_00552bc8 = (uint32_t)(uintptr_t)D2_ALLOC_AT(0x40000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglSprite.cpp", 100);
+    DAT_00552bc0 = (uint8_t*)D2_ALLOC_AT(0x10000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglSprite.cpp", 0x62);
+    DAT_00552bc4 = (uint8_t*)D2_ALLOC_AT(0x10000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglSprite.cpp", 99);
+    DAT_00552bc8 = (uint8_t*)D2_ALLOC_AT(0x40000, "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../D2OpenGL/Src/oglSprite.cpp", 100);
     D2CMP::SRC::CelCmp::CELCMP_SetPixelDataFreeCallback((pfnCelPixelDataFree)OGLSPRITE_ReleaseCelTextures);
 }
 
@@ -349,6 +349,7 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
     int iVar8;
     int iVar9;
     uint8_t* pShiftTable;
+    uint8_t* pbOutline;
     DC6Block* pDVar4;
     pDVar4 = pSprite->pGfxData->pDC6Block;
     if (!pDVar4) {
@@ -364,17 +365,17 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
     }
 
     pvVar3 = (void*)D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDVar4);
-    if (!*(int*)((int)pvVar3 + nSlot * 8)) {
+    if (!*(int*)((uint8_t*)pvVar3 + nSlot * 8)) {
       iVar6 = pSprite->nWidth;
       if (iVar6 < 0x21) {
         if (pSprite->nHeight < 0x21) {
-          *(uint32_t*)((int)pvVar3 + nSlot * 8) = 3;
+          *(uint32_t*)((uint8_t*)pvVar3 + nSlot * 8) = 3;
         } else {
           LAB_002e3555:
           if (0x80 < pSprite->nHeight) {
             goto LAB_002e3567;
           }
-          *(uint32_t*)((int)pvVar3 + nSlot * 8) = 2;
+          *(uint32_t*)((uint8_t*)pvVar3 + nSlot * 8) = 2;
         }
       } else {
         if (iVar6 < 0x81) {
@@ -389,11 +390,11 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
           return 0;
         }
 
-        *(uint32_t*)((int)pvVar3 + nSlot * 8) = 1;
+        *(uint32_t*)((uint8_t*)pvVar3 + nSlot * 8) = 1;
       }
     }
 
-    iVar6 = *(int*)((int)pvVar3 + nSlot * 8 + 4);
+    iVar6 = *(int*)((uint8_t*)pvVar3 + nSlot * 8 + 4);
     if (iVar6) {
       pThis = *PTR_PTR_003963b0;
       if ((uint8_t*)pThis->pNodes[iVar6 - 1].nOwnerKey == pPalette || nTexMode == 4) {
@@ -401,7 +402,7 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
       }
 
       CD2Textures::CD2TEXTURES_ReleaseById(pThis, iVar6);
-      *(uint32_t*)((int)pvVar3 + nSlot * 8 + 4) = 0;
+      *(uint32_t*)((uint8_t*)pvVar3 + nSlot * 8 + 4) = 0;
     }
     if (!DAT_00552bc0) {
       pvVar5 = Fog::Src::ErrorManager::GetInstructionPointer();
@@ -429,17 +430,17 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
       case 1:
 
       case 4:
-        D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame((D2GfxDataStrc*)(int)pSprite->pGfxData, -pSprite->nOffsetX, iVar6 - 1 - pSprite->nOffsetY, 0, 0, (BYTE*)(int)DAT_00552bc0, iVar6, nPitch, 0, 0, pPalette);
+        D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame(pSprite->pGfxData, -pSprite->nOffsetX, iVar6 - 1 - pSprite->nOffsetY, 0, 0, DAT_00552bc0, iVar6, nPitch, 0, 0, pPalette);
       break;
       case 2:
         iVar9 = 0;
-      D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame((D2GfxDataStrc*)(int)pSprite->pGfxData, -pSprite->nOffsetX, iVar6 - 1 - pSprite->nOffsetY, 0, 0, (BYTE*)(int)DAT_00552bc0, iVar6, nPitch, 0, 0, pPalette);
+      D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame(pSprite->pGfxData, -pSprite->nOffsetX, iVar6 - 1 - pSprite->nOffsetY, 0, 0, DAT_00552bc0, iVar6, nPitch, 0, 0, pPalette);
       iVar8 = pSprite->nTexSize;
       if (0 < iVar8) {
         pShiftTable = (*PTR_PTR_003963a0)[0x46];
         do {
-          if (*(uint8_t*)((int)pvVar5 + iVar9)) {
-            *(uint8_t*)((int)pvVar5 + iVar9) = pShiftTable[*(uint8_t*)((int)pvVar5 + iVar9)];
+          if (*(uint8_t*)((uint8_t*)pvVar5 + iVar9)) {
+            *(uint8_t*)((uint8_t*)pvVar5 + iVar9) = pShiftTable[*(uint8_t*)((uint8_t*)pvVar5 + iVar9)];
             iVar8 = pSprite->nTexSize;
           }
 
@@ -449,7 +450,7 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
 
       break;
       case 3:
-        D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame((D2GfxDataStrc*)(int)pSprite->pGfxData, 1 - pSprite->nOffsetX, iVar6 - 2 - pSprite->nOffsetY, 0, 0, (BYTE*)(int)DAT_00552bc0, iVar6, nPitch, 0, 0, 0);
+        D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame(pSprite->pGfxData, 1 - pSprite->nOffsetX, iVar6 - 2 - pSprite->nOffsetY, 0, 0, DAT_00552bc0, iVar6, nPitch, 0, 0, 0);
       if (!DAT_00552bc4) {
         pvVar5 = Fog::Src::ErrorManager::GetInstructionPointer();
         fp_fatal("Unrecoverable internal error %08x line %d", pvVar5, 0x1bb);
@@ -466,19 +467,19 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
       pvVar5 = (void*)DAT_00552bc4;
       if (0 < (int)(nPitch * iVar6 + nPitch * -2)) {
         iVar8 = (iVar6 - 2) * nPitch;
-        pcVar7 = (char*)((int)DAT_00552bc0 + nPitch);
-        iVar9 = (int)DAT_00552bc4 + nPitch;
+        pcVar7 = (char*)(DAT_00552bc0 + nPitch);
+        pbOutline = DAT_00552bc4 + nPitch;
         do {
           cVar1 = *pcVar7;
           pcVar7++;
           if (cVar1 != '\0') {
-            *(uint8_t*)(iVar9 - nPitch) = nOutlineColor;
-            *(uint8_t*)(iVar9 - 1) = nOutlineColor;
-            *(uint8_t*)(iVar9 + 1) = nOutlineColor;
-            *(uint8_t*)(iVar9 + nPitch) = nOutlineColor;
+            *(pbOutline - nPitch) = nOutlineColor;
+            pbOutline[-1] = nOutlineColor;
+            pbOutline[1] = nOutlineColor;
+            *(pbOutline + nPitch) = nOutlineColor;
           }
 
-          iVar9++;
+          pbOutline++;
           iVar8--;
           pvVar5 = (void*)DAT_00552bc4;
         } while (iVar8);
@@ -489,7 +490,7 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
     ppCVar2 = PTR_PTR_003963b0;
     (*PTR_PTR_003963b0)->vptr->CreateTexture(*PTR_PTR_003963b0, pvVar5, nPitch, iVar6, 3, pvVar3, nSlot, (int)pPalette);
     OGL_SetTextureFilter(1);
-    iVar6 = *(int*)((int)pvVar3 + nSlot * 8 + 4);
+    iVar6 = *(int*)((uint8_t*)pvVar3 + nSlot * 8 + 4);
     pThis = *ppCVar2;
     LAB_002e390b:
     CD2Textures::CD2TEXTURES_TouchEntry(pThis, iVar6);

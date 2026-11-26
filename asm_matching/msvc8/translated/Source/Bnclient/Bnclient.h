@@ -32,7 +32,7 @@ __pragma(pack(push, 1)) struct BigStack {
 __pragma(pack(push, 1)) struct BnMessQueue {
     /* 0x000 */ int nZero;
     /* 0x004 */ char bBuffer[288];
-    /* 0x124 */ size_t nDataSize;
+    /* 0x124 */ uint32_t nDataSize;
     /* 0x128 */ struct BnMessQueue * pNext;
 }; __pragma(pack(pop))
 #endif // D2_DEFINED_BnMessQueue

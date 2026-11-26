@@ -108,7 +108,7 @@ volatile long g_bInstalled = 0;
 // packet, opcode first. The system queue (mode 2) carries no client packet. The
 // originals are reached through pointers so the redirect cannot rewrite these calls.
 typedef void(__fastcall* PfnClientMessageGameSetup)(D2GSClientMsgEnvelopeStrc*, int32_t);
-typedef void(__fastcall* PfnClientMessageInGame)(char*, size_t);
+typedef void(__fastcall* PfnClientMessageInGame)(char*, uint32_t);
 PfnClientMessageGameSetup g_pfnClientMessageGameSetup = &D2Game::GAME::CCmd::NET_D2GS_SERVER_ProcessClientMessage_GameSetup;
 PfnClientMessageInGame g_pfnClientMessageInGame = &D2Game::GAME::CCmd::NET_D2GS_SERVER_ProcessClientMessage_InGame;
 
@@ -121,7 +121,7 @@ void __fastcall D2PATCH_ClientMessageGameSetup(D2GSClientMsgEnvelopeStrc* pPacke
     g_pfnClientMessageGameSetup(pPacket, nPacketSize);
 }
 
-void __fastcall D2PATCH_ClientMessageInGame(char* pBytes, size_t nSize) {
+void __fastcall D2PATCH_ClientMessageInGame(char* pBytes, uint32_t nSize) {
     CountServerPacket(pBytes, nSize);
     g_pfnClientMessageInGame(pBytes, nSize);
 }

@@ -117,7 +117,7 @@ void * __thiscall DestroyListNodeAndFree(void * pThis, uint8_t bFreeMemory);
 void __fastcall DestroyAllListNodes(struct StormLinkedListStrc * pListHead);
 struct D2LogRecordStrc * __thiscall AllocateAndInsertMessageNode(intptr_t * * ppListHead, int32_t nInsertMode, int32_t nPayloadSize, uint32_t dwAllocFlags);
 void __stdcall StopLogWriterThread();
-void EnqueueLogMessage(char * szText1, char * szText2, void * pData, size_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose);
+void EnqueueLogMessage(char * szText1, char * szText2, void * pData, uint32_t nDataLen, void * pCategory, BOOL bSkipData, int32_t nVerbose);
 // lpStartAddress parameter of CreateThread
 DWORD __stdcall LOGMANAGER_LogWriterThreadProc(void * lpThreadParam);
 void __fastcall EnqueueFormattedLogMessage(char * szText, int32_t nPriority, int32_t bAppendNewline, char * szFormat, va_list vaArgs);

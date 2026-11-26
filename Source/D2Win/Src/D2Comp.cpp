@@ -1609,7 +1609,7 @@ static D2TxtLinkStrc * gnHitClassTxtLinkHandle = 0; D2_STATIC_GUARD(gnHitClassTx
 static D2TxtLinkStrc * pD2CompItemsLinker = 0; D2_STATIC_GUARD(pD2CompItemsLinker, "pD2CompItemsLinker");
 static D2TxtLinkStrc * gnItemTypesCacheHandle = 0; D2_STATIC_GUARD(gnItemTypesCacheHandle, "gnItemTypesCacheHandle");
 static D2ItemTypesTxt * gpItemTypesTxt = 0; D2_STATIC_GUARD(gpItemTypesTxt, "gpItemTypesTxt");
-static size_t gnD2CompCompressionBufferSize = 0; D2_STATIC_GUARD(gnD2CompCompressionBufferSize, "gnD2CompCompressionBufferSize");
+static uint32_t gnD2CompCompressionBufferSize = 0; D2_STATIC_GUARD(gnD2CompCompressionBufferSize, "gnD2CompCompressionBufferSize");
 static int gnMaxCharacters = 0; D2_STATIC_GUARD(gnMaxCharacters, "gnMaxCharacters");
 static D2CompCharacterCompositeItemStrc gaCompCharacterCompositeItems[255] = {}; D2_STATIC_GUARD(gaCompCharacterCompositeItems, "gaCompCharacterCompositeItems");
 // also labelled: gpItemTypeHierarchy
@@ -2731,7 +2731,7 @@ int32_t __stdcall D2COMP_TruncateStringToFitWidth(uint16_t * wszText, int32_t nM
     char szMultiByte[300];
     int nFitCount = 0;
     D2Lang::Unicode::UNISYS::UNICODE_WideToMultiByte(szMultiByte, (uint16_t*)wszText, 300);
-    int nLength = strlen(szMultiByte);
+    int nLength = (int)strlen(szMultiByte);
     int bTruncated = 0;
     while (nFitCount < nLength) {
       if (D2WinFont::D2WINFONT_GetStringPixelWidth(wszText, nFitCount + 1) >= nMaxWidth) {
@@ -2964,13 +2964,13 @@ void * __stdcall D2COMP_LoadExcelTxtFile(D2PoolManagerStrc * pMemory, char * szF
     return pFileData;
 }
 
-void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFieldInputStrc * pBinFields, size_t * pSize, int32_t nLineLength) {
+void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFieldInputStrc * pBinFields, uint32_t * pSize, int32_t nLineLength) {
     // Static local variables (originally global data)
     static uint32_t gbLoadBinFiles = 0x1; D2_STATIC_GUARD(gbLoadBinFiles, "D2Win::Src::D2Comp::LoadTxt::gbLoadBinFiles");
 
     uint32_t* pArchive;
     D2BinFieldExcelStrc* pBinFieldExcel;
-    size_t pRowCountOrData;
+    uint32_t pRowCountOrData;
     uint32_t* pRecord;
     char szFilePath[260];
     uint32_t nFileSize = 0;
@@ -3009,10 +3009,10 @@ void * __stdcall LoadTxt(D2PoolManagerStrc * pMemory, char * szTxtName, D2BinFie
 void __fastcall D2COMP_AllocTxt_Items(D2PoolManagerStrc * pMemory) {
     // Static local variables (originally global data)
     static D2ItemsTxt * pD2CompItemsCopy; D2_STATIC_GUARD_BSS(pD2CompItemsCopy, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompItemsCopy");
-    static size_t nD2CompWeaponsSize; D2_STATIC_GUARD_BSS(nD2CompWeaponsSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompWeaponsSize");
+    static uint32_t nD2CompWeaponsSize; D2_STATIC_GUARD_BSS(nD2CompWeaponsSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompWeaponsSize");
     static D2ItemsTxt * pD2CompWeapons; D2_STATIC_GUARD_BSS(pD2CompWeapons, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::pD2CompWeapons");
-    static size_t nD2CompArmorSize; D2_STATIC_GUARD_BSS(nD2CompArmorSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompArmorSize");
-    static size_t nD2CompMiscSize; D2_STATIC_GUARD_BSS(nD2CompMiscSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompMiscSize");
+    static uint32_t nD2CompArmorSize; D2_STATIC_GUARD_BSS(nD2CompArmorSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompArmorSize");
+    static uint32_t nD2CompMiscSize; D2_STATIC_GUARD_BSS(nD2CompMiscSize, "D2Win::Src::D2Comp::D2COMP_AllocTxt_Items::nD2CompMiscSize");
 
     int j;
     int nItemIdx = 0;
@@ -4182,7 +4182,7 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
     gnItemTypesCacheHandle = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\Src\\D2Comp.cpp", 0xacb);
     int32_t nLineCount;
     nLineCount = 0xe4;
-    size_t* pSize;
+    uint32_t* pSize;
     pSize = &gnD2CompCompressionBufferSize;
     D2BinFieldInputStrc* pBitFieldExcel;
     pBitFieldExcel = aItemTypesFieldDefs;

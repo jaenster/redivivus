@@ -20,6 +20,17 @@ struct D2PathTypeArg;
 struct D2RoomStrc;
 struct D2UnitStrc;
 
+// Data types
+#ifndef D2_DEFINED_D2PathDirectionVectorStrc
+#define D2_DEFINED_D2PathDirectionVectorStrc
+struct D2PathDirectionVectorStrc {
+    /* 0x00 */ int nX; // 16.16 unit-circle X, magnitude 0x1000
+    /* 0x04 */ int nY; // 16.16 unit-circle Y
+    /* 0x08 */ int nDirIndex; // direction index 0..63
+};
+
+#endif // D2_DEFINED_D2PathDirectionVectorStrc
+
 namespace D2Common::PATH::Path {
 
 // Function declarations

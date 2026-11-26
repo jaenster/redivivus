@@ -66,7 +66,7 @@ struct D2TileLibraryHeaderStrc * __stdcall Alloc(struct D2TileLibraryHashStrc * 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 // @sourcefile .\SRC\TileProjects.cpp
 void __stdcall Free();
-int __stdcall TILEPROJECT_GetProjectId(char * szText);
+struct D2TileLibraryHashStrc * __stdcall TILEPROJECT_GetProjectId(char * szText);
 #endif // D2_MODULE_D2CMP
 // 1 internal function (defined in .cpp)
 

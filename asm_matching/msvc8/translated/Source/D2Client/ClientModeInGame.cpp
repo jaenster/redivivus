@@ -84,7 +84,7 @@ void __stdcall AppModeClientShutdown() {
 }
 
 int32_t __fastcall fAPPMODE_client_ReturnAppMode_Caller(D2IniConfigStrc * pD2IniConfig) {
-    int32_t eAppMode = fAPPMODE_client_ReturnAppMode((HMODULE)*(uint32_t*)((char*)&gMCPGameListBuffer + 28672), pD2IniConfig);
+    int32_t eAppMode = fAPPMODE_client_ReturnAppMode(*(HMODULE*)((char*)&gMCPGameListBuffer + 28672), pD2IniConfig);
     return eAppMode;
 }
 
@@ -142,7 +142,7 @@ uint32_t __stdcall CLIENTMODE_WaitForQServerConnection(uint32_t dwUnused) {
       gnClientModeInitValue = 1;
       D2GS_Connected = 0;
     } else {
-      size_t nSize;
+      uint32_t nSize;
       nState = D2Net::SRC::Client::NET_CLIENT_IsConnected();
       if (nState) {
         process_server_packets:
@@ -214,7 +214,6 @@ eD2ClientAppMode __stdcall NET_QServer_StartServer() {
       _Message::MessageGameLoop((::fpGameLoopFunction)GameLoopFuncInitGame);
       D2Net::Game::Server::NET_HACK_SetUseQServerHack(0);
     } else {
-      char* szIpAddress;
       if (eD2GSGameType_007a0610 == GAMETYPE_SINGLEPLAYER_UNCAPPED) {
         D2Net::Game::Server::QSERVER_CreateAndInit(CONNECTIONTYPE_SINGLEPLAYERUNCAPPED, GAMETYPE_SINGLEPLAYER_UNCAPPED);
         neD2GSConnectionType = CONNECTIONTYPE_SINGLEPLAYERUNCAPPED;
@@ -223,15 +222,14 @@ eD2ClientAppMode __stdcall NET_QServer_StartServer() {
         D2Net::Game::Server::NET_HACK_SetUseQServerHack(0);
       } else {
         if (eD2GSGameType_007a0610 == GAMETYPE_BNET_INTERNAL) {
-          szIpAddress = string_IpaddressGameserverBattlenet;
-          connect_remote_server:
-          D2Net::SRC::Client::NET_D2GS_ConnectToServer(CONNECTIONTYPE_SERVER, szIpAddress);
+          D2Net::SRC::Client::NET_D2GS_ConnectToServer(CONNECTIONTYPE_SERVER, string_IpaddressGameserverBattlenet);
           _Message::MessageGameLoop((::fpGameLoopFunction)GameLoopFuncInitGame);
           goto wait_for_connection;
         }
         if (eD2GSGameType_007a0610 != GAMETYPE_OBNET_HOST && eD2GSGameType_007a0610 != GAMETYPE_LAN_HOST) {
-          szIpAddress = string_IpAddressTcpIp;
-          goto connect_remote_server;
+          D2Net::SRC::Client::NET_D2GS_ConnectToServer(CONNECTIONTYPE_SERVER, string_IpAddressTcpIp);
+          _Message::MessageGameLoop((::fpGameLoopFunction)GameLoopFuncInitGame);
+          goto wait_for_connection;
         }
 
         D2Net::Game::Server::QSERVER_CreateAndInit(CONNECTIONTYPE_SERVER, GAMETYPE_SINGLEPLAYER_UNCAPPED);
@@ -260,7 +258,7 @@ uint32_t __stdcall CLIENTMODE_WaitForServerShutdown(uint32_t dwUnused) {
       D2Game::GAME::Server::NET_D2GS_SERVER_HandleAnyIncomingPacket();
     }
 
-    size_t nSize = D2Net::SRC::Client::NET_D2GS_CLIENT_ExtractPacketSize_from0xAE((char*)packetBuffer, 0x200);
+    uint32_t nSize = D2Net::SRC::Client::NET_D2GS_CLIENT_ExtractPacketSize_from0xAE((char*)packetBuffer, 0x200);
     GAME::SCmd::NET_D2GS_CLIENT_PacketHandle_from0xAF(packetBuffer, nSize);
     DWORD dwNowTick = GetTickCount();
     if (dwNowTick - gdwLastPacketActivityTick > 10000) {

@@ -136,7 +136,7 @@ inline void sRavePaintWindow() {
 
 // Windows slot 12. Options 0-11; 6-8 are not handled.
 // mac ppc classic/1.09d: 102b1d1c (1.00: 10077900)
-int RaveSetOption(unsigned int nOption, int nValue) {
+int RaveSetOption(unsigned int nOption, intptr_t nValue) {
     switch (nOption) {
     case 0:  // set the display device
         ghRaveDevice = (GDHandle)nValue;

@@ -130,7 +130,7 @@ static char g_enterNote[96] = "";
 // uses it to suspend the game and walk its stack, which is the only way to see where a
 // HANG actually is - a hung game answers no messages and writes no trace.
 static HANDLE g_gameThread = 0;
-static DWORD  g_imageBase = 0;
+static uintptr_t g_imageBase = 0;
 
 static void Enqueue(UINT msg, WPARAM wp, LPARAM lp, int delayFrames, int setPos, int x, int y) {
     EnterCriticalSection(&g_cs);
@@ -206,18 +206,18 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         char out[480]; int used = 0;
         SuspendThread(g_gameThread);
         BOOL got = GetThreadContext(g_gameThread, &ctx);
-        DWORD eip = got ? ctx.Eip : 0, ebp = got ? ctx.Ebp : 0;
+        uintptr_t eip = got ? (uintptr_t)D2_CONTEXT_FIELD(ctx, Eip) : 0, ebp = got ? (uintptr_t)D2_CONTEXT_FIELD(ctx, Ebp) : 0;
         // Copy the EBP chain out while suspended; format afterwards so the game is
         // stopped for as short a time as possible.
         DWORD rvas[24]; int n = 0;
         if (got) {
-            rvas[n++] = eip - g_imageBase;
+            rvas[n++] = (DWORD)(eip - g_imageBase);
             for (int i = 0; i < 20 && ebp; i++) {
                 if (IsBadReadPtr((void*)ebp, 8)) break;
-                DWORD ret = *(DWORD*)(ebp + 4);
-                DWORD next = *(DWORD*)ebp;
+                uintptr_t ret = *(uintptr_t*)(ebp + sizeof(uintptr_t));
+                uintptr_t next = *(uintptr_t*)ebp;
                 if (ret <= g_imageBase) break;
-                rvas[n++] = ret - g_imageBase;
+                rvas[n++] = (DWORD)(ret - g_imageBase);
                 if (next <= ebp) break;
                 ebp = next;
             }
@@ -1213,7 +1213,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                 CONTEXT ctx; memset(&ctx, 0, sizeof(ctx));
                 ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
                 if (GetThreadContext(hT, &ctx)) {
-                    ctx.Dr0 = (DWORD)nAddr;
+                    ctx.Dr0 = nAddr;
                     ctx.Dr7 &= ~(DWORD)0x000F0003;   // clear L0/G0 and RW0/LEN0
                     ctx.Dr7 |= 0x1;                  // L0: local enable
                     ctx.Dr7 |= (0x1u << 16);         // RW0 = 01 -> break on write
@@ -1765,14 +1765,14 @@ static LONG CALLBACK GuardVeh(EXCEPTION_POINTERS* pEx) {
     VirtualProtect((void*)nPage, si.dwPageSize, PAGE_READWRITE, &dwOld);
     if (nHit == nWant) {
         D2TraceFmt("GUARDHIT *** TARGET *** addr=%08X eip=%08X value=%08X",
-                   (unsigned)nHit, (unsigned)(uintptr_t)pEx->ContextRecord->Eip,
+                   (unsigned)nHit, (unsigned)(uintptr_t)D2_CONTEXT_FIELD(*pEx->ContextRecord, Eip),
                    *(unsigned*)(uintptr_t)g_pHwbpTarget);
     } else {
         static LONG nOther = 0;
         LONG n = InterlockedIncrement(&nOther);
         if (n <= 40)
             D2TraceFmt("GUARDOTHER addr=%08X eip=%08X (n=%d)", (unsigned)nHit,
-                       (unsigned)(uintptr_t)pEx->ContextRecord->Eip, (int)n);
+                       (unsigned)(uintptr_t)D2_CONTEXT_FIELD(*pEx->ContextRecord, Eip), (int)n);
     }
     // Single-step over the faulting store, then re-protect on the trap so the watch is
     // continuous instead of one-shot.
@@ -1795,7 +1795,7 @@ static LONG CALLBACK HwbpVeh(EXCEPTION_POINTERS* pEx) {
     // a private exception from the thread that must carry the watch.
     if (pEx->ExceptionRecord->ExceptionCode == D2_ARM_HWBP_EXCEPTION) {
         uintptr_t nAddr = (uintptr_t)g_pHwbpTarget;
-        pEx->ContextRecord->Dr0 = (DWORD)nAddr;
+        pEx->ContextRecord->Dr0 = nAddr;
         pEx->ContextRecord->Dr6 = 0;
         // L0 enabled, RW0 = write-only (01), LEN0 = 4 bytes (11).
         pEx->ContextRecord->Dr7 &= ~(DWORD)0x000F0003;
@@ -1808,25 +1808,25 @@ static LONG CALLBACK HwbpVeh(EXCEPTION_POINTERS* pEx) {
     if (!(pEx->ContextRecord->Dr6 & 0x1)) return EXCEPTION_CONTINUE_SEARCH;
     D2TraceFmt("HWBP WRITE target=%08X eip=%08X value=%08X ret0=%08X",
                (unsigned)(uintptr_t)g_pHwbpTarget,
-               (unsigned)(uintptr_t)pEx->ContextRecord->Eip,
+               (unsigned)(uintptr_t)D2_CONTEXT_FIELD(*pEx->ContextRecord, Eip),
                *(unsigned*)(uintptr_t)g_pHwbpTarget,
-               (unsigned)*(DWORD*)(uintptr_t)pEx->ContextRecord->Esp);
+               (unsigned)*(uintptr_t*)(uintptr_t)D2_CONTEXT_FIELD(*pEx->ContextRecord, Esp));
     // The writer is often a CRT memcpy or user32 SetRect, so eip alone names nothing.
     // Walk the stack for the first few words that land inside a module's image and
     // print them as module+offset: the first one inside d2recon is the caller.
     {
-        const DWORD* sp = (const DWORD*)(uintptr_t)pEx->ContextRecord->Esp;
+        const uintptr_t* sp = (const uintptr_t*)(uintptr_t)D2_CONTEXT_FIELD(*pEx->ContextRecord, Esp);
         int nFound = 0;
         for (int i = 0; i < 256 && nFound < 6; i++) {
-            DWORD v = 0;
-            if (IsBadReadPtr(sp + i, 4)) break;
+            uintptr_t v = 0;
+            if (IsBadReadPtr(sp + i, sizeof(uintptr_t))) break;
             v = sp[i];
             HMODULE h = 0;
             if (v < 0x10000 || !GetModuleHandleExA(GET_MODULE_HANDLE_EX_FLAG_FROM_ADDRESS | GET_MODULE_HANDLE_EX_FLAG_UNCHANGED_REFCOUNT, (LPCSTR)(uintptr_t)v, &h) || !h) continue;
             char szMod[MAX_PATH]; szMod[0] = 0;
             GetModuleFileNameA(h, szMod, sizeof(szMod));
             const char* base = strrchr(szMod, '\\'); base = base ? base + 1 : szMod;
-            D2TraceFmt("HWBP   frame[%d] esp+%03X %s+0x%X", nFound, i * 4, base, (unsigned)(v - (uintptr_t)h));
+            D2TraceFmt("HWBP   frame[%d] esp+%03X %s+0x%X", nFound, (unsigned)(i * sizeof(uintptr_t)), base, (unsigned)(v - (uintptr_t)h));
             nFound++;
         }
     }
@@ -1883,7 +1883,7 @@ extern "C" void D2ProbeArmClipHwbpAllThreads(void) {
                 CONTEXT ctx; ZeroMemory(&ctx, sizeof(ctx));
                 ctx.ContextFlags = CONTEXT_DEBUG_REGISTERS;
                 if (GetThreadContext(hT, &ctx)) {
-                    ctx.Dr0 = (DWORD)nAddr;
+                    ctx.Dr0 = nAddr;
                     ctx.Dr6 = 0;
                     ctx.Dr7 &= ~(DWORD)0x000F0003;
                     ctx.Dr7 |= 0x1u | (0x1u << 16) | (0x3u << 18);
@@ -2087,14 +2087,14 @@ static void DumpAllThreadsAt(const char* pszWhy) {
                 ctx.ContextFlags = CONTEXT_FULL;
                 if (GetThreadContext(hT, &ctx)) {
                     D2TraceFmt("FREEZE %s tid=%u eip=%08X esp=%08X ebp=%08X",
-                               pszWhy, (unsigned)te.th32ThreadID, (unsigned)ctx.Eip,
-                               (unsigned)ctx.Esp, (unsigned)ctx.Ebp);
+                               pszWhy, (unsigned)te.th32ThreadID, (unsigned)D2_CONTEXT_FIELD(ctx, Eip),
+                               (unsigned)D2_CONTEXT_FIELD(ctx, Esp), (unsigned)D2_CONTEXT_FIELD(ctx, Ebp));
                     // Walk a few EBP frames so a thread parked in a kernel wait still shows
                     // the game code that led there.
-                    uintptr_t nFp = (uintptr_t)ctx.Ebp;
+                    uintptr_t nFp = (uintptr_t)D2_CONTEXT_FIELD(ctx, Ebp);
                     for (int d = 0; d < 8 && nFp; d++) {
                         if (IsBadReadPtr((void*)nFp, 8)) break;
-                        uintptr_t nRet = *(uintptr_t*)(nFp + 4);
+                        uintptr_t nRet = *(uintptr_t*)(nFp + sizeof(uintptr_t));
                         if (!nRet) break;
                         D2TraceFmt("FREEZE   tid=%u frame%d ret=%08X", (unsigned)te.th32ThreadID, d,
                                    (unsigned)nRet);
@@ -2137,12 +2137,12 @@ static DWORD WINAPI ClipWatchThread(LPVOID) {
                     CONTEXT ctx; ZeroMemory(&ctx, sizeof(ctx));
                     ctx.ContextFlags = CONTEXT_FULL;
                     if (!GetThreadContext(g_ahWatched[i], &ctx)) continue;
-                    D2TraceFmt("FROZE idx=%d eip=%08X ebp=%08X", (int)i, (unsigned)ctx.Eip,
-                               (unsigned)ctx.Ebp);
-                    uintptr_t nFp = (uintptr_t)ctx.Ebp;
+                    D2TraceFmt("FROZE idx=%d eip=%08X ebp=%08X", (int)i, (unsigned)D2_CONTEXT_FIELD(ctx, Eip),
+                               (unsigned)D2_CONTEXT_FIELD(ctx, Ebp));
+                    uintptr_t nFp = (uintptr_t)D2_CONTEXT_FIELD(ctx, Ebp);
                     for (int d = 0; d < 10 && nFp; d++) {
                         if (IsBadReadPtr((void*)nFp, 8)) break;
-                        uintptr_t nRet = *(uintptr_t*)(nFp + 4);
+                        uintptr_t nRet = *(uintptr_t*)(nFp + sizeof(uintptr_t));
                         if (!nRet) break;
                         D2TraceFmt("FROZE   idx=%d f%d ret=%08X", (int)i, d, (unsigned)nRet);
                         uintptr_t nNext = *(uintptr_t*)nFp;
@@ -2292,16 +2292,18 @@ static void DumpSuspendedThread(const char* pszTag, DWORD dwTid, HANDLE hThread)
     CONTEXT ctx;
     ctx.ContextFlags = CONTEXT_CONTROL;
     if (!GetThreadContext(hThread, &ctx)) return;
-    DWORD base = (DWORD)(UINT_PTR)GetModuleHandleA(0);
-    D2TraceFmt("%s tid=%lu eip=%08lX rva=%08lX ebp=%08lX esp=%08lX",
-               pszTag, dwTid, ctx.Eip, ctx.Eip - base, ctx.Ebp, ctx.Esp);
-    DWORD* pFrame = (DWORD*)ctx.Ebp;
+    uintptr_t base = (uintptr_t)GetModuleHandleA(0);
+    uintptr_t eip = (uintptr_t)D2_CONTEXT_FIELD(ctx, Eip);
+    D2TraceFmt("%s tid=%lu eip=%p rva=%08lX ebp=%p esp=%p",
+               pszTag, dwTid, (void*)eip, (unsigned long)(eip - base),
+               (void*)(uintptr_t)D2_CONTEXT_FIELD(ctx, Ebp), (void*)(uintptr_t)D2_CONTEXT_FIELD(ctx, Esp));
+    uintptr_t* pFrame = (uintptr_t*)(uintptr_t)D2_CONTEXT_FIELD(ctx, Ebp);
     for (int i = 0; i < 20 && pFrame; i++) {
-        if (IsBadReadPtr(pFrame, 8)) break;
-        DWORD ret = pFrame[1];
+        if (IsBadReadPtr(pFrame, 2 * sizeof(uintptr_t))) break;
+        uintptr_t ret = pFrame[1];
         if (!ret) break;
-        D2TraceFmt("%sFRAME tid=%lu %2d ret=%08lX rva=%08lX", pszTag, dwTid, i, ret, ret - base);
-        DWORD* pNext = (DWORD*)pFrame[0];
+        D2TraceFmt("%sFRAME tid=%lu %2d ret=%p rva=%08lX", pszTag, dwTid, i, (void*)ret, (unsigned long)(ret - base));
+        uintptr_t* pNext = (uintptr_t*)pFrame[0];
         if (pNext <= pFrame) break;
         pFrame = pNext;
     }
@@ -2535,7 +2537,7 @@ extern "C" void D2CONTROL_Pump(void) {
     if (!g_gameThread) {
         DuplicateHandle(GetCurrentProcess(), GetCurrentThread(), GetCurrentProcess(),
                         &g_gameThread, 0, FALSE, DUPLICATE_SAME_ACCESS);
-        g_imageBase = (DWORD)(UINT_PTR)GetModuleHandleA(0);
+        g_imageBase = (uintptr_t)GetModuleHandleA(0);
         DWORD dwWatchdogId = 0;
         CloseHandle(CreateThread(0, 0, D2CONTROL_HangWatchdog, 0, 0, &dwWatchdogId));
     }

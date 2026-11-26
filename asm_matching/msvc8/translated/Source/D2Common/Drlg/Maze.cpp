@@ -6,12 +6,9 @@
 #include "Source/D2Common/Drlg/DrlgRoom.h"
 #include "Source/D2Common/Drlg/Preset.h"
 #include "Source/Fog/Fog.h"
-#include "Source/globals/globals.h"
-#include "Source/D2Game/D2Game.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2Client/Game/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
 #include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
@@ -38,6 +35,11 @@
 #include "Source/D2Common/Drlg/Drlg.data.h"
 #include "Source/D2Common/Drlg/OutPlace.data.h"
 #include "Source/D2Common/Skills/Skills.inline.h"
+
+#ifndef RECON_FPTD_fpDrlgMazeFindEdgeRoom
+#define RECON_FPTD_fpDrlgMazeFindEdgeRoom
+typedef D2RoomExStrc * (__fastcall *fpDrlgMazeFindEdgeRoom)(D2DrlgLevelStrc * pLevel);
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -81,7 +83,7 @@ typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknow
 
 #ifndef RECON_FPTD_fpLevelDataFn2
 #define RECON_FPTD_fpLevelDataFn2
-typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
+typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, int nNodeIndex, int * param_1_00);
 #endif
 
 
@@ -698,7 +700,7 @@ static void __stdcall DRLGMAZE_ExpandRoomsWithPresets(D2DrlgLevelStrc * pLevel, 
     D2DrlgPresetRoomStrc* pRoomExData;
     D2RoomExStrc* pExpandedRoom;
     D2PoolManagerStrc* pMemPool = pLevel->pDrlg->pMemoryPool;
-    D2RoomExStrc** pRoomPtrArray = (D2RoomExStrc**)D2_ALLOC_POOL_AT(pMemPool, pLevel->nRoomExCount * 4, ".\\DRLG\\Maze.cpp", 0x271);
+    D2RoomExStrc** pRoomPtrArray = (D2RoomExStrc**)D2_ALLOC_POOL_AT(pMemPool, pLevel->nRoomExCount * sizeof(D2RoomExStrc*), ".\\DRLG\\Maze.cpp", 0x271);
     D2RoomExStrc* pRoomIter = pLevel->pRoomExFirst;
     int nRoomCount = pLevel->nRoomExCount;
     for (int i = 0; i < nRoomCount; i++) {
@@ -1335,44 +1337,36 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
 }
 
 // Tests whether a new maze room can be placed adjacent to pRoomEx in the given direction. Allocates a temporary RoomEx, calls ReplaceRoomWithNewRoom to check placement; on failure frees the temp and returns 0. On success links nodes, registers the room in the level, picks a preset, then immediately frees the room — this is a probe-only check, not a commit. Returns 1 if placement would succeed, 0 otherwise.
-static BOOL DRLGMAZE_CanPlaceRoomInDirection(eDrlgDirection eDirection, D2RoomExStrc * pRoomEx) {
-    D2RoomExStrc* pTestRoom;
-    int bReplaced;
-    D2LvlMazeTxt* pLvlMazeTxt;
+static BOOL DRLGMAZE_CanPlaceRoomInDirection(D2RoomExStrc * pRoomEx, eDrlgDirection eDirection) {
     if (!(~(pRoomEx->pRoomExData.pRoomExDataPreset->nFlags >> 1) & 1)) {
       return 0;
     }
 
-    D2DrlgOrthStrc* pOrth = pRoomEx->pOrth;
-    while (true) {
-      if (!pOrth) {
-        pTestRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pRoomEx->pLevel, 2);
-        pLvlMazeTxt = pTestRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
-        pTestRoom->sCoords.WorldSize.x = pLvlMazeTxt->SizeX;
-        pTestRoom->sCoords.WorldSize.y = pLvlMazeTxt->SizeY;
-        bReplaced = DRLGMAZE_PlaceRoomAdjacent(eDirection, pTestRoom, pRoomEx);
-        if (!bReplaced) {
-          DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pTestRoom);
-          pTestRoom = 0;
-        } else {
-          DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pRoomEx, pTestRoom, eDirection);
-          DrlgRoom::AddRoomExToLevel(pRoomEx->pLevel, pTestRoom);
-          DRLGMAZE_PickRoomPreset(pTestRoom, 1);
-        }
-        if (pTestRoom) {
-          DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pTestRoom);
-        }
-
-        return (uint32_t)(pTestRoom != 0);
-      }
+    for (D2DrlgOrthStrc* pOrth = pRoomEx->pOrth; pOrth; pOrth = pOrth->pNext) {
       if (pOrth->neDrlgDirection == eDirection) {
-        break;
+        return 0;
       }
-
-      pOrth = pOrth->pNext;
     }
 
-    return 0;
+    D2RoomExStrc* pTestRoom = DrlgRoom::DRLGROOMEX_AllocRoomEx(pRoomEx->pLevel, 2);
+    D2LvlMazeTxt* pLvlMazeTxt = pTestRoom->pLevel->pDrlgLevelData.pTxtLvlMaze;
+    pTestRoom->sCoords.WorldSize.x = pLvlMazeTxt->SizeX;
+    pTestRoom->sCoords.WorldSize.y = pLvlMazeTxt->SizeY;
+    if (!DRLGMAZE_PlaceRoomAdjacent(eDirection, pTestRoom, pRoomEx)) {
+      DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pTestRoom);
+      pTestRoom = nullptr;
+    } else {
+      DrlgRoom::DRLGROOMEX_AllocNodesForBothRoomEx(pRoomEx, pTestRoom, eDirection);
+      DrlgRoom::AddRoomExToLevel(pRoomEx->pLevel, pTestRoom);
+      DRLGMAZE_PickRoomPreset(pTestRoom, 1);
+    }
+
+    BOOL bCanPlace = pTestRoom != nullptr;
+    if (pTestRoom) {
+      DrlgRoom::DRLGROOMEX_FreeDrlgRoomEx(pTestRoom);
+    }
+
+    return bCanPlace;
 }
 
 // Finds the top-most room in the level by iterating RoomEx list and comparing Y coordinates.
@@ -1382,7 +1376,7 @@ static D2RoomExStrc * DRLGMAZE_FindTopMostRoom(D2DrlgLevelStrc * pLevel) {
     D2RoomExStrc* pTopMost = 0;
     for (pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
       if (!pTopMost || pRoomEx->sCoords.WorldPosition.y < pTopMost->sCoords.WorldPosition.y) {
-        bCanPlace = DRLGMAZE_CanPlaceRoomInDirection(DIRECTION_NORTHEAST, pRoomEx);
+        bCanPlace = DRLGMAZE_CanPlaceRoomInDirection(pRoomEx, DIRECTION_NORTHEAST);
         if (bCanPlace) {
           pTopMost = pRoomEx;
         }
@@ -1399,7 +1393,7 @@ D2RoomExStrc * __fastcall DRLGMAZE_FindLeftMostRoom(D2DrlgLevelStrc * pLevel) {
     D2RoomExStrc* pLeftMost = 0;
     for (pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
       if (!pLeftMost || pRoomEx->sCoords.WorldPosition.x < pLeftMost->sCoords.WorldPosition.x) {
-        bCanPlace = DRLGMAZE_CanPlaceRoomInDirection(DIRECTION_SOUTHEAST, pRoomEx);
+        bCanPlace = DRLGMAZE_CanPlaceRoomInDirection(pRoomEx, DIRECTION_SOUTHEAST);
         if (bCanPlace) {
           pLeftMost = pRoomEx;
         }
@@ -1416,7 +1410,7 @@ D2RoomExStrc * __fastcall DRLGMAZE_FindRightMostRoom(D2DrlgLevelStrc * pLevel) {
     D2RoomExStrc* pRightMost = 0;
     for (pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
       if (!pRightMost || pRoomEx->sCoords.WorldPosition.x > pRightMost->sCoords.WorldPosition.x) {
-        bCanPlace = DRLGMAZE_CanPlaceRoomInDirection(DIRECTION_SOUTHWEST, pRoomEx);
+        bCanPlace = DRLGMAZE_CanPlaceRoomInDirection(pRoomEx, DIRECTION_SOUTHWEST);
         if (bCanPlace) {
           pRightMost = pRoomEx;
         }
@@ -1433,7 +1427,7 @@ D2RoomExStrc * __fastcall DRLGMAZE_FindBottomMostRoom(D2DrlgLevelStrc * pLevel) 
     D2RoomExStrc* pBottomMost = 0;
     for (pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
       if (!pBottomMost || pRoomEx->sCoords.WorldPosition.y > pBottomMost->sCoords.WorldPosition.y) {
-        bCanPlace = DRLGMAZE_CanPlaceRoomInDirection(DIRECTION_NORTHWEST, pRoomEx);
+        bCanPlace = DRLGMAZE_CanPlaceRoomInDirection(pRoomEx, DIRECTION_NORTHWEST);
         if (bCanPlace) {
           pBottomMost = pRoomEx;
         }

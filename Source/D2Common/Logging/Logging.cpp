@@ -10,7 +10,7 @@
 
 namespace D2Common::Logging {
 
-void __fastcall D2COMMON_Set_gpItemTypeTableContext(size_t nSize) {
+void __fastcall D2COMMON_Set_gpItemTypeTableContext(uint32_t nSize) {
     // Static local variables (originally global data)
     static unsigned long long gpItemTypeTableContext = 0; D2_STATIC_GUARD(gpItemTypeTableContext, "D2Common::Logging::D2COMMON_Set_gpItemTypeTableContext::gpItemTypeTableContext");
 
@@ -82,7 +82,7 @@ void StoreGameLogging(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nL
         strcat(szLogLine, "Type:Game\t");
       }
 
-      int nLength = strlen(szLogLine);
+      int nLength = (int)strlen(szLogLine);
       char* pszBody = szLogLine + nLength;
       int nSize = 500 - nLength;
       int nPrefixLen = Storm::Source::SSTR::SStrPrintf(pszBody, nSize, "Size:%d\n", nLogTypeArg);

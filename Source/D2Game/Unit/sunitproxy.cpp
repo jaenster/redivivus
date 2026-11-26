@@ -441,7 +441,6 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     D2InventoryStrc* pNpcInventory;
     int nControlTableIdx;
     int32_t nTradeItemIdx;
-    D2DataTableTxtStrc* pDataTable;
     PD2GameNpcProxyQueue pNpcEntry;
     int iVar1;
     int nNpcControlTableSize;
@@ -449,7 +448,7 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     uint8_t byNpcControlFlags;
     D2GameNpcArrayStrc* pNpcArray;
     pNpcArray = D2_NEW_POOL_AT(pGame->pMemoryPool, D2GameNpcArrayStrc, ".\\UNIT\\sunitproxy.cpp", 0xb7);
-    memset(pNpcArray, 0, 0x1100);
+    memset(pNpcArray, 0, sizeof(*pNpcArray));
     D2GameNpcControlStrc* pNpcControl;
     pNpcControl = D2_NEW_POOL_AT(pGame->pMemoryPool, D2GameNpcControlStrc, ".\\UNIT\\sunitproxy.cpp", 0xb9);
     pNpcControl->pNpc = 0;
@@ -476,10 +475,9 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
     if (nMonStatsTotal > 0) {
       char* pMonStatsTxtEntry;
       pNpcEntry = &pNpcArray->pNpc[0].pProxyQueue;
-      pDataTable = D2Common::ITEMS::Items::sgptDataTable;
       do {
-        if (nMonStatsIdx >= 0 && nMonStatsIdx < pDataTable->nTxtMonStatsSize) {
-          pMonStatsTxtEntry = (char*)&pDataTable->pTxtMonStats[nMonStatsIdx].Id;
+        if (nMonStatsIdx >= 0 && nMonStatsIdx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
+          pMonStatsTxtEntry = (char*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStatsIdx].Id;
           if (pMonStatsTxtEntry && (uint8_t)pMonStatsTxtEntry[0xd] & Fog::BitBuffer::gadwBitMasks[1]) {
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->nMonStatsId = nMonStatsIdx;
             ((D2GameNpcStrc*)((char*)pNpcEntry - 0x14))->bTrading = 0;
@@ -613,7 +611,6 @@ void __fastcall SUNITPROXY_AllocNpcControl(::SGAMEDATA * pGame) {
 
             nNpcCount++;
             pNpcEntry += 0x11;
-            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
           }
         }
 

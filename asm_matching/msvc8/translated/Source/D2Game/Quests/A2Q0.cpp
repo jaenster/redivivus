@@ -124,7 +124,7 @@ void __fastcall Q08_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // A2Q0 QUEST_SpokeToJerhyn — InitData (quest registration). Zeroes state-fn table, wires handlers: [0]=Callback_00 (talk/gossip), [0x0a]=Callback_10 (player leave), [0x0b]=Callback_11 (Jerhyn-complete + Meshif add), [0x0d]=Callback_13 (rejoin re-sync). Sets NPC gossip table (Jerhyn 0xc9 / string 0xfd), nQuestIdReal=QUEST_SpokeToJerhyn, status+active filters; allocs 0x84-byte A2Q0 quest data and zeroes its GUID player-count.
 void __fastcall Q08_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pSVar1 = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q08_Callback11_ScrollMessage;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q08_Callback00_NpcActivate;

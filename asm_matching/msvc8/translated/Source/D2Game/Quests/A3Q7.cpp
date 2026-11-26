@@ -262,7 +262,7 @@ void __fastcall Q24_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // A3Q7 quest-table REGISTRATION/init for slot QUESTINT_TheGuardian (referenced from quest-descriptor table @0x731750). Q24_InitData(pQuestData): zero the 0x3c-byte state-fn block; install Q24_Callback_13 at sStateFunctions[0xd] (JustCompleted handler); mark quest active, nStateFlag=0; alloc 0x14-byte quest-specific block (from "a3q7.cpp":0xb9) and zero its fields; set nQuestIdReal = QUEST_SpokeToHratli (the external id this slot reports); install Q24_StatusFilter/Q24_ActiveFilter; set bQuestCompleted=true as the initial latch. This is the per-game setup entry for the Mephisto/Act3-final + Act4-transition quest slot.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q7.cpp
 void __fastcall Q24_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0xd] = Q24_Callback13_PlayerStartedGame;
     pQuestData->pNpcMessages = 0;
     pQuestData->bIsActive = '\x01';

@@ -684,7 +684,7 @@ static BOOL __stdcall CUBE_ValidateRecipeInputs(::SGAMEDATA * pGame, D2CubeSetup
     int aItemUsedFlags[48];
     if (pInventory && pRecipe) {
       int nInputSlotIndex;
-      memset(aItemUsedFlags, 0, 0xc0);
+      memset(aItemUsedFlags, 0, sizeof(aItemUsedFlags));
       nInputSlotIndex = 0;
       do {
         _bInputMatched = CUBE_MatchInputDescriptorToCubeItems(pGame, pInventory, pRecipe, nInputSlotIndex, pMatchedItems, aItemUsedFlags);
@@ -1013,7 +1013,7 @@ void __fastcall CUBE_GenerateOutput(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2C
             nOutputClassId = (uint32_t)uVar1;
           }
 
-          memset(&sItemGenContext, 0, 0x84);
+          memset(&sItemGenContext, 0, sizeof(sItemGenContext));
           pGameTmp = pGameLocal;
           sItemGenContext.wItemFormat = pGameLocal->wItemFormat;
           sItemGenContext.pUnit = pPlayer;

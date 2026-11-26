@@ -21,10 +21,10 @@ struct StormLinkStrc;
 struct StormLinkedListStrc;
 
 // Data types
-#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client) || defined(D2_MODULE_Storm)
 struct SMemBlockDetailsStrc {
-    /* 0x00 */ DWORD dwSize;
-    /* 0x04 */ uint32_t pBlock;
+    /* 0x00 */ DWORD dwSize; // set to sizeof by the caller (0x1c on x86), SMemFindNextBlock checks it
+    /* 0x04 */ void * pBlock;
     /* 0x08 */ uint32_t bAllocated;
     /* 0x0C */ uint32_t bValid;
     /* 0x10 */ uint32_t nBlockSize;
@@ -65,15 +65,15 @@ __attribute__((noinline)) inline void __fastcall ARCHIVE_ClearList(struct StormL
 // Writes formatted text to a file handle using wvsprintfA. Variadic printf-style format arguments follow pFormat on the stack. Epilogue is a bare RET (no stack cleanup by callee), so the convention is __cdecl, not __stdcall.
 BOOL ARCHIVE_WriteFormattedText(HANDLE hFile, char * pFormat, ...);
 struct StormLinkStrc * __thiscall ARCHIVE_ComputeAddress(struct StormLinkStrc * pNode, intptr_t nBaseAddr);
-int __fastcall Unreferenced_0045b9d0(struct StormLinkStrc * pLink);
-uint32_t __fastcall Unreferenced_0045b9e0(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_0045b9d0(struct StormLinkStrc * pLink);
+uintptr_t __fastcall Unreferenced_0045b9e0(struct StormLinkStrc * pLink);
 intptr_t __fastcall Unreferenced_0045ba80(struct StormLinkedListStrc * pList);
-int __fastcall Unreferenced_0045baa0(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_0045baa0(struct StormLinkStrc * pLink);
 uint32_t __fastcall Unreferenced_0045bab0(int * pList);
 uint32_t * __fastcall Unreferenced_0045bac0(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bad0(struct StormLinkStrc * pNode);
 int32_t __thiscall ARCHIVE_GetNodeOrDefault(int32_t pThis, int32_t nNode);
-uint32_t __thiscall ARCHIVE_GetNodeValue(struct StormLinkedListStrc * pThis, struct StormLinkStrc * nNode);
+uintptr_t __thiscall ARCHIVE_GetNodeValue(struct StormLinkedListStrc * pThis, struct StormLinkStrc * nNode);
 void __thiscall ARCHIVE_UnlinkNode(struct StormLinkedListStrc * pThis, int * pNode);
 void __thiscall ARCHIVE_LinkNode(struct StormLinkedListStrc * pList, struct StormLinkStrc * pNode, int32_t nMode, struct StormLinkStrc * pTarget);
 intptr_t __thiscall ARCHIVE_GetNodeSize(struct StormLinkedListStrc * pThis, struct StormLinkStrc * nNode);
@@ -84,7 +84,7 @@ uint32_t * __fastcall Unreferenced_0045bd80(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_0045bd90(struct StormLinkStrc * pNode);
 struct StormLinkStrc * __thiscall ARCHIVE_AllocNode(struct StormLinkedListStrc * pList, int32_t nLinkMode, int32_t nSize, uint32_t dwAllocFlags);
 int * __thiscall ARCHIVE_FreeNode(struct StormLinkStrc * pNode, uint8_t byFree);
-uint32_t __thiscall ARCHIVE_RemoveNode(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
+uintptr_t __thiscall ARCHIVE_RemoveNode(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
 // NOTE: Callee-saved register params inferred (medium confidence): param_esi (ESI): LPOVERLAPPED, param_edi (EDI): LPOVERLAPPED, param_ebx (EBX): LPOVERLAPPED
 // @sourcefile SOURCE\D2HELL\Src\Archive.cpp
 void ARCHIVE_WriteMemoryCheckReport();

@@ -59,7 +59,7 @@
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Common/Units/Missile.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Unit/SUnitDmg.h"
 #include "Source/D2Game/Unit/SUnitMsg.h"
@@ -742,7 +742,7 @@ static int PLAYER_ChooseAttackAnimation(D2UnitStrc * pUnit) {
 D2UnitStrc * __fastcall MakeMissile(eMissilesId neMissilesId, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, int32_t nOffsetX, int32_t nOffsetY, int32_t nX, int32_t nY) {
     int nOwnerPos;
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     eD2UnitType eOwnerUnitType = pUnit->eUnitType;
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
@@ -2054,7 +2054,7 @@ static void __stdcall SKILLS_CreateMissileRing(D2SkillArgStrc * pSkillArg1, D2Sk
 void __fastcall SKILL_SpawnMissilesAtTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId neMissilesId, eMissilesId eMissilesId2, eD2Skills eSkill, int32_t nSkillLevel, int32_t nVelocity) {
     D2SkillArgStrc* pArgDst;
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     eD2UnitType eTargetUnitType = pUnit2->eUnitType;
     sSkillArg.nFlags = 3;
     int nXValue;
@@ -2206,7 +2206,7 @@ void __fastcall SKILL_CreateMissileAtCoords(D2UnitStrc * pUnit, eMissilesId pMis
       }
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nX = nX;
     sSkillArg.nFlags = 1;
     sSkillArg.pOwner = pUnit;

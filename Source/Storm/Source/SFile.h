@@ -97,39 +97,39 @@ typedef ULONG (__stdcall *IUnknown_Release)(void * This);
 #endif
 #ifndef RECON_FPTD_pfnCryptAcquireContextA
 #define RECON_FPTD_pfnCryptAcquireContextA
-typedef BOOL (__stdcall *pfnCryptAcquireContextA)(int * phProv, LPCSTR szContainer, LPCSTR szProvider, uint32_t dwProvType, uint32_t dwFlags);
+typedef BOOL (__stdcall *pfnCryptAcquireContextA)(ULONG_PTR * phProv, LPCSTR szContainer, LPCSTR szProvider, uint32_t dwProvType, uint32_t dwFlags);
 #endif
 #ifndef RECON_FPTD_pfnCryptCreateHash
 #define RECON_FPTD_pfnCryptCreateHash
-typedef BOOL (__stdcall *pfnCryptCreateHash)(int hProv, uint32_t nAlgId, int hKey, uint32_t dwFlags, int * phHash);
+typedef BOOL (__stdcall *pfnCryptCreateHash)(ULONG_PTR hProv, uint32_t nAlgId, ULONG_PTR hKey, uint32_t dwFlags, ULONG_PTR * phHash);
 #endif
 #ifndef RECON_FPTD_pfnCryptDestroyHash
 #define RECON_FPTD_pfnCryptDestroyHash
-typedef BOOL (__stdcall *pfnCryptDestroyHash)(int hHash);
+typedef BOOL (__stdcall *pfnCryptDestroyHash)(ULONG_PTR hHash);
 #endif
 #ifndef RECON_FPTD_pfnCryptDestroyKey
 #define RECON_FPTD_pfnCryptDestroyKey
-typedef BOOL (__stdcall *pfnCryptDestroyKey)(int hKey);
+typedef BOOL (__stdcall *pfnCryptDestroyKey)(ULONG_PTR hKey);
 #endif
 #ifndef RECON_FPTD_pfnCryptHashData
 #define RECON_FPTD_pfnCryptHashData
-typedef BOOL (__stdcall *pfnCryptHashData)(int hHash, void * pbData, uint32_t dwDataLen, uint32_t dwFlags);
+typedef BOOL (__stdcall *pfnCryptHashData)(ULONG_PTR hHash, void * pbData, uint32_t dwDataLen, uint32_t dwFlags);
 #endif
 #ifndef RECON_FPTD_pfnCryptImportKey
 #define RECON_FPTD_pfnCryptImportKey
-typedef BOOL (__stdcall *pfnCryptImportKey)(int hProv, void * pbData, uint32_t dwDataLen, int hPubKey, uint32_t dwFlags, int * phKey);
+typedef BOOL (__stdcall *pfnCryptImportKey)(ULONG_PTR hProv, void * pbData, uint32_t dwDataLen, ULONG_PTR hPubKey, uint32_t dwFlags, ULONG_PTR * phKey);
 #endif
 #ifndef RECON_FPTD_pfnCryptReleaseContext
 #define RECON_FPTD_pfnCryptReleaseContext
-typedef BOOL (__stdcall *pfnCryptReleaseContext)(int hProv, uint32_t dwFlags);
+typedef BOOL (__stdcall *pfnCryptReleaseContext)(ULONG_PTR hProv, uint32_t dwFlags);
 #endif
 #ifndef RECON_FPTD_pfnCryptSignHashA
 #define RECON_FPTD_pfnCryptSignHashA
-typedef BOOL (__stdcall *pfnCryptSignHashA)(int hHash, uint32_t dwKeySpec, LPCSTR szDescription, uint32_t dwFlags, void * pbSignature, uint32_t * pdwSigLen);
+typedef BOOL (__stdcall *pfnCryptSignHashA)(ULONG_PTR hHash, uint32_t dwKeySpec, LPCSTR szDescription, uint32_t dwFlags, void * pbSignature, uint32_t * pdwSigLen);
 #endif
 #ifndef RECON_FPTD_pfnCryptVerifySignatureA
 #define RECON_FPTD_pfnCryptVerifySignatureA
-typedef BOOL (__stdcall *pfnCryptVerifySignatureA)(int hHash, void * pbSignature, uint32_t dwSigLen, int hPubKey, LPCSTR szDescription, uint32_t dwFlags);
+typedef BOOL (__stdcall *pfnCryptVerifySignatureA)(ULONG_PTR hHash, void * pbSignature, uint32_t dwSigLen, ULONG_PTR hPubKey, LPCSTR szDescription, uint32_t dwFlags);
 #endif
 #ifndef RECON_FPTD_pfnSFileOpenCallback
 #define RECON_FPTD_pfnSFileOpenCallback
@@ -208,15 +208,15 @@ struct D2StormAudioStreamRec {
 #endif // D2_DEFINED_D2StormAudioStreamRec
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
 struct D2StormCryptApiStrc {
-    /* 0x00 */ BOOL (__stdcall *pfnAcquireContext)(int *, LPCSTR, LPCSTR, uint32_t, uint32_t);
-    /* 0x04 */ BOOL (__stdcall *pfnCreateHash)(int, uint32_t, int, uint32_t, int *);
-    /* 0x08 */ BOOL (__stdcall *pfnDestroyHash)(int);
-    /* 0x0C */ BOOL (__stdcall *pfnDestroyKey)(int);
-    /* 0x10 */ BOOL (__stdcall *pfnHashData)(int, void *, uint32_t, uint32_t);
-    /* 0x14 */ BOOL (__stdcall *pfnImportKey)(int, void *, uint32_t, int, uint32_t, int *);
-    /* 0x18 */ BOOL (__stdcall *pfnReleaseContext)(int, uint32_t);
-    /* 0x1C */ BOOL (__stdcall *pfnSignHash)(int, uint32_t, LPCSTR, uint32_t, void *, uint32_t *);
-    /* 0x20 */ BOOL (__stdcall *pfnVerifySignature)(int, void *, uint32_t, int, LPCSTR, uint32_t);
+    /* 0x00 */ pfnCryptAcquireContextA pfnAcquireContext;
+    /* 0x04 */ pfnCryptCreateHash pfnCreateHash;
+    /* 0x08 */ pfnCryptDestroyHash pfnDestroyHash;
+    /* 0x0C */ pfnCryptDestroyKey pfnDestroyKey;
+    /* 0x10 */ pfnCryptHashData pfnHashData;
+    /* 0x14 */ pfnCryptImportKey pfnImportKey;
+    /* 0x18 */ pfnCryptReleaseContext pfnReleaseContext;
+    /* 0x1C */ pfnCryptSignHashA pfnSignHash;
+    /* 0x20 */ pfnCryptVerifySignatureA pfnVerifySignature;
 };
 
 #endif // D2_MODULE_Storm
@@ -403,12 +403,12 @@ BOOL __stdcall SFileDdaBeginEx(struct D2MPQFileStrc * hFile, uint32_t dwBufferBy
 // @wasnamed SFILE_LoadFileToMemory
 // @basis behaviour-confirmed as part of a three-way arity lock. The real API has exactly one 5/7/8-parameter family: SFileLoadFile(filename, buffer, bytes, extrabytes, callback) = 5, SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback) = 7, SFileLoadFileEx2(... , readflags) = 8. This is the 5-parameter member; it forwards to the 8-parameter worker with archive = NULL, flags = SFILE_GetOpenFlags() and readflags = 0, which is exactly the set of defaults the 5-parameter signature implies. Note its first parameter is the FILENAME - it is currently mistyped D2ArchiveStrc *, and lands in the worker's filename slot.
 // @seealso SFileLoadFileEx 0041b680, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nSize, LPOVERLAPPED nReadCtx);
+uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nSize, LPOVERLAPPED nReadCtx);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileLoadFileEx"
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
+uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenArchive (SFILE.CPP)
 int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
@@ -504,21 +504,21 @@ void __stdcall SFileSetLocale(uint16_t nLocale);
 // @wasnamed SFILE_SetErrorCallback
 // @basis behaviour-confirmed and sibling-corroborated, contradicting the old name. The body sets one global scalar and registers nothing - there is no function pointer and no error path in it, so it cannot be a callback setter. The global it writes (gnSFileSearchHashOffset) is consumed in exactly one place, SFILE_SearchFileInArchives, as the argument immediately after gnSFileSearchLocale. gnSFileSearchLocale is written by SFileSetLocale at 004166d0, i.e. the adjacent function. The real API contains exactly one such pair, SFileSetLocale / SFileSetPlatform, and locale + platform are the two MPQ hash-table search selectors.
 void __stdcall SFileSetPlatform(uint8_t byPlatform);
-uint32_t __thiscall SFILE_CompareFileTime1(struct StormLinkStrc * pLink, intptr_t pLeft);
-int __fastcall Unreferenced_004167a0(struct StormLinkStrc * pLink);
+uintptr_t __thiscall SFILE_CompareFileTime1(struct StormLinkStrc * pLink, intptr_t pLeft);
+intptr_t __fastcall Unreferenced_004167a0(struct StormLinkStrc * pLink);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_004167b0(struct StormLinkStrc * pNode);
-int __fastcall Unreferenced_004167f0(struct StormLinkStrc * pLink);
-uint32_t __fastcall Unreferenced_00416800(struct StormLinkStrc * pLink);
-int __fastcall Unreferenced_00416820(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_004167f0(struct StormLinkStrc * pLink);
+uintptr_t __fastcall Unreferenced_00416800(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_00416820(struct StormLinkStrc * pLink);
 void * __fastcall Unreferenced_00416830(struct StormLinkStrc * pLink);
-uint32_t __fastcall Unreferenced_00416840(struct StormLinkStrc * pLink);
-int __fastcall Unreferenced_00416850(struct StormLinkStrc * pLink);
-int32_t __fastcall Unreferenced_00416860(void * pHandle);
-uint32_t __thiscall SFILE_CompareFileTime2(struct StormLinkStrc * pLink, intptr_t pLeft);
+uintptr_t __fastcall Unreferenced_00416840(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_00416850(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_00416860(void * pHandle);
+uintptr_t __thiscall SFILE_CompareFileTime2(struct StormLinkStrc * pLink, intptr_t pLeft);
 void __fastcall SFILE_CloseAllOpenFiles1_Unref_004168f0(struct D2ArchiveStrc * pArchive);
-uint32_t __thiscall SFILE_CompareFileSize1(struct StormLinkStrc * pLink, intptr_t pLeft);
-uint32_t __thiscall SFILE_CompareFileSize2(struct StormLinkStrc * pLink, intptr_t pLeft);
-uint32_t __thiscall SFILE_CompareFileName(struct StormLinkStrc * pLink, intptr_t pLeft);
+uintptr_t __thiscall SFILE_CompareFileSize1(struct StormLinkStrc * pLink, intptr_t pLeft);
+uintptr_t __thiscall SFILE_CompareFileSize2(struct StormLinkStrc * pLink, intptr_t pLeft);
+uintptr_t __thiscall SFILE_CompareFileName(struct StormLinkStrc * pLink, intptr_t pLeft);
 void __fastcall Unreferenced_004169f0(struct StormLinkedListStrc * pList);
 void __fastcall Unreferenced_00416a00(struct StormLinkedListStrc * pList);
 intptr_t __fastcall Unreferenced_00416a10(struct StormLinkedListStrc * pList);
@@ -532,10 +532,10 @@ uint32_t __stdcall SFILE_InternalReadAligned(struct D2MPQFileStrc * pArchive, ui
 void * __fastcall Unreferenced_00417770(struct StormLinkStrc * pLink);
 uint32_t * __fastcall Unreferenced_00417780(uint32_t * pData);
 void * __fastcall Unreferenced_00417790(struct StormLinkStrc * pLink);
-int32_t __fastcall Unreferenced_004177a0(void * pHandle);
+intptr_t __fastcall Unreferenced_004177a0(void * pHandle);
 struct StormLinkStrc * __fastcall Unreferenced_00417850(struct StormLinkStrc * pLink);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00417860(struct StormLinkStrc * pNode);
-int __fastcall Unreferenced_004178a0(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_004178a0(struct StormLinkStrc * pLink);
 uint32_t * __fastcall Unreferenced_004178b0(uint32_t * pData);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_004178c0(struct StormLinkStrc * pNode);
 void __fastcall SFILE_CloseAllOpenFiles1_Unref_00417900(struct D2ArchiveStrc * pArchive);
@@ -548,17 +548,17 @@ int __thiscall SFILE_AllocateFileRecord1(int32_t pThis, int32_t pLink);
 int __thiscall SFILE_FreeFileRecord1(int32_t pThis, int32_t pLink);
 // @blizzard TSList::LinkNode (STORM.H)
 void __thiscall TSList_FILEREC_LinkNode(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead);
-uint32_t __thiscall SFILE_CompareFileRecord1(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pLink);
+uintptr_t __thiscall SFILE_CompareFileRecord1(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pLink);
 void __fastcall Unreferenced_00417b40(struct StormLinkedListStrc * pListHead);
 int __thiscall SFILE_FreeFileRecord2(int32_t pThis, int32_t pLink);
 void __thiscall SFILE_InsertFileRecordIntoList2(struct StormLinkedListStrc * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead);
 int __thiscall SFILE_FreeFileRecord3(int32_t pThis, int32_t pLink);
 void __thiscall SFILE_InsertFileRecordIntoList3(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead);
-uint32_t __thiscall SFILE_CompareFileRecord2(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pLink);
+uintptr_t __thiscall SFILE_CompareFileRecord2(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pLink);
 void __fastcall Unreferenced_00417d40(struct StormLinkedListStrc * pListHead);
 int __thiscall SFILE_FreeFileRecord4(int32_t pThis, int32_t pLink);
 void __thiscall SFILE_InsertFileRecordIntoList4(int * * ppListContainer, int * * pNode, int32_t nInsertMode, int * * ppListHead);
-uint32_t __thiscall SFILE_CompareFileRecord3(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pLink);
+uintptr_t __thiscall SFILE_CompareFileRecord3(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pLink);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00417e50(struct StormLinkStrc * pNode);
 void __thiscall TSList_UnlinkNode_00417e90(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pLink);
 int __fastcall SFILE_SearchFileInArchives(struct D2ArchiveStrc * pArchive, struct D2MPQBlockEntryStrc * * ppBlockEntryOut, char * szFileName, uint8_t bSearchFlags, struct D2ArchiveStrc * * ppArchiveOut, char * szDiskPathOut);
@@ -663,7 +663,7 @@ int __stdcall SFILE_CancelAsyncRequestWithStatus(void * nRequestHandle);
 // @basis behaviour-confirmed as part of a three-way arity lock. The 8-parameter worker (archive, filename, buffer, bytes, extrabytes, flags, callback, readflags) that both shorter members forward into: open, size, allocate size+extrabytes, read, close. SFileLoadFileEx2 is the only 8-parameter Load in the real API, and the extra 8th slot is precisely the readflags the 7-parameter caller pins to 0.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx 0041b680
 // @sourcefile .\SOURCE\SFILE.CPP
-uint32_t __stdcall SFileLoadFileEx2(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx, int nReadFlags);
+uint32_t __stdcall SFileLoadFileEx2(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx, int nReadFlags);
 // Simplified wrapper for SFILE_ReadFile that passes 0 for the completion callback parameter and param6 as the async flags. Used when caller doesn't need completion notification.
 // Exported forwarder to SFileReadFileEx2.
 // Name from the PowerPC 1.13c Storm traceback table (exported SFileReadFileEx @10019a10).

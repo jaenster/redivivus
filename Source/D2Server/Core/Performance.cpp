@@ -36,7 +36,7 @@ HWND __stdcall GetPerfGraphDialogHwnd() {
 // 1.00 D2Server: 10007830
 BOOL __fastcall CreatePerfGraphDialog(HWND hParent) {
     RECT tRect;
-    HINSTANCE hInstance = (HINSTANCE)GetWindowLongA(hParent, GWL_HINSTANCE);
+    HINSTANCE hInstance = (HINSTANCE)GetWindowLongPtrA(hParent, GWLP_HINSTANCE);
     if (g_hPerfGraphDlg.hDlg) {
         return FALSE;
     }

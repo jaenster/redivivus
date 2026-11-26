@@ -426,18 +426,16 @@ BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc 
 
     D2InventoryStrc* pInventory = pUnit->pInventory;
     D2InventoryToBeUpdatedStrc* pUpdateEntry = D2Common::INVENTORY::Inventory::GetUpdates(pInventory);
-    do {
-      uint32_t dwFindGUID;
-      if (!pUpdateEntry) {
-        return 0;
-      }
-
-      dwFindGUID = D2Common::INVENTORY::Inventory::GetUpdatesUUid(pUpdateEntry);
+    while (pUpdateEntry) {
+      uint32_t dwFindGUID = D2Common::INVENTORY::Inventory::GetUpdatesUUid(pUpdateEntry);
       pFoundItem = SUnit::FindUnitFromTable(pGame, UNIT_ITEM, dwFindGUID);
       pUpdateEntry = D2Common::INVENTORY::Inventory::GetNextUpdate(pUpdateEntry);
-    } while (!pFoundItem);
+      if (pFoundItem) {
+        return 1;
+      }
+    }
 
-    return 1;
+    return 0;
 }
 
 static void __stdcall Unreferenced_00597aa0(D2UnitStrc * pItem) {

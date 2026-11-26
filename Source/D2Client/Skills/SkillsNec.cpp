@@ -65,7 +65,7 @@ BOOL __fastcall Skills_CltDoFunc_Nec_CurseCenter_StreamMissile(D2UnitStrc * pUni
       nAuraRangeAdj = 2;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.pOwner = pCasterUnit;
     sSkillArg.nFlags = 1;
     sSkillArg.nX = nTargetX;
@@ -143,7 +143,7 @@ static uint32_t __stdcall SKILLSNEC_CltSetBoneWallGfx(eD2Skills eSkill, int32_t 
       nUnitPosY = 0;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nMissileTxtNo = eMissileId;
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
@@ -214,7 +214,7 @@ BOOL __fastcall Skills_CltDoFunc_Nec_TargetedMissileAtParam(D2UnitStrc * pUnit, 
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (pSkill) {
       D2SkillArgStrc sSkillArg;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x2001;
       sSkillArg.pOwner = pUnit;
       sSkillArg.eSkillNo = eSkill;
@@ -308,7 +308,7 @@ int __fastcall SKILLSNEC_CltCreateTeethMissiles(D2UnitStrc * pUnit, eD2Skills eS
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x2021;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -400,7 +400,7 @@ int __fastcall SKILLSNEC_CltCreateBoneSpearMissile(D2UnitStrc * pUnit, eD2Skills
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
 
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x2001;
       sSkillArg.pOwner = pUnit;
       sSkillArg.nX = nTargetX;
@@ -579,7 +579,7 @@ BOOL __fastcall Skills_CltStFunc_SelectReviveMissileByMonsterSize(D2UnitStrc * p
 
     if ((int)eMissileId >= 0 && (int)eMissileId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       D2SkillArgStrc sSkillArg;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x2000;
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pCorpse;

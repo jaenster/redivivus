@@ -249,9 +249,9 @@ void __fastcall FreeMonsterAi(::SGAMEDATA * pGame, D2MonsterAiStrc * pMonster) {
 // @sourcefile .\MONSTER\MonsterAI.cpp
 static uint32_t __stdcall NPC_BeginInteraction(::SGAMEDATA * pGame, D2MonsterAiStrc * pAi, uint8_t questActionType, D2UnitStrc * pPlayer, D2UnitStrc * pNpcUnit) {
     uint32_t _bFirstInteraction;
-    bool bIsTrading;
+    BOOL bIsTrading;
     uint32_t dwTmp;
-    bool bFirstInteraction;
+    BOOL bFirstInteraction;
     D2GSPacketSrv0x27 npcInfoPkt;
     D2MonsterAiSubStrc* pAiSub = pAi->pAiSub;
     D2UnitStrc* pNpc = UNIT::SUnit::GetInteractedNpc(pGame, pPlayer);

@@ -10,6 +10,7 @@
 #include "Source/globals/globals.h"
 #include "Source/D2Common/D2Common.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Headers/D2Arch.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -28,6 +29,27 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TileCmpTileNodeStrc) == 0x14, "D2
 #endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2TileLibraryHeaderStrc) == 0x114, "D2_NEW_AT(D2TileLibraryHeaderStrc): the 32-bit layout must be the 0x114 bytes 1.14d allocates");
+
+// A DT1 file is the 32-bit tile library image: a 0x114-byte header, 0x60-byte tile records at the
+// header's pTiles file offset, and per tile a block of 0x14-byte subtile records followed by the pixel
+// data. The 32-bit build relocates that image in place. The 64-bit records are wider (pTiles,
+// pSubTiles, szFilePath, pLruNode and pPixelData are pointers), so it copies the data fields into
+// native records and keeps the pointer fields its own.
+#if D2_ARCH_X86
+static_assert(sizeof(::D2TileLibraryEntryStrc) == 0x60, "D2TileLibraryEntryStrc: DT1 tile records are relocated in place, so the record must be the 0x60 bytes on disk");
+static_assert(sizeof(::D2GroundSubTileStrc) == 0x14, "D2GroundSubTileStrc: DT1 subtile records are relocated in place, so the record must be the 0x14 bytes on disk");
+#elif D2_ARCH_X64
+#define DT1_HEADER_SIZE 0x114          // file header, up to and including the pTiles file offset
+#define DT1_HEADER_NTILES 0x10c        // int nTiles
+#define DT1_HEADER_TILES_OFFSET 0x110  // int file offset of the first tile record
+#define DT1_TILE_SIZE 0x60             // file tile record
+#define DT1_TILE_DATA_SIZE 0x54        // the tile fields before pSubTiles; the three slots after it are 0 on disk
+#define DT1_SUBTILE_SIZE 0x14          // file subtile record
+#define DT1_SUBTILE_PIXEL_OFFSET 0x10  // int pixel data offset from the start of the tile's block
+static_assert(offsetof(::D2TileLibraryHeaderStrc, nTiles) == DT1_HEADER_NTILES, "D2TileLibraryHeaderStrc: the fields before pTiles keep their on-disk offsets");
+static_assert(offsetof(::D2TileLibraryEntryStrc, pSubTiles) == DT1_TILE_DATA_SIZE, "D2TileLibraryEntryStrc: the fields before pSubTiles keep their on-disk offsets");
+static_assert(offsetof(::D2GroundSubTileStrc, pPixelData) == DT1_SUBTILE_PIXEL_OFFSET, "D2GroundSubTileStrc: the fields before pPixelData keep their on-disk offsets");
+#endif
 
 
 #ifndef RECON_FPTD_pfnTilecmpPixelCallback
@@ -66,15 +88,17 @@ static void TILECMP_FreeTileNode(D2TileCmpTileNodeStrc * pTileNode) {
     D2_FREE_AT(pTileNode, ".\\SRC\\Tilecmp.cpp", 0x38);
 }
 
+static_assert(sizeof(void*) != 4 || sizeof(D2TileCmpTileSetStrc) == 0x60, "D2_ALLOC_AT(sizeof(D2TileCmpTileSetStrc)): the 32-bit layout must be the 0x60 bytes 1.14d allocates");
+
 // @sourcefile .\SRC\Tilecmp.cpp
 D2TileCmpTileSetStrc * __stdcall TILECMP_AllocTileSet() {
-    void* pTileSet = D2_ALLOC_AT(0x60, ".\\SRC\\Tilecmp.cpp", 0x45);
+    void* pTileSet = D2_ALLOC_AT(sizeof(D2TileCmpTileSetStrc), ".\\SRC\\Tilecmp.cpp", 0x45);
     if (!pTileSet) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x46);
       exit(-1);
     }
 
-    memset(pTileSet, 0, 0x60);
+    memset(pTileSet, 0, sizeof(D2TileCmpTileSetStrc));
     return (D2TileCmpTileSetStrc*)pTileSet;
 }
 
@@ -663,10 +687,10 @@ static int32_t __fastcall TILECMP_CalculateCacheSize(D2TileLibraryHeaderStrc * p
     return nTotalBytes;
 }
 
-static size_t TILECMP_CopyTileNodes(void * pDstBuf, D2TileLibraryEntryStrc * pTileSetEntry) {
+static uint32_t TILECMP_CopyTileNodes(void * pDstBuf, D2TileLibraryEntryStrc * pTileSetEntry) {
     uint32_t nNodeSize;
     int* pFixupPtr;
-    size_t nCumSize = pTileSetEntry->nSubTiles * 0x14;
+    uint32_t nCumSize = pTileSetEntry->nSubTiles * 0x14;
     memcpy(pDstBuf, pTileSetEntry->pSubTiles, nCumSize);
     uint8_t* pWritePtr = (uint8_t*)((char*)pDstBuf + nCumSize);
     int iNode = 0;
@@ -676,7 +700,7 @@ static size_t TILECMP_CopyTileNodes(void * pDstBuf, D2TileLibraryEntryStrc * pTi
       do {
         pDVar1 = pTileSetEntry->pSubTiles;
         memcpy(pWritePtr, (void*)pDVar1[iNode].pPixelData, (uint32_t)pDVar1[iNode].wDataLength);
-        *pFixupPtr = (intptr_t)pWritePtr - (intptr_t)pDstBuf;
+        *pFixupPtr = (int)((intptr_t)pWritePtr - (intptr_t)pDstBuf);
         nNodeSize = (uint32_t)pDVar1[iNode].wDataLength;
         nCumSize += nNodeSize;
         pWritePtr += nNodeSize;
@@ -694,7 +718,7 @@ static size_t TILECMP_CopyTileNodes(void * pDstBuf, D2TileLibraryEntryStrc * pTi
 void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, D2TileLibraryHeaderStrc * pTileSetData, void * * ppDstBuffer, size_t * pSizeOut) {
     D2TileLibraryEntryStrc* pDVar1;
     void* nErrAddress;
-    size_t nCalcSize;
+    uint32_t nCalcSize;
     int nSrcTileSetOffset;
     void* pDstTileSetArray;
     uint8_t* pWriteCursor;
@@ -731,7 +755,7 @@ void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, D2TileLibraryHeaderSt
         nCalcSize = pTileSetData->nTiles * 0x60;
         pDstTileSetArray = (void*)((char*)nErrAddress + 0x114);
         memcpy(pDstTileSetArray, pTileSetData->pTiles, nCalcSize);
-        *(int*)((char*)nErrAddress + 0x110) = (intptr_t)pDstTileSetArray - (intptr_t)nErrAddress;
+        *(int*)((char*)nErrAddress + 0x110) = (int)((intptr_t)pDstTileSetArray - (intptr_t)nErrAddress);
         pWriteCursor = (uint8_t*)((char*)pDstTileSetArray + nCalcSize);
         nSizeOut = 0x0;
         if (pTileSetData->nTiles > 0) {
@@ -740,7 +764,7 @@ void __thiscall TILECMP_DeserializeAndFixup(int32_t pThis, D2TileLibraryHeaderSt
             pDVar1 = pTileSetData->pTiles;
             pDstTileSetEntry[3] = 0;
             nCalcSize = TILECMP_CopyTileNodes(pWriteCursor, (D2TileLibraryEntryStrc*)(-0x48 - (intptr_t)pDstTileSetArray + (intptr_t)pDstTileSetEntry + (char*)pDVar1));
-            nSrcTileSetOffset = (intptr_t)pWriteCursor - (intptr_t)nErrAddress;
+            nSrcTileSetOffset = (int)((intptr_t)pWriteCursor - (intptr_t)nErrAddress); // steer-ok: generated form, kept as emitted
             pDstTileSetEntry[1] = nCalcSize;
             pWriteCursor += nCalcSize;
             *pDstTileSetEntry = nSrcTileSetOffset;
@@ -776,6 +800,12 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
         return;
       }
 
+#if D2_ARCH_X64
+      // The whole-image form keeps every subtile block inline behind 32-bit records; only the
+      // minimal form (TILECMP_FixupMinimalPointers, used by TileProjects::Alloc) is widened.
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), __LINE__);
+      exit(-1);
+#elif D2_ARCH_X86
       pTileCmpHdr->pTiles = (D2TileLibraryEntryStrc*)(pTileCmpHdr->szLibraryName + (intptr_t)(pTileCmpHdr->pTiles->abSubTileFlags - 0x30));
       if (szText) {
         char* pszDst = pTileCmpHdr->szLibraryName;
@@ -818,9 +848,45 @@ void __stdcall TILECMP_FixupPointersInPlace(D2TileLibraryHeaderStrc * pTileCmpHd
       pTileCmpHdr->dwFlags = pTileCmpHdr->dwFlags & 0xfffffffdU | 4;
       *ppTileCmpHdrOut = pTileCmpHdr;
       return;
+#endif
     }
 }
 
+#if D2_ARCH_X64
+// Copies the 32-bit DT1 header and tile records of the file image pDt1 into one native allocation
+// (header, then the tile array, so TILECMP_FreeTileCache frees it as a single block once flag 4 is
+// set) and frees the image. The tile pointer slots start 0, as they are on disk.
+static D2TileLibraryHeaderStrc * TILECMP_WidenTileLibrary(D2TileLibraryHeaderStrc * pDt1) {
+    const uint8_t* pImage = (const uint8_t*)pDt1;
+    int32_t nTiles = *(const int32_t*)(pImage + DT1_HEADER_NTILES);
+    int32_t nTilesOffset = *(const int32_t*)(pImage + DT1_HEADER_TILES_OFFSET);
+    if (nTiles < 0) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), __LINE__);
+      exit(-1);
+    }
+
+    size_t nAllocSize = sizeof(D2TileLibraryHeaderStrc) + (size_t)nTiles * sizeof(D2TileLibraryEntryStrc);
+    D2TileLibraryHeaderStrc* pNative = (D2TileLibraryHeaderStrc*)D2_ALLOC_AT(nAllocSize, ".\\SRC\\Tilecmp.cpp", __LINE__);
+    if (!pNative) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), __LINE__);
+      exit(-1);
+    }
+
+    memset(pNative, 0, nAllocSize);
+    memcpy(pNative, pImage, DT1_HEADER_NTILES);
+    pNative->nTiles = nTiles;
+    pNative->pTiles = (D2TileLibraryEntryStrc*)(pNative + 1);
+    const uint8_t* pSrcTile = pImage + nTilesOffset;
+    for (int32_t i = 0; i < nTiles; i++) {
+      memcpy(&pNative->pTiles[i], pSrcTile, DT1_TILE_DATA_SIZE);
+      pSrcTile += DT1_TILE_SIZE;
+    }
+
+    D2_FREE_AT(pDt1, ".\\SRC\\Tilecmp.cpp", __LINE__);
+    return pNative;
+}
+
+#endif
 void __stdcall TILECMP_FixupMinimalPointers(D2TileLibraryHeaderStrc * pTileCmpHdr, D2TileLibraryHeaderStrc * * ppTileCmpHdrOut, char * szText) {
     if (pTileCmpHdr->nVersion != 7) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x37f);
@@ -830,8 +896,12 @@ void __stdcall TILECMP_FixupMinimalPointers(D2TileLibraryHeaderStrc * pTileCmpHd
       return;
     }
 
+#if D2_ARCH_X86
     pTileCmpHdr->pTiles = reinterpret_cast<D2TileLibraryEntryStrc*>(
         reinterpret_cast<uintptr_t>(pTileCmpHdr) + reinterpret_cast<uintptr_t>(pTileCmpHdr->pTiles));
+#elif D2_ARCH_X64
+    pTileCmpHdr = TILECMP_WidenTileLibrary(pTileCmpHdr);
+#endif
     char *pFilename = pTileCmpHdr->szLibraryName;
     strcpy(pFilename, szText);
 
@@ -893,12 +963,35 @@ void __stdcall TILECMP_RelocateSubTilePixelData(D2TileLibraryEntryStrc * pTile) 
       exit(-1);
     }
 
+#if D2_ARCH_X86
     D2GroundSubTileStrc* pSubTileBase = pTile->pSubTiles;
     for (int iSubTile = 0; iSubTile < pTile->nSubTiles; iSubTile++) {
       D2GroundSubTileStrc* pSubTile = &pTile->pSubTiles[iSubTile];
       pSubTile->pPixelData = (uint8_t*)pSubTileBase + (intptr_t)pSubTile->pPixelData;
     }
+#elif D2_ARCH_X64
+    // SPRITECACHE_AllocEntry reads the 32-bit block in behind room for the native records.
+    const uint8_t* pBlock = (const uint8_t*)TILECMP_GetSubTileBlock(pTile);
+    for (int iSubTile = 0; iSubTile < pTile->nSubTiles; iSubTile++) {
+      D2GroundSubTileStrc* pSubTile = &pTile->pSubTiles[iSubTile];
+      const uint8_t* pSrc = pBlock + (size_t)iSubTile * DT1_SUBTILE_SIZE;
+      memcpy(pSubTile, pSrc, DT1_SUBTILE_PIXEL_OFFSET);
+      pSubTile->pPixelData = (uint8_t*)pBlock + *(const int32_t*)(pSrc + DT1_SUBTILE_PIXEL_OFFSET);
+    }
+#endif
 }
+
+#if D2_ARCH_X64
+// Bytes the sprite cache holds for a tile: the native subtile records, then the tile's 32-bit block.
+uint32_t __stdcall TILECMP_GetSubTileCacheSize(D2TileLibraryEntryStrc * pTile) {
+    return (uint32_t)((size_t)pTile->nSubTiles * sizeof(D2GroundSubTileStrc)) + (uint32_t)pTile->nBlockDataSize;
+}
+
+// Where the sprite cache reads the tile's 32-bit block: right after the native subtile records.
+void * __stdcall TILECMP_GetSubTileBlock(D2TileLibraryEntryStrc * pTile) {
+    return (uint8_t*)pTile->pSubTiles + (size_t)pTile->nSubTiles * sizeof(D2GroundSubTileStrc);
+}
+#endif
 
 static void TILECMP_ApplyFunctionToPixels(uint8_t * pPixelData, int32_t nPixelBytes, pfnTilecmpPixelCallback pPixelCallback) {
     if (nPixelBytes <= 0) {
@@ -1027,12 +1120,12 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x454);
         exit(-1);
       } else {
-        memset(pDstHeader, 0, 0x114);
+        memset(pDstHeader, 0, sizeof(D2TileLibraryHeaderStrc));
         pCopySrc = pSrcTileCmpHdr;
         pCopyDst = pDstHeader;
         *pCopyDst = *pCopySrc;
         pDstHeader->dwFlags &= -2;
-        nAllocSize = pDstHeader->nTiles * 0x60;
+        nAllocSize = pDstHeader->nTiles * sizeof(D2TileLibraryEntryStrc);
         pDstHeader->pTiles = 0;
         pTileSetArray = (D2TileLibraryEntryStrc*)D2_ALLOC_AT(nAllocSize, ".\\SRC\\Tilecmp.cpp", 0x45e);
         pDstHeader->pTiles = pTileSetArray;
@@ -1102,7 +1195,7 @@ void __stdcall TILECMP_ShallowCopyZeroPointers(D2TileLibraryHeaderStrc * pSrcDt1
       exit(-1);
     } else {
       D2TileLibraryHeaderStrc* pDstBlock;
-      nAllocSize = pSrcDt1->nTiles * 0x60 + 0x114;
+      nAllocSize = pSrcDt1->nTiles * sizeof(D2TileLibraryEntryStrc) + sizeof(D2TileLibraryHeaderStrc);
       pDstBlock = (D2TileLibraryHeaderStrc*)D2_ALLOC_AT(nAllocSize, ".\\SRC\\Tilecmp.cpp", 0x49a);
       if (!pDstBlock) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (D2TileLibraryHeaderStrc*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x49b);

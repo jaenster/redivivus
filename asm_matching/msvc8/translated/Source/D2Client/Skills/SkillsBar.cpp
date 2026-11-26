@@ -210,7 +210,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_GrimWard(D2UnitStrc * pUnit, eD2Skills eSki
     }
     if ((int)eCorpseMissile >= 0 && (int)eCorpseMissile < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize) {
       D2SkillArgStrc sSkillArg;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.pOwner = pUnitArg;
       sSkillArg.eSkillNo = eSkillArg;
       sSkillArg.nSkillLevel = nSkillLvl;

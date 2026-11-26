@@ -451,7 +451,7 @@ static BOOL __stdcall RENDERER_D3D_InitializeDevice(int nResolutionMode, HWND hW
         if (nResult) {
           szErrorMsg = "Failed to add viewport to device!";
         } else {
-          memset(&sViewport, 0, 0x2c);
+          memset(&sViewport, 0, sizeof(sViewport));
           sViewport.dvScaleX = 0.0;
           sViewport.dvScaleY = 0.0;
           sViewport.dvMaxX = (float)RENDERER_nWindowWidth;
@@ -580,13 +580,12 @@ BOOL __fastcall CreateWindow(HWND hWnd, int nResolutionMode) {
     }
 
     RENDERER_D3D_ClearBackbuffer();
-    DDS_Flip pDVar1 = g_pD3DSurfaceBackbuffer->lpVtbl->Flip;
     if (pD2GFXRenderedDataStrc->bVSync) {
-      (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 1);
-      return 1;
+      g_pD3DSurfaceBackbuffer->lpVtbl->Flip(g_pD3DSurfaceBackbuffer, nullptr, 1);
+    } else {
+      g_pD3DSurfaceBackbuffer->lpVtbl->Flip(g_pD3DSurfaceBackbuffer, nullptr, 9);
     }
 
-    (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 9);
     return 1;
 }
 
@@ -681,13 +680,12 @@ BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize) {
     }
 
     RENDERER_D3D_ClearBackbuffer();
-    DDS_Flip pDVar1 = g_pD3DSurfaceBackbuffer->lpVtbl->Flip;
     if (pD2GFXRenderedDataStrc->bVSync) {
-      (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 1);
-      return 1;
+      g_pD3DSurfaceBackbuffer->lpVtbl->Flip(g_pD3DSurfaceBackbuffer, nullptr, 1);
+    } else {
+      g_pD3DSurfaceBackbuffer->lpVtbl->Flip(g_pD3DSurfaceBackbuffer, nullptr, 9);
     }
 
-    (*pDVar1)(g_pD3DSurfaceBackbuffer, nullptr, 9);
     return 1;
 }
 

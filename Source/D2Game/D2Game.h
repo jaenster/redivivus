@@ -1388,7 +1388,7 @@ struct D2QuestDataA1Q4SubStrc {
     /* 0x20 */ int32_t nScrollItemGUID;
     /* 0x24 */ int32_t nPlayerGUID;
     /* 0x28 */ uint32_t nPortalGUID;
-    /* 0x2C */ int16_t nStoneAttemptCount; // Cairn-stone wrong-attempt counter (masked &0x3f, incremented per click); OBJOP_A1Q4_ActivateHoradricMalusSmith
+    /* 0x2C */ uint16_t nStoneAttemptCount; // Cairn-stone wrong-attempt counter (masked &0x3f, incremented per click); OBJOP_A1Q4_ActivateHoradricMalusSmith
     /* 0x2E */ bool bRogueGuardTimerArmed;
     /* 0x2F */ uint8_t bTreeObjectSaved;
     /* 0x30 */ uint8_t bCairnStonesObjectSaved;
@@ -1598,8 +1598,7 @@ struct D2QuestDataA2Q4Strc {
     /* 0x24 */ int32_t nHaremBlockerY;
     /* 0x28 */ int32_t nJerhynX;
     /* 0x2C */ int32_t nJerhynY;
-    /* 0x30 */ int32_t nSummonerX; // X coordinate of the Summoner
-    /* 0x34 */ int32_t nSummonerY; // Y coordinate of the Summoner
+    /* 0x30 */ D2CoordStrc sSummonerCoords; // Summoner position, copied out whole by Q12_GetSummonerCoords
     /* 0x38 */ int32_t nJerhynObjectGUID; // GUID of the Jerhyn object unit
     /* 0x3C */ int32_t nJerhynMonsterGUID; // GUID of the Jerhyn monster unit used for AI control
     /* 0x40 */ uint16_t nPortalPlacedState; // Sanctuary entrance portal-placement state, always accessed as a word; 2 = placed (Q12_IsSanctuaryComplete)

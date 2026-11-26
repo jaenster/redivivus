@@ -28,44 +28,39 @@ int __fastcall D3DSUBTILE_Initialize(D3DSubtileCacheStrc * pCache, int nBaseMemo
     }
 
     pCache->nMaxNodes = uNodeCountCandidate;
-    D3DSubtileCacheNodeStrc* pNodeBuffer = (D3DSubtileCacheNodeStrc*)D2_ALLOC_AT(uNodeCountCandidate * 0x18, ".\\Src\\d3dSubtileCache.cpp", 0x2d);
+    D3DSubtileCacheNodeStrc* pNodeBuffer = (D3DSubtileCacheNodeStrc*)D2_ALLOC_AT(uNodeCountCandidate * sizeof(D3DSubtileCacheNodeStrc), ".\\Src\\d3dSubtileCache.cpp", 0x2d);
     pCache->pNodeBuffer = pNodeBuffer;
     if (!pNodeBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e);
       exit(-1);
     }
 
-    memset(pNodeBuffer, 0, uNodeCountCandidate * 0x18);
-    int nNodeIndex = 0;
-    if (-1 < pCache->nMaxNodes - 1) {
+    memset(pNodeBuffer, 0, uNodeCountCandidate * sizeof(*pNodeBuffer));
+    for (int nNodeIndex = 0; nNodeIndex <= pCache->nMaxNodes - 1; nNodeIndex++) {
       BOOL bSurfaceCreated;
-      do {
-        pCurrentNode = &pCache->pNodeBuffer[nNodeIndex];
-        pCurrentNode->nIndex = nNodeIndex;
-        if (nNodeIndex < pCache->nMaxNodes - 1) {
-          pCurrentNode->pNext = &pCache->pNodeBuffer[nNodeIndex + 1];
-        }
-        if (nNodeIndex > 0) {
-          pCurrentNode->pPrev = &pCache->pNodeBuffer[nNodeIndex - 1];
-        }
+      pCurrentNode = &pCache->pNodeBuffer[nNodeIndex];
+      pCurrentNode->nIndex = nNodeIndex;
+      if (nNodeIndex < pCache->nMaxNodes - 1) {
+        pCurrentNode->pNext = &pCache->pNodeBuffer[nNodeIndex + 1];
+      }
+      if (nNodeIndex > 0) {
+        pCurrentNode->pPrev = &pCache->pNodeBuffer[nNodeIndex - 1];
+      }
 
-        bSurfaceCreated = Renderer::RENDERER_D3D_CreateSurfaceWithTexture(&pCurrentNode->pSurface, (void**)&pCurrentNode->pTexture, 0x20, 0x20);
-        if (!bSurfaceCreated) {
-          if (pCurrentNode->pPrev) {
-            pCurrentNode->pPrev->pNext = 0;
-          }
-
-          pCache->nMaxNodes = nNodeIndex;
-          if (!nNodeIndex) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x49);
-            exit(-1);
-          }
-
-          break;
+      bSurfaceCreated = Renderer::RENDERER_D3D_CreateSurfaceWithTexture(&pCurrentNode->pSurface, (void**)&pCurrentNode->pTexture, 0x20, 0x20);
+      if (!bSurfaceCreated) {
+        if (pCurrentNode->pPrev) {
+          pCurrentNode->pPrev->pNext = 0;
         }
 
-        nNodeIndex++;
-      } while (nNodeIndex <= pCache->nMaxNodes - 1);
+        pCache->nMaxNodes = nNodeIndex;
+        if (!nNodeIndex) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x49);
+          exit(-1);
+        }
+
+        break;
+      }
     }
 
     pCache->nUsedCount = 0;

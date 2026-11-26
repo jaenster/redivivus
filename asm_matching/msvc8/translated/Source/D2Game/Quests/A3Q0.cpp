@@ -101,7 +101,7 @@ void __fastcall Q17_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // A3Q0 / QUEST_SpokeToHratli init (Act 3 quest-slot 0, internal Q17). NOT a numbered player quest — it is the hidden "Spoke To Hratli" tracking pseudo-quest. Hratli = monstats/NPC class 0xfd (253). Zeroes the 0xf-entry state-handler table, installs 3 handlers: [0x00]=Q17_Callback_00 (interact/gossip), [0x0b]=Q17_Callback_11 (dialog-played), [0x0d]=Q17_callback_13 (player-join refresh). Sets pNpcMessages=aNpcGossipData (Hratli string 0x1d1, menu), nQuestIdReal=QUEST_SpokeToHratli, status/active filters. Allocs 0x1c-byte A3Q0 specific block (Hratli spawn/coords/GUID + DRLG map ptr) and zeroes it.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q0.cpp
 void __fastcall Q17_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q17_Callback11_ScrollMessage;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q17_Callback00_NpcActivate;

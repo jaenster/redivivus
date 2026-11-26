@@ -36,7 +36,7 @@ typedef int32_t (__fastcall *fpD2QServerPacketClassifier)(uint8_t * pbPacket, si
 #endif
 #ifndef RECON_FPTD_fpD2QServerSinglePlayerSendHook
 #define RECON_FPTD_fpD2QServerSinglePlayerSendHook
-typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(struct D2QServerStrc * pQServer, char * pBytes, size_t nSize);
+typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(struct D2QServerStrc * pQServer, char * pBytes, uint32_t nSize);
 #endif
 #ifndef RECON_FPTD_fpD2QServerSourceLineHook
 #define RECON_FPTD_fpD2QServerSourceLineHook
@@ -89,7 +89,7 @@ struct __attribute__((packed)) D2QServerStrc {
     /* 0xBC0 */ int32_t (__fastcall *pfnPacketClassifier)(uint8_t *, size_t, uint32_t *, int *, int *, int *, uint32_t, uint32_t, uint32_t); // Inbound packet classifier/parser callback
     /* 0xBC4 */ int32_t (__fastcall *pfnOnClientAcceptedHook)(struct D2QServerStrc *, uint32_t, char *, int); // Optional source-line hook on successful accept
     /* 0xBC8 */ int32_t (__fastcall *pfnOnClientFreedHook)(struct D2QServerStrc *, uint32_t, char *, int); // Optional source-line hook before client free
-    /* 0xBCC */ int32_t (__fastcall *pfnSinglePlayerSendHook)(struct D2QServerStrc *, char *, size_t); // Singleplayer packet-send callback
+    /* 0xBCC */ int32_t (__fastcall *pfnSinglePlayerSendHook)(struct D2QServerStrc *, char *, uint32_t); // Singleplayer packet-send callback
     /* 0xBD0 */ int bUseQServerHack; // BOOL - use QServer hack mode
     /* 0xBD4 */ HANDLE hEmptyEvent;
     /* 0xBD8 */ HANDLE aAcceptThreadHandles[4];

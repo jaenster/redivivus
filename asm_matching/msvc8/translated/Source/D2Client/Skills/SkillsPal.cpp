@@ -109,7 +109,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_BlessedHammer(D2UnitStrc * pUnit, eD2Skills
       return 0;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x20;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;
@@ -167,7 +167,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_FistOfHeavens(D2UnitStrc * pUnit, eD2Skills
       return 0;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
@@ -217,7 +217,7 @@ BOOL __fastcall Skills_CltDoFunc_Pal_RandomRadiusMissileField(D2UnitStrc * pUnit
                 nCenterX = nRadius * nRadius / (nBaseRangeCalc * nBaseRangeCalc) / (int)(nRandSector + 1);
                 nBaseRangeCalc = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
                 nBaseRadius = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
-                memset(&sSkillArg, 0, 0x5c);
+                memset(&sSkillArg, 0, sizeof(sSkillArg));
                 sSkillArg.nFlags = 0x2001;
                 sSkillArg.nSkillLevel = nSkillLvl;
                 nSkillLvl = nCenterX;

@@ -441,7 +441,7 @@ void __stdcall INPUT_DialogMouseWheel(D2UIMouseMsgStrc * pMsg) {
     int nScrollSign;
     D2DialogSubStrc* pDialogSub;
     D2DialogStrc* pDialog = gpDialogActual;
-    short int wWheelDelta = pMsg->nWParam >> 16;
+    short int wWheelDelta = GET_WHEEL_DELTA_WPARAM(pMsg->nWParam);
     if (wWheelDelta) {
       ::UIWidget* self;
       nScrollSign = (int)wWheelDelta >> 0x1f;
@@ -713,7 +713,7 @@ void __stdcall INPUT_DialogKeyHandler(D2UIMouseMsgStrc * pMsg) {
       }
     }
 
-    iResult = DIALOG_HandleEnterKeyEvent(pDialog, pMsg->nWParam);
+    iResult = DIALOG_HandleEnterKeyEvent(pDialog, (uint32_t)pMsg->nWParam);
     if (iResult) {
       return;
     }
@@ -808,7 +808,6 @@ D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, 
     // Static local variables (originally global data)
     static char * gaszDialogBackgroundNames[1] = { s_dialogbackground_00727498 }; D2_STATIC_GUARD(gaszDialogBackgroundNames, "D2Client::UI::Dialog::AllocDialogStrcWithBackground::gaszDialogBackgroundNames");
 
-    int32_t nHandler;
     char szBgPath[260];
     D2GfxDataStrc sBgGfxData;
     LONG nDialogY = nY;
@@ -851,38 +850,34 @@ D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, 
     sprintf(szBgPath, "%s\\ui\\menu\\%s", "DATA\\GLOBAL", gaszDialogBackgroundNames[nBackgroundId]);
     DC6* pBgDC6 = Core::Archive::IMAGE_LoadDC6Ex(szBgPath, 0);
     pDialog->pBackgroundDC6 = pBgDC6;
-    memset(&sBgGfxData, 0, 0x48);
+    memset(&sBgGfxData, 0, sizeof(sBgGfxData));
     sBgGfxData.pDC6 = pDialog->pBackgroundDC6;
     sBgGfxData.nDirection = 0;
     sBgGfxData.nFrameNumber = 0;
     DC6Block* pBgBlock = D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockFromGfxData(&sBgGfxData);
     if (!pBgBlock) {
-      nHandler = 0x3b3;
-    } else {
-      LONG nDialogX = nX;
-      nHandler = D2CMP::SRC::CelCmp::GetDC6Width(pBgBlock);
-      pDialog->nBackgroundWidth = nHandler;
-      nHandler = D2CMP::SRC::CelCmp::GetDC6Height(pBgBlock);
-      pDialog->nBackgroundHeight = nHandler;
-      pDialog->pCoords.x = nDialogX;
-      pDialog->pCoords.y = nDialogY;
-      pDialog->pCoords2.x = nDialogX;
-      pDialog->pCoords2.y = nDialogY;
-      gnDialogStructAllocCount = 1;
-      DIALOG_RegisterHandler();
-      _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDialogFlagInit, 0xe);
-      _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &g_UIFlagInitDialogMouseWheel, 1);
-      gnDialogCounter++;
-      if (gnDialogCounter_b == 1) {
-        return pDialog;
-      }
-
-      nHandler = 0x3c8;
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3b3);
+      exit(-1);
     }
 
-    Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nHandler);
-    exit(-1);
-    return nullptr;
+    LONG nDialogX = nX;
+    pDialog->nBackgroundWidth = D2CMP::SRC::CelCmp::GetDC6Width(pBgBlock);
+    pDialog->nBackgroundHeight = D2CMP::SRC::CelCmp::GetDC6Height(pBgBlock);
+    pDialog->pCoords.x = nDialogX;
+    pDialog->pCoords.y = nDialogY;
+    pDialog->pCoords2.x = nDialogX;
+    pDialog->pCoords2.y = nDialogY;
+    gnDialogStructAllocCount = 1;
+    DIALOG_RegisterHandler();
+    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDialogFlagInit, 0xe);
+    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), &g_UIFlagInitDialogMouseWheel, 1);
+    gnDialogCounter++;
+    if (gnDialogCounter_b != 1) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3c8);
+      exit(-1);
+    }
+
+    return pDialog;
 }
 
 D2DialogStrc * __fastcall AllocDialogStrc(int32_t nX, int32_t nY, fpDialogFunc fpDialogFunc1, fpDialogFunc fpDialogFunc2, int32_t nExtraParam1, int32_t nLayoutMode, int32_t nAutoLayout, int32_t nWidth, int32_t nHeight, int32_t nExtraParam2, int32_t nExtraParam3) {
@@ -996,7 +991,7 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
 
     {
       ::UIWidget* self;
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sBgRect.left = pDialog->pCoords2.x;
       sBgRect.top = pDialog->pCoords2.y;
       pDialog->nDrawFrameCount++;

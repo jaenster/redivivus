@@ -1873,7 +1873,7 @@ void __stdcall QUESTLOG_DrawQuestLogButton() {
       return;
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     sGfxData.pDC6 = gpUIStatLevelUpButtonImages;
     sGfxData.nFrameNumber = 0;
@@ -2443,7 +2443,7 @@ void __stdcall DRAW_UI_Quest() {
     D2TextLineStrc* pNextWrappedLine;
     int nActIndex;
     nActIndex = 0;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
     uint32_t bIsPlayerDead;
     bIsPlayerDead = UNIT::Player::IsPlayerDead();
@@ -2908,7 +2908,6 @@ void __stdcall QUESTLOG_OnButtonMouseUp(D2UIMouseMsgStrc * pMsg) {
 
 // Checks quest availability by index. Scans gQuestIconsPerActTable to map index to quest ID, validates quest state (not just completed, reward awaits, can complete). Returns 1 if quest is available for interaction.
 BOOL __fastcall QUESTLOG_IsQuestAvailableForInteraction(int32_t nQuestIconIndex) {
-    int nClearCount;
     D2QuestLogEntryStrc byQuestEntryHdr;
     uint32_t bQuestAvail = GetQuestAvailabilityByIndex(0, nQuestIconIndex);
     if (!bQuestAvail) {
@@ -2964,12 +2963,7 @@ BOOL __fastcall QUESTLOG_IsQuestAvailableForInteraction(int32_t nQuestIconIndex)
       return 1;
     }
 
-    uint16_t* pQuestEntryInit = byQuestEntryHdr.wszDescription;
-    for (nClearCount = 0x96; nClearCount; nClearCount--) {
-      pQuestEntryInit[0] = L'\0';
-      pQuestEntryInit[1] = L'\0';
-      pQuestEntryInit += 2;
-    }
+    memset(byQuestEntryHdr.wszDescription, 0, sizeof(byQuestEntryHdr.wszDescription));
 
     byQuestEntryHdr.eQuestId = eQuestIdFromIcon;
     QUESTLOG_PopulateQuestEntry(&byQuestEntryHdr);

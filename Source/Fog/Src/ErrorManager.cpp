@@ -17,6 +17,7 @@
 #include "Source/Fog/Fog.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
+#include "Source/D2Headers/D2Arch.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -258,7 +259,11 @@ uint8_t Unreferenced_00407dd0() {
 }
 
 void __stdcall InitializeSystemInfo() {
+#if D2_ARCH_X86
     _MEMORYSTATUS memoryStatus;
+#elif D2_ARCH_X64
+    MEMORYSTATUSEX memoryStatus;
+#endif
     _OSVERSIONINFOA osVersionInfo;
     osVersionInfo.dwOSVersionInfoSize = 0x94;
     if (GetVersionExA(&osVersionInfo)) {
@@ -284,8 +289,17 @@ void __stdcall InitializeSystemInfo() {
       }
     }
 
+#if D2_ARCH_X86
     GlobalMemoryStatus(&memoryStatus);
     gSystemInfo.dwTotalPhysicalMemory = memoryStatus.dwTotalPhys;
+#elif D2_ARCH_X64
+    // dwTotalPhysicalMemory is a DWORD: saturate as the 32-bit GlobalMemoryStatus does above 4 GB.
+    memoryStatus.dwLength = sizeof(memoryStatus);
+    GlobalMemoryStatusEx(&memoryStatus);
+    gSystemInfo.dwTotalPhysicalMemory = memoryStatus.ullTotalPhys > 0xFFFFFFFFu ? 0xFFFFFFFFu : (uint32_t)memoryStatus.ullTotalPhys;
+#else
+#error "ErrorManager.cpp: no memory status query for this architecture"
+#endif
     GetSystemInfo(&gSystemInfo.sWinSystemInfo);
     gSystemInfo.bInitialized = 1;
 }
@@ -745,7 +759,8 @@ void ERROR_UnrecoverableInternalError_Warning(char * szUnused, int32_t nAddress,
 
 void ERROR_DeadlockedThread(DWORD pThread, int32_t nTicks) {
     Safesock::WSACleanup();
-    FOG_ErrorHandler(ERROR_Deadlock, (char*)pThread, 0x87f, "Deadlocked in thread %X for %d ticks", pThread, nTicks);
+    // The thread id rides in the szFile slot (the 1.14d push); FOG_ErrorHandler replaces szFile for ERROR_Deadlock.
+    FOG_ErrorHandler(ERROR_Deadlock, (char*)(uintptr_t)pThread, 0x87f, "Deadlocked in thread %X for %d ticks", pThread, nTicks);
     LogManager::ExitOrCrashCleanUpJmp();
 }
 

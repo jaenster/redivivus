@@ -230,12 +230,12 @@ BOOL __fastcall ActivateWindow() {
     return 0;
 }
 
-BOOL __fastcall SetOption(int32_t nOption, int32_t nValue) {
+BOOL __fastcall SetOption(int32_t nOption, intptr_t nValue) {
     if (nOption != 0xb) {
       return 0;
     }
 
-    gnDirectDrawPaletteSize = nValue;
+    gnDirectDrawPaletteSize = (int32_t)nValue;
     return 1;
 }
 
@@ -398,7 +398,7 @@ static BOOL InternalOpenWindow(int32_t nResolutionMode) {
       if (nLine) {
         szErrorMsg = "SetDisplayMode failed!";
       } else {
-        memset(&ddSurfDesc, 0, 0x6c);
+        memset(&ddSurfDesc, 0, sizeof(ddSurfDesc));
         ddSurfDesc.dwBackBufferCount = 2;
         gnDDrawFlipState = 2;
         ddSurfDesc.dwSize = 0x6c;
@@ -406,7 +406,7 @@ static BOOL InternalOpenWindow(int32_t nResolutionMode) {
         ddSurfDesc.ddsCaps = 0x4218;
         HVar1 = pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&gpDDrawPrimarySurface, nullptr);
         if (HVar1) {
-          memset(&ddSurfDesc, 0, 0x6c);
+          memset(&ddSurfDesc, 0, sizeof(ddSurfDesc));
           ddSurfDesc.ddsCaps = 0x4218;
           ddSurfDesc.dwSize = 0x6c;
           ddSurfDesc.dwFlags = 0x21;
@@ -414,7 +414,7 @@ static BOOL InternalOpenWindow(int32_t nResolutionMode) {
           gnDDrawFlipState = 1;
           HVar1 = pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&gpDDrawPrimarySurface, nullptr);
           if (HVar1) {
-            memset(&ddSurfDesc, 0, 0x6c);
+            memset(&ddSurfDesc, 0, sizeof(ddSurfDesc));
             ddSurfDesc.dwSize = 0x6c;
             ddSurfDesc.dwFlags = 1;
             ddSurfDesc.ddsCaps = 0x4200;
@@ -435,7 +435,7 @@ static BOOL InternalOpenWindow(int32_t nResolutionMode) {
           }
         }
 
-        memset(&ddSurfDesc, 0, 0x6c);
+        memset(&ddSurfDesc, 0, sizeof(ddSurfDesc));
         ddSurfDesc.dwSize = 0x6c;
         nLine = gpDDrawPrimarySurface->lpVtbl->GetSurfaceDesc(gpDDrawPrimarySurface, &ddSurfDesc);
         if (nLine) {

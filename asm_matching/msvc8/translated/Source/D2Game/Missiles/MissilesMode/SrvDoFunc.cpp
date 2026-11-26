@@ -20,7 +20,7 @@
 #include "Source/D2Common/Stats/StatsEx.h"
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Units/Missile.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Game/Targets.h"
 #include "Source/D2Game/Unit/SUnit.h"

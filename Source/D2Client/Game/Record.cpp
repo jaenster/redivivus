@@ -9,6 +9,46 @@
 #include "Source/D2Client/D2Client.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/Game/Record.data.h"
+#include "Source/D2Headers/D2Arch.h"
+
+// Record.dr1 holds 16-byte entries {nGameIndex, uMsg, wParam, lParam}, the 32-bit
+// D2GameRecordEntryStrc. A 64-bit build keeps that file layout and converts at the file boundary:
+// the recorded messages (keys, chars, mouse, WM_COMMAND, WM_CLOSE) carry 32-bit wParam/lParam
+// values, and a control HWND in WM_COMMAND's lParam is a 32-bit handle sign-extended, as on WOW64.
+#if D2_ARCH_X86
+static_assert(sizeof(D2GameRecordEntryStrc) == 0x10, "D2GameRecordEntryStrc: Record.dr1 is written from memory, so the entry must be the 16 bytes on disk");
+#elif D2_ARCH_X64
+struct D2GameRecordFileEntryStrc {
+    int32_t nGameIndex;
+    uint32_t uMsg;
+    uint32_t wParam;
+    int32_t lParam;
+};
+static_assert(sizeof(D2GameRecordFileEntryStrc) == 0x10, "D2GameRecordFileEntryStrc: the 16-byte Record.dr1 entry");
+
+static void RECORD_WriteBlock(HANDLE hFile, D2GameRecordStrc * pBlock, DWORD * pdwBytesWritten) {
+    D2GameRecordFileEntryStrc aFileEntries[500];
+    for (int i = 0; i < pBlock->nEntrySize; i++) {
+      aFileEntries[i].nGameIndex = pBlock->pEntry[i].nGameIndex;
+      aFileEntries[i].uMsg = pBlock->pEntry[i].uMsg;
+      aFileEntries[i].wParam = (uint32_t)pBlock->pEntry[i].wParam;
+      aFileEntries[i].lParam = (int32_t)pBlock->pEntry[i].lParam;
+    }
+
+    WriteFile(hFile, aFileEntries, (DWORD)(pBlock->nEntrySize * sizeof(D2GameRecordFileEntryStrc)), pdwBytesWritten, nullptr);
+}
+
+static void RECORD_ReadBlock(HANDLE hFile, D2GameRecordStrc * pBlock, int nEntries, DWORD * pdwBytesRead) {
+    D2GameRecordFileEntryStrc aFileEntries[500];
+    ReadFile(hFile, aFileEntries, (DWORD)(nEntries * sizeof(D2GameRecordFileEntryStrc)), pdwBytesRead, nullptr);
+    for (int i = 0; i < nEntries; i++) {
+      pBlock->pEntry[i].nGameIndex = aFileEntries[i].nGameIndex;
+      pBlock->pEntry[i].uMsg = aFileEntries[i].uMsg;
+      pBlock->pEntry[i].wParam = (WPARAM)aFileEntries[i].wParam;
+      pBlock->pEntry[i].lParam = (LPARAM)aFileEntries[i].lParam;
+    }
+}
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -127,7 +167,11 @@ void __stdcall SaveGameRecordToFile() {
     /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)&sHeader, 0x14, &dwBytesWritten, (LPOVERLAPPED)0x0);
     pBlock = &gsGameRecordContext;
     do {
+#if D2_ARCH_X86
       /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFile, (LPCVOID)pBlock, pBlock->nEntrySize << 4, &dwBytesWritten, (LPOVERLAPPED)0x0);
+#elif D2_ARCH_X64
+      RECORD_WriteBlock(hFile, pBlock, &dwBytesWritten);
+#endif
       pBlock = pBlock->pNext;
     } while (pBlock);
 
@@ -167,7 +211,11 @@ void __stdcall LoadGameRecordFromFile() {
           gsGameRecordContext.nEntrySize = 500;
         }
 
+#if D2_ARCH_X86
         /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize << 4, &dwBytesRead, (LPOVERLAPPED)0x0);
+#elif D2_ARCH_X64
+        RECORD_ReadBlock(hFile, gpCurrentGameRecord, gsGameRecordContext.nEntrySize, &dwBytesRead);
+#endif
       }
 
       /* HANDLE hObject for CloseHandle */ gpCurrentGameRecord = &gsGameRecordContext;

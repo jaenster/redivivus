@@ -112,7 +112,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_GameSetup(struct D2GSClient
 // Validates action → executes or queues timer → state change in next tick
 // NO client-side prediction - server is single source of truth.
 // Lag = delayed response, never desync.
-void __fastcall NET_D2GS_SERVER_ProcessClientMessage_InGame(char * pBytes, size_t nSize);
+void __fastcall NET_D2GS_SERVER_ProcessClientMessage_InGame(char * pBytes, uint32_t nSize);
 #endif // D2_MODULE_D2Game
 // 1 internal function (defined in .cpp)
 

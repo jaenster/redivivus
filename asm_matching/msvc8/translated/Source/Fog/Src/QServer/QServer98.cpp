@@ -24,7 +24,7 @@ void __fastcall QSERVER_CloseAllConnections(D2QServerStrc * pQServer) {
 }
 
 BOOL __fastcall SendToClientOnline(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pQServerClient, char * pBytes, int nSize) {
-    /* int flags for send */ /* int len for send */ /* char * buf for send */ /* SOCKET s for send */ unsigned int socket = pQServerClient->socket;
+    /* int flags for send */ /* int len for send */ /* char * buf for send */ /* SOCKET s for send */ SOCKET socket = pQServerClient->socket;
     int nBytesSent = send(socket, pBytes, nSize, 0);
     if (nBytesSent == -1) {
       WSAGetLastError();
@@ -220,7 +220,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
             socketCur = aScannedClientPtrs[__frame0.nSocketIdx]->socket;
           }
 
-          __frame0.uSlot634.nSelectResult = socketCur;
+          __frame0.uSlot634.hSocketCur = socketCur;
           /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ nClientIdx = __WSAFDIsSet(socketCur, &fsset1);
           /* fd_set * param_2 for __WSAFDIsSet */ /* SOCKET param_1 for __WSAFDIsSet */ if (!nClientIdx) {
             nClientIdx = __WSAFDIsSet(socketCur, &fsset0);
@@ -294,7 +294,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
                   nFdIdx = pClientIter->nBytesRead;
                   nClientIdx = 0;
                   if (nFdIdx <= 0x5b4) {
-                    /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nClientIdx = recv(__frame0.uSlot634.nSelectResult, pClientIter->aRecvBuffer + nFdIdx, 0x5b4 - nFdIdx, 0);
+                    /* int flags for recv */ /* int len for recv */ /* char * buf for recv */ /* SOCKET s for recv */ nClientIdx = recv(__frame0.uSlot634.hSocketCur, pClientIter->aRecvBuffer + nFdIdx, 0x5b4 - nFdIdx, 0);
                   }
 
                   /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);

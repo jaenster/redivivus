@@ -116,6 +116,7 @@ struct D2AiBloodLordScanStrc {
 struct D2AiImpScanStrc {
     /* 0x00 */ int32_t nMaxDistSq; // squared range limit read by MONSTERAI_FindUnassignedImpInRange
     /* 0x04 */ int32_t nUnused04; // not read by the callback
+    /* 0x08 */ int32_t nUnused08[8]; // not read by the callback; the caller reserves 40 bytes
 };
 struct D2AiClassCountScanStrc {
     /* 0x00 */ int32_t nClassId;

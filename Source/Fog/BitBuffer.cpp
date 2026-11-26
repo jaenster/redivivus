@@ -111,7 +111,7 @@ void __stdcall BITBUF_XorBuffers(uint8_t * pBufferA, uint32_t * pBufferB, uint8_
     }
 }
 
-void __stdcall InitBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, size_t nSize) {
+void __stdcall InitBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, uint32_t nSize) {
     if (!pBitBuffer) {
       Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x13c);
       exit(-1);
@@ -126,14 +126,14 @@ void __stdcall InitBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, siz
 
 int32_t __stdcall GetNextPositon(D2BitBufferStrc * pBitBuffer) {
     if (pBitBuffer->nBitsAtPos) {
-      return (size_t)((size_t)pBitBuffer->nCurrentPos + 1);
+      return (uint32_t)((uint32_t)pBitBuffer->nCurrentPos + 1);
     }
 
-    return (size_t)pBitBuffer->nCurrentPos;
+    return (uint32_t)pBitBuffer->nCurrentPos;
 }
 
 void __stdcall WriteValueToBitBuffer(D2BitBufferStrc * pBitBuffer, int32_t nValue, int32_t nSizeInBits) {
-    size_t nCapacityBits = pBitBuffer->nBitsInBuffer;
+    uint32_t nCapacityBits = pBitBuffer->nBitsInBuffer;
     /* check if there is room */ if ((int)(pBitBuffer->nBitsAtPos + pBitBuffer->nCurrentPos * 8 + nSizeInBits) > (int)nCapacityBits) {
       pBitBuffer->bEnd = 1;
       pBitBuffer->nCurrentPos = (int)nCapacityBits / 8;
@@ -192,7 +192,7 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
 
     uint8_t byMask;
     uint32_t dwBitMask;
-    size_t nBitsAtPos;
+    uint32_t nBitsAtPos;
     int nBitShift;
     D2BitBufferStrc* pBuf = pBitBuffer;
     int nBitsThisStep = pBitBuffer->nCurrentPos * 8 - pBitBuffer->nBitsInBuffer + nSize + pBitBuffer->nBitsAtPos;
@@ -216,8 +216,8 @@ int32_t __stdcall Read(D2BitBufferStrc * pBitBuffer, int32_t nSize) {
         }
 
         nBitsAtPos = pBuf->nBitsAtPos;
-        byCurrent = *pBuf->pBuffer;
-        byMask = gbGameSaveFileMarker[nBitsAtPos];
+        byCurrent = *pBuf->pBuffer; // steer-ok: generated form, kept as emitted
+        byMask = gbGameSaveFileMarker[nBitsAtPos]; // steer-ok: generated form, kept as emitted
         dwBitMask = gdwBitBufferSeed[nBitsThisStep];
         pBuf->nBitsAtPos = nBitsAtPos + nBitsThisStep;
         nSize += ((uint8_t)((byMask & byCurrent) >> D2_SHIFT_COUNT(nBitsAtPos)) & dwBitMask) << D2_SHIFT_COUNT(nBitShift);
@@ -272,7 +272,7 @@ void __stdcall BITBUFFER_WriteDwordPair(D2BitBufferStrc * pBitBuffer, int32_t * 
 
 int32_t __stdcall BITBUFFER_ReadHuffmanValue(D2BitBufferStrc * pBitBuffer, int32_t * pHuffmanTree) {
     uint32_t nBit;
-    size_t nBitsAtPos;
+    uint32_t nBitsAtPos;
     int nNodeBase = 0;
     while (true) {
       int iVar1;

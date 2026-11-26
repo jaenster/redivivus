@@ -24,7 +24,7 @@ struct __attribute__((packed)) DC6Block {
     /* 0x0C */ int nOffsetX;
     /* 0x10 */ int nOffsetY;
     /* 0x14 */ int nAllocSize;
-    /* 0x18 */ int nNextBlock;
+    /* 0x18 */ intptr_t nNextBlock; // on disk a 32-bit field; after load the frame's 0x2c-byte renderer record (CELCMP_GetDC6BlockPixelData), so pointer-sized in memory
     /* 0x1C */ int nLength;
     /* 0x20 */ char data[0];
 };

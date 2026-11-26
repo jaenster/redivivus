@@ -25,6 +25,64 @@ struct D2MonModeTxt;
 struct D2PoolManagerStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2ArmTypeTxt
+#define D2_DEFINED_D2ArmTypeTxt
+struct __attribute__((packed)) D2ArmTypeTxt {
+    /* 0x00 */ char name[32];
+    /* 0x20 */ char token[4];
+    /* 0x24 */ uint8_t field_0x24;
+    /* 0x25 */ uint8_t field_0x25;
+    /* 0x26 */ uint8_t field_0x26;
+    /* 0x27 */ uint8_t field_0x27;
+    /* 0x28 */ uint8_t field_0x28;
+    /* 0x29 */ uint8_t field_0x29;
+    /* 0x2A */ uint8_t field_0x2a;
+    /* 0x2B */ uint8_t field_0x2b;
+    /* 0x2C */ uint8_t field_0x2c;
+    /* 0x2D */ uint8_t field_0x2d;
+    /* 0x2E */ uint8_t field_0x2e;
+    /* 0x2F */ uint8_t field_0x2f;
+    /* 0x30 */ uint8_t field_0x30;
+    /* 0x31 */ uint8_t field_0x31;
+    /* 0x32 */ uint8_t field_0x32;
+    /* 0x33 */ uint8_t field_0x33;
+};
+
+#endif // D2_DEFINED_D2ArmTypeTxt
+#ifndef D2_DEFINED_D2InventoryScreenCoordinates
+#define D2_DEFINED_D2InventoryScreenCoordinates
+struct D2InventoryScreenCoordinates {
+    /* 0x00 */ int nLeft;
+    /* 0x04 */ int nRight;
+    /* 0x08 */ int nTop;
+    /* 0x0C */ int nBottom;
+};
+
+#endif // D2_DEFINED_D2InventoryScreenCoordinates
+#ifndef D2_DEFINED_D2MonModeTxt
+#define D2_DEFINED_D2MonModeTxt
+struct __attribute__((packed)) D2MonModeTxt {
+    /* 0x00 */ char name[32];
+    /* 0x20 */ char token[4];
+    /* 0x24 */ uint8_t DT_Dir;
+    /* 0x25 */ uint8_t NU_Dir;
+    /* 0x26 */ uint8_t WL_Dir;
+    /* 0x27 */ uint8_t GH_Dir;
+    /* 0x28 */ uint8_t A1_Dir;
+    /* 0x29 */ uint8_t A2_Dir;
+    /* 0x2A */ uint8_t BL_Dir;
+    /* 0x2B */ uint8_t SC_Dir;
+    /* 0x2C */ uint8_t S1_Dir;
+    /* 0x2D */ uint8_t S2_Dir;
+    /* 0x2E */ uint8_t S3_Dir;
+    /* 0x2F */ uint8_t S4_Dir;
+    /* 0x30 */ uint8_t DD_Dir;
+    /* 0x31 */ uint8_t KB_Dir;
+    /* 0x32 */ uint8_t SQ_Dir;
+    /* 0x33 */ uint8_t RN_Dir;
+};
+
+#endif // D2_DEFINED_D2MonModeTxt
 #ifndef D2_DEFINED_D2ObjModeTxt
 #define D2_DEFINED_D2ObjModeTxt
 struct __attribute__((packed)) D2ObjModeTxt {

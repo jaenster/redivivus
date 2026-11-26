@@ -22,8 +22,8 @@ namespace D2CMP { namespace Pallete {
 // Calls pfnCallback(pTileEntry, pContext) for every tile entry of every loaded tile project (gpTileProjectListHead); returns the call count.
 int32_t __stdcall TILEPROJECT_ForEachTileEntry(pfnTileEntryEnum pfnCallback, void * pContext) {
     D2TileLibraryHeaderStrc* pLibrary;
-    int nInvokeCount = 0;
     D2TileProjectStrc* pProject = SRC::TileProjects::gpTileProjectListHead;
+    int nInvokeCount = 0;
     if (!pfnCallback) {
       return 0;
     }

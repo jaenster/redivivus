@@ -899,7 +899,7 @@ bool __fastcall Q19_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q2.cpp
 void __fastcall Q19_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlagPrev = 1;
     ::SGAMEDATA* pQuestDataInternal = pQuestData->pGame;
@@ -919,7 +919,7 @@ void __fastcall Q19_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->sStateFunctions.fpQuestStateHandler[4] = Q19_Callback04_ItemPickedUp;
     D2QuestDataA3Q2Strc* pQuestSpecificData = D2_NEW_POOL_AT(pQuestDataInternal->pMemoryPool, D2QuestDataA3Q2Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q2.cpp", 0x39b);
     pQuestData->pQuestSpecificData.pA3Q2 = pQuestSpecificData;
-    memset(pQuestSpecificData, 0, 0xb0);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     pQuestSpecificData->nSewerStairsUpdateMode = 0;
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sQuestGUID);
 }

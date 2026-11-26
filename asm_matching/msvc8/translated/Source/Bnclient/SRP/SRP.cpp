@@ -236,7 +236,7 @@ BOOL __fastcall SRP_IsContextInitialized(D2Srp * pSrp) {
 
 // @sourcefile .\SRP.cpp
 D2Srp * * __fastcall SRP_CreateContext(D2Srp * * ppSrp) {
-    D2Srp* pAllocated = (D2Srp*)Storm::Source::SMem::SMemAlloc(0x4c, ".\\SRP.cpp", 0x157, 0);
+    D2Srp* pAllocated = (D2Srp*)Storm::Source::SMem::SMemAlloc(sizeof(D2Srp), ".\\SRP.cpp", 0x157, 0);
     *ppSrp = pAllocated ? SRP_ConstructContext(pAllocated) : 0;
     return ppSrp;
 }

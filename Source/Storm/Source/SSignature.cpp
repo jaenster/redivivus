@@ -17,6 +17,7 @@
 #include "Source/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Storm/Source/SSignature.inline.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2SsigContextStrc) == 0x78, "SMemAlloc(sizeof(D2SsigContextStrc)): the 32-bit layout must be the 0x78 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -37,7 +38,7 @@ void __fastcall SSIG_FreeBigNum(void * * pBigNum) {
     SBig::SBigDel((BigData*)*pBigNum);
 }
 
-static BOOL __stdcall SSIG_FindSignatureMarker(int32_t nOffset, uint32_t nTotalSize, uint8_t * pBuffer, int * pnFoundOffset) {
+static BOOL __stdcall SSIG_FindSignatureMarker(uint32_t nTotalSize, int32_t nOffset, uint8_t * pBuffer, int * pnFoundOffset) {
     int nMarkerOffset = nTotalSize - nOffset - 4;
     *pnFoundOffset = nMarkerOffset;
     if (nTotalSize >= nOffset + 4U && *(int*)(pBuffer + nMarkerOffset) == 0x5349474e) {
@@ -58,7 +59,7 @@ static void __stdcall SSIG_HashData(uint32_t nDataLen, uint8_t * pData, uint8_t 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_AllocContext. Storm export, exact string "SSignatureVerifyStream_Begin" (PPC export vector 100cdfc4 -> code 100a3c90). Basis: callee set {operator new / SMemAlloc, Sha1::Initialize} == 1.14d {SMemAlloc, Sha1_Initialize}, and PPC reads exactly r3,r4,r5 = 3 args, matching this function's 3 params. Allocates the 0x78-byte verify-stream context and a nModulusLen+4 data buffer, and inits the embedded Sha1 at ctx+0x18.
 void __fastcall SSignatureVerifyStream_Begin(D2SsigContextStrc * * ppContext, uint32_t nModulusLen, uint32_t nExponentLen) {
-    D2SsigContextStrc* pContext = (D2SsigContextStrc*)SMem::SMemAlloc(0x78, "new", -1, 0);
+    D2SsigContextStrc* pContext = (D2SsigContextStrc*)SMem::SMemAlloc(sizeof(D2SsigContextStrc), "new", -1, 0);
     *ppContext = pContext;
     pContext->nModulusLen = nModulusLen;
     (*ppContext)->nExponentLen = nExponentLen;
@@ -77,7 +78,7 @@ uint32_t __fastcall SSignatureVerifyStream_GetSignatureLength(D2SsigContextStrc 
 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_UpdateHash. Storm export (PPC vector 100cdfd4 -> 100a3af0). Basis: callee set {Sha1::Append, BlockMoveData} == 1.14d {Sha1_Append, SSYSTEM_Memmove, STORM_Memcpy}; PPC reads r3,r4,r5 = 3 args == 3 params here.
-void __fastcall SSignatureVerifyStream_ProvideData(D2SsigContextStrc * pContext, uint8_t * pData, size_t nDataLen) {
+void __fastcall SSignatureVerifyStream_ProvideData(D2SsigContextStrc * pContext, uint8_t * pData, uint32_t nDataLen) {
     uint32_t nRemaining = nDataLen - pContext->nBufferSize;
     if ((int)nRemaining >= 0) {
       if (pContext->nBytesBuffered > 0) {
@@ -167,7 +168,7 @@ int __fastcall SSignatureGenerate(uint8_t * pData, uint32_t * pnDataLen, void * 
     // SSIG_FindSignatureMarker (0041d340) never writes EDX - it is a leaf that
     // touches only EAX, ECX and [ESI] - so EDX still holds *pnDataLen at 0041d5bd.
     // Ghidra's `extraout_EDX` there is an artifact of not modelling that.
-    if (!SSIG_FindSignatureMarker(nKeySize, nDataLen, pData, &nMarkerOffset)) // 0041d5b2-0041d5bb
+    if (!SSIG_FindSignatureMarker(nDataLen, nKeySize, pData, &nMarkerOffset)) // 0041d5b2-0041d5bb
       nMarkerOffset = (int)nDataLen;                             // 0041d5bd  MOV [EBP-0x8],EDX
 
     uint8_t* pHash = (uint8_t*)__builtin_alloca(nKeySize);       // 0041d5c0-0041d5c7
@@ -270,7 +271,7 @@ int __fastcall SSignatureVerifyStream_Finish(D2SsigContextStrc * pContext, void 
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SSIG_SignDataBlock. Storm export (PPC vector 100cdfe4 -> 100a3890). It is a VERIFY, not a sign. Basis: PPC body = inline Begin (operator new + SMemAlloc + Sha1::Initialize) then bl SSignatureVerifyStream_ProvideData then bl SSignatureVerifyStream_Finish; this function = SSignatureVerifyStream_Begin -> ...ProvideData -> ...Finish, the same three steps with MSVC keeping Begin out of line. PPC reads r3..r8 = 6 args == 6 params here.
 // Returns Finish's result in EAX (tail at 0041d7fe..0041d806 leaves it untouched): nonzero if the signature verifies. The nExponentLen stack slot is reused as the Begin context out-parameter.
-int __fastcall SSignatureVerify(uint8_t * pData, size_t nDataLen, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen) {
+int __fastcall SSignatureVerify(uint8_t * pData, uint32_t nDataLen, void * pModulusBytes, uint32_t nModulusLen, void * pExponentBytes, uint32_t nExponentLen) {
     D2SsigContextStrc* pSsigContext;
     SSignatureVerifyStream_Begin((D2SsigContextStrc**)&pSsigContext, nModulusLen, nExponentLen);
     D2SsigContextStrc* pSsigContext2 = pSsigContext;
@@ -625,11 +626,10 @@ BigData * * __thiscall SSIGNATURE_RsaPowMod(BigData * * ppResult, BigData * * pp
 // @oracle 2026-08-28 pass 5. Oracle: Mac PPC 1.10b Storm.
 // Was SBIG_ExportBytesWithPadding. DESCRIPTIVE, not an oracle name. Body = SBigToBinaryBuffer into the caller's buffer, then zero-fill the remainder to the requested length - the exact tail of Crypt::RSA::Process. Zero callers: MSVC out-of-line COMDAT copy. Moved from SBig to SSignature.
 void * __thiscall SSIGNATURE_RsaExportZeroPadded(BigData * * ppBig, uint8_t * pOutBuf, uint32_t nBufLen) {
-    uint32_t nOrigLen = nBufLen;
-    BigData* ppBigValue = *ppBig;
-    SBig::SBigToBinaryBuffer(ppBigValue, pOutBuf, nBufLen, &nBufLen);
-    if (nBufLen < nOrigLen) {
-      SMem::SMemZero(pOutBuf + nBufLen, nOrigLen - nBufLen);
+    uint32_t nWritten;
+    SBig::SBigToBinaryBuffer(*ppBig, pOutBuf, nBufLen, &nWritten);
+    if (nWritten < nBufLen) {
+      SMem::SMemZero(pOutBuf + nWritten, nBufLen - nWritten);
     }
 
     return pOutBuf;

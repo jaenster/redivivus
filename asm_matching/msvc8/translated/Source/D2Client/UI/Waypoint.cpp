@@ -402,7 +402,7 @@ void __stdcall WAYPOINT_PopulateList() {
       }
     }
 
-    uint32_t nWaypointIdIter = (uint32_t)gaWaypointVisited[nActIdx * 0xb + 9];
+    int nWaypointIdIter = gaWaypointVisited[nActIdx * 0xb + 9];
     if (nWaypointIdIter > gaWaypointVisited[nActIdx * 0xb + 10]) {
       return;
     }
@@ -505,7 +505,7 @@ void __stdcall DRAW_UI_Waypoint() {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(1);
     int nTabYOffset;
     nTabYOffset = 0;
-    memset(&sDrawImageArgs, 0, 0x48);
+    memset(&sDrawImageArgs, 0, sizeof(sDrawImageArgs));
     sDrawImageArgs.pDC6 = WaypointWayGateBackGround;
     sDrawImageArgs.nDirection = 0;
     sDrawImageArgs.nFrameNumber = 0;

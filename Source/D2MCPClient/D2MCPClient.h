@@ -58,7 +58,7 @@ uint32_t __stdcall MCPSTATE_GetJoinTimestamp();
 BOOL __stdcall getIsMPCJoinSuccesfull();
 void __stdcall SetIsMPCJoinSuccesfull(BOOL bSuccess);
 void * __stdcall MCPCONNECT_GetCharListPacket();
-void __stdcall CopyCharListToGlobal(char * pBytes, size_t nSize);
+void __stdcall CopyCharListToGlobal(char * pBytes, uint32_t nSize);
 void __stdcall MCPCONNECT_CreateThread(uint32_t * pSrcState);
 void __fastcall NET_MCP_CLIENT_Send_0x03_CreateGame(mcp0x03data * pMcpData, int16_t nRequestId);
 void __fastcall NET_MCP_CLIENT_Send_0x04_JoinGame(char * szGameName, char * szGamePassword, uint16_t nRequestId);

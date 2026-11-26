@@ -18,6 +18,9 @@
 #endif
 
 
+// The ExtraWork DLL's entry point, as GetProcAddress("ExtraWork") is called here: no arguments, BOOL result.
+typedef BOOL (__stdcall *pfnExtraWork)(void);
+
 #ifndef RECON_FPTD_pfnCheckRevision
 #define RECON_FPTD_pfnCheckRevision
 typedef int (__stdcall *pfnCheckRevision)(LPCSTR szFile1, LPCSTR szFile2, LPCSTR szFile3, LPCSTR szValueString, DWORD * pdwVersion, DWORD * pdwChecksum, uint8_t * pbStatstring);
@@ -477,7 +480,7 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
             do {
               szLineBuffer[0] = '\0';
               memset(szLineBuffer + 1, 0, 0xff);
-              nLineOffset = (intptr_t)pListCursor - (intptr_t)pbArchivePath;
+              nLineOffset = (uint32_t)(pListCursor - pbArchivePath);
               lpFileName = szLineBuffer;
               if (nLineOffset < nSize) {
                 bArchiveOpened = 0;
@@ -507,7 +510,7 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
                 } while (nLineOffset < nSize);
               }
 
-              nLineOffset = (intptr_t)pListCursor - (intptr_t)pbArchivePath;
+              nLineOffset = (uint32_t)(pListCursor - pbArchivePath);
               for (; nLineOffset < nSize && (*pListCursor == '\r' || *pListCursor == '\n'); pListCursor++) {
                 nLineOffset++;
               }
@@ -945,7 +948,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
     int bOpened;
     BOOL BVar1;
     HMODULE hModule;
-    FARPROC pExtraWorkProc;
+    pfnExtraWork pExtraWorkProc;
     int32_t nOpenResult;
     uint32_t nIniLen;
     FILETIME FStack_1224;
@@ -965,10 +968,10 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
         int nStrLen;
         nStrLen = (int)strlen(szDestPath);
         __frame0.dwStackPad3 = (char*)D2_ALLOC_AT((size_t)(nStrLen + 1), ".\\BnDownload.cpp", 0x179);
-        bOpened = (intptr_t)__frame0.dwStackPad3 - (intptr_t)szDestPath;
+        intptr_t nCopyDelta = (intptr_t)__frame0.dwStackPad3 - (intptr_t)szDestPath;
         do {
           byScanChar = *szDestPath;
-          szDestPath[bOpened] = byScanChar;
+          szDestPath[nCopyDelta] = byScanChar;
           szDestPath++;
         } while (byScanChar != '\0');
       }
@@ -1060,7 +1063,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
                 log_extrawork_error:
                 Debug::DEBUG_Trace(pDestPtr);
               } else {
-                /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pExtraWorkProc = GetProcAddress(hModule, "ExtraWork");
+                /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pExtraWorkProc = (pfnExtraWork)GetProcAddress(hModule, "ExtraWork");
                 if (!pExtraWorkProc) {
                   pDestPtr = "<ERROR: Failed to get address of ExtraWork function!>";
                   goto log_extrawork_error;
@@ -1153,7 +1156,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881f64);
 }
 
-uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t nSize) {
+uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_t nSize) {
     FILETIME ftCacheTime;
     FILETIME ftZero;
     uint32_t nThreadId;

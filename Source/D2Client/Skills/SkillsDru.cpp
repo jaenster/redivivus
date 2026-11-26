@@ -65,7 +65,7 @@ BOOL __fastcall SKILLSDRU_CltCreateElementalMissiles(D2UnitStrc * pUnit, int32_t
       }
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     eD2UnitType eUnitType = pUnit->eUnitType;
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;

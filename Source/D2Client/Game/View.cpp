@@ -122,33 +122,29 @@ void __stdcall VIEW_Init() {
 }
 
 uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps) {
-    int nStepLeft;
-    uint8_t* pWrite;
-    uint32_t nMidLeft;
-    int nOuterScaled;
-    int nMidScaled;
     uint8_t* pTable = (uint8_t*)D2Hell::D2MEM_VirtualAlloc(nDim * nDim * nSteps + 3);
+    uint8_t* pWrite = pTable;
     uint32_t nOuter = 0;
     if (nDim > 0) {
-      int nAccum;
-      nOuterScaled = 0;
-      pWrite = pTable;
+      int nOuterScaled = 0;
       do {
-        nMidScaled = nOuterScaled;
-        nMidLeft = nDim;
+        int nBase = nOuter << 0x10;
+        int nMidScaled = nOuterScaled;
+        uint32_t nMidLeft = nDim;
         do {
-          nAccum = nOuter << 0x10;
-          for (nStepLeft = nSteps; (uint32_t)nStepLeft > 0; nStepLeft--) {
+          int nAccum = nBase;
+          int nStep = nMidScaled / nSteps;
+          for (uint32_t nStepLeft = nSteps; nStepLeft > 0; nStepLeft--) {
             *pWrite = (uint8_t)(nAccum / 65536);
             pWrite++;
-            nAccum += nMidScaled / nSteps;
+            nAccum += nStep;
           }
 
           nMidScaled += 0x10000;
           nMidLeft--;
         } while (nMidLeft);
 
-        nOuterScaled += -0x10000;
+        nOuterScaled -= 0x10000;
         nOuter++;
       } while (nOuter < nDim);
     }
@@ -166,33 +162,24 @@ void __fastcall Unreferenced_00475c30(LPVOID pMemory) {
 
 // Allocates a (nDim × nDim × (nSteps+1)) pointer table via D2MEM_VirtualAlloc and fills it with pointers into gPaletteTransitionTable for each interpolated palette entry. Used to build lighting/palette blend lookup tables for the game view renderer. Returns the base pointer of the allocated table.
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable(uint32_t nDim, uint32_t nSteps) {
-    uint8_t** pWrite;
-    int nAccum;
-    uint32_t nMidLeft;
-    uint32_t nInnerLeft;
-    int nOuterScaled;
-    int nMidScaled;
     uint8_t** pTable = (uint8_t**)D2Hell::D2MEM_VirtualAlloc((nSteps + 1) * nDim * nDim * 4);
+    uint8_t** pWrite = pTable;
     uint32_t nOuter = 0;
     if (nDim > 0) {
-      uint32_t nPaletteIdx;
-      nOuterScaled = 0;
-      nPaletteIdx = nSteps >> 0x18;
-      pWrite = pTable;
+      int nOuterScaled = 0;
+      uint32_t nPaletteIdx = nSteps >> 0x18;
       do {
-        nMidScaled = nOuterScaled;
-        nMidLeft = nDim;
+        int nBase = nOuter << 0x10;
+        int nMidScaled = nOuterScaled;
+        uint32_t nMidLeft = nDim;
         do {
-          if (nSteps > 0) {
-            nInnerLeft = nSteps;
-            nAccum = nOuter << 0x10;
-            do {
-              nPaletteIdx = nAccum / 65536;
-              *pWrite = gPaletteTransitionTable + ((uint32_t)(uint8_t)nPaletteIdx << 8);
-              pWrite++;
-              nAccum += nMidScaled / (int)nSteps;
-              nInnerLeft--;
-            } while (nInnerLeft);
+          int nAccum = nBase;
+          int nStep = nMidScaled / (int)nSteps;
+          for (uint32_t nInnerLeft = nSteps; nInnerLeft > 0; nInnerLeft--) {
+            nPaletteIdx = nAccum / 65536;
+            *pWrite = gPaletteTransitionTable + ((uint32_t)(uint8_t)nPaletteIdx << 8);
+            pWrite++;
+            nAccum += nStep;
           }
 
           nMidScaled += 0x10000;
@@ -201,7 +188,7 @@ uint8_t * * __stdcall VIEW_AllocPalettePointerTable(uint32_t nDim, uint32_t nSte
           nMidLeft--;
         } while (nMidLeft);
 
-        nOuterScaled += -0x10000;
+        nOuterScaled -= 0x10000;
         nOuter++;
       } while (nOuter < nDim);
     }
@@ -218,33 +205,29 @@ void __fastcall Unreferenced_00475d20(LPVOID pMemory) {
 }
 
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable2(uint32_t nDim, int32_t nSteps) {
-    int nStepLeft;
-    uint8_t** pWrite;
-    uint32_t nMidLeft;
-    int nOuterScaled;
-    int nMidScaled;
     uint8_t** pTable = (uint8_t**)D2Hell::D2MEM_VirtualAlloc(nDim * nDim * nSteps * 4);
+    uint8_t** pWrite = pTable;
     uint32_t nOuter = 0;
     if (nDim > 0) {
-      int nAccum;
-      nOuterScaled = 0;
-      pWrite = pTable;
+      int nOuterScaled = 0;
       do {
-        nMidScaled = nOuterScaled;
-        nMidLeft = nDim;
+        int nBase = nOuter << 0x10;
+        int nMidScaled = nOuterScaled;
+        uint32_t nMidLeft = nDim;
         do {
-          nAccum = nOuter << 0x10;
-          for (nStepLeft = nSteps; (uint32_t)nStepLeft > 0; nStepLeft--) {
-            *pWrite = gPaletteTransitionTable + ((nAccum / 65536 & 0xffU) << 8);
+          int nAccum = nBase;
+          int nStep = nMidScaled / nSteps;
+          for (uint32_t nStepLeft = nSteps; nStepLeft > 0; nStepLeft--) {
+            *pWrite = gPaletteTransitionTable + ((uint8_t)(nAccum / 65536) << 8);
             pWrite++;
-            nAccum += nMidScaled / nSteps;
+            nAccum += nStep;
           }
 
           nMidScaled += 0x10000;
           nMidLeft--;
         } while (nMidLeft);
 
-        nOuterScaled += -0x10000;
+        nOuterScaled -= 0x10000;
         nOuter++;
       } while (nOuter < nDim);
     }
@@ -604,7 +587,7 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     }
 
     DC6* pSummitDC6 = gpAncientsBgDC6;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     if (pSummitDC6) {
       sGfxData.pDC6 = pSummitDC6;
       sGfxData.nFrameNumber = nCloudFrame;

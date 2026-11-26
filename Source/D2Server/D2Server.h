@@ -26,7 +26,7 @@ struct SGAMEDATA {
     uint32_t dwHashKey;             // 0x10 hash bucket key
     uint8_t aBody[0x304C];          // 0x14 owned by D2Game
 };
-static_assert(sizeof(SGAMEDATA) == 0x3060, "SGAMEDATA is 0x3060 bytes in 1.00");
+static_assert(sizeof(void*) != 4 || sizeof(SGAMEDATA) == 0x3060, "SGAMEDATA is 0x3060 bytes in 1.00");
 
 // The table D2Game calls back into (GAME_SetServerCallbackFunctions). D2Game stores
 // the pointer, not a copy, so the host keeps it in static storage. 1.13c and 1.14d
@@ -49,7 +49,7 @@ struct D2ServerCallbackFunctions {
     void * pfRelockDatabaseCharacter;   // 0x38 null in 1.00
     void * pfLoadComplete;              // 0x3C null in 1.00
 };
-static_assert(sizeof(D2ServerCallbackFunctions) == 0x40, "D2ServerCallbackFunctions is 0x40 bytes in 1.00");
+static_assert(sizeof(void*) != 4 || sizeof(D2ServerCallbackFunctions) == 0x40, "D2ServerCallbackFunctions is 0x40 bytes in 1.00");
 
 // One character-server connection; the host keeps three (CharServ.cpp).
 struct CharServerConn {
@@ -57,7 +57,7 @@ struct CharServerConn {
     char szIpAddr[36];              // 0x04 dotted address from realms.ini; "0..." = unused slot
     HANDLE hConnThread;             // 0x28 pending asynchronous connect (FOG_SOCKET_ConnectEx)
 };
-static_assert(sizeof(CharServerConn) == 0x2C, "CharServerConn is 0x2C bytes");
+static_assert(sizeof(void*) != 4 || sizeof(CharServerConn) == 0x2C, "CharServerConn is 0x2C bytes");
 
 // MCP -> server: GTM create game (FromMCP.cpp, message 0x06).
 struct MCP_GTM_CreateGameReq {
@@ -86,13 +86,13 @@ static_assert(sizeof(MCP_GTM_JoinGameReq) == 33, "MCP_GTM_JoinGameReq is 33 byte
 struct MCP_GTM_CB_GameReq {
     uint8_t nCmd;                   // 0x00 0x0C create, 0x0D join
     uint32_t dwToken;               // 0x01
-    char * pGameName;               // 0x05
+    uint32_t dwGameNameRef;         // 0x05 four wire bytes; D2Game 10048/10049 take their address (char** in the D2Server program)
     uint16_t wField09;              // 0x09
     uint16_t wField0B;              // 0x0B
     uint16_t wField0D;              // 0x0D
     uint8_t aPayload[1];            // 0x0F
 };
-static_assert(sizeof(MCP_GTM_CB_GameReq) == 16, "MCP_GTM_CB_GameReq is 16 bytes");
+static_assert(sizeof(MCP_GTM_CB_GameReq) == 16, "MCP_GTM_CB_GameReq is 16 bytes on the wire");
 
 // One row of GAME_GetGameInformation's output (0x8C bytes).
 struct D2GameInfoEntry {
@@ -118,7 +118,7 @@ struct GameInfoNode {
     int32_t bActive;                // 0x90 0 = marked for removal
     GameInfoNode * pNext;           // 0x94
 };
-static_assert(sizeof(GameInfoNode) == 0x98, "GameInfoNode is 0x98 bytes");
+static_assert(sizeof(void*) != 4 || sizeof(GameInfoNode) == 0x98, "GameInfoNode is 0x98 bytes");
 
 // A pending join, registered by the MCP and consumed when the client arrives (PlayerToken.cpp).
 struct PlayerTokenNode {
@@ -130,7 +130,7 @@ struct PlayerTokenNode {
     uint32_t dwGameToken;           // 0x2C
     PlayerTokenNode * pNext;        // 0x30
 };
-static_assert(sizeof(PlayerTokenNode) == 0x34, "PlayerTokenNode is 0x34 bytes");
+static_assert(sizeof(void*) != 4 || sizeof(PlayerTokenNode) == 0x34, "PlayerTokenNode is 0x34 bytes");
 
 // The 5 bytes McpServiceThread hands ToMCP_SendGameJoinInfo once a minute.
 struct GameJoinInfoFields {
@@ -182,7 +182,7 @@ struct D2UnitDescription {
     char szName[0x80];              // 0x0C
     D2UnitDescription * pNext;      // 0x8C
 };
-static_assert(sizeof(D2UnitDescription) == 0x90, "D2UnitDescription is 0x90 bytes");
+static_assert(sizeof(void*) != 4 || sizeof(D2UnitDescription) == 0x90, "D2UnitDescription is 0x90 bytes");
 
 // One row of D2GAME_10017's player list (0x34 bytes).
 struct D2PlayerListEntry {

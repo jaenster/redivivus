@@ -345,8 +345,8 @@ static int32_t __stdcall AI_BAAL_SelectWeightedAction(int * pnWeights, int32_t n
     if (nWeightCount > 0) {
       do {
         nRandResult += *pWeight;
-        nCount--;
         pWeight++;
+        nCount--;
       } while (nCount);
     }
 
@@ -643,7 +643,7 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     int _bInThroneRoom;
     uint32_t _bVeryFarFromAnchor;
     BOOL _bInMeleeRange;
-    bool bInMeleeRange;
+    BOOL bInMeleeRange;
     int32_t nAction;
     int32_t nDistToAnchorPt;
     D2RoomStrc* pRoom;
@@ -653,8 +653,8 @@ static int32_t __stdcall AI_BaalEvaluateCombatAction(D2UnitStrc * pUnit, ::SGAME
     eD2LevelId eLevelId;
     uint32_t nDistToAnchor;
     int32_t eCollisionFlag;
-    bool bInThroneRoom;
-    bool bVeryFarFromAnchor;
+    BOOL bInThroneRoom;
+    BOOL bVeryFarFromAnchor;
     eD2UnitType eUnitType;
     eD2CollisionShapeType nCollisionWidth;
     int nCombatAiState = pAiGeneral->dwArg0;
@@ -849,23 +849,13 @@ static bool __stdcall AI_Baal_SpawnClone(::SGAMEDATA * pGame, D2AiGeneralStrc * 
 
     pTargetUnit->eUnitFlags |= UNITFLAG_NOXP | UNITFLAG_NOTC;
     RestartAiThink(pGame, pTargetUnit, 0xf);
-    if (!pUnit) {
-      eOwnerType = UNIT_COUNT;
-      nOwnerGuid = -1;
-    } else {
-      eOwnerType = pUnit->eUnitType;
-      nOwnerGuid = pUnit->nUnitGUID;
-    }
+    eOwnerType = !pUnit ? UNIT_COUNT : pUnit->eUnitType;
+    nOwnerGuid = !pUnit ? -1 : pUnit->nUnitGUID;
 
     Ai::AiGeneral::AssignMinionOwner(pGame, pUnit, nOwnerGuid, eOwnerType, 1, 0);
     Ai::AiGeneral::AddMinionToList(pGame, pUnit, pTargetUnit);
-    if (!pUnit) {
-      eOwnerType = UNIT_COUNT;
-      nOwnerGuid = -1;
-    } else {
-      eOwnerType = pUnit->eUnitType;
-      nOwnerGuid = pUnit->nUnitGUID;
-    }
+    eOwnerType = !pUnit ? UNIT_COUNT : pUnit->eUnitType;
+    nOwnerGuid = !pUnit ? -1 : pUnit->nUnitGUID;
 
     Ai::AiGeneral::AssignMinionOwner(pGame, pTargetUnit, nOwnerGuid, eOwnerType, 1, 0);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pTargetUnit, UNITSTAT_maxhp, D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit) / 3, 0);

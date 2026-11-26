@@ -106,7 +106,7 @@ int __fastcall SafeCreateDirectoryTree(char * szPath) {
     }
 
     for (char* pNextSep = Storm::Source::SSTR::SStrChr(szPath + 1, '\\'); pNextSep; pNextSep = Storm::Source::SSTR::SStrChr(pNextSep + 1, '\\')) {
-      uint32_t nSegmentLen = pNextSep - szPath;
+      uint32_t nSegmentLen = (uint32_t)(pNextSep - szPath);
       if (nSegmentLen >= 0x104) {
         bResult = 0;
         break;
@@ -346,7 +346,7 @@ int __fastcall SFILE_MoveDirectoryRecursive(LPCSTR szSrcRoot, LPCSTR szDstRoot) 
     return 1;
 }
 
-void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize) {
+void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize) {
     DWORD dwAttributes;
     char* pcLen;
     int nMoveResult;

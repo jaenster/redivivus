@@ -636,7 +636,7 @@ static void __stdcall WEATHER_GetLightingTint(int nIntensity, uint8_t * pOutTint
 static void WEATHER_SpawnParticle(D2SeedStrc * pSeed) {
     bool bIsBlizzard;
     D2WeatherParticleStrc* pParticleSlot;
-    uint32_t nSlot = Fog::Src::DataArrays::FOG_GetMissileField(pEnvironmentParticles);
+    int nSlot = Fog::Src::DataArrays::FOG_GetMissileField(pEnvironmentParticles);
     if (nSlot == -1) {
       return;
     }
@@ -1102,7 +1102,7 @@ void __fastcall WEATHER_DrawBubbles(D2DataArrayStrc * pBubbleArray, DC6 * * pDC6
         }
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     D2WeatherBubbleStrc* pEntry = (D2WeatherBubbleStrc*)pBubbleArraySaved->pData;
     int nIndex = 0;
     if (pBubbleArraySaved->nHighestUsedIndex < 0) {

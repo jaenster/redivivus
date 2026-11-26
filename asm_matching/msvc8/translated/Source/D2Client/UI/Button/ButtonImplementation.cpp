@@ -140,7 +140,7 @@ int __fastcall OnMouseWheel(::ButtonImplementation * pThis, int, D2UIMouseMsgStr
     pThis->bPressed = 0;
     pThis->nActivationState = 0;
     ::ButtonImplementation* pButtonSelf = pThis;
-    memset(&aGfxParams, 0, 0x48);
+    memset(&aGfxParams, 0, sizeof(aGfxParams));
     aGfxParams.pDC6 = ui::GetBuySellBtnDC6();
     aGfxParams.nFrameNumber = (int)pThis->nFrameBase;
     aGfxParams.nDirection = 0;
@@ -168,7 +168,7 @@ int __fastcall OnMouseWheel(::ButtonImplementation * pThis, int, D2UIMouseMsgStr
 
 void __fastcall Draw(::ButtonImplementation * pThis, int) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     sGfxData.nFrameNumber = (uint32_t)pThis->nFrameBase + pThis->bPressed;
     sGfxData.nDirection = 0;

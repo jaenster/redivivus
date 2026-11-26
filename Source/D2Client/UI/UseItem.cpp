@@ -89,10 +89,7 @@ static void ITEM_ToggleHandState(D2UnitStrc * pUnit) {
 
 BOOL __stdcall TEXT_HandleMouseMove() {
     int nPlayerGUID;
-    if (ui::gnPlayerCashDisplay != 2) {
-      return 0;
-    }
-
+    if (ui::gnPlayerCashDisplay == 2) {
     Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
     Dialog::gpHoradricCubeDialog = Dialog::AllocDialogStrc(0x96, 0x82, TEXT_EmptyCallback, nullptr, 1, 0, 1, 0, 0, 0, 1);
     Dialog::DIALOG_SetHighlightStyle(Dialog::gpHoradricCubeDialog, 0);
@@ -113,6 +110,9 @@ BOOL __stdcall TEXT_HandleMouseMove() {
 
     npcmenu::SubmitItem(gnCursorItemUnitId);
     return 1;
+    }
+
+    return 0;
 }
 
 void __fastcall TEXT_HandleItemUse(int32_t nMouseX, int32_t nMouseY) {
@@ -223,7 +223,7 @@ void __stdcall TEXT_DrawCashDisplay() {
     uint32_t uFontHeight = nHoradricCubeUIState;
     if (nHoradricCubeUIState == 1 || !nHoradricCubeUIState) {
       int nMouseX;
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.nDirection = 0;
       if (!uFontHeight) {
         sGfxData.pDC6 = ui::gpHoradricBackgroundDC6;

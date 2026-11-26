@@ -16,15 +16,45 @@
 // Forward declarations
 struct D2CrashDumpRequestStrc;
 typedef BOOL (__stdcall *pfnSymCleanup)(HANDLE hProcess);
+#if !defined(_WIN64)
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr)(HANDLE hProcess, DWORD dwAddr, void * pdwDisplacement, void * pLine);
+#else
+// 64-bit dbghelp exports only the *64 entry points (DWORD64 addresses).
+typedef BOOL (__stdcall *pfnSymGetLineFromAddr)(HANDLE hProcess, DWORD64 dwAddr, void * pdwDisplacement, void * pLine);
+#endif
+#if !defined(_WIN64)
 typedef BOOL (__stdcall *pfnSymGetModuleInfo)(HANDLE hProcess, DWORD dwAddr, void * pModuleInfo);
-typedef BOOL (__stdcall *pfnSymGetSymFromAddr)(HANDLE hProcess, DWORD dwAddr, void * pDisplacement, void * pSymbol);
+#else
+// 64-bit dbghelp exports only the *64 entry points (DWORD64 addresses).
+typedef BOOL (__stdcall *pfnSymGetModuleInfo)(HANDLE hProcess, DWORD64 dwAddr, void * pModuleInfo);
+#endif
+#if !defined(_WIN64)
+typedef BOOL (__stdcall *pfnSymGetSymFromAddr)(HANDLE hProcess, DWORD_PTR dwAddr, void * pDisplacement, void * pSymbol);
+#else
+// 64-bit dbghelp exports only the *64 entry points (DWORD64 addresses).
+typedef BOOL (__stdcall *pfnSymGetSymFromAddr)(HANDLE hProcess, DWORD64 dwAddr, void * pDisplacement, void * pSymbol);
+#endif
 typedef BOOL (__stdcall *pfnSymInitialize)(HANDLE hProcess, char * UserSearchPath, BOOL fInvadeProcess);
+#if !defined(_WIN64)
 typedef DWORD (__stdcall *pfnSymGetModuleBase)(HANDLE hProcess, DWORD dwAddr);
+#else
+// 64-bit dbghelp exports only the *64 entry points (DWORD64 addresses).
+typedef DWORD64 (__stdcall *pfnSymGetModuleBase)(HANDLE hProcess, DWORD64 dwAddr);
+#endif
 typedef DWORD (__stdcall *pfnSymGetOptions)();
-typedef DWORD (__stdcall *pfnSymLoadModule)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD BaseOfDll, DWORD SizeOfDll);
+#if !defined(_WIN64)
+typedef DWORD (__stdcall *pfnSymLoadModule)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD_PTR BaseOfDll, DWORD SizeOfDll);
+#else
+// 64-bit dbghelp exports only the *64 entry points (DWORD64 addresses).
+typedef DWORD64 (__stdcall *pfnSymLoadModule)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD64 BaseOfDll, DWORD SizeOfDll);
+#endif
 typedef DWORD (__stdcall *pfnSymSetOptions)(DWORD SymOptions);
+#if !defined(_WIN64)
 typedef void * (__stdcall *pfnSymFunctionTableAccess)(HANDLE hProcess, DWORD AddrBase);
+#else
+// 64-bit dbghelp exports only the *64 entry points (DWORD64 addresses).
+typedef void * (__stdcall *pfnSymFunctionTableAccess)(HANDLE hProcess, DWORD64 AddrBase);
+#endif
 typedef BOOL (__stdcall *pfnStackWalk)(DWORD MachineType, HANDLE hProcess, HANDLE hThread, void * StackFrame, void * ContextRecord, void * ReadMemoryRoutine, pfnSymFunctionTableAccess FunctionTableAccessRoutine, pfnSymGetModuleBase GetModuleBaseRoutine, void * TranslateAddress);
 
 extern D2CrashDumpRequestStrc * pCrashDumpInfo;

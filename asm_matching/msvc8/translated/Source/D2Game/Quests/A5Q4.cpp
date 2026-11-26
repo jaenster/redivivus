@@ -677,7 +677,7 @@ void __fastcall Q34_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // Q34_InitData (Betrayal of Harrogath) — quest registration. Allocates the 0x90-byte A5Q4 specific data, wires the per-state handlers (0/2/3/8/10/11/13), the NPC gossip table (Nihlathak class 0x200, intro string 0x4ea9), and sets nQuestIdReal=QUEST_BetrayalOfHaggorath, nInitNo=4, status/active/sequence filters, nSequenceQuestId=Siege on Harrogath. Initializes GUID list. No quest-state reads/writes.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q4.cpp
 void __fastcall Q34_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pSVar1 = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q34_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q34_Callback03_ChangedLevel;
@@ -697,7 +697,7 @@ void __fastcall Q34_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpActiveFilter = Q34_ActiveFilter;
     pQuestData->fpSequenceFilter = Q34_SequenceFilter;
     pQuestData->nSequenceQuestId = QUEST_SiegeOnHaggorath;
-    memset(pQuestSpecificData, 0, 0x90);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sQuestGUID);
 }
 

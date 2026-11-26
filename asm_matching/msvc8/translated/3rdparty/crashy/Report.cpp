@@ -135,7 +135,7 @@ int8_t __fastcall AddAttachment(::Report * pThis, int, char * szPath, int8_t bCo
         pBaseDirPtr += -1 - (intptr_t)pThis->szReportDir;
         if (pBaseDirPtr < (char*)0x400) {
           szPathCopy[(intptr_t)pBaseDirPtr] = '/';
-          bVar1 = File::FILETOOLS_ExtractFilename(szPathCopy + (intptr_t)(pBaseDirPtr + 1), szPath, (intptr_t)&local_8 - (intptr_t)(szPathCopy + (intptr_t)(pBaseDirPtr + 1)));
+          bVar1 = File::FILETOOLS_ExtractFilename(szPathCopy + (intptr_t)(pBaseDirPtr + 1), szPath, (uint32_t)((intptr_t)&local_8 - (intptr_t)(szPathCopy + (intptr_t)(pBaseDirPtr + 1))));
           if (bVar1) {
             File::FILETOOLS_CopyFile_UTF8(szPath, szPathCopy);
             szPath = szPathCopy;

@@ -680,7 +680,7 @@ void __fastcall Q21_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 // then enables bird drop (bBirdDropEnabled/bCanDropBird=true).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q4.cpp
 void __fastcall Q21_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->pNpcMessages = A3Q4::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 0;

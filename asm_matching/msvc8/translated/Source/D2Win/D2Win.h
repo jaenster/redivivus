@@ -299,7 +299,7 @@ __pragma(pack(push, 1)) struct DC6Block {
     /* 0x0C */ int nOffsetX;
     /* 0x10 */ int nOffsetY;
     /* 0x14 */ int nAllocSize;
-    /* 0x18 */ int nNextBlock;
+    /* 0x18 */ intptr_t nNextBlock; // on disk a 32-bit field; after load the frame's 0x2c-byte renderer record (CELCMP_GetDC6BlockPixelData), so pointer-sized in memory
     /* 0x1C */ int nLength;
     /* 0x20 */ char data[0];
 }; __pragma(pack(pop))
@@ -480,7 +480,7 @@ BOOL __fastcall Draw(::D2WinList * pList);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall ListCheck(struct D2ControlMsg * pList);
 BOOL __stdcall Key(struct D2ControlMsg * pControlMsg);
-::D2WinList * __fastcall D2WinList(int32_t nPosX, int32_t nPosY, int * nSizeX, int32_t nSizeY, int * pnItemArray, int * pnFontType);
+::D2WinList * __fastcall D2WinList(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int * pnItemArray, int * pnFontType);
 }}} // namespace D2Win::Src::D2WinList
 namespace D2Win { namespace Src { namespace D2WinMain {
 // Sets gnWindowInitState background DC6 pointer, returns 1

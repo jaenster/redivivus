@@ -13,7 +13,6 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/UI/Automap.h"
 #include "Source/D2Common/D2SeedStrc.h"
 #include "Source/D2Common/Unit.h"
 
@@ -114,6 +113,19 @@ union D2UnitDataUnion {
 };
 
 #endif // D2_DEFINED_D2UnitDataUnion
+#ifndef D2_DEFINED_uD2UnitMode
+#define D2_DEFINED_uD2UnitMode
+union uD2UnitMode {
+    /* 0x00 */ eD2PlayerAnimMode ePlayerMode; // match with plrmode..txt
+    /* 0x00 */ eD2MonsterAnimMode eMonsterMode; // match with monmode.txt
+    /* 0x00 */ eD2ObjectAnimMode eObjectMode; // match with objmode.txt
+    /* 0x00 */ eD2ItemAnimMode eItemMode; // holds up information about container
+    /* 0x00 */ eCollisionFlags eMissileCollision; // hold up information about missile collision
+    /* 0x00 */ uint32_t field_1c; // decompiler cast: mode value at +0x1c in caller frame
+    /* 0x00 */ uint32_t field_3; // decompiler cast: mode value at byte offset 3
+};
+
+#endif // D2_DEFINED_uD2UnitMode
 #pragma pack(push, 1)
 struct D2UnitStrc {
     /* 0x00 */ eD2UnitType eUnitType; // 0=PLAYER 1=MONSTER 2=OBJECT 3=MISSILE 4=ITEM 5=WARP

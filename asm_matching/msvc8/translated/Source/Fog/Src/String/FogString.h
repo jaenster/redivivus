@@ -21,7 +21,7 @@ void __stdcall SMEM_TitleCaseString(char * pMcpData);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 void __fastcall SMemStringToUppercase(char * szText, int32_t nMaxLen);
-uint8_t * __fastcall SMemEscapeString(uint8_t * pbDst, uint8_t * pbSrc, size_t nBufSize, uint8_t byQuoteChar);
+uint8_t * __fastcall SMemEscapeString(uint8_t * pbDst, uint8_t * pbSrc, uint32_t nBufSize, uint8_t byQuoteChar);
 char * __fastcall SMemFormat64BitWithSeparators(char * szText, uint32_t nWidth, uint32_t nValueLo, uint32_t nValueHi);
 #endif // D2_MODULE_Fog
 

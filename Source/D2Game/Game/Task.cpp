@@ -224,21 +224,21 @@ void __stdcall TASK_MoveTasksToSlotAndLinkSlot(D2TaskQueueSlotStrc * pSlot) {
       D2LinkNodeStrc* pReadyTask;
       do {
         nRemainingSlots--;
-        nStepsRemaining = (int)pSlotNode[-2].pPrev - (uint32_t)!((nRemainingSlots >= 0) + nTailCycleCount);
-        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + (intptr_t)pSlotNode[-2].pNext);
-        pInsertBefore = pSlotNode - 1;
-        pSortCur = pSlotNode[-1].pNext;
+        nStepsRemaining = ((D2TaskQueueSlotStrc*)((char*)pSlotNode - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->nTaskCount - (uint32_t)!((nRemainingSlots >= 0) + nTailCycleCount);
+        /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + ((D2TaskQueueSlotStrc*)((char*)pSlotNode - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->nSlotIndex);
+        pInsertBefore = &((D2TaskQueueSlotStrc*)((char*)pSlotNode - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->sTaskList;
+        pSortCur = ((D2TaskQueueSlotStrc*)((char*)pSlotNode - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->sTaskList.pNext;
         for (pCurTask = pSortCur; nStepsRemaining && (nStepsRemaining-- , pCurTask != pInsertBefore); pCurTask = pCurTask->pPrev) {}
 
         pReadyTask = pCurTask->pPrev;
         pCurTask->pPrev = pInsertBefore;
         pInsertBefore->pNext = pCurTask;
-        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + (intptr_t)pSlotNode[-2].pNext);
+        /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + ((D2TaskQueueSlotStrc*)((char*)pSlotNode - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->nSlotIndex);
         if (pReadyTask != pInsertBefore) {
           pCurTask = &pSlot->sTaskList;
           pSortCur->pPrev = 0;
           pInsertBefore = pCurTask->pNext;
-          while (pInsertBefore != pCurTask && (intptr_t)pReadyTask[-2].pPrev - (intptr_t)pInsertBefore[-2].pPrev < 0) {
+          while (pInsertBefore != pCurTask && (int32_t)(((D2TaskNodeStrc*)((char*)pReadyTask - offsetof(D2TaskNodeStrc, sLink)))->dwTimestamp - ((D2TaskNodeStrc*)((char*)pInsertBefore - offsetof(D2TaskNodeStrc, sLink)))->dwTimestamp) < 0) {
             pInsertBefore = pInsertBefore->pNext;
           }
 
@@ -259,7 +259,7 @@ void __stdcall TASK_MoveTasksToSlotAndLinkSlot(D2TaskQueueSlotStrc * pSlot) {
               pNextTask = pReadyTask->pPrev;
               do {
                 pInsertBefore = pReadyTask;
-                if (pSortNext[-2].pPrev == pNextTask[-2].pPrev || (intptr_t)pSortNext[-2].pPrev - (intptr_t)pNextTask[-2].pPrev < 0) {
+                if (((D2TaskNodeStrc*)((char*)pSortNext - offsetof(D2TaskNodeStrc, sLink)))->dwTimestamp == ((D2TaskNodeStrc*)((char*)pNextTask - offsetof(D2TaskNodeStrc, sLink)))->dwTimestamp || (int32_t)(((D2TaskNodeStrc*)((char*)pSortNext - offsetof(D2TaskNodeStrc, sLink)))->dwTimestamp - ((D2TaskNodeStrc*)((char*)pNextTask - offsetof(D2TaskNodeStrc, sLink)))->dwTimestamp) < 0) {
                   break;
                 }
 
@@ -372,10 +372,10 @@ void __stdcall TASK_GameTickCallback(uint32_t nParam, D2TaskNodeStrc * pTaskNode
         exit(-1);
       }
 
-      pFirstSlot = (D2TaskQueueSlotStrc*)(gsTaskQueueListHead.pNext - 2);
-      if (gsTaskQueueListHead.pNext[-2].pPrev == (D2LinkNodeStrc*)(pDVar1->nTaskCount + 1)) {
+      pFirstSlot = ((D2TaskQueueSlotStrc*)((char*)gsTaskQueueListHead.pNext - offsetof(D2TaskQueueSlotStrc, sSlotLink)));
+      if (((D2TaskQueueSlotStrc*)((char*)gsTaskQueueListHead.pNext - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->nTaskCount == pDVar1->nTaskCount + 1) {
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + pFirstSlot->nSlotIndex);
-        if (pSlotLink[-1].pPrev == pSlotLink - 1 || (pFreeNode = pSlotLink[-1].pNext , !pFreeNode)) {
+        if (((D2TaskQueueSlotStrc*)((char*)pSlotLink - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->sTaskList.pPrev == &((D2TaskQueueSlotStrc*)((char*)pSlotLink - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->sTaskList || (pFreeNode = ((D2TaskQueueSlotStrc*)((char*)pSlotLink - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->sTaskList.pNext , !pFreeNode)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2f5);
           exit(-1);
         }
@@ -385,7 +385,7 @@ void __stdcall TASK_GameTickCallback(uint32_t nParam, D2TaskNodeStrc * pTaskNode
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + pDVar1->nSlotIndex);
         TASK_InsertTaskAtTimestamp(pDVar1, (D2TaskNodeStrc*)((char*)pFreeNode - 0xc), 0);
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + pDVar1->nSlotIndex);
-        pSlotLink[-2].pPrev = (D2LinkNodeStrc*)((intptr_t)&pSlotLink[-2].pPrev[-1].pPrev + 3);
+        ((D2TaskQueueSlotStrc*)((char*)pSlotLink - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->nTaskCount = ((D2TaskQueueSlotStrc*)((char*)pSlotLink - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->nTaskCount - 1;
       } else {
         pDVar1->nTaskCount--;
         pSlotLink = &pDVar1->sSlotLink;
@@ -483,7 +483,7 @@ BOOL __fastcall TASK_EnqueueGameTask(D2TaskNodeStrc * pTaskNode, uint32_t dwCall
       gsTaskQueueListHead.pPrev = &gsTaskQueueListHead;
     } else if (gsTaskQueueListHead.pPrev != &gsTaskQueueListHead && gsTaskQueueListHead.pPrev) {
       D2LinkNodeStrc* pSlotLink = gsTaskQueueListHead.pPrev;
-      D2TaskQueueSlotStrc* pSlot = (D2TaskQueueSlotStrc*)((char*)pSlotLink - 0x10);
+      D2TaskQueueSlotStrc* pSlot = ((D2TaskQueueSlotStrc*)((char*)pSlotLink - offsetof(D2TaskQueueSlotStrc, sSlotLink)));
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&aTaskQueueCriticalSections[pSlot->nSlotIndex]);
       D2LinkNodeStrc* pNewLink = &pTaskNode->sLink;
       D2LinkNodeStrc* pTaskList = &pSlot->sTaskList;
@@ -530,21 +530,23 @@ BOOL __fastcall TASK_EnqueueGameTask(D2TaskNodeStrc * pTaskNode, uint32_t dwCall
 int32_t __fastcall TASK_DequeueReadyTask(uint32_t nSlotToken, D2TaskNodeStrc * * ppTaskOut) {
     int32_t nResult = 100;
     *ppTaskOut = 0;
-    EnterCriticalSection(aTaskQueueCriticalSections + (nSlotToken & 0x1f));
-    D2TaskQueueSlotStrc* pQueueSlot = gaTaskQueueHeadArray[nSlotToken & 0x1f];
+    int nSlot = nSlotToken & 0x1f;
+    EnterCriticalSection(aTaskQueueCriticalSections + nSlot);
+    D2TaskQueueSlotStrc* pQueueSlot = gaTaskQueueHeadArray[nSlot];
     if (!pQueueSlot) {
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + (nSlotToken & 0x1f));
+      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + nSlot);
       return 100;
     }
 
     PD2TaskNodeLink pReadyTask = pQueueSlot->sTaskList.pPrev;
     if (pReadyTask != &pQueueSlot->sTaskList && pReadyTask) {
+      D2TaskNodeStrc* pTask = (D2TaskNodeStrc*)((char*)pReadyTask - 0xc);
       uint32_t uVar1;
       uVar1 = TASK_GetTimestamp();
-      nResult = ((D2TaskNodeStrc*)((char*)pReadyTask - 0xc))->dwTimestamp - uVar1;
+      nResult = pTask->dwTimestamp - uVar1;
       if (nResult <= 0) {
         TASK_UnlinkTaskFromList(pReadyTask);
-        *ppTaskOut = (D2TaskNodeStrc*)((char*)pReadyTask - 0xc);
+        *ppTaskOut = pTask;
       }
     }
     if (pQueueSlot->nSlotIndex >= 0x20) {

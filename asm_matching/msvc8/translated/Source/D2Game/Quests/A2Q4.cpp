@@ -483,12 +483,12 @@ void __fastcall Q12_OnHoradricStaffAssembled(::SGAMEDATA * pGame) {
 }
 
 // A2Q4 - StubNoop1. Empty quest-table slot stub (returns nothing). No quest-state effect.
-void __stdcall A2Q4_OnJerhynCreated_NoOp(uint32_t dwArg1, uint32_t dwArg2) {
+void __fastcall A2Q4_OnJerhynCreated_NoOp(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
 
 }
 
 // A2Q4 - StubNoop2. Empty quest-table slot stub. No quest-state effect.
-void __stdcall A2Q4_OnAct2Guard2Created_NoOp(uint32_t dwArg1, uint32_t dwArg2) {
+void __fastcall A2Q4_OnAct2Guard2Created_NoOp(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
 
 }
 
@@ -619,14 +619,12 @@ BOOL __fastcall Q12_GetSummonerCoords(::SGAMEDATA * pGame, D2CoordStrc * pCoord)
       D2QuestDataA2Q4Strc* pDVar1;
       pDVar1 = pDVar2->pQuestSpecificData.pA2Q4;
       if (pDVar1->bSummonerKilled) {
-        pCoord->nX = pDVar1->nSummonerX;
-        pCoord->nY = pDVar1->nSummonerY;
+        *pCoord = pDVar1->sSummonerCoords;
         return 1;
       }
       if (pDVar1->bSummonerCoordsFallback) {
-        pCoord->nX = pDVar1->nSummonerX;
-        pCoord->nY = pDVar1->nSummonerY;
-        pCoord->nY += -4;
+        *pCoord = pDVar1->sSummonerCoords;
+        pCoord->nY -= 4;
         return 1;
       }
     }

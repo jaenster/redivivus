@@ -30,6 +30,28 @@ typedef int (__fastcall *UNITFINDTEST)(struct D2UnitStrc * pUnit, struct D2UnitF
 typedef int (__fastcall *fpUnitTest)(struct D2UnitStrc *, struct D2UnitStrc *);
 #endif
 
+// Data types
+#ifndef D2_DEFINED_D2UnitFindArgStrc
+#define D2_DEFINED_D2UnitFindArgStrc
+struct D2UnitFindArgStrc {
+    /* 0x00 */ int nFlags;
+    /* 0x04 */ int nPad04; // Unused padding; zeroed by memset(0x38), never read/written by any consumer (TestUnit, callers).
+    /* 0x08 */ struct D2UnitStrc * pAttacker;
+    /* 0x0C */ int nX;
+    /* 0x10 */ int nY;
+    /* 0x14 */ int nDistance;
+    /* 0x18 */ int nMaxArrayEntries;
+    /* 0x1C */ int nIndex;
+    /* 0x20 */ POINT * pCoords;
+    /* 0x24 */ int (__fastcall *fpUnitTest)(struct D2UnitStrc *, struct D2UnitFindArgStrc *);
+    /* 0x28 */ int nReserved28; // Reserved/scratch; zeroed, never read or written by any unit-find consumer.
+    /* 0x2C */ int nReserved2c; // Reserved/scratch; zeroed, never read or written by any unit-find consumer.
+    /* 0x30 */ int nReserved30; // Reserved/scratch; zeroed, never read or written by any unit-find consumer.
+    /* 0x34 */ int nReserved34; // Reserved/scratch; zeroed, never read or written by any unit-find consumer.
+};
+
+#endif // D2_DEFINED_D2UnitFindArgStrc
+
 namespace D2Common::Units::UnitFinds {
 
 // Function declarations

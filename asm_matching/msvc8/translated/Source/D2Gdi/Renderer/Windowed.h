@@ -190,7 +190,7 @@ void __fastcall PerspecitveScalePosition(int nPosX, int nPosY, int nAngle, int *
 void __fastcall SetDefaultPerspectiveFactor();
 BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize);
 BOOL __fastcall ActivateWindow();
-BOOL __fastcall SetOption(int nOption, int nValue);
+BOOL __fastcall SetOption(int nOption, intptr_t nValue);
 // Palette quantization via brute-force nearest-neighbor search. Iterates all 256 palette entries (prgbq_00989c40), calculates Manhattan distance (|R1-R2| + |G1-G2| + |B1-B2|) in RGB space, returns index of closest match. Classic indexed color dithering support for 8-bit framebuffer.
 uint8_t __fastcall RENDERER_WINDOWED_FindNearestPaletteIndex(int nRed, int nBlue, int nGreen);
 int * __fastcall GetRendererStatistics();

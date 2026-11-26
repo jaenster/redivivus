@@ -52,6 +52,30 @@ __pragma(pack(push, 1)) struct D2CompositTxt {
 }; __pragma(pack(pop))
 
 #endif // D2_DEFINED_D2CompositTxt
+#ifndef D2_DEFINED_D2MonModeTxt
+#define D2_DEFINED_D2MonModeTxt
+__pragma(pack(push, 1)) struct D2MonModeTxt {
+    /* 0x00 */ char name[32];
+    /* 0x20 */ char token[4];
+    /* 0x24 */ uint8_t DT_Dir;
+    /* 0x25 */ uint8_t NU_Dir;
+    /* 0x26 */ uint8_t WL_Dir;
+    /* 0x27 */ uint8_t GH_Dir;
+    /* 0x28 */ uint8_t A1_Dir;
+    /* 0x29 */ uint8_t A2_Dir;
+    /* 0x2A */ uint8_t BL_Dir;
+    /* 0x2B */ uint8_t SC_Dir;
+    /* 0x2C */ uint8_t S1_Dir;
+    /* 0x2D */ uint8_t S2_Dir;
+    /* 0x2E */ uint8_t S3_Dir;
+    /* 0x2F */ uint8_t S4_Dir;
+    /* 0x30 */ uint8_t DD_Dir;
+    /* 0x31 */ uint8_t KB_Dir;
+    /* 0x32 */ uint8_t SQ_Dir;
+    /* 0x33 */ uint8_t RN_Dir;
+}; __pragma(pack(pop))
+
+#endif // D2_DEFINED_D2MonModeTxt
 namespace D2Common { namespace COMPOSIT { namespace Composit {
 
 // Function declarations

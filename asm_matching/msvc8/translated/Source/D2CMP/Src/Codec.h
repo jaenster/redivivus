@@ -35,7 +35,7 @@ union CODEC_DecompressAllFrames_Slotm338 {
 #ifndef D2_DEFINED_D2CodecBitStateStrc
 #define D2_DEFINED_D2CodecBitStateStrc
 struct D2CodecBitStateStrc {
-    /* 0x00 */ uint32_t nReserved00; // field at +0 (not directly accessed by bit-reader fns)
+    /* 0x00 */ uint32_t * pStreamStart; // first 32-bit word of the bit stream; the bit position is ((pCurWord - pStreamStart) << 5) + nBitOffset
     /* 0x04 */ uint32_t * pCurWord; // pointer to current 32-bit word in bit stream
     /* 0x08 */ uint32_t nReserved08; // field at +8 (not directly accessed by bit-reader fns)
     /* 0x0C */ int nBitOffset; // bit offset within current 32-bit word (0..31)

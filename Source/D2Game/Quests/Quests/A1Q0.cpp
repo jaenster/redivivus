@@ -75,7 +75,7 @@ bool __fastcall Q00_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // Q00_InitData (QUEST_SpokeToWarriv, quest slot 0). Wires up the "spoke to Warriv" pseudo-quest: zeroes the state-handler table, installs Q00_Callback_00 at slot 0 (NPC interact) and Q00_Callback_11 at slot 0x0b (dialog complete), sets nQuestIdReal=QUEST_SpokeToWarriv, points pNpcMessages at the single-entry Warriv gossip table, marks active, and installs the status/active filters. NOT a numbered player quest — Act 1 intro greeting bookkeeping only (no reward, no journal).
 void __fastcall Q00_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q00_Callback00_NpcActivate;
     pQuestData->nStateFlag = 0;
     pQuestData->nStateFlagPrev = 0;

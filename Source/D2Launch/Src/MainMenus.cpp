@@ -5141,7 +5141,7 @@ void __stdcall UIMENU_TCPIPOptions() {
 }
 
 BOOL __stdcall MAINMENU_DisableControlIfDataNonZero(D2ControlMsg * pControlData) {
-    if (pControlData->uLParam.nLParam) {
+    if (pControlData->uLParam.bState) {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpCtlTcpIpAddress->sControl, 1);
     } else {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpCtlTcpIpAddress->sControl, 0);
@@ -5151,7 +5151,7 @@ BOOL __stdcall MAINMENU_DisableControlIfDataNonZero(D2ControlMsg * pControlData)
 }
 
 BOOL __stdcall MAINMENU_DisableControlIfDataNonZero2(D2ControlMsg * pControlData) {
-    if (pControlData->uLParam.nLParam) {
+    if (pControlData->uLParam.bState) {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpCtlTcpIpPort->sControl, 1);
     } else {
       D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpCtlTcpIpPort->sControl, 0);
@@ -5642,8 +5642,8 @@ uint16_t * __stdcall MAINMENU_LoadCreditsFile(uint32_t * pnCharCount) {
     char szLangAbbrev[4];
     D2MPQFileStrc* pArchive;
     D2Lang::StrTable::strtable::TABLES_GetLangAbbreviation(szLangAbbrev, 0);
-    memcpy(szFileNameBase, "Credits.txt", 0xc);
-    memcpy(szExpFileName, "ExpansionCredits.txt", 0x15);
+    memcpy(szFileNameBase, "Credits.txt", sizeof(szFileNameBase));
+    memcpy(szExpFileName, "ExpansionCredits.txt", sizeof(szExpFileName));
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     char* szFileName = szFileNameBase;
     if (bIsExpansion) {
@@ -6200,7 +6200,7 @@ void __fastcall Unreferenced_00431c60(uint8_t * pPacket, int nSize) {
 
 int __stdcall MAINMENU_HandleNetworkPacket(int nFrameIndex) {
     char szPacketBuffer[512];
-    size_t nPacketSize;
+    uint32_t nPacketSize;
     nPacketSize = D2Net::SRC::Client::NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(szPacketBuffer, 0x200);
     if (nPacketSize != -1) {
       switch ((uint8_t)szPacketBuffer[0]) {
@@ -6482,11 +6482,9 @@ uint32_t __stdcall MAINMENU_PollMCPThreadStatus() {
     }
 
     int32_t nJoinResult;
-    /* DWORD dwMilliseconds for WaitForSingleObject */ dwWaitResult = 0;
-    hHandle = D2MCPClient::McpConnect::GetMCPThread();
-    /* HANDLE hHandle for WaitForSingleObject */ dwWaitResult = WaitForSingleObject(hHandle, dwWaitResult);
+    dwWaitResult = WaitForSingleObject(D2MCPClient::McpConnect::GetMCPThread(), 0);
     if (dwWaitResult) {
-      if (dwWaitResult != 0x102) {
+      if (dwWaitResult != WAIT_TIMEOUT) {
         return 2;
       }
 
@@ -7051,7 +7049,7 @@ void __stdcall UIMENU_MainMenu() {
     FORMS_CreateAnyFormFromListExEx(0xe);
     FORMS_CreateAnyFormFromListExEx(0xf);
     ::D2WinTextBox* pCtlVersionText = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x115);
-    size_t nVersionLen = Storm::Source::SSTR::SStrPrintf(szVersionText, 0x40, "v %d.%d%c", 1, 0xe, 'd');
+    uint32_t nVersionLen = Storm::Source::SSTR::SStrPrintf(szVersionText, 0x40, "v %d.%d%c", 1, 0xe, 'd');
     if (D2IniData_launcher->bBUILD) {
       Storm::Source::SSTR::SStrPrintf(szVersionText + nVersionLen, 0x40 - nVersionLen, " %d", 0x47);
     }
@@ -7162,7 +7160,7 @@ BOOL __stdcall UIMENU_ShowTermsOfService() {
 
     while (true) {
       nSrcIndex = nCharOffset;
-      memset(wszLineBuffer, 0, 400);
+      memset(wszLineBuffer, 0, sizeof(wszLineBuffer));
       nDstIndex = 0;
       do {
         if (nSrcIndex >= nCharCount) {
@@ -7308,19 +7306,19 @@ int __stdcall ClickOnClassCreate(D2ControlMsg * pControlMsg) {
     pClickedAnim = pControlMsg->pControl;
     if (pClickedAnim == gaAnimImgCharCreateByClass[0]) {
       nNewClassId = 4;
-      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.nLParam, 4, 0xfa7, 0x140a);
+      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.bState, 4, 0xfa7, 0x140a);
     } else if (pClickedAnim == gaAnimImgCharCreateByClass[1]) {
       nNewClassId = 2;
-      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.nLParam, 2, 0xfa9, 0x1409);
+      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.bState, 2, 0xfa9, 0x1409);
     } else if (pClickedAnim == gaAnimImgCharCreateByClass[2]) {
       nNewClassId = 0;
-      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.nLParam, 0, 0xfab, 0x1408);
+      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.bState, 0, 0xfab, 0x1408);
     } else if (pClickedAnim == gaAnimImgCharCreateByClass[3]) {
       nNewClassId = 1;
-      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.nLParam, 1, 0xfaa, 0x140b);
+      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.bState, 1, 0xfaa, 0x140b);
     } else if (pClickedAnim == gaAnimImgCharCreateByClass[4]) {
       nNewClassId = 3;
-      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.nLParam, 3, 0xfa8, 0x140c);
+      MAINMENU_SetClassDescriptionTooltip(pControlMsg->uLParam.bState, 3, 0xfa8, 0x140c);
     } else if (pClickedAnim == gaAnimImgCharCreateByClass[5]) {
       nNewClassId = 5;
       MAINMENU_SetDruidDescription((D2WinAnimImageNotifyStrc*)pControlMsg);

@@ -553,7 +553,7 @@ void __fastcall Q09_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // A2Q1 (Radament's Lair) quest record init. Zeroes the 0x3c state-fn table, marks quest active with nStateFlag=1 (introduction/not-started). Wires the callback dispatch table indexed by gossip/state event: [0]=Q09_Callback_00 (gossip-line picker), [2]=Q09_Callback_02 (Radament-near retrigger), [3]=Q09_Callback_03 (Atma intro reply), [8]=Q09_Callback_08 (Radament death), [0xa]=noop thunk, [0xb]=Q09_Callback_11 (Atma reward dialog), [0xd]=Q09_Callback_13 (join-game state sync). Sets nSequenceQuestId=QUEST_TheSummoner (next quest in seq), fpSequenceFilter=Q09_SequenceFilter, fpActiveFilter=Q09_ActiveFilter, nQuestIdReal=QUEST_RadamentsLair. Allocs the 0x14-byte D2QuestDataA2Q1Strc scratch (bRadamentKilled/bSpokeToAtma/nBookOfSkillDropCount/bRewardPending/pRadamentRoom) and zeroes it.
 void __fastcall Q09_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 1;
     ::SGAMEDATA* pGame = pQuestData->pGame;

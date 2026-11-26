@@ -31,6 +31,9 @@ static char g_szStoredUsername[256] = {}; D2_STATIC_GUARD(g_szStoredUsername, "g
 static D2SrpSaltVerifierStrc g_srpSaltVerifier = {}; D2_STATIC_GUARD(g_srpSaltVerifier, "g_srpSaltVerifier");
 static D2SrpCredentialsStrc g_srpCredentials = {}; D2_STATIC_GUARD(g_srpCredentials, "g_srpCredentials");
 D2Srp * g_pSrpContext = 0; D2_GLOBAL_GUARD(g_pSrpContext, "g_pSrpContext");
+// kernel32!GetSystemDefaultUILanguage, looked up at run time (absent before Windows 2000).
+typedef LANGID (WINAPI *pfnGetSystemDefaultUILanguage)(void);
+
 namespace Bnclient::_net_sid {
 char * KeyClassic = 0; D2_GLOBAL_GUARD(KeyClassic, "Bnclient::_net_sid::KeyClassic");
 char * KeyExpansion = 0; D2_GLOBAL_GUARD(KeyExpansion, "Bnclient::_net_sid::KeyExpansion");
@@ -59,7 +62,7 @@ void * __stdcall NET_SID_CLIENT_GetChannelNamePtr() {
 
 // BATTLE.NET SID_CHATEVENT (0x0F) HANDLER
 // Receives chat event notifications from the Battle.net server with event type, flags, ping, username, and message text. Event types include: 0x01=show_user, 0x02=join, 0x03=leave, 0x04=whisper_recv, 0x05=talk, 0x06=broadcast, 0x07=channel, etc. Enqueues the raw packet bytes to the message queue (type 0) for asynchronous processing by the chat UI system.
-BOOL __fastcall NET_SID_CLIENT_Incoming_ChatEvent(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_ChatEvent(char * pBytes, uint32_t nSize) {
     BNMESSQUEUE_EnqueueBytes(0, pBytes, nSize);
     return 1;
 }
@@ -175,7 +178,7 @@ void __fastcall XSHA1_Transform(D2XSHA1ContextStrc * pShaCtx) {
 
 // XSHA1 one-shot hash: SHA-1 IV, zero-padded final block with no 0x80 and no bit length, XSHA1_Transform per block.
 // Name per redivivus issue #36 (asm-verified hash variant).
-void __fastcall XSHA1(D2XSHA1Strc * pOutput, char * szInput, size_t nInputSize) {
+void __fastcall XSHA1(D2XSHA1Strc * pOutput, char * szInput, uint32_t nInputSize) {
     D2XSHA1ContextStrc state;
     uint32_t nOffset = 0;
     state.state.h[0] = 0x67452301;
@@ -295,25 +298,25 @@ int __fastcall Unreferenced_00520c30(uint8_t byPacketId, int nValue) {
     return (uint32_t)byPacketId;
 }
 
-BOOL __fastcall NET_SID_CLIENT_IncomingReturn(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_IncomingReturn(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
 // SID_CREATEACCOUNT (0x2A) response handler. Legacy account creation result. Receives (DWORD)Status where 0=success, 1=name too short, 2=invalid characters, 3=prohibited word, 4=already exists, 5=still processing. Stores status in global g_dwSIDCreateAccountStatus.
-BOOL __fastcall NET_SID_CLIENT_Incoming_CreateAccount(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_CreateAccount(char * pBytes, uint32_t nSize) {
     g_SIDPacketResponseFlags[0x2a] = *(uint32_t*)pBytes;
     return 1;
 }
 
 // SID_CREATEACCOUNT2 (0x3D) response handler. Enhanced account creation result. Receives (DWORD)Status (same codes as 0x2A). Stores status in g_nSIDResponseCount2 and sets gbSIDCreateAccount2Complete=1 to signal completion.
-BOOL __fastcall NET_SID_CLIENT_Incoming_CreateAccount2(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_CreateAccount2(char * pBytes, uint32_t nSize) {
     g_nSIDResponseCount2 = *(uint32_t*)pBytes;
     g_SIDPacketResponseFlags[0x3d] = 1;
     return 1;
 }
 
 // SID_CHANGEPASSWORD (0x31) response handler. Password change result. Receives (DWORD)Status where 0=success, non-zero=failure. Stores status in g_nSIDResponseCount1, sets gbSIDChangePasswordComplete=1 completion flag. On success, routes to BnMessQueue state 0xe.
-BOOL __fastcall NET_SID_CLIENT_Incoming_ChangePassword(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_ChangePassword(char * pBytes, uint32_t nSize) {
     g_nSIDResponseCount1 = *(int*)pBytes;
     g_SIDPacketResponseFlags[0x31] = 1;
     if (!g_nSIDResponseCount1) {
@@ -325,13 +328,13 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ChangePassword(char * pBytes, size_t nSi
 
 // BATTLE.NET SID_CLIENTID (0x05) HANDLER
 // Receives client registration data from server containing: registration_version(4), registration_authority(4), client_id(4), client_token(4). Validates packet size (>=16 bytes), then saves all four values to the Windows registry under Configuration keys for persistent client identity. Logs "client acknowledged" message on success or error message on invalid packet.
-BOOL __fastcall NET_SID_CLIENT_Incoming_ClientId(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_ClientId(char * pBytes, uint32_t nSize) {
     int32_t nClientToken;
     int32_t nRegAuthority;
     if (pBytes && nSize >= 0x10) {
       int32_t nClientId;
-      nRegAuthority = *(int32_t*)(pBytes + 4);
-      nClientId = *(int32_t*)(pBytes + 8);
+      nRegAuthority = *(int32_t*)(pBytes + 4); // steer-ok: generated form, kept as emitted
+      nClientId = *(int32_t*)(pBytes + 8); // steer-ok: generated form, kept as emitted
       nClientToken = *(int32_t*)(pBytes + 0xc);
       Storm::Source::SReg::SRegSaveValue("Configuration", "Registration Version", 2, *(int32_t*)pBytes);
       Storm::Source::SReg::SRegSaveValue("Configuration", "Registration Authority", 2, nRegAuthority);
@@ -348,14 +351,14 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ClientId(char * pBytes, size_t nSize) {
 }
 
 // SID_LOGONCHALLENGE (0x28) response handler. Legacy simple logon challenge. Receives (DWORD)ServerToken which is used for password hash computation. Stores token via BNSEND_SetServerToken for subsequent SID_LOGONRESPONSE (0x29) request.
-BOOL __fastcall NET_SID_CLIENT_Incoming_LogonChallenge(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_LogonChallenge(char * pBytes, uint32_t nSize) {
     BnSend::BNSEND_SetServerToken(*(uint32_t*)pBytes);
     return 1;
 }
 
 // BATTLE.NET SID_STARTADVEX3 (0x1C) HANDLER
 // Receives game creation/start result from Battle.net server. The 4-byte status code indicates success (0) or various failure reasons (name taken, invalid settings, etc.). On success, sets global flag at 0x00882318 to signal the connection state machine to proceed with game join sequence.
-BOOL __fastcall NET_SID_CLIENT_Incoming_StartAdvEx3(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_StartAdvEx3(char * pBytes, uint32_t nSize) {
     if (!*(int*)pBytes) {
       g_SIDPacketResponseFlags[0x1c] = 1;
     }
@@ -364,7 +367,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_StartAdvEx3(char * pBytes, size_t nSize)
 }
 
 // SID_LOGONCHALLENGEEX (0x1D) response handler. Extended challenge with UDP support. Receives (DWORD)UDPToken, (DWORD)ServerToken. Stores ServerToken via BNSEND_SetServerToken and logs "logon acknowledged" to debug output. UDPToken used for optional UDP connection test.
-BOOL __fastcall NET_SID_CLIENT_Incoming_LogonChallengeEx(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_LogonChallengeEx(char * pBytes, uint32_t nSize) {
     BnSend::BNSEND_SetServerToken(*(uint32_t*)(pBytes + 4));
     Bnet::BNET_LogIndent(2, 4);
     Bnet::BnetLog_WriteLine("logon acknowledged");
@@ -373,13 +376,13 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_LogonChallengeEx(char * pBytes, size_t n
 }
 
 // SID_LOGONRESPONSE (0x29) response handler. Legacy simple logon result. Receives (DWORD)Status where 0=success, 1=invalid account, 2=invalid password, 3=account closed. Sets g_nRealmLogonResult to 1 if status==0 (success), else 0 (failure).
-BOOL __fastcall NET_SID_CLIENT_Incoming_LogonResponse(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_LogonResponse(char * pBytes, uint32_t nSize) {
     g_nRealmLogonResult = (uint32_t)!*(int*)pBytes;
     return 1;
 }
 
 // SID_LOGONRESPONSE2 (0x3A) response handler. Enhanced logon result with error reasons. Receives (DWORD)Status, (STRING)ReasonString. Status codes: 0=success, 1=account DNE, 2=invalid password, 3=account closed, 6=custom error (uses ReasonString). Routes to appropriate BnMessQueue UI state.
-BOOL __fastcall NET_SID_CLIENT_Incoming_LogonResponse2(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_LogonResponse2(char * pBytes, uint32_t nSize) {
     g_nRealmLogonResult = *(uint32_t*)pBytes;
     switch (g_nRealmLogonResult) {
       case 1:
@@ -403,7 +406,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_LogonResponse2(char * pBytes, size_t nSi
 }
 
 // SID_REPORTVERSION (0x07) response handler. Version check result from server. Receives (DWORD)Result where 0=banned, 1=outdated (needs patch), 2=current version OK, 3=must reinstall. For result==1, extracts (STRING)PatchURL and initiates BNDOWNLOAD (mode 0x80000002, type 2). Stores patch path in registry key "Patches". Sets gbSIDVersionCheckComplete flag: 0=needs update, 1=current.
-BOOL __fastcall NET_SID_CLIENT_Incoming_ReportVersion(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_ReportVersion(char * pBytes, uint32_t nSize) {
     uint8_t* pszPatchURL;
     uint32_t dwVersionResult = *(uint32_t*)pBytes;
     if (dwVersionResult > 0 && dwVersionResult <= 3) {
@@ -441,7 +444,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_ReportVersion(char * pBytes, size_t nSiz
 }
 
 // SID_STARTVERSIONING (0x06) response handler. Version check challenge from server. Receives (FILETIME)FileTime, (STRING)MPQFilename, (STRING)ValueString for CheckRevision algorithm. Initiates MPQ file download (mode 0x80000001, type 3) for version verification. ValueString passed to BNSEND_SendString for client-side checksum computation.
-BOOL __fastcall NET_SID_CLIENT_Incoming_StartVersioning(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_StartVersioning(char * pBytes, uint32_t nSize) {
     char* szFileName = pBytes + 8;
     if (strlen(szFileName) + 9 < nSize) {
       BnSend::BNSEND_SendString(szFileName + strlen(szFileName) + 1);
@@ -453,13 +456,13 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_StartVersioning(char * pBytes, size_t nS
 
 // BATTLE.NET SID_PING (0x25) HANDLER
 // Receives keepalive ping from Battle.net server containing a 4-byte token value. Immediately echoes the ping packet back to the server using NET_SID_CLIENT_Send with the same packet ID (0x25) and token data, maintaining the connection alive and measuring round-trip latency.
-BOOL __fastcall NET_SID_CLIENT_Incoming_Ping(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_Ping(char * pBytes, uint32_t nSize) {
     BnSend::NET_SID_CLIENT_Send(0x25, pBytes, nSize);
     return 1;
 }
 
 // SID_CDKEY3 (0x42) response handler. CD key validation result. Receives (DWORD)Result where 0=accepted, 3=invalid key, 4=key in use by (STRING)Username, 5=banned key, 6=wrong product. Stores result in gnCDKey3ValidationResult. For result==4, copies username to gszCDKeyInUseByUsername buffer (256 bytes) and routes to BnMessQueue state. Sets gbCDKeyValidationSuccess=1 on success.
-BOOL __fastcall NET_SID_CLIENT_Incoming_CDKey3(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_CDKey3(char * pBytes, uint32_t nSize) {
     // Static local variables (originally global data)
     static unsigned int gnCDKey3ValidationResult; D2_STATIC_GUARD_BSS(gnCDKey3ValidationResult, "Bnclient::_net_sid::NET_SID_CLIENT_Incoming_CDKey3::gnCDKey3ValidationResult");
 
@@ -491,34 +494,34 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CDKey3(char * pBytes, size_t nSize) {
 
 // BATTLE.NET SID_SERVERLIST (0x04) HANDLER
 // Receives comma-separated list of Battle.net server addresses from the server. Saves the server list string (starting at offset +4, skipping 4-byte header) to the Windows registry under Configuration\Server List key for persistent storage and future connection attempts.
-BOOL __fastcall NET_SID_CLIENT_Incoming_ServerList(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_ServerList(char * pBytes, uint32_t nSize) {
     Storm::Source::SReg::SRegSaveString("Configuration", "Server List", 2, pBytes + 4);
     return 1;
 }
 
 // BATTLE.NET SID_GETCHANNELLIST (0x0B) HANDLER
 // Receives list of available Battle.net chat channels (comma-separated null-terminated strings). Stores the channel list data in the BnSend subsystem for display in the channel selection UI when user wants to join a specific channel.
-BOOL __fastcall NET_SID_CLIENT_Incoming_GetChannelList(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_GetChannelList(char * pBytes, uint32_t nSize) {
     BnSend::BNSEND_StoreChannelListData((uint8_t*)pBytes, nSize);
     return 1;
 }
 
 // BATTLE.NET SID_GETADVLISTEX (0x09) HANDLER
 // Receives game list from Battle.net containing count and array of game info structures (game name, description, player count, flags, difficulty, etc.). Stores the game list data in the BnSend subsystem for display in the game browser UI where users select games to join.
-BOOL __fastcall NET_SID_CLIENT_Incoming_GetAdvListEx(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_GetAdvListEx(char * pBytes, uint32_t nSize) {
     BnSend::BNSEND_StoreGameListData((uint8_t*)pBytes, nSize);
     return 1;
 }
 
 // BATTLE.NET SID_ANNOUNCEMENT (0x20) HANDLER
 // Receives server-wide announcement text (MOTD, news, alerts) from Battle.net. Currently a no-op stub that discards the announcement data without displaying it to the user. Legacy handler retained for protocol compatibility.
-BOOL __fastcall NET_SID_CLIENT_Incoming_Announcement(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_Announcement(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
 // BATTLE.NET SID_ENTERCHAT (0x0A) HANDLER
 // Receives enter chat success response containing the client's unique username (may differ from requested name due to conflicts), stat string (game statistics for display), and account name. Enqueues the unique username as a string message (type 2) for UI display and stores it as the active channel name for subsequent chat operations.
-BOOL __fastcall NET_SID_CLIENT_Incoming_EnterChat(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_EnterChat(char * pBytes, uint32_t nSize) {
     BNMESSQUEUE_EnqueueString(2, pBytes);
     NET_SID_CLIENT_SetChannelName(pBytes);
     return 1;
@@ -526,7 +529,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_EnterChat(char * pBytes, size_t nSize) {
 
 // BATTLE.NET SID_GETFILETIME (0x33) HANDLER
 // Receives file metadata from Battle.net server containing: request_id(4), unknown(4), file_time(8 bytes FILETIME), filename(null-terminated). Decodes request_id to determine download type (0x80000005=optional patch with flags 2|1=3, 0x80000006=required patch with flags 4|1=5, others=flags 4|1=5) and initiates file download via BNDOWNLOAD_InitiateFileDownload with the provided timestamp and filename.
-BOOL __fastcall NET_SID_CLIENT_Incoming_GetFileTime(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_GetFileTime(char * pBytes, uint32_t nSize) {
     int dwRequestId = *(int*)pBytes;
     FILETIME* pFileTime = (FILETIME*)(pBytes + 8); // steer-ok: the original computes the file time and name pointers on entry, before the request-id test
     char* szFileName = (char*)(pFileTime + 1); // steer-ok: the original computes the file time and name pointers on entry, before the request-id test
@@ -543,7 +546,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_GetFileTime(char * pBytes, size_t nSize)
 
 // BATTLE.NET SID_CHECKAD (0x15) HANDLER
 // Receives banner ad info containing: DWORD ad_id, DWORD file_extension, FILETIME(8) file_time, null-terminated filename, null-terminated URL. Checks if the ad_id differs from the last cached ad (g_dwLastAdId), and if both filename and URL are non-empty, initiates asynchronous download via BNDOWNLOAD_InitiateFileDownload with the ad's file timestamp and URL.
-BOOL __fastcall NET_SID_CLIENT_Incoming_CheckAd(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_CheckAd(char * pBytes, uint32_t nSize) {
     uint32_t dwAdId = *(uint32_t*)pBytes;
     if (nSize >= 0x11 && dwAdId != g_dwLastAdId) {
       FILETIME* pFileTime = (FILETIME*)(pBytes + 8);
@@ -559,33 +562,33 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_CheckAd(char * pBytes, size_t nSize) {
 }
 
 // SID_QUERYREALMS2 (0x40) response handler. Receives realm list: (DWORD)Unknown, (DWORD)RealmCount, followed by array of realm entries (STRING)Title, (STRING)Description. Stores complete realm query data for client realm selection UI.
-BOOL __fastcall NET_SID_CLIENT_Incoming_QueryRealms2(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_QueryRealms2(char * pBytes, uint32_t nSize) {
     BnSend::BNSEND_StoreRealmQueryData((uint8_t*)pBytes, nSize);
     return 1;
 }
 
 // BATTLE.NET SID_QUERYADURL (0x41) HANDLER
 // Receives clicked banner ad URL response from Battle.net server. Stores the URL and associated CD key hash data via BNSEND_StoreCDKeyHashData for launching the user's web browser to the ad destination URL (typically external promotional pages or game downloads).
-BOOL __fastcall NET_SID_CLIENT_Incoming_QueryAdURL(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_QueryAdURL(char * pBytes, uint32_t nSize) {
     BnSend::BNSEND_StoreCDKeyHashData(pBytes, nSize);
     return 1;
 }
 
 // SID_LOGONREALMEX (0x3E) response handler. Receives MCP realm server connection info: (DWORD)MCPCookie, (DWORD)MCPStatus, 2x(DWORD)MCPChunk, (STRING)MCPIPAddress, (BYTE)MCPPort[2], (STRING)MCPRealmName. Stores user profile data for subsequent realm server connection via MCP protocol.
-BOOL __fastcall NET_SID_CLIENT_Incoming_LogonRealmEx(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_LogonRealmEx(char * pBytes, uint32_t nSize) {
     BnSend::BNSEND_StoreUserProfileData((uint8_t*)pBytes, nSize);
     return 1;
 }
 
 // BATTLE.NET SID_READUSERDATA (0x26) HANDLER
 // Receives user profile data from Battle.net server containing account statistics, friends list, clan info, or other profile fields requested by the client. Stores the profile data via BNSEND_StoreReadUserData for display in the user profile UI and social features.
-BOOL __fastcall NET_SID_CLIENT_Incoming_ReadUserData(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_ReadUserData(char * pBytes, uint32_t nSize) {
     BnSend::BNSEND_StoreReadUserData((uint8_t*)pBytes, nSize);
     return 1;
 }
 
 // JMP thunk
-BOOL __fastcall NET_SID_CLIENT_Incoming_NewsInfo(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_NewsInfo(char * pBytes, uint32_t nSize) {
     return ::Bnclient::BnSend::NET_SID_CLIENT_Incoming0x46(pBytes, nSize);
 }
 
@@ -598,7 +601,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_NewsInfo(char * pBytes, size_t nSize) {
 // - Formula string (null-terminated string) for CheckRevision hash computation
 // Server token is stored for subsequent auth packets. Client downloads MPQ archive
 // for version verification. Formula string drives the CheckRevision algorithm.
-BOOL __fastcall NET_SID_CLIENT_Incoming_AuthInfo(SID_S2C_AuthInfo * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_AuthInfo(SID_S2C_AuthInfo * pPacketData, uint32_t nPacketSize) {
     FILETIME ftArchiveTimestamp;
     if (!(nPacketSize >= 0x16 && *(char*)((char*)pPacketData + (nPacketSize - 1)) == '\0')) {
       return 0;
@@ -624,11 +627,11 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthInfo(SID_S2C_AuthInfo * pPacketData,
 
     ftArchiveTimestamp.dwLowDateTime = pPacketData->ftArchiveTimeLow;
     ftArchiveTimestamp.dwHighDateTime = pPacketData->ftArchiveTimeHigh;
-    uint32_t dwClientToken = pPacketData->dwClientToken;
-    DWORD dwServerToken = pPacketData->dwServerToken;
+    uint32_t dwClientToken = pPacketData->dwClientToken; // steer-ok: generated form, kept as emitted
+    DWORD dwServerToken = pPacketData->dwServerToken; // steer-ok: generated form, kept as emitted
     char* szText = &pPacketData->szArchiveFilename;
     uint32_t pArchiveNameEnd = Storm::Source::SSTR::SStrLen(szText);
-    char* szCheckRevisionFormula = szText + (pArchiveNameEnd + 1);
+    char* szCheckRevisionFormula = szText + (pArchiveNameEnd + 1); // steer-ok: generated form, kept as emitted
     BnSend::BNSEND_SetServerToken(dwClientToken);
     BnSend::BNSEND_SetClientToken(dwServerToken);
     BnSend::BNSEND_SendString(szCheckRevisionFormula);
@@ -645,7 +648,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthInfo(SID_S2C_AuthInfo * pPacketData,
 // Version: 0x000=valid, 0x100=upgrade needed, 0x101=wrong version, 0x102=downgrade
 // Key status: 0x200=invalid, 0x201=in use, 0x202=disabled, 0x203=wrong product
 // Initiates MPQ patch download for upgrade paths or sets login state for authentication flow.
-BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketData, uint32_t nPacketSize) {
     uint32_t nPatchNameLen;
     int nNullCount;
     uint32_t dwResultCode;
@@ -763,7 +766,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthCheck(SID_S2C_AuthCheck * pPacketDat
 // 0=success, 4=name in use, 7=blank name, 8=invalid characters,
 // 9=profanity filter, 10=no alphabetic chars, 11=adjacent punctuation, 12=too much punctuation
 // Sets global g_nSIDResponseCount2 to map status to UI error message display.
-BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountCreate(char * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountCreate(char * pPacketData, uint32_t nPacketSize) {
     if (nPacketSize < 4) {
       Debug::DEBUG_Trace("INVALID: AuthAccountCreate");
       return 0;
@@ -819,7 +822,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountCreate(char * pPacketData, si
 // - Server public key (32 bytes): Server's ephemeral public key 'B' for SRP
 // On status 0, client computes SRP proof using salt and server public key, then sends proof packet.
 // On status 1, account doesn't exist. On status 5, initiates account upgrade flow.
-BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogon(char * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogon(char * pPacketData, uint32_t nPacketSize) {
     BOOL dwStatusCode;
     int32_t iVar1;
     if (nPacketSize < 0x44) {
@@ -871,7 +874,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogon(char * pPacketData, siz
 // On status 0, client verifies server computed correct session key using VerifyServerProof.
 // If verification succeeds, mutual authentication complete and session key K established.
 // On status 2, password was incorrect. Logon fails on proof mismatch or unknown status.
-BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData, uint32_t nPacketSize) {
     if (nPacketSize < 0x18) {
       Debug::DEBUG_Trace("INVALID: AuthAccountLogonProof");
       return 0;
@@ -910,7 +913,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountLogonProof(char * pPacketData
 // - Server public key (32 bytes): Server's ephemeral public key 'B' for SRP
 // On status 0, client computes SRP proof with new password and sends change proof packet.
 // On status 1, account doesn't exist. On status 5, initiates account upgrade before allowing change.
-BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChange(char * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChange(char * pPacketData, uint32_t nPacketSize) {
     BOOL bUpgradeSent;
     int32_t iVar1;
     if (nPacketSize < 0x44) {
@@ -954,7 +957,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChange(char * pPacketData, si
 // On status 0, client verifies server computed correct session key with new password.
 // If verification succeeds, password change complete and old credentials cleared from memory.
 // On status 2, old password was incorrect. Sets global gbAuthChangeProofComplete to signal UI completion.
-BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketData, uint32_t nPacketSize) {
     int32_t bProofValid;
     if (nPacketSize < 0x18) {
       Debug::DEBUG_Trace("INVALID: AuthAccountChangeProof");
@@ -1000,7 +1003,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountChangeProof(char * pPacketDat
 // On status 0, server ready to accept upgrade proof using old password hash for verification.
 // Client must send upgrade proof packet with both old password verification and new SRP proof.
 // Non-zero status indicates upgrade request failed.
-BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgrade(char * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgrade(char * pPacketData, uint32_t nPacketSize) {
     if (nPacketSize < 8) {
       Debug::DEBUG_Trace("INVALID: AuthAccountUpgrade");
       return 0;
@@ -1025,7 +1028,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgrade(char * pPacketData, s
 // If upgrade initiated during logon (flag2 set), immediately sends logon packet with new credentials.
 // If upgrade during password change (flag2 clear), sets change complete flag for UI.
 // On status 2, old password verification failed. Clears password memory and sets appropriate error codes.
-BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgradeProof(char * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgradeProof(char * pPacketData, uint32_t nPacketSize) {
     BOOL bIsLogonFlow;
     if (nPacketSize < 4) {
       Debug::DEBUG_Trace("INVALID: AuthAccountUpgradeProof");
@@ -1078,14 +1081,14 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_AuthAccountUpgradeProof(char * pPacketDa
 // Receives confirmation from Battle.net server after client sets account email address.
 // No payload data processed - packet presence alone indicates success.
 // Sets global flag via BNSEND_SetGlobalFlag to signal email update completed.
-BOOL __fastcall NET_SID_CLIENT_Incoming_SetEmail(char * pPacketData, size_t nPacketSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_SetEmail(char * pPacketData, uint32_t nPacketSize) {
     BnSend::BNSEND_SetGlobalFlag(1);
     return 1;
 }
 
 // BATTLE.NET SID_OPTIONALWORK (0x4A) HANDLER
 // Receives optional patch/work filename from Battle.net server (null-terminated string). If the filename is non-empty and packet has data, sends SID_GETFILETIME (0x33) request with file_id=0x80000005 to query the file's timestamp and initiate optional patch download for background updating.
-BOOL __fastcall NET_SID_CLIENT_Incoming_OptionalWork(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_OptionalWork(char * pBytes, uint32_t nSize) {
     if (pBytes && *pBytes != '\0' && nSize) {
       BnSend::NET_SID_CLIENT_Send_0x33_GetFileTime(pBytes, 0x80000005);
     }
@@ -1095,7 +1098,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_OptionalWork(char * pBytes, size_t nSize
 
 // BATTLE.NET SID_REQUIREDWORK (0x4C) HANDLER
 // Receives required patch/work filename from Battle.net server (null-terminated string). If the filename is non-empty and packet has data, sends SID_GETFILETIME (0x33) request with file_id=0x80000006 to query the file's timestamp and initiate required patch download, which must complete before client can continue.
-BOOL __fastcall NET_SID_CLIENT_Incoming_RequiredWork(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming_RequiredWork(char * pBytes, uint32_t nSize) {
     if (pBytes && *pBytes != '\0' && nSize) {
       BnSend::NET_SID_CLIENT_Send_0x33_GetFileTime(pBytes, 0x80000006);
     }
@@ -1107,7 +1110,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming_RequiredWork(char * pBytes, size_t nSize
 // Table: NET_SID_CLIENT_INCOMING at 0x0072FFB0 (94 entries)
 // Packet format: 0xFF | PacketId(1) | Size(2, LE) | Data(...)
 // Validates nPacketId < 0x5E, calls handler from function pointer table.
-BOOL __fastcall NET_SID_CLIENT_IncomingPacketHandler(uint8_t nPacketId, char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_IncomingPacketHandler(uint8_t nPacketId, char * pBytes, uint32_t nSize) {
     // Static local variables (originally global data)
     static D2NET_CLIENT_SIDtoCLT NET_SID_CLIENT_INCOMING[94] = {
     &Bnclient::_net_sid::NET_SID_CLIENT_IncomingReturn,
@@ -1280,8 +1283,8 @@ int Unreferenced_00521ba0() {
     uint16_t uVar3;
     HMODULE hModule = LoadLibraryA("kernel32.dll");
     if (hModule) {
-      FARPROC pFVar2;
-      pFVar2 = GetProcAddress(hModule, "GetSystemDefaultUILanguage");
+      pfnGetSystemDefaultUILanguage pFVar2;
+      pFVar2 = (pfnGetSystemDefaultUILanguage)GetProcAddress(hModule, "GetSystemDefaultUILanguage");
       if (pFVar2) {
         uVar3 = (*pFVar2)();
         FreeLibrary(hModule);
@@ -1342,10 +1345,10 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
     HMODULE hKernel32;
     hKernel32 = LoadLibraryA("kernel32.dll");
     if (hKernel32) {
-      FARPROC pfnGetSystemDefaultUILanguage;
-      /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pfnGetSystemDefaultUILanguage = GetProcAddress(hKernel32, "GetSystemDefaultUILanguage");
-      if (pfnGetSystemDefaultUILanguage) {
-        dwUILanguage = (*pfnGetSystemDefaultUILanguage)();
+      pfnGetSystemDefaultUILanguage pfnGetUILanguage;
+      /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pfnGetUILanguage = (pfnGetSystemDefaultUILanguage)GetProcAddress(hKernel32, "GetSystemDefaultUILanguage");
+      if (pfnGetUILanguage) {
+        dwUILanguage = (*pfnGetUILanguage)();
         /* HMODULE hLibModule for FreeLibrary */ sAuthInfoPacket.dwLanguageId = (uint16_t)dwUILanguage;
         FreeLibrary(hKernel32);
         goto add_country_and_send;
@@ -1436,7 +1439,7 @@ int32_t __stdcall NET_SID_CLIENT_Send_0x51_AuthCheck() {
       pPacketEnd = dwClientToken.szTail + 0x1dc;
     }
 
-    pKeyOwnerStr = (intptr_t)pPacketEnd - (intptr_t)szBufferOutput;
+    pKeyOwnerStr = (int)((intptr_t)pPacketEnd - (intptr_t)szBufferOutput); // steer-ok: generated form, kept as emitted
     Storm::Source::SSTR::SStrCopy((char*)szBufferOutput, NET_SID_CLIENT_GetCdKeyOwner(), pKeyOwnerStr);
     FreeKeys();
     bHasPatchFile = Storm::Source::SSTR::SStrLen((char*)szBufferOutput);

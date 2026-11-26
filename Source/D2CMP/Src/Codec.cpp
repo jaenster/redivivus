@@ -6,6 +6,7 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2CMP/D2CMP.globals.h"
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Headers/D2Arch.h"
 #include "Source/D2CMP/Src/Codec.data.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -136,6 +137,9 @@ static uint32_t gdwD2CMPCodecTab1[32] = {
 }; D2_STATIC_GUARD(gdwD2CMPCodecTab1, "gdwD2CMPCodecTab1");
 uint8_t gaCodecFrameWorkBuffer2[262144] = {}; D2_GLOBAL_GUARD(gaCodecFrameWorkBuffer2, "gaCodecFrameWorkBuffer2");
 D2CodecPixelBufferEntryStrc gaCodecFrameDecodeBuffer[5625] = {}; D2_GLOBAL_GUARD(gaCodecFrameDecodeBuffer, "gaCodecFrameDecodeBuffer");
+static_assert(sizeof(void*) != 4 || sizeof(D2CodecPixelBufferEntryStrc) == 0x14, "memset(n * sizeof(D2CodecPixelBufferEntryStrc)): the 32-bit layout must be the 0x14 bytes 1.14d clears per block");
+static_assert(sizeof(void*) != 4 || sizeof(gaCodecFrameDecodeBuffer) == 0x1b774, "memset(sizeof(gaCodecFrameDecodeBuffer)): the 32-bit table must be the 0x1b774 bytes 1.14d clears");
+static_assert(sizeof(void*) != 4 || sizeof(D2CodecFrameIterStrc) == 0x3c, "memset(sizeof(D2CodecFrameIterStrc)): the 32-bit layout must be the 0x3c bytes 1.14d clears");
 
 namespace D2CMP::SRC::Codec {
 
@@ -287,7 +291,7 @@ static void CODEC_InitializeFrameIterator(D2CodecFrameBoundsStrc * pFrameBounds)
       return;
     }
 
-    memset(&iterState, 0, 0x3c);
+    memset(&iterState, 0, sizeof(iterState));
     iterState.nFrameIndex = -1;
     nStride = CODEC_AdvanceFrameIterator(pFrameBounds, &iterState);
     while (nStride) {
@@ -532,12 +536,12 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
     uint8_t* pOutPixelCursor;
     pOutPixelCursor = *ppOutBuffer;
     int nBitShift;
-    nBitShift = ((intptr_t)pBitOffsets->pCurWord - pBitOffsets->nReserved00 >> 2 << 5) + pBitOffsets->nBitOffset;
+    nBitShift = (int)((uintptr_t)pBitOffsets->pCurWord - (uintptr_t)pBitOffsets->pStreamStart >> 2 << 5) + pBitOffsets->nBitOffset;
     if (nCodecState->nFrameCount) {
       int nIterResult;
       nInitBitPos = nBitShift;
       pOutPixel = pOutPixelCursor;
-      memset(&__frame0.aIterState, 0, 0x3c);
+      memset(&__frame0.aIterState, 0, sizeof(__frame0.aIterState));
       __frame0.aIterState.nFrameIndex = -1;
       nIterResult = CODEC_AdvanceFrameIterator(nCodecState, &__frame0.aIterState);
       while (nIterResult) {
@@ -713,14 +717,14 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
       }
     }
 
-    *pBitsRead = ((intptr_t)pBitOffsets->pCurWord - pBitOffsets->nReserved00 >> 2 << 5) - nBitShift + pBitOffsets->nBitOffset;
+    *pBitsRead = (int)((uintptr_t)pBitOffsets->pCurWord - (uintptr_t)pBitOffsets->pStreamStart >> 2 << 5) - nBitShift + pBitOffsets->nBitOffset;
     ppOutBuffer[1] = pOutPixelCursor - (intptr_t)*ppOutBuffer;
 }
 
 BOOL __fastcall CODEC_EncodeRLE(D2CodecFrameComponentStrc * pSrcImage, DC6Block * pFrameHeader, uint8_t * pOutBuf) {
     int nZeroEnd;
     int nRunStart;
-    size_t nRunLen;
+    uint32_t nRunLen;
     int nNonZeroEnd;
     uint8_t* pSrcRow = pSrcImage->pSrcRow;
     uint32_t nRowStride = pSrcImage->nStrideValue0;
@@ -865,6 +869,12 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
       DC6Block* pOutCursor;
     };
     static_assert(sizeof(void*) != 4 || sizeof(local_334_u) == 4, "local_334_u must stay one 4-byte frame slot");
+    // The values VC8 kept in local_330's one frame slot, one member each: the pool first, then the frame's decoded bit fields.
+    union local_330_u {
+      D2PoolManagerStrc* pMemory;
+      uint32_t nLocal_330;
+    };
+    static_assert(sizeof(void*) != 4 || sizeof(local_330_u) == 4, "local_330_u must stay one 4-byte frame slot");
     // Frame slots -848..-808 are ONE object: &pRemapOutputBuf is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -876,7 +886,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
       uint32_t local_33c;
       CODEC_DecompressAllFrames_Slotm338 uSlot338;
       local_334_u local_334;
-      D2PoolManagerStrc* local_330;
+      local_330_u local_330;
       uint32_t local_32c;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 40, "frame group __frame0_t must reproduce the Ghidra frame layout");
@@ -884,7 +894,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
     D2CodecPixelBufferEntryStrc* pPrevIterState;
     uint32_t nNumBits;
     uint32_t nNumBits_00;
-    D2PoolManagerStrc* pDVar1;
+    uint32_t nFrameFlags;
     int iVar2;
     uint32_t uVar2;
     uint32_t uVar3;
@@ -927,7 +937,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
     uint8_t aPaletteData[260];
     uint32_t nEncSize;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ __frame0.local_334.pCelDecodeState = pDecodeState;
-    __frame0.local_330 = pMemory;
+    __frame0.local_330.pMemory = pMemory;
     EnterCriticalSection(&CelCmp::lpCriticalSection_008f03cc);
     aFrameHeaderInfo[0] = *(uint32_t*)(pCelHeader + 4);
     aFrameHeaderInfo[2] = *(uint32_t*)(pCelHeader + 0x14);
@@ -944,7 +954,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
       pbVar7 = local_318.pLocal_318;
       do {
         __frame0.local_334.nLocal_334 = *(uint32_t*)((intptr_t)pdwCompressedData + (*(int*)pbVar7 - *(int*)local_318.pLocal_318));
-        *__frame0.uSlot338.pnDirSizeOut = *pnSize;
+        *__frame0.uSlot338.pnDirSizeOut = (uint32_t)*pnSize;
         *pnSize += __frame0.local_334.nLocal_334;
         __frame0.uSlot338.pnDirSizeOut++;
         pbVar7 += 4;
@@ -952,9 +962,9 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
       } while (local_314);
     }
 
-    sBitState.nReserved00 = (uint32_t)(uintptr_t)pdwCompressedData;
+    sBitState.pStreamStart = pdwCompressedData;
     sBitState.pCurWord = pdwCompressedData;
-    void* pOutBuffer = D2_ALLOC_POOL_AT(__frame0.local_330, *pnSize, ".\\SRC\\Codec.cpp", 0x561);
+    void* pOutBuffer = D2_ALLOC_POOL_AT(__frame0.local_330.pMemory, *pnSize, ".\\SRC\\Codec.cpp", 0x561);
     __frame0.local_334.pOutCursor = (DC6Block*)pOutBuffer;
     __frame0.uSlot338.nFrameIndex = nStartFrame;
     if (nStartFrame < __frame0.nEndFrame) {
@@ -973,14 +983,14 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         iVar2 = 0x20 - iVar6;
         if (iVar2 >= 2) {
           iVar7 = iVar6 + 2;
-          __frame0.local_330 = (D2PoolManagerStrc*)(*sBitState.pCurWord >> D2_SHIFT_COUNT(iVar6) & 3);
+          __frame0.local_330.nLocal_330 = *sBitState.pCurWord >> D2_SHIFT_COUNT(iVar6) & 3;
           if (iVar7 == 0x20) {
             iVar7 = 0;
             sBitState.pCurWord++;
           }
         } else {
           iVar7 = 2 - iVar2;
-          __frame0.local_330 = (D2PoolManagerStrc*)(gaCodecLookupTable[iVar2] & *sBitState.pCurWord >> D2_SHIFT_COUNT(iVar6) | (gaCodecLookupTable[iVar7] & sBitState.pCurWord[1]) << D2_SHIFT_COUNT(iVar2));
+          __frame0.local_330.nLocal_330 = gaCodecLookupTable[iVar2] & *sBitState.pCurWord >> D2_SHIFT_COUNT(iVar6) | (gaCodecLookupTable[iVar7] & sBitState.pCurWord[1]) << D2_SHIFT_COUNT(iVar2);
           sBitState.pCurWord++;
         }
 
@@ -1092,13 +1102,13 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
 
         CODEC_CalculateFrameBounds(aFrameHeaderInfo, __frame0.uSlot338.nFrameIndex, &sFrameBounds, gCodecFrameWorkBuffer);
         CODEC_InitializeFrameIterator(&sFrameBounds);
-        memset(gaCodecFrameDecodeBuffer, 0, sFrameBounds.nBlockCount * 0x14);
-        pDVar1 = __frame0.local_330;
+        memset(gaCodecFrameDecodeBuffer, 0, sFrameBounds.nBlockCount * sizeof(D2CodecPixelBufferEntryStrc));
+        nFrameFlags = __frame0.local_330.nLocal_330;
         __frame0.local_32c = 0;
         local_314 = 0;
         local_318.pLocal_318 = 0;
         pdwBitCursor = sBitState.pCurWord;
-        if ((uintptr_t)__frame0.local_330 & 2) {
+        if (__frame0.local_330.nLocal_330 & 2) {
           iVar6 = 0x20 - uVar11;
           __frame0.local_32c = *sBitState.pCurWord >> D2_SHIFT_COUNT(uVar11);
           if (iVar6 >= 0x14) {
@@ -1119,7 +1129,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         iVar6 = 0x20 - uVar11;
         if (iVar6 >= 0x14) {
           iVar2 = uVar11 + 0x14;
-          __frame0.local_330 = (D2PoolManagerStrc*)(*pdwBitCursor >> D2_SHIFT_COUNT(uVar11) & 0xfffff);
+          __frame0.local_330.nLocal_330 = *pdwBitCursor >> D2_SHIFT_COUNT(uVar11) & 0xfffff;
           if (iVar2 == 0x20) {
             pdwBitCursor++;
             iVar2 = 0;
@@ -1129,9 +1139,9 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
           iVar2 = 0x14 - iVar6;
           pdwBitCursor++;
           local_310 = gaCodecLookupTable[iVar2] & *pdwBitCursor;
-          __frame0.local_330 = (D2PoolManagerStrc*)(gaCodecLookupTable[iVar6] & uVar10 >> D2_SHIFT_COUNT(uVar11) | local_310 << D2_SHIFT_COUNT(iVar6));
+          __frame0.local_330.nLocal_330 = gaCodecLookupTable[iVar6] & uVar10 >> D2_SHIFT_COUNT(uVar11) | local_310 << D2_SHIFT_COUNT(iVar6);
         }
-        if ((uintptr_t)pDVar1 & 1) {
+        if (nFrameFlags & 1) {
           iVar6 = 0x20 - iVar2;
           if (iVar6 >= 0x14) {
             iVar7 = iVar2 + 0x14;
@@ -1237,18 +1247,18 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
 
         CODEC_BuildInversePaletteFromBitmask(aInversePaletteLUT, aUsedColourBits, aPaletteData);
         nRawPixelBits = local_318.nLocal_318;
-        sEqualCellBitsPass2.nReserved00 = sBitState.nReserved00;
+        sEqualCellBitsPass2.pStreamStart = sBitState.pStreamStart;
         sPixelMaskBits.nBitOffset = iVar2 + __frame0.local_32c;
         sPixelMaskBits.pCurWord = pdwBitCursor + sPixelMaskBits.nBitOffset / 32;
         sPixelMaskBits.nBitOffset &= 0x1f;
-        uVar10 = (int)__frame0.local_330->pPools + (sPixelMaskBits.nBitOffset - 0x20U);
+        uVar10 = __frame0.local_330.nLocal_330 + (sPixelMaskBits.nBitOffset - 0x20U);
         sEncodingTypeBits.nBitOffset = uVar10 & 0x1f;
         sEncodingTypeBits.pCurWord = sPixelMaskBits.pCurWord + (int)uVar10 / 32;
         uVar10 = local_314 + sEncodingTypeBits.nBitOffset;
         sRawPixelBits.nBitOffset = uVar10 & 0x1f;
-        sPixelMaskBits.nReserved00 = sBitState.nReserved00;
-        sEncodingTypeBits.nReserved00 = sBitState.nReserved00;
-        sRawPixelBits.nReserved00 = sBitState.nReserved00;
+        sPixelMaskBits.pStreamStart = sBitState.pStreamStart;
+        sEncodingTypeBits.pStreamStart = sBitState.pStreamStart;
+        sRawPixelBits.pStreamStart = sBitState.pStreamStart;
         nBitPos = local_318.nLocal_318 + sRawPixelBits.nBitOffset;
         sRawPixelBits.pCurWord = sEncodingTypeBits.pCurWord + (int)uVar10 / 32;
         sPixelCodeBits.pCurWord = sRawPixelBits.pCurWord + ((intptr_t)(nBitPos + ((intptr_t)nBitPos >> 0x1f & 0x1f)) >> 5);
@@ -1256,9 +1266,9 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         sPixelMaskBits.nReserved08 = sBitState.nReserved08;
         sEncodingTypeBits.nReserved08 = sBitState.nReserved08;
         sRawPixelBits.nReserved08 = sBitState.nReserved08;
-        sPixelCodeBits.nReserved00 = sBitState.nReserved00;
+        sPixelCodeBits.pStreamStart = sBitState.pStreamStart;
         sPixelCodeBits.nReserved08 = sBitState.nReserved08;
-        sEqualCellBits.nReserved00 = sBitState.nReserved00;
+        sEqualCellBits.pStreamStart = sBitState.pStreamStart;
         local_318.nLocal_318 = 0x0;
         __frame0.pRemapOutputBuf = gaCodecFrameWorkBuffer2;
         __frame0.nRemapByteCount = 0;
@@ -1279,7 +1289,13 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
 
         if ((void*)gCodecFrameWorkBuffer < __frame0.pComponentTableEnd) {
           pComp = gCodecFrameWorkBuffer;
+#if defined(D2_ARCH_X64)
+          // pComponentTableEnd is gCodecFrameWorkBuffer + aFrameHeaderInfo[3] (set above for this frame): the 32-bit
+          // byte-difference form below divides by the x86 component size, so count the components directly.
+          iVar6 = aFrameHeaderInfo[3];
+#else
           iVar6 = ((intptr_t)__frame0.pComponentTableEnd - ((uintptr_t)&gCodecFrameWorkBuffer[0].nXOffset + 1)) / 0x2c + 1;
+#endif
           do {
             if (pComp->nStride) {
               uVar3 = 0;
@@ -1297,12 +1313,12 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         local_318.pLocal_318 = __frame0.pRemapOutputBuf;
         sBitState.nBitOffset = uVar10;
         if (sFrameBounds.nFrameCount) {
-          memset(&aFrameIterState, 0, 0x3c);
+          memset(&aFrameIterState, 0, sizeof(aFrameIterState));
           aFrameIterState.nFrameIndex = -1;
           BVar5 = CODEC_AdvanceFrameIterator(&sFrameBounds, &aFrameIterState);
           if (BVar5) {
             local_314 = 0;
-            memset(gaCodecFrameDecodeBuffer, 0, 0x1b774);
+            memset(gaCodecFrameDecodeBuffer, 0, sizeof(gaCodecFrameDecodeBuffer));
             __frame0.pComponentTableEnd = __frame0.local_32c ? (void*)&sEqualCellBitsPass2 : nullptr;
             puVar8 = __frame0.local_334.pOutCursor;
             do {

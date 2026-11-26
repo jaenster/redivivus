@@ -28,6 +28,7 @@ struct D2MapAIStrc;
 struct D2PoolManagerStrc;
 struct D2RoomExStrc;
 struct D2SeedStrc;
+struct SGAMEDATA;
 typedef uint32_t eD2LevelId;
 typedef uint32_t eD2UnitType;
 
@@ -337,6 +338,45 @@ __pragma(pack(push, 1)) struct D2LvlPrestTxt {
 }; __pragma(pack(pop))
 
 #endif // D2_DEFINED_D2LvlPrestTxt
+#ifndef D2_DEFINED_D2PathPosStrc
+#define D2_DEFINED_D2PathPosStrc
+struct D2PathPosStrc {
+    /* 0x00 */ int nDirection;
+    /* 0x04 */ int nXpos;
+    /* 0x08 */ int nYpos;
+};
+
+#endif // D2_DEFINED_D2PathPosStrc
+#ifndef D2_DEFINED_D2MapAIStrc
+#define D2_DEFINED_D2MapAIStrc
+struct D2MapAIStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2PathPosStrc * pPosition;
+};
+
+#endif // D2_DEFINED_D2MapAIStrc
+#ifndef D2_DEFINED_D2AiGeneralStrc
+#define D2_DEFINED_D2AiGeneralStrc
+__pragma(pack(push, 1)) struct D2AiGeneralStrc {
+    /* 0x00 */ int nFunctionId;
+    /* 0x04 */ void (__fastcall *fpFunction)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
+    /* 0x08 */ int nAiFlags;
+    /* 0x0C */ int nOwnerGUID;
+    /* 0x10 */ eD2UnitType eOwnerType;
+    /* 0x14 */ int dwArg0;
+    /* 0x18 */ int dwArg1;
+    /* 0x1C */ int dwArg2;
+    /* 0x20 */ struct D2MonsterAiCmdStrc * pCmdCurrent;
+    /* 0x24 */ struct D2MonsterAiCmdStrc * pCmdLast;
+    /* 0x28 */ struct SGAMEDATA * pGame;
+    /* 0x2C */ int nOwnerGUIDEx;
+    /* 0x30 */ eD2UnitType eOwnerTypeEx;
+    /* 0x34 */ struct D2MonsterDataMinionList * pMinionList;
+    /* 0x38 */ struct D2MapAIStrc * pMapAi;
+    /* 0x3C */ int nGenericSpawnerSpecific;
+}; __pragma(pack(pop))
+
+#endif // D2_DEFINED_D2AiGeneralStrc
 #ifndef D2_DEFINED_D2PresetUnitStrc
 #define D2_DEFINED_D2PresetUnitStrc
 __pragma(pack(push, 1)) struct D2PresetUnitStrc {

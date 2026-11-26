@@ -33,6 +33,58 @@ struct D2MagixAffixModStrc {
 };
 
 #endif // D2_DEFINED_D2MagixAffixModStrc
+#ifndef D2_DEFINED_D2GemsTxt
+#define D2_DEFINED_D2GemsTxt
+__pragma(pack(push, 1)) struct D2GemsTxt {
+    /* 0x00 */ char name[32]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x20 */ char letter[6]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x26 */ uint8_t field_0x26;
+    /* 0x27 */ uint8_t field_0x27;
+    /* 0x28 */ int code; // d2bs binfields FIELDTYPE_CODE_INT
+    /* 0x2C */ uint8_t field_0x2c;
+    /* 0x2D */ uint8_t field_0x2d;
+    /* 0x2E */ char nummods; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x2F */ char transform; // d2bs binfields FIELDTYPE_CHAR
+    /* 0x30 */ D2MagixAffixModStrc aWeaponMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x60 */ D2MagixAffixModStrc aHelmMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
+    /* 0x90 */ D2MagixAffixModStrc aShieldMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
+}; __pragma(pack(pop))
+
+#endif // D2_DEFINED_D2GemsTxt
+#ifndef D2_DEFINED_D2RareAffixTxt
+#define D2_DEFINED_D2RareAffixTxt
+struct D2RareAffixTxt {
+    /* 0x00 */ uint8_t field_0x0;
+    /* 0x01 */ uint8_t field_0x1;
+    /* 0x02 */ uint8_t field_0x2;
+    /* 0x03 */ uint8_t field_0x3;
+    /* 0x04 */ uint8_t field_0x4;
+    /* 0x05 */ uint8_t field_0x5;
+    /* 0x06 */ uint8_t field_0x6;
+    /* 0x07 */ uint8_t field_0x7;
+    /* 0x08 */ uint8_t field_0x8;
+    /* 0x09 */ uint8_t field_0x9;
+    /* 0x0A */ uint8_t field_0xa;
+    /* 0x0B */ uint8_t field_0xb;
+    /* 0x0C */ uint16_t wNameStrId;
+    /* 0x0E */ short version; // d2bs binfields FIELDTYPE_SHORT
+    /* 0x10 */ short itype1; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x12 */ short itype2; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x14 */ short itype3; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x16 */ short itype4; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x18 */ short itype5; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x1A */ short itype6; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x1C */ short itype7; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x1E */ short etype1; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x20 */ short etype2; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x22 */ short etype3; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x24 */ short etype4; // d2bs binfields FIELDTYPE_CODE_SHORT
+    /* 0x26 */ char name[32]; // d2bs binfields FIELDTYPE_ASCII
+    /* 0x46 */ uint8_t field_0x46;
+    /* 0x47 */ uint8_t field_0x47;
+};
+
+#endif // D2_DEFINED_D2RareAffixTxt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 __pragma(pack(push, 1)) struct D2RepairTypeEntryStrc {
     /* 0x00 */ char byMode;

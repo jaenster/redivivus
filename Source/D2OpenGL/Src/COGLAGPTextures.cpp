@@ -92,7 +92,7 @@ void COGLAGPTEXTURES_Construct(::COGLAGPTextures * pThis) {
     void* pvVar8 = malloc(iVar13 + 0x2000);
     pThis->pArenaAlloc = pvVar8;
     if (pvVar8) {
-      pBVar9 = (uint8_t*)((int)pvVar8 + 0xfffU & -4096);
+      pBVar9 = (uint8_t*)((uintptr_t)pvVar8 + 0xfffU & -4096);
       pThis->pArena = pBVar9;
       iVar13 = 0;
       iVar16 = 0;
@@ -175,7 +175,7 @@ void COGLAGPTEXTURES_Construct(::COGLAGPTextures * pThis) {
 
       pvVar8 = malloc(sVar12);
       pThis->pPageBufferAlloc = pvVar8;
-      pThis->pPageBuffer = (uint8_t*)((int)pvVar8 + 0x1fU & -32);
+      pThis->pPageBuffer = (uint8_t*)((uintptr_t)pvVar8 + 0x1fU & -32);
       if (0 < pThis->nPageCount) {
         piVar15 = &pThis->aPages[0].field_0x8;
         iVar13 = 0;
@@ -449,7 +449,7 @@ void ReleaseTexture(::COGLAGPTextures * pThis, D2TextureNodeStrc * pNode) {
       iVar5 = 0x100;
       iVar8 = 0x100;
       LAB_002e6b15:
-      iVar8 = ((int)pBVar2 - (int)pThis->apPoolBase[nBucket]) / (iVar8 * iVar5 * pThis->nBytesPerPixel);
+      iVar8 = (int)(pBVar2 - pThis->apPoolBase[nBucket]) / (iVar8 * iVar5 * pThis->nBytesPerPixel);
       if (iVar8 < 0 || INT_ARRAY_00334c70[nBucket] <= iVar8) {
         pvVar1 = Fog::Src::ErrorManager::GetInstructionPointer();
         fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0x30b);
@@ -531,7 +531,7 @@ void ConvertPixels(::COGLAGPTextures * pThis, int nTexWidth, int nTexHeight, int
               uVar1 = *(uint32_t*)(pSrc + iVar7);
               *(uint32_t*)(pBVar5 + iVar7 * 4) = (*PTR_UINT_ARRAY_00396370)[uVar1 & 0xff];
               *(uint32_t*)(pBVar5 + iVar7 * 4 + 4) = (*pauVar3)[uVar1 >> 8 & 0xff];
-              *(uint32_t*)(pBVar5 + iVar7 * 4 + 8) = *(uint32_t*)((int)*pauVar3 + (uVar1 >> 0xe & 0x3fc));
+              *(uint32_t*)(pBVar5 + iVar7 * 4 + 8) = (*pauVar3)[uVar1 >> 0x10 & 0xff];
               *(uint32_t*)(pBVar5 + iVar7 * 4 + 0xc) = (*pauVar3)[uVar1 >> 0x18];
               iVar7 += 4;
               iVar6--;
@@ -553,7 +553,7 @@ void ConvertPixels(::COGLAGPTextures * pThis, int nTexWidth, int nTexHeight, int
             pauVar2 = PTR_USHORT_ARRAY_0039636c;
             uVar1 = *(uint32_t*)(pSrc + iVar6 * 4);
             *(uint32_t*)(pBVar5 + iVar6 * 8) = (uint32_t)((uint32_t)(uint16_t)(*PTR_USHORT_ARRAY_0039636c)[uVar1 >> 8 & 0xff] << 16 | (uint32_t)(uint16_t)(*PTR_USHORT_ARRAY_0039636c)[uVar1 & 0xff]);
-            *(uint32_t*)(pBVar5 + iVar6 * 8 + 4) = (uint32_t)((uint32_t)(uint16_t)(*pauVar2)[uVar1 >> 0x18] << 16 | (uint32_t)(uint16_t)*(uint16_t*)((int)*pauVar2 + (uVar1 >> 0xf & 0x1fe)));
+            *(uint32_t*)(pBVar5 + iVar6 * 8 + 4) = (uint32_t)((uint32_t)(uint16_t)(*pauVar2)[uVar1 >> 0x18] << 16 | (uint32_t)(uint16_t)(*pauVar2)[uVar1 >> 0x10 & 0xff]);
             iVar6++;
           } while (nGroups != iVar6);
 

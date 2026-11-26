@@ -232,6 +232,18 @@ struct __attribute__((packed)) D2QuestDataA2Q3Strc {
 };
 
 #endif // D2_DEFINED_D2QuestDataA2Q3Strc
+#ifndef D2_DEFINED_D2CoordStrc
+#define D2_DEFINED_D2CoordStrc
+struct D2CoordStrc {
+    D2CoordStrc() = default;
+    D2CoordStrc(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+    D2CoordStrc(int a0, int a1) : nX(a0), nY(a1) {}
+
+    /* 0x00 */ int nX;
+    /* 0x04 */ int nY;
+};
+#endif // D2_DEFINED_D2CoordStrc
 #ifndef D2_DEFINED_D2QuestDataA2Q4Strc
 #define D2_DEFINED_D2QuestDataA2Q4Strc
 struct D2QuestDataA2Q4Strc {
@@ -265,8 +277,7 @@ struct D2QuestDataA2Q4Strc {
     /* 0x24 */ int32_t nHaremBlockerY;
     /* 0x28 */ int32_t nJerhynX;
     /* 0x2C */ int32_t nJerhynY;
-    /* 0x30 */ int32_t nSummonerX; // X coordinate of the Summoner
-    /* 0x34 */ int32_t nSummonerY; // Y coordinate of the Summoner
+    /* 0x30 */ D2CoordStrc sSummonerCoords; // Summoner position, copied out whole by Q12_GetSummonerCoords
     /* 0x38 */ int32_t nJerhynObjectGUID; // GUID of the Jerhyn object unit
     /* 0x3C */ int32_t nJerhynMonsterGUID; // GUID of the Jerhyn monster unit used for AI control
     /* 0x40 */ uint16_t nPortalPlacedState; // Sanctuary entrance portal-placement state, always accessed as a word; 2 = placed (Q12_IsSanctuaryComplete)

@@ -229,7 +229,7 @@ typedef void (__fastcall *fpSetGlobalLight)(int nRed, int nGreen, int nBlue);
 #endif
 #ifndef RECON_FPTD_fpSetOption
 #define RECON_FPTD_fpSetOption
-typedef BOOL (__fastcall *fpSetOption)(int nOption, int nValue);
+typedef BOOL (__fastcall *fpSetOption)(int nOption, intptr_t nValue);
 #endif
 #ifndef RECON_FPTD_fpSetPalette
 #define RECON_FPTD_fpSetPalette
@@ -289,7 +289,7 @@ struct D2RendererFunctionsStrc {
     /* 0x24 */ BOOL (__fastcall *nfpResizeWindow)(HWND, BOOL);
     /* 0x28 */ BOOL (__fastcall *nfpGetBackBuffer)(BYTE *);
     /* 0x2C */ BOOL (__fastcall *nfpActivateWindow)(BOOL);
-    /* 0x30 */ BOOL (__fastcall *nfpSetOption)(int, int);
+    /* 0x30 */ BOOL (__fastcall *nfpSetOption)(int, intptr_t); // nValue is a value or an out pointer, by option
     /* 0x34 */ BOOL (__stdcall *nfpBeginCutScene)();
     /* 0x38 */ void (__fastcall *nfpPlayCutScene)(char *, int, fnBinkFrameCallback);
     /* 0x3C */ BOOL (__fastcall *nfpCheckCutScene)();
@@ -357,7 +357,7 @@ void __stdcall D2GFX_EnableVSync();
 void __stdcall D2GFX_DisableFixAspect();
 DWORD * __stdcall D2GFX_GetRenderStatistics();
 void __fastcall D2GFX_SetOverlayMode(DWORD dwMode);
-BOOL __fastcall D2GFX_SetOption(int32_t nOption, int32_t nValue);
+BOOL __fastcall D2GFX_SetOption(int32_t nOption, intptr_t nValue);
 BOOL __stdcall D2GFX_Initialize(HINSTANCE hInstance, WNDPROC pfWndProc, eD2RendererMode eRenderedMode, BOOL bWindowed);
 void __stdcall RENDERER_TogglePerspective();
 void __stdcall RENDERER_ToggleBlendedShadows();

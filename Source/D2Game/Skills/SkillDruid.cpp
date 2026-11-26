@@ -187,20 +187,16 @@ void __fastcall D2SetAurastatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc * 
     int* pAuraCalcCursor = pSkillsTxt->aurastatcalc;
     short int* pAuraStatCursor = pSkillsTxt->aurastat;
     int nLoopCount = 6;
-    D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     do {
       eD2UnitStat eUnitStat;
       eUnitStat = (eD2UnitStat)*pAuraStatCursor;
-      D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+      D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
       if (pItemStatCostTxt) {
         nValue = D2Common::Skills::D2GetSkillCalc(pUnit, *pAuraCalcCursor, eSkill, nSkillLvl);
-        pDataTable = D2Common::ITEMS::Items::sgptDataTable;
         if (nValue) {
           D2Common::Stats::StatsEx::STATLIST_SetStatValue(pStatList, eUnitStat, nValue, 0);
-          pDataTable = D2Common::ITEMS::Items::sgptDataTable;
           if (eUnitStat == UNITSTAT_attackrate) {
             D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_other_animrate, nValue, 0);
-            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
           }
         }
       }
@@ -223,20 +219,16 @@ void __fastcall D2SetPassiveStatsFromSkills(D2UnitStrc * pUnit, D2StatListExStrc
     int* piPassiveCalc = pSkillsTxt->passivecalc;
     short int* psPassiveStat = pSkillsTxt->passivestat;
     int nCount = 5;
-    D2DataTableTxtStrc* pDataTable = D2Common::ITEMS::Items::sgptDataTable;
     do {
       eD2UnitStat eUnitStat;
       eUnitStat = (eD2UnitStat)*psPassiveStat;
-      D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < pDataTable->nTxtItemStatCostSize ? pDataTable->pTxtItemStatCost + eUnitStat : nullptr;
+      D2ItemStatCostTxt* pItemStatCostTxt = (int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eUnitStat : nullptr;
       if (pItemStatCostTxt) {
         nValue = D2Common::Skills::D2GetSkillCalc(pUnit, *piPassiveCalc, eSkill, nSkillLvl);
-        pDataTable = D2Common::ITEMS::Items::sgptDataTable;
         if (nValue) {
           D2Common::Stats::StatsEx::STATLIST_SetStatValue(pStatList, eUnitStat, nValue, 0);
-          pDataTable = D2Common::ITEMS::Items::sgptDataTable;
           if (eUnitStat == UNITSTAT_attackrate) {
             D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pStatList, UNITSTAT_other_animrate, nValue, 0);
-            pDataTable = D2Common::ITEMS::Items::sgptDataTable;
           }
         }
       }
@@ -307,7 +299,7 @@ BOOL __fastcall SKILLDRUID_CastMultiMissile(::SGAMEDATA * pGame, D2UnitStrc * pU
       }
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     eD2UnitType eUnitType = pUnit->eUnitType;
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
@@ -384,7 +376,7 @@ BOOL __fastcall Skills_SrvDoFunc_117_Firestorm(::SGAMEDATA * pGame, D2UnitStrc *
         return 1;
       }
 
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       eUnitType = pUnit->eUnitType;
       sSkillArg.nFlags = 0x21;
       sSkillArg.pOwner = pUnit;
@@ -591,7 +583,7 @@ BOOL __fastcall SKILLDRUID_SrvStFn56_FeralRageMaul(::SGAMEDATA * pGame, D2UnitSt
       return 0;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, D2Common::Skills::SKILLS_CalcToHit(pUnit, eSkill, nSkillLvl), 0);
     if (sDamage.wResultFlags & 1U) {
       if ((uint8_t)pSkillTxt->EType > ELEMENTAL_NONE) {
@@ -772,7 +764,7 @@ static void __stdcall SKILLDRUID_GetSummonDamageBonus(D2SkillsTxt * pSkillTxt, :
       nMinToHit = 10;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     SkillsServer::SKILLS_CalcToHitAndApply(pGame, pUnit2, pUnit, pSkillTxt, eSkill, nSkillLvl, &sDamage, 0);
     if ((uint8_t)sDamage.wResultFlags & 1) {
       sDamage.dwHitFlags |= pSkillTxt->HitFlags;
@@ -801,7 +793,7 @@ static void __stdcall SKILLDRUID_CreateAuraMissile(::SGAMEDATA * pGame, D2UnitSt
       return;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nSkillLevel = nSkillLvl;
     sSkillArg.nTotalFrames = nDuration;
     sSkillArg.nFlags = 0x8000;
@@ -851,7 +843,7 @@ BOOL __fastcall SKILLDRUID_SrvStFn58_FireClaws(::SGAMEDATA * pGame, D2UnitStrc *
       return 0;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     SkillsServer::SKILLS_CalcToHitAndApply(pGameLocal, pUnit, pTarget, pSkillTxt, eSkill, nSkillLvl, &sDamage, 0);
     if ((uint8_t)sDamage.wResultFlags & 1) {
       sDamage.dwHitFlags |= 2;
@@ -886,7 +878,7 @@ BOOL __fastcall Skills_SrvDoFunc_122_Hunger(::SGAMEDATA * pGame, D2UnitStrc * pU
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     SkillsServer::SKILLS_CalcToHitAndApply(pGame, pUnit, pTarget, pSkillTxt, eSkill, nSkillLvl, &sDamage, 0);
     if (sDamage.wResultFlags & 1U) {
       int32_t nBonusDmg;
@@ -939,7 +931,7 @@ BOOL __fastcall Skills_SrvDoFunc_123_Volcano(::SGAMEDATA * pGame, D2UnitStrc * p
 
     uint8_t nRandom = (uint8_t)D2Common::Seed::UNIT_GetModuloFromSeed(&pUnit->sSeed, 0x100);
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = nTargetX;
@@ -1052,7 +1044,7 @@ BOOL __fastcall Skills_SrvDoFunc_145_Hurricane(::SGAMEDATA * pGame, D2UnitStrc *
                 return 0;
               }
 
-              memset(&sDamage, 0, 0x70);
+              memset(&sDamage, 0, sizeof(sDamage));
               SkillsServer::SKILLS_AddRandomSkillDamage(pUnit, &sDamage.dwHitFlags, eSkill, nSkillLvl);
               SkillsServer::SetDamageOnEvent(pUnit, &sDamage, eSkill, nSkillLvl);
               sDamage.wResultFlags |= pSkillTxt->ResultFlags;
@@ -1307,7 +1299,7 @@ BOOL __fastcall SKILLDRUID_ApplyAccumulatedStateDamage(::SGAMEDATA * pGame, D2Un
       } while (nStateIdx < D2Common::ITEMS::Items::sgptDataTable->nAllStatesDataTblFlag0x10Size);
     }
 
-    memset(&sDamage, 0, 0x70);
+    memset(&sDamage, 0, sizeof(sDamage));
     sDamage.wResultFlags = UNIT::SUnitDmg::DAMAGE_CalculateHitCheck(pGame, pUnit, pTarget, nTotalToHit, 0);
     sDamage.dwHitClass = 1;
     UNIT::SUnitDmg::DAMAGE_CalculateAndApplyDamage(pGame, pUnit, pTarget, &sDamage, bySrcDam);

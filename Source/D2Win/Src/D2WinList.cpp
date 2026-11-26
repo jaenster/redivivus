@@ -360,7 +360,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
       return 0;
     }
 
-    uint32_t WVar1 = pControlMsg->wParam;
+    WPARAM WVar1 = pControlMsg->wParam;
     switch (WVar1) {
       case 0xd:
         {
@@ -458,7 +458,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     return 0;
 }
 
-::D2WinList * __fastcall D2WinList(int32_t nPosX, int32_t nPosY, int * nSizeX, int32_t nSizeY, int * pnItemArray, int * pnFontType) {
+::D2WinList * __fastcall D2WinList(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int * pnItemArray, int * pnFontType) {
     // Static local variables (originally global data)
     static int INT_ARRAY_006dd024[14] = {
     0x8,
@@ -490,7 +490,7 @@ BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     int* pItemCountPtr = &pList->sControl.dwState;
     *pItemCountPtr |= Fog::BitBuffer::gadwBitMasks[0];
     dwState = pList->sControl.dwState | Fog::BitBuffer::gadwBitMasks[2];
-    pList->sControl.dwSizeX = (int)nSizeX;
+    pList->sControl.dwSizeX = nSizeX;
     pList->sControl.dwState = dwState;
     pList->sControl.dwPosX = nPosX;
     pList->sControl.dwPosY = nPosY;

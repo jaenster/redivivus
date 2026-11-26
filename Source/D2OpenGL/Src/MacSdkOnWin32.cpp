@@ -891,9 +891,9 @@ BOOL SPRITECACHE_EnsureSpriteLoaded(::D2TileLibraryEntryStrc *pTile)
     return D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0);
 }
 
-int CloseHandle(uintptr_t hObject)
+int CloseHandle(void *hObject)
 {
-    return ::CloseHandle(reinterpret_cast<HANDLE>(hObject));
+    return ::CloseHandle(hObject);
 }
 
 intptr_t SendMessageA(void *hWnd, uint32_t nMsg, uintptr_t wParam, intptr_t lParam)

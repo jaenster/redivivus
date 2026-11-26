@@ -61,7 +61,7 @@ static D2TimerListStrc * EVENT_AllocTimerPool(::SGAMEDATA * pGame) {
       return nullptr;
     }
 
-    memset(pPool, 0, 0x7088);
+    memset(pPool, 0, sizeof(*pPool));
     D2TimerStrc* pSlot = pPool->pTimerList;
     pPool->pFirstList = pSlot;
     int nTimers = 599;
@@ -92,7 +92,7 @@ static D2TimerStrc * __stdcall EVENT_GetTimerOrAllocNew(::SGAMEDATA * pGame, D2T
     take_free_timer:
     pFreeTimer = pPool->pFirstList;
     pPool->pFirstList = pFreeTimer->pNextTimerList;
-    memset(pFreeTimer, 0, 0x30);
+    memset(pFreeTimer, 0, sizeof(*pFreeTimer));
     return pFreeTimer;
 }
 
@@ -494,7 +494,7 @@ void __fastcall EVENT_AllocTimerQueue(::SGAMEDATA * pGame) {
     }
 
     D2TimerQueueStrc* pNewQueue = D2_NEW_POOL_AT(pGame->pMemoryPool, D2TimerQueueStrc, ".\\GAME\\Event.cpp", 0x327);
-    memset(pNewQueue, 0, 0xa20);
+    memset(pNewQueue, 0, sizeof(*pNewQueue));
     D2TimerListStrc* pTimerPool = EVENT_AllocTimerPool(pGame);
     pNewQueue->pTimerList = pTimerPool;
     pGame->pTimerQueue = pNewQueue;

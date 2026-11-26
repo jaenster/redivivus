@@ -52,7 +52,7 @@
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Unit/SUnitDmg.h"
 #include "Source/D2Game/Unit/SUnitMsg.h"
@@ -1787,7 +1787,7 @@ void __fastcall HandleItemPutInContainer(uint8_t * pBytes) {
       return;
     }
 
-    ITEM_PlaceItemInContainer(pItem, (uint32_t)((uint32_t)(uint8_t)sItemDetails.reserved_09_0B[0] << 24 | (uint32_t)((uint32_t)((uint32_t)(uint8_t)sItemDetails.nAnimMode << 16 | (uint32_t)(uint16_t)sItemDetails.y) & 0xffffffu)), *(uint32_t*)((char*)&sItemDetails + 16), pPlayerUnit_lcl, (uint32_t)((uint32_t)(uint16_t)sItemDetails.y << 16 | (uint32_t)(uint16_t)sItemDetails.x));
+    ITEM_PlaceItemInContainer(pItem, (uint32_t)((uint32_t)(uint8_t)sItemDetails.reserved_09 << 24 | (uint32_t)((uint32_t)((uint32_t)(uint8_t)sItemDetails.nAnimMode << 16 | (uint32_t)(uint16_t)sItemDetails.y) & 0xffffffu)), *(uint32_t*)((char*)&sItemDetails + 16), pPlayerUnit_lcl, (uint32_t)((uint32_t)(uint16_t)sItemDetails.y << 16 | (uint32_t)(uint16_t)sItemDetails.x));
     uint32_t bCharmActive = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pItem, pPlayerUnit_lcl);
     if (bCharmActive) {
       ITEM_ApplySocketableAndEquipStats(0, pPlayerUnit_lcl, pItem);
@@ -3467,7 +3467,7 @@ D2UnitStrc * __fastcall HandleItemUpdateStats(uint8_t * pbPacket) {
       }
 
       pCursorItem_lcl = ITEM_CreateItemFromBodyPacket(0, 0, 0, pbPacketSaved, &stItemDetails);
-      ITEM_PlaceItemInContainer(pCursorItem_lcl, (uint32_t)((uint32_t)(uint8_t)stItemDetails.reserved_09_0B[0] << 24 | (uint32_t)((uint32_t)((uint32_t)(uint8_t)stItemDetails.nAnimMode << 16 | (uint32_t)(uint16_t)stItemDetails.y) & 0xffffffu)), (uint32_t)((uint32_t)(uint16_t)stItemDetails.reserved_12_13 << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)stItemDetails.nBodyLoc << 8 | (uint16_t)(uint8_t)stItemDetails.nInvPage)), pUnit, (uint32_t)((uint32_t)(uint16_t)stItemDetails.y << 16 | (uint32_t)(uint16_t)stItemDetails.x));
+      ITEM_PlaceItemInContainer(pCursorItem_lcl, (uint32_t)((uint32_t)(uint8_t)stItemDetails.reserved_09 << 24 | (uint32_t)((uint32_t)((uint32_t)(uint8_t)stItemDetails.nAnimMode << 16 | (uint32_t)(uint16_t)stItemDetails.y) & 0xffffffu)), (uint32_t)((uint32_t)(uint16_t)stItemDetails.reserved_12_13 << 16 | (uint32_t)(uint16_t)((uint16_t)(uint8_t)stItemDetails.nBodyLoc << 8 | (uint16_t)(uint8_t)stItemDetails.nInvPage)), pUnit, (uint32_t)((uint32_t)(uint16_t)stItemDetails.y << 16 | (uint32_t)(uint16_t)stItemDetails.x));
       bFlag = D2Common::ITEMS::Items::ITEM_IsActiveCharm(pCursorItem_lcl, pUnit);
       if (bFlag) {
         ITEM_ApplySocketableAndEquipStats(0, pUnit, pCursorItem_lcl);

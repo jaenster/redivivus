@@ -580,12 +580,12 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey) {
         pbKeyCopy = pbKeyCopy + strlen((char*)pbKeyCopy) + 1;
         pcFormatted = s__not_xlated_call_ken_w_00730520;
         pcVar1 = pcFormatted + strlen(pcFormatted);
-        pcFormatted = pcVar1 + 1;
-        pcFormatted = (char*)D2_ALLOC_AT((size_t)(pcVar1 + (int)(pbKeyCopy - pbSrc - (intptr_t)&s__not_xlated_call_ken_w_00730520) + 1), ".\\StrTable\\strtable.cpp", 0x26c);
+        pcFormatted = pcVar1 + 1; // steer-ok: generated form, kept as emitted (body pinned for x64 typing)
+        pcFormatted = (char*)D2_ALLOC_AT((size_t)((pbKeyCopy - pbSrc) + (pcVar1 - (char*)&s__not_xlated_call_ken_w_00730520) + 1), ".\\StrTable\\strtable.cpp", 0x26c);
         strcpy(pcFormatted, (char*)pbKey);
         pcSuffixDst = s__not_xlated_call_ken_w_00730520;
         pcSuffixEnd = pcSuffixDst + strlen(pcSuffixDst);
-        pcSuffixDst = pcSuffixEnd + 1;
+        pcSuffixDst = pcSuffixEnd + 1; // steer-ok: generated form, kept as emitted (body pinned for x64 typing)
         pcSuffixDst = pcFormatted - 1;
         do {
           pcSuffixSrc = pcSuffixDst + 1;
@@ -593,19 +593,19 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey) {
         } while (*pcSuffixSrc != '\0');
 
         pcSuffixSrc = s__not_xlated_call_ken_w_00730520;
-        for (nCopyCount = (uintptr_t)(pcSuffixEnd - ((intptr_t)&s__not_xlated_call_ken_w_00730520 - 1)) >> 2; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (uint32_t)((uintptr_t)(pcSuffixEnd - ((intptr_t)&s__not_xlated_call_ken_w_00730520 - 1)) >> 2); nCopyCount; nCopyCount--) {
           *(uint32_t*)pcSuffixDst = *(uint32_t*)pcSuffixSrc;
           pcSuffixSrc += 4;
           pcSuffixDst += 4;
         }
 
-        for (nCopyCount = (uintptr_t)(pcSuffixEnd - ((intptr_t)&s__not_xlated_call_ken_w_00730520 - 1)) & 3; nCopyCount; nCopyCount--) {
+        for (nCopyCount = (uint32_t)((uintptr_t)(pcSuffixEnd - ((intptr_t)&s__not_xlated_call_ken_w_00730520 - 1)) & 3); nCopyCount; nCopyCount--) {
           *pcSuffixDst = *pcSuffixSrc;
           pcSuffixSrc++;
           pcSuffixDst++;
         }
 
-        pcKeyEnd = Unicode::UNISYS::UNICODE_GetWideCharCount(pcFormatted, (int32_t)(pcVar1 + (int)(pbKeyCopy - pbSrc - (intptr_t)&s__not_xlated_call_ken_w_00730520)));
+        pcKeyEnd = Unicode::UNISYS::UNICODE_GetWideCharCount(pcFormatted, (int32_t)((pbKeyCopy - pbSrc) + (pcVar1 - (char*)&s__not_xlated_call_ken_w_00730520))); // key length + suffix length
         wszText = (uint16_t*)D2_ALLOC_AT(pcKeyEnd * 2 + 2, ".\\StrTable\\strtable.cpp", 0x271);
         pCacheNode->wszText = (uint16_t*)wszText;
         UTF8_ConvertToWideChar(wszText, pcFormatted, pcKeyEnd);
@@ -914,7 +914,7 @@ void __stdcall STRTABLE_FormatNumber(uint16_t * wszText, uint32_t nValue, int32_
     }
 
     _ultoa(nValue, szDigits, 10);
-    int nDigitCount = strlen(szDigits);
+    int nDigitCount = (int)strlen(szDigits);
     if (nDigitCount) {
       int nOutPos = (nDigitCount - 1) / 3 + nDigitCount;
       if (nOutPos >= 1 && nOutPos < nMaxLen - 1) {
@@ -1231,8 +1231,8 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
     }
 
     int* pnEntryCount = &pTblFile->nNodeCount;
-    gpStringIndexBase = (uint16_t**)D2_ALLOC_AT(pTblFile->nNodeCount * 4, ".\\StrTable\\strtable.cpp", 399);
-    memset(gpStringIndexBase, 0, *pnEntryCount * 4);
+    gpStringIndexBase = (uint16_t**)D2_ALLOC_AT(pTblFile->nNodeCount * sizeof(uint16_t*), ".\\StrTable\\strtable.cpp", 399);
+    memset(gpStringIndexBase, 0, *pnEntryCount * sizeof(uint16_t*));
     gnStringTableRefCount++;
     int32_t nWideCharCount = 0;
     uint16_t* j = &gpStringTableBase[1].wCRC + pTblFile->wIndexCount;
@@ -1274,8 +1274,8 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
     {
       int nCountEntryIdx;
       pnEntryCount = &gpStringTablePatchD2->nNodeCount;
-      gpStringIndexPatchD2 = (uint16_t**)D2_ALLOC_AT(gpStringTablePatchD2->nNodeCount * 4, ".\\StrTable\\strtable.cpp", 0x1c5);
-      memset(gpStringIndexPatchD2, 0, *pnEntryCount * 4);
+      gpStringIndexPatchD2 = (uint16_t**)D2_ALLOC_AT(gpStringTablePatchD2->nNodeCount * sizeof(uint16_t*), ".\\StrTable\\strtable.cpp", 0x1c5);
+      memset(gpStringIndexPatchD2, 0, *pnEntryCount * sizeof(uint16_t*));
       pEntryIdx2 = &gpStringTablePatchD2->nNodeCount;
       nCountEntryIdx = 0;
       j = &gpStringTablePatchD2[1].wCRC + gpStringTablePatchD2->wIndexCount;
@@ -1317,8 +1317,8 @@ int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szTex
         }
 
         pnEntryCount = &gpStringTableExpansion->nNodeCount;
-        gpStringIndexExpansion = (uint16_t**)D2_ALLOC_AT(gpStringTableExpansion->nNodeCount * 4, ".\\StrTable\\strtable.cpp", 0x1f8);
-        memset(gpStringIndexExpansion, 0, *pnEntryCount * 4);
+        gpStringIndexExpansion = (uint16_t**)D2_ALLOC_AT(gpStringTableExpansion->nNodeCount * sizeof(uint16_t*), ".\\StrTable\\strtable.cpp", 0x1f8);
+        memset(gpStringIndexExpansion, 0, *pnEntryCount * sizeof(uint16_t*));
         pEntryIdx = &gpStringTableExpansion->nNodeCount;
         nCountEntryIdx = 0;
         j = &gpStringTableExpansion[1].wCRC + gpStringTableExpansion->wIndexCount;

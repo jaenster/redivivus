@@ -178,13 +178,13 @@ void __fastcall TSLink_TMESSAGESOURCE_Unlink(struct StormLinkStrc * pLink);
 struct StormLinkStrc * __fastcall LINKEDLIST_GetOffset(struct StormLinkedListStrc * pList, int, void * pItem);
 void __fastcall LINKEDLIST_SetNodeValue(struct StormLinkedListStrc * pNode, int, int32_t dwValue);
 void __fastcall LINKEDLIST_InsertNode(struct StormLinkedListStrc * pList, int, void * pNewItem, int32_t nInsertMode, void * pRefItem);
-int32_t __fastcall LINKEDLIST_GetNodeAt(int * pList, int, void * nOffset);
+intptr_t __fastcall LINKEDLIST_GetNodeAt(int * pList, int, void * nOffset);
 void __fastcall LINKEDLIST_RemoveNode(int * pList, int, struct StormFaultHandlerNodeStrc * pItem);
 // @wasnamed LINKEDLIST_GetCount - one name on two different functions.
 // @evidence Calls LINKEDLIST_GetOffset(nOffset,p) then returns node[+4].
 // It counts nothing. 00426a60 is the real count (returns max(pList[+8],0)).
 // @caveat no xrefs - an inlined Storm TS-list template instance. Name is body-derived, not recovered.
-int32_t __fastcall LINKEDLIST_GetNodeLinkAtOffset(int * pList, int, void * nOffset);
+intptr_t __fastcall LINKEDLIST_GetNodeLinkAtOffset(int * pList, int, void * nOffset);
 // TSList<TMESSAGESOURCE>::UnlinkAll: unlinks every node without freeing it.
 // Named per redivivus issue #35; T from gFaultHandlerList, whose nodes are allocated with .?AUTMESSAGESOURCE@@ (0072f9fc).
 void __fastcall TSList_TMESSAGESOURCE_UnlinkAll(struct StormLinkedListStrc * pList);
@@ -199,7 +199,7 @@ void __fastcall TSList_TMESSAGESOURCE_Destructor_5176d3(struct StormLinkedListSt
 // TSList<TMESSAGESOURCE>::Clear: unlinks and SMemFrees every node.
 // Named per redivivus issue #35; T from the delete tag .?AUTMESSAGESOURCE@@ (0072f9fc).
 void __fastcall TSList_TMESSAGESOURCE_Clear(struct StormLinkedListStrc * pListHead);
-int32_t __fastcall LINKEDLIST_FindNode(int * pList, int, void * pNode);
+intptr_t __fastcall LINKEDLIST_FindNode(int * pList, int, void * pNode);
 void AtexitCleanup_FreeLinkedListAndCritSec();
 void __fastcall FAULT_LookupErrorString(uint32_t nErrorCode, char * szText, int32_t nMaxLen);
 void FAULT_ShowFormattedError(uint32_t nErrorCode, ...);

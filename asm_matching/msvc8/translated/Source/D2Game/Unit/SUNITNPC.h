@@ -143,7 +143,7 @@ void __fastcall HireMercFromNpc(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer
 // @sourcefile .\UNIT\SUNITNPC.CPP
 BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, struct D2UnitStrc * pNpc, struct D2UnitStrc * pItem, int32_t nNpcDataIdx);
 // Handles a player trade action with an NPC (buy/repair). Looks up the NPC's game proxy, marks it active, processes the NPC action, then conditionally resets the proxy and triggers item repair (single item if nParam!=0, all items if nParam==0) for repairable NPC types. Refreshes inventory after repair. Skips class IDs 0x96, 0xC6, and 0x203 (non-repairing NPCs).
-void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pNpc, int32_t bIsRepair, int32_t nMode);
+void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, struct D2UnitStrc * pUnit, struct D2UnitStrc * pNpc, struct D2ClientStrc * pClient, int32_t nMode);
 // Handle NPC sell transaction - transfer item from NPC to player inventory with cost calculation
 // @sourcefile .\UNIT\SUNITNPC.CPP
 eD2ServerIncomingStatus __fastcall SUNITNPC_SellItem(::SGAMEDATA * pGame, struct D2UnitStrc * pPlayer, int32_t nNpcGUID, int32_t nItemGUID, int32_t nMode, int32_t nPrice);

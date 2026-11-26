@@ -73,7 +73,7 @@ static D2SLogStrc * __stdcall SLOG_LockLog(uint32_t * pnSlotOut, int32_t bAlloca
 }
 
 static void SLOG_OutputIndent(D2SLogStrc * pLog) {
-    size_t nLen = pLog->nIndent;
+    uint32_t nLen = pLog->nIndent;
     if ((int)nLen <= 0) {
       return;
     }

@@ -117,11 +117,11 @@ int32_t __fastcall GetClientId(char * szCharName);
 BOOL __fastcall CLIENTS_IsCharacterNameFree(char * szCharName, char * szCharNameOut);
 // Appends an incoming save-data chunk to the client's in-progress save buffer. Looks up the client by nClientId in the QServer bucket table (under critical section), allocates pSaveGame on the first chunk, memcpys the chunk, advances nSaveOpenSize. When nSaveOpenSize reaches nTotalSize the save is complete: sets fClientFlags bit 3, runs PLAYERSAVE_CRC32MissileTable, and returns 1. Returns 0 if the QServer tables are uninitialised or the client is not found.
 // @sourcefile .\GAME\Clients.cpp
-int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, size_t size, size_t nTotalSize, uint32_t dwSaveFlags, uint32_t dwParam1, uint32_t dwParam2);
+int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, uint32_t size, uint32_t nTotalSize, uint32_t dwSaveFlags, uint32_t dwParam1, uint32_t dwParam2);
 struct D2SaveFileHeaderStrc * __fastcall GetSaveGame(struct D2ClientStrc * pClient);
-size_t __fastcall GetSaveGameSize(struct D2ClientStrc * pClient);
+uint32_t __fastcall GetSaveGameSize(struct D2ClientStrc * pClient);
 // @sourcefile .\GAME\Clients.cpp
-void __fastcall CopySafeBuffer(struct D2ClientStrc * pClient, void * pSaveBuffer, size_t nSaveSize);
+void __fastcall CopySafeBuffer(struct D2ClientStrc * pClient, void * pSaveBuffer, uint32_t nSaveSize);
 // @sourcefile .\GAME\Clients.cpp
 void __fastcall DeleteCurrentSave(struct D2ClientStrc * pClient);
 void __fastcall CLIENTS_ResetSaveTransferState(struct D2ClientStrc * pClient);

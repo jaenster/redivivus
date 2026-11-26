@@ -41,7 +41,7 @@
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/D2DamageStrc.h"
 #include "Source/D2Game/D2ObjectOperateFnArg.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Game/Targets.h"
 #include "Source/D2Game/Items/Items/Drop.h"
@@ -887,7 +887,7 @@ static void MONSTERMODE_ApplyDeathAreaDamage(::SGAMEDATA * pGame, D2UnitStrc * p
         if (nDamage <= 2) {
           _bInRange = D2Common::Units::TestCollisionBetweenInteractingUnits(pTarget, pUnit, 0x3c01);
           if (!_bInRange) {
-            memset(&sDamage, 0, 0x70);
+            memset(&sDamage, 0, sizeof(sDamage));
             nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTarget, UNITSTAT_hitpoints, 0) >> 5;
             sDamage.dwPhysDamage = nTargetHp;
             sDamage.wResultFlags = 1;
@@ -1048,7 +1048,7 @@ BOOL __fastcall MONSTER_OnDeathDispatch(::SGAMEDATA * pGame, D2ModeChangeStrc * 
             nClassId = (int)(nCEDamageScaled * 0x3c) / 100;
           }
 
-          memset(&sDamage, 0, 0x70);
+          memset(&sDamage, 0, sizeof(sDamage));
           nRandCEOffset = D2Common::Seed::RANDOM_RandomNumberSelector(&pVictim->sSeed, nCEDamageScaled - nClassId);
           sDamage.dwPhysDamage = nRandCEOffset + nClassId << 7;
           UNIT::SUnitDmg::DAMAGE_ApplyAreaOfEffectDamage(pGame, pUnit_00, pMonsterKillSaved, nPosY, 5, &sDamage, 0, 0, nullptr, 0x581);
@@ -1533,68 +1533,57 @@ D2MonModeTableRowStrc * __fastcall MONMODE_GetModeTableRow(D2UnitStrc * pUnit, u
     }
 }; D2_STATIC_GUARD(gaMonModeTable, "D2Game::Monster::MonsterMode::MONMODE_GetModeTableRow::gaMonModeTable");
 
-    eD2MonsterClassId nClassId;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
       return nullptr;
     }
 
-    eD2MonsterClassId nMonClassId;
+    int32_t nMonClassId;
+    D2MonStatsTxt* pMonStatsTxt;
     nMonClassId = pUnit->nClassId;
-    if ((int)nMonClassId < 0 || (int)nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId) || nAnimMode > 0xf) {
+    if ((int)nMonClassId < 0 || (int)nMonClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId) || nAnimMode > 0xf) {
       return nullptr;
     }
-    if (D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId].SplGetModeChart == '\0') {
+    if (pMonStatsTxt->SplGetModeChart == '\0') {
       return gaMonModeTable + nAnimMode;
     }
-    if ((int)nMonClassId > 0x21f) {
-      switch (nMonClassId) {
-        case MonsterUnitCrab:
 
-        case MonsterUnitClone:
-
-        case MonsterUnitUberBaal:
-          goto baal_family;
-        case MonsterUnitUberDiablo:
-          diablo_family:
-          if (nAnimMode == 0xb) {
-            return gaMonModeTable + 0x10;
-          }
-        if (nAnimMode != 10) {
-          return gaMonModeTable + nAnimMode;
+    switch (nMonClassId) {
+      case MonsterUnitTrappedSoul1:
+        if (nAnimMode == 4 || nAnimMode == 5) {
+          return gaMonModeTable + 0x12;
         }
-
-        return gaMonModeTable + 0x11;
-        default:
-          return gaMonModeTable + nAnimMode;
-      }
-    }
-    if (nMonClassId != MonsterUnitThroneBaal) {
-      switch (nMonClassId) {
-        case MonsterUnitDiablo:
-
-        case MonsterUnitDiabloClone:
-          goto diablo_family;
-        case MonsterUnitTrappedSoul1:
-          if (nAnimMode == 4 || nAnimMode == 5) {
-            return gaMonModeTable + 0x12;
-          }
         if (nAnimMode == 9 || nAnimMode == 8) {
           return gaMonModeTable + 0x13;
         }
-
         break;
-        case MonsterUnitWarrior:
-
-        case MonsterUnitMaster:
-          if (nAnimMode == 0xb) {
-            return gaMonModeTable + 0x14;
-          }
-      }
-    } else {
-      baal_family:
-      if (nAnimMode == 10) {
-        return gaMonModeTable + 7;
-      }
+      case MonsterUnitWarrior:
+      case MonsterUnitMaster:
+        if (nAnimMode == 0xb) {
+          return gaMonModeTable + 0x14;
+        }
+        break;
+      case MonsterUnitDiablo:
+      case MonsterUnitDiabloClone:
+      case MonsterUnitUberDiablo:
+        if (nAnimMode == 0xb) {
+          return gaMonModeTable + 0x10;
+        }
+        if (nAnimMode == 10) {
+          return gaMonModeTable + 0x11;
+        }
+        break;
+      case MonsterUnitThroneBaal:
+        if (nAnimMode == 10) {
+          return gaMonModeTable + 7;
+        }
+        break;
+      case MonsterUnitCrab:
+      case MonsterUnitClone:
+      case MonsterUnitUberBaal:
+        if (nAnimMode == 10) {
+          return gaMonModeTable + 7;
+        }
+        break;
     }
 
     return gaMonModeTable + nAnimMode;
@@ -1652,7 +1641,7 @@ void __fastcall MONMODE_EventEndAnimation(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // Server-side monster mode/lifecycle transition driver. Given a D2MonsterKillStrc (victim, attacker/target, requested nUnitMode), validates the victim is a monster, halts on a stuck uninterruptable state, then for non-GetHit modes sets the dynamic-path target/SP and recomputes combat stats & UMod-on-spawn. Looks up the per-mode AI drop/death handler (GetDropHandler) and invokes its pFn1; on a 0 result clears the current skill and schedules execution (PlanExecutionOfMonster). Flags MONMODEISCHANGING, re-inits the anim frame, applies velocity%, dispatches UMod-on-death, then re-resolves the handler for the unit's actual anim mode to (re)arm or clear anim timer events. Returns pFn1's result, or 0 (falling through to MONSTER_InitiateDefaultDeath) when no actual-mode handler exists. __stdcall(pGame,pMonsterKill,nParam).
 int32_t __stdcall MONSTERAI_ExecuteLifecycleTransition(::SGAMEDATA * pGame, D2ModeChangeStrc * pMonsterKill, int32_t bResetSkillOnSameMode) {
-    bool bIsModeZeroDeath;
+    BOOL bIsModeZeroDeath;
     BOOL BVar1;
     D2MonModeTableRowStrc* pCurrentModeHandler;
     uint32_t bHasAnimSequence;

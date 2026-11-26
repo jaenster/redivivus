@@ -370,6 +370,21 @@
       "dh": "1abe5cbe"
     },
     {
+      "name": "CHAR_FreePanelAssets_NoOp",
+      "address": "004a7ad0",
+      "lines": [
+        {
+          "line": 1,
+          "address": "004a7ad0"
+        }
+      ],
+      "namespace": "D2Client::UI::ui",
+      "calledFunctions": [
+        "CHAR_FreePanelAssets_NoOp"
+      ],
+      "dh": "937e2d4a"
+    },
+    {
       "name": "DRAW_UI_StatWindow_II",
       "address": "004a7ae0",
       "lines": [

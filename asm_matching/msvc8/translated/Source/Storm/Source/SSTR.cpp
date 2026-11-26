@@ -1127,11 +1127,11 @@ char * __stdcall SSTR_FindChar(char * szText, char cTarget, int32_t bFromEnd) {
 // call to the CRT strncmp. The case-sensitive half of the only Cmp/CmpI pair in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringCaseSensitive
-int32_t __stdcall SStrCmp(char * str_1, char * str_2, size_t nMaxCount) {
+int32_t __stdcall SStrCmp(char * str_1, char * str_2, uint32_t nMaxCount) {
     D2_CHECKS_BEGIN;
     D2_CHECK(str_1);
     D2_CHECK(str_2);
-    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (intptr_t)str_1 - (intptr_t)str_2);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (int32_t)(str_1 - str_2));
     int nResult = strncmp(str_1, str_2, nMaxCount);
     return nResult;
 }
@@ -1141,11 +1141,11 @@ int32_t __stdcall SStrCmp(char * str_1, char * str_2, size_t nMaxCount) {
 // @oracle-basis Identical to SStrCmp except it calls _strnicmp. The case-insensitive half of the pair.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringNoCaseSensitive
-int32_t __stdcall SStrCmpI(char * str_1, char * str_2, size_t nMaxCount) {
+int32_t __stdcall SStrCmpI(char * str_1, char * str_2, uint32_t nMaxCount) {
     D2_CHECKS_BEGIN;
     D2_CHECK(str_1);
     D2_CHECK(str_2);
-    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (intptr_t)str_1 - (intptr_t)str_2);
+    D2_CHECKS_END(SErr::SErrSetLastError(0x57), (int32_t)(str_1 - str_2));
     int nResult = _strnicmp(str_1, str_2, nMaxCount);
     return nResult;
 }
@@ -1171,7 +1171,7 @@ uint32_t __stdcall SStrCopy(char * szBufferOutput, char * szBufferInput, int32_t
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     if (nBufferOutputLength) {
       pDstLast = szBufferOutput + (nBufferOutputLength - 1);
-      for (nOffset = (intptr_t)szBufferOutput - (intptr_t)pDstLast; (uintptr_t)szBufferInput & 3 && nOffset; nOffset++) {
+      for (nOffset = (int)(szBufferOutput - pDstLast); (uintptr_t)szBufferInput & 3 && nOffset; nOffset++) {
         dwWord = *(uint32_t*)szBufferInput;
         szBufferInput = (char*)((char*)szBufferInput + 1);
         pDstLast[nOffset] = (char)dwWord;
@@ -1292,7 +1292,7 @@ uint32_t __stdcall SStrLen(char * szText) {
       } while (!dwZeroMask);
 
       if ((char)dwWord == '\0') {
-        return (intptr_t)pStrPos - (intptr_t)szText;
+        return (uint32_t)(pStrPos - szText);
       }
       if ((char)(dwWord >> 8) == '\0') {
         return (uint32_t)(pStrPos - szText + 1);
@@ -1373,7 +1373,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
 
       pScan = (char*)((char*)pScan + 3);
       append_source:
-      for (nOffset = (intptr_t)pScan - (intptr_t)pDstLast; (uintptr_t)szSource & 3 && nOffset; nOffset++) {
+      for (nOffset = (int)(pScan - pDstLast); (uintptr_t)szSource & 3 && nOffset; nOffset++) {
         dwWord = *(uint32_t*)szSource;
         szSource = (char*)((char*)szSource + 1);
         pDstLast[nOffset] = (char)dwWord;
@@ -1463,7 +1463,7 @@ static uint32_t D2vsprintf(char * szFormat, size_t nSize, char * pBuffer, va_lis
         if (nWritten >= nSize) {
           const size_t nLast = nSize - 1;
           pBuffer[nLast] = '\0';
-          return nLast;
+          return (uint32_t)nLast;
         }
         return nWritten;
       }
@@ -1479,7 +1479,7 @@ static uint32_t D2vsprintf(char * szFormat, size_t nSize, char * pBuffer, va_lis
 // va_list and is SStrVPrintf.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_printfToPointer
-size_t SStrPrintf(char * szOutput, size_t nSize, char * Format, ...) {
+uint32_t SStrPrintf(char * szOutput, uint32_t nSize, char * Format, ...) {
     va_list __va;
     va_start(__va, Format);
     D2_CHECKS_BEGIN;
@@ -1496,7 +1496,7 @@ size_t SStrPrintf(char * szOutput, size_t nSize, char * Format, ...) {
 // SStrPrintf. The va_list/varargs split is exactly what separates the two API names.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Vsnprintf
-uint32_t SStrVPrintf(char * szOutput, size_t nSize, char * szFormatString, va_list vaArgs) {
+uint32_t SStrVPrintf(char * szOutput, uint32_t nSize, char * szFormatString, va_list vaArgs) {
     D2_CHECKS_BEGIN;
     D2_CHECK(szOutput);
     D2_CHECK(szFormatString);
@@ -1576,7 +1576,7 @@ void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMa
     char* pWritePos;
     uint32_t dwArgMask;
     char* pWriteSaved;
-    bool bInQuoteSaved;
+    BOOL bInQuoteSaved;
     if (!szTokenOut && nMaxLen) {
       dwArgMask = 0;
     } else {
@@ -1591,13 +1591,13 @@ void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMa
     pHasQuoteDelim = SStrChr(szDelimiters, '\"');
     char* pRead;
     pRead = *ppszCursor;
-    bool bInQuote;
-    bInQuote = false;
+    BOOL bInQuote;
+    bInQuote = FALSE;
     uint32_t bWasQuoted;
     bWasQuoted = 0;
     char cCur;
     cCur = *pRead;
-    while (true) {
+    while (TRUE) {
       if (cCur == '\0' || (pWritePos = SStrChr(szDelimiters, cCur) , !pWritePos)) {
         goto read_token;
       }
@@ -1610,7 +1610,7 @@ void __stdcall SStrTokenize(char * * ppszCursor, char * szTokenOut, uint32_t nMa
     }
 
     bWasQuoted = 1;
-    bInQuote = true;
+    bInQuote = TRUE;
     pRead++;
     read_token:
     cCur = *pRead;
@@ -2118,7 +2118,7 @@ int64_t __stdcall SStrToInt64(char * pStr) {
           nAccum = nTmp + nAccum * 10;
           pCursor++;
           if (nAccum >= 0x19999999) {
-            nDigit = (intptr_t)pCursor - (intptr_t)pStr;
+            nDigit = (uint32_t)(pCursor - pStr);
             nTmp = nDigit;
             fScale = fOne;
             fSquare = fBase;
@@ -2153,7 +2153,7 @@ int64_t __stdcall SStrToInt64(char * pStr) {
         } while (nTmp < 10);
 
         if (nAccum64) {
-          dVar1 = SSTR_PowDoubleInt((double)fBase, (intptr_t)pCursor - (intptr_t)pStr);
+          dVar1 = SSTR_PowDoubleInt((double)fBase, (int)(pCursor - pStr));
           nAccum64 = _allmul((uint32_t)(int64_t)(dVar1 + 0.5), (int)((uint64_t)(int64_t)(dVar1 + 0.5) >> 0x20), (uint32_t)nAccum64, nAccumHi);
           nResult = nAccum64 + (uint64_t)nAccum;
           goto apply_sign;
@@ -2223,7 +2223,7 @@ double __stdcall SStrToDouble(char * pStr) {
           nCurDigit = nExp + nCurDigit * 10;
           pCursor++;
           if ((uint32_t)nCurDigit >= 0x19999999) {
-            fResult = (intptr_t)pCursor - (intptr_t)pStr;
+            fResult = (uint32_t)(pCursor - pStr);
             nExp = fResult;
             if ((int)fResult < 0) {
               nExp = -fResult;
@@ -2259,7 +2259,7 @@ double __stdcall SStrToDouble(char * pStr) {
         } while (nExp < 10);
 
         if (dAccum != 0.0) {
-          dScale = SSTR_PowDoubleInt(10.0, (intptr_t)pCursor - (intptr_t)pStr);
+          dScale = SSTR_PowDoubleInt(10.0, (int)(pCursor - pStr));
           dAccumSlot = (double)nCurDigit;
           if (nCurDigit < 0) {
             dAccumSlot += 4294967296.0;
@@ -2413,7 +2413,7 @@ float __stdcall SStrToFloat(char * pStr) {
           nCurDigit = fExpScratch + nCurDigit * 10;
           pCursor++;
           if ((uint32_t)nCurDigit >= 0x19999999) {
-            nAbsExp = (intptr_t)pCursor - (intptr_t)pStr;
+            nAbsExp = (uint32_t)(pCursor - pStr);
             fExpScratch = nAbsExp;
             dScale = 1.0;
             dPow = 10.0;
@@ -2451,7 +2451,7 @@ float __stdcall SStrToFloat(char * pStr) {
         } while (fExpScratch < 10);
 
         if (dAccum != 0.0) {
-          dScale = SSTR_PowDoubleInt(10.0, (intptr_t)pCursor - (intptr_t)pStr);
+          dScale = SSTR_PowDoubleInt(10.0, (int)(pCursor - pStr));
           fParsedValue = (long double)nCurDigit;
           if (nCurDigit < 0) {
             fParsedValue += (long double)4294967296.0;
@@ -2641,7 +2641,7 @@ int __stdcall UTF16_CalculateUTF8Length(uint16_t * pszUTF16, int nMaxChars, int 
       }
 
       if (pnCharsRead) {
-        *pnCharsRead = (intptr_t)pEnd - (intptr_t)pszUTF16 >> 1;
+        *pnCharsRead = (int)(pEnd - pszUTF16);
         return nUTF8Len;
       }
     }
@@ -2748,10 +2748,10 @@ int __stdcall UTF16_ToUTF8(uint8_t * pbUTF8, int nOutMaxChars, uint16_t * pszUTF
     iResult = -1;
     report_counts:
     if (pnBytesRead) {
-      *pnBytesRead = (intptr_t)pInCur - (intptr_t)pInEnd >> 1;
+      *pnBytesRead = (int)(pInCur - pInEnd);
     }
     if (pnCharsWritten) {
-      *pnCharsWritten = (intptr_t)pInStart - (intptr_t)pbUTF8;
+      *pnCharsWritten = (int)(pInStart - pbUTF8);
     }
 
     return iResult;
@@ -2831,7 +2831,7 @@ int __stdcall UTF8_CalculateUTF16Length(char * szText, int nMaxBytes, int * pnBy
     }
 
     if (pnBytesRead) {
-      *pnBytesRead = (intptr_t)pEndInner - (intptr_t)szText;
+      *pnBytesRead = (int)(pEndInner - szText);
     }
 
     return nUTF16Len;
@@ -2928,10 +2928,10 @@ int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUT
     iAccum = -1;
     report_counts:
     if (pnBytesRead) {
-      *pnBytesRead = (intptr_t)pOutStart - (intptr_t)pInEnd;
+      *pnBytesRead = (int)(pOutStart - pInEnd);
     }
     if (pnCharsWritten) {
-      *pnCharsWritten = (intptr_t)pInStart - (intptr_t)pszUTF16Out >> 1;
+      *pnCharsWritten = (int)((intptr_t)pInStart - (intptr_t)pszUTF16Out >> 1);
     }
 
     return iAccum;
@@ -3089,7 +3089,7 @@ static int __fastcall TRANSTBL_UnicodeToSingleByte(uint16_t * pThis, int, uint16
     uint8_t* pOutCur = pbOut;
     while (uCodepoint != L'\0') {
       if (!nCount) {
-        return (intptr_t)pOutCur - (intptr_t)pbOut;
+        return (int)(pOutCur - pbOut);
       }
       if (uCodepoint < 0x100 && uCodepoint == pXlatTbl[uCodepoint]) {
         *pOutCur = (uint8_t)*pThis;
@@ -3140,7 +3140,7 @@ static int __fastcall TRANSTBL_UnicodeToSingleByte(uint16_t * pThis, int, uint16
       pOutCur++;
     }
 
-    return (intptr_t)pOutCur - (intptr_t)pbOut;
+    return (int)(pOutCur - pbOut);
 }
 
 static int __fastcall TRANSTBL_SingleByteToUnicode(uint8_t * pbSrc, int nCount, uint16_t * pDest, uint16_t * pXlatTbl) {
@@ -3152,7 +3152,7 @@ static int __fastcall TRANSTBL_SingleByteToUnicode(uint8_t * pbSrc, int nCount, 
     uint16_t* puVar1 = pDest;
     while (byCur) {
       if (!nCount) {
-        return (intptr_t)puVar1 - (intptr_t)pDest >> 1;
+        return (int)(puVar1 - pDest);
       }
 
       pbSrc++;
@@ -3167,7 +3167,7 @@ static int __fastcall TRANSTBL_SingleByteToUnicode(uint8_t * pbSrc, int nCount, 
       puVar1++;
     }
 
-    return (intptr_t)puVar1 - (intptr_t)pDest >> 1;
+    return (int)(puVar1 - pDest);
 }
 
 void __stdcall TRANSTBL_UnicodeToLatin1(uint8_t * pbOut, uint16_t * pSrcUTF16, int nCount) {

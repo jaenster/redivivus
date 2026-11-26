@@ -69,8 +69,8 @@ int __stdcall WSACleanup();
 struct D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_START_ROUTINE pThreadProc, LPVOID pThreadParam, char * szConnectionAlias, uint32_t dwFlags);
 // @sourcefile .\Src\Safesock.cpp
 void __fastcall Free(struct D2NetDataStrc * pNetData);
-int32_t __fastcall WSASocket2_Read(struct D2NetDataStrc * pNetData, char * pBuffer, size_t nSize);
-int32_t __fastcall WSASocket2_Send(struct D2NetDataStrc * pNetData, char * pBytes, size_t nSize);
+int32_t __fastcall WSASocket2_Read(struct D2NetDataStrc * pNetData, char * pBuffer, uint32_t nSize);
+int32_t __fastcall WSASocket2_Send(struct D2NetDataStrc * pNetData, char * pBytes, uint32_t nSize);
 int __fastcall Safesock_PollReadReady(struct D2NetDataStrc * pNetData);
 int32_t __fastcall GetPeerNameDoesReturn(struct D2NetDataStrc * pNetData, sockaddr * pName, int * pNameLen);
 uint32_t __fastcall GetSockNameDoesReturn(struct D2NetDataStrc * pNetData, sockaddr * pName, int * pNameLen);
@@ -81,7 +81,7 @@ char * __fastcall inet_nameToIp(char * szText);
 int __fastcall SAFESOCK_SetSocketNonBlocking(struct D2NetDataStrc * pNetData, u_long bNonBlocking);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-int32_t __fastcall WSASocket2_SendOrCloseOnTimeout(struct D2NetDataStrc * pNetData, char * pBytes, size_t nSize);
+int32_t __fastcall WSASocket2_SendOrCloseOnTimeout(struct D2NetDataStrc * pNetData, char * pBytes, uint32_t nSize);
 void __fastcall SAFESOCK_EnterCriticalSection(struct D2NetDataStrc * pNetData);
 // Leaves the critical section embedded at offset 0xC within the safesock structure. Thin wrapper around Win32 LeaveCriticalSection.
 void __fastcall LeaveCriticalSection_Safesock(struct D2NetDataStrc * pSafesockStrc);

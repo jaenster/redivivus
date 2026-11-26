@@ -42,7 +42,7 @@ void __stdcall IGNORELIST_Initialize_Unref_005fe0f0();
 void __stdcall IGNORELIST_Initialize_Unref_005fe110();
 void __stdcall IGNORELIST_Initialize_Unref_005ff390();
 void __stdcall IGNORELIST_Initialize_Unref_00601b50();
-uint32_t __fastcall Unreferenced_00601b70(struct StormLinkStrc * pLink);
+uintptr_t __fastcall Unreferenced_00601b70(struct StormLinkStrc * pLink);
 void __stdcall IGNORELIST_Initialize_Unref_0060ac50();
 void __thiscall IGNORELIST_ExtractPrefix(::IgnoreList * pThis, char * szText, char * pszDstBuf, int32_t nBufLen);
 void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, char * nDstBuf, int32_t nBufLen);

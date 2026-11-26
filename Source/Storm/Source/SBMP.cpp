@@ -5,6 +5,7 @@
 #include "Source/Storm/Source/SMem.h"
 #include "Source/Storm/Source/SSTR.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2GifLzwEncoderStrc) == 0x134, "SMemZero(sizeof(D2GifLzwEncoderStrc)): the 32-bit layout must be the 0x134 bytes 1.14d clears");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -474,7 +475,7 @@ static void __stdcall SBMP_FlipImage(void * dst, uint8_t * src, int dstSize, int
     src += (numRows - 1) * srcStride;
     uint8_t* pDstEnd = (uint8_t*)dst + dstSize;
     do {
-      int nRemaining = pDstEnd - (uint8_t*)dst;
+      int nRemaining = (int)(pDstEnd - (uint8_t*)dst);
       numRows--;
       int nCopySize = rowWidth;
       if (rowWidth >= nRemaining) {
@@ -591,7 +592,7 @@ int __fastcall SBMP_EncodePcx256File(int nWidth, int nHeight, HANDLE hFile, uint
     D2PcxHeaderStrc sPcxHeader;
     HANDLE hFileLocal = hFile;
     uint8_t* pRLEOut = (uint8_t*)pPixels;
-    SMem::SMemZero(&sPcxHeader, 0x80);
+    SMem::SMemZero(&sPcxHeader, sizeof(sPcxHeader));
     /* LPOVERLAPPED lpOverlapped for WriteFile */ sPcxHeader.wBytesPerLine = (uint16_t)nHeight;
     /* LPDWORD lpNumberOfBytesWritten for WriteFile */ sPcxHeader.wXMax = sPcxHeader.wBytesPerLine - 1;
     /* DWORD nNumberOfBytesToWrite for WriteFile */ sPcxHeader.wYMax = (short int)nWidth - 1;
@@ -618,8 +619,8 @@ int __fastcall SBMP_EncodePcx256File(int nWidth, int nHeight, HANDLE hFile, uint
       nRowsRemaining = 0;
     }
 
-    HANDLE hFile_00 = hFileLocal;
-    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFileLocal, (LPCVOID)pDstPalEntry, (intptr_t)pRLEOut - (intptr_t)pDstPalEntry, &dwBytesWritten, (LPOVERLAPPED)0x0);
+    HANDLE hFile_00 = hFileLocal; // steer-ok: generated text, unchanged; the body is pinned for its x64 type edit
+    /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ WriteFile(hFileLocal, (LPCVOID)pDstPalEntry, (DWORD)((intptr_t)pRLEOut - (intptr_t)pDstPalEntry), &dwBytesWritten, (LPOVERLAPPED)0x0);
     SMem::SMemFree(pDstPalEntry, ".\\SOURCE\\SBMP.CPP", 0x4f2, 0);
     aPaletteBlock[0] = '\f';
     pDstPalEntry = aPaletteBlock + 2;
@@ -667,12 +668,12 @@ static void __fastcall SBMP_UncompressPcxImage(int dstSize, uint8_t * dst, int s
       if (byVal >= 0xc0) {
         nRLECount = byVal & 0x3f;
         if ((byVal & 0x3f) >= (uint32_t)((intptr_t)pDstEnd - (intptr_t)dst)) {
-          nRLECount = (intptr_t)pDstEnd - (intptr_t)dst;
+          nRLECount = (uint32_t)(pDstEnd - dst);
         }
 
         byRunValue = *(uint8_t*)pSrc;
         pSrc = pDstRow + 2;
-        nDstRemaining = (intptr_t)pDstEnd - (intptr_t)dst;
+        nDstRemaining = (int)(pDstEnd - dst);
         do {
           if (nRunLen >= width) {
             nColIdx = stride - nRunLen;
@@ -936,12 +937,12 @@ static int __stdcall SBMP_EncodeBmp256File(uint8_t * nPalettePtr, uint32_t nSrcS
     BITMAPFILEHEADER sBmpFileHdr;
     {
       DWORD dwBytesWritten;
-      SMem::SMemZero(&sBmpFileHdr, 0xe);
+      SMem::SMemZero(&sBmpFileHdr, sizeof(sBmpFileHdr));
       /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ sBmpFileHdr.bfSize = nSrcStride * height + 0x436;
       /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ sBmpFileHdr.bfType = 0x4d42;
       sBmpFileHdr.bfOffBits = 0x436;
       WriteFile(hFile, (LPCVOID)&sBmpFileHdr, 0xe, &dwBytesWritten, (LPOVERLAPPED)0x0);
-      SMem::SMemZero(&sBmpInfoHdr, 0x28);
+      SMem::SMemZero(&sBmpInfoHdr, sizeof(sBmpInfoHdr));
       /* LPOVERLAPPED lpOverlapped for WriteFile */ /* LPDWORD lpNumberOfBytesWritten for WriteFile */ sBmpInfoHdr.biHeight = height;
       /* DWORD nNumberOfBytesToWrite for WriteFile */ sBmpInfoHdr.biClrUsed = 0x100;
       sBmpInfoHdr.biClrImportant = 0x100;
@@ -1038,7 +1039,7 @@ static void __stdcall SBMP_CompressGifByte(D2GifLzwEncoderStrc * pState, uint8_t
 int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, uint8_t * pDstBuf) {
     D2GifLzwEncoderStrc sEncoder;
     uint8_t* nDstOffset = pDstBuf;
-    SMem::SMemZero(&sEncoder, 0x134);
+    SMem::SMemZero(&sEncoder, sizeof(sEncoder));
     sEncoder.nCodeSize = 9;
     sEncoder.nInitCodeSize = 9;
     sEncoder.nMaxCode = 0x1ff;
@@ -1067,7 +1068,7 @@ int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, uint8_t 
     SBMP_FlushPacket(&sEncoder, &nDstOffset);
     SMem::SMemFree(sEncoder.pHashTable, ".\\SOURCE\\SBMP.CPP", 0x3a4, 0);
     SMem::SMemFree(sEncoder.pCodeTable, ".\\SOURCE\\SBMP.CPP", 0x3a5, 0);
-    int nOutputSize = (intptr_t)nDstOffset - (intptr_t)pDstBuf;
+    int nOutputSize = (int)(nDstOffset - pDstBuf);
     return nOutputSize;
 }
 

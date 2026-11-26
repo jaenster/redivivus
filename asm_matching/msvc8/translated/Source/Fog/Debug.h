@@ -47,12 +47,21 @@ struct _EXCEPTION_RECORD {
 #endif // _WIN32
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#if !defined(_WIN64)
 __pragma(pack(push, 1)) struct ADDRESS {
     /* 0x00 */ DWORD Offset;
     /* 0x04 */ WORD Segment;
     /* 0x06 */ uint16_t pad_0x6;
     /* 0x08 */ ADDRESS_MODE Mode;
 }; __pragma(pack(pop))
+#else
+// 64-bit dbghelp has only the 64-bit stack walk: ADDRESS is ADDRESS64 there.
+struct ADDRESS {
+    DWORD64 Offset;
+    WORD Segment;
+    ADDRESS_MODE Mode;
+};
+#endif
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
@@ -130,6 +139,7 @@ struct D2ImagehlpSymbol64BufStrc {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#if !defined(_WIN64)
 struct D2ImagehlpSymbolBufStrc {
     /* 0x00 */ DWORD SizeOfStruct;
     /* 0x04 */ DWORD Address;
@@ -138,6 +148,17 @@ struct D2ImagehlpSymbolBufStrc {
     /* 0x10 */ DWORD MaxNameLength;
     /* 0x14 */ char Name[260]; // IMAGEHLP_SYMBOL with its name buffer; MaxNameLength is 0x100
 };
+#else
+// IMAGEHLP_SYMBOL64 with its name buffer (64-bit dbghelp has only SymGetSymFromAddr64).
+struct D2ImagehlpSymbolBufStrc {
+    DWORD SizeOfStruct;
+    DWORD64 Address;
+    DWORD Size;
+    DWORD Flags;
+    DWORD MaxNameLength;
+    char Name[260];
+};
+#endif
 
 #endif // D2_MODULE_Fog
 #ifndef D2_DEFINED_EHExceptionRecord
@@ -171,6 +192,7 @@ __pragma(pack(push, 1)) struct FPO_DATA_WORD {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#if !defined(_WIN64)
 __pragma(pack(push, 1)) struct IMAGEHLP_LINE64 {
     /* 0x00 */ DWORD SizeOfStruct;
     /* 0x04 */ void * Key;
@@ -178,9 +200,20 @@ __pragma(pack(push, 1)) struct IMAGEHLP_LINE64 {
     /* 0x0C */ char * FileName;
     /* 0x10 */ ULONGLONG Address;
 }; __pragma(pack(pop))
+#else
+// dbghelp.h layout: natural alignment, 0x28 bytes on 64-bit.
+struct IMAGEHLP_LINE64 {
+    DWORD SizeOfStruct;
+    void * Key;
+    DWORD LineNumber;
+    char * FileName;
+    ULONGLONG Address;
+};
+#endif
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#if !defined(_WIN64)
 struct IMAGEHLP_MODULE {
     /* 0x000 */ DWORD SizeOfStruct;
     /* 0x004 */ DWORD BaseOfImage;
@@ -193,6 +226,21 @@ struct IMAGEHLP_MODULE {
     /* 0x03C */ char ImageName[256];
     /* 0x13C */ char LoadedImageName[256];
 };
+#else
+// 64-bit dbghelp has only SymGetModuleInfo64: the first (v1) IMAGEHLP_MODULE64 layout.
+struct IMAGEHLP_MODULE {
+    DWORD SizeOfStruct;
+    DWORD64 BaseOfImage;
+    DWORD ImageSize;
+    DWORD TimeDateStamp;
+    DWORD CheckSum;
+    DWORD NumSyms;
+    DWORD SymType; // SYM_TYPE
+    char ModuleName[32];
+    char ImageName[256];
+    char LoadedImageName[256];
+};
+#endif
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
@@ -226,6 +274,7 @@ __pragma(pack(push, 1)) struct IMAGEHLP_MODULE64 {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#if !defined(_WIN64)
 struct KDHELP {
     /* 0x00 */ DWORD Thread;
     /* 0x04 */ DWORD ThCallbackStack;
@@ -240,14 +289,42 @@ struct KDHELP {
     /* 0x28 */ DWORD StackLimit;
     /* 0x2C */ DWORD Reserved[5];
 };
+#else
+// KDHELP64.
+struct KDHELP {
+    DWORD64 Thread;
+    DWORD ThCallbackStack;
+    DWORD ThCallbackBStore;
+    DWORD NextCallback;
+    DWORD FramePointer;
+    DWORD64 KiCallUserMode;
+    DWORD64 KeUserCallbackDispatcher;
+    DWORD64 SystemRangeStart;
+    DWORD64 KiUserExceptionDispatcher;
+    DWORD64 StackBase;
+    DWORD64 StackLimit;
+    DWORD BuildVersion;
+    DWORD RetpolineStubFunctionTableSize;
+    DWORD64 RetpolineStubFunctionTable;
+    DWORD RetpolineStubOffset;
+    DWORD RetpolineStubSize;
+    DWORD64 Reserved0[2];
+};
+#endif
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#if defined(_WIN64)
+#pragma pack(push, 4) // dbghelp.h packs MINIDUMP_EXCEPTION_INFORMATION to 4 on every target
+#endif
 struct MINIDUMP_EXCEPTION_INFORMATION {
     /* 0x00 */ DWORD ThreadId;
     /* 0x04 */ struct _EXCEPTION_POINTERS * ExceptionPointers;
     /* 0x08 */ BOOL ClientPointers;
 };
+#if defined(_WIN64)
+#pragma pack(pop)
+#endif
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
@@ -304,6 +381,7 @@ __pragma(pack(push, 1)) struct D2FogDebugModuleTableStrc {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#if !defined(_WIN64)
 __pragma(pack(push, 1)) struct STACKFRAME {
     /* 0x00 */ ADDRESS AddrPC;
     /* 0x0C */ ADDRESS AddrReturn;
@@ -317,6 +395,22 @@ __pragma(pack(push, 1)) struct STACKFRAME {
     /* 0x58 */ KDHELP KdHelp;
     /* 0x98 */ ADDRESS AddrBStore;
 }; __pragma(pack(pop))
+#else
+// STACKFRAME64: the only stack frame 64-bit StackWalk64 takes.
+struct STACKFRAME {
+    ADDRESS AddrPC;
+    ADDRESS AddrReturn;
+    ADDRESS AddrFrame;
+    ADDRESS AddrStack;
+    ADDRESS AddrBStore;
+    struct FPO_DATA_WORD * FuncTableEntry; // a RUNTIME_FUNCTION on AMD64: read as FPO data on x86 only
+    DWORD64 Params[4];
+    BOOL Far;
+    BOOL Virtual;
+    DWORD64 Reserved[3];
+    KDHELP KdHelp;
+};
+#endif
 
 #endif // D2_MODULE_Fog
 namespace Fog { namespace Debug {
@@ -335,9 +429,9 @@ void __stdcall Unreferenced_00401c80();
 bool __stdcall InitializeDebugSymbols();
 void __stdcall Unreferenced_00401dd0();
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
-bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModuleBase, char * szModuleName);
-bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, uint32_t * pdwSymDisplacement);
-bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, uint32_t * pdwLineNumber);
+bool __stdcall GetModuleInfoForAddress(uintptr_t dwQueryAddr, uintptr_t * pdwModuleBase, char * szModuleName);
+bool __stdcall GetSymbolNameForAddress(DWORD_PTR dwQueryAddr, char * szSymbolName, uint32_t * pdwSymDisplacement);
+bool __stdcall GetSourceLineForAddress(uintptr_t dwQueryAddr, char * szFileName, uint32_t * pdwLineNumber);
 bool __stdcall EnumerateLoadedModules(void * pfnModuleCallback, void * pUserContext);
 void __fastcall SetSymbolSearchPath(char * szSearchPath);
 int __fastcall FindSymbolFile(void * pfnFindCallback, int, char * szSearchPath, char * szFileName, void * nId, uint32_t dwTimestamp, uint32_t nThree, uint32_t dwFlags, char * szFoundFile, void * pUserContext);
@@ -370,7 +464,7 @@ struct D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwPro
 // Enumerates process modules using PSAPI library. Loads PSAPI.DLL, queries module list, retrieves module paths and base names, constructs sorted list of module information for debugging.
 // @sourcefile .\Src\Exceptions.cpp
 struct D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess);
-struct D2FogModuleNodeStrc * __fastcall FindModuleContainingAddress(uint32_t nAddress, struct D2FogModuleNodeStrc * pModuleList);
+struct D2FogModuleNodeStrc * __fastcall FindModuleContainingAddress(uintptr_t nAddress, struct D2FogModuleNodeStrc * pModuleList);
 // Dumps stack memory with symbol annotations. Formats raw stack bytes as hex, identifies pointer values, and looks up module/symbol information for each dword.
 void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, struct D2FogModuleNodeStrc * pModuleListHead);
 BOOL __fastcall FILETOOLS_GetExecutableFolderPath(LPSTR lpFilename, DWORD nSize);

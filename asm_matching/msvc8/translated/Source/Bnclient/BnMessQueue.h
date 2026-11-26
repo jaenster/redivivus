@@ -20,7 +20,7 @@
 __pragma(pack(push, 1)) struct BnMessQueue {
     /* 0x000 */ int nZero;
     /* 0x004 */ char bBuffer[288];
-    /* 0x124 */ size_t nDataSize;
+    /* 0x124 */ uint32_t nDataSize;
     /* 0x128 */ struct BnMessQueue * pNext;
 }; __pragma(pack(pop))
 
@@ -35,10 +35,10 @@ void __stdcall thunk_BNMESSQUEUE_Shutdown();
 void __stdcall BNMESSQUEUE_Initialize();
 // Shuts down Battle.net message queue. Deletes critical section at lpCriticalSection_00882004.
 void __stdcall BNMESSQUEUE_Shutdown();
-int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, size_t nSize);
+int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, uint32_t nSize);
 BOOL __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage);
 // Dequeues next Battle.net lobby chat message. Thread-safe dequeue from global linked list (nLobbyChatCurrentMessage). Copies message buffer to output, returns data size. Returns 0 if queue empty.
-size_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBufferOut);
+uint32_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBufferOut);
 int __stdcall BNMESSQUEUE_ClearAll();
 BOOL __fastcall BNMESSQUEUE_SetStateIfZero(int32_t nState);
 int __fastcall BNMESSQUEUE_SetStateWithString(int32_t nState, char * szMessage);

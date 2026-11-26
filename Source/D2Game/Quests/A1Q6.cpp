@@ -739,7 +739,7 @@ void __fastcall Q06_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // A1Q6 quest constructor (nInitNo 4). Zeroes the state-handler table then installs callbacks: slot0=Callback_00(gossip), 2=Callback_02(accept), 3=Callback_03(area), 8=Callback_08(Andariel death), 0xb=Callback_11(NPC gossip dispatch), 0xd=Callback_13(load). Sets fpSequenceFilter=Q06_SequenceFilter, fpActiveFilter=Q06_ActiveFilter, nQuestIdReal=SistersToTheSlaughter, nSequenceQuestId=PrisonOfIce, allocates 0x198-byte A1Q6 specific data and zeroes its GUID lists/flags. No quest-record state transitions.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q6.cpp
 void __fastcall Q06_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q06_Callback03_ChangedLevel;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q06_Callback08_MonsterKilled;

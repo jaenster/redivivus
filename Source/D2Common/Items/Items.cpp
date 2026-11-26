@@ -2,11 +2,6 @@
 
 #include "Source/D2Common/Items/Items.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2CMP/Pallete.h"
-#include "Source/D2Client/D2ClientStrc.h"
-#include "Source/D2Client/Game/Game/SGAMEDATA.h"
-#include "Source/D2Client/Unit/Item.h"
-#include "Source/D2Client/Unit/Monster.h"
 #include "Source/D2Common/Composit/Composit.h"
 #include "Source/D2Common/D2BitBufferStrc.h"
 #include "Source/D2Common/D2CharStatsTxt.h"
@@ -36,28 +31,7 @@
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
-#include "Source/D2Game/Game/Event.h"
-#include "Source/D2Game/Game/Targets.h"
-#include "Source/D2Game/Unit/SUnitDmg.h"
-#include "Source/D2Game/Unit/SUnitInactive.h"
-#include "Source/D2Game/Unit/SUnitMsg.h"
 #include "Source/Fog/Fog.h"
-#include "Source/Fog/BitBuffer.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Skills.h"
-#include "Source/Fog/Src/ErrorManager.h"
-#include "Source/globals/globals.h"
-#include "Source/D2CMP/Src/Codec.h"
-#include "Source/D2CMP/Src/LRUCache.h"
-#include "Source/D2CMP/Src/Tilecmp.h"
-#include "Source/D2Client/UI/Automap.h"
-#include "Source/D2Client/UI/Inv.h"
-#include "Source/D2Client/UI/SkillDesc.h"
-#include "Source/D2Client/Unit/Item.h"
-#include "Source/D2Client/Unit/Player.h"
-#include "Source/D2Client/Unit/PlrSkills.h"
 #include "Source/D2Common/Composit/Composit.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Common/D2SeedStrc.h"
@@ -75,43 +49,21 @@
 #include "Source/D2Common/Merc.h"
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Unit.h"
-#include "Source/D2Game/Monster/Ai/AI.h"
 #include "Source/D2Lang/D2Lang.h"
-#include "Source/D2Lang/D2LangRoot.h"
-#include "Source/D2Lang/StrTable/strtable.h"
-#include "Source/D2Win/D2Win.globals.h"
-#include "Source/Fog/D2MemoryManagerStrc.h"
-#include "Source/Fog/D2PoolManagerStrc.h"
-#include "Source/Fog/D2QServerStrc.h"
-#include "Source/Fog/Fog.globals.h"
-#include "Source/Fog/Memory.h"
-#include "Source/Fog/Save.h"
-#include "Source/Fog/Source/SFile.h"
-#include "Source/Fog/Source/SSComp.h"
-#include "Source/Fog/Src/LogManager.h"
 #include "Source/Storm/Storm.h"
-#include "Source/Storm/3rdparty/zlib/deflate.h"
 #include "Source/Storm/H/stpl.h"
-#include "Source/Storm/Source/SCMD.h"
-#include "Source/Storm/Source/SComp.h"
-#include "Source/Storm/Source/SErr.h"
-#include "Source/Storm/Source/SFile.h"
-#include "Source/Storm/Source/SMem.h"
-#include "Source/Storm/StormRoot.h"
 #include "Source/D2Headers/d2_platform.h"
-#include "Source/D2Client/UI/Automap.h"
-#include "Source/D2Client/UI/Inv.h"
-#include "Source/D2Client/UI/SkillDesc.h"
-#include "Source/D2Client/Unit/Player.h"
-#include "Source/D2Client/Unit/PlrSkills.h"
 #include "Source/D2Common/D2UnitDataItemStrc.h"
 #include "Source/D2Common/DataTbls/DataTbls.inline.h"
 #include "Source/D2Common/DataTbls/ItemStats.inline.h"
 #include "Source/D2Common/DataTbls/ItemTbls.inline.h"
 #include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
 #include "Source/D2Common/Units/Units.inline.h"
-#include "Source/D2Game/Game/SCmd.h"
-#include "Source/D2Game/Monster/Ai/AI.h"
+
+#ifndef RECON_FPTD_pfnSkillCalcOp
+#define RECON_FPTD_pfnSkillCalcOp
+typedef int (__fastcall *pfnSkillCalcOp)(int32_t nOperand1, int32_t nOperand2, uint32_t nOperand3, void * pContext);
+#endif
 
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
@@ -2008,9 +1960,9 @@ int32_t __stdcall BARBARIAN_CheckItemData_b1or2Handed_isTrue(D2UnitStrc * pUnit,
     }
 }
 
-static char ITEMS_ValidateItemQualityCode(uint32_t nQuality, int32_t nCode) {
+static char ITEMS_ValidateItemQualityCode(int32_t nCode, uint32_t nQuality) {
     if (nCode >= 0x1 && nCode <= 0x8 && nQuality <= 0x14) {
-      return (char)nCode * ' ' + ((uint8_t)nQuality & 0x1f);
+      return (char)(nCode * 32 + (nQuality & 0x1f));
     }
 
     return '\0';
@@ -2677,7 +2629,7 @@ static void __stdcall ITEMS_DeserializeSingleStat(uint32_t nFileVersion, eD2Unit
 // Deserializes the header fields of a D2 item from a packed bit-stream into a D2UnitDataItemDetailsStrc. Reads flags (32 bits), skips 10 bits (version + destination prefix), decodes the 3-bit destination: if stored/socketed (3 or 5) reads 16-bit x/y grid coords; otherwise reads body-loc, x, y, and inventory page. Handles the BODYPART (ear) special case for the item code tag, applies a legacy "nec " -> "neg " fixup for saves pre-version 0x5D, converts the 4-char code to a classId, and reads the socket count for non-compact non-crude items.
 BOOL __stdcall ReadInfoFromStreamVersioned(uint8_t * pBytesAfterId, size_t size, BOOL isSave, D2UnitDataItemDetailsStrc * itemData, int32_t nFileVersion) {
     D2BitBufferStrc bitBuffer;
-    Fog::BitBuffer::InitBitBuffer(&bitBuffer, pBytesAfterId, size);
+    Fog::BitBuffer::InitBitBuffer(&bitBuffer, pBytesAfterId, (uint32_t)size);
     if (isSave) {
       int32_t itemId;
       itemId = Fog::BitBuffer::ReadSigned(&bitBuffer, 0x10);
@@ -3877,7 +3829,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
           return nullptr;
         }
 
-        bValidColor = ITEMS_ValidateItemQualityCode((int)pUniqueTxt->chrtransform, (uint32_t)pItemsTxt->bTransform);
+        bValidColor = ITEMS_ValidateItemQualityCode((uint32_t)pItemsTxt->bTransform, (int)pUniqueTxt->chrtransform);
         *pColor = bValidColor;
         pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bInvTrans, (int)pUniqueTxt->invtransform);
         return pPaletteResult;
@@ -3886,7 +3838,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
         return nullptr;
       }
 
-      bValidColor = ITEMS_ValidateItemQualityCode((int)pUniqueTxt->chrtransform, (uint32_t)pItemsTxt->bTransform);
+      bValidColor = ITEMS_ValidateItemQualityCode((uint32_t)pItemsTxt->bTransform, (int)pUniqueTxt->chrtransform);
       *pColor = bValidColor;
       pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bTransform, (int)pUniqueTxt->chrtransform);
       return pPaletteResult;
@@ -3906,7 +3858,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
           return nullptr;
         }
 
-        bValidColor = ITEMS_ValidateItemQualityCode((int)pSetItemTxt->chrtransform, (uint32_t)pItemsTxt->bTransform);
+        bValidColor = ITEMS_ValidateItemQualityCode((uint32_t)pItemsTxt->bTransform, (int)pSetItemTxt->chrtransform);
         *pColor = bValidColor;
         pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bTransform, (int)pSetItemTxt->chrtransform);
         return pPaletteResult;
@@ -3915,7 +3867,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
         return nullptr;
       }
 
-      bValidColor = ITEMS_ValidateItemQualityCode((int)pSetItemTxt->chrtransform, (uint32_t)pItemsTxt->bTransform);
+      bValidColor = ITEMS_ValidateItemQualityCode((uint32_t)pItemsTxt->bTransform, (int)pSetItemTxt->chrtransform);
       *pColor = bValidColor;
       pPaletteResult = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bInvTrans, (int)pSetItemTxt->invtransform);
       return pPaletteResult;
@@ -3939,7 +3891,7 @@ uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * 
 
                 pDVar2 = DATATBLS::ItemTbls::TXT_Gems_GetLine(pItemsTxt->dwGemOffset);
                 pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(pItem->nClassId);
-                bValidColor = ITEMS_ValidateItemQualityCode((uint32_t)(uint8_t)pDVar2->transform, (uint32_t)pItemsTxt->bTransform);
+                bValidColor = ITEMS_ValidateItemQualityCode((uint32_t)pItemsTxt->bTransform, (uint32_t)(uint8_t)pDVar2->transform);
                 *pColor = bValidColor;
                 if (nTransType) {
                   pPaletteData = D2CMP::Pallete::PALETTE_GetItemPalette((uint32_t)pItemsTxt->bInvTrans, (uint32_t)(uint8_t)pDVar2->transform);
@@ -4997,7 +4949,7 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
         if (!pStatsEx) {
           nClassId = Units::GetGUID(pUnit);
           eQualityType = QUALITY_MAGIC;
-          pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(Units::GetMemPool(pUnit), nParam1, (int32_t)pStatsEx, eQualityType, nClassId);
+          pStatsEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(Units::GetMemPool(pUnit), nParam1, 0, eQualityType, nClassId);
           Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatsEx, 1);
           Stats::StatsEx::SetState(pStatsEx, bIsExtended);
         }
@@ -5431,7 +5383,7 @@ int32_t __stdcall ITEM_LoadFromSaveData(D2UnitStrc * pUnit, uint8_t * pSaveData,
     int32_t nBitsConsumed;
     int32_t nDeserializeResult;
     D2BitBufferStrc sBitBuffer;
-    Fog::BitBuffer::InitBitBuffer(&sBitBuffer, pSaveData, nSize);
+    Fog::BitBuffer::InitBitBuffer(&sBitBuffer, pSaveData, (uint32_t)nSize);
     if (bCheckHeader) {
       nBitsConsumed = Fog::BitBuffer::ReadSigned(&sBitBuffer, 0x10);
       if (nBitsConsumed != 0x4d4a) {
@@ -6668,7 +6620,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
     int32_t nErrLine;
     int nParamBitWidth;
     int nRunewordFlag;
-    nRunewordFlag = 0x62fffd;
+    nRunewordFlag = 0x62fffd; // steer-ok: generated form, kept as emitted
     bool bResetModeOnExit;
     bResetModeOnExit = false;
     if (!pItemUnit) {
@@ -6906,8 +6858,8 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
 
     D2MagicAffixTableStrc* pMagicAffixTableInfo;
     pMagicAffixTableInfo = DATATBLS::ItemTbls::TXT_MagicAffixes_GetTableInfo();
-    uTmpBits = ((intptr_t)pMagicAffixTableInfo->pPrefixStart - (intptr_t)pMagicAffixTableInfo->pTable) / 0x90;
-    iVar3 = ((intptr_t)pMagicAffixTableInfo->pAutoMagicStart - (intptr_t)pMagicAffixTableInfo->pTable) / 0x90;
+    uTmpBits = (uint32_t)(pMagicAffixTableInfo->pPrefixStart - pMagicAffixTableInfo->pTable);
+    iVar3 = (int)(pMagicAffixTableInfo->pAutoMagicStart - pMagicAffixTableInfo->pTable);
     if (pItemUnit->eUnitType == UNIT_ITEM && pItemUnit->pUnitData.pUnitDataItem) {
       wAutoMagic = pItemUnit->pUnitData.pUnitDataItem->wAutoMagic;
     } else {
@@ -7676,7 +7628,7 @@ void __fastcall SerializeItemToBitBuffer(D2UnitStrc * pUnit, D2BitBufferStrc * p
 
 int32_t __stdcall SerializeItem(D2UnitStrc * pUnit, uint8_t * pBitStream, size_t nBitStreamSize, D2StatListExStrc * pStatListEx, BOOL bAllItems, BOOL bIsCrude) {
     D2BitBufferStrc bitBuffer;
-    Fog::BitBuffer::InitBitBuffer(&bitBuffer, pBitStream, nBitStreamSize);
+    Fog::BitBuffer::InitBitBuffer(&bitBuffer, pBitStream, (uint32_t)nBitStreamSize);
     SerializeItemToBitBuffer(pUnit, &bitBuffer, pStatListEx, bAllItems, bIsCrude);
     if (bitBuffer.bEnd) {
       return 0;

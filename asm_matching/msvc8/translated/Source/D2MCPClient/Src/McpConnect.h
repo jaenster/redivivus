@@ -126,7 +126,7 @@ uint32_t __stdcall MCPSTATE_GetJoinTimestamp();
 BOOL __stdcall getIsMPCJoinSuccesfull();
 void __stdcall SetIsMPCJoinSuccesfull(BOOL bSuccess);
 void * __stdcall MCPCONNECT_GetCharListPacket();
-void __stdcall CopyCharListToGlobal(char * pBytes, size_t nSize);
+void __stdcall CopyCharListToGlobal(char * pBytes, uint32_t nSize);
 void __stdcall MCPCONNECT_CreateThread(uint32_t * pSrcState);
 void __fastcall NET_MCP_CLIENT_Send_0x03_CreateGame(mcp0x03data * pMcpData, int16_t nRequestId);
 void __fastcall NET_MCP_CLIENT_Send_0x04_JoinGame(char * szGameName, char * szGamePassword, uint16_t nRequestId);
@@ -145,9 +145,9 @@ void __fastcall MCPCONNECT_SetMessageCallback(pfnMCPMessage pfnCallback);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
 int16_t __stdcall SFILE_GetSearchLocale();
-BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_0043f840(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004473f0(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004476f0(char * pBytes, size_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_0043f840(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004473f0(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn_Unref_004476f0(char * pBytes, uint32_t nSize);
 void __stdcall MCPSTATE_SetListGameSuccess(BOOL bSuccess);
 BOOL __stdcall MCPSTATE_GetListGameSuccess();
 BOOL __stdcall MCPSTATE_GetCharDeleteSuccess();
@@ -174,34 +174,34 @@ void __fastcall NET_MCP_CLIENT_Send_0x0C(char * szText);
 void __stdcall NET_MCP_CLIENT_Send_0x0D();
 void __stdcall NET_MCP_CLIENT_Send_0x0F();
 void __stdcall NET_MCP_CLIENT_Send_0x10();
-BOOL __fastcall NET_MCP_CLIENT_IncomingReturn(char * pBytes, size_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_IncomingReturn(char * pBytes, uint32_t nSize);
 BOOL __fastcall MCP_INCOMING_SetD2GSJoinResultAndSignal(char * pPacket);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x02(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x07(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(struct MCPPacketSrv0x04 * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x08(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x09(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x0A(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x18(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x0B(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x0C(char * pBytes, size_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x02(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x07(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(struct MCPPacketSrv0x04 * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x08(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x09(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x0A(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x18(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x0B(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x0C(char * pBytes, uint32_t nSize);
 // Handles incoming MCP packet 0x0E. Parses the null-terminated string starting at offset 1 of the packet data and forwards it with its computed length.
-bool __fastcall NET_MCP_CLIENT_Incoming0x0E(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x0D(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x0F(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x10(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x11(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x12(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x14(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x17(char * pBytes, size_t nSize);
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x19(char * pBytes, size_t nSize);
+bool __fastcall NET_MCP_CLIENT_Incoming0x0E(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x0D(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x0F(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x10(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x11(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x12(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x14(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x17(char * pBytes, uint32_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x19(char * pBytes, uint32_t nSize);
 // REALM (MCP) PACKET HANDLER
 // Table: Src::McpConnect::INCOMING at 0x0070ED00 (26 entries)
 // Packet format: Size(2, LE) | Data(...) - first byte of data is packet type
 // Validates *pBytes <= 0x19, calls handler from pointer table.
-BOOL __fastcall HandleIncomingPacket(char * pBytes, size_t nSize);
+BOOL __fastcall HandleIncomingPacket(char * pBytes, uint32_t nSize);
 BOOL __fastcall MCPCONNECT_SocketCallback_Dispatch(uint8_t * pPacketBuf, int nPacketSize, void * pContext);
 void __stdcall MCPCONNECT_SanitizeWideString(uint16_t * wszText);
 // MCP 0x05 reply handler = REALM GAMELIST entry (one game per packet) AND join-info.
@@ -221,7 +221,7 @@ void __stdcall MCPCONNECT_SanitizeWideString(uint16_t * wszText);
 // => realm game list = N per-game 0x05 packets + a final 0x05 packet with token=-2.
 // This is NOT one concatenated packet, and NOT BNCS SID_GETADVLISTEX (that path is TCP/IP
 // only, via OOGUTIL_RequestGameListFromServer / g_pBNetGameListData).
-BOOL __fastcall NET_MCP_CLIENT_Incoming0x05(char * pBytes, size_t nSize);
+BOOL __fastcall NET_MCP_CLIENT_Incoming0x05(char * pBytes, uint32_t nSize);
 #endif // D2_MODULE_D2MCPClient
 // 1 internal function (defined in .cpp)
 

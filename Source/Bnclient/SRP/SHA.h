@@ -24,7 +24,7 @@ namespace Bnclient::SHA {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
 // Register params: pHashOut (ECX): uint8_t *, pWideStr (EDX): char *
 // @sourcefile .\SHA.cpp
-int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int32_t nLength);
+uint8_t * __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int32_t nLength);
 struct BigData * __fastcall SHA1_BigIntFromUnsigned(uint32_t nValue);
 struct BigData * __fastcall SHA1_FromBigIntBytes(void * pData, uint32_t nByteCount);
 uint32_t __fastcall SHA1_ToBigIntBytes(struct BigData * pBigNum, uint8_t * pOutBuf, uint32_t nBufSize);

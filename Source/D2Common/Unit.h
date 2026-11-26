@@ -13,10 +13,9 @@
 #include <cstdio>
 #include <cstdarg>
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2Common/D2CoordStrc.h"
 #include "Source/D2Common/D2SeedStrc.h"
 #include "Source/D2Common/D2UnitDataItemStrc.h"
-#include "Source/D2Game/Monster/Monsters.h"
-#include "Source/D2Game/Objects/Objects.h"
 
 // Forward declarations
 struct D2AiGeneralStrc;
@@ -26,6 +25,7 @@ struct D2ClientStrc;
 struct D2LightMapStrc;
 struct D2MissileStreamStrc;
 struct D2MonStatsTxt;
+struct D2MonsterPathParamStrc;
 struct D2PartyDataStrc;
 struct D2PoolManagerStrc;
 struct D2RoomStrc;
@@ -161,6 +161,16 @@ struct __attribute__((packed)) D2UnitDataMissileStrc {
 };
 
 #endif // D2_DEFINED_D2UnitDataMissileStrc
+#ifndef D2_DEFINED_D2MonsterPathParamOrNameUnion
+#define D2_DEFINED_D2MonsterPathParamOrNameUnion
+union D2MonsterPathParamOrNameUnion {
+    operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
+
+    /* 0x00 */ uint16_t * wszMonsterName; // client/common: super-unique name buffer (SetSuperUniqueName), freed by D2Client FreeMonster
+    /* 0x00 */ struct D2MonsterPathParamStrc * pPathParam; // server: AllocAiParam block
+};
+
+#endif // D2_DEFINED_D2MonsterPathParamOrNameUnion
 struct __attribute__((packed)) D2UnitDataMonsterStrc {
     /* 0x00 */ struct D2MonStatsTxt * pMonStatsTxt; // Pointer to MonStats.txt record
     /* 0x04 */ uint8_t Components[16]; // HD,TR,LG,RA,LA,RH,LH,S1..S8,+1pad. Indices 0-15

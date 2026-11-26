@@ -12,7 +12,7 @@ namespace Bnclient { namespace SHA {
 
 // Register params: pHashOut (ECX): uint8_t *, pWideStr (EDX): char *
 // @sourcefile .\SHA.cpp
-int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int32_t nLength) {
+uint8_t * __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int32_t nLength) {
     uint32_t i;
     uint8_t* pDstByte;
     D2BnSha1ContextStrc shaCtx;
@@ -33,13 +33,14 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
 
     uint32_t nHalfLen = (uint32_t)nLength >> 1;
     uint8_t* pTmpBuf = (uint8_t*)Storm::Source::SMem::SMemAlloc(nHalfLen, ".\\SHA.cpp", 200, 0);
-    uint32_t nByteIdx = 0;
+    uint8_t* pResult = nullptr;
     if (pTmpBuf) {
+      i = 0;
       if (nHalfLen > 0) {
         do {
-          pTmpBuf[nByteIdx] = pWideStr[nByteIdx * 2];
-          nByteIdx++;
-        } while (nByteIdx < nHalfLen);
+          pTmpBuf[i] = pWideStr[i * 2];
+          i++;
+        } while (i < nHalfLen);
       }
 
       SHA1::SHA1Init(&shaCtx);
@@ -73,10 +74,10 @@ int32_t __fastcall SHA1_HashWideString(uint8_t * pHashOut, char * pWideStr, int3
       } while (i < 0x14);
 
       Storm::Source::SMem::SMemFree(pTmpBuf, ".\\SHA.cpp", 0xef, 0);
-      nByteIdx = (uint32_t)pHashOut;
+      pResult = pHashOut;
     }
 
-    return nByteIdx;
+    return pResult;
 }
 
 BigData * __fastcall SHA1_BigIntFromUnsigned(uint32_t nValue) {

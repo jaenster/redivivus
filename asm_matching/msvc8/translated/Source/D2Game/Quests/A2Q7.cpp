@@ -298,7 +298,7 @@ bool __fastcall Q15_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // Q15 (Act2Guard4Gossip) quest-init: registers this slot as the Jerhyn gossip pseudo-quest. Zeroes the state-handler table, installs handler[0]=Callback_00 (dialog select), handler[8]=Callback_08 (stub), handler[0xb]=Callback_11 (message), sets pNpcMessages to the 0x179/0x3b gossip table, allocates A2Q7 quest-specific data, marks bIsActive, and crucially sets nQuestIdReal = QUEST_Act2Guard4Gossip with the status/active filters. This is the "extra" Act2 slot: NOT a public quest but the Jerhyn spoke-to gossip tracker.
 void __fastcall Q15_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q15_Callback11_ScrollMessage;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q15_Callback00_NpcActivate;

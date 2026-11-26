@@ -816,7 +816,7 @@ extern "C" void ___report_gsfailure(void);
 extern "C" void CallDestructExceptionObject(int* pExceptionObject);
 extern "C" int _purecall(void);
 extern "C" void __stdcall _eh_vector_constructor_iterator_(void* pArray, uint32_t nElementSize, int nCount, void (__fastcall *pfnConstructor)(void*), void (__fastcall *pfnDestructor)(void*));
-extern "C" void _eh_vector_destructor_iterator_(void* pArray, uint32_t nElementSize, int nCount, void (__fastcall *pfnDestructor)(void*));
+extern "C" void __stdcall _eh_vector_destructor_iterator_(void* pArray, uint32_t nElementSize, int nCount, void (__fastcall *pfnDestructor)(void*));
 extern "C" uint64_t __ftol2(void);
 extern "C" long double __CIsqrt(long double x);
 extern "C" long double __sqrt_common(double dArg, bool bSpecial, long double x);

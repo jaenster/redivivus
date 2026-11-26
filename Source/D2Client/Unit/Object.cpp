@@ -743,7 +743,7 @@ void __fastcall OBJECT_SpawnFireballGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlaye
       nYNeg = -5;
       nYOffset = 5;
       do {
-        memset(&sSkillArg, 0, 0x5c);
+        memset(&sSkillArg, 0, sizeof(sSkillArg));
         eUnitType = pUnit->eUnitType;
         sSkillArg.nFlags = 3;
         int nXValue;
@@ -808,7 +808,7 @@ void __fastcall OBJECT_SpawnExplosivePotionGrid(D2UnitStrc * pUnit, D2UnitStrc *
     eD2UnitType eUnitType;
     for (int i = 0; i < 6; i++) {
       int nLevel;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       eUnitType = pUnit->eUnitType;
       sSkillArg.nFlags = 0x520;
       int nXValue;
@@ -859,7 +859,7 @@ void __fastcall OBJECT_SpawnChokingGasGrid(D2UnitStrc * pUnit, D2UnitStrc * pPla
     int nIndex = 0;
     do {
       int nLevel;
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       eUnitType = pUnit->eUnitType;
       sSkillArg.nFlags = 0x520;
       int nXValue;

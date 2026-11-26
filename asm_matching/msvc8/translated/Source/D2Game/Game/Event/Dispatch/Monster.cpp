@@ -25,7 +25,7 @@
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Game/Targets.h"
 #include "Source/D2Game/Monster/Ai/AI.h"
@@ -208,7 +208,7 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
     0x1
 }; D2_STATIC_GUARD(UnknownModeValueArray, "D2Game::GAME::Event::Dispatch::Monster::MONSTER_EndOfFrameAiDispatch::UnknownModeValueArray");
 
-    bool bIsModeZeroDeath;
+    BOOL bIsModeZeroDeath;
     int nBaseMonClassId;
     D2MonStatsTxt* pMonStats;
     BOOL eUnitState;
@@ -385,7 +385,7 @@ void __fastcall MONSTER_EndOfFrameAiDispatch(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Kills a monster via a system-generated (non-player) kill. Clears the monster's current skill, builds a D2MonsterKillStrc (attacker from GetTargetEx, death anim mode 'e' for ghosts/non-solid else 'd'), and calls MONSTERAI_ExecuteLifecycleTransition. If the unit is frozen but not in mode-zero-death, returns early; otherwise triggers MONSTERAI_ExecuteAiFunction to process death AI.
 void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool bIsModeZeroDeath;
+    BOOL bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     D2ModeChangeStrc sMonsterKill;
     memset(&sMonsterKill, 0, sizeof(sMonsterKill));
@@ -418,7 +418,7 @@ void __fastcall MONMODE_EndTrappedSoulAttack(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // Handles a monster's death triggered by its attacker. Clears current skill, builds a D2MonsterKillStrc with victim/attacker (via GetTargetEx), selects death animation mode ('d' normal or 'e' for undead via MvFlags1), then calls MONSTERAI_ExecuteLifecycleTransition. If the monster is frozen and not in mode-0 death it returns early; otherwise drives the monster AI death function.
 void __fastcall MONMODE_EndTrappedSoulSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    bool bIsModeZeroDeath;
+    BOOL bIsModeZeroDeath;
     D2Common::Units::SetCurrentSkill(pUnit, nullptr);
     D2ModeChangeStrc killStrc;
     memset(&killStrc, 0, sizeof(killStrc));

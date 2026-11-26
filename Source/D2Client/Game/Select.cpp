@@ -261,10 +261,12 @@ static void SetSelectedUnit_I(D2UnitStrc * pUnit) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4f);
         exit(-1);
       }
+      eD2UnitType eUnitType = GetTypeInline(pUnit);
+      int nUnitGUID = GetGUIDInline(pUnit);
       if (!_Selection::bHasSelectedUnit) {
         goto store_selection;
       }
-      if (GetTypeInline(pUnit) == _Selection::eSelectedUnitType && GetGUIDInline(pUnit) == _Selection::nSelectedUnitGUID) {
+      if (eUnitType == _Selection::eSelectedUnitType && nUnitGUID == _Selection::nSelectedUnitGUID) {
         bSameUnitAsLast = 1;
         goto store_selection;
       }
@@ -522,11 +524,9 @@ static uint32_t __stdcall SELECT_IsUnitBehindDoor(D2UnitStrc * pUnit, D2UnitStrc
 }
 
 static int32_t SELECT_GetDistanceSquared(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
-    int32_t nX2 = D2Common::Units::GetScreenX(pUnit2);
-    int32_t nX1 = D2Common::Units::GetScreenX(pUnit);
-    int32_t nY2 = D2Common::Units::GetScreenY(pUnit2);
-    int32_t nY1 = D2Common::Units::GetScreenY(pUnit);
-    return (nY2 - nY1) * (nY2 - nY1) + (nX2 - nX1) * (nX2 - nX1);
+    int32_t nDiffX = D2Common::Units::GetScreenX(pUnit2) - D2Common::Units::GetScreenX(pUnit);
+    int32_t nDiffY = D2Common::Units::GetScreenY(pUnit2) - D2Common::Units::GetScreenY(pUnit);
+    return nDiffY * nDiffY + nDiffX * nDiffX;
 }
 
 int __stdcall SELECT_HasSelectedUnit() {

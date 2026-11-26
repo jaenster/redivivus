@@ -79,7 +79,7 @@ BOOL __fastcall GetQuestDataAncients(::SGAMEDATA * pGame);
 // [A5Q5 = Rite of Passage] Q35_GetAncientsState: returns the on-summit player count (aPlayerGUID[3]). No quest-state writes.
 int __fastcall Q35_GetAncientsState(::SGAMEDATA * pGame);
 // [A5Q5 = Rite of Passage] Q35_Noop: empty stub.
-void __stdcall Q35_Noop();
+void __fastcall Q35_Noop(::SGAMEDATA * pGame, D2UnitStrc * pUnit);
 // [A5Q5 = Rite of Passage] Q35_IsAncientsActive: returns 1 if the Ancients fight is currently engaged (field_0x11). No quest-state writes.
 BOOL __fastcall Q35_IsAncientsActive(::SGAMEDATA * pGame);
 // [A5Q5 = Rite of Passage] Q35_AreAncientsReadyToFight: returns 1 if Ancients were spawned but none remain alive (i.e. all defeated). No quest-state writes.

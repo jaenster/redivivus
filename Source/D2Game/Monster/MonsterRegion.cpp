@@ -271,7 +271,7 @@ void __fastcall AllocMonsterRegion(D2PoolManagerStrc * pMemory, D2MonsterRegionS
       do {
         pMonRegionListEntry = pMonsterRegionList + 1;
         pMonsterRegion = D2_NEW_POOL_AT(pMemory, D2MonsterRegionStrc, ".\\MONSTER\\MonsterRegion.cpp", 0x87);
-        memset(pMonsterRegion, 0, 0x2e4);
+        memset(pMonsterRegion, 0, sizeof(*pMonsterRegion));
         pLevelTxt = D2Common::DATATBLS::LvlTbls::TXT_Levels_GetLine(nSeedLow);
         pMonsterRegion->nAct = pLevelTxt->Act;
         pMonsterRegion->eLevelId = nSeedLow;

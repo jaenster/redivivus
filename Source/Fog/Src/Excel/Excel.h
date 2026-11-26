@@ -35,7 +35,7 @@ struct D2BinFieldHashNodeStrc {
 struct __attribute__((packed)) D2BinFieldInputStrc {
     /* 0x00 */ char * szName;
     /* 0x04 */ eD2BinFieldInputType eType;
-    /* 0x08 */ size_t nSize;
+    /* 0x08 */ uint32_t nSize;
     /* 0x0C */ int nOffset;
     /* 0x10 */ void * fpLinker; // by eType: struct D2TxtLinkStrc** (CODE*/NAME*), PFN_TxtKeyToWord* (KEY_WORD), PFN_TxtFieldLinker* (LINKER_*)
 };
@@ -53,7 +53,7 @@ namespace Fog::Src::Excel {
 // Function declarations
 // @sourcefile .\Src\Excel\Excel.cpp
 void __stdcall TXT_FreeBinFieldExcel(struct D2BinFieldExcelStrc * pBinFieldExcel);
-size_t __stdcall TXT_GetLinesCountFromBinFieldExcel(struct D2BinFieldExcelStrc * pBinFieldExcel);
+uint32_t __stdcall TXT_GetLinesCountFromBinFieldExcel(struct D2BinFieldExcelStrc * pBinFieldExcel);
 struct D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLine);
 // @sourcefile .\Src\Excel\Excel.cpp
 void __stdcall STRUCT_FreeTxtLink(struct D2TxtLinkStrc * pTxtLink);
@@ -67,7 +67,7 @@ int __stdcall FOG_ParseStringField(struct D2TxtLinkStrc * pTxtLink, char * szTex
 struct D2BinFieldExcelStrc * __stdcall STRUCT_CreateBinFieldExcelAndFillData(char * pD2Archive, size_t nSize);
 // Two passes over the txt rows: pass 1 resolves link-type columns (CODE*/NAME_I*), pass 2 parses every
 // mapped column into the record and pass 2b default-fills the mapped fields that had no column.
-void __stdcall TXT_ParseDataAndPutIntoStructure(struct D2BinFieldExcelStrc * pBinFieldExcel, struct D2BinFieldInputStrc * pBinFieldInput, char * pRecord, size_t nLinesCount, int nEndOffset);
+void __stdcall TXT_ParseDataAndPutIntoStructure(struct D2BinFieldExcelStrc * pBinFieldExcel, struct D2BinFieldInputStrc * pBinFieldInput, char * pRecord, uint32_t nLinesCount, int nEndOffset);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 int __stdcall FOG_ParseBinField(short * pOutMapping, struct D2BinFieldExcelStrc * pBinFieldExcel, struct D2BinFieldInputStrc * pBinFieldInput);

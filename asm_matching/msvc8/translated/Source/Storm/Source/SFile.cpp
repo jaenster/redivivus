@@ -16,6 +16,13 @@
 #include "Source/Storm/Storm.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Storm/Source/SFile.data.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2StormCryptApiStrc) == 0x24, "SMemAlloc(sizeof(D2StormCryptApiStrc)): the 32-bit layout must be the 0x24 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(D2MPQFileStrc) == 0x158, "SMemAlloc(sizeof(D2MPQFileStrc)): the 32-bit layout must be the 0x158 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(D2ArchiveStrc) == 0x25c, "SMemAlloc(sizeof(D2ArchiveStrc)): the 32-bit layout must be the 0x25c bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(D2StormAsyncOpStrc) == 0x44, "SMemAlloc(sizeof(D2StormAsyncOpStrc)): the 32-bit layout must be the 0x44 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(TDcmpStruct) == 0x3134, "SMemAlloc(sizeof(TDcmpStruct)): the 32-bit layout must be the 0x3134 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(StormEventRecStrc) == 0xc, "SMemAlloc(sizeof(StormEventRecStrc)): the 32-bit layout must be the 0xc bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(D2StormAudioStreamRec) == 0x50, "SMemAlloc(sizeof(D2StormAudioStreamRec)): the 32-bit layout must be the 0x50 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -38,39 +45,39 @@ typedef int (__stdcall *pfnSFileReadError)(void * pnBytesRead, uint32_t dwLastEr
 #endif
 #ifndef RECON_FPTD_pfnCryptAcquireContextA
 #define RECON_FPTD_pfnCryptAcquireContextA
-typedef BOOL (__stdcall *pfnCryptAcquireContextA)(int * phProv, LPCSTR szContainer, LPCSTR szProvider, uint32_t dwProvType, uint32_t dwFlags);
+typedef BOOL (__stdcall *pfnCryptAcquireContextA)(ULONG_PTR * phProv, LPCSTR szContainer, LPCSTR szProvider, uint32_t dwProvType, uint32_t dwFlags);
 #endif
 #ifndef RECON_FPTD_pfnCryptCreateHash
 #define RECON_FPTD_pfnCryptCreateHash
-typedef BOOL (__stdcall *pfnCryptCreateHash)(int hProv, uint32_t nAlgId, int hKey, uint32_t dwFlags, int * phHash);
+typedef BOOL (__stdcall *pfnCryptCreateHash)(ULONG_PTR hProv, uint32_t nAlgId, ULONG_PTR hKey, uint32_t dwFlags, ULONG_PTR * phHash);
 #endif
 #ifndef RECON_FPTD_pfnCryptDestroyHash
 #define RECON_FPTD_pfnCryptDestroyHash
-typedef BOOL (__stdcall *pfnCryptDestroyHash)(int hHash);
+typedef BOOL (__stdcall *pfnCryptDestroyHash)(ULONG_PTR hHash);
 #endif
 #ifndef RECON_FPTD_pfnCryptDestroyKey
 #define RECON_FPTD_pfnCryptDestroyKey
-typedef BOOL (__stdcall *pfnCryptDestroyKey)(int hKey);
+typedef BOOL (__stdcall *pfnCryptDestroyKey)(ULONG_PTR hKey);
 #endif
 #ifndef RECON_FPTD_pfnCryptHashData
 #define RECON_FPTD_pfnCryptHashData
-typedef BOOL (__stdcall *pfnCryptHashData)(int hHash, void * pbData, uint32_t dwDataLen, uint32_t dwFlags);
+typedef BOOL (__stdcall *pfnCryptHashData)(ULONG_PTR hHash, void * pbData, uint32_t dwDataLen, uint32_t dwFlags);
 #endif
 #ifndef RECON_FPTD_pfnCryptImportKey
 #define RECON_FPTD_pfnCryptImportKey
-typedef BOOL (__stdcall *pfnCryptImportKey)(int hProv, void * pbData, uint32_t dwDataLen, int hPubKey, uint32_t dwFlags, int * phKey);
+typedef BOOL (__stdcall *pfnCryptImportKey)(ULONG_PTR hProv, void * pbData, uint32_t dwDataLen, ULONG_PTR hPubKey, uint32_t dwFlags, ULONG_PTR * phKey);
 #endif
 #ifndef RECON_FPTD_pfnCryptReleaseContext
 #define RECON_FPTD_pfnCryptReleaseContext
-typedef BOOL (__stdcall *pfnCryptReleaseContext)(int hProv, uint32_t dwFlags);
+typedef BOOL (__stdcall *pfnCryptReleaseContext)(ULONG_PTR hProv, uint32_t dwFlags);
 #endif
 #ifndef RECON_FPTD_pfnCryptSignHashA
 #define RECON_FPTD_pfnCryptSignHashA
-typedef BOOL (__stdcall *pfnCryptSignHashA)(int hHash, uint32_t dwKeySpec, LPCSTR szDescription, uint32_t dwFlags, void * pbSignature, uint32_t * pdwSigLen);
+typedef BOOL (__stdcall *pfnCryptSignHashA)(ULONG_PTR hHash, uint32_t dwKeySpec, LPCSTR szDescription, uint32_t dwFlags, void * pbSignature, uint32_t * pdwSigLen);
 #endif
 #ifndef RECON_FPTD_pfnCryptVerifySignatureA
 #define RECON_FPTD_pfnCryptVerifySignatureA
-typedef BOOL (__stdcall *pfnCryptVerifySignatureA)(int hHash, void * pbSignature, uint32_t dwSigLen, int hPubKey, LPCSTR szDescription, uint32_t dwFlags);
+typedef BOOL (__stdcall *pfnCryptVerifySignatureA)(ULONG_PTR hHash, void * pbSignature, uint32_t dwSigLen, ULONG_PTR hPubKey, LPCSTR szDescription, uint32_t dwFlags);
 #endif
 #ifndef RECON_FPTD_pfnEHHandlerRoutine
 #define RECON_FPTD_pfnEHHandlerRoutine
@@ -172,7 +179,7 @@ int32_t __stdcall SFILE_DecompressLzw(uint8_t * pDstData, uint8_t * pSrcData, in
     D2LzwBufferStateStrc sBufState;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779080);
     if (!gpSFileExplodeWorkBuffer) {
-      gpSFileExplodeWorkBuffer = SMem::SMemAlloc(0x3134, ".\\SOURCE\\SFILE.CPP", 0x2c9, 0);
+      gpSFileExplodeWorkBuffer = SMem::SMemAlloc(sizeof(TDcmpStruct), ".\\SOURCE\\SFILE.CPP", 0x2c9, 0);
     }
 
     sBufState.pSrc = pSrcData;
@@ -844,7 +851,7 @@ uint32_t __stdcall SFileAuthenticateArchiveEx(D2ArchiveStrc * pArchive, uint32_t
 
     uint32_t iVar3;
     BOOL bReadOk;
-    size_t nChunkSize;
+    uint32_t nChunkSize;
     uint32_t nRemaining;
     D2ArchiveStrc* pArchiveOut;
     if (!pModulusBytes && !pExponentBytes) {
@@ -1090,18 +1097,18 @@ int32_t __stdcall SFileGetBasePath(char * szText, int32_t nMaxLength) {
 }
 
 int32_t __stdcall SFILE_GetFileTime(D2MPQFileStrc * pArchive, void * pFileTime) {
-    void* pFileTimeSlot;
+    D2MPQFileStrc* pFileTimeSlot;
     D2_CHECKS_BEGIN;
-    D2_CHECK_BLANK(pFileTime, *(uint32_t*)pFileTime = 0);
+    D2_CHECK_BLANK(pFileTime, *(D2ArchiveStrc**)pFileTime = 0);
     D2_CHECKS_END(SErr::SErrSetLastError(0x57), 0);
     EnterCriticalSection(&lpCriticalSection_00779068);
-    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, (D2MPQFileStrc**)&pFileTimeSlot);
+    int bIsValidHandle = SFILE_CheckFileHandle(pArchive, &pFileTimeSlot);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ if (!bIsValidHandle) {
       LeaveCriticalSection(&lpCriticalSection_00779068);
       return 0;
     }
 
-    *(uint32_t*)pFileTime = *(uint32_t*)((char*)pFileTimeSlot + 0x114);
+    *(D2ArchiveStrc**)pFileTime = pFileTimeSlot->pArchive;
     LeaveCriticalSection(&lpCriticalSection_00779068);
     return 1;
 }
@@ -1428,9 +1435,9 @@ int32_t __stdcall SFileUnloadFile(void * pFile) {
     return 1;
 }
 
-uint32_t __fastcall SFILE_CompareFileTime1(StormLinkStrc * pLink, int, intptr_t pLeft) {
-    uint32_t nValue = pLink->pNext;
-    if ((int)nValue < 0) {
+uintptr_t __fastcall SFILE_CompareFileTime1(StormLinkStrc * pLink, int, intptr_t pLeft) {
+    uintptr_t nValue = pLink->pNext;
+    if ((intptr_t)nValue < 0) {
       return ~nValue;
     }
     if (pLeft < 0) {
@@ -1440,7 +1447,7 @@ uint32_t __fastcall SFILE_CompareFileTime1(StormLinkStrc * pLink, int, intptr_t 
     return nValue + pLeft;
 }
 
-int __fastcall Unreferenced_004167a0(StormLinkStrc * pLink) {
+intptr_t __fastcall Unreferenced_004167a0(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
@@ -1458,15 +1465,15 @@ void __fastcall LINKEDLIST_UnlinkSelf_Unref_004167b0(StormLinkStrc * pNode) {
     pNode->pNext = 0;
 }
 
-int __fastcall Unreferenced_004167f0(StormLinkStrc * pLink) {
+intptr_t __fastcall Unreferenced_004167f0(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-uint32_t __fastcall Unreferenced_00416800(StormLinkStrc * pLink) {
+uintptr_t __fastcall Unreferenced_00416800(StormLinkStrc * pLink) {
     return pLink->pNext;
 }
 
-int __fastcall Unreferenced_00416820(StormLinkStrc * pLink) {
+intptr_t __fastcall Unreferenced_00416820(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
@@ -1474,22 +1481,22 @@ void * __fastcall Unreferenced_00416830(StormLinkStrc * pLink) {
     return (void*)(pLink->pNext <= 0 ? 0 : pLink->pNext);
 }
 
-uint32_t __fastcall Unreferenced_00416840(StormLinkStrc * pLink) {
+uintptr_t __fastcall Unreferenced_00416840(StormLinkStrc * pLink) {
     return pLink->pNext;
 }
 
-int __fastcall Unreferenced_00416850(StormLinkStrc * pLink) {
+intptr_t __fastcall Unreferenced_00416850(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-int32_t __fastcall Unreferenced_00416860(void * pHandle) {
+intptr_t __fastcall Unreferenced_00416860(void * pHandle) {
     StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
-uint32_t __fastcall SFILE_CompareFileTime2(StormLinkStrc * pLink, int, intptr_t pLeft) {
-    uint32_t nValue = pLink->pNext;
-    if ((int)nValue < 0) {
+uintptr_t __fastcall SFILE_CompareFileTime2(StormLinkStrc * pLink, int, intptr_t pLeft) {
+    uintptr_t nValue = pLink->pNext;
+    if ((intptr_t)nValue < 0) {
       return ~nValue;
     }
     if (pLeft < 0) {
@@ -1513,9 +1520,9 @@ void __fastcall SFILE_CloseAllOpenFiles1_Unref_004168f0(D2ArchiveStrc * pArchive
     pArchive->pNext = 0;
 }
 
-uint32_t __fastcall SFILE_CompareFileSize1(StormLinkStrc * pLink, int, intptr_t pLeft) {
-    uint32_t nValue = pLink->pNext;
-    if ((int)nValue < 0) {
+uintptr_t __fastcall SFILE_CompareFileSize1(StormLinkStrc * pLink, int, intptr_t pLeft) {
+    uintptr_t nValue = pLink->pNext;
+    if ((intptr_t)nValue < 0) {
       return ~nValue;
     }
     if (pLeft < 0) {
@@ -1525,9 +1532,9 @@ uint32_t __fastcall SFILE_CompareFileSize1(StormLinkStrc * pLink, int, intptr_t 
     return nValue + pLeft;
 }
 
-uint32_t __fastcall SFILE_CompareFileSize2(StormLinkStrc * pLink, int, intptr_t pLeft) {
-    uint32_t nValue = pLink->pNext;
-    if ((int)nValue < 0) {
+uintptr_t __fastcall SFILE_CompareFileSize2(StormLinkStrc * pLink, int, intptr_t pLeft) {
+    uintptr_t nValue = pLink->pNext;
+    if ((intptr_t)nValue < 0) {
       return ~nValue;
     }
     if (pLeft < 0) {
@@ -1537,9 +1544,9 @@ uint32_t __fastcall SFILE_CompareFileSize2(StormLinkStrc * pLink, int, intptr_t 
     return nValue + pLeft;
 }
 
-uint32_t __fastcall SFILE_CompareFileName(StormLinkStrc * pLink, int, intptr_t pLeft) {
-    uint32_t nValue = pLink->pNext;
-    if ((int)nValue < 0) {
+uintptr_t __fastcall SFILE_CompareFileName(StormLinkStrc * pLink, int, intptr_t pLeft) {
+    uintptr_t nValue = pLink->pNext;
+    if ((intptr_t)nValue < 0) {
       return ~nValue;
     }
     if (pLeft < 0) {
@@ -1972,11 +1979,11 @@ int __stdcall SFileAuthenticateArchive(D2ArchiveStrc * pArchive, uint32_t * pdwA
     // Frame slots -24..-4 are ONE object: &hKey is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
-      int hKey;
+      ULONG_PTR hKey;
       D2ArchiveStrc* pArchiveHandle;
-      int hProv;
+      ULONG_PTR hProv;
       uint8_t* pMappedView;
-      int hHash;
+      ULONG_PTR hHash;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 20, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
@@ -2004,7 +2011,7 @@ int __stdcall SFileAuthenticateArchive(D2ArchiveStrc * pArchive, uint32_t * pdwA
     HANDLE hFileMapping;
     HRSRC hResInfoSaved;
     char* lpName;
-    int* phKeyOut;
+    ULONG_PTR* phKeyOut;
     uint32_t nResult = SFileAuthenticateArchiveEx(pArchive, pdwAuthResult, nullptr, 0, nullptr, 0);
     if (nResult) {
       return 1;
@@ -2038,7 +2045,7 @@ int __stdcall SFileAuthenticateArchive(D2ArchiveStrc * pArchive, uint32_t * pdwA
     __frame0.pMappedView = 0;
     hAdvapi32 = LoadLibraryA("advapi32.dll");
     if (hAdvapi32) {
-      pCryptFuncs = (D2StormCryptApiStrc*)SMem::SMemAlloc(0x24, ".\\SOURCE\\SFILE.CPP", 0xa74, 0);
+      pCryptFuncs = (D2StormCryptApiStrc*)SMem::SMemAlloc(sizeof(D2StormCryptApiStrc), ".\\SOURCE\\SFILE.CPP", 0xa74, 0);
       /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pProcAddr = (pfnCryptAcquireContextA)GetProcAddress(hAdvapi32, "CryptAcquireContextA");
       pCryptFuncs->pfnAcquireContext = pProcAddr;
       if (pProcAddr) {
@@ -2086,7 +2093,7 @@ int __stdcall SFileAuthenticateArchive(D2ArchiveStrc * pArchive, uint32_t * pdwA
                                     /* LPCSTR lpType for FindResourceA */ lpType = "#256";
                                     /* LPCSTR lpName for FindResourceA */ hModule_00 = SSystem::StormGetInstance();
                                     /* HMODULE hModule for FindResourceA */ hResInfo = FindResourceA(hModule_00, lpName, lpType);
-                                    hResInfoSaved = hResInfo;
+                                    hResInfoSaved = hResInfo; // steer-ok: generated text, unchanged; the body is pinned for its x64 type edit
                                     /* HRSRC hResInfo for LoadResource */ hModule_00 = SSystem::StormGetInstance();
                                     /* HMODULE hModule for LoadResource */ hResData = LoadResource(hModule_00, hResInfoSaved);
                                     /* HGLOBAL hResData for LockResource */ pResData = LockResource(hResData);
@@ -2189,7 +2196,7 @@ void * __fastcall Unreferenced_00417790(StormLinkStrc * pLink) {
     return (void*)(pLink->pNext <= 0 ? 0 : pLink->pNext);
 }
 
-int32_t __fastcall Unreferenced_004177a0(void * pHandle) {
+intptr_t __fastcall Unreferenced_004177a0(void * pHandle) {
     StormLinkStrc* pLink = **(StormLinkStrc***)pHandle;
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
@@ -2214,7 +2221,7 @@ void __fastcall LINKEDLIST_UnlinkSelf_Unref_00417860(StormLinkStrc * pNode) {
     pNode->pNext = 0;
 }
 
-int __fastcall Unreferenced_004178a0(StormLinkStrc * pLink) {
+intptr_t __fastcall Unreferenced_004178a0(StormLinkStrc * pLink) {
     return pLink->pNext <= 0 ? 0 : pLink->pNext;
 }
 
@@ -2355,7 +2362,7 @@ void __fastcall TSList_FILEREC_LinkNode(int * * ppListContainer, int, int * * pN
     }
 }
 
-uint32_t __fastcall SFILE_CompareFileRecord1(StormLinkedListStrc * pThis, int, StormLinkStrc * pLink) {
+uintptr_t __fastcall SFILE_CompareFileRecord1(StormLinkedListStrc * pThis, int, StormLinkStrc * pLink) {
     if (!pLink) {
       pLink = &pThis->head;
     }
@@ -2468,7 +2475,7 @@ void __fastcall SFILE_InsertFileRecordIntoList3(int * * ppListContainer, int, in
     }
 }
 
-uint32_t __fastcall SFILE_CompareFileRecord2(StormLinkedListStrc * pThis, int, StormLinkStrc * pLink) {
+uintptr_t __fastcall SFILE_CompareFileRecord2(StormLinkedListStrc * pThis, int, StormLinkStrc * pLink) {
     if (!pLink) {
       pLink = &pThis->head;
     }
@@ -2532,7 +2539,7 @@ void __fastcall SFILE_InsertFileRecordIntoList4(int * * ppListContainer, int, in
     }
 }
 
-uint32_t __fastcall SFILE_CompareFileRecord3(StormLinkedListStrc * pThis, int, StormLinkStrc * pLink) {
+uintptr_t __fastcall SFILE_CompareFileRecord3(StormLinkedListStrc * pThis, int, StormLinkStrc * pLink) {
     if (!pLink) {
       pLink = &pThis->head;
     }
@@ -3460,7 +3467,7 @@ void __fastcall SFILE_DestroyFileRecord(D2MPQFileStrc * pMPQFile) {
 }
 
 D2MPQFileStrc * * __fastcall SFILE_AllocFileRecord1(int * * ppArchive, int, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags) {
-    D2MPQFileStrc** ppFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0x25c, sRTTI_ARCHIVEREC_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc** ppFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + (uint32_t)sizeof(D2ArchiveStrc), sRTTI_ARCHIVEREC_AllocTag, -2, nFlags | 8);
     D2MPQFileStrc** ppFileRecord;
     if (ppFileRecordNew) {
       *ppFileRecordNew = 0;
@@ -3497,7 +3504,7 @@ D2MPQFileStrc * __fastcall SFILE_AllocFileRecord(int * * ppArchive, int, int32_t
     '\x00'
 }; D2_STATIC_GUARD(sRTTI_FILEREC_AllocTag, "Storm::Source::SFile::SFILE_AllocFileRecord::sRTTI_FILEREC_AllocTag");
 
-    D2MPQFileStrc* ppFileRecordNew = (D2MPQFileStrc*)SMem::SMemAlloc(nExtraSize + 0x158, sRTTI_FILEREC_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc* ppFileRecordNew = (D2MPQFileStrc*)SMem::SMemAlloc(nExtraSize + (uint32_t)sizeof(D2MPQFileStrc), sRTTI_FILEREC_AllocTag, -2, nFlags | 8);
     D2MPQFileStrc* ppFileRecord;
     if (ppFileRecordNew) {
       ppFileRecordNew->pPrevLink = 0;
@@ -3519,7 +3526,7 @@ D2MPQFileStrc * __fastcall SFILE_AllocFileRecord(int * * ppArchive, int, int32_t
 }
 
 D2MPQFileStrc * * __fastcall SFILE_AllocFileRecord2(int * * ppArchive, int, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags) {
-    D2MPQFileStrc** ppFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0xc, sRTTI_EVENTREC_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc** ppFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + (uint32_t)sizeof(StormEventRecStrc), sRTTI_EVENTREC_AllocTag, -2, nFlags | 8);
     D2MPQFileStrc** ppFileRecord;
     if (ppFileRecordNew) {
       *ppFileRecordNew = 0;
@@ -3636,7 +3643,7 @@ int __stdcall SFILE_EnumFilesInternal(D2ArchiveStrc * pArchive, char * szText, v
       return 0;
     }
 
-    D2ArchiveStrc* pNewArchive = (D2ArchiveStrc*)SMem::SMemAlloc(0x25c, sRTTI_ARCHIVEREC_AllocTag, -2, 8);
+    D2ArchiveStrc* pNewArchive = (D2ArchiveStrc*)SMem::SMemAlloc(sizeof(D2ArchiveStrc), sRTTI_ARCHIVEREC_AllocTag, -2, 8);
     D2ArchiveStrc* pArchiveRecord = 0;
     if (pNewArchive) {
       pNewArchive->pPrevLink = 0;
@@ -3816,7 +3823,7 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
 }
 
 D2MPQFileStrc * * __fastcall SFILE_AllocFileRecord3(int * * ppArchive, int, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags) {
-    D2MPQFileStrc** pFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0x44, sRTTI_REQUEST_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc** pFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + (uint32_t)sizeof(D2StormAsyncOpStrc), sRTTI_REQUEST_AllocTag, -2, nFlags | 8);
     D2MPQFileStrc** pFileRecord;
     if (pFileRecordNew) {
       *pFileRecordNew = 0;
@@ -3854,7 +3861,7 @@ StormEventRecStrc * __fastcall SFILE_RemoveAsyncRequestFromQueue(void * pListCon
 }
 
 D2MPQFileStrc * * __fastcall SFILE_AllocFileRecord4(int * * ppArchive, int, int32_t nInsertMode, int32_t nExtraSize, uint32_t nFlags) {
-    D2MPQFileStrc** pFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + 0x50, sRTTI_AUDIOSTREAM_AllocTag, -2, nFlags | 8);
+    D2MPQFileStrc** pFileRecordNew = (D2MPQFileStrc**)SMem::SMemAlloc(nExtraSize + (uint32_t)sizeof(D2StormAudioStreamRec), sRTTI_AUDIOSTREAM_AllocTag, -2, nFlags | 8);
     D2MPQFileStrc** pFileRecord;
     if (pFileRecordNew) {
       *pFileRecordNew = 0;
@@ -3885,7 +3892,7 @@ static D2StormAsyncOpStrc * __stdcall SFILE_IssueRequest(uint32_t nFileOffset, v
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    D2StormAsyncOpStrc* pNewNode = (D2StormAsyncOpStrc*)SMem::SMemAlloc(0x44, sRTTI_REQUEST_AllocTag, -2, 8);
+    D2StormAsyncOpStrc* pNewNode = (D2StormAsyncOpStrc*)SMem::SMemAlloc(sizeof(D2StormAsyncOpStrc), sRTTI_REQUEST_AllocTag, -2, 8);
     if (pNewNode) {
       pNewNode->pPrevLink = 0;
       pNewNode->pNext = 0;
@@ -4132,7 +4139,7 @@ void __stdcall SFILE_CheckAudioStreams() {
     D2StormAudioStreamRec* pRequest;
     uint32_t nThisChunk;
     SFILE_CheckAudioStreams_Slotmc uSlotC;
-    size_t nBytesToRead;
+    DWORD nBytesToRead;
     uint32_t nReadOffset;
     D2MPQFileStrc* pFileCtx;
     uint32_t* pFilePosRef;
@@ -4495,7 +4502,7 @@ int __stdcall SFILE_CancelRequest(void * hFileHandle, D2MPQFileStrc * pMPQFile) 
       } else {
         nCancelled = 1;
         if (pRequest->hCompletionEvent) {
-          pNotifyNode = (StormEventRecStrc*)SMem::SMemAlloc(0xc, sRTTI_EVENTREC_AllocTag, -2, 8);
+          pNotifyNode = (StormEventRecStrc*)SMem::SMemAlloc(sizeof(StormEventRecStrc), sRTTI_EVENTREC_AllocTag, -2, 8);
           pNotifyNodeOk = 0;
           if (pNotifyNode) {
             pNotifyNode->link.pPrevLink = 0;
@@ -4719,7 +4726,7 @@ DWORD __stdcall SFILE_CdThreadProc(void * lpThreadParam) {
               pDVar2 = gpCurrentAsyncIORequest;
             }
 
-            pDVar2->pCompletion->pfnComplete(pDVar2->pReadBufferBase, (intptr_t)pDVar2->pChunkWritePtr + (pDVar2->nChunkBytesRead - (intptr_t)pDVar2->pReadBufferBase), pDVar2->pCompletion);
+            pDVar2->pCompletion->pfnComplete(pDVar2->pReadBufferBase, (uint32_t)((intptr_t)pDVar2->pChunkWritePtr + (pDVar2->nChunkBytesRead - (intptr_t)pDVar2->pReadBufferBase)), pDVar2->pCompletion);
             pDVar2 = gpCurrentAsyncIORequest;
           }
 
@@ -4766,6 +4773,11 @@ int __fastcall Unreferenced_0041a8d0(DWORD * pThreadId, HANDLE * pThreadHandle) 
     return DVar2;
 }
 
+// TSList<T>::Head(): the first node, or NULL when the next link is the terminator.
+static inline void* STORMLIST_Head(const StormLinkedListStrc* pList) {
+    return pList->head.pNext > 0 ? (void*)pList->head.pNext : nullptr;
+}
+
 // Under the SFile lock, sets the urgent flag (+0x1c) of every queued Storm read request whose buffer base (+0x24, SFILE_IssueRequest) is pReadBuffer. No-op if pReadBuffer is NULL. SFILE_SelectAsyncRequest caps an urgent request's deadline at 1000 ms (0041a51a).
 static void SFILE_SetRequestUrgentByBuffer(void * pReadBuffer, BOOL bUrgent) {
     D2StormAsyncOpStrc* pAsyncRequest;
@@ -4774,7 +4786,9 @@ static void SFILE_SetRequestUrgentByBuffer(void * pReadBuffer, BOOL bUrgent) {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00779068);
-    for (pAsyncRequest = (D2StormAsyncOpStrc*)(gSFileAsyncReqQueue.head.pNext <= 0 ? 0 : gSFileAsyncReqQueue.head.pNext); (intptr_t)pAsyncRequest > 0; pAsyncRequest = pAsyncRequest->pNext) {
+    D2StormAsyncOpStrc* iterate_delete;
+    // ITERATELIST: the macro's second loop variable iterate_delete is never set here.
+    for (pAsyncRequest = (D2StormAsyncOpStrc*)STORMLIST_Head(&gSFileAsyncReqQueue), iterate_delete = nullptr; (intptr_t)pAsyncRequest > 0; iterate_delete ? (pAsyncRequest = nullptr, iterate_delete = nullptr, pAsyncRequest) : pAsyncRequest = pAsyncRequest->pNext) {
       if (pAsyncRequest->pReadBufferBase == pReadBuffer) {
         pAsyncRequest->bUrgent = bUrgent;
       }
@@ -5075,10 +5089,10 @@ int __stdcall SFileReadFileEx2(D2MPQFileStrc * pFileHandle, void * pOutputBuffer
 // @basis behaviour-confirmed as part of a three-way arity lock. The 8-parameter worker (archive, filename, buffer, bytes, extrabytes, flags, callback, readflags) that both shorter members forward into: open, size, allocate size+extrabytes, read, close. SFileLoadFileEx2 is the only 8-parameter Load in the real API, and the extra 8th slot is precisely the readflags the 7-parameter caller pins to 0.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx 0041b680
 // @sourcefile .\SOURCE\SFILE.CPP
-uint32_t __stdcall SFileLoadFileEx2(D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx, int nReadFlags) {
+uint32_t __stdcall SFileLoadFileEx2(D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx, int nReadFlags) {
     uint8_t* pAllocBuffer;
     int nOpenFileResult;
-    size_t nPadBytes;
+    uint32_t nPadBytes;
     char* pFileName = pFileHandle;
     if (ppOutBuffer) {
       DWORD nFileSize;
@@ -5252,12 +5266,20 @@ static uint32_t SFILE_FindChunk(int32_t nChunkId, D2MPQFileStrc * pMPQFile, int 
 BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, uint32_t dwFlags, uint32_t dwInitialPos, int32_t lVolume, int32_t lPan, IDirectSoundBuffer * lpDSB) {
     // Frame slots -32..-4 are ONE object: &nDsBufferDescSize is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
+    // sDsBufferDesc is the DSBUFFERDESC (DirectX 7 layout, dwSize 0x14 on x86) passed to CreateSoundBuffer.
+    // Before that, its bytes +4..+0x13 receive the 16-byte 'fmt ' chunk, so the lpwfxFormat slot also holds
+    // nBlockAlign/wBitsPerSample; the union keeps the pointer full width on x64.
     struct __frame0_t {
-      uint32_t nDsBufferDescSize;
-      uint32_t nDsBufferFlags;
-      uint32_t pDsBufferBytes;
-      DWORD nWaveBlockAlign;
-      uint32_t pWaveFormatEx;
+      struct {
+        uint32_t nDsBufferDescSize;
+        uint32_t nDsBufferFlags;
+        uint32_t pDsBufferBytes;
+        DWORD nWaveBlockAlign;
+        union {
+          uint32_t nWaveFmtBlockAlign;
+          WAVEFORMATEX* pWaveFormatEx;
+        };
+      } sDsBufferDesc;
       uint32_t nWaveDataSize;
       uint32_t nWaveDataOffset;
     };
@@ -5326,16 +5348,16 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
       nChunkFound = SFILE_FindChunk(0x20746d66, pFile, (int*)&__frame0.nWaveDataSize);
       nAlignRemainder = __frame0.nWaveDataSize;
       if (nChunkFound && __frame0.nWaveDataSize >= 0x10) {
-        nResult = SFileReadFileEx2(pFile, &__frame0.nDsBufferFlags, 0x10, nullptr, (LPOVERLAPPED)0x0, 0, nullptr);
+        nResult = SFileReadFileEx2(pFile, &__frame0.sDsBufferDesc.nDsBufferFlags, 0x10, nullptr, (LPOVERLAPPED)0x0, 0, nullptr);
         if (nResult) {
           nSeekPos = SFileSetFilePointer(pFile, nAlignRemainder - 0x10, nullptr, 1);
           if (nSeekPos != -1) {
-            wFormatTag.nChannels = *(uint16_t*)((char*)&__frame0.nDsBufferFlags + 2);
-            wFormatTag.wFormatTag = (WORD)__frame0.nDsBufferFlags;
-            wFormatTag.nSamplesPerSec = __frame0.pDsBufferBytes;
-            wFormatTag.nAvgBytesPerSec = __frame0.nWaveBlockAlign;
-            wFormatTag.nBlockAlign = (WORD)__frame0.pWaveFormatEx;
-            wFormatTag.wBitsPerSample = *(uint16_t*)((char*)&__frame0.pWaveFormatEx + 2);
+            wFormatTag.nChannels = *(uint16_t*)((char*)&__frame0.sDsBufferDesc.nDsBufferFlags + 2);
+            wFormatTag.wFormatTag = (WORD)__frame0.sDsBufferDesc.nDsBufferFlags;
+            wFormatTag.nSamplesPerSec = __frame0.sDsBufferDesc.pDsBufferBytes;
+            wFormatTag.nAvgBytesPerSec = __frame0.sDsBufferDesc.nWaveBlockAlign;
+            wFormatTag.nBlockAlign = (WORD)__frame0.sDsBufferDesc.nWaveFmtBlockAlign;
+            wFormatTag.wBitsPerSample = *(uint16_t*)((char*)&__frame0.sDsBufferDesc.nWaveFmtBlockAlign + 2);
             wFormatTag.cbSize = 0;
             nChunkFound = SFILE_FindChunk(0x61746164, pFile, (int*)&__frame0.nWaveDataSize);
             if (nChunkFound) {
@@ -5347,20 +5369,20 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
               dwInitialPos = (uint32_t)!lpDSB;
               uVar1 = dwFlags;
               if (dwInitialPos) {
-                SMem::SMemZero(&__frame0.nDsBufferDescSize, 0x14);
+                SMem::SMemZero(&__frame0.sDsBufferDesc, sizeof(__frame0.sDsBufferDesc));
                 uVar1 = dwFlags;
-                __frame0.nDsBufferDescSize = 0x14;
-                __frame0.nDsBufferFlags = 0x80;
+                __frame0.sDsBufferDesc.nDsBufferDescSize = sizeof(__frame0.sDsBufferDesc);
+                __frame0.sDsBufferDesc.nDsBufferFlags = 0x80;
                 if (dwFlags & 0x20) {
-                  __frame0.nDsBufferFlags = 0xa0;
+                  __frame0.sDsBufferDesc.nDsBufferFlags = 0xa0;
                 }
                 if (dwFlags & 0x40) {
-                  __frame0.nDsBufferFlags |= 0x40;
+                  __frame0.sDsBufferDesc.nDsBufferFlags |= 0x40;
                 }
 
-                __frame0.pWaveFormatEx = (uint32_t)(uintptr_t)&wFormatTag;
-                __frame0.pDsBufferBytes = dwBufferBytes;
-                g_pDirectSound->lpVtbl->CreateSoundBuffer(g_pDirectSound, &__frame0.nDsBufferDescSize, (void**)&lpDSB, nullptr);
+                __frame0.sDsBufferDesc.pWaveFormatEx = &wFormatTag;
+                __frame0.sDsBufferDesc.pDsBufferBytes = dwBufferBytes;
+                g_pDirectSound->lpVtbl->CreateSoundBuffer(g_pDirectSound, &__frame0.sDsBufferDesc.nDsBufferDescSize, (void**)&lpDSB, nullptr);
                 if (!lpDSB) {
                   return 0;
                 }
@@ -5412,7 +5434,7 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
 // @wasnamed SFILE_LoadFileToMemory
 // @basis behaviour-confirmed as part of a three-way arity lock. The real API has exactly one 5/7/8-parameter family: SFileLoadFile(filename, buffer, bytes, extrabytes, callback) = 5, SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback) = 7, SFileLoadFileEx2(... , readflags) = 8. This is the 5-parameter member; it forwards to the 8-parameter worker with archive = NULL, flags = SFILE_GetOpenFlags() and readflags = 0, which is exactly the set of defaults the 5-parameter signature implies. Note its first parameter is the FILENAME - it is currently mistyped D2ArchiveStrc *, and lands in the worker's filename slot.
 // @seealso SFileLoadFileEx 0041b680, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nSize, LPOVERLAPPED nReadCtx) {
+uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nSize, LPOVERLAPPED nReadCtx) {
     uint32_t nOpenFlags = SFileLoadFileEx2(nullptr, pArchive, ppOutBuffer, pdwOutSize, nSize, SFILE_GetOpenFlags(), nReadCtx, 0);
     return nOpenFlags;
 }
@@ -5421,7 +5443,7 @@ uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * 
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFileEx(D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx) {
+uint32_t __stdcall SFileLoadFileEx(D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx) {
     uint32_t nResult = SFileLoadFileEx2(pArchive, pFileHandle, ppOutBuffer, pdwOutSize, nExtraPadBytes, nSearchScope, nReadCtx, 0);
     return nResult;
 }
@@ -5614,7 +5636,7 @@ int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t n
     if (!(nFlags & 1) || bIsCdrom) {
       /* HANDLE hTemplateFile for CreateFileA */ /* DWORD dwFlagsAndAttributes for CreateFileA */ /* DWORD dwCreationDisposition for CreateFileA */ /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateFileA */ /* DWORD dwShareMode for CreateFileA */ /* DWORD dwDesiredAccess for CreateFileA */ /* LPCSTR lpFileName for CreateFileA */ hFile = CreateFileA(szFullPath, 0x80000000, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0, (HANDLE)0x0);
       if (hFile != (HANDLE)-1) {
-        pNewArchive = (D2ArchiveStrc*)SMem::SMemAlloc(0x25c, sRTTI_ARCHIVEREC_AllocTag, -2, 8);
+        pNewArchive = (D2ArchiveStrc*)SMem::SMemAlloc(sizeof(D2ArchiveStrc), sRTTI_ARCHIVEREC_AllocTag, -2, 8);
         pArchive = 0;
         if (pNewArchive) {
           pNewArchive->pPrevLink = 0;
@@ -5687,7 +5709,7 @@ void __stdcall SFileOpenFileAsArchive(D2ArchiveStrc * nParentArchive, char * szF
       return;
     }
     if (!(pOpenedFile->pBlockEntry->dwFlags & 0x1ff00)) {
-      pNewArchive = (D2ArchiveStrc*)SMem::SMemAlloc(0x25c, sRTTI_ARCHIVEREC_AllocTag, -2, 8);
+      pNewArchive = (D2ArchiveStrc*)SMem::SMemAlloc(sizeof(D2ArchiveStrc), sRTTI_ARCHIVEREC_AllocTag, -2, 8);
       pArchive = 0;
       if (pNewArchive) {
         pNewArchive->pPrevLink = 0;
@@ -6058,14 +6080,14 @@ void StaticFini_CriticalSection_00779080() {
 
 // Runs at exit: removes every element from the open MPQ archive list gMpqArchiveList, then unlinks the list head itself.
 void StaticFini_gMpqArchiveList() {
-    uint32_t* pNextLink;
+    StormLinkStrc** pNextLink;
     ((TSList<::ARCHIVEREC, TSGetLink<::ARCHIVEREC>>*)&gMpqArchiveList)->UnlinkAll();
     if (!gMpqArchiveList.head.pPrevLink) {
       return;
     }
 
-    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gMpqArchiveList + 4, -1);
-    *pNextLink = (uint32_t)(uintptr_t)gMpqArchiveList.head.pPrevLink;
+    pNextLink = (StormLinkStrc**)D2_StormNextLink(&gMpqArchiveList.head, -1);
+    *pNextLink = gMpqArchiveList.head.pPrevLink;
     gMpqArchiveList.head.pPrevLink->pNext = gMpqArchiveList.head.pNext;
     gMpqArchiveList.head.pPrevLink = 0;
     gMpqArchiveList.head.pNext = 0;
@@ -6073,14 +6095,14 @@ void StaticFini_gMpqArchiveList() {
 
 // Runs at exit: removes every element from the async file request queue gSFileAsyncReqQueue, then unlinks the list head itself.
 void StaticFini_gSFileAsyncReqQueue() {
-    uint32_t* pNextLink;
+    StormLinkStrc** pNextLink;
     SFILE_CloseStreamHandle2(&gSFileAsyncReqQueue);
     if (!gSFileAsyncReqQueue.head.pPrevLink) {
       return;
     }
 
-    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gSFileAsyncReqQueue + 4, -1);
-    *pNextLink = (uint32_t)(uintptr_t)gSFileAsyncReqQueue.head.pPrevLink;
+    pNextLink = (StormLinkStrc**)D2_StormNextLink(&gSFileAsyncReqQueue.head, -1);
+    *pNextLink = gSFileAsyncReqQueue.head.pPrevLink;
     gSFileAsyncReqQueue.head.pPrevLink->pNext = gSFileAsyncReqQueue.head.pNext;
     gSFileAsyncReqQueue.head.pPrevLink = 0;
     gSFileAsyncReqQueue.head.pNext = 0;
@@ -6088,14 +6110,14 @@ void StaticFini_gSFileAsyncReqQueue() {
 
 // Runs at exit: removes every element from the open file list gSFileOpenFileList, then unlinks the list head itself.
 void StaticFini_gSFileOpenFileList() {
-    uint32_t* pNextLink;
+    StormLinkStrc** pNextLink;
     ((TSList<::FILEREC, TSGetLink<::FILEREC>>*)&gSFileOpenFileList)->UnlinkAll();
     if (!gSFileOpenFileList.head.pPrevLink) {
       return;
     }
 
-    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gSFileOpenFileList + 4, -1);
-    *pNextLink = (uint32_t)(uintptr_t)gSFileOpenFileList.head.pPrevLink;
+    pNextLink = (StormLinkStrc**)D2_StormNextLink(&gSFileOpenFileList.head, -1);
+    *pNextLink = gSFileOpenFileList.head.pPrevLink;
     gSFileOpenFileList.head.pPrevLink->pNext = gSFileOpenFileList.head.pNext;
     gSFileOpenFileList.head.pPrevLink = 0;
     gSFileOpenFileList.head.pNext = 0;
@@ -6103,14 +6125,14 @@ void StaticFini_gSFileOpenFileList() {
 
 // Runs at exit: removes every element from the audio stream list gSFileAudioStreamList, then unlinks the list head itself.
 void StaticFini_gSFileAudioStreamList() {
-    uint32_t* pNextLink;
+    StormLinkStrc** pNextLink;
     ((TSList<::EVENTREC, TSGetLink<::EVENTREC>>*)&gSFileAudioStreamList)->UnlinkAll();
     if (!gSFileAudioStreamList.head.pPrevLink) {
       return;
     }
 
-    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gSFileAudioStreamList + 4, -1);
-    *pNextLink = (uint32_t)(uintptr_t)gSFileAudioStreamList.head.pPrevLink;
+    pNextLink = (StormLinkStrc**)D2_StormNextLink(&gSFileAudioStreamList.head, -1);
+    *pNextLink = gSFileAudioStreamList.head.pPrevLink;
     gSFileAudioStreamList.head.pPrevLink->pNext = gSFileAudioStreamList.head.pNext;
     gSFileAudioStreamList.head.pPrevLink = 0;
     gSFileAudioStreamList.head.pNext = 0;
@@ -6118,14 +6140,14 @@ void StaticFini_gSFileAudioStreamList() {
 
 // Runs at exit: removes every element from the stream record list gSFileStreamRecordList, then unlinks the list head itself.
 void StaticFini_gSFileStreamRecordList() {
-    uint32_t* pNextLink;
+    StormLinkStrc** pNextLink;
     SFILE_CloseStreamHandle5(&gSFileStreamRecordList);
     if (!gSFileStreamRecordList.head.pPrevLink) {
       return;
     }
 
-    pNextLink = (uint32_t*)D2_StormNextLink((char*)&gSFileStreamRecordList + 4, -1);
-    *pNextLink = (uint32_t)(uintptr_t)gSFileStreamRecordList.head.pPrevLink;
+    pNextLink = (StormLinkStrc**)D2_StormNextLink(&gSFileStreamRecordList.head, -1);
+    *pNextLink = gSFileStreamRecordList.head.pPrevLink;
     gSFileStreamRecordList.head.pPrevLink->pNext = gSFileStreamRecordList.head.pNext;
     gSFileStreamRecordList.head.pPrevLink = 0;
     gSFileStreamRecordList.head.pNext = 0;

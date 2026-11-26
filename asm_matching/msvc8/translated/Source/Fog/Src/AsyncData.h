@@ -20,7 +20,7 @@ struct D2PoolManagerStrc;
 struct D2AsyncDataCallbackStrc;
 #ifndef RECON_FPTD_pfnAsyncDataComplete
 #define RECON_FPTD_pfnAsyncDataComplete
-typedef uint32_t (__stdcall *pfnAsyncDataComplete)(void * pReadBuffer, size_t nReadSize, struct D2AsyncDataCallbackStrc * pCallback);
+typedef uint32_t (__stdcall *pfnAsyncDataComplete)(void * pReadBuffer, uint32_t nReadSize, struct D2AsyncDataCallbackStrc * pCallback);
 #endif
 
 struct D2AsyncData_Line0x128;
@@ -29,7 +29,7 @@ struct D2AsyncData_Line0x128;
 #ifndef D2_DEFINED_D2AsyncDataCallbackStrc
 #define D2_DEFINED_D2AsyncDataCallbackStrc
 __pragma(pack(push, 1)) struct D2AsyncDataCallbackStrc {
-    /* 0x00 */ uint32_t (__stdcall *pfnCallback)(void *, size_t, struct D2AsyncDataCallbackStrc *); // called with (pReadBuffer, nReadSize, &tCallback) when the read completes
+    /* 0x00 */ uint32_t (__stdcall *pfnCallback)(void *, uint32_t, struct D2AsyncDataCallbackStrc *); // called with (pReadBuffer, nReadSize, &tCallback) when the read completes
     /* 0x04 */ uint32_t aUserData[4];
     /* 0x14 */ void * pResultBuffer; // non-NULL after the callback: replaces the read buffer (0040a505)
     /* 0x18 */ size_t nResultSize; // becomes nReadSize with pResultBuffer
@@ -54,7 +54,7 @@ __pragma(pack(push, 1)) struct D2AsyncData_Line0x128 {
     /* 0x1C */ D2AsyncDataCallbackStrc tCallback; // copy of the caller's completion block
     /* 0x38 */ struct D2AsyncDataSlotStrc * pSlot;
     /* 0x3C */ void * pReadBuffer; // result/read buffer; ASYNCDATA_GetResult returns this. Also the key SFILE_SetRequestPriorityByBuffer matches against each Storm request's buffer base (request +0x24, SFILE_IssueRequest)
-    /* 0x40 */ size_t nReadSize;
+    /* 0x40 */ uint32_t nReadSize;
     /* 0x44 */ int nPriority; // Storm read priority, always <= 0 here (ASYNCDATA_SetPriority halts on > 0, 0040a88d); ASYNCDATA_WaitForCompletion passes 1 directly to SFILE_SetRequestPriorityByBuffer to mark the reads urgent.
     /* 0x48 */ int nFlags;
     /* 0x4C */ int nPriorityBeforeDefer; // nPriority saved when ASYNCDATA_SetPriority defers a change (0040a8b3); ASYNCDATA_DeferPriorityUpdates re-applies nPriority on flush only if it differs (0040a933)
@@ -68,12 +68,12 @@ namespace Fog { namespace Src { namespace AsyncData {
 // Registers: nEnable in ECX; nReserved (EDX) is 0 at the only call site and not read.
 void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved);
 void __stdcall STRUCT_FreeAsyncData();
-struct D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(struct D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, size_t nReadSize, void * pReadBuffer, struct D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nLine);
+struct D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(struct D2PoolManagerStrc * pMemory, char * szText1, int32_t bAsync, uint32_t nFileOffset, uint32_t nReadSize, void * pReadBuffer, struct D2AsyncDataCallbackStrc * pCallback, int nPriority, char * szText2, int32_t nLine);
 uint32_t __fastcall ASYNCDATA_IsComplete(struct D2AsyncData_Line0x128 * pAsyncData);
 void * __fastcall ASYNCDATA_GetResult(struct D2AsyncData_Line0x128 * pAsyncData);
 // Returns pAsyncData->nReadSize (+0x40; set by STRUCT_AllocAsyncData_Line0x128 and by the completion copy); halts on a bad tag.
 // The SOUNDHDR callers add the result to their loaded-byte counters.
-size_t __fastcall ASYNCDATA_GetReadSize(struct D2AsyncData_Line0x128 * pAsyncData);
+uint32_t __fastcall ASYNCDATA_GetReadSize(struct D2AsyncData_Line0x128 * pAsyncData);
 void __fastcall ASYNCDATA_Free(struct D2AsyncData_Line0x128 * pAsyncData);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
@@ -94,7 +94,7 @@ void ASYNCDATA_HaltSetPriorityAtLine(int nLine);
 void __fastcall ASYNCDATA_DeferPriorityUpdates(BOOL bDefer);
 void __fastcall ASYNCDATA_WaitForCompletion(struct D2AsyncData_Line0x128 * pAsyncData);
 // __thiscall shape (ECX=this, RET 8). Frees the old buffer at +0x3c then stores [EBP+8]->+0x3c (pReadBuffer, void*) and [EBP+0xc]->+0x40 (nReadSize, size_t).
-void __fastcall ASYNCDATA_SetResult(struct D2AsyncData_Line0x128 * pAsyncData, int, void * pNewBuffer, size_t nNewSize);
+void __fastcall ASYNCDATA_SetResult(struct D2AsyncData_Line0x128 * pAsyncData, int, void * pNewBuffer, uint32_t nNewSize);
 #endif // D2_MODULE_Fog
 
 }}} // namespace Fog::Src::AsyncData

@@ -65,7 +65,7 @@
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/Player/Player.h"
@@ -1212,19 +1212,17 @@ void __fastcall PLAYER_InteractAtTarget(D2UnitStrc * pTargetUnit) {
 uint32_t __fastcall SKILL_CheckAuraRange(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int * pnMinX, int * pnMinY) {
     int32_t nCalcResult;
     D2UnitStrc* pPlayerUnit_lcl = GetPlayerUnit_UI();
-    if (!(pPlayerUnit_lcl && pSkill && pUnit)) {
-      return 0;
-    }
-
-    D2SkillsTxt* pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill);
-    if (pSkillsTxt) {
-      int nSkillLvl;
-      nSkillLvl = D2Common::Skills::GetSkillLevel(pPlayerUnit_lcl, pSkill, 1);
-      nCalcResult = D2Common::Skills::D2GetSkillCalc(pPlayerUnit_lcl, pSkillsTxt->aurarangecalc, (int)pSkillsTxt->skill, nSkillLvl);
-      *pnMinX = nCalcResult;
-      nCalcResult = D2Common::Collision::GetCollisionDistance(pPlayerUnit_lcl, pUnit);
-      *pnMinY = nCalcResult;
-      return (uint32_t)(nCalcResult <= *pnMinX);
+    if (pPlayerUnit_lcl && pSkill && pUnit) {
+      D2SkillsTxt* pSkillsTxt = D2Common::Skills::GetSkillsTxt(pSkill);
+      if (pSkillsTxt) {
+        int nSkillLvl;
+        nSkillLvl = D2Common::Skills::GetSkillLevel(pPlayerUnit_lcl, pSkill, 1);
+        nCalcResult = D2Common::Skills::D2GetSkillCalc(pPlayerUnit_lcl, pSkillsTxt->aurarangecalc, (int)pSkillsTxt->skill, nSkillLvl);
+        *pnMinX = nCalcResult;
+        nCalcResult = D2Common::Collision::GetCollisionDistance(pPlayerUnit_lcl, pUnit);
+        *pnMinY = nCalcResult;
+        return (uint32_t)(nCalcResult <= *pnMinX);
+      }
     }
 
     return 0;
@@ -1377,7 +1375,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
     int nClassId;
     eD2UnitType nUnitType;
     int nInteractRange;
-    bool bCanInteract;
+    BOOL bCanInteract;
     D2UnitStrc* pUnit;
     pUnit = GetPlayerUnit_UI();
     D2UnitStrc* pTargetUnit;
@@ -1447,11 +1445,11 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
             }
 
             D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
-            bCanInteract = true;
+            bCanInteract = TRUE;
             if (pUnderMouse->pTarget && pUnderMouse->pTarget->nClassId == 0x3b) {
               eCurseState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_just_portaled);
               if (eCurseState != STATE_none) {
-                bCanInteract = false;
+                bCanInteract = FALSE;
               }
             }
 
@@ -2228,9 +2226,14 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mous
     mouse.pTarget = GAME::Select::GetSelectedUnit();
     mouse.nX = nXConverted;
     mouse.nY = nY;
-    if (mouse.pTarget && (mouse.pTarget->eUnitType == UNIT_OBJECT || mouse.pTarget->eUnitType == UNIT_ITEM)) {
-      mouse.nX = D2Common::Units::GetXPosFromDynamicPathUnit(mouse.pTarget);
-      mouse.nY = D2Common::Units::GetYPosFromDynamicPathUnit(mouse.pTarget);
+    if (mouse.pTarget) {
+      switch (mouse.pTarget->eUnitType) {
+        case UNIT_OBJECT:
+        case UNIT_ITEM:
+          mouse.nX = D2Common::Units::GetXPosFromDynamicPathUnit(mouse.pTarget);
+          mouse.nY = D2Common::Units::GetYPosFromDynamicPathUnit(mouse.pTarget);
+          break;
+      }
     }
 
     uint16_t wMouseEventFlags = mouseEventFlags;
@@ -2270,13 +2273,13 @@ int __fastcall ClickMap(int32_t clickType, int32_t nX, int32_t nY, uint16_t mous
       bEscOpen = INPUT_HandleLeftClickWithPet(&mouse);
       return bEscOpen;
       case 3:
-        if (!mouse.pTarget) {
-          GAME::Select::ClearSelectedUnit();
+        if (mouse.pTarget) {
+          GAME::Select::SELECT_UpdateUnitSelection(mouse.pTarget);
           mouse.flags |= 6;
           bEscOpen = ClickMapRightSkill(&mouse);
           return bEscOpen;
         }
-      GAME::Select::SELECT_UpdateUnitSelection(mouse.pTarget);
+      GAME::Select::ClearSelectedUnit();
       mouse.flags |= 6;
       bEscOpen = ClickMapRightSkill(&mouse);
       return bEscOpen;
@@ -2462,11 +2465,7 @@ void __fastcall CLIENT_WarpPlayerAndContinueMove(D2UnitStrc * pUnit, D2RoomStrc 
       return;
     }
 
-    sMoveMessage.nTargetUnitType = 0;
-    sMoveMessage.nTargetUnitId = 0;
-    sMoveMessage.nSkillLvl = 0;
-    sMoveMessage.nMaxDistance = 0;
-    sMoveMessage.nTargetX = 0;
+    memset(&sMoveMessage, 0, sizeof(sMoveMessage));
     if (pTargetUnit) {
       sMoveMessage.nItemId = pTargetUnit->nUnitGUID;
       sMoveMessage.nSkillId = pTargetUnit->eUnitType;

@@ -43,7 +43,7 @@
 #include "Source/D2Common/Units/UnitFinds.h"
 #include "Source/D2Common/Waypoints.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Arena.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/Event.h"
@@ -2421,7 +2421,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
     D2GSPacketSrv0x26 sPacket;
     D2ChatMessage pBuffer;
     D2Packet0x5aEventStructure sEventPacket;
-    memset(&pBuffer, 0, 0x113);
+    memset(&pBuffer, 0, sizeof(pBuffer));
     pBuffer.nMessageId = pPacket->nCmd;
     pBuffer.nMessageType = pPacket->nMsgId;
     pBuffer.nLocale = pPacket->nMsgType;
@@ -2543,7 +2543,7 @@ void __fastcall PrepareClientMessage(::SGAMEDATA * pGame, char * szMessage, uint
     aPacketBuf.nMessageColor = nColor;
     aPacketBuf.szName[0] = '\0';
     aPacketBuf.nLanguage = '\0';
-    memcpy(aPacketBuf.szMessage, szMessage, 0x100);
+    memcpy(aPacketBuf.szMessage, szMessage, sizeof(aPacketBuf.szMessage));
     GAME::Server::ForEachClient(pGame, (fpForEachClientFn)NET_D2GS_SERVER_Send_0x26_Chat, &aPacketBuf);
 }
 
@@ -2564,29 +2564,13 @@ void __fastcall CHAT_BroadcastMessageToAllClients(::SGAMEDATA * pGame, uint32_t 
 
 // Iterates all clients in pGame via ForEachClient, broadcasting a 0x5A EventMessages packet built from nParam (pointer to message data). First measures the embedded character name string (capped at 16 chars); skips broadcast if name exceeds that limit. Side-effect: sends to every player in the game session.
 void __fastcall BroadcastEventMessage(::SGAMEDATA * pGame, D2Packet0x5aEventStructure * pEventData) {
-    int nNameLen = 0;
-    do {
-      if (pEventData->szName1[nNameLen] == '\0') {
+    int nNameLen;
+    char* szName = pEventData->szName1;
+    for (nNameLen = 0; nNameLen < 0x10; nNameLen++) {
+      if (!szName[nNameLen]) {
         break;
       }
-      if (pEventData->szName1[nNameLen + 1] == '\0') {
-        nNameLen++;
-        break;
-      }
-      if (pEventData->szName1[nNameLen + 2] == '\0') {
-        nNameLen += 2;
-        break;
-      }
-      if (pEventData->szName1[nNameLen + 3] == '\0') {
-        nNameLen += 3;
-        break;
-      }
-
-      nNameLen += 4;
-      if (nNameLen >= 0x10) {
-        return;
-      }
-    } while (true);
+    }
 
     if (nNameLen >= 0x10) {
       return;
@@ -2828,7 +2812,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1B_EquipToSwapSlot(::SGAMEDATA * pGame
       return SERVERSTATUS_BAD_DATA;
     }
 
-    BOOL bBadParams = 0x0;
+    BOOL bBadParams;
     BOOL nSwapOk = ITEMS::ItemMode::ITEMMODE_EquipItemToSwapBodyLoc(pGame, pUnit, dwItemGUID, (eD2BodyLoc)nSize, 0, &bBadParams);
     if (!nSwapOk && bBadParams) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -2920,7 +2904,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1E_EquipToWeaponSwap(::SGAMEDATA * pGa
 
     DWORD dwItemGUID = pPacket->dwItemGUID;
     eD2BodyLoc eTargetBodyLoc = (eD2BodyLoc)pPacket->dwBeltSlot;
-    int pSwappedOutItem = 0;
+    int pSwappedOutItem;
     eD2ServerIncomingStatus eStatus = SERVER_IsItemOnCursor(pGame, pUnit, dwItemGUID);
     if (eStatus != SERVERSTATUS_OK) {
       return (eD2ServerIncomingStatus)eStatus;
@@ -4897,7 +4881,7 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x66_WardenResponse_ReturnOk(::SGAM
 // Alive-check bypass: opcodes 0x14, 0x15, 0x3C, 0x43, 0x66
 // Dead-only: opcode 0x41 (Resurrect) checks for dead state
 // Validates fpHandler with IsBadCodePtr before call.
-eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pBytes, size_t nSize) {
+eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClientCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pBytes, uint32_t nSize) {
     bool bModeCancelled;
     bool bHandlerInvalid;
     uint32_t nHighResTime;

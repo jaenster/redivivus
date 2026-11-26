@@ -253,7 +253,7 @@ uint32_t __fastcall SOUND_GetSoundId(int32_t nChannelHandle);
 int __fastcall SOUND_GetSoundByIndex(int32_t nChannelHandle);
 int __fastcall SOUND_StopSound(int32_t nSoundId);
 int32_t __fastcall SOUND_IsChannelPlaying(int32_t nSoundGroup);
-struct D2SoundChannelStrc * __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, int32_t pListKey, struct D2SoundChannelStrc * nExcludeChannel);
+struct D2SoundChannelStrc * __stdcall SOUND_SetChannelProperties(int32_t nSoundGroup, intptr_t pListKey, struct D2SoundChannelStrc * nExcludeChannel);
 struct D2SoundChannelStrc * __thiscall SOUND_CalculateDistance(int32_t pThis, struct D2SoundChannelStrc * nExcludeChannel);
 float __thiscall SOUND_CalculateUnitDistance(int32_t pThis, struct D2UnitStrc * pUnit);
 void __fastcall SOUND_PlayEnvironmentSound(int32_t nSoundId, int32_t nPosX, int32_t nPosY, int32_t nPosZ);

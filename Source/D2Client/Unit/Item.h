@@ -152,7 +152,9 @@ struct __attribute__((packed)) D2UnitDataItemDetailsStrc {
     /* 0x04 */ uint16_t x;
     /* 0x06 */ uint16_t y;
     /* 0x08 */ uint8_t nAnimMode;
-    /* 0x09 */ uint8_t reserved_09_0B[3];
+    /* 0x09 */ uint8_t reserved_09;
+    /* 0x0A */ uint8_t reserved_0A;
+    /* 0x0B */ uint8_t reserved_0B;
     /* 0x0C */ eD2ItemFlag flags;
     /* 0x10 */ uint8_t nInvPage;
     /* 0x11 */ uint8_t nBodyLoc;

@@ -29,7 +29,7 @@ struct D2PoolStrc;
 struct __attribute__((packed)) D2PoolBlockStrc {
     /* 0x00 */ BYTE * pCommit;
     /* 0x04 */ DWORD * pUsage;
-    /* 0x08 */ size_t nBlocks;
+    /* 0x08 */ uint32_t nBlocks;
     /* 0x0C */ struct D2PoolBlockStrc * pPrev;
     /* 0x10 */ struct D2PoolBlockStrc * pNext;
     /* 0x14 */ struct D2PoolStrc * pPool;
@@ -40,9 +40,9 @@ struct __attribute__((packed)) D2PoolBlockStrc {
 #define D2_DEFINED_D2PoolStrc
 struct __attribute__((packed)) D2PoolStrc {
     /* 0x00 */ CRITICAL_SECTION pSync;
-    /* 0x18 */ size_t nBlockSize;
-    /* 0x1C */ size_t nBlocks;
-    /* 0x20 */ size_t nSize;
+    /* 0x18 */ uint32_t nBlockSize;
+    /* 0x1C */ uint32_t nBlocks;
+    /* 0x20 */ uint32_t nSize;
     /* 0x24 */ size_t nAllocBlock;
     /* 0x28 */ struct D2PoolBlockStrc * pBlocks;
     /* 0x2C */ struct D2PoolBlockStrc * pTail;
@@ -84,7 +84,7 @@ void __fastcall Free(struct D2PoolManagerStrc * pMemory, void * * pStruct, char 
 void * __fastcall Alloc(struct D2PoolManagerStrc * pMemory, size_t MemSize, char * szFile, int32_t Line);
 void * __fastcall ReAlloc(struct D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, size_t nAllocSize, char * szFile, int32_t nLine);
 void __fastcall FOG_SetServerMemHeap(pfnBlizzardError pfnFunc);
-void * __fastcall ReAllocClientMemory(void * pMemory, size_t nSize, char * szFile, size_t nLine, uint32_t nUnused);
+void * __fastcall ReAllocClientMemory(void * pMemory, size_t nSize, char * szFile, int32_t nLine, uint32_t nUnused);
 #endif // D2_MODULE_Fog
 // 8 internal functions (defined in .cpp)
 

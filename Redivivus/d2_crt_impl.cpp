@@ -31,8 +31,8 @@ extern "C" void __stdcall _eh_vector_constructor_iterator_(void* pArray, uint32_
     for (int i = 0; i < nCount; ++i) pfnConstructor(p + (size_t)i * nElementSize);
 }
 
-extern "C" void _eh_vector_destructor_iterator_(void* pArray, uint32_t nElementSize,
-                                               int nCount, void (__fastcall *pfnDestructor)(void*)) {
+extern "C" void __stdcall _eh_vector_destructor_iterator_(void* pArray, uint32_t nElementSize,
+                                                         int nCount, void (__fastcall *pfnDestructor)(void*)) {
     if (!pArray || !pfnDestructor) return;
     char* p = (char*)pArray;
     for (int i = nCount - 1; i >= 0; --i) pfnDestructor(p + (size_t)i * nElementSize);
@@ -42,7 +42,7 @@ extern "C" void _eh_vector_destructor_iterator_(void* pArray, uint32_t nElementS
 // The Visual C++ 2005 build links the libcmt the original linked, so what is the
 // CRT's own function comes from there. The two vector iterators above stay ours: libcmt's are
 // `eh vector constructor iterator' (??_L) and `eh vector destructor iterator'
-// (??_M), __stdcall, while the tree declares and calls these cdecl.
+// (??_M), both __stdcall like these, but under their mangled names.
 
 namespace _Wrappers {
 // The C++ EH frame handler of the function that stores it (the frame is

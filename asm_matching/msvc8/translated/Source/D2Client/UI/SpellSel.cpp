@@ -510,7 +510,7 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
       nPalette = nGlobalPaletteShift;
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pDC6;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = nIconCel;
@@ -609,7 +609,7 @@ void __fastcall SPELLSEL_DrawSkillIcon(short * pSkillId, int32_t nSlotIndex, int
       }
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pSkillArchive;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = (uint32_t)byIconCel;
@@ -1344,7 +1344,7 @@ void __fastcall SPELLSEL_DrawTabHeader(uint16_t * pThis, int, int32_t nYOffset) 
 
 void __stdcall SPELLSEL_DrawSkilltreeBackground(DC6 * pDC6, int32_t nSkillTreeTab) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pDC6;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -1583,7 +1583,7 @@ void __stdcall SKILLTREE_DrawBackground() {
     }
 
     nTabHighlightX += ui::ScreenSizeX - Inv::gnPanelOffsetX;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = gbSpellSelSkillTreeBackground != 0 ? 11 : 10;
@@ -2045,7 +2045,7 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
       nGlobalPaletteShift = PALETTE_BLUE;
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     nSkillBonus = nRowY;
     sGfxData.pDC6 = pArchive;
     sGfxData.nDirection = 0;

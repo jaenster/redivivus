@@ -80,7 +80,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
 // Processes downloaded BNFTP files: version info, cache files, ads, bnserver.ini, and ExtraWork DLLs. Handles extraction, loading, and cleanup.
 // EDX nDownloadFlags: download context +0x22c (file download) or 2 (patch download); not read here.
 void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownloadFlags, uint32_t eFileType, uint32_t pModTime, LPCSTR szSourcePath, char * szDestPath, char * pPoolMgr, void * nSize, int32_t bDeleteSource, int32_t bIsExtraWork);
-uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, size_t nSize);
+uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_t nSize);
 void StaticInit_CriticalSection_00881f64();
 void StaticFini_CriticalSection_00881f64();
 #endif // D2_MODULE_Bnclient

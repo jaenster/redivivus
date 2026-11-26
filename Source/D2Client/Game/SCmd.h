@@ -629,7 +629,7 @@ void __stdcall SaveCharacter();
 //   0xB0: Connection terminated (D2GS_Connected = 0)
 //   0xB3: Save file download (DownloadSave)
 //   0xB4: Connection refused (maps server reason 1-0x1A to client error codes)
-void __fastcall NET_D2GS_CLIENT_PacketHandle_from0xAF(uint8_t * pBytes, size_t nSize);
+void __fastcall NET_D2GS_CLIENT_PacketHandle_from0xAF(uint8_t * pBytes, uint32_t nSize);
 void __fastcall NET_D2GS_CLIENT_Incoming0x01_NEWGAME(struct D2GSPacketSrv0x01 * pBytes);
 void __fastcall NET_D2GS_CLIENT_Incoming0x03_NEWACT(struct D2GSPacketSrv0x03 * pBytes);
 void __fastcall SCMD_Rcv_IgnoreShared(char * pBytes);
@@ -822,7 +822,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA(struct D2GSPacketSrv0xAE
 // Size table: NET_D2GS_CLIENT_INCOMING_SIZE at 0x00730AE8
 // Unit extraction: packets 0x67-0x6D use offset+1 (monster), others use type@+1 guid@+2
 // Special decode: 0x18 (HP), 0x95/0x96 (Mana/Stamina)
-void __fastcall NET_D2GS_CLIENT_PacketHandle_to0xAF(char * pBytes, size_t nSize);
+void __fastcall NET_D2GS_CLIENT_PacketHandle_to0xAF(char * pBytes, uint32_t nSize);
 // @sourcefile .\GAME\SCmd.cpp
 void __fastcall FreeServerCmd(struct D2UnitStrc * pUnit);
 // Drains the per-unit incoming packet queue (D2ServerCmdStrc). For each buffered packet: determines its size via NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize, validates opcode (≤0xAE), checks the expected size from the dispatch table, asserts the handler pointer is non-null, then calls the handler (NET_D2GS_CLIENT_INCOMING[opcode].fpIncomingHandlerUnit). After all packets are dispatched, zeroes the buffer and resets nUsedBuffersCount.

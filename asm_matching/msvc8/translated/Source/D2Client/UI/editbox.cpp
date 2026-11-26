@@ -791,12 +791,12 @@ namespace D2Client { namespace UI { namespace Editbox { namespace EditBoxImpleme
 namespace D2Client { namespace UI { namespace Editbox { namespace EditBoxWrapper {
 
 ::EditBoxWrapper * __fastcall Constructor(::EditBoxWrapper * pThis, int, int nPosX, int nPosY, int nWidth, int nMaxLines, int nMaxValue, uint16_t nMaxLength, fpEditBoxOnEnter pfnOnEnter, int nFont) {
-    pfnEHHandlerRoutine pExceptionHandler = __GSHandlerCheck_EH_6ca183;
+    pfnEHHandlerRoutine pExceptionHandler = __GSHandlerCheck_EH_6ca183; // steer-ok: generated form, kept as emitted
     void* pSavedExceptionList = ExceptionList;
     uint32_t dwSehState = 0;
     ExceptionList = &pSavedExceptionList;
     pThis->pVtable = (EditBoxWrapperVtable*)(void*)EditBoxWrapper::vftable;
-    ::EditBoxImplementation* ppEditBox = (::EditBoxImplementation*)Storm::Source::SMem::SMemAlloc(0x5a, "new", -1, 0);
+    ::EditBoxImplementation* ppEditBox = (::EditBoxImplementation*)Storm::Source::SMem::SMemAlloc(sizeof(::EditBoxImplementation), "new", -1, 0);
     dwSehState = (uint32_t)((uint32_t)((uint32_t)dwSehState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (ppEditBox) {
       ppEditBox = vc8_thiscall(EditBoxImplementation::Constructor)(ppEditBox, nPosX, nPosY, nWidth, nMaxLines, nMaxValue, nMaxLength, pfnOnEnter, nFont);

@@ -252,12 +252,12 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
 
     pThis->nSlotMask = pOldBucket - 1;
     while (0 < pendingList.m_terminator.m_next) {
-      int nSavedNode = pendingList.m_terminator.m_next;
+      intptr_t nSavedNode = pendingList.m_terminator.m_next; // steer-ok: generated form, kept as emitted (body pinned for x64 typing)
       pNodeNext = pThis->tSlotListArray.m_data + (*(uint32_t*)pendingList.m_terminator.m_next & pThis->nSlotMask);
       pBackLink = (TSLink<::SGAMEDATA>*)(pNodeNext->m_linkoffset + pendingList.m_terminator.m_next);
       pPendingHead2 = pBackLink->m_prevlink;
       if (pPendingHead2) {
-        nNewMask = pBackLink->m_next;
+        intptr_t nUnlinkNext = pBackLink->m_next; // the unlinked node's m_next word, not the bucket mask
         pOldBucket2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pBackLink, -1);
         *pOldBucket2 = pPendingHead2;
         pBackLink->m_prevlink->m_next = pBackLink->m_next;
@@ -345,7 +345,7 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASH
     TSLink<::SGAMEDATA>* pExistingHead = ppActiveListLink->m_prevlink;
     if (pExistingHead) {
       char* pBackLink;
-      nIdInBucket = ppActiveListLink->m_next;
+      intptr_t nUnlinkNext = ppActiveListLink->m_next; // the unlinked node's m_next word, not a bucket index
       pBackLink = (char*)D2_StormNextLink(ppActiveListLink, -1);
       *(TSLink<::SGAMEDATA>**)pBackLink = pExistingHead;
       ppActiveListLink->m_prevlink->m_next = ppActiveListLink->m_next;

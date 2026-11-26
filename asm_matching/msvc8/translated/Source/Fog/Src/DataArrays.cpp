@@ -5,6 +5,7 @@
 #include "Source/Fog/Memory.h"
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2DataArrayStrc) == 0x120, "D2_ALLOC_AT(... + sizeof(D2DataArrayStrc)): the 32-bit layout must be the 0x120 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -21,9 +22,9 @@ namespace Fog { namespace Src { namespace DataArrays {
 
 // @sourcefile .\Src\DataArrays.cpp
 D2DataArrayStrc * __fastcall FOG_CreateDataArray(char * pszName, int numObjects, int nObjectSize) {
-    D2DataArrayStrc* local_EAX_31 = (D2DataArrayStrc*)D2_ALLOC_AT(numObjects * nObjectSize + 0x120, ".\\Src\\DataArrays.cpp", 0x34);
+    D2DataArrayStrc* local_EAX_31 = (D2DataArrayStrc*)D2_ALLOC_AT(numObjects * nObjectSize + sizeof(D2DataArrayStrc), ".\\Src\\DataArrays.cpp", 0x34);
     if (local_EAX_31) {
-      memset(local_EAX_31, 0, 0x120);
+      memset(local_EAX_31, 0, sizeof(D2DataArrayStrc));
       strncpy(local_EAX_31->szName, pszName, 0x100);
       local_EAX_31->nObjectSize = nObjectSize;
       local_EAX_31->numObjects = numObjects;

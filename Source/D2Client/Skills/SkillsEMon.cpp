@@ -51,7 +51,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_PerpendicularMissile(D2UnitStrc * pUnit, e
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 2;
     sSkillArg.nMissileTxtNo = eMissileCandidate;
     sSkillArg.pOwner = pUnit;
@@ -121,7 +121,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
         D2Common::Units::UpdateDirectionAndSpeed(pUnit, nDestX, nDestY);
       }
 
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x25;
       sSkillArg.pOwner = pUnit;
       sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -364,7 +364,7 @@ static int __stdcall SKILLSEMON_CltSetReviveGfx(eMissilesId eMissileId, eD2Skill
     static int gnSkillGfxReviveTableOffset1[8] = { 0x1, -0x1, 0x0, 0x0, 0x1, -0x1, 0x1, -0x1 }; D2_STATIC_GUARD(gnSkillGfxReviveTableOffset1, "D2Client::SKILLS::SkillsEMon::SKILLSEMON_CltSetReviveGfx::gnSkillGfxReviveTableOffset1");
 
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLevel;
     sSkillArg.nFlags = 3;
@@ -884,7 +884,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_BloodAndMissileB(D2UnitStrc * pUnit, eD2Sk
     }
 
     UNIT::Monster::MONSTER_SpawnBloodParticles(pOwnerUnit, 3, 0);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nMissileTxtNo = (eMissilesId)pSkillTxt->cltmissile[2];
     sSkillArg.eSkillNo = eSkill;
     sSkillArg.nSkillLevel = nSkillLvl;
@@ -924,7 +924,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_WallMissileRow(D2UnitStrc * pUnit, eD2Skil
           nRowStartX -= nPerpVecX * nRowMissileCount / 2;
           nRowStartY -= nPerpVecY * nRowMissileCount / 2;
           nAuraCalc = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[1], eSkill, nSkillLvl);
-          memset(&sSkillArg, 0, 0x5c);
+          memset(&sSkillArg, 0, sizeof(sSkillArg));
           sSkillArg.nFlags = 0x20;
           sSkillArg.pOwner = pUnit;
           sSkillArg.pMissile = pUnit;

@@ -72,7 +72,7 @@ void __stdcall SetRedToBlack() {
 
 void __stdcall UI_DrawPartyPanelBackground() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pMenu_party;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -87,7 +87,7 @@ void __stdcall UI_DrawPartyPanelBackground() {
 
 static void UI_DrawPartyMemberSeparatorBar(int32_t nBaseY) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pMenu_partybar;
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = 0;
@@ -98,7 +98,7 @@ static void UI_DrawPartyMemberSeparatorBar(int32_t nBaseY) {
 
 static void __stdcall UI_DrawPartyButtonFrame(DC6 * pDC6, int32_t nX, int32_t nFrame, int32_t nY) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pDC6;
     sGfxData.nFrameNumber = nFrame;
     sGfxData.nDirection = 0;
@@ -403,18 +403,18 @@ void __stdcall UI_DrawPartyButtons(D2UiPartyStrc * pUiParty) {
     uint32_t nResult;
     D2UnitStrc* pUnit;
     pUnit = UNIT::Player::GetPlayerUnit_UI();
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nDirection = 0;
-    int* pButton;
-    pButton = &pUiParty->pPartyButtons[0].nY;
+    D2UiPartyBoxStrc* pButton;
+    pButton = &pUiParty->pPartyButtons[0];
     int nButtonCount;
     nButtonCount = 5;
     do {
       uint32_t extraout_var;
-      if (pButton[3] || pButton[4] != 1) {
-        sGfxData.pDC6 = (DC6*)pButton[1];
-        sGfxData.nFrameNumber = pButton[2];
-        switch (pButton[3]) {
+      if (pButton->nButtonType || pButton->bIsActive != 1) {
+        sGfxData.pDC6 = pButton->pDC6;
+        sGfxData.nFrameNumber = pButton->nIndexDC6;
+        switch (pButton->nButtonType) {
           case 1:
             if ((uint32_t)sGfxData.nFrameNumber < 4 || (uint32_t)sGfxData.nFrameNumber > 7) {
               sGfxData.nFrameNumber = 4;
@@ -441,11 +441,11 @@ void __stdcall UI_DrawPartyButtons(D2UiPartyStrc * pUiParty) {
             }
         }
 
-        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pButton[-1] + Inv::gnPanelOffsetX, *pButton - Inv::gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
+        D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, pButton->nX + Inv::gnPanelOffsetX, pButton->nY - Inv::gnPanelOffsetY, -1, DRAW_SOLID, nullptr);
       }
 
       mark_disabled_button:
-      if (pButton[3] == 1) {
+      if (pButton->nButtonType == 1) {
         bShowRedBox = false;
         pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
         if (!pRoom || (bInTown = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom) , !bInTown)) {
@@ -462,10 +462,10 @@ void __stdcall UI_DrawPartyButtons(D2UiPartyStrc * pUiParty) {
         nResult = GAME::Roster::GetRosterLevel(pRoster);
         if ((int)nResult < 9 || bShowRedBox) {
           cRed = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0xff, 0, 0);
-          Engine::Gfx::D2GFX_DrawSolidRectExBySize(pButton[-1] + Inv::gnPanelOffsetX, *pButton - Inv::gnPanelOffsetY - 0x13, 0x14, 0x14, (uint32_t)((uint32_t)((uint32_t)extraout_var & 0xffffffu) << 8 | (uint32_t)(uint8_t)cRed), DRAW_TRANSPARENT);
+          Engine::Gfx::D2GFX_DrawSolidRectExBySize(pButton->nX + Inv::gnPanelOffsetX, pButton->nY - Inv::gnPanelOffsetY - 0x13, 0x14, 0x14, (uint32_t)((uint32_t)((uint32_t)extraout_var & 0xffffffu) << 8 | (uint32_t)(uint8_t)cRed), DRAW_TRANSPARENT);
         }
       }
-      pButton += 8;
+      pButton++;
       nButtonCount--;
       if (!nButtonCount) {
         return;
@@ -478,14 +478,10 @@ static void __stdcall UI_DrawPartyMemberLevelName(D2UiPartyStrc * pUiParty, int3
     uint16_t wszLevelName[255];
     uint16_t wszEllipsis[5];
     uint16_t wLastCharTmp;
-    uint16_t* pwszLevelName = wszLevelName;
-    for (nLevelNameWidth = 0x7f; nLevelNameWidth; nLevelNameWidth--) {
-      pwszLevelName[0] = L'\0';
-      pwszLevelName[1] = L'\0';
-      pwszLevelName += 2;
+    for (nLevelNameWidth = 0; nLevelNameWidth < 255; nLevelNameWidth++) {
+      wszLevelName[nLevelNameWidth] = L'\0';
     }
 
-    *pwszLevelName = L'\0';
     uint16_t* wSource = ui::CLIENT_GetLevelNameByLevelId(pUiParty->eLevelId);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszLevelName, wSource);
     uint16_t* pTruncate = wszLevelName + 0xfe;
@@ -518,7 +514,7 @@ static void __stdcall UI_DrawPartyMemberLevelName(D2UiPartyStrc * pUiParty, int3
 
 void __stdcall UI_DrawPartyAcceptButton() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = ui::GetBuySellBtnDC6();
     sGfxData.nFrameNumber = gpPartyAcceptButton != 0 ? 11 : 10;
     sGfxData.nDirection = 0;

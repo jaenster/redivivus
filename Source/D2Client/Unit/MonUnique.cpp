@@ -788,7 +788,7 @@ static void __stdcall MONUNIQUE_SpawnDirectionalMissiles(D2UnitStrc * pUnit, eMi
       return;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);

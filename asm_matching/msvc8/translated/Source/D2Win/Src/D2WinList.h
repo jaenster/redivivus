@@ -47,7 +47,7 @@ BOOL __fastcall Draw(::D2WinList * pList);
 BOOL __stdcall Push(struct D2ControlMsg * pControlMsg);
 BOOL __stdcall ListCheck(struct D2ControlMsg * pList);
 BOOL __stdcall Key(struct D2ControlMsg * pControlMsg);
-::D2WinList * __fastcall D2WinList(int32_t nPosX, int32_t nPosY, int * nSizeX, int32_t nSizeY, int * pnItemArray, int * pnFontType);
+::D2WinList * __fastcall D2WinList(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int * pnItemArray, int * pnFontType);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Win)
 void __fastcall FORMS_DestroyD2WinList(::D2WinList * pList);

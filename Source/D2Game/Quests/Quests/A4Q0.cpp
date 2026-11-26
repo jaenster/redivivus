@@ -60,7 +60,7 @@ bool __fastcall Q25_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // A4Q0 / internal Q25 = QUEST_SpokeToTyrael (Act 4 Pandemonium Fortress "Speak to Tyrael" pseudo-quest, the act-intro talk gate). InitData for the quest slot: zeroes the 0x3c state-fn table, installs state-0 handler Q25_Callback_00 (gossip while not yet done) and state-0xb handler Q25_Callback_11 (Tyrael dialog -> complete), points pNpcMessages at aNpcGossipData (single entry: MonStat 0x16f=Tyrael, string 0x298, menu), marks the quest active, sets nQuestIdReal=QUEST_SpokeToTyrael, and wires StatusFilter/ActiveFilter. NPC id 0x16f throughout = Tyrael; record-state slot pushed to QuestRecord fns is 0x18.
 void __fastcall Q25_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q25_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q25_Callback11_ScrollMessage;
     pQuestData->pNpcMessages = A4Q0::aNpcGossipData;

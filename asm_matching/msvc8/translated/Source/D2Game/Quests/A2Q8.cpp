@@ -104,7 +104,7 @@ bool __fastcall Q16_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // Q16_InitData - A2Q8 / QUEST_Act2Guard5Gossip: HIDDEN GOSSIP PSEUDO-QUEST (Act2 7th internal slot, not a journal quest). NPC 0x17a = Lut Gholein "Act2Guard5" (a Desert/Palace guard). Registers the quest dispatch handlers: gossip handler[0]=Q16_Callback_00 (offer gossip line), handler[0xb]=Q16_Callback_11 (mark gossip "spoken"). nQuestIdReal=QUEST_Act2Guard5Gossip; aNpcGossipData = single entry {monStat 0x17a, string 0x12f, menu}. Allocs 2-byte per-game scratch (D2QuestDataA2Q8Strc) zeroed. No journal/reward/items: purely a conditional one-line dialog gate.
 void __fastcall Q16_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q16_Callback11_ScrollMessage;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q16_Callback00_NpcActivate;

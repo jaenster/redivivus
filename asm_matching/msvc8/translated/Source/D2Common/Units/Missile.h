@@ -20,7 +20,20 @@ struct D2MissileDamageDataStrc;
 struct D2UnitStrc;
 typedef uint32_t eD2Skills;
 
+#ifndef RECON_FPTD_pfnSkillCalcOp
+#define RECON_FPTD_pfnSkillCalcOp
+typedef int (__fastcall *pfnSkillCalcOp)(int32_t nOperand1, int32_t nOperand2, uint32_t nOperand3, void * pContext);
+#endif
+
 // Data types
+#ifndef D2_DEFINED_D2ItemsEventMethodStrc
+#define D2_DEFINED_D2ItemsEventMethodStrc
+struct D2ItemsEventMethodStrc {
+    /* 0x00 */ int (__fastcall *pfnMethod)(int32_t, int32_t, uint32_t, void *); // Skill-calc operator. All 11 handlers across the two tables are __fastcall with RET 0x8: two operands in ECX/EDX, a third operand and the context pointer on the stack. The old fnSkillCalcMethod (2 params) belongs to SKILLS_CompileSkillFormula's pFunction parameter, not to this slot.
+    /* 0x04 */ int nArgCount; // Number of stack args to pop before call (0=none, 1=one, 2=two, 3=three+return)
+};
+
+#endif // D2_DEFINED_D2ItemsEventMethodStrc
 #ifndef D2_DEFINED_D2MissileCalcContextStrc
 #define D2_DEFINED_D2MissileCalcContextStrc
 struct D2MissileCalcContextStrc {

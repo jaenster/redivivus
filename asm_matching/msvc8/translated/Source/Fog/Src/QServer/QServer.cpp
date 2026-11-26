@@ -54,7 +54,7 @@ typedef int32_t (__fastcall *fpD2QServerSourceLineHook)(D2QServerStrc * pQServer
 #endif
 #ifndef RECON_FPTD_fpD2QServerSinglePlayerSendHook
 #define RECON_FPTD_fpD2QServerSinglePlayerSendHook
-typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(D2QServerStrc * pQServer, char * pBytes, size_t nSize);
+typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(D2QServerStrc * pQServer, char * pBytes, uint32_t nSize);
 #endif
 #ifndef RECON_FPTD_pfnEHHandlerRoutine
 #define RECON_FPTD_pfnEHHandlerRoutine
@@ -95,8 +95,9 @@ void QSERVER_LOG(char * szModul, char * szFormatString, ...) {
 }
 
 void __stdcall _unused_SetupDefaultValues(int * pnQServerSettings) {
-    TokenHashMapBucketSize = *pnQServerSettings;
-    nTokenBucketMask = *pnQServerSettings - 1;
+    int nBucketSize = pnQServerSettings[0];
+    TokenHashMapBucketSize = nBucketSize;
+    nTokenBucketMask = nBucketSize - 1;
     gnQServerIpConnCountModulo = pnQServerSettings[1];
     gnQServerHacklistBucketCount = pnQServerSettings[2];
     gbQServerUseDedicatedIoWorkers = pnQServerSettings[3];
@@ -462,7 +463,7 @@ int __stdcall CountQueuedPacketsInMode(D2QServerStrc * pQServer, int nMode) {
     return nPacketCount;
 }
 
-int __stdcall DequeueModePacket(D2QServerStrc * pQServer, int nMode, char * pBytes, size_t nSize) {
+int __stdcall DequeueModePacket(D2QServerStrc * pQServer, int nMode, char * pBytes, uint32_t nSize) {
     if (!pQServer) {
       return -1;
     }
@@ -651,7 +652,7 @@ uint32_t __stdcall ProbePeerNameByToken(D2QServerStrc * pQServer, uint32_t nToke
     return sPeerAddr.sin_addr;
 }
 
-uint32_t __stdcall GetClientSocketByToken(D2QServerStrc * pQServer, uint32_t nClientToken) {
+SOCKET __stdcall GetClientSocketByToken(D2QServerStrc * pQServer, uint32_t nClientToken) {
     uint32_t nBucketIndex = pQServer->nClientHashMask & nClientToken;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
     D2QServerClientConnectionStrc* pClientConn = pQServer->pQServerClientList[nBucketIndex];
@@ -668,7 +669,7 @@ uint32_t __stdcall GetClientSocketByToken(D2QServerStrc * pQServer, uint32_t nCl
       }
     }
 
-    uint32_t dwSocket = pClientConn->socket;
+    SOCKET dwSocket = pClientConn->socket;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(pQServer->pClientBucketLocks + nBucketIndex);
     return dwSocket;
 }
@@ -1072,7 +1073,7 @@ void __stdcall _NullSub() {
 D2QServerStrc * __stdcall NET_QServer_Init(eD2GSConnectionType neD2GSConnectionType, int nType, int nPort, eD2GSGameType eD2GameType, fpD2QServerPacketClassifier pfnPacketClassifier, fpD2QServerSourceLineHook pfnOnClientAcceptedHook, fpD2QServerSourceLineHook pfnOnClientFreedHook, fpD2QServerSinglePlayerSendHook pfnSinglePlayerSendHook) {
     WSADATA wsaData;
     D2QServerStrc* pQServer_lcl = D2_NEW_AT(D2QServerStrc, ".\\Src\\QServer\\QServer.cpp", 0x94);
-    memset(pQServer_lcl, 0, 0xc4c);
+    memset(pQServer_lcl, 0, sizeof(D2QServerStrc));
     uint32_t nTokenBucketCount = gnQServerIpConnCountModulo;
     int nTempIdx = TokenHashMapBucketSize;
     pQServer_lcl->nClientHashMask = nTokenBucketMask;
@@ -1081,14 +1082,14 @@ D2QServerStrc * __stdcall NET_QServer_Init(eD2GSConnectionType neD2GSConnectionT
     pQServer_lcl->bUseDedicatedIoWorkers = bUseDedicatedIoWorkers;
     pQServer_lcl->nClientBucketCount = nTempIdx;
     pQServer_lcl->nClientBucketCountForScan = nTempIdx;
-    D2QServerClientConnectionStrc** pQServerClientList = (D2QServerClientConnectionStrc**)D2_ALLOC_AT(nTempIdx * 4, ".\\Src\\QServer\\QServer.cpp", 0x9f);
+    D2QServerClientConnectionStrc** pQServerClientList = (D2QServerClientConnectionStrc**)D2_ALLOC_AT(nTempIdx * sizeof(D2QServerClientConnectionStrc*), ".\\Src\\QServer\\QServer.cpp", 0x9f);
     nTempIdx = TokenHashMapBucketSize;
-    size_t nAllocSize = TokenHashMapBucketSize * 4;
+    size_t nAllocSize = TokenHashMapBucketSize * sizeof(D2QServerClientConnectionStrc*);
     pQServer_lcl->pQServerClientList = pQServerClientList;
     memset(pQServerClientList, 0, nAllocSize);
-    CRITICAL_SECTION* pBucketLocks = (CRITICAL_SECTION*)D2_ALLOC_AT(nTempIdx * 0x18, ".\\Src\\QServer\\QServer.cpp", 0xa2);
+    CRITICAL_SECTION* pBucketLocks = (CRITICAL_SECTION*)D2_ALLOC_AT(nTempIdx * sizeof(CRITICAL_SECTION), ".\\Src\\QServer\\QServer.cpp", 0xa2);
     nTokenBucketCount = TokenHashMapBucketSize;
-    nAllocSize = TokenHashMapBucketSize * 0x18;
+    nAllocSize = TokenHashMapBucketSize * sizeof(CRITICAL_SECTION);
     pQServer_lcl->pClientBucketLocks = pBucketLocks;
     memset(pBucketLocks, 0, nAllocSize);
     int nBucketInitIdx = 0;
@@ -1096,28 +1097,28 @@ D2QServerStrc * __stdcall NET_QServer_Init(eD2GSConnectionType neD2GSConnectionT
       nTempIdx = 0;
       do {
         /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&pQServer_lcl->pClientBucketLocks[nBucketInitIdx]);
-        nTempIdx += 0x18;
+        nTempIdx += sizeof(CRITICAL_SECTION);
         nBucketInitIdx++;
         nTokenBucketCount = TokenHashMapBucketSize;
       } while (nBucketInitIdx < TokenHashMapBucketSize);
     }
 
     pQServer_lcl->nGameTokenHashMask = nTokenBucketCount;
-    D2QServerClientIpHashBucketTable pGameTokenHashBuckets = (D2QServerClientIpHashBucketTable)D2_ALLOC_AT(nTokenBucketCount * 4, ".\\Src\\QServer\\QServer.cpp", 0xa9);
-    nAllocSize = TokenHashMapBucketSize * 4;
+    D2QServerClientIpHashBucketTable pGameTokenHashBuckets = (D2QServerClientIpHashBucketTable)D2_ALLOC_AT(nTokenBucketCount * sizeof(D2QServerClientConnectionStrc*), ".\\Src\\QServer\\QServer.cpp", 0xa9);
+    nAllocSize = TokenHashMapBucketSize * sizeof(D2QServerClientConnectionStrc*);
     pQServer_lcl->pIpHashBuckets = pGameTokenHashBuckets;
     memset(pGameTokenHashBuckets, 0, nAllocSize);
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&pQServer_lcl->csTokenHash);
-    nAllocSize = gnQServerIpConnCountModulo * 4;
+    nAllocSize = gnQServerIpConnCountModulo * sizeof(D2QServerIpConnCountEntryStrc*);
     pQServer_lcl->nIpConnCountBucketCount = gnQServerIpConnCountModulo;
     D2QServerIpConnCountEntryStrc** ppIpConnCountBuckets = (D2QServerIpConnCountEntryStrc**)D2_ALLOC_AT(nAllocSize, ".\\Src\\QServer\\QServer.cpp", 0xaf);
-    nAllocSize = gnQServerIpConnCountModulo * 4;
+    nAllocSize = gnQServerIpConnCountModulo * sizeof(D2QServerIpConnCountEntryStrc*);
     pQServer_lcl->ppIpConnCountBuckets = ppIpConnCountBuckets;
     memset(ppIpConnCountBuckets, 0, nAllocSize);
-    nAllocSize = gnQServerHacklistBucketCount * 4;
+    nAllocSize = gnQServerHacklistBucketCount * sizeof(D2QServerHacklistEntryStrc*);
     pQServer_lcl->nHacklistBucketCount = gnQServerHacklistBucketCount;
     D2QServerHacklistEntryStrc** pIpHashBuckets = (D2QServerHacklistEntryStrc**)D2_ALLOC_AT(nAllocSize, ".\\Src\\QServer\\QServer.cpp", 0xb4);
-    nAllocSize = gnQServerHacklistBucketCount * 4;
+    nAllocSize = gnQServerHacklistBucketCount * sizeof(D2QServerHacklistEntryStrc*);
     pQServer_lcl->ppHacklistBuckets = pIpHashBuckets;
     memset(pIpHashBuckets, 0, nAllocSize);
     QSERVER_LOG("QSRV", "[QSInit]       Allocated TQSERVER = 0x%08X", pQServer_lcl);
@@ -1137,13 +1138,13 @@ D2QServerStrc * __stdcall NET_QServer_Init(eD2GSConnectionType neD2GSConnectionT
     pQServer_lcl->aListenSockets[1] = -1;
     pQServer_lcl->aListenSockets[2] = -1;
     pQServer_lcl->aListenSockets[3] = -1;
-    D2QServerModePacketNodeStrc** ppModeQueue = (D2QServerModePacketNodeStrc**)D2_ALLOC_AT(nType * 4, ".\\Src\\QServer\\QServer.cpp", 0xda);
+    D2QServerModePacketNodeStrc** ppModeQueue = (D2QServerModePacketNodeStrc**)D2_ALLOC_AT(nType * sizeof(D2QServerModePacketNodeStrc*), ".\\Src\\QServer\\QServer.cpp", 0xda);
     pQServer_lcl->ppModePacketQueueHeads = ppModeQueue;
     for (nTempIdx = 0; nTempIdx < nType; nTempIdx++) {
       pQServer_lcl->ppModePacketQueueHeads[nTempIdx] = 0;
     }
 
-    ppModeQueue = (D2QServerModePacketNodeStrc**)D2_ALLOC_AT(nType * 4, ".\\Src\\QServer\\QServer.cpp", 0xde);
+    ppModeQueue = (D2QServerModePacketNodeStrc**)D2_ALLOC_AT(nType * sizeof(D2QServerModePacketNodeStrc*), ".\\Src\\QServer\\QServer.cpp", 0xde);
     pQServer_lcl->ppModePacketQueueTails = ppModeQueue;
     for (nTempIdx = 0; nTempIdx < nType; nTempIdx++) {
       pQServer_lcl->ppModePacketQueueTails[nTempIdx] = 0;
@@ -1176,30 +1177,20 @@ D2QServerStrc * __stdcall NET_QServer_Init(eD2GSConnectionType neD2GSConnectionT
 }
 
 int __stdcall BroadcastToAllClients(D2QServerStrc * pQServer, char * pBytes, int nSize) {
-    D2QServerClientConnectionStrc* pQServerClient;
-    D2QServerStrc* pQServer_00 = pQServer;
-    uint32_t nBucketIndex = 0;
-    if ((uint32_t)pQServer->nClientBucketCount <= 0) {
-      return 1;
-    }
-
-    int* pQServer2 = 0;
-    do {
-      /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)((intptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (char*)(pQServer_00->pClientBucketLocks - 3)));
-      for (pQServerClient = pQServer_00->pQServerClientList[nBucketIndex]; pQServerClient; pQServerClient = pQServerClient->pNextByToken) {
+    for (uint32_t nBucketIndex = 0; nBucketIndex < (uint32_t)pQServer->nClientBucketCount; nBucketIndex++) {
+      EnterCriticalSection(&pQServer->pClientBucketLocks[nBucketIndex]);
+      for (D2QServerClientConnectionStrc* pQServerClient = pQServer->pQServerClientList[nBucketIndex]; pQServerClient; pQServerClient = pQServerClient->pNextByToken) {
         if (!pQServerClient->bClosePending) {
-          if (pQServer_00->bUseNtLocalMode) {
-            QServer::QServerNT::SendToClientLocal(pQServer_00, pQServerClient, pBytes, nSize);
+          if (pQServer->bUseNtLocalMode) {
+            QServer::QServerNT::SendToClientLocal(pQServer, pQServerClient, pBytes, nSize);
           } else {
-            QServer::QServer98::SendToClientOnline(pQServer_00, pQServerClient, pBytes, nSize);
+            QServer::QServer98::SendToClientOnline(pQServer, pQServerClient, pBytes, nSize);
           }
         }
       }
 
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection((LPCRITICAL_SECTION)((intptr_t)&((D2QServerStrc*)pQServer2)->aGameTokenFilters[0].nExpectedMaskedToken + (char*)(pQServer_00->pClientBucketLocks - 3)));
-      nBucketIndex++;
-      pQServer2 = &((D2QServerStrc*)pQServer2)->nClientBucketCountForScan;
-    } while (nBucketIndex < (uint32_t)pQServer_00->nClientBucketCount);
+      LeaveCriticalSection(&pQServer->pClientBucketLocks[nBucketIndex]);
+    }
 
     return 1;
 }
@@ -1521,7 +1512,7 @@ void __fastcall RemoveClientAndClearLog(D2QServerStrc * pQServer, D2QServerClien
     NET_QServerClientPacket_FreeAllPackets(pClient);
 }
 
-int __stdcall SendPacketByClientId(D2QServerStrc * pQServer, int nClientId, char * pBytes, size_t nSize) {
+int __stdcall SendPacketByClientId(D2QServerStrc * pQServer, int nClientId, char * pBytes, uint32_t nSize) {
     BOOL nClientSendResult;
     if (!pQServer) {
       return 0;
@@ -1729,7 +1720,7 @@ void __fastcall RecvForClient(D2QServerStrc * pQServer, D2QServerClientConnectio
     int32_t nClassifyResult;
     BOOL fSpamResult;
     D2QServerModePacketNodeStrc* pPacketNode;
-    size_t nByteCount;
+    uint32_t nByteCount;
     DWORD dwEnqueueTick;
     char* szIpStr;
     if (!pQServer->pfnPacketClassifier) {

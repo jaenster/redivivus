@@ -476,10 +476,8 @@ void __fastcall Q02_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 
     ::SGAMEDATA* pGame;
     pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData;
-    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
     D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
+    pBitBuffer = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
     BOOL bQuestState;
     bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
     if (bQuestState == 1) {
@@ -613,7 +611,7 @@ void __fastcall Q02_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // QUEST_TheSearchForCain (A1Q3), and zeroes the progress flags.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q2.cpp
 void __fastcall Q02_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q02_Callback03_ChangedLevel;
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q02_Callback08_MonsterKilled;

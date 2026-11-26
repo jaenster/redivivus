@@ -41,15 +41,15 @@ void __fastcall Unreferenced_0053b140(D2BitBufferStrc * pBitBuffer, uint16_t nVa
     Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, (uint32_t)nValue, 0x10);
 }
 
-int __fastcall Unreferenced_0053b180(D2UnitStrc * pUnit) {
+int * __fastcall Unreferenced_0053b180(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster) {
-      return (intptr_t)&pUnit->pUnitData.pUnitDataMonster->nOwnerGUID;
+      return &pUnit->pUnitData.pUnitDataMonster->nOwnerGUID;
     }
 
     return 0;
 }
 
-void thunk_NET_D2GS_SERVER_SendPacketToClient(char * szText, size_t nSize) {
+void thunk_NET_D2GS_SERVER_SendPacketToClient(char * szText, uint32_t nSize) {
     int32_t dwRetAddr;
     D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', dwRetAddr, szText, nSize);
 }

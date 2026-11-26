@@ -26,9 +26,9 @@ void __stdcall NET_GetLocalIPAddressString(char * szIpAddressOut) {
 }
 
 // @sourcefile .\SRC\D2Net.cpp
-size_t __fastcall NET_D2GS_CLIENT_ExtractPacketSize(LPCRITICAL_SECTION * lpCriticalSection, D2OnePacketClientStrc * * pD2OnePacketClient, char * pBytes, size_t nSize) {
+uint32_t __fastcall NET_D2GS_CLIENT_ExtractPacketSize(LPCRITICAL_SECTION * lpCriticalSection, D2OnePacketClientStrc * * pD2OnePacketClient, char * pBytes, uint32_t nSize) {
     DWORD dwTick;
-    size_t nPacketSize;
+    uint32_t nPacketSize;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection((LPCRITICAL_SECTION)lpCriticalSection);
     D2OnePacketClientStrc* pPacket = *pD2OnePacketClient;
     if (!pPacket || ::D2Net::Game::Server::nD2GSConnectionType == CONNECTIONTYPE_SINGLEPLAYERUNCAPPED && (dwTick = GetTickCount() , dwTick - pPacket->nTickCount < 500)) {

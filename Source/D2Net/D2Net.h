@@ -18,7 +18,7 @@
 #define D2_DEFINED_D2OnePacketClientStrc
 struct __attribute__((packed)) D2OnePacketClientStrc {
     /* 0x000 */ char pBytes[516];
-    /* 0x204 */ size_t nSize;
+    /* 0x204 */ uint32_t nSize;
     /* 0x208 */ DWORD nTickCount;
     /* 0x20C */ struct D2OnePacketClientStrc * pD2PacketClientNext;
 };
@@ -37,11 +37,11 @@ int __stdcall CreateThreadClientSocketOrSingleplayer();
 void __stdcall NET_SetPlayersCount(int32_t nCount);
 void __stdcall NET_HACK_SetUseQServerHack(BOOL bResult);
 void NET_QServer_FreeAndSend0xB0ToEveryone();
-int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode1(char * pBytes, size_t nSize);
-int32_t __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode0(char * pBytes, size_t nSize);
-int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode2(char * pBytes, size_t nSize);
+int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode1(char * pBytes, uint32_t nSize);
+int32_t __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode0(char * pBytes, uint32_t nSize);
+int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode2(char * pBytes, uint32_t nSize);
 // Low-level server-to-client packet send. In single-player mode, loops the packet back via NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket. In multiplayer: skips logging/compression for opcode 0xAF (handshake) or nMode==2; otherwise compresses the packet (up to 1032 bytes) and sends via QServer::SendPacketByClientId with a 1- or 2-byte length prefix. Halts if raw packet exceeds 0x204 bytes.
-int32_t __stdcall NET_D2GS_SERVER_SendPacketToClient(uint8_t nMode, int32_t nClientId, char * pBytes, size_t nSize);
+int32_t __stdcall NET_D2GS_SERVER_SendPacketToClient(uint8_t nMode, int32_t nClientId, char * pBytes, uint32_t nSize);
 void __stdcall NET_QServer_FindIpAddressByClientIdForQServer(int32_t nClientId, char * szIpAddress, int32_t nBufferSize);
 void __stdcall NET_HACK_AddClientToHackList(int32_t nClientId, char * szText, int32_t nBanFlags);
 // @sourcefile .\SRC\Server.cpp
@@ -63,7 +63,7 @@ void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType
 // Shuts down client-server connection. Frees packet buffer, sets shutdown flag, waits for thread (6s timeout), frees both packet queues (0xAF/0xAE), deletes critical section, closes socket for non-singleplayer.
 // @sourcefile .\SRC\Client.cpp
 void __stdcall NET_CLIENT_ShutdownConnection();
-size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_to0xAE(char * pBytes, size_t nSize);
-size_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, size_t nSize);
-uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(size_t nSize, int32_t Unused, char * pBytes);
+uint32_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_to0xAE(char * pBytes, uint32_t nSize);
+uint32_t __stdcall NET_D2GS_CLIENT_ExtractPacketSize_from0xAE(char * pBytes, uint32_t nSize);
+uint32_t __stdcall NET_D2GS_CLIENT_SendPacketAfterChecks(uint32_t nSize, int32_t Unused, char * pBytes);
 } // namespace D2Net::SRC::Client

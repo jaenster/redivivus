@@ -40,7 +40,7 @@ namespace D2Game { namespace Ai { namespace AiGeneral {
 // @sourcefile .\Ai\AiGeneral.cpp
 D2AiGeneralStrc * __fastcall AllocAiGeneral(::SGAMEDATA * pGame) {
     D2AiGeneralStrc* pAiGeneral = D2_NEW_POOL_AT(pGame->pMemoryPool, D2AiGeneralStrc, ".\\Ai\\AiGeneral.cpp", 0x1b);
-    memset(pAiGeneral, 0, 0x40);
+    memset(pAiGeneral, 0, sizeof(*pAiGeneral));
     pAiGeneral->nOwnerGUIDEx = -1;
     pAiGeneral->eOwnerTypeEx = UNIT_MONSTER;
     pAiGeneral->eOwnerType = UNIT_MONSTER;

@@ -2124,7 +2124,7 @@ void __fastcall CMD_InitKeyConfigUI(int32_t nFadeInDuration, int32_t nHoldDurati
       return;
     }
 
-    memset(&gRoomLightPulse, 0, 0x2c);
+    memset(&gRoomLightPulse, 0, sizeof(gRoomLightPulse));
     gRoomLightPulse.bRoomLightPulseActive = 1;
     if (!nFadeInDuration) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x67);

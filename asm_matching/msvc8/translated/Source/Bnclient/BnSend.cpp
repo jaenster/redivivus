@@ -226,7 +226,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint3
     Storm::Source::SSTR::SStrCopy(sPacket.szExeInfo, szExeInfoStr, 0x100);
     char* szFilenameCursor = sPacket.szExeInfo;
     szFilenameCursor = szFilenameCursor + strlen(szFilenameCursor) + 1;
-    int32_t nSendLen = NET_SID_CLIENT_Send(7, (char*)&sPacket, (size_t)(szFilenameCursor + (0x15 - (intptr_t)(sPacket.szExeInfo + 1))));
+    int32_t nSendLen = NET_SID_CLIENT_Send(7, (char*)&sPacket, (uint32_t)(uintptr_t)(szFilenameCursor + (0x15 - (intptr_t)(sPacket.szExeInfo + 1))));
     return (uint32_t)(nSendLen >= 0);
 }
 
@@ -287,7 +287,7 @@ int __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning() {
 }
 
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, size_t nSize) {
+void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, uint32_t nSize) {
     if (g_pBNetCDKeyHashData) {
       Storm::Source::SMem::SMemFree(g_pBNetCDKeyHashData, ".\\BnSend.cpp", 0x188, 0);
     }
@@ -382,7 +382,7 @@ void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bFor
     Storm::Source::SSTR::SStrCopy(__frame0.szChannelBuf, szText, 0x100);
     char* pszChannelCursor = __frame0.szChannelBuf;
     pszChannelCursor = pszChannelCursor + strlen(pszChannelCursor) + 1;
-    NET_SID_CLIENT_Send(0xc, (char*)&__frame0.dwJoinFlags, (size_t)(pszChannelCursor + (5 - (intptr_t)(__frame0.szChannelBuf + 1))));
+    NET_SID_CLIENT_Send(0xc, (char*)&__frame0.dwJoinFlags, (uint32_t)(uintptr_t)(pszChannelCursor + (5 - (intptr_t)(__frame0.szChannelBuf + 1))));
 }
 
 BOOL __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount) {
@@ -435,7 +435,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * sz
     char szPacketBuf[512] = {0};
     Storm::Source::SSTR::SStrCopy(szPacketBuf, szText1, 0x100);
     Storm::Source::SSTR::SStrCopy(szPacketBuf + strlen(szPacketBuf) + 1, szText2, 0x100);
-    return NET_SID_CLIENT_Send(10, szPacketBuf, strlen(szPacketBuf) + 1 + strlen(szPacketBuf + strlen(szPacketBuf) + 1) + 1) >= 0;
+    return NET_SID_CLIENT_Send(10, szPacketBuf, (uint32_t)(strlen(szPacketBuf) + 1 + strlen(szPacketBuf + strlen(szPacketBuf) + 1) + 1)) >= 0;
 }
 
 uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat() {
@@ -446,7 +446,7 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat() {
 void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * szChatText) {
     uint8_t* pbScan;
     int nUtf8Result;
-    size_t nUnicodeLen;
+    uint32_t nUnicodeLen;
     uint16_t wUnicodeBuf[512];
     uint8_t szUtf8Buf[512];
     uint8_t bCur;
@@ -527,7 +527,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * s
     pCursor += Storm::Source::SSTR::SStrCopy(pCursor, szGameName, 0x100) + 1;
     pCursor += Storm::Source::SSTR::SStrCopy(pCursor, szGamePassword, 0x100) + 1;
     size_t nPacketSize = pCursor - adwHeader.szStrings + Storm::Source::SSTR::SStrCopy(pCursor, szGameDescription, 0x100) + 0x15;
-    NET_SID_CLIENT_Send(0x1c, (char*)&adwHeader, nPacketSize);
+    NET_SID_CLIENT_Send(0x1c, (char*)&adwHeader, (uint32_t)nPacketSize);
     return 1;
 }
 
@@ -537,7 +537,7 @@ DWORD __stdcall BNCLIENT_SendKeepAlive() {
 }
 
 uint32_t __fastcall thunk_NET_SID_CLIENT_Send(uint8_t nPacketId, char * szText) {
-    size_t nPayloadSize;
+    uint32_t nPayloadSize;
     NET_SID_CLIENT_Send(nPacketId, szText, nPayloadSize);
     return 1;
 }
@@ -584,7 +584,7 @@ void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * s
     }
     size_t nPacketSize = pCursor - aPacketBuf.szData + Storm::Source::SSTR::SStrCopy(pCursor, "", 0x100) + 0x11;
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(9);
-    NET_SID_CLIENT_Send(9, (char*)&aPacketBuf, nPacketSize);
+    NET_SID_CLIENT_Send(9, (char*)&aPacketBuf, (uint32_t)nPacketSize);
     _net_sid::NET_SID_CLIENT_WaitForPacketId(9);
     return g_pBNetGameListData;
 }
@@ -598,7 +598,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szTex
     char* pCursor = szData;
     pCursor += Storm::Source::SSTR::SStrCopy(pCursor, szText1, 0x100) + 1;
     uint32_t nPasswordLen = Storm::Source::SSTR::SStrCopy(pCursor, szText2, 0x100);
-    NET_SID_CLIENT_Send(0x22, (char*)adwHeader, pCursor - szData + nPasswordLen + 9);
+    NET_SID_CLIENT_Send(0x22, (char*)adwHeader, (uint32_t)(pCursor - szData + nPasswordLen + 9));
     return 1;
 }
 
@@ -620,7 +620,7 @@ void BNSEND_FreeUserProfileData() {
 namespace Bnclient { namespace BnSend {
 
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, size_t nDataSize) {
+void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, uint32_t nDataSize) {
     if (gpBNetWriteUserData) {
       D2_FREE_AT(gpBNetWriteUserData, ".\\BnSend.cpp", 0x3b2);
     }
@@ -696,7 +696,7 @@ void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo() {
     pszLocaleCursor = pszLocaleCursor + strlen(pszLocaleCursor) + 1;
     /* int cchData for GetLocaleInfoA */ /* LPSTR lpLCData for GetLocaleInfoA */ /* LCTYPE LCType for GetLocaleInfoA */ /* LCID Locale for GetLocaleInfoA */ GetLocaleInfoA(0x400, 0x1002, pszLocaleCursor, 0x40);
     pszLocaleCursor = pszLocaleCursor + strlen(pszLocaleCursor) + 1;
-    NET_SID_CLIENT_Send(0x12, (char*)&ftSystemTime, (size_t)(pszLocaleCursor + (0x20 - (intptr_t)ftSystemTime.szStrings)));
+    NET_SID_CLIENT_Send(0x12, (char*)&ftSystemTime, (uint32_t)(uintptr_t)(pszLocaleCursor + (0x20 - (intptr_t)ftSystemTime.szStrings)));
 }
 
 int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t bRequestType) {
@@ -730,13 +730,13 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x27_WriteUserData(char * szAccount, uin
     }
 
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x27);
-    uint32_t bSent = NET_SID_CLIENT_Send(0x27, (char*)pPacketBuf, szBufferOutput - (char*)pPacketBuf) >= 0;
+    uint32_t bSent = NET_SID_CLIENT_Send(0x27, (char*)pPacketBuf, (uint32_t)(szBufferOutput - (char*)pPacketBuf)) >= 0;
     D2_FREE_AT(pPacketBuf, ".\\BnSend.cpp", 0x4e0);
     return bSent;
 }
 
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreReadUserData(uint8_t * pbReadData, size_t nSize) {
+void __fastcall BNSEND_StoreReadUserData(uint8_t * pbReadData, uint32_t nSize) {
     if (g_pBNetReadUserData) {
       D2_FREE_AT(g_pBNetReadUserData, ".\\BnSend.cpp", 0x4ec);
     }
@@ -768,7 +768,7 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint
     }
 
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x26);
-    BOOL bResult = NET_SID_CLIENT_Send(0x26, pPacketBuf, (intptr_t)szBufferOutput - (intptr_t)pPacketBuf) >= 0;
+    BOOL bResult = NET_SID_CLIENT_Send(0x26, pPacketBuf, (uint32_t)((intptr_t)szBufferOutput - (intptr_t)pPacketBuf)) >= 0;
     D2_FREE_AT(pPacketBuf, ".\\BnSend.cpp", 0x521);
     return bResult != FALSE;
 }
@@ -906,7 +906,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szTe
 
 BOOL __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash() {
     char szCrashDumpBuf[1500];
-    size_t nCrashDumpSize = 0x5dc;
+    uint32_t nCrashDumpSize = 0x5dc;
     BOOL bHasCrashDump = Fog::Debug::LoadPreviousCrashDump((uint8_t*)szCrashDumpBuf, (int*)&nCrashDumpSize);
     if (!bHasCrashDump) {
       return 0;
@@ -917,7 +917,7 @@ BOOL __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash() {
 }
 
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreRealmQueryData(uint8_t * pbRealmData, size_t nSize) {
+void __fastcall BNSEND_StoreRealmQueryData(uint8_t * pbRealmData, uint32_t nSize) {
     if (gpRealmQueryData) {
       D2_FREE_AT(gpRealmQueryData, ".\\BnSend.cpp", 0x19a);
     }
@@ -928,7 +928,7 @@ void __fastcall BNSEND_StoreRealmQueryData(uint8_t * pbRealmData, size_t nSize) 
 }
 
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, size_t nSize) {
+void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, uint32_t nSize) {
     if (g_pBNetChannelListData) {
       D2_FREE_AT(g_pBNetChannelListData, ".\\BnSend.cpp", 0x1ef);
     }
@@ -939,7 +939,7 @@ void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, size_t nSiz
 }
 
 // @sourcefile .\BnSend.cpp
-void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, size_t nSize) {
+void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, uint32_t nSize) {
     if (g_pBNetGameListData) {
       D2_FREE_AT(g_pBNetGameListData, ".\\BnSend.cpp", 0x36a);
     }
@@ -1355,7 +1355,7 @@ int __fastcall Unreferenced_0051c570(char * szText) {
     return 1;
 }
 
-int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t nSizeNoHeader) {
+int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, uint32_t nSizeNoHeader) {
     int32_t nBytesSent;
     uint32_t nAllocaGuard;
     char chHeader[4];
@@ -1373,7 +1373,7 @@ int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, size_t 
           nSizeNoHeader = 0;
         }
 
-        size_t nPacketSize = nSizeNoHeader + 4;
+        uint32_t nPacketSize = nSizeNoHeader + 4;
         Storm::Source::SMem::SMemCopy(chRealPacket, chHeader, 4);
         if (pBytes && nPacketSize < 0x2000) {
           Storm::Source::SMem::SMemCopy(chRealPacket + 4, pBytes, nSizeNoHeader);
@@ -1416,12 +1416,12 @@ void __fastcall BNCLIENT_ParseAndEnqueueChatMessages(char * szMessageText) {
 
 // BATTLE.NET PACKET DISPATCH LOOP
 // Iterates over received network buffer, scanning for 0xFF packet start markers and dispatching complete packets to NET_SID_CLIENT_IncomingPacketHandler. For each packet: validates 4-byte header (0xFF, ID, size_lo, size_hi), checks if buffer contains full packet based on 2-byte little-endian size field, dispatches packet data (excluding 4-byte header) to handler, advances buffer pointer by packet size. Returns pointer to remaining unparsed buffer data for next iteration.
-size_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t nSize) {
+uint32_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, uint32_t nSize) {
     int nBytesProcessed;
     char* pScanPtr = pBytes;
     do {
       if (*pScanPtr != -1) {
-        nBytesProcessed = (intptr_t)pScanPtr - (intptr_t)pBytes;
+        nBytesProcessed = (int)(pScanPtr - pBytes);
         do {
           if (nBytesProcessed >= (int)nSize) {
             break;
@@ -1434,7 +1434,7 @@ size_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, size_t
       uint16_t wPacketSize = *(uint16_t*)(pScanPtr + 2);
       size_t nRemaining = pBytes - pScanPtr + nSize;
       if (nRemaining < 4 || (int)nRemaining < (int)wPacketSize) {
-        size_t nLeftover = pBytes - pScanPtr + nSize;
+        uint32_t nLeftover = (uint32_t)(pBytes - pScanPtr + nSize);
         memcpy(pBytes, pScanPtr, nLeftover);
         return nLeftover;
       }
@@ -1462,7 +1462,7 @@ DWORD __stdcall BnetReadFunction(uint32_t dwThreadParam) {
     }
 
     DWORD dwLastKeepaliveTick = GetTickCount();
-    size_t pBufPos = 0;
+    uint32_t pBufPos = 0;
     D2NetDataStrc* pSafesock = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     do {
       /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ if (!pSafesock) {
@@ -2436,7 +2436,7 @@ BOOL __stdcall NET_SID_CLIENT_Send_0x42_CDKey3() {
     BOOL bIsExpansion;
     uint32_t uVar2;
     int32_t bHash1Ok;
-    size_t nSizeNoHeader;
+    uint32_t nSizeNoHeader;
     uint8_t* pSendData;
     uint32_t aExpansionPacket[3];
     D2CDKeyHashStrc aExpansionHashBuf;
@@ -2559,7 +2559,7 @@ void __fastcall BNSEND_HashCDKeyByType(D2CDKeyHashStrc * pOutHash, uint32_t nTok
     BNSEND_PrepareCDKeyHash(nToken, (char*)(_net_sid::NET_SID_CLIENT_GetCdKeyByType(nCDKeyType)), (uint32_t)(BNSEND_GetServerToken()), pOutHash);
 }
 
-int __fastcall BNSEND_SendRawBytes(void * pBytes, size_t nSize) {
+int __fastcall BNSEND_SendRawBytes(void * pBytes, uint32_t nSize) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&BnDownload::lpCriticalSection_00881f64);
     Storm::Source::SMem::SMemCopy(BnDownload::gbBnetFtpFileTransferActive, pBytes, nSize);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ BnDownload::gnNetworkSendState = 0;
@@ -2577,7 +2577,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwR
     dwFileTimeParam.dwRequestId = dwRequestId;
     dwFileTimeParam.dwUnknown = 0;
     char* pEnd = dwFileTimeParam.szFilename + Storm::Source::SSTR::SStrCopy(dwFileTimeParam.szFilename, szText, 0x104) + 1;
-    NET_SID_CLIENT_Send(0x33, (char*)&dwFileTimeParam, pEnd - (char*)&dwFileTimeParam);
+    NET_SID_CLIENT_Send(0x33, (char*)&dwFileTimeParam, (uint32_t)(pEnd - (char*)&dwFileTimeParam));
     return 1;
 }
 

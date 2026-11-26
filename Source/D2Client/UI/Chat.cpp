@@ -563,7 +563,6 @@ void __stdcall CHAT_DrawIMECandidates() {
 
 void __stdcall DRAW_UI_ChatInput() {
     int i;
-    uint16_t* pwszClear;
     uint16_t wszInputCopy[258];
     int nLineCount;
     D2TextLineStrc* pWrapList;
@@ -625,14 +624,10 @@ void __stdcall DRAW_UI_ChatInput() {
     nInputLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText);
     if (nInputLen > 0) {
       D2TextLineStrc* pWrapLine;
-      pwszClear = wszInputCopy;
-      for (i = 0x80; i; i--) {
-        pwszClear[0] = L'\0';
-        pwszClear[1] = L'\0';
-        pwszClear += 2;
+      for (i = 0; i < 257; i++) {
+        wszInputCopy[i] = L'\0';
       }
 
-      *pwszClear = L'\0';
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszInputCopy, gwszChatInputText, 0x100);
       pWrapList = D2Win::Src::D2WinFont::D2WINFONT_WordWrapString(wszInputCopy, &nLineCount, ui::ScreenSizeX - 0x109);
       nLineIdx = 0;
@@ -1400,7 +1395,7 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
     int nTextLength;
     nTextLength = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText);
     uint32_t wInputChar;
-    wInputChar = pMsg->nWParam;
+    wInputChar = (uint32_t)pMsg->nWParam;
     int nSavedLength;
     nSavedLength = nTextLength;
     if (wInputChar != 8) {

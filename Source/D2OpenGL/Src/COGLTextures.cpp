@@ -143,7 +143,7 @@ void ConvertPixels(::COGLTextures * pThis, int nTexWidth, int nTexHeight, int nS
               uVar1 = *(uint32_t*)(pSrc + iVar6);
               *(uint32_t*)(pBVar7 + iVar6 * 4) = (*PTR_UINT_ARRAY_00396370)[uVar1 & 0xff];
               *(uint32_t*)(pBVar7 + iVar6 * 4 + 4) = (*pauVar3)[uVar1 >> 8 & 0xff];
-              *(uint32_t*)(pBVar7 + iVar6 * 4 + 8) = *(uint32_t*)((int)*pauVar3 + (uVar1 >> 0xe & 0x3fc));
+              *(uint32_t*)(pBVar7 + iVar6 * 4 + 8) = (*pauVar3)[uVar1 >> 0x10 & 0xff];
               *(uint32_t*)(pBVar7 + iVar6 * 4 + 0xc) = (*pauVar3)[uVar1 >> 0x18];
               iVar6 += 4;
               iVar5--;
@@ -165,7 +165,7 @@ void ConvertPixels(::COGLTextures * pThis, int nTexWidth, int nTexHeight, int nS
             pauVar2 = PTR_USHORT_ARRAY_0039636c;
             uVar1 = *(uint32_t*)(pSrc + iVar5 * 4);
             *(uint32_t*)(pBVar7 + iVar5 * 8) = (uint32_t)((uint32_t)(uint16_t)(*PTR_USHORT_ARRAY_0039636c)[uVar1 >> 8 & 0xff] << 16 | (uint32_t)(uint16_t)(*PTR_USHORT_ARRAY_0039636c)[uVar1 & 0xff]);
-            *(uint32_t*)(pBVar7 + iVar5 * 8 + 4) = (uint32_t)((uint32_t)(uint16_t)(*pauVar2)[uVar1 >> 0x18] << 16 | (uint32_t)(uint16_t)*(uint16_t*)((int)*pauVar2 + (uVar1 >> 0xf & 0x1fe)));
+            *(uint32_t*)(pBVar7 + iVar5 * 8 + 4) = (uint32_t)((uint32_t)(uint16_t)(*pauVar2)[uVar1 >> 0x18] << 16 | (uint32_t)(uint16_t)(*pauVar2)[uVar1 >> 0x10 & 0xff]);
             iVar5++;
           } while (nQuads != iVar5);
 

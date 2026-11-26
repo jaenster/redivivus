@@ -6,6 +6,15 @@
 #include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Engine/Application.data.h"
+#include "Source/D2Headers/D2Arch.h"
+
+#if D2_ARCH_X86
+#define FOG_CONTEXT_CONTROL 0x10001 // CONTEXT_i386 | CONTEXT_CONTROL
+#elif D2_ARCH_X64
+#define FOG_CONTEXT_CONTROL CONTEXT_CONTROL
+#else
+#error "Application.cpp: no CONTEXT flags for this architecture"
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -34,8 +43,8 @@ namespace Fog { namespace Engine { namespace Application {
 static uint8_t DEBUG_ParseNB01DebugInfo(CV_INFO_PDB20 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 static uint8_t DEBUG_ParseRSDSDebugInfo(CV_INFO_PDB70 * pDebugRecord, D2FogDebugModuleEntryStrc * pModuleInfo);
 
-int Unreferenced_004046d0() {
-    return (int)NtCurrentTeb();
+struct _TEB * Unreferenced_004046d0() {
+    return NtCurrentTeb();
 }
 
 static uint32_t DEBUG_GetPEImageType(short * nMagic) {
@@ -468,11 +477,11 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
     struct __frame0_t {
       int nStackLimit;
       uint32_t nWalkIndex;
-      uint32_t* pStackTop;
+      uintptr_t* pStackTop;
       D2CrashFrameStrc* pFrameArrayBase;
       uint32_t nFramesWritten;
-      uint32_t nCurEip;
-      uint32_t* pCurEsp;
+      uintptr_t nCurEip;
+      uintptr_t* pCurEsp;
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 28, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
@@ -486,7 +495,7 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
     LPCVOID pStackBase;
     CONTEXT threadContext;
     EH4_EXCEPTION_REGISTRATION tSehFrame;
-    uint32_t* pNextEbp;
+    uintptr_t* pNextEbp;
     tSehFrame.TryLevel = -2;
     tSehFrame.ExceptionHandler = _except_handler4;
     tSehFrame.Next = (EH4_EXCEPTION_REGISTRATION*)ExceptionList;
@@ -510,7 +519,7 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
       walk_stack:
       __frame0.nFramesWritten = 0;
       __frame0.nCurEip = D2_CONTEXT_FIELD(threadContext, Eip);
-      __frame0.pCurEsp = (uint32_t*)D2_CONTEXT_FIELD(threadContext, Esp);
+      __frame0.pCurEsp = (uintptr_t*)D2_CONTEXT_FIELD(threadContext, Esp);
       cVar2 = _3rdparty::crashy::SYSTEM_CaptureThreadContext((LPCVOID*)&__frame0.pStackTop, dwThreadId, &__frame0.nStackLimit, &pStackBase);
       hThread = hOpenedThread;
       if (cVar2 != '\0') {
@@ -529,19 +538,19 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
           if (D2_CONTEXT_FIELD(threadContext, Ebp) <= (uintptr_t)__frame0.pCurEsp) {
             break;
           }
-          if ((uint32_t*)(D2_CONTEXT_FIELD(threadContext, Ebp) + 8) > __frame0.pStackTop) {
+          if ((uintptr_t*)(D2_CONTEXT_FIELD(threadContext, Ebp) + 2 * sizeof(uintptr_t)) > __frame0.pStackTop) {
             break;
           }
 
-          pNextEbp = *(uint32_t**)D2_CONTEXT_FIELD(threadContext, Ebp);
-          if ((uintptr_t)pNextEbp & 3) {
+          pNextEbp = *(uintptr_t**)D2_CONTEXT_FIELD(threadContext, Ebp);
+          if ((uintptr_t)pNextEbp & (sizeof(uintptr_t) - 1)) {
             break;
           }
           if ((uintptr_t)pNextEbp <= D2_CONTEXT_FIELD(threadContext, Ebp)) {
             break;
           }
 
-          __frame0.pCurEsp = (uint32_t*)(D2_CONTEXT_FIELD(threadContext, Ebp) + 4);
+          __frame0.pCurEsp = (uintptr_t*)(D2_CONTEXT_FIELD(threadContext, Ebp) + sizeof(uintptr_t));
           __frame0.nCurEip = *__frame0.pCurEsp;
           D2_CONTEXT_FIELD(threadContext, Ebp) = (DWORD_PTR)pNextEbp;
         }
@@ -561,7 +570,7 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
       }
     } else {
       dwThreadIdOrSuspend = GetCurrentThreadId();
-      threadContext.ContextFlags = 0x10001;
+      threadContext.ContextFlags = FOG_CONTEXT_CONTROL;
       if (dwThreadIdOrSuspend == dwThreadId) {
         RtlCaptureContext(&threadContext);
         goto walk_stack;
@@ -588,7 +597,7 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
     return nFrameCount;
 }
 
-bool __stdcall DEBUG_FormatAddressInfo(uint32_t nAddress, char * pOutput) {
+bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, char * pOutput) {
     char* pSep;
     char* pBasename;
     char szModulePath[260];
@@ -599,7 +608,7 @@ bool __stdcall DEBUG_FormatAddressInfo(uint32_t nAddress, char * pOutput) {
     *pLineField = 0;
     *pOutput = '\0';
     pOutput[0x204] = '\0';
-    uint32_t nModuleDisp = 0;
+    uintptr_t nModuleDisp = 0;
     bool bGotModule = Debug::GetModuleInfoForAddress(nAddress, &nModuleDisp, szModulePath);
     if (bGotModule) {
       pSep = strrchr(szModulePath, 0x2f);

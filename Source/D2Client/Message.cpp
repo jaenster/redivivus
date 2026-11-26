@@ -53,7 +53,7 @@ void __stdcall MESSAGE_OnActivate(D2UIMouseMsgStrc * pMsg) {
 
 void __stdcall WndProcD(D2UIMouseMsgStrc * phWnd) {
     /* LPARAM lParam for DefWindowProcA */ /* WPARAM wParam for DefWindowProcA */ /* UINT Msg for DefWindowProcA */ /* HWND hWnd for DefWindowProcA */ phWnd->bHandled = 1;
-    uint32_t lResult = DefWindowProcA(phWnd->hWnd, phWnd->uMsg, phWnd->nWParam, phWnd->uLParam.nLParam);
+    LRESULT lResult = DefWindowProcA(phWnd->hWnd, phWnd->uMsg, phWnd->nWParam, phWnd->uLParam.nLParam);
     phWnd->dwResult = lResult;
 }
 
@@ -65,17 +65,17 @@ void __stdcall MESSAGE_OnClose(D2UIMouseMsgStrc * pMsg) {
 
 LRESULT __stdcall WndProcB(HWND hWnd, uint32_t uMsg, WPARAM wParam, LPARAM lParam) {
     BOOL bHandled = 0;
-    int32_t lDispatchResult = 0;
+    LRESULT lDispatchResult = 0;
     GAME::Record::HandleWinProcMsg(uMsg, wParam, lParam);
     BOOL nHandled = GAME::Record::IsPlaybackActive();
     if (!nHandled || uMsg == 0x10) {
-      nHandled = Storm::WindowHandle::SMsgDispatchMessage(hWnd, uMsg, wParam, lParam, &bHandled, (LRESULT*)&lDispatchResult);
+      nHandled = Storm::WindowHandle::SMsgDispatchMessage(hWnd, uMsg, wParam, lParam, &bHandled, &lDispatchResult);
       if (nHandled && bHandled) {
         return lDispatchResult;
       }
     }
 
-    int32_t lResult = DefWindowProcA(hWnd, uMsg, wParam, lParam);
+    LRESULT lResult = DefWindowProcA(hWnd, uMsg, wParam, lParam);
     return lResult;
 }
 

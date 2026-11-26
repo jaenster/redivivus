@@ -21,7 +21,7 @@ namespace D2Net::Game::Server {
 extern eD2GSConnectionType nD2GSConnectionType;
 } // namespace D2Net::Game::Server
 namespace D2Net::SRC::Client {
-extern uint32_t CLIENT_SocketToServer;
+extern SOCKET CLIENT_SocketToServer;
 // lpThreadId parameter of CreateThread
 extern LPDWORD lpThreadId_00882b30;
 extern int gbClientConnected;

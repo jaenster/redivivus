@@ -39,7 +39,7 @@
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Game/Targets.h"
 #include "Source/D2Game/Items/ItemMode.h"
@@ -660,7 +660,7 @@ static void __stdcall SUNITINACTIVE_DeactivateMonster(::SGAMEDATA * pGame, D2Uni
 
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     D2InactiveMonsterRecordStrc* pInactiveRec = D2_NEW_POOL_AT(pGame->pMemoryPool, D2InactiveMonsterRecordStrc, ".\\UNIT\\SUnitInactive.cpp", 0x528);
-    memset(pInactiveRec, 0, 0x5c);
+    memset(pInactiveRec, 0, sizeof(*pInactiveRec));
     pInactiveRec->nOwnerId = -1;
     eD2UnitType eUnitType = pUnit->eUnitType;
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
@@ -1113,7 +1113,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
     uint8_t byMaxStage;
     uint8_t byNewStage;
     int32_t nLine;
-    uint32_t nErrorLine;
+    uint32_t nErrorLine; // steer-ok: generated form, kept as emitted (body pinned for x64 typing)
     short int wShrineTimerHi;
     BOOL bIsGrowable;
     SUNITINACTIVE_RoomInitMonsters(pGame, pRoom);
@@ -1217,7 +1217,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
                         nGrowCursor = uSlot14.nGrowInterval;
                         do {
                           GAME::Event::SetEvent(pGame, pUnit, 2, nGrowCursor + pGame->dwGameFrame, 0, 0);
-                          nGrowCursor = nGrowCursor + (intptr_t)uSlot14.pInactiveItemList;
+                          nGrowCursor = nGrowCursor + uSlot14.nGrowInterval;
                           nRemainingGrowSteps--;
                         } while (nRemainingGrowSteps);
                       }
@@ -1310,7 +1310,7 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
         }
 
         _Dst = D2_NEW_POOL_AT(pGame->pMemoryPool, D2InactiveUnitRecordStrc, ".\\UNIT\\SUnitInactive.cpp", 0x244);
-        memset(_Dst, 0, 0x34);
+        memset(_Dst, 0, sizeof(*_Dst));
         eUnitType = pUnit->eUnitType;
         if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
           iVar5 = pUnit->pPath.pStaticPath->nPosX;

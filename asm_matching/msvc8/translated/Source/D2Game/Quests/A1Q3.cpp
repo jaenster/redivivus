@@ -120,7 +120,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
     ::SGAMEDATA* pGame = (::SGAMEDATA*)pQuestData->pQuestSpecificData.pA1Q3;
     if (nMsgIndex == 0xa3) {
-      int16_t nPartyId;
+      uint16_t nPartyId;
       /* GetQuestState(Completed=0) — bail if already done */ bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_ToolsOfTheTrade, QUESTSTATE_Completed);
       if (!bQuestState) {
         pA1Q3Data = pQuestData->pQuestSpecificData.pA1Q3;
@@ -138,7 +138,7 @@ void __fastcall Q03_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
           QUEST_RemoveQuestItemFromPlayer(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x206d6468);
           pA1Q3Data->nQuestItemCount--;
           nPartyId = UNIT::SUnit::GetPartyId(pQuestArgs->pPlayer);
-          if (nPartyId != -1) {
+          if (nPartyId != 0xFFFF) {
             UNIT::Party::ExecuteFunctionForEveryPartyMember(pQuestArgs->pGame, nPartyId, (::fpExecuteOnUnitFunction)Q03_AutoCompleteIfHighLevel, nullptr);
           }
           if (pQuestData->bIsNotIntroduction != '\0') {
@@ -651,7 +651,7 @@ void __fastcall Q03_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // Q03_InitData (A1Q3) — quest constructor. Allocates the A1Q3-specific struct (0xa4 bytes), wires up the per-state handler table (slots 0,2,3,4,6,9,10,0xb,0xd,0xe -> the Q03_Callback_* fns), sets fpSequenceFilter/fpStatusFilter/fpActiveFilter, the Charsi NPC message table (mon 0x9a, string 0x92, menu), nQuestIdReal=ToolsOfTheTrade, nSequenceQuestId=A1Q4 SistersToTheSlaughter, nInitNo=5, bIsActive=true, nStateFlag=0, then zero-inits the struct (bMalusTaken/bCharsiNotified/bQuestAccepted/nMalusMode=0) and resets the participant GUID list. No quest-record writes.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q3.cpp
 void __fastcall Q03_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pSVar1 = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q03_Callback03_ChangedLevel;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q03_Callback10_PlayerLeavesGame;
@@ -674,7 +674,7 @@ void __fastcall Q03_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->nInitNo = 5;
     pQuestData->fpActiveFilter = Q03_ActiveFilter;
     pQuestData->nSequenceQuestId = QUEST_SistersToTheSlaughter;
-    memset(pQuestSpecificData, 0, 0xa4);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     pQuestSpecificData->field_0x00 = 0;
     pQuestSpecificData->nMalusGUID = 0;
     pQuestSpecificData->field_0x10 = '\0';

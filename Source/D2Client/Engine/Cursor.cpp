@@ -392,7 +392,7 @@ void __stdcall MOUSE_DrawCursorSprite() {
       nPositionY = UI::Inv::ScreenSizeY - 1;
     }
     nPositionX = nPositionX < (int)gnCursorType ? (int)gnCursorType : (nPositionX > UI::ui::ScreenSizeX - (int)gnCursorType - 1 ? UI::ui::ScreenSizeX - (int)gnCursorType - 1 : nPositionX);
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pCursorsDC6[nCursorDataIndex];
     sGfxData.nDirection = 0;
     sGfxData.nFrameNumber = gCursorAnimationFrame >> 8;
@@ -402,7 +402,7 @@ void __stdcall MOUSE_DrawCursorSprite() {
 
 void __stdcall UI_DrawCursorIcon() {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pCursorsDC6[6];
     sGfxData.nFrameNumber = gCursorAnimationFrame;
     sGfxData.nDirection = 0;
@@ -422,7 +422,7 @@ void __stdcall DrawCursor() {
       CursorData[nCursorDataIndex].pFunction();
     } else {
       int32_t nResult;
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       nResult = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nOutValue, '\x01', -1);
       if (nResult) {
         nSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);
@@ -477,7 +477,7 @@ void __stdcall UI_DrawCursorWithItem() {
           }
         }
 
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.pDC6 = pCursorsDC6[nCursorIndex];
         sGfxData.nFrameNumber = gCursorAnimationFrame >> 8;
         sGfxData.nDirection = 0;
@@ -485,7 +485,7 @@ void __stdcall UI_DrawCursorWithItem() {
         UI_UpdateCursorAnimation();
       }
     } else {
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       nClampedY = Engine::GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, 0, 0, &nOutValue, '\x01', -1);
       if (nClampedY) {
         nCursorIndex = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(&sGfxData, 0, 1);

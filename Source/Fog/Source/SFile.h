@@ -102,7 +102,7 @@ int __fastcall SFILE_GetExecutableDirectory(char * szText, DWORD nSize);
 int __fastcall SFILE_GetInstallPath(LPSTR lpFilename, DWORD nSize);
 int __fastcall SFILE_GetBlizzardAppDataPath(char * szOutPath, uint32_t nMaxLen);
 BOOL __stdcall GetUseDirectCommand();
-void __fastcall GetAndCreateSavePath(char * pBuffer, size_t nSize);
+void __fastcall GetAndCreateSavePath(char * pBuffer, uint32_t nSize);
 struct D2SystemInfoStrc * __stdcall SFILE_GetGlobalPointer();
 void __fastcall FILETOOLS_SetLogFilePathWithoutDateAndExtension2(char * szSuffix);
 // Module-private: no other module references these

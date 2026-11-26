@@ -230,12 +230,12 @@ void __fastcall SetAccelerator(::ButtonWrapper * pThis, int, BOOL bEnable) {
 }
 
 ::ButtonWrapper * __fastcall Constructor(::ButtonWrapper * pThis, int, int nPosX, int nPosY, int nButtonKind, fpButtonOnActivate pfnOnActivate) {
-    pfnEHHandlerRoutine pExcHandler = __GSHandlerCheck_EH_6ca103;
+    pfnEHHandlerRoutine pExcHandler = __GSHandlerCheck_EH_6ca103; // steer-ok: generated form, kept as emitted
     void* pPrevExceptionList = ExceptionList;
     int32_t dwExcState = 0;
     ExceptionList = &pPrevExceptionList;
     pThis->pVtable = (ButtonWrapperVtable*)(void*)ButtonWrapper::vftable;
-    ::ButtonImplementation* pNewButtonImpl = (::ButtonImplementation*)Storm::Source::SMem::SMemAlloc(0x36, "new", -1, 0);
+    ::ButtonImplementation* pNewButtonImpl = (::ButtonImplementation*)Storm::Source::SMem::SMemAlloc(sizeof(::ButtonImplementation), "new", -1, 0);
     dwExcState = (uint32_t)((uint32_t)((uint32_t)dwExcState >> 8 & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
     if (pNewButtonImpl) {
       pNewButtonImpl = vc8_thiscall(ButtonImplementation::Constructor)(pNewButtonImpl, nPosX, nPosY, nButtonKind, pfnOnActivate);

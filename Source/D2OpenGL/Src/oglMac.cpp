@@ -523,7 +523,7 @@ int OGL_MacClampMouseEvent(void * pEvent) {
       return 0;
     }
 
-    uint32_t uVar5 = *(uint32_t*)((int)pEvent + 10);
+    uint32_t uVar5 = *(uint32_t*)((uint8_t*)pEvent + 10);
     short int sVar1 = (short int)(uVar5 >> 0x10);
     uint32_t ptPos = uVar5;
     short int local_16 = sVar1;
@@ -555,7 +555,7 @@ int OGL_MacClampMouseEvent(void * pEvent) {
     }
 
     MAC_WarpMouseCursorPosition(ptPos);
-    *(uint32_t*)((int)pEvent + 10) = ptPos;
+    *(uint32_t*)((uint8_t*)pEvent + 10) = ptPos;
     return 0;
 }
 
@@ -697,11 +697,11 @@ BOOL OGL_MacStartCutscene(BYTE * * ppBuffer, int * pnPitch, void * pUnused) {
       nWidth = 800;
     }
     if (!DAT_00552b40) {
-      DAT_00552b40 = (uint32_t)(uintptr_t)(uint8_t*)Game::Main::MISC_OperatorNewShim(0x12c000);
+      DAT_00552b40 = (uint8_t*)Game::Main::MISC_OperatorNewShim(0x12c000);
     }
 
     OGL_CutsceneBeginGL(nWidth, nHeight, 0x280, 0x1e0);
-    *ppBuffer = (uint8_t*)DAT_00552b40;
+    *ppBuffer = DAT_00552b40;
     *pnPitch = 0xa00;
     INT_005eabe0 = MAC_GetBinkSurfaceType(CGDirectDisplayID_00552b2c);
     return 1;
@@ -726,7 +726,7 @@ BOOL OGL_MacReleaseCutSceneBuffer() {
 }
 
 // 1.14d mac: 002e1c3c
-BOOL OGL_SetOption(int nOption, int nValue) {
+BOOL OGL_SetOption(int nOption, intptr_t nValue) {
     // Static local variables (originally global data)
     static BOOL * PTR_BOOL_00396394 = &BOOL_005e9e2c; D2_STATIC_GUARD(PTR_BOOL_00396394, "D2OpenGL::oglMac::OGL_SetOption::PTR_BOOL_00396394");
 
@@ -734,7 +734,7 @@ BOOL OGL_SetOption(int nOption, int nValue) {
     BOOL BVar1 = 0;
     switch (nOption) {
       case 0:
-        CGDirectDisplayID_00552b2c = nValue;
+        CGDirectDisplayID_00552b2c = (CGDirectDisplayID)nValue;
       break;
       case 1:
         CVar2 = CGDirectDisplayID_00552b2c;
@@ -748,7 +748,7 @@ BOOL OGL_SetOption(int nOption, int nValue) {
       D2OGLDisplayModeStrc_ARRAY_00552b50[2] = *(D2OGLDisplayModeStrc*)nValue;
       break;
       case 4:
-        DAT_003ce7f0 = nValue;
+        DAT_003ce7f0 = (uint32_t)nValue;
       break;
       case 5:
         DAT_003ce7ec = 0x10;
@@ -767,7 +767,7 @@ BOOL OGL_SetOption(int nOption, int nValue) {
       *(CGDirectDisplayID*)nValue = CVar2;
       break;
       case 0xb:
-        DAT_003ce7f8 = nValue;
+        DAT_003ce7f8 = (uint32_t)nValue;
       return BVar1;
     }
 

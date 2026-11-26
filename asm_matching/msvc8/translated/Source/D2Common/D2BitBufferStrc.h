@@ -19,9 +19,9 @@
 #define D2_DEFINED_D2BitBufferStrc
 __pragma(pack(push, 1)) struct D2BitBufferStrc {
     /* 0x00 */ uint8_t * pBuffer;
-    /* 0x04 */ size_t nBitsInBuffer;
-    /* 0x08 */ size_t nCurrentPos;
-    /* 0x0C */ size_t nBitsAtPos;
+    /* 0x04 */ uint32_t nBitsInBuffer;
+    /* 0x08 */ uint32_t nCurrentPos;
+    /* 0x0C */ uint32_t nBitsAtPos;
     /* 0x10 */ BOOL bEnd;
 }; __pragma(pack(pop))
 

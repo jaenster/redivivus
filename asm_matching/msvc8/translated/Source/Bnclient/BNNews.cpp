@@ -105,7 +105,7 @@ void __stdcall BNNEWS_SaveToCache() {
     _SYSTEMTIME stSystemTime;
     intptr_t nTextLen;
     _FILETIME ftWriteTime;
-    char* pStrScanEnd;
+    char* pStrScanEnd; // steer-ok: generated form, kept as emitted
     char cStrChar;
     intptr_t nDestOffset;
     int nStrScanEnd;
@@ -116,8 +116,8 @@ void __stdcall BNNEWS_SaveToCache() {
       exit(-1);
     }
 
-    size_t nTotalSize = 8;
-    size_t nAccumSize = 8;
+    uint32_t nTotalSize = 8;
+    uint32_t nAccumSize = 8;
     if (g_nFirstUnreadNewsIndex < g_nNewsMaxCacheSize.nCount) {
       pEntryText = g_nNewsMaxCacheSize.pEntries[g_nFirstUnreadNewsIndex].szText;
       nEntryIndex = g_nFirstUnreadNewsIndex;
@@ -150,12 +150,12 @@ void __stdcall BNNEWS_SaveToCache() {
       nEntryDiff = g_nFirstUnreadNewsIndex * 0x408;
       nStrScanEnd = (int)(nUnreadCount - g_nFirstUnreadNewsIndex);
       do {
-        pDVar1 = g_nNewsMaxCacheSize.pEntries;
+        pDVar1 = g_nNewsMaxCacheSize.pEntries; // steer-ok: generated form, kept as emitted
         pEntryText = g_nNewsMaxCacheSize.pEntries->szText + nEntryDiff;
         *pWritePtr = *(uint32_t*)(g_nNewsMaxCacheSize.pEntries->szText + (nEntryDiff - 4));
         pStrScan = pEntryText;
         pStrScan = pStrScan + strlen(pStrScan) + 1;
-        nTextLen = (intptr_t)pStrScan - (intptr_t)(pDVar1->szText + (nEntryDiff + 1));
+        nTextLen = (intptr_t)pStrScan - (intptr_t)(pDVar1->szText + (nEntryDiff + 1)); // steer-ok: generated form, kept as emitted
         nDestOffset = 4 - (intptr_t)pEntryText;
         do {
           cStrChar = *pEntryText;
@@ -172,7 +172,7 @@ void __stdcall BNNEWS_SaveToCache() {
       nTotalSize = nAccumSize;
     }
 
-    uint32_t* pCacheBlock = pMemoryToFree;
+    uint32_t* pCacheBlock = pMemoryToFree; // steer-ok: generated form, kept as emitted
     /* LPSYSTEMTIME lpSystemTime for GetSystemTime */ GetSystemTime(&stSystemTime);
     /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ SystemTimeToFileTime(&stSystemTime, &ftWriteTime);
     Cache::CACHE_WriteData(szBnNewsChannelName, (LPCVOID)pMemoryToFree, nTotalSize, (uint32_t*)&ftWriteTime.dwLowDateTime, -1, -1);
@@ -382,7 +382,7 @@ void __fastcall BNNEWS_SetNewsEntryCount(D2BnNewsTableStrc * pNewsTable, int, ui
 
 // BATTLE.NET NEWS PARSER (SID_NEWS_INFO 0x46)
 // Parses news entries from Battle.net packet containing: count(1), unknown(4), motd_timestamp(4), timestamp(4), then array of entries. Each entry: entry_id(4), message(null-terminated). Maintains sorted cache (up to 256 entries) in gpBNetNewsCache, each 0x408 bytes with entry_id at +4 and message at +8. Special case: entry_id=0 triggers callback g_pfnMotdCallback for MOTD. Sorts by entry_id descending, calculates first unread index (g_nFirstUnreadNewsIndex) based on motd_timestamp, saves to disk cache, and invokes UI callbacks.
-BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, size_t nSize) {
+BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, uint32_t nSize) {
     int iVar1;
     uint32_t* puVar2;
     int nCacheByteOffset;
@@ -398,7 +398,7 @@ BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, size_t nSize) {
     nEntryCount = (uint32_t)*pBytes;
     uint32_t dwMotdTimestamp;
     dwMotdTimestamp = *(uint32_t*)(pBytes + 5);
-    uint32_t dwNewestNewsTimestamp;
+    uint32_t dwNewestNewsTimestamp; // steer-ok: generated form, kept as emitted
     dwNewestNewsTimestamp = *(uint32_t*)(pBytes + 9);
     uint32_t* pEntryData;
     pEntryData = (uint32_t*)(pBytes + 0xd);
@@ -558,7 +558,7 @@ BOOL __stdcall BNNEWS_LoadCachedNews() {
               pStrEnd++;
             } while ((char)uVar1 != '\0');
 
-            nStrLen = pStrEnd - pMsgText - 1;
+            nStrLen = (int)(pStrEnd - pMsgText - 1);
             if (nStrLen >= 0x400) {
               goto reset_news_table;
             }

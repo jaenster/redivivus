@@ -108,7 +108,7 @@ static void __stdcall RENDERER_WINDOWED_AllocateDIBSection(int nResolutionMode) 
 
     RENDERER_nWindowWidth = nWidth;
     RENDERER_nWindowHeight = nHeight;
-    memset(&sBitmapInfo, 0, 0x428);
+    memset(&sBitmapInfo, 0, sizeof(sBitmapInfo));
     /* HWND hWnd for GetDC */ sBitmapInfo.bmiHeader.biSize = 0x28;
     sBitmapInfo.bmiHeader.biWidth = nWidth;
     sBitmapInfo.bmiHeader.biHeight = -nHeight;
@@ -330,7 +330,7 @@ BOOL __fastcall ActivateWindow() {
     return 0;
 }
 
-BOOL __fastcall SetOption(int nOption, int nValue) {
+BOOL __fastcall SetOption(int nOption, intptr_t nValue) {
     return 0;
 }
 
@@ -620,12 +620,12 @@ void __fastcall DrawVerticalCropImage(D2GfxDataStrc * pData, int nPosX, int nPos
     }
 
     int32_t nDC6OffsetY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block);
-    int nViewportHeight = RENDERER_nWindowHeight;
+    int nViewportHeight = RENDERER_nWindowHeight; // steer-ok: generated form, kept as emitted
     if (!(nDC6OffsetY + nPosY >= 0 && nDC6OffsetY + nPosY - nDC6Height < RENDERER_nWindowHeight)) {
       return;
     }
 
-    uint32_t pLookupTable2 = 0;
+    uint8_t* pLookupTable2 = nullptr;
     int nDrawLinesSlot;
     uint8_t* pBlendTable = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&nDrawLinesSlot);
     D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, RENDERER_WINDOWED_nScaleOffsetY, RENDERER_WINDOWED_nScaleWidth, gpRenderBackBufferBits, nViewportHeight, RENDERER_nWindowWidth, 0, pBlendTable, nSkipLines, nDrawLines, pLookupTable2);
@@ -658,7 +658,7 @@ void __fastcall DrawClippedImage(D2GfxDataStrc * pData, int32_t nPosX, int32_t n
 
     int32_t nClipBottom_00 = __frame0.nClipBottom;
     uint8_t* pPalettePtr = RENDERER_WINDOWED_GetPalettePointer(nDrawMode, (uint32_t*)&pCropRect);
-    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nCropLeft, __frame0.nCropRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, pPalettePtr, __frame0.nClipTop, nClipBottom_00, bOutOfBounds);
+    D2CMP::SRC::CelCmp::CELCMP_DrawCelFrameFromGfxData(pData, nPosX, nPosY, __frame0.nCropLeft, __frame0.nCropRight, gpRenderBackBufferBits, RENDERER_nWindowHeight, RENDERER_nWindowWidth, 0, pPalettePtr, __frame0.nClipTop, nClipBottom_00, nullptr);
 }
 
 void __fastcall DrawShadow(D2GfxDataStrc * pData, int nPosX, int nPosY) {

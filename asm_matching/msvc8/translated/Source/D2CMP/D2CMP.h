@@ -88,7 +88,7 @@ struct D2CelFileCacheEntryStrc {
 #ifndef D2_DEFINED_D2CodecBitStateStrc
 #define D2_DEFINED_D2CodecBitStateStrc
 struct D2CodecBitStateStrc {
-    /* 0x00 */ uint32_t nReserved00; // field at +0 (not directly accessed by bit-reader fns)
+    /* 0x00 */ uint32_t * pStreamStart; // first 32-bit word of the bit stream; the bit position is ((pCurWord - pStreamStart) << 5) + nBitOffset
     /* 0x04 */ uint32_t * pCurWord; // pointer to current 32-bit word in bit stream
     /* 0x08 */ uint32_t nReserved08; // field at +8 (not directly accessed by bit-reader fns)
     /* 0x0C */ int nBitOffset; // bit offset within current 32-bit word (0..31)
@@ -210,7 +210,7 @@ struct D2SpriteCacheEntryStrc {
 #ifndef D2_DEFINED_D2SpriteDecodeRequestStrc
 #define D2_DEFINED_D2SpriteDecodeRequestStrc
 __pragma(pack(push, 1)) struct D2SpriteDecodeRequestStrc {
-    /* 0x00 */ uint32_t (__stdcall *pfnComplete)(uint32_t *, size_t, struct D2SpriteDecodeRequestStrc *);
+    /* 0x00 */ uint32_t (__stdcall *pfnComplete)(uint32_t *, uint32_t, struct D2SpriteDecodeRequestStrc *);
     /* 0x04 */ uint8_t * pCelHeader;
     /* 0x08 */ struct D2CelDecodeStateStrc * pDecodeState;
     /* 0x0C */ int32_t nStartFrame;
@@ -331,7 +331,7 @@ uint32_t __stdcall CELCMP_GetPaletteShiftValue(uint32_t nPaletteIndex, uint32_t 
 uint32_t __stdcall CELCMP_GetFrameDecodeHandlerReverse(uint32_t nGameDirection, uint32_t nLevelOfRotation);
 void __stdcall CELCMP_FixupPointersAndPrepare(struct DC6 * pDC6, struct DC6 * * ppDC6Out, char * szFile, int32_t nLine, int32_t nExpectedFormat, char * szName);
 void __stdcall CELCMP_DrawCelFrame(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, uint32_t nDstPitch, BYTE * pRenderArg1, BYTE * pRenderArg2, BYTE * pPalette);
-void __stdcall CELCMP_DrawCelFrameFromGfxData(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, int32_t pLookupTable1, uint8_t * pBlendTable, int32_t nClipTop, int32_t nClipBottom, int32_t pLookupTable2);
+void __stdcall CELCMP_DrawCelFrameFromGfxData(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nViewportHeight, uint32_t nDstPitch, uint8_t * pLookupTable1, uint8_t * pBlendTable, int32_t nClipTop, int32_t nClipBottom, uint8_t * pLookupTable2);
 void __stdcall CELCMP_DrawCelFrameCentered(struct D2GfxDataStrc * pGfxData, int32_t nDrawX, int32_t nDrawY, int32_t nClipLeft, int32_t nClipRight, BYTE * pDstBits, int32_t nDstHeight, int32_t nDstPitch, BYTE * pBlendTable, uint8_t byBlendColor);
 struct DC6Block * __stdcall CELCMP_GetDC6BlockFromGfxData(struct D2GfxDataStrc * pGfxData);
 int32_t __stdcall GetDC6Width(struct DC6Block * pDC6Block);
@@ -341,7 +341,7 @@ int32_t __stdcall GetDC6OffsetY(struct DC6Block * pDC6Block);
 int32_t __stdcall IMAGE_GetFramesCount(struct DC6 * pDC6);
 void __stdcall CELCMP_SetPixelDataFreeCallback(pfnCelPixelDataFree pfnFreeCallback);
 BOOL __stdcall DeleteCellFile(struct DC6 * pDC6);
-int __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
+uint8_t * __stdcall CELCMP_GetDC6BlockPixelData(struct DC6Block * pDC6Block);
 void __stdcall GFX_SetSpriteCacheFreeCallback(pfnLruFreeEntry pfnFreeEntry);
 }}} // namespace D2CMP::SRC::CelCmp
 namespace D2CMP { namespace SRC { namespace FastCmp {

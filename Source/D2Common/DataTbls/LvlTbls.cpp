@@ -2,7 +2,6 @@
 
 #include "Source/D2Common/DataTbls/LvlTbls.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2Client/UI/Automap.h"
 #include "Source/D2Common/DataTbls/DataTbls.h"
 #include "Source/D2Common/Drlg/D2DrlgFileStrc.h"
 #include "Source/D2Common/Drlg/Drlg.h"
@@ -15,7 +14,15 @@
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/DataTbls/LvlTbls.data.h"
+#include "Source/D2Headers/D2Arch.h"
 #include "Source/D2Common/Seed.inline.h"
+
+// lvlsub.bin records are the 32-bit 0x15c-byte layout; pDrlgFile and the grids are runtime-only.
+#if D2_ARCH_X86
+static_assert(sizeof(D2LvlSubTxt) == 0x15c, "D2LvlSubTxt: lvlsub.bin is loaded in place, so the record must be the 0x15c bytes on disk");
+#elif D2_ARCH_X64
+static_assert(offsetof(D2LvlSubTxt, pDrlgFile) == 0x50, "D2LvlSubTxt: the data fields before pDrlgFile keep their on-disk offsets");
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -814,6 +821,15 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
     };
     int nMaxTypeId = 0;
     sgpTxtLvlSub = (D2LvlSubTxt*)DataTbls::CompileTxt(pMemory, "lvlsub", lvlsub, &nTxtLvlSubSize, 0x15c);
+#if D2_ARCH_X64
+    {
+      static const DataTbls::D2BinRecordSpanStrc aLvlSubSpans[] = {
+        {0, 0, 0x50},
+        {0x11c, offsetof(D2LvlSubTxt, Prob), 0x40}
+      };
+      sgpTxtLvlSub = (D2LvlSubTxt*)DataTbls::WidenBinTable(sgpTxtLvlSub, nTxtLvlSubSize, 0x15c, sizeof(D2LvlSubTxt), aLvlSubSpans, 2);
+    }
+#endif
     D2LvlSubTxt* pLvlSubTxt = sgpTxtLvlSub;
     int i = nTxtLvlSubSize;
     int nRowCount = nTxtLvlSubSize;
@@ -852,8 +868,8 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
       }
     }
     if (nParam || bGametypeIsOBNetHost) {
-      gpaDrlgLvlSubPresetFiles = (D2DrlgFileStrc**)D2_ALLOC_AT(nRowCount * 4, ".\\DATATBLS\\LvlTbls.cpp", 0x3b6);
-      memset(gpaDrlgLvlSubPresetFiles, 0, nTxtLvlSubSize * 4);
+      gpaDrlgLvlSubPresetFiles = (D2DrlgFileStrc**)D2_ALLOC_AT(nRowCount * sizeof(D2DrlgFileStrc*), ".\\DATATBLS\\LvlTbls.cpp", 0x3b6);
+      memset(gpaDrlgLvlSubPresetFiles, 0, nTxtLvlSubSize * sizeof(D2DrlgFileStrc*));
     }
 
     pLvlSubTxt = sgpTxtLvlSub;
@@ -866,7 +882,7 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
     char* szCurrentFile = pLvlSubTxt->File;
     do {
       LVLTBLS_FixPathSlashes("DATA\\GLOBAL\\TILES", szCurrentFile);
-      if ((bIsExpansion || !*(int*)(szCurrentFile + 0x154)) && (nParam || bGametypeIsOBNetHost)) {
+      if ((bIsExpansion || !((D2LvlSubTxt*)(szCurrentFile - offsetof(D2LvlSubTxt, File)))->Expansion) && (nParam || bGametypeIsOBNetHost)) {
         Drlg::Preset::AllocDrlgFile(gpaDrlgLvlSubPresetFiles + i, nullptr, szCurrentFile);
         if (!gpaDrlgLvlSubPresetFiles[i]->nSubstGroups) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3c8);
@@ -874,7 +890,7 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
         }
       }
 
-      szCurrentFile += 0x15c;
+      szCurrentFile += sizeof(D2LvlSubTxt);
       i++;
     } while (i < nTxtLvlSubSize);
 }
@@ -1624,57 +1640,43 @@ static int32_t LVLTBLS_GetAutomapLevelId(char * szLevelName) {
 }; D2_STATIC_GUARD(gaAutomapLevelNames, "D2Common::DATATBLS::LvlTbls::LVLTBLS_GetAutomapLevelId::gaAutomapLevelNames");
 
     int nLevelId = 0;
-    if (*szLevelName == '0') {
-      return 0;
+    if (*szLevelName != '0') {
+      char (*pEntry)[16] = gaAutomapLevelNames;
+      do {
+        if (!strcmp(szLevelName, *pEntry)) {
+          return nLevelId;
+        }
+
+        pEntry++;
+        nLevelId++;
+      } while ((intptr_t)pEntry < (intptr_t)&gaAutomapLevelNames[sizeof(gaAutomapLevelNames) / sizeof(gaAutomapLevelNames[0])]);
+
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a5);
+      exit(-1);
     }
 
-    uint8_t (*pTableEntry)[16] = (uint8_t (*)[16])gaAutomapLevelNames;
-    uint8_t* pbScan = (uint8_t*)szLevelName;
-    uint8_t* pRowStart = (uint8_t*)pTableEntry;
-    do {
-      int nCmpResult;
-      nCmpResult = strcmp((char*)pbScan, (char*)pTableEntry);
-      if (!nCmpResult) {
-        return nLevelId;
-      }
-
-      pTableEntry = (uint8_t (*)[16])(pRowStart + 0x10);
-      nLevelId++;
-      pbScan = (uint8_t*)szLevelName;
-      pRowStart = (uint8_t*)pTableEntry;
-      if ((intptr_t)pTableEntry >= (intptr_t)((char*)&gaAutomapLevelNames + sizeof(gaAutomapLevelNames))) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a5);
-        exit(-1);
-      }
-    } while (true);
+    return nLevelId;
 }
 
 // Linear search through a hardcoded table of tile-name strings (e.g. "fl") to resolve an automap tile name to its integer tile ID. Returns 0 if the name starts with '0' or matches the first entry; halts with an internal error if the table end is overrun. In: szTileName (EDI). Out: matching tile ID or 0.
 static int32_t LVLTBLS_GetAutomapTileId(char * szTileName) {
     int nTileId = 0;
-    if (*szTileName == '0') {
-      return 0;
+    if (*szTileName != '0') {
+      char (*pEntry)[8] = gaAutomapTileNames;
+      do {
+        if (!strcmp(szTileName, *pEntry)) {
+          return nTileId;
+        }
+
+        pEntry++;
+        nTileId++;
+      } while ((intptr_t)pEntry < (intptr_t)&gaAutomapTileNames[sizeof(gaAutomapTileNames) / sizeof(gaAutomapTileNames[0])]);
+
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4d0);
+      exit(-1);
     }
 
-    uint8_t (*pCurEntry)[8] = (uint8_t (*)[8])gaAutomapTileNames;
-    uint8_t* pbSzCur = (uint8_t*)szTileName;
-    uint8_t* pEntryStart = (uint8_t*)pCurEntry;
-    do {
-      int nCmpResult;
-      nCmpResult = strcmp((char*)pbSzCur, (char*)pCurEntry);
-      if (!nCmpResult) {
-        return nTileId;
-      }
-
-      pCurEntry = (uint8_t (*)[8])(pEntryStart + 8);
-      nTileId++;
-      pbSzCur = (uint8_t*)szTileName;
-      pEntryStart = (uint8_t*)pCurEntry;
-      if ((intptr_t)pCurEntry >= (intptr_t)((char*)&gaAutomapTileNames + sizeof(gaAutomapTileNames))) {
-        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4d0);
-        exit(-1);
-      }
-    } while (true);
+    return nTileId;
 }
 
 // Loads and compiles automap.txt into the runtime AutoMap level tables. Initializes the data-table seed, declares the column schema (LevelName, TileName, Style, Start/EndSequence, Cel1-4), and compiles it via CompileTxt. Allocates a 32-byte-per-row AutoMapLvlTbls array, then per row resolves the automap level id and tile id, copies style/sequence and cel fields, and counts the valid (non -1) cels (halts if a row has zero cels). Then resets the gpaAutoMapRelated index table to -1 and builds, per level type, the start index + count of contiguous same-type rows. Side effects: allocates server memory, fills global automap tables; unrecoverable-halt on bad rows. Server-side D2Common DataTbls (LvlTbls).
@@ -1708,51 +1710,37 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
     D2AutomapTxt* pTxtAutomap = (D2AutomapTxt*)DataTbls::CompileTxt(pMemory, "automap", automap, &nTxtAutomapSize, 0x2c);
     D2AutoMapLvlTbls* pAutoMapLvlTbls_lcl = (D2AutoMapLvlTbls*)D2_ALLOC_POOL_AT(nullptr, nTxtAutomapSize << 5, ".\\DATATBLS\\LvlTbls.cpp", 0x4f7);
     memset(pAutoMapLvlTbls_lcl, 0, nTxtAutomapSize << 5);
-    int nTxtRow = 0;
-    if (nTxtAutomapSize > 0) {
-      int nValidCelCount;
-      pMiddlePointer = &pAutoMapLvlTbls_lcl->nIndex;
-      pbTxtRow = &pTxtAutomap->Style;
-      do {
-        nLevelType = LVLTBLS_GetAutomapLevelId((char*)(pbTxtRow - 0x18));
-        ((D2AutoMapLvlTbls*)(pMiddlePointer - 2))->nLevelType = nLevelType;
-        nLevelType = LVLTBLS_GetAutomapTileId((char*)(pbTxtRow - 8));
-        pMiddlePointer[-1] = nLevelType;
-        *(uint8_t*)pMiddlePointer = *pbTxtRow;
-        *(uint8_t*)((char*)pMiddlePointer + 1) = pbTxtRow[1];
-        *(uint8_t*)((char*)pMiddlePointer + 2) = pbTxtRow[2];
-        pMiddlePointer[1] = *(int*)(pbTxtRow + 4);
-        pMiddlePointer[2] = *(int*)(pbTxtRow + 8);
-        pMiddlePointer[3] = *(int*)(pbTxtRow + 0xc);
-        pMiddlePointer[4] = *(int*)(pbTxtRow + 0x10);
-        pMiddlePointer[5] = 0;
-        nValidCelCount = 0;
-        pCelField = pMiddlePointer;
-        do {
-          pCelField++;
-          if (*pCelField == -1) {
-            break;
-          }
-
-          pMiddlePointer[5]++;
-          nValidCelCount++;
-        } while (nValidCelCount < 4);
-
-        if (!pMiddlePointer[5]) {
-          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), (int32_t)0x50d);
-          exit(-1);
+    for (int nTxtRow = 0; nTxtRow < nTxtAutomapSize; nTxtRow++) {
+      D2AutomapTxt* pTxtRow = &pTxtAutomap[nTxtRow];
+      D2AutoMapLvlTbls* pLvlRow = &pAutoMapLvlTbls_lcl[nTxtRow];
+      pLvlRow->nLevelType = LVLTBLS_GetAutomapLevelId(pTxtRow->LevelName);
+      pLvlRow->nOrientation = LVLTBLS_GetAutomapTileId(pTxtRow->TileName);
+      *(uint8_t*)&pLvlRow->nIndex = pTxtRow->Style;
+      *((uint8_t*)&pLvlRow->nIndex + 1) = pTxtRow->StartSequence;
+      *((uint8_t*)&pLvlRow->nIndex + 2) = pTxtRow->EndSequence;
+      pLvlRow->nCellNo[0] = pTxtRow->Cell[0];
+      pLvlRow->nCellNo[1] = pTxtRow->Cell[1];
+      pLvlRow->nCellNo[2] = pTxtRow->Cell[2];
+      pLvlRow->nCellNo[3] = pTxtRow->Cell[3];
+      pLvlRow->nSize = 0;
+      for (int nCel = 0; nCel < 4; nCel++) {
+        if (pLvlRow->nCellNo[nCel] == -1) {
+          break;
         }
 
-        nTxtRow++;
-        pbTxtRow += 0x2c;
-        pMiddlePointer += 8;
-      } while (nTxtRow < nTxtAutomapSize);
+        pLvlRow->nSize++;
+      }
+
+      if (!pLvlRow->nSize) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), (int32_t)0x50d);
+        exit(-1);
+      }
     }
 
     DataTbls::UnloadBin(pTxtAutomap);
+    pAutoMapLvlTbls = pAutoMapLvlTbls_lcl;
     nTxtAutoMapSize = nTxtAutomapSize;
     pMiddlePointer = &gpaAutoMapRelated[0].nCount;
-    pAutoMapLvlTbls = pAutoMapLvlTbls_lcl;
     do {
       ((D2AutomapRelatedTxt*)(pMiddlePointer - 1))->nIndex = -1;
       *pMiddlePointer = -1;
@@ -1760,25 +1748,23 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
     } while ((intptr_t)pMiddlePointer < (intptr_t)&gpaAutoMapRelated + 292);
 
     int nAutoMapRow = 0;
-    if (nTxtAutomapSize > 0) {
-      do {
-        nIndex = pAutoMapLvlTbls_lcl[nAutoMapRow].nLevelType;
-        pNext = pAutoMapLvlTbls_lcl + nAutoMapRow;
-        gpaAutoMapRelated[nIndex].nIndex = nAutoMapRow;
-        nSameTypeStart = nAutoMapRow;
-        while (true) {
-          nSameTypeStart++;
-          if (!(nSameTypeStart < nTxtAutomapSize && (pNext++ , nIndex == pNext->nLevelType))) {
-            break;
-          }
-
-          nAutoMapRow++;
+    while (nAutoMapRow < nTxtAutomapSize) {
+      nIndex = pAutoMapLvlTbls_lcl[nAutoMapRow].nLevelType;
+      pNext = &pAutoMapLvlTbls_lcl[nAutoMapRow];
+      gpaAutoMapRelated[nIndex].nIndex = nAutoMapRow;
+      for (nSameTypeStart = nAutoMapRow + 1; nSameTypeStart < nTxtAutomapSize; nSameTypeStart++) {
+        pNext++;
+        if (nIndex != pNext->nLevelType) {
+          break;
         }
 
         nAutoMapRow++;
-        gpaAutoMapRelated[nIndex].nCount = nAutoMapRow;
-      } while (nAutoMapRow < nTxtAutomapSize);
+      }
+
+      nAutoMapRow++;
+      gpaAutoMapRelated[nIndex].nCount = nAutoMapRow;
     }
+
     if (!(nAutoMapRow <= nTxtAutomapSize)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x528);
       exit(-1);
@@ -1788,35 +1774,27 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
 }
 
 int32_t __fastcall GetRandomCellNo(int32_t nLevelType, int32_t nOrientation, int32_t nIndex, int32_t nSubIndex) {
-    uint32_t nRandIdx;
-    D2AutoMapLvlTbls* pAutoMapLvlTblsBase = pAutoMapLvlTbls;
     if (!nLevelType) {
       return -1;
     }
 
-    int nUpperBound = gpaAutoMapRelated[nLevelType].nIndex;
+    int nFirst = gpaAutoMapRelated[nLevelType].nIndex;
     int nCount = gpaAutoMapRelated[nLevelType].nCount;
-    if (nUpperBound == -1) {
+    if (nFirst == -1) {
       return -1;
     }
     if (nCount == -1) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53b);
       exit(-1);
     }
-    if (nUpperBound >= nCount) {
-      return -1;
-    }
 
-    int* pIndexField = &pAutoMapLvlTbls[nUpperBound].nIndex;
-    do {
-      if (((D2AutoMapLvlTbls*)(pIndexField - 2))->nLevelType == nLevelType && ((D2AutoMapLvlTbls*)(pIndexField - 2))->nOrientation == nOrientation && ((uint8_t)*pIndexField == 0xff || (uint32_t)(uint8_t)*pIndexField == nIndex) && (((uint8_t*)pIndexField)[1] == 0xff || (int)(uint32_t)((uint8_t*)pIndexField)[1] <= nSubIndex && (int)(uint32_t)((uint8_t*)pIndexField)[2] >= nSubIndex)) {
-        nRandIdx = Seed::RANDOM_RandomNumberSelector(psDataTableSeed, pAutoMapLvlTbls[nUpperBound].nSize);
-        return pAutoMapLvlTblsBase[nUpperBound].nCellNo[nRandIdx];
+    for (int i = nFirst; i < nCount; i++) {
+      D2AutoMapLvlTbls* pEntry = &pAutoMapLvlTbls[i];
+      uint8_t* pSeq = (uint8_t*)&pEntry->nIndex;
+      if (pEntry->nLevelType == nLevelType && pEntry->nOrientation == nOrientation && (pSeq[0] == 0xff || pSeq[0] == nIndex) && (pSeq[1] == 0xff || pSeq[1] <= nSubIndex && pSeq[2] >= nSubIndex)) {
+        return pAutoMapLvlTbls[i].nCellNo[Seed::RANDOM_RandomNumberSelector(psDataTableSeed, pAutoMapLvlTbls[i].nSize)];
       }
-
-      nUpperBound++;
-      pIndexField += 8;
-    } while (nUpperBound < nCount);
+    }
 
     return -1;
 }

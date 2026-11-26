@@ -934,7 +934,7 @@ void __fastcall Q05_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // A1Q5 (The Forgotten Tower) per-game quest registration. Zeroes the state-handler table then wires the per-state callbacks: [0]=Callback_00 (gossip), [3]=Callback_03 (area/tower entry), [8]=Callback_08 (Countess/clear), [0xa]=Callback_10 (player left), [0xb]=Callback_11 (Akara dialog/turn-in), [0xd]=Callback_13 (reload). Sets nQuestIdReal=QUEST_ForgottenTower, installs the NPC gossip table (aNpcGossipData), fpActiveFilter=Q05_ActiveFilter, fpSequenceFilter=Q05_SequenceFilter, nSequenceQuestId=QUEST_ToolsOfTheTrade (next quest), nInitNo=4, fpStatusFilter=null. Allocates the 0x120-byte A1Q5-specific data from the game memory pool, zeroes it, and inits its GUID player-count list (QUESTGUID_SetPlayerCountToZero). Pure registration; no quest-record state I/O.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
 void __fastcall Q05_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q05_Callback03_ChangedLevel;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q05_Callback11_ScrollMessage;
@@ -954,7 +954,7 @@ void __fastcall Q05_InitData(D2QuestDataStrc * pQuestData) {
     D2QuestDataA1Q5Strc* pQuestSpecificData = D2_NEW_POOL_AT(pGame->pMemoryPool, D2QuestDataA1Q5Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x40f);
     pQuestData->pQuestSpecificData.pA1Q5 = pQuestSpecificData;
     pQuestData->nSequenceQuestId = QUEST_ToolsOfTheTrade;
-    memset(pQuestSpecificData, 0, 0x120);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sQuestGUID);
 }
 

@@ -673,7 +673,7 @@ static void __stdcall Q35_FireAncientDeathMissile(D2QuestArgStrc * pQuestArg, D2
       return;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x420;
     sSkillArg.nMissileTxtNo = MISSILE_AncientDeathCenter;
     sSkillArg.pOwner = pQuestArg->pTarget;
@@ -930,7 +930,7 @@ void __fastcall Q35_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // [A5Q5 = Rite of Passage] Q35_InitData: quest table init. Allocates A5Q5 quest-specific data, wires sub-handlers (00/02/03/08/0b/0d), sets nQuestIdReal=QUEST_RiteOfPassage, fpActiveFilter=Q35_ActiveFilter, fpSequenceFilter=Q35_SequenceFilter, nSequenceQuestId=RescueOnMountArreat, and the altar gossip table (npc 0x203 -> string 0x4eb9).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q5.cpp
 void __fastcall Q35_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q35_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q35_Callback03_ChangedLevel;
@@ -950,7 +950,7 @@ void __fastcall Q35_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpActiveFilter = Q35_ActiveFilter;
     pQuestData->fpSequenceFilter = Q35_SequenceFilter;
     pQuestData->nSequenceQuestId = QUEST_RescueOnMountArreat;
-    memset(pQuestSpecificData, 0, 0x64);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
 }
 
 // [A5Q5 = Rite of Passage] Q35_OnPlayerDeath: if a player dies on the Arreat Summit before the Ancients are beaten, bumps the resurrection counter and resets the arena (Q35_ResetAncientsArena) so the fight restarts. No quest-state writes.
@@ -1002,7 +1002,7 @@ int __fastcall Q35_GetAncientsState(::SGAMEDATA * pGame) {
 }
 
 // [A5Q5 = Rite of Passage] Q35_Noop: empty stub.
-void __stdcall Q35_Noop() {
+void __fastcall Q35_Noop(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 }
 

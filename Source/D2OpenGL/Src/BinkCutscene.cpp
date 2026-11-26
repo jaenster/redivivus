@@ -205,7 +205,7 @@ void OGL_PlayVideoFile(char * szFile, int nResolutionMode, BYTE * pBuffer, int n
           }
 
           HANDLE_GetFileRefNum(hFile, &__frame0.nRefNum);
-          HBINK_00552584 = (HBINK)BinkOpenRefNum((uint64_t*)(int)__frame0.nRefNum, uVar6);
+          HBINK_00552584 = (HBINK)BinkOpenRefNum((void*)(intptr_t)__frame0.nRefNum, uVar6);
           if (HBINK_00552584) {
             DAT_00552588 = 0x280 - HBINK_00552584->Width >> 1;
             if (DAT_00552588 & 3) {
@@ -299,7 +299,7 @@ void OGL_PlayVideoFile(char * szFile, int nResolutionMode, BYTE * pBuffer, int n
                   do {
                     x = *(GLfloat*)((uintptr_t)&local_44 + iVar4);
                     y = *(GLfloat*)((uintptr_t)&local_40 + iVar4);
-                    glTexCoord2f(*(GLfloat*)((int)local_38 + iVar4 - 4), *(GLfloat*)((int)local_38 + iVar4));
+                    glTexCoord2f(*(GLfloat*)((uintptr_t)local_38 + iVar4 - 4), *(GLfloat*)((uintptr_t)local_38 + iVar4));
                     glVertex2f(x, y);
                     iVar4 += 0x10;
                   } while (iVar4 != 0x30);
@@ -326,7 +326,7 @@ void OGL_PlayVideoFile(char * szFile, int nResolutionMode, BYTE * pBuffer, int n
         }
         LAB_002dee0c:
         if (hFile) {
-          CloseHandle((int)hFile);
+          CloseHandle(hFile);
         }
       }
     }

@@ -150,7 +150,7 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
 }
 
 void __fastcall MissileCalcLinker(char * pSrc, void * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
-    size_t nCalcCodeSize;
+    uint32_t nCalcCodeSize;
     int32_t nParsedLen;
     uint8_t byCalcBuf[1024];
     if (!pRecord) {
@@ -173,73 +173,53 @@ void __fastcall MissileCalcLinker(char * pSrc, void * pRecord, int32_t nOffset, 
 }
 
 // Validates a single field of a D2MissilesTxt row (indexed by nMissileIdx) against [nMinVal, nMaxVal] and clamps it in-place if out of range. Reads the field via eFieldType (0=signed byte, 1=unsigned byte, 2=signed short, 3=unsigned short, 4=uint32) at nFieldOffset into the Missile sub-struct. On violation, walks pFieldDescArray to find the matching descriptor, then writes back the clamped value at the same offset and width.
-static void __stdcall MISSILETBLS_ValidateAndClampField(uint32_t eFieldType, int nMinVal, int nMaxVal, int32_t nFieldOffset, D2BinFieldInputStrc * pFieldDescArray, int32_t nMissileIdx) {
+static __inline void __stdcall MISSILETBLS_ValidateAndClampField(uint32_t eFieldType, int nMinVal, int nMaxVal, int32_t nFieldOffset, D2BinFieldInputStrc * pFieldDescArray, int32_t nMissileIdx) {
     D2MissilesTxt* pMissileTxt = nMissileIdx < 0 || nMissileIdx >= ITEMS::Items::sgptDataTable->nTxtMissilesSize ? 0 : ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileIdx;
-    uint32_t nRawVal = 0;
+    int nValue = 0;
     switch (eFieldType) {
       case 0:
-        nRawVal = (uint32_t)*(char*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nValue = *(char*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
       break;
       case 1:
-        nRawVal = (uint32_t)*(uint8_t*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nValue = *(uint8_t*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
       break;
       case 2:
-        nRawVal = (uint32_t)*(short int*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nValue = *(short int*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
       break;
       case 3:
-        nRawVal = (uint32_t)*(uint16_t*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nValue = *(uint16_t*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
       break;
       case 4:
-        nRawVal = *(uint32_t*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
+        nValue = *(int*)((intptr_t)&pMissileTxt->Missile + nFieldOffset);
+      break;
     }
 
-    if (!((int)nRawVal < nMinVal || (int)nRawVal > nMaxVal)) {
-      return;
-    }
-
-    int iDescIdx = 0;
-    eD2BinFieldInputType pCurFieldDesc = pFieldDescArray->eType;
-    D2BinFieldInputStrc* pDescBase = pFieldDescArray;
-    while (pCurFieldDesc != FIELDTYPE_END && pDescBase->nOffset != nFieldOffset) {
-      iDescIdx++;
-      pCurFieldDesc = pFieldDescArray[iDescIdx].eType;
-      pDescBase = pFieldDescArray + iDescIdx;
-    }
-
-    uint32_t nClampedVal = nRawVal;
-    if ((int)nRawVal <= nMinVal) {
-      nClampedVal = nMinVal;
-    }
-    if ((int)nClampedVal < nMaxVal) {
-      nMaxVal = nRawVal;
-      if ((int)nRawVal <= nMinVal) {
-        nMaxVal = nMinVal;
+    if (nValue < nMinVal || nValue > nMaxVal) {
+      int nField = 0;
+      while (pFieldDescArray[nField].eType != FIELDTYPE_END && pFieldDescArray[nField].nOffset != nFieldOffset) {
+        nField++;
       }
-    }
 
-    switch (eFieldType) {
-      case 0:
-
-      case 1:
-        *(char*)((intptr_t)&pMissileTxt->Missile + nFieldOffset) = (char)nMaxVal;
-      return;
-      case 2:
-
-      case 3:
-        *(short int*)((intptr_t)&pMissileTxt->Missile + nFieldOffset) = (short int)nMaxVal;
-      return;
-      case 4:
-        *(int*)((intptr_t)&pMissileTxt->Missile + nFieldOffset) = nMaxVal;
+      nValue = (nValue > nMinVal ? nValue : nMinVal) < nMaxVal ? (nValue > nMinVal ? nValue : nMinVal) : nMaxVal;
+      switch (eFieldType) {
+        case 0:
+        case 1:
+          *(char*)((intptr_t)&pMissileTxt->Missile + nFieldOffset) = (char)nValue;
+        return;
+        case 2:
+        case 3:
+          *(short int*)((intptr_t)&pMissileTxt->Missile + nFieldOffset) = (short int)nValue;
+        return;
+        case 4:
+          *(int*)((intptr_t)&pMissileTxt->Missile + nFieldOffset) = nValue;
+        return;
+      }
     }
 }
 
 // Builds the 147-column field-descriptor table for Missiles.txt (boolean bit-flags packed at offset 4, client/server Do/Hit/Dmg function-pointer columns, param/calc columns wired through MissileCalcLinker, sub-missile and overlay name links, damage/elemental-damage-by-level rows, velocity/accel, graphics, and collision columns) and compiles it into sgtDataTable.pTxtMissiles via CompileTxt (row stride 0x1a4). Post-compile: clamps each row's CollideType into 0..8. Finally serializes the compiled missile code table to a bin file via TXT_SaveTableToBinFile ("misscode"). __fastcall, pMemory = data-table pool. Called once at data-table load.
 // @sourcefile .\DATATBLS\MissileTbls.cpp
 void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
-    D2DataTableTxtStrc* sgptDataTable_lcl;
-    D2BinFieldInputStrc* pFieldDesc;
-    uint32_t byCollideType;
-    D2MissilesTxt* pMissileTxt;
     D2BinFieldInputStrc missiles[147] = {
       {"Missile", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
       {"LastCollide", FIELDTYPE_BIT, 0, 4, 0},
@@ -391,45 +371,8 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
     };
     MonsterTbls::sgtDataTable.pTxtMissilesLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MissileTbls.cpp", 0x189);
     MonsterTbls::sgtDataTable.pTxtMissiles = (D2MissilesTxt*)DataTbls::CompileTxt(pMemory, "missiles", missiles, &MonsterTbls::sgtDataTable.nTxtMissilesSize, 0x1a4);
-    int iMissileIdx = 0;
-    if (MonsterTbls::sgtDataTable.nTxtMissilesSize > 0) {
-      int iFieldIdx;
-      sgptDataTable_lcl = ITEMS::Items::sgptDataTable;
-      do {
-        if (iMissileIdx < 0 || iMissileIdx >= sgptDataTable_lcl->nTxtMissilesSize) {
-          pMissileTxt = 0;
-        } else {
-          pMissileTxt = &sgptDataTable_lcl->pTxtMissiles[iMissileIdx];
-        }
-
-        byCollideType = pMissileTxt->CollideType;
-        if (false || 8 < byCollideType) {
-          iFieldIdx = 0;
-          if (missiles[0].eType != FIELDTYPE_END) {
-            pFieldDesc = missiles;
-            do {
-              if (pFieldDesc->nOffset == 0x183) {
-                break;
-              }
-
-              iFieldIdx++;
-              pFieldDesc = missiles + iFieldIdx;
-            } while (missiles[iFieldIdx].eType != FIELDTYPE_END);
-          }
-          if (byCollideType) {
-            if (7 < byCollideType) {
-              byCollideType = 8;
-            }
-          } else {
-            byCollideType = 0;
-          }
-
-          pMissileTxt->CollideType = byCollideType;
-          sgptDataTable_lcl = ITEMS::Items::sgptDataTable;
-        }
-
-        iMissileIdx++;
-      } while (iMissileIdx < MonsterTbls::sgtDataTable.nTxtMissilesSize);
+    for (int nMissileIdx = 0; nMissileIdx < MonsterTbls::sgtDataTable.nTxtMissilesSize; nMissileIdx++) {
+      MISSILETBLS_ValidateAndClampField(1, 0, 8, 0x183, missiles, nMissileIdx);
     }
 
     DataTbls::TXT_SaveTableToBinFile(pMemory, "misscode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pMissCode, (size_t*)&MonsterTbls::sgtDataTable.nMissCodeSize, (size_t*)&MonsterTbls::sgtDataTable.nMissCodeCapacity);

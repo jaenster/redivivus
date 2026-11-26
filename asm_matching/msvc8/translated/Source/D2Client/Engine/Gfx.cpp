@@ -54,7 +54,7 @@
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/Unit/SUnitDmg.h"
@@ -678,7 +678,7 @@ void __fastcall GFX_DrawOverlayOnUnit(D2UnitStrc * pUnit, int32_t nOverlayId, in
             return;
           }
 
-          memset(&sGfxData, 0, 0x48);
+          memset(&sGfxData, 0, sizeof(sGfxData));
           sGfxData.nOverlayId = nOverlayId;
           if (!GfxUtil::DC6_AssignParams(&sGfxData, nullptr, nullptr, (uint32_t)D2Common::Units::GetDirection(pUnit), nFrame, &nAssignResult, 1, -1)) {
             return;
@@ -763,7 +763,7 @@ void __stdcall DRAW_UNIT_States(D2UnitStrc * pUnit, int32_t nBlendMode, int32_t 
         exit(-1);
       }
 
-      memset(&sGfxData, 0, 0x48);
+      memset(&sGfxData, 0, sizeof(sGfxData));
       sGfxData.nOverlayId = nThisOverlayId;
       if (!GfxUtil::DC6_AssignParams(&sGfxData, nullptr, nullptr, (uint32_t)D2Common::Units::GetDirection(pUnit), nFrame, &nScreenX, 1, -1)) {
         return;
@@ -1278,7 +1278,7 @@ uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
       }
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     nDC6Height = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDC6Height, 0, &nPalShiftIndex, '\x01', -1);
     if (!nDC6Height) {
       return 0;
@@ -1514,7 +1514,7 @@ void __fastcall GFX_FreePlayerCofCache(int32_t nParam) {
       D2_FREE_AT(gPlayerCofCache.pCacheMemory, ".\\ENGINE\\Gfx.cpp", 0xe50);
     }
 
-    memset(&gPlayerCofCache, 0, 0x80c);
+    memset(&gPlayerCofCache, 0, sizeof(gPlayerCofCache));
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
@@ -1525,7 +1525,7 @@ void GFX_FreeMonsterCofCache() {
       D2_FREE_AT(gMonsterCofCache.pCacheMemory, ".\\ENGINE\\Gfx.cpp", 0xe61);
     }
 
-    memset(&gMonsterCofCache, 0, 0x80c);
+    memset(&gMonsterCofCache, 0, sizeof(gMonsterCofCache));
 }
 
 static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPath, int * pnComponentCode, int32_t nMonsterClassId) {
@@ -1643,7 +1643,7 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
                 nComponentRow = 0;
                 if ((uint8_t)*(char*)((char*)pComponentTable + 3) > '\0') {
                   do {
-                    memset(&sGfxData, 0, 0x48);
+                    memset(&sGfxData, 0, sizeof(sGfxData));
                     bParamsValid1 = GfxUtil::GFXUTIL_InitAndBuildMonsterCofParams(&sGfxData, 0, 0, byComponent, nModeId, nComponentCode, pCofFile, pComponentTable, pMonStatsTxt, nComponentRow);
                     if (bParamsValid1) {
                       if (bSync) {
@@ -1661,7 +1661,7 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
                   } while (nComponentRow < *(uint8_t*)((char*)pComponentTable + 3));
                 }
               } else {
-                memset(&sGfxData2, 0, 0x48);
+                memset(&sGfxData2, 0, sizeof(sGfxData2));
                 bParamsValid1 = GfxUtil::GFXUTIL_InitAndBuildMonsterCofParams(&sGfxData2, 0, 0, byComponent, nModeId, nComponentCode, pCofFile, pComponentTable, pMonStatsTxt, 0);
                 if (bParamsValid1) {
                   if (bSync) {
@@ -1920,7 +1920,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_AsyncLoadUnitSprites(int32_t nAsyncBlock
                 }
 
                 while ((nDirection = __frame0.pLayerData[nLayerIdx]) < 0x10) {
-                  memset(&sSpriteParams, 0, 0x48);
+                  memset(&sSpriteParams, 0, sizeof(sSpriteParams));
                   pFrameResult = &__frame0.nFrameResult;
                   nErrLineVal = 0;
                   nStateFlagResult = nAnimMode;
@@ -2144,8 +2144,8 @@ static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
 void __fastcall GFX_InitCofSystem(int nCofCacheMemLimit) {
     gnGfxThrottleUpdateFrame = 0;
     gnCofCacheMemLimit = nCofCacheMemLimit;
-    memset(&gPlayerCofCache, 0, 0x80c);
-    memset(&gMonsterCofCache, 0, 0x80c);
+    memset(&gPlayerCofCache, 0, sizeof(gPlayerCofCache));
+    memset(&gMonsterCofCache, 0, sizeof(gMonsterCofCache));
     memset(gaSpriteLoadStatusTable, 0, 0x460);
     size_t nMonSpriteTableSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize * 0xa0;
     g_pMonsterSpriteCofStatusTable = (D2MonsterCofStatusEntryStrc*)D2_ALLOC_POOL_AT(nullptr, nMonSpriteTableSize, ".\\ENGINE\\Gfx.cpp", 0x7e1);
@@ -2162,14 +2162,14 @@ void GFX_ShutdownCofSystem() {
       D2_FREE_AT(gPlayerCofCache.pCacheMemory, ".\\ENGINE\\Gfx.cpp", 0xe50);
     }
 
-    memset(&gPlayerCofCache, 0, 0x80c);
+    memset(&gPlayerCofCache, 0, sizeof(gPlayerCofCache));
     GFX_FreeUnusedCofEntries(&gMonsterCofCache);
     gnCofCacheMemUsage -= gMonsterCofCache.nCacheEntryCount;
     if (gMonsterCofCache.pCacheMemory) {
       D2_FREE_AT(gMonsterCofCache.pCacheMemory, ".\\ENGINE\\Gfx.cpp", 0xe61);
     }
 
-    memset(&gMonsterCofCache, 0, 0x80c);
+    memset(&gMonsterCofCache, 0, sizeof(gMonsterCofCache));
     if (!g_pMonsterSpriteCofStatusTable) {
       return;
     }
@@ -2439,7 +2439,7 @@ void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int
       return;
     }
 
-    memset(&sSpriteParams, 0, 0x48);
+    memset(&sSpriteParams, 0, sizeof(sSpriteParams));
     if (!GfxUtil::DC6_AssignParams(&sSpriteParams, pUnit, nullptr, (uint32_t)D2Common::PATH::DynamicPath::GetDirection(uPathUnion.pDynamicPath), pUnit->nGfxCurrentFrame >> 8, &nFrameResult, (uint8_t)byComponent, -1)) {
       return;
     }
@@ -2974,7 +2974,7 @@ static D2GfxInfoUnkStrc * __stdcall GFX_DrawUnitComponents(int32_t nWorldX, uint
                     }
 
                     draw_layer:
-                    memset(&sGfxData, 0, 0x48);
+                    memset(&sGfxData, 0, sizeof(sGfxData));
                     nFrameResult = -1;
                     nErrLine = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirection, nFrameMetricX, (int*)&nFrameResult, byLayerComponent, -1);
                     if (nErrLine) {
@@ -3174,7 +3174,7 @@ BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
 
     nDirection = D2Common::Units::GetDirection(pUnit);
     D2Common::Units::GetShiftedFrameMetrics(pUnit, &nFrameMetricX, &nFrameMetricY);
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     nTargetX = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, (uint32_t)nDirection, nFrameMetricX, &nFrameResult, '\x01', -1);
     if (!nTargetX) {
       return 0;
@@ -3400,7 +3400,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
 
             nCallResult2 = GfxUtil::GFXUTIL_GetCofAnimSpeed(pCofDataBase, (uint32_t)byLayerComponent);
             if (nCallResult2) {
-              memset(&sGfxData, 0, 0x48);
+              memset(&sGfxData, 0, sizeof(sGfxData));
               nTmp = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirection, nFrameMetricX, &nFrameResult, byLayerComponent, -1);
               if (nTmp) {
                 D2gfx::D2GFX::D2GFX_DrawShadow(&sGfxData, nDrawX, nDrawY);
@@ -3515,7 +3515,7 @@ BOOL __fastcall GFX_DrawUnitColoredShape(D2UnitStrc * pUnit) {
     nPerspActive = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nPerspActive + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)byHealthColor);
     nDirection = D2Common::Units::GetDirection(pUnit);
     D2Common::Units::GetShiftedFrameMetrics(pUnit, &nFrameMetricX, &nFrameMetricY);
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     bParamsAssigned = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, (uint32_t)nDirection, nFrameMetricX, &nFrameResult, '\x01', -1);
     if (!bParamsAssigned) {
       return 0;
@@ -3663,7 +3663,7 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
         byLayerComponent = pCofData[nLayerIdx];
         nCallResult = GfxUtil::GFXUTIL_GetUnitCofDirectionOnScreen(pUnit, (uint32_t)byLayerComponent);
         if (nCallResult) {
-          memset(&sGfxData, 0, 0x48);
+          memset(&sGfxData, 0, sizeof(sGfxData));
           nCoord = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirection, nFrameMetricX, &nFrameResult, byLayerComponent, -1);
           if (nCoord) {
             D2gfx::D2GFX::D2GFX_DrawImageColoredShape(&sGfxData, __frame0.nScreenX, __frame0.nScreenY, (uint8_t)_nHealthBarColor);
@@ -3787,7 +3787,7 @@ BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t 
       }
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     nCallResult = GfxUtil::DC6_AssignParams(&sGfxData, pUnit, nullptr, nDirOrGoldTier, nFrame, &nFrameOut, '\x01', -1);
     if (!nCallResult) {
       return 0;

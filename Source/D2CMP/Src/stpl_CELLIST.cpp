@@ -668,12 +668,12 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
 
     pThis->nSlotMask = puVar1 - 1;
     while (0 < nTempSentinel.m_terminator.m_next) {
-      int nSavedNode = nTempSentinel.m_terminator.m_next;
+      intptr_t nSavedNode = nTempSentinel.m_terminator.m_next; // steer-ok: generated form, kept as emitted
       pPrevLink = pThis->tSlotListArray.m_data + (*(uint32_t*)nTempSentinel.m_terminator.m_next & pThis->nSlotMask);
       pNextLink = (TSLink<::CELLIST>*)(pPrevLink->m_linkoffset + nTempSentinel.m_terminator.m_next);
       ppDstHead = pNextLink->m_prevlink;
       if (ppDstHead) {
-        nNewSize = pNextLink->m_next;
+        intptr_t nUnlinkedNext = pNextLink->m_next;
         pNodeIt = (TSLink<::CELLIST>**)D2_StormNextLink(pNextLink, -1);
         *pNodeIt = ppDstHead;
         pNextLink->m_prevlink->m_next = pNextLink->m_next;

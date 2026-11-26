@@ -58,7 +58,7 @@ typedef int (__fastcall *fpLevelDataFn1)(struct D2DrlgLevelPlacementStrc * pLeve
 #endif
 #ifndef RECON_FPTD_fpLevelDataFn2
 #define RECON_FPTD_fpLevelDataFn2
-typedef uint8_t (__fastcall *fpLevelDataFn2)(struct D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
+typedef uint8_t (__fastcall *fpLevelDataFn2)(struct D2DrlgLevelStrc * pDrlgLevel, int nNodeIndex, int * param_1_00);
 #endif
 
 // Data types

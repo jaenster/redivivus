@@ -419,7 +419,7 @@ static uint8_t COMCALLBACK_CreateChannelUser(uint8_t * pbRawData, uint32_t nStat
     pbScan = pbScan + strlen((char*)pbScan) + 1;
     int nIndex;
     intptr_t nCopyDelta;
-    nIndex = (intptr_t)pbScan - (intptr_t)(pbRawData + 1);
+    nIndex = (int)((intptr_t)pbScan - (intptr_t)(pbRawData + 1));
     pUser->nFlags = 0;
     if (nStatusFlags & 2) {
       bIsD2Product = false;
@@ -2057,7 +2057,7 @@ D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUserna
       char* pStar;
       if (!pNewUser) {
         pNewUser = D2_NEW_AT(D2ChannelUserStrc, ".\\Src\\ComCallback.cpp", 0x6d4);
-        memset(pNewUser, 0, 0xb4);
+        memset(pNewUser, 0, sizeof(*pNewUser));
         intptr_t nDstOffset = pNewUser->szUsername - szUsername;
         do {
           cNameChar = *szUsername;

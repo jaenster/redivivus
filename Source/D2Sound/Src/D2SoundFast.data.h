@@ -16,8 +16,13 @@
 namespace D2Sound::Src::D2SoundFast {
 extern int gnAmbientSoundEntryCount;
 // Ambient sound table for area-based background audio. Array of {char* szFilename, int bPlayed} entries. Count stored in gaAmbientSoundFlags. SOUND_PlayNextAmbientSound iterates through this table, alternates with gaAmbientSoundEntryTable based on gnAmbientSoundLanguageCode flag. Reset by SOUND_ResetAmbientSoundFlags.
-extern int gAmbientSoundTable[16];
-extern int gaAmbientSoundEntryTable[16];
+// One ambient track: the .wav path and whether it has played in the current cycle.
+struct D2AmbientSoundEntryStrc {
+    /* 0x00 */ char * szFilename;
+    /* 0x04 */ int bPlayed;
+};
+extern D2AmbientSoundEntryStrc gAmbientSoundTable[8];
+extern D2AmbientSoundEntryStrc gaAmbientSoundEntryTable[8];
 extern uint32_t gnAmbientSoundCount;
 extern uint32_t gnAmbientSoundLanguageCode;
 extern uint32_t gbAmbientSoundLangInitialized;

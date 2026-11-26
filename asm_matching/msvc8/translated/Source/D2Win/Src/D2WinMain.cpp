@@ -427,10 +427,10 @@ D2ControlStrc * __stdcall FORMS_CreateAnyForm(FORMS_PredefinedFormStrc * pForm) 
         pScrollbar = D2WinScrollbar::D2WinScrollbar(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->fpOnPressCallback);
       return (D2ControlStrc*)pScrollbar;
       case FORM_Button:
-        pButton = D2WinButton::D2WinButton(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->fpOnPressCallback, pForm->nExtraParam, (int32_t)pForm->pTypeArg1, pForm->nFlagsOrType, pForm->nLabelAsLocaleStringId, (::Mouse)pForm->pTypeArg2);
+        pButton = D2WinButton::D2WinButton(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], pBackgroundDC6, pForm->fpOnPressCallback, pForm->nExtraParam, (int32_t)(intptr_t)pForm->pTypeArg1, pForm->nFlagsOrType, pForm->nLabelAsLocaleStringId, (::Mouse)pForm->pTypeArg2);
       return (D2ControlStrc*)pButton;
       case FORM_List:
-        pList = D2WinList::D2WinList(pForm->aParams[0], pForm->aParams[1], (int*)pForm->aParams[2], pForm->aParams[3], (int*)pForm->pTypeArg1, (int*)pForm->pTypeArg2);
+        pList = D2WinList::D2WinList(pForm->aParams[0], pForm->aParams[1], pForm->aParams[2], pForm->aParams[3], (int*)pForm->pTypeArg1, (int*)pForm->pTypeArg2);
       return (D2ControlStrc*)pList;
       case FORM_Timer:
         pTimer = D2WinTimer::D2WinTimer(pForm->aParams[0], pForm->fpOnPressCallback);
@@ -688,7 +688,7 @@ void __stdcall RENDERER_DrawOutOfGameScene() {
 }
 
 LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lParam) {
-    int32_t lResult;
+    LRESULT lResult;
     if (!D2GFX::gbGfxWindowCreated) {
       return 0;
     }
@@ -698,14 +698,14 @@ LRESULT __stdcall WndProc(HWND hWnd, uint32_t uMsg, uint32_t nWParam, LPARAM lPa
     }
 
     BOOL bHandled = 0;
-    int32_t lReturnValue = 0;
+    LRESULT lReturnValue = 0;
     if (uMsg == 0x10) {
       /* int nExitCode for PostQuitMessage */ ghwndMsgHook = 1;
       PostQuitMessage(0);
       return 0;
     }
 
-    BOOL bDispatched = Storm::WindowHandle::SMsgDispatchMessage(hWnd, uMsg, nWParam, lParam, &bHandled, (LRESULT*)&lReturnValue);
+    BOOL bDispatched = Storm::WindowHandle::SMsgDispatchMessage(hWnd, uMsg, nWParam, lParam, &bHandled, &lReturnValue);
     if (bDispatched && bHandled) {
       return lReturnValue;
     }
@@ -1078,7 +1078,7 @@ static BOOL __fastcall Unreferenced_004fa1b0(POINT * pPoint, D2ControlStrc * pCo
 
 D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(D2ControlStrc * pControl1, D2ControlStrc * pControl2) {
     BOOL bVar1;
-    bool bControl1Inside;
+    BOOL bControl1Inside;
     if (!pControl1) {
       return pControl2;
     }
@@ -1124,14 +1124,14 @@ D2ControlStrc * __stdcall D2WIN_FindClosestControlToMouse(D2ControlStrc * pContr
       nDistY2 = 0;
     }
     if (!nDistY1 && nDistX1 <= 0) {
-      bControl1Inside = true;
+      bControl1Inside = TRUE;
     } else {
-      bControl1Inside = false;
+      bControl1Inside = FALSE;
     }
     if (!nDistY2 && nDistX2 <= 0) {
-      bVar1 = true;
+      bVar1 = TRUE;
     } else {
-      bVar1 = false;
+      bVar1 = FALSE;
     }
 
     pBestControl = pControl2;
@@ -1363,8 +1363,9 @@ void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {
     uint32_t nRawY = (uint32_t)pDVar1->uLParam.sMousePos.nMouseY;
     gbCursorVisible = 1;
     D2gfx::D2GFX::UpdateOSCursorVisibilty(1);
-    D2gfx::D2GFX::D2GFX_GetScreenSize((int*)&phWnd, &nScreenHeight);
-    int nPhWnd = (intptr_t)&phWnd[-1].dwResult + 3;
+    int nScreenWidth;
+    D2gfx::D2GFX::D2GFX_GetScreenSize(&nScreenWidth, &nScreenHeight);
+    int nPhWnd = nScreenWidth - 1;
     nScreenHeight--;
     uint32_t bWindowActive = D2gfx::D2GFX::D2GFX_IsWindowActive();
     if (bWindowActive) {

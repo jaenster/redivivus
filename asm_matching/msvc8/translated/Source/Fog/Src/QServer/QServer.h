@@ -31,7 +31,7 @@ typedef int32_t (__fastcall *fpD2QServerPacketClassifier)(uint8_t * pbPacket, si
 #endif
 #ifndef RECON_FPTD_fpD2QServerSinglePlayerSendHook
 #define RECON_FPTD_fpD2QServerSinglePlayerSendHook
-typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(struct D2QServerStrc * pQServer, char * pBytes, size_t nSize);
+typedef int32_t (__fastcall *fpD2QServerSinglePlayerSendHook)(struct D2QServerStrc * pQServer, char * pBytes, uint32_t nSize);
 #endif
 #ifndef RECON_FPTD_fpD2QServerSourceLineHook
 #define RECON_FPTD_fpD2QServerSourceLineHook
@@ -356,7 +356,7 @@ int __stdcall SwapWorkerSlotValue(struct D2QServerStrc * pQServer, int nWorkerIn
 int __stdcall GetConnectedClients(struct D2QServerStrc * pQServer);
 void __stdcall SetPerIpConnectionLimit(struct D2QServerStrc * pQServer, int nPerIpConnectionLimit);
 DWORD __stdcall WaitForEmptyEvent(struct D2QServerStrc * pQServer, DWORD dwTimeoutMs);
-int __stdcall DequeueModePacket(struct D2QServerStrc * pQServer, int nMode, char * pBytes, size_t nSize);
+int __stdcall DequeueModePacket(struct D2QServerStrc * pQServer, int nMode, char * pBytes, uint32_t nSize);
 // Variant of WaitForEmptyEvent 006be4e0 with the same parameter list (D2QServerStrc*, DWORD). It handles pQServer->bUseNtLocalMode by calling
 // QServerNT::PumpIoCompletionQueues(pQServer, dwParam) instead of bailing out, and it narrows
 // the result to BOOL - (WaitForSingleObject(hEmptyEvent, dwParam) == WAIT_OBJECT_0).
@@ -366,7 +366,7 @@ int __stdcall DequeueModePacket(struct D2QServerStrc * pQServer, int nMode, char
 uint32_t __stdcall WaitForEmptyEventOrPumpIo(struct D2QServerStrc * pQServer, DWORD dwTimeoutMs);
 void __stdcall GetClientIpStringByClientId(struct D2QServerStrc * pQServer, int nClientId, char * szIpAddress, int nBufferSize);
 uint32_t __stdcall GetClientIpByToken(struct D2QServerStrc * pQServer, uint32_t nToken);
-uint32_t __stdcall GetClientSocketByToken(struct D2QServerStrc * pQServer, uint32_t nClientToken);
+SOCKET __stdcall GetClientSocketByToken(struct D2QServerStrc * pQServer, uint32_t nClientToken);
 void __stdcall QSHackUnlistIP(struct D2QServerStrc * pQServer, in_addr pIp, char * szFile2, uint32_t nLine);
 void __stdcall SetHacklistLineHook(struct D2QServerStrc * pQServer, fpD2QServerLineHook pfnHook);
 void __stdcall SetReservedHook(struct D2QServerStrc * pQServer, void * pfnHook);
@@ -393,7 +393,7 @@ struct D2QServerStrc * __stdcall NET_QServer_Init(eD2GSConnectionType neD2GSConn
 // Shuts down and frees QServer structure. Optionally broadcasts final packet to all clients before cleanup. Closes all worker threads, frees hash-map buckets, deletes critical sections, closes sockets, and invokes WSACleanup. Iterates through mode packet free list and hacklist free list to release all pooled allocations.
 // @sourcefile .\Src\QServer\QServer.cpp
 int __stdcall Shutdown(struct D2QServerStrc * pQServer, char * pBytes, int nSize);
-int __stdcall SendPacketByClientId(struct D2QServerStrc * pQServer, int nClientId, char * pBytes, size_t nSize);
+int __stdcall SendPacketByClientId(struct D2QServerStrc * pQServer, int nClientId, char * pBytes, uint32_t nSize);
 void __stdcall BanClient(struct D2QServerStrc * pQServer, int nClientId, char * szFile, int nLine);
 void __stdcall DisconnectAndBanIp(struct D2QServerStrc * pQServer, uint32_t nIpAddress, char * szFile, int nLine);
 // @wasnamed CloseRemoteConnection - one name on two different functions.

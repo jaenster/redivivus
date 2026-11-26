@@ -2,7 +2,6 @@
 
 #include "Source/D2Common/Drlg/Drlg.h"
 #include "Source/D2CMP/D2CMP.h"
-#include "Source/D2Client/Game/Game/SGAMEDATA.h"
 #include "Source/D2Common/D2UnitStrc.h"
 #include "Source/D2Common/DataTbls/LvlTbls.h"
 #include "Source/D2Common/Drlg/D2DrlgActWarpsInfoStrc.h"
@@ -79,7 +78,7 @@ typedef int (__fastcall *fpLevelDataFn1)(D2DrlgLevelPlacementStrc * pLevelUnknow
 #endif
 #ifndef RECON_FPTD_fpLevelDataFn2
 #define RECON_FPTD_fpLevelDataFn2
-typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, fpLevelDataFn1 fpLevelDataFn1, int * param_1_00);
+typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, int nNodeIndex, int * param_1_00);
 #endif
 
 int gaWildernessLevelSeedOffsets[170] = {
@@ -2558,21 +2557,18 @@ BOOL __fastcall DRLGPLACE_OrientedFixedOffset(D2DrlgLevelPlacementStrc * pLevelU
     pLevelUnknown->aCurrentDir[pLevelUnknown->nCurrentNode] = nOrientation;
     pLevelUnknown->aInitialDir[pLevelUnknown->nCurrentNode] = nOrientation;
     D2DrlgCoordsStrc* pCurNode = pLevelUnknown->aCoordsAndSize + pLevelUnknown->nCurrentNode;
-    if (tNextSeed & 1) {
-      switch (nOrientation) {
-        case 1:
-          {
-            pCurNode->WorldSize.x = 0xa0;
-            pCurNode->WorldSize.y = 0x40;
-            break;
-          }
-      }
-    } else {
-      pCurNode->WorldSize.x = 0x40;
-      pCurNode->WorldSize.y = 0xa0;
+    switch (nOrientation) {
+      case 0:
+        pCurNode->WorldSize.x = 0x40;
+        pCurNode->WorldSize.y = 0xa0;
+        break;
+      case 1:
+        pCurNode->WorldSize.x = 0xa0;
+        pCurNode->WorldSize.y = 0x40;
+        break;
     }
 
-    D2DrlgCoordsStrc* pPrevNode = pLevelUnknown->aCoordsAndSize + pLevelUnknown->pLevelData->aEntry[pLevelUnknown->nCurrentNode].nNodeLevelEntryIdPrev;
+    D2DrlgCoordsStrc* pPrevNode = &pLevelUnknown->aCoordsAndSize[pLevelUnknown->pLevelData->aEntry[pLevelUnknown->nCurrentNode].nNodeLevelEntryIdPrev];
     pCurNode->WorldPosition.x = pPrevNode->WorldPosition.x - pCurNode->WorldSize.x;
     pCurNode->WorldPosition.y = pPrevNode->WorldSize.y - pCurNode->WorldSize.y - 0x10 + pPrevNode->WorldPosition.y;
     return 1;
@@ -3035,10 +3031,9 @@ void __stdcall DRLGOUTROOM_ComputeExitTargetPositions(D2DrlgLevelStrc * pLevel) 
               break;
             }
 
-            nSpiralRadius = 0;
-            do {
-              nLeftExitX = *(int*)((char*)gaExitSpiralOffsetX + nSpiralRadius) * nSumX + nExitCount;
-              nLeftExitY = *(int*)((char*)gaExitSpiralOffsetY + nSpiralRadius) * nSumX + nSumY;
+            for (nSpiralRadius = 0; nSpiralRadius < 4; nSpiralRadius++) {
+              nLeftExitX = gaExitSpiralOffsetX[nSpiralRadius] * nSumX + nExitCount;
+              nLeftExitY = gaExitSpiralOffsetY[nSpiralRadius] * nSumX + nSumY;
               if (nLeftExitX >= 0 && nLeftExitX < pDVar1->nGridCoordsWidth && nLeftExitY >= 0 && nLeftExitY < pDVar1->nGridCoordsHeight) {
                 bCellEmpty = Outdoors::DRLGOUTDOOR_IsGridCellEmpty(pLevel, nLeftExitX, nLeftExitY);
                 if (bCellEmpty) {
@@ -3046,9 +3041,7 @@ void __stdcall DRLGOUTROOM_ComputeExitTargetPositions(D2DrlgLevelStrc * pLevel) 
                   break;
                 }
               }
-
-              nSpiralRadius += 4;
-            } while (nSpiralRadius < 0x10);
+            }
 
             nSumX++;
           } while (nSumX < 8);

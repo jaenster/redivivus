@@ -501,6 +501,7 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
     uint32_t nMessageIndex = (uint32_t)pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2QuestDataA5Q3Strc* pRewardList = pQuestData->pQuestSpecificData.pA5Q3;
+    D2Quest33RewardListStrc* pClassRewards; // the per-difficulty reward table (was kept in the pRewardList slot)
     *(uint32_t*)(char*)&nNpcNo = (uint32_t)(uint16_t)pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
     D2BitBufferStrc* pBitBufferRecord = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
     if (*(uint16_t*)(char*)&nNpcNo == 0x201) {
@@ -529,11 +530,10 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
         pDVar1->nIceItemCount++;
         pClient = UNIT::SUnit::SUNIT_GetClient(pQuestArgs->pPlayer, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q3.cpp", 0x214);
-        nNpcNo.nExtra = 0;
+        memset(&nNpcNo, 0, sizeof(nNpcNo));
         nNpcNo.nPacketId = ']';
         nNpcNo.nQuestId = '!';
         nNpcNo.nAlertFlags = '\x01';
-        nNpcNo.nFilterStatus = '\0';
         GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &nNpcNo);
         pDVar1->bIceScrollCollected = 1;
         return;
@@ -551,11 +551,10 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
             /* SetQuestState(Step0x08): Malah turn-in (dlg 0x4ea4) accepted, "rt2 " gift
                          granted */ D2Common::QuestRecord::SetQuestState(pBitBufferRecord, QUEST_PrisonOfIce, QUESTSTATE_Step0x08);
             pClient = UNIT::SUnit::SUNIT_GetClient(pQuestArgs->pPlayer, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a5q3.cpp", 0x22b);
-            nNpcNo.nExtra = 0;
+            memset(&nNpcNo, 0, sizeof(nNpcNo));
             nNpcNo.nPacketId = ']';
             nNpcNo.nQuestId = '!';
             nNpcNo.nAlertFlags = '\x02';
-            nNpcNo.nFilterStatus = '\0';
             GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &nNpcNo);
             bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBufferRecord, QUEST_PrisonOfIce, QUESTSTATE_Step0x09);
             if (bQuestStateResult) {
@@ -633,14 +632,14 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         return;
       }
 
-      pRewardList = (D2QuestDataA5Q3Strc*)&D2Quest33RewardListStrc_NORMAL;
+      pClassRewards = &D2Quest33RewardListStrc_NORMAL;
       nPlayerLevel = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pQuestArgs->pPlayer, UNITSTAT_level, 0);
       pGame = pQuestArgs->pGame;
       switch (pGame->nDifficulty) {
         case 1:
           {
             if (pGame->nGameType == SGAMETYPE_SINGLEPLAYER || nPlayerLevel > 0x2d) {
-              pRewardList = (D2QuestDataA5Q3Strc*)&D2Quest33RewardListStrc_NIGHTMARE;
+              pClassRewards = &D2Quest33RewardListStrc_NIGHTMARE;
             }
 
             break;
@@ -648,7 +647,7 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
         case 2:
           {
             if (pGame->nGameType == SGAMETYPE_SINGLEPLAYER || nPlayerLevel > 0x41) {
-              pRewardList = (D2QuestDataA5Q3Strc*)&D2Quest33RewardListStrc_HELL;
+              pClassRewards = &D2Quest33RewardListStrc_HELL;
             }
 
             break;
@@ -666,19 +665,18 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
       }
 
       pSeed = GetQuestControlSeed(pQuestArgs->pGame);
-      nRandIndex = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, pRewardList->sQuestGUID.aPlayerGUID[nPlayerClassId * 2 + 1]);
+      nRandIndex = D2Common::Seed::UNIT_GetModuloFromSeed(pSeed, pClassRewards->sClassRewads[nPlayerClassId].nPriceCount);
       bQuestStateResult = 1;
       eRewardQuality = QUALITY_RARE;
-      pQuestSpecificData = ITEM_RewardItemInInventory(pQuestArgs->pGame, pQuestArgs->pPlayer, ((const int32_t*)pRewardList->sQuestGUID.aPlayerGUID[nPlayerClassId * 2])[nRandIndex], ITEMS::Items::Drop::GetLevel(pQuestArgs->pPlayer, LEVEL_None), eRewardQuality, bQuestStateResult);
+      pQuestSpecificData = ITEM_RewardItemInInventory(pQuestArgs->pGame, pQuestArgs->pPlayer, ((const int32_t*)pClassRewards->sClassRewads[nPlayerClassId].szPriceList)[nRandIndex], ITEMS::Items::Drop::GetLevel(pQuestArgs->pPlayer, LEVEL_None), eRewardQuality, bQuestStateResult);
       if (!pQuestSpecificData) {
         return;
       }
 
-      nNpcNo.nExtra = 0;
+      memset(&nNpcNo, 0, sizeof(nNpcNo));
       nNpcNo.nPacketId = ']';
       nNpcNo.nQuestId = '!';
       nNpcNo.nAlertFlags = '\x10';
-      nNpcNo.nFilterStatus = '\0';
       pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(pQuestSpecificData->nClassId);
       if (pItemTxt && pItemTxt->wDropSound > 0) {
         nNpcNo.nExtra = pItemTxt->wDropSound;
@@ -1288,7 +1286,7 @@ bool __fastcall Q33_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 // fpStatusFilter/fpActiveFilter/fpSequenceFilter, nInitNo=5, nSequenceQuestId chain. Zeros Anya state fields.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q3.cpp
 void __fastcall Q33_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGameTmp = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q33_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q33_Callback03_ChangedLevel;
@@ -1308,7 +1306,7 @@ void __fastcall Q33_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpActiveFilter = Q33_ActiveFilter;
     pQuestData->fpSequenceFilter = Q33_SequenceFilter;
     pQuestData->nSequenceQuestId = QUEST_Act4Traversed;
-    memset(pQuestSpecificData, 0, 0x114);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sQuestGUID);
     pQuestSpecificData->nAnyaState = 0;
     pQuestSpecificData->nAnyaStateExtra = 0;

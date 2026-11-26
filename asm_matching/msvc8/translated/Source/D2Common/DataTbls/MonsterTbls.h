@@ -30,6 +30,20 @@ struct D2SuperUniquesTxt;
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2ItemsTableStrc
+#define D2_DEFINED_D2ItemsTableStrc
+struct D2ItemsTableStrc {
+    /* 0x00 */ int nSize;
+    /* 0x04 */ struct D2ItemsTxt * pItems;
+    /* 0x08 */ struct D2ItemsTxt * pWeapons;
+    /* 0x0C */ int nWeaponsSize;
+    /* 0x10 */ struct D2ItemsTxt * pArmor;
+    /* 0x14 */ int nArmorSize;
+    /* 0x18 */ struct D2ItemsTxt * pMisc;
+    /* 0x1C */ int nMiscSize;
+};
+
+#endif // D2_DEFINED_D2ItemsTableStrc
 #ifndef D2_DEFINED_D2MonItemPercentTxt
 #define D2_DEFINED_D2MonItemPercentTxt
 struct D2MonItemPercentTxt {
@@ -42,6 +56,120 @@ struct D2MonItemPercentTxt {
 };
 
 #endif // D2_DEFINED_D2MonItemPercentTxt
+#ifndef D2_DEFINED_D2MonStats2Txt
+#define D2_DEFINED_D2MonStats2Txt
+__pragma(pack(push, 1)) struct D2MonStats2Txt {
+    /* 0x000 */ short Id;
+    /* 0x002 */ uint8_t field_0x2;
+    /* 0x003 */ uint8_t field_0x3;
+    /* 0x004 */ union {
+        struct {
+            /* 0x004 */ uint8_t noGfxHitTest : 1;
+            /* 0x004 */ uint8_t noMap : 1;
+            /* 0x004 */ uint8_t noOvly : 1;
+            /* 0x004 */ uint8_t isSel : 1;
+            /* 0x004 */ uint8_t alSel : 1;
+            /* 0x004 */ uint8_t noSel : 1;
+            /* 0x004 */ uint8_t shiftSel : 1;
+            /* 0x004 */ uint8_t corpseSel : 1;
+            /* 0x005 */ uint8_t revive : 1;
+            /* 0x005 */ uint8_t isAtt : 1;
+            /* 0x005 */ uint8_t isSmall : 1; // Do not name small, this wont compile
+            /* 0x005 */ uint8_t large : 1;
+            /* 0x005 */ uint8_t soft : 1;
+            /* 0x005 */ uint8_t critter : 1;
+            /* 0x005 */ uint8_t shadow : 1;
+            /* 0x005 */ uint8_t noUniqueShift : 1;
+            /* 0x006 */ uint8_t compositeDeath : 1;
+            /* 0x006 */ uint8_t inert : 1;
+            /* 0x006 */ uint8_t objCol : 1;
+            /* 0x006 */ uint8_t deadCol : 1;
+            /* 0x006 */ uint8_t unflatDead : 1;
+            uint8_t : 3;  // unused
+        };
+        uint8_t aFlagBytes[3]; // the same flag bits as bytes, the width the code tests them at (bit n = aFlagBytes[n >> 3] & (1 << (n & 7)))
+    };
+    /* 0x007 */ uint8_t field_0x7;
+    /* 0x008 */ char SizeX;
+    /* 0x009 */ char SizeY;
+    /* 0x00A */ char spawnCol;
+    /* 0x00B */ char Height;
+    /* 0x00C */ uint8_t overlayHeight;
+    /* 0x00D */ uint8_t pixHeight;
+    /* 0x00E */ uint8_t MeleeRng;
+    /* 0x00F */ uint8_t field_0xf;
+    /* 0x010 */ int BaseW;
+    /* 0x014 */ char HitClass;
+    /* 0x015 */ uint8_t aComponents[16]; // HDv,TRv,LGv,Rav,Lav,RHv,LHv,SHv,S1v,S2v,S3v,S4v,S5v,S6v,S7v,S8v
+    /* 0x025 */ uint8_t byTotalFrames; // total frame count across component groups (written by MONSTERTBLS_ParseMonSeqField on final seq slot, struct+0x25, clamped <=0xfe)
+    /* 0x026 */ uint8_t aCompCodes[192]; // component code table: 16 seq slots x 12 bytes (3 dwords each, struct+0x26+slot*0xc); resolved class ids from comp code names, MONSTERTBLS_ParseMonSeqField
+    /* 0x0E6 */ uint8_t field_0xe6;
+    /* 0x0E7 */ uint8_t field_0xe7;
+    /* 0x0E8 */ uint8_t HD[2]; // flag bit: byte 0xe8 mask 0x1
+    /* 0x0EA */ uint8_t field_0xea;
+    /* 0x0EB */ uint8_t field_0xeb;
+    /* 0x0EC */ char TotalPieces;
+    /* 0x0ED */ uint8_t field_0xed;
+    /* 0x0EE */ uint8_t field_0xee;
+    /* 0x0EF */ uint8_t field_0xef;
+    /* 0x0F0 */ uint8_t mDT[2]; // flag bit: byte 0xf0 mask 0x1
+    /* 0x0F2 */ uint8_t field_0xf2;
+    /* 0x0F3 */ uint8_t field_0xf3;
+    /* 0x0F4 */ uint8_t byDirDT[16]; // dDT - NumDirections for Dead mode
+    /* 0x104 */ uint8_t A1mv[2]; // flag bit: byte 0x104 mask 0x10
+    /* 0x106 */ uint8_t field_0x106;
+    /* 0x107 */ uint8_t field_0x107;
+    /* 0x108 */ uint8_t byInfernoLen; // InfernoLen - number of inferno (channeled) sub-anims (struct+0x108)
+    /* 0x109 */ uint8_t byInfernoAnim; // InfernoAnim - inferno animation rate (struct+0x109)
+    /* 0x10A */ uint8_t byInfernoRollback; // InfernoRollback - inferno rollback frame (struct+0x10a)
+    /* 0x10B */ char byResurrectMode; // ResurrectMode - mode code resurrected monster plays in (FIELDTYPE_CODE_CHAR via pTxtMonModeLink, struct+0x10b)
+    /* 0x10C */ uint16_t wResurrectSkill; // ResurrectSkill — skill used when resurrecting
+    /* 0x10E */ short nHtTop; // htTop — hit-test box top
+    /* 0x110 */ short nHtLeft; // htLeft — hit-test box left
+    /* 0x112 */ short nHtWidth; // htWidth — hit-test box width
+    /* 0x114 */ short nHtHeight; // htHeight — hit-test box height
+    /* 0x116 */ uint8_t field_0x116;
+    /* 0x117 */ uint8_t field_0x117;
+    /* 0x118 */ int nAutomapCel; // automapCel — cel to display on automap for this monster
+    /* 0x11C */ uint8_t byLocalBlood; // localBlood — local blood type (0=none, 1=small, 2=large)
+    /* 0x11D */ uint8_t byBleed; // bleed — blood count multiplier
+    /* 0x11E */ uint8_t byLight; // light — light radius
+    /* 0x11F */ uint8_t byLgtR; // light red component (AllocLightMap R param)
+    /* 0x120 */ uint8_t byLgtG; // light green component (AllocLightMap G param)
+    /* 0x121 */ uint8_t byLgtB; // light blue component (AllocLightMap B param)
+    /* 0x122 */ uint8_t byUtrans[3]; // Utrans — unique colour transform (normal difficulty)
+    /* 0x125 */ uint8_t field_0x125;
+    /* 0x126 */ uint8_t field_0x126;
+    /* 0x127 */ uint8_t field_0x127;
+    /* 0x128 */ int nHeart; // Heart — body part item code (4-char raw)
+    /* 0x12C */ int nBodyPart; // BodyPart — body part item code (4-char raw)
+    /* 0x130 */ uint8_t byRestore; // restore - whether monster respawns
+    /* 0x131 */ uint8_t field_0x131;
+    /* 0x132 */ uint8_t field_0x132;
+    /* 0x133 */ uint8_t field_0x133;
+}; __pragma(pack(pop))
+
+#endif // D2_DEFINED_D2MonStats2Txt
+#ifndef D2_DEFINED_D2MonStatsInitStrc
+#define D2_DEFINED_D2MonStatsInitStrc
+struct D2MonStatsInitStrc {
+    /* 0x00 */ int nMinHP;
+    /* 0x04 */ int nMaxHP;
+    /* 0x08 */ int nAC;
+    /* 0x0C */ int nTH; // to-hit, rewritten by each attack group (flags 0x8/0x10/0x20)
+    /* 0x10 */ int nExp;
+    /* 0x14 */ int nA1MinD;
+    /* 0x18 */ int nA1MaxD;
+    /* 0x1C */ int nA2MinD;
+    /* 0x20 */ int nA2MaxD;
+    /* 0x24 */ int nS1MinD;
+    /* 0x28 */ int nS1MaxD;
+    /* 0x2C */ int nElMinD;
+    /* 0x30 */ int nElMaxD;
+    /* 0x34 */ int nElDur;
+};
+
+#endif // D2_DEFINED_D2MonStatsInitStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 __pragma(pack(push, 1)) struct D2TreasureClassExSubSubTxt {
     /* 0x000 */ short rare;

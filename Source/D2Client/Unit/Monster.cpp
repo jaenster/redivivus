@@ -65,7 +65,7 @@
 #include "Source/D2Game/D2Game.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Ai/D2AiGeneralStrc.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Monster/Ai/AI.h"
 #include "Source/D2Game/Monster/Monsters.h"
@@ -1037,6 +1037,7 @@ uint32_t __fastcall MONSTER_CheckCatapultFiringPosition(D2UnitStrc * pUnit, D2Un
 
 // Core initialization of a freshly allocated monster unit from its MonStats/MonStats2 record. Validates nClassId against the MonStats table, allocates the unit stat list and sets base stats: level (per-difficulty from TreasureClass area), attackrate, velocity%, animrate, and the six per-difficulty resistances (dmg/magic/fire/light/cold/poison), then applies difficulty scaling and base maxhp/hitpoints. Allocates the dynamic path (room nParam1, mode/coords from params) and sets velocity. Creates a player inventory for NPCs/interactables (or special class ids). Sets the update flag (nParam2). For dead/no-deadCol monsters removes collision, shrinks width and switches to corpse collision. Randomizes start gfx frame; sets targetable/shadow/valid-target/can-be-attacked unit flags from MonStats2 isSel/shadow/isAtt. Sets monstats type, special-monster init, light map, creates skill list, applies unique modifiers, then adds the monster's up to 8 skills (level += difficulty MonsterSkillBonus) with their modes. Finally computes an initial facing direction (random or special-case per base/class id, e.g. catapult firing position) and sets the path direction. nParam1=room ptr, pSkillIdPtr/nOverrideMode feed path alloc.
 void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nOverrideMode, int32_t nY, int32_t nClassId, uint32_t nAnimMode) {
+    short* pSkillId;
     D2InventoryStrc* pInventory;
     eD2UnitFlags eUpdatedFlags;
     D2SkillListStrc* pSkillsList;
@@ -1130,16 +1131,16 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     MonUnique::MONUNIQUE_ApplyModifierEffects(pUnit);
     pDiffLevels = D2Common::DATATBLS::DataTbls::GetDifficultyLevels(nDifficulty);
     nMonStats2Idx = pDiffLevels->MonsterSkillBonus;
-    nY = (int32_t)pMonStatsTxt->aSkill;
+    pSkillId = pMonStatsTxt->aSkill;
     i = 0;
     do {
-      if (*(short int*)nY >= 0 && pMonStatsTxt->aSkLvl[i] > '\0') {
-        D2Common::Skills::AddSkill(pUnit, (int)*(short int*)nY, pMonStatsTxt->aSkLvl[i] + nMonStats2Idx, 1, ".\\UNIT\\Monster.cpp", 0x23f);
+      if (*pSkillId >= 0 && pMonStatsTxt->aSkLvl[i] > '\0') {
+        D2Common::Skills::AddSkill(pUnit, (int)*pSkillId, pMonStatsTxt->aSkLvl[i] + nMonStats2Idx, 1, ".\\UNIT\\Monster.cpp", 0x23f);
         nRandStartFrame = (uint32_t)pMonStatsTxt->aSkMode[i];
-        D2Common::Skills::SetSkillMode(D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)*(short int*)nY), nRandStartFrame);
+        D2Common::Skills::SetSkillMode(D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, (int)*pSkillId), nRandStartFrame);
       }
 
-      nY += 2;
+      pSkillId++;
       i++;
     } while (i < 8);
 
@@ -1472,7 +1473,7 @@ static void MONSTER_CastMissileAtTarget(D2UnitStrc * pUnit) {
       return;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x20;
     switch ((int)eMissileId) {
       case 0x3f:
@@ -2123,7 +2124,7 @@ static void MONSTER_SpawnDeathEffectMissiles(D2UnitStrc * pUnit) {
     }
 
     if (D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_uberminion) && !D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_freeze)) {
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x2020;
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pUnit;
@@ -2136,7 +2137,7 @@ static void MONSTER_SpawnDeathEffectMissiles(D2UnitStrc * pUnit) {
     }
 
     int nMissileId = (uint8_t)D2Common::DATATBLS::MonsterTbls::TXT_MonStats_GetMonStats2(pUnit->nClassId)->Height + MISSILE_Monglacialspike;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x2020;
     sSkillArg.pOwner = pUnit;
     sSkillArg.pMissile = pUnit;

@@ -358,12 +358,12 @@ template<> inline void TSExplicitList<SGAMEDATA, -572662307>::Clear() {
 
 template<> inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::ReallocData(uint32_t nAlloc) {
     TSExplicitList<::SGAMEDATA, -572662307>* pNewBuf;
-    uint32_t* puVar1;
+    TSExplicitList<::SGAMEDATA, -572662307>* puVar1; // a slot list sits one pointer-sized word (its int link offset, padded) before its terminator
     TSLink<::SGAMEDATA>** pPrevLink2;
     TSLink<::SGAMEDATA>* pTVar2;
-    uint32_t encPrev;
-    uint32_t nNewCapSaved;
-    uint32_t* pNewTerminator;
+    intptr_t encPrev; // steer-ok: generated form, kept as emitted
+    int nNewCapSaved;
+    TSLink<::SGAMEDATA>* pNewTerminator;
     TSLink<::SGAMEDATA>* pNext;
     uint32_t nAllocCapacity = nAlloc;
     TSExplicitList<::SGAMEDATA, -572662307>* pBlock = this->m_data;
@@ -372,7 +372,7 @@ template<> inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::R
       pNewBuf = pBlock + nAlloc;
       do {
         pTVar2 = &pNewBuf->m_terminator;
-        ((TSExplicitList<::SGAMEDATA, -572662307>*)((char*)(pTVar2 - 1) + 4))->UnlinkAll();
+        ((TSExplicitList<::SGAMEDATA, -572662307>*)((intptr_t*)pTVar2 - 1))->UnlinkAll();
         pNext = pTVar2->m_prevlink;
         if (pNext) {
           encPrev = pTVar2->m_next;
@@ -389,13 +389,13 @@ template<> inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::R
     }
 
     this->m_alloc = nAllocCapacity;
-    pNewBuf = (TSExplicitList<::SGAMEDATA, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, nAllocCapacity * 0xc, D2Client::s___AV__TSExplicitList_USGAMEDATA__0070f584, -2, 0x10);
+    pNewBuf = (TSExplicitList<::SGAMEDATA, -572662307>*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pBlock, nAllocCapacity * sizeof(TSExplicitList<::SGAMEDATA, -572662307>), D2Client::s___AV__TSExplicitList_USGAMEDATA__0070f584, -2, 0x10);
     this->m_data = pNewBuf;
     if (pNewBuf) {
       return;
     }
 
-    pNewBuf = (TSExplicitList<::SGAMEDATA, -572662307>*)Storm::Source::SMem::SMemAlloc(nAllocCapacity * 0xc, D2Client::s___AV__TSExplicitList_USGAMEDATA__0070f584, -2, 0);
+    pNewBuf = (TSExplicitList<::SGAMEDATA, -572662307>*)Storm::Source::SMem::SMemAlloc(nAllocCapacity * sizeof(TSExplicitList<::SGAMEDATA, -572662307>), D2Client::s___AV__TSExplicitList_USGAMEDATA__0070f584, -2, 0);
     this->m_data = pNewBuf;
     if (!pBlock) {
       return;
@@ -409,18 +409,18 @@ template<> inline void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::R
       pNewBuf = pBlock;
       do {
         pNext = &pNewBuf->m_terminator;
-        puVar1 = (uint32_t*)(-4 - (intptr_t)pBlock + (intptr_t)pNext + (intptr_t)this->m_data);
+        puVar1 = (TSExplicitList<::SGAMEDATA, -572662307>*)(-(intptr_t)sizeof(intptr_t) - (intptr_t)pBlock + (intptr_t)pNext + (intptr_t)this->m_data);
         if (puVar1) {
-          pNewTerminator = puVar1 + 1;
-          *pNewTerminator = 0;
-          puVar1[2] = 0;
-          nNewCapSaved = *(uint32_t*)((char*)(pNext - 1) + 4);
-          *pNewTerminator = (uint32_t)(uintptr_t)pNewTerminator;
-          *puVar1 = nNewCapSaved;
-          puVar1[2] = ~(uint32_t)pNewTerminator;
+          pNewTerminator = &puVar1->m_terminator;
+          pNewTerminator->m_prevlink = 0;
+          puVar1->m_terminator.m_next = 0;
+          nNewCapSaved = ((TSExplicitList<::SGAMEDATA, -572662307>*)((intptr_t*)pNext - 1))->m_linkoffset;
+          pNewTerminator->m_prevlink = pNewTerminator;
+          puVar1->m_linkoffset = nNewCapSaved;
+          puVar1->m_terminator.m_next = ~(intptr_t)pNewTerminator;
         }
 
-        ((TSExplicitList<::SGAMEDATA, -572662307>*)((char*)(pNext - 1) + 4))->UnlinkAll();
+        ((TSExplicitList<::SGAMEDATA, -572662307>*)((intptr_t*)pNext - 1))->UnlinkAll();
         pTVar2 = pNext->m_prevlink;
         if (pTVar2) {
           encPrev = pNext->m_next;

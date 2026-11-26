@@ -12,6 +12,12 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
+#ifndef D2_DEFINED_HSHEAP
+#define D2_DEFINED_HSHEAP
+// A Storm heap handle (HSHEAP in the 1997 STORM.H). 1.14d hands out the heap
+// record's 32-bit hash (SMemHeapCreate counts up from 0x80000000), not a pointer.
+typedef uint32_t HSHEAP;
+#endif // D2_DEFINED_HSHEAP
 #if defined(_WIN64) && !defined(D2_DEFINED_D2SMemLink)
 #define D2_DEFINED_D2SMemLink
 // A free-list link of the Storm heap: the address of the next free block. The
@@ -1047,12 +1053,12 @@ BOOL __stdcall SFileDdaBeginEx(struct D2MPQFileStrc * hFile, uint32_t dwBufferBy
 // @wasnamed SFILE_LoadFileToMemory
 // @basis behaviour-confirmed as part of a three-way arity lock. The real API has exactly one 5/7/8-parameter family: SFileLoadFile(filename, buffer, bytes, extrabytes, callback) = 5, SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback) = 7, SFileLoadFileEx2(... , readflags) = 8. This is the 5-parameter member; it forwards to the 8-parameter worker with archive = NULL, flags = SFILE_GetOpenFlags() and readflags = 0, which is exactly the set of defaults the 5-parameter signature implies. Note its first parameter is the FILENAME - it is currently mistyped D2ArchiveStrc *, and lands in the worker's filename slot.
 // @seealso SFileLoadFileEx 0041b680, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nSize, LPOVERLAPPED nReadCtx);
+uint32_t __stdcall SFileLoadFile(char * pArchive, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nSize, LPOVERLAPPED nReadCtx);
 // @oracle Storm PPC export table, Mac PPC 1.10b Storm: "SFileLoadFileEx"
 // @wasnamed SFILE_LoadFileToMemory2
 // @basis behaviour-confirmed as part of a three-way arity lock. 7 parameters, positionally identical to SFileLoadFileEx(archive, filename, buffer, bytes, extrabytes, flags, callback); the body forwards them unchanged to the 8-parameter worker with readflags = 0, which is exactly what distinguishes Ex from Ex2.
 // @seealso SFileLoadFile 0041b650, SFileLoadFileEx2 0041af60
-uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, size_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
+uint32_t __stdcall SFileLoadFileEx(struct D2ArchiveStrc * pArchive, char * pFileHandle, void * * ppOutBuffer, DWORD * pdwOutSize, uint32_t nExtraPadBytes, uint32_t nSearchScope, LPOVERLAPPED nReadCtx);
 // @sourcefile .\SOURCE\SFILE.CPP
 // @blizzard SFileOpenArchive (SFILE.CPP)
 int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t nFlags, struct D2ArchiveStrc * * ppArchive);
@@ -1072,10 +1078,10 @@ namespace Storm { namespace Source { namespace SMem {
 // Global operator delete: frees p through Storm SMemFree with the delete source tag, and ignores null. Counterpart of MISC_OperatorNewShim.
 // The CRT and std scalar deleting destructors call it, so it is the linked global operator delete.
 __declspec(noinline) inline void MISC_OperatorDeleteShim(void * p);
-int32_t __stdcall SMemFindNextBlock(uint32_t nHeapId, uint8_t * pPrevBlock, uint16_t * * ppOutBlock, int * pnInfo);
-int32_t __stdcall SMemFindNextHeap(uint32_t nCurHeapId, int * pnNextHeapId, struct SMemHeapDetailsStrc * pHeapDetails);
+int32_t __stdcall SMemFindNextBlock(HSHEAP nHeapId, uint8_t * pPrevBlock, uint16_t * * ppOutBlock, int * pnInfo);
+int32_t __stdcall SMemFindNextHeap(HSHEAP nCurHeapId, HSHEAP * pnNextHeapId, struct SMemHeapDetailsStrc * pHeapDetails);
 int32_t __stdcall SMemFree(void * pObject, char * szFile, int32_t nLine, DWORD dwFlags);
-uint32_t __stdcall SMemGetHeapByCaller(int * pszName, uint32_t nFlags);
+HSHEAP __stdcall SMemGetHeapByCaller(int * pszName, uint32_t nFlags);
 void * __stdcall SMemAlloc(uint32_t nSize, char * szFile, uint32_t nLine, uint32_t nFlags);
 // @blizzard SMemReAlloc (Storm assert string)
 uint32_t * __stdcall SMemReAlloc(uint32_t * pBlock, uint32_t nSize, char * szSourceFile, int32_t nSourceLine, uint32_t dwFlags);
@@ -1179,13 +1185,13 @@ char * __stdcall SStrChrR(char * szText, char cTarget);
 // call to the CRT strncmp. The case-sensitive half of the only Cmp/CmpI pair in the module.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringCaseSensitive
-int32_t __stdcall SStrCmp(char * str_1, char * str_2, size_t nMaxCount);
+int32_t __stdcall SStrCmp(char * str_1, char * str_2, uint32_t nMaxCount);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrCmpI(const char *, const char *, unsigned long)
 // @oracle-basis Identical to SStrCmp except it calls _strnicmp. The case-insensitive half of the pair.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_CompareTwoStringNoCaseSensitive
-int32_t __stdcall SStrCmpI(char * str_1, char * str_2, size_t nMaxCount);
+int32_t __stdcall SStrCmpI(char * str_1, char * str_2, uint32_t nMaxCount);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrCopy(char *, const char *, unsigned long)
 // @oracle-basis Three parameters (dst, src, dstsize). Bounded copy with the word-at-a-time zero-byte trick, always
@@ -1215,14 +1221,14 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
 // va_list and is SStrVPrintf.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed STRING_printfToPointer
-size_t SStrPrintf(char * szOutput, size_t nSize, char * Format, ...);
+uint32_t SStrPrintf(char * szOutput, uint32_t nSize, char * Format, ...);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrVPrintf(char *, unsigned long, const char *, char *)
 // @oracle-basis Four parameters, the fourth an explicit va_list; same NULL guard and same internal worker as
 // SStrPrintf. The va_list/varargs split is exactly what separates the two API names.
 // @sourcefile-storm .\SOURCE\SSTR.CPP  (first-party: SStrDup's own SMemAlloc call site names it)
 // @wasnamed SSTR_Vsnprintf
-uint32_t SStrVPrintf(char * szOutput, size_t nSize, char * szFormatString, va_list vaArgs);
+uint32_t SStrVPrintf(char * szOutput, uint32_t nSize, char * szFormatString, va_list vaArgs);
 // @oracle PPC Mac Storm 1.10b export table (337 named TVector symbols), the authoritative Storm API.
 // @oracle-signature SStrTokenize(const char **, char *, unsigned long, const char *, int *)
 // @oracle-basis Parameter-for-parameter with the API signature: (char **cursor, char *tokenOut, unsigned long maxLen,

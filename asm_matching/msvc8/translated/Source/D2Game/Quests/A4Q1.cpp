@@ -563,7 +563,7 @@ void __fastcall Q26_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // Q26_InitData — quest constructor for The Fallen Angel (QUEST_TheFallenAngel, internal QUESTINT, init order 4). Allocates A4Q1 specific data (0x1c bytes), zeroes state-function table, sets initial stateflag 1, registers handlers (0=gossip,2=Jerhyn-first-talk,3=portal-object,8=Izual-death,10=player-leave,0xb=NPC-menu,0xd=load), sets nQuestIdReal, ActiveFilter, SequenceFilter, sequence prereq QUEST_SpokeToTyrael, Jerhyn NPC gossip table (mon 0x16f / string 0x29e), and clears Izual-tracking fields.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q1.cpp
 void __fastcall Q26_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->bIsActive = '\x01';
     pQuestData->nStateFlag = 1;
     ::SGAMEDATA* pGame = pQuestData->pGame;

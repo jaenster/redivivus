@@ -66,15 +66,15 @@ uint32_t __stdcall WND_GetActiveWindow_Unref_0041c2b0();
 WPARAM __stdcall SMsgDoMessageLoop(pfnStormMsgIdleCallback pfnIdleCallback, uint32_t dwUnused);
 HWND __stdcall WND_GetActiveWindow();
 BOOL __stdcall WND_SetActiveWindow(HWND pWindow);
-int __fastcall Unreferenced_004203c0(struct StormLinkStrc * pLink);
-uint32_t __fastcall Unreferenced_004203d0(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_004203c0(struct StormLinkStrc * pLink);
+uintptr_t __fastcall Unreferenced_004203d0(struct StormLinkStrc * pLink);
 struct StormLinkStrc * __thiscall WND_ResolveListOffset(struct StormLinkStrc * pNode, intptr_t pBase);
 void __fastcall Unreferenced_00420470(struct StormLinkedListStrc * pList);
-int __fastcall Unreferenced_004204f0(struct StormLinkStrc * pLink);
+intptr_t __fastcall Unreferenced_004204f0(struct StormLinkStrc * pLink);
 void __fastcall Unreferenced_00420500(struct StormLinkedListStrc * pListHead);
 int32_t __thiscall WND_GetNodeOrDefault(int32_t pThis, int32_t pNode);
 void __thiscall WND_InsertListNode(int * * ppList, int * * pNode, int32_t nMode, int * * ppAnchor);
-uint32_t __thiscall WND_GetNodeMaskedOffset(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
+uintptr_t __thiscall WND_GetNodeMaskedOffset(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
 void __fastcall LINKEDLIST_UnlinkSelf_Unref_00420610(struct StormLinkStrc * pNode);
 void __thiscall WND_UnlinkListNode(struct StormLinkedListStrc * pThis, struct StormLinkStrc * pNode);
 struct StormLinkedListStrc * __fastcall Unreferenced_004206a0(struct StormLinkedListStrc * pList);
@@ -88,7 +88,7 @@ int * * __thiscall WND_AllocRecord(int * * ppList, int32_t nMode, int32_t nSize,
 StormWndRecStrc * __thiscall WND_UnlinkAndFreeRecord(StormWndRecStrc * pRecord, uint8_t byFreeFlags);
 // @blizzard AddWindow (SMSG.CPP)
 void __stdcall SMSG_AddWindow(HWND hWnd);
-uint32_t __thiscall WND_RemoveAndFreeRecord(struct StormLinkedListStrc * pListHead, struct StormWndRecStrc * pRecord);
+uintptr_t __thiscall WND_RemoveAndFreeRecord(struct StormLinkedListStrc * pListHead, struct StormWndRecStrc * pRecord);
 // @blizzard FindWindow (SMSG.CPP)
 struct StormWndRecStrc * __fastcall SMSG_FindWindow(HWND nHandle);
 int Unreferenced_00420ae0();

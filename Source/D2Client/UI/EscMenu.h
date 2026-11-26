@@ -84,7 +84,7 @@ struct __attribute__((packed)) D2UIMouseMsgStrc {
     /* 0x16 */ uint8_t field_0x16;
     /* 0x17 */ uint8_t field_0x17;
     /* 0x18 */ uint32_t bHandled; // Handler sets 1 to mark the message consumed. Returned to the caller through WND_DispatchWindowMessage's pdwResult1.
-    /* 0x1C */ uint32_t dwResult; // Handler result, returned through WND_DispatchWindowMessage's pdwResult2.
+    /* 0x1C */ LRESULT dwResult; // Handler result, returned through WND_DispatchWindowMessage's pdwResult2.
 };
 
 namespace D2Client::UI::EscMenu {

@@ -5,6 +5,16 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/File.data.h"
+#include "Source/D2Headers/D2Arch.h"
+
+// A general register is a DWORD on x86 and a DWORD64 on x64.
+#if D2_ARCH_X86
+#define CRASH_REGISTER_FORMAT "%6s:0x%08x"
+#elif D2_ARCH_X64
+#define CRASH_REGISTER_FORMAT "%6s:0x%016I64x"
+#else
+#error "File.cpp: no register dump format for this architecture"
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -50,26 +60,26 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
     bool bVar1 = DEBUG_CaptureThreadContext(dwThreadId, &sContext);
     if (bVar1) {
       if (sContext.ContextFlags & 0x10002) {
-        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "EAX", D2_CONTEXT_FIELD(sContext, Eax));
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EBX", D2_CONTEXT_FIELD(sContext, Ebx));
+        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, CRASH_REGISTER_FORMAT, "EAX", D2_CONTEXT_FIELD(sContext, Eax)); // steer-ok: register-width format chosen per architecture above; the D2_ARCH_X86 string is the 1.14d one
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, CRASH_REGISTER_FORMAT, "EBX", D2_CONTEXT_FIELD(sContext, Ebx)); // steer-ok: register-width format chosen per architecture above; the D2_ARCH_X86 string is the 1.14d one
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ECX", D2_CONTEXT_FIELD(sContext, Ecx));
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, CRASH_REGISTER_FORMAT, "ECX", D2_CONTEXT_FIELD(sContext, Ecx)); // steer-ok: register-width format chosen per architecture above; the D2_ARCH_X86 string is the 1.14d one
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EDX", D2_CONTEXT_FIELD(sContext, Edx));
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, CRASH_REGISTER_FORMAT, "EDX", D2_CONTEXT_FIELD(sContext, Edx)); // steer-ok: register-width format chosen per architecture above; the D2_ARCH_X86 string is the 1.14d one
         nWritten += nChunkLen;
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "\n");
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ESI", D2_CONTEXT_FIELD(sContext, Esi));
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, CRASH_REGISTER_FORMAT, "ESI", D2_CONTEXT_FIELD(sContext, Esi)); // steer-ok: register-width format chosen per architecture above; the D2_ARCH_X86 string is the 1.14d one
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EDI", D2_CONTEXT_FIELD(sContext, Edi));
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, CRASH_REGISTER_FORMAT, "EDI", D2_CONTEXT_FIELD(sContext, Edi)); // steer-ok: register-width format chosen per architecture above; the D2_ARCH_X86 string is the 1.14d one
         __snprintf_s(szLineBuffer + (nWritten + nChunkLen), 0x400 - (nWritten + nChunkLen), -1, "\n\n");
         (*pOutputCallback)(pReport, szLineBuffer);
       }
       if (sContext.ContextFlags & 0x10001) {
-        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, "%6s:0x%08x", "EBP", D2_CONTEXT_FIELD(sContext, Ebp));
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "ESP", D2_CONTEXT_FIELD(sContext, Esp));
+        nWritten = __snprintf_s(szLineBuffer, 0x400, -1, CRASH_REGISTER_FORMAT, "EBP", D2_CONTEXT_FIELD(sContext, Ebp)); // steer-ok: register-width format chosen per architecture above; the D2_ARCH_X86 string is the 1.14d one
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, CRASH_REGISTER_FORMAT, "ESP", D2_CONTEXT_FIELD(sContext, Esp)); // steer-ok: register-width format chosen per architecture above; the D2_ARCH_X86 string is the 1.14d one
         nWritten += nChunkLen;
-        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "EIP", D2_CONTEXT_FIELD(sContext, Eip));
+        nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, CRASH_REGISTER_FORMAT, "EIP", D2_CONTEXT_FIELD(sContext, Eip)); // steer-ok: register-width format chosen per architecture above; the D2_ARCH_X86 string is the 1.14d one
         nWritten += nChunkLen;
         nChunkLen = __snprintf_s(szLineBuffer + nWritten, 0x400 - nWritten, -1, "%6s:0x%08x", "FLG", sContext.EFlags);
         nWritten += nChunkLen;
@@ -442,7 +452,7 @@ size_t __stdcall STRING_AppendStringToString(char * szDest, int32_t nDestSize, c
       nRemaining--;
     }
 
-    int nDestLen = (intptr_t)pDestEnd - (intptr_t)szDest;
+    int nDestLen = (int)(pDestEnd - szDest);
     nRemaining = nDestSize - nDestLen;
     if (!nRemaining) {
       pDestEnd = szSrc + 1;

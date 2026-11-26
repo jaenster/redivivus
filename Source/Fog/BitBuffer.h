@@ -24,7 +24,7 @@ void __stdcall SetBitAtOffset(char * pBuffer, uint32_t nOffset);
 BOOL __stdcall CheckBitAtOffset(char * pBuffer, int32_t nOffset);
 // NOTE: Return type changed void→uint8_t (1 callers, MEDIUM confidence)
 void __stdcall UnsetBitAtOffset(char * pBuffer, int32_t nOffset);
-void __stdcall InitBitBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, size_t nSize);
+void __stdcall InitBitBuffer(struct D2BitBufferStrc * pBitBuffer, uint8_t * pBytes, uint32_t nSize);
 int32_t __stdcall GetNextPositon(struct D2BitBufferStrc * pBitBuffer);
 void __stdcall WriteValueToBitBuffer(struct D2BitBufferStrc * pBitBuffer, int32_t nValue, int32_t nSizeInBits);
 uint32_t __stdcall ReadUnsigned(struct D2BitBufferStrc * pBitBuffer, int32_t nSize);

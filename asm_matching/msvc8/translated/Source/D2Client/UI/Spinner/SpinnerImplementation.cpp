@@ -167,7 +167,7 @@ void __fastcall Draw(::SpinnerImplementation * pThis, int) {
       pThis->pfnRepeatAction();
     }
 
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.pDC6 = pThis->pDC6;
     sGfxData.nFrameNumber = pThis->bUpPressed * 2;
     sGfxData.nDirection = 0;
@@ -359,7 +359,7 @@ int __fastcall OnLeftArrow(::SpinnerImplementation * pThis, int, D2UIMouseMsgStr
     pThis->bMouseCaptured = 0;
     pThis->bInRepeatAction = 0;
     pThis->nRepeatStep = 0;
-    memset(&celQueryBuf, 0, 0x48);
+    memset(&celQueryBuf, 0, sizeof(celQueryBuf));
     celQueryBuf.pDC6 = (DC6*)pDC6;
     celQueryBuf.nDirection = 0;
     celQueryBuf.nFrameNumber = 0;

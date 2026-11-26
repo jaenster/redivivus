@@ -30,17 +30,17 @@ typedef void (__fastcall *pfnCelPixelDataFree)(int * pPixelData);
 
 namespace D2CMP::SRC::GfxHash {
 
-// Unlinks hash entry pEntry from its bucket (pHashTable + 0x8000 + [pEntry+0]*4 -> [pEntry+0x2c]), frees the cache block's
+// Unlinks hash entry pEntry from its bucket (pHashTable->apBuckets[pEntry->nHashKey] -> pEntry->pNext), frees the cache block's
 // async frame buffer (+0x20 -> tDecode) and the entry itself. The entry node struct (+0 hash, +0x20 cache block, +0x28/+0x2c links) is untyped.
 // @sourcefile .\SRC\GfxHash.cpp
-void __thiscall GFXHASH_UnlinkCacheEntry(uint8_t * pHashTable, D2PoolManagerStrc * pMemory, D2GfxHashEntryStrc * pEntry) {
+void __thiscall GFXHASH_UnlinkCacheEntry(D2GfxHashTableStrc * pHashTable, D2PoolManagerStrc * pMemory, D2GfxHashEntryStrc * pEntry) {
     pfnCelPixelDataFree pFreeCallback;
     uint8_t* pFrameData;
     void* nErrAddress;
     int nFrameByteOffset;
     uint32_t nFrameIdx;
-    if (*(D2GfxHashEntryStrc**)(pHashTable + (pEntry->nHashKey * 4 + 0x8000)) == pEntry) {
-      *(D2GfxHashEntryStrc**)(pHashTable + (pEntry->nHashKey * 4 + 0x8000)) = pEntry->pNext;
+    if (pHashTable->apBuckets[pEntry->nHashKey] == pEntry) {
+      pHashTable->apBuckets[pEntry->nHashKey] = pEntry->pNext;
     }
 
     D2CelCacheBlockStrc* pCacheBlock = pEntry->pCacheBlock;
@@ -85,11 +85,11 @@ void __thiscall GFXHASH_UnlinkCacheEntry(uint8_t * pHashTable, D2PoolManagerStrc
     D2_FREE_POOL_AT(pMemory, pEntry, ".\\SRC\\GfxHash.cpp", 0x8e);
 }
 
-void __fastcall GFXHASH_InitHashTable(void * pHashTable) {
-    memset(pHashTable, 0, 0x10000);
+void __fastcall GFXHASH_InitHashTable(D2GfxHashTableStrc * pHashTable) {
+    memset(pHashTable, 0, sizeof(*pHashTable));
 }
 
-void __fastcall GFX_UnlinkCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTable, D2GfxHashEntryStrc * pEntry) {
+void __fastcall GFX_UnlinkCacheEntry(D2PoolManagerStrc * pMemory, D2GfxHashTableStrc * pHashTable, D2GfxHashEntryStrc * pEntry) {
     if (!pEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x141);
       exit(-1);
@@ -101,10 +101,10 @@ void __fastcall GFX_UnlinkCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTa
       pEntry->pNext->pPrev = pEntry->pPrev;
     }
 
-    GFXHASH_UnlinkCacheEntry((uint8_t*)pHashTable, pMemory, pEntry);
+    GFXHASH_UnlinkCacheEntry(pHashTable, pMemory, pEntry);
 }
 
-void __fastcall IGNORELIST_Initialize_Unref_0060ab70(void * pHashTable) {
+void __fastcall IGNORELIST_Initialize_Unref_0060ab70(D2GfxHashTableStrc * pHashTable) {
 
 }
 
@@ -186,14 +186,14 @@ static uint32_t GFXHASH_CalcHashKey(D2GfxDataStrc * pGfxData, uint32_t * pnDirec
     return ((nHashAccum >> 8 ^ nHashAccum) >> 0x10 ^ nHashAccum >> 8 ^ nHashAccum) & 0x1fff;
 }
 
-D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(uint8_t * pHashTable, D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, D2CelFileCacheEntryStrc * pCelEntry) {
+D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(D2GfxHashTableStrc * pHashTable, D2GfxDataStrc * pGfxData, int * pnDirIdx, uint32_t * pnFrameStep, D2CelFileCacheEntryStrc * pCelEntry) {
     int pCurEntry;
     bool bMatch;
     eD2UnitType eUnitType;
     uint32_t nHashKey;
     nHashKey = GFXHASH_CalcHashKey(pGfxData, pnFrameStep, (uint32_t*)pnDirIdx, pCelEntry);
     D2GfxHashEntryStrc* nEntryPtr;
-    nEntryPtr = *(D2GfxHashEntryStrc**)(pHashTable + (nHashKey * 4 + 0x8000));
+    nEntryPtr = pHashTable->apBuckets[nHashKey];
     int nSrcField1C;
     nSrcField1C = pGfxData->nCompositToken;
     int nSrcField20;
@@ -242,7 +242,7 @@ D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(uint8_t * pHashTable,
 }
 
 // @sourcefile .\SRC\GfxHash.cpp
-D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, void * pHashTable, D2CelCacheBlockStrc * pCacheBlock, D2GfxDataStrc * pGfxData, D2CelFileCacheEntryStrc * pCelEntry) {
+D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, D2GfxHashTableStrc * pHashTable, D2CelCacheBlockStrc * pCacheBlock, D2GfxDataStrc * pGfxData, D2CelFileCacheEntryStrc * pCelEntry) {
     D2GfxHashEntryStrc* pNewEntry = D2_NEW_POOL_AT(pMemory, D2GfxHashEntryStrc, ".\\SRC\\GfxHash.cpp", 0xef);
     D2GfxDataStrc* nGfxDataSaved = pGfxData;
     pNewEntry->pCacheBlock = pCacheBlock;
@@ -261,14 +261,14 @@ D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory,
     }
 
     pNewEntry->pPrev = 0;
-    D2GfxHashEntryStrc* nPrevHead = *(D2GfxHashEntryStrc**)((char*)pHashTable + nHashKey * 4 + 0x8000);
+    D2GfxHashEntryStrc* nPrevHead = pHashTable->apBuckets[nHashKey];
     pNewEntry->pNext = nPrevHead;
     if (nPrevHead) {
       nPrevHead->pPrev = pNewEntry;
     }
 
     pNewEntry->nHashKey = nHashKey;
-    *(D2GfxHashEntryStrc**)((char*)pHashTable + nHashKey * 4 + 0x8000) = (D2GfxHashEntryStrc*)pNewEntry;
+    pHashTable->apBuckets[nHashKey] = pNewEntry;
     return pNewEntry;
 }
 

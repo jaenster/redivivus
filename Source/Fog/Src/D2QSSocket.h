@@ -34,7 +34,7 @@ struct D2NetDataStrc * __stdcall NET_D2QSocket_GetSafesock(struct D2QSSocketStrc
 int32_t __stdcall NET_MCP_CLIENT_Send(struct D2QSSocketStrc * pQSocket, char * pBytes, uint16_t nDataSizeNoHeader);
 // Module-private: no other module references these
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(struct D2NetDataStrc * pSafesocket, char * pBytes, size_t nSize);
+int __fastcall NET_MCP_CLIENT_SendPacketToSafesocket(struct D2NetDataStrc * pSafesocket, char * pBytes, uint32_t nSize);
 void __stdcall QSSOCKET_SetCallbackHandler2(struct D2QSSocketStrc * pQSSocket, int nHeaderSize, int nSizeFieldOffset, int nHeaderLeadByte);
 // Socket receive loop, passed as thread proc to Fog::Safesock::Create_Flag0
 int __stdcall ReceiveLoopCallback(struct D2QSSocketStrc * pQSSocket);

@@ -42,7 +42,7 @@ namespace D2CMP::SRC::CelDataHash {
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
 // @sourcefile .\SRC\CelDataHash.cpp
 void __fastcall CELDATAHASH_UnlinkEntry(struct D2CelDataHashTableStrc * pHashTable, struct D2CelDataHashEntryStrc * pEntry, struct D2PoolManagerStrc * pMemory);
-void __fastcall CELDATAHASH_InitHashTable(void * pHashTable);
+void __fastcall CELDATAHASH_InitHashTable(struct D2CelDataHashTableStrc * pHashTable);
 // @sourcefile .\SRC\CelDataHash.cpp
 void __fastcall GFX_FreeAllCacheEntries(struct D2PoolManagerStrc * pMemory, struct D2CelDataHashTableStrc * pHashTable);
 struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_FindByFilename(struct D2CelDataHashTableStrc * pHashTable, char * szFileName);
@@ -50,7 +50,7 @@ struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_FindByFilename(struct D2C
 struct D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(struct D2PoolManagerStrc * pPoolManager, struct D2CelDataHashTableStrc * pHashTable, void * nRefCount, char * szFileName);
 // @sourcefile .\SRC\CelDataHash.cpp
 void __fastcall GFX_RemoveCacheEntry(struct D2PoolManagerStrc * pMemory, struct D2CelDataHashTableStrc * pHashTable, struct D2CelDataHashEntryStrc * pEntry);
-void __fastcall IGNORELIST_Initialize_Unref_0060b130(void * pHashTable);
+void __fastcall IGNORELIST_Initialize_Unref_0060b130(struct D2CelDataHashTableStrc * pHashTable);
 #endif // D2_MODULE_D2CMP
 
 } // namespace D2CMP::SRC::CelDataHash

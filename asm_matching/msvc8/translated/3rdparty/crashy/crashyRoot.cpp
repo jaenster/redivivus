@@ -136,7 +136,7 @@ char __stdcall SYSTEM_CaptureThreadContext(LPCVOID * pnStackTop, DWORD dwThreadI
       bVar1 = SYSTEM_GetStackRegion(&pStackBase, (LPCVOID)D2_CONTEXT_FIELD(ctx, Esp), &pStackTop);
       if (bVar1) {
         *pnStackTop = pStackTop;
-        *pnStackSize = (intptr_t)pStackTop - (intptr_t)pStackBase;
+        *pnStackSize = (int)((intptr_t)pStackTop - (intptr_t)pStackBase);
       }
       if (hThread) {
         /* HANDLE hThread for ResumeThread */ ResumeThread(hThread);

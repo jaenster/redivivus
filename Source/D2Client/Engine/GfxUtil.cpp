@@ -40,7 +40,7 @@
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Units/Units.h"
 #include "Source/D2Game/D2Game.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Objects/Objects.h"
 #include "Source/D2Game/Unit/SUnitDmg.h"
@@ -752,73 +752,55 @@ void * __fastcall GFXUTIL_Identity(void * pData) {
 
 uint32_t __fastcall GFXUTIL_GetCofFrameCount(uint8_t * pbCof, uint32_t nComponent) {
     uint32_t nResult = 0;
-    if (!(pbCof && (int)nComponent < 0x10)) {
-      return nResult;
-    }
+    if (pbCof && (int)nComponent < 0x10) {
+      int nLayerCount = *pbCof;
+      uint8_t* pbLayerEntry = pbCof + 0x1c;
+      for (int nLayerIdx = 0; nLayerIdx < nLayerCount; nLayerIdx++) {
+        if (*pbLayerEntry == nComponent) {
+          nResult = (uint32_t)pbLayerEntry[3];
+          break;
+        }
 
-    uint8_t* pbLayerEntry = pbCof + 0x1c;
-    int nLayerIdx = 0;
-    if (!*pbCof) {
-      return nResult;
-    }
-
-    while (*pbLayerEntry != nComponent) {
-      nLayerIdx++;
-      pbLayerEntry += 9;
-      if (nLayerIdx >= (int)(uint32_t)*pbCof) {
-        return nResult;
+        pbLayerEntry += 9;
       }
     }
 
-    nResult = (uint32_t)pbLayerEntry[3];
     return nResult;
 }
 
 uint32_t __fastcall GFXUTIL_GetCofAnimSpeed(uint8_t * pbCof, uint32_t nComponent) {
     uint32_t nResult = 0;
-    if (!(pbCof && (int)nComponent < 0x10)) {
-      return nResult;
-    }
+    if (pbCof && (int)nComponent < 0x10) {
+      int nLayerCount = *pbCof;
+      uint8_t* pbLayerEntry = pbCof + 0x1c;
+      for (int nLayerIdx = 0; nLayerIdx < nLayerCount; nLayerIdx++) {
+        if (*pbLayerEntry == nComponent) {
+          nResult = (uint32_t)pbLayerEntry[1];
+          break;
+        }
 
-    uint8_t* pbLayerEntry = pbCof + 0x1c;
-    int nLayerIdx = 0;
-    if (!*pbCof) {
-      return nResult;
-    }
-
-    while (*pbLayerEntry != nComponent) {
-      nLayerIdx++;
-      pbLayerEntry += 9;
-      if (nLayerIdx >= (int)(uint32_t)*pbCof) {
-        return nResult;
+        pbLayerEntry += 9;
       }
     }
 
-    nResult = (uint32_t)pbLayerEntry[1];
     return nResult;
 }
 
 uint32_t __fastcall GFXUTIL_GetCofDirection(uint8_t * pbCof, uint32_t nComponent) {
     uint32_t nResult = 0;
-    if (!(pbCof && (int)nComponent < 0x10)) {
-      return nResult;
-    }
+    if (pbCof && (int)nComponent < 0x10) {
+      int nLayerCount = *pbCof;
+      uint8_t* pbLayerEntry = pbCof + 0x1c;
+      for (int nLayerIdx = 0; nLayerIdx < nLayerCount; nLayerIdx++) {
+        if (*pbLayerEntry == nComponent) {
+          nResult = (uint32_t)pbLayerEntry[2];
+          break;
+        }
 
-    uint8_t* pbLayerEntry = pbCof + 0x1c;
-    int nLayerIdx = 0;
-    if (!*pbCof) {
-      return nResult;
-    }
-
-    while (*pbLayerEntry != nComponent) {
-      nLayerIdx++;
-      pbLayerEntry += 9;
-      if (nLayerIdx >= (int)(uint32_t)*pbCof) {
-        return nResult;
+        pbLayerEntry += 9;
       }
     }
 
-    nResult = (uint32_t)pbLayerEntry[2];
     return nResult;
 }
 
@@ -838,20 +820,15 @@ uint32_t __fastcall GFXUTIL_GetCofDrawOrder(uint8_t * pbCof, uint32_t nComponent
       return 5;
     }
 
+    int nLayerCount = *pbCof;
     uint8_t* pbLayerEntry = pbCof + 0x1c;
-    int nLayerIdx = 0;
-    if (!*pbCof) {
-      return 5;
-    }
-
-    do {
+    for (int nLayerIdx = 0; nLayerIdx < nLayerCount; nLayerIdx++) {
       if (*pbLayerEntry == nComponent) {
         return (uint32_t)pbLayerEntry[4];
       }
 
-      nLayerIdx++;
       pbLayerEntry += 9;
-    } while (nLayerIdx < (int)(uint32_t)*pbCof);
+    }
 
     return 5;
 }
@@ -883,7 +860,7 @@ void __fastcall GFXUTIL_SetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nCompone
 }
 
 // @sourcefile .\ENGINE\GfxUtil.cpp
-static void __stdcall GFXUTIL_UpdateDirectionForMode(uint8_t nDirection, int32_t nAnimMode, D2UnitStrc * pUnit, int32_t nPrevDirection, int32_t nNewDirection) {
+static void __stdcall GFXUTIL_UpdateDirectionForMode(uint32_t nDirection, int32_t nAnimMode, D2UnitStrc * pUnit, int32_t nPrevDirection, int32_t nNewDirection) {
     int nClassId;
     if (!nAnimMode) {
       return;
@@ -892,22 +869,22 @@ static void __stdcall GFXUTIL_UpdateDirectionForMode(uint8_t nDirection, int32_t
     eD2UnitType eType = UNIT_COUNT;
     if (pUnit) {
       eType = pUnit->eUnitType;
-      nClassId = pUnit->nClassId;
-    } else {
-      nClassId = -1;
     }
+    nClassId = !pUnit ? -1 : pUnit->nClassId;
 
     nAnimMode = D2Common::Units::GetAnimOrSeqMode(pUnit);
     D2Common::Skills::SKILLS_GetStateTransformGfx(pUnit, &eType, &nClassId, &nAnimMode, ".\\ENGINE\\GfxUtil.cpp", 0x53c);
-    if (eType != UNIT_PLAYER) {
-      if (eType == UNIT_MONSTER && (!nAnimMode || nAnimMode == 0xc) && nPrevDirection != nNewDirection) {
-        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, nDirection);
-        return;
-      }
-    } else {
-      if ((!nAnimMode || nAnimMode == 0x11) && nPrevDirection != nNewDirection) {
-        D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, nDirection);
-      }
+    switch (eType) {
+      case UNIT_PLAYER:
+        if ((!nAnimMode || nAnimMode == 0x11) && nPrevDirection != nNewDirection) {
+          D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, nDirection);
+        }
+        break;
+      case UNIT_MONSTER:
+        if ((!nAnimMode || nAnimMode == 0xc) && nPrevDirection != nNewDirection) {
+          D2Common::PATH::DynamicPath::SetDirectionAndNewDirection(pUnit->pPath.pDynamicPath, nDirection);
+        }
+        break;
     }
 }
 
@@ -938,7 +915,7 @@ void __fastcall GFXUTIL_CalcDirectionAndFrame(D2UnitStrc * pUnit, int32_t nAnimD
     *pnNumDirections = _cNumDirs;
     if (nAnimMode) {
       GFXUTIL_ConvertDirectionBits(_cNumDirs, nNumDirs, pnDirection);
-      GFXUTIL_UpdateDirectionForMode((uint8_t)*pnDirection, nAnimMode, pUnit, *pnNumDirections, nNumDirs);
+      GFXUTIL_UpdateDirectionForMode(*pnDirection, nAnimMode, pUnit, *pnNumDirections, nNumDirs);
     }
 
     uint32_t nFrameHandler = D2CMP::SRC::CelCmp::CELCMP_GetFrameDecodeHandlerReverse(*pnDirection, nNumDirs);
@@ -1544,7 +1521,7 @@ int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pby
           exit(-1);
         }
 
-        memset(&sGfxData, 0, 0x48);
+        memset(&sGfxData, 0, sizeof(sGfxData));
         sGfxData.nDirection = nPaletteShift;
         sGfxData.nFrameNumber = nFrame;
         sGfxData.pDC6 = 0;
@@ -1575,7 +1552,7 @@ int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pby
 int32_t __fastcall GFXUTIL_GetOverlayFrameDelay(D2UnitStrc * pUnit, D2GfxUnknown_0xa8 * pOverlayEntry) {
     D2GfxDataStrc sGfxData;
     int nOutItemClassId;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nOverlayId = pOverlayEntry->neOverlayId;
     uint32_t nOverlayAnimMode = pOverlayEntry->nRandomOffset;
     uint8_t byDirection = D2Common::Units::GetDirection(pUnit);
@@ -1598,7 +1575,7 @@ int32_t __fastcall GFXUTIL_GetOverlayFrameDelay(D2UnitStrc * pUnit, D2GfxUnknown
 
 void __fastcall GFXUTIL_GetOverlayDimensions(D2UnitStrc * pUnit, int nPaletteShift, uint32_t nAnimMode, uint32_t * pOutWidth, uint32_t * pOutHeight) {
     D2GfxDataStrc sGfxData;
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     sGfxData.nFrameNumber = nAnimMode;
     sGfxData.pDC6 = 0;
     sGfxData.nDirection = nPaletteShift;
@@ -1630,7 +1607,7 @@ uint32_t __fastcall GFXUTIL_IsUnitSpriteOnScreen(D2UnitStrc * pUnit, int32_t nWo
     }
 
     D2Common::Units::GetShiftedFrameMetrics(pUnit, &nFrameMetrics, &nFrameMetrics2);
-    memset(&sGfxData, 0, 0x48);
+    memset(&sGfxData, 0, sizeof(sGfxData));
     int nFrameNumber = nFrameMetrics;
     sGfxData.nDirection = D2Common::Units::GetDirection(pUnit);
     sGfxData.pDC6 = 0;

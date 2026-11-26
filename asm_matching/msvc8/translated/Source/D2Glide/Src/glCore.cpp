@@ -392,7 +392,7 @@ BOOL __fastcall ActivateWindow() {
     return 0;
 }
 
-BOOL __fastcall SetOption(int32_t nOption, int32_t nValue) {
+BOOL __fastcall SetOption(int32_t nOption, intptr_t nValue) {
     switch (nOption) {
       case 10:
         {
@@ -401,7 +401,7 @@ BOOL __fastcall SetOption(int32_t nOption, int32_t nValue) {
         }
       case 0xb:
         {
-          gbWINDOWED = nValue;
+          gbWINDOWED = (int)nValue;
           return 1;
         }
       default:
@@ -732,7 +732,7 @@ static BOOL RENDERER_GLIDE_InitWindow(int32_t nParam, HWND hWnd) {
       break;
     }
     gnGlideWindowHandle = hWnd;
-    ghGlideSstWindow = (*GLIDEDLL_grSstWinOpen_28)((FxU32)hWnd, screen_resolution, refresh_rate, 2, 0, 2, 0);
+    ghGlideSstWindow = (*GLIDEDLL_grSstWinOpen_28)((FxU32)HandleToULong(hWnd), screen_resolution, refresh_rate, 2, 0, 2, 0);
     if (ghGlideSstWindow) {
       ghGlideWindow = 1;
       if (gnGlideRendererInitialized) {

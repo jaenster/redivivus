@@ -568,7 +568,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_JumpMissileTowardTarget(D2UnitStrc * pUnit,
       } while (nWalkSteps > 0);
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nUnitX = nLaunchPosX - nSrcY;
     sSkillArg.nX = sSkillArg.nUnitX / 6 - 1 + nSrcY;
     sSkillArg.nUnitY = nLaunchPosY - nSrcX;
@@ -671,7 +671,7 @@ static BOOL __stdcall SKILLSMON_SetMissileFrameAndSpeed(eD2Skills eSkill, D2Unit
 // Creates a single missile from a pre-built D2SkillArgStrc using pUnit's RNG seed to pick a velocity offset from a table (pVelocityOffsets points to an int array, seed mod 5 selects entry). Advances pUnit->sSeed twice. After MakeMissile succeeds, calls SKILLSMON_SetMissileFrameAndSpeed to apply frame/speed from skill calc. Returns the new missile unit or NULL on failure.
 static D2UnitStrc * __stdcall SKILLSMON_CreateMissileWithSeed(int32_t * pVelocityOffsets, int32_t nUnitX, int32_t nUnitY, eD2Skills eSkill, int32_t nSkillLevel, D2UnitStrc * pUnit, int32_t nMissileId) {
     D2SkillArgStrc sSkillArg;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     D2SeedStrc sNewSeed = D2_SEED_NEXT(pUnit->sSeed);
     sSkillArg.nFlags = 0x25;
     sSkillArg.pOwner = pUnit;
@@ -871,7 +871,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RingMissileSpray(D2UnitStrc * pUnit, eD2Ski
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
 
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x1f;
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pUnit;
@@ -1039,7 +1039,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_DirectionalBeam(D2UnitStrc * pUnit, eD2Skil
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
 
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nMissileTxtNo = eMissileId;
       sSkillArg.nFlags = 3;
       sSkillArg.pOwner = pUnit;
@@ -1090,7 +1090,7 @@ void __fastcall SKILLSMON_SetMissilePathRandom(D2UnitStrc * pUnit, intptr_t nSee
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2SeedStrc* pSeed = &pUnit->sSeed;
-    D2Common::Seed::InitSeed_Param_666(pSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + nSeedOffset);
+    D2Common::Seed::InitSeed_Param_666(pSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + (int32_t)nSeedOffset);
     uint32_t sNewSeed = D2_SeedRoll(pSeed);
     if (!((int32_t)(sNewSeed % 100) >= 0x14)) {
       return;
@@ -1118,7 +1118,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RandomScatterMissiles(D2UnitStrc * pUnit, e
     }
 
     int32_t nMissileCount = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->calc[0], eSkill, nSkillLvl);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 0x21;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
@@ -1323,7 +1323,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_LineMissileSpread(D2UnitStrc * pUnit, eD2Sk
     nOriginY = D2Common::Skills::D2GetSkillCalc(pUnitOrig, pSkillTxt->calc[0], nMissileCountDown, nSkillLvl);
     nMissileCount = nRelX - nOriginY / 2 * nStepY;
     nDirY = nRelY - nOriginY / 2 * nStepX;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 3;
     nMissileCountDown = nOriginY;
     if (nOriginY <= 0) {
@@ -1502,7 +1502,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_RadialMissileExplosion(D2UnitStrc * pUnit, 
     if (pTargetUnit) {
       int32_t nVelocity;
       nVelocity = D2Common::DATATBLS::MissileTbls::MISSILETBLS_CalculateVelocity(eMissileId, nSkillLvl);
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 3;
       sSkillArg.nX = D2Common::Units::GetXPosFromDynamicPathUnit(pUnit);
       sSkillArg.nY = D2Common::Units::GetYPosFromDynamicPathUnit(pUnit);
@@ -1640,7 +1640,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_ScatterDoubleMissile(D2UnitStrc * pUnit, eD
         pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
       }
 
-      memset(&sSkillArg, 0, 0x5c);
+      memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 0x2021;
       sSkillArg.pOwner = pUnit;
       sSkillArg.pMissile = pUnit;
@@ -1719,7 +1719,7 @@ BOOL __fastcall Skills_CltDoFunc_Mon_CurseCenter_StreamRange(D2UnitStrc * pUnit,
     }
 
     int32_t nAuraRange = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurarangecalc, eSkill, nSkillLvl);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = nTargetX;
@@ -2013,7 +2013,7 @@ D2UnitStrc * __fastcall SKILLSMON_CltCreateSpiderLay(D2UnitStrc * pUnit) {
       pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(pStartRoom, nUnitX, nUnitY);
       bHasRoom = D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom);
       if (!bHasRoom) {
-        memset(&sSkillArg, 0, 0x5c);
+        memset(&sSkillArg, 0, sizeof(sSkillArg));
         sSkillArg.nUnitX = nUnitX + nOffsetX * 2;
         sSkillArg.nUnitY = nUnitY + nOffsetY * 2;
         sSkillArg.nFlags = 0x25;
@@ -2047,7 +2047,7 @@ void __fastcall SKILLSMON_SetMissilePathLinear(D2UnitStrc * pUnit, intptr_t nSee
     }
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + nSeedOffset);
+    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath) + (int32_t)nSeedOffset);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 10);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, (uint8_t)nTotalFrames);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);

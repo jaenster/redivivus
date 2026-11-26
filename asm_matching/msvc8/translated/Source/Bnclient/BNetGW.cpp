@@ -601,7 +601,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
         pZoneVal = vc8_thiscall(FindKey)(pClientSideData, pIniKeyVal, szKeyBuf);
         while (pZoneVal) {
           pEnuLineEnd = vc8_thiscall(SkipToEOL)(pClientSideData, pZoneVal, nTmp2);
-          uSlot1C.nFieldLen = (intptr_t)pEnuLineEnd - (intptr_t)pZoneVal;
+          uSlot1C.nFieldLen = (int)(pEnuLineEnd - pZoneVal);
           Storm::Source::SSTR::SStrCopy(pcVar1, pZoneVal, uSlot1C.nFieldLen + 1);
           nTmp3 = pcVar1;
           pZoneVal = vc8_thiscall(FindSection)(pClientSideData, szText, pcVar1);
@@ -610,7 +610,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
             pcVar1 = vc8_thiscall(FindKey)(pClientSideData, pZoneVal, "ZONE");
             if (pcVar1) {
               pEnuLineEnd = vc8_thiscall(SkipToEOL)(pClientSideData, pcVar1, nTmp2);
-              nZoneLen = (intptr_t)pEnuLineEnd - (intptr_t)pcVar1;
+              nZoneLen = (int)(pEnuLineEnd - pcVar1);
               nFieldLen = nZoneLen + 1;
             } else {
               nFieldLen = 2;
@@ -623,7 +623,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
             pcVar1 = vc8_thiscall(FindKey)(pClientSideData, pZoneVal, "ENU");
             if (pcVar1) {
               pZoneVal = vc8_thiscall(SkipToEOL)(pClientSideData, pcVar1, nTmp2);
-              nFieldLen = (intptr_t)pZoneVal - (intptr_t)pcVar1;
+              nFieldLen = (int)(pZoneVal - pcVar1);
             } else {
               nFieldLen = (int)strlen(nTmp3);
               pcVar1 = nTmp3;
@@ -639,7 +639,7 @@ void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, c
         }
 
         *pcVar1 = '\0';
-        nGatewayDataLen = (intptr_t)pcVar1 + (1 - (intptr_t)pRegMultiSzBuf);
+        nGatewayDataLen = (uint32_t)(pcVar1 - pRegMultiSzBuf + 1);
         if (!((int)nGatewayDataLen < (int)nSize)) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e6);
           exit(-1);

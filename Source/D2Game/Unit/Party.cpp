@@ -657,12 +657,13 @@ DWORD __fastcall PARTY_SplitGoldToPartyMembers(::SGAMEDATA * pGame, D2UnitStrc *
       }
       if (pUnit) {
         nGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
-        if (nGold + nShare >= 0 && (pUnit->eUnitType != UNIT_PLAYER || (nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit) , nGold + nShare <= (int)nGoldLimit))) {
-          D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_gold, nShare, 0);
+        nGold += nShare;
+        if (nGold < 0 || pUnit->eUnitType == UNIT_PLAYER && (nGoldLimit = D2Common::Units::GetInventoryGoldLimit(pUnit) , nGold > (int)nGoldLimit)) {
+          D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_gold, 0, 0);
           return nAlivePartyMembers;
         }
 
-        D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_gold, 0, 0);
+        D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_gold, nShare, 0);
         return nAlivePartyMembers;
       }
     } else {

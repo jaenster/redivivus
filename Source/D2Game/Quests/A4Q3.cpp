@@ -734,7 +734,7 @@ void __fastcall Q28_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // A4Q3 Hell's Forge — Q28_InitData: quest constructor. Wires up the state-function table (slots 0,2,3,4,8,9,0xa,0xb,0xd,0xe -> the Q28 callbacks above), fpActiveFilter=Q28_ActiveFilter, fpSequenceFilter=Q28_SequenceFilter, nSequenceQuestId=QUEST_AbleGoToAct4, nQuestIdReal=QUEST_HellsForge, nInitNo=4, the single Cain (0xf6) gossip entry (string 0x2a6), then allocates and zero-inits the 0x20-byte D2QuestDataA4Q3Strc (forge flags: bForgeQuestAccepted, bGotHammer, drop counters, gem quality, etc).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q3.cpp
 void __fastcall Q28_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->fpActiveFilter = Q28_ActiveFilter;
     pQuestData->pQuestSpecificData.pA4Q3 = 0;

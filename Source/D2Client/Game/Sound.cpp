@@ -536,48 +536,39 @@ BOOL __fastcall SOUND_SetSoundMixer(int32_t nMixer) {
 
 // Sets the global BackgroundSoundsActive flag then reinitializes the audio stream channels to apply the change. Queries the current mixer mode (DirectSound=1 or Sound3D=2), checks whether the corresponding subsystem is initialized, and calls SOUND_ShutdownAudio + SOUND_InitStreamChannels. Falls back to mixer mode 0 on init failure and adjusts the stored mixer setting accordingly.
 void __fastcall SOUND_SetBackgroundSoundsActive(BOOL bActive) {
-    DWORD dwInitFlag;
     BackgroundSoundsActive = bActive;
-    int32_t nMixerMode;
-    nMixerMode = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
+    int32_t nMixerMode = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
     if (nMixerMode == 1) {
-      dwInitFlag = D2Sound::SOUND_GetPrimaryBufferModeFlag();
-      check_mixer_ready:
-      if (!dwInitFlag) {
-        goto fall_back_to_mixer0;
-      }
-    } else if (nMixerMode == 2) {
-      dwInitFlag = D2Sound::SOUND_GetSound3DFlag();
-      goto check_mixer_ready;
-    }
+      if (!D2Sound::SOUND_GetPrimaryBufferModeFlag()) {
+      fall_back_to_mixer0:
+        SOUND_ShutdownAudio();
+        if (!SOUND_InitStreamChannels(0)) {
+          return;
+        }
 
-    SOUND_ShutdownAudio();
-    BOOL nInitResult;
-    nInitResult = SOUND_InitStreamChannels(nMixerMode);
-    if (nInitResult) {
-      int32_t nActiveMixer;
-      nActiveMixer = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
-      if (nActiveMixer == nMixerMode) {
+        if (!D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer()) {
+          return;
+        }
+
+        D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer(0);
         return;
       }
-
-      D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer(nMixerMode);
-      return;
+    } else if (nMixerMode == 2) {
+      if (!D2Sound::SOUND_GetSound3DFlag()) {
+        goto fall_back_to_mixer0;
+      }
     }
 
-    fall_back_to_mixer0:
     SOUND_ShutdownAudio();
-    nInitResult = SOUND_InitStreamChannels(0);
-    if (!nInitResult) {
+    if (!SOUND_InitStreamChannels(nMixerMode)) {
+      goto fall_back_to_mixer0;
+    }
+
+    if (D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer() == nMixerMode) {
       return;
     }
 
-    nMixerMode = D2Sound::Src::D2SoundFast::SOUND_GetSoundMixer();
-    if (!nMixerMode) {
-      return;
-    }
-
-    D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer(0);
+    D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer(nMixerMode);
 }
 
 // JMP thunk

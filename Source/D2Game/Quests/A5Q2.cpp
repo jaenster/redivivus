@@ -686,7 +686,7 @@ void __fastcall Q32_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // and zeroes the participant GUID list.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q2.cpp
 void __fastcall Q32_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[10] = Q32_Callback10_PlayerLeavesGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[3] = Q32_Callback03_ChangedLevel;
@@ -707,7 +707,7 @@ void __fastcall Q32_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpActiveFilter = Q32_ActiveFilter;
     pQuestData->fpSequenceFilter = Q32_SequenceFilter;
     pQuestData->nSequenceQuestId = QUEST_SpokeToMalachai;
-    memset(pQuestSpecificData, 0, 0x160);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sQuestGUID);
 }
 
@@ -898,8 +898,8 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
       return;
     }
 
-    sPortalCoords.y = pQuestDataA5Q2->aBarricadePos[nGroupIndex].y;
     sPortalCoords.x = pQuestDataA5Q2->aBarricadePos[nGroupIndex].x + 0xc;
+    sPortalCoords.y = pQuestDataA5Q2->aBarricadePos[nGroupIndex].y;
     D2RoomStrc* pPrisonerRoom;
     pPrisonerRoom = D2Common::Units::UNITS_GetRoom(pBarricadeUnit);
     D2RoomStrc* pAttackerRoom;
@@ -1077,14 +1077,13 @@ void __fastcall Q32_PrisonerTimerCallback(D2QuestDataStrc * pQuestData, D2UnitSt
     pA5Q2Data = pQuestData->pQuestSpecificData.pA5Q2;
     int nPrisonerGroupIdx;
     nPrisonerGroupIdx = 0;
-    int32_t* pnGroupGUIDEntry;
-    pnGroupGUIDEntry = pA5Q2Data->anBarricadePortalGUID;
-    while (nUnitGUID != *pnGroupGUIDEntry) {
-      nPrisonerGroupIdx++;
-      pnGroupGUIDEntry++;
-      if (nPrisonerGroupIdx >= 3) {
-        return;
+    for (; nPrisonerGroupIdx < 3; nPrisonerGroupIdx++) {
+      if (nUnitGUID == pA5Q2Data->anBarricadePortalGUID[nPrisonerGroupIdx]) {
+        break;
       }
+    }
+    if (nPrisonerGroupIdx >= 3) {
+      return;
     }
 
     if (!pUnit) {

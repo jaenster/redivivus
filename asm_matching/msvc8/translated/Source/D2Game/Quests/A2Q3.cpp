@@ -632,12 +632,12 @@ BOOL __fastcall OBJOP_A2Q3_ActivateTaintedSunAltar(D2ObjectOperateFnArg * pOpera
         pDVar1->bTaintedSunStartedFailed = true;
         UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, pOperation->pAttacker, (::fpExecuteOnUnitFunction)Q11_CountPlayersNeedingViperAmulet);
         pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
-        pGame3 = (::SGAMEDATA*)D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
+        int32_t nDropLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom); // was kept in the pGame3 slot
         pOperation->sArg.pVictim->dwDropItemCode = 0x20706976;
         nDroppedItemCount = 0;
         if (pDVar1->nViperAmuletDropCount > 0) {
           do {
-            pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_UNIQUE, (int32_t*)&pGame3, nullptr, -1, 0);
+            pPlayerData = ITEMS::Items::Drop::ITEM_RewardItemToDrop(pOperation->sArg.pGame, pOperation->sArg.pVictim, QUALITY_UNIQUE, &nDropLevelId, nullptr, -1, 0);
             if (pPlayerData) {
               D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pPlayerData, ITEMFLAG_IDENTIFIED, 1);
               nDroppedItemCount++;
@@ -854,7 +854,7 @@ void __fastcall Q11_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // QUEST_TheTaintedSun, fpActiveFilter=Q11_ActiveFilter, fpSequenceFilter=Q11_SequenceFilter, initNo 4,
 // stateFlag 0, and zero-inits the participant GUID list. No quest-record access.
 void __fastcall Q11_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q11_Callback00_NpcActivate;
     pQuestData->sStateFunctions.fpQuestStateHandler[0xb] = Q11_Callback11_ScrollMessage;
@@ -872,7 +872,7 @@ void __fastcall Q11_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpActiveFilter = Q11_ActiveFilter;
     pQuestData->fpSequenceFilter = Q11_SequenceFilter;
     pQuestData->nSequenceQuestId = QUEST_TheTaintedSun;
-    memset(pQuestSpecificData, 0, 0xa0);
+    memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
     pQuestSpecificData->nViperAmuletUpdateFlag = 0;
     QUESTGUID_SetPlayerCountToZero(&pQuestSpecificData->sPlayerGUID);
 }

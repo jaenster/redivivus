@@ -39,7 +39,7 @@ typedef BOOL (__fastcall *fpInitPerspective)(D2GfxSettingsStrc * pSettings, ::D2
 typedef BOOL (__fastcall *fpInitialize)(HINSTANCE hInstance);
 typedef BOOL (__fastcall *fpRelease)();
 typedef BOOL (__fastcall *fpResizeWindow)(HWND hWnd, BOOL bForceResize);
-typedef BOOL (__fastcall *fpSetOption)(int nOption, int nValue);
+typedef BOOL (__fastcall *fpSetOption)(int nOption, intptr_t nValue);
 typedef BOOL (__stdcall *fpBeginCutScene)();
 typedef BOOL (__stdcall *fpDestroyWindow)();
 typedef int (__fastcall *fpCheckGamma)();

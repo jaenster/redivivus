@@ -201,7 +201,7 @@ static void __stdcall SKILLSCLT_CreateMultiMissileDirected(D2SkillsTxt * pSkills
     }
 
     spawn_selected_missile:
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nX = nMissileSpawnX;
     sSkillArg.nMissileTxtNo = eMissileSelected;
     sSkillArg.nUnitX = nDirOffsetY;
@@ -330,7 +330,7 @@ BOOL __fastcall Skills_CltDoFunc_DualMissileWithZ(D2UnitStrc * pUnit, eD2Skills 
       return 0;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.pOwner = pUnitSaved;
     sSkillArg.nFlags = 1;
     sSkillArg.nX = nCoordX;
@@ -375,7 +375,7 @@ BOOL __fastcall Skills_CltDoFunc_DualMissileAtCoords(D2UnitStrc * pUnit, eD2Skil
       return 0;
     }
 
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.nX = nCoordX;
@@ -423,7 +423,7 @@ void __fastcall SKILLSCLT_CreateMissileWithGfx(D2UnitStrc * pUnit, uint32_t nSee
     D2Common::Seed::InitSeed_Param_666(&sSeed, nSeed);
     int nMaxDistSq = nCount * nCount;
     int nRange = nCount * 2;
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nFlags = 1;
     sSkillArg.pOwner = pUnit;
     sSkillArg.eSkillNo = eSkill;
@@ -491,7 +491,7 @@ void __fastcall SKILLSCLT_SetMissilePathAndCalc(D2UnitStrc * pUnit, intptr_t nIn
     }
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
-    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, nInitSeed);
+    D2Common::Seed::InitSeed_Param_666(&pUnit->sSeed, (int32_t)nInitSeed);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 10);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, (uint8_t)nTotalFrames);
     D2Common::PATH::DynamicPath::PATH_CalculatePath(pDynamicPath, pUnit, 0);
@@ -637,7 +637,7 @@ static void __stdcall SKILLSCLT_CltCreateMissileAtTarget(uint32_t dwSeed, uint32
     D2SkillArgStrc sSkillArg;
     D2SeedStrc ullSeedPair;
     D2Common::Seed::InitSeed_Param_666(&ullSeedPair, pUnit);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nX = nX;
     sSkillArg.nY = nY;
     sSkillArg.pOwner = pTargetUnit;
@@ -691,7 +691,7 @@ void __fastcall SKILLSCLT_SetMissilePathExtended(D2UnitStrc * pUnit, intptr_t nI
 
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2SeedStrc* pSeed = &pUnit->sSeed;
-    D2Common::Seed::InitSeed_Param_666(pSeed, nInitSeed);
+    D2Common::Seed::InitSeed_Param_666(pSeed, (int32_t)nInitSeed);
     D2Common::PATH::DynamicPath::PATH_SetPathType(pDynamicPath, 10);
     D2Common::PATH::DynamicPath::OverwriteDistanceAndMaxDistance(pDynamicPath, (uint8_t)nTotalFrames);
     D2Common::PATH::DynamicPath::GetPathPoint(pDynamicPath, &pPathPoints);
@@ -880,7 +880,7 @@ static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_
     D2SkillArgStrc sSkillArg;
     D2SeedStrc ullSeedPair;
     D2Common::Seed::InitSeed_Param_666(&ullSeedPair, nInitSeed);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nX = nX;
     sSkillArg.nY = nY;
     sSkillArg.pOwner = pTargetUnit;
@@ -1063,7 +1063,7 @@ static void __stdcall SKILLSCLT_CreateProjectileMissile(uint32_t dwUnused, uint3
     D2SeedStrc sSeed;
     uint64_t ullRngProduct;
     D2Common::Seed::InitSeed_Param_666(&sSeed, nSeed);
-    memset(&sSkillArg, 0, 0x5c);
+    memset(&sSkillArg, 0, sizeof(sSkillArg));
     sSkillArg.nX = nX;
     sSkillArg.nY = nY;
     sSkillArg.pOwner = pUnit;

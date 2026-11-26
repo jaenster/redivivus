@@ -41,7 +41,7 @@
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Arena.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/Event.h"

@@ -18,6 +18,29 @@
 struct D2BeltsTxt;
 struct D2PoolManagerStrc;
 
+// Data types
+#ifndef D2_DEFINED_D2BeltsEntryStrc
+#define D2_DEFINED_D2BeltsEntryStrc
+struct D2BeltsEntryStrc {
+    /* 0x00 */ int nLeft;
+    /* 0x04 */ int nRight;
+    /* 0x08 */ int nTop;
+    /* 0x0C */ int nBottom;
+};
+
+#endif // D2_DEFINED_D2BeltsEntryStrc
+#ifndef D2_DEFINED_D2BeltsTxt
+#define D2_DEFINED_D2BeltsTxt
+struct __attribute__((packed)) D2BeltsTxt {
+    /* 0x00 */ uint8_t nIndex;
+    /* 0x01 */ uint8_t pad0x01[3];
+    /* 0x04 */ uint8_t nBoxes;
+    /* 0x05 */ uint8_t pad0x05[3];
+    /* 0x08 */ D2BeltsEntryStrc beltBoxes[16];
+};
+
+#endif // D2_DEFINED_D2BeltsTxt
+
 namespace D2Common::DATATBLS::BeltsTbls {
 
 // Function declarations

@@ -349,7 +349,7 @@ BOOL OGL_DrawShadowTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, int nDra
       if (0 < pTile->nSubTiles) {
         iVar11 = nY * 0x2000;
         iVar8 = nX * 0x2000;
-        fVar1 = *(float*)((int)FLOAT_ARRAY_00334be0 + (nScreenPanels - 1U < 2 ? 4 : 0));
+        fVar1 = FLOAT_ARRAY_00334be0[nScreenPanels - 1U < 2 ? 1 : 0];
         iVar5 = iVar6 - 0xa0;
         if (1 < nScreenPanels - 1U) {
           iVar5 = iVar6;
@@ -620,7 +620,7 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
           iVar6 = *PTR_INT_003963a4;
         }
 
-        fMinX = *(float*)((int)FLOAT_ARRAY_00334be0 + (bVar14 ? 4 : 0));
+        fMinX = FLOAT_ARRAY_00334be0[bVar14 ? 1 : 0];
         uVar1 = pTile->nDirection;
         BVar7 = 0;
         if (9 < uVar1) {

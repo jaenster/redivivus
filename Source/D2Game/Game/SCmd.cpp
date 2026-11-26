@@ -54,7 +54,7 @@
 #include "Source/D2Common/Skills/Skills.h"
 #include "Source/D2Common/Unit.h"
 #include "Source/D2Common/Units/Units.h"
-#include "Source/D2Game/D2ParsedTreasureClassStrc.h"
+#include "Source/D2Common/D2ParsedTreasureClassStrc.h"
 #include "Source/D2Game/Game/Arena.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/Event.h"
@@ -205,12 +205,12 @@ static void __stdcall SCMD_QueuePacketForClient(D2ClientStrc * pClient, uint8_t 
         pPacket = D2_NEW_POOL_AT(nullptr, D2PacketListStrc, ".\\GAME\\SCmd.cpp", 0xa0);
       }
 
-      memset(pPacket, 0, 0x208);
+      memset(pPacket, 0, sizeof(D2PacketListStrc));
       Clients::SERVER_PutPacketInQueueList(pClient, pPacket);
     }
 
     memcpy(pPacket->pBytes + nOffset, pBytes, nSize);
-    pPacket->nSize += nSize;
+    pPacket->nSize += (int)nSize; // nOffset + nSize <= 0x200 here
 }
 
 void __fastcall NET_D2GS_SERVER_SendStateCommand(D2ClientStrc * pClient, uint8_t nPacketId) {
@@ -1165,7 +1165,7 @@ void __fastcall SCMD_QueueThreeBytePacket(D2ClientStrc * pClient, uint8_t * pPac
 void __fastcall NET_D2GS_SERVER_Send_0x5B_PlayerJoin(D2ClientStrc * pClient, D2UnitStrc * pUnit, D2ClientStrc * pOtherClient) {
     D2GSPacketSrv0x5B packet;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    memset(&packet, 0, 0x122);
+    memset(&packet, 0, sizeof(packet));
     packet.nPacketId = 0x5b;
     int nUnitGUID;
     if (!pUnit) {
@@ -2300,7 +2300,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p
 
 // Server-to-client packet builder/sender for D2GS message 0xAC (spawn/add a monster on the client). For a UNIT_MONSTER, bit-packs into a temp BitBuffer: animation mode (clamped to Attack2/Block/Kick/Death/Neutral), component/equipment indices, boss/champion/unique/superunique/minion/ghostly type flags, superunique boss number, the UMod list, the monster name seed, pet ownership (owner GUID when the owner is a player whose pet type==7), an optional owner GUID for player-owned units, and the network-visible stat list (only stats flagged ITEMSTATCOSTFLAG_SEND_OTHER, written using each stat's sendBits/sendParamBits). Prepends the 0xAC header (id, GUID, classId, X/Y, hp%, total size) and dispatches via NET_D2GS_SERVER_SendPacket_Helper to the given client. No-op for null/non-monster units. Stack-guarded.
 void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
-    bool bHasComponents;
+    BOOL bHasComponents;
     uint32_t nComponentData;
     uint8_t* pbyUModList;
     D2UnitStrc* pOwner;
@@ -2329,7 +2329,8 @@ void __fastcall NET_D2GS_SERVER_Send_0xAC_AddMonster(D2ClientStrc * pClient, D2U
       *(uint32_t*)((char*)&aPacket + 1) = pUnit->nUnitGUID;
       aPacket[0] = 0xac;
       *(uint16_t*)((char*)&aPacket + 5) = (uint16_t)pUnit->nClassId;
-      if (false || false) {
+      eUnitType = pUnit->eUnitType;
+      if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
         *(uint16_t*)((char*)&aPacket + 7) = (uint16_t)pUnit->pPath.pStaticPath->nPosX;
       } else if (pUnit->pPath.pDynamicPath) {
         nScratch = D2Common::PATH::DynamicPath::GetXPos(pUnit->pPath.pDynamicPath);
@@ -2641,7 +2642,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x9C_ITEMEX(D2ClientStrc * pClient, D2UnitS
       sPacket.nCategory = D2Common::Units::GetItemComponent(pPlayerUnit_lcl, pUnit);
       eSavedItemFlags = D2Common::ITEMS::Items::ITEM_GetItemData_eD2ItemFlag(pUnit);
       D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, eItemFlag, 1);
-      memset(sPacket.aBitStream, 0, 0xf4);
+      memset(sPacket.aBitStream, 0, sizeof(sPacket.aBitStream));
       nLine = D2Common::ITEMS::Items::SerializeItem(pUnit, (uint8_t*)sPacket.aBitStream, 0xf4, nullptr, 0, bIsCrude);
       const uint32_t nPacketLength = nLine + 8U;
       if (nPacketLength > 0xfcU) {

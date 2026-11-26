@@ -523,17 +523,19 @@ void __stdcall ROSTER_FlattenPartyListsIntoSingleRosterChain() {
 }
 
 static void ROSTER_MoveRosterPlayerToFront(int32_t nRosterGUID) {
-    D2RosterStrc* pCur;
+    D2RosterStrc* pHead = gpRosterPlayers;
     D2RosterStrc* pPrev = 0;
-    for (pCur = gpRosterPlayers; pCur; pCur = pCur->pNext) {
+    for (D2RosterStrc* pCur = pHead; pCur; pCur = pCur->pNext) {
       if (pCur->nRosterGUID == nRosterGUID && pPrev) {
         pPrev->pNext = pCur->pNext;
-        pCur->pNext = gpRosterPlayers;
-        gpRosterPlayers = pCur;
+        pCur->pNext = pHead;
+        pHead = pCur;
       }
 
       pPrev = pCur;
     }
+
+    gpRosterPlayers = pHead;
 }
 
 void __stdcall ROSTER_RebuildPlayerParty() {

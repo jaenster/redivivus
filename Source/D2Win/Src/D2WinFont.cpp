@@ -275,19 +275,20 @@ static int32_t TEXT_CalculateTextWidth(uint16_t * szBuffer) {
           nStrLen = 0;
           szBuffer++;
         } else {
-          if ((uint16_t)wCharCode >= 0x100 || wCharCode != L'\xff') {
-            pGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
-            nStrLen += (uint32_t)pGlyphEntry->abUnverified[1];
+          if (wCharCode < 0x100 && wCharCode == L'\xff') {
             szBuffer++;
-          } else {
-            nColorCmpResult = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNNoCase((uint16_t*)(szBuffer + 1), gnFontTableCharWidthCache, 1);
+            nColorCmpResult = D2Lang::Unicode::UNISYS::UNICODE_CompareWideStringsNNoCase(szBuffer, gnFontTableCharWidthCache, 1);
             if (!nColorCmpResult) {
               pGlyphEntry = (*gpfnFontGetCharWidth)(gnFontTableCharWidthCache[0]);
               nStrLen += (uint32_t)pGlyphEntry->abUnverified[1];
             }
 
-            szBuffer += 3;
+            szBuffer += 2;
             nCharPos += 2;
+          } else {
+            pGlyphEntry = (*gpfnFontGetCharWidth)(wCharCode);
+            nStrLen += (uint32_t)pGlyphEntry->abUnverified[1];
+            szBuffer++;
           }
         }
 
@@ -1016,7 +1017,7 @@ void __fastcall D2WINFONT_FreeWordWrapList(void * * ppNodeList) {
 }
 
 // @sourcefile .\Src\D2WinFont.cpp
-D2TextLineStrc * __stdcall D2WINFONT_AllocWordWrapNode(uint16_t * pwszText, size_t nSize, int32_t bTrimLeadingSpace) {
+D2TextLineStrc * __stdcall D2WINFONT_AllocWordWrapNode(uint16_t * pwszText, uint32_t nSize, int32_t bTrimLeadingSpace) {
     uint16_t* pText = pwszText;
     D2TextLineStrc* pNode = D2_NEW_AT(D2TextLineStrc, ".\\Src\\D2WinFont.cpp", 0x588);
     int nLen = nSize;
@@ -1202,7 +1203,7 @@ D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, int * p
     goto append_line_node;
 }
 
-int __fastcall Unreferenced_00502c40(intptr_t param_1) {
+intptr_t __fastcall Unreferenced_00502c40(intptr_t param_1) {
     int iVar1;
     uint32_t* puVar2 = (uint32_t*)param_1;
     for (iVar1 = 0x200; iVar1; iVar1--) {

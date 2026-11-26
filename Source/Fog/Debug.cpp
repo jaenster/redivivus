@@ -12,6 +12,30 @@
 #include "3rdparty/crashy/crashy.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Debug.data.h"
+#include "Source/D2Headers/D2Arch.h"
+
+// DbgHelp's 64-bit address arguments. 1.14d (32-bit stdcall) passes each DWORD64 as two DWORDs,
+// low then high; a 64-bit build passes the DWORD64 itself. 64-bit dbghelp exports only the *64
+// entry points, so the unsuffixed names resolve to those, with the AMD64 machine type.
+#if D2_ARCH_X86
+#define FOG_DBGHELP_ADDR64(lo, hi) lo, hi
+#define FOG_DBGHELP_MACHINE 0x14c
+#define FOG_DBGHELP_NAME(name, name64) name
+#define FOG_IMAGEHLP_SYMBOL_SIZE 0x18
+#define FOG_DBGHELP_FPO 1
+#define FOG_PRINTF_U64(v) v, 0 // a %llu argument as two DWORDs, low then high
+#define FOG_CONTEXT_FULL 0x10007 // CONTEXT_i386 | CONTROL | INTEGER | SEGMENTS
+#elif D2_ARCH_X64
+#define FOG_DBGHELP_ADDR64(lo, hi) ((DWORD64)(lo) | ((DWORD64)(hi) << 32))
+#define FOG_DBGHELP_MACHINE IMAGE_FILE_MACHINE_AMD64
+#define FOG_DBGHELP_NAME(name, name64) name64
+#define FOG_IMAGEHLP_SYMBOL_SIZE 0x20 // sizeof(IMAGEHLP_SYMBOL64) with its one-char Name
+#define FOG_DBGHELP_FPO 0 // StackWalk64 on AMD64 returns a RUNTIME_FUNCTION, not FPO data
+#define FOG_PRINTF_U64(v) (unsigned long long)(v)
+#define FOG_CONTEXT_FULL (CONTEXT_CONTROL | CONTEXT_INTEGER | CONTEXT_SEGMENTS)
+#else
+#error "Debug.cpp: no DbgHelp calling form for this architecture"
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -40,19 +64,35 @@ typedef BOOL (__stdcall *pfnStackWalk64)(DWORD MachineType, HANDLE hProcess, HAN
 #endif
 #ifndef RECON_FPTD_pfnSymFunctionTableAccess64
 #define RECON_FPTD_pfnSymFunctionTableAccess64
+#if D2_ARCH_X86
 typedef void * (__stdcall *pfnSymFunctionTableAccess64)(HANDLE hProcess, DWORD AddrBaseLow, DWORD AddrBaseHigh);
+#elif D2_ARCH_X64
+typedef void * (__stdcall *pfnSymFunctionTableAccess64)(HANDLE hProcess, DWORD64 AddrBase);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymGetLineFromAddr64
 #define RECON_FPTD_pfnSymGetLineFromAddr64
+#if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh, DWORD * pdwDisplacement, void * pLine64);
+#elif D2_ARCH_X64
+typedef BOOL (__stdcall *pfnSymGetLineFromAddr64)(HANDLE hProcess, DWORD64 qwAddr, DWORD * pdwDisplacement, void * pLine64);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymGetModuleBase64
 #define RECON_FPTD_pfnSymGetModuleBase64
+#if D2_ARCH_X86
 typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh);
+#elif D2_ARCH_X64
+typedef uint64_t (__stdcall *pfnSymGetModuleBase64)(HANDLE hProcess, DWORD64 qwAddr);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymGetModuleInfo64
 #define RECON_FPTD_pfnSymGetModuleInfo64
+#if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetModuleInfo64)(HANDLE hProcess, DWORD qwAddrLow, DWORD qwAddrHigh, void * pModuleInfo);
+#elif D2_ARCH_X64
+typedef BOOL (__stdcall *pfnSymGetModuleInfo64)(HANDLE hProcess, DWORD64 qwAddr, void * pModuleInfo);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymGetOptions
 #define RECON_FPTD_pfnSymGetOptions
@@ -60,7 +100,11 @@ typedef DWORD (__stdcall *pfnSymGetOptions)();
 #endif
 #ifndef RECON_FPTD_pfnSymGetSymFromAddr64
 #define RECON_FPTD_pfnSymGetSymFromAddr64
+#if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetSymFromAddr64)(HANDLE hProcess, DWORD AddressLow, DWORD AddressHigh, void * pDisplacement, void * pSymbol);
+#elif D2_ARCH_X64
+typedef BOOL (__stdcall *pfnSymGetSymFromAddr64)(HANDLE hProcess, DWORD64 Address, void * pDisplacement, void * pSymbol);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymInitialize
 #define RECON_FPTD_pfnSymInitialize
@@ -88,11 +132,19 @@ typedef BOOL (__stdcall *pfnSymFindFileInPath)(HANDLE hProcess, char * SearchPat
 #endif
 #ifndef RECON_FPTD_pfnSymLoadModule64
 #define RECON_FPTD_pfnSymLoadModule64
+#if D2_ARCH_X86
 typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD BaseOfDllLow, DWORD BaseOfDllHigh, DWORD SizeOfDll);
+#elif D2_ARCH_X64
+typedef uint64_t (__stdcall *pfnSymLoadModule64)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD64 BaseOfDll, DWORD SizeOfDll);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymUnloadModule64
 #define RECON_FPTD_pfnSymUnloadModule64
+#if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymUnloadModule64)(HANDLE hProcess, DWORD BaseOfDllLow, DWORD BaseOfDllHigh);
+#elif D2_ARCH_X64
+typedef BOOL (__stdcall *pfnSymUnloadModule64)(HANDLE hProcess, DWORD64 BaseOfDll);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnMiniDumpWriteDump
 #define RECON_FPTD_pfnMiniDumpWriteDump
@@ -136,31 +188,59 @@ typedef DWORD (__stdcall *pfnGetModuleBaseNameA)(HANDLE hProcess, void * hModule
 #endif
 #ifndef RECON_FPTD_pfnSymFunctionTableAccess
 #define RECON_FPTD_pfnSymFunctionTableAccess
+#if D2_ARCH_X86
 typedef void * (__stdcall *pfnSymFunctionTableAccess)(HANDLE hProcess, DWORD AddrBase);
+#elif D2_ARCH_X64
+typedef void * (__stdcall *pfnSymFunctionTableAccess)(HANDLE hProcess, DWORD64 AddrBase);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymGetLineFromAddr
 #define RECON_FPTD_pfnSymGetLineFromAddr
+#if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetLineFromAddr)(HANDLE hProcess, DWORD dwAddr, void * pdwDisplacement, void * pLine);
+#elif D2_ARCH_X64
+typedef BOOL (__stdcall *pfnSymGetLineFromAddr)(HANDLE hProcess, DWORD64 dwAddr, void * pdwDisplacement, void * pLine);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymGetModuleBase
 #define RECON_FPTD_pfnSymGetModuleBase
+#if D2_ARCH_X86
 typedef DWORD (__stdcall *pfnSymGetModuleBase)(HANDLE hProcess, DWORD dwAddr);
+#elif D2_ARCH_X64
+typedef DWORD64 (__stdcall *pfnSymGetModuleBase)(HANDLE hProcess, DWORD64 dwAddr);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymGetModuleInfo
 #define RECON_FPTD_pfnSymGetModuleInfo
+#if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymGetModuleInfo)(HANDLE hProcess, DWORD dwAddr, void * pModuleInfo);
+#elif D2_ARCH_X64
+typedef BOOL (__stdcall *pfnSymGetModuleInfo)(HANDLE hProcess, DWORD64 dwAddr, void * pModuleInfo);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymGetSymFromAddr
 #define RECON_FPTD_pfnSymGetSymFromAddr
-typedef BOOL (__stdcall *pfnSymGetSymFromAddr)(HANDLE hProcess, DWORD dwAddr, void * pDisplacement, void * pSymbol);
+#if D2_ARCH_X86
+typedef BOOL (__stdcall *pfnSymGetSymFromAddr)(HANDLE hProcess, DWORD_PTR dwAddr, void * pDisplacement, void * pSymbol);
+#elif D2_ARCH_X64
+typedef BOOL (__stdcall *pfnSymGetSymFromAddr)(HANDLE hProcess, DWORD64 dwAddr, void * pDisplacement, void * pSymbol);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymLoadModule
 #define RECON_FPTD_pfnSymLoadModule
-typedef DWORD (__stdcall *pfnSymLoadModule)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD BaseOfDll, DWORD SizeOfDll);
+#if D2_ARCH_X86
+typedef DWORD (__stdcall *pfnSymLoadModule)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD_PTR BaseOfDll, DWORD SizeOfDll);
+#elif D2_ARCH_X64
+typedef DWORD64 (__stdcall *pfnSymLoadModule)(HANDLE hProcess, HANDLE hFile, char * ImageName, char * ModuleName, DWORD64 BaseOfDll, DWORD SizeOfDll);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnSymUnloadModule
 #define RECON_FPTD_pfnSymUnloadModule
+#if D2_ARCH_X86
 typedef BOOL (__stdcall *pfnSymUnloadModule)(HANDLE hProcess, DWORD BaseOfDll);
+#elif D2_ARCH_X64
+typedef BOOL (__stdcall *pfnSymUnloadModule)(HANDLE hProcess, DWORD64 BaseOfDll);
+#endif
 #endif
 #ifndef RECON_FPTD_pfnStackWalk
 #define RECON_FPTD_pfnStackWalk
@@ -365,7 +445,7 @@ void __stdcall Unreferenced_00401dd0() {
 }
 
 // NOTE: Return type changed void→char (1 callers, MEDIUM confidence)
-bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModuleBase, char * szModuleName) {
+bool __stdcall GetModuleInfoForAddress(uintptr_t dwQueryAddr, uintptr_t * pdwModuleBase, char * szModuleName) {
     bool bVar1;
     HMODULE hModule;
     IMAGEHLP_MODULE64 sModuleInfo;
@@ -394,11 +474,11 @@ bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModul
       if (pSymGetModuleInfo64) {
         memset(&sModuleInfo, 0, 0x680);
         sModuleInfo.SizeOfStruct = 0x680;
-        bGotModuleInfo = (*pfnSymGetModuleInfo64Cached)(ghCurrentProcessHandle, dwQueryAddr, 0, &sModuleInfo);
+        bGotModuleInfo = (*pfnSymGetModuleInfo64Cached)(ghCurrentProcessHandle, FOG_DBGHELP_ADDR64(dwQueryAddr, 0), &sModuleInfo);
         if (bGotModuleInfo) {
           /* LPCSTR lpModuleName for GetModuleHandleA */ hModule = GetModuleHandleA(sModuleInfo.LoadedImageName);
           if (hModule) {
-            *pdwModuleBase = (uint32_t)sModuleInfo.BaseOfImage;
+            *pdwModuleBase = (uintptr_t)sModuleInfo.BaseOfImage;
           }
 
           strncpy_s(szModuleName, 0x100, sModuleInfo.ImageName, -1);
@@ -417,7 +497,7 @@ bool __stdcall GetModuleInfoForAddress(uint32_t dwQueryAddr, uint32_t * pdwModul
     return bVar1;
 }
 
-bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, uint32_t * pdwSymDisplacement) {
+bool __stdcall GetSymbolNameForAddress(DWORD_PTR dwQueryAddr, char * szSymbolName, uint32_t * pdwSymDisplacement) {
     bool bVar1;
     uint32_t adwDisplacement[2];
     IMAGEHLP_MODULE64 moduleInfo;
@@ -448,12 +528,16 @@ bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, u
         sSymbol.MaxNameLength = 0x400;
         adwDisplacement[0] = 0;
         adwDisplacement[1] = 0;
+#if D2_ARCH_X86
         *(uint32_t*)(char*)&sSymbol.Address = dwQueryAddr;
-        bApiOk = (*pSymGetSymFromAddr64)(ghCurrentProcessHandle, dwQueryAddr, 0, adwDisplacement, &sSymbol);
+#elif D2_ARCH_X64
+        sSymbol.Address = dwQueryAddr;
+#endif
+        bApiOk = (*pSymGetSymFromAddr64)(ghCurrentProcessHandle, FOG_DBGHELP_ADDR64(dwQueryAddr, 0), adwDisplacement, &sSymbol);
         if (bApiOk && pSymGetModuleInfo64) {
           memset(&moduleInfo, 0, 0x680);
           moduleInfo.SizeOfStruct = 0x680;
-          bApiOk = (*pSymGetModuleInfo64)(ghCurrentProcessHandle, dwQueryAddr, 0, &moduleInfo);
+          bApiOk = (*pSymGetModuleInfo64)(ghCurrentProcessHandle, FOG_DBGHELP_ADDR64(dwQueryAddr, 0), &moduleInfo);
           if (bApiOk && moduleInfo.SymType && moduleInfo.SymType != 4 && moduleInfo.SymType != 5) {
             strncpy_s(szSymbolName, 0x200, sSymbol.Name, -1);
             /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ *pdwSymDisplacement = adwDisplacement[0];
@@ -473,7 +557,7 @@ bool __stdcall GetSymbolNameForAddress(DWORD dwQueryAddr, char * szSymbolName, u
     return bVar1;
 }
 
-bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, uint32_t * pdwLineNumber) {
+bool __stdcall GetSourceLineForAddress(uintptr_t dwQueryAddr, char * szFileName, uint32_t * pdwLineNumber) {
     // Frame slots -24..-12 are ONE object: &dwDisplacement is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
@@ -515,8 +599,8 @@ bool __stdcall GetSourceLineForAddress(uint32_t dwQueryAddr, char * szFileName, 
       memset(&sLineInfo, 0, sizeof(sLineInfo));
       *(uint32_t*)(char*)&sLineInfo.Address = 0;
       *(uint32_t*)((char*)&sLineInfo.Address + 4) = 0;
-      sLineInfo.SizeOfStruct = 0x18;
-      bGotLine = (*pSymGetLineFromAddr64)(ghCurrentProcessHandle, dwQueryAddr, 0, &__frame0.dwDisplacement, &sLineInfo);
+      sLineInfo.SizeOfStruct = sizeof(sLineInfo);
+      bGotLine = (*pSymGetLineFromAddr64)(ghCurrentProcessHandle, FOG_DBGHELP_ADDR64(dwQueryAddr, 0), &__frame0.dwDisplacement, &sLineInfo);
       if (bGotLine) {
         strncpy_s(szFileName, 0x100, sLineInfo.FileName, -1);
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ *pdwLineNumber = sLineInfo.LineNumber;
@@ -668,7 +752,11 @@ int __stdcall LoadModuleSymbols(HANDLE hFile, char * szImageName, char * szModul
     }
     if (pSymLoadModule64) {
       uint64_t uVar2;
+#if D2_ARCH_X86
       *(uint32_t*)(char*)&uVar2 = (*pSymLoadModule64)(ghCurrentProcessHandle, hFile, szImageName, szModuleName, dwBaseOfDll, dwSizeOfDll, dwBaseHigh);
+#elif D2_ARCH_X64
+      uVar2 = (*pSymLoadModule64)(ghCurrentProcessHandle, hFile, szImageName, szModuleName, FOG_DBGHELP_ADDR64(dwBaseOfDll, dwSizeOfDll), dwBaseHigh);
+#endif
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pPrevExceptionRecord;
       return (int)(uint64_t)uVar2;
@@ -705,7 +793,7 @@ uint32_t __stdcall UnloadModuleSymbols(uint32_t dwBaseOfDll, uint32_t dwBaseHigh
     }
     if (pSymUnloadModule64) {
       BOOL bUnloaded;
-      bUnloaded = (*pSymUnloadModule64)(ghCurrentProcessHandle, dwBaseOfDll, dwBaseHigh);
+      bUnloaded = (*pSymUnloadModule64)(ghCurrentProcessHandle, FOG_DBGHELP_ADDR64(dwBaseOfDll, dwBaseHigh));
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pSehFrame;
       return (uint32_t)(bUnloaded != 0);
@@ -742,7 +830,7 @@ bool __stdcall WalkStackFrame(HANDLE hThread, void * pStackFrame, void * pContex
     }
     if (pStackWalk64 && pSymFunctionTableAccess64 && pSymGetModuleBase64) {
       BOOL bWalkOk;
-      bWalkOk = (*pStackWalk64)(0x14c, ghCurrentProcessHandle, hThread, pStackFrame, pContextRecord, nullptr, (void*)pSymFunctionTableAccess64, (void*)pSymGetModuleBase64, nullptr);
+      bWalkOk = (*pStackWalk64)(FOG_DBGHELP_MACHINE, ghCurrentProcessHandle, hThread, pStackFrame, pContextRecord, nullptr, (void*)pSymFunctionTableAccess64, (void*)pSymGetModuleBase64, nullptr);
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_0098a6f0);
       ExceptionList = pSehFrame;
       return bWalkOk;
@@ -1025,7 +1113,7 @@ void __fastcall FormatAddressDebugString(D2CrashFrameStrc * pAddrInfo, char * pS
       nOffset += nWritten;
     }
     if (*pSymInfo != '\0' || (uint32_t)*(int*)(pSymInfo + 0x200) > 0) {
-      nWritten = __snprintf_s(szOutput + nOffset, 0x400 - nOffset, -1, " %s+%llu", pSymInfo, *(uint32_t*)(pSymInfo + 0x200), 0);
+      nWritten = __snprintf_s(szOutput + nOffset, 0x400 - nOffset, -1, " %s+%llu", pSymInfo, FOG_PRINTF_U64(*(uint32_t*)(pSymInfo + 0x200)));
       nOffset += nWritten;
     }
 
@@ -1140,7 +1228,7 @@ void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFra
         nWritten += nChunkLen;
       }
       if (cTmp != '\0') {
-        nChunkLen = __snprintf_s(__frame0.szLineBuffer + nWritten, 0x400 - nWritten, -1, " [Stack Base: 0x%p Used Space: %llu/%llu bytes]", pThreadStackBase, (intptr_t)pThreadStackBase - (intptr_t)pThreadEsp, 0, __frame0.dwStackBytesUsed, 0);
+        nChunkLen = __snprintf_s(__frame0.szLineBuffer + nWritten, 0x400 - nWritten, -1, " [Stack Base: 0x%p Used Space: %llu/%llu bytes]", pThreadStackBase, FOG_PRINTF_U64((intptr_t)pThreadStackBase - (intptr_t)pThreadEsp), FOG_PRINTF_U64(__frame0.dwStackBytesUsed));
         nWritten += nChunkLen;
       }
 
@@ -1182,8 +1270,8 @@ int __stdcall DEBUG_UnloadStackCrawlDbgHelp() {
 
 void __fastcall DumpThreadContext(HANDLE hHandle) {
     CONTEXT sContext;
-    memset(&sContext, 0, 0x2cc);
-    /* LPCONTEXT lpContext for GetThreadContext */ /* HANDLE hThread for GetThreadContext */ sContext.ContextFlags = 0x10007;
+    memset(&sContext, 0, sizeof(sContext));
+    /* LPCONTEXT lpContext for GetThreadContext */ /* HANDLE hThread for GetThreadContext */ sContext.ContextFlags = FOG_CONTEXT_FULL; // steer-ok: per-arch CONTEXT flags macro defined above
     GetThreadContext(hHandle, &sContext);
     Src::LogManager::LogWithCategoryVarArgs("", "Stack bytes:\n");
     Src::LogManager::EnqueueLogMessage("ERR", "", (void*)D2_CONTEXT_FIELD(sContext, Esp), 0x1000, nullptr, 1, 0);
@@ -1191,7 +1279,7 @@ void __fastcall DumpThreadContext(HANDLE hHandle) {
     Src::LogManager::EnqueueLogMessage("ERR", "", (void*)D2_CONTEXT_FIELD(sContext, Eip), 0x20, nullptr, 1, 0);
 }
 
-static BOOL __stdcall GetSourceLineWithRetry(HANDLE hProcess, DWORD nAddress, void * pdwDisplacement, void * pLine) {
+static BOOL __stdcall GetSourceLineWithRetry(HANDLE hProcess, DWORD_PTR nAddress, void * pdwDisplacement, void * pLine) {
     if (!pSymGetLineFromAddr) {
       return 0;
     }
@@ -1448,7 +1536,7 @@ static D2FogModuleNodeStrc * __stdcall EnumerateAndLogModules(HANDLE hProcess, u
     return pModuleListHead;
 }
 
-D2FogModuleNodeStrc * __fastcall FindModuleContainingAddress(uint32_t nAddress, D2FogModuleNodeStrc * pModuleList) {
+D2FogModuleNodeStrc * __fastcall FindModuleContainingAddress(uintptr_t nAddress, D2FogModuleNodeStrc * pModuleList) {
     while (true) {
       if (!pModuleList) {
         return nullptr;
@@ -1508,7 +1596,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
     hSymProc = hSymHandle;
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "");
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Annotated stack dump");
-    uint32_t nEip;
+    uintptr_t nEip;
     nEip = D2_CONTEXT_FIELD(*pContext, Eip);
     D2FogModuleNodeStrc* pEipModule;
     pEipModule = FindModuleContainingAddress(nEip, pModuleListIter);
@@ -1554,7 +1642,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
         do {
           pBytesRemaining = __frame1.szHexLine;
           pBytesRemaining = pBytesRemaining + strlen(pBytesRemaining) + 1;
-          Storm::Source::SSTR::SStrPrintf(__frame1.szHexLine + ((intptr_t)pBytesRemaining - (intptr_t)(__frame1.szHexLine + 1)), 0x100 - ((intptr_t)pBytesRemaining - (intptr_t)(__frame1.szHexLine + 1)), " %02X%02X%02X%02X", (uint32_t)pStackPtr[nTmp], (uint32_t)pStackPtr[nTmp + 1], (uint32_t)pStackPtr[nTmp + 2], (uint32_t)pStackPtr[nTmp + 3]);
+          Storm::Source::SSTR::SStrPrintf(__frame1.szHexLine + ((intptr_t)pBytesRemaining - (intptr_t)(__frame1.szHexLine + 1)), (uint32_t)(0x100 - ((intptr_t)pBytesRemaining - (intptr_t)(__frame1.szHexLine + 1))), " %02X%02X%02X%02X", (uint32_t)pStackPtr[nTmp], (uint32_t)pStackPtr[nTmp + 1], (uint32_t)pStackPtr[nTmp + 2], (uint32_t)pStackPtr[nTmp + 3]);
           for (pDVar1 = pModuleListIter; pDVar1; pDVar1 = pDVar1->pNext) {
             if (*(uint8_t**)(pStackPtr + nTmp) >= pDVar1->dwBaseAddress && *(uint8_t**)(pStackPtr + nTmp) < pDVar1->dwBaseAddress + pDVar1->dwSize) {
               pEipModule = (D2FogModuleNodeStrc*)0x1;
@@ -1581,7 +1669,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
 
       pBytesRemaining = __frame1.szHexLine;
       pBytesRemaining = pBytesRemaining + strlen(pBytesRemaining) + 1;
-      __frame1.pBytesToDump = (intptr_t)pBytesRemaining - (intptr_t)(__frame1.szHexLine + 1);
+      __frame1.pBytesToDump = (int)((intptr_t)pBytesRemaining - (intptr_t)(__frame1.szHexLine + 1));
       nByteOffset = 0;
       if (nTmp > 0) {
         pAsciiOut = (uint8_t*)(__frame1.szHexLine + __frame1.pBytesToDump);
@@ -1614,7 +1702,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
           pDVar1 = pDVar1->pNext;
         }
 
-        bBadPtr = (*pSymGetSymFromAddr)(hSymProc, (DWORD)pAsciiOut, &__frame0.nSymDisplacement, __frame1.aSymInfo);
+        bBadPtr = (*pSymGetSymFromAddr)(hSymProc, (DWORD_PTR)pAsciiOut, &__frame0.nSymDisplacement, __frame1.aSymInfo);
         if (bBadPtr) {
           __frame1.pszSymText = __frame1.szSymbol;
         } else {
@@ -1647,7 +1735,7 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
     static uint32_t gnSymbolLoadState; D2_STATIC_GUARD_BSS(gnSymbolLoadState, "Fog::Debug::LoadSymbolsForAllModules::gnSymbolLoadState");
 
     D2FogModuleNodeStrc* pszCopySrc;
-    DWORD dwLastError;
+    DWORD_PTR dwLastError; // SymLoadModule result: the module base, 0 on failure
     char szModulePath[260];
     char szModuleName[256];
     D2FogModuleNodeStrc* pNextModule;
@@ -1667,7 +1755,7 @@ static D2FogModuleNodeStrc * __stdcall LoadSymbolsForAllModules(HANDLE hProcess,
         } while (chCopy != '\0');
 
         strcpy(szModuleName, pCurModule->szModuleName);
-        dwLastError = (*pSymLoadModule)(hProcess, (HANDLE)0x0, szModulePath, szModuleName, (DWORD)pCurModule->dwBaseAddress, pCurModule->dwSize);
+        dwLastError = (*pSymLoadModule)(hProcess, (HANDLE)0x0, szModulePath, szModuleName, (DWORD_PTR)pCurModule->dwBaseAddress, pCurModule->dwSize);
         if (!gnSymbolLoadState) {
           if (!dwLastError) {
             Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Error (%d) loading symbols for \'%s\'", GetLastError(), szModuleName);
@@ -1690,7 +1778,7 @@ BOOL __fastcall FILETOOLS_GetExecutableFolderPath(LPSTR lpFilename, DWORD nSize)
       return 0;
     }
 
-    for (nScanIndex = strlen(lpFilename) - 1; nScanIndex > 0; nScanIndex--) {
+    for (nScanIndex = (int32_t)strlen(lpFilename) - 1; nScanIndex > 0; nScanIndex--) {
       char chCur = lpFilename[nScanIndex];
       if (chCur == '\\' || chCur == '/' || chCur == ':') {
         break;
@@ -1797,7 +1885,7 @@ static void __stdcall GetLogicalAddress(void * pAddress, char * szModulePath, in
       return;
     }
 
-    uint32_t nSectionVSize = (intptr_t)pAddress - (intptr_t)_Stack_20.AllocationBase;
+    uint32_t nSectionVSize = (uint32_t)((intptr_t)pAddress - (intptr_t)_Stack_20.AllocationBase);
     uint32_t* pSectionHeader = (uint32_t*)((uint32_t)pNtHeader->FileHeader.SizeOfOptionalHeader + (char*)pNtHeader);
     uint32_t nSectionIdx = 0;
     if (pNtHeader->FileHeader.NumberOfSections <= 0) {
@@ -1911,6 +1999,7 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
 
     // Frame -1120..-956 is ONE object: a call writes 164 literal bytes starting at &stackFrame.
     // Separate locals let the compiler reorder them, and the write would run off the frame.
+#if D2_ARCH_X86
     struct __frame0_t {
       DWORD stackFrame[2];
       uint32_t nAddrPCMode;
@@ -1941,6 +2030,23 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
       uint8_t __pad48[116];
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 164, "frame group __frame0_t must reproduce the Ghidra frame layout");
+#elif D2_ARCH_X64
+    // The same frame as STACKFRAME64 (0x108 bytes): AddrPC +0x00, AddrFrame +0x20, AddrStack +0x30.
+    struct __frame0_t {
+      DWORD64 stackFrame[1];
+      uint32_t __padSegment8;
+      uint32_t nAddrPCMode;
+      uint8_t __padAddrReturn[16];
+      DWORD64 nAddrStackOffset;
+      uint32_t __padSegment40;
+      uint32_t nAddrStackMode;
+      DWORD64 nAddrFrameOffset;
+      uint32_t __padSegment56;
+      uint32_t nAddrFrameMode;
+      uint8_t __padTail[0xc8];
+    };
+    static_assert(sizeof(__frame0_t) == sizeof(STACKFRAME), "frame group __frame0_t is the STACKFRAME64 StackWalk64 fills");
+#endif
     __frame0_t __frame0;
     // Frame slots -948..-908 are ONE object: &nLineStructSize is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -1995,14 +2101,14 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
       return 0;
     }
 
-    memset(__frame0.stackFrame, 0, 0xa4);
+    memset(__frame0.stackFrame, 0, sizeof(__frame0));
     __frame0.nAddrFrameOffset = D2_CONTEXT_FIELD(*__frame1.pContextCopy, Esp);
     __frame0.stackFrame[0] = D2_CONTEXT_FIELD(*__frame1.pContextCopy, Eip);
     __frame0.nAddrStackOffset = D2_CONTEXT_FIELD(*__frame1.pContextCopy, Ebp);
     __frame0.nAddrPCMode = 3;
     __frame0.nAddrFrameMode = 3;
     __frame0.nAddrStackMode = 3;
-    __frame2.sSymbol.SizeOfStruct = 0x18;
+    __frame2.sSymbol.SizeOfStruct = FOG_IMAGEHLP_SYMBOL_SIZE;
     __frame2.sSymbol.MaxNameLength = 0x100;
     __frame1.nSymLookupFails = 0;
     __frame2.nFrameIdx = 0;
@@ -2012,7 +2118,7 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
         break;
       }
 
-      BVar1 = (*pStackWalk)(0x14c, hCurrentProcess, hThread, __frame0.stackFrame, __frame1.pContextCopy, nullptr, pSymFunctionTableAccess, pSymGetModuleBase, nullptr);
+      BVar1 = (*pStackWalk)(FOG_DBGHELP_MACHINE, hCurrentProcess, hThread, __frame0.stackFrame, __frame1.pContextCopy, nullptr, pSymFunctionTableAccess, pSymGetModuleBase, nullptr);
       hProcessCur = hCurrentProcess;
       if (!BVar1) {
         bCarry = (uint32_t)((uint32_t)nCyclesAcc + (uint32_t)nCycleSample) < (uint32_t)nCyclesAcc;
@@ -2048,8 +2154,8 @@ BOOL __fastcall QuickStackWalkWithSymbols(char * szSearchPath, HANDLE hProcess, 
         bCarry = (uint32_t)((uint32_t)qwSymCycles + (uint32_t)nCycleSample) < (uint32_t)qwSymCycles;
         qwSymCycles = (ULONGLONG)((uint64_t)qwSymCycles & 0xffffffff00000000ull | (uint64_t)(uint32_t)((uint32_t)qwSymCycles + nCycleSample));
         qwSymCycles = (ULONGLONG)((uint64_t)qwSymCycles & 0xffffffffull | (uint64_t)(uint32_t)((uint32_t)((uint64_t)qwSymCycles >> 32) + nCycleSample + (uint32_t)bCarry) << 32);
-        memset(&__frame2.moduleInfo, 0, 0x23c);
-        __frame2.moduleInfo.SizeOfStruct = 0x23c;
+        memset(&__frame2.moduleInfo, 0, sizeof(__frame2.moduleInfo));
+        __frame2.moduleInfo.SizeOfStruct = sizeof(__frame2.moduleInfo);
         BVar1 = (*pSymGetModuleInfo)(hCurrentProcess, __frame0.stackFrame[0], &__frame2.moduleInfo);
         if (!BVar1) {
           GetLastError();
@@ -2166,14 +2272,14 @@ void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext)
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "");
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Stack Crawl:");
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Address  Frame    Module       Return    Stack");
-    memset(&tStackFrame, 0, 0xa4);
+    memset(&tStackFrame, 0, sizeof(tStackFrame));
     tStackFrame.AddrPC.Offset = D2_CONTEXT_FIELD(*pContextBase, Eip);
     tStackFrame.AddrStack.Offset = D2_CONTEXT_FIELD(*pContextBase, Esp);
     tStackFrame.AddrFrame.Offset = D2_CONTEXT_FIELD(*pContextBase, Ebp);
     tStackFrame.AddrPC.Mode = AddrModeFlat;
     tStackFrame.AddrStack.Mode = AddrModeFlat;
     tStackFrame.AddrFrame.Mode = AddrModeFlat;
-    sSymbol.SizeOfStruct = 0x18;
+    sSymbol.SizeOfStruct = FOG_IMAGEHLP_SYMBOL_SIZE;
     sSymbol.MaxNameLength = 0x100;
     __frame0.nSymFailCount = 0;
     __frame0.nFrameCount = 0;
@@ -2183,7 +2289,7 @@ void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext)
         break;
       }
 
-      bWalkOk = (*pStackWalk)(0x14c, hDupProcess, dwHThreadLocal, &tStackFrame, pContextBase, nullptr, pSymFunctionTableAccess, pSymGetModuleBase, nullptr);
+      bWalkOk = (*pStackWalk)(FOG_DBGHELP_MACHINE, hDupProcess, dwHThreadLocal, &tStackFrame, pContextBase, nullptr, pSymFunctionTableAccess, pSymGetModuleBase, nullptr);
       if (!bWalkOk) {
         dwSymOptions = GetLastError();
         Src::LogManager::LOGMANAGER_TraceToModuleLog("", "Stack walk error: %d", dwSymOptions);
@@ -2231,7 +2337,7 @@ void __fastcall FullStackWalkWithAnnotations(HANDLE hThread, CONTEXT * pContext)
       }
 
       pFVar1 = tStackFrame.FuncTableEntry;
-      if (tStackFrame.FuncTableEntry) {
+      if (FOG_DBGHELP_FPO && tStackFrame.FuncTableEntry) {
         wFpoFlags = tStackFrame.FuncTableEntry->wAttributes;
         pwFpoFlags = &tStackFrame.FuncTableEntry->wAttributes;
         if (wFpoFlags >> 0xe) {
@@ -2309,7 +2415,7 @@ void __fastcall WriteCrashDump(uint32_t dwHeader0, uint32_t dwHeader1, uint32_t 
 // @sourcefile .\Src\Exceptions.cpp
 BOOL __fastcall LoadPreviousCrashDump(uint8_t * pOutBuffer, int * pnBufferSize) {
     int nResult;
-    size_t nFileSize;
+    uint32_t nFileSize;
     D2CrashDumpRecordStrc* pRecordCur;
     short int* pOutEntry;
     uint8_t recDataScratch[32];
@@ -2436,17 +2542,17 @@ BOOL __stdcall DEBUG_LoadStackCrawlDbgHelp() {
     }
 
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymCleanup = (pfnSymCleanup)GetProcAddress(pDbgHelpOrImageHlp, "SymCleanup");
-    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymFunctionTableAccess = (pfnSymFunctionTableAccess)GetProcAddress(pDbgHelpOrImageHlp, "SymFunctionTableAccess");
-    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymGetLineFromAddr = (pfnSymGetLineFromAddr)GetProcAddress(pDbgHelpOrImageHlp, "SymGetLineFromAddr");
-    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymGetModuleBase = (pfnSymGetModuleBase)GetProcAddress(pDbgHelpOrImageHlp, "SymGetModuleBase");
-    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymGetModuleInfo = (pfnSymGetModuleInfo)GetProcAddress(pDbgHelpOrImageHlp, "SymGetModuleInfo");
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymFunctionTableAccess = (pfnSymFunctionTableAccess)GetProcAddress(pDbgHelpOrImageHlp, FOG_DBGHELP_NAME("SymFunctionTableAccess", "SymFunctionTableAccess64"));
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymGetLineFromAddr = (pfnSymGetLineFromAddr)GetProcAddress(pDbgHelpOrImageHlp, FOG_DBGHELP_NAME("SymGetLineFromAddr", "SymGetLineFromAddr64"));
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymGetModuleBase = (pfnSymGetModuleBase)GetProcAddress(pDbgHelpOrImageHlp, FOG_DBGHELP_NAME("SymGetModuleBase", "SymGetModuleBase64"));
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymGetModuleInfo = (pfnSymGetModuleInfo)GetProcAddress(pDbgHelpOrImageHlp, FOG_DBGHELP_NAME("SymGetModuleInfo", "SymGetModuleInfo64"));
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymGetOptions = (pfnSymGetOptions)GetProcAddress(pDbgHelpOrImageHlp, "SymGetOptions");
-    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymGetSymFromAddr = (pfnSymGetSymFromAddr)GetProcAddress(pDbgHelpOrImageHlp, "SymGetSymFromAddr");
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymGetSymFromAddr = (pfnSymGetSymFromAddr)GetProcAddress(pDbgHelpOrImageHlp, FOG_DBGHELP_NAME("SymGetSymFromAddr", "SymGetSymFromAddr64"));
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymInitialize = (pfnSymInitialize)GetProcAddress(pDbgHelpOrImageHlp, "SymInitialize");
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymSetOptions = (pfnSymSetOptions)GetProcAddress(pDbgHelpOrImageHlp, "SymSetOptions");
-    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymLoadModule = (pfnSymLoadModule)GetProcAddress(pDbgHelpOrImageHlp, "SymLoadModule");
-    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymUnloadModule = (pfnSymUnloadModule)GetProcAddress(pDbgHelpOrImageHlp, "SymUnloadModule");
-    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pStackWalk = (pfnStackWalk)GetProcAddress(pDbgHelpOrImageHlp, "StackWalk");
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymLoadModule = (pfnSymLoadModule)GetProcAddress(pDbgHelpOrImageHlp, FOG_DBGHELP_NAME("SymLoadModule", "SymLoadModule64"));
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pSymUnloadModule = (pfnSymUnloadModule)GetProcAddress(pDbgHelpOrImageHlp, FOG_DBGHELP_NAME("SymUnloadModule", "SymUnloadModule64"));
+    /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pStackWalk = (pfnStackWalk)GetProcAddress(pDbgHelpOrImageHlp, FOG_DBGHELP_NAME("StackWalk", "StackWalk64"));
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pUnDecorateSymbolName = (pfnUnDecorateSymbolName)GetProcAddress(pDbgHelpOrImageHlp, "UnDecorateSymbolName");
     /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pMiniDumpWriteDump = (pfnMiniDumpWriteDump)GetProcAddress(pDbgHelpOrImageHlp, "MiniDumpWriteDump");
     if (pSymCleanup && pSymFunctionTableAccess && pSymGetModuleBase && pSymGetModuleInfo && pSymGetOptions && pSymGetSymFromAddr && pSymInitialize && pSymSetOptions && pStackWalk && pUnDecorateSymbolName && pSymLoadModule && pSymUnloadModule) {

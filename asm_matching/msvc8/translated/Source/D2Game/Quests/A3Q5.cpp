@@ -969,7 +969,7 @@ bool __fastcall Q22_StatusFilter(D2QuestDataStrc * pThis, int, uint32_t param_1,
 // Q22_InitData (BLACKENED TEMPLE) — quest constructor. Allocates 0x50-byte quest-specific data, installs the NPC gossip table (Ormus msg 0x252, menu), and wires the state-handler vtable: [0]=Q22_Callback_00 (gossip), [2]=set later by cb3, [3]=Q22_Callback_03, [8]=Q22_Callback_08 (council-kill drops), [0xb]=Q22_Callback_11 (Ormus dialog/complete), [0xd]=Q22_Callback_13 (load/resume), [10]=Q22_Callback_10 (participation). Sets fpSequenceFilter=Q22_SequenceFilter, nSequenceQuestId=QUEST_TheGoldenBird, fpActiveFilter=Q22_ActiveFilter, fpStatusFilter=null, nInitNo=6, and crucially nQuestIdReal=QUEST_TheBlackenedTemple (0x15) — confirming this file = quest "The Blackened Temple" (Travincal council kill). No quest-record state calls.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
 void __fastcall Q22_InitData(D2QuestDataStrc * pQuestData) {
-    memset(&pQuestData->sStateFunctions, 0, 0x3c);
+    memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->pNpcMessages = A3Q5::aNpcGossipData;
     pQuestData->bIsActive = '\x01';
     pQuestData->sStateFunctions.fpQuestStateHandler[8] = Q22_Callback08_MonsterKilled;
@@ -987,8 +987,8 @@ void __fastcall Q22_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpStatusFilter = 0;
     D2QuestDataA3Q5Strc* pQuestSpecificData = D2_NEW_POOL_AT(pQuestData->pGame->pMemoryPool, D2QuestDataA3Q5Strc, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a3q5.cpp", 0x425);
     pQuestData->pQuestSpecificData.pA3Q5 = pQuestSpecificData;
-    /* Stupid... Why double memset here ? */ memset(pQuestSpecificData, 0, 0x50);
-    memset(pQuestData->pQuestSpecificData.pA3Q5, 0, 0x50);
+    /* Stupid... Why double memset here ? */ memset(pQuestSpecificData, 0, sizeof(*pQuestSpecificData));
+    memset(pQuestData->pQuestSpecificData.pA3Q5, 0, sizeof(*pQuestData->pQuestSpecificData.pA3Q5));
 }
 
 }}}} // namespace D2Game::Quests::QUESTS::A3Q5

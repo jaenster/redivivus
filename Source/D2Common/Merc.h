@@ -20,6 +20,73 @@ struct D2MonSeqMonsterTbls;
 struct D2UnitStrc;
 
 // Data types
+#ifndef D2_DEFINED_D2HirelingHireData
+#define D2_DEFINED_D2HirelingHireData
+struct __attribute__((packed)) D2HirelingHireData {
+    /* 0x00 */ int32_t nId;
+    /* 0x04 */ int32_t nLevel;
+    /* 0x08 */ int32_t nHp;
+    /* 0x0C */ int32_t nStrength;
+    /* 0x10 */ int32_t nDexterity;
+    /* 0x14 */ int32_t nCost;
+    /* 0x18 */ int32_t nExperience;
+    /* 0x1C */ int32_t nDefense;
+    /* 0x20 */ int32_t nMinDamage;
+    /* 0x24 */ int32_t nMaxDamage;
+    /* 0x28 */ int32_t nShare;
+    /* 0x2C */ int32_t nResists;
+    /* 0x30 */ int32_t nHireDescription;
+    /* 0x34 */ int32_t field13_0x34;
+    /* 0x38 */ int16_t field14_0x38;
+};
+
+#endif // D2_DEFINED_D2HirelingHireData
+#ifndef D2_DEFINED_D2MercBaseStrc
+#define D2_DEFINED_D2MercBaseStrc
+struct D2MercBaseStrc {
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+
+    /* 0x00 */ uint32_t nBaseAttackRating;
+    /* 0x04 */ uint32_t nBaseDefense;
+};
+
+#endif // D2_DEFINED_D2MercBaseStrc
+#ifndef D2_DEFINED_D2MercDifficultyStrc
+#define D2_DEFINED_D2MercDifficultyStrc
+struct D2MercDifficultyStrc {
+    /* 0x00 */ int nExpModifier;
+    /* 0x04 */ int nArmorModifier;
+    /* 0x08 */ int nDamageModifier;
+    /* 0x0C */ int nResistMult;
+    /* 0x10 */ int nHealthMult;
+    /* 0x14 */ int nLifeModifier;
+    /* 0x18 */ int nDamageFinalMult;
+};
+
+#endif // D2_DEFINED_D2MercDifficultyStrc
+#ifndef D2_DEFINED_D2MercQuaternaryStrc
+#define D2_DEFINED_D2MercQuaternaryStrc
+struct D2MercQuaternaryStrc {
+    /* 0x00 */ uint32_t nState;
+    /* 0x04 */ int nDefenseFlag;
+    /* 0x08 */ uint32_t nDamageBonus;
+    /* 0x0C */ uint32_t nArmorBonus;
+    /* 0x10 */ int nHealthBonus;
+    /* 0x14 */ int nDefenseBonus;
+};
+
+#endif // D2_DEFINED_D2MercQuaternaryStrc
+#ifndef D2_DEFINED_D2MercQuinaryStrc
+#define D2_DEFINED_D2MercQuinaryStrc
+struct D2MercQuinaryStrc {
+    /* 0x00 */ uint32_t nAbility;
+    /* 0x04 */ int nHealthBonus;
+    /* 0x08 */ int nArmorBonus;
+    /* 0x0C */ uint32_t nSecondary;
+    /* 0x10 */ int field_10;
+};
+
+#endif // D2_DEFINED_D2MercQuinaryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
 struct D2MercRolledStatsStrc {
     /* 0x00 */ int nMercClass; // Merc class/variant (input, <4)
@@ -42,6 +109,36 @@ struct D2MercRolledStatsStrc {
 };
 
 #endif // D2_MODULE_D2Common
+#ifndef D2_DEFINED_D2MercSecondaryStrc
+#define D2_DEFINED_D2MercSecondaryStrc
+struct D2MercSecondaryStrc {
+    /* 0x00 */ uint32_t nDamage;
+    /* 0x04 */ uint32_t nArmor;
+    /* 0x08 */ int nDefenseBonus;
+    /* 0x0C */ int nArmorBonus;
+};
+
+#endif // D2_DEFINED_D2MercSecondaryStrc
+#ifndef D2_DEFINED_D2MercTertiaryStrc
+#define D2_DEFINED_D2MercTertiaryStrc
+struct D2MercTertiaryStrc {
+    /* 0x00 */ uint32_t nArmor;
+    /* 0x04 */ uint32_t nDefense;
+    /* 0x08 */ int nDefenseBonus;
+    /* 0x0C */ int nArmorBonus;
+};
+
+#endif // D2_DEFINED_D2MercTertiaryStrc
+#ifndef D2_DEFINED_D2MercWeaponAnimMapStrc
+#define D2_DEFINED_D2MercWeaponAnimMapStrc
+struct D2MercWeaponAnimMapStrc {
+    operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
+
+    /* 0x00 */ int32_t nAnimIndex;
+    /* 0x04 */ int32_t nWeaponClass;
+};
+
+#endif // D2_DEFINED_D2MercWeaponAnimMapStrc
 #ifndef D2_DEFINED_D2MonSeqTxt
 #define D2_DEFINED_D2MonSeqTxt
 struct D2MonSeqTxt {

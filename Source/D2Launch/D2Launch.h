@@ -113,7 +113,8 @@ struct D2UIMsgMousePosStrc {
 #ifndef D2_DEFINED_D2UIMsgLParamUnion
 #define D2_DEFINED_D2UIMsgLParamUnion
 union D2UIMsgLParamUnion {
-    /* 0x00 */ int32_t nLParam; // raw LPARAM; key messages test bit 30 (auto-repeat)
+    /* 0x00 */ LPARAM nLParam; // raw LPARAM; key messages test bit 30 (auto-repeat)
+    /* 0x00 */ int32_t bState; // D2ControlMsg notifies: the control's 32-bit state word
     /* 0x00 */ D2UIMsgMousePosStrc sMousePos; // mouse messages: x in the low word, y in the high word
 };
 #endif // D2_DEFINED_D2UIMsgLParamUnion
