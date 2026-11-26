@@ -8,6 +8,16 @@
 #include "Source/Fog/Src/ErrorManager.data.h"
 #include "Source/Fog/Src/LogManager.data.h"
 
+// The hex-dump fields EnqueueLogMessage packs between the two strings of a type-2 record.
+struct D2LogDumpHeaderStrc {
+    /* 0x00 */ void * pData;
+    /* 0x04 */ uint32_t nDataLen;
+    /* 0x08 */ void * pCategory; // non-null: offsets print relative (%04X), else as addresses
+    /* 0x0C */ BOOL bSkipData; // the bytes are read in place through pData, not copied after szText2
+    /* 0x10 */ uint32_t bAsciiColumn; // !nVerbose
+};
+static_assert(sizeof(void*) != 4 || sizeof(D2LogDumpHeaderStrc) == 0x14, "the packed hex-dump fields are 0x14 bytes on 32-bit");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_AT
@@ -346,11 +356,11 @@ namespace Fog { namespace Src { namespace LogManager {
 
 int __stdcall DetectCpuVendor() {
     char szCpuVendor[16];
-    *(uint32_t*)(szCpuVendor + 12) = 0;
+    ((uint32_t*)szCpuVendor)[3] = 0;
     uint32_t* pCpuidResult = D2_Cpuid(0);
-    *(uint32_t*)(char*)&szCpuVendor = pCpuidResult[1];
-    *(uint32_t*)((char*)&szCpuVendor + 4) = pCpuidResult[2];
-    *(uint32_t*)((char*)&szCpuVendor + 8) = pCpuidResult[3];
+    ((uint32_t*)szCpuVendor)[0] = pCpuidResult[1];
+    ((uint32_t*)szCpuVendor)[1] = pCpuidResult[2];
+    ((uint32_t*)szCpuVendor)[2] = pCpuidResult[3];
     bool bMatch = !strcmp(szCpuVendor, "GenuineIntel");
     if (bMatch) {
       return 1;
@@ -368,33 +378,33 @@ int __stdcall DetectCpuVendor() {
 static void __stdcall DecodeCpuModelName(uint32_t nModel, int32_t nBrandId, char * pOutName, int32_t nVendor, int32_t nFamily, int32_t nType) {
     int nCopyCount;
     char* pSrcName;
-    memcpy(pOutName, "{Unknown}", 10);
+    memcpy(pOutName, "{Unknown}", sizeof("{Unknown}"));
     if (nVendor != 1) {
       if (nVendor != 2) {
         if (nVendor == 3 && !nType) {
           if (nFamily == 4) {
-            memcpy(pOutName, "MediaGX", 8);
+            memcpy(pOutName, "MediaGX", sizeof("MediaGX"));
             return;
           }
           if (nFamily == 5) {
             if (nModel < 4) {
-              memcpy(pOutName, "6x86", 5);
+              memcpy(pOutName, "6x86", sizeof("6x86"));
               return;
             }
 
             /* Stores the 4 bytes "GXm\0" (Cyrix MediaGX, family 5 model >= 4) as an
                          immediate, not a pointer. Provenance: 1.14d asm 0040e386 MOV
-                         [EDI],0x006d5847. */ memcpy(pOutName, "GXm", 4);
+                         [EDI],0x006d5847. */ memcpy(pOutName, "GXm", sizeof("GXm"));
             return;
           }
           if (nFamily == 6) {
-            memcpy(pOutName, "6x86MX", 7);
+            memcpy(pOutName, "6x86MX", sizeof("6x86MX"));
             return;
           }
         }
       } else {
         if (nFamily == 4) {
-          memcpy(pOutName, "Am486DX4 or Am5x86", 0x13);
+          memcpy(pOutName, "Am486DX4 or Am5x86", sizeof("Am486DX4 or Am5x86"));
           return;
         }
         if (nFamily == 5) {
@@ -411,117 +421,117 @@ static void __stdcall DecodeCpuModelName(uint32_t nModel, int32_t nBrandId, char
             return;
           }
           if (nModel == 8) {
-            memcpy(pOutName, "K6-II", 6);
+            memcpy(pOutName, "K6-II", sizeof("K6-II"));
             return;
           }
           if (nModel >= 9) {
-            memcpy(pOutName, "K6-III", 7);
+            memcpy(pOutName, "K6-III", sizeof("K6-III"));
             return;
           }
         } else if (nFamily == 6) {
           if (nModel < 3) {
-            memcpy(pOutName, "Athlon", 7);
+            memcpy(pOutName, "Athlon", sizeof("Athlon"));
             return;
           }
           if (nModel == 3) {
-            memcpy(pOutName, "Duron", 6);
+            memcpy(pOutName, "Duron", sizeof("Duron"));
             return;
           }
           if (nModel < 6) {
-            memcpy(pOutName, "Athlon", 7);
+            memcpy(pOutName, "Athlon", sizeof("Athlon"));
             return;
           }
           if (nModel == 6) {
             pSrcName = "Athlon MP, XP, or Mobile";
-            memcpy(pOutName, pSrcName, 25);
+            memcpy(pOutName, pSrcName, sizeof("Athlon MP, XP, or Mobile"));
             return;
           }
           if (nModel == 7) {
-            memcpy(pOutName, "Duron Mobile", 0xd);
+            memcpy(pOutName, "Duron Mobile", sizeof("Duron Mobile"));
             return;
           }
         }
       }
     } else {
       if (nBrandId == 1) {
-        memcpy(pOutName, "Celeron", 8);
+        memcpy(pOutName, "Celeron", sizeof("Celeron"));
         return;
       }
       if (nBrandId == 2) {
-        memcpy(pOutName, "Pentium III", 0xc);
+        memcpy(pOutName, "Pentium III", sizeof("Pentium III"));
         return;
       }
       if (nBrandId == 3) {
-        memcpy(pOutName, "Pentium III Xeon", 0x11);
+        memcpy(pOutName, "Pentium III Xeon", sizeof("Pentium III Xeon"));
         return;
       }
       if (nBrandId == 4) {
-        memcpy(pOutName, "Pentium III", 0xc);
+        memcpy(pOutName, "Pentium III", sizeof("Pentium III"));
         return;
       }
       if (nBrandId == 8) {
-        memcpy(pOutName, "Pentium 4", 10);
+        memcpy(pOutName, "Pentium 4", sizeof("Pentium 4"));
         return;
       }
       if (nBrandId == 0xe) {
-        memcpy(pOutName, "Xeon", 5);
+        memcpy(pOutName, "Xeon", sizeof("Xeon"));
         return;
       }
       if (!nType) {
         if (nFamily == 5) {
           if (nModel < 4) {
-            memcpy(pOutName, "Pentium", 8);
+            memcpy(pOutName, "Pentium", sizeof("Pentium"));
             return;
           }
 
-          memcpy(pOutName, "Pentium MMX", 0xc);
+          memcpy(pOutName, "Pentium MMX", sizeof("Pentium MMX"));
           return;
         }
         if (nFamily == 6) {
           if (nModel < 3) {
-            memcpy(pOutName, "Pentium Pro", 0xc);
+            memcpy(pOutName, "Pentium Pro", sizeof("Pentium Pro"));
             return;
           }
           if (nModel < 5) {
-            memcpy(pOutName, "Pentium II", 0xb);
+            memcpy(pOutName, "Pentium II", sizeof("Pentium II"));
             return;
           }
           if (nModel == 5) {
-            memcpy(pOutName, "Pentium II or Celeron", 0x16);
+            memcpy(pOutName, "Pentium II or Celeron", sizeof("Pentium II or Celeron"));
             return;
           }
           if (nModel == 6) {
-            memcpy(pOutName, "Celeron", 8);
+            memcpy(pOutName, "Celeron", sizeof("Celeron"));
             return;
           }
           if (nModel == 7) {
-            memcpy(pOutName, "Pentium III", 0xc);
+            memcpy(pOutName, "Pentium III", sizeof("Pentium III"));
             return;
           }
           if (nModel >= 8) {
             pSrcName = "Pentium III (no brand)";
-            memcpy(pOutName, pSrcName, 23);
+            memcpy(pOutName, pSrcName, sizeof("Pentium III (no brand)"));
             return;
           }
         } else if (nFamily == 0xf) {
-          memcpy(pOutName, "Pentium 4 (no brand)", 0x15);
+          memcpy(pOutName, "Pentium 4 (no brand)", sizeof("Pentium 4 (no brand)"));
         }
       } else if (nType == 1) {
         if (nFamily == 5) {
           if (nModel < 3) {
-            memcpy(pOutName, "Pentium OD586", 0xe);
+            memcpy(pOutName, "Pentium OD586", sizeof("Pentium OD586"));
             return;
           }
           if (nModel == 3) {
-            memcpy(pOutName, "Pentium OD486", 0xe);
+            memcpy(pOutName, "Pentium OD486", sizeof("Pentium OD486"));
             return;
           }
           if (nModel >= 4) {
-            memcpy(pOutName, "Pentium MMX OD586", 0x12);
+            memcpy(pOutName, "Pentium MMX OD586", sizeof("Pentium MMX OD586"));
             return;
           }
         } else if (nFamily == 6) {
-          memcpy(pOutName, "Pentium II OD", 0xe);
+          memcpy(pOutName, "Pentium II OD", sizeof("Pentium II OD"));
           return;
         }
       }
@@ -914,18 +924,18 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
     pData = Storm::Source::SSTR::SStrLen((char*)szFileName);
     pDumpHeader = (uint8_t*)((intptr_t)&szFileName->tLink.pPrevLink + (pData + 1));
     __frame0.pDumpHeaderSaved = pDumpHeader;
-    if (*(int*)((intptr_t)&szFileName->nType + (pData + 1))) {
-      __frame0.pDumpData = *(uint8_t**)pDumpHeader;
+    if (((D2LogDumpHeaderStrc*)((intptr_t)szFileName + (pData + 1)))->bSkipData) {
+      __frame0.pDumpData = (uint8_t*)((D2LogDumpHeaderStrc*)pDumpHeader)->pData;
     } else {
-      pData = Storm::Source::SSTR::SStrLen((char*)(pDumpHeader + 0x14));
-      __frame0.pDumpData = pDumpHeader + (pData + 0x15);
+      pData = Storm::Source::SSTR::SStrLen((char*)(pDumpHeader + sizeof(D2LogDumpHeaderStrc)));
+      __frame0.pDumpData = pDumpHeader + (pData + sizeof(D2LogDumpHeaderStrc) + 1);
     }
 
     __frame0.pLogFile = FindOrOpenLogFileSlot((uint8_t*)szFileName, &__frame0.local_160);
     if (__frame0.pLogFile) {
       Storm::Source::SSTR::SStrPrintf(__frame0.szTimePrefix, 0x20, "%02d:%02d:%02d.%03d  ", (uint32_t)pLogRecord->tTime.wHour, (uint32_t)pLogRecord->tTime.wMinute, (uint32_t)pLogRecord->tTime.wSecond, (uint32_t)pLogRecord->tTime.wMilliseconds);
       Storm::Source::SSTR::SStrCopy(__frame0.szContPrefix, "              ", 0x20);
-      __frame0.nBytesRemaining = *(uint32_t*)(pDumpHeader + 4);
+      __frame0.nBytesRemaining = ((D2LogDumpHeaderStrc*)pDumpHeader)->nDataLen;
       nChunkLen = 1;
       lp = __frame0.pDumpData;
       while (true) {
@@ -935,8 +945,8 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
         }
 
         iVar1 = (int)(lp - __frame0.pDumpData);
-        if (!*(int*)(pDumpHeader + 8)) {
-          iVar1 = *(int*)pDumpHeader + iVar1;
+        if (!((D2LogDumpHeaderStrc*)pDumpHeader)->pCategory) {
+          iVar1 = (int)(intptr_t)((D2LogDumpHeaderStrc*)pDumpHeader)->pData + iVar1;
         }
 
         pLineCursor = __frame0.szTimePrefix;
@@ -944,7 +954,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
           pLineCursor = __frame0.szContPrefix;
         }
 
-        fprintf(__frame0.pLogFile, *(int*)(pDumpHeader + 8) ? (char*)"%s%s%04X:" : (char*)"%s%s%08X:", pLineCursor, pDumpHeader + 0x14, iVar1);
+        fprintf(__frame0.pLogFile, ((D2LogDumpHeaderStrc*)pDumpHeader)->pCategory ? (char*)"%s%s%04X:" : (char*)"%s%s%08X:", pLineCursor, pDumpHeader + sizeof(D2LogDumpHeaderStrc), iVar1);
         __frame0.local_160 = 0;
         nChunkLen = __frame0.nBytesRemaining;
         if (__frame0.nBytesRemaining >= 0x10) {
@@ -963,7 +973,7 @@ void __fastcall WriteHexDumpLogEntry(D2LogRecordStrc * pLogRecord) {
           }
 
           pDumpHeader = __frame0.pDumpHeaderSaved;
-          if (*(int*)(__frame0.pDumpHeaderSaved + 0x10)) {
+          if (((D2LogDumpHeaderStrc*)__frame0.pDumpHeaderSaved)->bAsciiColumn) {
             lp = __frame0.pChunkStart;
             for (iVar1 = ((0x10 - nChunkLen) * 9 >> 2) + 2; __frame0.pChunkStart = lp , iVar1 != 0; iVar1--) {
               Storm::Source::SSTR::SStrPack(__frame0.szLineBuf, " ", 0x100);
@@ -1521,7 +1531,7 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, uint32_t nD
       }
     }
 
-    int nPayloadSize = Storm::Source::SSTR::SStrLen(szText1) + 0x15;
+    int nPayloadSize = Storm::Source::SSTR::SStrLen(szText1) + (int)sizeof(D2LogDumpHeaderStrc) + 1;
     nPayloadSize += Storm::Source::SSTR::SStrLen(szText2) + 1;
     uint32_t nLen1;
     if (!bSkipData) {
@@ -1537,13 +1547,13 @@ void EnqueueLogMessage(char * szText1, char * szText2, void * pData, uint32_t nD
     GetLocalTime(&pNode->tTime);
     char* pText = (char*)(pNode + 1);
     nLen1 = Storm::Source::SSTR::SStrCopy(pText, szText1, 0x7fffffff);
-    char* pMessageFields = pText + nLen1 + 1;
-    *(void**)pMessageFields = (void*)pData;
-    *(size_t*)(pMessageFields + 4) = nDataLen;
-    *(void**)(pMessageFields + 8) = (void*)pCategory;
-    *(BOOL*)(pMessageFields + 0xc) = bSkipData;
-    *(uint32_t*)(pMessageFields + 0x10) = (uint32_t)!nVerbose;
-    pText = pMessageFields + 0x14;
+    D2LogDumpHeaderStrc* pMessageFields = (D2LogDumpHeaderStrc*)(pText + nLen1 + 1);
+    pMessageFields->pData = pData;
+    pMessageFields->nDataLen = nDataLen;
+    pMessageFields->pCategory = pCategory;
+    pMessageFields->bSkipData = bSkipData;
+    pMessageFields->bAsciiColumn = (uint32_t)!nVerbose;
+    pText = (char*)(pMessageFields + 1);
     pText += Storm::Source::SSTR::SStrCopy(pText, szText2, 0x7fffffff) + 1;
     if (!bSkipData) {
       memcpy(pText, pData, nDataLen);
@@ -1724,7 +1734,7 @@ void __stdcall StartLogWriterThread() {
     gLogWriterThreadHandle = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)LOGMANAGER_LogWriterThreadProc, (LPVOID)0x0, 0, (LPDWORD)&gLogWriterThreadId);
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ gLogManagerInitialized = 1;
     GetLocalTime(&gLogRealmStartupLocalTime);
-    for (int i = 0; i < 20; i++) {
+    for (int i = 0; i < (int)(sizeof(gLogFileSlotMutex) / sizeof(gLogFileSlotMutex[0])); i++) {
       gLogFileSlotMutex[i] = 1;
     }
 
@@ -1817,7 +1827,7 @@ void __fastcall Atomic64Store(int64_t * pllTarget, int64_t * pllValue) {
     bool bMatched;
     int64_t llNewValue = *pllValue;
     uint32_t dwCompareLo = (uint32_t)*pllTarget;
-    uint32_t dwExpectedHi = *(uint32_t*)((char*)pllTarget + 4);
+    uint32_t dwExpectedHi = (uint32_t)((uint64_t)*pllTarget >> 32);
     do {
       int64_t llCurrent;
       llCurrent = (uint64_t)((uint64_t)(uint32_t)dwExpectedHi << 32 | (uint64_t)(uint32_t)dwCompareLo);
@@ -1865,7 +1875,7 @@ ULONGLONG __stdcall GetFreeDiskSpaceForSavePath() {
       }
     }
 
-    for (uint32_t nCharIndex = 0; nCharIndex < 0x400; nCharIndex++) {
+    for (uint32_t nCharIndex = 0; nCharIndex < sizeof(szSavePath); nCharIndex++) {
       if (szSavePath[nCharIndex] == '\\') {
         szSavePath[nCharIndex + 1] = '\0';
         break;
@@ -1888,8 +1898,8 @@ void GetGlobalMemoryStatus(LPMEMORYSTATUS pMemoryStatus) {
 
 int __stdcall IsWindowsNT() {
     _OSVERSIONINFOA sVersionInfo;
-    memset(&sVersionInfo, 0, 0x94);
-    /* LPOSVERSIONINFOA lpVersionInformation for GetVersionExA */ sVersionInfo.dwOSVersionInfoSize = 0x94;
+    memset(&sVersionInfo, 0, sizeof(sVersionInfo));
+    /* LPOSVERSIONINFOA lpVersionInformation for GetVersionExA */ sVersionInfo.dwOSVersionInfoSize = sizeof(sVersionInfo);
     BOOL bGotVersion = GetVersionExA(&sVersionInfo);
     if (!bGotVersion) {
       return 0;
@@ -1905,7 +1915,7 @@ void InitHighResTimer() {
     int64_t qwResult = (int64_t)0xffffffffffffffffull;
     Atomic64Store(&qwTestTarget, &qwTestValue);
     Atomic64Load(&qwResult, &qwTestTarget);
-    if ((int)qwResult == 0x29a && !*(uint32_t*)((char*)&qwResult + 4)) {
+    if (qwResult == 0x29a) {
       D2HighResTimestampStrc tInitTimestamp;
       tInitTimestamp.nSeconds = _time32(nullptr);
       tInitTimestamp.dwTick = GetTickCount();

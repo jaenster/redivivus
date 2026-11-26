@@ -32,14 +32,14 @@ typedef int64_t __time64_t;
 
 #ifndef D2_DEFINED_Report
 #define D2_DEFINED_Report
-struct __attribute__((packed)) Report {
+D2_PACKED_BEGIN struct __attribute__((packed)) Report {
     /* 0x000 */ struct ReportVtable * _vfptr;
     /* 0x004 */ FILE * pFile;
     /* 0x008 */ char szFilePath[1024];
     /* 0x408 */ char szReportDir[1024];
     /* 0x808 */ int32_t nAttachmentCount;
     /* 0x80C */ char aszAttachmentPaths[16][1024];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_Report
 #ifndef D2_DEFINED_ReportVtable

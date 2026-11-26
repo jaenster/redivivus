@@ -17,12 +17,12 @@
 // Data types
 #ifndef D2_DEFINED_BnMessQueue
 #define D2_DEFINED_BnMessQueue
-struct __attribute__((packed)) BnMessQueue {
+D2_PACKED_BEGIN struct __attribute__((packed)) BnMessQueue {
     /* 0x000 */ int nZero;
     /* 0x004 */ char bBuffer[288];
     /* 0x124 */ uint32_t nDataSize;
     /* 0x128 */ struct BnMessQueue * pNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_BnMessQueue
 namespace Bnclient {

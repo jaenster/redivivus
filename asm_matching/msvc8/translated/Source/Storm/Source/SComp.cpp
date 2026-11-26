@@ -12,6 +12,7 @@
 static_assert(sizeof(void*) != 4 || sizeof(TCmpStruct) == 0x8dd8, "SMemAlloc(sizeof(TCmpStruct)): the 32-bit layout must be the 0x8dd8 bytes 1.14d allocates");
 static_assert(sizeof(void*) != 4 || sizeof(TDcmpStruct) == 0x3134, "SMemAlloc(sizeof(TDcmpStruct)): the 32-bit layout must be the 0x3134 bytes 1.14d allocates");
 static_assert(sizeof(void*) != 4 || sizeof(D2CompressHuffNodeStrc) == 0x18, "eh vector iterator sizeof(D2CompressHuffNodeStrc): the 32-bit layout must be the 0x18-byte element 1.14d steps by");
+static_assert(sizeof(void*) != 4 || sizeof(D2BitStreamReaderStrc) == 0xc, "the bit reader is {pCur, dwBitBuffer, nBitCount} on 32-bit");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -239,8 +240,8 @@ uint32_t __fastcall BITBUFFER_PeekBits(D2BitStreamReaderStrc * pBitBuf, int, uin
 }
 
 void __fastcall LINKEDLIST_Clear(uint8_t * pBitBuffer, int, int32_t nBits) {
-    *(uint32_t*)(pBitBuffer + 4) >>= D2_SHIFT_COUNT(nBits);
-    *(int*)(pBitBuffer + 8) -= nBits;
+    ((D2BitStreamReaderStrc*)pBitBuffer)->dwBitBuffer >>= D2_SHIFT_COUNT(nBits);
+    ((D2BitStreamReaderStrc*)pBitBuffer)->nBitCount -= nBits;
 }
 
 D2BitStreamWriterStrc * __fastcall LINKEDLIST_InsertAfter(D2BitStreamWriterStrc * pList, int, uint8_t * pNode, int32_t pNewNode) {
@@ -357,7 +358,7 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
         *(short int*)pOutCur = nSample;
         nChannel++;
         pInSamples++;
-        pOutCur += 2;
+        pOutCur += sizeof(short);
       } while (nChannel < nChannels);
     }
 
@@ -374,8 +375,8 @@ static uint32_t __stdcall SCOMP_ADPCMEncode(uint32_t nMaxOutSize, short * pInSam
 
     uint32_t nStepSize;
     do {
-      if ((int)((char*)pOutCur - (char*)pOutStart + 2) > (int)nMaxOutSize) {
-        return (uint32_t)((char*)pOutCur - (char*)pOutStart + 2);
+      if ((int)((char*)pOutCur - (char*)pOutStart + sizeof(short)) > (int)nMaxOutSize) {
+        return (uint32_t)((char*)pOutCur - (char*)pOutStart + sizeof(short));
       }
       if (nChannels == 2) {
         nChannel = (uint32_t)!nChannel;
@@ -486,10 +487,10 @@ static uint32_t __stdcall SCOMP_ADPCMDecode(short * pOut, uint32_t nOutSize, uin
     aStepIndex[0] = 0x2c;
     aStepIndex[1] = 0x2c;
     uint8_t* pInEnd = pIn + nInSize;
-    pIn += 2;
+    pIn += sizeof(short);
     for (uint32_t i = 0; i < nChannels; i++) {
       aPredicted[i] = *(short int*)pIn;
-      pIn += 2;
+      pIn += sizeof(short);
       if (nOutSize < 2) {
         return (uint32_t)((char*)pOut - (char*)pOutStart);
       }
@@ -1103,7 +1104,7 @@ BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t *
 
         ppMethodEntry += -2;
         pSrcCur = pStageBuf;
-      } while ((intptr_t)ppMethodEntry >= (intptr_t)((char*)&paSCompDecompressCodecTable + 4));
+      } while ((intptr_t)ppMethodEntry >= (intptr_t)&paSCompDecompressCodecTable[0].pfnCodec);
 
       if (pStageBuf != pDst) {
         SMem::SMemCopy(pDst, pStageBuf, nSrcSize);
@@ -1311,7 +1312,7 @@ int32_t __fastcall HUFFMAN_DecodeSymbol(D2HuffmanContextStrc * pThis, int, D2Bit
       pDVar3->dwBitBuffer = wBits >> 1;
       if (!*pnBitsLeft) {
         pDVar3->dwBitBuffer = *(uint32_t*)pDVar3->pCur;
-        pDVar3->pCur = (uint16_t*)((char*)pDVar3->pCur + 4);
+        pDVar3->pCur = (uint16_t*)((uint32_t*)pDVar3->pCur + 1);
         pDVar3->nBitCount = 0x20;
       }
       if (wBits & 1) {
@@ -4356,7 +4357,7 @@ int __fastcall HUFFMAN_DecompressBlock(D2HuffmanContextStrc * pDecoderCtx, int, 
     pBitBuf->nBitCount -= 8;
     pBitBuf->dwBitBuffer = uVar1 >> 8;
     vc8_thiscall(COMPRESS_InitEncoderContext)((D2CompressEncoderStrc*)pDecoderCtx, (uint8_t)uVar1);
-    pBitBuf = (D2BitStreamReaderStrc*)pDst;
+    uint8_t* pOutCur = pDst;
     pDecoderCtx->nUnused0 = (uint32_t)((char)uVar1 == '\0');
     while (true) {
       int32_t nSymbol;
@@ -4382,18 +4383,18 @@ int __fastcall HUFFMAN_DecompressBlock(D2HuffmanContextStrc * pDecoderCtx, int, 
         break;
       }
 
-      *(char*)&pBitBuf->pCur = (char)nSymbol;
-      pBitBuf = (D2BitStreamReaderStrc*)((intptr_t)&pBitBuf->pCur + 1);
+      *pOutCur = (uint8_t)nSymbol;
+      pOutCur++;
       nDstMax--;
       if (!nDstMax) {
-        return (int)((intptr_t)pBitBuf - (intptr_t)pDst);
+        return (int)(pOutCur - pDst);
       }
       if (pDecoderCtx->nUnused0) {
         vc8_thiscall(COMPRESS_UpdateFrequencies)((D2CompressEncoderStrc*)pDecoderCtx, pDecoderCtx->_pad306C[nSymbol]);
       }
     }
 
-    return (int)((intptr_t)pBitBuf - (intptr_t)pDst);
+    return (int)(pOutCur - pDst);
 }
 
 int __fastcall COMPRESS_EncodeBuffer(D2CompressEncoderStrc * pHuffCtx, int, D2BitStreamWriterStrc * pBitStream, uint8_t * pbSrc, int32_t nSrcLen, uint32_t nTableSel) {

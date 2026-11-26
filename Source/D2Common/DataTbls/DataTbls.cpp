@@ -43,6 +43,8 @@
 #endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2SkillsPerClassCounter) == 0x1c, "D2_NEW_AT(D2SkillsPerClassCounter): the 32-bit layout must be the 0x1c bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(D2AllStatesDataTbl) == 0x2, "D2AllStatesDataTbl is 0x2 bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2PassiveSkillsPerClassStrc) == 0x2, "D2PassiveSkillsPerClassStrc is 0x2 bytes on x86");
 
 
 static char gszMissileNameFormat[11] = {
@@ -368,9 +370,9 @@ void __fastcall DATATBLS_BuildStatesDataBitMask(D2StatesDataTbls * pStatesData, 
 
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __fastcall DATATBLS_BuildStatesDataList(D2AllStatesDataTbl * * ppAllStatesData, short * pCounter, uint32_t nFlag) {
-    D2AllStatesDataTbl* pAllStates = (D2AllStatesDataTbl*)D2_ALLOC_POOL_AT(nullptr, MonsterTbls::sgtDataTable.nTxtStatesSize * 2, ".\\DATATBLS\\DataTbls.cpp", 0x64b);
+    D2AllStatesDataTbl* pAllStates = (D2AllStatesDataTbl*)D2_ALLOC_POOL_AT(nullptr, MonsterTbls::sgtDataTable.nTxtStatesSize * sizeof(D2AllStatesDataTbl), ".\\DATATBLS\\DataTbls.cpp", 0x64b);
     *ppAllStatesData = pAllStates;
-    memset(pAllStates, 0, MonsterTbls::sgtDataTable.nTxtStatesSize * 2);
+    memset(pAllStates, 0, MonsterTbls::sgtDataTable.nTxtStatesSize * sizeof(D2AllStatesDataTbl));
     D2StatesTxt* pTxtStates = MonsterTbls::sgtDataTable.pTxtStates;
     *pCounter = 0;
     for (int nStateIdx = 0; nStateIdx < MonsterTbls::sgtDataTable.nTxtStatesSize; nStateIdx++) {
@@ -383,9 +385,9 @@ void __fastcall DATATBLS_BuildStatesDataList(D2AllStatesDataTbl * * ppAllStatesD
 
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __fastcall TXT_States_AllocItemTypesStateDataTable(D2AllStatesDataTbl * * ppAllStatesData, short * pCounter, int32_t nOffset) {
-    D2AllStatesDataTbl* pAllocTable = (D2AllStatesDataTbl*)D2_ALLOC_POOL_AT(nullptr, MonsterTbls::sgtDataTable.nTxtStatesSize * 2, ".\\DATATBLS\\DataTbls.cpp", 0x662);
+    D2AllStatesDataTbl* pAllocTable = (D2AllStatesDataTbl*)D2_ALLOC_POOL_AT(nullptr, MonsterTbls::sgtDataTable.nTxtStatesSize * sizeof(D2AllStatesDataTbl), ".\\DATATBLS\\DataTbls.cpp", 0x662);
     *ppAllStatesData = pAllocTable;
-    memset(pAllocTable, 0, MonsterTbls::sgtDataTable.nTxtStatesSize * 2);
+    memset(pAllocTable, 0, MonsterTbls::sgtDataTable.nTxtStatesSize * sizeof(D2AllStatesDataTbl));
     D2StatesTxt* pTxtStates = MonsterTbls::sgtDataTable.pTxtStates;
     *pCounter = 0;
     int nStateIdx = 0;
@@ -693,11 +695,11 @@ void __fastcall TXT_CharStats_DefineWideStringClass(D2CharStatsTxt * pTxtCharSta
     uint16_t wszTmpBuf[512];
     uint16_t wszSrcBuf[512];
     uint16_t wszShortBuf[32];
-    for (i = 0; i < 0x200; i++) {
+    for (i = 0; i < (int)_countof(wszSrcBuf); i++) {
       wszSrcBuf[i] = L'\0';
     }
 
-    for (i = 0; i < 0x200; i++) {
+    for (i = 0; i < (int)_countof(wszTmpBuf); i++) {
       wszTmpBuf[i] = L'\0';
     }
 
@@ -1680,8 +1682,8 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
       MonsterTbls::sgtDataTable.pSkillsPerClassCounter->Barbarian = 0;
       MonsterTbls::sgtDataTable.pSkillsPerClassCounter->Druid = 0;
       MonsterTbls::sgtDataTable.pSkillsPerClassCounter->Assassin = 0;
-      MonsterTbls::sgtDataTable.pPassiveSkillsPerClassStrc = (D2PassiveSkillsPerClassStrc*)D2_ALLOC_POOL_AT(nullptr, MonsterTbls::sgtDataTable.nPassiveSkillsCount * 2, ".\\DATATBLS\\DataTbls.cpp", 0x57a);
-      memset(MonsterTbls::sgtDataTable.pPassiveSkillsPerClassStrc, 0, MonsterTbls::sgtDataTable.nPassiveSkillsCount * 2);
+      MonsterTbls::sgtDataTable.pPassiveSkillsPerClassStrc = (D2PassiveSkillsPerClassStrc*)D2_ALLOC_POOL_AT(nullptr, MonsterTbls::sgtDataTable.nPassiveSkillsCount * sizeof(D2PassiveSkillsPerClassStrc), ".\\DATATBLS\\DataTbls.cpp", 0x57a);
+      memset(MonsterTbls::sgtDataTable.pPassiveSkillsPerClassStrc, 0, MonsterTbls::sgtDataTable.nPassiveSkillsCount * sizeof(D2PassiveSkillsPerClassStrc));
       nCounter = 0;
       MonsterTbls::sgtDataTable.nPassiveSkillsCount = 0;
       if (MonsterTbls::sgtDataTable.nTxtSkillsCount > 0) {
@@ -1918,7 +1920,7 @@ void __fastcall TXT_AllocTxt_states(D2PoolManagerStrc * pMemory) {
     size_t nAllocSize = nMaskBytes * 40;
     MonsterTbls::sgtDataTable.pStatesDataTbls = (D2StatesDataTbls*)D2_ALLOC_POOL_AT(nullptr, nAllocSize, ".\\DATATBLS\\DataTbls.cpp", 0x6ce);
     memset(MonsterTbls::sgtDataTable.pStatesDataTbls, 0, nAllocSize);
-    for (int nStateIdx = 0; nStateIdx < 40; nStateIdx++) {
+    for (int nStateIdx = 0; nStateIdx < (int)(sizeof(MonsterTbls::sgtDataTable.pSingleStateDataTbl) / sizeof(MonsterTbls::sgtDataTable.pSingleStateDataTbl[0])); nStateIdx++) {
       D2StatesDataTbls* pStateDataEntry = (D2StatesDataTbls*)((uint32_t*)MonsterTbls::sgtDataTable.pStatesDataTbls + nStateIdx * (nMaskBytes >> 2));
       MonsterTbls::sgtDataTable.pSingleStateDataTbl[nStateIdx] = pStateDataEntry;
       DATATBLS_BuildStatesDataBitMask(pStateDataEntry, nStateIdx);
@@ -1955,7 +1957,7 @@ void __stdcall DATATBLS_FreeStatesTxtTables() {
       MonsterTbls::sgtDataTable.pAllStatesDataTblFlag0x05 = 0;
     }
 
-    memset(MonsterTbls::sgtDataTable.pSingleStateDataTbl, 0, 0xa0);
+    memset(MonsterTbls::sgtDataTable.pSingleStateDataTbl, 0, sizeof(MonsterTbls::sgtDataTable.pSingleStateDataTbl));
     if (MonsterTbls::sgtDataTable.pTxtStates) {
       D2StatesTxt* pMemoryToFree;
       if (gbTxtAllocCountHeader) {

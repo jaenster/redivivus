@@ -51,7 +51,7 @@ struct D2AutomapRelatedTxt {
 
 #endif // D2_DEFINED_D2AutomapRelatedTxt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-struct __attribute__((packed)) D2AutomapTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AutomapTxt {
     /* 0x00 */ char LevelName[16];
     /* 0x10 */ char TileName[8];
     /* 0x18 */ uint8_t Style;
@@ -59,7 +59,7 @@ struct __attribute__((packed)) D2AutomapTxt {
     /* 0x1A */ uint8_t EndSequence;
     /* 0x1B */ uint8_t field_0x1b;
     /* 0x1C */ int Cell[4];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -93,14 +93,14 @@ struct D2LvlTblsTxt {
 #endif // D2_MODULE_D2Common
 #ifndef D2_DEFINED_D2LvlTypesTxt
 #define D2_DEFINED_D2LvlTypesTxt
-struct __attribute__((packed)) D2LvlTypesTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2LvlTypesTxt {
     /* 0x000 */ char File[32][60];
     /* 0x780 */ uint8_t Act;
     /* 0x781 */ uint8_t field_0x781;
     /* 0x782 */ uint8_t field_0x782;
     /* 0x783 */ uint8_t field_0x783;
     /* 0x784 */ int Expansion;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2LvlTypesTxt
 #ifndef D2_DEFINED_D2LvlTypeTileLibrariesStrc

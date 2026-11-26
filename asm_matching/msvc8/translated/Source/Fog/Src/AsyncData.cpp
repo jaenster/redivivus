@@ -6,6 +6,8 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2AsyncDataSlotStrc) == 0xc, "the slot table is 0x400 slots of 0xc bytes on 32-bit");
+static_assert(sizeof(void*) != 4 || sizeof(D2AsyncData_Line0x128) == 0x54, "async data records are 0x54 bytes on 32-bit");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -55,7 +57,7 @@ void __fastcall STRUCT_AllocAsyncData(int32_t nEnable, int32_t nReserved) {
       return;
     }
 
-    pD2AsyncDataStrc = (D2AsyncDataSlotStrc*)D2_ALLOC_AT(0x3000, ".\\Src\\AsyncData.cpp", 0x88);
+    pD2AsyncDataStrc = (D2AsyncDataSlotStrc*)D2_ALLOC_AT(0x400 * sizeof(D2AsyncDataSlotStrc), ".\\Src\\AsyncData.cpp", 0x88);
     if (!pD2AsyncDataStrc) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x89);
       exit(-1);
@@ -182,7 +184,7 @@ D2AsyncData_Line0x128 * __fastcall STRUCT_AllocAsyncData_Line0x128(D2PoolManager
     D2AsyncDataSlotStrc* pSlot;
     int i;
     D2AsyncData_Line0x128* pAsyncData = D2_NEW_POOL_AT(pMemory, D2AsyncData_Line0x128, ".\\Src\\AsyncData.cpp", 0x128);
-    memset(pAsyncData, 0, 0x54);
+    memset(pAsyncData, 0, sizeof(*pAsyncData));
     pAsyncData->nFlags = 0x41737960;
     if (!Source::SFile::ARCHIVE_OpenD2FileWrap(szText1, &pAsyncData->pFile)) {
       D2_FREE_POOL_AT(pMemory, pAsyncData, ".\\Src\\AsyncData.cpp", 0x135);

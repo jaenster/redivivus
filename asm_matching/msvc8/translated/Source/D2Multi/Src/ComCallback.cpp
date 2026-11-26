@@ -678,14 +678,13 @@ static void COMCALLBACK_FormatChannelUserData(D2ChannelUserStrc * pChannelUser) 
     uint16_t wszRealmName[52];
     uint16_t wszCharName[50];
     uint16_t wszDisplayName[52];
-    char szClanName[52];
     uint16_t wszClanTag[32];
     uint16_t wszClanNameW[17];
     char cFirstChar;
     for (int i = 0; i < 51; i++) {
       wszDisplayName[i] = 0;
     }
-    for (int i = 0; i < 17; i++) {
+    for (int i = 0; i < (int)_countof(wszClanNameW); i++) {
       wszClanNameW[i] = 0;
     }
 
@@ -693,7 +692,7 @@ static void COMCALLBACK_FormatChannelUserData(D2ChannelUserStrc * pChannelUser) 
       wszRealmName[i] = 0;
     }
     char* pszUsername = pChannelUser->szUsername;
-    for (int i = 0; i < 32; i++) {
+    for (int i = 0; i < (int)_countof(wszClanTag); i++) {
       wszClanTag[i] = 0;
     }
 
@@ -702,9 +701,8 @@ static void COMCALLBACK_FormatChannelUserData(D2ChannelUserStrc * pChannelUser) 
       wszClanNameW[0] = 0;
     } else {
       char* pszClanSep;
-      szClanName[0] = '\0';
-      memset(szClanName + 1, 0, 0x31);
-      for (nProductTag = 0; nProductTag < 0x32; nProductTag++) {
+      char szClanName[50] = "";
+      for (nProductTag = 0; nProductTag < (int)_countof(wszCharName); nProductTag++) {
         wszCharName[nProductTag] = L'\0';
       }
 
@@ -942,7 +940,7 @@ void __fastcall COMCALLBACK_FormatWhisperFrom(uint16_t * wszText, int szSenderNa
     uint16_t wszBuffer[512];
     char szFormatted[4];
     uint16_t wszConverted[4];
-    for (i = 0; i < 0x200; i++) {
+    for (i = 0; i < (int)_countof(wszBuffer); i++) {
       wszBuffer[i] = L'\0';
     }
 
@@ -973,7 +971,7 @@ void __fastcall COMCALLBACK_FormatWhisperTo(uint16_t * wszText, int szTargetName
     uint16_t wszBuffer[512];
     char szFormatted[4];
     uint16_t wszConverted[4];
-    for (i = 0; i < 0x200; i++) {
+    for (i = 0; i < (int)_countof(wszBuffer); i++) {
       wszBuffer[i] = L'\0';
     }
 
@@ -1045,7 +1043,7 @@ static int __fastcall PrintChannelText(char * szText, int32_t nColor) {
     int i;
     uint16_t* pStr;
     uint16_t wszText[576];
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszText); i++) {
       wszText[i] = L'\0';
     }
 
@@ -1060,11 +1058,11 @@ static void __stdcall COMCALLBACK_AppendChatWithUser(char * szUsername, char * s
     uint16_t* pStr;
     uint16_t wszMessage[576];
     uint16_t wszMain[576];
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszMain); i++) {
       wszMain[i] = L'\0';
     }
 
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszMessage); i++) {
       wszMessage[i] = L'\0';
     }
 
@@ -1438,7 +1436,7 @@ BOOL __stdcall COMCALLBACK_AppendServerMessage(uint32_t dwParam, char * szText) 
     int i;
     uint16_t* pStr;
     uint16_t wszText[576];
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszText); i++) {
       wszText[i] = L'\0';
     }
 
@@ -1579,7 +1577,7 @@ BOOL __fastcall COMCALLBACK_AppendErrorMessage(uint32_t dwCbArg1, uint32_t dwCbA
     int i;
     uint16_t* pStr;
     uint16_t wszText[576];
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszText); i++) {
       wszText[i] = L'\0';
     }
 
@@ -1593,7 +1591,7 @@ BOOL __fastcall COMCALLBACK_AppendInfoMessage(uint32_t dwCbArg1, uint32_t dwCbAr
     int i;
     uint16_t* pStr;
     uint16_t wszText[576];
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszText); i++) {
       wszText[i] = L'\0';
     }
 
@@ -1609,7 +1607,7 @@ BOOL __fastcall COMCALLBACK_HandleInfoRequest1(uint32_t dwCbArg1, uint32_t dwCbA
     uint16_t wszText[576];
     char szFormatted[500];
     sprintf(szFormatted, "The channel \"%s\" is full. If you are having problems using Battle.net commands, please click the Help button.", szInfoArg);
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszText); i++) {
       wszText[i] = L'\0';
     }
 
@@ -1625,7 +1623,7 @@ BOOL __fastcall COMCALLBACK_HandleInfoRequest2(uint32_t dwCbArg1, uint32_t dwCbA
     uint16_t wszText[576];
     char szFormatted[500];
     sprintf(szFormatted, "The channel \"%s\" is restricted. If you are having problems using Battle.net commands, please click the Help button.", szInfoArg);
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszText); i++) {
       wszText[i] = L'\0';
     }
 
@@ -1641,7 +1639,7 @@ static void __fastcall COMCALLBACK_ValidateWhisperTarget(char * szUsername, char
     uint16_t wszText[576];
     char szFormatted[500];
     sprintf(szFormatted, "*%s %s*", szUsername, szMessage);
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszText); i++) {
       wszText[i] = L'\0';
     }
 
@@ -1732,7 +1730,7 @@ static void __stdcall COMCALLBACK_FormatWhisperReply(uint8_t * pbReplyText, uint
       sprintf(szFormatted, "%s whispers: %s", (char*)pbReplyText, szReplyArg);
     }
 
-    for (nCmp = 0; nCmp < 0x240; nCmp++) {
+    for (nCmp = 0; nCmp < (int)_countof(wszUnicode); nCmp++) {
       wszUnicode[nCmp] = L'\0';
     }
 
@@ -1800,7 +1798,7 @@ static void __fastcall COMCALLBACK_ValidateEmoteTarget(char * szPlayerName, char
     uint16_t aWStack_678[576];
     char szFormatted[500];
     sprintf(szFormatted, "You whisper to %s: %s", szPlayerName, szEmoteText);
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(aWStack_678); i++) {
       aWStack_678[i] = L'\0';
     }
 
@@ -2130,7 +2128,7 @@ D2ChannelUserStrc * __stdcall COMCALLBACK_CreateChannelUserEntry(char * szUserna
         COMCALLBACK_AddOrUpdateChannelUser(pNewUser->szUsername, (uint8_t*)pNewUser->szFormattedName);
         gnChannelUserCount++;
         sprintf(szChannelUserCount, "%s (%d)", gszCurrentChannelName, gnChannelUserCount);
-        for (nResult = 0; nResult < 0x240; nResult++) {
+        for (nResult = 0; nResult < (int)_countof(wszChannelTitleBuffer); nResult++) {
           wszChannelTitleBuffer[nResult] = L'\0';
         }
 
@@ -2263,7 +2261,7 @@ void __stdcall COMCALLBACK_RemoveChannelUser(char * szUsername) {
 
     gnChannelUserCount--;
     sprintf(szChannelUserCount, "%s (%d)", gszCurrentChannelName, gnChannelUserCount);
-    for (nResult = 0; nResult < 0x240; nResult++) {
+    for (nResult = 0; nResult < (int)_countof(wszChannelTitleBuffer); nResult++) {
       wszChannelTitleBuffer[nResult] = L'\0';
     }
 
@@ -2302,7 +2300,7 @@ void __stdcall COMCALLBACK_ClearAllChannelUsers() {
     gnChannelUserTotalCount = 0;
     gnChannelUserCount = 0;
     sprintf(szChannelUserCount, "%s (%d)", gszCurrentChannelName, 0);
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszUserCountText); i++) {
       wszUserCountText[i] = L'\0';
     }
 
@@ -2325,7 +2323,7 @@ BOOL __fastcall COMCALLBACK_HandleJoinedChannel(uint32_t dwCbArg1, uint32_t dwCb
     uint16_t wszChannelMsg[576];
     char szFormatted[500];
     sprintf(szFormatted, "You have joined channel: %s", szChannelName);
-    for (i = 0; i < 0x240; i++) {
+    for (i = 0; i < (int)_countof(wszChannelMsg); i++) {
       wszChannelMsg[i] = L'\0';
     }
 

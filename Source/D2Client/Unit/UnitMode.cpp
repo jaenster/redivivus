@@ -206,7 +206,7 @@ void __fastcall INTERACT_AnyObject(uint16_t eUnitType, DWORD nUnitGUID) {
             D2Common::Units::UpdateDirectionAndSpeed(pPlayerUnit_lcl, D2Common::Units::GetXPosFromDynamicPathUnit(pTargetUnit), nPosY);
             nPosY = 0x20d;
             szSrcFile = ".\\UNIT\\UnitMode.cpp";
-            memset(aSkillCastMsg, 0, 7 * sizeof(aSkillCastMsg[0]));
+            memset(aSkillCastMsg, 0, sizeof(aSkillCastMsg));
             aSkillCastMsg[0] = D2Common::Skills::GetSkillId(D2Common::Skills::SKILLS_GetSkillByEnum(pPlayerUnit_lcl, SKILL_Kick), szSrcFile, nPosY);
             if (pTargetUnit->nClassId == 0x194) {
               if (pTargetUnit->eAnimMode.ePlayerMode == Death) {

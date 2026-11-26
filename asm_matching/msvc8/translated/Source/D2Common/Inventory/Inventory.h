@@ -27,7 +27,7 @@ typedef uint32_t eD2UnitType;
 // Data types
 #ifndef D2_DEFINED_D2ArmTypeTxt
 #define D2_DEFINED_D2ArmTypeTxt
-__pragma(pack(push, 1)) struct D2ArmTypeTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ArmTypeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
     /* 0x24 */ uint8_t field_0x24;
@@ -46,7 +46,7 @@ __pragma(pack(push, 1)) struct D2ArmTypeTxt {
     /* 0x31 */ uint8_t field_0x31;
     /* 0x32 */ uint8_t field_0x32;
     /* 0x33 */ uint8_t field_0x33;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ArmTypeTxt
 #ifndef D2_DEFINED_D2BeltsEntryStrc
@@ -61,23 +61,23 @@ struct D2BeltsEntryStrc {
 #endif // D2_DEFINED_D2BeltsEntryStrc
 #ifndef D2_DEFINED_D2BeltsTxt
 #define D2_DEFINED_D2BeltsTxt
-__pragma(pack(push, 1)) struct D2BeltsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BeltsTxt {
     /* 0x00 */ uint8_t nIndex;
     /* 0x01 */ uint8_t pad0x01[3];
     /* 0x04 */ uint8_t nBoxes;
     /* 0x05 */ uint8_t pad0x05[3];
     /* 0x08 */ D2BeltsEntryStrc beltBoxes[16];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2BeltsTxt
 #ifndef D2_DEFINED_D2CorpseStrc
 #define D2_DEFINED_D2CorpseStrc
-__pragma(pack(push, 1)) struct D2CorpseStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CorpseStrc {
     /* 0x00 */ eD2UnitType eUnitType; // corpse unit type; nCorpseCount counts non-player entries
     /* 0x04 */ int nUnitGUID; // corpse unit GUID (ROOMCORPSE_GetGUID)
     /* 0x08 */ uint32_t dwFlags; // third argument of INVENTORY_AddCorpse
     /* 0x0C */ struct D2CorpseStrc * pNext; // next corpse (+0xc)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2CorpseStrc
 #ifndef D2_DEFINED_D2GridScreenCoordinates
@@ -148,7 +148,7 @@ struct D2InventoryToBeUpdatedStrc {
 #endif // D2_DEFINED_D2InventoryToBeUpdatedStrc
 #ifndef D2_DEFINED_D2InventoryBodyStrc
 #define D2_DEFINED_D2InventoryBodyStrc
-__pragma(pack(push, 1)) struct D2InventoryBodyStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2InventoryBodyStrc {
     /* 0x00 */ D2InventoryEntryStrc rArm;
     /* 0x14 */ D2InventoryEntryStrc torso;
     /* 0x28 */ D2InventoryEntryStrc lArm;
@@ -159,19 +159,19 @@ __pragma(pack(push, 1)) struct D2InventoryBodyStrc {
     /* 0x8C */ D2InventoryEntryStrc belt;
     /* 0xA0 */ D2InventoryEntryStrc feet;
     /* 0xB4 */ D2InventoryEntryStrc gloves;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2InventoryBodyStrc
 #ifndef D2_DEFINED_D2InventoryTxt
 #define D2_DEFINED_D2InventoryTxt
-__pragma(pack(push, 1)) struct D2InventoryTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2InventoryTxt {
     /* 0x00 */ int invLeft;
     /* 0x04 */ int invRight;
     /* 0x08 */ int nTop;
     /* 0x0C */ int invBottom;
     /* 0x10 */ D2GridScreenCoordinates sGrid;
     /* 0x28 */ D2InventoryBodyStrc pBody;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2InventoryTxt
 #ifndef D2_DEFINED_D2ItemsTableStrc

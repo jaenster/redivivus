@@ -17,12 +17,12 @@
 // Data types
 #ifndef D2_DEFINED_D2GameRecordEntryStrc
 #define D2_DEFINED_D2GameRecordEntryStrc
-__pragma(pack(push, 1)) struct D2GameRecordEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GameRecordEntryStrc {
     /* 0x00 */ int nGameIndex;
     /* 0x04 */ uint32_t uMsg;
     /* 0x08 */ WPARAM wParam;
     /* 0x0C */ LPARAM lParam;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GameRecordEntryStrc
 #ifndef D2_DEFINED_D2GameRecordFileHeaderStrc
@@ -38,12 +38,12 @@ struct D2GameRecordFileHeaderStrc {
 #endif // D2_DEFINED_D2GameRecordFileHeaderStrc
 #ifndef D2_DEFINED_D2GameRecordStrc
 #define D2_DEFINED_D2GameRecordStrc
-__pragma(pack(push, 1)) struct D2GameRecordStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GameRecordStrc {
     /* 0x0000 */ D2GameRecordEntryStrc pEntry[500];
     /* 0x1F40 */ int nEntrySize;
     /* 0x1F44 */ int nPlaybackIndex;
     /* 0x1F48 */ struct D2GameRecordStrc * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GameRecordStrc
 namespace D2Client { namespace GAME { namespace Record {

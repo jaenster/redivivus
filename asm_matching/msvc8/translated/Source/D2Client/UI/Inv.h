@@ -36,10 +36,10 @@ typedef uint32_t * PD2NpcShopTabHasItems;
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2AttackSpeedStringStrc
 #define D2_DEFINED_D2AttackSpeedStringStrc
-__pragma(pack(push, 1)) struct D2AttackSpeedStringStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2AttackSpeedStringStrc {
     /* 0x00 */ int nKey; // item type or speed class
     /* 0x04 */ uint16_t wStringId;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2AttackSpeedStringStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
@@ -97,14 +97,14 @@ struct D2InventoryScreenCoordinates {
 #endif // D2_DEFINED_D2InventoryScreenCoordinates
 #ifndef D2_DEFINED_D2NpcShopButtonStrc
 #define D2_DEFINED_D2NpcShopButtonStrc
-__pragma(pack(push, 1)) struct D2NpcShopButtonStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2NpcShopButtonStrc {
     /* 0x00 */ int32_t nSelectedState; // 1=selected, 0=unselected
     /* 0x04 */ int32_t nDrawCallback; // draw callback flag (1=active)
     /* 0x08 */ uint16_t wStringId; // locale string ID for tooltip
     /* 0x0A */ int32_t nActionType; // 1=clear,2=buy,3=sell,9=close
     /* 0x0E */ uint16_t wCurrentSelection; // current selection state
     /* 0x10 */ int32_t nIconId; // cursor icon ID for this action
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2NpcShopButtonStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)

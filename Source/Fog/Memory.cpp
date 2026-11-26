@@ -9,6 +9,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Memory.data.h"
 #include "Source/D2Headers/D2Arch.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2MemoryManagerStrc) == 0xbea4, "the pool system is cleared whole: 0xbea4 bytes on 32-bit");
 static_assert(sizeof(void*) != 4 || sizeof(D2PoolBlockStrc) == 0x18, "malloc(... + sizeof(D2PoolBlockStrc)): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -34,6 +35,15 @@ static_assert(sizeof(void*) != 4 || sizeof(D2PoolBlockStrc) == 0x18, "malloc(...
 #ifndef RECON_FPTD_pfnBlizzardError
 #define RECON_FPTD_pfnBlizzardError
 typedef void (__fastcall *pfnBlizzardError)(char * szMessage, char * szTitle, char * * ppszButtonText, uint32_t dwFlags, uint32_t dwErrorCode, bool bIsFatal);
+#endif
+
+// Whether an address that FindBlockContainingAddress placed in a pool block is one of its slots. A malloc'd
+// overflow block can lie far above the last pool block on x64, where the slot quotient does not fit the
+// 32-bit index, so the x64 test compares it at full width.
+#if D2_ARCH_X86
+#define D2_POOL_SLOT_IN_RANGE(nSlot, pAddr, pCommit, pPool) ((int)(nSlot) < (int)(pPool)->nBlocks)
+#elif D2_ARCH_X64
+#define D2_POOL_SLOT_IN_RANGE(nSlot, pAddr, pCommit, pPool) (((intptr_t)(pAddr) - (intptr_t)(pCommit)) / (int)(pPool)->nBlockSize < (intptr_t)(int)(pPool)->nBlocks)
 #endif
 
 namespace Fog::Memory {
@@ -519,7 +529,7 @@ void __fastcall Free(D2PoolManagerStrc * pMemory, void * * pStruct, char * szFil
       if (pUserPtr >= pBlock->pCommit) {
         pPool = pBlock->pPool;
         nSlotIndex = (uint32_t)(((intptr_t)pUserPtr - (intptr_t)pBlock->pCommit) / (int)pPool->nBlockSize);
-        if ((int)nSlotIndex >= (int)pPool->nBlocks) {
+        if (!(D2_POOL_SLOT_IN_RANGE(nSlotIndex, pUserPtr, pBlock->pCommit, pPool))) {
           FreeTrackedAllocation(pManager, pUserPtr, szFile, Line0);
           return;
         }
@@ -662,7 +672,7 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
     uint32_t nBlockSize;
     size_t nManagerIndex;
     if (!pPoolManager) {
-      memset(&pGlobalPoolSystem, 0, 0xbea4);
+      memset(&pGlobalPoolSystem, 0, sizeof(pGlobalPoolSystem));
       /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&pGlobalPoolSystem.pSync);
       pGlobalPoolSystem.bInit = 1;
     }
@@ -883,7 +893,7 @@ void * __fastcall ReAlloc(D2PoolManagerStrc * pMemory, void * pMemoryToRealloc, 
         if (pMemoryToRealloc >= (void*)uSlot10.pFoundBlock->pCommit) {
           lpCriticalSection = uSlot10.pFoundBlock->pPool;
           nSlotIndex = (uint32_t)(((intptr_t)pMemoryToRealloc - (intptr_t)uSlot10.pFoundBlock->pCommit) / (int)lpCriticalSection->nBlockSize);
-          if (!((int)nSlotIndex < (int)lpCriticalSection->nBlocks)) {
+          if (!(D2_POOL_SLOT_IN_RANGE(nSlotIndex, pMemoryToRealloc, uSlot10.pFoundBlock->pCommit, lpCriticalSection))) {
             nErrAddress = ReallocTrackedAllocation(pManager, pMemoryToRealloc, (int32_t)nAllocSize, szFile, nLine);
             if (!nErrAddress) {
               Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x648);

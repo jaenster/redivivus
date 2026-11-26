@@ -31,24 +31,24 @@ typedef tagCANDIDATELIST * LPCANDIDATELIST;
 #endif // _WIN32
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) ChatCommandProcessor_Slotm580_At208 {
+D2_PACKED_BEGIN struct __attribute__((packed)) ChatCommandProcessor_Slotm580_At208 {
     /* 0x000 */ BYTE _pad0[520];
     /* 0x208 */ uint16_t wszMsgBuffer4[260]; // WCHAR[260], CONTAINER_InitializeBuffer(2, 0x104) at 0047c74c
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) ChatCommandProcessor_Slotm990_At208 {
+D2_PACKED_BEGIN struct __attribute__((packed)) ChatCommandProcessor_Slotm990_At208 {
     /* 0x000 */ BYTE _pad0[520];
     /* 0x208 */ uint16_t wszMsgBuffer2[260]; // WCHAR[260], CONTAINER_InitializeBuffer(2, 0x104) at 0047c601
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) ChatCommandProcessor_Slotm990_At30c {
+D2_PACKED_BEGIN struct __attribute__((packed)) ChatCommandProcessor_Slotm990_At30c {
     /* 0x000 */ BYTE _pad0[780];
     /* 0x30C */ char szCommandParam[260]; // CHAT_ExtractCommandParameter(0x104)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
@@ -65,12 +65,12 @@ struct D2BNetChatEventStrc {
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2ChatCommandStrc
 #define D2_DEFINED_D2ChatCommandStrc
-struct __attribute__((packed)) D2ChatCommandStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ChatCommandStrc {
     /* 0x00 */ char * pszCommand; // command text, e.g. "/players"
     /* 0x04 */ short nCommandType; // 3 = whole-line match, otherwise prefix match; low byte is the value returned through pbCommandType
     /* 0x06 */ int bTakesParameter; // non-zero: tokenize a parameter after the command
     /* 0x0A */ int bAllowedInSinglePlayer; // zero: skipped unless the game type is not GAMETYPE_SINGLEPLAYER
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ChatCommandStrc
 #ifndef D2_DEFINED_D2ChatPacketBuildStrc

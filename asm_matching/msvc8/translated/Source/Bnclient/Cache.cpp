@@ -5,6 +5,8 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Bnclient/Cache.data.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2BnCacheEntryHeaderStrc) == 0x144, "D2BnCacheEntryHeaderStrc is 0x144 bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2BnCacheFileHeaderStrc) == 0x2c, "D2BnCacheFileHeaderStrc is 0x2c bytes on x86");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -577,7 +579,7 @@ int32_t __stdcall CACHE_Open() {
 
     g_pCacheCryptTable = (uint32_t*)Storm::Source::SMem::SMemAlloc(0x1400, ".\\CACHE.CPP", 0x193, 0);
     CACHE_InitCryptTable();
-    gpCacheFileHeader = (D2BnCacheFileHeaderStrc*)Storm::Source::SMem::SMemAlloc(0x2c, ".\\CACHE.CPP", 0x197, 8);
+    gpCacheFileHeader = (D2BnCacheFileHeaderStrc*)Storm::Source::SMem::SMemAlloc(sizeof(D2BnCacheFileHeaderStrc), ".\\CACHE.CPP", 0x197, 8);
     uint32_t nFileSize;
     nFileSize = GetFileSize(ghCacheFileHandle, (LPDWORD)0x0);
     if (!nFileSize || nFileSize > 0xa00000) {
@@ -601,7 +603,7 @@ int32_t __stdcall CACHE_Open() {
         return 0;
       }
 
-      memset(gpCacheFileHeader, 0, 0x2c);
+      memset(gpCacheFileHeader, 0, sizeof(D2BnCacheFileHeaderStrc));
       pHeaderBuf->dwSignature = 0x1a334e42;
       pHeaderBuf->dwHeaderSize = 0x2c;
       pHashTableBuf = (uint8_t*)Storm::Source::SMem::SMemAlloc(0x4000, ".\\CACHE.CPP", 0x21c, 8);
@@ -818,7 +820,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, uint32_t * pCrc32Out, uint32_t * * 
           }
           *pDataSizeOut = 0;
         } else {
-          memset(&entryHeader, 0, 0x144);
+          memset(&entryHeader, 0, sizeof(D2BnCacheEntryHeaderStrc));
           nHashSlot = entryHeader.dwHeaderCrc32;
           if (gpCacheBlockTable[uVar1].dwFlags & 0xc0000000) {
             /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheBlockTable[uVar1].nFileOffset, (PLONG)0x0, 0);
@@ -997,7 +999,7 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
         do {
           if (gpCacheBlockTable[nBlockIdx].dwBlockSize >= nDataSize + 0x144) {
             /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(ghCacheFileHandle, gpCacheBlockTable[nBlockIdx].nFileOffset, (PLONG)0x0, 0);
-            memset(&entryHeaderSize, 0, 0x144);
+            memset(&entryHeaderSize, 0, sizeof(D2BnCacheEntryHeaderStrc));
             /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(ghCacheFileHandle, &entryHeaderSize, 4, &nBytesReadWrite, (LPOVERLAPPED)0x0);
             pFileHeader = gpCacheFileHeader;
             /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ if (nBytesReadWrite != 4) {
@@ -1061,7 +1063,7 @@ BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_
         pHashEntry[2] = 0;
         pNewBlockEntry[nBlockIdx].dwDataSize = nDataSize;
         pNewBlockEntry[nBlockIdx].dwFlags = 0xc0000000;
-        memset(&abEntryHeader, 0, 0x144);
+        memset(&abEntryHeader, 0, sizeof(D2BnCacheEntryHeaderStrc));
         abEntryHeader.dwHeaderSize = 0x144;
         pCurrentFileTime = CACHE_GetFileTime(0);
         abEntryHeader.ftNow.dwLowDateTime = pCurrentFileTime->dwLowDateTime;

@@ -41,7 +41,7 @@ typedef BOOL (__fastcall *fpDrawGroundTile)(struct D2TileLibraryEntryStrc * a1, 
 #endif
 #ifndef RECON_FPTD_fpDrawRoofTile
 #define RECON_FPTD_fpDrawRoofTile
-typedef void (__fastcall *fpDrawRoofTile)(int a1, int a2, int a3, uint32_t * a4, BYTE a5);
+typedef void (__fastcall *fpDrawRoofTile)(uint8_t * a1, int a2, int a3, uint32_t * a4, BYTE a5);
 #endif
 #ifndef RECON_FPTD_fpDrawVisTile
 #define RECON_FPTD_fpDrawVisTile
@@ -49,7 +49,7 @@ typedef void (__fastcall *fpDrawVisTile)(uint8_t * pbTileData, int32_t nScreenX,
 #endif
 #ifndef RECON_FPTD_fpDrawWallTile
 #define RECON_FPTD_fpDrawWallTile
-typedef void (__fastcall *fpDrawWallTile)(int a1, int a2, int a3, uint32_t * a4);
+typedef void (__fastcall *fpDrawWallTile)(uint8_t * a1, int a2, int a3, uint32_t * a4);
 #endif
 #ifndef RECON_FPTD_fpEndScene1
 #define RECON_FPTD_fpEndScene1
@@ -67,10 +67,10 @@ typedef void (__fastcall *fpFillYBufferTable)(void * ppvBits, int nWidth, int nH
 // Data types
 #ifndef D2_DEFINED_D2GFXWindowPlacementStrc
 #define D2_DEFINED_D2GFXWindowPlacementStrc
-__pragma(pack(push, 1)) struct D2GFXWindowPlacementStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GFXWindowPlacementStrc {
     /* 0x00 */ HWND pHWND;
     /* 0x04 */ WINDOWPLACEMENT pWindowPLacement;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2GFXWindowPlacementStrc
 #ifndef D2_DEFINED_D2RendererFunctionsStrc
 #define D2_DEFINED_D2RendererFunctionsStrc

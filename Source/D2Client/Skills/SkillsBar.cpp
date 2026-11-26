@@ -359,7 +359,7 @@ static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int
     if (!pRoom) {
       return 0;
     }
-    if (!(*((uint8_t*)pSkillTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+    if (!(pSkillTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
       return 0;
     }
 

@@ -57,7 +57,7 @@ struct D2UIMsgMousePosStrc {
 };
 
 #endif // D2_DEFINED_D2UIMsgMousePosStrc
-struct __attribute__((packed)) D2WinAnimImage {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2WinAnimImage {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ struct FORMS_AnimFrameStrc * pAnimFrames; // Five-row state table indexed by nAnimState (e.g. gaCharSelectAnimFramesAmazon); 0 = a static image drawn from sControl.pDC6. Non-zero also installs DrawAnim as sControl.fpDrawAnim (005008f0). From asm of Draw 005005b0 and UpdateFrame 00500480; was eFrameType.
     /* 0x44 */ int nStaticFrameDelay; // Frame delay in 40 ms units for an image without pAnimFrames (sControl.pDC6 frames advance every nStaticFrameDelay*1000/25 ms, 00500674); unused when pAnimFrames is set (the row's nFrameDelay is used). Form records b2/b3 give 1. Was pDC6Overlay: never a DC6.
@@ -67,7 +67,7 @@ struct __attribute__((packed)) D2WinAnimImage {
     /* 0x54 */ DRAWMODE eDrawMode; // DRAWMODE for the base image (D2GFX_DrawImage eDrawMode in Draw); the constructor stores DRAW_SOLID (5) when given 0 (005008fe). Was nFrameIntervalMs.
     /* 0x58 */ void (__stdcall *pfnOnStateChange)(void *); // Not a frame index. D2WINANIMIMAGE_UpdateFrame @00500480 does MOV EAX,[ESI+0x58]; TEST EAX,EAX; LEA EDX,[EBP-0x24]; PUSH EDX; CALL EAX (005004df-005004f3) - a null-checked 1-arg stdcall on a stack notify block.
     /* 0x5C */ BOOL bAnimate; // Draw advances nCurrentFrame only while non-zero; 1 at creation (00500911), written by D2WINANIMIMAGE_SetAnimate. Was bLooping.
-};
+}; D2_PACKED_END
 
 #ifndef D2_DEFINED_D2WinAnimImageNotifyStrc
 #define D2_DEFINED_D2WinAnimImageNotifyStrc
@@ -99,7 +99,7 @@ union D2UIMsgLParamUnion {
 #endif // D2_DEFINED_D2UIMsgLParamUnion
 #ifndef D2_DEFINED_D2ControlMsg
 #define D2_DEFINED_D2ControlMsg
-struct __attribute__((packed)) D2ControlMsg {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ControlMsg {
     /* 0x00 */ struct D2ControlStrc * pControl;
     /* 0x04 */ int uMsg;
     /* 0x08 */ WPARAM wParam;
@@ -108,7 +108,7 @@ struct __attribute__((packed)) D2ControlMsg {
     /* 0x14 */ uint32_t dwReserved; // Zeroed by the stack builders (D2WINBUTTON_HandleMouseWheel); no forms handler reads it
     /* 0x18 */ uint32_t bHandled; // Handler sets 1 to mark the message consumed
     /* 0x1C */ uint32_t dwResult; // Handler result
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ControlMsg
 namespace D2Launch::MainMenus {

@@ -1232,7 +1232,7 @@ void __fastcall DRLGROOMTILE_AllocRoomTileGrid(D2RoomExStrc * pRoomEx) {
 
     D2DrlgTileGridStrc* pTileGrid = D2_NEW_POOL_AT(pRoomEx->pLevel->pDrlg->pMemoryPool, D2DrlgTileGridStrc, ".\\DRLG\\RoomTile.cpp", 0x533);
     pRoomEx->pRoomTiles = pTileGrid;
-    memset(pTileGrid, 0, 0x2c);
+    memset(pTileGrid, 0, sizeof(D2DrlgTileGridStrc));
 }
 
 // Allocates wall/floor/roof tile data arrays based on counted tile maximums in pRoomTiles
@@ -1387,7 +1387,6 @@ void __fastcall FreeRoomEx(D2RoomExStrc * pRoomEx, BOOL bServerSide) {
 // Loads DT1 tile files from LvlTypes.txt based on nDT1Mask, plus Blank/InvisWal/Warp.dt1.
 void __fastcall DRLGROOMEX_InitTileData(D2RoomExStrc * pRoomEx) {
     uint32_t nMaskBitIndex;
-    char pathBuf[260];
     D2LvlTypesTxt* pLvlTypesLine = DATATBLS::LvlTbls::TXT_LvlTypes_GetLine(pRoomEx->pLevel->nLevelType);
     uint32_t nDT1Mask = pRoomEx->nDT1Mask;
     for (nMaskBitIndex = 0; nDT1Mask && nMaskBitIndex < 0x20; nMaskBitIndex++) {
@@ -1398,8 +1397,7 @@ void __fastcall DRLGROOMEX_InitTileData(D2RoomExStrc * pRoomEx) {
       nDT1Mask >>= 1;
     }
 
-    pathBuf[0] = '\0';
-    memset(pathBuf + 1, 0, 0x103);
+    char pathBuf[260] = "";
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(pathBuf, "%s\\Tiles\\Act1\\Outdoors\\Blank.dt1", "DATA\\GLOBAL");
     void** pTileProject = pRoomEx->apTiles;
     D2CMP::DUNGEON::Dungeon::TILEPROJECT_AllocSlot((uint8_t*)pTileProject, pathBuf);

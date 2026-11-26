@@ -78,14 +78,14 @@ struct D2AutomapRelatedTxt {
 #endif // D2_DEFINED_D2AutomapRelatedTxt
 #ifndef D2_DEFINED_D2AutomapStrc
 #define D2_DEFINED_D2AutomapStrc
-struct __attribute__((packed)) D2AutomapStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AutomapStrc {
     /* 0x0000 */ D2AutomapCellStrc pAutomapCellList[512];
     /* 0x2800 */ struct D2AutomapStrc * pNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2AutomapStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2AutomapUnknown {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AutomapUnknown {
     /* 0x00 */ size_t nFloorsSize;
     /* 0x04 */ size_t nWallsSize;
     /* 0x08 */ size_t nObjectsSize;
@@ -94,7 +94,7 @@ struct __attribute__((packed)) D2AutomapUnknown {
     /* 0x14 */ void * pWalls;
     /* 0x18 */ void * pObjects;
     /* 0x1C */ void * pExtras;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_uD2UnitMode

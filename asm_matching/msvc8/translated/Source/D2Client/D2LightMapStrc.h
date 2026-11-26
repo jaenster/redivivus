@@ -20,7 +20,7 @@ typedef uint32_t eD2UnitType;
 // Data types
 #ifndef D2_DEFINED_D2LightMapStrc
 #define D2_DEFINED_D2LightMapStrc
-__pragma(pack(push, 1)) struct D2LightMapStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2LightMapStrc {
     /* 0x00 */ eD2UnitType eUnitType;
     /* 0x04 */ DWORD nUnitGUID;
     /* 0x08 */ uint8_t bServerSideUnit;
@@ -40,6 +40,6 @@ __pragma(pack(push, 1)) struct D2LightMapStrc {
     /* 0x28 */ struct D2LightMapStrc * pPrev;
     /* 0x2C */ int bPixelMapReady; // 0=pixel map needs rebuild (collision occlusion); 1=pixel map cached and ready
     /* 0x30 */ int * pPixelMap;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2LightMapStrc

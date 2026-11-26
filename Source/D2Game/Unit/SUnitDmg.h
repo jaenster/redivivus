@@ -32,7 +32,7 @@ struct D2DifficultyLevelsTxt;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2CombatEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CombatEntryStrc {
     /* 0x00 */ uint32_t field_0; // unread by dmg cluster
     /* 0x04 */ eD2UnitType eAttackerType; // attacker unit type
     /* 0x08 */ int nAttackerGUID; // attacker GUID
@@ -40,7 +40,7 @@ struct __attribute__((packed)) D2CombatEntryStrc {
     /* 0x10 */ int nDefenderGUID; // defender GUID
     /* 0x14 */ D2DamageStrc sDamage; // queued damage block (0x70)
     /* 0x84 */ struct D2CombatEntryStrc * pNext; // next combat entry in list
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -96,7 +96,7 @@ struct D2PartyExperienceStrc {
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2ResistTableEntry
 #define D2_DEFINED_D2ResistTableEntry
-struct __attribute__((packed)) D2ResistTableEntry {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ResistTableEntry {
     /* 0x00 */ int nDamageFieldOffset; // byte offset of dmg field in D2DamageStrc
     /* 0x04 */ eD2UnitStat eResistStat; // resistance stat
     /* 0x08 */ eD2UnitStat eMaxResistStat; // max-resist stat
@@ -108,7 +108,7 @@ struct __attribute__((packed)) D2ResistTableEntry {
     /* 0x20 */ int nEnabled; // entry-enabled flag
     /* 0x24 */ char * nEventId; // log/event id
     /* 0x28 */ int field_28; // byte flag (low byte used)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ResistTableEntry
 namespace D2Game::UNIT::SUnitDmg {

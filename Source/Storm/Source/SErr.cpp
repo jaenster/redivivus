@@ -69,7 +69,7 @@ void __stdcall SERR_AddStormFacility(uint16_t wModuleId) {
       ppTailLink = &(*ppTailLink)->pNext;
     }
 
-    SIZE_T dwBytes = 0xc;
+    SIZE_T dwBytes = sizeof(D2SErrMessageSourceStrc);
     DWORD dwFlags = 4;
     /* HANDLE hHeap for HeapAlloc */ pNewNode = (D2SErrMessageSourceStrc*)HeapAlloc(GetProcessHeap(), dwFlags, dwBytes);
     *ppTailLink = pNewNode;
@@ -209,7 +209,7 @@ void __stdcall SErrPrepareAppFatal(void * pfnCallback, uint32_t nCallbackParam) 
 // @oracle-note The rival SSYSTEM_RegisterErrorModule 0041c0f0 writes the same gpErrorModuleList but calls GetModuleHandleA and takes no critical section, so it is the internal self-registration helper, not the export. Left under its descriptive name.
 int __stdcall SErrRegisterMessageSource(uint16_t wModuleId, HMODULE dwModuleBase, uint32_t dwParam2) {
     SERR_InternalEnterCriticalSection();
-    SIZE_T dwBytes = 0xc;
+    SIZE_T dwBytes = sizeof(D2SErrMessageSourceStrc);
     DWORD dwFlags = 4;
     D2SErrMessageSourceStrc* pNewModule = (D2SErrMessageSourceStrc*)HeapAlloc(GetProcessHeap(), dwFlags, dwBytes);
     pNewModule->wModuleId = wModuleId;

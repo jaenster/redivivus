@@ -87,7 +87,7 @@ struct D2PathPointStrc {
 
 #endif // D2_DEFINED_D2PathPointStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-__pragma(pack(push, 1)) struct D2DrlgPathSearchCtxStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgPathSearchCtxStrc {
     /* 0x0000 */ struct D2DrlgPathNodeStrc * apOpenBuckets[128]; // open-list hash buckets
     /* 0x0200 */ struct D2DrlgPathNodeStrc * apClosedBuckets[128]; // closed-list hash buckets; DRLGPATH_InsertNodeSorted uses base+0x200
     /* 0x0400 */ void * pSortedHead; // f-cost sorted list head, base+0x400
@@ -95,11 +95,11 @@ __pragma(pack(push, 1)) struct D2DrlgPathSearchCtxStrc {
     /* 0x2FC4 */ int32_t nPoolCount; // base+0x2FC4, the node-pool count
     /* 0x2FC8 */ void * apPropagateQueue[200]; // base+0x2FC8, used by DRLGPATH_PropagateNodeCosts
     /* 0x32E8 */ int32_t nPropagateCount; // base+0x32E8
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-__pragma(pack(push, 1)) struct D2DrlgAStarContextStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgAStarContextStrc {
     /* 0x00000 */ struct D2DrlgRoomAStarNodeStrc * pOpenListHead; // lowest-cost node, starts at aNodes[0]
     /* 0x00004 */ D2DrlgRoomAStarNodeStrc aNodes[900]; // node pool; nNodeCount stops at 900 (0x384)
     /* 0x06274 */ int32_t nNodeCount;
@@ -115,7 +115,7 @@ __pragma(pack(push, 1)) struct D2DrlgAStarContextStrc {
     /* 0x06290 */ int32_t aGridCells[50000]; // best cost per cell, (nWidth+6)*(nHeight+6) used, nWidth*nHeight <= 50000 asserted
     /* 0x36FD0 */ BOOL bRandomizeDirection;
     /* 0x36FD4 */ struct D2SeedStrc * pSeed;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)

@@ -147,7 +147,7 @@ struct D2AiCmdArgumentsStrc {
 #endif // D2_DEFINED_D2AiCmdArgumentsStrc
 #ifndef D2_DEFINED_D2AiGeneralStrc
 #define D2_DEFINED_D2AiGeneralStrc
-struct __attribute__((packed)) D2AiGeneralStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AiGeneralStrc {
     /* 0x00 */ int nFunctionId;
     /* 0x04 */ void (__fastcall *fpFunction)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
     /* 0x08 */ int nAiFlags;
@@ -164,16 +164,16 @@ struct __attribute__((packed)) D2AiGeneralStrc {
     /* 0x34 */ struct D2MonsterDataMinionList * pMinionList;
     /* 0x38 */ struct D2MapAIStrc * pMapAi;
     /* 0x3C */ int nGenericSpawnerSpecific;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2AiGeneralStrc
 #ifndef D2_DEFINED_D2AiListStrc
 #define D2_DEFINED_D2AiListStrc
-struct __attribute__((packed)) D2AiListStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AiListStrc {
     /* 0x00 */ D2AITypes eAIType;
     /* 0x04 */ void (__fastcall *fpInit)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
     /* 0x08 */ void (__fastcall *fpMain)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
     /* 0x0C */ void (__fastcall *fpSecondary)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2AiListStrc
 #ifndef D2_DEFINED_D2ArenaTxt
 #define D2_DEFINED_D2ArenaTxt
@@ -197,7 +197,7 @@ struct D2BaalFxSpiritSpawnStrc {
 #endif // D2_DEFINED_D2BaalFxSpiritSpawnStrc
 #ifndef D2_DEFINED_D2BNetSystemInfoStrc
 #define D2_DEFINED_D2BNetSystemInfoStrc
-struct __attribute__((packed)) D2BNetSystemInfoStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2BNetSystemInfoStrc {
     /* 0x000 */ uint32_t adwHeader[10]; // copied to FF01 pkt+0x01..+0x25
     /* 0x028 */ char szCompilationData[128]; // SStrCopy 0x80 -> pkt+0x29
     /* 0x0A8 */ uint32_t dw0xA8; // -> pkt+0xa9
@@ -217,7 +217,7 @@ struct __attribute__((packed)) D2BNetSystemInfoStrc {
     /* 0x0EC */ uint32_t dw0xEC; // -> pkt+0xbd
     /* 0x0F0 */ int32_t aSomeInts[8]; // MOVSD.REP 8 -> pkt+0xc1
     /* 0x110 */ uint32_t dw0x110; // -> pkt+0xe1
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2BNetSystemInfoStrc
 #ifndef D2_DEFINED_D2CharItemStrc
 #define D2_DEFINED_D2CharItemStrc
@@ -255,7 +255,7 @@ struct D2CoordStrc {
 #endif // D2_DEFINED_D2CoordStrc
 #ifndef D2_DEFINED_D2CreateMonsterUnitStrc
 #define D2_DEFINED_D2CreateMonsterUnitStrc
-struct __attribute__((packed)) D2CreateMonsterUnitStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CreateMonsterUnitStrc {
     /* 0x00 */ int32_t nUnitGUID;
     /* 0x04 */ int32_t nMonstatId;
     /* 0x08 */ int32_t nX;
@@ -263,7 +263,7 @@ struct __attribute__((packed)) D2CreateMonsterUnitStrc {
     /* 0x10 */ int32_t eMonsterType;
     /* 0x14 */ int32_t nOwnerGUID;
     /* 0x18 */ eD2UnitType eUnitType;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2CreateMonsterUnitStrc
 #ifndef D2_DEFINED_D2DamageStrc
 #define D2_DEFINED_D2DamageStrc
@@ -331,7 +331,7 @@ struct D2DifficultyLevelsTxt {
 #endif // D2_DEFINED_D2DifficultyLevelsTxt
 #ifndef D2_DEFINED_D2EventEntryStrc
 #define D2_DEFINED_D2EventEntryStrc
-struct __attribute__((packed)) D2EventEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2EventEntryStrc {
     /* 0x00 */ eD2TimerType nTimerType; // type of timer, varies between unit types
     /* 0x01 */ uint8_t pad_0x1;
     /* 0x02 */ short nFlags;
@@ -346,23 +346,23 @@ struct __attribute__((packed)) D2EventEntryStrc {
     /* 0x24 */ struct D2TimerListStrc * pNextTimerOnUnit; // next timer assigned to this unit
     /* 0x28 */ struct D2TimerListStrc * pTimerList; // timer list this timer belongs to
     /* 0x2C */ void (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *);
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2EventEntryStrc
 #ifndef D2_DEFINED_D2EventStrc
 #define D2_DEFINED_D2EventStrc
-struct __attribute__((packed)) D2EventStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2EventStrc {
     /* 0x0000 */ D2EventEntryStrc aEvents[600];
     /* 0x7080 */ struct D2EventStrc * pNext;
     /* 0x7084 */ struct D2EventStrc * pPrev;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2EventStrc
 #ifndef D2_DEFINED_D2GambleTxt
 #define D2_DEFINED_D2GambleTxt
-struct __attribute__((packed)) D2GambleTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GambleTxt {
     /* 0x00 */ char szCode[4];
     /* 0x04 */ int nLevel;
     /* 0x08 */ int nItemClassId;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GambleTxt
 #ifndef D2_DEFINED_D2NpcTradeStateStrc
 #define D2_DEFINED_D2NpcTradeStateStrc
@@ -384,7 +384,7 @@ struct D2NpcTradeStateStrc {
 #endif // D2_DEFINED_D2NpcTradeStateStrc
 #ifndef D2_DEFINED_D2GameNpcStrc
 #define D2_DEFINED_D2GameNpcStrc
-struct __attribute__((packed)) D2GameNpcStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GameNpcStrc {
     /* 0x00 */ int nMonStatsId;
     /* 0x04 */ struct D2InventoryStrc * pInventory;
     /* 0x08 */ struct D2NpcProxyInventoryStrc * pProxyInventories; // head of D2NpcProxyInventoryStrc nodes (GetPlayerProxyInventory walks it, RemovePlayerProxyInventory unlinks)
@@ -396,11 +396,11 @@ struct __attribute__((packed)) D2GameNpcStrc {
     /* 0x20 */ D2NpcTradeStateStrc sTrade; // trade/shop state block; callers pass its address as one object
     /* 0x3C */ int unk0x3C;
     /* 0x40 */ int nNpcGUID;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GameNpcStrc
 #ifndef D2_DEFINED_D2GSMsg67GameLogonSPStrc
 #define D2_DEFINED_D2GSMsg67GameLogonSPStrc
-struct __attribute__((packed)) D2GSMsg67GameLogonSPStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSMsg67GameLogonSPStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x67
     /* 0x01 */ char szGameName[16];
     /* 0x11 */ eD2HostGameType eHostGameType;
@@ -413,16 +413,16 @@ struct __attribute__((packed)) D2GSMsg67GameLogonSPStrc {
     /* 0x2B */ uint8_t field_0x2b;
     /* 0x2C */ uint8_t field_0x2c;
     /* 0x2D */ uint8_t nLanguageCode; // SetupGameChecks requires < 0xF
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSMsg67GameLogonSPStrc
 #ifndef D2_DEFINED_D2GSMsg6CUploadSaveStrc
 #define D2_DEFINED_D2GSMsg6CUploadSaveStrc
-struct __attribute__((packed)) D2GSMsg6CUploadSaveStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSMsg6CUploadSaveStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x6C
     /* 0x01 */ uint8_t nChunkSize;
     /* 0x02 */ uint32_t nTotalSize; // halts if >= 0x2000
     /* 0x06 */ uint8_t aData[0]; // nChunkSize bytes
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSMsg6CUploadSaveStrc
 #ifndef D2_DEFINED_D2GSPacketClt0x89
 #define D2_DEFINED_D2GSPacketClt0x89
@@ -435,7 +435,7 @@ struct D2GSPacketClt0x89 {
 #endif // D2_DEFINED_D2GSPacketClt0x89
 #ifndef D2_DEFINED_D2GSPacketSrv0x22_0x23
 #define D2_DEFINED_D2GSPacketSrv0x22_0x23
-struct __attribute__((packed)) D2GSPacketSrv0x22_0x23 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x22_0x23 {
     /* 0x00 */ uint8_t packetId;
     /* 0x01 */ uint8_t unitType;
     /* 0x02 */ uint8_t bRemove;
@@ -444,11 +444,11 @@ struct __attribute__((packed)) D2GSPacketSrv0x22_0x23 {
     /* 0x09 */ uint8_t nBaseAmount;
     /* 0x0A */ uint8_t nLevelBonus;
     /* 0x0B */ uint8_t bBody;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x22_0x23
 #ifndef D2_DEFINED_D2GSPacketSrv0x26
 #define D2_DEFINED_D2GSPacketSrv0x26
-struct __attribute__((packed)) D2GSPacketSrv0x26 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x26 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nMessageType;
     /* 0x02 */ uint8_t nLanguage;
@@ -458,11 +458,11 @@ struct __attribute__((packed)) D2GSPacketSrv0x26 {
     /* 0x09 */ uint8_t nColor;
     /* 0x0A */ char szName[16];
     /* 0x1A */ char szMessage[256];
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x26
 #ifndef D2_DEFINED_D2GSPacketSrv0x2C
 #define D2_DEFINED_D2GSPacketSrv0x2C
-struct __attribute__((packed)) D2GSPacketSrv0x2C {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x2C {
     D2GSPacketSrv0x2C() = default;
     D2GSPacketSrv0x2C(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -472,11 +472,11 @@ struct __attribute__((packed)) D2GSPacketSrv0x2C {
     /* 0x01 */ uint8_t nUnitType; // [pUnit]
     /* 0x02 */ int32_t nUnitGUID; // [pUnit+0xc]
     /* 0x06 */ uint16_t nSoundId; // word [pUnit+0x6e]
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x2C
 #ifndef D2_DEFINED_D2GSPacketSrv0x4C
 #define D2_DEFINED_D2GSPacketSrv0x4C
-struct __attribute__((packed)) D2GSPacketSrv0x4C {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x4C {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
@@ -485,11 +485,11 @@ struct __attribute__((packed)) D2GSPacketSrv0x4C {
     /* 0x09 */ uint8_t nTargetType;
     /* 0x0A */ uint32_t dwTargetGUID;
     /* 0x0E */ uint16_t wUnused;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x4C
 #ifndef D2_DEFINED_D2GSPacketSrv0x4D
 #define D2_DEFINED_D2GSPacketSrv0x4D
-struct __attribute__((packed)) D2GSPacketSrv0x4D {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x4D {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
@@ -498,16 +498,16 @@ struct __attribute__((packed)) D2GSPacketSrv0x4D {
     /* 0x0B */ uint16_t wTargetX;
     /* 0x0D */ uint16_t wTargetY;
     /* 0x0F */ uint16_t wUnused;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x4D
 #ifndef D2_DEFINED_D2GSPacketSrv0x53
 #define D2_DEFINED_D2GSPacketSrv0x53
-struct __attribute__((packed)) D2GSPacketSrv0x53 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x53 {
     /* 0x00 */ uint8_t nHeader; // 0x53
     /* 0x01 */ int32_t nCycleIndex; // day/night time index, 0-5
     /* 0x05 */ int32_t nTicks; // ticks into the current cycle
     /* 0x09 */ uint8_t bEclipse; // eclipse flag
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x53
 #ifndef D2_DEFINED_D2GSPacketSrv0x5D
 #define D2_DEFINED_D2GSPacketSrv0x5D
@@ -521,7 +521,7 @@ struct D2GSPacketSrv0x5D {
 #endif // D2_DEFINED_D2GSPacketSrv0x5D
 #ifndef D2_DEFINED_D2GSPacketSrv0x67
 #define D2_DEFINED_D2GSPacketSrv0x67
-struct __attribute__((packed)) D2GSPacketSrv0x67 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x67 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwMonsterGUID;
     /* 0x05 */ uint8_t nMoveType;
@@ -532,11 +532,11 @@ struct __attribute__((packed)) D2GSPacketSrv0x67 {
     /* 0x0C */ uint8_t nPathType;
     /* 0x0D */ uint16_t wVelocityPct;
     /* 0x0F */ uint8_t nParam4;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x67
 #ifndef D2_DEFINED_D2GSPacketSrv0x68
 #define D2_DEFINED_D2GSPacketSrv0x68
-struct __attribute__((packed)) D2GSPacketSrv0x68 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x68 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwMonsterGUID;
     /* 0x05 */ uint8_t nMode;
@@ -549,61 +549,61 @@ struct __attribute__((packed)) D2GSPacketSrv0x68 {
     /* 0x11 */ uint8_t nPathType;
     /* 0x12 */ uint16_t wVelocityPct;
     /* 0x14 */ uint8_t nParam3;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x68
 #ifndef D2_DEFINED_D2GSPacketSrv0x7F
 #define D2_DEFINED_D2GSPacketSrv0x7F
-struct __attribute__((packed)) D2GSPacketSrv0x7F {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x7F {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint16_t nUnitLife;
     /* 0x04 */ int nUnitGUID;
     /* 0x08 */ short nAreaID;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x7F
 #ifndef D2_DEFINED_D2GSPacketSrv0x8A
 #define D2_DEFINED_D2GSPacketSrv0x8A
-struct __attribute__((packed)) D2GSPacketSrv0x8A {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x8A {
     /* 0x00 */ uint8_t nPacketId; // 0x8A
     /* 0x01 */ uint8_t nUnitType; // 1
     /* 0x02 */ uint32_t nUnitGUID; // unaligned
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x8A
 #ifndef D2_DEFINED_D2GSPacketSrv0x8C
 #define D2_DEFINED_D2GSPacketSrv0x8C
-struct __attribute__((packed)) D2GSPacketSrv0x8C {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x8C {
     /* 0x00 */ uint8_t nPacketId; // Packet opcode (0x8C)
     /* 0x01 */ uint32_t nUnitGUID; // GUID of the player whose relationship list entry this is
     /* 0x05 */ uint32_t nOtherUnitGUID; // GUID of the player the entry refers to
     /* 0x09 */ uint16_t wRelationFlags; // D2UnitPlayerListStrc.nRelationshipFlags (low word)
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x8C
 #ifndef D2_DEFINED_D2GSPacketSrv0x8D
 #define D2_DEFINED_D2GSPacketSrv0x8D
-struct __attribute__((packed)) D2GSPacketSrv0x8D {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x8D {
     /* 0x00 */ uint8_t nPacketId; // 0x8D
     /* 0x01 */ int32_t nUnitGUID; // [pUnit+0xc] or -1
     /* 0x05 */ int16_t nPartyId;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x8D
 #ifndef D2_DEFINED_D2GSPacketSrv0x90
 #define D2_DEFINED_D2GSPacketSrv0x90
-struct __attribute__((packed)) D2GSPacketSrv0x90 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x90 {
     /* 0x00 */ uint8_t nPacketId; // Packet opcode (0x90)
     /* 0x01 */ uint32_t nPlayerGUID; // GUID of player whose roster position changed
     /* 0x05 */ int32_t nPlayerX; // X-coordinate sent by server for roster update
     /* 0x09 */ int32_t nPlayerY; // Y-coordinate sent by server for roster update
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GSPacketSrv0x90
 #ifndef D2_DEFINED_D2InactiveItemRecordStrc
 #define D2_DEFINED_D2InactiveItemRecordStrc
-struct __attribute__((packed)) D2InactiveItemRecordStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2InactiveItemRecordStrc {
     /* 0x00 */ struct D2InactiveItemRecordStrc * pNext;
     /* 0x04 */ int nDespawnTimer;
     /* 0x08 */ int nPlayerGUID;
     /* 0x0C */ short nItemDataSize;
     /* 0x0E */ uint8_t itemData[1];
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2InactiveItemRecordStrc
 #ifndef D2_DEFINED_D2InactiveMonsterRecordStrc
 #define D2_DEFINED_D2InactiveMonsterRecordStrc
@@ -648,7 +648,7 @@ struct D2InactiveUnitListStrc {
 #endif // D2_DEFINED_D2InactiveUnitListStrc
 #ifndef D2_DEFINED_D2ItemGenContextStrc
 #define D2_DEFINED_D2ItemGenContextStrc
-struct __attribute__((packed)) D2ItemGenContextStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ItemGenContextStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ struct D2SeedStrc * pSeed; // seed the new item is rolled from: &pUnit->sSeed, the room seed, or 0
     /* 0x08 */ struct SGAMEDATA * pGame;
@@ -695,14 +695,14 @@ struct __attribute__((packed)) D2ItemGenContextStrc {
     /* 0x7E */ uint8_t field_0x7e;
     /* 0x7F */ uint8_t field_0x7f;
     /* 0x80 */ eD2ItemFlag nFlags;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ItemGenContextStrc
 #ifndef D2_DEFINED_D2LevelPlayerCountArgStrc
 #define D2_DEFINED_D2LevelPlayerCountArgStrc
-struct __attribute__((packed)) D2LevelPlayerCountArgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2LevelPlayerCountArgStrc {
     /* 0x00 */ eD2LevelId eLevelId; // Level to count in; compared with DRLGROOM_GetLevelIdFromRoom of each unit's room
     /* 0x04 */ int32_t nCount; // Incremented by the IterateAllUnits callback for each unit whose room is in eLevelId; IterateAllUnits walks only pUnitList[0], so these are players
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2LevelPlayerCountArgStrc
 #ifndef D2_DEFINED_D2LinkNodeStrc
 #define D2_DEFINED_D2LinkNodeStrc
@@ -781,7 +781,7 @@ struct D2MissileDamageDataStrc {
 #endif // D2_DEFINED_D2MissileDamageDataStrc
 #ifndef D2_DEFINED_D2ModeChangeStrc
 #define D2_DEFINED_D2ModeChangeStrc
-struct __attribute__((packed)) D2ModeChangeStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ModeChangeStrc {
     /* 0x00 */ eD2MonsterAnimMode nUnitMode;
     /* 0x04 */ struct D2UnitStrc * pUnit;
     /* 0x08 */ struct D2UnitStrc * pTargetUnit;
@@ -793,7 +793,7 @@ struct __attribute__((packed)) D2ModeChangeStrc {
     /* 0x17 */ uint8_t nUnknown2;
     /* 0x18 */ int nMonType1; // value: zeroed by SetCurrentSkill/ReviveCorpse, passed as an int argument
     /* 0x1C */ int nMonType2; // value: zeroed, passed as a byte argument
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ModeChangeStrc
 #ifndef D2_DEFINED_D2MonModeTableRowStrc
 #define D2_DEFINED_D2MonModeTableRowStrc
@@ -899,12 +899,12 @@ struct D2MonsterRegionFieldSubStrc {
 #endif // D2_DEFINED_D2MonsterRegionFieldSubStrc
 #ifndef D2_DEFINED_D2MonsterRegionFieldStrc
 #define D2_DEFINED_D2MonsterRegionFieldStrc
-struct __attribute__((packed)) D2MonsterRegionFieldStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MonsterRegionFieldStrc {
     /* 0x00 */ uint16_t nClassId; // Monster class ID from MonStats.txt
     /* 0x02 */ uint8_t nRarity; // Rarity from MonStats.txt
     /* 0x03 */ uint8_t pad;
     /* 0x04 */ D2MonsterRegionFieldSubStrc aArray[3]; // Shuffled by SEED_RollChampionPack
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2MonsterRegionFieldStrc
 #ifndef D2_DEFINED_D2NodeUnkownStrc
 #define D2_DEFINED_D2NodeUnkownStrc
@@ -933,10 +933,10 @@ struct D2NPCMessageStrc {
 #endif // D2_DEFINED_D2NPCMessageStrc
 #ifndef D2_DEFINED_D2NPCMessageTableStrc
 #define D2_DEFINED_D2NPCMessageTableStrc
-struct __attribute__((packed)) D2NPCMessageTableStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2NPCMessageTableStrc {
     /* 0x00 */ D2NPCMessageStrc pMessages[16];
     /* 0xC0 */ int nMessagesCount;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2NPCMessageTableStrc
 #ifndef D2_DEFINED_D2NpcPlayerInteractionStrc
 #define D2_DEFINED_D2NpcPlayerInteractionStrc
@@ -970,11 +970,11 @@ struct D2NpcTradeItemStrc {
 #endif // D2_DEFINED_D2NpcTradeItemStrc
 #ifndef D2_DEFINED_D2ObjectControlSub0x1110
 #define D2_DEFINED_D2ObjectControlSub0x1110
-struct __attribute__((packed)) D2ObjectControlSub0x1110 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ObjectControlSub0x1110 {
     /* 0x00 */ struct D2RoomStrc * pRoom;
     /* 0x04 */ POINT sCoords;
     /* 0x0C */ struct D2ObjectControlSub0x1110 * pPrev;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ObjectControlSub0x1110
 #ifndef D2_DEFINED_D2ObjectInitFnArg
 #define D2_DEFINED_D2ObjectInitFnArg
@@ -997,16 +997,16 @@ struct D2ObjectModeArg {
 #endif // D2_DEFINED_D2ObjectModeArg
 #ifndef D2_DEFINED_D2ObjectOperateFnArg
 #define D2_DEFINED_D2ObjectOperateFnArg
-struct __attribute__((packed)) D2ObjectOperateFnArg {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ObjectOperateFnArg {
     /* 0x00 */ D2ObjectModeArg sArg;
     /* 0x08 */ struct D2UnitStrc * pAttacker;
     /* 0x0C */ struct D2SeedStrc * pSeed;
     /* 0x10 */ int nObjectClassId;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ObjectOperateFnArg
 #ifndef D2_DEFINED_D2ObjectRngStrc
 #define D2_DEFINED_D2ObjectRngStrc
-struct __attribute__((packed)) D2ObjectRngStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ObjectRngStrc {
     /* 0x00 */ uint8_t nAct; // Act number from LevelsTxt
     /* 0x01 */ uint8_t pad_0x1[3];
     /* 0x04 */ int pad_0x4;
@@ -1018,7 +1018,7 @@ struct __attribute__((packed)) D2ObjectRngStrc {
     /* 0x1C */ int nMonClassId; // Cached monster class for object animations, init -1
     /* 0x20 */ POINT aPoints2[4]; // Object placement exclusion zones
     /* 0x40 */ POINT aPoints1[10]; // Object placement positions
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ObjectRngStrc
 #ifndef D2_DEFINED_D2ObjectSpawnOffsetGroupStrc
 #define D2_DEFINED_D2ObjectSpawnOffsetGroupStrc
@@ -1029,7 +1029,7 @@ struct D2ObjectSpawnOffsetGroupStrc {
 #endif // D2_DEFINED_D2ObjectSpawnOffsetGroupStrc
 #ifndef D2_DEFINED_D2ObjectsTxt
 #define D2_DEFINED_D2ObjectsTxt
-struct __attribute__((packed)) D2ObjectsTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ObjectsTxt {
     /* 0x000 */ char Name[64];
     /* 0x040 */ uint16_t NameWideString[64];
     /* 0x0C0 */ char Token[2];
@@ -1124,7 +1124,7 @@ struct __attribute__((packed)) D2ObjectsTxt {
     /* 0x1BA */ uint8_t field_0x1ba;
     /* 0x1BB */ uint8_t field_0x1bb;
     /* 0x1BC */ int AutoMap;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ObjectsTxt
 #ifndef D2_DEFINED_D2ObjGroupTxt
 #define D2_DEFINED_D2ObjGroupTxt
@@ -1139,7 +1139,7 @@ struct D2ObjGroupTxt {
 #endif // D2_DEFINED_D2ObjGroupTxt
 #ifndef D2_DEFINED_D2Packet0x5aEventStructure
 #define D2_DEFINED_D2Packet0x5aEventStructure
-struct __attribute__((packed)) D2Packet0x5aEventStructure {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2Packet0x5aEventStructure {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nMessageType;
     /* 0x02 */ uint8_t nColor;
@@ -1147,7 +1147,7 @@ struct __attribute__((packed)) D2Packet0x5aEventStructure {
     /* 0x07 */ uint8_t nArgTypes;
     /* 0x08 */ char szName1[16];
     /* 0x18 */ char szName2[16];
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2Packet0x5aEventStructure
 #ifndef D2_DEFINED_D2PacketListStrc
 #define D2_DEFINED_D2PacketListStrc
@@ -1159,7 +1159,7 @@ struct D2PacketListStrc {
 #endif // D2_DEFINED_D2PacketListStrc
 #ifndef D2_DEFINED_D2ParsedTreasureClassEntriesStrc
 #define D2_DEFINED_D2ParsedTreasureClassEntriesStrc
-struct __attribute__((packed)) D2ParsedTreasureClassEntriesStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ParsedTreasureClassEntriesStrc {
     /* 0x00 */ int32_t nCumulativeWeightClassic; // Cumulative weight for Classic linear scan
     /* 0x04 */ int32_t nCumulativeWeightExpansion; // Cumulative weight for Expansion binary search
     /* 0x08 */ int16_t nItemClassId; // Item class ID or nested TC ID
@@ -1173,7 +1173,7 @@ struct __attribute__((packed)) D2ParsedTreasureClassEntriesStrc {
     /* 0x16 */ int16_t nFromTC0x30Mod; // nFromTCOffset0x30 modifier from entry
     /* 0x18 */ int16_t nFromTC0x32Mod; // nFromTCOffset0x32 modifier from entry
     /* 0x1A */ uint8_t pad26[2]; // padding to 28 bytes
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ParsedTreasureClassEntriesStrc
 #ifndef D2_DEFINED_D2ParsedTreasureClassStrc
 #define D2_DEFINED_D2ParsedTreasureClassStrc
@@ -1198,7 +1198,7 @@ struct D2ParsedTreasureClassStrc {
 #endif // D2_DEFINED_D2ParsedTreasureClassStrc
 #ifndef D2_DEFINED_D2PartyDataStrc
 #define D2_DEFINED_D2PartyDataStrc
-struct __attribute__((packed)) D2PartyDataStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2PartyDataStrc {
     /* 0x00 */ uint32_t nUnitGUID;
     /* 0x04 */ uint32_t nLifePercent;
     /* 0x08 */ eD2LevelId eLevelId;
@@ -1207,7 +1207,7 @@ struct __attribute__((packed)) D2PartyDataStrc {
     /* 0x0E */ uint8_t field_0xe;
     /* 0x0F */ uint8_t field_0xf;
     /* 0x10 */ struct D2PartyDataStrc * pPrev;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2PartyDataStrc
 #ifndef D2_DEFINED_D2PathPosStrc
 #define D2_DEFINED_D2PathPosStrc
@@ -1304,14 +1304,14 @@ union uD2QuestArgStrcUnion {
 #endif // D2_DEFINED_uD2QuestArgStrcUnion
 #ifndef D2_DEFINED_D2QuestArgStrc
 #define D2_DEFINED_D2QuestArgStrc
-struct __attribute__((packed)) D2QuestArgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestArgStrc {
     /* 0x00 */ struct SGAMEDATA * pGame;
     /* 0x04 */ int nEvent;
     /* 0x08 */ struct D2UnitStrc * pTarget;
     /* 0x0C */ struct D2UnitStrc * pPlayer;
     /* 0x10 */ int field4_0x10;
     /* 0x14 */ uD2QuestArgStrcUnion sQuestArgs;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestArgStrc
 #ifndef D2_DEFINED_D2QuestGUIDStrc
 #define D2_DEFINED_D2QuestGUIDStrc
@@ -1323,14 +1323,14 @@ struct D2QuestGUIDStrc {
 #endif // D2_DEFINED_D2QuestGUIDStrc
 #ifndef D2_DEFINED_D2QuestDataA1Q1Strc
 #define D2_DEFINED_D2QuestDataA1Q1Strc
-struct __attribute__((packed)) D2QuestDataA1Q1Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA1Q1Strc {
     /* 0x00 */ D2QuestGUIDStrc sQuestGUID; // Player tracking for den area
     /* 0x84 */ bool bQuestCompleted; // Set when all den monsters killed
     /* 0x85 */ bool bEnteredDen; // Set when player enters den area
     /* 0x86 */ uint8_t bAcceptedQuest; // Set when Akara gives quest (msg 0x40)
     /* 0x87 */ bool bNotifiedCompletion; // Set when timer notification sent
     /* 0x88 */ int32_t nDenMonstersLeftToKillCount; // Remaining monsters = spawn - kill count
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA1Q1Strc
 #ifndef D2_DEFINED_D2QuestDataA1Q2Strc
 #define D2_DEFINED_D2QuestDataA1Q2Strc
@@ -1345,7 +1345,7 @@ struct D2QuestDataA1Q2Strc {
 #endif // D2_DEFINED_D2QuestDataA1Q2Strc
 #ifndef D2_DEFINED_D2QuestDataA1Q3Strc
 #define D2_DEFINED_D2QuestDataA1Q3Strc
-struct __attribute__((packed)) D2QuestDataA1Q3Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA1Q3Strc {
     /* 0x00 */ uint8_t field_0x00;
     /* 0x01 */ uint8_t bMalusTaken; // Set when Horadric Malus has been picked up
     /* 0x02 */ uint8_t bCharsiNotified; // Set in Callback_02 when Charsi interacted
@@ -1366,7 +1366,7 @@ struct __attribute__((packed)) D2QuestDataA1Q3Strc {
     /* 0xA1 */ uint8_t bSequenceReady; // Checked to trigger sequence filter for next quest
     /* 0xA2 */ uint8_t field_0xA2;
     /* 0xA3 */ uint8_t field_0xA3;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA1Q3Strc
 #ifndef D2_DEFINED_D2QuestDataA1Q4SubStrc
 #define D2_DEFINED_D2QuestDataA1Q4SubStrc
@@ -1439,7 +1439,7 @@ struct D2QuestDataA1Q4SubStrc {
 #endif // D2_DEFINED_D2QuestDataA1Q4SubStrc
 #ifndef D2_DEFINED_D2QuestDataA1Q4Strc
 #define D2_DEFINED_D2QuestDataA1Q4Strc
-struct __attribute__((packed)) D2QuestDataA1Q4Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA1Q4Strc {
     /* 0x000 */ uint32_t nQuestStep; // Current quest progression step
     /* 0x004 */ struct SGAMEDATA * pGame; // Pointer to game instance
     /* 0x008 */ uint8_t field_0x08;
@@ -1459,11 +1459,11 @@ struct __attribute__((packed)) D2QuestDataA1Q4Strc {
     /* 0x0B0 */ int32_t nCainUnitGUID;
     /* 0x0B4 */ D2QuestGUIDStrc sQuestGUID1; // Player tracking - quest completion
     /* 0x138 */ D2QuestGUIDStrc sQuestGUID2; // Player tracking - Cain interaction
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA1Q4Strc
 #ifndef D2_DEFINED_D2QuestDataA1Q5Strc
 #define D2_DEFINED_D2QuestDataA1Q5Strc
-struct __attribute__((packed)) D2QuestDataA1Q5Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA1Q5Strc {
     /* 0x000 */ int32_t aPlayersInTowerGUIDs[12]; // Player GUIDs in tower (secondary tracking list)
     /* 0x030 */ uint16_t nPlayersInTowerCount; // Number of players in tower; unsigned word: every read is MOVZX (Q05_Callback00_NpcActivate 00594c50)
     /* 0x032 */ int16_t field_0x32;
@@ -1482,11 +1482,11 @@ struct __attribute__((packed)) D2QuestDataA1Q5Strc {
     /* 0x11B */ uint8_t bTalkedToNPC; // NPC conversation triggered
     /* 0x11C */ uint8_t field_0x11c; // only access: MOV byte ptr [ESI+0x11c],0 in Q05_TimerNotifyCompletion (005954e3)
     /* 0x11D */ uint8_t pad_0x11d[3];
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA1Q5Strc
 #ifndef D2_DEFINED_D2QuestDataA1Q6Strc
 #define D2_DEFINED_D2QuestDataA1Q6Strc
-struct __attribute__((packed)) D2QuestDataA1Q6Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA1Q6Strc {
     /* 0x000 */ D2QuestGUIDStrc sQuestGUIDCain; // Player tracking for Deckard Cain (NPC 0x109) interactions
     /* 0x084 */ D2QuestGUIDStrc sQuestGUIDAkara; // Player tracking for Akara (NPC 0x94) interactions
     /* 0x108 */ D2QuestGUIDStrc sQuestGUIDKashya; // Player tracking for Kashya (NPC 0x96) interactions
@@ -1497,7 +1497,7 @@ struct __attribute__((packed)) D2QuestDataA1Q6Strc {
     /* 0x195 */ uint8_t bQuestAccepted; // Set when quest accepted via Cain (msg 0xA6)
     /* 0x196 */ uint8_t field_0x196;
     /* 0x197 */ uint8_t field_0x197;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA1Q6Strc
 #ifndef D2_DEFINED_D2QuestDataA2Q0Strc
 #define D2_DEFINED_D2QuestDataA2Q0Strc
@@ -1546,7 +1546,7 @@ struct D2QuestDataA2Q2Strc {
 #endif // D2_DEFINED_D2QuestDataA2Q2Strc
 #ifndef D2_DEFINED_D2QuestDataA2Q3Strc
 #define D2_DEFINED_D2QuestDataA2Q3Strc
-struct __attribute__((packed)) D2QuestDataA2Q3Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA2Q3Strc {
     /* 0x00 */ uint8_t field_0x00;
     /* 0x01 */ uint8_t bDarknessTimerArmed;
     /* 0x02 */ bool bSunDarkened; // Set when sun goes dark, cleared when sun restored
@@ -1561,7 +1561,7 @@ struct __attribute__((packed)) D2QuestDataA2Q3Strc {
     /* 0x14 */ D2QuestGUIDStrc sPlayerGUID; // Player GUID tracking for quest completion
     /* 0x98 */ int32_t nAltarLevelId;
     /* 0x9C */ int32_t nViperAmuletDropCount;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA2Q3Strc
 #ifndef D2_DEFINED_D2QuestDataA2Q4Strc
 #define D2_DEFINED_D2QuestDataA2Q4Strc
@@ -1706,7 +1706,7 @@ struct D2QuestDataA3Q0Strc {
 #endif // D2_DEFINED_D2QuestDataA3Q0Strc
 #ifndef D2_DEFINED_D2QuestDataA3Q1Strc
 #define D2_DEFINED_D2QuestDataA3Q1Strc
-struct __attribute__((packed)) D2QuestDataA3Q1Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA3Q1Strc {
     /* 0x00 */ uint8_t bCanComplete; // Set to true in InitData, cleared when tome turned in
     /* 0x01 */ bool bCheckPartyForTome; // Party check flag for tome ownership
     /* 0x02 */ uint8_t bNotifiedPlayers; // Set when players notified
@@ -1724,11 +1724,11 @@ struct __attribute__((packed)) D2QuestDataA3Q1Strc {
     /* 0x14 */ int32_t nTomeObjectGUID;
     /* 0x18 */ int32_t nTomeObjectMode;
     /* 0x1C */ D2QuestGUIDStrc sQuestGUID; // Player tracking for tome quest completion
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA3Q1Strc
 #ifndef D2_DEFINED_D2QuestDataA3Q2Strc
 #define D2_DEFINED_D2QuestDataA3Q2Strc
-struct __attribute__((packed)) D2QuestDataA3Q2Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA3Q2Strc {
     /* 0x00 */ uint8_t bSewerStairsInitialized; // Set to 1 by Objects_InitFn41_SewerStairs
     /* 0x01 */ uint8_t bQuestCompleted; // Set true in Q19_Callback_11 (dialog 0x21f) via pA1Q2 cast; checked in Q19_Callback_02 to trigger RewardAwaits broadcast
     /* 0x02 */ uint8_t field_0x2;
@@ -1747,7 +1747,7 @@ struct __attribute__((packed)) D2QuestDataA3Q2Strc {
     /* 0x27 */ bool bOrbCountUpdated; // Set in UpdateOrbCount
     /* 0x28 */ int32_t field_0x28;
     /* 0x2C */ D2QuestGUIDStrc sQuestGUID; // Player tracking for Khalim's Will completion
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA3Q2Strc
 #ifndef D2_DEFINED_D2QuestDataA3Q3Strc
 #define D2_DEFINED_D2QuestDataA3Q3Strc
@@ -1876,7 +1876,7 @@ struct D2QuestDataA3Q7Strc {
 #endif // D2_DEFINED_D2QuestDataA3Q7Strc
 #ifndef D2_DEFINED_D2QuestDataA4Q1Strc
 #define D2_DEFINED_D2QuestDataA4Q1Strc
-struct __attribute__((packed)) D2QuestDataA4Q1Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA4Q1Strc {
     /* 0x00 */ int field_0x00; // unused/reserved
     /* 0x04 */ POINT ptIzualDeath; // Izual death X coord (POINT.x)
     /* 0x0C */ uint8_t bHasStep4; // Set when QUESTSTATE_Step0x04
@@ -1889,11 +1889,11 @@ struct __attribute__((packed)) D2QuestDataA4Q1Strc {
     /* 0x13 */ uint8_t field_0x13; // padding
     /* 0x14 */ struct D2UnitStrc * pIzualUnit; // struct D2UnitStrc* killed Izual unit
     /* 0x18 */ int field_0x18; // unused/reserved
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA4Q1Strc
 #ifndef D2_DEFINED_D2QuestDataA4Q2Strc
 #define D2_DEFINED_D2QuestDataA4Q2Strc
-struct __attribute__((packed)) D2QuestDataA4Q2Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA4Q2Strc {
     /* 0x00 */ uint8_t bTyraelTalked; // Set to 1 when Tyrael talked
     /* 0x01 */ uint8_t bDiabloSpawnStarted; // Diablo spawn process started
     /* 0x02 */ uint8_t bWaitingForDiabloSpawn; // Waiting for Diablo to appear
@@ -1924,7 +1924,7 @@ struct __attribute__((packed)) D2QuestDataA4Q2Strc {
     /* 0x46 */ uint8_t field_0x46; // padding
     /* 0x47 */ uint8_t field_0x47; // padding
     /* 0x48 */ int nSealBossKillCount; // Count of seal bosses killed (3 triggers chaos kill)
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA4Q2Strc
 #ifndef D2_DEFINED_D2QuestDataA4Q3Strc
 #define D2_DEFINED_D2QuestDataA4Q3Strc
@@ -1966,7 +1966,7 @@ struct D2QuestDataA5Q1Strc {
 #endif // D2_DEFINED_D2QuestDataA5Q1Strc
 #ifndef D2_DEFINED_D2QuestDataA5Q2Strc
 #define D2_DEFINED_D2QuestDataA5Q2Strc
-struct __attribute__((packed)) D2QuestDataA5Q2Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA5Q2Strc {
     /* 0x000 */ D2QuestGUIDStrc sQuestGUID;
     /* 0x084 */ uint8_t bQuestCompleted; // Set when quest accepted (gossip line 0x4e80 in Q32_Callback_11); cleared after reward claimed
     /* 0x085 */ uint8_t field_0x85;
@@ -1992,11 +1992,11 @@ struct __attribute__((packed)) D2QuestDataA5Q2Strc {
     /* 0x114 */ int32_t anWussieKillCount[3]; // wussie kills per group; Q32_IncrementWussieKillCount ADD [ESI+EAX*4+0x114]
     /* 0x120 */ int32_t anWussieMonsterGUIDs[15]; // Q32_Callback08 stores [EDI+ECX*4+0x120] with ECX = nWussieMonsterCount
     /* 0x15C */ int32_t nWussieMonsterCount; // Count of wussie monsters tracked
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA5Q2Strc
 #ifndef D2_DEFINED_D2QuestDataA5Q3Strc
 #define D2_DEFINED_D2QuestDataA5Q3Strc
-struct __attribute__((packed)) D2QuestDataA5Q3Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA5Q3Strc {
     /* 0x000 */ D2QuestGUIDStrc sQuestGUID;
     /* 0x084 */ int32_t nAnyaState; // 0=not started, 1=found, 2=complete
     /* 0x088 */ int32_t nAnyaStateExtra; // Set to 1 on cleanup if 0
@@ -2054,11 +2054,11 @@ struct __attribute__((packed)) D2QuestDataA5Q3Strc {
     /* 0x10E */ uint8_t field_0x10E;
     /* 0x10F */ uint8_t field_0x10F;
     /* 0x110 */ int32_t nNihlathakObjectGUID;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA5Q3Strc
 #ifndef D2_DEFINED_D2QuestDataA5Q4Strc
 #define D2_DEFINED_D2QuestDataA5Q4Strc
-struct __attribute__((packed)) D2QuestDataA5Q4Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA5Q4Strc {
     /* 0x00 */ D2QuestGUIDStrc sQuestGUID;
     /* 0x84 */ uint8_t field_0x84;
     /* 0x85 */ uint8_t bNihlathakSpeakTimerAdded; // Timer for Nihlathak speech added
@@ -2069,7 +2069,7 @@ struct __attribute__((packed)) D2QuestDataA5Q4Strc {
     /* 0x8A */ uint8_t field_0x8A;
     /* 0x8B */ uint8_t field_0x8B;
     /* 0x8C */ uint8_t * pRoomTarget; // Room where Nihlathak was killed
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA5Q4Strc
 #ifndef D2_DEFINED_D2QuestDataA5Q5Strc
 #define D2_DEFINED_D2QuestDataA5Q5Strc
@@ -2114,7 +2114,7 @@ struct D2QuestDataA5Q5Strc {
 #endif // D2_DEFINED_D2QuestDataA5Q5Strc
 #ifndef D2_DEFINED_D2QuestDataA5Q6Strc
 #define D2_DEFINED_D2QuestDataA5Q6Strc
-struct __attribute__((packed)) D2QuestDataA5Q6Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataA5Q6Strc {
     /* 0x00 */ D2QuestGUIDStrc sQuestGUID;
     /* 0x84 */ uint8_t field_0x84;
     /* 0x85 */ uint8_t field_0x85;
@@ -2137,7 +2137,7 @@ struct __attribute__((packed)) D2QuestDataA5Q6Strc {
     /* 0xA2 */ uint8_t field_0xa2;
     /* 0xA3 */ uint8_t field_0xa3;
     /* 0xA4 */ int32_t nQuestFlags; // Quest state flags bitmask sent to client in 0x50 QuestSpecial packet (Q36_SendQuestSpecialPacket)
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataA5Q6Strc
 #ifndef D2_DEFINED_QUESTCALLBACKFN
 #define D2_DEFINED_QUESTCALLBACKFN
@@ -2193,7 +2193,7 @@ union D2QuestSpecificDataUnion {
 #endif // D2_DEFINED_D2QuestSpecificDataUnion
 #ifndef D2_DEFINED_D2QuestDataStrc
 #define D2_DEFINED_D2QuestDataStrc
-struct __attribute__((packed)) D2QuestDataStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestDataStrc {
     /* 0x00 */ eD2QuestsInternal nQuestNoInternal;
     /* 0x04 */ struct SGAMEDATA * pGame;
     /* 0x08 */ uint8_t nAct;
@@ -2217,18 +2217,18 @@ struct __attribute__((packed)) D2QuestDataStrc {
     /* 0xEC */ bool (__fastcall *fpActiveFilter)(struct D2QuestDataStrc *, int32_t, struct D2UnitStrc *, struct D2BitBufferStrc *, struct D2UnitStrc *);
     /* 0xF0 */ bool (__fastcall *fpSequenceFilter)(struct D2QuestDataStrc *);
     /* 0xF4 */ struct D2QuestDataStrc * pPrev;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestDataStrc
 #ifndef D2_DEFINED_D2QuestInitDataExtended
 #define D2_DEFINED_D2QuestInitDataExtended
-struct __attribute__((packed)) D2QuestInitDataExtended {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestInitDataExtended {
     /* 0x00 */ void (__fastcall *fpQuestInit)(struct D2QuestDataStrc *);
     /* 0x04 */ int nAct;
     /* 0x08 */ int field2_0x8;
     /* 0x0C */ int field3_0xc;
     /* 0x10 */ eD2QuestsInternal nQuestNoInternal;
     /* 0x14 */ eD2Quests nQuestIdReal;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2QuestInitDataExtended
 #ifndef D2_DEFINED_D2QuestTimerStrc
 #define D2_DEFINED_D2QuestTimerStrc
@@ -2284,7 +2284,7 @@ struct D2RareAffixTxt {
 #endif // D2_DEFINED_D2RareAffixTxt
 #ifndef D2_DEFINED_D2ResistTableEntry
 #define D2_DEFINED_D2ResistTableEntry
-struct __attribute__((packed)) D2ResistTableEntry {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ResistTableEntry {
     /* 0x00 */ int nDamageFieldOffset; // byte offset of dmg field in D2DamageStrc
     /* 0x04 */ eD2UnitStat eResistStat; // resistance stat
     /* 0x08 */ eD2UnitStat eMaxResistStat; // max-resist stat
@@ -2296,7 +2296,7 @@ struct __attribute__((packed)) D2ResistTableEntry {
     /* 0x20 */ int nEnabled; // entry-enabled flag
     /* 0x24 */ char * nEventId; // log/event id
     /* 0x28 */ int field_28; // byte flag (low byte used)
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ResistTableEntry
 #ifndef D2_DEFINED_D2SkillCallbackContextStrc
 #define D2_DEFINED_D2SkillCallbackContextStrc
@@ -2309,7 +2309,7 @@ struct D2SkillCallbackContextStrc {
 #endif // D2_DEFINED_D2SkillCallbackContextStrc
 #ifndef D2_DEFINED_D2StateExArgStrc
 #define D2_DEFINED_D2StateExArgStrc
-struct __attribute__((packed)) D2StateExArgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2StateExArgStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ struct D2UnitStrc * pTarget;
     /* 0x08 */ eD2Skills eSkill;
@@ -2319,11 +2319,11 @@ struct __attribute__((packed)) D2StateExArgStrc {
     /* 0x18 */ int32_t nSkillCalc;
     /* 0x1C */ eD2States eAuraState;
     /* 0x20 */ void (__fastcall *pFunction)(struct D2UnitStrc *, eD2States, struct D2StatListExStrc *);
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2StateExArgStrc
 #ifndef D2_DEFINED_D2SUnitEventStrc
 #define D2_DEFINED_D2SUnitEventStrc
-struct __attribute__((packed)) D2SUnitEventStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SUnitEventStrc {
     /* 0x00 */ uint8_t nUnitEvent; // events.txt id dispatched by UNITEVENT_DispatchEventsByType (MOVZX byte [ESI])
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint16_t nFlags; // bit0 = callback running, bit1 = free pending (OR/AND word [ESI+2] in 005c0c30)
@@ -2334,11 +2334,11 @@ struct __attribute__((packed)) D2SUnitEventStrc {
     /* 0x14 */ BOOL (__fastcall *fpItemEventFunc)(::SGAMEDATA *, uint32_t, struct D2UnitStrc *, struct D2UnitStrc *, struct D2DamageStrc *, eD2Skills, int);
     /* 0x18 */ struct D2SUnitEventStrc * pPrev; // back link toward the list head (SUNITEVENT_Alloc stores new into old_head+0x18)
     /* 0x1C */ struct D2SUnitEventStrc * pNext; // forward link; every walker follows +0x1c
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2SUnitEventStrc
 #ifndef D2_DEFINED_D2SUnitMsg23Strc
 #define D2_DEFINED_D2SUnitMsg23Strc
-struct __attribute__((packed)) D2SUnitMsg23Strc {
+struct D2SUnitMsg23Strc {
     /* 0x00 */ uint32_t dwSkillOwnerGUID;
     /* 0x04 */ uint16_t nSkillId;
     /* 0x06 */ uint8_t nSkillSlot;
@@ -2346,7 +2346,7 @@ struct __attribute__((packed)) D2SUnitMsg23Strc {
 #endif // D2_DEFINED_D2SUnitMsg23Strc
 #ifndef D2_DEFINED_D2SUnitMsg99Strc
 #define D2_DEFINED_D2SUnitMsg99Strc
-struct __attribute__((packed)) D2SUnitMsg99Strc {
+struct D2SUnitMsg99Strc {
     /* 0x00 */ uint16_t nSkillId;
     /* 0x02 */ uint8_t nSkillLevel;
     /* 0x03 */ uint8_t nTargetType;
@@ -2356,13 +2356,14 @@ struct __attribute__((packed)) D2SUnitMsg99Strc {
 #endif // D2_DEFINED_D2SUnitMsg99Strc
 #ifndef D2_DEFINED_D2SUnitMsg9AStrc
 #define D2_DEFINED_D2SUnitMsg9AStrc
-struct __attribute__((packed)) D2SUnitMsg9AStrc {
+struct D2SUnitMsg9AStrc {
     /* 0x00 */ uint16_t nSkillId;
     /* 0x02 */ uint8_t nSkillLevel;
     /* 0x03 */ uint8_t field_0x3;
     /* 0x04 */ uint16_t nTargetX;
     /* 0x06 */ uint16_t nTargetY;
     /* 0x08 */ uint8_t field_0x8;
+    /* 0x09 */ uint8_t pad_0x9[3]; // the writer allocates 8 + 0xc (UnitQueuePacket0x9A)
 };
 #endif // D2_DEFINED_D2SUnitMsg9AStrc
 #ifndef D2_DEFINED_D2SUnitMsg9EStrc
@@ -2390,7 +2391,7 @@ struct D2SUnitMsgA1Strc {
 #endif // D2_DEFINED_D2SUnitMsgA1Strc
 #ifndef D2_DEFINED_D2SUnitMsgA3Strc
 #define D2_DEFINED_D2SUnitMsgA3Strc
-struct __attribute__((packed)) D2SUnitMsgA3Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SUnitMsgA3Strc {
     /* 0x00 */ uint8_t field_0x0;
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint16_t nSkillId;
@@ -2403,7 +2404,7 @@ struct __attribute__((packed)) D2SUnitMsgA3Strc {
     /* 0x14 */ int32_t nTargetGUID;
     /* 0x18 */ uint32_t dwParam1;
     /* 0x1C */ uint32_t dwParam2;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2SUnitMsgA3Strc
 #ifndef D2_DEFINED_D2SUnitMsgA4Strc
 #define D2_DEFINED_D2SUnitMsgA4Strc
@@ -2411,11 +2412,12 @@ struct D2SUnitMsgA4Strc {
     operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
 
     /* 0x00 */ int16_t nClassId;
+    /* 0x02 */ uint8_t pad_0x2[2]; // the writer allocates 8 + 4 (UnitQueuePacket0xA4)
 };
 #endif // D2_DEFINED_D2SUnitMsgA4Strc
 #ifndef D2_DEFINED_D2SUnitMsgA5Strc
 #define D2_DEFINED_D2SUnitMsgA5Strc
-struct __attribute__((packed)) D2SUnitMsgA5Strc {
+struct D2SUnitMsgA5Strc {
     /* 0x00 */ uint8_t nUnitType;
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint8_t field_0x2;
@@ -2426,7 +2428,7 @@ struct __attribute__((packed)) D2SUnitMsgA5Strc {
 #endif // D2_DEFINED_D2SUnitMsgA5Strc
 #ifndef D2_DEFINED_D2SUnitMsgABStrc
 #define D2_DEFINED_D2SUnitMsgABStrc
-struct __attribute__((packed)) D2SUnitMsgABStrc {
+struct D2SUnitMsgABStrc {
     /* 0x00 */ uint8_t nUnitType;
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint8_t field_0x2;
@@ -2451,12 +2453,21 @@ union D2SUnitMsgArgsUnion {
 #endif // D2_DEFINED_D2SUnitMsgArgsUnion
 #ifndef D2_DEFINED_D2SUnitMsgStrc
 #define D2_DEFINED_D2SUnitMsgStrc
-struct __attribute__((packed)) D2SUnitMsgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SUnitMsgStrc {
     /* 0x00 */ struct D2SUnitMsgStrc * pNext;
     /* 0x04 */ uint8_t nOpcode; // S->C opcode the drain (SERVER_UnitQueuePacketSend) switches on; written as a byte
     /* 0x05 */ uint8_t pad_0x5[3]; // header padding before uArgs (zeroed by the dword store at +4)
     /* 0x08 */ D2SUnitMsgArgsUnion uArgs; // per-opcode payload; each writer allocates only 8 + its member size (0xC..0x28)
-};
+}; D2_PACKED_END
+static_assert(sizeof(void*) != 4 || offsetof(D2SUnitMsgStrc, uArgs) == 8, "D2SUnitMsgStrc header is 8 bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg23Strc) == 8, "UnitQueuePacket0x23 allocates 0x10");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg99Strc) == 0xc, "UnitQueuePacket0x99 allocates 0x14");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg9AStrc) == 0xc, "UnitQueuePacket0x9A allocates 0x14");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg9EStrc) == 0xc, "UnitQueuePacket0x9E allocates 0x14");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsgA1Strc) == 0x10, "UnitQueuePacket0xA1 allocates 0x18");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsgA4Strc) == 4, "UnitQueuePacket0xA4 allocates 0xc");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsgA5Strc) == 0xc, "UnitQueuePacket0xA5 allocates 0x14");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsgABStrc) == 0xc, "UnitQueuePacket0xAB allocates 0x14");
 #endif // D2_DEFINED_D2SUnitMsgStrc
 #ifndef D2_DEFINED_D2SUnitProxyStrc_Line0x85
 #define D2_DEFINED_D2SUnitProxyStrc_Line0x85
@@ -2470,16 +2481,16 @@ struct D2SUnitProxyStrc_Line0x85 {
 #endif // D2_DEFINED_D2SUnitProxyStrc_Line0x85
 #ifndef D2_DEFINED_D2TaskQueueSlotStrc
 #define D2_DEFINED_D2TaskQueueSlotStrc
-struct __attribute__((packed)) D2TaskQueueSlotStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TaskQueueSlotStrc {
     /* 0x00 */ uint32_t nSlotIndex; // index into gaTaskQueueHeadArray / aTaskQueueCriticalSections (0..31); stored at 005649c9
     /* 0x04 */ int32_t nTaskCount; // tasks enqueued into this slot; 0 at 005649cb, +1 per task at 00564ad6
     /* 0x08 */ D2LinkNodeStrc sTaskList; // self-linked head of this slot's task list (005649d2..005649d7)
     /* 0x10 */ D2LinkNodeStrc sSlotLink; // link in the gsTaskQueueListHead ring of slots
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2TaskQueueSlotStrc
 #ifndef D2_DEFINED_D2TimerStrc
 #define D2_DEFINED_D2TimerStrc
-struct __attribute__((packed)) D2TimerStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TimerStrc {
     /* 0x00 */ eD2TimerType nTimerType; // the type of the timer, this varies between unit types
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint16_t nFlags;
@@ -2494,15 +2505,15 @@ struct __attribute__((packed)) D2TimerStrc {
     /* 0x24 */ struct D2TimerStrc * pNextTimerOnUnit; // the next timer assigned to this unit
     /* 0x28 */ struct D2TimerStrc * pPrevTimerOnUnit; // previous timer on the same unit: EVENT_AllocTimerToUnit stores the new head into the old head's +0x28
     /* 0x2C */ BOOL (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *, eD2TimerTypeDWORD, int32_t, int32_t); // function called when the timer ends
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2TimerStrc
 #ifndef D2_DEFINED_D2TimerListStrc
 #define D2_DEFINED_D2TimerListStrc
-struct __attribute__((packed)) D2TimerListStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TimerListStrc {
     /* 0x0000 */ D2TimerStrc pTimerList[600]; // allocated in realtime
     /* 0x7080 */ struct D2TimerStrc * pFirstList; // head of this pool's free-timer list (initially &pTimerList[0])
     /* 0x7084 */ struct D2TimerListStrc * pNextList; // unknown whenever it actually points to another TimerList, always NULL
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2TimerListStrc
 #ifndef D2_DEFINED_D2TradeItemUidPairStrc
 #define D2_DEFINED_D2TradeItemUidPairStrc
@@ -2599,7 +2610,7 @@ struct D2UnitQuestDataListStrc {
 #endif // D2_DEFINED_D2UnitQuestDataListStrc
 #ifndef D2_DEFINED_D2UnknownCreateMonsterStrc
 #define D2_DEFINED_D2UnknownCreateMonsterStrc
-struct __attribute__((packed)) D2UnknownCreateMonsterStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UnknownCreateMonsterStrc {
     /* 0x00 */ struct SGAMEDATA * pGame;
     /* 0x04 */ struct D2RoomStrc * pRoom;
     /* 0x08 */ struct D2RoomCoordListStrc * pCoordList;
@@ -2610,11 +2621,11 @@ struct __attribute__((packed)) D2UnknownCreateMonsterStrc {
     /* 0x1C */ int nY;
     /* 0x20 */ int32_t nSpawnRadius;
     /* 0x24 */ int16_t nFlags;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2UnknownCreateMonsterStrc
 #ifndef D2_DEFINED_D2UnknownItemRelatedStruct
 #define D2_DEFINED_D2UnknownItemRelatedStruct
-struct __attribute__((packed)) D2UnknownItemRelatedStruct {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UnknownItemRelatedStruct {
     /* 0x00 */ char nEquipLoc; // 5-bit equip slot from save file
     /* 0x01 */ uint8_t nStorageType; // 3-bit storage location/page from save file
     /* 0x02 */ uint32_t nItemLevel;
@@ -2635,7 +2646,7 @@ struct __attribute__((packed)) D2UnknownItemRelatedStruct {
     /* 0x32 */ char szCustomName[16]; // inline strcpy at PLRSAVE_CreateItemFromSaveData copies this NUL-terminated field into D2ItemGenContextStrc.szCustomName (char[16] @0x58); extent 0x32..0x41 also runs exactly to wItemFormat @0x42
     /* 0x42 */ uint16_t wItemFormat;
     /* 0x44 */ char szCode[4];
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2UnknownItemRelatedStruct
 #ifndef D2_DEFINED_D2WarpChanceStrc
 #define D2_DEFINED_D2WarpChanceStrc

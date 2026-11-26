@@ -4,6 +4,7 @@
 #include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/SMem.data.h"
+static_assert(sizeof(void*) != 4 || sizeof(SMemHeapStatsStrc) == 0x18, "gaSMemHeapStats is 4096 records of 0x18 bytes on 32-bit");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -562,7 +563,7 @@ void __stdcall SMemInitPerfCounters() {
     /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ QueryPerformanceFrequency(&liFrequency);
     gnSMemPerfTicksPerMillisecond = (uint32_t)(liFrequency.QuadPart / 1000);
     gnSMemPerfTicksPerMicrosecond = (uint32_t)(liFrequency.QuadPart / 1000000);
-    memset(gaSMemHeapStats, 0, 0x18000);
+    memset(gaSMemHeapStats, 0, sizeof(gaSMemHeapStats));
     g_SMemLastTickCount = ::GetTickCount();
 }
 

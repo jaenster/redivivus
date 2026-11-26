@@ -4922,7 +4922,7 @@ void __stdcall UIMENU_MainScreenBeforeMenu() {
     char szUTF8Buffer[512] = {0};
     uint16_t wszWideBuffer[512];
     wszWideBuffer[0] = L'\0';
-    for (nBufferSize = 1; nBufferSize < 512; nBufferSize++) {
+    for (nBufferSize = 1; nBufferSize < (int)_countof(wszWideBuffer); nBufferSize++) {
       wszWideBuffer[nBufferSize] = L'\0';
     }
 
@@ -5674,17 +5674,17 @@ uint16_t * __stdcall MAINMENU_LoadCreditsFile(uint32_t * pnCharCount) {
       } else if (*pFileBuf == -0x101) {
         nCharCount = (int)(nFileSize - 2) / 2;
         *pnCharCount = nCharCount;
-        pwText = (uint16_t*)D2_ALLOC_AT(nCharCount * 2, ".\\Src\\MainMenus.cpp", 0x13b8);
-        memcpy(pwText, pFileBuf + 1, *pnCharCount * 2);
+        pwText = (uint16_t*)D2_ALLOC_AT(nCharCount * sizeof(uint16_t), ".\\Src\\MainMenus.cpp", 0x13b8);
+        memcpy(pwText, pFileBuf + 1, *pnCharCount * sizeof(uint16_t));
       } else if (*pFileBuf == -2) {
         nCharCount = (int)(nFileSize - 2) / 2;
         *pnCharCount = nCharCount;
-        pwText = (uint16_t*)D2_ALLOC_AT(nCharCount * 2, ".\\Src\\MainMenus.cpp", 0x13bf);
-        memcpy(pwText, pFileBuf + 1, *pnCharCount * 2);
+        pwText = (uint16_t*)D2_ALLOC_AT(nCharCount * sizeof(uint16_t), ".\\Src\\MainMenus.cpp", 0x13bf);
+        memcpy(pwText, pFileBuf + 1, *pnCharCount * sizeof(uint16_t));
         CRYPTO_ByteSwap16Array(pwText, *pnCharCount);
       } else {
         *pnCharCount = nFileSize;
-        pwText = (uint16_t*)D2_ALLOC_AT(nFileSize * 2 + 1, ".\\Src\\MainMenus.cpp", 0x13c8);
+        pwText = (uint16_t*)D2_ALLOC_AT(nFileSize * sizeof(uint16_t) + 1, ".\\Src\\MainMenus.cpp", 0x13c8);
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pwText, (char*)pFileBuf, nFileSize);
       }
 
@@ -5753,7 +5753,7 @@ int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
     uint32_t nCharCount = 0;
     uint16_t* pwCursor = MAINMENU_LoadCreditsFile(&nCharCount);
     uint16_t* pwTextBuf = pwCursor;
-    for (i = 0; i < 0x400; i++) {
+    for (i = 0; i < (int)_countof(awLineBuf); i++) {
       awLineBuf[i] = L'\0';
     }
 
@@ -5796,7 +5796,7 @@ int __fastcall MAINMENU_DisplayCredits(int32_t nReserved) {
             break;
           }
 
-          for (i = 0; i < 0x100; i++) {
+          for (i = 0; i < (int)_countof(awCol1); i++) {
             awCol1[i] = L'\0';
           }
 
@@ -6140,18 +6140,18 @@ void __stdcall UIMENU_ShowRealmNameOnButton() {
     uint16_t awButtonText[256];
     D2BNetGatewayAccessStr* pGateway = (D2BNetGatewayAccessStr*)Launcher::gpBNetCallbacks->pfnBnetLoadAndReturn();
     Storm::Source::SSTR::SStrCopy(szGateway, Bnclient::BNGatewayAccess::Name(pGateway, pGateway->nCurGatewayIdx), 0x100);
-    for (i = 0; i < 0x100; i++) {
+    for (i = 0; i < (int)_countof(awGatewayW); i++) {
       awGatewayW[i] = L'\0';
     }
 
     D2Lang::UTF8_ConvertToWideChar(awGatewayW, szGateway, 0x100);
-    for (i = 0; i < 0x100; i++) {
+    for (i = 0; i < (int)_countof(awFormat); i++) {
       awFormat[i] = L'\0';
     }
 
     uint16_t* pwScratch = D2Lang::StrTable::strtable::GetLocaleString(0x2b29);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(awFormat, pwScratch);
-    for (i = 0; i < 0x100; i++) {
+    for (i = 0; i < (int)_countof(awButtonText); i++) {
       awButtonText[i] = L'\0';
     }
 
@@ -6813,7 +6813,7 @@ int __stdcall MAINMENU_PollMCPCreateGamePump(int nFrameIndex) {
 
 static int __stdcall MAINMENU_SetMultilineText(uint16_t * wszText, ::D2WinTextBox * pTextBox, int32_t nColor, bool bCentered) {
     uint16_t wszBuffer[1024];
-    for (int nClearCount = 0; nClearCount < 0x400; nClearCount++) {
+    for (int nClearCount = 0; nClearCount < (int)_countof(wszBuffer); nClearCount++) {
       wszBuffer[nClearCount] = L'\0';
     }
 
@@ -7126,7 +7126,7 @@ BOOL __stdcall UIMENU_ShowTermsOfService() {
         nCharCount = nAllocSize - 2 >> 1;
         CRYPTO_ByteSwap16Array(pwszText, nCharCount);
       } else {
-        pwszText = (uint16_t*)D2_ALLOC_AT(nAllocSize * 2 + 1, ".\\Src\\MainMenus.cpp", 0xc6b);
+        pwszText = (uint16_t*)D2_ALLOC_AT(nAllocSize * sizeof(uint16_t) + 1, ".\\Src\\MainMenus.cpp", 0xc6b);
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(pwszText, (char*)pFileBufferSrc, nAllocSize);
         D2_FREE_AT(pFileBufferSrc, ".\\Src\\MainMenus.cpp", 0xc6d);
         pFileBuffer = pwszText;
@@ -7256,7 +7256,7 @@ int __stdcall ClickOnClassCreate(D2ControlMsg * pControlMsg) {
         }
 
         ppAnimIter++;
-      } while ((intptr_t)ppAnimIter < (intptr_t)((char*)&gaAnimImgCharCreateByClass + 20));
+      } while ((intptr_t)ppAnimIter < (intptr_t)(gaAnimImgCharCreateByClass + 5));
     }
 
     uint32_t nPrevClassId;
@@ -8481,7 +8481,7 @@ int32_t __fastcall fAPPMODE_launcher_ReturnAppMode_Caller(D2IniConfigStrc * pD2I
     IMAGE_FreePredefinedImages();
     D2Lang::StrTable::strtable::STRINGTABLE_FreeStringTables();
     D2IniConfigStrc* pIniData = D2IniData_launcher;
-    memset(pIniData->szLastKnownIpTcpIp, 0, 24 * sizeof(pIniData->szLastKnownIpTcpIp[0]));
+    memset(pIniData->szLastKnownIpTcpIp, 0, sizeof(pIniData->szLastKnownIpTcpIp));
     D2Win::Src::D2WinMain::FreeInGameGFX();
     return gnSelectedCharGameState;
 }

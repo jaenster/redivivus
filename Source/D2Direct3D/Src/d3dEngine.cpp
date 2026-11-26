@@ -21,6 +21,8 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(DDSURFACEDESC2) == 0x7c, "DDSURFACEDESC2: dwSize and the clear after it must be the 0x7c bytes 1.14d uses");
+
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #endif
@@ -121,8 +123,8 @@ void __stdcall RENDERER_D3D_CreateFontTextures() {
       DWORD dwHResult;
       /* UINT format for DrawTextA */ /* LPRECT lprc for DrawTextA */ /* int cchText for DrawTextA */ /* LPCSTR lpchText for DrawTextA */ /* HDC hdc for DrawTextA */ __frame0.chChar = (char)__frame0.nCurrentChar;
       DrawTextA(hdc, &__frame0.chChar, 1, &rectGlyph, 0);
-      ddsdSurfSize.dwSize = 0x7c;
-      memset(&ddsdSurfSize.dwFlags, 0, 0x78);
+      ddsdSurfSize.dwSize = sizeof(ddsdSurfSize);
+      memset(&ddsdSurfSize.dwFlags, 0, sizeof(ddsdSurfSize) - sizeof(ddsdSurfSize.dwSize));
       dwHResult = __frame0.pMemorySurface->lpVtbl->Lock(__frame0.pMemorySurface, nullptr, &ddsdSurfSize, 0x21, nullptr);
       if (dwHResult) {
         DIRECTD3D_LogError("Failed to lock memory surface", dwHResult);
@@ -187,7 +189,7 @@ void __fastcall Unreferenced_006b74f0(void * pPalette) {
       return;
     }
 
-    for (int i = 0; i < 96; i++) {
+    for (int i = 0; i < (int)_countof(g_pFontTextureSurface); i++) {
       IDirectDrawSurface7* pSurface = (IDirectDrawSurface7*)g_pFontTextureSurface[i];
       if (pSurface) {
         DWORD nResult = pSurface->lpVtbl->SetPalette(pSurface, (IDirectDrawPalette*)pPalette);

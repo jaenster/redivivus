@@ -17,12 +17,12 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x82
 #define D2_DEFINED_D2GSPacketSrv0x82
-struct __attribute__((packed)) D2GSPacketSrv0x82 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x82 {
     /* 0x00 */ uint8_t nPacketId; // Packet opcode (always 0x82)
     /* 0x01 */ uint32_t nOwnerGUID; // GUID of the roster entry/player
     /* 0x05 */ char szOwnerName[16]; // Null-terminated owner display name
     /* 0x15 */ uint32_t nSourceObjectGUID; // GUID of the portal or object being updated
     /* 0x19 */ uint32_t nPortalDestinationGUID; // GUID of the portal destination/level object
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x82

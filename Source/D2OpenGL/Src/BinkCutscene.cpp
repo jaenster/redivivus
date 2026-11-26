@@ -94,17 +94,17 @@ void OGL_CutsceneBeginGL(int nScreenWidth, int nScreenHeight, int nTexWidth, int
     }
 
     glActiveTexture(0x84c0);
-    int nCount = 3;
-    GLboolean* pState = &D2OGLCutsceneCapStrc_ARRAY_003ce7d0[0].bSaved;
+    int nCount = _countof(D2OGLCutsceneCapStrc_ARRAY_003ce7d0);
+    D2OGLCutsceneCapStrc* pCap = D2OGLCutsceneCapStrc_ARRAY_003ce7d0;
     do {
-      glGetBooleanv(((D2OGLCutsceneCapStrc*)(pState - 4))->eCap, pState);
-      if (pState[1] == '\0') {
-        glDisable(((D2OGLCutsceneCapStrc*)(pState - 4))->eCap);
+      glGetBooleanv(pCap->eCap, &pCap->bSaved);
+      if (pCap->bWanted == '\0') {
+        glDisable(pCap->eCap);
       } else {
-        glEnable(((D2OGLCutsceneCapStrc*)(pState - 4))->eCap);
+        glEnable(pCap->eCap);
       }
 
-      pState += 8;
+      pCap++;
       nCount--;
     } while (nCount);
 }
@@ -113,16 +113,16 @@ void OGL_CutsceneBeginGL(int nScreenWidth, int nScreenHeight, int nTexWidth, int
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002de7e4
 void OGL_CutsceneRestoreGL() {
-    int nCount = 3;
-    GLboolean* pState = &D2OGLCutsceneCapStrc_ARRAY_003ce7d0[0].bSaved;
+    int nCount = _countof(D2OGLCutsceneCapStrc_ARRAY_003ce7d0);
+    D2OGLCutsceneCapStrc* pCap = D2OGLCutsceneCapStrc_ARRAY_003ce7d0;
     do {
-      if (*pState == '\0') {
-        glDisable(((D2OGLCutsceneCapStrc*)(pState - 4))->eCap);
+      if (pCap->bSaved == '\0') {
+        glDisable(pCap->eCap);
       } else {
-        glEnable(((D2OGLCutsceneCapStrc*)(pState - 4))->eCap);
+        glEnable(pCap->eCap);
       }
 
-      pState += 8;
+      pCap++;
       nCount--;
     } while (nCount);
 }

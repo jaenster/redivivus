@@ -41,12 +41,12 @@ struct D2ObjectControlStrc;
 // Data types
 #ifndef D2_DEFINED_D2ArenaControlStrc
 #define D2_DEFINED_D2ArenaControlStrc
-struct __attribute__((packed)) D2ArenaControlStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ArenaControlStrc {
     /* 0x00 */ eD2LevelId eLevelId; // Arena town level ID, read by GAME_GetTownLevelFromArenaCtrl
     /* 0x04 */ int nArenaTxtRecord; // Index into ArenaTxt table - selects score values for kills/deaths
     /* 0x08 */ eD2ArenaFlags eArenaFlags; // Masked with 0x3179C7 from game creation. Bit 0x400 = scores dirty.
     /* 0x0C */ int nTemplateLevel; // Arena map template - only low byte used
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ArenaControlStrc
 #ifndef D2_DEFINED_D2GameNpcArrayStrc
@@ -70,7 +70,7 @@ struct D2GameNpcControlStrc {
 #endif // D2_DEFINED_D2GameNpcControlStrc
 #ifndef D2_DEFINED_D2MonsterRegionStrc
 #define D2_DEFINED_D2MonsterRegionStrc
-struct __attribute__((packed)) D2MonsterRegionStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MonsterRegionStrc {
     /* 0x000 */ uint8_t nAct; // Act number from LevelsTxt
     /* 0x001 */ uint8_t pad_0x1[3];
     /* 0x004 */ int nRoomsCount; // Number of rooms processed
@@ -98,7 +98,7 @@ struct __attribute__((packed)) D2MonsterRegionStrc {
     /* 0x2DB */ uint8_t field_0x2db;
     /* 0x2DC */ int dwDungeonLevel; // MonLvl or MonLvlEx from Levels.txt
     /* 0x2E0 */ int dwDungeonLevelEx; // Same as dwDungeonLevel (set twice)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonsterRegionStrc
 #ifndef D2_DEFINED_D2ObjectRngShrines
@@ -125,14 +125,14 @@ struct D2QuestControlStrc {
 #endif // D2_DEFINED_D2QuestControlStrc
 #ifndef D2_DEFINED_D2TimerQueueStrc
 #define D2_DEFINED_D2TimerQueueStrc
-struct __attribute__((packed)) D2TimerQueueStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TimerQueueStrc {
     /* 0x000 */ int nIndex;
     /* 0x004 */ struct D2TimerStrc * pActiveTimersByType[5][64]; // 5 rows (unit type) of 64 frame buckets; type stride 0x100
     /* 0x504 */ struct D2TimerStrc * pDispatchedTimersByType[5][64]; // 5 rows (unit type) of 64 frame buckets; type stride 0x100
     /* 0xA04 */ struct D2TimerStrc * pTimerListByType[5]; // Array of Events for each unit Type
     /* 0xA18 */ struct D2TimerStrc * pTimerTemp; // next timer saved across the callback by the EVENT_Dispatch*Timers loops; compared against a timer in EVENT_RemoveAndRecycleTimer
     /* 0xA1C */ struct D2TimerListStrc * pTimerList;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2TimerQueueStrc
 #ifndef D2_DEFINED_D2UnitPartyControl
@@ -231,5 +231,14 @@ namespace D2Client::GAME::Game {
 #endif // D2_MODULE_D2Client
 
 } // namespace D2Client::GAME::Game
+
+static_assert(sizeof(void*) != 4 || sizeof(::SGAMEDATA) == 0x1df4, "SGAMEDATA: the 32-bit layout must be the 0x1df4 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || offsetof(::SGAMEDATA, m_linktoslot) == 4, "SGAMEDATA: the slot link sits at 4, the reuse lists' link offset");
+static_assert(sizeof(void*) != 4 || offsetof(::SGAMEDATA, m_linktofull) == 0xc, "SGAMEDATA: the full-list link sits at 0xc");
+static_assert(sizeof(void*) != 4 || offsetof(::SGAMEDATA, bUpdateStatsTick) - offsetof(::SGAMEDATA, nPathCount) == 0x48, "SGAMEDATA: the path counters and their sample count are one 0x48-byte block");
+// The hash table's chunk type, named so offsetof can take it (a template-id has a comma).
+typedef TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE> SGAMEDATAChunk;
+static_assert(sizeof(void*) != 4 || sizeof(SGAMEDATAChunk) == 0x18, "TSHashObjectChunk<SGAMEDATA>: the 32-bit layout must be the 0x18 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || offsetof(SGAMEDATAChunk, m_link) == 0x10, "TSHashObjectChunk<SGAMEDATA>: the chunk list links at 0x10");
 
 #include "Source/D2Client/Game/Game/SGAMEDATA.inline.h"

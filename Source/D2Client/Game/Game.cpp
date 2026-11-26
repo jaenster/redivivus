@@ -1327,7 +1327,7 @@ void __stdcall Congratz_SetOkClicked(D2UIMouseMsgStrc * pMsg) {
 int32_t __fastcall GAMEDATA_GetCenteredTextX(uint16_t nStringId, int32_t nCenterX) {
     int iClear;
     uint16_t wszText[100];
-    for (iClear = 0; iClear < 0x64; iClear++) {
+    for (iClear = 0; iClear < (int)_countof(wszText); iClear++) {
       wszText[iClear] = L'\0';
     }
 
@@ -1341,7 +1341,7 @@ void __stdcall GAMEDATA_DrawLoadingScreenText() {
     int iLoop;
     uint16_t wszText[100];
     int nCenterX = UI::ui::ScreenSizeX / 2;
-    for (iLoop = 0; iLoop < 0x64; iLoop++) {
+    for (iLoop = 0; iLoop < (int)_countof(wszText); iLoop++) {
       wszText[iLoop] = L'\0';
     }
 
@@ -1366,7 +1366,7 @@ void __stdcall GAMEDATA_DrawLoadingScreenText() {
     }
 
     nCenterX = UI::ui::ScreenSizeX / 2;
-    for (iLoop = 0; iLoop < 0x64; iLoop++) {
+    for (iLoop = 0; iLoop < (int)_countof(wszText); iLoop++) {
       wszText[iLoop] = L'\0';
     }
 
@@ -1636,7 +1636,7 @@ void __fastcall ClientInit_CharName(D2IniConfigStrc * pIniConfig) {
 
     int nLength = strlen(szName);
     nLength++;
-    memset(D2Game::Save::szSaveCharacterName, 0, 0x10);
+    memset(D2Game::Save::szSaveCharacterName, 0, sizeof(D2Game::Save::szSaveCharacterName));
     if (nLength > 0x10) {
       nLength = 0x10;
     }
@@ -2179,7 +2179,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
     uint16_t awcName[100];
     D2CharPortraitTextStrc sText;
     D2IniConfigStrc* pIniData = ClientModeInGame::D2IniData_Getter();
-    for (nTitleIndex = 0; nTitleIndex < 0x64; nTitleIndex++) {
+    for (nTitleIndex = 0; nTitleIndex < (int)_countof(awcName); nTitleIndex++) {
       awcName[nTitleIndex] = L'\0';
     }
 
@@ -2192,7 +2192,7 @@ void __stdcall GAMEDATA_DrawCharacterPortrait() {
     uint8_t nClassId = nD2PlayerClassID;
     uint32_t nHardcore = ePlayerStatus & PLAYERSTATUS_Hardcore;
     uint32_t nExpansion = ePlayerStatus & PLAYERSTATUS_Expansion;
-    for (nTitleIndex = 0; nTitleIndex < 0x64; nTitleIndex++) {
+    for (nTitleIndex = 0; nTitleIndex < (int)_countof(awcTitle); nTitleIndex++) {
       awcTitle[nTitleIndex] = L'\0';
     }
 

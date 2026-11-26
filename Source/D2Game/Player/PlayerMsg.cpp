@@ -2452,7 +2452,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
       if (!nMsgLen) {
         nMsgLen = pBuffer.szMessage;
         pMsgBufDst = (uint32_t*)sPacket.szMessage;
-        memcpy(pMsgBufDst, nMsgLen, 0x100);
+        memcpy(pMsgBufDst, nMsgLen, sizeof(sPacket.szMessage));
         sPacket.nMessageColor = '\0';
         sPacket.nPacketId = '&';
         sPacket.nUnitGUID = 0;
@@ -2482,8 +2482,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
           if (g_bWhisperSquelched) {
             sEventPacket.nMessageType = '\0';
             sEventPacket.nArgTypes = '\0';
-            memset(sEventPacket.szName1, 0, 16 * sizeof(sEventPacket.szName1[0]));
-            memset(sEventPacket.szName2, 0, 16 * sizeof(sEventPacket.szName2[0]));
+            memset(sEventPacket.szName1, 0, sizeof(sEventPacket.szName1));
+            memset(sEventPacket.szName2, 0, sizeof(sEventPacket.szName2));
             sEventPacket.nPacketId = 'Z';
             sEventPacket.nColor = '\0';
             sEventPacket.nArg = 0;
@@ -2503,7 +2503,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
               sWhisperEchoPacket.nLanguage = '\0';
               nMsgLen = pBuffer.szMessage;
               szFilteredMsg = sWhisperEchoPacket.szMessage;
-              memcpy(szFilteredMsg, nMsgLen, 0x100);
+              memcpy(szFilteredMsg, nMsgLen, sizeof(sWhisperEchoPacket.szMessage));
               pSenderClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrMsg.cpp", 0xa46);
               GAME::SCmd::NET_D2GS_SERVER_Send_0x26_CHATSTART(pSenderClient, &sWhisperEchoPacket);
               return SERVERSTATUS_OK;
@@ -2511,8 +2511,8 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
 
             sEventPacket.nMessageType = '\0';
             sEventPacket.nArgTypes = '\0';
-            memset(sEventPacket.szName1, 0, 16 * sizeof(sEventPacket.szName1[0]));
-            memset(sEventPacket.szName2, 0, 16 * sizeof(sEventPacket.szName2[0]));
+            memset(sEventPacket.szName1, 0, sizeof(sEventPacket.szName1));
+            memset(sEventPacket.szName2, 0, sizeof(sEventPacket.szName2));
             sEventPacket.nColor = '\0';
             sEventPacket.nPacketId = 'Z';
             sEventPacket.nArg = 0;
@@ -2557,7 +2557,7 @@ void __fastcall CHAT_BroadcastMessageToAllClients(::SGAMEDATA * pGame, uint32_t 
     aPacketBuf.nUnitGUID = 0;
     aPacketBuf.nMsgSubType = '\0';
     char* pMsgBufDst = aPacketBuf.szMessage;
-    memcpy(pMsgBufDst, pdwMessage, 0x100);
+    memcpy(pMsgBufDst, pdwMessage, sizeof(aPacketBuf.szMessage));
     aPacketBuf.nLanguage = '\0';
     GAME::Server::ForEachClient(pGame, (fpForEachClientFn)NET_D2GS_SERVER_Send_0x26_Chat, &aPacketBuf);
 }

@@ -26,6 +26,10 @@
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Seed.inline.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2UniqueItemsTxt) == 0x14c, "uniqueitems.txt rows are 0x14c bytes");
+
+static_assert(sizeof(void*) != 4 || sizeof(D2ItemGenContextStrc) == 0x84, "the item drop paths copy a 0x84-byte D2ItemGenContextStrc");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -456,7 +460,7 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
     BOOL BVar1;
     int32_t nWeightAccum;
     D2DataTableTxtStrc* pDataTable;
-    uint8_t* pUniqueEntryPtr;
+    D2UniqueItemsTxt* pUniqueEntryPtr;
     int nRarityWeight;
     uint32_t nUniqueIdx;
     uint32_t nChosenUniqueIdx;
@@ -511,20 +515,20 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
         nTotalRarityWeight = 0;
         nChosenUniqueIdx = -1;
         if (D2Common::ITEMS::Items::sgptDataTable->nTxtUniqueItemsSize > 0) {
-          pUniqueEntryPtr = (uint8_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + 0x2c;
+          pUniqueEntryPtr = D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems;
           pDataTable = D2Common::ITEMS::Items::sgptDataTable;
           do {
-            if ((*(uint16_t*)(pUniqueEntryPtr - 8) < 100 || 99 < wItemVersion) && Fog::BitBuffer::gadwBitMasks[0] & *pUniqueEntryPtr && pItemsTxt->dwCode == *(int*)(pUniqueEntryPtr - 4) && (pGame->nGameType != SGAMETYPE_BNET_HOST || pGame->eGameType != GAMETYPE_SINGLEPLAYER || !(Fog::BitBuffer::gadwBitMasks[3] & *pUniqueEntryPtr))) {
+            if (((uint16_t)pUniqueEntryPtr->version < 100 || 99 < wItemVersion) && Fog::BitBuffer::gadwBitMasks[0] & pUniqueEntryPtr->aFlagBytes[0] && pItemsTxt->dwCode == (int)pUniqueEntryPtr->dwItemCode && (pGame->nGameType != SGAMETYPE_BNET_HOST || pGame->eGameType != GAMETYPE_SINGLEPLAYER || !(Fog::BitBuffer::gadwBitMasks[3] & pUniqueEntryPtr->aFlagBytes[0]))) {
               nRollResult = D2Common::ITEMS::Items::ITEM_GetItemData_nItemLevel(pUnit);
               pDataTable = D2Common::ITEMS::Items::sgptDataTable;
-              if (*(short int*)(pUniqueEntryPtr + 8) <= nRollResult) {
+              if (pUniqueEntryPtr->lvl <= nRollResult) {
                 if (pItemGenContext->dwFileIndex > 0 && pItemGenContext->dwFileIndex - 1 == nUniqueIdx) {
                   nChosenUniqueIdx = nUniqueIdx;
                 }
 
                 gUniqueCandidatePool.aCandidates[nRarityWeight].nUniqueIdx = nUniqueIdx;
                 gUniqueCandidatePool.aCandidates[nRarityWeight].nCumulativeWeight = nTotalRarityWeight;
-                nCandidateCount = *(int*)(pUniqueEntryPtr + 4);
+                nCandidateCount = pUniqueEntryPtr->rarity;
                 nRarityWeight++;
                 if (nCandidateCount < 1) {
                   nCandidateCount = 1;
@@ -536,7 +540,7 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
             }
 
             nUniqueIdx++;
-            pUniqueEntryPtr += 0x14c;
+            pUniqueEntryPtr++;
           } while ((int)nUniqueIdx < pDataTable->nTxtUniqueItemsSize);
 
           if (nRarityWeight > 0) {
@@ -589,10 +593,10 @@ BOOL __stdcall ITEM_RollUniqueItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2It
         return 0;
       }
 
-      pUniqueEntryPtr = (uint8_t*)D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems + 0x2c;
-      while (*(uint16_t*)(pUniqueEntryPtr - 8) >= 100 || !(Fog::BitBuffer::gadwBitMasks[0] & *pUniqueEntryPtr) || pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER && Fog::BitBuffer::gadwBitMasks[3] & *pUniqueEntryPtr || pItemsTxt->dwCode != *(int*)(pUniqueEntryPtr - 4) || (bHasDurability = ITEM_CheckUniqueBitmask(bDurabilityCheck, pGame) , bHasDurability && pItemsTxt->bQuest == '\0')) {
+      pUniqueEntryPtr = D2Common::ITEMS::Items::sgptDataTable->pTxtUniqueItems;
+      while ((uint16_t)pUniqueEntryPtr->version >= 100 || !(Fog::BitBuffer::gadwBitMasks[0] & pUniqueEntryPtr->aFlagBytes[0]) || pGame->nGameType == SGAMETYPE_BNET_HOST && pGame->eGameType == GAMETYPE_SINGLEPLAYER && Fog::BitBuffer::gadwBitMasks[3] & pUniqueEntryPtr->aFlagBytes[0] || pItemsTxt->dwCode != (int)pUniqueEntryPtr->dwItemCode || (bHasDurability = ITEM_CheckUniqueBitmask(bDurabilityCheck, pGame) , bHasDurability && pItemsTxt->bQuest == '\0')) {
         bDurabilityCheck++;
-        pUniqueEntryPtr += 0x14c;
+        pUniqueEntryPtr++;
         if ((int)bDurabilityCheck >= nRarityWeight) {
           return 0;
         }
@@ -2605,7 +2609,7 @@ void __fastcall DROP_SpawnRandomItemInRoom(::SGAMEDATA * pGame, D2RoomStrc * pRo
       ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
       if (ppUnitTable) {
         pCtxIter = &sItemGenCtx;
-        memcpy(ppUnitTable, pCtxIter, 0x84);
+        memcpy(ppUnitTable, pCtxIter, sizeof(D2ItemGenContextStrc));
         return;
       }
     }
@@ -2953,7 +2957,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemToDrop(::SGAMEDATA * pGame, D2UnitStrc * 
       pDVar1 = ITEM_CreateItemInstance(pGame, &sItemGenCtx, 0);
       if (ppUnit) {
         pCtxIter = &sItemGenCtx;
-        memcpy(ppUnit, pCtxIter, 0x84);
+        memcpy(ppUnit, pCtxIter, sizeof(D2ItemGenContextStrc));
         return pDVar1;
       }
     } else {

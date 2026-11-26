@@ -62,7 +62,7 @@ struct D2CubeOutputStrc {
 #endif // D2_DEFINED_D2CubeOutputStrc
 #ifndef D2_DEFINED_D2CubeMainTxt
 #define D2_DEFINED_D2CubeMainTxt
-struct __attribute__((packed)) D2CubeMainTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CubeMainTxt {
     /* 0x00 */ uint8_t nEnabled;
     /* 0x01 */ uint8_t nLadder;
     /* 0x02 */ uint8_t nMinDiff;
@@ -76,7 +76,7 @@ struct __attribute__((packed)) D2CubeMainTxt {
     /* 0x12 */ uint16_t wVersion;
     /* 0x14 */ D2CubeInputStrc pInputItem[7];
     /* 0x4C */ D2CubeOutputStrc pOutputItem[3];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2CubeMainTxt
 // =============================================================================

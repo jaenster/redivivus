@@ -31,7 +31,7 @@ uint16_t * __fastcall INV_SkipColorCodeSuffix(uint16_t * wszText) {
 void __fastcall INV_SubstituteFormatToken(uint16_t * wszText, int32_t nTokenIndex, uint16_t * wszReplacement) {
     int nCopied;
     uint16_t wszWorkBuffer[400];
-    for (nCopied = 0; nCopied < 400; nCopied++) {
+    for (nCopied = 0; nCopied < (int)_countof(wszWorkBuffer); nCopied++) {
       wszWorkBuffer[nCopied] = L'\0';
     }
 

@@ -26,10 +26,10 @@ typedef uint32_t eD2LevelId;
 // Data types
 #ifndef D2_DEFINED_D2LevelPlayerCountArgStrc
 #define D2_DEFINED_D2LevelPlayerCountArgStrc
-struct __attribute__((packed)) D2LevelPlayerCountArgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2LevelPlayerCountArgStrc {
     /* 0x00 */ eD2LevelId eLevelId; // Level to count in; compared with DRLGROOM_GetLevelIdFromRoom of each unit's room
     /* 0x04 */ int32_t nCount; // Incremented by the IterateAllUnits callback for each unit whose room is in eLevelId; IterateAllUnits walks only pUnitList[0], so these are players
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2LevelPlayerCountArgStrc
 #ifndef D2_DEFINED_D2MercForHire
@@ -119,7 +119,7 @@ struct D2SUnitProxyStrc_Line0x85 {
 #endif // D2_DEFINED_D2SUnitProxyStrc_Line0x85
 #ifndef D2_DEFINED_D2GameNpcStrc
 #define D2_DEFINED_D2GameNpcStrc
-struct __attribute__((packed)) D2GameNpcStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GameNpcStrc {
     /* 0x00 */ int nMonStatsId;
     /* 0x04 */ struct D2InventoryStrc * pInventory;
     /* 0x08 */ struct D2NpcProxyInventoryStrc * pProxyInventories; // head of D2NpcProxyInventoryStrc nodes (GetPlayerProxyInventory walks it, RemovePlayerProxyInventory unlinks)
@@ -131,7 +131,7 @@ struct __attribute__((packed)) D2GameNpcStrc {
     /* 0x20 */ D2NpcTradeStateStrc sTrade; // trade/shop state block; callers pass its address as one object
     /* 0x3C */ int unk0x3C;
     /* 0x40 */ int nNpcGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GameNpcStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)

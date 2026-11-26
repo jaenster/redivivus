@@ -21,7 +21,13 @@ uint16_t gaPossessiveNameData = 0x2073; D2_GLOBAL_GUARD(gaPossessiveNameData, "g
 static uint16_t gnUnicodeKamapEntryCount = 0; D2_STATIC_GUARD(gnUnicodeKamapEntryCount, "gnUnicodeKamapEntryCount");
 static uint8_t gnUnicodeKamapGroupCount = 0; D2_STATIC_GUARD(gnUnicodeKamapGroupCount, "gnUnicodeKamapGroupCount");
 static D2UnicodeKamapEntryStrc * gpUnicodeKamapToCodeTable = 0; D2_STATIC_GUARD(gpUnicodeKamapToCodeTable, "gpUnicodeKamapToCodeTable");
-static uint8_t * g_pUnicodeKamapTable = 0; D2_STATIC_GUARD(g_pUnicodeKamapTable, "g_pUnicodeKamapTable");
+struct D2UnicodeKamapRangeStrc {
+    /* 0x00 */ uint8_t bLow;
+    /* 0x01 */ uint8_t bHigh;
+};
+static_assert(sizeof(void*) != 4 || sizeof(D2UnicodeKamapRangeStrc) == 0x2, "KAMAP range is 2 bytes");
+static_assert(sizeof(void*) != 4 || sizeof(D2UnicodeKamapEntryStrc) == 0x4, "KAMAP entry is 4 bytes");
+static D2UnicodeKamapRangeStrc * g_pUnicodeKamapTable = 0; D2_STATIC_GUARD(g_pUnicodeKamapTable, "g_pUnicodeKamapTable");
 static uint16_t * gpUnicodeCodeToMapTable = 0; D2_STATIC_GUARD(gpUnicodeCodeToMapTable, "gpUnicodeCodeToMapTable");
 
 namespace D2Lang::Unicode::UNISYS {
@@ -416,7 +422,7 @@ void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * w
 
             case L'u':
               wszNumBuf[0] = L'\0';
-            memset(wszNumBuf + 1, 0, 14 * sizeof(wszNumBuf[0]));
+            memset(wszNumBuf + 1, 0, sizeof(wszNumBuf) - 2 * sizeof(wszNumBuf[0]));
             if (wszFmtBuf[2] == L'd') {
               _itoa((int)(intptr_t)pArgSave, szNumBuf, 10); // the vararg slot holds an int for %d: its low 32 bits on x64
             } else {
@@ -621,7 +627,7 @@ char * __fastcall UNICODE_WideToMultiByte(char * pszDst, uint16_t * pwszSrc, int
 bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t * pwChar) {
     uint16_t wszTable[20];
     int i = 0;
-    for (int iFill = 0; iFill < 20; iFill++) {
+    for (int iFill = 0; iFill < (int)_countof(wszTable); iFill++) {
       wszTable[iFill] = L'\0';
     }
 
@@ -677,7 +683,7 @@ bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t *
 static bool UNICODE_CheckLeadingPunctuation(char * pszTable, uint16_t * wszText) {
     uint16_t wszTable[21];
     int i = 0;
-    for (int iFill = 1; iFill < 21; iFill++) {
+    for (int iFill = 1; iFill < (int)_countof(wszTable); iFill++) {
       wszTable[iFill] = L'\0';
     }
 
@@ -839,7 +845,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
           szSuffix[1] = ' ';
           szSuffix[2] = '\0';
         } else {
-          memcpy(szSuffix, "\'s ", 4);
+          memcpy(szSuffix, "\'s ", sizeof("\'s "));
         }
 
         pszSuffix = szSuffix;
@@ -847,7 +853,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
         goto append_possessive_suffix;
         case 1:
           STRING_CopyWideString(wszText1, wszSuffix);
-        memcpy(szSuffix, " de ", 5);
+        memcpy(szSuffix, " de ", sizeof(" de "));
         pszSuffix = szSuffix;
         pszSuffix = pszSuffix + strlen(pszSuffix) + 1;
         break;
@@ -876,9 +882,9 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
           STRING_CopyWideString(wszText1, wszSuffix);
         bIsPunct = UNICODE_CheckTrailingPunctuation("aeiou", (uint16_t*)wszText2);
         if (bIsPunct) {
-          memcpy(szSuffix, " d\'", 4);
+          memcpy(szSuffix, " d\'", sizeof(" d\'"));
         } else {
-          memcpy(szSuffix, " de ", 5);
+          memcpy(szSuffix, " de ", sizeof(" de "));
         }
 
         pszSuffix = szSuffix;
@@ -888,7 +894,7 @@ void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wsz
           goto default_case;
         case 5:
           STRING_CopyWideString(wszText1, wszSuffix);
-        memcpy(szSuffix, " di ", 5);
+        memcpy(szSuffix, " di ", sizeof(" di "));
         pszSuffix = szSuffix;
         pszSuffix = pszSuffix + strlen(pszSuffix) + 1;
         break;
@@ -929,12 +935,12 @@ void UNICODE_AllocBuffer(uint32_t nSize) {
 }
 
 void __thiscall UNICODE_ReadByteRange(void * pThis, uint8_t * pByteRange) {
-    *(uint16_t*)pThis = (uint16_t)*pByteRange;
-    *(uint16_t*)((char*)pThis + 2) = (uint16_t)pByteRange[2];
+    ((D2UnicodeKamapEntryStrc*)pThis)->wCode = (uint16_t)*pByteRange;
+    ((D2UnicodeKamapEntryStrc*)pThis)->wUnicode = (uint16_t)pByteRange[2];
 }
 
 uint32_t __thiscall UNICODE_CheckByteInRange(void * pThis, uint8_t byValue) {
-    if (*(uint8_t*)pThis <= byValue && byValue <= *(uint8_t*)((char*)pThis + 1)) {
+    if (((D2UnicodeKamapRangeStrc*)pThis)->bLow <= byValue && byValue <= ((D2UnicodeKamapRangeStrc*)pThis)->bHigh) {
       return 1;
     }
 
@@ -947,7 +953,7 @@ static int32_t __stdcall UNICODE_IsControlChar(uint8_t byChar) {
     }
 
     for (int32_t i = 0; i < gnUnicodeKamapGroupCount; i++) {
-      if (g_pUnicodeKamapTable[i * 2] <= byChar && byChar <= g_pUnicodeKamapTable[i * 2 + 1]) {
+      if (g_pUnicodeKamapTable[i].bLow <= byChar && byChar <= g_pUnicodeKamapTable[i].bHigh) {
         return 0;
       }
     }
@@ -1009,19 +1015,19 @@ BOOL __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
       Storm::Source::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
     }
 
-    g_pUnicodeKamapTable = (uint8_t*)Storm::Source::SMem::SMemAlloc((uint32_t)*pGroupCount * 2, "new[]", -1, 0);
+    g_pUnicodeKamapTable = (D2UnicodeKamapRangeStrc*)Storm::Source::SMem::SMemAlloc(sizeof(D2UnicodeKamapRangeStrc) * *pGroupCount, "new[]", -1, 0);
     if (!g_pUnicodeKamapTable) {
       D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0x91);
       return 0;
     }
 
-    memcpy(g_pUnicodeKamapTable, pFilePtr + 3, (uint32_t)*pGroupCount * 2);
-    uint16_t* pEntryData = (uint16_t*)(pFilePtr + 3 + (uint32_t)*pGroupCount * 2);
+    memcpy(g_pUnicodeKamapTable, pFilePtr + 3, sizeof(D2UnicodeKamapRangeStrc) * *pGroupCount);
+    uint16_t* pEntryData = (uint16_t*)(pFilePtr + 3 + sizeof(D2UnicodeKamapRangeStrc) * *pGroupCount);
     if (gpUnicodeKamapToCodeTable) {
       Storm::Source::SMem::SMemFree(gpUnicodeKamapToCodeTable, "delete[]", -1, 0);
     }
 
-    D2UnicodeKamapEntryStrc* pAllocBuf = (D2UnicodeKamapEntryStrc*)Storm::Source::SMem::SMemAlloc((uint32_t)*(uint16_t*)pFilePtr * 4, "new[]", -1, 0);
+    D2UnicodeKamapEntryStrc* pAllocBuf = (D2UnicodeKamapEntryStrc*)Storm::Source::SMem::SMemAlloc(sizeof(D2UnicodeKamapEntryStrc) * *(uint16_t*)pFilePtr, "new[]", -1, 0);
     gpUnicodeKamapToCodeTable = pAllocBuf;
     if (!pAllocBuf) {
       D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0x9e);
@@ -1041,7 +1047,7 @@ BOOL __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFile
       Storm::Source::SMem::SMemFree(gpUnicodeCodeToMapTable, "delete[]", -1, 0);
     }
 
-    uint16_t* pwCodeToMapTable = (uint16_t*)Storm::Source::SMem::SMemAlloc((uint32_t)*(uint16_t*)pFilePtr * 2, "new[]", -1, 0);
+    uint16_t* pwCodeToMapTable = (uint16_t*)Storm::Source::SMem::SMemAlloc(sizeof(uint16_t) * *(uint16_t*)pFilePtr, "new[]", -1, 0);
     gpUnicodeCodeToMapTable = pwCodeToMapTable;
     if (!pwCodeToMapTable) {
       D2_FREE_AT(pFileData, ".\\Unicode\\UNISYS.CPP", 0xb0);
@@ -1109,7 +1115,7 @@ static uint32_t __fastcall UNICODE_MapCharacterToCode(uint16_t wChar) {
 }
 
 int UNICODE_CompareKamapEntry(LPCVOID pKey, LPCVOID pEntry) {
-    return (uint32_t)*(uint16_t*)((char*)pKey + 2) - (uint32_t)*(uint16_t*)((char*)pEntry + 2);
+    return (uint32_t)((const D2UnicodeKamapEntryStrc*)pKey)->wUnicode - (uint32_t)((const D2UnicodeKamapEntryStrc*)pEntry)->wUnicode;
 }
 
 // The 4-byte search key sits in the slot the prologue's PUSH ECX reserves; only its high word (wChar) is

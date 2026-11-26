@@ -281,7 +281,7 @@ uint8_t * Unreferenced_0052bfc0() {
 
 int Unreferenced_0052bfe0() {
     int nCount = 0;
-    for (int nToken = 0; nToken < 1024; nToken++) {
+    for (int nToken = 0; nToken < (int)(sizeof(gaQServerGameTokens) / sizeof(gaQServerGameTokens[0])); nToken++) {
       if (gaQServerGameTokens[nToken] && gaQServerGameTokens[nToken] != 0xffffffff) {
         nCount++;
       }
@@ -869,7 +869,7 @@ void __fastcall NET_D2GS_SERVER_ProcessClientMessage_System(uint8_t * pBytes, in
               *(uint32_t*)((char*)&sPacketFF01.sHead + 185) = sSystemInfo.dw0xC0;
               /* Input Data */ /* Destination */ pSrcInts = sSystemInfo.aSomeInts; // steer-ok: generated form, kept as emitted
               pDstInts = sPacketFF01.aSomeInts;
-              /* Set Array length */ /* Copy operation */ memcpy(pDstInts, pSrcInts, 32);
+              /* Set Array length */ /* Copy operation */ memcpy(pDstInts, pSrcInts, sizeof(sPacketFF01.aSomeInts));
               *(uint32_t*)((char*)&sPacketFF01 + 225) = sSystemInfo.dw0x110;
               *(uint32_t*)((char*)&sPacketFF01 + 229) = sSystemInfo.dw0xC4;
               sPacketFF01.field14_0xe9 = sSystemInfo.dw0xC8;
@@ -1187,7 +1187,7 @@ static void UpdateClients(::SGAMEDATA * pGame) {
                 }
 
                 packet0x5a.nArgTypes = '\0';
-                memset(packet0x5a.szName1, 0, 16 * sizeof(packet0x5a.szName1[0]));
+                memset(packet0x5a.szName1, 0, sizeof(packet0x5a.szName1));
                 memset(packet0x5a.szName2 + 4, 0, 12 * sizeof(packet0x5a.szName2[0]));
                 packet0x5a.nPacketId = 'Z';
                 packet0x5a.nMessageType = '\x02';
@@ -1545,28 +1545,28 @@ static void __stdcall GAME_TrackGameStatistics(D2Game_Line0x13af * pStatRoot, in
 void __fastcall SERVER_GetPlayerClassName(char * szText, int32_t nId) {
     switch (nId) {
       case 0:
-        memcpy(szText, "Amazon", 7);
+        memcpy(szText, "Amazon", sizeof("Amazon"));
       return;
       case 1:
-        memcpy(szText, "Sorceress", 10);
+        memcpy(szText, "Sorceress", sizeof("Sorceress"));
       return;
       case 2:
-        memcpy(szText, "Necromancer", 0xc);
+        memcpy(szText, "Necromancer", sizeof("Necromancer"));
       return;
       case 3:
-        memcpy(szText, "Paladin", 8);
+        memcpy(szText, "Paladin", sizeof("Paladin"));
       return;
       case 4:
-        memcpy(szText, "Barbarian", 10);
+        memcpy(szText, "Barbarian", sizeof("Barbarian"));
       return;
       case 5:
-        memcpy(szText, "Druid", 6);
+        memcpy(szText, "Druid", sizeof("Druid"));
       return;
       case 6:
-        memcpy(szText, "Assassin", 9);
+        memcpy(szText, "Assassin", sizeof("Assassin"));
       return;
       default:
-        memcpy(szText, "Invalid Class", 0xe);
+        memcpy(szText, "Invalid Class", sizeof("Invalid Class"));
       return;
     }
 }
@@ -2058,7 +2058,7 @@ int32_t __stdcall QSERVER_CountExpansionGames() {
 // Generates histogram of active games by player count. Iterates global game token table (DATA_LastGameToken), locks each game, reads nClientsCount, increments corresponding histogram bucket. Output is array of shorts indexed by player count.
 void __stdcall QSERVER_GetGameListByPlayerCount(short * pHistogramOut, int32_t nMaxPlayers) {
     int nClientsCount;
-    memset(pHistogramOut, 0, nMaxPlayers * 2 + 2);
+    memset(pHistogramOut, 0, nMaxPlayers * sizeof(*pHistogramOut) + sizeof(*pHistogramOut));
     uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
       ::SGAMEDATA* pGame;
@@ -2088,7 +2088,7 @@ void __stdcall QSERVER_GetGameListByPlayerCount(short * pHistogramOut, int32_t n
 // Generates histogram of active games by age (in minutes). Iterates global game tokens, locks each game, reads dwGameFrame (frame counter), converts to minutes via division by 0x1d4c (7500 frames = 5 min), increments histogram bucket. Caps at nMaxMinutes-1.
 void __stdcall QSERVER_GetGameListByAge(short * pHistogramOut, int32_t nMaxMinutes) {
     int nAgeMinutes;
-    memset(pHistogramOut, 0, nMaxMinutes * 2);
+    memset(pHistogramOut, 0, nMaxMinutes * sizeof(*pHistogramOut));
     uint32_t* pTokenCursor = gaQServerGameTokens;
     do {
       ::SGAMEDATA* pGame;
@@ -2186,7 +2186,7 @@ BOOL __stdcall QSERVER_ExportGameStats(uint16_t nServerId, D2QServerGameStatsStr
       nPathSampleCount = pGame->nPathCountCount;
       pStats->nPathSampleCount = nPathSampleCount;
       if ((uint32_t)pGame->nPathCountCount > 200 && nPathSampleCount) {
-        memset(pGame->nPathCount, 0, 0x48);
+        memset(pGame->nPathCount, 0, sizeof(pGame->nPathCount) + sizeof(pGame->nPathCountCount));
       }
     }
 
@@ -3381,7 +3381,7 @@ void __fastcall GAME_CreateSingleplayerGame(int32_t nClientId, char * szGameName
     pGame->nServerToken = uVar1;
     SetGameName(pGame, szGameName, nClientId);
     pGame->nGameType = neD2HostGameType;
-    memset(pGame->anUnitGuidCounters, 0, 6 * sizeof(pGame->anUnitGuidCounters[0]));
+    memset(pGame->anUnitGuidCounters, 0, sizeof(pGame->anUnitGuidCounters));
     pGame->nDifficulty = nDifficulty;
     pGame->nTemplateLevel = nTemplate;
     if (eArenaFlags & ARENAFLAG_Expansion) {

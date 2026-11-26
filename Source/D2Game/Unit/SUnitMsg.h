@@ -23,7 +23,7 @@ typedef uint32_t eD2UnitType;
 // Data types
 #ifndef D2_DEFINED_D2SUnitMsg23Strc
 #define D2_DEFINED_D2SUnitMsg23Strc
-struct __attribute__((packed)) D2SUnitMsg23Strc {
+struct D2SUnitMsg23Strc {
     /* 0x00 */ uint32_t dwSkillOwnerGUID;
     /* 0x04 */ uint16_t nSkillId;
     /* 0x06 */ uint8_t nSkillSlot;
@@ -32,7 +32,7 @@ struct __attribute__((packed)) D2SUnitMsg23Strc {
 #endif // D2_DEFINED_D2SUnitMsg23Strc
 #ifndef D2_DEFINED_D2SUnitMsg99Strc
 #define D2_DEFINED_D2SUnitMsg99Strc
-struct __attribute__((packed)) D2SUnitMsg99Strc {
+struct D2SUnitMsg99Strc {
     /* 0x00 */ uint16_t nSkillId;
     /* 0x02 */ uint8_t nSkillLevel;
     /* 0x03 */ uint8_t nTargetType;
@@ -43,13 +43,14 @@ struct __attribute__((packed)) D2SUnitMsg99Strc {
 #endif // D2_DEFINED_D2SUnitMsg99Strc
 #ifndef D2_DEFINED_D2SUnitMsg9AStrc
 #define D2_DEFINED_D2SUnitMsg9AStrc
-struct __attribute__((packed)) D2SUnitMsg9AStrc {
+struct D2SUnitMsg9AStrc {
     /* 0x00 */ uint16_t nSkillId;
     /* 0x02 */ uint8_t nSkillLevel;
     /* 0x03 */ uint8_t field_0x3;
     /* 0x04 */ uint16_t nTargetX;
     /* 0x06 */ uint16_t nTargetY;
     /* 0x08 */ uint8_t field_0x8;
+    /* 0x09 */ uint8_t pad_0x9[3]; // the writer allocates 8 + 0xc (UnitQueuePacket0x9A)
 };
 
 #endif // D2_DEFINED_D2SUnitMsg9AStrc
@@ -80,7 +81,7 @@ struct D2SUnitMsgA1Strc {
 #endif // D2_DEFINED_D2SUnitMsgA1Strc
 #ifndef D2_DEFINED_D2SUnitMsgA3Strc
 #define D2_DEFINED_D2SUnitMsgA3Strc
-struct __attribute__((packed)) D2SUnitMsgA3Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SUnitMsgA3Strc {
     /* 0x00 */ uint8_t field_0x0;
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint16_t nSkillId;
@@ -93,7 +94,7 @@ struct __attribute__((packed)) D2SUnitMsgA3Strc {
     /* 0x14 */ int32_t nTargetGUID;
     /* 0x18 */ uint32_t dwParam1;
     /* 0x1C */ uint32_t dwParam2;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2SUnitMsgA3Strc
 #ifndef D2_DEFINED_D2SUnitMsgA4Strc
@@ -102,12 +103,13 @@ struct D2SUnitMsgA4Strc {
     operator uint16_t() const { return *reinterpret_cast<const uint16_t*>(this); }
 
     /* 0x00 */ int16_t nClassId;
+    /* 0x02 */ uint8_t pad_0x2[2]; // the writer allocates 8 + 4 (UnitQueuePacket0xA4)
 };
 
 #endif // D2_DEFINED_D2SUnitMsgA4Strc
 #ifndef D2_DEFINED_D2SUnitMsgA5Strc
 #define D2_DEFINED_D2SUnitMsgA5Strc
-struct __attribute__((packed)) D2SUnitMsgA5Strc {
+struct D2SUnitMsgA5Strc {
     /* 0x00 */ uint8_t nUnitType;
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint8_t field_0x2;
@@ -119,7 +121,7 @@ struct __attribute__((packed)) D2SUnitMsgA5Strc {
 #endif // D2_DEFINED_D2SUnitMsgA5Strc
 #ifndef D2_DEFINED_D2SUnitMsgABStrc
 #define D2_DEFINED_D2SUnitMsgABStrc
-struct __attribute__((packed)) D2SUnitMsgABStrc {
+struct D2SUnitMsgABStrc {
     /* 0x00 */ uint8_t nUnitType;
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint8_t field_0x2;
@@ -146,12 +148,21 @@ union D2SUnitMsgArgsUnion {
 #endif // D2_DEFINED_D2SUnitMsgArgsUnion
 #ifndef D2_DEFINED_D2SUnitMsgStrc
 #define D2_DEFINED_D2SUnitMsgStrc
-struct __attribute__((packed)) D2SUnitMsgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SUnitMsgStrc {
     /* 0x00 */ struct D2SUnitMsgStrc * pNext;
     /* 0x04 */ uint8_t nOpcode; // S->C opcode the drain (SERVER_UnitQueuePacketSend) switches on; written as a byte
     /* 0x05 */ uint8_t pad_0x5[3]; // header padding before uArgs (zeroed by the dword store at +4)
     /* 0x08 */ D2SUnitMsgArgsUnion uArgs; // per-opcode payload; each writer allocates only 8 + its member size (0xC..0x28)
-};
+}; D2_PACKED_END
+static_assert(sizeof(void*) != 4 || offsetof(D2SUnitMsgStrc, uArgs) == 8, "D2SUnitMsgStrc header is 8 bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg23Strc) == 8, "UnitQueuePacket0x23 allocates 0x10");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg99Strc) == 0xc, "UnitQueuePacket0x99 allocates 0x14");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg9AStrc) == 0xc, "UnitQueuePacket0x9A allocates 0x14");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg9EStrc) == 0xc, "UnitQueuePacket0x9E allocates 0x14");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsgA1Strc) == 0x10, "UnitQueuePacket0xA1 allocates 0x18");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsgA4Strc) == 4, "UnitQueuePacket0xA4 allocates 0xc");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsgA5Strc) == 0xc, "UnitQueuePacket0xA5 allocates 0x14");
+static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsgABStrc) == 0xc, "UnitQueuePacket0xAB allocates 0x14");
 
 #endif // D2_DEFINED_D2SUnitMsgStrc
 namespace D2Game::UNIT::SUnitMsg {

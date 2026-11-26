@@ -162,7 +162,7 @@ void __fastcall Unreferenced_00475c30(LPVOID pMemory) {
 
 // Allocates a (nDim × nDim × (nSteps+1)) pointer table via D2MEM_VirtualAlloc and fills it with pointers into gPaletteTransitionTable for each interpolated palette entry. Used to build lighting/palette blend lookup tables for the game view renderer. Returns the base pointer of the allocated table.
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable(uint32_t nDim, uint32_t nSteps) {
-    uint8_t** pTable = (uint8_t**)D2Hell::D2MEM_VirtualAlloc((nSteps + 1) * nDim * nDim * 4);
+    uint8_t** pTable = (uint8_t**)D2Hell::D2MEM_VirtualAlloc((nSteps + 1) * nDim * nDim * sizeof(uint8_t*));
     uint8_t** pWrite = pTable;
     uint32_t nOuter = 0;
     if (nDim > 0) {
@@ -205,7 +205,7 @@ void __fastcall Unreferenced_00475d20(LPVOID pMemory) {
 }
 
 uint8_t * * __stdcall VIEW_AllocPalettePointerTable2(uint32_t nDim, int32_t nSteps) {
-    uint8_t** pTable = (uint8_t**)D2Hell::D2MEM_VirtualAlloc(nDim * nDim * nSteps * 4);
+    uint8_t** pTable = (uint8_t**)D2Hell::D2MEM_VirtualAlloc(nDim * nDim * nSteps * sizeof(uint8_t*));
     uint8_t** pWrite = pTable;
     uint32_t nOuter = 0;
     if (nDim > 0) {
@@ -535,8 +535,6 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     DWORD dwResMode;
     int nCloudIdx;
     uint32_t nFrameIdx;
-    char* pStrSrc;
-    char* pStrDst;
     uint32_t nTileFrame3;
     char szFilePath[260];
     D2GfxDataStrc sGfxData;
@@ -565,13 +563,11 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     nCloudFrame %= 4;
     nScrollOffset = -nTileFrameX;
     if (!gpAncientsBgDC6) {
-      memcpy(szFilePath, "data\\global\\ui\\summit01", 0x18);
+      strcpy(szFilePath, "data\\global\\ui\\summit01");
       gpAncientsBgDC6 = Core::Archive::IMAGE_LoadDC6Ex(szFilePath, 0);
     }
     if (!gpCloudBackgroundDC6) {
-      pStrSrc = "data\\global\\ui\\cloud01";
-      pStrDst = szFilePath;
-      memcpy(pStrDst, pStrSrc, 23);
+      strcpy(szFilePath, "data\\global\\ui\\cloud01");
       gpCloudBackgroundDC6 = Core::Archive::IMAGE_LoadDC6Ex(szFilePath, 0);
     }
 
@@ -1248,7 +1244,12 @@ void __fastcall dWallPass(D2GameViewStrc * pGameView) {
         Wall2::DRAW_WORLD_Unit((D2UnitStrc*)sLightEntry->pData, (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)byBlue << 8 | (uint16_t)(uint8_t)byGreen) << 8 | (uint32_t)(uint8_t)byRed) << 8 | (uint32_t)(uint8_t)byIntensity), 0);
       }
 
+#if D2_ARCH_X86
       pCellEntry += 9;
+#elif D2_ARCH_X64
+      // The x86 body steps one 0x24-byte D2Wall2CellStrc as 9 list-head slots; the heads are pointers on x64.
+      pCellEntry = (D2Wall2DrawEntryStrc**)((char*)pCellEntry + sizeof(D2Wall2CellStrc));
+#endif
     } while (nFadeCalc);
 }
 

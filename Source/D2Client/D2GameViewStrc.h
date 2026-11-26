@@ -36,7 +36,7 @@ struct D2Wall2CellStrc {
 #endif // D2_DEFINED_D2Wall2CellStrc
 #ifndef D2_DEFINED_D2Wall2DrawListStrc
 #define D2_DEFINED_D2Wall2DrawListStrc
-struct __attribute__((packed)) D2Wall2DrawListStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2Wall2DrawListStrc {
     /* 0x0000 */ uint32_t dwWall2PassMask; // pass mask: bit0 under-floor (AddLowerWallTile), bit1 roof (AddRoofTile), bit3 shadow pass (AddShadowPassTile/InsertUnitDraw)
     /* 0x0004 */ D2Wall2DrawEntryStrc aWall2Entries[3000]; // draw-entry pool; every WALL2_Add*/Insert* takes aWall2Entries[nWall2EntryCount++] while it is < 3000
     /* 0xEA64 */ uint32_t nWall2EntryCount; // entries used; WALL2_BuildSceneDrawList zeroes it
@@ -47,12 +47,12 @@ struct __attribute__((packed)) D2Wall2DrawListStrc {
     /* 0xEA78 */ int32_t nWall2GridDim; // grid side: view width/0xa0 + 0xb + view height/0x50
     /* 0xEA7C */ int nWall2GridWidth; // view width/0xa0 + 0xb
     /* 0xEA80 */ int nWall2GridHeight; // view height/0x50 + 0xc
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2Wall2DrawListStrc
 #ifndef D2_DEFINED_D2GameViewStrc
 #define D2_DEFINED_D2GameViewStrc
-struct __attribute__((packed)) D2GameViewStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GameViewStrc {
     /* 0x00 */ uint32_t nFlags;
     /* 0x04 */ tagRECT pView;
     /* 0x14 */ tagRECT rcExtendedView;
@@ -62,6 +62,6 @@ struct __attribute__((packed)) D2GameViewStrc {
     /* 0x30 */ uint8_t * pPalByteTable32x16;
     /* 0x34 */ uint8_t * pPalByteTable16x32;
     /* 0x38 */ D2Wall2DrawListStrc sWall2; // wall2 draw list: pass mask, 3000-entry pool, count and the cell grid. WALL2_IsInDrawGrid and the Add*/Insert* helpers take &sWall2 and reach the grid fields through it
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GameViewStrc

@@ -46,7 +46,7 @@ typedef int32_t (__fastcall *fpD2QServerSourceLineHook)(struct D2QServerStrc * p
 // Data types
 #ifndef D2_DEFINED_D2QServerStrc
 #define D2_DEFINED_D2QServerStrc
-__pragma(pack(push, 1)) struct D2QServerStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QServerStrc {
     /* 0x000 */ int bUseNtLocalMode; // BOOL - 0 = Online (Winsock sockets), 1 = Local (NT pipes/IPC for singleplayer/LAN)
     /* 0x004 */ int clientsCount;
     /* 0x008 */ int nClientBucketCount; // Number of client-hash buckets / per-bucket locks used by token and socket lookups
@@ -100,7 +100,7 @@ __pragma(pack(push, 1)) struct D2QServerStrc {
     /* 0xC1C */ HANDLE aIoWorkerThreadHandles[4];
     /* 0xC2C */ uint32_t aIoWorkerThreadIds[4];
     /* 0xC3C */ int aIoWorkerStopFlags[4]; // BOOL[4] - per-IO-worker stop flags
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2QServerStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)

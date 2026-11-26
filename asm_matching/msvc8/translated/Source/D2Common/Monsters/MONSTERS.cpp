@@ -342,7 +342,7 @@ void __fastcall SetSuperUniqueName(D2UnitStrc * pUnit, uint16_t * wszText) {
     }
 
     int32_t nStrLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
-    uint16_t* pNameBuf = (uint16_t*)D2_ALLOC_AT(nStrLen * 2 + 2, ".\\Monsters\\MONSTERS.CPP", 0xc3);
+    uint16_t* pNameBuf = (uint16_t*)D2_ALLOC_AT(nStrLen * sizeof(uint16_t) + sizeof(uint16_t), ".\\Monsters\\MONSTERS.CPP", 0xc3);
     pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.wszMonsterName = pNameBuf;
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(pUnit->pUnitData.pUnitDataMonster->pPathParamOrName.wszMonsterName, wszText);
 }

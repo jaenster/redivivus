@@ -174,6 +174,8 @@
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
+static_assert(sizeof(void*) != 4 || sizeof(::D2GfxUtilNodeStrc) == 0x10, "D2_ALLOC_AT(D2GfxUtilNodeStrc): the 32-bit layout must be the 0x10 bytes 1.14d allocates");
+
 
 static int gPlrModeTokens[20] = {0}; D2_STATIC_GUARD(gPlrModeTokens, "gPlrModeTokens");
 static int gTxtCompositTokens[16] = {0}; D2_STATIC_GUARD(gTxtCompositTokens, "gTxtCompositTokens");
@@ -227,7 +229,7 @@ void __stdcall InitializeModeTokens() {
     D2MonModeTxt* pMonModeTxt;
     D2ObjTypeTxt* pObjTypeTxt;
     D2ArmTypeTxt* pArmTypeTxt;
-    memset(gTxtCompositTokens, 0, 0x40);
+    memset(gTxtCompositTokens, 0, sizeof(gTxtCompositTokens));
     uint32_t nIndex = 0;
     do {
       D2CompositTxt* pCompositTxt;
@@ -239,9 +241,9 @@ void __stdcall InitializeModeTokens() {
 
       gTxtCompositTokens[nIndex] = *(int*)pCompositTxt->token;
       nIndex++;
-    } while (nIndex < 0x10);
+    } while (nIndex < sizeof(gTxtCompositTokens) / sizeof(gTxtCompositTokens[0]));
 
-    memset(gPlrModeTokens, 0, 0x50);
+    memset(gPlrModeTokens, 0, sizeof(gPlrModeTokens));
     uint32_t nIndex2 = 0;
     do {
       pPlrModeTxt = D2Common::DATATBLS::TokTbls::TxtGetPlrTypeModeLine(nIndex2, 1);
@@ -252,9 +254,9 @@ void __stdcall InitializeModeTokens() {
 
       gPlrModeTokens[nIndex2] = *(int*)pPlrModeTxt->szToken;
       nIndex2++;
-    } while (nIndex2 < 0x14);
+    } while (nIndex2 < sizeof(gPlrModeTokens) / sizeof(gPlrModeTokens[0]));
 
-    memset(gMonModeTokens, 0, 0x40);
+    memset(gMonModeTokens, 0, sizeof(gMonModeTokens));
     uint32_t nMode = 0;
     do {
       pMonModeTxt = D2Common::DATATBLS::TokTbls::TxtGetMonModeLine(nMode, 1);
@@ -265,9 +267,9 @@ void __stdcall InitializeModeTokens() {
 
       gMonModeTokens[nMode] = *(int*)pMonModeTxt->token;
       nMode++;
-    } while (nMode < 0x10);
+    } while (nMode < sizeof(gMonModeTokens) / sizeof(gMonModeTokens[0]));
 
-    memset(gObjModeTokens, 0, 8 * sizeof(gObjModeTokens[0]));
+    memset(gObjModeTokens, 0, sizeof(gObjModeTokens));
     nMode = 0;
     do {
       pObjTypeTxt = D2Common::DATATBLS::TokTbls::TxtGetObjTypeModeLine(nMode, 1);
@@ -278,9 +280,9 @@ void __stdcall InitializeModeTokens() {
 
       gObjModeTokens[nMode] = *(int*)pObjTypeTxt->token;
       nMode++;
-    } while (nMode < 8);
+    } while (nMode < sizeof(gObjModeTokens) / sizeof(gObjModeTokens[0]));
 
-    memset(gArmTypeTokens, 0, 3 * sizeof(gArmTypeTokens[0]));
+    memset(gArmTypeTokens, 0, sizeof(gArmTypeTokens));
     uint32_t nId = 0;
     do {
       pArmTypeTxt = D2Common::DATATBLS::TokTbls::TxtGetArmTypeLine(nId);
@@ -291,7 +293,7 @@ void __stdcall InitializeModeTokens() {
 
       gArmTypeTokens[nId] = *(int*)pArmTypeTxt->token;
       nId++;
-    } while (nId < 3);
+    } while (nId < sizeof(gArmTypeTokens) / sizeof(gArmTypeTokens[0]));
 }
 
 static void __stdcall GFXUTIL_SetMissileCelFile(D2GfxDataStrc * pGfxData, D2UnitStrc * pMissile) {
@@ -306,18 +308,18 @@ static void __stdcall GFXUTIL_SetMissileCelFile(D2GfxDataStrc * pGfxData, D2Unit
 
 // @sourcefile .\ENGINE\GfxUtil.cpp
 void __fastcall AllocGfxUtil(void * * ppListHead, uint32_t dwParam, uint32_t dwValue1, uint32_t dwValue2, int * pnNodeCount, int * pnBytesAllocated) {
-    uint32_t* pNode = (uint32_t*)D2_ALLOC_AT(0x10, ".\\ENGINE\\GfxUtil.cpp", 0x80);
+    D2GfxUtilNodeStrc* pNode = (D2GfxUtilNodeStrc*)D2_ALLOC_AT(sizeof(D2GfxUtilNodeStrc), ".\\ENGINE\\GfxUtil.cpp", 0x80);
     if (!pNode) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x81);
       exit(-1);
     }
 
-    *pnBytesAllocated += 0x10;
-    memset(pNode, 0, 0x10);
-    *pNode = dwParam;
-    pNode[1] = dwValue1;
-    pNode[2] = dwValue2;
-    pNode[3] = (uint32_t)(uintptr_t)*ppListHead;
+    *pnBytesAllocated += sizeof(D2GfxUtilNodeStrc);
+    memset(pNode, 0, sizeof(D2GfxUtilNodeStrc));
+    pNode->dwParam = dwParam;
+    pNode->nType = (int32_t)dwValue1;
+    pNode->nId = (int32_t)dwValue2;
+    pNode->pNext = (D2GfxUtilNodeStrc*)*ppListHead;
     *ppListHead = pNode;
     (*pnNodeCount)++;
 }
@@ -754,8 +756,8 @@ uint32_t __fastcall GFXUTIL_GetCofFrameCount(uint8_t * pbCof, uint32_t nComponen
     uint32_t nResult = 0;
     if (pbCof && (int)nComponent < 0x10) {
       const uint8_t* pbHeader = pbCof;
-      pbCof += 0x1c;
-      for (int nLayerIdx = 0; nLayerIdx < *pbHeader; ++nLayerIdx, pbCof += 9) {
+      pbCof += sizeof(D2CofHeaderDisk);
+      for (int nLayerIdx = 0; nLayerIdx < *pbHeader; ++nLayerIdx, pbCof += sizeof(D2CofLayerDisk)) {
         if (*pbCof == nComponent) {
           nResult = (uint32_t)pbCof[3];
           break;
@@ -770,8 +772,8 @@ uint32_t __fastcall GFXUTIL_GetCofAnimSpeed(uint8_t * pbCof, uint32_t nComponent
     uint32_t nResult = 0;
     if (pbCof && (int)nComponent < 0x10) {
       const uint8_t* pbHeader = pbCof;
-      pbCof += 0x1c;
-      for (int nLayerIdx = 0; nLayerIdx < *pbHeader; ++nLayerIdx, pbCof += 9) {
+      pbCof += sizeof(D2CofHeaderDisk);
+      for (int nLayerIdx = 0; nLayerIdx < *pbHeader; ++nLayerIdx, pbCof += sizeof(D2CofLayerDisk)) {
         if (*pbCof == nComponent) {
           nResult = (uint32_t)pbCof[1];
           break;
@@ -786,8 +788,8 @@ uint32_t __fastcall GFXUTIL_GetCofDirection(uint8_t * pbCof, uint32_t nComponent
     uint32_t nResult = 0;
     if (pbCof && (int)nComponent < 0x10) {
       const uint8_t* pbHeader = pbCof;
-      pbCof += 0x1c;
-      for (int nLayerIdx = 0; nLayerIdx < *pbHeader; ++nLayerIdx, pbCof += 9) {
+      pbCof += sizeof(D2CofHeaderDisk);
+      for (int nLayerIdx = 0; nLayerIdx < *pbHeader; ++nLayerIdx, pbCof += sizeof(D2CofLayerDisk)) {
         if (*pbCof == nComponent) {
           nResult = (uint32_t)pbCof[2];
           break;
@@ -815,8 +817,8 @@ uint32_t __fastcall GFXUTIL_GetCofDrawOrder(uint8_t * pbCof, uint32_t nComponent
     }
 
     const uint8_t* pbHeader = pbCof;
-    pbCof += 0x1c;
-    for (int nLayerIdx = 0; nLayerIdx < *pbHeader; ++nLayerIdx, pbCof += 9) {
+    pbCof += sizeof(D2CofHeaderDisk);
+    for (int nLayerIdx = 0; nLayerIdx < *pbHeader; ++nLayerIdx, pbCof += sizeof(D2CofLayerDisk)) {
       if (*pbCof == nComponent) {
         return (uint32_t)pbCof[4];
       }
@@ -1243,10 +1245,10 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2UnitStrc * pUnit, D2GfxDataStrc *
             fUnitToken = GFXUTIL_GetUnitToken(pUnit, pGfxData->eUnitType, pGfxData->nClassId);
             pGfxData->nUnitToken = fUnitToken;
             i = 0;
-            uSlotC.pCofLayer = pCofData + 0x1c;
+            uSlotC.pCofLayer = (D2CofLayerDisk*)(pCofData + sizeof(D2CofHeaderDisk));
             if (*pCofData) {
-              while (*uSlotC.pCofLayer < 0x10) {
-                if (*uSlotC.pCofLayer == pGfxData->nComponentType) {
+              while (uSlotC.pCofLayer->nComponent < 0x10) {
+                if (uSlotC.pCofLayer->nComponent == pGfxData->nComponentType) {
                   if (eEffectiveUnitType != UNIT_PLAYER) {
                     if (eEffectiveUnitType != UNIT_MONSTER) {
                       if (eEffectiveUnitType == UNIT_OBJECT) {
@@ -1255,7 +1257,7 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2UnitStrc * pUnit, D2GfxDataStrc *
                     } else {
                       nMode = pGfxData->nMode;
                       pGfxData->nModeToken = gMonModeTokens[nMode];
-                      byComponentType = *uSlotC.pCofLayer;
+                      byComponentType = uSlotC.pCofLayer->nComponent;
                       nPaletteIdx = GFXUTIL_GetCompositePaletteIndex(pUnit, byComponentType);
                       byPaletteIdx = nPaletteIdx;
                       if (!nMode || nMode == 0xc) {
@@ -1315,7 +1317,7 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2UnitStrc * pUnit, D2GfxDataStrc *
 
                   finalize_gfx_tokens:
                   nPadToken = 0;
-                  GFXUTIL_PadTokenString((char*)(uSlotC.pCofLayer + 5), (char*)&nPadToken);
+                  GFXUTIL_PadTokenString(uSlotC.pCofLayer->szWeaponClass, (char*)&nPadToken);
                   pGfxData->nWeaponClass = nPadToken;
                   if (!pGfxData->nCompositToken) {
                     return 0;
@@ -1343,7 +1345,7 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2UnitStrc * pUnit, D2GfxDataStrc *
                 }
 
                 i++;
-                uSlotC.pCofLayer += 9;
+                uSlotC.pCofLayer++;
                 if (i >= (int)(uint32_t)*pCofData) {
                   return 0;
                 }
@@ -1410,8 +1412,8 @@ static BOOL __stdcall GFXUTIL_BuildMonsterCofParams(D2CofTextureCacheEntryStrc *
     }
 
     // COF layers: 9-byte records after the 0x1c-byte header; byte 0 is the component, bytes 5.. its weapon-class code.
-    uint8_t* pCofLayer = pCofData + 0x1c;
-    for (uint32_t nLayer = 0; nLayer < *pCofData; ++nLayer, pCofLayer += 9) {
+    uint8_t* pCofLayer = pCofData + sizeof(D2CofHeaderDisk);
+    for (uint32_t nLayer = 0; nLayer < *pCofData; ++nLayer, pCofLayer += sizeof(D2CofLayerDisk)) {
       if (pCofLayer[0] >= 0x10) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x3fb);
         exit(-1);

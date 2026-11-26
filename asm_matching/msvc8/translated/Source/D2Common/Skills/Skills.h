@@ -56,19 +56,19 @@ struct D2AllStatesDataTbl {
 #endif // D2_DEFINED_D2AllStatesDataTbl
 #ifndef D2_DEFINED_D2AnimDataBucketStrc
 #define D2_DEFINED_D2AnimDataBucketStrc
-__pragma(pack(push, 1)) struct D2AnimDataBucketStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2AnimDataBucketStrc {
     /* 0x00 */ int nCount; // number of records in this hash bucket
     /* 0x04 */ D2AnimDataRecordStrc aRecords[1]; // nCount records follow inline (variable length)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2AnimDataBucketStrc
 #ifndef D2_DEFINED_D2AnimDataStrc
 #define D2_DEFINED_D2AnimDataStrc
-__pragma(pack(push, 1)) struct D2AnimDataStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2AnimDataStrc {
     /* 0x000 */ struct D2AnimDataRecordStrc * pRecords;
     /* 0x004 */ struct D2AnimDataBucketStrc * pHashTable[256]; // 256 buckets indexed by the name hash; each points into the loaded AnimData.d2 image
     /* 0x404 */ D2AnimDataRecordStrc pDefaultRecord;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2AnimDataStrc
 #ifndef D2_DEFINED_D2BodyLocsTxt
@@ -125,7 +125,7 @@ struct D2HireDescTxt {
 #endif // D2_DEFINED_D2HireDescTxt
 #ifndef D2_DEFINED_D2HirelingTxt
 #define D2_DEFINED_D2HirelingTxt
-__pragma(pack(push, 1)) struct D2HirelingTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2HirelingTxt {
     /* 0x000 */ uint16_t version;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
@@ -170,7 +170,7 @@ __pragma(pack(push, 1)) struct D2HirelingTxt {
     /* 0x113 */ uint8_t field_0x113;
     /* 0x114 */ uint16_t nNameFirst;
     /* 0x116 */ uint16_t nNameLast;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2HirelingTxt
 #ifndef D2_DEFINED_D2HitClassTxt
@@ -200,7 +200,7 @@ struct D2ItemStatCostOpRelationStrc {
 #endif // D2_DEFINED_D2ItemStatCostOpRelationStrc
 #ifndef D2_DEFINED_D2ItemTypesTxt
 #define D2_DEFINED_D2ItemTypesTxt
-__pragma(pack(push, 1)) struct D2ItemTypesTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ItemTypesTxt {
     /* 0x00 */ char code[4];
     /* 0x04 */ short equiv1;
     /* 0x06 */ short equiv2;
@@ -231,7 +231,7 @@ __pragma(pack(push, 1)) struct D2ItemTypesTxt {
     /* 0x22 */ char storepage;
     /* 0x23 */ char varinvgfx;
     /* 0x24 */ char invgfx[6][32];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ItemTypesTxt
 #ifndef D2_DEFINED_D2LevelDefsColor
@@ -248,7 +248,7 @@ struct D2LevelDefsColor {
 #endif // D2_DEFINED_D2LevelDefsColor
 #ifndef D2_DEFINED_D2LevelsTxt
 #define D2_DEFINED_D2LevelsTxt
-__pragma(pack(push, 1)) struct D2LevelsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2LevelsTxt {
     /* 0x000 */ uint16_t Id; // wLevelNo - level id (u16)
     /* 0x002 */ char Pal;
     /* 0x003 */ char Act;
@@ -296,7 +296,7 @@ __pragma(pack(push, 1)) struct D2LevelsTxt {
     /* 0x21D */ uint8_t field_0x21d;
     /* 0x21E */ uint8_t field_0x21e;
     /* 0x21F */ uint8_t field_0x21f;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2LevelsTxt
 #ifndef D2_DEFINED_D2MissCalcTxt
@@ -377,13 +377,13 @@ struct D2MonPresetTxt {
 #endif // D2_DEFINED_D2MonPresetTxt
 #ifndef D2_DEFINED_D2MonPresetTxtPlace
 #define D2_DEFINED_D2MonPresetTxtPlace
-__pragma(pack(push, 1)) struct D2MonPresetTxtPlace {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MonPresetTxtPlace {
     /* 0x00 */ uint8_t Place : 1;
     uint8_t : 7;  // unused
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint8_t field_0x2;
     /* 0x03 */ uint8_t field_0x3;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonPresetTxtPlace
 #ifndef D2_DEFINED_D2MonPropTxtEntry
@@ -510,7 +510,7 @@ struct D2NpcTxt {
 #endif // D2_DEFINED_D2NpcTxt
 #ifndef D2_DEFINED_D2OverlayTxt
 #define D2_DEFINED_D2OverlayTxt
-__pragma(pack(push, 1)) struct D2OverlayTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2OverlayTxt {
     /* 0x00 */ uint16_t overlay;
     /* 0x02 */ char Filename[64];
     /* 0x42 */ short version;
@@ -542,7 +542,7 @@ __pragma(pack(push, 1)) struct D2OverlayTxt {
     /* 0x81 */ char LocalBlood;
     /* 0x82 */ uint8_t field_0x82;
     /* 0x83 */ uint8_t field_0x83;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2OverlayTxt
 #ifndef D2_DEFINED_D2ParsedChestTreasureClassStrc
@@ -563,7 +563,7 @@ struct D2PassiveSkillsPerClassStrc {
 #endif // D2_DEFINED_D2PassiveSkillsPerClassStrc
 #ifndef D2_DEFINED_D2PetTypeTxt
 #define D2_DEFINED_D2PetTypeTxt
-__pragma(pack(push, 1)) struct D2PetTypeTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PetTypeTxt {
     /* 0x00 */ uint32_t petType;
     /* 0x04 */ union {
         struct {
@@ -594,7 +594,7 @@ __pragma(pack(push, 1)) struct D2PetTypeTxt {
     /* 0xBB */ uint8_t field_0xbb;
     /* 0xBC */ int nSkillIndexCounter;
     /* 0xC0 */ short nSkillId[16];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2PetTypeTxt
 #ifndef D2_DEFINED_D2PlayerClassTxt
@@ -653,11 +653,11 @@ struct D2SetsTxtPStrc {
 
 #endif // D2_DEFINED_D2SetsTxtPStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-__pragma(pack(push, 1)) struct D2SkillCalcContextStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SkillCalcContextStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ eD2Skills nSkillId;
     /* 0x08 */ int32_t nSkillLevel;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #ifndef D2_DEFINED_D2SkillCalcTxt
@@ -764,7 +764,7 @@ struct D2StatesDataTbls {
 #endif // D2_DEFINED_D2StatesDataTbls
 #ifndef D2_DEFINED_D2StatesTxt
 #define D2_DEFINED_D2StatesTxt
-__pragma(pack(push, 1)) struct D2StatesTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2StatesTxt {
     /* 0x00 */ short state;
     /* 0x02 */ short overlay[4];
     /* 0x0A */ short castoverlay;
@@ -844,7 +844,7 @@ __pragma(pack(push, 1)) struct D2StatesTxt {
     /* 0x36 */ short srvactivefunc;
     /* 0x38 */ short skill;
     /* 0x3A */ short missile;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2StatesTxt
 #ifndef D2_DEFINED_D2StorePageTxt
@@ -889,10 +889,10 @@ struct D2TxtLinkStrc {
 #endif // D2_DEFINED_D2TxtLinkStrc
 #ifndef D2_DEFINED_D2TxtLinkSub0x08Strc
 #define D2_DEFINED_D2TxtLinkSub0x08Strc
-__pragma(pack(push, 1)) struct D2TxtLinkSub0x08Strc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TxtLinkSub0x08Strc {
     /* 0x00 */ char szItemCode[4];
     /* 0x04 */ uint32_t nRecords;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2TxtLinkSub0x08Strc
 #ifndef D2_DEFINED_D2UniqueSetItemsTxtEntry
@@ -907,7 +907,7 @@ struct D2UniqueSetItemsTxtEntry {
 #endif // D2_DEFINED_D2UniqueSetItemsTxtEntry
 #ifndef D2_DEFINED_D2ItemStatCostTxt
 #define D2_DEFINED_D2ItemStatCostTxt
-__pragma(pack(push, 1)) struct D2ItemStatCostTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ItemStatCostTxt {
     /* 0x000 */ uint16_t stat;
     /* 0x002 */ uint16_t pad_02;
     /* 0x004 */ D2ItemStatCostFlags dwItemStatFlags;
@@ -958,12 +958,12 @@ __pragma(pack(push, 1)) struct D2ItemStatCostTxt {
     /* 0x0DE */ D2ItemStatCostOpRelationStrc aOpRelations[16];
     /* 0x13E */ uint16_t pad_13E;
     /* 0x140 */ int nChargedSkillLevelBits;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ItemStatCostTxt
 #ifndef D2_DEFINED_D2LevelDefsTxt
 #define D2_DEFINED_D2LevelDefsTxt
-__pragma(pack(push, 1)) struct D2LevelDefsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2LevelDefsTxt {
     /* 0x00 */ int QuestFlag;
     /* 0x04 */ int QuestFlagEx;
     /* 0x08 */ int Layer;
@@ -985,18 +985,18 @@ __pragma(pack(push, 1)) struct D2LevelDefsTxt {
     /* 0x90 */ int Position;
     /* 0x94 */ int SaveMonsters;
     /* 0x98 */ int LOSDraw;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2LevelDefsTxt
 #ifndef D2_DEFINED_D2MonPropTxt
 #define D2_DEFINED_D2MonPropTxt
-__pragma(pack(push, 1)) struct D2MonPropTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MonPropTxt {
     /* 0x000 */ int Id;
     /* 0x004 */ D2MonPropTxtEntry entry[3][6];
     /* 0x124 */ char chance[3][6];
     /* 0x136 */ uint8_t field_0x136;
     /* 0x137 */ uint8_t field_0x137;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonPropTxt
 #ifndef D2_DEFINED_D2ParsedActTreasureClassStrc
@@ -1008,7 +1008,7 @@ struct D2ParsedActTreasureClassStrc {
 #endif // D2_DEFINED_D2ParsedActTreasureClassStrc
 #ifndef D2_DEFINED_D2SetsTxt
 #define D2_DEFINED_D2SetsTxt
-__pragma(pack(push, 1)) struct D2SetsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SetsTxt {
     /* 0x000 */ short index;
     /* 0x002 */ short name;
     /* 0x004 */ short version;
@@ -1022,12 +1022,12 @@ __pragma(pack(push, 1)) struct D2SetsTxt {
     /* 0x010 */ D2SetsTxtPStrc aPartialBonus[4];
     /* 0x090 */ D2SetsTxtFStrc aFullBonus[8];
     /* 0x110 */ struct D2SetItemsTxt * pTxtSetItems[6];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SetsTxt
 #ifndef D2_DEFINED_D2SetItemsTxt
 #define D2_DEFINED_D2SetItemsTxt
-__pragma(pack(push, 1)) struct D2SetItemsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SetItemsTxt {
     /* 0x000 */ short nId; // Set ID
     /* 0x002 */ char index[32];
     /* 0x022 */ short version;
@@ -1052,12 +1052,12 @@ __pragma(pack(push, 1)) struct D2SetItemsTxt {
     /* 0x087 */ uint8_t addFunc;
     /* 0x088 */ D2UniqueSetItemsTxtEntry sEntry[9];
     /* 0x118 */ D2SetItemsTxtEntry sEntryEx[5];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SetItemsTxt
 #ifndef D2_DEFINED_D2UniqueItemsTxt
 #define D2_DEFINED_D2UniqueItemsTxt
-__pragma(pack(push, 1)) struct D2UniqueItemsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2UniqueItemsTxt {
     /* 0x00 */ uint16_t wId; // runtime row index assigned on load
     /* 0x02 */ char index[32];
     /* 0x22 */ uint16_t wNameStr; // string table ID for unique item name
@@ -1077,8 +1077,7 @@ __pragma(pack(push, 1)) struct D2UniqueItemsTxt {
     /* 0x2D */ uint8_t field_0x2d;
     /* 0x2E */ uint8_t field_0x2e;
     /* 0x2F */ uint8_t field_0x2f;
-    /* 0x30 */ short rarity;
-    /* 0x32 */ uint16_t pad0x32; // alignment padding
+    /* 0x30 */ int rarity; // read as a dword by the unique roll (ITEM_RollUniqueItem)
     /* 0x34 */ short lvl;
     /* 0x36 */ short lvlReq;
     /* 0x38 */ char chrtransform;
@@ -1093,7 +1092,7 @@ __pragma(pack(push, 1)) struct D2UniqueItemsTxt {
     /* 0x88 */ char dropsfxframe;
     /* 0x89 */ uint8_t pad0x89[3]; // alignment padding
     /* 0x8C */ D2UniqueSetItemsTxtEntry sEntry[12];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2UniqueItemsTxt
 #ifndef D2_DEFINED_D2ParsedDifficultyTreasureClassStrc
@@ -1105,7 +1104,7 @@ struct D2ParsedDifficultyTreasureClassStrc {
 #endif // D2_DEFINED_D2ParsedDifficultyTreasureClassStrc
 #ifndef D2_DEFINED_D2DataTableTxtStrc
 #define D2_DEFINED_D2DataTableTxtStrc
-__pragma(pack(push, 1)) struct D2DataTableTxtStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DataTableTxtStrc {
     /* 0x000 */ struct D2PlayerClassTxt * pTxtPlayerClass;
     /* 0x004 */ struct D2TxtLinkStrc * pTxtPlayerClassLink;
     /* 0x008 */ struct D2BodyLocsTxt * pTxtBodyLocs;
@@ -1288,7 +1287,7 @@ __pragma(pack(push, 1)) struct D2DataTableTxtStrc {
     /* 0xC8C */ int nRoomDataFreeGenerationB; // copied from D2DrlgStrc.nRoomDataFreeGeneration in DRLGROOMEX_UpdateClientRoomExActivation; a counter, not a pointer
     /* 0xC90 */ int nRoomDataFreeGenerationA; // copied from D2DrlgStrc.nRoomDataFreeGeneration in DRLGROOMEX_UpdateClientRoomExActivation; a counter, not a pointer
     /* 0xC94 */ int nRoomDataGenerationA; // copied from D2DrlgStrc.nRoomDataGeneration in DRLGROOMEX_UpdateClientRoomExActivation; a counter, not a pointer
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DataTableTxtStrc
 namespace D2Common { namespace Skills {

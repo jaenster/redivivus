@@ -3796,7 +3796,7 @@ D2UnitStrc * * __fastcall RollChestDrops(D2ObjectOperateFnArg * pUnitKill, eD2It
         }
 
         nResultsItemSize = 0;
-        memset(aResultsItemList, 0, 6 * sizeof(aResultsItemList[0]));
+        memset(aResultsItemList, 0, sizeof(aResultsItemList));
         ITEMS::Items::Drop::SERVER_ITEM_RollItemToDrop(pGame, pUnitKill->sArg.pVictim, pUnitKill->pAttacker, pTreasure, eQuality, nVictimLevel, 0, aResultsItemList, &nResultsItemSize, 6);
         return (D2UnitStrc**)aResultsItemList[0];
       }

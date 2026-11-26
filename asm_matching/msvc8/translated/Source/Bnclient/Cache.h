@@ -26,16 +26,16 @@ union CACHE_ReadData_Slotm160 {
 #endif // D2_MODULE_Bnclient
 #ifndef D2_DEFINED_D2BnCacheBlockEntryStrc
 #define D2_DEFINED_D2BnCacheBlockEntryStrc
-__pragma(pack(push, 1)) struct D2BnCacheBlockEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BnCacheBlockEntryStrc {
     /* 0x00 */ LONG nFileOffset;
     /* 0x04 */ uint32_t dwBlockSize;
     /* 0x08 */ uint32_t dwDataSize;
     /* 0x0C */ uint32_t dwFlags;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2BnCacheBlockEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-__pragma(pack(push, 1)) struct D2BnCacheEntryHeaderStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BnCacheEntryHeaderStrc {
     /* 0x00 */ uint32_t dwHeaderSize; // always 0x144
     /* 0x04 */ uint32_t dwUnk04;
     /* 0x08 */ uint32_t dwUnk08;
@@ -48,7 +48,7 @@ __pragma(pack(push, 1)) struct D2BnCacheEntryHeaderStrc {
     /* 0x30 */ FILETIME ftExpiry;
     /* 0x38 */ FILETIME ftCacheExpiry;
     /* 0x40 */ char szKey[260];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #ifndef D2_DEFINED_D2BnCacheFileHeaderStrc

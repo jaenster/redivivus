@@ -100,6 +100,7 @@
 
 #define D2CONTROL_PORT 7777
 #define MAXQ 256
+#define D2C_COUNTOF(a) (sizeof(a) / sizeof((a)[0]))
 
 // kind 0 = dispatch a window message, kind 1 = take a screenshot of the real back buffer
 struct Action { int kind; UINT msg; WPARAM wp; LPARAM lp; int atFrame; int setPos; int x, y; char path[260]; };
@@ -288,15 +289,15 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     if (!strncmp(line, "pos", 3)) {
         static char posOut[2048];
         D2UnitStrc* apPlayers[2] = { nullptr, nullptr };
-        void* apTables[2] = { (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables, (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables };
-        for (int nTable = 0; nTable < 2; nTable++) {
-            D2UnitStrc** ppTable = (D2UnitStrc**)((char*)apTables[nTable] + UNIT_PLAYER * 0x200);
+        D2UnitStrc* (*apTables[2])[128] = { D2Client::UNIT::CUnit::ClientSideUnitHashTables, D2Client::UNIT::CUnit::ServerSideUnitHashTables };
+        for (int nTable = 0; nTable < (int)D2C_COUNTOF(apTables); nTable++) {
+            D2UnitStrc** ppTable = apTables[nTable][UNIT_PLAYER];
             for (int nBucket = 0; nBucket < 128 && !apPlayers[nTable]; nBucket++)
                 for (D2UnitStrc* pUnit = ppTable[nBucket]; pUnit; pUnit = pUnit->pListNext)
                     { apPlayers[nTable] = pUnit; break; }
         }
         int u = wsprintfA(posOut, "{\"sides\":[");
-        for (int i = 0; i < 2; i++) {
+        for (int i = 0; i < (int)D2C_COUNTOF(apPlayers); i++) {
             D2UnitStrc* pUnit = apPlayers[i];
             const D2DynamicPathStrc* pPath = pUnit ? pUnit->pPath.pDynamicPath : nullptr;
             if (!pPath) { u += wsprintfA(posOut + u, "%s{\"tbl\":%d,\"path\":0}", i ? "," : "", i); continue; }
@@ -389,12 +390,12 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         static char pktOut[8192];
         int u = wsprintfA(pktOut, "{\"client\":{");
         int n = 0;
-        for (int i = 0; i < 256; i++)
+        for (int i = 0; i < (int)D2C_COUNTOF(g_anClientPktCount); i++)
             if (g_anClientPktCount[i] && u < (int)sizeof(pktOut) - 60)
                 u += wsprintfA(pktOut + u, "%s\"%02X\":%u", n++ ? "," : "", i, g_anClientPktCount[i]);
         u += wsprintfA(pktOut + u, "},\"server\":{");
         n = 0;
-        for (int i = 0; i < 256; i++)
+        for (int i = 0; i < (int)D2C_COUNTOF(g_anServerPktCount); i++)
             if (g_anServerPktCount[i] && u < (int)sizeof(pktOut) - 60)
                 u += wsprintfA(pktOut + u, "%s\"%02X\":%u", n++ ? "," : "", i, g_anServerPktCount[i]);
         wsprintfA(pktOut + u, "}}");
@@ -546,7 +547,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         static char aiOut[8192];
         int u = wsprintfA(aiOut, "{\"mon\":[");
         int nSeen = 0, nEmitted = 0, nMoving = 0, nWithPath = 0, nWithTarget = 0;
-        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)D2Client::UNIT::CUnit::ServerSideUnitHashTables + UNIT_MONSTER * 0x200);
+        D2UnitStrc** ppTable = D2Client::UNIT::CUnit::ServerSideUnitHashTables[UNIT_MONSTER];
         for (int nBucket = 0; nBucket < 128; nBucket++) {
             for (D2UnitStrc* pUnit = ppTable[nBucket]; pUnit; pUnit = pUnit->pListNext) {
                 const D2DynamicPathStrc* pPath = pUnit->pPath.pDynamicPath;
@@ -602,12 +603,18 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         int nCells = (int)pView->sWall2.nWall2GridDim * (int)pView->sWall2.nWall2GridDim;
         if (nCells < 0 || nCells > 65536) nCells = 0;
         int nUsed = 0, aHead[9] = { 0 };
-        const unsigned char* pGrid = (const unsigned char*)pView->sWall2.pWall2;
-        if (pGrid && !IsBadReadPtr(pGrid, (UINT_PTR)nCells * 0x24)) {
+        const D2Wall2CellStrc* pGrid = pView->sWall2.pWall2;
+        if (pGrid && !IsBadReadPtr(pGrid, (UINT_PTR)nCells * sizeof(D2Wall2CellStrc))) {
             for (int i = 0; i < nCells; i++) {
-                const uint32_t* pCell = (const uint32_t*)(pGrid + (size_t)i * 0x24);
+                const D2Wall2CellStrc* pCell = &pGrid[i];
+                const uintptr_t aSlot[9] = {
+                    pCell->dwFlags,
+                    (uintptr_t)(pCell->field_0x4 | pCell->field_0x5 | pCell->field_0x6 | pCell->field_0x7),
+                    (uintptr_t)(uint32_t)pCell->nGridIsoX, (uintptr_t)(uint32_t)pCell->nGridIsoY,
+                    (uintptr_t)pCell->pShadowPassList, (uintptr_t)pCell->pWallList, (uintptr_t)pCell->pUnitBelowList,
+                    (uintptr_t)pCell->pRoofPassList, (uintptr_t)pCell->pUnderFloorList };
                 int bAny = 0;
-                for (int w = 0; w < 9; w++) if (pCell[w]) { aHead[w]++; bAny = 1; }
+                for (int w = 0; w < (int)D2C_COUNTOF(aSlot); w++) if (aSlot[w]) { aHead[w]++; bAny = 1; }
                 if (bAny) nUsed++;
             }
         }
@@ -738,24 +745,24 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         int nTotal = 0, nBad = 0, nRooms = 0;
         int aMax[8] = { 0 };
         int badType = -1, badCls = -1;
-        D2RoomStrc** ppList = *(D2RoomStrc***)((char*)pRoom + 0x00);
-        int nList = *(int*)((char*)pRoom + 0x24);
+        D2RoomStrc** ppList = pRoom->ppRoomList;
+        int nList = (int)pRoom->nRoomListCount;
         if (nList < 0 || nList > 64) nList = 0;
         for (int i = -1; i < nList; i++) {
             D2RoomStrc* pR = (i < 0) ? pRoom : (ppList ? ppList[i] : nullptr);
-            if (!pR || IsBadReadPtr(pR, 0x80)) continue;
+            if (!pR || IsBadReadPtr(pR, sizeof(D2RoomStrc))) continue;
             nRooms++;
-            D2UnitStrc* pU = *(D2UnitStrc**)((char*)pR + 0x74);
+            D2UnitStrc* pU = pR->pUnitList;
             for (int g = 0; pU && g < 4096; g++) {
-                if (IsBadReadPtr(pU, 0xEC)) { nBad++; break; }
-                int t = *(const int*)pU;
-                int c = *(const int*)((char*)pU + 4);
+                if (IsBadReadPtr(pU, offsetof(D2UnitStrc, pRoomNext) + sizeof(pU->pRoomNext))) { nBad++; break; }
+                int t = (int)pU->eUnitType;
+                int c = (int)pU->nClassId;
                 nTotal++;
                 if (t >= 0 && t < 8 && c > aMax[t]) aMax[t] = c;
                 if (t == 2 && (c < 0 || c >= D2Common::DATATBLS::ObjectTbls::nTxtObjectsSize)) {
                     nBad++; if (badType < 0) { badType = t; badCls = c; }
                 }
-                pU = *(D2UnitStrc**)((char*)pU + 0xE8);
+                pU = pU->pRoomNext;
             }
         }
         wsprintfA(ro,
@@ -795,7 +802,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                 if (u > (int)sizeof(oo) - 300) break;
                 u += wsprintfA(oo + u, "%s{\"L\":%d,\"cells\":%d,\"t\":{", nEmitted ? "," : "", L, nCells);
                 int first = 1;
-                for (int t = 0; t < 24; t++)
+                for (int t = 0; t < (int)D2C_COUNTOF(a); t++)
                     if (a[t] && u < (int)sizeof(oo) - 60) {
                         u += wsprintfA(oo + u, "%s\"%d\":%d", first ? "" : ",", t, a[t]); first = 0;
                     }
@@ -819,9 +826,8 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         int u = wsprintfA(og, "{\"objs\":[");
         int n = 0;
         for (int tbl = 0; tbl < 2 && u < (int)sizeof(og) - 120; tbl++) {
-            void* pBase = tbl ? (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables : (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables;
-            // rows are type-major with a 0x200 stride, as UnitsReply does it
-            D2UnitStrc** pT = (D2UnitStrc**)((char*)pBase + UNIT_OBJECT * 0x200);
+            D2UnitStrc* (*pBase)[128] = tbl ? D2Client::UNIT::CUnit::ServerSideUnitHashTables : D2Client::UNIT::CUnit::ClientSideUnitHashTables;
+            D2UnitStrc** pT = pBase[UNIT_OBJECT];
             for (int b = 0; b < 128 && u < (int)sizeof(og) - 120; b++) {
                 for (D2UnitStrc* pU = pT[b];
                      pU && !IsBadReadPtr(pU, 0x60); pU = pU->pListNext) {
@@ -874,42 +880,42 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         int L = pGV ? pGV->nCenterX : 0, T = pGV ? pGV->nCenterY : 0;
         int R = pGV ? (pGV->pView.right - pGV->pView.left + pGV->nCenterX) : 0;
         int B = pGV ? (pGV->pView.bottom - pGV->pView.top + pGV->nCenterY) : 0;
-        void* pEx0 = *(void**)((char*)pRoom + 0x10);
+        D2RoomExStrc* pEx0 = pRoom->pRoomEx;
         int nTotal = 0, nActive = 0, nPass = 0, nTiles = 0, nTilesPass = 0;
         int aT[24] = { 0 }, aPU[8] = { 0 }, aSkip[8] = { 0 }, nPreset = 0, nSkipFlag = 0;
         static char names[512]; names[0] = 0; int un = 0, nNamed = 0;
         // Start from the LEVEL's room-list head (pRoomEx->pLevel->pRoomExFirst), not from
         // the player's room - a forward walk only sees the tail of the list.
         int nLevelRooms = -1;
-        if (pEx0 && !IsBadReadPtr(pEx0, 0x60)) {
-            void* pLvl = *(void**)((char*)pEx0 + 0x58);
-            if (pLvl && !IsBadReadPtr(pLvl, 0x20)) {
-                nLevelRooms = *(const int*)((char*)pLvl + 0x08);
-                void* pHead = *(void**)((char*)pLvl + 0x10);
-                if (pHead && !IsBadReadPtr(pHead, 0x60)) pEx0 = pHead;
+        if (pEx0 && !IsBadReadPtr(pEx0, sizeof(D2RoomExStrc))) {
+            D2DrlgLevelStrc* pLvl = pEx0->pLevel;
+            if (pLvl && !IsBadReadPtr(pLvl, offsetof(D2DrlgLevelStrc, pRoomExFirst) + sizeof(pLvl->pRoomExFirst))) {
+                nLevelRooms = pLvl->nRoomExCount;
+                D2RoomExStrc* pHead = pLvl->pRoomExFirst;
+                if (pHead && !IsBadReadPtr(pHead, sizeof(D2RoomExStrc))) pEx0 = pHead;
             }
         }
-        for (void* pEx = pEx0; pEx && !IsBadReadPtr(pEx, 0x60) && nTotal < 4096;
-             pEx = *(void**)((char*)pEx + 0x24)) {
+        for (D2RoomExStrc* pEx = pEx0; pEx && !IsBadReadPtr(pEx, sizeof(D2RoomExStrc)) && nTotal < 4096;
+             pEx = pEx->pRoomExNext) {
             nTotal++;
-            D2RoomStrc* pR = *(D2RoomStrc**)((char*)pEx + 0x30);
-            if (!pR || IsBadReadPtr(pR, 0x80)) continue;
+            D2RoomStrc* pR = pEx->pRoom;
+            if (!pR || IsBadReadPtr(pR, sizeof(D2RoomStrc))) continue;
             nActive++;
-            const unsigned char* pTG = *(const unsigned char**)((char*)pEx + 0x54);
+            const D2DrlgTileGridStrc* pTG = pEx->pRoomTiles;
             int nW = 0;
-            if (pTG && !IsBadReadPtr(pTG, 0x20)) nW = *(const int*)(pTG + 0x08);
+            if (pTG && !IsBadReadPtr(pTG, sizeof(D2DrlgTileGridStrc))) nW = pTG->nWalls;
             if (nW < 0 || nW > 8192) nW = 0;
             nTiles += nW;
             // Which DS1 is this room built from? pRoomExData +0x08 pMap, pMap +0x0C pDrlgFile,
             // then match that pointer back to a cache node to recover the filename.
             if (nNamed < 12 && un < (int)sizeof(names) - 40) {
                 const char* nm = "?";
-                int pt = *(const int*)((char*)pEx + 0x48);
-                const unsigned char* pData = *(const unsigned char**)((char*)pEx + 0x20);
-                if (pt == 2 && pData && !IsBadReadPtr(pData, 0x10)) {
-                    const unsigned char* pMap = *(const unsigned char**)(pData + 0x08);
-                    if (pMap && !IsBadReadPtr(pMap, 0x20)) {
-                        const void* pDF = *(const void**)(pMap + 0x0C);
+                int pt = pEx->nPresetType;
+                const D2DrlgPresetRoomStrc* pData = pEx->pRoomExData.pRoomExDataPreset;
+                if (pt == 2 && pData && !IsBadReadPtr(pData, offsetof(D2DrlgPresetRoomStrc, pMap) + sizeof(pData->pMap))) {
+                    const D2DrlgMapStrc* pMap = pData->pMap;
+                    if (pMap && !IsBadReadPtr(pMap, offsetof(D2DrlgMapStrc, pDrlgFile) + sizeof(pMap->pDrlgFile))) {
+                        const void* pDF = pMap->pDrlgFile;
                         for (D2DrlgFileCacheNodeStrc* pC = D2Common::Drlg::Preset::gpDrlgFileCache;
                              pC && !IsBadReadPtr(pC, 0x110); pC = pC->pNext)
                             if ((const void*)pC->pDrlgFile == pDF) {
@@ -925,20 +931,20 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             }
             // Preset units the DS1 places in this room, by unit type. Compare against the
             // objects that actually exist: a shortfall means preset spawn is dropping them.
-            for (const unsigned char* pPU = *(const unsigned char**)((char*)pEx + 0x5C);
-                 pPU && !IsBadReadPtr(pPU, 0x20) && nPreset < 4096;
-                 pPU = *(const unsigned char**)(pPU + 0x0C)) {
-                int et = *(const int*)(pPU + 0x14);
-                int fl = *(const int*)(pPU + 0x1C);
+            for (const D2PresetUnitStrc* pPU = pEx->pPresetUnit;
+                 pPU && !IsBadReadPtr(pPU, sizeof(D2PresetUnitStrc)) && nPreset < 4096;
+                 pPU = pPU->pPresetUnitNext) {
+                int et = (int)pPU->eType;
+                int fl = pPU->nFlags;
                 nPreset++;
                 if (et >= 0 && et < 8) aPU[et]++;
                 // SUNIT_SpawnPresetUnits skips any preset with nFlags bit 0 set.
                 if (fl & 1) { nSkipFlag++; if (et >= 0 && et < 8) aSkip[et]++; }
             }
-            const unsigned char* pWT = (pTG && nW) ? *(const unsigned char**)(pTG + 0x14) : nullptr;
-            if (pWT && !IsBadReadPtr(pWT, (UINT_PTR)nW * 0x30))
+            const D2DrlgTileDataStrc* pWT = (pTG && nW) ? pTG->sRoomTiles.pWallTiles : nullptr;
+            if (pWT && !IsBadReadPtr(pWT, (UINT_PTR)nW * sizeof(D2DrlgTileDataStrc)))
                 for (int k = 0; k < nW; k++) {
-                    int tt = *(const int*)(pWT + (size_t)k * 0x30 + 0x1C);
+                    int tt = pWT[k].nTileType;
                     if (tt >= 0 && tt < 24) aT[tt]++;
                 }
             int mm[4] = { 0, 0, 0, 0 };
@@ -953,13 +959,13 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             nLevelRooms, nTotal, nActive, nPass, nTiles, nTilesPass);
         {
             int uu = lstrlenA(lr);
-            for (int t = 0; t < 24; t++)
+            for (int t = 0; t < (int)D2C_COUNTOF(aT); t++)
                 if (aT[t]) uu += wsprintfA(lr + uu, "%d:%d ", t, aT[t]);
             uu += wsprintfA(lr + uu, "\",\"presetUnits\":%d,\"presetByType\":\"", nPreset);
-            for (int t = 0; t < 8; t++)
+            for (int t = 0; t < (int)D2C_COUNTOF(aPU); t++)
                 if (aPU[t]) uu += wsprintfA(lr + uu, "%d:%d ", t, aPU[t]);
             uu += wsprintfA(lr + uu, "\",\"skippedByFlag1\":%d,\"skipByType\":\"", nSkipFlag);
-            for (int t = 0; t < 8; t++)
+            for (int t = 0; t < (int)D2C_COUNTOF(aSkip); t++)
                 if (aSkip[t]) uu += wsprintfA(lr + uu, "%d:%d ", t, aSkip[t]);
             wsprintfA(lr + uu, "\",\"rooms\":\"%s\"}", names);
         }
@@ -984,39 +990,39 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         int aMinX[24], aMaxX[24], aMinY[24], aMaxY[24], aMinH[24], aMaxH[24];
         int aRejX[24] = { 0 }, aRejY[24] = { 0 }, aRejG[24] = { 0 }, aPass[24] = { 0 };
         int aMinR[24], aMaxR[24];
-        for (int z = 0; z < 24; z++) { aMinR[z] = 1<<28; aMaxR[z] = -(1<<28); }
+        for (int z = 0; z < (int)D2C_COUNTOF(aMinR); z++) { aMinR[z] = 1<<28; aMaxR[z] = -(1<<28); }
         D2GameViewStrc* pGV = D2Client::GAME::Game::D2GameView;
         int nCullL = pGV ? pGV->nCenterX : 0, nCullT = pGV ? pGV->nCenterY : 0;
         int nCullR = pGV ? (pGV->pView.right - pGV->pView.left + pGV->nCenterX) : 0;
         int nCullB = pGV ? (pGV->pView.bottom - pGV->pView.top + pGV->nCenterY) : 0;
         D2Wall2DrawListStrc* pAllocB = pGV ? &pGV->sWall2 : nullptr;
-        for (int z = 0; z < 24; z++) { aMinX[z]=aMinY[z]=aMinH[z]=1<<28; aMaxX[z]=aMaxY[z]=aMaxH[z]=-(1<<28); }
+        for (int z = 0; z < (int)D2C_COUNTOF(aMinX); z++) { aMinX[z]=aMinY[z]=aMinH[z]=1<<28; aMaxX[z]=aMaxY[z]=aMaxH[z]=-(1<<28); }
         int nNegRoof = 0, nMinRoof = 32767, nMaxRoof = -32768;
-        D2RoomStrc** ppList = *(D2RoomStrc***)((char*)pRoom + 0x00);
-        int nList = *(int*)((char*)pRoom + 0x24);
+        D2RoomStrc** ppList = pRoom->ppRoomList;
+        int nList = (int)pRoom->nRoomListCount;
         if (nList < 0 || nList > 64) nList = 0;
         for (int i = -1; i < nList; i++) {
             D2RoomStrc* pR = (i < 0) ? pRoom : (ppList ? ppList[i] : nullptr);
-            if (!pR || IsBadReadPtr(pR, 0x80)) continue;
-            void* pEx = *(void**)((char*)pR + 0x10);
-            if (!pEx || IsBadReadPtr(pEx, 0x60)) continue;
-            const unsigned char* pTG = *(const unsigned char**)((char*)pEx + 0x54);
-            if (!pTG || IsBadReadPtr(pTG, 0x20)) continue;
+            if (!pR || IsBadReadPtr(pR, sizeof(D2RoomStrc))) continue;
+            D2RoomExStrc* pEx = pR->pRoomEx;
+            if (!pEx || IsBadReadPtr(pEx, sizeof(D2RoomExStrc))) continue;
+            const D2DrlgTileGridStrc* pTG = pEx->pRoomTiles;
+            if (!pTG || IsBadReadPtr(pTG, sizeof(D2DrlgTileGridStrc))) continue;
             nRooms++;
-            int nWalls = *(const int*)(pTG + 0x08);
-            const unsigned char* pWT = *(const unsigned char**)(pTG + 0x14);
+            int nWalls = pTG->nWalls;
+            const D2DrlgTileDataStrc* pWT = pTG->sRoomTiles.pWallTiles;
             if (nWalls < 0 || nWalls > 8192 || !pWT) continue;
-            if (IsBadReadPtr(pWT, (UINT_PTR)nWalls * 0x30)) continue;
+            if (IsBadReadPtr(pWT, (UINT_PTR)nWalls * sizeof(D2DrlgTileDataStrc))) continue;
             for (int k = 0; k < nWalls; k++) {
-                const unsigned char* pT = pWT + (size_t)k * 0x30;
-                int t = *(const int*)(pT + 0x1C);
+                const D2DrlgTileDataStrc* pT = &pWT[k];
+                int t = pT->nTileType;
                 if (t >= 0 && t < 24) aType[t]++; else nOther++;
                 // The cull MOVZX-extends roofHeight, so a NEGATIVE value becomes ~65440 and
                 // the tile is culled off-screen. Count those, split by tile type.
                 // Each tile already carries its computed screen position, so "is it on
                 // camera" is a direct question, not something to re-derive from the cull.
-                int sx = *(const int*)(pT + 0x00) - nOffX;
-                int sy = *(const int*)(pT + 0x04) - nOffY;
+                int sx = pT->nScreenX - nOffX;
+                int sy = pT->nScreenY - nOffY;
                 if (t >= 0 && t < 24) {
                     if (sx > -160 && sx < 960 && sy > -160 && sy < 760) aOn[t]++;
                     if (sx < aMinX[t]) aMinX[t] = sx;
@@ -1026,13 +1032,13 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                 }
                 // Routing in WALL2_CollectRoomTilesAndUnits keys on the render-layer bits:
                 // no 0x1c000 -> AddRoofTile -> slot 0x10 -> drawn as a SHADOW tile.
-                if (t >= 0 && t < 24 && !(*(const unsigned*)(pT + 0x14) & 0x1c000U)) aNoLayer[t]++;
-                const unsigned char* pLib = *(const unsigned char**)(pT + 0x18);
-                if (pLib && !IsBadReadPtr(pLib, 0x10) && t >= 0 && t < 24) {
+                if (t >= 0 && t < 24 && !((unsigned)pT->nFlags & 0x1c000U)) aNoLayer[t]++;
+                const D2TileLibraryEntryStrc* pLib = pT->pTileLibraryEntry;
+                if (pLib && !IsBadReadPtr(pLib, offsetof(D2TileLibraryEntryStrc, nWidth)) && t >= 0 && t < 24) {
                     // Replicate WALL2_CollectRoomTilesAndUnits' three gates exactly.
-                    int rawX = *(const int*)(pT + 0x00), rawY = *(const int*)(pT + 0x04);
-                    int nH  = *(const int*)(pLib + 0x08);                 // GetRoofHeightIndex
-                    int adjY = rawY - (int)(uint16_t)*(const short*)(pLib + 0x04);
+                    int rawX = pT->nScreenX, rawY = pT->nScreenY;
+                    int nH  = pLib->nHeight;                 // GetRoofHeightIndex
+                    int adjY = rawY - (int)pLib->nRoofHeight;
                     if (!(rawX <= nCullR && nCullL <= rawX + 0xa0)) {
                         aRejX[t]++;
                     } else if (!(nH + adjY <= nCullB && nCullT <= adjY - nH)) {
@@ -1046,13 +1052,13 @@ static void HandleLine(char* line, char* reply, int replyMax) {
                             aPass[t]++;
                     }
                 }
-                if (pLib && !IsBadReadPtr(pLib, 0x10)) {
-                    int nh = *(const int*)(pLib + 0x08);   // nHeight: the Y-gate term
+                if (pLib && !IsBadReadPtr(pLib, offsetof(D2TileLibraryEntryStrc, nWidth))) {
+                    int nh = pLib->nHeight;   // nHeight: the Y-gate term
                     if (t >= 0 && t < 24) {
                         if (nh < aMinH[t]) aMinH[t] = nh;
                         if (nh > aMaxH[t]) aMaxH[t] = nh;
                     }
-                    short rh = *(const short*)(pLib + 0x04);
+                    short rh = (short)pLib->nRoofHeight;
                     if (t >= 0 && t < 24) {
                         if (rh < aMinR[t]) aMinR[t] = rh;
                         if (rh > aMaxR[t]) aMaxR[t] = rh;
@@ -1071,19 +1077,19 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             pGV ? pGV->nCenterX : -1, pGV ? pGV->nCenterY : -1, nOffX, nOffY,
             pGV ? (pGV->pView.right - pGV->pView.left) : -1,
             pGV ? (pGV->pView.bottom - pGV->pView.top) : -1);
-        for (int t = 0; t < 24; t++)
+        for (int t = 0; t < (int)D2C_COUNTOF(aType); t++)
             if (aType[t] && u < (int)sizeof(rt) - 40)
                 u += wsprintfA(rt + u, "%s\"%d\":%d", u > 0 && rt[u-1] != '{' ? "," : "", t, aType[t]);
         u += wsprintfA(rt + u, "},\"negRoof\":%d,\"minRoof\":%d,\"maxRoof\":%d,\"negByType\":{",
                        nNegRoof, nMinRoof, nMaxRoof);
         int f2 = 1;
-        for (int t = 0; t < 24; t++)
+        for (int t = 0; t < (int)D2C_COUNTOF(aNeg); t++)
             if (aNeg[t] && u < (int)sizeof(rt) - 40) {
                 u += wsprintfA(rt + u, "%s\"%d\":%d", f2 ? "" : ",", t, aNeg[t]); f2 = 0;
             }
         u += wsprintfA(rt + u, "},\"onscreen\":{");
         int f3 = 1;
-        for (int t = 0; t < 24; t++)
+        for (int t = 0; t < (int)D2C_COUNTOF(aType); t++)
             if (aType[t] && u < (int)sizeof(rt) - 80) {
                 u += wsprintfA(rt + u, "%s\"%d\":\"%d/%d x[%d..%d] y[%d..%d]\"",
                                f3 ? "" : ",", t, aOn[t], aType[t],
@@ -1091,26 +1097,26 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             }
         u += wsprintfA(rt + u, "},\"roofH\":{");
         int f7 = 1;
-        for (int t = 0; t < 24; t++)
+        for (int t = 0; t < (int)D2C_COUNTOF(aType); t++)
             if (aType[t] && u < (int)sizeof(rt) - 60) {
                 u += wsprintfA(rt + u, "%s\"%d\":\"%d..%d\"", f7 ? "" : ",", t, aMinR[t], aMaxR[t]); f7 = 0;
             }
         u += wsprintfA(rt + u, "},\"gates\":{");
         int f6 = 1;
-        for (int t = 0; t < 24; t++)
+        for (int t = 0; t < (int)D2C_COUNTOF(aType); t++)
             if (aType[t] && u < (int)sizeof(rt) - 90) {
                 u += wsprintfA(rt + u, "%s\"%d\":\"pass %d rejX %d rejY %d rejGrid %d\"",
                                f6 ? "" : ",", t, aPass[t], aRejX[t], aRejY[t], aRejG[t]); f6 = 0;
             }
         u += wsprintfA(rt + u, "},\"nHeight\":{");
         int f5 = 1;
-        for (int t = 0; t < 24; t++)
+        for (int t = 0; t < (int)D2C_COUNTOF(aType); t++)
             if (aType[t] && u < (int)sizeof(rt) - 60) {
                 u += wsprintfA(rt + u, "%s\"%d\":\"%d..%d\"", f5 ? "" : ",", t, aMinH[t], aMaxH[t]); f5 = 0;
             }
         u += wsprintfA(rt + u, "},\"noLayerBits\":{");
         int f4 = 1;
-        for (int t = 0; t < 24; t++)
+        for (int t = 0; t < (int)D2C_COUNTOF(aType); t++)
             if (aType[t] && u < (int)sizeof(rt) - 40) {
                 u += wsprintfA(rt + u, "%s\"%d\":\"%d/%d\"", f4 ? "" : ",", t, aNoLayer[t], aType[t]); f4 = 0;
             }
@@ -1157,7 +1163,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
             const uint8_t* q = base + (size_t)r * 0x100;
             for (int k = 0; k < 256; k++) if (q[k]) { nNonZeroRows++; break; }
         }
-        for (int i = 0; i < 4; i++) {
+        for (int i = 0; i < (int)D2C_COUNTOF(rows); i++) {
             const uint8_t* q = base + (size_t)rows[i] * 0x100;
             u += wsprintfA(po + u, "%s\"%d\":\"", i ? "," : "", rows[i]);
             for (int k = 0; k < 12; k++) u += wsprintfA(po + u, "%02X", q[k]);
@@ -1272,7 +1278,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     if (!strncmp(line, "lmap", 4)) {
         static char lOut[512];
         int nZero = 0, nNonZero = 0, nMax = 0, nColl = 0, nSum = 0;
-        for (int i = 0; i < 2304; i++) {
+        for (int i = 0; i < (int)D2C_COUNTOF(D2Client::Draw::LightMap::gaLightMapCells); i++) {
             int v = D2Client::Draw::LightMap::gaLightMapCells[i].nCellIntensity;
             if (v) { nNonZero++; nSum += v; if (v > nMax) nMax = v; } else nZero++;
             if (D2Client::Draw::LightMap::gaLightMapCells[i].nCollisionGrid) nColl++;
@@ -1401,7 +1407,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         void* apCand[3] = { (void*)pPl->pAnimData, (void*)pPl->pGfxInfo, (void*)pPl->pGfxDataCopy };
         const char* aszName[3] = { "pAnimData", "pGfxInfo", "pGfxDataCopy" };
         int u = wsprintfA(cfOut, "{\"unit\":\"%08X\",\"cand\":[", (unsigned)(uintptr_t)pPl);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < (int)D2C_COUNTOF(apCand); i++) {
             char* p = (char*)apCand[i];
             int ok = p && !IsBadReadPtr(p, 0xc0);
             u += wsprintfA(cfOut + u, "%s{\"n\":\"%s\",\"p\":\"%08X\"", i ? "," : "",
@@ -1465,7 +1471,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
     if (!strncmp(line, "srv", 3) && line[3] != 'c') {
         static char svOut[640];
         D2UnitStrc* pSrv = nullptr;
-        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)D2Client::UNIT::CUnit::ServerSideUnitHashTables + UNIT_PLAYER * 0x200);
+        D2UnitStrc** ppTable = D2Client::UNIT::CUnit::ServerSideUnitHashTables[UNIT_PLAYER];
         for (int nBucket = 0; nBucket < 128 && !pSrv; nBucket++)
             for (D2UnitStrc* pU = ppTable[nBucket]; pU; pU = pU->pListNext) { pSrv = pU; break; }
         if (!pSrv) { lstrcpynA(reply, "{\"err\":\"no server player\"}", replyMax); return; }
@@ -1497,7 +1503,7 @@ static void HandleLine(char* line, char* reply, int replyMax) {
         }
         static char scOut[640];
         D2UnitStrc* pSrv = nullptr;
-        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)D2Client::UNIT::CUnit::ServerSideUnitHashTables + UNIT_PLAYER * 0x200);
+        D2UnitStrc** ppTable = D2Client::UNIT::CUnit::ServerSideUnitHashTables[UNIT_PLAYER];
         for (int nBucket = 0; nBucket < 128 && !pSrv; nBucket++)
             for (D2UnitStrc* pU = ppTable[nBucket]; pU; pU = pU->pListNext) { pSrv = pU; break; }
         ::SGAMEDATA* pGame = D2Game::GAME::Server::QSERVER_GetFirstActiveGame();
@@ -2365,13 +2371,13 @@ static int UnitsReply(char* out, int outMax, int nWantType) {
     // ServerSideUnitHashTables and `UNITS_FindServerSideUnit` reads the Client one, so one
     // pair of names is wrong in Ghidra and guessing which would put the NPC list on the
     // wrong side. Report the table each unit came from and let the caller see it.
-    void* apTables[2] = { (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables, (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables };
+    D2UnitStrc* (*apTables[2])[128] = { D2Client::UNIT::CUnit::ClientSideUnitHashTables, D2Client::UNIT::CUnit::ServerSideUnitHashTables };
     int used = wsprintfA(out, "{\"persp\":%d,\"units\":[", bPersp);
     int nFound = 0;
     for (int nTable = 0; nTable < 2; nTable++) {
     for (int nType = 0; nType < 6; nType++) {
         if (nWantType >= 0 && nType != nWantType) continue;
-        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)apTables[nTable] + nType * 0x200);
+        D2UnitStrc** ppTable = apTables[nTable][nType];
         for (int nBucket = 0; nBucket < 128; nBucket++) {
             for (D2UnitStrc* pUnit = ppTable[nBucket]; pUnit; pUnit = pUnit->pListNext) {
                 if (used > outMax - 260) { nFound++; continue; }
@@ -2454,9 +2460,9 @@ static void WalkerScanForShop(void) {
     // interact=1 in MonStats is the bit that decides whether a click opens a menu at all,
     // so it is the only test that answers "can I trade with this".
     if (!D2Common::ITEMS::Items::sgptDataTable) return;
-    void* apTables[2] = { (void*)D2Client::UNIT::CUnit::ClientSideUnitHashTables, (void*)D2Client::UNIT::CUnit::ServerSideUnitHashTables };
+    D2UnitStrc* (*apTables[2])[128] = { D2Client::UNIT::CUnit::ClientSideUnitHashTables, D2Client::UNIT::CUnit::ServerSideUnitHashTables };
     for (int nTable = 0; nTable < 2; nTable++) {
-        D2UnitStrc** ppTable = (D2UnitStrc**)((char*)apTables[nTable] + UNIT_MONSTER * 0x200);
+        D2UnitStrc** ppTable = apTables[nTable][UNIT_MONSTER];
         for (int nBucket = 0; nBucket < 128; nBucket++) {
             for (D2UnitStrc* pUnit = ppTable[nBucket]; pUnit; pUnit = pUnit->pListNext) {
                 if (pUnit->nClassId < 0 || pUnit->nClassId >= (int)D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) continue;
@@ -2550,7 +2556,7 @@ extern "C" void D2CONTROL_Pump(void) {
         if (!bViewWatchTried && D2Client::GAME::Game::D2GameView != nullptr &&
             GetFileAttributesA("test\\watchview") != INVALID_FILE_ATTRIBUTES) {
             bViewWatchTried = true;
-            g_pHwbpTarget = (void*)((char*)D2Client::GAME::Game::D2GameView + 0x10);
+            g_pHwbpTarget = (void*)&D2Client::GAME::Game::D2GameView->pView.bottom;
             D2TraceFmt("VIEWWATCH arming on %08X (D2GameView=%08X)", (unsigned)(uintptr_t)g_pHwbpTarget,
                        (unsigned)(uintptr_t)D2Client::GAME::Game::D2GameView);
             D2ProbeArmClipHwbpSelf();

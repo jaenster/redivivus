@@ -19,6 +19,7 @@
 #if D2_TARGET_CLIENT
 #elif D2_TARGET_SERVER
 #include "Redivivus/Server/ServerHost.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2IniConfigStrc) == 0x3cd, "D2IniConfigStrc is 0x3cd bytes on 32-bit");
 #else
 #error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
 #endif
@@ -735,7 +736,7 @@ int32_t __stdcall INI_FindConfigValueIndex(uint8_t * pbArgName) {
 
 uint32_t __fastcall INI_IsDelimiterChar(char cChar) {
     char szDelimiters[4] = { ' ', '\t', '\n', ':' };
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < (int)sizeof(szDelimiters); i++) {
       if (szDelimiters[i] == cChar) {
         return 1;
       }
@@ -915,7 +916,7 @@ void __thiscall MISC_ParseCommandLineAndPutIntoD2IniData(char * szText, D2IniCon
 }
 
 void __fastcall MISC_InitD2IniAndIgnorelist(D2IniConfigStrc * D2IniData, char * szCommandLine) {
-    memset(D2IniData, 0, 0x3cd);
+    memset(D2IniData, 0, sizeof(*D2IniData));
     MISC_GetValueFromD2Ini(D2IniData);
     D2Common::Chat::Ignorelist::MISC_InitIgnorelist();
     MISC_ParseCommandLineAndPutIntoD2IniData(szCommandLine, D2IniData);
@@ -1551,7 +1552,7 @@ void __fastcall D2INIT_CheckCommandLineOrLoadItFromRegistry(char * * ppszText) {
         Storm::Source::SReg::SRegLoadString("Diablo II", "CmdLine", 0, REGISTRY_CmdLine, 0x400);
         *ppszText = REGISTRY_CmdLine;
       } else {
-        memcpy(szCmdLineBuf, "-skiptobnet", 0xc);
+        memcpy(szCmdLineBuf, "-skiptobnet", sizeof("-skiptobnet"));
         Storm::Source::SReg::SRegSaveString("Diablo II", "CmdLine", 0, szCmdLineBuf);
       }
     }
@@ -1572,7 +1573,6 @@ void __stdcall CreateRegedit() {
     HKEY hKeySrc;
     uint8_t dataBuf[1024];
     char szValueName[260];
-    char szInstallPath[260];
     LSTATUS nRegStatus = RegOpenKeyA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta", &hKeySrc);
     if (!nRegStatus) {
       DWORD dwIndex;
@@ -1595,9 +1595,8 @@ void __stdcall CreateRegedit() {
       /* LPCSTR lpSubKey for RegDeleteKeyA */ /* HKEY hKey for RegDeleteKeyA */ RegDeleteKeyA(HKEY_LOCAL_MACHINE, "SOFTWARE\\Blizzard Entertainment\\Diablo II Beta");
     }
 
-    szInstallPath[0] = '\0';
-    memset(szInstallPath + 1, 0, 0x103);
-    Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, 0x104);
+    char szInstallPath[MAX_PATH] = "";
+    Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, sizeof(szInstallPath));
     if (gnServiceRunning) {
       /* LPCSTR lpPathName for SetCurrentDirectoryA */ SetCurrentDirectoryA(szInstallPath);
     }

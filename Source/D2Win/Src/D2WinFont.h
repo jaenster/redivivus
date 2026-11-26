@@ -53,14 +53,14 @@ struct D2FontTableHeaderStrc {
 #endif // D2_DEFINED_D2FontTableHeaderStrc
 #ifndef D2_DEFINED_D2TooltipTextStrc
 #define D2_DEFINED_D2TooltipTextStrc
-struct __attribute__((packed)) D2TooltipTextStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TooltipTextStrc {
     /* 0x000 */ uint16_t wszString[1024];
     /* 0x800 */ int nX;
     /* 0x804 */ int nY;
     /* 0x808 */ int nColor;
     /* 0x80C */ int nCenterFlag;
     /* 0x810 */ int nLoadProgress;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2TooltipTextStrc
 // =============================================================================

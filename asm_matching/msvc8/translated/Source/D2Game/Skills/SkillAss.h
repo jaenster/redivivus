@@ -51,14 +51,14 @@ struct D2SkillAreaDamageArgStrc {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2SkillCurseArgStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SkillCurseArgStrc {
     /* 0x00 */ eD2Skills eSkill;
     /* 0x04 */ int32_t nSkillLvl;
     /* 0x08 */ int32_t nDurationFrames;
     /* 0x0C */ eD2States eTargetState;
     /* 0x10 */ int32_t anStatIds[6];
     /* 0x28 */ int32_t anStatValues[6];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)

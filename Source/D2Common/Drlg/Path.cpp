@@ -9,6 +9,7 @@
 #include "Source/D2Common/Path/Path.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units/Units.twin.inline.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2DrlgPathNodeStrc) == 0x38, "D2DrlgPathNodeStrc is 0x38 bytes on x86");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -870,7 +871,7 @@ static void DRLGPATH_PropagateNodeCosts(D2DrlgPathNodeStrc * pStartNode, D2DrlgP
     while (pSearchCtx->nPropagateCount) {
       pSearchCtx->nPropagateCount--;
       D2DrlgPathNodeStrc* pCurNode = (D2DrlgPathNodeStrc*)pSearchCtx->apPropagateQueue[pSearchCtx->nPropagateCount];
-      for (int nChildIdx = 0; nChildIdx < 8; nChildIdx++) {
+      for (int nChildIdx = 0; nChildIdx < (int)_countof(pCurNode->pChildren); nChildIdx++) {
         D2DrlgPathNodeStrc* pNeighborNode = pCurNode->pChildren[nChildIdx];
         if (!pNeighborNode) {
           break;
@@ -904,7 +905,7 @@ D2DrlgPathNodeStrc * __fastcall DRLGPATH_AllocPathNode(D2DrlgPathSearchCtxStrc *
 
     D2DrlgPathNodeStrc* pNode = &nPathCtx->aNodePool[nPoolIndex];
     nPathCtx->nPoolCount = nPoolIndex + 1;
-    memset(pNode, 0, 0x38);
+    memset(pNode, 0, sizeof(D2DrlgPathNodeStrc));
     return pNode;
 }
 
@@ -1217,14 +1218,18 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
     abyOpenList.nPoolCount = 0;
     abyOpenList.pSortedHead = 0;
     abyOpenList.nPropagateCount = 0;
+#if D2_ARCH_X86
     memset(&abyOpenList, 0, 0x200);
-    memset(abyOpenList.apClosedBuckets, 0, 0x200);
+#elif D2_ARCH_X64
+    memset(&abyOpenList, 0, sizeof(abyOpenList));
+#endif
+    memset(abyOpenList.apClosedBuckets, 0, sizeof(abyOpenList.apClosedBuckets));
     D2PathPointStrc DVar1 = pPathTypeArg->tStartCoord;
     D2PathPointStrc nStartPacked = pPathTypeArg->tTargetCoord;
     if (abyOpenList.nPoolCount != 200) {
       pClosestNode = abyOpenList.aNodePool + abyOpenList.nPoolCount;
       abyOpenList.nPoolCount++;
-      memset(pClosestNode, 0, 0x38);
+      memset(pClosestNode, 0, sizeof(D2DrlgPathNodeStrc));
     }
 
     int32_t nDeltaX = (uint16_t)(uint32_t)d2_bits_of(DVar1) - (uint16_t)(uint32_t)d2_bits_of(nStartPacked);

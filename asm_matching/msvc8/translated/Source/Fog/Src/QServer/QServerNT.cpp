@@ -7,6 +7,7 @@
 #include "Source/Fog/Src/QServer/QServer.h"
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || offsetof(D2QServerWorkerTelemetryStrc, qpcStampAfterAcceptHook) + sizeof(LARGE_INTEGER) - offsetof(D2QServerWorkerTelemetryStrc, qpcStampStart) == 0x48, "AcceptConnection clears the nine accept stamps");
 static_assert(sizeof(void*) != 4 || sizeof(D2QServerClientPacketStrc) == 8, "D2_ALLOC_AT(... + sizeof(D2QServerClientPacketStrc)): the 32-bit layout must be the 8 bytes 1.14d allocates");
 
 // Forward declarations (used only by pointer here)
@@ -29,7 +30,7 @@ void __fastcall AwaitAndClose(D2QServerStrc * pQserver) {
     HANDLE aWaitHandles[8];
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQserver->csClientLifecycle);
     int nCount = 0;
-    for (int i = 0; i < 4; i++) {
+    for (int i = 0; i < (int)(sizeof(pQserver->aAcceptThreadHandles) / sizeof(pQserver->aAcceptThreadHandles[0])); i++) {
       if (pQserver->aAcceptThreadHandles[i]) {
         aWaitHandles[nCount] = pQserver->aAcceptThreadHandles[i];
         nCount++;
@@ -138,7 +139,7 @@ static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStruc
 static SOCKET __stdcall AcceptConnection(D2QServerStrc * pQServer, sockaddr * pSockAddr, int nWorkerIndex, int * pSockAddrLen) {
     char* szClientIpStr;
     BOOL bBeginReadOk2;
-    memset(&pQServer->aWorkerTelemetry[nWorkerIndex].qpcStampStart, 0, 0x48);
+    memset(&pQServer->aWorkerTelemetry[nWorkerIndex].qpcStampStart, 0, offsetof(D2QServerWorkerTelemetryStrc, qpcStampAfterAcceptHook) + sizeof(LARGE_INTEGER) - offsetof(D2QServerWorkerTelemetryStrc, qpcStampStart));
     /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&pQServer->aWorkerTelemetry[nWorkerIndex].qpcStampStart);
     *pSockAddrLen = 0x10;
     memset(pSockAddr, 0, sizeof(*pSockAddr));
@@ -217,10 +218,10 @@ static SOCKET __stdcall AcceptConnection(D2QServerStrc * pQServer, sockaddr * pS
     ioctlsocket((SOCKET)FileHandle, -0x7ffb9982, &ulNonBlocking);
     /* int * namelen for getpeername */ /* sockaddr * name for getpeername */ /* SOCKET s for getpeername */ nRejectReason = 0x10;
     getpeername((SOCKET)FileHandle, (sockaddr*)&pClient->peerSockaddr, &nRejectReason);
-    Storm::Source::SMem::SMemZero(pClient->peerSockaddr.sin_zero, 8);
+    Storm::Source::SMem::SMemZero(pClient->peerSockaddr.sin_zero, sizeof(pClient->peerSockaddr.sin_zero));
     /* int * namelen for getsockname */ /* sockaddr * name for getsockname */ /* SOCKET s for getsockname */ nRejectReason = 0x10;
     getsockname((SOCKET)FileHandle, (sockaddr*)&pClient->localSockaddr, &nRejectReason);
-    Storm::Source::SMem::SMemZero(pClient->localSockaddr.sin_zero, 8);
+    Storm::Source::SMem::SMemZero(pClient->localSockaddr.sin_zero, sizeof(pClient->localSockaddr.sin_zero));
     if ((HANDLE)pClient->socket != FileHandle) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x4e4);
       exit(-1);

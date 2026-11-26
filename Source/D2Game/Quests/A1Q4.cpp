@@ -771,7 +771,7 @@ void __fastcall RollStonesOrder(D2QuestDataA1Q4Strc * pQuestSpecificData) {
     char szDebugBuf[80];
     uint32_t sNextSeed;
     D2QuestDataA1Q4SubStrc* pSubData = *(D2QuestDataA1Q4SubStrc**)pQuestSpecificData->sSub.aStones;
-    memset(pSubData->aStones, 0, 5 * sizeof(pSubData->aStones[0]));
+    memset(pSubData->aStones, 0, sizeof(pSubData->aStones));
     pSubData->nStoneIndex = 0;
     aStoneClassIds[0] = 0x11;
     aStoneClassIds[1] = 0x12;

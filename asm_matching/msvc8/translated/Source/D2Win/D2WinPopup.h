@@ -24,15 +24,15 @@ typedef void (__stdcall *pfnVoidNoArgCallback)();
 // Data types
 #ifndef D2_DEFINED_D2WinPopupEntry
 #define D2_DEFINED_D2WinPopupEntry
-__pragma(pack(push, 1)) struct D2WinPopupEntry {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinPopupEntry {
     /* 0x00 */ uint16_t wszText[64];
     /* 0x80 */ void (__stdcall *pfnOnClick)(); // called with no arguments by D2WINPOPUP_HandleClick
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2WinPopupEntry
-__pragma(pack(push, 1)) struct D2WinPopup {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinPopup {
     /* 0x000 */ D2ControlStrc sControl;
     /* 0x040 */ int nMessageCount;
     /* 0x044 */ D2WinPopupEntry wszMessages[8]; // 8 entries of 0x84 bytes (AddMessage copies 0x21 dwords, at most 8)
     /* 0x464 */ BOOL bCentered;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END

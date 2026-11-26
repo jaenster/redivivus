@@ -300,7 +300,7 @@ static BOOL SOUND_InitStreamChannels(int32_t nMixerMode) {
       exit(-1);
     }
 
-    for (int nChannelIdx = 0; nChannelIdx < 16; nChannelIdx++) {
+    for (int nChannelIdx = 0; nChannelIdx < (int)_countof(gaSoundChannels); nChannelIdx++) {
       gaSoundChannels[nChannelIdx].nChannelType = 0;
       if (nChannelIdx < 4) {
         gaSoundChannels[nChannelIdx].nChannelType = 1;
@@ -327,7 +327,7 @@ static BOOL SOUND_InitStreamChannels(int32_t nMixerMode) {
 static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundChannelStrc * pSound, int nChannelType) {
     D2ClientSoundChannelStrc* pChannel;
     int i;
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < (int)_countof(gaSoundChannels); i++) {
       pChannel = &gaSoundChannels[i];
       if (!pChannel->pActiveSound && pChannel->nChannelType == nChannelType && !D2Sound::Src::D2SoundSmp::SOUNDSMP_IsPlaying(pChannel->pSoundSmp)) {
         return pChannel;
@@ -335,7 +335,7 @@ static D2ClientSoundChannelStrc * __stdcall SOUND_FindAvailableChannel(D2SoundCh
     }
 
     D2ClientSoundChannelStrc* pBestChannel = nullptr;
-    for (i = 0; i < 16; i++) {
+    for (i = 0; i < (int)_countof(gaSoundChannels); i++) {
       pChannel = &gaSoundChannels[i];
       if (pChannel->nChannelType == nChannelType && pChannel->pActiveSound) {
         if (!pBestChannel || D2Client::Sound::SOUND_IsChannelAvailable(pBestChannel->pActiveSound, pChannel->pActiveSound, 1, 1)) {

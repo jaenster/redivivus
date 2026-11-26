@@ -631,7 +631,7 @@ int __fastcall Unreferenced_00420da0(BigBuffer * pBigBuffer) {
 }
 
 uint32_t __thiscall WND_ByteBuffer_HasRoom(uint8_t * pThis, int32_t nAddBytes) {
-    return (uint32_t)((uint32_t)(*(int*)(pThis + 0x10) + nAddBytes) < *(uint32_t*)(pThis + 4));
+    return (uint32_t)((uint32_t)(((BigBuffer*)pThis)->nStartWord + nAddBytes) < ((BigBuffer*)pThis)->nCount);
 }
 
 BigBuffer * __thiscall WND_EntryArray_AllocNext(BigStack * pThis, int * pnCount) {

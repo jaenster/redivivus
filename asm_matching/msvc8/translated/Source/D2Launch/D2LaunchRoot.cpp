@@ -22,7 +22,7 @@ typedef int32_t (__fastcall *fnAppModeRun)(D2IniConfigStrc * pD2IniConfig);
 namespace D2Launch {
 
 // App mode launcher init: stash module handle and return pointer to fAPPMODE_launcher_ReturnAppMode_Caller.
-fnAppModeRun * __fastcall AppModeLauncherInit(HMODULE hModule) {
+fnAppModeRun * (__fastcall AppModeLauncherInit)(HMODULE hModule) {
     // Static local variables (originally global data)
     static fnAppModeRun gpfnLauncherAppModeRun = &D2Launch::MainMenus::fAPPMODE_launcher_ReturnAppMode_Caller; D2_STATIC_GUARD(gpfnLauncherAppModeRun, "D2Launch::AppModeLauncherInit::gpfnLauncherAppModeRun");
     static HMODULE GameModuleOffset; D2_STATIC_GUARD_BSS(GameModuleOffset, "D2Launch::AppModeLauncherInit::GameModuleOffset");

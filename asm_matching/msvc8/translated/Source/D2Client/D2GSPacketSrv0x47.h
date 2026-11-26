@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x47
 #define D2_DEFINED_D2GSPacketSrv0x47
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x47 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x47 {
     /* 0x00 */ uint8_t nPacketId; // Packet identifier (0x47)
     /* 0x01 */ uint8_t eUnitType; // Client-side unit type
     /* 0x02 */ uint8_t nActionByte; // Incoming flag/opcode
@@ -25,6 +25,6 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x47 {
     /* 0x07 */ uint8_t nReserved7; // Reserved/padding byte
     /* 0x08 */ uint16_t wPad1; // Observed flags from packet stream
     /* 0x0A */ uint8_t byPad2; // Trailing payload byte
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x47

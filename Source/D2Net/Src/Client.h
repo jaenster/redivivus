@@ -1329,12 +1329,12 @@ struct D2GameClients_Line0x347 {
 #endif // D2_MODULE_D2Net
 #ifndef D2_DEFINED_D2OnePacketClientStrc
 #define D2_DEFINED_D2OnePacketClientStrc
-struct __attribute__((packed)) D2OnePacketClientStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2OnePacketClientStrc {
     /* 0x000 */ char pBytes[516];
     /* 0x204 */ uint32_t nSize;
     /* 0x208 */ DWORD nTickCount;
     /* 0x20C */ struct D2OnePacketClientStrc * pD2PacketClientNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2OnePacketClientStrc
 #ifndef D2_DEFINED_D2PacketsClientStrc

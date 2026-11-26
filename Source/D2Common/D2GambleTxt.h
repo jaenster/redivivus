@@ -17,10 +17,10 @@
 // Data types
 #ifndef D2_DEFINED_D2GambleTxt
 #define D2_DEFINED_D2GambleTxt
-struct __attribute__((packed)) D2GambleTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GambleTxt {
     /* 0x00 */ char szCode[4];
     /* 0x04 */ int nLevel;
     /* 0x08 */ int nItemClassId;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GambleTxt

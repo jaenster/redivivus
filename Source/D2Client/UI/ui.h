@@ -34,29 +34,29 @@ typedef void (__stdcall *fnD2InitUIFlagFunction)(struct D2UIMouseMsgStrc * param
 // Data types
 #ifndef D2_DEFINED_D2ConfigControlDescStrc
 #define D2_DEFINED_D2ConfigControlDescStrc
-struct __attribute__((packed)) D2ConfigControlDescStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ConfigControlDescStrc {
     /* 0x00 */ int nCmdIndex; // Command index (0x39 = separator/header row)
     /* 0x04 */ uint16_t wStrId; // Locale string ID for this control's label
     /* 0x06 */ uint8_t _pad[4]; // Padding to 10 bytes
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ConfigControlDescStrc
 #ifndef D2_DEFINED_D2QuestAreaIntroStrc
 #define D2_DEFINED_D2QuestAreaIntroStrc
-struct __attribute__((packed)) D2QuestAreaIntroStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestAreaIntroStrc {
     /* 0x00 */ int nLevelId;
     /* 0x04 */ int nQuestId;
     /* 0x08 */ char szDC6Name[5];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QuestAreaIntroStrc
 #ifndef D2_DEFINED_D2UberBossImmunityStrc
 #define D2_DEFINED_D2UberBossImmunityStrc
-struct __attribute__((packed)) D2UberBossImmunityStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UberBossImmunityStrc {
     /* 0x00 */ int nStat;
     /* 0x04 */ uint16_t nStringId;
     /* 0x06 */ uint32_t nColor;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2UberBossImmunityStrc
 #ifndef D2_DEFINED_D2UIFlagInitStrc

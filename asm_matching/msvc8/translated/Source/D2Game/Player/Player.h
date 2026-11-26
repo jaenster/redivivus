@@ -40,7 +40,7 @@ struct D2CharItemStrc {
 #endif // D2_DEFINED_D2CharItemStrc
 #ifndef D2_DEFINED_D2PartyDataStrc
 #define D2_DEFINED_D2PartyDataStrc
-__pragma(pack(push, 1)) struct D2PartyDataStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PartyDataStrc {
     /* 0x00 */ uint32_t nUnitGUID;
     /* 0x04 */ uint32_t nLifePercent;
     /* 0x08 */ eD2LevelId eLevelId;
@@ -49,7 +49,7 @@ __pragma(pack(push, 1)) struct D2PartyDataStrc {
     /* 0x0E */ uint8_t field_0xe;
     /* 0x0F */ uint8_t field_0xf;
     /* 0x10 */ struct D2PartyDataStrc * pPrev;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2PartyDataStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)

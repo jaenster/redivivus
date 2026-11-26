@@ -4,7 +4,7 @@
 [![redivivus.app](https://img.shields.io/badge/redivivus.app-site-8f2b2b)](https://redivivus.app)
 
 [![Functions identical to 1.14d](https://img.shields.io/badge/functions%20identical-80.8%25-2e7d32?style=for-the-badge)](BYTE-MATCHING.md)
-[![Code bytes identical](https://img.shields.io/badge/code%20bytes%20identical-56.19%25-1565c0?style=for-the-badge)](BYTE-MATCHING.md)
+[![Code bytes identical](https://img.shields.io/badge/code%20bytes%20identical-56.22%25-1565c0?style=for-the-badge)](BYTE-MATCHING.md)
 [![Data bytes identical](https://img.shields.io/badge/data%20bytes%20identical-99.16%25-6a1b9a?style=for-the-badge)](BYTE-MATCHING.md)
 
 Diablo II: Lord of Destruction 1.14d, reverse-engineered into C++ that builds and runs.
@@ -13,10 +13,10 @@ At this commit (Ghidra database v2139):
 
 - Builds strict (`-std=c++17`, no `-fpermissive`) and links with no undefined symbol.
 - Single player works. A full playthrough has been completed on the Visual C++ 2005 build.
-- Functions whose machine code is identical to 1.14d, compiled with Visual C++ 2005 SP1: 12,038 of 14,900 (80.8%), of which 3,184 hand-written.
-- Code bytes identical: 1,468,127 of 2,612,801 (56.19%).
+- Functions whose machine code is identical to 1.14d, compiled with Visual C++ 2005 SP1: 12,042 of 14,900 (80.8%), of which 3,205 hand-written.
+- Code bytes identical: 1,468,819 of 2,612,801 (56.22%).
 - Initialised data identical (tables, globals, initialisers): 341,588 of 344,485 bytes (99.16%), 1,725 of 1,966 symbols.
-- A 64-bit build links (mingw x86-64, strict); its dedicated server loads the game data and shuts down cleanly under Wine. 9 pointer-width casts left, from 7,955.
+- A 64-bit build links (mingw x86-64, strict); its dedicated server loads the game data and shuts down cleanly under Wine. 7 pointer-width casts left, from 7,955.
 
 What is compared, what is left out, and the chart: [BYTE-MATCHING.md](BYTE-MATCHING.md). The names, types
 and structure layouts are reconstructions from the Ghidra databases; the function bodies are maintained in

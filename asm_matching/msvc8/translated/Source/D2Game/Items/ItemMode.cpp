@@ -6929,8 +6929,8 @@ BOOL __fastcall Transmorgify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc
 }
 
 void __fastcall Unreferenced_005641c0(void * pListHead) {
-    *(void**)pListHead = (void*)pListHead;
-    *(void**)((char*)pListHead + 4) = (void*)pListHead;
+    ((D2LinkNodeStrc*)pListHead)->pNext = (D2LinkNodeStrc*)pListHead;
+    ((D2LinkNodeStrc*)pListHead)->pPrev = (D2LinkNodeStrc*)pListHead;
 }
 
 void __fastcall ITEMMODE_ReturnZero3_Unref_00570690(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam) {

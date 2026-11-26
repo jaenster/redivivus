@@ -85,12 +85,12 @@ union D2TextureHandleUnion {
     /* 0x00 */ struct D2AGPTextureRecordStrc * pAGPRecord;
 };
 
-struct __attribute__((packed)) D2AGPTextureRecordStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AGPTextureRecordStrc {
     /* 0x00 */ GLuint hName;
     /* 0x04 */ GLuint hPage2D;
     /* 0x08 */ BYTE * pPixels;
     /* 0x0C */ DWORD dwUsageBits;
-};
+}; D2_PACKED_END
 
 struct CD2TexturesVtable {
     /* 0x00 */ void (*_CD2Textures)(::CD2Textures *);
@@ -105,7 +105,7 @@ struct CD2TexturesVtable {
     /* 0x24 */ void (*ConvertPixels)(::CD2Textures *, int, int, int, int, BYTE *);
 };
 
-struct __attribute__((packed)) D2TextureNodeStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TextureNodeStrc {
     /* 0x00 */ int nId;
     /* 0x04 */ D2TextureHandleUnion uHandle;
     /* 0x08 */ BOOL bUsedThisFrame;
@@ -118,7 +118,7 @@ struct __attribute__((packed)) D2TextureNodeStrc {
     /* 0x24 */ intptr_t nOwnerKey;
     /* 0x28 */ struct D2TextureNodeStrc * pNext;
     /* 0x2C */ struct D2TextureNodeStrc * pPrev;
-};
+}; D2_PACKED_END
 
 namespace D2OpenGL::CD2Textures {
 

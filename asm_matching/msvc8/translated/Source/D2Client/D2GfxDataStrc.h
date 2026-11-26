@@ -22,7 +22,7 @@ typedef uint32_t eD2UnitType;
 // Data types
 #ifndef D2_DEFINED_D2GfxDataStrc
 #define D2_DEFINED_D2GfxDataStrc
-__pragma(pack(push, 1)) struct D2GfxDataStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GfxDataStrc {
     /* 0x00 */ int nFrameNumber; // Current animation frame index
     /* 0x04 */ uint8_t dwFlags; // Flags: bit1=overlay, bit3=local player unit
     /* 0x05 */ uint8_t nComponentType; // COF component/body location index (0-15)
@@ -43,6 +43,6 @@ __pragma(pack(push, 1)) struct D2GfxDataStrc {
     /* 0x3C */ struct DC6Block * pDC6Block; // DC6 frame block (specific frame data, loaded by sprite cache)
     /* 0x40 */ int nDirection; // direction in 1/64 turns (0..0x3f): scaled nDirection*nDirections>>6 to a sprite direction (SPRITECACHE_GetOrLoadSprite/PrecacheSpriteSync), bounded < 0x40 in CELCMP_GetDC6BlockFromGfxData; used directly as the frame for UNIT_ITEM in LoadCelFileAndCache
     /* 0x44 */ uint32_t dwRenderFlags; // Rendering flags: bit1=apply palette color transform
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GfxDataStrc

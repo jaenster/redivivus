@@ -22,28 +22,28 @@ struct D2BnNewsEntryStrc;
 // Data types
 #ifndef D2_DEFINED_BigStack
 #define D2_DEFINED_BigStack
-struct __attribute__((packed)) BigStack {
+D2_PACKED_BEGIN struct __attribute__((packed)) BigStack {
     /* 0x000 */ BigBuffer aBuffers[16]; // scratch BigBuffers; BigBuffer_Mul/Div/IsPrime take aBuffers[nUsed] and bump nUsed
     /* 0x140 */ uint32_t nUsed; // index of the next free scratch buffer (+0x140)
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_BigStack
 #ifndef D2_DEFINED_BnMessQueue
 #define D2_DEFINED_BnMessQueue
-struct __attribute__((packed)) BnMessQueue {
+D2_PACKED_BEGIN struct __attribute__((packed)) BnMessQueue {
     /* 0x000 */ int nZero;
     /* 0x004 */ char bBuffer[288];
     /* 0x124 */ uint32_t nDataSize;
     /* 0x128 */ struct BnMessQueue * pNext;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_BnMessQueue
 #ifndef D2_DEFINED_D2BnCacheBlockEntryStrc
 #define D2_DEFINED_D2BnCacheBlockEntryStrc
-struct __attribute__((packed)) D2BnCacheBlockEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2BnCacheBlockEntryStrc {
     /* 0x00 */ LONG nFileOffset;
     /* 0x04 */ uint32_t dwBlockSize;
     /* 0x08 */ uint32_t dwDataSize;
     /* 0x0C */ uint32_t dwFlags;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2BnCacheBlockEntryStrc
 #ifndef D2_DEFINED_D2BnCacheFileHeaderStrc
 #define D2_DEFINED_D2BnCacheFileHeaderStrc
@@ -80,12 +80,12 @@ struct D2BnNewsTableStrc {
 #endif // D2_DEFINED_D2BnNewsTableStrc
 #ifndef D2_DEFINED_D2BnReadUserDataStrc
 #define D2_DEFINED_D2BnReadUserDataStrc
-struct __attribute__((packed)) D2BnReadUserDataStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2BnReadUserDataStrc {
     /* 0x00 */ uint32_t nAccountCount;
     /* 0x04 */ uint32_t nKeyCount;
     /* 0x08 */ uint32_t nRequestId;
     /* 0x0C */ char szValues[0];
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2BnReadUserDataStrc
 #ifndef D2_DEFINED_D2BnSha1ContextStrc
 #define D2_DEFINED_D2BnSha1ContextStrc

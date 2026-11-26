@@ -93,25 +93,25 @@ struct SID_C2S_AuthInfo {
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-__pragma(pack(push, 1)) struct SID_S2C_AuthCheck {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct SID_S2C_AuthCheck {
     /* 0x00 */ uint32_t dwResultCode; // Low byte=version status, high nibble=key flags. 0=ok, 0x100=upgrade, 0x101=wrong ver, 0x200=invalid key, 0x201=in use
     /* 0x04 */ char szAdditionalInfo; // null-terminated: username (in-use) or patch filename (upgrade)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-__pragma(pack(push, 1)) struct SID_S2C_AuthInfo {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct SID_S2C_AuthInfo {
     /* 0x00 */ uint32_t dwServerToken;
     /* 0x04 */ uint32_t dwClientToken;
     /* 0x08 */ uint32_t dwUdpValue;
     /* 0x0C */ uint32_t ftArchiveTimeLow;
     /* 0x10 */ uint32_t ftArchiveTimeHigh;
     /* 0x14 */ char szArchiveFilename; // null-terminated; szCheckRevisionFormula follows after null terminator
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-__pragma(pack(push, 1)) struct D2SidAuthCheckPacketStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SidAuthCheckPacketStrc {
     /* 0x00 */ uint32_t dwClientToken;
     /* 0x04 */ uint32_t dwExeVersion;
     /* 0x08 */ uint32_t dwExeHash;
@@ -120,14 +120,14 @@ __pragma(pack(push, 1)) struct D2SidAuthCheckPacketStrc {
     /* 0x14 */ D2CDKeyHashStrc sClassicKeyHash;
     /* 0x38 */ D2CDKeyHashStrc sExpansionKeyHash; // classic build overwrites this with the exe-info string instead
     /* 0x5C */ char szTail[512]; // exe-info string then CD-key owner name, both NUL terminated
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-__pragma(pack(push, 1)) struct SID_C2S_AuthAccountChangeProof {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct SID_C2S_AuthAccountChangeProof {
     /* 0x00 */ uint8_t aClientProofM1[20];
     /* 0x14 */ D2SrpSaltVerifierStrc sNewSaltVerifier;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)

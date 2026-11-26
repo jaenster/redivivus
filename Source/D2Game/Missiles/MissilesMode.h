@@ -30,14 +30,14 @@ typedef uint32_t eMissilesId;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2SubMissileAreaArgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SubMissileAreaArgStrc {
     /* 0x00 */ struct D2UnitStrc * pOwner; // copied to D2SkillArgStrc.pOwner
     /* 0x04 */ struct D2UnitStrc * pMissile; // the exploding missile; copied to D2SkillArgStrc.pMissile
     /* 0x08 */ eD2Skills eSkill; // copied to D2SkillArgStrc.eSkillNo
     /* 0x0C */ int nSkillLevel; // the builders store the skill level; copied to D2SkillArgStrc +0x30 nSkillLevel (005ab2e6/005ab2e9)
     /* 0x10 */ int nMaxCount; // sub-missile cap; the callback returns 0 once D2SkillCallbackContextStrc.nHitCount reaches it
     /* 0x14 */ int nSubMissileId; // MissilesTxt HitSubMissile1; copied to D2SkillArgStrc.nMissileTxtNo
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)

@@ -16,12 +16,12 @@
 // Data types
 #ifndef D2_DEFINED_D2OnePacketClientStrc
 #define D2_DEFINED_D2OnePacketClientStrc
-__pragma(pack(push, 1)) struct D2OnePacketClientStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2OnePacketClientStrc {
     /* 0x000 */ char pBytes[516];
     /* 0x204 */ uint32_t nSize;
     /* 0x208 */ DWORD nTickCount;
     /* 0x20C */ struct D2OnePacketClientStrc * pD2PacketClientNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2OnePacketClientStrc
 #ifndef D2_DEFINED_D2PacketsClientStrc
 #define D2_DEFINED_D2PacketsClientStrc

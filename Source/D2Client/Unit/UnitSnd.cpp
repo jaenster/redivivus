@@ -2786,7 +2786,7 @@ static inline void * * __stdcall UNITSND_GetSfxDataListHead(D2UnitStrc * pUnit) 
       exit(-1);
     }
 
-    return (void**)((intptr_t)&pUnit->uSideData + 0x14);
+    return (void**)&pUnit->uSideData.pClientSide.pUnitSfxData;
 }
 
 void __fastcall AllocUnitSfxData(D2UnitStrc * pUnit, int32_t nChannelHandle) {

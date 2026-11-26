@@ -48,12 +48,12 @@ struct _EXCEPTION_RECORD {
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 #if !defined(_WIN64)
-struct __attribute__((packed)) ADDRESS {
+D2_PACKED_BEGIN struct __attribute__((packed)) ADDRESS {
     /* 0x00 */ DWORD Offset;
     /* 0x04 */ WORD Segment;
     /* 0x06 */ uint16_t pad_0x6;
     /* 0x08 */ ADDRESS_MODE Mode;
-};
+}; D2_PACKED_END
 #else
 // 64-bit dbghelp has only the 64-bit stack walk: ADDRESS is ADDRESS64 there.
 struct ADDRESS {
@@ -76,19 +76,19 @@ struct D2CrashDumpRecordStrc {
 #endif // D2_MODULE_Fog
 #ifndef D2_DEFINED_D2CrashDumpRequestStrc
 #define D2_DEFINED_D2CrashDumpRequestStrc
-struct __attribute__((packed)) D2CrashDumpRequestStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CrashDumpRequestStrc {
     /* 0x00 */ HANDLE hFile;
     /* 0x04 */ struct _EXCEPTION_POINTERS * pExceptionPointers;
     /* 0x08 */ DWORD dwThreadId;
     /* 0x0C */ char * szComment;
     /* 0x10 */ uint8_t bSuccess;
     /* 0x11 */ uint8_t field_0x11[3];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2CrashDumpRequestStrc
 #ifndef D2_DEFINED_D2CrashFrameStrc
 #define D2_DEFINED_D2CrashFrameStrc
-struct __attribute__((packed)) D2CrashFrameStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CrashFrameStrc {
     /* 0x00 */ uintptr_t dwReturnAddr;
     /* 0x04 */ uintptr_t dw04;
     /* 0x08 */ uintptr_t dw08;
@@ -98,12 +98,12 @@ struct __attribute__((packed)) D2CrashFrameStrc {
     /* 0x12 */ uint8_t field_0x12;
     /* 0x13 */ uint8_t field_0x13;
     /* 0x14 */ uintptr_t a14[4];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2CrashFrameStrc
 #ifndef D2_DEFINED_D2FogDebugModuleEntryStrc
 #define D2_DEFINED_D2FogDebugModuleEntryStrc
-struct __attribute__((packed)) D2FogDebugModuleEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2FogDebugModuleEntryStrc {
     /* 0x000 */ void * pImageBase; // %p in DBG-MODULE line
     /* 0x004 */ uint32_t nImageSize; // %08x
     /* 0x008 */ char szModuleName[256]; // "%s"
@@ -113,7 +113,7 @@ struct __attribute__((packed)) D2FogDebugModuleEntryStrc {
     /* 0x21C */ uint32_t dwPdbAge; // %u
     /* 0x220 */ uint32_t dwImageTimeDateStamp; // %u
     /* 0x224 */ uint32_t dwTimestamp; // printed as ' %8x' when nonzero
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2FogDebugModuleEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
@@ -125,6 +125,20 @@ struct D2FogModuleNodeStrc {
     /* 0x20C */ struct D2FogModuleNodeStrc * pNext; // next module (+0x20c)
 };
 
+#endif // D2_MODULE_Fog
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#ifndef D2_DEFINED_D2FogAddressInfoStrc
+#define D2_DEFINED_D2FogAddressInfoStrc
+// One resolved return address: DEBUG_FormatAddressInfo fills it, FormatAddressDebugString prints it.
+struct D2FogAddressInfoStrc {
+    /* 0x000 */ char szSymbol[512];
+    /* 0x200 */ uint32_t dwSymbolDisplacement;
+    /* 0x204 */ char szModule[64];
+    /* 0x244 */ char szSourceFile[256];
+    /* 0x344 */ uint32_t nSourceLine;
+};
+
+#endif // D2_DEFINED_D2FogAddressInfoStrc
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 struct D2ImagehlpSymbol64BufStrc {
@@ -182,24 +196,24 @@ struct EHRegistrationNode {
 
 #endif // D2_DEFINED_EHRegistrationNode
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-struct __attribute__((packed)) FPO_DATA_WORD {
+D2_PACKED_BEGIN struct __attribute__((packed)) FPO_DATA_WORD {
     /* 0x00 */ DWORD ulOffStart;
     /* 0x04 */ DWORD cbProcSize;
     /* 0x08 */ DWORD cdwLocals;
     /* 0x0C */ WORD cdwParams;
     /* 0x0E */ WORD wAttributes; // Bit-fields: cbProlog bits 0-7, cbRegs bits 8-10, fHasSEH bit 11, fUseBP bit 12, reserved bit 13, cbFrame bits 14-15 (0 FRAME_FPO, 3 FRAME_NONFPO)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 #if !defined(_WIN64)
-struct __attribute__((packed)) IMAGEHLP_LINE64 {
+D2_PACKED_BEGIN struct __attribute__((packed)) IMAGEHLP_LINE64 {
     /* 0x00 */ DWORD SizeOfStruct;
     /* 0x04 */ void * Key;
     /* 0x08 */ DWORD LineNumber;
     /* 0x0C */ char * FileName;
     /* 0x10 */ ULONGLONG Address;
-};
+}; D2_PACKED_END
 #else
 // dbghelp.h layout: natural alignment, 0x28 bytes on 64-bit.
 struct IMAGEHLP_LINE64 {
@@ -244,7 +258,7 @@ struct IMAGEHLP_MODULE {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-struct __attribute__((packed)) IMAGEHLP_MODULE64 {
+D2_PACKED_BEGIN struct __attribute__((packed)) IMAGEHLP_MODULE64 {
     /* 0x000 */ DWORD SizeOfStruct;
     /* 0x004 */ uint8_t field_0x4;
     /* 0x005 */ uint8_t field_0x5;
@@ -270,7 +284,7 @@ struct __attribute__((packed)) IMAGEHLP_MODULE64 {
     /* 0x674 */ BOOL LineNumbers;
     /* 0x678 */ BOOL GlobalSymbols;
     /* 0x67C */ BOOL TypeInfo;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
@@ -374,15 +388,15 @@ struct _EXCEPTION_POINTERS {
 #endif // _WIN32
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-struct __attribute__((packed)) D2FogDebugModuleTableStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2FogDebugModuleTableStrc {
     /* 0x00 */ uint32_t nCount;
     /* 0x04 */ D2FogDebugModuleEntryStrc aEntries[256];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 #if !defined(_WIN64)
-struct __attribute__((packed)) STACKFRAME {
+D2_PACKED_BEGIN struct __attribute__((packed)) STACKFRAME {
     /* 0x00 */ ADDRESS AddrPC;
     /* 0x0C */ ADDRESS AddrReturn;
     /* 0x18 */ ADDRESS AddrFrame;
@@ -394,7 +408,7 @@ struct __attribute__((packed)) STACKFRAME {
     /* 0x4C */ DWORD Reserved[3];
     /* 0x58 */ KDHELP KdHelp;
     /* 0x98 */ ADDRESS AddrBStore;
-};
+}; D2_PACKED_END
 #else
 // STACKFRAME64: the only stack frame 64-bit StackWalk64 takes.
 struct STACKFRAME {
@@ -449,7 +463,7 @@ uint32_t * __fastcall ZeroStruct36Bytes(uint32_t * pStruct);
 struct D2SkillsTxt * __fastcall SKILLSTXT_ZeroOutFields(struct D2SkillsTxt * pSkillsTxt);
 int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight);
 bool __fastcall Unreferenced_00402c30(struct D2FogDebugModuleEntryStrc * pSrcEntry, struct D2FogDebugModuleTableStrc * pTable);
-void __fastcall FormatAddressDebugString(struct D2CrashFrameStrc * pAddrInfo, char * pSymInfo, char * szOutput);
+void __fastcall FormatAddressDebugString(struct D2CrashFrameStrc * pAddrInfo, struct D2FogAddressInfoStrc * pSymInfo, char * szOutput);
 void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, ::Report * pReport);
 void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo, uint32_t nMaxFrames);
 // Format stack trace for crash dump. Captures thread context if bIncludeThreadName set, iterates frames and calls callback for each formatted address line. If bIncludeStackInfo set, includes stack space usage info.

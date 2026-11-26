@@ -30,7 +30,7 @@ struct D2CompositListStrc {
 #endif // D2_DEFINED_D2CompositListStrc
 #ifndef D2_DEFINED_D2CompositTxt
 #define D2_DEFINED_D2CompositTxt
-__pragma(pack(push, 1)) struct D2CompositTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CompositTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
     /* 0x24 */ uint8_t field_0x24;
@@ -49,12 +49,12 @@ __pragma(pack(push, 1)) struct D2CompositTxt {
     /* 0x31 */ uint8_t field_0x31;
     /* 0x32 */ uint8_t field_0x32;
     /* 0x33 */ uint8_t field_0x33;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2CompositTxt
 #ifndef D2_DEFINED_D2MonModeTxt
 #define D2_DEFINED_D2MonModeTxt
-__pragma(pack(push, 1)) struct D2MonModeTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MonModeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
     /* 0x24 */ uint8_t DT_Dir;
@@ -73,7 +73,7 @@ __pragma(pack(push, 1)) struct D2MonModeTxt {
     /* 0x31 */ uint8_t KB_Dir;
     /* 0x32 */ uint8_t SQ_Dir;
     /* 0x33 */ uint8_t RN_Dir;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonModeTxt
 namespace D2Common { namespace COMPOSIT { namespace Composit {

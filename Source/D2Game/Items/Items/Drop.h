@@ -37,7 +37,7 @@ struct D2ItemClassCandidateStrc {
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2ItemGenContextStrc
 #define D2_DEFINED_D2ItemGenContextStrc
-struct __attribute__((packed)) D2ItemGenContextStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ItemGenContextStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ struct D2SeedStrc * pSeed; // seed the new item is rolled from: &pUnit->sSeed, the room seed, or 0
     /* 0x08 */ struct SGAMEDATA * pGame;
@@ -84,7 +84,7 @@ struct __attribute__((packed)) D2ItemGenContextStrc {
     /* 0x7E */ uint8_t field_0x7e;
     /* 0x7F */ uint8_t field_0x7f;
     /* 0x80 */ eD2ItemFlag nFlags;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ItemGenContextStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)

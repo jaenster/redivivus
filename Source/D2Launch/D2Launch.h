@@ -42,7 +42,7 @@ struct D2BNetRealmEntryStrc {
 #endif // D2_DEFINED_D2BNetRealmEntryStrc
 #ifndef D2_DEFINED_D2CharSelCompStrc
 #define D2_DEFINED_D2CharSelCompStrc
-struct __attribute__((packed)) D2CharSelCompStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CharSelCompStrc {
     /* 0x000 */ D2CharSelCompFlags nFlags;
     /* 0x004 */ uint8_t nAnimSpeed;
     /* 0x005 */ uint8_t nNumDirections;
@@ -71,11 +71,11 @@ struct __attribute__((packed)) D2CharSelCompStrc {
     /* 0x1EC */ uint16_t wszDisplayString4[32];
     /* 0x22C */ uint32_t nD2CharLevel;
     /* 0x230 */ uint32_t dwProductCode;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2CharSelCompStrc
 #ifndef D2_DEFINED_D2CharSelStrc
 #define D2_DEFINED_D2CharSelStrc
-struct __attribute__((packed)) D2CharSelStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CharSelStrc {
     /* 0x000 */ char szCharname[256]; // Character name (max 16 chars + null, rest unused)
     /* 0x100 */ char szCommandStringTable[512]; // Byte-addressable chat command format string table (packed at fixed sub-offsets 0x8..0xfe); NOT wide chars despite original name
     /* 0x300 */ uint8_t abEquipSlot1[16]; // Character component appearance data set 1 (11 bytes used, rest 0xFF-padded)
@@ -99,7 +99,7 @@ struct __attribute__((packed)) D2CharSelStrc {
     /* 0x344 */ uint32_t ftLastWriteTimeHigh; // FILETIME.dwHighDateTime of .d2s (sort key)
     /* 0x348 */ uint32_t dwRealmParam; // Realm-specific parameter from CHARSEL_ParseRealmCharList
     /* 0x34C */ struct D2CharSelStrc * pNext; // Next entry in char select linked list (sorted by recency)
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2CharSelStrc
 #ifndef D2_DEFINED_D2UIMsgMousePosStrc
 #define D2_DEFINED_D2UIMsgMousePosStrc
@@ -120,7 +120,7 @@ union D2UIMsgLParamUnion {
 #endif // D2_DEFINED_D2UIMsgLParamUnion
 #ifndef D2_DEFINED_D2ControlMsg
 #define D2_DEFINED_D2ControlMsg
-struct __attribute__((packed)) D2ControlMsg {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ControlMsg {
     /* 0x00 */ struct D2ControlStrc * pControl;
     /* 0x04 */ int uMsg;
     /* 0x08 */ WPARAM wParam;
@@ -129,7 +129,7 @@ struct __attribute__((packed)) D2ControlMsg {
     /* 0x14 */ uint32_t dwReserved; // Zeroed by the stack builders (D2WINBUTTON_HandleMouseWheel); no forms handler reads it
     /* 0x18 */ uint32_t bHandled; // Handler sets 1 to mark the message consumed
     /* 0x1C */ uint32_t dwResult; // Handler result
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ControlMsg
 #ifndef D2_DEFINED_D2RealmCharListCacheEntryStrc
 #define D2_DEFINED_D2RealmCharListCacheEntryStrc
@@ -153,7 +153,7 @@ struct D2WinAnimImageNotifyStrc {
 // Functions
 namespace D2Launch {
 // App mode launcher init: stash module handle and return pointer to fAPPMODE_launcher_ReturnAppMode_Caller.
-fnAppModeRun * __fastcall AppModeLauncherInit(HMODULE hModule);
+fnAppModeRun * (__fastcall AppModeLauncherInit)(HMODULE hModule);
 // Launcher app mode shutdown (no-op).
 void __stdcall AppModeLauncherShutdown();
 } // namespace D2Launch

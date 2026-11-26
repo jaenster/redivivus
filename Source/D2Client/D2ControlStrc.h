@@ -55,7 +55,7 @@ typedef BOOL (__stdcall *Push)(struct D2ControlMsg * pControlMsg);
 // Data types
 #ifndef D2_DEFINED_D2ControlStrc
 #define D2_DEFINED_D2ControlStrc
-struct __attribute__((packed)) D2ControlStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ControlStrc {
     /* 0x00 */ eD2FormType neD2FormType;
     /* 0x04 */ struct DC6 * pDC6;
     /* 0x08 */ int dwState;
@@ -72,6 +72,6 @@ struct __attribute__((packed)) D2ControlStrc {
     /* 0x34 */ BOOL (__stdcall *fpOnPress)(struct D2ControlMsg *);
     /* 0x38 */ BOOL (__fastcall *fpHitTest)(struct D2ControlStrc *);
     /* 0x3C */ struct D2ControlStrc * pNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ControlStrc

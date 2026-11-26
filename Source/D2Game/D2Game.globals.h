@@ -47,11 +47,11 @@ struct D2TimerTypeMethodsStrc {
 
 #ifndef D2_DEFINED_D2ShrinesTableEntryStrc
 #define D2_DEFINED_D2ShrinesTableEntryStrc
-struct __attribute__((packed)) D2ShrinesTableEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ShrinesTableEntryStrc {
     /* 0x00 */ void (__fastcall *fpShrineHandler)(D2ObjectOperateFnArg *, D2ShrinesTxt *);
     /* 0x04 */ eD2UnitStat eStat;
     /* 0x08 */ eD2States nState;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ShrinesTableEntryStrc
 
 

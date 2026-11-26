@@ -17,12 +17,12 @@
 // Data types
 #ifndef D2_DEFINED_BnMessQueue
 #define D2_DEFINED_BnMessQueue
-__pragma(pack(push, 1)) struct BnMessQueue {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct BnMessQueue {
     /* 0x000 */ int nZero;
     /* 0x004 */ char bBuffer[288];
     /* 0x124 */ uint32_t nDataSize;
     /* 0x128 */ struct BnMessQueue * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_BnMessQueue
 namespace Bnclient {

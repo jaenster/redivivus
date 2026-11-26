@@ -387,7 +387,7 @@ void __fastcall AllocDrlgCoordList(D2RoomExStrc * pRoomEx) {
     D2DrlgLevelStrc* pLevel = pRoomEx->pLevel;
     D2PoolManagerStrc* pMemory = pLevel->pDrlg->pMemoryPool;
     D2DrlgCoordListStrc* pCoordList = D2_NEW_POOL_AT(pMemory, D2DrlgCoordListStrc, ".\\DRLG\\DrlgLogic.cpp", 0xdf);
-    memset(pCoordList, 0, 0x34);
+    memset(pCoordList, 0, sizeof(D2DrlgCoordListStrc));
     pRoomEx->pDrlgCoordList = pCoordList;
     pCoordList->eFlags |= 1;
     pLevel->nLastRoomExCoordsIndex = 1;
@@ -588,7 +588,7 @@ void __fastcall DRLGLOGIC_BuildRoomCoordList(D2RoomExStrc * pRoomEx, D2DrlgGridS
     D2DrlgLevelStrc* pLevel = pRoomEx->pLevel;
     D2PoolManagerStrc* pPoolManagerStrc = pLevel->pDrlg->pMemoryPool;
     D2DrlgCoordListStrc* pCoordListStrc = D2_NEW_POOL_AT(pPoolManagerStrc, D2DrlgCoordListStrc, ".\\DRLG\\DrlgLogic.cpp", 0xdf);
-    memset(pCoordListStrc, 0, 0x34);
+    memset(pCoordListStrc, 0, sizeof(D2DrlgCoordListStrc));
     pRoomEx->pDrlgCoordList = pCoordListStrc;
     DRLGLOGIC_SetGridDoorFlags(pGrid, pRoomEx);
     pCoordListStrc->eFlags |= 2;

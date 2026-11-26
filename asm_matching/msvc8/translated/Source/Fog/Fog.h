@@ -91,16 +91,20 @@ typedef int32_t (__fastcall *fpD2QServerSourceLineHook)(struct D2QServerStrc * p
 // Data types
 #ifndef D2_DEFINED_D2AsyncDataCallbackStrc
 #define D2_DEFINED_D2AsyncDataCallbackStrc
-__pragma(pack(push, 1)) struct D2AsyncDataCallbackStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2AsyncDataCallbackStrc {
     /* 0x00 */ uint32_t (__stdcall *pfnCallback)(void *, uint32_t, struct D2AsyncDataCallbackStrc *); // called with (pReadBuffer, nReadSize, &tCallback) when the read completes
+#if defined(_WIN64)
+    /* 0x08 */ uint32_t aUserData[6]; // the D2CMP request keeps two pointers and two ints here (D2SpriteDecodeRequestStrc)
+#else
     /* 0x04 */ uint32_t aUserData[4];
+#endif
     /* 0x14 */ void * pResultBuffer; // non-NULL after the callback: replaces the read buffer (0040a505)
     /* 0x18 */ size_t nResultSize; // becomes nReadSize with pResultBuffer
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2AsyncDataCallbackStrc
 #ifndef D2_DEFINED_D2AsyncData_Line0x128
 #define D2_DEFINED_D2AsyncData_Line0x128
-__pragma(pack(push, 1)) struct D2AsyncData_Line0x128 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2AsyncData_Line0x128 {
     /* 0x00 */ struct D2MPQFileStrc * pFile; // open MPQ file handle (set by ARCHIVE_OpenD2FileWrap, read as struct D2MPQFileStrc* for seek/read/close)
     /* 0x04 */ struct D2PoolManagerStrc * pMemory;
     /* 0x08 */ _OVERLAPPED tOverlapped; // Offset = file position, hEvent = slot event (0040a77d/0040a787)
@@ -112,29 +116,29 @@ __pragma(pack(push, 1)) struct D2AsyncData_Line0x128 {
     /* 0x48 */ int nFlags;
     /* 0x4C */ int nPriorityBeforeDefer; // nPriority saved when ASYNCDATA_SetPriority defers a change (0040a8b3); ASYNCDATA_DeferPriorityUpdates re-applies nPriority on flush only if it differs (0040a933)
     /* 0x50 */ struct D2AsyncData_Line0x128 * pNextDeferred; // Next entry in the gpAsyncDataDeferredList list of deferred requests (nFlags & 8): pushed at 0040a8c1, unlinked by ASYNCDATA_Free (0040ab58), walked at 0040a936
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2AsyncData_Line0x128
 #ifndef D2_DEFINED_D2AsyncDataSlotStrc
 #define D2_DEFINED_D2AsyncDataSlotStrc
-__pragma(pack(push, 1)) struct D2AsyncDataSlotStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2AsyncDataSlotStrc {
     /* 0x00 */ HANDLE hEvent;
     /* 0x04 */ BOOL bFree;
     /* 0x08 */ struct D2AsyncData_Line0x128 * pRequest;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2AsyncDataSlotStrc
 #ifndef D2_DEFINED_D2BinFieldInputStrc
 #define D2_DEFINED_D2BinFieldInputStrc
-__pragma(pack(push, 1)) struct D2BinFieldInputStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BinFieldInputStrc {
     /* 0x00 */ char * szName;
     /* 0x04 */ eD2BinFieldInputType eType;
     /* 0x08 */ uint32_t nSize;
     /* 0x0C */ int nOffset;
     /* 0x10 */ void * fpLinker; // by eType: struct D2TxtLinkStrc** (CODE*/NAME*), PFN_TxtKeyToWord* (KEY_WORD), PFN_TxtFieldLinker* (LINKER_*)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2BinFieldInputStrc
 #ifndef D2_DEFINED_D2BlizzardErrorArgument
 #define D2_DEFINED_D2BlizzardErrorArgument
-__pragma(pack(push, 1)) struct D2BlizzardErrorArgument {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BlizzardErrorArgument {
     /* 0x00 */ char * szProduct;
     /* 0x04 */ char * szLocale;
     /* 0x08 */ char * szFrom;
@@ -144,22 +148,22 @@ __pragma(pack(push, 1)) struct D2BlizzardErrorArgument {
     /* 0x0F */ uint8_t field_0xf;
     /* 0x10 */ char * szAttachment[16];
     /* 0x50 */ int nAttachmentCount;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2BlizzardErrorArgument
 #ifndef D2_DEFINED_D2CrashDumpRequestStrc
 #define D2_DEFINED_D2CrashDumpRequestStrc
-__pragma(pack(push, 1)) struct D2CrashDumpRequestStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CrashDumpRequestStrc {
     /* 0x00 */ HANDLE hFile;
     /* 0x04 */ struct _EXCEPTION_POINTERS * pExceptionPointers;
     /* 0x08 */ DWORD dwThreadId;
     /* 0x0C */ char * szComment;
     /* 0x10 */ uint8_t bSuccess;
     /* 0x11 */ uint8_t field_0x11[3];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2CrashDumpRequestStrc
 #ifndef D2_DEFINED_D2CrashFrameStrc
 #define D2_DEFINED_D2CrashFrameStrc
-__pragma(pack(push, 1)) struct D2CrashFrameStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CrashFrameStrc {
     /* 0x00 */ uintptr_t dwReturnAddr;
     /* 0x04 */ uintptr_t dw04;
     /* 0x08 */ uintptr_t dw08;
@@ -169,7 +173,7 @@ __pragma(pack(push, 1)) struct D2CrashFrameStrc {
     /* 0x12 */ uint8_t field_0x12;
     /* 0x13 */ uint8_t field_0x13;
     /* 0x14 */ uintptr_t a14[4];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2CrashFrameStrc
 #ifndef D2_DEFINED_D2CrashReportStrc
 #define D2_DEFINED_D2CrashReportStrc
@@ -207,7 +211,7 @@ struct D2FogArchiveStrc {
 #endif // D2_DEFINED_D2FogArchiveStrc
 #ifndef D2_DEFINED_D2FogDebugModuleEntryStrc
 #define D2_DEFINED_D2FogDebugModuleEntryStrc
-__pragma(pack(push, 1)) struct D2FogDebugModuleEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2FogDebugModuleEntryStrc {
     /* 0x000 */ void * pImageBase; // %p in DBG-MODULE line
     /* 0x004 */ uint32_t nImageSize; // %08x
     /* 0x008 */ char szModuleName[256]; // "%s"
@@ -217,7 +221,7 @@ __pragma(pack(push, 1)) struct D2FogDebugModuleEntryStrc {
     /* 0x21C */ uint32_t dwPdbAge; // %u
     /* 0x220 */ uint32_t dwImageTimeDateStamp; // %u
     /* 0x224 */ uint32_t dwTimestamp; // printed as ' %8x' when nonzero
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2FogDebugModuleEntryStrc
 #ifndef D2_DEFINED_D2HighResTimestampStrc
 #define D2_DEFINED_D2HighResTimestampStrc
@@ -233,7 +237,7 @@ struct D2HighResTimestampStrc {
 #endif // D2_DEFINED_D2HighResTimestampStrc
 #ifndef D2_DEFINED_D2PoolStrc
 #define D2_DEFINED_D2PoolStrc
-__pragma(pack(push, 1)) struct D2PoolStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PoolStrc {
     /* 0x00 */ CRITICAL_SECTION pSync;
     /* 0x18 */ uint32_t nBlockSize;
     /* 0x1C */ uint32_t nBlocks;
@@ -241,11 +245,11 @@ __pragma(pack(push, 1)) struct D2PoolStrc {
     /* 0x24 */ size_t nAllocBlock;
     /* 0x28 */ struct D2PoolBlockStrc * pBlocks;
     /* 0x2C */ struct D2PoolBlockStrc * pTail;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2PoolStrc
 #ifndef D2_DEFINED_D2PoolManagerStrc
 #define D2_DEFINED_D2PoolManagerStrc
-__pragma(pack(push, 1)) struct D2PoolManagerStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PoolManagerStrc {
     /* 0x0000 */ int nPoolId; // related to pool count..
     /* 0x0004 */ CRITICAL_SECTION pSync;
     /* 0x001C */ uint32_t nPools;
@@ -256,18 +260,18 @@ __pragma(pack(push, 1)) struct D2PoolManagerStrc {
     /* 0x07AC */ BYTE * pOverflow[1023];
     /* 0x17A8 */ DWORD dwMemory;
     /* 0x17AC */ char szName[32];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2PoolManagerStrc
 #ifndef D2_DEFINED_D2MemoryManagerStrc
 #define D2_DEFINED_D2MemoryManagerStrc
-__pragma(pack(push, 1)) struct D2MemoryManagerStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MemoryManagerStrc {
     /* 0x0000 */ BOOL bInit;
     /* 0x0004 */ CRITICAL_SECTION pSync;
     /* 0x001C */ D2PoolManagerStrc pManagers[8];
     /* 0xBE7C */ size_t nManagers;
     /* 0xBE80 */ size_t nManagerIndex[8];
     /* 0xBEA0 */ size_t nFreeManagerIndex;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2MemoryManagerStrc
 #ifndef D2_DEFINED_D2MercSaveDataStrc
 #define D2_DEFINED_D2MercSaveDataStrc
@@ -282,7 +286,7 @@ struct D2MercSaveDataStrc {
 #endif // D2_DEFINED_D2MercSaveDataStrc
 #ifndef D2_DEFINED_D2NetDataStrc
 #define D2_DEFINED_D2NetDataStrc
-__pragma(pack(push, 1)) struct D2NetDataStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2NetDataStrc {
     /* 0x00 */ BOOL bConnected;
     /* 0x04 */ BOOL bInit;
     /* 0x08 */ SOCKET hSocket;
@@ -293,7 +297,7 @@ __pragma(pack(push, 1)) struct D2NetDataStrc {
     /* 0x30 */ int nError;
     /* 0x34 */ int nWSALastError;
     /* 0x38 */ char szHost[64];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2NetDataStrc
 #ifndef D2_DEFINED_D2PoolBlockEntryStrc
 #define D2_DEFINED_D2PoolBlockEntryStrc
@@ -304,27 +308,27 @@ struct D2PoolBlockEntryStrc {
 #endif // D2_DEFINED_D2PoolBlockEntryStrc
 #ifndef D2_DEFINED_D2PoolBlockStrc
 #define D2_DEFINED_D2PoolBlockStrc
-__pragma(pack(push, 1)) struct D2PoolBlockStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PoolBlockStrc {
     /* 0x00 */ BYTE * pCommit;
     /* 0x04 */ DWORD * pUsage;
     /* 0x08 */ uint32_t nBlocks;
     /* 0x0C */ struct D2PoolBlockStrc * pPrev;
     /* 0x10 */ struct D2PoolBlockStrc * pNext;
     /* 0x14 */ struct D2PoolStrc * pPool;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2PoolBlockStrc
 #ifndef D2_DEFINED_D2SockaddrInStrc
 #define D2_DEFINED_D2SockaddrInStrc
-__pragma(pack(push, 1)) struct D2SockaddrInStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SockaddrInStrc {
     /* 0x00 */ u_short sin_family;
     /* 0x02 */ u_short sin_port;
     /* 0x04 */ in_addr sin_addr;
     /* 0x08 */ char sin_zero[8];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2SockaddrInStrc
 #ifndef D2_DEFINED_D2QServerClientConnectionStrc
 #define D2_DEFINED_D2QServerClientConnectionStrc
-__pragma(pack(push, 1)) struct D2QServerClientConnectionStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QServerClientConnectionStrc {
     /* 0x00 */ int nClientToken;
     /* 0x04 */ struct D2QServerClientConnectionStrc * pNextByToken;
     /* 0x08 */ int nRefCount;
@@ -351,7 +355,7 @@ __pragma(pack(push, 1)) struct D2QServerClientConnectionStrc {
     /* 0xA8 */ int nBytesRead;
     /* 0xAC */ uint32_t dwReadTransferSize;
     /* 0xB0 */ char aRecvBuffer[1460];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2QServerClientConnectionStrc
 #ifndef D2_DEFINED_D2QServerClientIpHashBucketTable
 #define D2_DEFINED_D2QServerClientIpHashBucketTable
@@ -366,12 +370,12 @@ struct D2QServerClientPacketStrc {
 #endif // D2_DEFINED_D2QServerClientPacketStrc
 #ifndef D2_DEFINED_D2QServerHacklistEntryStrc
 #define D2_DEFINED_D2QServerHacklistEntryStrc
-__pragma(pack(push, 1)) struct D2QServerHacklistEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QServerHacklistEntryStrc {
     /* 0x00 */ in_addr ipAddress;
     /* 0x04 */ int nPrimaryTtlSec;
     /* 0x08 */ int nSecondaryTtlSec;
     /* 0x0C */ struct D2QServerHacklistEntryStrc * pNext; // Next hacklist entry
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2QServerHacklistEntryStrc
 #ifndef D2_DEFINED_D2QServerIpConnCountEntryStrc
 #define D2_DEFINED_D2QServerIpConnCountEntryStrc
@@ -383,12 +387,12 @@ struct D2QServerIpConnCountEntryStrc {
 #endif // D2_DEFINED_D2QServerIpConnCountEntryStrc
 #ifndef D2_DEFINED_D2QServerIpRateEntryStrc
 #define D2_DEFINED_D2QServerIpRateEntryStrc
-__pragma(pack(push, 1)) struct D2QServerIpRateEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QServerIpRateEntryStrc {
     /* 0x00 */ in_addr ipAddress;
     /* 0x04 */ uint32_t dwLastAttemptTick;
     /* 0x08 */ int nAttemptsInWindow;
     /* 0x0C */ struct D2QServerIpRateEntryStrc * pNext; // Next IP-rate entry
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2QServerIpRateEntryStrc
 #ifndef D2_DEFINED_D2QServerModePacketNodeStrc
 #define D2_DEFINED_D2QServerModePacketNodeStrc
@@ -411,7 +415,7 @@ struct D2QServerTokenFilterEntryStrc {
 #endif // D2_DEFINED_D2QServerTokenFilterEntryStrc
 #ifndef D2_DEFINED_D2QServerWorkerTelemetryStrc
 #define D2_DEFINED_D2QServerWorkerTelemetryStrc
-__pragma(pack(push, 1)) struct D2QServerWorkerTelemetryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QServerWorkerTelemetryStrc {
     /* 0x00 */ LARGE_INTEGER qpcAcceptLoopAccum;
     /* 0x08 */ LARGE_INTEGER qpcReserved08; // Reserved/unused in current analysis
     /* 0x10 */ LARGE_INTEGER qpcStageAcceptCallAccum;
@@ -437,11 +441,11 @@ __pragma(pack(push, 1)) struct D2QServerWorkerTelemetryStrc {
     /* 0xA4 */ int nAcceptBeginReadFailures;
     /* 0xA8 */ int nAcceptedClients;
     /* 0xAC */ uint32_t dwWorkerSlotValue; // Mirrored from D2QServerStrc.aWorkerSlotValues[i] in CopyWorkerTelemetrySnapshot
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2QServerWorkerTelemetryStrc
 #ifndef D2_DEFINED_D2QServerStrc
 #define D2_DEFINED_D2QServerStrc
-__pragma(pack(push, 1)) struct D2QServerStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QServerStrc {
     /* 0x000 */ int bUseNtLocalMode; // BOOL - 0 = Online (Winsock sockets), 1 = Local (NT pipes/IPC for singleplayer/LAN)
     /* 0x004 */ int clientsCount;
     /* 0x008 */ int nClientBucketCount; // Number of client-hash buckets / per-bucket locks used by token and socket lookups
@@ -495,7 +499,7 @@ __pragma(pack(push, 1)) struct D2QServerStrc {
     /* 0xC1C */ HANDLE aIoWorkerThreadHandles[4];
     /* 0xC2C */ uint32_t aIoWorkerThreadIds[4];
     /* 0xC3C */ int aIoWorkerStopFlags[4]; // BOOL[4] - per-IO-worker stop flags
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2QServerStrc
 #ifndef D2_DEFINED_D2QSQueueEntryStrc
 #define D2_DEFINED_D2QSQueueEntryStrc
@@ -507,16 +511,16 @@ struct D2QSQueueEntryStrc {
 #endif // D2_DEFINED_D2QSQueueEntryStrc
 #ifndef D2_DEFINED_D2QSQueueStrc
 #define D2_DEFINED_D2QSQueueStrc
-__pragma(pack(push, 1)) struct D2QSQueueStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QSQueueStrc {
     /* 0x00 */ int32_t bOverflow; // set when a dequeued message exceeds the caller's buffer
     /* 0x04 */ CRITICAL_SECTION csLock;
     /* 0x1C */ struct D2QSQueueEntryStrc * pHead;
     /* 0x20 */ struct D2QSQueueEntryStrc * pTail;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2QSQueueStrc
 #ifndef D2_DEFINED_D2QSSocketStrc
 #define D2_DEFINED_D2QSSocketStrc
-__pragma(pack(push, 1)) struct D2QSSocketStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QSSocketStrc {
     /* 0x000 */ HANDLE hThread;
     /* 0x004 */ DWORD dwThreadId; // thread id written by CreateThread (passed as its lpThreadId out argument)
     /* 0x008 */ char szIpAddress[260];
@@ -531,7 +535,7 @@ __pragma(pack(push, 1)) struct D2QSSocketStrc {
     /* 0x168 */ int (__fastcall *pfnPacketHandler)(uint8_t *, int, void *); // Set by QSSOCKET_SetCallbackHandler1. When non-null ProcessReceivedData calls it with pHandlerContext; a zero return means "not consumed, enqueue it".
     /* 0x16C */ void * pHandlerContext; // Second argument of QSSOCKET_SetCallbackHandler1; the sole argument passed to pfnPacketHandler.
     /* 0x170 */ D2QSQueueStrc aQueue; // Inbound message queue. D2QSQUEUE_Initialize(&this) in STRUCT_D2QSSocket_Init, FOG_EnqueueMessage(&this,...) in ProcessReceivedData, D2QSQueue::Free(&this) in FreeD2QSSocket. Runs to the 0x194 allocation size; no named struct exists for it yet.
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2QSSocketStrc
 #ifndef D2_DEFINED_D2SaveHandSkillStrc
 #define D2_DEFINED_D2SaveHandSkillStrc
@@ -553,7 +557,7 @@ struct D2SaveHotKeyStrc {
 #endif // D2_DEFINED_D2SaveHotKeyStrc
 #ifndef D2_DEFINED_D2SaveFileHeaderStrc
 #define D2_DEFINED_D2SaveFileHeaderStrc
-__pragma(pack(push, 1)) struct D2SaveFileHeaderStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SaveFileHeaderStrc {
     /* 0x00 */ uint32_t dwHeader;
     /* 0x04 */ uint32_t dwFileVersion;
     /* 0x08 */ uint32_t nFileSize; // total .d2s file size; file-bound (save header), 4 bytes on disk
@@ -583,7 +587,7 @@ __pragma(pack(push, 1)) struct D2SaveFileHeaderStrc {
     /* 0xAF */ D2MercSaveDataStrc sMerc; // Reserved merc block padding (copied by LoadMerc but never written by SaveMercData)
     /* 0xCF */ uint8_t nGuildInfo[3];
     /* 0xD2 */ uint8_t nReserved[125]; // Unused header padding bytes (zeroed on save, never read)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2SaveFileHeaderStrc
 #ifndef D2_DEFINED_D2SFileSignatureKeyStrc
 #define D2_DEFINED_D2SFileSignatureKeyStrc
@@ -604,21 +608,21 @@ struct D2SSCompDeflateBlockEntryStrc {
 #endif // D2_DEFINED_D2SSCompDeflateBlockEntryStrc
 #ifndef D2_DEFINED_D2SystemInfoStrc
 #define D2_DEFINED_D2SystemInfoStrc
-__pragma(pack(push, 1)) struct D2SystemInfoStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SystemInfoStrc {
     /* 0x00 */ int bInitialized; // set to 1 at the end of InitializeSystemInfo; SFILE_GetGlobalPointer hands out the struct only when set
     /* 0x04 */ uint32_t eOSType; // 0 = Win9x, 1 = NT4, 2 = 2000, 3 = XP, 4 = later (GetVersionExA)
     /* 0x08 */ float fOSVersion; // major + minor/100 from GetVersionExA
     /* 0x0C */ uint32_t dwTotalPhysicalMemory; // MEMORYSTATUS.dwTotalPhys
     /* 0x10 */ uint32_t dwUnknown10; // no reader or writer found
     /* 0x14 */ _SYSTEM_INFO sWinSystemInfo; // GetSystemInfo result
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2SystemInfoStrc
 #ifndef D2_DEFINED_D2TSExplicitListHeadStrc
 #define D2_DEFINED_D2TSExplicitListHeadStrc
-__pragma(pack(push, 1)) struct D2TSExplicitListHeadStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TSExplicitListHeadStrc {
     /* 0x00 */ int nLinkOffset; // Byte offset of the link node within each element (4 or 16 by list kind); the element's link is (char*)pElement + nLinkOffset, as in D2StormListHead
     /* 0x04 */ StormLinkStrc sTerminator; // The head's own link: sTerminator.pPrevLink = last link (self when empty), sTerminator.pNext = first element or ~&sTerminator when empty
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2TSExplicitListHeadStrc
 #ifndef D2_DEFINED_EHExceptionRecord
 #define D2_DEFINED_EHExceptionRecord

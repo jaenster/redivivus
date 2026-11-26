@@ -489,7 +489,6 @@ int STRING_FormatVarArgs(char * szDest, int32_t nDestSize, char * szFormat, ...)
 
 bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicationName, LPCSTR szCommandLine) {
     int nConverted;
-    _STARTUPINFOW startupInfo;
     uint16_t wszCommandLine[32768];
     uint16_t wszAppName[1024];
     if (szCommandLine) {
@@ -505,8 +504,7 @@ bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicat
       }
     }
 
-    startupInfo.cb = 0x44;
-    memset(&startupInfo.lpReserved, 0, 0x40);
+    _STARTUPINFOW startupInfo = { sizeof(startupInfo) };
     _PROCESS_INFORMATION processInfo;
     memset(&processInfo, 0, sizeof(processInfo));
     BOOL bCreated = CreateProcessW(lpApplicationName ? (LPCWSTR)wszAppName : nullptr, szCommandLine ? (LPWSTR)wszCommandLine : nullptr, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPVOID)0x0, (LPCWSTR)0x0, &startupInfo, &processInfo);

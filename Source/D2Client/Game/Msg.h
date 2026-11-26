@@ -28,23 +28,23 @@ struct D2ChatPacketSendStrc {
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt0x5E {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x5E {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ uint8_t nActionType;
     /* 0x02 */ int nPlayerGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt0x66 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x66 {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ short nDataLength;
     /* 0x03 */ uint8_t Data[0];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt0x67 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x67 {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ char szGameName[16];
     /* 0x11 */ uint8_t nGameType;
@@ -57,11 +57,11 @@ struct __attribute__((packed)) D2GSPacketClt0x67 {
     /* 0x2B */ uint8_t nUnused2B;
     /* 0x2C */ uint8_t nUnused2C;
     /* 0x2D */ uint8_t nLanguageCode;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt0x68 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x68 {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ int nGameHash;
     /* 0x05 */ short nGameToken;
@@ -71,93 +71,93 @@ struct __attribute__((packed)) D2GSPacketClt0x68 {
     /* 0x10 */ int nConstant;
     /* 0x14 */ uint8_t nLanguageCode;
     /* 0x15 */ char szCharName[16];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt0x6C {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x6C {
     /* 0x00 */ uint8_t nId; // 0x6C
     /* 0x01 */ uint8_t nChunkSize; // 0xFF for full chunks, remainder for the last
     /* 0x02 */ uint32_t nTotalSize; // total save size; server side D2GSMsg6CUploadSaveStrc.nTotalSize
     /* 0x06 */ uint8_t aData[258]; // up to 255 bytes used; region runs to the next local
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt0x6D {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x6D {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ int nTickCount;
     /* 0x05 */ int nDelay;
     /* 0x09 */ int nWardenOrZero;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt_CMD_INT {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt_CMD_INT {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ int nArg1;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt_CMD_INT_INT {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt_CMD_INT_INT {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ int nArg1;
     /* 0x05 */ int nArg2;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt_CMD_INT_INT_INT {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt_CMD_INT_INT_INT {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ int nArg1;
     /* 0x05 */ int nArg2;
     /* 0x09 */ int nArg3;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt_CMD_INT_INT_INT_INT {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt_CMD_INT_INT_INT_INT {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ int nArg1;
     /* 0x05 */ int nArg2;
     /* 0x09 */ int nArg3;
     /* 0x0D */ int nArg4;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt_CMD_SHORT {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt_CMD_SHORT {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ short nArg1;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt_CMD_SHORT_SHORT {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt_CMD_SHORT_SHORT {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ short nArg1;
     /* 0x03 */ short nArg2;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt_CMD_SHORT_SHORT_SHORT {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt_CMD_SHORT_SHORT_SHORT {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ short nArg1;
     /* 0x03 */ short nArg2;
     /* 0x05 */ short nArg3;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketClt_CMD_SHORT_SHORT_SHORT_SHORT {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt_CMD_SHORT_SHORT_SHORT_SHORT {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ short nArg1;
     /* 0x03 */ short nArg2;
     /* 0x05 */ short nArg3;
     /* 0x07 */ short nArg4;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 namespace D2Client::GAME::Msg {

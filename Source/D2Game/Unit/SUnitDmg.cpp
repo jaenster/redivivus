@@ -33,6 +33,8 @@
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Seed.inline.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2DamageStrc) == 0x70, "D2DamageStrc is copied as 0x70 bytes");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_FREE_POOL_AT
@@ -1804,7 +1806,7 @@ static void __stdcall DAMAGE_AddDamageListEntry(::SGAMEDATA * nGamePtr, D2Damage
     pNewCombatEntry->eDefenderType = pDefender->eUnitType;
     pNewCombatEntry->nDefenderGUID = pDefender->nUnitGUID;
     D2CombatEntryStrc* pEntryData = (D2CombatEntryStrc*)&pNewCombatEntry->sDamage;
-    memcpy(pEntryData, pDamage, 0x70);
+    memcpy(pEntryData, pDamage, sizeof(pNewCombatEntry->sDamage));
     pNewCombatEntry->pNext = (D2CombatEntryStrc*)pAttacker->pCombat;
     pAttacker->pCombat = (uint8_t*)pNewCombatEntry;
 }
@@ -2369,7 +2371,7 @@ static void __stdcall DAMAGE_ReduceEquipmentDurability(::SGAMEDATA * pGame, D2Un
 
     uint32_t uTotalWeight = 0;
     int i = 0;
-    memset(aEquipSlots, 0, 7 * sizeof(aEquipSlots[0]));
+    memset(aEquipSlots, 0, sizeof(aEquipSlots));
     if (gnArmorBodyLocCount <= 0) {
       return;
     }

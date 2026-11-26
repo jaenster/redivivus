@@ -59,14 +59,14 @@ struct D2SFileSignatureKeyStrc {
 #endif // D2_DEFINED_D2SFileSignatureKeyStrc
 #ifndef D2_DEFINED_D2SystemInfoStrc
 #define D2_DEFINED_D2SystemInfoStrc
-struct __attribute__((packed)) D2SystemInfoStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SystemInfoStrc {
     /* 0x00 */ int bInitialized; // set to 1 at the end of InitializeSystemInfo; SFILE_GetGlobalPointer hands out the struct only when set
     /* 0x04 */ uint32_t eOSType; // 0 = Win9x, 1 = NT4, 2 = 2000, 3 = XP, 4 = later (GetVersionExA)
     /* 0x08 */ float fOSVersion; // major + minor/100 from GetVersionExA
     /* 0x0C */ uint32_t dwTotalPhysicalMemory; // MEMORYSTATUS.dwTotalPhys
     /* 0x10 */ uint32_t dwUnknown10; // no reader or writer found
     /* 0x14 */ _SYSTEM_INFO sWinSystemInfo; // GetSystemInfo result
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2SystemInfoStrc
 namespace Fog::Source::SFile {

@@ -30,7 +30,7 @@ typedef void (__fastcall *AI_Main)(::SGAMEDATA * pGame, struct D2UnitStrc * pUni
 // Data types
 #ifndef D2_DEFINED_D2AiGeneralStrc
 #define D2_DEFINED_D2AiGeneralStrc
-struct __attribute__((packed)) D2AiGeneralStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AiGeneralStrc {
     /* 0x00 */ int nFunctionId;
     /* 0x04 */ void (__fastcall *fpFunction)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
     /* 0x08 */ int nAiFlags;
@@ -47,6 +47,6 @@ struct __attribute__((packed)) D2AiGeneralStrc {
     /* 0x34 */ struct D2MonsterDataMinionList * pMinionList;
     /* 0x38 */ struct D2MapAIStrc * pMapAi;
     /* 0x3C */ int nGenericSpawnerSpecific;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2AiGeneralStrc

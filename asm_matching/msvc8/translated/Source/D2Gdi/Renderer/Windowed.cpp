@@ -132,10 +132,10 @@ BOOL __fastcall CreateWindow(HWND hWnd, int nResolutionMode) {
     D2LogPalette256Strc sLogPalette;
     gnGlideWindowHandle = hWnd;
     RENDERER_WINDOWED_AllocateDIBSection(nResolutionMode);
-    memset(gaDirectDrawDitherPaletteRemap, 0, 0x400);
+    memset(gaDirectDrawDitherPaletteRemap, 0, sizeof(gaDirectDrawDitherPaletteRemap));
     sLogPalette.palVersion = 0x300;
     sLogPalette.palNumEntries = 0x100;
-    memset(sLogPalette.palPalEntry, 0, 0x400);
+    memset(sLogPalette.palPalEntry, 0, sizeof(sLogPalette.palPalEntry));
     /* LOGPALETTE * plpal for CreatePalette */ RENDERER_WINDOWED_hPalette = CreatePalette((LOGPALETTE*)&sLogPalette);
     RENDERER_WINDOWED_CreateDebugFont();
     RENDERER_WINDOWED_UpdateScaleFactor(nResolutionMode);
@@ -279,7 +279,7 @@ void __fastcall SetPalette(LPPALETTEENTRY pPalette) {
     } while ((intptr_t)pDestination < (intptr_t)(prgbq_00989c40 + 256));
 
     /* PALETTEENTRY * pPalEntries for SetPaletteEntries */ /* UINT cEntries for SetPaletteEntries */ /* UINT iStart for SetPaletteEntries */ /* HPALETTE hpal for SetPaletteEntries */ SetPaletteEntries(RENDERER_WINDOWED_hPalette, 0, 0x100, pPalette);
-    memcpy(gaDirectDrawDitherPaletteRemap, pPalette, 256 * sizeof(PALETTEENTRY));
+    memcpy(gaDirectDrawDitherPaletteRemap, pPalette, sizeof(gaDirectDrawDitherPaletteRemap));
 }
 
 void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {
@@ -1207,14 +1207,14 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int
         const int nSubtileY = pTile->pSubTiles[i].nOffsetY + nPosY;
         if (nSubtileX >= nClipLeft && nSubtileX < nClipRight && nSubtileY >= -0x20 && nSubtileY < nClipBottom) {
           const int nLightIndex = pTile->pSubTiles[i].nOffsetX >> 5;
-          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles;
+          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles; // steer-ok: placement kept from the matching body
           uint32_t aCornerLight[4];
           bAnyDrawn = 1;
           aCornerLight[0] = pLight[nLightIndex].nIntensity;
           aCornerLight[3] = pLight[nLightIndex].nIntensity;
           aCornerLight[1] = pLight[nLightIndex + 1].nIntensity;
           aCornerLight[2] = pLight[nLightIndex + 1].nIntensity;
-          D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile((int)(intptr_t)pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight, nAlpha);
+          D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile(pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight, nAlpha);
         }
       }
     }
@@ -1242,12 +1242,12 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPos
         const int nSubtileY = pTile->pSubTiles[i].nOffsetY + nPosY;
         if (nSubtileX >= nClipLeft && nSubtileX < nClipRight && nSubtileY >= -0x20 && nSubtileY < nClipBottom) {
           const int nLightIndex = pTile->pSubTiles[i].nOffsetX >> 5;
-          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles;
+          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles; // steer-ok: placement kept from the matching body
           uint32_t aCornerLight[4];
           aCornerLight[3] = aCornerLight[0] = pLight[nLightIndex].nIntensity;
           aCornerLight[2] = aCornerLight[1] = pLight[nLightIndex + 1].nIntensity;
           bAnyDrawn = 1;
-          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile((int)(intptr_t)pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight);
+          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile(pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight);
         }
       }
     }

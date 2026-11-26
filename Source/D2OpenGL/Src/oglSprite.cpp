@@ -51,6 +51,7 @@
 #include "Source/D2OpenGL/Src/oglSmack.h"
 #include "Source/D2OpenGL/Src/oglVertex.h"
 #include "Source/D2OpenGL/Src/MacDisplayDevice.h"
+#include "Source/D2CMP/D2GfxCellNodeStrc.h"
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_AT
@@ -364,18 +365,18 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
       nSlot = nTexMode;
     }
 
-    pvVar3 = (void*)D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDVar4);
-    if (!*(int*)((uint8_t*)pvVar3 + nSlot * 8)) {
+    D2GfxCellNodeStrc* pCellNode = (D2GfxCellNodeStrc*)D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDVar4);
+    if (!pCellNode->aModes[nSlot].nSizeClass) {
       iVar6 = pSprite->nWidth;
       if (iVar6 < 0x21) {
         if (pSprite->nHeight < 0x21) {
-          *(uint32_t*)((uint8_t*)pvVar3 + nSlot * 8) = 3;
+          pCellNode->aModes[nSlot].nSizeClass = 3;
         } else {
           LAB_002e3555:
           if (0x80 < pSprite->nHeight) {
             goto LAB_002e3567;
           }
-          *(uint32_t*)((uint8_t*)pvVar3 + nSlot * 8) = 2;
+          pCellNode->aModes[nSlot].nSizeClass = 2;
         }
       } else {
         if (iVar6 < 0x81) {
@@ -390,11 +391,11 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
           return 0;
         }
 
-        *(uint32_t*)((uint8_t*)pvVar3 + nSlot * 8) = 1;
+        pCellNode->aModes[nSlot].nSizeClass = 1;
       }
     }
 
-    iVar6 = *(int*)((uint8_t*)pvVar3 + nSlot * 8 + 4);
+    iVar6 = pCellNode->aModes[nSlot].nCacheNode;
     if (iVar6) {
       pThis = *PTR_PTR_003963b0;
       if ((uint8_t*)pThis->pNodes[iVar6 - 1].nOwnerKey == pPalette || nTexMode == 4) {
@@ -402,7 +403,7 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
       }
 
       CD2Textures::CD2TEXTURES_ReleaseById(pThis, iVar6);
-      *(uint32_t*)((uint8_t*)pvVar3 + nSlot * 8 + 4) = 0;
+      pCellNode->aModes[nSlot].nCacheNode = 0;
     }
     if (!DAT_00552bc0) {
       pvVar5 = Fog::Src::ErrorManager::GetInstructionPointer();
@@ -488,9 +489,9 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
 
     ::CD2Textures** ppCVar2;
     ppCVar2 = PTR_PTR_003963b0;
-    (*PTR_PTR_003963b0)->vptr->CreateTexture(*PTR_PTR_003963b0, pvVar5, nPitch, iVar6, 3, pvVar3, nSlot, (intptr_t)pPalette);
+    (*PTR_PTR_003963b0)->vptr->CreateTexture(*PTR_PTR_003963b0, pvVar5, nPitch, iVar6, 3, pCellNode, nSlot, (intptr_t)pPalette);
     OGL_SetTextureFilter(1);
-    iVar6 = *(int*)((uint8_t*)pvVar3 + nSlot * 8 + 4);
+    iVar6 = pCellNode->aModes[nSlot].nCacheNode;
     pThis = *ppCVar2;
     LAB_002e390b:
     CD2Textures::CD2TEXTURES_TouchEntry(pThis, iVar6);

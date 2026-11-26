@@ -131,7 +131,7 @@ void __fastcall FASTCMP_ConvertDCCWithPaletteRemap(DC6 * pDCC, DC6 * pDCCDest, p
     uint8_t* pbIndexOut;
     uint32_t nFrameFlags;
     uint32_t nCompressedSizeOut;
-    uint32_t* ppFrameDest;
+    DC6Block* ppFrameDest;
     if (!(pDCC->nFlags & 4)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xce);
       exit(-1);
@@ -142,16 +142,14 @@ void __fastcall FASTCMP_ConvertDCCWithPaletteRemap(DC6 * pDCC, DC6 * pDCCDest, p
       return;
     }
 
-#if D2_ARCH_X86
-    DC6* pSrcFrame = pDCC + 1;
     do {
-      uint32_t* pNewFrameData;
-      nPixelCount = *(int*)(pSrcFrame->nVersion + 8) * *(int*)(pSrcFrame->nVersion + 4);
+      DC6Block* pNewFrameData;
+      nPixelCount = pDCC->pBlocks[nFrameIndex]->nHeight * pDCC->pBlocks[nFrameIndex]->nWidth;
       pbIndexedBuf = (uint8_t*)D2_ALLOC_AT(nPixelCount, ".\\SRC\\FastCmp.cpp", 0xd4);
-      pbSrcPixel = (uint8_t*)(pSrcFrame->nVersion + 0x20);
+      pbSrcPixel = (uint8_t*)pDCC->pBlocks[nFrameIndex]->data;
       pbIndexOut = pbIndexedBuf;
       for (nPixelIndex = 0; nPixelIndex < nPixelCount; nPixelIndex++) {
-        if (*pbSrcPixel == (uint8_t)dwColorKey && pbSrcPixel[1] == (uint8_t)(dwColorKey >> 8) && pbSrcPixel[2] == *(uint8_t*)((char*)&dwColorKey + 2)) {
+        if (*pbSrcPixel == (uint8_t)dwColorKey && pbSrcPixel[1] == (uint8_t)(dwColorKey >> 8) && pbSrcPixel[2] == ((uint8_t*)&dwColorKey)[2]) {
           *pbIndexOut = 0;
         } else {
           byPaletteIndex = (*pfnPaletteRemap)(*pbSrcPixel, pbSrcPixel[1], pbSrcPixel[2]);
@@ -167,69 +165,26 @@ void __fastcall FASTCMP_ConvertDCCWithPaletteRemap(DC6 * pDCC, DC6 * pDCCDest, p
         pbSrcPixel += 3;
       }
 
-      ppFrameDest = (uint32_t*)pSrcFrame->nVersion;
-      FASTCMP_CompressToRLE(ppFrameDest[1], ppFrameDest[2], *ppFrameDest, &pbCompressedData, &nCompressedSize, pbIndexedBuf);
+      ppFrameDest = pDCC->pBlocks[nFrameIndex];
+      FASTCMP_CompressToRLE(ppFrameDest->nWidth, ppFrameDest->nHeight, ppFrameDest->nFlip, &pbCompressedData, &nCompressedSize, pbIndexedBuf);
       D2_FREE_AT(pbIndexedBuf, ".\\SRC\\FastCmp.cpp", 0xf0);
       nCompressedSizeOut = nCompressedSize;
-      pNewFrameData = (uint32_t*)D2_ALLOC_AT(nCompressedSize + 0x23, ".\\SRC\\FastCmp.cpp", 0xf2);
+      pNewFrameData = (DC6Block*)D2_ALLOC_AT(nCompressedSize + sizeof(DC6Block) + 3, ".\\SRC\\FastCmp.cpp", 0xf2);
       pbSrcPixel = pbCompressedData;
-      *pNewFrameData = *(uint32_t*)pSrcFrame->nVersion;
-      pNewFrameData[1] = *(uint32_t*)(pSrcFrame->nVersion + 4);
-      pNewFrameData[2] = *(uint32_t*)(pSrcFrame->nVersion + 8);
-      pNewFrameData[3] = *(uint32_t*)(pSrcFrame->nVersion + 0xc);
-      nFrameFlags = *(uint32_t*)(pSrcFrame->nVersion + 0x10);
-      pNewFrameData[7] = nCompressedSizeOut;
-      pNewFrameData[4] = nFrameFlags;
-      pNewFrameData[5] = 0;
-      pNewFrameData[6] = 0;
-      memcpy(pNewFrameData + 8, pbCompressedData, nCompressedSizeOut);
+      pNewFrameData->nFlip = pDCC->pBlocks[nFrameIndex]->nFlip;
+      pNewFrameData->nWidth = pDCC->pBlocks[nFrameIndex]->nWidth;
+      pNewFrameData->nHeight = pDCC->pBlocks[nFrameIndex]->nHeight;
+      pNewFrameData->nOffsetX = pDCC->pBlocks[nFrameIndex]->nOffsetX;
+      nFrameFlags = pDCC->pBlocks[nFrameIndex]->nOffsetY;
+      pNewFrameData->nLength = nCompressedSizeOut;
+      pNewFrameData->nOffsetY = nFrameFlags;
+      pNewFrameData->nAllocSize = 0;
+      pNewFrameData->nNextBlock = 0;
+      memcpy(pNewFrameData->data, pbCompressedData, nCompressedSizeOut);
       D2_FREE_AT(pbSrcPixel, ".\\SRC\\FastCmp.cpp", 0xfd);
-      *(uint32_t**)((intptr_t)pDCCDest - (intptr_t)pDCC + (char*)pSrcFrame) = (uint32_t*)pNewFrameData;
+      pDCCDest->pBlocks[nFrameIndex] = pNewFrameData;
       nFrameIndex++;
-      pSrcFrame = (DC6*)&pSrcFrame->nFlags;
     } while (nFrameIndex < (uint32_t)(pDCC->nDirections * pDCC->nFrames));
-#elif D2_ARCH_X64
-    // A loaded DC6 holds a native pointer table (CELCMP_FixupPointersAndPrepare), so the frames are
-    // reached through pBlocks and the new frames get the native block header.
-    for (; nFrameIndex < (uint32_t)(pDCC->nDirections * pDCC->nFrames); nFrameIndex++) {
-      DC6Block* pSrcBlock = pDCC->pBlocks[nFrameIndex];
-      nPixelCount = (size_t)pSrcBlock->nHeight * (size_t)pSrcBlock->nWidth;
-      pbIndexedBuf = (uint8_t*)D2_ALLOC_AT(nPixelCount, ".\\SRC\\FastCmp.cpp", 0xd4);
-      pbSrcPixel = (uint8_t*)pSrcBlock->data;
-      pbIndexOut = pbIndexedBuf;
-      for (nPixelIndex = 0; nPixelIndex < nPixelCount; nPixelIndex++) {
-        if (*pbSrcPixel == (uint8_t)dwColorKey && pbSrcPixel[1] == (uint8_t)(dwColorKey >> 8) && pbSrcPixel[2] == (uint8_t)(dwColorKey >> 16)) {
-          *pbIndexOut = 0;
-        } else {
-          byPaletteIndex = (*pfnPaletteRemap)(*pbSrcPixel, pbSrcPixel[1], pbSrcPixel[2]);
-          if (!byPaletteIndex) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe0);
-            exit(-1);
-          }
-
-          *pbIndexOut = byPaletteIndex;
-        }
-
-        pbIndexOut++;
-        pbSrcPixel += 3;
-      }
-
-      FASTCMP_CompressToRLE(pSrcBlock->nWidth, pSrcBlock->nHeight, pSrcBlock->nFlip, &pbCompressedData, &nCompressedSize, pbIndexedBuf);
-      D2_FREE_AT(pbIndexedBuf, ".\\SRC\\FastCmp.cpp", 0xf0);
-      DC6Block* pNewBlock = (DC6Block*)D2_ALLOC_AT(sizeof(DC6Block) + nCompressedSize + 3, ".\\SRC\\FastCmp.cpp", 0xf2);
-      pNewBlock->nFlip = pSrcBlock->nFlip;
-      pNewBlock->nWidth = pSrcBlock->nWidth;
-      pNewBlock->nHeight = pSrcBlock->nHeight;
-      pNewBlock->nOffsetX = pSrcBlock->nOffsetX;
-      pNewBlock->nOffsetY = pSrcBlock->nOffsetY;
-      pNewBlock->nAllocSize = 0;
-      pNewBlock->nNextBlock = 0;
-      pNewBlock->nLength = (int)nCompressedSize;
-      memcpy(pNewBlock->data, pbCompressedData, nCompressedSize);
-      D2_FREE_AT(pbCompressedData, ".\\SRC\\FastCmp.cpp", 0xfd);
-      pDCCDest->pBlocks[nFrameIndex] = pNewBlock;
-    }
-#endif
 }
 
 // EAX is loaded from pbRLEData at entry and advanced through the whole RLE-skip loop; RET leaves the advanced pointer in EAX, matching the caller's own extraout variable name pbRLEData.
@@ -1271,19 +1226,14 @@ void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t 
     bool bNoClip;
     uint8_t* pbDstRunEnd2;
     int32_t nErrLine = nDrawX;
-    uint32_t nFrameWidth = *(uint32_t*)(pImageHeader + 4);
+    uint32_t nFrameWidth = (uint32_t)((DC6Block*)pImageHeader)->nWidth;
     if (nDstPitch < nFrameWidth) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5ea);
       exit(-1);
     } else {
       uint8_t bRLEToken;
-      if ((uint32_t)(nStartRow + nRowCount) <= *(uint32_t*)(pImageHeader + 8)) {
-#if D2_ARCH_X86
-        pbRLEData = FASTCMP_SkipRLERows(pImageHeader + 0x20, nStartRow);
-#elif D2_ARCH_X64
-        // The native block header is wider than the 0x20 bytes on disk (nNextBlock is pointer-sized).
+      if ((uint32_t)(nStartRow + nRowCount) <= (uint32_t)((DC6Block*)pImageHeader)->nHeight) {
         pbRLEData = FASTCMP_SkipRLERows((uint8_t*)((DC6Block*)pImageHeader)->data, nStartRow);
-#endif
         if (!(*pImageHeader & 1)) {
           nDstPitch = -nDstPitch;
         }
@@ -1836,7 +1786,7 @@ void __fastcall FASTCMP_DecompressRLEWithAlpha(DC6Block * pFrameBlock, BYTE * pD
 
 // Decompress indexed RLE frames from a source DCC linked-list and write palette-converted DC6Block frames into a destination DC6 sprite
 uint32_t __fastcall FASTCMP_DecompressRLEWithPaletteConversion(::CELLIST * pDCCSrc, DC6 * pDCCDest) {
-    uint32_t* pNewFrame;
+    DC6Block* pNewFrame;
     uint32_t nDirectionIndex;
     uint32_t nFrameTableIndex;
     ::TCELENTRY* nFrameInDir;
@@ -1858,35 +1808,18 @@ uint32_t __fastcall FASTCMP_DecompressRLEWithPaletteConversion(::CELLIST * pDCCS
     for (nFrameInDir = (::TCELENTRY*)(nFirstLink <= 0 ? 0 : nFirstLink); 0 < (intptr_t)nFrameInDir; nFrameInDir = (::TCELENTRY*)nFrameInDir->m_link.m_next) {
       FASTCMP_CompressToRLE(nFrameInDir->nWidth, nFrameInDir->nHeight, nFrameInDir->dwArg7, &pbCompressedData, &nCompressedSize, nFrameInDir->pPixels);
       nFrameTableIndex = nCompressedSize;
-#if D2_ARCH_X86
-      pNewFrame = (uint32_t*)D2_ALLOC_AT(nCompressedSize + 0x23, ".\\SRC\\FastCmp.cpp", 0x82);
+      pNewFrame = (DC6Block*)D2_ALLOC_AT(nCompressedSize + sizeof(DC6Block) + 3, ".\\SRC\\FastCmp.cpp", 0x82);
       pMemoryToFree = pbCompressedData;
-      *pNewFrame = nFrameInDir->dwArg7;
-      pNewFrame[1] = nFrameInDir->nWidth;
-      pNewFrame[2] = nFrameInDir->nHeight;
-      pNewFrame[3] = nFrameInDir->nOffsetX;
+      pNewFrame->nFlip = nFrameInDir->dwArg7;
+      pNewFrame->nWidth = nFrameInDir->nWidth;
+      pNewFrame->nHeight = nFrameInDir->nHeight;
+      pNewFrame->nOffsetX = nFrameInDir->nOffsetX;
       dwFrameFlags = nFrameInDir->nOffsetY;
-      pNewFrame[7] = nFrameTableIndex;
-      pNewFrame[5] = 0;
-      pNewFrame[6] = 0;
-      pNewFrame[4] = dwFrameFlags;
-      memcpy(pNewFrame + 8, pbCompressedData, nFrameTableIndex);
-#elif D2_ARCH_X64
-      {
-        DC6Block* pNewBlock = (DC6Block*)D2_ALLOC_AT(sizeof(DC6Block) + nCompressedSize + 3, ".\\SRC\\FastCmp.cpp", 0x82);
-        pMemoryToFree = pbCompressedData;
-        pNewBlock->nFlip = nFrameInDir->dwArg7;
-        pNewBlock->nWidth = nFrameInDir->nWidth;
-        pNewBlock->nHeight = nFrameInDir->nHeight;
-        pNewBlock->nOffsetX = nFrameInDir->nOffsetX;
-        pNewBlock->nOffsetY = nFrameInDir->nOffsetY;
-        pNewBlock->nAllocSize = 0;
-        pNewBlock->nNextBlock = 0;
-        pNewBlock->nLength = nFrameTableIndex;
-        memcpy(pNewBlock->data, pbCompressedData, nFrameTableIndex);
-        pNewFrame = (uint32_t*)pNewBlock;
-      }
-#endif
+      pNewFrame->nLength = nFrameTableIndex;
+      pNewFrame->nAllocSize = 0;
+      pNewFrame->nNextBlock = 0;
+      pNewFrame->nOffsetY = dwFrameFlags;
+      memcpy(pNewFrame->data, pbCompressedData, nFrameTableIndex);
       D2_FREE_AT(pMemoryToFree, ".\\SRC\\FastCmp.cpp", 0x8d);
       nDirectionCount = pDCCSrc->nDirections;
       if (nDirectionCount > 1) {
@@ -1899,11 +1832,7 @@ uint32_t __fastcall FASTCMP_DecompressRLEWithPaletteConversion(::CELLIST * pDCCS
       nDirectionCount = nFrameCounter / nFramesPerDir;
       nDirectionIndex = nFrameCounter % nFramesPerDir;
       nFrameCounter++;
-#if D2_ARCH_X86
-      *(uint32_t**)(pDCCDest[1].nTerm + ((nFrameTableIndex * nFramesPerDir + nDirectionIndex) * 4 - 0xc)) = (uint32_t*)pNewFrame;
-#elif D2_ARCH_X64
-      pDCCDest->pBlocks[nFrameTableIndex * nFramesPerDir + nDirectionIndex] = (DC6Block*)pNewFrame;
-#endif
+      pDCCDest->pBlocks[nFrameTableIndex * nFramesPerDir + nDirectionIndex] = pNewFrame;
     }
 
     return nDirectionCount;

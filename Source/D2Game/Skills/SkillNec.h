@@ -36,7 +36,7 @@ struct D2CorpseExplosionArgStrc {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2CorpseSkillEventArgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CorpseSkillEventArgStrc {
     /* 0x00 */ struct SGAMEDATA * pGame;
     /* 0x04 */ struct D2UnitStrc * pUnit;
     /* 0x08 */ eD2Skills eSkill;
@@ -47,7 +47,7 @@ struct __attribute__((packed)) D2CorpseSkillEventArgStrc {
     /* 0x13 */ uint8_t field_0x13;
     /* 0x14 */ int nCorpseGUID;
     /* 0x18 */ int32_t nDuration;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -80,7 +80,7 @@ struct D2MonsterCastPetStrc {
 
 #endif // D2_DEFINED_D2MonsterCastPetStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2NecroSkillArgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2NecroSkillArgStrc {
     /* 0x00 */ struct SGAMEDATA * pGame;
     /* 0x04 */ struct D2UnitStrc * pUnit;
     /* 0x08 */ int32_t bRegisterExpireCallback; // Nonzero: curse applies to monsters only, validates attackable non-good target + corpse-consume gate, registers SKILLNEC_OnCurseExpire AI callback. Read as full int32 by consumers.
@@ -93,11 +93,11 @@ struct __attribute__((packed)) D2NecroSkillArgStrc {
     /* 0x4C */ eD2States eAuraState;
     /* 0x50 */ int32_t nAuraEvent[3]; // Aura unit-event ids [3]; reader passes (byte)nAuraEvent[i] as event id to D2SetAuraEvent. Active when nAuraEvent[0]>=0 && nAuraEventFunc[0]>0.
     /* 0x5C */ int32_t nAuraEventFunc[3]; // Aura-event function ids [3]; reader reads nAuraEvent[i+3] i.e. this[i], passed as the func arg to D2SetAuraEvent.
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2SkillAuraCtxStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SkillAuraCtxStrc {
     /* 0x00 */ struct SGAMEDATA * pGame;
     /* 0x04 */ struct D2UnitStrc * pCaster;
     /* 0x08 */ int32_t nField08; // skill-specific; SkillMonst uses it as a stat count
@@ -109,7 +109,7 @@ struct __attribute__((packed)) D2SkillAuraCtxStrc {
     /* 0x34 */ int32_t anStatValues[6];
     /* 0x4C */ int32_t eAuraState;
     /* 0x50 */ int32_t anExtra[6]; // skill-specific tail; SkillMonst keeps two more stat/value pairs here
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)

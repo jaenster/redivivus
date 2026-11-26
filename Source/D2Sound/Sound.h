@@ -44,7 +44,7 @@ struct DSBUFFERDESC {
 #endif // D2_MODULE_D2Sound
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
-struct __attribute__((packed)) WAVEFORMATEX {
+D2_PACKED_BEGIN struct __attribute__((packed)) WAVEFORMATEX {
     /* 0x00 */ WORD wFormatTag;
     /* 0x02 */ WORD nChannels;
     /* 0x04 */ DWORD nSamplesPerSec;
@@ -52,7 +52,7 @@ struct __attribute__((packed)) WAVEFORMATEX {
     /* 0x0C */ WORD nBlockAlign;
     /* 0x0E */ WORD wBitsPerSample;
     /* 0x10 */ WORD cbSize;
-};
+}; D2_PACKED_END
 
 #endif // _WIN32
 

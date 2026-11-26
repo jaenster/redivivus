@@ -73,7 +73,7 @@ struct D2GambleTableStrc {
 #endif // D2_DEFINED_D2GambleTableStrc
 #ifndef D2_DEFINED_D2GemsTxt
 #define D2_DEFINED_D2GemsTxt
-__pragma(pack(push, 1)) struct D2GemsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GemsTxt {
     /* 0x00 */ char name[32]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x20 */ char letter[6]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x26 */ uint8_t field_0x26;
@@ -86,7 +86,7 @@ __pragma(pack(push, 1)) struct D2GemsTxt {
     /* 0x30 */ D2MagixAffixModStrc aWeaponMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
     /* 0x60 */ D2MagixAffixModStrc aHelmMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
     /* 0x90 */ D2MagixAffixModStrc aShieldMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GemsTxt
 #ifndef D2_DEFINED_D2ItemRatioTxt
@@ -166,7 +166,7 @@ struct D2QualityItemsTableStrc {
 #endif // D2_DEFINED_D2QualityItemsTableStrc
 #ifndef D2_DEFINED_D2QualityItemsTxt
 #define D2_DEFINED_D2QualityItemsTxt
-__pragma(pack(push, 1)) struct D2QualityItemsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QualityItemsTxt {
     /* 0x00 */ bool armor;
     /* 0x01 */ bool weapon;
     /* 0x02 */ bool shield;
@@ -186,7 +186,7 @@ __pragma(pack(push, 1)) struct D2QualityItemsTxt {
     /* 0x6D */ uint8_t field_0x6d;
     /* 0x6E */ uint8_t field_0x6e;
     /* 0x6F */ uint8_t field_0x6f;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2QualityItemsTxt
 #ifndef D2_DEFINED_D2RareAffixTableStrc

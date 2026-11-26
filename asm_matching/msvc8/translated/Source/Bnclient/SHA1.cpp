@@ -437,7 +437,7 @@ void __fastcall SHA1Update(D2BnSha1ContextStrc * context, void * data, uint32_t 
 void __fastcall SHA1Final(uint8_t * digest, D2BnSha1ContextStrc * context) {
     uint32_t i;
     unsigned char finalcount[8];
-    for (i = 0; i < 8; i++) {
+    for (i = 0; i < (int)_countof(finalcount); i++) {
         finalcount[i] = (unsigned char)(((&context->nBitCountLow)[(i >= 4 ? 0 : 1)] >> ((3 - (i & 3)) * 8)) &
                                         255); /* Endian independent */
     }

@@ -157,7 +157,7 @@ BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBuffer
         if (hMapping) {
           pView = MapViewOfFile(hMapping, 4, 0, 0, 0);
           if (pView) {
-            if (*(short int*)pView == 0x5a4d && (pPeHeader = (int*)(*(int*)((char*)pView + 0x3c) + (intptr_t)pView) , *pPeHeader == 0x454c)) {
+            if (*(short int*)pView == 0x5a4d && (pPeHeader = (int*)(((IMAGE_DOS_HEADER*)pView)->e_lfanew + (intptr_t)pView) , *pPeHeader == 0x454c)) {
               if (!pPeHeader[0x2f]) {
                 *pnBufferSize = 0;
                 /* DWORD dwErrCode for SetLastError */ SetLastError(0x714);
@@ -255,7 +255,7 @@ BOOL __fastcall SOUNDUTIL_GetFileVersionInfo(LPCSTR szText, uint32_t * pnFileVer
       return 0;
     }
 
-    *pnMajorVer = (uint32_t)*(uint16_t*)((intptr_t)&pVerInfo->dwFileVersionMS + 2);
+    *pnMajorVer = (uint32_t)HIWORD(pVerInfo->dwFileVersionMS);
     *pnFileVerMS = (uint32_t)(uint16_t)pVerInfo->dwFileVersionMS;
     *pnFileVerLS = (uint32_t)(uint16_t)pVerInfo->dwFileVersionLS;
     return 1;

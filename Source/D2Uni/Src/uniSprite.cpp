@@ -114,7 +114,7 @@ BOOL __fastcall UniDrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, 
             aCornerLight[1] = pEntry[1] & 0xFF;
             aCornerLight[2] = aCornerLight[1];
             aCornerLight[3] = aCornerLight[0];
-            gpUniHelpers->nfpDrawRoofTile((int)(intptr_t)pSubTile->pPixelData, nX, nY, aCornerLight, nAlpha);
+            gpUniHelpers->nfpDrawRoofTile(pSubTile->pPixelData, nX, nY, aCornerLight, nAlpha);
         }
     }
     return bDrawn;
@@ -150,7 +150,7 @@ BOOL __fastcall UniDrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int n
             aCornerLight[1] = pEntry[1] & 0xFF;
             aCornerLight[2] = aCornerLight[1];
             aCornerLight[3] = aCornerLight[0];
-            gpUniHelpers->nfpDrawWallTile((int)(intptr_t)pSubTile->pPixelData, nX, nY, aCornerLight);
+            gpUniHelpers->nfpDrawWallTile(pSubTile->pPixelData, nX, nY, aCornerLight);
         }
     }
     return bDrawn;

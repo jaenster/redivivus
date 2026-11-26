@@ -1146,7 +1146,7 @@ void __fastcall MONSTER_InitMonsterUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
 
     D2Common::Monsters::MONSTERS::MONSTERS_OnInitMonster_NoOp(pUnit, nMonStats2Idx);
     nMonStats2Idx = pUnit->nClassId;
-    if (nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStats2Idx && (uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStats2Idx] + 0xd) & Fog::BitBuffer::gadwBitMasks[0]) {
+    if (nMonStats2Idx >= 0 && nMonStats2Idx < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStats2Idx && (uint8_t)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonStats2Idx].aFlagBytes[1] & Fog::BitBuffer::gadwBitMasks[0]) {
       return;
     }
 
@@ -3041,7 +3041,7 @@ void __fastcall MERC_InitializeFromPacket(D2UnitStrc * pUnit, D2MercInitArgStrc 
       nLevelDelta = 0;
     }
 
-    for (int nSkillIdx = 0; nSkillIdx < 6; nSkillIdx++) {
+    for (int nSkillIdx = 0; nSkillIdx < (int)(sizeof(pHirelingTxt->nSkillId) / sizeof(pHirelingTxt->nSkillId[0])); nSkillIdx++) {
       eD2Skills eSkill = (eD2Skills)pHirelingTxt->nSkillId[nSkillIdx];
       if ((int)eSkill <= 0 || (int)eSkill >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         break;

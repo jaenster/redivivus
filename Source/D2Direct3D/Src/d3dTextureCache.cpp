@@ -5,6 +5,7 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
+#include "Source/D2CMP/D2GfxCellNodeStrc.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -215,8 +216,8 @@ void __fastcall D3DTEXCACHE_InvalidateByTilePtr(D3DTextureCacheStrc * pCache) {
       ppLink[0] = 0;
       ppLink[1] = 0;
       if (pUsedNode->pAssociatedTilePtr) {
-        *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + pUsedNode->nTileSlotIndex * 8) = 0;
-        *(uint32_t*)((char*)pUsedNode->pAssociatedTilePtr + (pUsedNode->nTileSlotIndex * 8 + 4)) = 0;
+        pUsedNode->pAssociatedTilePtr->aModes[pUsedNode->nTileSlotIndex].nSizeClass = 0;
+        pUsedNode->pAssociatedTilePtr->aModes[pUsedNode->nTileSlotIndex].nCacheNode = 0;
         pUsedNode->pAssociatedTilePtr = 0;
       }
       if (!pCache->pFreeHead) {
@@ -292,8 +293,8 @@ int32_t __fastcall D3DTEXCACHE_EnsureAvailableNode(D3DTextureCacheStrc * pCache)
           ppLink[0] = 0;
           ppLink[1] = 0;
           if (pEvictNode->pAssociatedTilePtr) {
-            *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + pEvictNode->nTileSlotIndex * 8) = 0;
-            *(uint32_t*)((char*)pEvictNode->pAssociatedTilePtr + (pEvictNode->nTileSlotIndex * 8 + 4)) = 0;
+            pEvictNode->pAssociatedTilePtr->aModes[pEvictNode->nTileSlotIndex].nSizeClass = 0;
+            pEvictNode->pAssociatedTilePtr->aModes[pEvictNode->nTileSlotIndex].nCacheNode = 0;
             pEvictNode->pAssociatedTilePtr = 0;
           }
           if (!pCache->pFreeHead) {

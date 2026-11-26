@@ -29,10 +29,10 @@ struct D2OogErrorDataStrc {
 
 #endif // D2_MODULE_D2Launch
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Launch)
-struct __attribute__((packed)) D2SaveFileBufferStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SaveFileBufferStrc {
     /* 0x000 */ D2SaveFileHeaderStrc sHeader;
     /* 0x14F */ uint8_t abTail[7857];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Launch
 namespace D2Launch::Launcher {

@@ -188,7 +188,7 @@ int __fastcall D2WINTEXTBOX_SetLineCellTextW(::D2WinTextBox * pnTextBox, uint16_
           exit(-1);
         }
 
-        wszAllocDst = (uint16_t*)D2_ALLOC_AT(D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszLocalBuf) * 2 + 2, ".\\Src\\D2WinTextBox.cpp", 0x210);
+        wszAllocDst = (uint16_t*)D2_ALLOC_AT(D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszLocalBuf) * sizeof(uint16_t) + sizeof(uint16_t), ".\\Src\\D2WinTextBox.cpp", 0x210);
         nCurLineNode->apwszCells[nCol] = wszAllocDst;
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszAllocDst, wszLocalBuf);
       }
@@ -797,7 +797,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
               }
             }
 
-            for (nLineStride = 0; nLineStride < 0x400; nLineStride++) {
+            for (nLineStride = 0; nLineStride < (int)_countof(wszCellText); nLineStride++) {
               wszCellText[nLineStride] = L'\0';
             }
 
@@ -1317,7 +1317,7 @@ BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nL
         nVisibleLines = pTextBox->sControl.dwSizeX + pTextBox->sListState.nTextOffsetX * -2;
         if (nAlignment == 2) {
           Fog::File::CONTAINER_InitializeBuffer(wszIndent, 2, 6, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-          memcpy(wszIndent, L"     ", 0xc);
+          memcpy(wszIndent, L"     ", sizeof(wszIndent));
           nStrLen = D2WinFont::DRAW_text0(wszIndent);
           nVisibleLines -= nStrLen;
         }
@@ -1345,12 +1345,12 @@ BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nL
       } else {
         nSourceLine = 0x167;
         nMaxWidth = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pszTrimmed);
-        wDestination = (uint16_t*)Fog::Memory::AllocClientMemory(nMaxWidth * 2 + 2, ".\\Src\\D2WinTextBox.cpp", nSourceLine, nStrLen);
+        wDestination = (uint16_t*)Fog::Memory::AllocClientMemory(nMaxWidth * sizeof(uint16_t) + sizeof(uint16_t), ".\\Src\\D2WinTextBox.cpp", nSourceLine, nStrLen);
         pLineEntry->apwszCells[0] = wDestination;
       }
 
       D2Lang::Unicode::UNISYS::STRING_CopyWideString(wDestination, pszTrimmed);
-      memset(pLineEntry->apwszCells + 1, 0, 4 * sizeof(pLineEntry->apwszCells[0]));
+      memset(pLineEntry->apwszCells + 1, 0, sizeof(pLineEntry->apwszCells) - sizeof(pLineEntry->apwszCells[0]));
       pLineEntry->nLineStyle = nLineStyle;
       pLineEntry->bIndent = bIndent;
       pLineEntry->pNext = 0;
@@ -1420,7 +1420,7 @@ int __fastcall D2WINTEXTBOX_AddLines(::D2WinTextBox * pTextBox, uint16_t * wszTe
           pAllocedText = (uint16_t*)D2_ALLOC_AT(nAllocSize, ".\\Src\\D2WinTextBox.cpp", 0x1b0);
           pNewEntry->apwszCells[0] = pAllocedText;
           D2Lang::Unicode::UNISYS::STRING_CopyWideString(pAllocedText, wszText);
-          memset(pNewEntry->apwszCells + 1, 0, 4 * sizeof(pNewEntry->apwszCells[0]));
+          memset(pNewEntry->apwszCells + 1, 0, sizeof(pNewEntry->apwszCells) - sizeof(pNewEntry->apwszCells[0]));
           pNewEntry->nLineStyle = nLineStyle;
           pNewEntry->bIndent = bIndent;
           pNewEntry->pNext = 0;
@@ -1446,7 +1446,7 @@ void __fastcall D2WINTEXTBOX_SetLineCellTextA(::D2WinTextBox * pTextBox, char * 
     int nClearCount;
     uint16_t* pBufCursor;
     uint16_t wszWorkBuf[1024];
-    for (nClearCount = 0; nClearCount < 0x400; nClearCount++) {
+    for (nClearCount = 0; nClearCount < (int)_countof(wszWorkBuf); nClearCount++) {
       wszWorkBuf[nClearCount] = L'\0';
     }
 
@@ -1488,7 +1488,7 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
       nMaxPixelWidth = nAvailWidth;
       if (nAlignment == 2) {
         Fog::File::CONTAINER_InitializeBuffer(wszIndentBuf, 2, 6, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-        memcpy(wszIndentBuf, L"     ", 0xc);
+        memcpy(wszIndentBuf, L"     ", sizeof(wszIndentBuf));
         nAvailWidth -= D2WinFont::DRAW_text0(wszIndentBuf);
         nMaxPixelWidth = nAvailWidth;
       }
@@ -1553,7 +1553,7 @@ void __fastcall D2WINTEXTBOX_SetTextFromAnsiSimple(::D2WinTextBox * pTextBox, ch
       exit(-1);
     }
 
-    for (nClearCount = 0; nClearCount < 0x400; nClearCount++) {
+    for (nClearCount = 0; nClearCount < (int)_countof(wszWorkBuf); nClearCount++) {
       wszWorkBuf[nClearCount] = L'\0';
     }
 
@@ -1565,7 +1565,7 @@ void __fastcall D2WINTEXTBOX_SetTextFromAnsi(::D2WinTextBox * pTextBox, char * s
     int nClearCount;
     uint16_t* pBufCursor;
     uint16_t wszWorkBuf[1024];
-    for (nClearCount = 0; nClearCount < 0x400; nClearCount++) {
+    for (nClearCount = 0; nClearCount < (int)_countof(wszWorkBuf); nClearCount++) {
       wszWorkBuf[nClearCount] = L'\0';
     }
 

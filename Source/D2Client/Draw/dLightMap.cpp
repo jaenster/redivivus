@@ -254,7 +254,7 @@ D2LightMapStrc * __fastcall AllocLightMap(D2UnitStrc * pUnit, int32_t nLightType
       if (nLightType == 2) {
         int nPixelMapDim;
         nPixelMapDim = nDiameter * 2 + 1;
-        pPixelMap = (int*)D2_ALLOC_AT(nPixelMapDim * nPixelMapDim * 4, ".\\DRAW\\dLightMap.cpp", 0x116);
+        pPixelMap = (int*)D2_ALLOC_AT(nPixelMapDim * nPixelMapDim * sizeof(*pPixelMap), ".\\DRAW\\dLightMap.cpp", 0x116);
         pLightMap->pPixelMap = pPixelMap;
       } else {
         pLightMap->pPixelMap = 0;
@@ -1233,7 +1233,7 @@ static void __stdcall LIGHTMAP_UpdateSingleLight(int nQuality, D2LightMapStrc * 
       if (!pLightMap->bPixelMapReady) {
         if (!pLightMap->pPixelMap) {
           nRadius = (pLightMap->nRadiusX >> 3) * 2 + 1;
-          pPixelMap = (int*)D2_ALLOC_AT(nRadius * nRadius * 4, ".\\DRAW\\dLightMap.cpp", 0x4f1);
+          pPixelMap = (int*)D2_ALLOC_AT(nRadius * nRadius * sizeof(*pPixelMap), ".\\DRAW\\dLightMap.cpp", 0x4f1);
           pLightMap->pPixelMap = pPixelMap;
         }
 

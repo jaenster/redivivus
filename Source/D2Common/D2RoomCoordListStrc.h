@@ -18,13 +18,13 @@
 // Data types
 #ifndef D2_DEFINED_D2RoomCoordListStrc
 #define D2_DEFINED_D2RoomCoordListStrc
-struct __attribute__((packed)) D2RoomCoordListStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2RoomCoordListStrc {
     /* 0x00 */ D2DrlgCoordStrc pBox;
     /* 0x10 */ RECT pRect;
     /* 0x20 */ BOOL bNode;
     /* 0x24 */ BOOL nRoomActive;
     /* 0x28 */ int nIndex;
     /* 0x2C */ struct D2RoomCoordListStrc * pNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2RoomCoordListStrc

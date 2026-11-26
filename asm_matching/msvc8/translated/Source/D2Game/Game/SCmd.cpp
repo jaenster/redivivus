@@ -151,6 +151,8 @@
 #include "Source/D2Game/Monster/Ai/AI.h"
 #include "Source/D2Game/Skills/SkillAss.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2Packet0x5aEventStructure) == 0x28, "the 0x5A system message packet is 0x28 bytes");
+
 // The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
@@ -1140,7 +1142,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x5A_SYSTEMMSG(D2ClientStrc * pClient, D2Pa
     }
 
     uint8_t* pbyDst = pktBuf;
-    memcpy(pbyDst, pEventPacket, 40);
+    memcpy(pbyDst, pEventPacket, sizeof(D2Packet0x5aEventStructure));
     SCMD_QueuePacketForClient(pClient, pktBuf, 0x28);
 }
 
@@ -1546,7 +1548,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x3E_UpdateItemStats(D2ClientStrc * pClient
     D2BitBufferStrc bitBuf;
     uint8_t aPacket[34];
     int32_t nBitPos;
-    memset(aPacket, 0, 34 * sizeof(aPacket[0]));
+    memset(aPacket, 0, sizeof(aPacket));
     aPacket[0] = 0x3e;
     Fog::BitBuffer::InitBitBuffer(&bitBuf, aPacket + 2, 0x20);
     if (!pUnit) {
@@ -2172,7 +2174,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x8A_NpcWantsInteract(D2ClientStrc * pClien
 
 void __fastcall NET_D2GS_SERVER_Send_0x8F_HEARTBEAT_PING(D2ClientStrc * pClient, int32_t dwSendTick) {
     D2GSPacketSrv0x8F aPacket;
-    memset(aPacket.adwZero, 0, 8 * sizeof(aPacket.adwZero[0]));
+    memset(aPacket.adwZero, 0, sizeof(aPacket.adwZero));
     aPacket.nPacketId = 0x8f;
     SCMD_QueuePacketForClient(pClient, &aPacket.nPacketId, 0x21);
 }

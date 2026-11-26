@@ -265,7 +265,7 @@ D2RoomExStrc * __fastcall GetRoomExFromRoom_Unref_005a6220(D2RoomStrc * pRoom) {
 D2DrlgActStrc * __stdcall AllocAct(BYTE nActNo, int32_t dwInitSeed, BOOL bClientSide, ::SGAMEDATA * pGame, BYTE nDifficulty, D2PoolManagerStrc * pMemory, eD2LevelId eLevel, fAutoMap pfAutoMap, fTownAutoMap pfTownAutoMap) {
     D2DrlgStrc* pDrlg;
     D2DrlgActStrc* pAct = D2_NEW_POOL_AT(pMemory, D2DrlgActStrc, ".\\DUNGEON\\Dungeon.cpp", 0x19);
-    memset(pAct, 0, 0x60);
+    memset(pAct, 0, sizeof(D2DrlgActStrc));
     pAct->dwInitSeed = dwInitSeed;
     pAct->bClientSide = bClientSide;
     pAct->nActNo = nActNo;
@@ -414,7 +414,7 @@ void __stdcall DRLGROOM_GetAdjacentRoomsList(D2RoomStrc * pRoom, D2RoomStrc * * 
 // @sourcefile .\DUNGEON\Dungeon.cpp
 D2RoomStrc * __fastcall DRLGROOM_AllocRoomStrc(D2PoolManagerStrc * pMemory) {
     D2RoomStrc* pNewRoom = D2_NEW_POOL_AT(pMemory, D2RoomStrc, ".\\DUNGEON\\Dungeon.cpp", 0xf5);
-    memset(pNewRoom, 0, 0x80);
+    memset(pNewRoom, 0, sizeof(D2RoomStrc));
     return pNewRoom;
 }
 
@@ -456,7 +456,7 @@ D2RoomStrc * __fastcall AllocRoom(D2DrlgActStrc * pDrlgAct, D2RoomExStrc * pRoom
     }
 
     D2RoomStrc* pDrlgRoom = D2_NEW_POOL_AT(pDrlgAct->pMemory, D2RoomStrc, ".\\DUNGEON\\Dungeon.cpp", 0xf5);
-    memset(pDrlgRoom, 0, 0x80);
+    memset(pDrlgRoom, 0, sizeof(D2RoomStrc));
     pDrlgRoom->eFlags = eFlags;
     Seed::InitSeed_Param_666(&pDrlgRoom->sSeed, nInitSeed);
     pDrlgRoom->pRoomEx = pRoomEx;
@@ -1511,9 +1511,9 @@ void __stdcall GetPortalLevelArrayFromPortalFlags(D2PoolManagerStrc * pMemory, i
     }
 
     if (nMatchCount) {
-      pAllocatedLevels = (int*)D2_ALLOC_POOL_AT(pMemory, nMatchCount * 4, ".\\DUNGEON\\Dungeon.cpp", 0x614);
+      pAllocatedLevels = (int*)D2_ALLOC_POOL_AT(pMemory, nMatchCount * sizeof(int), ".\\DUNGEON\\Dungeon.cpp", 0x614);
       *ppLevels = pAllocatedLevels;
-      memcpy(pAllocatedLevels, anMatchedLevels, nMatchCount * 4);
+      memcpy(pAllocatedLevels, anMatchedLevels, nMatchCount * sizeof(int));
     } else {
       *ppLevels = 0;
     }
@@ -3669,7 +3669,7 @@ static int32_t DRLGPATH_ExtractPathFromResult(D2PathTypeArg * nPathCtx, D2DrlgRo
     } while (pParentNode);
 
     if (nWaypointCount >= 0x2 && nWaypointCount <= 0x4d) {
-      memcpy(pWaypointDst, (D2PathPointStrc**)(aWaypointStack + 78) - nWaypointCount, nWaypointCount * 4);
+      memcpy(pWaypointDst, (D2PathPointStrc**)(aWaypointStack + 78) - nWaypointCount, nWaypointCount * sizeof(D2PathPointStrc));
       return nWaypointCount;
     }
 
@@ -3692,14 +3692,14 @@ int32_t __fastcall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, in
     }
 
     memset(sAStarCtx.aGridCells, 0, (pRoomCoords->dwXSize + 6) * (pRoomCoords->dwYSize + 6) * 4);
-    *(uint32_t*)((char*)&sStartNode + 8) = pPathTypeArg->tStartCoord;
+    *(uint32_t*)&sStartNode.nX = pPathTypeArg->tStartCoord;
     D2PathPointStrc nPackedTo = pPathTypeArg->tTargetCoord;
-    int nPathLength = (uint16_t)(uint32_t)d2_bits_of(nPackedTo) - (uint16_t)*(uint32_t*)((char*)&sStartNode + 8);
+    int nPathLength = (uint16_t)(uint32_t)d2_bits_of(nPackedTo) - (uint16_t)*(uint32_t*)&sStartNode.nX;
     if (nPathLength < 0) {
       nPathLength = -nPathLength;
     }
 
-    int nAbsDX = ((uint32_t)d2_bits_of(nPackedTo) >> 0x10) - ((uint32_t)*(uint32_t*)((char*)&sStartNode + 8) >> 0x10);
+    int nAbsDX = ((uint32_t)d2_bits_of(nPackedTo) >> 0x10) - ((uint32_t)*(uint32_t*)&sStartNode.nX >> 0x10);
     if (nAbsDX < 0) {
       nAbsDX = -nAbsDX;
     }
@@ -3714,7 +3714,7 @@ int32_t __fastcall DRLGPATH_FindPathAStar(D2DrlgRoomCoordsStrc * pRoomCoords, in
     sStartNode.nHCost = wInitialHCost;
     sStartNode.nFCost = wInitialHCost;
     sStartNode.nFlags = -3;
-    uint32_t nCostLimit = DRLGPATH_GetPathDirectionPacked(*(uint32_t*)((char*)&sStartNode + 8), (uint32_t)d2_bits_of(nPackedTo));
+    uint32_t nCostLimit = DRLGPATH_GetPathDirectionPacked(*(uint32_t*)&sStartNode.nX, (uint32_t)d2_bits_of(nPackedTo));
     sStartNode.nDirection = nCostLimit & 7;
     sStartNode.pNext = 0;
     sStartNode.pParent = 0;
@@ -3783,3 +3783,6 @@ namespace D2Common { namespace Drlg { namespace Path {
 static void * keep_0067a5d0 = (0 ? (DRLGPATH_GetDirectionDeltaTable(*(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
 
 }}} // namespace D2Common::Drlg::Path
+
+static_assert(sizeof(void*) != 4 || offsetof(::D2DrlgRoomAStarNodeStrc, nX) == 0x8, "D2DrlgRoomAStarNodeStrc::nX is at 0x8 on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2PathPointStrc) == 0x4, "D2PathPointStrc is 0x4 bytes on x86");

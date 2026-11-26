@@ -17,13 +17,13 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacket0x96Decoded
 #define D2_DEFINED_D2GSPacket0x96Decoded
-__pragma(pack(push, 1)) struct D2GSPacket0x96Decoded {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacket0x96Decoded {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint16_t nStamina;
     /* 0x03 */ uint16_t nX;
     /* 0x05 */ uint16_t nY;
     /* 0x07 */ uint8_t dX;
     /* 0x08 */ uint8_t dY;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacket0x96Decoded

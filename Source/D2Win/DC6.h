@@ -20,7 +20,7 @@ struct DC6Block;
 // Data types
 #ifndef D2_DEFINED_DC6
 #define D2_DEFINED_DC6
-struct __attribute__((packed)) DC6 {
+D2_PACKED_BEGIN struct __attribute__((packed)) DC6 {
     /* 0x00 */ int nVersion;
     /* 0x04 */ int nFlags;
     /* 0x08 */ int nFormat;
@@ -28,6 +28,6 @@ struct __attribute__((packed)) DC6 {
     /* 0x10 */ int nDirections;
     /* 0x14 */ int nFrames;
     /* 0x18 */ struct DC6Block * pBlocks[0];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_DC6

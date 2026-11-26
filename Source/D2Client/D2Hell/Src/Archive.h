@@ -50,10 +50,10 @@ struct SMemHeapDetailsStrc {
 
 #endif // D2_DEFINED_SMemHeapDetailsStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) TALLOCREC {
+D2_PACKED_BEGIN struct __attribute__((packed)) TALLOCREC {
     /* 0x00 */ TSLink<TALLOCREC> m_link;
     /* 0x08 */ SMemHeapDetailsStrc sHeapDetails;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 namespace D2Client::Archive {

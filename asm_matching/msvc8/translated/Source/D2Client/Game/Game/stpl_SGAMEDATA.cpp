@@ -186,7 +186,11 @@ template<> __declspec(noinline) inline void TSExplicitList<SGAMEDATA, -572662307
     TSLink<::SGAMEDATA>* pTVar1;
     TSLink<::SGAMEDATA>* pNodeLink;
     if (pNode) {
-      pNodeLink = (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a);
+#if D2_ARCH_X86
+      pNodeLink = (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+      pNodeLink = (TSLink<::SGAMEDATA>*)((char*)pNode + this->m_linkoffset);
+#endif
     } else {
       pNodeLink = &this->m_terminator;
     }
@@ -201,7 +205,11 @@ template<> __declspec(noinline) inline void TSExplicitList<SGAMEDATA, -572662307
       pNodeLink->m_next = 0;
     }
     if (pExisting) {
-      pAnchorLink = (TSLink<::SGAMEDATA>*)(pExisting->szGameName + this->m_linkoffset - 0x2a);
+#if D2_ARCH_X86
+      pAnchorLink = (TSLink<::SGAMEDATA>*)(pExisting->szGameName + this->m_linkoffset - 0x2a); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+      pAnchorLink = (TSLink<::SGAMEDATA>*)((char*)pExisting + this->m_linkoffset);
+#endif
     } else {
       pAnchorLink = &this->m_terminator;
     }
@@ -238,7 +246,7 @@ template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unrefere
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::SGAMEDATA* pChunkNew = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
+    ::SGAMEDATA* pChunkNew = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::SGAMEDATA), D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
     ::SGAMEDATA* pChunk;
     if (pChunkNew) {
       pChunkNew->m_linktoslot.m_prevlink = 0;

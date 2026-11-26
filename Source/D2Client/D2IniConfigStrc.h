@@ -317,7 +317,7 @@ struct D2CharSelSaveDataStrc {
 #endif // D2_DEFINED_D2CharSelSaveDataStrc
 #ifndef D2_DEFINED_D2IniConfigStrc
 #define D2_DEFINED_D2IniConfigStrc
-struct __attribute__((packed)) D2IniConfigStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2IniConfigStrc {
     /* 0x000 */ char bD2ExpMpqExistsOrLanugageCode[4];
     /* 0x004 */ BOOL bCRASHAPP;
     /* 0x008 */ bool bWINDOW;
@@ -399,6 +399,6 @@ struct __attribute__((packed)) D2IniConfigStrc {
     /* 0x3C2 */ uint8_t isLadder;
     /* 0x3C3 */ uint8_t padding_0x3C3[8];
     /* 0x3CB */ eD2PlayerStatus neD2PlayerStatus;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2IniConfigStrc

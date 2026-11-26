@@ -75,7 +75,7 @@ struct StormCmdProcessingStrc {
 #endif // D2_MODULE_Storm
 #ifndef D2_DEFINED_CMDDEF
 #define D2_DEFINED_CMDDEF
-__pragma(pack(push, 1)) struct CMDDEF {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct CMDDEF {
     /* 0x00 */ struct CMDDEF * pPrev; // list link; SCmdRegisterArgument @006c4580 writes *pNewNode and pNewNode[1] as the two link words
     /* 0x04 */ struct CMDDEF * pNext; // walked by SCMD_ParseArgument off gpStormCmdListHeadSlash / gpStormCmdListHeadBackslash
     /* 0x08 */ uint32_t nArgTypeFlags; // &0x30000 selects bool (0) / int (0x10000) / string (0x20000)
@@ -89,7 +89,7 @@ __pragma(pack(push, 1)) struct CMDDEF {
     /* 0x34 */ BOOL (__stdcall *pfnCallback)(struct CMDPARAMS *, char *); // SCMDCALLBACK called with a CMDPARAMS view; returning 0 aborts parsing. SCmdRegisterArgument stores pfnCallback here; called at 006c48ad
     /* 0x38 */ int bSupplied; // set to 1 once the argument has been supplied
     /* 0x3C */ CMDPARAMSVALUE uValue; // current value: dwSetValue default for a boolean, the number, or an SMemAlloc'd string (SCMD.CPP line 0x121)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_CMDDEF
 namespace Storm { namespace Source {

@@ -18,6 +18,8 @@
 #ifndef D2_FREE_POOL_AT
 #define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(D2ObjModeTxt) == 0x34, "D2ObjModeTxt is 0x34 bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2ObjTypeTxt) == 0x34, "D2ObjTypeTxt is 0x34 bytes on x86");
 
 
 static D2MonModeTxt * pTxtMonMode1 = 0; D2_STATIC_GUARD(pTxtMonMode1, "pTxtMonMode1");
@@ -109,15 +111,15 @@ void __fastcall TXT_AllocTxt_objtype_objmode(D2PoolManagerStrc * pMemory) {
     D2ObjTypeTxt* pTxtObjType_lcl = (D2ObjTypeTxt*)DataTbls::CompileTxt(pMemory, "objtype", obj, &nObjTypeSize, 0x34);
     D2ObjModeTxt* pTxtObjMode_lcl = (D2ObjModeTxt*)DataTbls::CompileTxt(pMemory, "objmode", obj, &nObjModeSize, 0x34);
     uint32_t nTotalSize = nObjModeSize + nObjTypeSize;
-    D2ObjTypeTxt* pTxtObjType2 = (D2ObjTypeTxt*)D2_ALLOC_POOL_AT(nullptr, nTotalSize * 0x34, ".\\DATATBLS\\TokTbls.cpp", 0x94);
+    D2ObjTypeTxt* pTxtObjType2 = (D2ObjTypeTxt*)D2_ALLOC_POOL_AT(nullptr, nTotalSize * sizeof(D2ObjTypeTxt), ".\\DATATBLS\\TokTbls.cpp", 0x94);
     if (!pTxtObjType2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x95);
       exit(-1);
     }
 
-    memcpy(pTxtObjType2, pTxtObjType_lcl, nObjTypeSize * 0x34);
+    memcpy(pTxtObjType2, pTxtObjType_lcl, nObjTypeSize * sizeof(D2ObjTypeTxt));
     D2ObjModeTxt* pModes = (D2ObjModeTxt*)(pTxtObjType2 + nObjTypeSize);
-    memcpy(pModes, pTxtObjMode_lcl, nObjModeSize * 0x34);
+    memcpy(pModes, pTxtObjMode_lcl, nObjModeSize * sizeof(D2ObjModeTxt));
     DataTbls::UnloadBin(pTxtObjType_lcl);
     DataTbls::UnloadBin(pTxtObjMode_lcl);
     pTxtObjMode = pModes;

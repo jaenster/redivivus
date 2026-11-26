@@ -1,0 +1,86 @@
+{
+  "version": 6,
+  "cmakeMinimumRequired": { "major": 3, "minor": 25, "patch": 0 },
+  "configurePresets": [
+    {
+      "name": "vs-base",
+      "hidden": true,
+      "generator": "Ninja",
+      "binaryDir": "${sourceDir}/out/build/${presetName}",
+      "installDir": "${sourceDir}/out/install/${presetName}",
+      "condition": { "type": "equals", "lhs": "${hostSystemName}", "rhs": "Windows" },
+      "cacheVariables": { "CMAKE_EXPORT_COMPILE_COMMANDS": "ON" }
+    },
+    {
+      "name": "cl",
+      "hidden": true,
+      "inherits": "vs-base",
+      "cacheVariables": { "CMAKE_C_COMPILER": "cl.exe", "CMAKE_CXX_COMPILER": "cl.exe" }
+    },
+    {
+      "name": "clangcl",
+      "hidden": true,
+      "inherits": "vs-base",
+      "cacheVariables": { "CMAKE_C_COMPILER": "clang-cl.exe", "CMAKE_CXX_COMPILER": "clang-cl.exe" }
+    },
+    {
+      "name": "x86",
+      "hidden": true,
+      "architecture": { "value": "x86", "strategy": "external" },
+      "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "intelliSenseMode": "windows-msvc-x86" } }
+    },
+    {
+      "name": "x64",
+      "hidden": true,
+      "architecture": { "value": "x64", "strategy": "external" },
+      "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "intelliSenseMode": "windows-msvc-x64" } }
+    },
+    {
+      "name": "debug",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Debug" }
+    },
+    {
+      "name": "release",
+      "hidden": true,
+      "cacheVariables": { "CMAKE_BUILD_TYPE": "Release" }
+    },
+    {
+      "name": "server",
+      "hidden": true,
+      "cacheVariables": { "REDIVIVUS_SERVER": "ON" }
+    },
+
+    { "name": "msvc-x86-debug", "displayName": "MSVC x86 Debug (game)", "inherits": ["cl", "x86", "debug"] },
+    { "name": "msvc-x86-release", "displayName": "MSVC x86 Release (game)", "inherits": ["cl", "x86", "release"] },
+    { "name": "msvc-x64-debug", "displayName": "MSVC x64 Debug (game, experiment)", "inherits": ["cl", "x64", "debug"] },
+    { "name": "msvc-x64-release", "displayName": "MSVC x64 Release (game, experiment)", "inherits": ["cl", "x64", "release"] },
+    {
+      "name": "clangcl-x86", "displayName": "clang-cl x86 Debug (game)", "inherits": ["clangcl", "x86", "debug"],
+      "cacheVariables": { "CMAKE_C_COMPILER_TARGET": "i686-pc-windows-msvc", "CMAKE_CXX_COMPILER_TARGET": "i686-pc-windows-msvc" },
+      "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "intelliSenseMode": "windows-clang-x86" } }
+    },
+    {
+      "name": "clangcl-x64", "displayName": "clang-cl x64 Debug (game, experiment)", "inherits": ["clangcl", "x64", "debug"],
+      "cacheVariables": { "CMAKE_C_COMPILER_TARGET": "x86_64-pc-windows-msvc", "CMAKE_CXX_COMPILER_TARGET": "x86_64-pc-windows-msvc" },
+      "vendor": { "microsoft.com/VisualStudioSettings/CMake/1.0": { "intelliSenseMode": "windows-clang-x64" } }
+    },
+
+    { "name": "msvc-x86-server-debug", "displayName": "MSVC x86 Debug (d2host)", "inherits": ["server", "msvc-x86-debug"] },
+    { "name": "msvc-x64-server-debug", "displayName": "MSVC x64 Debug (d2host, experiment)", "inherits": ["server", "msvc-x64-debug"] },
+    { "name": "clangcl-x86-server", "displayName": "clang-cl x86 Debug (d2host)", "inherits": ["server", "clangcl-x86"] },
+    { "name": "clangcl-x64-server", "displayName": "clang-cl x64 Debug (d2host, experiment)", "inherits": ["server", "clangcl-x64"] }
+  ],
+  "buildPresets": [
+    { "name": "msvc-x86-debug", "configurePreset": "msvc-x86-debug" },
+    { "name": "msvc-x86-release", "configurePreset": "msvc-x86-release" },
+    { "name": "msvc-x64-debug", "configurePreset": "msvc-x64-debug" },
+    { "name": "msvc-x64-release", "configurePreset": "msvc-x64-release" },
+    { "name": "clangcl-x86", "configurePreset": "clangcl-x86" },
+    { "name": "clangcl-x64", "configurePreset": "clangcl-x64" },
+    { "name": "msvc-x86-server-debug", "configurePreset": "msvc-x86-server-debug", "targets": ["d2host"] },
+    { "name": "msvc-x64-server-debug", "configurePreset": "msvc-x64-server-debug", "targets": ["d2host"] },
+    { "name": "clangcl-x86-server", "configurePreset": "clangcl-x86-server", "targets": ["d2host"] },
+    { "name": "clangcl-x64-server", "configurePreset": "clangcl-x64-server", "targets": ["d2host"] }
+  ]
+}

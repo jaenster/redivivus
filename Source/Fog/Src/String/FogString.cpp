@@ -214,7 +214,7 @@ char * __fastcall SMemFormat64BitWithSeparators(char * szText, uint32_t nWidth, 
       }
 
       LVar1 = _alldvrm(nValueLo, nValueHi, 10, 0);
-      nValueHi = *(uint32_t*)((char*)&LVar1.qwQuotient + 4);
+      nValueHi = (uint32_t)(LVar1.qwQuotient >> 32);
       nValueLo = (uint32_t)LVar1.qwQuotient;
       *pcWrite2 = (char)LVar1.qwRemainder + '0';
       nGroupCount++;

@@ -317,7 +317,7 @@ struct D2CharSelSaveDataStrc {
 #endif // D2_DEFINED_D2CharSelSaveDataStrc
 #ifndef D2_DEFINED_D2IniConfigStrc
 #define D2_DEFINED_D2IniConfigStrc
-__pragma(pack(push, 1)) struct D2IniConfigStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2IniConfigStrc {
     /* 0x000 */ char bD2ExpMpqExistsOrLanugageCode[4];
     /* 0x004 */ BOOL bCRASHAPP;
     /* 0x008 */ bool bWINDOW;
@@ -399,6 +399,6 @@ __pragma(pack(push, 1)) struct D2IniConfigStrc {
     /* 0x3C2 */ uint8_t isLadder;
     /* 0x3C3 */ uint8_t padding_0x3C3[8];
     /* 0x3CB */ eD2PlayerStatus neD2PlayerStatus;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2IniConfigStrc

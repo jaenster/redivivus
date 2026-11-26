@@ -46,7 +46,7 @@ struct _SID_IDENTIFIER_AUTHORITY {
 
 #ifndef D2_DEFINED_D2BlizzardErrorArgument
 #define D2_DEFINED_D2BlizzardErrorArgument
-__pragma(pack(push, 1)) struct D2BlizzardErrorArgument {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BlizzardErrorArgument {
     /* 0x00 */ char * szProduct;
     /* 0x04 */ char * szLocale;
     /* 0x08 */ char * szFrom;
@@ -56,7 +56,7 @@ __pragma(pack(push, 1)) struct D2BlizzardErrorArgument {
     /* 0x0F */ uint8_t field_0xf;
     /* 0x10 */ char * szAttachment[16];
     /* 0x50 */ int nAttachmentCount;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2BlizzardErrorArgument
 #ifndef D2_DEFINED_D2CrashReportStrc

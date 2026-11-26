@@ -23,6 +23,7 @@
 D2SoundChannelNodeStrc * gpActiveSoundChannelsHead = 0; D2_GLOBAL_GUARD(gpActiveSoundChannelsHead, "gpActiveSoundChannelsHead");
 static uint32_t gnSoundChannelCount = 0; D2_STATIC_GUARD(gnSoundChannelCount, "gnSoundChannelCount");
 static uint32_t gpSoundChannelsArray = 0; D2_STATIC_GUARD(gpSoundChannelsArray, "gpSoundChannelsArray");
+static_assert(sizeof(void*) != 4 || sizeof(::D2SoundChannelStrc) == 0x59, "D2SoundChannelStrc: the 32-bit layout must be the 0x59 bytes 1.14d clears per channel");
 uint32_t gbSoundChaosEnabled = 0; D2_GLOBAL_GUARD(gbSoundChaosEnabled, "gbSoundChaosEnabled");
 
 namespace D2Client { namespace Sound {
@@ -34,7 +35,7 @@ D2SoundChannelStrc * __stdcall SOUND_GetChannelArray() {
     D2SoundChannelStrc* pChannel = gaSoundChannelPool;
     do {
       if (!pChannel->pListNode) {
-        memset(pChannel, 0, 0x59);
+        memset(pChannel, 0, sizeof(*pChannel));
         pChannel->pListNode = (int*)0x1;
         D2Sound::D2SoundUntil::SOUND_sD2SoundSmp_Alloc(&gpActiveSoundChannelsHead, (intptr_t)pChannel);
         pChannel->nChannelHandle = gpSoundChannelsArray + 1;

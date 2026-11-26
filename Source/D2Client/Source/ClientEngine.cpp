@@ -1099,7 +1099,7 @@ void DRAW_Overlay_SecondsLeftToGame() {
       return;
     }
 
-    for (nClearCount = 0; nClearCount < 0x100; nClearCount++) {
+    for (nClearCount = 0; nClearCount < (int)_countof(wszText); nClearCount++) {
       wszText[nClearCount] = L'\0';
     }
 
@@ -2157,7 +2157,7 @@ static void MONSTER_ProcessPathCallback(D2UnitStrc * pUnit, D2UnitStrc * pTarget
 }
 
 void __stdcall CLIENT_ClearActiveUnitSlotArray() {
-    memset(gaActiveUnitSlots, 0, 8 * sizeof(gaActiveUnitSlots[0]));
+    memset(gaActiveUnitSlots, 0, sizeof(gaActiveUnitSlots));
 }
 
 // CLIENT-SIDE AI BEHAVIOR DISPATCHER:

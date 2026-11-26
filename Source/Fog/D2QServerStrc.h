@@ -32,7 +32,7 @@ struct D2QServerTokenFilterEntryStrc {
 #endif // D2_DEFINED_D2QServerTokenFilterEntryStrc
 #ifndef D2_DEFINED_D2QServerWorkerTelemetryStrc
 #define D2_DEFINED_D2QServerWorkerTelemetryStrc
-struct __attribute__((packed)) D2QServerWorkerTelemetryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QServerWorkerTelemetryStrc {
     /* 0x00 */ LARGE_INTEGER qpcAcceptLoopAccum;
     /* 0x08 */ LARGE_INTEGER qpcReserved08; // Reserved/unused in current analysis
     /* 0x10 */ LARGE_INTEGER qpcStageAcceptCallAccum;
@@ -58,6 +58,6 @@ struct __attribute__((packed)) D2QServerWorkerTelemetryStrc {
     /* 0xA4 */ int nAcceptBeginReadFailures;
     /* 0xA8 */ int nAcceptedClients;
     /* 0xAC */ uint32_t dwWorkerSlotValue; // Mirrored from D2QServerStrc.aWorkerSlotValues[i] in CopyWorkerTelemetrySnapshot
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QServerWorkerTelemetryStrc

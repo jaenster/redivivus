@@ -25,7 +25,7 @@ typedef BOOL (__stdcall *fpListEntryCallback)(struct D2ControlMsg * pControlMsg)
 // Data types
 #ifndef D2_DEFINED_D2WinListEntry
 #define D2_DEFINED_D2WinListEntry
-__pragma(pack(push, 1)) struct D2WinListEntry {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinListEntry {
     /* 0x000 */ uint16_t wszText[256]; // copied by D2WINLIST_AddListItem, max 255 chars
     /* 0x200 */ int32_t nTextWidth; // text width + 8 (D2WINLIST_AddListItem)
     /* 0x204 */ BOOL (__stdcall *pfnOnActivate)(struct D2ControlMsg *); // called by Push (double click, tail call with the D2ControlMsg), ListCheck and Key (hotkey match)
@@ -37,7 +37,7 @@ __pragma(pack(push, 1)) struct D2WinListEntry {
     /* 0x219 */ BYTE _pad219[3];
     /* 0x21C */ int32_t nUserData; // Key compares the low word with the key code
     /* 0x220 */ struct D2WinListEntry * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2WinListEntry
 namespace D2Win { namespace Src { namespace D2WinList {

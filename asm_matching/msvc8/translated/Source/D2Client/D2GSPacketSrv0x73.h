@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x73
 #define D2_DEFINED_D2GSPacketSrv0x73
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x73 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x73 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ int nUnused;
     /* 0x05 */ short nMissileClassId;
@@ -30,6 +30,6 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x73 {
     /* 0x1A */ int nOwnerGUID;
     /* 0x1E */ uint8_t nSkillLevel;
     /* 0x1F */ uint8_t nPierceIdxValue;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x73

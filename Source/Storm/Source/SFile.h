@@ -168,7 +168,7 @@ struct D2LzwBufferStateStrc {
 #endif // D2_MODULE_Storm
 #ifndef D2_DEFINED_D2MPQBlockEntryStrc
 #define D2_DEFINED_D2MPQBlockEntryStrc
-struct __attribute__((packed)) D2MPQBlockEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MPQBlockEntryStrc {
     /* 0x00 */ uint32_t dwFilePos; // offset of the file data in the archive
     /* 0x04 */ uint32_t dwCompressedSize;
     /* 0x08 */ uint32_t dwFileSize;
@@ -176,7 +176,7 @@ struct __attribute__((packed)) D2MPQBlockEntryStrc {
     /* 0x10 */ FILETIME ftFileTime; // (attributes) bit 2
     /* 0x18 */ uint32_t dwCRC32; // (attributes) bit 1
     /* 0x1C */ uint8_t abMD5[16]; // (attributes) bit 4
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2MPQBlockEntryStrc
 #ifndef D2_DEFINED_D2StormAudioStreamRec
@@ -290,10 +290,10 @@ struct StormLinkStrc {
 
 #endif // D2_DEFINED_StormLinkStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-struct __attribute__((packed)) StormEventRecStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) StormEventRecStrc {
     /* 0x00 */ StormLinkStrc link;
     /* 0x08 */ HANDLE hEvent;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Storm
 namespace Storm::Source::SFile {

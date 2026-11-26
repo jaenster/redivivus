@@ -149,7 +149,7 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
 
     uint32_t pModifier;
     pModifier = eModifier;
-    for (nClassId = 0; nClassId < 0x12c; nClassId++) {
+    for (nClassId = 0; nClassId < (int)_countof(wszName); nClassId++) {
       wszName[nClassId] = L'\0';
     }
 

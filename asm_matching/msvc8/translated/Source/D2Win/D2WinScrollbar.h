@@ -26,7 +26,7 @@ typedef void (__stdcall *fpD2WinScrollbarOnChange)(struct D2UIMouseMsgStrc * pUn
 struct D2WinTextBox;
 
 // Data types
-__pragma(pack(push, 1)) struct D2WinScrollbar {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinScrollbar {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ int32_t bUpArrowPressed; // 0x40 (dword idx 0x10). Set to 1 on wheel-up in D2WINSCROLLBAR_HandleMouseWheel; zeroed in ctor.
     /* 0x44 */ int32_t bDownArrowPressed; // 0x44 (dword idx 0x11). Set to 1 on wheel-down in D2WINSCROLLBAR_HandleMouseWheel; zeroed in ctor.
@@ -36,7 +36,7 @@ __pragma(pack(push, 1)) struct D2WinScrollbar {
     /* 0x54 */ struct D2WinTextBox * pLinkedTextBox; // 0x54 (dword idx 0x15). SetLinkedTextBox; passed to D2WINTEXTBOX_ScrollToLine when non-NULL.
     /* 0x58 */ int32_t nWheelLockFlag; // 0x58 (dword idx 0x16). ONLY evidence: HandleMouseWheel does all its work under `if (field_0x58 == 0)`. Not zeroed by the ctor. Exact meaning unconfirmed.
     /* 0x5C */ void (__stdcall *pfnOnChange)(struct D2UIMouseMsgStrc *); // Called with one argument (the D2UnderMouseStrc) from D2WINSCROLLBAR_HandleMouseWheel @00508030; return unused.
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #ifndef D2_DEFINED_D2WinTextBoxListStateStrc
 #define D2_DEFINED_D2WinTextBoxListStateStrc
@@ -56,7 +56,7 @@ struct D2WinTextBoxListStateStrc {
 };
 
 #endif // D2_DEFINED_D2WinTextBoxListStateStrc
-__pragma(pack(push, 1)) struct D2WinTextBox {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinTextBox {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ D2WinTextBoxListStateStrc sListState;
     /* 0x90 */ struct D2WinScrollbar * pScrollbar; // Linked scrollbar (struct D2WinScrollbar*, stored in dwPosY slot of partial [2])
@@ -66,4 +66,4 @@ __pragma(pack(push, 1)) struct D2WinTextBox {
     /* 0xA0 */ int nExtraLineSpacingB; // Per-line extra spacing added when line flag byte[6]!=0
     /* 0xA4 */ int nExtraLineSpacingC; // Second per-line extra spacing used in same branch as 0xa4
     /* 0xA8 */ int pLineSpacingGlobal; // Ref to gnTextBoxLineSpacing global (fpMouse slot of [2])
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END

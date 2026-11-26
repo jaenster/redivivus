@@ -88,7 +88,7 @@ static void SLOG_OutputIndent(D2SLogStrc * pLog) {
 
 // @blizzard OutputReturn (SLOG.CPP)
 static void SLOG_OutputReturn(D2SLogStrc * pLog) {
-    SMem::SMemCopy(pLog->acBuffer + pLog->nUsed, (void*)"\r\n", 3);
+    SMem::SMemCopy(pLog->acBuffer + pLog->nUsed, (void*)"\r\n", sizeof("\r\n"));
     pLog->nUsed += 2;
 }
 

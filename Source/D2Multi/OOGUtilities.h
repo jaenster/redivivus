@@ -47,19 +47,19 @@ struct _STARTUPINFOA {
 #endif // _WIN32
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Multi)
-struct __attribute__((packed)) D2LanGameEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2LanGameEntryStrc {
     /* 0x00 */ uint8_t field_0x0;
     /* 0x01 */ char szGameName[16];
     /* 0x11 */ char szGameDesc[34];
     /* 0x33 */ uint16_t nPort;
     /* 0x35 */ uint8_t field_0x35[2];
     /* 0x37 */ uint32_t dwIpAddress;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Multi
 #ifndef D2_DEFINED_D2McpGameInfoStrc
 #define D2_DEFINED_D2McpGameInfoStrc
-struct __attribute__((packed)) D2McpGameInfoStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2McpGameInfoStrc {
     /* 0x00 */ int nHasMoreData; // 1 if bytes remain after this game's strings
     /* 0x04 */ uint16_t wRequestId;
     /* 0x06 */ uint16_t wPad06;
@@ -76,7 +76,7 @@ struct __attribute__((packed)) D2McpGameInfoStrc {
     /* 0x4C */ uint16_t awPlayerClass[16];
     /* 0x6C */ uint16_t awPlayerLevel[16];
     /* 0x8C */ char aszPlayerName[16][16];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2McpGameInfoStrc
 namespace D2Multi::OOGUtilities {

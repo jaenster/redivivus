@@ -17,11 +17,11 @@
 #include "Source/Storm/Source/SBig.h"
 
 // Data types
-__pragma(pack(push, 1)) struct BigData {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct BigData {
     /* 0x000 */ BigBuffer sPrimary; // the number itself; every SBig* wrapper passes the handle as this BigBuffer
     /* 0x014 */ BigStack sStack; // scratch stack at +0x14; SBigMul/Div/PowMod pass handle+0x14 as the BigStack
     /* 0x158 */ TSGrowableArray_Uc sOutBuffer; // byte output buffer at +0x158 filled by SBigToBinary*/ToStr*/ToStream*
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #ifndef D2_DEFINED_D2Srp
 #define D2_DEFINED_D2Srp

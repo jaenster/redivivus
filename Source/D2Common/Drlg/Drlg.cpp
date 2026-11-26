@@ -330,13 +330,13 @@ static void __stdcall DRLGLEVEL_FreeLevelSubStructs(D2PoolManagerStrc * pMemory,
     if (bFreeSubStructs) {
       if (!pLevel->pRoomExStateFlags) {
         if (pLevel->nRoomExCount) {
-          pStateFlags = (int*)D2_ALLOC_POOL_AT(pMemory, pLevel->nRoomExCount * 4, ".\\DRLG\\Drlg.cpp", 0x7c);
+          pStateFlags = (int*)D2_ALLOC_POOL_AT(pMemory, pLevel->nRoomExCount * sizeof(int), ".\\DRLG\\Drlg.cpp", 0x7c);
           pLevel->pRoomExStateFlags = pStateFlags;
         } else {
           pLevel->nRoomExCount = 0;
         }
 
-        memset(pLevel->pRoomExStateFlags, 0, pLevel->nRoomExCount * 4);
+        memset(pLevel->pRoomExStateFlags, 0, pLevel->nRoomExCount * sizeof(int));
       }
     } else {
       if (pLevel->pRoomExStateFlags) {
@@ -386,9 +386,9 @@ static void __stdcall DRLGLEVEL_FreeLevelSubStructs(D2PoolManagerStrc * pMemory,
         }
     }
 
-    memset(pLevel->aSpawnPoints, 0, 0x180);
+    memset(pLevel->aSpawnPoints, 0, sizeof(pLevel->aSpawnPoints));
     pLevel->nSpawnPointCount = 0;
-    memset(&pLevel->sWarpCoordinates, 0, 0x4c);
+    memset(&pLevel->sWarpCoordinates, 0, sizeof(D2DrlgLevelWarpCoordinatesStrc));
     if (!bFreeSubStructs && pLevel->pAutomapEx) {
       D2_FREE_POOL_AT(pMemory, pLevel->pAutomapEx, ".\\DRLG\\Drlg.cpp", 0xb7);
       pLevel->pAutomapEx = 0;
@@ -864,7 +864,7 @@ void __fastcall InitCache(D2DrlgStrc * pDrlg, D2DrlgTileDataStrc * pDrlgActSub18
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x438);
       exit(-1);
     } else {
-      memset(pDrlgActSub18, 0, 0x30);
+      memset(pDrlgActSub18, 0, sizeof(D2DrlgTileDataStrc));
       byActNo = pDrlg->nActNo;
       nTileSubType = 0;
       nTileSubType_00 = 0;
@@ -908,7 +908,7 @@ void __fastcall InitCache(D2DrlgStrc * pDrlg, D2DrlgTileDataStrc * pDrlgActSub18
 //   Type 3 (DRLGTYPE_WildernessLevel): pDrlgLevelData = D2DrlgLevelDataWildernessLevel* (0x268 bytes allocated)
 D2DrlgLevelStrc * __fastcall DRLGACTMISC_AllocDrlgLevel(D2DrlgStrc * pDrlg, eD2LevelId eLevel) {
     D2DrlgLevelStrc* pLevel = D2_NEW_POOL_AT(pDrlg->pMemoryPool, D2DrlgLevelStrc, ".\\DRLG\\Drlg.cpp", 0x1a8);
-    memset(pLevel, 0, 0x230);
+    memset(pLevel, 0, sizeof(D2DrlgLevelStrc));
     pLevel->pDrlg = pDrlg;
     pLevel->eD2LevelId = eLevel;
     D2LevelDefsTxt* pLevelDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(eLevel);
@@ -1072,7 +1072,7 @@ D2DrlgStrc * __fastcall DRLG_AllocDrlgActMisc(D2DrlgActStrc * pAct, eAct nActNo,
     pMemory = DUNGEON::Dungeon::GetMemPoolFromAct(pAct);
     D2DrlgStrc* pDrlgActMisc;
     pDrlgActMisc = D2_NEW_POOL_AT(pMemory, D2DrlgStrc, ".\\DRLG\\Drlg.cpp", 0x3a);
-    memset(pDrlgActMisc, 0, 0x48c);
+    memset(pDrlgActMisc, 0, sizeof(D2DrlgStrc));
     pDrlgActMisc->pDS1MemPool = pDS1MemPool;
     pDrlgActMisc->pMemoryPool = pMemory;
     pDrlgActMisc->nActNo = nActNo;
@@ -3031,7 +3031,7 @@ void __stdcall DRLGOUTROOM_ComputeExitTargetPositions(D2DrlgLevelStrc * pLevel) 
               break;
             }
 
-            for (nSpiralRadius = 0; nSpiralRadius < 4; nSpiralRadius++) {
+            for (nSpiralRadius = 0; nSpiralRadius < (int)_countof(gaExitSpiralOffsetX); nSpiralRadius++) {
               nLeftExitX = gaExitSpiralOffsetX[nSpiralRadius] * nSumX + nExitCount;
               nLeftExitY = gaExitSpiralOffsetY[nSpiralRadius] * nSumX + nSumY;
               if (nLeftExitX >= 0 && nLeftExitX < pDVar1->nGridCoordsWidth && nLeftExitY >= 0 && nLeftExitY < pDVar1->nGridCoordsHeight) {
@@ -3476,3 +3476,6 @@ static void * keep_00681510 = (0 ? (DRLGOUTROOM_GetDirectionChangeCost(*(int * *
 static void * keep_00681540 = (0 ? (DRLGOUTROOM_GetDirectionDeltaLookup(*(char *)0, *(char *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::Drlg
+
+static_assert(sizeof(void*) != 4 || sizeof(D2DrlgLevelWarpCoordinatesStrc) == 0x4c, "D2DrlgLevelWarpCoordinatesStrc is 0x4c bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2DrlgTileDataStrc) == 0x30, "D2DrlgTileDataStrc is 0x30 bytes on x86");

@@ -16,9 +16,9 @@
 #include "Source/Storm/H/stpl.h"
 
 // Data types
-struct __attribute__((packed)) MappingEntryNode : public TSHashObject<MappingEntryNode, HASHKEY_STRI> {
+D2_PACKED_BEGIN struct __attribute__((packed)) MappingEntryNode : public TSHashObject<MappingEntryNode, HASHKEY_STRI> {
     /* 0x18 */ char * szMappedValue;
-};
+}; D2_PACKED_END
 
 namespace D2Common::Chat::Ignorelist::MappingEntryNode {
 

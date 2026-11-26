@@ -37,9 +37,9 @@ union D2StatKeyUnion {
 #endif // D2_DEFINED_D2StatKeyUnion
 #ifndef D2_DEFINED_D2StatStrc
 #define D2_DEFINED_D2StatStrc
-struct __attribute__((packed)) D2StatStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2StatStrc {
     /* 0x00 */ D2StatKeyUnion uKey; // stat key: halves or packed (see D2StatKeyUnion)
     /* 0x04 */ int nStatValue;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2StatStrc

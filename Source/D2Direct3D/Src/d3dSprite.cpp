@@ -20,6 +20,9 @@
 #include "Source/D2Client/Game/View.data.h"
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
+#include "Source/D2CMP/D2GfxCellNodeStrc.h"
+
+static_assert(sizeof(void*) != 4 || sizeof(DDSURFACEDESC2) == 0x7c, "DDSURFACEDESC2: dwSize and the clear after it must be the 0x7c bytes 1.14d uses");
 
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
@@ -216,28 +219,28 @@ static int32_t __stdcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfoS
       exit(-1);
     }
 
-    char* pIVar1 = (char*)D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
+    D2GfxCellNodeStrc* pCellNode = (D2GfxCellNodeStrc*)D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
     int32_t nOrigMode = nMode;
     if (nMode == 4) {
       nMode = 1;
     }
-    if (!*(int*)(pIVar1 + nMode * 8)) {
+    if (!pCellNode->aModes[nMode].nSizeClass) {
       iMipLevel = pTexInfo->nWidth;
       if (iMipLevel <= 0x20 && pTexInfo->nHeight <= 0x20) {
-        *(uint32_t*)(pIVar1 + nMode * 8) = 3;
+        pCellNode->aModes[nMode].nSizeClass = 3;
       } else if (iMipLevel <= 0x80 && pTexInfo->nHeight <= 0x80) {
-        *(uint32_t*)(pIVar1 + nMode * 8) = 2;
+        pCellNode->aModes[nMode].nSizeClass = 2;
       } else {
         if (iMipLevel > 0x100 || pTexInfo->nHeight > 0x100) {
           return 0;
         }
 
-        *(uint32_t*)(pIVar1 + nMode * 8) = 1;
+        pCellNode->aModes[nMode].nSizeClass = 1;
       }
     }
 
-    iMipLevel = *(int*)(pIVar1 + nMode * 8);
-    int* pnCacheNodeIdx = (int*)(pIVar1 + 4 + nMode * 8);
+    iMipLevel = pCellNode->aModes[nMode].nSizeClass;
+    int* pnCacheNodeIdx = &pCellNode->aModes[nMode].nCacheNode;
     D3DTextureCacheStrc* pCache = (D3DTextureCacheStrc*)(&DAT_00970eac + iMipLevel * 0x1c);
     if (*pnCacheNodeIdx && (pCache->pNodeBuffer[*pnCacheNodeIdx - 1].field_0x0C == pPalette || nOrigMode == 4)) {
       d3dTextureCache::D3DTEXCACHE_InvalidateByIndex(pCache, *pnCacheNodeIdx);
@@ -270,7 +273,7 @@ static int32_t __stdcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfoS
       nTmp = pCache->pNodeBuffer[nNodeIdx].pSurface;
       pIMipLevel = pCache->pNodeBuffer + nNodeIdx;
       pbPixelData = gpD3DTextureSpritePoolMemory0;
-      pIMipLevel->pAssociatedTilePtr = pIVar1;
+      pIMipLevel->pAssociatedTilePtr = pCellNode;
       pIMipLevel->nTileSlotIndex = nMode;
       pIMipLevel->field_0x0C = pPalette;
       if (!nTmp) {
@@ -351,8 +354,8 @@ static int32_t __stdcall RENDERER_DIRECT3D_UploadTextureToCache(D2D3DSpriteInfoS
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1b5);
           exit(-1);
         } else {
-          sSurfaceDesc.dwSize = 0x7c;
-          memset(&sSurfaceDesc.dwFlags, 0, 0x78);
+          sSurfaceDesc.dwSize = sizeof(sSurfaceDesc);
+          memset(&sSurfaceDesc.dwFlags, 0, sizeof(sSurfaceDesc) - sizeof(sSurfaceDesc.dwSize));
           dwHResult = pDestSurface_00->lpVtbl->Lock(pDestSurface_00, nullptr, &sSurfaceDesc, 0x21, nullptr);
           if (dwHResult) {
             DIRECTD3D_LogError("Failed to lock memory surface", dwHResult);

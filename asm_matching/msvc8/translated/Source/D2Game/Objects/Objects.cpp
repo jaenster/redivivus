@@ -733,7 +733,7 @@ static int32_t __stdcall OBJECT_SelectRandomShrineType(::SGAMEDATA * pGame, uint
         nRandIdx = pShrinesRng->nShrinesCount[byShrineCategory];
         pObjSeed = ObjectsRgn::GetObjectControlSeed(pGame, pRoom);
         nRandIdx = D2_SeedRollLimited(pObjSeed, nRandIdx);
-        nShrineId = *(int*)((uint8_t*)pShrinesRng->aShrinesRng[byShrineCategory] + nRandIdx * 4);
+        nShrineId = ((int*)pShrinesRng->aShrinesRng[byShrineCategory])[nRandIdx];
         if (!nShrineId) {
           nShrineId = 1;
         }

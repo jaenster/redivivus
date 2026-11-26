@@ -18,6 +18,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/ErrorManager.data.h"
 #include "Source/D2Headers/D2Arch.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2BlizzardErrorArgument) == 0x54, "D2BlizzardErrorArgument is 0x54 bytes on 32-bit");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -239,7 +240,7 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     _3rdparty::crashy::Printf(pReport, "<Locale.System> %s\n", gaLanguageNames[nSysLocaleIdx]);
     _3rdparty::crashy::Printf(pReport, "<Game.Type> %s\n", "Client");
     _3rdparty::crashy::Printf(pReport, "<Game.Build> %s\n", "79b7ae8fe1e97d05d57ebdc4b65bf012d38c797e");
-    memset(aLogFilePaths, 0, 0x54);
+    memset(aLogFilePaths, 0, sizeof(aLogFilePaths));
     LogManager::InitLogFilePathPointers(aLogFilePaths, 0x15);
     uint32_t nLogIdx = 0;
     do {
@@ -550,7 +551,7 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
 
         _3rdparty::crashy::Printf(&crashFile, "<:Inspector.HashBlock>\n");
         _3rdparty::crashy::Close(&crashFile);
-        memset(&errorArg, 0, 0x54);
+        memset(&errorArg, 0, sizeof(errorArg));
         errorArg.szProduct = szProduct;
         nAttachIndex = 0;
         if (crashFile.nAttachmentCount > 0) {
@@ -650,7 +651,7 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
         }
 
         _3rdparty::crashy::Close(&crashFile);
-        memset(&errorArg, 0, 0x54);
+        memset(&errorArg, 0, sizeof(errorArg));
         errorArg.szProduct = szProduct;
         if (bSilentFlag) {
           *(uint32_t*)((char*)&errorArg + 12) |= 1;

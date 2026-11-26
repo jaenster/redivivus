@@ -141,7 +141,7 @@ struct D2UnitDataItemStrc {
 #endif // D2_DEFINED_D2UnitDataItemStrc
 #ifndef D2_DEFINED_D2UnitDataMissileStrc
 #define D2_DEFINED_D2UnitDataMissileStrc
-struct __attribute__((packed)) D2UnitDataMissileStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UnitDataMissileStrc {
     /* 0x00 */ int unk0x00; // Unknown dword 0
     /* 0x04 */ int unk0x04; // Unknown dword 1
     /* 0x08 */ int16_t nActivateFrame; // Frame at which missile activates
@@ -158,7 +158,7 @@ struct __attribute__((packed)) D2UnitDataMissileStrc {
     /* 0x28 */ int nHomeStatus; // Homing status
     /* 0x2C */ int sCoords; // Target/origin coordinates (packed short x,y)
     /* 0x30 */ struct D2MissileStreamStrc * pStream; // Unknown last field
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2UnitDataMissileStrc
 #ifndef D2_DEFINED_D2MonsterPathParamOrNameUnion
@@ -171,7 +171,7 @@ union D2MonsterPathParamOrNameUnion {
 };
 
 #endif // D2_DEFINED_D2MonsterPathParamOrNameUnion
-struct __attribute__((packed)) D2UnitDataMonsterStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UnitDataMonsterStrc {
     /* 0x00 */ struct D2MonStatsTxt * pMonStatsTxt; // Pointer to MonStats.txt record
     /* 0x04 */ uint8_t Components[16]; // HD,TR,LG,RA,LA,RH,LH,S1..S8,+1pad. Indices 0-15
     /* 0x14 */ uint16_t nNameSeed; // Seed for random unique name generation
@@ -196,7 +196,7 @@ struct __attribute__((packed)) D2UnitDataMonsterStrc {
     /* 0x5C */ uint16_t nSummonerFlags; // Summoner-related flags, set/cleared in SetUnsetSummonerFlags
     /* 0x5E */ uint8_t unk0x5E;
     /* 0x5F */ uint8_t unk0x5F;
-};
+}; D2_PACKED_END
 
 #ifndef D2_DEFINED_D2UnitDataObjectStrc
 #define D2_DEFINED_D2UnitDataObjectStrc
@@ -219,12 +219,12 @@ struct D2UnitDataObjectStrc {
 
 #endif // D2_DEFINED_D2UnitDataObjectStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-struct __attribute__((packed)) D2UnitDataPlayerSkillUnknown {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UnitDataPlayerSkillUnknown {
     /* 0x00 */ BOOL bUnknown;
     /* 0x04 */ eSkillEType eSkill;
     /* 0x08 */ eD2UnitType nUnitType;
     /* 0x0C */ uint32_t nUid;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #pragma pack(push, 1)
@@ -278,13 +278,12 @@ struct D2UnitDataPlayerStrc {
 
 #ifndef D2_DEFINED_D2UnitDataServerSide
 #define D2_DEFINED_D2UnitDataServerSide
-struct __attribute__((packed)) D2UnitDataServerSide {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UnitDataServerSide {
     /* 0x00 */ uint32_t dwInteractGUID; // GUID of the unit being interacted with (-1 = none)
     /* 0x04 */ eD2UnitType dwInteractType; // eD2UnitType of the interacted unit (6 = none)
     /* 0x08 */ uint8_t bInteracting; // 1 if currently interacting with an NPC/object
     /* 0x09 */ uint8_t field_0x9;
-    /* 0x0A */ uint8_t field_0xa;
-    /* 0x0B */ uint8_t field_0xb;
+    /* 0x0A */ int16_t nEventSound; // event sound (timer update type) set by SetupUpdateEvent_AttachEventSound, sent by UNITMSG_SendSoundPacketToClient
     /* 0x0C */ struct D2UnitStrc * pUpdateUnit; // Pointer to the unit being updated
     /* 0x10 */ struct D2UnitQuestDataListStrc * pQuestEventList; // Linked list of quest event data attached to this unit
     /* 0x14 */ uint8_t bSparkChest; // True if this is a sparkly chest
@@ -306,7 +305,7 @@ struct __attribute__((packed)) D2UnitDataServerSide {
     /* 0x2A */ uint8_t field_0x2a;
     /* 0x2B */ uint8_t field_0x2b;
     /* 0x2C */ struct D2SUnitEventStrc * pSrvUnitEventList; // server unit-event list (SUnitEvent.cpp), head = newest; linked via +0x1c
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2UnitDataServerSide
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -349,11 +348,11 @@ struct D2UnitFindsStrc {
 #endif // D2_DEFINED_D2UnitFindsStrc
 #ifndef D2_DEFINED_D2UnitStatDiminishedEntryStrc
 #define D2_DEFINED_D2UnitStatDiminishedEntryStrc
-struct __attribute__((packed)) D2UnitStatDiminishedEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UnitStatDiminishedEntryStrc {
     /* 0x00 */ int nDiminishedFlag; // 1 = apply diminished formula, 0 = pass through
     /* 0x04 */ int nBaseOffset; // Base value for diminishing returns formula
     /* 0x08 */ eD2UnitStat eStat; // Stat enum queried via ITEM_GetMinimalStatValueShifted
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2UnitStatDiminishedEntryStrc
 namespace D2Common::Unit {

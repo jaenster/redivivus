@@ -104,10 +104,10 @@ struct GlTextureCacheStrc {
 #endif // D2_DEFINED_GlTextureCacheStrc
 #ifndef D2_DEFINED_D2GlideVertexTexCacheBlockStrc
 #define D2_DEFINED_D2GlideVertexTexCacheBlockStrc
-struct __attribute__((packed)) D2GlideVertexTexCacheBlockStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GlideVertexTexCacheBlockStrc {
     /* 0x00 */ D2GlideVertexStrc aVertex[4]; // fan block submitted by DrawShadowQuad/DrawPalettedQuad/DrawPerspectiveImage
     /* 0x70 */ GlTextureCacheStrc aTextureCache[3]; // indexed 1-based from &aVertex[2].fT (= aTextureCache - 0x20) by UploadTextureToCache
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GlideVertexTexCacheBlockStrc
 // =============================================================================

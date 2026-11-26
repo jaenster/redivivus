@@ -47,7 +47,7 @@ struct D2DrlgCoordStrc {
 #endif // D2_DEFINED_D2DrlgCoordStrc
 #ifndef D2_DEFINED_D2DrlgPresetRoomStrc
 #define D2_DEFINED_D2DrlgPresetRoomStrc
-struct __attribute__((packed)) D2DrlgPresetRoomStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgPresetRoomStrc {
     /* 0x00 */ int nLevelPrest;
     /* 0x04 */ int nPickedFile;
     /* 0x08 */ struct D2DrlgMapStrc * pMap;
@@ -59,7 +59,7 @@ struct __attribute__((packed)) D2DrlgPresetRoomStrc {
     /* 0xEC */ struct D2DrlgGridStrc * pMazeGrid;
     /* 0xF0 */ POINT * pNavigationPoints; // world points of the room's tomb/grave tiles (Burial Grounds etc.); the duplicate type D2DrlgRoomExDataPreset names this slot sWorldPointsBurialGrounds
     /* 0xF4 */ int nNavigationPointsCount; // count for pNavigationPoints (nWorldPointsBurialGroundsSize in D2DrlgRoomExDataPreset)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgPresetRoomStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -315,7 +315,7 @@ struct D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds {
 #endif // D2_DEFINED_D2DrlgRoomExDataPresetWorldCoordinatesBurialGrounds
 #ifndef D2_DEFINED_D2LvlPrestTxt
 #define D2_DEFINED_D2LvlPrestTxt
-struct __attribute__((packed)) D2LvlPrestTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2LvlPrestTxt {
     /* 0x000 */ int Def;
     /* 0x004 */ eD2LevelId LevelId;
     /* 0x008 */ int Populate;
@@ -335,7 +335,7 @@ struct __attribute__((packed)) D2LvlPrestTxt {
     /* 0x040 */ int Files;
     /* 0x044 */ char File[6][60];
     /* 0x1AC */ int Dt1Mask;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2LvlPrestTxt
 #ifndef D2_DEFINED_D2PathPosStrc
@@ -357,7 +357,7 @@ struct D2MapAIStrc {
 #endif // D2_DEFINED_D2MapAIStrc
 #ifndef D2_DEFINED_D2AiGeneralStrc
 #define D2_DEFINED_D2AiGeneralStrc
-struct __attribute__((packed)) D2AiGeneralStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AiGeneralStrc {
     /* 0x00 */ int nFunctionId;
     /* 0x04 */ void (__fastcall *fpFunction)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
     /* 0x08 */ int nAiFlags;
@@ -374,12 +374,12 @@ struct __attribute__((packed)) D2AiGeneralStrc {
     /* 0x34 */ struct D2MonsterDataMinionList * pMinionList;
     /* 0x38 */ struct D2MapAIStrc * pMapAi;
     /* 0x3C */ int nGenericSpawnerSpecific;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2AiGeneralStrc
 #ifndef D2_DEFINED_D2PresetUnitStrc
 #define D2_DEFINED_D2PresetUnitStrc
-struct __attribute__((packed)) D2PresetUnitStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2PresetUnitStrc {
     /* 0x00 */ int nMode; // Mode flag - 1 for monsters from monpreset.txt, 3 for items (item code encoded)
     /* 0x04 */ int nClassId; // Unit class ID - MonStats ID for monsters, Object ID for objects
     /* 0x08 */ int nPosX; // X position in world coordinates (sub-tile units)
@@ -388,7 +388,7 @@ struct __attribute__((packed)) D2PresetUnitStrc {
     /* 0x14 */ eD2UnitType eType; // Unit type (UNIT_MONSTER=1, UNIT_OBJECT=2, UNIT_ITEM=4, UNIT_WARP=5)
     /* 0x18 */ int nPosY; // Y position in world coordinates (sub-tile units)
     /* 0x1C */ int nFlags; // Flags bitmask (bit 0 = auto-generated object)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2PresetUnitStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -410,13 +410,13 @@ union DRLGROOMEX_InitializePresetRoom_Slotm10 {
 
 #endif // D2_MODULE_D2Common
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-struct __attribute__((packed)) D2DrlgGridTileDataStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgGridTileDataStrc {
     /* 0x00 */ D2DrlgCoordStrc tCoord;
     /* 0x10 */ struct D2RoomExStrc * pRoom;
     /* 0x14 */ struct D2PoolManagerStrc * pMemory;
     /* 0x18 */ struct D2DrlgGridStrc * pGrid;
     /* 0x1C */ struct D2DrlgPresetRoomStrc * pRoomExDataPreset;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 namespace D2Common::Drlg::Preset {

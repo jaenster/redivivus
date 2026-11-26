@@ -87,7 +87,7 @@ struct D2SoundChannelNodeStrc {
 #endif // D2_DEFINED_D2SoundChannelNodeStrc
 #ifndef D2_DEFINED_D2SoundChannelStrc
 #define D2_DEFINED_D2SoundChannelStrc
-__pragma(pack(push, 1)) struct D2SoundChannelStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SoundChannelStrc {
     /* 0x00 */ int * pListNode; // linked-list node ptr (dereferenced as *pChannel = channel data)
     /* 0x04 */ int nSoundId; // eD2Sounds id
     /* 0x08 */ int nChannelHandle; // sound system channel handle
@@ -111,7 +111,7 @@ __pragma(pack(push, 1)) struct D2SoundChannelStrc {
     /* 0x4D */ int nFadeDir; // fade direction (pMatchChannelData+0x4d)
     /* 0x51 */ int nFadeStartTime; // global3 time when fade started (pMatchChannelData+0x51)
     /* 0x55 */ uint32_t nFadeEndTime; // global3+fadeOutMs target end time (pMatchChannelData+0x55)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SoundChannelStrc
 #ifndef D2_DEFINED_D2SoundEnvironTxt
@@ -144,10 +144,10 @@ struct D2SoundEnvironTxt {
 #endif // D2_DEFINED_D2SoundEnvironTxt
 #ifndef D2_DEFINED_D2SoundListNodeStrc
 #define D2_DEFINED_D2SoundListNodeStrc
-__pragma(pack(push, 1)) struct D2SoundListNodeStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SoundListNodeStrc {
     /* 0x00 */ intptr_t nItemKey;
     /* 0x04 */ struct D2SoundListNodeStrc * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SoundListNodeStrc
 #ifndef D2_DEFINED_D2SoundSmpStrc

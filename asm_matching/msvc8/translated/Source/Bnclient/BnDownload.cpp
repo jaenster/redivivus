@@ -16,6 +16,8 @@
 #ifndef D2_ALLOC_AT
 #define D2_ALLOC_AT(size, szFile, nLine) Fog::Memory::AllocClientMemory((size), (szFile), (nLine), 0)
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(D2BnetDownloadStateStrc) == 0x230, "D2BnetDownloadStateStrc is 0x230 bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(SID_C2S_ExtraWork) == 0x1004, "SID_C2S_ExtraWork is 0x1004 bytes on x86");
 
 
 // The ExtraWork DLL's entry point, as GetProcAddress("ExtraWork") is called here: no arguments, BOOL result.
@@ -174,7 +176,7 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
     __frame0.szDllPath[0] = '\0';
     __frame0.pdwVersionOutSaved = pdwVersionOut;
     __frame0.pdwChecksumOutSaved = pdwChecksumOut;
-    memset(__frame0.szDllPath + 1, 0, 0x103);
+    memset(__frame0.szDllPath + 1, 0, sizeof(__frame0.szDllPath) - sizeof(__frame0.szDllPath[0]));
     __frame0.nCheckResult = 0;
     DWORD dwStartTick = GetTickCount();
     do {
@@ -195,11 +197,11 @@ int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uin
                 /* LPCSTR lpProcName for GetProcAddress */ /* HMODULE hModule for GetProcAddress */ pCheckRevision = (pfnCheckRevision)GetProcAddress(hCheckRevDll, "CheckRevision");
                 if (pCheckRevision) {
                   __frame0.szGameExePath[0] = '\0';
-                  memset(__frame0.szGameExePath + 1, 0, 0x103);
+                  memset(__frame0.szGameExePath + 1, 0, sizeof(__frame0.szGameExePath) - sizeof(__frame0.szGameExePath[0]));
                   __frame0.szArchivePath[0] = '\0';
-                  memset(__frame0.szArchivePath + 1, 0, 0x103);
+                  memset(__frame0.szArchivePath + 1, 0, sizeof(__frame0.szArchivePath) - sizeof(__frame0.szArchivePath[0]));
                   __frame0.szVersionString[0] = '\0';
-                  memset(__frame0.szVersionString + 1, 0, 0x103);
+                  memset(__frame0.szVersionString + 1, 0, sizeof(__frame0.szVersionString) - sizeof(__frame0.szVersionString[0]));
                   /* DWORD nSize for GetModuleFileNameA */ dwStartTick = 0x104;
                   szGameExePathPtr = __frame0.szGameExePath;
                   /* LPSTR lpFilename for GetModuleFileNameA */ /* LPCSTR lpModuleName for GetModuleHandleA */ hGameModule = GetModuleHandleA((LPCSTR)0x0);
@@ -406,12 +408,7 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
     uint32_t nLineOffset;
     char* pbArchivePath;
     char* pListCursor;
-    char cArchiveListBuf[1024];
-    char cRegistryValue[1024];
     char szRegistryPath[900];
-    char cDestPathBuf[260];
-    char szLineBuffer[256];
-    char szModulePath[260];
     D2MPQFileStrc* pcStrLenResult;
     int32_t nErrorLine;
     __frame0.pOpenFileOut = pResultOut;
@@ -420,8 +417,7 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
       exit(-1);
     }
 
-    szModulePath[0] = '\0';
-    memset(szModulePath + 1, 0, 0x103);
+    char szModulePath[260] = "";
     /* DWORD nSize for GetModuleFileNameA */ /* LPSTR lpFilename for GetModuleFileNameA */ /* HMODULE hModule for GetModuleFileNameA */ GetModuleFileNameA((HMODULE)0x0, szModulePath, 0x104);
     szModulePath[0x103] = '\0';
     char* lpFileName = szModulePath;
@@ -437,16 +433,14 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
     }
 
     *lpFileName = '\0';
-    cRegistryValue[0] = '\0';
-    memset(cRegistryValue + 1, 0, 0x3ff);
+    char cRegistryValue[1024] = "";
     nErrorLine = Storm::Source::SReg::SRegLoadData((uint32_t*)"Patch", "Patches", 2, (LPBYTE)cRegistryValue, 0x3fe, nullptr);
     if (!nErrorLine || cRegistryValue[0] == '\0') {
       *pResultOut = 0;
       return 0;
     }
 
-    cArchiveListBuf[0] = '\0';
-    memset(cArchiveListBuf + 1, 0, 0x3ff);
+    char cArchiveListBuf[1024] = "";
     LPSTR szSourceFileName = cArchiveListBuf;
     lpFileName = cRegistryValue;
     LPSTR pVerifySigResult = szSourceFileName;
@@ -478,8 +472,7 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
           lpFileName = __frame0.pVerifySigOut;
           if (nSize > 0) {
             do {
-              szLineBuffer[0] = '\0';
-              memset(szLineBuffer + 1, 0, 0xff);
+              char szLineBuffer[256] = "";
               nLineOffset = (uint32_t)(pListCursor - pbArchivePath);
               lpFileName = szLineBuffer;
               if (nLineOffset < nSize) {
@@ -516,9 +509,8 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
               }
 
               __frame1.szEntryName = '\0';
-              memset(__frame1.auStack_413, 0, 0x103);
-              cDestPathBuf[0] = '\0';
-              memset(cDestPathBuf + 1, 0, 0x103);
+              memset(__frame1.auStack_413, 0, sizeof(__frame1.auStack_413));
+              char cDestPathBuf[260] = "";
               lpFileName = Storm::Source::SSTR::SStrChr(szLineBuffer, ' ');
               if (lpFileName) {
                 lpFileName = Storm::Source::SSTR::SStrChr(szLineBuffer, ' ');
@@ -884,12 +876,12 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
       Cache::CACHE_FreeMem(pCachedBuf, nCachedSize);
     }
 
-    D2BnetDownloadStateStrc* pThreadCtx = (D2BnetDownloadStateStrc*)Storm::Source::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0xa6, 0);
+    D2BnetDownloadStateStrc* pThreadCtx = (D2BnetDownloadStateStrc*)Storm::Source::SMem::SMemAlloc(sizeof(D2BnetDownloadStateStrc), ".\\BnDownload.cpp", 0xa6, 0);
     if (!pThreadCtx) {
       return;
     }
 
-    memset(pThreadCtx, 0, 0x230);
+    memset(pThreadCtx, 0, sizeof(D2BnetDownloadStateStrc));
     pThreadCtx->nSendSize = (short int)(strlen(szBufferInput) + 0x21);
     pThreadCtx->nUnk0x0C = eFileType;
     pThreadCtx->nUnk0x02 = 0;
@@ -1044,7 +1036,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
           pArchiveHandle = 0;
           __frame1.archiveFileCtx = 0;
           __frame1.cTempDllPath[0] = '\0';
-          memset(__frame1.cTempDllPath + 1, 0, 0x103);
+          memset(__frame1.cTempDllPath + 1, 0, sizeof(__frame1.cTempDllPath) - sizeof(__frame1.cTempDllPath[0]));
           Debug::DEBUG_Trace("Processing ExtraWork file");
           bOpened = Storm::Source::SFile::SFileOpenArchive(szDestPath, nullptr, 0, &pArchiveHandle);
           if (!bOpened) {
@@ -1086,7 +1078,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
                 }
 
                 Storm::Source::SFile::SFileCloseFile(__frame1.archiveFileCtx);
-                memset(&__frame1.sExtraWork, 0, 0x1004);
+                memset(&__frame1.sExtraWork, 0, sizeof(SID_C2S_ExtraWork));
                 *(uint32_t*)(char*)&__frame1.sExtraWork.abWorkData = (uint32_t)(uint8_t)__frame1.byVersionByte;
                 __frame1.sExtraWork.wGameType = 1;
                 __frame1.sExtraWork.wLength = 4;
@@ -1194,12 +1186,12 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_
       Cache::CACHE_FreeMem(pCacheData, dwCachedSize);
     }
 
-    D2BnetDownloadStateStrc* pThreadCtx = (D2BnetDownloadStateStrc*)Storm::Source::SMem::SMemAlloc(0x230, ".\\BnDownload.cpp", 0x698, 0);
+    D2BnetDownloadStateStrc* pThreadCtx = (D2BnetDownloadStateStrc*)Storm::Source::SMem::SMemAlloc(sizeof(D2BnetDownloadStateStrc), ".\\BnDownload.cpp", 0x698, 0);
     if (!pThreadCtx) {
       return 0;
     }
 
-    memset(pThreadCtx, 0, 0x230);
+    memset(pThreadCtx, 0, sizeof(D2BnetDownloadStateStrc));
     uint8_t* pbNameEnd = pPatchList;
     pbNameEnd = pbNameEnd + strlen((char*)pbNameEnd) + 1;
     pThreadCtx->nSendSize = (short int)(uintptr_t)pbNameEnd - ((short int)(uintptr_t)pPatchList + 1) + 0x21;

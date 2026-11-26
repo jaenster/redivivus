@@ -19,14 +19,14 @@
 struct StormLinkedListStrc;
 
 // Data types
-__pragma(pack(push, 1)) struct CELLIST : public TSHashObject<CELLIST, HASHKEY_NONE> {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct CELLIST : public TSHashObject<CELLIST, HASHKEY_NONE> {
     /* 0x18 */ uint32_t dwFlags;
     /* 0x1C */ uint32_t nFormat;
     /* 0x20 */ void * pRawData;
     /* 0x24 */ uint32_t nFrameCount;
     /* 0x28 */ uint32_t nDirections;
     /* 0x2C */ TSList<TCELENTRY, TSGetLink<TCELENTRY>> m_frames;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 namespace D2CMP { namespace SRC { namespace CelCmp { namespace CELLIST {
 

@@ -8,6 +8,7 @@
 #include "Source/D2Common/Path/Path.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units/Units.twin.inline.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2PathPointStrc) == 0x4, "D2PathPointStrc is 0x4 bytes on x86");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 extern uint32_t gaPathDirectionLookupTable[6];
@@ -113,8 +114,8 @@ static BOOL DRLGPATH_TryStepWithFallbackDirections(D2PathTypeArg * pPathTypeArg,
 static void __stdcall DRLGPATH_InsertWaypointsIntoBuffer(int32_t nInsertIdx, D2PathPointStrc * nWaypointBuf, int * pnCurIndex, int * pnPointCount, D2DrlgPathScannerStrc * pScanNode) {
     int nInsertCount = *pnCurIndex - nInsertIdx - 1 + pScanNode->nWaypointCount;
     int iVar1 = nInsertCount + nInsertIdx;
-    memmove(nWaypointBuf + iVar1 + 1, nWaypointBuf + nInsertIdx + 1, (*pnPointCount - nInsertIdx) * 4 - 4);
-    memcpy(nWaypointBuf + *pnCurIndex, pScanNode->anWaypoints, pScanNode->nWaypointCount * 4);
+    memmove(nWaypointBuf + iVar1 + 1, nWaypointBuf + nInsertIdx + 1, (*pnPointCount - nInsertIdx) * sizeof(D2PathPointStrc) - sizeof(D2PathPointStrc));
+    memcpy(nWaypointBuf + *pnCurIndex, pScanNode->anWaypoints, pScanNode->nWaypointCount * sizeof(D2PathPointStrc));
     *pnPointCount += nInsertCount;
     *pnCurIndex = iVar1 + 1;
 }

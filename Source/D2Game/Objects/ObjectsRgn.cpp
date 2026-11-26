@@ -97,7 +97,8 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
     }
 
     memset(pObjectControl->aObjectTypeCount, 0, sizeof(pObjectControl->aObjectTypeCount));
-    memset(pObjectControl->sShrinesRng.aShrinesRng, 0, 8 * sizeof(pObjectControl->sShrinesRng.aShrinesRng[0]));
+    memset(pObjectControl->sShrinesRng.aShrinesRng, 0, sizeof(pObjectControl->sShrinesRng.aShrinesRng));
+#if D2_ARCH_X86
     uSlotC.nShrineClassIdxLoop = 0;
     uSlot8.pShrinesRngIter = &pObjectControl->sShrinesRng;
     do {
@@ -113,6 +114,23 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
       uSlot8.pShrinesRngIter->nShrinesCount[0] = 0;
       uSlot8.pShrinesRngIter = (D2ObjectRngShrines*)(uSlot8.pShrinesRngIter->nShrinesCount + 1);
     } while (uSlotC.nShrineClassIdxLoop < 8);
+#elif D2_ARCH_X64
+    uSlotC.nShrineClassIdxLoop = 0;
+    // The x86 body walks a D2ObjectRngShrines* one dword per class, so ->aShrinesRng[0] and
+    // ->nShrinesCount[0] land on the class's entries; the pointer array is wider on x64.
+    do {
+      if (aShrineClassCounts[uSlotC.nShrineClassIdxLoop] > 0) {
+        nAllocSize = aShrineClassCounts[uSlotC.nShrineClassIdxLoop] * 4;
+        pShrineClassRng = (int*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, nAllocSize, ".\\OBJECTS\\objrgn.cpp", 0x54);
+        pObjectControl->sShrinesRng.aShrinesRng[uSlotC.nShrineClassIdxLoop] = (uint8_t*)pShrineClassRng;
+        memset(pShrineClassRng, 0, nAllocSize);
+      }
+
+      nShrinesCount = nShrinesTxtCount;
+      pObjectControl->sShrinesRng.nShrinesCount[uSlotC.nShrineClassIdxLoop] = 0;
+      uSlotC.nShrineClassIdxLoop++;
+    } while (uSlotC.nShrineClassIdxLoop < 8);
+#endif
 
     iShrineIdx = 0;
     if (nShrinesTxtCount > 0) {
@@ -469,7 +487,7 @@ int32_t __fastcall OBJECTRGN_GetTrapMonsterClassId(D2ObjectModeArg * pObjectMode
           }
         }
 
-        for (j = 0; j < 6; j++) {
+        for (j = 0; j < (int)(sizeof(anActMonIds) / sizeof(anActMonIds[0])); j++) {
           if (nClassId >= anActMonIds[j] && nClassId < anActMonIds[j] + 4) {
             return pLevelRng->nMonClassId = anActMonIds[j];
           }

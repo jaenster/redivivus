@@ -32,7 +32,17 @@
 #include "Source/Storm/Source/SFile.h"
 #include "Source/Storm/WindowHandle.h"
 
+#ifdef _MSC_VER
+// Visual C++ has no constructor attribute: the function goes into the CRT's initialiser
+// table, as Redivivus/d2_static_init.cpp does for the game's list.
+extern "C" void D2RunServerStaticInitializers();
+#pragma section(".CRT$XCU", read)
+extern "C" __declspec(allocate(".CRT$XCU")) void (__cdecl* const gpfnD2RunServerStaticInitializers)(void) =
+    D2RunServerStaticInitializers;
+extern "C" void D2RunServerStaticInitializers() {
+#else
 extern "C" __attribute__((constructor(200))) void D2RunServerStaticInitializers() {
+#endif
     D2Trace("server staticinit[00] 006ca700");
     Fog::Src::LogManager::StaticInit_gLogMessageQueueCS();
     D2Trace("server staticinit[01] 006ca720");

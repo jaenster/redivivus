@@ -1121,7 +1121,7 @@ void __fastcall AddAct124SecondaryBorder(D2DrlgLevelStrc * pLevel, int32_t nLvlS
 void __fastcall DRLGLEVEL_InitializeWithWildernessLevel(D2DrlgLevelStrc * pLevel) {
     D2DrlgLevelDataWildernessLevel* pDrlgLevelOutdoorsData = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgLevelDataWildernessLevel, ".\\DRLG\\Outdoors.cpp", 0x34c);
     pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData = pDrlgLevelOutdoorsData;
-    memset(pDrlgLevelOutdoorsData, 0, 0x268);
+    memset(pDrlgLevelOutdoorsData, 0, sizeof(D2DrlgLevelDataWildernessLevel));
 }
 
 // Top-level outdoor level generator. Converts world-size tile coordinates to 8-tile grid units, initialises four DrlgGrid structures (outdoor, preset, and two auxiliary grids), builds the vertex mesh, simplifies outdoor points, then dispatches to the act-specific initialiser (InitAct1-5OutdoorLevel) before calling DRLGOUTDOOR_CreateOutdoorRoomExGrid. Level 0x86 (Harrogath Exterior) is forced to use the Act 2 (desert) path.
@@ -1196,10 +1196,10 @@ void __fastcall DRLGOUTDOOR_FreeOutdoorLevelData(D2DrlgLevelStrc * pLevel, BOOL 
       nVertexGroupIdx--;
     } while (nVertexGroupIdx);
 
-    memset(pDVar1->aExitPoints1, 0, 0x78);
-    memset(pDVar1->aExitPoints2, 0, 0x78);
-    memset(pDVar1->aExitPoints3, 0, 0x78);
-    memset(pDVar1->aExitPoints4, 0, 0x78);
+    memset(pDVar1->aExitPoints1, 0, sizeof(pDVar1->aExitPoints1));
+    memset(pDVar1->aExitPoints2, 0, sizeof(pDVar1->aExitPoints2));
+    memset(pDVar1->aExitPoints3, 0, sizeof(pDVar1->aExitPoints3));
+    memset(pDVar1->aExitPoints4, 0, sizeof(pDVar1->aExitPoints4));
     pDVar1->nExitCount = 0;
     if (bKeepRoomData) {
       return;

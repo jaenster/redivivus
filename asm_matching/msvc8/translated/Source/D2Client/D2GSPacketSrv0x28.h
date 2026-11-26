@@ -17,12 +17,12 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x28
 #define D2_DEFINED_D2GSPacketSrv0x28
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x28 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x28 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUpdateType;
     /* 0x02 */ int nUnitGUID;
     /* 0x06 */ uint8_t nActionType;
     /* 0x07 */ uint8_t szQuestBits[96];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x28

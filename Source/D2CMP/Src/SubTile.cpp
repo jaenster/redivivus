@@ -162,7 +162,7 @@ void __fastcall SUBTILE_ConvertToIndexed(D2GroundSubTileStrc * pDstFrame, D2Grou
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x84);
       exit(-1);
     } else {
-      memcpy(pDstFrame, pSrcFrame, 0x10);
+      memcpy(pDstFrame, pSrcFrame, offsetof(D2GroundSubTileStrc, pPixelData));
       pDstFrame->wFormat &= 0xfffe;
       pDstFrame->pPixelData = 0;
       pDstFrame->wDataLength = 0;

@@ -302,15 +302,15 @@ int __fastcall ShowOogErrorDialog(D2OogErrorDataStrc * pErrorData) {
     uint16_t awszTitle[512];
     uint16_t awszBody[512];
     eOogErrorCode eErrorCode = pErrorData->eErrorCode;
-    for (nTitleStrId = 0; nTitleStrId < 0x200; nTitleStrId++) {
+    for (nTitleStrId = 0; nTitleStrId < (int)_countof(awszBody); nTitleStrId++) {
       awszBody[nTitleStrId] = L'\0';
     }
 
-    for (nTitleStrId = 0; nTitleStrId < 0x200; nTitleStrId++) {
+    for (nTitleStrId = 0; nTitleStrId < (int)_countof(awszFooter); nTitleStrId++) {
       awszFooter[nTitleStrId] = L'\0';
     }
 
-    for (nTitleStrId = 0; nTitleStrId < 0x200; nTitleStrId++) {
+    for (nTitleStrId = 0; nTitleStrId < (int)_countof(awszTitle); nTitleStrId++) {
       awszTitle[nTitleStrId] = L'\0';
     }
 
@@ -791,7 +791,7 @@ void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE n
       *pbWritePtr++ = gaNewCharDefaultAppearance[i];
     }
     *pbWritePtr++ = nCharacterClass + 1;
-    memset(SAVEFILE.pAppearance2, 0xff, 0x10);
+    memset(SAVEFILE.pAppearance2, 0xff, sizeof(SAVEFILE.pAppearance2));
     memset(pbWritePtr, 0xff, 0xb);
     pbWritePtr += 0xb;
     *pbWritePtr = 1;

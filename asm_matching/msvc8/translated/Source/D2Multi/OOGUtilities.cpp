@@ -27,6 +27,7 @@
 #ifndef max
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(_STARTUPINFOA) == 0x44, "_STARTUPINFOA is 0x44 bytes on x86");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -287,7 +288,7 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
       if (LAUNCHER_ReadRegistryValue(szRegistryCommandPath, (LPCSTR)0x0, (LPBYTE)szCommandLine, 0x400, &dwBytesRead)) {
         strcat(szCommandLine, " ");
         strcat(szCommandLine, pszUrl);
-        Storm::Source::SMem::SMemZero(&sStartupInfo, 0x44);
+        Storm::Source::SMem::SMemZero(&sStartupInfo, sizeof(_STARTUPINFOA));
         sStartupInfo.cb = 0x44;
         if (CreateProcessA((LPCSTR)0x0, szCommandLine, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0x20, (LPVOID)0x0, (LPCSTR)0x0, &sStartupInfo, &sProcessInfo)) {
           CloseHandle(sProcessInfo.hThread);
@@ -2454,11 +2455,11 @@ void __stdcall UIMENU_WaitInLine() {
     pwszClearCursor = D2Lang::StrTable::strtable::GetLocaleString(0x2b0f);
     D2Win::Src::D2WinImage::D2WINTEXTBOX_SetTextW(gpCtlGameNameLabelOrQueueStatus, pwszClearCursor);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gpCtlGameNameLabelOrQueueStatus, " ", 0);
-    for (nClearIter = 0; nClearIter < 200; nClearIter++) {
+    for (nClearIter = 0; nClearIter < (int)_countof(wszMessageBuffer); nClearIter++) {
       wszMessageBuffer[nClearIter] = L'\0';
     }
 
-    for (nClearIter = 0; nClearIter < 0x64; nClearIter++) {
+    for (nClearIter = 0; nClearIter < (int)_countof(wszPositionString); nClearIter++) {
       wszPositionString[nClearIter] = L'\0';
     }
 
@@ -3258,7 +3259,7 @@ void __stdcall OOGUTIL_AppendChatText(uint16_t * wszText) {
       pwszMatch = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)pwszNewlineToken);
       while (pwszMatch && pwszMatch[nLength] != L'\0') {
         nTotalLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszMatch);
-        memmove(pwszMatch, pwszMatch + nLength + 1, (nTotalLen - nLength) * 2);
+        memmove(pwszMatch, pwszMatch + nLength + 1, (nTotalLen - nLength) * sizeof(uint16_t));
         pwszMatch = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)pwszNewlineToken);
       }
 
@@ -3270,7 +3271,7 @@ int __fastcall OOGUTIL_ValidateStringFilter(DWORD dwUnused, char * szText) {
     int nClearCount;
     uint16_t* pwszClear;
     uint16_t wszNewsText[576];
-    for (nClearCount = 0; nClearCount < 0x240; nClearCount++) {
+    for (nClearCount = 0; nClearCount < (int)_countof(wszNewsText); nClearCount++) {
       wszNewsText[nClearCount] = L'\0';
     }
 

@@ -25,7 +25,7 @@ struct D2PresetUnitStrc;
 // Data types
 #ifndef D2_DEFINED_D2DrlgMapStrc
 #define D2_DEFINED_D2DrlgMapStrc
-__pragma(pack(push, 1)) struct D2DrlgMapStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgMapStrc {
     /* 0x00 */ int nNumber; // LvlPrest ID
     /* 0x04 */ int nRandomMapFileSelector; // Randomly selected file index from pTxtLevelPrest->Files
     /* 0x08 */ struct D2LvlPrestTxt * pTxtLevelPrest;
@@ -44,6 +44,6 @@ __pragma(pack(push, 1)) struct D2DrlgMapStrc {
     /* 0x4C */ int * pPopsOrientation; // Array of pop orientations [nPops]
     /* 0x50 */ struct D2DrlgCoordStrc * pPosLocation; // Array of pop location coordinates [nPops]
     /* 0x54 */ struct D2DrlgMapStrc * pNext; // Next DrlgMap in linked list (pLevel->pDrlgMapFirst)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgMapStrc

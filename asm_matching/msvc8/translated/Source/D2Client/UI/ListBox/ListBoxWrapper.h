@@ -162,13 +162,13 @@ struct ListBoxImplementation;
 // Data types
 #ifndef D2_DEFINED_D2ListBoxItemStrc
 #define D2_DEFINED_D2ListBoxItemStrc
-__pragma(pack(push, 1)) struct D2ListBoxItemStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ListBoxItemStrc {
     /* 0x0000 */ uint16_t wszText[6][1024]; // 6 columns of 0x400 WCHAR. WSTRING_PutWideCharIntoBuffer(row, src, 0x3ff) then a NUL word at index 0x3ff (LISTBOX_AddItem @004be500).
     /* 0x3000 */ uint16_t field_0x3000; // not observed in any access
     /* 0x3002 */ uint32_t dwItemData; // 004be525 MOV [i*0x300e+0x300a+this]
     /* 0x3006 */ uint32_t dwValue; // 004be6d9/004be6f0 MOV [(i+1)*0x300e+this] - dwValue, or the list default when bUseDefaultValue
     /* 0x300A */ uint32_t dwAuxData; // 004be703 MOV [i*0x300e+0x3012+this]
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ListBoxItemStrc
 #ifndef D2_DEFINED_ListBoxWrapper
@@ -226,7 +226,7 @@ struct ListBoxWrapperVtable {
 #endif // D2_DEFINED_ListBoxWrapperVtable
 #ifndef D2_DEFINED_ListBoxImplementation
 #define D2_DEFINED_ListBoxImplementation
-__pragma(pack(push, 1)) struct ListBoxImplementation {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct ListBoxImplementation {
     /* 0x000000 */ struct ListBoxImplementationVtable * pVtable; // 004bf678 MOV [ESI],0x6daaec (LISTBOX_Create); 004bf8ca MOV [ESI],0x6da6c0 (LISTBOX_BaseDeletingDestructor)
     /* 0x000004 */ int (__fastcall *pfnCharFilter)(::UIWidget *, struct D2UIMouseMsgStrc *);
     /* 0x000008 */ D2ListBoxItemStrc aItems[128]; // 128 entries of 0x300e. Base this+8: LISTBOX_Create @004bf67e LEA EDI,[ESI+8] with counter 0x7f; LISTBOX_AddItem @004be500 guards nItemCount < 0x80 and indexes IMUL idx,0x300e. 8 + 128*0x300e = 0x180708, exactly where the header fields below begin.
@@ -258,7 +258,7 @@ __pragma(pack(push, 1)) struct ListBoxImplementation {
     /* 0x18076A */ int nItemSpacing;
     /* 0x18076E */ uint32_t nScrollRepeatCount; // 004bf252 LISTBOX_Draw
     /* 0x180772 */ uint32_t nDrawCount; // 004bebe7 CMP [EDI+0x180772],0x2 in LISTBOX_OnMouseClick - guards the pfnOnItemActivated dispatch
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_ListBoxImplementation
 namespace D2Client { namespace UI { namespace ListBox { namespace ListBoxWrapper {

@@ -14,6 +14,8 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Common/Units/Units.inline.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2DrlgRoomCoordsStrc) == 0x20, "D2DrlgRoomCoordsStrc is 0x20 bytes on x86");
+static_assert(sizeof(void*) != 4 || offsetof(D2RoomCollisionGridStrc, aMap) == 0x24, "the collision map starts at 0x24 on x86");
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -225,14 +227,14 @@ void __fastcall AllocRoomCollisionGrid(D2PoolManagerStrc * pMemPool, D2RoomStrc 
     D2RoomStrc* pRoomSaved = pRoom;
     DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
     int nRoomCoordsCount = sRoomCoords.dwXSize * sRoomCoords.dwYSize;
-    D2RoomCollisionGridStrc* pCollisionMapNew = (D2RoomCollisionGridStrc*)D2_ALLOC_POOL_AT(pMemPool, (nRoomCoordsCount + 0x12 + sRoomCoords.dwYSize * 2) * 2, ".\\COLLISN\\Collisn.cpp", 0x185);
+    D2RoomCollisionGridStrc* pCollisionMapNew = (D2RoomCollisionGridStrc*)D2_ALLOC_POOL_AT(pMemPool, (nRoomCoordsCount + offsetof(D2RoomCollisionGridStrc, aMap) / sizeof(eCollisionFlags) + sRoomCoords.dwYSize * 2) * sizeof(eCollisionFlags), ".\\COLLISN\\Collisn.cpp", 0x185);
     D2RoomStrc* pRoomAdj = pRoomSaved;
     D2DrlgRoomCoordsStrc* pCoordsIter = &sRoomCoords;
     int* pCollisionMapWriter = (int*)pCollisionMapNew;
-    memcpy(pCollisionMapWriter, pCoordsIter, 32);
+    memcpy(pCollisionMapWriter, pCoordsIter, sizeof(D2DrlgRoomCoordsStrc));
     DUNGEON::Dungeon::DRLGROOM_SetCollisionGridInRoom(pRoomSaved, pCollisionMapNew);
     pCollisionMapNew->pMapStart = pCollisionMapNew->aMap;
-    memset(pCollisionMapNew->aMap, 0, nRoomCoordsCount * 2);
+    memset(pCollisionMapNew->aMap, 0, nRoomCoordsCount * sizeof(eCollisionFlags));
     DUNGEON::Dungeon::DRLGROOM_GetAdjacentRoomsList(pRoomAdj, &pRoomsNear, &nAdjacentRoomsCount);
     for (nRoomsNearIndex = 0; nRoomsNearIndex < nAdjacentRoomsCount; nRoomsNearIndex++) {
       D2RoomCollisionGridStrc* pCollisionMapCurrent;

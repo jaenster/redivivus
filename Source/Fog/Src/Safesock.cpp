@@ -6,6 +6,7 @@
 #include "Source/Fog/Src/ErrorManager.h"
 #include "Source/Fog/Src/LogManager.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2NetDataStrc) == 0x78, "D2NetDataStrc is 0x78 bytes on 32-bit");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -61,7 +62,7 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
     LPTHREAD_START_ROUTINE pThreadProcLocal = pThreadProc;
     char* szHostNameOrSockLen = szHostName;
     D2NetDataStrc* pSafesockStrc = D2_NEW_AT(D2NetDataStrc, ".\\Src\\Safesock.cpp", 0xcc);
-    memset(pSafesockStrc, 0, 0x78);
+    memset(pSafesockStrc, 0, sizeof(*pSafesockStrc));
     if (!szConnectionAlias) {
       szConnectionAlias = "UNKNOWN";
     }
@@ -136,7 +137,7 @@ D2NetDataStrc * __fastcall Create(char * szHostName, u_short nPort, LPTHREAD_STA
       /* int * namelen for getsockname */ /* sockaddr * name for getsockname */ /* SOCKET s for getsockname */ nHostNameOrSockLen = 0x10;
       nResult = getsockname(hSocket, (sockaddr*)sockNameBuf, (int*)&nHostNameOrSockLen);
       if (nResult != -1) {
-        /* in_addr in for inet_ntoa */ pSrcIp = inet_ntoa((in_addr)*(uint32_t*)((char*)&sockNameBuf + 4));
+        /* in_addr in for inet_ntoa */ pSrcIp = inet_ntoa(((sockaddr_in*)sockNameBuf)->sin_addr);
         pDstIp = cp_0075d040;
         do {
           cIpChar = *pSrcIp;

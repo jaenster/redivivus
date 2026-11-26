@@ -522,7 +522,7 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
     int a, b, c, d, e, t;
     for (i = 0; i < 16; i++)
         W[i] = pShaCtx[7 + i];
-    for (i = 16; i < 80; i++)
+    for (i = 16; i < (int)_countof(W); i++)
         W[i] = W[i - 3] ^ W[i - 8] ^ W[i - 14] ^ W[i - 16];
     a = pShaCtx[0];
     b = pShaCtx[1];
@@ -553,7 +553,7 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
         b = a;
         a = t;
     }
-    for (i = 60; i < 80; i++) {
+    for (i = 60; i < (int)_countof(W); i++) {
         t = ((a << 5) | (a >> 27)) + (b ^ c ^ d) + e + W[i] + 0xCA62C1D6;
         e = d;
         d = c;
@@ -569,7 +569,7 @@ void __stdcall SHA0_Transform(uint32_t * pShaCtx) {
 }
 
 void __stdcall NET_SID_CLIENT_ClearSHAContexts() {
-    memset(g_SHA1Contexts, 0, 0x114);
+    memset(g_SHA1Contexts, 0, sizeof(g_SHA1Contexts));
 }
 
 void __fastcall NET_SID_CLIENT_GetSHAState(int32_t nCtxIndex, uint32_t * pdwStateOut) {
@@ -838,7 +838,7 @@ void __fastcall NET_SID_CLIENT_IDEACrypt(uint16_t * pPlaintext, short * pCiphert
 }
 
 void __stdcall NET_SID_CLIENT_ClearIDEAContexts() {
-    memset(g_IDEAKeySchedules, 0, 0x138);
+    memset(g_IDEAKeySchedules, 0, sizeof(g_IDEAKeySchedules));
 }
 
 } // namespace Bnclient::_net_sid

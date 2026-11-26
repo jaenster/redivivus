@@ -41,6 +41,7 @@ static_assert(offsetof(D2LvlSubTxt, pDrlgFile) == 0x50, "D2LvlSubTxt: the data f
 #ifndef D2_FREE_AT
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(D2AutoMapLvlTbls) == 0x20, "D2AutoMapLvlTbls is 0x20 bytes on x86");
 
 
 static char gaAutomapTileNames[20][8] = {
@@ -255,8 +256,8 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
       D2LevelsTxt* pDVar1;
       pDVar1 = MonsterTbls::sgtDataTable.pTxtLevels;
       /* Convert string to widestring */ pWVar2 = (uint16_t*)&MonsterTbls::sgtDataTable.pTxtLevels[i].wszLevelName[0];
-      memset(pWVar2, 0, 0x50);
-      memset((void*)&pDVar1[i].wszLevelWarp[0], 0, 0x50);
+      memset(pWVar2, 0, sizeof(MonsterTbls::sgtDataTable.pTxtLevels[i].wszLevelName));
+      memset((void*)&pDVar1[i].wszLevelWarp[0], 0, sizeof(pDVar1[i].wszLevelWarp));
       D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pWVar2, D2Lang::StrTable::strtable::STRTABLE_GetStringByKey((uint8_t*)&pDVar1[i].LevelName[0]), 0x28);
       nWideCharBufLen = 0x28;
       pDVar1[i].wszLevelName[39] = 0;
@@ -377,8 +378,8 @@ static void LVLTBLS_BuildPortalLevelArray(D2LevelDefsTxt * pTxtLevelDefs) {
     }
 
     if (nPortalLevelCount) {
-      gpPortalLevelArray = (eD2LevelId*)D2_ALLOC_POOL_AT(nullptr, nPortalLevelCount * 4, ".\\DATATBLS\\LvlTbls.cpp", 0x16c);
-      memset(gpPortalLevelArray, 0, nPortalLevelCount * 4);
+      gpPortalLevelArray = (eD2LevelId*)D2_ALLOC_POOL_AT(nullptr, nPortalLevelCount * sizeof(eD2LevelId), ".\\DATATBLS\\LvlTbls.cpp", 0x16c);
+      memset(gpPortalLevelArray, 0, nPortalLevelCount * sizeof(eD2LevelId));
     }
 
     int nPortalIndex = 0;
@@ -641,7 +642,7 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoad
     do {
       D2LvlPrestTxt* pRow = &pLvlPrestTxt[nRowCount];
       if (bIsExpansion || !pRow->Expansion) {
-        for (nFileIdx = 0; nFileIdx < 6; nFileIdx++) {
+        for (nFileIdx = 0; nFileIdx < (int)_countof(pRow->File); nFileIdx++) {
           LVLTBLS_FixPathSlashes("DATA\\GLOBAL\\TILES", pRow->File[nFileIdx]);
           if (bLoadDrlgFiles && strlen(pRow->File[nFileIdx]) > 1) {
             Drlg::Preset::AllocDrlgFile(&pTxtLvlTbls[nRowCount * 6 + nFileIdx], nullptr, pRow->File[nFileIdx]);
@@ -1698,8 +1699,8 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
       {"end", FIELDTYPE_END, 0, 0, 0}
     };
     D2AutomapTxt* pTxtAutomap = (D2AutomapTxt*)DataTbls::CompileTxt(pMemory, "automap", automap, &nTxtAutomapSize, 0x2c);
-    D2AutoMapLvlTbls* pAutoMapLvlTbls_lcl = (D2AutoMapLvlTbls*)D2_ALLOC_POOL_AT(nullptr, nTxtAutomapSize << 5, ".\\DATATBLS\\LvlTbls.cpp", 0x4f7);
-    memset(pAutoMapLvlTbls_lcl, 0, nTxtAutomapSize << 5);
+    D2AutoMapLvlTbls* pAutoMapLvlTbls_lcl = (D2AutoMapLvlTbls*)D2_ALLOC_POOL_AT(nullptr, nTxtAutomapSize * sizeof(D2AutoMapLvlTbls), ".\\DATATBLS\\LvlTbls.cpp", 0x4f7);
+    memset(pAutoMapLvlTbls_lcl, 0, nTxtAutomapSize * sizeof(D2AutoMapLvlTbls));
     for (int nTxtRow = 0; nTxtRow < nTxtAutomapSize; nTxtRow++) {
       D2AutomapTxt* pTxtRow = &pTxtAutomap[nTxtRow];
       D2AutoMapLvlTbls* pLvlRow = &pAutoMapLvlTbls_lcl[nTxtRow];
@@ -1713,7 +1714,7 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
       pLvlRow->nCellNo[2] = pTxtRow->Cell[2];
       pLvlRow->nCellNo[3] = pTxtRow->Cell[3];
       pLvlRow->nSize = 0;
-      for (int nCel = 0; nCel < 4; nCel++) {
+      for (int nCel = 0; nCel < (int)_countof(pLvlRow->nCellNo); nCel++) {
         if (pLvlRow->nCellNo[nCel] == -1) {
           break;
         }

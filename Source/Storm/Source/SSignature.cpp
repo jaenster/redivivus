@@ -341,7 +341,7 @@ void __fastcall Sha1_Pump(uint32_t * pHashState, uint8_t * pBuffer) {
       aMsgSchedule[nIndex + 0x10] = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)pBuffer[8] << 8 | (uint16_t)(uint8_t)pBuffer[9]) << 8 | (uint32_t)(uint8_t)byMsgByte10) << 8 | (uint32_t)(uint8_t)pBuffer[0xb]);
       aMsgSchedule[nIndex + 0x11] = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)pBuffer[0xc] << 8 | (uint16_t)(uint8_t)pBuffer[0xd]) << 8 | (uint32_t)(uint8_t)byMsgByte0e) << 8 | (uint32_t)(uint8_t)pBuffer[0xf]);
       nIndex = nIndex2;
-      pBuffer += 0x10;
+      pBuffer += 4 * sizeof(uint32_t);
     } while (nIndex2 < 0x10);
 
     uint32_t* pSchedule = aMsgSchedule + nIndex2;
@@ -469,21 +469,21 @@ void __thiscall Sha1_Append(D2Sha1ContextStrc * pCtx, uint8_t * pData, uint32_t 
         return;
       }
 
-      for (; nBufIndex < 0x40; nBufIndex++) {
+      for (; nBufIndex < sizeof(pCtx->aBuffer); nBufIndex++) {
         pCtx->aBuffer[nBufIndex] = pCursor[nBufIndex];
       }
 
       Sha1_Pump(pCtx->aState, pCtx->aBuffer);
-      nLen -= 0x40;
-      pCursor += 0x40;
+      nLen -= sizeof(pCtx->aBuffer);
+      pCursor += sizeof(pCtx->aBuffer);
       nBufIndex = 0;
     }
     if (nLen >= 0x40) {
       uint32_t nBlocks = nLen >> 6;
       do {
         Sha1_Pump(pCtx->aState, pCursor);
-        nLen -= 0x40;
-        pCursor += 0x40;
+        nLen -= sizeof(pCtx->aBuffer);
+        pCursor += sizeof(pCtx->aBuffer);
         nBlocks--;
       } while (nBlocks);
     }
@@ -609,7 +609,7 @@ int __thiscall Sha1_Finalize(D2Sha1ContextStrc * pCtx, uint8_t * pDigest) {
       *pDigestCursor = (uint8_t)(dwStateWord >> 0x10);
       pDigestCursor[-1] = (uint8_t)(dwStateWord >> 0x18);
       pStateCursor++;
-      pDigestCursor += 4;
+      pDigestCursor += sizeof(*pStateCursor);
     }
 
     return dwStateWord >> 0x18;

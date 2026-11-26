@@ -21,7 +21,9 @@ namespace Redivivus { namespace Server {
 // Returns the host's function table; table[0] loads the data, runs the server until it
 // shuts down and returns the next app mode (APPMODE_mode0). Called once, from
 // ApplicationRunCurrentMode, after the game has parsed the command line and D2.ini.
-fnAppModeRun * __fastcall ServerHost_Init(HMODULE hModule);
+// The parenthesised declarator keeps __fastcall on this function: written as
+// `fnAppModeRun * __fastcall ServerHost_Init(...)`, clang-cl gives it to the pointee.
+fnAppModeRun * (__fastcall ServerHost_Init)(HMODULE hModule);
 
 // Called once after table[0] returns.
 void __stdcall ServerHost_Shutdown();

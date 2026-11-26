@@ -71,7 +71,7 @@ void __stdcall STATES_ClearGfxFlags(D2UnitStrc * pUnit) {
     }
 
     int nBufSize = ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
-    memset(pGfxFlags, 0, nBufSize / 32 * 4);
+    memset(pGfxFlags, 0, nBufSize / (int)(sizeof(uint32_t) * CHAR_BIT) * sizeof(uint32_t));
 }
 
 BOOL __stdcall STATES_HasAnyGfxFlag(D2UnitStrc * pUnit) {

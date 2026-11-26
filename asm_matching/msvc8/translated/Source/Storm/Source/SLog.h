@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2SLogStrc
 #define D2_DEFINED_D2SLogStrc
-__pragma(pack(push, 1)) struct D2SLogStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SLogStrc {
     /* 0x00 */ uint32_t nHandle; // the HSLOG this entry belongs to (slot = nHandle & 3)
     /* 0x04 */ struct D2SLogStrc * pNext; // next log in the slot's list
     /* 0x08 */ HANDLE hFile; // WriteFile/FlushFileBuffers target (SLOG_FlushLog); 0xffffffff until opened
@@ -26,7 +26,7 @@ __pragma(pack(push, 1)) struct D2SLogStrc {
     /* 0x14 */ int32_t nIndent; // spaces written by SLOG_OutputIndent (capped at 0x80)
     /* 0x18 */ BOOL bTimestamps; // SLOG_OutputTime writes the time prefix only when set
     /* 0x1C */ char acBuffer[65536];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SLogStrc
 namespace Storm { namespace Source { namespace SLog {

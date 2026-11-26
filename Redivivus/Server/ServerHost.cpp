@@ -201,7 +201,7 @@ fnAppModeRun gpfnServerHostRun = &RunServerHost;
 
 }  // namespace
 
-fnAppModeRun * __fastcall ServerHost_Init(HMODULE) {
+fnAppModeRun * (__fastcall ServerHost_Init)(HMODULE) {
     SetConsoleCtrlHandler(&ConsoleCtrlHandler, TRUE);
     return &gpfnServerHostRun;
 }

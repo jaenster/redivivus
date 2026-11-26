@@ -54,7 +54,7 @@ static void DRLGOUTROOM_PlaceAct5SpecialPresets(D2DrlgLevelStrc * pLevel) {
     int nX;
     int32_t nLvlPrestId;
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < (int)_countof(gaAct5SpecialPresetTable_0); i++) {
       if (pLevel->eD2LevelId == gaAct5SpecialPresetTable_0[i].eLevelId) {
         if (pLevel->sCoordinatesAndSize.WorldSize.x > pLevel->sCoordinatesAndSize.WorldSize.y) {
           nLvlPrestId = gaAct5SpecialPresetTable_0[i].nLvlPrestHorz;
@@ -389,7 +389,7 @@ void __stdcall DRLGOUTROOM_PlaceAct5SceneryPresets(D2DrlgLevelStrc * pLevel) {
     BOOL bSuccess;
     int32_t nPresetId;
     BOOL bTaller = pLevel->sCoordinatesAndSize.WorldSize.x < pLevel->sCoordinatesAndSize.WorldSize.y;
-    for (int i = 0; i < 15; i++) {
+    for (int i = 0; i < (int)_countof(gaAct5SceneryPresetTable_0); i++) {
       if (pLevel->eD2LevelId == gaAct5SceneryPresetTable_0[i][0]) {
         if (bTaller) {
           nPresetId = gaAct5SceneryPresetTable_0[i][1];

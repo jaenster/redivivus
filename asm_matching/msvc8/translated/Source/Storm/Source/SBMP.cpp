@@ -15,6 +15,17 @@ static_assert(sizeof(void*) != 4 || sizeof(D2GifLzwEncoderStrc) == 0x134, "SMemZ
 typedef void * (__stdcall *pfnSBmpAllocCallback)(uint32_t nSize);
 #endif
 
+#define HSIZE 5003 // GIF LZW hash table size for 80% occupancy
+
+// One palette entry as GIF and PCX files store it.
+struct D2SBmpRgbTripleStrc {
+    uint8_t byRed;
+    uint8_t byGreen;
+    uint8_t byBlue;
+};
+static_assert(sizeof(D2SBmpRgbTripleStrc) == 3, "GIF/PCX palette entries are 3 bytes");
+static_assert(sizeof(D2TgaHeaderStrc) == 0x12, "the TGA file header is 0x12 bytes");
+
 namespace Storm { namespace Source { namespace SBMP {
 
 // Validates TGA file header structure. Checks image type (1, 2, 9, or 10), color map type (0 or 1), bit depth (8, 24, or 32), and verifies image dimensions are within valid range (< 257).
@@ -38,10 +49,10 @@ static BOOL __fastcall SBMP_DecodeTGAPalette(D2TgaHeaderStrc * pHeader, int, int
       return 0;
     }
 
-    SMem::SMemZero(pPaletteOut, nFirstEntry * 4);
+    SMem::SMemZero(pPaletteOut, nFirstEntry * sizeof(*pPaletteOut));
     if (nFirstEntry < nBytesPerEntry) {
       uint8_t* pDstEntry;
-      pDstEntry = (uint8_t*)((char*)pPaletteOut + (nFirstEntry * 4 + 2));
+      pDstEntry = (uint8_t*)(pPaletteOut + nFirstEntry) + 2;
       nFirstEntry += nEntryCount;
       do {
         pDstEntry[-2] = pPaletteData[2];
@@ -55,12 +66,12 @@ static BOOL __fastcall SBMP_DecodeTGAPalette(D2TgaHeaderStrc * pHeader, int, int
 
         pDstEntry[1] = byAlpha;
         pPaletteData += nLastEntry;
-        pDstEntry += 4;
+        pDstEntry += sizeof(*pPaletteOut);
         nEntryCount--;
       } while (nEntryCount);
     }
 
-    SMem::SMemZero(pPaletteOut + nFirstEntry, (0x100 - nFirstEntry) * 4);
+    SMem::SMemZero(pPaletteOut + nFirstEntry, (0x100 - nFirstEntry) * sizeof(*pPaletteOut));
     return 1;
 }
 
@@ -75,9 +86,9 @@ static BOOL __fastcall SBMP_DecodeTGAPixels(uint8_t * pSrcData, uint8_t * pTgaHe
     uint8_t byPacketHeader;
     int nPixelsLeftInRow;
     uint8_t* pSrcDataEnd;
-    int32_t nWidth = (int32_t)*(uint16_t*)(pTgaHeader + 0xc);
+    int32_t nWidth = (int32_t)((D2TgaHeaderStrc*)pTgaHeader)->wWidth;
     int nBytesPerPixelStored = (int)(pTgaHeader[0x10] + 7) >> 3;
-    size_t nTotalPixelBytes = nBytesPerPixelStored * (uint32_t)*(uint16_t*)(pTgaHeader + 0xe) * nWidth;
+    size_t nTotalPixelBytes = nBytesPerPixelStored * (uint32_t)((D2TgaHeaderStrc*)pTgaHeader)->wHeight * nWidth;
     size_t nBytesToProcess = nMaxBytes;
     if (nMaxBytes >= (int)nTotalPixelBytes) {
       nBytesToProcess = nTotalPixelBytes;
@@ -101,7 +112,7 @@ static BOOL __fastcall SBMP_DecodeTGAPixels(uint8_t * pSrcData, uint8_t * pTgaHe
       pDstPixels += (nWidth - 1) * nBytesPerPixelStored;
     }
     if (!bFlipV) {
-      pDstPixels += (*(uint16_t*)(pTgaHeader + 0xe) - 1) * nBytesPerPixelStored * nWidth;
+      pDstPixels += (((D2TgaHeaderStrc*)pTgaHeader)->wHeight - 1) * nBytesPerPixelStored * nWidth;
     }
 
     switch (pTgaHeader[2]) {
@@ -346,22 +357,22 @@ static int __stdcall SBMP_LoadFromMemory(uint8_t * pData, uint32_t dataSize, uin
     }
 
     uint8_t byBpp = pData[0x10];
-    uint16_t wHeight = *(uint16_t*)(pData + 0xe);
+    uint16_t wHeight = ((D2TgaHeaderStrc*)pData)->wHeight;
     if (pData[1]) {
-      nColorMapSize = ((int)(pData[7] + 7) >> 3) * (uint32_t)*(uint16_t*)(pData + 5);
+      nColorMapSize = ((int)(((D2TgaHeaderStrc*)pData)->byColorMapEntrySize + 7) >> 3) * (uint32_t)((D2TgaHeaderStrc*)pData)->wColorMapLength;
     } else {
       nColorMapSize = 0;
     }
     if (pData[2] >= 9) {
       nPaletteDataSize = 1;
     } else {
-      nPaletteDataSize = ((int)(byBpp + 7) >> 3) * (uint32_t)wHeight * (uint32_t)*(uint16_t*)(pData + 0xc);
+      nPaletteDataSize = ((int)(byBpp + 7) >> 3) * (uint32_t)wHeight * (uint32_t)((D2TgaHeaderStrc*)pData)->wWidth;
     }
     if ((uint32_t)*pData + nPaletteDataSize + 0x12 + nColorMapSize > dataSize) {
       return 0;
     }
     if (pWidth) {
-      *pWidth = (uint32_t)*(uint16_t*)(pData + 0xc);
+      *pWidth = (uint32_t)((D2TgaHeaderStrc*)pData)->wWidth;
     }
     if (pHeight) {
       *pHeight = (uint32_t)wHeight;
@@ -441,8 +452,8 @@ static int __fastcall SBMP_WriteTGA(uint8_t * pPixels, int, void * hFile, uint8_
         pDstPalEntry[-1] = pSrcPalEntry[1];
         *pDstPalEntry = *pSrcPalEntry;
         pDstPalEntry[1] = pSrcPalEntry[-1];
-        pSrcPalEntry += 4;
-        pDstPalEntry += 3;
+        pSrcPalEntry += sizeof(PALETTEENTRY);
+        pDstPalEntry += sizeof(D2SBmpRgbTripleStrc);
         nPalIdx--;
       } while (nPalIdx);
 
@@ -637,8 +648,8 @@ int __fastcall SBMP_EncodePcx256File(int nWidth, int nHeight, HANDLE hFile, uint
       pDstPalEntry[-1] = pSrcPalEntry[-2];
       *pDstPalEntry = pSrcPalEntry[-1];
       pDstPalEntry[1] = *pSrcPalEntry;
-      pSrcPalEntry += 4;
-      pDstPalEntry += 3;
+      pSrcPalEntry += sizeof(PALETTEENTRY);
+      pDstPalEntry += sizeof(D2SBmpRgbTripleStrc);
       nRowIdx = nPaletteEntriesLeft - 1;
     } while (nRowIdx);
 
@@ -853,12 +864,12 @@ static int __stdcall SBMP_DecodeBmpFile(D2MPQFileStrc * hFile, void * palette, v
     } else {
       if (palette) {
         tagRGBQUAD aPaletteScratch[256];
-        nResult = SFile::SFileReadFile(hFile, aPaletteScratch, 0x400, nullptr, (LPOVERLAPPED)0x0);
+        nResult = SFile::SFileReadFile(hFile, aPaletteScratch, sizeof(aPaletteScratch), nullptr, (LPOVERLAPPED)0x0);
         if (!nResult) {
           return 0;
         }
 
-        for (nResult = 0; nResult < 0x100; nResult++) {
+        for (nResult = 0; nResult < (int)(sizeof(aPaletteScratch) / sizeof(aPaletteScratch[0])); nResult++) {
           ((uint8_t*)palette)[nResult * 4] = aPaletteScratch[nResult].rgbRed;
           ((uint8_t*)palette)[nResult * 4 + 1] = aPaletteScratch[nResult].rgbGreen;
           ((uint8_t*)palette)[nResult * 4 + 2] = aPaletteScratch[nResult].rgbBlue;
@@ -895,41 +906,43 @@ static int __fastcall SBMP_DecodeBmpMem(int * pWidth, int * pHeight, uint32_t * 
     uint32_t srcStride;
     uint8_t* pDstPaletteByte;
     uint8_t* bHasPalette = pPalette;
+    BITMAPFILEHEADER* pFileHeader = (BITMAPFILEHEADER*)pData;
+    BITMAPINFOHEADER* pInfoHeader = (BITMAPINFOHEADER*)(pFileHeader + 1);
     if (pWidth) {
-      *pWidth = *(int*)(pData + 0x12);
+      *pWidth = pInfoHeader->biWidth;
     }
     if (pHeight) {
-      *pHeight = *(int*)(pData + 0x16);
+      *pHeight = pInfoHeader->biHeight;
     }
     if (pBpp) {
-      *pBpp = (uint32_t)*(uint16_t*)(pData + 0x1c);
+      *pBpp = (uint32_t)pInfoHeader->biBitCount;
     }
-    if (*(uint16_t*)(pData + 0x1c) > 8) {
+    if (pInfoHeader->biBitCount > 8) {
       bHasPalette = 0;
     } else {
       uint8_t* pSrcPaletteByte;
       if (pPalette) {
         pDstPaletteByte = pPalette + 3;
-        pSrcPaletteByte = pData + 0x37;
-        nPaletteByteOffset = pPalette - (pData + 0x36);
+        pSrcPaletteByte = (uint8_t*)(pInfoHeader + 1) + 1;
+        nPaletteByteOffset = pPalette - (uint8_t*)(pInfoHeader + 1);
         for (int nColor = 0; nColor < 0x100; nColor++) {
           pDstPaletteByte[-3] = pSrcPaletteByte[1];
           pSrcPaletteByte[nPaletteByteOffset] = *pSrcPaletteByte;
           pDstPaletteByte[-1] = pSrcPaletteByte[-1];
           *pDstPaletteByte = 0;
-          pSrcPaletteByte += 4;
-          pDstPaletteByte += 4;
+          pSrcPaletteByte += sizeof(RGBQUAD);
+          pDstPaletteByte += sizeof(PALETTEENTRY);
         }
       }
     }
     if (pixels) {
-      rowWidth = (int)((uint32_t)*(uint16_t*)(pData + 0x1c) * *(int*)(pData + 0x12)) >> 3;
+      rowWidth = (int)((uint32_t)pInfoHeader->biBitCount * pInfoHeader->biWidth) >> 3;
       srcStride = rowWidth;
       if (rowWidth & 3) {
         srcStride = rowWidth - (rowWidth & 3) + 4;
       }
 
-      SBMP_FlipImage(pixels, pData + (*(int*)(pData + 10) - (bHasPalette ? 0x400 : 0) - 0x36), dstSize, rowWidth, srcStride, *(int*)(pData + 0x16));
+      SBMP_FlipImage(pixels, pData + (pFileHeader->bfOffBits - (bHasPalette ? 256 * sizeof(RGBQUAD) : 0) - sizeof(BITMAPFILEHEADER) - sizeof(BITMAPINFOHEADER)), dstSize, rowWidth, srcStride, pInfoHeader->biHeight);
     }
 
     return 1;
@@ -959,10 +972,10 @@ static int __stdcall SBMP_EncodeBmp256File(uint8_t * nPalettePtr, uint32_t nSrcS
       sBmpInfoHdr.biCompression = 0;
       sBmpInfoHdr.biSizeImage = nSrcStride * height;
       WriteFile(hFile, (LPCVOID)&sBmpInfoHdr, 0x28, &dwBytesWritten, (LPOVERLAPPED)0x0);
-      for (int i = 0; i < 0x100; i++) {
-        aPalette[i].rgbRed = nPalettePtr[i * 4];
-        aPalette[i].rgbGreen = nPalettePtr[i * 4 + 1];
-        aPalette[i].rgbBlue = nPalettePtr[i * 4 + 2];
+      for (int i = 0; i < (int)(sizeof(aPalette) / sizeof(aPalette[0])); i++) {
+        aPalette[i].rgbRed = ((PALETTEENTRY*)nPalettePtr)[i].peRed;
+        aPalette[i].rgbGreen = ((PALETTEENTRY*)nPalettePtr)[i].peGreen;
+        aPalette[i].rgbBlue = ((PALETTEENTRY*)nPalettePtr)[i].peBlue;
         aPalette[i].rgbReserved = 0;
     }
 
@@ -982,7 +995,7 @@ static int __stdcall SBMP_EncodeBmp256File(uint8_t * nPalettePtr, uint32_t nSrcS
 
 // @blizzard ClearBlock (SBMP.CPP)
 static void __stdcall SBMP_ClearBlock(D2GifLzwEncoderStrc * pState, uint8_t * * pDstBuf) {
-    SMem::SMemZero(pState->pHashTable, 0x4e2c);
+    SMem::SMemZero(pState->pHashTable, HSIZE * sizeof(*pState->pHashTable));
     pState->nNextCode = pState->nClearCode + 2;
     SBMP_Output(pState, pDstBuf, pState->nClearCode);
     pState->nCodeSize = pState->nInitCodeSize;
@@ -1053,8 +1066,8 @@ int __fastcall SBMP_CompressGifImage(int nSrcLen, uint8_t * pSrcPixels, uint8_t 
     sEncoder.nEOFCode = 0x101;
     sEncoder.nNextCode = 0x102;
     sEncoder.bFirst = 1;
-    sEncoder.pHashTable = (int32_t*)SMem::SMemAlloc(0x4e2c, ".\\SOURCE\\SBMP.CPP", 0x388, 8);
-    sEncoder.pCodeTable = (uint32_t*)SMem::SMemAlloc(0x4e2c, ".\\SOURCE\\SBMP.CPP", 0x389, 8);
+    sEncoder.pHashTable = (int32_t*)SMem::SMemAlloc(HSIZE * sizeof(*sEncoder.pHashTable), ".\\SOURCE\\SBMP.CPP", 0x388, 8);
+    sEncoder.pCodeTable = (uint32_t*)SMem::SMemAlloc(HSIZE * sizeof(*sEncoder.pCodeTable), ".\\SOURCE\\SBMP.CPP", 0x389, 8);
     SBMP_Output(&sEncoder, &nDstOffset, sEncoder.nClearCode);
     for (; nSrcLen; nSrcLen--) {
       SBMP_CompressGifByte(&sEncoder, &nDstOffset, (uint32_t)*pSrcPixels);
@@ -1093,11 +1106,11 @@ static int __fastcall SBMP_EncodeGif256File(int width, int, void * hFile, uint8_
     abGifHeader[4] = 0x37;
     abGifHeader[5] = 0x61;
     abGifHeader[8] = (uint8_t)height;
-    abGifHeader[9] = *(uint8_t*)((char*)&height + 1);
+    abGifHeader[9] = (uint8_t)(height >> 8);
     abGifHeader[10] = 0xf7;
     abGifHeader[0xb] = 0;
     abGifHeader[0xc] = 0;
-    *(uint16_t*)((char*)&abGifHeader + 6) = (short int)width;
+    *(uint16_t*)&abGifHeader[6] = (short int)width;
     WriteFile(hFile, (LPCVOID)abGifHeader, 0xd, (LPDWORD)&pCompressedBuf, (LPOVERLAPPED)0x0);
     uint8_t* pDstPalEntry = aPaletteBuf + 1;
     uint8_t* pSrcPalEntry = palette + 2;
@@ -1106,8 +1119,8 @@ static int __fastcall SBMP_EncodeGif256File(int width, int, void * hFile, uint8_
       pDstPalEntry[-1] = pSrcPalEntry[-2];
       *pDstPalEntry = pSrcPalEntry[-1];
       pDstPalEntry[1] = *pSrcPalEntry;
-      pSrcPalEntry += 4;
-      pDstPalEntry += 3;
+      pSrcPalEntry += sizeof(PALETTEENTRY);
+      pDstPalEntry += sizeof(D2SBmpRgbTripleStrc);
       pCompressedBuf--;
     } while (pCompressedBuf);
 
@@ -1116,10 +1129,10 @@ static int __fastcall SBMP_EncodeGif256File(int width, int, void * hFile, uint8_
     WriteFile(hFile, (LPCVOID)&bySentinel, 1, (LPDWORD)&pCompressedBuf, (LPOVERLAPPED)0x0);
     /* LPOVERLAPPED lpOverlapped for WriteFile */ memset(abGifHeader, 0, 4 * sizeof(abGifHeader[0]));
     /* DWORD nNumberOfBytesToWrite for WriteFile */ /* LPCVOID lpBuffer for WriteFile */ /* HANDLE hFile for WriteFile */ abGifHeader[6] = (uint8_t)height;
-    abGifHeader[7] = *(uint8_t*)((char*)&height + 1);
+    abGifHeader[7] = (uint8_t)(height >> 8);
     abGifHeader[8] = 0;
     abGifHeader[9] = 8;
-    *(uint16_t*)((char*)&abGifHeader + 4) = (short int)width;
+    *(uint16_t*)&abGifHeader[4] = (short int)width;
     WriteFile(hFile, (LPCVOID)abGifHeader, 10, (LPDWORD)&pCompressedBuf, (LPOVERLAPPED)0x0);
     pCompressedBuf = (uint8_t*)SMem::SMemAlloc(width * nHeight * 2, ".\\SOURCE\\SBMP.CPP", 1000, 0);
     DWORD nNumberOfBytesToWrite = SBMP_CompressGifImage(width * nHeight, pPixelsCopy, pCompressedBuf);
@@ -1187,8 +1200,8 @@ static int __fastcall SBMP_DecodePcxFile(D2MPQFileStrc * hFile, uint8_t * pixels
         pSrcPalEntry[-1] = *pDstPalEntry;
         *pSrcPalEntry = pDstPalEntry[1];
         pSrcPalEntry[1] = '\0';
-        pDstPalEntry += 3;
-        pSrcPalEntry += 4;
+        pDstPalEntry += sizeof(D2SBmpRgbTripleStrc);
+        pSrcPalEntry += sizeof(PALETTEENTRY);
       }
     }
 
@@ -1229,8 +1242,8 @@ static int __fastcall SBMP_DecodePcxMem(uint32_t * pWidth, int, D2PcxHeaderStrc 
       pDstPalette[-1] = pSrcPalette[-1];
       *pDstPalette = *pSrcPalette;
       pDstPalette[1] = '\0';
-      pSrcPalette += 3;
-      pDstPalette += 4;
+      pSrcPalette += sizeof(D2SBmpRgbTripleStrc);
+      pDstPalette += sizeof(PALETTEENTRY);
     }
 
     return 1;

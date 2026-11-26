@@ -250,7 +250,12 @@ uint32_t __fastcall Unreferenced_00552f20(uint32_t nValue) {
 
 static D2UnitStrc * * __stdcall UNITS_GetHashTableSlot(eD2UnitType eUnitType, ::SGAMEDATA * pGame, uint32_t nUnitGUID) {
     if (eUnitType <= UNIT_ITEM) {
+#if D2_ARCH_X86
       return (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitType] + (nUnitGUID & 0x7f) * 4 - 0x2a);
+#elif D2_ARCH_X64
+      // ganUnitHashTableBaseOffsets holds x86 byte offsets of SGAMEDATA.pUnitList rows.
+      return &pGame->pUnitList[(ganUnitHashTableBaseOffsets[eUnitType] - 0x1120) / 0x200][nUnitGUID & 0x7f];
+#endif
     }
 
     return nullptr;
@@ -266,7 +271,12 @@ D2UnitStrc * __fastcall FindUnitFromTable(::SGAMEDATA * pGame, eD2UnitType eUnit
     if (eUnitType == UNIT_WARP) {
       ppHashSlot = &pGame->pWarpTileList;
     } else if (eUnitType <= UNIT_ITEM) {
-      ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitType] + (nUnitGUID & 0x7f) * 4 - 0x2a);
+#if D2_ARCH_X86
+      ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitType] + (nUnitGUID & 0x7f) * 4 - 0x2a); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+      // ganUnitHashTableBaseOffsets holds x86 byte offsets of SGAMEDATA.pUnitList rows.
+      ppHashSlot = &pGame->pUnitList[(ganUnitHashTableBaseOffsets[eUnitType] - 0x1120) / 0x200][nUnitGUID & 0x7f];
+#endif
     } else {
       ppHashSlot = 0;
     }
@@ -330,7 +340,12 @@ void __fastcall UNITS_InsertUnitIntoHashTable(D2UnitStrc * pUnit, ::SGAMEDATA * 
     if (eCachedUnitType == UNIT_WARP) {
       ppHashSlot = &pGame->pWarpTileList;
     } else if (eCachedUnitType <= UNIT_ITEM) {
+#if D2_ARCH_X86
       ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eCachedUnitType] + (pUnit->nUnitGUID & 0x7fU) * 4 - 0x2a);
+#elif D2_ARCH_X64
+      // ganUnitHashTableBaseOffsets holds x86 byte offsets of SGAMEDATA.pUnitList rows.
+      ppHashSlot = &pGame->pUnitList[(ganUnitHashTableBaseOffsets[eCachedUnitType] - 0x1120) / 0x200][pUnit->nUnitGUID & 0x7fU];
+#endif
     } else {
       ppHashSlot = 0;
     }
@@ -371,7 +386,12 @@ static void UNITS_RemoveUnitFromHashTable(::SGAMEDATA * pGame, D2UnitStrc * pUni
     if (eUnitTypeSwitch == UNIT_WARP) {
       ppHashSlot = &pGame->pWarpTileList;
     } else if (eUnitTypeSwitch <= UNIT_ITEM) {
-      ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitTypeSwitch] + (pUnit->nUnitGUID & 0x7fU) * 4 - 0x2a);
+#if D2_ARCH_X86
+      ppHashSlot = (D2UnitStrc**)(pGame->szGameName + ganUnitHashTableBaseOffsets[eUnitTypeSwitch] + (pUnit->nUnitGUID & 0x7fU) * 4 - 0x2a); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+      // ganUnitHashTableBaseOffsets holds x86 byte offsets of SGAMEDATA.pUnitList rows.
+      ppHashSlot = &pGame->pUnitList[(ganUnitHashTableBaseOffsets[eUnitTypeSwitch] - 0x1120) / 0x200][pUnit->nUnitGUID & 0x7fU];
+#endif
     } else {
       ppHashSlot = 0;
     }
@@ -529,7 +549,7 @@ void __fastcall SetupUpdateEvent_AttachEventSound(D2UnitStrc * pUnit, eD2TimerTy
       exit(-1);
     }
 
-    *(short int*)((intptr_t)&pUnit->uSideData + 10) = (short int)nUpdateType;
+    pUnit->uSideData.pServerSide.nEventSound = (int16_t)nUpdateType;
     pUnit->uSideData.pServerSide.pUpdateUnit = pUpdateUnit;
     D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
     pUnit->eUnitFlags |= UNITFLAG_HASEVENTSOUND;
@@ -1296,7 +1316,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill) {
     if (pUnit && pTarget && (GetTypeInline(pUnit) == UNIT_PLAYER || GetTypeInline(pTarget) == UNIT_MONSTER)) {
       D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] : nullptr;
-      if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pSkillsTxt && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         Ai::AiGeneral::AIGENERAL_GetOwnerData(pTarget, &eSkill, (int*)&pTarget);
         if (!pTarget && eSkill == GetGUIDInline(pUnit)) {
           return 1;

@@ -58,6 +58,7 @@
 #ifndef D2_NEW_POOL_AT
 #define D2_NEW_POOL_AT(pPool, T, szFile, nLine) ((T*)D2_ALLOC_POOL_AT((pPool), sizeof(T), (szFile), (nLine)))
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(D2CoordStrc) == 0x8, "D2CoordStrc is 0x8 bytes on x86");
 
 #ifndef RECON_FPTD_fAutoMap
 #define RECON_FPTD_fAutoMap
@@ -263,7 +264,7 @@ void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestI
     }
 
     D2CoordStrc* pMemoryToFree;
-    pMemoryToFree = (D2CoordStrc*)D2_ALLOC_POOL_AT(pMemory, nTotalCells * 8, ".\\DRLG\\OutJung.cpp", 0xcb);
+    pMemoryToFree = (D2CoordStrc*)D2_ALLOC_POOL_AT(pMemory, nTotalCells * sizeof(D2CoordStrc), ".\\DRLG\\OutJung.cpp", 0xcb);
     nLevelPrestId2 = 0;
     if ((int)nTotalCells > 0) {
       int iVar1;

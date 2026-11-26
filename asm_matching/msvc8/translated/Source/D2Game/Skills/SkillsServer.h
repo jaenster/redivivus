@@ -94,7 +94,7 @@ struct D2AreaHitNextGUIDCtx {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2BaalWaveParamStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BaalWaveParamStrc {
     /* 0x00 */ int nUnitFindFlags;
     /* 0x04 */ struct D2UnitStrc * pAttacker;
     /* 0x08 */ eD2Skills eSkillId;
@@ -104,7 +104,7 @@ __pragma(pack(push, 1)) struct D2BaalWaveParamStrc {
     /* 0x18 */ int nSkillLevel;
     /* 0x1C */ int nCallbackArg;
     /* 0x20 */ BOOL (__fastcall *fpFunction)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, int, uint32_t);
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2UnitFindArgStrc

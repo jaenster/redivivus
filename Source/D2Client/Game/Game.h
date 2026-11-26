@@ -41,12 +41,12 @@ typedef void (__fastcall *fnClientDrawProc)(int32_t nParam);
 // Data types
 #ifndef D2_DEFINED_BetaScreenEntry
 #define D2_DEFINED_BetaScreenEntry
-struct __attribute__((packed)) BetaScreenEntry {
+D2_PACKED_BEGIN struct __attribute__((packed)) BetaScreenEntry {
     /* 0x00 */ uint32_t lastLoadTick; // last GetTickCount when slide was loaded
     /* 0x04 */ struct DC6 * cachedImage; // cached DC6 image
     /* 0x08 */ uint8_t paletteIndex; // palette override ID
     /* 0x09 */ char * fileName; // path token for wsprintf
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_BetaScreenEntry
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
@@ -105,10 +105,10 @@ struct D2ClientTimerStrc {
 
 #endif // D2_DEFINED_D2ClientTimerStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2StormListHead {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2StormListHead {
     /* 0x00 */ int32_t nLinkOffset; // byte offset of the link node within each element; signed
     /* 0x04 */ StormLinkStrc terminator; // TSList m_terminator, a TSLink: m_prevlink is the terminator's own address when empty, m_next is ~&terminator (negative) at the end of the list
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 // =============================================================================

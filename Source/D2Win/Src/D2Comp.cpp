@@ -1826,7 +1826,6 @@ static D2CompCofListNodeStrc * D2COMP_FindCOFEntryByModeAndWeapon(D2CompCofListN
 }
 
 static uint8_t * __stdcall D2COMP_GetOrLoadCOF(D2CompCofListNodeStrc * * ppCOFList, int32_t nPlayerClassId, int32_t nAnimMode, uint32_t dwWeaponClassToken) {
-    char szCOFFilePath[260];
     if (!ppCOFList) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ca);
       exit(-1);
@@ -1835,8 +1834,7 @@ static uint8_t * __stdcall D2COMP_GetOrLoadCOF(D2CompCofListNodeStrc * * ppCOFLi
     D2CompCofListNodeStrc* pCOFEntry = D2COMP_FindCOFEntryByModeAndWeapon(ppCOFList, nAnimMode, dwWeaponClassToken);
     if (!pCOFEntry) {
       D2CompCofCacheEntryStrc* nCOFCacheHandle;
-      szCOFFilePath[0] = '\0';
-      memset(szCOFFilePath + 1, 0, 0x103);
+      char szCOFFilePath[260] = "";
       D2COMP_BuildCOFFilePath(nPlayerClassId, nAnimMode, dwWeaponClassToken, szCOFFilePath);
       if (szCOFFilePath[0] == '\0') {
         return nullptr;
@@ -2820,8 +2818,14 @@ static BOOL D2COMP_ValidateAndLoadCOFForUnit(D2CharSelCompStrc * pCompUnit) {
 }
 
 void __fastcall D2COMP_UnlinkCompositeUnit(D2CharSelStrc * pCharSel) {
-    D2CharSelCompStrc* nNext = *(D2CharSelCompStrc**)(pCharSel->szCharname + 200);
-    D2CharSelCompStrc* nPrev = *(D2CharSelCompStrc**)(pCharSel->szCharname + 0xc4);
+#if D2_ARCH_X86
+    D2CharSelCompStrc* nNext = *(D2CharSelCompStrc**)(pCharSel->szCharname + 200); // steer-ok: the other store is in the other D2_ARCH arm
+    D2CharSelCompStrc* nPrev = *(D2CharSelCompStrc**)(pCharSel->szCharname + 0xc4); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+    // pCharSel is the composite unit (D2CharSelCompStrc); the x86 body reads its links at +0xc8/+0xc4.
+    D2CharSelCompStrc* nNext = ((D2CharSelCompStrc*)pCharSel)->pPrev;
+    D2CharSelCompStrc* nPrev = ((D2CharSelCompStrc*)pCharSel)->pNext;
+#endif
     if (!nNext) {
       gpCompositeUnitListHead = nPrev;
       if (nPrev) {
@@ -3436,7 +3440,7 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
       exit(-1);
     } else {
       int32_t* pCofCacheEntry;
-      pCofCacheEntry = (int32_t*)D2_ALLOC_AT(4, ".\\Src\\D2Comp.cpp", 0x866);
+      pCofCacheEntry = (int32_t*)D2_ALLOC_AT(sizeof(int), ".\\Src\\D2Comp.cpp", 0x866);
       if (!pCofCacheEntry) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x867);
         exit(-1);
@@ -3476,7 +3480,7 @@ void __stdcall D2COMP_CreateCompositeUnit(D2CharSelCompStrc * pCompUnit, uint32_
         pSlotCode++;
       } while (nSlot < 0x10);
 
-      for (nCofResult = 0; nCofResult < 0x10; nCofResult++) {
+      for (nCofResult = 0; nCofResult < (int)_countof(pCompUnit->nComponentTransforms); nCofResult++) {
         cCodeByte = *szText++;
         pCompUnit->nComponentTransforms[nCofResult] = cCodeByte;
         if (cCodeByte != -1) {
@@ -3894,7 +3898,7 @@ int __fastcall D2COMP_DrawUnitNameAndTitle(D2CharSelCompStrc * pCompUnit) {
         }
 
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszTitlePrefix, szTitlePrefix, 0xff);
-        memset(wszTitleText, 0, 0x200);
+        memset(wszTitleText, 0, sizeof(wszTitleText));
         D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszTitleText, wszTitlePrefix);
         D2Lang::Unicode::UNISYS::AppendToBuffer(wszTitleText, pCompUnit->wszDisplayString2);
       }
@@ -3959,7 +3963,7 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2CharSelCompStrc * pA3Q6Data) {
 
     {
       BOOL bMouseInRect;
-      for (nIconAnchorY = 0; nIconAnchorY < 0x100; nIconAnchorY++) {
+      for (nIconAnchorY = 0; nIconAnchorY < (int)_countof(wszLineText); nIconAnchorY++) {
         wszLineText[nIconAnchorY] = L'\0';
       }
 
@@ -3993,7 +3997,7 @@ void __fastcall DRAW_OOG_ChannelPlayers(D2CharSelCompStrc * pA3Q6Data) {
         add_d2_character_lines:
         dwPlayerInfo = pA3Q6Data->nD2CharLevel;
         if ((int)dwPlayerInfo > 0) {
-          memset(wszLineText, 0, 0x200);
+          memset(wszLineText, 0, sizeof(wszLineText));
           D2Lang::Unicode::UNISYS::UNICODE_FormatWideString(0x100, wszLineText, D2Lang::StrTable::strtable::GetLocaleString(0x1399), dwPlayerInfo);
           D2COMP_AddTextLineToLayout(wszLineText, aLineLayouts[0], &__frame0.nLineCount, &__frame0.nMaxLineWidth, &__frame0.nTotalWidth);
           if (pA3Q6Data->nFlags & Fog::BitBuffer::gadwBitMasks[5]) {
@@ -4168,7 +4172,7 @@ void __stdcall D2COMP_AllocTxt_EverythingItems() {
     }
 
     gbD2CompItemsAllocated = 1;
-    memset(gaCompCharacterCompositeItems, 0, 0xbf4);
+    memset(gaCompCharacterCompositeItems, 0, sizeof(gaCompCharacterCompositeItems));
     D2BinFieldInputStrc aItemTypesFieldDefs[24] = {
       {"code", FIELDTYPE_CODE4, 0, 0, &gnItemTypesCacheHandle},
       {"equiv1", FIELDTYPE_CODE_SHORT, 0, 4, &gnItemTypesCacheHandle},
@@ -4327,7 +4331,7 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
     {
       int* pCofCache;
       memset(pCharSelComp, 0, sizeof(*pCharSelComp));
-      pCofCache = (int*)D2_ALLOC_AT(4, ".\\Src\\D2Comp.cpp", 0x866);
+      pCofCache = (int*)D2_ALLOC_AT(sizeof(int), ".\\Src\\D2Comp.cpp", 0x866);
       if (!pCofCache) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x867);
       exit(-1);
@@ -4368,7 +4372,7 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
           pComponentCode++;
         } while (nComponentSlot < 0x10);
 
-        for (nRemaining = 0; nRemaining < 0x10; nRemaining++) {
+        for (nRemaining = 0; nRemaining < (int)_countof(pCharSelComp->nComponentTransforms); nRemaining++) {
           cTransform = *szText++;
           pCharSelComp->nComponentTransforms[nRemaining] = cTransform;
           if (cTransform != -1) {
@@ -4398,3 +4402,4 @@ D2CharSelCompStrc * __stdcall AllocCharSelectComponent(uint32_t nPlayerClassId, 
 }
 
 } // namespace D2Win::Src::D2Comp
+

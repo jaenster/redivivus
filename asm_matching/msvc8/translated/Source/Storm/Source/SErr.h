@@ -29,21 +29,21 @@ typedef BOOL (__stdcall *pfnSErrDisplayCallback)(uint32_t dwErrorCode, char * sz
 // Data types
 #ifndef D2_DEFINED_D2SErrMessageSourceStrc
 #define D2_DEFINED_D2SErrMessageSourceStrc
-__pragma(pack(push, 1)) struct D2SErrMessageSourceStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SErrMessageSourceStrc {
     /* 0x00 */ uint16_t wModuleId;
     /* 0x02 */ uint8_t field_0x2;
     /* 0x03 */ uint8_t field_0x3;
     /* 0x04 */ HMODULE hModule;
     /* 0x08 */ struct D2SErrMessageSourceStrc * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SErrMessageSourceStrc
 #ifndef D2_DEFINED_HANDLER
 #define D2_DEFINED_HANDLER
-__pragma(pack(push, 1)) struct HANDLER {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct HANDLER {
     /* 0x00 */ StormLinkStrc m_link;
     /* 0x08 */ BOOL (__stdcall *pfnHandler)(uint32_t, char *, void *, int32_t, char *);
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_HANDLER
 #ifndef D2_DEFINED_SErrAppFatalContextStrc

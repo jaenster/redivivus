@@ -20,8 +20,7 @@ namespace Fog { namespace Src { namespace D2Net {
 
 void __stdcall NET_SERVER_SentPacketLog_Clear() {
     int nCopyCount;
-    *(uint32_t*)(char*)&gaServerSentPacketByteCounts[0] = 0;
-    *(uint32_t*)((char*)&gaServerSentPacketByteCounts[0] + 4) = 0;
+    gaServerSentPacketByteCounts[0] = 0;
     uint32_t* pSrc = (uint32_t*)gaServerSentPacketByteCounts;
     uint32_t* pDst = (uint32_t*)(gaServerSentPacketByteCounts + 1);
     for (nCopyCount = 0x1fe; nCopyCount; nCopyCount--) {
@@ -30,29 +29,19 @@ void __stdcall NET_SERVER_SentPacketLog_Clear() {
       pDst++;
     }
 
-    *(uint32_t*)(char*)&gnSentPacketRawBytes = 0;
-    *(uint32_t*)((char*)&gnSentPacketRawBytes + 4) = 0;
-    *(uint32_t*)(char*)&gnSentPacketWireBytes = 0;
-    *(uint32_t*)((char*)&gnSentPacketWireBytes + 4) = 0;
-    *(uint32_t*)(char*)&gnSentPacketHeaderBytes = 0;
-    *(uint32_t*)((char*)&gnSentPacketHeaderBytes + 4) = 0;
+    gnSentPacketRawBytes = 0;
+    gnSentPacketWireBytes = 0;
+    gnSentPacketHeaderBytes = 0;
     Source::SSComp::COMPRESS_BuildHuffmanDecodeTable(Source::SSComp::gabHuffmanCodeLengths);
 }
 
 void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, uint32_t nSize) {
     uint32_t nByteValue;
     uint32_t nByteIndex;
-    uint64_t* pByteCountEntry;
-    int* pOverflowCount;
     int nBitCount = 0;
     for (nByteIndex = 0; nByteIndex < nSize; nByteIndex++) {
-      uint64_t nOldByteCount;
       nByteValue = (uint32_t)(uint8_t)pBytes[nByteIndex];
-      pByteCountEntry = gaServerSentPacketByteCounts + nByteValue;
-      nOldByteCount = *pByteCountEntry;
-      *(uint32_t*)pByteCountEntry = (uint32_t)*pByteCountEntry + 1;
-      pOverflowCount = (int*)((char*)gaServerSentPacketByteCounts + (nByteValue * 8 + 4));
-      *pOverflowCount += (uint32_t)(-2 < (uint32_t)nOldByteCount);
+      gaServerSentPacketByteCounts[nByteValue]++;
       nBitCount += (uint32_t)Source::SSComp::gabHuffmanCodeLengths[nByteValue];
     }
 
@@ -64,15 +53,9 @@ void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, uint32_t nSize) {
       nHeaderSize = 2;
     }
 
-    bool bCarry = (uint32_t)((uint32_t)gnSentPacketRawBytes + (uint32_t)nSize) < (uint32_t)gnSentPacketRawBytes;
-    *(uint32_t*)(char*)&gnSentPacketRawBytes = (uint32_t)gnSentPacketRawBytes + nSize;
-    *(uint32_t*)((char*)&gnSentPacketRawBytes + 4) += (uint32_t)bCarry;
-    bCarry = (uint32_t)((uint32_t)gnSentPacketWireBytes + (uint32_t)nByteValue) < (uint32_t)gnSentPacketWireBytes;
-    *(uint32_t*)(char*)&gnSentPacketWireBytes = (uint32_t)gnSentPacketWireBytes + nByteValue;
-    *(uint32_t*)((char*)&gnSentPacketWireBytes + 4) += (uint32_t)bCarry;
-    bCarry = (uint32_t)((uint32_t)gnSentPacketHeaderBytes + (uint32_t)nHeaderSize) < (uint32_t)gnSentPacketHeaderBytes;
-    *(uint32_t*)(char*)&gnSentPacketHeaderBytes = (uint32_t)gnSentPacketHeaderBytes + nHeaderSize;
-    *(uint32_t*)((char*)&gnSentPacketHeaderBytes + 4) += (uint32_t)bCarry;
+    gnSentPacketRawBytes += nSize;
+    gnSentPacketWireBytes += nByteValue;
+    gnSentPacketHeaderBytes += nHeaderSize;
 }
 
 uint32_t __fastcall NET_D2GS_SERVER_CompressPacket(char * pBuffer, uint32_t nBufferSize, char * pBytes, uint32_t nBytesSize) {

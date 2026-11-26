@@ -85,7 +85,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::Assign(TSExplicitList<::S
 // Byte-identical to TSExplicitList<CELLIST,..>::Link 00602110; T not proven (no xrefs), filed with the SGAMEDATA block.
 template<> TSLink<::SGAMEDATA>* TSExplicitList<SGAMEDATA, -572662307>::Link(::SGAMEDATA * pNode) {
     if (pNode) {
-      return (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a));
+      return (TSLink<::SGAMEDATA>*)((char*)pNode + this->m_linkoffset);
     }
 
     return &this->m_terminator;
@@ -122,7 +122,7 @@ template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unrefere
 // stpl-orphan: a COMDAT copy in TSExplicitList<SGAMEDATA, -572662307> that no member owns
 TSLink<::SGAMEDATA>* __fastcall Link_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>* pThis, int, ::SGAMEDATA * pNode) {
     if (pNode) {
-      return (TSLink<::SGAMEDATA>*)(pNode->szGameName + (pThis->m_linkoffset - 0x2a));
+      return (TSLink<::SGAMEDATA>*)((char*)pNode + pThis->m_linkoffset);
     }
 
     return &pThis->m_terminator;
@@ -134,7 +134,7 @@ template<> void TSExplicitList<SGAMEDATA, -572662307>::UnlinkNode(::SGAMEDATA * 
     TSLink<::SGAMEDATA>* pNodeLink;
     TSLink<::SGAMEDATA>** pPrevLink;
     if (pNode) {
-      pNodeLink = (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a);
+      pNodeLink = (TSLink<::SGAMEDATA>*)((char*)pNode + this->m_linkoffset);
     } else {
       pNodeLink = &this->m_terminator;
     }
@@ -190,7 +190,7 @@ void __fastcall UnlinkNode_Unreferenced(TSExplicitList<::SGAMEDATA, -572662307>*
     TSLink<::SGAMEDATA>* pNodeLink;
     TSLink<::SGAMEDATA>** pPrevLink;
     if (pNode) {
-      pNodeLink = (TSLink<::SGAMEDATA>*)(pNode->szGameName + pThis->m_linkoffset - 0x2a);
+      pNodeLink = (TSLink<::SGAMEDATA>*)((char*)pNode + pThis->m_linkoffset);
     } else {
       pNodeLink = &pThis->m_terminator;
     }
@@ -277,7 +277,7 @@ template<> TSExplicitList<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>, 16>* TSE
     this->m_terminator.m_prevlink = 0;
     pTVar1->m_next = 0;
     pTVar1->m_prevlink = pTVar1;
-    this->m_linkoffset = 0x10;
+    this->m_linkoffset = offsetof(SGAMEDATAChunk, m_link);
     this->m_terminator.m_next = ~(uintptr_t)pTVar1;
     return this;
 }
@@ -316,12 +316,12 @@ template<> __declspec(noinline) inline void TSGrowableArray<SGAMEDATA>::ReallocD
     }
 
     this->m_alloc = nAlloc;
-    this->m_data = (::SGAMEDATA*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBuffer, nAlloc * 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0x10);
+    this->m_data = (::SGAMEDATA*)Storm::Source::SMem::SMemReAlloc((uint32_t*)pOldBuffer, nAlloc * sizeof(::SGAMEDATA), D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0x10);
     if (this->m_data) {
       return;
     }
 
-    this->m_data = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nAlloc * 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
+    this->m_data = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nAlloc * sizeof(::SGAMEDATA), D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
     if (!pOldBuffer) {
       return;
     }
@@ -407,7 +407,7 @@ template<> void TSGrowableArray<TSExplicitList<SGAMEDATA, -572662307>>::Destruct
 }
 
 template<> TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<SGAMEDATA, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunkNew = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, D2Client::GAME::Record::s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, -2, dwFlags | 8);
+    TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunkNew = (TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(SGAMEDATAChunk), D2Client::GAME::Record::s___AV__TSHashObjectChunk_USGAMEDA_0070f5f4, -2, dwFlags | 8);
     TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>* pChunk;
     if (pChunkNew) {
       pChunkNew->nArrayAlloc = 0;

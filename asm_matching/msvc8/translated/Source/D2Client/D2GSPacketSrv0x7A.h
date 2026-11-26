@@ -17,13 +17,13 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x7A
 #define D2_DEFINED_D2GSPacketSrv0x7A
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x7A {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x7A {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nAction;
     /* 0x02 */ uint8_t nPetType;
     /* 0x03 */ short wClassId;
     /* 0x05 */ int nPlayerGUID;
     /* 0x09 */ int nSummonGUID;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x7A

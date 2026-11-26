@@ -400,7 +400,7 @@ D2SkillStrc * __stdcall GetCurrentSkill(D2UnitStrc * pUnit) {
 D2UnitStrc * __stdcall AllocUnit(D2PoolManagerStrc * pMemory, eD2UnitType eUnitType) {
     D2UnitDataMonsterStrc* local_EAX_79;
     D2UnitStrc* pUnit = D2_NEW_POOL_AT(pMemory, D2UnitStrc, ".\\UNITS\\Units.cpp", 0x66e);
-    memset(pUnit, 0, 0xf4);
+    memset(pUnit, 0, sizeof(D2UnitStrc));
     pUnit->eUnitType = eUnitType;
     pUnit->pMemory = pMemory;
     switch (eUnitType) {
@@ -408,7 +408,7 @@ D2UnitStrc * __stdcall AllocUnit(D2PoolManagerStrc * pMemory, eD2UnitType eUnitT
         {
           local_EAX_79 = D2_NEW_POOL_AT(pMemory, D2UnitDataMonsterStrc, ".\\UNITS\\Units.cpp", 0x67b);
           pUnit->pUnitData.pUnitDataMonster = local_EAX_79;
-          memset(local_EAX_79, 0, 0x60);
+          memset(local_EAX_79, 0, sizeof(D2UnitDataMonsterStrc));
           break;
         }
     }
@@ -1888,7 +1888,7 @@ void __stdcall AllocPlayerData(D2UnitStrc * pUnit) {
 
       pUnitDataPlayer = D2_NEW_POOL_AT(pUnit->pMemory, D2UnitDataPlayerStrc, ".\\UNITS\\Units.cpp", 0xf52);
       pUnit->pUnitData.pUnitDataPlayer = pUnitDataPlayer;
-      memset(pUnitDataPlayer, 0, 0x16c);
+      memset(pUnitDataPlayer, 0, sizeof(D2UnitDataPlayerStrc));
       pUnit->pUnitData.pUnitDataPlayer->szCharName[0] = '\0';
       for (iActIdx = 0; iActIdx < 3; iActIdx++) {
         pQuestBuf = (D2BitBufferStrc*)QuestRecord::CreateBitBuffer(GetMemPool(pUnit));
@@ -1919,8 +1919,13 @@ void __stdcall FreePlayerData(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
 
       iActIdx = 0x1c;
       do {
+#if D2_ARCH_X86
         QuestRecord::FreeQuestRecordPool(pMemory, *(D2BitBufferStrc**)(pUnit->pUnitData.pUnitDataPlayer->szCharName + iActIdx - 0xc));
         Waypoints::Free(pMemory, *(D2WaypointStrc**)(pUnit->pUnitData.pUnitDataPlayer->szCharName + iActIdx));
+#elif D2_ARCH_X64
+        QuestRecord::FreeQuestRecordPool(pMemory, pUnit->pUnitData.pUnitDataPlayer->pQuestRecord[(iActIdx - 0x1c) / 4]);
+        Waypoints::Free(pMemory, pUnit->pUnitData.pUnitDataPlayer->pWaypoint[(iActIdx - 0x1c) / 4]);
+#endif
         iActIdx += 4;
       } while (iActIdx < 0x28);
 

@@ -30,11 +30,11 @@ struct D2ObjectModeArg {
 #endif // D2_DEFINED_D2ObjectModeArg
 #ifndef D2_DEFINED_D2ObjectOperateFnArg
 #define D2_DEFINED_D2ObjectOperateFnArg
-struct __attribute__((packed)) D2ObjectOperateFnArg {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ObjectOperateFnArg {
     /* 0x00 */ D2ObjectModeArg sArg;
     /* 0x08 */ struct D2UnitStrc * pAttacker;
     /* 0x0C */ struct D2SeedStrc * pSeed;
     /* 0x10 */ int nObjectClassId;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ObjectOperateFnArg

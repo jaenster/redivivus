@@ -25,10 +25,10 @@ typedef void (__stdcall *pfnSEvtHandler)(void * pData);
 // Data types
 #ifndef D2_DEFINED_BREAKCMD
 #define D2_DEFINED_BREAKCMD
-struct __attribute__((packed)) BREAKCMD {
+D2_PACKED_BEGIN struct __attribute__((packed)) BREAKCMD {
     /* 0x00 */ StormLinkStrc m_link;
     /* 0x08 */ void * pData;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_BREAKCMD
 #ifndef D2_DEFINED_D2SevtHandlerNodeStrc
@@ -63,10 +63,10 @@ struct D2SevtTypeEntryStrc {
 
 #endif // D2_DEFINED_D2SevtTypeEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-struct __attribute__((packed)) StormBreakCmdStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) StormBreakCmdStrc {
     /* 0x00 */ StormLinkStrc link;
     /* 0x08 */ void * pData;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Storm
 // =============================================================================

@@ -1133,7 +1133,7 @@ void __fastcall AllocRosterOther(int32_t nOwnerGUID, int32_t nRosterGUID) {
         exit(-1);
       }
 
-      memset(pRoster, 0, 0x84);
+      memset(pRoster, 0, sizeof(*pRoster));
       pRoster->nRosterGUID = nOwnerGUID;
       pRoster->pNext = gpRosterOther;
       gpRosterOther = pRoster;
@@ -1358,7 +1358,7 @@ void __fastcall ROSTER_AllocOrUpdatePlayer(int nPlayerGUID, int nCharType, char 
         }
       } else {
         pNewRoster = D2_NEW_AT(D2RosterStrc, ".\\GAME\\Roster.cpp", 0xd8);
-        memset(pNewRoster, 0, 0x84);
+        memset(pNewRoster, 0, sizeof(*pNewRoster));
       }
 
       pPlayerList = UNIT::PlayerList::AllocPlayerList();

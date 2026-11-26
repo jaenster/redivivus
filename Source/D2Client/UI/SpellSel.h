@@ -26,17 +26,17 @@ typedef uint32_t eD2Skills;
 // Data types
 #ifndef D2_DEFINED_D2ClassIconWithNameStrc
 #define D2_DEFINED_D2ClassIconWithNameStrc
-struct __attribute__((packed)) D2ClassIconWithNameStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ClassIconWithNameStrc {
     /* 0x00 */ struct DC6 * pD2Archive;
     /* 0x04 */ char szSpelliconPath[30];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ClassIconWithNameStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2SpellSelGridIndexStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SpellSelGridIndexStrc {
     /* 0x00 */ uint8_t nCount;
     /* 0x01 */ int dwParam;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2SpellSelGridRegionStrc

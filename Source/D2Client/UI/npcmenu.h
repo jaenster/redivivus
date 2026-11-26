@@ -37,7 +37,7 @@ struct D2SpeechBankStrc;
 // Data types
 #ifndef D2_DEFINED_D2HirelingHireData
 #define D2_DEFINED_D2HirelingHireData
-struct __attribute__((packed)) D2HirelingHireData {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2HirelingHireData {
     /* 0x00 */ int32_t nId;
     /* 0x04 */ int32_t nLevel;
     /* 0x08 */ int32_t nHp;
@@ -53,18 +53,18 @@ struct __attribute__((packed)) D2HirelingHireData {
     /* 0x30 */ int32_t nHireDescription;
     /* 0x34 */ int32_t field13_0x34;
     /* 0x38 */ int16_t field14_0x38;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2HirelingHireData
 #ifndef D2_DEFINED_D2NpcMenuOptions
 #define D2_DEFINED_D2NpcMenuOptions
-struct __attribute__((packed)) D2NpcMenuOptions {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2NpcMenuOptions {
     /* 0x00 */ int nNpcId;
     /* 0x04 */ int nOptionsCount;
     /* 0x08 */ short nOptionStringId[5];
     /* 0x12 */ D2NpcMenuOptionFunc nOptionCallback[5];
     /* 0x26 */ uint8_t bEnabled;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2NpcMenuOptions
 #ifndef D2_DEFINED_D2NpcQuestCallbackEntry
@@ -80,7 +80,7 @@ struct D2NpcQuestCallbackEntry {
 #endif // D2_DEFINED_D2NpcQuestCallbackEntry
 #ifndef D2_DEFINED_D2NPCSpeechStrc
 #define D2_DEFINED_D2NPCSpeechStrc
-struct __attribute__((packed)) D2NPCSpeechStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2NPCSpeechStrc {
     /* 0x00 */ int nNpcID;
     /* 0x04 */ uint8_t nAct;
     /* 0x05 */ struct D2SpeechBankStrc * pBank;
@@ -91,18 +91,18 @@ struct __attribute__((packed)) D2NPCSpeechStrc {
     /* 0x13 */ bool bActPortal; // npc is a 'act portal'
     /* 0x14 */ bool bNoIntro; // npc doesnt have an introduction
     /* 0x15 */ uint8_t bGreeting;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2NPCSpeechStrc
 #ifndef D2_DEFINED_D2SpeechBankStrc
 #define D2_DEFINED_D2SpeechBankStrc
-struct __attribute__((packed)) D2SpeechBankStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SpeechBankStrc {
     /* 0x00 */ uint16_t wStringId; // string id shown by TEXT_ShowNpcDialog (NPCMENU_SendCainIdentifyItems)
     /* 0x02 */ uint8_t bQuestCondition; // 0: always eligible; else eligible when GetQuestState(eQuest, Completed) == nQuestCompleted
     /* 0x03 */ int32_t nQuestCompleted; // required QUESTSTATE_Completed result (0/1), unaligned
     /* 0x07 */ eD2Quests eQuest; // quest passed to GetQuestState by NPCMENU_SelectRandomDialogOption
     /* 0x0B */ int32_t nPlayerClass; // player class this line is for, 7 = any class
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2SpeechBankStrc
 namespace D2Client::UI::npcmenu {

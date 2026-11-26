@@ -104,7 +104,7 @@ void __fastcall AddRosterPet(int32_t nRosterGUID, int32_t nOwnerGUID, int32_t nS
     while (true) {
       if (!pExisting) {
         pRosterPet = D2_NEW_AT(D2RosterPetStrc, ".\\GAME\\RosterPets.cpp", 0x7a);
-        memset(pRosterPet, 0, 0x34);
+        memset(pRosterPet, 0, sizeof(*pRosterPet));
         pRosterPet->nRosterGUID = nRosterGUID;
         pRosterPet->nOwnerGUID = nOwnerGUID;
         pRosterPet->nSkillID = nSkillId;

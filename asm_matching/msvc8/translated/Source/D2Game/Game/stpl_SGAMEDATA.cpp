@@ -8,6 +8,9 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+typedef TSHashObject< ::SGAMEDATA, HASHKEY_NONE> SGameHashObject;
+static_assert(sizeof(void*) != 4 || offsetof(SGameHashObject, m_linktoslot) == 4, "the game hash table links SGAMEDATA at +4");
+
 
 template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::SyncLeaveLock(int32_t nLockedHandle) {
     if (!nLockedHandle) {
@@ -48,7 +51,7 @@ template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::RawNext(::SGAMED
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::Next(::SGAMEDATA * pNode) {
-    TSLink<::SGAMEDATA>* pLink = pNode ? (TSLink<::SGAMEDATA>*)((char*)(pNode->szGameName + this->m_linkoffset - 0x26) - 4) : &this->m_terminator;
+    TSLink<::SGAMEDATA>* pLink = pNode ? (TSLink<::SGAMEDATA>*)((intptr_t)pNode + this->m_linkoffset) : &this->m_terminator;
     intptr_t dwNext = pLink->m_next;
     return (::SGAMEDATA*)(dwNext <= 0 ? 0 : dwNext);
 }
@@ -82,7 +85,11 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::DeleteNode(::SGAMEDATA * pNode) {
-    TSLink<::SGAMEDATA>* pSlotPtr = pNode ? (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a)) : &this->m_terminator;
+#if D2_ARCH_X86
+    TSLink<::SGAMEDATA>* pSlotPtr = pNode ? (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a)) : &this->m_terminator; // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+    TSLink<::SGAMEDATA>* pSlotPtr = pNode ? (TSLink<::SGAMEDATA>*)((char*)pNode + this->m_linkoffset) : &this->m_terminator;
+#endif
     ::SGAMEDATA* pNext = (::SGAMEDATA*)(pSlotPtr->m_next <= 0 ? 0 : pSlotPtr->m_next);
     pNode->Destructor();
     Storm::Source::SMem::SMemFree(pNode, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
@@ -101,7 +108,11 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASH
         break;
       }
 
+#if D2_ARCH_X86
       pGame = *(::SGAMEDATA**)(pGame->szGameName + this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_linkoffset - 0x26);
+#elif D2_ARCH_X64
+      pGame = (::SGAMEDATA*)((TSLink<::SGAMEDATA>*)((char*)pGame + this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_linkoffset))->m_next;
+#endif
     }
 
     return pGame;
@@ -174,7 +185,7 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
     TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pQServerStateSaved = pThis;
     pendingList.UnlinkAll();
     pendingList.m_terminator.m_prevlink = &pendingList.m_terminator;
-    pendingList.m_linkoffset = 4;
+    pendingList.m_linkoffset = (int)offsetof(SGameHashObject, m_linktoslot);
     pendingList.m_terminator.m_next = nOldBucket;
     nBucketIdx.nBucketIdx2 = 0;
     if (nNewMask) {
@@ -182,19 +193,19 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
       pPendingHead2 = pendingList.m_terminator.m_prevlink;
       do {
         while (0 < (nBucketNextLink = pThis->tSlotListArray.m_data[nOldBucketIdx].m_terminator.m_next)) {
-          pBackLink = (TSLink<::SGAMEDATA>*)(nBucketNextLink + 4);
+          pBackLink = &((::SGAMEDATA*)nBucketNextLink)->m_linktoslot;
           pNodeData = pBackLink->m_prevlink;
           if (pNodeData) {
             pOldBucket2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pBackLink, -1);
             *pOldBucket2 = pNodeData;
-            pBackLink->m_prevlink->m_next = *(intptr_t*)(nBucketNextLink + 8);
+            pBackLink->m_prevlink->m_next = ((::SGAMEDATA*)nBucketNextLink)->m_linktoslot.m_next;
             pBackLink->m_prevlink = 0;
-            *(uint32_t*)(nBucketNextLink + 8) = 0;
+            ((::SGAMEDATA*)nBucketNextLink)->m_linktoslot.m_next = 0;
             pPendingHead2 = pendingList.m_terminator.m_prevlink;
           }
 
           pBackLink->m_prevlink = pPendingHead2;
-          *(intptr_t*)(nBucketNextLink + 8) = pPendingHead2->m_next;
+          ((::SGAMEDATA*)nBucketNextLink)->m_linktoslot.m_next = pPendingHead2->m_next;
           pPendingHead2->m_next = nBucketNextLink;
           pPendingHead2 = pBackLink;
           pendingList.m_terminator.m_prevlink = pBackLink;
@@ -216,11 +227,11 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
       nResetCount = pOldBucket;
       do {
         pNodeNext = &pThis->tSlotListArray.m_data[nResetBucketOffset];
-        if (pNodeNext->m_linkoffset != 4) {
+        if (pNodeNext->m_linkoffset != (int)offsetof(SGameHashObject, m_linktoslot)) {
           pNodeNext->UnlinkAll();
           pPendingHead2 = &pNodeNext->m_terminator;
           pPendingHead2->m_prevlink = pPendingHead2;
-          pNodeNext->m_linkoffset = 4;
+          pNodeNext->m_linkoffset = (int)offsetof(SGameHashObject, m_linktoslot);
           pNodeNext->m_terminator.m_next = ~(uintptr_t)pPendingHead2;
         }
 
@@ -239,7 +250,6 @@ template<> __declspec(noinline) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>
       pBackLink = (TSLink<::SGAMEDATA>*)(pNodeNext->m_linkoffset + pendingList.m_terminator.m_next);
       pPendingHead2 = pBackLink->m_prevlink;
       if (pPendingHead2) {
-        intptr_t nUnlinkNext = pBackLink->m_next; // the unlinked node's m_next word, not the bucket mask
         pOldBucket2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pBackLink, -1);
         *pOldBucket2 = pPendingHead2;
         pBackLink->m_prevlink->m_next = pBackLink->m_next;
@@ -319,7 +329,11 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASH
     TSExplicitList<::SGAMEDATA, -572662307>* pSlotList = this->tSlotListArray.m_data + nIdInBucket; // steer-ok: the original computes the slot list argument before loading nExtraBytes and dwFlags (TSHashTable::New argument order)
     ::SGAMEDATA* pGame = vc8_thiscall(this->pVtable->InternalNew)(this, pSlotList, nExtraBytes, dwFlags);
     if (pGame) {
-      ppActiveListLink = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (this->tFullList.m_linkoffset - 0x2a));
+#if D2_ARCH_X86
+      ppActiveListLink = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (this->tFullList.m_linkoffset - 0x2a)); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+      ppActiveListLink = (TSLink<::SGAMEDATA>*)((char*)pGame + this->tFullList.m_linkoffset);
+#endif
     } else {
       ppActiveListLink = &this->tFullList.m_terminator;
     }
@@ -327,7 +341,7 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASH
     TSLink<::SGAMEDATA>* pExistingHead = ppActiveListLink->m_prevlink;
     if (pExistingHead) {
       char* pBackLink;
-      intptr_t nUnlinkNext = ppActiveListLink->m_next; // the unlinked node's m_next word, not a bucket index
+      intptr_t nUnlinkNext = ppActiveListLink->m_next; // steer-ok: unused read kept as merged; the unlinked node's m_next word, not a bucket index
       pBackLink = (char*)D2_StormNextLink(ppActiveListLink, -1);
       *(TSLink<::SGAMEDATA>**)pBackLink = pExistingHead;
       ppActiveListLink->m_prevlink->m_next = ppActiveListLink->m_next;

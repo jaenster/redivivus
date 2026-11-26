@@ -17,12 +17,12 @@
 // Data types
 #ifndef D2_DEFINED_D2ProfilingDumpFrequency
 #define D2_DEFINED_D2ProfilingDumpFrequency
-struct __attribute__((packed)) D2ProfilingDumpFrequency {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ProfilingDumpFrequency {
     /* 0x00 */ char szFunction[104]; // profiled function's display name
     /* 0x68 */ LARGE_INTEGER liTime; // accumulated QueryPerformanceCounter ticks
     /* 0x70 */ int nCount; // number of PROFCORE_AccumulateTime calls
     /* 0x74 */ int nUnused; // never accessed
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ProfilingDumpFrequency
 namespace D2Common::Logging::ProfCore {

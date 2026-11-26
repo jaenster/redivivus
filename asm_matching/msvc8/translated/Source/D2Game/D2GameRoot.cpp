@@ -189,7 +189,7 @@ int __fastcall TASK_GetTimeUntilNextTask(uint32_t nQueueSlot) {
     if (pFirstTask != &pTaskSlot->sTaskList && pFirstTask) {
       uint32_t uVar1;
       uVar1 = GAME::Task::TASK_GetTimestamp();
-      nTimeDelta = ((D2TaskNodeStrc*)((char*)pFirstTask - 0xc))->dwTimestamp - uVar1;
+      nTimeDelta = ((D2TaskNodeStrc*)((char*)pFirstTask - offsetof(D2TaskNodeStrc, sLink)))->dwTimestamp - uVar1;
     }
     if (pTaskSlot->nSlotIndex >= 0x20) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x97);

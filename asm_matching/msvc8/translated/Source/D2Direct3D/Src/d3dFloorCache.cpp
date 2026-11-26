@@ -13,6 +13,8 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(DDSURFACEDESC2) == 0x7c, "DDSURFACEDESC2: dwSize and the clear after it must be the 0x7c bytes 1.14d uses");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_AT
@@ -424,8 +426,8 @@ void __stdcall D3D_RenderBinkVideoFrame() {
       return;
     }
 
-    dwSurfDescSize.dwSize = 0x7c;
-    memset(&dwSurfDescSize.dwFlags, 0, 0x78);
+    dwSurfDescSize.dwSize = sizeof(dwSurfDescSize);
+    memset(&dwSurfDescSize.dwFlags, 0, sizeof(dwSurfDescSize) - sizeof(dwSurfDescSize.dwSize));
     BinkDoFrame(gpBinkVideoD3D);
     if (!RENDERER_SelectedRendererCore) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3d);

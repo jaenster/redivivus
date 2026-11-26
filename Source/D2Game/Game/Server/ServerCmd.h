@@ -20,19 +20,19 @@ struct D2UnitStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketSrv0xB2 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0xB2 {
     /* 0x00 */ uint8_t nPacketId; // 0xB2
     /* 0x01 */ char szPlayerName[48];
     /* 0x31 */ uint16_t nUniqueCode;
     /* 0x33 */ uint16_t nGuildFlags;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketSrv0xB4 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0xB4 {
     /* 0x00 */ uint8_t nPacketId; // 0xB4
     /* 0x01 */ int32_t nReason; // EDX
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 namespace D2Game::GAME::Server::ServerCmd {

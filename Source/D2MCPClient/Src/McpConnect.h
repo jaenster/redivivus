@@ -33,16 +33,16 @@ typedef void (__stdcall *pfnVoidNoArgCallback)();
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
-struct __attribute__((packed)) MCP_CHARCREATE {
+D2_PACKED_BEGIN struct __attribute__((packed)) MCP_CHARCREATE {
     /* 0x00 */ char nPacketId;
     /* 0x01 */ DWORD dwCharClass;
     /* 0x05 */ WORD wCharFlags;
     /* 0x07 */ char szCharName[1025];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2MCPClient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
-struct __attribute__((packed)) MCP_CREATEGAME {
+D2_PACKED_BEGIN struct __attribute__((packed)) MCP_CREATEGAME {
     /* 0x00 */ char nPacketId;
     /* 0x01 */ short RequestId;
     /* 0x03 */ int nGameFlags;
@@ -50,51 +50,51 @@ struct __attribute__((packed)) MCP_CREATEGAME {
     /* 0x08 */ char nDifference;
     /* 0x09 */ char nMaxPlayers;
     /* 0x0A */ char szStrings[1026];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2MCPClient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
-struct __attribute__((packed)) MCPPacketClt0x01 {
+D2_PACKED_BEGIN struct __attribute__((packed)) MCPPacketClt0x01 {
     /* 0x00 */ char nPacketId;
     /* 0x01 */ int MCPCookie;
     /* 0x05 */ int MCPStatus;
-    /* 0x09 */ char MCPChunk1[8];
-    /* 0x11 */ char MCPChunk2[48];
+    /* 0x09 */ uint32_t MCPChunk1[2];
+    /* 0x11 */ uint32_t MCPChunk2[12];
     /* 0x41 */ char BnetName[1027];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2MCPClient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
-struct __attribute__((packed)) MCPPacketClt0x05 {
+D2_PACKED_BEGIN struct __attribute__((packed)) MCPPacketClt0x05 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint16_t wRequestId;
     /* 0x03 */ uint32_t dwGameField;
     /* 0x07 */ char szData[1025];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2MCPClient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
-struct __attribute__((packed)) MCPPacketClt0x16 {
+D2_PACKED_BEGIN struct __attribute__((packed)) MCPPacketClt0x16 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwField1;
     /* 0x05 */ uint32_t dwField2;
     /* 0x09 */ char szData[1027];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2MCPClient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
-struct __attribute__((packed)) MCPPacketClt0x19 {
+D2_PACKED_BEGIN struct __attribute__((packed)) MCPPacketClt0x19 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t nRequestedCount; // characters requested (MCP 0x19 CHARLIST2)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2MCPClient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2MCPClient)
-struct __attribute__((packed)) MCPPacketCltStr {
+D2_PACKED_BEGIN struct __attribute__((packed)) MCPPacketCltStr {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint16_t wRequestId;
     /* 0x03 */ char szData[1025];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2MCPClient
 namespace D2MCPClient::McpConnect {

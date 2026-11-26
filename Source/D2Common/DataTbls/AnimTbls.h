@@ -23,12 +23,12 @@ struct D2UnitStrc;
 // Data types
 #ifndef D2_DEFINED_D2AnimDataRecordStrc
 #define D2_DEFINED_D2AnimDataRecordStrc
-struct __attribute__((packed)) D2AnimDataRecordStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AnimDataRecordStrc {
     /* 0x00 */ char szAnimDataName[8];
     /* 0x08 */ int nFrames;
     /* 0x0C */ int nAnimSpeed;
     /* 0x10 */ uint8_t pFrameFlags[144];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2AnimDataRecordStrc
 namespace D2Common::DATATBLS::AnimTbls {

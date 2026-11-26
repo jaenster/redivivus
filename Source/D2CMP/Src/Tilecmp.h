@@ -51,7 +51,8 @@ struct D2PaletteEntryStrc {
 struct D2TileCmpTileNodeStrc {
     /* 0x00 */ short wOffsetX; // Sub-tile X offset in isometric space
     /* 0x02 */ short wOffsetY; // Sub-tile Y offset in isometric space
-    /* 0x04 */ uint16_t wUnk_04;
+    /* 0x04 */ uint8_t nSubIdxLo; // subtile column in the 5x5 grid
+    /* 0x05 */ uint8_t nSubIdxHi; // subtile row in the 5x5 grid
     /* 0x06 */ uint16_t wFlags; // Flags: bit0=transparent, bit13=valid (|=0x2001 in ExtractIsometricSubTile)
     /* 0x08 */ uint16_t wPixelSize; // Size of pixel buffer in bytes (0x600 for full 32x32 sub-tile)
     /* 0x0A */ uint16_t wUnk_0A;
@@ -71,7 +72,7 @@ struct D2TileCmpTileSetListStrc {
 #endif // D2_MODULE_D2CMP
 #ifndef D2_DEFINED_D2TileCmpTileSetStrc
 #define D2_DEFINED_D2TileCmpTileSetStrc
-struct __attribute__((packed)) D2TileCmpTileSetStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TileCmpTileSetStrc {
     /* 0x00 */ int nMinX; // Bounding min X; serialized: width = nMaxX - nMinX
     /* 0x04 */ int nMinY; // Bounding min Y; serialized: height = nMaxY - nMinY
     /* 0x08 */ int nMaxX; // bounding max X; TILECMP_InitTileSetFromDT1 sets 0xa0, TILECMP_SerializeTileSet writes width = nMaxX - nMinX
@@ -97,7 +98,7 @@ struct __attribute__((packed)) D2TileCmpTileSetStrc {
     /* 0x54 */ int nNodeCount; // Number of cached sub-tile nodes (+0x54, incremented by Generate25SubTiles)
     /* 0x58 */ struct D2TileCmpTileNodeStrc * pNodeHead; // Head of sub-tile node linked list (+0x58)
     /* 0x5C */ struct D2TileCmpTileSetStrc * pTileSetChain; // Next in tile-set chain (+0x5c, set by AddTileToSet)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2TileCmpTileSetStrc
 namespace D2CMP::SRC::Tilecmp {

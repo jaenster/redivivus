@@ -5,6 +5,7 @@
 #include "Source/Game/Main.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Hell/D2HellRoot.data.h"
+static_assert(sizeof(void*) != 4 || sizeof(StormFaultHandlerNodeStrc) == 0xc, "TSList NewNode allocates sizeof(StormFaultHandlerNodeStrc) plus the extra: 0xc on 32-bit");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -73,10 +74,8 @@ static pfnFaultError g_pfnFaultErrorCallback = (pfnFaultError)0; D2_STATIC_GUARD
 namespace D2Hell {
 
 bool __fastcall D2FILE_CreateProcess(LPCSTR szText) {
-    _STARTUPINFOA processInfo;
+    _STARTUPINFOA processInfo = { sizeof(processInfo) };
     _PROCESS_INFORMATION startupInfo;
-    processInfo.cb = 0x44;
-    memset(&processInfo.lpReserved, 0, 0x40);
     BOOL bCreated = CreateProcessA(szText, (LPSTR)0x0, (LPSECURITY_ATTRIBUTES)0x0, (LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPVOID)0x0, (LPCSTR)0x0, &processInfo, &startupInfo);
     if (!bCreated) {
       return false;
@@ -547,7 +546,7 @@ void __fastcall TSList_TMESSAGESOURCE_Destructor(StormLinkedListStrc * pList) {
 }
 
 void * __fastcall LINKEDLIST_AllocAndInsertNode(StormLinkedListStrc * pList, int, int32_t nInsertMode, int32_t nExtraSize, uint32_t dwFlags) {
-    uint32_t* pNewNodeNew = (uint32_t*)Storm::Source::SMem::SMemAlloc(nExtraSize + 0xc, s___AUTMESSAGESOURCE___0072f9fc, -2, dwFlags | 8);
+    uint32_t* pNewNodeNew = (uint32_t*)Storm::Source::SMem::SMemAlloc(nExtraSize + sizeof(StormFaultHandlerNodeStrc), s___AUTMESSAGESOURCE___0072f9fc, -2, dwFlags | 8);
     uint32_t* pNewNode;
     if (pNewNodeNew) {
       *pNewNodeNew = 0;
@@ -722,8 +721,8 @@ void __fastcall D2MEM_CopyRows(char * pCharSelComp, uint8_t * pSrc, int32_t nDst
 
       for (nRemainder = nBytesPerRow >> 2; nRemainder; nRemainder--) {
         *(uint32_t*)pCharSelComp = *(uint32_t*)pSrc;
-        pSrc += 4;
-        pCharSelComp += 4;
+        pSrc += sizeof(uint32_t);
+        pCharSelComp += sizeof(uint32_t);
       }
 
       pSrc += nSrcStride - nBytesPerRow;

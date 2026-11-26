@@ -41,13 +41,13 @@ struct D2InactiveItemRecordBufferStrc {
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2InactiveItemRecordStrc
 #define D2_DEFINED_D2InactiveItemRecordStrc
-__pragma(pack(push, 1)) struct D2InactiveItemRecordStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2InactiveItemRecordStrc {
     /* 0x00 */ struct D2InactiveItemRecordStrc * pNext;
     /* 0x04 */ int nDespawnTimer;
     /* 0x08 */ int nPlayerGUID;
     /* 0x0C */ short nItemDataSize;
     /* 0x0E */ uint8_t itemData[1];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2InactiveItemRecordStrc
 #ifndef D2_DEFINED_D2InactiveMonsterRecordStrc
@@ -93,7 +93,7 @@ struct D2InactiveUnitListStrc {
 };
 
 #endif // D2_DEFINED_D2InactiveUnitListStrc
-__pragma(pack(push, 1)) struct D2InactiveUnitRecordStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2InactiveUnitRecordStrc {
     /* 0x00 */ int nPosX;
     /* 0x04 */ int nPosY;
     /* 0x08 */ int eUnitType;
@@ -110,7 +110,7 @@ __pragma(pack(push, 1)) struct D2InactiveUnitRecordStrc {
     /* 0x2B */ uint8_t field_0x2b;
     /* 0x2C */ int nLevelId;
     /* 0x30 */ struct D2InactiveUnitRecordStrc * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
 union SUNITINACTIVE_RoomInit_Slotm14 {

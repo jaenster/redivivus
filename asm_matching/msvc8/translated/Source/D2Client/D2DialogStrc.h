@@ -25,7 +25,7 @@ typedef int (__stdcall *fpDialogFunc)();
 // Data types
 #ifndef D2_DEFINED_D2DialogStringData
 #define D2_DEFINED_D2DialogStringData
-__pragma(pack(push, 1)) struct D2DialogStringData {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DialogStringData {
     /* 0x000 */ uint16_t szString[120];
     /* 0x0F0 */ int32_t nYPos; // Y draw position (set by RecalculateLayout)
     /* 0x0F4 */ int32_t nXOffset; // X center offset from dialog left (0 when text wider than background)
@@ -35,12 +35,12 @@ __pragma(pack(push, 1)) struct D2DialogStringData {
     /* 0x104 */ int32_t nLineType; // Line type/style flag (nParam1 from AddStringData); 3=highlighted
     /* 0x108 */ int (__stdcall *fpOnClick)(); // Click callback fn pointer (nParam2); called on mouse confirm
     /* 0x10C */ int32_t nCallbackParam; // Parameter passed to click handler; nonzero increments nClickableCount
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DialogStringData
 #ifndef D2_DEFINED_D2DialogStrc
 #define D2_DEFINED_D2DialogStrc
-__pragma(pack(push, 1)) struct D2DialogStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DialogStrc {
     /* 0x000 */ int32_t nTickcount;
     /* 0x004 */ int32_t field_0x04_padding; // Padding/unused after nTickcount
     /* 0x008 */ struct DC6 * pBackgroundDC6;
@@ -74,6 +74,6 @@ __pragma(pack(push, 1)) struct D2DialogStrc {
     /* 0x068 */ D2DialogStringData aStringData[10];
     /* 0xB08 */ struct D2DialogSubStrc * pDialogSub;
     /* 0xB0C */ struct D2DialogStrc * pPrev;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DialogStrc

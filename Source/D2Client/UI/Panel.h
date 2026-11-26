@@ -37,13 +37,13 @@ struct D2BeltsEntryStrc {
 #endif // D2_DEFINED_D2BeltsEntryStrc
 #ifndef D2_DEFINED_D2BeltsTxt
 #define D2_DEFINED_D2BeltsTxt
-struct __attribute__((packed)) D2BeltsTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2BeltsTxt {
     /* 0x00 */ uint8_t nIndex;
     /* 0x01 */ uint8_t pad0x01[3];
     /* 0x04 */ uint8_t nBoxes;
     /* 0x05 */ uint8_t pad0x05[3];
     /* 0x08 */ D2BeltsEntryStrc beltBoxes[16];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2BeltsTxt
 namespace D2Client::UI::Panel {

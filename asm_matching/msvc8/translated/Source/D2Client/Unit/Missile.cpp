@@ -3666,7 +3666,7 @@ static void __stdcall MISSILE_CreateFlyingRockDebris(D2UnitStrc * pMissileUnit, 
       return;
     }
 
-    for (int i = 0; i < 18; i++) {
+    for (int i = 0; i < (int)_countof(gaRockDebrisSpreadConstY); i++) {
       memset(&sSkillArg, 0, sizeof(sSkillArg));
       sSkillArg.nFlags = 1;
       sSkillArg.pOwner = pOwner;
@@ -8000,7 +8000,7 @@ void __fastcall MISSILE_CltDoFn32_RadamentDeath(D2UnitStrc * pUnit) {
     int32_t nCurrentFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
     D2UnitStrc* pOwnerUnit = CUnit::MISSILE_GetOwnerUnit(pUnit);
     int nSpreadIdx = 0;
-    for (nSpreadIdx = 0; nSpreadIdx < 5; ++nSpreadIdx) {
+    for (nSpreadIdx = 0; nSpreadIdx < (int)_countof(gaMissile032SpreadConstData) - 1; ++nSpreadIdx) {
       if (nCurrentFrame > (int)(uint32_t)gaMissile032SpreadConstData[nSpreadIdx].nFrameThreshold) {
         break;
       }
@@ -8371,7 +8371,7 @@ void __fastcall MISSILE_CltDoFn36_DurielDeathControl(D2UnitStrc * pUnit) {
     }
 
     int nSpreadIdx = 0;
-    while (nSpreadIdx < 4 && nCurrentFrame <= (int)(uint32_t)gaMissile036ClientSpreadData[nSpreadIdx].nFrameThreshold) {
+    while (nSpreadIdx < (int)_countof(gaMissile036ClientSpreadData) - 1 && nCurrentFrame <= (int)(uint32_t)gaMissile036ClientSpreadData[nSpreadIdx].nFrameThreshold) {
       ++nSpreadIdx;
     }
 

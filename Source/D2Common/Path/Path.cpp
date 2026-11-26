@@ -53,6 +53,7 @@
 #include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
 #include "Source/D2Common/Units/Units.inline.h"
 #include "Source/D2Common/Units/Units.twin.inline.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2DynamicPathStrc) == 0x200, "D2DynamicPathStrc is 0x200 bytes on x86");
 
 #ifndef RECON_FPTD_D2PathTypeFunc
 #define RECON_FPTD_D2PathTypeFunc
@@ -1909,7 +1910,7 @@ void __stdcall AllocDynamicPath(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom,
     int32_t nUnitWidth;
     D2DynamicPathStrc* pDynamicPath;
     pDynamicPath = D2_NEW_POOL_AT(pMemory, D2DynamicPathStrc, ".\\PATH\\Path.cpp", 0x453);
-    memset(pDynamicPath, 0, 0x200);
+    memset(pDynamicPath, 0, sizeof(D2DynamicPathStrc));
     D2UnitStrc* pUnit_00;
     pUnit_00 = pUnit;
     pUnit->pPath.pDynamicPath = pDynamicPath;

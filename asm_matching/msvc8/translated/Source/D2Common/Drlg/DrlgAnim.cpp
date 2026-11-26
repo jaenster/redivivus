@@ -197,7 +197,7 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
               pAnimTileGrid->nCurrentFrame = 0;
               pAllocated = (D2DrlgTileDataStrc**)D2_ALLOC_POOL_AT(pMemory, nMatchCount * sizeof(D2DrlgTileDataStrc*), ".\\DRLG\\DrlgAnim.cpp", 0xa1);
               pAnimTileGrid->ppTileData = pAllocated;
-              memset(pAllocated, 0, nMatchCount * 4);
+              memset(pAllocated, 0, nMatchCount * sizeof(D2DrlgTileDataStrc*));
               pAnimTileGrid->nFrameStep = nFrameStep;
               pAnimTileGrid->pNext = pRoomExCtx->pRoomTiles->pAnimTiles;
               nIndex = 0;

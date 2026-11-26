@@ -21,6 +21,8 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(DDSURFACEDESC2) == 0x7c, "DDSURFACEDESC2: dwSize and the clear after it must be the 0x7c bytes 1.14d uses");
+
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #endif
@@ -266,8 +268,8 @@ static void __thiscall RENDERER_D3D_CopySmackerRowWithAlpha(uint16_t * pSrc, uin
 
 void __stdcall RENDERER_D3D_PresentSmackerFrame() {
     DDSURFACEDESC2 dwSurfDescSize;
-    dwSurfDescSize.dwSize = 0x7c;
-    memset(&dwSurfDescSize.dwFlags, 0, 0x78);
+    dwSurfDescSize.dwSize = sizeof(dwSurfDescSize);
+    memset(&dwSurfDescSize.dwFlags, 0, sizeof(dwSurfDescSize) - sizeof(dwSurfDescSize.dwSize));
     if (!gpD3DSmackerSystemSurface0[0]) {
       return;
     }

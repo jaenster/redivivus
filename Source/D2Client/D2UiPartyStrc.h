@@ -35,7 +35,7 @@ struct D2UiPartyBoxStrc {
 #endif // D2_DEFINED_D2UiPartyBoxStrc
 #ifndef D2_DEFINED_D2UiPartyStrc
 #define D2_DEFINED_D2UiPartyStrc
-struct __attribute__((packed)) D2UiPartyStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UiPartyStrc {
     /* 0x00 */ D2UiPartyBoxStrc pPartyButtons[5];
     /* 0xA0 */ char szPlayerName[25]; // UTF-8 player name from GetRosterName, max 15 chars + null + padding to 0xB9
     /* 0xB9 */ int nCharType; // Character class index (0=Amazon...6=Druid)
@@ -44,6 +44,6 @@ struct __attribute__((packed)) D2UiPartyStrc {
     /* 0xC5 */ int nRosterGUID; // From GetRosterGUID(pRoster), written by SetupPartyButtons
     /* 0xC9 */ int nScreenY; // Panel Y position = nPositionY + 0xd, written by SetupPartyButtons
     /* 0xCD */ struct D2UiPartyStrc * pNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2UiPartyStrc

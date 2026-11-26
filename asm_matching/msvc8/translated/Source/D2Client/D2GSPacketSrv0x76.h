@@ -17,10 +17,10 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x76
 #define D2_DEFINED_D2GSPacketSrv0x76
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x76 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x76 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t nUnitGUID;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x76

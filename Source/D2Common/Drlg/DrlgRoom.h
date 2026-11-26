@@ -35,7 +35,7 @@ struct D2LvlWarpTxt;
 // Data types
 #ifndef D2_DEFINED_D2DrlgOutdoorRoomStrc
 #define D2_DEFINED_D2DrlgOutdoorRoomStrc
-struct __attribute__((packed)) D2DrlgOutdoorRoomStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgOutdoorRoomStrc {
     /* 0x00 */ D2DrlgGridStrc pOrientationGrid; // Orientation/shadow grid for outdoor tiles
     /* 0x14 */ D2DrlgGridStrc pWallGrid; // Wall grid for outdoor tiles
     /* 0x28 */ D2DrlgGridStrc pFloorGrid; // Floor grid for outdoor tiles
@@ -48,7 +48,7 @@ struct __attribute__((packed)) D2DrlgOutdoorRoomStrc {
     /* 0x64 */ int nSubType; // SubType from LevelDefs.txt
     /* 0x68 */ int nSubTheme; // SubTheme from LevelDefs.txt
     /* 0x6C */ int nSubThemePicked; // Random subtheme variant picked (0-31)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgOutdoorRoomStrc
 #ifndef D2_DEFINED_D2DrlgRoomExRoomTileNodeStrc

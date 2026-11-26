@@ -249,6 +249,8 @@
 #endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2ServerCmdStrc) == 0x10, "D2_NEW_AT(D2ServerCmdStrc): the 32-bit layout must be the 0x10 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(::D2Packet0x5aEventStructure) == 40, "D2Packet0x5aEventStructure: the 32-bit layout must be the 40 bytes 1.14d copies from the packet");
+static_assert(sizeof(::D2GSPacketSrv0x47) == 11 && sizeof(::D2GSPacketSrv0x48) == 11 && sizeof(::D2GSPacketSrv0x50) == 15, "the 0x47/0x48/0x50 server packets are 11, 11 and 15 bytes on the wire");
 
 
 #ifndef RECON_FPTD_D2NET_CLIENT_D2GStoCLT_Unit
@@ -2465,7 +2467,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x5A(char * pBytes) {
     int nWords;
     D2Packet0x5aEventStructure packet;
     D2Packet0x5aEventStructure* pDst = &packet;
-    memcpy(pDst, pBytes, 40);
+    memcpy(pDst, pBytes, sizeof(*pDst));
     UI::Text::TEXT_HandleEventMessagePacket(&packet);
 }
 
@@ -2545,20 +2547,14 @@ void __fastcall SCMD_Rcv0x45_Ignore(char * pBytes) {
 // Client receiver for S2C packet 0x47 (11 bytes). Copies packet bytes into D2GSPacketSrv0x47 struct and calls ITEM_CltRecalcAllEquippedItems to re-evaluate equipped item requirements after stat changes.
 void __fastcall NET_D2GS_CLIENT_RecvRecalcEquippedItems(char * pBytes) {
     D2GSPacketSrv0x47 packet;
-    *(uint32_t*)(char*)&packet = *(uint32_t*)pBytes;
-    *(uint32_t*)((char*)&packet + 4) = *(uint32_t*)(pBytes + 4);
-    packet.wPad1 = *(uint16_t*)(pBytes + 8);
-    packet.byPad2 = pBytes[10];
+    memcpy(&packet, pBytes, sizeof(packet));
     UNIT::ITEM_CltRecalcAllEquippedItems(&packet, 1);
 }
 
 // Client receiver for S2C packet 0x48 (11 bytes). Copies packet bytes into D2GSPacketSrv0x48 struct and calls ITEM_CltRecalcAllEquippedItems2 to re-evaluate equipped item requirements.
 void __fastcall NET_D2GS_CLIENT_RecvRecalcEquippedItems2(char * pBytes) {
     D2GSPacketSrv0x48 packet;
-    *(uint32_t*)(char*)&packet = *(uint32_t*)pBytes;
-    *(uint32_t*)((char*)&packet + 4) = *(uint32_t*)(pBytes + 4);
-    packet.wPad1 = *(uint16_t*)(pBytes + 8);
-    packet.byPad2 = pBytes[10];
+    memcpy(&packet, pBytes, sizeof(packet));
     UNIT::ITEM_CltRecalcAllEquippedItems2(&packet);
 }
 
@@ -2585,12 +2581,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x53(D2GSPacketSrv0x53 * pBytes) {
 }
 
 void __fastcall NET_D2GS_CLIENT_Incoming0x50(D2GSPacketSrv0x50 * pBytes) {
-    D2GSPacketSrv0x50 sPacket;
-    *(uint32_t*)(char*)&sPacket = *(uint32_t*)pBytes;
-    *(uint32_t*)((char*)&sPacket.aPayload + 1) = *(uint32_t*)((char*)pBytes->aPayload + 1);
-    *(uint32_t*)((char*)&sPacket.aPayload + 5) = *(uint32_t*)((char*)pBytes->aPayload + 5);
-    *(uint16_t*)((char*)&sPacket.aPayload + 9) = *(uint16_t*)((char*)pBytes->aPayload + 9);
-    *(uint8_t*)((char*)&sPacket.aPayload[5] + 1) = *(uint8_t*)((char*)pBytes->aPayload + 0xb);
+    D2GSPacketSrv0x50 sPacket = *pBytes;
     NET_D2GS_CLIENT_Handle0x50_QuestSpecial(&sPacket);
 }
 
@@ -2958,7 +2949,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9C_ITEMEX(uint8_t * pBytes) {
     int nRemaining;
     uint8_t pBytesCopy[252];
     uint8_t* pWriteCursor = pBytesCopy;
-    memcpy(pWriteCursor, pBytes, 0xfc);
+    memcpy(pWriteCursor, pBytes, sizeof(pBytesCopy));
     switch (pBytesCopy[1]) {
       case 5:
 
@@ -3029,7 +3020,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x9D(uint8_t * pBytes) {
     int nWordsRemaining;
     uint8_t pBytesCopy[257];
     uint8_t* pWriteCursor = pBytesCopy;
-    memcpy(pWriteCursor, pBytes, 0x101);
+    memcpy(pWriteCursor, pBytes, sizeof(pBytesCopy));
     switch (pBytesCopy[1]) {
       case 0:
 
@@ -3377,7 +3368,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAC(char * pPacketData) {
         nSuperUniqueIndex = (int16_t)nSignedBits;
       }
 
-      memset(aMonUModList, 0, 9 * sizeof(aMonUModList[0]));
+      memset(aMonUModList, 0, sizeof(aMonUModList));
       pSuperUniqueName = aMonUModList;
       nReadBits = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
       if ((char)nReadBits != '\0') {
@@ -3502,7 +3493,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0xAE_WARDENDATA(D2GSPacketSrv0xAE * pByt
 static D2ServerCmdStrc * STRUCT_CreateAndPreprareServerCmd(D2UnitStrc * pUnit) {
     int nMaxPacketSize;
     if (!nD2PacketsClientBufferSize) {
-      for (int i = 0; i < 175; i++) {
+      for (int i = 0; i < (int)_countof(NET_D2GS_CLIENT_INCOMING); i++) {
         if (NET_D2GS_CLIENT_INCOMING[i].fpIncomingHandlerUnit && NET_D2GS_CLIENT_INCOMING[i].nExpectedSize > nD2PacketsClientBufferSize) {
           nD2PacketsClientBufferSize = NET_D2GS_CLIENT_INCOMING[i].nExpectedSize;
         }

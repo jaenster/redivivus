@@ -125,7 +125,7 @@ BOOL OGL_DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLigh
       }
 
       pfVar9 = &D2OGLVertexStrc_ARRAY_ARRAY_005526d0[0][0].fV;
-      pDVar15 = (D2OGLVertexStrc*)((char*)&D2OGLVertexStrc_ARRAY_ARRAY_005526d0 + 144);
+      pDVar15 = &D2OGLVertexStrc_ARRAY_ARRAY_005526d0[1][0];
       ppDVar12 = PTR_ARRAY_ARRAY_00552a30[0] + 1;
       iVar4 = 0;
       iVar14 = 0;
@@ -205,21 +205,21 @@ BOOL OGL_DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLigh
     }
 
     OGL_SetBlendMode(iVar4);
-    uint8_t* pBVar6 = &D2OGLVertexStrc_ARRAY_ARRAY_005526d0[0][0].nAlpha;
+    D2OGLVertexStrc* pVertex = &D2OGLVertexStrc_ARRAY_ARRAY_005526d0[0][0];
     iVar4 = 0;
     do {
       uint8_t bVar1;
-      bVar1 = (&pLight->sLight.nIntensity)[iVar4];
+      bVar1 = pLight[iVar4].sLight.nIntensity;
       pBVar2 = *PTR_PTR_00396388;
-      pBVar6[-3] = pBVar2[(uint32_t)(&pLight->sLight.nRed)[iVar4] + (uint32_t)bVar1 * 0x100];
-      pBVar6[-2] = pBVar2[(uint32_t)(&pLight->sLight.nGreen)[iVar4] + (uint32_t)bVar1 * 0x100];
-      pBVar6[-1] = pBVar2[(uint32_t)(&pLight->sLight.nBlue)[iVar4] + (uint32_t)bVar1 * 0x100];
-      *pBVar6 = nAlpha;
-      ((D2OGLVertexStrc*)(pBVar6 - 0xb))->fX = (float)*(int*)((uintptr_t)&pLight->nX + iVar4);
-      *(float*)(pBVar6 - 7) = (float)(*PTR_INT_003963a8 - *(int*)((uintptr_t)&pLight->nY + iVar4));
-      pBVar6 += 0x18;
-      iVar4 += 0xc;
-    } while (iVar4 != 0x1b0);
+      pVertex->nRed = pBVar2[(uint32_t)pLight[iVar4].sLight.nRed + (uint32_t)bVar1 * 0x100];
+      pVertex->nGreen = pBVar2[(uint32_t)pLight[iVar4].sLight.nGreen + (uint32_t)bVar1 * 0x100];
+      pVertex->nBlue = pBVar2[(uint32_t)pLight[iVar4].sLight.nBlue + (uint32_t)bVar1 * 0x100];
+      pVertex->nAlpha = nAlpha;
+      pVertex->fX = (float)pLight[iVar4].nX;
+      pVertex->fY = (float)(*PTR_INT_003963a8 - pLight[iVar4].nY);
+      pVertex++;
+      iVar4++;
+    } while (iVar4 != (int)(sizeof(D2OGLVertexStrc_ARRAY_ARRAY_005526d0) / sizeof(D2OGLVertexStrc)));
 
     if ((*PTR_PTR_00396384)->bLowQuality) {
       glBegin(6);

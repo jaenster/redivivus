@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x5B
 #define D2_DEFINED_D2GSPacketSrv0x5B
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x5B {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x5B {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ short nPacketLength;
     /* 0x03 */ int nPlayerGUID;
@@ -29,6 +29,6 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x5B {
     /* 0x1E */ short bInParty;
     /* 0x20 */ short nGuildFlags;
     /* 0x22 */ char szGuildTag[256]; // 0x22..0x121 is ONE 0x100-byte buffer holding TWO null-terminated strings: the guild tag, then the guild name at 0x23 + strlen(tag) + 1. 0053ca55 hands SendPacket_Helper the buffer at EBP-0x128 and 0053ca4e writes the length two bytes in, so the packet is 0x122 bytes.
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x5B

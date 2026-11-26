@@ -5,6 +5,7 @@
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Glide/Renderer/Glide.data.h"
+#include "Source/D2CMP/D2GfxCellNodeStrc.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -219,8 +220,8 @@ void __fastcall GLTEXCACHE_EvictLRU(GlTextureCacheStrc * pCache) {
       ppLink[0] = 0;
       ppLink[1] = 0;
       if (pEvictNode->pHashTable) {
-        *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8) = 0;
-        *(uint32_t*)((char*)pEvictNode->pHashTable + (pEvictNode->nHashIndex * 8 + 4)) = 0;
+        pEvictNode->pHashTable->aModes[pEvictNode->nHashIndex].nSizeClass = 0;
+        pEvictNode->pHashTable->aModes[pEvictNode->nHashIndex].nCacheNode = 0;
         pEvictNode->pHashTable = 0;
       }
       if (!pCache->pFreeHead) {
@@ -278,8 +279,8 @@ int __fastcall GLTEXCACHE_EnsureCapacity(GlTextureCacheStrc * pCache) {
           ppLink[0] = 0;
           ppLink[1] = 0;
           if (pEvictNode->pHashTable) {
-            *(uint32_t*)((char*)pEvictNode->pHashTable + pEvictNode->nHashIndex * 8) = 0;
-            *(uint32_t*)((char*)pEvictNode->pHashTable + (pEvictNode->nHashIndex * 8 + 4)) = 0;
+            pEvictNode->pHashTable->aModes[pEvictNode->nHashIndex].nSizeClass = 0;
+            pEvictNode->pHashTable->aModes[pEvictNode->nHashIndex].nCacheNode = 0;
             pEvictNode->pHashTable = 0;
           }
           if (!pCache->pFreeHead) {

@@ -225,7 +225,7 @@ static void __stdcall MONREGION_PopulateMonsterTypes(BOOL bIsNotNormalDifficulty
 
         iVar1--;
         if (nRandPick < iVar1) {
-          memmove(aMonIdPool + nRandPick, aMonIdPool + (nRandPick + 1), (iVar1 - nRandPick) * 2);
+          memmove(aMonIdPool + nRandPick, aMonIdPool + (nRandPick + 1), (iVar1 - nRandPick) * sizeof(aMonIdPool[0]));
         }
 
         nMonStatIdx = (int)(short int)nMonClassId;

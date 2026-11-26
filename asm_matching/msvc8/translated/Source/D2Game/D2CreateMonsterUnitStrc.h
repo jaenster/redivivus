@@ -20,7 +20,7 @@ typedef uint32_t eD2UnitType;
 // Data types
 #ifndef D2_DEFINED_D2CreateMonsterUnitStrc
 #define D2_DEFINED_D2CreateMonsterUnitStrc
-__pragma(pack(push, 1)) struct D2CreateMonsterUnitStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CreateMonsterUnitStrc {
     /* 0x00 */ int32_t nUnitGUID;
     /* 0x04 */ int32_t nMonstatId;
     /* 0x08 */ int32_t nX;
@@ -28,6 +28,6 @@ __pragma(pack(push, 1)) struct D2CreateMonsterUnitStrc {
     /* 0x10 */ int32_t eMonsterType;
     /* 0x14 */ int32_t nOwnerGUID;
     /* 0x18 */ eD2UnitType eUnitType;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2CreateMonsterUnitStrc

@@ -114,7 +114,7 @@ static void TestSmack(const char* pszFile) {
         }
         SmackDoFrame(pSmk);
         if (pSmk->NewPalette) {
-            memcpy(aPal, pSmk->Palette, 768);
+            memcpy(aPal, pSmk->Palette, sizeof(aPal));
             ++nPaletteChanges;
         }
         ++nDecoded;

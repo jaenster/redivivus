@@ -26,6 +26,8 @@
 #ifndef D2_ALLOC_AT
 #define D2_ALLOC_AT(size, szFile, nLine) Fog::Memory::AllocClientMemory((size), (szFile), (nLine), 0)
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(SID_C2S_ReportVersion) == 0x114, "SID_C2S_ReportVersion is 0x114 bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(_TIME_ZONE_INFORMATION) == 0xac, "_TIME_ZONE_INFORMATION is 0xac bytes on x86");
 
 #ifndef RECON_FPTD_fnInterlockedCompareExchange
 #define RECON_FPTD_fnInterlockedCompareExchange
@@ -216,7 +218,7 @@ int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * sz
 BOOL __fastcall NET_SID_CLIENT_Send_0x07_ReportVersion(uint32_t dwExeHash, uint32_t dwExeChecksum, char * szExeInfoStr) {
     SID_C2S_ReportVersion sPacket;
     char cFilenameCh;
-    memset(&sPacket, 0, 0x114);
+    memset(&sPacket, 0, sizeof(SID_C2S_ReportVersion));
     sPacket.dwPlatformId = 0x49583836;
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
     sPacket.dwProductId = bIsExpansion ? 0x44325850 : 0x44324456;
@@ -493,7 +495,7 @@ int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoo
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 1292, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    memcpy(__frame0.acStack_514, "68XI", 4);
+    memcpy(__frame0.acStack_514, "68XI", sizeof(__frame0.acStack_514));
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
     __frame0.iStack_510 = bIsExpansion ? 0x44325850 : 0x44324456;
     __frame0.uStack_50c = g_dwLastAdId;
@@ -676,7 +678,7 @@ void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo() {
     _TIME_ZONE_INFORMATION sTimeZoneInfo;
     SID_C2S_LocaleInfo ftSystemTime;
     char cCur;
-    memset(&sTimeZoneInfo, 0, 0xac);
+    memset(&sTimeZoneInfo, 0, sizeof(_TIME_ZONE_INFORMATION));
     /* LPTIME_ZONE_INFORMATION lpTimeZoneInformation for GetTimeZoneInformation */ GetTimeZoneInformation(&sTimeZoneInfo);
     /* LPSYSTEMTIME lpSystemTime for GetSystemTime */ GetSystemTime(&stSystemTime);
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&stLocalTime);
@@ -1612,7 +1614,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     SOCKET hSock;
     uint8_t* pbVar3;
     Debug::DEBUG_Trace("sFastestConnect()");
-    memset(__frame0.aCandidates, 0, 0x2100);
+    memset(__frame0.aCandidates, 0, sizeof(__frame0.aCandidates));
     BnDownload::BNDOWNLOAD_ResetState(0x66);
     if (!szServerList) {
       return 1;

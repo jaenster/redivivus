@@ -176,7 +176,7 @@ void __fastcall FreeMonsters(::SGAMEDATA * pGame) {
 void __fastcall MONSTER_FreeAllResources(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nClassId;
     UNIT::SUnitDmg::FreeCombat(pGame, pUnit);
-    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) || !((uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xd) & Fog::BitBuffer::gadwBitMasks[1])) {
+    if (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) || !((uint8_t)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].aFlagBytes[1] & Fog::BitBuffer::gadwBitMasks[1])) {
       UNIT::SUnit::UNITS_FreeInventoryItems(pGame, pUnit);
       D2Common::INVENTORY::Inventory::STRUCT_FreeInventory(pUnit->pInventory);
     }
@@ -682,7 +682,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
       } while (nTmpInt < 8);
 
       D2Common::Monsters::MONSTERS::MONSTERS_OnInitMonster_NoOp(pUnit, monLevelData.nMonsterSkillBonus);
-      if (*((uint8_t*)uMonTxt.pMonStats2Txt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (uMonTxt.pMonStats2Txt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         pUnit->eUnitFlags |= UNITFLAG_CANBEATTACKED;
       }
       if (pMonStatsTxt->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {

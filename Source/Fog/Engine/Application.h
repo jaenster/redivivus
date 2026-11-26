@@ -17,25 +17,26 @@
 // Forward declarations
 struct D2CrashFrameStrc;
 struct D2FogDebugModuleEntryStrc;
+struct D2FogAddressInfoStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-struct __attribute__((packed)) CV_INFO_PDB20 {
+D2_PACKED_BEGIN struct __attribute__((packed)) CV_INFO_PDB20 {
     /* 0x00 */ DWORD CvSignature;
     /* 0x04 */ LONG Offset;
     /* 0x08 */ DWORD Signature;
     /* 0x0C */ DWORD Age;
     /* 0x10 */ char PdbFileName[0];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-struct __attribute__((packed)) CV_INFO_PDB70 {
+D2_PACKED_BEGIN struct __attribute__((packed)) CV_INFO_PDB70 {
     /* 0x00 */ DWORD CvSignature;
     /* 0x04 */ GUID Signature;
     /* 0x14 */ DWORD Age;
     /* 0x18 */ char PdbFileName[0];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
@@ -65,7 +66,7 @@ struct IMAGE_DATA_DIRECTORY {
     /* 0x04 */ uint32_t Size;
 };
 
-struct __attribute__((packed)) IMAGE_OPTIONAL_HEADER32 {
+D2_PACKED_BEGIN struct __attribute__((packed)) IMAGE_OPTIONAL_HEADER32 {
     /* 0x00 */ uint16_t Magic;
     /* 0x02 */ uint8_t MajorLinkerVersion;
     /* 0x03 */ uint8_t MinorLinkerVersion;
@@ -97,7 +98,7 @@ struct __attribute__((packed)) IMAGE_OPTIONAL_HEADER32 {
     /* 0x58 */ uint32_t LoaderFlags;
     /* 0x5C */ uint32_t NumberOfRvaAndSizes;
     /* 0x60 */ IMAGE_DATA_DIRECTORY DataDirectory[16];
-};
+}; D2_PACKED_END
 
 #endif // _WIN32
 
@@ -113,7 +114,7 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList);
 bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList);
 // Unwinds stack frames for crash dumps. Walks EBP chain up to 128 frames, validates stack pointers, skips first N frames. Captures EIP, ESP, EBP for each frame. Handles current thread or remote thread via OpenThread/SuspendThread.
 int __thiscall DEBUG_UnwindStackFrames(CONTEXT * pContext, DWORD dwThreadId, struct D2CrashFrameStrc * pFrameArray, uint32_t nSkipFrames);
-bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, char * pOutput);
+bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, struct D2FogAddressInfoStrc * pOutput);
 int Unreferenced_004067c0();
 bool __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize);
 #endif // D2_MODULE_Fog

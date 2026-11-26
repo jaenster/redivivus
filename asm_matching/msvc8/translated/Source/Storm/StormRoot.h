@@ -33,7 +33,7 @@ struct D2StormAsyncCompletionStrc {
 #endif // D2_DEFINED_D2StormAsyncCompletionStrc
 #ifndef D2_DEFINED_D2StormAsyncOpStrc
 #define D2_DEFINED_D2StormAsyncOpStrc
-__pragma(pack(push, 1)) struct D2StormAsyncOpStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2StormAsyncOpStrc {
     /* 0x00 */ struct StormLinkStrc * pPrevLink; // TSLink m_prevlink; the terminator's own address when empty
     /* 0x04 */ struct D2StormAsyncOpStrc * pNext; // TSLink m_next; negative = ~&terminator, end of list
     /* 0x08 */ HANDLE hCompletionEvent; // caller's completion event HANDLE; SetEvent on completion or cancellation
@@ -51,7 +51,7 @@ __pragma(pack(push, 1)) struct D2StormAsyncOpStrc {
     /* 0x38 */ uint32_t bAutoFree; // nonzero: SFILE_CdThreadProc releases and SMemFrees the request after completion (0041a7e2-0041a7f9)
     /* 0x3C */ uint32_t nChunkBytesRead; // bytes read for the current chunk (SFILE_CdThreadProc)
     /* 0x40 */ struct D2StormAsyncCompletionStrc * pCompletion; // optional completion object; SFILE_IssueRequest stores its last argument here
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2StormAsyncOpStrc
 #ifndef D2_DEFINED_StormLinkedListStrc

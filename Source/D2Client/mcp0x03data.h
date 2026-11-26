@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_mcp0x03data
 #define D2_DEFINED_mcp0x03data
-struct __attribute__((packed)) mcp0x03data {
+D2_PACKED_BEGIN struct __attribute__((packed)) mcp0x03data {
     /* 0x00 */ char szGameName[16];
     /* 0x10 */ char szGamePassword[16];
     /* 0x20 */ char szGameDescription[32];
@@ -25,6 +25,6 @@ struct __attribute__((packed)) mcp0x03data {
     /* 0x44 */ uint8_t field_0x44;
     /* 0x45 */ char nDifference;
     /* 0x46 */ char nMaxPlayers;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_mcp0x03data

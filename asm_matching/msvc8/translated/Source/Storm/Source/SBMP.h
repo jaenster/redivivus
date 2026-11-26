@@ -78,7 +78,7 @@ struct D2PcxHeaderStrc {
 
 #endif // D2_DEFINED_D2PcxHeaderStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-__pragma(pack(push, 1)) struct D2TgaHeaderStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TgaHeaderStrc {
     /* 0x00 */ uint8_t byIdLength;
     /* 0x01 */ uint8_t byColorMapType;
     /* 0x02 */ uint8_t byImageType; // >=9 means RLE (unsigned JC)
@@ -91,11 +91,11 @@ __pragma(pack(push, 1)) struct D2TgaHeaderStrc {
     /* 0x0E */ uint16_t wHeight;
     /* 0x10 */ uint8_t byPixelDepth;
     /* 0x11 */ uint8_t byImageDescriptor;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_Storm
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-__pragma(pack(push, 1)) struct TGAHeaderStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct TGAHeaderStrc {
     /* 0x00 */ uint8_t nIdLength;
     /* 0x01 */ uint8_t nColorMapType;
     /* 0x02 */ uint8_t nImageType;
@@ -108,7 +108,7 @@ __pragma(pack(push, 1)) struct TGAHeaderStrc {
     /* 0x0E */ uint16_t nHeight;
     /* 0x10 */ uint8_t nPixelDepth;
     /* 0x11 */ uint8_t nDescriptor;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_Storm
 namespace Storm { namespace Source { namespace SBMP {

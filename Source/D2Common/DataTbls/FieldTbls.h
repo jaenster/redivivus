@@ -20,11 +20,11 @@ struct D2RoomStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-struct __attribute__((packed)) D2ExpFieldFileStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ExpFieldFileStrc {
     /* 0x00 */ uint16_t wHeader; // never read
     /* 0x02 */ uint32_t nHeight;
     /* 0x06 */ uint32_t nWidth;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 namespace D2Common::DATATBLS::FieldTbls {

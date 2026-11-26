@@ -14,6 +14,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2GfxCellNodeStrc;
 struct D2GlideVertexStrc;
 struct D2GroundSubTileStrc;
 struct D2RendererFunctionsStrc;
@@ -51,10 +52,10 @@ struct GlTextureCacheStrc {
 #endif // D2_DEFINED_GlTextureCacheStrc
 #ifndef D2_DEFINED_D2GlideVertexTexCacheBlockStrc
 #define D2_DEFINED_D2GlideVertexTexCacheBlockStrc
-struct __attribute__((packed)) D2GlideVertexTexCacheBlockStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GlideVertexTexCacheBlockStrc {
     /* 0x00 */ D2GlideVertexStrc aVertex[4]; // fan block submitted by DrawShadowQuad/DrawPalettedQuad/DrawPerspectiveImage
     /* 0x70 */ GlTextureCacheStrc aTextureCache[3]; // indexed 1-based from &aVertex[2].fT (= aTextureCache - 0x20) by UploadTextureToCache
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2GlideVertexTexCacheBlockStrc
 #ifndef D2_DEFINED_D2GlideWallCornerStrc
 #define D2_DEFINED_D2GlideWallCornerStrc
@@ -124,8 +125,8 @@ struct GlSubtileCacheStrc {
 struct GlTextureCacheNodeStrc {
     /* 0x00 */ int nIndex; // Node index in array
     /* 0x04 */ uint32_t dwAddress; // VRAM texture address
-    /* 0x08 */ void * pHashTable; // Back-reference to hash table
-    /* 0x0C */ int nHashIndex; // Index in hash table bucket
+    /* 0x08 */ struct D2GfxCellNodeStrc * pHashTable; // the cel frame whose texture this node holds
+    /* 0x0C */ int nHashIndex; // its D2GfxCellNodeStrc::aModes slot
     /* 0x10 */ uint8_t field_0x10;
     /* 0x11 */ uint8_t field_0x11;
     /* 0x12 */ uint8_t field_0x12;

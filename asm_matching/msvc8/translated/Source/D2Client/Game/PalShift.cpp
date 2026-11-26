@@ -52,8 +52,8 @@ void __stdcall AllocPalShift_GreenBlood() {
 
     D2GamePalShiftGreenBloodStrc* pGreenBlood = D2_NEW_AT(D2GamePalShiftGreenBloodStrc, ".\\GAME\\PalShift.cpp", 0x52);
     PalShift_GreenBlood = pGreenBlood;
-    memset(pGreenBlood, 0, 0x100);
-    D2Hell::D2FILE_ReadFile(nullptr, pFileHandle, pGreenBlood, 0x100);
+    memset(pGreenBlood, 0, sizeof(*pGreenBlood));
+    D2Hell::D2FILE_ReadFile(nullptr, pFileHandle, pGreenBlood, sizeof(*pGreenBlood));
     D2Hell::D2FILE_CloseFile(nullptr, pFileHandle);
 }
 
@@ -62,7 +62,7 @@ void __stdcall InitPal() {
     int i;
     D2MPQFileStrc* pGreenBloodFile;
     D2MPQFileStrc* pRandTransformFile;
-    size_t nAllocSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize * 8;
+    size_t nAllocSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize * sizeof(D2MonsterPalShiftSlotStrc);
     D2MonsterPalShiftSlotStrc* pPalShiftList = (D2MonsterPalShiftSlotStrc*)D2_ALLOC_AT(nAllocSize, ".\\GAME\\PalShift.cpp", 99);
     gpMonsterPalShiftList = pPalShiftList;
     memset(pPalShiftList, 0, nAllocSize);
@@ -86,8 +86,8 @@ void __stdcall InitPal() {
 
     D2GamePalShiftGreenBloodStrc* pGreenBlood = D2_NEW_AT(D2GamePalShiftGreenBloodStrc, ".\\GAME\\PalShift.cpp", 0x52);
     PalShift_GreenBlood = pGreenBlood;
-    memset(pGreenBlood, 0, 0x100);
-    D2Hell::D2FILE_ReadFile(nullptr, pGreenBloodFile, pGreenBlood, 0x100);
+    memset(pGreenBlood, 0, sizeof(*pGreenBlood));
+    D2Hell::D2FILE_ReadFile(nullptr, pGreenBloodFile, pGreenBlood, sizeof(*pGreenBlood));
     D2Hell::D2FILE_CloseFile(nullptr, pGreenBloodFile);
 }
 
@@ -203,7 +203,7 @@ void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId) {
 
     szMonsterCode[3] = '\0';
     szMonsterCode[2] = '\0';
-    memcpy(szFilePath, "Data\\Global\\Monsters\\", 0x16);
+    strcpy(szFilePath, "Data\\Global\\Monsters\\");
     szMonsterCode[1] = cCode1;
     szMonsterCode[0] = cCode0;
     strcat(szFilePath, szMonsterCode);
@@ -213,14 +213,14 @@ void __fastcall PALSHIFT_LoadMonsterPalShift(int32_t nMonsterId) {
       pSrc = pPathEnd2 + 1;
     } while (pPathEnd2[1] != '\0');
 
-    memcpy(pPathEnd2 + 1, "\\Cof\\palshift.dat", 0x12);
+    memcpy(pPathEnd2 + 1, "\\Cof\\palshift.dat", sizeof("\\Cof\\palshift.dat"));
     BOOL bFileExists = D2Hell::CheckIfFileExists(nullptr, szFilePath, &pFileHandle, 1);
     if (!bFileExists) {
       return;
     }
 
     D2PalShiftEntryStrc* pPalShiftEntry = D2_NEW_AT(D2PalShiftEntryStrc, ".\\GAME\\PalShift.cpp", 0xf4);
-    memset(pPalShiftEntry, 0, 0x1008);
+    memset(pPalShiftEntry, 0, sizeof(*pPalShiftEntry));
     D2Hell::D2FILE_ReadFile(nullptr, pFileHandle, pPalShiftEntry->aPalShifts, 0x800);
     D2Hell::D2FILE_CloseFile(nullptr, pFileHandle);
     PALSHIFT_ApplyGreenBloodPalette((uint8_t*)pPalShiftEntry, nMonsterId);

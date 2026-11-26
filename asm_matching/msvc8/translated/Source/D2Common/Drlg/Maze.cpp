@@ -401,7 +401,7 @@ void __stdcall DRLGMAZE_PickRoomPresets(D2RoomExStrc * pRoomEx) {
     D2LvlMazeTxt* pMazeTxt;
     pMazeTxt = pRoomEx->pLevel->pDrlgLevelData.pTxtLvlMaze;
     for (pNeighbor = pRoomEx->pLevel->pRoomExFirst; pNeighbor; pNeighbor = pNeighbor->pRoomExNext) {
-      if (pNeighbor != pRoomEx && ~(pNeighbor->pRoomExData.pRoomExDataPreset->nFlags >> 1) & 1) {
+      if (pRoomEx != pNeighbor && ~(pNeighbor->pRoomExData.pRoomExDataPreset->nFlags >> 1) & 1) {
         nDeltaX = 0;
         nDeltaY = 0;
         _bWithinDistance = DrlgRoom::DRLGCOORDS_IsWithinDistance(&pRoomEx->sCoords, &pNeighbor->sCoords, 1, &nDeltaX, &nDeltaY);
@@ -1022,7 +1022,7 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
     D2RoomExStrc* pRoomExStrc = pLevel->pRoomExFirst;
     uint32_t seedRoll = D2_SeedRoll(&pLevel->sSeed);
     uint32_t nBaseDir = seedRoll & 3;
-    memset(nRoomPtrs, 0, 0xf0);
+    memset(nRoomPtrs, 0, sizeof(nRoomPtrs));
     D2RoomExStrc** ppRoomPtrs = nRoomPtrs;
     D2RoomExStrc** pArmRoomWalker = (D2RoomExStrc**)((uint8_t*)&nRoomPtrs - 8);
     uint32_t nArmIndex = 0;

@@ -20,11 +20,11 @@ typedef uint32_t eD2LevelId;
 // Data types
 #ifndef D2_DEFINED_D2DrlgActWarpsInfoStrc
 #define D2_DEFINED_D2DrlgActWarpsInfoStrc
-__pragma(pack(push, 1)) struct D2DrlgActWarpsInfoStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgActWarpsInfoStrc {
     /* 0x00 */ eD2LevelId nLevelId;
     /* 0x04 */ eD2LevelId nTargetArea[8];
     /* 0x24 */ int nWarpId[8];
     /* 0x44 */ struct D2DrlgActWarpsInfoStrc * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgActWarpsInfoStrc

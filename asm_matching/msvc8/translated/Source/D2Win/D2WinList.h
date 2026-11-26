@@ -36,7 +36,7 @@ struct D2WinListEntries {
 };
 
 #endif // D2_DEFINED_D2WinListEntries
-__pragma(pack(push, 1)) struct D2WinList {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinList {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ D2WinListEntries sEntriesControl; // D2WinList +0x40..+0x6b (allocation is 0x6c). Ctor: +0x00 font type, +0x04 font table value, +0x08 that >>2, +0x10 item count, +0x14 = -1, +0x18 visible rows - 1. +0x20 widest text, +0x24 entry chain head, +0x28 selected entry
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END

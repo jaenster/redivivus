@@ -25,11 +25,11 @@ typedef int32_t * PD2KeyBindSlot;
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2KeyBindStrc
 #define D2_DEFINED_D2KeyBindStrc
-__pragma(pack(push, 1)) struct D2KeyBindStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2KeyBindStrc {
     /* 0x00 */ int32_t nCmdIndex; // command index (0..0x38); every access is a dword (CMP dword [EAX-6] in the lookup loops, MOV EAX,[ESI*2+0x7a6f90])
     /* 0x04 */ uint16_t wKeyCode; // VK code of bound key; 0xFFFF = unbound
     /* 0x06 */ int32_t nSlot; // binding slot 0 or 1, unaligned dword (CMP dword [EAX] at +6 in CMD_GetKeyForCommand 00469aad and siblings)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2KeyBindStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
@@ -41,19 +41,19 @@ struct D2KeyFileHeaderStrc {
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-__pragma(pack(push, 1)) struct D2CmdTbl_Line0x50f {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CmdTbl_Line0x50f {
     /* 0x00 */ uint16_t wMagic;
     /* 0x02 */ uint16_t wVersion;
     /* 0x04 */ uint16_t wSize;
     /* 0x06 */ D2KeyBindStrc aBindings[114];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-__pragma(pack(push, 1)) struct D2KeyFileStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2KeyFileStrc {
     /* 0x00 */ short wVersion; // Key-file format version; 0x25 is the version the loader accepts
     /* 0x02 */ D2KeyBindStrc aBindings[114]; // The 114 key bindings, 10 bytes each, exactly as they sit in the .key file
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 namespace D2Client { namespace UI { namespace CmdTbl {

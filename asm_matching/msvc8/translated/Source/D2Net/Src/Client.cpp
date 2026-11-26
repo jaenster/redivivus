@@ -105,7 +105,7 @@ void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType
     pD2PacketClient_from_0xAF = 0;
     InitializeCriticalSection(&lpCriticalSection_00882ce8);
     pD2PacketsClientBuffer = D2_NEW_AT(D2PacketsClientStrc, ".\\SRC\\Client.cpp", 200);
-    memset(pD2PacketsClientBuffer, 0, 0x7bc);
+    memset(pD2PacketsClientBuffer, 0, sizeof(D2PacketsClientStrc));
     ::D2Net::Game::Server::NET_D2GS_CLIENT_SetD2GSConnectionType(neD2GSConnectionType);
     BOOL BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
     if (BVar1) {
@@ -433,6 +433,10 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
       }
 
       pNewPacket = D2_NEW_AT(D2OnePacketClientStrc, ".\\SRC\\Client.cpp", 0x1fd);
+#if D2_ARCH_X64
+      // The size is written as a uint32_t into this pointer-sized slot, which starts as pBytes.
+      nPacketSize = 0;
+#endif
       nSizeResult = ::D2Net::Game::Server::NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(pBytes, pBytesSize, (uint32_t*)&nPacketSize);
       if (!nSizeResult) {
         return;

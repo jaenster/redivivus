@@ -44,15 +44,15 @@ struct D2TextLineStrc;
 // Data types
 #ifndef D2_DEFINED_D2ScreenMessageListStrc
 #define D2_DEFINED_D2ScreenMessageListStrc
-__pragma(pack(push, 1)) struct D2ScreenMessageListStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ScreenMessageListStrc {
     /* 0x00 */ struct ScreenMessage_t * pHead; // singly linked via ScreenMessage_t+0x22
     /* 0x04 */ uint16_t nCount; // word; TEXT_FreeAllScreenMessages asserts it equals the freed count
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ScreenMessageListStrc
 #ifndef D2_DEFINED_D2TextBoxStrc
 #define D2_DEFINED_D2TextBoxStrc
-__pragma(pack(push, 1)) struct D2TextBoxStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TextBoxStrc {
     /* 0x00 */ struct D2TextLineStrc * pLineList; // head of the 8-byte line nodes {WCHAR *pwszLine; next} from TEXT_ParseMultilineString / D2WINFONT_WordWrapString; freed by TEXT_FreeTextLineList
     /* 0x04 */ int nLineCount; // line count written by TEXT_ParseMultilineString / D2WINFONT_WordWrapString
     /* 0x08 */ int unk0x08; // zeroed by TEXT_RecalcTextBoxDimensions
@@ -66,7 +66,7 @@ __pragma(pack(push, 1)) struct D2TextBoxStrc {
     /* 0x22 */ uint32_t dwUnused22; // zeroed by TEXT_AllocTextBox (non-wrap path); no reader found in the Text module
     /* 0x26 */ uint32_t dwUnused26; // zeroed by TEXT_AllocTextBox (non-wrap path); no reader found in the Text module
     /* 0x2A */ uint16_t wUnused2A; // zeroed by TEXT_AllocTextBox (non-wrap path); no reader found in the Text module
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2TextBoxStrc
 #ifndef D2_DEFINED_D2TextLineStrc
@@ -79,13 +79,13 @@ struct D2TextLineStrc {
 #endif // D2_DEFINED_D2TextLineStrc
 #ifndef D2_DEFINED_ScreenMessage_t
 #define D2_DEFINED_ScreenMessage_t
-__pragma(pack(push, 1)) struct ScreenMessage_t {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct ScreenMessage_t {
     /* 0x00 */ uint16_t * apwszLines[6]; // Array of up to 6 wide string pointers (one per display line)
     /* 0x18 */ uint16_t nLineCount; // Number of active lines in apwszLines
     /* 0x1A */ int color; // text colour passed to DRAW_text; TEXT_AllocScreenMessage copies the dword at +0x1a
     /* 0x1E */ uint32_t dwMessageExpiration; // tick when the message expires; set to GetTickCount()+10000
     /* 0x22 */ struct ScreenMessage_t * pNext; // next message; every list walk reads +0x22
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_ScreenMessage_t
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)

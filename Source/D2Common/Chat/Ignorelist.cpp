@@ -12,6 +12,7 @@
 #include "Source/D2Common/Chat/Ignorelist/StringEntryNode.h"
 #include "Source/D2Common/D2Common.globals.h"
 #include "Source/D2Common/Chat/Ignorelist/ChatIgnoreList.h"
+static_assert(sizeof(void*) != 4 || sizeof(StringEntryNode) == 0x18, "StringEntryNode is 0x18 bytes on x86");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -144,15 +145,13 @@ void __thiscall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, char * szText, ch
 }
 
 int __thiscall IGNORELIST_ParsePattern(::IgnoreList * pThis, char * szText1, char * szText2, int32_t nBufferSize) {
-    char cPatternBuf[256];
     if (!szText2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a0);
       exit(-1);
     }
 
     *szText2 = '\0';
-    cPatternBuf[0] = '\0';
-    memset(cPatternBuf + 1, 0, 0xff);
+    char cPatternBuf[256] = "";
     IGNORELIST_ExtractSuffix(pThis, szText1, cPatternBuf, 0x100);
     if (cPatternBuf[0] == '\0') {
       IGNORELIST_ExtractPrefix(pThis, szText1, cPatternBuf, 0x100);
@@ -870,13 +869,11 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 int32_t __thiscall RemoveByPattern(::IgnoreList * pThis, char * szPattern) {
     int _bIsEnabled;
     bool bIsEnabled;
-    char szParsed[256];
     if (szPattern && *szPattern != '\0') {
       ::StringEntryNode* pEntry;
       _bIsEnabled = pThis->_vfptr->GetPersistentSetting(pThis);
       if (_bIsEnabled) {
-        szParsed[0] = '\0';
-        memset(szParsed + 1, 0, 0xff);
+        char szParsed[256] = "";
         IGNORELIST_ParsePattern(pThis, szPattern, szParsed, 0x100);
         if (szParsed[0] != '\0') {
           pEntry = pThis->tIgnoredPatterns.Ptr(szParsed);
@@ -1020,7 +1017,7 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::NewN
 
 // @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI>::InternalNew (STORM.H)
 template<> ::StringEntryNode * __thiscall TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalNew(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, TSExplicitList<::StringEntryNode, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::StringEntryNode* pAlloc = (::StringEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, D2Common::Chat::Ignorelist::StringEntryNode::s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
+    ::StringEntryNode* pAlloc = (::StringEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(StringEntryNode), D2Common::Chat::Ignorelist::StringEntryNode::s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
     ::StringEntryNode* pNewEntry;
     if (pAlloc) {
       pAlloc->m_linktoslot.m_prevlink = 0;
@@ -1296,15 +1293,11 @@ int32_t __thiscall CheckIgnored(::IgnoreList * pThis, char * szPlayerName) {
     int32_t _bIsEnabled;
     bool bIsEnabled;
     bool bFound;
-    char szSuffix[256];
     if (!(!szPlayerName || *szPlayerName == '\0')) {
-      char szPrefix[256];
       _bIsEnabled = pThis->_vfptr->GetPersistentSetting(pThis);
       if (_bIsEnabled) {
-        szSuffix[0] = '\0';
-        memset(szSuffix + 1, 0, 0xff);
-        szPrefix[0] = '\0';
-        memset(szPrefix + 1, 0, 0xff);
+        char szSuffix[256] = "";
+        char szPrefix[256] = "";
         IGNORELIST_ExtractPrefix(pThis, szPlayerName, szPrefix, 0x100);
         pThis->_vfptr->GetMappedValue(pThis, szPrefix, szSuffix, 0x100);
         if (szSuffix[0] == '\0') {
@@ -1908,13 +1901,11 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
 // Adds a name pattern to the ignore list and returns the result. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the value is already in EAX; typed void the reconstruction dropped it.
 int32_t __thiscall AddByPattern(::IgnoreList * pThis, char * szPattern) {
     ::StringEntryNode* pExistingEntry;
-    char szParsedPattern[256];
     if (szPattern && *szPattern != '\0') {
       int32_t bCanAdd;
       bCanAdd = pThis->_vfptr->GetPersistentSetting(pThis);
       if (bCanAdd) {
-        szParsedPattern[0] = '\0';
-        memset(szParsedPattern + 1, 0, 0xff);
+        char szParsedPattern[256] = "";
         IGNORELIST_ParsePattern(pThis, szPattern, szParsedPattern, 0x100);
         if (szParsedPattern[0] != '\0') {
           pExistingEntry = pThis->tIgnoredPatterns.Ptr(szParsedPattern);
@@ -1942,7 +1933,7 @@ int32_t __thiscall AddByAccountName(::IgnoreList * pThis, char * szAccountName) 
         pExistingEntry = pThis->tIgnoredAccounts.Ptr(szAccountName);
         if (!pExistingEntry) {
           pThis->tIgnoredAccounts.New(szAccountName, 0, 0);
-          memset(cIgnorePrefix + 1, 0, 0xff);
+          memset(cIgnorePrefix + 1, 0, sizeof(cIgnorePrefix) - sizeof(cIgnorePrefix[0]));
           cIgnorePrefix[0] = '!';
           Storm::Source::SSTR::SStrPack(cIgnorePrefix, szAccountName, 0x100);
           AppendLineToFile(pThis, cIgnorePrefix);
@@ -1959,12 +1950,10 @@ void __thiscall LoadFromFile(::IgnoreList * pThis) {
     uint32_t nLineLen;
     TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pHashTable;
     uint32_t pszIter;
-    char szLineBuf[256];
     FILE* pFile = fopen(pThis->szIgnoreFilePath, "rt");
     if (pFile) {
       char* pszLine;
-      szLineBuf[0] = '\0';
-      memset(szLineBuf + 1, 0, 0xff);
+      char szLineBuf[256] = "";
       pszLine = fgets(szLineBuf, 0x100, pFile);
       while (pszLine) {
         pszIter = 0;
@@ -2046,7 +2035,7 @@ namespace D2Common::Chat::Ignorelist::IgnoreList {
     pThis->pAppendFile = 0;
     pThis->nPersistentIgnore = 1;
     Fog::Source::SFile::SFILE_GetExecutableDirectory(__frame0.szExePath, 0x104);
-    Storm::Source::SMem::SMemZero(pThis->szIgnoreFilePath, 0x104);
+    Storm::Source::SMem::SMemZero(pThis->szIgnoreFilePath, sizeof(pThis->szIgnoreFilePath));
     char* pszLastBackslash = Storm::Source::SSTR::SStrChrR(__frame0.szExePath, '\\');
     if (pszLastBackslash) {
       pszLastBackslash[1] = '\0';
@@ -2079,8 +2068,8 @@ BOOL __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nR
     if (szRaw && *szRaw != '\0') {
       bIsOnline = pThis->_vfptr->GetPersistentSetting(pThis);
       if (bIsOnline) {
-        Storm::Source::SMem::SMemZero(szCharName, 0x100);
-        Storm::Source::SMem::SMemZero(szAccountName, 0x100);
+        Storm::Source::SMem::SMemZero(szCharName, sizeof(szCharName));
+        Storm::Source::SMem::SMemZero(szAccountName, sizeof(szAccountName));
         nOpenParenIdx = 0;
         for (nCharIdx = 0; szRaw[nCharIdx] != '\0' && nCharIdx < nRawLen - 1U; nCharIdx++) {
           if (szRaw[nCharIdx + 1] == '(') {
@@ -2103,7 +2092,7 @@ BOOL __thiscall AddAccountMapping(::IgnoreList * pThis, char * szRaw, int32_t nR
             Storm::Source::SMem::SMemFree(pNameEntry->szMappedValue, ".\\Chat\\Ignorelist.cpp", 0x142, 0);
           }
 
-          memset(cPatternPrefix + 1, 0, 0xff);
+          memset(cPatternPrefix + 1, 0, sizeof(cPatternPrefix) - sizeof(cPatternPrefix[0]));
           cPatternPrefix[0] = '*';
           Storm::Source::SSTR::SStrPack(cPatternPrefix, szCharName, 0x100);
           pszPatternDup = Storm::Source::SSTR::SStrDup(cPatternPrefix);

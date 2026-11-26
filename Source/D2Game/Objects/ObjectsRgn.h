@@ -48,16 +48,16 @@ union AllocObjectControl_Slotmc {
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2ObjectControlSub0x1110
 #define D2_DEFINED_D2ObjectControlSub0x1110
-struct __attribute__((packed)) D2ObjectControlSub0x1110 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ObjectControlSub0x1110 {
     /* 0x00 */ struct D2RoomStrc * pRoom;
     /* 0x04 */ POINT sCoords;
     /* 0x0C */ struct D2ObjectControlSub0x1110 * pPrev;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ObjectControlSub0x1110
 #ifndef D2_DEFINED_D2ObjectRngStrc
 #define D2_DEFINED_D2ObjectRngStrc
-struct __attribute__((packed)) D2ObjectRngStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ObjectRngStrc {
     /* 0x00 */ uint8_t nAct; // Act number from LevelsTxt
     /* 0x01 */ uint8_t pad_0x1[3];
     /* 0x04 */ int pad_0x4;
@@ -69,7 +69,7 @@ struct __attribute__((packed)) D2ObjectRngStrc {
     /* 0x1C */ int nMonClassId; // Cached monster class for object animations, init -1
     /* 0x20 */ POINT aPoints2[4]; // Object placement exclusion zones
     /* 0x40 */ POINT aPoints1[10]; // Object placement positions
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ObjectRngStrc
 namespace D2Game::Objects::ObjectsRgn {

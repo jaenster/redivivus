@@ -2628,7 +2628,7 @@ struct D2EventControlStrc {
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2EventEntryStrc
 #define D2_DEFINED_D2EventEntryStrc
-__pragma(pack(push, 1)) struct D2EventEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2EventEntryStrc {
     /* 0x00 */ eD2TimerType nTimerType; // type of timer, varies between unit types
     /* 0x01 */ uint8_t pad_0x1;
     /* 0x02 */ short nFlags;
@@ -2643,12 +2643,12 @@ __pragma(pack(push, 1)) struct D2EventEntryStrc {
     /* 0x24 */ struct D2TimerListStrc * pNextTimerOnUnit; // next timer assigned to this unit
     /* 0x28 */ struct D2TimerListStrc * pTimerList; // timer list this timer belongs to
     /* 0x2C */ void (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *);
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2EventEntryStrc
 #ifndef D2_DEFINED_D2TimerStrc
 #define D2_DEFINED_D2TimerStrc
-__pragma(pack(push, 1)) struct D2TimerStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TimerStrc {
     /* 0x00 */ eD2TimerType nTimerType; // the type of the timer, this varies between unit types
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint16_t nFlags;
@@ -2663,16 +2663,16 @@ __pragma(pack(push, 1)) struct D2TimerStrc {
     /* 0x24 */ struct D2TimerStrc * pNextTimerOnUnit; // the next timer assigned to this unit
     /* 0x28 */ struct D2TimerStrc * pPrevTimerOnUnit; // previous timer on the same unit: EVENT_AllocTimerToUnit stores the new head into the old head's +0x28
     /* 0x2C */ BOOL (__fastcall *nfpTimerFunction)(::SGAMEDATA *, struct D2UnitStrc *, eD2TimerTypeDWORD, int32_t, int32_t); // function called when the timer ends
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2TimerStrc
 #ifndef D2_DEFINED_D2EventStrc
 #define D2_DEFINED_D2EventStrc
-__pragma(pack(push, 1)) struct D2EventStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2EventStrc {
     /* 0x0000 */ D2EventEntryStrc aEvents[600];
     /* 0x7080 */ struct D2EventStrc * pNext;
     /* 0x7084 */ struct D2EventStrc * pPrev;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2EventStrc
 namespace D2Game { namespace GAME { namespace Event {

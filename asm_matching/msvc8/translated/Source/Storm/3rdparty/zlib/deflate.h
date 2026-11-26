@@ -87,7 +87,7 @@ struct z_stream {
 #endif // D2_DEFINED_z_stream
 #ifndef D2_DEFINED_deflate_state
 #define D2_DEFINED_deflate_state
-__pragma(pack(push, 1)) struct deflate_state {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct deflate_state {
     /* 0x0000 */ z_stream * strm; // pointer back to this zlib stream
     /* 0x0004 */ int32_t status; // deflate state machine status
     /* 0x0008 */ uint8_t * pending_buf; // output still pending
@@ -153,7 +153,7 @@ __pragma(pack(push, 1)) struct deflate_state {
     /* 0x16BB */ uint8_t field_0x16bb;
     /* 0x16BC */ int32_t bi_valid; // number of valid bits in bi_buf
     /* 0x16C0 */ uint32_t high_water; // high water mark offset in window for initialized bytes
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_deflate_state
 namespace Storm { namespace _3rdparty { namespace zlib { namespace deflate {

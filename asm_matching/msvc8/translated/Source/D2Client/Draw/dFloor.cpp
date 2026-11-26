@@ -319,7 +319,7 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * pLightBuffer, int32_t nTi
           pScreenX = &pLightEntry->nX;
           D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nSplitSide + nTileX) * 0x10000, (nRow + nTileY) * 0x10000, 0, pScreenX, &pLightEntry->nY);
           *pScreenX += nScreenHalfAdj;
-          View::DRAW_CoordIsInCoord((nSplitSide + nTileX) * 8, (nRow + nTileY) * 8, (uint8_t*)pLightEntry, (uint8_t*)((char*)pLightEntry + 1), (uint8_t*)((char*)pLightEntry + 2), (uint8_t*)((char*)pLightEntry + 3));
+          View::DRAW_CoordIsInCoord((nSplitSide + nTileX) * 8, (nRow + nTileY) * 8, &pLightEntry->sLight.nIntensity, &pLightEntry->sLight.nRed, &pLightEntry->sLight.nGreen, &pLightEntry->sLight.nBlue);
         }
 
         nSplitSide++;
@@ -699,7 +699,12 @@ void __fastcall dRoofDraw(D2GameViewStrc * pGameView) {
             pGameView = pGameViewSaved;
           }
 
+#if D2_ARCH_X86
           pCellEntry += 9;
+#elif D2_ARCH_X64
+          // The x86 body steps one 0x24-byte D2Wall2CellStrc as 9 list-head slots; the heads are pointers on x64.
+          pCellEntry = (D2Wall2DrawEntryStrc**)((char*)pCellEntry + sizeof(D2Wall2CellStrc));
+#endif
         } while (nCellsLeft);
       }
 

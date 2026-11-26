@@ -17,13 +17,13 @@
 // Data types
 #ifndef D2_DEFINED_MCPPacketSrv0x04
 #define D2_DEFINED_MCPPacketSrv0x04
-__pragma(pack(push, 1)) struct MCPPacketSrv0x04 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct MCPPacketSrv0x04 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ short nRequestId;
     /* 0x03 */ int nGameToken; // One dword: 0044ac24 MOV EDX,[EAX+3] stores it whole into D2GSGameToken (00798fb0)
     /* 0x07 */ int nGameIp;
     /* 0x0B */ int nGameHash;
     /* 0x0F */ int nResult;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_MCPPacketSrv0x04

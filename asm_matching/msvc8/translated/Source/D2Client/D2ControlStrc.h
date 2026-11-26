@@ -55,7 +55,7 @@ typedef BOOL (__stdcall *Push)(struct D2ControlMsg * pControlMsg);
 // Data types
 #ifndef D2_DEFINED_D2ControlStrc
 #define D2_DEFINED_D2ControlStrc
-__pragma(pack(push, 1)) struct D2ControlStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ControlStrc {
     /* 0x00 */ eD2FormType neD2FormType;
     /* 0x04 */ struct DC6 * pDC6;
     /* 0x08 */ int dwState;
@@ -72,6 +72,6 @@ __pragma(pack(push, 1)) struct D2ControlStrc {
     /* 0x34 */ BOOL (__stdcall *fpOnPress)(struct D2ControlMsg *);
     /* 0x38 */ BOOL (__fastcall *fpHitTest)(struct D2ControlStrc *);
     /* 0x3C */ struct D2ControlStrc * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ControlStrc

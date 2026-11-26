@@ -73,7 +73,7 @@ struct D2EscMenuUIFlagStrc {
 };
 
 #endif // D2_DEFINED_D2EscMenuUIFlagStrc
-__pragma(pack(push, 1)) struct D2UIMouseMsgStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2UIMouseMsgStrc {
     /* 0x00 */ HWND hWnd; // HWND the message was delivered to. Built by Storm::WindowHandle::WND_DispatchWindowMessage @00420b00 as its local hMsgWnd at Stack[-0x24], which it passes to SEvtDispatch as the opaque pData.
     /* 0x04 */ uint32_t uMsg; // Windows message id. WND_DispatchWindowMessage local uMsgL at Stack[-0x20].
     /* 0x08 */ WPARAM nWParam; // WPARAM. WND_DispatchWindowMessage local nMsgWParam at Stack[-0x1c]. Read as a byte virtual-key code by INPUT_FormKeyHandler/INPUT_FormKeyUpHandler.
@@ -85,7 +85,7 @@ __pragma(pack(push, 1)) struct D2UIMouseMsgStrc {
     /* 0x17 */ uint8_t field_0x17;
     /* 0x18 */ uint32_t bHandled; // Handler sets 1 to mark the message consumed. Returned to the caller through WND_DispatchWindowMessage's pdwResult1.
     /* 0x1C */ LRESULT dwResult; // Handler result, returned through WND_DispatchWindowMessage's pdwResult2.
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 namespace D2Client { namespace UI { namespace EscMenu {
 

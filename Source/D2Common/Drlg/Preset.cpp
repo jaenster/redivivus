@@ -51,6 +51,9 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2PresetUnitStrc) == 0x20, "D2_NEW_
 #ifndef D2_FREE_AT
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(D2DrlgSubstGroupStrc) == 0x18, "D2DrlgSubstGroupStrc is 0x18 bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2PathPosStrc) == 0xc, "D2PathPosStrc is 0xc bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2DrlgCoordStrc) == 0x10, "D2DrlgCoordStrc is 0x10 bytes on x86");
 
 
 #ifndef RECON_FPTD_fTownAutoMap
@@ -880,7 +883,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
       eCellUnitType = *pCursor2;
       pFile->nSubstGroups = eCellUnitType;
       pCursor2++;
-      pSubstGroups = (D2DrlgSubstGroupStrc*)D2_ALLOC_POOL_AT(nullptr, eCellUnitType * 0x18, ".\\DRLG\\Preset.cpp", 0x476);
+      pSubstGroups = (D2DrlgSubstGroupStrc*)D2_ALLOC_POOL_AT(nullptr, eCellUnitType * sizeof(D2DrlgSubstGroupStrc), ".\\DRLG\\Preset.cpp", 0x476);
       nStrLen = 0;
       pFile->pSubstGroups = pSubstGroups;
       if (pFile->nSubstGroups > 0) {
@@ -923,7 +926,7 @@ void __fastcall ParsePresetsOfDrlgFile(D2DrlgFileStrc * pFile, D2PoolManagerStrc
           if (pPreset->nPosX == *pCursor && pPreset->nPosY == *pnPosY) {
             pPathNodes = D2_NEW_POOL_AT(nullptr, D2MapAIStrc, ".\\DRLG\\Preset.cpp", 0x4a8);
             pPreset->pMapAI = pPathNodes;
-            pDVar2 = (D2PathPosStrc*)D2_ALLOC_POOL_AT(nullptr, nPcVar1 * 0xc, ".\\DRLG\\Preset.cpp", 0x4a9);
+            pDVar2 = (D2PathPosStrc*)D2_ALLOC_POOL_AT(nullptr, nPcVar1 * sizeof(D2PathPosStrc), ".\\DRLG\\Preset.cpp", 0x4a9);
             pPreset->pMapAI->pPosition = pDVar2;
             pPreset->pMapAI->nSize = nPcVar1;
             if (nPcVar1 > 0) {
@@ -1004,9 +1007,9 @@ D2MapAIStrc * __fastcall DRLGPRESET_CopyMapAI(D2PoolManagerStrc * pMemory, D2Map
     memset(pNewMapAI, 0, sizeof(*pNewMapAI));
     int nMode = pSrcMapAI->nSize;
     pNewMapAI->nSize = nMode;
-    D2PathPosStrc* pData = (D2PathPosStrc*)D2_ALLOC_POOL_AT(pMemory, nMode * 0xc, ".\\DRLG\\Preset.cpp", 0x579);
+    D2PathPosStrc* pData = (D2PathPosStrc*)D2_ALLOC_POOL_AT(pMemory, nMode * sizeof(D2PathPosStrc), ".\\DRLG\\Preset.cpp", 0x579);
     pNewMapAI->pPosition = pData;
-    memcpy(pData, pSrcMapAI->pPosition, pNewMapAI->nSize * 0xc);
+    memcpy(pData, pSrcMapAI->pPosition, pNewMapAI->nSize * sizeof(D2PathPosStrc));
     return pNewMapAI;
 }
 
@@ -1204,7 +1207,7 @@ void __fastcall DRLGPRESET_FreePresetRoomGridsFromRoomEx(D2RoomExStrc * pRoomEx)
 // @sourcefile .\DRLG\Preset.cpp
 void __fastcall DRLGROOMEX_AllocRoomExDataPresetArea(D2RoomExStrc * pRoomEx) {
     D2DrlgPresetRoomStrc* pPresetData = D2_NEW_POOL_AT(pRoomEx->pLevel->pDrlg->pMemoryPool, D2DrlgPresetRoomStrc, ".\\DRLG\\Preset.cpp", 0x70f);
-    memset(pPresetData, 0, 0xf8);
+    memset(pPresetData, 0, sizeof(D2DrlgPresetRoomStrc));
     pRoomEx->pRoomExData.pRoomExDataPreset = pPresetData;
 }
 
@@ -1581,7 +1584,7 @@ D2DrlgMapStrc * __fastcall DRLGPRESET_AllocDrlgMap(D2DrlgLevelStrc * pLevel, int
     uint32_t nFileSelector;
     uint32_t seedProduct;
     D2DrlgMapStrc* pDrlgMap = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgMapStrc, ".\\DRLG\\Preset.cpp", 0x9ad);
-    memset(pDrlgMap, 0, 0x58);
+    memset(pDrlgMap, 0, sizeof(D2DrlgMapStrc));
     D2LvlPrestTxt* pLvlPrest = DATATBLS::LvlTbls::TXT_LvlPrest_GetLine(nLvlPrestId);
     pDrlgMap->pTxtLevelPrest = pLvlPrest;
     pDrlgMap->nNumber = nLvlPrestId;
@@ -2131,13 +2134,13 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
 
       {
         if (nPopsCount) {
-          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * 4, ".\\DRLG\\Preset.cpp", 0x8bf);
+          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * sizeof(int), ".\\DRLG\\Preset.cpp", 0x8bf);
           pDrlgMap->pPopsIndex = pAllocatedArray;
-          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * 4, ".\\DRLG\\Preset.cpp", 0x8c0);
+          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * sizeof(int), ".\\DRLG\\Preset.cpp", 0x8c0);
           pDrlgMap->pPopsSubIndex = pAllocatedArray;
-          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * 4, ".\\DRLG\\Preset.cpp", 0x8c1);
+          pAllocatedArray = (int*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * sizeof(int), ".\\DRLG\\Preset.cpp", 0x8c1);
           pDrlgMap->pPopsOrientation = pAllocatedArray;
-          pPosLocationArray = (D2DrlgCoordStrc*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount << 4, ".\\DRLG\\Preset.cpp", 0x8c2);
+          pPosLocationArray = (D2DrlgCoordStrc*)D2_ALLOC_POOL_AT(pMemoryOrXIndex, nPopsCount * sizeof(D2DrlgCoordStrc), ".\\DRLG\\Preset.cpp", 0x8c2);
           pDrlgMap->pPosLocation = pPosLocationArray;
         }
 
@@ -2145,7 +2148,7 @@ static void __stdcall DRLGPRESET_BuildPresetArea(D2DrlgMapStrc * pDrlgMap, D2Drl
         memset(pDrlgMap->pPopsIndex, 0, nPopsArrayBytes);
         memset(pDrlgMap->pPopsSubIndex, 0, nPopsArrayBytes);
         memset(pDrlgMap->pPopsOrientation, 0, nPopsArrayBytes);
-        memset(pDrlgMap->pPosLocation, 0, nPopsCount << 4);
+        memset(pDrlgMap->pPosLocation, 0, nPopsCount * sizeof(D2DrlgCoordStrc));
         pDrlgFile = pDrlgMap->pDrlgFile;
         D2DrlgCoordStrc fileCoords = {0};
         D2DrlgGridStrc wallGrid = {0};
@@ -2543,7 +2546,7 @@ void __fastcall DRLGPRESET_FreeDrlgMapList(D2PoolManagerStrc * pMemory, D2DrlgMa
 
 // Searches for a matching preset type in the static preset type table. Compares the level ID, orientation bits, sub-type byte, and additional parameter against the table entries. Returns the matching index or -1 if not found. From Preset.cpp area.
 int32_t __stdcall DRLGPRESET_FindPresetTypeIndex(int32_t nLevelType, uint32_t nOrientationFlags, uint32_t nSubIndex) {
-    for (int i = 0; i < 37; i++) {
+    for (int i = 0; i < (int)(sizeof(gPresetTypeTables.aIndex) / sizeof(gPresetTypeTables.aIndex[0])); i++) {
       if (gPresetTypeTables.aIndex[i].nLevelId == nLevelType) {
         int nLast = gPresetTypeTables.aIndex[i].nLastIndex;
         uint32_t nOrientation = nOrientationFlags >> 0x14 & 0x3f;

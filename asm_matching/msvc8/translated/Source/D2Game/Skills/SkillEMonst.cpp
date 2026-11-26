@@ -244,11 +244,11 @@ BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc *
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
     }
 
-    uint8_t* pCombatEntryPtr = (uint8_t*)UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTargetUnit);
+    D2DamageStrc* pCombatEntryPtr = UNIT::SUnitDmg::DAMAGE_FindCombatEntry(pUnit, pTargetUnit);
     if (!pCombatEntryPtr) {
       return 0;
     }
-    if (pCombatEntryPtr[4] & 1) {
+    if (pCombatEntryPtr->wResultFlags & 1) {
       int nCurHp;
       pOwner = 0;
       if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
@@ -260,7 +260,7 @@ BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc *
 
       nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pOwner, UNITSTAT_hitpoints, 0);
       nValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pOwner);
-      nDmgHp = *(int*)(pCombatEntryPtr + 8);
+      nDmgHp = pCombatEntryPtr->dwPhysDamage;
       nTargetHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
       if (nDmgHp >= nTargetHp) {
         nDmgHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pTargetUnit, UNITSTAT_hitpoints, 0);
