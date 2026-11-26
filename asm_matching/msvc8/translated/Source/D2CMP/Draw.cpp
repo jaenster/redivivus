@@ -387,14 +387,11 @@ uint8_t __stdcall DRAW_FindNearestPaletteColor(uint8_t nRed, uint8_t nGreen, uin
     uint32_t nMinDistance = 0x7fffffff;
     uint32_t nBestIndex = 0;
     uint32_t nCurrentIndex = gnPaletteColorDepth;
-    if (gnPaletteColorDepth > gnPaletteMaxIndex) {
-      return '\0';
-    }
-
-    do {
+    while (nCurrentIndex <= gnPaletteMaxIndex) {
       if (!gbPaletteMaskEnabled || gaPaletteMaskData[nCurrentIndex] != '\0') {
         if (gbTransparentColorEnabled && gnDrawTransparentColorRGB == ((uint32_t)((uint16_t)(uint8_t)nRed << 8 | (uint16_t)(uint8_t)nGreen) << 8 | (uint32_t)(uint8_t)nBlue)) {
-          return '\0';
+          nBestIndex = 0;
+          break;
         }
 
         nDistance = gaColorDistanceLookupTable[(uint32_t)nRed - (uint32_t)gaGlobalPaletteRed[nCurrentIndex].b + 0x100] + gaColorDistanceLookupTable[(uint32_t)nGreen - (uint32_t)gaGlobalPaletteRed[nCurrentIndex].g + 0x100] + gaColorDistanceLookupTable[(uint32_t)nBlue - (uint32_t)gaGlobalPaletteRed[nCurrentIndex].r + 0x100];
@@ -405,10 +402,9 @@ uint8_t __stdcall DRAW_FindNearestPaletteColor(uint8_t nRed, uint8_t nGreen, uin
       }
 
       nCurrentIndex++;
-      if (nCurrentIndex > gnPaletteMaxIndex) {
-        return (uint8_t)nBestIndex;
-      }
-    } while (true);
+    }
+
+    return (uint8_t)nBestIndex;
 }
 
 int __stdcall DRAW_ConvertRGBAToIndexed(uint8_t * pRGBAIn, uint8_t * pIndexedOut, int nPixelCount, pfnRGBToPaletteIndex pfnCustomColorFinder) {
