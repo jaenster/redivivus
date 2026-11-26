@@ -58892,7 +58892,7 @@ static int32_t ESCMENU_GetItemIndexFromMouseY(int32_t nParam) {
       }
 
       nMenuCenterY++;
-      pItemYPosition += 0x154;
+      pItemYPosition += sizeof(D2EscMenuItemStrc) / sizeof(int);
     } while (nMenuCenterY < nMenuItemCount);
 
     if (nFoundIndex < 0) {
@@ -59235,7 +59235,7 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
       return;
     }
 
-    nSubImageOffset = 0x150;
+    nSubImageOffset = offsetof(D2EscMenuItemStrc, pDC6SubImages) / sizeof(DC6*);
     do {
       if (!pMenuTable[nItemIndex].nExpansionOnly || (bIsExpansion = Fog::D2CheckExpansionGame() , bIsExpansion != 0)) {
         if (pMenuTable[nItemIndex].szLocalizedImagePath[0] != '\0') {
@@ -59263,7 +59263,7 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
                 pLoadedDC6 = Core::Archive::IMAGE_LoadDC6Ex(szImagePath, 0);
                 nTableOffset = nSubImageOffset + nSubImageIndex;
                 nSubImageIndex++;
-                *(DC6**)(pMenuTable->szLocalizedImagePath + (nTableOffset * 4 - 0xc)) = (DC6*)pLoadedDC6;
+                *(DC6**)(pMenuTable->szLocalizedImagePath + (nTableOffset * sizeof(DC6*) - offsetof(D2EscMenuItemStrc, szLocalizedImagePath))) = (DC6*)pLoadedDC6;
                 pSubImagePath += 0x104;
               } while (nSubImageIndex < (uint32_t)pMenuTable[nItemIndex].nSubImageCount);
             }
@@ -59274,7 +59274,7 @@ void __fastcall ESCMENU_LoadLocalizedImages(int * pMenuHeader, D2EscMenuItemStrc
         }
       }
 
-      nSubImageOffset += 0x154;
+      nSubImageOffset += sizeof(D2EscMenuItemStrc) / sizeof(DC6*);
       nItemIndex++;
     } while (nItemIndex < *pMenuHeader);
 

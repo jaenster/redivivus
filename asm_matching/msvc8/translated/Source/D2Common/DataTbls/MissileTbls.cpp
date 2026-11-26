@@ -375,7 +375,7 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
       MISSILETBLS_ValidateAndClampField(1, 0, 8, 0x183, missiles, nMissileIdx);
     }
 
-    DataTbls::TXT_SaveTableToBinFile(pMemory, "misscode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pMissCode, (size_t*)&MonsterTbls::sgtDataTable.nMissCodeSize, (size_t*)&MonsterTbls::sgtDataTable.nMissCodeCapacity);
+    DataTbls::TXT_SaveTableToBinFile(pMemory, "misscode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pMissCode, &MonsterTbls::sgtDataTable.nMissCodeSize, &MonsterTbls::sgtDataTable.nMissCodeCapacity);
 }
 
 // @sourcefile .\DATATBLS\MissileTbls.cpp

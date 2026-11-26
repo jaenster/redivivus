@@ -658,6 +658,10 @@ template<> void __thiscall TSHashTableReuse<CELLIST, HASHKEY_NONE, 0>::InternalD
 }
 
 // Resize the pool block array to nNewCapacity slots; realloc or alloc+copy; re-init moved nodes
+// ReallocData walks the records by their m_frames.m_terminator link; the record holds pointers, so the distances differ on x64.
+#define CELLIST_TERM_OFFSET ((intptr_t)offsetof(::CELLIST, m_frames.m_terminator))
+#define CELLIST_OF_TERM(pLink) ((::CELLIST*)((char*)(pLink) - CELLIST_TERM_OFFSET))
+
 template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::ReallocData(uint32_t nAlloc) {
     TSLink<::TCELENTRY>** pBackLinkR;
     TSLink<::TCELENTRY>** pFreeListEntry;
@@ -670,7 +674,7 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Reall
     if (nAlloc < this->m_count) {
       pFreeListSlot = &pOldBlock[nAlloc].m_frames.m_terminator;
       do {
-        ((TSList<::TCELENTRY, TSGetLink<::TCELENTRY>>*)((char*)(pFreeListSlot - 1) + 4))->UnlinkAll();
+        CELLIST_OF_TERM(pFreeListSlot)->m_frames.UnlinkAll();
         pActiveNext = pFreeListSlot->m_prevlink;
         if (pActiveNext) {
           nCopyCount = pFreeListSlot->m_next;
@@ -681,9 +685,9 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Reall
           pFreeListSlot->m_next = 0;
         }
 
-        ((TSHashObject<::CELLIST, HASHKEY_NONE>*)(pFreeListSlot - 6))->Destructor();
+        ((TSHashObject<::CELLIST, HASHKEY_NONE>*)CELLIST_OF_TERM(pFreeListSlot))->Destructor();
         nAlloc++;
-        pFreeListSlot += 7;
+        pFreeListSlot = (TSLink<::TCELENTRY>*)((char*)pFreeListSlot + sizeof(::CELLIST));
       } while (nAlloc < this->m_count);
     }
 
@@ -708,27 +712,27 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Reall
       ::CELLIST* nNewNodeBase;
       pFreeListSlot = &pOldBlock->m_frames.m_terminator;
       do {
-        nNewNodeBase = (::CELLIST*)(-0x30 - (intptr_t)pOldBlock + (intptr_t)pFreeListSlot + (intptr_t)this->m_data);
+        nNewNodeBase = (::CELLIST*)(-CELLIST_TERM_OFFSET - (intptr_t)pOldBlock + (intptr_t)pFreeListSlot + (intptr_t)this->m_data);
         if (nNewNodeBase) {
           nNewNodeBase->m_linktoslot.m_prevlink = 0;
           nNewNodeBase->m_linktoslot.m_next = 0;
           nNewNodeBase->m_linktofull.m_prevlink = 0;
           nNewNodeBase->m_linktofull.m_next = 0;
-          nNewNodeBase->dwFlags = *(uint32_t*)(pFreeListSlot - 3);
-          nNewNodeBase->nFormat = *(uint32_t*)((char*)(pFreeListSlot - 3) + 4);
-          nNewNodeBase->pRawData = pFreeListSlot[-2].m_prevlink;
-          nNewNodeBase->nFrameCount = *(uint32_t*)((char*)(pFreeListSlot - 2) + 4);
-          nNewNodeBase->nDirections = *(uint32_t*)(pFreeListSlot - 1);
+          nNewNodeBase->dwFlags = CELLIST_OF_TERM(pFreeListSlot)->dwFlags;
+          nNewNodeBase->nFormat = CELLIST_OF_TERM(pFreeListSlot)->nFormat;
+          nNewNodeBase->pRawData = CELLIST_OF_TERM(pFreeListSlot)->pRawData;
+          nNewNodeBase->nFrameCount = CELLIST_OF_TERM(pFreeListSlot)->nFrameCount;
+          nNewNodeBase->nDirections = CELLIST_OF_TERM(pFreeListSlot)->nDirections;
           pActiveNext = &nNewNodeBase->m_frames.m_terminator;
           pActiveNext->m_prevlink = 0;
           nNewNodeBase->m_frames.m_terminator.m_next = 0;
-          nAllocPolicy = *(int*)((char*)(pFreeListSlot - 1) + 4);
+          nAllocPolicy = CELLIST_OF_TERM(pFreeListSlot)->m_frames.m_linkoffset;
           pActiveNext->m_prevlink = pActiveNext;
           nNewNodeBase->m_frames.m_linkoffset = nAllocPolicy;
           nNewNodeBase->m_frames.m_terminator.m_next = ~(uintptr_t)pActiveNext;
         }
 
-        ((TSList<::TCELENTRY, TSGetLink<::TCELENTRY>>*)((char*)(pFreeListSlot - 1) + 4))->UnlinkAll();
+        CELLIST_OF_TERM(pFreeListSlot)->m_frames.UnlinkAll();
         pActiveNext = pFreeListSlot->m_prevlink;
         if (pActiveNext) {
           nCopyCount = pFreeListSlot->m_next;
@@ -739,14 +743,17 @@ template<> __attribute__((noinline)) inline void TSGrowableArray<CELLIST>::Reall
           pFreeListSlot->m_next = 0;
         }
 
-        ((TSHashObject<::CELLIST, HASHKEY_NONE>*)(pFreeListSlot - 6))->Destructor();
-        pFreeListSlot += 7;
+        ((TSHashObject<::CELLIST, HASHKEY_NONE>*)CELLIST_OF_TERM(pFreeListSlot))->Destructor();
+        pFreeListSlot = (TSLink<::TCELENTRY>*)((char*)pFreeListSlot + sizeof(::CELLIST));
         nAlloc--;
       } while (nAlloc);
     }
 
     Storm::Source::SMem::SMemFree(pOldBlock, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, 0);
 }
+
+#undef CELLIST_OF_TERM
+#undef CELLIST_TERM_OFFSET
 
 
 template<> void TSGrowableArray<CELLIST>::Reserve(uint32_t nCount, int32_t bRound) {

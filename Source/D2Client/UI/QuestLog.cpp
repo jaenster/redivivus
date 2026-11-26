@@ -1067,7 +1067,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
     nActIndex = 0;
     while (gaQuestInfoTable[nActIndex].nQuestId != pEntry->eQuestId) {
       nActIndex++;
-      if ((intptr_t)&gaQuestInfoTable[nActIndex].nQuestId >= (intptr_t)((char*)&gaQuestInfoTable + sizeof(gaQuestInfoTable) + 12)) {
+      if ((intptr_t)&gaQuestInfoTable[nActIndex].nQuestId >= (intptr_t)((char*)&gaQuestInfoTable + sizeof(gaQuestInfoTable) + offsetof(D2QuestLogInfoStrc, nQuestId))) {
         pEntry->nDisplayState = 2;
         return;
       }
@@ -1587,7 +1587,7 @@ void __stdcall FreeQuestImages() {
       }
 
       ppActImage++;
-    } while ((intptr_t)ppActImage < (intptr_t)((char*)&gQuestLog + 181));
+    } while ((intptr_t)ppActImage < (intptr_t)((char*)&gQuestLog + offsetof(D2QuestLogStrc, questlast)));
 }
 
 // JMP thunk
@@ -2360,7 +2360,7 @@ void __stdcall QUESTLOG_LoadQuestIconsForAct(int nActIndex, int32_t bResetSelect
           return;
         }
 
-        pQuestIconEntry += 0x10;
+        pQuestIconEntry += sizeof(D2QuestLogInfoStrc);
       } while (true);
     }
 
@@ -2385,7 +2385,7 @@ void __stdcall GameOverWtf() {
     gQuestLog.questdone = 0;
     gQuestLog.invps = 0;
     gQuestLog.questlast = 0;
-    memset(gQuestLog.pQuestLogActImages, 0, 0x6c);
+    memset(gQuestLog.pQuestLogActImages, 0, sizeof(gQuestLog.pQuestLogActImages));
     gQuestLog.MonstersleftInDenOfEvil = 0;
     gQuestLog.pQuestLogData = 0;
     gQuestLog.bQuestLogScreenOpen = 0;
@@ -2664,7 +2664,7 @@ void __stdcall DRAW_UI_Quest() {
           bDoneIterating = '\x01';
         }
 
-        pQuestEntry += 0x10;
+        pQuestEntry += sizeof(D2QuestLogInfoStrc);
       } while (bDoneIterating == '\0');
 
       if (bShowSocketBg != '\0' && gQuestLog.nQuestLogActiveAct == 5) {

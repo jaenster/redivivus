@@ -17,7 +17,6 @@
 14	Source/D2CMP/Draw.cpp
 2	Source/D2CMP/Pallete.cpp
 3	Source/D2CMP/Src/CelCmp.cpp
-3	Source/D2CMP/Src/CelCmp/stpl_CELLIST.cpp
 2	Source/D2CMP/Src/Codec.cpp
 29	Source/D2CMP/Src/FastCmp.cpp
 1	Source/D2CMP/Src/Raw.cpp
@@ -48,14 +47,14 @@
 2	Source/D2Client/UI/MiniPanel.cpp
 6	Source/D2Client/UI/Panel.cpp
 8	Source/D2Client/UI/Party.cpp
-14	Source/D2Client/UI/QuestLog.cpp
+10	Source/D2Client/UI/QuestLog.cpp
 4	Source/D2Client/UI/SkillDesc.cpp
 10	Source/D2Client/UI/SpellSel.cpp
 18	Source/D2Client/UI/Text.cpp
 4	Source/D2Client/UI/Trade.cpp
 1	Source/D2Client/UI/Waypoint.cpp
 4	Source/D2Client/UI/editbox.cpp
-2	Source/D2Client/UI/npcmenu.cpp
+1	Source/D2Client/UI/npcmenu.cpp
 14	Source/D2Client/UI/ui.cpp
 21	Source/D2Client/Unit/Item.cpp
 1	Source/D2Client/Unit/Missile.cpp
@@ -168,7 +167,6 @@
 4	Source/D2Win/Src/D2WinTextBox.cpp
 5	Source/D2gfx/D2GfxHelperStrc.cpp
 14	Source/Fog/Debug.cpp
-1	Source/Fog/Engine/Application.cpp
 6	Source/Fog/File.cpp
 1	Source/Fog/Skills.cpp
 1	Source/Fog/Source/SSComp.cpp

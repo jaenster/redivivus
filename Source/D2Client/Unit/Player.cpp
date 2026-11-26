@@ -954,7 +954,8 @@ BOOL __fastcall PlayerMessage(int32_t nMessageType, D2UnitStrc * pUnit, D2Server
       case 0x12:
         pUnit->dwLastHitClass = pMessage->nTargetUnitType;
       bIsInTown = D2Common::INVENTORY::Inventory::INVENTORY_GetEquippedShield(pUnit->pInventory, nullptr);
-      if (bIsInTown || (D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pUnit->pInventory, (uint32_t*)&pMessage, -1, 1) , pMessage == (D2ServerMessageHandleStrc*)0xd)) {
+      uint32_t nWeaponClass;
+      if (bIsInTown || (D2Common::COMPOSIT::Composit::COMPOSIT_GetWeaponClassWithTransform(pUnit, pUnit->pInventory, &nWeaponClass, -1, 1) , nWeaponClass == 0xd)) {
         UnitMode::UNITMODE_SetAnimMode(pUnit, eD2PlayerAnimMode_ns::Block);
       }
 

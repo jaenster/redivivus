@@ -1177,7 +1177,7 @@ int __stdcall SFILE_GetFilePlatform(D2ArchiveStrc * pArchive, uint32_t * pPlatfo
       return 0;
     }
 
-    uint32_t* pPlatform = (uint32_t*)pArchive->pMpqFileRecord + 7;
+    uint32_t* pPlatform = (uint32_t*)(pArchive->pMpqFileRecord->szFileName + 0x14);
     pPlatformInfo[0] = pPlatform[0];
     pPlatformInfo[1] = pPlatform[1];
     pPlatformInfo[2] = pPlatform[2];
@@ -4476,7 +4476,7 @@ int __stdcall SFileDestroy() {
         break;
       }
 
-      SErr::SErrReportNamedResourceLeak("HSFILE", (char*)(gSFileOpenFileList.head.pNext + 8));
+      SErr::SErrReportNamedResourceLeak("HSFILE", ((D2MPQFileStrc*)gSFileOpenFileList.head.pNext)->szFileName);
       SFILE_FreeFileRecord((D2MPQFileStrc*)pListHead);
       SMem::SMemFree((void*)pListHead, "delete", -1, 0);
     }
@@ -4487,7 +4487,7 @@ int __stdcall SFileDestroy() {
         break;
       }
 
-      SErr::SErrReportNamedResourceLeak("HSARCHIVE", (char*)(gMpqArchiveList.head.pNext + 8));
+      SErr::SErrReportNamedResourceLeak("HSARCHIVE", ((D2ArchiveStrc*)gMpqArchiveList.head.pNext)->szArchivePath);
       SFILE_FreeArchiveRecord((D2ArchiveStrc*)pListHead);
       SMem::SMemFree((void*)pListHead, "delete", -1, 0);
     }

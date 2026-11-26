@@ -1173,7 +1173,7 @@ DWORD __stdcall TXT_Experience_GetExpRatio(int32_t nLevel) {
 }
 
 // @sourcefile .\DATATBLS\DataTbls.cpp
-void __fastcall TXT_SaveTableToBinFile(D2PoolManagerStrc * pMemory, char * szTableName, D2ArchiveStrc * * ppInput, size_t * pSize2, size_t * pSize1) {
+void __fastcall TXT_SaveTableToBinFile(D2PoolManagerStrc * pMemory, char * szTableName, D2ArchiveStrc * * ppInput, int * pSize2, int * pSize1) {
     FILE* pFile;
     uint32_t nLoadedSize;
     char szFilePath[260];
@@ -1624,8 +1624,8 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
         UnloadBin(pTxtTable);
       }
 
-      TXT_SaveTableToBinFile(pMemory, "skillscode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pSkillsCode, (size_t*)&MonsterTbls::sgtDataTable.nSkillsCodeSize, (size_t*)&MonsterTbls::sgtDataTable.nSkillsCodeCapacity);
-      TXT_SaveTableToBinFile(pMemory, "skilldesccode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pSkillDescCode, (size_t*)&MonsterTbls::sgtDataTable.nSkillDescCodeSize, (size_t*)&MonsterTbls::sgtDataTable.nSkillDescCodeCapacity);
+      TXT_SaveTableToBinFile(pMemory, "skillscode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pSkillsCode, &MonsterTbls::sgtDataTable.nSkillsCodeSize, &MonsterTbls::sgtDataTable.nSkillsCodeCapacity);
+      TXT_SaveTableToBinFile(pMemory, "skilldesccode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pSkillDescCode, &MonsterTbls::sgtDataTable.nSkillDescCodeSize, &MonsterTbls::sgtDataTable.nSkillDescCodeCapacity);
       MonsterTbls::sgtDataTable.pSkillsPerClassCounter = D2_NEW_POOL_AT(nullptr, D2SkillsPerClassCounter, ".\\DATATBLS\\DataTbls.cpp", 0x556);
       MonsterTbls::sgtDataTable.pSkillsPerClassCounter->Amazon = 0;
       MonsterTbls::sgtDataTable.pSkillsPerClassCounter->Sorceress = 0;

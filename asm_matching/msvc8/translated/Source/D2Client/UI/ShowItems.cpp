@@ -137,6 +137,10 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Lang/Unicode/UNISYS.inline.h"
 
+// Step and field distances from nDrawPosition inside gaGroundItemLabels, in int units; the record holds a pointer, so both differ on x64.
+#define GROUND_LABEL_STRIDE (int)(sizeof(D2GroundItemLabelStrc) / sizeof(int))
+#define GROUND_LABEL_DELTA(to) ((int)(offsetof(D2GroundItemLabelStrc, to) - offsetof(D2GroundItemLabelStrc, nDrawPosition)) / (int)sizeof(int))
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -460,9 +464,9 @@ void __stdcall DRAW_AltItems() {
       int* pDrawEntry;
       pDrawEntry = &gaGroundItemLabels[0].nDrawPosition;
       do {
-        D2Win::Src::D2WinFont::D2WINFONT_DrawTextWithBackgroundRect((uint16_t*)(pDrawEntry - 0x41), ((D2GroundItemLabelStrc*)(pDrawEntry - 0x46))->nLeft, pDrawEntry[-0x43], pDrawEntry[-1], *pDrawEntry, pDrawEntry[1]);
+        D2Win::Src::D2WinFont::D2WINFONT_DrawTextWithBackgroundRect((uint16_t*)(pDrawEntry + GROUND_LABEL_DELTA(wszName)), ((D2GroundItemLabelStrc*)(pDrawEntry + GROUND_LABEL_DELTA(nLeft)))->nLeft, pDrawEntry[GROUND_LABEL_DELTA(nBottom)], pDrawEntry[GROUND_LABEL_DELTA(nColorKey)], *pDrawEntry, pDrawEntry[GROUND_LABEL_DELTA(nTextColor)]);
         nMouseX++;
-        pDrawEntry += 0x48;
+        pDrawEntry += GROUND_LABEL_STRIDE;
       } while (nMouseX < gItemDrawFlags);
     }
     if (bFoundMatch) {

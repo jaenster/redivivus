@@ -1688,7 +1688,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
               iVar2++;
             }
 
-            pCandidateSlot += 0x42;
+            pCandidateSlot += 0x108 / sizeof(D2NetDataStrc*);
             nLoopCounter--;
           } while (nLoopCounter);
 
@@ -1724,7 +1724,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
                 }
               }
 
-              pCandidateIter += 0x42;
+              pCandidateIter += 0x108 / sizeof(D2NetDataStrc*);
               nLoopCounter--;
             } while (nLoopCounter);
 

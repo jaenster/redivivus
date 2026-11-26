@@ -2357,9 +2357,10 @@ D2UnitStrc * __fastcall ITEM_CreateFromSaveData(::SGAMEDATA * pGame, D2RoomStrc 
           return nullptr;
         }
 
-        nBytesConsumed = D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pSaveData, nSaveDataSize, bCheckItemHeader, nullptr, nVersion, (int*)&pUnitDataItemDetails);
+        int nLoadFailed;
+        nBytesConsumed = D2Common::ITEMS::Items::ITEM_LoadFromSaveData(pUnit, pSaveData, nSaveDataSize, bCheckItemHeader, nullptr, nVersion, &nLoadFailed);
         *pnBytesConsumed = nBytesConsumed;
-        if (nBytesConsumed && !pUnitDataItemDetails) {
+        if (nBytesConsumed && !nLoadFailed) {
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_SERVER, 1);
           D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pUnit, ITEMFLAG_NEW, 0);
           RefreshDurability(pGame, pUnit);

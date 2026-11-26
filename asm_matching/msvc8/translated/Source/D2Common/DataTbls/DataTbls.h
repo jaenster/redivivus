@@ -131,7 +131,7 @@ void __stdcall TXT_AllocTxt_charstats(struct D2PoolManagerStrc * pMemory);
 // Defines and compiles the experience.txt binary field descriptor table. Registers 8 INT fields (one per player class: Amazon through Assassin) plus an ExpRatio field at consecutive 4-byte offsets, then calls CompileTxt to parse experience.txt into sgtDataTable.pTxtExperience using the provided memory pool.
 void __stdcall TXT_AllocTxt_experience(struct D2PoolManagerStrc * pMemory);
 // @sourcefile .\DATATBLS\DataTbls.cpp
-void __fastcall TXT_SaveTableToBinFile(struct D2PoolManagerStrc * pMemory, char * szTableName, struct D2ArchiveStrc * * ppInput, size_t * pSize2, size_t * pSize1);
+void __fastcall TXT_SaveTableToBinFile(struct D2PoolManagerStrc * pMemory, char * szTableName, struct D2ArchiveStrc * * ppInput, int * pSize2, int * pSize1);
 // Loads and compiles Skills.txt and SkillDesc.txt into the engine's runtime tables. Builds two large D2BinFieldInputStrc schemas (skills: flags, mana/level reqs, damage, elemental, calc/srvprgfunc string-linker columns, state and reqskill cross-links; skilldesc) and compiles both into sgtDataTable (pTxtSkills/nTxtSkillsCount, pTxtSkillDesc/nTxtSkillDescSize, their txt-links, nPassiveSkillsCount). Also derives per-class skill index tables (pSkillsPerClassStrc, pPassiveSkillsPerClassStrc, pSkillsPerClassCounter, nSkillCountMaxPerClass) and cross-references pets (pTxtPetType.nSkillId). Caches skillscode/skilldesccode bins. Must run after pTxtPetType is loaded; halts via ErrorManager on count overflow. Skill record stride 0x23c. __stdcall(pMemory).
 // @sourcefile .\DATATBLS\DataTbls.cpp
 void __stdcall TXT_AllocTxt_skill_skilldesc(struct D2PoolManagerStrc * pMemory);

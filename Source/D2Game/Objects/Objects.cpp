@@ -514,14 +514,20 @@ D2UnitStrc * __fastcall SERVER_InitUnitObject(::SGAMEDATA * pGame, D2RoomStrc * 
     return pDVar1;
 }
 
+// The node behind D2TimerArgStrc::pTimerList: AllocTimer seeds one with nId -1, FrreeTimer walks pNext.
+struct D2ObjectTimerNodeStrc {
+    /* 0x00 */ int nId;
+    /* 0x04 */ D2ObjectTimerNodeStrc * pNext;
+};
+
 // @sourcefile .\OBJECTS\Objects.cpp
 D2TimerArgStrc * __fastcall AllocTimer(::SGAMEDATA * pGame) {
     D2TimerArgStrc* pTimerNode = D2_NEW_POOL_AT(pGame->pMemoryPool, D2TimerArgStrc, ".\\OBJECTS\\Objects.cpp", 0x1b8);
     memset(pTimerNode, 0, sizeof(*pTimerNode));
     pTimerNode->nUnitGUID = -1;
-    uint32_t* pTimerSentinel = (uint32_t*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, 8, ".\\OBJECTS\\Objects.cpp", 0x1bc);
-    *pTimerSentinel = -1;
-    pTimerSentinel[1] = 0;
+    D2ObjectTimerNodeStrc* pTimerSentinel = (D2ObjectTimerNodeStrc*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, sizeof(D2ObjectTimerNodeStrc), ".\\OBJECTS\\Objects.cpp", 0x1bc);
+    pTimerSentinel->nId = -1;
+    pTimerSentinel->pNext = nullptr;
     pTimerNode->pTimerList = pTimerSentinel;
     return pTimerNode;
 }
@@ -531,7 +537,7 @@ void __fastcall FrreeTimer(::SGAMEDATA * pGame, void * * ppTimerList) {
     void* pMemoryToFree = *ppTimerList;
     while (pMemoryToFree) {
       void* pNext;
-      pNext = *(void**)((char*)pMemoryToFree + 4);
+      pNext = ((D2ObjectTimerNodeStrc*)pMemoryToFree)->pNext;
       D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\OBJECTS\\Objects.cpp", 0x1ce);
       pMemoryToFree = pNext;
     }

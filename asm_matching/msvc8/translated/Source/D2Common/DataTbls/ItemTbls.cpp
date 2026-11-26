@@ -334,7 +334,7 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
     DataTbls::UnloadBin(pTxtWeaponsTmp);
     DataTbls::UnloadBin(pTxtArmorTmp);
     DataTbls::UnloadBin(pTxtMiscTmp);
-    DataTbls::TXT_SaveTableToBinFile(pMemory, "itemscode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pItemsCode, (size_t*)&MonsterTbls::sgtDataTable.nItemsCodeSize, (size_t*)&MonsterTbls::sgtDataTable.nItemsCodeCapacity);
+    DataTbls::TXT_SaveTableToBinFile(pMemory, "itemscode", (D2ArchiveStrc**)&MonsterTbls::sgtDataTable.pItemsCode, &MonsterTbls::sgtDataTable.nItemsCodeSize, &MonsterTbls::sgtDataTable.nItemsCodeCapacity);
     if (!MonsterTbls::sgtDataTable.bUseTxt) {
       i = 0;
       if (gsItemsTable.nSize > 0) {

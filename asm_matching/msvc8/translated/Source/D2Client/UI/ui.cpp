@@ -6852,9 +6852,9 @@ static int32_t UI_GetControlConfigTabIndex(int32_t nMouseX, int32_t nMouseY) {
     int nMatchedTabIndex = 0;
     uint32_t nTabByteOffset = 0;
     while (nMouseX < *(int*)(g_UIConfigTabTable[0].aBounds + nTabByteOffset) || nMouseX > *(int*)(g_UIConfigTabTable[0].aBounds + nTabByteOffset + 4) || nMouseY < *(int*)(g_UIConfigTabTable[0].aBounds + nTabByteOffset + 8) || nMouseY > *(int*)(g_UIConfigTabTable[0].aBounds + nTabByteOffset + 0xc)) {
-      nTabByteOffset += 0x1a;
+      nTabByteOffset += sizeof(D2UIConfigTabEntryStrc);
       nMatchedTabIndex++;
-      if (nTabByteOffset >= 0x4e) {
+      if (nTabByteOffset >= sizeof(g_UIConfigTabTable)) {
         return nMatchedTabIndex;
       }
     }

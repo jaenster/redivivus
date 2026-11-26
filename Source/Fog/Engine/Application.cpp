@@ -369,6 +369,14 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList) {
     return true;
 }
 
+// Loader-structure offsets in pointer units: every field before them is pointer-sized on both x86 and x64.
+#define PEB_WALK_TEB_PEB (12 * sizeof(void*))            // TEB.ProcessEnvironmentBlock
+#define PEB_WALK_PEB_LDR (3 * sizeof(void*))             // PEB.Ldr
+#define PEB_WALK_LDR_MEMORDER (8 + 3 * sizeof(void*))    // PEB_LDR_DATA.InMemoryOrderModuleList
+#define PEB_WALK_ENTRY_DLLBASE (4 * sizeof(void*))       // LDR_DATA_TABLE_ENTRY.DllBase, from InMemoryOrderLinks
+#define PEB_WALK_ENTRY_FULLNAME (7 * sizeof(void*))      // LDR_DATA_TABLE_ENTRY.FullDllName.Length, from InMemoryOrderLinks
+#define PEB_WALK_ENTRY_FULLNAME_BUF (8 * sizeof(void*))  // LDR_DATA_TABLE_ENTRY.FullDllName.Buffer, from InMemoryOrderLinks
+
 bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
     void* pSavedEsp;
     EH4_EXCEPTION_REGISTRATION tSehFrame;
@@ -384,8 +392,8 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
     }
 
     tSehFrame.TryLevel = 0;
-    uint8_t* pbLdr = *(uint8_t**)((char*)*(void**)((char*)NtCurrentTeb() + 0x30) + 0xc);
-    uint32_t* pListHead = (uint32_t*)(pbLdr + 0x14);
+    uint8_t* pbLdr = *(uint8_t**)((char*)*(void**)((char*)NtCurrentTeb() + PEB_WALK_TEB_PEB) + PEB_WALK_PEB_LDR);
+    uint32_t* pListHead = (uint32_t*)(pbLdr + PEB_WALK_LDR_MEMORDER);
     uint32_t* pEntry = *(uint32_t**)pListHead;
     while (true) {
       bool bVar1;
@@ -394,7 +402,7 @@ bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList) {
         return true;
       }
 
-      bVar1 = DEBUG_AddModuleToList(pModuleList, *(LPCWSTR*)(pEntry + 8), (uint32_t)*(uint16_t*)(pEntry + 7), *(short int**)(pEntry + 4));
+      bVar1 = DEBUG_AddModuleToList(pModuleList, *(LPCWSTR*)((char*)pEntry + PEB_WALK_ENTRY_FULLNAME_BUF), (uint32_t)*(uint16_t*)((char*)pEntry + PEB_WALK_ENTRY_FULLNAME), *(short int**)((char*)pEntry + PEB_WALK_ENTRY_DLLBASE));
       if (!bVar1) {
         break;
       }

@@ -624,19 +624,19 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
       ppDstHead = nTempSentinel.m_terminator.m_prevlink;
       do {
         while (0 < (nBucketNextLink = pThis->tSlotListArray.m_data[nBucketOffset].m_terminator.m_next)) {
-          pNextLink = (TSLink<::CELLIST>*)(nBucketNextLink + 4);
+          pNextLink = &((::CELLIST*)nBucketNextLink)->m_linktoslot;
           pNodeHead = pNextLink->m_prevlink;
           if (pNodeHead) {
             pBackLink1 = (TSLink<::CELLIST>**)D2_StormNextLink(pNextLink, -1);
             *pBackLink1 = pNodeHead;
-            pNextLink->m_prevlink->m_next = *(intptr_t*)(nBucketNextLink + 8);
+            pNextLink->m_prevlink->m_next = ((::CELLIST*)nBucketNextLink)->m_linktoslot.m_next;
             pNextLink->m_prevlink = 0;
-            *(uint32_t*)(nBucketNextLink + 8) = 0;
+            ((::CELLIST*)nBucketNextLink)->m_linktoslot.m_next = 0;
             ppDstHead = nTempSentinel.m_terminator.m_prevlink;
           }
 
           pNextLink->m_prevlink = ppDstHead;
-          *(intptr_t*)(nBucketNextLink + 8) = ppDstHead->m_next;
+          ((::CELLIST*)nBucketNextLink)->m_linktoslot.m_next = ppDstHead->m_next;
           ppDstHead->m_next = nBucketNextLink;
           ppDstHead = pNextLink;
           nTempSentinel.m_terminator.m_prevlink = pNextLink;
