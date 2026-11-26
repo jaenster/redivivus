@@ -1,0 +1,1 @@
+{ "name": "needsgone", "version": "0.3.0", "title": "Needs Gone", "author": "test", "dependencies": ["gone-mod >= 1.0"] }

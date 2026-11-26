@@ -3,8 +3,15 @@
 //
 // A mod is a directory holding info.json:
 //   { "name": "my-mod", "version": "1.2.0", "title": "...", "author": "...",
-//     "redivivus_version": "0.1", "dependencies": ["base >= 0.1", "? other", "! enemy"] }
-// The directory is named after the mod ("my-mod") or name and version ("my-mod_1.2.0").
+//     "dependencies": ["redivivus >= 0.1", "? other", "! enemy"] }
+// The directory is named after the mod ("my-mod") or name and version ("my-mod_1.2.0"); it is the
+// mod's namespace, mods/<name>/ in the one file tree of every mounted archive and folder.
+//
+// redivivus is the mod every mod depends on, and it is built into the game: the core, its public
+// modules and TypeScriptToLua's runtime are embedded in the exe. It is always present, with the
+// exe's version (D2LUA_REDIVIVUS_VERSION), and cannot be disabled; a mod folder or a mod named
+// redivivus (any case) is refused. mod, base, core and every name starting with redivivus are
+// reserved.
 //
 // Dependencies use Factorio's syntax:
 //   "name", "name >= 1.2"   required (operators < <= = >= >)
@@ -12,8 +19,8 @@
 //   "(?) name"              hidden optional: the same, not shown to players
 //   "! name"                incompatible: both cannot be loaded
 //   "~ name"                required, but does not affect load order
-// Every mod but base depends on base implicitly. Naming base in the list in any form replaces
-// the implicit dependency, so "? base" or "~ base" opts out of the hard requirement.
+// Every mod depends on redivivus implicitly; naming it ("redivivus >= 0.1") adds a version
+// constraint. It cannot be optional.
 //
 // Load order is a topological sort of the ordering edges; among mods whose dependencies are
 // all loaded, the smallest name (byte order) goes first. The same mod set gives the same order
@@ -24,8 +31,9 @@
 #include <string>
 #include <vector>
 
-// The API level the host offers. A mod's redivivus_version must not be newer (major.minor).
-#define D2LUA_REDIVIVUS_VERSION "0.1"
+// The version of redivivus, the mod built into the game: what "redivivus >= x" is checked against.
+#define D2LUA_REDIVIVUS_VERSION "0.1.0"
+#define D2LUA_INTRINSIC_MOD "redivivus"
 
 struct D2LuaVersion {
     int a[3] = { 0, 0, 0 };
@@ -48,7 +56,8 @@ struct D2LuaModInfo {
     D2LuaVersion tVersion;
     std::string sTitle;
     std::string sAuthor;
-    std::string sRedivivusVersion;
+    std::string sLicence;                        // "licence" (or "license") in info.json
+    bool bIntrinsic = false;                     // redivivus itself: from the exe, no directory
     std::vector<D2LuaDependency> aDependencies;  // as declared, plus the implicit base
     std::string sPath;                           // the mod's directory, no trailing slash
 };
@@ -56,9 +65,16 @@ struct D2LuaModInfo {
 // Parse "1", "1.2" or "1.2.3" (missing parts are 0). False on anything else.
 bool D2LuaMods_ParseVersion(const std::string& sText, D2LuaVersion& tOut);
 int D2LuaMods_CompareVersions(const D2LuaVersion& a, const D2LuaVersion& b);
+// Whether an installed version meets a dependency's version constraint.
+bool D2LuaMods_Satisfies(const D2LuaDependency& tDep, const D2LuaVersion& tHave);
 bool D2LuaMods_ParseDependency(const std::string& sText, D2LuaDependency& tOut, std::string& sError);
 // [A-Za-z0-9_-]+, at most 64 bytes.
 bool D2LuaMods_IsValidName(const std::string& sName);
+// mod, base, core, redivivus*: names no mod on disk may have (compared without case).
+bool D2LuaMods_IsReservedName(const std::string& sName);
+std::string D2LuaMods_ReservedWhy(const std::string& sName);
+// The entry for redivivus itself.
+D2LuaModInfo D2LuaMods_Intrinsic();
 
 // Read and check sDir/info.json. On failure sError says why (without the path).
 bool D2LuaMods_ReadInfo(const std::string& sDir, D2LuaModInfo& tOut, std::string& sError);
@@ -70,7 +86,7 @@ bool D2LuaMods_ParseInfo(const std::string& sText, const std::string& sDir, D2Lu
 void D2LuaMods_Discover(const std::vector<std::string>& aRoots, std::vector<D2LuaModInfo>& aOut,
                         std::vector<std::string>& aErrors);
 
-// Check the dependencies of aMods and put them in load order. Returns false with every problem
+// Check the dependencies of aMods and put them in load order, redivivus first (added when absent). Returns false with every problem
 // in aErrors (missing dependency, version mismatch, incompatibility, a cycle with its members
 // named in order); aOrdered is then empty.
 bool D2LuaMods_Resolve(const std::vector<D2LuaModInfo>& aMods, std::vector<D2LuaModInfo>& aOrdered,

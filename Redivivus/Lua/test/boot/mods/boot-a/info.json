@@ -1,1 +1,1 @@
-{ "name": "boot-a", "version": "1.2.0", "title": "Boot A", "dependencies": ["base >= 0.1"] }
+{ "name": "boot-a", "version": "1.2.0", "title": "Boot A", "dependencies": ["redivivus >= 0.1"] }

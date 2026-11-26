@@ -3,6 +3,5 @@
   "version": "0.1.0",
   "title": "First mod (TypeScript example)",
   "author": "Redivivus",
-  "redivivus_version": "0.1",
-  "dependencies": ["base >= 0.1"]
+  "dependencies": ["redivivus >= 0.1"]
 }

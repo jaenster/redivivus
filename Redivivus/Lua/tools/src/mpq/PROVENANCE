@@ -1,0 +1,9 @@
+The MPQ library of the mod portal (its mpq/src), copied at the portal's commit
+09b53ec67b773dc4ea6c297d63f06895c12f3fff.
+
+Changed here, nothing else: the relative imports name their files with the .ts extension
+('./error' -> './error.ts'), which Node needs to run the files as they are.
+
+The portal and rdvmod must agree byte for byte on what an archive is, so the copy is not to be
+edited here; a change goes to the portal's library first and is copied again. The writer's output
+depends on the pinned compressor (fflate, the same exact version in both package.json files).

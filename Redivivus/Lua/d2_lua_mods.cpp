@@ -41,6 +41,40 @@ bool D2LuaMods_IsValidName(const std::string& sName) {
     return true;
 }
 
+static std::string Lower(const std::string& s) {
+    std::string out = s;
+    for (char& c : out) {
+        if (c >= 'A' && c <= 'Z') {
+            c = (char)(c - 'A' + 'a');
+        }
+    }
+    return out;
+}
+
+bool D2LuaMods_IsReservedName(const std::string& sName) {
+    std::string s = Lower(sName);
+    return s == "mod" || s == "base" || s == "core" || s.compare(0, 9, "redivivus") == 0;
+}
+
+std::string D2LuaMods_ReservedWhy(const std::string& sName) {
+    std::string s = Lower(sName);
+    if (s == "redivivus") {
+        return " (redivivus is built into the game; nothing on disk may replace or extend it)";
+    }
+    return " (mod, base, core and names starting with redivivus are reserved)";
+}
+
+D2LuaModInfo D2LuaMods_Intrinsic() {
+    D2LuaModInfo t;
+    t.sName = D2LUA_INTRINSIC_MOD;
+    t.sVersion = D2LUA_REDIVIVUS_VERSION;
+    D2LuaMods_ParseVersion(t.sVersion, t.tVersion);
+    t.sTitle = "Redivivus";
+    t.sAuthor = "Redivivus";
+    t.bIntrinsic = true;
+    return t;
+}
+
 bool D2LuaMods_ParseVersion(const std::string& sText, D2LuaVersion& tOut) {
     tOut = D2LuaVersion();
     size_t nPos = 0;
@@ -151,6 +185,10 @@ static bool VersionSatisfies(const D2LuaVersion& tHave, D2LuaVersionOp eOp, cons
     return false;
 }
 
+bool D2LuaMods_Satisfies(const D2LuaDependency& tDep, const D2LuaVersion& tHave) {
+    return VersionSatisfies(tHave, tDep.eOp, tDep.tVersion);
+}
+
 static bool StringField(const D2Json& tRoot, const char* pszKey, bool bRequired, std::string& sOut, std::string& sError) {
     const D2Json* pValue = tRoot.Get(pszKey);
     if (!pValue) {
@@ -193,31 +231,28 @@ bool D2LuaMods_ParseInfo(const std::string& sText, const std::string& sDir, D2Lu
     }
     if (!StringField(tRoot, "name", true, tOut.sName, sError) || !StringField(tRoot, "version", true, tOut.sVersion, sError)
         || !StringField(tRoot, "title", false, tOut.sTitle, sError) || !StringField(tRoot, "author", false, tOut.sAuthor, sError)
-        || !StringField(tRoot, "redivivus_version", false, tOut.sRedivivusVersion, sError)) {
+        || !StringField(tRoot, "licence", false, tOut.sLicence, sError)) {
+        return false;
+    }
+    if (tOut.sLicence.empty() && !StringField(tRoot, "license", false, tOut.sLicence, sError)) {
+        return false;
+    }
+    if (tRoot.Get("redivivus_version")) {
+        sError = "info.json: \"redivivus_version\" is gone; name the version in the dependencies instead (\"redivivus >= "
+               + std::string(D2LUA_REDIVIVUS_VERSION) + "\")";
         return false;
     }
     if (!D2LuaMods_IsValidName(tOut.sName)) {
         sError = "info.json: name \"" + tOut.sName + "\" is not valid (letters, digits, '_' and '-', at most 64)";
         return false;
     }
+    if (D2LuaMods_IsReservedName(tOut.sName)) {
+        sError = "info.json: the name \"" + tOut.sName + "\" is reserved" + D2LuaMods_ReservedWhy(tOut.sName);
+        return false;
+    }
     if (!D2LuaMods_ParseVersion(tOut.sVersion, tOut.tVersion)) {
         sError = "info.json: version \"" + tOut.sVersion + "\" is not major.minor.patch";
         return false;
-    }
-    if (!tOut.sRedivivusVersion.empty()) {
-        D2LuaVersion tWant;
-        D2LuaVersion tHost;
-        D2LuaMods_ParseVersion(D2LUA_REDIVIVUS_VERSION, tHost);
-        if (!D2LuaMods_ParseVersion(tOut.sRedivivusVersion, tWant)) {
-            sError = "info.json: redivivus_version \"" + tOut.sRedivivusVersion + "\" is not a version";
-            return false;
-        }
-        tWant.a[2] = 0;
-        if (D2LuaMods_CompareVersions(tWant, tHost) > 0) {
-            sError = "mod '" + tOut.sName + "' needs Redivivus API " + tOut.sRedivivusVersion + ", this host offers "
-                   + D2LUA_REDIVIVUS_VERSION;
-            return false;
-        }
     }
     const D2Json* pDeps = tRoot.Get("dependencies");
     bool bNamesBase = false;
@@ -240,14 +275,20 @@ bool D2LuaMods_ParseInfo(const std::string& sText, const std::string& sDir, D2Lu
                 sError = "info.json: a mod cannot depend on itself";
                 return false;
             }
-            bNamesBase = bNamesBase || tDep.sName == "base";
+            if (tDep.sName == D2LUA_INTRINSIC_MOD) {
+                if (tDep.eKind != D2LuaDepKind::Required) {
+                    sError = "info.json: redivivus is built into the game and cannot be optional, unordered or incompatible";
+                    return false;
+                }
+                bNamesBase = true;
+            }
             tOut.aDependencies.push_back(tDep);
         }
     }
-    if (tOut.sName != "base" && !bNamesBase) {
+    if (!bNamesBase) {
         D2LuaDependency tBase;
-        tBase.sName = "base";
-        tBase.sText = "base (implicit)";
+        tBase.sName = D2LUA_INTRINSIC_MOD;
+        tBase.sText = "redivivus (implicit)";
         tOut.aDependencies.insert(tOut.aDependencies.begin(), tBase);
     }
     return true;
@@ -278,6 +319,10 @@ void D2LuaMods_Discover(const std::vector<std::string>& aRoots, std::vector<D2Lu
         for (const std::string& sEntry : aNames) {
             std::string sDir = sRoot + "/" + sEntry;
             if (!IsDirectory(sDir)) {
+                continue;
+            }
+            if (Lower(sEntry) == D2LUA_INTRINSIC_MOD || Lower(sEntry).compare(0, 10, "redivivus_") == 0) {
+                aErrors.push_back(sDir + ": a mod folder named redivivus is not allowed; redivivus is built into the game and nothing on disk may replace or extend it");
                 continue;
             }
             struct stat tStat;
@@ -323,8 +368,21 @@ static std::string VersionText(const D2LuaVersion& v) {
     return szBuf;
 }
 
-bool D2LuaMods_Resolve(const std::vector<D2LuaModInfo>& aMods, std::vector<D2LuaModInfo>& aOrdered,
+bool D2LuaMods_Resolve(const std::vector<D2LuaModInfo>& aGiven, std::vector<D2LuaModInfo>& aOrdered,
                        std::vector<std::string>& aErrors) {
+    // redivivus is always there, from the exe.
+    std::vector<D2LuaModInfo> aMods;
+    aMods.push_back(D2LuaMods_Intrinsic());
+    for (const D2LuaModInfo& t : aGiven) {
+        if (t.bIntrinsic) {
+            continue;
+        }
+        if (t.sName == D2LUA_INTRINSIC_MOD) {
+            aErrors.push_back("mod 'redivivus' is built into the game; a copy on disk is not loaded");
+            continue;
+        }
+        aMods.push_back(t);
+    }
     aOrdered.clear();
     size_t nErrorsBefore = aErrors.size();
     std::map<std::string, size_t> tIndex;

@@ -15,25 +15,38 @@
 //     chunk to the caller's environment (stock load gives it the thread's, i.e. the globals),
 //     newproxy is gone (userdata __gc would run mod code at collection time, where hooks are
 //     off), and the string metatable is locked (__metatable) with its __index a private copy.
-//   - Time. Every entry from the host into a mod goes through GuardedCall or GuardedResume,
+//   - Time. Every entry from the host into a mod goes through GuardedCall, CallAs or ResumeAs,
 //     which arm a deadline. A watchdog thread waits for it and, when it passes, sets a count hook
 //     with a count of 1 from that thread (lua_sethook is documented safe to call asynchronously;
 //     LuaJIT's hook state is global, so it reaches whichever coroutine runs). The hook raises an
-//     error on every instruction until the host disarms it, so a pcall in the mod cannot hold
-//     on: the loop around the pcall is itself an instruction. LuaJIT runs an xpcall message
-//     handler at the point of the error, which for the hook's error is inside the hook with
-//     hooks off, so the mods' xpcall skips the handler once the deadline has passed. Nothing else
-//     runs mod code with hooks off: no __gc (newproxy is gone, and tables have no finalizers in
-//     LuaJIT), no other message handlers. LuaJIT is built with LUAJIT_ENABLE_CHECKHOOK so
+//     error on every instruction of mod code until the host disarms it, so a pcall in the mod
+//     cannot hold on: the loop around the pcall is itself an instruction. LuaJIT runs an xpcall
+//     message handler at the point of the error, which for the hook's error is inside the hook
+//     with hooks off, so the mods' xpcall skips the handler once the deadline has passed. Nothing
+//     else runs mod code with hooks off: no __gc (newproxy is gone, and tables have no finalizers
+//     in LuaJIT), no other message handlers. LuaJIT is built with LUAJIT_ENABLE_CHECKHOOK so
 //     compiled traces test the hook mask and fall back to the interpreter. A count hook set for
 //     the whole call and reading a clock would be simpler, but a set hook stops trace recording
 //     and makes every trace exit, so mods would always run interpreted; CHECKHOOK is meant for
 //     hooks that are almost never set.
 //     The budget is per entry: a coroutine created in one entry and resumed in a later one gets
 //     the later entry's budget, never one for its lifetime.
-//   - Memory. The state's allocator counts bytes and refuses growth past the limit while a mod
-//     runs; LuaJIT turns that into its out-of-memory error. Outside a mod call the host's own
-//     allocations are not refused, so the host never meets an error where it has no pcall.
+//   - The core is never cut halfway. The core (Redivivus/Lua/core, compiled TypeScript) runs in
+//     this state beside the mods and keeps shared state (registries, scripts, handlers). Its
+//     chunks are named "=[core] ...", a name no mod can give a chunk (load refuses it). When the
+//     hook fires inside a core function it charges the mod the core is working for (the owner on
+//     top) and returns, leaving the hook set: the error is raised at the first instruction of mod
+//     code after it, or, when the core returns to the host first, the entry still ends as a fault.
+//     So a deadline never lands between two steps of a core update. The cost is that a core
+//     function working over a large table a mod handed it finishes before the mod is stopped;
+//     such work is bounded by the memory limit.
+//   - Memory. The state's allocator counts bytes. Past the limit, while a mod runs, it marks the
+//     entry and wakes the watchdog, which sets the same hook: the mod is stopped at its next
+//     instruction, the core finishes what it was doing. Past the hard limit (the limit plus a
+//     quarter, at least 16 MiB) an allocation is refused outright and LuaJIT raises its
+//     out-of-memory error there; either way the mod charged is faulted. Outside a mod call the
+//     host's own allocations are not refused, so the host never meets an error where it has no
+//     pcall.
 //   - Patterns. The mods' string.find, match, gmatch and gsub (their own tables and the string
 //     metatable's __index) are d2_lua_pattern.cpp's, which poll the deadline. The global string
 //     table keeps the stock functions, for the host.
@@ -75,11 +88,13 @@ struct HostContext {
     D2LuaLogFn pfnLog = nullptr;
     lua_State* L = nullptr;
 
-    // Memory, touched only on the Lua thread.
+    // Memory, touched on the Lua thread (bMemOver is read by the watchdog too).
     size_t nUsed = 0;
-    size_t nLimit = 0;
-    int bEnforce = 0;   // refuse growth past nLimit (only while a mod runs)
+    size_t nLimit = 0;  // past it the mod is stopped at its next instruction
+    size_t nHard = 0;   // past it an allocation is refused
+    int bEnforce = 0;   // refuse growth past the limits (only while a mod runs)
     int bRefused = 0;   // an allocation was refused during the current call
+    std::atomic<bool> bMemOver{false};  // the limit was passed during the current call
 
     // Time.
     unsigned nBudgetMs = 0;
@@ -89,7 +104,8 @@ struct HostContext {
     std::thread tWatchdog;
     bool bStop = false;
     bool bArmed = false;
-    std::atomic<bool> bFired{false};  // the deadline passed and the hook is set
+    bool bHookSet = false;            // the watchdog set the hook for the current call
+    std::atomic<bool> bFired{false};  // the deadline passed
     Clock::time_point tDeadline;
 
     // Mod ids and the owner stack.
@@ -127,6 +143,14 @@ static HostContext* GetContext(lua_State* L) {
     return (HostContext*)pContext;
 }
 
+static int TopOwner(HostContext* pContext) {
+    if (pContext->nOwners <= 0) {
+        return -1;
+    }
+    int nTop = pContext->nOwners <= kMaxOwners ? pContext->nOwners - 1 : kMaxOwners - 1;
+    return pContext->aOwner[nTop];
+}
+
 static void* Lua_Alloc(void* pUser, void* pBlock, size_t nOld, size_t nNew) {
     HostContext* pContext = (HostContext*)pUser;
     if (!pBlock) {
@@ -137,13 +161,22 @@ static void* Lua_Alloc(void* pUser, void* pBlock, size_t nOld, size_t nNew) {
         pContext->nUsed -= nOld;
         return nullptr;
     }
-    if (nNew > nOld && pContext->bEnforce && pContext->nUsed - nOld + nNew > pContext->nLimit) {
-        if (!pContext->bRefused && pContext->nFaultOwner < 0 && pContext->nOwners > 0) {
-            int nTop = pContext->nOwners <= kMaxOwners ? pContext->nOwners - 1 : kMaxOwners - 1;
-            pContext->nFaultOwner = pContext->aOwner[nTop];
+    if (nNew > nOld && pContext->bEnforce) {
+        size_t nAfter = pContext->nUsed - nOld + nNew;
+        if (nAfter > pContext->nHard) {
+            if (!pContext->bRefused && pContext->nFaultOwner < 0) {
+                pContext->nFaultOwner = TopOwner(pContext);
+            }
+            pContext->bRefused = 1;
+            return nullptr;
         }
-        pContext->bRefused = 1;
-        return nullptr;
+        if (nAfter > pContext->nLimit && !pContext->bMemOver.load(std::memory_order_relaxed)) {
+            if (pContext->nFaultOwner < 0) {
+                pContext->nFaultOwner = TopOwner(pContext);
+            }
+            pContext->bMemOver = true;
+            pContext->tWake.notify_one();
+        }
     }
     void* pNew = realloc(pBlock, nNew);
     if (!pNew) {
@@ -250,51 +283,85 @@ static int ChargeForDeadline(lua_State* L, HostContext* pContext) {
 
 // --- the deadline ------------------------------------------------------------------------------
 
+// Whether the function the hook interrupted is the core's (its chunk is named "=[core] ...").
+static bool InCore(lua_State* L) {
+    lua_Debug tAr;
+    if (!lua_getstack(L, 0, &tAr) || !lua_getinfo(L, "S", &tAr) || !tAr.source) {
+        return false;
+    }
+    return strncmp(tAr.source, D2LUA_CORE_CHUNK_PREFIX, sizeof(D2LUA_CORE_CHUNK_PREFIX) - 1) == 0;
+}
+
+// Set by the watchdog once the deadline passed or the memory limit did. Raises on every instruction
+// of mod code; inside the core it only charges and returns (see the header).
 static void Lua_BudgetHook(lua_State* L, lua_Debug* pDebug) {
     (void)pDebug;
     HostContext* pContext = GetContext(L);
+    bool bTime = pContext->bFired;
+    bool bMemory = pContext->bMemOver;
+    if (!bTime && !bMemory) {
+        return;
+    }
     if (pContext->nFaultOwner < 0) {
         pContext->nFaultOwner = ChargeForDeadline(L, pContext);
     }
-    lua_pushliteral(L, "time budget exceeded");
+    if (InCore(L)) {
+        return;
+    }
+    if (bMemory) {
+        lua_pushliteral(L, "not enough memory (the mod's state is over its limit)");
+    } else {
+        lua_pushliteral(L, "time budget exceeded");
+    }
     lua_error(L);
 }
 
+// Arming and disarming take the mutex but never wake the watchdog: an idle watchdog looks again a
+// quarter of a budget later, which is before any deadline armed meanwhile can pass.
 static void Watchdog(HostContext* pContext) {
     std::unique_lock<std::mutex> tLock(pContext->tMutex);
     while (!pContext->bStop) {
+        if (pContext->bArmed && !pContext->bHookSet && pContext->bMemOver) {
+            pContext->bHookSet = true;
+            lua_sethook(pContext->L, Lua_BudgetHook, LUA_MASKCOUNT, 1);
+        }
         if (pContext->bArmed && !pContext->bFired) {
-            pContext->tWake.wait_until(tLock, pContext->tDeadline);
-            if (pContext->bArmed && !pContext->bFired && Clock::now() >= pContext->tDeadline) {
+            if (Clock::now() >= pContext->tDeadline) {
                 pContext->bFired = true;
-                lua_sethook(pContext->L, Lua_BudgetHook, LUA_MASKCOUNT, 1);
+                if (!pContext->bHookSet) {
+                    pContext->bHookSet = true;
+                    lua_sethook(pContext->L, Lua_BudgetHook, LUA_MASKCOUNT, 1);
+                }
+                continue;
             }
+            pContext->tWake.wait_until(tLock, pContext->tDeadline);
         } else {
-            pContext->tWake.wait(tLock);
+            pContext->tWake.wait_for(tLock, std::chrono::milliseconds(pContext->nBudgetMs / 4 + 1));
         }
     }
 }
 
 static void ArmDeadline(HostContext* pContext) {
-    {
-        std::lock_guard<std::mutex> tLock(pContext->tMutex);
-        pContext->tDeadline = Clock::now() + std::chrono::milliseconds(pContext->nBudgetMs);
-        pContext->bArmed = true;
-        pContext->bFired = false;
-    }
-    pContext->tWake.notify_one();
+    std::lock_guard<std::mutex> tLock(pContext->tMutex);
+    pContext->tDeadline = Clock::now() + std::chrono::milliseconds(pContext->nBudgetMs);
+    pContext->bArmed = true;
+    pContext->bFired = false;
+    pContext->bHookSet = false;
 }
 
 // Returns whether the deadline had passed. After this the watchdog cannot set the hook.
 static bool DisarmDeadline(HostContext* pContext) {
     bool bFired;
+    bool bHookSet;
     {
         std::lock_guard<std::mutex> tLock(pContext->tMutex);
         pContext->bArmed = false;
         bFired = pContext->bFired;
+        bHookSet = pContext->bHookSet;
         pContext->bFired = false;
+        pContext->bHookSet = false;
     }
-    if (bFired) {
+    if (bHookSet) {
         lua_sethook(pContext->L, nullptr, 0, 0);
     }
     return bFired;
@@ -302,7 +369,7 @@ static bool DisarmDeadline(HostContext* pContext) {
 
 int D2LuaHost_DeadlinePassed(lua_State* L) {
     HostContext* pContext = GetContext(L);
-    if (pContext->bFired) {
+    if (pContext->bFired || pContext->bMemOver) {
         if (pContext->nFaultOwner < 0) {
             pContext->nFaultOwner = ChargeForDeadline(L, pContext);
         }
@@ -312,14 +379,22 @@ int D2LuaHost_DeadlinePassed(lua_State* L) {
 }
 
 int D2LuaHost_MemoryRefused(lua_State* L) {
-    return GetContext(L)->bRefused;
+    HostContext* pContext = GetContext(L);
+    return pContext->bRefused || pContext->bMemOver;
 }
 
-// Whether the current call's deadline has passed. For the xpcall wrapper below.
+int D2LuaHost_InEntry(lua_State* L) {
+    return GetContext(L)->nDepth > 0;
+}
+
+// Whether the current call ran out of time or memory. For the xpcall wrapper below.
 static int Lua_BudgetSpent(lua_State* L) {
-    lua_pushboolean(L, GetContext(L)->bFired ? 1 : 0);
+    HostContext* pContext = GetContext(L);
+    lua_pushboolean(L, pContext->bFired || pContext->bMemOver ? 1 : 0);
     return 1;
 }
+
+void D2LuaHost_LogErrorTop(lua_State* L, const char* pszMod);
 
 // --- logging -----------------------------------------------------------------------------------
 
@@ -400,6 +475,22 @@ static int Lua_Traceback(lua_State* L) {
     return 1;
 }
 
+static char s_TracebackKey;  // the traceback of the last error a CallAs or ResumeAs caught
+
+// The message handler of CallAs: keeps the error value as it is (the core passes it on to the mod
+// that called) and stores a traceback beside it. Never calls a __tostring of the mod's.
+static int Lua_KeepTraceback(lua_State* L) {
+    const char* pszMessage = lua_type(L, 1) == LUA_TSTRING ? lua_tostring(L, 1) : nullptr;
+    if (!pszMessage) {
+        pszMessage = lua_pushfstring(L, "(error object is a %s value)", luaL_typename(L, 1));
+    }
+    lua_pushlightuserdata(L, &s_TracebackKey);
+    luaL_traceback(L, L, pszMessage, 1);
+    lua_rawset(L, LUA_REGISTRYINDEX);
+    lua_settop(L, 1);
+    return 1;
+}
+
 static int Lua_Panic(lua_State* L) {
     const char* pszMessage = lua_tostring(L, -1);
     LogMessage(L, "[lua] PANIC: ", pszMessage ? pszMessage : "(no message)");
@@ -425,6 +516,10 @@ static void LogError(lua_State* L, const char* pszMod) {
     lua_pop(L, 1);
 }
 
+void D2LuaHost_LogErrorTop(lua_State* L, const char* pszMod) {
+    LogError(L, pszMod);
+}
+
 // --- the functions a mod environment gets in place of the stock ones ----------------------------
 
 // load and loadstring: the stock load with the mode forced to text, so bytecode is refused,
@@ -434,7 +529,11 @@ static int Lua_EnvLoad(lua_State* L) {
     int nArgs = lua_gettop(L);
     lua_pushvalue(L, lua_upvalueindex(1));
     lua_pushvalue(L, 1);
-    if (nArgs >= 2) {
+    if (nArgs >= 2 && lua_type(L, 2) == LUA_TSTRING
+        && strncmp(lua_tostring(L, 2), D2LUA_CORE_CHUNK_PREFIX, sizeof(D2LUA_CORE_CHUNK_PREFIX) - 1) == 0) {
+        // The core's chunk names are its own: the watchdog lets a core function finish.
+        lua_pushliteral(L, "=(load)");
+    } else if (nArgs >= 2) {
         lua_pushvalue(L, 2);
     } else {
         lua_pushnil(L);
@@ -678,7 +777,11 @@ static int Lua_FaultMod(lua_State* L) {
     lua_pushvalue(L, 1);
     lua_pushboolean(L, 0);
     lua_rawset(L, -3);
-    lua_gc(L, LUA_GCCOLLECT, 0);
+    // Several cycles: LuaJIT gives back its string buffer by halves, one halving per cycle, and a
+    // mod that ran out of memory leaves it large.
+    for (int i = 0; i < 4; i++) {
+        lua_gc(L, LUA_GCCOLLECT, 0);
+    }
     return 0;
 }
 
@@ -693,6 +796,7 @@ lua_State* D2LuaHost_Create(D2LuaLogFn pfnLog, const D2LuaLimits* pLimits) {
     pContext->pfnLog = pfnLog;
     pContext->nBudgetMs = pLimits && pLimits->nBudgetMs ? pLimits->nBudgetMs : kDefaultBudgetMs;
     pContext->nLimit = pLimits && pLimits->nMemoryBytes ? pLimits->nMemoryBytes : kDefaultMemoryBytes;
+    pContext->nHard = pContext->nLimit + (pContext->nLimit / 4 > (size_t)16 * 1024 * 1024 ? pContext->nLimit / 4 : (size_t)16 * 1024 * 1024);
 
     lua_State* L = lua_newstate(Lua_Alloc, pContext);
     if (!L) {
@@ -776,6 +880,7 @@ static bool BeginEntry(HostContext* pContext) {
     bool bOuter = pContext->nDepth == 0;
     if (bOuter) {
         pContext->bRefused = 0;
+        pContext->bMemOver = false;
         pContext->bEnforce = 1;
         pContext->nFaultOwner = -1;
         ArmDeadline(pContext);
@@ -785,16 +890,18 @@ static bool BeginEntry(HostContext* pContext) {
 }
 
 // Ends the entry; when it was the outermost and it ran out of time or memory, logs it, faults the
-// mod charged for it and returns D2LUA_FAULT. Otherwise returns nResult.
+// mod charged for it and returns D2LUA_FAULT. Otherwise returns nResult. A deadline that passed
+// counts even when the entry then finished: it passed inside the core, which was let finish.
 static int EndEntry(lua_State* L, HostContext* pContext, bool bOuter, int nStatus, const char* pszMod, int nResult) {
     pContext->nDepth--;
     if (!bOuter) {
         return nResult;
     }
-    bool bTimedOut = DisarmDeadline(pContext) && nStatus != 0;
-    bool bRefused = pContext->bRefused != 0 || nStatus == LUA_ERRMEM;
+    bool bTimedOut = DisarmDeadline(pContext);
+    bool bRefused = pContext->bRefused != 0 || pContext->bMemOver || nStatus == LUA_ERRMEM;
     pContext->bEnforce = 0;
     pContext->bRefused = 0;
+    pContext->bMemOver = false;
     int nCharged = pContext->nFaultOwner;
     pContext->nFaultOwner = -1;
     if (!bTimedOut && !bRefused) {
@@ -822,7 +929,9 @@ static int EndEntry(lua_State* L, HostContext* pContext, bool bOuter, int nStatu
         snprintf(szWhy, sizeof(szWhy), "[lua]   (in a call that entered through mod '%s', which stays enabled)", pszMod);
         LogMessage(L, "", szWhy);
     }
-    D2LuaHost_FaultMod(L, szCharged);
+    if (D2LuaHost_ModName(L, nCharged)) {
+        D2LuaHost_FaultMod(L, szCharged);
+    }
     return D2LUA_FAULT;
 }
 
@@ -844,39 +953,110 @@ int D2LuaHost_GuardedCall(lua_State* L, const char* pszMod, int nArgs, int nResu
     }
     int nResult = EndEntry(L, pContext, bOuter, nStatus, pszMod, nStatus == 0 ? D2LUA_OK : D2LUA_ERROR);
     if (nResult == D2LUA_FAULT && nStatus == 0) {
-        // Finished, but an allocation was refused on the way (the mod caught the error).
+        // Finished, but its time or memory ran out on the way (inside the core, or caught by the mod).
         lua_pop(L, nResults);
     }
     return nResult;
 }
 
-int D2LuaHost_GuardedResume(lua_State* L, lua_State* co, const char* pszMod, int nArgs, int* pnResults) {
+// Push the traceback CallAs stored, or nil.
+static void PushStoredTraceback(lua_State* L) {
+    lua_pushlightuserdata(L, &s_TracebackKey);
+    lua_rawget(L, LUA_REGISTRYINDEX);
+    lua_pushlightuserdata(L, &s_TracebackKey);
+    lua_pushnil(L);
+    lua_rawset(L, LUA_REGISTRYINDEX);
+}
+
+int D2LuaHost_CallAs(lua_State* L, int nModId, int nArgs, int* pnPushed) {
     HostContext* pContext = GetContext(L);
+    int nFunction = lua_gettop(L) - nArgs;
+    const char* pszMod = nModId >= 0 ? D2LuaHost_ModName(L, nModId) : nullptr;
+    char szMod[128];
+    snprintf(szMod, sizeof(szMod), "%s", pszMod ? pszMod : "(core)");
+    if (pszMod && D2LuaHost_IsModFaulted(L, szMod)) {
+        lua_settop(L, nFunction - 1);
+        *pnPushed = 0;
+        return D2LUA_CALL_DISABLED;
+    }
+    lua_pushcfunction(L, Lua_KeepTraceback);
+    lua_insert(L, nFunction);
     int nOwnerDepth = pContext->nOwners;
-    D2LuaHost_PushOwner(co, D2LuaHost_ModId(L, pszMod));
+    if (nModId >= 0) {
+        D2LuaHost_PushOwner(L, nModId);
+    }
+    bool bOuter = BeginEntry(pContext);
+    int nStatus = lua_pcall(L, nArgs, 1, nFunction);
+    pContext->nOwners = nOwnerDepth;
+    bool bSpent = pContext->bFired || pContext->bMemOver || pContext->bRefused || nStatus == LUA_ERRMEM;
+    lua_remove(L, nFunction);  // the handler; the result or the error is on top
+    int nResult = EndEntry(L, pContext, bOuter, nStatus, szMod, D2LUA_OK);
+    if (nResult == D2LUA_FAULT) {
+        lua_pop(L, 1);
+        PushStoredTraceback(L);
+        lua_pop(L, 1);
+        lua_pushliteral(L, "ran out of time or memory; the mod charged is disabled");
+        *pnPushed = 1;
+        return D2LUA_CALL_FAULTED;
+    }
+    if (nStatus == 0) {
+        *pnPushed = 1;
+        return D2LUA_CALL_OK;
+    }
+    if (!bOuter && bSpent) {
+        PushStoredTraceback(L);
+        lua_pop(L, 1);
+        *pnPushed = 1;
+        return D2LUA_CALL_FATAL;
+    }
+    PushStoredTraceback(L);
+    *pnPushed = 2;
+    return D2LUA_CALL_ERROR;
+}
+
+int D2LuaHost_ResumeAs(lua_State* L, lua_State* co, int nModId, int nArgs, int* pnResults) {
+    HostContext* pContext = GetContext(L);
+    const char* pszMod = D2LuaHost_ModName(L, nModId);
+    char szMod[128];
+    snprintf(szMod, sizeof(szMod), "%s", pszMod ? pszMod : "(core)");
+    *pnResults = 0;
+    if (!pszMod || D2LuaHost_IsModFaulted(L, szMod)) {
+        lua_settop(co, 0);
+        return D2LUA_CALL_DISABLED;
+    }
+    int nOwnerDepth = pContext->nOwners;
+    D2LuaHost_PushOwner(co, nModId);
     bool bOuter = BeginEntry(pContext);
     int nStatus = lua_resume(co, nArgs);
     pContext->nOwners = nOwnerDepth;
-    int nResult = D2LUA_OK;
-    *pnResults = 0;
+    bool bSpent = pContext->bFired || pContext->bMemOver || pContext->bRefused || nStatus == LUA_ERRMEM;
+    int nResult = EndEntry(L, pContext, bOuter, nStatus == LUA_YIELD ? 0 : nStatus, szMod, D2LUA_OK);
+    if (nResult == D2LUA_FAULT) {
+        lua_settop(co, 0);
+        return D2LUA_CALL_FAULTED;
+    }
     if (nStatus == LUA_YIELD || nStatus == 0) {
         *pnResults = lua_gettop(co);
-        nResult = nStatus == LUA_YIELD ? (int)D2LUA_YIELD : (int)D2LUA_OK;
-        nStatus = 0;
-    } else {
-        const char* pszMessage = lua_tostring(co, -1);
-        if (!pszMessage) {
-            pszMessage = lua_pushfstring(co, "(error object is a %s value)", luaL_typename(co, -1));
-        }
-        luaL_traceback(L, co, pszMessage, 0);
-        LogError(L, pszMod);
-        nResult = D2LUA_ERROR;
+        return nStatus == LUA_YIELD ? D2LUA_CALL_YIELD : D2LUA_CALL_OK;
     }
-    nResult = EndEntry(L, pContext, bOuter, nStatus, pszMod, nResult);
-    if (nResult == D2LUA_FAULT) {
-        *pnResults = 0;
+    // The error value on co, and a traceback of co.
+    const char* pszMessage = lua_type(co, -1) == LUA_TSTRING ? lua_tostring(co, -1) : nullptr;
+    char szType[64];
+    if (!pszMessage) {
+        snprintf(szType, sizeof(szType), "(error object is a %s value)", luaL_typename(co, -1));
+        pszMessage = szType;
     }
-    return nResult;
+    luaL_traceback(L, co, pszMessage, 0);
+    lua_xmove(co, L, 1);
+    lua_insert(L, -2);  // error, traceback
+    lua_settop(co, 0);
+    if (!bOuter && bSpent) {
+        lua_pop(L, 1);
+        *pnResults = 1;
+        return D2LUA_CALL_FATAL;
+    }
+    *pnResults = 2;
+    return D2LUA_CALL_ERROR;
 }
 
 static int RunBuffer(lua_State* L, const char* pszMod, const char* pBuffer, size_t nSize, const char* pszChunkName) {

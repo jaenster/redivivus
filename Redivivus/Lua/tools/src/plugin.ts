@@ -11,22 +11,25 @@
 // one written in TypeScript are the same thing at run time, so either calls the other.
 // Ordinary generators (not returning Script) stay on TSTL's path.
 // Calling a Script function anywhere but as the operand of `yield*` is an error: it would run the
-// action immediately instead of handing back a generator, unlike what TypeScript's types say.
+// action immediately instead of handing back a generator, unlike what TypeScript's types say. The
+// one other place is an argument where a Script is expected (guard's body): there the call is
+// handed over unstarted, as a function that runs it, its callee and arguments evaluated in place:
+//   guard(c, chase(m, t))  ->  guard(c, (function(f, a1, a2) return function() return f(a1, a2) end end)(chase, m, t))
 //
-// The runtime library. TSTL emits require("lualib_bundle"); a mod requires base's copy instead,
-// so the runtime ships once (Redivivus/Lua/mods/base/shared/lualib_bundle.lua).
+// The runtime library. TSTL emits require("lualib_bundle"); a mod requires redivivus:lualib instead,
+// the copy built into the game, so a mod ships none.
 //
-// Source maps. "sources" is rewritten to the TypeScript file relative to the Lua file, both
-// mod-relative, which is what the host's error mapping resolves against the chunk name.
+// Source maps. "sources" is rewritten to the TypeScript file relative to the Lua file, both in the
+// mod's namespace, which is what the host's error mapping resolves against the chunk name.
 
 import * as path from "node:path";
 import ts from "typescript";
 import * as tstl from "typescript-to-lua";
-import { type FunctionNode, MESSAGE_CALL, MESSAGE_DELEGATE, SCRIPT_DIAGNOSTIC, scriptChecks } from "./scriptcheck.ts";
+import { type FunctionNode, MESSAGE_CALL, MESSAGE_DEFER_SPREAD, MESSAGE_DELEGATE, SCRIPT_DIAGNOSTIC, scriptChecks } from "./scriptcheck.ts";
 
-export const LUALIB_REQUIRE = "__base__/shared/lualib_bundle";
+export const LUALIB_REQUIRE = "redivivus:lualib";
 
-const { isScriptFunction, misusedCall, misusedDelegate } = scriptChecks(ts);
+const { isDeferredArgument, isScriptFunction, misusedCall, misusedDelegate } = scriptChecks(ts);
 
 function diagnostic(node: ts.Node, message: string): ts.Diagnostic {
     return {
@@ -90,6 +93,32 @@ function dropGeneratorImport(node: ts.Node, context: tstl.TransformationContext)
     if (!hasOrdinaryGenerator(context.checker, node.getSourceFile())) context.usedLuaLibFeatures.delete(tstl.LuaLibFeature.Generator);
 }
 
+// A Script call as a function that runs it: (function(f, a1, ...) return function() return f(a1, ...) end end)(callee, args...),
+// so the callee and the arguments are evaluated where the call stands, the body only when run.
+function deferCall(call: tstl.Expression, node: ts.Node): tstl.Expression | undefined {
+    const inline = tstl.NodeFlags.Inline;
+    const closure = (params: tstl.Identifier[], run: tstl.Expression): tstl.Expression =>
+        tstl.createFunctionExpression(tstl.createBlock([tstl.createReturnStatement([
+            tstl.createFunctionExpression(tstl.createBlock([tstl.createReturnStatement([run])]), [], undefined, inline),
+        ])]), params, undefined, inline);
+    const argNames = (n: number) => Array.from({ length: n }, (_, i) => tstl.createIdentifier(`____arg${i + 1}`));
+    if (tstl.isCallExpression(call)) {
+        const args = call.params;
+        const f = tstl.createIdentifier("____body");
+        const names = argNames(args.length);
+        const run = tstl.createCallExpression(tstl.cloneIdentifier(f), names.map((a) => tstl.cloneIdentifier(a)));
+        return tstl.createCallExpression(closure([f, ...names], run), [call.expression, ...args], node);
+    }
+    if (tstl.isMethodCallExpression(call)) {
+        const args = call.params;
+        const self = tstl.createIdentifier("____self");
+        const names = argNames(args.length);
+        const run = tstl.createMethodCallExpression(tstl.cloneIdentifier(self), tstl.cloneIdentifier(call.name), names.map((a) => tstl.cloneIdentifier(a)));
+        return tstl.createCallExpression(closure([self, ...names], run), [call.prefixExpression, ...args], node);
+    }
+    return undefined;
+}
+
 function functionVisitor<T extends FunctionNode>(kind: "statements" | "expression") {
     return (node: T, context: tstl.TransformationContext) => {
         if (!isScriptFunction(context.checker, node)) {
@@ -132,7 +161,18 @@ export function makePlugin(modRoot: string): tstl.Plugin {
             },
             [ts.SyntaxKind.CallExpression]: (node: ts.CallExpression, context: tstl.TransformationContext) => {
                 if (misusedCall(context.checker, node)) context.diagnostics.push(diagnostic(node, MESSAGE_CALL));
-                return context.superTransformExpression(node);
+                if (!isDeferredArgument(context.checker, node)) return context.superTransformExpression(node);
+                if (node.arguments.some((a) => ts.isSpreadElement(a))) {
+                    context.diagnostics.push(diagnostic(node, MESSAGE_DEFER_SPREAD));
+                    return context.superTransformExpression(node);
+                }
+                const call = context.superTransformExpression(node);
+                const deferred = deferCall(call, node);
+                if (!deferred) {
+                    context.diagnostics.push(diagnostic(node, "This Script call cannot be handed over unstarted; call it from a Script function and pass that."));
+                    return call;
+                }
+                return deferred;
             },
         },
         beforeEmit(program: ts.Program, options: tstl.CompilerOptions, emitHost: tstl.EmitHost, result: tstl.EmitFile[]) {

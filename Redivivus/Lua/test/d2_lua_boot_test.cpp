@@ -1,7 +1,6 @@
 // The host test's checks of the boot path the game takes (d2_lua_boot.h, called by D2LUA_Boot):
 // discovery, load order with the broken mods disabled, the settings stage, the log, over the
-// fixture directory Redivivus/Lua/test/boot/mods (base comes from Redivivus/Lua/mods, as the game
-// ships it in its own mods/).
+// fixture directory Redivivus/Lua/test/boot/mods (redivivus itself is built in).
 #if D2_FEATURE_MODS && D2_LUA_HOST_TEST
 #include <stdio.h>
 #include <string.h>
@@ -23,7 +22,7 @@ void RunBootTests(const char* pszRoot) {
     printf("--- boot (the game's path)\n");
     std::string sRoot = pszRoot;
     D2LuaBootDesc tDesc;
-    tDesc.aRoots = { sRoot + "/Redivivus/Lua/mods", sRoot + "/Redivivus/Lua/test/boot/mods" };
+    tDesc.aRoots = { sRoot + "/Redivivus/Lua/test/boot/mods" };
     tDesc.sSettingsFile = sRoot + "/Redivivus/Lua/test/boot/mods/settings.json";
     tDesc.aApis = { &g_D2LuaApi_main };
     tDesc.pfnLog = TestLog;
@@ -32,7 +31,10 @@ void RunBootTests(const char* pszRoot) {
     ClearLog();
     D2LuaBoot_Run(tDesc, tBoot);
     Expect("[mods] LuaJIT", "the boot names the runtime");
-    Expect("[mods] 9 mod(s) found", "every mod directory with a readable info.json is found");
+    Expect("[mods] redivivus 0.1.0 is built in", "the boot names redivivus, built in, with the exe's version");
+    Expect("[mods] 8 mod(s) found", "every mod directory with a readable info.json is found");
+    Expect("a mod folder named redivivus is not allowed", "a folder named redivivus under mods/ is refused");
+    Expect("the name \"mod\" is reserved", "a mod named mod is refused");
     Expect("[mods]   boot-a 1.2.0 \"Boot A\" in ", "  each listed with version, title and path");
     Expect("[mods] error: ", "a broken info.json is an error");
     Check(Logged("boot-bad") && Logged("[mods] error: ") && !Logged("boot-bad 0"), "  and that mod is not found");
@@ -44,17 +46,21 @@ void RunBootTests(const char* pszRoot) {
     Expect("[mods] error: mod 'boot-cycle1' is disabled: dependency cycle: boot-cycle1 -> boot-cycle2 -> boot-cycle1",
            "a dependency cycle disables its members");
     Expect("[mods] error: mod 'boot-cycle2' is disabled: dependency cycle", "  all of them");
-    Expect("[mods] load order: base, boot-a, boot-b, boot-thrower", "the rest load, in dependency order");
+    Expect("[mods] load order: redivivus, boot-a, boot-b, boot-thrower", "the rest load, in dependency order, redivivus first");
+    Expect("[lua] [boot-a] boot-a settings stage ran", "the settings stage runs");
+    Check(!Logged("boot-a data stage ran") && !Logged("boot-a server ran"),
+          "  and no stage that needs engine hooks (data.lua, main)");
+    Expect("boot-thrower breaks in its settings stage", "a mod that fails in its settings stage is logged");
+    Expect("[mods] error: mod 'boot-thrower' is disabled: it failed in the settings stage",
+           "  and disabled, as a mod that runs out of time is");
+    Check(tBoot.pSettings && D2LuaRt_IsFaulted(tBoot.pSettings, "boot-thrower") && !D2LuaRt_IsFaulted(tBoot.pSettings, "boot-a"),
+          "  it is faulted in the settings state, the others are not");
     std::string sOrder;
     for (const D2LuaModInfo& t : tBoot.aOrder) {
         sOrder += t.sName + " ";
     }
-    Check(sOrder == "base boot-a boot-b boot-thrower " && tBoot.aFound.size() == 9 && tBoot.aErrors.size() == 6,
-          "  the result says the same");
-    Expect("[lua] [boot-a] boot-a settings stage ran", "the settings stage runs");
-    Check(!Logged("boot-a data stage ran") && !Logged("boot-a server control ran"),
-          "  and no stage that needs engine hooks (data.lua, control files)");
-    Expect("boot-thrower breaks in its settings stage", "a mod that fails in its settings stage is logged");
+    Check(sOrder == "redivivus boot-a boot-b " && tBoot.aFound.size() == 8 && tBoot.aErrors.size() == 9,
+          "  the result leaves it out of the load order and lists the error");
     Expect("[mods] settings stage ran: 2 setting(s) declared", "the declared settings are counted");
     Expect("[mods]   boot-a.volume = 8 (int, startup)", "  listed with the file's value");
     Expect("[mods]   boot-a.lang = \"en\" (choice, player; the file's value was refused: 'fr' is not one of the choices)",

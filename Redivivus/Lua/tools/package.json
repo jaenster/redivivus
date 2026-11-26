@@ -11,6 +11,7 @@
   },
   "dependencies": {
     "@typescript-to-lua/language-extensions": "1.19.0",
+    "fflate": "0.8.3",
     "lua-types": "2.14.1",
     "typescript": "6.0.2",
     "typescript-to-lua": "1.37.1"

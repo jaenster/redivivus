@@ -1,0 +1,20 @@
+{
+  "name": "@redivivus/ui",
+  "private": true,
+  "type": "module",
+  "description": "The Redivivus UI kit: signals, TSX widgets and layout (compiles to Lua), and a host pixel renderer for previews and snapshot tests.",
+  "engines": { "node": ">=22.18" },
+  "bin": { "ui-preview": "./tools/ui-preview.ts" },
+  "scripts": {
+    "build": "node tools/build.ts",
+    "test": "node tools/test.ts",
+    "preview": "node tools/ui-preview.ts"
+  },
+  "dependencies": {
+    "typescript": "6.0.2",
+    "typescript-to-lua": "1.37.1"
+  },
+  "devDependencies": {
+    "@types/node": "24.10.1"
+  }
+}

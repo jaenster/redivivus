@@ -41,11 +41,27 @@ void D2LuaHost_SetCoroutineOwner(lua_State* L, int nThreadIndex, int nModId);
 // owner stack charges (normally pszMod) and returns D2LUA_FAULT.
 int D2LuaHost_GuardedCall(lua_State* L, const char* pszMod, int nArgs, int nResults);
 
-// Resume coroutine co (owned by pszMod) with the nArgs values on top of co's stack, under the
-// guard, as one entry. Returns D2LUA_OK when it finished, D2LUA_YIELD when it yielded (the
-// yielded values stay on co's stack, *pnResults of them), or an error/fault code as above.
-enum { D2LUA_YIELD = 2 };
-int D2LuaHost_GuardedResume(lua_State* L, lua_State* co, const char* pszMod, int nArgs, int* pnResults);
+// What CallAs and ResumeAs came to: CallStatus in core/native/core.d.ts has the same values.
+enum {
+    D2LUA_CALL_ERROR = 0,      // an error: its value and a traceback string are pushed
+    D2LUA_CALL_OK = 1,         // returned (CallAs: one result pushed) or finished (ResumeAs)
+    D2LUA_CALL_YIELD = 2,      // ResumeAs: yielded; the values are on the coroutine
+    D2LUA_CALL_FATAL = -1,     // time or memory ran out inside an entry still running: the error is pushed
+    D2LUA_CALL_FAULTED = -2,   // the outermost entry ran out: the charged mod is faulted (logged)
+    D2LUA_CALL_DISABLED = -3,  // the mod was faulted before; nothing ran
+};
+// The prefix of the core's chunk names. The watchdog lets a function of such a chunk finish (the
+// deadline is acted on in the next mod instruction); load refuses the prefix to mods.
+#define D2LUA_CORE_CHUNK_PREFIX "=[core]"
+
+// Call the function under nArgs arguments at the top of the stack as mod nModId (-1: no owner
+// change), for the core: an entry of its own when no entry runs, nested otherwise (no new budget).
+// Leaves *pnPushed values as the D2LUA_CALL_ value says. A C boundary: nothing yields past it.
+int D2LuaHost_CallAs(lua_State* L, int nModId, int nArgs, int* pnPushed);
+// Resume co as mod nModId with nArgs values on co's stack, for the core's scheduler.
+int D2LuaHost_ResumeAs(lua_State* L, lua_State* co, int nModId, int nArgs, int* pnResults);
+// Whether a guarded entry is running.
+int D2LuaHost_InEntry(lua_State* L);
 
 // Whether the current guarded call's deadline has passed (the pattern matcher polls this).
 int D2LuaHost_DeadlinePassed(lua_State* L);
@@ -68,6 +84,9 @@ void* D2LuaHost_HookUser(lua_State* L);
 
 // Log a line through the state's log function.
 void D2LuaHost_Log(lua_State* L, const char* pszLine);
+// Log the error text at the top of the stack as mod pszMod's (through the error hook, which maps
+// generated Lua lines to TypeScript). Pops it.
+void D2LuaHost_LogErrorTop(lua_State* L, const char* pszMod);
 
 // The step-limited pattern functions, set into the string table at nStringTable.
 void D2LuaPattern_Install(lua_State* L, int nStringTable);

@@ -1,2 +1,2 @@
-// The data stage declares the settings, so they are listed at boot.
-import "./shared/settings";
+// The settings stage declares the settings, so they are listed at boot.
+import "./options";

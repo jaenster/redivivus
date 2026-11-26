@@ -29,7 +29,7 @@ struct D2LuaLimits {
 enum {
     D2LUA_DISABLED = -3,  // the mod is faulted; nothing was run
     D2LUA_FAULT = -2,     // the mod ran out of time or memory and is now faulted
-    D2LUA_ERROR = -1,     // a load or runtime error, logged; the mod stays enabled
+    D2LUA_ERROR = -1,     // a load or runtime error, logged; the mod stays enabled (but in a data stage file)
     D2LUA_MISSING = 0,    // the file or function does not exist; nothing was run
     D2LUA_OK = 1,
 };
@@ -58,7 +58,8 @@ int D2LuaHost_RunFile(lua_State* L, const char* pszMod, const char* pszPath, con
 // D2LUA_MISSING when the mod has no such function.
 int D2LuaHost_CallMod(lua_State* L, const char* pszMod, const char* pszFunction);
 
-// 1 when the mod has been faulted (out of time or memory) and is no longer run.
+// 1 when the mod has been faulted (out of time or memory, or failed in a data stage file) and is no
+// longer run.
 int D2LuaHost_IsModFaulted(lua_State* L, const char* pszMod);
 
 // Bytes the state holds now (the allocator's count).

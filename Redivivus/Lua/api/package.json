@@ -1,22 +1,11 @@
 {
   "name": "@redivivus/api",
   "version": "0.1.0",
-  "description": "TypeScript declarations of the Redivivus Lua mod API. One entry point per side: a project for client code only sees the client API.",
-  "types": "./shared.d.ts",
+  "description": "Declarations of redivivus, the mod built into Redivivus (its modules redivivus:server, redivivus:shared and the rest, emitted from the code that runs), the sandbox's Lua library as TypeScript, LuaLS files, and the editor plugin. Mod projects map \"redivivus:*\" to redivivus/*.d.ts (rdvmod tsconfig writes that).",
   "exports": {
-    "./server": { "types": "./server.d.ts" },
-    "./client": { "types": "./client.d.ts" },
-    "./data": { "types": "./data.d.ts" },
-    "./shared": { "types": "./shared.d.ts" },
+    "./redivivus/*": { "types": "./redivivus/*.d.ts" },
+    "./lua": { "types": "./lua/index.d.ts" },
     "./ls-plugin": "./ls-plugin/index.js"
-  },
-  "typesVersions": {
-    "*": {
-      "server": ["./server.d.ts"],
-      "client": ["./client.d.ts"],
-      "data": ["./data.d.ts"],
-      "shared": ["./shared.d.ts"]
-    }
   },
   "dependencies": {
     "@typescript-to-lua/language-extensions": "1.19.0"

@@ -15,5 +15,8 @@
         "utf8": "disable",
         "bit32": "disable"
     },
+    "workspace.library": [
+        "redivivus"
+    ],
     "diagnostics.globals": []
 }

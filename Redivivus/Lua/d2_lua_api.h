@@ -1,5 +1,7 @@
 // What generated binding glue (Redivivus/Lua/generated/*.gen.cpp, written by
-// Redivivus/Lua/tools/src/gen.ts from Redivivus/Lua/api/*.d.ts) and the natives it calls build on.
+// Redivivus/Lua/tools/src/gen.ts from Redivivus/Lua/core/native/*.d.ts and the core's public modules)
+// and the natives it calls build on. Natives are called by the core only (they sit in the table the
+// core starts with); handle classes are the native object API mods use directly.
 //
 // The calling convention of a native, from the declaration's types:
 //   function     T Native(D2LuaCtx& ctx, A1 a1, A2 a2, ...)
@@ -56,11 +58,9 @@ struct D2LuaOpt {
 };
 
 // --- the context ---------------------------------------------------------------------------------
-// For a closure installed into a mod's environment (upvalue 1 is the mod).
-D2LuaCtx D2LuaCtx_FromUpvalue(lua_State* L);
 // For a function shared by every mod (handle metatables): the mod whose code is running.
 D2LuaCtx D2LuaCtx_FromOwner(lua_State* L);
-// For code installing into a mod's environment.
+// For a native taking a mod id from the core: the mod, or null.
 D2LuaCtx D2LuaCtx_ForMod(lua_State* L, D2LuaMod* pMod);
 const char* D2LuaCtx_ModName(const D2LuaCtx& ctx);
 
@@ -90,8 +90,9 @@ lua_Integer D2LuaArg_Enum(lua_State* L, int i, const char* pszWhere, const char*
 // table keys and compare with ==.
 struct D2LuaHandleClass {
     const char* pszName;
-    // The object for id, or null when it no longer exists.
-    void* (*pfnResolve)(uint64_t nId);
+    // The object for id in the state L belongs to, or null when it no longer exists (or is not
+    // usable now: a monster that died, a unit in a room that was frozen).
+    void* (*pfnResolve)(lua_State* L, uint64_t nId);
     // The id of a live object.
     uint64_t (*pfnIdOf)(void* pObject);
     const luaL_Reg* aMethods;  // lua_CFunctions; self at index 1
@@ -107,6 +108,11 @@ void D2LuaHandle_PushObject(lua_State* L, const D2LuaHandleClass* pClass, void* 
 // The object behind the handle at index i: raises a clean error when i is not a handle of this
 // class, or when the object is gone. Null only when bOptional and the value is nil.
 void* D2LuaHandle_Check(lua_State* L, int i, const D2LuaHandleClass* pClass, const char* pszWhere, bool bOptional);
+// Push the member tables of handle class pszClass: methods, getters, setters (what __index and
+// __newindex read; a function added to one is a member of every handle of the class). For the
+// core, which implements the members of the engine's classes in TypeScript. False when the state
+// has no such class (nothing pushed).
+bool D2LuaHandle_PushMembers(lua_State* L, const char* pszClass);
 // Whether the value at i is a handle whose object exists.
 bool D2LuaHandle_IsLive(lua_State* L, int i);
 // Whether the value at i is a handle (of any class); class name and id out.
@@ -123,26 +129,21 @@ void D2LuaApi_DefineRegistry(lua_State* L, const char* pszRegistry, int nKind, i
 // apszNames); a second call for the same enum adds members. Once per state per declaration set.
 void D2LuaApi_DefineEnum(lua_State* L, const char* pszEnum, const char* const* apszNames, const lua_Number* anNumbers,
                          const char* const* apszStrings);
-// The enum's read-only table in the environment at nEnv, unless it already has one.
-void D2LuaApi_InstallEnum(lua_State* L, int nEnv, const char* pszEnum);
 // A native implementation at the bottom of a registry entry's chain (pszId null for a slot).
 void D2LuaApi_RegistryNative(lua_State* L, const char* pszRegistry, const char* pszId, lua_CFunction pfn);
-// Raise an event whose payload table is at the top of the stack (popped). Dispatched to every
-// mod in load order; see D2LuaRt_RaiseEvent.
+// Raise an event whose payload table is at the top of the stack (popped), in the game the host is
+// working on (the one whose tick, event or call is running); see D2LuaRt_RaiseEvent.
 int D2LuaApi_RaiseEvent(lua_State* L, const char* pszEvent);
 
-// A global object bound from a @noSelf interface: a table holding the methods (closures over the
-// mod), with a metatable whose __index runs the getters and whose __newindex runs the setters and
-// refuses everything else.
-void D2LuaApi_PushSingleton(lua_State* L, D2LuaMod* pMod, const char* pszName, const luaL_Reg* aMethods,
-                            const luaL_Reg* aGetters, const luaL_Reg* aSetters);
+// A table of the natives in aNatives, pushed (for the core's natives table).
+void D2LuaApi_PushNatives(lua_State* L, const luaL_Reg* aNatives);
 
 // --- one declaration file set ------------------------------------------------------------------
 struct D2LuaApiDesc {
     const char* pszName;
     // Once per state: handle classes, events, registries, native registry entries.
     void (*pfnRegister)(lua_State* L, int nSide);
-    // Once per mod environment (at nEnv) on that state: the globals of the side.
-    void (*pfnInstall)(lua_State* L, int nEnv, D2LuaMod* pMod, int nSide);
+    // Once per state: its native tables into the core's natives table at nTable.
+    void (*pfnNatives)(lua_State* L, int nTable, int nSide);
 };
 #endif

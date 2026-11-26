@@ -191,6 +191,7 @@ struct Reader {
     size_t* pnPos;
     int nTables;  // stack index: id -> table
     int nNextId;
+    int nInto;  // stack index of the table the root table is read into (emptied first), or 0
 };
 
 }  // namespace
@@ -243,7 +244,19 @@ static bool ReadValue(Reader* pR, int nDepth) {
         if (nDepth >= kMaxDepth) {
             luaL_error(L, "storage: corrupt save (nested too deep)");
         }
-        lua_newtable(L);
+        if (nDepth == 0 && pR->nInto) {
+            // The root goes into the table the caller holds, so references to it stay good.
+            lua_pushvalue(L, pR->nInto);
+            lua_pushnil(L);
+            while (lua_next(L, -2)) {
+                lua_pop(L, 1);
+                lua_pushvalue(L, -1);
+                lua_pushnil(L);
+                lua_rawset(L, -4);
+            }
+        } else {
+            lua_newtable(L);
+        }
         int nTable = lua_gettop(L);
         lua_pushvalue(L, nTable);
         lua_rawseti(L, pR->nTables, pR->nNextId++);
@@ -284,11 +297,12 @@ static bool ReadValue(Reader* pR, int nDepth) {
     }
 }
 
-void D2LuaStorage_Read(lua_State* L, const std::string* pIn, size_t* pnPos) {
+void D2LuaStorage_Read(lua_State* L, const std::string* pIn, size_t* pnPos, int nInto) {
     Reader tR;
     tR.L = L;
     tR.pIn = pIn;
     tR.pnPos = pnPos;
+    tR.nInto = nInto ? (nInto < 0 ? lua_gettop(L) + nInto + 1 : nInto) : 0;
     lua_newtable(L);
     tR.nTables = lua_gettop(L);
     tR.nNextId = 1;

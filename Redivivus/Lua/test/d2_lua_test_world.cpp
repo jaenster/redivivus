@@ -75,14 +75,14 @@ bool TestUnit_Damage(D2LuaCtx& ctx, TestUnitObj* self, double nAmount) {
     self->nHealth -= nAmount;
     bool bKilled = self->nHealth <= 0;
     if (!bKilled) {
-        D2LuaRaise_on_test_unit_damaged(ctx.L, self, nAmount, false);
+        D2LuaRaise_testUnitDamaged(ctx.L, self, nAmount, false);
         return false;
     }
     // Out of the world first, so handlers see the handle as invalid; freed after the event.
     auto it = s_tUnits.find(self->nId);
     TestUnitObj* pDead = it->second.release();
     s_tUnits.erase(it);
-    D2LuaRaise_on_test_unit_damaged(ctx.L, pDead, nAmount, true);
+    D2LuaRaise_testUnitDamaged(ctx.L, pDead, nAmount, true);
     delete pDead;
     return true;
 }

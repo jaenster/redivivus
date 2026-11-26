@@ -1,7 +1,7 @@
-// The host test's checks of the mod system: step-limited patterns, the loader, the runtime
-// (require rules, events, remote, registries, scripts, storage, reload) and the handle class of
-// the test world. Fixture mods live in Redivivus/Lua/test/mods; the TypeScript example mods are
-// built by the mod CLI and passed with --ts-mods.
+// The host test's checks of the mod system: step-limited patterns, the loader, the data stage, the
+// control stage (one program in two separate states, games, events, registries, storage, reload),
+// scripts, enums, the resolver, and the TypeScript mods the mod CLI built. Fixture mods live in
+// Redivivus/Lua/test/mods; the TypeScript example mods are built by the mod CLI (--ts-mods).
 #if D2_FEATURE_MODS && D2_LUA_HOST_TEST
 #include <stdio.h>
 #include <string.h>
@@ -10,6 +10,7 @@
 #include <string>
 #include <vector>
 
+#include "Redivivus/Lua/d2_lua_core.h"
 #include "Redivivus/Lua/d2_lua_internal.h"
 #include "Redivivus/Lua/d2_lua_mods.h"
 #include "Redivivus/Lua/d2_lua_runtime.h"
@@ -21,19 +22,93 @@
 
 typedef std::chrono::steady_clock Clock;
 
-static const unsigned kBudgetMs = 250;
-static std::string s_sRoot;
+std::string g_sTestRoot;
 
 static int ElapsedMs(Clock::time_point tStart) {
     return (int)std::chrono::duration_cast<std::chrono::milliseconds>(Clock::now() - tStart).count();
 }
 
-static void CheckLogged(const char* pszText, const char* pszWhat) {
+void CheckLogged(const char* pszText, const char* pszWhat) {
     bool bOk = Logged(pszText);
     if (!bOk) {
         printf("  (log lacks: %s)\n", pszText);
     }
     Check(bOk, pszWhat);
+}
+
+static const D2LuaApiDesc* const s_apApis[] = { &g_D2LuaApi_main, &g_D2LuaApi_test };
+
+std::vector<std::string> TestRoots() {
+    return { g_sTestRoot + "/Redivivus/Lua/test/mods" };
+}
+
+D2LuaRuntime* TestMakeRuntime(int nSide, const std::vector<std::string>& aRoots, const std::vector<std::string>& aOnly,
+                              const std::string& sSettingsFile, const std::vector<std::string>& aTestGrant,
+                              const std::vector<std::string>& aDriverGrant) {
+    std::vector<D2LuaModInfo> aFound;
+    std::vector<std::string> aErrors;
+    D2LuaMods_Discover(aRoots, aFound, aErrors);
+    std::vector<D2LuaModInfo> aPicked;
+    for (const auto& t : aFound) {
+        for (const auto& s : aOnly) {
+            if (t.sName == s) {
+                aPicked.push_back(t);
+            }
+        }
+    }
+    D2LuaRuntimeDesc tDesc;
+    tDesc.nSide = nSide;
+    tDesc.pfnLog = TestLog;
+    tDesc.tLimits.nBudgetMs = kTestBudgetMs;
+    tDesc.tLimits.nMemoryBytes = (size_t)64 * 1024 * 1024;
+    tDesc.aApis.assign(s_apApis, s_apApis + 2);
+    tDesc.sSettingsFile = sSettingsFile;
+    tDesc.aTestGrant = aTestGrant;
+    tDesc.aDriverGrant = aDriverGrant;
+    if (!D2LuaMods_Resolve(aPicked, tDesc.aMods, aErrors)) {
+        for (const auto& e : aErrors) {
+            printf("  resolve: %s\n", e.c_str());
+        }
+        return nullptr;
+    }
+    D2LuaRuntime* pRt = D2LuaRt_Create(tDesc);
+#if defined(D2_LUAJIT_CHECKHOOK) && !D2_LUAJIT_CHECKHOOK
+    // Without LUAJIT_ENABLE_CHECKHOOK a compiled loop never sees the budget's hook, so the checks
+    // that make a mod spin would hang. These states run interpreted, where the hook is seen; the
+    // compiled case is the host test's (--runaway).
+    if (pRt) {
+        luaJIT_setmode(D2LuaRt_State(pRt), 0, LUAJIT_MODE_ENGINE | LUAJIT_MODE_OFF);
+    }
+#endif
+    return pRt;
+}
+
+bool TestRun(D2LuaRuntime* pRt, uint32_t nGame, const char* pszMod, const char* pszSource) {
+    return D2LuaRt_Run(pRt, nGame, pszMod, pszSource) == D2LUA_OK;
+}
+
+void TestExpect(D2LuaRuntime* pRt, uint32_t nGame, const char* pszMod, const char* pszSource, const char* pszLogged,
+                const char* pszWhat) {
+    ClearLog();
+    bool bRan = TestRun(pRt, nGame, pszMod, pszSource);
+    bool bOk = bRan && (!pszLogged || Logged(pszLogged));
+    if (!bOk) {
+        printf("  ran: %d, wanted in log: %s\n", (int)bRan, pszLogged ? pszLogged : "-");
+    }
+    Check(bOk, pszWhat);
+}
+
+void TestStart(D2LuaRuntime* pRt, uint32_t nGame) {
+    std::string sError;
+    D2LuaRt_StartGame(pRt, nGame, nullptr, sError);
+}
+
+static std::string Order(const std::vector<D2LuaModInfo>& aMods) {
+    std::string s;
+    for (const auto& t : aMods) {
+        s += (s.empty() ? "" : " ") + t.sName;
+    }
+    return s;
 }
 
 // --- patterns ---------------------------------------------------------------------------------------
@@ -56,7 +131,6 @@ local patterns = {
   "%f[%w]%w+", "%f[%W]", "%f[%a]", "%f[^%z]", "(.)%1", "((a)(b))", "^(%s*)(.-)(%s*)$", ".-", ".-b", "x*$",
   "[%d%.]+", "%.", "%%", "[+-]?%d+", "(%d+)(%a+)", "a-b", "(a+)(b?)", "s+i", "(ss)(i)", "i(%w)%1",
   "(%a+)%s(%a+)", "^%s*(.-)%s*$", "[%z\1-\31]", "[\128-\255]+", "%[%[(.-)%]%]", ",", ",,", "[,]?",
-  -- malformed: errors must match too
   "%", "[a", "(a", "a)", "(()", "%1", "(%1)", "%b", "%ba", "%f", "%fa", "[%", "[^", "((((((((((((((((((((((((((((((((((a))))))))))))))))))))))))))))))))))",
 }
 local inits = { nil, 1, 2, 3, 0, -1, -3, 100, -100 }
@@ -67,7 +141,6 @@ local function same(a, b)
     local x, y = a[i], b[i]
     if type(x) ~= type(y) then return false end
     if type(x) == "string" then
-      -- error messages carry no position from a direct pcall of a C function, in both
       if x ~= y then return false end
     elseif x ~= y and not (x ~= x and y ~= y) then
       return false
@@ -125,7 +198,6 @@ for _, s in ipairs(subjects) do
     end
   end
 end
--- argument errors
 compare("find nil", pack(pcall(stock.find, nil, "a")), pack(pcall(mine.find, nil, "a")))
 compare("gsub bad repl", pack(pcall(stock.gsub, "a", "a", true)), pack(pcall(mine.gsub, "a", "a", true)))
 compare("find number subject", pack(pcall(stock.find, 12345, "3")), pack(pcall(mine.find, 12345, "3")))
@@ -135,7 +207,7 @@ return count, bad, table.concat(first, "\n")
 
 static void PatternTests() {
     printf("--- patterns\n");
-    D2LuaLimits tLimits = { kBudgetMs, (size_t)64 * 1024 * 1024 };
+    D2LuaLimits tLimits = { kTestBudgetMs, (size_t)64 * 1024 * 1024 };
     lua_State* L = D2LuaHost_Create(TestLog, &tLimits);
     if (luaL_loadstring(L, s_szPatternCorpus) != 0) {
         printf("corpus: %s\n", lua_tostring(L, -1));
@@ -159,7 +231,7 @@ static void PatternTests() {
     lua_settop(L, 0);
 
     char szBudget[96];
-    snprintf(szBudget, sizeof(szBudget), "time budget of %u ms", kBudgetMs);
+    snprintf(szBudget, sizeof(szBudget), "time budget of %u ms", kTestBudgetMs);
     static const struct { const char* pszMod; const char* pszWhat; const char* pszSource; } s_aHangs[] = {
         { "hang_find", "(\"a\"):rep(2000):find(\".-.-.-b\") is stopped at the budget", "local s = ('a'):rep(2000) return s:find('.-.-.-b')" },
         { "hang_find2", "  as string.find too", "return string.find(string.rep('a', 2000), '.-.-.-b')" },
@@ -175,11 +247,10 @@ static void PatternTests() {
         int nResult = D2LuaHost_RunString(L, tHang.pszMod, tHang.pszSource, tHang.pszMod);
         int nMs = ElapsedMs(tStart);
         printf("  stopped after %d ms\n", nMs);
-        Check(nResult == D2LUA_FAULT && Logged(szBudget) && nMs < (int)kBudgetMs * 4, tHang.pszWhat);
+        Check(nResult == D2LUA_FAULT && Logged(szBudget) && nMs < (int)kTestBudgetMs * 4, tHang.pszWhat);
     }
     ClearLog();
-    int nOk = D2LuaHost_RunString(L, "pat_ok",
-                                  "print('patterns', ('key = value'):match('(%w+)%s*=%s*(%w+)'), ('a,b'):gsub(',', ';'))", "ok");
+    int nOk = D2LuaHost_RunString(L, "pat_ok", "print('patterns', ('key = value'):match('(%w+)%s*=%s*(%w+)'), ('a,b'):gsub(',', ';'))", "ok");
     Check(nOk == D2LUA_OK && Logged("[lua] patterns\tkey\ta;b\t1"), "patterns work in a mod after the hangs");
     D2LuaHost_Destroy(L);
 }
@@ -198,15 +269,6 @@ static bool ParseMods(const std::vector<const char*>& aJson, std::vector<D2LuaMo
     return true;
 }
 
-static std::string Order(const std::vector<D2LuaModInfo>& aMods) {
-    std::string s;
-    for (const auto& t : aMods) {
-        s += (s.empty() ? "" : " ") + t.sName;
-    }
-    return s;
-}
-
-// Resolve and return the order, or "ERR: <errors joined>".
 static std::string ResolveJson(const std::vector<const char*>& aJson) {
     std::vector<D2LuaModInfo> aMods;
     std::string sError;
@@ -234,429 +296,370 @@ static void ExpectResolve(const std::vector<const char*>& aJson, const char* psz
     Check(bOk, pszWhat);
 }
 
-#define BASE "{\"name\":\"base\",\"version\":\"0.1.0\"}"
-
 static void LoaderTests() {
     printf("--- loader\n");
     ExpectResolve({ "{\"name\":\"zeta\",\"version\":\"1.0.0\"}", "{\"name\":\"alpha2\",\"version\":\"1\",\"dependencies\":[\"zeta\"]}",
-                    "{\"name\":\"mid\",\"version\":\"1\"}", BASE },
-                  "base mid zeta alpha2", "load order: dependencies first, ties by name, base implicit");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"nothere\"]}" },
+                    "{\"name\":\"mid\",\"version\":\"1\"}" },
+                  "redivivus mid zeta alpha2", "load order: redivivus first, dependencies first, ties by name");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"nothere\"]}" },
                   "ERR: mod 'a' requires 'nothere', which is not installed", "missing dependency");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"base >= 2.0\"]}" },
-                  "mod 'a' requires 'base >= 2.0.0', but version 0.1.0 is installed", "version mismatch (>=)");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"b < 1.5\"]}", "{\"name\":\"b\",\"version\":\"1.5.0\"}" },
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"redivivus >= 2.0\"]}" },
+                  "mod 'a' requires 'redivivus >= 2.0.0', but version 0.1.0 is installed", "a redivivus version too new is refused");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"redivivus >= 0.1\"]}" }, "redivivus a",
+                  "\"redivivus >= 0.1\" is met by the built-in 0.1.0");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"b < 1.5\"]}", "{\"name\":\"b\",\"version\":\"1.5.0\"}" },
                   "mod 'a' requires 'b < 1.5.0', but version 1.5.0 is installed", "version mismatch (<)");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"b = 1.5\"]}", "{\"name\":\"b\",\"version\":\"1.5.0\"}" },
-                  "base b a", "version match (=)");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"! b\"]}", "{\"name\":\"b\",\"version\":\"1\"}" },
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"b = 1.5\"]}", "{\"name\":\"b\",\"version\":\"1.5.0\"}" },
+                  "redivivus b a", "version match (=)");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"! b\"]}", "{\"name\":\"b\",\"version\":\"1\"}" },
                   "mod 'a' is incompatible with 'b', and both are enabled", "incompatibility");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"! b\"]}" }, "base a", "incompatibility with an absent mod is fine");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"b\"]}", "{\"name\":\"b\",\"version\":\"1\",\"dependencies\":[\"c\"]}",
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"b\"]}", "{\"name\":\"b\",\"version\":\"1\",\"dependencies\":[\"c\"]}",
                     "{\"name\":\"c\",\"version\":\"1\",\"dependencies\":[\"a\"]}" },
                   "ERR: dependency cycle: a -> b -> c -> a", "a cycle is named in order");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"? nothere\"]}" }, "base a", "absent optional dependency is fine");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"? z\"]}", "{\"name\":\"z\",\"version\":\"1\"}" },
-                  "base z a", "present optional dependency orders");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"(?) z\"]}", "{\"name\":\"z\",\"version\":\"1\"}" },
-                  "base z a", "hidden optional dependency orders");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"? z >= 2\"]}", "{\"name\":\"z\",\"version\":\"1\"}" },
-                  "mod 'a' requires 'z >= 2.0.0', but version 1 is installed", "optional dependency with the wrong version");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"~ z\"]}", "{\"name\":\"z\",\"version\":\"1\"}" },
-                  "base a z", "~ dependency does not order");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"~ z\"]}" },
-                  "requires 'z', which is not installed", "~ dependency is still required");
-    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\"}" }, "ERR: mod 'a' requires 'base'", "base is implicit");
-    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"? base\"]}" }, "a", "naming base optional opts out");
-    ExpectResolve({ BASE, "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"base >> 1\"]}" }, "PARSE: info.json: dependency \"base >> 1\"",
-                  "bad dependency syntax");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"? nothere\"]}" }, "redivivus a", "absent optional dependency is fine");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"? z\"]}", "{\"name\":\"z\",\"version\":\"1\"}" },
+                  "redivivus z a", "present optional dependency orders");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"~ z\"]}", "{\"name\":\"z\",\"version\":\"1\"}" },
+                  "redivivus a z", "~ dependency does not order");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"base >= 0.1\"]}" },
+                  "requires 'base', which is not installed", "there is no base mod any more");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"? redivivus\"]}" },
+                  "PARSE: info.json: redivivus is built into the game and cannot be optional", "redivivus cannot be optional");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"redivivus_version\":\"0.1\"}" }, "PARSE: info.json: \"redivivus_version\" is gone",
+                  "the redivivus_version field is refused with the way to say it now");
+    ExpectResolve({ "{\"name\":\"redivivus\",\"version\":\"9.0.0\"}" }, "PARSE: info.json: the name \"redivivus\" is reserved (redivivus is built into the game",
+                  "a mod named redivivus is refused");
+    ExpectResolve({ "{\"name\":\"ReDiViVuS\",\"version\":\"9.0.0\"}" }, "is reserved", "  in any case");
+    ExpectResolve({ "{\"name\":\"mod\",\"version\":\"1\"}" }, "PARSE: info.json: the name \"mod\" is reserved", "a mod may not be named mod");
+    ExpectResolve({ "{\"name\":\"base\",\"version\":\"1\"}" }, "is reserved", "  nor base");
+    ExpectResolve({ "{\"name\":\"redivivus-extras\",\"version\":\"1\"}" }, "is reserved", "  nor anything starting with redivivus");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":[\"b >> 1\"]}" }, "PARSE: info.json: dependency \"b >> 1\"", "bad dependency syntax");
     ExpectResolve({ "{\"name\":\"Bad Name\",\"version\":\"1\"}" }, "PARSE: info.json: name \"Bad Name\" is not valid", "bad mod name");
     ExpectResolve({ "{\"name\":\"a\",\"version\":\"1.x\"}" }, "PARSE: info.json: version \"1.x\"", "bad version");
-    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"redivivus_version\":\"9.0\"}" }, "PARSE: mod 'a' needs Redivivus API 9.0",
-                  "redivivus_version newer than the host");
     ExpectResolve({ "{\"name\":\"a\"}" }, "PARSE: info.json: \"version\" is missing", "missing version");
-    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",\"dependencies\":\"base\"}" }, "must be an array", "dependencies not an array");
     ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\",}" }, "PARSE: info.json: line 1", "malformed json names the position");
-    ExpectResolve({ BASE, BASE }, "ERR: mod 'base' is listed twice", "a mod listed twice");
+    ExpectResolve({ "{\"name\":\"a\",\"version\":\"1\"}", "{\"name\":\"a\",\"version\":\"1\"}" }, "ERR: mod 'a' is listed twice", "a mod listed twice");
 
     std::vector<D2LuaModInfo> aFound;
     std::vector<std::string> aErrors;
-    D2LuaMods_Discover({ s_sRoot + "/Redivivus/Lua/mods", s_sRoot + "/Redivivus/Lua/test/mods" }, aFound, aErrors);
-    Check(aErrors.empty() && Order(aFound) == "base alpha beta faulty gamma kitty", "discovery finds base and the fixture mods");
-    if (!aErrors.empty() || Order(aFound) != "base alpha beta faulty gamma kitty") {
-        printf("  found: %s, %d errors%s%s\n", Order(aFound).c_str(), (int)aErrors.size(), aErrors.empty() ? "" : ": ",
-               aErrors.empty() ? "" : aErrors[0].c_str());
-    }
+    D2LuaMods_Discover(TestRoots(), aFound, aErrors);
+    Check(aErrors.empty() && Order(aFound) == "alpha beta evil faulty gamma guardmod kitty worldmod", "discovery finds the fixture mods (redivivus is not on disk)");
     aFound.clear();
     aErrors.clear();
-    D2LuaMods_Discover({ s_sRoot + "/Redivivus/Lua/mods", s_sRoot + "/Redivivus/Lua/mods" }, aFound, aErrors);
-    Check(aErrors.size() == 1 && aErrors[0].find("found twice") != std::string::npos, "a mod found in two roots is an error");
-}
-
-// --- the runtime ------------------------------------------------------------------------------------
-
-static const D2LuaApiDesc* const s_apApis[] = { &g_D2LuaApi_main, &g_D2LuaApi_test };
-
-D2LuaRuntime* TestMakeRuntime(int nSide, const std::vector<std::string>& aRoots, const std::vector<std::string>& aOnly,
-                              const std::string& sSettingsFile) {
-    std::vector<D2LuaModInfo> aFound;
-    std::vector<std::string> aErrors;
-    D2LuaMods_Discover(aRoots, aFound, aErrors);
-    std::vector<D2LuaModInfo> aPicked;
-    for (const auto& t : aFound) {
-        for (const auto& s : aOnly) {
-            if (t.sName == s) {
-                aPicked.push_back(t);
-            }
-        }
+    D2LuaMods_Discover({ g_sTestRoot + "/Redivivus/Lua/test/mods", g_sTestRoot + "/Redivivus/Lua/test/mods" }, aFound, aErrors);
+    Check(aErrors.size() == 8 && aErrors[0].find("found twice") != std::string::npos, "a mod found in two roots is an error");
+    aFound.clear();
+    aErrors.clear();
+    D2LuaMods_Discover({ g_sTestRoot + "/Redivivus/Lua/test/boot/mods" }, aFound, aErrors);
+    bool bRedivivus = false, bMod = false;
+    for (const std::string& e : aErrors) {
+        bRedivivus = bRedivivus || e.find("a mod folder named redivivus is not allowed") != std::string::npos;
+        bMod = bMod || e.find("the name \"mod\" is reserved") != std::string::npos;
     }
-    D2LuaRuntimeDesc tDesc;
-    tDesc.nSide = nSide;
-    tDesc.pfnLog = TestLog;
-    tDesc.tLimits.nBudgetMs = kBudgetMs;
-    tDesc.tLimits.nMemoryBytes = (size_t)64 * 1024 * 1024;
-    tDesc.aApis.assign(s_apApis, s_apApis + 2);
-    tDesc.sSettingsFile = sSettingsFile;
-    if (!D2LuaMods_Resolve(aPicked, tDesc.aMods, aErrors)) {
-        for (const auto& e : aErrors) {
-            printf("  resolve: %s\n", e.c_str());
-        }
-        return nullptr;
-    }
-    return D2LuaRt_Create(tDesc);
+    Check(bRedivivus, "a folder named redivivus under mods/ is refused with a clear error");
+    Check(bMod, "a folder holding a mod named mod is refused");
 }
 
-static D2LuaRuntime* MakeRuntime(int nSide, const std::vector<std::string>& aRoots, const std::vector<std::string>& aOnly) {
-    return TestMakeRuntime(nSide, aRoots, aOnly, std::string());
-}
-
-// Run a chunk as mod pszMod of the runtime; true when it ran without an error.
-static bool Run(D2LuaRuntime* pRt, const char* pszMod, const char* pszSource) {
-    return D2LuaHost_RunString(D2LuaRt_State(pRt), pszMod, pszSource, "=test") == D2LUA_OK;
-}
-
-static void ExpectRun(D2LuaRuntime* pRt, const char* pszMod, const char* pszSource, const char* pszLogged, const char* pszWhat) {
-    ClearLog();
-    bool bRan = Run(pRt, pszMod, pszSource);
-    bool bOk = bRan && (!pszLogged || Logged(pszLogged));
-    if (!bOk) {
-        printf("  ran: %d, wanted in log: %s\n", (int)bRan, pszLogged ? pszLogged : "-");
-    }
-    Check(bOk, pszWhat);
-}
-
-static std::vector<std::string> FixtureRoots() {
-    return { s_sRoot + "/Redivivus/Lua/mods", s_sRoot + "/Redivivus/Lua/test/mods" };
-}
+// --- the data stage ---------------------------------------------------------------------------------
 
 static void DataStageTests() {
     printf("--- data stage\n");
     ClearLog();
-    D2LuaRuntime* pRt = MakeRuntime(D2LUA_SIDE_DATA, FixtureRoots(), { "base", "alpha", "beta" });
+    D2LuaRuntime* pRt = TestMakeRuntime(D2LUA_SIDE_DATA, TestRoots(), { "alpha", "beta" }, "");
     Check(pRt != nullptr, "data stage state created");
     if (!pRt) {
         return;
     }
+    Check(Order(D2LuaRt_Mods(pRt)) == "redivivus alpha beta", "redivivus is the first mod of every state");
     CheckLogged("[lua] [alpha] alpha settings stage", "settings.lua runs");
-    CheckLogged("[lua] [alpha] alpha data stage, helper doubles 8", "data.lua runs and requires mod files and shared/");
+    CheckLogged("[lua] [alpha] alpha data stage, helper doubles 8", "data.lua runs and requires its own modules");
     CheckLogged("[lua] [alpha] alpha final fixes sees 8 beta-shield", "data-final-fixes runs after every mod's data-updates");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(require, 'server.secret') log('data requires server:', ok, e)",
-              "the data stage cannot require control-stage code", "the data stage cannot require server/");
-    ExpectRun(pRt, "alpha", "log('data globals:', script, remote, storage, registries, type(data.extend))", "data globals: nil nil nil nil function",
-              "the data stage has data and no control-stage API");
+    TestExpect(pRt, 0, "alpha", "local ok, e = pcall(require('redivivus:data').data.extend, {}) local log = require('redivivus:shared').log log('extend ok:', ok)",
+               "extend ok: true", "data.extend works in the data stage");
+    TestExpect(pRt, 0, "alpha", "require('redivivus:shared').log('data globals:', script, remote, storage, registries, log, data, game)",
+               "data globals: nil nil nil nil nil nil nil", "no API globals in a mod environment");
     D2LuaRt_Destroy(pRt);
 }
 
-static void ClientStageTests() {
-    printf("--- client stage\n");
-    D2LuaRuntime* pRt = MakeRuntime(D2LUA_SIDE_CLIENT, FixtureRoots(), { "base", "alpha" });
-    Check(pRt != nullptr, "client stage state created");
-    if (!pRt) {
-        return;
-    }
-    ExpectRun(pRt, "alpha", "log('client ui:', require('client.ui').side)", "client ui: client", "client code requires client/");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(require, 'server.secret') log('client requires server:', ok, e)",
-              "client code cannot require server/", "client code cannot require server/");
-    ExpectRun(pRt, "alpha", "log('client globals:', type(script.on_event), storage, registries, test_world, type(remote.call))",
-              "client globals: function nil nil nil function", "the client has its own API, without the server's");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(script.on_event, 'on_test_unit_damaged', print) log('client event:', ok, e)",
-              "no event 'on_test_unit_damaged' on this side", "server events are unknown on the client");
-    D2LuaRt_Destroy(pRt);
-}
+// --- one program, two states ----------------------------------------------------------------------
 
-static void RuntimeTests() {
-    printf("--- server runtime\n");
+static void ControlTests() {
+    printf("--- control stage: one program, separate states\n");
     TestWorld_Clear();
     ClearLog();
-    D2LuaRuntime* pRt = MakeRuntime(D2LUA_SIDE_SERVER, FixtureRoots(), { "base", "alpha", "beta", "gamma", "faulty" });
-    Check(pRt != nullptr, "server state created over base and the fixtures");
-    if (!pRt) {
+    D2LuaRuntime* pServer = TestMakeRuntime(D2LUA_SIDE_SERVER, TestRoots(), { "alpha", "beta", "gamma", "faulty" }, "", { "alpha", "beta", "gamma" });
+    D2LuaRuntime* pClient = TestMakeRuntime(D2LUA_SIDE_CLIENT, TestRoots(), { "alpha", "beta", "gamma", "faulty" }, "");
+    Check(pServer && pClient, "a server and a client state over the same mods");
+    if (!pServer || !pClient) {
         return;
     }
-    Check(Order(D2LuaRt_Mods(pRt)) == "base alpha beta faulty gamma", "runtime load order");
-    CheckLogged("[lua] [alpha] alpha control 42 2 true", "control.lua runs; own and base modules; one instance per mod");
-    CheckLogged("[lua] [beta] beta control 10 beta", "a declared dependency's shared module, instantiated for the requirer");
+    Check(Order(D2LuaRt_Mods(pServer)) == "redivivus alpha beta faulty gamma", "runtime load order");
+    CheckLogged("[lua] [alpha] alpha main 42 true true", "main runs; ./helper, helper and alpha:helper are one instance");
+    CheckLogged("[lua] [beta] beta main 10 beta 5", "a dependency's module, instantiated for the requirer; a plain import of another mod's export");
     CheckLogged("mod 'gamma' does not depend on 'alpha'", "requiring a mod without declaring it fails");
+    TestExpect(pServer, 0, "alpha", "local s = require('redivivus:server') local c = require('redivivus:client') "
+               "require('redivivus:shared').log('both resolve on the server:', type(s), type(c), s.Event.Tick)",
+               "both resolve on the server: table table tick", "redivivus:server and redivivus:client both resolve in the server state");
+    TestExpect(pClient, 0, "alpha", "local s = require('redivivus:server') require('redivivus:shared').log('client side:', type(s), s.Event.Draw)",
+               "client side: table draw", "  and in the client state");
 
-    // require rules
-    ExpectRun(pRt, "alpha", "log('server secret:', require('server.secret').side)", "server secret: server", "server code requires server/");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(require, 'client/ui') log('server requires client:', ok, e)",
-              "server code cannot require client/", "server code cannot require client/");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(require, 'prototypes.items') log('server requires data file:', ok, e)",
-              "server code can require modules under server/ and shared/ only", "server code cannot require data-stage files");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(require, '__beta__/shared/data_bits') log('alpha requires beta:', ok, e)",
-              "mod 'alpha' does not depend on 'beta'", "no require into a mod that is not a dependency");
-    ExpectRun(pRt, "beta", "log('beta requires alpha server:', require('__alpha__.server.secret').side)", "beta requires alpha server: server",
-              "a dependency's server/ is reachable from server code");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(require, '../escape') log('dotdot:', ok, e)", "empty path segment", "'..' is refused");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(require, 'shared.nope') log('missing:', ok, e)", "module not found", "a missing module");
-    ExpectRun(pRt, "alpha", "log('cached:', require('shared.helper') == require('shared/helper.lua'), require('shared.helper').loads)",
-              "cached: true 1", "modules are cached per mod");
-
-    // API surface
-    ExpectRun(pRt, "alpha", "log('mod_name:', script.mod_name, pcall(function() script.mod_name = 'x' end))", "mod_name: alpha false",
-              "script.mod_name is the mod's and read-only");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(function() return script.nope end) log('unknown member:', e)", "script has no member 'nope'",
-              "unknown members raise");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(script.on_event, 'on_tik', print) log('misspelled:', e)", "no event 'on_tik' on this side",
-              "a misspelled event name is refused");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(script.on_event, 'on_tick', 5) log('bad handler:', e)", "function expected, got number",
-              "a handler of the wrong type is refused");
-
-    // lifecycle and events
-    std::string sError;
+    // Games: the server state calls server(game), the client state client(client).
     ClearLog();
-    D2LuaRt_Start(pRt, nullptr, sError);
-    ExpectRun(pRt, "alpha", "log('after init:', storage.counter, storage.inits)", "after init: 0 1", "on_init ran with fresh storage");
+    TestStart(pServer, 1);
+    TestStart(pClient, 1);
+    CheckLogged("[lua] [alpha] alpha client sees server_wrote = nil", "a variable the server export wrote is not visible to the client export, even in one process");
+    TestExpect(pServer, 1, "alpha", "require('redivivus:shared').log('server state:', server_wrote, clients)", "server state: server 1 nil",
+               "the server state never called client()");
+    TestExpect(pClient, 1, "alpha", "require('redivivus:shared').log('client state:', games, clients[1].gameId)", "client state: nil 1",
+               "the client state never called server()");
+    TestExpect(pServer, 1, "alpha", "local g = games[1] require('redivivus:shared').log('game:', g.id, g.loaded, g.storage('state', {}).inits)",
+               "game: 1 false 1", "the game object: id, loaded, a storage slot made from its defaults");
     ClearLog();
     for (int i = 0; i < 4; i++) {
-        D2LuaRt_Tick(pRt);
+        D2LuaRt_Tick(pServer, 1);
     }
     CheckLogged("mod 'faulty' ran past its time budget", "a handler that spins is stopped");
-    Check(D2LuaRt_IsFaulted(pRt, "faulty") && !D2LuaRt_IsFaulted(pRt, "gamma"), "  only that mod is faulted");
-    ExpectRun(pRt, "alpha", "log('ticks alpha:', storage.counter)", "ticks alpha: 4", "  a mod before it saw every tick");
-    ExpectRun(pRt, "gamma", "log('ticks gamma:', gamma_ticks)", "ticks gamma: 4", "  and a mod after it too");
+    Check(D2LuaRt_IsFaulted(pServer, "faulty") && !D2LuaRt_IsFaulted(pServer, "gamma"), "  only that mod is faulted");
+    TestExpect(pServer, 1, "alpha", "require('redivivus:shared').log('ticks alpha:', games[1].storage('state', {}).counter)", "ticks alpha: 4",
+               "  a mod before it saw every tick");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('ticks gamma:', gamma_ticks)", "ticks gamma: 4", "  and a mod after it too");
 
-    // remote
-    ExpectRun(pRt, "beta", "log('remote add:', remote.call('alpha', 'add', 2, 3), remote.call('alpha', 'whoami'))", "remote add: 5 alpha",
-              "remote.call runs the interface's function");
-    ExpectRun(pRt, "beta", "local ok, e = pcall(remote.call, 'alpha', 'fail') log('remote fail:', ok, e)", "remote fail: false",
-              "an error in a remote function reaches the caller");
-    ExpectRun(pRt, "beta", "local ok, e = pcall(remote.call, 'nope', 'x') log('remote unknown:', e)", "unknown interface 'nope'",
-              "an unknown interface");
-    ExpectRun(pRt, "beta", "log('interfaces:', remote.interfaces.alpha.add, remote.interfaces.alpha.nope)", "interfaces: true nil",
-              "remote.interfaces lists functions");
-    ExpectRun(pRt, "gamma", "local ok, e = pcall(remote.add_interface, 'alpha', {}) log('dup:', e)", "already exists (added by mod 'alpha')",
-              "an interface name is taken once");
+    // API surface on the game object.
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(function() return games[1].nope end) require('redivivus:shared').log('unknown member:', e)",
+               "game has no member 'nope'", "unknown members of the game raise");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(games[1].on, 'tik', print) require('redivivus:shared').log('misspelled:', e)",
+               "no event \"tik\" on this side", "a misspelled event name is refused");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(games[1].on, 'tick', 5) require('redivivus:shared').log('bad handler:', e)",
+               "function or nil expected, got number", "a handler of the wrong type is refused");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(games[1].on, 'draw', print) require('redivivus:shared').log('client event on server:', e)",
+               "no event \"draw\" on this side", "a client event is not raised on the server");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(function() games[1].id = 5 end) require('redivivus:shared').log('ro:', e)",
+               "game.id is read-only", "the game object is read-only");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(require('redivivus:data').data.extend, {}) require('redivivus:shared').log('extend in control:', e)",
+               "data.extend is for the data stage", "a data-stage call outside the data stage raises, naming the stage");
 
-    // registries
+    // Registries, per game.
     printf("--- registries\n");
-    ExpectRun(pRt, "gamma", "log('greet native:', registries.example.call('base:greet', 'x'))", "greet native: hello, x",
-              "a native entry at the bottom of the chain");
-    // beta wraps before alpha does, but alpha loads first, so beta's wrapper ends up outside.
-    Run(pRt, "beta", "registries.example.wrap('base:greet', function(next, name) return '<b ' .. next(name) .. '>' end)");
-    Run(pRt, "alpha", "registries.example.wrap('base:greet', function(next, name) return '[a ' .. next(name) .. ']' end)");
-    ExpectRun(pRt, "gamma", "log('greet wrapped:', registries.example.call('base:greet', 'x'))", "greet wrapped: <b [a hello, x]>",
-              "two mods wrap one entry in load order, whatever order they wrapped in");
-    Run(pRt, "gamma", "registries.example.wrap('base:greet', function(next, name) error('gamma wrapper breaks') end)");
-    ExpectRun(pRt, "gamma", "log('greet faulty wrapper:', registries.example.call('base:greet', 'x'))", "greet faulty wrapper: <b [a hello, x]>",
-              "a wrapper that errors falls through with the original arguments");
-    CheckLogged("a wrapper on example 'base:greet' failed and is removed from the chain", "  and is logged and removed");
-    ExpectRun(pRt, "gamma", "log('greet after removal:', registries.example.call('base:greet', 'y'))", "greet after removal: <b [a hello, y]>",
-              "  the rest of the chain keeps working");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('greet native:', games[1].registry.example.call('redivivus:greet', 'x'))",
+               "greet native: hello, x", "a native entry at the bottom of the chain");
+    TestRun(pServer, 1, "beta", "games[1].registry.example.wrap('redivivus:greet', function(next, name) return '<b ' .. next(name) .. '>' end)");
+    TestRun(pServer, 1, "alpha", "games[1].registry.example.wrap('redivivus:greet', function(next, name) return '[a ' .. next(name) .. ']' end)");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('greet wrapped:', games[1].registry.example.call('redivivus:greet', 'x'))",
+               "greet wrapped: <b [a hello, x]>", "two mods wrap one entry in load order, whatever order they wrapped in");
+    TestRun(pServer, 1, "gamma", "games[1].registry.example.wrap('redivivus:greet', function(next, name) error('gamma wrapper breaks') end)");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('greet faulty wrapper:', games[1].registry.example.call('redivivus:greet', 'x'))",
+               "greet faulty wrapper: <b [a hello, x]>", "a wrapper that errors falls through with the original arguments");
+    CheckLogged("a wrapper on example \"redivivus:greet\" failed and is removed from the chain", "  and is logged and removed");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('greet after removal:', games[1].registry.example.call('redivivus:greet', 'y'))",
+               "greet after removal: <b [a hello, y]>", "  the rest of the chain keeps working");
     Check(!Logged("failed and is removed"), "  the removed wrapper does not run again");
-    Run(pRt, "alpha", "registries.example.register('base:greet', function(name) return 'hi ' .. name end)");
-    ExpectRun(pRt, "gamma", "log('greet replaced:', registries.example.call('base:greet', 'z'))", "greet replaced: <b [a hi z]>",
-              "replace-then-wrap: register replaces the bottom, wrappers stay");
-    Run(pRt, "beta", "registries.example.register('beta:boom', function() error('boom at the bottom') end)"
-                     " registries.example.wrap('beta:boom', function(next) beta_wrapped = (beta_wrapped or 0) + 1 return next() end)");
-    ExpectRun(pRt, "gamma", "local ok, e = pcall(registries.example.call, 'beta:boom') log('bottom error:', ok, e)", "boom at the bottom",
-              "an error from the bottom reaches the caller as itself");
-    ExpectRun(pRt, "beta", "pcall(registries.example.call, 'beta:boom') log('wrapper kept:', beta_wrapped)", "wrapper kept: 2",
-              "  and the wrapper it passed through is not removed");
-    ExpectRun(pRt, "gamma", "local ok, e = pcall(registries.example.wrap, 'nope:x', print) log('wrap unknown:', e)", "has no entry 'nope:x'",
-              "wrapping an id that does not exist");
-    ExpectRun(pRt, "gamma", "log('slot:', registries.example_slot.call(21))", "slot: 42", "a slot registry's native");
-    Run(pRt, "alpha", "registries.example_slot.wrap(function(next, v) return next(v) + 1 end)");
-    ExpectRun(pRt, "gamma", "log('slot wrapped:', registries.example_slot.call(21))", "slot wrapped: 43", "  wrap(fn) on a slot");
-    Run(pRt, "beta", "registries.example_slot.set(function(v) return v end)");
-    ExpectRun(pRt, "gamma", "log('slot set:', registries.example_slot.call(21))", "slot set: 22", "  set(impl) keeps the wrapper");
+    TestRun(pServer, 1, "alpha", "games[1].registry.example.register('redivivus:greet', function(name) return 'hi ' .. name end)");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('greet replaced:', games[1].registry.example.call('redivivus:greet', 'z'))",
+               "greet replaced: <b [a hi z]>", "replace-then-wrap: register replaces the bottom, wrappers stay");
+    TestRun(pServer, 1, "beta", "games[1].registry.example.register('beta:boom', function() error('boom at the bottom') end)"
+                                " games[1].registry.example.wrap('beta:boom', function(next) beta_wrapped = (beta_wrapped or 0) + 1 return next() end)");
+    TestExpect(pServer, 1, "gamma", "local ok, e = pcall(games[1].registry.example.call, 'beta:boom') require('redivivus:shared').log('bottom error:', ok, e)",
+               "boom at the bottom", "an error from the bottom reaches the caller as itself");
+    TestExpect(pServer, 1, "beta", "pcall(games[1].registry.example.call, 'beta:boom') require('redivivus:shared').log('wrapper kept:', beta_wrapped)",
+               "wrapper kept: 2", "  and the wrapper it passed through is not removed");
+    TestExpect(pServer, 1, "gamma", "local ok, e = pcall(games[1].registry.example.wrap, 'nope:x', print) require('redivivus:shared').log('wrap unknown:', e)",
+               "has no entry \"nope:x\"", "wrapping an id that does not exist");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('slot:', games[1].registry.exampleSlot.call(21))", "slot: 42", "a slot registry's native");
+    TestRun(pServer, 1, "alpha", "games[1].registry.exampleSlot.wrap(function(next, v) return next(v) + 1 end)");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('slot wrapped:', games[1].registry.exampleSlot.call(21))", "slot wrapped: 43", "  wrap(fn) on a slot");
+    TestRun(pServer, 1, "beta", "games[1].registry.exampleSlot.set(function(v) return v end)");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('slot set:', games[1].registry.exampleSlot.call(21))", "slot set: 22", "  set(impl) keeps the wrapper");
     {
-        lua_State* L = D2LuaRt_State(pRt);
+        lua_State* L = D2LuaRt_State(pServer);
         lua_pushstring(L, "host");
-        int nResult = D2LuaRt_CallRegistry(pRt, "example", "base:greet", 1, 1);
-        Check(nResult == D2LUA_OK && lua_isstring(L, -1) && strcmp(lua_tostring(L, -1), "<b [a hi host]>") == 0,
-              "the host calls a registry entry through the chain");
-        if (nResult == D2LUA_OK) {
-            lua_pop(L, 1);
-        }
+        int nResult = D2LuaRt_CallRegistry(pServer, 1, "example", "redivivus:greet", 1);
+        Check(nResult == D2LUA_OK && lua_isstring(L, -1) && strcmp(lua_tostring(L, -1), "<b [a hi host]>") == 0, "the host calls a registry entry through the chain");
+        lua_settop(L, 0);
     }
 
-    // handles
+    // Handles of the test world (redivivus:test, granted to these mods by the test runner).
     printf("--- handles\n");
-    ExpectRun(pRt, "alpha",
-              "local u = test_world.spawn('zombie', TestUnitKind.Monster, 10) unit1 = u "
-              "log('unit:', u.valid, u.name, u.kind == TestUnitKind.Monster, u.health, u.object_name)",
-              "unit: true zombie true 10 TestUnit", "a handle's read-only properties");
-    ExpectRun(pRt, "alpha", "unit1.health = 5 log('health set:', unit1.health)", "health set: 5", "a read-write property");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(function() unit1.name = 'x' end) log('ro:', e)", "TestUnit.name is read-only",
-              "writing a read-only property raises");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(function() return unit1.nope end) log('unknown:', e)", "TestUnit has no member 'nope'",
-              "an unknown member raises");
-    ExpectRun(pRt, "alpha", "log('nearest alone:', unit1:find_nearest())", "nearest alone: nil", "an optional result: nil");
-    ExpectRun(pRt, "alpha",
-              "unit2 = test_world.spawn('guard', TestUnitKind.Npc, 50) "
-              "log('nearest:', unit1:find_nearest().name, unit1:find_nearest(TestUnitKind.Player), "
-              "unit1:find_nearest(TestUnitKind.Npc) == unit2)",
-              "nearest: guard nil true", "an optional result: a handle, filtered by an enum argument");
-    ExpectRun(pRt, "alpha", "log('interned:', test_world.get_unit(unit1.id) == unit1, rawequal(test_world.get_unit(unit1.id), unit1))",
-              "interned: true true", "the same object gives the same handle");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(test_world.spawn, 'x', 7, 1) log('enum:', e)", "7 is not a TestUnitKind",
-              "an enum argument outside the enum");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(unit1.damage, {}, 1) log('self:', e)", "TestUnit expected, got table",
-              "a method called on something else");
-    ExpectRun(pRt, "alpha",
-              "script.on_event('on_test_unit_damaged', function(e) log('damaged:', e.name, e.unit.valid, e.amount, e.killed) end)"
-              " unit1:damage(2)",
-              "damaged: on_test_unit_damaged true 2 false", "an event carrying a handle");
-    ExpectRun(pRt, "alpha", "log('died:', unit1:damage(100), unit1.valid)", "died: true false", "  the event of a kill, then the handle is invalid");
-    CheckLogged("damaged: on_test_unit_damaged false 100 true", "  inside the handler the killed unit's handle is already invalid");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(function() return unit1.health end) log('use after death:', ok, e)",
-              "TestUnit.health: this TestUnit is not valid", "use after invalidation is a clean error");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(unit1.damage, unit1, 1) log('method after death:', ok, e)",
-              "TestUnit.damage: this TestUnit is not valid", "  for methods too");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(function() unit1.health = 1 end) log('set after death:', ok, e)",
-              "this TestUnit is not valid", "  and setters");
-    ExpectRun(pRt, "alpha", "log('tostring:', tostring(unit1))", "tostring: TestUnit: invalid", "tostring of an invalid handle");
-    {
-        uint64_t nId = 0;
-        lua_State* L = D2LuaRt_State(pRt);
-        Run(pRt, "alpha", "unit3 = test_world.spawn('host-removed', TestUnitKind.Monster, 1) unit3_id = unit3.id");
-        D2LuaHost_NewModEnv(L, "alpha");
-        lua_getfield(L, -1, "unit3_id");
-        nId = (uint64_t)lua_tonumber(L, -1);
-        lua_pop(L, 2);
-        TestWorld_Remove(nId);
-        ExpectRun(pRt, "alpha", "log('host removed:', unit3.valid, pcall(function() return unit3.name end))", "host removed: false false",
-                  "an object the host removes invalidates its handles");
-    }
-    ExpectRun(pRt, "gamma", "log('formula:', registries.example.call('test:damage_formula', test_world.get_unit(" "2" "), 30))",
-              "formula: 15", "a native registry entry taking a handle");
+    TestExpect(pServer, 1, "alpha",
+               "local T = require('redivivus:test') local L = require('redivivus:shared').log "
+               "local u = T.world.spawn('zombie', T.TestUnitKind.Monster, 10) unit1 = u "
+               "L('unit:', u.valid, u.name, u.kind == T.TestUnitKind.Monster, u.health, u.objectName)",
+               "unit: true zombie true 10 TestUnit", "a handle's read-only properties");
+    TestExpect(pServer, 1, "alpha", "unit1.health = 5 require('redivivus:shared').log('health set:', unit1.health)", "health set: 5", "a read-write property");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(function() unit1.name = 'x' end) require('redivivus:shared').log('ro:', e)", "TestUnit.name is read-only",
+               "writing a read-only property raises");
+    TestExpect(pServer, 1, "alpha", "require('redivivus:shared').log('nearest alone:', unit1:findNearest())", "nearest alone: nil", "an optional result: nil");
+    TestExpect(pServer, 1, "alpha",
+               "local T = require('redivivus:test') unit2 = T.world.spawn('guard', T.TestUnitKind.Npc, 50) "
+               "require('redivivus:shared').log('nearest:', unit1:findNearest().name, unit1:findNearest(T.TestUnitKind.Player), unit1:findNearest(T.TestUnitKind.Npc) == unit2)",
+               "nearest: guard nil true", "an optional result: a handle, filtered by an enum argument");
+    TestExpect(pServer, 1, "alpha", "local T = require('redivivus:test') require('redivivus:shared').log('interned:', rawequal(T.world.getUnit(unit1.id), unit1))",
+               "interned: true", "the same object gives the same handle");
+    TestExpect(pServer, 1, "alpha", "local T = require('redivivus:test') local ok, e = pcall(T.world.spawn, 'x', 7, 1) require('redivivus:shared').log('enum:', e)",
+               "7 is not a TestUnitKind", "an enum argument outside the enum");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(unit1.damage, {}, 1) require('redivivus:shared').log('self:', e)", "TestUnit expected, got table",
+               "a method called on something else");
+    TestExpect(pServer, 1, "alpha",
+               "games[1].on('testUnitDamaged', function(e) require('redivivus:shared').log('damaged:', e.name, e.unit.valid, e.amount, e.killed) end) unit1:damage(2)",
+               "damaged: testUnitDamaged true 2 false", "an event carrying a handle, raised in the game the call is in");
+    TestExpect(pServer, 1, "alpha", "require('redivivus:shared').log('died:', unit1:damage(100), unit1.valid)", "died: true false", "  a kill, then the handle is invalid");
+    CheckLogged("damaged: testUnitDamaged false 100 true", "  inside the handler the killed unit's handle is already invalid");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(function() return unit1.health end) require('redivivus:shared').log('after death:', ok, e)",
+               "TestUnit.health: this TestUnit is not valid", "use after invalidation is a clean error");
+    TestExpect(pServer, 1, "gamma", "require('redivivus:shared').log('formula:', games[1].registry.example.call('test:damageFormula', require('redivivus:test').world.getUnit(2), 30))",
+               "formula: 15", "a native registry entry taking a handle");
 
-    // storage
+    // Storage.
     printf("--- storage\n");
-    Run(pRt, "alpha",
-        "storage.cycle = {} storage.cycle.self = storage.cycle storage.shared = { 1, 2 } storage.again = storage.shared "
-        "storage.nan = 0/0 storage[1] = true storage[2.5] = 'half' storage[true] = 'yes' storage.unit = unit2 "
-        "storage.dead = unit1 storage.deep = { a = { b = { c = 'deep' } } }");
-    std::string sSaved;
-    bool bSaved = D2LuaRt_SaveStorage(pRt, sSaved, sError);
+    TestRun(pServer, 1, "alpha",
+            "local s = games[1].storage('bag', {}) s.cycle = {} s.cycle.self = s.cycle s.shared = { 1, 2 } s.again = s.shared "
+            "s.nan = 0/0 s[1] = true s[2.5] = 'half' s[true] = 'yes' s.unit = unit2 s.dead = unit1 s.deep = { a = { b = { c = 'deep' } } }");
+    std::string sSaved, sError;
+    bool bSaved = D2LuaRt_SaveStorage(pServer, 1, sSaved, sError);
     Check(bSaved && sSaved.size() > 20, "storage saves");
     if (!bSaved) {
         printf("  %s\n", sError.c_str());
     }
     std::string sScratch;
-    Run(pRt, "beta", "storage.f = function() end");
-    Check(!D2LuaRt_SaveStorage(pRt, sScratch, sError) && sError.find("cannot save a function (at storage of mod 'beta': storage.f)") != std::string::npos,
+    TestRun(pServer, 1, "beta", "games[1].storage('x', {}).f = function() end");
+    Check(!D2LuaRt_SaveStorage(pServer, 1, sScratch, sError) && sError.find("cannot save a function (at storage of mod 'beta': storage.x.f)") != std::string::npos,
           "a function in storage is refused with its path");
-    Run(pRt, "beta", "storage.f = nil storage.t = { x = { coroutine.create(print) } }");
-    Check(!D2LuaRt_SaveStorage(pRt, sScratch, sError) && sError.find("cannot save a thread (at storage of mod 'beta': storage.t.x[1])") != std::string::npos,
-          "a coroutine is refused with its path");
-    Run(pRt, "beta", "storage.t = setmetatable({}, {})");
-    Check(!D2LuaRt_SaveStorage(pRt, sScratch, sError) && sError.find("with a metatable") != std::string::npos, "a table with a metatable is refused");
-    Run(pRt, "beta", "storage.t = { [{}] = 1 }");
-    Check(!D2LuaRt_SaveStorage(pRt, sScratch, sError) && sError.find("as a table key") != std::string::npos, "a table key is refused");
-    Run(pRt, "beta", "storage.t = nil");
+    TestRun(pServer, 1, "beta", "games[1].storage('x', {}).f = nil games[1].storage('x', {}).t = setmetatable({}, {})");
+    Check(!D2LuaRt_SaveStorage(pServer, 1, sScratch, sError) && sError.find("with a metatable") != std::string::npos, "a table with a metatable is refused");
+    TestRun(pServer, 1, "beta", "games[1].storage('x', {}).t = nil");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(games[1].storage, '__persist', {}) require('redivivus:shared').log('reserved key:', e)",
+               "keys starting with __ are the core's", "storage keys starting with __ are the core's");
 
-    D2LuaRuntime* pLoaded = MakeRuntime(D2LUA_SIDE_SERVER, FixtureRoots(), { "base", "alpha", "beta", "gamma", "faulty" });
+    D2LuaRuntime* pLoaded = TestMakeRuntime(D2LUA_SIDE_SERVER, TestRoots(), { "alpha", "beta", "gamma" }, "", { "alpha" });
     ClearLog();
-    bool bStarted = pLoaded && D2LuaRt_Start(pLoaded, &sSaved, sError);
-    Check(bStarted && Logged("[lua] [alpha] alpha on_load, counter 4"), "storage restores into a fresh state; on_load runs");
+    bool bStarted = pLoaded && D2LuaRt_StartGame(pLoaded, 7, &sSaved, sError);
+    Check(bStarted && Logged("[lua] [alpha] alpha loaded, counter 4"), "storage restores into a game of a fresh state; game.loaded is true");
     if (pLoaded) {
-        ExpectRun(pLoaded, "alpha",
-                  "log('restored:', storage.cycle.self == storage.cycle, storage.again == storage.shared, storage.shared[2], "
-                  "storage.nan ~= storage.nan, storage[1], storage[2.5], storage[true], storage.deep.a.b.c)",
-                  "restored: true true 2 true true half yes deep", "  cycles, shared tables, NaN and key types survive");
-        ExpectRun(pLoaded, "alpha", "log('restored handles:', storage.unit.valid, storage.unit.name, storage.dead.valid)",
-                  "restored handles: true guard false", "  handles come back as handles");
-        ExpectRun(pLoaded, "alpha", "log('no init on load:', storage.inits)", "no init on load: 1", "  on_init does not run on load");
+        TestExpect(pLoaded, 7, "alpha",
+                   "local s = games[7].storage('bag', {}) require('redivivus:shared').log('restored:', s.cycle.self == s.cycle, s.again == s.shared, s.shared[2], "
+                   "s.nan ~= s.nan, s[1], s[2.5], s[true], s.deep.a.b.c)",
+                   "restored: true true 2 true true half yes deep", "  cycles, shared tables, NaN and key types survive");
+        TestExpect(pLoaded, 7, "alpha", "local s = games[7].storage('bag', {}) require('redivivus:shared').log('handles:', s.unit.valid, s.unit.name, s.dead.valid)",
+                   "handles: true guard false", "  handles come back as handles");
         std::string sBad = sSaved.substr(0, sSaved.size() - 3);
-        D2LuaRuntime* pBad = MakeRuntime(D2LUA_SIDE_SERVER, FixtureRoots(), { "base", "alpha" });
-        Check(pBad && !D2LuaRt_Start(pBad, &sBad, sError) && sError.find("corrupt save") != std::string::npos, "a truncated save is refused");
-        D2LuaRt_Destroy(pBad);
+        Check(!D2LuaRt_StartGame(pLoaded, 8, &sBad, sError) && sError.find("corrupt save") != std::string::npos, "a truncated save is refused");
         D2LuaRt_Destroy(pLoaded);
     }
 
-    // reload
+    // Reload of one game.
     ClearLog();
-    Run(pRt, "beta", "beta_marker = 'before reload'");
-    bool bReloaded = D2LuaRt_Reload(pRt, sError);
-    Check(bReloaded && Logged("[lua] [alpha] alpha on_load, counter 4"), "reload rebuilds the control stage and runs on_load");
-    ExpectRun(pRt, "beta", "log('after reload:', beta_marker, storage.counter)", "after reload: nil nil", "  globals start over");
-    ExpectRun(pRt, "alpha", "log('reloaded storage:', storage.counter, storage.unit.name)", "reloaded storage: 4 guard", "  storage is handed back");
-    ExpectRun(pRt, "gamma", "log('greet after reload:', registries.example.call('base:greet', 'r'))", "greet after reload: hello, r",
-              "  registries start from the natives again");
-    D2LuaRt_Tick(pRt);
-    ExpectRun(pRt, "alpha", "log('ticking after reload:', storage.counter)", "ticking after reload: 5", "  events flow after a reload");
+    TestRun(pServer, 1, "alpha", "reload_marker = { games[1] }");
+    bool bReloaded = D2LuaRt_ReloadGame(pServer, 1, sError);
+    Check(bReloaded && Logged("[lua] [alpha] alpha main 42") && Logged("[lua] [alpha] alpha loaded, counter 4"),
+          "reload loads the modules again and calls server(game) with storage handed back");
+    TestExpect(pServer, 1, "alpha", "require('redivivus:shared').log('new object:', games[1] ~= reload_marker[1], reload_marker[1].id)",
+               "new object: true 1", "  the export gets a new object for the same game");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(reload_marker[1].registry.example.call, 'redivivus:greet', 'r') require('redivivus:shared').log('old registry:', ok, e)",
+               "old registry: true hello, r", "  what was registered before is gone: the chain is the native entry again");
+    D2LuaRt_Tick(pServer, 1);
+    TestExpect(pServer, 1, "alpha", "require('redivivus:shared').log('ticking after reload:', games[1].storage('state', {}).counter)",
+               "ticking after reload: 5", "  the new handler runs, once");
 
-    // the last check here faults alpha: a remote function that spins
-    ClearLog();
-    Run(pRt, "gamma", "remote.call('alpha', 'spin')");
-    Check(D2LuaRt_IsFaulted(pRt, "alpha") && !D2LuaRt_IsFaulted(pRt, "gamma") && Logged("mod 'alpha' ran past"),
-          "a remote function that spins faults the mod that owns it, not the caller");
+    // Ending the game drops what was registered through it.
+    Check(D2LuaRt_EndGame(pServer, 1), "the game ends");
+    TestExpect(pServer, 1, "alpha", "local ok, e = pcall(games[1].on, 'tick', print) require('redivivus:shared').log('ended:', e)",
+               "this game has ended", "an object of an ended game refuses");
+    D2LuaRt_Destroy(pClient);
+    D2LuaRt_Destroy(pServer);
+}
+
+// --- two games in one state ------------------------------------------------------------------------
+
+static void TwoGameTests() {
+    printf("--- two games in one state\n");
+    TestWorld_Clear();
+    D2LuaRuntime* pRt = TestMakeRuntime(D2LUA_SIDE_SERVER, TestRoots(), { "alpha", "beta", "gamma" }, "", { "alpha" });
+    if (!pRt) {
+        Check(0, "two games: runtime");
+        return;
+    }
+    TestStart(pRt, 1);
+    TestStart(pRt, 2);
+    TestExpect(pRt, 0, "alpha", "require('redivivus:shared').log('two objects:', games[1].id, games[2].id, games[1] ~= games[2])", "two objects: 1 2 true",
+               "one loaded mod, its export called once per game, a separate object each");
+    for (int i = 0; i < 3; i++) {
+        D2LuaRt_Tick(pRt, 1);
+    }
+    D2LuaRt_Tick(pRt, 2);
+    TestExpect(pRt, 0, "alpha", "require('redivivus:shared').log('counters:', games[1].storage('state', {}).counter, games[2].storage('state', {}).counter)",
+               "counters: 3 1", "handlers and storage are per game");
+    TestRun(pRt, 1, "alpha", "games[1].registry.example.wrap('redivivus:greet', function(next, n) return 'G1(' .. next(n) .. ')' end)");
+    TestExpect(pRt, 0, "alpha", "require('redivivus:shared').log('registries:', games[1].registry.example.call('redivivus:greet', 'x'), games[2].registry.example.call('redivivus:greet', 'x'))",
+               "registries: G1(hello, x) hello, x", "a wrapper registered in one game is not in the other");
+    TestRun(pRt, 2, "alpha", "games[2].startScript(function() while true do require('redivivus:shared').wait() g2_runs = (g2_runs or 0) + 1 end end)");
+    D2LuaRt_Tick(pRt, 1);
+    D2LuaRt_Tick(pRt, 1);
+    TestExpect(pRt, 0, "alpha", "require('redivivus:shared').log('g2 script after g1 ticks:', g2_runs)", "g2 script after g1 ticks: nil",
+               "a script of one game is not resumed by the other's ticks");
+    D2LuaRt_Tick(pRt, 2);
+    D2LuaRt_Tick(pRt, 2);
+    TestExpect(pRt, 0, "alpha", "require('redivivus:shared').log('g2 script:', g2_runs)", "g2 script: 1", "  it runs on its own game's ticks");
+    std::string sError;
+    Check(D2LuaRt_ReloadGame(pRt, 2, sError), "reload one game");
+    TestExpect(pRt, 0, "alpha", "require('redivivus:shared').log('after reloading 2:', games[1].registry.example.call('redivivus:greet', 'y'))",
+               "after reloading 2: G1(hello, y)", "  the other game keeps its registrations");
+    D2LuaRt_EndGame(pRt, 1);
+    D2LuaRt_Tick(pRt, 2);
+    TestExpect(pRt, 0, "alpha", "require('redivivus:shared').log('game 2 after game 1 ended:', games[2].storage('state', {}).counter, pcall(games[1].on, 'tick', print))",
+               "game 2 after game 1 ended: 4 false", "ending one game leaves the other intact");
     D2LuaRt_Destroy(pRt);
 }
 
 // --- scripts ----------------------------------------------------------------------------------------
 
 static const char s_szLuaScript[] = R"LUA(
-local function deep3() return script.wait(2) end
+local S = require("redivivus:shared")
+local log, wait = S.log, S.wait
+local g = games[1]
+local function deep3() return wait(2) end
 local function deep2() return deep3() end
 local function deep1() return deep2() end
-remote.add_interface("waiter", { wait = function() return script.wait(1) end })
-script.start(function()
-  log("script: start", script.tick)
+g.startScript(function()
+  log("script: start", g.tick)
   coroutine.yield()
-  log("script: bare yield resumed", script.tick)
+  log("script: bare yield resumed", g.tick)
   log("script: nested wait gives", deep1())
-  local ok, v = pcall(function() return script.wait(1) end)
+  local ok, v = pcall(function() return wait(1) end)
   log("script: wait inside pcall", ok, v)
-  local ok2, v2 = xpcall(function() return script.wait(1) end, function(e) return "handled " .. tostring(e) end)
+  local ok2, v2 = xpcall(function() return wait(1) end, function(e) return "handled " .. tostring(e) end)
   log("script: wait inside xpcall", ok2, v2)
-  for k in function(_, prev) if prev == nil then script.wait(1) return "k" end end do
-    log("script: wait inside an iterator", k, script.tick)
+  for k in function(_, prev) if prev == nil then wait(1) return "k" end end do
+    log("script: wait inside an iterator", k, g.tick)
   end
-  local t = setmetatable({}, { __index = function(_, key) return script.wait(1) end })
+  local t = setmetatable({}, { __index = function(_, key) return wait(1) end })
   log("script: wait inside __index", t.x)
-  local e = script.wait_event("on_test_unit_damaged")
+  local e = g.waitEvent("testUnitDamaged")
   log("script: waited for an event", e.amount, e.unit.name)
   local r = coroutine.yield({ ticks = 3 })
   log("script: yielded a wait value, outcome", r)
-  log("script: across table.sort", pcall(table.sort, { 3, 2, 1 }, function(a, b) script.wait(1) return a < b end))
-  log("script: across gsub", pcall(string.gsub, "ab", "%w", function(c) script.wait(1) return c end))
-  log("script: across tostring", pcall(tostring, setmetatable({}, { __tostring = function() script.wait(1) return "x" end })))
-  log("script: across remote.call", pcall(remote.call, "waiter", "wait"))
-  log("script: across require", pcall(require, "shared.waits"))
-  log("script: done", script.tick)
+  log("script: across table.sort", pcall(table.sort, { 3, 2, 1 }, function(a, b) wait(1) return a < b end))
+  log("script: across gsub", pcall(string.gsub, "ab", "%w", function(c) wait(1) return c end))
+  log("script: across a registry call", pcall(g.registry.example.call, "beta:waits"))
+  log("script: across require", pcall(require, "beta:waits"))
+  log("script: done", g.tick)
 end)
 )LUA";
 
 static void ScriptTests() {
     printf("--- scripts (Lua)\n");
     TestWorld_Clear();
-    D2LuaRuntime* pRt = MakeRuntime(D2LUA_SIDE_SERVER, FixtureRoots(), { "base", "alpha", "beta", "gamma" });
+    D2LuaRuntime* pRt = TestMakeRuntime(D2LUA_SIDE_SERVER, TestRoots(), { "alpha", "beta", "gamma" }, "", { "beta" });
     if (!pRt) {
         Check(0, "scripts: runtime");
         return;
     }
-    std::string sError;
-    D2LuaRt_Start(pRt, nullptr, sError);
+    TestStart(pRt, 1);
+    TestRun(pRt, 1, "beta", "games[1].registry.example.register('beta:waits', function() return require('redivivus:shared').wait(1) end)");
     ClearLog();
-    ExpectRun(pRt, "beta", s_szLuaScript, nullptr, "a plain Lua script starts");
+    TestExpect(pRt, 1, "beta", s_szLuaScript, nullptr, "a plain Lua script starts");
     Check(!Logged("script: start"), "  it does not run inside the call that starts it");
     ClearLog();
     for (int i = 0; i < 9; i++) {
-        D2LuaRt_Tick(pRt);
+        D2LuaRt_Tick(pRt, 1);
     }
     CheckLogged("[beta] script: start 1", "  first resume on the next tick");
     CheckLogged("[beta] script: bare yield resumed 2", "  a bare yield resumes on the next tick");
@@ -667,90 +670,63 @@ static void ScriptTests() {
     CheckLogged("[beta] script: wait inside __index 8", "  a wait inside a metamethod");
     Check(!Logged("script: waited for an event"), "  waiting for an event does not resume on ticks");
     ClearLog();
-    Run(pRt, "beta", "local u = test_world.spawn('target', TestUnitKind.Monster, 10) u:damage(4)");
-    CheckLogged("[beta] script: waited for an event 4 target", "  wait_event resumes with the payload");
+    TestRun(pRt, 1, "beta", "local u = require('redivivus:test').world.spawn('target', 0, 10) u:damage(4)");
+    CheckLogged("[beta] script: waited for an event 4 target", "  waitEvent resumes with the payload");
     ClearLog();
     for (int i = 0; i < 4; i++) {
-        D2LuaRt_Tick(pRt);
+        D2LuaRt_Tick(pRt, 1);
     }
     CheckLogged("[beta] script: yielded a wait value, outcome 12", "  yielding { ticks = 3 } resumes 3 ticks later with the tick");
-    CheckLogged("script: across table.sort false attempt to yield across C-call boundary", "  table.sort's comparator cannot yield");
-    CheckLogged("script: across gsub false attempt to yield across C-call boundary", "  gsub's callback cannot yield");
-    CheckLogged("script: across tostring true x", "  __tostring through tostring can yield (LuaJIT resumes metamethods)");
-    CheckLogged("script: across remote.call false attempt to yield across C-call boundary", "  a remote function cannot yield");
-    CheckLogged("script: across require false attempt to yield across C-call boundary", "  a module's main chunk cannot yield");
-    CheckLogged("[beta] script: done 13", "  the script runs to its end");
+    Check(Logged("script: across table.sort false") && Logged("attempt to yield across C-call boundary"), "  table.sort's comparator cannot yield");
+    Check(Logged("script: across gsub false") && Logged("attempt to yield across C-call boundary"), "  gsub's callback cannot yield");
+    Check(Logged("script: across a registry call false") && Logged("attempt to yield across C-call boundary"), "  a registry entry cannot yield (a native C boundary)");
+    Check(Logged("script: across require false") && Logged("attempt to yield across C-call boundary"), "  a module's main chunk cannot yield");
+    CheckLogged("[beta] script: done 12", "  the script runs to its end");
 
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(script.wait) log('outside:', e)", "script.wait can only be used inside a script",
-              "waiting outside a script is a clean error");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(coroutine.wrap(function() script.wait() end)) log('own coroutine:', e)",
-              "can only be used inside a script", "  also from a mod's own coroutine");
-    Run(pRt, "alpha", "script.on_event('on_tick', function() script.wait(1) end)");
-    ClearLog();
-    D2LuaRt_Tick(pRt);
-    CheckLogged("script.wait can only be used inside a script", "  and from an event handler the host calls");
-    Run(pRt, "alpha", "script.on_event('on_tick', nil)");
+    TestExpect(pRt, 1, "alpha", "local ok, e = pcall(require('redivivus:shared').wait) require('redivivus:shared').log('outside:', e)",
+               "wait can only be used inside a script", "waiting outside a script is a clean error");
+    TestExpect(pRt, 1, "alpha", "local ok, e = pcall(coroutine.wrap(function() require('redivivus:shared').wait() end)) require('redivivus:shared').log('own coroutine:', e)",
+               "can only be used inside a script", "  also from a mod's own coroutine");
 
-    // per-resume budget: each resume does a bit more than a third of the budget of work, five
-    // times, so the script as a whole runs well past one budget.
+    // Per-resume budget.
     {
-        lua_State* L = D2LuaRt_State(pRt);
-        Run(pRt, "gamma", "function spin(n) local s = 0 for i = 1, n do s = s + i % 3 end return s end");
+        TestRun(pRt, 1, "gamma", "function spin(n) local s = 0 for i = 1, n do s = s + i % 3 end return s end");
         Clock::time_point tStart = Clock::now();
-        Run(pRt, "gamma", "spin(4000000)");
+        TestRun(pRt, 1, "gamma", "spin(4000000)");
         int nMs = ElapsedMs(tStart);
         double nPerMs = 4000000.0 / (nMs > 0 ? nMs : 1);
-        long nWork = (long)(nPerMs * kBudgetMs * 0.4);
-        char szScript[512];
+        long nWork = (long)(nPerMs * kTestBudgetMs * 0.4);
+        char szScript[600];
         snprintf(szScript, sizeof(szScript),
-                 "script.start(function() for i = 1, 5 do spin(%ld) script.wait() end log('long script finished') end)", nWork);
-        Run(pRt, "gamma", szScript);
+                 "local w = require('redivivus:shared').wait games[1].startScript(function() for i = 1, 5 do spin(%ld) w() end require('redivivus:shared').log('long script finished') end)", nWork);
+        TestRun(pRt, 1, "gamma", szScript);
         ClearLog();
         tStart = Clock::now();
         for (int i = 0; i < 7; i++) {
-            D2LuaRt_Tick(pRt);
+            D2LuaRt_Tick(pRt, 1);
         }
         int nTotal = ElapsedMs(tStart);
-        printf("  five resumes took %d ms in all (budget %u ms per entry)\n", nTotal, kBudgetMs);
-        Check(Logged("long script finished") && !D2LuaRt_IsFaulted(pRt, "gamma") && nTotal > (int)kBudgetMs,
-              "the budget is per resume, not per script");
-        (void)L;
+        printf("  five resumes took %d ms in all (budget %u ms per entry)\n", nTotal, kTestBudgetMs);
+        Check(Logged("long script finished") && !D2LuaRt_IsFaulted(pRt, "gamma") && nTotal > (int)kTestBudgetMs, "the budget is per resume, not per script");
     }
-
-    // a script that spins faults its owner
-    Run(pRt, "gamma", "script.start(function() script.wait() while true do end end)");
+    TestRun(pRt, 1, "gamma", "games[1].startScript(function() require('redivivus:shared').wait() while true do end end)");
     ClearLog();
-    D2LuaRt_Tick(pRt);
-    D2LuaRt_Tick(pRt);
+    D2LuaRt_Tick(pRt, 1);
+    D2LuaRt_Tick(pRt, 1);
     Check(D2LuaRt_IsFaulted(pRt, "gamma") && Logged("mod 'gamma' ran past"), "a script that spins faults the mod that started it");
     D2LuaRt_Destroy(pRt);
 
-    // coroutine ownership through a remote call
-    pRt = MakeRuntime(D2LUA_SIDE_SERVER, FixtureRoots(), { "base", "alpha", "beta", "gamma" });
-    D2LuaRt_Start(pRt, nullptr, sError);
-    Run(pRt, "alpha",
-        "local co = coroutine.create(function() coroutine.yield('first') while true do end end) "
-        "remote.add_interface('alpha_co', { get = function() return co end })");
-    ExpectRun(pRt, "beta", "local co = remote.call('alpha_co', 'get') log('resume 1:', coroutine.resume(co))", "resume 1: true first",
-              "another mod resumes a coroutine alpha created");
+    // A wrapper that runs out of time faults its mod, and the chain recovers without it.
+    pRt = TestMakeRuntime(D2LUA_SIDE_SERVER, TestRoots(), { "alpha", "beta", "gamma" }, "");
+    TestStart(pRt, 1);
+    TestRun(pRt, 1, "alpha", "games[1].registry.example.wrap('redivivus:greet', function(next, n) return 'A(' .. next(n) .. ')' end)");
+    TestRun(pRt, 1, "beta", "games[1].registry.example.wrap('redivivus:greet', function(next, n) while true do end end)");
     ClearLog();
-    Run(pRt, "beta", "local co = remote.call('alpha_co', 'get') coroutine.resume(co)");
-    Check(D2LuaRt_IsFaulted(pRt, "alpha") && !D2LuaRt_IsFaulted(pRt, "beta") && Logged("mod 'alpha' ran past")
-              && Logged("which stays enabled"),
-          "  a fault inside it is charged to alpha, the creator, not beta, the resumer");
-    D2LuaRt_Destroy(pRt);
-
-    // a wrapper that runs out of time faults its mod, and the entry recovers without it
-    pRt = MakeRuntime(D2LUA_SIDE_SERVER, FixtureRoots(), { "base", "alpha", "beta", "gamma" });
-    D2LuaRt_Start(pRt, nullptr, sError);
-    Run(pRt, "alpha", "registries.example.wrap('base:greet', function(next, n) return 'A(' .. next(n) .. ')' end)");
-    Run(pRt, "beta", "registries.example.wrap('base:greet', function(next, n) while true do end end)");
-    ClearLog();
-    Run(pRt, "gamma", "registries.example.call('base:greet', 'q')");
-    Check(D2LuaRt_IsFaulted(pRt, "beta") && !D2LuaRt_IsFaulted(pRt, "gamma") && !D2LuaRt_IsFaulted(pRt, "alpha"),
-          "a wrapper that spins faults its own mod only");
-    ExpectRun(pRt, "gamma", "log('greet without beta:', registries.example.call('base:greet', 'q'))", "greet without beta: A(hello, q)",
-              "  the chain carries on without the faulted mod's wrapper");
+    TestRun(pRt, 1, "gamma", "games[1].registry.example.call('redivivus:greet', 'q')");
+    Check(D2LuaRt_IsFaulted(pRt, "beta") && !D2LuaRt_IsFaulted(pRt, "gamma") && !D2LuaRt_IsFaulted(pRt, "alpha"), "a wrapper that spins faults its own mod only");
+    CheckLogged("(in a call that entered through mod 'gamma', which stays enabled)", "  the mod whose call reached it stays enabled");
+    TestExpect(pRt, 1, "gamma", "require('redivivus:shared').log('greet without beta:', games[1].registry.example.call('redivivus:greet', 'q'))",
+               "greet without beta: A(hello, q)", "  the chain carries on without the faulted mod's wrapper");
     D2LuaRt_Destroy(pRt);
 }
 
@@ -758,66 +734,37 @@ static void ScriptTests() {
 
 static void EnumTests() {
     printf("--- enums\n");
-    D2LuaRuntime* pRt = MakeRuntime(D2LUA_SIDE_SERVER, FixtureRoots(), { "base", "alpha", "beta" });
+    D2LuaRuntime* pRt = TestMakeRuntime(D2LUA_SIDE_SERVER, TestRoots(), { "alpha", "beta" }, "", { "alpha", "beta" });
     if (!pRt) {
         Check(0, "enums: runtime");
         return;
     }
-    ExpectRun(pRt, "alpha", "log('enum values:', Event.Tick, TestUnitKind.Npc, ExampleId.Greet, Event.TestUnitDamaged)",
-              "enum values: on_tick 1 base:greet on_test_unit_damaged",
-              "enums are tables in the environment; the test set's members merge into Event");
-    ExpectRun(pRt, "alpha", "local ok, e = pcall(function() Event.Tick = 'x' end) log('enum write:', ok, e, Event.Tick)",
-              "enum write: false", "writing an existing member raises");
-    CheckLogged("Event is read-only (an enum)", "  with the enum's name");
-    ExpectRun(pRt, "alpha", "local ok = pcall(function() TestUnitKind.Dragon = 9 end) log('enum add:', ok, TestUnitKind.Dragon)",
-              "enum add: false nil", "adding a member raises");
-    ExpectRun(pRt, "alpha", "log('enum metatable:', getmetatable(Event), pcall(setmetatable, Event, {}))", "enum metatable: false false",
-              "the metatable is locked");
-    ExpectRun(pRt, "alpha",
-              "local n, sum = 0, 0 for k, v in pairs(TestUnitKind) do n = n + 1 sum = sum + v end log('enum pairs:', n, sum)",
-              "enum pairs: 3 3", "pairs walks an enum's members");
-    ExpectRun(pRt, "alpha", "local n = 0 for k in pairs({ a = 1, b = 2 }) do n = n + 1 end log('plain pairs:', n)", "plain pairs: 2",
-              "  and plain tables as before");
-    ExpectRun(pRt, "alpha", "rawset(TestUnitKind, 'Monster', 42) log('own rawset:', TestUnitKind.Monster)", "own rawset: 42",
-              "a rawset into its own proxy changes that mod's view only");
-    ExpectRun(pRt, "beta", "log('other mod:', TestUnitKind.Monster)", "other mod: 0", "  every other mod still reads the value");
-    ExpectRun(pRt, "beta", "log('registry by enum:', registries.example.call(ExampleId.Greet, 'e'))", "registry by enum: hello, e",
-              "plain Lua names a registry id through its enum");
-    ExpectRun(pRt, "beta", "log('registry by string:', registries.example.call('base:greet', 's'))",
-              "registry by string: hello, s", "  or by the same value as a string");
-    ExpectRun(pRt, "alpha",
-              "log('engine enums:', UnitType.Monster, PlayerMode.Run, MonsterMode.Run, UiVar.Inventory, AiTargeting.Basic, "
-              "QuestId.DenOfEvil, ItemQuality.Unique, DamageType.Cold, StatId.Strength, StatId.ItemArmorPercent, SkillId.Teleport, "
-              "DrawMode.Solid, Difficulty.Hell, PlayerClass.Assassin, BodyLoc.LArm, ItemFlag.Ethereal, ItemFlag.Tagged, "
-              "MonsterTypeFlag.Champion, Act.V, Act.None)",
-              "engine enums: 1 3 15 1 1 1 7 4 0 16 54 5 2 6 5 4194304 -2147483648 4 4 255",
-              "engine enums carry the header's values under the generated names");
-    ExpectRun(pRt, "alpha", "log('engine enum sentinels:', UnitType.Count, PlayerClass.Count, BodyLoc.NumBodylocs, UiVar.Ui0x1D)",
-              "engine enum sentinels: nil nil nil nil", "  excluded members are absent");
-    ExpectRun(pRt, "alpha", "local ok = pcall(function() SkillId.Teleport = 1 end) log('engine enum write:', ok, SkillId.Teleport)",
-              "engine enum write: false 54", "  and read-only like every enum");
+    TestExpect(pRt, 0, "alpha",
+               "local E = require('redivivus:enums') require('redivivus:shared').log('enum values:', E.Event.Tick, E.ExampleId.Greet, E.Event.TestUnitDamaged, require('redivivus:test').TestUnitKind.Npc)",
+               "enum values: tick redivivus:greet testUnitDamaged 1", "enums are read-only tables of redivivus:enums; the test set's members merge into Event");
+    TestExpect(pRt, 0, "alpha", "local E = require('redivivus:enums') local ok, e = pcall(function() E.Event.Tick = 'x' end) require('redivivus:shared').log('enum write:', ok, e)",
+               "Event.Tick is read-only (an enum)", "writing a member raises, naming the enum");
+    TestExpect(pRt, 0, "alpha", "local E = require('redivivus:enums') local ok = pcall(function() E.Act.VI = 6 end) require('redivivus:shared').log('enum add:', ok, E.Act.VI)",
+               "enum add: false nil", "adding a member raises");
+    TestExpect(pRt, 0, "alpha", "local E = require('redivivus:enums') require('redivivus:shared').log('enum metatable:', getmetatable(E.Event), pcall(setmetatable, E.Event, {}))",
+               "enum metatable: false false", "the metatable is locked");
+    TestExpect(pRt, 0, "alpha",
+               "local T = require('redivivus:test') local n, sum = 0, 0 for k, v in pairs(T.TestUnitKind) do n = n + 1 sum = sum + v end require('redivivus:shared').log('enum pairs:', n, sum)",
+               "enum pairs: 3 3", "pairs walks an enum's members");
+    TestExpect(pRt, 0, "alpha", "local E = require('redivivus:enums') rawset(E.Act, 'I', 42) require('redivivus:shared').log('own rawset:', E.Act.I)",
+               "own rawset: 42", "a rawset into its own table changes that mod's view only");
+    TestExpect(pRt, 0, "beta", "require('redivivus:shared').log('other mod:', require('redivivus:enums').Act.I)", "other mod: 0", "  every other mod still reads the value");
+    TestExpect(pRt, 0, "alpha", "require('redivivus:shared').log('same table:', require('redivivus:server').Event == require('redivivus:enums').Event)",
+               "same table: true", "redivivus:server re-exports the canonical Event of redivivus:enums");
+    TestExpect(pRt, 0, "alpha",
+               "local E = require('redivivus:enums') require('redivivus:shared').log('engine enums:', E.UnitType.Monster, E.PlayerMode.Run, E.MonsterMode.Run, E.UiFlag.Inventory, E.AiTargeting.Basic, "
+               "E.QuestId.DenOfEvil, E.ItemQuality.Unique, E.DamageType.Cold, E.StatId.Strength, E.StatId.ItemArmorPercent, E.SkillId.Teleport, "
+               "E.DrawMode.Solid, E.Difficulty.Hell, E.PlayerClassId.Assassin, E.BodyLoc.LArm, E.ItemFlag.Ethereal, E.ItemFlag.Tagged, "
+               "E.MonsterTypeFlag.Champion, E.Act.V, E.Act.None)",
+               "engine enums: 1 3 15 1 1 1 7 4 0 16 54 5 2 6 5 4194304 -2147483648 4 4 255", "engine enums carry the header's values under the generated names");
+    TestExpect(pRt, 0, "alpha", "local E = require('redivivus:enums') require('redivivus:shared').log('sentinels:', E.UnitType.Count, E.PlayerClassId.Count, E.UiVar, E.PlayerClass)",
+               "sentinels: nil nil nil nil", "  excluded members and the old names are absent");
     D2LuaRt_Destroy(pRt);
-
-    pRt = MakeRuntime(D2LUA_SIDE_DATA, FixtureRoots(), { "base", "alpha" });
-    if (pRt) {
-        ExpectRun(pRt, "alpha", "log('data enums:', UnitType.Item, SkillId.Attack, Event.Tick)", "data enums: 4 0 on_tick",
-                  "the data stage has the engine enums");
-        D2LuaRt_Destroy(pRt);
-    }
-
-    pRt = MakeRuntime(D2LUA_SIDE_CLIENT, FixtureRoots(), { "base", "alpha" });
-    if (pRt) {
-        ExpectRun(pRt, "alpha", "log('client engine enum:', UiVar.Automap)", "client engine enum: 10", "the client has them too");
-        ExpectRun(pRt, "alpha", "log('client enums:', Event.Draw, Event.TestUnitDamaged, TestUnitKind, ExampleId)",
-                  "client enums: on_draw nil nil nil", "an enum exists on the sides its declaring file is bound to");
-        ExpectRun(pRt, "alpha", "script.on_event(Event.Draw, function(e) log('drawn:', e.name == Event.Draw) end)", nullptr,
-                  "a client handler subscribed by enum");
-        ClearLog();
-        lua_newtable(D2LuaRt_State(pRt));
-        D2LuaRt_RaiseEvent(pRt, "on_draw");
-        CheckLogged("drawn: true", "  runs with the payload's name equal to the member");
-        D2LuaRt_Destroy(pRt);
-    }
 }
 
 // --- TypeScript mods ----------------------------------------------------------------------------------
@@ -841,66 +788,81 @@ static int FindMarkerLine(const std::string& sPath, const char* pszMarker) {
 }
 
 static void TypeScriptTests(const char* pszTsMods) {
-    printf("--- TypeScript mods (%s)\n", pszTsMods);
+    printf("--- TypeScript and plain-Lua example mods (%s)\n", pszTsMods);
     TestWorld_Clear();
-    std::vector<std::string> aRoots = { s_sRoot + "/Redivivus/Lua/mods", pszTsMods, s_sRoot + "/Redivivus/Lua/test/mods-ts" };
+    std::vector<std::string> aRoots = { pszTsMods, g_sTestRoot + "/Redivivus/Lua/test/mods-ts" };
     ClearLog();
-    D2LuaRuntime* pRt = MakeRuntime(D2LUA_SIDE_SERVER, aRoots, { "base", "first-mod", "second-mod", "lua-user" });
-    Check(pRt != nullptr, "the TypeScript mods load");
-    if (!pRt) {
+    D2LuaRuntime* pRt = TestMakeRuntime(D2LUA_SIDE_SERVER, aRoots, { "first-mod", "second-mod", "lua-user", "lua-mod", "ui-mod" }, "");
+    D2LuaRuntime* pClient = TestMakeRuntime(D2LUA_SIDE_CLIENT, aRoots, { "first-mod", "second-mod", "lua-user", "lua-mod", "ui-mod" }, "");
+    Check(pRt && pClient, "the example mods load in a server and a client state");
+    if (!pRt || !pClient) {
         return;
     }
-    Check(Order(D2LuaRt_Mods(pRt)) == "base first-mod lua-user second-mod", "  in dependency order");
-    CheckLogged("[first-mod] first-mod control loaded, lualib from base", "first-mod's control runs on base's TSTL runtime");
-    CheckLogged("[second-mod] second-mod imports from first-mod: hello, second-mod (3 letters doubled: 6)",
-                "second-mod uses a typed export of first-mod");
-    std::string sError;
-    D2LuaRt_Start(pRt, nullptr, sError);
-    CheckLogged("[first-mod] first-mod on_init", "on_init from TypeScript");
-    CheckLogged("[first-mod] engine enums: 1 54 7", "engine enums from TypeScript");
-    CheckLogged("[first-mod] kit settings: 3 slow", "kit settings from TypeScript: typed, with their defaults");
-    ExpectRun(pRt, "first-mod", "log('ts channel:', type(require('shared.net').net.implement))", "ts channel: function", "a TypeScript channel loads on the server");
-    ExpectRun(pRt, "second-mod", "log('ts registry:', registries.example.call('base:greet', 'ts'))",
-              "ts registry: second-mod{first-mod(hello, ts)}", "TypeScript wrappers in load order");
-    ExpectRun(pRt, "second-mod", "log('ts registry own id:', registries.example.call('first-mod:shout', 'ts'))",
-              "ts registry own id: <TS!>", "an id a mod added by declaration merging, wrapped by another");
-    ExpectRun(pRt, "second-mod", "log('ts remote:', remote.call('first-mod', 'add', 4, 5))", "ts remote: 9", "a TypeScript remote interface");
+    Check(Order(D2LuaRt_Mods(pRt)) == "redivivus first-mod lua-mod lua-user second-mod ui-mod", "  in dependency order");
+    CheckLogged("[first-mod] first-mod main loaded, lualib from redivivus 3", "first-mod's main runs on the TypeScriptToLua runtime redivivus serves");
+    CheckLogged("[second-mod] second-mod imports from first-mod: hello, second-mod (3 letters doubled: 6)", "second-mod uses a typed export of first-mod");
+    CheckLogged("[lua-mod] lua-mod loaded: redivivus:shared, redivivus:enums and its own module", "the plain-Lua example loads with require(\"redivivus:...\")");
+    D2LuaLoopback* pLoop = D2LuaLoopback_Create(pRt);
+    D2LuaLoopback_AddClient(pLoop, pClient, 5);
+    ClearLog();
+    TestStart(pRt, 1);
+    TestStart(pClient, 1);
+    CheckLogged("[first-mod] first-mod server(game 1), new game", "server(game) from TypeScript");
+    CheckLogged("[first-mod] engine enums: 1 54 7", "engine enums from TypeScript, inlined");
+    CheckLogged("[first-mod] kit settings: 3 slow", "typed settings from TypeScript: their defaults");
+    CheckLogged("[lua-mod] lua-mod server(game 1)", "the plain-Lua example's server export");
+    CheckLogged("[lua-mod] lua-mod client(game 1)", "  and its client export, in the client state");
+    CheckLogged("[ui-mod] ui-mod server panel in game 1: clicked 2 times, drawn",
+                "main imports a TSX panel on redivivus:ui and the server export mounts it: it works unchanged in the server state");
+    CheckLogged("[ui-mod] ui-mod client panel in game 1: clicked 2 times, drawn",
+                "  and the client export: TSX widgets on redivivus:ui, laid out, drawn, clicked, reactive");
+    Check(!D2LuaRt_IsFaulted(pRt, "ui-mod") && !D2LuaRt_IsFaulted(pClient, "ui-mod"), "  no fault in either state");
+    D2LuaLoopback_Pump(pLoop);
+    D2LuaLoopback_Pump(pLoop);
+    CheckLogged("[first-mod] peer 5 waved: hi (fast)", "a TypeScript channel: client call, server implement, server emit, client handler");
+    TestExpect(pRt, 1, "second-mod", "require('redivivus:shared').log('ts registry:', ts_game.registry.example.call('redivivus:greet', 'ts'))",
+               "ts registry: second-mod{first-mod(hello, ts)}", "TypeScript wrappers in load order");
+    TestExpect(pRt, 1, "second-mod", "require('redivivus:shared').log('ts registry own id:', ts_game.registry.example.call('first-mod:shout', 'ts'))",
+               "ts registry own id: <TS!>", "an id a mod added by augmentation, wrapped by another");
     ClearLog();
     for (int i = 0; i < 12; i++) {
-        D2LuaRt_Tick(pRt);
+        D2LuaRt_Tick(pRt, 1);
     }
     CheckLogged("[first-mod] ts script: started at 1", "a TS generator script: first resume");
     CheckLogged("[first-mod] ts script: bare yield resumed at 2", "  bare yield waits one tick");
     CheckLogged("[first-mod] ts script: wait value outcome 4", "  yield of a wait value gives its outcome");
     CheckLogged("[first-mod] ts script: nested actions gave 3 ticks, ended at 7", "  yield* into typed actions, nested three deep");
-    CheckLogged("[first-mod] ts script: lua action gave 9", "  yield* into an action written in Lua");
     CheckLogged("[first-mod] ts script: done", "  the TS script ends");
-    CheckLogged("[first-mod] kit waitUntil: true 3", "a kit script from TypeScript: waitUntil's outcome");
+    CheckLogged("[first-mod] waitUntil: true 3", "waitUntil's outcome from TypeScript");
     CheckLogged("[lua-user] lua script: ts action gave 6", "a Lua script calls an action written in TypeScript");
-    CheckLogged("[lua-user] lua script: done", "  and ends");
-    int nLine = FindMarkerLine(s_sRoot + "/Redivivus/Lua/examples/first-mod/server/control.ts", "THROW-ON-TICK-12");
+    CheckLogged("[lua-mod] lua-mod script waited, tick 3", "the plain-Lua example's script");
+    int nLine = FindMarkerLine(g_sTestRoot + "/Redivivus/Lua/examples/first-mod/main.ts", "THROW-ON-TICK-12");
     char szWant[160];
-    snprintf(szWant, sizeof(szWant), "__first-mod__/server/control.ts:%d: first-mod fails on tick 12", nLine);
-    CheckLogged(szWant, "a runtime error in a TS mod reports the .ts file and line");
-    CheckLogged("__first-mod__/server/control.ts:", "  and the traceback is mapped too");
+    snprintf(szWant, sizeof(szWant), "mods/first-mod/main.ts:%d: first-mod fails on tick 12", nLine);
+    CheckLogged(szWant, "a runtime error in a TS mod reports the .ts file and line, in the mod's namespace");
+    D2LuaLoopback_Destroy(pLoop);
+    D2LuaRt_Destroy(pClient);
     D2LuaRt_Destroy(pRt);
 }
 
 void RunModTests(const char* pszRoot, const char* pszTsMods) {
-    s_sRoot = pszRoot;
+    g_sTestRoot = pszRoot;
     PatternTests();
     LoaderTests();
     DataStageTests();
-    ClientStageTests();
-    RuntimeTests();
+    ControlTests();
+    TwoGameTests();
     ScriptTests();
     EnumTests();
     RunKitTests(pszRoot);
     RunBootTests(pszRoot);
+    RunMenuTests(pszRoot);
+    RunEscapeTests(pszRoot);
     if (pszTsMods) {
         TypeScriptTests(pszTsMods);
     } else {
         printf("SKIP TypeScript mods: no --ts-mods directory\n");
     }
+    RunWorldTests(pszTsMods);
 }
 #endif

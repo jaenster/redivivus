@@ -3,6 +3,5 @@
   "version": "0.1.0",
   "title": "Second mod (depends on the first)",
   "author": "Redivivus",
-  "redivivus_version": "0.1",
   "dependencies": ["first-mod >= 0.1"]
 }

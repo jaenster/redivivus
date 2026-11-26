@@ -26,6 +26,7 @@
 #include "Source/D2Win/D2WinImageEx.h"
 #include "Source/D2Win/D2WinScrollbar.h"
 #include "Source/D2Win/D2WinTimer.h"
+#include "Redivivus/Lua/d2_lua_hooks.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -7050,6 +7051,7 @@ void __stdcall UIMENU_MainMenu() {
     FORMS_CreateAnyFormFromListExEx(0xd);
     FORMS_CreateAnyFormFromListExEx(0xe);
     FORMS_CreateAnyFormFromListExEx(0xf);
+    D2LUA_MAIN_MENU(FORMS_pListExEx, FORMS_nListExExCount);
     ::D2WinTextBox* pCtlVersionText = (::D2WinTextBox*)FORMS_CreateAnyFormFromListExEx(0x115);
     size_t nVersionLen = Storm::Source::SSTR::SStrPrintf(szVersionText, 0x40, "v %d.%d%c", 1, 0xe, 'd');
     if (D2IniData_launcher->bBUILD) {

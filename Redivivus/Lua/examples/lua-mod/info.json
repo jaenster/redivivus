@@ -1,0 +1,7 @@
+{
+  "name": "lua-mod",
+  "version": "0.1.0",
+  "title": "A mod in plain Lua",
+  "author": "Redivivus",
+  "dependencies": ["redivivus >= 0.1"]
+}

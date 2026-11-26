@@ -11,9 +11,12 @@
 #include "Redivivus/Lua/generated/d2_lua_api_main.gen.h"
 #include "Source/Fog/Src/LogManager.h"
 
-static D2LuaBootResult* s_pBoot = nullptr;
+#include "Redivivus/Lua/engine/d2_lua_engine.h"
 
-static void D2LUA_LogToGame(const char* pszLine) {
+static D2LuaBootResult* s_pBoot = nullptr;
+static std::string s_sSettingsFile;
+
+void D2LUA_LogToGame(const char* pszLine) {
     Fog::Src::LogManager::LOGMANAGER_TraceToModuleLog((char*)"", (char*)"%s", pszLine);
 }
 
@@ -21,6 +24,7 @@ extern "C" void D2LUA_Boot(void) {
     if (s_pBoot) {
         return;
     }
+    D2LuaMenu_WaitForPrevious();
     char szPath[MAX_PATH + 32];
     DWORD nLen = GetModuleFileNameA(nullptr, szPath, MAX_PATH);
     if (nLen == 0 || nLen >= MAX_PATH) {
@@ -39,6 +43,8 @@ extern "C" void D2LUA_Boot(void) {
         D2LuaBootDesc tDesc;
         tDesc.aRoots.push_back(szPath);
         tDesc.sSettingsFile = std::string(szPath) + "\\settings.json";
+        tDesc.sModListFile = std::string(szPath) + "\\mod-list.json";
+        s_sSettingsFile = tDesc.sSettingsFile;
         tDesc.aApis.push_back(&g_D2LuaApi_main);
         tDesc.pfnLog = D2LUA_LogToGame;
         s_pBoot = new D2LuaBootResult;
@@ -48,7 +54,16 @@ extern "C" void D2LUA_Boot(void) {
     }
 }
 
+const D2LuaBootResult* D2LUA_BootResult(void) {
+    return s_pBoot;
+}
+
+const std::string& D2LUA_SettingsFile(void) {
+    return s_sSettingsFile;
+}
+
 extern "C" void D2LUA_Shutdown(void) {
+    D2LuaMenu_Shutdown();
     if (s_pBoot) {
         D2LuaBoot_Close(*s_pBoot);
         delete s_pBoot;

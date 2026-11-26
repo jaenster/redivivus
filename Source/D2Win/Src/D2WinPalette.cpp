@@ -11,6 +11,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Win/D2WinScrollbar.h"
 #include "Source/D2Win/Src/D2WinPalette.data.h"
+#include "Redivivus/Lua/d2_lua_hooks.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -236,6 +237,7 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
     D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
     D2_FREE_AT(pDatFileHandle, ".\\Src\\D2WinPalette.cpp", 0x96);
     D2_FREE_AT(pMemoryToFree, ".\\Src\\D2WinPalette.cpp", 0x99);
+    D2LUA_PALETTE_LOADED();
     return 1;
 }
 

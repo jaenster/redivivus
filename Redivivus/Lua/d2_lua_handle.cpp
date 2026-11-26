@@ -40,10 +40,10 @@ static int Lua_HandleIndex(lua_State* L) {
     }
     const char* pszKey = lua_tostring(L, 2);
     if (pszKey && strcmp(pszKey, "valid") == 0) {
-        lua_pushboolean(L, pData->pClass->pfnResolve(pData->nId) != nullptr);
+        lua_pushboolean(L, pData->pClass->pfnResolve(L, pData->nId) != nullptr);
         return 1;
     }
-    if (pszKey && strcmp(pszKey, "object_name") == 0) {
+    if (pszKey && strcmp(pszKey, "objectName") == 0) {
         lua_pushstring(L, pData->pClass->pszName);
         return 1;
     }
@@ -58,7 +58,7 @@ static int Lua_HandleIndex(lua_State* L) {
     if (lua_isnil(L, -1)) {
         return luaL_error(L, "%s has no member '%s'", pData->pClass->pszName, pszKey ? pszKey : luaL_typename(L, 2));
     }
-    if (!pData->pClass->pfnResolve(pData->nId)) {
+    if (!pData->pClass->pfnResolve(L, pData->nId)) {
         lua_pushfstring(L, "%s.%s", pData->pClass->pszName, pszKey);
         return InvalidError(L, pData, lua_tostring(L, -1));
     }
@@ -84,7 +84,7 @@ static int Lua_HandleNewIndex(lua_State* L) {
         }
         return luaL_error(L, "%s has no member '%s'", pData->pClass->pszName, pszKey ? pszKey : luaL_typename(L, 2));
     }
-    if (!pData->pClass->pfnResolve(pData->nId)) {
+    if (!pData->pClass->pfnResolve(L, pData->nId)) {
         lua_pushfstring(L, "%s.%s", pData->pClass->pszName, pszKey);
         return InvalidError(L, pData, lua_tostring(L, -1));
     }
@@ -100,7 +100,7 @@ static int Lua_HandleToString(lua_State* L) {
         return luaL_error(L, "not a handle");
     }
     lua_pushfstring(L, "%s: %s%f", pData->pClass->pszName,
-                    pData->pClass->pfnResolve(pData->nId) ? "" : "invalid ", (lua_Number)pData->nId);
+                    pData->pClass->pfnResolve(L, pData->nId) ? "" : "invalid ", (lua_Number)pData->nId);
     return 1;
 }
 
@@ -122,13 +122,20 @@ static void PushRegTable(lua_State* L, const luaL_Reg* aReg) {
 void D2LuaHandle_Register(lua_State* L, const D2LuaHandleClass* pClass) {
     D2LuaRt_PushField(L, "classes");
     lua_newtable(L);  // the class record
-    lua_newtable(L);  // the metatable
+    int nRecord = lua_gettop(L);
     PushRegTable(L, pClass->aMethods);
+    lua_setfield(L, nRecord, "methods");
     PushRegTable(L, pClass->aGetters);
+    lua_setfield(L, nRecord, "getters");
+    PushRegTable(L, pClass->aSetters);
+    lua_setfield(L, nRecord, "setters");
+    lua_newtable(L);  // the metatable
+    lua_getfield(L, nRecord, "methods");
+    lua_getfield(L, nRecord, "getters");
     lua_pushcclosure(L, Lua_HandleIndex, 2);
     lua_setfield(L, -2, "__index");
-    PushRegTable(L, pClass->aSetters);
-    PushRegTable(L, pClass->aGetters);
+    lua_getfield(L, nRecord, "setters");
+    lua_getfield(L, nRecord, "getters");
     lua_pushcclosure(L, Lua_HandleNewIndex, 2);
     lua_setfield(L, -2, "__newindex");
     lua_pushcfunction(L, Lua_HandleToString);
@@ -137,17 +144,32 @@ void D2LuaHandle_Register(lua_State* L, const D2LuaHandleClass* pClass) {
     lua_setfield(L, -2, "__eq");
     lua_pushboolean(L, 0);
     lua_setfield(L, -2, "__metatable");
-    lua_setfield(L, -2, "mt");
+    lua_setfield(L, nRecord, "mt");
     lua_newtable(L);
     lua_newtable(L);
     lua_pushliteral(L, "v");
     lua_setfield(L, -2, "__mode");
     lua_setmetatable(L, -2);
-    lua_setfield(L, -2, "intern");
+    lua_setfield(L, nRecord, "intern");
     lua_pushlightuserdata(L, (void*)pClass);
-    lua_setfield(L, -2, "cls");
+    lua_setfield(L, nRecord, "cls");
     lua_setfield(L, -2, pClass->pszName);
     lua_pop(L, 1);
+}
+
+bool D2LuaHandle_PushMembers(lua_State* L, const char* pszClass) {
+    D2LuaRt_PushField(L, "classes");
+    lua_getfield(L, -1, pszClass);
+    lua_remove(L, -2);
+    if (!lua_istable(L, -1)) {
+        lua_pop(L, 1);
+        return false;
+    }
+    lua_getfield(L, -1, "methods");
+    lua_getfield(L, -2, "getters");
+    lua_getfield(L, -3, "setters");
+    lua_remove(L, -4);
+    return true;
 }
 
 static bool PushClassRecord(lua_State* L, const char* pszClass) {
@@ -221,7 +243,7 @@ void* D2LuaHandle_Check(lua_State* L, int i, const D2LuaHandleClass* pClass, con
                    pData ? pData->pClass->pszName : luaL_typename(L, i));
         return nullptr;
     }
-    void* pObject = pClass->pfnResolve(pData->nId);
+    void* pObject = pClass->pfnResolve(L, pData->nId);
     if (!pObject) {
         InvalidError(L, pData, pszWhere);
     }
@@ -230,7 +252,7 @@ void* D2LuaHandle_Check(lua_State* L, int i, const D2LuaHandleClass* pClass, con
 
 bool D2LuaHandle_IsLive(lua_State* L, int i) {
     HandleData* pData = ToHandle(L, i);
-    return pData && pData->pClass->pfnResolve(pData->nId) != nullptr;
+    return pData && pData->pClass->pfnResolve(L, pData->nId) != nullptr;
 }
 
 bool D2LuaHandle_Inspect(lua_State* L, int i, const char** ppszClass, uint64_t* pnId) {

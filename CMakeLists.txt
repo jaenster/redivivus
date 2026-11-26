@@ -395,7 +395,7 @@ if(REDIVIVUS_MODS)
     target_link_libraries(d2 PRIVATE luajit)
     # The host's units are compiled in whichever module library owns Redivivus/ (or in d2):
     # they get LuaJIT's generated headers, and every game unit waits for the LuaJIT make.
-    file(GLOB _lua_host_sources "${D2_SUPPORT}/Lua/*.cpp" "${D2_SUPPORT}/Lua/generated/*.cpp")
+    file(GLOB _lua_host_sources "${D2_SUPPORT}/Lua/*.cpp" "${D2_SUPPORT}/Lua/generated/*.cpp" "${D2_SUPPORT}/Lua/engine/*.cpp")
     set_property(SOURCE ${_lua_host_sources} APPEND PROPERTY INCLUDE_DIRECTORIES "${D2_LUAJIT_OUT}/src")
     add_dependencies(d2_flags luajit_make)
     include("${D2_ROOT}/cmake/lua-api.cmake")

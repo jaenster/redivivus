@@ -8,5 +8,5 @@
 extern const D2LuaApiDesc g_D2LuaApi_test;
 
 // Raise an event on the state's runtime: builds the payload and dispatches it to every mod.
-bool D2LuaRaise_on_test_unit_damaged(lua_State* L, TestUnitTraits::Object* unit, double amount, bool killed);
+bool D2LuaRaise_testUnitDamaged(lua_State* L, TestUnitTraits::Object* unit, double amount, bool killed);
 #endif

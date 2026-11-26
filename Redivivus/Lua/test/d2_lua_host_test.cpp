@@ -13,6 +13,7 @@
 //   d2_lua_host_test --ts-mods DIR      also run the TypeScript example mods the mod CLI built
 //                                      into DIR (rdvmod build --out DIR)
 //   d2_lua_host_test --bench           time a few hot loops (CHECKHOOK costs show here)
+//   d2_lua_host_test --bench-dispatch ROOT TMP   time event dispatch and wrap chains through the core
 //   d2_lua_host_test --runaway         run the compiled-loop checks even in a build without
 //                                      LUAJIT_ENABLE_CHECKHOOK (they then never return)
 //
@@ -153,6 +154,8 @@ int main(int argc, char** argv) {
             pszRoot = argv[++i];
         } else if (strcmp(argv[i], "--ts-mods") == 0 && i + 1 < argc) {
             pszTsMods = argv[++i];
+        } else if (strcmp(argv[i], "--bench-dispatch") == 0 && i + 2 < argc) {
+            return RunDispatchBench(argv[i + 1], argv[i + 2]);
         } else if (strcmp(argv[i], "--bench") == 0) {
             return Bench();
         } else if (strcmp(argv[i], "--runaway") == 0) {

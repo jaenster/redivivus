@@ -113,6 +113,32 @@ extern "C" void D2TRACE_WatchWrite(void* pAddress) {
     else D2TraceFmt("WATCH failed on %p err=%lu", pAddress, GetLastError());
 }
 
+// True when [p, p + n) is committed, readable memory. Asked of the memory manager, so unlike
+// IsBadReadPtr it never raises an exception of its own: one raised here would come back into
+// this handler while it is still walking.
+static bool TraceReadable(const void* p, SIZE_T n) {
+    const char* pCur = (const char*)p;
+    const char* pEnd = pCur + n;
+    if (!pCur || pEnd < pCur) return false;
+    while (pCur < pEnd) {
+        MEMORY_BASIC_INFORMATION mbi;
+        if (VirtualQuery(pCur, &mbi, sizeof(mbi)) != sizeof(mbi)) return false;
+        if (mbi.State != MEM_COMMIT) return false;
+        if (mbi.Protect & (PAGE_NOACCESS | PAGE_GUARD)) return false;
+        if (!(mbi.Protect & (PAGE_READONLY | PAGE_READWRITE | PAGE_WRITECOPY | PAGE_EXECUTE_READ |
+                             PAGE_EXECUTE_READWRITE | PAGE_EXECUTE_WRITECOPY))) {
+            return false;
+        }
+        pCur = (const char*)mbi.BaseAddress + mbi.RegionSize;
+    }
+    return true;
+}
+
+// The handler of the thread currently inside it: a fault while reporting a fault is not reported.
+static DWORD g_dwTraceBusyThread = 0;
+
+static LONG TraceReport(EXCEPTION_POINTERS* pExc);
+
 static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
     DWORD dwCode = pExc->ExceptionRecord->ExceptionCode;
     // Ignore the non-fatal ones the loader and debugger raise routinely.
@@ -120,6 +146,26 @@ static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
         dwCode == 0x406D1388 /* thread-name */) {
         return EXCEPTION_CONTINUE_SEARCH;
     }
+    // LuaJIT raises its errors as exceptions 0xE24C4A00 | errcode (lj_err_throw) and catches
+    // them in its own handler; each is a script error the mod host reports, not a fault.
+    if ((dwCode ^ 0xE24C4A00UL) <= 0xFF) {
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+    // The watchpoint trap must always be answered, or the store it follows would be fatal.
+    if (dwCode == EXCEPTION_SINGLE_STEP && g_watchAddr) {
+        return TraceReport(pExc);
+    }
+    DWORD dwThread = GetCurrentThreadId();
+    if (InterlockedCompareExchange((LONG volatile*)&g_dwTraceBusyThread, (LONG)dwThread, 0) != 0) {
+        return EXCEPTION_CONTINUE_SEARCH;
+    }
+    LONG nResult = TraceReport(pExc);
+    InterlockedExchange((LONG volatile*)&g_dwTraceBusyThread, 0);
+    return nResult;
+}
+
+static LONG TraceReport(EXCEPTION_POINTERS* pExc) {
+    DWORD dwCode = pExc->ExceptionRecord->ExceptionCode;
 
     // The watchpoint trap: name the store and carry on. EIP is the instruction
     // after the write, so the value written is already in place to print.
@@ -190,7 +236,7 @@ static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
     if (!pCtx->Eip || !pCtx->Ebp || pCtx->Eip < dwLo || pCtx->Eip >= dwHi) {
         DWORD* pStack = (DWORD*)pCtx->Esp;
         for (int i = 0, nFound = 0; i < 1024 && nFound < 32; ++i) {
-            if (IsBadReadPtr(pStack + i, sizeof(DWORD))) break;
+            if (!TraceReadable(pStack + i, sizeof(DWORD))) break;
             DWORD dwVal = pStack[i];
             if (dwVal <= dwLo || dwVal >= dwHi) continue;
             wsprintfA(szLine, "D2SCAN +%03X ret=%08lX rva=%08lX\n", i * 4,
@@ -203,7 +249,7 @@ static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
 
     DWORD* pFrame = (DWORD*)pCtx->Ebp;
     for (int i = 0; i < 24 && pFrame; ++i) {
-        if (IsBadReadPtr(pFrame, sizeof(DWORD) * 2)) break;
+        if (!TraceReadable(pFrame, sizeof(DWORD) * 2)) break;
         DWORD dwRet = pFrame[1];
         if (!dwRet) break;
         wsprintfA(szLine, "D2FRAME %2d ret=%08lX rva=%08lX\n", i,
@@ -230,7 +276,7 @@ static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
     if (!pCtx->Rip || pCtx->Rip < nLo || pCtx->Rip >= nHi) {
         UINT_PTR* pStack = (UINT_PTR*)pCtx->Rsp;
         for (int i = 0, nFound = 0; i < 1024 && nFound < 32; ++i) {
-            if (IsBadReadPtr(pStack + i, sizeof(UINT_PTR))) break;
+            if (!TraceReadable(pStack + i, sizeof(UINT_PTR))) break;
             UINT_PTR nVal = pStack[i];
             if (nVal <= nLo || nVal >= nHi) continue;
             wsprintfA(szLine, "D2SCAN +%03X ret=%p rva=%08lX\n", i * 8, (void*)nVal, (unsigned long)(nVal - nLo));
@@ -244,12 +290,13 @@ static LONG CALLBACK TraceVectoredHandler(EXCEPTION_POINTERS* pExc) {
     for (int i = 0; i < 24 && ctx.Rip; ++i) {
         ULONG64 nImageBase = 0;
         PRUNTIME_FUNCTION pFn = RtlLookupFunctionEntry(ctx.Rip, &nImageBase, nullptr);
+        if (!TraceReadable((void*)ctx.Rsp, sizeof(UINT_PTR))) break;
         if (pFn) {
             PVOID pHandlerData = nullptr;
             ULONG64 nEstablisher = 0;
             RtlVirtualUnwind(UNW_FLAG_NHANDLER, nImageBase, ctx.Rip, pFn, &ctx, &pHandlerData, &nEstablisher, nullptr);
         } else {
-            if (IsBadReadPtr((void*)ctx.Rsp, sizeof(UINT_PTR))) break;
+            if (!TraceReadable((void*)ctx.Rsp, sizeof(UINT_PTR))) break;
             ctx.Rip = *(ULONG64*)ctx.Rsp;
             ctx.Rsp += 8;
         }

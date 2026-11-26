@@ -1,8 +1,7 @@
 // Mods, on the Lua runtime: set up once the game's log is up (discovery,
 // load order, the settings stage; see d2_lua_boot.h) and closed when the application returns.
 //
-// Built only with the REDIVIVUS_MODS option (CMake), which sets
-// D2_FEATURE_MODS=1. Otherwise both calls expand to nothing, so a call site in generated code
+// Built only with the REDIVIVUS_MODS option (CMake), which sets D2_FEATURE_MODS=1. Otherwise both calls expand to nothing, so a call site in generated code
 // leaves that unit's code exactly as it was.
 #pragma once
 

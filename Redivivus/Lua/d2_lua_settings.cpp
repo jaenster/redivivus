@@ -114,12 +114,20 @@ static const char* CheckValue(const D2LuaSettingInfo& t, const D2Json& v, char* 
 static bool Declare(D2LuaRuntime* pRt, D2LuaMod* pMod, const RawDecl& d, char* pszError, size_t nError) {
     try {
         for (const D2LuaSettingInfo& t : pRt->aSettings) {
-            if (t.sMod == pMod->sName && t.sName == d.pszName) {
+            if (t.sMod == pMod->sName && t.sName == d.pszName && t.nGeneration == pRt->nGeneration) {
                 snprintf(pszError, nError, "setting '%s' is declared twice", d.pszName);
                 return false;
             }
         }
+        // A reload declares the mod's settings again: the new declaration replaces the old one.
+        for (size_t i = 0; i < pRt->aSettings.size(); i++) {
+            if (pRt->aSettings[i].sMod == pMod->sName && pRt->aSettings[i].sName == d.pszName) {
+                pRt->aSettings.erase(pRt->aSettings.begin() + (long)i);
+                break;
+            }
+        }
         D2LuaSettingInfo t;
+        t.nGeneration = pRt->nGeneration;
         t.sMod = pMod->sName;
         t.sName = d.pszName;
         t.sType = d.pszType;
@@ -202,7 +210,7 @@ static const char* OptString(lua_State* L, int nTable, const char* pszField) {
     bool bBad = !psz && !lua_isnil(L, -1);
     lua_pop(L, 1);  // the string stays alive in the table
     if (bBad) {
-        luaL_error(L, "mod_settings.declare: '%s' must be a string", pszField);
+        luaL_error(L, "settings: '%s' must be a string", pszField);
     }
     return psz;
 }
@@ -211,31 +219,36 @@ static bool OptNumber(lua_State* L, int nTable, const char* pszField, double* pn
     lua_getfield(L, nTable, pszField);
     bool bHas = !lua_isnil(L, -1);
     if (bHas && lua_type(L, -1) != LUA_TNUMBER) {
-        luaL_error(L, "mod_settings.declare: '%s' must be a number", pszField);
+        luaL_error(L, "settings: '%s' must be a number", pszField);
     }
     *pnOut = bHas ? lua_tonumber(L, -1) : 0;
     lua_pop(L, 1);
     return bHas;
 }
 
-// mod_settings.declare(name, { type, scope, default, min?, max?, choices?, title?, description? })
-int D2LuaSettings_Declare(D2LuaCtx& ctx) {
-    lua_State* L = ctx.L;
+// declare(name at nName, { type, scope, default, min?, max?, choices?, title?, description? } after it)
+// for mod pMod. The core passes a declaration table it built itself.
+int D2LuaSettings_Declare(lua_State* L, D2LuaMod* pMod, int nName) {
+    D2LuaRuntime* pRt = pMod->pRt;
+    lua_pushvalue(L, nName);
+    lua_pushvalue(L, nName + 1);
+    lua_replace(L, 2);
+    lua_replace(L, 1);
     RawDecl d;
     d.pszName = luaL_checkstring(L, 1);
     luaL_checktype(L, 2, LUA_TTABLE);
     lua_settop(L, 2);
-    size_t nName = strlen(d.pszName);
-    if (nName == 0 || nName > 64 || strspn(d.pszName, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-") != nName) {
-        return luaL_error(L, "mod_settings.declare: '%s' is not a setting name (letters, digits, '_' and '-', at most 64)", d.pszName);
+    size_t nNameLen = strlen(d.pszName);
+    if (nNameLen == 0 || nNameLen > 64 || strspn(d.pszName, "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_-") != nNameLen) {
+        return luaL_error(L, "settings: '%s' is not a setting name (letters, digits, '_' and '-', at most 64)", d.pszName);
     }
     d.pszType = OptString(L, 2, "type");
     d.pszScope = OptString(L, 2, "scope");
     if (!d.pszType || IndexOf(s_apszTypes, d.pszType) < 0) {
-        return luaL_error(L, "mod_settings.declare: setting '%s' has no known type (bool, int, number, string, choice)", d.pszName);
+        return luaL_error(L, "settings: setting '%s' has no known type (bool, int, number, string, choice)", d.pszName);
     }
     if (!d.pszScope || IndexOf(s_apszScopes, d.pszScope) < 0) {
-        return luaL_error(L, "mod_settings.declare: setting '%s' has no known scope (startup, game, player)", d.pszName);
+        return luaL_error(L, "settings: setting '%s' has no known scope (startup, game, player)", d.pszName);
     }
     d.pszTitle = OptString(L, 2, "title");
     d.pszDescription = OptString(L, 2, "description");
@@ -250,31 +263,31 @@ int D2LuaSettings_Declare(D2LuaCtx& ctx) {
                    || ((strcmp(d.pszType, "int") == 0 || strcmp(d.pszType, "number") == 0) && d.nDefaultType == LUA_TNUMBER)
                    || ((strcmp(d.pszType, "string") == 0 || strcmp(d.pszType, "choice") == 0) && d.nDefaultType == LUA_TSTRING);
     if (!bTypeOk) {
-        return luaL_error(L, "mod_settings.declare: setting '%s': the default is a %s, not a %s value", d.pszName,
+        return luaL_error(L, "settings: setting '%s': the default is a %s, not a %s value", d.pszName,
                           luaL_typename(L, 3), d.pszType);
     }
     lua_getfield(L, 2, "choices");  // 4
     d.nChoices = 0;
     if (!lua_isnil(L, 4)) {
         if (!lua_istable(L, 4)) {
-            return luaL_error(L, "mod_settings.declare: setting '%s': choices must be a list of strings", d.pszName);
+            return luaL_error(L, "settings: setting '%s': choices must be a list of strings", d.pszName);
         }
         int nCount = (int)lua_objlen(L, 4);
         if (nCount > kMaxChoices) {
-            return luaL_error(L, "mod_settings.declare: setting '%s' has more than %d choices", d.pszName, kMaxChoices);
+            return luaL_error(L, "settings: setting '%s' has more than %d choices", d.pszName, kMaxChoices);
         }
         for (int i = 1; i <= nCount; i++) {
             lua_rawgeti(L, 4, i);
             if (lua_type(L, -1) != LUA_TSTRING) {
-                return luaL_error(L, "mod_settings.declare: setting '%s': choices must be a list of strings", d.pszName);
+                return luaL_error(L, "settings: setting '%s': choices must be a list of strings", d.pszName);
             }
             d.apszChoices[d.nChoices++] = lua_tostring(L, -1);  // kept alive by the table at 4
             lua_pop(L, 1);
         }
     }
     char szError[256];
-    if (!Declare(ctx.pRuntime, ctx.pMod, d, szError, sizeof(szError))) {
-        return luaL_error(L, "mod_settings.declare: %s", szError);
+    if (!Declare(pRt, pMod, d, szError, sizeof(szError))) {
+        return luaL_error(L, "settings: %s", szError);
     }
     return 0;
 }
@@ -298,28 +311,26 @@ static void PushJson(lua_State* L, const D2Json& v) {
     }
 }
 
-// mod_settings.get(name): this mod's value of the setting.
-int D2LuaSettings_Get(D2LuaCtx& ctx) {
-    lua_State* L = ctx.L;
-    const char* pszName = luaL_checkstring(L, 1);
-    for (const D2LuaSettingInfo& t : ctx.pRuntime->aSettings) {
-        if (t.sMod != ctx.pMod->sName || t.sName != pszName) {
+// get(name at nName): mod pMod's value of the setting.
+int D2LuaSettings_Get(lua_State* L, D2LuaMod* pMod, int nName) {
+    const char* pszName = luaL_checkstring(L, nName);
+    for (const D2LuaSettingInfo& t : pMod->pRt->aSettings) {
+        if (t.sMod != pMod->sName || t.sName != pszName) {
             continue;
         }
-        if (!ScopeReadable(t.sScope, ctx.nSide)) {
+        if (!ScopeReadable(t.sScope, pMod->pRt->tDesc.nSide)) {
             const char* pszWhere = t.sScope == "game" ? "the server" : "the client";
             return luaL_error(L, "setting '%s' is a %s setting; it is read on %s", pszName, t.sScope.c_str(), pszWhere);
         }
         PushJson(L, t.tValue);
         return 1;
     }
-    return luaL_error(L, "setting '%s' is not declared by mod '%s'", pszName, ctx.pMod->sName.c_str());
+    return luaL_error(L, "setting '%s' is not declared by mod '%s'", pszName, pMod->sName.c_str());
 }
 
-// mod_settings.list(): every setting declared in this state, all mods, in declaration order.
-int D2LuaSettings_List(D2LuaCtx& ctx) {
-    lua_State* L = ctx.L;
-    const std::vector<D2LuaSettingInfo>& a = ctx.pRuntime->aSettings;
+// list(): every setting declared in this state, all mods, in declaration order.
+int D2LuaSettings_List(lua_State* L) {
+    const std::vector<D2LuaSettingInfo>& a = D2LuaRt_FromState(L)->aSettings;
     lua_createtable(L, (int)a.size(), 0);
     for (size_t i = 0; i < a.size(); i++) {
         const D2LuaSettingInfo& t = a[i];
