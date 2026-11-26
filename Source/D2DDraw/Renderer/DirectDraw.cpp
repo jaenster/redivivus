@@ -24,6 +24,8 @@
 #ifndef max
 #define max(a, b) (((a) > (b)) ? (a) : (b))
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(DDBLTFX) == 0x64, "DDBLTFX: dwSize and the clear after it must be the 0x64 bytes 1.14d uses");
+static_assert(sizeof(void*) != 4 || sizeof(DDSURFACEDESC) == 0x6c, "DDSURFACEDESC: dwSize and the clear after it must be the 0x6c bytes 1.14d uses");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -151,7 +153,7 @@ BOOL __fastcall SetPalette(LPPALETTEENTRY pPalette) {
     uint8_t aGammaCurve[256];
     uint8_t byGreenBlue;
     double dPaletteSize = (double)gnDirectDrawPaletteSize;
-    memcpy(gaPaletteEntries, pPalette, sizeof(PALETTEENTRY) * 0x100);
+    memcpy(gaPaletteEntries, pPalette, sizeof(gaPaletteEntries));
 
     Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(gnDirectDrawGamma, (uint32_t*)aGammaCurve, dPaletteSize, 1, 0x100, 0xff);
     nIndex = 0;
@@ -408,19 +410,19 @@ static BOOL InternalOpenWindow(int32_t nResolutionMode) {
       }
 
       memset(&ddSurfDesc, 0, sizeof(ddSurfDesc));
-      ddSurfDesc.dwSize = 0x6c;
+      ddSurfDesc.dwSize = sizeof(ddSurfDesc);
       ddSurfDesc.dwFlags = 0x21;
       ddSurfDesc.ddsCaps = 0x4218;
       gnDDrawFlipState = ddSurfDesc.dwBackBufferCount = 2;
       if (pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&gpDDrawPrimarySurface, nullptr)) {
         memset(&ddSurfDesc, 0, sizeof(ddSurfDesc));
-        ddSurfDesc.dwSize = 0x6c;
+        ddSurfDesc.dwSize = sizeof(ddSurfDesc);
         ddSurfDesc.dwFlags = 0x21;
         ddSurfDesc.ddsCaps = 0x4218;
         gnDDrawFlipState = ddSurfDesc.dwBackBufferCount = 1;
         if (pWindowHandleBuffer->lpVtbl->CreateSurface(pWindowHandleBuffer, &ddSurfDesc, (void**)&gpDDrawPrimarySurface, nullptr)) {
           memset(&ddSurfDesc, 0, sizeof(ddSurfDesc));
-          ddSurfDesc.dwSize = 0x6c;
+          ddSurfDesc.dwSize = sizeof(ddSurfDesc);
           ddSurfDesc.dwFlags = 1;
           ddSurfDesc.ddsCaps = 0x4200;
           gnDDrawFlipState = 0;
@@ -442,7 +444,7 @@ static BOOL InternalOpenWindow(int32_t nResolutionMode) {
       }
 
       memset(&ddSurfDesc, 0, sizeof(ddSurfDesc));
-      ddSurfDesc.dwSize = 0x6c;
+      ddSurfDesc.dwSize = sizeof(ddSurfDesc);
       nLine = gpDDrawPrimarySurface->lpVtbl->GetSurfaceDesc(gpDDrawPrimarySurface, &ddSurfDesc);
       if (nLine) {
         szErrorMsg = "GetSurfaceDesc (primary) failed!";
@@ -529,7 +531,7 @@ BOOL __fastcall CreateWindow(HWND hWnd, int32_t nResolutionMode) {
       return 0;
     }
 
-    memset(gaDirectDrawDitherPaletteRemap, 0, 0x400);
+    memset(gaDirectDrawDitherPaletteRemap, 0, sizeof(gaDirectDrawDitherPaletteRemap));
     nHResult = pWindowHandleBuffer->lpVtbl->CreatePalette(pWindowHandleBuffer, 4, (PALETTEENTRY*)gaDirectDrawDitherPaletteRemap, &pDirectDrawPalette, nullptr);
     if (nHResult) {
       DirectDrawErrorHandler("CreatePalette failed!", nHResult);
@@ -548,7 +550,7 @@ void __fastcall PlayCutScene(char * szFile, int32_t nResolutionMode, void * fpFr
 
     gnCutSceneActiveFlag = 1;
     ddBltFx.dwSize = 100;
-    memset(&ddBltFx.dwDDFX, 0, 0x60);
+    memset(&ddBltFx.dwDDFX, 0, sizeof(ddBltFx) - sizeof(ddBltFx.dwSize));
     ddBltFx.dwFillColor = 0;
     if (!gpDDrawPrimarySurface) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x387);
@@ -577,8 +579,8 @@ BOOL __fastcall BeginScene(BOOL bClear, BYTE nRed, BYTE nGreen, BYTE nBlue) {
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&RENDERER_SelectedRendererCore->sLock);
     DirectDraw::ClearScreen(1);
-    ddSurfDescSize.dwSize = 0x6c;
-    memset(&ddSurfDescSize.dwFlags, 0, 0x68);
+    ddSurfDescSize.dwSize = sizeof(ddSurfDescSize);
+    memset(&ddSurfDescSize.dwFlags, 0, sizeof(ddSurfDescSize) - sizeof(ddSurfDescSize.dwSize));
     HRESULT nErrorCode = pDirectDrawSurface->lpVtbl->Lock(pDirectDrawSurface, nullptr, &ddSurfDescSize, 0x21, (HANDLE)0x0);
     if (nErrorCode) {
       DirectDrawErrorHandler("Lock failed!", nErrorCode);
@@ -658,8 +660,8 @@ BOOL __fastcall GetBackBuffer(BYTE * pBuffer) {
     int nY;
     int nWindowWidth;
     int nRemapIndex;
-    ddSurfDescSize.dwSize = 0x6c;
-    memset(&ddSurfDescSize.dwFlags, 0, 0x68);
+    ddSurfDescSize.dwSize = sizeof(ddSurfDescSize);
+    memset(&ddSurfDescSize.dwFlags, 0, sizeof(ddSurfDescSize) - sizeof(ddSurfDescSize.dwSize));
     if (!gpDDrawBackBuffer) {
       return 0;
     }
@@ -1361,7 +1363,7 @@ void __fastcall DrawSolidSquare(POINT * pPoint, BYTE nSize, BYTE nPaletteIndex) 
 void __fastcall ClearScreen(BOOL bPartial) {
     DDBLTFX ddBltFx;
     ddBltFx.dwSize = 100;
-    memset(&ddBltFx.dwDDFX, 0, 0x60);
+    memset(&ddBltFx.dwDDFX, 0, sizeof(ddBltFx) - sizeof(ddBltFx.dwSize));
     ddBltFx.dwFillColor = 0;
     if (!pDirectDrawSurface) {
       return;
@@ -1670,8 +1672,8 @@ void __stdcall BINK_RenderVideoFrame() {
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&RENDERER_SelectedRendererCore->sLock);
-    nDDSurfDescSize.dwSize = 0x6c;
-    memset(&nDDSurfDescSize.dwFlags, 0, 0x68);
+    nDDSurfDescSize.dwSize = sizeof(nDDSurfDescSize);
+    memset(&nDDSurfDescSize.dwFlags, 0, sizeof(nDDSurfDescSize) - sizeof(nDDSurfDescSize.dwSize));
     HRESULT hLockResult = gpDDrawPrimarySurface->lpVtbl->Lock(gpDDrawPrimarySurface, nullptr, &nDDSurfDescSize, 0x21, (HANDLE)0x0);
     if (!hLockResult) {
       BinkCopyToBuffer(gpBinkVideoDirectDraw, nDDSurfDescSize.lpSurface, nDDSurfDescSize.lPitch, gpBinkVideoDirectDraw->Height, gnBinkDDrawXOffset, gnBinkDDrawYOffset, gnBinkDDrawSurfaceType);

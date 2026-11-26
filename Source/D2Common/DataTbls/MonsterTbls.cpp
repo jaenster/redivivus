@@ -646,7 +646,7 @@ void __stdcall TXT_UnloadUniqueMonsterNameTables() {
       }
 
       ppEntry = (D2UniqueNameTablesStrc*)(ppEntry->apTable + 1);
-    } while ((intptr_t)ppEntry < (intptr_t)((char*)&gsTxtUniqueNameTables + 16));
+    } while ((intptr_t)ppEntry < (intptr_t)(gsTxtUniqueNameTables.apTable + _countof(gsTxtUniqueNameTables.apTable)));
 }
 
 uint16_t * __fastcall Unreferenced_00653e50(D2UnitStrc * pUnit, int nTableIndex) {
@@ -753,9 +753,9 @@ D2ParsedTreasureClassStrc * __fastcall TC_ExtendTreasureClassSize(char * szText)
 }
 
 void __fastcall ResizeParsedTCEntries(D2ParsedTreasureClassStrc * pParsedTC, int32_t nCount) {
-    D2ParsedTreasureClassEntriesStrc* pNewEntries = (D2ParsedTreasureClassEntriesStrc*)D2_REALLOC_POOL_AT(nullptr, pParsedTC->pEntries, nCount * 0x1c, ".\\DATATBLS\\MonsterTbls.cpp", 0x3ba);
+    D2ParsedTreasureClassEntriesStrc* pNewEntries = (D2ParsedTreasureClassEntriesStrc*)D2_REALLOC_POOL_AT(nullptr, pParsedTC->pEntries, nCount * sizeof(D2ParsedTreasureClassEntriesStrc), ".\\DATATBLS\\MonsterTbls.cpp", 0x3ba);
     pParsedTC->pEntries = pNewEntries;
-    memset(pNewEntries + pParsedTC->nEntriesCount, 0, (nCount - pParsedTC->nEntriesCount) * 0x1c);
+    memset(pNewEntries + pParsedTC->nEntriesCount, 0, (nCount - pParsedTC->nEntriesCount) * sizeof(D2ParsedTreasureClassEntriesStrc));
     pParsedTC->nEntriesCount = nCount;
 }
 
@@ -1397,7 +1397,7 @@ void __fastcall TXT_AllocTxt_superuniques(D2PoolManagerStrc * pMemory) {
       sgtDataTable.nTxtSuperUniquesSize = 0x200;
     }
 
-    for (int i = 0; i < 66; i++) {
+    for (int i = 0; i < (int)(sizeof(sgtDataTable.aTxtSuperUniquesHardcoded) / sizeof(sgtDataTable.aTxtSuperUniquesHardcoded[0])); i++) {
       sgtDataTable.aTxtSuperUniquesHardcoded[i] = -1;
     }
 
@@ -1408,7 +1408,7 @@ void __fastcall TXT_AllocTxt_superuniques(D2PoolManagerStrc * pMemory) {
       }
     }
 
-    for (int i = 0; i < 66; i++) {
+    for (int i = 0; i < (int)(sizeof(sgtDataTable.aTxtSuperUniquesHardcoded) / sizeof(sgtDataTable.aTxtSuperUniquesHardcoded[0])); i++) {
       if ((uint16_t)sgtDataTable.aTxtSuperUniquesHardcoded[i] == 0xffff) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x782);
         exit(-1);
@@ -1522,7 +1522,7 @@ void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
       pIdLineInit[-0x100] = -1;
       *pIdLineInit = -1;
       pIdLineInit++;
-    } while ((intptr_t)pIdLineInit < (intptr_t)((char*)&sgtDataTable + 2472));
+    } while ((intptr_t)pIdLineInit < (intptr_t)(sgtDataTable.nTxtHirelingIdLines + sizeof(sgtDataTable.nTxtHirelingIdLines) / sizeof(sgtDataTable.nTxtHirelingIdLines[0])));
 
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     int nCounter = 0;
@@ -1572,7 +1572,7 @@ void __stdcall MONSTERTBLS_FreeHirelingTxt() {
       pIdLine[-0x100] = -1;
       *pIdLine = -1;
       pIdLine++;
-    } while ((intptr_t)pIdLine < (intptr_t)((char*)&sgtDataTable + 2472));
+    } while ((intptr_t)pIdLine < (intptr_t)(sgtDataTable.nTxtHirelingIdLines + sizeof(sgtDataTable.nTxtHirelingIdLines) / sizeof(sgtDataTable.nTxtHirelingIdLines[0])));
 }
 
 D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelingId, int32_t nLevel) {
@@ -2147,8 +2147,8 @@ void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonType = (D2MonTypeTxt*)DataTbls::CompileTxt(pMemory, "montype", aFieldDefs, &sgtDataTable.nTxtMonTypeSize, 0xc);
     sgtDataTable.nMonTypeEquivRowDwords = (sgtDataTable.nTxtMonTypeSize + 0x1f) / 32;
     int nBitMatrixDwords = sgtDataTable.nMonTypeEquivRowDwords * sgtDataTable.nTxtMonTypeSize;
-    sgtDataTable.pTxtMonTypeUnknown = D2_ALLOC_POOL_AT(nullptr, nBitMatrixDwords * 4, ".\\DATATBLS\\MonsterTbls.cpp", 0xafc);
-    memset(sgtDataTable.pTxtMonTypeUnknown, 0, nBitMatrixDwords * 4);
+    sgtDataTable.pTxtMonTypeUnknown = D2_ALLOC_POOL_AT(nullptr, nBitMatrixDwords * sizeof(uint32_t), ".\\DATATBLS\\MonsterTbls.cpp", 0xafc);
+    memset(sgtDataTable.pTxtMonTypeUnknown, 0, nBitMatrixDwords * sizeof(uint32_t));
     for (int nRowTypeIdx = 0; nRowTypeIdx < sgtDataTable.nTxtMonTypeSize; nRowTypeIdx++) {
       uint32_t* pRowBits = (uint32_t*)sgtDataTable.pTxtMonTypeUnknown + nRowTypeIdx * sgtDataTable.nMonTypeEquivRowDwords;
       for (int nBitIdx = 0; nBitIdx < sgtDataTable.nTxtMonTypeSize; nBitIdx++) {
@@ -2474,7 +2474,7 @@ void __fastcall TXT_AllocTxt_monseq(D2PoolManagerStrc * pMemory) {
 
     sgtDataTable.nMonSeqMonsterTblsSize = sgtDataTable.pTxtMonSeq[sgtDataTable.nTxtMonSeqSize - 1].sequence + 1;
     sgtDataTable.pMonSeqMonsterTbls = (D2MonSeqMonsterTbls*)D2_ALLOC_POOL_AT(nullptr, sgtDataTable.nMonSeqMonsterTblsSize * sizeof(D2MonSeqMonsterTbls), ".\\DATATBLS\\MonsterTbls.cpp", 0xccc);
-    memset(sgtDataTable.pMonSeqMonsterTbls, 0, sgtDataTable.nMonSeqMonsterTblsSize * 0xc);
+    memset(sgtDataTable.pMonSeqMonsterTbls, 0, sgtDataTable.nMonSeqMonsterTblsSize * sizeof(D2MonSeqMonsterTbls));
     int i = 0;
     if (sgtDataTable.nTxtMonSeqSize <= 0) {
       return;
@@ -2673,9 +2673,9 @@ void __stdcall TXT_AllocParsedTreasureClassDiffActChestABC() {
     static char * gapTreasureClassChestParsedData[3] = { (char*)"", (char*)" (N)", (char*)" (H)" }; D2_STATIC_GUARD(gapTreasureClassChestParsedData, "D2Common::DATATBLS::MonsterTbls::TXT_AllocParsedTreasureClassDiffActChestABC::gapTreasureClassChestParsedData");
 
     char szTCName[256];
-    for (int nDifficulty = 0; nDifficulty < 3; nDifficulty++) {
+    for (int nDifficulty = 0; nDifficulty < (int)_countof(gapTreasureClassChestParsedData); nDifficulty++) {
       for (int nAct = 0; nAct < 5; nAct++) {
-        for (int nChest = 0; nChest < 3; nChest++) {
+        for (int nChest = 0; nChest < (int)_countof(gaszTreasureClassChestColumnNames); nChest++) {
           Storm::Source::SSTR::SStrPrintf(szTCName, 0x100, "Act %d%s Chest %s", nAct + 1, gapTreasureClassChestParsedData[nDifficulty], gaszTreasureClassChestColumnNames[nChest]);
           int nTCIdx = Fog::Src::Excel::GetLinkNodeIndex(sgtDataTable.pTxtMonsterTblsLink, szTCName, 0);
           sgtDataTable.pParsedTreasureClassDiffActChestABC.Difficulty[nDifficulty].Act[nAct].Chest[nChest] = nTCIdx >= 0 ? &sgtDataTable.pParsedTreasureClass[nTCIdx] : NULL;
@@ -2759,3 +2759,6 @@ void __fastcall TXT_AllocMonsterTables(D2PoolManagerStrc * pMemory) {
 static void * keep_006543c0 = (0 ? (Unreferenced_006543c0(*(char * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Common::DATATBLS::MonsterTbls
+
+static_assert(sizeof(void*) != 4 || sizeof(D2MonSeqMonsterTbls) == 0xc, "D2MonSeqMonsterTbls is 0xc bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2ParsedTreasureClassEntriesStrc) == 0x1c, "D2ParsedTreasureClassEntriesStrc is 0x1c bytes on x86");

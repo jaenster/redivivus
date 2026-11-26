@@ -8,6 +8,9 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+typedef TSHashObject< ::SGAMEDATA, HASHKEY_NONE> SGameHashObject;
+static_assert(sizeof(void*) != 4 || offsetof(SGameHashObject, m_linktoslot) == 4, "the game hash table links SGAMEDATA at +4");
+
 
 template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSect, 0>::SyncLeaveLock(int32_t nLockedHandle) {
     if (!nLockedHandle) {
@@ -48,7 +51,7 @@ template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::RawNext(::SGAMED
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::Next(::SGAMEDATA * pNode) {
-    TSLink<::SGAMEDATA>* pLink = pNode ? (TSLink<::SGAMEDATA>*)((char*)(pNode->szGameName + this->m_linkoffset - 0x26) - 4) : &this->m_terminator;
+    TSLink<::SGAMEDATA>* pLink = pNode ? (TSLink<::SGAMEDATA>*)((intptr_t)pNode + this->m_linkoffset) : &this->m_terminator;
     intptr_t dwNext = pLink->m_next;
     return (::SGAMEDATA*)(dwNext <= 0 ? 0 : dwNext);
 }
@@ -174,7 +177,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
     TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pQServerStateSaved = pThis;
     pendingList.UnlinkAll();
     pendingList.m_terminator.m_prevlink = &pendingList.m_terminator;
-    pendingList.m_linkoffset = 4;
+    pendingList.m_linkoffset = (int)offsetof(SGameHashObject, m_linktoslot);
     pendingList.m_terminator.m_next = nOldBucket;
     nBucketIdx.nBucketIdx2 = 0;
     if (nNewMask) {
@@ -182,19 +185,19 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
       pPendingHead2 = pendingList.m_terminator.m_prevlink;
       do {
         while (0 < (nBucketNextLink = pThis->tSlotListArray.m_data[nOldBucketIdx].m_terminator.m_next)) {
-          pBackLink = (TSLink<::SGAMEDATA>*)(nBucketNextLink + 4);
+          pBackLink = &((::SGAMEDATA*)nBucketNextLink)->m_linktoslot;
           pNodeData = pBackLink->m_prevlink;
           if (pNodeData) {
             pOldBucket2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pBackLink, -1);
             *pOldBucket2 = pNodeData;
-            pBackLink->m_prevlink->m_next = *(intptr_t*)(nBucketNextLink + 8);
+            pBackLink->m_prevlink->m_next = ((::SGAMEDATA*)nBucketNextLink)->m_linktoslot.m_next;
             pBackLink->m_prevlink = 0;
-            *(uint32_t*)(nBucketNextLink + 8) = 0;
+            ((::SGAMEDATA*)nBucketNextLink)->m_linktoslot.m_next = 0;
             pPendingHead2 = pendingList.m_terminator.m_prevlink;
           }
 
           pBackLink->m_prevlink = pPendingHead2;
-          *(intptr_t*)(nBucketNextLink + 8) = pPendingHead2->m_next;
+          ((::SGAMEDATA*)nBucketNextLink)->m_linktoslot.m_next = pPendingHead2->m_next;
           pPendingHead2->m_next = nBucketNextLink;
           pPendingHead2 = pBackLink;
           pendingList.m_terminator.m_prevlink = pBackLink;
@@ -216,11 +219,11 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
       nResetCount = pOldBucket;
       do {
         pNodeNext = &pThis->tSlotListArray.m_data[nResetBucketOffset];
-        if (pNodeNext->m_linkoffset != 4) {
+        if (pNodeNext->m_linkoffset != (int)offsetof(SGameHashObject, m_linktoslot)) {
           pNodeNext->UnlinkAll();
           pPendingHead2 = &pNodeNext->m_terminator;
           pPendingHead2->m_prevlink = pPendingHead2;
-          pNodeNext->m_linkoffset = 4;
+          pNodeNext->m_linkoffset = (int)offsetof(SGameHashObject, m_linktoslot);
           pNodeNext->m_terminator.m_next = ~(uintptr_t)pPendingHead2;
         }
 
@@ -239,7 +242,6 @@ template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_
       pBackLink = (TSLink<::SGAMEDATA>*)(pNodeNext->m_linkoffset + pendingList.m_terminator.m_next);
       pPendingHead2 = pBackLink->m_prevlink;
       if (pPendingHead2) {
-        intptr_t nUnlinkNext = pBackLink->m_next; // the unlinked node's m_next word, not the bucket mask
         pOldBucket2 = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pBackLink, -1);
         *pOldBucket2 = pPendingHead2;
         pBackLink->m_prevlink->m_next = pBackLink->m_next;

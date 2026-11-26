@@ -12,6 +12,8 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Src/Excel/Excel.data.h"
 #include "Source/D2Headers/D2Arch.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2TxtLinkSub0x08Strc) == 8, "txt link index entries are 8 bytes on 32-bit");
+static_assert(sizeof(void*) != 4 || offsetof(D2TxtLinkNodeStrc, nLinkIndex) == 0x20, "the link key is a 0x20-byte name then the index");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -140,7 +142,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
       eFieldType = pBoolFieldPrev->eType;
     }
 
-    Storm::Source::SMem::SMemZero(aHashBuckets, 0x400);
+    Storm::Source::SMem::SMemZero(aHashBuckets, sizeof(aHashBuckets));
     if (pBinFieldInput->eType != FIELDTYPE_END) {
       D2BinFieldHashNodeStrc* pDVar1;
       pDVar2 = aFieldHashNodes;
@@ -372,9 +374,9 @@ uint32_t __stdcall FOG_AddTxtLinkRecord(D2TxtLinkStrc * pTxtLink, uint32_t nItem
       if (!pTxtLink->pTxtLinkNode) {
         if (pTxtLink->nCapacity <= pTxtLink->nRecords) {
           nLowIndex = pTxtLink->nCapacity + 0x40;
-          pNewTxtLinkSub0x08 = (D2TxtLinkSub0x08Strc*)D2_REALLOC_POOL_AT(nullptr, pTxtLink->pTxtLinkSub0x08, nLowIndex * 8, ".\\Src\\Excel\\Excel.cpp", 0x3df);
+          pNewTxtLinkSub0x08 = (D2TxtLinkSub0x08Strc*)D2_REALLOC_POOL_AT(nullptr, pTxtLink->pTxtLinkSub0x08, nLowIndex * sizeof(D2TxtLinkSub0x08Strc), ".\\Src\\Excel\\Excel.cpp", 0x3df);
           pTxtLink->pTxtLinkSub0x08 = pNewTxtLinkSub0x08;
-          memset(pNewTxtLinkSub0x08 + pTxtLink->nCapacity, 0, 0x200);
+          memset(pNewTxtLinkSub0x08 + pTxtLink->nCapacity, 0, 0x40 * sizeof(D2TxtLinkSub0x08Strc));
           pTxtLink->nCapacity = nLowIndex;
         }
 
@@ -385,7 +387,7 @@ uint32_t __stdcall FOG_AddTxtLinkRecord(D2TxtLinkStrc * pTxtLink, uint32_t nItem
             while (true) {
               if (nLowIndex >= nHighIndex) {
                 if (nLowIndex < pTxtLink->nRecords) {
-                  memmove(pTxtLink->pTxtLinkSub0x08 + nLowIndex + 1, pTxtLink->pTxtLinkSub0x08 + nLowIndex, (pTxtLink->nRecords - nLowIndex) * 8);
+                  memmove(pTxtLink->pTxtLinkSub0x08 + nLowIndex + 1, pTxtLink->pTxtLinkSub0x08 + nLowIndex, (pTxtLink->nRecords - nLowIndex) * sizeof(D2TxtLinkSub0x08Strc));
                 }
 
                 *(uint32_t*)pTxtLink->pTxtLinkSub0x08[nLowIndex].szItemCode = nItemCode;
@@ -532,9 +534,9 @@ int __stdcall FOG_ParseStringField(D2TxtLinkStrc * pTxtLink, char * szText) {
 
       pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, sizeof(D2TxtLinkNodeStrc), ".\\Src\\Excel\\Excel.cpp", 0x4b9);
       memset(pKey, 0, sizeof(D2TxtLinkNodeStrc));
-      Storm::Source::SSTR::SStrCopy((char*)pKey, szText, 0x20);
-      String::FogString::SMemStringToUppercase((char*)pKey, 0x20);
-      *(int*)(pKey + 0x20) = pTxtLink->nRecords;
+      Storm::Source::SSTR::SStrCopy(((D2TxtLinkNodeStrc*)pKey)->szText, szText, sizeof(((D2TxtLinkNodeStrc*)pKey)->szText));
+      String::FogString::SMemStringToUppercase(((D2TxtLinkNodeStrc*)pKey)->szText, sizeof(((D2TxtLinkNodeStrc*)pKey)->szText));
+      ((D2TxtLinkNodeStrc*)pKey)->nLinkIndex = pTxtLink->nRecords;
       FOG_ValidateBytePtr((uint8_t*)&pTxtLink->pTxtLinkNode, pKey);
       nRecordIndex = pTxtLink->nRecords;
       pTxtLink->nRecords = nRecordIndex + 1;
@@ -558,9 +560,9 @@ int __fastcall FOG_ParseTxtLink(D2TxtLinkStrc * pTxtLink, char * szText) {
       if (nRecordIndex < 0) {
         pKey = (uint8_t*)D2_ALLOC_POOL_AT(nullptr, sizeof(D2TxtLinkNodeStrc), ".\\Src\\Excel\\Excel.cpp", 0x4d9);
         memset(pKey, 0, sizeof(D2TxtLinkNodeStrc));
-        Storm::Source::SSTR::SStrCopy((char*)pKey, szText, 0x20);
-        String::FogString::SMemStringToUppercase((char*)pKey, 0x20);
-        *(int*)(pKey + 0x20) = pTxtLink->nRecords;
+        Storm::Source::SSTR::SStrCopy(((D2TxtLinkNodeStrc*)pKey)->szText, szText, sizeof(((D2TxtLinkNodeStrc*)pKey)->szText));
+        String::FogString::SMemStringToUppercase(((D2TxtLinkNodeStrc*)pKey)->szText, sizeof(((D2TxtLinkNodeStrc*)pKey)->szText));
+        ((D2TxtLinkNodeStrc*)pKey)->nLinkIndex = pTxtLink->nRecords;
         FOG_ValidateBytePtr((uint8_t*)&pTxtLink->pTxtLinkNode, pKey);
         nRecordIndex = pTxtLink->nRecords;
         pTxtLink->nRecords = nRecordIndex + 1;

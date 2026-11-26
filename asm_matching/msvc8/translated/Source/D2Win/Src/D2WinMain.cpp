@@ -47,6 +47,7 @@
 #ifndef D2_ALLOC_AT
 #define D2_ALLOC_AT(size, szFile, nLine) Fog::Memory::AllocClientMemory((size), (szFile), (nLine), 0)
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(JPEG_CORE_PROPERTIES) == 0x4e40, "JPEG_CORE_PROPERTIES is 0x4e40 bytes on x86");
 
 
 #ifndef RECON_FPTD_pfnVoidNoArgCallback
@@ -1000,7 +1001,7 @@ static void __stdcall D2WIN_SaveScreenshotToFile(uint8_t * pDibBytes, LPCSTR szF
       }
     }
 
-    memset(&jpegProps, 0, 0x4e40);
+    memset(&jpegProps, 0, sizeof(JPEG_CORE_PROPERTIES));
     ijlInit(&jpegProps);
     jpegProps.DIBBytes = pDibBytes;
     jpegProps.DIBColor = 1;

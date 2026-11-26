@@ -1385,7 +1385,7 @@ static void __stdcall PLAYER_InteractWithUnitByType(eD2UnitType eTargetUnitType,
       use_default_range:
       nInteractRange = 5;
       approach_or_interact:
-      if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER && pTargetUnit && (nClassId = pTargetUnit->nClassId , nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId && (uVar2 = (uint32_t)(uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xd) , Fog::BitBuffer::gadwBitMasks[1] & uVar2 && Fog::BitBuffer::gadwBitMasks[0] & uVar2)) {
+      if (pTargetUnit && pTargetUnit->eUnitType == UNIT_MONSTER && pTargetUnit && (nClassId = pTargetUnit->nClassId , nClassId >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId && (uVar2 = (uint32_t)(uint8_t)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].aFlagBytes[1] , Fog::BitBuffer::gadwBitMasks[1] & uVar2 && Fog::BitBuffer::gadwBitMasks[0] & uVar2)) {
         if (pTargetUnit->pPath.pDynamicPath) {
           D2Common::PATH::DynamicPath::ZeroPathPointsSize(pTargetUnit->pPath.pDynamicPath);
         }

@@ -7,6 +7,9 @@
 #include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
 
+static_assert(sizeof(D2PcxHeaderStrc) == 0x80, "D2PcxHeaderStrc: the PCX file header is the 0x80 bytes on disk");
+static_assert(sizeof(PcxPaletteTrailer) == 0x301, "PcxPaletteTrailer: the PCX palette trailer is the 0x301 bytes on disk");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -261,15 +264,15 @@ BOOL __fastcall DRAW_LoadPaletteFromPCX(LPCSTR szFilePath) {
       return 0;
     }
 
-    memset(&sPcxHeader, 0, 0x80);
+    memset(&sPcxHeader, 0, sizeof(sPcxHeader));
     DWORD nBytesRead = 0;
-    ReadFile(hFile, &sPcxHeader, 0x80, &nBytesRead, (LPOVERLAPPED)0x0);
-    if (nBytesRead == 0x80 && sPcxHeader.byManufacturer == '\n' && sPcxHeader.byVersion == '\x05' && sPcxHeader.byBitsPerPixel == '\b') {
+    ReadFile(hFile, &sPcxHeader, sizeof(sPcxHeader), &nBytesRead, (LPOVERLAPPED)0x0);
+    if (nBytesRead == sizeof(sPcxHeader) && sPcxHeader.byManufacturer == '\n' && sPcxHeader.byVersion == '\x05' && sPcxHeader.byBitsPerPixel == '\b') {
       uint32_t iPaletteEntry;
-      memset(&pcxPaletteTrailer, 0, 0x301);
-      /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(hFile, -0x301, (PLONG)0x0, 2);
-      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &pcxPaletteTrailer, 0x301, &nBytesRead, (LPOVERLAPPED)0x0);
-      if (nBytesRead == 0x301 && pcxPaletteTrailer.nMarker == 0xc) {
+      memset(&pcxPaletteTrailer, 0, sizeof(pcxPaletteTrailer));
+      /* DWORD dwMoveMethod for SetFilePointer */ /* PLONG lpDistanceToMoveHigh for SetFilePointer */ /* LONG lDistanceToMove for SetFilePointer */ /* HANDLE hFile for SetFilePointer */ SetFilePointer(hFile, -(LONG)sizeof(pcxPaletteTrailer), (PLONG)0x0, 2);
+      /* LPOVERLAPPED lpOverlapped for ReadFile */ /* LPDWORD lpNumberOfBytesRead for ReadFile */ /* DWORD nNumberOfBytesToRead for ReadFile */ /* LPVOID lpBuffer for ReadFile */ /* HANDLE hFile for ReadFile */ ReadFile(hFile, &pcxPaletteTrailer, sizeof(pcxPaletteTrailer), &nBytesRead, (LPOVERLAPPED)0x0);
+      if (nBytesRead == sizeof(pcxPaletteTrailer) && pcxPaletteTrailer.nMarker == 0xc) {
         iPaletteEntry = 0;
         do {
           gaGlobalPaletteRed[iPaletteEntry].r = pcxPaletteTrailer.rgb[iPaletteEntry].r;
@@ -599,11 +602,11 @@ void __stdcall DRAW_BuildBrightenTable(LPPALETTEENTRY pPalette) {
     do {
       uint32_t nColorIndex = 0;
       uint32_t nBrightenLevel = nRow + 1;
-      uint8_t* pbPaletteEntry = &pPalette->peGreen;
+      LPPALETTEENTRY pEntry = pPalette;
       do {
-        pTables[nRow][nColorIndex] = D2GFX_FindNearestPaletteIndex(pPalette, 0x100, ((0xff - (uint32_t)pbPaletteEntry[-1]) * nBrightenLevel >> 4) + (uint32_t)pbPaletteEntry[-1], ((0xff - (uint32_t)*pbPaletteEntry) * nBrightenLevel >> 4) + (uint32_t)*pbPaletteEntry, ((0xff - (uint32_t)pbPaletteEntry[1]) * nBrightenLevel >> 4) + (uint32_t)pbPaletteEntry[1]);
+        pTables[nRow][nColorIndex] = D2GFX_FindNearestPaletteIndex(pPalette, 0x100, ((0xff - (uint32_t)pEntry->peRed) * nBrightenLevel >> 4) + (uint32_t)pEntry->peRed, ((0xff - (uint32_t)pEntry->peGreen) * nBrightenLevel >> 4) + (uint32_t)pEntry->peGreen, ((0xff - (uint32_t)pEntry->peBlue) * nBrightenLevel >> 4) + (uint32_t)pEntry->peBlue);
         nColorIndex++;
-        pbPaletteEntry += 4;
+        pEntry++;
       } while (nColorIndex < 0x100);
       nRow++;
     } while (nRow < 0x10);

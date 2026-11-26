@@ -7,6 +7,7 @@
 #include "Source/D2CMP/Src/CelCmp.h"
 
 static_assert(sizeof(void*) != 4 || sizeof(::CELLIST) == 0x38, "SMemAlloc(sizeof(CELLIST)): the 32-bit layout must be the 0x38 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(TSHashObjectChunk<::CELLIST, HASHKEY_NONE>) == 0x18, "SMemAlloc(sizeof(TSHashObjectChunk<CELLIST>)): the 32-bit chunk must be the 0x18 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -481,7 +482,7 @@ template<> __attribute__((noinline)) inline void TSHashTable<CELLIST, HASHKEY_NO
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::CELLIST* pAlloc = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pAlloc = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::CELLIST), D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     ::CELLIST* pNewEntry;
     if (pAlloc) {
       pAlloc->m_linktoslot.m_prevlink = 0;
@@ -810,7 +811,7 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor
 }
 
 template<> TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunkNew = (TSHashObjectChunk<::CELLIST, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, D2CMP::Draw::s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, dwFlags | 8);
+    TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunkNew = (TSHashObjectChunk<::CELLIST, HASHKEY_NONE>*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(TSHashObjectChunk<::CELLIST, HASHKEY_NONE>), D2CMP::Draw::s___AV__TSHashObjectChunk_UCELLIST_00741fb4, -2, dwFlags | 8);
     TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNewChunk;
     if (pNewChunkNew) {
       pNewChunkNew->nArrayAlloc = 0;

@@ -219,7 +219,7 @@ void __fastcall FOG_FillArrayWithRandomInts(int nArrayOffset, uint32_t * pArrayD
                 case 2:
                   {
                     *(short int*)pArrayData = (short int)nOutValue;
-                    pArrayData = (uint32_t*)((char*)pArrayData + 2);
+                    pArrayData = (uint32_t*)((short int*)pArrayData + 1);
                     break;
                   }
                 case 4:

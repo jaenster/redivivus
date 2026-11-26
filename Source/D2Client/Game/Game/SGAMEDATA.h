@@ -232,4 +232,13 @@ namespace D2Client::GAME::Game {
 
 } // namespace D2Client::GAME::Game
 
+static_assert(sizeof(void*) != 4 || sizeof(::SGAMEDATA) == 0x1df4, "SGAMEDATA: the 32-bit layout must be the 0x1df4 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || offsetof(::SGAMEDATA, m_linktoslot) == 4, "SGAMEDATA: the slot link sits at 4, the reuse lists' link offset");
+static_assert(sizeof(void*) != 4 || offsetof(::SGAMEDATA, m_linktofull) == 0xc, "SGAMEDATA: the full-list link sits at 0xc");
+static_assert(sizeof(void*) != 4 || offsetof(::SGAMEDATA, bUpdateStatsTick) - offsetof(::SGAMEDATA, nPathCount) == 0x48, "SGAMEDATA: the path counters and their sample count are one 0x48-byte block");
+// The hash table's chunk type, named so offsetof can take it (a template-id has a comma).
+typedef TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE> SGAMEDATAChunk;
+static_assert(sizeof(void*) != 4 || sizeof(SGAMEDATAChunk) == 0x18, "TSHashObjectChunk<SGAMEDATA>: the 32-bit layout must be the 0x18 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || offsetof(SGAMEDATAChunk, m_link) == 0x10, "TSHashObjectChunk<SGAMEDATA>: the chunk list links at 0x10");
+
 #include "Source/D2Client/Game/Game/SGAMEDATA.inline.h"

@@ -17,6 +17,7 @@
 // Forward declarations
 struct D2CrashFrameStrc;
 struct D2FogDebugModuleEntryStrc;
+struct D2FogAddressInfoStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
@@ -113,7 +114,7 @@ bool DEBUG_EnumerateModulesViaToolhelp32(int * pModuleList);
 bool __fastcall DEBUG_EnumerateModulesViaPEB(int * pModuleList);
 // Unwinds stack frames for crash dumps. Walks EBP chain up to 128 frames, validates stack pointers, skips first N frames. Captures EIP, ESP, EBP for each frame. Handles current thread or remote thread via OpenThread/SuspendThread.
 int __thiscall DEBUG_UnwindStackFrames(CONTEXT * pContext, DWORD dwThreadId, struct D2CrashFrameStrc * pFrameArray, uint32_t nSkipFrames);
-bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, char * pOutput);
+bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, struct D2FogAddressInfoStrc * pOutput);
 int Unreferenced_004067c0();
 bool __stdcall PATH_GetKnownFolderPath(LPSTR szOutPath, int32_t nBufferSize);
 #endif // D2_MODULE_Fog

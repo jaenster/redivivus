@@ -132,10 +132,10 @@ BOOL __fastcall CreateWindow(HWND hWnd, int nResolutionMode) {
     D2LogPalette256Strc sLogPalette;
     gnGlideWindowHandle = hWnd;
     RENDERER_WINDOWED_AllocateDIBSection(nResolutionMode);
-    memset(gaDirectDrawDitherPaletteRemap, 0, 0x400);
+    memset(gaDirectDrawDitherPaletteRemap, 0, sizeof(gaDirectDrawDitherPaletteRemap));
     sLogPalette.palVersion = 0x300;
     sLogPalette.palNumEntries = 0x100;
-    memset(sLogPalette.palPalEntry, 0, 0x400);
+    memset(sLogPalette.palPalEntry, 0, sizeof(sLogPalette.palPalEntry));
     /* LOGPALETTE * plpal for CreatePalette */ RENDERER_WINDOWED_hPalette = CreatePalette((LOGPALETTE*)&sLogPalette);
     RENDERER_WINDOWED_CreateDebugFont();
     RENDERER_WINDOWED_UpdateScaleFactor(nResolutionMode);
@@ -279,7 +279,7 @@ void __fastcall SetPalette(LPPALETTEENTRY pPalette) {
     } while ((intptr_t)pDestination < (intptr_t)(prgbq_00989c40 + 256));
 
     /* PALETTEENTRY * pPalEntries for SetPaletteEntries */ /* UINT cEntries for SetPaletteEntries */ /* UINT iStart for SetPaletteEntries */ /* HPALETTE hpal for SetPaletteEntries */ SetPaletteEntries(RENDERER_WINDOWED_hPalette, 0, 0x100, pPalette);
-    memcpy(gaDirectDrawDitherPaletteRemap, pPalette, 256 * sizeof(PALETTEENTRY));
+    memcpy(gaDirectDrawDitherPaletteRemap, pPalette, sizeof(gaDirectDrawDitherPaletteRemap));
 }
 
 void __fastcall SetPaletteTable(BYTE * * ppPaletteTable) {

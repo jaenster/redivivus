@@ -1548,13 +1548,13 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
         }
 
         pOpBase += 0xa2;
-        pOpParam += 0x144;
+        pOpParam += sizeof(D2ItemStatCostTxt);
         pOpStat1 += 0xa2;
-        pHasOpBaseDeps += 0x144;
-        pHasOp45Dep += 0x144;
-        pOp += 0x144;
+        pHasOpBaseDeps += sizeof(D2ItemStatCostTxt);
+        pHasOp45Dep += sizeof(D2ItemStatCostTxt);
+        pOp += sizeof(D2ItemStatCostTxt);
         nStatOrdinal2++;
-        nStatByteOffset += 0x144;
+        nStatByteOffset += sizeof(D2ItemStatCostTxt);
       } while (nStatOrdinal2 < nStatCount);
     }
 
@@ -1578,7 +1578,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
     }
 
     qsort(aDescPrioritySort, nDescPriorityCount, sizeof(D2ItemStatCostDescPriorityStrc), (int (*)(const void*, const void*))SORT_ItemDescPriority);
-    MonsterTbls::sgtDataTable.pItemStatCostDescPriority = (short*)D2_ALLOC_POOL_AT(nullptr, MonsterTbls::sgtDataTable.nItemStatCostDescPrioritySize * 2, ".\\DATATBLS\\ItemTbls.cpp", 0x748);
+    MonsterTbls::sgtDataTable.pItemStatCostDescPriority = (short*)D2_ALLOC_POOL_AT(nullptr, MonsterTbls::sgtDataTable.nItemStatCostDescPrioritySize * sizeof(int16_t), ".\\DATATBLS\\ItemTbls.cpp", 0x748);
     if (MonsterTbls::sgtDataTable.nItemStatCostDescPrioritySize <= 0) {
       return;
     }
@@ -1672,7 +1672,7 @@ void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
     };
     D2GambleTxt* pTxtGamble = (D2GambleTxt*)DataTbls::CompileTxt(pMemory, "gamble", gamble, &nTxtGambleSize.nSize, 0xc);
     if (nTxtGambleSize.nSize) {
-      nTxtGambleSize.pTable = (int*)D2_ALLOC_POOL_AT(nullptr, nTxtGambleSize.nSize * 4, ".\\DATATBLS\\ItemTbls.cpp", 0x7db);
+      nTxtGambleSize.pTable = (int*)D2_ALLOC_POOL_AT(nullptr, nTxtGambleSize.nSize * sizeof(int), ".\\DATATBLS\\ItemTbls.cpp", 0x7db);
       for (int nIdx = 0; nIdx < nTxtGambleSize.nSize; nIdx++) {
         const uint32_t dwItemCode = *(uint32_t*)pTxtGamble[nIdx].szCode;
         const int32_t nItemClassId = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.sTxtItemsLink, dwItemCode, 0);
@@ -2014,3 +2014,5 @@ void * __stdcall DATATBLS_GetObjTypeModeDataTables() {
 }
 
 }}} // namespace D2Common::DATATBLS::ItemTbls
+
+static_assert(sizeof(void*) != 4 || sizeof(D2ItemStatCostTxt) == 0x144, "D2ItemStatCostTxt is 0x144 bytes on x86");

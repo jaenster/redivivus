@@ -659,7 +659,7 @@ static D2UnitStrc * __stdcall SELECT_FindTargetInFacingDirection(D2UnitStrc * pP
     eD2UnitType eUnitType;
     uint32_t nDirBase = D2Common::Units::PATH_GetCurrentDirection(pPlayerUnit_lcl) >> 3;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pPlayerUnit_lcl);
-    for (int i = 0; i < 5; i++) {
+    for (int i = 0; i < (int)_countof(gaTargetSelectionAngleTable); i++) {
       uint32_t nDirIdx = gaTargetSelectionAngleTable[i] + nDirBase & 7;
       eUnitType = pPlayerUnit_lcl->eUnitType;
       if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {

@@ -23,6 +23,11 @@ static_assert(sizeof(void*) != 4 || sizeof(D2StormAsyncOpStrc) == 0x44, "SMemAll
 static_assert(sizeof(void*) != 4 || sizeof(TDcmpStruct) == 0x3134, "SMemAlloc(sizeof(TDcmpStruct)): the 32-bit layout must be the 0x3134 bytes 1.14d allocates");
 static_assert(sizeof(void*) != 4 || sizeof(StormEventRecStrc) == 0xc, "SMemAlloc(sizeof(StormEventRecStrc)): the 32-bit layout must be the 0xc bytes 1.14d allocates");
 static_assert(sizeof(void*) != 4 || sizeof(D2StormAudioStreamRec) == 0x50, "SMemAlloc(sizeof(D2StormAudioStreamRec)): the 32-bit layout must be the 0x50 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(D2MPQBlockEntryStrc) == 0x2c, "the in-memory block table entry: the 0x10-byte disk entry plus its (attributes)");
+static_assert(sizeof(void*) != 4 || offsetof(D2MPQBlockEntryStrc, ftFileTime) == 0x10, "the disk part of a block table entry is 0x10 bytes");
+static_assert(sizeof(void*) != 4 || sizeof(D2MPQHashEntryStrc) == 0x10, "hash table entries are 0x10 bytes");
+static_assert(sizeof(void*) != 4 || sizeof(D2MPQHeaderStrc) == 0x20, "the MPQ header is 0x20 bytes");
+static_assert(sizeof(void*) != 4 || offsetof(D2MPQFileStrc, szFilePath) == 0x10c, "D2MPQFileStrc layout");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -220,7 +225,7 @@ static uint32_t __stdcall SFILE_Hash(int32_t nHashKind, char * szText) {
 // @blizzard InitializeHashSource (SFILE.CPP)
 static void SFILE_InitializeHashSource(uint32_t nSeed) {
     if (!g_pStormMpqCryptTable) {
-      g_pStormMpqCryptTable = (uint32_t*)SMem::SMemAlloc(0x1400, ".\\SOURCE\\SFILE.CPP", 0x340, 0);
+      g_pStormMpqCryptTable = (uint32_t*)SMem::SMemAlloc(0x500 * sizeof(uint32_t), ".\\SOURCE\\SFILE.CPP", 0x340, 0);
     }
 
     uint32_t* pCryptTable = g_pStormMpqCryptTable;
@@ -374,15 +379,15 @@ void __fastcall SFILE_ShiftSectorTable(D2MPQBlockEntryStrc * pSectorTable, int, 
       pDstExtra = pDst->abMD5 + 8;
       nSectorsLeft = nSectorCount - 1;
       do {
-        memmove(pDst, pSrc, 0x10);
-        pSrc += -0x10;
-        *(DWORD*)(pDstExtra - 0x10) = 0;
-        ((FILETIME*)(pDstExtra - 0x14))->dwLowDateTime = 0;
-        *(uint32_t*)(pDstExtra - 0xc) = 0;
+        memmove(pDst, pSrc, offsetof(D2MPQBlockEntryStrc, ftFileTime));
+        pSrc -= offsetof(D2MPQBlockEntryStrc, ftFileTime);
+        ((D2MPQBlockEntryStrc*)(pDstExtra - offsetof(D2MPQBlockEntryStrc, abMD5[8])))->ftFileTime.dwHighDateTime = 0;
+        ((D2MPQBlockEntryStrc*)(pDstExtra - offsetof(D2MPQBlockEntryStrc, abMD5[8])))->ftFileTime.dwLowDateTime = 0;
+        ((D2MPQBlockEntryStrc*)(pDstExtra - offsetof(D2MPQBlockEntryStrc, abMD5[8])))->dwCRC32 = 0;
         memset(pDstExtra - 8, 0, 8 * sizeof(pDstExtra[0]));
         memset(pDstExtra, 0, 8 * sizeof(pDstExtra[0]));
         pDst--;
-        pDstExtra += -0x2c;
+        pDstExtra -= sizeof(D2MPQBlockEntryStrc);
         nSectorsLeft--;
       } while (nSectorsLeft);
     }
@@ -393,7 +398,7 @@ void __fastcall SFILE_ShiftSectorTable(D2MPQBlockEntryStrc * pSectorTable, int, 
     pDst->ftFileTime.dwHighDateTime = 0;
     pDst->ftFileTime.dwLowDateTime = 0;
     pDst->dwCRC32 = 0;
-    memset(pDst->abMD5, 0, 16 * sizeof(pDst->abMD5[0]));
+    memset(pDst->abMD5, 0, sizeof(pDst->abMD5));
 }
 
 void __fastcall Unreferenced_00415730(D2ArchiveStrc * pArchive) {
@@ -522,8 +527,8 @@ BOOL __stdcall SFILE_CheckForCdRom(char * szText) {
     SSTR::SStrCopy(szRootPath, szText, 4);
     UINT nDriveType = GetDriveTypeA(szRootPath);
     DWORD dwFsFlags = 0;
-    SMem::SMemZero(szFsName, 0x104);
-    BOOL bApiOk = GetVolumeInformationA(szRootPath, (LPSTR)0x0, 0, (LPDWORD)0x0, (LPDWORD)0x0, &dwFsFlags, szFsName, 0x104);
+    SMem::SMemZero(szFsName, sizeof(szFsName));
+    BOOL bApiOk = GetVolumeInformationA(szRootPath, (LPSTR)0x0, 0, (LPDWORD)0x0, (LPDWORD)0x0, &dwFsFlags, szFsName, sizeof(szFsName));
     if (!bApiOk) {
       return 0;
     }
@@ -1233,10 +1238,10 @@ int __stdcall SFILE_CopyFileRecordNameOrAlias(D2MPQFileStrc * pArchive, char * s
       /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00779068);
       return 0;
     }
-    if (*(int*)(szOutNameSlot + 0x10c)) {
-      szBufferInput = *(char**)(szOutNameSlot + 0x10c);
+    if (((D2MPQFileStrc*)szOutNameSlot)->szFilePath) {
+      szBufferInput = ((D2MPQFileStrc*)szOutNameSlot)->szFilePath;
     } else {
-      szBufferInput = szOutNameSlot + 8;
+      szBufferInput = ((D2MPQFileStrc*)szOutNameSlot)->szFileName;
     }
 
     SSTR::SStrCopy(szOutName, szBufferInput, nBufferOutputLength);
@@ -3823,7 +3828,7 @@ int __stdcall SFileOpenFileEx(D2ArchiveStrc * pArchive, char * szFileName, uint3
         nBlockEntry = (pBlockEntry->dwFileSize - 1 + pArchiveFound->nSectorSize) / pArchiveFound->nSectorSize;
         pArchiveFound = 0;
         if (*pdwBlockFlags & 0xff00) {
-          pArchiveFound = (D2ArchiveStrc*)SMem::SMemAlloc((int)nBlockEntry * 4 + 4, ".\\SOURCE\\SFILE.CPP", 0x1231, 0);
+          pArchiveFound = (D2ArchiveStrc*)SMem::SMemAlloc(((int)nBlockEntry + 1) * sizeof(uint32_t), ".\\SOURCE\\SFILE.CPP", 0x1231, 0);
         }
 
         pMpqFileRecord = vc8_thiscall(SFILE_AllocFileRecord)((int**)&gSFileOpenFileList, 1, 0, 0);
@@ -3875,7 +3880,7 @@ D2MPQFileStrc * * __fastcall SFILE_AllocFileRecord3(int * * ppArchive, int, int3
 StormEventRecStrc * __fastcall SFILE_RemoveAsyncRequestFromQueue(void * pListContext, int, StormEventRecStrc * pNode) {
     StormEventRecStrc* pSVar1 = pNode;
     if (!pNode) {
-      pSVar1 = (StormEventRecStrc*)((char*)pListContext + 4);
+      pSVar1 = (StormEventRecStrc*)&((StormLinkedListStrc*)pListContext)->head;
     }
 
     intptr_t nRefCount = pSVar1->link.pNext;
@@ -5234,7 +5239,7 @@ int __fastcall SFILE_ReadAdditionalAttributes(D2ArchiveStrc * pArchive, int, D2M
               do {
                 pFVar2->dwLowDateTime = *pSrcAttr;
                 pFVar2->dwHighDateTime = pSrcAttr[1];
-                pFVar2 = (FILETIME*)((char*)(pFVar2 + 5) + 4);
+                pFVar2 = (FILETIME*)((uint8_t*)pFVar2 + sizeof(D2MPQBlockEntryStrc));
                 pSrcAttr += 2;
                 nResult--;
               } while (nResult);
@@ -5242,11 +5247,11 @@ int __fastcall SFILE_ReadAdditionalAttributes(D2ArchiveStrc * pArchive, int, D2M
             if (nAttrFlags & 4 && (uint32_t)nNumEntries > 0) {
               pDstEntry = pAttributesBuffer->abMD5 + 8;
               do {
-                *(uint32_t*)(pDstEntry - 8) = *pSrcAttr;
-                *(uint32_t*)(pDstEntry - 4) = pSrcAttr[1];
-                *(uint32_t*)pDstEntry = pSrcAttr[2];
-                *(uint32_t*)(pDstEntry + 4) = pSrcAttr[3];
-                pDstEntry += 0x2c;
+                ((uint32_t*)(pDstEntry - 8))[0] = *pSrcAttr;
+                ((uint32_t*)(pDstEntry - 8))[1] = pSrcAttr[1];
+                ((uint32_t*)(pDstEntry - 8))[2] = pSrcAttr[2];
+                ((uint32_t*)(pDstEntry - 8))[3] = pSrcAttr[3];
+                pDstEntry += sizeof(D2MPQBlockEntryStrc);
                 pSrcAttr += 4;
                 nNumEntries--;
               } while (nNumEntries);
@@ -5387,12 +5392,12 @@ BOOL __stdcall SFileDdaBeginEx(D2MPQFileStrc * hFile, uint32_t dwBufferBytes, ui
         if (nResult) {
           nSeekPos = SFileSetFilePointer(pFile, nAlignRemainder - 0x10, nullptr, 1);
           if (nSeekPos != -1) {
-            wFormatTag.nChannels = *(uint16_t*)((char*)&__frame0.sDsBufferDesc.nDsBufferFlags + 2);
+            wFormatTag.nChannels = (uint16_t)(__frame0.sDsBufferDesc.nDsBufferFlags >> 16);
             wFormatTag.wFormatTag = (WORD)__frame0.sDsBufferDesc.nDsBufferFlags;
             wFormatTag.nSamplesPerSec = __frame0.sDsBufferDesc.pDsBufferBytes;
             wFormatTag.nAvgBytesPerSec = __frame0.sDsBufferDesc.nWaveBlockAlign;
             wFormatTag.nBlockAlign = (WORD)__frame0.sDsBufferDesc.nWaveFmtBlockAlign;
-            wFormatTag.wBitsPerSample = *(uint16_t*)((char*)&__frame0.sDsBufferDesc.nWaveFmtBlockAlign + 2);
+            wFormatTag.wBitsPerSample = (uint16_t)(__frame0.sDsBufferDesc.nWaveFmtBlockAlign >> 16);
             wFormatTag.cbSize = 0;
             nChunkFound = SFILE_FindChunk(0x61746164, pFile, (int*)&__frame0.nWaveDataSize);
             if (nChunkFound) {
@@ -5524,8 +5529,8 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
         nWindowOffset = nBlockIndex;
       }
 
-      SMem::SMemCopy(ppArchive->pMpqHeader, pScanBuffer + (uVar1 - nWindowOffset), 0x20);
-      if (ppArchive->pMpqHeader->dwMagic == 0x1a51504d && ppArchive->pMpqHeader->dwHeaderSize >= 0x20) {
+      SMem::SMemCopy(ppArchive->pMpqHeader, pScanBuffer + (uVar1 - nWindowOffset), sizeof(D2MPQHeaderStrc));
+      if (ppArchive->pMpqHeader->dwMagic == 0x1a51504d && ppArchive->pMpqHeader->dwHeaderSize >= sizeof(D2MPQHeaderStrc)) {
         break;
       }
 
@@ -5537,15 +5542,15 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
     ppArchive->nSectorSize = nHashKey;
     void* pvVar2 = SMem::SMemAlloc(nHashKey, ".\\SOURCE\\SFILE.CPP", 0x110b, 0);
     ppArchive->pSectorBuffer = pvVar2;
-    D2MPQHashEntryStrc* pOutputBuf = (D2MPQHashEntryStrc*)SMem::SMemAlloc(ppArchive->pMpqHeader->dwHashTableSize << 4, ".\\SOURCE\\SFILE.CPP", 0x1114, 0);
+    D2MPQHashEntryStrc* pOutputBuf = (D2MPQHashEntryStrc*)SMem::SMemAlloc(ppArchive->pMpqHeader->dwHashTableSize * sizeof(D2MPQHashEntryStrc), ".\\SOURCE\\SFILE.CPP", 0x1114, 0);
     __frame0.uSlotC.pszArchivePath = ppArchive->szArchivePath;
     ppArchive->pHashTable = pOutputBuf;
     __frame0.uSlot8.pnHashTableSize = (int32_t*)&ppArchive->nHashTableSize;
-    SFILE_ReadFileChecked(__frame0.uSlot8.pnHashTableSize, pOutputBuf, ppArchive->pMpqHeader->dwHashTableSize << 4, (uint32_t*)__frame0.uSlotC.pszArchivePath, ppArchive->hFile, &__frame0.nBytesRead, ppArchive->pMpqHeader->dwHashTablePos + ppArchive->nArchiveOffset);
+    SFILE_ReadFileChecked(__frame0.uSlot8.pnHashTableSize, pOutputBuf, ppArchive->pMpqHeader->dwHashTableSize * sizeof(D2MPQHashEntryStrc), (uint32_t*)__frame0.uSlotC.pszArchivePath, ppArchive->hFile, &__frame0.nBytesRead, ppArchive->pMpqHeader->dwHashTablePos + ppArchive->nArchiveOffset);
     nHashKey = SFILE_Hash(3, "(hash table)");
     D2ArchiveStrc* pListNode = __frame0.pSavedArchive;
-    SFILE_Decrypt(&__frame0.pSavedArchive->pHashTable->dwHashA, __frame0.pSavedArchive->pMpqHeader->dwHashTableSize << 4, nHashKey);
-    D2MPQBlockEntryStrc* pOutputBuf_00 = (D2MPQBlockEntryStrc*)SMem::SMemAlloc(pListNode->pMpqHeader->dwBlockTableSize * 0x2c, ".\\SOURCE\\SFILE.CPP", 0x1133, 0);
+    SFILE_Decrypt(&__frame0.pSavedArchive->pHashTable->dwHashA, __frame0.pSavedArchive->pMpqHeader->dwHashTableSize * sizeof(D2MPQHashEntryStrc), nHashKey);
+    D2MPQBlockEntryStrc* pOutputBuf_00 = (D2MPQBlockEntryStrc*)SMem::SMemAlloc(pListNode->pMpqHeader->dwBlockTableSize * sizeof(D2MPQBlockEntryStrc), ".\\SOURCE\\SFILE.CPP", 0x1133, 0);
     pListNode->pBlockTable = pOutputBuf_00;
     SFILE_ReadFileChecked(__frame0.uSlot8.pnHashTableSize, pOutputBuf_00, pListNode->pMpqHeader->dwBlockTableSize << 4, (uint32_t*)__frame0.uSlotC.pszArchivePath, pListNode->hFile, &__frame0.nBytesRead, pListNode->pMpqHeader->dwBlockTablePos + pListNode->nArchiveOffset);
     nHashKey = SFILE_Hash(3, "(block table)");
@@ -5687,7 +5692,7 @@ int __stdcall SFileOpenArchive(char * szArchiveName, int * pUserData, uint32_t n
         }
 
         pArchive->nFlags = nFlags >> 2 & 1;
-        pHeaderBuf = (D2MPQHeaderStrc*)SMem::SMemAlloc(0x20, ".\\SOURCE\\SFILE.CPP", 0x1052, 0);
+        pHeaderBuf = (D2MPQHeaderStrc*)SMem::SMemAlloc(sizeof(D2MPQHeaderStrc), ".\\SOURCE\\SFILE.CPP", 0x1052, 0);
         /* LPDWORD lpFileSizeHigh for GetFileSize */ /* HANDLE hFile for GetFileSize */ pArchive->pMpqHeader = pHeaderBuf;
         pArchive->nArchiveOffset = 0;
         DVar1 = GetFileSize(hFile, (LPDWORD)0x0);
@@ -5756,7 +5761,7 @@ void __stdcall SFileOpenFileAsArchive(D2ArchiveStrc * nParentArchive, char * szF
       pArchive->nPriority = 0;
       pArchive->nRefCount = 1;
       pArchive->bDontCloseHandle = __frame0.pBlockInfo;
-      pHeaderBuf = (D2MPQHeaderStrc*)SMem::SMemAlloc(0x20, ".\\SOURCE\\SFILE.CPP", 0x11ad, 0);
+      pHeaderBuf = (D2MPQHeaderStrc*)SMem::SMemAlloc(sizeof(D2MPQHeaderStrc), ".\\SOURCE\\SFILE.CPP", 0x11ad, 0);
       pArchive->pMpqHeader = pHeaderBuf;
       pArchive->nArchiveOffset = pOpenedFile->pBlockEntry->dwFilePos;
       pArchive->nArchiveFileSize = pOpenedFile->pBlockEntry->dwFileSize + pOpenedFile->pBlockEntry->dwFilePos;

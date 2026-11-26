@@ -8,6 +8,7 @@
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x194, "D2QSSocketStrc is 0x194 bytes on 32-bit");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -328,7 +329,7 @@ D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort,
 
       pD2QSSocket = D2_NEW_AT(D2QSSocketStrc, ".\\Src\\D2QSSocket.cpp", 0x245);
       if (pD2QSSocket) {
-        memset(pD2QSSocket, 0, 0x194);
+        memset(pD2QSSocket, 0, sizeof(*pD2QSSocket));
         Storm::Source::SSTR::SStrCopy(pD2QSSocket->szIpAddress, szIpAddress, 0x104);
         if (szName) {
           dwErrorCode = 4;
@@ -419,10 +420,10 @@ int32_t __stdcall NET_MCP_CLIENT_Send(D2QSSocketStrc * pQSocket, char * pBytes, 
       }
 
       Storm::Source::SMem::SMemCopy(aSendBuf + 3, pBytes, nDataSizeNoHeader - 1);
-      *(uint16_t*)((char*)&abLenHeader + 2) = nDataSizeNoHeader + 3;
+      *(uint16_t*)&abLenHeader[2] = nDataSizeNoHeader + 3;
       abLenHeader[1] = *pBytes;
       abLenHeader[0] = (uint8_t)pQSocket->nHeaderLeadByte;
-      Storm::Source::SMem::SMemCopy(aSendBuf, abLenHeader, 4);
+      Storm::Source::SMem::SMemCopy(aSendBuf, abLenHeader, sizeof(abLenHeader));
       nTotalSendSize = nDataSizeNoHeader + 3;
     } else {
       *(uint16_t*)(char*)&abLenHeader = nDataSizeNoHeader + 2;

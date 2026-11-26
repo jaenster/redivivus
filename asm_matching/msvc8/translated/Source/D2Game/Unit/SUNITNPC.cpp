@@ -158,6 +158,8 @@
 #include "Source/D2Game/Seed.inline.h"
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/D2Headers/D2Arch.h"
+
+static_assert(sizeof(void*) != 4 || sizeof(D2MercForHire) == 0x10, "the NPC hireling slots are 0x10 bytes each");
 static_assert(sizeof(void*) != 4 || sizeof(D2NpcProxyInventoryStrc) == 0xc, "D2_ALLOC_POOL_AT(sizeof(D2NpcProxyInventoryStrc)): the 32-bit layout must be the 0xc bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -189,7 +191,7 @@ namespace D2Game { namespace UNIT { namespace SUNITNPC {
 void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClassId, D2GameNpcStrc * nNpcUnit) {
     uint32_t nCandidateSlot;
     uint32_t nSearchSlot;
-    int* pSlotEntry;
+    D2MercForHire* pSlotEntry;
     int nSlotCount;
     uint32_t nNameLast;
     int nNpcUnit2;
@@ -204,9 +206,9 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
       return;
     }
 
-    pNpcDataBlock = (D2MercForHire*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, 0x450, ".\\UNIT\\SUNITNPC.CPP", 0x6e);
+    pNpcDataBlock = (D2MercForHire*)D2_ALLOC_POOL_AT(pGame->pMemoryPool, sizeof(D2MercForHire) * 0x45, ".\\UNIT\\SUNITNPC.CPP", 0x6e);
     pDVar2->pHirelingSlots = pNpcDataBlock;
-    memset(pNpcDataBlock, 0, 0x450);
+    memset(pNpcDataBlock, 0, sizeof(D2MercForHire) * 0x45);
     D2SeedStrc* pNpcControl = sunitproxy::SUNITPROXY_GetNpcControl(pGame);
     D2MercForHire* pNpcDataRaw = pDVar2->pHirelingSlots;
     uint32_t nHirelingCount = PLAYER::PlayerPets::GetHirelingNamesAndSize(pGame, nNpcClassId, (uint32_t*)&nNpcUnit2, &nNameLast, nullptr);
@@ -217,19 +219,19 @@ void __fastcall SUNITNPC_InitNpcInventory(::SGAMEDATA * pGame, int32_t nNpcClass
     if (nNpcUnit2 <= (int)nNameLast) {
       uint32_t DVar1;
       nSlotCount = 0;
-      pSlotEntry = &pNpcDataRaw->bActive;
+      pSlotEntry = &pNpcDataRaw[0];
       do {
         if (nSlotCount >= (int)nHirelingCount) {
           break;
         }
 
-        ((D2MercForHire*)(pSlotEntry - 2))->nNameStringId = (short int)nNpcUnit2 + (short int)nSlotCount;
+        pSlotEntry->nNameStringId = (short int)nNpcUnit2 + (short int)nSlotCount;
         DVar1 = D2_SeedRoll(pNpcControl);
-        pSlotEntry[-1] = DVar1;
+        pSlotEntry->nSeed = DVar1;
         nSlotCount++;
-        *pSlotEntry = 0;
-        pSlotEntry[1] = 0;
-        pSlotEntry += 4;
+        pSlotEntry->bActive = 0;
+        pSlotEntry->field5_0xc = 0;
+        pSlotEntry++;
       } while (nNpcUnit2 + nSlotCount <= (int)nNameLast);
     }
 
@@ -3164,7 +3166,7 @@ int __fastcall UseMenu(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestState pQ
     eD2QuestState eQuestState;
     D2UnitStrc* pClonedItem;
     pClonedItem = SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, guid);
-    if (!pClonedItem || !pUnit || (sUseMenuPkt.y = pClonedItem->nClassId , sUseMenuPkt.y < 0) || sUseMenuPkt.y >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + sUseMenuPkt.y) || !((uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[sUseMenuPkt.y] + 0xd) & Fog::BitBuffer::gadwBitMasks[1]) || pClonedItem->eUnitType != UNIT_MONSTER || !pClonedItem->pUnitData.pUnitDataMonster || (pMonsterAI = pClonedItem->pUnitData.pUnitDataMonster->pMonsterAi , !pMonsterAI)) {
+    if (!pClonedItem || !pUnit || (sUseMenuPkt.y = pClonedItem->nClassId , sUseMenuPkt.y < 0) || sUseMenuPkt.y >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + sUseMenuPkt.y) || !((uint8_t)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[sUseMenuPkt.y].aFlagBytes[1] & Fog::BitBuffer::gadwBitMasks[1]) || pClonedItem->eUnitType != UNIT_MONSTER || !pClonedItem->pUnitData.pUnitDataMonster || (pMonsterAI = pClonedItem->pUnitData.pUnitDataMonster->pMonsterAi , !pMonsterAI)) {
       return 0;
     }
 

@@ -551,7 +551,7 @@ BOOL __stdcall FindDiagonalNonCollisionCoords(D2RoomStrc * pRoom, int * pX, int 
         int nX = (pFloorTile->nPosX + sRoomCoords.sTileRect.left) * 5 + 3;
         int nY = (pFloorTile->nPosY + sRoomCoords.sTileRect.top) * 5 + 3;
         if (D2Common::Collision::CheckCollision_BlockPlayerMissile(pRoom, nX, nY, COLLIDE_MONSTER) == COLLIDE_NONE) {
-          for (int i = 0; i < 4; i++) {
+          for (int i = 0; i < (int)(sizeof(gaPathDiagonalOffsets) / sizeof(gaPathDiagonalOffsets[0])); i++) {
             if (D2Common::Collision::CheckCollision_BlockAll_Width(pRoom, gaPathDiagonalOffsets[i].x + nX, gaPathDiagonalOffsets[i].y + nY, COLLISION_UNIT_SIZE_SMALL, 0x1c09) == COLLIDE_NONE) {
               *pX = nX;
               *pY = nY;

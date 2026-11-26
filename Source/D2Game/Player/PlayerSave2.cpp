@@ -1022,7 +1022,7 @@ int __fastcall PLRSAVE_ReadQuestsFromBuffer(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    for (int nActCount = 0; nActCount < 3; nActCount++) {
+    for (int nActCount = 0; nActCount < (int)(sizeof(pPlayerData->pQuestRecord) / sizeof(pPlayerData->pQuestRecord[0])); nActCount++) {
       D2Common::QuestRecord::ReadQuestRecordFromBuffer(pPlayerData->pQuestRecord[nActCount], (char*)pBufStart + 10 + nActCount * 0x60, 0x60, 1);
     }
 
@@ -1071,7 +1071,7 @@ int __fastcall LoadPlayerIntro(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, shor
     }
 
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    for (int nActCount = 0; nActCount < 3; nActCount++) {
+    for (int nActCount = 0; nActCount < (int)(sizeof(pPlayerData->pInteractedNPCs) / sizeof(pPlayerData->pInteractedNPCs[0])); nActCount++) {
       PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(pPlayerData->pInteractedNPCs[nActCount], (uint32_t*)(pBufStart + 2) + nActCount * 2);
       PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(pPlayerData->pInteractedNPCs[nActCount], (uint32_t*)(pBufStart + 0xe) + nActCount * 2);
     }

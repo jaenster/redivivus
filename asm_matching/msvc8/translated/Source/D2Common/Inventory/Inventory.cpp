@@ -301,7 +301,7 @@ D2InventoryStrc * __stdcall STRUCT_CreatePlayerInventory(D2PoolManagerStrc * pMe
       return nullptr;
     }
 
-    memset(pInventoryStrc, 0, 0x40);
+    memset(pInventoryStrc, 0, sizeof(D2InventoryStrc));
     pInventoryStrc->nSignatureMagic = 0x1020304;
     pInventoryStrc->pMemory = pMemory;
     pInventoryStrc->pOwner = pUnit;
@@ -419,7 +419,7 @@ static D2InventoryGridInfoStrc * __stdcall ReinitializeInventoryGrid(int32_t nNe
           pGridInfo->bHeight = byWidth;
           pNewGrid = (D2UnitStrc**)D2_ALLOC_POOL_AT(pInventory->pMemory, (uint32_t)pGridInfo->bWidth * (uint32_t)byWidth * sizeof(D2UnitStrc*), ".\\INVENTORY\\Inventory.cpp", 0x2d1);
           pGridInfo->pGridCells = pNewGrid;
-          memset(pNewGrid, 0, (uint32_t)pGridInfo->bWidth * (uint32_t)pGridInfo->bHeight * 4);
+          memset(pNewGrid, 0, (uint32_t)pGridInfo->bWidth * (uint32_t)pGridInfo->bHeight * sizeof(D2UnitStrc*));
         }
         if (pGridInfo->bWidth != pInventorySize->Width || pGridInfo->bHeight != pInventorySize->Height) {
           return nullptr;
@@ -439,7 +439,7 @@ static D2InventoryGridInfoStrc * __stdcall ReinitializeInventoryGrid(int32_t nNe
       pGridInfo->bHeight = pInventorySize->Height;
       pNewGrid = (D2UnitStrc**)D2_ALLOC_POOL_AT(pInventory->pMemory, (uint32_t)pGridInfo->bWidth * (uint32_t)pGridInfo->bHeight * sizeof(D2UnitStrc*), ".\\INVENTORY\\Inventory.cpp", 0x2eb);
       pGridInfo->pGridCells = pNewGrid;
-      memset(pNewGrid, 0, (uint32_t)pGridInfo->bWidth * (uint32_t)pGridInfo->bHeight * 4);
+      memset(pNewGrid, 0, (uint32_t)pGridInfo->bWidth * (uint32_t)pGridInfo->bHeight * sizeof(D2UnitStrc*));
     }
 
     return pGridInfo;
@@ -4167,7 +4167,7 @@ void __stdcall INVENTORY_InitializeItemTypeTable() {
     }
 
     gbItemTypeTableInitialized = 1;
-    memset(gaItemTypeBaseIdTable, 0, 0x7f8);
+    memset(gaItemTypeBaseIdTable, 0, sizeof(gaItemTypeBaseIdTable));
     D2ItemsTableStrc* pItemsTxtSize;
     pItemsTxtSize = DATATBLS::ItemTbls::TXT_Items_GetSize();
     gaItemTypeBaseIdTable[2] = 0x2074696c;
@@ -4717,7 +4717,7 @@ static BOOL CopyInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
       if (bWidth > 0) {
         bHeight = pSrcGridInfo->bHeight;
         if (bHeight > 0 && bWidth == pDstGridInfo->bWidth && bHeight == pDstGridInfo->bHeight && pSrcGridInfo->pGridCells && pDstGridInfo->pGridCells) {
-          memcpy(pDstGridInfo->pGridCells, pSrcGridInfo->pGridCells, (uint32_t)bHeight * (uint32_t)bWidth * 4);
+          memcpy(pDstGridInfo->pGridCells, pSrcGridInfo->pGridCells, (uint32_t)bHeight * (uint32_t)bWidth * sizeof(D2UnitStrc*));
           return 1;
         }
       }
@@ -4819,7 +4819,7 @@ BOOL __stdcall INVENTORY_CanItemsBeTraded(D2PoolManagerStrc * pMemory, D2UnitStr
     if (!pInventoryCopy) {
       pInventory2 = 0;
     } else {
-      memset(pInventoryCopy, 0, 0x40);
+      memset(pInventoryCopy, 0, sizeof(D2InventoryStrc));
       pInventoryCopy->nSignatureMagic = 0x1020304;
       pInventoryCopy->pMemory = pMemory;
       pInventoryCopy->pOwner = 0;
@@ -4830,7 +4830,7 @@ BOOL __stdcall INVENTORY_CanItemsBeTraded(D2PoolManagerStrc * pMemory, D2UnitStr
     if (!pInventory) {
       pInventory = 0;
     } else {
-      memset(pInventory, 0, 0x40);
+      memset(pInventory, 0, sizeof(D2InventoryStrc));
       pInventory->pMemory = pMemory_00;
       pInventory->nSignatureMagic = 0x1020304;
       pInventory->pOwner = 0;

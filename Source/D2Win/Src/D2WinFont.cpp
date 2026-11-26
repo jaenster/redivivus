@@ -14,6 +14,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Win/Src/D2WinFont.data.h"
+static_assert(sizeof(void*) != 4 || offsetof(D2TooltipTextStrc, nX) == 0x800, "the tooltip text buffer is 0x800 bytes");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -700,7 +701,7 @@ static void D2WINFONT_DrawWideStringSimple(int32_t nX, uint16_t * wszText, int32
 
 void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltipX, int32_t nTooltipY, int32_t nTooltipColor, int32_t nCenterFlag) {
     if (!wszBuffer) {
-      memset(&DisplayedTooltip, 0, 0x800);
+      memset(DisplayedTooltip.wszString, 0, sizeof(DisplayedTooltip.wszString));
       DisplayedTooltip.nX = nTooltipX;
       DisplayedTooltip.nY = nTooltipY;
       DisplayedTooltip.nColor = nTooltipColor;
@@ -722,7 +723,7 @@ void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltip
         return;
       }
     }
-    memset(&DisplayedTooltip, 0, 0x800);
+    memset(DisplayedTooltip.wszString, 0, sizeof(DisplayedTooltip.wszString));
     DisplayedTooltip.nX = nTooltipX;
     DisplayedTooltip.nY = nTooltipY;
     DisplayedTooltip.nColor = nTooltipColor;
@@ -1018,7 +1019,7 @@ D2TextLineStrc * __stdcall D2WINFONT_AllocWordWrapNode(uint16_t * pwszText, uint
       }
     }
 
-    uint16_t* pNodeText = (uint16_t*)D2_ALLOC_AT(nLen * 2 + 2, ".\\Src\\D2WinFont.cpp", 0x591);
+    uint16_t* pNodeText = (uint16_t*)D2_ALLOC_AT(nLen * sizeof(uint16_t) + sizeof(uint16_t), ".\\Src\\D2WinFont.cpp", 0x591);
     pNode->wszLine = pNodeText;
     pNode->pNext = 0;
     D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pNodeText, pText, nLen);
@@ -1112,7 +1113,7 @@ D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, int * p
           }
         }
 
-        pDestination = (uint16_t*)D2_ALLOC_AT(nSegLen * 2 + 2, ".\\Src\\D2WinFont.cpp", 0x591);
+        pDestination = (uint16_t*)D2_ALLOC_AT(nSegLen * sizeof(uint16_t) + sizeof(uint16_t), ".\\Src\\D2WinFont.cpp", 0x591);
         pNode->wszLine = pDestination;
         pNode->pNext = 0;
         D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(pDestination, pNodeText, nSegLen);
@@ -1267,7 +1268,7 @@ void __stdcall D2WINFONT_InitFontSystem() {
     }
 
     gppDC6FontCache = &gaFontCache[1].pFontDC6;
-    memset(&DisplayedTooltip, 0, 0x800);
+    memset(DisplayedTooltip.wszString, 0, sizeof(DisplayedTooltip.wszString));
     strcpy(szFontPath, "c");
     D2Lang::UTF8_ConvertToWideChar((uint16_t*)gwFontHeightDefault, szFontPath, 2);
     strcpy(szFontPath, "m");

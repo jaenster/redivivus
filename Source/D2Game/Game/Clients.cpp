@@ -166,14 +166,14 @@ void __stdcall QServerClearAll() {
     D2ClientStrc** pBucketEntry;
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&gQServerClientByIdCs);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerClientByIdCs);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ for (nBucketIdx = 0; nBucketIdx < 0x100; nBucketIdx++) {
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ for (nBucketIdx = 0; nBucketIdx < (int)(sizeof(QServerClientBucketById) / sizeof(QServerClientBucketById[0])); nBucketIdx++) {
       QServerClientBucketById[nBucketIdx] = 0;
     }
 
     LeaveCriticalSection(&gQServerClientByIdCs);
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&gQServerClientByNameCs);
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerClientByNameCs);
-    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ for (nBucketIdx = 0; nBucketIdx < 0x100; nBucketIdx++) {
+    /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ for (nBucketIdx = 0; nBucketIdx < (int)(sizeof(QServerClientBucketByName) / sizeof(QServerClientBucketByName[0])); nBucketIdx++) {
       QServerClientBucketByName[nBucketIdx] = 0;
     }
 
@@ -1828,7 +1828,6 @@ D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, 
     DWORD dwTick;
     uint32_t bIsArenaMode;
     uint32_t nArenaClass;
-    uint8_t* pHotkeySlot;
     int nHotkeyIdx;
     if (gQServerClientTablesInitialized && pGame && pGame->nClientsCount < 8) {
       uint16_t wNameHash;
@@ -1857,15 +1856,11 @@ D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, 
       pClient->pDispatchList = 0;
       pClient->pPacketList = 0;
       pClient->pEmpty = 0;
-      pHotkeySlot = &pClient->pHotKeys[0].byHand;
-      nHotkeyIdx = 0x10;
-      do {
-        ((D2ClientHotKeyStrc*)(pHotkeySlot - 2))->wSkillId = -1;
-        *pHotkeySlot = 0;
-        *(int*)(pHotkeySlot + 2) = -1;
-        pHotkeySlot += 8;
-        nHotkeyIdx--;
-      } while (nHotkeyIdx);
+      for (nHotkeyIdx = 0; nHotkeyIdx < (int)(sizeof(pClient->pHotKeys) / sizeof(pClient->pHotKeys[0])); nHotkeyIdx++) {
+        pClient->pHotKeys[nHotkeyIdx].wSkillId = -1;
+        pClient->pHotKeys[nHotkeyIdx].byHand = 0;
+        pClient->pHotKeys[nHotkeyIdx].nItemGUID = -1;
+      }
 
       pClient->pNext = pGame->pClient;
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ pGame->pClient = pClient;

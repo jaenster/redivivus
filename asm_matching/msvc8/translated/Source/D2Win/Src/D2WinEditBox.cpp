@@ -307,7 +307,7 @@ static int32_t __stdcall D2WINEDITBOX_GetTextHeight(::D2WinEditBox * pEditBox, s
     wszCursorChar[1] = L'\0';
     D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszCursorChar, szCursorChar, 2);
     int nCursorWidth = D2WinFont::D2WINFONT_GetStringPixelWidth(wszCursorChar, 2);
-    for (int i = 0; i < 0x100; i++) {
+    for (int i = 0; i < (int)_countof(wszLineBuffer); i++) {
       wszLineBuffer[i] = L'\0';
     }
 
@@ -321,7 +321,7 @@ static int32_t __stdcall D2WINEDITBOX_GetTextHeight(::D2WinEditBox * pEditBox, s
       do {
         BOOL bLineWrapped = FALSE;
         int nCharCount = (int)(pszCurChar - pszLineStart);
-        memset(szLineBuffer, 0, 0x100);
+        memset(szLineBuffer, 0, sizeof(szLineBuffer));
         while (*pszCurChar != '\0' && *pszCurChar != '\r' && *pszCurChar != '\n') {
           szLineBuffer[nCharCount] = *pszCurChar;
           D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszLineBuffer, szLineBuffer, 0x100);
@@ -394,7 +394,7 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(::D2WinEditBox * pEditBox, i
     } else {
       char* pcVar1;
       if (pEditBox->sControl.neD2FormType == 1) {
-        for (nLineWidth = 0; nLineWidth < 0x12c; nLineWidth++) {
+        for (nLineWidth = 0; nLineWidth < (int)_countof(wszEditText); nLineWidth++) {
           wszEditText[nLineWidth] = L'\0';
         }
 
@@ -409,7 +409,7 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(::D2WinEditBox * pEditBox, i
         wszCursorChar[1] = L'\0';
         D2Lang::Unicode::UNISYS::STRING_CopyCharToWCharWithSetMaxSize(wszCursorChar, szCursorChar, 2);
         nCursorWidth = D2WinFont::D2WINFONT_GetStringPixelWidth(wszCursorChar, 2);
-        for (nClampedY = 0; nClampedY < 0x100; nClampedY++) {
+        for (nClampedY = 0; nClampedY < (int)_countof(wszLineWidthBuf); nClampedY++) {
           wszLineWidthBuf[nClampedY] = L'\0';
         }
 
@@ -467,7 +467,7 @@ static void __stdcall D2WINEDITBOX_GetCaretPosition(::D2WinEditBox * pEditBox, i
 
           nLoopCount = 0;
           bLineWrapped = false;
-          memset(szLineBuildBuf, 0, 0x100);
+          memset(szLineBuildBuf, 0, sizeof(szLineBuildBuf));
           cCur = *pcVar1;
           pszCurChar = pcVar1;
           while (true) {
@@ -662,7 +662,7 @@ BOOL __stdcall D2WINEDITBOX_PlaceCaretAtPoint(D2ControlMsg * pMsg, int nX, int n
           Fog::File::CONTAINER_InitializeBuffer(szLineBuffer, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           nCharCount = 0;
           bLineWrapped = false;
-          memset(szTextBuffer, 0, 0x100);
+          memset(szTextBuffer, 0, sizeof(szTextBuffer));
           cCur = *pszLineStart;
           pszCurChar = pszLineStart;
           while (true) {
@@ -790,7 +790,7 @@ static void D2WINEDITBOX_UpdateCursorPosition(::D2WinEditBox * pEditBox) {
     int nMaxLinePixels = pEditBox->sControl.dwSizeX + pEditBox->nInsetX * -2;
     uint32_t nTextLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pEditBox->wszText);
     uint32_t dwFlags = pEditBox->nFlags;
-    for (nLoopCount = 0; nLoopCount < 0x12c; nLoopCount++) {
+    for (nLoopCount = 0; nLoopCount < (int)_countof(wszDisplayText); nLoopCount++) {
       wszDisplayText[nLoopCount] = L'\0';
     }
 
@@ -948,11 +948,11 @@ static void D2WINEDITBOX_HandleDelete(::D2WinEditBox * pEditBox) {
         exit(-1);
       }
 
-      for (nTypeCheck = 0; nTypeCheck < 0x100; nTypeCheck++) {
+      for (nTypeCheck = 0; nTypeCheck < (int)_countof(wszBeforeDelete); nTypeCheck++) {
         wszBeforeDelete[nTypeCheck] = L'\0';
       }
 
-      for (nTypeCheck = 0; nTypeCheck < 0x100; nTypeCheck++) {
+      for (nTypeCheck = 0; nTypeCheck < (int)_countof(wszAfterDelete); nTypeCheck++) {
         wszAfterDelete[nTypeCheck] = L'\0';
       }
 
@@ -1412,7 +1412,7 @@ BOOL __fastcall D2WINEDITBOX_HandleKeyDown(::D2WinEditBox * pEditBox, char nVirt
       case '.':
         if (*pwszCursor != L'\0' && !nSelEnd) {
           nLine = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(pwszCursor + 1);
-          memmove(pwszCursor, pwszCursor + 1, (nLine + 1) * 2);
+          memmove(pwszCursor, pwszCursor + 1, (nLine + 1) * sizeof(uint16_t));
           pwszNewCursor = pwszCursor;
           if (*pwszCursor != L'\0' && *pwszCursor == L'\n') {
             nMoveSize = nLine - 1 + nLine + 1;
@@ -1650,7 +1650,7 @@ BOOL __fastcall Draw(::D2WinEditBox * pEditBox) {
 
       nLineCharCount = 0;
       bLineWrapped = 0;
-      memset(szLineSegment, 0, 0x100);
+      memset(szLineSegment, 0, sizeof(szLineSegment));
       cCurChar = *pcLineStart;
       pcLineEnd = pcLineStart;
       while (true) {
@@ -1945,7 +1945,7 @@ void __fastcall D2WINEDITBOX_SetTextFromAnsi(::D2WinEditBox * pEditBox, char * s
     int nZeroCount;
     uint16_t* pwszBufPtr;
     uint16_t wszText[256];
-    for (nZeroCount = 0; nZeroCount < 0x100; nZeroCount++) {
+    for (nZeroCount = 0; nZeroCount < (int)_countof(wszText); nZeroCount++) {
       wszText[nZeroCount] = L'\0';
     }
 

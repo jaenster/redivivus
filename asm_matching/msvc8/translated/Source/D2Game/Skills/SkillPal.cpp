@@ -417,7 +417,7 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
       sAuraArg.nFlag = (int32_t)pSkillTxt->passivestate;
     }
     if (!pUnit || pUnit->eUnitType != UNIT_PLAYER || nMana >= nManaCost) {
-      for (int i = 0; i < 6; i++) {
+      for (int i = 0; i < (int)(sizeof(pSkillTxt->aurastat) / sizeof(pSkillTxt->aurastat[0])); i++) {
         int nStat = pSkillTxt->aurastat[i];
         if (nStat < 0) {
           break;
@@ -432,7 +432,7 @@ BOOL __fastcall Skills_SrvDoFunc_065_Prayer(::SGAMEDATA * pGame, D2UnitStrc * pU
         sAuraArg.nAuraState = (int32_t)pSkillTxt->aurastate;
         SkillsServer::SKILLS_InvokeCallbackNoTarget(pGame, pUnit, SKILLPAL_ApplyAuraStateToTarget, &sAuraArg);
         if (sAuraArg.pStatList && nMana > nManaCost && pSkillTxt->passivestate <= 0) {
-          for (int i = 0; i < 5; i++) {
+          for (int i = 0; i < (int)(sizeof(pSkillTxt->passivestat) / sizeof(pSkillTxt->passivestat[0])); i++) {
             eD2UnitStat eUnitStat = (eD2UnitStat)pSkillTxt->passivestat[i];
             int32_t nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->passivecalc[i], eSkill, nSkillLvl);
             if (nValue && (int)eUnitStat > 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
@@ -1390,7 +1390,7 @@ BOOL __fastcall Skills_SrvDoFunc_081_HolyFreeze(::SGAMEDATA * pGame, D2UnitStrc 
       sAuraSelfArg.eSkill = eSkill;
       sAuraSelfArg.nAuraState = (int32_t)pSkillTxt->aurastate;
       sAuraSelfArg.pExtra = (void*)SKILLPAL_OnFreezeExpire;
-      for (int i = 0; i < 5; i++) {
+      for (int i = 0; i < (int)(sizeof(pSkillTxt->passivestat) / sizeof(pSkillTxt->passivestat[0])); i++) {
         sAuraSelfArg.anStats[i] = pSkillTxt->passivestat[i];
         if (D2Common::Units::GetType(pUnit) != UNIT_PLAYER || nMana >= nManaCost) {
           sAuraSelfArg.anCalcs[i] = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->passivecalc[i], eSkill, nSkillLvl);
@@ -1408,7 +1408,7 @@ BOOL __fastcall Skills_SrvDoFunc_081_HolyFreeze(::SGAMEDATA * pGame, D2UnitStrc 
       sAuraTargetArg.nDelayFrame = nDelayFrame;
       sAuraTargetArg.nAuraState = (int32_t)pSkillTxt->auratargetstate;
       if (pSkillTxt->auratargetstate >= 0 && (int)pSkillTxt->auratargetstate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize) {
-        for (int i = 0; i < 6; i++) {
+        for (int i = 0; i < (int)(sizeof(sAuraTargetArg.anStats) / sizeof(sAuraTargetArg.anStats[0])); i++) {
           sAuraTargetArg.anStats[i] = pSkillTxt->aurastat[i];
           if (nMana >= nManaCost) {
             int32_t nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->aurastatcalc[i], eSkill, nSkillLvl);

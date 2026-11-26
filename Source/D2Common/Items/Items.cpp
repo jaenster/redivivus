@@ -154,7 +154,7 @@ void __stdcall STRUCT_CreateDataItem(D2PoolManagerStrc * pMemory, D2UnitStrc * p
       exit(-1);
     }
 
-    memset(pUnitDataItem, 0, 0x74);
+    memset(pUnitDataItem, 0, sizeof(D2UnitDataItemStrc));
     pUnitDataItem->nPlayerGUID = -1;
     pUnit->pUnitData.pUnitDataItem = pUnitDataItem;
 }
@@ -7418,7 +7418,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
 
         write_stat_list:
         if (!bResetModeOnExit) {
-          memset(anStatSeenValues, 0, 0x7fc);
+          memset(anStatSeenValues, 0, sizeof(anStatSeenValues));
           nCopiedCount = Stats::StatsEx::CopyStatsToBuffer(pStatListEx, aStat, 0x1ff);
           i = 0;
           if (nCopiedCount > 0) {

@@ -28,6 +28,7 @@
 // the field offsets hold on every target and only the record stride is native.
 #if D2_ARCH_X86
 static_assert(sizeof(D2SoundsTxt) == 0x8e, "D2SoundsTxt: the 32-bit record must be the 0x8e bytes 1.14d allocates per row");
+static_assert(sizeof(void*) != 4 || sizeof(::D2SoundEnvironTxt) == 0x58, "D2SoundEnvironTxt: the 32-bit record must be the 0x58 bytes the bin field table fills per row");
 #endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -366,10 +367,10 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
       pD2File = (char*)D2Hell::D2FILE_AllocAndLoadD2File(D2Win::Src::D2WinArchive::ReturnZero(), szPath, pFileSize, pD2File, nLine);
       pBinExcel = Fog::Src::Excel::STRUCT_CreateBinFieldExcelAndFillData(pD2File, nFileSize);
       nTxtSoundEnvironSize = Fog::Src::Excel::TXT_GetLinesCountFromBinFieldExcel(pBinExcel);
-      pSoundEnviron = (D2SoundEnvironTxt*)D2_ALLOC_AT(nTxtSoundEnvironSize * 0x58, ".\\Sound\\SoundHdr.cpp", 0x112);
+      pSoundEnviron = (D2SoundEnvironTxt*)D2_ALLOC_AT(nTxtSoundEnvironSize * sizeof(D2SoundEnvironTxt), ".\\Sound\\SoundHdr.cpp", 0x112);
       pTxtSoundEnviron = pSoundEnviron;
-      memset(pSoundEnviron, 0, nTxtSoundEnvironSize * 0x58);
-      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinExcel, soundenviron, (char*)pSoundEnviron, nTxtSoundEnvironSize, 0x58);
+      memset(pSoundEnviron, 0, nTxtSoundEnvironSize * sizeof(D2SoundEnvironTxt));
+      Fog::Src::Excel::TXT_ParseDataAndPutIntoStructure(pBinExcel, soundenviron, (char*)pSoundEnviron, nTxtSoundEnvironSize, sizeof(D2SoundEnvironTxt));
       Fog::Src::Excel::TXT_FreeBinFieldExcel(pBinExcel);
       int nIdx = 1;
       int nGroupStart = 0;
@@ -425,8 +426,8 @@ void __stdcall TXT_AllocTxt_sounds_soundenviron() {
       }
 
       int nCount = gnSoundIdRangeMax - gpSoundHdrGlobal + 1;
-      pSoundChannelDataArray = D2_ALLOC_AT(nCount * 4, ".\\Sound\\SoundHdr.cpp", 0x147);
-      memset(pSoundChannelDataArray, 0, nCount * 4);
+      pSoundChannelDataArray = D2_ALLOC_AT(nCount * sizeof(int), ".\\Sound\\SoundHdr.cpp", 0x147);
+      memset(pSoundChannelDataArray, 0, nCount * sizeof(int));
       return;
     }
 }
@@ -993,7 +994,6 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
     static uint8_t bExitCutsceneActive; D2_STATIC_GUARD_BSS(bExitCutsceneActive, "D2Client::ExitGamePlayCutScene::bExitCutsceneActive");
 
     char* pszSrcName;
-    char* pPathCursor;
     HANDLE hFile;
     DWORD dwResult;
     void* pfnCallback;
@@ -1049,13 +1049,7 @@ void __fastcall ExitGamePlayCutScene(int32_t nCutsceneId) {
     if (nCurrentCutsceneId == 7) {
       bConnectionLost = 1;
       Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, 0x104);
-      pszSrcName = (char*)((uint8_t*)&szInstallPath - 1);
-      do {
-        pPathCursor = pszSrcName;
-        pszSrcName = pPathCursor + 1;
-      } while (pPathCursor[1] != '\0');
-
-      /* HANDLE hTemplateFile for CreateFileA */ /* DWORD dwFlagsAndAttributes for CreateFileA */ memcpy(pPathCursor + 1, "d2game.dll", 0xb);
+      strcat(szInstallPath, "d2game.dll");
       /* DWORD dwCreationDisposition for CreateFileA */ /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateFileA */ /* DWORD dwShareMode for CreateFileA */ /* DWORD dwDesiredAccess for CreateFileA */ /* LPCSTR lpFileName for CreateFileA */ hFile = CreateFileA(szInstallPath, 0, 1, (LPSECURITY_ATTRIBUTES)0x0, 3, 0x80, (HANDLE)0x0);
       if (hFile != (HANDLE)-1) {
         /* HANDLE hObject for CloseHandle */ CloseHandle(hFile);

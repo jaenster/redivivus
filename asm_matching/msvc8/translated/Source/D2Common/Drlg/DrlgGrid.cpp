@@ -520,7 +520,7 @@ void __fastcall DRLGGRID_SetLineFlagsWithWidth(D2DrlgGridStrc * pDrlgGrid, D2Drl
 }
 
 void * __fastcall Unreferenced_0067cb60(D2DrlgGridStrc * pDstGrid, D2DrlgGridStrc * pSrcGrid) {
-    void* pvVar1 = memcpy(pDstGrid->pCellsFlags, pSrcGrid->pCellsFlags, pSrcGrid->nHeight * pSrcGrid->nWidth * 4);
+    void* pvVar1 = memcpy(pDstGrid->pCellsFlags, pSrcGrid->pCellsFlags, pSrcGrid->nHeight * pSrcGrid->nWidth * sizeof(uint32_t));
     return pvVar1;
 }
 
@@ -547,7 +547,7 @@ void __fastcall FillGrid(D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHe
     pDrlgGrid->nWidth = nWidth;
     pDrlgGrid->nHeight = nHeight;
     pDrlgGrid->pCellsFlags = (eD2GridCellFlags*)pCellPos;
-    memset(pCellPos, 0, nWidth * nHeight * 4);
+    memset(pCellPos, 0, nWidth * nHeight * sizeof(int));
     int nRowOffset = 0;
     pDrlgGrid->pCellsRowOffsets = pCellRowOffsets;
     int nRowIdx = 0;
@@ -573,7 +573,7 @@ void __fastcall DRLGGRID_AllocGrid(D2PoolManagerStrc * pMemory, D2DrlgGridStrc *
     pDrlgGrid->nWidth = nWidth;
     pDrlgGrid->nHeight = nHeight;
     pDrlgGrid->pCellsFlags = pCellsFlags;
-    int* pRowOffsets = (int*)D2_ALLOC_POOL_AT(pMemory, nHeight * 4, ".\\DRLG\\DrlgGrid.cpp", 0x1d0);
+    int* pRowOffsets = (int*)D2_ALLOC_POOL_AT(pMemory, nHeight * sizeof(int), ".\\DRLG\\DrlgGrid.cpp", 0x1d0);
     pDrlgGrid->pCellsRowOffsets = pRowOffsets;
     int nOffset = 0;
     for (nRow = 0; nRow < nHeight; nRow++) {
@@ -591,7 +591,7 @@ void __fastcall DRLGGRID_InitGridFromTileData(D2PoolManagerStrc * pMemory, D2Drl
     pGrid->nWidth = pTileData->nWidth;
     pGrid->nHeight = pTileData->nHeight;
     pGrid->pCellsFlags = pParentCells + pTileData->nPosY * nParentRowStride + pTileData->nPosX;
-    int* pRowOffsets = (int*)D2_ALLOC_POOL_AT(pMemory, pTileData->nHeight * 4, ".\\DRLG\\DrlgGrid.cpp", 0x1ec);
+    int* pRowOffsets = (int*)D2_ALLOC_POOL_AT(pMemory, pTileData->nHeight * sizeof(int), ".\\DRLG\\DrlgGrid.cpp", 0x1ec);
     pGrid->pCellsRowOffsets = pRowOffsets;
     int nOffset = 0;
     for (nRow = 0; nRow < pTileData->nHeight; nRow++) {

@@ -127,6 +127,20 @@ struct D2FogModuleNodeStrc {
 
 #endif // D2_MODULE_Fog
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
+#ifndef D2_DEFINED_D2FogAddressInfoStrc
+#define D2_DEFINED_D2FogAddressInfoStrc
+// One resolved return address: DEBUG_FormatAddressInfo fills it, FormatAddressDebugString prints it.
+struct D2FogAddressInfoStrc {
+    /* 0x000 */ char szSymbol[512];
+    /* 0x200 */ uint32_t dwSymbolDisplacement;
+    /* 0x204 */ char szModule[64];
+    /* 0x244 */ char szSourceFile[256];
+    /* 0x344 */ uint32_t nSourceLine;
+};
+
+#endif // D2_DEFINED_D2FogAddressInfoStrc
+#endif // D2_MODULE_Fog
+#if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
 struct D2ImagehlpSymbol64BufStrc {
     /* 0x00 */ DWORD SizeOfStruct;
     /* 0x04 */ DWORD dwPad;
@@ -449,7 +463,7 @@ uint32_t * __fastcall ZeroStruct36Bytes(uint32_t * pStruct);
 struct D2SkillsTxt * __fastcall SKILLSTXT_ZeroOutFields(struct D2SkillsTxt * pSkillsTxt);
 int CompareUintDescending(LPCVOID pLeft, LPCVOID pRight);
 bool __fastcall Unreferenced_00402c30(struct D2FogDebugModuleEntryStrc * pSrcEntry, struct D2FogDebugModuleTableStrc * pTable);
-void __fastcall FormatAddressDebugString(struct D2CrashFrameStrc * pAddrInfo, char * pSymInfo, char * szOutput);
+void __fastcall FormatAddressDebugString(struct D2CrashFrameStrc * pAddrInfo, struct D2FogAddressInfoStrc * pSymInfo, char * szOutput);
 void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, ::Report * pReport);
 void __fastcall CRASH_DumpThreadContext(DWORD dwThreadId, void * pContext, fnCrashOutputLine pOutputCallback, ::Report * pReport, char bIncludeThreadName, char bIncludeStackInfo, uint32_t nMaxFrames);
 // Format stack trace for crash dump. Captures thread context if bIncludeThreadName set, iterates frames and calls callback for each formatted address line. If bIncludeStackInfo set, includes stack space usage info.

@@ -117,7 +117,7 @@ void __fastcall D2WINLIST_AddListItemFromCharName(::D2WinList * pList, char * sz
     int nStrLen;
     uint16_t* pWideStrBuf;
     uint16_t wszCharName[256];
-    for (nStrLen = 0; nStrLen < 0x100; nStrLen++) {
+    for (nStrLen = 0; nStrLen < (int)_countof(wszCharName); nStrLen++) {
       wszCharName[nStrLen] = L'\0';
     }
 

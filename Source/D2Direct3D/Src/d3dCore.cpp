@@ -21,6 +21,8 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(DDSURFACEDESC2) == 0x7c, "DDSURFACEDESC2: dwSize and the clear after it must be the 0x7c bytes 1.14d uses");
+
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #endif
@@ -398,8 +400,8 @@ static BOOL __stdcall RENDERER_D3D_InitializeDevice(int nResolutionMode, HWND hW
     /* BOOL bRepaint for MoveWindow */ /* int nHeight for MoveWindow */ /* int nWidth for MoveWindow */ /* int Y for MoveWindow */ /* int X for MoveWindow */ /* HWND hWnd for MoveWindow */ MoveWindow(hWnd, 0, 0, RENDERER_nWindowWidth, RENDERER_nWindowHeight, 1);
     g_bDeviceInitialized = 1;
     g_bCutsceneModeActive = 0;
-    ddsurfacedesc.dwSize = 0x7c;
-    memset(&ddsurfacedesc.dwFlags, 0, 0x78);
+    ddsurfacedesc.dwSize = sizeof(ddsurfacedesc);
+    memset(&ddsurfacedesc.dwFlags, 0, sizeof(ddsurfacedesc) - sizeof(ddsurfacedesc.dwSize));
     ddsurfacedesc.dwFlags = 0x21;
     ddsurfacedesc.dwCaps = 0x6218;
     ddsurfacedesc.dwBackBufferCount = 1;
@@ -692,13 +694,13 @@ BOOL __fastcall ResizeWindow(HWND hWnd, BOOL bForceResize) {
 BOOL __fastcall RENDERER_D3D_CreateSurfaceWithTexture(IDirectDrawSurface7 * * ppSurface, void * * ppTexture, DWORD nWidth, DWORD nHeight) {
     int iLoop;
     DDSURFACEDESC2 ddsdSize;
-    ddsdSize.dwSize = 0x7c;
-    memset(&ddsdSize.dwFlags, 0, 0x78);
+    ddsdSize.dwSize = sizeof(ddsdSize);
+    memset(&ddsdSize.dwFlags, 0, sizeof(ddsdSize) - sizeof(ddsdSize.dwSize));
     ddsdSize.dwFlags = 0x1007;
     ddsdSize.ddsCapsRest[0] = 0x80;
     uint32_t* pDstPixelFmt = gsD3DTextureDescTemplate;
     DWORD* pSrcTemplate = ddsdSize.ddpfPixelFormat;
-    memcpy(pSrcTemplate, pDstPixelFmt, 32);
+    memcpy(pSrcTemplate, pDstPixelFmt, sizeof(ddsdSize.ddpfPixelFormat));
     ddsdSize.dwWidth = nWidth;
     ddsdSize.dwHeight = nHeight;
     ddsdSize.dwCaps = g_bSupportsTextureCachingInternal ? 0x5000 : 0x10005000;

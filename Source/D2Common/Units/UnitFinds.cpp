@@ -216,7 +216,7 @@ static void ExpandUnitFinds(D2UnitFindDataStrc * pUnitFindData, D2UnitStrc * pUn
     }
 
     int nNewSize = pUnitFindData->nUnitFindsSize + 0xf;
-    D2UnitFindsStrc* pNewArray = (D2UnitFindsStrc*)D2_REALLOC_POOL_AT(pUnitFindData->pMemory, pUnitFindData->pUnitsArray, nNewSize * 4, ".\\UNITS\\UnitFinds.cpp", 0xc5);
+    D2UnitFindsStrc* pNewArray = (D2UnitFindsStrc*)D2_REALLOC_POOL_AT(pUnitFindData->pMemory, pUnitFindData->pUnitsArray, nNewSize * sizeof(pUnitFindData->pUnitsArray->aFoundUnitsList[0]), ".\\UNITS\\UnitFinds.cpp", 0xc5);
     pUnitFindData->nUnitFindsSize = nNewSize;
     pUnitFindData->pUnitsArray = pNewArray;
 }
@@ -235,7 +235,7 @@ void __stdcall InitializeUnitFindData(D2PoolManagerStrc * pMemPool, D2UnitFindDa
         exit(-1);
       }
 
-      memset(pInitArray, 0, 0x3c);
+      memset(pInitArray, 0, sizeof(D2UnitFindsStrc));
       pUnitFindData->pRoom = pRoom;
       pUnitFindData->nX = nX;
       pUnitFindData->nY = nY;

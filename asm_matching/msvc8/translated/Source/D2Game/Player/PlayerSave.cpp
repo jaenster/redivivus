@@ -1278,7 +1278,7 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
       GAME::Clients::SetGuildFlags(pClient, sOldSaveHeader.wGuildFlags);
       pGuildDataSrc = sOldSaveHeader.guildNameRaw;
       pGuildNameDst = szGuildName;
-      memcpy(pGuildNameDst, pGuildDataSrc, 28);
+      memcpy(pGuildNameDst, pGuildDataSrc, sizeof(szGuildName));
       dwGuildTag = (uint32_t)((uint32_t)(uint16_t)sOldSaveHeader.wGuildTagLo << 16 | (uint32_t)(uint16_t)sOldSaveHeader.wGuildTagHi) & 0xffffff;
       szGuildName[0x1b] = '\0';
       GAME::Clients::SetGuildTag(pClient, (char*)&dwGuildTag);
@@ -1391,7 +1391,7 @@ int __fastcall _oldSaveGameLoadingPart2(D2UnitStrc * pUnit, int * pnSaveData, ui
     }
 
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
-    for (int nAct = 0; nAct < 3; nAct++) {
+    for (int nAct = 0; nAct < (int)(sizeof(pPlayerData->pQuestRecord) / sizeof(pPlayerData->pQuestRecord[0])); nAct++) {
       D2Common::QuestRecord::ReadQuestRecordFromBuffer(pPlayerData->pQuestRecord[nAct], questDataBuf.pActQuests[nAct], 0x60, 1);
     }
 
@@ -1435,7 +1435,7 @@ int __fastcall _oldSaveGameLoadingPart4(D2UnitStrc * pUnit, uint32_t * pdwSaveCu
       return 0xb;
     }
 
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < (int)(sizeof(aIntroBlock.pActNpcData) / sizeof(aIntroBlock.pActNpcData[0])); i++) {
       PlayerIntro::PLAYERINTRO_CopyIntroData8Bytes(D2Common::Units::GetPlayerData(pUnit)->pInteractedNPCs[i], (uint32_t*)aIntroBlock.pActNpcData[i]);
       PlayerIntro::PLAYERINTRO_CopyIntroDataIndirect(D2Common::Units::GetPlayerData(pUnit)->pInteractedNPCs[i], (uint32_t*)aIntroBlock.pActNpcBitInfo[i]);
     }
@@ -1559,7 +1559,7 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
         pItemUnknownStructure->pageMaybe = (char)dwReadValue;
         dwReadValue = D2Common::ITEMS::Items::ITEMFLAG_CheckFlag(pItemUnknownStructure->neD2ItemFlag, ITEMFLAG_BODYPART);
         if (dwReadValue) {
-          memcpy(pItemUnknownStructure->szCode, "ear ", 4);
+          memcpy(pItemUnknownStructure->szCode, "ear ", sizeof(pItemUnknownStructure->szCode));
           dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 3);
           pItemUnknownStructure->dwFileIndex = dwReadValue;
           dwReadValue = Fog::BitBuffer::ReadUnsigned(&bitBuffer, 8);
@@ -1647,7 +1647,7 @@ int32_t __fastcall PLAYERSAVE_ParseItemFromBuffer(D2UnknownItemRelatedStruct * p
         nCharIdx++;
       } while (nCharIdx < 0x10);
 
-      memcpy(pItemUnknownStructure->szCode, "ear ", 4);
+      memcpy(pItemUnknownStructure->szCode, "ear ", sizeof(pItemUnknownStructure->szCode));
       return 0x19;
     }
 

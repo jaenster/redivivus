@@ -87,14 +87,14 @@ namespace D2Client { namespace GAME { namespace Game {
     pThis->pWarpTileList = pSource->pWarpTileList;
     uint32_t* pSrcArray = pSource->fUniqueSpawn;
     uint32_t* pDstArray = pThis->fUniqueSpawn;
-    memcpy(pDstArray, pSrcArray, 0x200);
+    memcpy(pDstArray, pSrcArray, sizeof(pThis->fUniqueSpawn));
     pThis->pNpcControl = pSource->pNpcControl;
     pThis->pArenaCtrl = pSource->pArenaCtrl;
     pThis->pPartyControl = pSource->pPartyControl;
     memcpy(pThis->nBossFlagList, pSource->nBossFlagList, sizeof(pThis->nBossFlagList));
     pSrcArray = pSource->nPathCount;
     pDstArray = pThis->nPathCount;
-    memcpy(pDstArray, pSrcArray, 0x48);
+    memcpy(pDstArray, pSrcArray, offsetof(::SGAMEDATA, bUpdateStatsTick) - offsetof(::SGAMEDATA, nPathCount)); // the path counters and their sample count copy as one block
     pThis->bUpdateStatsTick = pSource->bUpdateStatsTick;
     pThis->dwStatsTick = pSource->dwStatsTick;
     pThis->dwLastUpdateTick = pSource->dwLastUpdateTick;

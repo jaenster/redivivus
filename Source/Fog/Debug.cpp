@@ -13,6 +13,9 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Debug.data.h"
 #include "Source/D2Headers/D2Arch.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2FogModuleNodeStrc) == 0x210, "module nodes are cleared whole: 0x210 bytes on 32-bit");
+static_assert(sizeof(void*) != 4 || offsetof(D2CrashDumpRecordStrc, aData) == 0x10, "a crash dump record is a 0x10-byte header plus its dwords");
+static_assert(sizeof(void*) != 4 || sizeof(D2ImagehlpSymbol64BufStrc) == 0x420, "IMAGEHLP_SYMBOL64 with its 0x400 name buffer");
 
 // DbgHelp's 64-bit address arguments. 1.14d (32-bit stdcall) passes each DWORD64 as two DWORDs,
 // low then high; a 64-bit build passes the DWORD64 itself. 64-bit dbghelp exports only the *64
@@ -472,8 +475,8 @@ bool __stdcall GetModuleInfoForAddress(uintptr_t dwQueryAddr, uintptr_t * pdwMod
 
       pfnSymGetModuleInfo64Cached = pSymGetModuleInfo64;
       if (pSymGetModuleInfo64) {
-        memset(&sModuleInfo, 0, 0x680);
-        sModuleInfo.SizeOfStruct = 0x680;
+        memset(&sModuleInfo, 0, sizeof(sModuleInfo));
+        sModuleInfo.SizeOfStruct = sizeof(sModuleInfo);
         bGotModuleInfo = (*pfnSymGetModuleInfo64Cached)(ghCurrentProcessHandle, FOG_DBGHELP_ADDR64(dwQueryAddr, 0), &sModuleInfo);
         if (bGotModuleInfo) {
           /* LPCSTR lpModuleName for GetModuleHandleA */ hModule = GetModuleHandleA(sModuleInfo.LoadedImageName);
@@ -522,21 +525,16 @@ bool __stdcall GetSymbolNameForAddress(DWORD_PTR dwQueryAddr, char * szSymbolNam
         }
       }
       if (pSymGetSymFromAddr64) {
-        memset(&sSymbol, 0, 0x420);
+        memset(&sSymbol, 0, sizeof(sSymbol));
         sSymbol.SizeOfStruct = 0x20;
-        *(uint32_t*)((char*)&sSymbol.Address + 4) = 0;
         sSymbol.MaxNameLength = 0x400;
         adwDisplacement[0] = 0;
         adwDisplacement[1] = 0;
-#if D2_ARCH_X86
-        *(uint32_t*)(char*)&sSymbol.Address = dwQueryAddr;
-#elif D2_ARCH_X64
         sSymbol.Address = dwQueryAddr;
-#endif
         bApiOk = (*pSymGetSymFromAddr64)(ghCurrentProcessHandle, FOG_DBGHELP_ADDR64(dwQueryAddr, 0), adwDisplacement, &sSymbol);
         if (bApiOk && pSymGetModuleInfo64) {
-          memset(&moduleInfo, 0, 0x680);
-          moduleInfo.SizeOfStruct = 0x680;
+          memset(&moduleInfo, 0, sizeof(moduleInfo));
+          moduleInfo.SizeOfStruct = sizeof(moduleInfo);
           bApiOk = (*pSymGetModuleInfo64)(ghCurrentProcessHandle, FOG_DBGHELP_ADDR64(dwQueryAddr, 0), &moduleInfo);
           if (bApiOk && moduleInfo.SymType && moduleInfo.SymType != 4 && moduleInfo.SymType != 5) {
             strncpy_s(szSymbolName, 0x200, sSymbol.Name, -1);
@@ -597,8 +595,7 @@ bool __stdcall GetSourceLineForAddress(uintptr_t dwQueryAddr, char * szFileName,
       BOOL bGotLine;
       IMAGEHLP_LINE64 sLineInfo;
       memset(&sLineInfo, 0, sizeof(sLineInfo));
-      *(uint32_t*)(char*)&sLineInfo.Address = 0;
-      *(uint32_t*)((char*)&sLineInfo.Address + 4) = 0;
+      sLineInfo.Address = 0;
       sLineInfo.SizeOfStruct = sizeof(sLineInfo);
       bGotLine = (*pSymGetLineFromAddr64)(ghCurrentProcessHandle, FOG_DBGHELP_ADDR64(dwQueryAddr, 0), &__frame0.dwDisplacement, &sLineInfo);
       if (bGotLine) {
@@ -1094,7 +1091,7 @@ static void FormatModuleDebugString(char * szText, D2FogDebugModuleEntryStrc * p
     __snprintf_s(szText, 0x400, -1, "DBG-MODULE<%p %08x \"%s\" \"%s\" %u %s %u %u%s>", pModule->pImageBase, pModule->nImageSize, pModule->szModuleName, pModule->szImagePath, pModule->dwPdbSignature, szGuidStr, pModule->dwPdbAge, pModule->dwImageTimeDateStamp, szTimeStampSuffix);
 }
 
-void __fastcall FormatAddressDebugString(D2CrashFrameStrc * pAddrInfo, char * pSymInfo, char * szOutput) {
+void __fastcall FormatAddressDebugString(D2CrashFrameStrc * pAddrInfo, D2FogAddressInfoStrc * pSymInfo, char * szOutput) {
     int nWritten;
     char szParamDetail[84];
     *szOutput = '\0';
@@ -1102,24 +1099,24 @@ void __fastcall FormatAddressDebugString(D2CrashFrameStrc * pAddrInfo, char * pS
     if (pAddrInfo->b10 != '\0') {
       __snprintf_s(szParamDetail, 0x50, -1, " (%p,%p,%p,%p)", (void*)pAddrInfo->a14[0], (void*)pAddrInfo->a14[1], (void*)pAddrInfo->a14[2], (void*)pAddrInfo->a14[3]);
     }
-    if (*pSymInfo == '\0') {
-      __snprintf_s(szOutput, 0x400, -1, "DBG-ADDR<%p>(\"%s\")%s", (void*)pAddrInfo->dwReturnAddr, pSymInfo + 0x204, szParamDetail);
+    if (pSymInfo->szSymbol[0] == '\0') {
+      __snprintf_s(szOutput, 0x400, -1, "DBG-ADDR<%p>(\"%s\")%s", (void*)pAddrInfo->dwReturnAddr, pSymInfo->szModule, szParamDetail);
       return;
     }
 
-    int nOffset = __snprintf_s(szOutput, 0x400, -1, "%p %s", (void*)pAddrInfo->dwReturnAddr, pSymInfo + 0x204);
+    int nOffset = __snprintf_s(szOutput, 0x400, -1, "%p %s", (void*)pAddrInfo->dwReturnAddr, pSymInfo->szModule);
     if (0x15 - nOffset > 0) {
       nWritten = __snprintf_s(szOutput + nOffset, 0x400 - nOffset, -1, "%*s", 0x15 - nOffset, " ");
       nOffset += nWritten;
     }
-    if (*pSymInfo != '\0' || (uint32_t)*(int*)(pSymInfo + 0x200) > 0) {
-      nWritten = __snprintf_s(szOutput + nOffset, 0x400 - nOffset, -1, " %s+%llu", pSymInfo, FOG_PRINTF_U64(*(uint32_t*)(pSymInfo + 0x200)));
+    if (pSymInfo->szSymbol[0] != '\0' || pSymInfo->dwSymbolDisplacement > 0) {
+      nWritten = __snprintf_s(szOutput + nOffset, 0x400 - nOffset, -1, " %s+%llu", pSymInfo->szSymbol, FOG_PRINTF_U64(pSymInfo->dwSymbolDisplacement));
       nOffset += nWritten;
     }
 
     nWritten = __snprintf_s(szOutput + nOffset, 0x400 - nOffset, -1, "%s", szParamDetail);
-    if (pSymInfo[0x244] != '\0' || (uint32_t)*(int*)(pSymInfo + 0x344) > 0) {
-      __snprintf_s(szOutput + (nOffset + nWritten), 0x400 - (nOffset + nWritten), -1, " (%s,%u)", pSymInfo + 0x244, *(uint32_t*)(pSymInfo + 0x344));
+    if (pSymInfo->szSourceFile[0] != '\0' || pSymInfo->nSourceLine > 0) {
+      __snprintf_s(szOutput + (nOffset + nWritten), 0x400 - (nOffset + nWritten), -1, " (%s,%u)", pSymInfo->szSourceFile, pSymInfo->nSourceLine);
     }
 }
 
@@ -1202,7 +1199,7 @@ void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFra
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
       uint32_t dwStackBytesUsed;
-      char szAddressInfo[840];
+      D2FogAddressInfoStrc sAddressInfo;
       char szThreadName[128];
       char szLineBuffer[1024];
     };
@@ -1237,12 +1234,12 @@ void __fastcall CRASH_FormatStackTrace(DWORD dwThreadId, D2CrashFrameStrc * aFra
     }
 
     for (; (uint32_t)nNumFrames > 0; nNumFrames--) {
-      Engine::Application::DEBUG_FormatAddressInfo(aFrameAddrs->dwReturnAddr, __frame0.szAddressInfo);
+      Engine::Application::DEBUG_FormatAddressInfo(aFrameAddrs->dwReturnAddr, &__frame0.sAddressInfo);
       if (bIncludeThreadName == '\0') {
-        __frame0.szAddressInfo[0] = '\0';
+        __frame0.sAddressInfo.szSymbol[0] = '\0';
       }
 
-      FormatAddressDebugString(aFrameAddrs, __frame0.szAddressInfo, __frame0.szLineBuffer);
+      FormatAddressDebugString(aFrameAddrs, &__frame0.sAddressInfo, __frame0.szLineBuffer);
       nLineLen = (int)strlen(__frame0.szLineBuffer);
       if (nLineLen >= 0x3ff) {
         __frame0.szLineBuffer[0x3fe] = '\n';
@@ -1373,7 +1370,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesToolhelp32(uint32_t dwProcessId)
       }
 
       pModuleNode = D2_NEW_AT(D2FogModuleNodeStrc, ".\\Src\\Exceptions.cpp", 0x253);
-      memset(pModuleNode, 0, 0x210);
+      memset(pModuleNode, 0, sizeof(*pModuleNode));
       strcpy(pModuleNode->szModulePath, tModuleEntry.szExePath);
       strcpy(pModuleNode->szModuleName, tModuleEntry.szModule);
       pModuleNode->dwBaseAddress = tModuleEntry.modBaseAddr;
@@ -1478,7 +1475,7 @@ D2FogModuleNodeStrc * __stdcall EnumerateModulesPsapi(HANDLE hProcess) {
             }
 
             pModuleNode = D2_NEW_AT(D2FogModuleNodeStrc, ".\\Src\\Exceptions.cpp", 0x2d3);
-            memset(pModuleNode, 0, 0x210);
+            memset(pModuleNode, 0, sizeof(*pModuleNode));
             strcpy(pModuleNode->szModulePath, szModulePath);
             strcpy(pModuleNode->szModuleName, szModuleName);
             pModuleNode->dwBaseAddress = (BYTE*)sModuleInfo.lpBaseOfDll;
@@ -2406,8 +2403,8 @@ void __fastcall WriteCrashDump(uint32_t dwHeader0, uint32_t dwHeader1, uint32_t 
       sRecord.dwRecordType = dwRecordType;
       sRecord.dwHeader0 = dwHeader0;
       sRecord.nDwordCount = nDwordCount;
-      Storm::Source::SMem::SMemCopy(sRecord.aData, pData, nDwordCount * 4);
-      fwrite(&sRecord, nDwordCount * 4 + 0x10, 1, _File);
+      Storm::Source::SMem::SMemCopy(sRecord.aData, pData, nDwordCount * sizeof(sRecord.aData[0]));
+      fwrite(&sRecord, nDwordCount * sizeof(sRecord.aData[0]) + offsetof(D2CrashDumpRecordStrc, aData), 1, _File);
       fclose(_File);
     }
 }
@@ -2578,7 +2575,7 @@ void __fastcall TriggerManualStackDump(char * szCategory) {
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 732, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
     __frame0.szCategorySpill = szCategory;
-    memset(__frame0.context, 0, 0x2cc);
+    memset(__frame0.context, 0, sizeof(__frame0.context));
     __frame0.pContextEsp = (uint8_t*)&__frame0.szCategorySpill;
     *(uint32_t*)((char*)&__frame0.context + 196) = (uint32_t)(uintptr_t)&__frame0.szCategorySpill;
     __frame0.context[0] = 7;

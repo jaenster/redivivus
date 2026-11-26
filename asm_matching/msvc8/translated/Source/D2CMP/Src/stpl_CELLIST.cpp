@@ -7,6 +7,12 @@
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
+typedef TSHashObjectChunk<::CELLIST, HASHKEY_NONE> CELLISTCHUNK;
+
+static_assert(sizeof(void*) != 4 || offsetof(::CELLIST, m_linktoslot) == 4, "CELLIST: the slot link sits at 4 in 1.14d");
+static_assert(sizeof(void*) != 4 || offsetof(::CELLIST, m_linktofull) == 0xc, "CELLIST: the full-list link sits at 0xc in 1.14d");
+static_assert(sizeof(void*) != 4 || offsetof(CELLISTCHUNK, m_link) == 0x10, "TSHashObjectChunk<CELLIST>: the chunk link sits at 0x10 in 1.14d");
+
 
 template<> void TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::SyncEnterLock(int32_t * pLockedHandle, int32_t bForWriting) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&this->tSync.m_critsect);
@@ -205,7 +211,7 @@ template<> void TSExplicitList<CELLIST, -572662307>::SetLinkOffset(int32_t nLink
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::Next(::CELLIST * pNode) {
-    TSLink<::CELLIST>* pLink = pNode ? (TSLink<::CELLIST>*)((char*)((intptr_t)&pNode->m_linktoslot.m_prevlink + this->m_linkoffset) - 4) : &this->m_terminator;
+    TSLink<::CELLIST>* pLink = pNode ? (TSLink<::CELLIST>*)((char*)pNode + this->m_linkoffset) : &this->m_terminator;
     intptr_t nOffsetOrRef = pLink->m_next;
     return (::CELLIST*)(nOffsetOrRef <= 0 ? 0 : nOffsetOrRef);
 }
@@ -485,7 +491,7 @@ template<> TSExplicitList<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>, 16>* TSExp
     this->m_terminator.m_prevlink = 0;
     pTVar1->m_next = 0;
     pTVar1->m_prevlink = pTVar1;
-    this->m_linkoffset = 0x10;
+    this->m_linkoffset = offsetof(CELLISTCHUNK, m_link);
     this->m_terminator.m_next = ~(uintptr_t)pTVar1;
     return this;
 }
@@ -553,11 +559,11 @@ template<> __declspec(noinline) inline TSHashTable<::CELLIST, HASHKEY_NONE>* TSH
     this->tSlotListArray.m_data = 0;
     this->tSlotListArray.m_chunk = 0;
     this->nFullnessIndicator = 0;
-    if (pBucketSlot->m_linkoffset != 0xc) {
+    if (pBucketSlot->m_linkoffset != offsetof(::CELLIST, m_linktofull)) {
       pBucketSlot->UnlinkAll();
       pvSentinel = &this->tFullList.m_terminator;
       pvSentinel->m_prevlink = pvSentinel;
-      pBucketSlot->m_linkoffset = 0xc;
+      pBucketSlot->m_linkoffset = offsetof(::CELLIST, m_linktofull);
       this->tFullList.m_terminator.m_next = ~(uintptr_t)pvSentinel;
     }
 
@@ -566,11 +572,11 @@ template<> __declspec(noinline) inline TSHashTable<::CELLIST, HASHKEY_NONE>* TSH
     uint32_t nBucketIdx = 0;
     do {
       pBucketSlot = &this->tSlotListArray.m_data[nBucketIdx];
-      if (pBucketSlot->m_linkoffset != 4) {
+      if (pBucketSlot->m_linkoffset != offsetof(::CELLIST, m_linktoslot)) {
         pBucketSlot->UnlinkAll();
         pvSentinel = &pBucketSlot->m_terminator;
         pvSentinel->m_prevlink = pvSentinel;
-        pBucketSlot->m_linkoffset = 4;
+        pBucketSlot->m_linkoffset = offsetof(::CELLIST, m_linktoslot);
         pBucketSlot->m_terminator.m_next = ~(uintptr_t)pvSentinel;
       }
 
@@ -609,7 +615,7 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
     TSHashTable<::CELLIST, HASHKEY_NONE>* pHashTable = pThis;
     nTempSentinel.UnlinkAll();
     nTempSentinel.m_terminator.m_prevlink = &nTempSentinel.m_terminator;
-    nTempSentinel.m_linkoffset = 4;
+    nTempSentinel.m_linkoffset = offsetof(::CELLIST, m_linktoslot);
     nTempSentinel.m_terminator.m_next = (intptr_t)pBucket;
     nIndex.nIndex2 = 0;
     if (nNewSize) {
@@ -650,11 +656,11 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
       nIndex.nCount = puVar1;
       do {
         pPrevLink = &pThis->tSlotListArray.m_data[nBucketByteOffset];
-        if (pPrevLink->m_linkoffset != 4) {
+        if (pPrevLink->m_linkoffset != offsetof(::CELLIST, m_linktoslot)) {
           pPrevLink->UnlinkAll();
           ppDstHead = &pPrevLink->m_terminator;
           ppDstHead->m_prevlink = ppDstHead;
-          pPrevLink->m_linkoffset = 4;
+          pPrevLink->m_linkoffset = offsetof(::CELLIST, m_linktoslot);
           pPrevLink->m_terminator.m_next = ~(uintptr_t)ppDstHead;
         }
 
@@ -673,7 +679,6 @@ template<> void TSHashTable<CELLIST, HASHKEY_NONE>::GrowListArray() {
       pNextLink = (TSLink<::CELLIST>*)(pPrevLink->m_linkoffset + nTempSentinel.m_terminator.m_next);
       ppDstHead = pNextLink->m_prevlink;
       if (ppDstHead) {
-        intptr_t nUnlinkedNext = pNextLink->m_next;
         pNodeIt = (TSLink<::CELLIST>**)D2_StormNextLink(pNextLink, -1);
         *pNodeIt = ppDstHead;
         pNextLink->m_prevlink->m_next = pNextLink->m_next;
@@ -718,14 +723,14 @@ template<> TSHashTableReuse<::CELLIST, HASHKEY_NONE, 0>* TSHashTableReuse<CELLIS
     this->tChunkList.m_terminator.m_next = 0;
     TSLink<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>>* pTVar2 = &this->tChunkList.m_terminator;
     pTVar2->m_prevlink = pTVar2;
-    this->tChunkList.m_linkoffset = 0x10;
+    this->tChunkList.m_linkoffset = offsetof(CELLISTCHUNK, m_link);
     this->tChunkList.m_terminator.m_next = ~(uintptr_t)pTVar2;
     this->nChunkSize = 0x10;
-    if (this_00->m_linkoffset != 4) {
+    if (this_00->m_linkoffset != offsetof(::CELLIST, m_linktoslot)) {
       this_00->UnlinkAll();
       pTVar1 = &this->tReuseList.m_terminator;
       pTVar1->m_prevlink = pTVar1;
-      this_00->m_linkoffset = 4;
+      this_00->m_linkoffset = offsetof(::CELLIST, m_linktoslot);
       this->tReuseList.m_terminator.m_next = ~(uintptr_t)pTVar1;
     }
 

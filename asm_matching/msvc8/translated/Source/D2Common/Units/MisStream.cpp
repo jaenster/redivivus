@@ -174,12 +174,12 @@ void __stdcall Update(D2UnitStrc * pUnit, D2UnitStrc * pMissile, int32_t nParam1
       nSegmentCount = nExtraPerSegment;
       if (!pStream->nStreamSize) {
         pStream->nStreamSize = nPathIdx;
-        pStreamArray = (int*)D2_ALLOC_POOL_AT(pMissile->pMemory, nPathIdx * 4, ".\\UNITS\\MisStream.cpp", 0x97);
+        pStreamArray = (int*)D2_ALLOC_POOL_AT(pMissile->pMemory, nPathIdx * sizeof(int), ".\\UNITS\\MisStream.cpp", 0x97);
         pStream->pStream = pStreamArray;
-        memset(pStreamArray, 0, nPathIdx * 4);
+        memset(pStreamArray, 0, nPathIdx * sizeof(int));
         nExtraPerSegment = nSegmentCount;
       } else if (pStream->nStreamSize < nPathIdx) {
-        pStreamArray = (int*)D2_REALLOC_POOL_AT(pMissile->pMemory, pStream->pStream, nPathIdx * 4, ".\\UNITS\\MisStream.cpp", 0x9a);
+        pStreamArray = (int*)D2_REALLOC_POOL_AT(pMissile->pMemory, pStream->pStream, nPathIdx * sizeof(int), ".\\UNITS\\MisStream.cpp", 0x9a);
         pStream->pStream = pStreamArray;
       }
 

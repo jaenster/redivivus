@@ -396,7 +396,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 
 BOOL __fastcall MonsterNeedsToOpenDoor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2AiParamStrc * pAiParam) {
     D2MonsterAiParameterStruct params;
-    if (*((uint8_t*)pAiParam->pMonStats + 0xc) & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
+    if (pAiParam->pMonStats->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[3]) {
       eCollisionFlags eCollision = D2Common::PATH::DynamicPath::CheckAndGetCollisionFlag(pUnit->pPath.pDynamicPath);
       if ((eCollision & COLLIDE_DOOR) != COLLIDE_NONE) {
         params.pBestUnit = 0;
@@ -3196,7 +3196,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc
       return nullptr;
     }
 
-    uint8_t* pbVision = nullptr;
+    D2RoomCoordListStrc* pbVision = nullptr;
     int32_t nLastAttackerFlag = 0;
     uint16_t wAiFlags = (uint16_t)pMonsterAiGeneral->nAiFlags;
     if (wAiFlags & 0x40) {
@@ -3210,12 +3210,12 @@ D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc
         bNeedLOS = (int32_t)!((uint8_t)pMonsterAiGeneral->nAiFlags >> 3 & 1);
         if ((GetTypeInline(pUnit)) == UNIT_MONSTER) {
           if (pUnit->pUnitData.pUnitDataMonster) {
-            pbVision = pUnit->pUnitData.pUnitDataMonster->pVision;
+            pbVision = (D2RoomCoordListStrc*)pUnit->pUnitData.pUnitDataMonster->pVision;
           } else {
             pbVision = nullptr;
           }
           if (bNeedLOS && pbVision) {
-            nLastAttackerFlag = *(int*)(pbVision + 0x24);
+            nLastAttackerFlag = pbVision->nRoomActive;
             bNeedLOS = (int32_t)!nLastAttackerFlag;
           }
         }
@@ -3368,7 +3368,7 @@ D2UnitStrc * __fastcall MONSTERAI_FindBestTarget(::SGAMEDATA * pGame, D2UnitStrc
     if (nAlignment != 2) {
       *(uint16_t*)&pMonsterAiGeneral->nAiFlags = (uint16_t)pMonsterAiGeneral->nAiFlags | 8;
       if (pbVision) {
-        *(uint32_t*)(pbVision + 0x24) = (uint32_t)!nLastAttackerFlag;
+        pbVision->nRoomActive = (BOOL)!nLastAttackerFlag;
       }
     }
 
@@ -3500,7 +3500,7 @@ D2UnitStrc * __fastcall MONSTERAI_TargetCallback_FindNearbyPlayer(::SGAMEDATA * 
     }
 
     uint32_t pFoundTarget = AI::GetDistance(pUnit, pPlayerCandidate);
-    if (!((int)pFoundTarget <= 0xf && (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) || !((uint8_t)*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId] + 0xd) & Fog::BitBuffer::gadwBitMasks[1]) || (nDistance = Quests::QUESTS::QUEST_NpcWantsInteract(pGame, pPlayerCandidate, pUnit) , nDistance && (int)pFoundTarget < (int)pSearchData->nBestDistance)))) {
+    if (!((int)pFoundTarget <= 0xf && (!pUnit || (nClassId = pUnit->nClassId , nClassId < 0) || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize || !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nClassId) || !((uint8_t)D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nClassId].aFlagBytes[1] & Fog::BitBuffer::gadwBitMasks[1]) || (nDistance = Quests::QUESTS::QUEST_NpcWantsInteract(pGame, pPlayerCandidate, pUnit) , nDistance && (int)pFoundTarget < (int)pSearchData->nBestDistance)))) {
       return nullptr;
     }
 
@@ -7790,7 +7790,7 @@ void __fastcall AI_Hireling_SelectAndCastSkill(::SGAMEDATA * pGame, D2UnitStrc *
 
     eD2Skills* pHirelingType;
     pHirelingType = (eD2Skills*)pHirelingTxt->nSkillId;
-    for (nSkillIdx = 0; nSkillIdx < 6; pHirelingType = (eD2Skills*)((char*)pHirelingType + 4) , nSkillIdx++) {
+    for (nSkillIdx = 0; nSkillIdx < (int)(sizeof(nSkillChances) / sizeof(nSkillChances[0])); pHirelingType++ , nSkillIdx++) {
       eSkillId = *pHirelingType;
       if ((int)eSkillId <= 0 || (int)eSkillId >= D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount) {
         break;
@@ -7814,8 +7814,8 @@ void __fastcall AI_Hireling_SelectAndCastSkill(::SGAMEDATA * pGame, D2UnitStrc *
                 }
               }
 
-              nUnitLevel = *(int*)((char*)pHirelingType + 0x30) * nLevelDiff;
-              nCumulChance = nCumulChance + nUnitLevel / 4 + *(int*)((char*)pHirelingType + 0x18);
+              nUnitLevel = *(int*)((char*)pHirelingType + (offsetof(D2HirelingTxt, nSkillChanceRerLvl) - offsetof(D2HirelingTxt, nSkillId))) * nLevelDiff;
+              nCumulChance = nCumulChance + nUnitLevel / 4 + *(int*)((char*)pHirelingType + (offsetof(D2HirelingTxt, nSkillChance) - offsetof(D2HirelingTxt, nSkillId)));
               nSkillChances[nSkillIdx] = nCumulChance;
             }
           }
@@ -10461,7 +10461,7 @@ int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2Unit
       memset(aActionWeightTemplate + 9, 0, 8 * sizeof(aActionWeightTemplate[0]));
       pTemplateSrc = aActionWeightTemplate;
       pWeightDst = aActionWeights;
-      memcpy(pWeightDst, pTemplateSrc, 0x44);
+      memcpy(pWeightDst, pTemplateSrc, sizeof(aActionWeights));
       nWeightedDist = D2Common::Units::GetCurrentLifePercentage(pTargetEnemyUnit);
       if (nWeightedDist < 0x14) {
         aActionWeights[2] = 0x32;
@@ -10503,7 +10503,7 @@ int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2Unit
         memset(aActionWeightTemplate + 13, 0, 4 * sizeof(aActionWeightTemplate[0]));
         pTemplateSrc = aActionWeightTemplate;
         pWeightDst = aActionWeights;
-        memcpy(pWeightDst, pTemplateSrc, 0x44);
+        memcpy(pWeightDst, pTemplateSrc, sizeof(aActionWeights));
         if (nChaosArenaRadius < 2) {
           aActionWeights[8] += -5;
           aActionWeights[6] = 0;
@@ -10549,7 +10549,7 @@ int32_t __fastcall AI_Diablo_DecideAction(D2AiGeneralStrc * pDiabloAiCtx, D2Unit
         memset(aActionWeightTemplate + 13, 0, 4 * sizeof(aActionWeightTemplate[0]));
         pTemplateSrc = aActionWeightTemplate;
         pWeightDst = aActionWeights;
-        memcpy(pWeightDst, pTemplateSrc, 0x44);
+        memcpy(pWeightDst, pTemplateSrc, sizeof(aActionWeights));
         nTotalWeightSum = AI::GetDistance(pDiabloUnit, pTargetEnemyUnit);
         if (nTotalWeightSum > 0x19) {
           aActionWeights[8] += -5;
@@ -11210,7 +11210,7 @@ int32_t __fastcall AI_BAAL_ChooseCombatAction(D2AiGeneralStrc * nAiContext, D2Un
       aActionWeightTemplate[8] = 0xf;
       pTemplateSrc = aActionWeightTemplate;
       pWeightDst = aActionWeights;
-      memcpy(pWeightDst, pTemplateSrc, 0x44);
+      memcpy(pWeightDst, pTemplateSrc, sizeof(aActionWeights));
       nPosYOrDist = D2Common::Units::GetCurrentLifePercentage(pTargetUnit);
       if (nPosYOrDist < 0x14) {
         aActionWeights[2] = 0x32;
@@ -11258,7 +11258,7 @@ int32_t __fastcall AI_BAAL_ChooseCombatAction(D2AiGeneralStrc * nAiContext, D2Un
         aActionWeightTemplate[0x10] = i;
         pTemplateSrc = aActionWeightTemplate;
         pWeightDst = aActionWeights;
-        memcpy(pWeightDst, pTemplateSrc, 0x44);
+        memcpy(pWeightDst, pTemplateSrc, sizeof(aActionWeights));
         if (nDifficultyContext < 2) {
           aActionWeights[8] += -5;
           aActionWeights[1] = 0x19;
@@ -11311,7 +11311,7 @@ int32_t __fastcall AI_BAAL_ChooseCombatAction(D2AiGeneralStrc * nAiContext, D2Un
         aActionWeightTemplate[10] = 10;
         pTemplateSrc = aActionWeightTemplate;
         pWeightDst = aActionWeights;
-        memcpy(pWeightDst, pTemplateSrc, 0x44);
+        memcpy(pWeightDst, pTemplateSrc, sizeof(aActionWeights));
         nDistToArenaCenterOrTotal = AI::GetDistance(pUnit, pTargetUnit);
         if (nDistToArenaCenterOrTotal > 0x19) {
           aActionWeights[8] += -5;
@@ -17510,7 +17510,7 @@ void __fastcall AITHINK_Fn1_WillOWisp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
         pMonStats.nMonStats2 = 0x0;
       }
 
-      memset(&uFindScratch, 0, 0x38);
+      memset(&uFindScratch.s.sUnitFindArg, 0, sizeof(uFindScratch.s.sUnitFindArg));
       uFindScratch.s.sUnitFindArg.nY = pMonStats.nMonStats2;
       uFindScratch.s.sUnitFindArg.nX = nAiParam;
       uFindScratch.s.sUnitFindArg.nFlags = 0x583;
@@ -17691,9 +17691,9 @@ void __fastcall AITHINK_Fn1_WillOWisp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       }
 
       nDistToTarget = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
-      pMonStats.nMonStats = nDistToTarget + *(int*)((intptr_t)&uFindScratch + (pMonsterAiGeneral->dwArg2 * 8 + 0x34));
+      pMonStats.nMonStats = nDistToTarget + uFindScratch.anStrikeOffsets[pMonsterAiGeneral->dwArg2 * 2 + 13];
       nDistToTarget = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
-      pRoomScratch.nRoomScratch2 = nDistToTarget + *(int*)((intptr_t)&uFindScratch + (pMonsterAiGeneral->dwArg2 * 8 + 0x38));
+      pRoomScratch.nRoomScratch2 = nDistToTarget + uFindScratch.anStrikeOffsets[pMonsterAiGeneral->dwArg2 * 2 + 14];
       nDistToCoords = MONSTERAI_GetDistanceToCoords(pUnit, pMonStats.nMonStats, pRoomScratch.nRoomScratch2);
       if (nDistToCoords > 3) {
         goto move_to_pattern_point;
@@ -17706,11 +17706,11 @@ void __fastcall AITHINK_Fn1_WillOWisp(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
       }
       if (pMonsterAiGeneral->dwArg1 < 3) {
         nWispState = pMonsterAiGeneral->dwArg2 * 8;
-        if (*(int*)((intptr_t)&uFindScratch + (nWispState + 8)) || *(int*)((intptr_t)&uFindScratch + (nWispState + 0xc))) {
+        if (uFindScratch.anStrikeOffsets[pMonsterAiGeneral->dwArg2 * 2 + 2] || uFindScratch.anStrikeOffsets[pMonsterAiGeneral->dwArg2 * 2 + 3]) {
           nDistToTarget = D2Common::Units::GetXPosFromDynamicPathUnit(pTarget);
-          pRoomScratch.nRoomScratch = nDistToTarget + *(int*)((intptr_t)&uFindScratch + (pMonsterAiGeneral->dwArg2 * 8 + 8));
+          pRoomScratch.nRoomScratch = nDistToTarget + uFindScratch.anStrikeOffsets[pMonsterAiGeneral->dwArg2 * 2 + 2];
           nDistToTarget = D2Common::Units::GetYPosFromDynamicPathUnit(pTarget);
-          MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 7, pRoomScratch.nRoomScratch, nDistToTarget + *(int*)((intptr_t)&uFindScratch + (pMonsterAiGeneral->dwArg2 * 8 + 0xc)));
+          MONSTERAI_CommandSkillAtPosition(pGame, pUnit, 7, pRoomScratch.nRoomScratch, nDistToTarget + uFindScratch.anStrikeOffsets[pMonsterAiGeneral->dwArg2 * 2 + 3]);
           pMonsterAiGeneral->dwArg1++;
           return;
         }

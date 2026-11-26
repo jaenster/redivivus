@@ -14,6 +14,10 @@
 #include "Source/Bnclient/Bnclient.globals.h"
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Bnclient/net_sid.data.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2SidAuthCheckPacketStrc) == 0x25c, "D2SidAuthCheckPacketStrc is 0x25c bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2SrpCredentialsStrc) == 0xbc, "D2SrpCredentialsStrc is 0xbc bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(D2SrpSaltVerifierStrc) == 0x40, "D2SrpSaltVerifierStrc is 0x40 bytes on x86");
+static_assert(sizeof(void*) != 4 || sizeof(SID_C2S_AuthInfo) == 0x128, "SID_C2S_AuthInfo is 0x128 bytes on x86");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -240,11 +244,11 @@ int __stdcall SID_InitializeProtocolState() {
     int nCount;
     uint32_t* pResponseFlag;
     BOOL* pRequireAnswer;
-    for (nCount = 0; nCount < 0x5e; nCount++) {
+    for (nCount = 0; nCount < (int)_countof(g_SIDPacketResponseFlags); nCount++) {
       g_SIDPacketResponseFlags[nCount] = 0;
     }
 
-    for (nCount = 0; nCount < 0x5e; nCount++) {
+    for (nCount = 0; nCount < (int)_countof(NET_SID_INCOMING_CLIENT_PacketRequireAnswer); nCount++) {
       NET_SID_INCOMING_CLIENT_PacketRequireAnswer[nCount] = 0;
     }
 
@@ -1321,9 +1325,9 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
     SID_C2S_AuthInfo sAuthInfoPacket;
     sockaddr_in nsockaddr;
     uint32_t szCountryAbbrevBuf[16];
-    memset(&sAuthInfoPacket, 0, 0x128);
+    memset(&sAuthInfoPacket, 0, sizeof(SID_C2S_AuthInfo));
     sAuthInfoPacket.dwProtocolId = 0;
-    memcpy(sAuthInfoPacket.szPlatform, "68XI", 4);
+    memcpy(sAuthInfoPacket.szPlatform, "68XI", sizeof(sAuthInfoPacket.szPlatform));
     BOOL bIsExpansion;
     bIsExpansion = BnSend::D2CheckExpansionGame();
     sAuthInfoPacket.dwProductId = bIsExpansion ? 0x44325850 : 0x44324456;
@@ -1399,7 +1403,7 @@ int32_t __stdcall NET_SID_CLIENT_Send_0x51_AuthCheck() {
     uint8_t* szBufferOutput;
     D2SidAuthCheckPacketStrc dwClientToken;
     uint8_t szExeInfoClassic[256];
-    memset(&dwClientToken, 0, 0x25c);
+    memset(&dwClientToken, 0, sizeof(D2SidAuthCheckPacketStrc));
     __time32_t _Var1 = _time32(nullptr);
     DWORD dwTickCount = GetTickCount();
     g_dwCdKeyClientToken += dwTickCount + _Var1;
@@ -1454,13 +1458,13 @@ int __fastcall NET_SID_CLIENT_Send_0x53_AuthAccountLogon(char * pUsername, char 
     char usernameUpper[256];
     g_bSIDFlag2 = 0;
     Storm::Source::SSTR::SStrCopy(g_szStoredUsername, pUsername, 0x100);
-    Storm::Source::SMem::SMemZero(&g_srpCredentials, 0xbc);
+    Storm::Source::SMem::SMemZero(&g_srpCredentials, sizeof(D2SrpCredentialsStrc));
     Storm::Source::SSTR::SStrCopy(usernameUpper, pUsername, 0x100);
     Storm::Source::SSTR::SStrUpper(usernameUpper);
     Storm::Source::SSTR::SStrCopy(passwordUpper, pPassword, 0x100);
     Storm::Source::SSTR::SStrUpper(passwordUpper);
     vc8_thiscall(SRP::SRP_GenerateAccountCredentials)(&g_pSrpContext, &g_srpCredentials, usernameUpper, passwordUpper);
-    Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
+    Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, sizeof(g_srpCredentials.aClientPublicKey_A));
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x100);
     nUsernameLen += 0x21;
     BnSend::NET_SID_CLIENT_Send(0x53, (char*)&packet, nUsernameLen);
@@ -1469,7 +1473,7 @@ int __fastcall NET_SID_CLIENT_Send_0x53_AuthAccountLogon(char * pUsername, char 
 
 int32_t __stdcall NET_SID_CLIENT_Resend_0x53_AuthAccountLogon() {
     SID_C2S_AuthAccountLogon packet;
-    Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
+    Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, sizeof(g_srpCredentials.aClientPublicKey_A));
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, g_szStoredUsername, 0x100);
     nUsernameLen += 0x21;
     BnSend::NET_SID_CLIENT_Send(0x53, (char*)&packet, nUsernameLen);
@@ -1480,9 +1484,9 @@ int32_t __stdcall NET_SID_CLIENT_Resend_0x53_AuthAccountLogon() {
 int32_t __fastcall NET_SID_CLIENT_Send_0x54_AuthAccountLogonProof(void * pSalt, void * pServerPublicKeyB) {
     char M1ClientProof[20];
     BOOL bKeyExchangeOk = vc8_thiscall(SRP::SRP_ClientKeyExchange)(&g_pSrpContext, &g_srpCredentials, pSalt, pServerPublicKeyB);
-    Storm::Source::SMem::SMemZero(g_srpCredentials.szPassword, 0x20);
+    Storm::Source::SMem::SMemZero(g_srpCredentials.szPassword, sizeof(g_srpCredentials.szPassword));
     if (bKeyExchangeOk) {
-      Storm::Source::SMem::SMemCopy(M1ClientProof, g_srpCredentials.aClientProof_M1, 0x14);
+      Storm::Source::SMem::SMemCopy(M1ClientProof, g_srpCredentials.aClientProof_M1, sizeof(M1ClientProof));
       BnSend::NET_SID_CLIENT_Send(0x54, M1ClientProof, 0x14);
       return 1;
     }
@@ -1513,7 +1517,7 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
     char newPasswordUpperBuf[256];
     char usernameUpper[256];
     g_bSIDFlag2 = 0;
-    Storm::Source::SMem::SMemZero(&g_srpCredentials, 0xbc);
+    Storm::Source::SMem::SMemZero(&g_srpCredentials, sizeof(D2SrpCredentialsStrc));
     Storm::Source::SSTR::SStrCopy(usernameUpper, pUsername, 0x100);
     Storm::Source::SSTR::SStrUpper(usernameUpper);
     Storm::Source::SSTR::SStrCopy(oldPasswordUpper, pOldPassword, 0x100);
@@ -1522,7 +1526,7 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
     Storm::Source::SSTR::SStrUpper(newPasswordUpperBuf);
     vc8_thiscall(SRP::SRP_ClientGenerateVerifier)(&g_pSrpContext, usernameUpper, (uint32_t*)newPasswordUpperBuf, (uint32_t*)&g_srpSaltVerifier, g_srpSaltVerifier.aVerifier);
     vc8_thiscall(SRP::SRP_GenerateAccountCredentials)(&g_pSrpContext, &g_srpCredentials, usernameUpper, oldPasswordUpper);
-    Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, 0x20);
+    Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientPublicKey_A, sizeof(g_srpCredentials.aClientPublicKey_A));
     uint32_t nUsernameLen = Storm::Source::SSTR::SStrCopy(packet.szUsername, pUsername, 0x100);
     nUsernameLen += 0x21;
     BnSend::NET_SID_CLIENT_Send(0x55, (char*)&packet, nUsernameLen);
@@ -1531,12 +1535,12 @@ int __fastcall NET_SID_CLIENT_Send_0x55_AuthAccountChange(char * pUsername, char
 
 int32_t __fastcall NET_SID_CLIENT_Send_0x56_AuthAccountChangeProof(void * pSalt, void * pServerPublicKeyB) {
     BOOL bKeyExchangeOk = vc8_thiscall(SRP::SRP_ClientKeyExchange)(&g_pSrpContext, &g_srpCredentials, pSalt, pServerPublicKeyB);
-    Storm::Source::SMem::SMemZero(g_srpCredentials.szPassword, 0x20);
+    Storm::Source::SMem::SMemZero(g_srpCredentials.szPassword, sizeof(g_srpCredentials.szPassword));
     if (bKeyExchangeOk) {
       SID_C2S_AuthAccountChangeProof packet;
-      Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientProof_M1, 0x14);
-      Storm::Source::SMem::SMemCopy(&packet.sNewSaltVerifier, &g_srpSaltVerifier, 0x40);
-      Storm::Source::SMem::SMemZero(&g_srpSaltVerifier, 0x40);
+      Storm::Source::SMem::SMemCopy(&packet, g_srpCredentials.aClientProof_M1, sizeof(g_srpCredentials.aClientProof_M1));
+      Storm::Source::SMem::SMemCopy(&packet.sNewSaltVerifier, &g_srpSaltVerifier, sizeof(D2SrpSaltVerifierStrc));
+      Storm::Source::SMem::SMemZero(&g_srpSaltVerifier, sizeof(D2SrpSaltVerifierStrc));
       BnSend::NET_SID_CLIENT_Send(0x56, (char*)&packet, 0x54);
       return 1;
     }
@@ -1568,8 +1572,8 @@ int __fastcall NET_SID_CLIENT_Send_0x58_AuthAccountUpgradeProof(uint32_t nServer
     XSHA1((D2XSHA1Strc*)sProofInput.abPasswordHash, szPasswordLower, Storm::Source::SSTR::SStrLen(szPasswordLower));
     sPacket.dwClientToken = sProofInput.dwClientToken;
     XSHA1(&sPacket.shaPasswordProof, (char*)&sProofInput, 0x1c);
-    Storm::Source::SMem::SMemCopy(&sPacket.sSaltVerifier, &g_srpSaltVerifier, 0x40);
-    Storm::Source::SMem::SMemZero(&g_srpSaltVerifier, 0x40);
+    Storm::Source::SMem::SMemCopy(&sPacket.sSaltVerifier, &g_srpSaltVerifier, sizeof(D2SrpSaltVerifierStrc));
+    Storm::Source::SMem::SMemZero(&g_srpSaltVerifier, sizeof(D2SrpSaltVerifierStrc));
     BnSend::NET_SID_CLIENT_Send(0x58, (char*)&sPacket, 0x58);
     return 0;
 }
@@ -1585,7 +1589,7 @@ BOOL __stdcall NET_SID_CLIENT_GetSIDFlag2() {
 }
 
 void __stdcall NET_SID_ClearSrpPassword() {
-    Storm::Source::SMem::SMemZero(g_srpCredentials.szPassword, 0x20);
+    Storm::Source::SMem::SMemZero(g_srpCredentials.szPassword, sizeof(g_srpCredentials.szPassword));
 }
 
 uint32_t __fastcall NET_SID_CLIENT_ExtractCDKeyNibble(uint32_t * pCdKeyData, uint32_t nNibbleIndex) {

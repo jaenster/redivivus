@@ -762,7 +762,7 @@ void __fastcall Objects_InitFn62_CagedWussie(D2ObjectInitFnArg * pInitArg) {
       QUEST_SetStateAndBroadcast(pQuestData, 1, nullptr, (::fpExecuteOnUnitFunction)Q32_NotifyQuestState, 1);
     }
 
-    for (int nBarricadeIdx = 0; nBarricadeIdx < 3; nBarricadeIdx++) {
+    for (int nBarricadeIdx = 0; nBarricadeIdx < (int)(sizeof(pA5Q2Data->abGroupAllFreed) / sizeof(pA5Q2Data->abGroupAllFreed[0])); nBarricadeIdx++) {
       if (!pA5Q2Data->abGroupAllFreed[nBarricadeIdx]) {
         for (int nCheckIdx = 0; nCheckIdx < nBarricadeIdx; nCheckIdx++) {
           if (pA5Q2Data->aBarricadePos[nCheckIdx].x == pInitArg->nX && pA5Q2Data->aBarricadePos[nCheckIdx].y == pInitArg->nY) {
@@ -1077,7 +1077,7 @@ void __fastcall Q32_PrisonerTimerCallback(D2QuestDataStrc * pQuestData, D2UnitSt
     pA5Q2Data = pQuestData->pQuestSpecificData.pA5Q2;
     int nPrisonerGroupIdx;
     nPrisonerGroupIdx = 0;
-    for (; nPrisonerGroupIdx < 3; nPrisonerGroupIdx++) {
+    for (; nPrisonerGroupIdx < (int)(sizeof(pA5Q2Data->anBarricadePortalGUID) / sizeof(pA5Q2Data->anBarricadePortalGUID[0])); nPrisonerGroupIdx++) {
       if (nUnitGUID == pA5Q2Data->anBarricadePortalGUID[nPrisonerGroupIdx]) {
         break;
       }

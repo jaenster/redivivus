@@ -16,6 +16,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Bnclient/BnSend.data.h"
 #include "Source/Bnclient/net_sid.data.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2BnNewsEntryStrc) == 0x408, "D2BnNewsEntryStrc is 0x408 bytes on x86");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -223,13 +224,13 @@ void * __thiscall BNNEWS_DestroyNewsTable(D2BnNewsTableStrc * pNewsTable, uint8_
 void __thiscall BNNEWS_ReallocateNewsTable(D2BnNewsTableStrc * pNewsTable, uint32_t dwNewCapacity) {
     D2BnNewsEntryStrc* pBlock = pNewsTable->pEntries;
     pNewsTable->nCapacity = dwNewCapacity;
-    D2BnNewsEntryStrc* pFallbackAlloc = (D2BnNewsEntryStrc*)Storm::Source::SMem::SMemReAlloc(&pBlock->dwFlags, dwNewCapacity * 0x408, s___AUItem_NewsTable___0072ff8c, -2, 0x10);
+    D2BnNewsEntryStrc* pFallbackAlloc = (D2BnNewsEntryStrc*)Storm::Source::SMem::SMemReAlloc(&pBlock->dwFlags, dwNewCapacity * sizeof(D2BnNewsEntryStrc), s___AUItem_NewsTable___0072ff8c, -2, 0x10);
     pNewsTable->pEntries = pFallbackAlloc;
     if (pFallbackAlloc) {
       return;
     }
 
-    pFallbackAlloc = (D2BnNewsEntryStrc*)Storm::Source::SMem::SMemAlloc(dwNewCapacity * 0x408, s___AUItem_NewsTable___0072ff8c, -2, 0);
+    pFallbackAlloc = (D2BnNewsEntryStrc*)Storm::Source::SMem::SMemAlloc(dwNewCapacity * sizeof(D2BnNewsEntryStrc), s___AUItem_NewsTable___0072ff8c, -2, 0);
     pNewsTable->pEntries = pFallbackAlloc;
     if (!pBlock) {
       return;

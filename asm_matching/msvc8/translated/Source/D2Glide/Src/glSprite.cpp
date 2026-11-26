@@ -21,6 +21,7 @@
 #include "Source/D2Client/Game/View.data.h"
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Glide/Renderer/Glide.data.h"
+#include "Source/D2CMP/D2GfxCellNodeStrc.h"
 
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
@@ -468,7 +469,7 @@ static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * 
       exit(-1);
     }
 
-    void* nTexStartAddress = (void*)D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
+    D2GfxCellNodeStrc* pCellNode = (D2GfxCellNodeStrc*)D2CMP::SRC::CelCmp::CELCMP_GetDC6BlockPixelData(pDC6Block);
     int32_t nTMUParamSaved = nMode;
     if (nMode == 4) {
       nMode = 1;
@@ -478,28 +479,28 @@ static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * 
     grTexInfo.aspectRatioLog2 = pTexInfo->nAspect;
     grTexInfo.format = 5;
     grTexInfo.data = gpGlideSpriteBuffer;
-    if (!*(int*)((char*)nTexStartAddress + nMode * 8)) {
+    if (!pCellNode->aModes[nMode].nSizeClass) {
       nCacheBucket = pTexInfo->nTexArea;
       if (nCacheBucket <= 0x1000) {
-        *(uint32_t*)((char*)nTexStartAddress + nMode * 8) = 3;
+        pCellNode->aModes[nMode].nSizeClass = 3;
       } else if (nCacheBucket <= 0x4000) {
-        *(uint32_t*)((char*)nTexStartAddress + nMode * 8) = 2;
+        pCellNode->aModes[nMode].nSizeClass = 2;
       } else {
         if (nCacheBucket > 0x10000) {
           return 0;
         }
 
-        *(uint32_t*)((char*)nTexStartAddress + nMode * 8) = 1;
+        pCellNode->aModes[nMode].nSizeClass = 1;
       }
     }
 
-    nCacheBucket = *(int*)((char*)nTexStartAddress + nMode * 8);
+    nCacheBucket = pCellNode->aModes[nMode].nSizeClass;
     if (gnGlideSpriteSecondaryTMUEnabled) {
       gnGlideTMUIndex = (uint32_t)(nCacheBucket == 1);
     }
 
-    int nNewCacheNode = *(int*)((char*)nTexStartAddress + (nMode * 8 + 4));
-    int* pnCacheEntryIndex = (int*)((char*)nTexStartAddress + (nMode * 8 + 4));
+    int nNewCacheNode = pCellNode->aModes[nMode].nCacheNode;
+    int* pnCacheEntryIndex = &pCellNode->aModes[nMode].nCacheNode;
     grTexInfo.largeLodLog2 = grTexInfo.smallLodLog2;
     if (nNewCacheNode && (*(uint8_t**)&gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[nNewCacheNode - 1].field_0x10 == pPalette || nModeSaved == 4)) {
       glTextureCache::GLTEXCACHE_PromoteNodeToMRU(gGlideVertex0.aTextureCache + (nCacheBucket - 1), *pnCacheEntryIndex);
@@ -513,7 +514,7 @@ static int32_t __stdcall RENDERER_GLIDE_UploadTextureToCache(GlideTexInfoStrc * 
       *pnCacheEntryIndex = nNewCacheNode;
     }
 
-    gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].pHashTable = nTexStartAddress;
+    gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].pHashTable = pCellNode;
     gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].nHashIndex = nMode;
     *(uint8_t**)&gGlideVertex0.aTextureCache[nCacheBucket - 1].pNodes[*pnCacheEntryIndex - 1].field_0x10 = (uint8_t*)pPalette;
     uint8_t* pSrcPixelRow = gpGlideSpriteBuffer;

@@ -63,6 +63,8 @@
 #include "Source/D2Game/Quests/Quests/Quest39.h"
 #include "Source/D2Game/Quests/Quests/Quest40.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2NPCMessageStrc) == 0xc, "the NPC gossip table rows are 0xc bytes");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_FREE_POOL_AT
@@ -240,19 +242,17 @@ void __fastcall AddGossipMessageOnMonster(D2QuestDataStrc * pQuestData, D2GSPack
       return;
     }
 
-    uint8_t* pMsgEntry = (uint8_t*)&pNpcMsgTable[nMessageIndexMaybe].pMessages[0].nStringIndex;
     do {
-      if (*(int*)(pMsgEntry - 4) == nMonStatsId) {
-        nMenu = *(int32_t*)(pMsgEntry + 4);
+      if (pNpcMsgTable[nMessageIndexMaybe].pMessages[nMsgIdx].nMonStatsId == nMonStatsId) {
+        nMenu = pNpcMsgTable[nMessageIndexMaybe].pMessages[nMsgIdx].bMenu;
         if (nMenu == 1) {
           nMenu = 0;
         }
 
-        D2Common::Text::AddNewGossipText(sTextMessage, (uint32_t)*(uint16_t*)pMsgEntry, nMenu);
+        D2Common::Text::AddNewGossipText(sTextMessage, (uint32_t)(uint16_t)pNpcMsgTable[nMessageIndexMaybe].pMessages[nMsgIdx].nStringIndex, nMenu);
       }
 
       nMsgIdx++;
-      pMsgEntry += 0xc;
     } while (nMsgIdx < pNpcMsgTable[nMessageIndexMaybe].nMessagesCount);
 }
 
@@ -1391,7 +1391,7 @@ void __fastcall QUEST_CheckGoldenBirdDrop(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
     pQuestData = 0;
     check_drop_conditions:
-    if (pUnit && (nMonClassId = pUnit->nClassId , nMonClassId >= 0) && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId && pQuestData && pQuestData->bIsNotIntroduction == '\x01' && nMonClassId != 0x197 && !(*((uint8_t*)&D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId] + 0xd) & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
+    if (pUnit && (nMonClassId = pUnit->nClassId , nMonClassId >= 0) && nMonClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize && D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId && pQuestData && pQuestData->bIsNotIntroduction == '\x01' && nMonClassId != 0x197 && !(D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats[nMonClassId].aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[6])) {
       A3Q5::Q21_CheckGoldenBirdDropConditions(pQuestData, pUnit);
       return;
     }

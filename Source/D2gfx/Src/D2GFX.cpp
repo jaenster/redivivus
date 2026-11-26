@@ -794,12 +794,12 @@ void __stdcall DRAW_HideTaskbarAppBars() {
     memset(&appBarData, 0, sizeof(appBarData));
     appBarData.cbSize = 0x24;
     appBarData.hWnd = hwndD2GFX_Window;
-    for (int nEdge = 0; nEdge < 4; nEdge++) {
+    for (int nEdge = 0; nEdge < (int)_countof(gaD2GFXWindowPlacements); nEdge++) {
       appBarData.uEdge = nEdge;
       HWND hWnd = (HWND)SHAppBarMessage(7, &appBarData);
       gaD2GFXWindowPlacements[nEdge].pHWND = hWnd;
       if (hWnd) {
-        gaD2GFXWindowPlacements[nEdge].pWindowPLacement.length = 0x2c;
+        gaD2GFXWindowPlacements[nEdge].pWindowPLacement.length = sizeof(WINDOWPLACEMENT);
         GetWindowPlacement(hWnd, &gaD2GFXWindowPlacements[nEdge].pWindowPLacement);
         ShowWindow(gaD2GFXWindowPlacements[nEdge].pHWND, 0);
       }
@@ -1815,7 +1815,7 @@ void __fastcall D2GFX_FillYBufferFast(int32_t nScreenWidth, int32_t nScreenHeigh
 void __fastcall PALETTE_InitColorLookupTables(BYTE * * ppPaletteTable) {
     memcpy(gaPaletteBlendEntries, ppPaletteTable, sizeof(gaPaletteBlendEntries));
     gpPaletteBlendLookupTable = gaPaletteBlendEntries;
-    for (int i = 0; i < 49; i++) {
+    for (int i = 0; i < (int)_countof(gaPaletteColorLUT); i++) {
       memcpy(gaPaletteColorLUT[i], gaPaletteBlendEntries[i + 3], sizeof(gaPaletteColorLUT[i]));
     }
 }

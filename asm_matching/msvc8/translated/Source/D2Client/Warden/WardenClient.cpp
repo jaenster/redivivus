@@ -83,7 +83,7 @@ static uint32_t __stdcall WARDEN_CheckSignatureMagic(int32_t nTotalLen, int32_t 
     *pnSigOffset = nSigOffset;
     if (nTotalLen >= nDataLen + 4U) {
       int32_t nMagic;
-      Storm::Source::SMem::SMemCopy(&nMagic, pBuffer + nSigOffset, 4);
+      Storm::Source::SMem::SMemCopy(&nMagic, pBuffer + nSigOffset, sizeof(nMagic));
       return (uint32_t)(nMagic == 0x5349474e);
     }
 
@@ -113,7 +113,7 @@ static BOOL __stdcall WARDEN_VerifyModuleSignature(uint32_t nKeySize, char * szM
     // Frame slots -24..-4 are ONE object: &pExpectedHash is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
     struct __frame0_t {
-      uint8_t* pExpectedHash;
+      union { uint32_t nSigMagic; uint8_t* pExpectedHash; }; // one slot: the signature magic, then the hash buffer
       BigData* pBnModulus;
       BigData* pBnExponent;
       BigData* pBnSig;
@@ -131,8 +131,8 @@ static BOOL __stdcall WARDEN_VerifyModuleSignature(uint32_t nKeySize, char * szM
       return 0;
     }
 
-    Storm::Source::SMem::SMemCopy(&__frame0.pExpectedHash, pData + nSigOffset, 4);
-    if (__frame0.pExpectedHash != (uint8_t*)0x5349474e) {
+    Storm::Source::SMem::SMemCopy(&__frame0.nSigMagic, pData + nSigOffset, sizeof(__frame0.nSigMagic));
+    if (__frame0.nSigMagic != 0x5349474e) {
       return 0;
     }
 

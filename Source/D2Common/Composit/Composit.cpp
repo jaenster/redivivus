@@ -68,7 +68,7 @@ void __thiscall COMPOSIT_ReadCompositeFileRow(char * szText, int32_t nBodyIndex)
       return;
     }
 
-    memcpy(szText, "hth ", 4);
+    memcpy(szText, "hth ", sizeof("hth ") - 1);
 }
 
 int __stdcall COMPOSIT_GetItemTypeIndex(int32_t iItemType) {

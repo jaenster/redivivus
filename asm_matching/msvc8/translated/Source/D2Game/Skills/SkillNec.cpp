@@ -30,6 +30,8 @@
 #include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
 #include "Source/D2Common/Units/Units.inline.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2DamageStrc) == 0x70, "D2DamageStrc is copied as 0x70 bytes");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
@@ -1087,7 +1089,7 @@ BOOL __fastcall SKILLNEC_ApplySummonBuffs(::SGAMEDATA * pGame, D2UnitStrc * pUni
             pSkillsTxtTbl = D2Common::ITEMS::Items::sgptDataTable->pTxtSkills;
             if (pSkillsTxtTbl + eSummonSkill) {
               SkillsServer::SetSkill(pSummon, eSummonSkill, nStatCalc, 0);
-              if (*((uint8_t*)&pSkillsTxtTbl[eSummonSkill] + 0x4) & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
+              if (pSkillsTxtTbl[eSummonSkill].aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) {
                 SkillsServer::Server_SelectSkill(pSummon, 0, (int)*pSumSkillCursor, -1);
               }
             }
@@ -1249,7 +1251,7 @@ uint32_t __fastcall SKILLNEC_ApplyCorpseExplosionToUnit(D2SkillCallbackContextSt
     eD2UnitType eUnitType = pUnit->eUnitType;
     uint32_t* pDmgDataSrc = (uint32_t*)pExplosionArgs->pDamage;
     uint32_t* pDmgDataDst = (uint32_t*)&sDamage;
-    memcpy(pDmgDataDst, pDmgDataSrc, 0x70);
+    memcpy(pDmgDataDst, pDmgDataSrc, sizeof(D2DamageStrc));
     if (eUnitType == UNIT_OBJECT || (int)eUnitType > 3 && (int)eUnitType <= 5) {
       nPosY = pUnit->pPath.pStaticPath->nPosY;
     } else if (pUnit->pPath.pDynamicPath) {

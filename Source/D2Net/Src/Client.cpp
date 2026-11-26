@@ -105,7 +105,7 @@ void __stdcall NET_D2GS_ConnectToServer(eD2GSConnectionType neD2GSConnectionType
     pD2PacketClient_from_0xAF = 0;
     InitializeCriticalSection(&lpCriticalSection_00882ce8);
     pD2PacketsClientBuffer = D2_NEW_AT(D2PacketsClientStrc, ".\\SRC\\Client.cpp", 200);
-    memset(pD2PacketsClientBuffer, 0, 0x7bc);
+    memset(pD2PacketsClientBuffer, 0, sizeof(D2PacketsClientStrc));
     ::D2Net::Game::Server::NET_D2GS_CLIENT_SetD2GSConnectionType(neD2GSConnectionType);
     BOOL BVar1 = ::D2Net::Game::Server::NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
     if (BVar1) {

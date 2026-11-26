@@ -240,6 +240,7 @@ static uint32_t gaMonsterModePrecacheEntries[15] = {
     0xb
 }; D2_STATIC_GUARD(gaMonsterModePrecacheEntries, "gaMonsterModePrecacheEntries");
 static int32_t gnMonsterModePrecacheCount = 0xf; D2_STATIC_GUARD(gnMonsterModePrecacheCount, "gnMonsterModePrecacheCount");
+static_assert(sizeof(void*) != 4 || sizeof(::D2ClientSpriteLoadStatusStrc) == 0xa0, "D2ClientSpriteLoadStatusStrc: the 32-bit layout must be the 0xa0-byte rows 1.14d clears");
 static D2ClientSpriteLoadStatusStrc gaSpriteLoadStatusTable[7] = {0}; D2_STATIC_GUARD(gaSpriteLoadStatusTable, "gaSpriteLoadStatusTable");
 static D2CofCacheStrc gMonsterCofCache = {0}; D2_STATIC_GUARD(gMonsterCofCache, "gMonsterCofCache");
 namespace D2Client { namespace Engine { namespace Gfx {
@@ -331,7 +332,7 @@ void * __stdcall GFX_FindTextureInCache(D2CofCacheStrc * pTextureCache, char * s
     char nFilenameWord0[260];
     D2CofTextureCacheEntryStrc* pEntry;
     *(uint32_t*)(char*)&nFilenameWord0 &= -256;
-    memset(nFilenameWord0 + 1, 0, 0x103);
+    memset(nFilenameWord0 + 1, 0, sizeof(nFilenameWord0) - 1);
     GFX_ExtractFilenameFromPath(szPath, nFilenameWord0);
     _strlwr(nFilenameWord0);
     nHash = GFX_HashTextureName(nFilenameWord0);
@@ -340,7 +341,7 @@ void * __stdcall GFX_FindTextureInCache(D2CofCacheStrc * pTextureCache, char * s
       if (!pEntry) {
         return nullptr;
       }
-      if (*(uint32_t*)(char*)&nFilenameWord0 == *(int*)pEntry->szName && *(uint32_t*)((char*)&nFilenameWord0 + 4) == *(int*)(pEntry->szName + 4)) {
+      if (*(uint32_t*)(char*)&nFilenameWord0 == *(int*)pEntry->szName && ((uint32_t*)nFilenameWord0)[1] == ((int*)pEntry->szName)[1]) {
         break;
       }
 
@@ -356,11 +357,9 @@ static void * __stdcall GFX_LoadCofFile(D2CofCacheStrc * pTextureCache, char * s
     uint8_t* pLoadedFile;
     uint32_t nHash;
     uint32_t dwUnused;
-    char szFilename[260];
+    char szFilename[MAX_PATH] = "";
     int32_t nSrcLine;
     uint32_t* pSize;
-    szFilename[0] = '\0';
-    memset(szFilename + 1, 0, 0x103);
     GFX_ExtractFilenameFromPath(szPath, szFilename);
     _strlwr(szFilename);
     void* nAddress = GFX_FindTextureInCache(pTextureCache, szFilename);
@@ -369,7 +368,7 @@ static void * __stdcall GFX_LoadCofFile(D2CofCacheStrc * pTextureCache, char * s
       pEntry->pNext = 0;
       pEntry->dwFlags = 0;
       pEntry->nFileSize = 0;
-      memset(pEntry->szName, 0, 8 * sizeof(pEntry->szName[0]));
+      memset(pEntry->szName, 0, sizeof(pEntry->szName));
       pEntry->pFileData = 0;
       *(uint32_t*)&pEntry->field_0x18 = 0;
       pEntry->dwFlags |= 1;
@@ -909,7 +908,7 @@ static uint8_t * __stdcall GFX_LoadCompositCof(uint8_t * * pnOutCofData, uint32_
     int nWeaponParam;
     nWeaponParam = 0;
     szCofPath[0] = '\0';
-    memset(szCofPath + 1, 0, 0x103);
+    memset(szCofPath + 1, 0, sizeof(szCofPath) - 1);
     int bResult;
     bResult = GfxUtil::GFXUTIL_IsValidUnitType(pUnit);
     if (!bResult) {
@@ -1116,7 +1115,7 @@ D2GfxInfoStrc * __stdcall AllocGfxInfo() {
       exit(-1);
     }
 
-    memset(pGfxInfo, 0, 0x3c);
+    memset(pGfxInfo, 0, sizeof(D2GfxInfoStrc));
     pGfxInfo->dwCofDataFlags = 2;
     pGfxInfo->nPalShiftIndex = 2;
     return pGfxInfo;
@@ -1577,8 +1576,8 @@ static void __stdcall GFX_BuildMonsterCofPath(uint32_t nModeId, LPSTR szOutputPa
     szMonCode[3] = '\0';
     szAnimToken[3] = '\0';
     szCompToken[0] = (uint8_t)*pnComponentCode == 0x20 ? 0 : (uint8_t)*pnComponentCode;
-    szCompToken[1] = *(uint8_t*)((char*)pnComponentCode + 1) == 0x20 ? 0 : *(uint8_t*)((char*)pnComponentCode + 1);
-    szCompToken[2] = *(uint8_t*)((char*)pnComponentCode + 2) == 0x20 ? 0 : *(uint8_t*)((char*)pnComponentCode + 2);
+    szCompToken[1] = ((uint8_t*)pnComponentCode)[1] == 0x20 ? 0 : ((uint8_t*)pnComponentCode)[1];
+    szCompToken[2] = ((uint8_t*)pnComponentCode)[2] == 0x20 ? 0 : ((uint8_t*)pnComponentCode)[2];
     szMonCode[0] = szMonStatsCode[0] == ' ' ? 0 : szMonStatsCode[0];
     uint8_t byChar = (uint8_t)((uint32_t)dwCodeChars >> 8);
     szMonCode[1] = byChar == 0x20 ? 0 : byChar;
@@ -1596,15 +1595,13 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
     int32_t bParamsValid1;
     int32_t bSpriteLoaded;
     uint32_t nComponentRow;
-    char szCofPath[260];
+    char szCofPath[MAX_PATH] = "";
     D2GfxDataStrc sGfxData2;
     D2GfxDataStrc sGfxData;
     int nLayerIndex;
     int32_t nComponentCode;
     uint8_t byComponent;
     uint8_t* pLayerData;
-    szCofPath[0] = '\0';
-    memset(szCofPath + 1, 0, 0x103);
     GFX_BuildMonsterCofPath(nModeId, szCofPath, &nComponentCode, (int)*pComponentTable);
     D2CofTextureCacheEntryStrc* pCofFile = (D2CofTextureCacheEntryStrc*)GFX_FindTextureInCache(&gMonsterCofCache, szCofPath);
     if (!pCofFile && (pCofFile = (D2CofTextureCacheEntryStrc*)GFX_LoadCofFile(&gMonsterCofCache, szCofPath) , !pCofFile)) {
@@ -1633,9 +1630,9 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
             }
 
             while ((byComponent = pLayerData[nLayerIndex]) < 0x10) {
-              if (*(char*)((char*)pComponentTable + 3) != '\0') {
+              if (((D2MonCofComponentTableStrc*)pComponentTable)->nRows != '\0') {
                 nComponentRow = 0;
-                if ((uint8_t)*(char*)((char*)pComponentTable + 3) > '\0') {
+                if ((uint8_t)((D2MonCofComponentTableStrc*)pComponentTable)->nRows > '\0') {
                   do {
                     memset(&sGfxData, 0, sizeof(sGfxData));
                     bParamsValid1 = GfxUtil::GFXUTIL_InitAndBuildMonsterCofParams(&sGfxData, 0, 0, byComponent, nModeId, nComponentCode, pCofFile, pComponentTable, pMonStatsTxt, nComponentRow);
@@ -1652,7 +1649,7 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
                     }
 
                     nComponentRow++;
-                  } while (nComponentRow < *(uint8_t*)((char*)pComponentTable + 3));
+                  } while (nComponentRow < ((D2MonCofComponentTableStrc*)pComponentTable)->nRows);
                 }
               } else {
                 memset(&sGfxData2, 0, sizeof(sGfxData2));
@@ -1701,7 +1698,7 @@ void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFl
       const int nModeId = gaMonsterModePrecacheEntries[nModeIdx];
       if (pMonStatsEx->mDT[nModeId >> 3] & Fog::BitBuffer::gadwBitMasks[nModeId & 7]) {
         short int aCofBuffer[26];
-        memset(aCofBuffer, 0, 0x34);
+        memset(aCofBuffer, 0, sizeof(aCofBuffer));
         aCofBuffer[0] = (short int)nMonsterClassId;
         GFX_PrecacheMonsterCofSprites(pMonStats, nModeId, nFlags, aCofBuffer);
       }
@@ -2125,7 +2122,7 @@ void __fastcall GFX_InitCofSystem(int nCofCacheMemLimit) {
     gnCofCacheMemLimit = nCofCacheMemLimit;
     memset(&gPlayerCofCache, 0, sizeof(gPlayerCofCache));
     memset(&gMonsterCofCache, 0, sizeof(gMonsterCofCache));
-    memset(gaSpriteLoadStatusTable, 0, 0x460);
+    memset(gaSpriteLoadStatusTable, 0, sizeof(gaSpriteLoadStatusTable));
     size_t nMonSpriteTableSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize * 0xa0;
     g_pMonsterSpriteCofStatusTable = (D2MonsterCofStatusEntryStrc*)D2_ALLOC_POOL_AT(nullptr, nMonSpriteTableSize, ".\\ENGINE\\Gfx.cpp", 0x7e1);
     memset(g_pMonsterSpriteCofStatusTable, 0, nMonSpriteTableSize);
@@ -2231,7 +2228,7 @@ void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, in
       exit(-1);
     } else {
       uint32_t nRandomValue;
-      memset(pOverlay, 0, 0xa8);
+      memset(pOverlay, 0, sizeof(D2GfxUnknown_0xa8));
       pOverlay->nOverlayType = nOverlayType;
       pOverlay->neOverlayId = eOverlay;
       nRandomValue = GfxUtil::GFXUTIL_GetOverlayFrameDelay(pUnit, pOverlay);
@@ -2441,7 +2438,7 @@ BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int
     BOOL nCofIdentity;
     D2UnitStrc* pOwnerUnit;
     D2InventoryStrc* pInventoryUsed;
-    void* pBounds;
+    D2CofHeaderDisk* pCofHeader;
     int32_t nTransformGfx;
     if (!pUnit || !FlagBit_D2UnitStrc_eUnitFlagsEx_3(pUnit) || (nCofIdentity = D2Common::DATATBLS::ItemStats::ITEMSTATS_CheckUnitHasStateFlagIndex(pUnit, 0x25) , !nCofIdentity) || (pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit) , !pOwnerUnit)) {
       pInventoryUsed = pUnit->pInventory;
@@ -2472,21 +2469,21 @@ BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int
           return 0;
         }
 
-        pBounds = GfxUtil::GFXUTIL_Identity(pData);
-        if (!pBounds) {
+        pCofHeader = (D2CofHeaderDisk*)GfxUtil::GFXUTIL_Identity(pData);
+        if (!pCofHeader) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xda4);
           exit(-1);
         }
-        if (nTestX < *(int*)((char*)pBounds + 8) - 0x10 + nOriginX) {
+        if (nTestX < pCofHeader->nXMin - 0x10 + nOriginX) {
           return 0;
         }
-        if (nTestX >= *(int*)((char*)pBounds + 0xc) + 0x10 + nOriginX) {
+        if (nTestX >= pCofHeader->nXMax + 0x10 + nOriginX) {
           return 0;
         }
-        if (nTestY < *(int*)((char*)pBounds + 0x10) - 0x10 + nOriginY) {
+        if (nTestY < pCofHeader->nYMin - 0x10 + nOriginY) {
           return 0;
         }
-        if (nTestY < *(int*)((char*)pBounds + 0x14) + 0x10 + nOriginY) {
+        if (nTestY < pCofHeader->nYMax + 0x10 + nOriginY) {
           return 1;
         }
         break;
@@ -2543,21 +2540,21 @@ BOOL __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t
       return 0;
     }
 
-    void* pBounds = GfxUtil::GFXUTIL_Identity(pData);
-    if (!pBounds) {
+    D2CofHeaderDisk* pCofHeader = (D2CofHeaderDisk*)GfxUtil::GFXUTIL_Identity(pData);
+    if (!pCofHeader) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd3);
       exit(-1);
     }
 
-    nWeaponClassOrFlag = *(int*)((char*)pBounds + 8) + nOriginXAdj;
+    nWeaponClassOrFlag = pCofHeader->nXMin + nOriginXAdj;
     if (bCenterAdjust) {
-      nWeaponClassOrFlag -= (*(int*)((char*)pBounds + 0x14) - *(int*)((char*)pBounds + 0x10)) / 2;
+      nWeaponClassOrFlag -= (pCofHeader->nYMax - pCofHeader->nYMin) / 2;
     }
-    if (!(nWeaponClassOrFlag < UI::ui::ScreenSizeX - 1 && *(int*)((char*)pBounds + 0xc) + nOriginXAdj >= 0 && *(int*)((char*)pBounds + 0x14) + nOriginY >= 0)) {
+    if (!(nWeaponClassOrFlag < UI::ui::ScreenSizeX - 1 && pCofHeader->nXMax + nOriginXAdj >= 0 && pCofHeader->nYMax + nOriginY >= 0)) {
       return 0;
     }
 
-    return (uint32_t)(*(int*)((char*)pBounds + 0x10) + nOriginY < UI::Inv::ScreenSizeY - 1);
+    return (uint32_t)(pCofHeader->nYMin + nOriginY < UI::Inv::ScreenSizeY - 1);
 }
 
 // Registers: nAct (ECX) is passed by the caller but not read.

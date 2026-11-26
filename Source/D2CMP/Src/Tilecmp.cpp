@@ -126,13 +126,13 @@ static void TILECMP_FreeTileSet(D2TileCmpTileSetStrc * pTileSet) {
 
 // @sourcefile .\SRC\Tilecmp.cpp
 void __stdcall TILECMP_AllocTileLink(uint32_t dwTileRef, uint32_t dwLinkData) {
-    uint32_t* pTileLink = (uint32_t*)D2_ALLOC_AT(0x10, ".\\SRC\\Tilecmp.cpp", 0x6d);
+    uint32_t* pTileLink = (uint32_t*)D2_ALLOC_AT(4 * sizeof(uint32_t), ".\\SRC\\Tilecmp.cpp", 0x6d);
     if (!pTileLink) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6e);
       exit(-1);
     }
 
-    memset(pTileLink, 0, 0x10);
+    memset(pTileLink, 0, 4 * sizeof(uint32_t));
     *pTileLink = dwTileRef;
     pTileLink[1] = dwLinkData;
 }
@@ -445,15 +445,15 @@ static void TILECMP_Generate25SubTiles(D2TileCmpTileSetStrc * pTileSet, void * p
     }
 }; D2_STATIC_GUARD(gaTileCmpSubTileOffsets, "D2CMP::SRC::Tilecmp::TILECMP_Generate25SubTiles::gaTileCmpSubTileOffsets");
 
-    for (int iSubTile = 0; iSubTile < 0x19; iSubTile++) {
+    for (int iSubTile = 0; iSubTile < (int)_countof(gaTileCmpSubTileOffsets); iSubTile++) {
       char cSubTileCol;
       D2TileCmpTileNodeStrc sSubTile;
       D2TileCmpTileNodeStrc* pNewNode;
       memset(&sSubTile, 0, sizeof(sSubTile));
       TILECMP_ExtractIsometricSubTile(&sSubTile, pDT1Data, pTileSet->sTransparentColor, gaTileCmpSubTileOffsets[iSubTile].nPixelCol, gaTileCmpSubTileOffsets[iSubTile].nPixelRow);
       cSubTileCol = (char)(iSubTile / 5);
-      *(uint8_t*)(char*)&sSubTile.wUnk_04 = (char)iSubTile + cSubTileCol * -5;
-      *(uint8_t*)((char*)&sSubTile.wUnk_04 + 1) = cSubTileCol;
+      sSubTile.nSubIdxLo = (char)iSubTile + cSubTileCol * -5;
+      sSubTile.nSubIdxHi = cSubTileCol;
       if (sSubTile.wFlags & 1) {
         pNewNode = D2_NEW_AT(D2TileCmpTileNodeStrc, ".\\SRC\\Tilecmp.cpp", 0x1a7);
         if (!pNewNode) {
@@ -507,9 +507,9 @@ static void __stdcall TILECMP_SerializeTileSet(D2TileCmpTileSetStrc * pSrcTileSe
     pDstEntry->nFrame_Rarity = pSrcTileSet->nRarity;
     pDstEntry->transparentColorRGB24 = pSrcTileSet->sTransparentColor;
     pDstEntry->nSubTiles = pSrcTileSet->nNodeCount;
-    memcpy(pDstEntry->abSubTileFlags, pSrcTileSet->abSubTileFlags, 25);
+    memcpy(pDstEntry->abSubTileFlags, pSrcTileSet->abSubTileFlags, sizeof(pSrcTileSet->abSubTileFlags));
     nCopiedNodes = pDstEntry->nSubTiles;
-    size_t nNodeArrayBytes = nCopiedNodes * 0x14;
+    size_t nNodeArrayBytes = nCopiedNodes * sizeof(D2GroundSubTileStrc);
     if (nNodeArrayBytes) {
       D2GroundSubTileStrc* pSerialNodeArray;
       pSerialNodeArray = (D2GroundSubTileStrc*)D2_ALLOC_AT(nNodeArrayBytes, ".\\SRC\\Tilecmp.cpp", 0x201);
@@ -531,8 +531,8 @@ static void __stdcall TILECMP_SerializeTileSet(D2TileCmpTileSetStrc * pSrcTileSe
         pDstTileNode = &pDstEntry->pSubTiles[nCopiedNodes];
         pDstTileNode->nOffsetX = pSrcTileNode->wOffsetX;
         pDstTileNode->nOffsetY = pSrcTileNode->wOffsetY;
-        pDstTileNode->nSubIdxLo = *(uint8_t*)&pSrcTileNode->wUnk_04;
-        pDstTileNode->nSubIdxHi = pSrcTileNode->wUnk_04 >> 8;
+        pDstTileNode->nSubIdxLo = pSrcTileNode->nSubIdxLo;
+        pDstTileNode->nSubIdxHi = pSrcTileNode->nSubIdxHi;
         pDstTileNode->wFormat = pSrcTileNode->wFlags;
         pDstTileNode->wDataLength = pSrcTileNode->wPixelSize;
         pDstTileNode->pPixelData = pSrcTileNode->pPixelBuf;
@@ -574,13 +574,13 @@ static uint32_t __stdcall TILECMP_ExportCacheToBuffer(D2TileCmpTileSetListStrc *
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x22d);
         exit(-1);
       } else {
-        memset(pExportHeader, 0, 0x114);
+        memset(pExportHeader, 0, sizeof(*pExportHeader));
         pExportHeader->nVersion = 7;
         if (pTileSetList->dwFlags) {
           pExportHeader->dwFlags = 1;
         }
 
-        nTileSetArrayBytes = pTileSetList->nTileSetCount * 0x60;
+        nTileSetArrayBytes = pTileSetList->nTileSetCount * sizeof(D2TileLibraryEntryStrc);
         pExportHeader->nTiles = pTileSetList->nTileSetCount;
         pSerialTileSetArray = (D2TileLibraryEntryStrc*)D2_ALLOC_AT(nTileSetArrayBytes, ".\\SRC\\Tilecmp.cpp", 0x238);
         pExportHeader->pTiles = pSerialTileSetArray;
@@ -1102,9 +1102,7 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
     int nCopyWords;
     D2TileLibraryEntryStrc* pCopyWordSrc;
     D2TileLibraryHeaderStrc* pCopySrc;
-    uint8_t* pSrcTileSet;
     D2TileLibraryHeaderStrc* pCopyDst;
-    uint8_t* pCopyWordDst;
     int iTileSet;
     int iNode;
     size_t nAllocSize;
@@ -1140,18 +1138,11 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
           do {
             pDstTileSet = &pDstHeader->pTiles[iTileSet];
             pCopyWordSrc = &pSrcTileCmpHdr->pTiles[iTileSet];
-            pSrcTileSet = (uint8_t*)pCopyWordSrc;
-            pCopyWordDst = (uint8_t*)pDstTileSet;
-            for (nCopyWords = 0x18; nCopyWords; nCopyWords--) {
-              *(uint32_t*)pCopyWordDst = *(uint32_t*)pSrcTileSet;
-              pSrcTileSet += 4;
-              pCopyWordDst += 4;
-            }
-
+            *pDstTileSet = *pCopyWordSrc;
             nCopyWords = 0;
             pDstTileSet->pSubTiles = nullptr;
             if (pDstTileSet->nSubTiles) {
-              nAllocSize = pDstTileSet->nSubTiles * 0x14;
+              nAllocSize = pDstTileSet->nSubTiles * sizeof(D2GroundSubTileStrc);
               if (!nAllocSize) {
                 Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x470);
                 exit(-1);
@@ -1170,7 +1161,7 @@ void __stdcall TILECMP_DeepCopyWithRecompression(D2TileLibraryHeaderStrc * pSrcT
                 do {
                   TILECMP_CompressSubTile((D2GroundSubTileStrc*)((char*)pCopyWordSrc->pSubTiles + nCopyWords), (D2GroundSubTileStrc*)((char*)pDstTileSet->pSubTiles + nCopyWords), (pfnRGBToPaletteIndex)pPaletteContext, (uint32_t)pCopyWordSrc->transparentColorRGB24);
                   iNode++;
-                  nCopyWords += 0x14;
+                  nCopyWords += sizeof(D2GroundSubTileStrc);
                 } while (iNode < pCopyWordSrc->nSubTiles);
               }
             }

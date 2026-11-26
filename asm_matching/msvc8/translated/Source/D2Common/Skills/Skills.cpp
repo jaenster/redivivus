@@ -825,7 +825,7 @@ static int SKILLS_CheckRestriction(D2UnitStrc * pUnitStrc, D2SkillStrc * pSkillT
           return 0;
         }
 
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < (int)(sizeof(pSkillRecord->state) / sizeof(pSkillRecord->state[0])); i++) {
           int nState = pSkillRecord->state[i];
           if (nState < 0) {
             return 0;
@@ -3124,7 +3124,7 @@ D2SkillStrc * __stdcall AllocSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
       }
 
       D2SkillStrc* pNewSkill = D2_NEW_POOL_AT(pSkillsList->pMemory, D2SkillStrc, ".\\SKILLS\\Skills.cpp", 0x539);
-      memset(pNewSkill, 0, 0x40);
+      memset(pNewSkill, 0, sizeof(D2SkillStrc));
       pNewSkill->pRecord = pSkillListStrc;
       if (pUnit->eUnitType == UNIT_MONSTER) {
         pNewSkill->nMode = pSkillListStrc->monanim;
@@ -3276,7 +3276,7 @@ void __stdcall SKILLS_AddOrRemoveItemSkill(D2UnitStrc * pUnit, int32_t nOwnerGUI
     }
 
     pNewSkill = D2_NEW_POOL_AT(pSkillsList->pMemory, D2SkillStrc, ".\\SKILLS\\Skills.cpp", 0x5fe);
-    memset(pNewSkill, 0, 0x40);
+    memset(pNewSkill, 0, sizeof(D2SkillStrc));
     pNewSkill->pRecord = pSkillTxt;
     switch ((int)pSkillTxt->anim) {
       case 7:
@@ -3789,7 +3789,7 @@ uint32_t __stdcall SKILL_GetPassiveElementCalc(D2UnitStrc * pUnit, eD2Skills eSk
     }
 
     int i;
-    for (i = 0; i < 5; i++) {
+    for (i = 0; i < (int)(sizeof(pSkillTxt->passivestat) / sizeof(pSkillTxt->passivestat[0])); i++) {
       if (pSkillTxt->passivestat[i] == nMinStatId || pSkillTxt->passivestat[i] == nMaxStatId) {
         break;
       }

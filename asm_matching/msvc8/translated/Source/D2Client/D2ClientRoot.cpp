@@ -63,6 +63,20 @@
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
 #endif
 
+// The loaded Warden module image: a 32-bit image read in place, so its slots stay fixed-width.
+struct D2WardenModuleImageDisk {
+    /* 0x00 */ uint32_t nImageSize;
+    /* 0x04 */ uint32_t dwUnk0x04;
+    /* 0x08 */ uint32_t nRelocTableOffset;
+    /* 0x0C */ uint32_t nRelocCount;
+    /* 0x10 */ int nExportTableOffset;
+    /* 0x14 */ uint32_t nExportCount;
+    /* 0x18 */ int nOrdinalBase;
+};
+static_assert(offsetof(D2WardenModuleImageDisk, nOrdinalBase) == 0x18, "D2WardenModuleImageDisk: the ordinal base sits at 0x18 of the module image");
+
+static_assert(sizeof(void*) != 4 || sizeof(::D2NpcCashTabStrc) == 0x28, "D2NpcCashTabStrc: the 32-bit layout must be the 0x28-byte stride 1.14d walks");
+
 
 #ifndef RECON_FPTD_fpRequiredUserAction
 #define RECON_FPTD_fpRequiredUserAction
@@ -833,12 +847,12 @@ void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
     LONG nResultBytes;
     char szMultiByte[200];
     uint16_t wszWide[32];
-    memset(szMultiByte, 0, 200);
+    memset(szMultiByte, 0, sizeof(szMultiByte));
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
     HIMC hImc = ImmGetContext(hWnd);
     if (hImc) {
       DWORD dwBufLen;
-      for (int iFill = 0; iFill < 32; iFill++) {
+      for (int iFill = 0; iFill < (int)(sizeof(wszWide) / sizeof(wszWide[0])); iFill++) {
         wszWide[iFill] = L'\0';
       }
 
@@ -875,8 +889,8 @@ void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
         if (bImeOpen) {
           /* DWORD dwBufLen for ImmGetCompositionStringA */ /* LPVOID lpBuf for ImmGetCompositionStringA */ /* DWORD param_2 for ImmGetCompositionStringA */ /* HIMC param_1 for ImmGetCompositionStringA */ nResultBufLen = ImmGetCompositionStringA(hImc, 8, (LPVOID)0x0, 0);
           if (nResultBufLen > 0) {
-            memset(szMultiByte, 0, 200);
-            memset(wszWide, 0, 0x40);
+            memset(szMultiByte, 0, sizeof(szMultiByte));
+            memset(wszWide, 0, sizeof(wszWide));
             if (nResultBufLen > 199) {
               nResultBufLen = 199;
             }
@@ -1089,12 +1103,12 @@ void __stdcall TEXT_InitializeTextSystem() {
       return;
     }
 
-    uint8_t* pHitTestEntry = &gaNpcCashTabs[0].nHitTestState;
+    D2NpcCashTabStrc* pCashTab = gaNpcCashTabs;
     int nCount = UI::UseItem::nCashDisplayItemCount;
     do {
-      pHitTestEntry[1] = 0;
-      *pHitTestEntry = 0;
-      pHitTestEntry += 0x28;
+      pCashTab->bVisible = 0;
+      pCashTab->nHitTestState = 0;
+      pCashTab++;
       nCount--;
     } while (nCount);
 }
@@ -1119,7 +1133,7 @@ void __stdcall SOUND_ClearGlobalState() {
     UNIT::UnitSnd::gnSoundInitCooldown = 0x5a;
     UNIT::UnitSnd::gnSoundLastPlayerAnimModeTime = 0;
     UNIT::UnitSnd::geSoundLastPlayerAnimMode = 0;
-    memset(UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags, 0, 0x1000);
+    memset(UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags, 0, sizeof(UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags));
 }
 
 void __stdcall DRAW_WORLD_SetWarpFadeTimer() {
@@ -2942,11 +2956,13 @@ pfnWardenCreateInterface __fastcall WARDEN_DecryptBuffer(D2WardenModuleStrc * pp
     if (!pContext) {
       return nullptr;
     }
-    if (!((uint32_t)(nOrdinal - *(int*)(pContext + 0x18)) < *(uint32_t*)(pContext + 0x14))) {
+    const D2WardenModuleImageDisk* pImage = (const D2WardenModuleImageDisk*)pContext;
+    if (!((uint32_t)(nOrdinal - pImage->nOrdinalBase) < pImage->nExportCount)) {
       return nullptr;
     }
 
-    return (pfnWardenCreateInterface)(pContext + *(int*)(pContext + *(int*)(pContext + 0x10) + (nOrdinal - *(int*)(pContext + 0x18)) * 4));
+    const int* pExportTable = (const int*)(pContext + pImage->nExportTableOffset);
+    return (pfnWardenCreateInterface)(pContext + pExportTable[nOrdinal - pImage->nOrdinalBase]);
 }
 
 // Decrypt Warden anti-cheat module data using RSA/crypto operations
@@ -3037,12 +3053,12 @@ uint32_t __fastcall WARDEN_DecryptModule(D2WardenModuleStrc * pModule, uint32_t 
           nRelocEntryByte = *pRelocationEntry;
           if (nRelocEntryByte & 0x80) {
             nRelOffset = (((nRelocEntryByte & 0x7f) * 0x100 + (uint32_t)pRelocationEntry[1]) * 0x100 + (uint32_t)pRelocationEntry[2]) * 0x100 + (uint32_t)pRelocationEntry[3];
-            pRelocationEntry += 4;
+            pRelocationEntry += sizeof(uint32_t); // the long entry: a 31-bit big-endian offset
             *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
             nRelocationCount++;
           } else {
             nRelOffset = (uint32_t)pRelocationEntry[1] + nRelOffset + ((uint32_t)nRelocEntryByte << 8);
-            pRelocationEntry += 2;
+            pRelocationEntry += sizeof(uint16_t); // the short entry: a 15-bit big-endian delta
             *(int*)((char*)pModuleBase + nRelOffset) += (int)pModuleBase;
             nRelocationCount++;
           }

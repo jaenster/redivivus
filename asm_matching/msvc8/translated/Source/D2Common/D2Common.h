@@ -7879,8 +7879,7 @@ __pragma(pack(push, 1)) struct D2UnitDataServerSide {
     /* 0x04 */ eD2UnitType dwInteractType; // eD2UnitType of the interacted unit (6 = none)
     /* 0x08 */ uint8_t bInteracting; // 1 if currently interacting with an NPC/object
     /* 0x09 */ uint8_t field_0x9;
-    /* 0x0A */ uint8_t field_0xa;
-    /* 0x0B */ uint8_t field_0xb;
+    /* 0x0A */ int16_t nEventSound; // event sound (timer update type) set by SetupUpdateEvent_AttachEventSound, sent by UNITMSG_SendSoundPacketToClient
     /* 0x0C */ struct D2UnitStrc * pUpdateUnit; // Pointer to the unit being updated
     /* 0x10 */ struct D2UnitQuestDataListStrc * pQuestEventList; // Linked list of quest event data attached to this unit
     /* 0x14 */ uint8_t bSparkChest; // True if this is a sparkly chest
@@ -7933,8 +7932,7 @@ __pragma(pack(push, 1)) struct D2UniqueItemsTxt {
     /* 0x2D */ uint8_t field_0x2d;
     /* 0x2E */ uint8_t field_0x2e;
     /* 0x2F */ uint8_t field_0x2f;
-    /* 0x30 */ short rarity;
-    /* 0x32 */ uint16_t pad0x32; // alignment padding
+    /* 0x30 */ int rarity; // read as a dword by the unique roll (ITEM_RollUniqueItem)
     /* 0x34 */ short lvl;
     /* 0x36 */ short lvlReq;
     /* 0x38 */ char chrtransform;

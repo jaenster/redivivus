@@ -267,7 +267,7 @@ BOOL __fastcall SetGamma(int32_t nGamma) {
       if (nResult) {
         nResult = (*GLIDEDLL_grGet_12)(0x2a, 4, &nGammaBits);
         if (nResult) {
-          FxU32* pGammaTable = (FxU32*)Storm::Source::SMem::SMemAlloc(nTableSize * 4, ".\\Src\\glCore.cpp", 0x42f, 0);
+          FxU32* pGammaTable = (FxU32*)Storm::Source::SMem::SMemAlloc(nTableSize * sizeof(FxU32), ".\\Src\\glCore.cpp", 0x42f, 0);
           Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(nGamma, pGammaTable, (double)gbWINDOWED, 4, nTableSize, (1 << D2_SHIFT_COUNT(nGammaBits)) - 1);
           (*GLIDEDLL_grLoadGammaTable_16)(nTableSize, pGammaTable, pGammaTable, pGammaTable);
           return Storm::Source::SMem::SMemFree(pGammaTable, ".\\Src\\glCore.cpp", 0x43a, 0);
@@ -362,16 +362,9 @@ void __fastcall SetPalette(LPPALETTEENTRY pPalette) {
       return;
     }
 
-    uint32_t* pDst = gGlidePaletteEntry0;
-    uint8_t* pSrc = &pPalette->peBlue;
-    do {
-      *pDst = ((((tagPALETTEENTRY*)(pSrc - 2))->peRed + 0xff00 << 8) + (uint32_t)pSrc[-1] << 8) + (uint32_t)*pSrc;
-      *(uint32_t*)(pSrc + ((intptr_t)((char*)&gGlidePaletteEntry0 + 2) - (intptr_t)pPalette)) = ((pSrc[2] + 0xff00 << 8) + (uint32_t)pSrc[3] << 8) + (uint32_t)pSrc[4];
-      *(uint32_t*)(pSrc + ((intptr_t)((char*)&gGlidePaletteEntry0 + 6) - (intptr_t)pPalette)) = ((pSrc[6] + 0xff00 << 8) + (uint32_t)pSrc[7] << 8) + (uint32_t)pSrc[8];
-      *(uint32_t*)(pSrc + ((intptr_t)((char*)&gGlidePaletteEntry0 + 10) - (intptr_t)pPalette)) = ((pSrc[10] + 0xff00 << 8) + (uint32_t)pSrc[0xb] << 8) + (uint32_t)pSrc[0xc];
-      pDst += 4;
-      pSrc += 0x10;
-    } while ((intptr_t)pDst < (intptr_t)((char*)&gGlidePaletteEntry0 + sizeof(gGlidePaletteEntry0)));
+    for (int i = 0; i < (int)_countof(gGlidePaletteEntry0); i++) {
+      gGlidePaletteEntry0[i] = ((pPalette[i].peRed + 0xff00 << 8) + (uint32_t)pPalette[i].peGreen << 8) + (uint32_t)pPalette[i].peBlue;
+    }
 
     (*GLIDEDLL_grTexDownloadTable_8)(2, gGlidePaletteEntry0);
 }

@@ -342,7 +342,7 @@ void D2PATCH_InstallAll(void) {
     // Stored XOR 0x5a so no copy of the needle's bytes exists in the image either.
     static const unsigned char kNeedleXor[9] = {0x2c, 0x7a, 0x7f, 0x3e, 0x74, 0x7f, 0x3e, 0x7f, 0x39};
     char szNeedle[10];
-    for (int i = 0; i < 9; i++) szNeedle[i] = (char)(kNeedleXor[i] ^ 0x5a);
+    for (int i = 0; i < (int)sizeof(kNeedleXor); i++) szNeedle[i] = (char)(kNeedleXor[i] ^ 0x5a);
     szNeedle[9] = '\0';
     D2PATCH_RedirectFormatString(szNeedle, szVersion, 2);
 

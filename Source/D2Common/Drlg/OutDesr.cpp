@@ -455,7 +455,7 @@ static void PlaceFillsInLostCity(D2DrlgLevelStrc * pLevel) {
 }
 
 static void PlaceTombEntriesInCanyon(D2DrlgLevelStrc * pLevel) {
-    for (int i = 0; i < 9; i++) {
+    for (int i = 0; i < (int)(sizeof(gaTombCanyonPresetOffsets.aTombEntries) / sizeof(gaTombCanyonPresetOffsets.aTombEntries[0])); i++) {
       const D2TombCanyonPresetStrc* pEntry = &gaTombCanyonPresetOffsets.aTombEntries[i];
       Outdoors::SpawnOutdoorLevelPresetEx(pLevel, pEntry->nX, pEntry->nY, pEntry->nPresetId, pEntry->nVariant, 0);
     }

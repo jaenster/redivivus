@@ -975,7 +975,7 @@ BOOL __fastcall Initialize(HINSTANCE hInstance) {
       return 0;
     }
 
-    (*GLIDEDLL_grGet_12)(0xf, 4, (FxI32*)((char*)&gnGlideSecondaryTMUCount + 4));
+    (*GLIDEDLL_grGet_12)(0xf, sizeof(gnGlideSecondaryTMUCount[1]), (FxI32*)&gnGlideSecondaryTMUCount[1]);
     return (uint32_t)(gnGlideSecondaryTMUCount[1] > 0);
 }
 
@@ -1147,7 +1147,7 @@ void __fastcall DrawLight(DWORD * pLight, DWORD * pPlayerLight, int32_t nPosX, i
 
     gnDrawLightSavedPosX = nPosX;
     gnDrawLightSavedPosY = nPosY;
-    memcpy(gaGlideColorDebugGradientIndices, pLight, 0x1000);
+    memcpy(gaGlideColorDebugGradientIndices, pLight, sizeof(gaGlideColorDebugGradientIndices));
     memcpy(*gpnLightmapRowPointers, pPlayerLight, 0x4800);
     RENDERER_GLIDE_DrawLightMap();
 }
@@ -1765,48 +1765,48 @@ BOOL __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
     }
 
     _nAlpha = 4;
-    uint8_t* pbLightEntry = &pLight->sLight.nGreen;
+    D2GfxLightExStrc* pLightEntry = pLight;
     D2GlideGroundVertexCursorStrc* pfVertexSlot = (D2GlideGroundVertexCursorStrc*)&gaGlideGroundTileVertices[0].fY;
     do {
       uint8_t* pLightingTable = gpGlideLightingTable;
-      byIntensity = ((D2GfxLightStrc*)(pbLightEntry - 2))->nIntensity;
-      pfVertexSlot->dwColor = ((pLightingTable[(uint32_t)pbLightEntry[-1] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)*pbLightEntry + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[1] + ((uint32_t)byIntensity << 8)];
-      pfVertexSlot[-1].fXNext = (float)*(int*)(pbLightEntry + 2);
-      pfVertexSlot->fY = (float)*(int*)(pbLightEntry + 6);
-      byIntensity = pbLightEntry[10];
-      pfVertexSlot[1].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0xb] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0xc] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0xd] + ((uint32_t)byIntensity << 8)];
-      pfVertexSlot->fXNext = (float)*(int*)(pbLightEntry + 0xe);
-      pfVertexSlot[1].fY = (float)*(int*)(pbLightEntry + 0x12);
-      byIntensity = pbLightEntry[0x16];
-      pfVertexSlot[2].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x17] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x18] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x19] + ((uint32_t)byIntensity << 8)];
-      pfVertexSlot[1].fXNext = (float)*(int*)(pbLightEntry + 0x1a);
-      pfVertexSlot[2].fY = (float)*(int*)(pbLightEntry + 0x1e);
-      byIntensity = pbLightEntry[0x22];
-      pfVertexSlot[3].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x23] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x24] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x25] + ((uint32_t)byIntensity << 8)];
-      pfVertexSlot[2].fXNext = (float)*(int*)(pbLightEntry + 0x26);
-      pfVertexSlot[3].fY = (float)*(int*)(pbLightEntry + 0x2a);
-      byIntensity = pbLightEntry[0x2e];
-      pfVertexSlot[4].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x2f] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x30] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x31] + ((uint32_t)byIntensity << 8)];
-      pfVertexSlot[3].fXNext = (float)*(int*)(pbLightEntry + 0x32);
-      pfVertexSlot[4].fY = (float)*(int*)(pbLightEntry + 0x36);
-      byIntensity = pbLightEntry[0x3a];
-      pfVertexSlot[5].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x3b] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x3c] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x3d] + ((uint32_t)byIntensity << 8)];
-      pfVertexSlot[4].fXNext = (float)*(int*)(pbLightEntry + 0x3e);
-      pfVertexSlot[5].fY = (float)*(int*)(pbLightEntry + 0x42);
-      byIntensity = pbLightEntry[0x46];
-      pfVertexSlot[6].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x47] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x48] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x49] + ((uint32_t)byIntensity << 8)];
-      pfVertexSlot[5].fXNext = (float)*(int*)(pbLightEntry + 0x4a);
-      pfVertexSlot[6].fY = (float)*(int*)(pbLightEntry + 0x4e);
-      byIntensity = pbLightEntry[0x52];
-      pfVertexSlot[7].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x53] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x54] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x55] + ((uint32_t)byIntensity << 8)];
-      pfVertexSlot[6].fXNext = (float)*(int*)(pbLightEntry + 0x56);
-      pfVertexSlot[7].fY = (float)*(int*)(pbLightEntry + 0x5a);
-      byIntensity = pbLightEntry[0x5e];
-      pfVertexSlot[8].dwColor = ((pLightingTable[(uint32_t)pbLightEntry[0x5f] + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x60] + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pbLightEntry[0x61] + ((uint32_t)byIntensity << 8)];
+      byIntensity = pLightEntry->sLight.nIntensity;
+      pfVertexSlot->dwColor = ((pLightingTable[(uint32_t)pLightEntry->sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry->sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry->sLight.nBlue + ((uint32_t)byIntensity << 8)];
+      pfVertexSlot[-1].fXNext = (float)pLightEntry->nX;
+      pfVertexSlot->fY = (float)pLightEntry->nY;
+      byIntensity = pLightEntry[1].sLight.nIntensity;
+      pfVertexSlot[1].dwColor = ((pLightingTable[(uint32_t)pLightEntry[1].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[1].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[1].sLight.nBlue + ((uint32_t)byIntensity << 8)];
+      pfVertexSlot->fXNext = (float)pLightEntry[1].nX;
+      pfVertexSlot[1].fY = (float)pLightEntry[1].nY;
+      byIntensity = pLightEntry[2].sLight.nIntensity;
+      pfVertexSlot[2].dwColor = ((pLightingTable[(uint32_t)pLightEntry[2].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[2].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[2].sLight.nBlue + ((uint32_t)byIntensity << 8)];
+      pfVertexSlot[1].fXNext = (float)pLightEntry[2].nX;
+      pfVertexSlot[2].fY = (float)pLightEntry[2].nY;
+      byIntensity = pLightEntry[3].sLight.nIntensity;
+      pfVertexSlot[3].dwColor = ((pLightingTable[(uint32_t)pLightEntry[3].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[3].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[3].sLight.nBlue + ((uint32_t)byIntensity << 8)];
+      pfVertexSlot[2].fXNext = (float)pLightEntry[3].nX;
+      pfVertexSlot[3].fY = (float)pLightEntry[3].nY;
+      byIntensity = pLightEntry[4].sLight.nIntensity;
+      pfVertexSlot[4].dwColor = ((pLightingTable[(uint32_t)pLightEntry[4].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[4].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[4].sLight.nBlue + ((uint32_t)byIntensity << 8)];
+      pfVertexSlot[3].fXNext = (float)pLightEntry[4].nX;
+      pfVertexSlot[4].fY = (float)pLightEntry[4].nY;
+      byIntensity = pLightEntry[5].sLight.nIntensity;
+      pfVertexSlot[5].dwColor = ((pLightingTable[(uint32_t)pLightEntry[5].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[5].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[5].sLight.nBlue + ((uint32_t)byIntensity << 8)];
+      pfVertexSlot[4].fXNext = (float)pLightEntry[5].nX;
+      pfVertexSlot[5].fY = (float)pLightEntry[5].nY;
+      byIntensity = pLightEntry[6].sLight.nIntensity;
+      pfVertexSlot[6].dwColor = ((pLightingTable[(uint32_t)pLightEntry[6].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[6].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[6].sLight.nBlue + ((uint32_t)byIntensity << 8)];
+      pfVertexSlot[5].fXNext = (float)pLightEntry[6].nX;
+      pfVertexSlot[6].fY = (float)pLightEntry[6].nY;
+      byIntensity = pLightEntry[7].sLight.nIntensity;
+      pfVertexSlot[7].dwColor = ((pLightingTable[(uint32_t)pLightEntry[7].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[7].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[7].sLight.nBlue + ((uint32_t)byIntensity << 8)];
+      pfVertexSlot[6].fXNext = (float)pLightEntry[7].nX;
+      pfVertexSlot[7].fY = (float)pLightEntry[7].nY;
+      byIntensity = pLightEntry[8].sLight.nIntensity;
+      pfVertexSlot[8].dwColor = ((pLightingTable[(uint32_t)pLightEntry[8].sLight.nRed + ((uint32_t)byIntensity << 8)] | -256) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[8].sLight.nGreen + ((uint32_t)byIntensity << 8)]) << 8 | (uint32_t)pLightingTable[(uint32_t)pLightEntry[8].sLight.nBlue + ((uint32_t)byIntensity << 8)];
       _nAlpha--;
-      pfVertexSlot[7].fXNext = (float)*(int*)(pbLightEntry + 0x62);
-      pfVertexSlot[8].fY = (float)*(int*)(pbLightEntry + 0x66);
-      pbLightEntry += 0x6c;
+      pfVertexSlot[7].fXNext = (float)pLightEntry[8].nX;
+      pfVertexSlot[8].fY = (float)pLightEntry[8].nY;
+      pLightEntry += 9;
       pfVertexSlot += 9;
     } while (_nAlpha);
 

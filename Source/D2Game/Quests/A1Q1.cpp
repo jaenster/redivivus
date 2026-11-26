@@ -8,6 +8,8 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Game/Quests/QUESTS.inline.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2QuestDataA1Q1Strc) == 0x8c, "the A1Q1 quest data is 0x8c bytes");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -564,7 +566,7 @@ void __fastcall Q01_InitData(D2QuestDataStrc * pQuestData) {
     pQuestData->fpActiveFilter = Q01_ActiveFilter;
     pQuestData->fpSequenceFilter = Q01_SequenceFilter;
     pQuestData->nSequenceQuestId = QUEST_SistersBurialGrounds;
-    memset(pQuestSpecificData, 0, 0x8c);
+    memset(pQuestSpecificData, 0, sizeof(D2QuestDataA1Q1Strc));
     QUESTGUID_SetPlayerCountToZero((D2QuestGUIDStrc*)pQuestSpecificData);
 }
 

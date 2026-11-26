@@ -12,6 +12,9 @@
 #include "Source/Fog/FogRoot.h"
 #include "Source/Fog/QServer.h"
 #include "Source/Fog/Src/QServer/QServer.data.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2QServerModePacketNodeStrc) == 0x5c0, "mode packet nodes are 0x5c0 bytes on 32-bit");
+static_assert(sizeof(void*) != 4 || sizeof(D2QServerWorkerTelemetryStrc) == 0xb0, "worker telemetry records are 0xb0 bytes on 32-bit");
+static_assert(sizeof(void*) != 4 || sizeof(D2QServerClientContainerStrc) == 0x664, "client containers are 0x664 bytes on 32-bit");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -492,7 +495,7 @@ int __stdcall DequeueModePacket(D2QServerStrc * pQServer, int nMode, char * pByt
 
     memcpy(pBytes, _Src, _Size);
     int nPayloadSize = _Src->nPacketPayloadSize;
-    memset(_Src, 0, 0x5c0);
+    memset(_Src, 0, sizeof(*_Src));
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
     _Src->pNext = pQServer->pModePacketFreeList;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->pModePacketFreeList = _Src;
@@ -1045,7 +1048,7 @@ int __fastcall MatchesGameTokenFilter_Thunk(D2QServerStrc * pQServer, uint32_t n
 
 void __fastcall CopyWorkerTelemetrySnapshot(D2QServerStrc * pQServer, D2QServerWorkerTelemetryStrc * pOutTelemetry, int nWorkers) {
     EnterCriticalSection(&pQServer->csWorkerTelemetry);
-    memcpy(pOutTelemetry, pQServer->aWorkerTelemetry, nWorkers * 0xb0);
+    memcpy(pOutTelemetry, pQServer->aWorkerTelemetry, nWorkers * sizeof(D2QServerWorkerTelemetryStrc));
     LeaveCriticalSection(&pQServer->csWorkerTelemetry);
     for (int i = 0; i < nWorkers; i++) {
       pOutTelemetry[i].dwWorkerSlotValue = pQServer->aWorkerSlotValues[i];
@@ -1193,7 +1196,7 @@ int __stdcall BroadcastToAllClients(D2QServerStrc * pQServer, char * pBytes, int
 // @sourcefile .\Src\QServer\QServer.cpp
 D2QServerClientContainerStrc * __fastcall AddClient(D2QServerStrc * pQServer, SOCKET pSock, uint32_t nIp) {
     D2QServerClientContainerStrc* client = D2_NEW_AT(D2QServerClientContainerStrc, ".\\Src\\QServer\\QServer.cpp", 0x23b);
-    memset(client, 0, 0x664);
+    memset(client, 0, sizeof(*client));
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
     pQServer->clientsCount++;
     uint32_t nToken = pQServer->clientsCount;

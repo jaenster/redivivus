@@ -63,7 +63,7 @@ void __fastcall DRLGOUTROOM_FreeOutRoomEx(D2RoomExStrc * pRoomEx) {
 // @sourcefile .\DRLG\OutRoom.cpp
 void __fastcall DRLGOUTROOM_AllocOutdoorRoomData(D2RoomExStrc * pRoomEx) {
     D2DrlgOutdoorRoomStrc* pRoomExDataOutRoom = D2_NEW_POOL_AT(pRoomEx->pLevel->pDrlg->pMemoryPool, D2DrlgOutdoorRoomStrc, ".\\DRLG\\OutRoom.cpp", 0xc5);
-    memset(pRoomExDataOutRoom, 0, 0x70);
+    memset(pRoomExDataOutRoom, 0, sizeof(D2DrlgOutdoorRoomStrc));
     pRoomEx->pRoomExData.pRoomExDataOutdoorRoom = pRoomExDataOutRoom;
 }
 

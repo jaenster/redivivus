@@ -2249,10 +2249,10 @@ void __stdcall UIMENU_CantTestItBeacuseItCrash() {
       *ppCtlSlot = pCtl;
       ppCtlSlot++;
       pFormDef++;
-    } while ((intptr_t)ppCtlSlot <= (intptr_t)((char*)&gpCtlLobbyChat + 4));
+    } while ((intptr_t)ppCtlSlot <= (intptr_t)&gpCtlLobbyChat[1]);
 
     gpCtlConfirmDialog = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x13);
-    for (nDifficultyDone = 0; nDifficultyDone < 0x64; nDifficultyDone++) {
+    for (nDifficultyDone = 0; nDifficultyDone < (int)_countof(wszClassName); nDifficultyDone++) {
       wszClassName[nDifficultyDone] = L'\0';
     }
 
@@ -2361,7 +2361,7 @@ void __stdcall CHATDLG_DestroyLobbyChatForms() {
       }
 
       pForm++;
-    } while ((intptr_t)pForm <= (intptr_t)((char*)&gpCtlLobbyChat + 4));
+    } while ((intptr_t)pForm <= (intptr_t)&gpCtlLobbyChat[1]);
 
     if (!gpCtlConfirmDialog) {
       return;
@@ -2505,7 +2505,7 @@ static void __stdcall CHATDLG_FormatFileTimeToDate(FILETIME * pFileTime, int32_t
     int nZeroCount;
     uint16_t wszWideBuf[256];
     _SYSTEMTIME systemTime;
-    for (nZeroCount = 0; nZeroCount < 0x100; nZeroCount++) {
+    for (nZeroCount = 0; nZeroCount < (int)_countof(wszWideBuf); nZeroCount++) {
       wszWideBuf[nZeroCount] = L'\0';
     }
 
@@ -3139,7 +3139,7 @@ void __stdcall CHATDLG_ClearChatHistory() {
 
 static void CHATDLG_AppendChatToHistory(char * szText) {
     char cCurrent;
-    memmove(gaChatDlgHistoryBuffer + 1, gaChatDlgHistoryBuffer, 0x900);
+    memmove(gaChatDlgHistoryBuffer + 1, gaChatDlgHistoryBuffer, sizeof(gaChatDlgHistoryBuffer) - sizeof(gaChatDlgHistoryBuffer[0]));
     strcpy((char*)gaChatDlgHistoryBuffer, szText);
     gnChatHistoryEntryCount++;
     if (gnChatHistoryEntryCount < 10) {
@@ -3234,7 +3234,7 @@ void __stdcall CHATDLG_RefreshGameNameDisplay() {
     uint16_t awszGameNames[512];
     char aszGameNames[512];
     char cCurrent;
-    for (nClearCount = 0; nClearCount < 0x200; nClearCount++) {
+    for (nClearCount = 0; nClearCount < (int)_countof(awszGameNames); nClearCount++) {
       awszGameNames[nClearCount] = L'\0';
     }
 
@@ -3706,11 +3706,11 @@ void __fastcall CHATDLG_HandleChatListClick(int32_t nStartRank, int32_t nRankCou
     if (!nRankCount) {
       for (nCmp = 0; nCmp < 0x80; nCmp++) { ((uint32_t*)sRowBuf.wszCell)[nCmp] = 0; }
 
-      for (nCmp = 0; nCmp < 0x100; nCmp++) {
+      for (nCmp = 0; nCmp < (int)_countof(wszNamePart); nCmp++) {
         wszNamePart[nCmp] = L'\0';
       }
 
-      for (nCmp = 0; nCmp < 0x100; nCmp++) {
+      for (nCmp = 0; nCmp < (int)_countof(wszEmptyMsg); nCmp++) {
         wszEmptyMsg[nCmp] = L'\0';
       }
 
@@ -4101,7 +4101,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
         ppFormIter->pLobbyForm0 = pCreatedForm;
         pPredefFormIter++;
         ppFormIter = (D2LobbyControlsStrc*)&ppFormIter->pLobbyForm1;
-      } while ((intptr_t)pPredefFormIter < (intptr_t)((char*)&OOGUtilities::gaPredefinedForms_b + 816));
+      } while ((intptr_t)pPredefFormIter < (intptr_t)(OOGUtilities::gaPredefinedForms_b + 17));
 
       BattleNetNews = (::D2WinTextBox*)D2Win::Src::D2WinMain::FORMS_CreateAnyForm(OOGUtilities::gaPredefinedForms_b + 0x17);
     } else {
@@ -4262,7 +4262,7 @@ int __fastcall CHATDLG_RunChatLobbyScreen(D2IniConfigStrc * pD2IniConfig) {
         }
 
         pForm++;
-      } while ((intptr_t)pForm <= (intptr_t)((char*)&gpCtlLobbyChat + 4));
+      } while ((intptr_t)pForm <= (intptr_t)&gpCtlLobbyChat[1]);
 
       if (gpCtlConfirmDialog) {
         D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlConfirmDialog);
@@ -4528,7 +4528,7 @@ int __fastcall OOGUTIL_SendChatMessage(char * szText, int32_t bUseChannelPrefix)
     int nSendResult;
     uint16_t nTitleStrId;
     char cFirstChar = *szText;
-    Storm::Source::SMem::SMemZero(OOGUtilities::gszOogChatInputBuffer, 0x200);
+    Storm::Source::SMem::SMemZero(OOGUtilities::gszOogChatInputBuffer, sizeof(OOGUtilities::gszOogChatInputBuffer));
     if (!bUseChannelPrefix || cFirstChar == '/' || !gpCurrentChatRoomContext) {
       pszSrc = szText;
       do {

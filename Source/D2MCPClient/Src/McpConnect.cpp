@@ -57,6 +57,7 @@ D2QSSocketStrc * MCPD2QSSocket = 0; D2_GLOBAL_GUARD(MCPD2QSSocket, "D2MCPClient:
 static uint32_t gMCPConnectionState[0x52] = {}; D2_STATIC_GUARD(gMCPConnectionState, "gMCPConnectionState");
 static uint32_t g_bMCPListGameSuccess = 0; D2_STATIC_GUARD(g_bMCPListGameSuccess, "g_bMCPListGameSuccess");
 static uint32_t g_nMCPJoinTimestamp = 0; D2_STATIC_GUARD(g_nMCPJoinTimestamp, "g_nMCPJoinTimestamp");
+static_assert(sizeof(void*) != 4 || sizeof(D2McpGameInfoStrc) == 0x18c, "D2McpGameInfoStrc is 0x18c bytes");
 D2McpGameInfoStrc g_CharSelectBuffer = {}; D2_GLOBAL_GUARD(g_CharSelectBuffer, "g_CharSelectBuffer");
 static char g_szMCPGameName[4] = {}; D2_STATIC_GUARD(g_szMCPGameName, "g_szMCPGameName");
 static uint32_t g_bMCPJoinGameSuccess = 0; D2_STATIC_GUARD(g_bMCPJoinGameSuccess, "g_bMCPJoinGameSuccess");
@@ -246,7 +247,7 @@ D2McpGameInfoStrc * __stdcall MCPCONNECT_GetCharSelectBuffer() {
 }
 
 void __stdcall MCPCONNECT_ClearCharSelectBuffer() {
-    memset(&g_CharSelectBuffer, 0, 0x18c);
+    memset(&g_CharSelectBuffer, 0, sizeof(D2McpGameInfoStrc));
 }
 
 uint32_t __stdcall MCPSTATE_GetCharUpgradeSuccess() {
@@ -456,7 +457,7 @@ void __stdcall MCPCONNECT_CreateThread(uint32_t * pSrcState) {
       return;
     }
 
-    memcpy(gMCPConnectionState, pSrcState, 0x52 * sizeof(uint32_t));
+    memcpy(gMCPConnectionState, pSrcState, sizeof(gMCPConnectionState));
     MCPThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)ThreadHandler, (LPVOID)0x0, 0, (LPDWORD)&pSrcState);
 }
 
@@ -482,22 +483,22 @@ int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnStartupInfo) {
     SetD2GSJoinResult(0);
     mcp0x01.MCPCookie = *pnStartupInfo;
     mcp0x01.MCPStatus = pnStartupInfo[1];
-    *(uint32_t*)(char*)&mcp0x01.MCPChunk1 = pnStartupInfo[2];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk1 + 4) = pnStartupInfo[3];
-    *(uint32_t*)(char*)&mcp0x01.MCPChunk2 = pnStartupInfo[6];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 4) = pnStartupInfo[7];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 8) = pnStartupInfo[8];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 12) = pnStartupInfo[9];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 16) = pnStartupInfo[10];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 20) = pnStartupInfo[0xb];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 24) = pnStartupInfo[0xc];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 28) = pnStartupInfo[0xd];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 32) = pnStartupInfo[0xe];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 36) = pnStartupInfo[0xf];
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 40) = pnStartupInfo[0x10];
+    mcp0x01.MCPChunk1[0] = pnStartupInfo[2];
+    mcp0x01.MCPChunk1[1] = pnStartupInfo[3];
+    mcp0x01.MCPChunk2[0] = pnStartupInfo[6];
+    mcp0x01.MCPChunk2[1] = pnStartupInfo[7];
+    mcp0x01.MCPChunk2[2] = pnStartupInfo[8];
+    mcp0x01.MCPChunk2[3] = pnStartupInfo[9];
+    mcp0x01.MCPChunk2[4] = pnStartupInfo[10];
+    mcp0x01.MCPChunk2[5] = pnStartupInfo[0xb];
+    mcp0x01.MCPChunk2[6] = pnStartupInfo[0xc];
+    mcp0x01.MCPChunk2[7] = pnStartupInfo[0xd];
+    mcp0x01.MCPChunk2[8] = pnStartupInfo[0xe];
+    mcp0x01.MCPChunk2[9] = pnStartupInfo[0xf];
+    mcp0x01.MCPChunk2[10] = pnStartupInfo[0x10];
     uint32_t pStrLen = 0;
     mcp0x01.nPacketId = '\x01';
-    *(uint32_t*)((char*)&mcp0x01.MCPChunk2 + 44) = pnStartupInfo[0x11];
+    mcp0x01.MCPChunk2[11] = pnStartupInfo[0x11];
     STRING_GetStringLength(mcp0x01.BnetName, (char*)(pnStartupInfo + 0x12), &pStrLen, 0x400);
     uint32_t nPacketSize = pStrLen + 0x41;
     if (nPacketSize >= 0xffff) {
@@ -1190,7 +1191,7 @@ void __stdcall MCPCONNECT_SanitizeWideString(uint16_t * wszText) {
       wszMatch = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)wszToken);
       while (wszMatch && wszMatch[nLen] != L'\0') {
         nTotalLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszMatch);
-        memmove(wszMatch, wszMatch + nLen + 1, (nTotalLen - nLen) * 2);
+        memmove(wszMatch, wszMatch + nLen + 1, (nTotalLen - nLen) * sizeof(uint16_t));
         wszMatch = (uint16_t*)D2Lang::Unicode::UNISYS::UNICODE_FindSubstring((uint16_t*)wszText, (uint16_t*)wszToken);
       }
 

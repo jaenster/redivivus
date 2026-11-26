@@ -27,6 +27,8 @@
 #include "Source/D2Game/D2GameRoot.h"
 #include "Source/D2Game/Skills/SkillsServer.data.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2DamageStrc) == 0x70, "D2DamageStrc is copied as 0x70 bytes");
+
 // The clamps use the Windows SDK min/max macros, as windef.h defines them for VC8.
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
@@ -571,7 +573,7 @@ uint32_t __fastcall SKILLS_AreaCallback_ApplyCopiedDamage(D2SkillCallbackContext
     D2DamageStrc sDamage;
     uint32_t* pSrcDamage = (uint32_t*)pContext->pCallbackArg;
     uint32_t* pDstDamage = (uint32_t*)&sDamage;
-    memcpy(pDstDamage, pSrcDamage, 0x70);
+    memcpy(pDstDamage, pSrcDamage, sizeof(D2DamageStrc));
     SkillsServer::SKILLS_ApplyDamageToTarget(pContext->pGame, pContext->pUnit, pUnit, &sDamage, 0);
     return 1;
 }
@@ -1922,7 +1924,7 @@ void __fastcall SKILLASS_ClearAllChargeUpStates(D2UnitStrc * pUnit) {
     int* pStateFlags = D2Common::DATATBLS::ItemStats::thunk_UNIT_GetStateList_StateFlags(pUnit);
     int nStateWordCount = D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize + 0x1f;
     nStateWordCount = nStateWordCount / 32;
-    memcpy(aStateBitWords, pStateFlags, nStateWordCount * 4);
+    memcpy(aStateBitWords, pStateFlags, nStateWordCount * sizeof(aStateBitWords[0]));
     int nStateIdBitBase = 0;
     if (nStateWordCount <= 0) {
       return;

@@ -164,6 +164,8 @@
 #include "Source/D2Game/Skills/SkillsServer.data.h"
 #include "Source/Fog/Src/Safesock.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(D2DamageStrc) == 0x70, "D2DamageStrc is copied as 0x70 bytes");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -901,7 +903,7 @@ uint32_t __fastcall SKILLS_ApplyDamageCallback(D2SkillCallbackContextStrc * pCon
     D2DamageStrc sDamage;
     uint32_t* pDamageSrc = (uint32_t*)pContext->pCallbackArg;
     uint32_t* pDamageDstCopy = (uint32_t*)&sDamage;
-    memcpy(pDamageDstCopy, pDamageSrc, 0x70);
+    memcpy(pDamageDstCopy, pDamageSrc, sizeof(D2DamageStrc));
     SKILLS_ApplyDamageToTarget(pContext->pGame, pContext->pUnit, pUnit, &sDamage, 0);
     return 1;
 }

@@ -1095,7 +1095,7 @@ void __fastcall SKILL_ForEachUnitInRadius(D2UnitStrc * pUnit, int32_t nCenterX, 
 }
 
 BOOL __fastcall SKILLS_RadiusCallback_IncrementCounter(D2fpSkillFuncArg * pFuncArg, D2UnitStrc * pUnit) {
-    pFuncArg->pSub->pOwner = (D2UnitStrc*)((intptr_t)&pFuncArg->pSub->pOwner->eUnitType + 1);
+    (*(int*)pFuncArg->pSub)++; // the caller's user data is a hit counter, not a D2fpSkillFuncSub
     return 1;
 }
 
@@ -2129,12 +2129,12 @@ void __fastcall SKILLS_CreateMissileSpiralGrid(int32_t nSkillLevel, D2SkillArgSt
     pSkillArg->nUnitY = -0xe;
     UNIT::Missile::MakeMissile(pSkillArg);
     int nRingsRemaining = nSkillLevel - 1;
-    for (int nRingOffset = 0; nRingOffset < 7; nRingOffset++) {
+    for (int nRingOffset = 0; nRingOffset < (int)_countof(gaSkillSpiralGridOffsets_2); nRingOffset++) {
       if (!nRingsRemaining) {
         return;
       }
 
-      for (nGridOffset = 0; nGridOffset < 4; nGridOffset++) {
+      for (nGridOffset = 0; nGridOffset < (int)_countof(gaSkillSpiralGridOffsets_3); nGridOffset++) {
         if (nRingsRemaining <= 0) {
           break;
         }

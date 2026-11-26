@@ -340,7 +340,7 @@ void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t 
     pUnit->eAnimMode = uVar1;
     D2UnitDataObjectStrc* pObjectData = D2_NEW_AT(D2UnitDataObjectStrc, ".\\UNIT\\Object.cpp", 0x76);
     pUnit->pUnitData.pUnitDataObject = pObjectData;
-    memset(pObjectData, 0, 0x38);
+    memset(pObjectData, 0, sizeof(*pObjectData));
     pUnit->pUnitData.pUnitDataObject->unk0x10 = 0;
     pUnit->pUnitData.pUnitDataObject->unk0x14 = 0;
     D2ObjectsTxt* pTxtLine = D2Common::DATATBLS::ObjectTbls::TXT_Objects_GetLine(nClassId);
@@ -806,7 +806,7 @@ void __fastcall OBJECT_SpawnExplosivePotionGrid(D2UnitStrc * pUnit, D2UnitStrc *
     int anXOffsets[6] = { -6, -6, 0, 0, 6, 6 };
     int anYOffsets[6] = { 6, -6, 6, -6, 6, -6 };
     eD2UnitType eUnitType;
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < (int)_countof(anXOffsets); i++) {
       int nLevel;
       memset(&sSkillArg, 0, sizeof(sSkillArg));
       eUnitType = pUnit->eUnitType;

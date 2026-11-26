@@ -1250,7 +1250,7 @@ static uint32_t __stdcall CUNIT_IsItemInAnyInventory(D2UnitStrc * pExcludeUnit, 
         nBucket++;
       } while (nBucket < 0x80);
 
-      ppUnitTable = (D2UnitStrc* (*)[128])((char*)&ServerSideUnitHashTables + 512);
+      ppUnitTable = &ServerSideUnitHashTables[1];
       nTable++;
     } while (nTable < 2);
 
@@ -1448,10 +1448,10 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
     pCurPath->nDirectionVectorX = pLocalPath->nDirectionVectorX;
     pCurPath->nDirectionVectorY = pLocalPath->nDirectionVectorY;
     if (pLocalPath->dwPathPoints) {
-      memcpy(pCurPath->PathPoints, pLocalPath->PathPoints, pLocalPath->dwPathPoints * 4);
+      memcpy(pCurPath->PathPoints, pLocalPath->PathPoints, pLocalPath->dwPathPoints * sizeof(pCurPath->PathPoints[0]));
     }
     if (pLocalPath->nSaveCoordsSize) {
-      memcpy(pCurPath->SaveCoords, pLocalPath->SaveCoords, pLocalPath->nSaveCoordsSize * 4);
+      memcpy(pCurPath->SaveCoords, pLocalPath->SaveCoords, pLocalPath->nSaveCoordsSize * sizeof(pCurPath->SaveCoords[0]));
     }
 
     pCurPath->nSaveCoordsSize = pLocalPath->nSaveCoordsSize;
@@ -1951,28 +1951,28 @@ void __stdcall CLIENT_UpdateUnitGfxState() {
       for (pTmp = *ppBucket; pTmp; pTmp = pTmp->pListNext) {}
 
       ppBucket++;
-    } while ((intptr_t)ppBucket < (intptr_t)((char*)&ClientSideUnitHashTables + 1024));
+    } while ((intptr_t)ppBucket < (intptr_t)(ClientSideUnitHashTables[1] + _countof(ClientSideUnitHashTables[1])));
 
     ppBucket = ServerSideUnitHashTables[4];
     do {
       for (pTmp = *ppBucket; pTmp; pTmp = pTmp->pListNext) {}
 
       ppBucket++;
-    } while ((intptr_t)ppBucket < (intptr_t)((char*)&ServerSideUnitHashTables + 2560));
+    } while ((intptr_t)ppBucket < (intptr_t)(ServerSideUnitHashTables[4] + _countof(ServerSideUnitHashTables[4])));
 
     ppBucket = ServerSideUnitHashTables[0];
     do {
       for (pTmp = *ppBucket; pTmp; pTmp = pTmp->pListNext) {}
 
       ppBucket++;
-    } while ((intptr_t)ppBucket < (intptr_t)((char*)&ServerSideUnitHashTables + 512));
+    } while ((intptr_t)ppBucket < (intptr_t)(ServerSideUnitHashTables[0] + _countof(ServerSideUnitHashTables[0])));
 
     ppBucket = ServerSideUnitHashTables[1];
     do {
       for (pTmp = *ppBucket; pTmp; pTmp = pTmp->pListNext) {}
 
       ppBucket++;
-    } while ((intptr_t)ppBucket < (intptr_t)((char*)&ServerSideUnitHashTables + 1024));
+    } while ((intptr_t)ppBucket < (intptr_t)(ServerSideUnitHashTables[1] + _countof(ServerSideUnitHashTables[1])));
 
     CUNIT_IterateHashTableWithCallback(ClientSideUnitHashTables[1], (fnUnitIterCallback)CLIENT_ClearChangedStatFlags_Thunk);
     CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[4], (fnUnitIterCallback)CLIENT_ClearChangedStatFlags_Thunk);
@@ -2461,10 +2461,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     if (pItemSeed && pUnit->eUnitType == UNIT_MONSTER) {
       pItemData = pUnit->pUnitData.pUnitDataMonster;
       if (pItemData && pItemData->Components) {
-        *(uint32_t*)pItemData->Components = *(uint32_t*)pItemSeed;
-        *(uint32_t*)(pItemData->Components + 4) = *(uint32_t*)(pItemSeed + 4);
-        *(uint32_t*)(pItemData->Components + 8) = *(uint32_t*)(pItemSeed + 8);
-        *(uint32_t*)(pItemData->Components + 0xc) = *(uint32_t*)(pItemSeed + 0xc);
+        memcpy(pItemData->Components, pItemSeed, sizeof(pItemData->Components));
       }
     }
 

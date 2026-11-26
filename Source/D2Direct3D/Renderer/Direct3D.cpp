@@ -21,6 +21,10 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(DDCAPS_DX7) == 0x17c, "DDCAPS_DX7: dwSize and the clear after it must be the 0x17c bytes 1.14d uses");
+static_assert(sizeof(void*) != 4 || sizeof(DDSURFACEDESC2) == 0x7c, "DDSURFACEDESC2: dwSize and the clear after it must be the 0x7c bytes 1.14d uses");
+static_assert(sizeof(D2D3DDeviceSlotStrc) == 0x3c0 && offsetof(D2D3DDeviceSlotStrc, dwAgpMemTotal) == 0x134, "D2D3DDeviceSlotStrc: the 0x3c0-byte slot whose first 0x134 bytes 1.14d clears");
+
 #ifndef min
 #define min(a, b) (((a) < (b)) ? (a) : (b))
 #endif
@@ -1005,8 +1009,8 @@ BOOL __stdcall RENDERER_D3D_InitializeCutsceneMode() {
     if (nSetDisplayModeResult) {
       szErrorMessage = "SetDisplayMode failed!";
     } else {
-      dwDDSurfDescSize.dwSize = 0x7c;
-      memset(&dwDDSurfDescSize.dwFlags, 0, 0x78);
+      dwDDSurfDescSize.dwSize = sizeof(dwDDSurfDescSize);
+      memset(&dwDDSurfDescSize.dwFlags, 0, sizeof(dwDDSurfDescSize) - sizeof(dwDDSurfDescSize.dwSize));
       dwDDSurfDescSize.dwFlags = 1;
       dwDDSurfDescSize.dwCaps = 0x4200;
       nSetDisplayModeResult = g_pDirectDraw7->lpVtbl->CreateSurface(g_pDirectDraw7, &dwDDSurfDescSize, (void**)&g_pD3DSurfaceBackbuffer, nullptr);
@@ -1044,8 +1048,9 @@ void __fastcall SetGamma(int nGamma) {
     }
 
     Fog::Src::DataArrays::FOG_FillArrayWithRandomInts(nGamma, aGammaRamp, (double)BOOL_0074c020, 2, 0x100, 0xffff);
-    memcpy(&aGammaRamp[128], aGammaRamp, 0x200);
-    memcpy(&aGammaRamp[256], aGammaRamp, 0x200);
+    // aGammaRamp is a DDGAMMARAMP: three 256-entry WORD channels, green and blue copied from red.
+    memcpy(&aGammaRamp[128], aGammaRamp, sizeof(aGammaRamp) / 3);
+    memcpy(&aGammaRamp[256], aGammaRamp, sizeof(aGammaRamp) / 3);
     if (!g_pDDGammaControl) {
       return;
     }
@@ -1066,8 +1071,8 @@ BOOL __fastcall GetBackBuffer(BYTE * pBuffer) {
     uint32_t* pRowStart;
     int nRow;
     uint32_t uPixel32;
-    ddSurfDescSize.dwSize = 0x7c;
-    memset(&ddSurfDescSize.dwFlags, 0, 0x78);
+    ddSurfDescSize.dwSize = sizeof(ddSurfDescSize);
+    memset(&ddSurfDescSize.dwFlags, 0, sizeof(ddSurfDescSize) - sizeof(ddSurfDescSize.dwSize));
     if (!D3DSurfaceSecondary) {
       return 0;
     }
@@ -1117,13 +1122,13 @@ BOOL __fastcall GetBackBuffer(BYTE * pBuffer) {
 int32_t __fastcall RENDERER_D3D_CreateSystemMemoryTexture(IDirectDrawSurface7 * * ppSurface, IDirect3DTexture2 * * ppTexture, int32_t nWidth, int32_t nHeight) {
     int nCopyCount;
     DDSURFACEDESC2 ddSurfaceDesc;
-    ddSurfaceDesc.dwSize = 0x7c;
-    memset(&ddSurfaceDesc.dwFlags, 0, 0x78);
+    ddSurfaceDesc.dwSize = sizeof(ddSurfaceDesc);
+    memset(&ddSurfaceDesc.dwFlags, 0, sizeof(ddSurfaceDesc) - sizeof(ddSurfaceDesc.dwSize));
     ddSurfaceDesc.dwFlags = 0x1007;
     ddSurfaceDesc.dwCaps = 0x840;
     uint32_t* pSrcTemplate = gsD3DTextureDescTemplate;
     DWORD* pDstPixelFormat = ddSurfaceDesc.ddpfPixelFormat;
-    memcpy(pDstPixelFormat, pSrcTemplate, 32);
+    memcpy(pDstPixelFormat, pSrcTemplate, sizeof(ddSurfaceDesc.ddpfPixelFormat));
     ddSurfaceDesc.dwWidth = nWidth;
     ddSurfaceDesc.dwHeight = nHeight;
     DWORD dwResult = g_pDirectDraw7->lpVtbl->CreateSurface(g_pDirectDraw7, &ddSurfaceDesc, (void**)ppSurface, nullptr);
@@ -1149,8 +1154,8 @@ void __stdcall RENDERER_D3D_ClearBackbuffer() {
       pTargetSurface = D3DSurfaceSecondary;
     }
 
-    ddSurfDescSize.dwSize = 0x7c;
-    memset(&ddSurfDescSize.dwFlags, 0, 0x78);
+    ddSurfDescSize.dwSize = sizeof(ddSurfDescSize);
+    memset(&ddSurfDescSize.dwFlags, 0, sizeof(ddSurfDescSize) - sizeof(ddSurfDescSize.dwSize));
     DWORD nResult = pTargetSurface->lpVtbl->Lock(pTargetSurface, nullptr, &ddSurfDescSize, 0x21, nullptr);
     int nRowsLeft = RENDERER_nWindowHeight;
     if (nResult) {
@@ -1171,15 +1176,15 @@ void __fastcall RENDERER_D3D_CopySurfacePixels(IDirectDrawSurface7 * pSrcSurface
     size_t nCopyWidth;
     uint8_t* pSrcRowCopy;
     uint8_t* pDestRowCopy;
-    ddDestDescSize.dwSize = 0x7c;
-    memset(&ddDestDescSize.dwFlags, 0, 0x78);
+    ddDestDescSize.dwSize = sizeof(ddDestDescSize);
+    memset(&ddDestDescSize.dwFlags, 0, sizeof(ddDestDescSize) - sizeof(ddDestDescSize.dwSize));
     DWORD nLockResult = pDestSurface->lpVtbl->Lock(pDestSurface, nullptr, &ddDestDescSize, 0x21, nullptr);
     if (nLockResult) {
       DIRECTD3D_LogError("Failed to lock source surface", nLockResult);
     } else {
       DDSURFACEDESC2 ddSrcDescSize;
-      ddSrcDescSize.dwSize = 0x7c;
-      memset(&ddSrcDescSize.dwFlags, 0, 0x78);
+      ddSrcDescSize.dwSize = sizeof(ddSrcDescSize);
+      memset(&ddSrcDescSize.dwFlags, 0, sizeof(ddSrcDescSize) - sizeof(ddSrcDescSize.dwSize));
       nLockResult = pSrcSurface->lpVtbl->Lock(pSrcSurface, nullptr, &ddSrcDescSize, 0x21, nullptr);
       if (nLockResult) {
         DIRECTD3D_LogError("Failed to lock dest surface", nLockResult);
@@ -1462,8 +1467,8 @@ HRESULT __stdcall RENDERER_D3D_EnumDisplayModeCallback(int * pDisplayModeDesc, D
         DIRECTD3D_LogError("SetDisplayMode (mode enumeration) failed!", nDDCallResult);
       } else {
         if (!(Fog::BitBuffer::gadwBitMasks[0] & dwModeFlags) && !(Fog::BitBuffer::gadwBitMasks[1] & dwModeFlags)) {
-          nDDSurfDescSize.dwSize = 0x7c;
-          memset(&nDDSurfDescSize.dwFlags, 0, 0x78);
+          nDDSurfDescSize.dwSize = sizeof(nDDSurfDescSize);
+          memset(&nDDSurfDescSize.dwFlags, 0, sizeof(nDDSurfDescSize) - sizeof(nDDSurfDescSize.dwSize));
           nDDSurfDescSize.dwFlags = 1;
           nDDSurfDescSize.dwCaps = 0x4200;
           nDDCallResult = g_pDirectDraw7->lpVtbl->CreateSurface(g_pDirectDraw7, &nDDSurfDescSize, (void**)&__frame0.pTestSurface, nullptr);
@@ -1472,8 +1477,8 @@ HRESULT __stdcall RENDERER_D3D_EnumDisplayModeCallback(int * pDisplayModeDesc, D
             goto release_test_objects;
           }
         } else {
-          nDDSurfDescSize.dwSize = 0x7c;
-          memset(&nDDSurfDescSize.dwFlags, 0, 0x78);
+          nDDSurfDescSize.dwSize = sizeof(nDDSurfDescSize);
+          memset(&nDDSurfDescSize.dwFlags, 0, sizeof(nDDSurfDescSize) - sizeof(nDDSurfDescSize.dwSize));
           nDDSurfDescSize.dwFlags = 0x21;
           nDDSurfDescSize.dwCaps = 0x6218;
           nDDSurfDescSize.dwBackBufferCount = 1;
@@ -1570,9 +1575,9 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
     pfnSehHandler = SehHandler_6ca520;
     __frame0.pPrevExceptionRecord = ExceptionList;
     __frame0.pDirectDraw1 = 0;
-    nDDCapsSize.dwSize = 0x17c;
+    nDDCapsSize.dwSize = sizeof(nDDCapsSize);
     ExceptionList = &__frame0.pPrevExceptionRecord;
-    memset(&nDDCapsSize.dwCaps, 0, 0x178);
+    memset(&nDDCapsSize.dwCaps, 0, sizeof(nDDCapsSize) - sizeof(nDDCapsSize.dwSize));
     __frame0.pPrimarySurface = 0;
     __frame0.pBackBufferSurface = 0;
     __frame0.pEnumDevice = 0;
@@ -1592,7 +1597,7 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
     nDeviceNameOffset = gnDirect3DDeviceCount * 0x3c0;
     D2D3DDeviceSlotStrc* pDeviceBlock;
     pDeviceBlock = gD3DDeviceBlock0 + gnDirect3DDeviceCount;
-    memset(pDeviceBlock, 0, 0x134);
+    memset(pDeviceBlock, 0, offsetof(D2D3DDeviceSlotStrc, dwAgpMemTotal));
     if (!lpGUID) {
       pDeviceBlock->dwFlags |= Fog::BitBuffer::gadwBitMasks[0];
     } else {
@@ -1690,8 +1695,8 @@ BOOL __stdcall Direct3DCallBack(GUID * lpGUID, char * lpDriverDescription, char 
               if (hResult) {
                 pszErrorMsg = "IDirectDraw4_SetDisplayMode";
               } else {
-                nSurfDescSize.dwSize = 0x7c;
-                memset(&nSurfDescSize.dwFlags, 0, 0x78);
+                nSurfDescSize.dwSize = sizeof(nSurfDescSize);
+                memset(&nSurfDescSize.dwFlags, 0, sizeof(nSurfDescSize) - sizeof(nSurfDescSize.dwSize));
                 nSurfDescSize.dwFlags = 0x21;
                 nSurfDescSize.dwCaps = 0x6218;
                 nSurfDescSize.dwBackBufferCount = 1;
@@ -2815,54 +2820,54 @@ void __fastcall DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc 
       DVar2 = 6;
       g_pD3DDevice->lpVtbl->DrawIndexedPrimitiveVB(g_pD3DDevice, 6, g_pD3DGroundTileVB, gdwRendererMode, 4, 0x1c);
     } else {
-      uint8_t* pLightCursor;
+      D2GfxLightExStrc* pLightCursor;
       DVar2 = (*pVBLockFn)(g_pD3DGroundTileVB, 0x21, (void**)&pAlpha, nullptr);
       if (DVar2) {
         goto lock_failed;
       }
 
       pTileData = (void*)0x4;
-      pLightCursor = &pLight->sLight.nGreen;
+      pLightCursor = pLight;
       do {
-        byLightIntensity = ((D2GfxLightStrc*)(pLightCursor - 2))->nIntensity;
-        pAlpha->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[-1] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)*pLightCursor + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[1] + ((uint32_t)byLightIntensity << 8)]);
-        pAlpha->fX = (float)*(int*)(pLightCursor + 2);
-        pAlpha->fY = (float)*(int*)(pLightCursor + 6);
-        byLightIntensity = pLightCursor[10];
-        pAlpha[1].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0xb] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0xc] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0xd] + ((uint32_t)byLightIntensity << 8)]);
-        pAlpha[1].fX = (float)*(int*)(pLightCursor + 0xe);
-        pAlpha[1].fY = (float)*(int*)(pLightCursor + 0x12);
-        byLightIntensity = pLightCursor[0x16];
-        pAlpha[2].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x17] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x18] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x19] + ((uint32_t)byLightIntensity << 8)]);
-        pAlpha[2].fX = (float)*(int*)(pLightCursor + 0x1a);
-        pAlpha[2].fY = (float)*(int*)(pLightCursor + 0x1e);
-        byLightIntensity = pLightCursor[0x22];
-        pAlpha[3].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x23] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x24] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x25] + ((uint32_t)byLightIntensity << 8)]);
-        pAlpha[3].fX = (float)*(int*)(pLightCursor + 0x26);
-        pAlpha[3].fY = (float)*(int*)(pLightCursor + 0x2a);
-        byLightIntensity = pLightCursor[0x2e];
-        pAlpha[4].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x2f] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x30] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x31] + ((uint32_t)byLightIntensity << 8)]);
-        pAlpha[4].fX = (float)*(int*)(pLightCursor + 0x32);
-        pAlpha[4].fY = (float)*(int*)(pLightCursor + 0x36);
-        byLightIntensity = pLightCursor[0x3a];
-        pAlpha[5].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x3b] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x3c] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x3d] + ((uint32_t)byLightIntensity << 8)]);
-        pAlpha[5].fX = (float)*(int*)(pLightCursor + 0x3e);
-        pAlpha[5].fY = (float)*(int*)(pLightCursor + 0x42);
-        byLightIntensity = pLightCursor[0x46];
-        pAlpha[6].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x47] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x48] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x49] + ((uint32_t)byLightIntensity << 8)]);
-        pAlpha[6].fX = (float)*(int*)(pLightCursor + 0x4a);
-        pAlpha[6].fY = (float)*(int*)(pLightCursor + 0x4e);
-        byLightIntensity = pLightCursor[0x52];
-        pAlpha[7].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x53] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x54] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x55] + ((uint32_t)byLightIntensity << 8)]);
-        pAlpha[7].fX = (float)*(int*)(pLightCursor + 0x56);
-        pAlpha[7].fY = (float)*(int*)(pLightCursor + 0x5a);
-        byLightIntensity = pLightCursor[0x5e];
-        pAlpha[8].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x5f] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x60] + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[0x61] + ((uint32_t)byLightIntensity << 8)]);
-        pAlpha[8].fX = (float)*(int*)(pLightCursor + 0x62);
-        pAlpha[8].fY = (float)*(int*)(pLightCursor + 0x66);
+        byLightIntensity = pLightCursor->sLight.nIntensity;
+        pAlpha->dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor->sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor->sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor->sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+        pAlpha->fX = (float)pLightCursor->nX;
+        pAlpha->fY = (float)pLightCursor->nY;
+        byLightIntensity = pLightCursor[1].sLight.nIntensity;
+        pAlpha[1].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[1].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[1].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[1].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+        pAlpha[1].fX = (float)pLightCursor[1].nX;
+        pAlpha[1].fY = (float)pLightCursor[1].nY;
+        byLightIntensity = pLightCursor[2].sLight.nIntensity;
+        pAlpha[2].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[2].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[2].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[2].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+        pAlpha[2].fX = (float)pLightCursor[2].nX;
+        pAlpha[2].fY = (float)pLightCursor[2].nY;
+        byLightIntensity = pLightCursor[3].sLight.nIntensity;
+        pAlpha[3].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[3].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[3].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[3].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+        pAlpha[3].fX = (float)pLightCursor[3].nX;
+        pAlpha[3].fY = (float)pLightCursor[3].nY;
+        byLightIntensity = pLightCursor[4].sLight.nIntensity;
+        pAlpha[4].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[4].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[4].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[4].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+        pAlpha[4].fX = (float)pLightCursor[4].nX;
+        pAlpha[4].fY = (float)pLightCursor[4].nY;
+        byLightIntensity = pLightCursor[5].sLight.nIntensity;
+        pAlpha[5].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[5].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[5].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[5].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+        pAlpha[5].fX = (float)pLightCursor[5].nX;
+        pAlpha[5].fY = (float)pLightCursor[5].nY;
+        byLightIntensity = pLightCursor[6].sLight.nIntensity;
+        pAlpha[6].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[6].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[6].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[6].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+        pAlpha[6].fX = (float)pLightCursor[6].nX;
+        pAlpha[6].fY = (float)pLightCursor[6].nY;
+        byLightIntensity = pLightCursor[7].sLight.nIntensity;
+        pAlpha[7].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[7].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[7].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[7].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+        pAlpha[7].fX = (float)pLightCursor[7].nX;
+        pAlpha[7].fY = (float)pLightCursor[7].nY;
+        byLightIntensity = pLightCursor[8].sLight.nIntensity;
+        pAlpha[8].dwDiffuse = (uint32_t)((uint32_t)((uint32_t)((uint16_t)(uint8_t)cAlphaByte << 8 | (uint16_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[8].sLight.nRed + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[8].sLight.nGreen + ((uint32_t)byLightIntensity << 8)]) << 8 | (uint32_t)(uint8_t)g_aLightingTable[(uint32_t)pLightCursor[8].sLight.nBlue + ((uint32_t)byLightIntensity << 8)]);
+        pAlpha[8].fX = (float)pLightCursor[8].nX;
+        pAlpha[8].fY = (float)pLightCursor[8].nY;
         pAlpha += 9;
         pTileData = (void*)((char*)pTileData - 1);
-        pLightCursor += 0x6c;
+        pLightCursor += 9;
       } while (pTileData);
 
       DVar2 = g_pD3DGroundTileVB->lpVtbl->Unlock(g_pD3DGroundTileVB);
@@ -2903,7 +2908,7 @@ void __fastcall RENDERER_D3D_SetTextureStageColor(D2D3DVertexStrc * pVertex, uin
 // Initializes perspective Z-division table at 0x00981748 (8192 entries). For each Z coordinate in range [-4096, 4095], calculates perspective factor as 3059712 / (Z - 3000), clamped to range Z=[-2999, 2999] to prevent divide-by-zero. Used for depth-based vertex scaling in 3D tile rendering.
 void __stdcall RENDERER_D3D_InitPerspectiveTransformTable() {
     int nZ = -0x1000;
-    for (int i = 0; i < 0x2000; i++) {
+    for (int i = 0; i < (int)_countof(g_aPerspectiveZDivisionTable); i++) {
       int nClampedZ;
       if (nZ > -2999 && nZ < 2999) {
         nClampedZ = nZ;

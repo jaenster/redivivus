@@ -230,7 +230,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
                 __frame0.sClientAddr.sin_family = 0;
                 __frame0.sClientAddr.sin_port = 0;
                 __frame0.sClientAddr.sin_addr = 0;
-                memset(__frame0.sClientAddr.sin_zero, 0, 8 * sizeof(__frame0.sClientAddr.sin_zero[0]));
+                memset(__frame0.sClientAddr.sin_zero, 0, sizeof(__frame0.sClientAddr.sin_zero));
                 __frame0.uSlot634.nSelectResult = 0;
                 while (true) {
                   /* int iError for WSASetLastError */ _Wrappers::WSASetLastError(0);

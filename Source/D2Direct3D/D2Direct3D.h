@@ -14,6 +14,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2GfxCellNodeStrc;
 struct D2D3DDisplayModeStrc;
 struct D2GroundSubTileStrc;
 struct D2RendererFunctionsStrc;
@@ -161,8 +162,8 @@ struct D3DSubtileCacheStrc {
 #define D2_DEFINED_D3DTextureCacheNodeStrc
 struct D3DTextureCacheNodeStrc {
     /* 0x00 */ int nIndex;
-    /* 0x04 */ void * pAssociatedTilePtr;
-    /* 0x08 */ int32_t nTileSlotIndex;
+    /* 0x04 */ struct D2GfxCellNodeStrc * pAssociatedTilePtr; // the cel frame whose texture this node holds
+    /* 0x08 */ int32_t nTileSlotIndex; // its D2GfxCellNodeStrc::aModes slot
     /* 0x0C */ void * field_0x0C;
     /* 0x10 */ struct IDirectDrawSurface7 * pSurface;
     /* 0x14 */ struct IDirect3DTexture2 * pTexture;

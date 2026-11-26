@@ -28,6 +28,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2StatListStrc) == 0x3c, "D2_NEW_AT
 #endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2StatListExStrc) == 0x64, "D2_NEW_AT(D2StatListExStrc): the 32-bit layout must be the 0x64 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || sizeof(D2StatStrc) == 0x8, "D2StatStrc is 0x8 bytes on x86");
 
 
 #ifndef RECON_FPTD_pfnStatChangedCb
@@ -114,11 +115,11 @@ static D2StatStrc * __stdcall STATLIST_InsertStatIntoArray(D2StatInfoStrc * pSta
     }
     if (pStatInfo->wStatCount >= pStatInfo->wStatCapacity) {
       pStatInfo->wStatCapacity += 4;
-      pReallocBuf = (D2StatStrc*)D2_REALLOC_POOL_AT(pStatList, pStatInfo->pStatInfo, pStatInfo->wStatCapacity * 8, ".\\Stats\\StatsEx.cpp", 0xe8);
+      pReallocBuf = (D2StatStrc*)D2_REALLOC_POOL_AT(pStatList, pStatInfo->pStatInfo, pStatInfo->wStatCapacity * sizeof(D2StatStrc), ".\\Stats\\StatsEx.cpp", 0xe8);
       pStatInfo->pStatInfo = pReallocBuf;
     }
     if (nInsertPos < pStatInfo->wStatCount) {
-      memmove(pStatInfo->pStatInfo + nInsertPos + 1, pStatInfo->pStatInfo + nInsertPos, (pStatInfo->wStatCount - nInsertPos) * 8);
+      memmove(pStatInfo->pStatInfo + nInsertPos + 1, pStatInfo->pStatInfo + nInsertPos, (pStatInfo->wStatCount - nInsertPos) * sizeof(D2StatStrc));
     }
 
     pReallocBuf = pStatInfo->pStatInfo + nInsertPos;
@@ -135,7 +136,7 @@ static void __stdcall STATLIST_RemoveStatFromArray(D2PoolManagerStrc * pPoolMana
       return;
     }
     if (nRemoveIdx < nCount - 1) {
-      memmove(pStat, pStat + 1, (nCount - nRemoveIdx) * 8 - 8);
+      memmove(pStat, pStat + 1, (nCount - nRemoveIdx) * sizeof(D2StatStrc) - sizeof(D2StatStrc));
     }
 
     ppStatArray->wStatCount--;
@@ -144,7 +145,7 @@ static void __stdcall STATLIST_RemoveStatFromArray(D2PoolManagerStrc * pPoolMana
     }
 
     ppStatArray->wStatCapacity = ppStatArray->wStatCapacity - 4;
-    D2StatStrc* pReallocBuf = (D2StatStrc*)D2_REALLOC_POOL_AT(pPoolManager2, ppStatArray->pStatInfo, ppStatArray->wStatCapacity * 8, ".\\Stats\\StatsEx.cpp", 0x110);
+    D2StatStrc* pReallocBuf = (D2StatStrc*)D2_REALLOC_POOL_AT(pPoolManager2, ppStatArray->pStatInfo, ppStatArray->wStatCapacity * sizeof(D2StatStrc), ".\\Stats\\StatsEx.cpp", 0x110);
     ppStatArray->pStatInfo = pReallocBuf;
 }
 
@@ -204,12 +205,12 @@ static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatList
     if (pStatEx->sChangedStats.wCount >= nNewCapacity) {
       nNewCapacity += 4;
       pStatEx->sChangedStats.wCapacity = nNewCapacity;
-      pStatEx->sChangedStats.pChangedStatIds = (int*)D2_REALLOC_POOL_AT(pStatEx->sStatList.pMemory, pStatEx->sChangedStats.pChangedStatIds, nNewCapacity * 4, ".\\Stats\\StatsEx.cpp", 0x162);
+      pStatEx->sChangedStats.pChangedStatIds = (int*)D2_REALLOC_POOL_AT(pStatEx->sStatList.pMemory, pStatEx->sChangedStats.pChangedStatIds, nNewCapacity * sizeof(int), ".\\Stats\\StatsEx.cpp", 0x162);
     }
 
     int nCount = (int)pStatEx->sChangedStats.wCount;
     if (nInsertPos < nCount) {
-      memmove(pStatEx->sChangedStats.pChangedStatIds + nInsertPos + 1, pStatEx->sChangedStats.pChangedStatIds + nInsertPos, (nCount - nInsertPos) * 4);
+      memmove(pStatEx->sChangedStats.pChangedStatIds + nInsertPos + 1, pStatEx->sChangedStats.pChangedStatIds + nInsertPos, (nCount - nInsertPos) * sizeof(int));
     }
 
     pStatEx->sChangedStats.pChangedStatIds[nInsertPos] = nShiftedStat;
@@ -395,7 +396,7 @@ static void __stdcall STATLIST_SetFullStatValue(int32_t nStatKey, int32_t nNewVa
 // Allocates a simple D2StatListStrc (60 bytes). Used for child stat lists (item bonuses, buff overlays, aura effects). Does NOT allocate the extended fields (full stats, state flags).
 D2StatListStrc * __stdcall AllocStatList(D2PoolManagerStrc * pMemory, int32_t nFlags, int32_t nFrame, eD2UnitType eUnitType, int32_t dwUnitGUID) {
     D2StatListStrc* pNewStatList = D2_NEW_POOL_AT(pMemory, D2StatListStrc, ".\\Stats\\StatsEx.cpp", 0x56a);
-    memset(pNewStatList, 0, 0x3c);
+    memset(pNewStatList, 0, sizeof(D2StatListStrc));
     pNewStatList->eOwnerType = eUnitType;
     pNewStatList->pMemory = pMemory;
     pNewStatList->nOwnerGUID = dwUnitGUID;
@@ -1908,7 +1909,7 @@ D2StatListExStrc * __stdcall AllocStatListEx(D2UnitStrc * pUnit, uint32_t dwFlag
     }
 
     D2StatListExStrc* pStatsEx = D2_NEW_POOL_AT(pUnit->pMemory, D2StatListExStrc, ".\\Stats\\StatsEx.cpp", 0x586);
-    memset(pStatsEx, 0, 100);
+    memset(pStatsEx, 0, sizeof(D2StatListExStrc));
     pStatsEx->sStatList.pMemory = pUnit->pMemory;
     pStatsEx->sStatList.eOwnerType = !pUnit ? UNIT_COUNT : pUnit->eUnitType;
     pStatsEx->sStatList.nOwnerGUID = !pUnit ? -1 : pUnit->nUnitGUID;

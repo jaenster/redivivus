@@ -15,6 +15,7 @@
 #include "Source/D2Headers/d2_platform.h"
 
 // Forward declarations
+struct D2GfxCellNodeStrc;
 struct GlTextureCacheStrc;
 
 // Data types
@@ -23,8 +24,8 @@ struct GlTextureCacheStrc;
 struct GlTextureCacheNodeStrc {
     /* 0x00 */ int nIndex; // Node index in array
     /* 0x04 */ uint32_t dwAddress; // VRAM texture address
-    /* 0x08 */ void * pHashTable; // Back-reference to hash table
-    /* 0x0C */ int nHashIndex; // Index in hash table bucket
+    /* 0x08 */ struct D2GfxCellNodeStrc * pHashTable; // the cel frame whose texture this node holds
+    /* 0x0C */ int nHashIndex; // its D2GfxCellNodeStrc::aModes slot
     /* 0x10 */ uint8_t field_0x10;
     /* 0x11 */ uint8_t field_0x11;
     /* 0x12 */ uint8_t field_0x12;

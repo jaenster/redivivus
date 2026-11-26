@@ -41,7 +41,7 @@ void __fastcall SRP_InitializeRandomState(D2Srp * pThis, int, uint32_t dwSeed) {
     SHA1::SHA1Init(&aShaCtx);
     SHA1::SHA1Update(&aShaCtx, &sSeedEntropy, 0xc);
     SHA1::SHA1Final(pThis->aRandomPoolA, &aShaCtx);
-    memcpy(pThis->aRandomPoolB, pThis->aRandomPoolA, 20);
+    memcpy(pThis->aRandomPoolB, pThis->aRandomPoolA, sizeof(pThis->aRandomPoolB));
     memset(pThis->aOutputBuffer, 0, 20 * sizeof(pThis->aOutputBuffer[0]));
     pThis->nBytesAvailable = 0;
 }
@@ -202,7 +202,7 @@ void __fastcall SRP_ComputeClientProof(D2Srp * pThis, int, char * szUsername, vo
     SHA1::SHA1Init(&sha1Ctx);
     SHA1::SHA1Update(&sha1Ctx, xorHashNPrime, nByteLen);
     SHA1::SHA1Final(hashG, &sha1Ctx);
-    for (int i = 0; i < 0x14; i++) {
+    for (int i = 0; i < (int)_countof(hashG); i++) {
       xorHashNPrime[i] = hashG[i] ^ hashN[i];
     }
 

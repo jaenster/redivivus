@@ -126,7 +126,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     SIZE_T* pBytesRead;
     uint16_t* pReadBuffer;
     *(uint32_t*)(char*)&szModuleName = Game::gClientGameData.gnWardenChecksumModuleName * 0x470e31c1;
-    *(uint32_t*)((char*)&szModuleName + 4) = Game::gClientGameData.gnWardenChecksumAddr2 * 0x470e31c1;
+    *(uint32_t*)&szModuleName[4] = Game::gClientGameData.gnWardenChecksumAddr2 * 0x470e31c1;
     int nModuleOffset = Game::gClientGameData.gnWardenChecksumModuleOffset * 0x470e31c1;
     szModuleName[8] = '\0';
     if ((char)*(uint32_t*)(char*)&szModuleName != '\0') {

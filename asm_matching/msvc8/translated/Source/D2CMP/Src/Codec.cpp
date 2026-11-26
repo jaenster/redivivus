@@ -9,6 +9,10 @@
 #include "Source/D2Headers/D2Arch.h"
 #include "Source/D2CMP/Src/Codec.data.h"
 
+static_assert(sizeof(void*) != 4 || offsetof(D2CelFileCacheEntryStrc, adwDirectionOffsets) == 0x1c, "D2CelFileCacheEntryStrc: the direction offsets sit at 0x1c in 1.14d");
+static_assert(sizeof(void*) != 4 || offsetof(D2CelDecodeStateStrc, aDirOffsets) == 0xc, "D2CelDecodeStateStrc: the direction offsets sit at 0xc in 1.14d");
+static_assert(sizeof(void*) != 4 || offsetof(D2CodecFrameIterStrc, nBlockWidth) - offsetof(D2CodecFrameIterStrc, nColumnPos) == 0x10, "D2CodecFrameIterStrc: the per-row cursor is the four ints 1.14d clears");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_POOL_AT
@@ -253,7 +257,7 @@ static BOOL CODEC_AdvanceFrameIterator(D2CodecFrameBoundsStrc * pFrameBounds, D2
         nFrameWidth = (int)nXRemainder / 4 + (int)nYRemainder / 4 * pFrameBounds->nBlockStride;
         pIterState->nBlockIndexBase = nFrameWidth;
         pIterState->nBlockIndex = nFrameWidth;
-        memset(&pIterState->nColumnPos, 0, 4 * sizeof(pIterState->nColumnPos));
+        memset(&pIterState->nColumnPos, 0, offsetof(D2CodecFrameIterStrc, nBlockWidth) - offsetof(D2CodecFrameIterStrc, nColumnPos));
         nXRemainder = (int)nXRemainder % 4;
         nYRemainder = (int)nYRemainder % 4;
         nFrameWidth = pIterState->nYOffset;
@@ -981,17 +985,17 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ __frame0.local_334.pCelDecodeState = pDecodeState;
     __frame0.local_330.pMemory = pMemory;
     EnterCriticalSection(&CelCmp::lpCriticalSection_008f03cc);
-    aFrameHeaderInfo[0] = *(uint32_t*)(pCelHeader + 4);
-    aFrameHeaderInfo[2] = *(uint32_t*)(pCelHeader + 0x14);
-    aFrameHeaderInfo[3] = *(uint32_t*)(pCelHeader + 0x18);
-    aFrameHeaderInfo[1] = *(uint32_t*)(pCelHeader + 8);
+    aFrameHeaderInfo[0] = ((D2CelFileCacheEntryStrc*)pCelHeader)->dwVersion;
+    aFrameHeaderInfo[2] = ((D2CelFileCacheEntryStrc*)pCelHeader)->nDirections;
+    aFrameHeaderInfo[3] = ((D2CelFileCacheEntryStrc*)pCelHeader)->nFramesPerDirection;
+    aFrameHeaderInfo[1] = ((D2CelFileCacheEntryStrc*)pCelHeader)->dwFlags;
     sBitState.nReserved08 = nReadSize * 8;
     __frame0.nEndFrame = nFrameCount + nStartFrame;
     uint32_t uVar10 = 0;
     *pnSize = 0;
     if (nStartFrame < __frame0.nEndFrame) {
-      local_318.pLocal_318 = pCelHeader + (nStartFrame * 4 + 0x1c);
-      __frame0.uSlot338.pnDirSizeOut = (uint32_t*)((char*)__frame0.local_334.pCelDecodeState + 0xc + nStartFrame * 4);
+      local_318.pLocal_318 = (uint8_t*)&((D2CelFileCacheEntryStrc*)pCelHeader)->adwDirectionOffsets[nStartFrame];
+      __frame0.uSlot338.pnDirSizeOut = (uint32_t*)&__frame0.local_334.pCelDecodeState->aDirOffsets[nStartFrame];
       local_314 = __frame0.nEndFrame - nStartFrame;
       pbVar7 = local_318.pLocal_318;
       do {
@@ -1004,7 +1008,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         *pnSize += __frame0.local_334.nLocal_334 + aFrameHeaderInfo[3] * (sizeof(DC6Block) - 0x20);
 #endif
         __frame0.uSlot338.pnDirSizeOut++;
-        pbVar7 += 4;
+        pbVar7 += sizeof(uint32_t);
         local_314--;
       } while (local_314);
     }

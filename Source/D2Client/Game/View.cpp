@@ -535,8 +535,6 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     DWORD dwResMode;
     int nCloudIdx;
     uint32_t nFrameIdx;
-    char* pStrSrc;
-    char* pStrDst;
     uint32_t nTileFrame3;
     char szFilePath[260];
     D2GfxDataStrc sGfxData;
@@ -565,13 +563,11 @@ static void DRAW_Background_Ancients(D2UnitStrc * pPlayerUnit) {
     nCloudFrame %= 4;
     nScrollOffset = -nTileFrameX;
     if (!gpAncientsBgDC6) {
-      memcpy(szFilePath, "data\\global\\ui\\summit01", 0x18);
+      strcpy(szFilePath, "data\\global\\ui\\summit01");
       gpAncientsBgDC6 = Core::Archive::IMAGE_LoadDC6Ex(szFilePath, 0);
     }
     if (!gpCloudBackgroundDC6) {
-      pStrSrc = "data\\global\\ui\\cloud01";
-      pStrDst = szFilePath;
-      memcpy(pStrDst, pStrSrc, 23);
+      strcpy(szFilePath, "data\\global\\ui\\cloud01");
       gpCloudBackgroundDC6 = Core::Archive::IMAGE_LoadDC6Ex(szFilePath, 0);
     }
 

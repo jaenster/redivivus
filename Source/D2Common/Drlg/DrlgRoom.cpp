@@ -427,7 +427,7 @@ D2RoomStrc * __fastcall DRLGSPAWN_FindSpawnLocationInLevel(D2DrlgStrc * pDrlg, e
 // @sourcefile .\DRLG\DrlgRoom.cpp
 D2RoomExStrc * __fastcall DRLGROOMEX_AllocRoomEx(D2DrlgLevelStrc * pLevel, int nPresetType) {
     D2RoomExStrc* pRoomEx = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2RoomExStrc, ".\\DRLG\\DrlgRoom.cpp", 0x20);
-    memset(pRoomEx, 0, 0xec);
+    memset(pRoomEx, 0, sizeof(D2RoomExStrc));
     pRoomEx->nPresetType = nPresetType;
     pRoomEx->pLevel = pLevel;
     pRoomEx->fRoomStatus = '\x04';

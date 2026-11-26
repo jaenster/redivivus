@@ -319,7 +319,7 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * pLightBuffer, int32_t nTi
           pScreenX = &pLightEntry->nX;
           D2gfx::D2GFX::D2GFX_AdjustPerspectivePosition((nSplitSide + nTileX) * 0x10000, (nRow + nTileY) * 0x10000, 0, pScreenX, &pLightEntry->nY);
           *pScreenX += nScreenHalfAdj;
-          View::DRAW_CoordIsInCoord((nSplitSide + nTileX) * 8, (nRow + nTileY) * 8, (uint8_t*)pLightEntry, (uint8_t*)((char*)pLightEntry + 1), (uint8_t*)((char*)pLightEntry + 2), (uint8_t*)((char*)pLightEntry + 3));
+          View::DRAW_CoordIsInCoord((nSplitSide + nTileX) * 8, (nRow + nTileY) * 8, &pLightEntry->sLight.nIntensity, &pLightEntry->sLight.nRed, &pLightEntry->sLight.nGreen, &pLightEntry->sLight.nBlue);
         }
 
         nSplitSide++;

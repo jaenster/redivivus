@@ -14,6 +14,7 @@
 #include "Source/D2Client/D2BNetGatewayAccessStr.h"
 #include "Source/Fog/Fog.h"
 #include "Source/D2Headers/d2_platform.h"
+static_assert(sizeof(void*) != 4 || sizeof(_TIME_ZONE_INFORMATION) == 0xac, "_TIME_ZONE_INFORMATION is 0xac bytes on x86");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -80,7 +81,7 @@ namespace Bnclient { namespace BNGatewayAccess {
 int32_t __fastcall GetSystemTimeZone(D2BNetGatewayAccessStr * pGatewayAccess, int) {
     int32_t nTimeZoneBias;
     _TIME_ZONE_INFORMATION tziInfo;
-    Storm::Source::SMem::SMemZero(&tziInfo, 0xac);
+    Storm::Source::SMem::SMemZero(&tziInfo, sizeof(_TIME_ZONE_INFORMATION));
     /* LPTIME_ZONE_INFORMATION lpTimeZoneInformation for GetTimeZoneInformation */ GetTimeZoneInformation(&tziInfo);
     LANGID langId = GetUserDefaultLangID();
     if ((langId & 0x3ff) != 9 || (nTimeZoneBias = 0x1e0 , (langId & 0xfc00) != 0xc00)) {

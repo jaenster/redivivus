@@ -1077,8 +1077,7 @@ struct __attribute__((packed)) D2UniqueItemsTxt {
     /* 0x2D */ uint8_t field_0x2d;
     /* 0x2E */ uint8_t field_0x2e;
     /* 0x2F */ uint8_t field_0x2f;
-    /* 0x30 */ short rarity;
-    /* 0x32 */ uint16_t pad0x32; // alignment padding
+    /* 0x30 */ int rarity; // read as a dword by the unique roll (ITEM_RollUniqueItem)
     /* 0x34 */ short lvl;
     /* 0x36 */ short lvlReq;
     /* 0x38 */ char chrtransform;

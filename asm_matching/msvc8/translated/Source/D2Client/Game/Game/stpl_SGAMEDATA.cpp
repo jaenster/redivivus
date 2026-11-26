@@ -238,7 +238,7 @@ template<> uint32_t * __fastcall TSExplicitList<SGAMEDATA, -572662307>::Unrefere
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::SGAMEDATA* pChunkNew = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
+    ::SGAMEDATA* pChunkNew = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::SGAMEDATA), D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
     ::SGAMEDATA* pChunk;
     if (pChunkNew) {
       pChunkNew->m_linktoslot.m_prevlink = 0;

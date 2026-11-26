@@ -364,7 +364,7 @@ BOOL __fastcall Skills_SrvDoFunc_071_Taunt(::SGAMEDATA * pGame, D2UnitStrc * pUn
     sCurseArgs.pUnit = pUnit;
     sCurseArgs.nDurationInFrames = nDurationFrames;
     sCurseArgs.bUpdateAnimSpeed = 0;
-    for (int nStatIdx = 0; nStatIdx < 6; nStatIdx++) {
+    for (int nStatIdx = 0; nStatIdx < (int)(sizeof(pSkillsTxt->aurastat) / sizeof(pSkillsTxt->aurastat[0])); nStatIdx++) {
       short int eStatId = pSkillsTxt->aurastat[nStatIdx];
       if (eStatId < 0 || (int)eStatId >= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         sCurseArgs.eStat[nStatIdx] = ~UNITSTAT_strength;
@@ -1232,7 +1232,7 @@ static BOOL __stdcall SKILLBAR_CanTargetPosition(D2UnitStrc * pUnit, int32_t nX,
     if (!pRoom) {
       return 0;
     }
-    if (!(*((uint8_t*)pSkillsTxt + 0x5) & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
+    if (!(pSkillsTxt->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) && D2Common::DUNGEON::Dungeon::DRLGROOM_IsRoomInTown(pRoom)) {
       return 0;
     }
 

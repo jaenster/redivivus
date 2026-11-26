@@ -24,6 +24,17 @@
 #define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
 #endif
 
+// One hash node of a .tbl string table, read in place right after the index array.
+__pragma(pack(push, 1)) struct D2StringTableTblNodeStrc {
+    /* 0x00 */ uint8_t bUsed;
+    /* 0x01 */ uint16_t wIndex;
+    /* 0x03 */ uint32_t dwHash;
+    /* 0x07 */ uint32_t dwKeyOffset;
+    /* 0x0B */ uint32_t dwStringOffset;
+    /* 0x0F */ uint16_t wStringLength;
+}; __pragma(pack(pop))
+static_assert(sizeof(D2StringTableTblNodeStrc) == 0x11, ".tbl hash nodes are 17 bytes on disk");
+
 static_assert(sizeof(void*) != 4 || sizeof(::D2UntranslatedStringCacheNodeStrc) == 0xc, "D2_NEW_AT(D2UntranslatedStringCacheNodeStrc): the 32-bit layout must be the 0xc bytes 1.14d allocates");
 
 
@@ -473,7 +484,7 @@ static uint16_t * __stdcall STRTABLE_GetStringByIndex(D2StringTableTblFileStrc *
 
     {
       char* pcEntry;
-      pcEntry = (char*)&pStrTable[1].wCRC + nStringIdx * 0x11 + (uint32_t)pStrTable->wIndexCount * 2;
+      pcEntry = (char*)&pStrTable[1].wCRC + nStringIdx * sizeof(D2StringTableTblNodeStrc) + (uint32_t)pStrTable->wIndexCount * sizeof(uint16_t);
       if (!(pcEntry < (char*)&pStrTable->wCRC + pStrTable->dwFileSize)) {
         Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x106);
         exit(-1);
@@ -606,7 +617,7 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey) {
         }
 
         pcKeyEnd = Unicode::UNISYS::UNICODE_GetWideCharCount(pcFormatted, (int32_t)((pbKeyCopy - pbSrc) + (pcVar1 - (char*)&s__not_xlated_call_ken_w_00730520))); // key length + suffix length
-        wszText = (uint16_t*)D2_ALLOC_AT(pcKeyEnd * 2 + 2, ".\\StrTable\\strtable.cpp", 0x271);
+        wszText = (uint16_t*)D2_ALLOC_AT(pcKeyEnd * sizeof(uint16_t) + sizeof(uint16_t), ".\\StrTable\\strtable.cpp", 0x271);
         pCacheNode->wszText = (uint16_t*)wszText;
         UTF8_ConvertToWideChar(wszText, pcFormatted, pcKeyEnd);
         D2_FREE_AT(pcFormatted, ".\\StrTable\\strtable.cpp", 0x277);
@@ -624,7 +635,7 @@ uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey) {
 
 static uint16_t __stdcall STRTABLE_FindStringByKey(uint16_t * * ppHashTable, uint8_t * pbKey, uint16_t * * pnTextOut, D2StringTableTblFileStrc * pStrTable) {
     int nCmp;
-    int nIndexBytes = (uint32_t)pStrTable->wIndexCount * 2;
+    int nIndexBytes = (uint32_t)pStrTable->wIndexCount * sizeof(uint16_t);
     uint32_t nProbeCount = 0;
     uint32_t nHashIdx = STRTABLE_HashString((char*)pbKey, pStrTable->nNodeCount);
     if ((uint32_t)pStrTable->nHashMaxTries <= 0) {
@@ -632,11 +643,11 @@ static uint16_t __stdcall STRTABLE_FindStringByKey(uint16_t * * ppHashTable, uin
     }
 
     do {
-      char* pcSlot;
-      pcSlot = (char*)&pStrTable[1].wCRC + (nHashIdx * 0x11 + nIndexBytes);
+      D2StringTableTblNodeStrc* pSlot;
+      pSlot = (D2StringTableTblNodeStrc*)((char*)&pStrTable[1].wCRC + (nHashIdx * sizeof(D2StringTableTblNodeStrc) + nIndexBytes));
       nProbeCount++;
-      if (*pcSlot == '\x01') {
-        nCmp = strcmp((char*)&pStrTable->wCRC + *(int*)(pcSlot + 7), (char*)pbKey);
+      if (pSlot->bUsed == 1) {
+        nCmp = strcmp((char*)&pStrTable->wCRC + (int)pSlot->dwKeyOffset, (char*)pbKey);
         if (!nCmp) {
           if (!ppHashTable[nHashIdx]) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x296);
@@ -644,7 +655,7 @@ static uint16_t __stdcall STRTABLE_FindStringByKey(uint16_t * * ppHashTable, uin
           }
 
           *pnTextOut = ppHashTable[nHashIdx];
-          return *(uint16_t*)(pcSlot + 1);
+          return pSlot->wIndex;
         }
       }
 
@@ -791,7 +802,7 @@ void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, uint8_t * pBuffer, uint32
 }
 
 void __fastcall STRTABLE_NormalizeLanguageCode(char * szText) {
-    for (int nIndex = 0; nIndex < 13; nIndex++) {
+    for (int nIndex = 0; nIndex < (int)_countof(gaLanguageTable); nIndex++) {
       if (!_stricmp(szText, gaLanguageTable[nIndex].pszLangCode)) {
         strcpy(szText, gaLanguageTable[nIndex].pszLangCodeNormalized);
         return;
@@ -877,7 +888,7 @@ void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat) {
 
     int nLangIdx = 0;
     if ((int)nLangCode < 0xe) {
-      for (nLangIdx = 0; nLangIdx < 13; nLangIdx++) {
+      for (nLangIdx = 0; nLangIdx < (int)_countof(gaLanguageTable); nLangIdx++) {
         if (gaLanguageTable[nLangIdx].dwLangId == nLangCode) {
           break;
         }
@@ -1150,15 +1161,15 @@ static uint16_t * __fastcall STRTABLE_LoadStringTableFile(char * szFileName) {
       exit(-1);
     }
 
-    uint8_t* pNodeTable = (uint8_t*)&pArchive[1] + (uint32_t)pArchive->wIndexCount * 2;
+    D2StringTableTblNodeStrc* pNodeTable = (D2StringTableTblNodeStrc*)((uint8_t*)&pArchive[1] + (uint32_t)pArchive->wIndexCount * sizeof(uint16_t));
     int i = 0;
     if (pArchive->nNodeCount > 0) {
       do {
-        if (*(uint32_t*)(pNodeTable + i * 0x11 + 7) >= pArchive->dwFileSize) {
+        if (pNodeTable[i].dwKeyOffset >= pArchive->dwFileSize) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe0);
           exit(-1);
         }
-        if (*(uint32_t*)(pNodeTable + i * 0x11 + 0xb) >= pArchive->dwFileSize) {
+        if (pNodeTable[i].dwStringOffset >= pArchive->dwFileSize) {
           Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe1);
           exit(-1);
         }

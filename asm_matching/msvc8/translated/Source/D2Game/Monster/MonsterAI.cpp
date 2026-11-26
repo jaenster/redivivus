@@ -192,7 +192,7 @@ void __fastcall MERC_ApplyLevelStats(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
         nCalc = D2Common::Stats::StatsEx::SERVER_GetUnitStat(pMerc, UNITSTAT_maxhp, 0);
         D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pMerc, UNITSTAT_hpregen, nCalc / 2000 < 0 ? 0 : nCalc / 2000, 0);
         pSkillEntry = pHirelingTxt->nSkillId;
-        for (nLevelDiff = 0; nLevelDiff < 6; pSkillEntry++ , nLevelDiff++) {
+        for (nLevelDiff = 0; nLevelDiff < (int)(sizeof(pHirelingTxt->nSkillId) / sizeof(pHirelingTxt->nSkillId[0])); pSkillEntry++ , nLevelDiff++) {
           eSkill = *pSkillEntry;
           if ((int)eSkill <= 0) {
             return;

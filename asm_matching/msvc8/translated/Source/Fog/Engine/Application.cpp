@@ -7,6 +7,8 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Engine/Application.data.h"
 #include "Source/D2Headers/D2Arch.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2DebugModuleInfo) == 0x228, "module list slots are copied whole: 0x228 bytes on 32-bit");
+static_assert(sizeof(D2FogAddressInfoStrc) == 0x348, "the resolved-address record CRASH_FormatStackTrace keeps in its frame");
 
 #if D2_ARCH_X86
 #define FOG_CONTEXT_CONTROL 0x10001 // CONTEXT_i386 | CONTEXT_CONTROL
@@ -254,8 +256,8 @@ static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModuleP
     pDst = aModuleInfo.szPath;
     for (nCopyCount = 0x40; nCopyCount; nCopyCount--) {
       *(uint32_t*)pDst = *(uint32_t*)pBasename;
-      pBasename += 4;
-      pDst += 4;
+      pBasename += sizeof(uint32_t);
+      pDst += sizeof(uint32_t);
     }
 
     uint8_t bVar1 = DEBUG_ParseModuleHeaders((D2FogDebugModuleEntryStrc*)&aModuleInfo, pModuleBase);
@@ -268,7 +270,7 @@ static bool __stdcall DEBUG_AddModuleToList(int * pModuleList, LPCWSTR szModuleP
 
     D2DebugModuleInfo* pSrcInfo = &aModuleInfo;
     int* pListSlot = pModuleList + (*pModuleList * 0x8a + 1);
-    memcpy(pListSlot, pSrcInfo, 0x228);
+    memcpy(pListSlot, pSrcInfo, sizeof(*pSrcInfo));
     (*pModuleList)++;
     nMbLen = *pModuleList;
     return nMbLen < 0x100;
@@ -597,17 +599,17 @@ int __fastcall DEBUG_UnwindStackFrames(CONTEXT * pContext, int, DWORD dwThreadId
     return nFrameCount;
 }
 
-bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, char * pOutput) {
+bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, D2FogAddressInfoStrc * pOutput) {
     char* pSep;
     char* pBasename;
     char szModulePath[260];
-    *(uint32_t*)(pOutput + 0x200) = 0;
-    char* pSrcFileField = pOutput + 0x244;
+    pOutput->dwSymbolDisplacement = 0;
+    char* pSrcFileField = pOutput->szSourceFile;
     *pSrcFileField = '\0';
-    uint32_t* pLineField = (uint32_t*)(pOutput + 0x344);
+    uint32_t* pLineField = &pOutput->nSourceLine;
     *pLineField = 0;
-    *pOutput = '\0';
-    pOutput[0x204] = '\0';
+    pOutput->szSymbol[0] = '\0';
+    pOutput->szModule[0] = '\0';
     uintptr_t nModuleDisp = 0;
     bool bGotModule = Debug::GetModuleInfoForAddress(nAddress, &nModuleDisp, szModulePath);
     if (bGotModule) {
@@ -632,12 +634,12 @@ bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, char * pOutput) {
         pSep = szModulePath;
       }
 
-      strncpy_s(pOutput + 0x204, 0x40, pSep, -1);
+      strncpy_s(pOutput->szModule, sizeof(pOutput->szModule), pSep, -1);
     } else {
-      pOutput[0x204] = '\0';
+      pOutput->szModule[0] = '\0';
     }
 
-    Debug::GetSymbolNameForAddress(nAddress, pOutput, (uint32_t*)(pOutput + 0x200));
+    Debug::GetSymbolNameForAddress(nAddress, pOutput->szSymbol, &pOutput->dwSymbolDisplacement);
     Debug::GetSourceLineForAddress(nAddress, szModulePath, pLineField);
     pSep = strrchr(szModulePath, 0x2f);
     pBasename = 0;
@@ -660,7 +662,7 @@ bool __stdcall DEBUG_FormatAddressInfo(uintptr_t nAddress, char * pOutput) {
       pSep = szModulePath;
     }
 
-    strncpy_s(pSrcFileField, 0x100, pSep, -1);
+    strncpy_s(pSrcFileField, sizeof(pOutput->szSourceFile), pSep, -1);
     return true;
 }
 

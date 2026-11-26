@@ -29,6 +29,7 @@
 #endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2TaskQueueSlotStrc) == 0x18, "D2_NEW_AT(D2TaskQueueSlotStrc): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
+static_assert(sizeof(void*) != 4 || offsetof(::D2TaskNodeStrc, sLink) == 0xc, "the task list links D2TaskNodeStrc at +0xc");
 
 
 // also labelled: gpTaskQueueListHead, gppTaskQueueHead
@@ -174,7 +175,7 @@ static void TASK_InsertTaskAtTimestamp(D2TaskQueueSlotStrc * pSlot, D2TaskNodeSt
     D2LinkNodeStrc* pInsertPos;
     pTaskNode->dwTimestamp += nDelay;
     pInsertPos = pSlot->sTaskList.pNext;
-    while (pInsertPos != &pSlot->sTaskList && (int32_t)(((D2TaskNodeStrc*)((char*)pInsertPos - 0xc))->dwTimestamp - pTaskNode->dwTimestamp) > 0) {
+    while (pInsertPos != &pSlot->sTaskList && (int32_t)(((D2TaskNodeStrc*)((char*)pInsertPos - offsetof(D2TaskNodeStrc, sLink)))->dwTimestamp - pTaskNode->dwTimestamp) > 0) {
       pInsertPos = pInsertPos->pNext;
     }
 
@@ -383,7 +384,7 @@ void __stdcall TASK_GameTickCallback(uint32_t nParam, D2TaskNodeStrc * pTaskNode
         TASK_UnlinkTaskFromList(pFreeNode);
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + pFirstSlot->nSlotIndex);
         /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(aTaskQueueCriticalSections + pDVar1->nSlotIndex);
-        TASK_InsertTaskAtTimestamp(pDVar1, (D2TaskNodeStrc*)((char*)pFreeNode - 0xc), 0);
+        TASK_InsertTaskAtTimestamp(pDVar1, (D2TaskNodeStrc*)((char*)pFreeNode - offsetof(D2TaskNodeStrc, sLink)), 0);
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(aTaskQueueCriticalSections + pDVar1->nSlotIndex);
         ((D2TaskQueueSlotStrc*)((char*)pSlotLink - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->nTaskCount = ((D2TaskQueueSlotStrc*)((char*)pSlotLink - offsetof(D2TaskQueueSlotStrc, sSlotLink)))->nTaskCount - 1;
       } else {
@@ -540,7 +541,7 @@ int32_t __fastcall TASK_DequeueReadyTask(uint32_t nSlotToken, D2TaskNodeStrc * *
 
     PD2TaskNodeLink pReadyTask = pQueueSlot->sTaskList.pPrev;
     if (pReadyTask != &pQueueSlot->sTaskList && pReadyTask) {
-      D2TaskNodeStrc* pTask = (D2TaskNodeStrc*)((char*)pReadyTask - 0xc);
+      D2TaskNodeStrc* pTask = (D2TaskNodeStrc*)((char*)pReadyTask - offsetof(D2TaskNodeStrc, sLink));
       uint32_t uVar1;
       uVar1 = TASK_GetTimestamp();
       nResult = pTask->dwTimestamp - uVar1;

@@ -242,7 +242,7 @@ static void DRLGENV_InitEnvironmentCycle(D2DrlgEnvironmentStrc * pDrlgEnvironmen
 
 D2DrlgEnvironmentStrc * __fastcall DRLGENV_AllocEnvironment(D2PoolManagerStrc * pMemory) {
     D2DrlgEnvironmentStrc* pEnv = D2_NEW_POOL_AT(pMemory, D2DrlgEnvironmentStrc, ".\\ENVIRONMENT\\Env.cpp", 0x12a);
-    memset(pEnv, 0, 0x38);
+    memset(pEnv, 0, sizeof(D2DrlgEnvironmentStrc));
     pEnv->nTimeIndex = 2;
     pEnv->nTimeRate = gnTimeRates[pEnv->nTimeRateIndex];
     D2DrlgActEnvironmentData* pDataTable = (D2DrlgActEnvironmentData*)(aENVIRONMENTDATA1 + 6);

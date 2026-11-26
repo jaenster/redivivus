@@ -517,7 +517,7 @@ void __fastcall AuraEnchanted(D2UnitStrc * pUnit, int32_t nIndex, BOOL bUnknown)
     }
 
     uint32_t nAuraIndex = 0;
-    for (int i = 0; i < 8; i++) {
+    for (int i = 0; i < (int)(sizeof(gaAuraEnchantedTable) / sizeof(gaAuraEnchantedTable[0])); i++) {
       if (gaAuraEnchantedTable[i].nLevelThreshold <= bUnknown) {
         nAuraIndex++;
       }

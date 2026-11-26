@@ -538,7 +538,7 @@ template<> inline void __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Internal
 
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE>::InternalNew (STORM.H)
 template<> inline ::SGAMEDATA * __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalNew(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::SGAMEDATA* pAlloc = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
+    ::SGAMEDATA* pAlloc = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::SGAMEDATA), D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
     ::SGAMEDATA* pNewEntry;
     if (pAlloc) {
       pAlloc->m_linktoslot.m_prevlink = 0;
@@ -641,11 +641,11 @@ template<> inline TSHashTable<::SGAMEDATA, HASHKEY_NONE>* TSHashTable<SGAMEDATA,
     this->tSlotListArray.m_data = 0;
     this->tSlotListArray.m_chunk = 0;
     this->nFullnessIndicator = 0;
-    if (pBucket->m_linkoffset != 0xc) {
+    if (pBucket->m_linkoffset != offsetof(::SGAMEDATA, m_linktofull)) {
       pBucket->UnlinkAll();
       pListHead = &this->tFullList.m_terminator;
       pListHead->m_prevlink = pListHead;
-      pBucket->m_linkoffset = 0xc;
+      pBucket->m_linkoffset = offsetof(::SGAMEDATA, m_linktofull);
       this->tFullList.m_terminator.m_next = ~(uintptr_t)pListHead;
     }
 
@@ -654,11 +654,11 @@ template<> inline TSHashTable<::SGAMEDATA, HASHKEY_NONE>* TSHashTable<SGAMEDATA,
     uint32_t nBucketIdx = 0;
     do {
       pBucket = &this->tSlotListArray.m_data[nBucketIdx];
-      if (pBucket->m_linkoffset != 4) {
+      if (pBucket->m_linkoffset != offsetof(::SGAMEDATA, m_linktoslot)) {
         pBucket->UnlinkAll();
         pListHead = &pBucket->m_terminator;
         pListHead->m_prevlink = pListHead;
-        pBucket->m_linkoffset = 4;
+        pBucket->m_linkoffset = offsetof(::SGAMEDATA, m_linktoslot);
         pBucket->m_terminator.m_next = ~(uintptr_t)pListHead;
       }
 
@@ -708,7 +708,7 @@ template<> inline void __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::
 // @blizzard TSHashTableReuse<SGAMEDATA,HASHKEY_NONE,0>::InternalNew (STORM.H)
 template<> inline ::SGAMEDATA * __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalNew(TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* pThis, int, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
     TSLink<::SGAMEDATA>* ppSlot;
-    ::SGAMEDATA* pGame = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
+    ::SGAMEDATA* pGame = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::SGAMEDATA), D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
     if (pGame) {
       pGame->m_linktoslot.m_prevlink = 0;
       pGame->m_linktoslot.m_next = 0;
@@ -778,14 +778,14 @@ template<> inline TSHashTableReuse<::SGAMEDATA, HASHKEY_NONE, 0>* TSHashTableReu
     this->tChunkList.m_terminator.m_next = 0;
     TSLink<TSHashObjectChunk<::SGAMEDATA, HASHKEY_NONE>>* pTVar1 = &this->tChunkList.m_terminator;
     pTVar1->m_prevlink = pTVar1;
-    this->tChunkList.m_linkoffset = 0x10;
+    this->tChunkList.m_linkoffset = offsetof(SGAMEDATAChunk, m_link);
     this->tChunkList.m_terminator.m_next = ~(uintptr_t)pTVar1;
     this->nChunkSize = 0x10;
-    if (pReuseList->m_linkoffset != 4) {
+    if (pReuseList->m_linkoffset != offsetof(::SGAMEDATA, m_linktoslot)) {
       pReuseList->UnlinkAll();
       pListHead = &this->tReuseList.m_terminator;
       pListHead->m_prevlink = pListHead;
-      pReuseList->m_linkoffset = 4;
+      pReuseList->m_linkoffset = offsetof(::SGAMEDATA, m_linktoslot);
       this->tReuseList.m_terminator.m_next = ~(uintptr_t)pListHead;
     }
 

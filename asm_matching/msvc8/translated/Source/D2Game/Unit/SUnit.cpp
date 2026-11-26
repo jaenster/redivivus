@@ -528,7 +528,7 @@ void __fastcall SetupUpdateEvent_AttachEventSound(D2UnitStrc * pUnit, eD2TimerTy
       exit(-1);
     }
 
-    *(short int*)((intptr_t)&pUnit->uSideData + 10) = (short int)nUpdateType;
+    pUnit->uSideData.pServerSide.nEventSound = (int16_t)nUpdateType;
     pUnit->uSideData.pServerSide.pUpdateUnit = pUpdateUnit;
     D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
     pUnit->eUnitFlags |= UNITFLAG_HASEVENTSOUND;
@@ -1295,7 +1295,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 BOOL __fastcall UNITS_CheckSkillTargetAlignment(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill) {
     if (pUnit && pTarget && (GetTypeInline(pUnit) == UNIT_PLAYER || GetTypeInline(pTarget) == UNIT_MONSTER)) {
       D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? &D2Common::ITEMS::Items::sgptDataTable->pTxtSkills[eSkill] : nullptr;
-      if (pSkillsTxt && *((uint8_t*)pSkillsTxt + 0x7) & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
+      if (pSkillsTxt && pSkillsTxt->aFlagBytes[3] & (uint8_t)Fog::BitBuffer::gadwBitMasks[1]) {
         Ai::AiGeneral::AIGENERAL_GetOwnerData(pTarget, &eSkill, (int*)&pTarget);
         if (!pTarget && eSkill == GetGUIDInline(pUnit)) {
           return 1;

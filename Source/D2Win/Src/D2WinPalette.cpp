@@ -154,10 +154,10 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
       pDstIndexCounter++;
     }
 
-    memcpy(gPaletteAct1, pMemoryToFree + 0xd40, 0x30000);
-    memcpy(gPaletteDataBase, pMemoryToFree + 0x100, 0x3100);
-    memcpy(gPaletteAct5, pMemoryToFree + 0x10d40, 0x10000);
-    memcpy(gPaletteAct2, pMemoryToFree + 0xcd40, 0x10000);
+    memcpy(gPaletteAct1, pMemoryToFree + 0xd40, sizeof(gPaletteAct1));
+    memcpy(gPaletteDataBase, pMemoryToFree + 0x100, sizeof(gPaletteDataBase));
+    memcpy(gPaletteAct5, pMemoryToFree + 0x10d40, sizeof(gPaletteAct5));
+    memcpy(gPaletteAct2, pMemoryToFree + 0xcd40, sizeof(gPaletteAct2));
     memcpy(gPaletteDataBase + 0x2000, pMemoryToFree + 0x900, 0x1000);
     pSrcArchive = pMemoryToFree + 0xd00;
     pDstIndexCounter = (PALETTEENTRY*)(gPaletteDataBase + 0x3000);
@@ -167,8 +167,8 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
       pDstIndexCounter++;
     }
 
-    memcpy(gPaletteAct1Outdoor, pMemoryToFree + 0x14d40, 0x8000);
-    memcpy(gPaletteActNeutral, pMemoryToFree + 0x16d40, 0x10000);
+    memcpy(gPaletteAct1Outdoor, pMemoryToFree + 0x14d40, sizeof(gPaletteAct1Outdoor));
+    memcpy(gPaletteActNeutral, pMemoryToFree + 0x16d40, sizeof(gPaletteActNeutral));
     pSrcArchive = pMemoryToFree + 0x1ad40;
     pDstIndexCounter = (PALETTEENTRY*)gPaletteUnits;
     for (nCount = 0x40; nCount; nCount--) {

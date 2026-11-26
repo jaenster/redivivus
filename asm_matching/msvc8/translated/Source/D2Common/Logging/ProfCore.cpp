@@ -2645,7 +2645,7 @@ void __stdcall D2ProfileDump() {
     LARGE_INTEGER liFrequencyHigh;
     /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ QueryPerformanceFrequency(&liFrequencyHigh);
     LOGGING_LogLine(1, 2, 1, 0x80000, ".\\Logging\\ProfCore.cpp", 0x4e, "PROFILING DUMP FREQUENCY %d:\n", liFrequencyHigh.u.LowPart, liFrequencyHigh.u.HighPart);
-    for (int i = 0; i < 23; i++) {
+    for (int i = 0; i < (int)_countof(gaProfilingDumpFrequency); i++) {
       LOGGING_LogLine(1, 2, 1, 0x80000, ".\\Logging\\ProfCore.cpp", 0x54, "FUNCTION: %30s, TIME %12d, COUNT %5d", gaProfilingDumpFrequency[i].szFunction, gaProfilingDumpFrequency[i].liTime.u.LowPart, gaProfilingDumpFrequency[i].nCount);
     }
 }

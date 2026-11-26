@@ -447,7 +447,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen() {
 
           D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetTextFromAnsi(gaCharSelScreenSlotControls[nCharacterIndex], szNameBuf, 4 + (uVar1 & 4 ? -3 : 0));
           CHARSEL_GetClassNameString((uint32_t)pCharSel->ePlayerClassID, wszClassName);
-          for (nTextArg0 = 0; nTextArg0 < 0x64; nTextArg0++) {
+          for (nTextArg0 = 0; nTextArg0 < (int)_countof(wszLineBuf); nTextArg0++) {
             wszLineBuf[nTextArg0] = L'\0';
           }
 
@@ -1163,7 +1163,7 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
     }
 
     gpCharSelPendingEntry = D2_NEW_AT(D2CharSelStrc, ".\\Src\\CharSel.cpp", 0x5e2);
-    Storm::Source::SMem::SMemCopy(gpCharSelPendingEntry, pSelectedChar, 0x350);
+    Storm::Source::SMem::SMemCopy(gpCharSelPendingEntry, pSelectedChar, sizeof(D2CharSelStrc));
     D2CharSelStrc* pCharSelCopy = gpCharSelPendingEntry;
     gpCharSelPendingEntry->pNext = 0;
     if (pSelectedChar->nEntryType == 1) {
@@ -1810,8 +1810,8 @@ int __stdcall CHARSEL_CreateCharEntry(uint16_t * wszCharName, uint16_t * wszComm
     D2CharSelStrc* pCharSel = D2_NEW_AT(D2CharSelStrc, ".\\Src\\CharSel.cpp", 0xbaf);
     D2Lang::WideCharToUTF8(pCharSel->szCharname, wszCharName, 0x100);
     D2Lang::Unicode::UNISYS::STRING_CopyWideString((uint16_t*)pCharSel->szCommandStringTable, wszCommandString);
-    memset(pCharSel->abEquipSlot1, 0, 16 * sizeof(pCharSel->abEquipSlot1[0]));
-    memset(pCharSel->abEquipSlot2, 0, 16 * sizeof(pCharSel->abEquipSlot2[0]));
+    memset(pCharSel->abEquipSlot1, 0, sizeof(pCharSel->abEquipSlot1));
+    memset(pCharSel->abEquipSlot2, 0, sizeof(pCharSel->abEquipSlot2));
     pCharSel->ePlayerClassID = ePlayerClass;
     pCharSel->nLevel = 0;
     pCharSel->nCharacterFlags = 0;
@@ -2236,7 +2236,7 @@ void __stdcall CHARSEL_InitCharSelScreen() {
     gpCtlCharSelScrollbar = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0xa7);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarLinkedTextBox(gpCtlCharSelScrollbar, nullptr);
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarCallbackB(gpCtlCharSelScrollbar, (fpD2WinScrollbarOnChange)MAINMENU_CharSelScrollbarCallback);
-    memset(gaCharSelScreenSlotControls, 0, 8 * sizeof(gaCharSelScreenSlotControls[0]));
+    memset(gaCharSelScreenSlotControls, 0, sizeof(gaCharSelScreenSlotControls));
     gnCharSelScreenSlotCount = 8;
     int nSlotIndex = 0;
     do {
@@ -2342,7 +2342,7 @@ void __stdcall UIMENU_CharacterSelectAllGameTypes() {
     gpCharSelExpansionToggle = (::D2WinTextBox*)MainMenus::FORMS_CreateAnyFormFromListExEx(0x9e);
     gpControlCharSelArrows = MainMenus::FORMS_CreateAnyFormFromListExEx(0x9f);
     nSlotIndex = 0;
-    memset(gaCharSelScreenSlotControls, 0, 8 * sizeof(gaCharSelScreenSlotControls[0]));
+    memset(gaCharSelScreenSlotControls, 0, sizeof(gaCharSelScreenSlotControls));
     if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
       gnCharSelScreenSlotCount = 4;
       nSlotY = 0xf6;

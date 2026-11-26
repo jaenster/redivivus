@@ -51,6 +51,30 @@ so it survives anything that later touches its unit. If the body only matches wi
 name, type or prototype, that part is a declaration: send it through the door below and say so in
 the pull request.
 
+### Sizes and offsets
+
+The original passed `sizeof(T)` to its allocators, `memset` and `memcpy`, indexed arrays and named
+fields. The decompiler folds all of that into numbers; a body here spells it back:
+
+- a size is `sizeof(T)`, `sizeof(x)`, `sizeof(T) * n` or `offsetof(T, field)` for a deliberate
+  partial clear, never a folded literal like `memset(p, 0, 0x3c)`;
+- a member is the real field (`p->pNext`), never `*(int*)((char*)p + 0x24)`: if the field is
+  missing or wrong, that is a declaration (the door below);
+- a stride is array indexing or `sizeof`, never `p += 0x18`; a loop bound over an array is
+  `_countof(a)` (`sizeof(a) / sizeof(a[0])` for a member of a packed struct, which mingw's
+  `_countof` cannot bind);
+- `char sz[MAX_PATH] = "";` rather than the `sz[0] = 0; memset(sz + 1, 0, 0x103)` it compiles to.
+
+Next to a type whose size a change relies on, once per type, prove the 32-bit value is unchanged:
+
+```cpp
+static_assert(sizeof(void*) != 4 || sizeof(D2GfxInfoStrc) == 0x3c, "D2GfxInfoStrc is 0x3c bytes on x86");
+```
+
+A byte offset into a raw buffer (packet bytes, a file image) really is one and stays. CI runs
+`node asm_matching/lint/literal-sizes.mjs --baseline asm_matching/lint/literal-sizes.baseline.tsv`;
+no file may go above its count in the baseline.
+
 ### A wrong name, type, field, prototype or calling convention
 
 This is the common case, and it belongs in Ghidra: a declaration is shared by every function that

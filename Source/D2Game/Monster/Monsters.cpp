@@ -1429,7 +1429,7 @@ void __fastcall MONSTER_ApplyAmplifyDamageCurse(::SGAMEDATA * pGame, D2UnitStrc 
       return;
     }
 
-    for (int i = 1; i < 6; i++) {
+    for (int i = 1; i < (int)(sizeof(pSkillsTxt->aurastat) / sizeof(pSkillsTxt->aurastat[0])); i++) {
       if (pSkillsTxt->aurastat[i] >= 0 && pSkillsTxt->aurastat[i] < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize) {
         int nValue = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurastatcalc[i], SKILL_AmplifyDamage, nSkillLevel);
         if (nValue) {
@@ -2096,7 +2096,7 @@ void __fastcall MONSTER_QueenPoisonCloudDeath(::SGAMEDATA * pGame, D2UnitStrc * 
     sSkillArg.fpFunction = SKILLS::SkillSor::SKILL_InitChargedBoltPath;
     int anDirX[4] = {0, 1, 0, -1};
     int anDirY[4] = {-1, 0, 1, 0};
-    for (int nDir = 0; nDir < 4; nDir++) {
+    for (int nDir = 0; nDir < (int)(sizeof(anDirX) / sizeof(anDirX[0])); nDir++) {
       int nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
       int nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
       int nTargetX = anDirX[nDir] + nPosX;

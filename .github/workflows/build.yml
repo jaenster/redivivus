@@ -14,6 +14,19 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Decompiler-folded size literals (memset(p, 0, 0x3c), (char*)p + 0x24, p += 0x18) that should
+  # be sizeof, offsetof, a field or an index. The committed baseline holds one count per file;
+  # the job fails when any file goes above its row, so the total can only go down.
+  lint-literal-sizes:
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Literal sizes stay at or below the baseline
+        run: node asm_matching/lint/literal-sizes.mjs --baseline asm_matching/lint/literal-sizes.baseline.tsv
+
   mingw-i686:
     runs-on: ubuntu-24.04
     steps:

@@ -39,7 +39,7 @@ void __stdcall AllocParticle(D2UnitStrc * pUnit) {
       }
     }
 
-    memset(pParticle, 0, 0x4c);
+    memset(pParticle, 0, sizeof(*pParticle));
     Gfx::SetParticle(pUnit, pParticle);
 }
 

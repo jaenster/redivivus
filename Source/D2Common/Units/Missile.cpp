@@ -33,6 +33,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UnitDataMissileStrc) == 0x34, "D2
 #ifndef D2_FREE_POOL_AT
 #define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(D2MissileDamageDataStrc) == 0x7c, "D2MissileDamageDataStrc is 0x7c bytes on x86");
 
 
 #ifndef RECON_FPTD_fnSkillCalcMethod
@@ -49,7 +50,7 @@ void __stdcall AllocMissileData(D2UnitStrc * pUnit) {
     }
 
     D2UnitDataMissileStrc* pUnitDataMissile = D2_NEW_POOL_AT(pUnit->pMemory, D2UnitDataMissileStrc, ".\\UNITS\\Missile.cpp", 0x22);
-    memset(pUnitDataMissile, 0, 0x34);
+    memset(pUnitDataMissile, 0, sizeof(D2UnitDataMissileStrc));
     pUnitDataMissile->nOwnerGUID = -1;
     pUnit->pUnitData.pUnitDataMissile = pUnitDataMissile;
 }
@@ -1077,7 +1078,7 @@ void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageDa
     int nElemMaxDmg;
     eD2UnitStat eUnitStat;
     D2UnitStrc* pOwner = pUnit;
-    memset(pMissileDamageData, 0, 0x7c);
+    memset(pMissileDamageData, 0, sizeof(D2MissileDamageDataStrc));
     if (!(pUnit && pMissile && pMissile->eUnitType == UNIT_MISSILE)) {
       return;
     }

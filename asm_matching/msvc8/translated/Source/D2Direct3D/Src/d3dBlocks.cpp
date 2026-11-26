@@ -13,6 +13,8 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/D2Direct3D/Renderer/Direct3D.data.h"
 
+static_assert(sizeof(void*) != 4 || sizeof(DDSURFACEDESC2) == 0x7c, "DDSURFACEDESC2: dwSize and the clear after it must be the 0x7c bytes 1.14d uses");
+
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 #ifndef D2_ALLOC_AT
@@ -210,8 +212,8 @@ BOOL __fastcall D3D_RenderFloorTileToTexture(D2TileLibraryEntryStrc * pTileLibra
         }
 
         gD3DFloorTextureCache.pNodeBuffer[nNodeIndex - 1].pTile = pTileLibraryEntry;
-        sSurfaceDesc.dwSize = 0x7c;
-        memset(&sSurfaceDesc.dwFlags, 0, 0x78);
+        sSurfaceDesc.dwSize = sizeof(sSurfaceDesc);
+        memset(&sSurfaceDesc.dwFlags, 0, sizeof(sSurfaceDesc) - sizeof(sSurfaceDesc.dwSize));
         dwSurfaceOpResult = gpD3DFloorTileSystemSurface->lpVtbl->Lock(gpD3DFloorTileSystemSurface, nullptr, &sSurfaceDesc, 0x21, nullptr);
         if (dwSurfaceOpResult) {
           Renderer::DIRECTD3D_LogError("Failed to lock memory surface", dwSurfaceOpResult);
@@ -273,8 +275,8 @@ void __fastcall D3D_RenderSubtileToTexture(D2GroundSubTileStrc * pSubTile) {
           exit(-1);
         } else {
           gD3DSubtileTextureCache.pNodeBuffer[nNodeIndex - 1].pSubTile = pSubTile;
-          sSurfaceDesc.dwSize = 0x7c;
-          memset(&sSurfaceDesc.dwFlags, 0, 0x78);
+          sSurfaceDesc.dwSize = sizeof(sSurfaceDesc);
+          memset(&sSurfaceDesc.dwFlags, 0, sizeof(sSurfaceDesc) - sizeof(sSurfaceDesc.dwSize));
           dwSurfaceResult = gpD3DSubtileSystemSurface->lpVtbl->Lock(gpD3DSubtileSystemSurface, nullptr, &sSurfaceDesc, 0x21, nullptr);
           if (dwSurfaceResult) {
             Renderer::DIRECTD3D_LogError("Failed to lock memory surface", dwSurfaceResult);

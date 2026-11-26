@@ -97,7 +97,7 @@ int32_t __fastcall AllocObjectControl(::SGAMEDATA * pGame) {
     }
 
     memset(pObjectControl->aObjectTypeCount, 0, sizeof(pObjectControl->aObjectTypeCount));
-    memset(pObjectControl->sShrinesRng.aShrinesRng, 0, 8 * sizeof(pObjectControl->sShrinesRng.aShrinesRng[0]));
+    memset(pObjectControl->sShrinesRng.aShrinesRng, 0, sizeof(pObjectControl->sShrinesRng.aShrinesRng));
     uSlotC.nShrineClassIdxLoop = 0;
     uSlot8.pShrinesRngIter = &pObjectControl->sShrinesRng;
     do {
@@ -469,7 +469,7 @@ int32_t __fastcall OBJECTRGN_GetTrapMonsterClassId(D2ObjectModeArg * pObjectMode
           }
         }
 
-        for (j = 0; j < 6; j++) {
+        for (j = 0; j < (int)(sizeof(anActMonIds) / sizeof(anActMonIds[0])); j++) {
           if (nClassId >= anActMonIds[j] && nClassId < anActMonIds[j] + 4) {
             return pLevelRng->nMonClassId = anActMonIds[j];
           }

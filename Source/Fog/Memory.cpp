@@ -9,6 +9,7 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Memory.data.h"
 #include "Source/D2Headers/D2Arch.h"
+static_assert(sizeof(void*) != 4 || sizeof(D2MemoryManagerStrc) == 0xbea4, "the pool system is cleared whole: 0xbea4 bytes on 32-bit");
 static_assert(sizeof(void*) != 4 || sizeof(D2PoolBlockStrc) == 0x18, "malloc(... + sizeof(D2PoolBlockStrc)): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -662,7 +663,7 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
     uint32_t nBlockSize;
     size_t nManagerIndex;
     if (!pPoolManager) {
-      memset(&pGlobalPoolSystem, 0, 0xbea4);
+      memset(&pGlobalPoolSystem, 0, sizeof(pGlobalPoolSystem));
       /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ InitializeCriticalSection(&pGlobalPoolSystem.pSync);
       pGlobalPoolSystem.bInit = 1;
     }

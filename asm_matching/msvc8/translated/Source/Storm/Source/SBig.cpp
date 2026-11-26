@@ -6,6 +6,7 @@
 #include "Source/Storm/Source/SSystem.h"
 static_assert(sizeof(void*) != 4 || sizeof(BigData) == 0x168, "SMemAlloc(sizeof(BigData)): the 32-bit layout must be the 0x168 bytes 1.14d allocates");
 static_assert(sizeof(void*) != 4 || sizeof(BigBuffer) == 0x14, "eh vector iterator sizeof(BigBuffer): the 32-bit layout must be the 0x14-byte element 1.14d steps by");
+static_assert(sizeof(void*) != 4 || offsetof(TSGrowableArray_Ui, pData) == 8, "TSFixedArray and TSGrowableArray share the {alloc, count, data} header");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -191,7 +192,7 @@ void __fastcall SBIG_DynArray_Resize(TSGrowableArray_Ui * pArray, int, int32_t n
       return;
     }
 
-    uint32_t* pNewBuffer = SMem::SMemReAlloc(pArray->pData, nNewCount * 4, s__I_00708874, -2, 0);
+    uint32_t* pNewBuffer = SMem::SMemReAlloc(pArray->pData, nNewCount * sizeof(*pArray->pData), s__I_00708874, -2, 0);
     pArray->pData = pNewBuffer;
 }
 
@@ -525,7 +526,7 @@ void __fastcall TSBaseArray_Ui_Copy(TSGrowableArray_Ui * pArray, int, uint32_t n
     pArray->nCapacity = nCount;
     if (pArray->pData || nCount) {
       uint32_t* pNewBuffer;
-      pNewBuffer = SMem::SMemReAlloc(pArray->pData, nCount * 4, s__I_00708874, -2, 0);
+      pNewBuffer = SMem::SMemReAlloc(pArray->pData, nCount * sizeof(*pArray->pData), s__I_00708874, -2, 0);
       pArray->pData = pNewBuffer;
     }
 
@@ -607,13 +608,13 @@ void __fastcall SBIG_ArrayByteAltSetCapacity(TSGrowableArray_Uc * pArray, int, i
 void __fastcall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, int, uint32_t nCapacity) {
     uint32_t* pOldBuffer = pArray->pData;
     pArray->nCapacity = nCapacity;
-    uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity * 4, s__I_00708874, -2, 0x10);
+    uint32_t* pNewBuffer = SMem::SMemReAlloc(pOldBuffer, nCapacity * sizeof(*pOldBuffer), s__I_00708874, -2, 0x10);
     pArray->pData = pNewBuffer;
     if (pNewBuffer) {
       return;
     }
 
-    uint32_t* pFallbackBuffer = (uint32_t*)SMem::SMemAlloc(nCapacity * 4, s__I_00708874, -2, 0);
+    uint32_t* pFallbackBuffer = (uint32_t*)SMem::SMemAlloc(nCapacity * sizeof(uint32_t), s__I_00708874, -2, 0);
     pArray->pData = pFallbackBuffer;
     if (!pOldBuffer) {
       return;
@@ -677,11 +678,11 @@ void __fastcall TSFixedArray_Ui_Destructor_Unref_004217f0(TSGrowableArray_Ui * p
 // @oracle-method PLAUSIBLE. Frees the m_data pointer at +8 and nothing else. Its only xrefs are MSVC exception-unwind funclets, which is where a destructor is referenced from.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void __fastcall TSFixedArray_Ui_Destructor(void * pArray) {
-    if (!*(void**)((char*)pArray + 8)) {
+    if (!((TSGrowableArray_Ui*)pArray)->pData) {
       return;
     }
 
-    SMem::SMemFree(*(void**)((char*)pArray + 8), s__I_00708874, -2, 0);
+    SMem::SMemFree(((TSGrowableArray_Ui*)pArray)->pData, s__I_00708874, -2, 0);
 }
 
 void __fastcall Unreferenced_00421830(void * pArray) {
@@ -710,7 +711,7 @@ uint32_t * __fastcall Unreferenced_00421860(uint32_t * pData) {
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
 void * __fastcall TSFixedArray_Ui_Assign(uint32_t * pArray, int, void * pSrcArray) {
     if (pArray != (unsigned int*)pSrcArray) {
-      vc8_thiscall(TSBaseArray_Ui_Copy)((TSGrowableArray_Ui*)pArray, *(uint32_t*)((char*)pSrcArray + 4), *(uint32_t**)((char*)pSrcArray + 8));
+      vc8_thiscall(TSBaseArray_Ui_Copy)((TSGrowableArray_Ui*)pArray, ((TSGrowableArray_Ui*)pSrcArray)->nLen, ((TSGrowableArray_Ui*)pSrcArray)->pData);
     }
 
     return pArray;
@@ -1079,7 +1080,7 @@ void __fastcall SBIG_EnsureCapacity(BigBuffer * pDwordArray, int, uint32_t nInde
       vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDwordArray, nNewCapacity);
     }
     if (bZeroFill) {
-      SMem::SMemZero(pDwordArray->pData + pDwordArray->nCount, (nIndex - pDwordArray->nCount) * 4 + 4);
+      SMem::SMemZero(pDwordArray->pData + pDwordArray->nCount, (nIndex + 1 - pDwordArray->nCount) * sizeof(*pDwordArray->pData));
     }
 
     pDwordArray->nCount = nValue;
@@ -1161,7 +1162,7 @@ void __fastcall SBIG_GrowToIndex(BigBuffer * pDwordArray, int, int32_t nIndex) {
       vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDwordArray, nNewCapacity);
     }
 
-    SMem::SMemZero(pDwordArray->pData + pDwordArray->nCount, (nTargetIndex - pDwordArray->nCount) * 4 + 4);
+    SMem::SMemZero(pDwordArray->pData + pDwordArray->nCount, (nTargetIndex + 1 - pDwordArray->nCount) * sizeof(*pDwordArray->pData));
     pDwordArray->nCount = nNewLen;
 }
 
@@ -1295,7 +1296,7 @@ static void __stdcall BigBuffer_Add_Ui(BigBuffer * pDest, BigBuffer * pSource, u
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nNewCapacity);
         }
 
-        SMem::SMemZero(pDest->pData + pDest->nCount, (nDestIndex - pDest->nCount) * 4 + 4);
+        SMem::SMemZero(pDest->pData + pDest->nCount, (nDestIndex + 1 - pDest->nCount) * sizeof(*pDest->pData));
         pDest->nCount = nNewLen;
       }
 
@@ -1365,7 +1366,7 @@ static void __stdcall BigBuffer_Add(BigBuffer * pSourceA, BigBuffer * pSourceB, 
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nNewCapacity);
         }
 
-        SMem::SMemZero(pDest->pData + pDest->nCount, (nDestIndex - pDest->nCount) * 4 + 4);
+        SMem::SMemZero(pDest->pData + pDest->nCount, (nDestIndex + 1 - pDest->nCount) * sizeof(*pDest->pData));
         pDest->nCount = nWordB;
       }
 
@@ -1417,7 +1418,7 @@ static void __stdcall BigBuffer_And(BigBuffer * pSourceA, BigBuffer * pSourceB, 
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nNewCapacity);
         }
 
-        SMem::SMemZero(pDest->pData + pDest->nCount, (nWordIndex - pDest->nCount) * 4 + 4);
+        SMem::SMemZero(pDest->pData + pDest->nCount, (nWordIndex + 1 - pDest->nCount) * sizeof(*pDest->pData));
         pDest->nCount = nNewLen;
       }
 
@@ -1598,7 +1599,7 @@ static void __stdcall BigBuffer_Mul_Ux(BigBuffer * pDest, BigBuffer * pSource, u
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nNewCapacity);
         }
 
-        SMem::SMemZero(pDest->pData + pDest->nCount, (nAbsIndex - pDest->nCount) * 4 + 4);
+        SMem::SMemZero(pDest->pData + pDest->nCount, (nAbsIndex + 1 - pDest->nCount) * sizeof(*pDest->pData));
         pDest->nCount = nNeededLen;
       }
 
@@ -1648,7 +1649,7 @@ static void __stdcall BigBuffer_Not(BigBuffer * pSource, BigBuffer * pDest) {
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pDest, nNewCapacity);
         }
 
-        SMem::SMemZero(pDest->pData + pDest->nCount, (nWordIndex - pDest->nCount) * 4 + 4);
+        SMem::SMemZero(pDest->pData + pDest->nCount, (nWordIndex + 1 - pDest->nCount) * sizeof(*pDest->pData));
         pDest->nCount = nNewLen;
       }
 
@@ -1700,7 +1701,7 @@ static void __stdcall BigBuffer_Or(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffer
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
         }
 
-        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex + 1 - pResult->nCount) * sizeof(*pResult->pData));
         pResult->nCount = nNewLen;
       }
 
@@ -1748,7 +1749,7 @@ static void __stdcall BigBuffer_Set2Exp(uint32_t nBitPos, BigBuffer * pResult) {
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
         }
 
-        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex + 1 - pResult->nCount) * sizeof(*pResult->pData));
         pResult->nCount = nNewLen;
       }
 
@@ -1772,7 +1773,7 @@ static void __stdcall BigBuffer_Set2Exp(uint32_t nBitPos, BigBuffer * pResult) {
         vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
       }
 
-      SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+      SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex + 1 - pResult->nCount) * sizeof(*pResult->pData));
       pResult->nCount = nNewLen;
     }
 
@@ -1905,7 +1906,7 @@ static void __stdcall BigBuffer_Shl(BigBuffer * pResult, BigBuffer * pSrc, uint3
             vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount);
           }
 
-          SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
+          SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex + 1 - pResult->nCount) * sizeof(*pResult->pData));
           pResult->nCount = nNeededLen;
         }
 
@@ -1984,7 +1985,7 @@ static void __stdcall BigBuffer_Shr(BigBuffer * pResult, BigBuffer * pSrc, uint3
             vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount);
           }
 
-          SMem::SMemZero(pResult->pData + pResult->nCount, (nSrcCount - pResult->nCount) * 4 + 4);
+          SMem::SMemZero(pResult->pData + pResult->nCount, (nSrcCount + 1 - pResult->nCount) * sizeof(*pResult->pData));
           pResult->nCount = nIndex;
         }
 
@@ -2126,7 +2127,7 @@ static void __stdcall BigBuffer_Sub(BigBuffer * pResult, BigBuffer * pLhs, BigBu
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount);
         }
 
-        SMem::SMemZero(pResult->pData + pResult->nCount, (dwLhsWord - pResult->nCount) * 4 + 4);
+        SMem::SMemZero(pResult->pData + pResult->nCount, (dwLhsWord + 1 - pResult->nCount) * sizeof(*pResult->pData));
         pResult->nCount = dwRhsWord;
       }
 
@@ -2178,7 +2179,7 @@ static void __stdcall BigBuffer_Xor(BigBuffer * pLhs, BigBuffer * pRhs, BigBuffe
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
         }
 
-        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex - pResult->nCount) * 4 + 4);
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nWordIndex + 1 - pResult->nCount) * sizeof(*pResult->pData));
         pResult->nCount = nNewLen;
       }
 
@@ -2252,7 +2253,7 @@ static void __stdcall BigBuffer_FromBinary(void * pSrcBytes, uint32_t nByteCount
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nNewCapacity);
         }
 
-        SMem::SMemZero(pResult->pData + pResult->nCount, (nDestIndex - pResult->nCount) * 4 + 4);
+        SMem::SMemZero(pResult->pData + pResult->nCount, (nDestIndex + 1 - pResult->nCount) * sizeof(*pResult->pData));
         pResult->nCount = nNewLen;
       }
 
@@ -2313,7 +2314,7 @@ static void __stdcall BigBuffer_FromUnsigned(uint32_t dwValue, BigBuffer * pResu
         vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, nAlignedCount);
       }
 
-      SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex - pResult->nCount) * 4 + 4);
+      SMem::SMemZero(pResult->pData + pResult->nCount, (nIndex + 1 - pResult->nCount) * sizeof(*pResult->pData));
       pResult->nCount = nNeededCount;
     }
 
@@ -2877,7 +2878,7 @@ static void __stdcall BigBuffer_Div(BigBuffer * pQuotient, BigBuffer * pRemainde
               vc8_thiscall(TSFixedArray_Ui_ReallocData)(pResult, uBitIter);
             }
 
-            SMem::SMemZero(pResult->pData + pResult->nCount, (nDividendLen - pResult->nCount) * 4 + 4);
+            SMem::SMemZero(pResult->pData + pResult->nCount, (nDividendLen + 1 - pResult->nCount) * sizeof(*pResult->pData));
             pResult->nCount = uNeeded;
           }
           if (!pResult->pData[pResult->nStartWord + nDivisorLen]) {
@@ -2916,7 +2917,7 @@ static void __stdcall BigBuffer_Div(BigBuffer * pQuotient, BigBuffer * pRemainde
               vc8_thiscall(TSFixedArray_Ui_ReallocData)(pQuotient, nAlignChunk);
             }
 
-            SMem::SMemZero(pQuotient->pData + pQuotient->nCount, (nDividendLen - pQuotient->nCount) * 4 + 4);
+            SMem::SMemZero(pQuotient->pData + pQuotient->nCount, (nDividendLen + 1 - pQuotient->nCount) * sizeof(*pQuotient->pData));
             pQuotient->nCount = uNeeded;
           }
 
@@ -3084,7 +3085,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
                 vc8_thiscall(TSFixedArray_Ui_ReallocData)(pnAcc, uBitIter);
               }
 
-              SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uLen - pnAcc->nCount) * 4 + 4);
+              SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uLen + 1 - pnAcc->nCount) * sizeof(*pnAcc->pData));
               pnAcc->nCount = uGrowStep;
             }
 
@@ -3120,7 +3121,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
                 vc8_thiscall(TSFixedArray_Ui_ReallocData)(pnAcc, uNewCapacity);
               }
 
-              SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uLen - pnAcc->nCount) * 4 + 4);
+              SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uLen + 1 - pnAcc->nCount) * sizeof(*pnAcc->pData));
               pnAcc->nCount = uGrowStep;
             }
 
@@ -3163,7 +3164,7 @@ void __stdcall BigBuffer_Mul(BigBuffer * pnResult, BigBuffer * pnA, BigBuffer * 
             vc8_thiscall(TSFixedArray_Ui_ReallocData)(pnAcc, uNewCapacity);
           }
 
-          SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uLen - pnAcc->nCount) * 4 + 4);
+          SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uLen + 1 - pnAcc->nCount) * sizeof(*pnAcc->pData));
           pnAcc->nCount = uGrowStep;
         }
 
@@ -3334,7 +3335,7 @@ void __stdcall BigBuffer_Rand(BigBuffer * pnResult, BigBuffer * pnModulus, BigBu
           vc8_thiscall(TSFixedArray_Ui_ReallocData)(self, uAlignedCap);
         }
 
-        SMem::SMemZero(self->pData + self->nCount, (uNeededCount - self->nCount) * 4 + 4);
+        SMem::SMemZero(self->pData + self->nCount, (uNeededCount + 1 - self->nCount) * sizeof(*self->pData));
         self->nCount = uNewLen;
       }
 
@@ -3518,7 +3519,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
               vc8_thiscall(TSFixedArray_Ui_ReallocData)(pnAcc, nCapacity);
             }
 
-            SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uNewCapacity - pnAcc->nCount) * 4 + 4);
+            SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uNewCapacity + 1 - pnAcc->nCount) * sizeof(*pnAcc->pData));
             pnAcc->nCount = uGrowStep;
           }
 
@@ -3556,7 +3557,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
               vc8_thiscall(TSFixedArray_Ui_ReallocData)(pnAcc, uBitIter2);
             }
 
-            SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uNeededCount - pnAcc->nCount) * 4 + 4);
+            SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uNeededCount + 1 - pnAcc->nCount) * sizeof(*pnAcc->pData));
             pnAcc->nCount = uGrowStep;
           }
 
@@ -3598,7 +3599,7 @@ void __stdcall BigBuffer_Square(BigBuffer * pnResult, BigBuffer * pnInput, BigSt
             vc8_thiscall(TSFixedArray_Ui_ReallocData)(pnAcc, uBitIter);
           }
 
-          SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uNewCapacity - pnAcc->nCount) * 4 + 4);
+          SMem::SMemZero(pnAcc->pData + pnAcc->nCount, (uNewCapacity + 1 - pnAcc->nCount) * sizeof(*pnAcc->pData));
           pnAcc->nCount = uGrowStep;
         }
 

@@ -48,7 +48,8 @@ Point sgRaveOriginZero;      // 1037c744 = {0, 0}
 const float sgfRaveColorOne = 1.0f;   // 1037c788
 const float sgfRaveZero = 0.0f;       // 1037c79c
 const float sgfRaveClipInset = 0.5f;  // 1037c798
-uint8_t * sgRavePaletteTableCopy[0x120 / 4];  // 1052efd8
+uint8_t * sgRavePaletteTableCopy[0x48];  // 1052efd8
+static_assert(sizeof(void*) != 4 || sizeof(sgRavePaletteTableCopy) == 0x120, "RaveSetPaletteTable copies the 0x120-byte 32-bit table");
 } // namespace
 
 TQADrawContext * gpRaveDrawContext;
@@ -320,7 +321,7 @@ int RaveChangeRes(int nUnused, int nMode) {
 
 // mac ppc classic/1.09d: 102b24b0 (1.00: 10078144)
 void RaveSetPaletteTable(uint8_t ** pTable) {
-    CopyMemory(sgRavePaletteTableCopy, pTable, 0x120);
+    CopyMemory(sgRavePaletteTableCopy, pTable, sizeof(sgRavePaletteTableCopy));
     gpRavePaletteTable = sgRavePaletteTableCopy;
 }
 

@@ -29,6 +29,7 @@
 #ifndef D2_FREE_POOL_AT
 #define D2_FREE_POOL_AT(pPool, p, szFile, nLine) Fog::Memory::FreeServerMemory((pPool), (p), (szFile), (nLine), 0)
 #endif
+static_assert(sizeof(void*) != 4 || sizeof(D2DrlgLevelPlacementStrc) == 0x1f4, "D2DrlgLevelPlacementStrc is 0x1f4 bytes on x86");
 
 
 #ifndef RECON_FPTD_fpLevelDataFn1
@@ -1456,7 +1457,7 @@ static void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData,
     eD2LevelId eLevelIdCurrent;
     int64_t lSeedProductA;
     int nNodeEntryOffset;
-    memset(&pLevelUnknown, 0, 500);
+    memset(&pLevelUnknown, 0, sizeof(D2DrlgLevelPlacementStrc));
     int nIndexMax;
     nIndexMax = 0;
     do {
@@ -1936,7 +1937,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
           bNoOverlap = nGridX + 1;
           aSubLevelRecords[nSubIdx.nSubIdx2].nGridX = nGridY;
           aSubLevelRecords[nSubIdx.nSubIdx2].nGridY = bNoOverlap;
-          pSubGridData = (int32_t*)D2_ALLOC_POOL_AT(pPoolManagerStrc, iVar2 * iVar1 * 4, ".\\DRLG\\OutPlace.cpp", 0x66f);
+          pSubGridData = (int32_t*)D2_ALLOC_POOL_AT(pPoolManagerStrc, iVar2 * iVar1 * sizeof(int), ".\\DRLG\\OutPlace.cpp", 0x66f);
           aSubLevelRecords[nSubIdx.nSubIdx2].pCellMap = pSubGridData;
           if (!nSubIdx.nSubIdx2) {
             sNewSeed = D2_SEED_NEXT(pDrlg->nSeed);
@@ -2440,7 +2441,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
           } while (nGridY < iVar3);
         }
 
-        for (int nRecord = 0; nRecord < 3; nRecord++) {
+        for (int nRecord = 0; nRecord < (int)_countof(aSubLevelRecords); nRecord++) {
           D2DrlgSubLevelPlaceStrc* pRecord = &aSubLevelRecords[nRecord];
           iVar3 = 0;
           for (nGridY = 0; nGridY < iVar2; nGridY++) {
@@ -2471,7 +2472,7 @@ static D2DrlgLevelStrc * DRLGLEVEL_FixDrlgLevelForSpiderForest(D2DrlgLevelStrc *
           }
         } while (bSwapped);
 
-        for (iVar3 = 0; iVar3 < 3; iVar3++) {
+        for (iVar3 = 0; iVar3 < (int)_countof(aSubLevelRecords); iVar3++) {
           D2DrlgSubLevelPlaceStrc* pRecord = &aSubLevelRecords[iVar3];
           pSubLevel = GetLevelAndAlloc(pDrlg, iVar3 + 0x4c);
           pSubLevel->pAutomapEx = pRecord->pCellMap;

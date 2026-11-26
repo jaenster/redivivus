@@ -1352,7 +1352,7 @@ uint32_t __stdcall SStrPack(LPSTR szText, char * szSource, uint32_t nBufferLengt
           dwWord = dwCarry - dwWord2;
           dwCarry = dwWord | dwWord2;
           dwZeroMask = (dwWord2 + 0x7efefeff ^ dwWord) & 0x81010101;
-          pScanNext = (uint32_t*)((char*)pScan + 4);
+          pScanNext = (uint32_t*)pScan + 1;
           dwWord = guStringAlignmentTemp;
         } while (!dwZeroMask);
 
@@ -1818,7 +1818,6 @@ ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive,
       while (nChar) {
         pszText++;
         nAccum64 = UVar1 + qwSeed;
-        *(uint32_t*)((char*)&qwSeed + 4) = (int)(qwSeed >> 0x20);
         UVar1 = (uint64_t)((uint64_t)(uint32_t)(gaHashSeedTable[nChar >> 4].nHashHigh - gaHashSeedTable[nChar & 0xf].nHashHigh - (uint32_t)(gaHashSeedTable[nChar >> 4].dwHashLow < gaHashSeedTable[nChar & 0xf].dwHashLow) ^ (uint32_t)((uint64_t)nAccum64 >> 0x20)) << 32 | (uint64_t)(uint32_t)(gaHashSeedTable[nChar >> 4].dwHashLow - gaHashSeedTable[nChar & 0xf].dwHashLow ^ (uint32_t)nAccum64));
         nAccum64 = (int64_t)qwSeed * 0x21;
         qwSeed = nAccum64 + (uint64_t)nChar + UVar1 + 3;
@@ -1835,7 +1834,6 @@ ULONGLONG __stdcall SSTR_HashString64(uint8_t * pszText, uint8_t bCaseSensitive,
         }
 
         nAccum64 = UVar1 + qwSeed;
-        *(uint32_t*)((char*)&qwSeed + 4) = (int)(qwSeed >> 0x20);
         UVar1 = (uint64_t)((uint64_t)(uint32_t)(gaHashSeedTable[nChar >> 4].nHashHigh - gaHashSeedTable[nChar & 0xf].nHashHigh - (uint32_t)(gaHashSeedTable[nChar >> 4].dwHashLow < gaHashSeedTable[nChar & 0xf].dwHashLow) ^ (uint32_t)((uint64_t)nAccum64 >> 0x20)) << 32 | (uint64_t)(uint32_t)(gaHashSeedTable[nChar >> 4].dwHashLow - gaHashSeedTable[nChar & 0xf].dwHashLow ^ (uint32_t)nAccum64));
         nAccum64 = (int64_t)qwSeed * 0x21;
         qwSeed = nAccum64 + (uint64_t)nChar + UVar1 + 3;
@@ -2898,9 +2896,9 @@ int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUT
           goto report_counts;
         }
         if (uByteCount <= 0xffff) {
-          pbUTF8In += 2;
+          pbUTF8In += sizeof(uint16_t);
           *(short int*)pInStart = (short int)uByteCount;
-          pInStart += 2;
+          pInStart += sizeof(uint16_t);
           if (!uByteCount) {
             iAccum = 0;
             goto report_counts;
@@ -2908,17 +2906,17 @@ int __stdcall UTF8_ToUTF16(short * pszUTF16Out, int nOutMaxChars, uint8_t * pbUT
         } else if (uByteCount > 0x10ffff) {
           pInStart[0] = 0xfd;
           pInStart[1] = 0xff;
-          pInStart += 2;
-          pbUTF8In += 2;
+          pInStart += sizeof(uint16_t);
+          pbUTF8In += sizeof(uint16_t);
         } else {
           if (pbUTF8In >= (unsigned char*)(pszUTF16Out + nOutMaxChars)) {
             goto output_full;
           }
 
           *(short int*)pInStart = (short int)(uByteCount - 0x10000 >> 10) - 0x2800;
-          *(uint16_t*)(pInStart + 2) = ((uint16_t)(uByteCount - 0x10000) & 0x3ff) + 0xdc00;
-          pInStart += 4;
-          pbUTF8In += 4;
+          ((uint16_t*)pInStart)[1] = ((uint16_t)(uByteCount - 0x10000) & 0x3ff) + 0xdc00;
+          pInStart += 2 * sizeof(uint16_t);
+          pbUTF8In += 2 * sizeof(uint16_t);
         }
 
         pOutStart += iResult;

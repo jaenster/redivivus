@@ -12,6 +12,7 @@
 #include <cstdint>
 #include <cstddef>
 #include "Source/D2Headers/d2_platform.h"
+#include "Source/D2CMP/D2GfxCellNodeStrc.h"
 
 // Forward declarations
 struct D2AsyncData_Line0x128;
@@ -224,7 +225,8 @@ struct __attribute__((packed)) D2SpriteDecodeRequestStrc {
 struct D2TileCmpTileNodeStrc {
     /* 0x00 */ short wOffsetX; // Sub-tile X offset in isometric space
     /* 0x02 */ short wOffsetY; // Sub-tile Y offset in isometric space
-    /* 0x04 */ uint16_t wUnk_04;
+    /* 0x04 */ uint8_t nSubIdxLo; // subtile column in the 5x5 grid
+    /* 0x05 */ uint8_t nSubIdxHi; // subtile row in the 5x5 grid
     /* 0x06 */ uint16_t wFlags; // Flags: bit0=transparent, bit13=valid (|=0x2001 in ExtractIsometricSubTile)
     /* 0x08 */ uint16_t wPixelSize; // Size of pixel buffer in bytes (0x600 for full 32x32 sub-tile)
     /* 0x0A */ uint16_t wUnk_0A;
