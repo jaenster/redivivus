@@ -176,14 +176,14 @@ struct D2GfxTileRectStrc {
 #endif // D2_DEFINED_D2GfxTileRectStrc
 #ifndef D2_DEFINED_D2TooltipTextStrc
 #define D2_DEFINED_D2TooltipTextStrc
-__pragma(pack(push, 1)) struct D2TooltipTextStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TooltipTextStrc {
     /* 0x000 */ uint16_t wszString[1024];
     /* 0x800 */ int nX;
     /* 0x804 */ int nY;
     /* 0x808 */ int nColor;
     /* 0x80C */ int nCenterFlag;
     /* 0x810 */ int nLoadProgress;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2TooltipTextStrc
 #ifndef D2_DEFINED_D2WinAccountListEntry
 #define D2_DEFINED_D2WinAccountListEntry
@@ -220,7 +220,7 @@ struct D2WinListEntries {
 #endif // D2_DEFINED_D2WinListEntries
 #ifndef D2_DEFINED_D2WinListEntry
 #define D2_DEFINED_D2WinListEntry
-__pragma(pack(push, 1)) struct D2WinListEntry {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinListEntry {
     /* 0x000 */ uint16_t wszText[256]; // copied by D2WINLIST_AddListItem, max 255 chars
     /* 0x200 */ int32_t nTextWidth; // text width + 8 (D2WINLIST_AddListItem)
     /* 0x204 */ BOOL (__stdcall *pfnOnActivate)(struct D2ControlMsg *); // called by Push (double click, tail call with the D2ControlMsg), ListCheck and Key (hotkey match)
@@ -232,14 +232,14 @@ __pragma(pack(push, 1)) struct D2WinListEntry {
     /* 0x219 */ BYTE _pad219[3];
     /* 0x21C */ int32_t nUserData; // Key compares the low word with the key code
     /* 0x220 */ struct D2WinListEntry * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2WinListEntry
 #ifndef D2_DEFINED_D2WinPopupEntry
 #define D2_DEFINED_D2WinPopupEntry
-__pragma(pack(push, 1)) struct D2WinPopupEntry {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinPopupEntry {
     /* 0x00 */ uint16_t wszText[64];
     /* 0x80 */ void (__stdcall *pfnOnClick)(); // called with no arguments by D2WINPOPUP_HandleClick
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2WinPopupEntry
 #ifndef D2_DEFINED_D2WinTextBoxLineStrc
 #define D2_DEFINED_D2WinTextBoxLineStrc
@@ -280,7 +280,7 @@ struct D2WinWndHandlerStrc {
 #endif // D2_DEFINED_D2WinWndHandlerStrc
 #ifndef D2_DEFINED_DC6
 #define D2_DEFINED_DC6
-__pragma(pack(push, 1)) struct DC6 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct DC6 {
     /* 0x00 */ int nVersion;
     /* 0x04 */ int nFlags;
     /* 0x08 */ int nFormat;
@@ -288,11 +288,11 @@ __pragma(pack(push, 1)) struct DC6 {
     /* 0x10 */ int nDirections;
     /* 0x14 */ int nFrames;
     /* 0x18 */ struct DC6Block * pBlocks[0];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_DC6
 #ifndef D2_DEFINED_DC6Block
 #define D2_DEFINED_DC6Block
-__pragma(pack(push, 1)) struct DC6Block {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct DC6Block {
     /* 0x00 */ int nFlip;
     /* 0x04 */ int nWidth;
     /* 0x08 */ int nHeight;
@@ -302,7 +302,7 @@ __pragma(pack(push, 1)) struct DC6Block {
     /* 0x18 */ intptr_t nNextBlock; // on disk a 32-bit field; after load the frame's 0x2c-byte renderer record (CELCMP_GetDC6BlockPixelData), so pointer-sized in memory
     /* 0x1C */ int nLength;
     /* 0x20 */ char data[0];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_DC6Block
 #ifndef D2_DEFINED_FORMS_AnimFrameStrc
 #define D2_DEFINED_FORMS_AnimFrameStrc

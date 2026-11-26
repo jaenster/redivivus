@@ -178,7 +178,7 @@ static void AllocUiPartyFromRoster(D2RosterStrc * pRoster, int32_t nPositionY) {
     char cChar;
     D2UiPartyStrc* pUiPartyGlobal = Party::pUiParty;
     pUiParty = D2_NEW_AT(D2UiPartyStrc, ".\\UI\\Party.cpp", 0x14d);
-    memset(pUiParty, 0, 0xd1);
+    memset(pUiParty, 0, sizeof(*pUiParty));
     SetupPartyButtons(pRoster, pUiParty, nPositionY);
     char* pRosterName = GAME::Roster::GetRosterName(pRoster);
     char* pPlayerName = pUiParty->szPlayerName;

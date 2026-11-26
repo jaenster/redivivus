@@ -2,35 +2,35 @@
 <title>Bytes of the original game code by kind of match</title>
 <rect width="800" height="280" rx="6" fill="#ffffff"/>
 <text x="24" y="30" font-size="15" font-weight="600" fill="#1f2328">Original game code, C runtime, prebuilt PKWARE library and compiler EH stubs left out: 2,612,801 bytes</text>
-<rect x="24.00" y="52" width="422.65" height="30" fill="#1f6feb"/>
-<text x="235.33" y="71" font-size="12" text-anchor="middle" fill="#ffffff">56.2%</text>
-<rect x="446.65" y="52" width="188.93" height="30" fill="#79b8ff"/>
-<text x="541.12" y="71" font-size="12" text-anchor="middle" fill="#000000">25.1%</text>
-<rect x="635.58" y="52" width="64.66" height="30" fill="#e3b341"/>
-<text x="667.92" y="71" font-size="12" text-anchor="middle" fill="#000000">8.6%</text>
-<rect x="700.25" y="52" width="66.20" height="30" fill="#d1d5da"/>
-<text x="733.35" y="71" font-size="12" text-anchor="middle" fill="#000000">8.8%</text>
+<rect x="24.00" y="52" width="422.75" height="30" fill="#1f6feb"/>
+<text x="235.37" y="71" font-size="12" text-anchor="middle" fill="#ffffff">56.2%</text>
+<rect x="446.75" y="52" width="188.89" height="30" fill="#79b8ff"/>
+<text x="541.19" y="71" font-size="12" text-anchor="middle" fill="#000000">25.1%</text>
+<rect x="635.64" y="52" width="64.65" height="30" fill="#e3b341"/>
+<text x="667.96" y="71" font-size="12" text-anchor="middle" fill="#000000">8.6%</text>
+<rect x="700.29" y="52" width="66.17" height="30" fill="#d1d5da"/>
+<text x="733.37" y="71" font-size="12" text-anchor="middle" fill="#000000">8.8%</text>
 <rect x="766.45" y="52" width="5.38" height="30" fill="#eceff3"/>
 <rect x="771.83" y="52" width="4.17" height="30" fill="#9aa4ae"/>
 <rect x="24" y="52" width="752" height="30" fill="none" stroke="#d1d9e0"/>
 <rect x="24" y="101" width="14" height="14" rx="2" fill="#1f6feb" stroke="#d1d9e0"/>
 <text x="46" y="112" font-size="13" fill="#1f2328">Whole function identical</text>
-<text x="334" y="112" font-size="13" text-anchor="end" fill="#1f2328">1,468,497</text>
-<text x="398" y="112" font-size="13" text-anchor="end" fill="#1f2328">56.20%</text>
+<text x="334" y="112" font-size="13" text-anchor="end" fill="#1f2328">1,468,819</text>
+<text x="398" y="112" font-size="13" text-anchor="end" fill="#1f2328">56.22%</text>
 <text x="416" y="112" font-size="12" fill="#59636e">functions that compile to the original bytes (MATCH)</text>
 <rect x="24" y="127" width="14" height="14" rx="2" fill="#79b8ff" stroke="#d1d9e0"/>
 <text x="46" y="138" font-size="13" fill="#1f2328">Matching instructions</text>
-<text x="334" y="138" font-size="13" text-anchor="end" fill="#1f2328">656,431</text>
+<text x="334" y="138" font-size="13" text-anchor="end" fill="#1f2328">656,293</text>
 <text x="398" y="138" font-size="13" text-anchor="end" fill="#1f2328">25.12%</text>
 <text x="416" y="138" font-size="12" fill="#59636e">already right, but the function still differs elsewhere</text>
 <rect x="24" y="153" width="14" height="14" rx="2" fill="#e3b341" stroke="#d1d9e0"/>
 <text x="46" y="164" font-size="13" fill="#1f2328">Same instruction, other operands</text>
-<text x="334" y="164" font-size="13" text-anchor="end" fill="#1f2328">224,674</text>
+<text x="334" y="164" font-size="13" text-anchor="end" fill="#1f2328">224,622</text>
 <text x="398" y="164" font-size="13" text-anchor="end" fill="#1f2328">8.60%</text>
 <text x="416" y="164" font-size="12" fill="#59636e">same instruction, other registers or offsets</text>
 <rect x="24" y="179" width="14" height="14" rx="2" fill="#d1d5da" stroke="#d1d9e0"/>
 <text x="46" y="190" font-size="13" fill="#1f2328">Different instructions</text>
-<text x="334" y="190" font-size="13" text-anchor="end" fill="#1f2328">230,021</text>
+<text x="334" y="190" font-size="13" text-anchor="end" fill="#1f2328">229,889</text>
 <text x="398" y="190" font-size="13" text-anchor="end" fill="#1f2328">8.80%</text>
 <text x="416" y="190" font-size="12" fill="#59636e">instructions with no matching partner</text>
 <rect x="24" y="205" width="14" height="14" rx="2" fill="#eceff3" stroke="#d1d9e0"/>

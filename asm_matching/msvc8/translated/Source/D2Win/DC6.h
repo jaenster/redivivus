@@ -20,7 +20,7 @@ struct DC6Block;
 // Data types
 #ifndef D2_DEFINED_DC6
 #define D2_DEFINED_DC6
-__pragma(pack(push, 1)) struct DC6 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct DC6 {
     /* 0x00 */ int nVersion;
     /* 0x04 */ int nFlags;
     /* 0x08 */ int nFormat;
@@ -28,6 +28,6 @@ __pragma(pack(push, 1)) struct DC6 {
     /* 0x10 */ int nDirections;
     /* 0x14 */ int nFrames;
     /* 0x18 */ struct DC6Block * pBlocks[0];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_DC6

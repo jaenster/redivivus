@@ -21,10 +21,10 @@ typedef uint32_t eD2LevelId;
 // Data types
 #ifndef D2_DEFINED_D2WaypointListEntryStrc
 #define D2_DEFINED_D2WaypointListEntryStrc
-__pragma(pack(push, 1)) struct D2WaypointListEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WaypointListEntryStrc {
     /* 0x00 */ eD2LevelId eLevelId;
     /* 0x04 */ uint8_t bActivated;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2WaypointListEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)

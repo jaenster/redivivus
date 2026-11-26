@@ -18,13 +18,13 @@
 // Data types
 #ifndef D2_DEFINED_D2MemoryManagerStrc
 #define D2_DEFINED_D2MemoryManagerStrc
-struct __attribute__((packed)) D2MemoryManagerStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MemoryManagerStrc {
     /* 0x0000 */ BOOL bInit;
     /* 0x0004 */ CRITICAL_SECTION pSync;
     /* 0x001C */ D2PoolManagerStrc pManagers[8];
     /* 0xBE7C */ size_t nManagers;
     /* 0xBE80 */ size_t nManagerIndex[8];
     /* 0xBEA0 */ size_t nFreeManagerIndex;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2MemoryManagerStrc

@@ -18,10 +18,10 @@
 // Data types
 #ifndef D2_DEFINED_D2TimerListStrc
 #define D2_DEFINED_D2TimerListStrc
-struct __attribute__((packed)) D2TimerListStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TimerListStrc {
     /* 0x0000 */ D2TimerStrc pTimerList[600]; // allocated in realtime
     /* 0x7080 */ struct D2TimerStrc * pFirstList; // head of this pool's free-timer list (initially &pTimerList[0])
     /* 0x7084 */ struct D2TimerListStrc * pNextList; // unknown whenever it actually points to another TimerList, always NULL
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2TimerListStrc

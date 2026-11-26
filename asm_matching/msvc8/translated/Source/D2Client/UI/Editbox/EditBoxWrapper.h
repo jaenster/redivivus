@@ -186,7 +186,7 @@ struct EditBoxWrapperVtable;
 // Data types
 #ifndef D2_DEFINED_EditBoxImplementation
 #define D2_DEFINED_EditBoxImplementation
-__pragma(pack(push, 1)) struct EditBoxImplementation {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct EditBoxImplementation {
     /* 0x00 */ struct EditBoxImplementationVtable * pVtable; // virtual function table
     /* 0x04 */ int (__fastcall *pfnCharFilter)(::UIWidget *, struct D2UIMouseMsgStrc *);
     /* 0x08 */ int nPosX;
@@ -210,7 +210,7 @@ __pragma(pack(push, 1)) struct EditBoxImplementation {
     /* 0x4E */ int nFont;
     /* 0x52 */ int * pDC6;
     /* 0x56 */ int bDrawFrame;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_EditBoxImplementation
 #ifndef D2_DEFINED_EditBoxWrapper

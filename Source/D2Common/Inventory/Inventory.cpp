@@ -764,12 +764,22 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight,
     D2UnitStrc** pScanCell;
     int iVar1;
     int nRowCount;
+#if D2_ARCH_X86
     int* pStartCol;
+#elif D2_ARCH_X64
+    D2UnitStrc** pStartCol; // the grid cells are pointers; the x86 body scans them as dwords
+#endif
     int32_t nSavedStartCol = nStartCol;
     uint32_t nScore = 0;
     if (nStartCol > 0) {
       if (nStartRow < (int)((uint32_t)byItemHeight + nStartRow)) {
+#if D2_ARCH_X86
         pScanCell = pGridInfo->pGridCells + ((uint32_t)pGridInfo->bWidth * nStartRow - 1);
+#elif D2_ARCH_X64
+        // 1.14d adds nStartCol here (0063b368..0063b381); the x86 body leaves it out and reads cell -1 of the row.
+        // Without it the 32-bit wrap of (row * width - 1) becomes a 4 GB offset on x64.
+        pScanCell = pGridInfo->pGridCells + ((uint32_t)pGridInfo->bWidth * nStartRow + (nStartCol - 1));
+#endif
         iVar1 = (uint32_t)byItemHeight + nStartRow - nStartRow;
         do {
           if (*pScanCell) {
@@ -806,7 +816,11 @@ static uint32_t __stdcall INVENTORY_CalcGridPlacementScore(uint8_t byItemHeight,
     if (nStartRow > 0) {
       if (nStartCol < iVar1) {
         nRowCount = iVar1 - nStartCol;
+#if D2_ARCH_X86
         pStartCol = (int*)(pGridInfo->pGridCells + (nGridWidth * (nStartRow - 1) + nStartCol));
+#elif D2_ARCH_X64
+        pStartCol = pGridInfo->pGridCells + (nGridWidth * (nStartRow - 1) + nStartCol);
+#endif
         do {
           if (*pStartCol) {
             nScore++;
@@ -886,7 +900,11 @@ static uint32_t __stdcall INVENTORY_FindBestPlacementWithScore(int * ppnOutX, in
 // Scans the grid (pGridInfo) in reverse column order for the first empty cell where an item of size byItemWidth x byItemHeight fits, verified by INVENTORY_IsGridRectEmpty. Writes the column to *pnOutX and row to *pnOutY. Returns 1 on success, 0 if no slot found. Does not score placements — use INVENTORY_FindBestGridPosition for scored placement.
 static BOOL __stdcall INVENTORY_FindFirstEmptySlot(int * pnOutX, int * pnOutY, uint8_t byItemWidth, uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo) {
     int32_t bFits;
+#if D2_ARCH_X86
     int32_t* pGridCell;
+#elif D2_ARCH_X64
+    D2UnitStrc** pGridCell; // the grid cells are pointers; the x86 body scans them as dwords
+#endif
     uint8_t byGridWidth;
     int nX = pGridInfo->bWidth - 1;
     if (nX < 0) {
@@ -899,7 +917,11 @@ static BOOL __stdcall INVENTORY_FindFirstEmptySlot(int * pnOutX, int * pnOutY, u
       nY = 0;
       if (nGridRows) {
         byGridWidth = pGridInfo->bWidth;
-        pGridCell = (int32_t*)(pGridInfo->pGridCells + nX);
+#if D2_ARCH_X86
+        pGridCell = (int32_t*)(pGridInfo->pGridCells + nX); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+        pGridCell = pGridInfo->pGridCells + nX;
+#endif
         do {
           if (!*pGridCell && (int)((uint32_t)byItemWidth + nX) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nY) <= (int)nGridRows) {
             bFits = INVENTORY_IsGridRectEmpty(byItemWidth, nX, byItemHeight, pGridInfo, nY);

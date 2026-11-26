@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2SkillsTxt
 #define D2_DEFINED_D2SkillsTxt
-__pragma(pack(push, 1)) struct D2SkillsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SkillsTxt {
     /* 0x000 */ short skill;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
@@ -221,6 +221,6 @@ __pragma(pack(push, 1)) struct D2SkillsTxt {
     /* 0x232 */ short aibonus;
     /* 0x234 */ int costmult;
     /* 0x238 */ int costadd;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SkillsTxt

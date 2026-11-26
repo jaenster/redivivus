@@ -27,10 +27,10 @@ typedef int (__stdcall *pfnStormMsgIdleCallback)(int nIdleIteration);
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-struct __attribute__((packed)) StormWndRecStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) StormWndRecStrc {
     /* 0x00 */ StormLinkStrc link;
     /* 0x08 */ HWND hWnd;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Storm
 namespace Storm::WindowHandle {

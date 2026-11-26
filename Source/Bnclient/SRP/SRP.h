@@ -23,10 +23,10 @@ struct D2SrpServerSessionStrc;
 // Data types
 #ifndef D2_DEFINED_BigStack
 #define D2_DEFINED_BigStack
-struct __attribute__((packed)) BigStack {
+D2_PACKED_BEGIN struct __attribute__((packed)) BigStack {
     /* 0x000 */ BigBuffer aBuffers[16]; // scratch BigBuffers; BigBuffer_Mul/Div/IsPrime take aBuffers[nUsed] and bump nUsed
     /* 0x140 */ uint32_t nUsed; // index of the next free scratch buffer (+0x140)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_BigStack
 #ifndef D2_DEFINED_D2BnSha1ContextStrc
@@ -68,11 +68,11 @@ struct D2SrpServerSessionStrc {
 
 #endif // D2_DEFINED_D2SrpServerSessionStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct __attribute__((packed)) D2SrpSeedEntropyStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SrpSeedEntropyStrc {
     /* 0x00 */ __time32_t tTime; // _time32() result
     /* 0x04 */ uint32_t dwSeed; // copy of SRP_InitializeRandomState's dwSeed
     /* 0x08 */ int32_t nRand; // rand() after srand(dwSeed)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #ifndef D2_DEFINED_TSGrowableArray_Uc

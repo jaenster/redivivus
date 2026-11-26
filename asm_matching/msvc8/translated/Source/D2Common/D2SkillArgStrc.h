@@ -26,7 +26,7 @@ typedef void (__fastcall *fpMissileInitFunction)(struct D2UnitStrc * pMissile, i
 // Data types
 #ifndef D2_DEFINED_D2SkillArgStrc
 #define D2_DEFINED_D2SkillArgStrc
-__pragma(pack(push, 1)) struct D2SkillArgStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SkillArgStrc {
     /* 0x00 */ int nFlags;
     /* 0x04 */ struct D2UnitStrc * pOwner;
     /* 0x08 */ struct D2UnitStrc * pMissile;
@@ -50,6 +50,6 @@ __pragma(pack(push, 1)) struct D2SkillArgStrc {
     /* 0x50 */ uint32_t nLightRadius; // duplicate of the nLightOverride name at 0x38 before; no known consumer
     /* 0x54 */ void (__fastcall *fpFunction)(struct D2UnitStrc *, intptr_t); // Optional per-missile init callback, invoked by CreatingMissile @0059fe30 as MOV EDX,[ESI+0x58] / MOV ECX,EBX / CALL EAX - pure __fastcall, two register args, no stack args, return discarded.
     /* 0x58 */ intptr_t nFunctionParam; // second argument of fpFunction (fpMissileInitFunction nParam): a missile index, quadrant offset, revive count or a unit pointer depending on the caller; MakeMissile 004cd540 passes it through as int32_t
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SkillArgStrc

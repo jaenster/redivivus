@@ -18,11 +18,11 @@
 // Data types
 #ifndef D2_DEFINED_D2MonsterRegionFieldStrc
 #define D2_DEFINED_D2MonsterRegionFieldStrc
-__pragma(pack(push, 1)) struct D2MonsterRegionFieldStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MonsterRegionFieldStrc {
     /* 0x00 */ uint16_t nClassId; // Monster class ID from MonStats.txt
     /* 0x02 */ uint8_t nRarity; // Rarity from MonStats.txt
     /* 0x03 */ uint8_t pad;
     /* 0x04 */ D2MonsterRegionFieldSubStrc aArray[3]; // Shuffled by SEED_RollChampionPack
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonsterRegionFieldStrc

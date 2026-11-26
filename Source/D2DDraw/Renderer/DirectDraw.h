@@ -415,7 +415,7 @@ struct IDirectDrawVtbl {
 
 #endif // D2_DEFINED_IDirectDrawVtbl
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2DDraw)
-struct __attribute__((packed)) DDBLTFX {
+D2_PACKED_BEGIN struct __attribute__((packed)) DDBLTFX {
     /* 0x00 */ DWORD dwSize;
     /* 0x04 */ DWORD dwDDFX;
     /* 0x08 */ DWORD dwROP;
@@ -439,7 +439,7 @@ struct __attribute__((packed)) DDBLTFX {
     /* 0x50 */ DWORD dwFillColor; // union dwFillDepth/dwFillPixel/lpDDSPattern
     /* 0x54 */ DDCOLORKEY ddckDestColorkey;
     /* 0x5C */ DDCOLORKEY ddckSrcColorkey;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2DDraw
 namespace D2DDraw::Renderer::DirectDraw {

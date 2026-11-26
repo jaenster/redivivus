@@ -3700,9 +3700,16 @@ int __stdcall SFILE_EnumFilesInternal(D2ArchiveStrc * pArchive, char * szText, v
     } else {
       pInsertPos = (StormLinkStrc*)gMpqArchiveList.head.pNext;
       do {
+#if D2_ARCH_X86
         if (*(int*)(pInsertPos + 0x23) <= (intptr_t)pArchiveRecord->pMpqFileRecord) {
           break;
         }
+#elif D2_ARCH_X64
+        // The x86 body reads the archive priority at +0x118 as 0x23 links; the record's slot is wider on x64.
+        if (*(int*)&((D2ArchiveStrc*)pInsertPos)->pMpqFileRecord <= (intptr_t)pArchiveRecord->pMpqFileRecord) {
+          break;
+        }
+#endif
 
         pInsertPos = (StormLinkStrc*)pInsertPos->pNext;
         if ((intptr_t)pInsertPos <= 0) {
@@ -5575,9 +5582,16 @@ int __fastcall SFILE_s_OpenArchive(D2ArchiveStrc * ppArchive, uint32_t nFlags, i
     } else {
       pScanPos = (StormLinkStrc*)gMpqArchiveList.head.pNext;
       do {
+#if D2_ARCH_X86
         if (*(int*)(pScanPos + 0x23) <= (intptr_t)pListNode->pMpqFileRecord) {
           break;
         }
+#elif D2_ARCH_X64
+        // The x86 body reads the archive priority at +0x118 as 0x23 links; the record's slot is wider on x64.
+        if (*(int*)&((D2ArchiveStrc*)pScanPos)->pMpqFileRecord <= (intptr_t)pListNode->pMpqFileRecord) {
+          break;
+        }
+#endif
 
         pScanPos = (StormLinkStrc*)pScanPos->pNext;
         if ((intptr_t)pScanPos <= 0) {

@@ -20,15 +20,15 @@ struct D2WinImageHitArea;
 typedef uint32_t DRAWMODE;
 
 // Data types
-struct __attribute__((packed)) D2WinImage {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2WinImage {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ int nFrame; // DC6 cell index, clamped by 004fd110, drawn from by Draw 004fd1f0
     /* 0x44 */ DRAWMODE eDrawMode; // ctor sets 5; passed to the cell draw by Draw 004fd1f0
     /* 0x48 */ struct D2WinImageHitArea * pHitAreas; // NULL-terminated hit-area array tested by Push 004fd5d0
-};
+}; D2_PACKED_END
 
-struct __attribute__((packed)) D2WinImageEx {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2WinImageEx {
     /* 0x00 */ D2WinImage sImage; // an ImageEx is an Image (type 2, shares Push 004fd5d0)
     /* 0x4C */ int nBorderX; // Draw 004fd470 reads it as the horizontal border
     /* 0x50 */ int nBorderY; // Draw 004fd470 reads it as the vertical border
-};
+}; D2_PACKED_END

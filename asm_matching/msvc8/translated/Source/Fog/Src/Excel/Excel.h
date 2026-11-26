@@ -32,13 +32,13 @@ struct D2BinFieldHashNodeStrc {
 #endif // D2_MODULE_Fog
 #ifndef D2_DEFINED_D2BinFieldInputStrc
 #define D2_DEFINED_D2BinFieldInputStrc
-__pragma(pack(push, 1)) struct D2BinFieldInputStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BinFieldInputStrc {
     /* 0x00 */ char * szName;
     /* 0x04 */ eD2BinFieldInputType eType;
     /* 0x08 */ uint32_t nSize;
     /* 0x0C */ int nOffset;
     /* 0x10 */ void * fpLinker; // by eType: struct D2TxtLinkStrc** (CODE*/NAME*), PFN_TxtKeyToWord* (KEY_WORD), PFN_TxtFieldLinker* (LINKER_*)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2BinFieldInputStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)

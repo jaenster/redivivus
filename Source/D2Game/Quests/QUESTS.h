@@ -109,14 +109,14 @@ struct D2QuestArgStrcUnion3 {
 #endif // D2_DEFINED_D2QuestArgStrcUnion3
 #ifndef D2_DEFINED_D2QuestInitDataExtended
 #define D2_DEFINED_D2QuestInitDataExtended
-struct __attribute__((packed)) D2QuestInitDataExtended {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestInitDataExtended {
     /* 0x00 */ void (__fastcall *fpQuestInit)(struct D2QuestDataStrc *);
     /* 0x04 */ int nAct;
     /* 0x08 */ int field2_0x8;
     /* 0x0C */ int field3_0xc;
     /* 0x10 */ eD2QuestsInternal nQuestNoInternal;
     /* 0x14 */ eD2Quests nQuestIdReal;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QuestInitDataExtended
 #ifndef D2_DEFINED_D2QuestTimerStrc
@@ -156,14 +156,14 @@ union uD2QuestArgStrcUnion {
 #endif // D2_DEFINED_uD2QuestArgStrcUnion
 #ifndef D2_DEFINED_D2QuestArgStrc
 #define D2_DEFINED_D2QuestArgStrc
-struct __attribute__((packed)) D2QuestArgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QuestArgStrc {
     /* 0x00 */ struct SGAMEDATA * pGame;
     /* 0x04 */ int nEvent;
     /* 0x08 */ struct D2UnitStrc * pTarget;
     /* 0x0C */ struct D2UnitStrc * pPlayer;
     /* 0x10 */ int field4_0x10;
     /* 0x14 */ uD2QuestArgStrcUnion sQuestArgs;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QuestArgStrc
 // =============================================================================

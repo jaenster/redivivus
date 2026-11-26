@@ -162,12 +162,12 @@ struct D2AiCorpseScanStrc {
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2AiListStrc
 #define D2_DEFINED_D2AiListStrc
-struct __attribute__((packed)) D2AiListStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AiListStrc {
     /* 0x00 */ D2AITypes eAIType;
     /* 0x04 */ void (__fastcall *fpInit)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
     /* 0x08 */ void (__fastcall *fpMain)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
     /* 0x0C */ void (__fastcall *fpSecondary)(::SGAMEDATA *, struct D2UnitStrc *, struct D2AiParamStrc *);
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2AiListStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -261,13 +261,13 @@ struct D2AiShadowMasterScanStrc {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2AiSkillCandidateStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AiSkillCandidateStrc {
     /* 0x00 */ struct D2UnitStrc * pTarget;
     /* 0x04 */ eD2Skills eSkillId;
     /* 0x08 */ int32_t nScore;
     /* 0x0C */ int32_t nUnused0C; // only zeroed
     /* 0x10 */ int32_t nUnused10; // only zeroed
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -326,7 +326,7 @@ struct D2MinionForEachCtx {
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2ModeChangeStrc
 #define D2_DEFINED_D2ModeChangeStrc
-struct __attribute__((packed)) D2ModeChangeStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ModeChangeStrc {
     /* 0x00 */ eD2MonsterAnimMode nUnitMode;
     /* 0x04 */ struct D2UnitStrc * pUnit;
     /* 0x08 */ struct D2UnitStrc * pTargetUnit;
@@ -338,7 +338,7 @@ struct __attribute__((packed)) D2ModeChangeStrc {
     /* 0x17 */ uint8_t nUnknown2;
     /* 0x18 */ int nMonType1; // value: zeroed by SetCurrentSkill/ReviveCorpse, passed as an int argument
     /* 0x1C */ int nMonType2; // value: zeroed, passed as a byte argument
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ModeChangeStrc
 #ifndef D2_DEFINED_D2MonsterAiCmdStrc
@@ -367,10 +367,10 @@ struct D2MonsterAiParameterStruct {
 
 #endif // D2_DEFINED_D2MonsterAiParameterStruct
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2UnitFindArgDataStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UnitFindArgDataStrc {
     /* 0x00 */ D2UnitFindArgStrc sUnitFindArg;
     /* 0x38 */ D2UnitFindDataStrc sUnitFindData;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)

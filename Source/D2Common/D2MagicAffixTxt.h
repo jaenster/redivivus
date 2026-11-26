@@ -18,7 +18,7 @@
 // Data types
 #ifndef D2_DEFINED_D2MagicAffixTxt
 #define D2_DEFINED_D2MagicAffixTxt
-struct __attribute__((packed)) D2MagicAffixTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MagicAffixTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ uint16_t wNameStr; // string table ID for affix name (GetLocaleString index)
     /* 0x22 */ short version;
@@ -43,6 +43,6 @@ struct __attribute__((packed)) D2MagicAffixTxt {
     /* 0x84 */ int divide;
     /* 0x88 */ int multiply;
     /* 0x8C */ int add;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2MagicAffixTxt

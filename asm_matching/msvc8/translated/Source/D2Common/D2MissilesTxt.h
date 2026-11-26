@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2MissilesTxt
 #define D2_DEFINED_D2MissilesTxt
-__pragma(pack(push, 1)) struct D2MissilesTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MissilesTxt {
     /* 0x000 */ uint16_t Missile;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
@@ -189,6 +189,6 @@ __pragma(pack(push, 1)) struct D2MissilesTxt {
     /* 0x1A1 */ uint8_t AnimSpeed;
     /* 0x1A2 */ char LocalBlood;
     /* 0x1A3 */ uint8_t field_0x1a3;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2MissilesTxt

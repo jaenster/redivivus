@@ -81,7 +81,7 @@ struct D2PlayerMsgUnknownStrc {
 
 #endif // D2_MODULE_D2Client
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-__pragma(pack(push, 1)) struct D2PlayerWaypointsStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PlayerWaypointsStrc {
     /* 0x00 */ short wSetOrDel;
     /* 0x02 */ uint64_t Waypoint : 64;
     /* 0x0A */ uint8_t field_0xa;
@@ -90,7 +90,7 @@ __pragma(pack(push, 1)) struct D2PlayerWaypointsStrc {
     /* 0x0D */ uint8_t field_0xd;
     /* 0x0E */ uint8_t field_0xe;
     /* 0x0F */ uint8_t field_0xf;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 namespace D2Client { namespace UNIT { namespace Player {

@@ -414,6 +414,7 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
       exit(-1);
     }
 
+#if D2_ARCH_X86
     unsigned char* pRecordCursor = (unsigned char*)pEntry;
     int nRemaining = pCache->nCacheEntryCount;
     gnCofCacheMemUsage += nRemaining;
@@ -447,6 +448,63 @@ static void __stdcall GFX_LoadAndHashCofArchive(char * szPath, D2CofCacheStrc * 
       pRecordCursor += *puVar1;
     }
 
+#elif D2_ARCH_X64
+    // The archive is a run of records with a 0x18-byte header (pNext, dwFlags, nFileSize, szName[8],
+    // pFileData) followed by nFileSize bytes of COF data, used in place on x86. The x64 header holds
+    // two pointers, so the records are copied into native ones and the file image is freed.
+    const int nDiskHeader = 0x18;
+    const uint8_t* pDisk = (const uint8_t*)pEntry;
+    int nDiskSize = pCache->nCacheEntryCount;
+    size_t nNativeSize = 0;
+    for (int nOff = 0; nOff < nDiskSize; ) {
+      uint32_t nFileSize = *(const uint32_t*)(pDisk + nOff + 8);
+      nNativeSize += (offsetof(D2CofTextureCacheEntryStrc, field_0x18) + nFileSize + 7) & ~(size_t)7;
+      nOff += nDiskHeader + (int)nFileSize;
+    }
+
+    uint8_t* pNative = (uint8_t*)D2_ALLOC_AT(nNativeSize, pNameEnd, nSrcLine);
+    if (!pNative) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10c);
+      exit(-1);
+    }
+
+    memset(pNative, 0, nNativeSize);
+    pCache->pCacheMemory = pNative;
+    gnCofCacheMemUsage += nDiskSize;
+    uint8_t* pRecordCursor = pNative;
+    for (int nOff = 0; nOff < nDiskSize; ) {
+      uint32_t nHash;
+      uint32_t nFileSize = *(const uint32_t*)(pDisk + nOff + 8);
+      pEntry = (D2CofTextureCacheEntryStrc*)pRecordCursor;
+      pEntry->dwFlags = 0;
+      pEntry->nFileSize = nFileSize;
+      memcpy(pEntry->szName, pDisk + nOff + 0xc, sizeof(pEntry->szName));
+      memcpy(&pEntry->field_0x18, pDisk + nOff + nDiskHeader, nFileSize);
+      if ((uint8_t)pEntry->field_0x1a > 0x40) {
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x126);
+        exit(-1);
+      }
+
+      pEntry->pFileData = (uint8_t*)&pEntry->field_0x18;
+      if ((uint32_t)(int)strnlen(pEntry->szName, sizeof(pEntry->szName)) >= 8) { // steer-ok: CRT function
+        Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
+        exit(-1);
+      }
+
+      nHash = Storm::Source::SSTR::SStrHash(pEntry->szName, 1, 0);
+      nBucket = nHash;
+      for (unsigned int i = 0; i < 3; ++i) {
+        nBucket = (nBucket >> 8) ^ nHash;
+      }
+      nBucket &= 0x1ff;
+      pEntry->pNext = pCache->apBuckets[nBucket];
+      pCache->apBuckets[nBucket] = pEntry;
+      pRecordCursor += (offsetof(D2CofTextureCacheEntryStrc, field_0x18) + nFileSize + 7) & ~(size_t)7;
+      nOff += nDiskHeader + (int)nFileSize;
+    }
+
+    D2_FREE_AT((void*)pDisk, pNameEnd, nSrcLine);
+#endif
     pCache->nFrameCount = 1;
 }
 

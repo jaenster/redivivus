@@ -26,19 +26,19 @@ struct D2PoolStrc;
 // Data types
 #ifndef D2_DEFINED_D2PoolBlockStrc
 #define D2_DEFINED_D2PoolBlockStrc
-struct __attribute__((packed)) D2PoolBlockStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2PoolBlockStrc {
     /* 0x00 */ BYTE * pCommit;
     /* 0x04 */ DWORD * pUsage;
     /* 0x08 */ uint32_t nBlocks;
     /* 0x0C */ struct D2PoolBlockStrc * pPrev;
     /* 0x10 */ struct D2PoolBlockStrc * pNext;
     /* 0x14 */ struct D2PoolStrc * pPool;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2PoolBlockStrc
 #ifndef D2_DEFINED_D2PoolStrc
 #define D2_DEFINED_D2PoolStrc
-struct __attribute__((packed)) D2PoolStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2PoolStrc {
     /* 0x00 */ CRITICAL_SECTION pSync;
     /* 0x18 */ uint32_t nBlockSize;
     /* 0x1C */ uint32_t nBlocks;
@@ -46,7 +46,7 @@ struct __attribute__((packed)) D2PoolStrc {
     /* 0x24 */ size_t nAllocBlock;
     /* 0x28 */ struct D2PoolBlockStrc * pBlocks;
     /* 0x2C */ struct D2PoolBlockStrc * pTail;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2PoolStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)

@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacket0x18Decoded
 #define D2_DEFINED_D2GSPacket0x18Decoded
-struct __attribute__((packed)) D2GSPacket0x18Decoded {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacket0x18Decoded {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint16_t nHP;
     /* 0x03 */ uint16_t nMP;
@@ -28,6 +28,6 @@ struct __attribute__((packed)) D2GSPacket0x18Decoded {
     /* 0x0B */ uint16_t nY;
     /* 0x0D */ uint8_t dX;
     /* 0x0E */ uint8_t dY;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacket0x18Decoded

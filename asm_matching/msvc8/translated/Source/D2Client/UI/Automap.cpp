@@ -272,6 +272,14 @@ static POINT gaAutomapXMarkerPolyline[13] = {
         /* .y = */ -0x1
     }
 }; D2_STATIC_GUARD(gaAutomapXMarkerPolyline, "gaAutomapXMarkerPolyline");
+// The reveal walks a pointer to each tile's nFlags and reaches the record 5 dwords back, stepping 0xc
+// dwords (0x30 bytes) per tile; the record holds pointers on x64.
+#if D2_ARCH_X86
+#define D2_TILE_FROM_FLAGS(p) ((D2DrlgTileDataStrc*)(p - 5))
+#elif D2_ARCH_X64
+#define D2_TILE_FROM_FLAGS(p) ((D2DrlgTileDataStrc*)((char*)(p) - offsetof(D2DrlgTileDataStrc, nFlags)))
+#endif
+
 namespace D2Client { namespace UI { namespace Automap {
 int nAutoMapZoomDivisor = 0xa; D2_GLOBAL_GUARD(nAutoMapZoomDivisor, "D2Client::UI::Automap::nAutoMapZoomDivisor");
 int nAutoMapCenters = 0x1; D2_GLOBAL_GUARD(nAutoMapCenters, "D2Client::UI::Automap::nAutoMapCenters");
@@ -734,7 +742,7 @@ D2AutomapCellStrc * __stdcall AUTOMAP_AllocCell() {
       if (!pAutomap) {
         alloc_new_block:
         pAutomap = D2_NEW_AT(D2AutomapStrc, ".\\UI\\automap.cpp", 0x35d);
-        memset(pAutomap, 0, 0x2804);
+        memset(pAutomap, 0, sizeof(*pAutomap));
         pNewListHead = pAutomap;
         if (pDVar2) {
           pDVar2->pNext = pAutomap;
@@ -1530,11 +1538,15 @@ void __stdcall AUTOMAP_RevealRoom(D2RoomStrc * pRoom, int32_t bForceReveal, D2Au
       pnTileFlags = &pTiles->nFlags;
       do {
         if (!(*pnTileFlags & 8U) && (*pnTileFlags & 0x20000U || bAutoMapRevealAll || bForceReveal)) {
-          AUTOMAP_RevealTile((D2DrlgTileDataStrc*)(pnTileFlags - 5), pRoomEx, &pAutomapLayer->pFloors);
+          AUTOMAP_RevealTile(D2_TILE_FROM_FLAGS(pnTileFlags), pRoomEx, &pAutomapLayer->pFloors);
         }
 
         i++;
+#if D2_ARCH_X86
         pnTileFlags += 0xc;
+#elif D2_ARCH_X64
+        pnTileFlags = (int*)((char*)pnTileFlags + sizeof(D2DrlgTileDataStrc));
+#endif
       } while (i < nTileCount);
     }
 
@@ -1544,11 +1556,15 @@ void __stdcall AUTOMAP_RevealRoom(D2RoomStrc * pRoom, int32_t bForceReveal, D2Au
       pnTileFlags = &pTiles->nFlags;
       do {
         if (!(*pnTileFlags & 8U) && (*pnTileFlags & 0x20000U || bAutoMapRevealAll || bForceReveal)) {
-          AUTOMAP_RevealTile((D2DrlgTileDataStrc*)(pnTileFlags - 5), pRoomEx, &pAutomapLayer->pWalls);
+          AUTOMAP_RevealTile(D2_TILE_FROM_FLAGS(pnTileFlags), pRoomEx, &pAutomapLayer->pWalls);
         }
 
         i++;
+#if D2_ARCH_X86
         pnTileFlags += 0xc;
+#elif D2_ARCH_X64
+        pnTileFlags = (int*)((char*)pnTileFlags + sizeof(D2DrlgTileDataStrc));
+#endif
       } while (i < nTileCount);
     }
 

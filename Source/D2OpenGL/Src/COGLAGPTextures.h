@@ -69,18 +69,18 @@ struct COGLAGPTexturesVtable {
     /* 0x24 */ void (*ConvertPixels)(::CD2Textures *, int, int, int, int, BYTE *);
 };
 
-struct __attribute__((packed)) D2AGPPageStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AGPPageStrc {
     /* 0x00 */ int nOwner;
     /* 0x04 */ GLuint hName;
     /* 0x08 */ int field_0x8;
-};
+}; D2_PACKED_END
 
-struct __attribute__((packed)) D2AGPSlotStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AGPSlotStrc {
     /* 0x00 */ GLuint hName;
     /* 0x04 */ int nOwner;
-};
+}; D2_PACKED_END
 
-struct __attribute__((packed)) COGLAGPTextures {
+D2_PACKED_BEGIN struct __attribute__((packed)) COGLAGPTextures {
     /* 0x0000 */ struct COGLAGPTexturesVtable * vptr;
     /* 0x0004 */ int field_0x4;
     /* 0x0008 */ int nReserveBytes;
@@ -124,7 +124,7 @@ struct __attribute__((packed)) COGLAGPTextures {
     /* 0xA2E8 */ int field_0xa2e8[6];
     /* 0xA300 */ int anProbeCount[6];
     /* 0xA318 */ int nPageCount;
-};
+}; D2_PACKED_END
 
 namespace D2OpenGL::COGLAGPTextures {
 

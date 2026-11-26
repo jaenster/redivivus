@@ -17,11 +17,11 @@
 // Data types
 #ifndef D2_DEFINED_D2TxtLinkNodeStrc
 #define D2_DEFINED_D2TxtLinkNodeStrc
-struct __attribute__((packed)) D2TxtLinkNodeStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TxtLinkNodeStrc {
     /* 0x00 */ char szText[32];
     /* 0x20 */ int nLinkIndex;
     /* 0x24 */ struct D2TxtLinkNodeStrc * pPrevious;
     /* 0x28 */ struct D2TxtLinkNodeStrc * pNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2TxtLinkNodeStrc

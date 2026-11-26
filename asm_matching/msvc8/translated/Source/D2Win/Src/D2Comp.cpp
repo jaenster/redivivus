@@ -2818,8 +2818,14 @@ static BOOL D2COMP_ValidateAndLoadCOFForUnit(D2CharSelCompStrc * pCompUnit) {
 }
 
 void __fastcall D2COMP_UnlinkCompositeUnit(D2CharSelStrc * pCharSel) {
-    D2CharSelCompStrc* nNext = *(D2CharSelCompStrc**)(pCharSel->szCharname + 200);
-    D2CharSelCompStrc* nPrev = *(D2CharSelCompStrc**)(pCharSel->szCharname + 0xc4);
+#if D2_ARCH_X86
+    D2CharSelCompStrc* nNext = *(D2CharSelCompStrc**)(pCharSel->szCharname + 200); // steer-ok: the other store is in the other D2_ARCH arm
+    D2CharSelCompStrc* nPrev = *(D2CharSelCompStrc**)(pCharSel->szCharname + 0xc4); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+    // pCharSel is the composite unit (D2CharSelCompStrc); the x86 body reads its links at +0xc8/+0xc4.
+    D2CharSelCompStrc* nNext = ((D2CharSelCompStrc*)pCharSel)->pPrev;
+    D2CharSelCompStrc* nPrev = ((D2CharSelCompStrc*)pCharSel)->pNext;
+#endif
     if (!nNext) {
       gpCompositeUnitListHead = nPrev;
       if (nPrev) {

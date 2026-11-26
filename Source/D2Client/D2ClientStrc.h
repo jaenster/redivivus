@@ -36,12 +36,12 @@ struct D2ClientHotKeyStrc {
 #endif // D2_DEFINED_D2ClientHotKeyStrc
 #ifndef D2_DEFINED_D2ClientVisibilityEntryStrc
 #define D2_DEFINED_D2ClientVisibilityEntryStrc
-struct __attribute__((packed)) D2ClientVisibilityEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ClientVisibilityEntryStrc {
     /* 0x00 */ uint8_t nUnitType;
     /* 0x01 */ uint32_t nUnitGUID;
     /* 0x05 */ uint16_t nX;
     /* 0x07 */ uint16_t nY;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ClientVisibilityEntryStrc
 #ifndef D2_DEFINED_D2PlayerBasicsData
@@ -64,28 +64,28 @@ struct D2PlayerBasicsData {
 #endif // D2_DEFINED_D2PlayerBasicsData
 #ifndef D2_DEFINED_D2QServerClientStrcExt
 #define D2_DEFINED_D2QServerClientStrcExt
-struct __attribute__((packed)) D2QServerClientStrcExt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QServerClientStrcExt {
     /* 0x00 */ uint32_t dwPingSamples[16]; // Ring buffer of recent ping RTT ticks (up to 16 samples)
     /* 0x40 */ uint32_t dwReserved0x40; // Not referenced yet
     /* 0x44 */ uint64_t qwAveragePingTicks; // 64-bit rolling/averaged ping RTT value
     /* 0x4C */ int nHeartbeatSampleCount; // Number of heartbeat samples received (used by ping window logic)
     /* 0x50 */ int nForceTimeoutDisconnect; // Set by CCmd case 0x70 when client should be force-disconnected by timeout loop
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QServerClientStrcExt
 #ifndef D2_DEFINED_D2ClientVisibilityBufferStrc
 #define D2_DEFINED_D2ClientVisibilityBufferStrc
-struct __attribute__((packed)) D2ClientVisibilityBufferStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ClientVisibilityBufferStrc {
     /* 0x000 */ uint8_t abHeader[4];
     /* 0x004 */ D2ClientVisibilityEntryStrc aEntries[55];
     /* 0x1F3 */ uint8_t field_0x1f3;
     /* 0x1F4 */ uint32_t nCount;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ClientVisibilityBufferStrc
 #ifndef D2_DEFINED_D2ClientStrc
 #define D2_DEFINED_D2ClientStrc
-struct __attribute__((packed)) D2ClientStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ClientStrc {
     /* 0x000 */ int nClientNo; // Unique client identifier
     /* 0x004 */ int ConnectionState; // 0=init,3=loading,4=inGame,5=actChange
     /* 0x008 */ uint8_t nClass; // Player class ID
@@ -161,6 +161,6 @@ struct __attribute__((packed)) D2ClientStrc {
     /* 0x50C */ int dwLangId;
     /* 0x510 */ int unk0x510;
     /* 0x514 */ int unk0x514;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ClientStrc

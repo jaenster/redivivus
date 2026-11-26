@@ -34,11 +34,11 @@ typedef tagRGBQUAD RGBQUAD;
 #endif // _WIN32
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Gdi)
-struct __attribute__((packed)) D2LogPalette256Strc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2LogPalette256Strc {
     /* 0x00 */ WORD palVersion;
     /* 0x02 */ WORD palNumEntries;
     /* 0x04 */ PALETTEENTRY palPalEntry[256];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Gdi
 #ifndef D2_DEFINED_Smack
@@ -144,10 +144,10 @@ struct Smack {
 
 #endif // D2_DEFINED_Smack
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Gdi)
-struct __attribute__((packed)) BITMAPINFO256 {
+D2_PACKED_BEGIN struct __attribute__((packed)) BITMAPINFO256 {
     /* 0x00 */ BITMAPINFOHEADER bmiHeader;
     /* 0x28 */ RGBQUAD bmiColors[256];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Gdi
 namespace D2Gdi::Renderer::Windowed {

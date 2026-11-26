@@ -24,7 +24,7 @@ struct D2MPQHashEntryStrc;
 // Data types
 #ifndef D2_DEFINED_D2ArchiveStrc
 #define D2_DEFINED_D2ArchiveStrc
-__pragma(pack(push, 1)) struct D2ArchiveStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ArchiveStrc {
     /* 0x000 */ struct D2ArchiveStrc * pPrevLink;
     /* 0x004 */ struct D2ArchiveStrc * pNext;
     /* 0x008 */ char szArchivePath[260];
@@ -48,7 +48,7 @@ __pragma(pack(push, 1)) struct D2ArchiveStrc {
     /* 0x150 */ struct D2ArchiveStrc * pBaseArchive;
     /* 0x154 */ char szInternalPrefix[260];
     /* 0x258 */ int nPriority;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ArchiveStrc
 #ifndef D2_DEFINED_D2MPQHashEntryStrc

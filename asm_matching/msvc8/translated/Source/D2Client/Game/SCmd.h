@@ -61,17 +61,17 @@ typedef void (__fastcall *D2NET_CLIENT_D2GStoCLT_Unit)(struct D2UnitStrc * pUnit
 // Data types
 #ifndef D2_DEFINED_D2GSPacketClt0x5D
 #define D2_DEFINED_D2GSPacketClt0x5D
-__pragma(pack(push, 1)) struct D2GSPacketClt0x5D {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketClt0x5D {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ uint8_t nActionType;
     /* 0x02 */ uint8_t bToggle;
     /* 0x03 */ int nPlayerGUID;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketClt0x5D
 #ifndef D2_DEFINED_D2GSPacketSrv0x01
 #define D2_DEFINED_D2GSPacketSrv0x01
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x01 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x01 {
     D2GSPacketSrv0x01() {}
     D2GSPacketSrv0x01(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -82,45 +82,45 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x01 {
     /* 0x02 */ uint32_t dwArenaFlags;
     /* 0x06 */ uint8_t nExpansion;
     /* 0x07 */ uint8_t nLadder;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x01
 #ifndef D2_DEFINED_D2GSPacketSrv0x09
 #define D2_DEFINED_D2GSPacketSrv0x09
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x09 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x09 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint8_t nClassId;
     /* 0x07 */ uint16_t wX;
     /* 0x09 */ uint16_t wY;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x09
 #ifndef D2_DEFINED_D2GSPacketSrv0x0A
 #define D2_DEFINED_D2GSPacketSrv0x0A
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x0A {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x0A {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x0A
 #ifndef D2_DEFINED_D2GSPacketSrv0x0C
 #define D2_DEFINED_D2GSPacketSrv0x0C
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x0C {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x0C {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint8_t nMessageType;
     /* 0x07 */ uint8_t nHitClass;
     /* 0x08 */ uint8_t nHpPercent;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x0C
 #ifndef D2_DEFINED_D2GSPacketSrv0x0D
 #define D2_DEFINED_D2GSPacketSrv0x0D
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x0D {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x0D {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
@@ -129,24 +129,24 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x0D {
     /* 0x09 */ uint16_t wY;
     /* 0x0B */ uint8_t nHitClass;
     /* 0x0C */ uint8_t nHpPercent;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x0D
 #ifndef D2_DEFINED_D2GSPacketSrv0x0E
 #define D2_DEFINED_D2GSPacketSrv0x0E
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x0E {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x0E {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint8_t nMessageType;
     /* 0x07 */ uint8_t nParam2;
     /* 0x08 */ uint32_t dwParam;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x0E
 #ifndef D2_DEFINED_D2GSPacketSrv0x0F
 #define D2_DEFINED_D2GSPacketSrv0x0F
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x0F {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x0F {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
@@ -156,12 +156,12 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x0F {
     /* 0x0B */ uint8_t nHitClass;
     /* 0x0C */ uint16_t wX2;
     /* 0x0E */ uint16_t wY2;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x0F
 #ifndef D2_DEFINED_D2GSPacketSrv0x10
 #define D2_DEFINED_D2GSPacketSrv0x10
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x10 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x10 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
@@ -170,12 +170,12 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x10 {
     /* 0x08 */ uint32_t dwTargetGUID;
     /* 0x0C */ uint16_t wX;
     /* 0x0E */ uint16_t wY;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x10
 #ifndef D2_DEFINED_D2GSPacketSrv0x11
 #define D2_DEFINED_D2GSPacketSrv0x11
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x11 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x11 {
     D2GSPacketSrv0x11() {}
     D2GSPacketSrv0x11(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -185,41 +185,41 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x11 {
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint16_t wParam;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x11
 #ifndef D2_DEFINED_D2GSPacketSrv0x15
 #define D2_DEFINED_D2GSPacketSrv0x15
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x15 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x15 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint16_t wX;
     /* 0x08 */ uint16_t wY;
     /* 0x0A */ uint8_t bWarpFade;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x15
 #ifndef D2_DEFINED_D2GSPacketSrv0x20
 #define D2_DEFINED_D2GSPacketSrv0x20
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x20 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x20 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwUnitGUID;
     /* 0x05 */ uint8_t nAttributeId;
     /* 0x06 */ uint32_t dwValue;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x20
 #ifndef D2_DEFINED_D2GSPacketSrv0x23
 #define D2_DEFINED_D2GSPacketSrv0x23
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x23 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x23 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint8_t nSkillSlot;
     /* 0x07 */ uint16_t wSkillId;
     /* 0x09 */ uint32_t dwSkillOwnerGUID;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x23
 #ifndef D2_DEFINED_D2GSPacketSrv0x29
@@ -232,7 +232,7 @@ struct D2GSPacketSrv0x29 {
 #endif // D2_DEFINED_D2GSPacketSrv0x29
 #ifndef D2_DEFINED_D2GSPacketSrv0x3F
 #define D2_DEFINED_D2GSPacketSrv0x3F
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x3F {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x3F {
     D2GSPacketSrv0x3F() {}
     D2GSPacketSrv0x3F(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -242,31 +242,31 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x3F {
     /* 0x01 */ uint8_t nItemSlot; // 0xff when the unit GUID is used
     /* 0x02 */ uint32_t nUnitGUID;
     /* 0x06 */ uint16_t nSkillId;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x3F
 #ifndef D2_DEFINED_D2GSPacketSrv0x40
 #define D2_DEFINED_D2GSPacketSrv0x40
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x40 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x40 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ eD2ItemFlag eItemFlag;
     /* 0x09 */ BOOL bSet;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x40
 #ifndef D2_DEFINED_D2GSPacketSrv0x50
 #define D2_DEFINED_D2GSPacketSrv0x50
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x50 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x50 {
     /* 0x00 */ uint8_t nPacketId; // 0x50
     /* 0x01 */ uint16_t nMessageType; // 1/2/4/0xd/0x17 or quest id (Q36)
     /* 0x03 */ uint16_t aPayload[6]; // word stores at +3,+5,+7; stone-order word loop from +3
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x50
 #ifndef D2_DEFINED_D2GSPacketSrv0x51
 #define D2_DEFINED_D2GSPacketSrv0x51
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x51 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x51 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nObjectType;
     /* 0x02 */ uint32_t dwObjectGUID;
@@ -275,12 +275,12 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x51 {
     /* 0x0A */ uint16_t wY;
     /* 0x0C */ uint8_t nState;
     /* 0x0D */ uint8_t nInteraction;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x51
 #ifndef D2_DEFINED_D2GSPacketSrv0x57
 #define D2_DEFINED_D2GSPacketSrv0x57
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x57 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x57 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwUnitGUID;
     /* 0x05 */ uint8_t nParam5;
@@ -288,47 +288,47 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x57 {
     /* 0x08 */ uint16_t wParam8;
     /* 0x0A */ uint16_t wParam10;
     /* 0x0C */ uint16_t wParam12;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x57
 #ifndef D2_DEFINED_D2GSPacketSrv0x5C
 #define D2_DEFINED_D2GSPacketSrv0x5C
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x5C {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x5C {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwPlayerGUID;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x5C
 #ifndef D2_DEFINED_D2GSPacketSrv0x5F
 #define D2_DEFINED_D2GSPacketSrv0x5F
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x5F {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x5F {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwFlags;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x5F
 #ifndef D2_DEFINED_D2GSPacketSrv0x62
 #define D2_DEFINED_D2GSPacketSrv0x62
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x62 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x62 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint8_t nUnused;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x62
 #ifndef D2_DEFINED_D2GSPacketSrv0x65
 #define D2_DEFINED_D2GSPacketSrv0x65
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x65 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x65 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwUnitGUID;
     /* 0x05 */ uint16_t wKillCount;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x65
 #ifndef D2_DEFINED_D2GSPacketSrv0x69
 #define D2_DEFINED_D2GSPacketSrv0x69
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x69 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x69 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwMonsterGUID;
     /* 0x05 */ uint8_t nState;
@@ -336,12 +336,12 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x69 {
     /* 0x08 */ uint16_t wY;
     /* 0x0A */ uint8_t nParam1;
     /* 0x0B */ uint8_t nParam2;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x69
 #ifndef D2_DEFINED_D2GSPacketSrv0x6B
 #define D2_DEFINED_D2GSPacketSrv0x6B
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x6B {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x6B {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwMonsterGUID;
     /* 0x05 */ uint8_t nAction;
@@ -351,12 +351,12 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x6B {
     /* 0x0B */ uint8_t nParam2;
     /* 0x0C */ uint16_t wX2;
     /* 0x0E */ uint16_t wY2;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x6B
 #ifndef D2_DEFINED_D2GSPacketSrv0x6C
 #define D2_DEFINED_D2GSPacketSrv0x6C
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x6C {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x6C {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwMonsterGUID;
     /* 0x05 */ uint8_t nAttackType;
@@ -365,37 +365,37 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0x6C {
     /* 0x0B */ uint8_t nParam2;
     /* 0x0C */ uint16_t wX;
     /* 0x0E */ uint16_t wY;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x6C
 #ifndef D2_DEFINED_D2GSPacketSrv0x6D
 #define D2_DEFINED_D2GSPacketSrv0x6D
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x6D {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x6D {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwMonsterGUID;
     /* 0x05 */ uint16_t wX;
     /* 0x07 */ uint16_t wY;
     /* 0x09 */ uint8_t nHpPercent128;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x6D
 #ifndef D2_DEFINED_D2GSPacketSrv0x74
 #define D2_DEFINED_D2GSPacketSrv0x74
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x74 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x74 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t bAssign;
     /* 0x02 */ uint32_t dwPlayerGUID;
     /* 0x06 */ uint32_t dwCorpseGUID;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x74
 #ifndef D2_DEFINED_D2GSPacketSrv0x79
 #define D2_DEFINED_D2GSPacketSrv0x79
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x79 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x79 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nTradeId;
     /* 0x02 */ uint32_t dwGold;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x79
 #ifndef D2_DEFINED_D2GSPacketSrv0x7B
@@ -415,43 +415,43 @@ struct D2GSPacketSrv0x7B {
 #endif // D2_DEFINED_D2GSPacketSrv0x7B
 #ifndef D2_DEFINED_D2GSPacketSrv0x7D
 #define D2_DEFINED_D2GSPacketSrv0x7D
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x7D {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x7D {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nOwnerUnitType;
     /* 0x02 */ uint32_t dwOwnerGUID;
     /* 0x06 */ uint32_t dwItemGUID;
     /* 0x0A */ uint32_t dwItemState; // 0x100 broke, 0x200 repaired
     /* 0x0E */ uint32_t dwBrokenFlag;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x7D
 #ifndef D2_DEFINED_D2GSPacketSrv0x7E
 #define D2_DEFINED_D2GSPacketSrv0x7E
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x7E {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x7E {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t dwUnused;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x7E
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x94SkillStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x94SkillStrc {
     /* 0x00 */ uint16_t wSkillId;
     /* 0x02 */ uint8_t nSkillLevel;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2GSPacketSrv0x9B
 #define D2_DEFINED_D2GSPacketSrv0x9B
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x9B {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x9B {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint16_t wMercNameId;
     /* 0x03 */ uint32_t dwReviveCost;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x9B
 #ifndef D2_DEFINED_D2GSPacketSrv0xA3
 #define D2_DEFINED_D2GSPacketSrv0xA3
-__pragma(pack(push, 1)) struct D2GSPacketSrv0xA3 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0xA3 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nParam2;
     /* 0x02 */ uint16_t wSkillId;
@@ -462,12 +462,12 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0xA3 {
     /* 0x0C */ uint32_t dwValue2;
     /* 0x10 */ uint32_t dwValue3;
     /* 0x14 */ uint32_t dwValue4;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0xA3
 #ifndef D2_DEFINED_D2GSPacketSrv0xA5
 #define D2_DEFINED_D2GSPacketSrv0xA5
-__pragma(pack(push, 1)) struct D2GSPacketSrv0xA5 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0xA5 {
     D2GSPacketSrv0xA5() {}
     D2GSPacketSrv0xA5(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -477,69 +477,69 @@ __pragma(pack(push, 1)) struct D2GSPacketSrv0xA5 {
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint16_t wSkillId;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0xA5
 #ifndef D2_DEFINED_D2GSPacketSrv0xA7
 #define D2_DEFINED_D2GSPacketSrv0xA7
-__pragma(pack(push, 1)) struct D2GSPacketSrv0xA7 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0xA7 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint8_t nStateId;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0xA7
 #ifndef D2_DEFINED_D2GSPacketSrv0xA8
 #define D2_DEFINED_D2GSPacketSrv0xA8
-__pragma(pack(push, 1)) struct D2GSPacketSrv0xA8 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0xA8 {
     /* 0x00 */ uint8_t nPacketId; // 0xA8
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ int32_t nUnitGUID;
     /* 0x06 */ uint8_t nPacketSize;
     /* 0x07 */ uint8_t nStateId;
     /* 0x08 */ uint8_t aBitStream[244];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0xA8
 #ifndef D2_DEFINED_D2GSPacketSrv0xA9
 #define D2_DEFINED_D2GSPacketSrv0xA9
-__pragma(pack(push, 1)) struct D2GSPacketSrv0xA9 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0xA9 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint8_t nStateId;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0xA9
 #ifndef D2_DEFINED_D2GSPacketSrv0xAA
 #define D2_DEFINED_D2GSPacketSrv0xAA
-__pragma(pack(push, 1)) struct D2GSPacketSrv0xAA {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0xAA {
     /* 0x00 */ uint8_t nPacketId; // 0xAA
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ int32_t nUnitGUID;
     /* 0x06 */ uint8_t nPacketSize;
     /* 0x07 */ uint8_t aBitStream[244];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0xAA
 #ifndef D2_DEFINED_D2GSPacketSrv0xAB
 #define D2_DEFINED_D2GSPacketSrv0xAB
-__pragma(pack(push, 1)) struct D2GSPacketSrv0xAB {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0xAB {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
     /* 0x06 */ uint8_t nHpPercent128;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0xAB
 #ifndef D2_DEFINED_D2GSPacketSrv0xAE
 #define D2_DEFINED_D2GSPacketSrv0xAE
-__pragma(pack(push, 1)) struct D2GSPacketSrv0xAE {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0xAE {
     /* 0x00 */ uint8_t nPacketId; // 0xAE
     /* 0x01 */ uint16_t nDataSize; // word SI
     /* 0x03 */ uint8_t aData[509];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0xAE
 #ifndef D2_DEFINED_D2NET_CLIENT_D2GS_ServerToClient

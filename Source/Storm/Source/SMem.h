@@ -108,20 +108,20 @@ union SMemReallocInPlace_Slotm10 {
 #endif // D2_MODULE_Storm
 #ifndef D2_DEFINED_D2FogHeapBlockHdrStrc
 #define D2_DEFINED_D2FogHeapBlockHdrStrc
-struct __attribute__((packed)) D2FogHeapBlockHdrStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2FogHeapBlockHdrStrc {
     /* 0x00 */ uint16_t wBlockSize; // total block size in bytes (includes header)
     /* 0x02 */ uint8_t byPadding; // extra padding bytes between header and user data
     /* 0x03 */ uint8_t byFlags; // flags: bit0=debug-tail,bit1=free,bit2=large(VirtualAlloc),bit4=prev-free-adjacent,bit6=temp,bit7=leak-protected
     /* 0x04 */ D2FogHeapBlockLinkUnion uLink; // lo16=upper16(heap ptr),hi16=0x6f6d magic — written from heap+0x0c
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2FogHeapBlockHdrStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-struct __attribute__((packed)) D2FogLargeBlockHdrStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2FogLargeBlockHdrStrc {
     /* 0x00 */ uint32_t nSize;
     /* 0x04 */ struct D2FogHeapBlockHdrStrc * pAllocBlock;
     /* 0x08 */ D2FogHeapBlockHdrStrc tHdr;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Storm
 namespace Storm::Source::SMem {

@@ -17,11 +17,11 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x8E
 #define D2_DEFINED_D2GSPacketSrv0x8E
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x8E {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x8E {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ bool nAssign;
     /* 0x02 */ int nOwnerGUID;
     /* 0x06 */ int nCorpseGUID;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x8E

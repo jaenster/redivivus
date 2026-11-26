@@ -592,7 +592,7 @@ struct D3DVIEWPORT {
 
 #endif // D2_MODULE_D2Direct3D
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Direct3D)
-struct __attribute__((packed)) DDDEVICEIDENTIFIER2 {
+D2_PACKED_BEGIN struct __attribute__((packed)) DDDEVICEIDENTIFIER2 {
     /* 0x000 */ char szDriver[512];
     /* 0x200 */ char szDescription[512];
     /* 0x400 */ LARGE_INTEGER liDriverVersion;
@@ -602,7 +602,7 @@ struct __attribute__((packed)) DDDEVICEIDENTIFIER2 {
     /* 0x414 */ DWORD dwRevision;
     /* 0x418 */ GUID guidDeviceIdentifier;
     /* 0x428 */ DWORD dwWHQLLevel;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Direct3D
 #ifndef D2_DEFINED_DDPIXELFORMAT
@@ -639,7 +639,7 @@ struct DDSCAPS2 {
 #endif // D2_MODULE_D2Direct3D
 #ifndef D2_DEFINED_DDSURFACEDESC2
 #define D2_DEFINED_DDSURFACEDESC2
-struct __attribute__((packed)) DDSURFACEDESC2 {
+D2_PACKED_BEGIN struct __attribute__((packed)) DDSURFACEDESC2 {
     /* 0x00 */ DWORD dwSize;
     /* 0x04 */ DWORD dwFlags;
     /* 0x08 */ DWORD dwHeight;
@@ -658,7 +658,7 @@ struct __attribute__((packed)) DDSURFACEDESC2 {
     /* 0x68 */ DWORD dwCaps; // First DWORD of the embedded DDSCAPS2 at offset 104; RENDERER_D3D_InitializeDevice writes 0x6218 here with DDSD_CAPS set
     /* 0x6C */ DWORD ddsCapsRest[3]; // Remaining three DWORDs of the embedded DDSCAPS2 that starts at 104
     /* 0x78 */ DWORD dwTextureStage;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_DDSURFACEDESC2
 #ifndef D2_DEFINED_Direct3D7Vtable
@@ -1093,7 +1093,7 @@ struct IDirectDrawSurface7Vtbl {
 #endif // D2_DEFINED_IDirectDrawSurface7Vtbl
 #ifndef D2_DEFINED_D2D3DDeviceSlotStrc
 #define D2_DEFINED_D2D3DDeviceSlotStrc
-struct __attribute__((packed)) D2D3DDeviceSlotStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2D3DDeviceSlotStrc {
     /* 0x000 */ uint32_t dwFlags;
     /* 0x004 */ GUID guid;
     /* 0x014 */ uint32_t dwVendorId;
@@ -1109,11 +1109,11 @@ struct __attribute__((packed)) D2D3DDeviceSlotStrc {
     /* 0x138 */ uint32_t dwAgpMemFree;
     /* 0x13C */ D2D3DDisplayModeStrc aModes[32];
     /* 0x3BC */ int nModeCount;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2D3DDeviceSlotStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Direct3D)
-struct __attribute__((packed)) D3DDEVICEDESC {
+D2_PACKED_BEGIN struct __attribute__((packed)) D3DDEVICEDESC {
     /* 0x00 */ DWORD dwSize;
     /* 0x04 */ DWORD dwFlags;
     /* 0x08 */ DWORD dcmColorModel;
@@ -1148,11 +1148,11 @@ struct __attribute__((packed)) D3DDEVICEDESC {
     /* 0xF4 */ DWORD dwTextureOpCaps;
     /* 0xF8 */ WORD wMaxTextureBlendStages;
     /* 0xFA */ WORD wMaxSimultaneousTextures;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Direct3D
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Direct3D)
-struct __attribute__((packed)) DDCAPS_DX7 {
+D2_PACKED_BEGIN struct __attribute__((packed)) DDCAPS_DX7 {
     /* 0x000 */ DWORD dwSize;
     /* 0x004 */ DWORD dwCaps;
     /* 0x008 */ DWORD dwCaps2;
@@ -1210,7 +1210,7 @@ struct __attribute__((packed)) DDCAPS_DX7 {
     /* 0x148 */ DWORD dwNLVBFXCaps;
     /* 0x14C */ DWORD dwNLVBRops[8];
     /* 0x16C */ DDSCAPS2 ddsCaps;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Direct3D
 namespace D2Direct3D::Renderer {

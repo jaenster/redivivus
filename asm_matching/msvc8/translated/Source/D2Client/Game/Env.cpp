@@ -355,7 +355,12 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     DC6_UncompOverlays_Rain[3] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     nGradientIndex = 0;
     do {
+#if D2_ARCH_X86
       nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(*(DC6**)((char*)DC6_UncompOverlays_Rain + nGradientIndex));
+#elif D2_ARCH_X64
+      // nGradientIndex is the x86 byte offset (4 per entry) into both arrays; the DC6 array is pointer-sized on x64.
+      nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(DC6_UncompOverlays_Rain[nGradientIndex / 4]);
+#endif
       *(int32_t*)((char*)DC6_UncompOverlays_Rain_FrameCount + nGradientIndex) = nFrameCount;
       nGradientIndex += 4;
     } while (nGradientIndex < 0x10);
@@ -370,7 +375,12 @@ void __fastcall MISC_PrepareWeatherOverlay(eD2LevelId eLevel) {
     DC6_UncompOverlays_bubble[3] = Core::Archive::IMAGE_LoadWeatherDC6ToPointer(szPath, &nDC6Size, FALSE);
     nGradientIndex = 0;
     do {
+#if D2_ARCH_X86
       nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(*(DC6**)((char*)DC6_UncompOverlays_bubble + nGradientIndex));
+#elif D2_ARCH_X64
+      // nGradientIndex is the x86 byte offset (4 per entry) into both arrays; the DC6 array is pointer-sized on x64.
+      nFrameCount = D2CMP::SRC::CelCmp::IMAGE_GetFramesCount(DC6_UncompOverlays_bubble[nGradientIndex / 4]);
+#endif
       *(int32_t*)((char*)DC6_UncompOverlays_bubble_FrameCount + nGradientIndex) = nFrameCount;
       nGradientIndex += 4;
     } while (nGradientIndex < 0x10);

@@ -46,7 +46,7 @@ struct D2ChangedStatArrayStrc {
 #endif // D2_DEFINED_D2ChangedStatArrayStrc
 #ifndef D2_DEFINED_D2StatListStrc
 #define D2_DEFINED_D2StatListStrc
-__pragma(pack(push, 1)) struct D2StatListStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2StatListStrc {
     /* 0x00 */ struct D2PoolManagerStrc * pMemory; // Memory pool for allocations
     /* 0x04 */ struct D2UnitStrc * pUnitAttached; // Unit this stat list is attached to (the owner's unit)
     /* 0x08 */ eD2UnitType eOwnerType; // Unit type of the stat list creator
@@ -61,12 +61,12 @@ __pragma(pack(push, 1)) struct D2StatListStrc {
     /* 0x30 */ struct D2StatListExStrc * pNextLink; // Next stat list in linked chain
     /* 0x34 */ struct D2StatListExStrc * pParent; // Parent stat list (the unit's main D2StatListExStrc)
     /* 0x38 */ void (__fastcall *fpExpire)(struct D2UnitStrc *, eD2States, struct D2StatListExStrc *); // Callback when stat list expires/is removed, fn(struct D2StatListExStrc*)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2StatListStrc
 #ifndef D2_DEFINED_D2StatListExStrc
 #define D2_DEFINED_D2StatListExStrc
-__pragma(pack(push, 1)) struct D2StatListExStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2StatListExStrc {
     /* 0x00 */ D2StatListStrc sStatList; // Base stat list (60 bytes) - contains base stats, links, flags
     /* 0x3C */ struct D2StatListExStrc * pActiveHead; // Head of active child stat list chain (items, buffs)
     /* 0x40 */ struct D2StatListExStrc * pInactiveHead; // Head of inactive/disabled child stat list chain (flag 0x2000)
@@ -76,6 +76,6 @@ __pragma(pack(push, 1)) struct D2StatListExStrc {
     /* 0x58 */ int * pStateFlags; // Dynamic bitfield array: [0..N-1]=active states, [N..2N-1]=changed states
     /* 0x5C */ void (__fastcall *fpCallback)(::SGAMEDATA *, struct D2UnitStrc *, struct D2UnitStrc *, eD2Skills, int32_t, int32_t); // Stat-change callback installed by AllocStatListEx. The only value ever stored in 1.14d is D2Game::ITEMS::ItemMode::STATSLISTEX_FunctionCallback @0055b800 (__fastcall: ECX=pGame, EDX=pUnit, then pItemOwner/eSkill/fOld/fNew on the stack), written from SERVER_InitPlayer and the monster alloc path. No indirect call through this field exists in 1.14d Game.exe.
     /* 0x60 */ struct SGAMEDATA * pGame; // Game context pointer
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2StatListExStrc

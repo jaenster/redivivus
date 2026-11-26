@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2MissilesTxt
 #define D2_DEFINED_D2MissilesTxt
-struct __attribute__((packed)) D2MissilesTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MissilesTxt {
     /* 0x000 */ uint16_t Missile;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
@@ -189,6 +189,6 @@ struct __attribute__((packed)) D2MissilesTxt {
     /* 0x1A1 */ uint8_t AnimSpeed;
     /* 0x1A2 */ char LocalBlood;
     /* 0x1A3 */ uint8_t field_0x1a3;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2MissilesTxt

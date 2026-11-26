@@ -35,7 +35,7 @@ typedef BOOL (__fastcall *fpDrawGroundTile)(struct D2TileLibraryEntryStrc * a1, 
 #endif
 #ifndef RECON_FPTD_fpDrawRoofTile
 #define RECON_FPTD_fpDrawRoofTile
-typedef void (__fastcall *fpDrawRoofTile)(int a1, int a2, int a3, uint32_t * a4, BYTE a5);
+typedef void (__fastcall *fpDrawRoofTile)(uint8_t * a1, int a2, int a3, uint32_t * a4, BYTE a5);
 #endif
 #ifndef RECON_FPTD_fpDrawVisTile
 #define RECON_FPTD_fpDrawVisTile
@@ -43,7 +43,7 @@ typedef void (__fastcall *fpDrawVisTile)(uint8_t * pbTileData, int32_t nScreenX,
 #endif
 #ifndef RECON_FPTD_fpDrawWallTile
 #define RECON_FPTD_fpDrawWallTile
-typedef void (__fastcall *fpDrawWallTile)(int a1, int a2, int a3, uint32_t * a4);
+typedef void (__fastcall *fpDrawWallTile)(uint8_t * a1, int a2, int a3, uint32_t * a4);
 #endif
 #ifndef RECON_FPTD_fpFillYBufferTable
 #define RECON_FPTD_fpFillYBufferTable
@@ -89,9 +89,9 @@ struct D2GfxHelperStrc {
     /* 0x04 */ void (__fastcall *nfpDrawVisTile)(uint8_t *, int32_t, int32_t);
     /* 0x08 */ void (__fastcall *nfpDrawVisTileLit)(int, int, int, int);
     /* 0x0C */ BOOL (__fastcall *nfpDrawGroundTile)(struct D2TileLibraryEntryStrc *, int, int, struct D2GfxLightExStrc *);
-    /* 0x10 */ void (__fastcall *nfpDrawWallTile)(int, int, int, uint32_t *);
+    /* 0x10 */ void (__fastcall *nfpDrawWallTile)(uint8_t *, int, int, uint32_t *);
     /* 0x14 */ void (__fastcall *nfpDrawBlendedVisTile)(uint8_t *, int, int, int);
-    /* 0x18 */ void (__fastcall *nfpDrawRoofTile)(int, int, int, uint32_t *, BYTE);
+    /* 0x18 */ void (__fastcall *nfpDrawRoofTile)(uint8_t *, int, int, uint32_t *, BYTE);
 };
 
 #endif // D2_DEFINED_D2GfxHelperStrc
@@ -7133,7 +7133,7 @@ struct D2GfxSmack {
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2GfxUnknown_0xa8
 #define D2_DEFINED_D2GfxUnknown_0xa8
-struct __attribute__((packed)) D2GfxUnknown_0xa8 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GfxUnknown_0xa8 {
     /* 0x00 */ int32_t nOverlayType; // From nOverlayType param of GFX_AddOverlayToUnit; later tested == 8 and == 2 / == 6.
     /* 0x04 */ eOverlayId neOverlayId; // From eOverlay param; indexes sgptDataTable->pTxtOverlay.
     /* 0x08 */ uint32_t nValue0; // 0x8. = nValue0 param in the general case; forced to 1 when nOverlayType == 2.
@@ -7257,12 +7257,12 @@ struct __attribute__((packed)) D2GfxUnknown_0xa8 {
     /* 0xA2 */ uint8_t field_0xa2;
     /* 0xA3 */ uint8_t field_0xa3;
     /* 0xA4 */ struct D2GfxUnknown_0xa8 * pNext; // 0xa4. Intrusive singly-linked list: pOverlay->pNext = pGfxInfo->pOverlayList; pGfxInfo->pOverlayList = pOverlay.
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GfxUnknown_0xa8
 #ifndef D2_DEFINED_D2MonModeTxt
 #define D2_DEFINED_D2MonModeTxt
-struct __attribute__((packed)) D2MonModeTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MonModeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
     /* 0x24 */ uint8_t DT_Dir;
@@ -7281,7 +7281,7 @@ struct __attribute__((packed)) D2MonModeTxt {
     /* 0x31 */ uint8_t KB_Dir;
     /* 0x32 */ uint8_t SQ_Dir;
     /* 0x33 */ uint8_t RN_Dir;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonModeTxt
 namespace D2Client::Engine::Gfx {

@@ -58,6 +58,7 @@ void __fastcall GFXHASH_UnlinkCacheEntry(D2GfxHashTableStrc * pHashTable, int, D
         nErrAddress = (void*)((DC6Block*)pFrameData)->nNextBlock;
         nFrameByteOffset = 0;
         nFrameIdx = 0;
+#if D2_ARCH_X86
         if ((uint32_t)((uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount) > 0) {
           do {
             DC6Block* pFrameBlock = (DC6Block*)(pFrameData + nFrameByteOffset);
@@ -73,6 +74,24 @@ void __fastcall GFXHASH_UnlinkCacheEntry(D2GfxHashTableStrc * pHashTable, int, D
             nFrameIdx++;
           } while (nFrameIdx < (uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount);
         }
+#elif D2_ARCH_X64
+        if ((uint32_t)((uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount) > 0) {
+          // The decoded frames carry the native x64 block header (DC6Block): the renderer record at +0x18
+          // is pointer-sized, nLength follows at +0x20 and the RLE data at +0x24.
+          do {
+            if (*(void**)(pFrameData + (nFrameByteOffset + 0x18))) {
+              if (pFreeCallback) {
+                (*pFreeCallback)(*(int**)(pFrameData + (nFrameByteOffset + 0x18)));
+              }
+
+              *(void**)(pFrameData + (nFrameByteOffset + 0x18)) = nullptr;
+            }
+
+            nFrameByteOffset = nFrameByteOffset + 0x27 + *(int*)(pFrameData + nFrameByteOffset + 0x20) + *(int*)(pFrameData + (nFrameByteOffset + 0x14));
+            nFrameIdx++;
+          } while (nFrameIdx < (uint32_t)pCacheBlock->tDecode.nFramesPerDir * (uint32_t)pCacheBlock->tDecode.nDirCount);
+        }
+#endif
         if (nErrAddress) {
           D2_FREE_POOL_AT(pMemory, nErrAddress, ".\\SRC\\GfxHash.cpp", 0x82);
         }

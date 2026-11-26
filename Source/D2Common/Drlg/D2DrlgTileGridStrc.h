@@ -22,13 +22,13 @@ struct D2DrlgTileLinkStrc;
 // Data types
 #ifndef D2_DEFINED_D2DrlgTileGridStrc
 #define D2_DEFINED_D2DrlgTileGridStrc
-struct __attribute__((packed)) D2DrlgTileGridStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgTileGridStrc {
     /* 0x00 */ struct D2DrlgTileLinkStrc * pMapLinks; // Linked list of tile links (wall/floor classification). In warp nodes: struct D2RoomExStrc* target room
     /* 0x04 */ struct D2DrlgAnimTileGridStrc * pAnimTiles; // Linked list of animated tile grids. In warp nodes: pNext for linked list
     /* 0x08 */ int nWalls; // Current wall tile write index (used during tile creation)
     /* 0x0C */ int nFloors; // Current floor tile write index (used during tile creation)
     /* 0x10 */ int nShadows; // Current shadow/roof tile write index (used during tile creation). In warp nodes: warp destination ID
     /* 0x14 */ D2DrlgRoomTilesStrc sRoomTiles; // Wall tile data array (0x30 bytes per element)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgTileGridStrc

@@ -26,13 +26,13 @@ typedef uint32_t eMissilesId;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2StaticFieldArgStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2StaticFieldArgStrc {
     /* 0x00 */ int32_t nCalc1;
     /* 0x04 */ int32_t nDrainPct;
     /* 0x08 */ int32_t nStaticMin;
     /* 0x0C */ int32_t nSynergyBonus;
     /* 0x10 */ eSkillEType eElemType;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)

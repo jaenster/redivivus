@@ -23,7 +23,7 @@ typedef uint32_t eD2MonsterAnimMode;
 // Data types
 #ifndef D2_DEFINED_D2UnknownCreateMonsterStrc
 #define D2_DEFINED_D2UnknownCreateMonsterStrc
-__pragma(pack(push, 1)) struct D2UnknownCreateMonsterStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2UnknownCreateMonsterStrc {
     /* 0x00 */ struct SGAMEDATA * pGame;
     /* 0x04 */ struct D2RoomStrc * pRoom;
     /* 0x08 */ struct D2RoomCoordListStrc * pCoordList;
@@ -34,6 +34,6 @@ __pragma(pack(push, 1)) struct D2UnknownCreateMonsterStrc {
     /* 0x1C */ int nY;
     /* 0x20 */ int32_t nSpawnRadius;
     /* 0x24 */ int16_t nFlags;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2UnknownCreateMonsterStrc

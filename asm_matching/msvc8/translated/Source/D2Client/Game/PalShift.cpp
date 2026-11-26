@@ -62,7 +62,7 @@ void __stdcall InitPal() {
     int i;
     D2MPQFileStrc* pGreenBloodFile;
     D2MPQFileStrc* pRandTransformFile;
-    size_t nAllocSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize * 8;
+    size_t nAllocSize = D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize * sizeof(D2MonsterPalShiftSlotStrc);
     D2MonsterPalShiftSlotStrc* pPalShiftList = (D2MonsterPalShiftSlotStrc*)D2_ALLOC_AT(nAllocSize, ".\\GAME\\PalShift.cpp", 99);
     gpMonsterPalShiftList = pPalShiftList;
     memset(pPalShiftList, 0, nAllocSize);

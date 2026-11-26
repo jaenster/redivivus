@@ -17,13 +17,13 @@
 // Data types
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
-__pragma(pack(push, 1)) struct tagPALETTEENTRY {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct tagPALETTEENTRY {
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
 
     /* 0x00 */ BYTE peRed;
     /* 0x01 */ BYTE peGreen;
     /* 0x02 */ BYTE peBlue;
     /* 0x03 */ BYTE peFlags;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // _WIN32

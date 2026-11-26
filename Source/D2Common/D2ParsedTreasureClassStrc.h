@@ -20,7 +20,7 @@ typedef uint8_t eTCFlags;
 // Data types
 #ifndef D2_DEFINED_D2ParsedTreasureClassEntriesStrc
 #define D2_DEFINED_D2ParsedTreasureClassEntriesStrc
-struct __attribute__((packed)) D2ParsedTreasureClassEntriesStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ParsedTreasureClassEntriesStrc {
     /* 0x00 */ int32_t nCumulativeWeightClassic; // Cumulative weight for Classic linear scan
     /* 0x04 */ int32_t nCumulativeWeightExpansion; // Cumulative weight for Expansion binary search
     /* 0x08 */ int16_t nItemClassId; // Item class ID or nested TC ID
@@ -34,7 +34,7 @@ struct __attribute__((packed)) D2ParsedTreasureClassEntriesStrc {
     /* 0x16 */ int16_t nFromTC0x30Mod; // nFromTCOffset0x30 modifier from entry
     /* 0x18 */ int16_t nFromTC0x32Mod; // nFromTCOffset0x32 modifier from entry
     /* 0x1A */ uint8_t pad26[2]; // padding to 28 bytes
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ParsedTreasureClassEntriesStrc
 #ifndef D2_DEFINED_D2ParsedTreasureClassStrc

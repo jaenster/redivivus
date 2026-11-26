@@ -21,7 +21,7 @@ struct D2UnitStrc;
 // Data types
 #ifndef D2_DEFINED_D2NpcCashTabStrc
 #define D2_DEFINED_D2NpcCashTabStrc
-struct __attribute__((packed)) D2NpcCashTabStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2NpcCashTabStrc {
     /* 0x00 */ uint16_t nTooltipStringId;
     /* 0x02 */ int nTooltipX;
     /* 0x06 */ int nTooltipY;
@@ -34,7 +34,7 @@ struct __attribute__((packed)) D2NpcCashTabStrc {
     /* 0x22 */ int nBaseCelFrame;
     /* 0x26 */ uint8_t nHitTestState;
     /* 0x27 */ uint8_t bVisible;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2NpcCashTabStrc
 namespace D2Client::UI::UseItem {

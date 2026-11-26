@@ -186,7 +186,11 @@ template<> __declspec(noinline) inline void TSExplicitList<SGAMEDATA, -572662307
     TSLink<::SGAMEDATA>* pTVar1;
     TSLink<::SGAMEDATA>* pNodeLink;
     if (pNode) {
-      pNodeLink = (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a);
+#if D2_ARCH_X86
+      pNodeLink = (TSLink<::SGAMEDATA>*)(pNode->szGameName + this->m_linkoffset - 0x2a); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+      pNodeLink = (TSLink<::SGAMEDATA>*)((char*)pNode + this->m_linkoffset);
+#endif
     } else {
       pNodeLink = &this->m_terminator;
     }
@@ -201,7 +205,11 @@ template<> __declspec(noinline) inline void TSExplicitList<SGAMEDATA, -572662307
       pNodeLink->m_next = 0;
     }
     if (pExisting) {
-      pAnchorLink = (TSLink<::SGAMEDATA>*)(pExisting->szGameName + this->m_linkoffset - 0x2a);
+#if D2_ARCH_X86
+      pAnchorLink = (TSLink<::SGAMEDATA>*)(pExisting->szGameName + this->m_linkoffset - 0x2a); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+      pAnchorLink = (TSLink<::SGAMEDATA>*)((char*)pExisting + this->m_linkoffset);
+#endif
     } else {
       pAnchorLink = &this->m_terminator;
     }

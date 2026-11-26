@@ -85,7 +85,11 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::DeleteNode(::SGAMEDATA * pNode) {
-    TSLink<::SGAMEDATA>* pSlotPtr = pNode ? (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a)) : &this->m_terminator;
+#if D2_ARCH_X86
+    TSLink<::SGAMEDATA>* pSlotPtr = pNode ? (TSLink<::SGAMEDATA>*)(pNode->szGameName + (this->m_linkoffset - 0x2a)) : &this->m_terminator; // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+    TSLink<::SGAMEDATA>* pSlotPtr = pNode ? (TSLink<::SGAMEDATA>*)((char*)pNode + this->m_linkoffset) : &this->m_terminator;
+#endif
     ::SGAMEDATA* pNext = (::SGAMEDATA*)(pSlotPtr->m_next <= 0 ? 0 : pSlotPtr->m_next);
     pNode->Destructor();
     Storm::Source::SMem::SMemFree(pNode, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
@@ -104,7 +108,11 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASH
         break;
       }
 
+#if D2_ARCH_X86
       pGame = *(::SGAMEDATA**)(pGame->szGameName + this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_linkoffset - 0x26);
+#elif D2_ARCH_X64
+      pGame = (::SGAMEDATA*)((TSLink<::SGAMEDATA>*)((char*)pGame + this->tSlotListArray.m_data[dwHashVal & this->nSlotMask].m_linkoffset))->m_next;
+#endif
     }
 
     return pGame;
@@ -321,7 +329,11 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASH
     TSExplicitList<::SGAMEDATA, -572662307>* pSlotList = this->tSlotListArray.m_data + nIdInBucket; // steer-ok: the original computes the slot list argument before loading nExtraBytes and dwFlags (TSHashTable::New argument order)
     ::SGAMEDATA* pGame = vc8_thiscall(this->pVtable->InternalNew)(this, pSlotList, nExtraBytes, dwFlags);
     if (pGame) {
-      ppActiveListLink = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (this->tFullList.m_linkoffset - 0x2a));
+#if D2_ARCH_X86
+      ppActiveListLink = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (this->tFullList.m_linkoffset - 0x2a)); // steer-ok: the other store is in the other D2_ARCH arm
+#elif D2_ARCH_X64
+      ppActiveListLink = (TSLink<::SGAMEDATA>*)((char*)pGame + this->tFullList.m_linkoffset);
+#endif
     } else {
       ppActiveListLink = &this->tFullList.m_terminator;
     }
@@ -329,7 +341,7 @@ template<> __declspec(noinline) inline ::SGAMEDATA * TSHashTable<SGAMEDATA, HASH
     TSLink<::SGAMEDATA>* pExistingHead = ppActiveListLink->m_prevlink;
     if (pExistingHead) {
       char* pBackLink;
-      intptr_t nUnlinkNext = ppActiveListLink->m_next; // the unlinked node's m_next word, not a bucket index
+      intptr_t nUnlinkNext = ppActiveListLink->m_next; // steer-ok: unused read kept as merged; the unlinked node's m_next word, not a bucket index
       pBackLink = (char*)D2_StormNextLink(ppActiveListLink, -1);
       *(TSLink<::SGAMEDATA>**)pBackLink = pExistingHead;
       ppActiveListLink->m_prevlink->m_next = ppActiveListLink->m_next;

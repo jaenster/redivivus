@@ -23,7 +23,7 @@ typedef uint8_t eD2InventoryGridType;
 // Data types
 #ifndef D2_DEFINED_D2ItemInventoryNodeStrc
 #define D2_DEFINED_D2ItemInventoryNodeStrc
-struct __attribute__((packed)) D2ItemInventoryNodeStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ItemInventoryNodeStrc {
     /* 0x00 */ struct D2InventoryStrc * pInventory; // Socketed items inventory
     /* 0x04 */ struct D2UnitStrc * pPrevItem; // Previous item in linked list
     /* 0x08 */ struct D2UnitStrc * pNextItem; // Next item in linked list
@@ -33,6 +33,6 @@ struct __attribute__((packed)) D2ItemInventoryNodeStrc {
     /* 0x0F */ uint8_t unk0xF;
     /* 0x10 */ struct D2UnitStrc * pPrevItemInPage; // Previous item in page linked list
     /* 0x14 */ struct D2UnitStrc * pNextItemInPage; // Next item in page linked list
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2ItemInventoryNodeStrc

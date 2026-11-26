@@ -36,7 +36,7 @@ struct D2Sha1ContextStrc {
 
 #endif // D2_DEFINED_D2Sha1ContextStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-struct __attribute__((packed)) D2SsigContextStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SsigContextStrc {
     /* 0x00 */ uint32_t nModulusLen; // RSA modulus length in bytes, also the signature length; Finish passes it to CryptRSA_Prepare as nModulusLen
     /* 0x04 */ uint32_t nExponentLen; // RSA public exponent length in bytes; Finish passes it to CryptRSA_Prepare as nExponentLen
     /* 0x08 */ uint32_t nBytesBuffered; // bytes currently in pDataBuffer
@@ -47,7 +47,7 @@ struct __attribute__((packed)) D2SsigContextStrc {
     /* 0x16 */ uint8_t field_0x16;
     /* 0x17 */ uint8_t field_0x17;
     /* 0x18 */ D2Sha1ContextStrc sSha1; // SHA-1 context; SSignatureVerifyStream_* pass &ctx+0x18 to Sha1_*
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Storm
 namespace Storm::Source::SSignature {

@@ -53,7 +53,7 @@ struct D2ShrinesTxt {
 #endif // D2_DEFINED_D2ShrinesTxt
 #ifndef D2_DEFINED_D2ObjectsTxt
 #define D2_DEFINED_D2ObjectsTxt
-__pragma(pack(push, 1)) struct D2ObjectsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ObjectsTxt {
     /* 0x000 */ char Name[64];
     /* 0x040 */ uint16_t NameWideString[64];
     /* 0x0C0 */ char Token[2];
@@ -148,7 +148,7 @@ __pragma(pack(push, 1)) struct D2ObjectsTxt {
     /* 0x1BA */ uint8_t field_0x1ba;
     /* 0x1BB */ uint8_t field_0x1bb;
     /* 0x1BC */ int AutoMap;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ObjectsTxt
 

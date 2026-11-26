@@ -1505,11 +1505,20 @@ static void __stdcall DRLGLEVEL_ParseLevelData(D2DrlgLevelDataList * pLevelData,
           pLevelUnknown.aCurrentDir[nNodeOffset] = -1;
           pLevelUnknown.aInitialDir[nNodeOffset] = -1;
           nNodeOffset--;
+#if D2_ARCH_X86
           peLevelIdEntry += -4;
+#elif D2_ARCH_X64
+          // The x86 body steps one 16-byte D2DrlgLevelDataEntry as 4 ints; the entry holds a function pointer on x64.
+          peLevelIdEntry = (eD2LevelId*)((char*)peLevelIdEntry - sizeof(D2DrlgLevelDataEntry));
+#endif
         } else if (!fnPlacementValidator || (nCoordsOffset = (*fnPlacementValidator)(&pLevelUnknown, nNodeOffset) , nCoordsOffset != 0)) {
           pCurLevelDataList++;
           nNodeOffset++;
+#if D2_ARCH_X86
           peLevelIdEntry += 4;
+#elif D2_ARCH_X64
+          peLevelIdEntry = (eD2LevelId*)((char*)peLevelIdEntry + sizeof(D2DrlgLevelDataEntry));
+#endif
         }
       } while (*peLevelIdEntry != LEVEL_None);
     }

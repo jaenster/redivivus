@@ -29,7 +29,7 @@ typedef uint32_t eD2UnitType;
 #ifndef D2_DEFINED_D2CofHeaderDisk
 #define D2_DEFINED_D2CofHeaderDisk
 // A .cof file read in place: the 0x1c-byte header, then nLayers layer records.
-__pragma(pack(push, 1)) struct D2CofHeaderDisk {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CofHeaderDisk {
     /* 0x00 */ uint8_t nLayers;
     /* 0x01 */ uint8_t nFrames;
     /* 0x02 */ uint8_t nDirections;
@@ -41,37 +41,37 @@ __pragma(pack(push, 1)) struct D2CofHeaderDisk {
     /* 0x14 */ int nYMax;
     /* 0x18 */ uint16_t nAnimRate;
     /* 0x1A */ uint16_t nUnk0x1A;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 static_assert(sizeof(D2CofHeaderDisk) == 0x1c, "D2CofHeaderDisk: the .cof header is 0x1c bytes on disk");
 #endif // D2_DEFINED_D2CofHeaderDisk
 #ifndef D2_DEFINED_D2CofLayerDisk
 #define D2_DEFINED_D2CofLayerDisk
 // One .cof layer record, 9 bytes on disk. Fields 1..4 are named by the accessors that read them.
-__pragma(pack(push, 1)) struct D2CofLayerDisk {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2CofLayerDisk {
     /* 0x00 */ uint8_t nComponent;
     /* 0x01 */ uint8_t nAnimSpeed;
     /* 0x02 */ uint8_t nDirection;
     /* 0x03 */ uint8_t nFrameCount;
     /* 0x04 */ uint8_t nDrawOrder;
     /* 0x05 */ char szWeaponClass[4];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 static_assert(sizeof(D2CofLayerDisk) == 9, "D2CofLayerDisk: a .cof layer record is 9 bytes on disk");
 #endif // D2_DEFINED_D2CofLayerDisk
 #ifndef D2_DEFINED_D2MonCofComponentTableStrc
 #define D2_DEFINED_D2MonCofComponentTableStrc
 // The monster COF component table the precache passes as short *: the class id, then nRows rows of
 // one variant byte per COF component.
-__pragma(pack(push, 1)) struct D2MonCofComponentTableStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MonCofComponentTableStrc {
     /* 0x00 */ short nClassId;
     /* 0x02 */ uint8_t nUnk0x02;
     /* 0x03 */ uint8_t nRows;
     /* 0x04 */ uint8_t aRows[3][16];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 static_assert(sizeof(D2MonCofComponentTableStrc) == 0x34, "D2MonCofComponentTableStrc: the precache clears a 0x34-byte table");
 #endif // D2_DEFINED_D2MonCofComponentTableStrc
 #ifndef D2_DEFINED_D2ArmTypeTxt
 #define D2_DEFINED_D2ArmTypeTxt
-__pragma(pack(push, 1)) struct D2ArmTypeTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ArmTypeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
     /* 0x24 */ uint8_t field_0x24;
@@ -90,7 +90,7 @@ __pragma(pack(push, 1)) struct D2ArmTypeTxt {
     /* 0x31 */ uint8_t field_0x31;
     /* 0x32 */ uint8_t field_0x32;
     /* 0x33 */ uint8_t field_0x33;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ArmTypeTxt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)

@@ -25,14 +25,14 @@
 #endif
 
 // One hash node of a .tbl string table, read in place right after the index array.
-struct __attribute__((packed)) D2StringTableTblNodeStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2StringTableTblNodeStrc {
     /* 0x00 */ uint8_t bUsed;
     /* 0x01 */ uint16_t wIndex;
     /* 0x03 */ uint32_t dwHash;
     /* 0x07 */ uint32_t dwKeyOffset;
     /* 0x0B */ uint32_t dwStringOffset;
     /* 0x0F */ uint16_t wStringLength;
-};
+}; D2_PACKED_END
 static_assert(sizeof(D2StringTableTblNodeStrc) == 0x11, ".tbl hash nodes are 17 bytes on disk");
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2UntranslatedStringCacheNodeStrc) == 0xc, "D2_NEW_AT(D2UntranslatedStringCacheNodeStrc): the 32-bit layout must be the 0xc bytes 1.14d allocates");

@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x2A
 #define D2_DEFINED_D2GSPacketSrv0x2A
-struct __attribute__((packed)) D2GSPacketSrv0x2A {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x2A {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nTradeType;
     /* 0x02 */ uint8_t nResult;
@@ -27,6 +27,6 @@ struct __attribute__((packed)) D2GSPacketSrv0x2A {
     /* 0x06 */ uint8_t field_0x6;
     /* 0x07 */ int nUnitGUID;
     /* 0x0B */ int nGold;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x2A

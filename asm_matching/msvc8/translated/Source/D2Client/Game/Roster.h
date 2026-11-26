@@ -43,7 +43,7 @@ struct D2RosterPetSeedStrc {
 #endif // D2_DEFINED_D2RosterPetSeedStrc
 #ifndef D2_DEFINED_D2RosterPetStrc
 #define D2_DEFINED_D2RosterPetStrc
-__pragma(pack(push, 1)) struct D2RosterPetStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2RosterPetStrc {
     /* 0x00 */ int nRosterClass;
     /* 0x04 */ int nSkillID;
     /* 0x08 */ int nRosterGUID;
@@ -55,7 +55,7 @@ __pragma(pack(push, 1)) struct D2RosterPetStrc {
     /* 0x20 */ int bRemoved; // merc inactive/dead flag: 0=active, 1=removed-but-kept
     /* 0x24 */ D2RosterPetSeedStrc sSeed;
     /* 0x30 */ struct D2RosterPetStrc * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2RosterPetStrc
 namespace D2Client { namespace GAME { namespace Roster {

@@ -16,7 +16,7 @@
 #include "Source/Storm/H/stpl.h"
 
 // Data types
-__pragma(pack(push, 1)) struct TCELENTRY {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct TCELENTRY {
     /* 0x00 */ TSLink<TCELENTRY> m_link;
     /* 0x08 */ uint32_t dwArg7;
     /* 0x0C */ uint32_t nWidth;
@@ -25,7 +25,7 @@ __pragma(pack(push, 1)) struct TCELENTRY {
     /* 0x18 */ int32_t nOffsetX;
     /* 0x1C */ int32_t nOffsetY;
     /* 0x20 */ uint8_t * pPixels;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 namespace D2CMP { namespace SRC { namespace CelCmp { namespace TCELENTRY {
 

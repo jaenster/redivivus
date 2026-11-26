@@ -32,13 +32,13 @@ union D2DrlgOrthLinkUnion {
 #endif // D2_DEFINED_D2DrlgOrthLinkUnion
 #ifndef D2_DEFINED_D2DrlgOrthStrc
 #define D2_DEFINED_D2DrlgOrthStrc
-__pragma(pack(push, 1)) struct D2DrlgOrthStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgOrthStrc {
     /* 0x00 */ D2DrlgOrthLinkUnion pLink; // Linked level (nType==0) or room (nType==1)
     /* 0x04 */ eDrlgDirection neDrlgDirection;
     /* 0x08 */ int bIsDrlgTypePresetArea; // BOOL: whether linked level/room is a preset area
     /* 0x0C */ int nType; // 0=level link (pRoomEx is struct D2DrlgLevelStrc*), 1=room link (pRoomEx is struct D2RoomExStrc*)
     /* 0x10 */ struct D2DrlgCoordsStrc * psCoordinatesAndSize; // Points to sCoordinatesAndSize of linked level or sCoords of linked room
     /* 0x14 */ struct D2DrlgOrthStrc * pNext; // Next node in linked list
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgOrthStrc

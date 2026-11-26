@@ -16,8 +16,8 @@
 #include "Source/D2Client/D2ControlStrc.h"
 
 // Data types
-__pragma(pack(push, 1)) struct D2WinTimer {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinTimer {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ int nTimeoutInSeconds;
     /* 0x44 */ int nCreationTickCount;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END

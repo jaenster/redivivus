@@ -73,14 +73,14 @@ struct D2DrlgActEnvironmentData {
 #endif // D2_DEFINED_D2DrlgActEnvironmentData
 #ifndef D2_DEFINED_D2DrlgExitPointStrc
 #define D2_DEFINED_D2DrlgExitPointStrc
-struct __attribute__((packed)) D2DrlgExitPointStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgExitPointStrc {
     /* 0x00 */ int nWorldX; // Exit point world X
     /* 0x04 */ int nWorldY; // Exit point world Y
     /* 0x08 */ uint8_t eType; // Exit type/direction code (e.g. 0..4); written byte-wide, 4=none
     /* 0x09 */ uint8_t _pad9[3]; // padding
     /* 0x0C */ int field_C; // unknown (unused in observed exit functions)
     /* 0x10 */ int field_10; // unknown (unused in observed exit functions)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgExitPointStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -189,14 +189,14 @@ struct D2DrlgRoomExNearNodeStrc {
 
 #endif // D2_MODULE_D2Common
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-struct __attribute__((packed)) D2DrlgRoomExTileBucketStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgRoomExTileBucketStrc {
     /* 0x00 */ struct D2DrlgTileLinkStrc * pMapLinks; // Mirrors D2DrlgTileGridStrc.pMapLinks (struct struct D2DrlgTileLinkStrc*)
     /* 0x04 */ struct D2DrlgAnimTileGridStrc * pAnimTiles; // Mirrors D2DrlgTileGridStrc.pAnimTiles (struct struct D2DrlgAnimTileGridStrc*)
     /* 0x08 */ struct D2DrlgRoomExTileBucketStrc * nNext;
     /* 0x0C */ int nFloors; // Mirrors D2DrlgTileGridStrc.nFloors — current floor tile write index
     /* 0x10 */ int nShadows; // Mirrors D2DrlgTileGridStrc.nShadows — current shadow/roof tile write index
     /* 0x14 */ D2DrlgRoomTilesStrc Tiles;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -227,18 +227,18 @@ struct D2DrlgWallLayerGridsStrc {
 #endif // D2_DEFINED_D2DrlgWallLayerGridsStrc
 #ifndef D2_DEFINED_D2LvlMazeTxt
 #define D2_DEFINED_D2LvlMazeTxt
-struct __attribute__((packed)) D2LvlMazeTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2LvlMazeTxt {
     /* 0x00 */ eD2LevelId Level; // ID from D2LevelsTxt
     /* 0x04 */ int Rooms[3]; // the minimum number of .ds1 map sections that will make up the maze in Normal, Nightmare and Hell difficulties.
     /* 0x10 */ int SizeX; // The size in the X\Y direction of any component ds1 map section.
     /* 0x14 */ int SizeY; // The size in the X\Y direction of any component ds1 map section.
     /* 0x18 */ int Merge; // Possibly related to how adjacent .ds1s are connected with each other, but what the different values are for is unknown.
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2LvlMazeTxt
 #ifndef D2_DEFINED_D2LvlSubTxt
 #define D2_DEFINED_D2LvlSubTxt
-struct __attribute__((packed)) D2LvlSubTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2LvlSubTxt {
     /* 0x000 */ int Type;
     /* 0x004 */ char File[60];
     /* 0x040 */ int CheckAll;
@@ -254,7 +254,7 @@ struct __attribute__((packed)) D2LvlSubTxt {
     /* 0x130 */ int Trials[5];
     /* 0x144 */ int Max[5];
     /* 0x158 */ int Expansion;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2LvlSubTxt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
@@ -268,7 +268,7 @@ struct DrlgVertBorderVariantPair {
 #endif // D2_MODULE_D2Common
 #ifndef D2_DEFINED_D2DrlgLevelDataWildernessLevel
 #define D2_DEFINED_D2DrlgLevelDataWildernessLevel
-struct __attribute__((packed)) D2DrlgLevelDataWildernessLevel {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgLevelDataWildernessLevel {
     /* 0x000 */ uint32_t dwFlags; // Flags: 0x04=right border, 0x08=left border, 0x10=mid split, 0x20=has corner fill, 0x40=has preset placed, 0x80=top-left town, 0x100=top-right town, 0x200=left town, 0x400=bottom-left town
     /* 0x004 */ D2DrlgGridStrc sGridPreset; // Grid for preset level IDs / orientation
     /* 0x018 */ D2DrlgGridStrc sGridLink; // Grid for vis/link flags between adjacent levels
@@ -286,24 +286,24 @@ struct __attribute__((packed)) D2DrlgLevelDataWildernessLevel {
     /* 0x1E8 */ D2DrlgExitPointStrc aExitPoints4[6]; // Per-exit point array (6 exits). Computed target positions by DRLGOUTROOM_ComputeExitTargetPositions
     /* 0x260 */ int nExitCount; // Number of exit points (0..6); zeroed then incremented as exits are built
     /* 0x264 */ struct D2DrlgOrthStrc * pOrthData; // Linked list of orthogonal room connection data, freed by FreeRoomData
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgLevelDataWildernessLevel
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-struct __attribute__((packed)) D2DrlgOutRoomPathPoolStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgOutRoomPathPoolStrc {
     /* 0x0000 */ struct D2DrlgOutRoomPathNodeStrc * pHead;
     /* 0x0004 */ D2DrlgOutRoomPathNodeStrc aNodes[900];
     /* 0x8CA4 */ int nNodeCount;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #ifndef D2_DEFINED_D2DrlgPresetTypeTablesStrc
 #define D2_DEFINED_D2DrlgPresetTypeTablesStrc
-struct __attribute__((packed)) D2DrlgPresetTypeTablesStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgPresetTypeTablesStrc {
     /* 0x000 */ D2DrlgPresetTypeIndexStrc aIndex[37];
     /* 0x1BC */ int nAlignPad;
     /* 0x1C0 */ D2DrlgPresetTypeStrc aTypes[34];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgPresetTypeTablesStrc
 namespace D2Common::Drlg {

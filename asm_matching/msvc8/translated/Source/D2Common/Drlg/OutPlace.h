@@ -24,7 +24,7 @@ typedef uint8_t eAct;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-__pragma(pack(push, 1)) struct D2DrlgSubLevelPlaceStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgSubLevelPlaceStrc {
     /* 0x00 */ D2DrlgCoordsStrc sCoords;
     /* 0x10 */ int32_t nDirection;
     /* 0x14 */ int32_t nLinkCount;
@@ -37,7 +37,7 @@ __pragma(pack(push, 1)) struct D2DrlgSubLevelPlaceStrc {
     /* 0x35 */ uint8_t field_0x35;
     /* 0x36 */ uint8_t field_0x36;
     /* 0x37 */ uint8_t field_0x37;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 namespace D2Common { namespace Drlg { namespace OutPlace {

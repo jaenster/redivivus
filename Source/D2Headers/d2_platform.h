@@ -6,6 +6,44 @@
 
 #pragma once
 
+// Visual C++ 2015 and later as cl.exe (clang-cl takes the GCC spellings as they are):
+// the two GCC spellings the generator emits that cl has no syntax for.
+//   __attribute__((x))  each attribute as its __declspec, `packed` as nothing: cl packs
+//                       with #pragma pack, which D2_PACKED_BEGIN/END put around every
+//                       packed struct (same layout, same offsets).
+//   __thiscall          see below, after the system headers.
+// VC8 (the oracle) never takes this branch: vc8_translate rewrites both.
+#if defined(_MSC_VER) && _MSC_VER >= 1900 && !defined(__clang__)
+#  define __attribute__(a) D2_MSVC_ATTR_ a
+#  define D2_MSVC_ATTR_(x) D2_MSVC_ATTR_##x
+#  define D2_MSVC_ATTR_packed
+#  define D2_MSVC_ATTR_used
+#  define D2_MSVC_ATTR_noinline __declspec(noinline)
+#  define D2_MSVC_ATTR_always_inline
+#  define D2_MSVC_ATTR_selectany __declspec(selectany)
+#  define D2_MSVC_ATTR_init_priority(n)
+#  define D2_PACKED_BEGIN __pragma(pack(push, 1))
+#  define D2_PACKED_END __pragma(pack(pop))
+// GCC's frame/return-address builtins, level 0 only (the only level the tree uses),
+// as cl's intrinsics; the frame address is the slot below the return address, where
+// a frame's saved EBP/RBP sits. And GCC's spelling of _alloca.
+extern "C" void* _ReturnAddress(void);
+extern "C" void* _AddressOfReturnAddress(void);
+#  pragma intrinsic(_ReturnAddress, _AddressOfReturnAddress)
+#  define __builtin_return_address(level) _ReturnAddress()
+#  define __builtin_frame_address(level) ((void*)((char*)_AddressOfReturnAddress() - sizeof(void*)))
+#  define __builtin_alloca _alloca
+#endif
+// The tree declares `typedef int _EXCEPTION_DISPOSITION` (d2_enums.h); the CRT's excpt.h
+// declares an enum of that tag. The CRT's is renamed while the system headers are read.
+#if defined(_MSC_VER) && _MSC_VER >= 1900
+#  define _EXCEPTION_DISPOSITION d2_crt_EXCEPTION_DISPOSITION
+#endif
+#if !(defined(_MSC_VER) && _MSC_VER >= 1900 && !defined(__clang__))
+#  define D2_PACKED_BEGIN
+#  define D2_PACKED_END
+#endif
+
 // Core type aliases MUST come before system headers to prevent
 // std::byte (C++17) from shadowing our byte typedef
 
@@ -150,6 +188,11 @@ typedef struct in_addr {
 // models it as `struct in_addr`. The file has no guard finer than its own,
 // so everything it declares is declared here, unchanged apart from that one
 // member. Same layout, same offsets, same names.
+#  if defined(_MSC_VER) && _MSC_VER >= 1900
+// The Windows SDK's winsock2.h declares these itself (sin_addr through the
+// in_addr above); mingw's copy is not there to claim.
+#  define _MINGW_IP_TYPES_H
+#  endif
 #  ifndef _MINGW_IP_TYPES_H
 #  define _MINGW_IP_TYPES_H
 #    include <_bsd_types.h>
@@ -191,6 +234,33 @@ typedef struct timeval TIMEVAL, *PTIMEVAL, *LPTIMEVAL;
 #  include <psapi.h>
 #  include <mmsystem.h>
 #  include <wintrust.h>
+// cl (not clang-cl) accepts __thiscall on member functions only, and the tree declares
+// free functions __thiscall (receiver in ECX, the rest on the stack). __fastcall keeps
+// the receiver in ECX and moves the second argument to EDX; every caller and callee is
+// compiled with the same mapping, so the program agrees with itself, and only the x86
+// convention of those functions differs from the original's. The system headers that
+// spell __thiscall for the CRT's own members (yvals.h, the standard library the tree
+// includes) are read first, so their declarations keep the real convention.
+#  if defined(_MSC_VER) && _MSC_VER >= 1900
+// rpcndr.h: `#define small char`; d2_enums.h has an enumerator named small.
+#    undef small
+#    undef _EXCEPTION_DISPOSITION
+#    include <malloc.h>
+// The old CRT's locale record, which the UCRT no longer names (only pointers to it
+// are declared here).
+typedef struct threadlocaleinfostruct threadlocinfo;
+#  endif
+#  if defined(_MSC_VER) && _MSC_VER >= 1900 && !defined(__clang__)
+#    include <new>
+#    include <string>
+#    include <deque>
+#    include <type_traits>
+#    if defined(_M_IX86)
+#      define __thiscall __fastcall
+#    else
+#      define __thiscall
+#    endif
+#  endif
 #  ifdef CreateWindow
 #    undef CreateWindow
 #  endif
@@ -681,9 +751,16 @@ static inline errno_t _strncpy_s(char* dst, size_t dsz, const char* src, size_t 
     dst[i] = 0;
     return (src[i] && cnt >= dsz) ? 80 /* STRUNCATE */ : 0;
 }
+#if defined(_MSC_VER) && _MSC_VER >= 1900
+// The Visual C++ CRT has only the MSVC names; the POSIX ones map onto them.
+#define __stricmp _stricmp
+#define strcasecmp _stricmp
+#define strncasecmp _strnicmp
+#else
 #define __stricmp strcasecmp
 #define _stricmp strcasecmp
 #define _strnicmp strncasecmp
+#endif
 #define _strrchr strrchr
 #define _strtok strtok
 #define _strcspn strcspn
@@ -844,24 +921,24 @@ __declspec(noinline) __declspec(noreturn) inline void __stdcall AtlThrowImpl(HRE
 #endif
 }  // namespace ATL
 #define AtlThrow ATL::AtlThrowImpl
-extern "C" __stdcall void* SmackOpen(const char* szName, uint32_t dwFlags, uint32_t dwExtraBuf);
-extern "C" __stdcall void SmackClose(void* pSmack);
-extern "C" __stdcall int32_t SmackDoFrame(void* pSmack);
-extern "C" __stdcall void SmackNextFrame(void* pSmack);
-extern "C" __stdcall int32_t SmackWait(void* pSmack);
-extern "C" __stdcall void SmackToBuffer(void* pSmack, uint32_t nLeft, uint32_t nTop, uint32_t nPitch, uint32_t nDestHeight, void* pBuffer, uint32_t dwFlags);
-extern "C" __stdcall void* BinkOpen(void* hFile, uint32_t dwFlags);
-extern "C" __stdcall void BinkClose(void* pBink);
-extern "C" __stdcall int32_t BinkDoFrame(void* pBink);
-extern "C" __stdcall void BinkNextFrame(void* pBink);
-extern "C" __stdcall int32_t BinkWait(void* pBink);
-extern "C" __stdcall int32_t BinkCopyToBuffer(void* pBink, void* pDest, int32_t nDestPitch, uint32_t nDestHeight, uint32_t nDestX, uint32_t nDestY, uint32_t dwFlags);
-extern "C" __stdcall int32_t BinkSetSoundSystem(void* (__stdcall* pfnOpen)(uint32_t), uint32_t dwParam);
-extern "C" __stdcall void* BinkOpenDirectSound(uint32_t dwParam);
-extern "C" __stdcall uint32_t BinkDDSurfaceType(void* pDDSurface);
-extern "C" __stdcall int32_t ijlInit(void* pJpegCoreProps);
-extern "C" __stdcall int32_t ijlFree(void* pJpegCoreProps);
-extern "C" __stdcall int32_t ijlWrite(void* pJpegCoreProps, int32_t nWriteOption);
+extern "C" void* __stdcall SmackOpen(const char* szName, uint32_t dwFlags, uint32_t dwExtraBuf);
+extern "C" void __stdcall SmackClose(void* pSmack);
+extern "C" int32_t __stdcall SmackDoFrame(void* pSmack);
+extern "C" void __stdcall SmackNextFrame(void* pSmack);
+extern "C" int32_t __stdcall SmackWait(void* pSmack);
+extern "C" void __stdcall SmackToBuffer(void* pSmack, uint32_t nLeft, uint32_t nTop, uint32_t nPitch, uint32_t nDestHeight, void* pBuffer, uint32_t dwFlags);
+extern "C" void* __stdcall BinkOpen(void* hFile, uint32_t dwFlags);
+extern "C" void __stdcall BinkClose(void* pBink);
+extern "C" int32_t __stdcall BinkDoFrame(void* pBink);
+extern "C" void __stdcall BinkNextFrame(void* pBink);
+extern "C" int32_t __stdcall BinkWait(void* pBink);
+extern "C" int32_t __stdcall BinkCopyToBuffer(void* pBink, void* pDest, int32_t nDestPitch, uint32_t nDestHeight, uint32_t nDestX, uint32_t nDestY, uint32_t dwFlags);
+extern "C" int32_t __stdcall BinkSetSoundSystem(void* (__stdcall* pfnOpen)(uint32_t), uint32_t dwParam);
+extern "C" void* __stdcall BinkOpenDirectSound(uint32_t dwParam);
+extern "C" uint32_t __stdcall BinkDDSurfaceType(void* pDDSurface);
+extern "C" int32_t __stdcall ijlInit(void* pJpegCoreProps);
+extern "C" int32_t __stdcall ijlFree(void* pJpegCoreProps);
+extern "C" int32_t __stdcall ijlWrite(void* pJpegCoreProps, int32_t nWriteOption);
 
 #ifdef _WIN32
 static inline FILE* _wfopen(const uint16_t* filename, const uint16_t* mode) { return _wfopen((const wchar_t*)filename, (const wchar_t*)mode); }
@@ -877,9 +954,9 @@ extern "C" int ___init_ctype(threadlocinfo* _LocInfo);
 extern "C" int ___init_monetary(threadlocinfo* _LocInfo);
 extern "C" int ___init_numeric(threadlocinfo* _LocInfo);
 extern "C" int ___init_time(threadlocinfo* _LocInfo);
-extern "C" __stdcall HRESULT DirectDrawCreate(GUID* lpGUID, struct IDirectDraw1** lplpDD, struct IUnknown* pUnkOuter);
-extern "C" __stdcall int32_t DirectSoundCreate(const GUID* pcGuidDevice, struct IDirectSound** ppDS, struct IUnknown* pUnkOuter);
-extern "C" __stdcall int32_t DirectSoundEnumerateA(BOOL (__stdcall* pCallback)(int, char*, char*, DWORD), void* pContext);
+extern "C" HRESULT __stdcall DirectDrawCreate(GUID* lpGUID, struct IDirectDraw1** lplpDD, struct IUnknown* pUnkOuter);
+extern "C" int32_t __stdcall DirectSoundCreate(const GUID* pcGuidDevice, struct IDirectSound** ppDS, struct IUnknown* pUnkOuter);
+extern "C" int32_t __stdcall DirectSoundEnumerateA(BOOL (__stdcall* pCallback)(int, char*, char*, DWORD), void* pContext);
 namespace _Wrappers {
   static inline SOCKET accept(SOCKET s, struct sockaddr* addr, int* addrlen) { return ::accept(s, addr, addrlen); }
   static inline int bind(SOCKET s, const struct sockaddr* addr, int namelen) { return ::bind(s, addr, namelen); }
@@ -890,7 +967,7 @@ namespace _Wrappers {
   void CRT_ExceptionFilter2(EHExceptionRecord* pExceptionRecord, EHRegistrationNode* pRegistrationNode, CONTEXT* pContext, void* pDispatcherContext);
   void CRT_ExceptionFilter3(EHExceptionRecord* pExceptionRecord, EHRegistrationNode* pRegistrationNode, CONTEXT* pContext, void* pDispatcherContext);
   uint32_t gCmdLineHelpText(unsigned short* pText, uint32_t nEcx, unsigned char* pBytes);
-  extern "C" __stdcall HRESULT DirectDrawEnumerateA(BOOL (__stdcall* lpCallback)(GUID* lpGUID, char* lpDriverDescription, char* lpDriverName, void* lpContext), void* lpContext);
+  extern "C" HRESULT __stdcall DirectDrawEnumerateA(BOOL (__stdcall* lpCallback)(GUID* lpGUID, char* lpDriverDescription, char* lpDriverName, void* lpContext), void* lpContext);
   static inline void WSASetLastError(int iError) { ::WSASetLastError(iError); }
 }  // namespace _Wrappers
 #endif // _WIN32

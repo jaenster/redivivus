@@ -36,7 +36,7 @@ struct D2RenderStatisticsStrc {
     /* 0x24 */ int field_0x24[18]; // stat dwords 9..26: misses 12..14, accesses per frame 18..20
 };
 
-struct __attribute__((packed)) D2OGLVertexStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2OGLVertexStrc {
     /* 0x00 */ float fX;
     /* 0x04 */ float fY;
     /* 0x08 */ BYTE nRed;
@@ -46,7 +46,7 @@ struct __attribute__((packed)) D2OGLVertexStrc {
     /* 0x0C */ float fU;
     /* 0x10 */ float fV;
     /* 0x14 */ float fUnused;
-};
+}; D2_PACKED_END
 
 struct D2OGLDisplayModeStrc {
     D2OGLDisplayModeStrc() = default;
@@ -64,12 +64,12 @@ struct D2OGLWallCornerStrc {
     /* 0x08 */ int nZ;
 };
 
-struct __attribute__((packed)) D2OGLCutsceneCapStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2OGLCutsceneCapStrc {
     /* 0x00 */ GLenum eCap;
     /* 0x04 */ GLboolean bSaved;
     /* 0x05 */ GLboolean bWanted;
     /* 0x06 */ BYTE pad_0x6[2];
-};
+}; D2_PACKED_END
 
 struct D2OGLSpriteStrc {
     /* 0x00 */ struct D2GfxDataStrc * pGfxData;

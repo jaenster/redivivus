@@ -29,7 +29,7 @@ struct D2MonStatsTxtTC {
 #endif // D2_DEFINED_D2MonStatsTxtTC
 #ifndef D2_DEFINED_D2MonStatsTxt
 #define D2_DEFINED_D2MonStatsTxt
-struct __attribute__((packed)) D2MonStatsTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MonStatsTxt {
     /* 0x000 */ uint16_t Id;
     /* 0x002 */ short BaseId;
     /* 0x004 */ short NextInClass;
@@ -167,6 +167,6 @@ struct __attribute__((packed)) D2MonStatsTxt {
     /* 0x1A5 */ char SplGetModeChart;
     /* 0x1A6 */ char SplEndGeneric;
     /* 0x1A7 */ char SplClientEnd;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonStatsTxt

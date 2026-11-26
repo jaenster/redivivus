@@ -63,7 +63,7 @@ struct D2DrawFloorStrc {
 #endif // D2_DEFINED_D2DrawFloorStrc
 #ifndef D2_DEFINED_D2GfxLightStrc
 #define D2_DEFINED_D2GfxLightStrc
-__pragma(pack(push, 1)) struct D2GfxLightStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GfxLightStrc {
     D2GfxLightStrc() {}
     D2GfxLightStrc(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
@@ -73,7 +73,7 @@ __pragma(pack(push, 1)) struct D2GfxLightStrc {
     /* 0x01 */ BYTE nRed;
     /* 0x02 */ BYTE nGreen;
     /* 0x03 */ BYTE nBlue;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GfxLightStrc
 #ifndef D2_DEFINED_D2GfxLightExStrc

@@ -39,13 +39,13 @@ struct D2fpSkillFuncArg {
 #endif // D2_DEFINED_D2fpSkillFuncArg
 #ifndef D2_DEFINED_D2fpSkillFuncSub
 #define D2_DEFINED_D2fpSkillFuncSub
-__pragma(pack(push, 1)) struct D2fpSkillFuncSub {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2fpSkillFuncSub {
     /* 0x00 */ struct D2UnitStrc * pOwner;
     /* 0x04 */ struct D2UnitStrc * pMissile;
     /* 0x08 */ eD2Skills eSkillNo;
     /* 0x0C */ int32_t nSkillLevel;
     /* 0x10 */ int nTargetLimit; // missile callbacks: hit limit (MISSILE_CltHitFn25 sets it from cHitPar2, clamped to >= 1; CreateAtTarget compares it with the hit count)
     /* 0x14 */ eMissilesId nMissileTxtNo;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2fpSkillFuncSub

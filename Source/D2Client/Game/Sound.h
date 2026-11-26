@@ -63,7 +63,7 @@ struct D2SoundStringKeyStrc {
 #endif // D2_DEFINED_D2SoundStringKeyStrc
 #ifndef D2_DEFINED_D2SoundsTxt
 #define D2_DEFINED_D2SoundsTxt
-struct __attribute__((packed)) D2SoundsTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SoundsTxt {
     /* 0x00 */ char Filename[60];
     /* 0x3C */ uint8_t Volume;
     /* 0x3D */ uint8_t Group_Size;
@@ -97,7 +97,7 @@ struct __attribute__((packed)) D2SoundsTxt {
     /* 0x82 */ void * pAsyncData; // struct D2AsyncData_Line0x128* while async load in flight
     /* 0x86 */ int32_t nLoadState; // 0=unloaded 1=async-loading 2=loaded
     /* 0x8A */ int32_t nRefCount; // Active channel reference count
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2SoundsTxt
 #ifndef D2_DEFINED_D2SoundWavCacheEntryStrc

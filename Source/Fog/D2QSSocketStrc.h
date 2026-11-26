@@ -24,7 +24,7 @@ typedef int (__fastcall *fpD2QSSocketPacketHandler)(uint8_t * pPacketBuf, int nP
 // Data types
 #ifndef D2_DEFINED_D2NetDataStrc
 #define D2_DEFINED_D2NetDataStrc
-struct __attribute__((packed)) D2NetDataStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2NetDataStrc {
     /* 0x00 */ BOOL bConnected;
     /* 0x04 */ BOOL bInit;
     /* 0x08 */ SOCKET hSocket;
@@ -35,22 +35,22 @@ struct __attribute__((packed)) D2NetDataStrc {
     /* 0x30 */ int nError;
     /* 0x34 */ int nWSALastError;
     /* 0x38 */ char szHost[64];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2NetDataStrc
 #ifndef D2_DEFINED_D2QSQueueStrc
 #define D2_DEFINED_D2QSQueueStrc
-struct __attribute__((packed)) D2QSQueueStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QSQueueStrc {
     /* 0x00 */ int32_t bOverflow; // set when a dequeued message exceeds the caller's buffer
     /* 0x04 */ CRITICAL_SECTION csLock;
     /* 0x1C */ struct D2QSQueueEntryStrc * pHead;
     /* 0x20 */ struct D2QSQueueEntryStrc * pTail;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QSQueueStrc
 #ifndef D2_DEFINED_D2QSSocketStrc
 #define D2_DEFINED_D2QSSocketStrc
-struct __attribute__((packed)) D2QSSocketStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QSSocketStrc {
     /* 0x000 */ HANDLE hThread;
     /* 0x004 */ DWORD dwThreadId; // thread id written by CreateThread (passed as its lpThreadId out argument)
     /* 0x008 */ char szIpAddress[260];
@@ -65,6 +65,6 @@ struct __attribute__((packed)) D2QSSocketStrc {
     /* 0x168 */ int (__fastcall *pfnPacketHandler)(uint8_t *, int, void *); // Set by QSSOCKET_SetCallbackHandler1. When non-null ProcessReceivedData calls it with pHandlerContext; a zero return means "not consumed, enqueue it".
     /* 0x16C */ void * pHandlerContext; // Second argument of QSSOCKET_SetCallbackHandler1; the sole argument passed to pfnPacketHandler.
     /* 0x170 */ D2QSQueueStrc aQueue; // Inbound message queue. D2QSQUEUE_Initialize(&this) in STRUCT_D2QSSocket_Init, FOG_EnqueueMessage(&this,...) in ProcessReceivedData, D2QSQueue::Free(&this) in FreeD2QSSocket. Runs to the 0x194 allocation size; no named struct exists for it yet.
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QSSocketStrc

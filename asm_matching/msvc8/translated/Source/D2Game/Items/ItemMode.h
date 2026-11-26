@@ -30,12 +30,12 @@ typedef uint8_t eD2BodyLoc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2WeaponSwapSlotStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WeaponSwapSlotStrc {
     /* 0x00 */ eD2BodyLocDWORD eSourceBodyLoc; // Slot the item is moved OUT of. Passed to INVENTORY_GetItemByGridOffset and NullSub_2Arg.
     /* 0x04 */ struct D2UnitStrc * pItem; // The item found in eSourceBodyLoc, filled in by the first loop.
     /* 0x08 */ eD2BodyLocDWORD eTargetBodyLoc; // Slot the item is moved INTO. Passed to INVENTORY_GetItemAtBodyLoc and SetBodyLoc.
     /* 0x0C */ int32_t nPutItemParam; // Fourth dword, passed to PutItemInInventory (4 on the outbound pair, 3 on the return pair).
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 namespace D2Game { namespace ITEMS { namespace ItemMode {

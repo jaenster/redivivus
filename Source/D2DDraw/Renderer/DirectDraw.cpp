@@ -1446,7 +1446,7 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX,
           aCornerLight[3] = pLight[nLightIndex].nIntensity;
           aCornerLight[1] = pLight[nLightIndex + 1].nIntensity;
           aCornerLight[2] = pLight[nLightIndex + 1].nIntensity;
-          D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile((int)(intptr_t)pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight, (uint8_t)nAlpha);
+          D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile(pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight, (uint8_t)nAlpha);
         }
       }
     }
@@ -1479,7 +1479,7 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int32_t nPosX, int3
           aCornerLight[3] = aCornerLight[0] = pLight[nLightIndex].nIntensity;
           aCornerLight[2] = aCornerLight[1] = pLight[nLightIndex + 1].nIntensity;
           bAnyDrawn = 1;
-          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile((int)(intptr_t)pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight);
+          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile(pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight);
         }
       }
     }

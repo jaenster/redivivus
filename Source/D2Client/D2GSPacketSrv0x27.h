@@ -28,13 +28,13 @@ struct D2GSPacketSrv0x27_Entry {
 #endif // D2_DEFINED_D2GSPacketSrv0x27_Entry
 #ifndef D2_DEFINED_D2GSPacketSrv0x27
 #define D2_DEFINED_D2GSPacketSrv0x27
-struct __attribute__((packed)) D2GSPacketSrv0x27 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x27 {
     /* 0x00 */ uint8_t nId;
     /* 0x01 */ uint8_t eUnitType;
     /* 0x02 */ int nUnitGUID;
     /* 0x06 */ uint8_t nMessageCount;
     /* 0x07 */ uint8_t field_0x7;
     /* 0x08 */ D2GSPacketSrv0x27_Entry aMessages[8];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x27

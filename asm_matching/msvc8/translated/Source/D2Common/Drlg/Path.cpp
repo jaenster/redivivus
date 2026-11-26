@@ -1218,7 +1218,11 @@ int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
     abyOpenList.nPoolCount = 0;
     abyOpenList.pSortedHead = 0;
     abyOpenList.nPropagateCount = 0;
+#if D2_ARCH_X86
     memset(&abyOpenList, 0, 0x200);
+#elif D2_ARCH_X64
+    memset(&abyOpenList, 0, sizeof(abyOpenList));
+#endif
     memset(abyOpenList.apClosedBuckets, 0, sizeof(abyOpenList.apClosedBuckets));
     D2PathPointStrc DVar1 = pPathTypeArg->tStartCoord;
     D2PathPointStrc nStartPacked = pPathTypeArg->tTargetCoord;

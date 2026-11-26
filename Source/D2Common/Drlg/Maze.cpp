@@ -401,7 +401,7 @@ void __stdcall DRLGMAZE_PickRoomPresets(D2RoomExStrc * pRoomEx) {
     D2LvlMazeTxt* pMazeTxt;
     pMazeTxt = pRoomEx->pLevel->pDrlgLevelData.pTxtLvlMaze;
     for (pNeighbor = pRoomEx->pLevel->pRoomExFirst; pNeighbor; pNeighbor = pNeighbor->pRoomExNext) {
-      if (pNeighbor != pRoomEx && ~(pNeighbor->pRoomExData.pRoomExDataPreset->nFlags >> 1) & 1) {
+      if (pRoomEx != pNeighbor && ~(pNeighbor->pRoomExData.pRoomExDataPreset->nFlags >> 1) & 1) {
         nDeltaX = 0;
         nDeltaY = 0;
         _bWithinDistance = DrlgRoom::DRLGCOORDS_IsWithinDistance(&pRoomEx->sCoords, &pNeighbor->sCoords, 1, &nDeltaX, &nDeltaY);

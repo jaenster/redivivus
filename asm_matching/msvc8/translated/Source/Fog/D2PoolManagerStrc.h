@@ -26,7 +26,7 @@ struct D2PoolBlockEntryStrc {
 #endif // D2_DEFINED_D2PoolBlockEntryStrc
 #ifndef D2_DEFINED_D2PoolManagerStrc
 #define D2_DEFINED_D2PoolManagerStrc
-__pragma(pack(push, 1)) struct D2PoolManagerStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PoolManagerStrc {
     /* 0x0000 */ int nPoolId; // related to pool count..
     /* 0x0004 */ CRITICAL_SECTION pSync;
     /* 0x001C */ uint32_t nPools;
@@ -37,6 +37,6 @@ __pragma(pack(push, 1)) struct D2PoolManagerStrc {
     /* 0x07AC */ BYTE * pOverflow[1023];
     /* 0x17A8 */ DWORD dwMemory;
     /* 0x17AC */ char szName[32];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2PoolManagerStrc

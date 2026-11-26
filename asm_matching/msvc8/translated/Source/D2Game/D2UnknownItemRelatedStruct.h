@@ -20,7 +20,7 @@ typedef int eD2ItemFlag;
 // Data types
 #ifndef D2_DEFINED_D2UnknownItemRelatedStruct
 #define D2_DEFINED_D2UnknownItemRelatedStruct
-__pragma(pack(push, 1)) struct D2UnknownItemRelatedStruct {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2UnknownItemRelatedStruct {
     /* 0x00 */ char nEquipLoc; // 5-bit equip slot from save file
     /* 0x01 */ uint8_t nStorageType; // 3-bit storage location/page from save file
     /* 0x02 */ uint32_t nItemLevel;
@@ -41,6 +41,6 @@ __pragma(pack(push, 1)) struct D2UnknownItemRelatedStruct {
     /* 0x32 */ char szCustomName[16]; // inline strcpy at PLRSAVE_CreateItemFromSaveData copies this NUL-terminated field into D2ItemGenContextStrc.szCustomName (char[16] @0x58); extent 0x32..0x41 also runs exactly to wItemFormat @0x42
     /* 0x42 */ uint16_t wItemFormat;
     /* 0x44 */ char szCode[4];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2UnknownItemRelatedStruct

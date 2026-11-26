@@ -543,9 +543,9 @@ typedef void (__fastcall *fpCelDrawFrameByFormat)(uint8_t * pImageHeader, uint8_
 typedef void (__fastcall *fpCelRemapFrameByFormat)(DC6Block * pFrame, BYTE * pPaletteRemap);
 typedef void (__fastcall *fpD2ShrineTableHandler)(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines);
 typedef void (__fastcall *fpDrawBlendedVisTile)(uint8_t * a1, int a2, int a3, int a4);
-typedef void (__fastcall *fpDrawRoofTile)(int a1, int a2, int a3, uint32_t * a4, BYTE a5);
+typedef void (__fastcall *fpDrawRoofTile)(uint8_t * a1, int a2, int a3, uint32_t * a4, BYTE a5);
 typedef void (__fastcall *fpDrawVisTile)(uint8_t * pbTileData, int32_t nScreenX, int32_t nScreenY);
-typedef void (__fastcall *fpDrawWallTile)(int a1, int a2, int a3, uint32_t * a4);
+typedef void (__fastcall *fpDrawWallTile)(uint8_t * a1, int a2, int a3, uint32_t * a4);
 typedef void (__fastcall *fpFillYBufferTable)(void * ppvBits, int nWidth, int nHeight, int a4);
 typedef void (__fastcall *fpMonsterUModHandler)(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwParam1, int32_t nParam2);
 typedef void (__fastcall *fpServerInitFunctions)(D2IniConfigStrc * pIni);
@@ -689,14 +689,14 @@ struct D2CutsceneDescStrc {
 
 #ifndef D2_DEFINED_D2D3DDeviceInfoStrc
 #define D2_DEFINED_D2D3DDeviceInfoStrc
-__pragma(pack(push, 1)) struct D2D3DDeviceInfoStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2D3DDeviceInfoStrc {
     /* 0x000 */ uint32_t dwFlags;
     /* 0x004 */ GUID guid;
     /* 0x014 */ uint32_t dwVendorId;
     /* 0x018 */ uint32_t dwDeviceId;
     /* 0x01C */ char szName[256];
     /* 0x11C */ uint32_t nBytesPerPixel;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2D3DDeviceInfoStrc
 
 #ifndef D2_DEFINED_D2D3DTileCornerStrc
@@ -737,7 +737,7 @@ struct D2ExitCutsceneState {
 
 #ifndef D2_DEFINED_D2GameListEntryStrc
 #define D2_DEFINED_D2GameListEntryStrc
-__pragma(pack(push, 1)) struct D2GameListEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GameListEntryStrc {
     /* 0x00 */ uint8_t unk0x00;
     /* 0x01 */ char szName[16];
     /* 0x11 */ char szDescription[32];
@@ -745,7 +745,7 @@ __pragma(pack(push, 1)) struct D2GameListEntryStrc {
     /* 0x33 */ uint16_t nJoinId; // first argument to OOGMENU_JoinGame; deduplication key
     /* 0x35 */ uint16_t unk0x35;
     /* 0x37 */ uint32_t dwIpAddr; // to NET_MakeIPV4AddressHumanFriendly
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2GameListEntryStrc
 
 #ifndef D2_DEFINED_D2GemsTableStrc
@@ -768,17 +768,17 @@ struct D2HashSeedPairStrc {
 
 #ifndef D2_DEFINED_D2HirelingStatLabelStrc
 #define D2_DEFINED_D2HirelingStatLabelStrc
-__pragma(pack(push, 1)) struct D2HirelingStatLabelStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2HirelingStatLabelStrc {
     /* 0x00 */ int nX;
     /* 0x04 */ int nCenterWidth;
     /* 0x08 */ int nY;
     /* 0x0C */ uint16_t wStrId;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2HirelingStatLabelStrc
 
 #ifndef D2_DEFINED_D2IniConfigValuesStrc
 #define D2_DEFINED_D2IniConfigValuesStrc
-__pragma(pack(push, 1)) struct D2IniConfigValuesStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2IniConfigValuesStrc {
     /* 0x00 */ char szAppName[27];
     /* 0x1B */ char szKeyName[27];
     /* 0x36 */ char szCmdLineArg[27];
@@ -787,7 +787,7 @@ __pragma(pack(push, 1)) struct D2IniConfigValuesStrc {
     /* 0x53 */ uint8_t field_0x53;
     /* 0x54 */ int nOffset;
     /* 0x58 */ int nDefaultValue;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2IniConfigValuesStrc
 
 #ifndef D2_DEFINED_D2LeapArcSegmentStrc
@@ -842,13 +842,13 @@ struct D2NpcControlInitStrc {
 
 #ifndef D2_DEFINED_D2NpcShopTabStrc
 #define D2_DEFINED_D2NpcShopTabStrc
-__pragma(pack(push, 1)) struct D2NpcShopTabStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2NpcShopTabStrc {
     /* 0x00 */ int nTextX; // tab label X, panel-relative
     /* 0x04 */ int nTextY; // tab label Y, panel-relative
     /* 0x08 */ uint16_t nStringId; // strtable id of the tab label
     /* 0x0A */ uint32_t nSelected; // tab is the highlighted one
     /* 0x0E */ uint32_t nHasItems; // tab holds at least one item
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2NpcShopTabStrc
 
 #ifndef D2_DEFINED_D2ObjModeFuncEntryStrc
@@ -946,13 +946,13 @@ struct D2SocketOffsetStrc {
 
 #ifndef D2_DEFINED_D2StatDescRowStrc
 #define D2_DEFINED_D2StatDescRowStrc
-__pragma(pack(push, 1)) struct D2StatDescRowStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2StatDescRowStrc {
     /* 0x00 */ int nX1;
     /* 0x04 */ int nY;
     /* 0x08 */ int nX2;
     /* 0x0C */ uint16_t nStringId;
     /* 0x0E */ int nTextWidth;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2StatDescRowStrc
 
 #ifndef D2_DEFINED_D2StatPanelRowStrc
@@ -967,12 +967,12 @@ struct D2StatPanelRowStrc {
 
 #ifndef D2_DEFINED_D2StatScreenButtonStrc
 #define D2_DEFINED_D2StatScreenButtonStrc
-__pragma(pack(push, 1)) struct D2StatScreenButtonStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2StatScreenButtonStrc {
     /* 0x00 */ int nX;
     /* 0x04 */ int nY;
     /* 0x08 */ int bHitTest;
     /* 0x0C */ uint16_t nStatId;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2StatScreenButtonStrc
 
 #ifndef D2_DEFINED_D2TileCmpSubTileOffset
@@ -1004,20 +1004,20 @@ struct D2TombCanyonPresetStrc {
 
 #ifndef D2_DEFINED_D2TombCanyonPresetRegionStrc
 #define D2_DEFINED_D2TombCanyonPresetRegionStrc
-__pragma(pack(push, 1)) struct D2TombCanyonPresetRegionStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TombCanyonPresetRegionStrc {
     /* 0x00 */ D2TombCanyonPresetStrc aTombEntries[9]; // PlaceTombEntriesInCanyon walks exactly 9 of these
     /* 0x90 */ int aPresetVariants[24]; // 12 rows of 2; DRLGOUTROOM_GetPresetVariantFromGridCell folds the base to 0x6f2680
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2TombCanyonPresetRegionStrc
 
 #ifndef D2_DEFINED_D2UIConfigTabEntryStrc
 #define D2_DEFINED_D2UIConfigTabEntryStrc
-__pragma(pack(push, 1)) struct D2UIConfigTabEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2UIConfigTabEntryStrc {
     /* 0x00 */ uint16_t nLabelStringId; // String table SID for this column/tab label - read by CONTROLCONFIG_CalculateColumnBounds and DRAW_ConfigControlsMenu
     /* 0x02 */ void (*pfnAction)(); // Function called when this tab's button is clicked (unaligned - the table is packed)
     /* 0x06 */ int nTabId; // Tab identifier (1=keys, 2=mouse, 3=gamepad)
     /* 0x0A */ uint8_t aBounds[16]; // Four ints: left, right, top, bottom of this column, filled in by CONTROLCONFIG_CalculateColumnBounds
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2UIConfigTabEntryStrc
 
 #ifndef D2_DEFINED_D2UIFlagDescStrc
@@ -1083,11 +1083,11 @@ struct D2UniqueCandidateStrc {
 
 #ifndef D2_DEFINED_D2UniqueCandidatePoolStrc
 #define D2_DEFINED_D2UniqueCandidatePoolStrc
-__pragma(pack(push, 1)) struct D2UniqueCandidatePoolStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2UniqueCandidatePoolStrc {
     /* 0x00 */ uint32_t nGoldCodeInitFlag; // gItemDropGoldCodeInitFlag; the pick loop folds its address as the table base minus one row
     /* 0x04 */ uint32_t _pad;
     /* 0x08 */ D2UniqueCandidateStrc aCandidates[4096];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2UniqueCandidatePoolStrc
 
 #ifndef D2_DEFINED_D2ZlibExtraLBitsBlOrderStrc
@@ -1101,11 +1101,11 @@ struct D2ZlibExtraLBitsBlOrderStrc {
 
 #ifndef D2_DEFINED_D3DTextureCacheSetStrc
 #define D2_DEFINED_D3DTextureCacheSetStrc
-__pragma(pack(push, 1)) struct D3DTextureCacheSetStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D3DTextureCacheSetStrc {
     /* 0x00 */ D3DTextureCacheStrc aCaches[3]; // mip levels 1..3, indexed [iMip-1]
     /* 0x54 */ IDirect3DTexture2 * apSpriteTextures[3]; // [iMip-1]
     /* 0x60 */ IDirectDrawSurface7 * apSpriteSurfaces[3]; // [iMip-1]
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D3DTextureCacheSetStrc
 
 #ifndef D2_DEFINED_DSCAPS
@@ -1160,22 +1160,22 @@ struct D2PickableStrc {
 
 #ifndef D2_DEFINED_D2AuraEnchantedStrc
 #define D2_DEFINED_D2AuraEnchantedStrc
-__pragma(pack(push, 1)) struct D2AuraEnchantedStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2AuraEnchantedStrc {
     /* 0x00 */ int nLevelThreshold; // compared against the monster level to size the RNG modulo
     /* 0x04 */ int nSkillLevelBase;
     /* 0x08 */ int nSkillLevelMul;
     /* 0x0C */ int nSkillLevelDiv;
     /* 0x10 */ eD2Skills eSkill; // aura skill granted
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2AuraEnchantedStrc
 
 #ifndef D2_DEFINED_D2ShrinesTableEntryStrc
 #define D2_DEFINED_D2ShrinesTableEntryStrc
-__pragma(pack(push, 1)) struct D2ShrinesTableEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ShrinesTableEntryStrc {
     /* 0x00 */ void (__fastcall *fpShrineHandler)(D2ObjectOperateFnArg *, D2ShrinesTxt *);
     /* 0x04 */ eD2UnitStat eStat;
     /* 0x08 */ eD2States nState;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2ShrinesTableEntryStrc
 
 // =============================================================================

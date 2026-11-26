@@ -27,7 +27,7 @@ typedef BOOL (__fastcall *D2ItemStatCostItemEventFunc)(::SGAMEDATA * pGame, uint
 // Data types
 #ifndef D2_DEFINED_D2SUnitEventStrc
 #define D2_DEFINED_D2SUnitEventStrc
-__pragma(pack(push, 1)) struct D2SUnitEventStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SUnitEventStrc {
     /* 0x00 */ uint8_t nUnitEvent; // events.txt id dispatched by UNITEVENT_DispatchEventsByType (MOVZX byte [ESI])
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint16_t nFlags; // bit0 = callback running, bit1 = free pending (OR/AND word [ESI+2] in 005c0c30)
@@ -38,7 +38,7 @@ __pragma(pack(push, 1)) struct D2SUnitEventStrc {
     /* 0x14 */ BOOL (__fastcall *fpItemEventFunc)(::SGAMEDATA *, uint32_t, struct D2UnitStrc *, struct D2UnitStrc *, struct D2DamageStrc *, eD2Skills, int);
     /* 0x18 */ struct D2SUnitEventStrc * pPrev; // back link toward the list head (SUNITEVENT_Alloc stores new into old_head+0x18)
     /* 0x1C */ struct D2SUnitEventStrc * pNext; // forward link; every walker follows +0x1c
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SUnitEventStrc
 namespace D2Game { namespace UNIT { namespace SUnitEvent {

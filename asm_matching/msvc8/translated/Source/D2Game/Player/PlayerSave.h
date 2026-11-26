@@ -46,7 +46,7 @@ struct D2ItemDupeCacheEntryStrc {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2OldSaveHeaderStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2OldSaveHeaderStrc {
     /* 0x00 */ int saveDataBuf[2];
     /* 0x08 */ char szCharNameClient[15];
     /* 0x17 */ uint8_t byCharNamePad;
@@ -103,33 +103,33 @@ __pragma(pack(push, 1)) struct D2OldSaveHeaderStrc {
     /* 0x7E */ uint16_t wGuildInfoLo;
     /* 0x80 */ uint8_t byGuildInfoC;
     /* 0x81 */ uint8_t byInitSeedByte;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2SaveFileNpcStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SaveFileNpcStrc {
     /* 0x00 */ short szMagic;
     /* 0x02 */ short nSize;
     /* 0x04 */ uint8_t pActNpcData[3][8];
     /* 0x1C */ uint8_t pActNpcBitInfo[3][8];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2SaveFileQuestsStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SaveFileQuestsStrc {
     /* 0x00 */ int nMagic;
     /* 0x04 */ int nVersion;
     /* 0x08 */ short nSize;
     /* 0x0A */ char pActQuests[3][96];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2SaveWaypointListEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SaveWaypointListEntryStrc {
     /* 0x00 */ D2WaypointStrc pWaypoints;
     /* 0x10 */ uint32_t field1_0x10;
     /* 0x14 */ uint32_t field2_0x14;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -139,12 +139,12 @@ struct D2SaveWaypointListStrc {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2SaveFileWaypointsStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SaveFileWaypointsStrc {
     /* 0x00 */ short szMagic;
     /* 0x02 */ int nVersion;
     /* 0x06 */ short nSize;
     /* 0x08 */ D2SaveWaypointListStrc pActWaypoints;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 namespace D2Game { namespace PLAYER { namespace PlayerSave {

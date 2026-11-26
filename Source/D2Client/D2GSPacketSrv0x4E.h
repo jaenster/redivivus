@@ -17,10 +17,10 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x4E
 #define D2_DEFINED_D2GSPacketSrv0x4E
-struct __attribute__((packed)) D2GSPacketSrv0x4E {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x4E {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ short nNameStringID;
     /* 0x03 */ int nSeed;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x4E

@@ -17,12 +17,12 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x03
 #define D2_DEFINED_D2GSPacketSrv0x03
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x03 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x03 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nAct;
     /* 0x02 */ int nMapSeed;
     /* 0x06 */ short nArea;
     /* 0x08 */ int nAutomap;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x03

@@ -17,9 +17,9 @@
 // Data types
 #ifndef D2_DEFINED_D2DrlgCoordsStrc
 #define D2_DEFINED_D2DrlgCoordsStrc
-__pragma(pack(push, 1)) struct D2DrlgCoordsStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgCoordsStrc {
     /* 0x00 */ POINT WorldPosition;
     /* 0x08 */ POINT WorldSize;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgCoordsStrc

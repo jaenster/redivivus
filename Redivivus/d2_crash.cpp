@@ -4,9 +4,10 @@
 // lines for whoever compiled it, without the person reading it needing that exe.
 //
 // The DWARF is read by libbacktrace (3rdparty/libbacktrace) straight out of the
-// running image. Parsing it happens only on a crash, on a worker thread with its
-// own stack, so a stack overflow or a damaged stack still gets symbolised; if that
-// thread cannot finish, the report falls back to module+offset per frame.
+// running image; a Visual Studio build has a PDB instead, read through DbgHelp.
+// Parsing it happens only on a crash, on a worker thread with its own stack, so a
+// stack overflow or a damaged stack still gets symbolised; if that thread cannot
+// finish, the report falls back to module+offset per frame.
 
 #include <windows.h>
 #include <tlhelp32.h>
@@ -14,7 +15,32 @@
 #include <stdlib.h>
 #include <string.h>
 
+#if defined(_MSC_VER)
+// The tree declares its own ADDRESS_MODE and enumerators (d2_enums.h); DbgHelp's are
+// renamed while its header is read.
+#define ADDRESS_MODE d2_dbghelp_ADDRESS_MODE
+#define AddrMode1616 d2_dbghelp_AddrMode1616
+#define AddrMode1632 d2_dbghelp_AddrMode1632
+#define AddrModeReal d2_dbghelp_AddrModeReal
+#define AddrModeFlat d2_dbghelp_AddrModeFlat
+#include <dbghelp.h>
+#undef ADDRESS_MODE
+#undef AddrMode1616
+#undef AddrMode1632
+#undef AddrModeReal
+#undef AddrModeFlat
+// Ahead of the static-init runner (.CRT$XCU) and the trace handler, as
+// init_priority(140) orders it for GCC: the library group of _initterm runs first.
+#pragma init_seg(lib)
+#define D2CRASH_NOINLINE __declspec(noinline)
+#define D2CRASH_COMPILER "MSVC " D2CRASH_STR(_MSC_FULL_VER)
+#define D2CRASH_STR(x) D2CRASH_STR2(x)
+#define D2CRASH_STR2(x) #x
+#else
 #include "3rdparty/libbacktrace/backtrace.h"
+#define D2CRASH_NOINLINE __attribute__((noinline))
+#define D2CRASH_COMPILER "gcc " __VERSION__
+#endif
 #include "D2Arch.h"
 
 // An address in the image. The 32-bit target keeps every one in a DWORD, as the
@@ -46,7 +72,13 @@ namespace {
 // Startup state.
 // ---------------------------------------------------------------------------
 char g_szExePath[MAX_PATH];
+#if defined(_MSC_VER)
+// DbgHelp is initialised on the first lookup, which is a crash; this only says the
+// executable was found. The PDB path the linker recorded is where it is looked for.
+bool g_pBtState = false;
+#else
 backtrace_state* g_pBtState = 0;
+#endif
 
 // libbacktrace reports problems through a callback; they are collected here and
 // printed in the report, never acted on.
@@ -327,6 +359,7 @@ void SymAppend(const char* pszFormat, ...) {
 // __cxa_demangle (which mallocs its result). libstdc++'s callback demangler
 // works on the stack and streams the name out in pieces; they are collected into
 // a static buffer. Only the symbolisation worker calls this, one thread at a time.
+#if !defined(_MSC_VER)
 extern "C" int __gcclibcxx_demangle_callback(const char* pszMangled,
                                              void (*pfnSink)(const char*, size_t, void*),
                                              void* pOpaque);
@@ -393,6 +426,43 @@ void OnSymInfo(void* pData, uintptr_t uPc, const char* pszName, uintptr_t uVal, 
 }
 
 void OnBtErrorQuiet(void*, const char* pszMsg, int nErr) { BtError(0, pszMsg, nErr); }
+#else
+// DbgHelp undecorates (SYMOPT_UNDNAME) and finds the line; it is not thread-safe,
+// and only the symbolisation worker calls it, one thread at a time.
+struct PcInfo {
+    int nHits;
+};
+
+void SymLookup(ADDR dwPc, PcInfo* pInfo) {
+    static bool s_bInit = false;
+    HANDLE hProcess = GetCurrentProcess();
+    if (!s_bInit) {
+        SymSetOptions(SYMOPT_UNDNAME | SYMOPT_DEFERRED_LOADS | SYMOPT_LOAD_LINES | SYMOPT_FAIL_CRITICAL_ERRORS);
+        if (!SymInitialize(hProcess, 0, TRUE)) {
+            BtError(0, "SymInitialize failed", (int)GetLastError());
+            g_pBtState = false;
+            return;
+        }
+        s_bInit = true;
+    }
+    static ULONG64 s_aSymBuf[(sizeof(SYMBOL_INFO) + 1024 + sizeof(ULONG64) - 1) / sizeof(ULONG64)];
+    SYMBOL_INFO* pSym = (SYMBOL_INFO*)s_aSymBuf;
+    memset(s_aSymBuf, 0, sizeof(s_aSymBuf));
+    pSym->SizeOfStruct = sizeof(SYMBOL_INFO);
+    pSym->MaxNameLen = 1024;
+    DWORD64 qwDisp = 0;
+    if (!SymFromAddr(hProcess, (DWORD64)dwPc, &qwDisp, pSym)) return;
+    IMAGEHLP_LINE64 line;
+    memset(&line, 0, sizeof(line));
+    line.SizeOfStruct = sizeof(line);
+    DWORD dwLineDisp = 0;
+    if (SymGetLineFromAddr64(hProcess, (DWORD64)dwPc, &dwLineDisp, &line))
+        SymAppend("  %s  %s:%lu", pSym->Name, line.FileName, (unsigned long)line.LineNumber);
+    else
+        SymAppend("  %s+0x%lX", pSym->Name, (unsigned long)qwDisp);
+    ++pInfo->nHits;
+}
+#endif
 
 DWORD WINAPI SymbolizeThread(LPVOID) {
     static const char* const s_aKindLabel[] = { "fault", "frame", "scan " };
@@ -418,9 +488,13 @@ DWORD WINAPI SymbolizeThread(LPVOID) {
         ADDR dwPc = f.eKind == FRAME_FAULT ? f.dwAddr : f.dwAddr - 1;
         PcInfo info = { 0 };
         if (g_pBtState && f.dwAddr >= g_dwExeLo && f.dwAddr < g_dwExeHi) {
+#if defined(_MSC_VER)
+            SymLookup(dwPc, &info);
+#else
             backtrace_pcinfo(g_pBtState, dwPc, OnPcInfo, OnBtErrorQuiet, &info);
             if (!info.nHits)
                 backtrace_syminfo(g_pBtState, dwPc, OnSymInfo, OnBtErrorQuiet, &info);
+#endif
         }
         SymAppend("\r\n");
     }
@@ -462,7 +536,7 @@ void WriteReport(EXCEPTION_POINTERS* pExc, bool bForeign, DWORD dwThreadId,
 
     Out("Redivivus crash report\r\n");
     Out("Send this whole file with your bug report.\r\n\r\n");
-    Out("Build:     %s (%s), %s\r\n", REDIVIVUS_BUILD_ID, BUILD_KIND, "gcc " __VERSION__);
+    Out("Build:     %s (%s), %s\r\n", REDIVIVUS_BUILD_ID, BUILD_KIND, D2CRASH_COMPILER);
     typedef LONG (WINAPI *RtlGetVersionFn)(OSVERSIONINFOW*);
     RtlGetVersionFn pfnGetVersion =
         (RtlGetVersionFn)(void*)GetProcAddress(GetModuleHandleA("ntdll.dll"), "RtlGetVersion");
@@ -625,7 +699,7 @@ LONG CALLBACK CrashVectoredHandler(EXCEPTION_POINTERS* pExc) {
 // stack starts at this function, then the halt, then the code that halted.
 // Writing the report takes the "own" slot: the fall-off-the-end ud2 that follows
 // a halt in a non-void caller is the same failure, and is not reported again.
-extern "C" __attribute__((noinline)) void D2CRASH_ReportHalt(int nLine, unsigned nAddress) {
+extern "C" D2CRASH_NOINLINE void D2CRASH_ReportHalt(int nLine, unsigned nAddress) {
     if (InterlockedCompareExchange(&g_nBusy, 1, 0) != 0) return;
     if (InterlockedExchange(&g_nOwnReported, 1) == 0) {
         static CONTEXT s_ctx;
@@ -656,7 +730,11 @@ struct CrashInit {
             (const IMAGE_NT_HEADERS*)((const char*)hExe + ((const IMAGE_DOS_HEADER*)hExe)->e_lfanew);
         g_dwExeHi = g_dwExeLo + pNt->OptionalHeader.SizeOfImage;
         // Cheap: the DWARF itself is parsed on the first lookup, which is a crash.
+#if defined(_MSC_VER)
+        g_pBtState = g_szExePath[0] != 0;
+#else
         if (g_szExePath[0]) g_pBtState = backtrace_create_state(g_szExePath, 0, BtError, 0);
+#endif
         AddVectoredExceptionHandler(1, CrashVectoredHandler);
         // A stack overflow leaves no room for a handler, so the process dies with no
         // report and the fault looks uncatchable. Reserving a slice keeps the handler
@@ -665,6 +743,10 @@ struct CrashInit {
         SetThreadStackGuarantee(&ulGuarantee);
     }
 };
+#if defined(_MSC_VER)
+CrashInit g_crashInit;  // #pragma init_seg(lib), above
+#else
 CrashInit g_crashInit __attribute__((init_priority(140)));
+#endif
 
 }  // namespace

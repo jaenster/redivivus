@@ -37,13 +37,13 @@ typedef unsigned long LCID;
 #endif // _WIN32
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct __attribute__((packed)) BnCDKeyHashInput26 {
+D2_PACKED_BEGIN struct __attribute__((packed)) BnCDKeyHashInput26 {
     /* 0x00 */ uint32_t dwClientToken;
     /* 0x04 */ uint32_t dwServerToken;
     /* 0x08 */ uint32_t dwProductId;
     /* 0x0C */ uint32_t dwPublicValue;
     /* 0x10 */ uint8_t abPrivateValue[10];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
@@ -75,12 +75,12 @@ struct D2BnNewsTableStrc {
 #endif // D2_DEFINED_D2BnNewsTableStrc
 #ifndef D2_DEFINED_D2BnReadUserDataStrc
 #define D2_DEFINED_D2BnReadUserDataStrc
-struct __attribute__((packed)) D2BnReadUserDataStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2BnReadUserDataStrc {
     /* 0x00 */ uint32_t nAccountCount;
     /* 0x04 */ uint32_t nKeyCount;
     /* 0x08 */ uint32_t nRequestId;
     /* 0x0C */ char szValues[0];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2BnReadUserDataStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
@@ -145,12 +145,12 @@ struct SID_C2S_GetFileTime {
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct __attribute__((packed)) SID_C2S_LogonResponse {
+D2_PACKED_BEGIN struct __attribute__((packed)) SID_C2S_LogonResponse {
     /* 0x00 */ uint32_t dwClientToken;
     /* 0x04 */ uint32_t dwServerToken;
     /* 0x08 */ D2XSHA1Strc sPasswordHash;
     /* 0x1C */ char szUsername[256];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
@@ -185,7 +185,7 @@ struct SID_C2S_StartVersioning {
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct __attribute__((packed)) SID_C2S_LocaleInfo {
+D2_PACKED_BEGIN struct __attribute__((packed)) SID_C2S_LocaleInfo {
     /* 0x00 */ FILETIME ftSystemTime;
     /* 0x08 */ FILETIME ftLocalTime;
     /* 0x10 */ LONG nTimeZoneBias;
@@ -193,7 +193,7 @@ struct __attribute__((packed)) SID_C2S_LocaleInfo {
     /* 0x18 */ LCID dwUserLCID;
     /* 0x1C */ uint32_t dwUserLangId;
     /* 0x20 */ char szStrings[256];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 namespace Bnclient::BnSend {

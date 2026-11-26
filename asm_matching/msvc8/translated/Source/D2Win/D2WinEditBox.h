@@ -31,7 +31,7 @@ typedef void (__stdcall *fpD2WinEditBoxSubmit)(uint16_t * wszText);
 #endif
 
 // Data types
-__pragma(pack(push, 1)) struct D2WinEditBox {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinEditBox {
     /* 0x000 */ D2ControlStrc sControl;
     /* 0x040 */ int32_t nInsetX; // horizontal text inset in pixels: Draw adds it to dwPosX (004ff6cc) and subtracts it twice from dwSizeX (004fe7d6 ADD EAX,EAX)
     /* 0x044 */ int32_t nInsetY; // vertical text inset in pixels: Draw 004ff6e1 / DrawFlag0x8 004fff2f use it against the Y extent
@@ -55,4 +55,4 @@ __pragma(pack(push, 1)) struct D2WinEditBox {
     /* 0x278 */ struct D2WinEditBox * pNextTabEditBox; // next edit box in tab order: Tab walks this chain (HandleKeyRelease 004ff410); set by D2WINEDITBOX_LinkTabOrder
     /* 0x27C */ struct D2WinEditBox * pPrevTabEditBox; // previous edit box in tab order: Shift+Tab walks this chain (HandleKeyRelease 004ff456); set by D2WINEDITBOX_LinkTabOrder
     /* 0x280 */ uint32_t bPendingPush; // Non-zero triggers Push() from Draw(); cleared when not focused
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END

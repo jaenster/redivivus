@@ -22,7 +22,7 @@ typedef uint8_t eD2PlayerClassID;
 // Data types
 #ifndef D2_DEFINED_D2GSMsg67GameLogonSPStrc
 #define D2_DEFINED_D2GSMsg67GameLogonSPStrc
-__pragma(pack(push, 1)) struct D2GSMsg67GameLogonSPStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSMsg67GameLogonSPStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x67
     /* 0x01 */ char szGameName[16];
     /* 0x11 */ eD2HostGameType eHostGameType;
@@ -35,11 +35,11 @@ __pragma(pack(push, 1)) struct D2GSMsg67GameLogonSPStrc {
     /* 0x2B */ uint8_t field_0x2b;
     /* 0x2C */ uint8_t field_0x2c;
     /* 0x2D */ uint8_t nLanguageCode; // SetupGameChecks requires < 0xF
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSMsg67GameLogonSPStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2GSMsg68GameLogonMultiStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSMsg68GameLogonMultiStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x68
     /* 0x01 */ uint32_t dwGameHash;
     /* 0x05 */ uint16_t nGameToken;
@@ -55,25 +55,25 @@ __pragma(pack(push, 1)) struct D2GSMsg68GameLogonMultiStrc {
     /* 0x13 */ uint8_t field_0x13;
     /* 0x14 */ uint8_t nLanguage;
     /* 0x15 */ char szCharName[16];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2GSMsg6CUploadSaveStrc
 #define D2_DEFINED_D2GSMsg6CUploadSaveStrc
-__pragma(pack(push, 1)) struct D2GSMsg6CUploadSaveStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSMsg6CUploadSaveStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x6C
     /* 0x01 */ uint8_t nChunkSize;
     /* 0x02 */ uint32_t nTotalSize; // halts if >= 0x2000
     /* 0x06 */ uint8_t aData[0]; // nChunkSize bytes
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSMsg6CUploadSaveStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2GSMsg6DPingStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSMsg6DPingStrc {
     /* 0x00 */ uint8_t nOpcode; // 0x6D
     /* 0x01 */ int32_t nPingTime;
     /* 0x05 */ int32_t nSeqNum;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -87,10 +87,10 @@ union D2GSGameSetupMsgUnion {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2GSClientMsgEnvelopeStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSClientMsgEnvelopeStrc {
     /* 0x00 */ uint32_t nClientId;
     /* 0x04 */ D2GSGameSetupMsgUnion uMsg; // packed client message, opcode first
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 namespace D2Game { namespace GAME { namespace CCmd {

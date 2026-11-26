@@ -52,83 +52,83 @@ struct D2ChatMessage {
 
 #endif // D2_DEFINED_D2ChatMessage
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x01_WalkToLocation {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x01_WalkToLocation {
     /* 0x00 */ uint8_t nCmd; // 0x01
     /* 0x01 */ uint16_t wX; // target X
     /* 0x03 */ uint16_t wY; // target Y
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x02_WalkToEntity {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x02_WalkToEntity {
     /* 0x00 */ uint8_t nCmd; // 0x02
     /* 0x01 */ uint32_t eUnitType; // unit type enum
     /* 0x05 */ uint32_t dwUnitGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x03_RunToLocation {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x03_RunToLocation {
     /* 0x00 */ uint8_t nCmd; // 0x03
     /* 0x01 */ uint16_t wX; // target X
     /* 0x03 */ uint16_t wY; // target Y
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x04_RunToEntity {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x04_RunToEntity {
     /* 0x00 */ uint8_t nCmd; // 0x04
     /* 0x01 */ uint32_t eUnitType; // unit type enum
     /* 0x05 */ uint32_t dwUnitGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x05_LeftSkillOnLocation {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x05_LeftSkillOnLocation {
     /* 0x00 */ uint8_t nCmd; // 0x05
     /* 0x01 */ uint16_t wX; // target X
     /* 0x03 */ uint16_t wY; // target Y
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x06_LeftSkillOnEntity {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x06_LeftSkillOnEntity {
     /* 0x00 */ uint8_t nCmd; // 0x06
     /* 0x01 */ uint32_t eUnitType; // unit type enum
     /* 0x05 */ uint32_t dwUnitGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x07_LeftSkillOnEntityEx {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x07_LeftSkillOnEntityEx {
     /* 0x00 */ uint8_t nCmd; // 0x07
     /* 0x01 */ uint32_t eUnitType; // unit type enum
     /* 0x05 */ uint32_t dwUnitGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x08_LeftSkillOnLocationEx {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x08_LeftSkillOnLocationEx {
     /* 0x00 */ uint8_t nCmd; // 0x08
     /* 0x01 */ uint16_t wX; // target X
     /* 0x03 */ uint16_t wY; // target Y
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x09_LeftSkillOnEntityEx2 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x09_LeftSkillOnEntityEx2 {
     /* 0x00 */ uint8_t nCmd; // 0x09
     /* 0x01 */ uint32_t eUnitType; // unit type enum
     /* 0x05 */ uint32_t dwUnitGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x0A_LeftSkillOnEntityEx3 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x0A_LeftSkillOnEntityEx3 {
     /* 0x00 */ uint8_t nCmd; // 0x0A
     /* 0x01 */ uint32_t eUnitType; // unit type enum
     /* 0x05 */ uint32_t dwUnitGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -140,51 +140,51 @@ struct D2GSPacketClt0x0B_Keepalive {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x0C_RightSkillOnLocation {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x0C_RightSkillOnLocation {
     /* 0x00 */ uint8_t nCmd; // 0x0C opcode
     /* 0x01 */ uint16_t nX; // target X coord
     /* 0x03 */ uint16_t nY; // target Y coord
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x0D_RightSkillOnEntity {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x0D_RightSkillOnEntity {
     /* 0x00 */ uint8_t nCmd; // 0x0D opcode
     /* 0x01 */ uint32_t nUnitType; // eD2UnitType (<6)
     /* 0x05 */ uint32_t nGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x0E_RightSkillOnEntityEx {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x0E_RightSkillOnEntityEx {
     /* 0x00 */ uint8_t nCmd; // 0x0E opcode
     /* 0x01 */ uint32_t nUnitType; // eD2UnitType (<6)
     /* 0x05 */ uint32_t nGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x0F_RightSkillOnLocationEx {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x0F_RightSkillOnLocationEx {
     /* 0x00 */ uint8_t nCmd; // 0x0F opcode
     /* 0x01 */ uint16_t nX; // target X coord
     /* 0x03 */ uint16_t nY; // target Y coord
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x10_RightSkillOnEntityEx2 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x10_RightSkillOnEntityEx2 {
     /* 0x00 */ uint8_t nCmd; // 0x10 opcode
     /* 0x01 */ uint32_t nUnitType; // eD2UnitType (<6)
     /* 0x05 */ uint32_t nGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x11_RightSkillOnEntityEx3 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x11_RightSkillOnEntityEx3 {
     /* 0x00 */ uint8_t nCmd; // 0x11 opcode
     /* 0x01 */ uint32_t nUnitType; // eD2UnitType (<6)
     /* 0x05 */ uint32_t nGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -196,11 +196,11 @@ struct D2GSPacketClt0x12_CancelChanneledSkill {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x13_InteractWithEntity {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x13_InteractWithEntity {
     /* 0x00 */ uint8_t nCmd; // 0x13 opcode
     /* 0x01 */ uint32_t nUnitType; // eD2UnitType (<=UNIT_WARP)
     /* 0x05 */ uint32_t nGUID; // target unit GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -223,173 +223,173 @@ struct D2GSPacketClt0x15_ChatMessage {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x16_PickUpItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x16_PickUpItem {
     /* 0x00 */ uint8_t nCmd; // 0x16
     /* 0x01 */ eD2UnitType eUnitType;
     /* 0x05 */ uint32_t dwTargetGUID;
     /* 0x09 */ int bParam; // BOOL passed to SERVER_InteractOrPick
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x17_DropItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x17_DropItem {
     /* 0x00 */ uint8_t nCmd; // 0x17
     /* 0x01 */ uint32_t dwItemGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x18_InsertItemToBuffer {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x18_InsertItemToBuffer {
     /* 0x00 */ uint8_t nCmd; // 0x18
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ int nX;
     /* 0x09 */ int nY;
     /* 0x0D */ uint32_t nBufferId;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x19_RemoveItemFromBuffer {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x19_RemoveItemFromBuffer {
     /* 0x00 */ uint8_t nCmd; // 0x19
     /* 0x01 */ uint32_t dwItemGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x1A_EquipItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x1A_EquipItem {
     /* 0x00 */ uint8_t nCmd; // 0x1A
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ uint32_t dwBodyLoc;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x1B_UnequipItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x1B_UnequipItem {
     /* 0x00 */ uint8_t nCmd; // 0x1B
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ uint32_t dwBodyLoc;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x1C_UnequipToCursor {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x1C_UnequipToCursor {
     /* 0x00 */ uint8_t nCmd; // 0x1C
     /* 0x01 */ uint16_t nBodyLoc;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x1D_Swap2HandItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x1D_Swap2HandItem {
     /* 0x00 */ uint8_t nCmd; // 0x1D
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ uint32_t dwBodyLoc;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x1E_RemoveItemFromBelt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x1E_RemoveItemFromBelt {
     /* 0x00 */ uint8_t nCmd; // 0x1E
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ uint32_t dwBeltSlot;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x1F_SwapCursorAndGridItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x1F_SwapCursorAndGridItem {
     /* 0x00 */ uint8_t nCmd; // 0x1F
     /* 0x01 */ uint32_t dwCursorItemGUID;
     /* 0x05 */ uint32_t dwGridItemGUID;
     /* 0x09 */ int32_t nGridX;
     /* 0x0D */ int32_t nGridY;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x20_UseItemAtLocation {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x20_UseItemAtLocation {
     /* 0x00 */ uint8_t nCmd; // 0x20
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ int nX;
     /* 0x09 */ int nY;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x21_MergeStackables {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x21_MergeStackables {
     /* 0x00 */ uint8_t nCmd; // 0x21
     /* 0x01 */ uint32_t dwItemGUID1;
     /* 0x05 */ uint32_t dwItemGUID2;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x22_ItemToBelt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x22_ItemToBelt {
     /* 0x00 */ uint8_t nCmd; // 0x22
     /* 0x01 */ uint32_t dwItemGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x23_ItemToBelt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x23_ItemToBelt {
     /* 0x00 */ uint8_t nCmd; // 0x23
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ uint32_t nBeltSlotOrIndex;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x24_ItemFromBelt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x24_ItemFromBelt {
     /* 0x00 */ uint8_t nCmd; // 0x24
     /* 0x01 */ uint32_t dwItemGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x25_SwapBeltItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x25_SwapBeltItem {
     /* 0x00 */ uint8_t nCmd; // 0x25
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ uint32_t dwTargetGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x26_UseItemAtPlayerCoords {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x26_UseItemAtPlayerCoords {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint32_t dwItemGUID;
     /* 0x05 */ int nArg;
     /* 0x09 */ uint32_t dwUnused;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x27_UseItemOnItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x27_UseItemOnItem {
     /* 0x00 */ uint8_t nCmd; // opcode 0x27
     /* 0x01 */ uint32_t dwTargetItemGUID; // item to apply scroll/stack to
     /* 0x05 */ uint32_t dwScrollGUID; // scroll or stack source item
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x28_SocketItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x28_SocketItem {
     /* 0x00 */ uint8_t nCmd; // opcode 0x28
     /* 0x01 */ uint32_t dwGemGUID; // gem/rune/jewel on cursor
     /* 0x05 */ uint32_t dwSocketableGUID; // socketed base item
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x29_ScrollIntoBook {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x29_ScrollIntoBook {
     /* 0x00 */ uint8_t nCmd; // opcode 0x29
     /* 0x01 */ uint32_t dwScrollGUID; // scroll to insert
     /* 0x05 */ uint32_t dwBookGUID; // tome/book target
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x2A_ItemToCube {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x2A_ItemToCube {
     /* 0x00 */ uint8_t nCmd; // opcode 0x2A
     /* 0x01 */ uint32_t dwCursorItemGUID; // item on cursor to place
     /* 0x05 */ uint32_t dwCubeGUID; // Horadric Cube target
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -417,135 +417,135 @@ struct D2GSPacketClt0x2E_DeadStub {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x2F_NpcInteract {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x2F_NpcInteract {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint32_t dwUnused;
     /* 0x05 */ uint32_t dwNpcGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x30_NpcCancelDialog {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x30_NpcCancelDialog {
     /* 0x00 */ uint8_t nCmd; // opcode 0x30
     /* 0x01 */ uint32_t dwPad; // unused padding (client sends 0)
     /* 0x05 */ uint32_t dwNpcGUID; // NPC unit GUID to cancel dialog on
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x31_NpcGossip {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x31_NpcGossip {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint32_t dwNpcGUID;
     /* 0x05 */ uint16_t nGossipId;
     /* 0x07 */ uint16_t wUnused;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x32_NpcBuyConfirm {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x32_NpcBuyConfirm {
     /* 0x00 */ uint8_t nCmd; // opcode 0x32
     /* 0x01 */ uint32_t dwNpcGUID; // vendor NPC GUID
     /* 0x05 */ uint32_t dwItemGUID; // item being purchased
     /* 0x09 */ uint32_t dwFlags; // bit31=special; bits16-30=param1 (tab/mode); bits0-15=param2 (buy cost param); masked to 0x7fffffff for lookup
     /* 0x0D */ uint32_t dwCost; // gold cost paid
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x33_NpcSell {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x33_NpcSell {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ int nNpcGUID;
     /* 0x05 */ int nItemGUID;
     /* 0x09 */ uint16_t nMode;
     /* 0x0B */ uint16_t wUnused;
     /* 0x0D */ int32_t nPrice; // Client-computed sell price: CalculateTransactionCost_Thunk result, sent by ClickItemLeft at 0049024c. The server ignores it and recomputes.
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x34_CainIdentify {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x34_CainIdentify {
     /* 0x00 */ uint8_t nCmd; // opcode 0x34
     /* 0x01 */ uint32_t dwNpcGUID; // Cain NPC GUID
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x35_NpcRepair {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x35_NpcRepair {
     /* 0x00 */ uint8_t nCmd; // opcode 0x35
     /* 0x01 */ uint32_t dwNpcGUID; // gamble NPC GUID
     /* 0x05 */ uint32_t dwItemGUID; // gamble item GUID
     /* 0x09 */ uint16_t wParam1; // gamble param1 (item type/index)
     /* 0x0B */ uint16_t wPad; // padding
     /* 0x0D */ uint32_t dwParam2; // gamble param2 (cost/seed)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x36_HireMerc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x36_HireMerc {
     /* 0x00 */ uint8_t nCmd; // opcode 0x36
     /* 0x01 */ int32_t nNpcGUID; // GUID of NPC offering mercs
     /* 0x05 */ uint16_t nMercId; // merc table index to hire
     /* 0x07 */ uint16_t _pad; // padding / unused
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x37_GambleConfirm {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x37_GambleConfirm {
     /* 0x00 */ uint8_t nCmd; // opcode 0x37
     /* 0x01 */ uint32_t dwItemGUID; // GUID of gambled item to reveal/identify
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x38_NpcMenuSelect {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x38_NpcMenuSelect {
     /* 0x00 */ uint8_t nCmd; // opcode 0x38
     /* 0x01 */ uint32_t eNpcGUID; // NPC unit GUID (typed eD2QuestState in decompile, actually GUID)
     /* 0x05 */ uint32_t dwMenuId; // menu option selected (trade/identify/repair/gamble/hire/quest)
     /* 0x09 */ uint32_t dwParams; // additional menu parameters
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x3A_AllocStatPoint {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x3A_AllocStatPoint {
     /* 0x00 */ uint8_t nCmd; // opcode 0x3A
     /* 0x01 */ uint16_t wStatPacked; // low byte: stat index 0-15; high byte: repeat count 0-99 (repeats = count+1). The handler reads it as one word.
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x3B_AllocSkillPoint {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x3B_AllocSkillPoint {
     /* 0x00 */ uint8_t nCmd; // opcode 0x3B
     /* 0x01 */ uint16_t eSkillId; // eD2Skills skill to level up
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x3C_SelectSkill {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x3C_SelectSkill {
     /* 0x00 */ uint8_t nCmd; // opcode 0x3C
     /* 0x01 */ uint32_t dwSkillIdWithHand; // eD2Skills in bits 30-0; bit31=1 left hand, bit31=0 right hand
     /* 0x05 */ uint32_t dwOwnerId; // item owner GUID for oskills; -1 for normal skills
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x3D_ActivateObject {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x3D_ActivateObject {
     /* 0x00 */ uint8_t nCmd; // opcode 0x3D
     /* 0x01 */ uint32_t dwObjectGUID; // GUID of UNIT_OBJECT to activate (door/shrine/chest/waypoint/quest)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x3E_QuestItemPickup {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x3E_QuestItemPickup {
     /* 0x00 */ uint8_t nCmd; // opcode 0x3E
     /* 0x01 */ uint32_t dwUnitGUID; // GUID of item/object for quest interaction (UNIT_ITEM type=4)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x3F_PlayEmote {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x3F_PlayEmote {
     /* 0x00 */ uint8_t nCmd; // opcode 0x3F
     /* 0x01 */ uint16_t nEmoteId; // emote sound id; valid range 0x19-0x20 (8 emotes)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -565,34 +565,34 @@ struct D2GSPacketClt0x41_Resurrect {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x44_StaffInOrifice {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x44_StaffInOrifice {
     /* 0x00 */ uint8_t nCmd; // opcode 0x44
     /* 0x01 */ uint8_t _pad1[4]; // unused bytes 1-4
     /* 0x05 */ uint32_t nObjectGUID; // object/orifice GUID
     /* 0x09 */ uint32_t nStaffGUID; // staff item GUID
     /* 0x0D */ int16_t nItemId; // item type id
     /* 0x0F */ uint8_t _pad2[2]; // padding to 0x11
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x46_NpcInteractMerc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x46_NpcInteractMerc {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint32_t nNpcGUID;
     /* 0x05 */ uint32_t nMercGUID;
     /* 0x09 */ eD2UnitType eUnitType;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x47_CommandMercenary {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x47_CommandMercenary {
     /* 0x00 */ uint8_t nCmd; // opcode 0x47
     /* 0x01 */ uint32_t nMercGUID; // mercenary unit GUID
     /* 0x05 */ uint16_t nTargetX; // target X coordinate
     /* 0x07 */ uint8_t _pad1[2]; // padding
     /* 0x09 */ uint16_t nTargetY; // target Y coordinate
     /* 0x0B */ uint8_t _pad2[2]; // padding to 0xD
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -604,58 +604,58 @@ struct D2GSPacketClt0x48_CutsceneOver {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x49_TakeWaypoint {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x49_TakeWaypoint {
     /* 0x00 */ uint8_t nCmd; // opcode 0x49
     /* 0x01 */ uint32_t nWaypointGUID; // waypoint object GUID
     /* 0x05 */ uint16_t nWaypointId; // waypoint destination id
     /* 0x07 */ uint8_t _pad[2]; // padding to 9 bytes
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x4B_ForceUnitUpdate {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x4B_ForceUnitUpdate {
     /* 0x00 */ uint8_t nCmd; // opcode 0x4B
     /* 0x01 */ uint32_t eUnitType; // unit type (0-5 validated)
     /* 0x05 */ uint32_t nUnitGUID; // unit GUID to force update
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x4C_TransmogrifyItem2 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x4C_TransmogrifyItem2 {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint32_t dwItemGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x4D_ResetNpcIntroFlag {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x4D_ResetNpcIntroFlag {
     /* 0x00 */ uint8_t nCmd; // opcode 0x4D
     /* 0x01 */ uint16_t nNpcId; // NPC MonStats id to clear intro-spoken flag
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x4F_ClickButton {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x4F_ClickButton {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint16_t nButton;
     /* 0x03 */ uint32_t dwParam;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x50_DropGold {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x50_DropGold {
     /* 0x00 */ uint8_t nCmd; // opcode 0x50
     /* 0x01 */ uint32_t nUnitId; // player unit id (self)
     /* 0x05 */ uint32_t nGoldAmount; // gold amount to drop
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x51_SetHotkey {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x51_SetHotkey {
     /* 0x00 */ uint8_t nCmd; // opcode 0x51
     /* 0x01 */ uint32_t nSkillAndHotkeyIndex; // bits[14:0]=skill id, bits[20:16]=hotkey slot index (must be <0x10)
     /* 0x05 */ int32_t nItemGUID; // skill level / charge level for skill lookup
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -683,37 +683,37 @@ struct D2GSPacketClt0x54_StopRunning {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x58_MarkQuestDone {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x58_MarkQuestDone {
     /* 0x00 */ uint8_t nCmd; // opcode 0x58
     /* 0x01 */ uint16_t nQuestId; // quest index; must be < QUEST_ActIntroduced
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x59_CommandNPC {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x59_CommandNPC {
     /* 0x00 */ uint8_t nCmd; // opcode 0x59
     /* 0x01 */ uint32_t nUnitType; // unit type; validated <= 5
     /* 0x05 */ uint32_t nUnitGUID; // NPC unit GUID for FindUnitFromTable
     /* 0x09 */ uint32_t nY; // target Y coordinate passed to SetAiArgument(2)
     /* 0x0D */ uint32_t nX; // target X coordinate passed to SetAiArgument(3)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x5D_PartyScreenToggle {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x5D_PartyScreenToggle {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint8_t nActionIndex;
     /* 0x02 */ uint8_t nParam1;
     /* 0x03 */ uint32_t dwPlayerGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x5E_PartyScreenAction {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x5E_PartyScreenAction {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint8_t nActionIndex;
     /* 0x02 */ uint32_t dwPlayerGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -725,24 +725,24 @@ struct D2GSPacketClt0x60_WeaponSwap {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x61_MercEquipItem {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x61_MercEquipItem {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint16_t nBodyLoc;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x62_ResurrectMerc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x62_ResurrectMerc {
     /* 0x00 */ uint8_t nCmd; // opcode 0x62 — expansion NPC sell
     /* 0x01 */ uint32_t dwNpcGUID; // item GUID passed to SUNITNPC_HandleSellAction
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2GSPacketClt0x63_ItemToBeltAuto {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketClt0x63_ItemToBeltAuto {
     /* 0x00 */ uint8_t nCmd;
     /* 0x01 */ uint32_t dwItemGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -755,7 +755,7 @@ struct D2GSPacketClt0x66_WardenStub {
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2GSPacketSrv0x26
 #define D2_DEFINED_D2GSPacketSrv0x26
-struct __attribute__((packed)) D2GSPacketSrv0x26 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x26 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nMessageType;
     /* 0x02 */ uint8_t nLanguage;
@@ -765,7 +765,7 @@ struct __attribute__((packed)) D2GSPacketSrv0x26 {
     /* 0x09 */ uint8_t nColor;
     /* 0x0A */ char szName[16];
     /* 0x1A */ char szMessage[256];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x26
 #ifndef D2_DEFINED_D2WarpChanceStrc

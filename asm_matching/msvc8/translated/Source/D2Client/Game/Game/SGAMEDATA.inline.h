@@ -714,7 +714,11 @@ template<> inline ::SGAMEDATA * __fastcall TSHashTableReuse<SGAMEDATA, HASHKEY_N
       pGame->m_linktoslot.m_next = 0;
       pGame->m_linktofull.m_prevlink = 0;
       pGame->m_linktofull.m_next = 0;
+#if defined(_WIN64)
+      ppSlot = (TSLink<::SGAMEDATA>*)((char*)pGame + pList->m_linkoffset);
+#else
       ppSlot = (TSLink<::SGAMEDATA>*)(pGame->szGameName + (pList->m_linkoffset - 0x2a));
+#endif
     } else {
       pGame = 0;
       ppSlot = &pList->m_terminator;

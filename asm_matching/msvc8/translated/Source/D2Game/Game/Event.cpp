@@ -630,11 +630,12 @@ static void __stdcall SetEventInternal(eD2TimerTypeDWORD eTimerType, ::SGAMEDATA
     }
 
     *ppDispatchBucket = pNewTimer;
+    int nTypeIndex = Dispatch::aTimerIndexUnitTypeLookupTable[pNewTimer->eUnitType];
+    D2TimerQueueStrc* pTimerQueue = pGame->pTimerQueue;
     if (pNewTimer->nFrame == -1) {
-      ppDispatchBucket = pGame->pTimerQueue->pTimerListByType + Dispatch::aTimerIndexUnitTypeLookupTable[pNewTimer->eUnitType];
+      ppDispatchBucket = pTimerQueue->pTimerListByType + nTypeIndex;
     } else {
-      nFrameBucket = pNewTimer->nFrame % 64;
-      ppDispatchBucket = pGame->pTimerQueue->pActiveTimersByType[Dispatch::aTimerIndexUnitTypeLookupTable[pNewTimer->eUnitType]] + nFrameBucket;
+      ppDispatchBucket = pTimerQueue->pActiveTimersByType[nTypeIndex] + pNewTimer->nFrame % 64;
     }
     if (*ppDispatchBucket) {
       return;

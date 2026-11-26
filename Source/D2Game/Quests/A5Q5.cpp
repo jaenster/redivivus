@@ -1186,14 +1186,14 @@ void __fastcall Q35_BootAllPlayersFromSummit(::SGAMEDATA * pGame) {
 BOOL __fastcall OBJOP_A5Q5_AncientsAltarActivate(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pUnit;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pOperation->sArg.pGame, QUESTINT_RiteOfPassage);
-    if (!pQuestData) {
-      return 0;
-    }
+    if (pQuestData) {
+      D2QuestDataA5Q5Strc* pQuestSpecificData;
+      pUnit = pOperation->sArg.pVictim;
+      pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
+      if (pUnit && pUnit->eAnimMode.ePlayerMode != Death) {
+        return 0;
+      }
 
-    D2QuestDataA5Q5Strc* pQuestSpecificData;
-    pUnit = pOperation->sArg.pVictim;
-    pQuestSpecificData = pQuestData->pQuestSpecificData.pA5Q5;
-    if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
       if (pQuestData->bIsNotIntroduction == '\0') {
         if (pQuestSpecificData->nResurrectionCount > 0) {
           UNIT::SUnit::IteratePlayerOrMonsterUnits(pOperation->sArg.pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q35_BootPlayerFromSummit);

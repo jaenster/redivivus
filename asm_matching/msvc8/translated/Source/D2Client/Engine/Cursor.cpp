@@ -103,6 +103,16 @@ static D2CursorDataStrc CursorData[7] = {
     }
 }; D2_STATIC_GUARD(CursorData, "CursorData");
 static int gnCursorDataCount = 0x7; D2_STATIC_GUARD(gnCursorDataCount, "gnCursorDataCount");
+// The cursor table walk steps 7 dwords per D2CursorDataStrc from its szCursorname, which sits at +24; the
+// record holds two pointers on x64.
+#if D2_ARCH_X86
+#define D2_CURSOR_NEXT_NAME(pp) ((pp) += 7)
+#define D2_CURSOR_NAME_OFFSET 24
+#elif D2_ARCH_X64
+#define D2_CURSOR_NEXT_NAME(pp) ((pp) = (char**)((char*)(pp) + sizeof(D2CursorDataStrc)))
+#define D2_CURSOR_NAME_OFFSET offsetof(D2CursorDataStrc, szCursorname)
+#endif
+
 namespace D2Client { namespace Cursor {
 int MouseY = 0; D2_GLOBAL_GUARD(MouseY, "D2Client::Cursor::MouseY");
 int MouseX = 0; D2_GLOBAL_GUARD(MouseX, "D2Client::Cursor::MouseX");
@@ -265,9 +275,9 @@ int __fastcall UI_InitializeCursor(int32_t nCursorType) {
       /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ wsprintfA(szPath, "%s\\UI\\CURSOR\\%s", "DATA\\GLOBAL", *ppszCursorName);
       pCursorDC6 = Core::Archive::IMAGE_LoadDC6Ex(szPath, 0);
       *ppCursorDC6 = pCursorDC6;
-      ppszCursorName += 7;
+      D2_CURSOR_NEXT_NAME(ppszCursorName);
       ppCursorDC6++;
-    } while ((intptr_t)ppszCursorName < (intptr_t)((char*)&CursorData + sizeof(CursorData) + 24));
+    } while ((intptr_t)ppszCursorName < (intptr_t)((char*)&CursorData + sizeof(CursorData) + D2_CURSOR_NAME_OFFSET));
 
     gnCursorInitialized = 1;
     ItemTypeOnHand = 1;

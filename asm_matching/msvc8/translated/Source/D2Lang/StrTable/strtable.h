@@ -32,7 +32,7 @@ struct D2LangTableEntryStrc {
 #endif // D2_DEFINED_D2LangTableEntryStrc
 #ifndef D2_DEFINED_D2StringTableTblFileStrc
 #define D2_DEFINED_D2StringTableTblFileStrc
-__pragma(pack(push, 1)) struct D2StringTableTblFileStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2StringTableTblFileStrc {
     /* 0x00 */ uint16_t wCRC; // CRC16-CCITT over [dwDataStartOffset, dwFileSize). Compared at 00525954 (CMP AX, word ptr [ESI])
     /* 0x02 */ uint16_t wIndexCount; // Number of ushort entries in the index array at 0x15. 00525978 MOVZX ECX,[ESI+2]; LEA EAX,[ESI+ECX*2+0x15]. Index bound at 00524930.
     /* 0x04 */ int nNodeCount; // Hash table size = number of 17-byte nodes. Signed loop bound at 0052597c; hash modulus in STRTABLE_HashString (00524c60) and (idx+1)%[+4].
@@ -40,7 +40,7 @@ __pragma(pack(push, 1)) struct D2StringTableTblFileStrc {
     /* 0x09 */ uint32_t dwDataStartOffset; // Unaligned. CRC start offset - 3rd arg to STRTABLE_CalculateCRC at 00525941 (MOV ECX,[ESI+9]).
     /* 0x0D */ int nHashMaxTries; // Unaligned. Probe limit in STRTABLE_FindStringByKey: loop guard *(int*)(pTbl+0xd)!=0 and while(nProbeCount < *(uint*)(pTbl+0xd)).
     /* 0x11 */ uint32_t dwFileSize; // Unaligned. CRC end offset (4th arg, 0052593e MOV EAX,[ESI+0x11]) and the buffer bound every node offset is checked against (00525990/00525995, 00524930).
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2StringTableTblFileStrc
 #ifndef D2_DEFINED_D2UntranslatedStringCacheNodeStrc

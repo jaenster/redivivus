@@ -28,11 +28,11 @@ typedef uint16_t eCollisionFlags;
 // Data types
 #ifndef D2_DEFINED_D2RoomCollisionGridStrc
 #define D2_DEFINED_D2RoomCollisionGridStrc
-__pragma(pack(push, 1)) struct D2RoomCollisionGridStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2RoomCollisionGridStrc {
     /* 0x00 */ D2DrlgRoomCoordsStrc sCoords; // Subtile world position/size + tile rect, copied from room coords
     /* 0x20 */ eCollisionFlags * pMapStart; // Pointer to collision data array (eCollisionFlags[width*height]), points to &aMap[0]
     /* 0x24 */ eCollisionFlags aMap[1]; // Variable-length collision flag array, indexed as [y*width+x], actual size = sCoords.dwXSize*sCoords.dwYSize
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2RoomCollisionGridStrc
 #ifndef D2_DEFINED_D2RoomStrc

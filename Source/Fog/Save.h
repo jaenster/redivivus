@@ -38,7 +38,7 @@ struct D2SaveHandSkillStrc {
 
 #endif // D2_DEFINED_D2SaveHandSkillStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-struct __attribute__((packed)) D2SaveHeaderStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SaveHeaderStrc {
     /* 0x00 */ uint32_t dwMagic;
     /* 0x04 */ uint32_t dwVersion;
     /* 0x08 */ char szCharName[15];
@@ -63,7 +63,7 @@ struct __attribute__((packed)) D2SaveHeaderStrc {
     /* 0x7E */ uint16_t wGuildInfoLo;
     /* 0x80 */ uint8_t byGuildInfoC;
     /* 0x81 */ uint8_t byInitSeedByte;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Fog
 #ifndef D2_DEFINED_D2SaveHotKeyStrc
@@ -78,7 +78,7 @@ struct D2SaveHotKeyStrc {
 #endif // D2_DEFINED_D2SaveHotKeyStrc
 #ifndef D2_DEFINED_D2SaveFileHeaderStrc
 #define D2_DEFINED_D2SaveFileHeaderStrc
-struct __attribute__((packed)) D2SaveFileHeaderStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SaveFileHeaderStrc {
     /* 0x00 */ uint32_t dwHeader;
     /* 0x04 */ uint32_t dwFileVersion;
     /* 0x08 */ uint32_t nFileSize; // total .d2s file size; file-bound (save header), 4 bytes on disk
@@ -108,7 +108,7 @@ struct __attribute__((packed)) D2SaveFileHeaderStrc {
     /* 0xAF */ D2MercSaveDataStrc sMerc; // Reserved merc block padding (copied by LoadMerc but never written by SaveMercData)
     /* 0xCF */ uint8_t nGuildInfo[3];
     /* 0xD2 */ uint8_t nReserved[125]; // Unused header padding bytes (zeroed on save, never read)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2SaveFileHeaderStrc
 namespace Fog::Save {

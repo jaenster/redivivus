@@ -1692,7 +1692,7 @@ static D2ChatPlayerNameNodeStrc * gpChatPlayerNameListHead = 0; D2_STATIC_GUARD(
 namespace D2Multi::ChatDlg {
 
 // App mode multiplayer init: stash module handle and return pointer to fAPPMODE_multiplayer_ReturnAppMode_Caller.
-fnAppModeRun * __fastcall AppModeMultiplayerInit(HMODULE hModule) {
+fnAppModeRun * (__fastcall AppModeMultiplayerInit)(HMODULE hModule) {
     // Static local variables (originally global data)
     static fnAppModeRun gpfnMultiplayerAppModeRun = &D2Multi::OOGUtilities::fAPPMODE_multiplayer_ReturnAppMode_Caller; D2_STATIC_GUARD(gpfnMultiplayerAppModeRun, "D2Multi::ChatDlg::AppModeMultiplayerInit::gpfnMultiplayerAppModeRun");
     static HMODULE gbChatRoomListUIActive; D2_STATIC_GUARD_BSS(gbChatRoomListUIActive, "D2Multi::ChatDlg::AppModeMultiplayerInit::gbChatRoomListUIActive");

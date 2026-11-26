@@ -60,7 +60,7 @@ struct D2CelDecodeStateStrc {
 #endif // D2_DEFINED_D2CelDecodeStateStrc
 #ifndef D2_DEFINED_D2CelCacheBlockStrc
 #define D2_DEFINED_D2CelCacheBlockStrc
-struct __attribute__((packed)) D2CelCacheBlockStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CelCacheBlockStrc {
     /* 0x00 */ eD2UnitType eUnitType; // written by the DCC path only
     /* 0x04 */ int32_t nMode; // copied from D2GfxDataStrc
     /* 0x08 */ int32_t nClassId; // copied from D2GfxDataStrc
@@ -70,7 +70,7 @@ struct __attribute__((packed)) D2CelCacheBlockStrc {
     /* 0x18 */ int32_t nModeToken; // copied from D2GfxDataStrc
     /* 0x1C */ int32_t nWeaponClass; // copied from D2GfxDataStrc
     /* 0x20 */ D2CelDecodeStateStrc tDecode;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2CelCacheBlockStrc
 #ifndef D2_DEFINED_D2CelFileCacheEntryStrc
 #define D2_DEFINED_D2CelFileCacheEntryStrc
@@ -210,7 +210,7 @@ struct D2SpriteCacheEntryStrc {
 #endif // D2_DEFINED_D2SpriteCacheEntryStrc
 #ifndef D2_DEFINED_D2SpriteDecodeRequestStrc
 #define D2_DEFINED_D2SpriteDecodeRequestStrc
-struct __attribute__((packed)) D2SpriteDecodeRequestStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SpriteDecodeRequestStrc {
     /* 0x00 */ uint32_t (__stdcall *pfnComplete)(uint32_t *, uint32_t, struct D2SpriteDecodeRequestStrc *);
     /* 0x04 */ uint8_t * pCelHeader;
     /* 0x08 */ struct D2CelDecodeStateStrc * pDecodeState;
@@ -218,7 +218,7 @@ struct __attribute__((packed)) D2SpriteDecodeRequestStrc {
     /* 0x10 */ int32_t nFrameCount;
     /* 0x14 */ void * pDecodedFrames; // Fog pResultBuffer
     /* 0x18 */ size_t nDecodedSize; // Fog nResultSize
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2SpriteDecodeRequestStrc
 #ifndef D2_DEFINED_D2TileCmpTileNodeStrc
 #define D2_DEFINED_D2TileCmpTileNodeStrc
@@ -236,7 +236,7 @@ struct D2TileCmpTileNodeStrc {
 #endif // D2_DEFINED_D2TileCmpTileNodeStrc
 #ifndef D2_DEFINED_D2TileCmpTileSetStrc
 #define D2_DEFINED_D2TileCmpTileSetStrc
-struct __attribute__((packed)) D2TileCmpTileSetStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TileCmpTileSetStrc {
     /* 0x00 */ int nMinX; // Bounding min X; serialized: width = nMaxX - nMinX
     /* 0x04 */ int nMinY; // Bounding min Y; serialized: height = nMaxY - nMinY
     /* 0x08 */ int nMaxX; // bounding max X; TILECMP_InitTileSetFromDT1 sets 0xa0, TILECMP_SerializeTileSet writes width = nMaxX - nMinX
@@ -262,7 +262,7 @@ struct __attribute__((packed)) D2TileCmpTileSetStrc {
     /* 0x54 */ int nNodeCount; // Number of cached sub-tile nodes (+0x54, incremented by Generate25SubTiles)
     /* 0x58 */ struct D2TileCmpTileNodeStrc * pNodeHead; // Head of sub-tile node linked list (+0x58)
     /* 0x5C */ struct D2TileCmpTileSetStrc * pTileSetChain; // Next in tile-set chain (+0x5c, set by AddTileToSet)
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2TileCmpTileSetStrc
 #ifndef D2_DEFINED_D2TileLibraryHashNodeStrc
 #define D2_DEFINED_D2TileLibraryHashNodeStrc

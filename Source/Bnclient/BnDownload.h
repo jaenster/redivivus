@@ -19,7 +19,7 @@ struct D2ArchiveStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct __attribute__((packed)) D2BnetDownloadStateStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2BnetDownloadStateStrc {
     /* 0x000 */ uint16_t nSendSize; // size of packet to send (*pDownloadCtx)
     /* 0x002 */ uint8_t nUnk0x02;
     /* 0x003 */ uint8_t nUnk0x03;
@@ -33,11 +33,11 @@ struct __attribute__((packed)) D2BnetDownloadStateStrc {
     /* 0x124 */ char szOutputPath[260]; // output file path buffer (puVar1+0x92 as ushort* = byte 0x124)
     /* 0x228 */ int nConnMode; // connection/retry mode (-0x7ffffffe=retry; pDownloadCtx+0x114 as ushort* = byte 0x228)
     /* 0x22C */ int nFileType; // file transfer type (2=direct recv; pDownloadCtx+0x116 as ushort* = byte 0x22c)
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)
-struct __attribute__((packed)) D2BnFtpFileHeaderStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2BnFtpFileHeaderStrc {
     /* 0x00 */ uint8_t field_0x0;
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint8_t field_0x2;
@@ -47,7 +47,7 @@ struct __attribute__((packed)) D2BnFtpFileHeaderStrc {
     /* 0x0C */ uint32_t dwAdBannerExt;
     /* 0x10 */ FILETIME ftFileTime;
     /* 0x18 */ char szFileName[0];
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Bnclient
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Bnclient)

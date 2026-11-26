@@ -31,13 +31,13 @@ struct D2RoomStrc;
 // Data types
 #ifndef D2_DEFINED_D2DrlgCoordListStrc
 #define D2_DEFINED_D2DrlgCoordListStrc
-struct __attribute__((packed)) D2DrlgCoordListStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgCoordListStrc {
     /* 0x00 */ int eFlags; // Bit 0: simple/single coord, Bit 1: has grids allocated
     /* 0x04 */ int nListSize; // Number of D2RoomCoordListStrc entries
     /* 0x08 */ D2DrlgGridStrc sOrientationGrid; // Grid for wall/orientation indices
     /* 0x1C */ D2DrlgGridStrc sCoordIndexGrid; // Grid mapping subtile positions to coord regions
     /* 0x30 */ struct D2RoomCoordListStrc * pCoord; // Array of room coord list entries (size = nListSize)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgCoordListStrc
 #ifndef D2_DEFINED_D2DrlgRoomExDataUnion

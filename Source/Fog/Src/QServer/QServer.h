@@ -242,12 +242,12 @@ struct D2QServerField7StrcWrapper {
 #endif // D2_MODULE_Fog
 #ifndef D2_DEFINED_D2QServerHacklistEntryStrc
 #define D2_DEFINED_D2QServerHacklistEntryStrc
-struct __attribute__((packed)) D2QServerHacklistEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QServerHacklistEntryStrc {
     /* 0x00 */ in_addr ipAddress;
     /* 0x04 */ int nPrimaryTtlSec;
     /* 0x08 */ int nSecondaryTtlSec;
     /* 0x0C */ struct D2QServerHacklistEntryStrc * pNext; // Next hacklist entry
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QServerHacklistEntryStrc
 #ifndef D2_DEFINED_D2QServerIpConnCountEntryStrc
@@ -261,12 +261,12 @@ struct D2QServerIpConnCountEntryStrc {
 #endif // D2_DEFINED_D2QServerIpConnCountEntryStrc
 #ifndef D2_DEFINED_D2QServerIpRateEntryStrc
 #define D2_DEFINED_D2QServerIpRateEntryStrc
-struct __attribute__((packed)) D2QServerIpRateEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QServerIpRateEntryStrc {
     /* 0x00 */ in_addr ipAddress;
     /* 0x04 */ uint32_t dwLastAttemptTick;
     /* 0x08 */ int nAttemptsInWindow;
     /* 0x0C */ struct D2QServerIpRateEntryStrc * pNext; // Next IP-rate entry
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QServerIpRateEntryStrc
 #ifndef D2_DEFINED_D2QServerModePacketNodeStrc
@@ -289,20 +289,20 @@ struct D2QServerTokenHashMapData {
 #endif // D2_MODULE_Fog
 #ifndef D2_DEFINED_D2SockaddrInStrc
 #define D2_DEFINED_D2SockaddrInStrc
-struct __attribute__((packed)) D2SockaddrInStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SockaddrInStrc {
     /* 0x00 */ u_short sin_family;
     /* 0x02 */ u_short sin_port;
     /* 0x04 */ in_addr sin_addr;
     /* 0x08 */ char sin_zero[8];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2SockaddrInStrc
 #ifndef D2_DEFINED_D2TSExplicitListHeadStrc
 #define D2_DEFINED_D2TSExplicitListHeadStrc
-struct __attribute__((packed)) D2TSExplicitListHeadStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TSExplicitListHeadStrc {
     /* 0x00 */ int nLinkOffset; // Byte offset of the link node within each element (4 or 16 by list kind); the element's link is (char*)pElement + nLinkOffset, as in D2StormListHead
     /* 0x04 */ StormLinkStrc sTerminator; // The head's own link: sTerminator.pPrevLink = last link (self when empty), sTerminator.pNext = first element or ~&sTerminator when empty
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2TSExplicitListHeadStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
@@ -313,7 +313,7 @@ struct FogCritSectLockStrc {
 #endif // D2_MODULE_Fog
 #ifndef D2_DEFINED_D2QServerClientConnectionStrc
 #define D2_DEFINED_D2QServerClientConnectionStrc
-struct __attribute__((packed)) D2QServerClientConnectionStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2QServerClientConnectionStrc {
     /* 0x00 */ int nClientToken;
     /* 0x04 */ struct D2QServerClientConnectionStrc * pNextByToken;
     /* 0x08 */ int nRefCount;
@@ -340,7 +340,7 @@ struct __attribute__((packed)) D2QServerClientConnectionStrc {
     /* 0xA8 */ int nBytesRead;
     /* 0xAC */ uint32_t dwReadTransferSize;
     /* 0xB0 */ char aRecvBuffer[1460];
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2QServerClientConnectionStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)

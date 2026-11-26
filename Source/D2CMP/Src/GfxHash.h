@@ -23,7 +23,7 @@ typedef uint32_t eD2UnitType;
 // Data types
 #ifndef D2_DEFINED_D2CelCacheBlockStrc
 #define D2_DEFINED_D2CelCacheBlockStrc
-struct __attribute__((packed)) D2CelCacheBlockStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CelCacheBlockStrc {
     /* 0x00 */ eD2UnitType eUnitType; // written by the DCC path only
     /* 0x04 */ int32_t nMode; // copied from D2GfxDataStrc
     /* 0x08 */ int32_t nClassId; // copied from D2GfxDataStrc
@@ -33,7 +33,7 @@ struct __attribute__((packed)) D2CelCacheBlockStrc {
     /* 0x18 */ int32_t nModeToken; // copied from D2GfxDataStrc
     /* 0x1C */ int32_t nWeaponClass; // copied from D2GfxDataStrc
     /* 0x20 */ D2CelDecodeStateStrc tDecode;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2CelCacheBlockStrc
 #ifndef D2_DEFINED_D2GfxHashEntryStrc

@@ -39,14 +39,14 @@ struct D2HighResTimestampStrc {
 
 #endif // D2_DEFINED_D2HighResTimestampStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Fog)
-__pragma(pack(push, 1)) struct D2LogRecordStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2LogRecordStrc {
     /* 0x00 */ StormLinkStrc tLink;
     /* 0x08 */ uint32_t nSize;
     /* 0x0C */ int32_t nType;
     /* 0x10 */ BOOL bTimestamp;
     /* 0x14 */ SYSTEMTIME tTime;
     /* 0x24 */ char szFileName[0];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_Fog
 namespace Fog { namespace Src { namespace LogManager {

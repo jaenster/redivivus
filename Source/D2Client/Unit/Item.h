@@ -48,19 +48,19 @@ typedef int (__fastcall *pfnSkillCalcOp)(int32_t nOperand1, int32_t nOperand2, u
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x42
 #define D2_DEFINED_D2GSPacketSrv0x42
-struct __attribute__((packed)) D2GSPacketSrv0x42 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x42 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x42
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-struct __attribute__((packed)) D2GSPacketSrv0x7C {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x7C {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nUnitType;
     /* 0x02 */ uint32_t dwUnitGUID;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2ItemRatioTxt
@@ -147,7 +147,7 @@ struct D2ItemWeaponClassCodeStrc {
 #endif // D2_DEFINED_D2ItemWeaponClassCodeStrc
 #ifndef D2_DEFINED_D2UnitDataItemDetailsStrc
 #define D2_DEFINED_D2UnitDataItemDetailsStrc
-struct __attribute__((packed)) D2UnitDataItemDetailsStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2UnitDataItemDetailsStrc {
     /* 0x00 */ uint32_t classId;
     /* 0x04 */ uint16_t x;
     /* 0x06 */ uint16_t y;
@@ -160,7 +160,7 @@ struct __attribute__((packed)) D2UnitDataItemDetailsStrc {
     /* 0x11 */ uint8_t nBodyLoc;
     /* 0x12 */ uint16_t reserved_12_13;
     /* 0x14 */ uint32_t usedSockets;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2UnitDataItemDetailsStrc
 #ifndef D2_DEFINED_Item

@@ -20,10 +20,10 @@ typedef uint32_t eD2UnitType;
 // Data types
 #ifndef D2_DEFINED_D2DrlgDeleteStrc
 #define D2_DEFINED_D2DrlgDeleteStrc
-struct __attribute__((packed)) D2DrlgDeleteStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgDeleteStrc {
     /* 0x00 */ eD2UnitType eUnitType;
     /* 0x04 */ int nUnitGUID;
     /* 0x08 */ struct D2DrlgDeleteStrc * pNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgDeleteStrc

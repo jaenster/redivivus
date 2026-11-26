@@ -108,14 +108,14 @@ struct D2CodecPixelBufferEntryStrc {
 
 #endif // D2_DEFINED_D2CodecPixelBufferEntryStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-__pragma(pack(push, 1)) struct D2DccFileHeaderStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DccFileHeaderStrc {
     /* 0x00 */ char nSignature; // 0x74 't'; the load is refused if this does not match
     /* 0x01 */ uint8_t nVersion;
     /* 0x02 */ uint8_t nDirections; // clamped to 32; that many dword offsets follow the header
     /* 0x03 */ uint32_t nFramesPerDir; // unaligned by one - the header is packed on disk
     /* 0x07 */ uint32_t nTag;
     /* 0x0B */ uint32_t nFinalDc6Size;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2CMP
 namespace D2CMP { namespace SRC { namespace Codec {

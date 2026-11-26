@@ -29,7 +29,7 @@ struct D2PlayerListStrc {
 #endif // D2_DEFINED_D2PlayerListStrc
 #ifndef D2_DEFINED_D2RosterStrc
 #define D2_DEFINED_D2RosterStrc
-struct __attribute__((packed)) D2RosterStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2RosterStrc {
     /* 0x00 */ char szRosterName[16];
     /* 0x10 */ int nRosterGUID;
     /* 0x14 */ int nHpPercent;
@@ -50,6 +50,6 @@ struct __attribute__((packed)) D2RosterStrc {
     /* 0x4A */ char szGuildName[28]; // Guild name (28 chars max)
     /* 0x66 */ char pRosterName[26]; // Formatted display name with guild tag
     /* 0x80 */ struct D2RosterStrc * pNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2RosterStrc

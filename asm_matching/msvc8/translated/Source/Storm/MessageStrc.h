@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_MessageStrc
 #define D2_DEFINED_MessageStrc
-__pragma(pack(push, 1)) struct MessageStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct MessageStrc {
     /* 0x00 */ uint8_t packetId;
     /* 0x01 */ uint8_t messageType;
     /* 0x02 */ uint8_t language;
@@ -27,6 +27,6 @@ __pragma(pack(push, 1)) struct MessageStrc {
     /* 0x09 */ uint8_t nameColor;
     /* 0x0A */ char name[16];
     /* 0x1A */ char message[256];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_MessageStrc

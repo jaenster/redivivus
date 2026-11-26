@@ -1302,7 +1302,7 @@ void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2Pool
         sPixelMaskBits.nBitOffset = iVar2 + __frame0.local_32c;
         sPixelMaskBits.pCurWord = pdwBitCursor + sPixelMaskBits.nBitOffset / 32;
         sPixelMaskBits.nBitOffset &= 0x1f;
-        uVar10 = __frame0.local_330.nLocal_330 + (sPixelMaskBits.nBitOffset - 0x20U);
+        uVar10 = __frame0.local_330.nLocal_330 + 0x20 + (sPixelMaskBits.nBitOffset - 0x20U);
         sEncodingTypeBits.nBitOffset = uVar10 & 0x1f;
         sEncodingTypeBits.pCurWord = sPixelMaskBits.pCurWord + (int)uVar10 / 32;
         uVar10 = local_314 + sEncodingTypeBits.nBitOffset;

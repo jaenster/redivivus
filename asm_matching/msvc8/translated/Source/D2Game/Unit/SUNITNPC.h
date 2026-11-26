@@ -29,7 +29,7 @@ typedef uint32_t eD2Skills;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2UseMenuTmp {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2UseMenuTmp {
     D2UseMenuTmp() {}
     D2UseMenuTmp(uint64_t v) { *reinterpret_cast<uint64_t*>(this) = v; }
     operator uint64_t() const { return *reinterpret_cast<const uint64_t*>(this); }
@@ -39,7 +39,7 @@ __pragma(pack(push, 1)) struct D2UseMenuTmp {
     /* 0x01 */ uint32_t dwGuid;
     /* 0x05 */ uint8_t byMenuType;
     /* 0x06 */ uint16_t wTail; // Read as the high half of the dword at struct offset 4 (UseMenu 0057a186 MOV ECX,dword ptr [EBP-0x100]); the 7-byte model cut it in half.
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 namespace D2Game { namespace UNIT { namespace SUNITNPC {

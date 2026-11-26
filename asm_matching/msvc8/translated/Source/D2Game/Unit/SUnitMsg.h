@@ -81,7 +81,7 @@ struct D2SUnitMsgA1Strc {
 #endif // D2_DEFINED_D2SUnitMsgA1Strc
 #ifndef D2_DEFINED_D2SUnitMsgA3Strc
 #define D2_DEFINED_D2SUnitMsgA3Strc
-__pragma(pack(push, 1)) struct D2SUnitMsgA3Strc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SUnitMsgA3Strc {
     /* 0x00 */ uint8_t field_0x0;
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint16_t nSkillId;
@@ -94,7 +94,7 @@ __pragma(pack(push, 1)) struct D2SUnitMsgA3Strc {
     /* 0x14 */ int32_t nTargetGUID;
     /* 0x18 */ uint32_t dwParam1;
     /* 0x1C */ uint32_t dwParam2;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SUnitMsgA3Strc
 #ifndef D2_DEFINED_D2SUnitMsgA4Strc
@@ -148,12 +148,12 @@ union D2SUnitMsgArgsUnion {
 #endif // D2_DEFINED_D2SUnitMsgArgsUnion
 #ifndef D2_DEFINED_D2SUnitMsgStrc
 #define D2_DEFINED_D2SUnitMsgStrc
-__pragma(pack(push, 1)) struct D2SUnitMsgStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SUnitMsgStrc {
     /* 0x00 */ struct D2SUnitMsgStrc * pNext;
     /* 0x04 */ uint8_t nOpcode; // S->C opcode the drain (SERVER_UnitQueuePacketSend) switches on; written as a byte
     /* 0x05 */ uint8_t pad_0x5[3]; // header padding before uArgs (zeroed by the dword store at +4)
     /* 0x08 */ D2SUnitMsgArgsUnion uArgs; // per-opcode payload; each writer allocates only 8 + its member size (0xC..0x28)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 static_assert(sizeof(void*) != 4 || offsetof(D2SUnitMsgStrc, uArgs) == 8, "D2SUnitMsgStrc header is 8 bytes on x86");
 static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg23Strc) == 8, "UnitQueuePacket0x23 allocates 0x10");
 static_assert(sizeof(void*) != 4 || sizeof(D2SUnitMsg99Strc) == 0xc, "UnitQueuePacket0x99 allocates 0x14");

@@ -17,7 +17,7 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x48
 #define D2_DEFINED_D2GSPacketSrv0x48
-struct __attribute__((packed)) D2GSPacketSrv0x48 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x48 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t eUnitType;
     /* 0x02 */ uint8_t byActionByte; // Action byte set by sender (byActionByte param in Send_0x48)
@@ -25,6 +25,6 @@ struct __attribute__((packed)) D2GSPacketSrv0x48 {
     /* 0x07 */ uint8_t byPad0; // Zeroed padding byte
     /* 0x08 */ uint16_t wPad1; // Zeroed padding word
     /* 0x0A */ uint8_t byPad2; // Zeroed padding byte
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x48

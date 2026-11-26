@@ -3220,7 +3220,7 @@ void __fastcall TEXT_PrintPartyMessage(uint16_t * wszText, uint8_t byColor) {
     uint16_t* pwszText = wszText;
     int32_t nPrevFont = D2Win::Src::D2WinFont::SetAndReturnLastFont(0xd);
     ScreenMessage_t* pNewMsg = D2_NEW_AT(ScreenMessage_t, ".\\UI\\text.cpp", 0xdad);
-    memset(pNewMsg, 0, 0x24);
+    memset(pNewMsg, 0, sizeof(*pNewMsg));
     pNewMsg->pNext = nullptr;
     pNewMsg->dwMessageExpiration = GetTickCount() + 10000;
     int nLineLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);

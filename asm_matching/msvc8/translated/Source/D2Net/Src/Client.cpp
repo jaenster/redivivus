@@ -433,6 +433,10 @@ void __fastcall NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(char * pByte
       }
 
       pNewPacket = D2_NEW_AT(D2OnePacketClientStrc, ".\\SRC\\Client.cpp", 0x1fd);
+#if D2_ARCH_X64
+      // The size is written as a uint32_t into this pointer-sized slot, which starts as pBytes.
+      nPacketSize = 0;
+#endif
       nSizeResult = ::D2Net::Game::Server::NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(pBytes, pBytesSize, (uint32_t*)&nPacketSize);
       if (!nSizeResult) {
         return;

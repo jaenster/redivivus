@@ -756,7 +756,7 @@ void __stdcall DIALOG_CleanupSystem() {
 }
 
 static void Unreferenced_004b7bc0(D2DialogStrc * pDialog) {
-    memset(pDialog, 0, 0xb10);
+    memset(pDialog, 0, sizeof(*pDialog));
     pDialog->nBackgroundWidth = 0;
     pDialog->nBackgroundHeight = 0;
     pDialog->nSubCounter = 0;
@@ -823,10 +823,10 @@ D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, 
 
     gnDialogCounter_b++;
     D2DialogStrc* pDialog = D2_NEW_AT(D2DialogStrc, ".\\UI\\dialog.cpp", 0x396);
-    memset(pDialog, 0, 0xb10);
+    memset(pDialog, 0, sizeof(*pDialog));
     pDialog->pPrev = gpDialogActual;
     gpDialogActual = pDialog;
-    memset(pDialog, 0, 0xb10);
+    memset(pDialog, 0, sizeof(*pDialog));
     pDialog->nBackgroundWidth = 0;
     pDialog->nBackgroundHeight = 0;
     pDialog->nSubCounter = 0;
@@ -890,10 +890,10 @@ D2DialogStrc * __fastcall AllocDialogStrc(int32_t nX, int32_t nY, fpDialogFunc f
 
     gnDialogCounter_b++;
     D2DialogStrc* pDialog = D2_NEW_AT(D2DialogStrc, ".\\UI\\dialog.cpp", 999);
-    memset(pDialog, 0, 0xb10);
+    memset(pDialog, 0, sizeof(*pDialog));
     pDialog->pPrev = gpDialogActual;
     gpDialogActual = pDialog;
-    memset(pDialog, 0, 0xb10);
+    memset(pDialog, 0, sizeof(*pDialog));
     pDialog->pCoords.x = nX;
     pDialog->pCoords2.x = nX;
     pDialog->fpDialogFunc1 = fpDialogFunc1;

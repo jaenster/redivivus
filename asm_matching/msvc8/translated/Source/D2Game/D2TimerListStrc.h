@@ -18,10 +18,10 @@
 // Data types
 #ifndef D2_DEFINED_D2TimerListStrc
 #define D2_DEFINED_D2TimerListStrc
-__pragma(pack(push, 1)) struct D2TimerListStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TimerListStrc {
     /* 0x0000 */ D2TimerStrc pTimerList[600]; // allocated in realtime
     /* 0x7080 */ struct D2TimerStrc * pFirstList; // head of this pool's free-timer list (initially &pTimerList[0])
     /* 0x7084 */ struct D2TimerListStrc * pNextList; // unknown whenever it actually points to another TimerList, always NULL
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2TimerListStrc

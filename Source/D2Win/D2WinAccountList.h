@@ -19,7 +19,7 @@
 struct D2WinAccountListEntry;
 
 // Data types
-struct __attribute__((packed)) D2WinAccountList {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2WinAccountList {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ struct D2WinAccountListEntry * pFirstEntry; // entry chain head (AddAccount pushes at the head)
     /* 0x44 */ struct D2WinAccountListEntry * pSelectedEntry; // entry under the last click (Push), highlighted by Draw
@@ -27,4 +27,4 @@ struct __attribute__((packed)) D2WinAccountList {
     /* 0x4C */ int32_t nUserData; // ctor argument nUserData; not read by the D2WinAccountList code
     /* 0x50 */ int32_t nFontId; // SetAndReturnLastFont(nFontId) in Draw; pdwFontData[0] or 1
     /* 0x54 */ int32_t nFontData1; // pdwFontData[1] or 0; not read by the D2WinAccountList code
-};
+}; D2_PACKED_END

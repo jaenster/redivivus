@@ -69,11 +69,11 @@ struct D2ClientMonAnimModeEntryStrc {
 #endif // D2_DEFINED_D2ClientMonAnimModeEntryStrc
 #ifndef D2_DEFINED_D2GSPacketSrv0x98
 #define D2_DEFINED_D2GSPacketSrv0x98
-struct __attribute__((packed)) D2GSPacketSrv0x98 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GSPacketSrv0x98 {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint32_t nUnitGUID;
     /* 0x05 */ uint16_t wValue;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x98
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
@@ -91,15 +91,15 @@ struct D2MercInitArgStrc {
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2MonMsgAnimModeStrc
 #define D2_DEFINED_D2MonMsgAnimModeStrc
-struct __attribute__((packed)) D2MonMsgAnimModeStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MonMsgAnimModeStrc {
     /* 0x00 */ eD2MonsterAnimMode eMode; // Mode MonsterMessage sets for this message id; 0x10 = none (MONSTER_IsModeMoveFlagSet rejects >= 0x10)
     /* 0x04 */ int bCheckMoveFlag; // Nonzero: test the MonStats2 per-mode move flag (+0x104 bit[mode])
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonMsgAnimModeStrc
 #ifndef D2_DEFINED_D2MonStats2Txt
 #define D2_DEFINED_D2MonStats2Txt
-struct __attribute__((packed)) D2MonStats2Txt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MonStats2Txt {
     /* 0x000 */ short Id;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
@@ -188,7 +188,7 @@ struct __attribute__((packed)) D2MonStats2Txt {
     /* 0x131 */ uint8_t field_0x131;
     /* 0x132 */ uint8_t field_0x132;
     /* 0x133 */ uint8_t field_0x133;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonStats2Txt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)

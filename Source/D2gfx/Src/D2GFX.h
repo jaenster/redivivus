@@ -255,23 +255,23 @@ typedef _devicemodeA DEVMODEA;
 
 typedef tagWNDCLASSA WNDCLASSA;
 
-struct __attribute__((packed)) _AppBarData {
+D2_PACKED_BEGIN struct __attribute__((packed)) _AppBarData {
     /* 0x00 */ DWORD cbSize;
     /* 0x04 */ HWND hWnd;
     /* 0x08 */ UINT uCallbackMessage;
     /* 0x0C */ UINT uEdge;
     /* 0x10 */ RECT rc;
     /* 0x20 */ LPARAM lParam;
-};
+}; D2_PACKED_END
 
 #endif // _WIN32
 
 #ifndef D2_DEFINED_D2GFXWindowPlacementStrc
 #define D2_DEFINED_D2GFXWindowPlacementStrc
-struct __attribute__((packed)) D2GFXWindowPlacementStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2GFXWindowPlacementStrc {
     /* 0x00 */ HWND pHWND;
     /* 0x04 */ WINDOWPLACEMENT pWindowPLacement;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2GFXWindowPlacementStrc
 #ifndef D2_DEFINED_D2RendererFunctionsStrc

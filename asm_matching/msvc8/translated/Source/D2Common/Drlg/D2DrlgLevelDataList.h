@@ -25,11 +25,11 @@ typedef BOOL (__fastcall *fpLevelDataEntry)(struct D2DrlgLevelPlacementStrc * pL
 // Data types
 #ifndef D2_DEFINED_D2DrlgLevelDataEntry
 #define D2_DEFINED_D2DrlgLevelDataEntry
-__pragma(pack(push, 1)) struct D2DrlgLevelDataEntry {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgLevelDataEntry {
     /* 0x00 */ BOOL (__fastcall *nfpLevelDataEntry)(struct D2DrlgLevelPlacementStrc *);
     /* 0x04 */ eD2LevelId neD2LevelId;
     /* 0x08 */ int nNodeLevelEntryIdPrev;
     /* 0x0C */ int nNodeLevelEntryIdNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgLevelDataEntry

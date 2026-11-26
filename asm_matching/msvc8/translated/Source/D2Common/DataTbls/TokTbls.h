@@ -27,7 +27,7 @@ struct D2PoolManagerStrc;
 // Data types
 #ifndef D2_DEFINED_D2ArmTypeTxt
 #define D2_DEFINED_D2ArmTypeTxt
-__pragma(pack(push, 1)) struct D2ArmTypeTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ArmTypeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
     /* 0x24 */ uint8_t field_0x24;
@@ -46,7 +46,7 @@ __pragma(pack(push, 1)) struct D2ArmTypeTxt {
     /* 0x31 */ uint8_t field_0x31;
     /* 0x32 */ uint8_t field_0x32;
     /* 0x33 */ uint8_t field_0x33;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ArmTypeTxt
 #ifndef D2_DEFINED_D2InventoryScreenCoordinates
@@ -61,7 +61,7 @@ struct D2InventoryScreenCoordinates {
 #endif // D2_DEFINED_D2InventoryScreenCoordinates
 #ifndef D2_DEFINED_D2MonModeTxt
 #define D2_DEFINED_D2MonModeTxt
-__pragma(pack(push, 1)) struct D2MonModeTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MonModeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
     /* 0x24 */ uint8_t DT_Dir;
@@ -80,12 +80,12 @@ __pragma(pack(push, 1)) struct D2MonModeTxt {
     /* 0x31 */ uint8_t KB_Dir;
     /* 0x32 */ uint8_t SQ_Dir;
     /* 0x33 */ uint8_t RN_Dir;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonModeTxt
 #ifndef D2_DEFINED_D2ObjModeTxt
 #define D2_DEFINED_D2ObjModeTxt
-__pragma(pack(push, 1)) struct D2ObjModeTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ObjModeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
     /* 0x24 */ uint8_t field_0x24;
@@ -104,12 +104,12 @@ __pragma(pack(push, 1)) struct D2ObjModeTxt {
     /* 0x31 */ uint8_t field_0x31;
     /* 0x32 */ uint8_t field_0x32;
     /* 0x33 */ uint8_t field_0x33;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ObjModeTxt
 #ifndef D2_DEFINED_D2ObjTypeTxt
 #define D2_DEFINED_D2ObjTypeTxt
-__pragma(pack(push, 1)) struct D2ObjTypeTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ObjTypeTxt {
     /* 0x00 */ char name[32];
     /* 0x20 */ char token[4];
     /* 0x24 */ uint8_t field_0x24;
@@ -128,12 +128,12 @@ __pragma(pack(push, 1)) struct D2ObjTypeTxt {
     /* 0x31 */ uint8_t field_0x31;
     /* 0x32 */ uint8_t field_0x32;
     /* 0x33 */ uint8_t field_0x33;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ObjTypeTxt
 #ifndef D2_DEFINED_D2PlrTypeModeTxt
 #define D2_DEFINED_D2PlrTypeModeTxt
-__pragma(pack(push, 1)) struct D2PlrTypeModeTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PlrTypeModeTxt {
     /* 0x00 */ char szName[32];
     /* 0x20 */ char szToken[4];
     /* 0x24 */ uint8_t field_0x24;
@@ -152,7 +152,7 @@ __pragma(pack(push, 1)) struct D2PlrTypeModeTxt {
     /* 0x31 */ uint8_t field_0x31;
     /* 0x32 */ uint8_t field_0x32;
     /* 0x33 */ uint8_t field_0x33;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2PlrTypeModeTxt
 namespace D2Common { namespace DATATBLS { namespace TokTbls {

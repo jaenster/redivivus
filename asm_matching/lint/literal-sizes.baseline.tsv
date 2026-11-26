@@ -33,10 +33,10 @@
 1	Source/D2Client/Game/Roster.cpp
 3	Source/D2Client/Game/SCmd.cpp
 8	Source/D2Client/Game/View.cpp
-21	Source/D2Client/UI/Automap.cpp
+20	Source/D2Client/UI/Automap.cpp
 8	Source/D2Client/UI/Chat.cpp
 23	Source/D2Client/UI/CmdTbl.cpp
-6	Source/D2Client/UI/Dialog.cpp
+1	Source/D2Client/UI/Dialog.cpp
 4	Source/D2Client/UI/EscMenu.cpp
 2	Source/D2Client/UI/Help.cpp
 2	Source/D2Client/UI/Hireables.cpp
@@ -44,11 +44,11 @@
 9	Source/D2Client/UI/ListBox/ListBoxImplementation.cpp
 2	Source/D2Client/UI/MiniPanel.cpp
 6	Source/D2Client/UI/Panel.cpp
-9	Source/D2Client/UI/Party.cpp
+8	Source/D2Client/UI/Party.cpp
 14	Source/D2Client/UI/QuestLog.cpp
 4	Source/D2Client/UI/SkillDesc.cpp
 10	Source/D2Client/UI/SpellSel.cpp
-19	Source/D2Client/UI/Text.cpp
+18	Source/D2Client/UI/Text.cpp
 4	Source/D2Client/UI/Trade.cpp
 1	Source/D2Client/UI/Waypoint.cpp
 4	Source/D2Client/UI/editbox.cpp
@@ -99,7 +99,6 @@
 1	Source/D2Game/Objects/ObjectsMode.cpp
 1	Source/D2Game/Objects/ObjectsRgn.cpp
 4	Source/D2Game/Player/PlayerIntro.cpp
-1	Source/D2Game/Player/PlayerModes.cpp
 6	Source/D2Game/Player/PlayerMsg.cpp
 22	Source/D2Game/Player/PlayerSave.cpp
 10	Source/D2Game/Player/PlayerSave2.cpp

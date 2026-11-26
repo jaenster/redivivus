@@ -91,12 +91,12 @@ struct D2WinTrustData {
 
 #endif // D2_MODULE_D2Hell
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Hell)
-__pragma(pack(push, 1)) struct D2WinTrustFileInfo {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2WinTrustFileInfo {
     /* 0x00 */ DWORD cbStruct;
     /* 0x04 */ LPCWSTR pcwszFilePath;
     /* 0x08 */ HANDLE hFile;
     /* 0x0C */ GUID * pgKnownSubject;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Hell
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Hell)
@@ -108,10 +108,10 @@ struct StormFaultHandlerNode {
 
 #endif // D2_MODULE_D2Hell
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Hell)
-__pragma(pack(push, 1)) struct StormFaultHandlerNodeStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct StormFaultHandlerNodeStrc {
     /* 0x00 */ StormLinkStrc link;
     /* 0x08 */ BOOL (__stdcall *pfnHandler)(DWORD, char *, DWORD);
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Hell
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows

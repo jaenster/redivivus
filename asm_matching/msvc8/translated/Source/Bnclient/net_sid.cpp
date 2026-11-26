@@ -1337,7 +1337,7 @@ int __stdcall NET_SID_CLIENT_Send_0x50_AuthInfo() {
     nSockAddrLen = 0x10;
     uint32_t bGotLocalIp;
     bGotLocalIp = BnSend::BNSEND_GetSocketAddress((sockaddr*)&nsockaddr, &nSockAddrLen);
-    sAuthInfoPacket.dwLocalIp = bGotLocalIp ? nsockaddr.sin_addr : 0;
+    sAuthInfoPacket.dwLocalIp = bGotLocalIp ? (uint32_t)nsockaddr.sin_addr : 0;
     /* LPSYSTEMTIME lpSystemTime for GetSystemTime */ GetSystemTime(&stUtcTime);
     /* LPSYSTEMTIME lpSystemTime for GetLocalTime */ GetLocalTime(&stLocalTime);
     /* LPFILETIME lpFileTime for SystemTimeToFileTime */ /* SYSTEMTIME * lpSystemTime for SystemTimeToFileTime */ SystemTimeToFileTime(&stUtcTime, &ftUtc);

@@ -24,7 +24,7 @@ struct DC6;
 // Data types
 #ifndef D2_DEFINED_D2QuestLogEntryStrc
 #define D2_DEFINED_D2QuestLogEntryStrc
-__pragma(pack(push, 1)) struct D2QuestLogEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QuestLogEntryStrc {
     /* 0x000 */ uint8_t bVisible;
     /* 0x001 */ int32_t eQuestId;
     /* 0x005 */ uint16_t wTitleStringId;
@@ -36,7 +36,7 @@ __pragma(pack(push, 1)) struct D2QuestLogEntryStrc {
     /* 0x264 */ uint8_t bHasDescription;
     /* 0x265 */ uint8_t bQuestActive;
     /* 0x266 */ uint32_t nDisplayState;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2QuestLogEntryStrc
 #ifndef D2_DEFINED_D2QuestLogInfoStrc
@@ -65,7 +65,7 @@ struct D2QuestLogPanelRectStrc {
 #endif // D2_DEFINED_D2QuestLogPanelRectStrc
 #ifndef D2_DEFINED_D2QuestLogStrc
 #define D2_DEFINED_D2QuestLogStrc
-__pragma(pack(push, 1)) struct D2QuestLogStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QuestLogStrc {
     /* 0x000 */ uint32_t bQuestLogOpen;
     /* 0x004 */ uint32_t dwUnused04; // no references
     /* 0x008 */ int nQuestLogQuestCount;
@@ -102,7 +102,7 @@ __pragma(pack(push, 1)) struct D2QuestLogStrc {
     /* 0xFC8 */ uint8_t bZooMonsterSpawned;
     /* 0xFC9 */ uint32_t nZooMonsterGUID;
     /* 0xFCD */ uint32_t nZooSpawnCounter;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2QuestLogStrc
 namespace D2Client { namespace UI { namespace QuestLog {

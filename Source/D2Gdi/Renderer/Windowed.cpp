@@ -1207,14 +1207,14 @@ BOOL __fastcall DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int
         const int nSubtileY = pTile->pSubTiles[i].nOffsetY + nPosY;
         if (nSubtileX >= nClipLeft && nSubtileX < nClipRight && nSubtileY >= -0x20 && nSubtileY < nClipBottom) {
           const int nLightIndex = pTile->pSubTiles[i].nOffsetX >> 5;
-          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles;
+          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles; // steer-ok: placement kept from the matching body
           uint32_t aCornerLight[4];
           bAnyDrawn = 1;
           aCornerLight[0] = pLight[nLightIndex].nIntensity;
           aCornerLight[3] = pLight[nLightIndex].nIntensity;
           aCornerLight[1] = pLight[nLightIndex + 1].nIntensity;
           aCornerLight[2] = pLight[nLightIndex + 1].nIntensity;
-          D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile((int)(intptr_t)pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight, nAlpha);
+          D2GfxRendereInitFunctionsStrc->nfpDrawRoofTile(pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight, nAlpha);
         }
       }
     }
@@ -1242,12 +1242,12 @@ BOOL __fastcall DrawWallTile(D2TileLibraryEntryStrc * pTile, int nPosX, int nPos
         const int nSubtileY = pTile->pSubTiles[i].nOffsetY + nPosY;
         if (nSubtileX >= nClipLeft && nSubtileX < nClipRight && nSubtileY >= -0x20 && nSubtileY < nClipBottom) {
           const int nLightIndex = pTile->pSubTiles[i].nOffsetX >> 5;
-          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles;
+          D2GroundSubTileStrc* pSubTile = i + pTile->pSubTiles; // steer-ok: placement kept from the matching body
           uint32_t aCornerLight[4];
           aCornerLight[3] = aCornerLight[0] = pLight[nLightIndex].nIntensity;
           aCornerLight[2] = aCornerLight[1] = pLight[nLightIndex + 1].nIntensity;
           bAnyDrawn = 1;
-          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile((int)(intptr_t)pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight);
+          D2GfxRendereInitFunctionsStrc->nfpDrawWallTile(pSubTile->pPixelData, nSubtileX, nSubtileY, aCornerLight);
         }
       }
     }

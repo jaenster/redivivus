@@ -22,7 +22,7 @@ struct D2UnitStrc;
 // Data types
 #ifndef D2_DEFINED_D2HirelingHireData
 #define D2_DEFINED_D2HirelingHireData
-__pragma(pack(push, 1)) struct D2HirelingHireData {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2HirelingHireData {
     /* 0x00 */ int32_t nId;
     /* 0x04 */ int32_t nLevel;
     /* 0x08 */ int32_t nHp;
@@ -38,7 +38,7 @@ __pragma(pack(push, 1)) struct D2HirelingHireData {
     /* 0x30 */ int32_t nHireDescription;
     /* 0x34 */ int32_t field13_0x34;
     /* 0x38 */ int16_t field14_0x38;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2HirelingHireData
 #ifndef D2_DEFINED_D2MercBaseStrc

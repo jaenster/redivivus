@@ -78,3 +78,18 @@ extern "C" int _except_handler4(struct _EXCEPTION_RECORD* pRecord, EH4_EXCEPTION
     abort();
 }
 #endif  // !_MSC_VER
+
+#if defined(_MSC_VER) && defined(_M_X64)
+// The same stub for a Visual Studio x64 build: x64 SEH is table-driven and its CRT has
+// no _except_handler4 to link, while the x86 libcmt has the real one. Referenced by
+// address only, as above; any call dies at the abort().
+extern "C" int _except_handler4(struct _EXCEPTION_RECORD* pRecord, EH4_EXCEPTION_REGISTRATION* pRegistration,
+                                 CONTEXT* pContext, void* pDispatcherContext) {
+  (void)pRecord;
+  (void)pRegistration;
+  (void)pContext;
+  (void)pDispatcherContext;
+  D2Trace("ABORT called");
+  abort();
+}
+#endif

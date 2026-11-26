@@ -1057,7 +1057,6 @@ static void __stdcall PLRMODES_HandleDepletedAmmoOrThrowable(::SGAMEDATA * pGame
     uint32_t bCanReequip;
     eD2ItemTypes eItemType;
     int nReloadClassId;
-    uint32_t nBodyLocWord;
     BOOL bIsBroken = D2Common::ITEMS::Items::IsStackable(pUnit);
     if (!(bIsBroken || (nThrowableStat = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_throwable(pUnit) , nThrowableStat != 0) || (nThrowableStat = D2Common::Stats::StatsEx::STATLIST_UnitGetStatValueUnchecked(pUnit, UNITSTAT_item_throwable, 0) , nThrowableStat != 0))) {
       return;
@@ -1080,10 +1079,9 @@ static void __stdcall PLRMODES_HandleDepletedAmmoOrThrowable(::SGAMEDATA * pGame
       bIsWeapon = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_reload(pUnit);
       eItemType = D2Common::ITEMS::Items::ITEM_GetItemData_wType(pUnit);
       eBodyLoc = D2Common::ITEMS::Items::GetBodyLocation(pUnit);
-      nBodyLocWord = (uint32_t)((uint32_t)((uint32_t)d2_load24((char*)&nBodyLocWord + 1) & 0xffffffu) << 8 | (uint32_t)(uint8_t)eBodyLoc);
       bCanReequip = D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_reequip(pUnit);
       D2Common::Units::ChangeAnimMode(pWeaponOwner, 1);
-      ITEMS::ItemMode::ITEMMODE_TakeItemFromBodyLoc(pGame, pWeaponOwner, (eD2BodyLoc)nBodyLocWord, 1, &dwEquipResult);
+      ITEMS::ItemMode::ITEMMODE_TakeItemFromBodyLoc(pGame, pWeaponOwner, eBodyLoc, 1, &dwEquipResult);
       D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pUnit, ITEMCMD_DELETE, 1);
       if (bIsWeapon) {
         for (pReloadItem = D2Common::INVENTORY::Inventory::INVENTORY_FindItemByType(pWeaponOwner->pInventory, eItemType, nullptr); pReloadItem; pReloadItem = D2Common::INVENTORY::Inventory::INVENTORY_FindItemByType(pWeaponOwner->pInventory, eItemType, pReloadItem)) {
@@ -1099,9 +1097,9 @@ static void __stdcall PLRMODES_HandleDepletedAmmoOrThrowable(::SGAMEDATA * pGame
                   nQuantity = pUnit->nClassId;
                 }
                 if (nQuantity == pReloadItem->nClassId) {
-                  pSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pWeaponOwner->pInventory, nBodyLocWord & 0xff);
+                  pSlotItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pWeaponOwner->pInventory, eBodyLoc);
                   if (!pSlotItem) {
-                    bIsBroken = ITEMS::ItemMode::ITEMMODE_EquipStoredItem(pGame, pWeaponOwner, pReloadItem->nUnitGUID, (eD2BodyLoc)nBodyLocWord);
+                    bIsBroken = ITEMS::ItemMode::ITEMMODE_EquipStoredItem(pGame, pWeaponOwner, pReloadItem->nUnitGUID, eBodyLoc);
                     if (bIsBroken) {
                       return;
                     }
@@ -1115,7 +1113,7 @@ static void __stdcall PLRMODES_HandleDepletedAmmoOrThrowable(::SGAMEDATA * pGame
         }
       }
       if (bCanReequip) {
-        PLRMODES_ReequipWeaponAfterThrow(pGame, (uint8_t)nBodyLocWord, pWeaponOwner);
+        PLRMODES_ReequipWeaponAfterThrow(pGame, eBodyLoc, pWeaponOwner);
       }
     } else {
       bIsBroken = D2Common::ITEMS::Items::CheckItemFlag(pUnit, ITEMFLAG_BROKEN, 0x513, ".\\PLAYER\\PlrModes.cpp");

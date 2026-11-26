@@ -26,7 +26,7 @@ typedef int32_t (__fastcall *fnAppModeRun)(struct D2IniConfigStrc * pD2IniConfig
 // Data types
 #ifndef D2_DEFINED_CMDPARAMS
 #define D2_DEFINED_CMDPARAMS
-struct __attribute__((packed)) CMDPARAMS {
+D2_PACKED_BEGIN struct __attribute__((packed)) CMDPARAMS {
     /* 0x00 */ uint32_t dwFlags; // argument flags; & 0x30000 = bool (0) / number (0x10000) / string (0x20000). From node +0x08
     /* 0x04 */ uint32_t dwId; // argument id, 0xffffffff = none. From node +0x0c
     /* 0x08 */ char * szName; // switch name without the dash; points at the node's name buffer (LEA [node+0x10])
@@ -34,13 +34,13 @@ struct __attribute__((packed)) CMDPARAMS {
     /* 0x10 */ uint32_t dwSetValue; // value set for a boolean switch. From node +0x24
     /* 0x14 */ uint32_t dwSetMask; // mask applied for a boolean switch. From node +0x28
     /* 0x18 */ CMDPARAMSVALUE uValue; // parsed value. From node +0x3c
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_CMDPARAMS
 namespace D2Client::ClientModeInGame {
 
 // Function declarations
-fnAppModeRun * __fastcall AppModeClientInit(HMODULE hModule);
+fnAppModeRun * (__fastcall AppModeClientInit)(HMODULE hModule);
 // Client app mode shutdown: close server/profiler logging.
 void __stdcall AppModeClientShutdown();
 // Module-private: no other module references these

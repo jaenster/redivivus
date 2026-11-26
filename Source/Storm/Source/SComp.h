@@ -102,7 +102,7 @@ struct SCompEncodeCodecEntryStrc {
 #endif // D2_DEFINED_SCompEncodeCodecEntryStrc
 #ifndef D2_DEFINED_D2CompressEncoderStrc
 #define D2_DEFINED_D2CompressEncoderStrc
-struct __attribute__((packed)) D2CompressEncoderStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CompressEncoderStrc {
     /* 0x0000 */ uint32_t nReserved00; // field at +0
     /* 0x0004 */ uint32_t nRootWeight; // set to 1 after init (root weight or ready flag)
     /* 0x0008 */ D2CompressHuffNodeStrc aNodePool[515]; // Huffman node pool: 515*24=12360 bytes, ends at +0x304f
@@ -114,20 +114,20 @@ struct __attribute__((packed)) D2CompressEncoderStrc {
     /* 0x3064 */ struct D2CompressHuffNodeStrc * pWeightedListHead; // +0x3064: sorted-by-weight list head (lowest weight)
     /* 0x3068 */ int nNodeCount; // +0x3068: nodes allocated from pool so far
     /* 0x306C */ struct D2CompressHuffNodeStrc * apSymbolNodes[258]; // +0x306c: symbol-to-node lookup table (0x102 entries)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2CompressEncoderStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_Storm)
-struct __attribute__((packed)) D2HuffQuickEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2HuffQuickEntryStrc {
     /* 0x00 */ uint32_t nEpoch; // equals D2HuffmanContextStrc.nEpoch when the entry is valid
     /* 0x04 */ uint32_t nBitCount; // code length in bits
     union {
         /* 0x08 */ int nSymbol; // decoded symbol when nBitCount <= 7
         /* 0x08 */ struct D2CompressHuffNodeStrc * pNode; // tree node to continue from when nBitCount > 7
     };
-};
+}; D2_PACKED_END
 
-struct __attribute__((packed)) D2HuffmanContextStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2HuffmanContextStrc {
     /* 0x0000 */ uint32_t nUnused0; // unused pad
     /* 0x0004 */ int32_t nEpoch; // rebuild epoch; quick-table entries are invalid when their epoch != this
     /* 0x0008 */ D2CompressHuffNodeStrc aNodes[515]; // 0x203 tree nodes at 0x18 bytes each (ends at 0x3050)
@@ -140,7 +140,7 @@ struct __attribute__((packed)) D2HuffmanContextStrc {
     /* 0x3068 */ int32_t nNodeCount; // nodes allocated so far at 0x3068
     /* 0x306C */ struct D2CompressHuffNodeStrc * _pad306C[258]; // symbol-to-node lookup table (0x102 entries); same layout as D2CompressEncoderStrc.apSymbolNodes
     /* 0x3474 */ struct D2HuffQuickEntryStrc aQuickTable[128]; // 0x80 quick-decode entries at 0x3474; object size 0x3a74
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_Storm
 namespace Storm::Source::SComp {

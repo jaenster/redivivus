@@ -16,7 +16,7 @@
 #include "Source/D2Client/D2ControlStrc.h"
 
 // Data types
-struct __attribute__((packed)) D2WinProgressBar {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2WinProgressBar {
     /* 0x00 */ D2ControlStrc sControl;
     /* 0x40 */ float fCurrentProgress;
-};
+}; D2_PACKED_END

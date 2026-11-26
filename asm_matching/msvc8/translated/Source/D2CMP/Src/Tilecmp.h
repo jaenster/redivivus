@@ -72,7 +72,7 @@ struct D2TileCmpTileSetListStrc {
 #endif // D2_MODULE_D2CMP
 #ifndef D2_DEFINED_D2TileCmpTileSetStrc
 #define D2_DEFINED_D2TileCmpTileSetStrc
-__pragma(pack(push, 1)) struct D2TileCmpTileSetStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TileCmpTileSetStrc {
     /* 0x00 */ int nMinX; // Bounding min X; serialized: width = nMaxX - nMinX
     /* 0x04 */ int nMinY; // Bounding min Y; serialized: height = nMaxY - nMinY
     /* 0x08 */ int nMaxX; // bounding max X; TILECMP_InitTileSetFromDT1 sets 0xa0, TILECMP_SerializeTileSet writes width = nMaxX - nMinX
@@ -98,7 +98,7 @@ __pragma(pack(push, 1)) struct D2TileCmpTileSetStrc {
     /* 0x54 */ int nNodeCount; // Number of cached sub-tile nodes (+0x54, incremented by Generate25SubTiles)
     /* 0x58 */ struct D2TileCmpTileNodeStrc * pNodeHead; // Head of sub-tile node linked list (+0x58)
     /* 0x5C */ struct D2TileCmpTileSetStrc * pTileSetChain; // Next in tile-set chain (+0x5c, set by AddTileToSet)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2TileCmpTileSetStrc
 namespace D2CMP { namespace SRC { namespace Tilecmp {

@@ -85,7 +85,7 @@ struct ButtonWrapperVtable;
 // Data types
 #ifndef D2_DEFINED_ButtonImplementation
 #define D2_DEFINED_ButtonImplementation
-struct __attribute__((packed)) ButtonImplementation {
+D2_PACKED_BEGIN struct __attribute__((packed)) ButtonImplementation {
     /* 0x00 */ struct ButtonImplementationVtable * pVtable; // virtual function table
     /* 0x04 */ int (__fastcall *pfnCharFilter)(::UIWidget *, struct D2UIMouseMsgStrc *);
     /* 0x08 */ int nPosX;
@@ -100,7 +100,7 @@ struct __attribute__((packed)) ButtonImplementation {
     /* 0x2C */ int nActivationState;
     /* 0x30 */ uint16_t nFrameBase;
     /* 0x32 */ int nButtonKind;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_ButtonImplementation
 #ifndef D2_DEFINED_ButtonWrapper

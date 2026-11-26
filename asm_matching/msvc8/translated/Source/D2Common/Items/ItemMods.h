@@ -35,7 +35,7 @@ struct D2MagixAffixModStrc {
 #endif // D2_DEFINED_D2MagixAffixModStrc
 #ifndef D2_DEFINED_D2GemsTxt
 #define D2_DEFINED_D2GemsTxt
-__pragma(pack(push, 1)) struct D2GemsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GemsTxt {
     /* 0x00 */ char name[32]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x20 */ char letter[6]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x26 */ uint8_t field_0x26;
@@ -48,7 +48,7 @@ __pragma(pack(push, 1)) struct D2GemsTxt {
     /* 0x30 */ D2MagixAffixModStrc aWeaponMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
     /* 0x60 */ D2MagixAffixModStrc aHelmMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
     /* 0x90 */ D2MagixAffixModStrc aShieldMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GemsTxt
 #ifndef D2_DEFINED_D2RareAffixTxt
@@ -86,11 +86,11 @@ struct D2RareAffixTxt {
 
 #endif // D2_DEFINED_D2RareAffixTxt
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-__pragma(pack(push, 1)) struct D2RepairTypeEntryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2RepairTypeEntryStrc {
     /* 0x00 */ char byMode;
     /* 0x01 */ char aPad[3];
     /* 0x04 */ eD2ItemTypes eType;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #ifndef D2_DEFINED_D2SetsTxtFStrc

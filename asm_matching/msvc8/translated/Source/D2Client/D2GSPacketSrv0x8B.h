@@ -17,10 +17,10 @@
 // Data types
 #ifndef D2_DEFINED_D2GSPacketSrv0x8B
 #define D2_DEFINED_D2GSPacketSrv0x8B
-__pragma(pack(push, 1)) struct D2GSPacketSrv0x8B {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GSPacketSrv0x8B {
     /* 0x00 */ uint8_t nPacketId; // Packet opcode (0x8B)
     /* 0x01 */ uint32_t nUnitGUID; // GUID of the roster unit whose party flag changed
     /* 0x05 */ uint8_t bInParty; // Nonzero when unit is in player's party
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GSPacketSrv0x8B

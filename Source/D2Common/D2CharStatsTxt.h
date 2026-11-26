@@ -28,7 +28,7 @@ struct D2CharItemStrc {
 };
 
 #endif // D2_DEFINED_D2CharItemStrc
-struct __attribute__((packed)) D2CharStatsTxt {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CharStatsTxt {
     /* 0x00 */ uint16_t wszClass[16];
     /* 0x20 */ char szClass[16];
     /* 0x30 */ uint8_t str;
@@ -67,4 +67,4 @@ struct __attribute__((packed)) D2CharStatsTxt {
     /* 0xAC */ short StartSkill;
     /* 0xAE */ short Skill[10];
     /* 0xC2 */ uint16_t pad0xC2; // trailing record padding to 0xC4 stride (no column binds); merges 0xC2-0xC3
-};
+}; D2_PACKED_END

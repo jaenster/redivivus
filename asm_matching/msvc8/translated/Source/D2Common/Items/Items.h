@@ -41,7 +41,7 @@ typedef void (__fastcall *pfnItemTransactionCb)(::SGAMEDATA * pGame, struct D2Un
 // Data types
 #ifndef D2_DEFINED_D2GemsTxt
 #define D2_DEFINED_D2GemsTxt
-__pragma(pack(push, 1)) struct D2GemsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GemsTxt {
     /* 0x00 */ char name[32]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x20 */ char letter[6]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x26 */ uint8_t field_0x26;
@@ -54,7 +54,7 @@ __pragma(pack(push, 1)) struct D2GemsTxt {
     /* 0x30 */ D2MagixAffixModStrc aWeaponMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
     /* 0x60 */ D2MagixAffixModStrc aHelmMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
     /* 0x90 */ D2MagixAffixModStrc aShieldMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GemsTxt
 #ifndef D2_DEFINED_D2ItemCalcContextStrc
@@ -363,7 +363,7 @@ struct D2RunesTxtTableStrc {
 #endif // D2_DEFINED_D2RunesTxtTableStrc
 #ifndef D2_DEFINED_D2UnitDataItemDetailsStrc
 #define D2_DEFINED_D2UnitDataItemDetailsStrc
-__pragma(pack(push, 1)) struct D2UnitDataItemDetailsStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2UnitDataItemDetailsStrc {
     /* 0x00 */ uint32_t classId;
     /* 0x04 */ uint16_t x;
     /* 0x06 */ uint16_t y;
@@ -376,12 +376,12 @@ __pragma(pack(push, 1)) struct D2UnitDataItemDetailsStrc {
     /* 0x11 */ uint8_t nBodyLoc;
     /* 0x12 */ uint16_t reserved_12_13;
     /* 0x14 */ uint32_t usedSockets;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2UnitDataItemDetailsStrc
 #ifndef D2_DEFINED_D2RuneTableStrc
 #define D2_DEFINED_D2RuneTableStrc
-__pragma(pack(push, 1)) struct D2RuneTableStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2RuneTableStrc {
     /* 0x00 */ char szName[64]; // runeword name (ASCII, starts here, 64 bytes)
     /* 0x40 */ char szRuneName[64]; // rune name column (ASCII, starts here, 64 bytes)
     /* 0x80 */ char completed;
@@ -405,7 +405,7 @@ __pragma(pack(push, 1)) struct D2RuneTableStrc {
     /* 0xA8 */ int rune5;
     /* 0xAC */ int rune6;
     /* 0xB0 */ D2SetsTxtFStrc sEntry[7]; // t1code1..t1code7 property entries (t1code/t1param/t1min/t1max x7)
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2RuneTableStrc
 namespace D2Common { namespace ITEMS { namespace Items {

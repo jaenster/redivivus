@@ -30,7 +30,7 @@ struct D2DrlgEnvironmentStrc;
 // Data types
 #ifndef D2_DEFINED_D2DrlgActStrc
 #define D2_DEFINED_D2DrlgActStrc
-__pragma(pack(push, 1)) struct D2DrlgActStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgActStrc {
     /* 0x00 */ eD2LevelId eLevelIdFirst; // First level in the act (used by client)
     /* 0x04 */ struct D2DrlgEnvironmentStrc * pEnvironment; // Day/night environment cycle
     /* 0x08 */ eD2LevelId nLevelId; // Server-side initial level ID
@@ -45,7 +45,7 @@ __pragma(pack(push, 1)) struct D2DrlgActStrc {
     /* 0x54 */ int bRoomDirty; // BOOL - Set to 1 when a room is allocated (AllocRoom)
     /* 0x58 */ int bDrlgDeleteIsSet; // BOOL - Set when DRLG delete is pending
     /* 0x5C */ struct D2PoolManagerStrc * pMemory; // Server memory pool manager
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgActStrc
 #ifndef D2_DEFINED_D2DrlgEnvironmentStrc

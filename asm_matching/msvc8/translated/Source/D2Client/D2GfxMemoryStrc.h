@@ -27,7 +27,7 @@ struct D2SpriteCache;
 // Data types
 #ifndef D2_DEFINED_D2GfxMemoryStrc
 #define D2_DEFINED_D2GfxMemoryStrc
-__pragma(pack(push, 1)) struct D2GfxMemoryStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GfxMemoryStrc {
     /* 0x00 */ struct D2PoolManagerStrc * pMemory;
     /* 0x04 */ uint32_t pMaxMemory; // Upper memory bound; AllocEntry2 checks: usedMemory+request <= pMaxMemory
     /* 0x08 */ uint32_t nUsedMemory; // Current used memory in bytes; FreeMemory adjusts this under critical section
@@ -43,7 +43,7 @@ __pragma(pack(push, 1)) struct D2GfxMemoryStrc {
     /* 0x30 */ CRITICAL_SECTION lpCriticalSection; // Win32 CRITICAL_SECTION (24 bytes); protects nUsedMemory and eviction
     /* 0x48 */ uint32_t nTotalAllocs; // Total allocation count since initialization
     /* 0x4C */ uint32_t nAllocations; // Current active allocation count; incremented each AllocEntry2 call
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GfxMemoryStrc
 #ifndef D2_DEFINED_D2SpriteCache

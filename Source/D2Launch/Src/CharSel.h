@@ -23,7 +23,7 @@ struct DC6;
 // Data types
 #ifndef D2_DEFINED_D2CharSelCompStrc
 #define D2_DEFINED_D2CharSelCompStrc
-struct __attribute__((packed)) D2CharSelCompStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CharSelCompStrc {
     /* 0x000 */ D2CharSelCompFlags nFlags;
     /* 0x004 */ uint8_t nAnimSpeed;
     /* 0x005 */ uint8_t nNumDirections;
@@ -52,7 +52,7 @@ struct __attribute__((packed)) D2CharSelCompStrc {
     /* 0x1EC */ uint16_t wszDisplayString4[32];
     /* 0x22C */ uint32_t nD2CharLevel;
     /* 0x230 */ uint32_t dwProductCode;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2CharSelCompStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Launch)
@@ -64,7 +64,7 @@ struct D2CharSelLineBufStrc {
 #endif // D2_MODULE_D2Launch
 #ifndef D2_DEFINED_D2CharSelStrc
 #define D2_DEFINED_D2CharSelStrc
-struct __attribute__((packed)) D2CharSelStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CharSelStrc {
     /* 0x000 */ char szCharname[256]; // Character name (max 16 chars + null, rest unused)
     /* 0x100 */ char szCommandStringTable[512]; // Byte-addressable chat command format string table (packed at fixed sub-offsets 0x8..0xfe); NOT wide chars despite original name
     /* 0x300 */ uint8_t abEquipSlot1[16]; // Character component appearance data set 1 (11 bytes used, rest 0xFF-padded)
@@ -88,7 +88,7 @@ struct __attribute__((packed)) D2CharSelStrc {
     /* 0x344 */ uint32_t ftLastWriteTimeHigh; // FILETIME.dwHighDateTime of .d2s (sort key)
     /* 0x348 */ uint32_t dwRealmParam; // Realm-specific parameter from CHARSEL_ParseRealmCharList
     /* 0x34C */ struct D2CharSelStrc * pNext; // Next entry in char select linked list (sorted by recency)
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2CharSelStrc
 #ifndef D2_DEFINED_D2RealmCharListCacheEntryStrc

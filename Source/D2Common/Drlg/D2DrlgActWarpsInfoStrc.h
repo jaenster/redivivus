@@ -20,11 +20,11 @@ typedef uint32_t eD2LevelId;
 // Data types
 #ifndef D2_DEFINED_D2DrlgActWarpsInfoStrc
 #define D2_DEFINED_D2DrlgActWarpsInfoStrc
-struct __attribute__((packed)) D2DrlgActWarpsInfoStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2DrlgActWarpsInfoStrc {
     /* 0x00 */ eD2LevelId nLevelId;
     /* 0x04 */ eD2LevelId nTargetArea[8];
     /* 0x24 */ int nWarpId[8];
     /* 0x44 */ struct D2DrlgActWarpsInfoStrc * pNext;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgActWarpsInfoStrc

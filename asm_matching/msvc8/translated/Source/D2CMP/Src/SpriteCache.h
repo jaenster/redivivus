@@ -90,7 +90,7 @@ struct D2SpriteCacheEntryStrc {
 #endif // D2_DEFINED_D2SpriteCacheEntryStrc
 #ifndef D2_DEFINED_D2SpriteDecodeRequestStrc
 #define D2_DEFINED_D2SpriteDecodeRequestStrc
-__pragma(pack(push, 1)) struct D2SpriteDecodeRequestStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2SpriteDecodeRequestStrc {
     /* 0x00 */ uint32_t (__stdcall *pfnComplete)(uint32_t *, uint32_t, struct D2SpriteDecodeRequestStrc *);
     /* 0x04 */ uint8_t * pCelHeader;
     /* 0x08 */ struct D2CelDecodeStateStrc * pDecodeState;
@@ -98,7 +98,7 @@ __pragma(pack(push, 1)) struct D2SpriteDecodeRequestStrc {
     /* 0x10 */ int32_t nFrameCount;
     /* 0x14 */ void * pDecodedFrames; // Fog pResultBuffer
     /* 0x18 */ size_t nDecodedSize; // Fog nResultSize
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2SpriteDecodeRequestStrc
 namespace D2CMP { namespace SRC { namespace SpriteCache {

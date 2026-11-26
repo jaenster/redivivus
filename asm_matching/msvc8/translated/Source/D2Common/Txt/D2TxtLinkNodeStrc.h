@@ -17,11 +17,11 @@
 // Data types
 #ifndef D2_DEFINED_D2TxtLinkNodeStrc
 #define D2_DEFINED_D2TxtLinkNodeStrc
-__pragma(pack(push, 1)) struct D2TxtLinkNodeStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TxtLinkNodeStrc {
     /* 0x00 */ char szText[32];
     /* 0x20 */ int nLinkIndex;
     /* 0x24 */ struct D2TxtLinkNodeStrc * pPrevious;
     /* 0x28 */ struct D2TxtLinkNodeStrc * pNext;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2TxtLinkNodeStrc

@@ -15,11 +15,17 @@
 # whole, in the 1.14d link order. A wrong-direction include between modules is
 # reported in build/module-gates.tsv; in a module marked strict it is an error.
 #
-# The target is 32-bit Windows and the code assumes the MSVC x86 ABI, so the
-# only supported compiler is a mingw-w64 i686 g++ (native or cross).
+# The target is 32-bit Windows and the code assumes the MSVC x86 ABI. The
+# reference compiler is a mingw-w64 i686 g++ (native or cross); Visual Studio
+# 2026/2022 (cl or clang-cl, x86 and x64) builds the same tree for debugging,
+# through CMakePresets.json (docs/building-msvc.md).
 
 cmake_minimum_required(VERSION 3.24)
-project(Redivivus LANGUAGES C CXX ASM)
+project(Redivivus LANGUAGES C CXX)
+# GNU assembly (Redivivus/d2_link_support.s); an MSVC build defines its one symbol in C++.
+if(NOT MSVC)
+    enable_language(ASM)
+endif()
 
 # Mac OS X: the Mac-only code (Storm's Mac layer), compile only. See cmake/mac.cmake.
 if(APPLE)
@@ -116,8 +122,9 @@ foreach(list D2_SOURCES D2_HEADERS)
     # none belongs to any build here. cmake/check-macppc.sh syntax-checks them.
     list(FILTER ${list} EXCLUDE REGEX "^${D2_ROOT}/(Source/D2Rave|Source/D2Uni|Redivivus/Platform)/")
 endforeach()
-if(D2_ARCH_X64)
-    # x86 assembly: the i686-decorated stub the 64-bit build defines in C++ instead.
+if(D2_ARCH_X64 OR MSVC)
+    # GNU i686 assembly: the stub the 64-bit build defines in C++ instead
+    # (Redivivus/x64/d2_crt_x64.cpp), and an MSVC build in d2_crt_impl.cpp.
     list(FILTER D2_SOURCES EXCLUDE REGEX "/Redivivus/d2_link_support\\.s$")
 endif()
 list(SORT D2_SOURCES)
@@ -158,16 +165,20 @@ set(CXX_ONLY "$<COMPILE_LANGUAGE:CXX>")
 add_library(d2_flags INTERFACE)
 target_compile_features(d2_flags INTERFACE cxx_std_17)
 target_include_directories(d2_flags INTERFACE ${D2_INCLUDE_DIRS})
-target_compile_options(d2_flags INTERFACE
-    "$<${CXX_ONLY}:-g;-w;-fms-extensions;-fwrapv>"
-    "$<${CXX_ONLY}:SHELL:-include ${D2_PLATFORM_HEADER}>"
-    "$<${CXX_ONLY}:-fmacro-prefix-map=${D2_ROOT}/=>")
-if(EXISTS "${D2_SUPPORT}/d2_hand.h")
+if(MSVC)
+    include("${D2_ROOT}/cmake/msvc.cmake")
+else()
     target_compile_options(d2_flags INTERFACE
-        "$<${CXX_ONLY}:SHELL:-include ${D2_SUPPORT}/d2_hand.h>")
-endif()
-if(REDIVIVUS_PERMISSIVE)
-    target_compile_options(d2_flags INTERFACE "$<${CXX_ONLY}:-fpermissive>")
+        "$<${CXX_ONLY}:-g;-w;-fms-extensions;-fwrapv>"
+        "$<${CXX_ONLY}:SHELL:-include ${D2_PLATFORM_HEADER}>"
+        "$<${CXX_ONLY}:-fmacro-prefix-map=${D2_ROOT}/=>")
+    if(EXISTS "${D2_SUPPORT}/d2_hand.h")
+        target_compile_options(d2_flags INTERFACE
+            "$<${CXX_ONLY}:SHELL:-include ${D2_SUPPORT}/d2_hand.h>")
+    endif()
+    if(REDIVIVUS_PERMISSIVE)
+        target_compile_options(d2_flags INTERFACE "$<${CXX_ONLY}:-fpermissive>")
+    endif()
 endif()
 if(REDIVIVUS_DEV)
     target_compile_definitions(d2_flags INTERFACE REDIVIVUS_DEV)
@@ -379,6 +390,10 @@ add_custom_target(module_gates ALL DEPENDS "${CMAKE_BINARY_DIR}/module-gates.tsv
 # describe of the tree is baked in at configure time; only d2_crash.cpp sees it,
 # so a new commit recompiles that one file.
 # ---------------------------------------------------------------------------
+# An MSVC build carries a PDB instead, which d2_crash.cpp reads through DbgHelp.
+if(MSVC)
+    target_link_libraries(d2 PRIVATE dbghelp)
+else()
 set(D2_BACKTRACE "${D2_ROOT}/${D2_MODULE_libbacktrace_DIR}")
 add_library(libbacktrace STATIC
     ${D2_BACKTRACE}/alloc.c
@@ -393,6 +408,7 @@ set_target_properties(libbacktrace PROPERTIES C_STANDARD 99 C_EXTENSIONS ON)
 target_include_directories(libbacktrace PRIVATE "${D2_BACKTRACE}")
 target_compile_options(libbacktrace PRIVATE -g -w)
 target_link_libraries(d2 PRIVATE libbacktrace)
+endif()
 
 if(NOT REDIVIVUS_BUILD_ID)
     execute_process(COMMAND git describe --always --dirty --tags
@@ -425,7 +441,11 @@ endif()
 # shim performs a real C++ throw, so libstdc++ is needed regardless.
 # ---------------------------------------------------------------------------
 set_target_properties(d2 PROPERTIES WIN32_EXECUTABLE ON OUTPUT_NAME d2)
-target_link_options(d2 PRIVATE -static -static-libgcc -static-libstdc++)
+if(MSVC)
+    target_link_options(d2 PRIVATE ${D2_MSVC_LINK_OPTIONS})
+else()
+    target_link_options(d2 PRIVATE -static -static-libgcc -static-libstdc++)
+endif()
 
 target_link_libraries(d2 PRIVATE
     kernel32 user32 gdi32 advapi32 shell32 ole32 oleaut32
@@ -443,18 +463,26 @@ if(D2_ARCH_X64)
     # time (LoadLibrary, no import), IJL writes the JPEG with stb_image_write. The
     # FFmpeg headers are a compile-time dependency only; point at the include/ of
     # the same shared build whose DLLs will sit beside the exe (docs/building.md).
-    set(REDIVIVUS_FFMPEG_INCLUDE "" CACHE PATH
+    set(REDIVIVUS_FFMPEG_INCLUDE "$ENV{REDIVIVUS_FFMPEG_INCLUDE}" CACHE PATH
         "include/ of an FFmpeg shared build (libavformat/avformat.h ...), 64-bit build only")
-    if(NOT EXISTS "${REDIVIVUS_FFMPEG_INCLUDE}/libavformat/avformat.h")
+    if(NOT EXISTS "${REDIVIVUS_FFMPEG_INCLUDE}/libavformat/avformat.h" AND REDIVIVUS_SERVER)
+        # d2host decodes no video; only the game executable, outside the default
+        # target of a server build directory, needs the shims.
+        message(STATUS "64-bit server build without FFmpeg headers: the game executable cannot link here")
+    elseif(NOT EXISTS "${REDIVIVUS_FFMPEG_INCLUDE}/libavformat/avformat.h")
         message(FATAL_ERROR "64-bit build: set -DREDIVIVUS_FFMPEG_INCLUDE=<ffmpeg>/include "
             "(the directory holding libavformat/avformat.h); see docs/building.md")
     endif()
+endif()
+if(D2_ARCH_X64 AND EXISTS "${REDIVIVUS_FFMPEG_INCLUDE}/libavformat/avformat.h")
     file(GLOB D2_X64_SOURCES CONFIGURE_DEPENDS LIST_DIRECTORIES false "${D2_SUPPORT}/x64/*.cpp")
     add_library(d2_x64deps STATIC ${D2_X64_SOURCES})
     target_compile_features(d2_x64deps PRIVATE cxx_std_17)
-    target_compile_options(d2_x64deps PRIVATE -g -Wall -Wextra)
-    # stb_image_write.h is static and only part of it is called.
-    set_source_files_properties("${D2_SUPPORT}/x64/d2_ijl.cpp" PROPERTIES COMPILE_OPTIONS -Wno-unused-function)
+    if(NOT MSVC)
+        target_compile_options(d2_x64deps PRIVATE -g -Wall -Wextra)
+        # stb_image_write.h is static and only part of it is called.
+        set_source_files_properties("${D2_SUPPORT}/x64/d2_ijl.cpp" PROPERTIES COMPILE_OPTIONS -Wno-unused-function)
+    endif()
     target_include_directories(d2_x64deps PRIVATE "${D2_ROOT}" "${D2_ROOT}/Source/D2Headers"
         "${D2_ROOT}/3rdparty/stb" SYSTEM "${REDIVIVUS_FFMPEG_INCLUDE}")
     target_link_libraries(d2_x64deps PUBLIC winmm)
@@ -463,14 +491,19 @@ if(D2_ARCH_X64)
     add_executable(x64deps_test EXCLUDE_FROM_ALL "${D2_SUPPORT}/x64/test/x64deps_test.cpp")
     target_compile_features(x64deps_test PRIVATE cxx_std_17)
     target_include_directories(x64deps_test PRIVATE "${D2_ROOT}" "${D2_ROOT}/Source/D2Headers" "${D2_ROOT}/3rdparty/stb")
-    target_link_options(x64deps_test PRIVATE -static -static-libgcc -static-libstdc++)
     target_link_libraries(x64deps_test PRIVATE d2_x64deps)
     # A 64-bit glide3x.dll beside it, resolved by the decorated names Glide.cpp asks for.
     add_executable(glidetest WIN32 EXCLUDE_FROM_ALL "${D2_SUPPORT}/x64/test/glidetest.cpp")
     target_compile_features(glidetest PRIVATE cxx_std_17)
-    target_link_options(glidetest PRIVATE -static -static-libgcc -static-libstdc++)
     target_link_libraries(glidetest PRIVATE user32 gdi32)
-elseif(EXISTS "${D2_IMPLIB_DEFS}")
+    if(NOT MSVC)
+        target_link_options(x64deps_test PRIVATE -static -static-libgcc -static-libstdc++)
+        target_link_options(glidetest PRIVATE -static -static-libgcc -static-libstdc++)
+    endif()
+elseif(NOT D2_ARCH_X64 AND MSVC AND EXISTS "${D2_IMPLIB_DEFS}")
+    d2_msvc_implibs("${D2_IMPLIB_DEFS}" D2_IMPLIBS)
+    target_link_libraries(d2 PRIVATE ${D2_IMPLIBS})
+elseif(NOT D2_ARCH_X64 AND EXISTS "${D2_IMPLIB_DEFS}")
     if(NOT CMAKE_DLLTOOL)
         find_program(CMAKE_DLLTOOL NAMES ${D2_TOOL_PREFIX}dlltool dlltool REQUIRED)
     endif()
@@ -504,13 +537,18 @@ if(REDIVIVUS_X64_LOWMEM_SMOKE)
     if(NOT D2_ARCH_X64)
         message(FATAL_ERROR "REDIVIVUS_X64_LOWMEM_SMOKE is for the 64-bit build only")
     endif()
-    # GNU ld has no --disable-large-address-aware for PE32+; the flag is cleared after the link.
-    find_package(Python3 REQUIRED COMPONENTS Interpreter)
-    set(D2_X64_LOWMEM_LINK -Wl,--disable-high-entropy-va -Wl,--disable-dynamicbase
-        -Wl,--image-base=0x400000)
-    set(D2_X64_LOWMEM_POST "${Python3_EXECUTABLE}" "${D2_ROOT}/cmake/pe-clear-laa.py")
-    target_link_options(d2 PRIVATE ${D2_X64_LOWMEM_LINK})
-    add_custom_command(TARGET d2 POST_BUILD COMMAND ${D2_X64_LOWMEM_POST} "$<TARGET_FILE:d2>")
+    if(MSVC)
+        set(D2_X64_LOWMEM_LINK /LARGEADDRESSAWARE:NO /HIGHENTROPYVA:NO /DYNAMICBASE:NO /BASE:0x400000)
+        target_link_options(d2 PRIVATE ${D2_X64_LOWMEM_LINK})
+    else()
+        # GNU ld has no --disable-large-address-aware for PE32+; the flag is cleared after the link.
+        find_package(Python3 REQUIRED COMPONENTS Interpreter)
+        set(D2_X64_LOWMEM_LINK -Wl,--disable-high-entropy-va -Wl,--disable-dynamicbase
+            -Wl,--image-base=0x400000)
+        set(D2_X64_LOWMEM_POST "${Python3_EXECUTABLE}" "${D2_ROOT}/cmake/pe-clear-laa.py")
+        target_link_options(d2 PRIVATE ${D2_X64_LOWMEM_LINK})
+        add_custom_command(TARGET d2 POST_BUILD COMMAND ${D2_X64_LOWMEM_POST} "$<TARGET_FILE:d2>")
+    endif()
 endif()
 
 if(REDIVIVUS_SERVER)
@@ -550,12 +588,20 @@ if(REDIVIVUS_SERVER)
     endif()
     target_link_libraries(d2host PRIVATE d2_flags)
     target_compile_definitions(d2host PRIVATE ${D2_ALL_MODULE_DEFS})
-    string(JOIN "," D2_SERVER_LINK_GROUP ${D2_SERVER_LIBRARIES} libbacktrace)
-    target_link_libraries(d2host PRIVATE "$<LINK_GROUP:RESCAN,${D2_SERVER_LINK_GROUP}>")
-    target_link_options(d2host PRIVATE -static -static-libgcc -static-libstdc++)
+    if(MSVC)
+        # link.exe searches every library until nothing more resolves: no group needed.
+        target_link_libraries(d2host PRIVATE ${D2_SERVER_LIBRARIES} dbghelp)
+        target_link_options(d2host PRIVATE ${D2_MSVC_LINK_OPTIONS})
+    else()
+        string(JOIN "," D2_SERVER_LINK_GROUP ${D2_SERVER_LIBRARIES} libbacktrace)
+        target_link_libraries(d2host PRIVATE "$<LINK_GROUP:RESCAN,${D2_SERVER_LINK_GROUP}>")
+        target_link_options(d2host PRIVATE -static -static-libgcc -static-libstdc++)
+    endif()
     if(REDIVIVUS_X64_LOWMEM_SMOKE)
         target_link_options(d2host PRIVATE ${D2_X64_LOWMEM_LINK})
-        add_custom_command(TARGET d2host POST_BUILD COMMAND ${D2_X64_LOWMEM_POST} "$<TARGET_FILE:d2host>")
+        if(NOT MSVC)
+            add_custom_command(TARGET d2host POST_BUILD COMMAND ${D2_X64_LOWMEM_POST} "$<TARGET_FILE:d2host>")
+        endif()
     endif()
     target_link_libraries(d2host PRIVATE
         kernel32 user32 gdi32 advapi32 shell32 ole32 oleaut32

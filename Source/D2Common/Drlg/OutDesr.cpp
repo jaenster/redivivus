@@ -23,10 +23,10 @@ struct D2TombCanyonPresetStrc {
 #endif // D2_DEFINED_D2TombCanyonPresetStrc
 #ifndef D2_DEFINED_D2TombCanyonPresetRegionStrc
 #define D2_DEFINED_D2TombCanyonPresetRegionStrc
-struct __attribute__((packed)) D2TombCanyonPresetRegionStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TombCanyonPresetRegionStrc {
     /* 0x00 */ D2TombCanyonPresetStrc aTombEntries[9]; // PlaceTombEntriesInCanyon walks exactly 9 of these
     /* 0x90 */ int aPresetVariants[24]; // 12 rows of 2; DRLGOUTROOM_GetPresetVariantFromGridCell folds the base to 0x6f2680
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2TombCanyonPresetRegionStrc
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E

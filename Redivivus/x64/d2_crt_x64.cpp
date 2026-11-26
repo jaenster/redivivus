@@ -18,6 +18,10 @@
 struct EHExceptionRecord;
 struct EHRegistrationNode;
 
+// A Visual Studio build takes both from elsewhere: the handler from
+// Redivivus/d2_crt_impl.cpp (its _MSC_VER part), _rotl16 from the compiler, whose
+// intrinsic it is.
+#if !defined(_MSC_VER)
 namespace _Wrappers {
 void CRT_ExceptionFilter1(EHExceptionRecord*, EHRegistrationNode*, CONTEXT*, void*) {}
 }  // namespace _Wrappers
@@ -28,6 +32,7 @@ void CRT_ExceptionFilter1(EHExceptionRecord*, EHRegistrationNode*, CONTEXT*, voi
 extern "C" unsigned short __cdecl _rotl16(unsigned short value, unsigned char shift) {
     return (unsigned short)((value << shift) | (value >> (16 - shift)));
 }
+#endif
 
 // Fog's LOGMGR_GetTime32 and D2Common's SEED_GetTime32 copy VC8's inline time(),
 // which calls _time32. The UCRT exports it; the x86-64 msvcrt.dll import library

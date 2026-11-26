@@ -24,12 +24,12 @@ struct D2Wall2DrawListStrc;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Client)
-__pragma(pack(push, 1)) struct D2Wall2DrawContextStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2Wall2DrawContextStrc {
     /* 0x00 */ struct D2GameViewStrc * pGameView;
     /* 0x04 */ RECT rcCull;
     /* 0x14 */ struct D2RoomStrc * pRoom;
     /* 0x18 */ uint32_t nTickCount;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Client
 #ifndef D2_DEFINED_D2Wall2DrawEntryStrc

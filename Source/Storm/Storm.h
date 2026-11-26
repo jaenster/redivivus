@@ -131,10 +131,10 @@ struct StormLinkStrc {
 #endif // D2_DEFINED_StormLinkStrc
 #ifndef D2_DEFINED_BREAKCMD
 #define D2_DEFINED_BREAKCMD
-struct __attribute__((packed)) BREAKCMD {
+D2_PACKED_BEGIN struct __attribute__((packed)) BREAKCMD {
     /* 0x00 */ StormLinkStrc m_link;
     /* 0x08 */ void * pData;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_BREAKCMD
 #ifndef D2_DEFINED_CCritSect
 #define D2_DEFINED_CCritSect
@@ -156,7 +156,7 @@ union CMDPARAMSVALUE {
 #endif // D2_DEFINED_CMDPARAMSVALUE
 #ifndef D2_DEFINED_CMDDEF
 #define D2_DEFINED_CMDDEF
-struct __attribute__((packed)) CMDDEF {
+D2_PACKED_BEGIN struct __attribute__((packed)) CMDDEF {
     /* 0x00 */ struct CMDDEF * pPrev; // list link; SCmdRegisterArgument @006c4580 writes *pNewNode and pNewNode[1] as the two link words
     /* 0x04 */ struct CMDDEF * pNext; // walked by SCMD_ParseArgument off gpStormCmdListHeadSlash / gpStormCmdListHeadBackslash
     /* 0x08 */ uint32_t nArgTypeFlags; // &0x30000 selects bool (0) / int (0x10000) / string (0x20000)
@@ -170,7 +170,7 @@ struct __attribute__((packed)) CMDDEF {
     /* 0x34 */ BOOL (__stdcall *pfnCallback)(struct CMDPARAMS *, char *); // SCMDCALLBACK called with a CMDPARAMS view; returning 0 aborts parsing. SCmdRegisterArgument stores pfnCallback here; called at 006c48ad
     /* 0x38 */ int bSupplied; // set to 1 once the argument has been supplied
     /* 0x3C */ CMDPARAMSVALUE uValue; // current value: dwSetValue default for a boolean, the number, or an SMemAlloc'd string (SCMD.CPP line 0x121)
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_CMDDEF
 #ifndef D2_DEFINED_ct_data
 #define D2_DEFINED_ct_data
@@ -183,7 +183,7 @@ struct ct_data {
 #endif // D2_DEFINED_ct_data
 #ifndef D2_DEFINED_D2ArchiveStrc
 #define D2_DEFINED_D2ArchiveStrc
-struct __attribute__((packed)) D2ArchiveStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2ArchiveStrc {
     /* 0x000 */ struct D2ArchiveStrc * pPrevLink;
     /* 0x004 */ struct D2ArchiveStrc * pNext;
     /* 0x008 */ char szArchivePath[260];
@@ -207,7 +207,7 @@ struct __attribute__((packed)) D2ArchiveStrc {
     /* 0x150 */ struct D2ArchiveStrc * pBaseArchive;
     /* 0x154 */ char szInternalPrefix[260];
     /* 0x258 */ int nPriority;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2ArchiveStrc
 #ifndef D2_DEFINED_D2CompressHuffNodeStrc
 #define D2_DEFINED_D2CompressHuffNodeStrc
@@ -222,7 +222,7 @@ struct D2CompressHuffNodeStrc {
 #endif // D2_DEFINED_D2CompressHuffNodeStrc
 #ifndef D2_DEFINED_D2CompressEncoderStrc
 #define D2_DEFINED_D2CompressEncoderStrc
-struct __attribute__((packed)) D2CompressEncoderStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2CompressEncoderStrc {
     /* 0x0000 */ uint32_t nReserved00; // field at +0
     /* 0x0004 */ uint32_t nRootWeight; // set to 1 after init (root weight or ready flag)
     /* 0x0008 */ D2CompressHuffNodeStrc aNodePool[515]; // Huffman node pool: 515*24=12360 bytes, ends at +0x304f
@@ -234,7 +234,7 @@ struct __attribute__((packed)) D2CompressEncoderStrc {
     /* 0x3064 */ struct D2CompressHuffNodeStrc * pWeightedListHead; // +0x3064: sorted-by-weight list head (lowest weight)
     /* 0x3068 */ int nNodeCount; // +0x3068: nodes allocated from pool so far
     /* 0x306C */ struct D2CompressHuffNodeStrc * apSymbolNodes[258]; // +0x306c: symbol-to-node lookup table (0x102 entries)
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2CompressEncoderStrc
 #ifndef D2_DEFINED_D2FogHeapBlockLinkUnion
 #define D2_DEFINED_D2FogHeapBlockLinkUnion
@@ -251,16 +251,16 @@ union D2FogHeapBlockLinkUnion {
 #endif // D2_DEFINED_D2FogHeapBlockLinkUnion
 #ifndef D2_DEFINED_D2FogHeapBlockHdrStrc
 #define D2_DEFINED_D2FogHeapBlockHdrStrc
-struct __attribute__((packed)) D2FogHeapBlockHdrStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2FogHeapBlockHdrStrc {
     /* 0x00 */ uint16_t wBlockSize; // total block size in bytes (includes header)
     /* 0x02 */ uint8_t byPadding; // extra padding bytes between header and user data
     /* 0x03 */ uint8_t byFlags; // flags: bit0=debug-tail,bit1=free,bit2=large(VirtualAlloc),bit4=prev-free-adjacent,bit6=temp,bit7=leak-protected
     /* 0x04 */ D2FogHeapBlockLinkUnion uLink; // lo16=upper16(heap ptr),hi16=0x6f6d magic — written from heap+0x0c
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2FogHeapBlockHdrStrc
 #ifndef D2_DEFINED_D2MPQBlockEntryStrc
 #define D2_DEFINED_D2MPQBlockEntryStrc
-struct __attribute__((packed)) D2MPQBlockEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MPQBlockEntryStrc {
     /* 0x00 */ uint32_t dwFilePos; // offset of the file data in the archive
     /* 0x04 */ uint32_t dwCompressedSize;
     /* 0x08 */ uint32_t dwFileSize;
@@ -268,11 +268,11 @@ struct __attribute__((packed)) D2MPQBlockEntryStrc {
     /* 0x10 */ FILETIME ftFileTime; // (attributes) bit 2
     /* 0x18 */ uint32_t dwCRC32; // (attributes) bit 1
     /* 0x1C */ uint8_t abMD5[16]; // (attributes) bit 4
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2MPQBlockEntryStrc
 #ifndef D2_DEFINED_D2MPQFileStrc
 #define D2_DEFINED_D2MPQFileStrc
-struct __attribute__((packed)) D2MPQFileStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2MPQFileStrc {
     /* 0x000 */ struct D2MPQFileStrc * pPrevLink;
     /* 0x004 */ struct D2MPQFileStrc * pNext;
     /* 0x008 */ char szFileName[260];
@@ -295,7 +295,7 @@ struct __attribute__((packed)) D2MPQFileStrc {
     /* 0x14C */ BOOL bChecksumEnabled; // Read and written as a dword (CMP dword [ESI+0x14c],0 in SFILE_InternalReadUnaligned; SFileOpenFileEx stores a dword)
     /* 0x150 */ uint32_t nChecksumState;
     /* 0x154 */ uint32_t nExpectedFileSize;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2MPQFileStrc
 #ifndef D2_DEFINED_D2MPQHashEntryStrc
 #define D2_DEFINED_D2MPQHashEntryStrc
@@ -346,13 +346,13 @@ struct D2PcxHeaderStrc {
 #endif // D2_DEFINED_D2PcxHeaderStrc
 #ifndef D2_DEFINED_D2SErrMessageSourceStrc
 #define D2_DEFINED_D2SErrMessageSourceStrc
-struct __attribute__((packed)) D2SErrMessageSourceStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SErrMessageSourceStrc {
     /* 0x00 */ uint16_t wModuleId;
     /* 0x02 */ uint8_t field_0x2;
     /* 0x03 */ uint8_t field_0x3;
     /* 0x04 */ HMODULE hModule;
     /* 0x08 */ struct D2SErrMessageSourceStrc * pNext;
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2SErrMessageSourceStrc
 #ifndef D2_DEFINED_D2SevtHandlerNodeStrc
 #define D2_DEFINED_D2SevtHandlerNodeStrc
@@ -394,7 +394,7 @@ struct D2Sha1ContextStrc {
 #endif // D2_DEFINED_D2Sha1ContextStrc
 #ifndef D2_DEFINED_D2SLogStrc
 #define D2_DEFINED_D2SLogStrc
-struct __attribute__((packed)) D2SLogStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SLogStrc {
     /* 0x00 */ uint32_t nHandle; // the HSLOG this entry belongs to (slot = nHandle & 3)
     /* 0x04 */ struct D2SLogStrc * pNext; // next log in the slot's list
     /* 0x08 */ HANDLE hFile; // WriteFile/FlushFileBuffers target (SLOG_FlushLog); 0xffffffff until opened
@@ -403,7 +403,7 @@ struct __attribute__((packed)) D2SLogStrc {
     /* 0x14 */ int32_t nIndent; // spaces written by SLOG_OutputIndent (capped at 0x80)
     /* 0x18 */ BOOL bTimestamps; // SLOG_OutputTime writes the time prefix only when set
     /* 0x1C */ char acBuffer[65536];
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2SLogStrc
 #ifndef D2_DEFINED_D2SMemTablesStrc
 #define D2_DEFINED_D2SMemTablesStrc
@@ -432,7 +432,7 @@ struct D2StormAsyncCompletionStrc {
 #endif // D2_DEFINED_D2StormAsyncCompletionStrc
 #ifndef D2_DEFINED_D2StormAsyncOpStrc
 #define D2_DEFINED_D2StormAsyncOpStrc
-struct __attribute__((packed)) D2StormAsyncOpStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2StormAsyncOpStrc {
     /* 0x00 */ struct StormLinkStrc * pPrevLink; // TSLink m_prevlink; the terminator's own address when empty
     /* 0x04 */ struct D2StormAsyncOpStrc * pNext; // TSLink m_next; negative = ~&terminator, end of list
     /* 0x08 */ HANDLE hCompletionEvent; // caller's completion event HANDLE; SetEvent on completion or cancellation
@@ -450,7 +450,7 @@ struct __attribute__((packed)) D2StormAsyncOpStrc {
     /* 0x38 */ uint32_t bAutoFree; // nonzero: SFILE_CdThreadProc releases and SMemFrees the request after completion (0041a7e2-0041a7f9)
     /* 0x3C */ uint32_t nChunkBytesRead; // bytes read for the current chunk (SFILE_CdThreadProc)
     /* 0x40 */ struct D2StormAsyncCompletionStrc * pCompletion; // optional completion object; SFILE_IssueRequest stores its last argument here
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_D2StormAsyncOpStrc
 #ifndef D2_DEFINED_D2StormAudioStreamRec
 #define D2_DEFINED_D2StormAudioStreamRec
@@ -488,7 +488,7 @@ struct tree_desc {
 #endif // D2_DEFINED_tree_desc
 #ifndef D2_DEFINED_deflate_state
 #define D2_DEFINED_deflate_state
-struct __attribute__((packed)) deflate_state {
+D2_PACKED_BEGIN struct __attribute__((packed)) deflate_state {
     /* 0x0000 */ z_stream * strm; // pointer back to this zlib stream
     /* 0x0004 */ int32_t status; // deflate state machine status
     /* 0x0008 */ uint8_t * pending_buf; // output still pending
@@ -554,7 +554,7 @@ struct __attribute__((packed)) deflate_state {
     /* 0x16BB */ uint8_t field_0x16bb;
     /* 0x16BC */ int32_t bi_valid; // number of valid bits in bi_buf
     /* 0x16C0 */ uint32_t high_water; // high water mark offset in window for initialized bytes
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_deflate_state
 #ifndef D2_DEFINED_gz_header
 #define D2_DEFINED_gz_header
@@ -576,10 +576,10 @@ struct gz_header {
 #endif // D2_DEFINED_gz_header
 #ifndef D2_DEFINED_HANDLER
 #define D2_DEFINED_HANDLER
-struct __attribute__((packed)) HANDLER {
+D2_PACKED_BEGIN struct __attribute__((packed)) HANDLER {
     /* 0x00 */ StormLinkStrc m_link;
     /* 0x08 */ BOOL (__stdcall *pfnHandler)(uint32_t, char *, void *, int32_t, char *);
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_HANDLER
 #ifndef D2_DEFINED_IDirectSoundBuffer
 #define D2_DEFINED_IDirectSoundBuffer
@@ -628,7 +628,7 @@ struct inflate_code {
 #endif // D2_DEFINED_inflate_code
 #ifndef D2_DEFINED_MessageStrc
 #define D2_DEFINED_MessageStrc
-struct __attribute__((packed)) MessageStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) MessageStrc {
     /* 0x00 */ uint8_t packetId;
     /* 0x01 */ uint8_t messageType;
     /* 0x02 */ uint8_t language;
@@ -638,7 +638,7 @@ struct __attribute__((packed)) MessageStrc {
     /* 0x09 */ uint8_t nameColor;
     /* 0x0A */ char name[16];
     /* 0x1A */ char message[256];
-};
+}; D2_PACKED_END
 #endif // D2_DEFINED_MessageStrc
 #ifndef D2_DEFINED_SCMD
 #define D2_DEFINED_SCMD

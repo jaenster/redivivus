@@ -17,10 +17,10 @@
 // Data types
 #ifndef D2_DEFINED_D2GambleTxt
 #define D2_DEFINED_D2GambleTxt
-__pragma(pack(push, 1)) struct D2GambleTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GambleTxt {
     /* 0x00 */ char szCode[4];
     /* 0x04 */ int nLevel;
     /* 0x08 */ int nItemClassId;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GambleTxt

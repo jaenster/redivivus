@@ -58,7 +58,7 @@ struct D2MonItemPercentTxt {
 #endif // D2_DEFINED_D2MonItemPercentTxt
 #ifndef D2_DEFINED_D2MonStats2Txt
 #define D2_DEFINED_D2MonStats2Txt
-__pragma(pack(push, 1)) struct D2MonStats2Txt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MonStats2Txt {
     /* 0x000 */ short Id;
     /* 0x002 */ uint8_t field_0x2;
     /* 0x003 */ uint8_t field_0x3;
@@ -147,7 +147,7 @@ __pragma(pack(push, 1)) struct D2MonStats2Txt {
     /* 0x131 */ uint8_t field_0x131;
     /* 0x132 */ uint8_t field_0x132;
     /* 0x133 */ uint8_t field_0x133;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2MonStats2Txt
 #ifndef D2_DEFINED_D2MonStatsInitStrc
@@ -171,7 +171,7 @@ struct D2MonStatsInitStrc {
 
 #endif // D2_DEFINED_D2MonStatsInitStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-__pragma(pack(push, 1)) struct D2TreasureClassExSubSubTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TreasureClassExSubSubTxt {
     /* 0x000 */ short rare;
     /* 0x002 */ short set;
     /* 0x004 */ short unique;
@@ -180,11 +180,11 @@ __pragma(pack(push, 1)) struct D2TreasureClassExSubSubTxt {
     /* 0x00A */ int nodrop;
     /* 0x00E */ char item[10][64];
     /* 0x28E */ int prob[10];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Common)
-__pragma(pack(push, 1)) struct D2TreasureClassExTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TreasureClassExTxt {
     /* 0x000 */ char treasure_class[32];
     /* 0x020 */ int picks;
     /* 0x024 */ short group;
@@ -198,7 +198,7 @@ __pragma(pack(push, 1)) struct D2TreasureClassExTxt {
     /* 0x034 */ int nodrop;
     /* 0x038 */ char item[10][64];
     /* 0x2B8 */ int prob[10];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Common
 #ifndef D2_DEFINED_D2UniqueNameTablesStrc

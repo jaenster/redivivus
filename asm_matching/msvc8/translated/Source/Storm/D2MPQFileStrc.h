@@ -21,7 +21,7 @@ struct D2MPQBlockEntryStrc;
 // Data types
 #ifndef D2_DEFINED_D2MPQFileStrc
 #define D2_DEFINED_D2MPQFileStrc
-__pragma(pack(push, 1)) struct D2MPQFileStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2MPQFileStrc {
     /* 0x000 */ struct D2MPQFileStrc * pPrevLink;
     /* 0x004 */ struct D2MPQFileStrc * pNext;
     /* 0x008 */ char szFileName[260];
@@ -44,6 +44,6 @@ __pragma(pack(push, 1)) struct D2MPQFileStrc {
     /* 0x14C */ BOOL bChecksumEnabled; // Read and written as a dword (CMP dword [ESI+0x14c],0 in SFILE_InternalReadUnaligned; SFileOpenFileEx stores a dword)
     /* 0x150 */ uint32_t nChecksumState;
     /* 0x154 */ uint32_t nExpectedFileSize;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2MPQFileStrc

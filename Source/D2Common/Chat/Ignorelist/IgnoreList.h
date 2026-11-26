@@ -69,7 +69,7 @@ typedef ::IgnoreList * (__thiscall *IgnoreList_ScalarDeletingDestructor)(::Ignor
 struct IgnoreListVtable;
 
 // Data types
-struct __attribute__((packed)) IgnoreList {
+D2_PACKED_BEGIN struct __attribute__((packed)) IgnoreList {
     /* 0x000 */ struct IgnoreListVtable * _vfptr;
     /* 0x004 */ TSHashTable<StringEntryNode, HASHKEY_STRI> tIgnoredPatterns;
     /* 0x02C */ TSHashTable<StringEntryNode, HASHKEY_STRI> tIgnoredAccounts;
@@ -77,7 +77,7 @@ struct __attribute__((packed)) IgnoreList {
     /* 0x07C */ FILE * pAppendFile;
     /* 0x080 */ char szIgnoreFilePath[260]; // MAX_PATH ignore-list file path; ctor memsets 0x104 then STRING_CopyStringWithSetLength(exe dir + filename, 0x104)
     /* 0x184 */ int32_t nPersistentIgnore; // "Persistent Ignore" registry value; returned by ChatIgnoreList_GetPersistentSetting 0060ddf0 (pThis[0x61]) and written by IGNORELIST_SavePersistentSetting 0060de00
-};
+}; D2_PACKED_END
 
 #ifndef D2_DEFINED_IgnoreListVtable
 #define D2_DEFINED_IgnoreListVtable

@@ -74,7 +74,7 @@ struct D2D3DDisplayModeStrc {
 #endif // D2_DEFINED_D2D3DDisplayModeStrc
 #ifndef D2_DEFINED_D2D3DDeviceSlotStrc
 #define D2_DEFINED_D2D3DDeviceSlotStrc
-__pragma(pack(push, 1)) struct D2D3DDeviceSlotStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2D3DDeviceSlotStrc {
     /* 0x000 */ uint32_t dwFlags;
     /* 0x004 */ GUID guid;
     /* 0x014 */ uint32_t dwVendorId;
@@ -90,7 +90,7 @@ __pragma(pack(push, 1)) struct D2D3DDeviceSlotStrc {
     /* 0x138 */ uint32_t dwAgpMemFree;
     /* 0x13C */ D2D3DDisplayModeStrc aModes[32];
     /* 0x3BC */ int nModeCount;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_D2D3DDeviceSlotStrc
 #ifndef D2_DEFINED_D2D3DVertexStrc
 #define D2_DEFINED_D2D3DVertexStrc
@@ -206,7 +206,7 @@ struct DDSCAPS {
 #endif // D2_DEFINED_DDSCAPS
 #ifndef D2_DEFINED_DDSURFACEDESC2
 #define D2_DEFINED_DDSURFACEDESC2
-__pragma(pack(push, 1)) struct DDSURFACEDESC2 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct DDSURFACEDESC2 {
     /* 0x00 */ DWORD dwSize;
     /* 0x04 */ DWORD dwFlags;
     /* 0x08 */ DWORD dwHeight;
@@ -225,7 +225,7 @@ __pragma(pack(push, 1)) struct DDSURFACEDESC2 {
     /* 0x68 */ DWORD dwCaps; // First DWORD of the embedded DDSCAPS2 at offset 104; RENDERER_D3D_InitializeDevice writes 0x6218 here with DDSD_CAPS set
     /* 0x6C */ DWORD ddsCapsRest[3]; // Remaining three DWORDs of the embedded DDSCAPS2 that starts at 104
     /* 0x78 */ DWORD dwTextureStage;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 #endif // D2_DEFINED_DDSURFACEDESC2
 #ifndef D2_DEFINED_Direct3D7Vtable
 #define D2_DEFINED_Direct3D7Vtable

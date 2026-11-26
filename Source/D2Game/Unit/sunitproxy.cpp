@@ -54,6 +54,14 @@ int gnNpcControlInitCount = 0x2b; D2_GLOBAL_GUARD(gnNpcControlInitCount, "gnNpcC
 static D2NpcItemTablesStrc gaNpcItemTables[17] = {}; D2_STATIC_GUARD(gaNpcItemTables, "gaNpcItemTables");
 static uint8_t gbaNpcItemTableBuilt[17] = {}; D2_STATIC_GUARD(gbaNpcItemTableBuilt, "gbaNpcItemTableBuilt");
 
+// The NPC init walks a pointer to each D2GameNpcStrc's pProxyQueue slot and reaches the record
+// 0x14 bytes back, stepping 0x11 slots (0x44 bytes) per NPC; on x64 the offsets are the native ones.
+#if D2_ARCH_X86
+#define D2_NPC_FROM_QUEUE_SLOT(p) ((D2GameNpcStrc*)((char*)p - 0x14))
+#elif D2_ARCH_X64
+#define D2_NPC_FROM_QUEUE_SLOT(p) ((D2GameNpcStrc*)((char*)p - offsetof(D2GameNpcStrc, pProxyQueue)))
+#endif
+
 namespace D2Game::UNIT::sunitproxy {
 
 D2MonsterAiStrc * __fastcall GetMonsterAI(D2UnitStrc * pUnit) {

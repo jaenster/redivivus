@@ -51,11 +51,11 @@ typedef void (*EndFrame_fn)(::CD2Textures * pThis);
 typedef void (*ReleaseTexture_fn)(::CD2Textures * pThis, D2TextureNodeStrc * pNode);
 
 // Full type definitions (used by value in globals)
-struct __attribute__((packed)) D2OGLColorRGBStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2OGLColorRGBStrc {
     /* 0x00 */ BYTE nRed;
     /* 0x01 */ BYTE nGreen;
     /* 0x02 */ BYTE nBlue;
-};
+}; D2_PACKED_END
 
 // =============================================================================
 // Global data (referenced by multiple functions)

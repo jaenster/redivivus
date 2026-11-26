@@ -699,7 +699,12 @@ void __fastcall dRoofDraw(D2GameViewStrc * pGameView) {
             pGameView = pGameViewSaved;
           }
 
+#if D2_ARCH_X86
           pCellEntry += 9;
+#elif D2_ARCH_X64
+          // The x86 body steps one 0x24-byte D2Wall2CellStrc as 9 list-head slots; the heads are pointers on x64.
+          pCellEntry = (D2Wall2DrawEntryStrc**)((char*)pCellEntry + sizeof(D2Wall2CellStrc));
+#endif
         } while (nCellsLeft);
       }
 

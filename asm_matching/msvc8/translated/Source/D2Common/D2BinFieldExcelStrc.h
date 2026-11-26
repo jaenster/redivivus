@@ -17,11 +17,11 @@
 // Data types
 #ifndef D2_DEFINED_D2BinFieldExcelStrc
 #define D2_DEFINED_D2BinFieldExcelStrc
-__pragma(pack(push, 1)) struct D2BinFieldExcelStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BinFieldExcelStrc {
     /* 0x00 */ char * pD2Archive;
     /* 0x04 */ char * pDataStart; // Pointer to start of data rows in the TSV buffer (after the header row)
     /* 0x08 */ uint32_t nLinesCount; // Number of data lines (rows), excluding header and Expansion-tagged rows
     /* 0x0C */ int nColumnCount; // Number of tab-separated columns counted in the header row
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2BinFieldExcelStrc

@@ -23,14 +23,14 @@ typedef uint32_t eD2States;
 
 // Data types
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-struct __attribute__((packed)) D2SkillAuraTargetArgStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2SkillAuraTargetArgStrc {
     /* 0x00 */ eD2Skills eSkill;
     /* 0x04 */ int32_t nSkillLvl;
     /* 0x08 */ int32_t nDuration;
     /* 0x0C */ eD2States eAuraTargetState;
     /* 0x10 */ int32_t nAuraStat;
     /* 0x14 */ int32_t nAuraStatValue;
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 namespace D2Game::SKILLS::SkillAma {

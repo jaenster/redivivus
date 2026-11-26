@@ -27,7 +27,7 @@ namespace D2Launch {
 
 // Function declarations
 // App mode launcher init: stash module handle and return pointer to fAPPMODE_launcher_ReturnAppMode_Caller.
-fnAppModeRun * __fastcall AppModeLauncherInit(HMODULE hModule);
+fnAppModeRun * (__fastcall AppModeLauncherInit)(HMODULE hModule);
 // Launcher app mode shutdown (no-op).
 void __stdcall AppModeLauncherShutdown();
 // Module-private: no other module references these

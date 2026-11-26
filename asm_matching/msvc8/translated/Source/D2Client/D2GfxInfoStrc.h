@@ -26,7 +26,7 @@ struct D2ParticleOffset3DVectorStrc {
 #endif // D2_DEFINED_D2ParticleOffset3DVectorStrc
 #ifndef D2_DEFINED_D2ParticleStrc
 #define D2_DEFINED_D2ParticleStrc
-__pragma(pack(push, 1)) struct D2ParticleStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2ParticleStrc {
     /* 0x00 */ int nFlags;
     /* 0x04 */ int nPosX;
     /* 0x08 */ int nPosY;
@@ -38,6 +38,6 @@ __pragma(pack(push, 1)) struct D2ParticleStrc {
     /* 0x40 */ int nDurationFrames; // Frame countdown; decremented each tick, set via PARTICLE_SetBounce
     /* 0x44 */ int nZAnimScale; // Z animation divisor; scales arc height (multiplied by delta Z)
     /* 0x48 */ int nBounceCount; // Bounce counter; minimum 1, decremented per bounce
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2ParticleStrc

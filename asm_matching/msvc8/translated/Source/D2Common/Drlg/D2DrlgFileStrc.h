@@ -42,10 +42,10 @@ struct D2DrlgFileStrc {
 #endif // D2_DEFINED_D2DrlgFileStrc
 #ifndef D2_DEFINED_D2DrlgSubstGroupStrc
 #define D2_DEFINED_D2DrlgSubstGroupStrc
-__pragma(pack(push, 1)) struct D2DrlgSubstGroupStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2DrlgSubstGroupStrc {
     /* 0x00 */ D2DrlgCoordStrc tBox; // Bounding box of the substitution group (nPosX, nPosY, nWidth, nHeight)
     /* 0x10 */ int nProbability; // Substitution probability/chance (DS1 version >= 13)
     /* 0x14 */ int nVariantCount; // Unknown substitution group field
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2DrlgSubstGroupStrc

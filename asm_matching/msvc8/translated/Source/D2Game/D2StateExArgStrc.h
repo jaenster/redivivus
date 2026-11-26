@@ -28,7 +28,7 @@ typedef void (__fastcall *PFN_StatExpireCallback)(struct D2UnitStrc * pUnit, eD2
 // Data types
 #ifndef D2_DEFINED_D2StateExArgStrc
 #define D2_DEFINED_D2StateExArgStrc
-__pragma(pack(push, 1)) struct D2StateExArgStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2StateExArgStrc {
     /* 0x00 */ struct D2UnitStrc * pUnit;
     /* 0x04 */ struct D2UnitStrc * pTarget;
     /* 0x08 */ eD2Skills eSkill;
@@ -38,6 +38,6 @@ __pragma(pack(push, 1)) struct D2StateExArgStrc {
     /* 0x18 */ int32_t nSkillCalc;
     /* 0x1C */ eD2States eAuraState;
     /* 0x20 */ void (__fastcall *pFunction)(struct D2UnitStrc *, eD2States, struct D2StatListExStrc *);
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2StateExArgStrc

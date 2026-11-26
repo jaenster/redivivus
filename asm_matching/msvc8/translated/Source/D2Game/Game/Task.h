@@ -27,22 +27,22 @@ struct D2LinkNodeStrc {
 
 #endif // D2_DEFINED_D2LinkNodeStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2TaskNodeStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TaskNodeStrc {
     /* 0x00 */ uint32_t dwTimestamp; // Due time (TASK_GetTimestamp + delay); lists are ordered by signed difference
     /* 0x04 */ uint32_t dwCallbackId; // TASK_Dispatch halts at line 0x463 unless 0 (TASK_GameTickCallback)
     /* 0x08 */ uint32_t dwUserData; // Game token at both enqueue sites; TASK_GameTickCallback passes it to QSERVER_FindAndLockGame
     /* 0x0C */ D2LinkNodeStrc sLink; // Link in a slot's sTaskList
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2TaskQueueSlotStrc
 #define D2_DEFINED_D2TaskQueueSlotStrc
-__pragma(pack(push, 1)) struct D2TaskQueueSlotStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2TaskQueueSlotStrc {
     /* 0x00 */ uint32_t nSlotIndex; // index into gaTaskQueueHeadArray / aTaskQueueCriticalSections (0..31); stored at 005649c9
     /* 0x04 */ int32_t nTaskCount; // tasks enqueued into this slot; 0 at 005649cb, +1 per task at 00564ad6
     /* 0x08 */ D2LinkNodeStrc sTaskList; // self-linked head of this slot's task list (005649d2..005649d7)
     /* 0x10 */ D2LinkNodeStrc sSlotLink; // link in the gsTaskQueueListHead ring of slots
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2TaskQueueSlotStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)

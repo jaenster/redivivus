@@ -67,7 +67,7 @@ static TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCritSec
 
 namespace D2Client { namespace ClientModeInGame {
 
-fnAppModeRun * __fastcall AppModeClientInit(HMODULE hModule) {
+fnAppModeRun * (__fastcall AppModeClientInit)(HMODULE hModule) {
     // Static local variables (originally global data)
     static fnAppModeRun gpfnClientAppModeRun = &D2Client::ClientModeInGame::fAPPMODE_client_ReturnAppMode_Caller; D2_STATIC_GUARD(gpfnClientAppModeRun, "D2Client::ClientModeInGame::AppModeClientInit::gpfnClientAppModeRun");
 

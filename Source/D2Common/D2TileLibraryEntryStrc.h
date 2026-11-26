@@ -21,7 +21,7 @@ struct D2LRUCacheNodeStrc;
 // Data types
 #ifndef D2_DEFINED_D2TileLibraryEntryStrc
 #define D2_DEFINED_D2TileLibraryEntryStrc
-struct __attribute__((packed)) D2TileLibraryEntryStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2TileLibraryEntryStrc {
     /* 0x00 */ int nDirection;
     /* 0x04 */ uint16_t nRoofHeight;
     /* 0x06 */ short nFlags;
@@ -43,6 +43,6 @@ struct __attribute__((packed)) D2TileLibraryEntryStrc {
     /* 0x54 */ struct D2GroundSubTileStrc * pSubTiles; // 0x14-byte subtile records (x,y at +0/+2, flags at +8, pixel data at +0x10) (D2GroundSubTileStrc; the renderers index it by byte offset)
     /* 0x58 */ char * szFilePath; // DT1 file path; SPRITECACHE_AllocEntry passes it to CheckIfFileExists and reads nBlockDataSize bytes from it into pSubTiles
     /* 0x5C */ struct D2LRUCacheNodeStrc * pLruNode; // sprite-cache LRU node; SPRITECACHE_AllocEntry moves it to front, FreeEntry frees it
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2TileLibraryEntryStrc

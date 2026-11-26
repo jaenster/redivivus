@@ -16,9 +16,9 @@
 #include "Source/Storm/H/stpl.h"
 
 // Data types
-__pragma(pack(push, 1)) struct MappingEntryNode : public TSHashObject<MappingEntryNode, HASHKEY_STRI> {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct MappingEntryNode : public TSHashObject<MappingEntryNode, HASHKEY_STRI> {
     /* 0x18 */ char * szMappedValue;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 namespace D2Common { namespace Chat { namespace Ignorelist { namespace MappingEntryNode {
 

@@ -42,7 +42,7 @@ struct D2PcxRgbStrc {
 #endif // D2_MODULE_D2CMP
 #ifndef _WIN32  // provided by the Win32 SDK / CRT on Windows
 
-struct __attribute__((packed)) tagRGBQUAD {
+D2_PACKED_BEGIN struct __attribute__((packed)) tagRGBQUAD {
     tagRGBQUAD() = default;
     tagRGBQUAD(uint32_t v) { *reinterpret_cast<uint32_t*>(this) = v; }
     operator uint32_t() const { return *reinterpret_cast<const uint32_t*>(this); }
@@ -52,15 +52,15 @@ struct __attribute__((packed)) tagRGBQUAD {
     /* 0x01 */ BYTE rgbGreen;
     /* 0x02 */ BYTE rgbRed;
     /* 0x03 */ BYTE rgbReserved;
-};
+}; D2_PACKED_END
 
 #endif // _WIN32
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2CMP)
-struct __attribute__((packed)) PcxPaletteTrailer {
+D2_PACKED_BEGIN struct __attribute__((packed)) PcxPaletteTrailer {
     /* 0x00 */ uint8_t nMarker; // 0x0c
     /* 0x01 */ D2PcxRgbStrc rgb[256]; // 256 R,G,B triplets
-};
+}; D2_PACKED_END
 
 #endif // D2_MODULE_D2CMP
 namespace D2CMP::Draw {

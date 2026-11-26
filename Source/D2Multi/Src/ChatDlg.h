@@ -101,7 +101,7 @@ struct D2UiLevelLineTextStrc {
 };
 
 #endif // D2_MODULE_D2Multi
-struct __attribute__((packed)) D2WinButton {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2WinButton {
     /* 0x000 */ D2ControlStrc sControl;
     /* 0x040 */ int nButtonFlags; // Button behaviour flags. Bits 0x3 (either bit): Push fires fpOnPress on mouse down (00501118), Mouse skips the release and the release callback (0050119b), Draw pins bPressedInside to 1 while pressed (00500e02). Bit1 0x2 additionally toggles bPressed/bPressedInside on each Push (005010d4). Bit2 0x4 skips button.wav (0050110a). Bits 3-6 unverified (scroll_up, scroll_down, transparent, hotkey_label). From asm of D2WINBUTTON Push/Mouse/Draw.
     /* 0x044 */ BOOL bPressed; // Set by Push (mouse down; toggled for flag bit1 buttons), cleared by Mouse (mouse up) unless nButtonFlags & 3. Was pDC6Hover: never a DC6, only 0/1.
@@ -117,11 +117,11 @@ struct __attribute__((packed)) D2WinButton {
     /* 0x268 */ BOOL (__stdcall *fpHoverCallback)(struct D2ControlMsg *); // Optional callback invoked each frame when mouse is over button
     /* 0x26C */ int bMouseOver; // Bool: 1 if mouse is currently over button, updated each Draw frame
     /* 0x270 */ int32_t nHotkeyStringId; // String table ID for hotkey label (rendered below main label when flag bit6 set)
-};
+}; D2_PACKED_END
 
 #ifndef D2_DEFINED_FORMS_PredefinedFormStrc
 #define D2_DEFINED_FORMS_PredefinedFormStrc
-struct __attribute__((packed)) FORMS_PredefinedFormStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) FORMS_PredefinedFormStrc {
     /* 0x00 */ eD2FormType neD2FormType;
     /* 0x04 */ int aParams[4];
     /* 0x14 */ int32_t nExtraParam; // AnimImage = D2WinAnimImage nStaticFrameDelay (40 ms units; records 0xb2/0xb3 give 1); struct DC6* for ImageEx; Button = hotkey virtual-key code passed as D2WinButton nHotkeyVK (0xd VK_RETURN on OK buttons, 0x1b VK_ESCAPE on Cancel/back buttons, 0x26/0x28 arrow keys, 0 = none); generic int for others
@@ -131,20 +131,20 @@ struct __attribute__((packed)) FORMS_PredefinedFormStrc {
     /* 0x24 */ void * pTypeArg1; // Constructor argument whose meaning depends on neD2FormType (FORMS_CreateAnyForm): EditBox = fpD2WinEditBoxSubmit* submit callback (e.g. OOGUTIL_SendChatMessageWide); Image = struct D2WinImageHitArea*; AnimImage = FORMS_AnimFrameStrc[5] state table, D2WinAnimImage pAnimFrames (e.g. gaCharSelectAnimFramesAmazon); TextBox = int[3] scrollbar geometry x,y,height (gaMultiTextBoxScrollbarGeom*); Button = initial image index 0/2/4/6 (D2WinButton nCurrentImageIndex); List = item array. Unused (0) for the other types.
     /* 0x28 */ void * pTypeArg2; // Constructor argument whose meaning depends on neD2FormType (FORMS_CreateAnyForm): EditBox = font id pair (gaMenuFormFontParams*); Image = Key* handler; AnimImage = fpD2WinAnimImageNotify* (e.g. MAINMENU_SetAmazonDescription); TextBox = font params (gaMenuFormFontParams*/gaMultiFormFontParams*); Button = Mouse* hover callback (e.g. MAINMENU_DisableControlIfDataNonZero); List = font id pointer; AccountList = font data. Unused (0) for the other types.
     /* 0x2C */ uint32_t nFlagsOrType; // Button = nButtonFlags (D2WinButton +0x40 bit flags: 0, 1, 2, 4, 6, 8, 0x10, 0x20, 0x40 occur); uint32 flags/count for TextBox/EditBox/AccountList
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_FORMS_PredefinedFormStrc
-struct __attribute__((packed)) D2WinSmack {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2WinSmack {
     /* 0x000 */ D2ControlStrc sControl;
     /* 0x040 */ char szFilePath[256]; // strncpy(pSmack->szFilePath, szFilePath, 0x100) at D2WINSMACK_LoadAndDecodeSmacker 00506938; runs exactly to sSmackerCtx at 0x140
     /* 0x140 */ D2SmackerContextStrc sSmackerCtx; // embedded smacker context buffer (hSmack+eMode+nX+nY)
-};
+}; D2_PACKED_END
 
 namespace D2Multi::ChatDlg {
 
 // Function declarations
 // App mode multiplayer init: stash module handle and return pointer to fAPPMODE_multiplayer_ReturnAppMode_Caller.
-fnAppModeRun * __fastcall AppModeMultiplayerInit(HMODULE hModule);
+fnAppModeRun * (__fastcall AppModeMultiplayerInit)(HMODULE hModule);
 // Multiplayer app mode shutdown (no-op).
 void __stdcall AppModeMultiplayerShutdown();
 // Battle.net game creation and joining functions - handle both realm and open bnet modes

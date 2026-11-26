@@ -44,7 +44,7 @@ struct D2ElemDmgStatTripleStrc {
 #endif // D2_DEFINED_D2ElemDmgStatTripleStrc
 #ifndef D2_DEFINED_D2GemsTxt
 #define D2_DEFINED_D2GemsTxt
-__pragma(pack(push, 1)) struct D2GemsTxt {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2GemsTxt {
     /* 0x00 */ char name[32]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x20 */ char letter[6]; // d2bs binfields FIELDTYPE_ASCII
     /* 0x26 */ uint8_t field_0x26;
@@ -57,7 +57,7 @@ __pragma(pack(push, 1)) struct D2GemsTxt {
     /* 0x30 */ D2MagixAffixModStrc aWeaponMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
     /* 0x60 */ D2MagixAffixModStrc aHelmMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
     /* 0x90 */ D2MagixAffixModStrc aShieldMods[3]; // d2bs binfields FIELDTYPE_NAME_INT
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2GemsTxt
 #ifndef D2_DEFINED_D2MonStatsInitStrc

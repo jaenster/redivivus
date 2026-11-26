@@ -37,7 +37,7 @@ typedef void (__fastcall *fpForEachClientFn)(struct D2ClientStrc * pClient, void
 // Data types
 #ifndef D2_DEFINED_D2BNetSystemInfoStrc
 #define D2_DEFINED_D2BNetSystemInfoStrc
-__pragma(pack(push, 1)) struct D2BNetSystemInfoStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2BNetSystemInfoStrc {
     /* 0x000 */ uint32_t adwHeader[10]; // copied to FF01 pkt+0x01..+0x25
     /* 0x028 */ char szCompilationData[128]; // SStrCopy 0x80 -> pkt+0x29
     /* 0x0A8 */ uint32_t dw0xA8; // -> pkt+0xa9
@@ -57,7 +57,7 @@ __pragma(pack(push, 1)) struct D2BNetSystemInfoStrc {
     /* 0x0EC */ uint32_t dw0xEC; // -> pkt+0xbd
     /* 0x0F0 */ int32_t aSomeInts[8]; // MOVSD.REP 8 -> pkt+0xc1
     /* 0x110 */ uint32_t dw0x110; // -> pkt+0xe1
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2BNetSystemInfoStrc
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -72,7 +72,7 @@ struct D2Game_Line0x13af {
 #endif // D2_MODULE_D2Game
 #ifndef D2_DEFINED_D2Packet0x5aEventStructure
 #define D2_DEFINED_D2Packet0x5aEventStructure
-__pragma(pack(push, 1)) struct D2Packet0x5aEventStructure {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2Packet0x5aEventStructure {
     /* 0x00 */ uint8_t nPacketId;
     /* 0x01 */ uint8_t nMessageType;
     /* 0x02 */ uint8_t nColor;
@@ -80,11 +80,11 @@ __pragma(pack(push, 1)) struct D2Packet0x5aEventStructure {
     /* 0x07 */ uint8_t nArgTypes;
     /* 0x08 */ char szName1[16];
     /* 0x18 */ char szName2[16];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_DEFINED_D2Packet0x5aEventStructure
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2PacketD2GS_SC_0xFFFD {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PacketD2GS_SC_0xFFFD {
     /* 0x00 */ uint8_t nPacketSubType;
     /* 0x01 */ uint8_t field_0x1;
     /* 0x02 */ uint8_t field_0x2;
@@ -141,7 +141,7 @@ __pragma(pack(push, 1)) struct D2PacketD2GS_SC_0xFFFD {
     /* 0xBA */ uint8_t field_0xba;
     /* 0xBB */ uint8_t field_0xbb;
     /* 0xBC */ uint8_t field_0xbc;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
@@ -153,7 +153,7 @@ struct D2PlayerMessageThreadArgsStrc {
 
 #endif // D2_MODULE_D2Game
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2QServerGameStatsStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QServerGameStatsStrc {
     /* 0x00 */ uint32_t nServerToken;
     /* 0x04 */ int32_t nSeedLow; // pGame->pInitSeed.nSeedLow
     /* 0x08 */ int32_t nClientCount;
@@ -190,10 +190,10 @@ __pragma(pack(push, 1)) struct D2QServerGameStatsStrc {
     /* 0xA7 */ uint8_t field_0xa7;
     /* 0xA8 */ eD2ArenaFlags eArenaFlags;
     /* 0xAC */ struct D2PoolManagerStrc * pMemoryPool;
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
-__pragma(pack(push, 1)) struct D2QServerUnitRecordStrc {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2QServerUnitRecordStrc {
     /* 0x00 */ eD2UnitType eUnitType; // unit type
     /* 0x04 */ int32_t nClassId;
     /* 0x08 */ uint32_t nUnitGUID;
@@ -204,10 +204,10 @@ __pragma(pack(push, 1)) struct D2QServerUnitRecordStrc {
     /* 0x1C */ uint32_t nOwnerGUID;
     /* 0x20 */ uint32_t field_0x20; // never written
     /* 0x24 */ char szCharName[16]; // player units only; zeroed at [0] otherwise
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #if !defined(D2_MODULE_LIBRARIES) || defined(D2_MODULE_D2Game)
-__pragma(pack(push, 1)) struct D2PacketD2GS_SC_0xFF01 {
+D2_PACKED_BEGIN __pragma(pack(push, 1)) struct D2PacketD2GS_SC_0xFF01 {
     /* 0x000 */ D2PacketD2GS_SC_0xFFFD sHead;
     /* 0x0BD */ uint8_t field_0xbd;
     /* 0x0BE */ uint8_t field_0xbe;
@@ -245,7 +245,7 @@ __pragma(pack(push, 1)) struct D2PacketD2GS_SC_0xFF01 {
     /* 0x119 */ uint8_t field_0x119;
     /* 0x11A */ uint8_t field_0x11a;
     /* 0x11B */ char nZeroed[74];
-}; __pragma(pack(pop))
+}; __pragma(pack(pop)) D2_PACKED_END
 
 #endif // D2_MODULE_D2Game
 namespace D2Game { namespace GAME { namespace Server {

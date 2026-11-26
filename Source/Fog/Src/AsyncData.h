@@ -28,26 +28,30 @@ struct D2AsyncData_Line0x128;
 // Data types
 #ifndef D2_DEFINED_D2AsyncDataCallbackStrc
 #define D2_DEFINED_D2AsyncDataCallbackStrc
-struct __attribute__((packed)) D2AsyncDataCallbackStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AsyncDataCallbackStrc {
     /* 0x00 */ uint32_t (__stdcall *pfnCallback)(void *, uint32_t, struct D2AsyncDataCallbackStrc *); // called with (pReadBuffer, nReadSize, &tCallback) when the read completes
+#if defined(_WIN64)
+    /* 0x08 */ uint32_t aUserData[6]; // the D2CMP request keeps two pointers and two ints here (D2SpriteDecodeRequestStrc)
+#else
     /* 0x04 */ uint32_t aUserData[4];
+#endif
     /* 0x14 */ void * pResultBuffer; // non-NULL after the callback: replaces the read buffer (0040a505)
     /* 0x18 */ size_t nResultSize; // becomes nReadSize with pResultBuffer
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2AsyncDataCallbackStrc
 #ifndef D2_DEFINED_D2AsyncDataSlotStrc
 #define D2_DEFINED_D2AsyncDataSlotStrc
-struct __attribute__((packed)) D2AsyncDataSlotStrc {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AsyncDataSlotStrc {
     /* 0x00 */ HANDLE hEvent;
     /* 0x04 */ BOOL bFree;
     /* 0x08 */ struct D2AsyncData_Line0x128 * pRequest;
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2AsyncDataSlotStrc
 #ifndef D2_DEFINED_D2AsyncData_Line0x128
 #define D2_DEFINED_D2AsyncData_Line0x128
-struct __attribute__((packed)) D2AsyncData_Line0x128 {
+D2_PACKED_BEGIN struct __attribute__((packed)) D2AsyncData_Line0x128 {
     /* 0x00 */ struct D2MPQFileStrc * pFile; // open MPQ file handle (set by ARCHIVE_OpenD2FileWrap, read as struct D2MPQFileStrc* for seek/read/close)
     /* 0x04 */ struct D2PoolManagerStrc * pMemory;
     /* 0x08 */ _OVERLAPPED tOverlapped; // Offset = file position, hEvent = slot event (0040a77d/0040a787)
@@ -59,7 +63,7 @@ struct __attribute__((packed)) D2AsyncData_Line0x128 {
     /* 0x48 */ int nFlags;
     /* 0x4C */ int nPriorityBeforeDefer; // nPriority saved when ASYNCDATA_SetPriority defers a change (0040a8b3); ASYNCDATA_DeferPriorityUpdates re-applies nPriority on flush only if it differs (0040a933)
     /* 0x50 */ struct D2AsyncData_Line0x128 * pNextDeferred; // Next entry in the gpAsyncDataDeferredList list of deferred requests (nFlags & 8): pushed at 0040a8c1, unlinked by ASYNCDATA_Free (0040ab58), walked at 0040a936
-};
+}; D2_PACKED_END
 
 #endif // D2_DEFINED_D2AsyncData_Line0x128
 namespace Fog::Src::AsyncData {
