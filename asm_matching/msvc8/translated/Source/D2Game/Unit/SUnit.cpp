@@ -146,6 +146,7 @@
 #include "Source/D2Common/Units/Units.inline.h"
 #include "Source/D2Game/Monster/Ai/AI.h"
 #include "Source/D2Game/Skills/SkillAss.h"
+#include "Redivivus/Lua/d2_lua_hooks.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -2323,6 +2324,7 @@ void __fastcall FreeServerUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
         exit(-1);
       }
 
+      D2LUA_UNIT_FREED(pGame, pUnit);
       UNITS_UnlinkUnitFromRoom(pUnit, pGame, 0);
       pQuestDataList = pUnit->uSideData.pServerSide.pQuestEventList;
       if (pQuestDataList) {
