@@ -314,9 +314,10 @@ export function actions(): Record<string, Fn> {
             const p = points.subtileArg(to, 1, "monster.runTo");
             return act(self, "monster.runTo", "move", () => W().aiMove(self, undefined, p.x, p.y, true), undefined, p.x, p.y);
         },
-        walkToward: (self: NativeHandle, target: unknown) => {
+        walkToward: (self: NativeHandle, target: unknown, flags?: unknown) => {
             const t = unitArg(target, 1, "monster.walkToward");
-            return act(self, "monster.walkToward", "move", () => W().aiMove(self, t, 0, 0, false), t);
+            const f = flags === undefined ? 0 : argInteger(flags, 2, "monster.walkToward");
+            return act(self, "monster.walkToward", "move", () => W().aiMove(self, t, 0, 0, false, f), t);
         },
         runToward: (self: NativeHandle, target: unknown) => {
             const t = unitArg(target, 1, "monster.runToward");
@@ -331,10 +332,26 @@ export function actions(): Record<string, Fn> {
             return cast(self, "monster.castSkill", skill, at, m, false);
         },
         castSequence: (self: NativeHandle, skill: unknown, at: unknown) => cast(self, "monster.castSequence", skill, at, MonsterMode.Sequence, true),
-        circleToward: (self: NativeHandle, target: unknown, steps: unknown) => {
+        circleToward: (self: NativeHandle, target: unknown, steps: unknown, flank?: unknown) => {
             const t = unitArg(target, 1, "monster.circleToward");
             const n = argInteger(steps, 2, "monster.circleToward");
-            return act(self, "monster.circleToward", "circle", () => W().aiCircle(self, t, n), t);
+            return act(self, "monster.circleToward", "circle", () => W().aiCircle(self, t, n, flank === true), t);
+        },
+        walkPast: (self: NativeHandle, target: unknown, offset: unknown, force?: unknown) => {
+            const t = unitArg(target, 1, "monster.walkPast");
+            const n = argInteger(offset, 2, "monster.walkPast");
+            return act(self, "monster.walkPast", "walk", () => W().aiWalkPast(self, t, n, force === true), t);
+        },
+        wanderAround: (self: NativeHandle, target: unknown, radius: unknown) => {
+            const t = unitArg(target, 1, "monster.wanderAround");
+            const r = argInteger(radius, 2, "monster.wanderAround");
+            return act(self, "monster.wanderAround", "wander", () => W().aiWanderAround(self, t, r));
+        },
+        walkToDistance: (self: NativeHandle, target: unknown, maxStep: unknown, dist: unknown) => {
+            const t = unitArg(target, 1, "monster.walkToDistance");
+            const m = argInteger(maxStep, 2, "monster.walkToDistance");
+            const d = argInteger(dist, 3, "monster.walkToDistance");
+            return act(self, "monster.walkToDistance", "walk", () => W().aiWalkToDistance(self, t, m, d), t);
         },
         wander: (self: NativeHandle, radius: unknown) => {
             const r = argInteger(radius, 1, "monster.wander");

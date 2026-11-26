@@ -61,6 +61,9 @@ struct D2UnitStrc {
     int nCasts = 0, nSequences = 0, nCircles = 0;
     int nLastSkill = -1, nLastMode = -1;
     D2UnitStrc* pReviving = nullptr;    // the corpse a resurrect brings back when the action ends
+    // Mephisto's replica keeps what the engine keeps in its D2AiGeneralStrc.
+    int nArg0 = 0, nArg1 = 0, nArg2 = 0;
+    bool bBehindWall = false;           // CollidesWith a unit is true when it stands behind a wall
 };
 
 enum { STAT_HP = 6, STAT_MAXHP = 7 };
@@ -107,7 +110,7 @@ public:
         p->tStats[STAT_HP] = 50 << 8;
         p->tStats[STAT_MAXHP] = 50 << 8;
         p->tStats[12] = 7;  // level
-        p->nAiIndex = nClass == 19 ? 6 : nClass == 58 ? 13 : 3;  // Fallen, Fallen Shaman; everything else: Zombie
+        p->nAiIndex = nClass == 19 ? 6 : nClass == 58 ? 13 : nClass == 242 ? 50 : 3;  // Fallen, Fallen Shaman, Mephisto; else Zombie
         p->nSeedLow += p->nGuid * 7919;
         D2UnitStrc* pRaw = p.get();
         aUnits.push_back(std::move(p));
@@ -180,18 +183,25 @@ public:
 
     // What the shamans did, frame by frame: the stock replica and the script must write the same.
     std::vector<std::string> aTrace;
-    void Trace(D2UnitStrc* p, const char* pszWhat, int a = -1, int b = -1) {
-        if (p->nClass != 58) {
+    void Trace(D2UnitStrc* p, const char* pszWhat, int a = -1, int b = -1, int c = -1) {
+        if (p->nClass != 58 && p->nClass != 242) {
             return;
         }
-        char sz[96];
-        snprintf(sz, sizeof(sz), "%u %u %s %d %d", nFrame, p->nGuid, pszWhat, a, b);
+        char sz[128];
+        snprintf(sz, sizeof(sz), "%u %u %s %d %d %d", nFrame, p->nGuid, pszWhat, a, b, c);
         aTrace.push_back(sz);
     }
 
     void StockThink(D2UnitStrc* p) {
         if (p->nClass == 58) {
             StockShaman(p);
+            return;
+        }
+        if (p->nClass == 242) {
+            StockMephisto(p);
+            if (p->nThinkAt < 0 && p->nActionEnd < 0 && !p->bDead) {
+                AiIdle(p, AiDelay(p));  // armed nothing: as the mod host does for a script think
+            }
             return;
         }
         p->nStockThinks++;
@@ -246,10 +256,180 @@ public:
             return;
         }
         if ((int)(SeedRoll(p) % 100) < aip[2]) {
-            AiCircle(p, pTarget, 3);
+            AiCircle(p, pTarget, 3, 0);
             return;
         }
         AiIdle(p, 10);
+    }
+
+    // AITHINK_Fn1_Mephisto (D2Game Monster/Ai/AI.cpp, 1.14d 005f78b0) over this stand-in, goto for
+    // goto, with dwArg0/1/2 in nArg0/1/2; DecideMephistoAlternateTarget inlined.
+    void StockMephisto(D2UnitStrc* p) {
+        p->nStockThinks++;
+        int nDistance = 0;
+        D2UnitStrc* pTarget = NearestPlayer(p, nDistance);
+        if (!pTarget) {
+            p->nThinkAt = (int)nFrame + 12;  // AI_BASIC: no target, no think
+            return;
+        }
+        bool bEngaged = nDistance <= 2;
+        D2LuaMonsterData t;
+        MonsterData(p->nClass, t);
+        int nLife = LifePercent(p);
+        int nHurt = (100 - nLife) / 5;
+        if (nHurt < 0) {
+            nHurt = 0;
+        }
+        bool bMoved = false;
+        uint32_t nState = (uint32_t)p->nArg2;
+        if (!bEngaged) {
+            if (nDistance > 0x14) {
+                nState = 4;
+                goto dispatch_state;
+            }
+            if (!nState) {
+                if (nLife <= 0x14 && nDistance < 5) {
+                    if ((int)(SeedRoll(p) % 100) < 0x28) {
+                        nState = 1;
+                        goto dispatch_state;
+                    }
+                }
+                if ((int)(SeedRoll(p) % 100) < nHurt + 0x32) {
+                    goto start_attack_sequence;
+                }
+            } else if (nState <= 4) {
+                goto dispatch_state;
+            }
+            nState = 0;
+            if ((int)(SeedRoll(p) % 100) < 0x41) {
+                if ((int)(SeedRoll(p) % 100) >= 0x41 && nDistance <= 5) {
+                    AiPathOverrides(p, 0, 0, 4);
+                    AiMove(p, pTarget, 0, 0, D2LUA_MOVE_WALK, 7);
+                    p->nArg2 = 0;
+                    return;
+                }
+                AiCircle(p, pTarget, 4, 0);
+                p->nArg2 = 0;
+                return;
+            }
+            AiIdle(p, 10);
+            p->nArg2 = (int)nState;
+            return;
+        }
+        if ((int)(SeedRoll(p) % 100) > t.aAiParams[0]) {
+            nState = 3;
+        } else {
+        start_attack_sequence:
+            nState = 2;
+            p->nArg0 = (int)(SeedRoll(p) % 3 + 3);
+        }
+    dispatch_state:
+        switch (nState) {
+            case 0:
+                AiIdle(p, 5);
+                p->nArg2 = 4;
+                return;
+            case 1:
+                nState = 0;
+                AiPathOverrides(p, 0, 0x32, 0);
+                if (AiWalkPast(p, pTarget, 8, true)) {
+                    p->nArg2 = (int)nState;
+                    return;
+                }
+                if (bEngaged) {
+                    AiCast(p, t.aSkills[2], t.aSkillModes[2], pTarget, 0, 0);
+                    p->nArg2 = 0;
+                    return;
+                }
+                break;
+            case 3:
+                nState = 0;
+                if ((int)(SeedRoll(p) % 100) < nHurt + 0x50) {
+                    if ((int)(SeedRoll(p) % 100) < 0x50 - nHurt) {
+                        AiAttack(p, pTarget, false);
+                        p->nArg2 = 0;
+                        return;
+                    }
+                    AiCast(p, t.aSkills[2], t.aSkillModes[2], pTarget, 0, 0);
+                    p->nArg2 = 0;
+                    return;
+                }
+                AiPathOverrides(p, 0, 0x32, 0);
+                goto approach_or_wander;
+            case 4:
+                nState = 0;
+                AiPathOverrides(p, 0, 0x32, 0);
+                if (AiWanderAround(p, pTarget, 6)) {
+                    p->nArg2 = (int)nState;
+                    return;
+                }
+                bMoved = AiWalkToDistance(p, pTarget, 0xc, 6);
+                goto wander_if_move_failed;
+        }
+        p->nArg0--;
+        if (!p->nArg0) {
+            nState = 0;
+        }
+        if (!p->nArg1) {
+            p->nArg1 = 2;
+        approach_or_wander:
+            bMoved = AiCircle(p, pTarget, 3, 1);
+        wander_if_move_failed:
+            if (!bMoved) {
+                AiWander(p, 0xc);
+            }
+            p->nArg2 = (int)nState;
+            return;
+        }
+        p->nArg1++;
+        {
+            // DecideMephistoAlternateTarget
+            D2LuaTargetScan tScan;
+            AiTargetScan(p, tScan);
+            D2UnitStrc* pAt = pTarget;
+            bool bPicked = false;
+            if (tScan.pWeakest && (int)(SeedRoll(p) % 100) < t.aAiParams[1]) {
+                pAt = tScan.pWeakest;
+                bPicked = true;
+            }
+            if (!bPicked && tScan.pNearestWhenPlayer && (int)(SeedRoll(p) % 100) < t.aAiParams[2]) {
+                pAt = tScan.pWeakest;
+            }
+            int nCount = 0;
+            while (nCount < 8 && t.aSkills[nCount] >= 0) {
+                nCount++;
+            }
+            if (nCount > 0) {
+                int nShare = 100 / nCount;
+                int nRoll = (int)(SeedRoll(p) % 100);
+                bool bWall = false;
+                if (nDifficulty > 0) {
+                    if (pAt && CollidesWith(p, pAt, 4)) {
+                        bWall = true;
+                    }
+                    if (nDifficulty > 0 && (bWall || nDistance > 0x1e)) {
+                        AiCast(p, t.aSkills[5], t.aSkillModes[5], pAt, 0, 0);
+                        goto roll_approach_next_think;
+                    }
+                }
+                if (nDistance < 0xf && nRoll < nShare && nDifficulty > 0) {
+                    AiCast(p, t.aSkills[4], t.aSkillModes[4], pAt, 0, 0);
+                } else if (nRoll < nShare * 2) {
+                    AiCast(p, t.aSkills[3], t.aSkillModes[3], pAt, 0, 0);
+                } else if (nRoll < nShare * 3) {
+                    AiCast(p, t.aSkills[1], t.aSkillModes[1], pAt, 0, 0);
+                } else {
+                    AiCast(p, t.aSkills[0], t.aSkillModes[0], pAt, 0, 0);
+                }
+            } else {
+                AiWander(p, 6);
+            }
+        }
+    roll_approach_next_think:
+        if ((int)(SeedRoll(p) % 100) < 0x32 - nHurt) {
+            p->nArg1 = 0;
+        }
+        p->nArg2 = (int)nState;
     }
 
     // One frame: timers, then actions that end (a move puts the unit at its goal and thinks at once,
@@ -308,7 +488,8 @@ public:
     }
 
     // --- the interface ---
-    int Difficulty() override { return 1; }
+    int nDifficulty = 1;
+    int Difficulty() override { return nDifficulty; }
     bool Expansion() override { return true; }
     std::string Name() override { return "testgame"; }
     uint32_t Seed() override { return 12345; }
@@ -411,7 +592,8 @@ public:
         p->nMode = 1;
         p->nThinkAt = (int)nFrame + nFrames;
     }
-    bool AiMove(D2UnitStrc* p, D2UnitStrc* pTarget, int x, int y, int) override {
+    bool AiMove(D2UnitStrc* p, D2UnitStrc* pTarget, int x, int y, int nMove, int nFlags) override {
+        Trace(p, "move", pTarget ? (int)pTarget->nGuid : x, pTarget ? -1 : y, nMove * 256 + nFlags);
         if (!pTarget && !RoomOfPoint(x, y)) {
             return false;
         }
@@ -450,19 +632,35 @@ public:
         p->pReviving = pTarget && pTarget->bDead ? pTarget : nullptr;
         return true;
     }
-    bool AiCircle(D2UnitStrc* p, D2UnitStrc* pTarget, int nSteps) override {
-        Trace(p, "circle", pTarget ? (int)pTarget->nGuid : -1, nSteps);
+    bool AiCircle(D2UnitStrc* p, D2UnitStrc* pTarget, int nSteps, int nFlags) override {
+        Trace(p, "circle", pTarget ? (int)pTarget->nGuid : -1, nSteps, nFlags);
         p->nCircles++;
         SeedRoll(p);  // the engine rolls clockwise or not
         // Three steps round the target that end where they began: the scene keeps its distances.
         p->pGoal = nullptr;
         p->nGoalX = p->nX;
         p->nGoalY = p->nY;
+        if (!pTarget || pTarget->bBehindWall) {
+            return false;  // no way round a wall here
+        }
         p->nActionEnd = (int)nFrame + 4;
         p->nMode = 2;
-        return pTarget != nullptr;
+        return true;
     }
+    int nMephistoSkills = 6;
     bool MonsterData(int nClass, D2LuaMonsterData& t) override {
+        if (nClass == 242) {  // Mephisto: six skills unless a scene takes some away
+            t.nBaseId = 242;
+            t.nAi = 50;
+            t.nAiDelay = 3;
+            int aip[8] = { 60, 35, 50, 0, 0, 0, 0, 0 };
+            for (int i = 0; i < 8; i++) {
+                t.aAiParams[i] = aip[i];
+                t.aSkills[i] = i < nMephistoSkills ? 334 + i : -1;
+                t.aSkillModes[i] = i < nMephistoSkills ? 10 + (i % 4) : 0;
+            }
+            return true;
+        }
         if (nClass == 58) {  // fallenshaman1, nightmare (the stand-in's difficulty is 1)
             t.nBaseId = 58;
             t.nAi = 13;
@@ -525,10 +723,75 @@ public:
             }
         }
     }
-    bool AiWander(D2UnitStrc* p, int) override {
+    bool AiWander(D2UnitStrc* p, int nRadius) override {
+        Trace(p, "wander", nRadius);
         p->nThinkAt = (int)nFrame + 6;
         return true;
     }
+    // A move to a point near a unit: refused when the point is in no loaded room.
+    bool MoveNear(D2UnitStrc* p, int x, int y) {
+        if (!RoomOfPoint(x, y)) {
+            return false;
+        }
+        p->pGoal = nullptr;
+        p->nGoalX = x;
+        p->nGoalY = y;
+        p->nActionEnd = (int)nFrame + 4;
+        p->nMode = 2;
+        p->nAiState = 2;
+        return true;
+    }
+    static int Sign(int v) { return v > 0 ? 1 : v < 0 ? -1 : 0; }
+    bool AiWalkPast(D2UnitStrc* p, D2UnitStrc* t, int nOffset, bool bForce) override {
+        Trace(p, "walkpast", (int)t->nGuid, nOffset, bForce);
+        return MoveNear(p, t->nX + Sign(t->nX - p->nX) * nOffset, t->nY + Sign(t->nY - p->nY) * nOffset);
+    }
+    bool AiWanderAround(D2UnitStrc* p, D2UnitStrc* t, int nRadius) override {
+        Trace(p, "wanderaround", (int)t->nGuid, nRadius);
+        return MoveNear(p, t->nX + nRadius, t->nY - nRadius);
+    }
+    bool AiWalkToDistance(D2UnitStrc* p, D2UnitStrc* t, int nMaxStep, int nDistance) override {
+        Trace(p, "walktodistance", (int)t->nGuid, nMaxStep, nDistance);
+        p->nThinkAt = -1;  // the engine drops its pending think first
+        int dx = Sign(p->nX - t->nX);
+        return MoveNear(p, t->nX + (dx ? dx : 1) * nDistance, t->nY);
+    }
+    int LifePercent(D2UnitStrc* p) override {
+        int nMax = p->tStats[STAT_MAXHP] >> 8;
+        return nMax ? (p->tStats[STAT_HP] >> 8) * 100 / nMax : 0;
+    }
+    bool CollidesWith(D2UnitStrc*, D2UnitStrc* pOther, int) override { return pOther->bBehindWall; }
+    // CollectMephistoTargetInfo over the players (the only units a monster here can attack).
+    void AiTargetScan(D2UnitStrc* p, D2LuaTargetScan& t) override {
+        for (auto& u : aUnits) {
+            if (u.get() == p || u->nType != D2LUA_UNIT_PLAYER || !u->pRoom || u->bCorpse || u->bDead) {
+                continue;
+            }
+            int dx = u->nX - p->nX, dy = u->nY - p->nY;
+            int d = dx * dx + dy * dy;
+            if (d > 0x400) {
+                continue;
+            }
+            t.nCount++;
+            if (d <= 0xe1) {
+                t.nCloseCount++;
+            }
+            if (d < t.nNearestDistance) {
+                t.pNearest = u.get();
+                t.nNearestDistance = d;
+            }
+            int nLife = u->tStats[STAT_HP] >> 8;
+            if (nLife < t.nWeakestLife) {
+                t.pWeakest = u.get();
+                t.nWeakestLife = nLife;
+            }
+            if (d < t.nNearestWhenPlayerDistance && p->nType == D2LUA_UNIT_PLAYER) {
+                t.pNearestWhenPlayer = u.get();
+                t.nNearestWhenPlayerDistance = d;
+            }
+        }
+    }
+    void AiPathOverrides(D2UnitStrc* p, int nType, int nVelocity, int nSteps) override { Trace(p, "path", nType, nVelocity, nSteps); }
     bool AiFlee(D2UnitStrc* p, D2UnitStrc*, int) override {
         p->nThinkAt = (int)nFrame + 6;
         return true;
@@ -872,6 +1135,201 @@ static void ChargerGuardTests(const char* pszTsMods) {
     D2LuaRt_Destroy(pRt);
 }
 
+// --- Mephisto: two TypeScript ports against a replica of the C++ ----------------------------------
+
+struct MephistoScene {
+    uint32_t nSeed;
+    int nDifficulty;
+    int nSkills;
+};
+
+static uint32_t SceneRoll(uint32_t& n) {
+    n ^= n << 13;
+    n ^= n >> 17;
+    n ^= n << 5;
+    return n;
+}
+
+// One scene: two players (their places, life and walls changing every 25 frames by the scene's own
+// generator), Mephisto with a seed of the scene and his life put into a new band now and then.
+// pszVersion: the port to run, or nullptr for the replica. Gives Mephisto's trace, then his seed
+// and the replica's three words where it ran.
+static std::vector<std::string> RunMephistoScene(const char* pszTsMods, const MephistoScene& sc, const char* pszVersion) {
+    TestEngineWorld tWorld;
+    TestEngineWorld* w = &tWorld;
+    w->nDifficulty = sc.nDifficulty;
+    w->nMephistoSkills = sc.nSkills;
+    D2UnitStrc* pA = w->Add(D2LUA_UNIT_PLAYER, 1, 110, 100, "Amazonia");
+    D2UnitStrc* pB = w->Add(D2LUA_UNIT_PLAYER, 2, 130, 104, "Barbarian");
+    std::vector<std::string> aMods;
+    if (pszVersion) {
+        aMods.push_back("mephisto");
+    }
+    D2LuaRuntime* pRt = MakeWorldRuntime(w, { pszTsMods }, aMods);
+    if (!pRt) {
+        return { "no runtime" };
+    }
+    TestStart(pRt, 1);
+    if (pszVersion) {
+        std::string sUse = std::string("require('./main').useVersion('") + pszVersion + "')";
+        TestRun(pRt, 1, "mephisto", sUse.c_str());
+    }
+    D2UnitStrc* pM = w->Add(D2LUA_UNIT_MONSTER, 242, 120, 100);
+    pM->nSeedLow = sc.nSeed * 2654435761u + 12345;
+    pM->nSeedHigh = 666;
+    pM->tStats[STAT_HP] = 400 << 8;
+    pM->tStats[STAT_MAXHP] = 400 << 8;
+    uint32_t r = sc.nSeed * 7919u + 1;
+    for (int i = 0; i < 900; i++) {
+        if (w->nFrame % 25 == 0) {
+            for (D2UnitStrc* p : { pA, pB }) {
+                int x = pM->nX + (int)(SceneRoll(r) % 61) - 30;
+                int y = pM->nY + (int)(SceneRoll(r) % 41) - 20;
+                if (SceneRoll(r) % 5 == 0) {  // right next to him: melee range
+                    x = pM->nX + 1;
+                    y = pM->nY;
+                }
+                if (w->RoomOfPoint(x, y)) {
+                    p->nX = x;
+                    p->nY = y;
+                    p->pRoom = w->RoomOfPoint(x, y);
+                }
+                p->tStats[STAT_HP] = (int)(1 + SceneRoll(r) % 80) << 8;
+                p->bBehindWall = SceneRoll(r) % 4 == 0;
+            }
+            if (SceneRoll(r) % 3 == 0) {
+                pM->tStats[STAT_HP] = (int)(1 + SceneRoll(r) % 400) << 8;
+            }
+        }
+        w->Step();
+    }
+    std::vector<std::string> aOut;
+    for (const std::string& t : w->aTrace) {
+        aOut.push_back(t);
+    }
+    // Not the seed: the ports make the C++'s last roll of a think (after a cast) at the next think.
+    char sz[96];
+    snprintf(sz, sizeof(sz), "at %d %d", pM->nX, pM->nY);
+    aOut.push_back(sz);
+    if (pszVersion && D2LuaRt_IsFaulted(pRt, "mephisto")) {
+        aOut.push_back("faulted");
+    }
+    D2LuaRt_EndGame(pRt, 1);
+    D2LuaRt_Destroy(pRt);
+    return aOut;
+}
+
+static void MephistoTests(const char* pszTsMods) {
+    printf("--- the mephisto example against a replica of the stock AI on a stand-in engine (%s)\n", pszTsMods);
+
+    // The helpers one by one, on a stand-in monster with scripted rolls and outcomes.
+    {
+        TestEngineWorld tWorld;
+        ClearLog();
+        D2LuaRuntime* pRt = MakeWorldRuntime(&tWorld, { pszTsMods }, { "mephisto" });
+        Check(pRt != nullptr, "the mephisto example loads");
+        if (!pRt) {
+            return;
+        }
+        TestStart(pRt, 1);
+        ClearLog();
+        TestRun(pRt, 1, "mephisto",
+                "local S = require('redivivus:shared') local steps = require('./steps') local f = steps.run() "
+                "for _, l in ipairs(f) do S.log('step FAIL', l) end S.log('steps', steps.count, #f)");
+        const char* p = strstr(g_szTestLog, "[mephisto] steps ");
+        int nCases = 0, nFailed = -1;
+        if (p) {
+            sscanf(p, "[mephisto] steps %d %d", &nCases, &nFailed);
+        }
+        if (nFailed != 0) {
+            printf("%s\n", g_szTestLog);
+        }
+        char sz[160];
+        snprintf(sz, sizeof(sz), "the helpers step by step: %d table-driven cases, every action they start as scripted", nCases);
+        Check(nCases > 30 && nFailed == 0, sz);
+        D2LuaRt_EndGame(pRt, 1);
+        D2LuaRt_Destroy(pRt);
+    }
+
+    // The whole AI against the replica: scenes over seeds, difficulties and skill counts.
+    std::vector<MephistoScene> aScenes;
+    for (uint32_t i = 1; i <= 60; i++) {
+        // A row has 6 skills; 8 changes the shares. None (the cast-nothing path) is left to the step
+        // tests: the C++ would cast skill -1 in melee then, which the API refuses.
+        aScenes.push_back({ i, (int)(i % 3), i % 4 == 3 ? 8 : 6 });
+    }
+    std::map<std::string, int> tKinds;
+    size_t nThinks = 0;
+    int nSwitchSame = 0, nComposedSame = 0;
+    std::string sFirstDiff;
+    for (const MephistoScene& sc : aScenes) {
+        std::vector<std::string> aStock = RunMephistoScene(pszTsMods, sc, nullptr);
+        std::vector<std::string> aSwitch = RunMephistoScene(pszTsMods, sc, "switch");
+        std::vector<std::string> aComposed = RunMephistoScene(pszTsMods, sc, "composed");
+        nThinks += aStock.size() - 1;
+        for (const std::string& t : aStock) {
+            char szKind[32] = {};
+            unsigned f, g;
+            int a = 0, b = 0, c = 0;
+            if (sscanf(t.c_str(), "%u %u %31s %d %d %d", &f, &g, szKind, &a, &b, &c) == 6) {
+                std::string k = szKind;
+                if (k == "cast") {
+                    k += " " + std::to_string(a);
+                } else if (k == "circle" || k == "wander" || k == "idle") {
+                    k += " " + std::to_string(k == "circle" ? b * 10 + c : a);
+                }
+                tKinds[k]++;
+            }
+        }
+        nSwitchSame += aSwitch == aStock;
+        nComposedSame += aComposed == aStock;
+        for (const auto* pOther : { &aSwitch, &aComposed }) {
+            if (*pOther == aStock || (!sFirstDiff.empty() && pOther != &aSwitch) || sFirstDiff.find("switch") == 0) {
+                continue;
+            }
+            for (size_t i = 0; i < aStock.size() || i < pOther->size(); i++) {
+                const std::string a = i < aStock.size() ? aStock[i] : "(none)";
+                const std::string b = i < pOther->size() ? (*pOther)[i] : "(none)";
+                if (a != b) {
+                    if (getenv("D2LUA_MEPHISTO_DUMP")) {
+                        for (size_t j = 0; j < aStock.size() || j < pOther->size(); j++) {
+                            printf("    %-40s | %s\n", j < aStock.size() ? aStock[j].c_str() : "", j < pOther->size() ? (*pOther)[j].c_str() : "");
+                        }
+                    }
+                    sFirstDiff = std::string(pOther == &aSwitch ? "switch" : "composed") + " scene " + std::to_string(sc.nSeed) + " line " +
+                                 std::to_string(i) + ": stock [" + a + "] port [" + b + "]";
+                    break;
+                }
+            }
+        }
+    }
+    if (!sFirstDiff.empty()) {
+        printf("  first difference: %s\n", sFirstDiff.c_str());
+    }
+    char sz[200];
+    snprintf(sz, sizeof(sz), "the switch port equals the replica in %d of %zu scenes (%zu actions in all)", nSwitchSame, aScenes.size(), nThinks);
+    Check(nSwitchSame == (int)aScenes.size(), sz);
+    snprintf(sz, sizeof(sz), "the composed port equals the replica in %d of %zu scenes", nComposedSame, aScenes.size());
+    Check(nComposedSame == (int)aScenes.size(), sz);
+    std::string sKinds;
+    for (const auto& kv : tKinds) {
+        sKinds += " " + kv.first + "=" + std::to_string(kv.second);
+    }
+    printf("  actions over all scenes:%s\n", sKinds.c_str());
+    // Every way out of a think was taken at least once.
+    const char* aMust[] = { "attack", "walkpast", "wanderaround", "walktodistance", "move", "circle 40", "circle 31", "idle 10", "wander 12",
+                            "cast 334", "cast 335", "cast 336", "cast 337", "cast 338", "cast 339", "path" };
+    std::string sMissing;
+    for (const char* k : aMust) {
+        if (!tKinds.count(k)) {
+            sMissing += std::string(" ") + k;
+        }
+    }
+    snprintf(sz, sizeof(sz), "  the scenes reach every way out of a think (missing:%s)", sMissing.empty() ? " none" : sMissing.c_str());
+    Check(sMissing.empty(), sz);
+    Check(!tKinds.count("idle 5"), "  and never the C++ case 0 (idle 5), which nothing reaches");
+}
+
 void RunWorldTests(const char* pszTsMods) {
     WorldApiTests();
     GuardAiTests();
@@ -879,6 +1337,7 @@ void RunWorldTests(const char* pszTsMods) {
         ChargerTests(pszTsMods);
         ChargerGuardTests(pszTsMods);
         ShamanTests(pszTsMods);
+        MephistoTests(pszTsMods);
     } else {
         printf("SKIP the charger example: no --ts-mods directory\n");
     }

@@ -114,15 +114,22 @@
 ---@field findTarget function The target the engine's AI would pick now (an AI's FindTargetAndDistance), with its AI distance.
 ---@field canCast function Whether the skill can be cast at the unit or corpse now (its target and placement checks).
 ---@field orderMinions function Give each monster of the group it is in an order (what the group's AIs read next).
+---@field lifePercent integer Life in percent of its maximum, as the engine rounds it down (the life bands the AIs test).
+---@field collidesWith function Whether a collision of the mask (the engine's collision bits) lies between it and the unit.
+---@field scanTargets function The engine's target scan as Mephisto's AI makes it: what it could attack around it, in the scan's order.
+---@field setPathOverrides function How its next move paths (the engine's AITACTICS_SetPathOverrides): path type (1 is taken as 7),
 ---@field idle function Stand for frames (default: its AI delay), then think again.
 ---@field walkTo function Walk to a point. Blocked when no path could be started or it stopped short.
 ---@field runTo function Run to a point (walks when it cannot run).
----@field walkToward function Walk toward a unit. Interrupted when the unit is gone or dead.
+---@field walkToward function Walk toward a unit (moveFlags: the engine's StartMonsterMove flags). Interrupted when the unit is gone or dead.
 ---@field runToward function 
 ---@field attack function Attack (Attack1, or Attack2 with secondary).
 ---@field castSkill function Cast a skill in a mode (default Cast; a MonStats SkMode column gives a skill's own).
 ---@field castSequence function Cast a sequence skill (mode Sequence: the animation the skill's sequence table plays), as a resurrect.
----@field circleToward function Close in on a unit along a curve, clockwise or not by a roll of its seed, steps long.
+---@field circleToward function Close in on a unit along a curve, clockwise or not by a roll of its seed, steps long (flank: the
+---@field walkPast function Walk toward a unit and offset subtiles on past it, along the line from here (force: even when close).
+---@field wanderAround function Walk to a random spot within radius of a unit.
+---@field walkToDistance function Drop its pending think and walk to distance subtiles from a unit, at most maxStep at a time.
 ---@field wander function Walk to a random spot within radius.
 ---@field flee function Run away from a unit for distance subtiles.
 
@@ -155,6 +162,18 @@
 ---@field leader Monster? The leader of the group it was in, when there is one.
 ---@field hasStateMask function 
 ---@field distanceTo function Straight-line distance in subtiles.
+
+--- What a target scan found: the units it could attack within a squared distance of 1024 (about 32
+--- subtiles). Distances are squared subtiles.
+---@class TargetScan
+---@field nearest any? 
+---@field nearestDistance integer 
+---@field weakest any? The one with the least life (whole points), the first of equals in the scan's order.
+---@field weakestLife integer 
+---@field nearestWhenPlayer any? The nearest, kept only when the scanning unit is a player: never for a monster (the engine tests the scanner).
+---@field nearestWhenPlayerDistance integer 
+---@field count integer 
+---@field closeCount integer How many within a squared distance of 225 (15 subtiles).
 
 --- A MonStats row as the AI reads it, for the game's difficulty. A snapshot: read it once.
 ---@class MonsterData

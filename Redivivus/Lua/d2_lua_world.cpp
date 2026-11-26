@@ -790,6 +790,72 @@ static int N_aiFindTarget(lua_State* L) {
     return 2;
 }
 
+static D2UnitStrc* CheckThinking(lua_State* L, const char* pszWhere);
+
+static int N_lifePercent(lua_State* L) {
+    D2LuaWorld* w = World(L);
+    lua_pushinteger(L, w->LifePercent(CheckMonster(L, 1, "monster.lifePercent")));
+    return 1;
+}
+
+// collides(monster, unit, mask)
+static int N_collides(lua_State* L) {
+    D2LuaWorld* w = World(L);
+    D2UnitStrc* p = CheckMonster(L, 1, "monster.collidesWith");
+    D2UnitStrc* pOther = CheckUnit(L, 2, "monster.collidesWith");
+    int nMask = ArgInt(L, 3, "monster.collidesWith");
+    if (nMask < 0 || nMask > 0xFFFF) {
+        return luaL_error(L, "monster.collidesWith: mask %d is outside 0..65535", nMask);
+    }
+    lua_pushboolean(L, w->CollidesWith(p, pOther, nMask));
+    return 1;
+}
+
+static void PushLiveOrNil(lua_State* L, D2LuaWorld* w, D2UnitStrc* p) {
+    if (p && w->FindUnit(w->UnitType(p), w->UnitGuid(p))) {
+        PushUnit(L, w, p);
+    } else {
+        lua_pushnil(L);
+    }
+}
+
+// aiScan(monster): nearest, its distance, weakest, its life, nearest when player, its distance, count, close count.
+static int N_aiScan(lua_State* L) {
+    D2LuaWorld* w = World(L);
+    D2UnitStrc* p = CheckMonster(L, 1, "monster.scanTargets");
+    D2LuaTargetScan t;
+    w->AiTargetScan(p, t);
+    PushLiveOrNil(L, w, t.pNearest);
+    lua_pushinteger(L, t.nNearestDistance);
+    PushLiveOrNil(L, w, t.pWeakest);
+    lua_pushinteger(L, t.nWeakestLife);
+    PushLiveOrNil(L, w, t.pNearestWhenPlayer);
+    lua_pushinteger(L, t.nNearestWhenPlayerDistance);
+    lua_pushinteger(L, t.nCount);
+    lua_pushinteger(L, t.nCloseCount);
+    return 8;
+}
+
+// aiPath(monster, pathType, velocity, steps)
+static int N_aiPath(lua_State* L) {
+    D2LuaWorld* w = World(L);
+    D2UnitStrc* p = CheckThinking(L, "monster.setPathOverrides");
+    int nType = ArgInt(L, 2, "monster.setPathOverrides");
+    int nVelocity = ArgInt(L, 3, "monster.setPathOverrides");
+    int nSteps = ArgInt(L, 4, "monster.setPathOverrides");
+    if (nType < 0 || nType > 15) {
+        return luaL_error(L, "monster.setPathOverrides: path type %d is outside 0..15", nType);
+    }
+    if (nVelocity < -126 || nVelocity > 126) {  // the engine halts outside this
+        return luaL_error(L, "monster.setPathOverrides: velocity %d is outside -126..126", nVelocity);
+    }
+    if (nSteps < 0 || nSteps > 255) {
+        return luaL_error(L, "monster.setPathOverrides: steps %d is outside 0..255", nSteps);
+    }
+    w->AiPathOverrides(p, nType, nVelocity, nSteps);
+    return 0;
+}
+
 // aiCanCast(monster, skill, target|nil, x, y)
 static int N_aiCanCast(lua_State* L) {
     D2LuaWorld* w = World(L);
@@ -939,8 +1005,12 @@ static int N_aiMove(lua_State* L) {
     if (pTarget == p) {
         return luaL_error(L, "monster.move: a monster cannot move to itself");
     }
+    int nFlags = lua_isnoneornil(L, 6) ? 0 : ArgInt(L, 6, "monster.move");
+    if (nFlags < 0 || nFlags > 255) {
+        return luaL_error(L, "monster.move: flags %d is outside 0..255", nFlags);
+    }
     w->AiMarkAction(p);
-    bool bOk = w->AiMove(p, pTarget, nX, nY, lua_toboolean(L, 5) ? D2LUA_MOVE_RUN : D2LUA_MOVE_WALK);
+    bool bOk = w->AiMove(p, pTarget, nX, nY, lua_toboolean(L, 5) ? D2LUA_MOVE_RUN : D2LUA_MOVE_WALK, nFlags);
     w->bScheduled = w->bScheduled || bOk;
     lua_pushboolean(L, bOk);
     return 1;
@@ -998,8 +1068,64 @@ static int N_aiCircle(lua_State* L) {
     if (nSteps < 1 || nSteps > 255) {
         return luaL_error(L, "monster.circleToward: steps %d is outside 1..255", nSteps);
     }
+    bool bFlags = lua_toboolean(L, 4) != 0;
     w->AiMarkAction(p);
-    bool bOk = w->AiCircle(p, pTarget, nSteps);
+    bool bOk = w->AiCircle(p, pTarget, nSteps, bFlags ? 1 : 0);
+    w->bScheduled = w->bScheduled || bOk;
+    lua_pushboolean(L, bOk);
+    return 1;
+}
+
+// aiWalkPast(m, target, offset, force)
+static int N_aiWalkPast(lua_State* L) {
+    D2LuaWorld* w = World(L);
+    D2UnitStrc* p = CheckThinking(L, "monster.walkPast");
+    D2UnitStrc* pTarget = CheckUnit(L, 2, "monster.walkPast");
+    int nOffset = ArgInt(L, 3, "monster.walkPast");
+    if (pTarget == p) {
+        return luaL_error(L, "monster.walkPast: a monster cannot walk past itself");
+    }
+    if (nOffset < 0 || nOffset > 255) {
+        return luaL_error(L, "monster.walkPast: offset %d is outside 0..255", nOffset);
+    }
+    w->AiMarkAction(p);
+    bool bOk = w->AiWalkPast(p, pTarget, nOffset, lua_toboolean(L, 4) != 0);
+    w->bScheduled = w->bScheduled || bOk;
+    lua_pushboolean(L, bOk);
+    return 1;
+}
+
+// aiWanderAround(m, target, radius)
+static int N_aiWanderAround(lua_State* L) {
+    D2LuaWorld* w = World(L);
+    D2UnitStrc* p = CheckThinking(L, "monster.wanderAround");
+    D2UnitStrc* pTarget = CheckUnit(L, 2, "monster.wanderAround");
+    int nRadius = ArgInt(L, 3, "monster.wanderAround");
+    if (nRadius < 1 || nRadius > 30) {
+        return luaL_error(L, "monster.wanderAround: radius %d is outside 1..30", nRadius);
+    }
+    w->AiMarkAction(p);
+    bool bOk = w->AiWanderAround(p, pTarget, nRadius);
+    w->bScheduled = w->bScheduled || bOk;
+    lua_pushboolean(L, bOk);
+    return 1;
+}
+
+// aiWalkToDistance(m, target, maxStep, distance)
+static int N_aiWalkToDistance(lua_State* L) {
+    D2LuaWorld* w = World(L);
+    D2UnitStrc* p = CheckThinking(L, "monster.walkToDistance");
+    D2UnitStrc* pTarget = CheckUnit(L, 2, "monster.walkToDistance");
+    int nMaxStep = ArgInt(L, 3, "monster.walkToDistance");
+    int nDistance = ArgInt(L, 4, "monster.walkToDistance");
+    if (pTarget == p) {
+        return luaL_error(L, "monster.walkToDistance: a monster cannot keep a distance to itself");
+    }
+    if (nMaxStep < 1 || nMaxStep > 60 || nDistance < 0 || nDistance > 60) {
+        return luaL_error(L, "monster.walkToDistance: step %d or distance %d is outside 1..60", nMaxStep, nDistance);
+    }
+    w->AiMarkAction(p);
+    bool bOk = w->AiWalkToDistance(p, pTarget, nMaxStep, nDistance);
     w->bScheduled = w->bScheduled || bOk;
     lua_pushboolean(L, bOk);
     return 1;
@@ -1086,6 +1212,13 @@ static const luaL_Reg s_aWorldNatives[] = {
     { "aiFlee", N_aiFlee },
     { "aiStock", N_aiStock },
     { "aiCircle", N_aiCircle },
+    { "aiWalkPast", N_aiWalkPast },
+    { "aiWanderAround", N_aiWanderAround },
+    { "aiWalkToDistance", N_aiWalkToDistance },
+    { "aiPath", N_aiPath },
+    { "aiScan", N_aiScan },
+    { "lifePercent", N_lifePercent },
+    { "collides", N_collides },
     { "aiDistance", N_aiDistance },
     { "aiFindTarget", N_aiFindTarget },
     { "aiCanCast", N_aiCanCast },

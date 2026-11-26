@@ -225,6 +225,17 @@ export interface Monster extends Unit {
     canCast(skill: SkillId, at: Unit | Corpse): boolean;
     /** Give each monster of the group it is in an order (what the group's AIs read next). */
     orderMinions(order: MinionOrder): void;
+    /** Life in percent of its maximum, as the engine rounds it down (the life bands the AIs test). */
+    readonly lifePercent: integer;
+    /** Whether a collision of the mask (the engine's collision bits) lies between it and the unit. */
+    collidesWith(other: Unit, mask: integer): boolean;
+    /** The engine's target scan as Mephisto's AI makes it: what it could attack around it, in the scan's order. */
+    scanTargets(): TargetScan;
+    /**
+     * How its next move paths (the engine's AITACTICS_SetPathOverrides): path type (1 is taken as 7),
+     * velocity change, steps. Lasts until the next override; only inside its own AI script.
+     */
+    setPathOverrides(pathType: integer, velocity: integer, steps: integer): void;
 
     // The actions: only inside this monster's own AI script, each run with yield*.
     /** Stand for frames (default: its AI delay), then think again. */
@@ -233,8 +244,8 @@ export interface Monster extends Unit {
     walkTo(to: Subtile): Script<Outcome>;
     /** Run to a point (walks when it cannot run). */
     runTo(to: Subtile): Script<Outcome>;
-    /** Walk toward a unit. Interrupted when the unit is gone or dead. */
-    walkToward(target: Unit): Script<Outcome>;
+    /** Walk toward a unit (moveFlags: the engine's StartMonsterMove flags). Interrupted when the unit is gone or dead. */
+    walkToward(target: Unit, moveFlags?: integer): Script<Outcome>;
     runToward(target: Unit): Script<Outcome>;
     /** Attack (Attack1, or Attack2 with secondary). */
     attack(target: Unit, secondary?: boolean): Script<Outcome>;
@@ -242,8 +253,17 @@ export interface Monster extends Unit {
     castSkill(skill: SkillId, at: Unit | Corpse | Subtile, mode?: MonsterMode): Script<Outcome>;
     /** Cast a sequence skill (mode Sequence: the animation the skill's sequence table plays), as a resurrect. */
     castSequence(skill: SkillId, at: Unit | Corpse | Subtile): Script<Outcome>;
-    /** Close in on a unit along a curve, clockwise or not by a roll of its seed, steps long. */
-    circleToward(target: Unit, steps: integer): Script<Outcome>;
+    /**
+     * Close in on a unit along a curve, clockwise or not by a roll of its seed, steps long (flank: the
+     * engine's other direction flags, as Mephisto closes in).
+     */
+    circleToward(target: Unit, steps: integer, flank?: boolean): Script<Outcome>;
+    /** Walk toward a unit and offset subtiles on past it, along the line from here (force: even when close). */
+    walkPast(target: Unit, offset: integer, force?: boolean): Script<Outcome>;
+    /** Walk to a random spot within radius of a unit. */
+    wanderAround(target: Unit, radius: integer): Script<Outcome>;
+    /** Drop its pending think and walk to distance subtiles from a unit, at most maxStep at a time. */
+    walkToDistance(target: Unit, maxStep: integer, distance: integer): Script<Outcome>;
     /** Walk to a random spot within radius. */
     wander(radius: integer): Script<Outcome>;
     /** Run away from a unit for distance subtiles. */
@@ -292,6 +312,24 @@ export interface Corpse extends Handle {
 
 /** Any unit a query gives: narrow it by `type`. */
 export type AnyUnit = Player | Monster | (Unit & { readonly type: Exclude<UnitType, UnitType.Player | UnitType.Monster> });
+
+/**
+ * What a target scan found: the units it could attack within a squared distance of 1024 (about 32
+ * subtiles). Distances are squared subtiles.
+ */
+export interface TargetScan {
+    readonly nearest: AnyUnit | undefined;
+    readonly nearestDistance: integer;
+    /** The one with the least life (whole points), the first of equals in the scan's order. */
+    readonly weakest: AnyUnit | undefined;
+    readonly weakestLife: integer;
+    /** The nearest, kept only when the scanning unit is a player: never for a monster (the engine tests the scanner). */
+    readonly nearestWhenPlayer: AnyUnit | undefined;
+    readonly nearestWhenPlayerDistance: integer;
+    readonly count: integer;
+    /** How many within a squared distance of 225 (15 subtiles). */
+    readonly closeCount: integer;
+}
 
 /** A MonStats row as the AI reads it, for the game's difficulty. A snapshot: read it once. */
 export interface MonsterData {

@@ -120,7 +120,8 @@ export declare function waitUntil(pred: (this: void) => boolean, timeoutTicks: i
  *
  * A body waits as a whole: a `wait(100)` or an action the engine runs is not cut short, and an
  * action the body started is left to the engine as it runs it. Errors in check or body propagate.
- * Guards nest. `yield* guard(() => target.valid && !target.dead, chase(monster, target))`: the
+ * Guards nest. Outside a script, in a coroutine of the mod's own (a test driving a Script), the
+ * body's waits reach whoever resumes it. `yield* guard(() => target.valid && !target.dead, chase(monster, target))`: the
  * build hands the body over unstarted. In Lua the body is a function that runs it:
  * `guard(check, function() return chase(monster, target) end)`.
  */

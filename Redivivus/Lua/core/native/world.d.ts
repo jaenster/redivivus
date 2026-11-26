@@ -57,11 +57,19 @@ export interface NativeWorld {
     /** AI id, whether its think runs now, AI state, AI delay. */
     aiUnit(monster: NativeHandle): LuaMultiReturn<[number, boolean, number, number]>;
     aiIdle(monster: NativeHandle, frames: number): void;
-    aiMove(monster: NativeHandle, target: NativeHandle | undefined, x: number, y: number, run: boolean): boolean;
+    aiMove(monster: NativeHandle, target: NativeHandle | undefined, x: number, y: number, run: boolean, flags?: number): boolean;
     aiAttack(monster: NativeHandle, target: NativeHandle, secondary: boolean): boolean;
     /** SERVER_UNIT_CastSkill in mode, or with sequence MONSTERAI_CommandSkillSequence. Target: a unit or corpse. */
     aiCast(monster: NativeHandle, skill: number, target: NativeHandle | undefined, x: number, y: number, mode: number, sequence: boolean): boolean;
-    aiCircle(monster: NativeHandle, target: NativeHandle, steps: number): boolean;
+    aiCircle(monster: NativeHandle, target: NativeHandle, steps: number, flags: boolean): boolean;
+    aiWalkPast(monster: NativeHandle, target: NativeHandle, offset: number, force: boolean): boolean;
+    aiWanderAround(monster: NativeHandle, target: NativeHandle, radius: number): boolean;
+    aiWalkToDistance(monster: NativeHandle, target: NativeHandle, maxStep: number, distance: number): boolean;
+    aiPath(monster: NativeHandle, pathType: number, velocity: number, steps: number): void;
+    /** nearest, distance, weakest, life, nearest when the scanner is a player, distance, count, close count. */
+    aiScan(monster: NativeHandle): LuaMultiReturn<[NativeHandle | undefined, number, NativeHandle | undefined, number, NativeHandle | undefined, number, number, number]>;
+    lifePercent(monster: NativeHandle): number;
+    collides(monster: NativeHandle, other: NativeHandle, mask: number): boolean;
     aiDistance(monster: NativeHandle, other: NativeHandle): number;
     aiFindTarget(monster: NativeHandle): LuaMultiReturn<[NativeHandle | undefined, number]>;
     aiCanCast(monster: NativeHandle, skill: number, target: NativeHandle | undefined, x: number, y: number): boolean;

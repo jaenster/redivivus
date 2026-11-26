@@ -130,7 +130,7 @@ script's, so its waits and actions are the script's.
 |`generated/`|Generated and committed: the glue, the embedded core (`d2_lua_core.gen.cpp`) and its runtime library's licence|
 |`api/`|The `@redivivus/api` package: emitted declarations, the sandbox's Lua library as TypeScript, LuaLS files, the reference, the editor plugin|
 |`tools/`|The generator (`src/gen.ts`), `rdvmod` (`src/cli.ts`), the TypeScriptToLua plugin, the MPQ library (`src/mpq`, copied from the mod portal; see its PROVENANCE), the selftest|
-|`examples/`|`first-mod` and `second-mod` (TypeScript), `lua-mod` (plain Lua), `ui-mod` (a TSX panel), `charger` (a monster AI), `type-tests`|
+|`examples/`|`first-mod` and `second-mod` (TypeScript), `lua-mod` (plain Lua), `ui-mod` (a TSX panel), `charger` (a monster AI), `fallen-shaman` and `mephisto` (stock AIs ported; mephisto twice, with step-level tests), `type-tests`|
 |`test/`|The host test, its fixture mods, the adversarial escape suite, a stand-in engine for the world classes and the AI hook (`d2_lua_test_engine.cpp`)|
 
 ## Commands

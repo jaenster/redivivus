@@ -49,6 +49,7 @@
 #include "Source/D2Game/D2StateExArgStrc.h"
 #include "Source/D2Game/Game/Clients.h"
 #include "Source/D2Game/Game/SCmd.h"
+#include "Source/D2Game/Game/Event.h"
 #include "Source/D2Game/Ai/AiGeneral.h"
 #include "Source/D2Game/Monster/Ai/AI.h"
 #include "Source/D2Game/Monster/Create.h"
@@ -480,11 +481,35 @@ public:
         D2Game::Ai::AiGeneral::CreateMinion(pGame, p, &tArgs);
     }
 
+    int LifePercent(D2UnitStrc* p) override { return D2Common::Units::GetCurrentLifePercentage(p); }
+    bool CollidesWith(D2UnitStrc* p, D2UnitStrc* pOther, int nMask) override {
+        return D2Common::Units::TestCollisionWithUnit(p, pOther, nMask) != 0;
+    }
+    void AiTargetScan(D2UnitStrc* p, D2LuaTargetScan& tOut) override {
+        D2AiMephistoScanStrc tScan;
+        memset(&tScan, 0, sizeof(tScan));
+        tScan.nNearestDistance = 0x7fffffff;
+        tScan.nWeakestLife = 0x7fffffff;
+        tScan.nNearestWhenPlayerDistance = 0x7fffffff;
+        AI::ForEach(pGame, p, (D2MonsterAiParameterStruct*)&tScan, (fpMonsterAiForEach)AI::CollectMephistoTargetInfo, 1);
+        tOut.pNearest = tScan.pNearestUnit;
+        tOut.nNearestDistance = tScan.nNearestDistance;
+        tOut.pWeakest = tScan.pWeakestUnit;
+        tOut.nWeakestLife = tScan.nWeakestLife;
+        tOut.pNearestWhenPlayer = tScan.pNearestWhenPlayer;
+        tOut.nNearestWhenPlayerDistance = tScan.nNearestWhenPlayerDistance;
+        tOut.nCount = tScan.nTotalCount;
+        tOut.nCloseCount = tScan.nCloseCount;
+    }
+    void AiPathOverrides(D2UnitStrc* p, int nPathType, int nVelocity, int nSteps) override {
+        AI::AITACTICS_SetPathOverrides(p, nPathType, nVelocity, (uint8_t)nSteps);
+    }
+
     // --- actions ---
     void AiIdle(D2UnitStrc* p, int nFrames) override { AI::PlanNextAiMove(pGame, p, nFrames); }
-    bool AiMove(D2UnitStrc* p, D2UnitStrc* pTarget, int nX, int nY, int nMove) override {
+    bool AiMove(D2UnitStrc* p, D2UnitStrc* pTarget, int nX, int nY, int nMove, int nFlags) override {
         eD2MonsterAnimMode eMode = nMove == D2LUA_MOVE_RUN ? eD2MonsterAnimMode_ns::Run : eD2MonsterAnimMode_ns::Walk;
-        return AI::StartMonsterMove(pGame, p, pTarget, eMode, nX, nY, 1, 0) != 0;
+        return AI::StartMonsterMove(pGame, p, pTarget, eMode, nX, nY, 1, nFlags) != 0;
     }
     bool AiAttack(D2UnitStrc* p, D2UnitStrc* pTarget, bool bSecondary) override {
         return AI::AI_ChangeModeAndTargetUnit(pGame, p, bSecondary ? eD2MonsterAnimMode_ns::Attack2 : eD2MonsterAnimMode_ns::Attack1, pTarget) != 0;
@@ -495,8 +520,18 @@ public:
     bool AiSequence(D2UnitStrc* p, int nSkill, D2UnitStrc* pTarget, int nX, int nY) override {
         return AI::MONSTERAI_CommandSkillSequence(pGame, p, (eD2Skills)nSkill, pTarget, nX, nY) != 0;
     }
-    bool AiCircle(D2UnitStrc* p, D2UnitStrc* pTarget, int nSteps) override {
-        return AI::SetCombatStateAndApproachTarget(pGame, p, pTarget, (uint8_t)nSteps, 0) != 0;
+    bool AiCircle(D2UnitStrc* p, D2UnitStrc* pTarget, int nSteps, int nFlags) override {
+        return AI::SetCombatStateAndApproachTarget(pGame, p, pTarget, (uint8_t)nSteps, nFlags) != 0;
+    }
+    bool AiWalkPast(D2UnitStrc* p, D2UnitStrc* pTarget, int nOffset, bool bForce) override {
+        return AI::WalkTowardsUnitOffset(pGame, p, pTarget, (uint8_t)nOffset, bForce ? 1 : 0) != 0;
+    }
+    bool AiWanderAround(D2UnitStrc* p, D2UnitStrc* pTarget, int nRadius) override {
+        return AI::WalkRandomOffsetAroundUnit(pGame, p, pTarget, (uint32_t)nRadius) != 0;
+    }
+    bool AiWalkToDistance(D2UnitStrc* p, D2UnitStrc* pTarget, int nMaxStep, int nDistance) override {
+        D2Game::GAME::Event::EVENT_RemoveUnitTimersByType(pGame, p, UNITEVENTCALLBACK_AITHINK, 0);
+        return AI::MONSTERAI_CommandWalkToDistance(pGame, p, pTarget, nMaxStep, nDistance) != 0;
     }
     bool AiWander(D2UnitStrc* p, int nRadius) override { return AI::WalkRandomOffset(pGame, p, (uint32_t)nRadius) != 0; }
     bool AiFlee(D2UnitStrc* p, D2UnitStrc* pFrom, int nDistance) override {

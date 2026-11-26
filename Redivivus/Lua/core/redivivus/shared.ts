@@ -164,7 +164,8 @@ export function waitUntil(pred: (this: void) => boolean, timeoutTicks: integer):
  *
  * A body waits as a whole: a `wait(100)` or an action the engine runs is not cut short, and an
  * action the body started is left to the engine as it runs it. Errors in check or body propagate.
- * Guards nest. `yield* guard(() => target.valid && !target.dead, chase(monster, target))`: the
+ * Guards nest. Outside a script, in a coroutine of the mod's own (a test driving a Script), the
+ * body's waits reach whoever resumes it. `yield* guard(() => target.valid && !target.dead, chase(monster, target))`: the
  * build hands the body over unstarted. In Lua the body is a function that runs it:
  * `guard(check, function() return chase(monster, target) end)`.
  */
@@ -172,8 +173,9 @@ export function guard<T>(check: (this: void) => boolean, body: Script<T>): Scrip
     argFunction(check, 1, "guard");
     const run = argFunction<(this: void) => unknown>(body, 2, "guard");
     const outer = coroutine.running();
-    const mod = outer === undefined ? undefined : scheduler.modOf(outer) ?? ai.modOf(outer);
-    if (mod === undefined) return error("guard can only be used inside a script (started with startScript) or a monster's AI script", 2);
+    // A script's mod; in a coroutine of a mod's own (a test driving a Script), this mod.
+    const mod = outer === undefined ? undefined : scheduler.modOf(outer) ?? ai.modOf(outer) ?? modId;
+    if (mod === undefined) return error("guard can only be used inside a script or a coroutine", 2);
     // The body's own coroutine, counted as this script's: its waits and actions are the script's.
     // Only this call holds it, so a body dropped here is collected.
     const inner = native.spawn(mod, run);

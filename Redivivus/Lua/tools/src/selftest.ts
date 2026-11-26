@@ -75,9 +75,9 @@ function mod(name: string, files: Record<string, string>, deps: string[] = []): 
 }
 
 step("generated outputs are up to date", node, [path.join(TOOLS, "src/gen.ts"), "--check"], { ok: true });
-step("the example mods build", node, [cli, "build", "--out", out, path.join(EXAMPLES, "first-mod"), path.join(EXAMPLES, "second-mod"), path.join(EXAMPLES, "lua-mod"), path.join(EXAMPLES, "ui-mod"), path.join(EXAMPLES, "charger"), path.join(EXAMPLES, "fallen-shaman")], { ok: true });
+step("the example mods build", node, [cli, "build", "--out", out, path.join(EXAMPLES, "first-mod"), path.join(EXAMPLES, "second-mod"), path.join(EXAMPLES, "lua-mod"), path.join(EXAMPLES, "ui-mod"), path.join(EXAMPLES, "charger"), path.join(EXAMPLES, "fallen-shaman"), path.join(EXAMPLES, "mephisto")], { ok: true });
 step("the examples and the type tests check (every @ts-expect-error is a real error)", node,
-    [cli, "check", path.join(EXAMPLES, "first-mod"), path.join(EXAMPLES, "second-mod"), path.join(EXAMPLES, "lua-mod"), path.join(EXAMPLES, "ui-mod"), path.join(EXAMPLES, "charger"), path.join(EXAMPLES, "fallen-shaman"), path.join(EXAMPLES, "type-tests")], { ok: true });
+    [cli, "check", path.join(EXAMPLES, "first-mod"), path.join(EXAMPLES, "second-mod"), path.join(EXAMPLES, "lua-mod"), path.join(EXAMPLES, "ui-mod"), path.join(EXAMPLES, "charger"), path.join(EXAMPLES, "fallen-shaman"), path.join(EXAMPLES, "mephisto"), path.join(EXAMPLES, "type-tests")], { ok: true });
 
 // The type tests with every @ts-expect-error blanked out: each line under one must be reported.
 {

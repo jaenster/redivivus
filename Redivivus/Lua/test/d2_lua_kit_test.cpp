@@ -374,9 +374,12 @@ static void GuardTests() {
     // Outside a script.
     TestExpect(pRt, 1, "kitty", "local ok, e = pcall(S.guard, function() return true end, function() end) S.log('g6', e)",
                "guard can only be used inside a script", "  guard outside a script is an error");
-    TestExpect(pRt, 1, "kitty", "local co = coroutine.create(function() return S.guard(function() return true end, function() end) end) "
-               "S.log('g6b', select(2, coroutine.resume(co)))",
-               "guard can only be used inside a script", "  as in a coroutine of the mod's own");
+    TestExpect(pRt, 1, "kitty", "local n = 0 local co = coroutine.create(function() return S.guard(function() n = n + 1 return n < 3 end, "
+               "function() local a = coroutine.yield('w1') S.log('g6b got', a) coroutine.yield('w2') S.log('g6b never') end) end) "
+               "local _, y1 = coroutine.resume(co) local _, y2 = coroutine.resume(co, 'sent') local ok, r = coroutine.resume(co) "
+               "S.log('g6b', y1, y2, ok, r == E.Outcome.Interrupted, coroutine.status(co))",
+               "g6b w1 w2 true true dead", "  in a coroutine of the mod's own: its waits reach the resumer, and the check still cuts it");
+    CheckLogged("g6b got sent", "    what the resumer sends reaches the body");
     TestExpect(pRt, 1, "kitty", "local ok, e = pcall(S.guard, function() return true end, 5) S.log('g6c', e)",
                "bad argument #2 to 'guard'", "  the body must be a function (what the build hands over)");
 

@@ -205,6 +205,7 @@ function targetArg(v: unknown, i: number, where: string): NativeHandle {
 
 const monsterMoreGetters: Record<string, Fn> = {
     data: (u: NativeHandle) => monsterData(W().unitInfo(u)[2]),
+    lifePercent: (u: NativeHandle) => W().lifePercent(u),
     leader: (u: NativeHandle) => W().leader(u),
     alignment: (u: NativeHandle) => W().alignment(u),
 };
@@ -228,6 +229,17 @@ const monsterMethods: Record<string, Fn> = {
     canCast: (u: NativeHandle, skill: unknown, at: unknown) =>
         W().aiCanCast(u, argInteger(skill, 1, "monster.canCast"), targetArg(at, 2, "monster.canCast"), 0, 0),
     orderMinions: (u: NativeHandle, order: unknown) => W().aiOrderMinions(u, argInteger(order, 1, "monster.orderMinions")),
+    collidesWith: (u: NativeHandle, other: unknown, mask: unknown) => {
+        if (!native.isHandle(other) || !native.handleIsLive(other)) error("bad argument #1 to 'monster.collidesWith' (a valid unit expected)", 2);
+        return W().collides(u, other as NativeHandle, argInteger(mask, 2, "monster.collidesWith"));
+    },
+    scanTargets: (u: NativeHandle) => {
+        const [nearest, nearestDistance, weakest, weakestLife, nearestWhenPlayer, whenPlayerDistance, count, closeCount] = W().aiScan(u);
+        return { nearest, nearestDistance, weakest, weakestLife, nearestWhenPlayer, nearestWhenPlayerDistance: whenPlayerDistance, count, closeCount };
+    },
+    setPathOverrides: (u: NativeHandle, pathType: unknown, velocity: unknown, steps: unknown) =>
+        W().aiPath(u, argInteger(pathType, 1, "monster.setPathOverrides"), argInteger(velocity, 2, "monster.setPathOverrides"),
+            argInteger(steps, 3, "monster.setPathOverrides")),
     ...ai.actions(),
 };
 

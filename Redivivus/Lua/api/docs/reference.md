@@ -571,15 +571,22 @@ A monster (and NPCs, which are monsters too).
 - `findTarget(): { readonly target: AnyUnit; readonly distance: integer; } | undefined;` - The target the engine's AI would pick now (an AI's FindTargetAndDistance), with its AI distance.
 - `canCast(skill: SkillId, at: Unit | Corpse): boolean;` - Whether the skill can be cast at the unit or corpse now (its target and placement checks).
 - `orderMinions(order: MinionOrder): void;` - Give each monster of the group it is in an order (what the group's AIs read next).
+- `readonly lifePercent: integer;` - Life in percent of its maximum, as the engine rounds it down (the life bands the AIs test).
+- `collidesWith(other: Unit, mask: integer): boolean;` - Whether a collision of the mask (the engine's collision bits) lies between it and the unit.
+- `scanTargets(): TargetScan;` - The engine's target scan as Mephisto's AI makes it: what it could attack around it, in the scan's order.
+- `setPathOverrides(pathType: integer, velocity: integer, steps: integer): void;` - How its next move paths (the engine's AITACTICS_SetPathOverrides): path type (1 is taken as 7), velocity change, steps. Lasts until the next override; only inside its own AI script.
 - `idle(frames?: integer): Script<Outcome>;` - Stand for frames (default: its AI delay), then think again.
 - `walkTo(to: Subtile): Script<Outcome>;` - Walk to a point. Blocked when no path could be started or it stopped short.
 - `runTo(to: Subtile): Script<Outcome>;` - Run to a point (walks when it cannot run).
-- `walkToward(target: Unit): Script<Outcome>;` - Walk toward a unit. Interrupted when the unit is gone or dead.
+- `walkToward(target: Unit, moveFlags?: integer): Script<Outcome>;` - Walk toward a unit (moveFlags: the engine's StartMonsterMove flags). Interrupted when the unit is gone or dead.
 - `runToward(target: Unit): Script<Outcome>;`
 - `attack(target: Unit, secondary?: boolean): Script<Outcome>;` - Attack (Attack1, or Attack2 with secondary).
 - `castSkill(skill: SkillId, at: Unit | Corpse | Subtile, mode?: MonsterMode): Script<Outcome>;` - Cast a skill in a mode (default Cast; a MonStats SkMode column gives a skill's own).
 - `castSequence(skill: SkillId, at: Unit | Corpse | Subtile): Script<Outcome>;` - Cast a sequence skill (mode Sequence: the animation the skill's sequence table plays), as a resurrect.
-- `circleToward(target: Unit, steps: integer): Script<Outcome>;` - Close in on a unit along a curve, clockwise or not by a roll of its seed, steps long.
+- `circleToward(target: Unit, steps: integer, flank?: boolean): Script<Outcome>;` - Close in on a unit along a curve, clockwise or not by a roll of its seed, steps long (flank: the engine's other direction flags, as Mephisto closes in).
+- `walkPast(target: Unit, offset: integer, force?: boolean): Script<Outcome>;` - Walk toward a unit and offset subtiles on past it, along the line from here (force: even when close).
+- `wanderAround(target: Unit, radius: integer): Script<Outcome>;` - Walk to a random spot within radius of a unit.
+- `walkToDistance(target: Unit, maxStep: integer, distance: integer): Script<Outcome>;` - Drop its pending think and walk to distance subtiles from a unit, at most maxStep at a time.
 - `wander(radius: integer): Script<Outcome>;` - Walk to a random spot within radius.
 - `flee(from: Unit, distance: integer): Script<Outcome>;` - Run away from a unit for distance subtiles.
 
@@ -620,6 +627,20 @@ Monster handle is then valid) or gone.
 ### `type AnyUnit = Player | Monster | (Unit & { readonly type: Exclude<UnitType, UnitType.Player | UnitType.Monster>; });`
 
 Any unit a query gives: narrow it by `type`.
+
+### `interface TargetScan`
+
+What a target scan found: the units it could attack within a squared distance of 1024 (about 32
+subtiles). Distances are squared subtiles.
+
+- `readonly nearest: AnyUnit | undefined;`
+- `readonly nearestDistance: integer;`
+- `readonly weakest: AnyUnit | undefined;` - The one with the least life (whole points), the first of equals in the scan's order.
+- `readonly weakestLife: integer;`
+- `readonly nearestWhenPlayer: AnyUnit | undefined;` - The nearest, kept only when the scanning unit is a player: never for a monster (the engine tests the scanner).
+- `readonly nearestWhenPlayerDistance: integer;`
+- `readonly count: integer;`
+- `readonly closeCount: integer;` - How many within a squared distance of 225 (15 subtiles).
 
 ### `interface MonsterData`
 
@@ -823,7 +844,8 @@ resumed again, and the outcome is Outcome.Interrupted. Otherwise the outcome is 
 
 A body waits as a whole: a `wait(100)` or an action the engine runs is not cut short, and an
 action the body started is left to the engine as it runs it. Errors in check or body propagate.
-Guards nest. `yield* guard(() => target.valid && !target.dead, chase(monster, target))`: the
+Guards nest. Outside a script, in a coroutine of the mod's own (a test driving a Script), the
+body's waits reach whoever resumes it. `yield* guard(() => target.valid && !target.dead, chase(monster, target))`: the
 build hands the body over unstarted. In Lua the body is a function that runs it:
 `guard(check, function() return chase(monster, target) end)`.
 

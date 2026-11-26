@@ -1,0 +1,7 @@
+{
+  "name": "mephisto",
+  "version": "0.1.0",
+  "title": "Mephisto (the stock AI, ported to TypeScript twice)",
+  "author": "Redivivus",
+  "dependencies": ["redivivus >= 0.1"]
+}

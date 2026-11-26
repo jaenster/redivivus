@@ -65,6 +65,20 @@ enum D2LuaAiClaim { D2LUA_AI_UNCLAIMED = 0, D2LUA_AI_WRAPPED = 1, D2LUA_AI_REGIS
 
 enum D2LuaAiMove { D2LUA_MOVE_WALK = 0, D2LUA_MOVE_RUN = 1 };
 
+// The engine's target scan as Mephisto's AI makes it (ForEach with CollectMephistoTargetInfo): the
+// units it could attack within a squared distance of 1024. "When player" is filled only when the
+// scanning unit is a player (the engine tests the scanner's type, not the target's).
+struct D2LuaTargetScan {
+    D2UnitStrc* pNearest = nullptr;
+    int nNearestDistance = 0x7fffffff;
+    D2UnitStrc* pWeakest = nullptr;
+    int nWeakestLife = 0x7fffffff;
+    D2UnitStrc* pNearestWhenPlayer = nullptr;
+    int nNearestWhenPlayerDistance = 0x7fffffff;
+    int nCount = 0;
+    int nCloseCount = 0;  // within a squared distance of 225
+};
+
 class D2LuaWorld {
 public:
     virtual ~D2LuaWorld() {}
@@ -164,18 +178,31 @@ public:
     virtual bool AiCanCast(D2UnitStrc* pUnit, int nSkill, D2UnitStrc* pTarget, int nX, int nY) = 0;
     // An order to every monster in the group (CreateMinion: AllocCommandsForMinions).
     virtual void AiOrderMinions(D2UnitStrc* pUnit, int nOrder) = 0;
+    // Life in percent of its maximum, as the engine rounds it (GetCurrentLifePercentage).
+    virtual int LifePercent(D2UnitStrc* pUnit) = 0;
+    // Whether a collision of the mask lies between the two units (TestCollisionWithUnit).
+    virtual bool CollidesWith(D2UnitStrc* pUnit, D2UnitStrc* pOther, int nMask) = 0;
+    virtual void AiTargetScan(D2UnitStrc* pUnit, D2LuaTargetScan& tOut) = 0;
+    // How its next moves path (AITACTICS_SetPathOverrides).
+    virtual void AiPathOverrides(D2UnitStrc* pUnit, int nPathType, int nVelocity, int nSteps) = 0;
 
     // --- the actions a script AI starts (each counts as scheduling the next think) ----------------
     // Think again after nFrames (the engine's PlanNextAiMove: back to neutral first).
     virtual void AiIdle(D2UnitStrc* pUnit, int nFrames) = 0;
-    // Walk or run to a unit or a subtile. False when no path could be started.
-    virtual bool AiMove(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int nX, int nY, int nMove) = 0;
+    // Walk or run to a unit or a subtile, with StartMonsterMove's flags. False when no path could be started.
+    virtual bool AiMove(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int nX, int nY, int nMove, int nFlags) = 0;
     virtual bool AiAttack(D2UnitStrc* pUnit, D2UnitStrc* pTarget, bool bSecondary) = 0;
     virtual bool AiCast(D2UnitStrc* pUnit, int nSkill, int nMode, D2UnitStrc* pTarget, int nX, int nY) = 0;
     // A sequence skill (MONSTERAI_CommandSkillSequence). False when the mode could not be set.
     virtual bool AiSequence(D2UnitStrc* pUnit, int nSkill, D2UnitStrc* pTarget, int nX, int nY) = 0;
-    // Close in along a curve (SetCombatStateAndApproachTarget).
-    virtual bool AiCircle(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int nSteps) = 0;
+    // Close in along a curve (SetCombatStateAndApproachTarget; nFlags non-zero: its direction flags).
+    virtual bool AiCircle(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int nSteps, int nFlags) = 0;
+    // Walk toward a unit to nOffset subtiles past it along the line (WalkTowardsUnitOffset).
+    virtual bool AiWalkPast(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int nOffset, bool bForce) = 0;
+    // Walk to a random spot around a unit (WalkRandomOffsetAroundUnit).
+    virtual bool AiWanderAround(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int nRadius) = 0;
+    // Drop its pending think, then walk to a distance from a unit (MONSTERAI_CommandWalkToDistance).
+    virtual bool AiWalkToDistance(D2UnitStrc* pUnit, D2UnitStrc* pTarget, int nMaxStep, int nDistance) = 0;
     virtual bool AiWander(D2UnitStrc* pUnit, int nRadius) = 0;
     virtual bool AiFlee(D2UnitStrc* pUnit, D2UnitStrc* pFrom, int nDistance) = 0;
     // One think of the stock AI, with the engine's parameters of the think now running.
