@@ -19,45 +19,27 @@ template<> void TSExportTableSync<SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, C
 
 // Unlinks a SGAMEDATA from up to two intrusive hash-table chains (pHashLink1/pHashLink2 with their corresponding nHashLinkOffset fields). For each non-null link, computes the back-pointer using the stored offset, patches the predecessor's next pointer to skip this node, then zeroes the game's own link field and offset. Called during game teardown to remove the game from name/token lookup tables before freeing memory.
 template<> __attribute__((noinline)) inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::Unlink(::SGAMEDATA * pNode) {
-    TSLink<::SGAMEDATA>** pBackLink;
-    if (!pNode->m_linktoslot.m_next) {
-      return;
-    }
-
-    TSLink<::SGAMEDATA>* pTVar1 = &pNode->m_linktoslot;
-    TSLink<::SGAMEDATA>* nLinkValue = pTVar1->m_prevlink;
-    if (nLinkValue) {
-      intptr_t nHashLinkOffset;
-      nHashLinkOffset = pNode->m_linktoslot.m_next;
-      if (nHashLinkOffset < 0) {
-        pBackLink = (TSLink<::SGAMEDATA>**)~nHashLinkOffset;
-      } else {
-        pBackLink = (TSLink<::SGAMEDATA>**)((char*)pTVar1 + (nHashLinkOffset - nLinkValue->m_next));
+    if (pNode->m_linktoslot.m_next) {
+      TSLink<::SGAMEDATA>* pLink = &pNode->m_linktoslot;
+      TSLink<::SGAMEDATA>* pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<::SGAMEDATA>** ppNextBack = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
 
-      *pBackLink = nLinkValue;
-      pTVar1->m_prevlink->m_next = pNode->m_linktoslot.m_next;
-      pTVar1->m_prevlink = 0;
-      pNode->m_linktoslot.m_next = 0;
+      pLink = &pNode->m_linktofull;
+      pPrevLink = pLink->m_prevlink;
+      if (pPrevLink) {
+        TSLink<::SGAMEDATA>** ppNextBack = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1);
+        *ppNextBack = pPrevLink;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
+      }
     }
-
-    nLinkValue = pNode->m_linktofull.m_prevlink;
-    pTVar1 = &pNode->m_linktofull;
-    if (!nLinkValue) {
-      return;
-    }
-
-    intptr_t nHashLinkOffset2 = pNode->m_linktofull.m_next;
-    if (nHashLinkOffset2 < 0) {
-      pBackLink = (TSLink<::SGAMEDATA>**)~nHashLinkOffset2;
-    } else {
-      pBackLink = (TSLink<::SGAMEDATA>**)((char*)pTVar1 + (nHashLinkOffset2 - nLinkValue->m_next));
-    }
-
-    *pBackLink = nLinkValue;
-    pTVar1->m_prevlink->m_next = pNode->m_linktofull.m_next;
-    pTVar1->m_prevlink = 0;
-    pTVar1->m_next = 0;
 }
 
 template<> ::SGAMEDATA * TSExplicitList<SGAMEDATA, -572662307>::RawNext(::SGAMEDATA * pNode) {

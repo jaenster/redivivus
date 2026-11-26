@@ -15,76 +15,40 @@ namespace D2Game::Quests::QUESTS::Quest39 {
 
 // A3Q1 "Lam Esen's Tome" — NPC-dialog handler slot 0xb. On each NPC dialog event, checks whether the spoken message index matches that NPC's gossip line (two lines for Asheara, Alkor, Ormus and Meshif2; one for Cain3 0x1ca and Natalya 0x1c5). On a match it reaches mark_spoken, which calls PLAYER_SetSpokenWithNPC to record that the player has spoken with that NPC. Drives the "spoken with Act 3 NPCs" progress tracking for Q39.
 void __fastcall Q39_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    bool bDialogIndexMatch;
-    eD2MonsterClassId nMonStatsId;
-    nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
-    uint16_t nMessageIndex;
-    nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
+    eD2MonsterClassId nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    uint16_t nMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     switch (nMonStatsId) {
       case MonsterUnitAlkor:
-        if (nMessageIndex == 0x1f6) {
-          goto mark_spoken;
+        if (nMessageIndex == 0x1f6 || nMessageIndex == 0x1f5) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      bDialogIndexMatch = false;
-      if (nMessageIndex == 0x1f5) {
-        bDialogIndexMatch = true;
-      }
-
-      break;
+        break;
       case MonsterUnitMeshif2:
-        if (nMessageIndex == 0x1df) {
-          goto mark_spoken;
+        if (nMessageIndex == 0x1df || nMessageIndex == 0x1de) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      bDialogIndexMatch = false;
-      if (nMessageIndex == 0x1de) {
-        bDialogIndexMatch = true;
-      }
-
-      break;
+        break;
       case MonsterUnitAsheara:
-        if (nMessageIndex != 0x1eb) {
-          bDialogIndexMatch = false;
-          if (nMessageIndex == 0x1ea) {
-            bDialogIndexMatch = true;
-          }
-
-          break;
+        if (nMessageIndex == 0x1eb || nMessageIndex == 0x1ea) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      goto mark_spoken;
+        break;
       case MonsterUnitOrmus:
-        if (nMessageIndex == 0x203) {
-          goto mark_spoken;
+        if (nMessageIndex == 0x203 || nMessageIndex == 0x202) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      bDialogIndexMatch = false;
-      if (nMessageIndex == 0x202) {
-        bDialogIndexMatch = true;
-      }
-
-      break;
+        break;
       case MonsterUnitNatalya:
-        bDialogIndexMatch = false;
-      if (nMessageIndex == 0x1c5) {
-        bDialogIndexMatch = true;
-      }
-
-      break;
+        if (nMessageIndex == 0x1c5) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
+        }
+        break;
       case MonsterUnitDeckardCain3:
-        bDialogIndexMatch = false;
-      if (nMessageIndex == 0x1ca) {
-        bDialogIndexMatch = true;
-      }
-
-      break;
-      default:
-        return;
+        if (nMessageIndex == 0x1ca) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
+        }
+        break;
     }
-
-    if (!bDialogIndexMatch) {
-      return;
-    }
-
-    mark_spoken:
-    PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
 }
 
 // A3Q1 "Lam Esen's Tome" — NPC-interact handler slot 0x0 (first-talk trigger). On player interaction with an Act 3 NPC (Asheara, Alkor, Ormus, Meshif2, Cain, Natalya), checks PLAYER_CheckIfSpokenWithNPC; if not yet spoken, calls AddGossipMessageOnMonster to queue a gossip message, using message variant 1 if the player class matches a class-specific Amazon index for that NPC, else variant 0. Records the first-talk gossip delivery for Q39 NPC introductions.

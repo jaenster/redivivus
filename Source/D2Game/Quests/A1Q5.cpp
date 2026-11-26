@@ -510,73 +510,55 @@ static void __fastcall Q05_OnTowerComplete(D2QuestDataStrc * pQuestData) {
 // A1Q5 "Tools of the Trade" (Horadric Malus) quest-state handler slot[3]. On dialog index 0x14: advances state 0->2 (sets flag); on index 0x19: advances toward state 3. Broadcasts the new quest state to all players via QUEST_SetStateAndBroadcast and re-syncs each player with Q05_SyncQuestStepToPlayer. In the non-intro path (pTextControl==1) at state 2 it finalizes once the player's quest record shows Completed, and at state 5 removes the player from the tracking list and deactivates the quest when no objects remain.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
 void __fastcall Q05_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2QuestDataA1Q5Strc* pA1Q4Data;
-    D2QuestDataA1Q5Strc* pA1Q5Data;
-    ::SGAMEDATA* pGame;
-    int nIndex;
-    nIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
-    if (pQuestData->bIsNotIntroduction == '\0') {
-      BOOL bQuestState;
-      handle_left_town:
-      if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel == 1) {
-        if (pQuestData->nStateFlag == 2) {
-          pGame = pQuestArgs->pGame;
-          D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pQuestArgs->pPlayer);
-          bQuestState = D2Common::QuestRecord::GetQuestState(pQuestRecord, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-          if (bQuestState != 1) {
-            QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x28d);
+    int nNewLevel = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
+    int nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    if (pQuestData->bIsNotIntroduction) {
+      if (nNewLevel == 0x14) {
+        int nNewState;
+        if (!pQuestData->nStateFlag) {
+          QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x267);
+          nNewState = 3;
+        } else {
+          if (pQuestData->nStateFlag > 3 || pQuestData->nStateFlagPrev != 1) {
             return;
           }
-        } else if (pQuestData->nStateFlag == 5 && pQuestData->bIsNotIntroduction != '\0') {
-          pA1Q5Data = pQuestData->pQuestSpecificData.pA1Q5;
-          if (!pQuestArgs->pPlayer) {
-            nIndex = -1;
-          } else {
-            nIndex = pQuestArgs->pPlayer->nUnitGUID;
-          }
 
-          bQuestState = Q05_RemovePlayerFromTrackingList(0, pA1Q5Data, nIndex);
-          if (bQuestState && !pA1Q5Data->nPlayersInTowerCount && !pA1Q5Data->nPlayersForRewardCount) {
-            pQuestData->bIsActive = '\0';
-          }
+          nNewState = 4;
         }
+
+        pQuestData->nQuestPacketFlags = '\0';
+        QUEST_SetStateAndBroadcast(pQuestData, nNewState, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, 1);
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_SyncQuestStepToPlayer);
+        return;
       }
+      if (nNewLevel == 0x19) {
+        if (pQuestData->nStateFlag >= 4 || pQuestData->nStateFlagPrev == 2) {
+          return;
+        }
+        if (pQuestData->nStateFlag != 3) {
+          QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x27a);
+        }
+
+        pQuestData->nQuestPacketFlags = '\0';
+        QUEST_SetStateAndBroadcast(pQuestData, 2, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, 1);
+        UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_SyncQuestStepToPlayer);
+        return;
+      }
+    }
+
+    if (nOldLevel != 1) {
       return;
     }
-    if (nIndex == 0x14) {
-      if (!pQuestData->nStateFlag) {
-        QUEST_SetStateFlag(pQuestData, 2, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x267);
-        nIndex = 3;
-      } else {
-        if (pQuestData->nStateFlag > 3) {
-          return;
-        }
-        if (pQuestData->nStateFlagPrev != 1) {
-          return;
-        }
-
-        nIndex = 4;
+    if (pQuestData->nStateFlag == 2) {
+      if (D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer), pQuestData->nQuestIdReal, QUESTSTATE_Completed) != 1) {
+        QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x28d);
       }
-    } else {
-      if (nIndex != 0x19) {
-        goto handle_left_town;
+    } else if (pQuestData->nStateFlag == 5 && pQuestData->bIsNotIntroduction) {
+      D2QuestDataA1Q5Strc* pA1Q5Data = pQuestData->pQuestSpecificData.pA1Q5;
+      if (Q05_RemovePlayerFromTrackingList(0, pA1Q5Data, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID) && !pA1Q5Data->nPlayersInTowerCount && !pA1Q5Data->nPlayersForRewardCount) {
+        pQuestData->bIsActive = '\0';
       }
-      if (pQuestData->nStateFlag >= 4) {
-        return;
-      }
-      if (pQuestData->nStateFlagPrev == 2) {
-        return;
-      }
-      if (pQuestData->nStateFlag != 3) {
-        QUEST_SetStateFlag(pQuestData, 3, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a1q5.cpp", 0x27a);
-      }
-
-      nIndex = 2;
     }
-
-    pQuestData->nQuestPacketFlags = '\0';
-    QUEST_SetStateAndBroadcast(pQuestData, nIndex, nullptr, (::fpExecuteOnUnitFunction)Q05_NotifyQuestStateToPlayer, 1);
-    UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q05_SyncQuestStepToPlayer);
 }
 
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp

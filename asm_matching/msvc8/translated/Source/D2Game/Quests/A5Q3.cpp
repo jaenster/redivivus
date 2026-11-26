@@ -1098,50 +1098,33 @@ void __fastcall CalculateBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // If Completed/FinishedInPreviousGame -> mark done (field_0x84=2, field_0x88=1). Else from Step0x03/Step0x02 bits derive
 // stateFlag 2/3 and prev; if the player holds the scroll, jump to stateFlag 3 / prev 4.
 void __fastcall Q33_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2QuestDataA5Q3Strc* pA1Q6Data;
-    pA1Q6Data = pQuestData->pQuestSpecificData.pA5Q3;
-    D2UnitStrc* pScrollItem;
-    pScrollItem = ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20656369);
-    if (pScrollItem) {
-      pA1Q6Data->nIceItemCount = 1;
+    D2QuestDataA5Q3Strc* pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
+    if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20656369)) {
+      pA5Q3Data->nIceItemCount = 1;
     }
 
-    ::SGAMEDATA* pGame;
-    pGame = pQuestArgs->pGame;
-    D2UnitDataPlayerStrc* pPlayerData;
-    pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
-    D2BitBufferStrc* pBitBuffer;
-    pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
-    BOOL bQuestStateResult;
-    bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed);
-    if (bQuestStateResult || (bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_FinishedInPreviousGame) , bQuestStateResult != 0)) {
-      pA1Q6Data->nAnyaState = 2;
-      pA1Q6Data->nAnyaStateExtra = 1;
+    D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Completed) || D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_FinishedInPreviousGame)) {
+      pA5Q3Data->nAnyaState = 2;
+      pA5Q3Data->nAnyaStateExtra = 1;
       return;
     }
-    if (pQuestData->bIsNotIntroduction == '\0') {
+    if (!pQuestData->bIsNotIntroduction) {
       return;
     }
 
-    bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Step0x03);
-    if (bQuestStateResult) {
+    if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Step0x03)) {
       pQuestData->nStateFlag = 3;
-    } else {
-      bQuestStateResult = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Step0x02);
-      if (!bQuestStateResult) {
-        goto apply_held_potion_state;
-      }
-
+      pQuestData->nStateFlagPrev = 1;
+    } else if (D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_Step0x02)) {
       pQuestData->nStateFlag = 2;
+      pQuestData->nStateFlagPrev = 1;
     }
 
-    pQuestData->nStateFlagPrev = 1;
-    apply_held_potion_state:
-    if (!pA1Q6Data->nIceItemCount) {
-      return;
+    if (pA5Q3Data->nIceItemCount) {
+      pQuestData->nStateFlag = 3;
+      pQuestData->nStateFlagPrev = 4;
     }
-    pQuestData->nStateFlag = 3;
-    pQuestData->nStateFlagPrev = 4;
 }
 
 // Q33_Callback_14 (PrisonOfIce, state-0xe handler): tracks held scroll count. Then, once quest is no longer in intro

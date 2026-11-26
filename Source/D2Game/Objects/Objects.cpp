@@ -898,14 +898,12 @@ void __fastcall Objects_InitFn02_Urn(D2ObjectInitFnArg * pInitArg) {
 }
 
 void __fastcall Objects_InitFn27_GooPile(D2ObjectInitFnArg * pInitArg) {
-    D2SeedStrc* pDVar1 = pInitArg->pSeed;
-    uint32_t DVar2 = D2_SeedRoll(pDVar1);
-    uint8_t byMode = 3;
-    if ((int)(DVar2 % 1000) >= 0x14d) {
-      byMode = 0;
+    uint8_t nShrineId = 0;
+    if ((int)(D2_SeedRoll(pInitArg->pSeed) % 1000) < 0x14d) {
+      nShrineId = 3;
     }
 
-    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = byMode;
+    pInitArg->pObject->pUnitData.pUnitDataObject->nShrineId = nShrineId;
 }
 
 // Init callback for lockable chest objects (group 03). Calls Objects_InitFn02 for base setup, then reads the chest's current flags. If the object's txt Lockable flag is set, rolls a seed value against (MonLvl/2 + 8) percent chance; if the roll passes the chest is flagged as locked (bit 0x80). Finally seeds the object's own RNG state with a derived value and writes back the flags.
@@ -1091,12 +1089,11 @@ void __fastcall Objects_InitFn11_TownPortal(D2ObjectInitFnArg * pInitArg) {
 }
 
 void __fastcall Objects_InitFn51_TrappedSoul(D2ObjectInitFnArg * pInitArg) {
-    D2UnitStrc* pUnit = pInitArg->pObject;
-    if (!(pUnit && (pUnit->eAnimMode.ePlayerMode == Walk || pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral))) {
+    if (GetAnimModeInline(pInitArg->pObject) != Walk && GetAnimModeInline(pInitArg->pObject) != eD2PlayerAnimMode_ns::Neutral) {
       return;
     }
 
-    GAME::Event::SetEvent(pInitArg->pGame, pUnit, 9, pInitArg->pGame->dwGameFrame + 0x23, 0, 0);
+    GAME::Event::SetEvent(pInitArg->pGame, pInitArg->pObject, 9, pInitArg->pGame->dwGameFrame + 0x23, 0, 0);
 }
 
 static BOOL __stdcall ROOM_CheckSpawnCollision(D2RoomStrc * pRoom, uint32_t nSizeY, int * pnRoomCoords, int * pnSpawnCoord, uint32_t nSizeX) {

@@ -1280,50 +1280,40 @@ int __stdcall LIGHTMAP_GetQualityLevel() {
     static unsigned int gdwLightmapQualityLastCheck; D2_STATIC_GUARD_BSS(gdwLightmapQualityLastCheck, "D2Client::Draw::LightMap::LIGHTMAP_GetQualityLevel::gdwLightmapQualityLastCheck");
     static int gnLightmapQualityLevel; D2_STATIC_GUARD_BSS(gnLightmapQualityLevel, "D2Client::Draw::LightMap::LIGHTMAP_GetQualityLevel::gnLightmapQualityLevel");
 
-    uint32_t dwTickCount;
-    int nQualityLevel;
-    nQualityLevel = 2;
-    BOOL bLowQuality;
-    bLowQuality = D2gfx::D2GFX::D2GFX_GetLowQuality();
-    if (bLowQuality) {
-      nQualityLevel = UNIT::Missile::LIGHTMAP_GetQualityLevel();
-      if (nQualityLevel) {
+    int nQualityLevel = 2;
+    if (D2gfx::D2GFX::D2GFX_GetLowQuality()) {
+      if (UNIT::Missile::LIGHTMAP_GetQualityLevel()) {
         nQualityLevel = 1;
-        goto rate_by_fps;
-      }
-    } else {
-      uint32_t nFps;
-      rate_by_fps:
-      nFps = GAME::Game::GAMEDATA_GetFpsDrawn();
-      if ((int)nFps > 9) {
-        if ((int)nFps > 0xc) {
-          if ((int)nFps > 0xf) {
-            goto commit_with_hysteresis;
-          }
-          if (gnLightmapQualityLevel >= 1) {
-            return gnLightmapQualityLevel;
-          }
-        }
-
-        nQualityLevel = 1;
-        goto commit_with_hysteresis;
+      } else {
+        nQualityLevel = 0;
       }
     }
 
-    nQualityLevel = 0;
-    commit_with_hysteresis:
-    dwTickCount = gdwLightmapQualityLastCheck;
-    int nNewLevel = gnLightmapQualityLevel;
+    if (nQualityLevel) {
+      int nFps = GAME::Game::GAMEDATA_GetFpsDrawn();
+      if (nFps <= 9) {
+        nQualityLevel = 0;
+      } else if (nFps <= 0xc) {
+        nQualityLevel = 1;
+      } else if (nFps <= 0xf) {
+        if (gnLightmapQualityLevel >= 1) {
+          return gnLightmapQualityLevel;
+        }
+
+        nQualityLevel = 1;
+      }
+    }
+
     if (nQualityLevel != gnLightmapQualityLevel) {
-      dwTickCount = GetTickCount();
-      nNewLevel = nQualityLevel;
-      if (dwTickCount - gdwLightmapQualityLastCheck <= 0x7d0) {
+      uint32_t dwTickCount = GetTickCount();
+      if (dwTickCount - gdwLightmapQualityLastCheck > 0x7d0) {
+        gdwLightmapQualityLastCheck = dwTickCount;
+        gnLightmapQualityLevel = nQualityLevel;
+      } else {
         return gnLightmapQualityLevel;
       }
     }
 
-    gdwLightmapQualityLastCheck = dwTickCount;
-    gnLightmapQualityLevel = nNewLevel;
     return nQualityLevel;
 }
 

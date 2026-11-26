@@ -101,75 +101,39 @@ bool __fastcall Q40_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // Quest 40 (Siege on Harrogath) NPC-gossip callback. Dispatches on monster-class ID and dialog message index. For Drehya, Malah, Town (Korlic?), Qualkehk, and Deckard Cain: if the matching message index is spoken, calls PLAYER_SetSpokenWithNPC. Special Malah path also fetches the SiegeOnHaggorath quest data and sets nStateFlag=1 on first introduction (gate: bIsNotIntroduction && nStateFlag==0).
 void __fastcall Q40_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
-    D2QuestDataStrc* pSiegeQuestData;
-    bool bMsgMatched;
-    eD2MonsterClassId nMonStatsId;
-    nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
-    uint16_t nMsgIndex;
-    nMsgIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
+    eD2MonsterClassId nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
+    uint16_t nMsgIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     switch (nMonStatsId) {
       case MonsterUnitDeckardCain6:
-        bMsgMatched = false;
-      if (nMsgIndex == 0x4e23) {
-        bMsgMatched = true;
-      }
-
-      break;
+        if (nMsgIndex == 0x4e23) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
+        }
+        break;
       case MonsterUnitDrehya1:
-        bMsgMatched = false;
-      if (nMsgIndex == 0x4e2e) {
-        bMsgMatched = true;
-      }
-
-      break;
+        if (nMsgIndex == 0x4e2e) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
+        }
+        break;
       case MonsterUnitMalah:
-        if (nMsgIndex != 0x4e47 && nMsgIndex != 0x4e46 && nMsgIndex != 0x4e45) {
-          return;
-        }
-      PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
-      pSiegeQuestData = GetQuestDataByQuestNoInternal(pQuestArgs->pGame, QUESTINT_SiegeOnHaggorath);
-      if (!pSiegeQuestData) {
-        return;
-      }
-      if (pSiegeQuestData->nStateFlag) {
-        return;
-      }
-      if (pSiegeQuestData->bIsNotIntroduction == '\0') {
-        return;
-      }
-
-      pSiegeQuestData->nStateFlag = 1;
-      return;
-      case MonsterUnitTown:
-        if (nMsgIndex != 0x4e56 && nMsgIndex != 0x4e55) {
-          bMsgMatched = false;
-          if (nMsgIndex == 0x4e57) {
-            bMsgMatched = true;
+        if (nMsgIndex == 0x4e47 || nMsgIndex == 0x4e46 || nMsgIndex == 0x4e45) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
+          D2QuestDataStrc* pSiegeQuestData = GetQuestDataByQuestNoInternal(pQuestArgs->pGame, QUESTINT_SiegeOnHaggorath);
+          if (pSiegeQuestData && !pSiegeQuestData->nStateFlag && pSiegeQuestData->bIsNotIntroduction) {
+            pSiegeQuestData->nStateFlag = 1;
           }
-
-          break;
         }
-      goto mark_spoken;
+        break;
+      case MonsterUnitTown:
+        if (nMsgIndex == 0x4e56 || nMsgIndex == 0x4e55 || nMsgIndex == 0x4e57) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
+        }
+        break;
       case MonsterUnitQualkehk:
-        if (nMsgIndex == 0x4e63 || nMsgIndex == 0x4e62) {
-          goto mark_spoken;
+        if (nMsgIndex == 0x4e63 || nMsgIndex == 0x4e62 || nMsgIndex == 0x4e61) {
+          PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
         }
-      bMsgMatched = false;
-      if (nMsgIndex == 0x4e61) {
-        bMsgMatched = true;
-      }
-
-      break;
-      default:
-        return;
+        break;
     }
-
-    if (!bMsgMatched) {
-      return;
-    }
-
-    mark_spoken:
-    PLAYER::PlayerIntro::PLAYER_SetSpokenWithNPC(pQuestArgs->pPlayer, pQuestArgs->pGame, nMonStatsId);
 }
 
 // Quest-slot initializer for internal quest 40 (nQuestIdReal=QUEST_ActIntroduced, the "act intro" gossip pseudo-quest). Zeroes the 0x3C-byte state-function table on the D2QuestDataStrc, installs the gossip dispatch handlers (slot 0 = Q40_Callback_00, slot 0xB = Q40_Callback_11), points pNpcMessages at the act's aNpcGossipData, marks the quest active with cleared state flags, sets no per-game scratch (pQuestSpecificData=NULL), and registers the status/active filters (Q40_StatusFilter/Q40_ActiveFilter). No journal/reward; a dialog gate only.

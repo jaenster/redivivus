@@ -3859,9 +3859,6 @@ void __fastcall ITEMMODE_RechargeItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 static BOOL ITEMMODE_ValidateInventorySlot(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pScrollItem) {
-    int32_t bInserted;
-    BOOL BVar1;
-    int32_t nInsertResult;
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x610);
       exit(-1);
@@ -3869,14 +3866,9 @@ static BOOL ITEMMODE_ValidateInventorySlot(D2UnitStrc * pUnit, ::SGAMEDATA * pGa
 
     D2UnitStrc* pMatchingBook = D2Common::INVENTORY::Inventory::INVENTORY_FindMatchingScrollBook(pUnit->pInventory, pScrollItem, nullptr);
     if (pMatchingBook) {
-      if (!pScrollItem) {
-        bInserted = ITEM_InsertScrollIntoBook(pGame, pUnit, -1, pMatchingBook->nUnitGUID, &nInsertResult);
-        return bInserted;
-      }
-
-      int t2_c2 = pScrollItem->nUnitGUID;
-      BVar1 = ITEM_InsertScrollIntoBook(pGame, pUnit, t2_c2, pMatchingBook->nUnitGUID, &nInsertResult);
-      return BVar1;
+      int32_t nInsertResult;
+      int nBookGUID = pMatchingBook->nUnitGUID; // steer-ok: the original reads the book GUID before the scroll GUID argument
+      return ITEM_InsertScrollIntoBook(pGame, pUnit, !pScrollItem ? -1 : pScrollItem->nUnitGUID, nBookGUID, &nInsertResult);
     }
 
     return 0;

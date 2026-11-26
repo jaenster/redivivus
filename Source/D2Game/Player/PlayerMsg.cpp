@@ -3744,20 +3744,18 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_10(D2UnitStrc * p) 
 
 // C->S 0x3F Play Emote (3B). Packet: [op:1][emoteId:u16]. Values 0x19-0x20 only. Blocked if unit has flag bit 10.
 eD2ServerIncomingStatus __fastcall SCMD_0x3F_PlayEmote(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3F_PlayEmote * pPacket, uint32_t nSize) {
-    eD2ServerIncomingStatus eResult = SERVERSTATUS_BAD_PARAMS;
     if (nSize != 3) {
-      return eResult;
+      return SERVERSTATUS_BAD_PARAMS;
     }
     if ((uint32_t)(pPacket->nEmoteId - 0x19) <= 7) {
-      if (pUnit && FlagBit_D2UnitStrc_eUnitFlags_10(pUnit)) {
+      if (!FlagBit_D2UnitStrc_eUnitFlags_10(pUnit)) {
+        UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, (eD2TimerTypeDWORD)pPacket->nEmoteId, nullptr);
+      } else {
         return SERVERSTATUS_BAD_TARGET;
       }
-
-      UNIT::SUnit::SetupUpdateEvent_AttachEventSound(pUnit, (eD2TimerTypeDWORD)pPacket->nEmoteId, nullptr);
     }
 
-    eResult = SERVERSTATUS_OK;
-    return eResult;
+    return SERVERSTATUS_OK;
 }
 
 eD2ServerIncomingStatus __fastcall SCMD_0x40_RefreshQuestData(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x40_RefreshQuestData * pPacket, uint32_t nSize) {

@@ -2736,29 +2736,31 @@ BOOL __fastcall SUNITNPC_OpenTradeScreen(::SGAMEDATA * pGame, D2UnitStrc * pPlay
 
 // Handles a player trade action with an NPC (buy/repair). Looks up the NPC's game proxy, marks it active, processes the NPC action, then conditionally resets the proxy and triggers item repair (single item if nParam!=0, all items if nParam==0) for repairable NPC types. Refreshes inventory after repair. Skips class IDs 0x96, 0xC6, and 0x203 (non-repairing NPCs).
 void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpc, D2ClientStrc * pClient, int32_t nMode) {
-    int nNpcDataIdx;
     if (!pNpc) {
       return;
     }
 
-    D2UnitStrc* pPlayer = pUnit;
+    int nNpcDataIdx;
     D2GameNpcStrc* pNpcData = sunitproxy::GetGameNpcByUnit(pGame, pNpc, &nNpcDataIdx);
     if (!pNpcData) {
       return;
     }
 
     pNpcData->bTrading = 1;
-    pNpcData->nNpcGUID = pNpc->nUnitGUID;
-    SUNITNPC_ProcessNpcAction(pGame, pPlayer, pNpc, nMode);
+    pNpcData->nNpcGUID = GetGUIDInline(pNpc);
+    SUNITNPC_ProcessNpcAction(pGame, pUnit, pNpc, nMode);
     int nNpcClassId = pNpc->nClassId;
-    if (!(nNpcClassId != 0x96 && nNpcClassId != 0x203 && nNpcClassId != 0xc6)) {
+    if (nNpcClassId == 0x96 || nNpcClassId == 0x203 || nNpcClassId == 0xc6) {
       return;
     }
-    if (pClient && !nMode && pNpcData->sTrade.bRefillStorePending) {
-      pNpcData->sTrade.bRefillStorePending = 0;
-      sunitproxy::SUNITPROXY_ResetNpcProxy(pGame, pNpcData, pNpc);
-      SUNITNPC_FillNpcStore(pGame, pPlayer, pNpc, &pNpcData->sTrade);
-      pNpcData->sTrade.bStoreFilled = 1;
+    if (pClient && !nMode) {
+      D2NpcTradeStateStrc* pTradeState = &pNpcData->sTrade;
+      if (pTradeState->bRefillStorePending) {
+        pTradeState->bRefillStorePending = 0;
+        sunitproxy::SUNITPROXY_ResetNpcProxy(pGame, pNpcData, pNpc);
+        SUNITNPC_FillNpcStore(pGame, pUnit, pNpc, pTradeState);
+        pTradeState->bStoreFilled = 1;
+      }
     }
 
     D2Common::Units::RefreshInventory(pNpc, 1);
@@ -2767,7 +2769,7 @@ void __fastcall SUNITNPC_HandleTradeAction(::SGAMEDATA * pGame, D2UnitStrc * pUn
       return;
     }
 
-    D2InventoryStrc* pInventory = sunitproxy::SUNITPROXY_GetPlayerProxyInventory(pGame, pPlayer, pNpc);
+    D2InventoryStrc* pInventory = sunitproxy::SUNITPROXY_GetPlayerProxyInventory(pGame, pUnit, pNpc);
     if (!pInventory) {
       return;
     }

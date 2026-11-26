@@ -305,51 +305,28 @@ template<> inline void TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalClear(int32
 }
 
 template<> inline void TSExplicitList<SGAMEDATA, -572662307>::Clear() {
-    TSLink<::SGAMEDATA>* pTVar2;
-    intptr_t uVar3;
-    TSLink<::SGAMEDATA>** pPrevLink;
-    TSLink<::SGAMEDATA>** pPrevLink2;
-    TSLink<::SGAMEDATA>* pLink;
-    ::SGAMEDATA* pObject;
-    intptr_t encPrev;
-    TSLink<::SGAMEDATA>* pNext;
     while (true) {
-      TSLink<::SGAMEDATA>* pTVar1;
-      pObject = (::SGAMEDATA*)this->m_terminator.m_next;
-      if ((intptr_t)pObject <= 0) {
+      ::SGAMEDATA* pObject = (intptr_t)this->m_terminator.m_next > 0 ? (::SGAMEDATA*)this->m_terminator.m_next : nullptr;
+      if (!pObject) {
         break;
       }
 
-      pNext = pObject->m_linktofull.m_prevlink;
-      pTVar1 = &pObject->m_linktofull;
-      if (pNext) {
-        encPrev = pObject->m_linktofull.m_next;
-        if (encPrev < 0) {
-          pPrevLink = (TSLink<::SGAMEDATA>**)~encPrev;
-        } else {
-          pPrevLink = (TSLink<::SGAMEDATA>**)((char*)pTVar1 + (encPrev - pNext->m_next));
-        }
-
-        *pPrevLink = pNext;
-        pTVar1->m_prevlink->m_next = pObject->m_linktofull.m_next;
-        pTVar1->m_prevlink = 0;
-        pObject->m_linktofull.m_next = 0;
+      TSLink<::SGAMEDATA>* pLink = &pObject->m_linktofull;
+      TSLink<::SGAMEDATA>* pPrev = pLink->m_prevlink;
+      if (pPrev) {
+        *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1) = pPrev;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
 
-      pTVar2 = pObject->m_linktoslot.m_prevlink;
-      pTVar1 = &pObject->m_linktoslot;
-      if (pTVar2) {
-        uVar3 = pObject->m_linktoslot.m_next;
-        if (uVar3 < 0) {
-          pPrevLink2 = (TSLink<::SGAMEDATA>**)~uVar3;
-        } else {
-          pPrevLink2 = (TSLink<::SGAMEDATA>**)((char*)pTVar1 + (uVar3 - pTVar2->m_next));
-        }
-
-        *pPrevLink2 = pTVar2;
-        pTVar1->m_prevlink->m_next = pObject->m_linktoslot.m_next;
-        pTVar1->m_prevlink = 0;
-        pObject->m_linktoslot.m_next = 0;
+      pLink = &pObject->m_linktoslot;
+      pPrev = pLink->m_prevlink;
+      if (pPrev) {
+        *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1) = pPrev;
+        pLink->m_prevlink->m_next = pLink->m_next;
+        pLink->m_prevlink = 0;
+        pLink->m_next = 0;
       }
 
       Storm::Source::SMem::SMemFree(pObject, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, 0);
@@ -561,46 +538,33 @@ template<> inline void __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::Internal
 
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE>::InternalNew (STORM.H)
 template<> inline ::SGAMEDATA * __fastcall TSHashTable<SGAMEDATA, HASHKEY_NONE>::InternalNew(TSHashTable<::SGAMEDATA, HASHKEY_NONE>* pThis, int, TSExplicitList<::SGAMEDATA, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSLink<::SGAMEDATA>* ppSlot;
-    ::SGAMEDATA* pNode = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
-    if (pNode) {
-      pNode->m_linktoslot.m_prevlink = 0;
-      pNode->m_linktoslot.m_next = 0;
-      pNode->m_linktofull.m_prevlink = 0;
-      pNode->m_linktofull.m_next = 0;
-      ppSlot = (TSLink<::SGAMEDATA>*)(pNode->szGameName + (pList->m_linkoffset - 0x2a));
+    ::SGAMEDATA* pAlloc = (::SGAMEDATA*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x1df4, D2Client::GAME::Game::s___AUSGAMEDATA___0070f56c, -2, dwFlags | 8);
+    ::SGAMEDATA* pNewEntry;
+    if (pAlloc) {
+      pAlloc->m_linktoslot.m_prevlink = 0;
+      pAlloc->m_linktoslot.m_next = 0;
+      pAlloc->m_linktofull.m_prevlink = 0;
+      pAlloc->m_linktofull.m_next = 0;
+      pNewEntry = pAlloc;
     } else {
-      pNode = 0;
-      ppSlot = &pList->m_terminator;
+      pNewEntry = 0;
     }
 
-    TSLink<::SGAMEDATA>* pExisting = ppSlot->m_prevlink;
-    if (pExisting) {
-      char* ppPrevLink;
-      ppPrevLink = (char*)D2_StormNextLink(ppSlot, -1);
-      *(TSLink<::SGAMEDATA>**)ppPrevLink = (TSLink<::SGAMEDATA>*)pExisting;
-      ppSlot->m_prevlink->m_next = ppSlot->m_next;
-      ppSlot->m_prevlink = 0;
-      ppSlot->m_next = 0;
+    TSLink<::SGAMEDATA>* pLink = pNewEntry ? (TSLink<::SGAMEDATA>*)((intptr_t)pNewEntry + pList->m_linkoffset) : &pList->m_terminator;
+
+    if (pLink->m_prevlink) {
+      *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1) = pLink->m_prevlink;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
     }
 
-    pExisting = &pList->m_terminator;
-    ppSlot->m_prevlink = pExisting;
-    ppSlot->m_next = pList->m_terminator.m_next;
-    intptr_t dwNext2 = pList->m_terminator.m_next;
-    intptr_t nLinkOffset = pList->m_linkoffset;
-    if (dwNext2 < 0) {
-      *(TSLink<::SGAMEDATA>**)~dwNext2 = (TSLink<::SGAMEDATA>*)ppSlot;
-    } else {
-      if (nLinkOffset < 0) {
-        nLinkOffset = (intptr_t)pExisting - pExisting->m_prevlink->m_next;
-      }
-
-      *(TSLink<::SGAMEDATA>**)(dwNext2 + nLinkOffset) = (TSLink<::SGAMEDATA>*)ppSlot;
-    }
-
-    pExisting->m_next = (intptr_t)pNode;
-    return pNode;
+    TSLink<::SGAMEDATA>* pTerminator = &pList->m_terminator;
+    pLink->m_prevlink = pTerminator;
+    pLink->m_next = pTerminator->m_next;
+    *(TSLink<::SGAMEDATA>**)D2_StormNextLink(pTerminator, pList->m_linkoffset) = pLink;
+    pTerminator->m_next = (intptr_t)pNewEntry;
+    return pNewEntry;
 }
 
 // @blizzard TSHashTable<SGAMEDATA,HASHKEY_NONE>::Destroy (STORM.H)

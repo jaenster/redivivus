@@ -178,13 +178,13 @@ int32_t __stdcall GetClassId(D2UnitStrc * pUnit) {
 }
 
 void __stdcall SetOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
-    if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
+    if ((!pUnit ? UNIT_COUNT : pUnit->eUnitType) != UNIT_MISSILE) {
       return;
     }
 
     int nClassId = pUnit->nClassId;
-    D2MissilesTxt* pMissilesTxt;
-    if (!((pMissilesTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr) && pMissilesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
+    D2MissilesTxt* pMissilesTxt = nClassId >= 0 && nClassId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
+    if (!pMissilesTxt || !(pMissilesTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0])) {
       return;
     }
 

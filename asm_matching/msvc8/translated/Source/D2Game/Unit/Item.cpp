@@ -463,75 +463,60 @@ static void __stdcall Unreferenced_00597aa0(D2UnitStrc * pItem) {
     D2Common::ITEMS::Items::SetBodyLoc(pItem, BODYLOC_NONE);
 }
 
+// The flag bit as the original's header getter returns it: a value of its own, tested in a register.
+// steer-ok: generated-form FlagBit getter
+static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_0(D2UnitStrc * p) {
+    if (!p) {
+        return 0;
+    }
+    return p->eUnitFlagsEx >> 0 & 1;
+}
+
 // Drains the pending-update queue on pUnit's inventory. For each queued GUID, looks up the item unit and clears body-loc overrides for TAKE/SET/EXCHANGE commands, then calls ITEM_ClearFlagsAndCommands. Recursively processes socketed-item sub-inventories. Finally deletes items marked ITEMCMD_DELETE. Called server-side after inventory transactions to apply deferred state changes.
 // @sourcefile .\INVENTORY\InvMode.cpp
 void __fastcall ITEM_ProcessInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    BOOL bTaken;
-    D2InventoryToBeUpdatedStrc* pInventoryToBeUpdated;
-    uint32_t dwFindGUID;
-    D2UnitStrc* pSocketedItem;
-    D2InventoryStrc* pSubInventory;
     D2InventoryStrc* pInventory = pUnit->pInventory;
     if (!pInventory) {
       return;
     }
 
     D2Common::Units::RefreshInventory(pUnit, 0);
-    D2InventoryToBeUpdatedStrc* pUpdateEntry = D2Common::INVENTORY::Inventory::GetUpdates(pInventory);
-    if (!pUpdateEntry) {
-      D2Common::INVENTORY::Inventory::FreeUpdatesFromInventory(pInventory);
-      return;
-    }
-
-    D2UnitStrc* pItem;
-    do {
-      dwFindGUID = D2Common::INVENTORY::Inventory::GetUpdatesUUid(pUpdateEntry);
-      pItem = SUnit::FindUnitFromTable(pGame, UNIT_ITEM, dwFindGUID);
-      if (pItem) {
-        dwFindGUID = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_BODYLOC_TAKE_ITEM);
-        if (dwFindGUID || (dwFindGUID = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_INVENTORY_SET_ITEM) , dwFindGUID != 0)) {
-          D2Common::ITEMS::Items::SetBodyLoc(pItem, BODYLOC_NONE);
-        }
-
-        dwFindGUID = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_BODYLOC_EXCHANGE_ITEM);
-        if (dwFindGUID) {
-          bTaken = D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_TAKEN, 0x180, ".\\INVENTORY\\InvMode.cpp");
-          if (bTaken) {
-            D2Common::ITEMS::Items::SetBodyLoc(pItem, BODYLOC_NONE);
-          }
-        }
-
-        ITEM_ClearFlagsAndCommands(pGame, pItem);
-        if (pItem->eUnitFlagsEx & UNITFLAGEX_HASINV) {
-          D2Common::Units::RefreshInventory(pItem, 0);
-          pSubInventory = pItem->pInventory;
-          if (!pSubInventory) {
-            Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a4);
-            exit(-1);
-          }
-
-          for (pInventoryToBeUpdated = D2Common::INVENTORY::Inventory::GetUpdates(pSubInventory); pInventoryToBeUpdated; pInventoryToBeUpdated = D2Common::INVENTORY::Inventory::GetNextUpdate(pInventoryToBeUpdated)) {
-            dwFindGUID = D2Common::INVENTORY::Inventory::GetUpdatesUUid(pInventoryToBeUpdated);
-            pSocketedItem = SUnit::FindUnitFromTable(pGame, UNIT_ITEM, dwFindGUID);
-            if (pSocketedItem) {
-              ITEM_ClearFlagsAndCommands(pGame, pSocketedItem);
-            }
-          }
-
-          D2Common::INVENTORY::Inventory::FreeUpdatesFromInventory(pSubInventory);
-        }
-
-        dwFindGUID = D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_DELETE);
-        if (dwFindGUID) {
-          ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pItem);
-        }
+    for (D2InventoryToBeUpdatedStrc* pUpdateEntry = D2Common::INVENTORY::Inventory::GetUpdates(pInventory); pUpdateEntry; pUpdateEntry = D2Common::INVENTORY::Inventory::GetNextUpdate(pUpdateEntry)) {
+      D2UnitStrc* pItem = SUnit::FindUnitFromTable(pGame, UNIT_ITEM, D2Common::INVENTORY::Inventory::GetUpdatesUUid(pUpdateEntry));
+      if (!pItem) {
+        continue;
+      }
+      if (D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_BODYLOC_TAKE_ITEM) || D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_INVENTORY_SET_ITEM)) {
+        D2Common::ITEMS::Items::SetBodyLoc(pItem, BODYLOC_NONE);
+      }
+      if (D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_BODYLOC_EXCHANGE_ITEM) && D2Common::ITEMS::Items::CheckItemFlag(pItem, ITEMFLAG_TAKEN, 0x180, ".\\INVENTORY\\InvMode.cpp")) {
+        D2Common::ITEMS::Items::SetBodyLoc(pItem, BODYLOC_NONE);
       }
 
-      pUpdateEntry = D2Common::INVENTORY::Inventory::GetNextUpdate(pUpdateEntry);
-    } while (pUpdateEntry);
+      ITEM_ClearFlagsAndCommands(pGame, pItem);
+      if (FlagBit_D2UnitStrc_eUnitFlagsEx_0(pItem)) {
+        D2Common::Units::RefreshInventory(pItem, 0);
+        D2InventoryStrc* pSubInventory = pItem->pInventory;
+        if (!pSubInventory) {
+          Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a4);
+          exit(-1);
+        }
+
+        for (D2InventoryToBeUpdatedStrc* pSubEntry = D2Common::INVENTORY::Inventory::GetUpdates(pSubInventory); pSubEntry; pSubEntry = D2Common::INVENTORY::Inventory::GetNextUpdate(pSubEntry)) {
+          D2UnitStrc* pSocketedItem = SUnit::FindUnitFromTable(pGame, UNIT_ITEM, D2Common::INVENTORY::Inventory::GetUpdatesUUid(pSubEntry));
+          if (pSocketedItem) {
+            ITEM_ClearFlagsAndCommands(pGame, pSocketedItem);
+          }
+        }
+
+        D2Common::INVENTORY::Inventory::FreeUpdatesFromInventory(pSubInventory);
+      }
+      if (D2Common::ITEMS::Items::ITEM_CheckItemData_eD2ItemCmd(pItem, ITEMCMD_DELETE)) {
+        ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pItem);
+      }
+    }
 
     D2Common::INVENTORY::Inventory::FreeUpdatesFromInventory(pInventory);
-    return;
 }
 
 static void __stdcall MONSTER_SendNpcEnchantsToClient(D2ClientStrc * pClient, D2UnitStrc * pUnit) {

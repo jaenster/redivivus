@@ -1017,47 +1017,34 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::NewN
 
 // @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI>::InternalNew (STORM.H)
 template<> ::StringEntryNode * __fastcall TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalNew(TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pThis, int, TSExplicitList<::StringEntryNode, -572662307>* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
-    TSLink<::StringEntryNode>* pBucketHead;
-    ::StringEntryNode* pNode = (::StringEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::StringEntryNode), D2Common::Chat::Ignorelist::StringEntryNode::s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
-    if (pNode) {
-      pNode->m_linktoslot.m_prevlink = 0;
-      pNode->m_linktoslot.m_next = 0;
-      pNode->m_linktofull.m_prevlink = 0;
-      pNode->m_linktofull.m_next = 0;
-      pNode->m_key.szString = 0;
-      pBucketHead = (TSLink<::StringEntryNode>*)((intptr_t)&pNode->m_hashval + pList->m_linkoffset);
+    ::StringEntryNode* pAlloc = (::StringEntryNode*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x18, D2Common::Chat::Ignorelist::StringEntryNode::s___AUStringEntryNode___0074364c, -2, dwFlags | 8);
+    ::StringEntryNode* pNewEntry;
+    if (pAlloc) {
+      pAlloc->m_linktoslot.m_prevlink = 0;
+      pAlloc->m_linktoslot.m_next = 0;
+      pAlloc->m_linktofull.m_prevlink = 0;
+      pAlloc->m_linktofull.m_next = 0;
+      pAlloc->m_key.szString = 0;
+      pNewEntry = pAlloc;
     } else {
-      pNode = 0;
-      pBucketHead = &pList->m_terminator;
+      pNewEntry = 0;
     }
 
-    TSLink<::StringEntryNode>* pHeadEntry = pBucketHead->m_prevlink;
-    if (pHeadEntry) {
-      TSLink<::StringEntryNode>** pPrev;
-      pPrev = (TSLink<::StringEntryNode>**)D2_StormNextLink(pBucketHead, -1);
-      *pPrev = pHeadEntry;
-      pBucketHead->m_prevlink->m_next = pBucketHead->m_next;
-      pBucketHead->m_prevlink = 0;
-      pBucketHead->m_next = 0;
+    TSLink<::StringEntryNode>* pLink = pNewEntry ? (TSLink<::StringEntryNode>*)((intptr_t)pNewEntry + pList->m_linkoffset) : &pList->m_terminator;
+    TSLink<::StringEntryNode>* pPrev = pLink->m_prevlink;
+    if (pPrev) {
+      *(TSLink<::StringEntryNode>**)D2_StormNextLink(pLink, -1) = pPrev;
+      pLink->m_prevlink->m_next = pLink->m_next;
+      pLink->m_prevlink = 0;
+      pLink->m_next = 0;
     }
 
-    pHeadEntry = &pList->m_terminator;
-    pBucketHead->m_prevlink = pHeadEntry;
-    pBucketHead->m_next = pList->m_terminator.m_next;
-    intptr_t dwNext2 = pList->m_terminator.m_next;
-    intptr_t pNext = pList->m_linkoffset;
-    if (dwNext2 < 0) {
-      *(TSLink<::StringEntryNode>**)~dwNext2 = (TSLink<::StringEntryNode>*)pBucketHead;
-    } else {
-      if (pNext < 0) {
-        pNext = (intptr_t)pHeadEntry - pHeadEntry->m_prevlink->m_next;
-      }
-
-      *(TSLink<::StringEntryNode>**)(dwNext2 + pNext) = (TSLink<::StringEntryNode>*)pBucketHead;
-    }
-
-    pHeadEntry->m_next = (intptr_t)pNode;
-    return pNode;
+    TSLink<::StringEntryNode>* pTerminator = &pList->m_terminator;
+    pLink->m_prevlink = pTerminator;
+    pLink->m_next = pTerminator->m_next;
+    *(TSLink<::StringEntryNode>**)D2_StormNextLink(pTerminator, pList->m_linkoffset) = pLink;
+    pTerminator->m_next = (intptr_t)pNewEntry;
+    return pNewEntry;
 }
 
 // @blizzard TSHashTable<StringEntryNode,HASHKEY_STRI>::InternalDelete (STORM.H)

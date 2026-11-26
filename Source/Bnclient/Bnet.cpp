@@ -14,6 +14,7 @@ static _RTL_CRITICAL_SECTION lpCriticalSection_00881860 = {}; D2_STATIC_GUARD(lp
 namespace Bnclient::Bnet {
 
 int BNET_LogIndent(int32_t nIndentAction, int32_t nDelta) {
+    int nResult = 0;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881860);
     if (nIndentAction == 1) {
       if (!(gbBnetLogInitialized & 1)) {
@@ -30,17 +31,13 @@ int BNET_LogIndent(int32_t nIndentAction, int32_t nDelta) {
       }
 
       Storm::Source::SLog::SLogCreate("BnetLog.txt", 0, &gnBnetLogFileHandle);
-      /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881860);
-      return 1;
-    }
-    if (nIndentAction == 2) {
-      uint32_t* pFilestream;
-      pFilestream = (uint32_t*)BNCLIENT_GetBnetLogFilestream();
-      Storm::Source::SLog::SLogSetIndent(*pFilestream, nDelta);
+      nResult = 1;
+    } else if (nIndentAction == 2) {
+      Storm::Source::SLog::SLogSetIndent(*(uint32_t*)BNCLIENT_GetBnetLogFilestream(), nDelta);
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881860);
-    return 0;
+    return nResult;
 }
 
 void BnetLog_WriteLine(char * Format, ...) {

@@ -481,20 +481,21 @@ template<> __declspec(noinline) inline void TSHashTable<CELLIST, HASHKEY_NONE>::
 }
 
 template<> ::CELLIST * TSExplicitList<CELLIST, -572662307>::NewNode(uint32_t nLocation, uint32_t nExtraBytes, uint32_t dwFlags) {
-    ::CELLIST* pNewEntryAlloc = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + sizeof(::CELLIST), D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
+    ::CELLIST* pAlloc = (::CELLIST*)Storm::Source::SMem::SMemAlloc(nExtraBytes + 0x38, D2CMP::SRC::CelCmp::CELLIST::s___AUCELLIST___00741f2c, -2, dwFlags | 8);
     ::CELLIST* pNewEntry;
-    if (pNewEntryAlloc) {
-      TSLink<::TCELENTRY>* pTVar1;
-      pNewEntryAlloc->m_linktoslot.m_prevlink = 0;
-      pNewEntryAlloc->m_linktoslot.m_next = 0;
-      pNewEntryAlloc->m_linktofull.m_prevlink = 0;
-      pNewEntryAlloc->m_linktofull.m_next = 0;
-      pTVar1 = &pNewEntryAlloc->m_frames.m_terminator;
-      pTVar1->m_next = 0;
-      pTVar1->m_prevlink = pTVar1;
-      pNewEntryAlloc->m_frames.m_linkoffset = 0;
-      pNewEntryAlloc->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
-      pNewEntry = pNewEntryAlloc;
+    if (pAlloc) {
+      pAlloc->m_linktoslot.m_prevlink = 0;
+      pAlloc->m_linktoslot.m_next = 0;
+      pAlloc->m_linktofull.m_prevlink = 0;
+      pAlloc->m_linktofull.m_next = 0;
+      TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pFrames = &pAlloc->m_frames;
+      TSLink<::TCELENTRY>* pTerminator = &pFrames->m_terminator;
+      pTerminator->m_prevlink = 0;
+      pTerminator->m_next = 0;
+      pTerminator->m_prevlink = pTerminator;
+      pFrames->m_linkoffset = 0;
+      pFrames->m_terminator.m_next = ~(uintptr_t)pTerminator;
+      pNewEntry = pAlloc;
     } else {
       pNewEntry = 0;
     }
@@ -766,30 +767,30 @@ template<> void TSGrowableArray<CELLIST>::Reserve(uint32_t nCount, int32_t bRoun
 }
 
 template<> __declspec(noinline) inline ::CELLIST * TSGrowableArray<CELLIST>::New() {
-    uint32_t nNextCount = this->m_count + 1;
-    if (nNextCount > this->m_alloc) {
-      uint32_t nAlignStep;
-      nAlignStep = this->m_chunk;
-      if (!nAlignStep) {
-        nAlignStep = this->CalcChunkSize(nNextCount);
+    uint32_t nNeeded = this->m_count + 1;
+    if (nNeeded > this->m_alloc) {
+      uint32_t nGranularity = this->m_chunk;
+      if (!nGranularity) {
+        nGranularity = this->CalcChunkSize(nNeeded);
       }
 
-      nNextCount = D2_RoundUp(nNextCount, nAlignStep);
-      this->ReallocData(nNextCount);
+      nNeeded = D2_RoundUp(nNeeded, nGranularity);
+      this->ReallocData(nNeeded);
     }
 
-    ::CELLIST* pNewNode = this->m_data + this->m_count;
-    if (pNewNode) {
-      TSLink<::TCELENTRY>* pTVar1;
-      pNewNode->m_linktoslot.m_prevlink = 0;
-      pNewNode->m_linktoslot.m_next = 0;
-      pNewNode->m_linktofull.m_prevlink = 0;
-      pNewNode->m_linktofull.m_next = 0;
-      pTVar1 = &pNewNode->m_frames.m_terminator;
-      pTVar1->m_next = 0;
-      pTVar1->m_prevlink = pTVar1;
-      pNewNode->m_frames.m_linkoffset = 0;
-      pNewNode->m_frames.m_terminator.m_next = ~(uintptr_t)pTVar1;
+    ::CELLIST* pNewEntry = this->m_data + this->m_count;
+    if (pNewEntry) {
+      pNewEntry->m_linktoslot.m_prevlink = 0;
+      pNewEntry->m_linktoslot.m_next = 0;
+      pNewEntry->m_linktofull.m_prevlink = 0;
+      pNewEntry->m_linktofull.m_next = 0;
+      TSList<TCELENTRY, TSGetLink<TCELENTRY>>* pFrames = &pNewEntry->m_frames;
+      TSLink<::TCELENTRY>* pTerminator = &pFrames->m_terminator;
+      pTerminator->m_prevlink = 0;
+      pTerminator->m_next = 0;
+      pTerminator->m_prevlink = pTerminator;
+      pFrames->m_linkoffset = 0;
+      pFrames->m_terminator.m_next = ~(uintptr_t)pTerminator;
     }
 
     return &this->m_data[this->m_count++];
