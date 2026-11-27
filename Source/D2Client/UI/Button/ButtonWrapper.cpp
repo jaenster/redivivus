@@ -263,3 +263,14 @@ void __thiscall SetAccelerator(::ButtonWrapper * pThis, BOOL bEnable) {
 }
 
 } // namespace D2Client::UI::Button::ButtonWrapper
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client::UI::Button::ButtonWrapper {
+
+// 1.14d mac: 0009c7a4
+void __stdcall BUTTON_ConstructWrapper(::ButtonWrapper * pButton, int nPosX, int nPosY, int nButtonKind, fpButtonOnActivate pfnOnActivate) {
+    Constructor(pButton, nPosX, nPosY, nButtonKind, pfnOnActivate);
+}
+
+} // namespace D2Client::UI::Button::ButtonWrapper
+#endif

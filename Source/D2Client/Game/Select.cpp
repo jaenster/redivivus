@@ -1090,3 +1090,18 @@ void __stdcall SELECT_UpdateSelectedUnit() {
 }
 
 } // namespace D2Client::GAME::Select
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client::GAME::Select {
+
+// 1.14d mac: 0007c26b
+bool __stdcall SELECT_IsValueOne(int * pnValue) {
+    bool bResult = false;
+    if (pnValue) {
+      bResult = *pnValue == 1;
+    }
+    return bResult;
+}
+
+} // namespace D2Client::GAME::Select
+#endif

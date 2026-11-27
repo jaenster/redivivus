@@ -599,3 +599,30 @@ void __stdcall UI_HandleMousePositionUpdate(D2UIMouseMsgStrc * pMsg) {
 }
 
 } // namespace D2Client::Cursor
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client::Cursor {
+
+// 004403b0: the value the Mac shell's about dialog hands the cursor code.
+static int gnCursorOverrideValue = 0;
+// 004403b4: set whenever the override value is zero.
+static int gnCursorOverrideClear = 0;
+
+// 1.14d mac: 0006328d
+void __stdcall CURSOR_SetOverrideValue(int nValue) {
+    gnCursorOverrideValue = nValue;
+}
+
+// 1.14d mac: 000632a1
+int __stdcall CURSOR_GetOverrideClear() {
+    return gnCursorOverrideClear;
+}
+
+// 1.14d mac: 000632b2
+void __stdcall CURSOR_SetOverrideValueAndClear(int nValue) {
+    gnCursorOverrideClear = (nValue == 0);
+    gnCursorOverrideValue = nValue;
+}
+
+} // namespace D2Client::Cursor
+#endif

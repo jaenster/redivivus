@@ -621,3 +621,44 @@ void __fastcall SOUND_UpdateEnvironmentAmbience(int32_t nTick) {
 }
 
 } // namespace D2Client::Sound
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Sound::Src::D2SoundSmp { BOOL __stdcall FUN_002e93bd(void * pSoundSmp); }
+
+namespace D2Client::Sound {
+
+// 0044b130
+static int gnSoundOffsetA = 0;
+// 0044b134
+static int gnSoundOffsetB = 0;
+
+// 1.14d mac: 0009475b
+BOOL __stdcall SOUND_IsClientSampleActive(D2ClientSoundChannelStrc * pSound) {
+    if (!pSound || !pSound->pSoundSmp) {
+      return 0;
+    }
+    return D2Sound::Src::D2SoundSmp::FUN_002e93bd(pSound->pSoundSmp);
+}
+
+// 1.14d mac: 000978f8
+void __stdcall SOUND_IncreaseOffsetA() {
+    gnSoundOffsetA += 0x10;
+}
+
+// 1.14d mac: 0009790d
+void __stdcall SOUND_DecreaseOffsetA() {
+    gnSoundOffsetA -= 0x10;
+}
+
+// 1.14d mac: 00097922
+void __stdcall SOUND_DecreaseOffsetB() {
+    gnSoundOffsetB -= 0x10;
+}
+
+// 1.14d mac: 00097937
+void __stdcall SOUND_IncreaseOffsetB() {
+    gnSoundOffsetB += 0x10;
+}
+
+} // namespace D2Client::Sound
+#endif

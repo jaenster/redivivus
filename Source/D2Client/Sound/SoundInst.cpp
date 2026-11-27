@@ -1181,3 +1181,49 @@ void __fastcall SOUND_StopUnitSoundByIndex(int32_t nChannelHandle, D2UnitStrc * 
 static void * keep_004b94a0 = (0 ? (SOUNDINST_StopChannel(*(D2SoundChannelStrc * *)0), (void *)0) : (void *)0);
 
 } // namespace D2Client::Sound
+
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client::Sound {
+
+BOOL __stdcall SOUND_IsClientSampleActive(D2ClientSoundChannelStrc * pSound);
+
+// 1.14d mac: 00095dd8
+BOOL __fastcall SOUND_IsStreamChannelSampleActive(int nChannelHandle) {
+    if (!nChannelHandle) {
+      return 0;
+    }
+
+    D2SoundChannelNodeStrc* pNode = gpActiveSoundChannelsHead;
+    D2SoundChannelStrc* pChannel;
+    do {
+      if (!pNode) {
+        return 0;
+      }
+      pChannel = pNode->pChannel;
+      pNode = pNode->pNext;
+    } while (pChannel->nChannelHandle != nChannelHandle);
+
+    if (!pChannel || !pChannel->pClientChannel) {
+      return 0;
+    }
+
+    bool bResult = false;
+    pNode = gpActiveSoundChannelsHead;
+    D2SoundChannelStrc* pFound;
+    do {
+      if (!pNode) {
+        return 0;
+      }
+      pFound = pNode->pChannel;
+      pNode = pNode->pNext;
+    } while (pFound->nChannelHandle != nChannelHandle);
+
+    if (pFound && pFound->nPlayMode == 1) {
+      bResult = SOUND_IsClientSampleActive(pChannel->pClientChannel) != 0;
+    }
+    return bResult;
+}
+
+} // namespace D2Client::Sound
+#endif

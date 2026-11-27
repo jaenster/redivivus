@@ -369,3 +369,24 @@ void __stdcall RecordCurrentStep() {
 }
 
 } // namespace D2Client::GAME::Record
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client::GAME::Record {
+
+// 00445a74
+static uint8_t gbRecordFlagA = 0;
+// 00445a59
+static uint8_t gbRecordFlagB = 0;
+
+// 1.14d mac: 000749e3
+void __stdcall RECORD_SetFlagA() {
+    gbRecordFlagA = 1;
+}
+
+// 1.14d mac: 000749f5
+BOOL __stdcall RECORD_GetFlagB() {
+    return gbRecordFlagB;
+}
+
+} // namespace D2Client::GAME::Record
+#endif
