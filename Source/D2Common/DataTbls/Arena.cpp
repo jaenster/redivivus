@@ -19,6 +19,7 @@ static D2ArenaTxt * sgpTxtArena = 0; D2_STATIC_GUARD(sgpTxtArena, "sgpTxtArena")
 namespace D2Common::DATATBLS::ArenaTbls {
 
 // Defines the binary field layout for arena.txt (Suicide, PlayerKill, PlayerKillPercent, MonsterKill, PlayerDeath, PlayerDeathPercent, MonsterDeath — all INT) and calls CompileTxt to parse and store the result into sgpTxtArena. In: pMemory pool.
+// 1.14d mac: 00139fea
 void __fastcall TXT_LoadArenaTxt(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc arena[8] = {
       {"Suicide", FIELDTYPE_INT, 0, 0, 0},
@@ -42,6 +43,7 @@ D2ArenaTxt * __fastcall GetArenaTxtRecord(int32_t nArenaType) {
     return sgpTxtArena + nArenaType;
 }
 
+// 1.14d mac: 0013a0b1
 void __stdcall FreeArenaTxt() {
     DataTbls::UnloadBin(sgpTxtArena);
     sgpTxtArena = 0;
@@ -73,6 +75,7 @@ static void __stdcall TXT_BuildCharTemplateLevelIndex(D2CharTemplateTxt * pCharT
 }
 
 // Arena preset-fighter roster loader (= beta D2Common ARENA_LoadCharTemplatesTxt, DATATBLS\Arena.cpp). LIVE in 1.14d: called by TXT_InitTxtFiles at game init, compiles chartemplate.txt into the level-indexed ArenaCharTemplate[] (0xF8-byte records: Name, class->index, level, str/int/Hitpoints/Mana/ManaRegenBonus/Velocity/AttackRate/OtherRate, RightSkill, Skill1-9+SkillLevel1-9, item1-15 (code/loc/count)). Retail ships no chartemplate.txt so it loads 0 rows. Provide the data file to populate the arena roster for arena mode; spawn via the GetCharTemplateRecord(level,n) accessors. Arena GAMEPLAY (rounds/combat) was the part actually cut.
+// 1.14d mac: 0013a0da
 void __fastcall TXT_LoadCharTemplateTxt(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc chartemplate[79] = {
       {"Name", FIELDTYPE_ASCII, 0x1d, 0, 0},
@@ -182,6 +185,7 @@ D2CharTemplateTxt * __fastcall TXT_CharTemplate_GetLine(int nTemplate, int nLeve
     }
 }
 
+// 1.14d mac: 0013b255
 uint32_t __fastcall GetClassFromCharTemplateTxt(int32_t nTemplate, int32_t nLevel) {
     if (nTemplate <= 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf5);

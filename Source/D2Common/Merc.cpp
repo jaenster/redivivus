@@ -88,6 +88,7 @@ static int32_t MERC_GetWeaponAnimIndex(D2UnitStrc * pUnit) {
 }
 
 // Returns the D2MonSeqMonsterTbls entry for the unit's current skill sequence. For player-type units (mercs), resolves via apFixedSequenceTable indexed by weapon anim index. For monster units, looks up the monster's MonStats entry then retrieves by sequence ID. Returns null if no current skill or sequence ID &lt; 1.
+// 1.14d mac: 0014b077
 static D2MonSeqMonsterTbls * __stdcall GetMonsterSequenceTable(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static D2MonSeqMonsterTbls * apFixedSequenceTable[24] = {
@@ -162,6 +163,7 @@ static D2MonSeqMonsterTbls * __stdcall GetMonsterSequenceTable(D2UnitStrc * pUni
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0014b05a
 D2MonSeqTxt * __stdcall MERC_GetSequenceTxt(D2UnitStrc * pUnit) {
     D2MonSeqMonsterTbls* pSeqTable = GetMonsterSequenceTable(pUnit);
     if (!pSeqTable) {
@@ -172,6 +174,7 @@ D2MonSeqTxt * __stdcall MERC_GetSequenceTxt(D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0014b17b
 int32_t __stdcall GetCounter1(D2UnitStrc * pUnit) {
     D2MonSeqMonsterTbls* pSeqTable = GetMonsterSequenceTable(pUnit);
     if (!pSeqTable) {
@@ -182,6 +185,7 @@ int32_t __stdcall GetCounter1(D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0014b19c
 int32_t __stdcall GetCounter2(D2UnitStrc * pUnit) {
     D2MonSeqMonsterTbls* pSeqTable = GetMonsterSequenceTable(pUnit);
     if (!pSeqTable) {
@@ -192,6 +196,7 @@ int32_t __stdcall GetCounter2(D2UnitStrc * pUnit) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0014b1ba
 void __stdcall ANIM_GetSequenceFrameInfo(D2MonSeqTxt * pSeqData, int32_t nStartFrame, int32_t nEndFrame, uint32_t * pnMode, uint32_t * pnFrame, uint32_t * pnDirection, uint32_t * pnEvent) {
     if (!pSeqData) {
       *pnMode = 0;
@@ -229,6 +234,7 @@ void __stdcall ANIM_GetSequenceFrameInfo(D2MonSeqTxt * pSeqData, int32_t nStartF
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0014b258
 void __stdcall ANIM_GetEventFrame(D2MonSeqTxt * pSeqData, int32_t nFrameIdx, uint32_t * pnEvent) {
     if (!pSeqData) {
       *pnEvent = 0;
@@ -586,6 +592,7 @@ uint32_t __fastcall MERC_GenerateStatsFromSeed(int32_t nSeed, D2MercRolledStatsS
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0017be2f
 uint16_t * __fastcall GetMercTypeString(uint32_t nIndex) {
     // Static local variables (originally global data)
     static int16_t aMercTypeLocaleStringIds[9] = {
@@ -610,6 +617,7 @@ uint16_t * __fastcall GetMercTypeString(uint32_t nIndex) {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0017be64
 int32_t __fastcall GetMercAct(BOOL bIsExpansion, int32_t nClassId, uint16_t nMercNameId) {
     D2HirelingTxt* pHirelingTxt = DATATBLS::MonsterTbls::GetHirelingEntryByClassId(bIsExpansion, nClassId, nullptr);
     if (pHirelingTxt) {
@@ -625,11 +633,13 @@ int32_t __fastcall GetMercAct(BOOL bIsExpansion, int32_t nClassId, uint16_t nMer
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0017be1a
 int32_t __stdcall GetBaseExperience(int32_t nLevel, int32_t nExpPerLevel) {
     return (nLevel + 1) * nLevel * nLevel * nExpPerLevel;
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0017beb6
 uint32_t __stdcall GetReviveCost(D2UnitStrc * pUnit) {
     int nLevel = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     uint32_t nCost = nLevel * nLevel / 2 * 0xf;
@@ -642,6 +652,7 @@ uint32_t __stdcall GetReviveCost(D2UnitStrc * pUnit) {
 }
 
 // Randomly selects a mercenary (hireling) from the appropriate act/difficulty table and computes all rolled stats (level, HP, STR, DEX, damage, defense, XP, cost, resists) into pHireData. Uses nMercSeed to initialize the RNG. Level is buyer's level ±5 clamped to 2. All per-level deltas are scaled from the selected HirelingTxt row. Returns TRUE on success, FALSE if no valid hireling entry exists.
+// 1.14d mac: 0017bbcd
 BOOL __fastcall RollMercStats(int32_t nVersion, D2UnitStrc * pUnit, int32_t nMercSeed, int32_t nAct, int32_t nDifficulty, D2HirelingHireData * pHireData) {
     D2HirelingTxt* pHirelingList[16];
     D2SeedStrc nRollSeed;

@@ -22,6 +22,7 @@ static int nTxtObjGroupSize = 0; D2_STATIC_GUARD(nTxtObjGroupSize, "nTxtObjGroup
 namespace D2Common::DATATBLS::ObjectTbls {
 
 // Builds the field-descriptor table for Objects.txt (158 columns: name, animation frame counts/deltas, per-mode flags, components, parms, draw/AI function indices, etc.) and compiles it into the global sgpTxtObjects bin table via CompileTxt (row stride 0x1c0). Post-compile per row: zeroes the wide-name buffer, resolves the localized display name from the string table into it, and left-shifts the eight FrameCnt fields by 8 (fixed-point scale). Side-effects: writes sgpTxtObjects / nTxtObjectsSize. __fastcall, pMemory = the data-table memory pool. Called once at data-table load.
+// 1.14d mac: 0014ab5d
 void __fastcall TXT_AllocTxt_objects(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc objects[158] = {
       {"Name", FIELDTYPE_ASCII, 0x3f, 0, 0},
@@ -206,6 +207,7 @@ void __fastcall TXT_AllocTxt_objects(D2PoolManagerStrc * pMemory) {
     } while (nObjIdx < nTxtObjectsSize);
 }
 
+// 1.14d mac: 0014ac81
 D2ObjectsTxt * __stdcall TXT_Objects_GetLine(int32_t nClassId) {
     if (!(nClassId < nTxtObjectsSize)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd);
@@ -219,12 +221,14 @@ D2ObjectsTxt * __stdcall TXT_Objects_GetLine(int32_t nClassId) {
     return sgpTxtObjects + nClassId;
 }
 
+// 1.14d mac: 0014acef
 void __stdcall TXT_FreeTxt_Objects() {
     DataTbls::UnloadBin(sgpTxtObjects);
     sgpTxtObjects = 0;
     nTxtObjectsSize = 0;
 }
 
+// 1.14d mac: 0014ad22
 void __stdcall OBJECTTBLS_FreeObjGroupTxt() {
     DataTbls::UnloadBin(pTxtObjGroup);
     pTxtObjGroup = 0;
@@ -266,6 +270,7 @@ void __fastcall TXT_AllocTxt_objgroup(D2PoolManagerStrc * pMemory) {
 }
 
 // Returns the D2ObjGroupTxt record at the given index, or NULL if the index is out of range (>= nTxtObjGroupSize).
+// 1.14d mac: 0014adda
 D2ObjGroupTxt * __stdcall DATATBLS_GetObjGroupTxtRecord(int32_t nIndex) {
     if (nTxtObjGroupSize > nIndex) {
       return pTxtObjGroup + nIndex;
@@ -292,6 +297,7 @@ void __fastcall TXT_AllocTxt_shrines(D2PoolManagerStrc * pMemory) {
     pTxtShrines = (D2ShrinesTxt*)DataTbls::CompileTxt(pMemory, "shrines", shrines, &nTxtShrinesSize, 0xb8);
 }
 
+// 1.14d mac: 0014ae82
 D2ShrinesTxt * __stdcall TXT_Shrines_GetLine(int32_t nShrineId) {
     if (!(nShrineId < nTxtShrinesSize)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15f);
@@ -305,6 +311,7 @@ D2ShrinesTxt * __stdcall TXT_Shrines_GetLine(int32_t nShrineId) {
     return pTxtShrines + nShrineId;
 }
 
+// 1.14d mac: 0014aef0
 int32_t __stdcall GetShrinesSize() {
     return nTxtShrinesSize;
 }

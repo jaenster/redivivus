@@ -83,6 +83,7 @@ static void DRLGOUTROOM_PlaceAct5SpecialPresets(D2DrlgLevelStrc * pLevel) {
 }
 
 // Checks if the grid cell at (nX, nY) is flagged, and if so spawns a preset at that location.
+// 1.14d mac: 0015d15e
 static BOOL __stdcall DRLGOUTROOM_SpawnPresetIfGridFlagged(D2DrlgLevelStrc * pLevel, D2DrlgLevelDataWildernessLevel * pWildData, int nX, int nY, int nPresetId) {
     uint32_t nGridFlags = DrlgGrid::GetGridFlags(&pWildData->sGridOutdoor, nX, nY);
     if (nGridFlags & 0x400) {
@@ -148,6 +149,7 @@ void __stdcall DRLGOUTROOM_PlaceAct5BorderPresets(D2DrlgLevelStrc * pLevel) {
 }
 
 // Returns the base preset ID for Act 5 outer wall tiles. Returns 5 for the Bloody Foothills (level 0x75) or 4 for other Act 5 levels. Called by PlaceAct1245OutdoorBorders. Trivial getter.
+// 1.14d mac: 0015c55c
 int32_t __fastcall DRLGOUTROOM_GetGridDivisionSize(D2DrlgLevelStrc * pLevel) {
     return pLevel->eD2LevelId == 0x75 ? 5 : 4;
 }
@@ -556,6 +558,7 @@ void __stdcall DRLGOUTPLACE_PlaceAct5WallPresets(D2DrlgLevelStrc * pLevel) {
     }
 }
 
+// 1.14d mac: 0015c574
 void __fastcall InitAct5OutdoorLevel(D2DrlgLevelStrc * pLevel) {
     if (pLevel->eD2LevelId == 0x6e) {
       DRLGOUTPLACE_PlaceAct5WallPresets(pLevel);

@@ -95,6 +95,7 @@ typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, int n
 namespace D2Common::Drlg {
 
 // Propagates tile animation data from one room's tile list to another. Copies animation frame data from the source room's tiles to the destination room's tiles. From DrlgAnim.cpp.
+// 1.14d mac: 0014de4c
 void __fastcall DRLGANIM_PropagateAnimationData(D2RoomExStrc * pRoomExSrc, D2RoomExStrc * pRoomExDst) {
     D2DrlgAnimTileGridStrc* pDVar1;
     int i;
@@ -315,6 +316,7 @@ static void __stdcall DRLGROOMTILE_WorldToTileScreenPos(int * pOutCoords, D2Room
 }
 
 // Allocates the next wall tile slot in pRoomEx's tile grid, links it into the *ppTileHead list, converts minimap coords to screen coords, sets colour/type/flags, then recursively creates a shadow tile (type 4) when nTileType==3 and propagates nGridFlags bits into that shadow tile's flags.
+// 1.14d mac: 0016169e
 D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, D2TileLibraryEntryStrc * pTileLibEntry, int nTileType) {
     uint32_t nLibFlags;
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
@@ -392,6 +394,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateWallTileData(D2RoomExStrc * p
 }
 
 // Initializes D2DrlgTileDataStrc: sets library entry, RGB to 0xFF, maps grid flags to tile flags.
+// 1.14d mac: 00161903
 void __fastcall DRLGROOMTILE_FillTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * pTileData, int nPosX, int nPosY, uint32_t nGridFlags, D2TileLibraryEntryStrc * pTileLibEntry) {
     uint32_t nLibFlags;
     pTileData->pTileLibraryEntry = pTileLibEntry;
@@ -454,6 +457,7 @@ void __fastcall DRLGROOMTILE_FillTileData(D2RoomExStrc * pRoomEx, D2DrlgTileData
 }
 
 // Allocates from floor tile array, links into floor list, calls FillTileData.
+// 1.14d mac: 001619aa
 D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateFloorTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, D2TileLibraryEntryStrc * pTileLibEntry) {
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     D2DrlgTileDataStrc* pTileData = pTileGrid->sRoomTiles.pFloorTiles + pTileGrid->nFloors;
@@ -470,6 +474,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateFloorTileData(D2RoomExStrc * 
 }
 
 // Allocates the next shadow tile entry from the room's pRoofTiles array, links it into the ppTileHead list, increments the shadow count, converts world coords to room-relative and screen coords (with +0x28 Y bias), copies RGB=white, hardcodes nTileType=0xD, and maps nGridFlags bits to nFlags (flip/lighting/transition bits).
+// 1.14d mac: 00161a23
 D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc * pRoomEx, D2DrlgTileDataStrc * * ppTileHead, int nPosX, int nPosY, uint32_t nGridFlags, D2TileLibraryEntryStrc * pTileLibEntry) {
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     D2DrlgTileDataStrc* pTileData = pTileGrid->sRoomTiles.pRoofTiles + pTileGrid->nShadows;
@@ -537,6 +542,7 @@ D2DrlgTileDataStrc * __fastcall DRLGROOMTILE_CreateShadowTileData(D2RoomExStrc *
 }
 
 // Creates a shadow tile data entry from grid cell flags. Gets the tile library entry for shadow type (0xd) and creates the shadow tile data for the room.
+// 1.14d mac: 00161b09
 void __fastcall DRLGROOMTILE_CreateShadowTileFromGrid(D2RoomExStrc * pRoomEx, int nPosX, int nPosY, uint32_t nGridFlags) {
     D2TileLibraryEntryStrc* nTileLibEntry = DRLG_FindHTile(pRoomEx, 0xd, nGridFlags);
     DRLGROOMTILE_CreateShadowTileData(pRoomEx, nullptr, nPosX, nPosY, nGridFlags, nTileLibEntry);
@@ -584,6 +590,7 @@ char __stdcall DRLGROOMTILE_GetWarpDirectionByte(int nTileType) {
 }
 
 // Sets the warp tile direction by looking up the correct LvlWarp entry based on the destination direction, updating the tile link's warp data pointer.
+// 1.14d mac: 00162f99
 static void __stdcall DRLGROOMTILE_SetWarpTileDirection(D2DrlgRoomExRoomTileNodeStrc * pTileLink, int nTileType) {
     uint8_t nDirection;
     uint8_t nCurrentDir;
@@ -614,6 +621,7 @@ static void __stdcall DRLGROOMTILE_SetWarpTileDirection(D2DrlgRoomExRoomTileNode
     }
 }
 
+// 1.14d mac: 00162893
 static BOOL __stdcall DRLGROOMTILE_CreateExitWarp(D2RoomExStrc * pRoomEx, int32_t nWorldX, int32_t nTileType, uint32_t nTileFlags, int32_t nWorldY) {
     D2LvlWarpTxt* pWarpInfo = DrlgRoom::DRLGLEVEL_GetWarpsIdIfExistsAndSetup(pRoomEx->pLevel, (uint8_t)(nTileFlags >> 0x14) & 0x3f, nTileType == 0xb ? 0x72 : 0x6c);
     if (!pWarpInfo) {
@@ -812,6 +820,7 @@ static inline D2DrlgTileLinkStrc * __stdcall DRLGROOMTILE_AllocTileLink(D2PoolMa
 
 // Adds a tile data entry of the given type (0=floor, 0xd=shadow, other=wall) to the room, allocating a tile link if needed. For warp types (0xa/0xb), validates coordinates first.
 // @sourcefile .\DRLG\RoomTile.cpp
+// 1.14d mac: 00163029
 static D2DrlgTileDataStrc * __stdcall DRLGROOMTILE_AddTileData(D2RoomExStrc * pRoomEx, int nTileType, D2PoolManagerStrc * pPoolManager, uint32_t nGridInfo, int32_t nX, int32_t nY) {
     D2DrlgTileLinkStrc* pTileLink;
     D2TileLibraryEntryStrc* nTileLibEntry;
@@ -1006,6 +1015,7 @@ static void __stdcall DRLGROOMTILE_UpdateTileType(D2DrlgTileDataStrc * pTileData
 }
 
 // Searches near rooms for an existing tile at position nX. If found, updates the tile type via DRLGROOMTILE_UpdateTileType. If not found, creates a new tile via DRLGROOMTILE_AddTileData.
+// 1.14d mac: 00162b35
 static void __stdcall DRLGROOMTILE_UpdateOrAddTile(int32_t nX, int32_t nY, D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, int nTileType, uint32_t nGridInfo) {
     D2RoomExStrc* pNeighborRoom = 0;
     D2DrlgTileDataStrc* pTileData = DRLGROOMTILE_FindTileInNearRooms(nGridInfo, pRoomEx, (uint32_t)!nTileType, nX, nY, &pNeighborRoom);
@@ -1114,6 +1124,7 @@ static void __stdcall DRLGROOMTILE_ProcessTile(eD2GridCellFlags nFlags, D2RoomEx
     DRLGROOMTILE_CreateShadowTileData(pRoom, nullptr, nX, nY, nFlags, nTileLibEntry);
 }
 
+// 1.14d mac: 00161b58
 void __fastcall InitRoomTiles(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2DrlgGridStrc * pOtherGrid, int32_t nTileParam, int32_t bKillEdgeX, int32_t bKillEdgeY) {
     eD2GridCellFlags nFlags;
     eD2GridCellFlags nCellFlags;
@@ -1169,6 +1180,7 @@ void __fastcall DRLGROOMTILE_CountTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGr
 }
 
 // Secondary counting pass for specific wall/shadow flag combos.
+// 1.14d mac: 001621d7
 void __fastcall DRLGROOMTILE_CountWallTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pFloorGrid, D2DrlgGridStrc * pOrientGrid, int bKillEdgeX, int bKillEdgeY) {
     int nWidth = (uint32_t)!bKillEdgeX + pRoomEx->sCoords.WorldSize.x;
     int nHeight = (uint32_t)!bKillEdgeY + pRoomEx->sCoords.WorldSize.y;
@@ -1189,6 +1201,7 @@ void __fastcall DRLGROOMTILE_CountWallTilesFromGrid(D2RoomExStrc * pRoomEx, D2Dr
     }
 }
 
+// 1.14d mac: 0016227b
 void __fastcall InitGridCells(D2RoomExStrc * pRoomEx) {
     Seed::InitSeed_Param_666(&pRoomEx->sSeed, pRoomEx->nSeed);
     switch (pRoomEx->nPresetType) {
@@ -1225,6 +1238,7 @@ void __fastcall InitializorForDrlgType(D2RoomExStrc * pRoomEx) {
 
 // Allocates 0x2C byte D2DrlgTileGridStrc at pRoomEx->pRoomTiles (offset 0x54)
 // @sourcefile .\DRLG\RoomTile.cpp
+// 1.14d mac: 001622e9
 void __fastcall DRLGROOMTILE_AllocRoomTileGrid(D2RoomExStrc * pRoomEx) {
     if (pRoomEx->pRoomTiles) {
       return;
@@ -1237,6 +1251,7 @@ void __fastcall DRLGROOMTILE_AllocRoomTileGrid(D2RoomExStrc * pRoomEx) {
 
 // Allocates wall/floor/roof tile data arrays based on counted tile maximums in pRoomTiles
 // @sourcefile .\DRLG\RoomTile.cpp
+// 1.14d mac: 00162351
 void __fastcall DRLGROOMTILE_AllocTileDataArrays(D2RoomExStrc * pRoomEx) {
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
     D2DrlgRoomTilesStrc* pRoomTiles = &pRoomEx->pRoomTiles->sRoomTiles;
@@ -1258,6 +1273,7 @@ void __fastcall DRLGROOMTILE_AllocTileDataArrays(D2RoomExStrc * pRoomEx) {
 
 // Grows tile data array capacity via realloc.
 // @sourcefile .\DRLG\RoomTile.cpp
+// 1.14d mac: 0016244c
 void __fastcall DRLGROOMTILE_GrowTileDataArray(D2PoolManagerStrc * pMemory, D2DrlgTileGridStrc * pTileGrid, int nAdditionalTiles) {
     if (!nAdditionalTiles) {
       return;
@@ -1385,6 +1401,7 @@ void __fastcall FreeRoomEx(D2RoomExStrc * pRoomEx, BOOL bServerSide) {
 }
 
 // Loads DT1 tile files from LvlTypes.txt based on nDT1Mask, plus Blank/InvisWal/Warp.dt1.
+// 1.14d mac: 00162753
 void __fastcall DRLGROOMEX_InitTileData(D2RoomExStrc * pRoomEx) {
     uint32_t nMaskBitIndex;
     D2LvlTypesTxt* pLvlTypesLine = DATATBLS::LvlTbls::TXT_LvlTypes_GetLine(pRoomEx->pLevel->nLevelType);
@@ -1449,6 +1466,7 @@ static void __stdcall DRLGOUTDOOR_CopyPresetUnitsFromSubTxt(int32_t roomX, int32
 }
 
 // Applies a LvlSub DS1 patch to the outdoor room: copies floor/wall/shadow flags into the room’s grids, grows the room tile array for flagged shadow tiles, and spawns shadow tiles plus preset units from the sub file.
+// 1.14d mac: 00164841
 void __stdcall DRLGOUTDOOR_ApplyLvlSubTileData(D2PoolManagerStrc * pMemory, int32_t baseX, int32_t baseY, D2DrlgWallLayerGridsStrc * pRoomCtx, int * pRect, D2LvlSubTxt * pSubTxt, int32_t rectOffsetY) {
     uint32_t uGridFlags;
     int nXDelta;

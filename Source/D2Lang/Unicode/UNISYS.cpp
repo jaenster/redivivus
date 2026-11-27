@@ -32,6 +32,7 @@ static uint16_t * gpUnicodeCodeToMapTable = 0; D2_STATIC_GUARD(gpUnicodeCodeToMa
 
 namespace D2Lang::Unicode::UNISYS {
 
+// 1.14d mac: 002b9e1c
 int32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * wszText2) {
     uint16_t wCurChar = *wszText1;
     while (wCurChar != L'\0' && *wszText2 != L'\0' && wCurChar == *wszText2) {
@@ -49,6 +50,7 @@ int32_t __fastcall STRING_CompareWideStrings(uint16_t * wszText1, uint16_t * wsz
     return (uint32_t)((uint16_t)*wszText1 > (uint16_t)*wszText2);
 }
 
+// 1.14d mac: 002b9e68
 int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * wszSecond, int32_t nMaxChars) {
     uint16_t wChar2;
     uint16_t wChar1 = *wszFirst;
@@ -72,6 +74,7 @@ int32_t __fastcall UNICODE_CompareWideStringsN(uint16_t * wszFirst, uint16_t * w
     return 0;
 }
 
+// 1.14d mac: 002b9eac
 int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16_t * pwszText2) {
     uint16_t wChar1 = *pwszText1;
     while (wChar1) {
@@ -97,6 +100,7 @@ int32_t __fastcall UNICODE_CompareWideStringsNoCase(uint16_t * pwszText1, uint16
     return *pwszText2 != 0 ? -1 : 0;
 }
 
+// 1.14d mac: 002b9f3a
 int32_t __fastcall UNICODE_CompareWideStringsNNoCase(uint16_t * pwszText1, uint16_t * pwszText2, int32_t nMaxChars) {
     uint16_t wChar1Raw = *pwszText1;
     uint16_t wChar1Mapped = wChar1Raw;
@@ -164,6 +168,7 @@ uint16_t * __thiscall UNICODE_FindWideChar(uint16_t * pThis, uint16_t wCharToFin
     return pThis;
 }
 
+// 1.14d mac: 002ba040
 uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2) {
     uint16_t* pwszResult = wszText1;
     while (*pwszResult != L'\0') {
@@ -178,6 +183,7 @@ uint16_t * __fastcall AppendToBuffer(uint16_t * wszText1, uint16_t * wszText2) {
     return wszText1;
 }
 
+// 1.14d mac: 002ba070
 uint16_t * __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * pwszSrc, int32_t nMaxChars) {
     uint16_t* pwszCur = pwszDst;
     while (*pwszCur) {
@@ -192,6 +198,7 @@ uint16_t * __fastcall UNICODE_AppendWideStringN(uint16_t * pwszDst, uint16_t * p
     return pwszDst;
 }
 
+// 1.14d mac: 002ba0ba
 uint16_t * __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uint16_t * wszChar, size_t nSizeMaybe) {
     uint16_t* pWritePtr = pDestination;
     while (nSizeMaybe-- && *wszChar) {
@@ -205,6 +212,7 @@ uint16_t * __fastcall WSTRING_PutWideCharIntoBuffer(uint16_t * pDestination, uin
     return pDestination;
 }
 
+// 1.14d mac: 002ba10e
 uint16_t * __fastcall STRING_CopyWideString(uint16_t * wDestination, uint16_t * wSource) {
     uint16_t* pDest = wDestination;
     do {
@@ -215,6 +223,7 @@ uint16_t * __fastcall STRING_CopyWideString(uint16_t * wDestination, uint16_t * 
     return wDestination;
 }
 
+// 1.14d mac: 002ba130
 int32_t __fastcall STRING_GetWideStringLength(uint16_t * wszString) {
     int nLength = 0;
     if (!wszString) {
@@ -305,6 +314,7 @@ uint16_t * __fastcall UNICODE_FindSubstringNoCase(uint16_t * pwszHaystack, uint1
     return pwszHaystack - nMatchOffset;
 }
 
+// 1.14d mac: 002ba152
 uint16_t * __fastcall UNICODE_FindSubstring(uint16_t * pwszHaystack, uint16_t * pwszNeedle) {
     uint16_t wNeedleCur;
     int nMatchOffset;
@@ -360,6 +370,7 @@ uint16_t * __fastcall UNICODE_FindSubstring(uint16_t * pwszHaystack, uint16_t * 
     } while (true);
 }
 
+// 1.14d mac: 002ba1dc
 void UNICODE_FormatWideString(int32_t nMaxChars, uint16_t * wszDst, uint16_t * wszFmt, ...) {
     va_list __va;
     va_start(__va, wszFmt);
@@ -522,6 +533,7 @@ int __fastcall Unreferenced_00526d00(uint16_t * pChar) {
     return 1;
 }
 
+// 1.14d mac: 002b78f4
 BOOL __fastcall UNICODE_CheckLineBreakPosition(uint16_t * pWszText, int32_t nPos) {
     int nIsSpace;
     if (!nPos) {
@@ -558,6 +570,7 @@ BOOL __fastcall UNICODE_CheckLineBreakPosition(uint16_t * pWszText, int32_t nPos
     return 0;
 }
 
+// 1.14d mac: 002b79ee
 uint16_t * __fastcall STRING_ConvertCharToWchar(uint16_t * pwszBuffer, char * pszBuffer, int32_t nSize) {
     uint16_t* pWVar2;
     int nWideLen;
@@ -595,6 +608,7 @@ uint16_t * __fastcall STRING_ConvertCharToWchar(uint16_t * pwszBuffer, char * ps
     return pwszBuffer;
 }
 
+// 1.14d mac: 002b7ac0
 uint16_t * __fastcall STRING_CopyCharToWCharWithSetMaxSize(uint16_t * pDestination, char * szSource, int32_t nSize) {
     int i;
     for (i = 0; i < nSize && szSource[i]; i++) {
@@ -610,6 +624,7 @@ uint16_t * __fastcall STRING_CopyCharToWCharWithSetMaxSize(uint16_t * pDestinati
     return pDestination;
 }
 
+// 1.14d mac: 002b7b04
 char * __fastcall UNICODE_WideToMultiByte(char * pszDst, uint16_t * pwszSrc, int32_t nSize) {
     char* pszCur = pszDst;
     while (nSize > 1 && *pwszSrc) {
@@ -680,6 +695,7 @@ bool __thiscall UNICODE_CheckTrailingPunctuation(char * szSourceFile, uint16_t *
     return false;
 }
 
+// 1.14d mac: 002b7f00
 static bool UNICODE_CheckLeadingPunctuation(char * pszTable, uint16_t * wszText) {
     uint16_t wszTable[21];
     int i = 0;
@@ -737,6 +753,7 @@ static bool UNICODE_CheckLeadingPunctuation(char * pszTable, uint16_t * wszText)
     return false;
 }
 
+// 1.14d mac: 002b7b38
 void __fastcall UNICODE_FormatPossessiveName(uint16_t * wszText1, uint16_t * wszText2, uint16_t * wszSuffix, int32_t nMaxChars, int32_t nLang) {
     // Static local variables (originally global data)
 
@@ -961,6 +978,7 @@ static int32_t __stdcall UNICODE_IsControlChar(uint8_t byChar) {
     return 1;
 }
 
+// 1.14d mac: 002b7fe4
 void __stdcall UNICODE_FreeKamapTables() {
     if (g_pUnicodeKamapTable) {
       Storm::Source::SMem::SMemFree(g_pUnicodeKamapTable, "delete[]", -1, 0);
@@ -979,6 +997,7 @@ void __stdcall UNICODE_FreeKamapTables() {
 }
 
 // @sourcefile .\Unicode\UNISYS.CPP
+// 1.14d mac: 002b804a
 BOOL __fastcall UNICODE_LoadKamapFile(D2PoolManagerStrc * pMemory, char * szFilename) {
     // Static local variables (originally global data)
     static uint8_t szUnicodeKamapVersion[40] = {}; D2_STATIC_GUARD(szUnicodeKamapVersion, "D2Lang::Unicode::UNISYS::UNICODE_LoadKamapFile::szUnicodeKamapVersion");
@@ -1279,6 +1298,7 @@ int32_t __fastcall UNICODE_GetMultiByteLength(uint16_t * wszText, int32_t nMaxCh
     return nByteLen;
 }
 
+// 1.14d mac: 002b8358
 int32_t __fastcall UNICODE_GetWideCharCount(char * szText, int32_t szSourceFile) {
     if (!gpUnicodeCodeToMapTable) {
       return (int32_t)strlen(szText);

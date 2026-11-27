@@ -188,6 +188,7 @@ void __stdcall thunk_D2MEM_VirtualFree(LPVOID pMemory) {
     D2Hell::D2MEM_VirtualFree(pMemory);
 }
 
+// 1.14d mac: 00131ff7
 uint8_t __stdcall D2GFX_FindNearestPaletteIndex(LPPALETTEENTRY pPallete, uint32_t nPaletteSize, int32_t nRed, int32_t nGreen, int32_t nBlue) {
     int nRedDiff;
     uint8_t bVar1 = 0;

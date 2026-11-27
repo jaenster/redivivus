@@ -190,6 +190,7 @@ static uint32_t __stdcall CODEC_ReadBitsWithTransparency(uint32_t pCharSelComp, 
     return nBitsRead;
 }
 
+// 1.14d mac: 0012eb03
 static BOOL CODEC_AdvanceFrameIterator(D2CodecFrameBoundsStrc * pFrameBounds, D2CodecFrameIterStrc * pIterState) {
     int iVar1;
     int nFrameWidth;
@@ -762,6 +763,7 @@ void __stdcall CODEC_DecompressFrameData(D2CodecFrameBoundsStrc * nCodecState, D
     ppOutBuffer[1] = pOutPixelCursor - (intptr_t)*ppOutBuffer;
 }
 
+// 1.14d mac: 0012cb82
 BOOL __fastcall CODEC_EncodeRLE(D2CodecFrameComponentStrc * pSrcImage, DC6Block * pFrameHeader, uint8_t * pOutBuf) {
     int nZeroEnd;
     int nRunStart;
@@ -859,6 +861,7 @@ BOOL __fastcall CODEC_EncodeRLE(D2CodecFrameComponentStrc * pSrcImage, DC6Block 
     return 1;
 }
 
+// 1.14d mac: 0012ccbe
 int __fastcall CODEC_LoadPaletteFromFile(char * szText, D2CelFileCacheEntryStrc * pCelEntry) {
     uint32_t nColorEntries;
     D2DccFileHeaderStrc sDccHeader;
@@ -896,6 +899,7 @@ int __fastcall CODEC_LoadPaletteFromFile(char * szText, D2CelFileCacheEntryStrc 
     return 0;
 }
 
+// 1.14d mac: 0012ce1c
 void * __fastcall CODEC_DecompressAllFrames(uint32_t * pdwCompressedData, D2PoolManagerStrc * pMemory, int32_t nReadSize, uint8_t * pCelHeader, D2CelDecodeStateStrc * pDecodeState, int32_t nStartFrame, int32_t nFrameCount, size_t * pnSize, char * szFileName) {
     // Static local variables (originally global data)
     static uint8_t gaCodecFrameOutputBase[120000]; D2_STATIC_GUARD_BSS(gaCodecFrameOutputBase, "D2CMP::SRC::Codec::CODEC_DecompressAllFrames::gaCodecFrameOutputBase");

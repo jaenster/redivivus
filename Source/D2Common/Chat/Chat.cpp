@@ -26,6 +26,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2HoverTextStrc) == 0x110, "D2_NEW_
 namespace D2Common::Chat {
 
 // @sourcefile .\Chat\Chat.cpp
+// 1.14d mac: 00135922 D2Common::Chat::Chat::Alloc
 D2HoverTextStrc * __stdcall Alloc(D2PoolManagerStrc * pMemory, char * szMessage, int32_t nDuration) {
     char cCurChar;
     int nMsgLen = (int)strlen(szMessage);
@@ -51,6 +52,7 @@ D2HoverTextStrc * __stdcall Alloc(D2PoolManagerStrc * pMemory, char * szMessage,
 }
 
 // @sourcefile .\Chat\Chat.cpp
+// 1.14d mac: 001359c8 D2Common::Chat::Chat::Free
 void __stdcall Free(D2PoolManagerStrc * pMemory, D2HoverTextStrc * pHoverText) {
     if (!pHoverText) {
       return;
@@ -63,6 +65,7 @@ uint32_t __stdcall CHAT_GetChatField(uint32_t * pdwParam) {
     return *pdwParam;
 }
 
+// 1.14d mac: 00135a09
 int32_t __stdcall GetExpireFrame(D2HoverTextStrc * pHover) {
     return pHover->nExpireFrame;
 }
@@ -73,10 +76,12 @@ void __stdcall TEXT_CopyHoverMessageString(D2HoverTextStrc * pHover, char * szMe
     strcpy(szMessageOut, pcSrc);
 }
 
+// 1.14d mac: 00135a34
 void * __stdcall HOVERTEXT_GetTextLineList(D2HoverTextStrc * pHover) {
     return pHover->pTextLineList;
 }
 
+// 1.14d mac: 00135a3f
 void __stdcall HOVERTEXT_SetTextLineList(D2HoverTextStrc * pHoverText, void * pTextLineList) {
     pHoverText->pTextLineList = pTextLineList;
 }
@@ -85,6 +90,7 @@ uint8_t __stdcall GetLanguageCode(D2HoverTextStrc * pHoverText) {
     return pHoverText->nLanguageCode;
 }
 
+// 1.14d mac: 00135a59
 void __stdcall SetLanguageCode(D2HoverTextStrc * pHover, uint8_t nLanguageCode) {
     pHover->nLanguageCode = nLanguageCode;
 }

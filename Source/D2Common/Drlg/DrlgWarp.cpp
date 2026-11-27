@@ -43,6 +43,7 @@
 namespace D2Common::Drlg::DrlgRoom {
 
 // Returns warp-id array for a level. Prefer pDrlg->pWarpsInfo override list; otherwise use LevelDefs.txt Warp[]. Halts if warps list exists but lacks terminator.
+// 1.14d mac: 00151356
 int * __fastcall DRLGACTMISC_GetWarpsIdIfExists(D2DrlgStrc * pDrlg, eD2LevelId eLevel) {
     D2LevelDefsTxt* pLevelDefs;
     D2DrlgActWarpsInfoStrc* pWarpsInfo = pDrlg->pWarpsInfo;

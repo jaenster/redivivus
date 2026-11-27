@@ -104,6 +104,7 @@ void __thiscall GFXHASH_UnlinkCacheEntry(D2GfxHashTableStrc * pHashTable, D2Pool
     D2_FREE_POOL_AT(pMemory, pEntry, ".\\SRC\\GfxHash.cpp", 0x8e);
 }
 
+// 1.14d mac: 001315e5
 void __fastcall GFXHASH_InitHashTable(D2GfxHashTableStrc * pHashTable) {
     memset(pHashTable, 0, sizeof(*pHashTable));
 }
@@ -261,6 +262,7 @@ D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(D2GfxHashTableStrc * 
 }
 
 // @sourcefile .\SRC\GfxHash.cpp
+// 1.14d mac: 001317dc
 D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, D2GfxHashTableStrc * pHashTable, D2CelCacheBlockStrc * pCacheBlock, D2GfxDataStrc * pGfxData, D2CelFileCacheEntryStrc * pCelEntry) {
     D2GfxHashEntryStrc* pNewEntry = D2_NEW_POOL_AT(pMemory, D2GfxHashEntryStrc, ".\\SRC\\GfxHash.cpp", 0xef);
     D2GfxDataStrc* nGfxDataSaved = pGfxData;

@@ -19,6 +19,7 @@ static int gaSetItemBonusStates[6] = { 0xa5, 0xa6, 0xa7, 0xa8, 0xa9, 0xaa }; D2_
 namespace D2Common {
 
 // Enables/disables the partial-set-bonus states on a set item according to how many set pieces are currently equipped. Only acts on quality==5 (set) items whose setitems.txt addFunc is nonzero. For addFunc==1 it iterates the set's other members and toggles each gaSetItemBonusStates entry disabled/enabled via STATLIST_ToggleStateDisabled based on the corresponding bit in nEquippedMask (the equipped-pieces bitmask). For addFunc==2 it derives a piece count and enables the first N bonus states while disabling the rest. Returns 1 if a set-bonus update was applied, 0 otherwise.
+// 1.14d mac: 0017b3db
 BOOL __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedMask) {
     // Static local variables (originally global data)
     static int gnItemQualityByBaseId[64] = {
@@ -139,6 +140,7 @@ BOOL __fastcall ITEM_UpdateSetItemStates(D2UnitStrc * pUnit, uint32_t nEquippedM
 }
 
 // Manages a set-bonus stat list on pUnit for the set item pUnit2. nMode=0: allocate (if needed) and apply ITEMMOD_ApplySetBonuses into one of 6 gaSetItemBonusStates slots. nMode=1: locate and free the matching stat list. Guards against applying bonuses to items that are themselves magic-or-better quality.
+// 1.14d mac: 0017b529
 BOOL __fastcall ITEM_ManageSetBonusStatList(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nMode) {
     D2StatListExStrc* pStatList;
     int nExistingSetId;

@@ -34,6 +34,7 @@ D2_PACKED_BEGIN struct __attribute__((packed)) D2TombCanyonPresetRegionStrc {
 namespace D2Common::Drlg::OutWild {
 
 // Checks whether the entire grid column at nX is empty (no flags set), returns TRUE if empty.
+// 1.14d mac: 0015de10
 static BOOL DRLGOUTROOM_IsGridColumnEmpty(D2DrlgLevelStrc * pLevel, int nX) {
     int nY;
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
@@ -123,6 +124,7 @@ static void __stdcall DRLGOUTROOM_PlaceRiverCrossingPreset(D2DrlgLevelStrc * pDr
 }
 
 // Spawns border column presets (0x1A and 0x1B) for two adjacent columns. Iterates all Y rows, determining the preset orientation from grid flags using lookup tables. If the level has road flags (0x14), also places a road transition preset. Called by FillBorderCornersAndPresets and SpawnTownTransitionsAndCaves.
+// 1.14d mac: 0015de75
 void __stdcall DRLGOUTROOM_SpawnVerticalBorderPresets(D2DrlgLevelStrc * pLevel, int32_t nColumn) {
     int nVariant;
     int nX;
@@ -226,6 +228,7 @@ static void DRLGOUTROOM_MarkBorderJunctions(D2DrlgLevelStrc * pLevel) {
 }
 
 // Spawns a corner fill preset at grid coordinates (nX, nY) to fill gaps in outdoor room layouts.
+// 1.14d mac: 0015e159
 static BOOL __stdcall DRLGOUTROOM_SpawnCornerFillPreset(D2DrlgLevelStrc * pLevel, int nX, int nY) {
     D2DrlgLevelDataWildernessLevel* pWildData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     switch (DrlgGrid::GetGridFlags(&pWildData->sGridPreset, nX, nY)) {
@@ -457,6 +460,7 @@ static void DRLGOUTROOM_SpawnAct1LevelPresets(D2DrlgLevelStrc * pLevel) {
     Outdoors::SpawnOutdoorLevelPreset(pLevel, 0x1e, -1, 0, '\x0f');
 }
 
+// 1.14d mac: 0015d2a2
 void __fastcall InitAct1OutdoorLevel(D2DrlgLevelStrc * pLevel) {
     int eLevelId = pLevel->eD2LevelId;
     if (eLevelId != 2 && eLevelId != 3 && eLevelId != 0x11) {

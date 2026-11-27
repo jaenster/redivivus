@@ -240,6 +240,7 @@ static void DRLGENV_InitEnvironmentCycle(D2DrlgEnvironmentStrc * pDrlgEnvironmen
     pDrlgEnvironment->nTicks = pDrlgEnvironment->nTimeRate * pEnvData->nLenght;
 }
 
+// 1.14d mac: 001668d2
 D2DrlgEnvironmentStrc * __fastcall DRLGENV_AllocEnvironment(D2PoolManagerStrc * pMemory) {
     D2DrlgEnvironmentStrc* pEnv = D2_NEW_POOL_AT(pMemory, D2DrlgEnvironmentStrc, ".\\ENVIRONMENT\\Env.cpp", 0x12a);
     memset(pEnv, 0, sizeof(D2DrlgEnvironmentStrc));
@@ -261,6 +262,7 @@ D2DrlgEnvironmentStrc * __fastcall DRLGENV_AllocEnvironment(D2PoolManagerStrc * 
     return pEnv;
 }
 
+// 1.14d mac: 00166beb
 void __fastcall DRLGENV_FreeEnvironment(D2PoolManagerStrc * pMemory, D2DrlgEnvironmentStrc * pDrlgEnvironment) {
     D2_FREE_POOL_AT(pMemory, pDrlgEnvironment, ".\\ENVIRONMENT\\Env.cpp", 0x13f);
 }
@@ -319,6 +321,7 @@ static D2DrlgEnvironmentStrc * DRLGENV_UpdateEnvironmentCycle(D2DrlgEnvironmentS
 }
 
 // Advances the day/night environment cycle for an act's DRLG environment by one tick and updates lighting. Increments nTicks (with act-specific bias for acts 2/3 and eclipse handling), wraps at nTimeRate*360, and when the tick threshold for the next time-index entry (from aENVIRONMENTDATA1/2/3 tables, chosen by eclipse flag and act) is passed, advances nTimeIndex and stores the new nEnvironmentData. Then recomputes global light intensity and color; forces a fixed sky-blue tint for level 0x78. Returns nonzero (TRUE) if the environment-data value changed this tick, signaling callers to refresh.
+// 1.14d mac: 00166c28
 BOOL __stdcall DRLGENV_UpdatePeriodOfDay(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pRoom) {
     char eActNoByte;
     DWORD dwActNo;
@@ -349,6 +352,7 @@ BOOL __stdcall DRLGENV_UpdatePeriodOfDay(D2DrlgActStrc * pDrlgAct, D2RoomStrc * 
 }
 
 // Advances the day/night environment cycle for a DRLG act and reports whether the lighting/sky state changed. Fetches the act's environment struct; increments its tick counter, with act-specific adjustments (act 3 adds 0xF; act 2 adds extra ticks when the current ENVIRONMENTDATA1 phase flag==2) unless an eclipse is active. Wraps ticks at nTimeRate*0x168. Selects the next cycle index (0..5 wrap) from the appropriate ENVIRONMENTDATA table (1=normal, 2=eclipse/act!=3, 3=eclipse act 3); when ticks exceed that phase's duration*rate it advances nTimeIndex and updates nEnvironmentData/nTicks. Returns TRUE if the derived base-time bucket moved more than 0x10, or if env-data or time-index changed; FALSE otherwise. Drives sky color/light cycling in outdoor acts.
+// 1.14d mac: 00166d86
 BOOL __stdcall DRLGENV_UpdateCycleIndex(D2DrlgActStrc * pDrlgAct, int32_t nActNo) {
     int nTimeRate;
     D2DrlgEnvironmentStrc* pEnv = DUNGEON::Dungeon::DRLGENV_GetEnvironmentFromAct(pDrlgAct);
@@ -398,6 +402,7 @@ int32_t __stdcall DRLGENV_GetIntensityFromAct(D2DrlgActStrc * pDrlgAct) {
     return pEnv->nGlobalLightIntensity;
 }
 
+// 1.14d mac: 00166e47
 int32_t __stdcall DRLGENV_GetPeriodOfDayFromAct(D2DrlgActStrc * pDrlgAct, int32_t * pBaseTime) {
     D2DrlgEnvironmentStrc* pEnv = DUNGEON::Dungeon::DRLGENV_GetEnvironmentFromAct(pDrlgAct);
     if (!pEnv) {
@@ -465,6 +470,7 @@ int32_t __stdcall DRLGENV_GetCycleIndexFromAct(D2DrlgActStrc * pDrlgAct) {
 }
 
 // Sets the time-of-day state (nIndex 0–5, nAngle ticks) and eclipse flag in the act's D2DrlgEnvironmentStrc, then updates ambient light intensity and color. Selects ENVIRONMENTDATA1 or ENVIRONMENTDATA2 based on bEclipse. Applies Act 4-specific global light color override. Halts with an internal error if nIndex or nAngle are out of range.
+// 1.14d mac: 00166eae
 void __stdcall DRLGENV_InitializeEnvironment(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pRoom, int32_t nIndex, int32_t nAngle, BOOL bEclipse) {
     eAct eActNo;
     D2DrlgActEnvironmentData* pDVar1;
@@ -520,6 +526,7 @@ void __stdcall DRLGENV_InitializeEnvironment(D2DrlgActStrc * pDrlgAct, D2RoomStr
     }
 }
 
+// 1.14d mac: 00166ff0
 void __stdcall DRLGENV_GetCycleIndex_Ticks_EclipseFromAct(D2DrlgActStrc * pDrlgAct, int * pTimeIndex, int * pTicks, BOOL * pEclipse) {
     D2DrlgEnvironmentStrc* pEnv = DUNGEON::Dungeon::DRLGENV_GetEnvironmentFromAct(pDrlgAct);
     *pTimeIndex = pEnv->nTimeIndex;
@@ -575,6 +582,7 @@ void __stdcall DRLGENV_SetNextTimeRate(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pR
     pEnv->nGlobalLightBlue = 0xff;
 }
 
+// 1.14d mac: 0016701d
 void __stdcall DRLGENV_TaintedSunBegin(D2DrlgActStrc * pDrlgAct) {
     D2DrlgEnvironmentStrc* pEnv = DUNGEON::Dungeon::DRLGENV_GetEnvironmentFromAct(pDrlgAct);
     pEnv->nTimeRateIndex = 1;

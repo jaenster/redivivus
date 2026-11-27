@@ -31,6 +31,7 @@ typedef int32_t (__fastcall *pfnTextMessageCompare)(uint16_t * pnCodeA, uint16_t
 namespace D2Common::Text {
 
 // @sourcefile .\Text\Text.cpp
+// 1.14d mac: 0018aa67
 D2GSPacketSrv0x27_TextStrc * __stdcall STRUCT_AllocTxtMessageForPacket0x27(D2PoolManagerStrc * pMemory) {
     D2GSPacketSrv0x27_TextStrc* pTxtMsg = D2_NEW_POOL_AT(pMemory, D2GSPacketSrv0x27_TextStrc, ".\\Text\\Text.cpp", 0x2b);
     pTxtMsg->pMemory = pMemory;
@@ -40,6 +41,7 @@ D2GSPacketSrv0x27_TextStrc * __stdcall STRUCT_AllocTxtMessageForPacket0x27(D2Poo
 }
 
 // @sourcefile .\Text\Text.cpp
+// 1.14d mac: 0018aafd
 static void TEXT_FreeAllMessages(D2GSPacketSrv0x27_TextStrc * ppPoolManager) {
     D2GSPacketSrv0x27_EntryStrc* pMemoryToFree = ppPoolManager->pMessage;
     while (pMemoryToFree) {
@@ -53,6 +55,7 @@ static void TEXT_FreeAllMessages(D2GSPacketSrv0x27_TextStrc * ppPoolManager) {
 }
 
 // @sourcefile .\Text\Text.cpp
+// 1.14d mac: 0018aab6
 void __stdcall STRUCT_FreeTxtMessageForPacket0x27(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text) {
     D2GSPacketSrv0x27_EntryStrc* pMemoryToFree = pGSPacketSrv0x27_Text->pMessage;
     while (pMemoryToFree) {
@@ -97,6 +100,7 @@ void __stdcall TEXT_RemoveMessageById(D2GSPacketSrv0x27_TextStrc * ppPoolManager
     }
 }
 
+// 1.14d mac: 0018abb2
 int32_t __stdcall TEXT_CountMessagesOfType2(D2GSPacketSrv0x27_TextStrc * pMsgList) {
     D2GSPacketSrv0x27_EntryStrc* pCurEntry;
     int nCount = 0;
@@ -109,6 +113,7 @@ int32_t __stdcall TEXT_CountMessagesOfType2(D2GSPacketSrv0x27_TextStrc * pMsgLis
     return nCount;
 }
 
+// 1.14d mac: 0018abd6
 uint16_t __stdcall TEXT_GetMessageByIndex(D2GSPacketSrv0x27_TextStrc * pMsgList, int32_t nTargetIndex) {
     D2GSPacketSrv0x27_EntryStrc* pCurEntry = pMsgList->pMessage;
     int nIndex = 0;
@@ -128,6 +133,7 @@ uint16_t __stdcall TEXT_GetMessageByIndex(D2GSPacketSrv0x27_TextStrc * pMsgList,
     } while (true);
 }
 
+// 1.14d mac: 0018ac0a
 uint16_t __stdcall OVERHEAD_GetMessageType0(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nIndex) {
     D2GSPacketSrv0x27_EntryStrc* pCurEntry = pGSPacketSrv0x27_Text->pMessage;
     int nMatchCount = 0;
@@ -147,6 +153,7 @@ uint16_t __stdcall OVERHEAD_GetMessageType0(D2GSPacketSrv0x27_TextStrc * pGSPack
     } while (true);
 }
 
+// 1.14d mac: 0018ac3e
 uint16_t __stdcall OVERHEAD_GetMessageType1(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, int32_t nTargetIndex) {
     D2GSPacketSrv0x27_EntryStrc* pCurEntry = pGSPacketSrv0x27_Text->pMessage;
     int nType1Count = 0;
@@ -166,6 +173,7 @@ uint16_t __stdcall OVERHEAD_GetMessageType1(D2GSPacketSrv0x27_TextStrc * pGSPack
     } while (true);
 }
 
+// 1.14d mac: 0018ac72
 void __stdcall BuildPacket0x27Messages(D2GSPacketSrv0x27_TextStrc * pTxtMsg, uint8_t * pOutMessageData) {
     int nSlot;
     D2GSPacketSrv0x27_EntryStrc* pCurEntry;
@@ -201,6 +209,7 @@ void __stdcall BuildPacket0x27Messages(D2GSPacketSrv0x27_TextStrc * pTxtMsg, uin
 }
 
 // @sourcefile .\Text\Text.cpp
+// 1.14d mac: 0018ad30
 void __stdcall StoreMessages(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text, uint8_t * pPacketData) {
     D2GSPacketSrv0x27_EntryStrc* pNewEntry;
     uint32_t byMsgType;
@@ -338,6 +347,7 @@ void __thiscall TEXT_SortMessages(uint16_t nCount, uint16_t * pEntries, pfnTextM
 }
 
 // @sourcefile .\Text\Text.cpp
+// 1.14d mac: 0018ae3e
 void __stdcall TEXT_SortMessageList(D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text) {
     if (!pGSPacketSrv0x27_Text) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x165);

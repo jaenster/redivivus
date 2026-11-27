@@ -717,6 +717,7 @@ void __fastcall DATATBLS_LinkerItemStatCost(char * pszStatName, int32_t * pnStat
 }
 
 // Loads and parses CubMain.txt (or cubeserver.txt/bin) into the pTxtCubeMain table. Allocates D2CubeMainTxt array, parses each line with 50+ fields including enabled, ladder, difficulty, class, op/param/value (conditions), nNumInputs, wVersion, 7 input descriptors (item code, quality, quantity, sockets, ethereal, etc.), and 3 output descriptors (type, level, quality, affixes, mods). Handles both text and binary formats. Stores result in pTxtCubeMain global.
+// 1.14d mac: 00141ff0
 void __fastcall CUBE_LoadCubeMainTable(D2PoolManagerStrc * pMemory) {
     BOOL _bFileExists;
     bool bFileExists;
@@ -852,6 +853,7 @@ void __stdcall CUBE_FreeCubeMainTable() {
 }
 
 // Returns a pointer to a cube recipe by index. Validates index against nTxtCubeMainSize and returns pTxtCubeMain[index]. Returns NULL if index is out of bounds.
+// 1.14d mac: 001421ba
 D2CubeMainTxt * __stdcall CUBE_GetRecipeByIndex(int32_t nIndex) {
     if (!pTxtCubeMain) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34e);
@@ -875,18 +877,22 @@ void __stdcall nullsub_Unref_0066a210(D2UnitStrc * pUnit, uint32_t dwParam2) {
 
 }
 
+// 1.14d mac: 0017bef2 D2Common::Txt::Cube::nullsub
 void __stdcall nullsub(D2UnitStrc * pUnit, uint32_t dwParam2) {
 
 }
 
+// 1.14d mac: 0017bef7
 void __stdcall FIELDTBLS_AllocPlayerData_NoOp(D2UnitStrc * dwUnused) {
 
 }
 
+// 1.14d mac: 0017befc
 void __fastcall FIELDTBLS_FreePlayerData_STUB(D2UnitStrc * pUnit) {
 
 }
 
+// 1.14d mac: 0014bb78
 void __fastcall FIELDTBLS_InitTxtFiles_NoOp(D2PoolManagerStrc * pMemory) {
 
 }

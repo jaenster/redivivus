@@ -25,31 +25,37 @@ static __time32_t __stdcall SEED_GetTime32(__time32_t * pTime) {
     return _Var1;
 }
 
+// 1.14d mac: 00184e39
 uint32_t __fastcall SEED_GenerateRandomSeed(int32_t nSeedOffset) {
     __time32_t _Var1 = _time32(nullptr);
     DWORD dwTickCount = GetTickCount();
     return (((dwTickCount + _Var1 + nSeedOffset) * 0x19660d + 0x3c6ef35f) * 0x19660d + 0x3c6ef35f) * 0x19660d + 0x3c6ef35f & 0x7fffffff;
 }
 
+// 1.14d mac: 00184e6c
 void __fastcall SEED_InitDefault(D2SeedStrc * pSeed) {
     pSeed->nSeedLow = 1;
     pSeed->nSeedHigh = 0x29a;
 }
 
+// 1.14d mac: 00184e81
 void __fastcall InitSeed_Param_666(D2SeedStrc * pSeed, int32_t nInitSeed) {
     pSeed->nSeedLow = nInitSeed;
     pSeed->nSeedHigh = 666;
 }
 
+// 1.14d mac: 00184e95
 uint32_t __fastcall GetSeed_nSeedLow(D2SeedStrc * pSeed) {
     return pSeed->nSeedLow;
 }
 
+// 1.14d mac: 00184e9f D2Common::Seed::SetSeed
 void __fastcall SetSeed(D2SeedStrc * pSeed, uint32_t nSeedLow, uint32_t nSeedHigh) {
     pSeed->nSeedLow = nSeedLow;
     pSeed->nSeedHigh = nSeedHigh;
 }
 
+// 1.14d mac: 00184eb2 D2Common::Seed::GetSeed
 void __fastcall GetSeed(D2SeedStrc * pSeed, uint32_t * nSeedLow, uint32_t * nSeedHigh) {
     *nSeedLow = pSeed->nSeedLow;
     *nSeedHigh = pSeed->nSeedHigh;

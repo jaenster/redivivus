@@ -75,6 +75,7 @@ static int gaDs1TileTypeConversion[42] = {
 namespace D2Common::Drlg::DrlgAnim {
 
 // Scans every cell in the room's grid, looks up the tile in all tile projects, and for any tile whose library flags include bit 0x100 (animated) adds (matchCount-1) to the floor, wall, or roof animated tile counters in pRoomTiles and sets the animated-room flag 0x8000000 on pRoomEx.
+// 1.14d mac: 0014d783
 void __fastcall DRLGROOMTILE_CountAnimTilesFromGrid(D2RoomExStrc * pRoomEx, D2DrlgGridStrc * pGrid, D2DrlgGridStrc * pOrientGrid, int32_t pUnused, int nKillEdgeX, int nKillEdgeY) {
     D2TileLibraryEntryStrc* aTileResults[40];
     int nWidth = (uint32_t)!nKillEdgeX + pRoomEx->sCoords.WorldSize.x;
@@ -143,6 +144,7 @@ void __fastcall AnimateTiles(D2RoomExStrc * pRoomEx) {
 
 // Builds the animated-tile frame chains for a generated room. Scans the room's tile-entry array (stride 0x30 (0xc dwords)) for tiles flagged animated (TILEPROJECT_GetTileCount bit 0x100), looks up all project tile variants into a 40-entry result buffer, allocates a D2DrlgAnimTileGridStrc from the DRLG memory pool plus a per-frame ppTileData array, and creates floor/shadow/wall tile data for each animation frame (selecting CreateFloor/Shadow/WallTileData by entry type), tagging each with flag 8. Links the new anim-tile grid onto the room's pRoomTiles->pAnimTiles list. Halts on frame-count inconsistencies. Stack-guarded.
 // @sourcefile .\DRLG\DrlgAnim.cpp
+// 1.14d mac: 0014da2a
 void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStrc * pRoomEx, int nFrameStep, D2DrlgTileDataStrc * pTiles, int nTileCount) {
     int nTileType;
     uint32_t nMatchCount;
@@ -279,6 +281,7 @@ void __fastcall DRLGANIM_AllocAnimatedTiles(D2DrlgGridStrc * pGrids, D2RoomExStr
 }
 
 // Wrapper calling DRLGANIM_AllocAnimatedTiles for wall/floor/shadow.
+// 1.14d mac: 0014d9b9
 void __fastcall DRLGROOMTILE_AllocAnimTiles(D2RoomExStrc * pRoomEx, int nFrameStep, D2DrlgGridStrc * pWallGrids, int nUnused1, D2DrlgGridStrc * pFloorGrids, int nUnused2, D2DrlgGridStrc * pRoofGrids) {
     D2DrlgTileGridStrc* pTileGrid = pRoomEx->pRoomTiles;
     DRLGANIM_AllocAnimatedTiles(pWallGrids, pRoomEx, nFrameStep, pTileGrid->sRoomTiles.pWallTiles, pTileGrid->nWalls);
@@ -291,6 +294,7 @@ int __fastcall DRLGANIM_GetOrientationFromIndex_Unref_0066d7e0(int nAnimIndex) {
 }
 
 // Returns the tile orientation value for a given animation index by indexing the static gnDrlgAnimFrameCounter lookup table. Maps DS1 animation indices to their corresponding DRLG orientation constants.
+// 1.14d mac: 001614cf
 int __fastcall DRLGPRESET_MapTileType(int nAnimIndex) {
     return gaDs1TileTypeConversion[nAnimIndex];
 }

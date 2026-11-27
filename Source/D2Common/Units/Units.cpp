@@ -325,6 +325,7 @@ void __stdcall Return_Unref_005fe100(D2UnitStrc * pUnit, int32_t nParam) {
 
 }
 
+// 1.14d mac: 0018e710 D2Common::Units::Units::GetDirection
 uint8_t __stdcall GetDirection(D2UnitStrc * pUnit) {
     uint8_t byDirection;
     if (!pUnit) {
@@ -346,6 +347,7 @@ uint8_t __stdcall GetDirection(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0018e76d D2Common::Units::Units::GetFirstSkill
 D2SkillStrc * __stdcall GetFirstSkill(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x638);
@@ -367,6 +369,7 @@ D2SkillStrc * __stdcall GetLeftSkill(D2UnitStrc * pUnit) {
     return pSkill;
 }
 
+// 1.14d mac: 0018e7ff
 D2SkillStrc * __stdcall GetRightSkill(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x64a);
@@ -386,6 +389,7 @@ void __stdcall SetCurrentSkill(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     Skills::SetCurrentSkill(pUnit->pSkillsList, pSkill);
 }
 
+// 1.14d mac: 0018e89a D2Common::Units::Units::GetCurrentSkill
 D2SkillStrc * __stdcall GetCurrentSkill(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x65c);
@@ -397,6 +401,7 @@ D2SkillStrc * __stdcall GetCurrentSkill(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 0018e8e3
 D2UnitStrc * __stdcall AllocUnit(D2PoolManagerStrc * pMemory, eD2UnitType eUnitType) {
     D2UnitDataMonsterStrc* local_EAX_79;
     D2UnitStrc* pUnit = D2_NEW_POOL_AT(pMemory, D2UnitStrc, ".\\UNITS\\Units.cpp", 0x66e);
@@ -417,6 +422,7 @@ D2UnitStrc * __stdcall AllocUnit(D2PoolManagerStrc * pMemory, eD2UnitType eUnitT
 }
 
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 0018ea1a D2Common::Units::Units::Free
 void __stdcall Free(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;
@@ -457,6 +463,7 @@ void __fastcall UNITS_SetWarpStaticPathCoords(D2UnitStrc * pUnit, int32_t nPosX,
     }
 }
 
+// 1.14d mac: 0018eaad
 int32_t __stdcall GetPrecisionX(D2UnitStrc * pUnit) {
     WORD xOffset;
     int32_t nLine;
@@ -474,6 +481,7 @@ int32_t __stdcall GetPrecisionX(D2UnitStrc * pUnit) {
     return pUnit->pPath.pStaticPath->nPosX << 0x10;
 }
 
+// 1.14d mac: 0018eb0f
 int32_t __stdcall GetPrecisionY(D2UnitStrc * pUnit) {
     int32_t nLine;
     if (!pUnit) {
@@ -490,6 +498,7 @@ int32_t __stdcall GetPrecisionY(D2UnitStrc * pUnit) {
     return pUnit->pPath.pStaticPath->nPosY << 0x10;
 }
 
+// 1.14d mac: 0018eb71
 void __stdcall SetXForStaticUnit(D2UnitStrc * pUnit, int32_t nX) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6ef);
@@ -507,6 +516,7 @@ void __stdcall SetXForStaticUnit(D2UnitStrc * pUnit, int32_t nX) {
     }
 }
 
+// 1.14d mac: 0018ebe7
 void __stdcall SetYForStaticUnit(D2UnitStrc * pUnit, int32_t nY) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x706);
@@ -524,6 +534,7 @@ void __stdcall SetYForStaticUnit(D2UnitStrc * pUnit, int32_t nY) {
     }
 }
 
+// 1.14d mac: 0018ec5d
 int32_t __stdcall GetUnitSizeX(D2UnitStrc * pUnit) {
     D2MonStats2Txt* pMonStats2Txt;
     D2MissilesTxt* pMissilesTxt;
@@ -559,6 +570,7 @@ int32_t __stdcall GetUnitSizeX(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018ed54
 int32_t __stdcall GetUnitSizeY(D2UnitStrc * pUnit) {
     D2MonStats2Txt* pMonStats2Txt;
     D2MissilesTxt* pMissilesTxt;
@@ -595,6 +607,7 @@ int32_t __stdcall GetUnitSizeY(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018ee5c
 int32_t __stdcall GetScreenX(D2UnitStrc * pUnit) {
     LONG nTargetX;
     if (!pUnit) {
@@ -611,6 +624,7 @@ int32_t __stdcall GetScreenX(D2UnitStrc * pUnit) {
     return pUnit->pPath.pStaticPath->nScreenX;
 }
 
+// 1.14d mac: 0018eebb
 int32_t __stdcall GetScreenY(D2UnitStrc * pUnit) {
     int32_t nLine;
     if (!pUnit) {
@@ -704,6 +718,7 @@ void __stdcall SetScreenY(D2UnitStrc * pUnit, int32_t nTargetY) {
 }
 
 // NOTE: Return type changed void→short int (1 callers, MEDIUM confidence)
+// 1.14d mac: 0018ef1c
 void __stdcall GetCoords(D2UnitStrc * pUnit, POINT * pPoint) {
     int32_t nLine;
     if (!pUnit) {
@@ -771,6 +786,7 @@ void __fastcall SetTargetXYForWarp(D2UnitStrc * pUnit, int32_t nTargetX, int32_t
     }
 }
 
+// 1.14d mac: 0018f03b D2Common::Units::Units::GetCollisionType
 int32_t __fastcall GetCollisionType(D2UnitStrc * pUnit) {
     D2ObjectsTxt* pObjectsTxt;
     int32_t nLine;
@@ -814,6 +830,7 @@ int32_t __fastcall GetCollisionType(D2UnitStrc * pUnit) {
 }
 
 // Returns nothing: every exit leaves AddCollision_Vector's or GetUnitSizeY's EAX, and none of the 17 call sites reads it.
+// 1.14d mac: 0018f212
 void __stdcall BlockCollisionPath(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     int32_t nLine;
     if (!pUnit) {
@@ -831,6 +848,7 @@ void __stdcall BlockCollisionPath(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_
     Collision::AddCollision_Vector(pRoom, nX, nY, nVectorX, nVectorY, nLine);
 }
 
+// 1.14d mac: 0018f298
 void __stdcall InitializeStaticPath(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x866);
@@ -849,6 +867,7 @@ void __stdcall InitializeStaticPath(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int3
     pPath->nScreenY = nScreenYLocal;
 }
 
+// 1.14d mac: 0018f311
 void __stdcall ResetRoom(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x87d);
@@ -865,6 +884,7 @@ void __stdcall ResetRoom(D2UnitStrc * pUnit) {
 }
 
 // @blizzard UnitGetRoom
+// 1.14d mac: 0018f1ae
 D2RoomStrc * __stdcall UNITS_GetRoom(D2UnitStrc * pUnit) {
     D2RoomStrc* pRoom;
     if (!pUnit) {
@@ -885,6 +905,7 @@ D2RoomStrc * __stdcall UNITS_GetRoom(D2UnitStrc * pUnit) {
     return pUnit->pPath.pStaticPath->pRoom;
 }
 
+// 1.14d mac: 0018f37f
 void __stdcall SetTargetUnitForDynamicUnit(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8ac);
@@ -992,12 +1013,14 @@ void __stdcall SetAnimSpeedForMonster(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0018f3fc
 void __stdcall GetRunAndWalkVelocityForPlayer(D2UnitStrc * nUnused, int32_t ePlayerClassId, int * pWalkVelocity, int * pRunVelocity) {
     D2CharStatsTxt* pCharStatsTxt = ePlayerClassId < 0 || ePlayerClassId >= ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? 0 : ITEMS::Items::sgptDataTable->pTxtCharStats + ePlayerClassId;
     *pWalkVelocity = (uint32_t)pCharStatsTxt->WalkVelocity;
     *pRunVelocity = (uint32_t)pCharStatsTxt->RunVelocity;
 }
 
+// 1.14d mac: 0018f83c
 static void UNITS_AddRunVelocityBonus(D2UnitStrc * pUnit, int32_t ePlayerClassId) {
     D2StatListExStrc* pStatEx = (D2StatListExStrc*)Stats::StatsEx::AllocStatList(!pUnit ? nullptr : pUnit->pMemory, 4, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     D2CharStatsTxt* pCharStatsTxt = ePlayerClassId >= 0 && ePlayerClassId < ITEMS::Items::sgptDataTable->nTxtCharStatsSize ? ITEMS::Items::sgptDataTable->pTxtCharStats + ePlayerClassId : nullptr;
@@ -1010,6 +1033,7 @@ static void UNITS_AddRunVelocityBonus(D2UnitStrc * pUnit, int32_t ePlayerClassId
     Stats::StatsEx::STATLIST_AttachStatListToUnit(pUnit, pStatEx, 1);
 }
 
+// 1.14d mac: 0018f440
 void __stdcall SetAnimData(D2UnitStrc * pUnit, int32_t nUnitType, int32_t nClassId, int32_t nMode) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x936);
@@ -1041,6 +1065,7 @@ uint32_t __stdcall NeedsRoomUpdate(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00190143
 void __stdcall SetCurrentRoomInvalid(D2UnitStrc * pUnit, int32_t bInvalid) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x9fe);
@@ -1056,6 +1081,7 @@ void __stdcall SetCurrentRoomInvalid(D2UnitStrc * pUnit, int32_t bInvalid) {
     pUnit->pPath.pStaticPath->bRoomNeedsUpdate = bInvalid != 0;
 }
 
+// 1.14d mac: 001901ac
 void __stdcall RefreshInventory(D2UnitStrc * pUnit, BOOL bHasInventory) {
     if (bHasInventory) {
       Unit::ROOM_LinkUnitToUpdateList(pUnit);
@@ -1076,6 +1102,7 @@ void __stdcall RefreshInventory(D2UnitStrc * pUnit, BOOL bHasInventory) {
 }
 
 // Returns the eInventoryPage for a given unit and page index. For players, maps nInvPage (1-4) to trade/transmog/bank pages, or performs a class-specific lookup. For monsters, always returns INVPAGE_Monster. For objects, recognises Guild Vault (0x152) and Trophy Case (0x153). Returns INVPAGE_None on mismatch or null input (halts on null). RETURN WIDTH: every exit writes the whole of EAX (MOV EAX,imm32 / LEA EAX,[EAX*4+8] / MOV EAX,[ECX*8+0x744548]) and InitializeiInventoryPages takes it with MOV ESI,EAX - no MOVZX anywhere.
+// 1.14d mac: 001901f8
 int32_t __stdcall UNITS_GetInventoryRecordId(D2UnitStrc * pUnit, uint8_t nInvPage, BOOL bLoD) {
     // Static local variables (originally global data)
     static int aPlayerInventoryPage[14] = {
@@ -1150,6 +1177,7 @@ int32_t __stdcall UNITS_GetInventoryRecordId(D2UnitStrc * pUnit, uint8_t nInvPag
     return nPageResult;
 }
 
+// 1.14d mac: 001902e8
 D2LightMapStrc * __stdcall GetLightMap(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xa6d);
@@ -1161,6 +1189,7 @@ D2LightMapStrc * __stdcall GetLightMap(D2UnitStrc * pUnit) {
     return pLightMap;
 }
 
+// 1.14d mac: 0019032d
 int32_t __stdcall GetAnimOrSeqMode(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -1185,6 +1214,7 @@ void __stdcall SetAnimOrSeqMode(D2UnitStrc * pUnit, int32_t nAnimMode) {
     pUnit->eAnimMode.ePlayerMode = nAnimMode;
 }
 
+// 1.14d mac: 0019034f
 static int32_t __stdcall UpdateSequenceMode(D2UnitStrc * pUnit, uint32_t nSeqMode) {
     uint32_t nFrameCount;
     uint8_t byActionFrame[4];
@@ -1197,6 +1227,7 @@ static int32_t __stdcall UpdateSequenceMode(D2UnitStrc * pUnit, uint32_t nSeqMod
     return (uint32_t)(nSeqMode != nPrevSeqMode);
 }
 
+// 1.14d mac: 0018f903
 void __stdcall InitializeSequence(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;
@@ -1218,6 +1249,7 @@ void __stdcall InitializeSequence(D2UnitStrc * pUnit) {
     pUnit->eUnitFlags |= UNITFLAG_SQGFXCHANGE;
 }
 
+// 1.14d mac: 001903b4
 void __stdcall SetSequenceFrame(D2UnitStrc * pUnit, int32_t nSequenceFrame) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xace);
@@ -1227,6 +1259,7 @@ void __stdcall SetSequenceFrame(D2UnitStrc * pUnit, int32_t nSequenceFrame) {
     pUnit->nSeqFrame = (pUnit->nSeqFrame & 0xffU) + nSequenceFrame * 0x100;
 }
 
+// 1.14d mac: 00190533
 void __stdcall UpdateFrame(D2UnitStrc * pUnit) {
     pUnit->nGfxCurrentFrame += (int)pUnit->nAnimSpeed;
     if (pUnit->nGfxCurrentFrame < pUnit->nFrameCount) {
@@ -1236,6 +1269,7 @@ void __stdcall UpdateFrame(D2UnitStrc * pUnit) {
     pUnit->nGfxCurrentFrame -= pUnit->nFrameCount;
 }
 
+// 1.14d mac: 0019054d
 void __stdcall SetFrameNonRate(D2UnitStrc * pUnit, int32_t nRate, int32_t nFailRate) {
     nFailRate <<= 8;
     pUnit->nGfxCurrentFrame += (int)pUnit->nAnimSpeed;
@@ -1261,6 +1295,7 @@ static int32_t UNITS_GetBaseWalkVelocity(eD2UnitType eUnitType, int32_t nClassId
     }
 }
 
+// 1.14d mac: 001905c3
 static int32_t UNITS_GetAnimFrameTime(eD2UnitType eUnitType, int32_t nClassId, int32_t nAnimMode) {
     D2MonStatsTxt* pMonStatsTxt;
     switch (eUnitType) {
@@ -1442,6 +1477,7 @@ static BOOL UNITS_IsAnimSpeedSetByCastRate(D2UnitStrc * pUnit, eD2UnitType eUnit
 }
 
 // Returns the diminished (soft-capped) value of a unit stat indexed by nParam into gaUnitStatDiminished[]. If the entry has nDiminishedFlag==1 and the raw value is non-zero, applies a harmonic-mean formula: (base * value) / (base + value), producing diminishing returns. Otherwise returns the raw shifted stat value unchanged.
+// 1.14d mac: 00190575
 static int32_t GetDiminishedStat(D2UnitStrc * pUnit, int32_t nIndex) {
     // Static local variables (originally global data)
     static D2UnitStatDiminishedEntryStrc gaUnitStatDiminished[5] = {
@@ -1484,11 +1520,13 @@ static int32_t GetDiminishedStat(D2UnitStrc * pUnit, int32_t nIndex) {
     return nStatValue;
 }
 
+// 1.14d mac: 00190750
 void __stdcall SetAnimationSpeed(D2UnitStrc * pUnit, int32_t nSpeed) {
     uint32_t nClampedSpeed = nSpeed <= 0 ? 0 : nSpeed;
     pUnit->nAnimSpeed = (int)nClampedSpeed < 0x7fff ? nClampedSpeed : 0x7fff;
 }
 
+// 1.14d mac: 00190773
 uint32_t __stdcall IsAtEndOfFrameCycle(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xd81);
@@ -1501,6 +1539,7 @@ uint32_t __stdcall IsAtEndOfFrameCycle(D2UnitStrc * pUnit) {
     return (uint32_t)((int)pUnit->nAnimSpeed + pUnit->nGfxCurrentFrame >= pUnit->nFrameCount);
 }
 
+// 1.14d mac: 001907cd
 void __stdcall GetShiftedFrameMetrics(D2UnitStrc * pUnit, int * pCurrentFrame, int * pFrameCount) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0xd8f);
@@ -1558,6 +1597,7 @@ void __stdcall SetAnimActionFrame(D2UnitStrc * pUnit, int32_t nFrame) {
     pUnit->nActionFrame = 4;
 }
 
+// 1.14d mac: 0019087e
 int32_t __stdcall GetEventFrameInfo(D2UnitStrc * pUnit, int32_t nFrame) {
     D2MonSeqTxt* pSeqTxt;
     uint32_t nSeqCurrentFrame;
@@ -1618,6 +1658,7 @@ D2SkillStrc * __stdcall GetSkillFromSkillId(D2UnitStrc * pUnit, eD2Skills eSkill
     return nullptr;
 }
 
+// 1.14d mac: 00190958
 BOOL __stdcall IsDoor(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe10);
@@ -1630,6 +1671,7 @@ BOOL __stdcall IsDoor(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 001909a6
 BOOL __fastcall CheckIfObjectOrientationIs1(D2UnitStrc * pUnit) {
     if (pUnit->eUnitType != UNIT_OBJECT) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe1e);
@@ -1639,6 +1681,7 @@ BOOL __fastcall CheckIfObjectOrientationIs1(D2UnitStrc * pUnit) {
     return (uint32_t)(pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Orientation == '\x01');
 }
 
+// 1.14d mac: 001909f4
 BOOL __stdcall IsShrine(D2UnitStrc * pUnit) {
     BOOL bResult;
     if (!(pUnit->eUnitType != UNIT_OBJECT || (bResult = 1 , !(pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->SubClass & 1U)))) {
@@ -1649,6 +1692,7 @@ BOOL __stdcall IsShrine(D2UnitStrc * pUnit) {
     return bResult;
 }
 
+// 1.14d mac: 00190a16
 D2ObjectsTxt * __stdcall GetObjectTxtRecordFromObject(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe3c);
@@ -1663,6 +1707,7 @@ D2ObjectsTxt * __stdcall GetObjectTxtRecordFromObject(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00190a7e
 D2ShrinesTxt * __stdcall GetShrineTxtRecordFromObject(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe4e);
@@ -1677,6 +1722,7 @@ D2ShrinesTxt * __stdcall GetShrineTxtRecordFromObject(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00190ae7
 void __stdcall SetShrineTxtRecordInObjectData(D2UnitStrc * pUnit, D2ShrinesTxt * pShrinesTxt) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe60);
@@ -1692,6 +1738,7 @@ void __stdcall SetShrineTxtRecordInObjectData(D2UnitStrc * pUnit, D2ShrinesTxt *
     }
 }
 
+// 1.14d mac: 00190b51
 void __stdcall UpdateDirectionAndSpeed(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     if (!pUnit->pPath.pDynamicPath) {
       return;
@@ -1700,6 +1747,7 @@ void __stdcall UpdateDirectionAndSpeed(D2UnitStrc * pUnit, int32_t nX, int32_t n
     PATH::DynamicPath::PATH_SetDirectionToTarget(pUnit->pPath.pDynamicPath, nX, nY, 0);
 }
 
+// 1.14d mac: 00190d10
 static void __stdcall StoreOwnerTypeAndGUID(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nOwnerGUID) {
     if (!pUnit) {
       return;
@@ -1727,6 +1775,7 @@ static void __stdcall StoreOwnerTypeAndGUID(D2UnitStrc * pUnit, eD2UnitType eUni
     pUnit->eUnitFlagsEx |= UNITFLAGEX_STOREOWNERINFO;
 }
 
+// 1.14d mac: 00190cf4
 void __stdcall StoreOwnerInfo(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nOwnerId) {
     StoreOwnerTypeAndGUID(pUnit, eUnitType, nOwnerId);
 }
@@ -1739,6 +1788,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 00190e08
 void __stdcall StoreOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     if (pOwner) {
       StoreOwnerTypeAndGUID(pUnit, pOwner->eUnitType, GetGUIDInline(pOwner));
@@ -1765,6 +1815,7 @@ void __stdcall StoreOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     return;
 }
 
+// 1.14d mac: 00190e99
 void __stdcall StoreLastAttacker(D2UnitStrc * pUnit, D2UnitStrc * pKiller) {
     uint32_t nKillerGUID;
     if (!pUnit) {
@@ -1784,6 +1835,7 @@ void __stdcall StoreLastAttacker(D2UnitStrc * pUnit, D2UnitStrc * pKiller) {
     pUnit->nKillerGUID = 0;
 }
 
+// 1.14d mac: 00190c6d
 int __stdcall GetDirectionToCoords(D2UnitStrc * pUnit, int32_t nNewX, int32_t nNewY) {
     uint32_t nX;
     int32_t nY;
@@ -1809,6 +1861,7 @@ int __stdcall GetDirectionToCoords(D2UnitStrc * pUnit, int32_t nNewX, int32_t nN
     return nX;
 }
 
+// 1.14d mac: 00190f12
 void __stdcall SetOverlay(D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nLayer) {
     if (!((int)nOverlay >= 0 && (int)nOverlay < ITEMS::Items::sgptDataTable->nTxtOverlaySize)) {
       return;
@@ -1825,6 +1878,7 @@ void __stdcall SetOverlay(D2UnitStrc * pUnit, uint32_t nOverlay, int32_t nLayer)
     Unit::ROOM_LinkUnitToUpdateList(pUnit);
 }
 
+// 1.14d mac: 00190fde
 int32_t __stdcall GetBeltType(D2UnitStrc * pUnit) {
     if ((!pUnit || pUnit->eUnitType != UNIT_ITEM) != 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf20);
@@ -1842,6 +1896,7 @@ int32_t __stdcall GetBeltType(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0019107b
 int32_t __stdcall GetCurrentLifePercentage(D2UnitStrc * pUnit) {
     int nCurHp = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0) >> 8;
     int32_t nMaxHp = Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit) >> 8;
@@ -1860,6 +1915,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 001910c5
 BOOL __stdcall IsSoftMonster(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -1871,6 +1927,7 @@ BOOL __stdcall IsSoftMonster(D2UnitStrc * pUnit) {
 
 // Allocates and zero-initialises a D2UnitDataPlayerStrc (0x16C bytes) for pUnit if not already present. For each of the 3 acts, allocates a quest-bit buffer and a waypoint record. Sets the initial portal flags to the Rogue Encampment default and zeroes the trade tick. Halts if pUnit is null or player data already exists. Calls FIELDTBLS_AllocPlayerData_STUB for cube/recipe table setup.
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 00191141
 void __stdcall AllocPlayerData(D2UnitStrc * pUnit) {
     D2BitBufferStrc* pQuestBuf;
     D2WaypointStrc* pWaypoint;
@@ -1906,6 +1963,7 @@ void __stdcall AllocPlayerData(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 00191256
 void __stdcall FreePlayerData(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf6b);
@@ -1936,6 +1994,7 @@ void __stdcall FreePlayerData(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0019132a
 void __stdcall SetNameInPlayerData(D2UnitStrc * pUnit, char * szName) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xf97);
@@ -1971,6 +2030,7 @@ char * __stdcall GetPlayerName(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00191451
 D2UnitDataPlayerStrc * __stdcall GetPlayerData(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfb4);
@@ -2000,6 +2060,7 @@ void __stdcall SetPlayerPortalFlags(D2UnitStrc * pUnit, int32_t nPortalFlags) {
     }
 }
 
+// 1.14d mac: 0019151d
 int32_t __stdcall GetPlayerPortalFlags(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfc9);
@@ -2014,6 +2075,7 @@ int32_t __stdcall GetPlayerPortalFlags(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00191582
 int32_t __stdcall GetNameOffsetFromObject(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfd3);
@@ -2026,6 +2088,7 @@ int32_t __stdcall GetNameOffsetFromObject(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 001915cf
 uint8_t __stdcall GetObjectPortalFlags(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfe4);
@@ -2040,6 +2103,7 @@ uint8_t __stdcall GetObjectPortalFlags(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00191635
 void __stdcall SetObjectPortalFlags(D2UnitStrc * pUnit, uint8_t nPortalFlag) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfef);
@@ -2069,6 +2133,7 @@ BOOL __stdcall CheckObjectPortalFlag(D2UnitStrc * pUnit, uint8_t nPortalFlag) {
     }
 }
 
+// 1.14d mac: 0019169f
 int32_t __stdcall GetOverlayHeight(D2UnitStrc * pUnit) {
     D2MonStats2Txt* pMonStats2Txt;
     int32_t nClassId;
@@ -2103,6 +2168,7 @@ int32_t __stdcall GetOverlayHeight(D2UnitStrc * pUnit) {
 }
 
 // Computes the effective defense rating for a unit. Starts from UNITSTAT_armorclass, adds dex/4, then applies skill_armor_percent and item_armor_percent bonuses. If the unit has the Holy Shield state active and a shield equipped, adds the Holy Shield calc[0] bonus. Applies armor_override_percent on top. Returns total defense; returns at least 0 (negative base is divided, not floored).
+// 1.14d mac: 00191715
 int32_t __stdcall GetDefense(D2UnitStrc * pUnit) {
     int32_t nSkillArmorPct;
     int32_t nItemArmorPct;
@@ -2164,6 +2230,7 @@ static inline int32_t GetToHitFactorInline(D2UnitStrc * pUnit) {
     return pCharStatsTxt->ToHitFactor;
 }
 
+// 1.14d mac: 00191962
 int32_t __stdcall GetAttackRate(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_PLAYER) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x107f);
@@ -2178,6 +2245,7 @@ int32_t __stdcall GetAttackRate(D2UnitStrc * pUnit) {
 }
 
 // Returns 1 if the monster unit is considered to have a shield for block/defense purposes. Hard-codes TRUE for Diablo, DoomKnight, and DiabloClone; FALSE for Wolf. For other monsters, reads the body component slot 7 code, resolves it via MONSTER_GetComponentOverlay, then looks up the item code: returns 1 if the resolved item's wType is 2 (shield base type). Returns 0 on any lookup failure.
+// 1.14d mac: 00191a17
 BOOL __fastcall HasShield(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint32_t gaHasShieldItemCodes[1] = { 0x20686374 }; D2_STATIC_GUARD(gaHasShieldItemCodes, "D2Common::Units::HasShield::gaHasShieldItemCodes");
@@ -2282,6 +2350,7 @@ int32_t __stdcall GetBlockRate(D2UnitStrc * pUnit, BOOL bExpansion) {
     return 0x4b;
 }
 
+// 1.14d mac: 00191e14
 D2UnitStrc * __stdcall GetEquippedWeapon(D2UnitStrc * pUnit) {
     int32_t nBodyLoc;
     BOOL bSwitch;
@@ -2344,6 +2413,7 @@ int32_t __stdcall GetMeleeRange(D2UnitStrc * pUnit) {
 }
 
 // Tests whether the line segment from unit (x,y) with radius size to target (x2,y2) with radius size2 is blocked by room collision. Clamps both radii to 2, computes Manhattan-distance proximity rejection, then adjusts endpoints by the respective radii along the dominant axis before delegating to Collision::TestCollision with the supplied eCollisionFlag. Returns TRUE if a collision is detected.
+// 1.14d mac: 0019203b D2Common::Units::Units::TestCollision
 static BOOL __stdcall TestCollision(int32_t nX1, int32_t nSize2, int32_t nX2, int32_t nY1, int32_t nSize1, int32_t nY2, D2RoomStrc * pRoom, int32_t eCollisionFlag) {
     POINT ptTarget;
     POINT ptUnit;
@@ -2407,6 +2477,7 @@ static BOOL __stdcall TestCollision(int32_t nX1, int32_t nSize2, int32_t nX2, in
     return bCollides;
 }
 
+// 1.14d mac: 00191f80
 BOOL __stdcall TestCollisionByCoordinates(D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t eCollisionFlag) {
     int32_t x;
     int32_t y;
@@ -2442,6 +2513,7 @@ BOOL __stdcall TestCollisionByCoordinates(D2UnitStrc * pUnit, int32_t nX, int32_
     return bCollides;
 }
 
+// 1.14d mac: 0019211f
 BOOL __stdcall TestCollisionWithUnit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t eCollisionFlag) {
     int32_t nX;
     int32_t nY;
@@ -2477,6 +2549,7 @@ BOOL __stdcall TestCollisionWithUnit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, in
 }
 
 // Tests whether two units collide, temporarily suppressing each unit's own collision contribution if its collision type matches the provided eCollisionFlag. Fetches dynamic-path positions for both units, calls PATH_RemoveUnitCollision on each flagged unit, invokes TestCollision with their sizes, then restores collision via PATH_AddUnitCollision. Returns FALSE if either unit is null or has no room.
+// 1.14d mac: 0019228f
 BOOL __stdcall TestCollisionBetweenInteractingUnits(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t eCollisionFlag) {
     int32_t nY;
     int32_t nX2;
@@ -2531,6 +2604,7 @@ BOOL __stdcall TestCollisionBetweenInteractingUnits(D2UnitStrc * pUnit, D2UnitSt
 
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 
+// 1.14d mac: 0019242c
 BOOL __stdcall IsInMeleeRange(D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t nAttackerExtendRange) {
     if (!pTarget || !pUnit) {
       return 0;
@@ -2573,6 +2647,7 @@ static inline eD2PlayerAnimMode GetAnimModeInline(D2UnitStrc * pUnit) {
 }
 
 // Returns TRUE if the unit is currently in a movement animation mode. For players, checks GetAnimOrSeqMode result: modes 2, 3, or 6. For monsters, checks for Walk or Skill3 mode, plus special-cases base ID 0x6E (Oblivion Knight with Decrepify walk). Returns FALSE for missiles (halts) and all other types.
+// 1.14d mac: 0019252b
 BOOL __stdcall IsInMovingMode(D2UnitStrc * pUnit) {
     uint32_t nAnimMode;
     int32_t nLine;
@@ -2618,11 +2693,13 @@ BOOL __stdcall IsInMovingMode(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0019261a
 BOOL __stdcall IsInMovingModeEx(D2UnitStrc * pUnit) {
     BOOL bMoving = IsInMovingMode(pUnit);
     return (uint32_t)(bMoving != 0);
 }
 
+// 1.14d mac: 00192703
 uint32_t __stdcall UNITS_GetHealingCost(D2UnitStrc * nMpDeficit) {
     D2UnitStrc* pUnit = nMpDeficit;
     uint32_t nMaxHp = Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
@@ -2645,6 +2722,7 @@ uint32_t __stdcall UNITS_GetHealingCost(D2UnitStrc * nMpDeficit) {
     return (uint32_t)(nLevel * (nHpLack + nMpLack)) >> 2;
 }
 
+// 1.14d mac: 001927a7
 uint32_t __stdcall GetInventoryGoldLimit(D2UnitStrc * pUnit) {
     int32_t nLevel = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0);
     return nLevel * 10000;
@@ -2657,6 +2735,7 @@ void __stdcall Return(D2UnitStrc * pUnit, int32_t nParam) {
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 00192892
 void __stdcall InitRightSkill(D2UnitStrc * pUnit) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
@@ -2688,6 +2767,7 @@ static inline D2UnitDataPlayerStrc * GetPlayerDataInline(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 00192914
 void __stdcall InitLeftSkill(D2UnitStrc * pUnit) {
     int32_t nOwnerGUID;
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
@@ -2708,6 +2788,7 @@ void __stdcall InitLeftSkill(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 00192996
 void __stdcall InitSwitchRightSkill(D2UnitStrc * pUnit) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
@@ -2725,6 +2806,7 @@ void __stdcall InitSwitchRightSkill(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 00192a32
 void __stdcall InitSwitchLeftSkill(D2UnitStrc * pUnit) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
@@ -2741,6 +2823,7 @@ void __stdcall InitSwitchLeftSkill(D2UnitStrc * pUnit) {
     pPlayerData->nSwitchLeftSkillOwnerGUID = Skills::GetOwnerGUID(pSkill);
 }
 
+// 1.14d mac: 00192ace
 void __stdcall GetRightSkillData(D2UnitStrc * pUnit, eD2Skills * pRightSkillId, int * pRightSkillOwnerGUID) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       *pRightSkillId = SKILL_Attack;
@@ -2758,6 +2841,7 @@ void __stdcall GetRightSkillData(D2UnitStrc * pUnit, eD2Skills * pRightSkillId, 
     *pRightSkillOwnerGUID = pPlayerData->nRightSkillOwnerGUID;
 }
 
+// 1.14d mac: 00192b3b
 void __stdcall GetLeftSkillData(D2UnitStrc * pUnit, eD2Skills * pLeftSkillId, int * pLeftSkillOwnerGUID) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       *pLeftSkillId = SKILL_Attack;
@@ -2775,6 +2859,7 @@ void __stdcall GetLeftSkillData(D2UnitStrc * pUnit, eD2Skills * pLeftSkillId, in
     *pLeftSkillOwnerGUID = pPlayerData->nLeftSkillOwnerGUID;
 }
 
+// 1.14d mac: 00192ba8
 void __stdcall GetSwitchRightSkillDataResetRightSkill(D2UnitStrc * pUnit, eD2Skills * pShiftRightSkillId, int * pShiftRightSkillOwnerGUID) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       *pShiftRightSkillId = SKILL_Attack;
@@ -2796,6 +2881,7 @@ void __stdcall GetSwitchRightSkillDataResetRightSkill(D2UnitStrc * pUnit, eD2Ski
     pPlayerData->eUnknownSkill = SKILL_Attack;
 }
 
+// 1.14d mac: 00192c44
 void __stdcall GetSwitchLeftSkillDataResetLeftSkill(D2UnitStrc * pUnit, eD2Skills * pShiftLeftSkillId, int * pShiftLeftSkillOwnerGUID) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       *pShiftLeftSkillId = SKILL_Attack;
@@ -2817,6 +2903,7 @@ void __stdcall GetSwitchLeftSkillDataResetLeftSkill(D2UnitStrc * pUnit, eD2Skill
     pPlayerData->eUnknownSkill = SKILL_Attack;
 }
 
+// 1.14d mac: 00192ce0
 void __stdcall GetShiftLeftSkillData(D2UnitStrc * pUnit, eD2Skills * pShiftLeftSkillId, int * pShiftLeftSkillOwnerGUID) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       *pShiftLeftSkillId = SKILL_Attack;
@@ -2834,6 +2921,7 @@ void __stdcall GetShiftLeftSkillData(D2UnitStrc * pUnit, eD2Skills * pShiftLeftS
     *pShiftLeftSkillOwnerGUID = pPlayerData->nSwitchLeftSkillOwnerGUID;
 }
 
+// 1.14d mac: 00192d53
 void __stdcall GetShiftRightSkillData(D2UnitStrc * pUnit, eD2Skills * pShiftRightSkillId, int * pShiftRightSkillOwnerGUID) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       *pShiftRightSkillId = SKILL_Attack;
@@ -2851,6 +2939,7 @@ void __stdcall GetShiftRightSkillData(D2UnitStrc * pUnit, eD2Skills * pShiftRigh
     *pShiftRightSkillOwnerGUID = pPlayerData->nSwitchRightSkillOwnerGUID;
 }
 
+// 1.14d mac: 00192dc6
 void __stdcall SetShiftLeftSkillData(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nShiftLeftSkillOwnerGUID) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
@@ -2866,6 +2955,7 @@ void __stdcall SetShiftLeftSkillData(D2UnitStrc * pUnit, eD2Skills eSkill, int32
     pPlayerData->nSwitchLeftSkillOwnerGUID = nShiftLeftSkillOwnerGUID;
 }
 
+// 1.14d mac: 00192e28
 void __stdcall SetShiftRightSkillData(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nShiftRightSkillOwnerGUID) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
@@ -2881,6 +2971,7 @@ void __stdcall SetShiftRightSkillData(D2UnitStrc * pUnit, eD2Skills eSkill, int3
     pPlayerData->nSwitchRightSkillOwnerGUID = nShiftRightSkillOwnerGUID;
 }
 
+// 1.14d mac: 00192e8a
 void __stdcall SetWeaponGUID(D2UnitStrc * pUnit, D2UnitStrc * pWeapon) {
     if (GetTypeInline(pUnit) != UNIT_PLAYER) {
       return;
@@ -2905,6 +2996,7 @@ void __stdcall SetWeaponGUID(D2UnitStrc * pUnit, D2UnitStrc * pWeapon) {
     pPlayerData->nWeaponGUID = 0;
 }
 
+// 1.14d mac: 00192f1a
 int32_t __stdcall GetWeaponGUID(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfb4);
@@ -2922,10 +3014,12 @@ int32_t __stdcall GetWeaponGUID(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00192f65
 uint32_t __stdcall GetStashGoldLimit(D2UnitStrc * pUnit) {
     return 2500000;
 }
 
+// 1.14d mac: 00192f6f
 BOOL __fastcall CanSwitchAI(int32_t nMonsterId) {
     D2MonStatsTxt* pMonStats = nMonsterId >= 0 && nMonsterId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterId : nullptr;
     if (!pMonStats) {
@@ -2943,6 +3037,7 @@ BOOL __fastcall CanSwitchAI(int32_t nMonsterId) {
     return (uint32_t)((pMonStats->aFlagBytes[2] & (uint8_t)Fog::BitBuffer::gadwBitMasks[0]) != 0);
 }
 
+// 1.14d mac: 0019300a
 void __fastcall SetTimerArg(D2UnitStrc * pUnit, D2TimerArgStrc * pTimerArg) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x150b);
@@ -2952,6 +3047,7 @@ void __fastcall SetTimerArg(D2UnitStrc * pUnit, D2TimerArgStrc * pTimerArg) {
     pUnit->uSideData.pServerSide.pTimerArgs = pTimerArg;
 }
 
+// 1.14d mac: 0019304d
 D2TimerArgStrc * __fastcall GetTimerArg(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1513);
@@ -2962,6 +3058,7 @@ D2TimerArgStrc * __fastcall GetTimerArg(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 0019308b
 void __stdcall AllocStaticPath(D2UnitStrc * pUnit) {
     if (pUnit->pPath.pStaticPath) {
       return;
@@ -2973,6 +3070,7 @@ void __stdcall AllocStaticPath(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 001930e7
 void __stdcall FreeStaticPath(D2UnitStrc * pUnit) {
     if (!pUnit->pPath.pStaticPath) {
       return;
@@ -2981,6 +3079,7 @@ void __stdcall FreeStaticPath(D2UnitStrc * pUnit) {
     D2_FREE_POOL_AT(pUnit->pMemory, pUnit->pPath.pStaticPath, ".\\UNITS\\Units.cpp", 0x152b);
 }
 
+// 1.14d mac: 001906f3
 BOOL __stdcall CanDualWield(D2UnitStrc * pUnit) {
     eD2UnitType eUnitType;
     int32_t nClassId;
@@ -3016,6 +3115,7 @@ BOOL __stdcall CanDualWield(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0019312b
 BOOL __stdcall IsCorpseUseable(D2UnitStrc * pUnit) {
     int _bHasPassiveState;
     bool bHasPassiveState;
@@ -3042,6 +3142,7 @@ BOOL __stdcall IsCorpseUseable(D2UnitStrc * pUnit) {
 }
 
 // Returns TRUE if pUnit is close enough to interact with object pObject. pObject must be UNIT_OBJECT or returns FALSE. Returns TRUE immediately if distance is 0. Otherwise compares both units' world positions (static or dynamic path), centering the object by its X/Y size, and tests against a +/-1 or +/-2 tile bounding box depending on whether the object has a positive footprint and on the unit's own X size. Pure geometric range check; no side effects.
+// 1.14d mac: 001931c8
 BOOL __stdcall IsObjectInInteractRange(D2UnitStrc * pUnit, D2UnitStrc * pObject) {
     int nObjX;
     bool bSignedGreater;
@@ -3153,6 +3254,7 @@ BOOL __stdcall IsObjectInInteractRange(D2UnitStrc * pUnit, D2UnitStrc * pObject)
     return 0;
 }
 
+// 1.14d mac: 0018f0f4 D2Common::Units::Units::RemoveCollision_Vector
 void __stdcall RemoveCollision_Vector(D2UnitStrc * pUnit) {
     int32_t nY;
     int32_t nX;
@@ -3179,6 +3281,7 @@ void __stdcall RemoveCollision_Vector(D2UnitStrc * pUnit) {
 }
 
 // Returns the current facing direction (0–15) for a unit based on its path. For objects/portals uses the static path position; for units with a dynamic path, compares current XY to the next-step waypoint (SP1). If both X and Y match (unit is at its next waypoint), falls back to DynamicPath::UpdateDirection. Otherwise calls GetDirectionToCoords toward the next SP1 position.
+// 1.14d mac: 00190b84
 uint8_t __stdcall PATH_GetCurrentDirection(D2UnitStrc * pUnit) {
     uint32_t nCurPos;
     if (!pUnit) {
@@ -3220,6 +3323,7 @@ uint8_t __stdcall PATH_GetCurrentDirection(D2UnitStrc * pUnit) {
 }
 
 // Returns the active weapon unit for a dual-wield-capable player, taking the current skill's weapsel field into account. weapsel 1=right hand, 2=skill-flag-driven left/right selection, 3=animation-frame-driven slot, 4=no weapon. Falls back to the default equipped weapon when the unit cannot dual-wield or the skill txt is missing. Returns NULL if no valid non-broken weapon is found.
+// 1.14d mac: 00191c27
 D2UnitStrc * __stdcall GetWeaponBySkill(D2UnitStrc * pUnit, int32_t nParam) {
     D2UnitStrc* pRightHandItem;
     uint32_t nWeaponSlot;
@@ -3310,6 +3414,7 @@ D2UnitStrc * __stdcall GetWeaponBySkill(D2UnitStrc * pUnit, int32_t nParam) {
 
 // Returns the weapon animation-class field used to drive a player unit's attack/cast animation selection. Resolves the unit's effective type/class/anim-mode through SKILLS_GetStateTransformGfx (handling shape-shift transforms). Only meaningful for players in Attack1/Attack2 or (when dual-wield capable) Skill3/Skill4 modes: fetches the relevant weapon via GetWeaponBySkill, reads its weapon anim class (ITEM_GetWeaponAnimClass), and indexes gdwUnitStrucFieldMask by (transformed-class * 7 + animclass) to return the field mask/value. Returns 0 for non-players or other modes. pUnit = the unit being animated.
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 0018f770
 uint32_t __stdcall UNITS_GetFrameBonus(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint32_t gaClassWeaponFrameBonus[98] = {
@@ -3466,6 +3571,7 @@ uint32_t __stdcall UNITS_GetFrameBonus(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00192638
 uint32_t __fastcall GetHitClassForPlayerOrMonster(D2UnitStrc * pUnit) {
     D2UnitStrc* pWeapon;
     if (!pUnit) {
@@ -3493,6 +3599,7 @@ uint32_t __fastcall GetHitClassForPlayerOrMonster(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 001926d2
 uint32_t __fastcall GetWeaponClass(D2UnitStrc * pUnit) {
     D2UnitStrc* pWeapon = GetWeaponBySkill(pUnit, 1);
     if (pWeapon) {
@@ -3505,6 +3612,7 @@ uint32_t __fastcall GetWeaponClass(D2UnitStrc * pUnit) {
 }
 
 // Activates/deactivates item stat lists for dual-wield players based on the skill currently being cast (nParam). Calls GetWeaponBySkill to determine the active weapon, compares it to the equipped weapon, and calls STATLIST_SetItemStatActive to mark the correct weapon's stat list active (1) and the other inactive (0). No-ops if the unit cannot dual-wield.
+// 1.14d mac: 0019061f
 void __stdcall UpdateDualWieldStats(D2UnitStrc * pUnit, int32_t nParam) {
     D2UnitStrc* pPrimaryWeapon;
     BOOL bCanDualWield = CanDualWield(pUnit);
@@ -3552,6 +3660,7 @@ void __stdcall UpdateDualWieldStats(D2UnitStrc * pUnit, int32_t nParam) {
 }
 
 // Returns the visual component index for an item equipped on a unit. For arm-slot items (L_ARM/R_ARM), checks both arm slots for non-broken items; if both slots are occupied with one-handed weapons and the unit can dual-wield, returns component 6 for the secondary weapon. Falls back to ITEM_GetItemsTxt_bComponent for the default component from ItemsTxt.
+// 1.14d mac: 001927d3
 uint8_t __stdcall GetItemComponent(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     D2UnitStrc* pLeftArmItem;
     BOOL bNotBroken;
@@ -3667,6 +3776,7 @@ void __stdcall AdvanceAnimFrame(D2UnitStrc * pUnit) {
 
 // Recomputes a unit's animation speed (nAnimSpeed / nSeqAnimSpeed) and movement velocities for its current anim mode. Resolves the effective composite anim-mode/class via SKILLS_GetStateTransformGfx + SetAnimData, then branches per mode: sequence-transition uses FRW-diminished rate; Block/TownWalk applies FBR (+holy shield bonus); GetHit/Run apply FHR; KnockBack/Skill1 use fixed frame time + 0x1000 velocity; walk modes scale base walk velocity by velocitypercent and set dynamic-path velocities; attack modes combine attackrate, dual-wield averaging of both weapon attackrates, sequence penalty, and SKILL_CalcAttackFrames. All speeds clamped to [.. ,0x7FFF]. Pure recompute on pUnit fields; szFile/nLine are caller source-location for sub-calls. No-op if pUnit null or eUnitType>4 / ==missile.
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 0018f95b
 void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine) {
     int32_t nFastStat;
     uint32_t bAnimatesAtFrameEnd;
@@ -3892,6 +4002,7 @@ void __stdcall UpdateAnimSpeed(D2UnitStrc * pUnit, char * szFile, int32_t nLine)
 
 // Initializes a unit's animation playback state when its eAnimMode changes. Resets action frame, computes the weapon anim class into the high byte of nGfxCurrentFrame, applies state-transform gfx overrides (SKILLS_GetStateTransformGfx), then branches by eUnitType: PLAYER/MONSTER set up the sequence (InitializeSequence for the special death/sequence mode, else clear pAnimSeq and derive nFrameCount from the anim-data hash table) and recompute anim speed (UpdateAnimSpeed); OBJECT reads FrameCnt/FrameDelta/Start from Objects.txt and randomizes speed unless Sync; MISSILE derives anim speed from Missiles.txt animrate (fixed-point) and frame count from AnimLen; ITEM sets fixed speeds/frame counts for drop/ground modes. Halts via ERROR_UnrecoverableInternalError on null unit or bad object mode. Returns 1 normally.
 // @sourcefile .\UNITS\Units.cpp
+// 1.14d mac: 0018f4a4
 void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
     int nWeaponAnimClass;
     BOOL bIsShapeshifted;
@@ -4018,6 +4129,7 @@ void __stdcall InitAnimMode(D2UnitStrc * pUnitArg) {
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
+// 1.14d mac: 0019007b
 int32_t __stdcall ChangeAnimMode(D2UnitStrc * pUnit, int32_t nMode) {
     if (pUnit && pUnit->eUnitType != UNIT_WARP) {
       if (pUnit->eAnimMode.ePlayerMode != nMode) {

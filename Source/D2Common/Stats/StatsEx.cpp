@@ -107,6 +107,7 @@ static int32_t __stdcall STATLIST_BinarySearchStatInfoArray(int32_t nStatKey, D2
     return nLo;
 }
 
+// 1.14d mac: 00195cde
 static D2StatStrc * __stdcall STATLIST_InsertStatIntoArray(D2StatInfoStrc * pStatInfo, int32_t nStatKey, D2PoolManagerStrc * pStatList) {
     D2StatStrc* pReallocBuf;
     int32_t nInsertPos = STATLIST_BinarySearchInsertPos(nStatKey, pStatInfo);
@@ -129,6 +130,7 @@ static D2StatStrc * __stdcall STATLIST_InsertStatIntoArray(D2StatInfoStrc * pSta
     return pReallocBuf;
 }
 
+// 1.14d mac: 00195deb
 static void __stdcall STATLIST_RemoveStatFromArray(D2PoolManagerStrc * pPoolManager1, D2StatStrc * pStat, D2PoolManagerStrc * pPoolManager2, D2StatInfoStrc * ppStatArray) {
     int nCount = (int)ppStatArray->wStatCount;
     int nRemoveIdx = (int)(pStat - ppStatArray->pStatInfo);
@@ -169,6 +171,7 @@ static int32_t STATLIST_BinarySearchChangedInsertPos(D2ChangedStatArrayStrc * pS
 }
 
 // Records a changed stat into the D2StatListExStrc dirty-tracking array so it can be saved later. Guards: only runs if the stat-list has the dirty-tracking flag (bit 31), skips volatile stats (hp/mana/stamina/exp/gold), skips stats not in ItemStatCost or lacking the SAVED flag. Finds the sorted insertion position via binary search; if the changed-stat array is full, reallocates it (+4 slots via Fog ReAllocServerMemory). Shifts existing entries and inserts the shifted-stat id, then increments wCount.
+// 1.14d mac: 00195e9c
 static void __stdcall STATLIST_TrackChangedStat(int32_t nShiftedStat, D2StatListExStrc * pStatEx) {
     if (!(pStatEx->sStatList.nFlags & 0x80000000U)) {
       return;
@@ -394,6 +397,7 @@ static void __stdcall STATLIST_SetFullStatValue(int32_t nStatKey, int32_t nNewVa
 }
 
 // Allocates a simple D2StatListStrc (60 bytes). Used for child stat lists (item bonuses, buff overlays, aura effects). Does NOT allocate the extended fields (full stats, state flags).
+// 1.14d mac: 00195797
 D2StatListStrc * __stdcall AllocStatList(D2PoolManagerStrc * pMemory, int32_t nFlags, int32_t nFrame, eD2UnitType eUnitType, int32_t dwUnitGUID) {
     D2StatListStrc* pNewStatList = D2_NEW_POOL_AT(pMemory, D2StatListStrc, ".\\Stats\\StatsEx.cpp", 0x56a);
     memset(pNewStatList, 0, sizeof(D2StatListStrc));
@@ -440,6 +444,7 @@ int32_t __stdcall GetOwnerGUID(D2StatListExStrc * pStatList) {
     return pStatList->sStatList.nOwnerGUID;
 }
 
+// 1.14d mac: 0019593e D2Common::Stats::StatsEx::SetState
 void __stdcall SetState(D2StatListExStrc * pStatsEx, eD2States eState) {
     if (!pStatsEx) {
       return;
@@ -448,6 +453,7 @@ void __stdcall SetState(D2StatListExStrc * pStatsEx, eD2States eState) {
     pStatsEx->sStatList.eState = eState;
 }
 
+// 1.14d mac: 00195950
 eD2States __stdcall GetState(D2StatListExStrc * pStatList) {
     if (!pStatList) {
       return STATE_none;
@@ -456,6 +462,7 @@ eD2States __stdcall GetState(D2StatListExStrc * pStatList) {
     return pStatList->sStatList.eState;
 }
 
+// 1.14d mac: 00195963
 void __stdcall SetTimeout_WithFlag(D2StatListExStrc * pStatList, int32_t nTimeout) {
     if (!pStatList) {
       return;
@@ -467,6 +474,7 @@ void __stdcall SetTimeout_WithFlag(D2StatListExStrc * pStatList, int32_t nTimeou
     pStatList->sStatList.nTimeout = nTimeout;
 }
 
+// 1.14d mac: 0019597d
 int __stdcall STATLIST_GetExpireFrame(D2StatListExStrc * pStatList) {
     if (!pStatList) {
       return 0;
@@ -475,6 +483,7 @@ int __stdcall STATLIST_GetExpireFrame(D2StatListExStrc * pStatList) {
     return pStatList->sStatList.nTimeout;
 }
 
+// 1.14d mac: 001962ab
 int32_t __stdcall STATLIST_GetStatFromBaseArray(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint16_t nLayer) {
     if (!pStatList) {
       return 0;
@@ -489,6 +498,7 @@ int32_t __stdcall STATLIST_GetStatFromBaseArray(D2StatListExStrc * pStatList, eD
     return nStatValue;
 }
 
+// 1.14d mac: 001948e4
 int32_t __stdcall SERVER_GetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nLayer) {
     if (!pUnit) {
       return 0;
@@ -506,6 +516,7 @@ int32_t __stdcall SERVER_GetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, 
     return nStatValue;
 }
 
+// 1.14d mac: 001963a1
 int32_t __stdcall STATLIST_GetStatValueByIdAndLayer(D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, uint16_t nLayer) {
     if (!pStatsEx) {
       return 0;
@@ -522,6 +533,7 @@ int32_t __stdcall STATLIST_GetStatValueByIdAndLayer(D2StatListExStrc * pStatsEx,
 
 // Returns unsigned stat value for the given stat ID and layer from the unit's D2StatListExStrc. Uses ItemStatCost.txt minimum/shifted calculation.
 // @blizzard StatsGetCurrentStat
+// 1.14d mac: 001949e8
 int __stdcall STATSEX_GetCurrentStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint16_t nLayer) {
     if (!pUnit) {
       return 0;
@@ -539,6 +551,7 @@ int __stdcall STATSEX_GetCurrentStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, 
     return nValue;
 }
 
+// 1.14d mac: 001964b3
 int32_t __stdcall thunk_STATLIST_GetStatFromBaseArray(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nLayer) {
     int32_t nStatValue = STATLIST_GetStatFromBaseArray(pStatList, eUnitStat, (uint16_t)nLayer);
     return nStatValue;
@@ -549,11 +562,13 @@ int32_t __stdcall thunk_STATLIST_GetMinimalStatValueShifted(D2StatListExStrc * p
     return nResult;
 }
 
+// 1.14d mac: 001964bd
 int32_t __stdcall STATLIST_UnitGetStatValueUnchecked(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nLayer) {
     int32_t nStatValue = STATLIST_GetStatValueByIdAndLayer(pUnit->pStatsEx, eUnitStat, (uint16_t)nLayer);
     return nStatValue;
 }
 
+// 1.14d mac: 001964e5
 int __stdcall STATLIST_GetStatBonusFromList(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nLayer) {
     if (!pStatList) {
       return 0;
@@ -564,6 +579,7 @@ int __stdcall STATLIST_GetStatBonusFromList(D2StatListExStrc * pStatList, eD2Uni
     return nMinShifted - nBaseValue;
 }
 
+// 1.14d mac: 00196534
 int32_t __stdcall STATLIST_GetStatBonusFromLists(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, uint32_t nLayer) {
     D2StatListExStrc* pStatsEx = pUnit->pStatsEx;
     if (!pStatsEx) {
@@ -609,6 +625,7 @@ int32_t __stdcall STATLIST_GetStatValueByIndex(D2StatListExStrc * pStatList, int
     return pStatList->sStatList.sBaseStats.pStatInfo[nIndex].nStatValue;
 }
 
+// 1.14d mac: 0019661e
 D2StatListExStrc * __stdcall GetStatListByState(D2StatListExStrc * pStatsEx, eD2States eState) {
     D2StatListExStrc* pCurList;
     if (!pStatsEx) {
@@ -637,6 +654,7 @@ D2StatListExStrc * __stdcall GetStatListByState(D2StatListExStrc * pStatsEx, eD2
     return nullptr;
 }
 
+// 1.14d mac: 00196661
 D2StatListExStrc * __stdcall GetStatsByState(D2UnitStrc * pUnit, eD2States eState) {
     D2StatListExStrc* pStatsEx = pUnit->pStatsEx;
     if (!pStatsEx) {
@@ -650,6 +668,7 @@ D2StatListExStrc * __stdcall GetStatsByState(D2UnitStrc * pUnit, eD2States eStat
     return pStatsEx;
 }
 
+// 1.14d mac: 0019668f
 D2StatListExStrc * __stdcall GetStatListByFlags(D2StatListExStrc * pStatsEx, uint32_t nStatListFlags) {
     if (!pStatsEx) {
       return nullptr;
@@ -672,6 +691,7 @@ D2StatListExStrc * __stdcall GetStatListByFlags(D2StatListExStrc * pStatsEx, uin
     return nullptr;
 }
 
+// 1.14d mac: 001966c9
 D2StatListExStrc * __stdcall STATLIST_FindStatListWithFlags(D2StatListExStrc * pStatList, uint32_t nFlags) {
     D2StatListExStrc* pCurList;
     if (!pStatList) {
@@ -687,6 +707,7 @@ D2StatListExStrc * __stdcall STATLIST_FindStatListWithFlags(D2StatListExStrc * p
     return nullptr;
 }
 
+// 1.14d mac: 001966ed
 D2StatListExStrc * __stdcall GetStatsByFlags(D2UnitStrc * pUnit, uint32_t nStatListFlags) {
     D2StatListExStrc* pStatsEx = pUnit->pStatsEx;
     if (!pStatsEx) {
@@ -700,6 +721,7 @@ D2StatListExStrc * __stdcall GetStatsByFlags(D2UnitStrc * pUnit, uint32_t nStatL
     return pStatsEx;
 }
 
+// 1.14d mac: 0019671b
 D2StatListExStrc * __stdcall GetStatListByStateOrFlagsIfNotExists(D2UnitStrc * pUnit, eD2States eState, uint32_t nStatListFlags) {
     D2StatListExStrc* pStatListEx = pUnit->pStatsEx;
     if (!pStatListEx) {
@@ -717,6 +739,7 @@ D2StatListExStrc * __stdcall GetStatListByStateOrFlagsIfNotExists(D2UnitStrc * p
     return pStatListEx;
 }
 
+// 1.14d mac: 0019675e
 D2StatListExStrc * __stdcall GetStatList(D2UnitStrc * pUnit, eD2States eState, uint32_t eStatListFlags) {
     D2StatListExStrc* pStatsEx = pUnit->pStatsEx;
     if (!(pStatsEx && pStatsEx->sStatList.nFlags & 0x80000000U)) {
@@ -743,6 +766,7 @@ D2StatListExStrc * __stdcall GetStatList(D2UnitStrc * pUnit, eD2States eState, u
     return nullptr;
 }
 
+// 1.14d mac: 00196a55
 D2UnitStrc * __stdcall SEVER_ITEM_GetOwner(D2UnitStrc * pUnit, uint32_t * pbStatNotDynamic) {
     D2StatListExStrc* pStatsEx;
     if (pUnit) {
@@ -767,6 +791,7 @@ D2UnitStrc * __stdcall SEVER_ITEM_GetOwner(D2UnitStrc * pUnit, uint32_t * pbStat
 }
 
 // For a unit whose StatsEx has the root flag, binary-searches the changed-stat list for eUnitStat. If not found in the changed set, binary-searches the base stat array and invokes pParam as a callback(nStatValue, pUnit2) with the current unchanged stat value.
+// 1.14d mac: 00196a9b
 void __stdcall STATLIST_DispatchUnchangedStatToCallback(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eD2UnitStat eUnitStat, pfnStatChangedCb pfnCallback) {
     if (!pUnit) {
       return;
@@ -793,6 +818,7 @@ void __stdcall STATLIST_DispatchUnchangedStatToCallback(D2UnitStrc * pUnit, D2Un
 }
 
 // Iterates all changed-stat IDs in pUnit's StatsEx, binary-searches each into the base stat array to get the current value, and invokes pParam as a callback(nStatValue, pUnit2) for each. Only runs if pUnit has a root StatsEx with at least one changed stat.
+// 1.14d mac: 00196b63
 void __stdcall STATLIST_IterateChangedStats(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, pfnStatChangedCb pfnCallback) {
     int32_t nStatKey;
     long int nStatIdx;
@@ -829,6 +855,7 @@ void __stdcall STATLIST_IterateChangedStats(D2UnitStrc * pUnit, D2UnitStrc * pUn
     } while (nChangedIdx < pDVar2->sChangedStats.wCount);
 }
 
+// 1.14d mac: 00196c48
 void __stdcall STATLIST_ClearChangedStatFlags(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;
@@ -850,6 +877,7 @@ void __stdcall STATLIST_ClearChangedStatFlags(D2UnitStrc * pUnit) {
 }
 
 // @blizzard StatsGetAlignment
+// 1.14d mac: 00196cac
 int32_t __stdcall STATSEX_GetAlignment(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -870,6 +898,7 @@ int32_t __stdcall STATSEX_GetAlignment(D2UnitStrc * pUnit) {
     return 2;
 }
 
+// 1.14d mac: 00196d0c
 void __stdcall STATLIST_SetOverlayPending(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->pStatsEx)) {
       return;
@@ -879,6 +908,7 @@ void __stdcall STATLIST_SetOverlayPending(D2UnitStrc * pUnit) {
     *pnStatListFlags |= 0x100;
 }
 
+// 1.14d mac: 00196d23
 uint32_t __stdcall STATLIST_IsOverlayPending(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -890,6 +920,7 @@ uint32_t __stdcall STATLIST_IsOverlayPending(D2UnitStrc * pUnit) {
     return (uint32_t)pUnit->pStatsEx->sStatList.nFlags >> 8 & 1;
 }
 
+// 1.14d mac: 00196d41
 int32_t __stdcall STATLIST_GetStatByState(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat) {
     int32_t nStatValue = STATLIST_GetStatValueByIdAndLayer(pStatList, eUnitStat, 0);
     return nStatValue;
@@ -946,6 +977,7 @@ void __stdcall STATLIST_SetUnitState(D2UnitStrc * pUnit, eD2States eState, int32
     }
 }
 
+// 1.14d mac: 00196ee3
 eD2States __stdcall GetStateBitFlag(D2UnitStrc * pUnit, eD2States eState) {
     if (!pUnit) {
       return STATE_none;
@@ -959,6 +991,7 @@ eD2States __stdcall GetStateBitFlag(D2UnitStrc * pUnit, eD2States eState) {
     return pStatList->pStateFlags[(int)eState >> 5] & Fog::BitBuffer::gadwBitMasks[eState & STATE_venomclaws];
 }
 
+// 1.14d mac: 00196f20
 int * __stdcall GetStateFlags(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return nullptr;
@@ -975,6 +1008,7 @@ int * __stdcall GetStateFlags(D2UnitStrc * pUnit) {
     return pStatsEx->pStateFlags;
 }
 
+// 1.14d mac: 00196f3e
 int * __stdcall STATLIST_GetUnitGfxFlags(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return nullptr;
@@ -1021,6 +1055,7 @@ int32_t __stdcall STATLIST_CopyStatsToBuffer(D2UnitStrc * pUnit, D2StatStrc * pS
     return nCopyCount;
 }
 
+// 1.14d mac: 00197066
 int32_t __stdcall CopyStatsToBuffer(D2StatListExStrc * pStatListEx, D2StatStrc * pOutput, int32_t nOutputSize) {
     if (!pStatListEx) {
       return 0;
@@ -1042,6 +1077,7 @@ int32_t __stdcall CopyStatsToBuffer(D2StatListExStrc * pStatListEx, D2StatStrc *
     return nStatsCount;
 }
 
+// 1.14d mac: 001970f8
 void __stdcall STATLIST_SetExpireFunction(D2StatListExStrc * pStatsEx, PFN_StatExpireCallback pfnExpire) {
     if (!pStatsEx) {
       return;
@@ -1050,11 +1086,13 @@ void __stdcall STATLIST_SetExpireFunction(D2StatListExStrc * pStatsEx, PFN_StatE
     pStatsEx->sStatList.fpExpire = pfnExpire;
 }
 
+// 1.14d mac: 001975a3
 int __stdcall STATLIST_GetBaseStatValue(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, uint32_t nLayer) {
     int32_t nResult = STATLIST_GetStatFromBaseArray(pStatList, eUnitStat, (uint16_t)nLayer);
     return nResult;
 }
 
+// 1.14d mac: 001972ef
 int32_t __stdcall STATLIST_GetMaxLifeFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -1067,6 +1105,7 @@ int32_t __stdcall STATLIST_GetMaxLifeFromUnit(D2UnitStrc * pUnit) {
     return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x70000, pCostLine);
 }
 
+// 1.14d mac: 001972c9
 int32_t __stdcall STATLIST_GetMaxManaFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -1079,6 +1118,7 @@ int32_t __stdcall STATLIST_GetMaxManaFromUnit(D2UnitStrc * pUnit) {
     return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x90000, pCostLine);
 }
 
+// 1.14d mac: 001972a3
 int32_t __stdcall STATLIST_GetMaxStaminaFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -1091,6 +1131,7 @@ int32_t __stdcall STATLIST_GetMaxStaminaFromUnit(D2UnitStrc * pUnit) {
     return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0xb0000, pCostLine);
 }
 
+// 1.14d mac: 001975ac
 int32_t __stdcall STATLIST_GetMaxDurabilityFromUnit(D2UnitStrc * pUnit) {
     D2ItemStatCostTxt* pItemStatCostLine = nullptr;
     if (pUnit && ITEMS::Items::sgptDataTable->nTxtItemStatCostSize > 0x49) {
@@ -1120,6 +1161,7 @@ int32_t __stdcall STATLIST_GetMaxDurabilityFromUnit(D2UnitStrc * pUnit) {
     return nMaxDurability;
 }
 
+// 1.14d mac: 001975f4
 int32_t __stdcall STATLIST_GetMaxDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage) {
     if (bCheckSecondaryDamage) {
       if (!pUnit) {
@@ -1143,6 +1185,7 @@ int32_t __stdcall STATLIST_GetMaxDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckS
     return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x160000, pCostLine);
 }
 
+// 1.14d mac: 00197635
 int32_t __stdcall STATLIST_GetMinDamageFromUnit(D2UnitStrc * pUnit, BOOL bCheckSecondaryDamage) {
     if (bCheckSecondaryDamage) {
       if (!pUnit) {
@@ -1190,6 +1233,7 @@ int32_t __stdcall STATLIST_GetMinThrowDamageFromUnit(D2UnitStrc * pUnit) {
     return STATLIST_GetStatValueByKey(pUnit->pStatsEx, 0x9f0000, pCostLine);
 }
 
+// 1.14d mac: 00197676
 int32_t __stdcall STATLIST_GetDefenseFromUnit(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -1207,6 +1251,7 @@ int32_t __stdcall STATLIST_GetStatForDamageCalc(D2UnitStrc * pUnit2, D2UnitStrc 
     return nStatValue;
 }
 
+// 1.14d mac: 001976ea
 int __stdcall STATLIST_GetFullListPtr(D2StatListExStrc * pStatList) {
     if (!pStatList) {
       return 0;
@@ -1215,6 +1260,7 @@ int __stdcall STATLIST_GetFullListPtr(D2StatListExStrc * pStatList) {
     return pStatList->sStatList.nTimeout;
 }
 
+// 1.14d mac: 001976fd
 void __stdcall STATSEX_SetStatListTimeout(D2StatListExStrc * pStatList, int32_t nTimeout) {
     if (!pStatList) {
       return;
@@ -1226,22 +1272,27 @@ void __stdcall STATSEX_SetStatListTimeout(D2StatListExStrc * pStatList, int32_t 
     pStatList->sStatList.nTimeout = nTimeout;
 }
 
+// 1.14d mac: 00197717
 void __stdcall SetSkillId(D2StatListExStrc * pStatsEx, eD2Skills eSkill) {
     pStatsEx->sStatList.eSkill = eSkill;
 }
 
+// 1.14d mac: 00197725 D2Common::Stats::StatsEx::GetSkillId
 eD2Skills __stdcall GetSkillId(D2StatListExStrc * pStatList) {
     return pStatList->sStatList.eSkill;
 }
 
+// 1.14d mac: 00197730
 void __stdcall SetSkillLevel(D2StatListExStrc * pStatsEx, int32_t nSkillLevel) {
     pStatsEx->sStatList.nSkillLevel = nSkillLevel;
 }
 
+// 1.14d mac: 0019773e D2Common::Stats::StatsEx::GetSkillLevel
 int __stdcall GetSkillLevel(D2StatListExStrc * pStatListEx) {
     return pStatListEx->sStatList.nSkillLevel;
 }
 
+// 1.14d mac: 0019776c
 static int __stdcall STATLIST_CopyStatPairsByStatIndex(D2StatStrc * pOutStatPairs, uint32_t nStatId, int32_t nMaxCount, D2StatListExStrc * pStatList) {
     if (!pStatList) {
       return 0;
@@ -1280,11 +1331,13 @@ static int __stdcall STATLIST_CopyStatPairsByStatIndex(D2StatStrc * pOutStatPair
     return iVar1;
 }
 
+// 1.14d mac: 00197749
 int32_t __stdcall STATSEX_CopyStatPairsFromStatList(D2StatListExStrc * nStatListPtr, uint32_t nStatId, D2StatStrc * pOutStatPairs, int32_t nMaxCount) {
     int nCopied = STATLIST_CopyStatPairsByStatIndex(pOutStatPairs, nStatId, nMaxCount, nStatListPtr);
     return nCopied;
 }
 
+// 1.14d mac: 00197815
 int32_t __stdcall STATLIST_GetItemStatBonusValues(D2UnitStrc * pItem, uint32_t nStatIndex, D2StatStrc * pOutStatPairs, int32_t nMaxCount) {
     D2StatListExStrc* pStatsEx = pItem->pStatsEx;
     if (!pStatsEx) {
@@ -1299,6 +1352,7 @@ int32_t __stdcall STATLIST_GetItemStatBonusValues(D2UnitStrc * pItem, uint32_t n
 }
 
 // Calculates the combined value of a stat for a D2StatListExStrc, including all ItemStatCost formula operations (op types 1-13). Reads base value from CalcFullStatFromChildren, then applies complex stat formulas involving other stats, character class bonuses, and time-of-day modifiers.
+// 1.14d mac: 00193e18
 int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, int32_t nStatShifted) {
     int32_t nBaseValue;
     int32_t nBaseStatLookup;
@@ -1546,6 +1600,7 @@ int32_t __fastcall STATLIST_CalcCombinedStatValue(D2StatListExStrc * pStatList, 
 }
 
 // Recursively computes and stores an item-stat-cost stat value that has dependent/related stats (op formula). pStatList=stat list, nParam=stat id packed in high word, pItemStatCostStat=pointer into the ItemStatCost record for this stat, pUnitOwner=owner. First computes the combined base value; if the stat has no related-stats flag (offset+0x51==0) it just stores and returns. Otherwise it recurses over up to 3 related stats, and per the itemstatcost.txt "op" column (byte at +0x2a, enum eD2ItemStatOp) decides whether the owner/attached unit qualifies; if all related contributions are zero it then propagates the value to a secondary list of up to 0x40 stats. Returns the stat value. Mutates stat-list entries via STATLIST_SetFullStatValue.
+// 1.14d mac: 00194b08
 int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList, int32_t nStatKey, D2ItemStatCostTxt * pItemStatCostStat, D2UnitStrc * pUnitOwner) {
     uint32_t nRelatedStatIdx;
     int32_t nRelatedVal;
@@ -1678,6 +1733,7 @@ int32_t __fastcall STATLIST_ApplyComplexStatFormula(D2StatListExStrc * pStatList
 }
 
 // Propagates a stat change delta up the parent chain. For each parent D2StatListExStrc, updates the full stat array via PropagateStatDelta or ApplyComplexStatFormula. Stops propagation at inactive (0x2000) or NOCALCBONUS (0x40000000) boundaries.
+// 1.14d mac: 001951b0
 void __fastcall STATLIST_PropagateStatChange(D2StatListExStrc * pStatsEx, int32_t nShiftedStat, int32_t nDelta, D2UnitStrc * pUnit) {
     if (!nDelta) {
       return;
@@ -1720,6 +1776,7 @@ void __fastcall STATLIST_PropagateStatChange(D2StatListExStrc * pStatsEx, int32_
 }
 
 // Detaches a stat list (e.g. an item's or a state's contribution) from its parent unit's stat tree and rolls back its effect. Unlinks the node from parent active/inactive heads and the sibling prev/next chain, clears its attached unit. Unless the list is flagged ephemeral (0x2000): re-applies any Op4/Op5-dependent complex stat formulas, then propagates the negation of each of its (base or full) stats up to the parent via STATLIST_PropagateStatChange (skipping damage-related stats when the 0x40000000 flag is set), and finally invokes the list's fpExpire callback if it had an attached unit. Pure side-effect on the stat tree; no return.
+// 1.14d mac: 00195391
 void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
     D2StatStrc* nOp45StatCount;
     D2StatInfoStrc* pEffectiveStatsArr;
@@ -1829,6 +1886,7 @@ void __stdcall STATLIST_DetachAndRecalc(D2StatListExStrc * pStatListEx) {
 }
 
 // Detaches pStatsEx from its parent (STATLIST_DetachAndRecalc), then frees all associated memory: base stat array, full-stat array, changed-stat ID array, state flags, and recursively frees non-root child stat lists. Finally frees the D2StatListExStrc itself.
+// 1.14d mac: 00195634
 void __fastcall FreeAnyStatList(D2StatListExStrc * pPlayerStatsEx) {
     D2StatListExStrc* pChildNext;
     D2StatListExStrc* pChildStatsEx;
@@ -1870,6 +1928,7 @@ void __fastcall FreeAnyStatList(D2StatListExStrc * pPlayerStatsEx) {
     D2_FREE_POOL_AT(pPlayerStatsEx->sStatList.pMemory, pPlayerStatsEx, ".\\Stats\\StatsEx.cpp", 0x502);
 }
 
+// 1.14d mac: 0019561c
 void __stdcall FreeStatList(D2StatListStrc * pStatList) {
     if (!(pStatList && !(pStatList->nFlags & 0x80000000U))) {
       return;
@@ -1886,6 +1945,7 @@ void __fastcall Unreferenced_00626cf0(D2StatListExStrc * pStatListEx) {
     FreeAnyStatList(pStatListEx);
 }
 
+// 1.14d mac: 00195770
 void __stdcall STATLIST_FreeStatListMemory(D2UnitStrc * pUnit) {
     D2StatListExStrc* pPlayerStatsEx = pUnit->pStatsEx;
     if (!pPlayerStatsEx) {
@@ -1898,6 +1958,7 @@ void __stdcall STATLIST_FreeStatListMemory(D2UnitStrc * pUnit) {
     pUnit->pStatsEx = 0;
 }
 
+// 1.14d mac: 00195807
 D2StatListExStrc * __stdcall AllocStatListEx(D2UnitStrc * pUnit, uint32_t dwFlags, fpStatListExChangeCb pfnStatChangeCb, ::SGAMEDATA * pGame) {
     D2StatListExStrc* pStatsExAlloc = pUnit->pStatsEx;
     if (pStatsExAlloc) {
@@ -1927,6 +1988,7 @@ D2StatListExStrc * __stdcall AllocStatListEx(D2UnitStrc * pUnit, uint32_t dwFlag
 }
 
 // Attaches child stat list pStatsEx to pOp45Owner's main D2StatListExStrc, then propagates the child's stats into the parent. Detaches/recalcs first and guards against link cycles. If the child has flag 0x2000 (INACTIVE) it is linked into the parent's pInactiveHead chain and returns; otherwise it is linked into the pActiveHead chain. For state stat lists with op4/op5-dependent stats it pre-applies their complex formulas (STATLIST_ApplyComplexStatFormula). Then it walks the child's effective/base stat array and calls STATLIST_PropagateStatChange for each into the parent: when nParam==0 it sets the 0x40000000 (NOCALCBONUS) flag and SKIPS stats flagged damagerelated; when nParam!=0 it clears that flag and propagates every stat. No return; mutates both lists and the unit's aggregate stats.
+// 1.14d mac: 00195990
 void __stdcall STATLIST_AttachStatListToUnit(D2UnitStrc * pOp45Owner, D2StatListExStrc * pStatsEx, int32_t bActive) {
     uint32_t dwFlags;
     D2ItemStatCostTxt* pItemStatCostLine;
@@ -2042,6 +2104,7 @@ void __stdcall STATLIST_AttachStatListToUnit(D2UnitStrc * pOp45Owner, D2StatList
 }
 
 // Adds nValue to stat (eUnitStat, nSubIndex) in pStatsEx's base array. Inserts the stat entry if absent; removes it if the result is zero. Propagates the delta up the parent chain via STATLIST_PropagateStatChange. Tracks the stat in the changed-stat list for player-owned root stat lists.
+// 1.14d mac: 00195c0d
 void __stdcall STATLIST_AddStatValue(D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nSubIndex) {
     int32_t nSearchIdx;
     D2StatStrc* pStatEntry;
@@ -2073,6 +2136,7 @@ void __stdcall STATLIST_AddStatValue(D2StatListExStrc * pStatsEx, eD2UnitStat eU
 }
 
 // Sets a stat to an absolute value in a D2StatListExStrc's base-stat array. Packs (eUnitStat, low subindex) into a single key, binary-searches the sorted stat array, and either updates an existing entry or inserts a new one. If nParam==0, removes the entry entirely. Computes the delta and propagates it via STATLIST_PropagateStatChange. For player-owned stat lists with the dirty flag set, records the changed stat via STATLIST_TrackChangedStat for client sync. Returns 1 if the value changed, 0 if already equal or list is null.
+// 1.14d mac: 00195fee
 BOOL __stdcall STATLIST_SetStatValue(D2StatListExStrc * pStatEx, eD2UnitStat eUnitStat, int32_t nValue, uint16_t low) {
     int32_t nSearchIdx;
     D2StatStrc* pStatEntry;
@@ -2112,6 +2176,7 @@ BOOL __stdcall STATLIST_SetStatValue(D2StatListExStrc * pStatEx, eD2UnitStat eUn
     return 1;
 }
 
+// 1.14d mac: 001960cc
 void __stdcall D2AddStatToStatsListEx(D2StatListExStrc * pStatsEx, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer) {
     if (pStatsEx) {
       STATLIST_SetStatValue(pStatsEx, eUnitStat, nValue, (uint16_t)nLayer);
@@ -2119,6 +2184,7 @@ void __stdcall D2AddStatToStatsListEx(D2StatListExStrc * pStatsEx, eD2UnitStat e
 }
 
 // Sets a stat value in the unit's base stat array by binary search on the packed (statId<<16|layer) key. Inserts a new entry if missing and value != 0; removes entry if value == 0; propagates the delta to all dependent stat lists via STATLIST_PropagateStatChange. Also enqueues a change notification for player-owned stat lists (flag 0x80000000). Returns 1 on change, 0 on no-op.
+// 1.14d mac: 00196101
 BOOL __stdcall STATLIST_SetStatValueInBaseArray(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer, D2UnitStrc * pUnit) {
     int32_t nSearchIdx;
     D2StatStrc* pStatEntry;
@@ -2158,6 +2224,7 @@ BOOL __stdcall STATLIST_SetStatValueInBaseArray(D2StatListExStrc * pStatList, eD
     return 1;
 }
 
+// 1.14d mac: 001961de
 void __stdcall STATLIST_SetStatValueInBaseArraySafe(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, uint32_t nLayer, D2UnitStrc * pUnit) {
     if (!pStatList) {
       return;
@@ -2170,6 +2237,7 @@ void __stdcall thunk_STATLIST_SetStatValue(D2StatListExStrc * pStatList, eD2Unit
     STATLIST_SetStatValue(pStatList, eUnitStat, nValue, (uint16_t)nLayer);
 }
 
+// 1.14d mac: 0019621d
 void __stdcall STATLIST_SetUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, uint16_t nLayer) {
     BOOL bChanged = STATLIST_SetStatValue(pUnit->pStatsEx, eUnitStat, nValue, nLayer);
     if (!(bChanged && pUnit->eUnitType == UNIT_PLAYER)) {
@@ -2183,6 +2251,7 @@ void __stdcall thunk_STATLIST_AddStatValue(D2StatListExStrc * pStatList, eD2Unit
     STATLIST_AddStatValue(pStatList, eUnitStat, nValue, nSubIndex);
 }
 
+// 1.14d mac: 00196273
 void __stdcall STATLIST_AddUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, int32_t nValue, int16_t nLayer) {
     if (!nValue) {
       return;
@@ -2191,6 +2260,7 @@ void __stdcall STATLIST_AddUnitStat(D2UnitStrc * pUnit, eD2UnitStat eUnitStat, i
     STATLIST_AddStatValue(pUnit->pStatsEx, eUnitStat, nValue, nLayer);
 }
 
+// 1.14d mac: 0019655c
 void __stdcall STATLIST_MarkUnitStatsChanged(D2UnitStrc * pUnit) {
     eD2States eState;
     D2StatListExStrc* pActiveStatList;
@@ -2271,6 +2341,7 @@ void __stdcall STATLIST_RemoveAllStats(D2StatListExStrc * pStatList) {
     }
 }
 
+// 1.14d mac: 00196d66
 void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc * pUnit) {
     D2StatListExStrc* pStatsEx;
     if (!pUnit) {
@@ -2297,6 +2368,7 @@ void __stdcall STATLIST_RemoveAllStatsFromOverlay(D2UnitStrc * pUnit) {
 }
 
 // Walks the active child stat-list chain of pUnit and frees any timed (flag bit 2) stat lists whose timeout has expired. When nFrameNumber is 0, decrements each timeout counter by 1 and frees on reaching zero; otherwise frees all whose timeout field is <= nFrameNumber.
+// 1.14d mac: 00196f83
 void __stdcall RemoveStatListAfterTimeout(D2UnitStrc * pUnit, int32_t nFrameNumber) {
     D2StatListExStrc* pNextStatList;
     uint32_t nFlags;
@@ -2338,6 +2410,7 @@ void __stdcall RemoveStatListAfterTimeout(D2UnitStrc * pUnit, int32_t nFrameNumb
     }
 }
 
+// 1.14d mac: 001970a5
 void __stdcall STATLIST_MergeBaseStats(D2StatListExStrc * pStatListExDest, D2StatListExStrc * pStatListExSource) {
     if (!(pStatListExDest && pStatListExSource)) {
       return;
@@ -2350,6 +2423,7 @@ void __stdcall STATLIST_MergeBaseStats(D2StatListExStrc * pStatListExDest, D2Sta
     }
 }
 
+// 1.14d mac: 0019710a
 void __stdcall STATLIST_RecalcAfterRemove(D2UnitStrc * pUnit) {
     uint32_t _bIsStateActive;
     bool bIsStateActive;
@@ -2380,6 +2454,7 @@ void __stdcall STATLIST_RecalcAfterRemove(D2UnitStrc * pUnit) {
 }
 
 // Clamps a unit's stamina, mana, and hitpoints to their respective maximum values by querying the minimum shifted stat value from ItemStatCost.txt (IDs 10, 8, 6) and calling STATLIST_AddStatValue with a negative delta when any resource exceeds its cap.
+// 1.14d mac: 0019717a
 void __stdcall UpdateResourceStats(D2UnitStrc * pUnit) {
     int32_t nMinShiftedStatVal;
     if (!pUnit) {
@@ -2433,6 +2508,7 @@ void __stdcall UpdateResourceStats(D2UnitStrc * pUnit) {
 }
 
 // After a gem/rune is socketed into pUnit2 (worn by pUnit), recalculates all op=6/7 dependent stats on pUnit. Iterates pUnit2's full stat list, finds stats with op-dependent cross-references (opStat1/2/3), recalculates their combined values, and writes them back via STATLIST_SetFullStatValue.
+// 1.14d mac: 001973b3
 void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     uint32_t nOpStatIndex;
     int32_t nCombinedStatVal;
@@ -2487,10 +2563,12 @@ void __stdcall ItemUpdateStatsAfterSocketing(D2UnitStrc * pUnit, D2UnitStrc * pU
     }
 }
 
+// 1.14d mac: 0019739d
 void __stdcall STATLIST_RemoveAndRecalc(D2UnitStrc * pUnit, D2StatListExStrc * pStatListEx) {
     STATLIST_DetachAndRecalc(pStatListEx);
 }
 
+// 1.14d mac: 0019769c
 void __stdcall STATLIST_RemoveFromOwnerAndRecalc(D2UnitStrc * pOwner, D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->pStatsEx)) {
       return;
@@ -2499,6 +2577,7 @@ void __stdcall STATLIST_RemoveFromOwnerAndRecalc(D2UnitStrc * pOwner, D2UnitStrc
     STATLIST_DetachAndRecalc(pUnit->pStatsEx);
 }
 
+// 1.14d mac: 001976bd
 void __stdcall STATLIST_SetStatValueSimple(D2StatListExStrc * pStatList, eD2UnitStat eUnitStat, int32_t nValue, int32_t nUnused) {
     STATLIST_SetStatValue(pStatList, eUnitStat, nValue, 0);
 }
@@ -2517,6 +2596,7 @@ int32_t __stdcall UNITS_CalcCombinedStatValue(D2UnitStrc * pUnit, eD2UnitStat eU
 }
 
 // Activates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently inactive (NOCALCBONUS flag set), clears the flag and propagates all damage-related stats upward. Otherwise delegates to STATLIST_SetItemStatActive. Returns 1 on success, 0 if already active or not attached.
+// 1.14d mac: 0019682f
 BOOL __stdcall STATLIST_ActivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     int nShiftedStat;
     D2StatInfoStrc* pEffectiveStats;
@@ -2561,6 +2641,7 @@ BOOL __stdcall STATLIST_ActivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem
     return 0;
 }
 
+// 1.14d mac: 001967a9
 void __stdcall STATLIST_SetItemStatActive(D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t bActive) {
     if (!(pUnit && pItem)) {
       return;
@@ -2596,6 +2677,7 @@ void __stdcall STATLIST_SetItemStatActive(D2UnitStrc * pUnit, D2UnitStrc * pItem
     }
 }
 
+// 1.14d mac: 00197315
 BOOL __stdcall STATLIST_ToggleStateDisabled(D2UnitStrc * pUnit, eD2States eState, int32_t bDisabled) {
     if (eState == STATE_none) {
       return 0;
@@ -2628,6 +2710,7 @@ BOOL __stdcall STATLIST_ToggleStateDisabled(D2UnitStrc * pUnit, eD2States eState
 }
 
 // Deactivates an item's stat contributions on pUnit. If the item's StatsEx is attached to pUnit and currently active (NOCALCBONUS flag clear), sets the flag and propagates all damage-related stats with negated deltas to remove their effect. Otherwise delegates to STATLIST_SetItemStatActive(0). Returns 1 on success, 0 if already inactive or not attached.
+// 1.14d mac: 00196941
 BOOL __stdcall STATLIST_DeactivateItemStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     int nShiftedStat;
     D2StatInfoStrc* pEffectiveStats;
@@ -2698,10 +2781,12 @@ int Unreferenced_00627b30() {
 // fnSkillCalcMethod is __fastcall(int32_t, void *): both arguments ride in ECX/EDX, which is why
 // a stub that purges nothing is correct here and why RET 0 does not discriminate. Had the
 // dispatcher been __stdcall(2) it would have pushed 8 bytes that this RET never removes.
+// 1.14d mac: 0016f660 D2Common::Stats::StatsEx::nullsub
 int __fastcall nullsub(int32_t nCalcCode, void * pContext) {
     return 0;
 }
 
+// 1.14d mac: 0016f667
 int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, void * dwParam2) {
     if (nLeft < nRight) {
       return nLeft;
@@ -2711,6 +2796,7 @@ int32_t __fastcall MATH_Min(int32_t nLeft, int32_t nRight, uint32_t dwParam1, vo
     return nLeft;
 }
 
+// 1.14d mac: 0016f677
 int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t nOperand3, void * pContext) {
     if (nLeft > nRight) {
       return nLeft;
@@ -2720,6 +2806,7 @@ int32_t __fastcall MATH_Max(int32_t nLeft, int32_t nRight, uint32_t nOperand3, v
     return nLeft;
 }
 
+// 1.14d mac: 0016f687
 int __fastcall MATH_RandomRange(int32_t nMin, int32_t nMax, uint32_t nRangeMax, D2ItemCalcContextStrc * pSeed) {
     if (!pSeed) {
       return 0;
@@ -2733,6 +2820,7 @@ int __fastcall MATH_RandomRange(int32_t nMin, int32_t nMax, uint32_t nRangeMax, 
     return Seed::RANDOM_RandomNumberSelector(pUnitSeed, nMax - nMin + 1) + nMin;
 }
 
+// 1.14d mac: 0016f6d8
 int32_t __fastcall UNITS_GetStatValueByType(eD2UnitStat eUnitStat, int32_t nQueryMode, uint32_t dwContext, D2UnitStrc * * ppUnit) {
     int32_t nStatValue;
     int nStatValue2;

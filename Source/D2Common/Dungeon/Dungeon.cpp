@@ -262,6 +262,7 @@ D2RoomExStrc * __fastcall GetRoomExFromRoom_Unref_005a6220(D2RoomStrc * pRoom) {
 
 // Allocates D2DrlgActStrc, fills core fields, allocates DRLG act misc (server/client path), allocates environment, and initializes tile cache.
 // @sourcefile .\DUNGEON\Dungeon.cpp
+// 1.14d mac: 00164bbc
 D2DrlgActStrc * __stdcall AllocAct(BYTE nActNo, int32_t dwInitSeed, BOOL bClientSide, ::SGAMEDATA * pGame, BYTE nDifficulty, D2PoolManagerStrc * pMemory, eD2LevelId eLevel, fAutoMap pfAutoMap, fTownAutoMap pfTownAutoMap) {
     D2DrlgStrc* pDrlg;
     D2DrlgActStrc* pAct = D2_NEW_POOL_AT(pMemory, D2DrlgActStrc, ".\\DUNGEON\\Dungeon.cpp", 0x19);
@@ -284,6 +285,7 @@ D2DrlgActStrc * __stdcall AllocAct(BYTE nActNo, int32_t dwInitSeed, BOOL bClient
     return pAct;
 }
 
+// 1.14d mac: 00164e6a
 D2PoolManagerStrc * __fastcall GetMemPoolFromAct(D2DrlgActStrc * pDrlgAct) {
     return pDrlgAct->pMemory;
 }
@@ -315,6 +317,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 }
 
 // The unit-list search loop leaves its found (or NULL) D2UnitStrc* result in EAX at the fallthrough return, unused by the body itself; caller evidence names the read pStaircaseUnit.
+// 1.14d mac: 00164e75
 D2UnitStrc * __stdcall TakeStairsInternal(D2RoomStrc * pRoom, eD2LevelId eLevelId, D2LvlWarpTxt * * ppRoomEx) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6a);
@@ -353,6 +356,7 @@ D2LvlWarpTxt * __stdcall DUNGEON_GetLvlWarpTxtForWarpUnit(D2RoomStrc * pRoom, D2
     return pShadows;
 }
 
+// 1.14d mac: 00164f74
 D2DrlgTileDataStrc * __stdcall DRLGROOM_GetFloorTilesFromRoom(D2RoomStrc * pRoom, int * pFloorCount) {
     if (pRoom && pRoom->pRoomTiles) {
       *pFloorCount = pRoom->pRoomTiles->nFloorTilesCount;
@@ -363,6 +367,7 @@ D2DrlgTileDataStrc * __stdcall DRLGROOM_GetFloorTilesFromRoom(D2RoomStrc * pRoom
     return nullptr;
 }
 
+// 1.14d mac: 00164f9c
 D2DrlgTileDataStrc * __stdcall DRLGROOM_GetWallTilesFromRoom(D2RoomStrc * pRoom, int * pWallCount) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb1);
@@ -373,6 +378,7 @@ D2DrlgTileDataStrc * __stdcall DRLGROOM_GetWallTilesFromRoom(D2RoomStrc * pRoom,
     return pRoom->pRoomTiles->pWallTiles;
 }
 
+// 1.14d mac: 00164fe6
 D2DrlgTileDataStrc * __stdcall DRLGROOM_GetRoofTilesFromRoom(D2RoomStrc * pRoom, int * pRoofCount) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbe);
@@ -387,6 +393,7 @@ D2DrlgTileDataStrc * __stdcall GetTileDataFromAct(D2DrlgActStrc * pDrlgAct) {
     return &pDrlgAct->sTileCache;
 }
 
+// 1.14d mac: 0016503c
 void __stdcall DRLGROOM_GetRoomCoordinates(D2RoomStrc * pRoom, D2DrlgRoomCoordsStrc * pCoords) {
     if (!pCoords) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd1);
@@ -400,6 +407,7 @@ void __stdcall DRLGROOM_GetRoomCoordinates(D2RoomStrc * pRoom, D2DrlgRoomCoordsS
     *pCoords = pRoom->sCoords;
 }
 
+// 1.14d mac: 001650a9
 void __stdcall DRLGROOM_GetAdjacentRoomsList(D2RoomStrc * pRoom, D2RoomStrc * * * pppRoomList, int * pNumRooms) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xec);
@@ -605,6 +613,7 @@ D2RoomStrc * __stdcall GetAdjacentRoomByCoordinates(D2RoomStrc * pRoom, int32_t 
     return nullptr;
 }
 
+// 1.14d mac: 00165293
 void __stdcall CallRoomCallback(D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallback, void * pArgs) {
     uint32_t nRoomIdx;
     if (!pRoom) {
@@ -630,6 +639,7 @@ void __stdcall CallRoomCallback(D2RoomStrc * pRoom, ROOMCALLBACKFN pfnRoomCallba
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): param_ebx (EBX): DWORD
+// 1.14d mac: 0016531c
 int32_t * __stdcall DRLGROOM_GetMinimapRect(D2RoomStrc * pRoom, int32_t * pRect) {
     int* pRect2;
     int32_t nDummy;
@@ -683,6 +693,7 @@ void __stdcall GetRGB_IntensityFromRoom(D2RoomStrc * pRoom, char * nIntensity, c
     Drlg::DrlgRoom::GetRGB_IntensityFromRoomEx(pRoom->pRoomEx, nIntensity, nRed, nGreen, nBlue);
 }
 
+// 1.14d mac: 00165464
 D2RoomStrc * __stdcall FindRoomBySubtileCoordinates(D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY) {
     if (!pDrlgAct) {
       return nullptr;
@@ -726,6 +737,7 @@ BOOL __fastcall AreSubtileCoordinatesInsideRoom(D2DrlgCoordsStrc * pDrlgCoords, 
     return 0;
 }
 
+// 1.14d mac: 00165508
 D2RoomStrc * __stdcall FindActSpawnLocation(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32_t a3, int * pX, int * pY) {
     if (!pDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x221);
@@ -736,6 +748,7 @@ D2RoomStrc * __stdcall FindActSpawnLocation(D2DrlgActStrc * pDrlgAct, eD2LevelId
     return pRoom;
 }
 
+// 1.14d mac: 001656ef
 D2UnitStrc * __stdcall DRLGROOM_GetFirstUnitInRoom(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x249);
@@ -746,6 +759,7 @@ D2UnitStrc * __stdcall DRLGROOM_GetFirstUnitInRoom(D2RoomStrc * pRoom) {
     return pRoom->pUnitList;
 }
 
+// 1.14d mac: 00165735
 void __stdcall DRLGROOM_IncreaseAlliedCount(D2RoomStrc * pRoom) {
     if (!pRoom) {
       return;
@@ -762,6 +776,7 @@ int32_t __stdcall GetAlliedCountFromRoom(D2RoomStrc * pRoom) {
     return pRoom->nAllies;
 }
 
+// 1.14d mac: 00165744
 void __stdcall DRLGROOM_DecreaseAlliedCount(D2RoomStrc * pRoom) {
     if (!pRoom) {
       return;
@@ -774,6 +789,7 @@ void __stdcall DRLGROOM_DecreaseAlliedCount(D2RoomStrc * pRoom) {
     pRoom->nAllies--;
 }
 
+// 1.14d mac: 0016578d
 D2UnitStrc * * __fastcall DRLGROOM_GetUnitListFromRoom(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x286);
@@ -805,6 +821,7 @@ D2PresetUnitStrc * __stdcall GetPresetUnitsFromRoom(D2RoomStrc * pRoom) {
     return pPresetUnit;
 }
 
+// 1.14d mac: 00165865
 D2RoomCollisionGridStrc * __fastcall DRLGROOM_GetCollisionGridFromRoom(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c5);
@@ -814,6 +831,7 @@ D2RoomCollisionGridStrc * __fastcall DRLGROOM_GetCollisionGridFromRoom(D2RoomStr
     return pRoom->pCollisionGrid;
 }
 
+// 1.14d mac: 001658a3
 void __fastcall DRLGROOM_SetCollisionGridInRoom(D2RoomStrc * pRoom, D2RoomCollisionGridStrc * pCollisionMap) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ce);
@@ -823,6 +841,7 @@ void __fastcall DRLGROOM_SetCollisionGridInRoom(D2RoomStrc * pRoom, D2RoomCollis
     pRoom->pCollisionGrid = pCollisionMap;
 }
 
+// 1.14d mac: 001658e6
 void __stdcall AddRoomData(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32_t nX, int32_t nY, D2RoomStrc * pRoomCache) {
     D2RoomExStrc* pRoomEx;
     if (!pDrlgAct) {
@@ -838,6 +857,7 @@ void __stdcall AddRoomData(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32_t 
     AddRoomDataPrepare(pDrlgAct->pDrlg, eLevel, nX, nY, pRoomEx);
 }
 
+// 1.14d mac: 00165953
 void __stdcall RemoveRoomData(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32_t nX, int32_t nY, D2RoomStrc * pRoom) {
     D2RoomExStrc* pRoomEx;
     if (!pDrlgAct) {
@@ -854,6 +874,7 @@ void __stdcall RemoveRoomData(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32
 }
 
 // Extracts RoomEx pointers from two D2RoomStrc and calls DRLGROOMEX_SwapActiveRoomEx. Used when a client transitions between rooms to swap active room data.
+// 1.14d mac: 001659c0
 void __stdcall DRLGROOM_SwapRoomDataForRoomEx(D2RoomStrc * pRoom, D2RoomStrc * pRoom2) {
     D2RoomExStrc* pRoomEx1 = 0;
     D2RoomExStrc* pRoomEx2 = 0;
@@ -868,6 +889,7 @@ void __stdcall DRLGROOM_SwapRoomDataForRoomEx(D2RoomStrc * pRoom, D2RoomStrc * p
 }
 
 // Tail-calls DRLGROOMEX_GetRoomByCoords (D2RoomStrc*) as its final statement, dropping the result.
+// 1.14d mac: 001659f4
 D2RoomStrc * __stdcall DRLGROOM_GetRoomFromActAndCoord(D2DrlgActStrc * pDrlgAct, int32_t nX, int32_t nY) {
     if (!pDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x313);
@@ -878,6 +900,7 @@ D2RoomStrc * __stdcall DRLGROOM_GetRoomFromActAndCoord(D2DrlgActStrc * pDrlgAct,
     return pDVar1;
 }
 
+// 1.14d mac: 00165a4a
 D2RoomStrc * __stdcall DRLGROOM_GetRoomFromAct(D2DrlgActStrc * pDrlgAct) {
     if (!pDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x31e);
@@ -887,6 +910,7 @@ D2RoomStrc * __stdcall DRLGROOM_GetRoomFromAct(D2DrlgActStrc * pDrlgAct) {
     return pDrlgAct->pRoom;
 }
 
+// 1.14d mac: 00165a88
 eD2LevelId __stdcall DRLGROOM_GetLevelIdFromRoom(D2RoomStrc * pRoom) {
     if (!pRoom) {
       return LEVEL_None;
@@ -897,6 +921,7 @@ eD2LevelId __stdcall DRLGROOM_GetLevelIdFromRoom(D2RoomStrc * pRoom) {
 }
 
 // Tail-calls DRLGWARP_GetWarpDestinationLevel (eD2LevelId) as its final statement, dropping the result. The null-pRoom early-out has no computed value (don't-care on that path only).
+// 1.14d mac: 00165aa9
 eD2LevelId __stdcall GetWarpDestinationLevel(D2RoomStrc * pRoom, eD2LevelId eLevel) {
     if (!pRoom) {
       return LEVEL_None;
@@ -915,6 +940,7 @@ eD2LevelId __stdcall GetLevelIdFromPopulatedRoom(D2RoomStrc * pRoom) {
     return neD2LevelId;
 }
 
+// 1.14d mac: 00165af2 D2Common::DUNGEON::Dungeon::HasWaypoint
 BOOL __stdcall HasWaypoint(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x363);
@@ -935,6 +961,7 @@ char * __stdcall GetPickedLevelPrestFilePathFromRoom(D2RoomStrc * pRoom) {
 }
 
 // @sourcefile .\DUNGEON\Dungeon.cpp
+// 1.14d mac: 00165b38
 void __stdcall AllocDrlgDelete(D2RoomStrc * pRoom, eD2UnitType eUnitType, int32_t nUnitGUID) {
     if (!pRoom) {
       return;
@@ -949,6 +976,7 @@ void __stdcall AllocDrlgDelete(D2RoomStrc * pRoom, eD2UnitType eUnitType, int32_
 }
 
 // @sourcefile .\DUNGEON\Dungeon.cpp
+// 1.14d mac: 00165ba4
 void __stdcall DRLGROOM_FreeDrlgDelete(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x390);
@@ -1030,6 +1058,7 @@ uint32_t __stdcall Is0x44Above2(D2RoomStrc * pRoom) {
 }
 
 // Checks if all near rooms in pRoom's adjacency list have the active flag (0x1) set, and that the count matches the RoomEx near count. Used by SendPacketsToClients.
+// 1.14d mac: 00165cf8
 BOOL __stdcall DRLGROOM_AreAllNearRoomsActive(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ef);
@@ -1061,6 +1090,7 @@ BOOL __stdcall DRLGROOM_AreAllNearRoomsActive(D2RoomStrc * pRoom) {
     return 1;
 }
 
+// 1.14d mac: 00165d65
 int32_t __stdcall DRLGROOM_IsUnitInactiveProcessed(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x42f);
@@ -1070,6 +1100,7 @@ int32_t __stdcall DRLGROOM_IsUnitInactiveProcessed(D2RoomStrc * pRoom) {
     return pRoom->eFlags & 2;
 }
 
+// 1.14d mac: 00165da6
 void __stdcall DRLGROOM_SetUnitInactiveProcessed(D2RoomStrc * pRoom, BOOL bSet) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x438);
@@ -1084,6 +1115,7 @@ void __stdcall DRLGROOM_SetUnitInactiveProcessed(D2RoomStrc * pRoom, BOOL bSet) 
 }
 
 // Validates the client list of a room by checking that all entries in the client array (offset 0x48) are non-null. Halts if any entry is null.
+// 1.14d mac: 00165eee
 static BOOL __fastcall DRLGROOM_ValidateClientList(D2RoomStrc * pRoom) {
     D2ClientStrc** pClientIter;
     uint32_t i = 0;
@@ -1104,6 +1136,7 @@ static BOOL __fastcall DRLGROOM_ValidateClientList(D2RoomStrc * pRoom) {
 }
 
 // Sorts the client list of a room using bubble sort by client ID. Validates the list first, halts on error.
+// 1.14d mac: 00165f40
 static void DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
     if (!DRLGROOM_ValidateClientList(pRoom)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x45b);
@@ -1136,6 +1169,7 @@ static void DRLGROOM_SortClientList(D2RoomStrc * pRoom) {
 
 // Adds nClientId to the room's pClients array. Grows the array by 4 slots via ReAllocServerMemory when at capacity (nClientsMax). Appends the client ID, increments nClientsCount, then re-sorts the client list. Validates the room and client ID are non-null/non-zero before proceeding; halts on assertion failure. Called when a client enters a room's visibility range.
 // @sourcefile .\DUNGEON\Dungeon.cpp
+// 1.14d mac: 00165df9
 void __stdcall DRLGROOM_AddClientToRoom(D2RoomStrc * pRoom, D2ClientStrc * nClientId) {
     BOOL bValidated;
     D2ClientStrc** pNewClients;
@@ -1204,11 +1238,13 @@ void __stdcall DRLGROOM_RemoveClientFromRoom(D2RoomStrc * pRoom, D2ClientStrc * 
     DRLGROOM_SortClientList(pRoom);
 }
 
+// 1.14d mac: 00165fb1
 void __stdcall DRLGROOM_RemoveClientFromRoom_HaltTail(int nLine) {
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
     exit(-1);
 }
 
+// 1.14d mac: 00166071
 int32_t __stdcall DRLGROOM_GetIdleTicks(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4ae);
@@ -1249,6 +1285,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_22(D2UnitStrc * p) 
 }
 
 // @sourcefile .\DUNGEON\Dungeon.cpp
+// 1.14d mac: 00164d8a
 void __fastcall FreeRoom(D2PoolManagerStrc * pMemory, D2RoomStrc * pRoom) {
     D2UnitStrc* pUnit = pRoom->pUnitList;
     while (pUnit) {
@@ -1284,6 +1321,7 @@ void __fastcall DUNGEON_ClearRoomTiles(D2RoomStrc * pRoom) {
 }
 
 // Unlinks pRoom from pDrlgAct's room linked list and removes it from the adjacency lists of all neighboring rooms. After unlinking, frees the room's DrlgRoomEx data and the room itself via FreeRoom. Halts with an internal error if pRoom is null or not found in the act's list.
+// 1.14d mac: 001660bb
 void __stdcall DRLGROOM_RemoveRoomFromAct(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pRoom) {
     D2RoomStrc* pPrevRoom;
     int i;
@@ -1330,6 +1368,7 @@ void __stdcall DRLGROOM_RemoveRoomFromAct(D2DrlgActStrc * pDrlgAct, D2RoomStrc *
     FreeRoom(pDrlgAct->pMemory, pRoom);
 }
 
+// 1.14d mac: 001661ca
 void __stdcall DRLGROOM_SwapActiveRoomExBetweenLevels(D2RoomStrc * pRoom, D2RoomStrc * pRoom2) {
     D2RoomExStrc* pRoomEx1 = pRoom ? pRoom->pRoomEx : 0;
     if (pRoom2) {
@@ -1340,11 +1379,13 @@ void __stdcall DRLGROOM_SwapActiveRoomExBetweenLevels(D2RoomStrc * pRoom, D2Room
     Drlg::ChangeActiveRoomBetweenLevels(pRoomEx1, nullptr);
 }
 
+// 1.14d mac: 001661fe
 void __stdcall FreeDungeons(D2DrlgActStrc * pDrlgAct) {
     Drlg::DRLG_FreeInactiveLevelData(pDrlgAct->pDrlg);
 }
 
 // Tail-calls CheckLOSDraw (uint32_t) as its final statement, dropping the result. The null-pRoom early-out has no computed value (don't-care on that path only).
+// 1.14d mac: 00166217
 uint32_t __stdcall DRLGROOM_CheckLOSDraw(D2RoomStrc * pRoom) {
     if (!pRoom) {
       return 0;
@@ -1354,6 +1395,7 @@ uint32_t __stdcall DRLGROOM_CheckLOSDraw(D2RoomStrc * pRoom) {
     return dwResult;
 }
 
+// 1.14d mac: 00166238
 D2DrlgEnvironmentStrc * __fastcall DRLGENV_GetEnvironmentFromAct(D2DrlgActStrc * pDrlgAct) {
     if (!pDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x547);
@@ -1363,6 +1405,7 @@ D2DrlgEnvironmentStrc * __fastcall DRLGENV_GetEnvironmentFromAct(D2DrlgActStrc *
     return pDrlgAct->pEnvironment;
 }
 
+// 1.14d mac: 00166276
 D2DrlgStrc * __stdcall GetDrlgFromAct(D2DrlgActStrc * pDrlgAct) {
     if (!pDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x550);
@@ -1380,15 +1423,18 @@ int32_t __stdcall GetInitSeedFromAct(D2DrlgActStrc * pDrlgAct) {
     return pDrlgAct->dwInitSeed;
 }
 
+// 1.14d mac: 001662c7
 D2RoomExStrc * __fastcall GetRoomExFromRoom(D2RoomStrc * pRoom) {
     return pRoom->pRoomEx;
 }
 
+// 1.14d mac: 001662d2
 BOOL __stdcall IsTownLevelId(int32_t nLevelId) {
     BOOL BVar1 = Drlg::LEVEL_CheckIfLevelIsTown(nLevelId);
     return BVar1;
 }
 
+// 1.14d mac: 001662db
 BOOL __stdcall DRLGROOM_IsRoomInTown(D2RoomStrc * pRoom) {
     if (!pRoom) {
       return 0;
@@ -1403,10 +1449,12 @@ int32_t __stdcall Return0(D2RoomStrc * pRoom) {
     return Drlg::DRLG_ReturnZero(!pRoom ? LEVEL_None : Drlg::DrlgRoom::GetLevelId(pRoom->pRoomEx));
 }
 
+// 1.14d mac: 0016632d
 BOOL __stdcall DRLGROOM_IsUpdateLocked(D2RoomStrc * pRoom) {
     return pRoom->eFlags & 4;
 }
 
+// 1.14d mac: 0016633b
 eD2LevelId __stdcall GetTownLevelIdFromActNo(uint8_t nAct) {
     // Static local variables (originally global data)
     static eD2LevelId gaTownLevelIdByAct[5] = { LEVEL_RogueEncampment, LEVEL_LutGholein, LEVEL_KurastDocktown, LEVEL_ThePandemoniumFortress, LEVEL_Harrogath }; D2_STATIC_GUARD(gaTownLevelIdByAct, "D2Common::DUNGEON::Dungeon::GetTownLevelIdFromActNo::gaTownLevelIdByAct");
@@ -1420,6 +1468,7 @@ eD2LevelId __stdcall GetTownLevelIdFromActNo(uint8_t nAct) {
 }
 
 // Checks whether a room has an outdoor border by examining its RoomEx preset type and outdoor border flag. Returns true for outdoor-type rooms with border flags set.
+// 1.14d mac: 0016637f
 BOOL __stdcall DRLGROOM_HasOutdoorBorder(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a5);
@@ -1430,11 +1479,13 @@ BOOL __stdcall DRLGROOM_HasOutdoorBorder(D2RoomStrc * pRoom) {
     return uHasBorder;
 }
 
+// 1.14d mac: 001663c5
 int32_t __stdcall GetNumberOfPopulatedRoomsInLevel(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel) {
     int32_t nRoomCount = Drlg::ACTMISC_CountLevelRooms(pDrlgAct->pDrlg, eLevel);
     return nRoomCount;
 }
 
+// 1.14d mac: 001663e5
 D2DrlgLevelWarpCoordinatesStrc * __stdcall GetWarpCoordinatesFromRoom(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5b9);
@@ -1445,6 +1496,7 @@ D2DrlgLevelWarpCoordinatesStrc * __stdcall GetWarpCoordinatesFromRoom(D2RoomStrc
     return pWarpCoords;
 }
 
+// 1.14d mac: 0016642b
 void __stdcall UpdateWarpRoomSelect(D2RoomStrc * pRoom, eD2LevelId eLevel) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5c4);
@@ -1454,6 +1506,7 @@ void __stdcall UpdateWarpRoomSelect(D2RoomStrc * pRoom, eD2LevelId eLevel) {
     Drlg::DrlgRoom::DRLGWARP_UpdateWarpRoomExSelect(pRoom->pRoomEx, eLevel);
 }
 
+// 1.14d mac: 0016647a
 void __stdcall UpdateWarpRoomDeselect(D2RoomStrc * pRoom, eD2LevelId eLevel) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5cf);
@@ -1463,6 +1516,7 @@ void __stdcall UpdateWarpRoomDeselect(D2RoomStrc * pRoom, eD2LevelId eLevel) {
     Drlg::DrlgRoom::DRLGWARP_UpdateWarpRoomExDeselect(pRoom->pRoomEx, eLevel);
 }
 
+// 1.14d mac: 001664c9 D2Common::DUNGEON::Dungeon::UpdatePops
 void __stdcall UpdatePops(D2RoomStrc * pRoom, int32_t nX, int32_t nY, BOOL bOtherRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5da);
@@ -1482,6 +1536,7 @@ D2RoomCoordListStrc * __stdcall DRLGROOM_GetCoordListFromSubtilePos(D2RoomStrc *
     return pCoordList;
 }
 
+// 1.14d mac: 0016660d
 D2RoomCoordListStrc * __stdcall GetCoordList(D2RoomStrc * pRoom) {
     D2RoomCoordListStrc* pCoordList = Drlg::DrlgLogic::GetCoordList(pRoom->pRoomEx);
     return pCoordList;
@@ -1520,6 +1575,7 @@ void __stdcall GetPortalLevelArrayFromPortalFlags(D2PoolManagerStrc * pMemory, i
     *pnLevels = nMatchCount;
 }
 
+// 1.14d mac: 00166626
 int32_t __stdcall GetPortalFlagFromLevelId(eD2LevelId eLevel) {
     int nArrayCount;
     eD2LevelId* pPortalLevelArray = DATATBLS::LvlTbls::GetPortalLevelArrayFromPortalFlags((uint32_t*)&nArrayCount);
@@ -1538,6 +1594,7 @@ int32_t __stdcall GetPortalFlagFromLevelId(eD2LevelId eLevel) {
     return 0;
 }
 
+// 1.14d mac: 00166663
 eD2LevelId __stdcall GetTownLevelIdFromAct(D2DrlgActStrc * pDrlgAct) {
     if (!pDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x634);
@@ -1560,6 +1617,7 @@ eD2LevelId __stdcall GetHoradricStaffTombLevelId(D2DrlgActStrc * pDrlgAct) {
 // @wasnamed ToggleHasPortalFlag - one name on two different functions.
 // @evidence D2RoomStrc NULL-check then forwards to the RoomEx implementation at
 // 0061bac0, which is what actually sets/clears bit 0x400000.
+// 1.14d mac: 001666c2
 void __stdcall ToggleHasPortalFlagRoom(D2RoomStrc * pRoom, BOOL bReset) {
     if (!pRoom) {
       return;
@@ -1568,6 +1626,7 @@ void __stdcall ToggleHasPortalFlagRoom(D2RoomStrc * pRoom, BOOL bReset) {
     ToggleHasPortalFlag(pRoom->pRoomEx, bReset);
 }
 
+// 1.14d mac: 001666e6
 void __stdcall AnimateTiles(D2RoomStrc * pRoom) {
     if (!pRoom) {
       return;
@@ -1576,6 +1635,7 @@ void __stdcall AnimateTiles(D2RoomStrc * pRoom) {
     Drlg::DrlgAnim::AnimateTiles(pRoom->pRoomEx);
 }
 
+// 1.14d mac: 00166703
 void __stdcall InitRoomTileAnimation(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pRoom, D2RoomStrc * pRoom2) {
     D2RoomExStrc* pRoomExSrc = 0;
     D2RoomExStrc* pRoomExDst = 0;
@@ -1595,6 +1655,7 @@ void __stdcall InitRoomTileAnimation(D2DrlgActStrc * pDrlgAct, D2RoomStrc * pRoo
     Drlg::DRLGANIM_PropagateAnimationData(pRoomExSrc, pRoomExDst);
 }
 
+// 1.14d mac: 0016674c
 void __stdcall SetActCallbackFunc(D2DrlgActStrc * pDrlgAct, ::ACTCALLBACKFN pFunc) {
     if (!pDrlgAct) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x67f);
@@ -1604,6 +1665,7 @@ void __stdcall SetActCallbackFunc(D2DrlgActStrc * pDrlgAct, ::ACTCALLBACKFN pFun
     pDrlgAct->pCallback = (::ACTCALLBACKFN)pFunc;
 }
 
+// 1.14d mac: 0016678f
 void __stdcall SaveKilledUnitGUID(D2RoomStrc * pRoom, int32_t nUnitGUID) {
     if (!pRoom) {
       return;
@@ -1614,6 +1676,7 @@ void __stdcall SaveKilledUnitGUID(D2RoomStrc * pRoom, int32_t nUnitGUID) {
 }
 
 // @sourcefile .\DUNGEON\Dungeon.cpp
+// 1.14d mac: 00164cd2
 void __stdcall FreeAct(D2DrlgActStrc * pDrlgAct) {
     D2RoomStrc* pNextRoom;
     if (!pDrlgAct) {
@@ -1640,6 +1703,7 @@ void __stdcall FreeAct(D2DrlgActStrc * pDrlgAct) {
     /* Finally frees D2DrlgAct it self */ D2_FREE_POOL_AT(pDrlgAct->pMemory, pDrlgAct, ".\\DUNGEON\\Dungeon.cpp", 0x52);
 }
 
+// 1.14d mac: 0016556c
 D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, int32_t nSpawnTypeOrMode, int * pnSpawnX, int * pnSpawnY, uint32_t nUnitSize) {
     D2RoomStrc* pSpawnRoom;
     D2RoomStrc* pFreeCoordRoom;
@@ -1677,6 +1741,7 @@ D2RoomStrc * __stdcall SpawnUnit(D2DrlgActStrc * pDrlgAct, eD2LevelId eLevel, in
     }
 }
 
+// 1.14d mac: 00166526
 int32_t __stdcall GetGridIndex(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
     D2RoomStrc* pNearRoom = Collision::DRLGROOM_FindBetterNearbyRoom(pRoom, nX, nY);
     if (!pNearRoom) {
@@ -1688,6 +1753,7 @@ int32_t __stdcall GetGridIndex(D2RoomStrc * pRoom, int32_t nX, int32_t nY) {
 }
 
 // Initializes a RoomEx's runtime data: sets up near rooms and vis tiles if not already done, initializes grid cells, sets up tile data for DRLG type, rolls the room seed, and increments the actmisc activation counters.
+// 1.14d mac: 0014bd95
 static void DRLGROOMEX_InitRoomExData(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx) {
     D2DrlgStrc* pDrlg = pRoomEx->pLevel->pDrlg;
     if (!pRoomEx->nDrlgRoomsExNearCount) {
@@ -1702,6 +1768,7 @@ static void DRLGROOMEX_InitRoomExData(D2PoolManagerStrc * pMemory, D2RoomExStrc 
 }
 
 // Moves a D2RoomExStrc to a different activation priority list. Unlinks from current pStatusPrev/pStatusNext chain and relinks into the sentinel list at pDrlg->aSubA0[nNewStatus].
+// 1.14d mac: 0014c128
 static D2RoomExStrc * DRLGROOMEX_MoveToActivationList(D2RoomExStrc * pRoomEx, uint8_t nNewStatus) {
     if (pRoomEx->fRoomStatus != nNewStatus) {
       D2RoomExStrc* pSentinel;
@@ -1763,6 +1830,7 @@ void __fastcall DRLGROOMEX_ActivateRoomEx(D2RoomExStrc * pRoomEx) {
 }
 
 // Ensure tile data and monster presets are initialized for RoomEx. If fRoomStatus > 3, move room into activation list (decompiler omits args).
+// 1.14d mac: 0014c357
 void __fastcall DRLGROOMEX_InitTileDataAndPresets(D2RoomExStrc * pRoomEx) {
     if (!(pRoomEx->eRoomExFlags & 0x1000000U)) {
       Drlg::DRLGROOMEX_InitTileData(pRoomEx);
@@ -1930,6 +1998,7 @@ void __fastcall DRLGROOMEX_PropagateDecRefCount(D2RoomExStrc * pRoomEx, uint8_t 
     }
 }
 
+// 1.14d mac: 0014bb82
 void __fastcall AddRoomDataPrepare(D2DrlgStrc * pDrlg, int32_t eLevelId, int32_t nX, int32_t nY, D2RoomExStrc * pRoomExCache) {
     D2DrlgLevelStrc* pDrlgLevel = Drlg::GetLevelAndAlloc(pDrlg, eLevelId);
     if (pRoomExCache && pRoomExCache->pLevel->eD2LevelId != eLevelId) {
@@ -1945,6 +2014,7 @@ void __fastcall AddRoomDataPrepare(D2DrlgStrc * pDrlg, int32_t eLevelId, int32_t
 }
 
 // Removes room data for a RoomEx at given level/coordinates. Finds the RoomEx via GetRoomOfCoords, decrements its init ref count, recalculates priority, and propagates decrements to near rooms. Called by RemoveRoomData.
+// 1.14d mac: 0014bc56
 void __fastcall DRLGROOMEX_RemoveRoomDataPrepare(D2DrlgStrc * pDrlg, eD2LevelId eLevelId, int32_t nX, int32_t nY, D2RoomExStrc * pRoomEx) {
     D2DrlgLevelStrc* pLevel = Drlg::GetLevelAndAlloc(pDrlg, eLevelId);
     if (pRoomEx && pRoomEx->pLevel->eD2LevelId != eLevelId) {
@@ -1962,6 +2032,7 @@ void __fastcall DRLGROOMEX_RemoveRoomDataPrepare(D2DrlgStrc * pDrlg, eD2LevelId 
 }
 
 // Swaps the active room status between two room extensions. Updates the status-linked list pointers.
+// 1.14d mac: 0014bd08
 void __fastcall DRLGROOMEX_SwapActiveRoomEx(D2RoomExStrc * pRoomExNew, D2RoomExStrc * pRoomExOld) {
     if (pRoomExNew == pRoomExOld) {
       return;
@@ -1979,6 +2050,7 @@ void __fastcall DRLGROOMEX_SwapActiveRoomEx(D2RoomExStrc * pRoomExNew, D2RoomExS
 }
 
 // RoomEx initialization. If not flagged, build tile data, spawn monster presets (for preset type 2), init neighbor/vis tiles, build collision grid + tiles per drlg type, roll room seed, and bump DRLG init counters. Returns pRoomEx->pRoom.
+// 1.14d mac: 0014bd3a
 D2RoomStrc * __fastcall InitRoomEx(D2RoomExStrc * pRoomEx) {
     if (!(pRoomEx->eRoomExFlags & 0x1000000U)) {
       Drlg::DRLGROOMEX_InitTileData(pRoomEx);
@@ -2061,6 +2133,7 @@ void __fastcall DRLGROOM_GetActMiscCacheInfo(int32_t * pnCacheA, int32_t * pnCac
 }
 
 // Client-side RoomEx activation loop. Called each frame from ClientSideGameLoop. Caches actmisc state, then iterates RoomEx linked list activating rooms that need initialization (no pRoom, not flagged 0x100000). Throttled by a countdown timer and activation counter field_0x98.
+// 1.14d mac: 0014be58
 void __stdcall DRLGROOMEX_UpdateClientRoomExActivation(D2DrlgStrc * pDrlg) {
     uint8_t* pCountdown;
     D2RoomExStrc* pIteratorStart;
@@ -2151,6 +2224,7 @@ BOOL __fastcall DRLGROOMEX_TestCanUntile(D2RoomExStrc * pRoomEx) {
     return 1;
 }
 
+// 1.14d mac: 0014bfe5
 void __fastcall ToggleHasPortalFlag(D2RoomExStrc * pRoomEx, BOOL bReset) {
     if (bReset) {
       pRoomEx->eRoomExFlags &= -4194305;
@@ -2175,6 +2249,7 @@ static void DRLGROOMEX_DemoteAndActivate(D2RoomExStrc * pRoomExStrc) {
 }
 
 // Conditionally demotes a RoomEx to priority 2 if tile data (flag 0x1000000) and presets (type 2 + flag 0x2000000) are already initialized, and current priority is above 2. Then activates if init ref count is non-zero.
+// 1.14d mac: 0014c30f
 void __fastcall DRLGROOMEX_DemoteIfReady(D2RoomExStrc * pRoomEx) {
     if (!(pRoomEx->eRoomExFlags & 0x1000000U && (pRoomEx->nPresetType != 2 || pRoomEx->eRoomExFlags & 0x2000000U) && 2 < pRoomEx->fRoomStatus)) {
       return;
@@ -2332,6 +2407,7 @@ uint32_t __fastcall DRLGPATH_StepPathWithCollisionCheck(D2PathTypeArg * pPathTyp
 }
 
 // Applies a directional offset to a missile's position based on the owner's facing direction and an offset radius. Uses sin/cos lookup tables to compute the X/Y displacement.
+// 1.14d mac: 0018261f
 void __fastcall DRLGPATH_ApplyMissileOffset(D2DynamicPathStrc * pDynamicPath) {
     uint32_t findex;
     float fVar1;
@@ -2361,6 +2437,7 @@ void __fastcall DRLGPATH_ApplyMissileOffset(D2DynamicPathStrc * pDynamicPath) {
 }
 
 // Writes the effective target position (X at pOutPos[0], Y at pOutPos[1]) for a missile by reading its owner unit's position via pGfxDataCopy (static or dynamic path). If the missile carries a non-zero offset radius in uSideData[4], applies a direction-based polar offset using the sinTable, allowing missiles to spiral or orbit around their target point.
+// 1.14d mac: 001826f7
 void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, D2DynamicPathStrc * pDynamicPath) {
     uint8_t byDirection;
     int32_t nCoord;
@@ -2403,6 +2480,7 @@ void __fastcall DRLGPATH_GetMissileTargetPosition(short * pOutPos, D2DynamicPath
 }
 
 // Computes a weighted distance between two packed coordinates. Uses a lookup table for distances within 8 tiles, falls back to a simple heuristic (minor + major*2) for larger distances.
+// 1.14d mac: 00182839
 int32_t __stdcall DRLGPATH_GetWeightedDistancePacked(uint32_t nPackedPos1, uint32_t nPackedPos2) {
     // Static local variables (originally global data)
     static int gaPathWeightTable[64] = {
@@ -2496,6 +2574,7 @@ int32_t __stdcall DRLGPATH_GetWeightedDistancePacked(uint32_t nPackedPos1, uint3
 }
 
 // Given a triplet of candidate directions (from GetPathDirectionTriplet), checks each against collision and returns the first non-blocked direction. Used by path smoothing and movement.
+// 1.14d mac: 001815fb
 static BOOL __stdcall DRLGPATH_FindNonBlockedDirectionFromTriplet(uint32_t nPackedPos, int * pnDirTriplet, int * pnChosenDir, D2PathTypeArg * pPathTypeArg) {
     int32_t iVar2;
     int32_t iVar3;
@@ -2637,6 +2716,7 @@ static BOOL __stdcall DRLGPATH_RaycastCollisionLine(int * pVelocity, uint32_t nP
 }
 
 // Performs a Bresenham line raycast between two packed positions, checking collision at each step. Handles all octant cases (X-major, Y-major, diagonal). Returns 0 if blocked, 1 if path is clear.
+// 1.14d mac: 00181dfb
 static BOOL __stdcall DRLGPATH_RaycastBresenhamLine(uint32_t nPackedSrc, D2PathPointStrc * pnPackedDst, D2DynamicPathStrc * pPathArg) {
     int32_t iVar1;
     D2PathPointStrc sDst;
@@ -2801,6 +2881,7 @@ static BOOL __stdcall DRLGPATH_RaycastBresenhamLine(uint32_t nPackedSrc, D2PathP
 }
 
 // Checks if a target position is reachable from a unit's current dynamic path position. Validates unit type (player/monster), handles zero-velocity case, and performs a Bresenham line collision check.
+// 1.14d mac: 001819a2
 static BOOL DRLGPATH_CheckTargetReachable(D2PathPointStrc * pTargetPos, D2DynamicPathStrc * pDynamicPath) {
     BOOL nReachResult;
     uint32_t nPackedPos;
@@ -2839,6 +2920,7 @@ static BOOL DRLGPATH_CheckTargetReachable(D2PathPointStrc * pTargetPos, D2Dynami
 }
 
 // Smooths a path by iterating through waypoints, choosing the best non-blocked direction at each step using direction triplets and collision checks. Builds a refined path with fewer unnecessary turns. Returns the waypoint count, which it also stores into pDynamicPath->dwPathPoints - the tail is MOV [ECX+0x28],EAX at 00679c71, so the count is live in EAX at the RET. PATH_FindPathToward tail-returns it for the nDirOffset case; typing this void made that caller return an uninitialised local, which reached PATH_CalculatePath as a waypoint count of ~2e9 and indexed PathPoints[] off the end.
+// 1.14d mac: 0018141b
 int32_t __fastcall DRLGPATH_SmoothPathPoints(D2PathTypeArg * pPathTypeArg) {
     BOOL _bFoundDir;
     bool bFoundDir;
@@ -2915,6 +2997,7 @@ int32_t __fastcall DRLGPATH_SmoothPathPoints(D2PathTypeArg * pPathTypeArg) {
 }
 
 // Builds a coarse dynamic path from the unit's current position toward the target stored in pPathTypeArg, writing waypoints into pDynamicPath->PathPoints and returning the count. If a direction offset is already set, delegates to DRLGPATH_SmoothPathPoints. Otherwise: if the target is directly reachable (CheckTargetReachable) or within the IDA* distance threshold, emits a single waypoint; else walks step-by-step toward the target via DRLGPATH_GetPathDirectionTripletPacked + FindNonBlockedDirectionFromTriplet (using gPathDirectionOffsetsX/Y), recording a waypoint each time the chosen direction changes, bounded by nDistMax iterations and anti-backtracking.
+// 1.14d mac: 00181779
 int32_t __fastcall PATH_FindPathToward(D2PathTypeArg * pPathTypeArg) {
     int32_t nSmoothResult;
     int aDirTriplet[3];
@@ -3023,12 +3106,14 @@ int32_t __fastcall PATH_FindPathToward(D2PathTypeArg * pPathTypeArg) {
     return nWaypointCount;
 }
 
+// 1.14d mac: 00181ab3
 int32_t __fastcall PATH_FindPathTowardFromStart(D2PathTypeArg * pPathTypeArg) {
     pPathTypeArg->pDynamicPath->nPathPointIndex = 0;
     int32_t nResult = PATH_FindPathToward(pPathTypeArg);
     return nResult;
 }
 
+// 1.14d mac: 00181ac9
 int32_t __fastcall PATH_FindPathSmoothed(D2PathTypeArg * pPathTypeArg) {
     D2DynamicPathStrc* pDynamicPath = pPathTypeArg->pDynamicPath;
     pDynamicPath->nPathPointIndex = 0;
@@ -3053,6 +3138,7 @@ int32_t __fastcall PATH_FindPathSmoothed(D2PathTypeArg * pPathTypeArg) {
 }
 
 // Finds a path from source to destination by first trying PATH_FindPathToward (greedy/directional). If the result doesn't reach the destination and the straight-line distance is short enough (squared distance &lt; 0x145), falls back to PATH_FindPathAStarAlt; if A* also fails, retries the directional search. Returns the waypoint count.
+// 1.14d mac: 00181b42
 int32_t __fastcall PATH_FindPathTowardWithAStarFallback(D2PathTypeArg * pPathTypeArg) {
     int32_t nResult;
     D2PathPointStrc nLastWaypoint;
@@ -3100,6 +3186,7 @@ int32_t __fastcall PATH_FindPathTowardWithAStarFallback(D2PathTypeArg * pPathTyp
     return nResult;
 }
 
+// 1.14d mac: 00181c17
 int32_t __fastcall PATH_FindPathSingleStep(D2PathTypeArg * pPathTypeArg) {
     D2DynamicPathStrc* pDynamicPath = pPathTypeArg->pDynamicPath;
     pDynamicPath->nPathPointIndex = 0;
@@ -3115,6 +3202,7 @@ int32_t __fastcall PATH_FindPathSingleStep(D2PathTypeArg * pPathTypeArg) {
     return 1;
 }
 
+// 1.14d mac: 00181c73
 int32_t __fastcall PATH_FindPathForceMove(D2PathTypeArg * pPathTypeArg) {
     D2DynamicPathStrc* pDynamicPath = pPathTypeArg->pDynamicPath;
     pDynamicPath->nPathPointIndex = 0;
@@ -3124,6 +3212,7 @@ int32_t __fastcall PATH_FindPathForceMove(D2PathTypeArg * pPathTypeArg) {
 }
 
 // Pathfinding callback that computes a knockback destination for a unit. Derives displacement from source to target using the dominant-axis normalisation scaled by half the path's nDist, then raycasts (Bresenham) the resulting endpoint back through collision geometry. Writes the final reachable point into pDynamicPath->PathPoints[0] and sets dwPathPoints=1. Returns 1 if the unit actually moved, 0 if blocked at source.
+// 1.14d mac: 00181ca4
 int32_t __fastcall PATH_FindPathKnockback(D2PathTypeArg * pPathTypeArg) {
     int nDeltaY;
     int nAbsDY;
@@ -3201,6 +3290,7 @@ int32_t __fastcall PATH_FindPathKnockback(D2PathTypeArg * pPathTypeArg) {
 }
 
 // Builds a circular set of path points around the origin using sin/cos lookup tables. Generates up to 77 waypoints in a spiral pattern, stored in the static path structure. Used for circular movement patterns.
+// 1.14d mac: 00182162
 int32_t __fastcall DRLGPATH_BuildCircularPathPoints(D2DynamicPathStrc * pStaticPath, D2SeedStrc * pSeed) {
     uint16_t nNewX;
     uint32_t nPackedCurX;
@@ -3240,6 +3330,7 @@ int32_t __fastcall DRLGPATH_BuildCircularPathPoints(D2DynamicPathStrc * pStaticP
 }
 
 // Builds a set of randomized path waypoints using a seed-based random direction offset. Computes direction triplets and applies random perturbations to create organic-looking movement paths.
+// 1.14d mac: 00182231
 void __fastcall DRLGPATH_BuildRandomizedPathPoints(D2DynamicPathStrc * pPathStrc, D2SeedStrc * pDynamicPath) {
     uint32_t nChosenDir;
     D2PathPointStrc* pWaypointOut;

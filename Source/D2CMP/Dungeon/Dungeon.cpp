@@ -13,6 +13,7 @@
 namespace D2CMP::DUNGEON::Dungeon {
 
 // Tail-calls TileProjects::Alloc (already int* returning) and passes its result straight through unmodified to RET.
+// 1.14d mac: 001353c2
 int * __stdcall TILEPROJECT_AllocSlot(void * pTileProject, char * szFilename) {
     int i;
     if (!pTileProject) {
@@ -90,6 +91,7 @@ uint32_t __stdcall TILEPROJECT_LookupTilesInAllProjects(void * * ppProjects, int
     return nMaxTiles - nRemaining;
 }
 
+// 1.14d mac: 00135500
 int32_t __stdcall GetOrientation(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79);
@@ -99,6 +101,7 @@ int32_t __stdcall GetOrientation(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     return pTileLibraryEntry->nOrientation;
 }
 
+// 1.14d mac: 0013553e
 int32_t __stdcall GetIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7a);
@@ -108,6 +111,7 @@ int32_t __stdcall GetIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     return pTileLibraryEntry->nIndex;
 }
 
+// 1.14d mac: 0013557c
 uint32_t __stdcall TILEPROJECT_GetTileCount(D2TileLibraryEntryStrc * pTileEntry) {
     if (!pTileEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7b);
@@ -135,6 +139,7 @@ int __stdcall TILEPROJECT_GetAnimatedTileDataPtr(D2TileLibraryEntryStrc * pTileL
     return pTileLibraryEntry->nFrame_Rarity;
 }
 
+// 1.14d mac: 001355f9
 int32_t __stdcall GetSubIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7e);
@@ -153,6 +158,7 @@ int __stdcall TILEPROJECT_GetTileOrientationIndex(D2TileLibraryEntryStrc * pTile
     return pTileLibraryEntry->nDirection;
 }
 
+// 1.14d mac: 00135637
 int __stdcall TILEPROJECT_GetRoofHeightIndex(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x80);
@@ -162,6 +168,7 @@ int __stdcall TILEPROJECT_GetRoofHeightIndex(D2TileLibraryEntryStrc * pTileLibra
     return pTileLibraryEntry->nHeight;
 }
 
+// 1.14d mac: 00135675
 BYTE * __stdcall TILE_GetTileFlags(D2TileLibraryEntryStrc * pTileLibraryEntry) {
     if (!pTileLibraryEntry) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x81);

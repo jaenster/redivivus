@@ -121,6 +121,7 @@ static void INVENTORY_UnlinkItemFromList(D2UnitStrc * * pItemListHead, D2UnitStr
     pNode->pPrevItem = 0;
 }
 
+// 1.14d mac: 0016a7c4
 static BOOL __stdcall INVENTORY_IsGridRectEmpty(uint8_t byWidth, int32_t nStartCol, uint8_t byHeight, D2InventoryGridInfoStrc * pGridInfo, int32_t nStartRow) {
     D2UnitStrc** pRowCells;
     for (int nRow = nStartRow; nRow < nStartRow + byHeight; nRow++) {
@@ -233,6 +234,7 @@ int __fastcall Unreferenced_0063aad0(D2UnitStrc * pUnit) {
 }
 
 // Removes an item unit from its owning D2InventoryStrc. Validates inventory signature (0x1020304), removes the item from its grid slot, clears the cursor-item pointer or unlinks it from the item list, zeroes the item's inventory/grid references, clears the owner's stat bonuses via STATLIST_RemoveFromOwnerAndRecalc, and clears dwPrimaryWeaponGUID if it matched. Returns 1 on success, 0 on any validation failure.
+// 1.14d mac: 001670b9
 BOOL __fastcall INVENTORY_RemoveItemFromInventory(D2UnitStrc * pItem) {
     if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
@@ -291,6 +293,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 0016737f
 D2InventoryStrc * __stdcall STRUCT_CreatePlayerInventory(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
     if (!pMemory && pUnit) {
       pMemory = pUnit->pMemory;
@@ -315,6 +318,7 @@ D2InventoryStrc * __stdcall STRUCT_CreatePlayerInventory(D2PoolManagerStrc * pMe
 
 // Destroys a D2InventoryStrc and frees all associated memory. Removes the cursor item and every item in the linked list via INVENTORY_RemoveItemFromInventory, frees each grid cell array, the grids array itself, the pending-update list, and the corpse-delete list, then frees the inventory struct itself. Clears the back-pointer on the owner unit. Guards on nSignatureMagic == 0x1020304.
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00167412
 void __stdcall STRUCT_FreeInventory(D2InventoryStrc * pInventory) {
     D2CorpseStrc* pNextCorpse;
     D2InventoryToBeUpdatedStrc* pNextUpdate;
@@ -361,6 +365,7 @@ void __stdcall STRUCT_FreeInventory(D2InventoryStrc * pInventory) {
     D2_FREE_POOL_AT(pInventory->pMemory, pInventory, ".\\INVENTORY\\Inventory.cpp", 0x27f);
 }
 
+// 1.14d mac: 00167593
 BOOL __stdcall INVENTORY_CheckDoItemBelongToInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     if (!pInventory) {
       return 0;
@@ -383,6 +388,7 @@ BOOL __stdcall INVENTORY_CheckDoItemBelongToInventory(D2InventoryStrc * pInvento
     return (uint32_t)(ppInventory->pInventory == pInventory);
 }
 
+// 1.14d mac: 001675c1
 D2UnitStrc * __stdcall INVENTORY_RemoveItem(D2InventoryStrc * pInventory, D2UnitStrc * pItem) {
     if (!pInventory) {
       return nullptr;
@@ -402,6 +408,7 @@ D2UnitStrc * __stdcall INVENTORY_RemoveItem(D2InventoryStrc * pInventory, D2Unit
 
 // Ensures that grid slot nNewGridSize exists in pInventory and optionally allocates its cell array. If the slot index is within the existing pGrids array, validates or allocates the cell buffer to match pInventorySize (Width x Height). If the slot is beyond the current count, reallocates pGrids to hold the new index and allocates a zeroed cell array. Returns a pointer to the target D2InventoryGridInfoStrc, or NULL on mismatch/failure. Called before any grid read/write to lazily expand the inventory grid table.
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00167a76
 static D2InventoryGridInfoStrc * __stdcall ReinitializeInventoryGrid(int32_t nNewGridSize, D2InventorySizesStrc * pInventorySize, D2InventoryStrc * pInventory) {
     D2UnitStrc** pNewGrid;
     D2InventoryGridInfoStrc* pGridInfo;
@@ -446,6 +453,7 @@ static D2InventoryGridInfoStrc * __stdcall ReinitializeInventoryGrid(int32_t nNe
 }
 
 // Links pItem onto the tail of pInventoryStrc's item linked list (pFirstItem/pLastItem chain). Validates that pItem is a unit of type UNIT_ITEM (eUnitType==4) with valid pUnitData and pStatsEx. Sets pUnitDataItem->pInventory to the previous last item and pStatsEx to the inventory pointer.
+// 1.14d mac: 001676b1
 static void INVENTORY_AppendItemToList(D2UnitStrc * pItem, D2InventoryStrc * pInventoryStrc) {
     if ((pItem ? pItem->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return;
@@ -517,6 +525,7 @@ static void __stdcall INVENTORY_InsertItemInPageList(D2InventoryStrc * pInventor
 
 // Places an item unit (pUnit, must be UNIT_ITEM with a valid signature 0x1020304 inventory) into a target inventory page grid at cell (nnX,nnY). Reads the item's width/height from D2ItemsTxt; for special pages (nParam1 0=stash-like via UINT_ARRAY_00744660, 1=default config) forces a 1x1 footprint, otherwise resolves the page grid dimensions (GetGridDimensions on eInventoryPage nParam2) and bounds-checks the rect. Reinitializes the grid, requires the target rect empty (INVENTORY_IsGridRectEmpty), then if the item was on the ground (Run anim) removes its room/collision presence, unlinks it from any prior inventory, links it in, fills the grid rect, sets owner GUID and page/location bytes, increments item count, and sets the item's static X/Y. Returns 1 on success, 0 on any validation failure.
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00167cb1
 static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_t nInventoryGrid, int32_t nInventoryPage, D2UnitStrc * pUnit, D2InventoryStrc * pInventory) {
     D2UnitDataItemStrc* pDVar2;
     D2UnitDataItemStrc* pDVar3;
@@ -667,6 +676,7 @@ static BOOL __stdcall INVENTORY_PlaceItemInGrid(int32_t nnX, int32_t nnY, int32_
     return 0;
 }
 
+// 1.14d mac: 001675fb
 BOOL __stdcall PutItemInInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, uint32_t dwParam) {
     D2UnitDataItemStrc* pDVar2;
     D2UnitStrc* pDVar3;
@@ -727,6 +737,7 @@ BOOL __stdcall PutItemInInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUn
     return 1;
 }
 
+// 1.14d mac: 00167701
 D2UnitStrc * __stdcall INVENTORY_GetFirstItem(D2InventoryStrc * pInventory) {
     if (!pInventory) {
       return nullptr;
@@ -749,6 +760,7 @@ D2UnitStrc * __stdcall INVENTORY_GetLastItem(D2InventoryStrc * pInventory) {
     return pInventory->pLastItem;
 }
 
+// 1.14d mac: 0016a9d4
 static uint32_t __stdcall INVENTORY_CheckItemFitsInGrid(uint32_t dwUnused, uint8_t nGridCol, int32_t nY, int32_t nX, uint8_t byItemHeight, D2InventoryGridInfoStrc * pGridInfo) {
     if ((int)((uint32_t)nGridCol + nX) <= (int)(uint32_t)pGridInfo->bWidth && (int)((uint32_t)byItemHeight + nY) <= (int)(uint32_t)pGridInfo->bHeight) {
       uint32_t bFits;
@@ -1085,6 +1097,7 @@ static BOOL __stdcall INVENTORY_FindGridPositionByOwner3(uint8_t byItemHeight, u
 
 // Finds a valid grid position in pInventory for pUnit (must be UNIT_ITEM) on the inventory page eInvPage. Queries the item's width/height via ITEM_GetItemsTxt_nWidthAndHeight, retrieves or creates the grid via ReinitializeInventoryGrid, then dispatches to INVENTORY_FindPlacementSlot, INVENTORY_FindGridPositionByOwner, INVENTORY_FindGridPositionByOwner2, or INVENTORY_FindGridPositionByOwner3 depending on item/inventory size class. Returns 0 on any validation failure.
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 0016771a
 int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eInvPage, int * ppnOutX, int * pnOutY, uint8_t byPage) {
     BOOL nResultSlot;
     D2GridScreenCoordinates sGridDims;
@@ -1140,6 +1153,7 @@ int __stdcall INVENTORY_FindItemGridPosition(D2InventoryStrc * pInventory, D2Uni
 // @wasnamed INVENTORY_PlaceItemInGrid - one name on two different functions.
 // @evidence Calls INVENTORY_FindItemGridPosition first, then 0063afd0 with
 // the found x/y. The explicit-position placement is 0063afd0.
+// 1.14d mac: 00167c2d
 BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eInvPage, int32_t nGridX, uint8_t nPage, char * szFile, int32_t nLine) {
     BOOL pResult;
     uint32_t nPageByte = nPage;
@@ -1166,6 +1180,7 @@ BOOL __stdcall INVENTORY_AutoPlaceItemInGrid(D2InventoryStrc * pInventory, D2Uni
 
 // Checks whether an item (pUnit) can be placed at grid position (nGridX, nGridY) on page eInvPage in pInventory without colliding with existing items. Reads item dimensions via ITEM_GetItemsTxt_nWidthAndHeight, reinitializes the grid layout, then walks the item's footprint cells. Writes collision count to *pnParam; returns 1 if all cells are clear, 0 if any cell is occupied or inputs are invalid.
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00167fd0
 BOOL __stdcall INVENTORY_CheckGridCollisions(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, D2UnitStrc * * ppCollidedItemOut, int * pnCollidingItemCount, uint8_t nPage) {
     int _bResult;
     bool bResult;
@@ -1248,6 +1263,7 @@ BOOL __stdcall INVENTORY_CheckGridCollisions(D2InventoryStrc * pInventory, D2Uni
 
 // Checks whether the rectangular region [nGridX, nGridY, nGridX+itemW, nGridY+itemH] in the inventory grid for eInvPage is clear enough to place pUnit. Iterates every cell in the bounding box via the reinitialised grid; returns 0 if a box-code item blocks placement (when bCheckBox set) or if more than one distinct item occupies the region, otherwise returns 1. Writes a blocking item pointer to *pnOutItem when a conflict is found.
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00168123
 BOOL __stdcall INVENTORY_CheckGridOccupancy(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, D2UnitStrc * * pnOutItem, uint8_t nPageByte, int bCheckBox) {
     D2ItemsTxt* pItemsTxt;
     char nItemWidth;
@@ -1344,6 +1360,7 @@ int __stdcall Unreferenced_0063bcb0(int param_1, int param_2, int param_3, int p
     return 1;
 }
 
+// 1.14d mac: 001682d5
 BOOL __stdcall INVENTORY_PlaceItemAtCoords(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t nGridX, int32_t nGridY, int32_t eInvPage, int32_t nUnused, uint8_t bGridIndex) {
     if (!pInventory) {
       return 0;
@@ -1353,14 +1370,17 @@ BOOL __stdcall INVENTORY_PlaceItemAtCoords(D2InventoryStrc * pInventory, D2UnitS
     return BVar1;
 }
 
+// 1.14d mac: 0016831a
 void __stdcall UnusedDebug(char * szFilename, uint32_t nLine, D2InventoryStrc * pInventory, int32_t nX, int32_t nY, eInventoryPage eDebugPage, uint32_t dwParam, uint8_t nInvPage) {
 
 }
 
+// 1.14d mac: 0016831f D2Common::INVENTORY::Inventory::NullSub
 void __stdcall NullSub(D2InventoryStrc * pInventory) {
 
 }
 
+// 1.14d mac: 00168324
 D2UnitStrc * __stdcall GetUnitAndXAndY(D2InventoryStrc * pInventory, int32_t nGridX, int32_t nGridY, int * pnOutX, int * pnOutY, int32_t eInvPage, uint8_t nGridSize) {
     D2GridScreenCoordinates sGridDims;
     D2UnitStrc* pUnit;
@@ -1391,6 +1411,7 @@ D2UnitStrc * __stdcall GetUnitAndXAndY(D2InventoryStrc * pInventory, int32_t nGr
     return nullptr;
 }
 
+// 1.14d mac: 00168414
 BOOL __stdcall INVENTORY_GetItemAtBodyLoc(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int32_t eBodyLoc) {
     if (pInventory && (uint32_t)eBodyLoc <= 0xc) {
       BOOL pResult;
@@ -1401,6 +1422,7 @@ BOOL __stdcall INVENTORY_GetItemAtBodyLoc(D2InventoryStrc * pInventory, D2UnitSt
     return 0;
 }
 
+// 1.14d mac: 00168455
 D2UnitStrc * __stdcall INVENTORY_GetItemByGridOffset(D2InventoryStrc * pInventory, int32_t nGridOffset) {
     D2InventoryGridStrc* pInventoryGrid;
     if (!pInventory) {
@@ -1426,6 +1448,7 @@ D2UnitStrc * __stdcall INVENTORY_GetItemByGridOffset(D2InventoryStrc * pInventor
 
 // @wasnamed NullSub - one name on two different functions.
 // @evidence Bare RET, 2 parameters. 0063bd00 is a bare RET with 1 parameter.
+// 1.14d mac: 0016849b
 void __stdcall NullSub_2Arg(D2InventoryStrc * pInventory, uint32_t dwParam2) {
 
 }
@@ -1469,6 +1492,7 @@ BOOL __stdcall INVENTORY_HasEquippedWeaponClass(D2InventoryStrc * pInventory, in
     return 0;
 }
 
+// 1.14d mac: 0016860a
 D2UnitStrc * __stdcall GetEquipedWeapon(D2InventoryStrc * pInventory) {
     D2InventoryGridInfoStrc* pGridInfo;
     D2UnitStrc* pUnit;
@@ -1503,6 +1527,7 @@ D2UnitStrc * __stdcall GetEquipedWeapon(D2InventoryStrc * pInventory) {
     return nullptr;
 }
 
+// 1.14d mac: 001686a0
 D2UnitStrc * __stdcall GetPrimaryWeapon(D2InventoryStrc * pInventory) {
     uint32_t bIsWeaponType;
     D2UnitStrc* pItem;
@@ -1535,6 +1560,7 @@ D2UnitStrc * __stdcall GetPrimaryWeapon(D2InventoryStrc * pInventory) {
 }
 
 // Searches all equipped body slots (11 slots, stride 4) for an item matching nItemType. For weapon-animation-class items (anim 2, 3, or 0xC), type 6 returns the non-primary weapon and type 5 returns the primary weapon. For other items, matches via ITEM_GetItemsTxt_bComponent against nItemType. Returns the first matching D2UnitStrc* or NULL. Used to locate worn items by visual/functional category (e.g. right-arm vs left-arm weapon).
+// 1.14d mac: 00168759
 D2UnitStrc * __stdcall INVENTORY_FindWornItemByType(D2InventoryStrc * pInventory, uint32_t nItemType) {
     uint8_t bMatchesType;
     int32_t nAnimClass;
@@ -1581,6 +1607,7 @@ D2UnitStrc * __stdcall INVENTORY_FindWornItemByType(D2InventoryStrc * pInventory
     return nullptr;
 }
 
+// 1.14d mac: 00168810
 uint32_t __stdcall INVENTORY_IsItemLocationValid(D2InventoryStrc * pInventory, D2UnitStrc * pItem) {
     if (pInventory && pInventory->nSignatureMagic == 0x1020304 && pItem && pItem->eUnitType == UNIT_ITEM) {
       uint32_t nXPos;
@@ -1591,6 +1618,7 @@ uint32_t __stdcall INVENTORY_IsItemLocationValid(D2InventoryStrc * pInventory, D
     return 0;
 }
 
+// 1.14d mac: 00168842
 int32_t __stdcall INVENTORY_GetItemXPosition(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     if (pInventory && pInventory->nSignatureMagic == 0x1020304 && pUnit && pUnit->eUnitType == UNIT_ITEM) {
       int32_t nXPos;
@@ -1601,6 +1629,7 @@ int32_t __stdcall INVENTORY_GetItemXPosition(D2InventoryStrc * pInventory, D2Uni
     return 0;
 }
 
+// 1.14d mac: 0016886a
 void __stdcall INVENTORY_SetCursorItem(D2InventoryStrc * pInventory, D2UnitStrc * pItem) {
     D2ItemInventoryNodeStrc* ppInventory;
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
@@ -1620,6 +1649,7 @@ void __stdcall INVENTORY_SetCursorItem(D2InventoryStrc * pInventory, D2UnitStrc 
 }
 
 // @blizzard INVENTORYGetHandItem
+// 1.14d mac: 001688c3
 D2UnitStrc * __stdcall INVENTORY_GetHandItem(D2InventoryStrc * pInventory) {
     if (!pInventory) {
       return nullptr;
@@ -1632,6 +1662,7 @@ D2UnitStrc * __stdcall INVENTORY_GetHandItem(D2InventoryStrc * pInventory) {
 }
 
 // Searches the stash inventory page for the first item that is socketable with pUnit1 (the socketing reagent) and has remaining stack capacity (quantity &lt; maxStack). If pUnit2 is non-null, scanning starts after pUnit2 in the page-linked list (used to resume past a previously checked item). Returns the matching D2UnitStrc* or null if none found.
+// 1.14d mac: 001688dc
 D2UnitStrc * __stdcall INVENTORY_FindBackpackItemForStack(D2InventoryStrc * pInventory, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
     D2GridScreenCoordinates sGridDims;
     if (!pInventory) {
@@ -1701,6 +1732,7 @@ D2UnitStrc * __stdcall INVENTORY_FindBackpackItemForStack(D2InventoryStrc * pInv
 }
 
 // Scans the main inventory grid of pInventory for the first item that is socketable (per IsItemSocketable) relative to pUnit1, is not fully stacked, and — if pUnit2 is non-null — appears after pUnit2 in the item list. Returns the matching D2UnitStrc* or NULL.
+// 1.14d mac: 001689f5
 D2UnitStrc * __stdcall INVENTORY_FindEquippedItemForStack(D2InventoryStrc * pInventory, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
     if (!pInventory) {
       return nullptr;
@@ -1829,6 +1861,7 @@ D2UnitStrc * __stdcall INVENTORY_FindMatchingScrollBook(D2InventoryStrc * pInven
     return nullptr;
 }
 
+// 1.14d mac: 00168c91
 static BOOL INVENTORY_PlaceItemInBeltSlot(int * pnBeltType, D2InventoryStrc * pInventory, uint32_t nBeltSlot) {
     if (pnBeltType && pInventory && pInventory->nSignatureMagic == 4 && nBeltSlot <= 0xf) {
       BOOL nGridResult;
@@ -1840,6 +1873,7 @@ static BOOL INVENTORY_PlaceItemInBeltSlot(int * pnBeltType, D2InventoryStrc * pI
 }
 
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00168c18
 BOOL __stdcall INVENTORY_CanPlaceItemInBelt(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, uint32_t nBeltSlot) {
     char byItemHeight;
     char pUnitSlot;
@@ -1862,6 +1896,7 @@ BOOL __stdcall INVENTORY_CanPlaceItemInBelt(D2InventoryStrc * pInventory, D2Unit
     return 0;
 }
 
+// 1.14d mac: 00168cd5
 void __stdcall INVENTORY_OnBeltChanged_NoOp(D2InventoryStrc * pInventory, uint32_t dwParam2) {
 
 }
@@ -1874,6 +1909,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 00168cda
 BOOL __stdcall INVENTORY_CanAutoBeltItem(D2InventoryStrc * pInventory, D2UnitStrc * pItem) {
     BOOL _bSamePotion;
     bool bSamePotion;
@@ -1917,6 +1953,7 @@ BOOL __stdcall INVENTORY_CanAutoBeltItem(D2InventoryStrc * pInventory, D2UnitStr
 
 // Finds the best belt slot index for pUnit (a potion item) and writes it to *dwParam. Prefers a column already containing the same potion type (stacking behaviour), falling back to any empty slot if the item's txt entry has bAutoBelt set. Only considers 1x1 beltable items; slot count is capped by the equipped belt's nBoxes. Does nothing if no valid slot is found.
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00168d7a
 BOOL __stdcall INVENTORY_FindBeltSlotForPotion(D2InventoryStrc * pInventory, D2UnitStrc * pUnit, int * pnOutSlotIndex) {
     D2UnitStrc* pBeltItem;
     int32_t nBeltTypeId;
@@ -1979,6 +2016,7 @@ BOOL __stdcall INVENTORY_FindBeltSlotForPotion(D2InventoryStrc * pInventory, D2U
     return 0;
 }
 
+// 1.14d mac: 00168ef8
 int __stdcall INVENTORY_PlacePotionInBelt(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     int32_t nBeltSlot = 0;
     BOOL bFoundSlot = INVENTORY_FindBeltSlotForPotion(pInventory, pUnit, &nBeltSlot);
@@ -1995,6 +2033,7 @@ int __stdcall INVENTORY_PlacePotionInBelt(D2InventoryStrc * pInventory, D2UnitSt
     return INVENTORY_PlaceItemInGrid(nBeltSlot, 0, 1, 0, pUnit, pInventory);
 }
 
+// 1.14d mac: 00168f3e
 D2UnitStrc * __stdcall INVENTORY_GetItemInBeltSlot(D2InventoryStrc * pInventory, uint32_t nBeltSlot) {
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
       return nullptr;
@@ -2009,6 +2048,7 @@ D2UnitStrc * __stdcall INVENTORY_GetItemInBeltSlot(D2InventoryStrc * pInventory,
 }
 
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00168f87
 BOOL __stdcall INVENTORY_CheckBeltSlotAndGetItem(D2InventoryStrc * pInventory, D2UnitStrc * pItemUnit, uint32_t nBeltSlot, D2UnitStrc * * ppOutItem) {
     char byItemHeight;
     char pInventorySlot;
@@ -2050,6 +2090,7 @@ BOOL __stdcall INVENTORY_CheckBeltSlotAndGetItem(D2InventoryStrc * pInventory, D
 }
 
 // Returns true if a non-broken, non-disabled shield is equipped in either the primary (grid cell 4) or secondary (grid cell 5) weapon slot of the inventory. If ppUnit is non-null, writes the found shield unit pointer to *ppUnit. Returns false and leaves *ppUnit null if no shield is equipped.
+// 1.14d mac: 00169068
 BOOL __stdcall INVENTORY_GetEquippedShield(D2InventoryStrc * pInventory, D2UnitStrc * * ppUnit) {
     BOOL _BVar1;
     uint32_t _bIsShield;
@@ -2207,6 +2248,7 @@ uint32_t __stdcall INVENTORY_CanMoveEquippedToPage(D2InventoryStrc * pInventory,
     return 0;
 }
 
+// 1.14d mac: 0016924f
 void __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc * pInventory) {
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
       return;
@@ -2219,6 +2261,7 @@ void __stdcall INVENTORY_RemoveAllItems(D2InventoryStrc * pInventory) {
     }
 }
 
+// 1.14d mac: 0016927a
 D2InventoryToBeUpdatedStrc * __stdcall GetUpdates(D2InventoryStrc * pInventory) {
     if (!pInventory) {
       return nullptr;
@@ -2231,6 +2274,7 @@ D2InventoryToBeUpdatedStrc * __stdcall GetUpdates(D2InventoryStrc * pInventory) 
 }
 
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00169293
 void __stdcall FreeUpdatesFromInventory(D2InventoryStrc * pInventory) {
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
       return;
@@ -2264,6 +2308,7 @@ BOOL __stdcall SERVER_IsInToBeUpdatedList(D2InventoryStrc * pInventory, int32_t 
 }
 
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00169300
 void __stdcall UpsertToUpdateList(D2InventoryStrc * pInventory, D2UnitStrc * pItem) {
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304 && pItem && pItem->eUnitType == UNIT_ITEM)) {
       return;
@@ -2292,6 +2337,7 @@ void __stdcall UpsertToUpdateList(D2InventoryStrc * pInventory, D2UnitStrc * pIt
     pInventory->pUpdatesLast = pNewUpdate;
 }
 
+// 1.14d mac: 001693e1
 D2InventoryToBeUpdatedStrc * __stdcall GetNextUpdate(D2InventoryToBeUpdatedStrc * pUpdate) {
     if (!pUpdate) {
       return nullptr;
@@ -2300,6 +2346,7 @@ D2InventoryToBeUpdatedStrc * __stdcall GetNextUpdate(D2InventoryToBeUpdatedStrc 
     return pUpdate->pNext;
 }
 
+// 1.14d mac: 001693f4
 uint32_t __stdcall GetUpdatesUUid(D2InventoryToBeUpdatedStrc * pInventoryToBeUpdated) {
     if (!pInventoryToBeUpdated) {
       return 0;
@@ -2308,6 +2355,7 @@ uint32_t __stdcall GetUpdatesUUid(D2InventoryToBeUpdatedStrc * pInventoryToBeUpd
     return pInventoryToBeUpdated->nUnitGuid;
 }
 
+// 1.14d mac: 00169406
 int32_t __stdcall ITEM_ItemsInItem(D2InventoryStrc * pInventory) {
     if (!pInventory) {
       return 0;
@@ -2320,6 +2368,7 @@ int32_t __stdcall ITEM_ItemsInItem(D2InventoryStrc * pInventory) {
 }
 
 // Walks the inventory item list and returns the first item matching nItemType (via IsOfType). If pAfterItem is non-null, skips items until that item is found, then continues searching from the next grid. Validates inventory magic signature before iterating. Returns NULL if the inventory is invalid, the type is not found, or iteration detects a corrupt chain.
+// 1.14d mac: 0016941f
 D2UnitStrc * __stdcall INVENTORY_FindItemByType(D2InventoryStrc * pInventory, int nItemType, D2UnitStrc * pAfterItem) {
     D2GridScreenCoordinates sGridDims;
     D2UnitDataItemStrc* pItemData;
@@ -2742,6 +2791,7 @@ void __fastcall INVENTORY_SetOrClearCursorItem(D2InventoryStrc * pInventory, D2U
     pInventory->dwPrimaryWeaponGUID = -1;
 }
 
+// 1.14d mac: 00169508
 void __stdcall INVENTORY_UpdatePrimaryWeapon(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     if (!(pInventory && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM)) {
       return;
@@ -2777,6 +2827,7 @@ void __stdcall INVENTORY_UpdatePrimaryWeapon(D2InventoryStrc * pInventory, D2Uni
     }
 }
 
+// 1.14d mac: 001695eb
 void __stdcall INVENTORY_SwapPrimaryWeaponOnRemoval(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     D2UnitStrc* pOtherArmWeapon;
     if (!(pInventory && (pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM)) {
@@ -2858,6 +2909,7 @@ int __stdcall INVENTORY_GetWeaponHandedness(D2UnitStrc * pUnit, D2InventoryStrc 
     return -1;
 }
 
+// 1.14d mac: 0016969b
 void __stdcall INVENTORY_SetOwnerGUID(D2InventoryStrc * pInventory, int32_t nUnitGUID) {
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
       return;
@@ -2866,6 +2918,7 @@ void __stdcall INVENTORY_SetOwnerGUID(D2InventoryStrc * pInventory, int32_t nUni
     pInventory->nOwnerGUID = nUnitGUID;
 }
 
+// 1.14d mac: 001696b5
 int32_t __stdcall INVENTORY_GetOwnerGUID(D2InventoryStrc * pInventory) {
     if (!pInventory) {
       return -1;
@@ -2879,6 +2932,7 @@ int32_t __stdcall INVENTORY_GetOwnerGUID(D2InventoryStrc * pInventory) {
 
 // @sourcefile .\INVENTORY\Inventory.cpp
 // Appends a D2CorpseStrc {eUnitType, nUnitGUID, dwFlags, pNext} to pInventory->pCorpse/pCorpseLast and counts non-player corpses. The first arg carries the 0x1020304 inventory signature.
+// 1.14d mac: 001696d1
 void __stdcall INVENTORY_AddCorpse(D2InventoryStrc * pInventory, int32_t nUnitGUID, uint32_t dwFlags, eD2UnitType eUnitType) {
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
       return;
@@ -2905,6 +2959,7 @@ void __stdcall INVENTORY_AddCorpse(D2InventoryStrc * pInventory, int32_t nUnitGU
 
 // Removes a corpse entry from pInventory's pCorpse linked list, matched by nGUID and eUnitType. Unlinks it from the list (updating pCorpseLast when needed), decrements nCorpseCount if the entry is not a player corpse, then frees its memory. Returns 1 on successful removal, 0 if not found or inventory is invalid.
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 00169769
 BOOL __stdcall INVENTORY_RemoveCorpse(D2InventoryStrc * pInventory, int32_t nGUID, int32_t eUnitType) {
     D2CorpseStrc* pMemoryToFree;
     if (!pInventory) {
@@ -2978,6 +3033,7 @@ void __stdcall INVENTORY_FreeNotifications(D2InventoryStrc * pInventory) {
     pInventory->pCorpseLast = 0;
 }
 
+// 1.14d mac: 0016983d
 int32_t __stdcall INVENTORY_GetCorpseCount(D2InventoryStrc * pInventory) {
     if (!pInventory) {
       return 0;
@@ -2990,6 +3046,7 @@ int32_t __stdcall INVENTORY_GetCorpseCount(D2InventoryStrc * pInventory) {
 }
 
 // Returns pCorpse->pNext (+0xc).
+// 1.14d mac: 00169856
 D2CorpseStrc * __stdcall INVENTORY_GetNextCorpse(D2CorpseStrc * pCorpse) {
     if (!pCorpse) {
       return nullptr;
@@ -3006,6 +3063,7 @@ int32_t __stdcall ROOMCORPSE_GetGUID(D2CorpseStrc * pCorpse) {
     return pCorpse->nUnitGUID;
 }
 
+// 1.14d mac: 0016987c
 int32_t __stdcall CORPSE_GetMercClassId(D2CorpseStrc * pCorpse) {
     if (!pCorpse) {
       return 0;
@@ -3014,6 +3072,7 @@ int32_t __stdcall CORPSE_GetMercClassId(D2CorpseStrc * pCorpse) {
     return pCorpse->dwFlags;
 }
 
+// 1.14d mac: 0016988f
 eD2UnitType __stdcall CORPSE_GetData(D2CorpseStrc * pRoom) {
     if (!pRoom) {
       return UNIT_PLAYER;
@@ -4247,6 +4306,7 @@ void __stdcall INVENTORY_InitializeItemTypeTable() {
     gnItemTypeAltGfxSentinel = 0xff;
 }
 
+// 1.14d mac: 00169cca
 static uint32_t INVENTORY_GetAlternateGfxIndex(int32_t dwItemCode, int32_t dwAltGfxCode) {
     INVENTORY_InitializeItemTypeTable();
     uint32_t nTableIdx = 1;
@@ -4389,6 +4449,7 @@ static int32_t __stdcall INVENTORY_CalculateSwapActionCode(int32_t nParam1, int3
 }
 
 // Decides whether an item can be equipped alongside the unit's current weapon for dual-wield. pUnit=currently-equipped weapon item, pItem1=item being equipped, pCharUnit=the character. Returns 1 if compatible/allowed, 0 if not. Rejects shoots+ammo mismatches and quivers; blocks two-handers unless the Barbarian's 2H-as-1H check passes; otherwise requires both to be weapons and gates on class (Barbarian dual-wield, Assassin/Druid hand-to-hand) via ValidateClassId. Used by item-equip placement logic.
+// 1.14d mac: 0016a5e7
 static BOOL INVENTORY_CanDualWieldItems(D2UnitStrc * pUnit, D2UnitStrc * pItem1, D2UnitStrc * pCharUnit) {
     BOOL _bIsTwoHanded;
     bool bIsTwoHanded;
@@ -4519,6 +4580,7 @@ static BOOL INVENTORY_CanDualWieldItems(D2UnitStrc * pUnit, D2UnitStrc * pItem1,
 }
 
 // Determines the equip-swap action code (0-7) when equipping pNewItem into a weapon slot on pUnit1, given the current items pUnit (paired slot) and pUnit2 (current slot). Returns: 0=equip empty, 1=replace, 2=can't dual-wield, 3=move to stash, 4=two-hander blocks, 5=dual-wield swap, 6=socket insert, 7=move to stash (page check). Used by INVENTORY_GetEquipActionForBodySlot to decide what happens when a weapon slot changes.
+// 1.14d mac: 0016a093
 static uint32_t __stdcall INVENTORY_GetEquipSwapAction(D2UnitStrc * pUnit1, uint32_t nPairedBodyLoc, D2UnitStrc * pNewItem, D2UnitStrc * pUnit2, D2UnitStrc * pUnit) {
     bool bIsTwoHanded;
     BOOL bIsSocketable;
@@ -4560,6 +4622,7 @@ static uint32_t __stdcall INVENTORY_GetEquipSwapAction(D2UnitStrc * pUnit1, uint
 }
 
 // Returns the equip action code for placing pItem into body slot nParam on pUnit. First validates body location fit and equipment requirements. For arm slots (R_ARM/L_ARM and their swap pairs), retrieves both the current and paired slot items and delegates to INVENTORY_GetEquipSwapAction. For other slots, returns 1 (replace) if the slot is occupied or 1 if placing a new item; returns 3 (move to stash) if clearing an occupied slot. Returns 0 on null unit/inventory or failed fit/req check.
+// 1.14d mac: 00169f65
 int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(D2UnitStrc * pUnit, eD2BodyLocDWORD nBodyLoc, D2UnitStrc * pItem, int bSkipRequirementsCheck) {
     BOOL nReqCheckResult;
     uint32_t nPairedBodyLoc;
@@ -4612,6 +4675,7 @@ int32_t __stdcall INVENTORY_GetEquipActionForBodySlot(D2UnitStrc * pUnit, eD2Bod
     return pCurrentSlotItem ? 3 : 0;
 }
 
+// 1.14d mac: 00169f41
 D2UnitStrc * __stdcall INVENTORY_GetNextItem(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return nullptr;
@@ -4634,6 +4698,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 }
 
 // Returns the item unit if pUnit is of type ITEM (unitType == 4), otherwise returns null.
+// 1.14d mac: 00169cb4
 D2UnitStrc * __stdcall GetCarriedItem(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return nullptr;
@@ -4642,6 +4707,7 @@ D2UnitStrc * __stdcall GetCarriedItem(D2UnitStrc * pUnit) {
     return GetTypeInline(pUnit) != UNIT_ITEM ? nullptr : pUnit;
 }
 
+// 1.14d mac: 0016a184
 int32_t __stdcall ITEM_GetGUID(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return 0;
@@ -4654,6 +4720,7 @@ int32_t __stdcall ITEM_GetGUID(D2UnitStrc * pUnit) {
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
+// 1.14d mac: 0016a19a
 int32_t __stdcall ITEM_GetItemData_eD2InventoryGridType(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
       return 0;
@@ -4686,6 +4753,7 @@ D2UnitStrc * __stdcall INVENTORY_IsItemOwnedBy(D2InventoryStrc * pInventory, D2U
     return nullptr;
 }
 
+// 1.14d mac: 0016a1eb
 BOOL __stdcall FreeRecursiveInventorysWithChilds(D2InventoryStrc * pInventory) {
     if (!pInventory) {
       return 0;
@@ -4710,6 +4778,7 @@ BOOL __stdcall FreeRecursiveInventorysWithChilds(D2InventoryStrc * pInventory) {
 
 
 // Copies the backpack grid (grid index 2) cell array from pUnit's inventory into pInventory. Looks up the inventory page dimensions via GetInventoryPage + GetGridDimensions, ensures both grids exist and have matching Width x Height, then memcpys the source cell pointer array. Returns 1 on success, 0 if either inventory is invalid, grids are missing, or dimensions mismatch.
+// 1.14d mac: 0016a2f2 D2Common::INVENTORY::Inventory::CopyInventory
 static BOOL CopyInventory(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     D2GridScreenCoordinates sGridDims;
     uint8_t bWidth;
@@ -4788,6 +4857,7 @@ static BOOL __stdcall INVENTORY_ReserveGridCells(D2InventoryStrc * pInventory, D
 }
 
 // Checks whether all items on pUnit2's mercenary inventory page (INVPAGE_MERC) can be reserved into pInventory (owned by pUnit). Iterates the merc's item chain; returns 1 if every merc item fits (INVENTORY_ReserveGridCells succeeds for each), 0 if any item fails placement. Used when transferring merc gear between units.
+// 1.14d mac: 0016a3ce
 static BOOL __stdcall INVENTORY_CanTradeItemsFit(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D2UnitStrc * pUnit2) {
     int32_t bReserveResult;
     D2UnitStrc* pCurrentItem;
@@ -4831,6 +4901,7 @@ static BOOL __stdcall INVENTORY_CanTradeItemsFit(D2UnitStrc * pUnit, D2Inventory
 
 // Determines whether two units can complete a merc-item trade by making temporary inventory copies. Allocates two scratch inventories from pMemory, copies each unit's inventory into them, then calls INVENTORY_CanTransferMercItems in both directions to find which unit is the buyer. Sets *pbMercIsBuyer accordingly (false = pUnit2 buys, true = pUnit buys). Frees both scratch inventories before returning. Returns 1 if a valid transfer direction was found, 0 otherwise.
 // @sourcefile .\INVENTORY\Inventory.cpp
+// 1.14d mac: 0016a22d
 BOOL __stdcall INVENTORY_CanItemsBeTraded(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, BOOL * pnFailedSide) {
     int _bSuccess;
     bool bSuccess;
@@ -4887,6 +4958,7 @@ BOOL __stdcall INVENTORY_CanItemsBeTraded(D2PoolManagerStrc * pMemory, D2UnitStr
     return _bSuccess;
 }
 
+// 1.14d mac: 001684a0
 void __stdcall GetCurrentItemOnBodyLocation(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D2UnitStrc * * ppUnit, uint32_t bodyLoc) {
     if (!(pInventory && pInventory->nSignatureMagic == 0x1020304)) {
       return;
@@ -4913,6 +4985,7 @@ void __stdcall GetCurrentItemOnBodyLocation(D2UnitStrc * pUnit, D2InventoryStrc 
 }
 
 // Walks pUnit's inventory and builds the visual appearance arrays (pArray1=component gfx indices, pArray2=colors) from equipped items. Handles head/arms (circlet check) and torso (body-component transform loop). Used to snapshot a character's look for encoding into a packet or save record.
+// 1.14d mac: 001698a1
 void __stdcall SaveCharAppearance(D2UnitStrc * pUnit, char * pArray1, char * pArray2) {
     eD2BodyLoc eBodyLocation;
     bool bHasAppearanceColors;

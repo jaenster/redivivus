@@ -21,15 +21,18 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 
 namespace D2Common::Chat::Ignorelist::IgnoreList {
 
+// 1.14d mac: 00197e6c
 int32_t __thiscall GetPersistentSetting(::IgnoreList * pThis) {
     return pThis->nPersistentIgnore;
 }
 
+// 1.14d mac: 00197e7a
 void __thiscall SavePersistentSetting(::IgnoreList * pThis, int32_t nPersistent) {
     pThis->nPersistentIgnore = nPersistent;
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Persistent Ignore", 0, nPersistent);
 }
 
+// 1.14d mac: 0019814a
 int32_t __thiscall AppendLineToFile(::IgnoreList * pThis, char * szLine) {
     int32_t bIsEnabled;
     FILE* _File;

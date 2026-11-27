@@ -127,6 +127,7 @@ static D2InventoryTxt * __stdcall TXT_Inventory_GetLine(uint32_t nIndex) {
     return pTxtInventory + nIndex;
 }
 
+// 1.14d mac: 0014235a
 void __stdcall GetInvDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2InventoryScreenCoordinates * pOutput) {
     uint32_t nTxtIndex = nScreenMode * 0x10 + neInventoryPage;
     if (!pTxtInventory) {
@@ -149,6 +150,7 @@ void __stdcall GetInvDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2
 }
 
 // Fills a D2GridScreenCoordinates struct with grid layout data for the given inventory page and screen mode. Indexes pTxtInventory by (nScreenMode*16 + eInventoryPage) and copies gridX/Y, pixel bounds (left/right/top/bottom), and cell size (width/height). Halts with an internal error if the table is null or index is out of range.
+// 1.14d mac: 00142413
 void __stdcall GetGridDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2GridScreenCoordinates * pOutput) {
     uint32_t nTxtIndex = nScreenMode * 0x10 + neInventoryPage;
     if (!pTxtInventory) {
@@ -167,6 +169,7 @@ void __stdcall GetGridDimensions(int32_t neInventoryPage, int32_t nScreenMode, D
     }
 }
 
+// 1.14d mac: 00142477
 void __stdcall GetBodyDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2InventoryEntryStrc * pOutput, eInventoryBodyLoc eBodyLoc) {
     D2InventoryEntryStrc* pDVar1;
     uint8_t byHeight;

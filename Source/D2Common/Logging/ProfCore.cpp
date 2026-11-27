@@ -2641,6 +2641,7 @@ void __fastcall PROFCORE_AccumulateTime(int nIndex, LARGE_INTEGER liStart) {
 }
 
 // @sourcefile .\Logging\ProfCore.cpp
+// 1.14d mac: 0017baf7
 void __stdcall D2ProfileDump() {
     LARGE_INTEGER liFrequencyHigh;
     /* LARGE_INTEGER * lpFrequency for QueryPerformanceFrequency */ QueryPerformanceFrequency(&liFrequencyHigh);

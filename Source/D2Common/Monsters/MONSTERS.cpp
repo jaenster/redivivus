@@ -181,6 +181,7 @@ uint8_t __stdcall MONSTERS_GetGfxOffsetTable1(uint8_t bParam) {
     return gaMonsterGfxOffsetTable3[bParam];
 }
 
+// 1.14d mac: 0017c234
 uint8_t __stdcall MONSTERS_GetGfxOffsetTable2(uint8_t byDirection) {
     // Static local variables (originally global data)
     static uint8_t gaMonsterGfxOffsetTable2[64] = {
@@ -261,6 +262,7 @@ uint8_t __stdcall MONSTERS_GetGfxOffsetTable3(uint8_t bParam) {
     return gaMonsterGfxOffsetTable1[bParam];
 }
 
+// 1.14d mac: 0017c24b
 void __stdcall MONSTERS_GetCompositeDimensions(uint8_t nDirection, int * pnOffsetX, int * pnOffsetY) {
     // Static local variables (originally global data)
     static int8_t SBYTE_ARRAY_006ea978[32] = {
@@ -336,6 +338,7 @@ void __stdcall MONSTERS_GetCompositeDimensions(uint8_t nDirection, int * pnOffse
     *pnOffsetY = (int)SBYTE_ARRAY_006ea978[nDirection];
 }
 
+// 1.14d mac: 0017c276
 void __fastcall SetSuperUniqueName(D2UnitStrc * pUnit, uint16_t * wszText) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster && wszText)) {
       return;
@@ -368,6 +371,7 @@ uint32_t __fastcall MONSTER_CanBeInTown(D2UnitStrc * pUnit) {
     return (uint32_t)((int)pUnit->eUnitFlags < 0);
 }
 
+// 1.14d mac: 0017c356
 BOOL __stdcall MONSTER_IsSandLeaper(D2UnitStrc * pUnit, int32_t nParam) {
     int nBaseId;
     if (!pUnit || pUnit->eUnitType != UNIT_MONSTER) {
@@ -386,6 +390,7 @@ BOOL __stdcall MONSTER_IsSandLeaper(D2UnitStrc * pUnit, int32_t nParam) {
     return 0;
 }
 
+// 1.14d mac: 0017c3d9
 uint32_t __stdcall IsDemon(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -400,6 +405,7 @@ uint32_t __stdcall IsDemon(D2UnitStrc * pUnit) {
     return (uint32_t)((pMonStatsTxt2->aFlagBytes[1] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5]) != 0);
 }
 
+// 1.14d mac: 0017c433
 BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -419,6 +425,7 @@ BOOL __stdcall MONSTER_IsMonsterUndead(D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 0017c497
 uint32_t __stdcall UnitIsMarkedBoss(D2MonStatsTxt * pMonStatsTxt, D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MONSTER) {
       if (!pMonStatsTxt) {
@@ -434,6 +441,7 @@ uint32_t __stdcall UnitIsMarkedBoss(D2MonStatsTxt * pMonStatsTxt, D2UnitStrc * p
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0017c4ed
 BOOL __stdcall CheckIfMonsterIsDead(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -446,6 +454,7 @@ BOOL __stdcall CheckIfMonsterIsDead(D2UnitStrc * pUnit) {
 }
 
 // Resolves the monster class ID, world position, and animation mode to use when summoning or spawning a unit. If pUnit is a live monster and nParam1 is set, reads spawn data (spawn/spawnx/spawny/spawnmode) from MonStats.txt. Otherwise reads summon/summode from Skills.txt for skill nParam2. Writes results to pnMode, pnParam1 (X), pnParam2 (Y); returns the monster class ID or -1 if not found.
+// 1.14d mac: 0017c511
 int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpawn, int32_t nSkillId, int32_t nMode, int * pnMode, int * pnSpawnX, int * pnSpawnY) {
     int nSumModeOrSpawnMode;
     D2SkillsTxt* pSkillsTxt;
@@ -496,11 +505,13 @@ int32_t __stdcall SummonOrSpawnMode(D2UnitStrc * pUnit, int32_t bUseMonStatsSpaw
     return -1;
 }
 
+// 1.14d mac: 0017d3ff
 void __stdcall MONSTERS_OnInitMonster_NoOp(D2UnitStrc * pUnit, uint32_t dwParam2) {
 
 }
 
 // Iterates the 16 component overlay slots of a monster unit (which may carry equipment like a SuperUnique), looks up each component's item code in items.txt, and returns the maximum bLightRadius value found across all equipped components. Returns 0 for non-monster units or monsters without component data.
+// 1.14d mac: 0017d404
 uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     int nClassId;
@@ -538,6 +549,7 @@ uint8_t __stdcall MONSTERS_GetMaxLightRadiusFromEquipment(D2UnitStrc * pUnit) {
 }
 
 // Resolves which monster class ID should actually spawn in a room for a given nMonsterId, accounting for level-specific monster tables and difficulty upgrades. Looks up the base class ID via D2MonStatsTxt.BaseId, scans the level's valid monster array (LevelsTxt.mon) for a match, and if not found walks the NextInClass chain up to nUpgradeCount steps as long as the upgraded monster's level does not exceed the level cap. Returns the best matching class ID, or the original nMonsterId if no suitable upgrade is found.
+// 1.14d mac: 0017d288
 int32_t __stdcall GetMonsterBaseId(D2RoomStrc * pRoom, int32_t nMonsterId) {
     D2MonStatsTxt* pMonStatsTxt;
     int nMonBaseId;
@@ -621,6 +633,7 @@ int32_t __stdcall GetMonsterBaseId(D2RoomStrc * pRoom, int32_t nMonsterId) {
     return nUpgradedId;
 }
 
+// 1.14d mac: 0017d49c
 uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -636,6 +649,7 @@ uint32_t __stdcall MONSTERS_CheckMonStatFlag0xc_Bit7(D2UnitStrc * pUnit) {
 }
 
 // Retrieves the animation flags and valid-flags for a monster's upgrade tier by looking up its class id in the MonStats upgrade table. Writes the flags from gdwMonStatAnimFlagsTable into pdwAnimFlags and pdwValidFlags. Halts with a fatal error if the unit is not a monster or the upgrade index is out of range.
+// 1.14d mac: 0017d4f0
 void __stdcall MONSTERS_GetUpgradeSkillsAndCount(D2UnitStrc * pUnit, uint32_t * pdwAnimFlags, uint32_t * pdwValidFlags) {
     // Static local variables (originally global data)
     static D2MonStatAnimEntryStrc gdwMonStatAnimFlagsTable[4] = {
@@ -679,6 +693,7 @@ void __stdcall MONSTERS_GetUpgradeSkillsAndCount(D2UnitStrc * pUnit, uint32_t * 
     }
 }
 
+// 1.14d mac: 0017d5da
 uint32_t __stdcall MONSTER_GetMercType(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -700,6 +715,7 @@ uint32_t __stdcall MONSTER_GetMercType(D2UnitStrc * pUnit) {
 }
 
 // Scales a non-champion (Align != 1) monster's core combat stats (up to 3 entries from gaDifficultyScalingTable_MonsterApply) by a difficulty-specific percent/divisor pair selected by bParam (1 = first difficulty tier, else second). Also raises the monster's level by bParam*25. Only acts when nParam==0 and bParam!=0.
+// 1.14d mac: 0017d635
 void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t bExpansion, uint8_t byDifficulty) {
     // Static local variables (originally global data)
     static int gMonLvl_U_UniqueMonsterLevelChance2[3][5] = {
@@ -740,6 +756,7 @@ void __stdcall MONSTER_ApplyDifficultyScaling(D2UnitStrc * pUnit, int32_t bExpan
 }
 
 // Computes the monster class id, spawn X/Y position and spawn-mode for a unit that spawns/generates other monsters (super-uniques and generator-type monsters such as nests, spawners, statues, Blood Raven, Maggot Queen, Izual, etc.). Outputs via pnMonId/pnPosX/pnPosY/pdwSpawnMode. Resolves the unit's MonStats BaseId, then switches on it: each generator case picks the spawned monster (via GetMonsterClassByDifficulty/upgrade data, clamped to MonStats table size) and an offset position relative to the parent's path coords, using the unit seed for randomized cases. pfnCallback supplies the class id for hut/NPC cases. Default/unknown returns monId 0, pos (0,0), mode 1. Uses nRandSeed for seeded variants.
+// 1.14d mac: 0017c704
 void __stdcall MONSTER_GetSpawnParameters(D2UnitStrc * pUnit, int * pnMonId, uint32_t * pnPosX, uint32_t * pnPosY, eD2MonsterAnimMode * pdwSpawnMode, int32_t nRandSeed, pfnMonsterSpawnClassIdCb pfnCallback) {
     eD2MonsterClassId nMonStatsId;
     D2SeedStrc* pSeed;

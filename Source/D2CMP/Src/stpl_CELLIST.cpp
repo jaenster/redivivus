@@ -426,6 +426,7 @@ template<> void TSExportTableSimple<CELLIST, HCELLIST__*, 0>::Delete(::CELLIST *
     this->pVtable->InternalDelete(this, pNode);
 }
 
+// 1.14d mac: 0012c3fc TSHashTable<CELLIST, HASHKEY_NONE>::InternalClear
 template<> void TSHashTable<CELLIST, HASHKEY_NONE>::InternalClear(int32_t bUnlinkOnly) {
     this->nFullnessIndicator = 0;
     this->tFullList.UnlinkAll();

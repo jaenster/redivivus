@@ -147,6 +147,7 @@ void __stdcall MONSTERTBLS_FreeTransformArrays() {
     }
 }
 
+// 1.14d mac: 00146c43
 int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, uint32_t * pnMaxChainId, int32_t * pnChainId) {
     if (nMonStatsId >= 0 && nMonStatsId < sgtDataTable.nTxtMonStatsSize) {
       if (pnMaxChainId) {
@@ -169,6 +170,7 @@ int32_t __stdcall MONSTERTBLS_GetUpgradeDataByMonStatsId(int32_t nMonStatsId, ui
 }
 
 // TXT field linker for a MonStats skill slot (index nSkillIdx, max 7): zeroes the skill mode byte and sequence ID, then resolves szText as a monster mode name (via FilterNameString + monmode link) or falls back to a monster sequence ID (via monseq link). Writes mode byte to pMonStats+0x180+idx and seq short to +0x188+idx*2.
+// 1.14d mac: 00146cc0
 void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, uint32_t nSkillIdx, int32_t nMonStatsOffset, int32_t nReserved1, int32_t nReserved2) {
     if (!(pRecord && nSkillIdx <= 7)) {
       return;
@@ -198,6 +200,7 @@ void __fastcall MONSTERTBLS_ParseMonStatsField(char * szText, char * pRecord, ui
 }
 
 // Loads and compiles monstats.txt into the engine's runtime MonStats table. Builds the column schema as a stack D2BinFieldInputStrc array (Id/BaseId/NextInClass/NameStr/DescStr/Code/TransLvl/... with per-field type/offset/linker), wiring the field linkers to sgtDataTable.pTxtMonStatsLink (most fields), pTxtMonSoundsLink (sound fields), and DATATBLS_LookupStringId for the string-key name/desc columns, then hands the schema + pMemory to the standard DATATBLS bin-compile/alloc routine to populate the MonStats table. pMemory passed in ECX (thiscall/fastcall-style); large alloca'd stack frame.
+// 1.14d mac: 00146df7
 void __fastcall TXT_AllocTxt_monstats(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc monstats[254] = {
       {"Id", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtMonStatsLink},
@@ -467,6 +470,7 @@ void __fastcall TXT_AllocTxt_monstats(D2PoolManagerStrc * pMemory) {
 }
 
 // Computes level/difficulty-scaled monster combat stats from monstats.txt + monlvl.txt into the caller-supplied pnOutStats[] array. Inputs: nMonStatsId (monstats row), bIsChampion (selects champion HP/AC/XP/TH/DM column triplet), nDifficultyIdx (0-2, clamped), nMonLevel (clamped to monlvl table), nStatFlags (bitmask 0x1..0x100 selecting which stat groups to fill: HP, AC, XP, to-hit/damage, elemental). Per the monstat noRatio flag, values are either taken raw from the monstats row or scaled against the monlvl base via D2ApplyPercent(base, percent, 100). Returns 1 on success, 0 if the monstats/monlvl row is out of range or null. Pure stat computation; no unit mutation.
+// 1.14d mac: 00147118
 BOOL __stdcall MONSTER_CalculateLevelScaledStats(int32_t nMonStatsId, int32_t bIsChampion, uint32_t nDifficultyIdx, int32_t nMonLevel, uint32_t nStatFlags, D2MonStatsInitStrc * pOutStats) {
     int32_t nScaledStat;
     D2MonStatsTxt* pMonStatsTxt = nMonStatsId >= 0 && nMonStatsId < ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? ITEMS::Items::sgptDataTable->pTxtMonStats + nMonStatsId : nullptr;
@@ -636,6 +640,7 @@ void __fastcall DATATBLS_CompileUniqueTitleTxt(D2PoolManagerStrc * pMemory, char
     gsTxtUniqueNameTables.apTable[nTitleIdx] = pCompiledTxt;
 }
 
+// 1.14d mac: 001480df
 void __stdcall TXT_UnloadUniqueMonsterNameTables() {
     D2UniqueNameTablesStrc* ppEntry = &gsTxtUniqueNameTables;
     do {
@@ -685,6 +690,7 @@ uint16_t * __fastcall MONSTER_GetRandomUniquePrefix_Unref_00653e90(D2UnitStrc * 
     return pWVar2;
 }
 
+// 1.14d mac: 001481a3
 uint16_t * __fastcall MONSTER_GetRandomUniquePrefix(D2UnitStrc * pUnit) {
     if (!(pUnit && gsTxtUniqueNameTables.anSize[1] > 0)) {
       return (uint16_t*)&gwMonsterTblsDefaultId;
@@ -703,6 +709,7 @@ uint16_t * __fastcall MONSTER_GetRandomUniquePrefix(D2UnitStrc * pUnit) {
     return pLocaleStr;
 }
 
+// 1.14d mac: 001481c1
 uint16_t * __fastcall MONSTER_GetRandomUniqueSuffix(D2UnitStrc * pUnit) {
     if (!(pUnit && gsTxtUniqueNameTables.anSize[2] > 0)) {
       return (uint16_t*)&gwMonsterTblsDefaultId;
@@ -721,6 +728,7 @@ uint16_t * __fastcall MONSTER_GetRandomUniqueSuffix(D2UnitStrc * pUnit) {
     return pLocaleStr;
 }
 
+// 1.14d mac: 001481df
 uint16_t * __fastcall MONSTER_GetRandomUniqueAppelation(D2UnitStrc * pUnit) {
     if (!(pUnit && gsTxtUniqueNameTables.anSize[3] > 0)) {
       return (uint16_t*)&gwMonsterTblsDefaultId;
@@ -752,6 +760,7 @@ D2ParsedTreasureClassStrc * __fastcall TC_ExtendTreasureClassSize(char * szText)
     return pNewEntry;
 }
 
+// 1.14d mac: 001482ab
 void __fastcall ResizeParsedTCEntries(D2ParsedTreasureClassStrc * pParsedTC, int32_t nCount) {
     D2ParsedTreasureClassEntriesStrc* pNewEntries = (D2ParsedTreasureClassEntriesStrc*)D2_REALLOC_POOL_AT(nullptr, pParsedTC->pEntries, nCount * sizeof(D2ParsedTreasureClassEntriesStrc), ".\\DATATBLS\\MonsterTbls.cpp", 0x3ba);
     pParsedTC->pEntries = pNewEntries;
@@ -1230,6 +1239,7 @@ void __stdcall TXT_AllocTxt_TreasureClassEx(D2PoolManagerStrc * pMemory) {
     DataTbls::UnloadBin(pTxtTreasureClassEx);
 }
 
+// 1.14d mac: 00149081
 void __stdcall FreeParsedTC() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(sgtDataTable.pTxtMonsterTblsLink);
     for (int nIdx = 0; nIdx < sgtDataTable.nParsedTreasureClassSize; nIdx++) {
@@ -1253,6 +1263,7 @@ D2ParsedTreasureClassStrc * __stdcall TC_LookupTreasureClassByName(char * szText
 }
 
 // TC level-variant selector. TCs with same nGroup form a chain, select best match where TC.nLevel <= nLevel. Linear scan through variants, returns highest applicable TC or base TC if no variants.
+// 1.14d mac: 001483de
 D2ParsedTreasureClassStrc * __stdcall TC_GetParsedTreasureClassByLevel(uint16_t nTreasureClassId, int32_t nLevel) {
     if (nTreasureClassId > 0 && (int)(uint32_t)nTreasureClassId < sgtDataTable.nParsedTreasureClassSize) {
       D2ParsedTreasureClassStrc* pBestTC = &sgtDataTable.pParsedTreasureClass[nTreasureClassId];
@@ -1272,6 +1283,7 @@ D2ParsedTreasureClassStrc * __stdcall TC_GetParsedTreasureClassByLevel(uint16_t 
     return nullptr;
 }
 
+// 1.14d mac: 0014843a
 D2ParsedTreasureClassStrc * __stdcall DATATBLS_GetChestTreasureClass(int32_t nDifficulty, int32_t nAct, int32_t nTier) {
     const int32_t nDiff = nDifficulty <= 0 ? 0 : nDifficulty;
     const int32_t nClampedDiff = nDiff < 2 ? nDiff : 2; // steer-ok: the original clamps difficulty, then act, then chest; the order of the subscripts is unspecified
@@ -1290,6 +1302,7 @@ void __stdcall MONSTERTBLS_Unused_HaltLine1710() {
 }
 
 // Compile body locations txt - monster hit location armor percentages
+// 1.14d mac: 0014915a
 void __fastcall DATATBLS_LoadMonItemPercentTxt(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aFields[5] = {
       {"HeartPercent", FIELDTYPE_CHAR, 0, 0, 0},
@@ -1301,6 +1314,7 @@ void __fastcall DATATBLS_LoadMonItemPercentTxt(D2PoolManagerStrc * pMemory) {
     pMonItemPercentTxt = (D2MonItemPercentTxt*)DataTbls::CompileTxt(pMemory, "monitempercent", aFields, (int*)&gnMonItemPercentTxtRecordCount, 4);
 }
 
+// 1.14d mac: 001491d7
 void __stdcall DATATBLS_UnloadMonItemPercentTxt() {
     DataTbls::UnloadBin(pMonItemPercentTxt);
 }
@@ -1325,6 +1339,7 @@ D2MonItemPercentTxt * __stdcall DATATBLS_GetMonItemPercentTxtRecord(int32_t nRec
 }
 
 // Defines and compiles the MonUMod.txt field schema into the global data table. Sets up 16 D2BinFieldInputStrc entries (uniquemod, version, enabled, xfer, champion, fpick, exclude1/2, cpick/upick per difficulty, constants), calls CompileTxt to parse the file, allocates the MonUMod link table, and caps nTxtMonUmodSize at 256.
+// 1.14d mac: 001491f6
 void __fastcall TXT_AllocTxt_monumod(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc monumod[16] = {
       {"uniquemod", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtMonUmodLink},
@@ -1367,6 +1382,7 @@ void Unreferenced_006552a0() {
 }
 
 // Loads and compiles superuniques.txt into sgtDataTable. Declares the column schema (Superunique key, Name string-id, Class->MonStats link, hcIdx, MonSound link, Mod1-3, Min/MaxGrp, AutoPos, EClass, Stacks, Replaceable, Utrans/(N)/(H), TC/(N)/(H)->MonsterTbls links) and a TxtLink, then compiles via CompileTxt into pTxtSuperUniques (cap 0x200 rows). Builds the aTxtSuperUniquesHardcoded[] reverse-lookup array (init -1) mapping each row's hcIdx (<66) to its first row index, then asserts every hardcoded slot was filled (unrecoverable-halt at line 0x782 if any is still -1). Side effect: populates global superunique data table and hardcoded index map. Server-side D2Common DataTbls (MonsterTbls).
+// 1.14d mac: 00149318
 void __fastcall TXT_AllocTxt_superuniques(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc superuniques[21] = {
       {"Superunique", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtSuperUniquesLink},
@@ -1428,6 +1444,7 @@ void Unreferenced_006556a0() {
     sgtDataTable.nTxtSuperUniquesSize = 0;
 }
 
+// 1.14d mac: 0014950e
 D2SuperUniquesTxt * __stdcall TXT_SuperUniques_GetLine(int32_t nSuperUnique) {
     if (nSuperUnique >= sgtDataTable.nTxtSuperUniquesSize) {
       return nullptr;
@@ -1436,11 +1453,13 @@ D2SuperUniquesTxt * __stdcall TXT_SuperUniques_GetLine(int32_t nSuperUnique) {
     return sgtDataTable.pTxtSuperUniques + nSuperUnique;
 }
 
+// 1.14d mac: 00149539
 int32_t __stdcall MONSTERTBLS_GetSuperUniquesTxtCount() {
     return sgtDataTable.nTxtSuperUniquesSize;
 }
 
 // Loads and compiles hireling.txt into sgtDataTable.pTxtHireling (record stride 0x118). Builds the column-binding descriptor (version/id/class/act/difficulty/seller/gold/level, namefirst/namelast, per-level stat-growth columns, 6 skill/mode/chance/level groups linked to the Skills table, hiredesc linked to the HireDesc table, equipment slots) and calls CompileTxt. Afterward initializes the nTxtHirelingIdLines lookup table to -1, resolves namefirst/namelast string-table ids, validates them on expansion games (error-halts on missing/ordering/range violations), and fills the (class,act-difficulty) -> row-index map. __fastcall(pMemory). Side effect: populates global hireling data table.
+// 1.14d mac: 00149550
 void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
     int nHirelingId;
     uint16_t* pwStrLookup;
@@ -1564,6 +1583,7 @@ void __fastcall TXT_AllocTxt_hireling(D2PoolManagerStrc * pMemory) {
     } while (nCounter < sgtDataTable.nTxtHirelingSize);
 }
 
+// 1.14d mac: 001497a6
 void __stdcall MONSTERTBLS_FreeHirelingTxt() {
     DataTbls::UnloadBin(sgtDataTable.pTxtHireling);
     sgtDataTable.nTxtHirelingSize = 0;
@@ -1575,6 +1595,7 @@ void __stdcall MONSTERTBLS_FreeHirelingTxt() {
     } while ((intptr_t)pIdLine < (intptr_t)(sgtDataTable.nTxtHirelingIdLines + sizeof(sgtDataTable.nTxtHirelingIdLines) / sizeof(sgtDataTable.nTxtHirelingIdLines[0])));
 }
 
+// 1.14d mac: 001497f3
 D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelingId, int32_t nLevel) {
     D2HirelingTxt* pResult = nullptr;
     if (nHirelingId >= 0x100) {
@@ -1607,6 +1628,7 @@ D2HirelingTxt * __stdcall GetHirelingText(int32_t bIsExpansion, int32_t nHirelin
     return pResult;
 }
 
+// 1.14d mac: 001498a5
 D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t nMercNameId, D2HirelingTxt * pPrevEntry) {
     intptr_t nIndex = 0;
     if (pPrevEntry) {
@@ -1629,6 +1651,7 @@ D2HirelingTxt * __stdcall GetHirelingEntryByNameId(BOOL bIsExpansion, uint16_t n
     return nullptr;
 }
 
+// 1.14d mac: 0014993b
 D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t nClassId, D2HirelingTxt * pPrevEntry) {
     intptr_t nIndex = 0;
     if (pPrevEntry) {
@@ -1651,6 +1674,7 @@ D2HirelingTxt * __stdcall GetHirelingEntryByClassId(BOOL bIsExpansion, int32_t n
     return nullptr;
 }
 
+// 1.14d mac: 001499c3
 D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcClassId, int32_t nDifficulty, D2HirelingTxt * pPrevEntry) {
     *(uint16_t*)(char*)&bIsExpansion = bIsExpansion ? 100 : 0;
     intptr_t nIndex = 0;
@@ -1674,6 +1698,7 @@ D2HirelingTxt * __stdcall GetHirelingEntry(int32_t bIsExpansion, int32_t nNpcCla
     return nullptr;
 }
 
+// 1.14d mac: 00149a45
 D2HirelingTxt * __stdcall GetHirelingDataTable(int32_t nVersion, int32_t nAct, int32_t nDifficulty, D2HirelingTxt * pHirelingTxt) {
     *(uint16_t*)(char*)&nVersion = nVersion ? 100 : 0;
     intptr_t nIndex = 0;
@@ -1806,6 +1831,7 @@ void __stdcall DATATBLS_UnloadMonSoundsTxt() {
     sgtDataTable.nTxtMonSoundsSize = 0;
 }
 
+// 1.14d mac: 00149b7b
 D2MonSoundsTxt * __stdcall TxtGetMonSoundsLine(int32_t nSoundId) {
     if (sgtDataTable.pTxtMonSounds && nSoundId >= 0 && nSoundId < sgtDataTable.nTxtMonSoundsSize) {
       return sgtDataTable.pTxtMonSounds + nSoundId;
@@ -1814,6 +1840,7 @@ D2MonSoundsTxt * __stdcall TxtGetMonSoundsLine(int32_t nSoundId) {
     return nullptr;
 }
 
+// 1.14d mac: 00149bb3
 D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nMonStatsId) {
     if (sgtDataTable.pTxtMonSounds && sgtDataTable.pTxtMonStats && nMonStatsId < sgtDataTable.nTxtMonStatsSize) {
       int nMonSoundId;
@@ -1827,6 +1854,7 @@ D2MonSoundsTxt * __stdcall MONSTERTBLS_GetMonSoundsTxtRecord(int32_t nMonStatsId
 }
 
 // Parses one comma-separated component-code field of a MonSeq/monster txt row into the row's compiled code table. For sequence slot nSeqSlot (<0x10) it clears the slot's count byte and three code entries, strips surrounding quotes, then tokenizes the input string on commas; each <=4-char token is packed into a 4-char code (space-padded), resolved to a class id via Excel GetClassIdFromName against pTxtCompCodeLink, and stored as a byte. Writes the resolved code count back to offset 0x15+nSeqSlot (max 12 codes). On the final slot (0xf) it sums frame counts across the parsed component groups and stores the clamped (<=0xfe) total at offset 0x25. Pure table-build side effects; no return.
+// 1.14d mac: 00149c0e
 void __fastcall MONSTERTBLS_ParseMonStats2ComponentVariants(char * szText, char * pRecord, uint32_t nComponent, int32_t nLinkerCtx1, int32_t nLinkerCtx2, int32_t nLinkerCtx3) {
     int32_t nClassId;
     uint32_t dwCodeBuf;
@@ -2133,6 +2161,7 @@ BOOL __fastcall MONSTERTBLS_CheckNestedMonsterTypes(int32_t nMonTypeId, int32_t 
 }
 
 // Loads and compiles the montype.txt data table into sgtDataTable.pTxtMonType. Defines 7 field descriptors (type, equiv1-3, strsing, strplur, end), calls CompileTxt, then allocates and populates a bitfield matrix (nTxtMonTypeSize x ceil(nTxtMonTypeSize/32) words) encoding the transitive type-membership graph by calling MONSTERTBLS_GetMonSeqFrameCount for every (row, col) type pair.
+// 1.14d mac: 00149ed9
 void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aFieldDefs[7] = {
       {"type", FIELDTYPE_NAME_I_WORD, 0, 0, &sgtDataTable.pTxtMonTypeLink},
@@ -2159,6 +2188,7 @@ void __fastcall TXT_AllocTxt_montype(D2PoolManagerStrc * pMemory) {
     }
 }
 
+// 1.14d mac: 0014a007
 void __stdcall DATATBLS_UnloadMonTypeTxt() {
     if (!sgtDataTable.pTxtMonType) {
       return;
@@ -2327,6 +2357,7 @@ void Unreferenced_00659970() {
     sgtDataTable.nTxtMonLvlSize = 0;
 }
 
+// 1.14d mac: 0014a0c7
 void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
     if (!pRecord) {
       return;
@@ -2362,6 +2393,7 @@ void __fastcall DATATBLS_LinkerMonsterPreset(char * pName, char * pRecord, int32
 }
 
 // Parses monpreset.txt (Act/CHAR + Place/LINKER_BIT) via CompileTxt, then builds the per-act index arrays sgtDataTable.pTxtMonPresetPerAct[] and pTxtMonPresetPerActId[] so presets can be looked up by act number. Side-effects: sgtDataTable.pTxtMonPresetPlace, pTxtMonPresetPerAct, pTxtMonPresetPerActId.
+// 1.14d mac: 0014a173
 void __fastcall TXT_AllocTxt_monpreset(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc monpreset[3] = {
       {"Act", FIELDTYPE_CHAR, 0, 0, 0},
@@ -2390,6 +2422,7 @@ void __fastcall TXT_AllocTxt_monpreset(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonPresetPerActId[nActIdx] = nPresetIdxInAct;
 }
 
+// 1.14d mac: 0014a282
 void __stdcall MONSTERTBLS_FreeMonPresetTxt() {
     if (sgtDataTable.pTxtMonPresetPlace) {
       DataTbls::UnloadBin(sgtDataTable.pTxtMonPresetPlace);
@@ -2407,6 +2440,7 @@ void __stdcall MONSTERTBLS_FreeMonPresetTxt() {
     sgtDataTable.pTxtMonPresetPerActId[4] = 0;
 }
 
+// 1.14d mac: 0014a2cd
 D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nAct, int * pnRecordCount) {
     if (!pnRecordCount) {
       return nullptr;
@@ -2420,6 +2454,7 @@ D2MonPresetTxt * __stdcall MONSTERTBLS_GetMonPresetRecord(uint32_t nAct, int * p
     return nullptr;
 }
 
+// 1.14d mac: 0014a312
 int32_t __stdcall MONSTERTBLS_MapSuperUniqueId(int32_t nType, int32_t nSuperUniqueId) {
     switch (nType) {
       case 0:
@@ -2432,6 +2467,7 @@ int32_t __stdcall MONSTERTBLS_MapSuperUniqueId(int32_t nType, int32_t nSuperUniq
     return nSuperUniqueId;
 }
 
+// 1.14d mac: 0014a346
 void __fastcall TXT_AllocTxt_sounds(D2PoolManagerStrc * pMemory) {
     if (!sgtDataTable.bUseTxt) {
       return;
@@ -2445,6 +2481,7 @@ void __fastcall TXT_AllocTxt_sounds(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtSounds = (D2SoundsTxtSmall*)DataTbls::CompileTxt(pMemory, "sounds", aSoundsFields, &sgtDataTable.nTxtSoundsSize, 2);
 }
 
+// 1.14d mac: 0014a3c1
 void __stdcall TXT_FreeTxt_sounds() {
     if (!sgtDataTable.pTxtSounds) {
       return;
@@ -2456,6 +2493,7 @@ void __stdcall TXT_FreeTxt_sounds() {
 }
 
 // Loads and compiles the MonSeq.txt data table into sgtDataTable. Defines the six binary field descriptors (sequence, mode, frame, dir, event, end), compiles the TXT via CompileTxt, then builds the pMonSeqMonsterTbls lookup array indexed by sequence ID, setting each entry's pMonSeqTxt pointer and counting rows per sequence. Called once at startup during data-table initialization.
+// 1.14d mac: 0014a402
 void __fastcall TXT_AllocTxt_monseq(D2PoolManagerStrc * pMemory) {
     int nSeqId;
     D2BinFieldInputStrc monseq[6] = {
@@ -2494,6 +2532,7 @@ void __fastcall TXT_AllocTxt_monseq(D2PoolManagerStrc * pMemory) {
     } while (i < sgtDataTable.nTxtMonSeqSize);
 }
 
+// 1.14d mac: 0014a515
 void __stdcall DATATBLS_UnloadMonSeqTxt() {
     if (sgtDataTable.pTxtMonSeq) {
       DataTbls::UnloadBin(sgtDataTable.pTxtMonSeq);
@@ -2509,6 +2548,7 @@ void __stdcall DATATBLS_UnloadMonSeqTxt() {
 }
 
 // 2022.01.09 - dzik
+// 1.14d mac: 0014a598
 D2MonSeqMonsterTbls * __stdcall GetMonsterSequenceTableByIndex(int32_t nIndex) {
     if (nIndex >= 0 && nIndex < sgtDataTable.nMonSeqMonsterTblsSize) {
       return sgtDataTable.pMonSeqMonsterTbls + nIndex;
@@ -2518,6 +2558,7 @@ D2MonSeqMonsterTbls * __stdcall GetMonsterSequenceTableByIndex(int32_t nIndex) {
 }
 
 // Loads and compiles the MonEquip.txt data table at startup. Declares the column schema (monster link, level, oninit, three item/loc/mod triplets with BodyLocs/Items excel linkers) and calls CompileTxt to allocate sgtDataTable.pTxtMonEquip (record size 0x1c). Halts with fatal error 0xd1c if the row count overflows 0x7fff. Post-processes: back-links each MonStats row to its first MonEquip row (nMonEquipId) and validates each equipment slot's loc and item code (blanks slots whose item name isn't a valid excel class id). Side effects only; no return.
+// 1.14d mac: 0014a5c3
 void __fastcall TXT_AllocTxt_MonEquip(D2PoolManagerStrc * pMemory) {
     int nMonStatIdx;
     D2MonEquipTxt* pMonStatEntry;
@@ -2606,6 +2647,7 @@ void Unreferenced_0065a170() {
 }
 
 // Frees all monster-related data tables from sgtDataTable. Unloads MonEquip, Npc, MonLvl, MonPreset, SuperUniques (+ txt link), MonUmod (+ txt link), MonStats (+ txt link), MonStats2 (+ txt link), MonProp (+ txt link), MonSounds (+ txt link), then delegates to MONSTERTBLS_FreeMonPropTxt, FreeParsedTC, and TXT_UnloadUniqueMonsterNameTables. Called during game shutdown or data table reload.
+// 1.14d mac: 0014aa94
 void __stdcall MONSTERTBLS_UnloadMonsterTxts() {
     if (sgtDataTable.pTxtMonEquip) {
       DataTbls::UnloadBin(sgtDataTable.pTxtMonEquip);
@@ -2684,6 +2726,7 @@ void __stdcall TXT_AllocParsedTreasureClassDiffActChestABC() {
     }
 }
 
+// 1.14d mac: 00148494
 void __stdcall TXT_AllocItemDropData(D2PoolManagerStrc * pMemory) {
     sgtDataTable.pTxtMonsterTblsLink = Fog::Src::Excel::STRUCT_CreateTxtLinkStrc(".\\DATATBLS\\MonsterTbls.cpp", 0x60e);
     TC_GenerateAutoItemTypeTreasureClasses();
@@ -2702,6 +2745,7 @@ void __fastcall TXT_AllocItemDropData_Thunk(D2PoolManagerStrc * bPartial) {
 }
 
 // Allocates and compiles all monster-related TXT data tables into the given memory pool. Loads uniquetitle/uniqueprefix/uniquesuffix/uniqueappellation (each keyed on the 'Name' column via DATATBLS_LookupStringId), then delegates to per-table alloc helpers for monlvl, monstats/monstats2, monprop, monsounds, monseq, monumod, superuniques, monpreset, hireling, npc, and MonEquip. Called once at startup during data-table initialization.
+// 1.14d mac: 0014a723
 void __fastcall TXT_AllocMonsterTables(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aFieldDefs[2] = {
       {"Name", FIELDTYPE_KEY_WORD, 0, 0, (void*)DataTbls::DATATBLS_LookupStringId},

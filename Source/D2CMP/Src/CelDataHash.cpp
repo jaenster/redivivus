@@ -32,6 +32,7 @@ void __fastcall CELDATAHASH_UnlinkEntry(D2CelDataHashTableStrc * pHashTable, D2C
     D2_FREE_POOL_AT(pMemory, pEntry, ".\\SRC\\CelDataHash.cpp", 0x3a);
 }
 
+// 1.14d mac: 0012c97f
 void __fastcall CELDATAHASH_InitHashTable(D2CelDataHashTableStrc * pHashTable) {
     memset(pHashTable, 0, sizeof(*pHashTable));
 }
@@ -67,6 +68,7 @@ void __fastcall GFX_FreeAllCacheEntries(D2PoolManagerStrc * pMemory, D2CelDataHa
     exit(-1);
 }
 
+// 1.14d mac: 0012c9f2
 D2CelDataHashEntryStrc * __fastcall CELDATAHASH_FindByFilename(D2CelDataHashTableStrc * pHashTable, char * szFileName) {
     if (*szFileName == '\0') {
       return nullptr;
@@ -90,6 +92,7 @@ D2CelDataHashEntryStrc * __fastcall CELDATAHASH_FindByFilename(D2CelDataHashTabl
 }
 
 // @sourcefile .\SRC\CelDataHash.cpp
+// 1.14d mac: 0012ca68
 D2CelDataHashEntryStrc * __fastcall CELDATAHASH_AllocEntry(D2PoolManagerStrc * pPoolManager, D2CelDataHashTableStrc * pHashTable, void * nRefCount, char * szFileName) {
     D2CelDataHashEntryStrc* pNewEntry = D2_NEW_POOL_AT(pPoolManager, D2CelDataHashEntryStrc, ".\\SRC\\CelDataHash.cpp", 0x88);
     pNewEntry->pData = nRefCount;

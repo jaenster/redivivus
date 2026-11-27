@@ -97,6 +97,7 @@ static void __stdcall DRLGPATH_UpdateUnitRoom(D2RoomStrc * pRoom, D2DynamicPathS
 }
 
 // DRLGPATH_SetPathPosition - Sets the world position of a dynamic path, converts to screen coordinates via DRLG_MapWorldToScreenCoords, and triggers room transfer if the unit has moved to a different room.
+// 1.14d mac: 00184032
 static void __stdcall DRLGPATH_SetPathPosition(POINT tFixed, D2RoomStrc * pRoom, D2DynamicPathStrc * pDynamicPath) {
     if (pDynamicPath->nFlags & 0x40000U) {
       if (!Collision::DRLGROOM_FindBetterNearbyRoom(pDynamicPath->pRoom, (uint32_t)tFixed.x >> 0x10, (uint32_t)tFixed.y >> 0x10)) {
@@ -117,6 +118,7 @@ static void __stdcall DRLGPATH_SetPathPosition(POINT tFixed, D2RoomStrc * pRoom,
 }
 
 // DRLGPATH_ClearPathPosition - Zeroes out a dynamic path's world and screen coordinates, resets path points, removes the unit from its room, and sets the pending-room-change flag (0x2).
+// 1.14d mac: 0018347c
 void __stdcall DRLGPATH_ClearPathPosition(D2DynamicPathStrc * pDynamicPath) {
     static POINT gCoord_Dummy; D2_STATIC_GUARD_BSS(gCoord_Dummy, "D2Common::PATH::Path::DRLGPATH_ClearPathPosition::gCoord_Dummy");
     pDynamicPath->Coords.tFixed = gCoord_Dummy;
@@ -132,6 +134,7 @@ void __stdcall DRLGPATH_ClearPathPosition(D2DynamicPathStrc * pDynamicPath) {
 }
 
 // Given two 16.16 fixed-point coordinate pairs (from/to), computes a unit direction POINT (pPoint->x/y) and a 0..63 direction index (returned and written to *pnParam). Determines the dominant axis (X vs Y), normalizes the minor/major ratio to a 0..0x7f index, and looks up the vector components and base direction in the gnDrlgPathDirectionX / gaPathCalcDirectionVectorX tables, then applies octant/sign corrections (axis swap, Y-negate, X-negate, +8 rotation) to produce the final 64-direction value. __fastcall. Core direction primitive used by the DRLG path-building routines.
+// 1.14d mac: 001834c5
 int __fastcall DRLGPATH_CalcDirectionVector(POINT * pPoint, uint32_t * pnDirection, uint32_t nFromXfp, uint32_t nFromYfp, uint32_t nToXfp, uint32_t nToYfp) {
     // Static local variables (originally global data)
     static D2PathDirectionVectorStrc gaPathDirectionVectors[128] = {
@@ -839,6 +842,7 @@ void __fastcall DRLGPATH_CalcPathDirection(POINT * pPoint, uint32_t * pnDirectio
 }
 
 // DRLGPATH_GetDirectionFromCoords - Converts tile coordinates to fixed-point and calls DRLGPATH_CalcDirectionVector. Used by GetDirectionToCoords, Skills_SrvDoFunc_062, and Update to determine facing direction.
+// 1.14d mac: 001835ca
 uint32_t __stdcall DRLGPATH_GetDirectionFromCoords(uint32_t nX, int32_t nY, int32_t nNewX, int32_t nNewY) {
     POINT ptResult;
     DRLGPATH_CalcDirectionVector(&ptResult, &nX, (nX << 0x10) + 0x8000, nY * 0x10000 + 0x8000, nNewX * 0x10000 + 0x8000, nNewY * 0x10000 + 0x8000);
@@ -851,6 +855,7 @@ uint32_t __stdcall PATH_ComputeDirectionFromPreciseCoords(uint32_t nFromXfp, uin
 }
 
 // Advances a dynamic path along its path points: skips points already reached, computes the direction vector and velocity toward the current point (flips the direction index when flag 0x200 is set), and returns 1 when the last point is reached or the next step lands on the target subtile.
+// 1.14d mac: 00183682
 int32_t __fastcall DRLGPATH_AdvanceAlongPathPoints(D2DynamicPathStrc * pDynamicPath, int32_t bSetDirOnWaypoint, int32_t bForceDirection) {
     int bReachedWaypoint;
     POINT sDirVector;
@@ -1092,6 +1097,7 @@ static void PATH_UpdateVelocityWithAcceleration(int32_t nStepScale, D2DynamicPat
 }
 
 // Re-runs A* pathfinding for a unit whose current path has become stale or blocked. If the path is not frozen (flag 0x10), marks the unit for update and resets the path point index. For walk/run/follow path types (2, 0xD, 0xF), selects ePathType 2 (restore saved target) or 0xD based on nParam, attempts PATH_CalculatePath, and falls back to type 0xF on failure. Returns the result of PATH_CalculatePath.
+// 1.14d mac: 00183892
 uint32_t __stdcall PATH_RecalculatePath(D2UnitStrc * pUnit, int32_t bHasTargetUnit) {
     uint32_t bPathCalcOk;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
@@ -1228,6 +1234,7 @@ BOOL __fastcall PATH_CheckPathCollision(D2UnitStrc * pUnit, D2DynamicPathStrc * 
     return 1;
 }
 
+// 1.14d mac: 001842fb
 BOOL __stdcall PATH_HasReachedTarget(D2UnitStrc * pUnit) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (!pDynamicPath) {
@@ -1247,6 +1254,7 @@ BOOL __stdcall PATH_HasReachedTarget(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 001849bd
 void __stdcall PATH_SnapPositionToTile(D2DynamicPathStrc * pDynamicPath) {
     POINT tPos;
     tPos.x = (pDynamicPath->Coords.tFixed.x & 0xffff0000U) + 0x8000;
@@ -1254,6 +1262,7 @@ void __stdcall PATH_SnapPositionToTile(D2DynamicPathStrc * pDynamicPath) {
     DRLGPATH_SetPathPosition(tPos, nullptr, pDynamicPath);
 }
 
+// 1.14d mac: 001849f9
 uint32_t __stdcall Get8FlagsFromDynamicPath(D2DynamicPathStrc * pDynamicPath) {
     if (!pDynamicPath) {
       return 0;
@@ -1262,6 +1271,7 @@ uint32_t __stdcall Get8FlagsFromDynamicPath(D2DynamicPathStrc * pDynamicPath) {
     return pDynamicPath->nFlags & 8;
 }
 
+// 1.14d mac: 00184a0f
 void __stdcall PATH_MoveUnitToUnitPosition(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     D2DynamicPathStrc* pTargetPath;
     if (!pUnit) {
@@ -1375,6 +1385,7 @@ D2DynamicPathStrc * __fastcall Unreferenced_00650800(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 00183964
 BOOL __stdcall PATH_AdvanceUnitAlongPath(D2UnitStrc * pUnit, int pExternalPath) {
     uint32_t nTargetReached;
     uint32_t nPathFlags;
@@ -1455,6 +1466,7 @@ static BOOL __stdcall PATH_MoveUnitToPosition(D2RoomStrc * pRoom, D2PathPointStr
     return 1;
 }
 
+// 1.14d mac: 001846b6
 static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, D2PathPointStrc tTargetPos, D2DynamicPathStrc * pPath) {
     D2PathPointStrc tCurPos;
     tCurPos.nX = pPath->Coords.tSubtile.nPosX;
@@ -1489,6 +1501,7 @@ static int __stdcall PATH_MoveObjectToPosition(D2RoomStrc * pRoom, D2PathPointSt
     return 1;
 }
 
+// 1.14d mac: 00184353
 BOOL __stdcall PATH_GetCollisionMaskAt(D2DynamicPathStrc * pDynamicPath, D2UnitStrc * pUnit, D2RoomStrc * pRoom, uint16_t wPosX, uint16_t wPosY) {
     D2PathPointStrc tPoint;
     tPoint.nX = wPosX;
@@ -1553,6 +1566,7 @@ BOOL __stdcall PATH_TestLineOfSight(D2DynamicPathStrc * pDynamicPath, D2UnitStrc
     return 1;
 }
 
+// 1.14d mac: 0018a9fc
 BOOL __stdcall IsAllyOf(D2UnitStrc * pUnit, D2UnitStrc * pRosterUnit) {
     if (!pUnit) {
       return 0;

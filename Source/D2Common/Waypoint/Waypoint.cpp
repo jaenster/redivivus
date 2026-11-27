@@ -147,6 +147,7 @@ static uint16_t aaWaypointsBitMasks_0__1_[112][2] = { 0 }; D2_STATIC_GUARD(aaWay
 
 namespace D2Common::Waypoints {
 
+// 1.14d mac: 00193af0
 BOOL __stdcall FindLevelIdByWaypointId(uint16_t nWaypointId, eD2LevelId * pLevelId) {
     *pLevelId = LEVEL_None;
     if (nWaypointId < 0xff) {
@@ -170,6 +171,7 @@ BOOL __stdcall FindLevelIdByWaypointId(uint16_t nWaypointId, eD2LevelId * pLevel
     return 0;
 }
 
+// 1.14d mac: 00193b52
 BOOL __stdcall FindWaypointIdByLevelId(eD2LevelId eLevel, int16_t * pWaypointId) {
     *pWaypointId = 0xff;
     if ((int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
@@ -186,6 +188,7 @@ BOOL __stdcall FindWaypointIdByLevelId(eD2LevelId eLevel, int16_t * pWaypointId)
     return 0;
 }
 
+// 1.14d mac: 00193ba4
 uint32_t __stdcall CheckWaypoint(D2WaypointStrc * pWaypoint, uint16_t nWaypointId) {
     if (!pWaypoint) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd);
@@ -203,6 +206,7 @@ uint32_t __stdcall CheckWaypoint(D2WaypointStrc * pWaypoint, uint16_t nWaypointI
     }
 }
 
+// 1.14d mac: 00193c28
 void __stdcall EnableWaypoint(D2WaypointStrc * pWaypoint, uint16_t nWaypointId) {
     if (!pWaypoint) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xed);
@@ -222,6 +226,7 @@ void __stdcall EnableWaypoint(D2WaypointStrc * pWaypoint, uint16_t nWaypointId) 
 }
 
 // @sourcefile .\WayPoint\Waypoint.cpp
+// 1.14d mac: 00193ca7 D2Common::Waypoints::Alloc
 D2WaypointStrc * __stdcall Alloc(D2PoolManagerStrc * pMemory) {
     D2WaypointStrc* pWaypoint = D2_NEW_POOL_AT(pMemory, D2WaypointStrc, ".\\WayPoint\\Waypoint.cpp", 0xfc);
     memset(pWaypoint, 0, sizeof(*pWaypoint));
@@ -248,6 +253,7 @@ BOOL __fastcall WAYPOINT_UpgradeSignature(D2WaypointStrc * pWaypoint) {
 }
 
 // @sourcefile .\WayPoint\Waypoint.cpp
+// 1.14d mac: 00193d04 D2Common::Waypoints::Free
 void __stdcall Free(D2PoolManagerStrc * pMemory, D2WaypointStrc * pWaypoint) {
     uint16_t nSignature = pWaypoint->nSignature;
     if (nSignature != 0x102) {
@@ -262,6 +268,7 @@ void __stdcall Free(D2PoolManagerStrc * pMemory, D2WaypointStrc * pWaypoint) {
     D2_FREE_POOL_AT(pMemory, pWaypoint, ".\\WayPoint\\Waypoint.cpp", 0x121);
 }
 
+// 1.14d mac: 00193da2
 void __stdcall CopyWaypointBits(D2WaypointStrc * pWaypoint, uint8_t * nWaypointBits) {
     *pWaypoint = *(D2WaypointStrc*)nWaypointBits;
     uint16_t nSignature = pWaypoint->nSignature;
@@ -278,6 +285,7 @@ void __stdcall CopyWaypointBits(D2WaypointStrc * pWaypoint, uint8_t * nWaypointB
     /* Sets 1st Waypoint always available */ pWaypoint->aWaypointBits[aaWaypointsBitMasks[0][0] - 1] |= aaWaypointsBitMasks[0][1];
 }
 
+// 1.14d mac: 00193de8
 void __stdcall CopyWaypoint(D2WaypointStrc * pWaypoint, D2WaypointStrc * pEntry) {
     uint16_t nSignature = pWaypoint->nSignature;
     if (nSignature != 0x102) {

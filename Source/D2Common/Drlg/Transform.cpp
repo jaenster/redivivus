@@ -8,6 +8,7 @@
 
 namespace D2Common::Drlg::Transform {
 
+// 1.14d mac: 001667b1
 void __stdcall CoordsMapToScreen(int32_t * pX, int32_t * pY) {
     int x = *pX;
     int y = *pY;
@@ -15,6 +16,7 @@ void __stdcall CoordsMapToScreen(int32_t * pX, int32_t * pY) {
     *pY = (y + x) * 8;
 }
 
+// 1.14d mac: 001667d4
 void __stdcall DRLG_MapWorldToScreenCoords(int32_t * pX, int32_t * pY) {
     int x = *pX;
     int y = *pY;
@@ -30,6 +32,7 @@ void __stdcall DRLG_CoordsScreenToWorldTile(int32_t * pX, int32_t * pY) {
     *pY = (x * 2 - nWorldX) / 0xa0;
 }
 
+// 1.14d mac: 001667f6
 void __stdcall CoordsMiniMapToScreen(int32_t * pX, int32_t * pY) {
     int x = *pX;
     int y = *pY;
@@ -38,6 +41,7 @@ void __stdcall CoordsMiniMapToScreen(int32_t * pX, int32_t * pY) {
 }
 
 // Converts orthogonal (width, height) to isometric tile coordinates divided by 160 (0xA0). Formula: isoX = (h*2 + w) / 160, isoY = (h*2 - w) / 160. Used by drawing/automap code.
+// 1.14d mac: 0016681b
 int32_t __stdcall DRLG_OrthToIsoCoordsDiv160(int32_t nX, int32_t nY, int32_t * pX, int32_t * pY) {
     *pX = nY * 2 + nX;
     *pY = nY * 2 - nX;
@@ -119,6 +123,7 @@ void __stdcall SizeWorldToRoom(int32_t nWidth, int32_t nHeight, int32_t * pX, in
 // Converts high-precision world coords (16-bit fixed-point) to screen pixels.
 // screenX = (worldX - worldY) >> 5, screenY = (worldX + worldY) >> 5.
 // Used for tiles, perspective adjust, particle position.
+// 1.14d mac: 00166899
 void __stdcall DRLG_ScreenToWorldShift5(int32_t * pX, int32_t * pY) {
     int nX = *pX;
     int nY = *pY;
@@ -134,6 +139,7 @@ void __stdcall DRLG_ScreenToWorldNoShift(int32_t * pX, int32_t * pY) {
     *pY = nY * 2 - nX;
 }
 
+// 1.14d mac: 001668bd
 void __stdcall CoordsRoomToWorld(int32_t * pX, int32_t * pY) {
     *pX *= 5;
     *pY *= 5;

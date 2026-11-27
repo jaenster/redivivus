@@ -42,6 +42,7 @@ static void __stdcall DRLGOUTDOOR_ApplySubstitutionGroup(D2UnkOutdoorStrc * pUnk
 }
 
 // Ensures pLvlSubTxtRecord->pDrlgFile is loaded, then initializes per-layer grids (wall/floor/shadow) from the DS1 tile-type layers. Also applies a per-wall-layer flag mask and validates that substitution groups exist.
+// 1.14d mac: 00163a99
 void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pLvlSubTxtRecord) {
     D2DrlgCoordStrc tDrlgCoord;
     int nGridWidth;
@@ -81,6 +82,7 @@ void __fastcall InitializeDrlgFile(D2PoolManagerStrc * pMemory, D2LvlSubTxt * pL
     }
 }
 
+// 1.14d mac: 001631ab
 void __fastcall AddSecondaryBorder(D2UnkOutdoorStrc * pOutdoorCtx) {
     D2LvlSubTxt* pDVar1;
     D2LvlSubTxt* pLvlSubTxtRecord = DATATBLS::LvlTbls::TXT_LvlSub_GetLineFromSubType(pOutdoorCtx->nLvlSubId);

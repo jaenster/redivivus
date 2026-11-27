@@ -29,6 +29,7 @@ typedef BOOL (__fastcall *fpLRUCacheForEachFn)(D2LRUCacheNodeStrc * pEntry, uint
 namespace D2CMP::SRC::LRUCache {
 
 // @sourcefile .\SRC\LRUCache.cpp
+// 1.14d mac: 00131b2c
 void __fastcall LRUCACHE_Init(D2LRUCacheStrc * pCache, D2PoolManagerStrc * pMemory, uint32_t dwBufSize, pfnLruFreeEntry pfnFreeEntry, int32_t nMaxCount) {
     intptr_t nEntryIndex;
     pCache->dwBufSize = dwBufSize;
@@ -132,6 +133,7 @@ void __fastcall LRUCACHE_ForEach(D2LRUCacheStrc * pCache, fpLRUCacheForEachFn pf
     }
 }
 
+// 1.14d mac: 00131e2d
 static D2LRUCacheNodeStrc * LRUCACHE_AllocEntry(D2LRUCacheStrc * pCache, int32_t nEntrySize) {
     if (pCache->nCount == pCache->nMaxCount) {
       return nullptr;
@@ -175,6 +177,7 @@ static D2LRUCacheNodeStrc * LRUCACHE_AllocEntry(D2LRUCacheStrc * pCache, int32_t
 }
 
 // @sourcefile .\SRC\LRUCache.cpp
+// 1.14d mac: 00131c88
 void __fastcall LRUCACHE_FreeEntry(D2LRUCacheStrc * pCache, D2LRUCacheNodeStrc * pNode) {
     if (!pCache->nCount) {
       return;
@@ -227,6 +230,7 @@ void __fastcall LRUCACHE_FreeEntry(D2LRUCacheStrc * pCache, D2LRUCacheNodeStrc *
     pCache->nCount--;
 }
 
+// 1.14d mac: 00131f8d
 void __fastcall LRUCACHE_MoveToFront(D2LRUCacheStrc * pCache, D2LRUCacheNodeStrc * pNode) {
     if (!pCache->nCount) {
       return;
@@ -250,6 +254,7 @@ void __fastcall LRUCACHE_MoveToFront(D2LRUCacheStrc * pCache, D2LRUCacheNodeStrc
 }
 
 // @sourcefile .\SRC\LRUCache.cpp
+// 1.14d mac: 00131c22
 void __fastcall LRUCACHE_FreeAll(D2LRUCacheStrc * pCache) {
     int nRemaining = pCache->nCount;
     while (nRemaining) {
@@ -266,6 +271,7 @@ void __fastcall LRUCACHE_FreeAll(D2LRUCacheStrc * pCache) {
 }
 
 // @sourcefile .\SRC\LRUCache.cpp
+// 1.14d mac: 00131d65
 D2LRUCacheNodeStrc * __fastcall LRUCACHE_GetOrAlloc(D2LRUCacheStrc * pCache, uint32_t nEntrySize, void * pUserData) {
     void* nAddress;
     if (!(nEntrySize < pCache->dwBufSize)) {

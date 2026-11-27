@@ -68,6 +68,7 @@ void __stdcall AllocMissileStream(D2UnitStrc * pUnit) {
     Missile::SetStream(pUnit, pStream);
 }
 
+// 1.14d mac: 0018d714
 void __stdcall FreeMissileStream(D2UnitStrc * pUnit) {
     D2PoolManagerStrc* pMemoryPool;
     D2MissileStreamStrc* pMemoryToFree = Missile::GetStream(pUnit);

@@ -30,6 +30,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2DrlgOutdoorRoomStrc) == 0x70, "D2
 namespace D2Common::Drlg::OutRoom {
 
 // @sourcefile .\DRLG\OutRoom.cpp
+// 1.14d mac: 0015c09e
 void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(D2RoomExStrc * pRoomEx) {
     D2DrlgOutdoorRoomStrc* pGrid = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     D2PoolManagerStrc* pMemory = pRoomEx->pLevel->pDrlg->pMemoryPool;
@@ -46,6 +47,7 @@ void __fastcall DRLGOUTROOM_FreeDrlgOutdoorRoomData(D2RoomExStrc * pRoomEx) {
     pRoomEx->pRoomExData.pRoomExDataOutdoorRoom = 0;
 }
 
+// 1.14d mac: 0015c165
 void __fastcall DRLGOUTROOM_FreeOutRoomEx(D2RoomExStrc * pRoomEx) {
     D2DrlgOutdoorRoomStrc* pGrid = pRoomEx->pRoomExData.pRoomExDataOutdoorRoom;
     if (!pGrid) {
@@ -61,6 +63,7 @@ void __fastcall DRLGOUTROOM_FreeOutRoomEx(D2RoomExStrc * pRoomEx) {
 }
 
 // @sourcefile .\DRLG\OutRoom.cpp
+// 1.14d mac: 0015c189
 void __fastcall DRLGOUTROOM_AllocOutdoorRoomData(D2RoomExStrc * pRoomEx) {
     D2DrlgOutdoorRoomStrc* pRoomExDataOutRoom = D2_NEW_POOL_AT(pRoomEx->pLevel->pDrlg->pMemoryPool, D2DrlgOutdoorRoomStrc, ".\\DRLG\\OutRoom.cpp", 0xc5);
     memset(pRoomExDataOutRoom, 0, sizeof(D2DrlgOutdoorRoomStrc));
