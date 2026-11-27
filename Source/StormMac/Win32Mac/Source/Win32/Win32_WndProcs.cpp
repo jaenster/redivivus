@@ -322,24 +322,32 @@ LRESULT Proc_ButtonWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
 // 1.14d mac: 0002f793
 LRESULT Proc_StaticWndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
     LRESULT lResult = 0;
-    if (uMsg < WM_MOUSEMOVE) {
-        if (uMsg - WM_SETFOCUS < 2) {
+    switch (uMsg) {
+        case WM_SETFOCUS:
+        case WM_KILLFOCUS:
             InvalidateRect(hWnd, 0, 1);
-        } else if (uMsg == WM_SETTEXT) {
+            break;
+        case WM_SETTEXT: {
             LRESULT lText = DefWindowProc(hWnd, WM_SETTEXT, wParam, lParam);
             if (lText != 0) {
                 InvalidateRect(hWnd, 0, 1);
                 lResult = lText;
             }
-        } else if (uMsg == WM_PAINT) {
+            break;
+        }
+        case WM_PAINT: {
             PAINTSTRUCT tPaint;
             BeginPaint(hWnd, &tPaint);
             EndPaint(hWnd, &tPaint);
-        } else {
-            lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
+            break;
         }
-    } else if (uMsg - WM_MOUSEMOVE >= 3) {
-        lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
+        case WM_MOUSEMOVE:
+        case WM_LBUTTONDOWN:
+        case WM_LBUTTONUP:
+            break;
+        default:
+            lResult = DefWindowProc(hWnd, uMsg, wParam, lParam);
+            break;
     }
     return lResult;
 }
