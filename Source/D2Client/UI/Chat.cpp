@@ -1552,3 +1552,36 @@ void StaticInit_gwcImeCompositionBuffer() {
 }
 
 } // namespace D2Client::UI::Chat
+#if !defined(_WIN32) && D2_OS_MAC
+// The marked text of an unfinished TSM composition: before, converted range, after.
+static uint16_t gwszMacIMEMarkedText[261] = {}; D2_STATIC_GUARD(gwszMacIMEMarkedText, "gwszMacIMEMarkedText");
+
+// The Text Services Manager callback. A finished text is appended to the chat line; an unfinished
+// one is kept apart as marked text, with the converted range between marker colours 4 and 1.
+// The text is UTF-16 (the MacShell.h callback type is declared over char).
+// 1.14d mac: 0009ea1a
+void CHAT_OnIMEInputText(const char* szText, bool bAppend, int* pnRange) {
+    uint16_t* wszText = (uint16_t*)szText;
+    uint16_t wszBefore[260];
+    uint16_t wszRange[260];
+    uint16_t wszAfter[260];
+    if (!bAppend) {
+      memset(wszBefore, 0, sizeof(D2Client::UI::Chat::gwszChatInputText));
+      memset(wszRange, 0, sizeof(D2Client::UI::Chat::gwszChatInputText));
+      memset(wszAfter, 0, sizeof(D2Client::UI::Chat::gwszChatInputText));
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszBefore, wszText, pnRange[0]);
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszRange, wszText + pnRange[0], pnRange[1] - pnRange[0]);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszAfter, wszText + pnRange[1]);
+      D2Client::UI::ui::AppendAsWideChar(wszBefore, 4);
+      D2Client::UI::ui::AppendAsWideChar(wszRange, 1);
+      D2Client::UI::ui::AppendAsWideChar(wszAfter, 4);
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(gwszMacIMEMarkedText, wszBefore, 0x100);
+      D2Lang::Unicode::UNISYS::UNICODE_AppendWideStringN(gwszMacIMEMarkedText, wszRange, 0x100);
+      D2Lang::Unicode::UNISYS::UNICODE_AppendWideStringN(gwszMacIMEMarkedText, wszAfter, 0x100);
+    } else {
+      D2Lang::Unicode::UNISYS::UNICODE_AppendWideStringN(D2Client::UI::Chat::gwszChatInputText, wszText, 0x100);
+      gnChatInputTextLength += D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
+      gwszMacIMEMarkedText[0] = 0;
+    }
+}
+#endif
