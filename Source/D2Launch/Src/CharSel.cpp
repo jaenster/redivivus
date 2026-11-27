@@ -2468,4 +2468,33 @@ namespace D2Launch::CharSel {
 
 D2CharSelStrc * D2CharSelStrcFirst = 0; D2_GLOBAL_GUARD(D2CharSelStrcFirst, "D2Launch::CharSel::D2CharSelStrcFirst");
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002bcb53
+BOOL __stdcall CHARSEL_ReloadCharListForPreferredRealm() {
+    CHARSEL_LoadCharList(PreferredClosedRealm);
+    CHARSEL_ResetCharListUI();
+    return 1;
+}
+
+// 1.14d mac: 002bcce5
+void __stdcall CHARSEL_ClearSelectionScreen() {
+    CHARSEL_DestroySelectedChar();
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpaCharSelectDisplay);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelDeleteButton);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelExpansionToggle);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelDownArrow->sControl, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlCharSelDeleteButton, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCharSelExitButton, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelOKButton->sControl, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlCharSelectGameTypeBtn, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpaCharSelCharacterList->sControl, 0);
+    if (!Fog::D2CheckExpansionGame()) {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpControlCharSelImage->sControl, 0);
+    } else {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 0);
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, 0);
+    }
+}
+#endif
+
 } // namespace D2Launch::CharSel
