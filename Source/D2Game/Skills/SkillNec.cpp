@@ -502,7 +502,8 @@ BOOL __fastcall Skills_SrvDoFunc_030_CastCurseAoE(::SGAMEDATA * pGame, D2UnitStr
       nDuration = SKILLNEC_ApplyCurseDifficultyDivisor(pGame->nDifficulty, nDuration);
     }
 
-    D2NecroSkillArgStrc sNecroArg = {};
+    D2NecroSkillArgStrc sNecroArg;
+    memset(&sNecroArg, 0, sizeof(sNecroArg));
     sNecroArg.pGame = pGame;
     sNecroArg.pUnit = pUnit;
     sNecroArg.bRegisterExpireCallback = bIsReviveOrSkel;
