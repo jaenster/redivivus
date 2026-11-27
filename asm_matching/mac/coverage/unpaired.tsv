@@ -348,11 +348,11 @@ addr	class	win_addr	evidence
 000fa535	mac-only		two-button hit test for NPC cash dialog with sound and packet 0x44; no verified win twin
 000fa9be	mac-only		returns player hand (cursor) item via Mac inventory call; no win function USEITEM_GetCursorItem resolves
 000fb318	compiler		returns constant 0; used as a dialog callback stub
-000fb34a	mac-only		frees waypoint struct and three DC6s after close packet; no win function WAYPOINT_FreeResources resolves
-000fb436	mac-only		waygate panel draw with Mac-side quest tabs; no win function WAYPOINT_DrawPanel resolves
+000fb34a	shared-unpaired	0049c700	WAYPOINT_Shutdown: same close packet, Free(pWaypoint), then FreeUiImages (the three DC6 frees)
+000fb436	shared-unpaired	0049c9c0	DRAW_UI_Waypoint is the panel draw; Mac name WAYPOINT_DrawPanel is only the Ghidra label
 000fbd00	shared-unpaired	0049cec0	Decompile comment states Win 0x0049cec0 pair; waypoint key handler for 0x104/0x102 messages; no Mac API
-000fbd68	mac-only		one-line wrapper sending the waypoint close packet; no verified win twin
-000fc1e0	mac-only		waypoint panel mouse-down handler with Mac-side tab and entry hit tests; no win function WAYPOINT_OnMouseDown resolves
+000fbd68	shared-unpaired	0049c6c0	Mac wrapper around WAYPOINT_SendClosePacket; Windows callers call WAYPOINT_SendClosePacket (0049c6c0) directly
+000fc1e0	shared-unpaired	0049d160	INPUT_WaypointMouseDown: panel-outside close, tab select, entry select, close button
 000fd004	mac-only		allocates player unit and sets name; no win function CUNIT_CreatePlayerUnit resolves
 000fe88e	shared-unpaired	00464210	Decompile comment states Win 0x00464210 pair (tier T2); forwards to SKILLS_IsSelectableCorpse2
 000fe8a4	shared-unpaired	00464220	Decompile comment states Win 0x00464220 pair (tier T1d); forwards to FUN_00188f88
@@ -362,11 +362,11 @@ addr	class	win_addr	evidence
 00100691	mac-only		skill select-proc dispatch via Mac handler table; no win function CUNIT_CheckSkillSelectProc resolves
 00103137	shared-unpaired	004c3980	Win ITEM_HandleWeaponSwitchItems exists, same reload-item job (377B vs 561B); Mac comment claims no twin
 00104360	compiler		tail-call stub to ITEM_GetItemDropSound with 0 in second argument
-00116880	mac-only		client-side monster AI switch; no win function MONSTER_UpdateClientSideAI resolves
-00117921	mac-only		client monster step-away move using Mac path/collision calls; no verified win twin
-00117ab8	mac-only		client monster random-offset move via MonsterMessage; no verified win twin
-00117bb9	mac-only		two-unit same-position test; no verified win twin
-00117d1a	mac-only		sends monster message 0 from a target record with defaults 6 and -1; no verified win twin
+00116880	shared-unpaired	0046d780	CLIENT_DispatchMonsterAiBehavior: the client monster AI switch (ClientEngine.cpp, neighbours 00116859/0011779c already tagged)
+00117921	shared-unpaired	0046c7d0	MONSTER_TryMoveTowardTarget: collision check one tile away then MonsterMessage (bMoveStep, nSenderId, dwAnimMode, pTarget)
+00117ab8	shared-unpaired	0046c960	CLIENT_SendMonsterMoveToRandomNearbyPosMessage: seed-rolled random sign offset then MonsterMessage
+00117bb9	shared-unpaired	0046cbf0	CLIENT_CheckIfUnitPositionsMatch: same X and Y of two units
+00117d1a	shared-unpaired	0046c770	CLIENT_SendMonsterMoveToUnitMessage with sender 0 and skill level 6 folded in: pTarget type/GUID or UNIT_COUNT/-1
 00117f15	mac-only		monster-data accessor returning field at offset 0x30; no verified win twin
 00117f72	mac-only		monster-data accessor returning arena field at offset 0x34; no verified win twin
 0011c3c6	mac-only		reads a MonStats2 flag bit for a monster class; no verified win twin
@@ -375,8 +375,8 @@ addr	class	win_addr	evidence
 00122e48	mac-only		click-state bit logic on DAT_00455608; no Win function of this name, no twin verified
 00122ed9	mac-only		PLAYER_HandleMapClickAction: no Win symbol of this name; Mac click dispatcher, no verified twin
 00124756	shared-unpaired	0055b110	same-name Windows function 0055b110 (PLAYERLIST_FindEntry); was: roster list walk; Win PLAYERLIST_FindEntry is D2Game-side (0055b110), no client twin verified
-001286ca	mac-only		UNITMODE_SetModeWithEffects: no Win symbol; Mac wrapper over shared UNITMODE helpers, no verified twin
-0012875b	mac-only		one-call wrapper over UNITMODE_SetModeAndLoadCof; no Win symbol, no verified inlining caller
+001286ca	shared-unpaired	00480e70	UNITMODE_SetAnimMode: ChangeAnimMode and COF load (Mac keeps that in UNITMODE_SetModeAndLoadCof), then ShowElementalHitOverlay and the mode-change sound
+0012875b	shared-unpaired	00480ec0	UNITMODE_SetAnimModeSilent: the same SetModeAndLoadCof body without the effects; Mac wrapper
 0012876a	shared-unpaired	00480c80	Win UNITMODE_IsTargetInActionRange same range test incl. aura check for actions 6/0xd
 00128831	mac-only		UNITMODE_ExecuteAttackAndQueueSkill: no Win symbol; uses INPUT_GetClickModifierFlags, no verified twin
 001288b4	shared-unpaired	004ca280	Win SOUND_ClearGlobalState same name (52B vs 89B)
@@ -404,8 +404,8 @@ addr	class	win_addr	evidence
 0012c720	compiler		TSHashTable destructor template boilerplate
 0012c940	compiler		static initialiser: TSExportTableSync<CELLIST> ctor plus __cxa_atexit registration
 0012c99d	mac-only		CELDATAHASH_FreeEntry: no Win symbol of this name found
-0012cb1f	mac-only		CELDATAHASH_RemoveEntry: no Win symbol of this name found
-0012ecd4	mac-only		Storm::Win32Mac::InterlockedIncrement and pthread-backed InitializeCriticalSection; Win side inline
+0012cb1f	shared-unpaired	0060b0b0	GFX_RemoveCacheEntry: same halt line 0xb2, unlink at +0x28/+0x2c, then free the entry
+0012ecd4	shared-unpaired	0060cd30	GFX_InitGlobalCriticalSection: InterlockedIncrement, InitializeCriticalSection when the count is 1
 0012ed3a	shared-unpaired	00606d40	Win D2CMP::SRC::FastCmp FASTCMP_DecompressRLE same name (88B vs 97B)
 0012ed9b	shared-unpaired	00606da0	FASTCMP_DecompressRLEWithClip; same-named Win FastCmp function
 0012ee21	shared-unpaired	00606e40	FASTCMP_DecompressRLEWithBlend; same-named Win FastCmp function
@@ -434,7 +434,7 @@ addr	class	win_addr	evidence
 00134f21	mac-only		SPRITECACHE_ResetHitMissCounts: no Win symbol of this name found
 001351a1	mac-only		Tilecmp record-offset fixup loop (20-byte records); no verified Win twin
 001351e2	shared-unpaired	0060a390	Same name on Win (TILECMP_FixupMinimalPointers) and same fatal line 0x37f shape; not win-decompiled; pairer score -3 rejected
-00135375	mac-only		null-check (line 0x3c9) then calls 001351a1; no verified Win twin
+00135375	shared-unpaired	0060a390	TILECMP_FixupMinimalPointers: null argument halts (line 0x3c9, the HaltTail 0060a3a0) else fixup
 001353b9	mac-only		forwarder to 00134ebb; no verified Win twin
 001360b9	compiler		Stack-arg thunk forwarding to COLLISN_CheckCellMask_RegArgs
 001361b4	compiler		Stack-arg thunk forwarding to AddCollision_Vector1
@@ -442,7 +442,7 @@ addr	class	win_addr	evidence
 0013724c	shared-unpaired	0064da40	RemoveCollision_Cross: same name on Win (__stdcall, 5-cell cross via DRLGROOM_FindBetterNearbyRoom)
 00138aeb	shared-unpaired	0064e840	spiral search calling DRLGROOM_GetAdjacentRoomsList and CheckCollision_Vector; no platform API; pairer candidate COLLISION_FindFreeCoordSpiral
 00139c88	compiler		bare return, empty stub
-00139c8d	mac-only		wrapper over LOGGING_CloseLogFile; no verified Win twin
+00139c8d	shared-unpaired	00624b20	Mac wrapper around the log close; Windows CloseLogging (00624b20) is the same close
 0013a06d	shared-unpaired	00664ab0	table row index with fatal on idx>0; name matches candidate GetArenaTxtRecord; no platform API
 0013b1ae	shared-unpaired	00665740	UnloadBin on sgpTxtCharTemplate then NULL; matches candidate FreeCharTemplateTxt
 0013b1d7	shared-unpaired	00665770	level and template index with fatal checks; Mac comment cites Windows TXT_CharTemplate_GetLine 00665770
@@ -450,14 +450,14 @@ addr	class	win_addr	evidence
 001411d7	shared-unpaired	00668600	cube input spec string parser (any, item, qty, quality tokens); no platform API; name matches candidate
 001417d2	shared-unpaired	00668a90	cube output string parser (portals, prefix/suffix, quality flags); no platform API; name matches candidate
 00141f82	shared-unpaired	006690e0	DATATBLS_LinkerItemStatCost: same name on Win, stat-name to id parse
-0014219b	mac-only		UnloadBin of record table at DAT_0052d208; no verified Win twin
+0014219b	shared-unpaired	0066a1a0	CUBE_FreeCubeMainTable: UnloadBin of the 0x148-byte cubemain record table
 00142230	shared-unpaired	0066a200	CUBE_GetRecipeCount: same name on Win, returns nTxtCubeMainSize
-00142241	mac-only		CUBE_ParseNextIntToken: no Win symbol of this name found
-0014228b	mac-only		DATATBLS_LoadInventoryTxt: no Win symbol of this name found
-0014233b	mac-only		DATATBLS_UnloadInventoryTxt: no Win symbol of this name found
-001423bb	mac-only		DATATBLS_GetInventoryTxtRecord: no Win symbol of this name found
+00142241	shared-unpaired	006685c0	CUBE_TokenizeAndParseInt: strcspn on comma, terminate, atoi
+0014228b	shared-unpaired	0065b660	TXT_AllocTxt_inventory: CompileTxt inventory, record 0xf0, halts unless 0x20 records
+0014233b	shared-unpaired	0065c130	FreeInventoryTable: UnloadBin of the inventory table
+001423bb	shared-unpaired	0065c140	TXT_Inventory_GetLine: indexed record with halt when the table is null
 001451a8	mac-only		LVLTBLS_LoadLevelDefsTxt: no Win symbol of this name found
-001455f6	mac-only		LVLTBLS_GetLvlTypeFileName: no Win symbol of this name found
+001455f6	shared-unpaired	0061eb40	LVLTBLS_GetLvlTypeFilename: Mac name differs in case only
 0014809e	mac-only		MONSTERTBLS_FreeMonStatsTxt: no Win symbol of this name found
 00148121	mac-only		MONSTER_GetRandomUniqueNameString: no Win symbol of this name found
 001481fd	mac-only		DATATBLS_AllocTreasureClassRecord: no Win symbol of this name found
@@ -469,9 +469,9 @@ addr	class	win_addr	evidence
 00149db7	mac-only		MonsterTbls conditional unload (0xa90/0xa94); no verified Win twin
 0014a086	mac-only		MonsterTbls conditional unload (0xc30/0xc2c); no verified Win twin
 0014ab27	shared-unpaired	00654410	TC_ExtractNextIntModifier: same name on Win, 39-byte parser
-0014ad55	mac-only		DATATBLS_LoadObjGroupTxt: no Win symbol of this name found
-0014adfd	mac-only		DATATBLS_LoadShrinesTxt: no Win symbol of this name found
-0014af01	mac-only		DATATBLS_UnloadShrinesTxt: no Win symbol of this name found
+0014ad55	shared-unpaired	00640f20	TXT_AllocTxt_objgroup: CompileTxt objgroup, record 0x34
+0014adfd	shared-unpaired	00641320	TXT_AllocTxt_shrines: CompileTxt shrines, record 0xb8
+0014af01	shared-unpaired	00641510	TXT_Shrines_Free: UnloadBin of the shrines table
 0014bb7d	compiler		bare return, empty stub
 0014bcc3	mac-only		DRLG room counter walk with static handler table and PropagateDecRefCount follow-up; no verified Win twin
 0014c008	shared-unpaired	0061b5b0	DRLGROOMEX_PropagateDecRefCount: same name on Win, recursive refcount propagation over near rooms
@@ -489,7 +489,7 @@ addr	class	win_addr	evidence
 0014e731	shared-unpaired	0067c470	DrlgGrid::AndNegatedFlag: same name on Win
 0014f255	shared-unpaired	0066ce30	Exact name DRLG_ROOMEX_GetGridIndex at 0066ce30; subtile-to-tile /5 and coord list lookup, no Mac API
 0014f29b	shared-unpaired	0066ceb0	Exact name DRLGLOGIC_GetCoordListFromSubtilePos at 0066ceb0; /5 math then list lookup, no Mac API
-0014f2d3	mac-only		DRLGLOGIC_GetCoordListFromTilePos: no Win symbol of this name found
+0014f2d3	shared-unpaired	0066ceb0	DRLGLOGIC_GetCoordListFromSubtilePos: same lookup (Mac Ghidra label says TilePos)
 0014f381	shared-unpaired	0066cf60	DRLGLOGIC_LinkCoordListEntry: same name on Win, links two rooms' coord-list grids at border point
 0014f413	shared-unpaired	0066c770	InitializeDrlgCoordList: same name on Win, replaces grid index across connected rooms
 0014f879	shared-unpaired	0066c100	Exact name DRLGROOMEX_FreeDrlgRoomEx at 0066c100; DrlgRoom.cpp free routine, no Mac API
@@ -532,12 +532,12 @@ addr	class	win_addr	evidence
 0016d98d	mac-only		Indexes the 3x3 gems.txt mod table at 0x30/0x60/0x90; no win function of this name found
 0016f440	mac-only		Seeded roll with version-0 off-by-one; no win function of this name found; not verified on win
 0016ffad	mac-only		Throwable and stackable check on ItemTypes row; no win function of this name found; not verified on win
-0017b8bd	mac-only		Closes pLOGFILE via fclose and pthread-backed critical section delete; no win function of this name found
-0017e166	mac-only		A* neighbour-node add with 200-entry pool and two hash tables; win helper not located by name (win ExpandAllNeighbors cites one)
+0017b8bd	shared-unpaired	00624b20	Windows CloseLogging: fclose of pLOGFILE then DeleteCriticalSection, the Mac body uses the pthread-backed one
+0017e166	shared-unpaired	0067b200	DRLGPATH_TryExpandNeighborNode: A* neighbour add (Windows source cites it as the expand helper)
 0017ef68	mac-only		Unnamed register-arg DRLG walker using gnDrlgMemoryMax seed table; no win twin identified
 00180f5c	shared-unpaired	00648cd0	same-name Windows function 00648cd0 (PATH_GetCollisionPattern); was: Getter for path +0x50; no win function of this name found (win-side inlining unverified)
-0018258c	mac-only		Halves X/Y pair until both in +-0x10000; no win twin identified
-001837f9	mac-only		Snaps path to cell centre via DRLGPATH_SetPathPosition; win PATH_ResetPathState at 006507b0 is a different 74-byte body
+0018258c	shared-unpaired	00678f00	DRLGPATH_NormalizeFixedPointPair: shifts both halves until within +-0x10000, checked against the Windows body
+001837f9	shared-unpaired	00650590	PATH_SnapPositionToTile: tile origin plus 0x8000 on both axes, then DRLGPATH_SetPathPosition
 0018702b	shared-unpaired	00647320	Win SKILLS_AddOrRemoveItemSkill at 00647320 (Skills.cpp literal, same args, same add/update/remove logic)
 0018849e	mac-only		SKILLS_GetSkillByEnum then GetSkillLevel; no win function of this name found
 00188f88	mac-only		Thin wrapper over SKILLS_CheckMonsterCorpseSelectable (win 006454c0) plus MonStats +0x32; no win wrapper identified
@@ -545,7 +545,7 @@ addr	class	win_addr	evidence
 001890c2	mac-only		Corpse-selectable plus IsSoftMonster wrapper; no win wrapper of this shape identified
 001890f5	shared-unpaired	00645680	same-name Windows function 00645680 (SKILLS_IsSelectableCorpse2); was: Thin wrapper over SKILLS_CheckMonsterCorpseSelectable; no win wrapper of this shape identified
 00189112	mac-only		Thin wrapper over SKILLS_CheckMonsterCorpseSelectable; no win wrapper of this shape identified
-0018a158	mac-only		Returns the other hand item (slot 4 vs 5); no win function of this name found; pairer candidate CheckWeaponRequirements is unrelated
+0018a158	shared-unpaired	00643d60	SKILLS_GetWeaponByHand: slot 4 when the arg is 5, else 5, checked against the Windows body
 0018b52f	mac-only		Builds 0x7C damage struct from missile row, skill and owner stats; no win function of this name found; win pairer candidate unrelated
 001904df	mac-only		Copies frame flags 1-4 into nActionFrame from anim data; no win function of this name found
 0019074b	compiler		Empty void body; a call-target stub kept out of line, not a real function
@@ -660,7 +660,7 @@ addr	class	win_addr	evidence
 002ba5e9	shared-unpaired	0043b890	same BNet pump body (pfnWaitForLogonResponse, IsSocketConnected, MAINMENU_GetGlobalValue2); win LAUNCHER_PollBNConnectionPump
 002ba636	shared-unpaired	0043b8e0	pfnWaitForCreateAccountResponse + pfnDisconnect, same flow; win LAUNCHER_HandleBnetConnect_1 identical shape
 002ba694	shared-unpaired	0043b940	pfnWaitForChangePasswordResponse + pfnDisconnect, same flow; win LAUNCHER_PumpChangePasswordResponse identical shape
-002bbb4d	mac-only		body only returns 1; no caller, no code reference
+002bbb4d	shared-unpaired	00436e90	MAINMENU_ReturnOnePump: returns 1
 002bc7d4	shared-unpaired	00437a70	SStrHash lookup walking gpRealmCharListCache with expiry tick; win CHARSEL_GetCachedRealmData same job
 002bcb53	mac-only		wrapper: CHARSEL_PopulateCharList(&DAT_0054a2e8) + ResetCharListUI; win 0043b490 is a different function
 002bcce5	mac-only		UI-only reset after CHARSEL_DestroySelectedChar; no Windows twin per decompile
@@ -683,12 +683,12 @@ addr	class	win_addr	evidence
 002cb38e	mac-only		rune-locale alpha predicate over wide char (___maskrune path); no verified win twin
 002cbd10	mac-only		caches SStrHash of Header and Game Time in two globals; no caller or verified win twin
 002cc749	mac-only		MCP packet handler setting SetD2GSJoinResult and Win32Mac::SetEvent; no verified win twin
-002ccb4e	mac-only		returns address of a global block; accessor, no verified win twin
-002ccb5f	mac-only		returns a 16-bit global; accessor, no verified win twin
+002ccb4e	shared-unpaired	00449bc0	GetD2GSConnectIp: returns the address of a global block
+002ccb5f	shared-unpaired	00449bd0	GetD2GSRequestId: returns a 16-bit global
 002ccbcc	shared-unpaired	00449c30	same-name Windows function 00449c30 (MCPSTATE_GetCharLogonSuccess); was: returns g_bMCPCharLogonSuccess; accessor, no verified win twin
-002ccca9	mac-only		returns address of a 0x18C-byte global block; accessor
-002cccba	mac-only		SMemZero of 0x18C-byte global block; no caller or verified win twin
-002ccd1d	mac-only		returns a 32-bit global; accessor, no verified win twin
+002ccca9	shared-unpaired	00449d50	MCPCONNECT_GetCharSelectBuffer: returns the address of the 0x18c-byte block
+002cccba	shared-unpaired	00449d60	MCPCONNECT_ClearCharSelectBuffer: zeroes the 0x18c-byte block
+002ccd1d	shared-unpaired	00449de0	MCPCONNECT_GetD2GSGameHash: returns a 32-bit global
 002ccfd4	mac-only		builds MCP packet 0x01 (MCP_STARTUP) and sends via NET_MCP_CLIENT_Send; win twin not verified
 002cfbd1	mac-only		wrapper calling FUN_002d4627(1) and returns 1; no caller
 002d098a	mac-only		chat-dialog MCP pump; checks DAT_00551d8c bit 0 instead of gnMainMenuConnectFlag; win OOG_PollMCPCharLogonPump 0043dbf0 not verified
@@ -707,11 +707,11 @@ addr	class	win_addr	evidence
 002d7874	mac-only		stores arg in DAT_005cd10c and returns multiplayer app-mode table; no caller
 002d788e	compiler		empty void body stub
 002d7ffc	mac-only		edit-box filter accepting letters, digits, space, apostrophe, hyphen, underscore; no verified win twin
-002d8084	mac-only		edit-box filter accepting bytes above 0x1f (signed compare); no verified win twin
-002d9d78	mac-only		callback calling OOGUTIL_RefreshGameList and returning 1; no verified win twin
-002d9d8d	mac-only		identical body to 002d8084 (edit-box filter, signed compare); no verified win twin
-002d9d9e	mac-only		callback calling OOGUTIL_RefreshGameList and returning 1; identical to 002d9d78
-002d9db3	mac-only		callback calling OOGUTIL_RefreshGameList and returning 1; no verified win twin
+002d8084	shared-unpaired	004435d0	OOGUTIL_IsFirstCharPrintableAscii: first char above 0x1f (signed) and not above 0x7f
+002d9d78	shared-unpaired	004456a0	EDITBOX_Cb_OOGUTIL_RefreshGameList: calls OOGUTIL_RefreshGameList, returns 1
+002d9d8d	shared-unpaired	00443600	OOGUTIL_FilterPrintableAsciiChar: same body as 004435d0 (002d8084)
+002d9d9e	shared-unpaired	004456b0	EDITBOX_Cb_..._ForMaxPlayers: calls OOGUTIL_RefreshGameList, returns 1
+002d9db3	shared-unpaired	004456c0	EDITBOX_Cb_..._ForLevelRestriction: calls OOGUTIL_RefreshGameList, returns 1
 002dca5f	mac-only		CD-key pair decode via base-24 table into hex with checksum bits; pure arithmetic, no verified win twin
 002dcaeb	mac-only		CD-key digit uppercase via libc ___toupper then xor with key bits; no verified win twin
 002de00a	mac-only		forwards arg to Fog::QServer::FUN_002f3d19 on global pQServer; no verified win twin
@@ -727,9 +727,9 @@ addr	class	win_addr	evidence
 002e9952	mac-only		music stream open path via SOUNDSMP_OpenAndStreamFile; win twin not verified
 002e9cce	shared-unpaired	00514920	Windows SOUND_GetMusicEnabled exists at 00514920; 17-byte getter of the music-enabled setting
 002e9cdf	mac-only		log10 attenuation curve in hundredths of dB using libm _log10; win twin not verified
-002e9ee5	mac-only		3D distance to volume (_log, _pow) and pan; libm calls; win twin not verified
+002e9ee5	shared-unpaired	00516830	SOUNDSMP_CalculateVolumeAndPan: distance to volume and pan
 002ea0da	mac-only		frees sound-sample list heads via SOUND_sD2SoundSmp_Free; no verified win twin
-002ed89d	mac-only		socket receive framing loop over WSASocket2_Read and Safesock wrappers; win twin not verified
+002ed89d	shared-unpaired	006bc3a0	ReceiveLoopCallback: socket receive framing loop (D2QSSocket.cpp neighbours tagged)
 002edfed	mac-only		halting wrapper around FOG_ArrayGetByHandle with fp_fatal; no verified win twin
 002ee03b	mac-only		handle lookup with index and serial check; no verified win twin
 002eed78	mac-only		Calls Gestalt (Mac OS query) and sets up Mac product/OS info at init; Gestalt is a Mac-only API
@@ -740,8 +740,8 @@ addr	class	win_addr	evidence
 002ef740	mac-only		exe directory plus trailing backslash via SFILE_GetExecutableDirectory; win twin not verified
 002ef76c	mac-only		install path plus Save directory with SafeCreateDirectoryTree; win twin not verified
 002ef904	mac-only		gamma and contrast ramp using libm _pow; pure math, win twin not verified
-002efad4	mac-only		creates LogThread via Storm CreateThread and initialises log state; win twin not verified
-002efde7	mac-only		Mac logs dir is executable dir plus logs; Windows FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder uses My Documents
+002efad4	shared-unpaired	00410540	StartLogWriterThread: creates the log writer thread and initialises its state
+002efde7	shared-unpaired	0040f000	FILETOOLS_GetUserMyDocumentsDiabloIIGameLogsFolder: same job, the Mac directory is the executable dir plus logs
 002f0f4a	mac-only		unlinks all nodes then the list head link via STORMLIST_UnlinkAll; no verified win twin
 002f0ff4	mac-only		unlink and reinsert of a list node with two link modes; no verified win twin
 002f10a8	shared-unpaired		TLink::NextLink helper (low bit terminator, else add offset); called from FUN_002f0ff4 and list code; VC inlines it there
