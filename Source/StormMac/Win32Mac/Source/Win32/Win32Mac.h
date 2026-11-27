@@ -38,6 +38,13 @@ typedef const char* LPCSTR;
 typedef DWORD* LPDWORD;
 typedef LONG* LPLONG;
 
+#ifndef FALSE
+#define FALSE 0
+#endif
+#ifndef TRUE
+#define TRUE 1
+#endif
+
 // A kernel-object handle is a 1-based index into the handle table (GetWin32HandlePtr).
 typedef int32_t HANDLE;
 
@@ -51,6 +58,10 @@ typedef union _LARGE_INTEGER {
         DWORD LowPart;
         LONG HighPart;
     };
+    struct {
+        DWORD LowPart;
+        LONG HighPart;
+    } u;
     int64_t QuadPart;
 } LARGE_INTEGER;
 
@@ -289,6 +300,15 @@ struct tagRGBQUAD {
 };
 typedef tagRGBQUAD RGBQUAD;
 
+struct tagPALETTEENTRY {
+    BYTE peRed;
+    BYTE peGreen;
+    BYTE peBlue;
+    BYTE peFlags;
+};
+typedef tagPALETTEENTRY PALETTEENTRY;
+typedef PALETTEENTRY* LPPALETTEENTRY;
+
 // The format Win32_DirectSound.cpp's buffers keep, wFormatTag through cbSize.
 #pragma pack(push, 1)
 struct WAVEFORMATEX {
@@ -346,5 +366,12 @@ struct WSAData {
 typedef WSAData WSADATA;
 WIN32MAC_LAYOUT(WSADATA_size, sizeof(WSADATA) == 0x190);
 // ---- end of the shared code's Win32 data types ----
+
+// ---- Win32_String.cpp: the Microsoft CRT number formatting the layer supplies ----
+char* _itoa(int nValue, char* szBuffer, int nRadix);
+char* _ui64toa(uint64_t nValue, char* szBuffer, int nRadix);
+// No body in 1.14d: its one caller, STRTABLE_FormatInt64, is not in the Mac binary either.
+char* _i64toa(int64_t nValue, char* szBuffer, int nRadix);
+char* _ultoa(DWORD dwValue, char* szBuffer, DWORD dwRadix);
 
 #endif  // D2_OS_MAC

@@ -87,7 +87,7 @@ static_assert(sizeof(void*) != 4 || sizeof(D2GfxHashTableStrc) == 0x10000, "the 
 static uint32_t gbSpriteCacheConversionEnabled = 0; D2_STATIC_GUARD(gbSpriteCacheConversionEnabled, "gbSpriteCacheConversionEnabled");
 static D2GfxMemoryStrc D2GfxMemoryStrc_0089db60 = {}; D2_STATIC_GUARD(D2GfxMemoryStrc_0089db60, "D2GfxMemoryStrc_0089db60");
 static_assert(sizeof(void*) != 4 || sizeof(D2LRUCacheStrc) == 0x34, "memset(sizeof(D2LRUCacheStrc)): the 32-bit layout must be the 0x34 bytes 1.14d clears");
-static_assert(sizeof(void*) != 4 || sizeof(D2GfxMemoryStrc) == 0x50, "memset(sizeof(D2GfxMemoryStrc)): the 32-bit layout must be the 0x50 bytes 1.14d clears");
+static_assert(sizeof(void*) != 4 || sizeof(D2GfxMemoryStrc) == 0x50 - 0x18 + sizeof(CRITICAL_SECTION), "memset(sizeof(D2GfxMemoryStrc)): the 32-bit layout must be the 0x50 bytes 1.14d clears (0x64 on the Mac, whose critical section is a 0x2c-byte pthread mutex)");
 static_assert(sizeof(D2CelFileCacheEntryStrc) == 0xc0, "LRUCACHE_GetOrAlloc(sizeof(D2CelFileCacheEntryStrc)): the layout must be the 0xc0 bytes 1.14d allocates");
 static_assert(sizeof(void*) != 4 || sizeof(D2CelCacheBlockStrc) == 0xb8, "SPRITECACHE_AllocEntry2(sizeof(D2CelCacheBlockStrc)): the 32-bit layout must be the 0xb8 bytes 1.14d allocates");
 static_assert(sizeof(void*) != 4 || sizeof(D2GfxCellNodeStrc) == 0x2c, "D2_ALLOC_POOL_AT(n * sizeof(D2GfxCellNodeStrc)): the 32-bit cel frame record must be the 0x2c bytes 1.14d allocates");

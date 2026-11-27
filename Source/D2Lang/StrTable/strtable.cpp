@@ -843,7 +843,12 @@ uint32_t __stdcall MISC_GetLanguageCode() {
     return gnLanguageCode;
 }
 
+// 1.14d mac: 002b9950
 uint32_t __stdcall STRTABLE_GetRegistryLanguage() {
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac reads no Control Panel language: the game's own language file decides.
+    return 0;
+#else
     // Static local variables (originally global data)
     static char gszRegistryLanguage[256] = {}; D2_STATIC_GUARD(gszRegistryLanguage, "D2Lang::StrTable::strtable::STRTABLE_GetRegistryLanguage::gszRegistryLanguage");
 
@@ -877,6 +882,7 @@ uint32_t __stdcall STRTABLE_GetRegistryLanguage() {
     }
 
     return 0;
+#endif
 }
 
 void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat) {

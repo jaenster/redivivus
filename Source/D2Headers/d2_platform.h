@@ -311,6 +311,7 @@ static inline int WideCharToMultiByte(UINT cp, DWORD flags, const uint16_t* src,
 #  include <sys/select.h>
 #  include <sys/time.h>
 #  include <netinet/in.h>
+#  include <limits.h>
 #endif
 #ifndef _countof
 #  define _countof(a) (sizeof(a) / sizeof((a)[0]))
@@ -396,9 +397,9 @@ typedef void* LPSERVICE_STATUS;
 struct CRITICAL_SECTION { void* DebugInfo; long LockCount; long RecursionCount; void* OwningThread; void* LockSemaphore; unsigned long SpinCount; };
 typedef CRITICAL_SECTION* LPCRITICAL_SECTION;
 #endif
-struct POINT { long x; long y; };
+struct POINT { LONG x; LONG y; };
 typedef POINT* LPPOINT;
-struct RECT { long left; long top; long right; long bottom; };
+struct RECT { LONG left; LONG top; LONG right; LONG bottom; };
 typedef RECT* LPRECT;
 #if !D2_OS_MAC
 struct FILETIME { DWORD dwLowDateTime; DWORD dwHighDateTime; };
@@ -408,8 +409,10 @@ struct GUID { DWORD Data1; WORD Data2; WORD Data3; BYTE Data4[8]; };
 struct OVERLAPPED { DWORD Internal; DWORD InternalHigh; DWORD Offset; DWORD OffsetHigh; HANDLE hEvent; };
 typedef OVERLAPPED* LPOVERLAPPED;
 
+#if !D2_OS_MAC
 struct PALETTEENTRY { BYTE peRed; BYTE peGreen; BYTE peBlue; BYTE peFlags; };
 typedef PALETTEENTRY* LPPALETTEENTRY;
+#endif
 
 #if !D2_OS_MAC
 typedef FILETIME _FILETIME;
@@ -832,6 +835,7 @@ static inline errno_t _strncpy_s(char* dst, size_t dsz, const char* src, size_t 
 #define _fputs fputs
 #ifndef _WIN32
 #define _time64 time
+#define _time32 time
 #define _difftime64 difftime
 #endif
 
