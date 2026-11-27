@@ -15,6 +15,8 @@ file(GLOB_RECURSE D2_MAC_SOURCES CONFIGURE_DEPENDS LIST_DIRECTORIES false
     "${CMAKE_SOURCE_DIR}/Source/StormMac/*.CPP"
     "${CMAKE_SOURCE_DIR}/Source/StormMac/*.mm"
     "${CMAKE_SOURCE_DIR}/Source/D2gfx/Mac/*.cpp"
+    "${CMAKE_SOURCE_DIR}/Source/D2gfx/Mac/*.mm"
+    "${CMAKE_SOURCE_DIR}/Source/D2Hell/Mac/*.cpp"
     "${CMAKE_SOURCE_DIR}/Source/MacSpecific/Source/MacShell/*.cpp")
 list(REMOVE_DUPLICATES D2_MAC_SOURCES)
 list(SORT D2_MAC_SOURCES)
