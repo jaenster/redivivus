@@ -1221,9 +1221,8 @@ uint32_t __fastcall SKILL_CheckManaForCast(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    int32_t nOwnerGUID = D2Common::Skills::GetOwnerGUID(pSkill);
-    if (nOwnerGUID != -1) {
-      return (uint32_t)(pSkill->nCharges > 0);
+    if (D2Common::Skills::GetOwnerGUID(pSkill) != -1) {
+      return pSkill->nCharges > 0;
     }
 
     D2SkillsTxt* pSkillTxt = D2Common::Skills::GetSkillsTxt(pSkill);
@@ -1231,25 +1230,17 @@ uint32_t __fastcall SKILL_CheckManaForCast(D2UnitStrc * pUnit) {
       return 0;
     }
 
-    int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1);
-    nSkillLevel--;
+    int nSkillLevel = D2Common::Skills::GetSkillLevel(pUnit, pSkill, 1) - 1;
     if (nSkillLevel < 0) {
       nSkillLevel = 0;
     }
 
-    short int sLvlMana = pSkillTxt->lvlmana;
-    short int sManaShift = pSkillTxt->manashift;
-    short int sMana = pSkillTxt->mana;
-    if (pSkillTxt->srvdofunc == 0x74) {
-      BOOL bHasCharges;
-      bHasCharges = D2Common::DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit);
-      if (bHasCharges) {
-        return 1;
-      }
+    int nManaCost = pSkillTxt->lvlmana * nSkillLevel + pSkillTxt->mana << D2_SHIFT_COUNT(pSkillTxt->manashift);
+    if (pSkillTxt->srvdofunc == 0x74 && D2Common::DATATBLS::ItemStats::UNITS_IsShapeshifted(pUnit)) {
+      return 1;
     }
 
-    int nCurrentMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0);
-    return (uint32_t)(nCurrentMana >= sLvlMana * nSkillLevel + (int)sMana << D2_SHIFT_COUNT(sManaShift));
+    return D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_mana, 0) >= nManaCost;
 }
 
 // @sourcefile .\SKILLS\Skills.cpp
