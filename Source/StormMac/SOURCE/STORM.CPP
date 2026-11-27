@@ -98,17 +98,14 @@ BOOL StormDestroy(void) {
     return 1;
 }
 
-// The system option values, 1.14d mac 00554df8..00554e08.
-// 1.14d mac: 00554dfc
-uint32_t s_dwSystemOption1;
-// 1.14d mac: 00554e00
-uint32_t s_dwSystemOption2;
+// The system option values, 1.14d mac 00554df8..00554e08: options 3, 1, 2 (read by SErrDisplayError
+// and SErrReportNamedResourceLeak as a table), 4, and 5 (SLOG's debug-output switch).
 // 1.14d mac: 00554df8
-uint32_t s_dwSystemOption3;
+uint32_t g_adwSystemOptions[3];
 // 1.14d mac: 00554e04
-uint32_t s_dwSystemOption4;
+uint32_t g_dwSystemOption4;
 // 1.14d mac: 00554e08
-uint32_t s_dwSystemOption5;
+uint32_t g_bLogDebugOutput;
 
 // 1.14d mac: 0000973c
 BOOL SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t* pValue, int32_t nValueSize) {
@@ -120,7 +117,7 @@ BOOL SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t* pValue, int32_t nValu
             if (nValueSize != 4) {
                 return bResult;
             }
-            s_dwSystemOption1 = *pValue;
+            g_adwSystemOptions[1] = *pValue;
             break;
         case 2:
             if (nValueSize != 4) {
@@ -135,26 +132,26 @@ BOOL SSYSTEM_SetSystemOption(uint32_t nOptionId, uint32_t* pValue, int32_t nValu
                 if (((dwOption2 - 1) ^ dwOption2) != dwOption2 * 2 - 1) {
                     return bResult;
                 }
-                s_dwSystemOption2 = dwOption2;
+                g_adwSystemOptions[2] = dwOption2;
             }
             break;
         case 3:
             if (nValueSize != 4) {
                 return bResult;
             }
-            s_dwSystemOption3 = *pValue;
+            g_adwSystemOptions[0] = *pValue;
             break;
         case 4:
             if (nValueSize != 4) {
                 return bResult;
             }
-            s_dwSystemOption4 = *pValue;
+            g_dwSystemOption4 = *pValue;
             break;
         case 5:
             if (nValueSize != 4) {
                 return bResult;
             }
-            s_dwSystemOption5 = *pValue;
+            g_bLogDebugOutput = *pValue;
             break;
         case 6: {
             if (nValueSize != 8) {

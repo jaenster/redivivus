@@ -164,7 +164,8 @@ template<class T, int OFFSET>
 void TSExplicitList<T, OFFSET>::DeleteAll() {
     T* pNode;
     while ((pNode = Head()) != NULL) {
-        DeleteNode(pNode);
+        pNode->~T();
+        SMemFree(pNode, "", -2, 0);
     }
 }
 

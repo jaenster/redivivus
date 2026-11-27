@@ -321,9 +321,9 @@ uint32_t SStrHashHT(const char* szText) {
     const uint8_t* p = szUpper;
     const uint32_t kJenkinsBlock = 3 * sizeof(uint32_t);
     while (nLeft >= kJenkinsBlock) {
-        a += *(const uint32_t*)(p + 0);
-        b += *(const uint32_t*)(p + 4);
-        c += *(const uint32_t*)(p + 8);
+        c += (uint32_t)p[8] | (uint32_t)p[9] << 8 | (uint32_t)p[10] << 16 | (uint32_t)p[11] << 24;
+        b += (uint32_t)p[4] | (uint32_t)p[5] << 8 | (uint32_t)p[6] << 16 | (uint32_t)p[7] << 24;
+        a += (uint32_t)p[0] | (uint32_t)p[1] << 8 | (uint32_t)p[2] << 16 | (uint32_t)p[3] << 24;
         SSTR_JENKINS_MIX(a, b, c);
         p += kJenkinsBlock;
         nLeft -= 12;

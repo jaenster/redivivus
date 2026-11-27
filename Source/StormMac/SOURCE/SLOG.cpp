@@ -222,7 +222,8 @@ static void SLOG_FlushLog(SLogRecord* pLog) {
 
 // 1.14d mac: 00017e0d
 BOOL SLogCreate(char* szFileName, uint32_t dwFlags, int* pLogHandle) {
-    if (!pLogHandle || (*pLogHandle = 0, *szFileName == '\0') || !szFileName) {
+    bool bEmpty;
+    if (!pLogHandle || (bEmpty = *szFileName == '\0', *pLogHandle = 0, bEmpty) || !szFileName) {
         SErrSetLastError(ERROR_INVALID_PARAMETER);
         return 0;
     }
@@ -454,10 +455,7 @@ static void SLOG_OutputTime(SLogRecord* pLog, int32_t bHasData) {
 static void SLOG_WriteIndentSpaces(SLogRecord* pLog) {
     int32_t nIndent = pLog->nIndent;
     if (nIndent > 0) {
-        int32_t nSpaces = 0x80;
-        if (nIndent <= 0x80) {
-            nSpaces = nIndent;
-        }
+        int32_t nSpaces = nIndent >= 0x81 ? 0x80 : nIndent;
         SMemFill(pLog->acBuffer + pLog->nUsed, nSpaces, ' ');
         pLog->acBuffer[pLog->nUsed + nSpaces] = '\0';
         pLog->nUsed += nSpaces;

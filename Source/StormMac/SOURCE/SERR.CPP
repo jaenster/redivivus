@@ -6,6 +6,9 @@
 // first functions, from SERR_SetDisplayErrorCallback, follow SCOMP.CPP's static
 // initialiser (0000fe80).
 #include "../Win32Mac/Source/Win32/Win32Mac.h"
+#pragma GCC visibility push(hidden)
+#include "../H/stpl.h"
+#pragma GCC visibility pop
 
 #if !defined(_WIN32) && D2_OS_MAC
 
@@ -60,15 +63,14 @@ void STORM_Nop(void);
 void DebugStr(const unsigned char* pMessage);
 // Out of line in SFILE.CPP's neighbourhood.
 void CRITSECT_Init(pthread_mutex_t* pMutex);
-void CRITSECT_Destroy(void* pMutex);
+void CRITSECT_Destroy(pthread_mutex_t* pMutex) __attribute__((visibility("hidden")));
 
 extern "C" int __cxa_atexit(void (*pfnDestructor)(void*), void* pObject, void* pDso);
 extern "C" void* __dso_handle;
 
-// 1.14d mac: 00396028
-// The application's option words: +4 non-zero when the debugger-only leak output is off,
-// +0x14 non-zero when no error log is written.
-extern int* g_pnStormOptions;
+// STORM.CPP's option words: [1] non-zero when the debugger-only leak output is on,
+// [5] non-zero when no error log is written.
+extern uint32_t g_adwSystemOptions[6];
 
 // 1.14d mac: 003dfb14
 // The application's extra-information writer for the error log, or null.
@@ -85,90 +87,18 @@ typedef int (*pfnSErrHandler)(uint32_t nErrorCode, const char* szErrorText, cons
 
 // ---- the intrusive list the registered handlers live on ----
 
-struct TSLink {
-    TSLink* pPrev;
-    uintptr_t nNext;
+// The log mutex: made by the static initialiser, which registers its destructor straight from
+// Storm's own CRITSECT_Destroy.
+class SErrCritSect : public pthread_mutex_t {
+public:
+    SErrCritSect() {
+        CRITSECT_Init(this);
+        __cxa_atexit((void (*)(void*))CRITSECT_Destroy, this, &__dso_handle);
+    }
 };
-
-struct TSList {
-    int nLinkOffset;
-    TSLink tTerminator;
-};
-
-static inline bool IsListEnd(uintptr_t nNext) {
-    return nNext == 0 || (nNext & 1) != 0;
-}
-
-// 1.14d mac: 00010fb4
-// TSLink::NextLink
-static TSLink* TSLINK_NextLink(TSLink* pLink, int nLinkOffset) {
-    uintptr_t nNext = pLink->nNext;
-    if (IsListEnd(nNext)) {
-        return (TSLink*)(nNext & 0xfffffffe);
-    }
-    if (nLinkOffset < 0) {
-        nLinkOffset = (int)((intptr_t)pLink - *(intptr_t*)((char*)pLink->pPrev + 4));
-    }
-    return (TSLink*)(nNext + nLinkOffset);
-}
-
-// 1.14d mac: 00010f74
-// TSLink::Unlink
-static void TSLINK_Unlink(TSLink* pLink) {
-    TSLink* pPrev = pLink->pPrev;
-    if (pPrev != NULL) {
-        TSLink* pNextLink = TSLINK_NextLink(pLink, -1);
-        pNextLink->pPrev = pPrev;
-        pLink->pPrev->nNext = pLink->nNext;
-        pLink->pPrev = NULL;
-        pLink->nNext = 0;
-    }
-}
-
-// 1.14d mac: 00010fea
-// TSList::UnlinkAll
-static void TSLIST_UnlinkAll(TSList* pList) {
-    TSLink* pLink = (TSLink*)pList->tTerminator.nNext;
-    while (true) {
-        if (IsListEnd((uintptr_t)pLink)) {
-            pLink = NULL;
-        }
-        if (pLink == NULL) {
-            break;
-        }
-        TSLINK_Unlink(pLink);
-        pLink = (TSLink*)pList->tTerminator.nNext;
-    }
-}
-
-// 1.14d mac: 00010eca
-// TSList::~TSList
-static void TSLIST_Destructor(void* pList) {
-    TSLIST_UnlinkAll((TSList*)pList);
-    TSLINK_Unlink(&((TSList*)pList)->tTerminator);
-}
-
-// 1.14d mac: 00010eec
-// TSList::DeleteAll: unlinks and frees every element.
-static void TSLIST_DeleteAll(TSList* pList) {
-    TSLink* pLink = (TSLink*)pList->tTerminator.nNext;
-    if (IsListEnd((uintptr_t)pLink)) {
-        pLink = NULL;
-    }
-    while (pLink != NULL) {
-        TSLINK_Unlink(pLink);
-        TSLINK_Unlink(pLink);
-        SMemFree(pLink, "", -2, 0);
-        pLink = (TSLink*)pList->tTerminator.nNext;
-        if (IsListEnd((uintptr_t)pLink)) {
-            pLink = NULL;
-        }
-    }
-}
 
 // A registered error handler: the link, then the callback.
-struct SErrHandlerNode {
-    TSLink tLink;
+struct SErrHandlerNode : TSLinkedNode<SErrHandlerNode> {
     pfnSErrHandler pfnHandler;
 };
 
@@ -183,7 +113,7 @@ struct SErrFacility {
 // ---- the module's state ----
 
 // 1.14d mac: 003f02ac
-static TSList s_tHandlers;
+static TSExplicitList<SErrHandlerNode, 0> s_tHandlers;
 // 1.14d mac: 003f02e4
 static pfnBlizzardError s_pfnDisplayError;
 // 1.14d mac: 003f02e8
@@ -196,7 +126,7 @@ static LONG s_nCriticalSectionState = -1;
 // 1.14d mac: 003f02f0
 static CRITICAL_SECTION s_tCriticalSection;
 // 1.14d mac: 003f02b8
-static pthread_mutex_t s_tLogMutex;
+static SErrCritSect s_tLogMutex;
 // 1.14d mac: 003f0328
 static char s_bLeakOptionRead;
 // 1.14d mac: 003f032c
@@ -217,7 +147,7 @@ void SERR_SetDisplayErrorCallback(pfnBlizzardError pfnCallback) {
 
 // 1.14d mac: 0000fed5
 BOOL SErrDestroy(void) {
-    TSLIST_DeleteAll(&s_tHandlers);
+    s_tHandlers.DeleteAll();
     s_bFacilitiesRegistered = 0;
     while (s_pFacilities != NULL) {
         SErrFacility* pNext = s_pFacilities->pNext;
@@ -256,7 +186,7 @@ static const char* SERR_GetString(int32_t nErrorIndex) {
 }
 
 // 1.14d mac: 0001088b
-void WriteErrorLog(const char* pszText);
+static void WriteErrorLog(const char* pszText) __attribute__((noinline));
 
 // 1.14d mac: 0000ffaa
 int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTraceFlags, const char* pCustomMsg,
@@ -411,10 +341,7 @@ int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTrac
     if (nButton != 0) {
         nMsgResult = nButton;
     }
-    SErrHandlerNode* pHandler = (SErrHandlerNode*)s_tHandlers.tTerminator.nNext;
-    if (IsListEnd((uintptr_t)pHandler)) {
-        pHandler = NULL;
-    }
+    SErrHandlerNode* pHandler = s_tHandlers.Head();
     bool bHandled = false;
     if (pHandler != NULL) {
         const char* szHandlerMsg = "";
@@ -426,8 +353,8 @@ int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTrac
                 bHandled = true;
                 break;
             }
-            pHandler = (SErrHandlerNode*)pHandler->tLink.nNext;
-        } while (!IsListEnd((uintptr_t)pHandler));
+            pHandler = pHandler->m_link.m_next;
+        } while (!TSLink<SErrHandlerNode>::IsTerminator(pHandler));
     }
     if (!bHandled && s_pfnDisplayError == NULL) {
         void* hWnd = SMsgGetDefaultWindow();
@@ -437,7 +364,7 @@ int SErrDisplayError(uint32_t nErrorCode, const char* pStackTrace, int32_t nTrac
         nMsgResult = MessageBox(hWnd, szFullMessage, szModuleName, nStyle | nIcon);
     }
     LeaveCriticalSection(&s_tCriticalSection);
-    if (g_pnStormOptions[5] == 0) {
+    if (g_adwSystemOptions[5] == 0) {
         pthread_mutex_lock(&s_tLogMutex);
         pthread_mutex_unlock(&s_tLogMutex);
         *pCursor = '\0';
@@ -554,7 +481,7 @@ static void SERR_WriteLogTextCRLF(HANDLE hFile, const char* szText) {
 // 1.14d mac: 0001088b
 // "Errors\<date> Error.txt" beside the executable, or in the executable's own folder when
 // that cannot be made.
-void WriteErrorLog(const char* pszText) {
+static void WriteErrorLog(const char* pszText) {
     char szModulePath[260];
     char szPath[260];
     char szFileName[260];
@@ -588,9 +515,11 @@ void WriteErrorLog(const char* pszText) {
         LogComputerInfoHeader(1, SERR_WriteLogLineF, (void*)hFile, "Error", aLocalTime);
         SERR_WriteLogTextCRLF(hFile, pszText);
         if (g_pfnErrorLogExtraInfo != NULL) {
-            char szExtraInfo[0x1450];
+            // a run-time sized array: the original allocates it on the stack at this point
+            uint32_t nExtraInfoSize = 0x1450;
+            char szExtraInfo[nExtraInfoSize];
             szExtraInfo[0] = '\0';
-            g_pfnErrorLogExtraInfo(szExtraInfo, 0x1450);
+            g_pfnErrorLogExtraInfo(szExtraInfo, nExtraInfoSize);
             if (szExtraInfo[0] != '\0') {
                 SERR_WriteLogTextCRLF(hFile, szExtraInfo);
             }
@@ -628,14 +557,12 @@ void SErrReportNamedResourceLeak(const char* szMessage, const char* szText) {
         SRegLoadValue("Internal", "Debug Memory", 0, &s_nLeakOption);
     }
     if (s_nLeakOption != 0) {
-        const char* szFormat;
         if (szText == NULL || *szText == '\0') {
-            szFormat = "%s";
+            SStrPrintf(szDescription, 0x100, "%s", szMessage);
         } else {
-            szFormat = "%s (%s)";
+            SStrPrintf(szDescription, 0x100, "%s (%s)", szMessage, szText);
         }
-        SStrPrintf(szDescription, 0x100, szFormat, szMessage, szText);
-        if (g_pnStormOptions[1] == 0) {
+        if (g_adwSystemOptions[1] == 0) {
             SErrDisplayError(0x8510007f, szDescription, -3, NULL, 1, 1);
         } else {
             SStrPrintf(szLine, 200, "Storm Error : handle never released -- %s\n", szDescription);
@@ -644,15 +571,17 @@ void SErrReportNamedResourceLeak(const char* szMessage, const char* szText) {
     }
 }
 
-// 1.14d mac: 00011040
-// The static initialiser: the handler list and the log mutex, destroyed at exit.
-void SERR_InitStatics(void) {
-    s_tHandlers.nLinkOffset = 0;
-    s_tHandlers.tTerminator.pPrev = &s_tHandlers.tTerminator;
-    s_tHandlers.tTerminator.nNext = (uintptr_t)&s_tHandlers.tTerminator | 1;
-    __cxa_atexit(TSLIST_Destructor, &s_tHandlers, &__dso_handle);
-    CRITSECT_Init(&s_tLogMutex);
-    __cxa_atexit(CRITSECT_Destroy, &s_tLogMutex, &__dso_handle);
-}
+template void TSLink<SErrHandlerNode>::Unlink();
+template TSLink<SErrHandlerNode>* TSLink<SErrHandlerNode>::NextLink(int);
+template void TSExplicitList<SErrHandlerNode, 0>::UnlinkAll();
+template void TSExplicitList<SErrHandlerNode, 0>::DeleteAll();
+template TSExplicitList<SErrHandlerNode, 0>::~TSExplicitList();
+
+// 1.14d mac: 00010eca TSExplicitList<SErrHandlerNode,0>::~TSExplicitList[D2]
+// 1.14d mac: 00010eec TSExplicitList<SErrHandlerNode,0>::DeleteAll
+// 1.14d mac: 00010f74 TSLink<SErrHandlerNode>::Unlink
+// 1.14d mac: 00010fb4 TSLink<SErrHandlerNode>::NextLink
+// 1.14d mac: 00010fea TSExplicitList<SErrHandlerNode,0>::UnlinkAll
+// 1.14d mac: 00011040 _GLOBAL__I_a
 
 #endif  // D2_OS_MAC
