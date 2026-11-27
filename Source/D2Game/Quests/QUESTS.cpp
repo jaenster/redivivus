@@ -446,7 +446,7 @@ void __fastcall QUEST_OnPlayerEnteredArea(::SGAMEDATA * pGame, int32_t ePrevious
     questArg.pGame = pGame;
     questArg.nEvent = 3;
     questArg.sQuestArgs.sLevelChange.nOldLevel = ePreviousLevelId;
-    questArg.sQuestArgs.sNpcActivate.nIndex = eEnteredLevelId;
+    questArg.sQuestArgs.sLevelChange.nNewLevel = eEnteredLevelId;
     questArg.pPlayer = pUnit;
     QUEST_DispatchBroadcast(true, '\0', &questArg);
 }
@@ -862,7 +862,9 @@ void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, uin
       }
     }
 
-    questArg.sQuestArgs.sNpcActivate.nIndex = (int)nGossipIndex;
+    // The message index is the second dword of the argument, which the event 0xB handlers read as
+    // sNpcMessage.nMessageIndex. sNpcActivate.nIndex follows a pointer, so on x64 it is a different slot.
+    questArg.sQuestArgs.sLevelChange.nNewLevel = (int)nGossipIndex;
     QUEST_DispatchBroadcast(true, '\x01', &questArg);
 }
 
@@ -2750,7 +2752,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
                   pQuestCallback.pGame = pGame;
                   pQuestCallback.nEvent = 3;
                   pQuestCallback.sQuestArgs.sLevelChange.nOldLevel = 1;
-                  pQuestCallback.sQuestArgs.sNpcActivate.nIndex = 0x28;
+                  pQuestCallback.sQuestArgs.sLevelChange.nNewLevel = 0x28;
                   pQuestCallback.pPlayer = pUnit;
                   if (lpfn) {
                     /* FARPROC lpfn for IsBadCodePtr */ bQuestState = IsBadCodePtr((FARPROC)lpfn);
