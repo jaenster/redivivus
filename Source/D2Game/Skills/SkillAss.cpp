@@ -2400,7 +2400,8 @@ BOOL __fastcall Skills_SrvDoFunc_049_SummonShadowClone(::SGAMEDATA * pGame, D2Un
       byPetType = 0;
     }
 
-    D2MonsterCastPetStrc sSummonCast = {};
+    D2MonsterCastPetStrc sSummonCast;
+    memset(&sSummonCast, 0, sizeof(sSummonCast));
     sSummonCast.classId = nClassId;
     sSummonCast.nFunctionId = 0;
     sSummonCast.pPlayer = pUnit;
