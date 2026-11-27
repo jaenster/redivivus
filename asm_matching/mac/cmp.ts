@@ -1,6 +1,10 @@
 // Compares the Mac reconstruction with the shipped 1.14d Intel Mac binary, function by function.
 //
-//   node asm_matching/mac/cmp.ts --build <mac build dir> [--binary <DiabloII_macho>] [--tsv <out>] [-v] [filter...]
+//   node asm_matching/mac/cmp.ts --build <mac build dir> [--binary <DiabloII_macho>] [--tsv <out>] [--no-shared] [-v] [filter...]
+//
+// A file's object comes from the d2_mac_objs target (the Mac-only code) or, failing that, from
+// d2_mac_shared_objs (the shared game code the Mac binary carries too); the two are reported apart.
+// --no-shared skips the shared part.
 //
 // Every function or global in a Mac source carrying "// 1.14d mac: <addr>" on the line before its
 // definition is paired with that address. For each function, our object's instruction stream is
@@ -29,6 +33,7 @@ let binary = process.env.D2_MAC_BINARY ?? "";
 let tsvOut = "";
 let insnsOut = "";
 let verbose = false;
+let withShared = true;
 const filters: string[] = [];
 for (let i = 0; i < argv.length; i++) {
     const a = argv[i];
@@ -37,6 +42,7 @@ for (let i = 0; i < argv.length; i++) {
     else if (a === "--tsv") tsvOut = resolve(argv[++i]);
     else if (a === "--insns") insnsOut = resolve(argv[++i]);
     else if (a === "-v") verbose = true;
+    else if (a === "--no-shared") withShared = false;
     else filters.push(a);
 }
 if (!buildDir || !binary) {
@@ -494,31 +500,38 @@ for (const e of entries) {
     byFile.get(e.file)!.push(e);
 }
 const rows: string[] = ["file\taddr\tname\tstatus\tinsns\tunverified\tdetail"];
-let same = 0, total = 0;
-const noObject: string[] = [];
 const pct = (n: number, d: number) => (d ? (100 * n / d).toFixed(1) : "0.0") + "%";
+const noObject: string[] = [];
+const part = { "Mac-only": { same: 0, total: 0 }, shared: { same: 0, total: 0 } };
+const TARGETS: { part: keyof typeof part; dir: string }[] = [
+    { part: "Mac-only", dir: "d2_mac_objs.dir" },
+    ...(withShared ? [{ part: "shared" as const, dir: "d2_mac_shared_objs.dir" }] : []),
+];
 for (const [file, es] of byFile) {
-    const objPath = join(buildDir, "CMakeFiles/d2_mac_objs.dir", file + ".o");
-    if (!existsSync(objPath)) {
+    const target = TARGETS.find((t) => existsSync(join(buildDir, "CMakeFiles", t.dir, file + ".o")));
+    if (!target) {
         noObject.push(file);
-        if (verbose) console.log(`${file}: no object at ${objPath}`);
-        for (const e of es) rows.push([file, e.addr.toString(16).padStart(8, "0"), e.name, "NOOBJ", 0, 0, "not built by d2_mac_objs"].join("\t"));
+        if (verbose) console.log(`${file}: no object under ${buildDir}`);
+        for (const e of es) rows.push([file, e.addr.toString(16).padStart(8, "0"), e.name, "NOOBJ", 0, 0, "not built by d2_mac_objs or d2_mac_shared_objs"].join("\t"));
         continue;
     }
-    const obj = loadObject(objPath);
+    const obj = loadObject(join(buildDir, "CMakeFiles", target.dir, file + ".o"));
     let fs = 0, ft = 0;
     for (const e of es) {
         if (!obj.funcs.has(e.name) && !starts.includes(e.addr)) continue;  // a global, not a function
         const r = compareOne(e, obj);
-        ft++; total++;
-        if (r.status === "SAME") { fs++; same++; }
+        ft++; part[target.part].total++;
+        if (r.status === "SAME") { fs++; part[target.part].same++; }
         const unv = r.unverified ? ` (${r.unverified} unverified refs)` : "";
         console.log(`${e.addr.toString(16).padStart(8, "0")} ${e.name} ${r.status}${r.n ? ` ${r.n} insns` : ""}${unv}${r.detail ? " " + r.detail : ""}`);
         rows.push([file, e.addr.toString(16).padStart(8, "0"), e.name, r.status, r.n, r.unverified, r.detail.split("\n")[0]].join("\t"));
     }
-    console.log(`== ${file}: ${fs}/${ft} same (${pct(fs, ft)})`);
+    console.log(`== ${file}: ${fs}/${ft} same (${pct(fs, ft)})${target.part === "shared" ? " [shared]" : ""}`);
 }
-if (noObject.length) console.log(`== ${noObject.length} tagged files have no Mac object (not built by d2_mac_objs; -v lists them)`);
-console.log(`== total ${same}/${total} instruction-identical (${pct(same, total)})`);
+if (noObject.length) console.log(`== ${noObject.length} tagged files have no Mac object (not built by d2_mac_objs${withShared ? " or d2_mac_shared_objs" : ""}; -v lists them)`);
+const m = part["Mac-only"], sh = part.shared;
+console.log(`== Mac-only ${m.same}/${m.total} instruction-identical (${pct(m.same, m.total)})`);
+if (withShared) console.log(`== shared ${sh.same}/${sh.total} instruction-identical (${pct(sh.same, sh.total)})`);
+console.log(`== total ${m.same + sh.same}/${m.total + sh.total} instruction-identical (${pct(m.same + sh.same, m.total + sh.total)})`);
 if (tsvOut) writeFileSync(tsvOut, rows.join("\n") + "\n");
 if (insnsOut) writeFileSync(insnsOut, insnLog.join("\n") + "\n");
