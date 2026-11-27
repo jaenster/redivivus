@@ -6,16 +6,10 @@
 // Reconstructed from the 1.00 D2Server.dll (2000-05-26); not part of the 1.14d byte
 // match; not linked into Game.exe yet.
 //
-// Layouts, in dwords:
-//   list    [0] offset of the link inside an element, [1] head next, [2] head prev
-//   link    [0] next, [1] prev: negative = complemented pointer to the previous
-//           link, otherwise an element pointer the list's offset is added to
-//   array   [0] capacity, [1] count, [2] the lists (12 bytes each), [3] growth step
-//   table   [0] vtable, [1..3] element list, [4] 0, [5..9] bucket array (+[9] mask),
-//           [0xa..0xd] element list, [0xe..0x11] chunk list, [0x12] hash seed,
-//           [0x13] 0, [0x14..0x19] CRITICAL_SECTION
-//   element SGAMEDATA: [1..2] one link, [3..4] the other
-//   chunk   [1] count, [2] elements (0x3060 bytes each), [4..5] link
+// The layouts are in D2Server.h: GameTableLink, GameTableList, GameTableListArray,
+// SGAMEDATA, GameTableChunk and GameDataTable. A link's previous field is either a
+// complemented pointer to the previous link (negative) or the previous element, to
+// which the list's link offset is added.
 
 #include "Source/D2Server/GameTable.h"
 #include "Source/D2Server/Core/ToMCP.h"
@@ -24,9 +18,6 @@
 namespace D2Server::GameTable {
 
 using namespace D2Server::Imports;
-
-#define GT_PTR(x) ((uint32_t *)(uintptr_t)(x))
-#define GT_U32(p) ((uint32_t)(uintptr_t)(p))
 
 static const char s_szSGameData[] = ".?AUSGAMEDATA@@";
 static const char s_szHashObjectChunk[] = ".?AV?$TSHashObjectChunk@USGAMEDATA@@VHASHKEY_NONE@@@@";
@@ -51,172 +42,182 @@ static void * const s_vtblHashTable[4] = {                            // 1.00 D2
     (void *)GameTable_DestructBody_ScalarDelete, (void *)TSHashObject_SGAMEDATA_Destructor,
 };
 
-typedef void (__thiscall * ElementDeleteFn)(uint32_t * pThis, uint32_t * pElement);
+typedef void (__thiscall * ElementDeleteFn)(GameDataTable * pThis, SGAMEDATA * pElement);
+typedef GameTableLink * (__thiscall * PrevLinkFn)(GameTableLink * pLink, intptr_t nOffset);
+
+static inline GameTableLink * GtLink(uintptr_t uAddress) {
+    return (GameTableLink *)uAddress;
+}
+
+// The link of the element uElement in pList.
+static inline GameTableLink * GtElementLink(GameTableList * pList, uintptr_t uElement) {
+    return GtLink((uintptr_t)pList->nLinkOffset + uElement);
+}
 
 // The link unlink every member inlines: point the previous link past this one.
-static inline void GtUnlink(uint32_t * pLink) {
-    uint32_t dwNext = pLink[0];
-    if (dwNext == 0) {
+static inline void GtUnlink(GameTableLink * pLink) {
+    uintptr_t uNext = pLink->uNext;
+    if (uNext == 0) {
         return;
     }
-    uint32_t dwPrev = pLink[1];
-    uint32_t * pPrevNext;
-    if ((int32_t)dwPrev < 0) {
-        pPrevNext = GT_PTR(~dwPrev);
+    uintptr_t uPrev = pLink->uPrev;
+    GameTableLink * pPrevLink;
+    if ((intptr_t)uPrev < 0) {
+        pPrevLink = GtLink(~uPrev);
     } else {
-        pPrevNext = GT_PTR(GT_U32(pLink) + (dwPrev - *GT_PTR(dwNext + 4)));
+        pPrevLink = GtLink((uintptr_t)pLink + (uPrev - GtLink(uNext)->uPrev));
     }
-    *pPrevNext = dwNext;
-    *GT_PTR(pLink[0] + 4) = pLink[1];
-    pLink[0] = 0;
-    pLink[1] = 0;
+    pPrevLink->uNext = uNext;
+    GtLink(pLink->uNext)->uPrev = pLink->uPrev;
+    pLink->uNext = 0;
+    pLink->uPrev = 0;
 }
 
 // Unlinks every element of a list, last first.
-static inline void GtUnlinkAllElements(uint32_t * pList) {
-    while ((int32_t)pList[2] > 0) {
-        GtUnlink(GT_PTR(pList[0] + pList[2]));
+static inline void GtUnlinkAllElements(GameTableList * pList) {
+    while ((intptr_t)pList->head.uPrev > 0) {
+        GtUnlink(GtElementLink(pList, pList->head.uPrev));
     }
 }
 
 // The out-of-line form of the unlink, with the previous link found by
 // TSListNode_GetOffset.
-static inline void GtUnlinkVia(uint32_t * pLink, uint32_t * (__thiscall * pfnGetOffset)(uint32_t *, int)) {
-    if (pLink[0] != 0) {
-        uint32_t * pPrevNext = pfnGetOffset(pLink, -1);
-        *pPrevNext = pLink[0];
-        *GT_PTR(pLink[0] + 4) = pLink[1];
-        pLink[0] = 0;
-        pLink[1] = 0;
+static inline void GtUnlinkVia(GameTableLink * pLink, PrevLinkFn pfnGetOffset) {
+    if (pLink->uNext != 0) {
+        GameTableLink * pPrevLink = pfnGetOffset(pLink, -1);
+        pPrevLink->uNext = pLink->uNext;
+        GtLink(pLink->uNext)->uPrev = pLink->uPrev;
+        pLink->uNext = 0;
+        pLink->uPrev = 0;
     }
 }
 
 // 1.00 D2Server: 1000a240
-uint32_t * __fastcall GameTable_Construct(uint32_t * pThis) {
-    TSListHead_Init_Sentinel(pThis + 1);
-    TSListNode_Zero(pThis + 5);
-    pThis[0] = GT_U32(s_vtblExplicitList);
-    pThis[4] = 0;
-    TSExplicitList_Resize_DrainOld(pThis + 1, 0x0C);
-    pThis[9] = 3;
-    TSExplicitList_Resize(pThis + 5, 4);
-    for (uint32_t i = 0; i <= pThis[9]; ++i) {
-        TSExplicitList_Resize_DrainOld(GT_PTR(pThis[7] + i * 0x0C), 4);
+GameDataTable * __fastcall GameTable_Construct(GameDataTable * pThis) {
+    TSListHead_Init_Sentinel(&pThis->elements);
+    TSListNode_Zero(&pThis->buckets);
+    pThis->pVtable = s_vtblExplicitList;
+    pThis->dw10 = 0;
+    TSExplicitList_Resize_DrainOld(&pThis->elements, offsetof(SGAMEDATA, listLink));
+    pThis->nBucketMask = 3;
+    TSExplicitList_Resize(&pThis->buckets, 4);
+    for (uint32_t i = 0; i <= pThis->nBucketMask; ++i) {
+        TSExplicitList_Resize_DrainOld(&pThis->buckets.pLists[i], offsetof(SGAMEDATA, bucketLink));
     }
-    TSListHead_Init(pThis + 0x0A);
-    pThis[0x0A] = 0xDDDDDDDD;
-    TSListHead_InitEmpty(pThis + 0x0A);
-    TSListHead_Init_B(pThis + 0x0E);
-    pThis[0x0E] = 0x10;
-    TSListHead_InitEmpty_B(pThis + 0x0E);
-    pThis[0] = GT_U32(s_vtblHashObject);
-    pThis[0x0D] = 0x10;
-    TSExplicitList_Resize_DrainOld(pThis + 0x0A, 4);
-    pThis[0] = GT_U32(s_vtblHashTable);
-    pThis[0x12] = ~GT_U32(pThis) & 0x0FFFFFFF;
-    pThis[0x13] = 0;
-    InitializeCriticalSection((LPCRITICAL_SECTION)(pThis + 0x14));
-    pThis[0] = GT_U32(s_vtblGameTable);
+    TSListHead_Init(&pThis->reuse);
+    pThis->reuse.nLinkOffset = (intptr_t)(int32_t)0xDDDDDDDD;
+    TSListHead_InitEmpty(&pThis->reuse);
+    TSListHead_Init_B(&pThis->chunks);
+    pThis->chunks.nLinkOffset = offsetof(GameTableChunk, link);
+    TSListHead_InitEmpty_B(&pThis->chunks);
+    pThis->pVtable = s_vtblHashObject;
+    pThis->dw34 = 0x10;
+    TSExplicitList_Resize_DrainOld(&pThis->reuse, offsetof(SGAMEDATA, bucketLink));
+    pThis->pVtable = s_vtblHashTable;
+    pThis->dwHashSeed = ~(uint32_t)(uintptr_t)pThis & 0x0FFFFFFF;
+    pThis->dw4C = 0;
+    InitializeCriticalSection(&pThis->cs);
+    pThis->pVtable = s_vtblGameTable;
     return pThis;
 }
 
 // 1.00 D2Server: 1000a3c0
-void __thiscall SGAMEDATA_FreeElement_A(uint32_t * pThis, uint32_t * pElement) {
+void __thiscall SGAMEDATA_FreeElement_A(GameDataTable * pThis, SGAMEDATA * pElement) {
     SGAMEDATA_UnlinkFromBothLists(pElement);
     SMemFree(pElement, s_szSGameData, -2, 0);
 }
 
 // 1.00 D2Server: 1000a3f0
-uint32_t * __thiscall SGAMEDATA_AllocInChunk_A(uint32_t * pThis, uint32_t * pList, int nExtra, uint32_t dwFlags) {
+SGAMEDATA * __thiscall SGAMEDATA_AllocInChunk_A(GameDataTable * pThis, GameTableList * pList, int nExtra, uint32_t dwFlags) {
     return SGAMEDATA_Chunk_AllocElement(pList, 1, nExtra, dwFlags);
 }
 
 // 1.00 D2Server: 1000a420
-void __fastcall TSHashObject_SGAMEDATA_Destructor(uint32_t * pThis) {
-    pThis[4] = 0;
-    while ((int32_t)pThis[3] > 0) {
-        TSList_UnlinkNode(GT_PTR(pThis[1] + pThis[3]));
+void __fastcall TSHashObject_SGAMEDATA_Destructor(GameDataTable * pThis) {
+    pThis->dw10 = 0;
+    while ((intptr_t)pThis->elements.head.uPrev > 0) {
+        TSList_UnlinkNode(GtElementLink(&pThis->elements, pThis->elements.head.uPrev));
     }
-    for (uint32_t i = 0; i < pThis[6]; ++i) {
-        int32_t nElement;
-        while ((nElement = *(int32_t *)GT_PTR(pThis[7] + i * 0x0C + 8)) > 0) {
-            ((ElementDeleteFn)((void **)(uintptr_t)pThis[0])[0])(pThis, GT_PTR(nElement));
+    for (uint32_t i = 0; i < pThis->buckets.nCount; ++i) {
+        intptr_t nElement;
+        while ((nElement = (intptr_t)pThis->buckets.pLists[i].head.uPrev) > 0) {
+            ((ElementDeleteFn)pThis->pVtable[0])(pThis, (SGAMEDATA *)nElement);
         }
     }
-    int32_t nPtr;
-    while ((nPtr = (int32_t)pThis[0x10]) > 0) {
-        SGAMEDATA_Chunk_FreeAll(GT_PTR(nPtr));
-        SMemFree(GT_PTR(nPtr), s_szHashObjectChunk, -2, 0);
+    intptr_t nPtr;
+    while ((nPtr = (intptr_t)pThis->chunks.head.uPrev) > 0) {
+        SGAMEDATA_Chunk_FreeAll((GameTableChunk *)nPtr);
+        SMemFree((void *)nPtr, s_szHashObjectChunk, -2, 0);
     }
-    while ((nPtr = (int32_t)pThis[0x0C]) > 0) {
-        SGAMEDATA_UnlinkFromBothLists(GT_PTR(nPtr));
-        SMemFree(GT_PTR(nPtr), s_szSGameData, -2, 0);
+    while ((nPtr = (intptr_t)pThis->reuse.head.uPrev) > 0) {
+        SGAMEDATA_UnlinkFromBothLists((SGAMEDATA *)nPtr);
+        SMemFree((void *)nPtr, s_szSGameData, -2, 0);
     }
 }
 
 // 1.00 D2Server: 1000a4e0
-void __thiscall SGAMEDATA_FreeElement_B(uint32_t * pThis, uint32_t * pElement) {
+void __thiscall SGAMEDATA_FreeElement_B(GameDataTable * pThis, SGAMEDATA * pElement) {
     SGAMEDATA_UnlinkFromBothLists(pElement);
     SMemFree(pElement, s_szSGameData, -2, 0);
 }
 
 // 1.00 D2Server: 1000a510
-uint32_t * __thiscall SGAMEDATA_AllocInChunk_B(uint32_t * pThis, uint32_t * pList, int nExtra, uint32_t dwFlags) {
+SGAMEDATA * __thiscall SGAMEDATA_AllocInChunk_B(GameDataTable * pThis, GameTableList * pList, int nExtra, uint32_t dwFlags) {
     return SGAMEDATA_Chunk_AllocElement(pList, 1, nExtra, dwFlags);
 }
 
 // 1.00 D2Server: 1000a540
-void __fastcall GameTable_ClearAllChunks(uint32_t * pThis) {
-    pThis[0] = GT_U32(s_vtblExplicitList);
-    pThis[4] = 0;
-    while ((int32_t)pThis[3] >= 1) {
-        TSList_UnlinkNode(TSListNode_GetNodePtr(pThis + 1, (int)pThis[3]));
+void __fastcall GameTable_ClearAllChunks(GameDataTable * pThis) {
+    pThis->pVtable = s_vtblExplicitList;
+    pThis->dw10 = 0;
+    while ((intptr_t)pThis->elements.head.uPrev >= 1) {
+        TSList_UnlinkNode(TSListNode_GetNodePtr(&pThis->elements, (intptr_t)pThis->elements.head.uPrev));
     }
-    for (uint32_t i = 0; i < pThis[6]; ++i) {
-        uint32_t * pBucket = GT_PTR(pThis[7] + i * 0x0C);
-        while ((int32_t)pBucket[2] >= 1) {
-            GtUnlink(GT_PTR(pBucket[0] + pBucket[2]));
+    for (uint32_t i = 0; i < pThis->buckets.nCount; ++i) {
+        GameTableList * pBucket = &pThis->buckets.pLists[i];
+        while ((intptr_t)pBucket->head.uPrev >= 1) {
+            GtUnlink(GtElementLink(pBucket, pBucket->head.uPrev));
         }
     }
-    for (uint32_t i = 0; i < pThis[6]; ++i) {
-        TSList_SGAMEDATA_UnlinkNode_C(GT_PTR(pThis[7] + i * 0x0C));
+    for (uint32_t i = 0; i < pThis->buckets.nCount; ++i) {
+        TSList_SGAMEDATA_UnlinkNode_C(&pThis->buckets.pLists[i]);
     }
-    if (pThis[7] != 0) {
-        SMemFree(GT_PTR(pThis[7]), s_szExplicitList, -2, 0);
+    if (pThis->buckets.pLists != nullptr) {
+        SMemFree(pThis->buckets.pLists, s_szExplicitList, -2, 0);
     }
-    while ((int32_t)pThis[3] > 0) {
-        GtUnlinkVia(GT_PTR(pThis[1] + pThis[3]), TSListNode_GetOffset);
+    while ((intptr_t)pThis->elements.head.uPrev > 0) {
+        GtUnlinkVia(GtElementLink(&pThis->elements, pThis->elements.head.uPrev), TSListNode_GetOffset);
     }
-    GtUnlink(pThis + 2);
+    GtUnlink(&pThis->elements.head);
 }
 
 // 1.00 D2Server: 1000a720
-void __fastcall TSExplicitList_SGAMEDATA_Destructor(uint32_t * pThis) {
-    pThis[4] = 0;
-    while ((int32_t)pThis[3] > 0) {
-        TSList_UnlinkNode(GT_PTR(pThis[1] + pThis[3]));
+void __fastcall TSExplicitList_SGAMEDATA_Destructor(GameDataTable * pThis) {
+    pThis->dw10 = 0;
+    while ((intptr_t)pThis->elements.head.uPrev > 0) {
+        TSList_UnlinkNode(GtElementLink(&pThis->elements, pThis->elements.head.uPrev));
     }
-    for (uint32_t i = 0; i < pThis[6]; ++i) {
-        uint32_t * pBucket = GT_PTR(pThis[7] + i * 0x0C);
-        while ((int32_t)pBucket[2] >= 1) {
-            GtUnlink(GT_PTR(pBucket[0] + pBucket[2]));
+    for (uint32_t i = 0; i < pThis->buckets.nCount; ++i) {
+        GameTableList * pBucket = &pThis->buckets.pLists[i];
+        while ((intptr_t)pBucket->head.uPrev >= 1) {
+            GtUnlink(GtElementLink(pBucket, pBucket->head.uPrev));
         }
     }
-    pThis[4] = 0;
-    pThis[9] = 0;
-    for (uint32_t i = 0; i < pThis[6]; ++i) {
-        TSList_SGAMEDATA_ScalarDelete(GT_PTR(pThis[7] + i * 0x0C), 0);
+    pThis->dw10 = 0;
+    pThis->nBucketMask = 0;
+    for (uint32_t i = 0; i < pThis->buckets.nCount; ++i) {
+        TSList_SGAMEDATA_ScalarDelete(&pThis->buckets.pLists[i], 0);
     }
-    if (pThis[7] != 0) {
-        SMemFree(GT_PTR(pThis[7]), s_szExplicitList, -2, 0);
+    if (pThis->buckets.pLists != nullptr) {
+        SMemFree(pThis->buckets.pLists, s_szExplicitList, -2, 0);
     }
-    pThis[5] = 0;
-    pThis[6] = 0;
-    pThis[7] = 0;
+    pThis->buckets.nCapacity = 0;
+    pThis->buckets.nCount = 0;
+    pThis->buckets.pLists = nullptr;
 }
 
 // 1.00 D2Server: 1000a830
-uint32_t * __thiscall ToMCP_ScalarDelete(uint32_t * pThis, uint8_t nFlags) {
+GameDataTable * __thiscall ToMCP_ScalarDelete(GameDataTable * pThis, uint8_t nFlags) {
     Core::ToMCP::ToMCP_Destructor(pThis);
     if ((nFlags & 1) && pThis) {
         SMemFree(pThis, "delete", -1, 0);
@@ -225,7 +226,7 @@ uint32_t * __thiscall ToMCP_ScalarDelete(uint32_t * pThis, uint8_t nFlags) {
 }
 
 // 1.00 D2Server: 1000a870
-uint32_t * __thiscall SGAMEDATA_ScalarDelete(uint32_t * pThis, uint8_t nFlags) {
+SGAMEDATA * __thiscall SGAMEDATA_ScalarDelete(SGAMEDATA * pThis, uint8_t nFlags) {
     SGAMEDATA_UnlinkFromBothLists(pThis);
     if ((nFlags & 1) && pThis) {
         SMemFree(pThis, "delete", -1, 0);
@@ -234,7 +235,7 @@ uint32_t * __thiscall SGAMEDATA_ScalarDelete(uint32_t * pThis, uint8_t nFlags) {
 }
 
 // 1.00 D2Server: 1000a8b0
-uint32_t * __thiscall GameTable_ScalarDelete(uint32_t * pThis, uint8_t nFlags) {
+GameDataTable * __thiscall GameTable_ScalarDelete(GameDataTable * pThis, uint8_t nFlags) {
     GameTable_Destruct(pThis);
     if ((nFlags & 1) && pThis) {
         SMemFree(pThis, "delete", -1, 0);
@@ -245,53 +246,53 @@ uint32_t * __thiscall GameTable_ScalarDelete(uint32_t * pThis, uint8_t nFlags) {
 // The table's destructor below its own class: the chunks and elements, then the
 // base lists.
 // 1.00 D2Server: 1000a8f0
-void __fastcall GameTable_Destruct(uint32_t * pThis) {
-    pThis[0] = GT_U32(s_vtblHashObject);
-    int32_t nPtr;
-    while ((nPtr = (int32_t)pThis[0x10]) > 0) {
-        SGAMEDATA_Chunk_FreeAll(GT_PTR(nPtr));
-        SMemFree(GT_PTR(nPtr), s_szHashObjectChunk, -2, 0);
+void __fastcall GameTable_Destruct(GameDataTable * pThis) {
+    pThis->pVtable = s_vtblHashObject;
+    intptr_t nPtr;
+    while ((nPtr = (intptr_t)pThis->chunks.head.uPrev) > 0) {
+        SGAMEDATA_Chunk_FreeAll((GameTableChunk *)nPtr);
+        SMemFree((void *)nPtr, s_szHashObjectChunk, -2, 0);
     }
-    while ((nPtr = (int32_t)pThis[0x0C]) > 0) {
-        SGAMEDATA_UnlinkFromBothLists_B(GT_PTR(nPtr));
-        SMemFree(GT_PTR(nPtr), s_szSGameData, -2, 0);
+    while ((nPtr = (intptr_t)pThis->reuse.head.uPrev) > 0) {
+        SGAMEDATA_UnlinkFromBothLists_B((SGAMEDATA *)nPtr);
+        SMemFree((void *)nPtr, s_szSGameData, -2, 0);
     }
-    while ((int32_t)pThis[0x10] > 0) {
-        TSList_UnlinkNode_C(GT_PTR(pThis[0x0E] + pThis[0x10]));
+    while ((intptr_t)pThis->chunks.head.uPrev > 0) {
+        TSList_UnlinkNode_C(GtElementLink(&pThis->chunks, pThis->chunks.head.uPrev));
     }
-    GtUnlinkVia(pThis + 0x0F, TSListNode_GetOffset_B);
-    while ((int32_t)pThis[0x0C] > 0) {
-        TSList_UnlinkNode(GT_PTR(pThis[0x0A] + pThis[0x0C]));
+    GtUnlinkVia(&pThis->chunks.head, TSListNode_GetOffset_B);
+    while ((intptr_t)pThis->reuse.head.uPrev > 0) {
+        TSList_UnlinkNode(GtElementLink(&pThis->reuse, pThis->reuse.head.uPrev));
     }
-    GtUnlinkVia(pThis + 0x0B, TSListNode_GetOffset);
-    pThis[0] = GT_U32(s_vtblExplicitList);
-    pThis[4] = 0;
-    TSList_UnlinkAll(pThis + 1);
-    for (uint32_t i = 0; i < pThis[6]; ++i) {
-        int32_t nSlot;
-        while ((nSlot = *(int32_t *)GT_PTR(pThis[7] + i * 0x0C + 8)) >= 1) {
-            TSList_UnlinkNode(TSListNode_GetNodePtr(GT_PTR(pThis[7] + i * 0x0C), nSlot));
+    GtUnlinkVia(&pThis->reuse.head, TSListNode_GetOffset);
+    pThis->pVtable = s_vtblExplicitList;
+    pThis->dw10 = 0;
+    TSList_UnlinkAll(&pThis->elements);
+    for (uint32_t i = 0; i < pThis->buckets.nCount; ++i) {
+        intptr_t nSlot;
+        while ((nSlot = (intptr_t)pThis->buckets.pLists[i].head.uPrev) >= 1) {
+            TSList_UnlinkNode(TSListNode_GetNodePtr(&pThis->buckets.pLists[i], nSlot));
         }
     }
-    TSExplicitList_SGAMEDATA_UnlinkAll(pThis + 5);
-    TSList_UnlinkAll(pThis + 1);
-    TSList_UnlinkNode(pThis + 2);
+    TSExplicitList_SGAMEDATA_UnlinkAll(&pThis->buckets);
+    TSList_UnlinkAll(&pThis->elements);
+    TSList_UnlinkNode(&pThis->elements.head);
 }
 
 // 1.00 D2Server: 1000aaf0
-void __fastcall TSList_SGAMEDATA_UnlinkNode(uint32_t * pList) {
+void __fastcall TSList_SGAMEDATA_UnlinkNode(GameTableList * pList) {
     GtUnlinkAllElements(pList);
-    GtUnlink(pList + 1);
+    GtUnlink(&pList->head);
 }
 
 // 1.00 D2Server: 1000ab90
-void __fastcall TSList_SGAMEDATA_UnlinkNode_B(uint32_t * pList) {
+void __fastcall TSList_SGAMEDATA_UnlinkNode_B(GameTableList * pList) {
     GtUnlinkAllElements(pList);
-    GtUnlink(pList + 1);
+    GtUnlink(&pList->head);
 }
 
 // 1.00 D2Server: 1000ac30
-uint32_t * __thiscall GameTable_ClearChunks_ScalarDelete(uint32_t * pThis, uint8_t nFlags) {
+GameDataTable * __thiscall GameTable_ClearChunks_ScalarDelete(GameDataTable * pThis, uint8_t nFlags) {
     GameTable_ClearAllChunks(pThis);
     if ((nFlags & 1) && pThis) {
         SMemFree(pThis, "delete", -1, 0);
@@ -300,102 +301,102 @@ uint32_t * __thiscall GameTable_ClearChunks_ScalarDelete(uint32_t * pThis, uint8
 }
 
 // 1.00 D2Server: 1000ac70
-void __fastcall TSExplicitList_SGAMEDATA_FreeAllBuckets(uint32_t * pThis) {
-    for (uint32_t i = 0; i < pThis[1]; ++i) {
-        uint32_t * pBucket = GT_PTR(pThis[2] + i * 0x0C);
-        while ((int32_t)pBucket[2] > 0) {
-            TSList_UnlinkNode(GT_PTR(TSList_OffsetAdd((int)pBucket[2], (int)pBucket[0])));
+void __fastcall TSExplicitList_SGAMEDATA_FreeAllBuckets(GameTableListArray * pThis) {
+    for (uint32_t i = 0; i < pThis->nCount; ++i) {
+        GameTableList * pBucket = &pThis->pLists[i];
+        while ((intptr_t)pBucket->head.uPrev > 0) {
+            TSList_UnlinkNode(GtLink(TSList_OffsetAdd((intptr_t)pBucket->head.uPrev, pBucket->nLinkOffset)));
         }
-        TSList_UnlinkNode(pBucket + 1);
+        TSList_UnlinkNode(&pBucket->head);
     }
-    if (pThis[2] != 0) {
-        SMemFree(GT_PTR(pThis[2]), s_szExplicitList, -2, 0);
+    if (pThis->pLists != nullptr) {
+        SMemFree(pThis->pLists, s_szExplicitList, -2, 0);
     }
 }
 
 // 1.00 D2Server: 1000ad50
-void __fastcall SGAMEDATA_UnlinkFromBothLists(uint32_t * pElement) {
-    GtUnlink(pElement + 3);
-    GtUnlink(pElement + 1);
+void __fastcall SGAMEDATA_UnlinkFromBothLists(SGAMEDATA * pElement) {
+    GtUnlink(&pElement->listLink);
+    GtUnlink(&pElement->bucketLink);
 }
 
 // 1.00 D2Server: 1000ade0
-void __fastcall SGAMEDATA_UnlinkFromBothLists_B(uint32_t * pElement) {
-    GtUnlink(pElement + 3);
-    GtUnlink(pElement + 1);
+void __fastcall SGAMEDATA_UnlinkFromBothLists_B(SGAMEDATA * pElement) {
+    GtUnlink(&pElement->listLink);
+    GtUnlink(&pElement->bucketLink);
 }
 
 // 1.00 D2Server: 1000ae70
-void __fastcall TSList_UnlinkSingleNode(uint32_t * pLink) {
+void __fastcall TSList_UnlinkSingleNode(GameTableLink * pLink) {
     GtUnlink(pLink);
 }
 
 // 1.00 D2Server: 1000aec0
-void __fastcall TSList_SGAMEDATA_UnlinkNode_C(uint32_t * pList) {
+void __fastcall TSList_SGAMEDATA_UnlinkNode_C(GameTableList * pList) {
     GtUnlinkAllElements(pList);
-    GtUnlink(pList + 1);
+    GtUnlink(&pList->head);
 }
 
-// A new element, its extra bytes after the 0x3060 of SGAMEDATA, linked at the tail
-// of the list (nLinkMode 1) or at its head (any other nonzero mode).
+// A new element, its extra bytes after SGAMEDATA, linked at the tail of the list
+// (nLinkMode 1) or at its head (any other nonzero mode).
 // 1.00 D2Server: 1000af60
-uint32_t * __thiscall SGAMEDATA_Chunk_AllocElement(uint32_t * pList, int nLinkMode, int nExtra, uint32_t dwFlags) {
-    uint32_t * pBlock = (uint32_t *)SMemAlloc(nExtra + 0x3060, s_szSGameData, -2, dwFlags | 8);
+SGAMEDATA * __thiscall SGAMEDATA_Chunk_AllocElement(GameTableList * pList, int nLinkMode, int nExtra, uint32_t dwFlags) {
+    SGAMEDATA * pBlock = (SGAMEDATA *)SMemAlloc(nExtra + sizeof(SGAMEDATA), s_szSGameData, -2, dwFlags | 8);
     if (pBlock) {
-        pBlock[1] = 0;
-        pBlock[2] = 0;
-        pBlock[3] = 0;
-        pBlock[4] = 0;
+        pBlock->bucketLink.uNext = 0;
+        pBlock->bucketLink.uPrev = 0;
+        pBlock->listLink.uNext = 0;
+        pBlock->listLink.uPrev = 0;
     }
     if (nLinkMode == 0) {
         return pBlock;
     }
-    uint32_t * pLink = pBlock ? GT_PTR(pList[0] + GT_U32(pBlock)) : pList + 1;
+    GameTableLink * pLink = pBlock ? GtElementLink(pList, (uintptr_t)pBlock) : &pList->head;
     GtUnlink(pLink);
-    uint32_t * pHead = pList + 1;
+    GameTableLink * pHead = &pList->head;
     if (nLinkMode != 1) {
-        uint32_t dwFirst = *pHead;
-        pLink[0] = dwFirst;
-        pLink[1] = *GT_PTR(dwFirst + 4);
-        *GT_PTR(dwFirst + 4) = GT_U32(pBlock);
-        *pHead = GT_U32(pLink);
+        uintptr_t uFirst = pHead->uNext;
+        pLink->uNext = uFirst;
+        pLink->uPrev = GtLink(uFirst)->uPrev;
+        GtLink(uFirst)->uPrev = (uintptr_t)pBlock;
+        pHead->uNext = (uintptr_t)pLink;
         return pBlock;
     }
-    pLink[0] = GT_U32(pHead);
-    pLink[1] = pList[2];
-    uint32_t dwPrev = pList[2];
-    int32_t nBase = (int32_t)pList[0];
-    if ((int32_t)dwPrev < 0) {
-        *GT_PTR(~dwPrev) = GT_U32(pLink);
-        pList[2] = GT_U32(pBlock);
+    pLink->uNext = (uintptr_t)pHead;
+    pLink->uPrev = pList->head.uPrev;
+    uintptr_t uPrev = pList->head.uPrev;
+    intptr_t nBase = pList->nLinkOffset;
+    if ((intptr_t)uPrev < 0) {
+        GtLink(~uPrev)->uNext = (uintptr_t)pLink;
+        pList->head.uPrev = (uintptr_t)pBlock;
         return pBlock;
     }
     if (nBase < 0) {
-        nBase = (int32_t)(GT_U32(pHead) - *GT_PTR(*pHead + 4));
+        nBase = (intptr_t)((uintptr_t)pHead - GtLink(pHead->uNext)->uPrev);
     }
-    *GT_PTR(dwPrev + nBase) = GT_U32(pLink);
-    pList[2] = GT_U32(pBlock);
+    GtLink(uPrev + nBase)->uNext = (uintptr_t)pLink;
+    pList->head.uPrev = (uintptr_t)pBlock;
     return pBlock;
 }
 
 // 1.00 D2Server: 1000b070
-void __fastcall TSExplicitList_SGAMEDATA_UnlinkAll(uint32_t * pThis) {
-    for (uint32_t i = 0; i < pThis[1]; ++i) {
-        TSList_SGAMEDATA_UnlinkNode(GT_PTR(pThis[2] + i * 0x0C));
+void __fastcall TSExplicitList_SGAMEDATA_UnlinkAll(GameTableListArray * pThis) {
+    for (uint32_t i = 0; i < pThis->nCount; ++i) {
+        TSList_SGAMEDATA_UnlinkNode(&pThis->pLists[i]);
     }
-    if (pThis[2] != 0) {
-        SMemFree(GT_PTR(pThis[2]), s_szExplicitList, -2, 0);
+    if (pThis->pLists != nullptr) {
+        SMemFree(pThis->pLists, s_szExplicitList, -2, 0);
     }
 }
 
 // 1.00 D2Server: 1000b0e0
-void __fastcall TSList_SGAMEDATA_UnlinkNode_D(uint32_t * pList) {
+void __fastcall TSList_SGAMEDATA_UnlinkNode_D(GameTableList * pList) {
     GtUnlinkAllElements(pList);
-    GtUnlink(pList + 1);
+    GtUnlink(&pList->head);
 }
 
 // 1.00 D2Server: 1000b180
-uint32_t * __thiscall GameTable_DestructBody_ScalarDelete(uint32_t * pThis, uint8_t nFlags) {
+GameDataTable * __thiscall GameTable_DestructBody_ScalarDelete(GameDataTable * pThis, uint8_t nFlags) {
     GameTable_DestructBody(pThis);
     if ((nFlags & 1) && pThis) {
         SMemFree(pThis, "delete", -1, 0);
@@ -406,77 +407,77 @@ uint32_t * __thiscall GameTable_DestructBody_ScalarDelete(uint32_t * pThis, uint
 // As GameTable_Destruct, with each element deleted through SGAMEDATA's scalar
 // deleting destructor.
 // 1.00 D2Server: 1000b1c0
-void __fastcall GameTable_DestructBody(uint32_t * pThis) {
-    pThis[0] = GT_U32(s_vtblHashObject);
-    int32_t nPtr;
-    while ((nPtr = (int32_t)pThis[0x10]) >= 1) {
-        SGAMEDATA_Chunk_FreeAll(GT_PTR(nPtr));
-        SMemFree(GT_PTR(nPtr), s_szHashObjectChunk, -2, 0);
+void __fastcall GameTable_DestructBody(GameDataTable * pThis) {
+    pThis->pVtable = s_vtblHashObject;
+    intptr_t nPtr;
+    while ((nPtr = (intptr_t)pThis->chunks.head.uPrev) >= 1) {
+        SGAMEDATA_Chunk_FreeAll((GameTableChunk *)nPtr);
+        SMemFree((void *)nPtr, s_szHashObjectChunk, -2, 0);
     }
-    while ((nPtr = (int32_t)pThis[0x0C]) > 0) {
-        SGAMEDATA_ScalarDelete(GT_PTR(nPtr), 0);
-        SMemFree(GT_PTR(nPtr), s_szSGameData, -2, 0);
+    while ((nPtr = (intptr_t)pThis->reuse.head.uPrev) > 0) {
+        SGAMEDATA_ScalarDelete((SGAMEDATA *)nPtr, 0);
+        SMemFree((void *)nPtr, s_szSGameData, -2, 0);
     }
-    while ((int32_t)pThis[0x10] > 0) {
-        TSList_UnlinkNode_C(GT_PTR(pThis[0x0E] + pThis[0x10]));
+    while ((intptr_t)pThis->chunks.head.uPrev > 0) {
+        TSList_UnlinkNode_C(GtElementLink(&pThis->chunks, pThis->chunks.head.uPrev));
     }
-    GtUnlinkVia(pThis + 0x0F, TSListNode_GetOffset_B);
-    while ((int32_t)pThis[0x0C] > 0) {
-        TSList_UnlinkNode(GT_PTR(pThis[0x0A] + pThis[0x0C]));
+    GtUnlinkVia(&pThis->chunks.head, TSListNode_GetOffset_B);
+    while ((intptr_t)pThis->reuse.head.uPrev > 0) {
+        TSList_UnlinkNode(GtElementLink(&pThis->reuse, pThis->reuse.head.uPrev));
     }
-    GtUnlinkVia(pThis + 0x0B, TSListNode_GetOffset);
-    pThis[0] = GT_U32(s_vtblExplicitList);
-    pThis[4] = 0;
-    TSList_UnlinkAll(pThis + 1);
-    for (uint32_t i = 0; i < pThis[6]; ++i) {
-        int32_t nSlot;
-        while ((nSlot = *(int32_t *)GT_PTR(pThis[7] + i * 0x0C + 8)) >= 1) {
-            TSList_UnlinkNode(TSListNode_GetNodePtr(GT_PTR(pThis[7] + i * 0x0C), nSlot));
+    GtUnlinkVia(&pThis->reuse.head, TSListNode_GetOffset);
+    pThis->pVtable = s_vtblExplicitList;
+    pThis->dw10 = 0;
+    TSList_UnlinkAll(&pThis->elements);
+    for (uint32_t i = 0; i < pThis->buckets.nCount; ++i) {
+        intptr_t nSlot;
+        while ((nSlot = (intptr_t)pThis->buckets.pLists[i].head.uPrev) >= 1) {
+            TSList_UnlinkNode(TSListNode_GetNodePtr(&pThis->buckets.pLists[i], nSlot));
         }
     }
-    TSExplicitList_SGAMEDATA_UnlinkAll(pThis + 5);
-    TSList_UnlinkAll(pThis + 1);
-    TSList_UnlinkNode(pThis + 2);
+    TSExplicitList_SGAMEDATA_UnlinkAll(&pThis->buckets);
+    TSList_UnlinkAll(&pThis->elements);
+    TSList_UnlinkNode(&pThis->elements.head);
 }
 
 // The link whose next field points at this link.
 // 1.00 D2Server: 1000b380
-uint32_t * __thiscall TSListNode_GetOffset(uint32_t * pLink, int nOffset) {
-    uint32_t dwPrev = pLink[1];
-    if ((int32_t)dwPrev < 0) {
-        return GT_PTR(~dwPrev);
+GameTableLink * __thiscall TSListNode_GetOffset(GameTableLink * pLink, intptr_t nOffset) {
+    uintptr_t uPrev = pLink->uPrev;
+    if ((intptr_t)uPrev < 0) {
+        return GtLink(~uPrev);
     }
     if (nOffset < 0) {
-        nOffset = (int)(GT_U32(pLink) - *GT_PTR(pLink[0] + 4));
+        nOffset = (intptr_t)((uintptr_t)pLink - GtLink(pLink->uNext)->uPrev);
     }
-    return GT_PTR(dwPrev + nOffset);
+    return GtLink(uPrev + nOffset);
 }
 
 // 1.00 D2Server: 1000b3c0
-void __fastcall TSList_UnlinkNode(uint32_t * pLink) {
+void __fastcall TSList_UnlinkNode(GameTableLink * pLink) {
     GtUnlink(pLink);
 }
 
 // 1.00 D2Server: 1000b410
-uint32_t * __thiscall TSListNode_GetNodePtr(uint32_t * pList, int nNode) {
+GameTableLink * __thiscall TSListNode_GetNodePtr(GameTableList * pList, intptr_t nNode) {
     if (nNode != 0) {
-        return GT_PTR(pList[0] + nNode);
+        return GtElementLink(pList, (uintptr_t)nNode);
     }
-    return pList + 1;
+    return &pList->head;
 }
 
 // 1.00 D2Server: 1000b440
-void __fastcall TSList_UnlinkAll(uint32_t * pList) {
+void __fastcall TSList_UnlinkAll(GameTableList * pList) {
     GtUnlinkAllElements(pList);
 }
 
 // 1.00 D2Server: 1000b4b0
-void __fastcall TSList_UnlinkNode_B(uint32_t * pLink) {
+void __fastcall TSList_UnlinkNode_B(GameTableLink * pLink) {
     GtUnlink(pLink);
 }
 
 // 1.00 D2Server: 1000b500
-uint32_t * __thiscall TSList_SGAMEDATA_ScalarDelete(uint32_t * pList, uint8_t nFlags) {
+GameTableList * __thiscall TSList_SGAMEDATA_ScalarDelete(GameTableList * pList, uint8_t nFlags) {
     TSList_SGAMEDATA_UnlinkNode(pList);
     if ((nFlags & 1) && pList) {
         SMemFree(pList, "delete", -1, 0);
@@ -485,100 +486,100 @@ uint32_t * __thiscall TSList_SGAMEDATA_ScalarDelete(uint32_t * pList, uint8_t nF
 }
 
 // 1.00 D2Server: 1000b540
-void __fastcall SGAMEDATA_Chunk_FreeAll(uint32_t * pChunk) {
-    GtUnlink(pChunk + 4);
-    for (uint32_t i = 0; i < pChunk[1]; ++i) {
-        uint32_t * pSlot = GT_PTR(pChunk[2] + i * 0x3060);
-        TSList_UnlinkNode(pSlot + 3);
-        GtUnlinkVia(pSlot + 1, TSListNode_GetOffset);
+void __fastcall SGAMEDATA_Chunk_FreeAll(GameTableChunk * pChunk) {
+    GtUnlink(&pChunk->link);
+    for (uint32_t i = 0; i < pChunk->nCount; ++i) {
+        SGAMEDATA * pSlot = &pChunk->pElements[i];
+        TSList_UnlinkNode(&pSlot->listLink);
+        GtUnlinkVia(&pSlot->bucketLink, TSListNode_GetOffset);
     }
-    if (pChunk[2] != 0) {
-        SMemFree(GT_PTR(pChunk[2]), s_szSGameData, -2, 0);
+    if (pChunk->pElements != nullptr) {
+        SMemFree(pChunk->pElements, s_szSGameData, -2, 0);
     }
 }
 
 // 1.00 D2Server: 1000b620
-void __fastcall TSListHead_Init_Sentinel(uint32_t * pList) {
-    pList[1] = 0;
-    pList[2] = 0;
-    pList[1] = GT_U32(pList + 1);
-    pList[0] = 0xDDDDDDDD;
-    pList[2] = ~GT_U32(pList + 1);
+void __fastcall TSListHead_Init_Sentinel(GameTableList * pList) {
+    pList->head.uNext = 0;
+    pList->head.uPrev = 0;
+    pList->head.uNext = (uintptr_t)&pList->head;
+    pList->nLinkOffset = (intptr_t)(int32_t)0xDDDDDDDD;
+    pList->head.uPrev = ~(uintptr_t)&pList->head;
 }
 
 // Empties the list and changes its link offset.
 // 1.00 D2Server: 1000b650
-void __thiscall TSExplicitList_Resize_DrainOld(uint32_t * pList, int nLinkOffset) {
-    if (nLinkOffset == (int)pList[0]) {
+void __thiscall TSExplicitList_Resize_DrainOld(GameTableList * pList, intptr_t nLinkOffset) {
+    if (nLinkOffset == pList->nLinkOffset) {
         return;
     }
     GtUnlinkAllElements(pList);
-    pList[1] = GT_U32(pList + 1);
-    pList[2] = ~GT_U32(pList + 1);
-    pList[0] = (uint32_t)nLinkOffset;
+    pList->head.uNext = (uintptr_t)&pList->head;
+    pList->head.uPrev = ~(uintptr_t)&pList->head;
+    pList->nLinkOffset = nLinkOffset;
 }
 
 // 1.00 D2Server: 1000b6e0
-uint32_t * __thiscall TSListNode_GetOffset_B(uint32_t * pLink, int nOffset) {
-    uint32_t dwPrev = pLink[1];
-    if ((int32_t)dwPrev < 0) {
-        return GT_PTR(~dwPrev);
+GameTableLink * __thiscall TSListNode_GetOffset_B(GameTableLink * pLink, intptr_t nOffset) {
+    uintptr_t uPrev = pLink->uPrev;
+    if ((intptr_t)uPrev < 0) {
+        return GtLink(~uPrev);
     }
     if (nOffset < 0) {
-        nOffset = (int)(GT_U32(pLink) - *GT_PTR(pLink[0] + 4));
+        nOffset = (intptr_t)((uintptr_t)pLink - GtLink(pLink->uNext)->uPrev);
     }
-    return GT_PTR(dwPrev + nOffset);
+    return GtLink(uPrev + nOffset);
 }
 
 // 1.00 D2Server: 1000b720
-void __fastcall TSList_UnlinkNode_C(uint32_t * pLink) {
+void __fastcall TSList_UnlinkNode_C(GameTableLink * pLink) {
     GtUnlink(pLink);
 }
 
 // 1.00 D2Server: 1000b770
-int __fastcall TSList_OffsetAdd(int nOffset, int nBase) {
+intptr_t __fastcall TSList_OffsetAdd(intptr_t nOffset, intptr_t nBase) {
     return nOffset + nBase;
 }
 
 // 1.00 D2Server: 1000b790
-void __fastcall TSListHead_Init(uint32_t * pList) {
-    pList[1] = 0;
-    pList[2] = 0;
-    pList[1] = GT_U32(pList + 1);
-    pList[0] = 0;
-    pList[2] = ~GT_U32(pList + 1);
+void __fastcall TSListHead_Init(GameTableList * pList) {
+    pList->head.uNext = 0;
+    pList->head.uPrev = 0;
+    pList->head.uNext = (uintptr_t)&pList->head;
+    pList->nLinkOffset = 0;
+    pList->head.uPrev = ~(uintptr_t)&pList->head;
 }
 
 // 1.00 D2Server: 1000b7c0
-void __fastcall TSListNode_Zero(uint32_t * pArray) {
-    pArray[0] = 0;
-    pArray[1] = 0;
-    pArray[2] = 0;
-    pArray[3] = 0;
+void __fastcall TSListNode_Zero(GameTableListArray * pArray) {
+    pArray->nCapacity = 0;
+    pArray->nCount = 0;
+    pArray->pLists = nullptr;
+    pArray->nGrowth = 0;
 }
 
 // 1.00 D2Server: 1000b7e0
-void __fastcall TSListHead_Init_B(uint32_t * pList) {
-    pList[1] = 0;
-    pList[2] = 0;
-    pList[1] = GT_U32(pList + 1);
-    pList[0] = 0;
-    pList[2] = ~GT_U32(pList + 1);
+void __fastcall TSListHead_Init_B(GameTableList * pList) {
+    pList->head.uNext = 0;
+    pList->head.uPrev = 0;
+    pList->head.uNext = (uintptr_t)&pList->head;
+    pList->nLinkOffset = 0;
+    pList->head.uPrev = ~(uintptr_t)&pList->head;
 }
 
 // 1.00 D2Server: 1000b810
-void __fastcall TSListHead_InitEmpty(uint32_t * pList) {
-    pList[1] = GT_U32(pList + 1);
-    pList[2] = ~GT_U32(pList + 1);
+void __fastcall TSListHead_InitEmpty(GameTableList * pList) {
+    pList->head.uNext = (uintptr_t)&pList->head;
+    pList->head.uPrev = ~(uintptr_t)&pList->head;
 }
 
 // Grows or shrinks an array of lists to nCount, the capacity in steps of the growth
 // value (the largest power of two not above the count, until it is set; 21 past 20).
 // 1.00 D2Server: 1000b830
-void __thiscall TSExplicitList_Resize(uint32_t * pArray, uint32_t nCount) {
-    if (pArray[1] < nCount) {
-        if (pArray[0] < nCount) {
-            uint32_t nStep = pArray[3];
+void __thiscall TSExplicitList_Resize(GameTableListArray * pArray, uint32_t nCount) {
+    if (pArray->nCount < nCount) {
+        if (pArray->nCapacity < nCount) {
+            uint32_t nStep = pArray->nGrowth;
             if (nStep == 0) {
                 if (nCount < 0x15) {
                     nStep = nCount;
@@ -589,7 +590,7 @@ void __thiscall TSExplicitList_Resize(uint32_t * pArray, uint32_t nCount) {
                         nStep = 1;
                     }
                 } else {
-                    pArray[3] = 0x15;
+                    pArray->nGrowth = 0x15;
                     nStep = 0x15;
                 }
             }
@@ -597,70 +598,70 @@ void __thiscall TSExplicitList_Resize(uint32_t * pArray, uint32_t nCount) {
             if (nCount % nStep != 0) {
                 nCapacity = (nStep - nCount % nStep) + nCount;
             }
-            uint32_t * pOld = GT_PTR(pArray[2]);
-            if (nCapacity < pArray[1]) {
-                uint32_t * pList = pOld + nCapacity * 3;
-                for (uint32_t i = nCapacity; i < pArray[1]; ++i, pList += 3) {
+            GameTableList * pOld = pArray->pLists;
+            if (nCapacity < pArray->nCount) {
+                GameTableList * pList = pOld + nCapacity;
+                for (uint32_t i = nCapacity; i < pArray->nCount; ++i, ++pList) {
                     TSList_SGAMEDATA_ScalarDelete(pList, 0);
                 }
             }
-            pArray[0] = nCapacity;
-            pArray[2] = GT_U32(SMemReAlloc(pOld, nCapacity * 0x0C, s_szExplicitList, -2, 0x10));
-            if (pArray[2] == 0) {
-                pArray[2] = GT_U32(SMemAlloc(nCapacity * 0x0C, s_szExplicitList, -2, 0));
+            pArray->nCapacity = nCapacity;
+            pArray->pLists = (GameTableList *)SMemReAlloc(pOld, nCapacity * sizeof(GameTableList), s_szExplicitList, -2, 0x10);
+            if (pArray->pLists == nullptr) {
+                pArray->pLists = (GameTableList *)SMemAlloc(nCapacity * sizeof(GameTableList), s_szExplicitList, -2, 0);
                 if (pOld) {
-                    uint32_t nMove = pArray[1] > nCapacity ? nCapacity : pArray[1];
-                    uint32_t * pList = pOld;
-                    for (uint32_t nOffset = 0; nMove != 0; --nMove, nOffset += 0x0C, pList += 3) {
-                        TSListHead_InitFrom(GT_PTR(pArray[2] + nOffset), pList);
+                    uint32_t nMove = pArray->nCount > nCapacity ? nCapacity : pArray->nCount;
+                    GameTableList * pList = pOld;
+                    for (uint32_t i = 0; nMove != 0; --nMove, ++i, ++pList) {
+                        TSListHead_InitFrom(&pArray->pLists[i], pList);
                         TSList_SGAMEDATA_ScalarDelete(pList, 0);
                     }
                     SMemFree(pOld, s_szExplicitList, -2, 0);
                 }
             }
         }
-        if (pArray[1] < nCount) {
-            for (uint32_t i = pArray[1]; i < nCount; ++i) {
-                TSListHead_Init_Sentinel_B(GT_PTR(pArray[2] + i * 0x0C));
+        if (pArray->nCount < nCount) {
+            for (uint32_t i = pArray->nCount; i < nCount; ++i) {
+                TSListHead_Init_Sentinel_B(&pArray->pLists[i]);
             }
-            pArray[1] = nCount;
+            pArray->nCount = nCount;
             return;
         }
-    } else if (nCount < pArray[1]) {
-        for (uint32_t i = nCount; i < pArray[1]; ++i) {
-            TSList_SGAMEDATA_UnlinkNode(GT_PTR(pArray[2] + i * 0x0C));
+    } else if (nCount < pArray->nCount) {
+        for (uint32_t i = nCount; i < pArray->nCount; ++i) {
+            TSList_SGAMEDATA_UnlinkNode(&pArray->pLists[i]);
         }
     }
-    pArray[1] = nCount;
+    pArray->nCount = nCount;
 }
 
 // 1.00 D2Server: 1000ba10
-void __fastcall TSListHead_InitEmpty_B(uint32_t * pList) {
-    pList[1] = GT_U32(pList + 1);
-    pList[2] = ~GT_U32(pList + 1);
+void __fastcall TSListHead_InitEmpty_B(GameTableList * pList) {
+    pList->head.uNext = (uintptr_t)&pList->head;
+    pList->head.uPrev = ~(uintptr_t)&pList->head;
 }
 
 // 1.00 D2Server: 1000ba30
-void __fastcall TSListHead_Init_Sentinel_B(uint32_t * pList) {
+void __fastcall TSListHead_Init_Sentinel_B(GameTableList * pList) {
     if (pList) {
-        pList[1] = 0;
-        pList[2] = 0;
-        pList[1] = GT_U32(pList + 1);
-        pList[0] = 0xDDDDDDDD;
-        pList[2] = ~GT_U32(pList + 1);
+        pList->head.uNext = 0;
+        pList->head.uPrev = 0;
+        pList->head.uNext = (uintptr_t)&pList->head;
+        pList->nLinkOffset = (intptr_t)(int32_t)0xDDDDDDDD;
+        pList->head.uPrev = ~(uintptr_t)&pList->head;
     }
 }
 
 // A head with the source list's link offset.
 // 1.00 D2Server: 1000ba70
-void __fastcall TSListHead_InitFrom(uint32_t * pList, uint32_t * pSource) {
+void __fastcall TSListHead_InitFrom(GameTableList * pList, GameTableList * pSource) {
     if (pList) {
-        pList[1] = 0;
-        pList[2] = 0;
-        uint32_t dwOffset = pSource[0];
-        pList[1] = GT_U32(pList + 1);
-        pList[0] = dwOffset;
-        pList[2] = ~GT_U32(pList + 1);
+        pList->head.uNext = 0;
+        pList->head.uPrev = 0;
+        intptr_t nOffset = pSource->nLinkOffset;
+        pList->head.uNext = (uintptr_t)&pList->head;
+        pList->nLinkOffset = nOffset;
+        pList->head.uPrev = ~(uintptr_t)&pList->head;
     }
 }
 

@@ -25,7 +25,7 @@ int __fastcall ToMCP_SendGameOpen(char * pGameName, uint8_t nDifficulty, char * 
 int __fastcall ToMCP_SendCharEnter(char * pCharName, uint16_t wClass, uint32_t dwLevel, uint32_t dwExperienceLo, uint32_t dwExperienceHi, uint32_t dwFlags); // 1.00 D2Server: 10008ca0
 int __fastcall ToMCP_SendCharCreate(uint32_t dwToken, char * pCharName, uint16_t wClass); // 1.00 D2Server: 10008e20
 void __fastcall ToMCP_SendGameJoinInfo(GameJoinInfoFields * pFields);          // 1.00 D2Server: 10008ec0
-void __fastcall ToMCP_Destructor(uint32_t * pThis);                             // 1.00 D2Server: 10008fe0
+void __fastcall ToMCP_Destructor(GameDataTable * pThis);                             // 1.00 D2Server: 10008fe0
 
 // The game-data table GAME_InitGameDataTable fills (a Storm TSHashTable<SGAMEDATA>
 // object; GameTable.cpp holds its member functions).

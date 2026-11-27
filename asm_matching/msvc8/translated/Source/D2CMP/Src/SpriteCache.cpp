@@ -1415,6 +1415,90 @@ uint32_t __stdcall SPRITECACHE_DecodeFrameByIndex(uint32_t * pReadBuffer, uint32
     return 1;
 }
 
+#if D2_ARCH_X64
+#define DC6_FILE_BLOCK_HEADER 0x20      // nFlip .. nLength of a frame block as stored in the file
+#define DC6_FILE_BLOCK_NLENGTH 0x1c     // int nLength in the file block header
+#define DC6_FILE_BLOCK_TERMINATOR 3     // bytes after each frame's RLE data
+static_assert(offsetof(DC6Block, nNextBlock) == 0x18, "DC6Block: the fields before nNextBlock keep their on-disk offsets");
+
+// Read completion for a raw DC6 frame group (no codec). The file stores 0x20-byte frame headers with a 32-bit
+// nNextBlock; the native DC6Block holds a pointer there, so nLength and the RLE data sit further out. Copies the
+// frames into native blocks, moves the direction offsets in pRequest->pDecodeState to match, and hands the new
+// buffer back to Fog, which swaps it in for the read buffer. A DCC group comes out of CODEC_DecompressAllFrames
+// already in the native layout.
+static uint32_t __stdcall SPRITECACHE_WidenRawDC6Frames(uint32_t * pReadBuffer, uint32_t nReadSize, D2SpriteDecodeRequestStrc * pRequest) {
+    const uint8_t* pRaw = (const uint8_t*)pReadBuffer;
+    const size_t nGrowth = sizeof(DC6Block) - DC6_FILE_BLOCK_HEADER;
+    D2CelDecodeStateStrc* pDecodeState = pRequest->pDecodeState;
+    uint32_t nBlocks = 0;
+    uint32_t nOffset = 0;
+    while (nOffset + DC6_FILE_BLOCK_HEADER <= nReadSize) {
+      const DC6Block* pFileBlock = (const DC6Block*)(pRaw + nOffset);
+      int32_t nLength = *(const int32_t*)(pRaw + nOffset + DC6_FILE_BLOCK_NLENGTH);
+      int64_t nStride = (int64_t)DC6_FILE_BLOCK_HEADER + DC6_FILE_BLOCK_TERMINATOR + nLength + pFileBlock->nAllocSize;
+      if (nLength < 0 || pFileBlock->nAllocSize < 0 || nOffset + nStride > nReadSize) {
+        break;
+      }
+
+      nOffset += (uint32_t)nStride;
+      nBlocks++;
+    }
+
+    if (!nBlocks) {
+      return 1;
+    }
+
+    const uint32_t nRawSize = nOffset;
+    const size_t nNativeSize = (size_t)nReadSize + nBlocks * nGrowth;
+    uint8_t* pNative = (uint8_t*)D2_ALLOC_POOL_AT(D2GfxMemoryStrc_0089db60.pMemory, nNativeSize, ".\\SRC\\SpriteCache.cpp", __LINE__);
+    if (!pNative) {
+      return 1;
+    }
+
+    // Each direction offset moves out by one header growth per frame block in front of it.
+    for (int32_t& nDirOffset : pDecodeState->aDirOffsets) {
+      if (nDirOffset <= 0 || (uint32_t)nDirOffset > nRawSize) {
+        continue;
+      }
+
+      uint32_t nBlocksBefore = 0;
+      uint32_t nScan = 0;
+      while (nScan < (uint32_t)nDirOffset) {
+        const DC6Block* pFileBlock = (const DC6Block*)(pRaw + nScan);
+        nScan += DC6_FILE_BLOCK_HEADER + DC6_FILE_BLOCK_TERMINATOR + *(const int32_t*)(pRaw + nScan + DC6_FILE_BLOCK_NLENGTH) + pFileBlock->nAllocSize;
+        nBlocksBefore++;
+      }
+
+      nDirOffset += (int32_t)(nBlocksBefore * nGrowth);
+    }
+
+    uint8_t* pCursor = pNative;
+    nOffset = 0;
+    for (uint32_t i = 0; i < nBlocks; i++) {
+      const uint8_t* pSrc = pRaw + nOffset;
+      DC6Block* pBlock = (DC6Block*)pCursor;
+      int32_t nLength = *(const int32_t*)(pSrc + DC6_FILE_BLOCK_NLENGTH);
+      uint32_t nTail = DC6_FILE_BLOCK_TERMINATOR + nLength + ((const DC6Block*)pSrc)->nAllocSize;
+      memcpy(pBlock, pSrc, offsetof(DC6Block, nNextBlock));
+      pBlock->nNextBlock = 0;
+      pBlock->nLength = nLength;
+      memcpy(pBlock->data, pSrc + DC6_FILE_BLOCK_HEADER, nTail);
+      pCursor += sizeof(DC6Block) + nTail;
+      nOffset += DC6_FILE_BLOCK_HEADER + nTail;
+    }
+
+    memcpy(pCursor, pRaw + nRawSize, nReadSize - nRawSize);
+    pRequest->pDecodedFrames = pNative;
+    pRequest->nDecodedSize = nNativeSize;
+    D2SpriteCacheEntryStrc* pCacheEntry = pDecodeState->pCacheEntry;
+    if (pCacheEntry) {
+      SPRITECACHE_FreeMemory(&D2GfxMemoryStrc_0089db60, pCacheEntry, (int32_t)(nBlocks * nGrowth), 0);
+    }
+
+    return 1;
+}
+#endif
+
 // Load CEL sprite from archive into cache with optional palette override. Custom calling convention: ECX=path, EDX=codec header, EDI=cache entry, 3 stdcall stack params.
 // @sourcefile .\SRC\SpriteCache.cpp
 static void __stdcall SPRITECACHE_LoadCelFileAndCache(char * szCelPath, D2CelFileCacheEntryStrc * pCelEntry, D2CelCacheBlockStrc * pCacheEntry, D2GfxDataStrc * pGfxData, int32_t nDirection, int32_t nFrameCount) {
@@ -1500,7 +1584,16 @@ static void __stdcall SPRITECACHE_LoadCelFileAndCache(char * szCelPath, D2CelFil
           pCacheEntry->tDecode.pAsyncData = pAsyncData;
           Fog::Src::AsyncData::ASYNCDATA_GetReadSize(pAsyncData);
         } else {
+#if D2_ARCH_X86
           pAsyncData = Fog::Src::AsyncData::STRUCT_AllocAsyncData_Line0x128(D2GfxMemoryStrc_0089db60.pMemory, szCelPath, 0, *pStartOffset, nReadSize, nullptr, nullptr, -2, ".\\SRC\\SpriteCache.cpp", 0x379);
+#elif D2_ARCH_X64
+          D2SpriteDecodeRequestStrc tWidenRequest;
+          memset(&tWidenRequest, 0, sizeof(tWidenRequest));
+          tWidenRequest.pfnComplete = SPRITECACHE_WidenRawDC6Frames;
+          tWidenRequest.pCelHeader = (uint8_t*)pCelEntry;
+          tWidenRequest.pDecodeState = &pCacheEntry->tDecode;
+          pAsyncData = Fog::Src::AsyncData::STRUCT_AllocAsyncData_Line0x128(D2GfxMemoryStrc_0089db60.pMemory, szCelPath, 0, *pStartOffset, nReadSize, nullptr, (D2AsyncDataCallbackStrc*)&tWidenRequest, -2, ".\\SRC\\SpriteCache.cpp", 0x379);
+#endif
           pCacheEntry->tDecode.pAsyncData = pAsyncData;
         }
         if (!pCacheEntry->tDecode.pAsyncData) {
@@ -1606,6 +1699,14 @@ static uint32_t __stdcall SPRITECACHE_LoadFromArchive(D2GfxDataStrc * pGfxData, 
         hArchiveHandle = *pOffsetTable;
         nLine = 0x3e6;
         pDecodeRequest = 0;
+#if D2_ARCH_X64
+        D2SpriteDecodeRequestStrc tWidenRequest;
+        memset(&tWidenRequest, 0, sizeof(tWidenRequest));
+        tWidenRequest.pfnComplete = SPRITECACHE_WidenRawDC6Frames;
+        tWidenRequest.pCelHeader = (uint8_t*)pCelEntry;
+        tWidenRequest.pDecodeState = &pCacheEntry->tDecode;
+        pDecodeRequest = &tWidenRequest;
+#endif
         pAsyncData = Fog::Src::AsyncData::STRUCT_AllocAsyncData_Line0x128(D2GfxMemoryStrc_0089db60.pMemory, szFileName, 1, hArchiveHandle, nDataSize2, nullptr, (D2AsyncDataCallbackStrc*)pDecodeRequest, -2, ".\\SRC\\SpriteCache.cpp", 0x3e6);
       }
 

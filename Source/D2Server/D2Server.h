@@ -15,18 +15,53 @@ namespace D2Server {
 
 #pragma pack(push, 1)
 
+// The table's types are naturally aligned: their fields are dwords and pointers, so
+// the 32-bit layout is the binary's either way.
+#pragma pack(push, 8)
+
+// A Storm list link: the next link, and the previous one encoded either as a
+// complemented pointer to that link (negative) or as the previous element, to which
+// the list's link offset is added. Both are pointer-wide.
+struct GameTableLink {
+    uintptr_t uNext;                // 0x00 the next link
+    uintptr_t uPrev;                // 0x04 ~previous link, or the previous element
+};
+
+// A Storm list: where the link sits inside an element, and the terminator link.
+struct GameTableList {
+    intptr_t nLinkOffset;           // 0x00 byte offset of the link inside an element
+    GameTableLink head;             // 0x04 head.uNext first link, head.uPrev last element
+};
+
+// A growable array of lists (the hash buckets).
+struct GameTableListArray {
+    uint32_t nCapacity;             // 0x00
+    uint32_t nCount;                // 0x04
+    GameTableList * pLists;         // 0x08
+    uint32_t nGrowth;               // 0x0C 0 until the first resize picks one
+};
+
 // The game-data element D2Game keeps per game. Its RTTI name is SGAMEDATA in 1.00
 // and 1.14d alike, but D2Server only ever holds it as an opaque handle: no function
 // of the host reads a body field. The body belongs to D2Game.
 struct SGAMEDATA {
     void * vtable;                  // 0x00 TSHashObject vtable
-    void * pNext;                   // 0x04 TSExplicitList next
-    void * pPrev;                   // 0x08 TSExplicitList prev
-    void * pHashNext;               // 0x0C hash-chain link
-    uint32_t dwHashKey;             // 0x10 hash bucket key
+    GameTableLink bucketLink;       // 0x04 the hash bucket's (or the reuse list's) link
+    GameTableLink listLink;         // 0x0C the table's element list link
     uint8_t aBody[0x304C];          // 0x14 owned by D2Game
 };
 static_assert(sizeof(void*) != 4 || sizeof(SGAMEDATA) == 0x3060, "SGAMEDATA is 0x3060 bytes in 1.00");
+
+// One block of the table's element heap.
+struct GameTableChunk {
+    uint32_t dw00;                  // 0x00
+    uint32_t nCount;                // 0x04 elements in the block
+    SGAMEDATA * pElements;          // 0x08 the elements
+    uint32_t dw0C;                  // 0x0C
+    GameTableLink link;             // 0x10 the table's chunk list link
+};
+
+#pragma pack(pop)
 
 // The table D2Game calls back into (GAME_SetServerCallbackFunctions). D2Game stores
 // the pointer, not a copy, so the host keeps it in static storage. 1.13c and 1.14d
@@ -86,7 +121,7 @@ static_assert(sizeof(MCP_GTM_JoinGameReq) == 33, "MCP_GTM_JoinGameReq is 33 byte
 struct MCP_GTM_CB_GameReq {
     uint8_t nCmd;                   // 0x00 0x0C create, 0x0D join
     uint32_t dwToken;               // 0x01
-    uint32_t dwGameNameRef;         // 0x05 four wire bytes; D2Game 10048/10049 take their address (char** in the D2Server program)
+    uint32_t dwGameNameRef;         // 0x05 four wire bytes; D2Game 10048/10049 take their address
     uint16_t wField09;              // 0x09
     uint16_t wField0B;              // 0x0B
     uint16_t wField0D;              // 0x0D
@@ -194,16 +229,32 @@ struct D2PlayerListEntry {
 };
 static_assert(sizeof(D2PlayerListEntry) == 0x34, "D2PlayerListEntry is 0x34 bytes");
 
+#pragma pack(push, 8)
+
 // The game-data table: Storm's TSHashTable<SGAMEDATA,HASHKEY_NONE>, 0x68 bytes. Its
-// members are reached as dwords by index, as the template's functions do (GameTable.cpp).
-// It is a global C++ object (ToMCP.cpp): constructed before WinMain and destroyed at
-// exit by the code the compiler generates for it.
+// member functions are in GameTable.cpp. It is a global C++ object (ToMCP.cpp):
+// constructed before WinMain and destroyed at exit by the code the compiler generates
+// for it.
 struct GameDataTable {
-    uint32_t a[0x1A];               // 0x00 vtable, lists, chunk heap; 0x50 CRITICAL_SECTION
+    void * const * pVtable;         // 0x00
+    GameTableList elements;         // 0x04 every element, through SGAMEDATA::listLink
+    uint32_t dw10;                  // 0x10
+    GameTableListArray buckets;     // 0x14 lists through SGAMEDATA::bucketLink
+    uint32_t nBucketMask;           // 0x24
+    GameTableList reuse;            // 0x28 freed elements, through SGAMEDATA::bucketLink
+    uint32_t dw34;                  // 0x34 0x10
+    GameTableList chunks;           // 0x38 the element heap, through GameTableChunk::link
+    uint32_t dw44;                  // 0x44
+    uint32_t dwHashSeed;            // 0x48 low 28 bits of the complemented this
+    uint32_t dw4C;                  // 0x4C
+    CRITICAL_SECTION cs;            // 0x50
     GameDataTable();
     ~GameDataTable();
 };
-static_assert(sizeof(GameDataTable) == 0x68, "GameDataTable is 0x68 bytes");
+static_assert(sizeof(void*) != 4 || sizeof(GameDataTable) == 0x68, "GameDataTable is 0x68 bytes");
+static_assert(sizeof(void*) != 4 || offsetof(GameDataTable, cs) == 0x50, "the critical section is at 0x50");
+
+#pragma pack(pop)
 
 // One entry of realms.ini's accept list.
 struct AcceptIpEntry {

@@ -6839,7 +6839,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
     uint8_t* wszEarLevel[2];
     D2MagicAffixTxt* pPrefixAffix2;
     D2RareAffixTxt* pRareAffix;
-    uint32_t dwArgsEnd;
+    uint16_t* dwArgsEnd;
     D2InventoryStrc* pInventory;
     if (!pUnit) {
       return;
@@ -6988,7 +6988,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
               pwLocaleStr = _SkillHelpers::INV_SkipColorCodeSuffix(wszBaseName);
               D2Lang::Unicode::UNISYS::STRING_CopyWideString(pwOutBuffer, pwLocaleStr);
             } else {
-              wsprintf(pwOutBuffer, D2Lang::StrTable::strtable::GetLocaleString(0x6b3), D2Lang::StrTable::strtable::GetLocaleString(0x6c0), D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr), 0);
+              wsprintf(pwOutBuffer, D2Lang::StrTable::strtable::GetLocaleString(0x6b3), D2Lang::StrTable::strtable::GetLocaleString(0x6c0), D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr), nullptr);
             }
 
             break;
@@ -7094,7 +7094,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszLargeWorkBuf, pwSeparator);
           __frame0.wszRareName = L'\0';
           Fog::File::CONTAINER_InitializeBuffer(__frame0.wszRareNameBuf, 2, 199, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-          wsprintf(&__frame0.wszRareName, D2Lang::StrTable::strtable::GetLocaleString(0x6b6), wszPrefix, wszSuffix, 0);
+          wsprintf(&__frame0.wszRareName, D2Lang::StrTable::strtable::GetLocaleString(0x6b6), wszPrefix, wszSuffix, nullptr);
           Fog::File::CONTAINER_InitializeBuffer(wszScratch, 2, 0x200, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
           bFlagCheck = INV_FormatPlayerNameWithBase(wszScratch, &__frame0.wszRareName, pUnit);
           pwLocaleStr = wszScratch;
@@ -7164,7 +7164,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
               } else {
                 __frame0.wszPossessive[0] = L'\0';
                 Fog::File::CONTAINER_InitializeBuffer(__frame0.wszPossessive + 1, 2, 99, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-                wsprintf(__frame0.wszPossessive, D2Lang::StrTable::strtable::GetLocaleString(0x2769), wszNameScratch, 0);
+                wsprintf(__frame0.wszPossessive, D2Lang::StrTable::strtable::GetLocaleString(0x2769), wszNameScratch, nullptr);
                 pwLocaleStr = __frame0.wszPossessive;
               }
 
@@ -7255,7 +7255,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
             exit(-1);
           }
 
-          wsprintf(pwOutBuffer, D2Lang::StrTable::strtable::GetLocaleString(0x6b2), wszPrefix, D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr), wszSuffix, 0);
+          wsprintf(pwOutBuffer, D2Lang::StrTable::strtable::GetLocaleString(0x6b2), wszPrefix, D2Lang::StrTable::strtable::GetLocaleString(pItemsTxt->wNameStr), wszSuffix, nullptr);
           break;
           default:
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8ce);
@@ -7698,7 +7698,7 @@ void __fastcall ITEM_BuildSetItemTooltip(D2UnitStrc * pUnit) {
 
         pOwnerUnit = GetSetItem((int)pSetItemsTxt->nId, pUnitInventory);
         if (pSetItemsTxt->stringId) {
-          wsprintf(wszWorkBuf, D2Lang::StrTable::strtable::GetLocaleString(0x2769), D2Lang::StrTable::strtable::GetLocaleString(pSetItemsTxt->stringId), 0);
+          wsprintf(wszWorkBuf, D2Lang::StrTable::strtable::GetLocaleString(0x2769), D2Lang::StrTable::strtable::GetLocaleString(pSetItemsTxt->stringId), nullptr);
           D2Lang::Unicode::UNISYS::AppendToBuffer(wszWorkBuf, pwSeparator);
         }
 

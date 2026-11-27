@@ -770,7 +770,7 @@ void __fastcall RollStonesOrder(D2QuestDataA1Q4Strc * pQuestSpecificData) {
     int aStoneClassIds[5];
     char szDebugBuf[80];
     uint32_t sNextSeed;
-    D2QuestDataA1Q4SubStrc* pSubData = *(D2QuestDataA1Q4SubStrc**)pQuestSpecificData->sSub.aStones;
+    D2QuestDataA1Q4SubStrc* pSubData = (D2QuestDataA1Q4SubStrc*)((D2QuestDataStrc*)pQuestSpecificData)->pQuestSpecificData.pA1Q4;
     memset(pSubData->aStones, 0, sizeof(pSubData->aStones));
     pSubData->nStoneIndex = 0;
     aStoneClassIds[0] = 0x11;
@@ -1237,7 +1237,7 @@ BOOL __fastcall OBJOP_A1Q4_ActivateCairnStone(D2ObjectOperateFnArg * pOperation)
     }
 
     D2QuestDataA1Q4SubStrc* pSubData;
-    pSubData = *(D2QuestDataA1Q4SubStrc**)((D2QuestDataA1Q4Strc*)__frame0.pQuestData)->sSub.aStones;
+    pSubData = (D2QuestDataA1Q4SubStrc*)__frame0.pQuestData->pQuestSpecificData.pA1Q4;
     if (!pSubData->bStonesRolled) {
       pSubData->bStonesRolled = true;
       RollStonesOrder((D2QuestDataA1Q4Strc*)__frame0.pQuestData);
@@ -1515,7 +1515,7 @@ void __fastcall Q04_SendStonesOrderToClient(::SGAMEDATA * pGame, D2UnitStrc * pU
     D2QuestDataA1Q4Strc* pQuestSpecificData = (D2QuestDataA1Q4Strc*)GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSearchForCain);
     if (pQuestSpecificData) {
       D2ClientStrc* pClient;
-      pSubData = *(D2QuestDataA1Q4SubStrc**)pQuestSpecificData->sSub.aStones;
+      pSubData = (D2QuestDataA1Q4SubStrc*)((D2QuestDataStrc*)pQuestSpecificData)->pQuestSpecificData.pA1Q4;
       if (!pSubData->bStonesRolled) {
         pSubData->bStonesRolled = true;
         RollStonesOrder(pQuestSpecificData);

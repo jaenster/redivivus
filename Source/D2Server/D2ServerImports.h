@@ -69,8 +69,8 @@ void __stdcall D2GAME_10021(uint32_t dwUnused1, uint32_t dwUnused2, const char *
 void __stdcall D2GAME_10022(uint16_t wGameId, const char * szMessage); // D2Game 10022: message to one game
 int __stdcall D2GAME_10017(uint16_t wGameId, D2PlayerListEntry * pOut, int nMax); // D2Game 10017: fills the player list of a game
 int __stdcall D2GAME_10016(uint16_t wGameId);                       // D2Game 10016: player count of a game
-void __stdcall D2GAME_10048(uint32_t dwToken, char ** ppGameName, uint16_t wField0B, uint16_t wField09, uint16_t wField0D, uint8_t * pPayload); // D2Game 10048: GTM 0x0C create
-void __stdcall D2GAME_10049(uint32_t dwToken, char ** ppGameName, uint16_t wField0B, uint16_t wField09, uint16_t wField0D, uint8_t * pPayload); // D2Game 10049: GTM 0x0D join
+void __stdcall D2GAME_10048(uint32_t dwToken, uint32_t * pGameNameRef, uint16_t wField0B, uint16_t wField09, uint16_t wField0D, uint8_t * pPayload); // D2Game 10048: GTM 0x0C create
+void __stdcall D2GAME_10049(uint32_t dwToken, uint32_t * pGameNameRef, uint16_t wField0B, uint16_t wField09, uint16_t wField0D, uint8_t * pPayload); // D2Game 10049: GTM 0x0D join
 int __stdcall D2GAME_10018(uint16_t wGameId, int nOne, void * pItemText, void * pItemData, void * pSelection); // D2Game 10018: item list of a selected unit
 int __stdcall GAME_GetGameServerGameIds(uint16_t * pGameIds, int nMax); // D2Game 10015
 int __stdcall GAME_GetGamesCount();                                 // D2Game 10012

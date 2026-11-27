@@ -434,7 +434,12 @@ static int gnPathNodeMax[128] = {
     0xb,
     0x27
 }; D2_STATIC_GUARD(gnPathNodeMax, "gnPathNodeMax");
-uint32_t gaPathDirectionLookupTable[6] = { 0xffffffff, 0x2, 0x5, 0x4, 0x3, 0x0 }; D2_STATIC_GUARD(gaPathDirectionLookupTable, "gaPathDirectionLookupTable");
+// Direction from a point to one of its 8 neighbours, laid out [dy + 1][dx + 1]; -1 at the centre.
+int32_t gaPathDirectionLookupTable[9] = {
+    7, 0, 1,
+    6, -1, 2,
+    5, 4, 3
+}; D2_STATIC_GUARD(gaPathDirectionLookupTable, "gaPathDirectionLookupTable");
 
 namespace D2Common::Drlg::Path {
 
@@ -1399,9 +1404,9 @@ int32_t __stdcall DRLGPATH_BuildBresenhamPointList(uint32_t nSrcPacked, uint32_t
     return 0;
 }
 
-// Computes a direction lookup value from two packed coordinates using a table at 0x6F1E28. The index is computed as (dy*3 - srcX + dstX), suggesting a 3-state direction encoding. No callers found - likely used via function pointer.
+// Direction (0-7, -1 for none) from the source to an adjacent destination: the 3x3 table at 0x6F1E18 indexed 4 + dy*3 + dx. No callers found - likely used via function pointer.
 uint32_t __stdcall DRLGPATH_GetDirectionLookupFromPacked(uint32_t nSrcPacked, uint32_t nDstPacked) {
-    return gaPathDirectionLookupTable[((nDstPacked >> 0x10) - (nSrcPacked >> 0x10)) * 3 - (uint16_t)nSrcPacked + (uint16_t)nDstPacked];
+    return gaPathDirectionLookupTable[4 + ((int)(nDstPacked >> 0x10) - (int)(nSrcPacked >> 0x10)) * 3 + ((int)(uint16_t)nDstPacked - (int)(uint16_t)nSrcPacked)];
 }
 
 } // namespace D2Common::Drlg::Path

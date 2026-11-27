@@ -769,11 +769,12 @@ template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::As
     this->m_terminator.m_next = ~(uintptr_t)pTVar1;
 }
 
-template<> int __fastcall TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Unreferenced_00603f70(int param_1, int param_2, int param_3) {
-    *(uint32_t*)(param_1 + 4) = 0;
-    *(uint32_t*)(param_1 + 8) = 0;
-    *(uint32_t*)(param_1 + 0xc) = 0;
-    *(uint32_t*)(param_1 + 0x10) = 0;
+template<> void* __fastcall TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Unreferenced_00603f70(void* param_1, int param_2, int param_3) {
+    uint32_t* pWords = (uint32_t*)param_1;
+    pWords[1] = 0;
+    pWords[2] = 0;
+    pWords[3] = 0;
+    pWords[4] = 0;
     return param_1;
 }
 

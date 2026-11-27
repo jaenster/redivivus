@@ -6893,7 +6893,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     D2HirelingHireData* pHireData;
     ListBoxWrapperVtable* pListBoxVtbl;
     D2MercForHire* pMercForHire;
-    uint32_t pNullSentinel;
+    uint16_t* pNullSentinel;
     void** ppvVar2 = &ExceptionList;
     int32_t nEHState = -1; // steer-ok: generated form, kept as emitted
     pfnEHHandlerRoutine pSehHandler = __GSHandlerCheck_EH_6ca09b; // steer-ok: generated form, kept as emitted

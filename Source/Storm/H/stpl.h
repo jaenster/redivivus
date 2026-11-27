@@ -131,7 +131,7 @@ public:
     static uint32_t* __fastcall Unreferenced_00602750(uint32_t* pData);
     static void __fastcall LINKEDLIST_UnlinkSelf_Unref_00602760(StormLinkStrc* pNode);
     void Unreferenced_00602950();
-    static int __fastcall Unreferenced_00603f70(int param_1, int param_2, int param_3);
+    static void* __fastcall Unreferenced_00603f70(void* param_1, int param_2, int param_3);
     void Unreferenced_0060f020();
     void Unreferenced_0060f360();
 };
@@ -418,7 +418,7 @@ template<> __attribute__((noinline)) inline void TSExplicitList<TSHashObjectChun
 // Copies pSource's link offset and resets this list's terminator to empty.
 // Byte-identical to TSExplicitList<StringEntryNode,..>::Assign 0060e370.
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Assign(TSExplicitList<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>, 16>* pSource);
-template<> int __fastcall TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Unreferenced_00603f70(int param_1, int param_2, int param_3);
+template<> void* __fastcall TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::Unreferenced_00603f70(void* param_1, int param_2, int param_3);
 // Init pool node: copy nHeadEntry from src, zero both list links
 template<> TSExplicitList<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>, 16>* TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::CopyConstructor(TSExplicitList<TSHashObjectChunk<::CELLIST, HASHKEY_NONE>, 16>* pSource);
 template<> void TSExplicitList<TSHashObjectChunk<CELLIST, HASHKEY_NONE>, 16>::LinkNode(TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pNode, uint32_t nLinkType, TSHashObjectChunk<::CELLIST, HASHKEY_NONE>* pExisting);

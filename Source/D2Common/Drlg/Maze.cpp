@@ -1024,7 +1024,7 @@ void __fastcall RollArcaneTypePath(D2DrlgLevelStrc * pLevel) {
     uint32_t nBaseDir = seedRoll & 3;
     memset(nRoomPtrs, 0, sizeof(nRoomPtrs));
     D2RoomExStrc** ppRoomPtrs = nRoomPtrs;
-    D2RoomExStrc** pArmRoomWalker = (D2RoomExStrc**)((uint8_t*)&nRoomPtrs - 8);
+    D2RoomExStrc** pArmRoomWalker = nRoomPtrs - 2;
     uint32_t nArmIndex = 0;
     do {
       nDirection = nArmIndex & 3;

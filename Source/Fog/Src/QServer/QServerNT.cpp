@@ -633,7 +633,7 @@ int __fastcall PumpIoCompletionQueues(D2QServerStrc * pQServer, uint32_t dwTimeo
 
 SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     int nResult;
-    uint32_t* pThreadArgs;
+    D2QServerWorkerThreadContextStrc* pThreadArgs;
     HANDLE hThread;
     sockaddr bindAddr;
     uint32_t* pIocp2;
@@ -681,16 +681,16 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     pQServer->aListenPorts[nResult] = (u_short)nPortLocal;
     pQServer->aListenSockets[nResult] = hListenSocket;
     pQServer->aWorkerSlotValues[nResult] = 1;
-    pThreadArgs = (uint32_t*)D2_ALLOC_AT(8, ".\\Src\\QServer\\QServerNT.cpp", 0xa2);
-    /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ *pThreadArgs = (uint32_t)(uintptr_t)pQServer;
-    pThreadArgs[1] = nResult;
+    pThreadArgs = (D2QServerWorkerThreadContextStrc*)D2_ALLOC_AT(sizeof(D2QServerWorkerThreadContextStrc), ".\\Src\\QServer\\QServerNT.cpp", 0xa2);
+    /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pThreadArgs->pQServer = pQServer;
+    pThreadArgs->nWorkerIndex = nResult;
     hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)AcceptThreadMain, pThreadArgs, 0, (LPDWORD)(pQServer->aAcceptThreadIds + nResult));
     pQServer->aAcceptThreadHandles[nResult] = hThread;
     ErrorManager::StubHook1(pQServer->aAcceptThreadIds[nResult], hThread);
     if (pQServer->bUseDedicatedIoWorkers) {
-      pThreadArgs = (uint32_t*)D2_ALLOC_AT(8, ".\\Src\\QServer\\QServerNT.cpp", 0xb5);
-      /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ *pThreadArgs = (uint32_t)(uintptr_t)pQServer;
-      pThreadArgs[1] = nResult;
+      pThreadArgs = (D2QServerWorkerThreadContextStrc*)D2_ALLOC_AT(sizeof(D2QServerWorkerThreadContextStrc), ".\\Src\\QServer\\QServerNT.cpp", 0xb5);
+      /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pThreadArgs->pQServer = pQServer;
+      pThreadArgs->nWorkerIndex = nResult;
       pIocp2 = (uint32_t*)(pQServer->aIoWorkerThreadIds + nResult);
       hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)pIocp2);
       pQServer->aIoWorkerThreadHandles[nResult] = hThread;

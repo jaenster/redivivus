@@ -124,7 +124,10 @@ void __fastcall DRAW_DrawRoomUnits(D2RoomStrc * pRoom) {
         nCoord = D2Common::Units::GetScreenY(pUnit);
         D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nScreenX, nCoord - MouseYOffset, nScreenX + 4, nCoord - MouseYOffset + 4, 0xff, DRAW_SOLID);
         if (pUnit && pUnit->eUnitType == UNIT_WARP) {
-          for (pGfxInfo = pUnit->pGfxInfo; pGfxInfo; pGfxInfo = *(D2GfxInfoStrc**)(pGfxInfo->nComponentFlags + 0x20)) {
+          // The walk reads the dword at 0x20 as the next node, but 0x20..0x27 are the flags of
+          // components 16..19 (Gfx.cpp sets 0x14 of them); AllocGfxInfo zeroes them, so the walk
+          // stops after the first node. It reads 4 bytes, as the 32-bit pointer did.
+          for (pGfxInfo = pUnit->pGfxInfo; pGfxInfo; pGfxInfo = (D2GfxInfoStrc*)(uintptr_t)*(uint32_t*)(pGfxInfo->nComponentFlags + 0x20)) {
             nYEnd = *(int*)(pGfxInfo->nComponentFlags + 4) - MouseYOffset;
             nScreenX = *(int*)pGfxInfo->nComponentFlags - MouseXOffset;
             nLineAlpha = 0xff;

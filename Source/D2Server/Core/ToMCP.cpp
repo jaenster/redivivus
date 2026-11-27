@@ -288,8 +288,8 @@ void __fastcall ToMCP_SendGameJoinInfo(GameJoinInfoFields * pFields) {
 // The game-data table's destructor, run at exit: its critical section, then the base
 // destructor (GameTable_DestructBody, which the binary has inline here).
 // 1.00 D2Server: 10008fe0
-void __fastcall ToMCP_Destructor(uint32_t * pThis) {
-    DeleteCriticalSection((LPCRITICAL_SECTION)(pThis + 0x14));
+void __fastcall ToMCP_Destructor(GameDataTable * pThis) {
+    DeleteCriticalSection(&pThis->cs);
     GameTable::GameTable_DestructBody(pThis);
 }
 
@@ -298,9 +298,9 @@ void __fastcall ToMCP_Destructor(uint32_t * pThis) {
 // The construction and destruction the compiler emits for the global (its dynamic
 // initializer at 10008f90 and the atexit thunk at 10008fc0).
 D2Server::GameDataTable::GameDataTable() {
-    D2Server::GameTable::GameTable_Construct(a);
+    D2Server::GameTable::GameTable_Construct(this);
 }
 
 D2Server::GameDataTable::~GameDataTable() {
-    D2Server::Core::ToMCP::ToMCP_Destructor(a);
+    D2Server::Core::ToMCP::ToMCP_Destructor(this);
 }

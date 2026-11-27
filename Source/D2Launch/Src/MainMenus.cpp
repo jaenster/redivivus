@@ -7481,7 +7481,7 @@ void __stdcall MAINMENU_QueryAndBuildRealmList() {
       }
     }
 
-    qsort(g_pBNetRealmList, gnRealmListCount, 4, MAINMENU_CompareRealmNames);
+    qsort(g_pBNetRealmList, gnRealmListCount, sizeof(*g_pBNetRealmList), MAINMENU_CompareRealmNames);
     return;
 }
 

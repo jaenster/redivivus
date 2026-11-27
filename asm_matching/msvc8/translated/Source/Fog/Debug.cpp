@@ -13,6 +13,15 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Debug.data.h"
 #include "Source/D2Headers/D2Arch.h"
+
+// Hex address field of the crash-dump lines: 8 digits on x86, the full pointer on x64.
+#if defined(_WIN64)
+#define FOG_ADDR_FMT "%016I64X"
+#define FOG_ADDR_FMT_L "%016I64X"
+#else
+#define FOG_ADDR_FMT "%08X"
+#define FOG_ADDR_FMT_L "%08lX"
+#endif
 static_assert(sizeof(void*) != 4 || sizeof(D2FogModuleNodeStrc) == 0x210, "module nodes are cleared whole: 0x210 bytes on 32-bit");
 static_assert(sizeof(void*) != 4 || offsetof(D2CrashDumpRecordStrc, aData) == 0x10, "a crash dump record is a 0x10-byte header plus its dwords");
 static_assert(sizeof(void*) != 4 || sizeof(D2ImagehlpSymbol64BufStrc) == 0x420, "IMAGEHLP_SYMBOL64 with its 0x400 name buffer");
@@ -1137,32 +1146,27 @@ void __fastcall EnumerateAndDumpAllFunctions(fnCrashOutputLine pOutputCallback, 
       }
     }
 
-    qsort(sModuleTable.aEntries, 0, 0x228, CompareUintDescending);
+    qsort(sModuleTable.aEntries, 0, sizeof(D2FogDebugModuleEntryStrc), CompareUintDescending);
 }
 
 static void InitializeDebugInfoTable(D2FogDebugModuleTableStrc * pTable) {
     D2FogDebugModuleEntryStrc* pEntryBase = pTable->aEntries;
     int nRemaining = 0xff;
-    uint16_t* pEntryCursor = &pTable->aEntries[0].guidPdb.Data3;
     do {
-      uint8_t* pbyGuidData4;
       pEntryBase->pImageBase = 0;
-      *(uint32_t*)(pEntryCursor - 0x107) = 0;
-      *(uint32_t*)(pEntryCursor - 5) = 0;
-      ((GUID*)(pEntryCursor - 3))->Data1 = 0;
-      pEntryCursor[-1] = 0;
-      *pEntryCursor = 0;
-      pbyGuidData4 = (uint8_t*)(pEntryCursor + 1);
-      *(uint32_t*)pbyGuidData4 = 0;
-      pbyGuidData4 = (uint8_t*)(pEntryCursor + 3);
-      *(uint32_t*)pbyGuidData4 = 0;
-      *(uint32_t*)(pEntryCursor + 5) = 0;
-      *(uint32_t*)(pEntryCursor + 7) = 0;
-      *(uint32_t*)(pEntryCursor + 9) = 0;
-      *(uint8_t*)(pEntryCursor - 0x105) = 0;
-      *(uint8_t*)(pEntryCursor - 0x85) = 0;
+      pEntryBase->nImageSize = 0;
+      pEntryBase->dwPdbSignature = 0;
+      pEntryBase->guidPdb.Data1 = 0;
+      pEntryBase->guidPdb.Data2 = 0;
+      pEntryBase->guidPdb.Data3 = 0;
+      *(uint32_t*)&pEntryBase->guidPdb.Data4[0] = 0;
+      *(uint32_t*)&pEntryBase->guidPdb.Data4[4] = 0;
+      pEntryBase->dwPdbAge = 0;
+      pEntryBase->dwImageTimeDateStamp = 0;
+      pEntryBase->dwTimestamp = 0;
+      pEntryBase->szModuleName[0] = 0;
+      pEntryBase->szImagePath[0] = 0;
       pEntryBase++;
-      pEntryCursor += 0x114;
       nRemaining--;
     } while (nRemaining >= 0);
 }
@@ -1527,7 +1531,7 @@ static D2FogModuleNodeStrc * __stdcall EnumerateAndLogModules(HANDLE hProcess, u
     }
 
     for (D2FogModuleNodeStrc* pModuleList = pModuleListHead; pModuleList; pModuleList = pModuleList->pNext) {
-      Src::LogManager::LOGMANAGER_TraceToModuleLog("", "    Base:%08lXh  Size:%7lXh  Name:%-15.15s  Path:%s", pModuleList->dwBaseAddress, pModuleList->dwSize, pModuleList->szModuleName, pModuleList);
+      Src::LogManager::LOGMANAGER_TraceToModuleLog("", "    Base:" FOG_ADDR_FMT_L "h  Size:%7lXh  Name:%-15.15s  Path:%s", (uintptr_t)pModuleList->dwBaseAddress, pModuleList->dwSize, pModuleList->szModuleName, pModuleList->szModulePath);
     }
 
     return pModuleListHead;
@@ -1610,7 +1614,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
       pTmp = "unknown";
     }
 
-    Src::LogManager::LogWithCategoryVarArgs("", "\n                     // EIP = 0x%08X - %s - %s+%04X\n\n", nEip, pTmp, pBytesRemaining, __frame1.nBytesRemaining);
+    Src::LogManager::LogWithCategoryVarArgs("", "\n                     // EIP = 0x" FOG_ADDR_FMT " - %s - %s+%04X\n\n", nEip, pTmp, pBytesRemaining, __frame1.nBytesRemaining);
     int nLinesEmitted;
     nLinesEmitted = 0;
     __frame1.nBytesRemaining = 0x1000;
@@ -1620,7 +1624,7 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
         break;
       }
 
-      Src::LogManager::LogWithCategoryVarArgs("", "              %08X:", pStackPtr);
+      Src::LogManager::LogWithCategoryVarArgs("", "              " FOG_ADDR_FMT ":", (uintptr_t)pStackPtr);
       __frame1.pBytesToDump = nBytesThisRow;
       if (nBytesThisRow >= 0x10) {
         __frame1.pBytesToDump = 0x10;
@@ -1709,12 +1713,12 @@ void __fastcall DumpAnnotatedStackMemory(HANDLE hSymHandle, CONTEXT * pContext, 
         nByteOffset = _stricmp(__frame1.pszSymText, "`string\'");
         if (!nByteOffset && !__frame0.nSymDisplacement) {
           pEscapedStr = Src::String::FogString::SMemEscapeString(__frame1.aEscapedString, pAsciiOut, 0x50, 0);
-          pBytesRemaining = "\n                           // 0x%08X - %s - %s=\'%s\'\n\n";
-          Src::LogManager::LogWithCategoryVarArgs("", "\n                           // 0x%08X - %s - %s=\'%s\'\n\n", pAsciiOut, pDVar1->szModuleName, __frame1.pszSymText, pEscapedStr);
+          pBytesRemaining = "\n                           // 0x" FOG_ADDR_FMT " - %s - %s=\'%s\'\n\n";
+          Src::LogManager::LogWithCategoryVarArgs("", "\n                           // 0x" FOG_ADDR_FMT " - %s - %s=\'%s\'\n\n", (uintptr_t)pAsciiOut, pDVar1->szModuleName, __frame1.pszSymText, pEscapedStr);
         } else {
-          pBytesRemaining = "\n                           // 0x%08X - %s - %s+%04X\n\n";
+          pBytesRemaining = "\n                           // 0x" FOG_ADDR_FMT " - %s - %s+%04X\n\n";
           pEscapedStr = __frame0.nSymDisplacement;
-          Src::LogManager::LogWithCategoryVarArgs("", "\n                           // 0x%08X - %s - %s+%04X\n\n", pAsciiOut, pDVar1->szModuleName, __frame1.pszSymText, pEscapedStr);
+          Src::LogManager::LogWithCategoryVarArgs("", "\n                           // 0x" FOG_ADDR_FMT " - %s - %s+%04X\n\n", (uintptr_t)pAsciiOut, pDVar1->szModuleName, __frame1.pszSymText, pEscapedStr);
         }
 
         nLinesEmitted += 3;

@@ -676,7 +676,7 @@ void __stdcall QSHackUnlistIP(D2QServerStrc * pQServer, in_addr pIp, char * szFi
     }
 }
 
-void __stdcall QSHackListSize(D2QServerStrc * pQServer, uint32_t szFile, uint32_t nLine) {
+void __stdcall QSHackListSize(D2QServerStrc * pQServer, char * szFile, uint32_t nLine) {
     if (!pQServer->bUseQServerHack) {
       return;
     }

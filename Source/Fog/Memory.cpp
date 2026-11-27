@@ -374,8 +374,17 @@ static int32_t __stdcall FindOrCreateBlockWithFreeSlots(D2PoolBlockStrc * * ppOu
     return 0;
 }
 
+// Link word in front of an overflow allocation, chaining it into its pOverflow hash bucket.
+// x64 pads it to 16 bytes so the user block keeps malloc's 16-byte alignment.
+union D2PoolOverflowHeader {
+    uint8_t* pNext;
+#if D2_ARCH_X64
+    alignas(16) uint8_t aAlign[16];
+#endif
+};
+
 void * __fastcall POOL_AllocOverflowBlock(D2PoolManagerStrc * pMemory, int32_t nSize, char * szFile, int32_t nFileLine) {
-    uint8_t* pNode = (uint8_t*)malloc(nSize + sizeof(uint8_t*));
+    uint8_t* pNode = (uint8_t*)malloc(nSize + sizeof(D2PoolOverflowHeader));
     if (!pNode) {
       OutOfMemoryHandler("(3) Pool Blocks overflowed at %d", pMemory->nBlocks);
       Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x388);
@@ -383,14 +392,14 @@ void * __fastcall POOL_AllocOverflowBlock(D2PoolManagerStrc * pMemory, int32_t n
     }
 
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pMemory->pSync);
-    *(uint8_t**)pNode = pMemory->pOverflow[(intptr_t)pNode % 0x3ff];
+    ((D2PoolOverflowHeader*)pNode)->pNext = pMemory->pOverflow[(intptr_t)pNode % 0x3ff];
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pMemory->pOverflow[(intptr_t)pNode % 0x3ff] = pNode;
     LeaveCriticalSection(&pMemory->pSync);
-    return pNode + sizeof(uint8_t*);
+    return pNode + sizeof(D2PoolOverflowHeader);
 }
 
 void __fastcall FreeTrackedAllocation(D2PoolManagerStrc * nManager, void * nUserPtr, char * szFile, int32_t nLine) {
-    void* pAllocBase = (void*)((char*)nUserPtr - sizeof(uint8_t*));
+    void* pAllocBase = (void*)((char*)nUserPtr - sizeof(D2PoolOverflowHeader));
     void* pPrev = 0;
     EnterCriticalSection(&nManager->pSync);
     uint8_t* pNext = nManager->pOverflow[(intptr_t)pAllocBase % 0x3ff];
@@ -421,7 +430,7 @@ void __fastcall FreeTrackedAllocation(D2PoolManagerStrc * nManager, void * nUser
 
 void * __fastcall ReallocTrackedAllocation(D2PoolManagerStrc * pManager, void * pUserPtr, int32_t nNewSize, char * szFile, int32_t nLine) {
     uint8_t* pCurrent;
-    void* pAllocBase = (void*)((char*)pUserPtr - sizeof(uint8_t*));
+    void* pAllocBase = (void*)((char*)pUserPtr - sizeof(D2PoolOverflowHeader));
     CRITICAL_SECTION* lpCriticalSection = &pManager->pSync;
     void* pPrev = 0;
     EnterCriticalSection(lpCriticalSection);
@@ -446,17 +455,17 @@ void * __fastcall ReallocTrackedAllocation(D2PoolManagerStrc * pManager, void * 
       *(uint8_t**)pPrev = *(uint8_t**)pCurrent;
     }
 
-    void* pNewAlloc = realloc(pAllocBase, nNewSize + sizeof(uint8_t*));
+    void* pNewAlloc = realloc(pAllocBase, nNewSize + sizeof(D2PoolOverflowHeader));
     if (!pNewAlloc) {
       OutOfMemoryHandler("Unable to allocate free block of %s", nNewSize);
       Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Src::ErrorManager::GetInstructionPointer(), 0x421);
       exit(-1);
     }
 
-    *(uint8_t**)pNewAlloc = pManager->pOverflow[(intptr_t)pNewAlloc % 0x3ff];
+    ((D2PoolOverflowHeader*)pNewAlloc)->pNext = pManager->pOverflow[(intptr_t)pNewAlloc % 0x3ff];
     pManager->pOverflow[(intptr_t)pNewAlloc % 0x3ff] = (BYTE*)pNewAlloc;
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
-    return (void*)((char*)pNewAlloc + sizeof(uint8_t*));
+    return (void*)((char*)pNewAlloc + sizeof(D2PoolOverflowHeader));
 }
 
 static D2PoolBlockStrc * __stdcall FindBlockContainingAddress(void * nAddress, D2PoolManagerStrc * nManager) {

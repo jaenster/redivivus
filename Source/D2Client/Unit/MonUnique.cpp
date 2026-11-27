@@ -211,7 +211,7 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
         pMonStatsTxt = D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonClassId;
       }
 
-      UI::Inv::wsprintf(wszName, D2Lang::StrTable::strtable::GetLocaleString(0x2b40), D2Lang::StrTable::strtable::GetLocaleString((uint16_t)gaChampionModifierTitles[nChampTitleIdx * 2 + 1]), D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr), 0);
+      UI::Inv::wsprintf(wszName, D2Lang::StrTable::strtable::GetLocaleString(0x2b40), D2Lang::StrTable::strtable::GetLocaleString((uint16_t)gaChampionModifierTitles[nChampTitleIdx * 2 + 1]), D2Lang::StrTable::strtable::GetLocaleString(pMonStatsTxt->NameStr), nullptr);
       D2Common::Monsters::MONSTERS::SetSuperUniqueName(pUnit, wszName);
       return;
     }
