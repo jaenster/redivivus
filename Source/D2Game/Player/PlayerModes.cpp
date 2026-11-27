@@ -549,66 +549,58 @@ static void PLRMODES_ClearCursorAndDeleteItem(D2UnitStrc * pUnit, D2UnitStrc * p
     D2Common::Units::RefreshInventory(pUnit, 1);
 }
 
+static inline int GetGUIDInline(D2UnitStrc * pUnit) {
+    if (pUnit) {
+        return pUnit->nUnitGUID;
+    }
+    return (int)(-1);
+}
 // Drops all equipped items (body locations -1 through 12) and all carried gold from pUnit onto the ground, typically called on player death. Cursor item (body loc -1) is cleared from inventory and deleted before dropping. Each body-loc item is unequipped via PLRMODES_UnequipAndPrepareItemForDrop, cloned from serialised data, and placed at the nearest free ground spot via FindBestSpotToSpawnItem/DropItem. After equipment, drains UNITSTAT_gold to 0 and calls GOLD_DropGoldFromInventory.
 // @sourcefile .\PLAYER\PlrModes.cpp
 static void __stdcall PLRMODES_DropAllEquipmentAndGold(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
-    D2ClientStrc* pClient;
-    D2RoomStrc* pSpawnRoom;
-    int nBodyLoc_00;
-    POINT ptUnitPos;
-    POINT ptBestSpot;
-    uint8_t bAllowOnGround;
-    uint32_t nGoldAmount;
-    D2InventoryStrc* pInventory;
-    POINT* pSpawnPos;
-    D2InventoryStrc* pInventoryDrop = pUnit->pInventory;
-    int nBodyLoc = -1;
-    do {
-      D2UnitStrc* pBodyLocItem;
-      nBodyLoc_00 = nBodyLoc;
+    D2InventoryStrc* pInventory = pUnit->pInventory;
+    for (int nBodyLoc = -1; nBodyLoc < 0xd; nBodyLoc++) {
+      D2UnitStrc* pItem;
       if (nBodyLoc == -1) {
-        pBodyLocItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventoryDrop);
+        pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pInventory);
       } else {
-        pBodyLocItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventoryDrop, nBodyLoc);
+        pItem = D2Common::INVENTORY::Inventory::INVENTORY_GetItemByGridOffset(pInventory, nBodyLoc);
       }
-      if (pBodyLocItem) {
-        if (nBodyLoc_00 == -1) {
-          pInventory = pUnit->pInventory;
-          pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrModes.cpp", 0x27d);
+
+      if (pItem) {
+        if (nBodyLoc == -1) {
+          D2InventoryStrc* pHandInventory = pUnit->pInventory;
+          D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\PLAYER\\PlrModes.cpp", 0x27d);
           GAME::SCmd::NET_D2GS_SERVER_Send_0x42_DESTROYHANDITEM(pClient, pUnit);
-          D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pInventory, nullptr);
-          D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pBodyLocItem, ITEMCMD_DELETE, 1);
-          D2Common::INVENTORY::Inventory::UpsertToUpdateList(pInventory, pBodyLocItem);
+          D2Common::INVENTORY::Inventory::INVENTORY_SetCursorItem(pHandInventory, nullptr);
+          D2Common::ITEMS::Items::ITEM_EditItemData_eD2ItemCmd(pItem, ITEMCMD_DELETE, 1);
+          D2Common::INVENTORY::Inventory::UpsertToUpdateList(pHandInventory, pItem);
           D2Common::Units::RefreshInventory(pUnit, 1);
         } else {
-          if (pBodyLocItem->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
+          if (pItem->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Neutral) {
             Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2a8);
             exit(-1);
           }
 
-          PLRMODES_UnequipAndPrepareItemForDrop(pGame, pUnit, pBodyLocItem, nBodyLoc_00);
+          PLRMODES_UnequipAndPrepareItemForDrop(pGame, pUnit, pItem, nBodyLoc);
         }
 
-        pBodyLocItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pBodyLocItem, pUnit, 1);
+        pItem = ITEMS::Items::Drop::ITEM_CloneFromSerializedData(pGame, pItem, pUnit, 1);
+        POINT ptUnitPos;
         D2Common::Units::GetCoords(pUnit, &ptUnitPos);
-        bAllowOnGround = 1;
-        nGoldAmount = 1;
-        pSpawnPos = &ptBestSpot;
-        pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptUnitPos, pSpawnPos, nGoldAmount, bAllowOnGround);
-        ITEMS::Items::Drop::DropItem(pGame, pUnit, pBodyLocItem, pSpawnRoom, ptBestSpot.x, ptBestSpot.y);
-        nBodyLoc_00 = nBodyLoc;
+        POINT ptBestSpot;
+        D2RoomStrc* pSpawnRoom = ITEMS::Items::Drop::FindBestSpotToSpawnItem(D2Common::Units::UNITS_GetRoom(pUnit), &ptUnitPos, &ptBestSpot, 1, 1);
+        ITEMS::Items::Drop::DropItem(pGame, pUnit, pItem, pSpawnRoom, ptBestSpot.x, ptBestSpot.y);
       }
+    }
 
-      nBodyLoc = nBodyLoc_00 + 1;
-    } while (nBodyLoc < 0xd);
-
-    nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
+    uint32_t nGoldAmount = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_gold, 0);
     if (pUnit->eUnitType == UNIT_PLAYER) {
       D2Common::Units::GetInventoryGoldLimit(pUnit);
     }
 
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_gold, 0, 0);
-    Player::GOLD_DropGoldFromInventory(pGame, pUnit, pUnit->nUnitGUID, nGoldAmount);
+    Player::GOLD_DropGoldFromInventory(pGame, pUnit, GetGUIDInline(pUnit), nGoldAmount);
 }
 
 static int32_t __stdcall PLRMODES_CleanupInvalidCorpses(::SGAMEDATA * pGame, D2UnitStrc * pUnitRaw) {

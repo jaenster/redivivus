@@ -564,7 +564,8 @@ void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
           break;
         }
 
-        D2ItemStatCostTxt* pItemStatCostTxt = nStatId >= 0 && nStatId < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + nStatId : nullptr;
+        eD2UnitStat eStat = (eD2UnitStat)nStatId;
+        D2ItemStatCostTxt* pItemStatCostTxt = (int)eStat >= 0 && (int)eStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtItemStatCost + eStat : nullptr;
         if (!pItemStatCostTxt) {
           break;
         }
@@ -572,7 +573,7 @@ void __fastcall SKILLNEC_ApplyDimVision(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
           sNecroArg.bUpdateAnimSpeed = 1;
         }
 
-        sNecroArg.eStat[i] = (eD2UnitStat)nStatId;
+        sNecroArg.eStat[i] = eStat;
         sNecroArg.aSkillCalc[i] = D2Common::Skills::D2GetSkillCalc(pUnit, pSkillsTxt->aurastatcalc[i], SKILL_DimVision, nSkillLvl);
       }
 

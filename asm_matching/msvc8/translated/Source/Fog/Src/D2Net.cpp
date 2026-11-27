@@ -36,25 +36,23 @@ void __stdcall NET_SERVER_SentPacketLog_Clear() {
 }
 
 void __fastcall NET_D2GS_SERVER_LogSentPacket(char * pBytes, uint32_t nSize) {
-    uint32_t nByteValue;
-    uint32_t nByteIndex;
-    int nBitCount = 0;
-    for (nByteIndex = 0; nByteIndex < nSize; nByteIndex++) {
-      nByteValue = (uint32_t)(uint8_t)pBytes[nByteIndex];
-      gaServerSentPacketByteCounts[nByteValue]++;
-      nBitCount += (uint32_t)Source::SSComp::gabHuffmanCodeLengths[nByteValue];
+    uint32_t nBitCount;
+    uint32_t i;
+    for (i = 0, nBitCount = 0; i < nSize; i++) {
+      uint8_t nByte = pBytes[i];
+      gaServerSentPacketByteCounts[nByte]++;
+      nBitCount += Source::SSComp::gabHuffmanCodeLengths[nByte];
     }
 
-    nByteIndex = nBitCount + 7U >> 3;
     uint32_t nHeaderSize = 1;
-    nByteValue = nByteIndex + 1;
-    if (nByteValue >= 0xf0) {
-      nByteValue = nByteIndex + 2;
+    uint32_t nWireSize = ((nBitCount + 7) >> 3) + nHeaderSize;
+    if (nWireSize >= 0xf0) {
+      nWireSize += nHeaderSize;
       nHeaderSize = 2;
     }
 
     gnSentPacketRawBytes += nSize;
-    gnSentPacketWireBytes += nByteValue;
+    gnSentPacketWireBytes += nWireSize;
     gnSentPacketHeaderBytes += nHeaderSize;
 }
 
