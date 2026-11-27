@@ -82,7 +82,7 @@ void TSLIST_Destructor(int pList) {
     TSLINK_Unlink((int*)(pList + 4));
 }
 
-// 1.14d mac: 0054942c
+// 1.14d mac: 005493f4
 static MacFaultHandlerList gFaultHandlerList;
 
 // 1.14d mac: 002b71b0
@@ -90,7 +90,7 @@ static MacFaultHandlerList gFaultHandlerList;
 void TSLIST_InitFaultHandlerList(void) {
     gFaultHandlerList.nLinkOffset = 0;
     gFaultHandlerList.pPrevLink = (int)&gFaultHandlerList.pPrevLink;
-    gFaultHandlerList.pNext = (int)&gFaultHandlerList.pPrevLink + 1;
+    gFaultHandlerList.pNext = (int)&gFaultHandlerList.pPrevLink | 1;
     __cxa_atexit((void (*)(void*))TSLIST_Destructor, &gFaultHandlerList, &__dso_handle);
 }
 
