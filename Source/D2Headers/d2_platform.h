@@ -867,10 +867,6 @@ typedef GUID IID;
 // The Win32 entry points the shared code calls that Storm's Win32-on-Mac layer
 // implements, under the layer's own names (Win32_Files.cpp, Win32_Process.cpp,
 // Win32_TimeAndDate.cpp, Win32_GDI.cpp, Win32_Window.cpp, Win32_Rect.cpp).
-HANDLE FindFirstFile(const char* szPattern, _WIN32_FIND_DATAA* pFindData);
-BOOL FindNextFile(HANDLE hFind, _WIN32_FIND_DATAA* pFindData);
-BOOL FindClose(HANDLE hFind);
-BOOL DeleteFile(LPCSTR szFileName);
 DWORD GetTempPath(DWORD nBufferLength, char* szBuffer);
 UINT GetTempFileName(LPCSTR szPathName, LPCSTR szPrefix, UINT uUnique, char* szTempFileName);
 BOOL FileTimeToSystemTime(const FILETIME* pFileTime, SYSTEMTIME* pSystemTime);
@@ -931,9 +927,6 @@ LONG DispatchMessage(const tagMSG* pMsg);
 #define PeekMessageA PeekMessage
 #define GetMessageA GetMessage
 #define DispatchMessageA DispatchMessage
-#define FindFirstFileA FindFirstFile
-#define FindNextFileA FindNextFile
-#define DeleteFileA DeleteFile
 #define GetTempPathA GetTempPath
 #define GetTempFileNameA GetTempFileName
 #define DefWindowProcA DefWindowProc
