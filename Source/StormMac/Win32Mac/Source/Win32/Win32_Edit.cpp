@@ -42,6 +42,7 @@ BOOL Wnd_IsVisibleAndEnabled(HWND hWnd);
 DWORD GetSysColor(int nIndex);
 DWORD SetTextColor(HDC hDC, DWORD dwColor);
 int GetSystemMetrics(int nIndex);
+void* GetStockObject(int nIndex);
 void GDI_GetFontHeight(void* hFont, LONG* pnHeight);
 HDC GetDC(HWND hWnd);
 int ReleaseDC(HWND hWnd, HDC hDC);
@@ -50,8 +51,8 @@ BOOL GetTextExtentExPointA(HDC hDC, const char* szText, int nLength, int nMaxExt
                            SIZE* pSize);
 int Text_CalculateLineBreaks(HDC hDC, const char* szText, int nLength, int nMaxWidth, Win32MacTextLine* pLines,
                              int nMaxLines);
-bool Rect_PinPtInRect(RECT* pRect, int* pX, int* pY);
-short GetKeyState(int nVirtKey);
+BOOL Rect_PinPtInRect(RECT* pRect, int* pX, int* pY);
+int GetKeyState(int nVirtKey);
 BOOL CLIPBOARD_SetText(const char* szText, int nLength);
 int CLIPBOARD_GetTextSize(void);
 int CLIPBOARD_GetText(char* pBuffer, int nBufferSize);
@@ -165,6 +166,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return 0;
     }
     case 7: {  // WM_SETFOCUS
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         lResult = DefWindowProc(hWnd, WM_SETFOCUS, wParam, lParam);
         DWORD dwID = GetWindowLong(hWnd, -12);
         HWND hParent = GetParent(hWnd);
@@ -175,6 +177,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 8: {  // WM_KILLFOCUS
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         KillTimer(hWnd, EDIT_CARET_TIMER);
         bool bWasOn = pEdit->bCaretOn != 0;
         if (bWasOn) {
@@ -195,6 +198,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 0xC: {  // WM_SETTEXT
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         pEdit->pText[0] = 0;
         pEdit->nLength = 0;
         Edit_SetSelection(hWnd, pEdit, 0, 0);
@@ -210,6 +214,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 0xD: {  // WM_GETTEXT
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         lResult = 0;
         if (pEdit->pText != NULL) {
             lResult = wParam - 1;
@@ -222,12 +227,14 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 0xE:  // WM_GETTEXTLENGTH
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         lResult = 0;
         if (pEdit->pText != NULL) {
             lResult = pEdit->nLength;
         }
         return lResult;
     case 0xF: {  // WM_PAINT
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         Win32MacPaintStruct tPaint;
         HDC hDC = BeginPaint(hWnd, &tPaint);
         char* pText = NULL;
@@ -391,11 +398,12 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 0x30: {  // WM_SETFONT
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         lResult = DefWindowProc(hWnd, 0x30, wParam, lParam);
         if (wParam == 0) {
             wParam = DefWindowProc(hWnd, 0x31, 0, 0);
             if (wParam == 0) {
-                wParam = GetSystemMetrics(0xD);
+                wParam = (WPARAM)GetStockObject(0xD);
             }
         }
         LONG nHeight;
@@ -406,8 +414,10 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 0x87:  // WM_GETDLGCODE
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         return (pEdit->dwStyle & ES_MULTILINE) | 0x89;
     case 0xB0: {  // EM_GETSEL
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         int nStart = pEdit->nSelAnchor;
         int nEnd = pEdit->nSelCaret;
         int nMax = nEnd;
@@ -429,8 +439,10 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         Edit_On_EM_SETSEL(hWnd, wParam, lParam);
         return 0;
     case 0xBA:  // EM_GETLINECOUNT
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         return pEdit->nLines;
     case 0xC2: {  // EM_REPLACESEL
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         if (pEdit == NULL || lParam == 0 || *(const char*)lParam == '\0') {
             return 0;
         }
@@ -443,6 +455,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return 0;
     }
     case 0xC5:  // EM_LIMITTEXT
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         if (pEdit != NULL) {
             if (wParam == 0) {
                 wParam = (pEdit->dwStyle << 29) | 0x7FFFFFFF;
@@ -451,8 +464,10 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         }
         return 0;
     case 0xCE:  // EM_GETFIRSTVISIBLELINE
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         return pEdit->nTopLine;
     case 0x100: {  // WM_KEYDOWN
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         short nShift = GetKeyState(0x10);
         GetKeyState(0x11);
         int nAnchor = pEdit->nSelAnchor;
@@ -730,6 +745,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 0x102: {  // WM_CHAR
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         short nCtrl = GetKeyState(0x11);
         short nWin = GetKeyState(0x5B);
         char cKey = (char)wParam;
@@ -788,6 +804,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 0x113: {  // WM_TIMER
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         if (wParam == EDIT_DRAG_TIMER) {
             if (GetCapture() != hWnd) {
                 return 0;
@@ -808,6 +825,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return 0;
     }
     case 0x115: {  // WM_VSCROLL
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         if ((pEdit->dwStyle & ES_MULTILINE) == 0) {
             return -1;
         }
@@ -838,6 +856,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return 0;
     }
     case 0x200: {  // WM_MOUSEMOVE
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         if (GetCapture() != hWnd) {
             return 0;
         }
@@ -908,6 +927,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return 0;
     }
     case 0x201: {  // WM_LBUTTONDOWN
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         SetFocus(hWnd);
         SetCapture(hWnd);
         pEdit->nDragX = 0;
@@ -938,6 +958,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return 0;
     }
     case 0x202:  // WM_LBUTTONUP
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         KillTimer(hWnd, EDIT_DRAG_TIMER);
         if (GetCapture() == hWnd) {
             ReleaseCapture();
@@ -948,6 +969,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         Edit_On_EM_SETSEL(hWnd, 0, -1);
         return 0;
     case 0x300: {  // WM_CUT
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         lResult = 0;
         if (Edit_CopySelectionToClipboard(pEdit)) {
             Edit_DeleteSelection(hWnd, pEdit);
@@ -959,8 +981,10 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 0x301:  // WM_COPY
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         return Edit_CopySelectionToClipboard(pEdit) != 0;
     case 0x302: {  // WM_PASTE
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         int nSize = CLIPBOARD_GetTextSize();
         if (nSize < 1) {
             return 0;
@@ -991,6 +1015,7 @@ LONG Edit_WndProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam) {
         return lResult;
     }
     case 0x303:  // WM_CLEAR
+        pEdit = (Win32MacEditData*)GetProp(hWnd, s_szEditData);
         if (pEdit->nSelAnchor == pEdit->nSelCaret) {
             return 1;
         }
