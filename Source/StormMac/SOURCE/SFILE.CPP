@@ -47,7 +47,7 @@ static TSExplicitList<D2StormAudioStreamRec, 0> s_tStreamList;
 static SFileCritSect s_tQueueLock;
 
 // 1.14d mac: 003f059c
-static void* s_pDirectSound;
+static IDirectSound* s_pDirectSound;
 // 1.14d mac: 003f05a0
 static uint32_t s_dwDirectAccessFlags;
 // 1.14d mac: 003f05a8
@@ -218,7 +218,7 @@ BOOL SFileDdaEnd(D2MPQFileStrc* pFile) {
         }
         pStream = pNextStream;
     }
-    pFile->pStream = NULL;
+    pFile->bStreamActive = 0;
     SFILE_UNLOCK();
     return 1;
 }
@@ -384,7 +384,7 @@ SFILE_STATIC int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec* pStream) {
 }
 
 // 1.14d mac: 00013418
-BOOL SFileDdaInitialize(void* pDirectSound) {
+BOOL SFileDdaInitialize(IDirectSound* pDirectSound) {
     if (pDirectSound == NULL) {
         SErrSetLastError(0x57);
     } else {
@@ -1722,5 +1722,343 @@ D2StormAsyncOpStrc::~D2StormAsyncOpStrc() {
         }
     }
     m_link.Unlink();
+}
+
+// 1.14d mac: 003f05a4
+static uint32_t s_nWaveChunkSize;
+// The Storm option block (SSystem): the third dword is the size of one wave streaming chunk.
+extern uint32_t g_aStormOptions[3];
+
+struct SFileDsBufferDesc {
+    uint32_t dwSize;
+    uint32_t dwFlags;
+    uint32_t dwBufferBytes;
+    uint32_t dwReserved;
+    void* pWaveFormat;
+};
+
+struct SFileWaveFormat {
+    uint16_t wFormatTag;
+    uint16_t nChannels;
+    uint32_t nSamplesPerSec;
+    uint32_t nAvgBytesPerSec;
+    uint16_t nBlockAlign;
+    uint16_t wBitsPerSample;
+    uint16_t cbSize;
+};
+
+// 1.14d mac: 00012465
+// Starts streaming a RIFF wave file out of an MPQ through a DirectSound buffer, the caller's
+// or one made here.
+BOOL SFileDdaBeginEx(D2MPQFileStrc* hFile, uint32_t dwBufferBytes, uint32_t dwFlags, uint32_t dwInitialPos,
+                     int32_t lVolume, int32_t lPan, IDirectSoundBuffer* lpDSB) {
+    IDirectSoundBuffer* pBuffer = lpDSB;
+    DWORD dwErrCode;
+    if (dwBufferBytes == 0) {
+        dwErrCode = 0x57;
+    } else if (s_pDirectSound == NULL) {
+        dwErrCode = 0x85100071;
+    } else {
+        SFILE_LOCK();
+        if (hFile->bStreamActive != 0) {
+            SFileDdaEnd(hFile);
+        }
+        if (((s_dwDirectAccessFlags | dwFlags) & 1) == 0 && (hFile->hFile != 0 || hFile->pArchive == NULL)) {
+            SErrSetLastError(0x8510006f);
+            SFILE_UNLOCK();
+            return 0;
+        }
+        s_nWaveChunkSize = g_aStormOptions[2];
+        if (s_nWaveChunkSize == 0) {
+            g_aStormOptions[2] = 0x4000;
+            s_nWaveChunkSize = 0x4000;
+        }
+        if (s_pWaveBuffer == NULL) {
+            s_pWaveBuffer = SMemAlloc(s_nWaveChunkSize, SFILE_FILE, 0xba3, 0);
+        }
+        D2ArchiveStrc* pArchive = hFile->pArchive;
+        if (pArchive != NULL && (uint32_t)pArchive->nArchiveType < 2) {
+            pArchive->nArchiveType = 2;
+        }
+        SFILE_UNLOCK();
+        uint32_t nChunk = s_nWaveChunkSize;
+        uint32_t nRemainder = (nChunk - 1) & dwBufferBytes;
+        if (nRemainder != 0) {
+            dwBufferBytes = (dwBufferBytes + nChunk) - nRemainder;
+        }
+        SFileSetFilePointer(hFile, 0, NULL, 0);
+        uint32_t nBufferSize = nChunk * 2;
+        if (nChunk * 2 <= dwBufferBytes) {
+            nBufferSize = dwBufferBytes;
+        }
+        int32_t aRiffHeader[3];
+        if (SFileReadFileEx2(hFile, aRiffHeader, 0xc, NULL, NULL, 0, NULL) != 0 && aRiffHeader[0] == 0x46464952 &&
+            aRiffHeader[2] == 0x45564157) {
+            int aChunk[2];
+            aChunk[1] = 0;
+            aChunk[0] = 0;
+            uint32_t nFound = SFILE_FindChunk(hFile, 0x20746d66, aChunk);
+            uint32_t nFormatSize = aChunk[0];
+            SFileWaveFormat tFormat;
+            if (nFound != 0 && nFormatSize > 0xf &&
+                SFileReadFileEx2(hFile, &tFormat, 0x10, NULL, NULL, 0, NULL) != 0 &&
+                SFileSetFilePointer(hFile, nFormatSize - 0x10, NULL, 1) != 0xFFFFFFFF) {
+                tFormat.cbSize = 0;
+                nFound = SFILE_FindChunk(hFile, 0x61746164, aChunk);
+                int nDataOffset = aChunk[1];
+                uint32_t nDataSize = aChunk[0];
+                if (nFound != 0) {
+                    uint32_t nStartPos = dwInitialPos == 0 ? 0 : dwInitialPos % nDataSize;
+                    bool bOwnBuffer = pBuffer == NULL;
+                    if (bOwnBuffer) {
+                        SFileDsBufferDesc tDesc;
+                        tDesc.dwReserved = 0;
+                        tDesc.dwFlags = (dwFlags & 0x60) | 0x80;
+                        tDesc.dwSize = 0x14;
+                        tDesc.pWaveFormat = &tFormat;
+                        tDesc.dwBufferBytes = nBufferSize;
+                        s_pDirectSound->CreateSoundBuffer(&tDesc, &pBuffer);
+                        if (pBuffer == NULL) {
+                            return 0;
+                        }
+                    }
+                    if (lVolume != 0 && lVolume != 0x7fffffff) {
+                        pBuffer->SetVolume(lVolume);
+                    }
+                    if (lPan != 0 && lPan != 0x7fffffff) {
+                        pBuffer->SetPan(lPan);
+                    }
+                    SFILE_LOCK();
+                    D2StormAudioStreamRec* pStream = s_tStreamList.NewNode(STORM_LIST_LINK_BEFORE, 0, 0);
+                    pStream->pMpqFile = hFile;
+                    pStream->nBufferSize = nBufferSize;
+                    pStream->dwAvgBytesPerSec = tFormat.nAvgBytesPerSec;
+                    pStream->nNoCleanupFlag = (dwFlags >> 0x12) & 1;
+                    pStream->nStreamType = 0;
+                    pStream->nDataChunkOffset = nDataOffset;
+                    pStream->nDataChunkSize = nDataSize;
+                    pStream->nInitialPos = nStartPos;
+                    pStream->nCurrentPos = nStartPos;
+                    pStream->nBytePos = nStartPos;
+                    pStream->lVolume = lVolume;
+                    pStream->lPan = lPan;
+                    pStream->pStream = pBuffer;
+                    pStream->bAllocatedStream = bOwnBuffer;
+                    pStream->bIs16Bit = (tFormat.wBitsPerSample == 8) << 7;
+                    pStream->nRefCount = 1;
+                    if (hFile != NULL) {
+                        hFile->nRefCount++;
+                    }
+                    pBuffer->SetCurrentPosition(0);
+                    hFile->bStreamActive = 1;
+                    SFILE_UNLOCK();
+                    SFILE_CreateCdThread();
+                    SetEvent(s_hCdEvent);
+                    return 1;
+                }
+            }
+        }
+        dwErrCode = 0xd;
+    }
+    SErrSetLastError(dwErrCode);
+    return 0;
+}
+
+typedef int (*PFNBLASTWRITE)(void* pState, void* pData, size_t nSize);
+typedef unsigned (*PFNBLASTREAD)(void* pState, void** ppData);
+
+// What the blast decompressor's callbacks share: the destination (buffer, running offset) and
+// the source (data at 0x0C, size at 0x14).
+struct SFileBlastContext {
+    uint8_t* pOutput;     // 0x00
+    int nOutOffset;       // 0x04
+    uint32_t nOutLimit;   // 0x08
+    void* pInput;         // 0x0C
+    uint32_t n10;         // 0x10
+    uint32_t nInSize;     // 0x14
+};
+
+// 1.14d mac: 00015661
+// Reads whole sectors, starting on a sector boundary, into pDstBuf: loads the sector offset table
+// of a compressed file on first use, decrypts, and decompresses sector by sector. Returns the
+// bytes made.
+SFILE_STATIC uint32_t SFILE_InternalReadAligned(D2MPQFileStrc* pFile, uint32_t nFileOffset, void* pDestination,
+                                                uint32_t nReadLen) {
+    uint8_t* pDstBuf = (uint8_t*)pDestination;
+    D2ArchiveStrc* pArchive = pFile->pArchive;
+    uint32_t nResult;
+    if ((nFileOffset & (pArchive->nSectorSize - 1)) != 0) {
+        SErrSetLastError(0x57);
+        return 0;
+    }
+    nResult = 0;
+    if (nReadLen == 0) {
+        return 0;
+    }
+    D2MPQBlockEntryStrc* pBlock = pFile->pBlockEntry;
+    uint8_t cCompress = (uint8_t)(pBlock->dwFlags >> 8);
+    if (cCompress != 0 && pFile->bSectorsLoaded == 0) {
+        uint32_t nTableRead = 0;
+        if (!SFILE_ReadFileChecked(pBlock->dwFilePos, &pArchive->nFilePos, pArchive->hFile, pFile->pSectorTable,
+                                   pFile->nSectorCount * 4 + 4, &nTableRead, pArchive->szArchivePath)) {
+            return 0;
+        }
+        if ((pFile->pBlockEntry->dwFlags & 0x10000) != 0) {
+            SFILE_Decrypt(pFile->pSectorTable, nTableRead, pFile->nDecryptKey - 1);
+        }
+        uint32_t nIndex = 0;
+        while (true) {
+            if (pFile->nSectorCount <= nIndex) {
+                pFile->bSectorsLoaded = 1;
+                pBlock = pFile->pBlockEntry;
+                cCompress = (uint8_t)(pBlock->dwFlags >> 8);
+                break;
+            }
+            if (pFile->pSectorTable[nIndex] > pFile->pSectorTable[nIndex + 1]) {
+                return 0;
+            }
+            nIndex++;
+        }
+    }
+
+    uint8_t* pReadBuffer = pDstBuf;
+    uint32_t nToRead = nReadLen;
+    uint32_t nBaseOffset = nFileOffset;
+    if (cCompress != 0) {
+        uint32_t nSector = pFile->pArchive->nSectorSize;
+        nBaseOffset = pFile->pSectorTable[nFileOffset / nSector];
+        nToRead = pFile->pSectorTable[(nReadLen + nFileOffset) / nSector] - nBaseOffset;
+        pReadBuffer = (uint8_t*)SMemAlloc(nToRead + 4, SFILE_FILE, 0x360, 0x10000000);
+        pBlock = pFile->pBlockEntry;
+    }
+    nResult = nReadLen;
+    uint32_t nBytesGot = 0;
+    pArchive = pFile->pArchive;
+    SFILE_ReadFileChecked(pBlock->dwFilePos + nBaseOffset, &pArchive->nFilePos, pArchive->hFile, pReadBuffer,
+                          nToRead, &nBytesGot, pArchive->szArchivePath);
+    uint32_t dwFlags = pFile->pBlockEntry->dwFlags;
+    if (nBytesGot < nToRead) {
+        if ((uint8_t)(dwFlags >> 8) == 0) {
+            nResult = nBytesGot;
+        } else {
+            uint32_t nSector = pFile->pArchive->nSectorSize;
+            nResult = 0;
+            uint32_t nIndex = nFileOffset / nSector + 1;
+            while (nIndex <= pFile->nSectorCount) {
+                if (nBytesGot < pFile->pSectorTable[nIndex] - nBaseOffset) {
+                    break;
+                }
+                nResult += nSector;
+                nIndex++;
+            }
+        }
+    }
+    if ((dwFlags & 0x10000) != 0) {
+        uint32_t nSectors = pFile->nSectorCount;
+        uint32_t nSector = pFile->pArchive->nSectorSize;
+        uint32_t nIndex = nFileOffset / nSector;
+        if (nIndex < nSectors) {
+            int nPos = 0;
+            int nCountdown = -(int)(((nResult - 1) + nSector) / nSector);
+            do {
+                if (nCountdown == 0) {
+                    break;
+                }
+                uint32_t nLength;
+                if ((uint8_t)(pFile->pBlockEntry->dwFlags >> 8) == 0) {
+                    uint32_t nSectorSize = pFile->pArchive->nSectorSize;
+                    uint32_t nLeft = nResult - nPos;
+                    if (nSectorSize < nLeft) {
+                        nLeft = nSectorSize;
+                    }
+                    nLength = nLeft;
+                    if (nIndex == nSectors - 1) {
+                        uint32_t nTail = (nSectorSize - 1) & pFile->pBlockEntry->dwFileSize;
+                        if (nTail != 0) {
+                            nLength = nTail;
+                            if (nLeft < nTail) {
+                                nLength = nLeft;
+                            }
+                        }
+                    }
+                } else {
+                    nLength = pFile->pSectorTable[nIndex + 1] - pFile->pSectorTable[nIndex];
+                }
+                SFILE_Decrypt((uint32_t*)(pReadBuffer + nPos), nLength & 0xfffffffc, pFile->nDecryptKey + nIndex);
+                nPos += nLength;
+                nCountdown++;
+                nIndex++;
+                nSectors = pFile->nSectorCount;
+            } while (nIndex < nSectors);
+        }
+        dwFlags = pFile->pBlockEntry->dwFlags;
+    }
+    if ((uint8_t)(dwFlags >> 8) != 0) {
+        uint32_t nSectors = pFile->nSectorCount;
+        uint32_t nSector = pFile->pArchive->nSectorSize;
+        uint32_t nIndex = nFileOffset / nSector;
+        if (nIndex < nSectors) {
+            int nCountdown = -(int)(((nResult - 1) + nSector) / nSector);
+            int nSrcPos = 0;
+            int nDstPos = 0;
+            do {
+                if (nCountdown == 0) {
+                    break;
+                }
+                uint32_t nCompressedLen = pFile->pSectorTable[nIndex + 1] - pFile->pSectorTable[nIndex];
+                bool bLast = nIndex == nSectors - 1;
+                nIndex++;
+                D2ArchiveStrc* pMpq;
+                uint32_t nExpected;
+                if (bLast) {
+                    pMpq = pFile->pArchive;
+                    nExpected = pMpq->nSectorSize;
+                    uint32_t nFileSize = pFile->pBlockEntry->dwFileSize;
+                    if (nFileSize == 0 || (nFileSize & (nExpected - 1)) != 0) {
+                        nExpected = (nExpected - 1) & nFileSize;
+                    }
+                } else {
+                    pMpq = pFile->pArchive;
+                    nExpected = pMpq->nSectorSize;
+                }
+                if (nCompressedLen < nExpected) {
+                    uint32_t nMethod = pFile->pBlockEntry->dwFlags & 0xff00;
+                    if (nMethod == 0x200) {
+                        if (pFile->bChecksumEnabled != 0 && pFile->nChecksumState != 1 &&
+                            0x3f < pReadBuffer[nSrcPos]) {
+                            pFile->nChecksumState = 1;
+                        }
+                        uint32_t nDestSize = nExpected;
+                        if (SCompDecompress(pDstBuf + nDstPos, &nDestSize, pReadBuffer + nSrcPos, nCompressedLen,
+                                            pMpq->szArchivePath) == 0) {
+                            SErrDisplayError(0x85100083, pFile->pArchive->szArchivePath, -4, NULL, 0, 1);
+                        }
+                    } else if (nMethod == 0x100) {
+                        pthread_mutex_lock(&s_tQueueLock.m_tMutex);
+                        SFileBlastContext tContext;
+                        tContext.pInput = pReadBuffer + nSrcPos;
+                        tContext.nOutOffset = 0;
+                        tContext.nOutLimit = 0xffffffff;
+                        tContext.n10 = 0;
+                        tContext.pOutput = pDstBuf + nDstPos;
+                        tContext.nInSize = nCompressedLen;
+                        blast((PFNBLASTREAD)SFILE_DecompressReadCallback, &tContext,
+                              (PFNBLASTWRITE)SFILE_DecompressWriteCallback, &tContext);
+                        pthread_mutex_unlock(&s_tQueueLock.m_tMutex);
+                    }
+                } else if (pReadBuffer != pDstBuf && 0 < (int)nExpected) {
+                    memmove(pDstBuf + nDstPos, pReadBuffer + nSrcPos, nExpected);
+                }
+                nSrcPos += nCompressedLen;
+                nDstPos += nExpected;
+                nCountdown++;
+                nSectors = pFile->nSectorCount;
+            } while (nIndex < nSectors);
+        }
+    }
+    if (pReadBuffer != pDstBuf) {
+        SMemFree(pReadBuffer, SFILE_FILE, 0x3cd, 0);
+    }
+    return nResult;
 }
 #endif  // D2_OS_MAC

@@ -21,6 +21,9 @@ struct D2StormAsyncOpStrc;
 struct D2SsigContextStrc;
 // The Mac DirectSound shim's buffer (Storm::IDirectSoundBuffer); only the call this file makes.
 struct IDirectSoundBuffer {
+    int SetVolume(int nVolume);
+    int SetPan(int nPan);
+    int SetCurrentPosition(DWORD dwPosition);
     int GetCurrentPosition(DWORD* pdwPlayCursor, DWORD* pdwWriteCursor);
     int Release();
 };
@@ -93,7 +96,7 @@ struct D2MPQFileStrc {
     uint32_t nSectorCount;                   // 0x128
     uint32_t* pSectorTable;                  // 0x12C
     BOOL bSectorsLoaded;                     // 0x130
-    D2StormAudioStreamRec* pStream;          // 0x134
+    BOOL bStreamActive;                      // 0x134  a DirectSound stream reads this file
     void* pReadBuffer;                       // 0x138
     uint32_t nBytesRead;                     // 0x13C
     uint32_t nBufferSize;                    // 0x140
@@ -160,7 +163,16 @@ typedef char D2MPQ_size_file[(sizeof(D2MPQFileStrc) == 0x158) ? 1 : -1];
 typedef char D2MPQ_size_stream[(sizeof(D2StormAudioStreamRec) == 0x50) ? 1 : -1];
 typedef char D2MPQ_size_async[(sizeof(D2StormAsyncOpStrc) == 0x44) ? 1 : -1];
 
+// The Mac DirectSound shim's device (Storm::IDirectSound).
+struct IDirectSound {
+    int CreateSoundBuffer(const void* pDescription, IDirectSoundBuffer** ppBuffer);
+};
+
 // ---- the entry points of the other Storm files this one calls ----
+int SCompDecompress(void* pDest, uint32_t* pnDestSize, const void* pSource, uint32_t nSourceSize,
+                    const char* szArchivePath);
+int blast(unsigned (*pfnRead)(void* pState, void** ppData), void* pReadParam,
+          int (*pfnWrite)(void* pState, void* pData, size_t nSize), void* pWriteParam);
 void SErrSetLastError(DWORD dwErrCode);
 void SErrReportResourceLeak(const char* szType);
 void SErrReportNamedResourceLeak(const char* szType, const char* szName);
