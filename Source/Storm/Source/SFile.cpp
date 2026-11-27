@@ -372,7 +372,7 @@ static uint32_t __stdcall SFILE_SearchHashTable(D2ArchiveStrc * pArchive, int16_
 
 void __thiscall SFILE_ShiftSectorTable(D2MPQBlockEntryStrc * pSectorTable, uint32_t nSectorCount) {
     int nSectorsLeft;
-    uint8_t* pSrc = pSectorTable->abMD5 + ((nSectorCount << 4) - 0x2c);
+    uint8_t* pSrc = pSectorTable->abMD5 + ((int)(nSectorCount << 4) - 0x2c);
     D2MPQBlockEntryStrc* pDst = pSectorTable + (nSectorCount - 1);
     if (nSectorCount > 1) {
       uint8_t* pDstExtra;
