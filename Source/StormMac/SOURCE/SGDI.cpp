@@ -39,7 +39,8 @@ void* g_pSGdiScratchBuffer;
 // 1.14d mac: 003f06f8
 int g_nSGdiScratchBufferSize;
 
-int SGDI_ResizeScratchBuffer(int nSize);
+// The callers outside this band pass the size in a register.
+int __attribute__((fastcall, noinline)) SGDI_ResizeScratchBuffer(int nSize);
 
 // The instantiations clang-425 emitted into this file's object (stpl.h):
 // 1.14d mac: 00017a82 TSLinkList<SGdiObject>::~TSLinkList[D1]
@@ -91,7 +92,8 @@ int SGdiDestroy(void) {
 // 1.14d mac: 000179e0
 // Called with other sizes by the drawing calls of this file that are not in this band.
 int SGDI_ResizeScratchBuffer(int nSize) {
-    if (g_nSGdiScratchBufferSize < nSize || nSize == 0) {
+    bool bFree = nSize == 0;
+    if (g_nSGdiScratchBufferSize < nSize || bFree) {
         if (g_pSGdiScratchBuffer) {
             SMemFree(g_pSGdiScratchBuffer, SGDI_FILE, 79, 0);
             g_pSGdiScratchBuffer = NULL;

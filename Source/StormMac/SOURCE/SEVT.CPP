@@ -89,11 +89,11 @@ static uint32_t s_bTablesChanged;
 // 1.14d mac: 003f04fc
 static LONG s_nDispatchDepth;
 
-static SEvtType* SEVT_FindType(uint32_t dwEventId, uint32_t dwSubId) {
+static inline __attribute__((always_inline)) SEvtType* SEVT_FindType(uint32_t dwEventId, uint32_t dwSubId) {
     if (s_ppTypes == NULL || s_nTypeBuckets == 0) {
         return NULL;
     }
-    for (SEvtType* pType = s_ppTypes[(s_nTypeBuckets - 1) & (dwSubId ^ dwEventId)]; pType != NULL;
+    for (SEvtType* pType = s_ppTypes[(s_nTypeBuckets - 1) & (dwEventId ^ dwSubId)]; pType != NULL;
          pType = pType->pNext) {
         if (pType->dwEventId == dwEventId && pType->dwSubId == dwSubId) {
             return pType;
@@ -271,15 +271,19 @@ BOOL SEvtUnregisterType(uint32_t nEventId, uint32_t nSubId) {
             SEVT_DeleteIdHashTable(pTable);
             pTable = pType->pHandlers;
         }
-        SEvtType** ppLink = &s_ppTypes[(s_nTypeBuckets - 1) & (nSubId ^ nEventId)];
-        while (*ppLink != NULL) {
-            if (*ppLink == pType) {
-                *ppLink = pType->pNext;
+        SEvtType** ppLink = &s_ppTypes[(s_nTypeBuckets - 1) & (nEventId ^ nSubId)];
+        SEvtType* pCursor = *ppLink;
+        while (pCursor != NULL) {
+            SEvtType* pNext = pCursor->pNext;
+            if (pCursor == pType) {
+                *ppLink = pNext;
                 delete pType;
                 s_nTypes--;
-                break;
+                pCursor = *ppLink;
+            } else {
+                ppLink = &pCursor->pNext;
+                pCursor = pNext;
             }
-            ppLink = &(*ppLink)->pNext;
         }
         s_bTablesChanged = 1;
         bRemoved = 1;
@@ -291,13 +295,14 @@ BOOL SEvtUnregisterType(uint32_t nEventId, uint32_t nSubId) {
 // 1.14d mac: 00011504
 // Drops the current handler table and goes back to the one pushed before it; without one
 // the event type goes.
-void SEvtPopState(uint32_t nEventId, uint32_t nSubId) {
+BOOL SEvtPopState(uint32_t nEventId, uint32_t nSubId) {
     pthread_mutex_lock(&s_tEventMutex);
+    BOOL bResult = 0;
     SEvtType* pType = SEVT_FindType(nEventId, nSubId);
     if (pType != NULL) {
         SEvtHandlerTable* pPrevious = pType->pHandlers->pPrev;
         if (pPrevious == NULL) {
-            SEvtUnregisterType(nEventId, nSubId);
+            bResult = SEvtUnregisterType(nEventId, nSubId);
         } else {
             SEVT_DeleteIdHashTable(pType->pHandlers);
             pType->pHandlers = pPrevious;
@@ -305,6 +310,7 @@ void SEvtPopState(uint32_t nEventId, uint32_t nSubId) {
     }
     s_bTablesChanged = 1;
     pthread_mutex_unlock(&s_tEventMutex);
+    return bResult;
 }
 
 // 1.14d mac: 0001169c
@@ -380,7 +386,7 @@ BOOL SEvtRegisterHandler(uint32_t dwEventId, uint32_t dwSubId, uint32_t dwKey, i
         s_ppTypes = ppBuckets;
         s_nTypeBuckets = nBuckets;
         SEvtType* pNew = (SEvtType*)SMemAlloc(0x14, SEVT_FILE, 0x15f, 8);
-        uint32_t nHome = (s_nTypeBuckets - 1) & (dwSubId ^ dwEventId);
+        uint32_t nHome = (s_nTypeBuckets - 1) & (dwEventId ^ dwSubId);
         pNew->dwEventId = dwEventId;
         pNew->dwSubId = dwSubId;
         pNew->pHandlers = (SEvtHandlerTable*)SMemAlloc(0x10, SEVT_FILE, 0x162, 8);

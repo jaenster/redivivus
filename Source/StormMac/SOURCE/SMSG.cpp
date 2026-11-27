@@ -89,9 +89,8 @@ int SMsgBreakHandlerChain(void* pData) {
 
 // 1.14d mac: 00018ce4
 int SMsgDestroy(void) {
-    SMsgWindowRecord* pRecord;
-    while ((pRecord = s_tWindowList.Head()) != NULL) {
-        SMSG_DeleteWindow(pRecord->hWnd);
+    while (!TSLink<SMsgWindowRecord>::IsTerminator(s_tWindowList.m_terminator.m_next)) {
+        SMSG_DeleteWindow(s_tWindowList.m_terminator.m_next->hWnd);
     }
     return 1;
 }
@@ -269,12 +268,15 @@ void SMsgUnregisterMessage(void* hWindow, uint32_t nMessage, void* pfnHandler) {
 
 // 1.14d mac: 00019235
 static SMsgWindowRecord* SMSG_FindWindow(void* hWnd) {
-    for (SMsgWindowRecord* pRecord = s_tWindowList.Head(); pRecord; pRecord = s_tWindowList.Next(pRecord)) {
+    SMsgWindowRecord* pFound = NULL;
+    for (SMsgWindowRecord* pRecord = s_tWindowList.Head(); !TSLink<SMsgWindowRecord>::IsTerminator(pRecord);
+         pRecord = s_tWindowList.Link(pRecord)->m_next) {
         if (pRecord->hWnd == hWnd) {
-            return pRecord;
+            pFound = pRecord;
+            break;
         }
     }
-    return NULL;
+    return pFound;
 }
 
 #endif  // D2_OS_MAC
