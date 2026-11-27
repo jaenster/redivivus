@@ -72,7 +72,7 @@ static void* RESOURCE_FindEntry(unsigned int nTypeOrName, const char* szTypeArg,
             int nOffset;
             if ((short)pEntry[2] == -1) {
                 szEntryType[0] = '\0';
-                nEntryTypeId = *(short*)((char*)pEntry + 10);
+                nEntryTypeId = ((short*)pEntry)[5];
                 nOffset = 4;
             } else {
                 szEntryType[0] = (char)(short)pEntry[2];
@@ -168,7 +168,7 @@ UINT LoadString(HANDLE hInstance, UINT uID, char* szBuffer, int nBufferMax) {
             }
             if ((int)nCopied > 0) {
                 for (UINT n = nCopied; n != 0; n--) {
-                    pString += 2;
+                    pString += sizeof(short);
                     *szBuffer++ = *pString;
                 }
             }

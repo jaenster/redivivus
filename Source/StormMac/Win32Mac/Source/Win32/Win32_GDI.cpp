@@ -933,7 +933,7 @@ HDC GetDC(void* hWnd) {
         if (hDC != NULL) {
             Win32MacDCData* pDC = LockDC(hDC);
             Wnd_CalculateVisibleRgn(hWnd, pDC->hClipRgn, 1);
-            HFONT hWindowFont = *(HFONT*)((char*)hWnd + 0x80);
+            HFONT hWindowFont = ((const Win32MacWindowFontView*)hWnd)->hFont;
             if (hWindowFont != NULL) {
                 pDC->hFont = hWindowFont;
             }
@@ -1234,16 +1234,16 @@ BOOL GetTextMetrics(HDC hDC, Win32MacTextMetrics* pMetrics) {
     Win32MacDCData* pDC = LockDC(hDC);
     Win32MacFont* pFont = (Win32MacFont*)Mem_HandleLock(GDI_TYPE_FONT, pDC->hFont);
     LONG* pnMetrics = (LONG*)pMetrics;
-    memset(pnMetrics, 0, 0x38);
+    memset(pnMetrics, 0, sizeof(*pMetrics));
     pnMetrics[0] = pFont->nDescent + pFont->nAscent;
     pnMetrics[1] = pFont->nAscent;
     pnMetrics[2] = pFont->nDescent;
     pnMetrics[3] = 0;
     pnMetrics[4] = pFont->nAveWidth;
     pnMetrics[7] = (pFont->nStyle & 1) ? 700 : 400;
-    ((BYTE*)pnMetrics)[0x30] = (pFont->nStyle >> 1) & 1;
-    ((BYTE*)pnMetrics)[0x31] = (pFont->nStyle >> 2) & 1;
-    ((BYTE*)pnMetrics)[0x33] = 4;
+    pMetrics->tmItalic = (pFont->nStyle >> 1) & 1;
+    pMetrics->tmUnderlined = (pFont->nStyle >> 2) & 1;
+    pMetrics->tmPitchAndFamily = 4;
     Mem_HandleUnLock(GDI_TYPE_FONT, pDC->hFont);
     UnlockDC(hDC);
     return 1;

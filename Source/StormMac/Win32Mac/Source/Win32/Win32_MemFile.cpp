@@ -73,7 +73,7 @@ void* AllocateMemFile2(int nSize, BYTE bZero) {
                 ExitProcess(0xFFFFFFFF);
             } else {
                 MemFile2* pFile = (MemFile2*)pHeader;
-                SMemZero(pHeader, 0x9C);
+                SMemZero(pHeader, sizeof(MemFile2));
                 pFile->pData = pData;
                 pFile->dwFlags = (DWORD)bZero << 2 | pFile->dwFlags | 1;
                 pFile->nSize = nSize;

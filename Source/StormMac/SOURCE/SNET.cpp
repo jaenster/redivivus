@@ -519,7 +519,7 @@ static void SNET_ConnSendPacket(SNetConn* pConn, SNetPacketHdr* pPacket) {
                 goto done;
             }
             *g_pSendBuffer = (int)(g_pSendBuffer + 0x10);
-            SMemCopy(g_pSendBuffer + 0x10, pAddress, 0x10);
+            SMemCopy(g_pSendBuffer + 0x10, pAddress, sizeof(SNetAddress));
             SMemCopy(g_pSendBuffer + 0x50, pPacket, nSize);
             pSendData = (SNetPacketHdr*)(g_pSendBuffer + 0x50);
         }
@@ -540,7 +540,7 @@ SNET_NOINLINE static SNetPacket* SNET_ConnSendMessage(SNetConn* pConn, uint32_t 
     SNetConn* pLocalConn = SNET_LOCALCONN();
     if (pLocalConn == NULL) {
         SNetAddress tZero;
-        SMemZero(&tZero, 0x10);
+        SMemZero(&tZero, sizeof(tZero));
         pLocalConn = SNET_CreateConnection(&g_tLocalConnList, &tZero);
     }
     SNetPacket* pNode = NULL;
@@ -548,14 +548,14 @@ SNET_NOINLINE static SNetPacket* SNET_ConnSendMessage(SNetConn* pConn, uint32_t 
         return NULL;
     }
     uint32_t nBytes = nPayloadSize + 12;
-    void* pMem = SMemAlloc(0x10, SNET_FILE, 0x52F, 0);
+    void* pMem = SMemAlloc(sizeof(SNetAddress), SNET_FILE, 0x52F, 0);
     SNetAddress* pAddress = pMem ? (SNetAddress*)pMem : NULL;
     size_t nAlloc = (4 - (nBytes & 3)) + nBytes;
     if (nAlloc < 5) {
         nAlloc = 4;
     }
     SNetPacketHdr* pPacket = (SNetPacketHdr*)SMemAlloc(nAlloc, SNET_FILE, 0x531, 0);
-    SMemCopy(pAddress, &pConn->tAddress, 0x10);
+    SMemCopy(pAddress, &pConn->tAddress, sizeof(SNetAddress));
     pPacket->wSize = (uint16_t)nBytes;
     pPacket->wAck = pConn->aAckSeq[nType];
     pPacket->byType = (uint8_t)nType;
@@ -626,7 +626,7 @@ static void SNET_ConnResendMessage(SNetConn* pConn, SNetPacketHdr* pData, uint32
 // 1.14d mac: 0001a43f
 static SNetConn* SNET_CreateConnection(TSList<SNetConn>* pConnList, SNetAddress* pAddress) {
     SNetConn* pConn = pConnList->NewNode(STORM_LIST_LINK_BEFORE, 0, 0);
-    SMemCopy(&pConn->tAddress, pAddress, 0x10);
+    SMemCopy(&pConn->tAddress, pAddress, sizeof(SNetAddress));
     *(uint16_t*)&pConn->byPlayerId = 0xFFFF;
     pConn->dwLastReceiveTime = GetTickCount();
     return pConn;
@@ -720,7 +720,7 @@ BOOL SNetLeaveGame(DWORD dwExitCode) {
         SNetConn* pLocalConn = SNET_LOCALCONN();
         if (pLocalConn == NULL) {
             SNetAddress tZero;
-            SMemZero(&tZero, 0x10);
+            SMemZero(&tZero, sizeof(tZero));
             pLocalConn = SNET_CreateConnection(&g_tLocalConnList, &tZero);
         }
         if (pLocalConn != NULL) {

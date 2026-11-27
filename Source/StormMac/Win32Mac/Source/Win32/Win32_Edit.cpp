@@ -1454,7 +1454,7 @@ static void Edit_RestoreEditDataBackup(HWND hWnd, Win32MacEditData* pEdit,
         nCapacity = pBackup->nCapacity;
         pText = (char*)Priv_Alloc(nCapacity);
     }
-    memcpy(pEdit, pBackup, 0x48);
+    memcpy(pEdit, pBackup, offsetof(Win32MacEditData, pText));
     pEdit->nLines = nLines;
     pEdit->pLines = pLines;
     pEdit->nCapacity = nCapacity;

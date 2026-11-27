@@ -107,7 +107,7 @@ void Sha1_Append(Sha1* pContext, const uint8_t* pData, uint32_t nSize) {
     }
     while (nSize > 0x3f) {
         Sha1_Pump(pContext->aState, pData);
-        pData += 0x40;
+        pData += sizeof(pContext->abyBlock);
         nSize -= 0x40;
     }
     nFilled = 0;

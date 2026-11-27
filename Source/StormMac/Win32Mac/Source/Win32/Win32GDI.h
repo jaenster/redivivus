@@ -139,6 +139,13 @@ struct Win32MacDCData {
 };
 WIN32MAC_LAYOUT(Win32MacDCData_size, sizeof(Win32MacDCData) == 0x48);
 
+// The one field of a window record (Win32MacWindow, Win32MacWindow.h) the GDI reads: the window font.
+struct Win32MacWindowFontView {
+    BYTE pad00[0x80];
+    HFONT hFont;  // 0x80
+};
+WIN32MAC_LAYOUT(Win32MacWindowFontView_font, offsetof(Win32MacWindowFontView, hFont) == 0x80);
+
 // The rectangle functions (Win32_Rect.cpp).
 // 1.14d mac: 0002b25d
 BOOL SetRect(RECT* pRect, int nLeft, int nTop, int nRight, int nBottom);

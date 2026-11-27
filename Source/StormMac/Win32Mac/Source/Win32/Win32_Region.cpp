@@ -326,8 +326,8 @@ static void Rgn_CombineRgns(int hDest, int hSrc1, int hSrc2, pfnStripRgnBandProc
     }
     StripRgn* pRgn1 = Rgn_Lock(hSrc1);
     StripRgn* pRgn2 = Rgn_Lock(hSrc2);
-    StripRect* pBand2Last = (StripRect*)((char*)pRgn2 + pRgn2->nRects * 0x10 + 0xc);
-    StripRect* pBand1Last = (StripRect*)((char*)pRgn1 + pRgn1->nRects * 0x10 + 0xc);
+    StripRect* pBand2Last = &pRgn2->aRects[pRgn2->nRects - 1];
+    StripRect* pBand1Last = &pRgn1->aRects[pRgn1->nRects - 1];
     StripRect* pBand1 = pRgn1->aRects;
     StripRect* pBand2 = pRgn2->aRects;
     bool bStarted = false;
@@ -427,7 +427,7 @@ static void Rgn_CombineRgns(int hDest, int hSrc1, int hSrc2, pfnStripRgnBandProc
     StripRgn* pScratch = Rgn_Lock(hScratch);
     if (pScratch->nRects > 1) {
         StripRect* pFirst = pScratch->aRects;
-        StripRect* pLast = (StripRect*)((char*)pScratch + pScratch->nRects * 0x10 + 0xc);
+        StripRect* pLast = &pScratch->aRects[pScratch->nRects - 1];
         bool bMerged = false;
         StripRect* pPrev = pFirst;
         StripRect* pCur = pFirst;

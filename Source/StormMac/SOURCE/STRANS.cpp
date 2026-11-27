@@ -316,7 +316,7 @@ int UTF8_ToUTF16(short* pszUTF16Out, int nOutMaxChars, uint8_t* pbUTF8In, int nI
             nCodepoint -= 0x10000;
             pOut[0] = (short)((nCodepoint >> 10) - 0x2800);
             pOut[1] = (nCodepoint & 0x3ff) | 0xdc00;
-            pOut += 2;
+            pOut += sizeof(uint32_t) / sizeof(uint16_t);
         } else {
             *pOut++ = 0xfffd;
         }

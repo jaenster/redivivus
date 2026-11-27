@@ -32,8 +32,14 @@ typedef Win32MacDC* HDC;
 struct Win32MacTextMetrics {
     LONG tmHeight;
     LONG tmAscent;
-    LONG aOther[13];
+    LONG aOther[10];
+    BYTE tmItalic;           // 0x30
+    BYTE tmUnderlined;       // 0x31
+    BYTE tmStruckOut;        // 0x32
+    BYTE tmPitchAndFamily;   // 0x33
+    LONG nTail;              // 0x34
 };
+static_assert(sizeof(void*) != 4 || sizeof(Win32MacTextMetrics) == 0x38, "Win32MacTextMetrics");
 
 // The Mac port GDI_SetUpMacPort saves and GDI_RestoreMacPort puts back.
 struct Win32MacSavedPort {

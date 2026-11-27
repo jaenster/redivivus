@@ -53,12 +53,12 @@ void fpFillYBufferTable(void* pBits, int nPitch, int nHeight, int n0C) {
 // 1.14d mac: 002b1913
 // Takes a copy of the palette-table set and of its 49 shift tables.
 void PALETTE_InitColorLookupTables(uint8_t** ppPaletteTables) {
-    SMemCopy(g_apPaletteTables, ppPaletteTables, 0x120);
+    SMemCopy(g_apPaletteTables, ppPaletteTables, sizeof(g_apPaletteTables));
     g_ppPaletteTables = g_apPaletteTables;
     int nOffset = 0;
     uint8_t** ppShift = &g_apPaletteTables[3];
     do {
-        SMemCopy(&g_abShiftTables[0][0] + nOffset, *ppShift, 0x100);
+        SMemCopy(&g_abShiftTables[0][0] + nOffset, *ppShift, sizeof(g_abShiftTables[0]));
         ppShift++;
         nOffset += 0x100;
     } while (nOffset != 0x3100);

@@ -100,7 +100,7 @@ BOOL MSG_PeekQueuedMessage(MsgRing* pRing, MSG* pMsg, BOOL bRemove, UINT nMsgMin
 void Msg_RemoveMsgsForHWnd(MsgRing* pRing, HWND hWnd) {
     for (int i = pRing->nHead; i != pRing->nTail;) {
         if (pRing->aMsgs[i].hwnd == hWnd) {
-            memset(&pRing->aMsgs[i], 0, 4 * sizeof(DWORD));
+            memset(&pRing->aMsgs[i], 0, offsetof(MSG, time));
         }
         if (++i >= MSGRING_SIZE) {
             i = 0;

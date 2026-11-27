@@ -102,7 +102,7 @@ short GetAsyncKeyState(BYTE byVirtKey) {
     if ((abKeyMap[uByte] >> uBit) & 1) {
         wResult = ((s_abKeyMap[uByte] & (1 << uBit)) != 0) | 0x8000;
     }
-    SMemCopy(s_abKeyMap, abKeyMap, 0x10);
+    SMemCopy(s_abKeyMap, abKeyMap, sizeof(s_abKeyMap));
     return (short)wResult;
 }
 

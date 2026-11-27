@@ -319,12 +319,13 @@ uint32_t SStrHashHT(const char* szText) {
 
     uint32_t nLeft = nLen;
     const uint8_t* p = szUpper;
-    while (nLeft >= 12) {
+    const uint32_t kJenkinsBlock = 3 * sizeof(uint32_t);
+    while (nLeft >= kJenkinsBlock) {
         a += *(const uint32_t*)(p + 0);
         b += *(const uint32_t*)(p + 4);
         c += *(const uint32_t*)(p + 8);
         SSTR_JENKINS_MIX(a, b, c);
-        p += 12;
+        p += kJenkinsBlock;
         nLeft -= 12;
     }
     c += nLen;

@@ -120,6 +120,8 @@ struct IDirectSoundBuffer {
 WIN32MAC_LAYOUT(IDirectSoundBuffer_size, sizeof(IDirectSoundBuffer) == 0xAC);
 WIN32MAC_LAYOUT(IDirectSoundBuffer_header, offsetof(IDirectSoundBuffer, tHeader) == 0x64);
 WIN32MAC_LAYOUT(IDirectSoundBuffer_frames, offsetof(IDirectSoundBuffer, tHeader.nFrames) == 0x7A);
+// WAVEFORMATEX as the buffer stores it: wFormatTag through cbSize.
+static const size_t kWaveFormatBytes = offsetof(IDirectSoundBuffer, pad2A) - offsetof(IDirectSoundBuffer, wFormatTag);
 
 // 1.14d mac: 003f481c
 // The tick count when the minimum-volume time was set.
@@ -340,7 +342,7 @@ int32_t IDirectSound_CreateSoundBuffer(IDirectSound* pDirectSound, const uint32_
         pBuffer->pDirectSound = pDirectSound;
         if ((dwFlags & DSBCAPS_PRIMARYBUFFER_) == 0) {
             const WORD* pFormat = (const WORD*)pBufferDesc[4];
-            memcpy(&pBuffer->wFormatTag, pFormat, 18);
+            memcpy(&pBuffer->wFormatTag, pFormat, kWaveFormatBytes);
             SoundData* pData = (SoundData*)operator new(12);
             int nSize = pBufferDesc[2];
             pData->nSize = nSize;
@@ -550,7 +552,7 @@ int32_t IDirectSoundBuffer_Play(IDirectSoundBuffer* pBuffer, DWORD dwReserved1, 
                 pBuffer->tHeader.nBaseFreq = 0x3c;
                 pBuffer->tHeader.nFrames = (pBuffer->pData->nSize / pBuffer->nChannels) / (pBuffer->wBitsPerSample >> 3);
                 long double fRate = (double)pBuffer->nSamplesPerSec;
-                memcpy(pBuffer->tHeader.aSampleRate, &fRate, 10);
+                memcpy(pBuffer->tHeader.aSampleRate, &fRate, sizeof(pBuffer->tHeader.aSampleRate));
                 pBuffer->tHeader.nMarkerChunk = 0;
                 pBuffer->tHeader.nInstruments = 0;
                 pBuffer->tHeader.nSampleSize = pBuffer->wBitsPerSample;
@@ -727,7 +729,7 @@ int32_t IDirectSoundBuffer_SetFormat(IDirectSoundBuffer* pBuffer, const void* pF
     if (pFormat != 0) {
         hResult = DSERR_INVALIDCALL_;
         if (s_pPrimaryBuffer == pBuffer) {
-            memcpy(&pBuffer->wFormatTag, pFormat, 18);
+            memcpy(&pBuffer->wFormatTag, pFormat, kWaveFormatBytes);
             hResult = 0;
         }
     }

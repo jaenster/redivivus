@@ -396,7 +396,7 @@ void BigBuffer_MulMod(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigBuffe
 
 // 1.14d mac: 0000b032
 void SBigNew(BigData** ppBigData) {
-    BigData* pBigNum = (BigData*)SMemAlloc(0x168, SBIG_FILE, 0x51e, 0);
+    BigData* pBigNum = (BigData*)SMemAlloc(sizeof(BigData), SBIG_FILE, 0x51e, 0);
     BigData* pResult = NULL;
     if (pBigNum != NULL) {
         pBigNum->tResult.nCount = 0;
@@ -861,9 +861,9 @@ void TSGrowableArray_Ui_Reserve(BigBuffer* pArray, int nCount, int bRound) {
 void TSBaseArray_Ui_ReallocData(BigBuffer* pArray, uint32_t nNewMax) {
     uint32_t* pBlock = pArray->pData;
     pArray->nCapacity = nNewMax;
-    pArray->pData = (uint32_t*)SMemReAlloc(pBlock, nNewMax * 4, "nothing", -2, 0x10);
+    pArray->pData = (uint32_t*)SMemReAlloc(pBlock, nNewMax * sizeof(uint32_t), "nothing", -2, 0x10);
     if (pArray->pData == NULL) {
-        uint32_t* pNew = (uint32_t*)SMemAlloc(nNewMax * 4, "nothing", -2, 0);
+        uint32_t* pNew = (uint32_t*)SMemAlloc(nNewMax * sizeof(uint32_t), "nothing", -2, 0);
         pArray->pData = pNew;
         if (pBlock != NULL) {
             uint32_t nKeep = pArray->nCount;
@@ -954,7 +954,7 @@ void TSFixedArray_Ui_Set(BigBuffer* pArray, int nCount, const uint32_t* pSrc) {
 void TSFixedArray_Ui_ReallocData(BigBuffer* pArray, int nCount) {
     pArray->nCapacity = nCount;
     if (pArray->pData != NULL || nCount != 0) {
-        pArray->pData = (uint32_t*)SMemReAlloc(pArray->pData, nCount << 2, "nothing", -2, 0);
+        pArray->pData = (uint32_t*)SMemReAlloc(pArray->pData, nCount * sizeof(uint32_t), "nothing", -2, 0);
     }
 }
 

@@ -296,7 +296,10 @@ struct MacDisplayState {
     uint8_t b0B;
     uint8_t b0C;
     uint8_t b0D;
+    uint8_t unk0E[0x211 - 0x0E];
+    void* pfnHook __attribute__((packed));  // 0x211
 };
+static_assert(sizeof(void*) != 4 || offsetof(MacDisplayState, pfnHook) == 0x211, "MacDisplayState::pfnHook");
 // 1.14d mac: 005c8660
 extern MacDisplayState g_tMacDisplayState;
 // 1.14d mac: 005c8a38
@@ -1257,7 +1260,7 @@ static Boolean FUN_0019bed3(void) {
         BINK_SetMemory((void* (*)(size_t))GAMESETUP_Alloc, GAMESETUP_Free);
         g_nMacAppMode = 4;
         g_tMacDisplayState.b0B = 1;
-        *(void**)((char*)&g_tMacDisplayState + 0x211) = (void*)FUN_0019c7d9;
+        g_tMacDisplayState.pfnHook = (void*)FUN_0019c7d9;
         MAC_DisableMenus();
         if (MAC_PromptForGameDisc()) {
             BOOL bGameExpansion = D2CheckExpansionGame();
@@ -1694,7 +1697,7 @@ static uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent) {
         uint16_t wModifiers = pEvent->modifiers;
         if (s_wLastModifiers != wModifiers) {
             EventRecord tSynth;
-            memset(&tSynth, 0, 6);
+            memset(&tSynth, 0, sizeof(tSynth.what) + sizeof(tSynth.message));
             tSynth.message = 0;
             tSynth.when = pEvent->when;
             tSynth.where = pEvent->where;
@@ -2026,7 +2029,7 @@ static uint8_t MAC_HandleMenuSelection(uint32_t nMenuResult) {
         case 1:
             break;
         case 3:
-            SMemZero(bBuffer, 0x3CD);
+            SMemZero(bBuffer, sizeof(bBuffer));
             return 0;
         case 4:
             g_bMacMenuToggle = g_bMacMenuToggle == 0;
@@ -2076,7 +2079,7 @@ int MAC_CountMultiByteChars(const char* pText, int nBytes) {
         nCount++;
         if (CharacterByteType((Ptr)pText, 0, nScript) == -1) {
             nBytes -= 2;
-            pText += 2;
+            pText += sizeof(uint16_t);
         } else {
             nBytes -= 1;
             pText += 1;
@@ -2455,7 +2458,7 @@ void MAC_ParseCommandLine(MacDisplayState* pConfig, const char* szCommandLine) {
                                 break;
                             }
                             nCompare = strcmp(pszName, szSwitchName);
-                            pszName += 0x5C;
+                            pszName += sizeof(g_aMacSwitches[0]);
                         } while (nCompare != 0);
                         if (nSwitchIndex != 0xFFFFFFFF) {
                             bSearching = false;

@@ -209,7 +209,7 @@ static void Dlg_UpdateEditMenu(int nUnused, DlgMenuState* pMenuState, DialogPtr 
         bSavedEnabled = (short)pMenuState->wSavedBits >= 0;
         if (bAnyEnabled && (short)pMenuState->wSavedBits >= 0) {
             EnableMenuItem(hMenu, 0);
-            ((BYTE*)&pMenuState->wSavedBits)[1] |= 0x80;
+            pMenuState->wSavedBits |= 0x8000;
             DrawMenuBar();
             return;
         }
@@ -221,7 +221,7 @@ static void Dlg_UpdateEditMenu(int nUnused, DlgMenuState* pMenuState, DialogPtr 
         return;
     }
     DisableMenuItem(hMenu, 0);
-    ((BYTE*)&pMenuState->wSavedBits)[1] &= 0x7F;
+    pMenuState->wSavedBits &= 0x7FFF;
     DrawMenuBar();
 }
 
@@ -424,7 +424,7 @@ void Dlg_ModalDialogLoop(DialogPtr pDialog, DlgMenuState* pMenuState, DlgFilterP
         *pItemHit = nItemHit;
         SetPort(pSavedPort);
     } else {
-        memset(&tEvent, 0, 16);
+        memset(&tEvent, 0, sizeof(tEvent));
         WaitNextEvent(0, &tEvent, 0, NULL);
         if (pfnFilter != NULL) {
             pfnFilter(pDialog, &tEvent, &nItemHit);

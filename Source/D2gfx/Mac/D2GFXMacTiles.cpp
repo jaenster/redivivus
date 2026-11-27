@@ -181,7 +181,7 @@ void FUN_002b224c(const uint8_t* pSrc, uint8_t* pDest, const uint8_t* pRemap, in
         }
         pDest += g_tSurface.nPitch;
         nRows--;
-        pSrc += 2;
+        pSrc += sizeof(uint16_t);
     } while (true);
 }
 
@@ -277,7 +277,7 @@ void FUN_002b24c4(const uint8_t* pSrc, uint8_t* pDest, int nLightX, int nLightXS
             pLight = g_abLightGrid + (nLightY >> (nShift & 0x1f)) * 0x20 + (nLightX >> (nShift & 0x1f)) * 0x400;
             pDest = pDestRow + g_tSurface.nPitch;
             nRowsLeft--;
-            pSrc += 2;
+            pSrc += sizeof(uint16_t);
             pDestRow = pDest;
         } while (nRowsLeft != 0);
     }
@@ -399,7 +399,7 @@ void FUN_002b2a08(int nX, int nY, const uint8_t* pSrc, uint8_t* pDest, const uin
                 }
             }
             pDestRow += g_tSurface.nPitch;
-            pRun = pRun + 2;
+            pRun = pRun + sizeof(uint16_t);
             nRow++;
         } while (nRow < nRows);
     }
@@ -614,7 +614,7 @@ void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY) {
                 }
                 pDst = pDestRow + g_tSurface.nPitch;
                 nRows--;
-                pSrc = pSrc + 2;
+                pSrc = pSrc + sizeof(uint16_t);
                 pDestRow = pDst;
             } while (nRows != 0);
         } else {

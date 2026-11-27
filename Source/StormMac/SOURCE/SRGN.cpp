@@ -75,6 +75,7 @@ struct RgnBlockList {
 // The three arrays a record owns: alloc, count, data, chunk. They free their storage.
 template<int N>
 struct RgnArr {
+    static const uint32_t kElemSize = N;  // N is the element size in bytes
     uint32_t m_alloc;
     uint32_t m_count;
     void* m_data;
@@ -308,7 +309,7 @@ RGN_NOINLINE void RgnBlockList_UnlinkAll(RgnBlockList* pList) {
 RGN_NOINLINE void RgnArr8_ReallocData(RgnArr<8>* pArray, int nNewSize) {
     pArray->m_alloc = nNewSize;
     if (pArray->m_data != NULL || nNewSize != 0) {
-        pArray->m_data = SMemReAlloc(pArray->m_data, nNewSize << 3, "nothing", -2, 0);
+        pArray->m_data = SMemReAlloc(pArray->m_data, nNewSize * pArray->kElemSize, "nothing", -2, 0);
     }
 }
 
@@ -329,7 +330,7 @@ RGN_NOINLINE void RgnArr8_Set(RgnArr<8>* pArray, int nCount, void* pSource) {
 RGN_NOINLINE void RgnArr16_ReallocData(RgnArr<0x10>* pArray, int nNewSize) {
     pArray->m_alloc = nNewSize;
     if (pArray->m_data != NULL || nNewSize != 0) {
-        pArray->m_data = SMemReAlloc(pArray->m_data, nNewSize << 4, "nothing", -2, 0);
+        pArray->m_data = SMemReAlloc(pArray->m_data, nNewSize * pArray->kElemSize, "nothing", -2, 0);
     }
 }
 
@@ -350,7 +351,7 @@ RGN_NOINLINE void RgnArr16_Set(RgnArr<0x10>* pArray, int nCount, void* pSource) 
 RGN_NOINLINE void RgnArr1C_ReallocData(RgnArr<0x1C>* pArray, int nNewSize) {
     pArray->m_alloc = nNewSize;
     if (pArray->m_data != NULL || nNewSize != 0) {
-        pArray->m_data = SMemReAlloc(pArray->m_data, nNewSize * 0x1C, "nothing", -2, 0);
+        pArray->m_data = SMemReAlloc(pArray->m_data, nNewSize * pArray->kElemSize, "nothing", -2, 0);
     }
 }
 
