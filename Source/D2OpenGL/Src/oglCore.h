@@ -88,7 +88,6 @@ struct D2OGLSpriteStrc {
 
 namespace D2OpenGL::oglCore {
 // Forwards to an internal D2OpenGL initialisation routine.
-// Described from the Mac body (no Windows twin).
 BOOL OGL_Initialize(void * hInstance); // 1.14d mac: 002df3c4
 // Stores its two arguments in globals, allocates the block buffers and the perspective and vertex tables, registers an exit-time cleanup, fills the colour-scale and perspective tables and runs further renderer setup. Returns 1.
 // Described from the Mac body (no Windows twin).
@@ -100,9 +99,7 @@ void OGL_AtExitRelease(); // 1.14d mac: 002df42b
 // Described from the Mac body (no Windows twin).
 BOOL OGL_Release(); // 1.14d mac: 002df45c
 BOOL OGL_CreateWindow(void * hWindow, int nResolutionMode); // 1.14d mac: 002df47b
-// Opens the GL window at 800x600 or 640x480, sets up an orthographic projection and default GL state, initialises sprites, and creates the texture manager matching the available Apple texture extensions. At 800x600 it also initialises video playback.
 // Described from the Mac body (no Windows twin).
-BOOL OGL_OpenOpenGLWindow(int nResolutionMode); // 1.14d mac: 002df4db
 BOOL OGL_DestroyWindow(); // 1.14d mac: 002df760
 // Shuts the OpenGL renderer down: releases a global interface object, shuts down the Smacker video state when the screen is 800x600, shuts down sprites, and closes the Mac window.
 // Described from the Mac body (no Windows twin).
@@ -134,9 +131,9 @@ void OGL_SetBlendMode(int nBlendMode); // 1.14d mac: 002dfcf5
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 void OGL_SetTextureFilter(int nFilter); // 1.14d mac: 002dfdb0
 struct D2RenderStatisticsStrc * OGL_GetRenderStatistics(); // 1.14d mac: 002dfe26
-void OGL_OpenWindowHook2(); // 1.14d mac: 002dfe2d
-void OGL_CloseWindowHook1(); // 1.14d mac: 002dfe32
-void OGL_OpenWindowHook1(); // 1.14d mac: 002dfe37
-void OGL_CloseWindowHook2(); // 1.14d mac: 002dfe3c
+void OGL_OpenWindowHook2() __attribute__((noinline)); // 1.14d mac: 002dfe2d
+void OGL_CloseWindowHook1() __attribute__((noinline)); // 1.14d mac: 002dfe32
+void OGL_OpenWindowHook1() __attribute__((noinline)); // 1.14d mac: 002dfe37
+void OGL_CloseWindowHook2() __attribute__((noinline)); // 1.14d mac: 002dfe3c
 
 } // namespace D2OpenGL::oglCore

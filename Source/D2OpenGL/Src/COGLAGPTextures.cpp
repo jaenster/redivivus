@@ -26,7 +26,19 @@
 static_assert(sizeof(void*) != 4 || sizeof(::D2AGPTextureRecordStrc) == 0x10, "D2_NEW_AT(D2AGPTextureRecordStrc): the 32-bit layout must be the 0x10 bytes 1.14d allocates");
 
 
+uint32_t UINT_ARRAY_005e9ee0[256] = {}; D2_GLOBAL_GUARD(UINT_ARRAY_005e9ee0, "UINT_ARRAY_005e9ee0");
+uint16_t USHORT_ARRAY_005ea2e0[256] = {}; D2_GLOBAL_GUARD(USHORT_ARRAY_005ea2e0, "USHORT_ARRAY_005ea2e0");
+BOOL BOOL_005c8a64 = 0; D2_GLOBAL_GUARD(BOOL_005c8a64, "BOOL_005c8a64");
+
 namespace D2OpenGL::COGLAGPTextures {
+
+
+static __attribute__((used)) uint32_t DAT_005eabec; D2_STATIC_GUARD_BSS(DAT_005eabec, "D2OpenGL::COGLAGPTextures::BindTexture::DAT_005eabec");
+static __attribute__((used)) uint32_t DAT_00552e00; D2_STATIC_GUARD_BSS(DAT_00552e00, "D2OpenGL::COGLAGPTextures::COGLAGPTEXTURES_AcquireSlot::DAT_00552e00");
+
+static int s_anBucketWidth[6] = { 0x10, 0x20, 0x40, 0x80, 0xa0, 0x100 };
+static int s_anBucketHeight[6] = { 0x10, 0x20, 0x40, 0x80, 0x50, 0x100 };
+static int s_anBucketCount[6] = { 0x200, 0x800, 0x800, 0x100, 0x100, 0x40 };
 
 // Calls the COGLAGPTextures constructor.
 // Described from the Mac body (no Windows twin).
@@ -58,13 +70,13 @@ void COGLAGPTEXTURES_Construct(::COGLAGPTextures * pThis) {
     pGVar5 = glGetString(0x1f03);
     char* pcVar7 = strstr((char*)pGVar5, "GL_APPLE_packed_pixel");
     pThis->bPackedPixels = pcVar7 != 0;
-    *PTR_BOOL_0039639c = 1;
+    BOOL_005c8a64 = 1;
     if (!pcVar6) {
-      *PTR_BOOL_00396380 = 1;
+      BOOL_005c8a68 = 1;
       pThis->eTarget = 0x84f5;
       pThis->nPageCount = 0;
     } else {
-      *PTR_BOOL_00396380 = 0;
+      BOOL_005c8a68 = 0;
       pThis->eTarget = 0xde1;
       pThis->nPageCount = 1;
     }
@@ -73,9 +85,9 @@ void COGLAGPTEXTURES_Construct(::COGLAGPTextures * pThis) {
     pThis->nArenaSize = 0;
     bool bVar1 = pThis->bPackedPixels;
     int iVar13 = 0;
-    int* piVar15 = INT_ARRAY_00334c40;
-    int* piVar17 = INT_ARRAY_00334c58;
-    int* piVar19 = INT_ARRAY_00334c70;
+    int* piVar15 = s_anBucketWidth;
+    int* piVar17 = s_anBucketHeight;
+    int* piVar19 = s_anBucketCount;
     int iVar16 = 0;
     do {
       uVar14 = ((uint32_t)!bVar1 * 2 + 2) * *piVar17 * *piVar15 * *piVar19 + 0x101f & -4096;
@@ -124,8 +136,8 @@ void COGLAGPTEXTURES_Construct(::COGLAGPTextures * pThis) {
       D2AGPSlotStrc* pDVar2;
       pDVar2 = pThis->apSlots[iVar13];
       pBVar9 = pThis->apPoolBase[iVar13];
-      width = INT_ARRAY_00334c40[iVar13];
-      height = INT_ARRAY_00334c58[iVar13];
+      width = s_anBucketWidth[iVar13];
+      height = s_anBucketHeight[iVar13];
       iVar3 = pThis->nBytesPerPixel;
       uVar14 = iVar13 == 4 | 0x2600;
       iVar18 = 0;
@@ -156,7 +168,7 @@ void COGLAGPTEXTURES_Construct(::COGLAGPTextures * pThis) {
         pDVar2[iVar18].nOwner = -1;
         pBVar9 += height * width * iVar3;
         iVar18++;
-      } while (iVar18 < INT_ARRAY_00334c70[iVar13]);
+      } while (iVar18 < s_anBucketCount[iVar13]);
 
       iVar16 += iVar18;
       iVar13++;
@@ -238,7 +250,7 @@ void _COGLAGPTextures_D2(::COGLAGPTextures * pThis) {
         glDeleteTextures(1, &textures->hName);
         textures++;
         iVar2++;
-      } while (iVar2 < INT_ARRAY_00334c70[iVar1]);
+      } while (iVar2 < s_anBucketCount[iVar1]);
 
       iVar1++;
     } while (iVar1 < 6);
@@ -296,9 +308,9 @@ bool COGLAGPTEXTURES_AllocTextureEntry(::COGLAGPTextures * pThis, D2TextureNodeS
     int nBucket;
     nBucket = 0;
     int* piVar3;
-    piVar3 = INT_ARRAY_00334c58;
+    piVar3 = s_anBucketHeight;
     int* piVar2;
-    piVar2 = INT_ARRAY_00334c40;
+    piVar2 = s_anBucketWidth;
     do {
       if (pNode->nWidth <= *piVar2 && pNode->nHeight <= *piVar3) {
         goto LAB_002e688d;
@@ -332,9 +344,9 @@ bool UploadTexture(::COGLAGPTextures * pThis, D2TextureNodeStrc * pNode, void * 
     int nBucket;
     nBucket = 0;
     int* piVar3;
-    piVar3 = INT_ARRAY_00334c58;
+    piVar3 = s_anBucketHeight;
     int* piVar5;
-    piVar5 = INT_ARRAY_00334c40;
+    piVar5 = s_anBucketWidth;
     do {
       if (pNode->nWidth <= *piVar5 && pNode->nHeight <= *piVar3) {
         goto LAB_002e6928;
@@ -426,8 +438,8 @@ void ReleaseTexture(::COGLAGPTextures * pThis, D2TextureNodeStrc * pNode) {
     pBVar2 = pMemoryToFree->pPixels;
     if (pBVar2) {
       nBucket = 0;
-      piVar7 = INT_ARRAY_00334c58;
-      piVar4 = INT_ARRAY_00334c40;
+      piVar7 = s_anBucketHeight;
+      piVar4 = s_anBucketWidth;
       do {
         iVar8 = *piVar4;
         if (pNode->nWidth <= iVar8) {
@@ -450,7 +462,7 @@ void ReleaseTexture(::COGLAGPTextures * pThis, D2TextureNodeStrc * pNode) {
       iVar8 = 0x100;
       LAB_002e6b15:
       iVar8 = (int)(pBVar2 - pThis->apPoolBase[nBucket]) / (iVar8 * iVar5 * pThis->nBytesPerPixel);
-      if (iVar8 < 0 || INT_ARRAY_00334c70[nBucket] <= iVar8) {
+      if (iVar8 < 0 || s_anBucketCount[nBucket] <= iVar8) {
         pvVar1 = Fog::Src::ErrorManager::GetInstructionPointer();
         fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0x30b);
       }
@@ -468,12 +480,10 @@ void ReleaseTexture(::COGLAGPTextures * pThis, D2TextureNodeStrc * pNode) {
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002e6bb4
 void BindTexture(::COGLAGPTextures * pThis, D2TextureNodeStrc * pNode) {
-    // Static local variables (originally global data)
-    static uint32_t DAT_005eabec; D2_STATIC_GUARD_BSS(DAT_005eabec, "D2OpenGL::COGLAGPTextures::BindTexture::DAT_005eabec");
 
     D2AGPTextureRecordStrc* pDVar1 = pNode->uHandle.pAGPRecord;
     pThis->hBoundTexture = pDVar1->hName;
-    *(uint8_t*)&pDVar1->dwUsageBits = (uint8_t)pDVar1->dwUsageBits | 1;
+    *(uint8_t*)&pDVar1->dwUsageBits |= 1;
     if (!pDVar1->hPage2D) {
       DAT_005eabec = 0;
       glBindTexture(pThis->eTarget, pThis->hBoundTexture);
@@ -527,9 +537,9 @@ void ConvertPixels(::COGLAGPTextures * pThis, int nTexWidth, int nTexHeight, int
           iVar6 = nGroups;
           if (0 < nGroups) {
             do {
-              pauVar3 = PTR_UINT_ARRAY_00396370;
+              pauVar3 = (&UINT_ARRAY_005e9ee0);
               uVar1 = *(uint32_t*)(pSrc + iVar7);
-              *(uint32_t*)(pBVar5 + iVar7 * 4) = (*PTR_UINT_ARRAY_00396370)[uVar1 & 0xff];
+              *(uint32_t*)(pBVar5 + iVar7 * 4) = UINT_ARRAY_005e9ee0[uVar1 & 0xff];
               *(uint32_t*)(pBVar5 + iVar7 * 4 + 4) = (*pauVar3)[uVar1 >> 8 & 0xff];
               *(uint32_t*)(pBVar5 + iVar7 * 4 + 8) = (*pauVar3)[uVar1 >> 0x10 & 0xff];
               *(uint32_t*)(pBVar5 + iVar7 * 4 + 0xc) = (*pauVar3)[uVar1 >> 0x18];
@@ -550,9 +560,9 @@ void ConvertPixels(::COGLAGPTextures * pThis, int nTexWidth, int nTexHeight, int
         iVar6 = 0;
         if (0 < nGroups) {
           do {
-            pauVar2 = PTR_USHORT_ARRAY_0039636c;
+            pauVar2 = (&USHORT_ARRAY_005ea2e0);
             uVar1 = *(uint32_t*)(pSrc + iVar6 * 4);
-            *(uint32_t*)(pBVar5 + iVar6 * 8) = (uint32_t)((uint32_t)(uint16_t)(*PTR_USHORT_ARRAY_0039636c)[uVar1 >> 8 & 0xff] << 16 | (uint32_t)(uint16_t)(*PTR_USHORT_ARRAY_0039636c)[uVar1 & 0xff]);
+            *(uint32_t*)(pBVar5 + iVar6 * 8) = (uint32_t)((uint32_t)(uint16_t)USHORT_ARRAY_005ea2e0[uVar1 >> 8 & 0xff] << 16 | (uint32_t)(uint16_t)USHORT_ARRAY_005ea2e0[uVar1 & 0xff]);
             *(uint32_t*)(pBVar5 + iVar6 * 8 + 4) = (uint32_t)((uint32_t)(uint16_t)(*pauVar2)[uVar1 >> 0x18] << 16 | (uint32_t)(uint16_t)(*pauVar2)[uVar1 >> 0x10 & 0xff]);
             iVar6++;
           } while (nGroups != iVar6);
@@ -571,14 +581,14 @@ void ConvertPixels(::COGLAGPTextures * pThis, int nTexWidth, int nTexHeight, int
 // 1.14d mac: 002e6e00
 int CreateTexture(::COGLAGPTextures * pThis, void * pPixels, int nWidth, int nHeight, int nOwnerType, void * pOwner, int nOwnerIndex, intptr_t nOwnerKey) {
     uint8_t* pBVar2;
-    int nTexHeight;
     int nTexWidth;
+    int nTexHeight;
     int nClass;
     nClass = 0;
-    int* piVar3;
-    piVar3 = INT_ARRAY_00334c58;
     int* piVar5;
-    piVar5 = INT_ARRAY_00334c40;
+    piVar5 = s_anBucketWidth;
+    int* piVar3;
+    piVar3 = s_anBucketHeight;
     do {
       nTexWidth = *piVar5;
       if (nWidth <= nTexWidth) {
@@ -629,8 +639,6 @@ int CreateTexture(::COGLAGPTextures * pThis, void * pPixels, int nWidth, int nHe
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002e6fa4
 void COGLAGPTEXTURES_AcquireSlot(::COGLAGPTextures * pThis, int nClass) {
-    // Static local variables (originally global data)
-    static uint32_t DAT_00552e00; D2_STATIC_GUARD_BSS(DAT_00552e00, "D2OpenGL::COGLAGPTextures::COGLAGPTEXTURES_AcquireSlot::DAT_00552e00");
 
     D2AGPTextureRecordStrc* pDVar1;
     bool bVar2;
@@ -653,7 +661,7 @@ void COGLAGPTEXTURES_AcquireSlot(::COGLAGPTextures * pThis, int nClass) {
 
       uVar3 = *pCursor + 1;
       *pCursor = uVar3;
-      iVar4 = INT_ARRAY_00334c70[nClass];
+      iVar4 = s_anBucketCount[nClass];
       if (iVar4 - 1 <= (int)uVar3) {
         *pCursor = 0;
         uVar3 = 0;

@@ -78,6 +78,12 @@ typedef void (__fastcall *pfnCelPixelDataFree)(int * pPixelData);
 typedef void (*D2OGLFrameCallbackFn)();
 #endif
 
+D2OGLVertexStrc D2OGLVertexStrc_ARRAY_00552bcc[4] = {}; D2_GLOBAL_GUARD(D2OGLVertexStrc_ARRAY_00552bcc, "D2OGLVertexStrc_ARRAY_00552bcc");
+uint8_t * DAT_00552bc0 = 0; D2_GLOBAL_GUARD(DAT_00552bc0, "DAT_00552bc0");
+uint8_t * DAT_00552bc4 = 0; D2_GLOBAL_GUARD(DAT_00552bc4, "DAT_00552bc4");
+BOOL BOOL_005c8a68 = 0; D2_GLOBAL_GUARD(BOOL_005c8a68, "BOOL_005c8a68");
+BYTE * * PTR_005e9e20 = 0; D2_GLOBAL_GUARD(PTR_005e9e20, "PTR_005e9e20");
+
 namespace D2OpenGL::oglSprite {
 
 // The Src files call one another unqualified.
@@ -92,6 +98,13 @@ using namespace D2OpenGL::oglSmack;
 using namespace D2OpenGL::oglSprite;
 using namespace D2OpenGL::oglVertex;
 using namespace D2OpenGL::MacDisplayDevice;
+
+static BOOL OGL_GetSpriteMetadata(struct D2GfxDataStrc * pData, struct D2OGLSpriteStrc * pSprite);
+static void OGL_ComputeTextureSize(struct D2OGLSpriteStrc * pSprite);
+static BOOL OGL_PrepareCelTexture(struct D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOutlineColor, int nTexMode);
+static BYTE OGL_SetDrawMode(int nDrawMode);
+static void OGL_DrawPalettedQuad(struct D2OGLSpriteStrc * pSprite, int nX, int nY, DWORD dwGamma, int nColorIndex, BYTE nAlpha, BOOL bUseColorIndex, int nTexWidth, int nTexHeight);
+
 
 // Allocates the oglSprite.cpp buffers and registers the cel-release callback.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
@@ -124,7 +137,7 @@ void OGLSPRITE_Init() {
 void __fastcall OGLSPRITE_ReleaseCelTextures(D2OGLSpriteTexSlotStrc * pSlots) {
     int iVar2 = 0;
     do {
-      ::CD2Textures** ppCVar1 = PTR_PTR_003963b0;
+      ::CD2Textures** ppCVar1 = (&PTR_005e9edc);
       if (0 < pSlots[iVar2].nSizeClass && 0 < pSlots[iVar2].nTextureId) {
         CD2Textures::CD2TEXTURES_ReleaseById(*ppCVar1, pSlots[iVar2].nTextureId);
       }
@@ -182,9 +195,9 @@ void OGL_DrawPerspectiveImage(D2GfxDataStrc * pData, int nX, int nY, DWORD dwGam
     int iVar8 = __frame0.sSprite.nOffsetY * 0x1000 + __frame0.sSprite.nOffsetX * -0x800 + nY;
     int iVar7 = __frame0.sSprite.nOffsetX * 0x800 + nX + __frame0.sSprite.nOffsetY * 0x1000;
     OGL_AdjustPerspectivePosition(iVar7 + __frame0.sSprite.nTexHeight * -0x1000, iVar8 + __frame0.sSprite.nTexHeight * -0x1000, 0, &__frame0.nScreenX, &__frame0.nScreenY);
-    int* piVar1 = PTR_INT_003963a8;
+    int* piVar1 = (&INT_005e9e28);
     D2OGLVertexStrc_ARRAY_00552bcc[0].fX = (float)__frame0.nScreenX;
-    D2OGLVertexStrc_ARRAY_00552bcc[0].fY = (float)*PTR_INT_003963a8 - (float)__frame0.nScreenY;
+    D2OGLVertexStrc_ARRAY_00552bcc[0].fY = (float)INT_005e9e28 - (float)__frame0.nScreenY;
     D2OGLVertexStrc_ARRAY_00552bcc[0].fU = __frame0.sSprite.fS0;
     D2OGLVertexStrc_ARRAY_00552bcc[0].fV = __frame0.sSprite.fT0;
     OGL_AdjustPerspectivePosition(iVar7, iVar8, 0, &__frame0.nScreenX, &__frame0.nScreenY);
@@ -220,7 +233,7 @@ void OGL_DrawPerspectiveImage(D2GfxDataStrc * pData, int nX, int nY, DWORD dwGam
     }
 
     iVar4 += -0x2f;
-    iVar5 = *PTR_INT_003963a4;
+    iVar5 = INT_005e9e24;
     if (!(0.0 <= D2OGLVertexStrc_ARRAY_00552bcc[0].fX && D2OGLVertexStrc_ARRAY_00552bcc[0].fX < (float)iVar5 && 0.0 <= D2OGLVertexStrc_ARRAY_00552bcc[0].fY && D2OGLVertexStrc_ARRAY_00552bcc[0].fY < (float)iVar4 || 0.0 <= D2OGLVertexStrc_ARRAY_00552bcc[1].fX && D2OGLVertexStrc_ARRAY_00552bcc[1].fX < (float)iVar5 && 0.0 <= D2OGLVertexStrc_ARRAY_00552bcc[1].fY && D2OGLVertexStrc_ARRAY_00552bcc[1].fY < (float)iVar4 || 0.0 <= D2OGLVertexStrc_ARRAY_00552bcc[2].fX && D2OGLVertexStrc_ARRAY_00552bcc[2].fX < (float)iVar5 && 0.0 <= D2OGLVertexStrc_ARRAY_00552bcc[2].fY && D2OGLVertexStrc_ARRAY_00552bcc[2].fY < (float)iVar4 || 0.0 <= D2OGLVertexStrc_ARRAY_00552bcc[3].fX && D2OGLVertexStrc_ARRAY_00552bcc[3].fX < (float)iVar5 && 0.0 <= fVar9 && fVar9 < (float)iVar4)) {
       return;
     }
@@ -235,7 +248,7 @@ void OGL_DrawPerspectiveImage(D2GfxDataStrc * pData, int nX, int nY, DWORD dwGam
     OGL_ApplyColorLighting(D2OGLVertexStrc_ARRAY_00552bcc, (D2GfxLightStrc)dwGamma);
     D2OGLVertexStrc_ARRAY_00552bcc[0].nAlpha = BVar2;
     glColor4ubv(&D2OGLVertexStrc_ARRAY_00552bcc[0].nRed);
-    if (!*PTR_BOOL_00396380) {
+    if (!BOOL_005c8a68) {
       glBegin(6);
       glTexCoord2f(D2OGLVertexStrc_ARRAY_00552bcc[0].fU, D2OGLVertexStrc_ARRAY_00552bcc[0].fV);
       glVertex2f(D2OGLVertexStrc_ARRAY_00552bcc[0].fX, D2OGLVertexStrc_ARRAY_00552bcc[0].fY);
@@ -266,7 +279,7 @@ void OGL_DrawPerspectiveImage(D2GfxDataStrc * pData, int nX, int nY, DWORD dwGam
 
 // Was named RENDERER_GLIDE_GetSpriteMetadata after its Windows Glide counterpart (Game.exe 0050a260); this is the OpenGL renderer's own copy.
 // 1.14d mac: 002e33a9
-BOOL OGL_GetSpriteMetadata(D2GfxDataStrc * pData, D2OGLSpriteStrc * pSprite) {
+static BOOL OGL_GetSpriteMetadata(D2GfxDataStrc * pData, D2OGLSpriteStrc * pSprite) {
     BOOL BVar2 = 0;
     int bSpriteLoaded = D2CMP::SRC::SpriteCache::SPRITECACHE_GetOrLoadSprite(pData, 0, 1);
     if (!bSpriteLoaded) {
@@ -294,53 +307,52 @@ BOOL OGL_GetSpriteMetadata(D2GfxDataStrc * pData, D2OGLSpriteStrc * pSprite) {
 // Computes power-of-two texture width/height/area from the image dims and sets the default UVs (0..1).
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e344e
-void OGL_ComputeTextureSize(D2OGLSpriteStrc * pSprite) {
-    int iVar2;
-    int iVar3;
-    int nMaxDim;
-    int iVar4 = pSprite->nWidth;
-    if (!*PTR_BOOL_0039639c) {
-      bool bVar1;
-      iVar3 = 1;
-      do {
-        iVar2 = iVar3;
-        iVar3 = iVar2 * 2;
-      } while (iVar2 < iVar4);
-
-      iVar4 = 1;
-      do {
-        bVar1 = iVar4 < pSprite->nHeight;
-        iVar3 = iVar4;
-        iVar4 *= 2;
-      } while (bVar1);
-    } else {
-      nMaxDim = pSprite->nHeight;
-      if (pSprite->nHeight <= iVar4) {
-        nMaxDim = iVar4;
+static void OGL_ComputeTextureSize(D2OGLSpriteStrc * pSprite) {
+    int nWidth = pSprite->nWidth;
+    int nTexWidth;
+    int nTexHeight;
+    if (BOOL_005c8a64) {
+      int nMaxDim = pSprite->nHeight;
+      if (nWidth >= nMaxDim) {
+        nMaxDim = nWidth;
       }
 
-      iVar4 = 0x10;
+      int nSize = 0x10;
       do {
-        iVar2 = iVar4;
-        iVar3 = iVar2;
-        iVar4 = iVar2 * 2;
-      } while (iVar2 < nMaxDim);
+        nTexWidth = nSize;
+        nSize = nTexWidth * 2;
+      } while (nTexWidth < nMaxDim);
+
+      nTexHeight = nTexWidth;
+    } else {
+      int nSize = 1;
+      do {
+        nTexWidth = nSize;
+        nSize = nTexWidth * 2;
+      } while (nTexWidth < nWidth);
+
+      int nHeight = pSprite->nHeight;
+      nSize = 1;
+      do {
+        nTexHeight = nSize;
+        nSize = nTexHeight * 2;
+      } while (nTexHeight < nHeight);
     }
 
-    pSprite->nTexWidth = iVar2;
-    pSprite->nTexHeight = iVar3;
+    pSprite->nTexWidth = nTexWidth;
+    pSprite->nTexHeight = nTexHeight;
     OGL_IsPerspectiveEnabled();
     pSprite->fS0 = 0.0;
     pSprite->fS1 = 1.0;
     pSprite->fT0 = 0.0;
     pSprite->fT1 = 1.0;
-    pSprite->nTexSize = pSprite->nTexHeight * pSprite->nTexWidth;
+    pSprite->nTexSize = pSprite->nTexWidth * pSprite->nTexHeight;
 }
 
 // Decodes a cel into the sprite buffer (normal, palette-shifted or outlined), uploads it if not cached and binds it.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e34d7
-BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOutlineColor, int nTexMode) {
+static BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOutlineColor, int nTexMode) {
     char cVar1;
     void* pvVar3;
     void* pvVar5;
@@ -397,7 +409,7 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
 
     iVar6 = pCellNode->aModes[nSlot].nCacheNode;
     if (iVar6) {
-      pThis = *PTR_PTR_003963b0;
+      pThis = PTR_005e9edc;
       if ((uint8_t*)pThis->pNodes[iVar6 - 1].nOwnerKey == pPalette || nTexMode == 4) {
         goto LAB_002e390b;
       }
@@ -438,7 +450,7 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
       D2CMP::SRC::CelCmp::CELCMP_DrawCelFrame(pSprite->pGfxData, -pSprite->nOffsetX, iVar6 - 1 - pSprite->nOffsetY, 0, 0, DAT_00552bc0, iVar6, nPitch, 0, 0, pPalette);
       iVar8 = pSprite->nTexSize;
       if (0 < iVar8) {
-        pShiftTable = (*PTR_PTR_003963a0)[0x46];
+        pShiftTable = PTR_005e9e20[0x46];
         do {
           if (*(uint8_t*)((uint8_t*)pvVar5 + iVar9)) {
             *(uint8_t*)((uint8_t*)pvVar5 + iVar9) = pShiftTable[*(uint8_t*)((uint8_t*)pvVar5 + iVar9)];
@@ -488,8 +500,8 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
     }
 
     ::CD2Textures** ppCVar2;
-    ppCVar2 = PTR_PTR_003963b0;
-    (*PTR_PTR_003963b0)->vptr->CreateTexture(*PTR_PTR_003963b0, pvVar5, nPitch, iVar6, 3, pCellNode, nSlot, (intptr_t)pPalette);
+    ppCVar2 = (&PTR_005e9edc);
+    PTR_005e9edc->vptr->CreateTexture(PTR_005e9edc, pvVar5, nPitch, iVar6, 3, pCellNode, nSlot, (intptr_t)pPalette);
     OGL_SetTextureFilter(1);
     iVar6 = pCellNode->aModes[nSlot].nCacheNode;
     pThis = *ppCVar2;
@@ -500,54 +512,40 @@ BOOL OGL_PrepareCelTexture(D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOut
 
 // Was named RENDERER_GLIDE_SetDrawMode after its Windows Glide counterpart (Game.exe 0050abf0); this is the OpenGL renderer's own copy.
 // 1.14d mac: 002e3934
-BYTE OGL_SetDrawMode(int nDrawMode) {
-    uint8_t bVar1;
-    int32_t nBlendModeArg;
-    if (false) {
-      uint8_t bVar2;
-      switchD_002e394e_caseD_6:
-      bVar2 = 0x80;
-      if (nDrawMode != 1) {
-        bVar2 = ~-!nDrawMode | 0x40;
+static BYTE OGL_SetDrawMode(int nDrawMode) {
+    switch (nDrawMode) {
+      case 5:
+      case 7:
+        OGL_SetBlendMode(1);
+        return 0xff;
+      default: {
+        BYTE nAlpha = nDrawMode == 0 ? 0x40 : 0xff;
+        if (nDrawMode == 1) {
+          nAlpha = 0x80;
+        }
+        if (nDrawMode == 2) {
+          nAlpha = 0xc0;
+        }
+        OGL_SetBlendMode(4);
+        return nAlpha;
       }
-
-      bVar1 = 0xc0;
-      if (nDrawMode != 2) {
-        bVar1 = bVar2;
-      }
-
-      OGL_SetBlendMode(4);
-    } else {
-      switch (nDrawMode) {
-        case 3:
-          nBlendModeArg = 2;
-        break;
-        case 4:
-          nBlendModeArg = 3;
-        break;
-        case 5:
-
-        case 7:
-          nBlendModeArg = 1;
-        break;
-        default:
-          goto switchD_002e394e_caseD_6;
-      }
-
-      OGL_SetBlendMode(nBlendModeArg);
-      bVar1 = 0xff;
+      case 3:
+        OGL_SetBlendMode(2);
+        return 0xff;
+      case 4:
+        OGL_SetBlendMode(3);
+        return 0xff;
     }
-
-    return bVar1;
 }
 
 // 1.14d mac: 002e39bc
-void OGL_DrawImage(D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDrawMode, BYTE * pPalette) {
+BOOL OGL_DrawImage(D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDrawMode, BYTE * pPalette) {
     int nTexMode;
     D2OGLSpriteStrc sSprite;
+    BOOL BVar2 = 0;
     BOOL BVar1 = OGL_GetSpriteMetadata(pData, &sSprite);
-    if (!(BVar1 && sSprite.nOffsetX + nX <= *PTR_INT_003963a4 && -1 < sSprite.nOffsetX + nX + sSprite.nWidth && -1 < sSprite.nOffsetY + nY && sSprite.nOffsetY + nY - sSprite.nHeight < *PTR_INT_003963a8)) {
-      return;
+    if (!(BVar1 && sSprite.nOffsetX + nX <= INT_005e9e24 && -1 < sSprite.nOffsetX + nX + sSprite.nWidth && -1 < sSprite.nOffsetY + nY && sSprite.nOffsetY + nY - sSprite.nHeight < INT_005e9e28)) {
+      return BVar2;
     }
 
     OGL_ComputeTextureSize(&sSprite);
@@ -559,17 +557,19 @@ void OGL_DrawImage(D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDr
     }
 
     BVar1 = OGL_PrepareCelTexture(&sSprite, pPalette, '\0', nTexMode);
+    BVar2 = 1;
     if (!BVar1) {
-      return;
+      return BVar2;
     }
 
     OGL_DrawPalettedQuad(&sSprite, nX, nY, dwGamma, 0, nAlpha, 0, 0, 0);
+    return BVar2;
 }
 
 // OpenGL: draws a sprite cel as one textured quad - colour from OGL_ApplyColorLighting, blending set by OGL_SetColorCombine, scaled for perspective when it is on - through glBegin/glColor4ubv/glTexCoord2f/glVertex2f.
 // Was named RENDERER_GLIDE_DrawPalettedQuad after its Windows Glide counterpart (Game.exe 0050a9a0); this is the OpenGL renderer's own copy.
 // 1.14d mac: 002e3ab2
-void OGL_DrawPalettedQuad(D2OGLSpriteStrc * pSprite, int nX, int nY, DWORD dwGamma, int nColorIndex, BYTE nAlpha, BOOL bUseColorIndex, int nTexWidth, int nTexHeight) {
+static void OGL_DrawPalettedQuad(D2OGLSpriteStrc * pSprite, int nX, int nY, DWORD dwGamma, int nColorIndex, BYTE nAlpha, BOOL bUseColorIndex, int nTexWidth, int nTexHeight) {
     int iVar4;
     int iVar5;
     OGL_SetColorCombine(1);
@@ -578,7 +578,7 @@ void OGL_DrawPalettedQuad(D2OGLSpriteStrc * pSprite, int nX, int nY, DWORD dwGam
     } else {
       uint8_t* pBVar2;
       iVar4 = nColorIndex * 3;
-      pBVar2 = (*PTR_PTR_003963a0)[0x45];
+      pBVar2 = PTR_005e9e20[0x45];
       D2OGLVertexStrc_ARRAY_00552bcc[0].nBlue = pBVar2[iVar4 + 2];
       D2OGLVertexStrc_ARRAY_00552bcc[0].nRed = pBVar2[iVar4];
       D2OGLVertexStrc_ARRAY_00552bcc[0].nGreen = pBVar2[iVar4 + 1];
@@ -596,7 +596,7 @@ void OGL_DrawPalettedQuad(D2OGLSpriteStrc * pSprite, int nX, int nY, DWORD dwGam
     int iVar6 = pSprite->nOffsetY - iVar4;
     BOOL BVar3 = OGL_IsPerspectiveEnabled();
     if (BVar3) {
-      iVar5 = *PTR_INT_003963ac;
+      iVar5 = INT_005eabe4;
       if (iVar5 != 0x100) {
         iVar4 = (int)(((uint32_t)(iVar4 * iVar5 >> 0x1f) >> 0x18) + iVar4 * iVar5) >> 8;
         local_1c = (int)(((uint32_t)(local_1c * iVar5 >> 0x1f) >> 0x18) + local_1c * iVar5) >> 8;
@@ -608,8 +608,8 @@ void OGL_DrawPalettedQuad(D2OGLSpriteStrc * pSprite, int nX, int nY, DWORD dwGam
     float fVar9 = (float)(iVar6 + nY);
     D2OGLVertexStrc_ARRAY_00552bcc[0].fX = (float)(local_18 + nX);
     D2OGLVertexStrc_ARRAY_00552bcc[2].fX = (float)(local_18 + nX + local_1c);
-    if (!*PTR_BOOL_00396380) {
-      iVar5 = *PTR_INT_003963a8;
+    if (!BOOL_005c8a68) {
+      iVar5 = INT_005e9e28;
       D2OGLVertexStrc_ARRAY_00552bcc[1].fU = fVar1;
     } else {
       if (!nTexWidth) {
@@ -619,7 +619,7 @@ void OGL_DrawPalettedQuad(D2OGLSpriteStrc * pSprite, int nX, int nY, DWORD dwGam
         nTexWidth = pSprite->nTexWidth;
       }
 
-      iVar5 = *PTR_INT_003963a8;
+      iVar5 = INT_005e9e28;
       fVar10 *= (float)nTexHeight;
       fVar8 *= (float)nTexHeight;
       fVar7 *= (float)nTexWidth;
@@ -653,21 +653,21 @@ void OGL_DrawPalettedQuad(D2OGLSpriteStrc * pSprite, int nX, int nY, DWORD dwGam
 }
 
 // 1.14d mac: 002e3e98
-void OGL_DrawShiftedImage(D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDrawMode, int nColorIndex) {
+BOOL OGL_DrawShiftedImage(D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDrawMode, int nColorIndex) {
     D2OGLSpriteStrc sSprite;
     int nSpriteResult = OGL_GetSpriteMetadata(pData, &sSprite);
-    if (!(nSpriteResult && sSprite.nOffsetX + nX <= *PTR_INT_003963a4 && -1 < sSprite.nOffsetX + nX + sSprite.nWidth && -1 < sSprite.nOffsetY + nY && sSprite.nOffsetY + nY - sSprite.nHeight < *PTR_INT_003963a8)) {
-      return;
+    if (!(nSpriteResult && sSprite.nOffsetX + nX <= INT_005e9e24 && -1 < sSprite.nOffsetX + nX + sSprite.nWidth && -1 < sSprite.nOffsetY + nY && sSprite.nOffsetY + nY - sSprite.nHeight < INT_005e9e28)) {
+      return 0;
     }
 
     OGL_ComputeTextureSize(&sSprite);
     uint8_t nAlpha = OGL_SetDrawMode(nDrawMode);
     BOOL BVar1 = OGL_PrepareCelTexture(&sSprite, nullptr, '\0', 1);
-    if (!BVar1) {
-      return;
+    if (BVar1) {
+      OGL_DrawPalettedQuad(&sSprite, nX, nY, dwGamma, nColorIndex, nAlpha, 0, 0, 0);
     }
 
-    OGL_DrawPalettedQuad(&sSprite, nX, nY, dwGamma, nColorIndex, nAlpha, 0, 0, 0);
+    return 1;
 }
 
 // 1.14d mac: 002e3f6c
@@ -721,8 +721,8 @@ void OGL_DrawClippedImage(D2GfxDataStrc * pData, int nX, int nY, D2GfxTileRectSt
       iVar9 = pCropRect->nX0;
     }
 
-    int iVar7 = *PTR_INT_003963a4;
-    if (pCropRect->nX1 <= *PTR_INT_003963a4) {
+    int iVar7 = INT_005e9e24;
+    if (pCropRect->nX1 <= INT_005e9e24) {
       iVar7 = pCropRect->nX1;
     }
     if (iVar9 > iVar7) {
@@ -744,8 +744,8 @@ void OGL_DrawClippedImage(D2GfxDataStrc * pData, int nX, int nY, D2GfxTileRectSt
       iVar4 = 0;
     }
 
-    int iVar10 = *PTR_INT_003963a8;
-    if (pCropRect->nY1 <= *PTR_INT_003963a8) {
+    int iVar10 = INT_005e9e28;
+    if (pCropRect->nY1 <= INT_005e9e28) {
       iVar10 = pCropRect->nY1;
     }
     if (iVar4 > iVar10) {
@@ -846,7 +846,7 @@ void OGL_DrawShadow(D2GfxDataStrc * pData, int nX, int nY) {
     BVar1 = OGL_IsPerspectiveEnabled();
     iVar3 = sSprite.nTexWidth;
     if (BVar1) {
-      iVar4 = *PTR_INT_003963ac;
+      iVar4 = INT_005eabe4;
       if (iVar4 != 0x100) {
         local_48 = (int)(((uint32_t)(local_48 * iVar4 >> 0x1f) >> 0x18) + local_48 * iVar4) >> 8;
         iVar5 = (int)(((uint32_t)(iVar5 * iVar4 >> 0x1f) >> 0x18) + iVar5 * iVar4) >> 8;
@@ -857,11 +857,11 @@ void OGL_DrawShadow(D2GfxDataStrc * pData, int nX, int nY) {
 
     iVar2 += nX;
     fVar6 = (float)(iVar5 + nY);
-    if (!*PTR_BOOL_00396380) {
-      iVar4 = *PTR_INT_003963a8;
+    if (!BOOL_005c8a68) {
+      iVar4 = INT_005e9e28;
       D2OGLVertexStrc_ARRAY_00552bcc[1].fU = sSprite.fS0;
     } else {
-      iVar4 = *PTR_INT_003963a8;
+      iVar4 = INT_005e9e28;
       D2OGLVertexStrc_ARRAY_00552bcc[1].fU = sSprite.fS0 * (float)sSprite.nTexWidth;
       sSprite.fT0 *= (float)sSprite.nTexHeight;
       sSprite.fT1 *= (float)sSprite.nTexHeight;

@@ -59,6 +59,21 @@
 typedef void (*D2OGLFrameCallbackFn)();
 #endif
 
+// 1.14d mac: 0055259c
+uint8_t DAT_0055259c = 0; D2_GLOBAL_GUARD(DAT_0055259c, "DAT_0055259c");
+// 1.14d mac: 005525a0
+uint32_t DAT_005525a0 = 0; D2_GLOBAL_GUARD(DAT_005525a0, "DAT_005525a0");
+// 1.14d mac: 005525a4
+uint32_t DAT_005525a4 = 0; D2_GLOBAL_GUARD(DAT_005525a4, "DAT_005525a4");
+// 1.14d mac: 005e9e24
+int INT_005e9e24 = 0; D2_GLOBAL_GUARD(INT_005e9e24, "INT_005e9e24");
+// 1.14d mac: 005e9e28
+int INT_005e9e28 = 0; D2_GLOBAL_GUARD(INT_005e9e28, "INT_005e9e28");
+// 1.14d mac: 005e9e2c
+BOOL BOOL_005e9e2c = 0; D2_GLOBAL_GUARD(BOOL_005e9e2c, "BOOL_005e9e2c");
+// 1.14d mac: 005e9edc
+::CD2Textures * PTR_005e9edc = 0; D2_GLOBAL_GUARD(PTR_005e9edc, "PTR_005e9edc");
+
 namespace D2OpenGL::oglCore {
 
 // The Src files call one another unqualified.
@@ -74,6 +89,40 @@ using namespace D2OpenGL::oglSprite;
 using namespace D2OpenGL::oglVertex;
 using namespace D2OpenGL::MacDisplayDevice;
 
+struct NewAGPTextures : ::COGLAGPTextures {
+    NewAGPTextures() { D2OpenGL::COGLAGPTextures::COGLAGPTEXTURES_ConstructThunk(this); }
+};
+
+struct NewTextures : ::COGLTextures {
+    NewTextures(int nMemoryBudget) { D2OpenGL::COGLTextures::COGLTEXTURES_ConstructThunk(this, nMemoryBudget); }
+};
+
+static BOOL OGL_OpenOpenGLWindow(int nResolutionMode);
+
+
+// 1.14d mac: 005e9e18
+static __attribute__((used)) D2GfxHelperStrc * PTR_005e9e18; D2_STATIC_GUARD_BSS(PTR_005e9e18, "D2OpenGL::oglCore::OGL_InitPerspective::PTR_005e9e18");
+// 1.14d mac: 005526c8
+static __attribute__((used)) uint8_t DAT_005526c8; D2_STATIC_GUARD_BSS(DAT_005526c8, "D2OpenGL::oglCore::OGL_AtExitRelease::DAT_005526c8");
+// 1.14d mac: 005e9e34
+static __attribute__((used)) uint32_t DAT_005e9e34; D2_STATIC_GUARD_BSS(DAT_005e9e34, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e34");
+// 1.14d mac: 005e9e40
+static __attribute__((used)) uint32_t DAT_005e9e40; D2_STATIC_GUARD_BSS(DAT_005e9e40, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e40");
+// 1.14d mac: 005e9e4c
+static __attribute__((used)) uint32_t DAT_005e9e4c; D2_STATIC_GUARD_BSS(DAT_005e9e4c, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e4c");
+// 1.14d mac: 005e9e50
+static __attribute__((used)) uint32_t DAT_005e9e50; D2_STATIC_GUARD_BSS(DAT_005e9e50, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e50");
+// 1.14d mac: 005e9e54
+static __attribute__((used)) uint32_t DAT_005e9e54; D2_STATIC_GUARD_BSS(DAT_005e9e54, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e54");
+// 1.14d mac: 005e9e1c
+static __attribute__((used)) uint32_t DAT_005e9e1c; D2_STATIC_GUARD_BSS(DAT_005e9e1c, "D2OpenGL::oglCore::OGL_UpdateScaleFactor::DAT_005e9e1c");
+// 1.14d mac: 005ea4e0
+static __attribute__((used)) BYTE BYTE_ARRAY_ARRAY_005ea4e0[256][3] = {}; D2_STATIC_GUARD(BYTE_ARRAY_ARRAY_005ea4e0, "D2OpenGL::oglCore::OGL_SetPalette::BYTE_ARRAY_ARRAY_005ea4e0");
+// 1.14d mac: 005ea7e0
+static __attribute__((used)) BYTE BYTE_ARRAY_ARRAY_005ea7e0[256][4] = {}; D2_STATIC_GUARD(BYTE_ARRAY_ARRAY_005ea7e0, "D2OpenGL::oglCore::OGL_SetPalette::BYTE_ARRAY_ARRAY_005ea7e0");
+// 1.14d mac: 005525a8
+static __attribute__((used)) BYTE * PTR_ARRAY_005525a8[72] = {}; D2_STATIC_GUARD(PTR_ARRAY_005525a8, "D2OpenGL::oglCore::OGL_SetPaletteTable::PTR_ARRAY_005525a8");
+
 // Forwards to an internal D2OpenGL initialisation routine.
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002df3c4
@@ -86,8 +135,6 @@ BOOL OGL_Initialize(void * hInstance) {
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002df3cd
 BOOL OGL_InitPerspective(D2GfxSettingsStrc * pSettings, D2GfxHelperStrc * pHelpers) {
-    // Static local variables (originally global data)
-    static D2GfxHelperStrc * PTR_005e9e18; D2_STATIC_GUARD_BSS(PTR_005e9e18, "D2OpenGL::oglCore::OGL_InitPerspective::PTR_005e9e18");
 
     PTR_005e9e14 = pSettings;
     PTR_005e9e18 = pHelpers;
@@ -107,8 +154,6 @@ BOOL OGL_InitPerspective(D2GfxSettingsStrc * pSettings, D2GfxHelperStrc * pHelpe
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002df42b
 void OGL_AtExitRelease() {
-    // Static local variables (originally global data)
-    static uint8_t DAT_005526c8; D2_STATIC_GUARD_BSS(DAT_005526c8, "D2OpenGL::oglCore::OGL_AtExitRelease::DAT_005526c8");
 
     if (DAT_005526c8 != '\0') {
       return;
@@ -138,42 +183,28 @@ BOOL OGL_CreateWindow(void * hWindow, int nResolutionMode) {
 
     OGL_GammaBlack();
     OGL_MacCreateSurface(nResolutionMode);
-    BOOL BVar1 = OGL_OpenOpenGLWindow(nResolutionMode);
-    if (!BVar1) {
+    if (!OGL_OpenOpenGLWindow(nResolutionMode)) {
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLCreateSurface: *** sOpenOpenGLWindow failed.");
       OGL_MacApplyGamma();
-    } else {
-      OGL_MacClearDisplayToBlack();
-      OGL_MacApplyGamma();
+      return 0;
     }
 
-    return (uint32_t)(BVar1 != 0);
+    OGL_MacClearDisplayToBlack();
+    OGL_MacApplyGamma();
+    return 1;
 }
 
 // Opens the GL window at 800x600 or 640x480, sets up an orthographic projection and default GL state, initialises sprites, and creates the texture manager matching the available Apple texture extensions. At 800x600 it also initialises video playback.
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002df4db
-BOOL OGL_OpenOpenGLWindow(int nResolutionMode) {
-    // Static local variables (originally global data)
-    static uint32_t DAT_005e9e34; D2_STATIC_GUARD_BSS(DAT_005e9e34, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e34");
-    static uint32_t DAT_005e9e40; D2_STATIC_GUARD_BSS(DAT_005e9e40, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e40");
-    static uint32_t DAT_005e9e4c; D2_STATIC_GUARD_BSS(DAT_005e9e4c, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e4c");
-    static uint32_t DAT_005e9e50; D2_STATIC_GUARD_BSS(DAT_005e9e50, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e50");
-    static uint32_t DAT_005e9e54; D2_STATIC_GUARD_BSS(DAT_005e9e54, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::DAT_005e9e54");
+static BOOL OGL_OpenOpenGLWindow(int nResolutionMode) {
     static D2OGLTileFreeCallbackFn PTR_OGL_ReleaseTileTextures_0039637c = &D2OpenGL::oglBlocks::OGL_ReleaseTileTextures; D2_STATIC_GUARD(PTR_OGL_ReleaseTileTextures_0039637c, "D2OpenGL::oglCore::OGL_OpenOpenGLWindow::PTR_OGL_ReleaseTileTextures_0039637c");
 
     void* pvVar4;
-    ::COGLAGPTextures* pThis;
+    ::CD2Textures* pThis;
     OGL_OpenWindowHook1();
-    INT_005e9e24 = 800;
-    if (!nResolutionMode) {
-      INT_005e9e24 = 0x280;
-    }
-
-    INT_005e9e28 = 600;
-    if (!nResolutionMode) {
-      INT_005e9e28 = 0x1e0;
-    }
+    INT_005e9e24 = nResolutionMode == 0 ? 0x280 : 0x320;
+    INT_005e9e28 = nResolutionMode == 0 ? 0x1e0 : 0x258;
 
     BOOL BVar5 = 0;
     BOOL BVar2 = OGL_MacOpenWindow(nResolutionMode);
@@ -214,18 +245,13 @@ BOOL OGL_OpenOpenGLWindow(int nResolutionMode) {
       }
     }
 
-    bool bVar1 = OGL_HasAppleTextureExtensions();
-    if (bVar1) {
-      pThis = (::COGLAGPTextures*)Game::Main::MISC_OperatorNewShim(sizeof(::COGLAGPTextures));
-      COGLAGPTextures::COGLAGPTEXTURES_ConstructThunk(pThis);
+    if (OGL_HasAppleTextureExtensions()) {
+      pThis = (::CD2Textures*)new NewAGPTextures;
     } else {
-      int nMemoryBudget;
-      pThis = (::COGLAGPTextures*)Game::Main::MISC_OperatorNewShim(sizeof(::COGLTextures));
-      nMemoryBudget = OGL_GetTextureMemoryBudget();
-      COGLTextures::COGLTEXTURES_ConstructThunk((::COGLTextures*)pThis, nMemoryBudget);
+      pThis = (::CD2Textures*)new NewTextures(OGL_GetTextureMemoryBudget());
     }
 
-    PTR_005e9edc = (::CD2Textures*)pThis;
+    PTR_005e9edc = pThis;
     if (INT_005e9e24 == 800 && INT_005e9e28 == 600) {
       oglSmack::OGLSMACK_Init();
     }
@@ -351,8 +377,6 @@ BOOL OGL_EndScene1() {
 
 // 1.14d mac: 002df992
 void OGL_UpdateScaleFactor(int nScaleFactor) {
-    // Static local variables (originally global data)
-    static uint32_t DAT_005e9e1c; D2_STATIC_GUARD_BSS(DAT_005e9e1c, "D2OpenGL::oglCore::OGL_UpdateScaleFactor::DAT_005e9e1c");
 
     DAT_005e9e1c = nScaleFactor;
 }
@@ -408,9 +432,6 @@ void OGL_GetScreenSize(int * pWidth, int * pHeight) {
 
 // 1.14d mac: 002dfa9e
 void OGL_SetPalette(BYTE * pPalette) {
-    // Static local variables (originally global data)
-    static BYTE BYTE_ARRAY_ARRAY_005ea4e0[256][3] = {}; D2_STATIC_GUARD(BYTE_ARRAY_ARRAY_005ea4e0, "D2OpenGL::oglCore::OGL_SetPalette::BYTE_ARRAY_ARRAY_005ea4e0");
-    static BYTE BYTE_ARRAY_ARRAY_005ea7e0[256][4] = {}; D2_STATIC_GUARD(BYTE_ARRAY_ARRAY_005ea7e0, "D2OpenGL::oglCore::OGL_SetPalette::BYTE_ARRAY_ARRAY_005ea7e0");
 
     int iVar1 = 0;
     uint32_t* puVar2 = UINT_ARRAY_005e9ee0;
@@ -448,8 +469,6 @@ uint32_t OGL_ScalePaletteValue(int nIndex) {
 
 // 1.14d mac: 002dfbab
 void OGL_SetPaletteTable(BYTE * * pPaletteTable) {
-    // Static local variables (originally global data)
-    static BYTE * PTR_ARRAY_005525a8[72] = {}; D2_STATIC_GUARD(PTR_ARRAY_005525a8, "D2OpenGL::oglCore::OGL_SetPaletteTable::PTR_ARRAY_005525a8");
 
     Storm::Source::SMem::SMemCopy(PTR_ARRAY_005525a8, pPaletteTable, sizeof(PTR_ARRAY_005525a8));
     PTR_005e9e20 = PTR_ARRAY_005525a8;
@@ -465,16 +484,16 @@ BOOL OGL_ResizeWindow(void * hWindow, int nResolutionMode) {
     OGL_MacReleaseCutSceneBuffer();
     OGL_CloseOpenGLWindow();
     short int sVar1 = OGL_MacSwapContext(nResolutionMode, 0, 0);
-    if (!sVar1) {
-      OGL_OpenOpenGLWindow(nResolutionMode);
-      OGL_MacClearDisplayToBlack();
-      OGL_MacApplyGamma();
-    } else {
+    if (sVar1) {
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLSwapContext: *** OpenGLMacSwapContext failed. (%d)", (int)sVar1);
       OGL_MacApplyGamma();
+      return 0;
     }
 
-    return (uint32_t)!sVar1;
+    OGL_OpenOpenGLWindow(nResolutionMode);
+    OGL_MacClearDisplayToBlack();
+    OGL_MacApplyGamma();
+    return 1;
 }
 
 // Was named RENDERER_GLIDE_SetColorCombine after its Windows Glide counterpart (Game.exe 005094b0); this is the OpenGL renderer's own copy.
@@ -483,20 +502,22 @@ void OGL_SetColorCombine(int nMode) {
     if (DAT_005525a0 == nMode) {
       return;
     }
-    if (nMode == 2) {
-      if (*PTR_BOOL_00396380) {
+    if (nMode != 2) {
+      if (nMode == 1) {
+        if (BOOL_005c8a68) {
+          glEnable(0x84f5);
+        }
+
+        glEnable(0xde1);
+        glEnable(0xbc0);
+      }
+    } else {
+      if (BOOL_005c8a68) {
         glDisable(0x84f5);
       }
 
       glDisable(0xde1);
       glDisable(0xbc0);
-    } else if (nMode == 1) {
-      if (*PTR_BOOL_00396380) {
-        glEnable(0x84f5);
-      }
-
-      glEnable(0xde1);
-      glEnable(0xbc0);
     }
 
     DAT_005525a0 = nMode;
@@ -568,22 +589,22 @@ D2RenderStatisticsStrc * OGL_GetRenderStatistics() {
 
 // 1.14d mac: 002dfe2d
 void OGL_OpenWindowHook2() {
-
+    __asm__ volatile("");
 }
 
 // 1.14d mac: 002dfe32
 void OGL_CloseWindowHook1() {
-
+    __asm__ volatile("");
 }
 
 // 1.14d mac: 002dfe37
 void OGL_OpenWindowHook1() {
-
+    __asm__ volatile("");
 }
 
 // 1.14d mac: 002dfe3c
 void OGL_CloseWindowHook2() {
-
+    __asm__ volatile("");
 }
 
 } // namespace D2OpenGL::oglCore

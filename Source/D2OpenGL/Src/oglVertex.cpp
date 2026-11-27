@@ -72,6 +72,12 @@
 typedef void (*D2OGLFrameCallbackFn)();
 #endif
 
+D2OGLColorRGBStrc D2OGLColorRGBStrc_00552c2c = {}; D2_GLOBAL_GUARD(D2OGLColorRGBStrc_00552c2c, "D2OGLColorRGBStrc_00552c2c");
+D2OGLVertexStrc D2OGLVertexStrc_ARRAY_00552c34[4] = {}; D2_GLOBAL_GUARD(D2OGLVertexStrc_ARRAY_00552c34, "D2OGLVertexStrc_ARRAY_00552c34");
+D2OGLVertexStrc D2OGLVertexStrc_ARRAY_ARRAY_00552c94[5][3] = {}; D2_GLOBAL_GUARD(D2OGLVertexStrc_ARRAY_ARRAY_00552c94, "D2OGLVertexStrc_ARRAY_ARRAY_00552c94");
+uint8_t DAT_00552c30 = 0; D2_GLOBAL_GUARD(DAT_00552c30, "DAT_00552c30");
+BYTE * PTR_005eabe8 = 0; D2_GLOBAL_GUARD(PTR_005eabe8, "PTR_005eabe8");
+
 namespace D2OpenGL::oglVertex {
 
 // The Src files call one another unqualified.
@@ -86,6 +92,10 @@ using namespace D2OpenGL::oglSmack;
 using namespace D2OpenGL::oglSprite;
 using namespace D2OpenGL::oglVertex;
 using namespace D2OpenGL::MacDisplayDevice;
+
+
+static __attribute__((used)) uint8_t DAT_00552dfc; D2_STATIC_GUARD_BSS(DAT_00552dfc, "D2OpenGL::oglVertex::OGL_InitTileVertices::DAT_00552dfc");
+static __attribute__((used)) void* PTR_DAT_003963b4 = (void*)0x005ebc38; D2_STATIC_GUARD(PTR_DAT_003963b4, "D2OpenGL::oglVertex::OGL_HasAppleTextureExtensions::PTR_DAT_003963b4");
 
 // Allocates the 64K oglVertex.cpp table.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
@@ -120,7 +130,7 @@ void OGL_FillColorScaleTable() {
       nProduct = 0;
       nOffset = nRowOffset;
       do {
-        PTR_005eabe8[nOffset] = (char)(uint32_t)((uint64_t)((int64_t)nProduct * 0x80808081) >> 0x27) - (char)((int64_t)nProduct * 0x80808081 >> 0x3f);
+        PTR_005eabe8[nOffset] = (BYTE)(nProduct / 255);
         nProduct += nRow;
         nOffset++;
         nCount--;
@@ -163,14 +173,12 @@ void OGL_SetGlobalLight(BYTE nRed, BYTE nGreen, BYTE nBlue) {
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002e49a7
 void OGL_InitTileVertices() {
-    // Static local variables (originally global data)
-    static uint8_t DAT_00552dfc; D2_STATIC_GUARD_BSS(DAT_00552dfc, "D2OpenGL::oglVertex::OGL_InitTileVertices::DAT_00552dfc");
 
     int iVar5;
     int* piVar6;
     DAT_00552c30 = 1;
     D2OGLVertexStrc_ARRAY_00552c34[0].fX = 0.0;
-    D2OGLVertexStrc_ARRAY_00552c34[0].fY = (float)*PTR_INT_003963a8;
+    D2OGLVertexStrc_ARRAY_00552c34[0].fY = (float)INT_005e9e28;
     D2OGLVertexStrc_ARRAY_00552c34[0].fU = 0.0;
     D2OGLVertexStrc_ARRAY_00552c34[0].fV = 0.0;
     D2OGLVertexStrc_ARRAY_00552c34[1].fX = 0.0;
@@ -255,7 +263,7 @@ BOOL OGL_DrawShadowTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, int nDra
     int local_2c;
     int local_28;
     uint8_t local_1c;
-    if (*PTR_BOOL_00396380 && !((DAT_00552c30 ^ 1) & 1)) {
+    if (BOOL_005c8a68 && !((DAT_00552c30 ^ 1) & 1)) {
       OGL_SetTileVerticesTexelUV();
       DAT_00552c30 = 0;
     }
@@ -277,10 +285,10 @@ BOOL OGL_DrawShadowTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, int nDra
     }
 
     BVar4 = OGL_IsPerspectiveEnabled();
-    int* piVar3 = PTR_INT_003963a8;
+    int* piVar3 = (&INT_005e9e28);
     if (!BVar4) {
-      local_28 = *PTR_INT_003963a4;
-      iVar7 = *PTR_INT_003963a8;
+      local_28 = INT_005e9e24;
+      iVar7 = INT_005e9e28;
       if (nScreenPanels == 2) {
         local_2c = 0x120;
       } else {
@@ -335,8 +343,8 @@ BOOL OGL_DrawShadowTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, int nDra
       }
     } else {
       float fVar1;
-      iVar7 = *PTR_INT_003963a8;
-      iVar6 = *PTR_INT_003963a4;
+      iVar7 = INT_005e9e28;
+      iVar6 = INT_005e9e24;
       if (nScreenPanels == 1) {
         fVar17 = -160.0;
       } else {
@@ -444,7 +452,7 @@ BOOL OGL_DrawShadowTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, int nDra
 void OGL_SetTileVerticesTexelUV() {
     int iVar3;
     D2OGLVertexStrc_ARRAY_00552c34[0].fX = 0.0;
-    D2OGLVertexStrc_ARRAY_00552c34[0].fY = (float)*PTR_INT_003963a8;
+    D2OGLVertexStrc_ARRAY_00552c34[0].fY = (float)INT_005e9e28;
     D2OGLVertexStrc_ARRAY_00552c34[0].fU = 0.0;
     D2OGLVertexStrc_ARRAY_00552c34[0].fV = 0.0;
     D2OGLVertexStrc_ARRAY_00552c34[1].fX = 0.0;
@@ -479,7 +487,7 @@ void OGL_SetTileVerticesTexelUV() {
 
 // 1.14d mac: 002e5419
 BOOL OGL_DrawTransWallTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2GfxLightStrc * pLight, int nScreenPanels, BYTE nAlpha) {
-    if (*PTR_BOOL_00396380 && !((DAT_00552c30 ^ 1) & 1)) {
+    if (BOOL_005c8a68 && !((DAT_00552c30 ^ 1) & 1)) {
       OGL_SetTileVerticesTexelUV();
       DAT_00552c30 = 0;
     }
@@ -543,8 +551,8 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
       BVar3 = OGL_IsPerspectiveEnabled();
       BVar7 = 0;
       if (!BVar3) {
-        nMaxX = *PTR_INT_003963a4;
-        iVar15 = *PTR_INT_003963a8;
+        nMaxX = INT_005e9e24;
+        iVar15 = INT_005e9e28;
         if (nScreenPanels == 2) {
           nMinX = 0x120;
         } else {
@@ -576,8 +584,8 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
                 sLight_00 = pLight[iVar10];
                 OGL_BindWallBlockTexture((D2GroundSubTileStrc*)((uintptr_t)&pDVar2->nOffsetX + iVar5));
                 D2OGLVertexStrc_ARRAY_00552c34[0].fX = (float)iVar8;
-                D2OGLVertexStrc_ARRAY_00552c34[0].fY = (float)(*PTR_INT_003963a8 - (iVar12 + nY));
-                D2OGLVertexStrc_ARRAY_00552c34[1].fY = (float)(*PTR_INT_003963a8 - iVar11);
+                D2OGLVertexStrc_ARRAY_00552c34[0].fY = (float)(INT_005e9e28 - (iVar12 + nY));
+                D2OGLVertexStrc_ARRAY_00552c34[1].fY = (float)(INT_005e9e28 - iVar11);
                 D2OGLVertexStrc_ARRAY_00552c34[2].fX = (float)(iVar8 + 0x20);
                 D2OGLVertexStrc_ARRAY_00552c34[1].fX = D2OGLVertexStrc_ARRAY_00552c34[0].fX;
                 D2OGLVertexStrc_ARRAY_00552c34[2].fY = D2OGLVertexStrc_ARRAY_00552c34[1].fY;
@@ -607,7 +615,7 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
           } while (iVar6 < nBlockCount);
         }
       } else {
-        iVar15 = *PTR_INT_003963a8;
+        iVar15 = INT_005e9e28;
         if (nScreenPanels == 1) {
           fOffsetX = -160.0;
         } else {
@@ -615,9 +623,9 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
         }
 
         bVar14 = nScreenPanels - 1U < 2;
-        iVar6 = *PTR_INT_003963a4 - 0xa0;
+        iVar6 = INT_005e9e24 - 0xa0;
         if (!bVar14) {
-          iVar6 = *PTR_INT_003963a4;
+          iVar6 = INT_005e9e24;
         }
 
         fMinX = FLOAT_ARRAY_00334be0[bVar14 ? 1 : 0];
@@ -647,9 +655,9 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
             iVar5 = D2OGLWallCornerStrc_ARRAY_ARRAY_003ce7fc[uVar1][uVar9 + 1].nZ;
             iVar8 = D2OGLWallCornerStrc_ARRAY_ARRAY_003ce7fc[uVar1][uVar9].nZ - iVar6;
             OGL_AdjustPerspectivePosition(iVar12, nY_00, iVar8, &__frame0.local_18, &__frame0.local_1c);
-            piVar13 = PTR_INT_003963a8;
+            piVar13 = (&INT_005e9e28);
             D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][0].fX = (float)__frame0.local_18;
-            D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][0].fY = (float)(*PTR_INT_003963a8 - __frame0.local_1c);
+            D2OGLVertexStrc_ARRAY_ARRAY_00552c94[0][0].fY = (float)(INT_005e9e28 - __frame0.local_1c);
             OGL_AdjustPerspectivePosition(iVar12, nY_00, iVar8 - 0x20, &__frame0.local_18, &__frame0.local_1c);
             D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][0].fX = (float)__frame0.local_18;
             D2OGLVertexStrc_ARRAY_ARRAY_00552c94[4][0].fY = (float)(*piVar13 - __frame0.local_1c);
@@ -670,8 +678,8 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
                 if ((uVar9 | 4) != 4) {
                   OGL_AdjustPerspectivePosition(iVar12, nY_00, iVar8 + uVar9 * -8, &__frame0.local_18, &__frame0.local_1c);
                   D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][0].fX = (float)__frame0.local_18;
-                  piVar13 = PTR_INT_003963a8;
-                  D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][0].fY = (float)(*PTR_INT_003963a8 - __frame0.local_1c);
+                  piVar13 = (&INT_005e9e28);
+                  D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][0].fY = (float)(INT_005e9e28 - __frame0.local_1c);
                   OGL_AdjustPerspectivePosition(iVar10, iVar11, iVar5 + uVar9 * -8, &__frame0.local_18, &__frame0.local_1c);
                   D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][2].fX = (float)__frame0.local_18;
                   D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][2].fY = (float)(*piVar13 - __frame0.local_1c);
@@ -679,7 +687,7 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
 
                 OGL_AdjustPerspectivePosition(iVar10 + iVar12 >> 1, iVar11 + nY_00 >> 1, (iVar5 + iVar8 >> 1) + uVar9 * -8, &__frame0.local_18, &__frame0.local_1c);
                 D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][1].fX = (float)__frame0.local_18;
-                D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][1].fY = (float)(*PTR_INT_003963a8 - __frame0.local_1c);
+                D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][1].fY = (float)(INT_005e9e28 - __frame0.local_1c);
                 iVar6 = 0;
                 pVertex = (D2OGLVertexStrc*)&D2OGLVertexStrc_ARRAY_ARRAY_00552c94[uVar9][0].fX;
                 do {
@@ -737,7 +745,7 @@ BOOL OGL_DrawWallTileBlocks(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2Gf
 
 // 1.14d mac: 002e5ea1
 BOOL OGL_DrawWallTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2GfxLightStrc * pLight, int nScreenPanels) {
-    if (*PTR_BOOL_00396380 && !((DAT_00552c30 ^ 1) & 1)) {
+    if (BOOL_005c8a68 && !((DAT_00552c30 ^ 1) & 1)) {
       OGL_SetTileVerticesTexelUV();
       DAT_00552c30 = 0;
     }
@@ -750,25 +758,17 @@ BOOL OGL_DrawWallTile(D2TileLibraryEntryStrc * pTile, int nX, int nY, D2GfxLight
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e5f00
 bool OGL_HasAppleTextureExtensions() {
-    // Static local variables (originally global data)
-    static void* PTR_DAT_003963b4 = (void*)0x005ebc38; D2_STATIC_GUARD(PTR_DAT_003963b4, "D2OpenGL::oglVertex::OGL_HasAppleTextureExtensions::PTR_DAT_003963b4");
-
-    bool bResult;
-    char* pcVar3;
     GLubyte* pGVar2 = glGetString(0x1f03);
     glGetString(0x1f01);
     char* pClientStorage = strstr((char*)pGVar2, "GL_APPLE_client_storage");
     char* pTextureRange = strstr((char*)pGVar2, "GL_APPLE_texture_range");
     if (!pClientStorage || !pTextureRange) {
-      bResult = false;
-    } else {
-      uint32_t uVar1;
-      uVar1 = *(uint32_t*)((uint8_t*)PTR_DAT_003963b4 + 0xc);
-      pcVar3 = strstr((char*)pGVar2, "GL_EXT_texture_rectangle");
-      bResult = pcVar3 && 0xfffffff < uVar1;
+      return false;
     }
 
-    return bResult;
+    uint32_t uVar1 = *(uint32_t*)((uint8_t*)PTR_DAT_003963b4 + 0xc);
+    char* pcVar3 = strstr((char*)pGVar2, "GL_EXT_texture_rectangle");
+    return pcVar3 && 0xfffffff < uVar1;
 }
 
 } // namespace D2OpenGL::oglVertex

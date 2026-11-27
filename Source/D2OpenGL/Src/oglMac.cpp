@@ -60,6 +60,38 @@
 typedef void (*D2OGLFrameCallbackFn)();
 #endif
 
+// 1.14d mac: 00552b28
+CGDisplayModeRef CGDisplayModeRef_00552b28 = nullptr; D2_GLOBAL_GUARD(CGDisplayModeRef_00552b28, "CGDisplayModeRef_00552b28");
+// 1.14d mac: 00552b2c
+CGDirectDisplayID CGDirectDisplayID_00552b2c = 0; D2_GLOBAL_GUARD(CGDirectDisplayID_00552b2c, "CGDirectDisplayID_00552b2c");
+// 1.14d mac: 00552b30
+WindowRef WindowRef_00552b30 = nullptr; D2_GLOBAL_GUARD(WindowRef_00552b30, "WindowRef_00552b30");
+// 1.14d mac: 00552b34
+AGLContext AGLContext_00552b34 = nullptr; D2_GLOBAL_GUARD(AGLContext_00552b34, "AGLContext_00552b34");
+// 1.14d mac: 00552b38
+short SHORT_ARRAY_00552b38[2] = {}; D2_GLOBAL_GUARD(SHORT_ARRAY_00552b38, "SHORT_ARRAY_00552b38");
+// 1.14d mac: 00552b50
+D2OGLDisplayModeStrc D2OGLDisplayModeStrc_ARRAY_00552b50[3] = {}; D2_GLOBAL_GUARD(D2OGLDisplayModeStrc_ARRAY_00552b50, "D2OGLDisplayModeStrc_ARRAY_00552b50");
+// 1.14d mac: 00552b20
+uint8_t DAT_00552b20 = 0; D2_GLOBAL_GUARD(DAT_00552b20, "DAT_00552b20");
+// 1.14d mac: 00552b24
+uint32_t DAT_00552b24 = 0; D2_GLOBAL_GUARD(DAT_00552b24, "DAT_00552b24");
+// 1.14d mac: 00552b3c
+uint8_t DAT_00552b3c = 0; D2_GLOBAL_GUARD(DAT_00552b3c, "DAT_00552b3c");
+// 1.14d mac: 00552b40
+uint8_t * DAT_00552b40 = 0; D2_GLOBAL_GUARD(DAT_00552b40, "DAT_00552b40");
+
+// 1.14d mac: 003ce7e8
+uint32_t DAT_003ce7e8 = -0x1; D2_GLOBAL_GUARD(DAT_003ce7e8, "DAT_003ce7e8");
+// 1.14d mac: 003ce7ec
+uint32_t DAT_003ce7ec = 0x10; D2_GLOBAL_GUARD(DAT_003ce7ec, "DAT_003ce7ec");
+// 1.14d mac: 003ce7f0
+uint32_t DAT_003ce7f0 = -0x1; D2_GLOBAL_GUARD(DAT_003ce7f0, "DAT_003ce7f0");
+// 1.14d mac: 003ce7f4
+uint32_t DAT_003ce7f4 = 0x9b; D2_GLOBAL_GUARD(DAT_003ce7f4, "DAT_003ce7f4");
+// 1.14d mac: 003ce7f8
+uint32_t DAT_003ce7f8 = 0x1; D2_GLOBAL_GUARD(DAT_003ce7f8, "DAT_003ce7f8");
+
 namespace D2OpenGL::oglMac {
 
 // The Src files call one another unqualified.
@@ -74,6 +106,14 @@ using namespace D2OpenGL::oglSmack;
 using namespace D2OpenGL::oglSprite;
 using namespace D2OpenGL::oglVertex;
 using namespace D2OpenGL::MacDisplayDevice;
+
+
+// 1.14d mac: 00334b88
+static __attribute__((used)) int INT_ARRAY_00334b88[5] = { 0x1, 0x2, 0x4, 0x1a, 0x0 }; D2_STATIC_GUARD(INT_ARRAY_00334b88, "D2OpenGL::oglMac::OGL_MacOpenWindow::INT_ARRAY_00334b88");
+// 1.14d mac: 00552b44
+static __attribute__((used)) EventHandlerUPP EventHandlerUPP_00552b44 = nullptr; D2_STATIC_GUARD(EventHandlerUPP_00552b44, "D2OpenGL::oglMac::OGL_MacOpenWindow::EventHandlerUPP_00552b44");
+// 1.14d mac: 00552b48
+static __attribute__((used)) uint8_t DAT_00552b48; D2_STATIC_GUARD_BSS(DAT_00552b48, "D2OpenGL::oglMac::OGL_MacOpenWindow::DAT_00552b48");
 
 // Always returns 1.
 // Described from the Mac body (no Windows twin).
@@ -130,12 +170,6 @@ BOOL OGL_RestoreDisplayMode() {
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e0d68
 BOOL OGL_MacCreateSurface(int nResolution) {
-    CGDisplayModeRef hBestMode;
-    int nError;
-    size_t nWidth;
-    size_t nHeight;
-    char* Format;
-    uint32_t dwModeBits;
     if (DAT_00552b24 != 1) {
       return 1;
     }
@@ -143,37 +177,37 @@ BOOL OGL_MacCreateSurface(int nResolution) {
     HideMenuBar();
     CGDisplayModeRef_00552b28 = CGDisplayCopyDisplayMode(CGDirectDisplayID_00552b2c);
     if (!CGDisplayModeRef_00552b28) {
-      Format = "OpenGLMacCreateSurface: *** CGDisplayCopyDisplayMode failed.";
-    } else {
-      Boolean bSameMode;
-      dwModeBits = D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwSizeFlags;
-      hBestMode = (CGDisplayModeRef)MACDISPLAY_FindBestDisplayMode(CGDirectDisplayID_00552b2c, dwModeBits >> 1 & 0x7fff, dwModeBits >> 0x10, DAT_003ce7ec, (uint32_t)*(uint16_t*)((uintptr_t)&D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwRefreshFixed + 2), (uint8_t)dwModeBits & 1, '\x01');
-      if (!hBestMode) {
-        Format = "OpenGLMacCreateSurface: *** Couldn\'t find mode for %dx%dx%d %fHz%s.";
-      } else {
-        CGCaptureAllDisplays();
-        bSameMode = CFEqual(hBestMode, CGDisplayModeRef_00552b28);
-        if (bSameMode != '\0') {
-          CGDisplayModeRelease(CGDisplayModeRef_00552b28);
-          CGDisplayModeRef_00552b28 = (CGDisplayModeRef)0x0;
-          CFRelease(hBestMode);
-          return 1;
-        }
-
-        nError = CGDisplaySetDisplayMode(CGDirectDisplayID_00552b2c, hBestMode, (CFDictionaryRef)0x0);
-        nWidth = CGDisplayModeGetWidth(hBestMode);
-        nHeight = CGDisplayModeGetHeight(hBestMode);
-        Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacCreateSurface: *** CGDisplaySwitchToMode (%dx%d)", nWidth, nHeight);
-        CFRelease(hBestMode);
-        if (!nError) {
-          return 1;
-        }
-
-        Format = "OpenGLMacCreateSurface: *** CGDisplaySwitchToMode failed (%d)";
-      }
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacCreateSurface: *** CGDisplayCopyDisplayMode failed.");
+      return 0;
     }
 
-    Fog::Src::LogManager::LOGFILE_WriteStringToFile(Format);
+    uint32_t nRefreshHz = ((uint16_t*)&D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwRefreshFixed)[1];
+    uint32_t dwModeBits = D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwSizeFlags;
+    CGDisplayModeRef hBestMode = (CGDisplayModeRef)MACDISPLAY_FindBestDisplayMode(CGDirectDisplayID_00552b2c, dwModeBits >> 1 & 0x7fff, dwModeBits >> 0x10, DAT_003ce7ec, nRefreshHz, (uint8_t)dwModeBits & 1, '\x01');
+    if (!hBestMode) {
+      dwModeBits = D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwSizeFlags;
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacCreateSurface: *** Couldn't find mode for %dx%dx%d %fHz%s.", dwModeBits >> 1 & 0x7fff, dwModeBits >> 0x10, DAT_003ce7ec, (double)(float)D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwRefreshFixed * (1.0 / 65536.0), (dwModeBits & 1) ? " (stretched)" : "");
+      return 0;
+    }
+
+    CGCaptureAllDisplays();
+    if (CFEqual(hBestMode, CGDisplayModeRef_00552b28)) {
+      CGDisplayModeRelease(CGDisplayModeRef_00552b28);
+      CGDisplayModeRef_00552b28 = (CGDisplayModeRef)0x0;
+      CFRelease(hBestMode);
+      return 1;
+    }
+
+    int nError = CGDisplaySetDisplayMode(CGDirectDisplayID_00552b2c, hBestMode, (CFDictionaryRef)0x0);
+    size_t nWidth = CGDisplayModeGetWidth(hBestMode);
+    size_t nHeight = CGDisplayModeGetHeight(hBestMode);
+    Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacCreateSurface: *** CGDisplaySwitchToMode (%dx%d)", nWidth, nHeight);
+    CFRelease(hBestMode);
+    if (!nError) {
+      return 1;
+    }
+
+    Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacCreateSurface: *** CGDisplaySwitchToMode failed (%d)", nError);
     return 0;
 }
 
@@ -196,7 +230,7 @@ short OGL_MacSwapContext(int nResolution, int nColorBits, int nUnused) {
 
     uint32_t uVar1 = D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwSizeFlags;
     size_t nMinHeight = uVar1 >> 0x10;
-    CGDisplayModeRef hBestMode = (CGDisplayModeRef)MACDISPLAY_FindBestDisplayMode(CGDirectDisplayID_00552b2c, uVar1 >> 1 & 0x7fff, nMinHeight, nColorBits, (uint32_t)*(uint16_t*)((uintptr_t)&D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwRefreshFixed + 2), (uint8_t)uVar1 & 1, '\x01');
+    CGDisplayModeRef hBestMode = (CGDisplayModeRef)MACDISPLAY_FindBestDisplayMode(CGDirectDisplayID_00552b2c, uVar1 >> 1 & 0x7fff, nMinHeight, nColorBits, (uint32_t)((uint16_t*)&D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwRefreshFixed)[1], (uint8_t)uVar1 & 1, '\x01');
     if (!hBestMode) {
       uVar1 = D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwSizeFlags;
       szStretched = "";
@@ -234,15 +268,11 @@ short OGL_MacSwapContext(int nResolution, int nColorBits, int nUnused) {
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e10f6
 BOOL OGL_MacOpenWindow(int nResolution) {
-    // Static local variables (originally global data)
-    static int INT_ARRAY_00334b88[5] = { 0x1, 0x2, 0x4, 0x1a, 0x0 }; D2_STATIC_GUARD(INT_ARRAY_00334b88, "D2OpenGL::oglMac::OGL_MacOpenWindow::INT_ARRAY_00334b88");
     static uint32_t UINT_ARRAY_ARRAY_00334b9c[3][2] = {
     { 0x77696e64, 0x48 },
     { 0x77696e64, 0x4b },
     { 0x77696e64, 0x1b }
 }; D2_STATIC_GUARD(UINT_ARRAY_ARRAY_00334b9c, "D2OpenGL::oglMac::OGL_MacOpenWindow::UINT_ARRAY_ARRAY_00334b9c");
-    static EventHandlerUPP EventHandlerUPP_00552b44 = nullptr; D2_STATIC_GUARD(EventHandlerUPP_00552b44, "D2OpenGL::oglMac::OGL_MacOpenWindow::EventHandlerUPP_00552b44");
-    static uint8_t DAT_00552b48; D2_STATIC_GUARD_BSS(DAT_00552b48, "D2OpenGL::oglMac::OGL_MacOpenWindow::DAT_00552b48");
 
     OSStatus OVar3;
     int iVar4;
@@ -266,9 +296,9 @@ BOOL OGL_MacOpenWindow(int nResolution) {
     local_14 = *(int*)PTR____stack_chk_guard_003961fc;
     if (!DAT_00552b24) {
       CGDisplayBounds(&local_24, CGDirectDisplayID_00552b2c);
-      local_34.size.width = (CGFloat)*PTR_INT_003963a4;
+      local_34.size.width = (CGFloat)INT_005e9e24;
       local_34.origin.x = (local_24.size.width - local_34.size.width) * 0.5 + local_24.origin.x;
-      local_34.size.height = (CGFloat)*PTR_INT_003963a8;
+      local_34.size.height = (CGFloat)INT_005e9e28;
       local_34.origin.y = (local_24.size.height - local_34.size.height) * 0.5 + local_24.origin.y;
       BVar7 = 0;
       OVar3 = HIWindowCreate(6, INT_ARRAY_00334b88, nullptr, 1, &local_34, &WindowRef_00552b30);
@@ -364,8 +394,8 @@ BOOL OGL_MacOpenWindow(int nResolution) {
             CGDisplayBounds(&local_9c, CGDirectDisplayID_00552b2c);
             SHORT_ARRAY_00552b38[1] = (short int)(int)local_9c.origin.x;
             SHORT_ARRAY_00552b38[0] = (short int)(int)local_9c.origin.y;
-            iVar4 = *PTR_INT_003963a4;
-            height = *PTR_INT_003963a8;
+            iVar4 = INT_005e9e24;
+            height = INT_005e9e28;
             y = (int)((D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwSizeFlags >> 0x10) - height) / 2;
             x = (int)((D2OGLDisplayModeStrc_ARRAY_00552b50[nResolution].dwSizeFlags >> 1 & 0x7fff) - iVar4) / 2;
             glViewport(x, y, iVar4, height);
@@ -374,8 +404,8 @@ BOOL OGL_MacOpenWindow(int nResolution) {
             SHORT_ARRAY_00552b38[0] = 0;
             SHORT_ARRAY_00552b38[1] = 0;
             LocalToGlobal((Point*)SHORT_ARRAY_00552b38);
-            iVar4 = *PTR_INT_003963a4;
-            height = *PTR_INT_003963a8;
+            iVar4 = INT_005e9e24;
+            height = INT_005e9e28;
             y = 0;
             x = 0;
             glViewport(x, y, iVar4, height);
@@ -425,69 +455,64 @@ BOOL OGL_MacSetRenderer(uint32_t nDisplayId, AGLPixelFormat hPixelFormat) {
     };
     static_assert(sizeof(void*) != 4 || sizeof(__frame0_t) == 16, "frame group __frame0_t must reproduce the Ghidra frame layout");
     __frame0_t __frame0;
-    AGLRendererInfo hRenderer;
-    char* Format;
     __frame0.local_14 = nDisplayId;
     glGetString(0x1f01);
     glGetString(0x1f02);
-    GLboolean GVar1;
-    GVar1 = aglDescribePixelFormat(hPixelFormat, 0x46, &__frame0.nFormatRendererID);
-    if (GVar1 == '\0') {
-      Format = "OpenGLMacSetRenderer: *** aglDescribePixelFormat failed.";
-    } else {
-      AGLRendererInfo hRendererInfo;
-      hRendererInfo = aglQueryRendererInfoForCGDirectDisplayIDs(&__frame0.local_14, 1);
-      if (!hRendererInfo) {
-        Format = "OpenGLMacSetRenderer: *** aglQueryRendererInfo failed.";
-      } else {
-        hRenderer = hRendererInfo;
-        do {
-          GVar1 = aglDescribeRenderer(hRenderer, 0x46, &__frame0.nRendererID);
-          if (GVar1 == '\0') {
-            goto LAB_002e168f;
-          }
-          if (__frame0.nRendererID == __frame0.nFormatRendererID) {
-            if (hRenderer) {
-              goto LAB_002e169b;
-            }
-
-            break;
-          }
-
-          hRenderer = aglNextRendererInfo(hRenderer);
-        } while (hRenderer);
-
-        __frame0.bAccelerated = 0;
-        hRenderer = hRendererInfo;
-        do {
-          GVar1 = aglDescribeRenderer(hRenderer, 0x49, &__frame0.bAccelerated);
-          if (GVar1 == '\0') {
-            goto LAB_002e168f;
-          }
-          if (__frame0.bAccelerated) {
-            if (hRenderer) {
-              LAB_002e169b:
-              DAT_00552b20 = 1;
-              aglDestroyRendererInfo(hRendererInfo);
-              return 1;
-            }
-
-            break;
-          }
-
-          hRenderer = aglNextRendererInfo(hRenderer);
-        } while (hRenderer);
-
-        Format = "OpenGLMacSetRenderer: *** No usable OpenGL engine found.";
-      }
-    }
-
-    while (true) {
-      Fog::Src::LogManager::LOGFILE_WriteStringToFile(Format);
+    if (!aglDescribePixelFormat(hPixelFormat, 0x46, &__frame0.nFormatRendererID)) {
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacSetRenderer: *** aglDescribePixelFormat failed.");
       return 0;
-      LAB_002e168f:
-      Format = "OpenGLMacSetRenderer: *** aglDescribeRenderer failed.";
     }
+
+    AGLRendererInfo hRendererInfo = aglQueryRendererInfoForCGDirectDisplayIDs(&__frame0.local_14, 1);
+    if (!hRendererInfo) {
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacSetRenderer: *** aglQueryRendererInfo failed.");
+      return 0;
+    }
+
+    AGLRendererInfo hRenderer = hRendererInfo;
+    do {
+      if (!aglDescribeRenderer(hRenderer, 0x46, &__frame0.nRendererID)) {
+        goto describeFailed;
+      }
+      if (__frame0.nRendererID == __frame0.nFormatRendererID) {
+        if (hRenderer) {
+          goto found;
+        }
+
+        break;
+      }
+
+      hRenderer = aglNextRendererInfo(hRenderer);
+    } while (hRenderer);
+
+    __frame0.bAccelerated = 0;
+    hRenderer = hRendererInfo;
+    do {
+      if (!aglDescribeRenderer(hRenderer, 0x49, &__frame0.bAccelerated)) {
+        goto describeFailed;
+      }
+      if (__frame0.bAccelerated) {
+        if (hRenderer) {
+          goto found;
+        }
+
+        break;
+      }
+
+      hRenderer = aglNextRendererInfo(hRenderer);
+    } while (hRenderer);
+
+    Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacSetRenderer: *** No usable OpenGL engine found.");
+    return 0;
+
+describeFailed:
+    Fog::Src::LogManager::LOGFILE_WriteStringToFile("OpenGLMacSetRenderer: *** aglDescribeRenderer failed.");
+    return 0;
+
+found:
+    DAT_00552b20 = 1;
+    aglDestroyRendererInfo(hRendererInfo);
+    return 1;
 }
 
 // Destroys the AGL context and disposes the window.
@@ -519,7 +544,7 @@ void OGL_MacSwapBuffers() {
 
 // 1.14d mac: 002e175d
 int OGL_MacClampMouseEvent(void * pEvent) {
-    if (!(!*PTR_BOOL_00396390 && DAT_00552b24 && *(uint16_t*)pEvent < 9)) {
+    if (!(!BOOL_005e9e30 && DAT_00552b24 && *(uint16_t*)pEvent < 9)) {
       return 0;
     }
 
@@ -539,13 +564,13 @@ int OGL_MacClampMouseEvent(void * pEvent) {
       sVar3 = SHORT_ARRAY_00552b38[0];
     }
 
-    int iVar4 = (short int)((short int)*PTR_INT_003963a4 + SHORT_ARRAY_00552b38[1]) - 1;
+    int iVar4 = (short int)((short int)INT_005e9e24 + SHORT_ARRAY_00552b38[1]) - 1;
     if (iVar4 < local_16) {
       ptPos = ptPos & 0xffff | iVar4 * 0x10000;
       local_16 = (short int)iVar4;
     }
 
-    uVar5 = (int)(short int)((short int)*PTR_INT_003963a8 + SHORT_ARRAY_00552b38[0]) - 1;
+    uVar5 = (int)(short int)((short int)INT_005e9e28 + SHORT_ARRAY_00552b38[0]) - 1;
     if ((int)uVar5 < (int)sVar3) {
       ptPos = ptPos & -65536 | uVar5 & 0xffff;
       sVar3 = (short int)uVar5;
@@ -561,7 +586,7 @@ int OGL_MacClampMouseEvent(void * pEvent) {
 
 // 1.14d mac: 002e185d
 BOOL OGL_MacGlobalToLocal(short * pPoint) {
-    int iVar1 = *PTR_BOOL_00396390;
+    int iVar1 = BOOL_005e9e30;
     if (iVar1) {
       return (uint32_t)!iVar1;
     }
@@ -573,7 +598,7 @@ BOOL OGL_MacGlobalToLocal(short * pPoint) {
 
 // 1.14d mac: 002e1894
 BOOL OGL_MacLocalToGlobal(short * pPoint) {
-    int iVar1 = *PTR_BOOL_00396390;
+    int iVar1 = BOOL_005e9e30;
     if (iVar1) {
       return (uint32_t)!iVar1;
     }
@@ -653,7 +678,6 @@ void OGL_RestoreGamma() {
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e19eb
 void OGL_MacClearDisplayToBlack() {
-    // Static local variables (originally global data)
     static CGPoint * PTR__CGPointZero_0039638c = (CGPoint*)&D2OpenGL::CGPointZero; D2_STATIC_GUARD(PTR__CGPointZero_0039638c, "D2OpenGL::oglMac::OGL_MacClearDisplayToBlack::PTR__CGPointZero_0039638c");
     static CFStringRef * PTR__kCGColorBlack_00396398 = (CFStringRef*)&D2OpenGL::kCGColorBlack; D2_STATIC_GUARD(PTR__kCGColorBlack_00396398, "D2OpenGL::oglMac::OGL_MacClearDisplayToBlack::PTR__kCGColorBlack_00396398");
 
@@ -727,52 +751,40 @@ BOOL OGL_MacReleaseCutSceneBuffer() {
 
 // 1.14d mac: 002e1c3c
 BOOL OGL_SetOption(int nOption, intptr_t nValue) {
-    // Static local variables (originally global data)
-    static BOOL * PTR_BOOL_00396394 = &BOOL_005e9e2c; D2_STATIC_GUARD(PTR_BOOL_00396394, "D2OpenGL::oglMac::OGL_SetOption::PTR_BOOL_00396394");
-
-    CGDirectDisplayID CVar2;
-    BOOL BVar1 = 0;
     switch (nOption) {
       case 0:
         CGDirectDisplayID_00552b2c = (CGDirectDisplayID)nValue;
-      break;
+        break;
       case 1:
-        CVar2 = CGDirectDisplayID_00552b2c;
-      *(CGDirectDisplayID*)nValue = CVar2;
-      break;
+        *(CGDirectDisplayID*)nValue = CGDirectDisplayID_00552b2c;
+        break;
       case 2:
         D2OGLDisplayModeStrc_ARRAY_00552b50[0] = *(D2OGLDisplayModeStrc*)nValue;
-      break;
+        break;
       case 3:
         D2OGLDisplayModeStrc_ARRAY_00552b50[1] = *(D2OGLDisplayModeStrc*)nValue;
-      D2OGLDisplayModeStrc_ARRAY_00552b50[2] = *(D2OGLDisplayModeStrc*)nValue;
-      break;
+        D2OGLDisplayModeStrc_ARRAY_00552b50[2] = *(D2OGLDisplayModeStrc*)nValue;
+        break;
       case 4:
         DAT_003ce7f0 = (uint32_t)nValue;
-      break;
+        break;
       case 5:
-        DAT_003ce7ec = 0x10;
-      if (nValue) {
-        DAT_003ce7ec = 0x20;
-      }
-
-      break;
-      default:
-        return BVar1;
+        DAT_003ce7ec = nValue ? 0x20 : 0x10;
+        break;
       case 8:
         DAT_00552b24 = (uint32_t)!nValue;
-      break;
+        break;
       case 10:
-        CVar2 = *PTR_BOOL_00396394;
-      *(CGDirectDisplayID*)nValue = CVar2;
-      break;
+        *(CGDirectDisplayID*)nValue = BOOL_005e9e2c;
+        break;
       case 0xb:
         DAT_003ce7f8 = (uint32_t)nValue;
-      return BVar1;
+        return 0;
+      default:
+        return 0;
     }
 
-    BVar1 = 1;
-    return BVar1;
+    return 1;
 }
 
 // Carbon window event handler installed in MacOpenWindow. Handles moved, activate and close (sends WM_CLOSE).
@@ -790,33 +802,22 @@ OSStatus OGL_MacWindowEventHandler(EventHandlerCallRef hCallRef, EventRef hEvent
 
     UVar1 = GetEventKind(hEvent);
     OSStatus nStatus = -0x2692;
-    switch (UVar1) {
-      case 0x1b:
-        {
-          SetPortWindowPort(WindowRef_00552b30);
-          SHORT_ARRAY_00552b38[0] = 0;
-          SHORT_ARRAY_00552b38[1] = 0;
-          LocalToGlobal((Point*)SHORT_ARRAY_00552b38);
-          break;
-        }
-      case 0x4b:
-        {
-          MAC_OnWindowZoom();
-          nStatus = 0;
-          break;
-        }
-      case 0x48:
-        {
-          hWnd = (int*)D2gfx::D2GFX::GetHwnd();
-          SendMessageA(hWnd, 0x10, 0, 0);
-          nStatus = 0;
-          hWnd = (int*)D2gfx::D2GFX::GetHwnd();
-          if (!hWnd) {
-            nStatus = -0x2692;
-          }
-
-          break;
-        }
+    if (UVar1 == 0x1b) {
+      SetPortWindowPort(WindowRef_00552b30);
+      SHORT_ARRAY_00552b38[0] = 0;
+      SHORT_ARRAY_00552b38[1] = 0;
+      LocalToGlobal((Point*)SHORT_ARRAY_00552b38);
+    } else if (UVar1 == 0x4b) {
+      MAC_OnWindowZoom();
+      nStatus = 0;
+    } else if (UVar1 == 0x48) {
+      hWnd = (int*)D2gfx::D2GFX::GetHwnd();
+      SendMessageA(hWnd, 0x10, 0, 0);
+      nStatus = 0;
+      hWnd = (int*)D2gfx::D2GFX::GetHwnd();
+      if (!hWnd) {
+        nStatus = -0x2692;
+      }
     }
 
     return nStatus;

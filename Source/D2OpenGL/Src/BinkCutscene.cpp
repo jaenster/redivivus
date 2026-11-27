@@ -60,6 +60,14 @@
 typedef void (*D2OGLFrameCallbackFn)();
 #endif
 
+uint32_t DAT_0055256c = 0; D2_GLOBAL_GUARD(DAT_0055256c, "DAT_0055256c");
+uint32_t DAT_00552570 = 0; D2_GLOBAL_GUARD(DAT_00552570, "DAT_00552570");
+uint32_t DAT_00552574 = 0; D2_GLOBAL_GUARD(DAT_00552574, "DAT_00552574");
+uint32_t DAT_00552578 = 0; D2_GLOBAL_GUARD(DAT_00552578, "DAT_00552578");
+uint32_t DAT_0055257c = 0; D2_GLOBAL_GUARD(DAT_0055257c, "DAT_0055257c");
+BOOL BOOL_005e9e30 = 0; D2_GLOBAL_GUARD(BOOL_005e9e30, "BOOL_005e9e30");
+int INT_005eabe0 = 0; D2_GLOBAL_GUARD(INT_005eabe0, "INT_005eabe0");
+
 namespace D2OpenGL::BinkCutscene {
 
 // The Src files call one another unqualified.
@@ -74,6 +82,12 @@ using namespace D2OpenGL::oglSmack;
 using namespace D2OpenGL::oglSprite;
 using namespace D2OpenGL::oglVertex;
 using namespace D2OpenGL::MacDisplayDevice;
+
+
+static __attribute__((used)) uint8_t DAT_00552580; D2_STATIC_GUARD_BSS(DAT_00552580, "D2OpenGL::BinkCutscene::OGL_PlayVideoFile::DAT_00552580");
+static __attribute__((used)) HBINK HBINK_00552584 = nullptr; D2_STATIC_GUARD(HBINK_00552584, "D2OpenGL::BinkCutscene::OGL_PlayVideoFile::HBINK_00552584");
+static __attribute__((used)) uint32_t DAT_00552588; D2_STATIC_GUARD_BSS(DAT_00552588, "D2OpenGL::BinkCutscene::OGL_PlayVideoFile::DAT_00552588");
+static __attribute__((used)) uint32_t DAT_0055258c; D2_STATIC_GUARD_BSS(DAT_0055258c, "D2OpenGL::BinkCutscene::OGL_PlayVideoFile::DAT_0055258c");
 
 // Halts if either of its first two arguments is not positive, stores all four arguments in globals and creates the video texture once. It then selects texture unit 0 and, for three GL capabilities, saves their current enabled state and enables or disables each according to a stored preset.
 // Described from the Mac body (no Windows twin).
@@ -131,12 +145,6 @@ void OGL_CutsceneRestoreGL() {
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002de824
 void OGL_PlayVideoFile(char * szFile, int nResolutionMode, BYTE * pBuffer, int nPitch, D2OGLFrameCallbackFn pfnFrame) {
-    // Static local variables (originally global data)
-    static uint8_t DAT_00552580; D2_STATIC_GUARD_BSS(DAT_00552580, "D2OpenGL::BinkCutscene::OGL_PlayVideoFile::DAT_00552580");
-    static HBINK HBINK_00552584 = nullptr; D2_STATIC_GUARD(HBINK_00552584, "D2OpenGL::BinkCutscene::OGL_PlayVideoFile::HBINK_00552584");
-    static uint32_t DAT_00552588; D2_STATIC_GUARD_BSS(DAT_00552588, "D2OpenGL::BinkCutscene::OGL_PlayVideoFile::DAT_00552588");
-    static uint32_t DAT_0055258c; D2_STATIC_GUARD_BSS(DAT_0055258c, "D2OpenGL::BinkCutscene::OGL_PlayVideoFile::DAT_0055258c");
-    static int * PTR_INT_00396378 = &INT_005eabe0; D2_STATIC_GUARD(PTR_INT_00396378, "D2OpenGL::BinkCutscene::OGL_PlayVideoFile::PTR_INT_00396378");
 
     // Frame slots -98..-88 are ONE object: &nRefNum is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -182,7 +190,7 @@ void OGL_PlayVideoFile(char * szFile, int nResolutionMode, BYTE * pBuffer, int n
       __bzero(pBuffer, DAT_00552574 * DAT_00552578 * 4);
       DAT_00552580 = '\0';
       D2gfx::D2GFX::D2GFX_GetScreenSize(&__frame0.nScreenWidth, &__frame0.nScreenHeight);
-      if (!(HBINK_00552584 || *PTR_BOOL_00396390)) {
+      if (!(HBINK_00552584 || BOOL_005e9e30)) {
         FlushEvents(0xffff, 0);
         BinkSetSoundSystem(PTR_BINK_OpenSoundManager_00396374, 0);
         BVar3 = Fog::Source::SFile::GetUseDirectCommand();
@@ -221,9 +229,9 @@ void OGL_PlayVideoFile(char * szFile, int nResolutionMode, BYTE * pBuffer, int n
                   goto LAB_002dedd0;
                 }
 
-                iVar4 = *PTR_BOOL_00396390;
+                iVar4 = BOOL_005e9e30;
               } else {
-                iVar4 = *PTR_BOOL_00396390;
+                iVar4 = BOOL_005e9e30;
               }
               if (iVar4) {
                 goto LAB_002dedd0;
@@ -251,7 +259,7 @@ void OGL_PlayVideoFile(char * szFile, int nResolutionMode, BYTE * pBuffer, int n
                 iVar4 = BinkWait(HBINK_00552584);
                 if (!iVar4) {
                   BinkDoFrame(HBINK_00552584);
-                  BinkCopyToBuffer(HBINK_00552584, pBuffer, nPitch, HBINK_00552584->Height, DAT_00552588, DAT_0055258c, *PTR_INT_00396378);
+                  BinkCopyToBuffer(HBINK_00552584, pBuffer, nPitch, HBINK_00552584->Height, DAT_00552588, DAT_0055258c, INT_005eabe0);
                   if (HBINK_00552584->FrameNum == HBINK_00552584->Frames) {
                     DAT_00552580 = '\x01';
                   } else {

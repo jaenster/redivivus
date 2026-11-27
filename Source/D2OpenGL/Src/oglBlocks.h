@@ -16,7 +16,6 @@ namespace D2OpenGL::oglBlocks {
 // Function declarations
 
 // Allocates the three oglBlocks.cpp scratch buffers.
-// Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 void OGLBLOCKS_AllocBuffers(); // 1.14d mac: 002dee38
 // Frees the three oglBlocks.cpp buffers.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
@@ -24,9 +23,7 @@ void OGLBLOCKS_FreeBuffers(); // 1.14d mac: 002deec5
 // Ensures the tile is loaded, decodes it into a 160x80 (or 256x128) buffer, uploads it once, sets the filter and binds the texture.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 BOOL OGL_PrepareGroundTileTexture(struct D2TileLibraryEntryStrc * pTile); // 1.14d mac: 002def7a
-// Decodes the tile's sub-blocks (isometric raw and RLE forms) into a pitch-sized buffer. Only caller is PrepareGroundTileTexture.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
-void OGL_DecodeGroundTileBlocks(struct D2TileLibraryEntryStrc * pTile, BYTE * pDst, int nPitch); // 1.14d mac: 002df0d1
 // If the block has no texture yet, decodes its run-length data into a 32x32 scratch buffer, uploads it through the texture manager and sets the texture filter. Then marks its texture entry as recently used.
 // Described from the Mac body (no Windows twin).
 void OGL_BindWallBlockTexture(struct D2GroundSubTileStrc * pBlock); // 1.14d mac: 002df201

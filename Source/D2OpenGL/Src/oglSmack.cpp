@@ -86,6 +86,23 @@ using namespace D2OpenGL::oglSprite;
 using namespace D2OpenGL::oglVertex;
 using namespace D2OpenGL::MacDisplayDevice;
 
+static void OGLSMACK_ConvertIndexedToRGBA(BYTE * pIndices, uint32_t * pDst, BYTE * pRGB);
+
+static __attribute__((used)) uint8_t DAT_00334bc0 = -0x1; D2_STATIC_GUARD(DAT_00334bc0, "D2OpenGL::oglSmack::OGL_DecodeSmacker::DAT_00334bc0");
+static __attribute__((used)) uint8_t DAT_00334bb4 = -0x1; D2_STATIC_GUARD(DAT_00334bb4, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00334bb4");
+static __attribute__((used)) uint32_t DAT_00552b90; D2_STATIC_GUARD_BSS(DAT_00552b90, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552b90");
+static __attribute__((used)) uint32_t DAT_00552b94; D2_STATIC_GUARD_BSS(DAT_00552b94, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552b94");
+static __attribute__((used)) uint32_t DAT_00552b98; D2_STATIC_GUARD_BSS(DAT_00552b98, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552b98");
+static __attribute__((used)) uint32_t DAT_00552b9c; D2_STATIC_GUARD_BSS(DAT_00552b9c, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552b9c");
+static __attribute__((used)) uint32_t DAT_00552ba0; D2_STATIC_GUARD_BSS(DAT_00552ba0, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552ba0");
+static __attribute__((used)) uint32_t DAT_00552ba4; D2_STATIC_GUARD_BSS(DAT_00552ba4, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552ba4");
+static __attribute__((used)) uint32_t DAT_00552ba8; D2_STATIC_GUARD_BSS(DAT_00552ba8, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552ba8");
+static __attribute__((used)) uint32_t DAT_00552bac; D2_STATIC_GUARD_BSS(DAT_00552bac, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bac");
+static __attribute__((used)) uint32_t DAT_00552bb0; D2_STATIC_GUARD_BSS(DAT_00552bb0, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bb0");
+static __attribute__((used)) uint32_t DAT_00552bb4; D2_STATIC_GUARD_BSS(DAT_00552bb4, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bb4");
+static __attribute__((used)) uint32_t DAT_00552bb8; D2_STATIC_GUARD_BSS(DAT_00552bb8, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bb8");
+static __attribute__((used)) uint32_t DAT_00552bbc; D2_STATIC_GUARD_BSS(DAT_00552bbc, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bbc");
+
 // Allocates the oglSmack.cpp buffers and creates two textures with filter params.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e20d4
@@ -134,8 +151,6 @@ void OGLSMACK_Shutdown() {
 // From Windows 1.14d Game.exe 0050e5d0 (Mac pair tier T1g).
 // 1.14d mac: 002e22fb
 void OGL_DecodeSmacker(char * szSmacker, D2SmackerContextStrc * pContext, char nMode) {
-    // Static local variables (originally global data)
-    static uint8_t DAT_00334bc0 = -0x1; D2_STATIC_GUARD(DAT_00334bc0, "D2OpenGL::oglSmack::OGL_DecodeSmacker::DAT_00334bc0");
 
     // Frame slots -1908..-864 are ONE object: &dwFileSize is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -290,22 +305,8 @@ void OGL_CloseSmacker(D2SmackerContextStrc * pContext) {
 
 // 1.14d mac: 002e274d
 void OGL_PlayerSmacker(D2SmackerContextStrc * pContext) {
-    // Static local variables (originally global data)
-    static uint8_t DAT_00334bb4 = -0x1; D2_STATIC_GUARD(DAT_00334bb4, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00334bb4");
-    static uint32_t DAT_00552b90; D2_STATIC_GUARD_BSS(DAT_00552b90, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552b90");
-    static uint32_t DAT_00552b94; D2_STATIC_GUARD_BSS(DAT_00552b94, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552b94");
-    static uint32_t DAT_00552b98; D2_STATIC_GUARD_BSS(DAT_00552b98, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552b98");
-    static uint32_t DAT_00552b9c; D2_STATIC_GUARD_BSS(DAT_00552b9c, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552b9c");
-    static uint32_t DAT_00552ba0; D2_STATIC_GUARD_BSS(DAT_00552ba0, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552ba0");
-    static uint32_t DAT_00552ba4; D2_STATIC_GUARD_BSS(DAT_00552ba4, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552ba4");
-    static uint32_t DAT_00552ba8; D2_STATIC_GUARD_BSS(DAT_00552ba8, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552ba8");
-    static uint32_t DAT_00552bac; D2_STATIC_GUARD_BSS(DAT_00552bac, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bac");
-    static uint32_t DAT_00552bb0; D2_STATIC_GUARD_BSS(DAT_00552bb0, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bb0");
-    static uint32_t DAT_00552bb4; D2_STATIC_GUARD_BSS(DAT_00552bb4, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bb4");
-    static uint32_t DAT_00552bb8; D2_STATIC_GUARD_BSS(DAT_00552bb8, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bb8");
-    static uint32_t DAT_00552bbc; D2_STATIC_GUARD_BSS(DAT_00552bbc, "D2OpenGL::oglSmack::OGL_PlayerSmacker::DAT_00552bbc");
 
-    if (!(pContext->eMode == 'p' && !*PTR_BOOL_00396390)) {
+    if (!(pContext->eMode == 'p' && !BOOL_005e9e30)) {
       return;
     }
 
@@ -313,11 +314,11 @@ void OGL_PlayerSmacker(D2SmackerContextStrc * pContext) {
     oglCore::OGL_SetColorCombine(1);
     oglCore::OGL_SetBlendMode(1);
     glColor4ubv(&DAT_00334bb4);
-    int* piVar3 = PTR_INT_003963a8;
+    int* piVar3 = (&INT_005e9e28);
     int iVar2 = pContext->nX;
     DAT_00552b90 = (float)iVar2;
-    DAT_00552b94 = (GLfloat)(*PTR_INT_003963a8 - (iVar1 - 0x40));
-    DAT_00552b9c = (GLfloat)(*PTR_INT_003963a8 - iVar1);
+    DAT_00552b94 = (GLfloat)(INT_005e9e28 - (iVar1 - 0x40));
+    DAT_00552b9c = (GLfloat)(INT_005e9e28 - iVar1);
     DAT_00552ba0 = 0.9375;
     float fVar4 = (float)(iVar2 + 0x100);
     DAT_00552bac = 1.0;
@@ -367,7 +368,7 @@ void OGL_PlayerSmacker(D2SmackerContextStrc * pContext) {
 // Called only by OGL_DecodeSmacker. Converts a 256x64 block of 8-bit indexed pixels to RGBA through an RGB palette (index 0 becomes 0xff).
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002e2af8
-void OGLSMACK_ConvertIndexedToRGBA(BYTE * pIndices, uint32_t * pDst, BYTE * pRGB) {
+static void OGLSMACK_ConvertIndexedToRGBA(BYTE * pIndices, uint32_t * pDst, BYTE * pRGB) {
     uint32_t dwColor;
     int nPaletteOffset;
     int nRow = 0;
@@ -379,15 +380,18 @@ void OGLSMACK_ConvertIndexedToRGBA(BYTE * pIndices, uint32_t * pDst, BYTE * pRGB
         dwColor = 0xff;
         if (pIndices[nColumn] && pRGB) {
           nPaletteOffset = (uint32_t)pIndices[nColumn] * 3;
-          dwColor = (uint32_t)pRGB[nPaletteOffset + 2] << 8 | (uint32_t)pRGB[nPaletteOffset] << 0x18 | (uint32_t)pRGB[nPaletteOffset + 1] << 0x10 | 0xff;
+          uint32_t uG = pRGB[nPaletteOffset + 1];
+          uint32_t uR = pRGB[nPaletteOffset];
+          uint32_t uB = pRGB[nPaletteOffset + 2];
+          dwColor = uG << 0x10 | uR << 0x18 | uB << 8 | 0xff;
         }
 
         pDest[nColumn] = dwColor;
         nColumn++;
       } while (nColumn != 0x100);
 
-      pDest += 0x100;
       pIndices += 0x200;
+      pDest += 0x100;
       nRow++;
     } while (nRow != 0x40);
 }

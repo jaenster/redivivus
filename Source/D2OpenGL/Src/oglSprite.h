@@ -38,21 +38,8 @@ void OGLSPRITE_Shutdown(); // 1.14d mac: 002e2cd0
 // Glide: draw isometric perspective image with texture filtering and lighting
 // From Windows 1.14d Game.exe 0050acc0 (Mac pair tier T1g).
 void OGL_DrawPerspectiveImage(struct D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDrawMode, int nScreenMode, BYTE * pPalette); // 1.14d mac: 002e2d91
-// Was named RENDERER_GLIDE_GetSpriteMetadata after its Windows Glide counterpart (Game.exe 0050a260); this is the OpenGL renderer's own copy.
-BOOL OGL_GetSpriteMetadata(struct D2GfxDataStrc * pData, struct D2OGLSpriteStrc * pSprite); // 1.14d mac: 002e33a9
-// Computes power-of-two texture width/height/area from the image dims and sets the default UVs (0..1).
-// Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
-void OGL_ComputeTextureSize(struct D2OGLSpriteStrc * pSprite); // 1.14d mac: 002e344e
-// Decodes a cel into the sprite buffer (normal, palette-shifted or outlined), uploads it if not cached and binds it.
-// Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
-BOOL OGL_PrepareCelTexture(struct D2OGLSpriteStrc * pSprite, BYTE * pPalette, BYTE nOutlineColor, int nTexMode); // 1.14d mac: 002e34d7
-// Was named RENDERER_GLIDE_SetDrawMode after its Windows Glide counterpart (Game.exe 0050abf0); this is the OpenGL renderer's own copy.
-BYTE OGL_SetDrawMode(int nDrawMode); // 1.14d mac: 002e3934
-void OGL_DrawImage(struct D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDrawMode, BYTE * pPalette); // 1.14d mac: 002e39bc
-// OpenGL: draws a sprite cel as one textured quad - colour from OGL_ApplyColorLighting, blending set by OGL_SetColorCombine, scaled for perspective when it is on - through glBegin/glColor4ubv/glTexCoord2f/glVertex2f.
-// Was named RENDERER_GLIDE_DrawPalettedQuad after its Windows Glide counterpart (Game.exe 0050a9a0); this is the OpenGL renderer's own copy.
-void OGL_DrawPalettedQuad(struct D2OGLSpriteStrc * pSprite, int nX, int nY, DWORD dwGamma, int nColorIndex, BYTE nAlpha, BOOL bUseColorIndex, int nTexWidth, int nTexHeight); // 1.14d mac: 002e3ab2
-void OGL_DrawShiftedImage(struct D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDrawMode, int nColorIndex); // 1.14d mac: 002e3e98
+BOOL OGL_DrawImage(struct D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDrawMode, BYTE * pPalette); // 1.14d mac: 002e39bc
+BOOL OGL_DrawShiftedImage(struct D2GfxDataStrc * pData, int nX, int nY, DWORD dwGamma, int nDrawMode, int nColorIndex); // 1.14d mac: 002e3e98
 void OGL_DrawVerticalCropImage(struct D2GfxDataStrc * pData, int nX, int nY, int nSkipLines, int nDrawLines, int nDrawMode); // 1.14d mac: 002e3f6c
 void OGL_DrawClippedImage(struct D2GfxDataStrc * pData, int nX, int nY, struct D2GfxTileRectStrc * pCropRect, int nDrawMode); // 1.14d mac: 002e40a2
 void OGL_DrawShadow(struct D2GfxDataStrc * pData, int nX, int nY); // 1.14d mac: 002e4332

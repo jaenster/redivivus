@@ -60,6 +60,9 @@
 typedef void (*D2OGLFrameCallbackFn)();
 #endif
 
+// 1.14d mac: 005526cc
+uint8_t DAT_005526cc = 0; D2_GLOBAL_GUARD(DAT_005526cc, "DAT_005526cc");
+
 namespace D2OpenGL::oglFloorCache {
 
 // The Src files call one another unqualified.
@@ -75,6 +78,16 @@ using namespace D2OpenGL::oglSprite;
 using namespace D2OpenGL::oglVertex;
 using namespace D2OpenGL::MacDisplayDevice;
 
+
+// 1.14d mac: 00334b70
+static __attribute__((used)) float FLOAT_ARRAY_00334b70[2] = { 80, 128 }; D2_STATIC_GUARD(FLOAT_ARRAY_00334b70, "D2OpenGL::oglFloorCache::OGL_DrawGroundTile::FLOAT_ARRAY_00334b70");
+// 1.14d mac: 00334b78
+static __attribute__((used)) float FLOAT_ARRAY_00334b78[2] = { 160, 256 }; D2_STATIC_GUARD(FLOAT_ARRAY_00334b78, "D2OpenGL::oglFloorCache::OGL_DrawGroundTile::FLOAT_ARRAY_00334b78");
+// 1.14d mac: 005526d0
+static __attribute__((used)) D2OGLVertexStrc D2OGLVertexStrc_ARRAY_ARRAY_005526d0[6][6] = {}; D2_STATIC_GUARD(D2OGLVertexStrc_ARRAY_ARRAY_005526d0, "D2OpenGL::oglFloorCache::OGL_DrawGroundTile::D2OGLVertexStrc_ARRAY_ARRAY_005526d0");
+// 1.14d mac: 00552a30
+static __attribute__((used)) D2OGLVertexStrc * PTR_ARRAY_ARRAY_00552a30[5][12] = {}; D2_STATIC_GUARD(PTR_ARRAY_ARRAY_00552a30, "D2OpenGL::oglFloorCache::OGL_DrawGroundTile::PTR_ARRAY_ARRAY_00552a30");
+
 // Sets a global flag to 1.
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002e07ec
@@ -84,12 +97,6 @@ void OGL_InvalidateGroundMesh() {
 
 // 1.14d mac: 002e07fe
 BOOL OGL_DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLight, int nX, int nY, int nWorldX, int nWorldY, BYTE nAlpha, int nScreenPanels, void * pTileData) {
-    // Static local variables (originally global data)
-    static float FLOAT_ARRAY_00334b70[2] = { 80, 128 }; D2_STATIC_GUARD(FLOAT_ARRAY_00334b70, "D2OpenGL::oglFloorCache::OGL_DrawGroundTile::FLOAT_ARRAY_00334b70");
-    static float FLOAT_ARRAY_00334b78[2] = { 160, 256 }; D2_STATIC_GUARD(FLOAT_ARRAY_00334b78, "D2OpenGL::oglFloorCache::OGL_DrawGroundTile::FLOAT_ARRAY_00334b78");
-    static D2OGLVertexStrc D2OGLVertexStrc_ARRAY_ARRAY_005526d0[6][6] = {}; D2_STATIC_GUARD(D2OGLVertexStrc_ARRAY_ARRAY_005526d0, "D2OpenGL::oglFloorCache::OGL_DrawGroundTile::D2OGLVertexStrc_ARRAY_ARRAY_005526d0");
-    static D2OGLVertexStrc * PTR_ARRAY_ARRAY_00552a30[5][12] = {}; D2_STATIC_GUARD(PTR_ARRAY_ARRAY_00552a30, "D2OpenGL::oglFloorCache::OGL_DrawGroundTile::PTR_ARRAY_ARRAY_00552a30");
-    static BYTE * * PTR_PTR_00396388 = &PTR_005eabe8; D2_STATIC_GUARD(PTR_PTR_00396388, "D2OpenGL::oglFloorCache::OGL_DrawGroundTile::PTR_PTR_00396388");
 
     uint8_t* pBVar2;
     bool bVar3;
@@ -113,12 +120,12 @@ BOOL OGL_DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLigh
     float fVar24;
     if (DAT_005526cc == '\x01') {
       DAT_005526cc = '\0';
-      if (!*PTR_BOOL_0039639c) {
+      if (!BOOL_005c8a64) {
         bVar3 = false;
         fVar21 = 128.0;
         fVar22 = 256.0;
       } else {
-        bVar20 = !*PTR_BOOL_00396380;
+        bVar20 = !BOOL_005c8a68;
         bVar3 = !bVar20;
         fVar21 = FLOAT_ARRAY_00334b70[bVar20];
         fVar22 = FLOAT_ARRAY_00334b78[bVar20];
@@ -210,18 +217,18 @@ BOOL OGL_DrawGroundTile(D2TileLibraryEntryStrc * pTile, D2GfxLightExStrc * pLigh
     do {
       uint8_t bVar1;
       bVar1 = pLight[iVar4].sLight.nIntensity;
-      pBVar2 = *PTR_PTR_00396388;
+      pBVar2 = PTR_005eabe8;
       pVertex->nRed = pBVar2[(uint32_t)pLight[iVar4].sLight.nRed + (uint32_t)bVar1 * 0x100];
       pVertex->nGreen = pBVar2[(uint32_t)pLight[iVar4].sLight.nGreen + (uint32_t)bVar1 * 0x100];
       pVertex->nBlue = pBVar2[(uint32_t)pLight[iVar4].sLight.nBlue + (uint32_t)bVar1 * 0x100];
       pVertex->nAlpha = nAlpha;
       pVertex->fX = (float)pLight[iVar4].nX;
-      pVertex->fY = (float)(*PTR_INT_003963a8 - pLight[iVar4].nY);
+      pVertex->fY = (float)(INT_005e9e28 - pLight[iVar4].nY);
       pVertex++;
       iVar4++;
     } while (iVar4 != (int)(sizeof(D2OGLVertexStrc_ARRAY_ARRAY_005526d0) / sizeof(D2OGLVertexStrc)));
 
-    if ((*PTR_PTR_00396384)->bLowQuality) {
+    if (PTR_005e9e14->bLowQuality) {
       glBegin(6);
       glColor4ubv(&D2OGLVertexStrc_ARRAY_ARRAY_005526d0[0][0].nRed);
       glTexCoord2f(D2OGLVertexStrc_ARRAY_ARRAY_005526d0[0][0].fU, D2OGLVertexStrc_ARRAY_ARRAY_005526d0[0][0].fV);

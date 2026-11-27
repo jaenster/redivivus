@@ -425,13 +425,12 @@ void EndFrame(::CD2Textures * pThis) {
 // Returns the remaining texture memory: the total minus the memory in use, minus the reserve computed at init when the flag is set.
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002b1700
-int GetFreeMemory(::CD2Textures * pThis, bool bExcludeReserve) {
+int GetFreeMemory(::CD2Textures * pThis, BYTE bExcludeReserve) {
     int nFreeMemory = pThis->nMemoryBudget - pThis->nUsedBytes;
-    if (!bExcludeReserve) {
-      return nFreeMemory;
+    if (bExcludeReserve) {
+      nFreeMemory -= pThis->nReserveBytes;
     }
 
-    nFreeMemory -= pThis->nReserveBytes;
     return nFreeMemory;
 }
 

@@ -72,6 +72,11 @@
 typedef void (*D2OGLFrameCallbackFn)();
 #endif
 
+// 1.14d mac: 00552590
+uint8_t * DAT_00552590 = 0; D2_GLOBAL_GUARD(DAT_00552590, "DAT_00552590");
+// 1.14d mac: 00552598
+BYTE * PTR_00552598 = 0; D2_GLOBAL_GUARD(PTR_00552598, "PTR_00552598");
+
 namespace D2OpenGL::oglBlocks {
 
 // The Src files call one another unqualified.
@@ -86,6 +91,9 @@ using namespace D2OpenGL::oglSmack;
 using namespace D2OpenGL::oglSprite;
 using namespace D2OpenGL::oglVertex;
 using namespace D2OpenGL::MacDisplayDevice;
+
+static void OGL_DecodeGroundTileBlocks(struct D2TileLibraryEntryStrc * pTile, BYTE * pDst, int nPitch);
+
 
 // Allocates the three oglBlocks.cpp scratch buffers.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
@@ -120,134 +128,96 @@ void OGLBLOCKS_FreeBuffers() {
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002def7a
 BOOL OGL_PrepareGroundTileTexture(D2TileLibraryEntryStrc * pTile) {
-    CD2TexturesVtable* pCVar3;
-    ::CD2Textures* pThis;
-    int nWidth;
-    int nHeight;
-    BOOL BVar4 = 0;
-    BOOL BVar1 = SPRITECACHE_EnsureSpriteLoaded(pTile);
-    if (!BVar1) {
-      return BVar4;
+    BOOL bResult = 0;
+    if (!D2CMP::SRC::SpriteCache::SPRITECACHE_AllocEntry(pTile, 1, 0)) {
+      return bResult;
     }
 
     short int nTextureId = pTile->nTextureCacheIndex;
     if (nTextureId < 0) {
-      void* pvVar2;
-      pvVar2 = Fog::Src::ErrorManager::GetInstructionPointer();
+      void* pvVar2 = Fog::Src::ErrorManager::GetInstructionPointer();
       fp_fatal("Unrecoverable internal error %08x line %d", pvVar2, 0x17d);
       nTextureId = pTile->nTextureCacheIndex;
     }
+
     if (!nTextureId) {
-      if (!*PTR_BOOL_0039639c) {
-        OGL_DecodeGroundTileBlocks(pTile, PTR_00552598, 0x100);
-        pThis = *PTR_PTR_003963b0;
-        pCVar3 = pThis->vptr;
-        nHeight = 0x80;
-        nWidth = 0x100;
-      } else {
+      if (BOOL_005c8a64) {
         OGL_DecodeGroundTileBlocks(pTile, PTR_00552598, 0xa0);
-        pThis = *PTR_PTR_003963b0;
-        pCVar3 = pThis->vptr;
-        nHeight = 0x50;
-        nWidth = 0xa0;
+        PTR_005e9edc->vptr->CreateTexture(PTR_005e9edc, PTR_00552598, 0xa0, 0x50, 1, pTile, 0, 0);
+      } else {
+        OGL_DecodeGroundTileBlocks(pTile, PTR_00552598, 0x100);
+        PTR_005e9edc->vptr->CreateTexture(PTR_005e9edc, PTR_00552598, 0x100, 0x80, 1, pTile, 0, 0);
       }
 
-      pCVar3->CreateTexture(pThis, PTR_00552598, nWidth, nHeight, 1, pTile, 0, 0);
       OGL_SetTextureFilter(2);
       nTextureId = pTile->nTextureCacheIndex;
     }
 
-    CD2Textures::CD2TEXTURES_TouchEntry(*PTR_PTR_003963b0, (int)nTextureId);
-    BVar4 = 1;
-    return BVar4;
+    CD2Textures::CD2TEXTURES_TouchEntry(PTR_005e9edc, (int)nTextureId);
+    bResult = 1;
+    return bResult;
 }
 
 // Decodes the tile's sub-blocks (isometric raw and RLE forms) into a pitch-sized buffer. Only caller is PrepareGroundTileTexture.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 // 1.14d mac: 002df0d1
-void OGL_DecodeGroundTileBlocks(D2TileLibraryEntryStrc * pTile, BYTE * pDst, int nPitch) {
-    uint8_t bVar1;
-    size_t nSize;
-    uint8_t bVar3;
-    uint8_t bVar4;
-    uint8_t* pbVar5;
-    uint8_t* pbVar6;
-    int nRow;
-    int iVar7;
-    int iVar8;
-    uint8_t* pbVar9;
-    uint8_t* pbVar10;
-    uint8_t* pbVar11;
-    uint8_t* pDest;
+static void OGL_DecodeGroundTileBlocks(D2TileLibraryEntryStrc * pTile, BYTE * pDst, int nPitch) {
     Storm::Source::SMem::SMemZero(pDst, nPitch << 7);
-    if (0 >= pTile->nSubTiles) {
+    if (pTile->nSubTiles <= 0) {
       return;
     }
 
     int nBlock = 0;
     do {
-      D2GroundSubTileStrc* pDVar2;
-      pDVar2 = pTile->pSubTiles;
-      if (pDVar2[nBlock].wFormat & 1) {
-        iVar8 = pDVar2[nBlock].nOffsetY * nPitch + (int)pDVar2[nBlock].nOffsetX;
-        if (!(pDVar2[nBlock].wFormat & 4)) {
-          nRow = 0;
-          nSize = 4;
-          pbVar6 = pDVar2[nBlock].pPixelData;
-          pDest = pDst + iVar8 + 0xe;
+      D2GroundSubTileStrc* pSubTile = &pTile->pSubTiles[nBlock];
+      if (pSubTile->wFormat & 1) {
+        int nOffset = pSubTile->nOffsetY * nPitch + pSubTile->nOffsetX;
+        if (!(pSubTile->wFormat & 4)) {
+          BYTE* pDest = pDst + nOffset + 0xe;
+          BYTE* pSrc = pSubTile->pPixelData;
+          int nSize = 4;
+          int nRow = 0;
           do {
-            iVar8 = 2;
-            if (nRow < 7) {
-              iVar8 = -2;
-            }
-
-            iVar7 = -4;
-            if (nRow < 7) {
-              iVar7 = 4;
-            }
-
-            pbVar9 = pbVar6 + nSize;
-            Storm::Source::SMem::SMemCopy(pDest, pbVar6, nSize);
+            int nShift = nRow < 7 ? -2 : 2;
+            int nGrow = nRow < 7 ? 4 : -4;
+            Storm::Source::SMem::SMemCopy(pDest, pSrc, nSize);
+            pDest += nPitch + nShift;
+            pSrc += nSize;
+            nSize += nGrow;
             nRow++;
-            nSize = iVar7 + nSize;
-            pbVar6 = pbVar9;
-            pDest = pDest + iVar8 + nPitch;
           } while (nRow != 0xf);
         } else {
-          pbVar10 = pDst + iVar8;
-          iVar8 = 0xf;
-          pbVar6 = pDVar2[nBlock].pPixelData;
-          pbVar9 = pbVar10;
+          BYTE* pLine = pDst + nOffset;
+          BYTE* pDest = pLine;
+          BYTE* pSrc = pSubTile->pPixelData;
+          int nLines = 0xf;
           do {
             while (true) {
-              pbVar11 = pbVar9;
-              pbVar5 = pbVar6;
-              pbVar6 = pbVar5 + 2;
-              bVar3 = pbVar5[1];
-              bVar1 = *pbVar5;
-              if (!bVar1 && !bVar3) {
+              BYTE* pRun = pSrc;
+              BYTE nSkip = pRun[0];
+              BYTE nCount = pRun[1];
+              pSrc = pRun + 2;
+              if (!nSkip && !nCount) {
                 break;
               }
 
-              pbVar9 = pbVar11 + bVar1;
-              if (bVar3) {
-                bVar4 = bVar3 - 1;
+              pDest += nSkip;
+              BYTE* pStart = pDest;
+              if (nCount) {
+                BYTE nLast = nCount - 1;
                 do {
-                  *pbVar9 = *pbVar6;
-                  pbVar9++;
-                  pbVar6++;
-                  bVar3--;
-                } while (bVar3);
+                  *pDest++ = *pSrc++;
+                  nCount--;
+                } while (nCount);
 
-                pbVar6 = pbVar5 + bVar4 + 3;
-                pbVar9 = pbVar11 + (uint32_t)bVar1 + (uint32_t)bVar4 + 1;
+                pSrc = pRun + nLast + 3;
+                pDest = pStart + nLast + 1;
               }
             }
 
-            pbVar10 += nPitch;
-            iVar8--;
-            pbVar9 = pbVar10;
-          } while (iVar8);
+            pLine += nPitch;
+            pDest = pLine;
+          } while (--nLines);
         }
       }
 
@@ -318,12 +288,12 @@ void OGL_BindWallBlockTexture(D2GroundSubTileStrc * pBlock) {
         pbVar11 = pbVar6;
       } while (nRows);
 
-      (*PTR_PTR_003963b0)->vptr->CreateTexture(*PTR_PTR_003963b0, (void*)DAT_00552590, 0x20, 0x20, 2, pBlock, 0, 0);
+      PTR_005e9edc->vptr->CreateTexture(PTR_005e9edc, (void*)DAT_00552590, 0x20, 0x20, 2, pBlock, 0, 0);
       OGL_SetTextureFilter(1);
       nTextureId = pBlock->nTextureCacheIndex;
     }
 
-    CD2Textures::CD2TEXTURES_TouchEntry(*PTR_PTR_003963b0, (int)nTextureId);
+    CD2Textures::CD2TEXTURES_TouchEntry(PTR_005e9edc, (int)nTextureId);
 }
 
 // Releases the tile's own texture and the texture of each of its sub-blocks from the texture manager.
@@ -332,7 +302,7 @@ void OGL_BindWallBlockTexture(D2GroundSubTileStrc * pBlock) {
 // Windows: D2CMP calls this callback __fastcall (argument in ECX); the Mac build has no fastcall.
 void __fastcall OGL_ReleaseTileTextures(D2TileLibraryEntryStrc * pTile) {
     if (0 < pTile->nTextureCacheIndex) {
-      CD2Textures::CD2TEXTURES_ReleaseById(*PTR_PTR_003963b0, (int)pTile->nTextureCacheIndex);
+      CD2Textures::CD2TEXTURES_ReleaseById(PTR_005e9edc, (int)pTile->nTextureCacheIndex);
     }
 
     int iVar1 = pTile->nSubTiles;
@@ -345,7 +315,7 @@ void __fastcall OGL_ReleaseTileTextures(D2TileLibraryEntryStrc * pTile) {
       int nTextureId_00;
       nTextureId_00 = (int)pTile->pSubTiles[nTextureId].nTextureCacheIndex;
       if (0 < nTextureId_00) {
-        CD2Textures::CD2TEXTURES_ReleaseById(*PTR_PTR_003963b0, nTextureId_00);
+        CD2Textures::CD2TEXTURES_ReleaseById(PTR_005e9edc, nTextureId_00);
         iVar1 = pTile->nSubTiles;
       }
 

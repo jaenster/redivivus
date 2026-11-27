@@ -427,13 +427,12 @@ addr	name	reason_class	detail
 002b0f36	CD2TEXTURES_Init	pic-ref	same code shape but the flag test reads g_tSurface-8 in orig and &_BOOL_005c8a64 in ours
 002b104a	_CD2Textures_D0	pic-ref	same instructions; tail jump goes to `delete` in the original but to an unresolved local label in ours
 002b106e	_CD2Textures_D2	eh	orig has a call to __ZSt9terminatev (noexcept terminate path) that ours does not emit
-002b10e6	CreateTexture	wrong	orig calls CD2TEXTURES_SetEntryOwner twice and FOG_GetFramePointer; ours omits them and writes +0x18/+0x1c directly
-002b1290	CD2TEXTURES_ReleaseEntry	wrong	orig multiplies by field +0x10 and loads +0x14 via cmove select; ours multiplies by +0x14 and loads +0x10 via branch, so field offsets are swapped
+002b10e6	CreateTexture	regalloc	spill slots [ebp-0x10]/[ebp-0x14] swapped
+002b1290	CD2TEXTURES_ReleaseEntry	regalloc	push order edi/esi/ebx, frame 0x10 vs 0x1c
 002b13b8	CD2TEXTURES_SetEntryOwner	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical
 002b14b4	CD2TEXTURES_ListAppend	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical
 002b1600	CD2TEXTURES_ListRemove	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical
-002b1700	GetFreeMemory	wrong	orig skips the subtract when flag equals 0 (je); ours skips when flag is not 1 (jne), a different constant on the same flag
-002b1718	CD2TEXTURES_GrowEntries	wrong	ours stores to [reg+0x54] which orig never writes; orig writes through [reg] with a different register chain
+002b1718	CD2TEXTURES_GrowEntries	regalloc	spill slots swapped; ebx lea hoisted by ours
 002b1913	PALETTE_InitColorLookupTables	regalloc	same instructions; the 49-table copy loop keeps the byte offset in edi and the source cursor in ebx, ours the other way round (index loop and pointer loop give the same)
 002b1a44	FUN_002b1a44	crt-idiom	orig is an unrolled per-row copy with cascading cmp/ja and dec-counter chains (Duff-style); ours is a compact loop over g_anTileRowDest/Src/Width
 002b1ca9	FUN_002b1ca9	crt-idiom	orig is a fully unrolled copy (about 357 extra add-based offset steps); ours is a loop over g_anTileRow tables with shade lookup
@@ -464,103 +463,78 @@ addr	name	reason_class	detail
 002de374	_COGLTextures_D0	inline	orig _COGLTextures_D0 calls out-of-line _COGLTextures_D2; ours inlines CD2TEXTURES_Flush and _CD2Textures_D2 with a vtable store
 002de38e	_COGLTextures	inline	orig tail-jumps to _COGLTextures_D2; ours inlines CD2TEXTURES_Flush and the vtable store, then jmp _CD2Textures_D2
 002de398	_COGLTextures_D2	eh	orig _COGLTextures_D2 has a __ZSt9terminatev landing pad call after _CD2Textures_D2 that ours lacks
-002de3ce	UploadTexture	semantic-guess	same calls and constants; orig uses je/jmp branches where ours uses cmove/cmovne, and frame size differs (0x24 vs 0x30)
+002de3ce	UploadTexture	stack-layout	frame sub esp 0x24 vs ours 0x30, push order esi/edi
 002de56a	ConvertPixels	data-guess	ours references guessed _PTR_UINT_ARRAY/_PTR_USHORT_ARRAY pointer globals and unnamed calls where orig calls FOG_GetFramePointer
 002de719	OGL_CutsceneBeginGL	data-guess	orig stores directly to s_bOSChecked+0x913a..0x9146; ours writes through guessed _DAT_0055256c..0x55257c pointers, and its FOG_GetFramePointer call shows as '?'
 002de7e4	OGL_CutsceneRestoreGL	data-guess	same glEnable/glDisable calls; orig walks g_apMacRenderers+6658 from edi with stride 8, ours indexes _D2OGLCutsceneCapStrc_ARRAY by esi
-002de824	OGL_PlayVideoFile	wrong	ours calls named Bink functions (_BinkSetSoundSystem, _BinkDoFrame, _BinkNextFrame, _BinkCopyToBuffer, _BinkWait, _BinkClose) where orig calls unresolved '?' and FOG_GetFramePointer; float ops differ (cvtsi2ss/cvtsd2ss vs addsd/haddpd)
+002de824	OGL_PlayVideoFile	stack-layout	frame 0x9c vs ours 0xdc; not rewritten
 002dee38	OGLBLOCKS_AllocBuffers	data-guess	orig stores allocations to s_bOSChecked+0x915e/0x9162/0x9166; ours stores through _DAT_00552590/94/98 pointer globals
 002deec5	OGLBLOCKS_FreeBuffers	data-guess	orig clears s_bOSChecked+0x915e/0x9162/0x9166 directly; ours clears through _DAT_00552590/94/98 pointer loads
-002def7a	OGL_PrepareGroundTileTexture	wrong	first call passes three arguments (esi, 0, 1) in orig but one argument (edi) in ours; ours also reads _PTR_BOOL/_PTR_PTR globals where orig reads s_bOSChecked+0x9166
-002df0d1	OGL_DecodeGroundTileBlocks	wrong	ours zeros [ebp+0xc] sized by [ebp+0x10]<<7 and reads the struct from [ebp+8]; orig zeros the edx buffer sized by [ebp+8]<<7 with the struct in ecx
+002def7a	OGL_PrepareGroundTileTexture	unverified-ref	instruction-identical; 2 reference(s) to renderer data or a Fog callee that only one side can name
+002df0d1	OGL_DecodeGroundTileBlocks	stack-layout	same code shape; spill slots one word apart (-0x20 vs -0x1c) and one extra mov esi,edi in the nibble loop
 002df201	OGL_BindWallBlockTexture	data-guess	orig reads guessed s_bOSChecked+0x915e and calls FOG_GetFramePointer; ours reads through _DAT_00552590 and shows an unnamed '?' call, frame 0x4c vs 0x3c
-002df347	OGL_ReleaseTileTextures	data-guess	ours dereferences _PTR_PTR_003963b0 twice where orig dereferences one unresolved [PIC ?] global once
 002df3cd	OGL_InitPerspective	data-guess	ours stores through _PTR_005e9e14 and then to OGL_InitPerspective+0; orig stores straight to unresolved [PIC ?] globals
 002df42b	OGL_AtExitRelease	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-002df47b	OGL_CreateWindow	wrong	orig calls OGL_MacApplyGamma twice (second one after LOGFILE_WriteStringToFile); ours calls it once
-002df4db	OGL_OpenOpenGLWindow	wrong	orig calls OGL_OpenWindowHook1 at entry and OGL_OpenWindowHook2 later, plus new/delete/__Unwind_Resume; ours has none of these calls
-002df784	OGL_CloseOpenGLWindow	wrong	orig calls OGL_CloseWindowHook1 before and OGL_CloseWindowHook2 after the shutdown calls; ours has neither
-002df7ed	OGL_ClearCaches	data-guess	orig writes 0 to an unresolved [PIC ?] global; ours loads _PTR_005e9edc and dereferences it before writing 0
+002df4db	OGL_OpenOpenGLWindow	unverified-ref	instruction-identical; 7 reference(s) to renderer data or a Fog callee that only one side can name
 002df81a	OGL_PauseSurface	data-guess	orig reads and writes unresolved [PIC ?] globals; ours goes through _BOOL_005e9e2c/_BOOL_005e9e30 pointers and returns via setne
 002df86e	OGL_PlayCutScene	data-guess	orig writes s_bOSChecked+0x916a directly; ours writes through the _DAT_0055259c pointer; call sequence is the same
-002df8f1	OGL_CheckCutScene	data-guess	orig reads s_bOSChecked+0x916a directly; ours loads _DAT_0055259c and dereferences it
 002df903	OGL_BeginScene	data-guess	orig writes s_bOSChecked+0x916e/0x9172 directly and reads unresolved [PIC ?] flags; ours writes via _DAT_005525a0/a4 and _BOOL_ pointers
-002df978	OGL_EndScene1	pic-ref	orig stores 0 straight to a blob global; ours loads pointer global _BOOL_005e9e2c and stores through it
-002df992	OGL_UpdateScaleFactor	wrong	ours body is empty (prologue/epilogue only); orig loads arg at [ebp+8] and stores it to a global
-002df9b9	OGL_EndScene2	pic-ref	ours reads pointer global _PTR_005e9edc then dereferences it once more; orig reads its global directly
+002df992	OGL_UpdateScaleFactor	unverified-ref	instruction-identical; 1 reference(s) to renderer data or a Fog callee that only one side can name
 002df9e2	OGL_GetBackBuffer	pic-ref	ours reaches globals _INT_005e9e24/_INT_005e9e28 through an extra pointer load; ours FOG call shows as '?' where orig has FOG_GetFramePointer
-002dfa7d	OGL_GetScreenSize	pic-ref	same two stores as orig but both source globals are read through pointer globals _INT_005e9e24/_INT_005e9e28 (one extra load each)
 002dfa9e	OGL_SetPalette	data-guess	ours uses guessed arrays _UINT_ARRAY_005e9ee0/_USHORT_ARRAY_005ea2e0 and code-relative labels OGL_SetPalette+2/+3 where orig writes fixed globals
 002dfb94	OGL_ScalePaletteValue	data-guess	orig indexes absolute table at 0x30a344; ours loads guessed pointer global _UINT_ARRAY_005e9ee0 then indexes it
 002dfbab	OGL_SetPaletteTable	data-guess	ours takes address OGL_SetPaletteTable+0 (function label) as the buffer and stores via _PTR_005e9e20; orig uses s_bOSChecked+9176
-002dfbe3	OGL_ResizeWindow	wrong	orig calls OGL_MacApplyGamma one extra time after LOGFILE_WriteStringToFile; ours has a single call; cmov select is otherwise equivalent
-002dfc65	OGL_SetColorCombine	wrong	mode 2 disables 0x84f5/0xde1/0xbc0 in orig, but ours tests mode 1 and enables 0x84f5; cache global also differs (DAT_005525a0 vs s_bOSChecked+916e)
+002dfc65	OGL_SetColorCombine	unverified-ref	instruction-identical; 2 reference(s) to renderer data or a Fog callee that only one side can name
 002dfcf5	OGL_SetBlendMode	pic-ref	same cache test and 4-way switch with same constants; ours uses cache global _DAT_005525a4 and a relative in-function jump table (+0x94)
 002dfdb0	OGL_SetTextureFilter	data-guess	orig pushes float immediates 0x46180000/0x46180400; ours loads them from guessed addresses OGL_GetRenderStatistics+8/+c
 002dfe41	OGL_DrawString	stack-layout	frame 0x62c vs orig 0x61c with extra spill slots at ebp-0x614/-0x618 for the stack guard pointer
-002dfeff	OGL_AreBlendedShadowsEnabled	pic-ref	ours loads pointer-to-pointer global _PTR_PTR_00396384 with one extra dereference; orig reads one level less
 002dff15	OGL_DrawSolidRectEx	pic-ref	clamp logic matches but ours clamps arg [ebp+8] first through _PTR_INT_003963a4 with one extra dereference; FOG call shows as '?'
 002e00c0	OGL_DrawSolidRectAlpha	pic-ref	same as DrawSolidRectEx: clamp via _PTR_INT_003963a4 with one extra dereference; FOG call shows as '?'
-002e0245	OGL_DrawLine	semantic-guess	same clip against two bounds, but ours builds the byte flag with setne and keeps floats in xmm2 where orig stores/reloads them; global deref depths differ
-002e03c0	OGL_DrawRect	semantic-guess	bounds checks are equivalent with operands swapped (jge vs jle, cmp order reversed); FOG call shows as '?'
-002e0534	OGL_DrawRectEx	semantic-guess	three bounds checks with swapped cmp operands (jge vs jle), equivalent; same fatal line 0xdc; FOG calls shown as '?'
-002e06bd	OGL_DrawSolidRect	semantic-guess	bounds checks with swapped cmp operands and jge vs jle, equivalent; same fatal line 0xfd; FOG calls shown as '?'
+002e0245	OGL_DrawLine	regalloc	orig spills &INT_005e9e28 to [ebp-0x10] and holds nX1 in esi, ours keeps pointer in esi and nX1 in edi
+002e03c0	OGL_DrawRect	regalloc	assert compare fixed; stack spill order of clamp temporaries differs
+002e0534	OGL_DrawRectEx	regalloc	asserts and clamp compares fixed; callee-saved esi/edi swapped
+002e06bd	OGL_DrawSolidRect	unverified-ref	instruction-identical; 2 reference(s) to renderer data or a Fog callee that only one side can name
 002e0757	OGL_DrawSolidSquare	regalloc	same instructions modulo register choice
-002e07ec	OGL_InvalidateGroundMesh	pic-ref	orig stores 1 to global s_bOSChecked+929a; ours loads pointer _DAT_005526cc and stores through it
-002e07fe	OGL_DrawGroundTile	wrong	ours computes the tile maths in double (addsd/divsd/cvtss2sd/cvtsd2ss) where orig stays single (addss/divss); precision and rounding differ
+002e07fe	OGL_DrawGroundTile	stack-layout	spill slot numbering differs from the first spill ([ebp-0x14] vs [ebp-0x1c]) and FP literal-pool refs are not normalised; code shape otherwise unchecked beyond first 30 insns
 002e0c42	OGL_GetTextureMemoryBudget	pic-ref	same select of 0x96000/0xea600 and bit-field arithmetic, but ours reads different globals (_DAT_003ce7e8/ec, _DAT_00552b20) and lowers the select to neg/and
 002e0c87	OGL_InstallCursorCallbacks	pic-ref	orig passes &MACCURSOR_* values from direct globals; ours reads them through pointer globals _PTR_LAB_003961ec/f4 and _PTR_PTR_003961e0; same call slot +0xc4
-002e0cc8	OGL_RestoreDisplayMode	pic-ref	same display-mode flow; ours reads _DAT_00552b24/_CGDisplayModeRef_00552b28/_CGDirectDisplayID_00552b2c where orig uses s_bOSChecked+96f2/96f6/96fa
-002e0d68	OGL_MacCreateSurface	wrong	"orig masks a field with 0x7fff, rounds with cvtsd2ss/cvtss2sd and appends "" (stretched)"" to a log string; ours has none of these"
-002e0f4a	OGL_MacSwapContext	wrong	orig multiplies the converted double by a constant (mulsd); ours has no mulsd and adds a guessed constant with fild/fstp; values differ
-002e10f6	OGL_MacOpenWindow	wrong	"orig does single-precision addss/cvtsi2ss where ours uses addsd/cvtss2sd; orig loads a constant data blob (lea p""niwH..."") that ours lacks; FUN_0019f18a shows as '?'"
-002e15a6	OGL_MacSetRenderer	semantic-guess	orig has an extra jmp to the no-engine error path (lea of 'No usable OpenGL engine found.' then flag=1); ours sets the flag via a pointer global and its string lea shows as raw [R+0xb9d]
+002e0d68	OGL_MacCreateSurface	pic-ref	instruction stream identical; remaining diffs are scaled-index PIC refs [ebx+8*eax+disp] on the display mode array and the FP literal pool, not normalised by cmp.ts
+002e0f4a	OGL_MacSwapContext	regalloc	esi/edi swapped for hBestMode and stack frame 0x4c vs 0x2c: ours spills the dwRefreshFixed temporaries; same call sequence otherwise
+002e10f6	OGL_MacOpenWindow	stack-layout	frame 0xac vs 0x5c; Carbon event spec/attribute locals laid out differently, stack protector slot at -0x9c in orig
+002e15a6	OGL_MacSetRenderer	regalloc	control flow identical; orig keeps hRendererInfo in a stack slot and the PIC base in ebx, ours uses esi/edi (one extra spill)
 002e16cc	OGL_MacCloseWindow	pic-ref	same aglSetCurrentContext/aglDestroyContext/DisposeWindow sequence; ours reaches globals via _AGLContext_00552b34/_WindowRef_00552b30 and exits with jmp out instead of jmp FUN_0019f18a
-002e173e	OGL_MacSwapBuffers	pic-ref	ours loads pointer global _AGLContext_00552b34 then dereferences it; orig passes s_bOSChecked+9702 directly
 002e175d	OGL_MacClampMouseEvent	pic-ref	same flag and mode checks with one extra dereference per global; ours reads word pair via _SHORT_ARRAY_00552b38 offsets 0/2 instead of s_bOSChecked+9706/9708
 002e185d	OGL_MacGlobalToLocal	pic-ref	same flag test and word subtraction; ours reads the flag and the word pair through pointer globals (extra deref) instead of direct globals
 002e1894	OGL_MacLocalToGlobal	pic-ref	same as GlobalToLocal with add: flag and word pair reached through pointer globals in ours
 002e18da	OGL_MacSetGamma	pic-ref	clamp to [0x37,0xff] is equivalent (cmovge/cmovle form); ours stores the gamma value through pointer global _DAT_003ce7f4 instead of g_apMacRenderers+6678
-002e190b	OGL_MacApplyGamma	pic-ref	same SetGammaRamp call and flag check; gamma and display globals reached via _DAT_003ce7f4/f8/00552b24/2c instead of g_apMacRenderers+6678/667c and s_bOSChecked
-002e194a	OGL_GammaBlack	pic-ref	orig cmp/loads s_bOSChecked+96f2/96fa directly; ours derefs _DAT_00552b24 and _CGDirectDisplayID pointer globals before the same SetGammaRamp call
-002e1985	OGL_GammaIdentity	pic-ref	same direct-global vs pointer-global pattern as OGL_GammaBlack; ours derefs _DAT_00552b24 and _CGDirectDisplayID_00552b2c before the same SetGammaRamp call
-002e19c0	OGL_RestoreGamma	pic-ref	orig reads s_bOSChecked+96f2/96fa directly before MACDISPLAY_RestoreGammaRamp; ours goes through _DAT_00552b24 and _CGDirectDisplayID_00552b2c pointer globals
 002e19eb	OGL_MacClearDisplayToBlack	crt-idiom	orig does unsigned-to-double with SSE orpd/subsd magic constant and frame 0x5c; ours writes 0x43300000 to stack slots and uses fild/fstp x87 with frame 0x7c; same callees
 002e1b4c	OGL_MacStartCutscene	pic-ref	same 0x258/0x1e0/0x320/0x280 size selection and STORM_Alloc-shaped call; orig reads g_apMacRenderers and s_bOSChecked directly while ours reaches them via pointer globals; ours callee shows as ?
 002e1bf5	OGL_MacReleaseCutSceneBuffer	pic-ref	same restore/free-if-nonnull/clear sequence; ours reaches s_bOSChecked+970a/970e through _DAT_00552b3c/_DAT_00552b40 pointers and the delete callee shows as ?
-002e1c3c	OGL_SetOption	wrong	jump table arms differ (orig 7 distinct arms, ours 12 entries with other targets) and stores hit different globals (orig g_apMacRenderers+6670/6674/667c, ours D2OGLDisplayModeStrc array and DAT_003ce7xx)
-002e1d14	OGL_MacWindowEventHandler	wrong	event-kind dispatch differs: orig tests 0x1b then 0x4b and calls FUN_0019c953 and SendMessage; ours tests 0x4b then 0x48 and calls GetHwnd
-002e1ddf	OGLPERSPECTIVE_AllocTable	pic-ref	orig stores the allocation result directly to s_bOSChecked+973e; ours loads _PTR_00552b70 and stores through that pointer
-002e1e1e	OGLPERSPECTIVE_FreeTable	pic-ref	orig reads and clears s_bOSChecked+973e directly; ours loads _PTR_00552b70 and dereferences it before the same assert and free
-002e1e67	OGL_FillPerspectiveTable	wrong	loop bound differs (orig cmp 0xbb7 with ebx init 0xffffe891; ours cmp 0xbb6 with init 0xfffff000) and orig uses inline idiv where ours calls ___divdi3
+002e1c3c	OGL_SetOption	sched	orig tail-merges the common mov eax,1; clang duplicates the constant return per switch case (52 vs 47 insns)
+002e1d14	OGL_MacWindowEventHandler	sched	orig tests event kinds 0x1b, 0x4b, 0x48 in that order; clang turns the chain into a switch and tests 0x4b, 0x48, 0x1b
+002e1e67	OGL_FillPerspectiveTable	sched	orig keeps setl al of (i < -0xbb6) hoisted above the i<2999 test; clang folds the redundant compare away, 33 vs 37 insns
 002e1ede	OGL_IsPerspectiveEnabled	pic-ref	ours takes one extra pointer load (_PTR_PTR_00396384 then [eax]) before the same flag test on [eax+4]
-002e1efd	OGL_SetPerspectiveScale	pic-ref	orig stores directly to s_bOSChecked+9742/9746; ours loads _DAT_00552b74/_DAT_00552b78 pointer globals and stores through them
-002e1f1a	OGL_AdjustPerspectivePosition	wrong	orig shifts the fixed-point deltas with sar 0x10, ours with shr 0x10, which changes results for negative deltas
-002e1fcc	OGL_PerspectiveScalePosition	wrong	constants differ: orig uses and 0x1fff, add 0x1080, lea 0x1000 and sar 0x14; ours uses and 0x3ffc and shr 0x12
-002e20bf	OGL_SetDefaultPerspectiveFactor	pic-ref	orig stores 0x100 to an unnamed global directly; ours loads _INT_005eabe4 pointer then stores through it
+002e1fcc	OGL_PerspectiveScalePosition	pic-ref	instruction stream identical; the only diffs are [esi+disp] data refs off an esi PIC base that cmp.ts does not normalise (orig 0x270b96/0xb43ca vs our object-relative displacement)
 002e20d4	OGLSMACK_Init	pic-ref	orig takes lea of s_bOSChecked+9756/975a and stores texture ids directly; ours loads _DAT_00552b88 and _PTR_00552b7c..84 pointer globals and stores through them
 002e221e	OGLSMACK_Shutdown	pic-ref	orig uses lea of s_bOSChecked+9756 and zeroes 974a/974e/9752 directly; ours reaches the same data via _DAT_00552b88 and _PTR_00552b7c..84 pointers
-002e22fb	OGL_DecodeSmacker	wrong	ours calls FilepathToFSSpec and _memcpy which orig does not, orig calls SMemFree which ours lacks, and constants differ (0x7600/0x3b vs 0x7400/0x39)
-002e274d	OGL_PlayerSmacker	semantic-guess	same callee sequence, but ours does the float math through double conversions (cvtsd2ss, fisttp) and an extra PTR_BOOL check where orig uses direct float constants; 266 vs 172 insns
-002e2af8	OGLSMACK_ConvertIndexedToRGBA	semantic-guess	same 64x256 loop and same pack constants (shl 0x10/0x18/0x8, or 0xff); differs only by calling convention (orig register args ecx/edx, ours stack args at ebp+8..0x10) and local shuffling
+002e22fb	OGL_DecodeSmacker	stack-layout	frame 0x79c vs 0x7bc; not rewritten
+002e274d	OGL_PlayerSmacker	inline	orig frame 0x1c, 172 insns vs ours 301; not rewritten
+002e2af8	OGLSMACK_ConvertIndexedToRGBA	sched	orig loads rgb byte +1,+0,+2; clang425 schedules +0,+1,+2 for every ordering tried
 002e2b70	OGLSPRITE_Init	pic-ref	orig compares and stores s_bOSChecked+978e/9792/9796 directly; ours loads _DAT_00552bc0..c4 pointer globals first and adds a spill slot; FOG_GetFramePointer shows as ? on ours
-002e2c8c	OGLSPRITE_ReleaseCelTextures	pic-ref	same loop and CD2TEXTURES_ReleaseById call; ours reaches the texture table through an extra pointer deref (_PTR_PTR_003963b0 then [ecx])
 002e2cd0	OGLSPRITE_Shutdown	pic-ref	orig clears s_bOSChecked+978e/9792/9796 directly; ours loads _DAT_00552bc0..c8 pointer globals and clears through them; frame 0x14 vs 0x10
 002e2d91	OGL_DrawPerspectiveImage	pic-ref	same call sequence; orig stores flags and fields to s_bOSChecked+979a..97f2 directly while ours writes the same offset pattern through a pointer-based struct (+0x10..+0x30)
-002e33a9	OGL_GetSpriteMetadata	semantic-guess	orig receives args in ecx/edx with frame 0x1c, ours reads them from [ebp+8]/[ebp+0xc] with frame 0xc; same FOG/fp_fatal assert shape
-002e344e	OGL_ComputeTextureSize	wrong	field offsets swapped: orig imul by [reg+0x14] and loads [reg+0x18], ours imul by [reg+0x18] and loads [reg+0x14]
-002e34d7	OGL_PrepareCelTexture	semantic-guess	same callees and 0x20/0x80 range checks (branch senses differ only by jbe/jg vs ja/jle); differs by argument passing (ecx vs [ebp+8]), frame 0x5c vs 0x4c and pointer-indirected globals
-002e3934	OGL_SetDrawMode	wrong	switch range differs: orig computes ecx-3 with cases 3..7 (cmp 4), ours computes arg-1 with cases 1..7 (cmp 6)
-002e39bc	OGL_DrawImage	semantic-guess	same callees and order; differences are argument passing (ecx/edx vs stack), a sete/movzx boolean in ours and pointer-indirected globals
-002e3ab2	OGL_DrawPalettedQuad	semantic-guess	same glColor/glBegin/glVertex sequence; ours calls _glEnd where orig tail-jumps to it, arguments pass on stack instead of ecx/edx, and colour-byte registers differ
-002e3e98	OGL_DrawShiftedImage	semantic-guess	same callees; orig keeps flags in registers and reads its argument from ecx, ours stores flags to stack slots and reads from [ebp+8]; globals reached through pointers in ours
+002e33a9	OGL_GetSpriteMetadata	unverified-ref	instruction-identical; 1 reference(s) to renderer data or a Fog callee that only one side can name
+002e344e	OGL_ComputeTextureSize	regalloc	same 46 insns; width/height temps land in other regs (orig width in ecx, PIC base in eax)
+002e34d7	OGL_PrepareCelTexture	stack-layout	same structure; local slots differ and orig re-reads pSprite+8 per compare (cmp [ebx+8]) where ours loads once
+002e3934	OGL_SetDrawMode	sched	switch jump table keeps cases 3..7 in orig, ours folds the 1/2 compares into cases 1..7 and tail-merges differently; push esi vs ebx
+002e39bc	OGL_DrawImage	regalloc	control flow equal (returns BOOL 0/1 now); orig keeps GetSpriteMetadata result in ecx and branches for nTexMode, ours uses setcc and edi for the return constant
+002e3ab2	OGL_DrawPalettedQuad	stack-layout	204 vs 218 insns, orig spills float locals earlier (esp 0x2c vs 0x3c); not reworked
 002e3f6c	OGL_DrawVerticalCropImage	crt-idiom	orig uses SSE orpd/subsd magic-constant unsigned-to-double with divss; ours writes 0x43300000 to stack and uses fild/fstp x87 with frame 0x8c vs 0x5c
-002e40a2	OGL_DrawClippedImage	wrong	division is done in double (divsd with cvtss2sd) in ours where orig uses single-precision divss and cvtsi2ss, changing rounding of the crop/clip maths
-002e4332	OGL_DrawShadow	semantic-guess	same callees and colour/shadow flag stores; orig works in registers with single cvtsi2ss and frame 0x6c, ours writes through a struct pointer (+0x8..+0xb) with frame 0x5c; argument passing differs
-002e476f	OGL_DrawImageFast	semantic-guess	same callees and order; ours stores args to stack slots (frame 0x60) where orig passes them in ecx/edx (frame 0x50)
+002e40a2	OGL_DrawClippedImage	stack-layout	clamps identical, slots and register choice differ (ebp-0x48 vs -0x44); 222 vs 197 insns
+002e4332	OGL_DrawShadow	sched	source equals the Ghidra decompile; orig loads sSprite float fields into locals before OGL_IsPerspectiveEnabled calls (240 vs 203 insns)
 002e4811	OGLVERTEX_AllocTable	pic-ref	orig stores eax straight to a global; ours loads the global's address from _PTR_005eabe8 and stores through it
 002e4850	OGLVERTEX_FreeTable	pic-ref	orig reads and zeroes a global directly; ours goes through _PTR_005eabe8 indirection, same ops otherwise
-002e4899	OGL_FillColorScaleTable	semantic-guess	same 0x80808081 divide-by-255 idiom but orig uses signed imul/shr 0x1f and ours unsigned mul/sar, different loop shape
+002e4899	OGL_FillColorScaleTable	sched	body is nProduct/255 now; orig keeps the 0x100 inner count in edi with dec/jne, ours strength-reduces to cmp esi,0x100
 002e48fc	OGL_ScaleVertexColor	pic-ref	same three colour bytes (+0/+1/+2) read from s_bOSChecked+97fa..fc in orig but from D2OGLColorRGBStrc via _PTR_005eabe8 in ours; orig adds a global where ours ORs
 002e4940	OGL_ApplyColorLighting	pic-ref	lookup table base read as a global value in orig (add R,[global]) but via _PTR_005eabe8 deref in ours; bit extract shr 0x18 vs rol 8 also differs
 002e4981	OGL_SetGlobalLight	pic-ref	orig stores the three colour bytes to s_bOSChecked+97fa..fc, ours stores them to D2OGLColorRGBStrc+0/+1/+2
@@ -570,19 +544,19 @@ addr	name	reason_class	detail
 002e5419	OGL_DrawTransWallTile	pic-ref	texture-flag byte read from s_bOSChecked+97fe in orig, from DAT_00552c30 via _PTR_BOOL_00396380 in ours; same logic and callees
 002e547c	OGL_DrawWallTileBlocks	inline	orig calls OGL_ApplyColorLighting three times out of line, ours has the body inlined; FOG_GetFramePointer shows as unnamed calls on ours
 002e5ea1	OGL_DrawWallTile	pic-ref	same texture-flag mismatch as DrawTransWallTile: s_bOSChecked+97fe in orig, DAT_00552c30 via _PTR_BOOL_00396380 in ours
-002e5f00	OGL_HasAppleTextureExtensions	wrong	orig dereferences a global pointer and reads +0xc before comparing with 0xfffffff; ours reads absolute 0x5ebc44 with no +0xc load
+002e5f00	OGL_HasAppleTextureExtensions	sched	same logic; ours hoists xor cl,cl and merges the false path, orig returns xor eax,eax on the early exit
 002e5f9a	COGLAGPTEXTURES_Construct	eh	orig has __Unwind_Resume and _CD2Textures_D2 landing-pad calls that ours lacks
-002e668a	_COGLAGPTextures_D0	wrong	orig tail-jumps to a shared delete path, ours jumps to out; the delete call is missing on ours
+002e668a	_COGLAGPTextures_D0	unverified-ref	body identical; tail jmp to MISC_OperatorDeleteShim shows as 'out' vs orig 'delete'
 002e66ae	_COGLAGPTextures_D2	eh	orig calls _CD2Textures_D2 and __ZSt9terminatev (EH terminate path) that ours lacks
 002e67a4	EndFrame	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 002e67fe	COGLAGPTEXTURES_AllocTextureEntry	pic-ref	orig loop bounds are lea of p-literal data, ours compares against _INT_ARRAY_00334c40 tables; FOG call is unnamed on ours
-002e68c4	UploadTexture	semantic-guess	orig dispatches the format through a jumptable, ours searches _INT_ARRAY tables with a compare chain; same GL enum constants
+002e68c4	UploadTexture	regalloc	PIC base register pop edx vs edi
 002e69e2	ReleaseTexture	pic-ref	orig reads table entries via offsets from a PIC base (0x4e280), ours via named _INT_ARRAY_00334c40/58/70; FOG calls unnamed on ours
-002e6bb4	BindTexture	wrong	orig calls _glBindTexture twice and writes two global state dwords (0 and 1); ours calls it once and writes none
-002e6c32	ConvertPixels	semantic-guess	pixel index math differs (orig lea 5x plus shl 2, ours lea 4x plus add R,R); ours also reads data pointers via _PTR_ globals
-002e6e00	CreateTexture	semantic-guess	orig walks p-literal tables by pointer, ours runs an indexed 6-iteration loop over _INT_ARRAY tables; field update is equivalent add/mov
+002e6bb4	BindTexture	unverified-ref	instruction-identical; 2 reference(s) to renderer data or a Fog callee that only one side can name
+002e6c32	ConvertPixels	regalloc	PIC base pop esi vs eax; palette loop registers
+002e6e00	CreateTexture	regalloc	bucket-table lea order matches; bucket index and tex width/height swap esi/edi/ebx
 002e6fa4	COGLAGPTEXTURES_AcquireSlot	pic-ref	static cursor at s_bOSChecked+99ce in orig is symbolised as COGLAGPTEXTURES_AcquireSlot+0 in ours; table base _INT_ARRAY_00334c70 differs
-002e70fc	OGL_MacGetDisplayDevice	semantic-guess	same CGDisplayBounds/DM calls, but float sums are stored and reassembled in different order with cvttss2si from memory vs registers
+002e70fc	OGL_MacGetDisplayDevice	sched	orig computes the two float sums (x+w, y+h) before DMGetFirstScreenDevice; clang sinks them after the call and widens the conversions
 002ef7cd	FOG_MacGetBlizzardSupportPath	noobj	Source/Fog/Src/ErrorManager.cpp is not built by d2_mac_objs
 0030a84a	MAC_SpawnProcess	unverified-ref	3 reference(s) only one side can resolve; every other instruction identical
 002b69ff	ARCHIVE_LoadMPQ	stack-layout	shared D2HellRoot.cpp D2_OS_MAC body, measured from d2_mac_shared_objs (cmp only reads d2_mac_objs, so coverage cannot see it). Fixed from the asm: GetModuleFileName (Win32Mac) instead of GetModuleFileNameA, szArchivePath[MAX_PATH-1] (orig +0x107, ours wrote [0xff]), the Mac __FILE__ of SRC/Archive.cpp on the alloc/free. Remaining: orig has an unreferenced 4-byte slot above tParam and pArchive below it (ours pArchive above tParam), and orig keeps the szArchivePath pointer and the callback in ebx/edi where ours reloads them

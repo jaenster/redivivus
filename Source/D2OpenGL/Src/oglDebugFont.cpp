@@ -102,19 +102,19 @@ void OGL_DrawLight(DWORD * pLight, DWORD * pPlayerLight, int nX, int nY) {
 // Was named RENDERER_GLIDE_AreBlendedShadowsEnabled after its Windows Glide counterpart (Game.exe 0050bf40); this is the OpenGL renderer's own copy.
 // 1.14d mac: 002dfeff
 BOOL OGL_AreBlendedShadowsEnabled() {
-    return (*PTR_PTR_00396384)->bBlendedShadows;
+    return PTR_005e9e14->bBlendedShadows;
 }
 
 // Draws a solid rectangle using Glide API with blend mode
 // From Windows 1.14d Game.exe 0050bf50 (Mac pair tier T1e).
 // 1.14d mac: 002dff15
 void OGL_DrawSolidRectEx(int nX0, int nY0, int nX1, int nY1, BYTE nPaletteIndex, DRAWMODE nDrawMode) {
-    int* piVar1 = PTR_INT_003963a8;
+    int* piVar1 = (&INT_005e9e28);
     if (nX1 < 0) {
       nX1 = 0;
     }
 
-    int iVar2 = *PTR_INT_003963a4 - 1;
+    int iVar2 = INT_005e9e24 - 1;
     if (iVar2 < nX1) {
       nX1 = iVar2;
     }
@@ -131,7 +131,7 @@ void OGL_DrawSolidRectEx(int nX0, int nY0, int nX1, int nY1, BYTE nPaletteIndex,
       nY1 = 0;
     }
 
-    iVar2 = *PTR_INT_003963a8 - 1;
+    iVar2 = INT_005e9e28 - 1;
     if (iVar2 < nY1) {
       nY1 = iVar2;
     }
@@ -180,12 +180,12 @@ void OGL_DrawSolidRectEx(int nX0, int nY0, int nX1, int nY1, BYTE nPaletteIndex,
 
 // 1.14d mac: 002e00c0
 void OGL_DrawSolidRectAlpha(int nX0, int nY0, int nX1, int nY1, BYTE nPaletteIndex, BYTE nAlpha) {
-    int* piVar1 = PTR_INT_003963a8;
+    int* piVar1 = (&INT_005e9e28);
     if (nX1 < 0) {
       nX1 = 0;
     }
 
-    int iVar2 = *PTR_INT_003963a4 - 1;
+    int iVar2 = INT_005e9e24 - 1;
     if (iVar2 < nX1) {
       nX1 = iVar2;
     }
@@ -202,7 +202,7 @@ void OGL_DrawSolidRectAlpha(int nX0, int nY0, int nX1, int nY1, BYTE nPaletteInd
       nY1 = 0;
     }
 
-    iVar2 = *PTR_INT_003963a8 - 1;
+    iVar2 = INT_005e9e28 - 1;
     if (iVar2 < nY1) {
       nY1 = iVar2;
     }
@@ -240,45 +240,40 @@ void OGL_DrawSolidRectAlpha(int nX0, int nY0, int nX1, int nY1, BYTE nPaletteInd
 
 // 1.14d mac: 002e0245
 void OGL_DrawLine(int nX0, int nY0, int nX1, int nY1, BYTE nPaletteIndex, BYTE nAlpha) {
-    float y;
-    int nBlendMode;
-    int* piVar1 = PTR_INT_003963a8;
-    if (!(-1 < (nX0 & nX1) && (nX1 < *PTR_INT_003963a4 || nX0 < *PTR_INT_003963a4) && -1 < (nY0 & nY1) && (nY1 < *PTR_INT_003963a8 || nY0 < *PTR_INT_003963a8))) {
-      return;
-    }
+    int* piVar1 = &INT_005e9e28;
+    if (-1 < (nX0 & nX1) && (nX1 < INT_005e9e24 || nX0 < INT_005e9e24) && -1 < (nY0 & nY1) && (nY1 < *piVar1 || nY0 < *piVar1)) {
+      uint32_t uColor = OGL_ScalePaletteValue((uint32_t)nPaletteIndex);
+      OGL_SetColorCombine(2);
+      if (nAlpha == 0xff) {
+        OGL_SetBlendMode(1);
+      } else {
+        OGL_SetBlendMode(4);
+      }
 
-    uint32_t uVar2 = OGL_ScalePaletteValue((uint32_t)nPaletteIndex);
-    OGL_SetColorCombine(2);
-    if (nAlpha == 0xff) {
-      nBlendMode = 1;
-    } else {
-      nBlendMode = 4;
-    }
+      glColor4ub((GLubyte)uColor, (GLubyte)(uColor >> 8), (GLubyte)(uColor >> 0x10), nAlpha);
+      GLfloat x = (GLfloat)nX0;
+      GLfloat y;
+      if (nX0 == nX1 && nY0 == nY1) {
+        y = (float)*piVar1 - (float)nY0;
+        glBegin(0);
+      } else {
+        float fHeight = (float)*piVar1;
+        glBegin(1);
+        y = fHeight - (float)nY1;
+        glVertex2f(x, fHeight - (float)nY0);
+        x = (GLfloat)nX1;
+      }
 
-    OGL_SetBlendMode(nBlendMode);
-    GLfloat x = (GLfloat)nX0;
-    glColor4ub((GLubyte)uVar2, (GLubyte)(uVar2 >> 8), (GLubyte)(uVar2 >> 0x10), nAlpha);
-    if (nX0 == nX1 && nY0 == nY1) {
-      y = (float)*piVar1 - (float)nY0;
-      glBegin(0);
-    } else {
-      float fVar3;
-      fVar3 = (float)*piVar1;
-      glBegin(1);
-      y = fVar3 - (float)nY1;
-      glVertex2f(x, fVar3 - (float)nY0);
-      x = (GLfloat)nX1;
+      glVertex2f(x, y);
+      glEnd();
     }
-
-    glVertex2f(x, y);
-    glEnd();
 }
 
 // 1.14d mac: 002e03c0
 void OGL_DrawRect(RECT * pRect, BYTE nPaletteIndex) {
     void* pvVar1;
     int nRectLeft;
-    if (pRect->right < pRect->left) {
+    if (pRect->left > pRect->right) {
       void* nErrorAddr;
       nErrorAddr = Fog::Src::ErrorManager::GetInstructionPointer();
       fp_fatal("Unrecoverable internal error %08x line %d", nErrorAddr, 0xb6);
@@ -286,7 +281,7 @@ void OGL_DrawRect(RECT * pRect, BYTE nPaletteIndex) {
 
     int nRectTop = pRect->top;
     int nYEnd = pRect->bottom;
-    if (nYEnd < nRectTop) {
+    if (nRectTop > nYEnd) {
       pvVar1 = Fog::Src::ErrorManager::GetInstructionPointer();
       fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0xb7);
       nRectTop = pRect->top;
@@ -295,7 +290,7 @@ void OGL_DrawRect(RECT * pRect, BYTE nPaletteIndex) {
 
     int nX1 = pRect->left;
     int nXEnd = pRect->right;
-    if (!(nXEnd - nX1 && nYEnd - nRectTop && -1 < nXEnd && nX1 <= *PTR_INT_003963a4 && -1 < nYEnd && nRectTop <= *PTR_INT_003963a8)) {
+    if (!(nXEnd - nX1 && nYEnd - nRectTop && -1 < nXEnd && nX1 <= INT_005e9e24 && -1 < nYEnd && nRectTop <= INT_005e9e28)) {
       return;
     }
 
@@ -310,11 +305,11 @@ void OGL_DrawRect(RECT * pRect, BYTE nPaletteIndex) {
 // 1.14d mac: 002e0534
 void OGL_DrawRectEx(RECT * pRect, BYTE nPaletteIndex) {
     void* pvVar1;
-    if (pRect->right < pRect->left) {
+    if (pRect->left > pRect->right) {
       pvVar1 = Fog::Src::ErrorManager::GetInstructionPointer();
       fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0xdc);
     }
-    if (pRect->bottom < pRect->top) {
+    if (pRect->top > pRect->bottom) {
       pvVar1 = Fog::Src::ErrorManager::GetInstructionPointer();
       fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0xdd);
     }
@@ -325,14 +320,14 @@ void OGL_DrawRectEx(RECT * pRect, BYTE nPaletteIndex) {
       nX1 = 0;
     }
 
-    int iVar2 = *PTR_INT_003963a4 - 1;
-    if (iVar2 < nX1) {
+    int iVar2 = INT_005e9e24 - 1;
+    if (nX1 > iVar2) {
       nX1 = iVar2;
     }
     if (nX0 < 0) {
       nX0 = 0;
     }
-    if (iVar2 < nX0) {
+    if (nX0 > iVar2) {
       nX0 = iVar2;
     }
     if (nX0 == nX1) {
@@ -344,16 +339,16 @@ void OGL_DrawRectEx(RECT * pRect, BYTE nPaletteIndex) {
       iVar2 = 0;
     }
 
-    int iVar3 = *PTR_INT_003963a8 - 1;
-    if (iVar3 < iVar2) {
+    int iVar3 = INT_005e9e28 - 1;
+    if (iVar2 > iVar3) {
       iVar2 = iVar3;
     }
 
     int nY0 = 0;
-    if (-1 < pRect->top) {
+    if (pRect->top >= 0) {
       nY0 = pRect->top;
     }
-    if (iVar3 < nY0) {
+    if (nY0 > iVar3) {
       nY0 = iVar3;
     }
     if (nY0 == iVar2) {
@@ -373,7 +368,7 @@ void OGL_DrawRectEx(RECT * pRect, BYTE nPaletteIndex) {
 // 1.14d mac: 002e06bd
 void OGL_DrawSolidRect(RECT * pRect, BYTE nPaletteIndex) {
     void* pvVar1;
-    if (pRect->right < pRect->left) {
+    if (pRect->left > pRect->right) {
       void* nErrorAddr;
       nErrorAddr = Fog::Src::ErrorManager::GetInstructionPointer();
       fp_fatal("Unrecoverable internal error %08x line %d", nErrorAddr, 0xfd);
@@ -381,7 +376,7 @@ void OGL_DrawSolidRect(RECT * pRect, BYTE nPaletteIndex) {
 
     int nY0 = pRect->top;
     int nY1 = pRect->bottom;
-    if (nY1 < nY0) {
+    if (nY0 > nY1) {
       pvVar1 = Fog::Src::ErrorManager::GetInstructionPointer();
       fp_fatal("Unrecoverable internal error %08x line %d", pvVar1, 0xfe);
       nY0 = pRect->top;

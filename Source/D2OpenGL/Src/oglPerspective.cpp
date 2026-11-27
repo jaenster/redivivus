@@ -72,6 +72,17 @@
 typedef void (*D2OGLFrameCallbackFn)();
 #endif
 
+// 1.14d mac: 00552b70
+int * PTR_00552b70 = 0; D2_GLOBAL_GUARD(PTR_00552b70, "PTR_00552b70");
+// 1.14d mac: 00552b74
+int DAT_00552b74 = 0; D2_GLOBAL_GUARD(DAT_00552b74, "DAT_00552b74");
+// 1.14d mac: 00552b78
+int DAT_00552b78 = 0; D2_GLOBAL_GUARD(DAT_00552b78, "DAT_00552b78");
+// 1.14d mac: 005e9e14
+D2GfxSettingsStrc * PTR_005e9e14 = 0; D2_GLOBAL_GUARD(PTR_005e9e14, "PTR_005e9e14");
+// 1.14d mac: 005eabe4
+int INT_005eabe4 = 0; D2_GLOBAL_GUARD(INT_005eabe4, "INT_005eabe4");
+
 namespace D2OpenGL::oglPerspective {
 
 // The Src files call one another unqualified.
@@ -86,6 +97,7 @@ using namespace D2OpenGL::oglSmack;
 using namespace D2OpenGL::oglSprite;
 using namespace D2OpenGL::oglVertex;
 using namespace D2OpenGL::MacDisplayDevice;
+
 
 // Allocates the 0x8000 oglPerspective.cpp table.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
@@ -121,7 +133,7 @@ void OGL_FillPerspectiveTable() {
         }
       }
 
-      pTable[nIndex + 0x1000] = (int)(0x2ee000 / (int64_t)nDivisor);
+      pTable[nIndex + 0x1000] = 0x2ee000 / nDivisor;
       nIndex++;
     } while (nIndex != 0x1000);
 
@@ -132,7 +144,7 @@ void OGL_FillPerspectiveTable() {
 // Described from the Mac body (no Windows twin).
 // 1.14d mac: 002e1ede
 BOOL OGL_IsPerspectiveEnabled() {
-    BOOL BVar1 = !(*PTR_PTR_00396384)->bPerspectiveCapable ? 0 : (*PTR_PTR_00396384)->bPerspectiveEnabled;
+    BOOL BVar1 = !PTR_005e9e14->bPerspectiveCapable ? 0 : PTR_005e9e14->bPerspectiveEnabled;
     return BVar1;
 }
 
@@ -148,8 +160,8 @@ void OGL_AdjustPerspectivePosition(int nX, int nY, int nBias, int * pXAdjust, in
     int nDeltaY = (nY - DAT_00552b78) * 0x18 >> 0x10;
     int nDiagSum = nDeltaY + nDeltaX;
     int nPerspScale = PTR_00552b70[(nBias * 0x99800 + nDiagSum * 0x9c9b8 >> 0x14) + 0x1000U & 0x1fff];
-    *pXAdjust = *PTR_INT_003963a4 / 2 + ((nDeltaY - nDeltaX) * nPerspScale * 0x2d4 >> 0x14);
-    *pYAdjust = *PTR_INT_003963a8 / 2 - 0x20 + ((nBias * 0x109a08 + nDiagSum * -0x5a800 >> 10) * nPerspScale >> 0x14);
+    *pXAdjust = INT_005e9e24 / 2 + ((nDeltaY - nDeltaX) * nPerspScale * 0x2d4 >> 0x14);
+    *pYAdjust = INT_005e9e28 / 2 - 0x20 + ((nBias * 0x109a08 + nDiagSum * -0x5a800 >> 10) * nPerspScale >> 0x14);
 }
 
 // 1.14d mac: 002e1fcc
@@ -160,17 +172,16 @@ void OGL_PerspectiveScalePosition(int nX, int nY, int nAngle, int * pXAdjust, in
     int iVar4 = iVar3 + iVar1;
     int nLookupIdx = iVar4 * 0x9c9b8 >> 0x14;
     int iVar2 = PTR_00552b70[nLookupIdx + 0x1000U & 0x1fff];
-    *pXAdjust = *PTR_INT_003963a4 / 2 + ((iVar3 - iVar1) * iVar2 * 0x2d4 >> 0x14);
+    *pXAdjust = INT_005e9e24 / 2 + ((iVar3 - iVar1) * iVar2 * 0x2d4 >> 0x14);
     iVar1 = iVar4 * -0x2d4 >> 1;
     iVar2 = iVar2 * iVar1 >> 0x14;
-    *pYAdjust = *PTR_INT_003963a8 / 2 - 0x10 + iVar2;
+    *pYAdjust = INT_005e9e28 / 2 - 0x10 + iVar2;
+    INT_005eabe4 = iVar2 - ((iVar1 + 0x37400) * pLookupTable[nLookupIdx + 0x1080U & 0x1fff] >> 0x14);
     if (!bOrder) {
-      iVar3 = 0x466;
+      INT_005eabe4 = INT_005eabe4 * 0x466 >> 10;
     } else {
-      iVar3 = 0x4cc;
+      INT_005eabe4 = INT_005eabe4 * 0x4cc >> 10;
     }
-
-    INT_005eabe4 = (iVar2 - ((iVar1 + 0x37400) * pLookupTable[nLookupIdx + 0x1080U & 0x1fff] >> 0x14)) * iVar3 >> 10;
 }
 
 // 1.14d mac: 002e20bf

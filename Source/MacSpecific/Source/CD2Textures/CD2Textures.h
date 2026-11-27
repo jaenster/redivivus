@@ -39,7 +39,7 @@ typedef void (*EndFrame_fn)(::CD2Textures * pThis);
 #endif
 #ifndef RECON_FPTD_GetFreeMemory_fn
 #define RECON_FPTD_GetFreeMemory_fn
-typedef int (*GetFreeMemory_fn)(::CD2Textures * pThis, bool bExcludeReserve);
+typedef int (*GetFreeMemory_fn)(::CD2Textures * pThis, BYTE bExcludeReserve);
 #endif
 #ifndef RECON_FPTD_IsTextureBound_fn
 #define RECON_FPTD_IsTextureBound_fn
@@ -97,7 +97,7 @@ struct CD2TexturesVtable {
     /* 0x04 */ void (*_CD2Textures_D0)(::CD2Textures *);
     /* 0x08 */ int (*CreateTexture)(::CD2Textures *, void *, int, int, int, void *, int, intptr_t);
     /* 0x0C */ void (*EndFrame)(::CD2Textures *);
-    /* 0x10 */ int (*GetFreeMemory)(::CD2Textures *, bool);
+    /* 0x10 */ int (*GetFreeMemory)(::CD2Textures *, BYTE);
     /* 0x14 */ bool (*UploadTexture)(::CD2Textures *, struct D2TextureNodeStrc *, void *);
     /* 0x18 */ void (*ReleaseTexture)(::CD2Textures *, struct D2TextureNodeStrc *);
     /* 0x1C */ void (*BindTexture)(::CD2Textures *, struct D2TextureNodeStrc *);
@@ -171,7 +171,7 @@ struct D2TextureNodeStrc * CD2TEXTURES_ListRemove(::CD2Textures * pThis, struct 
 void EndFrame(::CD2Textures * pThis); // 1.14d mac: 002b16de
 // Returns the remaining texture memory: the total minus the memory in use, minus the reserve computed at init when the flag is set.
 // Described from the Mac body (no Windows twin).
-int GetFreeMemory(::CD2Textures * pThis, bool bExcludeReserve); // 1.14d mac: 002b1700
+int GetFreeMemory(::CD2Textures * pThis, BYTE bExcludeReserve); // 1.14d mac: 002b1700
 // Adds 0x400 to the entry capacity at +0x48, allocates and copies the 0x30-byte entries, rebases every list pointer onto the new block, links in the new free entries and frees the old array.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 void CD2TEXTURES_GrowEntries(::CD2Textures * pThis); // 1.14d mac: 002b1718

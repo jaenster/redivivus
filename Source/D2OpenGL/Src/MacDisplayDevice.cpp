@@ -79,11 +79,14 @@ using namespace D2OpenGL::MacDisplayDevice;
 GDHandle OGL_MacGetDisplayDevice(CGDirectDisplayID nDisplayId) {
     CGRect local_24;
     CGDisplayBounds(&local_24, nDisplayId);
+    float fLeft = local_24.origin.x;
+    float fTop = local_24.origin.y;
+    float fBottom = local_24.size.height + local_24.origin.y;
+    float fRight = local_24.size.width + local_24.origin.x;
     GDHandle hDevice = DMGetFirstScreenDevice('\x01');
     while (hDevice) {
-      GDPtr pGVar1;
-      pGVar1 = *hDevice;
-      if ((short int)(int)local_24.origin.y == pGVar1->gdRect.top && (short int)(int)local_24.origin.x == pGVar1->gdRect.left && (short int)(int)(local_24.size.height + local_24.origin.y) == pGVar1->gdRect.bottom && (short int)(int)(local_24.size.width + local_24.origin.x) == pGVar1->gdRect.right) {
+      GDPtr pGVar1 = *hDevice;
+      if ((uint16_t)pGVar1->gdRect.top == (uint16_t)(int)fTop && (uint16_t)pGVar1->gdRect.left == (uint16_t)(int)fLeft && (uint16_t)pGVar1->gdRect.bottom == (uint16_t)(int)fBottom && (uint16_t)pGVar1->gdRect.right == (uint16_t)(int)fRight) {
         return hDevice;
       }
 

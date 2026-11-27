@@ -40,7 +40,7 @@ typedef void (*EndFrame_fn)(::CD2Textures * pThis);
 #endif
 #ifndef RECON_FPTD_GetFreeMemory_fn
 #define RECON_FPTD_GetFreeMemory_fn
-typedef int (*GetFreeMemory_fn)(::CD2Textures * pThis, bool bExcludeReserve);
+typedef int (*GetFreeMemory_fn)(::CD2Textures * pThis, BYTE bExcludeReserve);
 #endif
 #ifndef RECON_FPTD_IsTextureBound_fn
 #define RECON_FPTD_IsTextureBound_fn
@@ -61,7 +61,7 @@ struct COGLAGPTexturesVtable {
     /* 0x04 */ void (*_COGLAGPTextures_D0)(::COGLAGPTextures *);
     /* 0x08 */ int (*CreateTexture)(::CD2Textures *, void *, int, int, int, void *, int, intptr_t);
     /* 0x0C */ void (*EndFrame)(::CD2Textures *);
-    /* 0x10 */ int (*GetFreeMemory)(::CD2Textures *, bool);
+    /* 0x10 */ int (*GetFreeMemory)(::CD2Textures *, BYTE);
     /* 0x14 */ bool (*UploadTexture)(::CD2Textures *, struct D2TextureNodeStrc *, void *);
     /* 0x18 */ void (*ReleaseTexture)(::CD2Textures *, struct D2TextureNodeStrc *);
     /* 0x1C */ void (*BindTexture)(::CD2Textures *, struct D2TextureNodeStrc *);

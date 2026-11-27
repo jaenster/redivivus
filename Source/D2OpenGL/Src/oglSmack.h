@@ -19,7 +19,6 @@ namespace D2OpenGL::oglSmack {
 // Function declarations
 
 // Allocates the oglSmack.cpp buffers and creates two textures with filter params.
-// Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
 void OGLSMACK_Init(); // 1.14d mac: 002e20d4
 // Deletes the two textures and frees the smack buffers.
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
@@ -29,8 +28,6 @@ void OGLSMACK_Shutdown(); // 1.14d mac: 002e221e
 void OGL_DecodeSmacker(char * szSmacker, struct D2SmackerContextStrc * pContext, char nMode); // 1.14d mac: 002e22fb
 void OGL_CloseSmacker(struct D2SmackerContextStrc * pContext); // 1.14d mac: 002e2730
 void OGL_PlayerSmacker(struct D2SmackerContextStrc * pContext); // 1.14d mac: 002e274d
-// Called only by OGL_DecodeSmacker. Converts a 256x64 block of 8-bit indexed pixels to RGBA through an RGB palette (index 0 becomes 0xff).
 // Named from the Mac body: no Windows 1.14d twin (inlined there or Mac-only); description checked against this decompilation.
-void OGLSMACK_ConvertIndexedToRGBA(BYTE * pIndices, uint32_t * pDst, BYTE * pRGB); // 1.14d mac: 002e2af8
 
 } // namespace D2OpenGL::oglSmack
