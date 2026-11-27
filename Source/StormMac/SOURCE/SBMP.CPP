@@ -23,6 +23,8 @@ DWORD SFileSetFilePointer(D2MPQFileStrc* pFile, int nDistance, int* pnDistanceHi
 DWORD SFileGetFileSize(D2MPQFileStrc* pFile, LPDWORD pdwFileSizeHigh);
 BOOL SFileCloseFile(D2MPQFileStrc* pFile);
 
+// File-local routines are not inlined and take their first two arguments in ecx and edx.
+#define SBMP_LOCAL static __attribute__((noinline))
 #define SBMP_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SBMP.CPP"
 
 #pragma pack(push, 1)
@@ -76,14 +78,13 @@ struct TgaHeader {
 };
 #pragma pack(pop)
 
-static void SBMP_CopyBottomUpRows(const void* pSrc, void* pDest, size_t nDestSize, size_t nRowBytes, int nSrcPitch,
+SBMP_LOCAL void SBMP_CopyBottomUpRows(const void* pSrc, void* pDest, size_t nDestSize, size_t nRowBytes, int nSrcPitch,
                                   int nRows);
-static int SBMP_IsValidTgaHeader(const TgaHeader* pHeader);
-static int SBMP_LoadTgaPalette(int nBytesRead, const uint8_t* pEntries, const TgaHeader* pHeader, int nExpected,
-                               uint8_t* pPalette);
-static int SBMP_DecodeTgaPixels(const uint8_t* pSrc, const TgaHeader* pHeader, int nSrcSize, uint8_t* pDest,
+SBMP_LOCAL bool SBMP_IsValidTgaHeader(const TgaHeader* pHeader);
+SBMP_LOCAL int SBMP_LoadTgaPalette(const TgaHeader* pHeader, const uint8_t* pEntries, int nExpected, uint8_t* pPalette);
+SBMP_LOCAL int SBMP_DecodeTgaPixels(const TgaHeader* pHeader, const uint8_t* pSrc, int nSrcSize, uint8_t* pDest,
                                 size_t nDestSize);
-static void UncompressPcxImage(const uint8_t* pSrc, uint8_t* pDest, uint32_t nDestSize, int nSrcSize,
+SBMP_LOCAL void UncompressPcxImage(const uint8_t* pSrc, uint8_t* pDest, uint32_t nDestSize, int nSrcSize,
                                uint32_t nWidth, uint32_t nBytesPerLine, int nPlanes);
 
 // 1.14d mac: 0000c0ae
@@ -229,10 +230,9 @@ int SBmpDecodeImage(int nFormat, const void* pData, uint32_t nDataSize, uint8_t*
                 *pnBpp = byDepth;
             }
             if ((pPalette == NULL || pHeader->byColorMapType == 0 ||
-                 SBMP_LoadTgaPalette(pHeader->byIdLength, pBytes + pHeader->byIdLength + 0x12, pHeader, nPaletteBytes,
-                                     pPalette) != 0) &&
+                 SBMP_LoadTgaPalette(pHeader, pBytes + pHeader->byIdLength + 0x12, nPaletteBytes, pPalette) != 0) &&
                 (pbPixels == NULL ||
-                 SBMP_DecodeTgaPixels(pBytes + pHeader->byIdLength + nPaletteBytes + 0x12, pHeader,
+                 SBMP_DecodeTgaPixels(pHeader, pBytes + pHeader->byIdLength + nPaletteBytes + 0x12,
                                       nDataSize - (pHeader->byIdLength + nPaletteBytes + 0x12), pbPixels,
                                       nPixelBufSize) != 0)) {
                 bResult = 1;
@@ -407,15 +407,15 @@ bool SBmpLoadImage(const char* szFile, uint8_t* pPalette, uint8_t* pPixels, size
                         bResult = true;
                     } else {
                         uint8_t abyPalette[0x400];
-                        int nPaletteRead = SFileReadFile(pFile, abyPalette, nPaletteBytes, NULL, NULL);
-                        bResult = SBMP_LoadTgaPalette(nPaletteRead, abyPalette, &tHeader, nPaletteBytes, pPalette) != 0;
+                        SFileReadFile(pFile, abyPalette, nPaletteBytes, NULL, NULL);
+                        bResult = SBMP_LoadTgaPalette(&tHeader, abyPalette, nPaletteBytes, pPalette) != 0;
                         bOk = bResult;
                     }
                     if (bOk && pPixels != NULL) {
                         size_t nPixelSize = ((SFileGetFileSize(pFile, NULL) - 0x12 - nPaletteBytes)) - tHeader.byIdLength;
                         uint8_t* pBuffer = (uint8_t*)SMemAlloc(nPixelSize, SBMP_FILE, 0x111, 0);
                         SFileReadFile(pFile, pBuffer, nPixelSize, NULL, NULL);
-                        if (SBMP_DecodeTgaPixels(pBuffer, &tHeader, nPixelSize, pPixels, nPixelBufSize) != 0) {
+                        if (SBMP_DecodeTgaPixels(&tHeader, pBuffer, nPixelSize, pPixels, nPixelBufSize) != 0) {
                             SMemFree(pBuffer, SBMP_FILE, 0x11b, 0);
                             bResult = true;
                         } else {
@@ -433,7 +433,7 @@ bool SBmpLoadImage(const char* szFile, uint8_t* pPalette, uint8_t* pPixels, size
 
 // 1.14d mac: 0000ccb4
 // Rows from the last source row up, packed into the destination until it is full.
-static void SBMP_CopyBottomUpRows(const void* pSrc, void* pDest, size_t nDestSize, size_t nRowBytes, int nSrcPitch,
+SBMP_LOCAL void SBMP_CopyBottomUpRows(const void* pSrc, void* pDest, size_t nDestSize, size_t nRowBytes, int nSrcPitch,
                                   int nRows) {
     if (nRows == 0 || nSrcPitch == 0 || nRowBytes == 0 || nDestSize == 0 || pSrc == NULL || pDest == NULL) {
         SErrSetLastError(0x57);
@@ -461,37 +461,37 @@ static void SBMP_CopyBottomUpRows(const void* pSrc, void* pDest, size_t nDestSiz
 // 1.14d mac: 0000cd40
 // Image types 1, 2, 9 and 10; colour-mapped 8-bit with a 24 or 32 bit map, or true colour
 // 24 or 32 bit with no map.
-static int SBMP_IsValidTgaHeader(const TgaHeader* pHeader) {
+SBMP_LOCAL bool SBMP_IsValidTgaHeader(const TgaHeader* pHeader) {
     if (10 < pHeader->byImageType) {
-        return 0;
+        return false;
     }
     if ((0x606U >> (pHeader->byImageType & 0x1f) & 1) == 0) {
-        return 0;
+        return false;
     }
-    if (pHeader->byColorMapType != 1) {
+    if (pHeader->byColorMapType == 1) {
+        if (pHeader->byPixelDepth != 8) {
+            return false;
+        }
+        if (0x100 < (int)pHeader->wColorMapFirst + (int)pHeader->wColorMapLength) {
+            return false;
+        }
+        if (pHeader->byColorMapDepth != 0x18 && pHeader->byColorMapDepth != 0x20) {
+            return false;
+        }
+    } else {
         if (pHeader->byColorMapType != 0) {
-            return 0;
+            return false;
         }
         if (pHeader->byPixelDepth == 0x20) {
             if ((pHeader->byDescriptor & 0xf) != 8) {
-                return 0;
+                return false;
             }
         } else if (pHeader->byPixelDepth == 0x18) {
             if ((pHeader->byDescriptor & 0xf) != 0) {
-                return 0;
+                return false;
             }
         } else {
-            return 0;
-        }
-    } else {
-        if (pHeader->byPixelDepth != 8) {
-            return 0;
-        }
-        if (0x100 < (uint32_t)pHeader->wColorMapLength + (uint32_t)pHeader->wColorMapFirst) {
-            return 0;
-        }
-        if (pHeader->byColorMapDepth != 0x18 && pHeader->byColorMapDepth != 0x20) {
-            return 0;
+            return false;
         }
     }
     return pHeader->byDescriptor < 0x40;
@@ -499,8 +499,7 @@ static int SBMP_IsValidTgaHeader(const TgaHeader* pHeader) {
 
 // 1.14d mac: 0000cdbe
 // The colour map into a 256-entry palette, the rest of it zeroed.
-static int SBMP_LoadTgaPalette(int nBytesRead, const uint8_t* pEntries, const TgaHeader* pHeader, int nExpected,
-                               uint8_t* pPalette) {
+SBMP_LOCAL int SBMP_LoadTgaPalette(const TgaHeader* pHeader, const uint8_t* pEntries, int nExpected, uint8_t* pPalette) {
     uint16_t nLength = pHeader->wColorMapLength;
     uint32_t nDepth = pHeader->byColorMapDepth + 7;
     uint32_t nBytesPerEntry = nDepth >> 3;
@@ -542,7 +541,7 @@ static int SBMP_LoadTgaPalette(int nBytesRead, const uint8_t* pEntries, const Tg
 
 // 1.14d mac: 0000ce80
 // Raw (types 1, 2) or run-length (9, 10) pixels, placed by the descriptor's origin bits.
-static int SBMP_DecodeTgaPixels(const uint8_t* pSrc, const TgaHeader* pHeader, int nSrcSize, uint8_t* pDest,
+SBMP_LOCAL int SBMP_DecodeTgaPixels(const TgaHeader* pHeader, const uint8_t* pSrc, int nSrcSize, uint8_t* pDest,
                                 size_t nDestSize) {
     uint32_t nBytesPerPixel = (pHeader->byPixelDepth + 7) >> 3;
     uint8_t byDescriptor = pHeader->byDescriptor;
@@ -656,7 +655,7 @@ static int SBMP_DecodeTgaPixels(const uint8_t* pSrc, const TgaHeader* pHeader, i
 // 1.14d mac: 0000d1f8
 // PCX run-length data into pixels. Each scanline holds nPlanes planes of nBytesPerLine
 // bytes, the planes written interleaved (the last plane first); stops at either end.
-static void UncompressPcxImage(const uint8_t* pSrc, uint8_t* pDest, uint32_t nDestSize, int nSrcSize,
+SBMP_LOCAL void UncompressPcxImage(const uint8_t* pSrc, uint8_t* pDest, uint32_t nDestSize, int nSrcSize,
                                uint32_t nWidth, uint32_t nBytesPerLine, int nPlanes) {
     int nRowStride = nPlanes * nWidth;
     uint8_t* pDestEnd = pDest + nDestSize;

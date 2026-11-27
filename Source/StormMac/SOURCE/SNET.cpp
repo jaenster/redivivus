@@ -474,7 +474,7 @@ static inline void SNET_StampChecksum(SNetPacketHdr* pPacket) {
     uint16_t wSum = SNET_ComputePacketChecksum((const uint8_t*)&pPacket->wSize, pPacket->wSize - 2);
     uint32_t nLow = ((wSum & 0xFF) + (uint32_t)(wSum >> 8)) % 0xFF ^ 0xFF;
     uint32_t nHigh = (wSum >> 8) + nLow;
-    pPacket->wChecksum = ((uint16_t)(nLow << 8) | (uint16_t)(nHigh + (uint16_t)(nHigh / 0xFF) * -0xFF)) ^ 0xFF;
+    pPacket->wChecksum = ((uint16_t)(nLow << 8) | (uint16_t)(nHigh % 0xFF)) ^ 0xFF;
 }
 
 // Frees a locally queued message: its address object and its packet, each when present.
@@ -669,7 +669,7 @@ SNET_NOINLINE static void SNET_DestroyConnection(SNetConn* pConn) {
 static void SNET_DestroyAllConnections(void) {
     int nList = 0;
     do {
-        TSList<SNetConn>* pList = nList == 0 ? &g_tConnList : &g_tLocalConnList;
+        TSList<SNetConn>* pList = nList != 0 ? &g_tLocalConnList : &g_tConnList;
         SNetConn* pConn;
         while ((pConn = pList->Head()) != NULL) {
             SNET_DestroyConnection(pConn);

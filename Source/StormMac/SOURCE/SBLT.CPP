@@ -12,11 +12,11 @@ void SCodeDelete(int hCodeStream);
 
 // 1.14d mac: 003f0238
 // The blit table: 0x100 entries of 0x10 bytes; the second word is a compiled code stream.
-static void* s_pBlitTable;
+void* s_pBlitTable;  // set by the blitter set-up, which is not part of this file
 
 // 1.14d mac: 003f023c
 // Two fixed entries of three words each, the first of which is a code stream.
-static int s_atFixedEntries[2][3];
+int s_atFixedEntries[2][3];
 
 // 1.14d mac: 0000c000
 BOOL SBltDestroy(void) {

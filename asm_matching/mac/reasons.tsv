@@ -7,60 +7,41 @@ addr	name	reason_class	detail
 000098dc	CryptRSA_Process	eh	orig has __Unwind_Resume and four __ZSt9terminatev cleanup landing pads absent in ours, ours has ___stack_chk_fail instead
 000099ee	LogComputerInfoHeader	pic-ref	orig indexes an unnamed table via lea [R+4R+0x38d651], ours names g_aszMonthAbbreviation and loads with mov, bounds check equivalent
 00009d2e	Sha1_Pump	crt-idiom	orig is fully unrolled (424 insns, no loop), ours is a 144-insn loop with round constants 0x5a827999 etc.
-0000a4b8	Sha1_Append	semantic-guess	64-bit length add is sub/adc-style in orig and lea/add/adc-0 in ours, same Sha1_Pump calls and bit-count update
+0000a4b8	Sha1_Append	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 74 insns, ours 78; opcode-skeleton similarity 0.67
 0000a56e	Sha1_Finalize	pic-ref	orig uses lea of PIC g_abySha1Padding, ours loads the pointer via mov from the PIC GOT slot &g_abySha1Padding
-0000a629	SBigAdd	semantic-guess	orig calls BigBuffer_Add and returns, ours tail-jumps to BigBuffer_Add with same argument registers
-0000a645	BigBuffer_Add	semantic-guess	same TSBaseArray_Ui_Copy and SBIG_GrowToIndexNoZero callees, orig loop/jump layout differs from ours (adc/sbb form)
-0000a71d	SBIG_CompareBigBuffers_ForSha1	wrong	orig loads ecx from [ebp+8] and edx from [ebp+0xc] before jmp, ours passes incoming ecx/edx unchanged to BigBuffer_Compare
-0000a72c	BigBuffer_Compare	semantic-guess	same compare loop semantics with cmova in orig and cmovb/jbe in ours, different loop and branch structure
+0000a645	BigBuffer_Add	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 79 insns, ours 78; opcode-skeleton similarity 0.70
+0000a72c	BigBuffer_Compare	regalloc	pA is copied to eax and spilled before the loads; loop index registers swap (ebx/edi)
 0000a7b6	SBigDel	eh	landing-pad tail differs (orig 3 insns, ours 0); body pic-ref: same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0000a87e	BigBuffer_Div	semantic-guess	orig calls BigBuffer_SetZero, ours has the same call as a tail jmp; otherwise same callee set and arithmetic
-0000ace5	SBigFromBinary	semantic-guess	orig calls BigBuffer_FromBinary and returns, ours tail-jumps to it with same argument registers
-0000ad01	BigBuffer_FromBinary	regalloc	same operations, orig keeps extra spill mov to [ebp-0x1c] and register move while ours reloads from [ebp+0x8]
-0000ade7	SBigMul	wrong	ours stores the ecx/edx arguments of BigBuffer_Mul to the stack, orig passes them in registers
-0000ae0a	BigBuffer_Mul	semantic-guess	same callees, orig compares ecx first while ours compares eax, branch order and arg reload placement differ
-0000afda	BigBuffer_MulMod	wrong	orig takes the esi base from ecx, ours reads a fifth stack argument from [ebp+0x18] and has a 0x20 frame
-0000b032	SBigNew	semantic-guess	both zero the 0x154-byte block after SMemAlloc, orig uses lea and a 0x14-stride loop, ours a counter loop with mov
-0000b0fd	SBigPowMod	wrong	ours stores the ecx/edx argument of BigBuffer_PowMod on the stack, orig passes edx in a register
-0000b127	BigBuffer_PowMod	semantic-guess	same callee sequence, ours and orig differ in loop/branch layout and use add -2 / cmove vs add 2 / neg
-0000b38f	BigBuffer_Shl	semantic-guess	orig calls SBIG_TrimLeadingZeros, ours tail-jumps to it on one path, same TSBaseArray and GrowToIndex callees
-0000b487	BigBuffer_Shr	semantic-guess	same callees and shape, shift count computed as 0x20-x in orig and as neg(x&0x1f) in ours
-0000b555	BigBuffer_Square	semantic-guess	same callees, orig and ours use cmovae vs cmovbe and reversed jne/jae for the same squaring-length check
-0000b731	SBigSub	semantic-guess	orig calls BigBuffer_Sub and returns, ours tail-jumps to BigBuffer_Sub with same argument registers
-0000b74d	BigBuffer_Sub	semantic-guess	same callees, orig uses xor-zeroing and a jmp loop while ours uses an sbb/cmp loop form, same sub-with-borrow semantics
-0000b819	SBigToBinaryBuffer	wrong	ours stores the BigBuffer arguments for SBIG_ToBinaryAppend on the stack, orig passes ecx/edx in registers
-0000b878	SBIG_ToBinaryAppend	semantic-guess	same reserve call, ours computes sub before test and reloads spilled values, same overflow check semantics
+0000a87e	BigBuffer_Div	inline	callees differ: orig-only [] ours-only []
+0000ae0a	BigBuffer_Mul	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 148 insns, ours 146; opcode-skeleton similarity 0.97
+0000b032	SBigNew	regalloc	identical stores; orig hoists lea ecx,[eax+0x154] before the loop and uses edx as index
+0000b127	BigBuffer_PowMod	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 190 insns, ours 196; opcode-skeleton similarity 0.88
+0000b38f	BigBuffer_Shl	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 90 insns, ours 92; opcode-skeleton similarity 0.84
+0000b74d	BigBuffer_Sub	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 73 insns, ours 72; opcode-skeleton similarity 0.68
+0000b878	SBIG_ToBinaryAppend	regalloc	identical but one commutative lea operand order (lea ecx,[edx+esi] orig)
 0000b92f	BigBuffer_Div_Ux	regalloc	same operations, orig spills edx and ecx to [ebp-0x24]/[ebp-0x1c] that ours keeps in registers, ours reloads [ebp+0x10]
-0000ba3f	BigBuffer_Mul_Ux	semantic-guess	same callees, ours uses mul dword ptr [ebp+0x10] in a differently shaped loop with 0x1c frame vs orig 0x2c
-0000bb08	TSGrowableArray_Uc_Reserve	semantic-guess	same ReallocData call, ours loads [esi] early and compares with reg/reg, orig compares against memory, same jbe/jae condition
-0000bb7c	TSBaseArray_Uc_ReallocData	semantic-guess	same alloc/realloc/free callees, ours stores via indexed addressing [R+R] where orig computes the address with add and je
-0000bc80	TSGrowableArray_Ui_Reserve	semantic-guess	same as TSGrowableArray_Uc_Reserve shape with 0x3f instead of 0xff bound, same callee, load order differs
-0000bcf2	TSBaseArray_Ui_ReallocData	semantic-guess	same alloc/realloc/free callees, orig has an extra test and je on the realloc-result path that ours lacks
-0000bdc8	TSBaseArray_Ui_Copy	semantic-guess	same Reserve and bzero callees, orig computes lea/dec index while ours uses inc edi and a test ebx before the call result check
+0000ba3f	BigBuffer_Mul_Ux	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 72 insns, ours 68; opcode-skeleton similarity 0.78
+0000bb08	TSGrowableArray_Uc_Reserve	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 46 insns, ours 47; opcode-skeleton similarity 0.94
+0000bb7c	TSBaseArray_Uc_ReallocData	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 66 insns, ours 64; opcode-skeleton similarity 0.95
+0000bc80	TSGrowableArray_Ui_Reserve	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 46 insns, ours 47; opcode-skeleton similarity 0.94
+0000bcf2	TSBaseArray_Ui_ReallocData	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 69 insns, ours 65; opcode-skeleton similarity 0.94
+0000bdc8	TSBaseArray_Ui_Copy	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 43 insns, ours 39; opcode-skeleton similarity 0.84
 0000bf02	TSFixedArray_Ui_Set	regalloc	same instructions modulo register choice
-0000c000	SBltDestroy	wrong	ours returns 1 immediately, orig frees the blit table entries with SCodeDelete/SMemFree/SMemZero and clears s_pBlitTable
-0000c0ae	SBmpDecodeImage	wrong	orig calls UncompressPcxImage first and reads arg at [ebp+0x18] where ours reads [ebp+0x10]; frame and lea constants (-0x2fe vs -0x300) also differ
-0000c421	SBmpLoadImage	semantic-guess	same callee set but orig calls SErrSetLastError first and has a different branch shape (jae/jmp, cmp R,0x8) than ours; local offsets differ too
+0000c000	SBltDestroy	regalloc	loop counter: orig counts 2 down with dec/jne, clang425 here counts -2 up with inc
+0000c0ae	SBmpDecodeImage	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 274 insns, ours 270; opcode-skeleton similarity 0.59
+0000c421	SBmpLoadImage	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 487 insns, ours 481; opcode-skeleton similarity 0.76
 0000ccb4	SBMP_CopyBottomUpRows	sched	same instructions in a different order
-0000cd40	SBMP_IsValidTgaHeader	wrong	orig compares byte [ecx+0x10] against 0x20 via ah while ours compares it against 0x8 and adds words at [ecx+3] and [ecx+5]
-0000cdbe	SBMP_LoadTgaPalette	semantic-guess	same calls and bzero pair, but orig takes its first argument in ecx and ours in edx and the loop bound uses cmovge where ours uses cmovbe
-0000ce80	SBMP_DecodeTgaPixels	semantic-guess	same memmove callee, but orig has 63 extra-only ops (cmp/ja/inc/imul) and a different branch structure and frame size 0x4c vs 0x3c
-0000d1f8	UncompressPcxImage	semantic-guess	same SMemFill callee, but orig has many extra add/imul/cmp ops (218 vs 151 insns) suggesting a different row/loop structure
-0000d43e	SCmdDestroy	semantic-guess	same callees; orig materialises null-check booleans with and/sete/or while ours uses je/jmp branches, and PIC string loads are reordered
+0000cd40	SBMP_IsValidTgaHeader	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 48 insns, ours 46; opcode-skeleton similarity 0.81
+0000cdbe	SBMP_LoadTgaPalette	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 70 insns, ours 70; opcode-skeleton similarity 0.89
+0000ce80	SBMP_DecodeTgaPixels	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 296 insns, ours 266; opcode-skeleton similarity 0.69
+0000d1f8	UncompressPcxImage	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 218 insns, ours 151; opcode-skeleton similarity 0.45
+0000d43e	SCmdDestroy	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 79 insns, ours 66; opcode-skeleton similarity 0.77
 0000d532	SCmdProcess	pic-ref	orig reads global s_tBareList-4 where ours reads s_bRequiredRegistered-4, plus orig uses setcc/or where ours uses branches
-0000d674	SCMD_ProcessTokens	wrong	orig has a call to SCMD_ReportError and bounds check cmp 0x100 with jge; ours lacks that call and checks cmp 0xff
+0000d674	SCMD_ProcessTokens	inline	callees differ: orig-only [] ours-only []
 0000db26	SCMD_ReportError	pic-ref	same 78-insn body; orig indexes a table at absolute 0x3c1bb1 directly while ours loads named global _gaSCMD_FallbackMessages first
-0000dce8	SCmdRegisterArgument	wrong	orig calls TSList_NewNode while ours calls SMemAlloc and TSLINK_Unlink instead, with different stored constants (0x40, 0x8, 0xfffffffe)
-0000de3a	SCMD_ProcessCurrentFlag	semantic-guess	same PerformConversion and SCMD_FindFlagDef calls; orig uses cmovl for the min while ours uses a jge branch
-0000dec7	PerformConversion	semantic-guess	same callees; orig has more mov/and/or/sete flag ops and different stores to ebp-0x34 vs ours ebp-0x40, with ours using jumps for tests
-0000e251	SCMD_FindFlagDef	semantic-guess	same callees; orig computes a boolean with and/or/sete and jle while ours uses je/jge with swapped compare operands
-0000e2ea	SCMD_ListDestructor	wrong	orig calls TSLIST_UnlinkAll before TSLINK_Unlink on esi+4; ours drops the TSLIST_UnlinkAll call entirely and tail-jumps to TSLINK_Unlink
-0000e30c	TSLIST_DeleteAll	semantic-guess	same TSLINK_Unlink and SMemFree callees; orig uses mov/cmovne with and/or/sete where ours uses je and test branches
-0000e394	TSList_NewNode	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
+0000dce8	SCmdRegisterArgument	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 98 insns, ours 93; opcode-skeleton similarity 0.62
+0000dec7	PerformConversion	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 268 insns, ours 247; opcode-skeleton similarity 0.84
 0000e40a	TSList_LinkNode	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-0000e47e	TSLINK_Unlink	inline	orig calls TSLINK_NextLink out-of-line while ours has its body inlined (sub and and -0x2 sequence) with no call
-0000e4be	TSLINK_NextLink	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
-0000e4f4	TSLIST_UnlinkAll	inline	static TS list/link helper: clang inlines it, no out-of-line copy in the object, so there is nothing to compare
 0000e540	SCMD_InitStaticLists	pic-ref	orig stores sentinel into s_tBareList-4 and loads unnamed global ? where ours stores into s_bRequiredRegistered-4 and loads ___dso_handle; same otherwise
 0000e610	SCodeDelete	inline	orig calls TSLIST_DeleteNode out-of-line while ours has no such call and an inlined SMemFree plus two TSLINK_Unlink sequence
 0000e6e7	SCodeDestroy	wrong	orig calls SMemZero twice and TSLIST_DeleteAll; ours has no SMemZero calls at all and substitutes SMemFree and TSLINK_Unlink, so zeroing side effects are missing
@@ -201,52 +182,47 @@ addr	name	reason_class	detail
 00019235	SMSG_FindWindow	wrong	orig uses the s_tWindowList+4 sentinel via cmove and a second sete/or condition; ours has no sentinel reference and loops without it
 00019464	TSLinkList<SMsgWindowRecord>::DeleteNode	regalloc	same instructions modulo register choice
 000194e0	_GLOBAL__I_a	pic-ref	orig lea's the ~TSLinkList destructor and loads a PIC slot for __dso_handle; ours mov's the &symbol forms, same atexit call
-00019532	SNetLeaveGame	wrong	orig stores g_nSNetState0/2/3 as byte writes, ours as dword writes; frame is 0x4c in orig vs 0x3c in ours
-0001983b	SNET_DestroyAllConnections	semantic-guess	ConnList/LocalConnList ternary is cmovne on orig and cmove with swapped operands on ours; same selection
-00019897	SNetDestroy	wrong	orig passes ecx=1 to SpiDestroy before the call; ours calls SpiDestroy without that argument
-00019a47	SpiDestroy	wrong	orig takes its object from ecx (mov esi,ecx) and writes g_nSpiCount as a byte; ours ignores ecx and writes dword
-00019b0b	SNET_ConnSendMessage	wrong	packet header constants differ: orig uses imul 0xff, lea [R+0x2]/[R+0xc] and add with a register; ours stores 0x14, 0xb00, 0x8 and 0xffffff01
-00019dc6	SNET_ConnResendMessage	semantic-guess	checksum fold is ebx-255*x in orig (imul 0xff, sub) and ebx+(-255*x) in ours (imul 0xffffff01, add); same arithmetic mod 2^32
-00019eb2	SNET_ConnSendPacket	wrong	orig loads g_pSendBuffer and writes header fields as dword; ours never reads g_pSendBuffer and stores a word
+00019532	SNetLeaveGame	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 217 insns, ours 188; opcode-skeleton similarity 0.69
+00019897	SNetDestroy	inline	orig SpiDestroy takes bClearList in ecx (fastcc, constant 1 not propagated); ours propagates the constant
+00019a47	SpiDestroy	inline	orig SpiDestroy takes its argument in ecx; ours propagates the constant
+00019b0b	SNET_ConnSendMessage	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 203 insns, ours 163; opcode-skeleton similarity 0.65
+00019eb2	SNET_ConnSendPacket	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 107 insns, ours 100; opcode-skeleton similarity 0.88
 0001a05f	dump_packet	data-guess	orig dispatches the packet subtype through a 16-entry switch jumptable; ours indexes guessed tables at 0xe3c and 0xe4c
-0001a27c	SNET_ComputePacketChecksum	semantic-guess	one's-complement fold uses cmp 0xfe with cmova in orig and cmp 0xff with a jb branch in ours; same threshold
-0001a319	SNET_DestroyConnection	semantic-guess	list selection is cmp/je/jmp on orig and cmove on ours; both pick the same list
-0001a43f	SNET_CreateConnection	wrong	orig calls NewNode on the ecx list argument; ours passes &g_tLocalConnList as the list instead
+0001a27c	SNET_ComputePacketChecksum	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 34 insns, ours 35; opcode-skeleton similarity 0.86
+0001a319	SNET_DestroyConnection	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 44 insns, ours 42; opcode-skeleton similarity 0.89
+0001a43f	SNET_CreateConnection	inline	orig keeps the list argument in ecx (two callers, same list); ours propagates the constant
 0001a4a2	SNetLogInfo::~SNetLogInfo[D1]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0001a508	TSGrowableArray<unsignedint>::~TSGrowableArray[D1]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0001a9f8	SLOG_EnsureLogCreated	semantic-guess	orig works through its pointer argument and calls SLOG_CreateFromRegistry; ours hard-codes g_tSNetLog and tail-jumps to it
-0001aa62	SLOG_CreateFromRegistry	wrong	orig passes its own arguments ebp+0xc and ebp+0x10 to SRegLoadString; ours passes g_tSNetLog fields instead; frame 0x11c vs 0x12c
+0001a9f8	SLOG_EnsureLogCreated	inline	orig takes pLogInfo on the stack and calls SLOG_CreateFromRegistry out of line; ours propagates g_tSNetLog
+0001aa62	SLOG_CreateFromRegistry	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 45 insns, ours 45; opcode-skeleton similarity 0.89
 0001ae80	_GLOBAL__I_a	pic-ref	orig lea's destructor and string-literal addresses; ours mov's PIC &symbol slots and immediate-stores the literal text; __dso_handle resolves differently
-0001b106	RgnExportTable::~RgnExportTable[D1]	wrong	ours is a bare jmp to an unresolved label; orig calls _pthread_mutex_destroy on this+0x50 and sets the vtable
-0001b13a	RgnExportTable_Lock	semantic-guess	orig computes the flag after the lock call with sbb eax,eax; ours computes it before the lock with xor/sbb and reuses ebx
-0001b238	RgnLink_NextLink	semantic-guess	tagged-pointer walk uses sete/or/je on orig and test/jne/jns branches on ours; both do the same sub and and-2 steps
+0001b106	RgnExportTable::~RgnExportTable[D1]	inline	callees differ: orig-only [_pthread_mutex_destroy __ZSt9terminatev] ours-only []
+0001b13a	RgnExportTable_Lock	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 34 insns, ours 34; opcode-skeleton similarity 0.88
 0001b26e	RgnList_LinkNode	regalloc	same ops; orig differs only by two reg-to-reg moves at the argument setup
-0001b2f0	RgnList_UnlinkAll	semantic-guess	ptr&1 and null test are sete/movzx/or on orig and setne/test on ours; same branches to the same unlink
-0001b33c	RgnHashTable_Ptr	semantic-guess	hash index is computed via a cmovne/sete boolean on orig and a branch chain on ours; same lookups
-0001b3aa	RgnExportTable::RgnExportTable[C1]	wrong	ours is an empty stub (pop/jmp out); orig constructs RgnHashTableReuse, calls CRITSECT_Init and sets fields
-0001b452	RgnHashTableReuse::InternalNew	semantic-guess	same comparisons; orig uses sete/or/cmovne boolean forms and ours uses branches
-0001b514	RgnExportTable::~RgnExportTable[D0]	wrong	orig calls _pthread_mutex_destroy then the D2 destructor then terminate; ours has an unresolved call and jmp delete, no mutex destroy
-0001b58e	RgnBlockList_Clear	semantic-guess	null/empty checks are a sete/or/cmovne boolean on orig and je/jne branches on ours; same unlink and destroy calls
-0001b61a	RgnFreeList_Clear	semantic-guess	same SMemFree/RgnLink_Unlink call sequence; orig uses boolean sete/or forms and ours branches, terminate calls shown unresolved
+0001b2f0	RgnList_UnlinkAll	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 33 insns, ours 32; opcode-skeleton similarity 0.94
+0001b33c	RgnHashTable_Ptr	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 48 insns, ours 44; opcode-skeleton similarity 0.71
+0001b3aa	RgnExportTable::RgnExportTable[C1]	inline	callees differ: orig-only [RgnHashTableReuse::RgnHashTableReuse[C1] CRITSECT_Init RgnHashTableReuse::~RgnHashTableReuse[D2] __Unwind_Resume] ours-only []
+0001b452	RgnHashTableReuse::InternalNew	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 66 insns, ours 66; opcode-skeleton similarity 0.97
+0001b514	RgnExportTable::~RgnExportTable[D0]	inline	callees differ: orig-only [_pthread_mutex_destroy RgnHashTableReuse::~RgnHashTableReuse[D2] __ZSt9terminatev] ours-only []
+0001b61a	RgnFreeList_Clear	unverified-ref	3 reference(s) (__ZSt9terminatev) only one side can resolve; every other instruction identical
 0001b732	RgnArrRGN_Destroy	eh	orig has four __ZSt9terminatev calls on the landing pads, ours has three unresolved calls
-0001b88e	RgnBlockLink_NextLink	semantic-guess	identical to RgnLink_NextLink: branch structure differs, same tagged-pointer arithmetic
-0001b8c4	RgnHashTable_Clear	semantic-guess	same RgnList_UnlinkAll and RgnLink_Unlink calls; frame 0x1c vs 0xc and boolean condition forms differ
-0001ba12	RgnArrRGN_Reserve	semantic-guess	same ReallocData call; orig compares with cmp reg,[mem] and jbe, ours loads [esi] into eax and uses jae, equivalent
+0001b8c4	RgnHashTable_Clear	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 68 insns, ours 67; opcode-skeleton similarity 0.97
+0001ba12	RgnArrRGN_Reserve	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 46 insns, ours 47; opcode-skeleton similarity 0.94
 0001ba84	RgnArrRGN_ReallocData	eh	orig has 6 call __ZSt9terminatev where ours has 6 unresolved calls, and orig uses cmova where ours uses cmovb
 0001bce0	SRGN_CopyRegionRecord	eh	orig adds __Unwind_Resume, terminate and SMemFree/RgnLink_Unlink cleanup calls that ours lacks entirely
-0001be5a	RgnArr8_Set	semantic-guess	same RgnArr8_ReallocData call, but orig copies via xmm0 at [R+R] with xor and branch shape while ours adds 8 then stores at [R]
-0001befa	RgnArr16_Set	semantic-guess	same RgnArr16_ReallocData call, but orig uses two 8-byte movsd at [R+R] and [R+R+8] while ours adds 0x10 first
-0001bfa6	RgnArr1C_Set	semantic-guess	same RgnArr1C_ReallocData call, but orig indexes with an xor/add offset and branches on esi while ours does pointer arithmetic and branches on eax
+0001be5a	RgnArr8_Set	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 33 insns, ours 29; opcode-skeleton similarity 0.73
+0001befa	RgnArr16_Set	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 35 insns, ours 31; opcode-skeleton similarity 0.69
+0001bfa6	RgnArr1C_Set	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 39 insns, ours 37; opcode-skeleton similarity 0.67
 0001c066	RgnBlockList_LinkNode	regalloc	only two extra reg-to-reg mov instructions in orig, same calls and same ops otherwise
-0001c0e8	RgnArrRGN_New	semantic-guess	orig computes count+1 via lea and reloads [R+8] while ours uses inc; same RgnArrRGN_Reserve call
+0001c0e8	RgnArrRGN_New	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 43 insns, ours 40; opcode-skeleton similarity 0.91
 0001c1b6	RgnHashTableReuse::~RgnHashTableReuse[D2]	pic-ref	orig loads the vtable as mov from PIC symbol then add 8, ours uses lea of the PIC symbol; orig also has a terminate call
 0001c258	RgnHashTable::~RgnHashTable[D2]	pic-ref	orig loads the vtable as mov from PIC symbol then add 8, ours uses lea of the PIC symbol; orig also has a terminate call
-0001c2f4	InternalDelete	wrong	orig calls SMemFree 4 times and terminate, ours calls RgnList_LinkNode and no SMemFree at all
+0001c2f4	InternalDelete	inline	callees differ: orig-only [SMemFree SMemFree SMemFree SMemFree __ZSt9terminatev __ZSt9terminatev __ZSt9terminatev] ours-only [RgnList_LinkNode]
 0001c3ce	InternalNew	inline	orig is a 14-insn wrapper calling RgnList_NewNode out of line, ours has RgnList_NewNode body inlined with RgnArrRGN_New and ReallocData calls
-0001c41e	Destroy	wrong	orig calls RgnBucketArr_Destroy on this+0x14 and sets 0x24 to -1, ours calls RgnBlockList_Clear(this+0x38) and RgnFreeList_Clear(this+0x28)
+0001c41e	Destroy	inline	callees differ: orig-only [RgnBucketArr_Destroy] ours-only [RgnBlockList_Clear RgnFreeList_Clear]
 0001c46c	RgnBucketArr_Destroy	eh	only callee difference is orig's extra __ZSt9terminatev; loop stride and index codegen also differ (add 0xc vs lea +4)
-0001c5c6	RgnBlockList_UnlinkAll	semantic-guess	same single RgnBlockLink_Unlink call, but boolean expression built as and/movzx/cmovne in orig vs setne/test in ours
-0001c612	RgnHashTableReuse::RgnHashTableReuse[C1]	wrong	orig calls RgnList_UnlinkAll twice and writes 0xdddddddd fill values, ours makes no calls and zeroes fields instead
+0001c5c6	RgnBlockList_UnlinkAll	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 33 insns, ours 32; opcode-skeleton similarity 0.94
+0001c612	RgnHashTableReuse::RgnHashTableReuse[C1]	inline	callees differ: orig-only [RgnList_UnlinkAll RgnList_UnlinkAll] ours-only []
 0001c6f0	_GLOBAL__I_a	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
 0001c806	SStrCopy	crt-idiom	orig scans 4 bytes at a time with 0x81010100 masks, ours uses a byte-at-a-time loop
 0001c9bd	SStrDup	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
@@ -259,13 +235,13 @@ addr	name	reason_class	detail
 0001d458	SSignatureVerifyStream_Finish	eh	orig has extra __Unwind_Resume and terminate calls plus stack adjust cleanups, ours has none; all other callees match
 0001d69e	STRANS_DeleteTransRecord	sched	same instructions in a different order
 0001d720	STransDestroy	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0001d826	TSList_DeleteNode_STrans	wrong	orig calls TSLink<STrans>::Unlink twice, ours calls it three times
-0001d90c	TSExplicitList<STrans,0>::UnlinkAll	semantic-guess	same single Unlink call, ours has one extra add of [esi] before the call and a different jmp target
+0001d826	TSList_DeleteNode_STrans	inline	callees differ: orig-only [] ours-only []
+0001d90c	TSExplicitList<STrans,0>::UnlinkAll	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 31 insns, ours 32; opcode-skeleton similarity 0.97
 0001d960	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0001d9b5	UTF16_ToUTF8	wrong	ours uses constants 0x8000, shr 15 and xor 3 with table displacement +0x711, orig uses setns/or 2 with table +0x304076
-0001dad0	UTF8_IsValidString	semantic-guess	same whitespace/range predicate: orig uses range compares, ours uses bitmask 0x2600 with bt
-0001dbca	UTF8_ToUTF16	semantic-guess	orig dispatches lead byte through a jump table, ours uses a compare chain with cmp 0x10ffff; same callee
-0001ddd4	TRANSTBL_Latin1ToUnicode	wrong	orig passes the gszUnicodeLatin1_1 table address to SingleByteToUnicode, ours passes the stack parameter instead
+0001d9b5	UTF16_ToUTF8	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 100 insns, ours 107; opcode-skeleton similarity 0.79
+0001dad0	UTF8_IsValidString	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 102 insns, ours 78; opcode-skeleton similarity 0.36
+0001dbca	UTF8_ToUTF16	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 168 insns, ours 186; opcode-skeleton similarity 0.74
+0001ddd4	TRANSTBL_Latin1ToUnicode	unknown	re-derived from the asm in the rework round, still not instruction-equal; orig 15 insns, ours 11; opcode-skeleton similarity 0.73
 0001de00	TRANSTBL_SingleByteToUnicode	data-guess	ours reaches the table through call-pop PIC and displacement +0x1cb, orig indexes a register base with no displacement
 0001de67	SVidDestroy	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0001df6a	SVidPlayEnd	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
@@ -465,7 +441,7 @@ addr	name	reason_class	detail
 000330c8	IDirectSoundBuffer_Release	eh	landing-pad tail differs (orig 1 insns, ours 0); body pic-ref: same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0003314e	IDirectSoundBuffer_Stop	regalloc	same calls; orig has two extra reg-to-stack stores (spill-like) while ours keeps the value in ecx instead of eax
 000332c6	IDirectSoundBuffer_Lock	semantic-guess	same LockMemFile2 call; orig clamps with jbe branches, ours with cmovbe pairs
-00033344	IDirectSoundBuffer_Play	data-guess	ours loads double literals from guessed label IKsPropertySet_Set+d/+15 where orig uses p""; frame 0x4c vs 0x3c and word-store vs movsd pattern follow
+00033344	IDirectSoundBuffer_Play	data-guess	"ours loads double literals from guessed label IKsPropertySet_Set+d/+15 where orig uses p""""; frame 0x4c vs 0x3c and word-store vs movsd pattern follow"
 00033632	IDirectSound_AcquireSoundChannel	wrong	ours passes args to GetFreeChannelFromPool in ecx/edx and [esp]; orig pushes all three on the stack, so argument passing differs
 000336ae	IDirectSoundBuffer_UpdatePanAndVolume	wrong	ours takes this from ecx while orig reads [ebp+8]; orig stores 0x2e as a word and ours as a dword; ours uses fld/fisttp where orig uses cvttss2si
 000337e4	IDirectSound_GetFreeChannelFromPool	wrong	ours reads its arguments from ecx/edx while orig reads [ebp+0xc] and [ebp+0x10]; parameter passing differs
@@ -595,7 +571,7 @@ addr	name	reason_class	detail
 0019e432	FUN_0019e432	wrong	orig makes 2 AEInstallEventHandler calls plus 4 cxa_guard pairs; ours makes 4 AEInstallEventHandler calls and no guards, so the handler set differs
 0019e64a	MAC_SetTSMInputCallback	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0019e764	MAC_ConvertUnicodeToText	stack-layout	same instructions; frame size or local offsets differ
-0019e8a1	MAC_ParseCommandLine	wrong	same callees but the separator test differs: orig looks up g_aMacSwitches with bound 0x100 and cmp 0x4, ours uses literal " \t\n:" with cmp 0x3 and bound 0xff
+0019e8a1	MAC_ParseCommandLine	wrong	"same callees but the separator test differs: orig looks up g_aMacSwitches with bound 0x100 and cmp 0x4, ours uses literal "" \t\n:"" with cmp 0x3 and bound 0xff"
 0019f18a	FUN_0019f18a	sched	same instructions in a different order
 0019f1c4	MAC_SetWorkingDirectoryToAppFolder	stack-layout	same instructions; frame size or local offsets differ
 0019f2b6	FLAMINGLOGO_Init	wrong	same callees but orig writes globals s_dwNextTick, s_hCTable, s_hMaskCTable while ours writes fields at +0x946, +0x94a, +0x94e and or's 0x2 into a flag
@@ -691,9 +667,9 @@ addr	name	reason_class	detail
 002e0c42	OGL_GetTextureMemoryBudget	pic-ref	same select of 0x96000/0xea600 and bit-field arithmetic, but ours reads different globals (_DAT_003ce7e8/ec, _DAT_00552b20) and lowers the select to neg/and
 002e0c87	OGL_InstallCursorCallbacks	pic-ref	orig passes &MACCURSOR_* values from direct globals; ours reads them through pointer globals _PTR_LAB_003961ec/f4 and _PTR_PTR_003961e0; same call slot +0xc4
 002e0cc8	OGL_RestoreDisplayMode	pic-ref	same display-mode flow; ours reads _DAT_00552b24/_CGDisplayModeRef_00552b28/_CGDirectDisplayID_00552b2c where orig uses s_bOSChecked+96f2/96f6/96fa
-002e0d68	OGL_MacCreateSurface	wrong	orig masks a field with 0x7fff, rounds with cvtsd2ss/cvtss2sd and appends " (stretched)" to a log string; ours has none of these
+002e0d68	OGL_MacCreateSurface	wrong	"orig masks a field with 0x7fff, rounds with cvtsd2ss/cvtss2sd and appends "" (stretched)"" to a log string; ours has none of these"
 002e0f4a	OGL_MacSwapContext	wrong	orig multiplies the converted double by a constant (mulsd); ours has no mulsd and adds a guessed constant with fild/fstp; values differ
-002e10f6	OGL_MacOpenWindow	wrong	orig does single-precision addss/cvtsi2ss where ours uses addsd/cvtss2sd; orig loads a constant data blob (lea p"niwH...") that ours lacks; FUN_0019f18a shows as '?'
+002e10f6	OGL_MacOpenWindow	wrong	"orig does single-precision addss/cvtsi2ss where ours uses addsd/cvtss2sd; orig loads a constant data blob (lea p""niwH..."") that ours lacks; FUN_0019f18a shows as '?'"
 002e15a6	OGL_MacSetRenderer	semantic-guess	orig has an extra jmp to the no-engine error path (lea of 'No usable OpenGL engine found.' then flag=1); ours sets the flag via a pointer global and its string lea shows as raw [R+0xb9d]
 002e16cc	OGL_MacCloseWindow	pic-ref	same aglSetCurrentContext/aglDestroyContext/DisposeWindow sequence; ours reaches globals via _AGLContext_00552b34/_WindowRef_00552b30 and exits with jmp out instead of jmp FUN_0019f18a
 002e173e	OGL_MacSwapBuffers	pic-ref	ours loads pointer global _AGLContext_00552b34 then dereferences it; orig passes s_bOSChecked+9702 directly

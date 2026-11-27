@@ -30,6 +30,10 @@ HANDLE CreateFile(const char* szName, DWORD dwAccess, DWORD dwShare, void* pSecu
 DWORD GetFileSize(HANDLE hFile, DWORD* pdwHigh);
 BOOL ReadFile(HANDLE hFile, void* pBuffer, DWORD nBytes, DWORD* pnRead, void* pOverlapped);
 
+// File-local routines are not inlined and take their first two arguments in ecx and edx.
+#define SCMD_LOCAL static __attribute__((noinline))
+// The list templates are instantiations shared with other objects, so they keep the C calling convention.
+#define SCMD_TPL inline __attribute__((noinline))
 #define SCMD_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SCMD.CPP"
 
 // 1.14d mac: gaSCMD_FallbackMessages
@@ -93,23 +97,23 @@ static int32_t s_bRequiredRegistered;
 
 // The next element of a list, NULL at the terminator.
 static inline CMDDEF* ListElement(CMDDEF* pNext) {
-    if (pNext == NULL || ((uintptr_t)pNext & 1) != 0) {
+    if ((pNext == NULL) | (((uintptr_t)pNext & 1) != 0)) {
         return NULL;
     }
     return pNext;
 }
 
 void TSLIST_DeleteAll(CMDLIST* pList);
-static void TSLIST_UnlinkAll(CMDLIST* pList);
-static void TSLINK_Unlink(void* pLink);
-static void* TSLINK_NextLink(void* pLink, int nLinkOffset);
-static CMDDEF* TSList_NewNode(CMDLIST* pList, int nLinkType, int nExtraBytes, uint32_t dwAllocFlags);
-static void TSList_LinkNode(CMDLIST* pList, CMDDEF* pNode, int nLinkType, void* pExistingLink);
-static void SCMD_ReportError(const char* szItem, DWORD dwError, CMDERRORCALLBACK pfnError, const char* szText);
-static CMDDEF* SCMD_FindFlagDef(const char* szToken, CMDDEF* pFirstDef, int32_t nMinLength);
-static int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed);
-static BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pProcessing, int* pnConsumed);
-static BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCursor, CMDDEF** ppPositional,
+SCMD_TPL void TSLIST_UnlinkAll(CMDLIST* pList);
+SCMD_TPL void TSLINK_Unlink(void* pLink);
+SCMD_TPL void* TSLINK_NextLink(void* pLink, int nLinkOffset);
+SCMD_TPL CMDDEF* TSList_NewNode(CMDLIST* pList, int nLinkType, int nExtraBytes, uint32_t dwAllocFlags);
+SCMD_TPL void TSList_LinkNode(CMDLIST* pList, CMDDEF* pNode, int nLinkType, void* pExistingLink);
+SCMD_LOCAL void SCMD_ReportError(const char* szItem, DWORD dwError, CMDERRORCALLBACK pfnError, const char* szText);
+SCMD_LOCAL CMDDEF* SCMD_FindFlagDef(const char* szToken, CMDDEF* pFirstDef, int32_t nMinLength);
+SCMD_LOCAL int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed);
+SCMD_LOCAL BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pProcessing, int* pnConsumed);
+SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCursor, CMDDEF** ppPositional,
                                CMDUNKNOWNCALLBACK pfnExtra, CMDERRORCALLBACK pfnError);
 
 // 1.14d mac: 0000d43e
@@ -169,7 +173,7 @@ int SCmdProcess(char* szCmdLine, int bSkipProgName, CMDUNKNOWNCALLBACK pfnExtra,
 // One token at a time: "@file" is read and parsed recursively, "-name" and "/name" name
 // switches (letters may be run together), anything else is the value of the switch
 // before it or the next positional argument.
-static BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCursor, CMDDEF** ppPositional,
+SCMD_LOCAL BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCursor, CMDDEF** ppPositional,
                                CMDUNKNOWNCALLBACK pfnExtra, CMDERRORCALLBACK pfnError) {
     if (**ppszCursor != '\0') {
         char* pszNext = *ppszCursor;
@@ -292,7 +296,7 @@ static BOOL SCMD_ProcessTokens(SCMD_PROCESSING* pProcessing, char** ppszCursor, 
 
 // 1.14d mac: 0000db26
 // The error callback's text: the registered message with the item put in, or a fallback.
-static void SCMD_ReportError(const char* szItem, DWORD dwError, CMDERRORCALLBACK pfnError, const char* szText) {
+SCMD_LOCAL void SCMD_ReportError(const char* szItem, DWORD dwError, CMDERRORCALLBACK pfnError, const char* szText) {
     int nMessage;
     if (dwError == 0x6e) {
         nMessage = 2;
@@ -384,7 +388,7 @@ BOOL SCmdRegisterArgList(const uint32_t* pCmdDefArray, uint32_t nCount) {
 
 // 1.14d mac: 0000de3a
 // Applies the pending switch, and every other definition its name still matches, to a value.
-static BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pProcessing, int* pnConsumed) {
+SCMD_LOCAL BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pProcessing, int* pnConsumed) {
     *pnConsumed = 0;
     CMDDEF* pDef = pProcessing->pCurrent;
     pProcessing->pCurrent = NULL;
@@ -393,9 +397,7 @@ static BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pPro
         if (!PerformConversion(pDef, szArgLine, &nArgConsumed)) {
             return 0;
         }
-        if (*pnConsumed < (int)nArgConsumed) {
-            *pnConsumed = nArgConsumed;
-        }
+        *pnConsumed = *pnConsumed < (int)nArgConsumed ? (int)nArgConsumed : *pnConsumed;
         pDef = SCMD_FindFlagDef(pProcessing->szName, ListElement(pDef->pNextElement), pProcessing->nNameLen);
     }
     return 1;
@@ -405,7 +407,7 @@ static BOOL SCMD_ProcessCurrentFlag(const char* szArgLine, SCMD_PROCESSING* pPro
 // Stores a value into a definition: a string (copied), a number, or a flag set or cleared by
 // its mask (a leading '+' or '-' on the text chooses). Then the callback, then every other
 // definition of the same group and type takes the value too.
-static int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed) {
+SCMD_LOCAL int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pnConsumed) {
     *pnConsumed = 0;
     uint32_t dwFlags = pDef->dwFlags;
     uint32_t dwType = dwFlags & 0x30000;
@@ -504,14 +506,14 @@ static int PerformConversion(CMDDEF* pDef, const char* szValue, uint32_t* pnCons
 
 // 1.14d mac: 0000e251
 // The longest definition (longer than nMinLength) whose name starts the token, from pFirstDef on.
-static CMDDEF* SCMD_FindFlagDef(const char* szToken, CMDDEF* pFirstDef, int32_t nMinLength) {
+SCMD_LOCAL CMDDEF* SCMD_FindFlagDef(const char* szToken, CMDDEF* pFirstDef, int32_t nMinLength) {
     int nTokenLen = SStrLen(szToken);
     CMDDEF* pFound = NULL;
     if (pFirstDef != NULL) {
         int nBest = nMinLength - 1;
         do {
             int nCmdLen = pFirstDef->nNameLen;
-            if (nBest < nCmdLen && nCmdLen <= nTokenLen) {
+            if (nCmdLen > nBest && nCmdLen <= nTokenLen) {
                 int nCmp;
                 if ((pFirstDef->dwFlags & 0x100) == 0) {
                     nCmp = _strnicmp(pFirstDef->szName, szToken, nCmdLen);
@@ -534,7 +536,7 @@ typedef uintptr_t LINKWORD;
 
 // 1.14d mac: 0000e2ea
 // A list's destructor: unlink everything, then the list's own link.
-static void SCMD_ListDestructor(void* pList) {
+SCMD_TPL void SCMD_ListDestructor(void* pList) {
     TSLIST_UnlinkAll((CMDLIST*)pList);
     TSLINK_Unlink((LINKWORD*)pList + 1);
 }
@@ -552,7 +554,7 @@ void TSLIST_DeleteAll(CMDLIST* pList) {
 
 // 1.14d mac: 0000e394
 // TSList::NewNode: a zeroed node of 0x40 bytes and more, linked when a link type is given.
-static CMDDEF* TSList_NewNode(CMDLIST* pList, int nLinkType, int nExtraBytes, uint32_t dwAllocFlags) {
+SCMD_TPL CMDDEF* TSList_NewNode(CMDLIST* pList, int nLinkType, int nExtraBytes, uint32_t dwAllocFlags) {
     CMDDEF* pMem = (CMDDEF*)SMemAlloc(nExtraBytes + 0x40, "", -2, dwAllocFlags | 8);
     CMDDEF* pNode = NULL;
     if (pMem != NULL) {
@@ -568,7 +570,7 @@ static CMDDEF* TSList_NewNode(CMDLIST* pList, int nLinkType, int nExtraBytes, ui
 
 // 1.14d mac: 0000e40a
 // Links a node after (1) or before (2) a link of the list, by default the list's own.
-static void TSList_LinkNode(CMDLIST* pList, CMDDEF* pNode, int nLinkType, void* pExistingLink) {
+SCMD_TPL void TSList_LinkNode(CMDLIST* pList, CMDDEF* pNode, int nLinkType, void* pExistingLink) {
     LINKWORD* pLink = (LINKWORD*)pNode;
     LINKWORD* pListWords = (LINKWORD*)pList;
     if (pNode == NULL) {
@@ -597,7 +599,7 @@ static void TSList_LinkNode(CMDLIST* pList, CMDDEF* pNode, int nLinkType, void* 
 }
 
 // 1.14d mac: 0000e47e
-static void TSLINK_Unlink(void* pLinkArg) {
+SCMD_TPL void TSLINK_Unlink(void* pLinkArg) {
     LINKWORD* pLink = (LINKWORD*)pLinkArg;
     LINKWORD nPrevious = *pLink;
     if (nPrevious != 0) {
@@ -611,10 +613,10 @@ static void TSLINK_Unlink(void* pLinkArg) {
 
 // 1.14d mac: 0000e4be
 // The link of the next element; at the end the terminator's address, its low bit cleared.
-static void* TSLINK_NextLink(void* pLinkArg, int nLinkOffset) {
+SCMD_TPL void* TSLINK_NextLink(void* pLinkArg, int nLinkOffset) {
     LINKWORD* pLink = (LINKWORD*)pLinkArg;
     LINKWORD nNext = pLink[1];
-    if (nNext == 0 || (nNext & 1) != 0) {
+    if ((nNext == 0) | ((nNext & 1) != 0)) {
         return (void*)(nNext & 0xfffffffe);
     }
     if (nLinkOffset < 0) {
@@ -624,7 +626,7 @@ static void* TSLINK_NextLink(void* pLinkArg, int nLinkOffset) {
 }
 
 // 1.14d mac: 0000e4f4
-static void TSLIST_UnlinkAll(CMDLIST* pList) {
+SCMD_TPL void TSLIST_UnlinkAll(CMDLIST* pList) {
     LINKWORD* pNode;
     while ((pNode = (LINKWORD*)ListElement(pList->pFirst)) != NULL) {
         TSLINK_Unlink(pNode);

@@ -188,7 +188,7 @@ public:
 // 1.14d mac: 0001b238
 RGN_NOINLINE RgnLink* RgnLink_NextLink(RgnLink* pLink, int nLinkOffset) {
     uint32_t pNext = pLink->m_next;
-    if (pNext == 0 || (pNext & 1)) {
+    if ((pNext == 0) | (pNext & 1)) {
         return (RgnLink*)(pNext & 0xFFFFFFFE);
     }
     if (nLinkOffset < 0) {
@@ -211,7 +211,7 @@ RGN_NOINLINE void RgnLink_Unlink(RgnLink* pLink) {
 // 1.14d mac: 0001b88e
 RGN_NOINLINE RgnBlockLink* RgnBlockLink_NextLink(RgnBlockLink* pLink, int nLinkOffset) {
     uint32_t pNext = pLink->m_next;
-    if (pNext == 0 || (pNext & 1)) {
+    if ((pNext == 0) | (pNext & 1)) {
         return (RgnBlockLink*)(pNext & 0xFFFFFFFE);
     }
     if (nLinkOffset < 0) {
@@ -278,7 +278,7 @@ RGN_NOINLINE void RgnList_UnlinkAll(RgnList* pList) {
     uint32_t pNode;
     for (;;) {
         pNode = pList->m_term.m_next;
-        if (pNode == 0 || (pNode & 1)) {
+        if ((pNode == 0) | (pNode & 1)) {
             pNode = 0;
         }
         if (pNode == 0) {
@@ -293,7 +293,7 @@ RGN_NOINLINE void RgnBlockList_UnlinkAll(RgnBlockList* pList) {
     uint32_t pNode;
     for (;;) {
         pNode = pList->m_term.m_next;
-        if (pNode == 0 || (pNode & 1)) {
+        if ((pNode == 0) | (pNode & 1)) {
             pNode = 0;
         }
         if (pNode == 0) {
@@ -523,7 +523,7 @@ RGN_NOINLINE void RgnFreeList_Clear(RgnList* pList) {
     RGN* pObject;
     for (;;) {
         pObject = (RGN*)pList->m_term.m_next;
-        if (pObject == NULL || ((uint32_t)pObject & 1)) {
+        if ((pObject == NULL) | (((uint32_t)pObject) & 1)) {
             pObject = NULL;
         }
         if (pObject == NULL) {
@@ -540,7 +540,7 @@ RGN_NOINLINE void RgnBlockList_Clear(RgnBlockList* pList) {
     RgnBlock* pObject;
     for (;;) {
         pObject = (RgnBlock*)pList->m_term.m_next;
-        if (pObject == NULL || ((uint32_t)pObject & 1)) {
+        if ((pObject == NULL) | (((uint32_t)pObject) & 1)) {
             pObject = NULL;
         }
         if (pObject == NULL) {
@@ -564,7 +564,7 @@ RGN_NOINLINE void RgnHashTable_Clear(RgnHashTable* pTable, int bUnlinkOnly) {
         for (uint32_t nBucket = 0; nBucket < nBuckets; nBucket++) {
             RgnList* pBucket = &pBuckets[nBucket];
             uint32_t pNode = pBucket->m_term.m_next;
-            if (pNode == 0 || (pNode & 1)) {
+            if ((pNode == 0) | (pNode & 1)) {
                 pNode = 0;
             }
             if (pNode != 0) {
@@ -577,7 +577,7 @@ RGN_NOINLINE void RgnHashTable_Clear(RgnHashTable* pTable, int bUnlinkOnly) {
                     pBuckets = pTable->m_buckets.m_data;
                     pBucket = &pBuckets[nBucket];
                     pNode = pBucket->m_term.m_next;
-                    if (pNode == 0 || (pNode & 1)) {
+                    if ((pNode == 0) | (pNode & 1)) {
                         pNode = 0;
                     }
                 } while (pNode != 0);
@@ -601,7 +601,7 @@ RGN_NOINLINE RGN* RgnHashTable_Ptr(RgnHashTable* pTable, uint32_t dwKey) {
         RgnList* pBuckets = pTable->m_buckets.m_data;
         RgnList* pBucket = &pBuckets[pTable->m_slotmask & dwKey];
         RGN* pEntry = (RGN*)pBucket->m_term.m_next;
-        if (pEntry == NULL || ((uint32_t)pEntry & 1)) {
+        if ((pEntry == NULL) | (((uint32_t)pEntry) & 1)) {
             pEntry = NULL;
         }
         while (pEntry != NULL && !((uint32_t)pEntry & 1)) {
@@ -674,14 +674,14 @@ void RgnHashTableReuse::InternalDelete(RGN* pNode) {
 // 1.14d mac: 0001b452 RgnHashTableReuse::InternalNew
 RGN* RgnHashTableReuse::InternalNew(RgnList* pList, uint32_t nExtraBytes, uint32_t dwFlags) {
     RGN* pNode = (RGN*)m_free.m_term.m_next;
-    if (pNode == NULL || ((uint32_t)pNode & 1)) {
+    if ((pNode == NULL) | (((uint32_t)pNode) & 1)) {
         pNode = NULL;
     }
     if (pNode == NULL) {
         RgnBlock* pHead;
         for (;;) {
             pHead = (RgnBlock*)m_blocks.m_term.m_next;
-            if (pHead == NULL || ((uint32_t)pHead & 1)) {
+            if ((pHead == NULL) | (((uint32_t)pHead) & 1)) {
                 pHead = NULL;
             }
             if (pHead != NULL && pHead->m_alloc != pHead->m_count) {

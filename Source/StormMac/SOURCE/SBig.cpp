@@ -20,6 +20,8 @@ void* SMemAlloc(uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags
 int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
 void* SMemReAlloc(void* pMem, uint32_t nBytes, const char* szFile, int nLine, uint32_t dwFlags);
 
+// File-local routines: the original compiler passes the first two arguments in ecx and edx.
+#define SBIG_LOCAL static __attribute__((noinline))
 #define SBIG_FILE "/Users/bclemetson/dev/diablo2/Diablo2/Source/DiabloAll/../../../StormMac/Storm Mac/SOURCE/SBig.cpp"
 
 struct BigBuffer {
@@ -57,24 +59,24 @@ void SBIG_GrowToIndexNoZero(BigBuffer* pBuffer, int32_t nIndex);
 void SBIG_TrimLeadingZeros(BigBuffer* pBuffer);
 void TSFixedArray_Ui_Set(BigBuffer* pArray, int nCount, const uint32_t* pSrc);
 void SBIG_BigBuffer_GetWord(BigStack* pStack, BigBuffer* pDest, BigBuffer* pSource);
-void BigBuffer_Add(BigBuffer* pDest, BigBuffer* pSourceA, BigBuffer* pSourceB);
-int32_t BigBuffer_Compare(BigBuffer* pA, BigBuffer* pB);
-void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBuffer* pDividend, BigBuffer* pDivisor,
+SBIG_LOCAL void BigBuffer_Add(BigBuffer* pDest, BigBuffer* pSourceA, BigBuffer* pSourceB);
+SBIG_LOCAL int32_t BigBuffer_Compare(BigBuffer* pA, BigBuffer* pB);
+SBIG_LOCAL void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBuffer* pDividend, BigBuffer* pDivisor,
                           BigStack* pStack);
-void BigBuffer_FromBinary(BigBuffer* pResult, const void* pSrcBytes, uint32_t nByteCount);
-void BigBuffer_Mul(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigStack* pStack);
-void BigBuffer_MulMod(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigBuffer* pModulus,
+SBIG_LOCAL void BigBuffer_FromBinary(BigBuffer* pResult, const void* pSrcBytes, uint32_t nByteCount);
+SBIG_LOCAL void BigBuffer_Mul(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigStack* pStack);
+SBIG_LOCAL void BigBuffer_MulMod(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigBuffer* pModulus,
                              BigStack* pStack);
-void BigBuffer_PowMod(BigBuffer* pResult, BigBuffer* pBase, BigBuffer* pExponent, BigBuffer* pModulus,
+SBIG_LOCAL void BigBuffer_PowMod(BigBuffer* pResult, BigBuffer* pBase, BigBuffer* pExponent, BigBuffer* pModulus,
                              BigStack* pStack);
-void BigBuffer_Shl(BigBuffer* pResult, BigBuffer* pSource, uint32_t nShiftBits);
-void BigBuffer_Shr(BigBuffer* pResult, BigBuffer* pSource, uint32_t nShiftBits);
-void BigBuffer_Square(BigBuffer* pResult, BigBuffer* pInput, BigStack* pStack);
-void BigBuffer_Sub(BigBuffer* pResult, BigBuffer* pLhs, BigBuffer* pRhs);
-void BigBuffer_Div_Ux(uint32_t* pnRemainder, BigBuffer* pQuotient, BigBuffer* pDividend, uint32_t nDivisorLo,
+SBIG_LOCAL void BigBuffer_Shl(BigBuffer* pResult, BigBuffer* pSource, uint32_t nShiftBits);
+SBIG_LOCAL void BigBuffer_Shr(BigBuffer* pResult, BigBuffer* pSource, uint32_t nShiftBits);
+SBIG_LOCAL void BigBuffer_Square(BigBuffer* pResult, BigBuffer* pInput, BigStack* pStack);
+SBIG_LOCAL void BigBuffer_Sub(BigBuffer* pResult, BigBuffer* pLhs, BigBuffer* pRhs);
+SBIG_LOCAL void BigBuffer_Div_Ux(uint32_t* pnRemainder, BigBuffer* pQuotient, BigBuffer* pDividend, uint32_t nDivisorLo,
                              uint32_t nDivisorHi);
-void BigBuffer_Mul_Ux(BigBuffer* pDest, BigBuffer* pSource, uint32_t nMultiplierLo, uint32_t nMultiplierHi);
-void SBIG_ToBinaryAppend(ByteArray* pBytes, BigBuffer* pBig);
+SBIG_LOCAL void BigBuffer_Mul_Ux(BigBuffer* pDest, BigBuffer* pSource, uint32_t nMultiplierLo, uint32_t nMultiplierHi);
+SBIG_LOCAL void SBIG_ToBinaryAppend(ByteArray* pBytes, BigBuffer* pBig);
 
 // ---- the exports ----
 
@@ -84,7 +86,7 @@ void SBigAdd(BigData* pResult, BigData* pBigA, BigData* pBigB) {
 }
 
 // 1.14d mac: 0000a645
-void BigBuffer_Add(BigBuffer* pDest, BigBuffer* pSourceA, BigBuffer* pSourceB) {
+SBIG_LOCAL void BigBuffer_Add(BigBuffer* pDest, BigBuffer* pSourceA, BigBuffer* pSourceB) {
     uint32_t nCarry = 0;
     int i = 0;
     while (true) {
@@ -117,14 +119,15 @@ int32_t SBIG_CompareBigBuffers_ForSha1(BigData* pBigA, BigData* pBigB) {
 }
 
 // 1.14d mac: 0000a72c
-int32_t BigBuffer_Compare(BigBuffer* pA, BigBuffer* pB) {
+SBIG_LOCAL int32_t BigBuffer_Compare(BigBuffer* pA, BigBuffer* pB) {
     uint32_t nCountB = pB->nCount;
     uint32_t nIndexB = pB->nStartWord;
+    uint32_t nCountA = pA->nCount;
     uint32_t nIndexA = pA->nStartWord;
     int32_t nResult = 0;
     while (true) {
         uint32_t nWordA;
-        if (nIndexA < pA->nCount) {
+        if (nIndexA < nCountA) {
             nWordA = pA->pData[nIndexA];
         } else {
             nWordA = 0;
@@ -139,7 +142,7 @@ int32_t BigBuffer_Compare(BigBuffer* pA, BigBuffer* pB) {
         if (nWordA != nWordB) {
             uint32_t nHigherB = 0;
             nWordA = 0;
-            if (nIndexA < pA->nCount) {
+            if (nIndexA < nCountA) {
                 nWordA = pA->pData[nIndexA];
             }
             if (nIndexB < nCountB) {
@@ -176,13 +179,13 @@ void SBigDel(BigData* pBig) {
 
 // 1.14d mac: 0000a87e
 // quotient and remainder of dividend / divisor; the scratch stack holds the scaled copies.
-void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBuffer* pDividend, BigBuffer* pDivisor,
+SBIG_LOCAL void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBuffer* pDividend, BigBuffer* pDivisor,
                           BigStack* pStack) {
     SBIG_TrimLeadingZeros(pDividend);
     SBIG_TrimLeadingZeros(pDivisor);
     uint32_t nDivisorLen = pDivisor->nCount - pDivisor->nStartWord;
     uint32_t nDividendLen = pDividend->nCount - pDividend->nStartWord;
-    if (nDividendLen < nDivisorLen) {
+    if (nDivisorLen > nDividendLen) {
         if (pRemainder != pDividend) {
             TSFixedArray_Ui_Set(pRemainder, pDividend->nCount, pDividend->pData);
         }
@@ -191,11 +194,12 @@ void BigBuffer_Div(BigBuffer* pQuotient, BigBuffer* pRemainder, BigBuffer* pDivi
         BigBuffer_SetZero(pQuotient);
     } else if (nDivisorLen < 2) {
         TSBaseArray_Ui_Copy(pRemainder, pRemainder->nStartWord, (uint32_t*)1);
+        uint32_t* pnRemainder = pRemainder->pData + pRemainder->nStartWord;
         uint32_t nDivisor = 0;
         if (pDivisor->nStartWord < pDivisor->nCount) {
             nDivisor = pDivisor->pData[pDivisor->nStartWord];
         }
-        BigBuffer_Div_Ux(pRemainder->pData + pRemainder->nStartWord, pQuotient, pDividend, nDivisor, 0);
+        BigBuffer_Div_Ux(pnRemainder, pQuotient, pDividend, nDivisor, 0);
         SBIG_GrowToIndexNoZero(pRemainder, 1);
     } else {
         int nTop = pStack->nDepth;
@@ -295,7 +299,7 @@ void SBigFromBinary(BigData* pDstBignum, const void* pSrcBytes, uint32_t nByteCo
 
 // 1.14d mac: 0000ad01
 // Little-endian bytes into words.
-void BigBuffer_FromBinary(BigBuffer* pResult, const void* pSrcBytes, uint32_t nByteCount) {
+SBIG_LOCAL void BigBuffer_FromBinary(BigBuffer* pResult, const void* pSrcBytes, uint32_t nByteCount) {
     BigBuffer_SetZero(pResult);
     for (uint32_t i = 0; i != nByteCount; i++) {
         uint8_t byValue = ((const uint8_t*)pSrcBytes)[i];
@@ -326,7 +330,7 @@ void SBigMul(BigData* pResult, BigData* pBigA, BigData* pBigB) {
 
 // 1.14d mac: 0000ae0a
 // Schoolbook multiplication; into a scratch buffer when the result aliases an operand.
-void BigBuffer_Mul(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigStack* pStack) {
+SBIG_LOCAL void BigBuffer_Mul(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigStack* pStack) {
     BigBuffer* pArray = pResult;
     if (pResult == pA || pResult == pB) {
         pArray = &pStack->atBuffers[pStack->nDepth++];
@@ -384,7 +388,7 @@ void BigBuffer_Mul(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigStack* p
 
 // 1.14d mac: 0000afda
 // result = a * b mod modulus.
-void BigBuffer_MulMod(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigBuffer* pModulus,
+SBIG_LOCAL void BigBuffer_MulMod(BigBuffer* pResult, BigBuffer* pA, BigBuffer* pB, BigBuffer* pModulus,
                              BigStack* pStack) {
     int nDepth = pStack->nDepth;
     pStack->nDepth = nDepth + 1;
@@ -404,6 +408,7 @@ void SBigNew(BigData** ppBigData) {
         pBigNum->tResult.nGrowStep = 0;
         pBigNum->tResult.pData = NULL;
         pBigNum->tResult.nStartWord = 0;
+        BigBuffer* pTail = (BigBuffer*)&pBigNum->tStack.nDepth;
         for (int i = 0; i < 16; i++) {
             BigBuffer* pBuffer = &pBigNum->tStack.atBuffers[i];
             pBuffer->nCount = 0;
@@ -412,11 +417,12 @@ void SBigNew(BigData** ppBigData) {
             pBuffer->pData = NULL;
             pBuffer->nStartWord = 0;
         }
-        pBigNum->tStack.nDepth = 0;
-        pBigNum->tBytes.nCount = 0;
-        pBigNum->tBytes.nCapacity = 0;
-        pBigNum->tBytes.nGrowStep = 0;
-        pBigNum->tBytes.pData = NULL;
+        // the depth counter and the byte array are laid out as one more five-word buffer
+        pTail->nCount = 0;
+        pTail->nCapacity = 0;
+        pTail->nGrowStep = 0;
+        pTail->pData = NULL;
+        pTail->nStartWord = 0;
         pResult = pBigNum;
     }
     *ppBigData = pResult;
@@ -430,7 +436,7 @@ void SBigPowMod(BigData* pResult, BigData* pBase, BigData* pExponent, BigData* p
 // 1.14d mac: 0000b127
 // result = base ^ exponent mod modulus, two exponent bits at a time over the powers
 // base^1 .. base^3.
-void BigBuffer_PowMod(BigBuffer* pResult, BigBuffer* pBase, BigBuffer* pExponent, BigBuffer* pModulus,
+SBIG_LOCAL void BigBuffer_PowMod(BigBuffer* pResult, BigBuffer* pBase, BigBuffer* pExponent, BigBuffer* pModulus,
                              BigStack* pStack) {
     SBIG_TrimLeadingZeros(pExponent);
     if (pExponent->nCount == pExponent->nStartWord) {
@@ -503,7 +509,7 @@ void BigBuffer_PowMod(BigBuffer* pResult, BigBuffer* pBase, BigBuffer* pExponent
 }
 
 // 1.14d mac: 0000b38f
-void BigBuffer_Shl(BigBuffer* pResult, BigBuffer* pSource, uint32_t nShiftBits) {
+SBIG_LOCAL void BigBuffer_Shl(BigBuffer* pResult, BigBuffer* pSource, uint32_t nShiftBits) {
     uint32_t nWordShift = nShiftBits >> 5;
     int nIndex = (nWordShift + 1 + pSource->nCount) - pSource->nStartWord;
     if (nIndex != 0) {
@@ -538,14 +544,14 @@ void BigBuffer_Shl(BigBuffer* pResult, BigBuffer* pSource, uint32_t nShiftBits) 
 }
 
 // 1.14d mac: 0000b487
-void BigBuffer_Shr(BigBuffer* pResult, BigBuffer* pSrc, uint32_t nShiftBits) {
+SBIG_LOCAL void BigBuffer_Shr(BigBuffer* pResult, BigBuffer* pSrc, uint32_t nShiftBits) {
     uint32_t nWordShift = nShiftBits >> 5;
     uint32_t nSrcCount = pSrc->nCount;
     int nSrcBase = pSrc->nStartWord;
     uint32_t nIndex = nSrcBase + nWordShift;
     int i = 0;
     if (nIndex < nSrcCount) {
-        uint8_t byShift = nShiftBits & 0x1f;
+        uint32_t byShift = nShiftBits & 0x1f;
         do {
             uint32_t dwWord = pSrc->pData[nIndex] >> byShift;
             if ((nShiftBits & 0x1f) != 0) {
@@ -553,7 +559,7 @@ void BigBuffer_Shr(BigBuffer* pResult, BigBuffer* pSrc, uint32_t nShiftBits) {
                 if (i + 1 + nSrcBase + nWordShift < nSrcCount) {
                     dwUpper = pSrc->pData[nSrcBase + nWordShift + i + 1];
                 }
-                dwWord = (dwUpper << ((0x20U - byShift) & 0x1f)) + dwWord;
+                dwWord = (dwUpper << (0x20U - byShift)) + dwWord;
             }
             TSBaseArray_Ui_Copy(pResult, pResult->nStartWord + i, (uint32_t*)1);
             pResult->pData[pResult->nStartWord + i] = dwWord;
@@ -568,7 +574,7 @@ void BigBuffer_Shr(BigBuffer* pResult, BigBuffer* pSrc, uint32_t nShiftBits) {
 
 // 1.14d mac: 0000b555
 // Squaring: each cross product is added twice, the diagonal once.
-void BigBuffer_Square(BigBuffer* pResult, BigBuffer* pInput, BigStack* pStack) {
+SBIG_LOCAL void BigBuffer_Square(BigBuffer* pResult, BigBuffer* pInput, BigStack* pStack) {
     BigBuffer* pArray = pResult;
     if (pResult == pInput) {
         pArray = &pStack->atBuffers[pStack->nDepth++];
@@ -580,8 +586,8 @@ void BigBuffer_Square(BigBuffer* pResult, BigBuffer* pInput, BigStack* pStack) {
         uint32_t iOuter = 0;
         uint32_t nCarryHigh;
         do {
-            uint64_t nCarry = 0;
             uint32_t iInner = 0;
+            uint64_t nCarry = 0;
             while (true) {
                 uint32_t nWordOuter = 0;
                 if (nStart + iOuter < nCount) {
@@ -595,7 +601,7 @@ void BigBuffer_Square(BigBuffer* pResult, BigBuffer* pInput, BigStack* pStack) {
                 uint64_t nProduct = (uint64_t)nWordInner * (uint64_t)nWordOuter;
                 TSBaseArray_Ui_Copy(pArray, pArray->nStartWord + iDest, (uint32_t*)1);
                 uint64_t nProductPlusOld = nProduct + (uint64_t)pArray->pData[pArray->nStartWord + iDest];
-                if (iOuter <= iInner) {
+                if (iInner >= iOuter) {
                     nProduct = 0;
                 }
                 uint64_t nAddend = nProduct + nCarry;
@@ -605,7 +611,7 @@ void BigBuffer_Square(BigBuffer* pResult, BigBuffer* pInput, BigStack* pStack) {
                 nCarryHigh = (uint32_t)(nSum >> 32);
                 bool bOverflow = nSum < nAddend;
                 nCarry = (uint64_t)nCarryHigh | ((uint64_t)bOverflow << 32);
-                if (iOuter < iInner + 1) {
+                if (iInner + 1 > iOuter) {
                     break;
                 }
                 nCount = pInput->nCount;
@@ -628,7 +634,7 @@ void SBigSub(BigData* pResult, BigData* pBigA, BigData* pBigB) {
 }
 
 // 1.14d mac: 0000b74d
-void BigBuffer_Sub(BigBuffer* pResult, BigBuffer* pLhs, BigBuffer* pRhs) {
+SBIG_LOCAL void BigBuffer_Sub(BigBuffer* pResult, BigBuffer* pLhs, BigBuffer* pRhs) {
     uint32_t nBorrowLo = 0;
     int32_t nBorrowHi = 0;
     int i = 0;
@@ -677,24 +683,26 @@ void TSGrowableArray_Uc_Reserve(ByteArray* pArray, int nCount, int bRound);
 // 1.14d mac: 0000b878
 // The bytes of the number, least significant first; zero bytes of the top word are not
 // appended.
-void SBIG_ToBinaryAppend(ByteArray* pBytes, BigBuffer* pBig) {
+SBIG_LOCAL void SBIG_ToBinaryAppend(ByteArray* pBytes, BigBuffer* pBig) {
     uint32_t nCount = pBig->nCount;
     int nStart = pBig->nStartWord;
     if (((nCount - nStart) & 0x3fffffff) != 0) {
-        uint8_t nBitShift = 0;
+        uint32_t nBitShift = 0;
         uint32_t nByte = 0;
         do {
-            uint32_t nIndex = nStart + (nByte >> 2);
+            uint32_t nWordNo = nByte >> 2;
+            uint32_t nIndex = nStart + nWordNo;
             uint32_t dwWord = 0;
             if (nIndex < nCount) {
                 dwWord = pBig->pData[nIndex];
             }
             dwWord = dwWord >> (nBitShift & 0x18);
-            if (dwWord != 0 || (nByte >> 2) + 1 < nCount - nStart) {
+            if (dwWord != 0 || nWordNo + 1 < nCount - nStart) {
                 TSGrowableArray_Uc_Reserve(pBytes, 1, 1);
+                uint8_t* pByteData = pBytes->pData;
                 uint32_t nUsed = pBytes->nCount;
                 pBytes->nCount = nUsed + 1;
-                pBytes->pData[nUsed] = (uint8_t)dwWord;
+                pByteData[nUsed] = (uint8_t)dwWord;
                 nCount = pBig->nCount;
                 nStart = pBig->nStartWord;
             }
@@ -706,7 +714,7 @@ void SBIG_ToBinaryAppend(ByteArray* pBytes, BigBuffer* pBig) {
 
 // 1.14d mac: 0000b92f
 // pQuotient = pDividend / divisor, the remainder to *pnRemainder; the divisor is 64 bits.
-void BigBuffer_Div_Ux(uint32_t* pnRemainder, BigBuffer* pQuotient, BigBuffer* pDividend, uint32_t nDivisorLo,
+SBIG_LOCAL void BigBuffer_Div_Ux(uint32_t* pnRemainder, BigBuffer* pQuotient, BigBuffer* pDividend, uint32_t nDivisorLo,
                              uint32_t nDivisorHi) {
     SBIG_GrowToIndexNoZero(pQuotient, pDividend->nCount - pDividend->nStartWord);
     uint32_t nCount = pDividend->nCount;
@@ -737,7 +745,7 @@ void BigBuffer_Div_Ux(uint32_t* pnRemainder, BigBuffer* pQuotient, BigBuffer* pD
 }
 
 // 1.14d mac: 0000ba3f
-void BigBuffer_Mul_Ux(BigBuffer* pDest, BigBuffer* pSource, uint32_t nMultiplierLo, uint32_t nMultiplierHi) {
+SBIG_LOCAL void BigBuffer_Mul_Ux(BigBuffer* pDest, BigBuffer* pSource, uint32_t nMultiplierLo, uint32_t nMultiplierHi) {
     uint32_t nCarry = 0;
     int i = 0;
     while (true) {
