@@ -16,6 +16,9 @@ void __fastcall RENDERER_D3D_CopyPixelsWithStride(uint8_t * pSrc, uint8_t * pDes
     }
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build has no Direct3D renderer and no registry.
+#else
 void __fastcall RENDERER_D3D_CloseRegistryKey(HKEY * phKey) {
     if (!*phKey) {
       return;
@@ -24,5 +27,6 @@ void __fastcall RENDERER_D3D_CloseRegistryKey(HKEY * phKey) {
     /* HKEY hKey for RegCloseKey */ RegCloseKey(*phKey);
     *phKey = (HKEY)0x0;
 }
+#endif
 
 } // namespace D2Client::Renderer

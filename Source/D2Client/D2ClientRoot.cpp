@@ -838,6 +838,9 @@ int __fastcall Unreferenced_0047aa40(uint16_t * pChar) {
     return 0;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
+#else
 void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
     int32_t nNewLen;
     int32_t nCompLen;
@@ -924,6 +927,7 @@ void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
 }
+#endif
 
 void __stdcall INPUT_HandleIMEStartComposition(D2UIMouseMsgStrc * pMsg) {
     gaChatInputBuffer = '\x01';
@@ -2965,6 +2969,9 @@ pfnWardenCreateInterface __thiscall WARDEN_DecryptBuffer(D2WardenModuleStrc * pp
     return (pfnWardenCreateInterface)(pContext + pExportTable[nOrdinal - pImage->nOrdinalBase]);
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build loads no Warden module (no VirtualProtect, no x86 module image).
+#else
 // Decrypt Warden anti-cheat module data using RSA/crypto operations
 uint32_t __fastcall WARDEN_DecryptModule(D2WardenModuleStrc * pModule, uint32_t nInputSize, uint32_t * pHeader, uint32_t nOutputSize) {
     FARPROC pProcAddress;
@@ -3136,6 +3143,7 @@ uint32_t __fastcall WARDEN_DecryptModule(D2WardenModuleStrc * pModule, uint32_t 
 
     return (uint32_t)!nIterCount;
 }
+#endif
 
 // RC4 key schedule: fills pRc4State's 256-byte S-box with 0..255, zeroes the i/j bytes at +0x100/+0x101, then swaps S[i] with S[j], j += S[i] + pKey[i % nKeyLength].
 // The only caller, WARDEN_DecryptAndLoadModule, passes a 0x10-byte key; 1.14d asm 004e09c0..004e0a1a.

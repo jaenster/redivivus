@@ -2728,7 +2728,11 @@ eD2ClientAppMode __stdcall pfModes_EnterGame() {
         /* .pfHandler = */ &D2Client::GAME::Game::INPUT_HandlePassthrough
     }
 }; D2_STATIC_GUARD(g_UIFlagInitGameDataPanel4, "D2Client::GAME::Game::pfModes_EnterGame::g_UIFlagInitGameDataPanel4");
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac build never asks for the OS version (00070e8f).
+#else
     static _OSVERSIONINFOA lpVersionInformation_007a0528 = {}; D2_STATIC_GUARD(lpVersionInformation_007a0528, "D2Client::GAME::Game::pfModes_EnterGame::lpVersionInformation_007a0528");
+#endif
     // also labelled: lpThreadId_QserverLoopThread, lpThreadId_007a05f0
 static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D2Client::GAME::Game::pfModes_EnterGame::gdwHostGameThreadId");
     static BOOL gbExitingGamePadding; D2_STATIC_GUARD_BSS(gbExitingGamePadding, "D2Client::GAME::Game::pfModes_EnterGame::gbExitingGamePadding");
@@ -2739,11 +2743,15 @@ static uint32_t gdwHostGameThreadId; D2_STATIC_GUARD_BSS(gdwHostGameThreadId, "D
     }
 
     GetTickCount();
+#if !defined(_WIN32) && D2_OS_MAC
+    BOOL bResult;
+#else
     /* LPOSVERSIONINFOA lpVersionInformation for GetVersionExA */ lpVersionInformation_007a0528.dwOSVersionInfoSize = 0x94;
     BOOL bResult = GetVersionExA(&lpVersionInformation_007a0528);
     if (bResult) {
       gbExitingGamePadding = 1;
     }
+#endif
 
     View::VIEW_InitLookupTables();
     INV_ResetItemDescFlags();

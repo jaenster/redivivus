@@ -192,16 +192,24 @@ Measured 2026-11-27 over its 448 units, distinct error sites and failing units:
 |Bnclient|455|381|7|
 |Fog|446|364|12|
 |Storm|299|141|10|
-|D2Client|172|107|24|
+|D2Client|172|0|0|
 |D2gfx|34|30|1|
 |D2Hell|37|33|1|
 |D2Win|31|28|4|
 |D2Launch|32|16|3|
 |D2Multi|30|14|3|
-|D2Game|133|11|6|
+|D2Game|133|0|0|
 |D2Sound|71|11|3|
 |D2Net|46|9|3|
 |Game|1|1|1|
+
+D2Client and D2Game compile with 0 errors. Where the Mac binary differs, the shared source has a
+`!defined(_WIN32) && D2_OS_MAC` branch with the binary's behaviour (the Mac pump has no accelerator
+tables, its ping carries no module checksum, its text goes through MAC_ConvertTextToUnicode and
+MAC_ConvertUnicodeToText). What the binary lacks is guarded out: the Imm* IME (the Mac uses the Text
+Services Manager), Warden module loading, the Direct3D registry key; `Core/Lng.cpp` is out of the
+Mac target. `Source/D2Headers/d2_platform_mac.h` declares the layer's entry points under the names
+the shared code calls (`PeekMessageA` is `PeekMessage` there).
 |total|1935 (386 units)|1146 (78 units)|78|
 
 What is left is in the bodies: Win32 API the Mac reaches another way (registry through

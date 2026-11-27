@@ -41,6 +41,9 @@
 #include "Source/D2Client/UI/Help.data.h"
 #include "Source/D2Client/UI/Party.data.h"
 #include "Source/D2Client/UI/Text.data.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include "Source/MacSpecific/Source/MacShell/MacShell.h"
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -3052,7 +3055,12 @@ static uint8_t TEXT_ConvertCharToWideWithLanguage(uint32_t dwUnused, char * szTe
     uint32_t nCurLanguage;
     if (nLanguage == 7 || nLanguage == 0xc || nLanguage == 6 || nLanguage == 9) {
       uint16_t uVar1;
-      /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(0, 1, szText, 0x100, (LPWSTR)pwszDest, 0x100);
+      /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ 
+#if !defined(_WIN32) && D2_OS_MAC
+      MAC_ConvertTextToUnicode(szText, (char*)pwszDest, strlen(szText), 0x200, -0x80);
+#else
+      MultiByteToWideChar(0, 1, szText, 0x100, (LPWSTR)pwszDest, 0x100);
+#endif
       nCurLanguage = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
       if (nCurLanguage != nLanguage) {
         if (nCurLanguage == 7) {
@@ -3892,7 +3900,12 @@ void __fastcall TEXT_ProcessChatMessage(MessageStrc * pMessage) {
         case 7:
           {
             Fog::File::CONTAINER_InitializeBuffer(wcWideStart, 2, 0x100, D2Lang::Unicode::UNISYS::STRING_ZeroOneWCHAR);
-            /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ MultiByteToWideChar(0, 1, pszName, 0x100, (LPWSTR)wcWideStart, 0x100);
+            /* int cchWideChar for MultiByteToWideChar */ /* LPWSTR lpWideCharStr for MultiByteToWideChar */ /* int cbMultiByte for MultiByteToWideChar */ /* LPCSTR lpMultiByteStr for MultiByteToWideChar */ /* DWORD dwFlags for MultiByteToWideChar */ /* UINT CodePage for MultiByteToWideChar */ 
+#if !defined(_WIN32) && D2_OS_MAC
+            MAC_ConvertTextToUnicode(pszName, (char*)wcWideStart, strlen(pszName), 0x200, -0x80);
+#else
+            MultiByteToWideChar(0, 1, pszName, 0x100, (LPWSTR)wcWideStart, 0x100);
+#endif
             byMsgType = pMessage->language;
             nCheckResult = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
             if (byMsgType != nCheckResult) {

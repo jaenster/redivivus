@@ -103,11 +103,15 @@ int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
       /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ bHasMessage = PeekMessageA(&msg, (HWND)0x0, 0, 0, 0);
       if (bHasMessage) {
         /* UINT wMsgFilterMax for GetMessageA */ /* UINT wMsgFilterMin for GetMessageA */ /* HWND hWnd for GetMessageA */ /* LPMSG lpMsg for GetMessageA */ getMessageResult = GetMessageA(&msg, (HWND)0x0, 0, 0);
+#if !defined(_WIN32) && D2_OS_MAC
+        // The Mac pump has no accelerator tables (0005e2ee).
+#else
         if (getMessageResult && GAME::Game::ghAccelTable) {
           lpMsg = &msg;
           hAccTable = GAME::Game::ghAccelTable;
           /* HWND hWnd for TranslateAcceleratorA */ TranslateAcceleratorA(D2gfx::D2GFX::GetHwnd(), hAccTable, lpMsg);
         }
+#endif
 
         /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&msg);
         /* MSG * lpMsg for DispatchMessageA */ DispatchMessageA(&msg);

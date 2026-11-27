@@ -1052,7 +1052,11 @@ void __stdcall CMD_WriteKeyFile() {
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
     Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, 0xdc);
     strcat(szInstallPath, "default.key");
+#if !defined(_WIN32) && D2_OS_MAC
+    hFile = Fog::Source::SFile::thunk_CreateFileA(szInstallPath, 0x40000000, 0, nullptr, 2, 0x80, 0);
+#else
     hFile = Fog::Source::SFile::thunk_CreateFileA(szInstallPath, 0x40000000, 0, nullptr, 2, 0x80, nullptr);
+#endif
     if (hFile == (HANDLE)-1) {
       return;
     }

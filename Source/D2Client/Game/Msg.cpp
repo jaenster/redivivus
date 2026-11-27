@@ -129,6 +129,10 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     *(uint32_t*)&szModuleName[4] = Game::gClientGameData.gnWardenChecksumAddr2 * 0x470e31c1;
     int nModuleOffset = Game::gClientGameData.gnWardenChecksumModuleOffset * 0x470e31c1;
     szModuleName[8] = '\0';
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac build reads no module image: a named module only selects the constant (00072fa9).
+    nWardenChecksum = (char)*(uint32_t*)(char*)&szModuleName != '\0';
+#else
     if ((char)*(uint32_t*)(char*)&szModuleName != '\0') {
       HMODULE hModule;
       /* LPCSTR lpModuleName for GetModuleHandleA */ nWardenChecksum = 0xcccccccc;
@@ -156,6 +160,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     } else {
       nWardenChecksum = 0;
     }
+#endif
 
     DWORD dwTick = GetTickCount();
     if (!(dwTick - gdwLastPingSentTick >= 5000)) {
@@ -167,7 +172,11 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     packet.nTickCount = GetTickCount();
     uint32_t nGameDataDelay = Game::GAME_GetAveragePing() >> 1;
     packet.nDelay = nGameDataDelay;
+#if !defined(_WIN32) && D2_OS_MAC
+    packet.nWardenOrZero = nWardenChecksum ? 0xd498e7cc : 0;
+#else
     packet.nWardenOrZero = nWardenChecksum * -0x49bf21bf;
+#endif
     D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(0xd, 0, (char*)&packet);
     gnD2GSBytesSentTotal += 0xd;
     gnD2GSPacketsSentTotal++;
