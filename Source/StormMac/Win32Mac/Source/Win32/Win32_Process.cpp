@@ -12,7 +12,7 @@
 // (Win32_Priv.cpp).
 // SetLastError is inlined into GetModuleFileName in 1.14d, so they share a unit there too.
 // The folder is that of Win32_utils.cpp, the one Win32_ file whose 1.14d path is in the
-// binary. GetCommandLine (0002ab8e) is Objective-C and the locale functions
+// binary. GetCommandLine (0002ab8e) is Objective-C (Win32_CommandLine.mm) and the locale functions
 // (0002af55..0002b1c0), GetLastError and MessageBox are not reconstructed yet.
 //
 // ddraw.dll, dsound.dll, advapi32.dll and wsock32.dll are not loaded: LoadLibrary
