@@ -1537,7 +1537,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 000f875c	D2Client::UI::ui::UI_SetMultipleButtonKeyBindings	328	D2Client/UI/ui.cpp	file-map	Source/D2Client/UI/ui.cpp	shared-unpaired	missing		-	00453640	
 000f979b	D2Client::UI::ui::FUN_000f979b	7	D2Client/UI/ui.cpp	file-map	-	compiler	missing		-		
 000fa1c0	D2Client::FUN_000fa1c0	107	?	unpaired	?	blizzard-mac	missing		-		
-000fa535	D2Client::FUN_000fa535	585	?	unpaired	?	blizzard-mac	missing		-		
+000fa535	D2Client::FUN_000fa535	585	?	unpaired	?	shared-unpaired	missing		-	004c0450	
 000fa9be	D2Client::UI::UseItem::USEITEM_GetCursorItem	35	D2Client/UI/UseItem.cpp	file-map	Source/D2Client/UI/UseItem.cpp	shared-unpaired	missing		-		
 000fb318	D2Client::FUN_000fb318	7	?	unpaired	-	compiler	missing		-		
 000fb34a	D2Client::UI::Waypoint::WAYPOINT_FreeResources	144	?	unpaired	?	shared-unpaired	missing		-	0049c700	
@@ -1563,14 +1563,14 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 00117f72	D2Client::UNIT::Monster::FUN_00117f72	31	D2Client/UNIT/Monster.cpp	file-map	Source/D2Client/UNIT/Monster.cpp	shared-unpaired	missing		-	004ae170	
 0011c3c6	D2Client::UNIT::Monster::FUN_0011c3c6	131	D2Client/UNIT/Monster.cpp	file-map	Source/D2Client/UNIT/Monster.cpp	shared-unpaired	missing		-	004afbc0	
 0011c72a	D2Client::UNIT::Monster::MONSTER_ExplodeOwnerMissile	95	D2Client/UNIT/Monster.cpp	file-map	Source/D2Client/UNIT/Monster.cpp	shared-unpaired	missing		-	004ae3c0	
-0011e970	D2Client::FUN_0011e970	21	?	unpaired	?	blizzard-mac	missing		-		
+0011e970	D2Client::FUN_0011e970	21	?	unpaired	-	compiler	missing		-	006cad00	
 00122e48	D2Client::UNIT::Player::FUN_00122e48	145	D2Client/UNIT/Player.cpp	file-map	Source/D2Client/UNIT/Player.cpp	shared-unpaired	missing		-	00462930	
 00122ed9	D2Client::UNIT::Player::PLAYER_HandleMapClickAction	1973	D2Client/UNIT/Player.cpp	__FILE__	Source/D2Client/UNIT/Player.cpp	shared-unpaired	missing		-	004625b0	
 00124756	D2Client::UNIT::PlayerList::PLAYERLIST_FindEntry	54	?	unpaired	?	shared-unpaired	missing		-	0055b110	
 001286ca	D2Client::UNITMODE_SetModeWithEffects	66	?	unpaired	?	shared-unpaired	missing		-	00480e70	
 0012875b	D2Client::FUN_0012875b	15	?	unpaired	?	shared-unpaired	missing		-	00480ec0	
 0012876a	FUN_0012876a	199	?	unpaired	?	shared-unpaired	missing		-	00480c80	
-00128831	D2Client::UNIT::UnitMode::UNITMODE_ExecuteAttackAndQueueSkill	129	?	unpaired	?	blizzard-mac	missing		-		
+00128831	D2Client::UNIT::UnitMode::UNITMODE_ExecuteAttackAndQueueSkill	129	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Client/Unit/UnitMode.cpp	no		regalloc
 001288b4	D2Client::SOUND_ClearGlobalState	89	?	unpaired	?	shared-unpaired	missing		-	004ca280	
 00128d8f	D2Client::UNIT::UnitSnd::FUN_00128d8f	83	D2Client/UNIT/UnitSnd.cpp	file-map	Source/D2Client/UNIT/UnitSnd.cpp	shared-unpaired	missing		-	004ca810	
 00128e04	D2Client::UNIT::UnitSnd::UNITSND_GetSfxListHeadAddress	63	D2Client/UNIT/UnitSnd.cpp	file-map	Source/D2Client/UNIT/UnitSnd.cpp	shared-unpaired	missing		-	004ca870	
@@ -1612,7 +1612,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 001304a4	D2CMP::FASTCMP_DecompressRLEWithLookup1AndClip_v2	520	?	unpaired	?	shared-unpaired	missing		-	006077c0	
 001306cc	D2CMP::FASTCMP_DecompressRLEWithBlend3	591	?	unpaired	?	shared-unpaired	missing		-	00608110	
 0013093c	D2CMP::FASTCMP_DecompressRLEWithBlend3AndClip	673	?	unpaired	?	shared-unpaired	missing		-	006082e0	
-00130c01	D2CMP::D2CMP_DrawRleCelRows	1489	?	unpaired	?	blizzard-mac	missing		-		
+00130c01	D2CMP::D2CMP_DrawRleCelRows	1489	?	unpaired	?	shared-unpaired	missing		-	00608540	
 001318ac	D2CMP::GfxHash::GFXHASH_FreeEntry	445	D2CMP/SRC/GfxHash.cpp	__FILE__	Source/D2CMP/SRC/GfxHash.cpp	shared-unpaired	missing		-	0060a9d0	
 0013268b	D2CMP::SRC::SpriteCache::SPRITECACHE_EvictCelCacheEntry	72	D2CMP/SRC/SpriteCache.cpp	file-map	Source/D2CMP/SRC/SpriteCache.cpp	blizzard-mac	missing		-		
 001342e4	D2CMP::SpriteCache::FUN_001342e4	51	D2CMP/SRC/SpriteCache.cpp	file-map	Source/D2CMP/SRC/SpriteCache.cpp	shared-unpaired	missing		-	005fee10	
@@ -1627,7 +1627,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 001351a1	D2CMP::Tilecmp::FUN_001351a1	65	D2CMP/SRC/Tilecmp.cpp	file-map	Source/D2CMP/SRC/Tilecmp.cpp	shared-unpaired	missing		-	0060a4c0	
 001351e2	D2CMP::SRC::Tilecmp::TILECMP_FixupMinimalPointers	244	D2CMP/SRC/Tilecmp.cpp	file-map	Source/D2CMP/SRC/Tilecmp.cpp	shared-unpaired	missing		-	0060a390	
 00135375	D2CMP::FUN_00135375	68	?	unpaired	?	shared-unpaired	missing		-	0060a390	
-001353b9	D2CMP::FUN_001353b9	9	?	unpaired	?	blizzard-mac	missing		-		
+001353b9	D2CMP::FUN_001353b9	9	?	unpaired	?	shared-unpaired	missing		-	00604a30	
 001360b9	D2Common::Collision::Collision::COLLISN_CheckCellMask	38	D2Common/COLLISN/Collisn.cpp	file-map	-	compiler	missing		-		
 001361b4	D2Common::Collision::Collision::AddCollision_Vector1_StackArgs	35	D2Common/COLLISN/Collisn.cpp	file-map	-	compiler	missing		-		
 0013629c	D2Common::Collision::Collision::RemoveCollision_Vector1_StackArgs	35	D2Common/COLLISN/Collisn.cpp	file-map	-	compiler	missing		-		
@@ -1665,7 +1665,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0014adfd	D2Common::DATATBLS_LoadShrinesTxt	133	?	unpaired	?	shared-unpaired	missing		-	00641320	
 0014af01	D2Common::DATATBLS_UnloadShrinesTxt	51	?	unpaired	?	shared-unpaired	missing		-	00641510	
 0014bb7d	D2Common::FUN_0014bb7d	5	?	unpaired	-	compiler	missing		-		
-0014bcc3	D2Common::FUN_0014bcc3	69	?	unpaired	?	blizzard-mac	missing		-		
+0014bcc3	D2Common::FUN_0014bcc3	69	?	unpaired	?	shared-unpaired	missing		-	0061b690	
 0014c008	D2Common::DUNGEON::Dungeon::DRLGROOMEX_PropagateDecRefCount	111	D2Common/DUNGEON/Dungeon.cpp	file-map	Source/D2Common/DUNGEON/Dungeon.cpp	shared-unpaired	missing		-	0061b5b0	
 0014c077	D2Common::DUNGEON::Dungeon::DRLGROOMEX_RecalcPriority_Case4	12	D2Common/DUNGEON/Dungeon.cpp	file-map	-	compiler	missing		-		
 0014c083	D2Common::DUNGEON::Dungeon::DRLGROOMEX_RecalcPriority_Case5	12	D2Common/DUNGEON/Dungeon.cpp	file-map	-	compiler	missing		-		
@@ -1689,27 +1689,27 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0015323e	D2Common::Drlg::Maze::FUN_0015323e	175	D2Common/DRLG/Maze.cpp	file-map	Source/D2Common/DRLG/Maze.cpp	shared-unpaired	missing		-	006718c0	
 001533f9	D2Common::Drlg::Maze::FUN_001533f9	146	D2Common/DRLG/Maze.cpp	file-map	Source/D2Common/DRLG/Maze.cpp	shared-unpaired	missing		-	006724e0	
 0015348b	D2Common::Drlg::Maze::DRLGMAZE_ExpandRoomsWithPresets	231	D2Common/DRLG/Maze.cpp	__FILE__	Source/D2Common/DRLG/Maze.cpp	shared-unpaired	missing		-	00671320	
-0015834a	D2Common::Drlg::DRLGOUTROOM_AllocPathNode	74	?	unpaired	?	blizzard-mac	missing		-		
+0015834a	D2Common::Drlg::DRLGOUTROOM_AllocPathNode	74	?	unpaired	?	shared-unpaired	missing		-	00681630	
 0015a9cc	D2Common::Drlg::DRLGLEVEL_ParseLevelData	975	?	unpaired	?	shared-unpaired	missing		-	006772c0	
 0015af30	D2Common::DRLGPLACE_ACT5_ValidatePlacementList3	110	?	unpaired	?	shared-unpaired	missing		-	00677030	
-0015aff1	D2Common::FUN_0015aff1	110	?	unpaired	?	blizzard-mac	missing		-		
-0015b05f	D2Common::FUN_0015b05f	110	?	unpaired	?	blizzard-mac	missing		-		
-0015b0cd	D2Common::FUN_0015b0cd	185	?	unpaired	?	blizzard-mac	missing		-		
-0015b186	D2Common::FUN_0015b186	188	?	unpaired	?	blizzard-mac	missing		-		
-0015b3c0	D2Common::FUN_0015b3c0	110	?	unpaired	?	blizzard-mac	missing		-		
-0015b42e	D2Common::FUN_0015b42e	110	?	unpaired	?	blizzard-mac	missing		-		
-0015b49c	D2Common::FUN_0015b49c	202	?	unpaired	?	blizzard-mac	missing		-		
-0015b566	D2Common::FUN_0015b566	188	?	unpaired	?	blizzard-mac	missing		-		
-0015b622	D2Common::FUN_0015b622	188	?	unpaired	?	blizzard-mac	missing		-		
-0015ba0b	D2Common::FUN_0015ba0b	113	?	unpaired	?	blizzard-mac	missing		-		
-0015ba7c	D2Common::FUN_0015ba7c	366	?	unpaired	?	blizzard-mac	missing		-		
-0015bbea	D2Common::FUN_0015bbea	313	?	unpaired	?	blizzard-mac	missing		-		
+0015aff1	D2Common::FUN_0015aff1	110	?	unpaired	?	shared-unpaired	missing		-	00676f50	
+0015b05f	D2Common::FUN_0015b05f	110	?	unpaired	?	shared-unpaired	missing		-	00676fc0	
+0015b0cd	D2Common::FUN_0015b0cd	185	?	unpaired	?	shared-unpaired	missing		-	00676c00	
+0015b186	D2Common::FUN_0015b186	188	?	unpaired	?	shared-unpaired	missing		-	00676150	
+0015b3c0	D2Common::FUN_0015b3c0	110	?	unpaired	?	shared-unpaired	missing		-	006770a0	
+0015b42e	D2Common::FUN_0015b42e	110	?	unpaired	?	shared-unpaired	missing		-	00677110	
+0015b49c	D2Common::FUN_0015b49c	202	?	unpaired	?	shared-unpaired	missing		-	006769a0	
+0015b566	D2Common::FUN_0015b566	188	?	unpaired	?	shared-unpaired	missing		-	00676280	
+0015b622	D2Common::FUN_0015b622	188	?	unpaired	?	shared-unpaired	missing		-	00676ae0	
+0015ba0b	D2Common::FUN_0015ba0b	113	?	unpaired	?	shared-unpaired	missing		-	006768c0	
+0015ba7c	D2Common::FUN_0015ba7c	366	?	unpaired	?	shared-unpaired	missing		-	00676650	
+0015bbea	D2Common::FUN_0015bbea	313	?	unpaired	?	shared-unpaired	missing		-	00676450	
 0015c10a	D2Common::Drlg::OutRoom::DRLGOUTROOM_FreeOutdoorGridsAndVertices	91	D2Common/DRLG/OutRoom.cpp	file-map	Source/D2Common/DRLG/OutRoom.cpp	shared-unpaired	missing		-	0067d680	
-0015cff8	D2Common::FUN_0015cff8	99	?	unpaired	?	blizzard-mac	missing		-		
+0015cff8	D2Common::FUN_0015cff8	99	?	unpaired	?	shared-unpaired	missing		-	0067e240	
 0015d1d0	D2Common::DRLGOUTROOM_FindLeftExitPosition	48	?	unpaired	?	shared-unpaired	missing		-	0067fc20	
 0015fe70	D2Common::Drlg::Preset::BuildArea	2659	D2Common/DRLG/Preset.cpp	__FILE__	Source/D2Common/DRLG/Preset.cpp	shared-unpaired	missing		-	00667ed0	
 00161490	D2Common::FUN_00161490	63	?	unpaired	-	compiler	missing		-		
-001646f1	D2Common::FUN_001646f1	336	?	unpaired	?	blizzard-mac	missing		-		
+001646f1	D2Common::FUN_001646f1	336	?	unpaired	?	shared-unpaired	missing		-	0066fcf0	
 0016706b	D2Common::Environment::Environment::DRLGENV_TaintedSunEnd	78	?	unpaired	?	shared-unpaired	missing		-	0061c4d0	
 0016852a	D2Common::INVENTORY::Inventory::INVENTORY_GetWieldType	224	D2Common/INVENTORY/Inventory.cpp	file-map	Source/D2Common/INVENTORY/Inventory.cpp	shared-unpaired	missing		-	0063d340	
 00168ad3	D2Common::INVENTORY::Inventory::INVENTORY_FindFillableBook	325	D2Common/INVENTORY/Inventory.cpp	file-map	Source/D2Common/INVENTORY/Inventory.cpp	shared-unpaired	missing		-	0063c3b0	
@@ -1726,7 +1726,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0016ffad	D2Common::ITEMS::Items::FUN_0016ffad	137	D2Common/ITEMS/Items.cpp	file-map	Source/D2Common/ITEMS/Items.cpp	shared-unpaired	missing		-	0062e5d0	
 0017b8bd	D2Common::Src::LogManager::LOGGING_CloseLogFile	59	?	unpaired	?	shared-unpaired	missing		-	00624b20	
 0017e166	D2Common::FUN_0017e166	1305	?	unpaired	?	shared-unpaired	missing		-	0067b200	
-0017ef68	FUN_0017ef68	219	?	unpaired	?	blizzard-mac	missing		-		
+0017ef68	FUN_0017ef68	219	?	unpaired	?	shared-unpaired	missing		-	0067a690	
 00180f5c	D2Common::PATH::Path::PATH_GetCollisionPattern	11	D2Common/PATH/Path.cpp	file-map	Source/D2Common/PATH/Path.cpp	shared-unpaired	missing		-	00648cd0	
 0018258c	D2Common::FUN_0018258c	147	?	unpaired	?	shared-unpaired	missing		-	00678f00	
 001837f9	D2Common::FUN_001837f9	153	?	unpaired	?	shared-unpaired	missing		-	00650590	
@@ -1738,10 +1738,10 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 001890f5	D2Common::Skills::Skills::SKILLS_IsSelectableCorpse2	29	D2Common/SKILLS/Skills.cpp	file-map	Source/D2Common/SKILLS/Skills.cpp	shared-unpaired	missing		-	00645680	
 00189112	D2Common::Skills::Skills::FUN_00189112	29	D2Common/SKILLS/Skills.cpp	file-map	Source/D2Common/SKILLS/Skills.cpp	shared-unpaired	missing		-	006454c0	
 0018a158	D2Common::Skills::Skills::SKILLS_GetOtherHandItem	45	?	unpaired	?	shared-unpaired	missing		-	00643d60	
-0018b52f	D2Common::Units::Missile::MISSILE_CalculateDamageData	2462	?	unpaired	?	blizzard-mac	missing		-		
+0018b52f	D2Common::Units::Missile::MISSILE_CalculateDamageData	2462	?	unpaired	?	shared-unpaired	missing		-	0064b860	
 001904df	D2Common::Units::Units::FUN_001904df	84	D2Common/UNITS/Units.cpp	file-map	Source/D2Common/UNITS/Units.cpp	shared-unpaired	missing		-	006218d0	
 0019074b	D2Common::Units::Units::FUN_0019074b	5	D2Common/UNITS/Units.cpp	file-map	-	compiler	missing		-		
-00193aa0	D2Common::FUN_00193aa0	80	?	unpaired	?	blizzard-mac	missing		-		
+00193aa0	D2Common::FUN_00193aa0	80	?	unpaired	?	shared-unpaired	missing		-		
 00193d4c	D2Common::WayPoint::Waypoint::FUN_00193d4c	86	D2Common/WayPoint/Waypoint.cpp	file-map	Source/D2Common/WayPoint/Waypoint.cpp	shared-unpaired	missing		-	00660f80	
 001965de	D2Common::Stats::StatsEx::STATLIST_RemoveAllStats	64	D2Common/Stats/StatsEx.cpp	file-map	Source/D2Common/Stats/StatsEx.cpp	shared-unpaired	missing		-	00627340	
 00197ddc	IgnoreList::~IgnoreList	9	D2Common/Chat/Ignorelist.cpp	file-map	-	compiler	missing		-		
@@ -1762,7 +1762,7 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 001998f4	D2Common::Chat::Ignorelist::TSHASHTABLE_InitializeStringEntry	108	D2Common/Chat/Ignorelist.cpp	file-map	Source/D2Common/Chat/Ignorelist.cpp	shared-unpaired	missing		-	006104a0	
 00199a34	D2Common::Chat::Ignorelist::TSLIST_LinkNodeStringEntry	130	D2Common/Chat/Ignorelist.cpp	file-map	Source/D2Common/Chat/Ignorelist.cpp	shared-unpaired	missing		-	0060fe90	
 0019a270	D2Common::Chat::Ignorelist::TSLIST_NewNodeMappingEntry	147	D2Common/Chat/Ignorelist.cpp	file-map	Source/D2Common/Chat/Ignorelist.cpp	shared-unpaired	missing		-	00610630	
-0019a50e	D2Common::Chat::Ignorelist::TSLIST_NewNodeStringEntry	140	?	unpaired	?	blizzard-mac	missing		-		
+0019a50e	D2Common::Chat::Ignorelist::TSLIST_NewNodeStringEntry	140	?	unpaired	?	shared-unpaired	missing		-	0060fe90	
 0019a59a	MAC_ShowAboutDialog	770	MacSpecific/Source/Mac Shell/?	unit	Source/MacSpecific/Source/MacShell/unknown_startup.cpp	blizzard-mac	nonmatch	Source/MacSpecific/Source/MacShell/unknown_startup.cpp	yes		regalloc
 0019a89c	FUN_0019a89c	77	MacSpecific/Source/Mac Shell/?	unit	Source/MacSpecific/Source/MacShell/unknown_startup.cpp	blizzard-mac	match	Source/MacSpecific/Source/MacShell/unknown_startup.cpp	yes		
 0019a8e9	MAC_BeginModalDialog	265	MacSpecific/Source/Mac Shell/?	unit	Source/MacSpecific/Source/MacShell/unknown_startup.cpp	blizzard-mac	match	Source/MacSpecific/Source/MacShell/unknown_startup.cpp	yes		
@@ -1854,12 +1854,12 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 0019f2b6	MacSpecific::Mac_Shell::D2FlamingLogo::FLAMINGLOGO_Init	667	MacSpecific/Source/Mac Shell/D2FlamingLogo.cpp	unit	Source/MacSpecific/Source/MacShell/D2FlamingLogo.cpp	blizzard-mac	nonmatch	Source/MacSpecific/Source/MacShell/D2FlamingLogo.cpp	yes		regalloc
 0019f551	MacSpecific::Mac_Shell::D2FlamingLogo::FLAMINGLOGO_Shutdown	203	MacSpecific/Source/Mac Shell/D2FlamingLogo.cpp	unit	Source/MacSpecific/Source/MacShell/D2FlamingLogo.cpp	blizzard-mac	match	Source/MacSpecific/Source/MacShell/D2FlamingLogo.cpp	yes		
 0019f61c	MacSpecific::Mac_Shell::D2FlamingLogo::FLAMINGLOGO_DrawFrame	680	MacSpecific/Source/Mac Shell/D2FlamingLogo.cpp	unit	Source/MacSpecific/Source/MacShell/D2FlamingLogo.cpp	blizzard-mac	match	Source/MacSpecific/Source/MacShell/D2FlamingLogo.cpp	yes		unverified-ref
-0019f900	FUN_0019f900	38	?	unpaired	?	blizzard-mac	missing		-		
+0019f900	FUN_0019f900	38	?	unpaired	?	shared-unpaired	missing		-	005fc830	
 001a1132	D2Game::Ai::AiBaal::AI_CheckSpecialSkillsOnPrimeEvil	56	D2Game/Ai/AiBaal.cpp	file-map	Source/D2Game/Ai/AiBaal.cpp	shared-unpaired	missing		-	005fc0c0	
 001a116a	D2Game::Ai::AiBaal::AI_BAAL_GetWeightedRandomIndex	100	D2Game/Ai/AiBaal.cpp	file-map	Source/D2Game/Ai/AiBaal.cpp	shared-unpaired	missing		-	005fc130	
-001a449c	D2Game::FUN_001a449c	10	?	unpaired	?	blizzard-mac	missing		-		
-001a6c53	D2Game::FUN_001a6c53	63	?	unpaired	?	blizzard-mac	missing		-		
-001a6c92	D2Game::FUN_001a6c92	74	?	unpaired	?	blizzard-mac	missing		-		
+001a449c	D2Game::FUN_001a449c	10	?	unpaired	?	shared-unpaired	missing		-	005b0d60	
+001a6c53	D2Game::FUN_001a6c53	63	?	unpaired	?	shared-unpaired	missing		-	005dd0b0	
+001a6c92	D2Game::FUN_001a6c92	74	?	unpaired	?	shared-unpaired	missing		-	005dca70	
 001a6f13	D2Game::FUN_001a6f13	5	?	unpaired	-	compiler	missing		-		
 001a6f18	D2Game::FUN_001a6f18	5	?	unpaired	-	compiler	missing		-		
 001a6f56	D2Game::FUN_001a6f56	5	?	unpaired	-	compiler	missing		-		
@@ -1871,25 +1871,25 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 001aea68	D2Game::GAME::Game::FUN_001aea68	10	D2Game/GAME/Game.cpp	file-map	-	compiler	missing		-		
 001aeb38	D2Game::GAME::Game::FUN_001aeb38	10	D2Game/GAME/Game.cpp	file-map	-	compiler	missing		-		
 001aefdc	TSExportTableSync<SGAMEDATA,HSGAMEDATA__*,HSGAMEDATALOCK__*,CCritSect,0>::NewLock	83	?	unpaired	?	shared-unpaired	missing		-	006048c0	
-001af0ee	TSHashTable<SGAMEDATA,HASHKEY_NONE>::InternalFind	109	?	unpaired	?	blizzard-mac	missing		-		
+001af0ee	TSHashTable<SGAMEDATA,HASHKEY_NONE>::InternalFind	109	?	unpaired	?	shared-unpaired	missing		-	0052e650	
 001af15c	TSExportTableSimple<SGAMEDATA,HSGAMEDATA__*,0>::GenerateUniqueHandle	71	?	unpaired	?	shared-unpaired	missing		-	00603280	
-001af1a4	TSHashTable<SGAMEDATA,HASHKEY_NONE>::New	132	?	unpaired	?	blizzard-mac	missing		-		
-001af228	TSHashTable<SGAMEDATA,HASHKEY_NONE>::Initialize	108	?	unpaired	?	blizzard-mac	missing		-		
+001af1a4	TSHashTable<SGAMEDATA,HASHKEY_NONE>::New	132	?	unpaired	?	shared-unpaired	missing		-	00530820	
+001af228	TSHashTable<SGAMEDATA,HASHKEY_NONE>::Initialize	108	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Game/Game/stpl_SGAMEDATA.cpp	no		regalloc
 001afc48	D2Game::GAME::Clients::CLIENT_RemoveFromAdjacentRooms	116	?	unpaired	?	shared-unpaired	missing		-	0053ab80	
-001b4747	FUN_001b4747	61	?	unpaired	?	blizzard-mac	missing		-		
-001b4ea1	D2Game::GAME::Task::TASK_LinkTaskToListTail	182	?	unpaired	?	blizzard-mac	missing		-		
-001b4f60	D2Game::GAME::Task::TASK_DestroyQueueMutexes	62	?	unpaired	?	blizzard-mac	missing		-		
+001b4747	FUN_001b4747	61	?	unpaired	?	shared-unpaired	missing		-	0053cdf0	
+001b4ea1	D2Game::GAME::Task::TASK_LinkTaskToListTail	182	?	unpaired	?	shared-unpaired	missing		-	00564290	
+001b4f60	D2Game::GAME::Task::TASK_DestroyQueueMutexes	62	?	unpaired	-	compiler	missing		-	006cb4a0	
 001b4fb0	D2Game::FUN_001b4fb0	124	?	unpaired	-	compiler	missing		-		
 001b9abb	D2Game::ITEMS::ItemMode::ITEMMODE_GetClientFromPlayerOrOwner	101	D2Game/ITEMS/ItemMode.cpp	__FILE__	Source/D2Game/ITEMS/ItemMode.cpp	shared-unpaired	missing		-	0055db80	
 001c789c	D2Game::ITEMS::Items::ITEMS_RemoveAndFreeItem	123	D2Game/ITEMS/Items.cpp	file-map	Source/D2Game/ITEMS/Items.cpp	shared-unpaired	missing		-	00558b90	
 001c7917	D2Game::ITEMS::Items::ITEMS_FreeExpiredGroundItems	117	D2Game/ITEMS/Items.cpp	file-map	Source/D2Game/ITEMS/Items.cpp	shared-unpaired	missing		-	00558b90	
 001d6e83	D2Game::MONSTER_SetAiState	30	?	unpaired	?	shared-unpaired	missing		-	005734c0	
-001dd3f3	D2Game::FUN_001dd3f3	117	?	unpaired	?	blizzard-mac	missing		-		
-001dd468	D2Game::FUN_001dd468	117	?	unpaired	?	blizzard-mac	missing		-		
-001e6d3d	D2Game::UMOD_CallInitFunction	28	?	unpaired	?	blizzard-mac	missing		-		
+001dd3f3	D2Game::FUN_001dd3f3	117	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Game/Monster/MonsterMode.cpp	no		stack-layout
+001dd468	D2Game::FUN_001dd468	117	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Game/Monster/MonsterMode.cpp	no		stack-layout
+001e6d3d	D2Game::UMOD_CallInitFunction	28	?	unpaired	?	shared-unpaired	missing		-	005a2100	
 001f82b8	D2Game::PLAYER::Player::SERVER_GAME_SetMinimumPlayerCount	25	D2Game/PLAYER/Player.cpp	file-map	Source/D2Game/PLAYER/Player.cpp	blizzard-mac	match	Source/D2Game/Player/Player.cpp	no		
-001fb18b	D2Game::PLAYER_SpendStatPointsOnStrength	91	?	unpaired	?	blizzard-mac	missing		-		
-001fb32c	D2Game::PLAYER_SpendStatPointsOnDexterity	91	?	unpaired	?	blizzard-mac	missing		-		
+001fb18b	D2Game::PLAYER_SpendStatPointsOnStrength	91	?	unpaired	?	shared-unpaired	missing		-	00570d60	
+001fb32c	D2Game::PLAYER_SpendStatPointsOnDexterity	91	?	unpaired	?	shared-unpaired	missing		-	00570d60	
 00205604	D2Game::PLAYER::PlrMsg::FUN_00205604	37	D2Game/PLAYER/PlrMsg.cpp	file-map	Source/D2Game/PLAYER/PlrMsg.cpp	blizzard-mac	match	Source/D2Game/Player/PlayerMsg.cpp	no		
 002056d0	D2Game::PLAYER::PlayerMsg::PLRMSG_ValidateNpcInteract	406	D2Game/PLAYER/PlrMsg.cpp	file-map	Source/D2Game/PLAYER/PlrMsg.cpp	shared-unpaired	missing		-	0054b930	
 002151c9	D2Game::Quests::QUESTS::FUN_002151c9	68	D2Game/QUESTS/QUESTS.CPP	file-map	Source/D2Game/QUESTS/QUESTS.CPP	shared-unpaired	missing		-	005447a0	
@@ -1924,15 +1924,15 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002408bd	D2Game::Quests::QUESTS::A5Q4::Q34_NotifyQuestState	173	?	unpaired	?	shared-unpaired	missing		-	0058aea0	
 00242547	D2Game::Quests::QUESTS::A5Q5::Q35_NotifyQuestState	173	?	unpaired	?	shared-unpaired	missing		-	0058be20	
 00243b98	D2Game::Quests::QUESTS::A5Q6::SendQuestBitsIfNeeded	173	D2Game/Quests/a5q6.cpp	file-map	Source/D2Game/Quests/a5q6.cpp	shared-unpaired	missing		-	0058d770	
-00245256	D2Game::Quests::QUESTS::A5Q2::Q32_IncrementBarricadeGroupKills	62	?	unpaired	?	blizzard-mac	missing		-		
+00245256	D2Game::Quests::QUESTS::A5Q2::Q32_IncrementBarricadeGroupKills	62	?	unpaired	?	shared-unpaired	missing		-	00588880	
 00248873	D2Game::SKILLS::SkillAss::SKILLASS_OnChargeUpStateExpire	37	D2Game/SKILLS/SkillAss.cpp	file-map	Source/D2Game/SKILLS/SkillAss.cpp	blizzard-mac	match	Source/D2Game/Skills/SkillAss.cpp	no		
 0024eba7	D2Game::SKILLASS_SetupMissilePath	148	?	unpaired	?	shared-unpaired	missing		-	005d40f0	
-002584aa	D2Game::SKILLEMONST_RemoveBloodManaStatList	59	?	unpaired	?	blizzard-mac	missing		-		
+002584aa	D2Game::SKILLEMONST_RemoveBloodManaStatList	59	?	unpaired	?	shared-unpaired	missing		-	005d2b60	
 00267b1c	D2Game::SKILLS::SkillNec::FUN_00267b1c	381	D2Game/SKILLS/SkillNec.cpp	file-map	Source/D2Game/SKILLS/SkillNec.cpp	shared-unpaired	missing		-	005c4180	
-0026ed6e	FUN_0026ed6e	45	?	unpaired	?	blizzard-mac	missing		-		
+0026ed6e	FUN_0026ed6e	45	?	unpaired	?	shared-unpaired	missing		-	0056f550	
 00276341	D2Game::SKILLPAL_AuraCallback_Redemption	66	?	unpaired	?	shared-unpaired	missing		-	005d0d70	
 002779c2	D2Game::PLAYERLIST_SetHostileDelay	59	?	unpaired	?	shared-unpaired	missing		-	0055b720	
-0027b570	D2Game::FUN_0027b570	28	?	unpaired	?	blizzard-mac	missing		-		
+0027b570	D2Game::FUN_0027b570	28	?	unpaired	-	compiler	missing		-	006caf60	
 00284da0	D2Game::UNIT::SUnitMsg::SUNITMSG_AppendMessage	52	D2Game/UNIT/SUnitMsg.cpp	file-map	Source/D2Game/UNIT/SUnitMsg.cpp	shared-unpaired	missing		-	005718c0	
 002b0e04	D2OpenGL::CD2Textures::CD2TEXTURES_Construct	305	MacSpecific/Source/CD2Textures/CD2Textures.cpp	__FILE__	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp	blizzard-mac	nonmatch	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp	yes		pic-ref
 002b0f36	D2OpenGL::CD2Textures::CD2TEXTURES_Init	209	MacSpecific/Source/CD2Textures/CD2Textures.cpp	__FILE__	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp	blizzard-mac	nonmatch	Source/MacSpecific/Source/CD2Textures/CD2Textures.cpp	yes		pic-ref
@@ -2079,12 +2079,12 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002b721d	MACSEC_GetSigningOrganizationName	1302	D2Hell/SRC/Archive.cpp|?	between	Source/D2Hell/SRC/Archive.cpp|?	blizzard-mac	nonmatch	Source/D2Hell/Mac/MACSEC.cpp	no		stack-layout
 002b7733	MACSEC_CheckCodeSignature	289	D2Hell/SRC/Archive.cpp|?	between	Source/D2Hell/SRC/Archive.cpp|?	blizzard-mac	nonmatch	Source/D2Hell/Mac/MACSEC.cpp	no		regalloc
 002b7854	MACSEC_IsBlizzardSigned	157	D2Hell/SRC/Archive.cpp|?	between	Source/D2Hell/SRC/Archive.cpp|?	blizzard-mac	match	Source/D2Hell/Mac/MACSEC.cpp	no		
-002b7f94	UNICODE_IsWhitespace	80	?	unpaired	?	blizzard-mac	missing		-		
+002b7f94	UNICODE_IsWhitespace	80	?	unpaired	?	shared-unpaired	missing		-	00526d30	
 002b8570	D2Lang::StrTable::strtable::FUN_002b8570	229	D2Lang/StrTable/strtable.cpp	file-map	Source/D2Lang/StrTable/strtable.cpp	shared-unpaired	missing		-	005262a0	
 002b9950	D2Lang::StrTable::strtable::FUN_002b9950	7	D2Lang/StrTable/strtable.cpp	file-map	-	compiler	match	Source/D2Lang/StrTable/strtable.cpp	no		
 002b9add	D2Lang::StrTable::strtable::STRTABLE_FormatNumber	365	D2Lang/StrTable/strtable.cpp	file-map	Source/D2Lang/StrTable/strtable.cpp	shared-unpaired	missing		-	00525350	
 002ba4fc	LAUNCHER_InitNetworkLobbyQueue	107	?	unpaired	?	shared-unpaired	missing		-	0043b7a0	
-002ba568	FUN_002ba568	18	?	unpaired	?	blizzard-mac	missing		-		
+002ba568	FUN_002ba568	18	?	unpaired	?	shared-unpaired	missing		-	0043b810	
 002ba5e9	FUN_002ba5e9	77	?	unpaired	?	shared-unpaired	missing		-	0043b890	
 002ba636	FUN_002ba636	94	?	unpaired	?	shared-unpaired	missing		-	0043b8e0	
 002ba694	FUN_002ba694	97	?	unpaired	?	shared-unpaired	missing		-	0043b940	
@@ -2094,8 +2094,8 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002bcce5	D2Launch::CharSel::FUN_002bcce5	275	D2Launch/Src/CharSel.cpp	file-map	Source/D2Launch/Src/CharSel.cpp	blizzard-mac	match	Source/D2Launch/Src/CharSel.cpp	yes		
 002bd1c3	D2Launch::CharSel::CHARSEL_IsValidSaveName	49	D2Launch/Src/CharSel.cpp	file-map	Source/D2Launch/Src/CharSel.cpp	shared-unpaired	missing		-	00438f40	
 002c0e98	D2Launch::CharSel::CHARSEL_GetRealmNameChecked	34	D2Launch/Src/CharSel.cpp	file-map	Source/D2Launch/Src/CharSel.cpp	shared-unpaired	missing		-	00437a20	
-002c1420	D2Launch::FUN_002c1420	39	?	unpaired	?	blizzard-mac	missing		-		
-002c1447	D2Launch::FUN_002c1447	26	?	unpaired	?	blizzard-mac	missing		-		
+002c1420	D2Launch::FUN_002c1420	39	?	unpaired	-	compiler	missing		-	006ca940	
+002c1447	D2Launch::FUN_002c1447	26	?	unpaired	?	shared-unpaired	missing		-	0042e590	
 002c1461	D2Launch::FUN_002c1461	5	?	unpaired	-	compiler	missing		-		
 002c4107	D2Launch::MainMenus::MAINMENU_PollMCPCharLogonPump	71	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	shared-unpaired	missing		-	00432fe0	
 002c56cd	D2Launch::MainMenus::FUN_002c56cd	61	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	shared-unpaired	missing		-	0042fde0	
@@ -2107,17 +2107,17 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002c96e5	D2Launch::MainMenus::MAINMENU_LoadCreditsText	1769	D2Launch/Src/MainMenus.cpp	__FILE__	Source/D2Launch/Src/MainMenus.cpp	shared-unpaired	missing		-	00431050	
 002c9eb7	D2Launch::MainMenus::MAINMENU_RunInsertExpansionCdDialog	88	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	blizzard-mac	nonmatch	Source/D2Launch/Src/MainMenus.cpp	yes		unverified-ref
 002c9f0f	D2Launch::MainMenus::MAINMENU_PollInsertCdDialog	155	D2Launch/Src/MainMenus.cpp	file-map	Source/D2Launch/Src/MainMenus.cpp	blizzard-mac	nonmatch	Source/D2Launch/Src/MainMenus.cpp	yes		unverified-ref
-002cb34c	D2Launch::MainMenus::MAINMENU_DoesArchiveFileExist	66	?	unpaired	?	blizzard-mac	missing		-		
-002cb38e	MAINMENU_IsAsciiAlphabeticChar	79	?	unpaired	?	blizzard-mac	missing		-		
-002cbd10	FUN_002cbd10	91	?	unpaired	?	blizzard-mac	missing		-		
-002cc749	FUN_002cc749	67	?	unpaired	?	blizzard-mac	missing		-		
+002cb34c	D2Launch::MainMenus::MAINMENU_DoesArchiveFileExist	66	?	unpaired	?	shared-unpaired	missing		-	0042fce0	
+002cb38e	MAINMENU_IsAsciiAlphabeticChar	79	?	unpaired	?	shared-unpaired	missing		-	0042e630	
+002cbd10	FUN_002cbd10	91	?	unpaired	-	compiler	missing		-	006ca980	
+002cc749	FUN_002cc749	67	?	unpaired	?	shared-unpaired	missing		-	0044ab80	
 002ccb4e	FUN_002ccb4e	17	?	unpaired	?	shared-unpaired	missing		-	00449bc0	
 002ccb5f	FUN_002ccb5f	18	?	unpaired	?	shared-unpaired	missing		-	00449bd0	
 002ccbcc	MCPSTATE_GetCharLogonSuccess	17	?	unpaired	?	shared-unpaired	missing		-	00449c30	
 002ccca9	FUN_002ccca9	17	?	unpaired	?	shared-unpaired	missing		-	00449d50	
 002cccba	FUN_002cccba	39	?	unpaired	?	shared-unpaired	missing		-	00449d60	
 002ccd1d	FUN_002ccd1d	17	?	unpaired	?	shared-unpaired	missing		-	00449de0	
-002ccfd4	D2MCPClient::McpConnect::MCPCONNECT_SendStartup	323	?	unpaired	?	blizzard-mac	missing		-		
+002ccfd4	D2MCPClient::McpConnect::MCPCONNECT_SendStartup	323	?	unpaired	?	shared-unpaired	missing		-	0044a1d0	
 002cfbd1	D2Multi::ChatDlg::FUN_002cfbd1	32	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	missing		-	0043e570	
 002d098a	D2Multi::ChatDlg::FUN_002d098a	71	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	blizzard-mac	match	Source/D2Multi/Src/ChatDlg.cpp	yes		
 002d1dc6	D2Multi::ChatDlg::CHATDLG_DisplayTimestampedMessage	377	D2Multi/Src/ChatDlg.cpp	file-map	Source/D2Multi/Src/ChatDlg.cpp	shared-unpaired	body	Source/D2Multi/Src/ChatDlg.cpp	yes	0043e4c0	
@@ -2132,18 +2132,18 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002d5a7a	D2Multi::ComCallback::COMCALLBACK_RemoveUserFromChannelList	440	D2Multi/Src/ComCallback.cpp	__FILE__	Source/D2Multi/Src/ComCallback.cpp	blizzard-mac	nonmatch	Source/D2Multi/Src/ComCallback.cpp	yes		stack-layout
 002d5d27	D2Multi::ComCallback::COMCALLBACK_AppendChatText	127	D2Multi/Src/ComCallback.cpp	file-map	Source/D2Multi/Src/ComCallback.cpp	shared-unpaired	missing		-	00447ab0	
 002d7520	D2Multi::ComCallback::COMCALLBACK_CompareUserNames	83	D2Multi/Src/ComCallback.cpp	file-map	Source/D2Multi/Src/ComCallback.cpp	blizzard-mac	nonmatch	Source/D2Multi/Src/ComCallback.cpp	yes		regalloc
-002d7874	FUN_002d7874	26	?	unpaired	?	blizzard-mac	missing		-		
+002d7874	FUN_002d7874	26	?	unpaired	?	shared-unpaired	missing		-	0043cbe0	
 002d788e	FUN_002d788e	5	?	unpaired	-	compiler	missing		-		
-002d7ffc	FUN_002d7ffc	115	?	unpaired	?	blizzard-mac	missing		-		
+002d7ffc	FUN_002d7ffc	115	?	unpaired	?	blizzard-mac	nonmatch	Source/D2Multi/OOGUtilities.cpp	no		regalloc
 002d8084	FUN_002d8084	17	?	unpaired	?	shared-unpaired	missing		-	004435d0	
 002d9d78	FUN_002d9d78	21	?	unpaired	?	shared-unpaired	missing		-	004456a0	
 002d9d8d	FUN_002d9d8d	17	?	unpaired	?	shared-unpaired	missing		-	00443600	
 002d9d9e	FUN_002d9d9e	21	?	unpaired	?	shared-unpaired	missing		-	004456b0	
 002d9db3	FUN_002d9db3	21	?	unpaired	?	shared-unpaired	missing		-	004456c0	
-002dca5f	CDKEY_Decode16Pairs	140	?	unpaired	?	blizzard-mac	missing		-		
-002dcaeb	CDKEY_Decode16XorDigit	74	?	unpaired	?	blizzard-mac	missing		-		
-002de00a	D2Net::FUN_002de00a	38	?	unpaired	?	blizzard-mac	missing		-		
-002de030	D2Net::FUN_002de030	38	?	unpaired	?	blizzard-mac	missing		-		
+002dca5f	CDKEY_Decode16Pairs	140	?	unpaired	?	shared-unpaired	missing		-	00449890	
+002dcaeb	CDKEY_Decode16XorDigit	74	?	unpaired	?	shared-unpaired	missing		-	00449920	
+002de00a	D2Net::FUN_002de00a	38	?	unpaired	?	shared-unpaired	missing		-	0052b250	
+002de030	D2Net::FUN_002de030	38	?	unpaired	?	shared-unpaired	missing		-	0052b280	
 002de2d0	D2OpenGL::COGLTextures::COGLTEXTURES_ConstructThunk	9	D2OpenGL/Src/?|D2OpenGL/Src/oglBlocks.cpp	between	Source/D2OpenGL/Src/?|Source/D2OpenGL/Src/oglBlocks.cpp	blizzard-mac	match	Source/D2OpenGL/Src/COGLTextures.cpp	no		
 002de2da	D2OpenGL::COGLTextures::COGLTEXTURES_Construct	136	D2OpenGL/Src/?|D2OpenGL/Src/oglBlocks.cpp	between	Source/D2OpenGL/Src/?|Source/D2OpenGL/Src/oglBlocks.cpp	blizzard-mac	nonmatch	Source/D2OpenGL/Src/COGLTextures.cpp	no		eh
 002de374	D2OpenGL::COGLTextures::~COGLTextures_D0	26	D2OpenGL/Src/?|D2OpenGL/Src/oglBlocks.cpp	between	Source/D2OpenGL/Src/?|Source/D2OpenGL/Src/oglBlocks.cpp	blizzard-mac	nonmatch	Source/D2OpenGL/Src/COGLTextures.cpp	no		inline
@@ -2301,12 +2301,12 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002e95bc	D2Sound::D2SoundSmp::FUN_002e95bc	56	D2Sound/Src/D2SoundSmp.cpp	file-map	Source/D2Sound/Src/D2SoundSmp.cpp	blizzard-mac	nonmatch	Source/D2Sound/Src/D2SoundSmp.cpp	yes		
 002e9952	D2Sound::D2SoundStrm::SOUNDSTRM_PlayMusicFile	151	D2Sound/Src/D2SoundStrm.cpp	file-map	Source/D2Sound/Src/D2SoundStrm.cpp	blizzard-mac	body	Source/D2Sound/Src/D2SoundFast.cpp	no		
 002e9cce	D2Sound::FUN_002e9cce	17	?	unpaired	?	shared-unpaired	missing		-	00514920	
-002e9cdf	D2Sound::FUN_002e9cdf	158	?	unpaired	?	blizzard-mac	missing		-		
+002e9cdf	D2Sound::FUN_002e9cdf	158	?	unpaired	?	shared-unpaired	missing		-	005165f0	
 002e9ee5	D2Sound::SOUND_ComputeVolumeAndPanFromPosition	279	?	unpaired	?	shared-unpaired	missing		-	00516830	
 002ea0da	D2Sound::D2SoundUtil::SOUND_FreeAllSoundSmps	38	D2Sound/Src/D2SoundUtil.cpp	file-map	Source/D2Sound/Src/D2SoundUtil.cpp	blizzard-mac	match	Source/D2Sound/D2SoundUntil.cpp	no		
 002ed89d	Fog::Src::D2QSSocket::QSSOCKET_ReceiveLoop	845	?	unpaired	?	shared-unpaired	missing		-	006bc3a0	
-002edfed	Fog::FUN_002edfed	78	?	unpaired	?	blizzard-mac	missing		-		
-002ee03b	Fog::FOG_ArrayGetByHandle	175	?	unpaired	?	blizzard-mac	missing		-		
+002edfed	Fog::FUN_002edfed	78	?	unpaired	?	shared-unpaired	missing		-	006bcc90	
+002ee03b	Fog::FOG_ArrayGetByHandle	175	?	unpaired	?	shared-unpaired	missing		-	006bcc10	
 002eed78	Fog::ErrorManager::FOG_InitErrorManager	737	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	blizzard-mac	nonmatch	Source/Fog/Src/ErrorManager.cpp	yes		stack-layout
 002ef085	Fog::ErrorManager::FOG_GetFramePointer	7	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	shared-unpaired	missing		-		
 002ef339	Fog::ErrorManager::FUN_002ef339	18	Fog/Src/ErrorManager.cpp	file-map	Source/Fog/Src/ErrorManager.cpp	shared-unpaired	missing		-	00407ff0	
@@ -2318,18 +2318,18 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002ef904	Fog::FOG_BuildGammaRamp	464	?	unpaired	?	blizzard-mac	missing		-		
 002efad4	Fog::ErrorManager::FOG_StartLogThread	180	?	unpaired	?	shared-unpaired	missing		-	00410540	
 002efde7	Fog::FOG_GetLogDirectory	82	?	unpaired	?	shared-unpaired	missing		-	0040f000	
-002f0f4a	Fog::FUN_002f0f4a	33	?	unpaired	?	blizzard-mac	missing		-		
-002f0ff4	Fog::FUN_002f0ff4	116	?	unpaired	?	blizzard-mac	missing		-		
+002f0f4a	Fog::FUN_002f0f4a	33	?	unpaired	?	shared-unpaired	missing		-	0040fd90	
+002f0ff4	Fog::FUN_002f0ff4	116	?	unpaired	?	shared-unpaired	missing		-	0040fbb0	
 002f10a8	Fog::STORMLIST_GetNextLink	53	?	unpaired	?	shared-unpaired	missing		-		
-002f10de	Fog::STORMLIST_UnlinkAll	71	?	unpaired	?	blizzard-mac	missing		-		
+002f10de	Fog::STORMLIST_UnlinkAll	71	?	unpaired	?	shared-unpaired	missing		-	0040fd00	
 002f1130	Fog::FUN_002f1130	160	?	unpaired	-	compiler	missing		-		
 002f1443	Fog::Excel::Excel::TXT_GetLinesCountFromBinFieldExcel	11	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	shared-unpaired	missing		-	006bcde0	
 002f2675	Fog::Excel::Excel::FUN_002f2675	25	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	blizzard-mac	match	Source/Fog/Src/Excel/Excel.cpp	yes		
 002f268e	Fog::Excel::Excel::FUN_002f268e	24	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	blizzard-mac	match	Source/Fog/Src/Excel/Excel.cpp	yes		
 002f27cd	Fog::Src::Excel::Excel::FOG_GetStringFromLinkIndex	137	Fog/Src/Excel/Excel.cpp	file-map	Source/Fog/Src/Excel/Excel.cpp	blizzard-mac	nonmatch	Source/Fog/Src/Excel/Excel.cpp	yes		sched
-002f33e9	Fog::FUN_002f33e9	7	?	unpaired	?	blizzard-mac	missing		-		
-002f33ff	Fog::FUN_002f33ff	7	?	unpaired	?	blizzard-mac	missing		-		
-002f3406	Fog::FUN_002f3406	141	?	unpaired	?	blizzard-mac	missing		-		
+002f33e9	Fog::FUN_002f33e9	7	?	unpaired	?	blizzard-mac	match	Source/Fog/Memory.cpp	no		
+002f33ff	Fog::FUN_002f33ff	7	?	unpaired	?	blizzard-mac	match	Source/Fog/Memory.cpp	no		
+002f3406	Fog::FUN_002f3406	141	?	unpaired	?	shared-unpaired	missing		-	00411210	
 002f3bea	Fog::Src::QServer::QServer::QSERVER_SendToAllClients	121	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006bfad0	
 002f3d19	Fog::QServer::QServer::FUN_002f3d19	65	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006be4a0	
 002f3d5a	Fog::Src::QServer::QServer::QSERVER_SendToClient	80	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006bfad0	
@@ -2337,12 +2337,12 @@ addr	name	bytes	orig_file	file_evidence	redivivus	class	status	body_file	at_path
 002f4400	Fog::Src::QServer::QServer::QSERVER_UpdateHackListTimers	400	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006be700	
 002f471c	Fog::Src::QServer::QServer::QSERVER_MatchesAddressMaskList	76	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006bf660	
 002f47d4	Fog::Src::QServer::QServer::QSERVER_IsAddressConnectionLimitReached	124	Fog/Src/QServer/QServer.cpp	file-map	Source/Fog/Src/QServer/QServer.cpp	shared-unpaired	missing		-	006be9f0	
-002f5529	Fog::FUN_002f5529	17	?	unpaired	?	blizzard-mac	missing		-		
-002f553b	Fog::FUN_002f553b	64	?	unpaired	?	blizzard-mac	missing		-		
+002f5529	Fog::FUN_002f5529	17	?	unpaired	?	shared-unpaired	missing		-	006bf4e0	
+002f553b	Fog::FUN_002f553b	64	?	unpaired	?	shared-unpaired	missing		-	006bf660	
 002f557e	Fog::FUN_002f557e	5	?	unpaired	-	compiler	missing		-		
-002f5f73	Fog::QSERVER_SendToClientSocket	66	?	unpaired	?	blizzard-mac	missing		-		
-002f70c5	FUN_002f70c5	101	?	unpaired	?	blizzard-mac	missing		-		
-002f7257	Fog::FUN_002f7257	66	?	unpaired	?	blizzard-mac	missing		-		
+002f5f73	Fog::QSERVER_SendToClientSocket	66	?	unpaired	?	shared-unpaired	missing		-	006c3410	
+002f70c5	FUN_002f70c5	101	?	unpaired	?	blizzard-mac	nonmatch	Source/Fog/Src/QServer/QServerNT.cpp	no		unverified-ref
+002f7257	Fog::FUN_002f7257	66	?	unpaired	?	shared-unpaired	missing		-	004109d0	
 002f7324	MACDISPLAY_SetGammaRamp	212	?	unit	?	blizzard-mac	match	Source/D2gfx/Mac/MACDISPLAYGamma.cpp	no		
 002f73f8	MACDISPLAY_RestoreGammaRamp	86	?	unit	?	blizzard-mac	match	Source/D2gfx/Mac/MACDISPLAYGamma.cpp	no		
 002f938c	FUN_002f938c	28	?	unpaired	-	compiler	missing		-		
