@@ -87,6 +87,25 @@ struct MacAppProcs {
 };
 // 1.14d mac: 00397abc
 extern MacAppProcs* g_pMacAppProcs;
+// 1.14d mac: 00029946
+void MSG_ExchangeCmdPeriodFlag(int* pnFlag);
+// 1.14d mac: 00013bad
+uint32_t SFileLoadFile(const char* szFileName, void** ppBuffer, uint32_t* pdwSize, uint32_t dwSearchScope, void* pOverlapped);
+// 1.14d mac: 002b8fba
+void TABLES_GetLangAbbreviation(char* szOut, int nLanguage);
+// 1.14d mac: 002ee3a4
+void FUN_002ee3a4(const char* szName);
+// 1.14d mac: 0003e2ab
+void FUN_0003e2ab(void);
+// 1.14d mac: 00018c44
+int SMemFree(void* pMem, const char* szFile, int nLine, uint32_t dwFlags);
+// 1.14d mac: 00396200
+extern void (*g_pfnMacAbortHook)(void);
+void MAC_DeactivateTSMDocument(void);
+void MAC_ActivateTSMDocument(void);
+void MAC_ShutdownTSM(void);
+void FUN_0019e432(void);
+void MAC_SetWorkingDirectoryToAppFolder(void);
 // 1.14d mac: 00036d19
 bool MACDISPLAY_SelectDriver(int nDriver);
 // 1.14d mac: 00036d8b
@@ -100,7 +119,7 @@ void MACCURSOR_ShowDisplayCursor(void);
 // 1.14d mac: 00036847
 void FUN_00036847(void);
 // 1.14d mac: 00036ff5
-void FUN_00036ff5(void);
+void MACCURSOR_InitCursor(void);
 // 1.14d mac: 0001e550
 void FPSetMessageBoxCallback(void (*pfnCallback)(void));
 // 1.14d mac: 0001e9bb
@@ -112,8 +131,10 @@ void MAC_WarpMouseCursorPosition(uint32_t ptCursor);
 int FUN_002b5de2(Point* pPoint);
 bool MAC_SetCursorPos(int16_t* pnX, int16_t* pnY);
 bool MAC_GetCursorPos(int* pnX, int* pnY);
-uint8_t MAC_HandleKeyDownEvent(EventRecord* pEvent);
-uint8_t MAC_HandleSuspendResumeEvent(EventRecord* pEvent);
+__attribute__((noinline)) bool MAC_OnApplicationDeactivate(EventRecord* pEvent);
+__attribute__((noinline)) bool MAC_OnApplicationActivate(EventRecord* pEvent);
+static __attribute__((noinline)) void MAC_HandleKeyDownEvent(EventRecord* pEvent);
+static __attribute__((noinline)) uint8_t MAC_HandleSuspendResumeEvent(EventRecord* pEvent);
 void FUN_0019db65(void);
 void MAC_SynthesizeKeyEvent(uint32_t nPressed, uint32_t nKeyCode, EventRecord* pEvent, char cPressed);
 // 1.14d mac: 0002a6a3
@@ -945,7 +966,7 @@ bool MAC_OnApplicationActivate(EventRecord* pEvent) {
     return bPosted;
 }
 
-void FUN_0019be2c(void);
+__attribute__((noinline)) void FUN_0019be2c(void);
 
 // 1.14d mac: 0019bba4
 // An update event: the whole window is redrawn.
@@ -1455,7 +1476,7 @@ Boolean FUN_0019cc81(int nDisplayModule, int nUnused) {
     MAC_GetDefaultDisplayMode(&nOptionWidth, &nOptionHeight, &nOptionDepth);
     s_nDisplayModule = nDisplayModule;
     if (MACDISPLAY_SelectDriver(0)) {
-        ((void (*)(void*, void*, void*))g_pMacAppProcs->apfn[49])((void*)FUN_00036ff5, (void*)MACCURSOR_ShowDisplayCursor,
+        ((void (*)(void*, void*, void*))g_pMacAppProcs->apfn[49])((void*)MACCURSOR_InitCursor, (void*)MACCURSOR_ShowDisplayCursor,
                                                                    (void*)FUN_00036847);
         int nWidth;
         int nHeight;
@@ -1534,7 +1555,7 @@ void MAC_DisableMenus(void) {
 // Set while a modal dialog has the events.
 extern int g_bMacModalActive;
 
-uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent);
+static uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent);
 
 // 1.14d mac: 0019cf88
 // Takes events until a null event comes: mouse, keys, updates, the menu bar, window drags and
@@ -1638,7 +1659,7 @@ static uint16_t s_wLastModifiers;
 // 1.14d mac: 0019d248
 // A position change is a WM_MOUSEMOVE; every modifier key that changed is synthesised as a
 // key event. True when the renderer took the event itself.
-uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent) {
+static uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent) {
     uint8_t bHandled = FUN_0019b74d(pEvent);
     if (!bHandled && pEvent->what < 0x10 && ((0x81FFu >> (pEvent->what & 0x1F)) & 1)) {
         if (s_ptLastMouse.v != pEvent->where.v || s_ptLastMouse.h != pEvent->where.h) {
@@ -1678,6 +1699,112 @@ uint8_t MAC_TrackMouseAndModifierChanges(EventRecord* pEvent) {
         }
     }
     return bHandled;
+}
+
+// 1.14d mac: 0019d3c2
+// An osEvt that is a suspend or resume: the application is told and the event turned into an
+// activate event of the front window. True when it was rewritten.
+static uint8_t MAC_HandleSuspendResumeEvent(EventRecord* pEvent) {
+    pEvent->what = 0;
+    uint8_t bResult = 0;
+    if ((pEvent->message & 0xFF000000) == 0x01000000) {
+        if ((pEvent->message & 1) == 0) {
+            MAC_DeactivateTSMDocument();
+            MAC_OnApplicationDeactivate(pEvent);
+        } else {
+            MAC_OnApplicationActivate(pEvent);
+            MAC_ActivateTSMDocument();
+        }
+        WindowRef pFrontWindow = FrontWindow();
+        if (pFrontWindow != NULL) {
+            pEvent->what = activateEvt;
+            pEvent->modifiers = pEvent->message;
+            pEvent->message = (UInt32)pFrontWindow;
+            bResult = 1;
+        }
+    }
+    return bResult;
+}
+
+// 1.14d mac: 005c8a40
+// Set while a command-period is held.
+int g_nCmdPeriod;
+
+// 1.14d mac: 0019d42b
+// A key down: Cmd-period is noted for Storm, Cmd with a menu key runs the item, anything else
+// is posted. A command auto-repeat is dropped.
+static void MAC_HandleKeyDownEvent(EventRecord* pEvent) {
+    uint16_t nModifiers = pEvent->modifiers;
+    UInt32 nMessage = pEvent->message;
+    if (pEvent->what != autoKey || (nModifiers & 0x100) == 0) {
+        if ((nModifiers & 0x100) == 0) {
+            g_nCmdPeriod = 0;
+        } else {
+            bool bCmdPeriod = (nMessage & 0xFF) == '.';
+            g_nCmdPeriod = bCmdPeriod;
+            if (bCmdPeriod) {
+                MSG_ExchangeCmdPeriodFlag(&g_nCmdPeriod);
+                nModifiers = pEvent->modifiers;
+            }
+        }
+        if ((nModifiers & 0x100) != 0) {
+            FUN_0019db65();
+            nMessage = MenuKey((char)nMessage);
+            if ((char)nMessage != 0 && MAC_HandleMenuCommand(nMessage)) {
+                return;
+            }
+        }
+        MAC_PostKeyDown(pEvent);
+    }
+}
+
+OSErr MAC_CheckRequiredAppleEventParams(const AppleEvent* pAppleEvent);
+
+// 1.14d mac: 0019d4ba
+// The 'oapp' handler.
+OSErr MAC_HandleOpenAppAppleEvent(const AppleEvent* pAppleEvent, AppleEvent* pReply, SRefCon nRefCon) {
+    return MAC_CheckRequiredAppleEventParams(pAppleEvent);
+}
+
+// 1.14d mac: 0019d4d3
+// GotRequiredParams: no missed-keyword attribute is fine, one found is errAEParamMissed.
+OSErr MAC_CheckRequiredAppleEventParams(const AppleEvent* pAppleEvent) {
+    DescType nReturnedType;
+    Size nActualSize;
+    OSErr nError = AEGetAttributePtr(pAppleEvent, keyMissedKeywordAttr, typeWildCard, &nReturnedType, NULL, 0, &nActualSize);
+    if (nError == errAEDescNotFound) {
+        return 0;
+    }
+    short nResult = errAEParamMissed;
+    if (nError != 0) {
+        nResult = nError;
+    }
+    return nResult;
+}
+
+// 1.14d mac: 0019d52f
+// The 'odoc' handler: nothing to open.
+OSErr MAC_HandleOpenDocumentsAppleEvent(const AppleEvent* pAppleEvent, AppleEvent* pReply, SRefCon nRefCon) {
+    return 0;
+}
+
+// 1.14d mac: 00536c58
+// Asks whether quitting is allowed; none means always.
+static uint8_t (*s_pfnQuitQuery)(void);
+
+// 1.14d mac: 0019d537
+// The 'quit' handler: Quit (menu command 7) unless the application vetoes it.
+OSErr MAC_HandleQuitAppleEvent(const AppleEvent* pAppleEvent, AppleEvent* pReply, SRefCon nRefCon) {
+    OSErr nError = MAC_CheckRequiredAppleEventParams(pAppleEvent);
+    uint8_t bCancelQuit = 0;
+    if (s_pfnQuitQuery != NULL) {
+        bCancelQuit = s_pfnQuitQuery();
+        bCancelQuit = bCancelQuit ^ 1;
+    }
+    if (nError == 0 && bCancelQuit == 0) {
+        FUN_0019bbcd(7);
+    }
+    return nError;
 }
 
 #endif  // D2_OS_MAC
