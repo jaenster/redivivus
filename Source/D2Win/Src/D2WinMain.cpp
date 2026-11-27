@@ -824,6 +824,11 @@ void __stdcall INPUT_CtrlKeyUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+#if D2_OS_MAC
+// 1.14d mac: 0004ba8d
+void __stdcall D2WIN_HandleSystemCommand(D2UIMouseMsgStrc * pMsg) {
+}
+#else
 void __stdcall D2WIN_HandleSystemCommand(D2UIMouseMsgStrc * pMsg) {
     uint16_t uSysCmd = (uint16_t)pMsg->nWParam & 0xfff0;
     if (uSysCmd == 0xf130 || uSysCmd == 0xf100) {
@@ -900,6 +905,7 @@ void __stdcall D2WIN_HandleSystemCommand(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
 }
+#endif
 
 void __stdcall D2WIN_HandleActivation(D2UIMouseMsgStrc * pMsg) {
     // Static local variables (originally global data)
@@ -1328,9 +1334,12 @@ BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback)
 void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {
     uint32_t Y;
     bool bXOutOfRange;
+#if !D2_OS_MAC
     tagTRACKMOUSEEVENT sTrackMouseEvent;
+#endif
     int nScreenHeight;
     D2UIMouseMsgStrc* pDVar1 = phWnd;
+#if !D2_OS_MAC
     if (!gbMouseInWindow) {
       /* LPTRACKMOUSEEVENT lpEventTrack for TrackMouseEvent */ sTrackMouseEvent.cbSize = sizeof(sTrackMouseEvent);
       sTrackMouseEvent.dwFlags = 2;
@@ -1339,6 +1348,7 @@ void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {
       TrackMouseEvent(&sTrackMouseEvent);
       gbMouseInWindow = 1;
     }
+#endif
 
     int nRawX = (int)pDVar1->uLParam.sMousePos.nMouseX;
     uint32_t nRawY = (uint32_t)pDVar1->uLParam.sMousePos.nMouseY;

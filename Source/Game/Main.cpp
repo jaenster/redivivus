@@ -44,6 +44,7 @@ static_assert(sizeof(void*) != 4 || sizeof(D2IniConfigStrc) == 0x3cd, "D2IniConf
 #define RECON_FPTD_fpRequiredUserAction
 typedef BOOL (*fpRequiredUserAction)();
 #endif
+#if !D2_OS_MAC
 #ifndef RECON_FPTD_pfnAllocateAndInitializeSid
 #define RECON_FPTD_pfnAllocateAndInitializeSid
 typedef BOOL (__stdcall *pfnAllocateAndInitializeSid)(void * pIdentifierAuthority, uint8_t nSubAuthorityCount, DWORD dwSubAuthority0, DWORD dwSubAuthority1, DWORD dwSubAuthority2, DWORD dwSubAuthority3, DWORD dwSubAuthority4, DWORD dwSubAuthority5, DWORD dwSubAuthority6, DWORD dwSubAuthority7, PSID * pSid);
@@ -59,6 +60,7 @@ typedef BOOL (__stdcall *pfnAddAccessDeniedAce)(void * pAcl, DWORD dwAceRevision
 #ifndef RECON_FPTD_pfnSetSecurityInfo
 #define RECON_FPTD_pfnSetSecurityInfo
 typedef DWORD (__stdcall *pfnSetSecurityInfo)(HANDLE handle, DWORD ObjectType, DWORD SecurityInfo, PSID psidOwner, PSID psidGroup, void * pDacl, void * pSacl);
+#endif
 #endif
 
 namespace Game::Main {
@@ -644,6 +646,7 @@ D2IniConfigValuesStrc D2IniConfigValues[58] = {
         /* .nDefaultValue = */ 0x0
     }
 }; D2_GLOBAL_GUARD(D2IniConfigValues, "Game::Main::D2IniConfigValues");
+#if !D2_OS_MAC
 _SERVICE_STATUS lpServiceStatus_007065fc = {
     /* .dwServiceType = */ 0x10,
     /* .dwCurrentState = */ 0x4,
@@ -653,12 +656,17 @@ _SERVICE_STATUS lpServiceStatus_007065fc = {
     /* .dwCheckPoint = */ 0x0,
     /* .dwWaitHint = */ 0x0
 }; D2_GLOBAL_GUARD(lpServiceStatus_007065fc, "Game::Main::lpServiceStatus_007065fc");
+#endif
 } // namespace Game::Main
+#if !D2_OS_MAC
 static _SERVICE_STATUS gszCommandLineLocaleCode = {}; D2_STATIC_GUARD(gszCommandLineLocaleCode, "gszCommandLineLocaleCode");
+#endif
 namespace Game::Main {
 fnAppModeRun * CurrentApplication = (fnAppModeRun *)0x00000000; D2_GLOBAL_GUARD(CurrentApplication, "Game::Main::CurrentApplication");
 eD2ApplicationMode geModState = APPMODE_mode0; D2_GLOBAL_GUARD(geModState, "Game::Main::geModState");
+#if !D2_OS_MAC
 SERVICE_STATUS_HANDLE ghServiceCtrlHandler = nullptr; D2_GLOBAL_GUARD(ghServiceCtrlHandler, "Game::Main::ghServiceCtrlHandler");
+#endif
 HINSTANCE WinMain_hInstance = (HINSTANCE)0x00000000; D2_GLOBAL_GUARD(WinMain_hInstance, "Game::Main::WinMain_hInstance");
 uint32_t gnServiceRunning = 0x0; D2_GLOBAL_GUARD(gnServiceRunning, "Game::Main::gnServiceRunning");
 } // namespace Game::Main
@@ -670,6 +678,7 @@ void * MISC_OperatorNewShim(uint32_t nSize) {
     return pMemory;
 }
 
+#if !D2_OS_MAC
 void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
     UINT dwIniValue;
     char* pDestField;
@@ -704,6 +713,7 @@ void __stdcall MISC_GetValueFromD2Ini(D2IniConfigStrc * pD2IniData) {
       nEntryOffset++;
     } while (nEntryOffset < 58);
 }
+#endif
 
 void __fastcall Unreferenced_00405550(char * szString) {
     while (*szString) {
@@ -1300,6 +1310,8 @@ int __fastcall ApplicationMain(HINSTANCE hInstance, D2IniConfigStrc * pD2IniData
       /* HMODULE hLibModule for FreeLibrary */ FreeLibrary(ghKeyhookDll);
     }
 #elif D2_TARGET_SERVER
+#elif D2_TARGET_CLIENT
+// The Mac build has no keyboard hook DLL.
 #else
 #error "Main.cpp: define exactly one of D2_TARGET_CLIENT or D2_TARGET_SERVER"
 #endif
@@ -1615,6 +1627,8 @@ void __fastcall D2INIT_CheckCommandLineOrLoadItFromRegistry(char * * ppszText) {
     }
 }
 
+// Windows-only, not in the 1.14d Mac binary (it has no registry, ini file, security descriptor or service control manager).
+#if !D2_OS_MAC
 void __stdcall CreateRegedit() {
     DWORD dwValueInfo;
     DWORD dwValueNameLen;
@@ -1892,11 +1906,14 @@ int32_t __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lp
 
 static void * keep_00406190 = (0 ? (ERRORMANAGER_TryGetProcAddress(*(HMODULE *)0, *(FARPROC * *)0, *(LPCSTR *)0), (void *)0) : (void *)0);
 static void * keep_00406470 = (0 ? (Unreferenced_00406470(*(SC_HANDLE * *)0, *(SC_HANDLE * *)0), (void *)0) : (void *)0);
+#endif
 
 } // namespace Game::Main
 
+#if !D2_OS_MAC
 // Process entry point — the linker resolves `WinMain` at root scope,
 // not `Game::Main::WinMain`.
 extern "C" int32_t __stdcall WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int32_t nShowCmd) {
     return Game::Main::WinMain(hInstance, hPrevInstance, lpCmdLine, nShowCmd);
 }
+#endif

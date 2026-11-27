@@ -107,6 +107,8 @@ void __fastcall D2WINEDITBOX_SetChangeCallback(::D2WinEditBox * pEditBox, fpD2Wi
     }
 }
 
+// Not in the 1.14d Mac binary: the layer has no clipboard.
+#if !D2_OS_MAC
 char * __stdcall D2WINEDITBOX_GetClipboardText() {
     // Static local variables (originally global data)
     static char gszClipboardTextBuffer[512] = {}; D2_STATIC_GUARD(gszClipboardTextBuffer, "D2Win::Src::D2WinEditBox::D2WINEDITBOX_GetClipboardText::gszClipboardTextBuffer");
@@ -169,6 +171,7 @@ BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText) {
     CloseClipboard();
     return 1;
 }
+#endif
 
 // Returns TRUE when the edit box has a non-empty selection: nSelAnchor (+0x54) != -1 and
 // nSelAnchor != nSelCursor (+0x58). HandleKeyPress uses it to decide whether typing replaces a selection
