@@ -1218,91 +1218,63 @@ void __fastcall ChangeActiveRoomBetweenLevels(D2RoomExStrc * pRoomEx, D2RoomExSt
 
 // Frees room tile data and near-room arrays for neighboring level rooms.
 BOOL __stdcall DRLG_FreeAdjacentLevelRoomData(D2DrlgLevelStrc * pLevel) {
-    D2DrlgLevelStrc* pVisLevel;
-    eD2LevelId* pVisLevelIds2;
-    uint32_t dwNeighborFlags;
-    eD2LevelId nCurLevelId;
-    eD2LevelId eVisLevelId;
-    D2RoomExStrc* pRoomEx;
-    D2PoolManagerStrc* pMemory;
-    pMemory = pLevel->pDrlg->pMemoryPool;
-    for (pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
+    D2PoolManagerStrc* pMemory = pLevel->pDrlg->pMemoryPool;
+    for (D2RoomExStrc* pRoomEx = pLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
       if (pRoomEx->fRoomStatus <= 3 || pRoomEx->eRoomExFlags & 0x100000U) {
         return 0;
       }
     }
 
-    int* pVisLevelIds;
-    pVisLevelIds = DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->eD2LevelId);
-    int32_t i;
-    i = 0;
-    do {
-      eVisLevelId = pVisLevelIds[i];
-      if (eVisLevelId != LEVEL_None) {
-        for (pVisLevel = pLevel->pDrlg->pLevel; pVisLevel; pVisLevel = pVisLevel->pLevelNext) {
-          if (pVisLevel->eD2LevelId == eVisLevelId) {
-            goto free_linked_vis_rooms;
-          }
-        }
+    int* pVisLevelIds = DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->eD2LevelId);
+    for (int i = 0; i < 8; i++) {
+      eD2LevelId eVisLevelId = pVisLevelIds[i];
+      if (eVisLevelId == LEVEL_None) {
+        continue;
+      }
 
+      D2DrlgLevelStrc* pVisLevel = nullptr;
+      for (D2DrlgLevelStrc* pCandidate = pLevel->pDrlg->pLevel; pCandidate; pCandidate = pCandidate->pLevelNext) {
+        if (pCandidate->eD2LevelId == eVisLevelId) {
+          pVisLevel = pCandidate;
+          break;
+        }
+      }
+      if (!pVisLevel) {
         pVisLevel = DRLGACTMISC_AllocDrlgLevel(pLevel->pDrlg, eVisLevelId);
-        free_linked_vis_rooms:
-        pRoomEx = pVisLevel->pRoomExFirst;
-        if (pRoomEx) {
-          pVisLevelIds2 = (eD2LevelId*)DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pVisLevel->pDrlg, pVisLevel->eD2LevelId);
-          nCurLevelId = pLevel->eD2LevelId;
-          dwNeighborFlags = 0;
-          if (*pVisLevelIds2 == nCurLevelId) {
-            dwNeighborFlags = 0x10;
-          }
-          if (pVisLevelIds2[1] == nCurLevelId) {
-            dwNeighborFlags |= 0x20;
-          }
-          if (pVisLevelIds2[2] == nCurLevelId) {
-            dwNeighborFlags |= 0x40;
-          }
-          if (pVisLevelIds2[3] == nCurLevelId) {
-            dwNeighborFlags |= 0x80;
-          }
-          if (pVisLevelIds2[4] == nCurLevelId) {
-            dwNeighborFlags |= 0x100;
-          }
-          if (pVisLevelIds2[5] == nCurLevelId) {
-            dwNeighborFlags |= 0x200;
-          }
-          if (pVisLevelIds2[6] == nCurLevelId) {
-            dwNeighborFlags |= 0x400;
-          }
-          if (pVisLevelIds2[7] == nCurLevelId) {
-            dwNeighborFlags |= 0x800;
-          }
+      }
 
-          do {
-            if (dwNeighborFlags & pRoomEx->eRoomExFlags && (pRoomEx->fRoomStatus <= 3 || pRoomEx->eRoomExFlags & 0x100000U)) {
-              return 0;
-            }
+      D2RoomExStrc* pRoomEx = pVisLevel->pRoomExFirst;
+      if (!pRoomEx) {
+        continue;
+      }
 
-            pRoomEx = pRoomEx->pRoomExNext;
-          } while (pRoomEx);
-
-          for (pRoomEx = pVisLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
-            if (pRoomEx->eRoomExFlags & dwNeighborFlags) {
-              DrlgRoom::DRLGROOMEX_FreeDrlgRoomTile(pMemory, pRoomEx);
-              if (pRoomEx->ppDrlgRoomsExNear) {
-                D2_FREE_POOL_AT(pMemory, pRoomEx->ppDrlgRoomsExNear, ".\\DRLG\\Drlg.cpp", 0x16f);
-                pRoomEx->ppDrlgRoomsExNear = 0;
-                pRoomEx->nDrlgRoomsExNearCount = 0;
-              }
-            }
-          }
+      eD2LevelId* pVisLevelIds2 = (eD2LevelId*)DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pVisLevel->pDrlg, pVisLevel->eD2LevelId);
+      uint32_t dwNeighborFlags = 0;
+      for (int j = 0; j < 8; j++) {
+        if (pVisLevelIds2[j] == pLevel->eD2LevelId) {
+          dwNeighborFlags |= 0x10 << j;
         }
       }
 
-      i++;
-      if (i >= 8) {
-        return 1;
+      for (; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
+        if (dwNeighborFlags & pRoomEx->eRoomExFlags && (pRoomEx->fRoomStatus <= 3 || pRoomEx->eRoomExFlags & 0x100000U)) {
+          return 0;
+        }
       }
-    } while (true);
+
+      for (pRoomEx = pVisLevel->pRoomExFirst; pRoomEx; pRoomEx = pRoomEx->pRoomExNext) {
+        if (pRoomEx->eRoomExFlags & dwNeighborFlags) {
+          DrlgRoom::DRLGROOMEX_FreeDrlgRoomTile(pMemory, pRoomEx);
+          if (pRoomEx->ppDrlgRoomsExNear) {
+            D2_FREE_POOL_AT(pMemory, pRoomEx->ppDrlgRoomsExNear, ".\\DRLG\\Drlg.cpp", 0x16f);
+            pRoomEx->ppDrlgRoomsExNear = 0;
+            pRoomEx->nDrlgRoomsExNearCount = 0;
+          }
+        }
+      }
+    }
+
+    return 1;
 }
 
 // 1.14d mac: 0014cbc6
