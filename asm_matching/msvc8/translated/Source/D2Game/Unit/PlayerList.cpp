@@ -35,6 +35,7 @@ typedef void (__fastcall *fpSUnitIterateCallback)(::SGAMEDATA * pGame, D2UnitStr
 
 namespace D2Game { namespace UNIT { namespace PlayerList {
 
+// 1.14d mac: 00277500
 static DWORD * PLAYERLIST_FindEntry(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitPlayerListStrc* pDVar1;
     int nTargetGUID;
@@ -61,6 +62,7 @@ static DWORD * PLAYERLIST_FindEntry(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 // @evidence Allocates a 0x14-byte D2UnitPlayerListStrc (PlayerList.cpp:0x6d),
 // guards with PLAYERLIST_FindEntry and links it into pPlayerData->pPlayerList. 004dc270 allocates the
 // 4-byte list head (line 0x25). Two different allocations, one name.
+// 1.14d mac: 00277419
 void __fastcall PLAYERLIST_AddPlayerEntry(::SGAMEDATA * pGame, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
     int32_t nTargetGUID;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit1);
@@ -100,6 +102,7 @@ void __fastcall PLAYERLIST_AddPlayerEntry(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // @sourcefile .\UNIT\PlayerList.cpp
+// 1.14d mac: 00277541
 void __fastcall PLAYERLIST_RemoveFromList(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherPlayer) {
     int nOtherGUID;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
@@ -140,6 +143,7 @@ void __fastcall PLAYERLIST_RemoveFromList(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Updates the relationship flags between pUnit and pTargetUnit in pUnit's player list, then sends packet 0x8C (RelationshipUpdate) to pTargetUnit's client. dwFlagMask selects which relationship bits to modify; nParam=0 clears them, non-zero sets them. No-op if the two units are the same or no list entry exists for pTargetUnit.
+// 1.14d mac: 002775cb
 void __fastcall SendRelationshipStatus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit, uint32_t dwFlagMask, int32_t bSet) {
     D2UnitPlayerListStrc* pListEntry;
     uint32_t nOtherUnitGUID;
@@ -176,6 +180,7 @@ void __fastcall SendRelationshipStatus(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     }
 }
 
+// 1.14d mac: 0027763c
 uint32_t __fastcall PLAYERLIST_GetFlagsMasked(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint32_t nMaskFlags) {
     D2UnitPlayerListStrc* pListEntry;
     int nUnit2GUID;
@@ -202,6 +207,7 @@ uint32_t __fastcall PLAYERLIST_GetFlagsMasked(D2UnitStrc * pUnit, D2UnitStrc * p
     return 0;
 }
 
+// 1.14d mac: 00277666
 uint16_t __fastcall PLAYERLIST_GetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitPlayerListStrc* pListEntry;
     int nUnit2GUID;
@@ -231,6 +237,7 @@ uint16_t __fastcall PLAYERLIST_GetFlags(D2UnitStrc * pUnit, D2UnitStrc * pUnit2)
 
 
 
+// 1.14d mac: 0027768f
 void __fastcall SetPlayerRelationship(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nRelationship) {
     D2UnitPlayerListStrc* pListEntry;
     int nUnit2GUID;
@@ -256,6 +263,7 @@ void __fastcall SetPlayerRelationship(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, i
     }
 }
 
+// 1.14d mac: 002776b5
 uint16_t __fastcall PLAYERLIST_IsPartied(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitPlayerListStrc* pListEntry;
     uint16_t wPtrHigh;
@@ -289,6 +297,7 @@ uint16_t __fastcall PLAYERLIST_IsPartied(D2UnitStrc * pUnit, D2UnitStrc * pUnit2
 
 // Sends SCMD 0x8B (PlayerRelationship) packet to pUnit's client reflecting the party/hostility relationship with pUnit2. Walks pUnit's player list to find the entry matching pUnit2's GUID, then—if the units differ and the list entry exists—calls NET_D2GS_SERVER_Send_0x8B_PlayerRelationship with the target GUID and bIsPartied flag.
 // @sourcefile .\UNIT\PlayerList.cpp
+// 1.14d mac: 002776e2
 void __fastcall Send0x8bRelationshipStatus(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     D2UnitPlayerListStrc* pListEntry;
     int nOtherGUID;
@@ -334,6 +343,7 @@ void __fastcall Send0x8bRelationshipStatus(D2UnitStrc * pUnit, D2UnitStrc * pUni
 }
 
 // Looks up the relationship list entry for pOtherUnit in pUnit's player list and sends packet 0x8C (RelationshipUpdate) with the current nRelationshipFlags to pOtherUnit's client. Read-only: does not modify flags. No-op if units are the same or no entry exists.
+// 1.14d mac: 0027776a
 void __fastcall PARTY_SendRelationshipForPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit) {
     uint32_t nOtherUnitGUID;
     int nOtherGUID;
@@ -369,6 +379,7 @@ void __fastcall PARTY_SendRelationshipForPlayer(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Establishes a bidirectional player-list relationship between pUnit and pOtherPlayer: allocates entries for both directions, sends packet 0x8D (AssignPlayerToParty), clears bIsPartied flags, updates party membership based on current party ID, and broadcasts the full relationship table of pUnit to pOtherPlayer via 0x8C packets.
+// 1.14d mac: 00277815
 void __fastcall PLAYERLIST_AddBothWays(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pOtherPlayer) {
     D2UnitPlayerListStrc* pListEntry;
     int nOtherGUID;
@@ -412,6 +423,7 @@ void __fastcall PLAYERLIST_AddBothWays(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     }
 }
 
+// 1.14d mac: 002777bf
 void __fastcall PARTY_BroadcastPlayerToAllUnits(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x14f);
@@ -421,6 +433,7 @@ void __fastcall PARTY_BroadcastPlayerToAllUnits(::SGAMEDATA * pGame, D2UnitStrc 
     SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYERLIST_AddBothWays, pUnit);
 }
 
+// 1.14d mac: 0027790a
 void __fastcall PARTY_RefreshPlayerListRelationships(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int16_t nFoundPartyId;
     D2UnitStrc* pUnit_00;
@@ -438,6 +451,7 @@ void __fastcall PARTY_RefreshPlayerListRelationships(::SGAMEDATA * pGame, D2Unit
     }
 }
 
+// 1.14d mac: 00277981
 DWORD __fastcall GetHostileDelay(D2UnitStrc * pUnit, D2UnitStrc * pPlayer) {
     D2UnitDataPlayerStrc* pPlayerData;
     int nPlayerGUID;
@@ -468,6 +482,7 @@ DWORD __fastcall GetHostileDelay(D2UnitStrc * pUnit, D2UnitStrc * pPlayer) {
     return 0;
 }
 
+// 1.14d mac: 002779c2
 void __fastcall PLAYERLIST_SetHostileDelay(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nDelayFrames) {
     int nUnit2GUID;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
@@ -495,11 +510,13 @@ void __fastcall PLAYERLIST_SetHostileDelay(D2UnitStrc * pUnit, D2UnitStrc * pUni
     pPlayerData->dwHostileDelayTick = dwTickCount;
 }
 
+// 1.14d mac: 00277410
 void __fastcall PLAYERLIST_RemoveFromListCallback(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     PLAYERLIST_RemoveFromList(pGame, pUnit, pUnit2);
 }
 
 // @sourcefile .\UNIT\PlayerList.cpp
+// 1.14d mac: 0027738d
 void __fastcall PLAYERDATA_FreePlayerList(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     SUnit::IterateAllUnits(pGame, (fpSUnitIterateCallback)PLAYERLIST_RemoveFromListCallback, pUnit);

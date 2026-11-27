@@ -71,10 +71,12 @@ void __stdcall D2WINPALETTE_LoadPalettes() {
     D2gfx::D2GFX::D2GFX_SetPaletteTable((BYTE**)aPaletteTable);
 }
 
+// 1.14d mac: 0004c266
 uint8_t * __fastcall D2WINPAL_GetActPalettePointer(int32_t nPaletteIndex) {
     return gPaletteAct1Outdoor + nPaletteIndex * 0x100;
 }
 
+// 1.14d mac: 0004c27e
 void __stdcall DRAW_SetOrReloadPalleteMain() {
     if (!gbPaletteGammaShiftEnabled) {
       return;
@@ -100,6 +102,7 @@ void __stdcall DRAW_SetOrReloadPalleteMain() {
     D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
 }
 
+// 1.14d mac: 0004c2f5
 void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t bEnableGammaShift) {
     if (bEnableGammaShift) {
       gbGammaShiftActive = 1;
@@ -114,6 +117,7 @@ void __fastcall D2WINPALETTE_SetPaletteIndex(int32_t bEnableGammaShift) {
     D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
 }
 
+// 1.14d mac: 0004c3f8
 uint8_t __stdcall D2GFX_GetColorFromCurrentPallete(uint8_t nRed, uint8_t nGreen, uint8_t nBlue) {
     uint8_t bVar1 = D2CMP::Draw::D2GFX_FindNearestPaletteIndex(MostLikelyCurrentPalletePtr, 0x100, (uint32_t)nRed, (uint32_t)nGreen, (uint32_t)nBlue);
     return bVar1;
@@ -123,11 +127,13 @@ void __stdcall Unreferenced_004fb1b0() {
     D2gfx::D2GFX::D2GFX_SetPalette(MostLikelyCurrentPalletePtr);
 }
 
+// 1.14d mac: 0004c43a
 void __fastcall D2WINPAL_CopyPalette(void * pDest) {
     memcpy(pDest, gPaletteDataBase, 0x3100);
 }
 
 // @sourcefile .\Src\D2WinPalette.cpp
+// 1.14d mac: 0004be0d
 BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
     uint32_t uAlphaR;
     int nCount;
@@ -241,6 +247,7 @@ BOOL __stdcall D2WINPAL_LoadPaletteFiles(char * szText1, char * szText2) {
     return 1;
 }
 
+// 1.14d mac: 0004bd41
 BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct) {
     char szDatPath[260];
     char szPl2Path[260];
@@ -256,6 +263,7 @@ BOOL __fastcall D2WINPAL_LoadActPalette(uint8_t nAct) {
     return nResult;
 }
 
+// 1.14d mac: 0004c349
 int __stdcall LoadPalette(char * szDatFile, char * szPl2File) {
     char szDatFullPath[260];
     if (!szDatFile) {
@@ -271,6 +279,7 @@ int __stdcall LoadPalette(char * szDatFile, char * szPl2File) {
     return 1;
 }
 
+// 1.14d mac: 0004d28c
 void __fastcall D2WINTEXTBOX_SetCompactLineSpacing(BOOL bCompactLineSpacingMode) {
     D2WinTextBox::gbCompactLineSpacingMode = bCompactLineSpacingMode;
 }

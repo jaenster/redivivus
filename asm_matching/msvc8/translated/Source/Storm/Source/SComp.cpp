@@ -815,6 +815,7 @@ void __fastcall SCOMP_AdpcmStereoDecompress(short * pDst, uint32_t * pnDstLen, u
 // @sourcefile .\SOURCE\SCOMP.CPP
 // Returns a scratch buffer for SCompCompress/SCompDecompress, the shared one when it is free.
 // Name from the PowerPC 1.13c Storm traceback table (static s_AllocDecompressBuffer @10049fa0).
+// 1.14d mac: 0000f191
 static uint32_t * SCOMP_s_AllocDecompressBuffer(uint32_t nSize, int32_t * pbShared) {
     // Static local variables (originally global data)
     static uint32_t gnScompTempBufferCapacity; D2_STATIC_GUARD_BSS(gnScompTempBufferCapacity, "Storm::Source::SComp::SCOMP_s_AllocDecompressBuffer::gnScompTempBufferCapacity");
@@ -846,6 +847,7 @@ static uint32_t * SCOMP_s_AllocDecompressBuffer(uint32_t nSize, int32_t * pbShar
 }
 
 // @sourcefile .\SOURCE\SCOMP.CPP
+// 1.14d mac: 0000f2c1
 static void __stdcall SCOMP_ReleaseTempBuffer(int32_t bShared, void * pBuf) {
     if (!pBuf) {
       return;
@@ -998,6 +1000,7 @@ BOOL __stdcall SCompCompress(uint8_t * pDst, uint32_t * pnDstLen, uint32_t * pSr
 // @wasnamed SCOMP_Decompress
 // @basis behaviour-confirmed and the exact inverse of SCompCompress. (dst, pdstsize, src, srcsize, flags). Reads the leading method byte that SCompCompress wrote, rejects unsupported bits (byte & 0x34), then walks the same codec dispatch table BACKWARDS - opposite direction to the compressor - ping-ponging between the destination and a scratch buffer. srcsize == dstsize short-circuits to a plain memcpy, which is the uncompressed-sector case.
 // @seealso SCompCompress 0041e570
+// 1.14d mac: 0000f32f
 BOOL __stdcall SCompDecompress(uint32_t * pDst, uint32_t * pnDstSize, uint32_t * pSrc, uint32_t nSrcSizeIn, void * pvUserData) {
     // Frame slots -12..-4 are ONE object: &nSavedSize is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.

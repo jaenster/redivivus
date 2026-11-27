@@ -168,6 +168,7 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::Nex
     return (::MappingEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
 }
 
+// 1.14d mac: 001995f6 TSExplicitList<MappingEntryNode, -572662307>::UnlinkAll
 template<> void TSExplicitList<MappingEntryNode, -572662307>::UnlinkAll() {
     while (true) {
       intptr_t nNode = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;

@@ -41,6 +41,7 @@ int __fastcall FINDTILE_ComputeHash(int cSubIndex, int cIndex, int cTileSubType)
     return uVar1;
 }
 
+// 1.14d mac: 001311d2
 D2TileLibraryHashStrc * __stdcall FINDTILE_AllocHashTable() {
     D2TileLibraryHashStrc* pHashTable = D2_NEW_AT(D2TileLibraryHashStrc, ".\\SRC\\FindTiles.cpp", 0x2a);
     if (!pHashTable) {
@@ -52,6 +53,7 @@ D2TileLibraryHashStrc * __stdcall FINDTILE_AllocHashTable() {
     return pHashTable;
 }
 
+// 1.14d mac: 00131244
 void __fastcall FINDTILE_FreeHashTable(D2TileLibraryHashStrc * pHashTable) {
     D2TileLibraryHashRefStrc* pMemoryToFree_00;
     D2TileLibraryHashRefStrc* pNextChainNode;
@@ -136,6 +138,7 @@ static void FINDTILE_AllocHashEntry(D2TileLibraryEntryStrc * pTileData, D2TileLi
     }
 }
 
+// 1.14d mac: 00131308
 void __fastcall FINDTILE_Register(D2TileLibraryHashStrc * pHashTable, D2TileLibraryEntryStrc * pTileData) {
     D2TileLibraryHashNodeStrc* pHashEntry;
     D2TileLibraryHashNodeStrc** pHashSlot;

@@ -34,6 +34,7 @@ static uint32_t gnLoadingProgressRatio = 0; D2_STATIC_GUARD(gnLoadingProgressRat
 
 namespace D2Client { namespace GAME { namespace Msg {
 
+// 1.14d mac: 000a0b8b
 void __stdcall NET_SendPacket0x3f_0x1a() {
     NET_D2GS_CLIENT_Send_SHORT('?', 0x1a);
 }
@@ -46,6 +47,7 @@ int __stdcall RENDERING_GetEngineMode() {
 }
 
 // Client-side sender for opcode 0x67 (game join/create handshake). Fills D2GSPacketClt0x67 with game name, game type (SP/open-bnet/LAN/open), char class (or arena default), language code, arena flags (initialising to ClientUpdate|Expansion if zero), difficulty, and saved character name, then dispatches via NET_D2GS_CLIENT_SendPacketAfterChecks.
+// 1.14d mac: 00072e2f
 void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName, uint32_t nArenaFlags) {
     D2GSPacketClt0x67 packet;
     packet.nId = 0x67;
@@ -100,6 +102,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x67(char * szGameName, uint32_t nArenaFlag
     gnD2GSPacketsSentTotal++;
 }
 
+// 1.14d mac: 00072f67
 void __stdcall NET_D2GS_CLIENT_Send_0x6B() {
     char nOpcode = 0x6b;
     D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(sizeof(nOpcode), 0, &nOpcode);
@@ -108,6 +111,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6B() {
 }
 
 // Client-side keep-alive ping sender. Throttled to once per 5 seconds (gdwLastPingSentTick). Computes an anti-cheat/Warden checksum by reading 2 bytes each from two offsets in a named module via ReadProcessMemory; sends packet 0x6D containing the current tick, the computed checksum (obfuscated), and half the game data delay. Updates gnPacketSendCount_0x69 and _gbNetworkPacketSyncFlag after send.
+// 1.14d mac: 00072fa9
 void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     // Static local variables (originally global data)
     static unsigned int gdwLastPingSentTick; D2_STATIC_GUARD_BSS(gdwLastPingSentTick, "D2Client::GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING::gdwLastPingSentTick");
@@ -129,6 +133,10 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     *(uint32_t*)&szModuleName[4] = Game::gClientGameData.gnWardenChecksumAddr2 * 0x470e31c1;
     int nModuleOffset = Game::gClientGameData.gnWardenChecksumModuleOffset * 0x470e31c1;
     szModuleName[8] = '\0';
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac build reads no module image: a named module only selects the constant (00072fa9).
+    nWardenChecksum = (char)*(uint32_t*)(char*)&szModuleName != '\0';
+#else
     if ((char)*(uint32_t*)(char*)&szModuleName != '\0') {
       HMODULE hModule;
       /* LPCSTR lpModuleName for GetModuleHandleA */ nWardenChecksum = 0xcccccccc;
@@ -156,6 +164,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     } else {
       nWardenChecksum = 0;
     }
+#endif
 
     DWORD dwTick = GetTickCount();
     if (!(dwTick - gdwLastPingSentTick >= 5000)) {
@@ -167,7 +176,11 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
     packet.nTickCount = GetTickCount();
     uint32_t nGameDataDelay = Game::GAME_GetAveragePing() >> 1;
     packet.nDelay = nGameDataDelay;
+#if !defined(_WIN32) && D2_OS_MAC
+    packet.nWardenOrZero = nWardenChecksum ? 0xd498e7cc : 0;
+#else
     packet.nWardenOrZero = nWardenChecksum * -0x49bf21bf;
+#endif
     D2Net::SRC::Client::NET_D2GS_CLIENT_SendPacketAfterChecks(0xd, 0, (char*)&packet);
     gnD2GSBytesSentTotal += 0xd;
     gnD2GSPacketsSentTotal++;
@@ -175,6 +188,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x6D_PING() {
 
 // Takes no parameter. Sends one byte, the constant 0x69 (00477eec MOV byte ptr [EBP-1],0x69).
 // The prologue's PUSH ECX only reserves the 4-byte frame slot; ECX is not an argument.
+// 1.14d mac: 00073037
 void __stdcall NET_D2GS_CLIENT_Send_0x69() {
     D2BNetClientCallbacksStrc* pCallbacks;
     char nOpcode = 0x69;
@@ -204,6 +218,7 @@ void __stdcall NET_D2GS_CLIENT_Send_0x69() {
     pCallbacks->pfnSendKeepAlive();
 }
 
+// 1.14d mac: 000730cb
 void __fastcall NET_D2GS_CLIENT_Send_0x68(int16_t nGameToken, int32_t nGameHash) {
     D2GSPacketClt0x68 packet;
     packet.nId = 0x68;
@@ -272,6 +287,7 @@ static uint8_t * MSG_ReadSaveFileToBuffer(uint32_t * pnFileSize) {
     return pBuffer;
 }
 
+// 1.14d mac: 000731a1
 void __fastcall LOADING_SetProgressRatio(int32_t nProgress, int32_t nTotal) {
     if (!nTotal) {
       gnLoadingProgressRatio = nTotal;
@@ -281,6 +297,7 @@ void __fastcall LOADING_SetProgressRatio(int32_t nProgress, int32_t nTotal) {
     gnLoadingProgressRatio = (nProgress << 8) / nTotal;
 }
 
+// 1.14d mac: 000731c8
 int __stdcall LOADING_GetProgressRatio() {
     return gnLoadingProgressRatio;
 }
@@ -303,6 +320,7 @@ void __fastcall LOADING_AnimateProgressBar(int32_t nCurrentChunk, int32_t nTotal
 
 // Sends the player's save file to the game server as a stream of 0x6C (ASCII 'l') packets. Reads the entire save buffer via MSG_ReadSaveFileToBuffer, then sends it in 255-byte chunks followed by a final tail packet. Optionally animates a loading progress bar (bAnimate != 0). Updates gnPacketSendCount_0x69 and the network sync flag after each chunk.
 // @sourcefile .\GAME\Msg.cpp
+// 1.14d mac: 0007323f
 void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
     int nBytesCopied;
     D2GSPacketClt0x6C sPacket;
@@ -370,6 +388,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x6C(int32_t bAnimate) {
 }
 
 // Client-side outbound D2GS packet sender. Asserts size < 0x200, copies up to 512 bytes to a stack buffer and forwards via NET_D2GS_CLIENT_SendPacketAfterChecks. Performs a duplicate-suppression throttle keyed on the packet opcode (*pBytes): movement-ish opcodes 5-0x11 are dropped if identical to the last sent packet within 0x32ms; other opcodes within 0xC8ms; opcode 0x3a always sends. On send, caches the packet in gpLastSentPacketBuffer + gdwLastPacketSendTick and bumps gnPacketSendCount_0x69 / network sync flag. Inputs: pBytes (raw packet), nSize (length).
+// 1.14d mac: 000735bc
 static void __stdcall NET_D2GS_CLIENT_Send(uint8_t * pBytes, int32_t nSize) {
     // Static local variables (originally global data)
     static char gaLastSentPacketBuffer[512] = {0}; D2_STATIC_GUARD(gaLastSentPacketBuffer, "D2Client::GAME::Msg::NET_D2GS_CLIENT_Send::gaLastSentPacketBuffer");
@@ -456,11 +475,13 @@ void __stdcall NET_D2GS_CLIENT_Send_Extern(uint8_t * pBytes, int32_t nSize) {
     ::D2Client::GAME::Msg::NET_D2GS_CLIENT_Send(pBytes, nSize);
 }
 
+// 1.14d mac: 0007359e
 void __fastcall NET_D2GS_CLIENT_Send_CMD(uint8_t nOpcode) {
     uint8_t nPacketId = nOpcode;
     NET_D2GS_CLIENT_Send(&nPacketId, 1);
 }
 
+// 1.14d mac: 000736ea
 void __fastcall NET_D2GS_CLIENT_Send_SHORT(uint8_t nPacketId, uint16_t nArg1) {
     D2GSPacketClt_CMD_SHORT packet;
     packet.nId = nPacketId;
@@ -468,6 +489,7 @@ void __fastcall NET_D2GS_CLIENT_Send_SHORT(uint8_t nPacketId, uint16_t nArg1) {
     NET_D2GS_CLIENT_Send(&packet.nId, 3);
 }
 
+// 1.14d mac: 00073710
 void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT(uint8_t nPacketId, int16_t nTargetX, int16_t nTargetY) {
     D2GSPacketClt_CMD_SHORT_SHORT packet;
     packet.nId = nPacketId;
@@ -476,6 +498,7 @@ void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT(uint8_t nPacketId, int16_t nTar
     NET_D2GS_CLIENT_Send(&packet.nId, 5);
 }
 
+// 1.14d mac: 0007373e
 void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(uint8_t nPacketId, int16_t nButtonId, int16_t nGoldHi, int16_t nGoldLow) {
     D2GSPacketClt_CMD_SHORT_SHORT_SHORT packet;
     packet.nArg1 = nButtonId;
@@ -495,6 +518,7 @@ void __fastcall NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT_SHORT(uint8_t nPacketId, 
     NET_D2GS_CLIENT_Send(&packet.nId, 9);
 }
 
+// 1.14d mac: 00073774
 void __fastcall NET_D2GS_CLIENT_Send_INT(uint8_t nId, int32_t nArg1) {
     D2GSPacketClt_CMD_INT sPacket;
     sPacket.nId = nId;
@@ -502,6 +526,7 @@ void __fastcall NET_D2GS_CLIENT_Send_INT(uint8_t nId, int32_t nArg1) {
     NET_D2GS_CLIENT_Send(&sPacket.nId, 5);
 }
 
+// 1.14d mac: 00073798
 void __fastcall NET_D2GS_CLIENT_Send_INT_INT(uint8_t nPacketId, int32_t nArg1, int32_t nArg2) {
     D2GSPacketClt_CMD_INT_INT sPacket;
     sPacket.nId = nPacketId;
@@ -510,6 +535,7 @@ void __fastcall NET_D2GS_CLIENT_Send_INT_INT(uint8_t nPacketId, int32_t nArg1, i
     NET_D2GS_CLIENT_Send(&sPacket.nId, 9);
 }
 
+// 1.14d mac: 000737c2
 void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT(uint8_t nPacketId, int32_t nArg1, int32_t nArg2, int32_t nArg3) {
     D2GSPacketClt_CMD_INT_INT_INT sPacket;
     sPacket.nArg1 = nArg1;
@@ -519,6 +545,7 @@ void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT(uint8_t nPacketId, int32_t nArg
     NET_D2GS_CLIENT_Send(&sPacket.nId, 0xd);
 }
 
+// 1.14d mac: 000737f2
 void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT_INT(uint8_t nPacketId, int32_t nUnitType, int32_t nUnitGUID, int32_t nTargetX, int32_t nTargetY) {
     D2GSPacketClt_CMD_INT_INT_INT_INT packet;
     packet.nArg2 = nUnitGUID;
@@ -529,6 +556,7 @@ void __fastcall NET_D2GS_CLIENT_Send_INT_INT_INT_INT(uint8_t nPacketId, int32_t 
     NET_D2GS_CLIENT_Send(&packet.nId, 0x11);
 }
 
+// 1.14d mac: 00073828
 void __fastcall NET_D2GS_CLIENT_Send_0x5D(int nActionType, uint32_t nPlayerGUID, int32_t bToggle) {
     D2GSPacketClt0x5D sPacket;
     memset(&sPacket, 0, sizeof(sPacket));
@@ -541,6 +569,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x5D(int nActionType, uint32_t nPlayerGUID,
     NET_D2GS_CLIENT_Send(&sPacket.nId, 7);
 }
 
+// 1.14d mac: 0007386d
 void __fastcall NET_D2GS_CLIENT_Send_0x5E(int nActionType, int32_t nPlayerGUID) {
     D2GSPacketClt0x5E sPacket;
     memset(&sPacket, 0, sizeof(sPacket));
@@ -550,6 +579,7 @@ void __fastcall NET_D2GS_CLIENT_Send_0x5E(int nActionType, int32_t nPlayerGUID) 
     NET_D2GS_CLIENT_Send(&sPacket.nId, 6);
 }
 
+// 1.14d mac: 000738a9
 void __fastcall NET_D2GS_CLIENT_Send_Chat(D2ChatPacketBuildStrc * pChatPacket) {
     D2ChatPacketSendStrc sPacket;
     sPacket.nCmd = pChatPacket->nCmd;

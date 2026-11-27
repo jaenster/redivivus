@@ -122,6 +122,7 @@ static uint8_t gnSpellSelTabHighlightColor = 0; D2_STATIC_GUARD(gnSpellSelTabHig
 
 namespace D2Client { namespace UI { namespace SpellSel {
 
+// 1.14d mac: 000ec03e
 void __stdcall SPELLSEL_Initialize() {
     // Static local variables (originally global data)
     static int gSpellSelKeyBindText1; D2_STATIC_GUARD_BSS(gSpellSelKeyBindText1, "D2Client::UI::SpellSel::SPELLSEL_Initialize::gSpellSelKeyBindText1");
@@ -251,6 +252,7 @@ void __stdcall SPELLSEL_Cleanup() {
     } while ((intptr_t)pClassIconEntry < (intptr_t)((char*)&pSpellsClassSkillicon + sizeof(pSpellsClassSkillicon)));
 }
 
+// 1.14d mac: 000ec331
 DC6 * __fastcall ARCHIVE_LoadSpellsClassSkillicon(short * pSkillId) {
     if (!pSkillId) {
       return pSpellsClassSkillicon[nD2PlayerClassID].pD2Archive;
@@ -271,6 +273,7 @@ DC6 * __fastcall ARCHIVE_LoadSpellsClassSkillicon(short * pSkillId) {
     return gpSpellSelSkillIconDC6;
 }
 
+// 1.14d mac: 000ec3a4
 void __fastcall SPELLSEL_SetMouseHandFlag(BOOL bLeftHand) {
     gbSpellSelMouseHandFlag = bLeftHand;
 }
@@ -285,6 +288,7 @@ static uint32_t __stdcall SPELLSEL_IsMouseInRect(int32_t nRectX, int32_t nRectY,
     return 0;
 }
 
+// 1.14d mac: 000ec3b8
 int32_t __fastcall SPELLSEL_GetSkillPalette(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     int32_t nCanUseResult = UNIT::PlrSkills::PLRSKILLS_CanUseSkillCheck(pUnit, pSkill);
     if (nCanUseResult) {
@@ -294,6 +298,7 @@ int32_t __fastcall SPELLSEL_GetSkillPalette(D2UnitStrc * pUnit, D2SkillStrc * pS
     return 0;
 }
 
+// 1.14d mac: 000ec610
 void __fastcall SPELLSEL_DrawSkillTooltip(short * pSkillId, int32_t bShowExpanded, int32_t nSkillDescId, int32_t nStatId, int32_t nIconX, int32_t nIconY) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -312,6 +317,7 @@ void __fastcall SPELLSEL_DrawSkillTooltip(short * pSkillId, int32_t bShowExpande
     SkillDesc::SKILLDESC_BuildSkillShortTooltip(UNIT::Player::GetPlayerUnit_UI(), *pSkillId, nSkillDescId, nStatId, bShowExpanded, nIconX, nIconY);
 }
 
+// 1.14d mac: 000ec683
 void __fastcall SPELLSEL_DrawKeyBindingText(int32_t nCmdIndex, int32_t nX, int32_t nY, int32_t dwColor) {
     // Static local variables (originally global data)
     static uint16_t gSpellSelKeyNameBuffer[16] = {0}; D2_STATIC_GUARD(gSpellSelKeyNameBuffer, "D2Client::UI::SpellSel::SPELLSEL_DrawKeyBindingText::gSpellSelKeyNameBuffer");
@@ -348,6 +354,7 @@ void __fastcall SPELLSEL_DrawKeyBindingText(int32_t nCmdIndex, int32_t nX, int32
     D2Win::Src::D2WinFont::DRAW_text(pWszKeyName, nX, nY, dwColor, 0);
 }
 
+// 1.14d mac: 000ec9bf
 static void __stdcall SPELLSEL_DrawKeyBindingsForLeftHand(int32_t nSlotIndex, short * pSkillId, int32_t nIconX, int32_t nIconY) {
     if (gSpellSelectionSkillIDs[0] == *pSkillId && gSpellSelLeftSkillBindings[0] == nSlotIndex && gSpellSelectionSkillIDs[0] != -1 && gSpellSelRightSkillBindings[0] == 1) {
       SPELLSEL_DrawKeyBindingText(0xe, nIconX + 0x22, nIconY - 0x23, 4);
@@ -401,6 +408,7 @@ static void __stdcall SPELLSEL_DrawKeyBindingsForLeftHand(int32_t nSlotIndex, sh
     SPELLSEL_DrawKeyBindingText(0x35, nIconX + 0x22, nIconY - 0x23, 4);
 }
 
+// 1.14d mac: 000ed411
 void __fastcall SPELLSEL_DrawSkillLevel(int32_t pThis, int, int32_t nScreenX, int32_t nIconY) {
     uint16_t wszLevelBuf[16];
     char szLevelBuf[16];
@@ -427,6 +435,7 @@ void __fastcall SPELLSEL_DrawSkillLevel(int32_t pThis, int, int32_t nScreenX, in
     D2Win::Src::D2WinFont::DRAW_text(wszLevelBuf, nScreenX + 4, nIconY - 1, 3, 0);
 }
 
+// 1.14d mac: 000ecef8
 static void __stdcall SPELLSEL_DrawKeyBindingsForRightHand(int32_t nSlotIndex, short * pSkillId, int32_t nIconX, int32_t nIconY) {
     if (gSpellSelectionSkillIDs[0] == *pSkillId && gSpellSelLeftSkillBindings[0] == nSlotIndex && gSpellSelectionSkillIDs[0] != -1 && !gSpellSelRightSkillBindings[0]) {
       SPELLSEL_DrawKeyBindingText(0xe, nIconX + 0x22, nIconY - 0x23, 4);
@@ -480,6 +489,7 @@ static void __stdcall SPELLSEL_DrawKeyBindingsForRightHand(int32_t nSlotIndex, s
     SPELLSEL_DrawKeyBindingText(0x35, nIconX + 0x22, nIconY - 0x23, 4);
 }
 
+// 1.14d mac: 000ec7b7
 void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId, int32_t nSkillId, int32_t nQuantity, GLOBALPALLETE nGlobalPaletteShift, int32_t nSkillIdSlot, int32_t nIconX, int32_t bIsLeftHand) {
     D2UnitStrc* pAltWeapon;
     uint32_t bIsWeaponType;
@@ -575,6 +585,7 @@ void __fastcall SPELLSEL_DrawSkillIconWithQuantity(DC6 * pDC6, short * pSkillId,
     vc8_thiscall(SPELLSEL_DrawSkillLevel)(nQuantity, nSkillIdSlot, nIconX);
 }
 
+// 1.14d mac: 000ed4e7
 void __fastcall SPELLSEL_DrawSkillIcon(short * pSkillId, int32_t nSlotIndex, int32_t nSkillId, GLOBALPALLETE nGlobalPaletteShift, int32_t nIconX, int32_t nIconY, int32_t bIsLeftHand) {
     D2GfxDataStrc sGfxData;
     DC6* pSkillArchive;
@@ -644,6 +655,7 @@ static int32_t __stdcall SPELLSEL_RegisterSkillSlot(int32_t nSlotIndex, int32_t 
     return nSlotX;
 }
 
+// 1.14d mac: 000edca2
 int __fastcall SPELLSEL_FindChargedSkill1(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
@@ -659,6 +671,7 @@ int __fastcall SPELLSEL_FindChargedSkill1(D2UnitStrc * pUnit, int32_t nTargetSki
     return 0;
 }
 
+// 1.14d mac: 000edcfc
 int __fastcall SPELLSEL_FindChargedSkill2(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
@@ -674,6 +687,7 @@ int __fastcall SPELLSEL_FindChargedSkill2(D2UnitStrc * pUnit, int32_t nTargetSki
     return 0;
 }
 
+// 1.14d mac: 000edd56
 int __fastcall SPELLSEL_FindChargedSkill3(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
@@ -689,6 +703,7 @@ int __fastcall SPELLSEL_FindChargedSkill3(D2UnitStrc * pUnit, int32_t nTargetSki
     return 0;
 }
 
+// 1.14d mac: 000eddb0
 int __fastcall SPELLSEL_FindChargedSkill4(D2UnitStrc * pUnit, int32_t nTargetSkillId) {
     D2SkillsTxt* pSkillsTxt;
     int32_t nQuantity;
@@ -704,6 +719,7 @@ int __fastcall SPELLSEL_FindChargedSkill4(D2UnitStrc * pUnit, int32_t nTargetSki
     return 0;
 }
 
+// 1.14d mac: 000ede0a
 void __stdcall INPUT_SpellSelectClick(D2UIMouseMsgStrc * pMsg) {
     if (!UNIT::Player::GetPlayerUnit_UI()) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ba);
@@ -775,6 +791,7 @@ static void __stdcall SPELLSEL_ClearSkillBinding(short * pSkillId, int32_t nChar
     } while ((intptr_t)pSlotSkillId < (intptr_t)((char*)&gSpellSelGridRegion + 720));
 }
 
+// 1.14d mac: 000ee1d3
 void __stdcall SPELLSEL_ClearChargedSkillBindings() {
     D2SkillsTxt* pSkillsTxt;
     int32_t nLine;
@@ -840,6 +857,7 @@ void __fastcall SPELLSEL_HandleSkillSelection(int32_t nSlotIndex) {
     }
 }
 
+// 1.14d mac: 000ee07c
 static int SPELLSEL_IsSkillSlotValid(int32_t nSlot) {
     int nChargesLeft;
     if (gSpellSelectionSkillIDs[nSlot] == -1) {
@@ -869,6 +887,7 @@ static int SPELLSEL_IsSkillSlotValid(int32_t nSlot) {
     return 0;
 }
 
+// 1.14d mac: 000ee117
 void __fastcall SPELLSEL_ActivateSkillSlot(int32_t nSlot) {
     if (gSpellSelectionSkillIDs[nSlot] == -1) {
       return;
@@ -890,6 +909,7 @@ void __fastcall SPELLSEL_ActivateSkillSlot(int32_t nSlot) {
     D2Common::Skills::SelectSkillRight(pUnit, gSpellSelectionSkillIDs[nSlot], gSpellSelLeftSkillBindings[nSlot]);
 }
 
+// 1.14d mac: 000ee4a9
 void __fastcall SPELLSEL_SetSkillSlot(int32_t nSlotIndex, int32_t nSkillId, int32_t nRightHandBinding, int32_t nOwnerGUID) {
     gSpellSelectionSkillIDs[nSlotIndex] = nSkillId;
     gSpellSelRightSkillBindings[nSlotIndex] = nRightHandBinding;
@@ -941,6 +961,7 @@ void __stdcall SPELLSEL_AutoBindNonChargedSkills() {
     } while (nGridIdx < 0x3c);
 }
 
+// 1.14d mac: 000ec3ee
 void __fastcall SPELLSEL_DrawSkillRequirementTooltip(short * pwSkillId, int32_t bMouseOverIn, uint32_t nChargeCount, int32_t nScreenX, int32_t nBoxBottomY) {
     uint16_t wszTooltip[256];
     char szNumBuf[12];
@@ -993,6 +1014,7 @@ void __fastcall SPELLSEL_DrawSkillRequirementTooltip(short * pwSkillId, int32_t 
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, nScreenX, nBoxBottomY - 0x32, bMouseOverIn, 1);
 }
 
+// 1.14d mac: 000ed810
 void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, BOOL bWeaponSwap, BOOL bShowTooltips, BOOL bChargedOnly) {
     // Static local variables (originally global data)
     static int gnSpellSelGridDrawX1; D2_STATIC_GUARD_BSS(gnSpellSelGridDrawX1, "D2Client::UI::SpellSel::SPELLSEL_DrawSkillGrid::gnSpellSelGridDrawX1");
@@ -1137,6 +1159,7 @@ void __fastcall SPELLSEL_DrawSkillGrid(D2UnitStrc * pUnit, int32_t nGridStartX, 
     } while (true);
 }
 
+// 1.14d mac: 000ed6c7
 void Unreferenced_004aa680() {
     if (!gbSpellSelMouseHandFlag) {
       return;
@@ -1149,6 +1172,7 @@ void Unreferenced_004aa680() {
     SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), 0x50, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
+// 1.14d mac: 000ed718
 void __fastcall Unreferenced_004aa6b0(BOOL bChargedOnly) {
     if (gbSpellSelMouseHandFlag) {
       return;
@@ -1160,6 +1184,7 @@ void __fastcall Unreferenced_004aa6b0(BOOL bChargedOnly) {
     SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ui::ScreenSizeX - 0x80, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
+// 1.14d mac: 000ed773
 void __stdcall Unreferenced_004aa6e0() {
     if (!gbSpellSelMouseHandFlag) {
       return;
@@ -1168,6 +1193,7 @@ void __stdcall Unreferenced_004aa6e0() {
     SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), 0x50, 1, 1, 0);
 }
 
+// 1.14d mac: 000ed7bd
 void __stdcall Unreferenced_004aa710() {
     if (gbSpellSelMouseHandFlag) {
       return;
@@ -1179,6 +1205,7 @@ void __stdcall Unreferenced_004aa710() {
     SPELLSEL_DrawSkillGrid(UNIT::Player::GetPlayerUnit_UI(), ui::ScreenSizeX - 0x80, bWeaponSwap, bShowTooltips, bChargedOnly);
 }
 
+// 1.14d mac: 000edfbe
 void __fastcall SPELLSEL_CycleRightHandSkills(int32_t nSteps) {
     uint32_t bPlayerDead = UNIT::Player::IsPlayerDead();
     if (bPlayerDead) {
@@ -1273,10 +1300,12 @@ void __stdcall SPELLSEL_ClearWaitingForSkillFlag_Unref_004aa8e0() {
     BooleanWaitingForSkillingMaybe = 0;
 }
 
+// 1.14d mac: 000e9461
 void __stdcall SPELLSEL_ClearWaitingForSkillFlag() {
     BooleanWaitingForSkillingMaybe = 0;
 }
 
+// 1.14d mac: 000e9466
 int __stdcall SPELLSEL_IsWaitingForSkill() {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     if (pUnit) {
@@ -1291,6 +1320,7 @@ int __stdcall SPELLSEL_IsWaitingForSkill() {
     }
 }
 
+// 1.14d mac: 000e9497
 void __stdcall ARCHIVE_LoadSpellsClassSkilltree() {
     if (!pSpellsClassSkilltree[nD2PlayerClassID].szSpelliconPath) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x88);
@@ -1301,6 +1331,7 @@ void __stdcall ARCHIVE_LoadSpellsClassSkilltree() {
     pSpellsClassSkilltree[nD2PlayerClassID].pD2Archive = pArchive;
 }
 
+// 1.14d mac: 000e94d4
 void __stdcall SPELLSEL_FreeSkilltreeGraphic() {
     if (!pSpellsClassSkilltree[nD2PlayerClassID].pD2Archive) {
       return;
@@ -1310,6 +1341,7 @@ void __stdcall SPELLSEL_FreeSkilltreeGraphic() {
     pSpellsClassSkilltree[nD2PlayerClassID].pD2Archive = 0;
 }
 
+// 1.14d mac: 000ebac6
 static int32_t SPELLSEL_GetSkillTreeRowOffset(char cSkillRow) {
     if (cSkillRow == '\x01') {
       return Inv::gnPanelOffsetY - 0x1a2 + Inv::ScreenSizeY;
@@ -1333,6 +1365,7 @@ static int32_t SPELLSEL_GetSkillTreeRowOffset(char cSkillRow) {
     return 0;
 }
 
+// 1.14d mac: 000ebb9c
 static int32_t SPELLSEL_GetSkillTreeColumnOffset(char cSkillColumn) {
     if (cSkillColumn == '\x01') {
       return ui::ScreenSizeX - Inv::gnPanelOffsetX - 0x131;
@@ -1463,6 +1496,7 @@ void __stdcall DRAW_UI_SkillsWindow_II() {
     vc8_thiscall(SPELLSEL_DrawTabHeader)(D2Lang::StrTable::strtable::GetLocaleString(0x57ed), 0x172);
 }
 
+// 1.14d mac: 000e9eed
 void __stdcall thunk_D2GFX_GetColorFromPalette_C() {
     gnSpellSelTabHighlightColor = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0, 0);
 }
@@ -1600,6 +1634,7 @@ void __stdcall SKILLTREE_DrawBackground() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTabHighlightX, Inv::gnPanelOffsetY - 0x3f + Inv::ScreenSizeY, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000ebbe7
 static BOOL __stdcall SKILLTREE_IsMouseOnSkillNode(int32_t nNodeScreenX, int32_t nNodeScreenY, int32_t nHitWidth, int32_t nHitHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -1665,6 +1700,7 @@ int Unreferenced_004ab7b0() {
     return 0;
 }
 
+// 1.14d mac: 000eb514
 void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
     int32_t nTmpResult;
     eD2Skills eSkill;
@@ -1825,6 +1861,7 @@ void __stdcall INPUT_SkillTreeLeftClick(D2UIMouseMsgStrc * pMsg) {
     return;
 }
 
+// 1.14d mac: 000ebc27
 void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
     int32_t nNewSkills;
     D2SkillsTxt* pSkillTxt;
@@ -1970,6 +2007,7 @@ void __stdcall ClickOnScreenSkillWindow(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ebff2
 void __stdcall SKILLTREE_FreeResources() {
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
     if (!pUnit) {
@@ -2115,6 +2153,7 @@ void __stdcall SKILLTREE_DrawSkillNode(eD2Skills eSkill, D2SkillsTxt * pSkillTxt
     D2Win::Src::D2WinFont::DRAW_text(wszLevelBuf, nColumnX + 0x30, nRowY + 0xc, nSkillBonus, 0);
 }
 
+// 1.14d mac: 000e9519
 void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
     BOOL eState;
     D2SkillStrc* pSkill;
@@ -2233,6 +2272,7 @@ void __stdcall DRAW_UI_SkillSkillsWithAvailableSkills() {
     } while (nSkillDescIdx < nNewSkills);
 }
 
+// 1.14d mac: 000e9ce0
 void __stdcall SKILLTREE_DrawAllSkillNodes() {
     int nSkillDescIdx;
     D2SkillStrc* pSkill;
@@ -2300,6 +2340,7 @@ void __stdcall SKILLTREE_DrawAllSkillNodes() {
     } while (nSkillIdx < nSkillCount);
 }
 
+// 1.14d mac: 000e9f23
 void __stdcall DRAW_UI_SkillWindow() {
     // Static local variables (originally global data)
     static BOOL gbSpellSelSkillTreeScrolling; D2_STATIC_GUARD_BSS(gbSpellSelSkillTreeScrolling, "D2Client::UI::SpellSel::DRAW_UI_SkillWindow::gbSpellSelSkillTreeScrolling");
@@ -2326,5 +2367,19 @@ void __stdcall DRAW_UI_SkillWindow() {
 }
 
 static void * keep_004a8cf0 = (0 ? (SPELLSEL_IsMouseInRect(*(int32_t *)0, *(int32_t *)0, *(int32_t *)0, *(int32_t *)0), (void *)0) : (void *)0);
+
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 000ed666
+// The same grid reset SPELLSEL_Initialize does, followed by the four grid layouts, each of which
+// the Windows build only has as an unreferenced function (004aa680, 004aa6b0, 004aa6e0, 004aa710).
+void __stdcall SPELLSEL_ResetAndLayoutGrids() {
+    memset(&gSpellSelGridRegion, 0, sizeof(gSpellSelGridRegion));
+    memset(gSpellSelGridRegion.aRightHandSlots, 0xff, sizeof(gSpellSelGridRegion.aRightHandSlots));
+    Unreferenced_004aa680();
+    Unreferenced_004aa6b0(0);
+    Unreferenced_004aa6e0();
+    Unreferenced_004aa710();
+}
+#endif
 
 }}} // namespace D2Client::UI::SpellSel

@@ -29,6 +29,7 @@ namespace D2Client { namespace UNIT { namespace PlayerList {
 
 // Allocates and zero-initialises a D2PlayerListStrc from client memory (PlayerList.cpp heap). Sets pEntry to NULL. Halts with an unrecoverable error if allocation fails. Returns the new list head.
 // @sourcefile .\UNIT\PlayerList.cpp
+// 1.14d mac: 001245ed
 D2PlayerListStrc * __stdcall AllocPlayerList() {
     D2PlayerListStrc* pPlayerList = D2_NEW_AT(D2PlayerListStrc, ".\\UNIT\\PlayerList.cpp", 0x25);
     if (!pPlayerList) {
@@ -41,6 +42,7 @@ D2PlayerListStrc * __stdcall AllocPlayerList() {
 }
 
 // @sourcefile .\UNIT\PlayerList.cpp
+// 1.14d mac: 0012465f
 void __fastcall FreePlayerList(D2PlayerListStrc * pPlayerList) {
     if (!pPlayerList) {
       return;
@@ -58,6 +60,7 @@ void __fastcall FreePlayerList(D2PlayerListStrc * pPlayerList) {
 }
 
 // @sourcefile .\UNIT\PlayerList.cpp
+// 1.14d mac: 001246d3
 void __fastcall AllocPlayerListSub(int32_t nUnitGUID, int32_t nRosterGUID) {
     D2PlayerListSubStrc* pNewEntry;
     D2PlayerListStrc* pPlayerList = GAME::Roster::GetPlayerList(nUnitGUID);
@@ -112,6 +115,7 @@ void __fastcall FreePlayerListSub(int32_t nUnitGUID, int32_t nRosterGUID) {
     D2_FREE_AT(pEntry, ".\\UNIT\\PlayerList.cpp", 0x97);
 }
 
+// 1.14d mac: 0012478c
 void __fastcall SetUnsetFlags(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag, BOOL bSetUnset) {
     D2PlayerListStrc* pPlayerList = GAME::Roster::GetPlayerList(nUnitGUID);
     if (!(pPlayerList && nUnitGUID != nRosterGUID)) {
@@ -138,6 +142,7 @@ void __fastcall SetUnsetFlags(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t n
     pEntry->nFlags &= ~nFlag;
 }
 
+// 1.14d mac: 001247ba
 uint32_t __fastcall GetFlag(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag) {
     D2PlayerListSubStrc* pEntry;
     D2PlayerListStrc* pPlayerList = GAME::Roster::GetPlayerList(nUnitGUID);
@@ -170,6 +175,7 @@ uint16_t __fastcall Unreferenced_004dc480(int nUnitGUID, int nRosterGUID) {
     return 0;
 }
 
+// 1.14d mac: 001247e0
 void __fastcall SetFlag(int32_t nUnitGUID, int32_t nRosterGUID, uint32_t nFlag) {
     D2PlayerListStrc* pPlayerList = GAME::Roster::GetPlayerList(nUnitGUID);
     if (!(pPlayerList && nUnitGUID != nRosterGUID)) {

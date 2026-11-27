@@ -19,31 +19,48 @@ static uint32_t gbHideExtendedFPSStats = 0; D2_STATIC_GUARD(gbHideExtendedFPSSta
 
 namespace D2Client { namespace GAME { namespace Rendering {
 
+// 1.14d mac: 0005e6a3
 void __fastcall SetupGamma(DWORD dwGamma) {
     D2gfx::D2GFX::D2GFX_SetGamma(dwGamma);
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 0005e6ac
+// Takes the renderer id and the engine index; SetCurrentEngineToOne and the RENDERER_Set* stubs
+// fix them to constants.
+void CLIENT_SetRendererMode(int nRenderer, int nEngineIndex) {
+    CurrentRendingEngine = nRenderer;
+    gnCurrentEngineIndex = nEngineIndex;
+}
+
+#endif
+// 1.14d mac: 0005e6c9
 void __stdcall SetCurrentEngineToOne() {
     CurrentRendingEngine = 1;
     gnCurrentEngineIndex = 1;
 }
 
+// 1.14d mac: 0005e6e8
 void __stdcall RENDERER_Set3DFX() {
     CurrentRendingEngine = 4;
 }
 
+// 1.14d mac: 0005e6fd
 void __stdcall RENDERER_SetOpenGL() {
     CurrentRendingEngine = 5;
 }
 
+// 1.14d mac: 0005e712
 void __stdcall RENDERER_SetMode6() {
     CurrentRendingEngine = 6;
 }
 
+// 1.14d mac: 0005e727
 void __stdcall RENDERER_SetMode7() {
     CurrentRendingEngine = 7;
 }
 
+// 1.14d mac: 0005e73c
 int __stdcall GetCurrentEngine() {
     return CurrentRendingEngine;
 }
@@ -52,6 +69,7 @@ int __stdcall RENDERING_GetCurrentEngineIndex() {
     return gnCurrentEngineIndex;
 }
 
+// 1.14d mac: 0005e74e
 uint32_t __stdcall IsWindowMode() {
     return (uint32_t)(CurrentRendingEngine >= 4);
 }
@@ -111,6 +129,7 @@ void __stdcall DrawRenderStats() {
 }
 
 // Renders the in-game FPS and diagnostic stats overlay (toggled by gbFPSStatsEnabled). Maintains a per-second frame counter (fps global) and a cumulative frame accumulator. When enabled, draws: FPS + skip count, ping, physical/page memory usage (via GlobalMemoryStatus), renderer name (Software/DirectDraw/Glide/OpenGL/Direct3D/RAVE), and optionally COF memory, sprite cache, async file count, and CelData cache stats. Called each render frame from the game rendering path.
+// 1.14d mac: 0005e76a
 void __stdcall DRAW_UI_FPSStats() {
     // Static local variables (originally global data)
     static unsigned int gdwFPSLastSecondTick; D2_STATIC_GUARD_BSS(gdwFPSLastSecondTick, "D2Client::GAME::Rendering::DRAW_UI_FPSStats::gdwFPSLastSecondTick");
@@ -151,10 +170,14 @@ void __stdcall DRAW_UI_FPSStats() {
     D2gfx::D2GFX::D2GFX_DrawString(10, 2, "%d FPS  %d Skip", fps, nStat);
     nStatValue = Game::GetPing();
     D2gfx::D2GFX::D2GFX_DrawString(0xa0, 2, "Ping: %d", nStatValue);
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac overlay shows no physical or page memory (0005e76a).
+#else
     /* LPMEMORYSTATUS lpBuffer for GlobalMemoryStatus */ memStatus.dwLength = sizeof(memStatus);
     GlobalMemoryStatus(&memStatus);
     D2gfx::D2GFX::D2GFX_DrawString(10, 0x10, "Phys:%d/%dm", (memStatus.dwTotalPhys - memStatus.dwAvailPhys >> 0x14) + 1, (memStatus.dwTotalPhys >> 0x14) + 1);
     D2gfx::D2GFX::D2GFX_DrawString(0xa0, 0x10, "Page:%d/%dm", (memStatus.dwTotalPageFile - memStatus.dwAvailPageFile >> 0x14) + 1, (memStatus.dwTotalPageFile >> 0x14) + 1);
+#endif
     eRendererMode_lcl = D2gfx::D2GFX::D2GFX_GetRendererMode();
     switch (eRendererMode_lcl) {
       case RENDERER_Windowed:
@@ -203,6 +226,7 @@ void __stdcall DRAW_UI_FPSStats() {
     return;
 }
 
+// 1.14d mac: 0005f3c9
 void __stdcall ResetStats() {
     gbHideExtendedFPSStats = 0;
     gbFPSStatsEnabled = (uint32_t)!gbFPSStatsEnabled;
@@ -224,6 +248,7 @@ void __stdcall ResetStats() {
     D2CMP::SRC::SpriteCache::SPRITECACHE_Lock();
 }
 
+// 1.14d mac: 0005f478
 void __stdcall STATLIST_ResetIfNotUpdating() {
     if (gbHideExtendedFPSStats || !gbFPSStatsEnabled) {
       ResetStats();

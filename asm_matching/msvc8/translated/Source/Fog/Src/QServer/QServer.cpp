@@ -14,7 +14,12 @@
 #include "Source/Fog/Src/QServer/QServer.data.h"
 static_assert(sizeof(void*) != 4 || sizeof(D2QServerModePacketNodeStrc) == 0x5c0, "mode packet nodes are 0x5c0 bytes on 32-bit");
 static_assert(sizeof(void*) != 4 || sizeof(D2QServerWorkerTelemetryStrc) == 0xb0, "worker telemetry records are 0xb0 bytes on 32-bit");
+#if !defined(_WIN32) && D2_OS_MAC
+static_assert(sizeof(void*) != 4 || sizeof(D2QServerClientContainerStrc) == 0x678, "client containers are 0x678 bytes on 32-bit");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(D2QServerClientContainerStrc) == 0x664, "client containers are 0x664 bytes on 32-bit");
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -34,9 +39,20 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QServerIpConnCountEntryStrc) == 0
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2QServerModePacketNodeStrc) == 0x5c0, "D2_NEW_AT(D2QServerModePacketNodeStrc): the 32-bit layout must be the 0x5c0 bytes 1.14d allocates");
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(::D2QServerStrc) == 0xc9c, "D2_NEW_AT(D2QServerStrc): the 32-bit layout must be the 0xc9c bytes 1.14d allocates");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(::D2QServerStrc) == 0xc4c, "D2_NEW_AT(D2QServerStrc): the 32-bit layout must be the 0xc4c bytes 1.14d allocates");
+#endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+static_assert(sizeof(void*) != 4 || sizeof(::D2QServerClientContainerStrc) == 0x678, "D2_NEW_AT(D2QServerClientContainerStrc): the 32-bit layout must be the 0x678 bytes 1.14d allocates");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(::D2QServerClientContainerStrc) == 0x664, "D2_NEW_AT(D2QServerClientContainerStrc): the 32-bit layout must be the 0x664 bytes 1.14d allocates");
+#endif
 
 static_assert(sizeof(void*) != 4 || sizeof(::D2QServerHacklistEntryStrc) == 0x10, "D2_NEW_AT(D2QServerHacklistEntryStrc): the 32-bit layout must be the 0x10 bytes 1.14d allocates");
 
@@ -126,6 +142,7 @@ int __stdcall SwapWorkerSlotValue(D2QServerStrc * pQServer, int nWorkerIndex, in
 }
 
 // @sourcefile .\Src\QServer\QServer.cpp
+// 1.14d mac: 002f3c63
 BOOL __stdcall ClearModePacketQueues(D2QServerStrc * pQServer) {
     for (int nMode = 0; nMode < pQServer->nModeCount; nMode++) {
       EnterCriticalSection(&pQServer->csClientLifecycle);
@@ -162,6 +179,7 @@ uint32_t __stdcall IsSingleplayer(D2QServerStrc * pQServer) {
     return 1;
 }
 
+// 1.14d mac: 002f3d19
 void __stdcall SetPerIpConnectionLimit(D2QServerStrc * pQServer, int nPerIpConnectionLimit) {
     if (!pQServer) {
       return;
@@ -197,6 +215,7 @@ void __fastcall LeaveCriticalSection_QServer(FogCritSectLockStrc * ppCriticalSec
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(ppCriticalSection->pCriticalSection);
 }
 
+// 1.14d mac: 002f409b
 D2QServerClientConnectionStrc * __fastcall FindClientByClientId(D2QServerStrc * pQServer, int nClientId) {
     uint32_t local_8;
     D2QServerClientConnectionStrc* pClientConn;
@@ -212,6 +231,7 @@ D2QServerClientConnectionStrc * __fastcall FindClientByClientId(D2QServerStrc * 
     return pClientConn;
 }
 
+// 1.14d mac: 002f438b
 D2QServerClientConnectionStrc * __fastcall FindClientBySocket(D2QServerStrc * pQServer, SOCKET Socket) {
     D2QServerClientConnectionStrc* pResult;
     D2QServerClientConnectionStrc* pClientConn = nullptr;
@@ -233,6 +253,7 @@ done:
     return pResult;
 }
 
+// 1.14d mac: 002f3f90
 void __fastcall IncrementClientRefCount(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pQServerClient) {
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement((LONG*)&pQServerClient->nRefCount);
 }
@@ -255,6 +276,7 @@ static void __stdcall NET_QServerClientPacket_FreeAllPackets(D2QServerClientConn
     D2_FREE_AT(pQServerClient, ".\\Src\\QServer\\QServer.cpp", 0x3ae);
 }
 
+// 1.14d mac: 002f4590
 void __stdcall LogHackList(int nHacklistSize) {
     DWORD DVar1 = GetTickCount();
     if (!(DVar1 - gdwHacklistLastLogTime > 2000)) {
@@ -265,6 +287,7 @@ void __stdcall LogHackList(int nHacklistSize) {
     gdwHacklistLastLogTime = DVar1;
 }
 
+// 1.14d mac: 002f4400
 void __fastcall SweepExpiredHackEntries(D2QServerStrc * pQServer) {
     D2QServerHacklistEntryStrc* pNextEntry;
     int nNewPrimaryTtl;
@@ -402,6 +425,7 @@ void __fastcall HACKL_RemoveIpFromHacklist(D2QServerStrc * pQServer, char * szFi
     gdwHacklistLastLogTime = dwTickCount;
 }
 
+// 1.14d mac: 002f476b
 int __fastcall HACKL_CheckAndResetHacklistEntry(D2QServerStrc * pQServer, int, uint32_t nIpAddress) {
     CRITICAL_SECTION* lpCriticalSection = &pQServer->csHacklist;
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(lpCriticalSection);
@@ -427,6 +451,7 @@ int __fastcall HACKL_CheckAndResetHacklistEntry(D2QServerStrc * pQServer, int, u
 }
 
 // Checks whether the given IP currently has at least the configured per-IP connection limit.
+// 1.14d mac: 002f47d4
 BOOL __fastcall IsPerIpLimitReached(D2QServerStrc * pQServer, in_addr * pClientIp) {
     if (pQServer->nPerIpConnectionLimit < 0) {
       return 0;
@@ -463,6 +488,7 @@ int __stdcall CountQueuedPacketsInMode(D2QServerStrc * pQServer, int nMode) {
     return nPacketCount;
 }
 
+// 1.14d mac: 002f4b9f
 int __stdcall DequeueModePacket(D2QServerStrc * pQServer, int nMode, char * pBytes, uint32_t nSize) {
     if (!pQServer) {
       return -1;
@@ -693,10 +719,12 @@ void __stdcall SetHacklistLineHook(D2QServerStrc * pQServer, fpD2QServerLineHook
     pQServer->pfnOnHacklistAddLineHook = pfnHook;
 }
 
+// 1.14d mac: 002f5305
 void __stdcall SetReservedHook(D2QServerStrc * pQServer, void * pfnHook) {
     pQServer->pfnReservedHook0xBBC = pfnHook;
 }
 
+// 1.14d mac: 002f5316
 void __stdcall SetClientServerTokenByClientId(D2QServerStrc * pQServer, int nClientId, uint32_t nServerToken) {
     if (!nClientId) {
       return;
@@ -860,6 +888,7 @@ static void FreeIpRateList(D2QServerStrc * pQServer) {
 }
 
 // @sourcefile .\Src\QServer\QServer.cpp
+// 1.14d mac: 002f5370
 int __stdcall QSERVER_EnqueueClientPacket(D2QServerStrc * pQServer, char * pBytes, int nSize, int nClientId) {
     D2QServerModePacketNodeStrc* pModePacketNode;
     uint32_t nClassifierOuts[4];
@@ -907,6 +936,7 @@ int __stdcall QSERVER_EnqueueClientPacket(D2QServerStrc * pQServer, char * pByte
     return 1;
 }
 
+// 1.14d mac: 002f5529
 void __stdcall SetHackMode(D2QServerStrc * pQServer, BOOL bUseQServerHack) {
     pQServer->bUseQServerHack = bUseQServerHack;
 }
@@ -1061,6 +1091,7 @@ void __stdcall _NullSub() {
 
 // Allocates and initializes QServer structure with hash-map game storage, client connection tables, per-IP rate limiting, and hacklist tracking. Creates 32 worker threads for BNet mode or uses cooperative single-player loop. Initializes Winsock, allocates TokenHashMapBucketSize (1024) hash buckets with individual critical sections, and sets up three packet-mode queues for setup/in-game/system dispatch.
 // @sourcefile .\Src\QServer\QServer.cpp
+// 1.14d mac: 002f3494
 D2QServerStrc * __stdcall NET_QServer_Init(eD2GSConnectionType neD2GSConnectionType, int nType, int nPort, eD2GSGameType eD2GameType, fpD2QServerPacketClassifier pfnPacketClassifier, fpD2QServerSourceLineHook pfnOnClientAcceptedHook, fpD2QServerSourceLineHook pfnOnClientFreedHook, fpD2QServerSinglePlayerSendHook pfnSinglePlayerSendHook) {
     WSADATA wsaData;
     D2QServerStrc* pQServer_lcl = D2_NEW_AT(D2QServerStrc, ".\\Src\\QServer\\QServer.cpp", 0x94);
@@ -1194,6 +1225,7 @@ int __stdcall BroadcastToAllClients(D2QServerStrc * pQServer, char * pBytes, int
 }
 
 // @sourcefile .\Src\QServer\QServer.cpp
+// 1.14d mac: 002f3daa
 D2QServerClientContainerStrc * __fastcall AddClient(D2QServerStrc * pQServer, SOCKET pSock, uint32_t nIp) {
     D2QServerClientContainerStrc* client = D2_NEW_AT(D2QServerClientContainerStrc, ".\\Src\\QServer\\QServer.cpp", 0x23b);
     memset(client, 0, sizeof(*client));
@@ -1309,6 +1341,7 @@ static void __stdcall RemoveClient(D2QServerStrc * pQServer, uint32_t nClientTok
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pQServer->csClientLifecycle);
 }
 
+// 1.14d mac: 002f45df
 void __fastcall BanIpAddress(D2QServerStrc * pQServer, char * szFile, uint32_t nIpAddress, int nLine) {
     D2QServerHacklistEntryStrc* pHacklistEntry;
     if (!pQServer->bUseQServerHack) {
@@ -1352,6 +1385,7 @@ void __fastcall BanIpAddress(D2QServerStrc * pQServer, char * szFile, uint32_t n
 }
 
 // @sourcefile .\Src\QServer\QServer.cpp
+// 1.14d mac: 002f4850
 int __fastcall CheckIpConnectionRate(D2QServerStrc * pQServer, in_addr * pIpAddress) {
     D2QServerIpRateEntryStrc* pRateEntry;
     if (pQServer->nPerIpConnectionLimit < 1) {
@@ -1497,6 +1531,7 @@ int __stdcall Shutdown(D2QServerStrc * pQServer, char * pBytes, int nSize) {
 
 // Decrements pClient refcount via InterlockedDecrement. If zero: invokes optional cleanup callback at pQServer+0xBC8, removes client from server, and frees all queued packets.
 // @sourcefile .\Src\QServer\QServer.cpp
+// 1.14d mac: 002f40fb
 void __fastcall RemoveClientAndClearLog(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pClient) {
     LONG LVar1 = InterlockedDecrement((LONG*)&pClient->nRefCount);
     if (LVar1) {
@@ -1510,6 +1545,7 @@ void __fastcall RemoveClientAndClearLog(D2QServerStrc * pQServer, D2QServerClien
     NET_QServerClientPacket_FreeAllPackets(pClient);
 }
 
+// 1.14d mac: 002f50d9
 int __stdcall SendPacketByClientId(D2QServerStrc * pQServer, int nClientId, char * pBytes, uint32_t nSize) {
     BOOL nClientSendResult;
     if (!pQServer) {
@@ -1535,6 +1571,7 @@ int __stdcall SendPacketByClientId(D2QServerStrc * pQServer, int nClientId, char
     return 0;
 }
 
+// 1.14d mac: 002f3fa9
 void __fastcall CloseRemoteConnection(D2QServerStrc * pQServer, int nClientId, char * szFile, int nLine) {
     int nCloseRc;
     int nCloseResult;
@@ -1584,6 +1621,7 @@ void __fastcall CloseRemoteConnection(D2QServerStrc * pQServer, int nClientId, c
     return;
 }
 
+// 1.14d mac: 002f51d0
 void __stdcall BanClient(D2QServerStrc * pQServer, int nClientId, char * szFile, int nLine) {
     D2QServerClientConnectionStrc* pClientConn;
     if (!pQServer->bUseQServerHack) {
@@ -1633,6 +1671,7 @@ void __stdcall DisconnectAndBanIp(D2QServerStrc * pQServer, uint32_t nIpAddress,
 
 // @wasnamed CloseRemoteConnection - one name on two different functions.
 // @evidence __stdcall shim whose whole body forwards its four arguments to 006c0420.
+// 1.14d mac: 002f52e6
 void __stdcall thunk_CloseRemoteConnection(D2QServerStrc * pQServer, int nClientId, char * szText, int nLine) {
     CloseRemoteConnection(pQServer, nClientId, szText, nLine);
 }
@@ -1654,6 +1693,7 @@ void __stdcall QSDisconnectIP(D2QServerStrc * pQServer, in_addr addr, char * szT
 }
 
 // pQServerStrc arrives in EDI; the other three arguments are on the stack (RET 0xc).
+// 1.14d mac: 002f4b04
 static void __stdcall HACKL_DisconnectAndBanClient(int nClientToken, char * pReason, int nLine, D2QServerStrc * pQServerStrc) {
     if (!pQServerStrc->bUseQServerHack) {
       return;
@@ -1680,6 +1720,7 @@ static void __stdcall HACKL_DisconnectAndBanClient(int nClientToken, char * pRea
 }
 
 // @sourcefile .\Src\QServer\QServer.cpp
+// 1.14d mac: 002f4a29
 int __fastcall CheckIfPlayerIsBannedByAddress(D2QServerStrc * pQServer, in_addr * pAddr, char * szFile, int32_t nLine) {
     D2QServerClientConnectionStrc* pFoundClient;
     uint32_t nIpAddr = pAddr->S_un.S_addr;
@@ -1704,6 +1745,7 @@ int __fastcall CheckIfPlayerIsBannedByAddress(D2QServerStrc * pQServer, in_addr 
 }
 
 // @sourcefile .\Src\QServer\QServer.cpp
+// 1.14d mac: 002f4ca0
 void __fastcall RecvForClient(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pClient) {
     // Frame slots -20..-4 are ONE object: &nClassifierOut0 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.

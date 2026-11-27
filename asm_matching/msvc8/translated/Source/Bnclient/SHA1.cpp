@@ -14,6 +14,7 @@
 namespace Bnclient { namespace SHA1 {
 
 // SHA-1 compression round over one 512-bit block. blockWords points to 16 32-bit words, stateWords points to 5-word hash state.
+// 1.14d mac: 002f76bb
 static void SHA1Transform(uint32_t * state, uint32_t * buffer) {
     uint32_t stateE = state[1];
     uint32_t stateD = *buffer;
@@ -406,6 +407,7 @@ static void SHA1Transform(uint32_t * state, uint32_t * buffer) {
     state[4] += stateA;
 }
 
+// 1.14d mac: 002f75bd
 void __fastcall SHA1Init(D2BnSha1ContextStrc * context) {
     /* SHA1 initialization constants */
     context->aState[0] = 0x67452301;
@@ -416,6 +418,7 @@ void __fastcall SHA1Init(D2BnSha1ContextStrc * context) {
     context->nBitCountLow = context->nBitCountHigh = 0;
 }
 
+// 1.14d mac: 002f75f5
 void __fastcall SHA1Update(D2BnSha1ContextStrc * context, void * data, uint32_t len) {
     unsigned int i, j;
     j = (context->nBitCountLow >> 3) & 63;
@@ -434,6 +437,7 @@ void __fastcall SHA1Update(D2BnSha1ContextStrc * context, void * data, uint32_t 
     memcpy(&context->abyBlock[j], &((unsigned char *)data)[i], len - i);
 }
 
+// 1.14d mac: 002f8917
 void __fastcall SHA1Final(uint8_t * digest, D2BnSha1ContextStrc * context) {
     uint32_t i;
     unsigned char finalcount[8];

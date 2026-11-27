@@ -9,6 +9,7 @@
 
 namespace D2Client { namespace _SkillHelpers {
 
+// 1.14d mac: 000ab474
 uint16_t * __fastcall INV_SkipColorCodeSuffix(uint16_t * wszText) {
     int nCharIndex;
     for (nCharIndex = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText); nCharIndex > 0; nCharIndex--) {
@@ -28,6 +29,7 @@ uint16_t * __fastcall INV_SkipColorCodeSuffix(uint16_t * wszText) {
     return wszText;
 }
 
+// 1.14d mac: 000ab4ba
 void __fastcall INV_SubstituteFormatToken(uint16_t * wszText, int32_t nTokenIndex, uint16_t * wszReplacement) {
     int nCopied;
     uint16_t wszWorkBuffer[400];

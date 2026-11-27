@@ -29,6 +29,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game { namespace Quests { namespace QUESTS { namespace A4Q1 {
 
 // Q26_ActiveFilter (Fallen Angel / kill-Izual quest) — decides if a target NPC should show the quest as "active" / offer quest gossip. Only while quest not yet Completed. Jerhyn (classId 0x16f): active when RewardAwaits OR introduction stateflag==1. Izual (classId 0x196): active until Step0x05 (talked-to-Izual-spirit) is set. Returns false otherwise / before introduction.
+// 1.14d mac: 0023540b
 bool __fastcall Q26_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (pQuestData->bIsNotIntroduction != '\0') {
       BOOL BVar1 = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheFallenAngel, QUESTSTATE_Completed);
@@ -86,6 +87,7 @@ BOOL __fastcall Q26_PlayerUpdateFallenAngelState(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Q26_SequenceFilter — chains to the prerequisite quest's filter (nSequenceQuestId = QUEST_SpokeToTyrael). Runs only when this quest's stateflag==5 (finalized) or post-introduction; validates the linked quest's fpSequenceFilter ptr (halts on bad ptr) then invokes it. Propagates Fallen Angel completion into the Act 4 quest sequence/Tyrael dialog gating.
+// 1.14d mac: 00235f36
 bool __fastcall Q26_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
       return true;
@@ -107,6 +109,7 @@ bool __fastcall Q26_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // Q26_PlayerNotifyCompleted — completion-notify predicate+send (callback for QUEST_SetStateAndBroadcast). Sends quest-update packet 0x16 to a player only if the Fallen Angel quest is Completed-or-FinishedInPreviousGame AND not (JustCompleted) AND not (CannotCompleteQuestInGame); otherwise no-op. Pushes the finished UI update to relevant players.
+// 1.14d mac: 00236017
 BOOL __fastcall Q26_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -127,6 +130,7 @@ BOOL __fastcall Q26_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // A4Q1 (Fallen Angel / Izual) NPC dialog handler, handler index 0xb. Jerhyn msg 0x29e: sets bPortalJerhynSpawned, advances stateflag to 2, resyncs all players, sends gossip. Jerhyn msg 0x2a4 (turn-in): if RewardAwaits+JustCompleted, finalizes quest (stateflag 5, sequence filter, broadcast, set Completed, clear step states, award +2 skill points). Izual-spirit msg 0x2a3: marks talked, sets Step0x05, broadcasts stateflag 4.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q1.cpp
+// 1.14d mac: 00235b5a
 void __fastcall Q26_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL _bRewardOrCompletion;
     bool bRewardOrCompletion;
@@ -204,6 +208,7 @@ void __fastcall Q26_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Q26_Callback_00 — gossip-text selector (handler[0]). Chooses which Fallen Angel gossip line an NPC speaks based on quest state. Izual-spirit (0x196) before Step0x05 -> msg 3. RewardAwaits -> msg 3. Already-participated player -> msg 4. Else, before completion/intro, picks msg from gdwQ15QuestStateMessages[stateflag] (0xFFFFFFFF = stay silent). Emits via AddGossipMessageOnMonster.
+// 1.14d mac: 00235960
 void __fastcall Q26_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQ15QuestStateMessages[6] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gdwQ15QuestStateMessages, "D2Game::Quests::QUESTS::A4Q1::Q26_Callback00_NpcActivate::gdwQ15QuestStateMessages");
@@ -264,6 +269,7 @@ void __fastcall Q26_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     }
 }
 
+// 1.14d mac: 00239cc1
 BOOL __fastcall Q26_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -279,6 +285,7 @@ BOOL __fastcall Q26_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
     return 0;
 }
 
+// 1.14d mac: 00236187
 BOOL __fastcall Q26_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheFallenAngel, QUESTSTATE_JustCompleted);
@@ -289,6 +296,7 @@ BOOL __fastcall Q26_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStr
     return 0;
 }
 
+// 1.14d mac: 0023549d
 void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -322,6 +330,7 @@ void __fastcall Q26_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
     D2Common::QuestRecord::UnsetQuestStepStates(pBitBuffer, QUEST_TheFallenAngel);
 }
 
+// 1.14d mac: 00239c44
 BOOL __fastcall Q26_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheFallenAngel, QUESTSTATE_JustCompleted);
@@ -337,11 +346,13 @@ BOOL __fastcall Q26_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Q26_Callback_10 — player-leave handler (handler[10]). Removes the departing player's GUID from this quest's participation list (sQuestGUID); uses -1 when no player. Cleans up party-participation tracking so reward/credit logic stays correct.
+// 1.14d mac: 00235673
 void __fastcall Q26_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // Q26_QuestUpdate_SpawnIzual — deferred quest timer (added in Callback_08). If stateflag just reached 4 (and prev wasn't 4/0xd), broadcast stateflag 3. Then, if a spawn was queued, spawn Izual's monster (classId 0x196) at the recorded subtile coords in Act4 (pAct[3]); tries skill-variant ids 1/3/5. Materializes the actual Izual demon unit for the kill.
+// 1.14d mac: 00239d52
 uint8_t __fastcall Q26_QuestUpdate_SpawnIzual(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2RoomStrc* pRoom;
     D2UnitStrc* pIzualUnit;
@@ -369,6 +380,7 @@ uint8_t __fastcall Q26_QuestUpdate_SpawnIzual(::SGAMEDATA * pGame, D2QuestDataSt
 }
 
 // Q26_PlayerCheckNearIzual — per-player proximity completion check (run via IteratePlayerOrMonsterUnits on Izual death). If the player's room == Izual's room or an adjacent room, and quest not Completed/RewardAwaits, marks that player's record JustCompleted + RewardAwaits. Grants kill credit to players near Izual when he dies.
+// 1.14d mac: 00239ad1
 BOOL __fastcall Q26_PlayerCheckNearIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     BOOL _bQuestState;
     bool bQuestState;
@@ -426,6 +438,7 @@ BOOL __fastcall Q26_PlayerCheckNearIzual(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Q26_Callback_08 — Izual-death handler (handler[8], fires when Izual monster dies). Logs "Finished quest", clears handler[2]/[8], sets stateflag 4, stores Izual unit + death coords. Marks killer/nearby players JustCompleted+RewardAwaits (if not already done), then iterates party: proximity credit (CheckNearIzual), propagate completion, and mark out-of-act members CannotComplete. Queues Q26_QuestUpdate_SpawnIzual timer.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q1.cpp
+// 1.14d mac: 00235790
 void __fastcall Q26_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL _bQuestState;
     bool bQuestState;
@@ -473,6 +486,7 @@ void __fastcall Q26_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // Q26_Callback_03 — object/portal interaction handler (handler[3]). On the relevant object (id 0x67), remove player from list; if stateflag==2 and quest not Completed, advance stateflag->3 (Jerhyn portal opened path), resync all players, and if first time (prev stateflag 0) broadcast stateflag 1. Drives progression after the Jerhyn red-portal step.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q1.cpp
+// 1.14d mac: 002356a2
 void __fastcall Q26_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x67) {
       return;
@@ -502,6 +516,7 @@ void __fastcall Q26_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // Q26_Callback_02 — Jerhyn first-talk handler (handler[2]). When target is Jerhyn (0x16f) and the pending-intro flag (field_0x11) is set, broadcast stateflag 1 (quest introduced/log entry), clear the flag, and detach handler[2] so this fires once. Kicks off the quest after the player first speaks to Jerhyn.
+// 1.14d mac: 00235ae8
 void __fastcall Q26_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x16f)) {
       return;
@@ -519,6 +534,7 @@ void __fastcall Q26_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Q26_Callback_13 — load/init-from-record handler (handler[0xd], reconstructs in-memory stateflag from saved QuestRecord on game load). If quest not Completed/FinishedInPreviousGame: Step0x04 -> stateflag 3 + bJerhynAiActive (prev 2); Step0x03 -> stateflag 3 (prev 1); Step0x02 -> stateflag 2 (prev 1). Restores Fallen Angel progress when a game (re)starts.
+// 1.14d mac: 00235e58
 void __fastcall Q26_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -562,6 +578,7 @@ void __fastcall Q26_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // Q26_InitData — quest constructor for The Fallen Angel (QUEST_TheFallenAngel, internal QUESTINT, init order 4). Allocates A4Q1 specific data (0x1c bytes), zeroes state-function table, sets initial stateflag 1, registers handlers (0=gossip,2=Jerhyn-first-talk,3=portal-object,8=Izual-death,10=player-leave,0xb=NPC-menu,0xd=load), sets nQuestIdReal, ActiveFilter, SequenceFilter, sequence prereq QUEST_SpokeToTyrael, Jerhyn NPC gossip table (mon 0x16f / string 0x29e), and clears Izual-tracking fields.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q1.cpp
+// 1.14d mac: 00235563
 void __fastcall Q26_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->bIsActive = '\x01';

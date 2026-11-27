@@ -164,4 +164,8 @@ BOOL fpInsertExpansionCd();
 }} // namespace D2Launch::MainMenus
 
 // Globals
+#if !defined(_WIN32) && D2_OS_MAC
+extern uint8_t fpInsertPlayCd;
+#else
 extern uint32_t fpInsertPlayCd;
+#endif

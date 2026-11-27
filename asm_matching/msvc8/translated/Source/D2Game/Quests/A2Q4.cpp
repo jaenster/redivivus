@@ -20,6 +20,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game { namespace Quests { namespace QUESTS { namespace A2Q4 {
 
 // A2Q4 "The Arcane Sanctuary" - ActiveFilter. Decides whether an NPC (target classId) currently has a quest-active gossip option for this player. Returns false if Sanctuary already Completed(0). For Drognan(0x14b): blocked if RewardAwaits(1); offers Step0x07 if portal not yet placed, or Step0x08 once portal exists (sSub.field_0x2E). For Atma/Cain (0xb1 stateFlag==1, 0xc9 stateFlag==2): offers Completed path unless RewardAwaits set. Filtered out if the chosen quest-record state bit is already set.
+// 1.14d mac: 00225889
 bool __fastcall Q12_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheArcaneSanctuary, QUESTSTATE_Completed) != 1) {
       if (nTargetClassId == 0x14b) {
@@ -52,11 +53,13 @@ bool __fastcall Q12_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // JMP thunk
+// 1.14d mac: 00226504
 void __fastcall Q12_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::D2Game::Quests::QUESTS::SetRewardAndFinishFlags(pQuestData, pQuestArgs);
 }
 
 // A2Q4 - NotifyArcaneComplete. Per-player journal-update callback used as the broadcast fn for QUEST_SetStateAndBroadcast. Sends a quest-update packet (subcmd 0xb) to the player ONLY when the Sanctuary record is in a "completed-ish" state: (Completed(0) OR FinishedInPreviousGame(0xf)) AND NOT JustCompleted(0xd) AND NOT CannotCompleteQuestInGame(0xe). Otherwise no-op.
+// 1.14d mac: 00225acb
 BOOL __fastcall Q12_NotifyArcaneComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -76,6 +79,7 @@ BOOL __fastcall Q12_NotifyArcaneComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // A2Q4 - UpdateQuestRecord. Per-player iterator callback: mirrors the in-memory quest stateFlag into the persisted quest-record step bits. Skips if Completed(0) or RewardAwaits(1) already set. Maps nStateFlag: 2->Step0x02, 3->Step0x03; 4 with prev 2/3 -> Step0x04, prev 4 -> Step0x05. Drives the journal progression as the player talks to NPCs / opens the Cellar.
+// 1.14d mac: 0022b3ef
 BOOL __fastcall Q12_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -121,6 +125,7 @@ BOOL __fastcall Q12_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A2Q4 - Callback_02 (quest state 2 handler). Fires when target is Drognan (classId 177) and the Tainted-Sun-failed flag is set: clears flags, broadcasts quest state 2 via QUEST_SetStateAndBroadcast(NotifyArcaneComplete), clears the failed flag, detaches the state-2 handler, then iterates players running UpdateQuestRecord to persist step bits.
+// 1.14d mac: 0022650d
 void __fastcall Q12_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 177)) {
       return;
@@ -140,6 +145,7 @@ void __fastcall Q12_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q4 - CheckJournalState. Returns 1 if the Arcane Sanctuary entrance portal has been placed (A2Q4 sSub.nPortalGUID == 2), else 0. Used to gate whether the Palace-Cellar->Sanctuary portal already exists.
+// 1.14d mac: 00225979
 BOOL __fastcall Q12_CheckJournalState(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
     if (pQuestData && pQuestData->pQuestSpecificData.pA2Q4->nPortalPlacedState == 2) {
@@ -150,6 +156,7 @@ BOOL __fastcall Q12_CheckJournalState(::SGAMEDATA * pGame) {
 }
 
 // A2Q4 - OnJournalActivate. Marks the quest journal entry as active (field_0xe=1) and sets the portal-placement substate to 2, then iterates players running UpdateQuestRecord to persist. If a tracked object exists, refreshes its update flag and removes its collision (opens the way). Called when the Cellar/staff path activates the Sanctuary entrance. Parameter 0 is the A2Q4 record and parameter 1 is the D2QuestDataStrc; they were recorded the wrong way round until 2026.08.30.
+// 1.14d mac: 00225b78
 static void __stdcall Q12_OnJournalActivate(D2QuestDataA2Q4Strc * pQuestData, D2QuestDataStrc * pQuestContext) {
     pQuestData->bDrognanSummonerHint = 1;
     if (!pQuestData->nPortalPlacedState) {
@@ -172,6 +179,7 @@ static void __stdcall Q12_OnJournalActivate(D2QuestDataA2Q4Strc * pQuestData, D2
 }
 
 // A2Q4 - Callback_11 (NPC-talk handler). Drives the quest from NPC dialogue. Drognan(0x14b): msg 0xba -> set Step0x07; msg 0xbb..0xbd -> set Step0x08. Other NPCs: for the Summoner-aftermath gossip set, send gossip packet and consume RewardAwaits(1) (Unset + add player to participation list). On msg 0x18c (staff/Sanctuary trigger) broadcasts state 5 and, if player is in the right room, spawns the Canyon-of-the-Magi portal and marks record JustCompleted(0xd). Atma(0xb1 msg0x175)->stateFlag 2 + OnJournalActivate; Cain/Jerhyn(0xc9 msg0x179)->stateFlag 3, broadcast state 3, persist.
+// 1.14d mac: 00225eda
 void __fastcall Q12_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArg) {
     uint16_t nNPCNo = pQuestArg->sQuestArgs.sNpcMessage.nNPCNo;
     uint16_t nMessageIndex = pQuestArg->sQuestArgs.sNpcMessage.nMessageIndex;
@@ -238,6 +246,7 @@ void __fastcall Q12_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q4 - Callback_00 (gossip-text builder). Chooses which gossip line an NPC speaks. For Drognan(0x14b): advances the control RNG seed and picks one of 3 Summoner hint lines (8..10) if hint flag set, else line 7. Otherwise: if RewardAwaits(1) -> line 4; if player already participated -> line 5; else gate on stateFlag/intro/Completed(0)/JustCompleted(0xd) and index the gdwQ08QuestStateMessages table by stateFlag to pick the line.
+// 1.14d mac: 00225d25
 void __fastcall Q12_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQ08QuestStateMessages[7] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x0 }; D2_STATIC_GUARD(gdwQ08QuestStateMessages, "D2Game::Quests::QUESTS::A2Q4::Q12_Callback00_NpcActivate::gdwQ08QuestStateMessages");
@@ -314,6 +323,7 @@ void __fastcall Q12_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A2Q4 - SetCannotComplete. Per-player iterator callback (nParam = unit, byte[0x6d]=difficulty). If the Sanctuary is neither Completed(0) nor RewardAwaits(1), sets CannotCompleteQuestInGame(0xe) on that player's record - marks the quest unreachable this game (e.g. portal placed but reward not earned by this player).
+// 1.14d mac: 002275cf
 BOOL __fastcall Q12_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -329,6 +339,7 @@ BOOL __fastcall Q12_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A2Q4 - CheckArcaneAndReward. Per-player iterator callback: the actual quest-COMPLETE grant. If not already Completed(0)/RewardAwaits(1) and the player is standing in LEVEL_ArcaneSanctuary, sets the full completion bit set on the record: JustCompleted(0xd), RewardAwaits(1), Completed(0), clears all step bits, then re-sets Step0x08+Step0x07; finally propagates completion to every party member via Q12_SetArcaneCompleteOnPartyMember.
+// 1.14d mac: 00227483
 BOOL __fastcall Q12_CheckArcaneAndReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
@@ -378,6 +389,7 @@ static bool __fastcall Q12_SequenceFilterInlined(D2QuestDataStrc * pQuestData) {
 }
 
 // A2Q4 - SequenceFilter (entry). On first activation (stateFlag==0 and intro done) sets stateFlag 1, then chains into the sequence quest (The Summoner) by calling its fpSequenceFilter. Halts via ErrorManager if the fn ptr is bad.
+// 1.14d mac: 00226745
 bool __fastcall Q12_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
       QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a2q4.cpp", 0x35a);
@@ -388,6 +400,7 @@ bool __fastcall Q12_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // A2Q4 - Callback_13 (load/sync handler). Reconstructs in-memory quest stateFlag from the persisted record on game load. If TaintedSun Completed(0) -> mark journal fields. If Sanctuary Completed(0) or RewardAwaits(1): set record JustCompleted(0xd) and mark journal done. If player holds the quest item -> stateFlag 1. Else map step bits to stateFlag: Step0x05->4/4, Step0x04->4/3, Step0x03->3/3, Step0x02->2/2. Also checks HoradricStaff Completed(0) to mark the journal entry.
+// 1.14d mac: 002265a5
 void __fastcall Q12_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pQuestArgs->pGame, pQuestArgs->pPlayer);
     D2QuestDataA2Q4Strc* pA2Q4Data = pQuestData->pQuestSpecificData.pA2Q4;
@@ -435,6 +448,7 @@ void __fastcall Q12_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // A2Q4 - OnHoradricStaffAssembled. Entry point fired when the Horadric Staff is assembled (the prerequisite that unlocks the Arcane Sanctuary). If quest not yet introduced -> OnJournalActivate (open the Sanctuary entrance). Otherwise set stateFlag 1 if zero, and if no prior progress broadcast quest state 1 via QUEST_SetStateAndBroadcast(NotifyArcaneComplete).
+// 1.14d mac: 002231d1
 void __fastcall Q12_OnHoradricStaffAssembled(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestContext = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
     if (!pQuestContext) {
@@ -490,6 +504,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 }
 
 // A2Q4 - BlockHaremRoomForPlayerAccess. Spawns a blocking object (classId 0x13e) just in front of the player to wall off the harem/palace room until the quest opens it. Tries player-pos offset, then a fallback offset; on success marks the substruct occupied and records the object GUID.
+// 1.14d mac: 00226cdd
 void __fastcall BlockHaremRoomForPlayerAccess(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     POINT ptPlayerPos;
     D2QuestDataA2Q4Strc* pA2Q4Specific = pQuestData->pQuestSpecificData.pA2Q4;
@@ -522,6 +537,7 @@ void __fastcall BlockHaremRoomForPlayerAccess(D2QuestDataStrc * pQuestData, D2Un
 }
 
 // A2Q4 - Objects_InitFn30. Object init fn: syncs a quest object's visual/update flag to the portal substate (sSub.nPortalGUID), records its GUID, and removes its collision once the portal substate == 2 (portal active). No quest-record writes.
+// 1.14d mac: 00226df8
 void __fastcall Objects_InitFn30_HaremBlocker(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheArcaneSanctuary);
@@ -546,6 +562,7 @@ void __fastcall Objects_InitFn30_HaremBlocker(D2ObjectInitFnArg * pInitArg) {
 }
 
 // A2Q4 (A2Q6/Duriel-related) - Q14_CheckDurielProximity. Per-player iterator: if The Seven Tombs (Duriel) is not Completed(0)/RewardAwaits(1) and the player is within ~31 units of the tracked Duriel-quest coords, sets the proximity flag and records the player GUID. Reads A2Q4 quest data block (shared union) for the coords. Returns 1 on trigger.
+// 1.14d mac: 00227263
 BOOL __fastcall Q12_CheckDistanceToHaremBlocker(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheSevenTombs, QUESTSTATE_Completed);
@@ -607,6 +624,7 @@ BOOL __fastcall Q12_GetSummonerCoords(::SGAMEDATA * pGame, D2CoordStrc * pCoord)
 }
 
 // A2Q4 - CheckJustCompleted. Per-player iterator: reads (queries, does not write) the JustCompleted(0xd) bit of the Sanctuary record for each player. Side-effect-free probe used during the staff-altar operate flow alongside CheckArcaneAndReward/SetCannotComplete.
+// 1.14d mac: 00227646
 BOOL __fastcall Q12_CheckJustCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheArcaneSanctuary, QUESTSTATE_JustCompleted);
@@ -615,6 +633,7 @@ BOOL __fastcall Q12_CheckJustCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
 // A2Q4 Horazon's Journal operate fn (OperateFn 42, Arcane Sanctuary). Sets the object death/update event, sends NPC-info packet 0x18c, records the room, and if the quest is introduced and below state 5 advances it to 5 and runs the per-player iterators CheckArcaneAndReward, SetCannotComplete and CheckJustCompleted. Reading it opens the way to the Canyon of the Magi.
 // Slot from objects.txt OperateFn 42.
+// 1.14d mac: 00227311
 BOOL __fastcall OBJOP_A2Q4_ReadHorazonsJournal(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
     D2RoomStrc* pAltarRoom;
@@ -646,6 +665,7 @@ BOOL __fastcall OBJOP_A2Q4_ReadHorazonsJournal(D2ObjectOperateFnArg * pOperation
 }
 
 // A2Q4 \"The Arcane Sanctuary\" — object init-fn for the Sanctuary portal and Palace Cellar Level 3 objects. Reads the A1Q4 quest-specific sSub to determine whether the object is in LEVEL_ArcaneSanctuary (syncs nPortalGUID[1] slot) or LEVEL_PalaceCellarLevel3 (syncs field_0x2C slot). Sets the object update flag and schedules its first activation event using the object's FrameCnt[1]. No quest-record state writes.
+// 1.14d mac: 00227683
 void __fastcall Objects_InitFn29_ArcaneSanctuaryPortal(D2ObjectInitFnArg * pInitArg) {
     D2ObjectsTxt* pObjectsTxt;
     D2QuestDataStrc* pQuestData;
@@ -685,6 +705,7 @@ void __fastcall Objects_InitFn29_ArcaneSanctuaryPortal(D2ObjectInitFnArg * pInit
 }
 
 // A2Q4 - SetObjectOperateState. Toggles the two paired Sanctuary-portal substate fields when an object is operated. nParam 0x4a: if Cellar field unset, set it to 1 and mark portal substate 2. nParam 0x36: if portal substate unset, set portal 1 and Cellar field 2. Keeps the Cellar<->Sanctuary portal pair consistent. No quest-record writes.
+// 1.14d mac: 00227766
 void __fastcall Q12_SetObjectOperateState(::SGAMEDATA * pGame, int32_t nFromLevelId) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
     if (!pDVar2) {

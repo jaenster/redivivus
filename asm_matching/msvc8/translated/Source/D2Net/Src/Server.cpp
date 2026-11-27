@@ -204,6 +204,7 @@ static uint32_t gnDefaultClientGameToken = 0; D2_STATIC_GUARD(gnDefaultClientGam
 
 namespace D2Net { namespace Game { namespace Server {
 
+// 1.14d mac: 002dccb0
 int __stdcall CreateThreadClientSocketOrSingleplayer() {
     BOOL BVar1 = NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer();
     if (BVar1) {
@@ -220,7 +221,11 @@ int __stdcall CreateThreadClientSocketOrSingleplayer() {
           LeaveCriticalSection(&lpCriticalSection_00882ce8);
         }
 
+#if !defined(_WIN32) && D2_OS_MAC
+        hClientConnectionThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SRC::Client::ThreadClientToServer, (LPVOID)0x0, 0, (LPDWORD)&SRC::Client::lpThreadId_00882b30, "ClientThread");
+#else
         /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ hClientConnectionThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SRC::Client::ThreadClientToServer, (LPVOID)0x0, 0, (LPDWORD)&SRC::Client::lpThreadId_00882b30);
+#endif
         /* int nPriority for SetThreadPriority */ /* HANDLE hThread for SetThreadPriority */ SetThreadPriority(hClientConnectionThread, 1);
         return 2;
       }
@@ -231,6 +236,7 @@ int __stdcall CreateThreadClientSocketOrSingleplayer() {
     return 1;
 }
 
+// 1.14d mac: 002ddc40
 int32_t __fastcall HandleIncomingPacketBuffer(D2QServerStrc * pQServer, char * pBytes, uint32_t nSize) {
     SRC::Client::NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket(pBytes, nSize);
     return 1;
@@ -295,6 +301,7 @@ void __stdcall NET_Thunk_QServerAddGameTokenFilter(uint32_t nExpectedMaskedToken
     Fog::Src::AddGameTokenFilter(gpQServer, nMaskTableIndex, nExpectedMaskedToken);
 }
 
+// 1.14d mac: 002de00a
 void __stdcall NET_SetPlayersCount(int32_t nCount) {
     Fog::Src::SetPerIpConnectionLimit(gpQServer, nCount);
 }
@@ -303,6 +310,7 @@ void __stdcall QSERVER_GetConnectedClients() {
     Fog::Src::GetConnectedClients(gpQServer);
 }
 
+// 1.14d mac: 002de030
 void __stdcall NET_HACK_SetUseQServerHack(BOOL bResult) {
     Fog::Src::SetHackMode(gpQServer, bResult);
 }
@@ -314,22 +322,26 @@ void NET_QServer_FreeAndSend0xB0ToEveryone() {
     gpQServer = 0;
 }
 
+// 1.14d mac: 002de094
 int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode1(char * pBytes, uint32_t nSize) {
     int nResult = Fog::Src::DequeueModePacket(gpQServer, 1, pBytes, nSize);
     return nResult;
 }
 
+// 1.14d mac: 002de0c9
 int32_t __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode0(char * pBytes, uint32_t nSize) {
     int nResult = Fog::Src::DequeueModePacket(gpQServer, 0, pBytes, nSize);
     return nResult;
 }
 
+// 1.14d mac: 002de0fe
 int __stdcall NET_D2GS_SERVER_DequeueModePacket_Mode2(char * pBytes, uint32_t nSize) {
     int nResult = Fog::Src::DequeueModePacket(gpQServer, 2, pBytes, nSize);
     return nResult;
 }
 
 // Low-level server-to-client packet send. In single-player mode, loops the packet back via NET_D2GS_CLIENT_HandleIncomingBufferAndCreatePacket. In multiplayer: skips logging/compression for opcode 0xAF (handshake) or nMode==2; otherwise compresses the packet (up to 1032 bytes) and sends via QServer::SendPacketByClientId with a 1- or 2-byte length prefix. Halts if raw packet exceeds 0x204 bytes.
+// 1.14d mac: 002ddd78
 int32_t __stdcall NET_D2GS_SERVER_SendPacketToClient(uint8_t nMode, int32_t nClientId, char * pBytes, uint32_t nSize) {
     int nSendResult;
     uint32_t pbCompressedSize;
@@ -387,6 +399,7 @@ void __stdcall SERVER_GetClientSocketByToken(uint32_t nToken) {
     Fog::Src::GetClientSocketByToken(gpQServer, nToken);
 }
 
+// 1.14d mac: 002de167
 void __stdcall NET_HACK_AddClientToHackList(int32_t nClientId, char * szText, int32_t nBanFlags) {
     Fog::Src::BanClient(gpQServer, nClientId, szText, nBanFlags);
 }
@@ -404,6 +417,7 @@ void __stdcall NET_DisconnectIP(in_addr addr, char * szText, int32_t nFlags) {
 }
 
 // @sourcefile .\SRC\Server.cpp
+// 1.14d mac: 002de19b
 void __stdcall QSERVER_KillConnection(int32_t nClientId) {
     Fog::Src::thunk_CloseRemoteConnection(gpQServer, nClientId, ".\\SRC\\Server.cpp", 0x1d4);
 }
@@ -429,6 +443,7 @@ void __stdcall AssignClientToToken(int32_t nClientId, uint32_t nToken) {
     gnDefaultClientGameToken = nToken;
 }
 
+// 1.14d mac: 002de232
 uint32_t __stdcall QSERVER_GetClientGameToken(uint32_t nClientId) {
     if (nClientId) {
       uint32_t nToken;
@@ -448,6 +463,7 @@ void __fastcall NET_EnqueueClientPacket(char * szText, uint16_t nSize, int32_t n
     Fog::Src::QSERVER_EnqueueClientPacket(gpQServer, szText, (uint32_t)nSize, nClientId);
 }
 
+// 1.14d mac: 002de264
 uint32_t __fastcall NET_EnqueueLocalClientPacket(char * pPacket, uint16_t nSize) {
     if (nSize > 0x204) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x217);
@@ -473,6 +489,7 @@ void __stdcall _NullSubRet8(uint32_t dwParam) {
     Fog::Src::_NullSubRet8(gpQServer, dwParam);
 }
 
+// 1.14d mac: 002ddd40
 int32_t __fastcall NET_D2GS_SERVER_Send_0xAF01(D2QServerStrc * pQServer, uint32_t nClientId, char * pszSourceFile, int nLine) {
     uint8_t aPacketFrame[4];
     aPacketFrame[0] = 0xaf;
@@ -481,6 +498,7 @@ int32_t __fastcall NET_D2GS_SERVER_Send_0xAF01(D2QServerStrc * pQServer, uint32_
     return 1;
 }
 
+// 1.14d mac: 002ddf35
 int32_t __fastcall NET_D2GS_CLIENT_Send_0x70(D2QServerStrc * pQServer, uint32_t nClientId, char * pszSourceFile, int nLine) {
     uint8_t nPacketId;
     nPacketId = 0x70;
@@ -488,6 +506,7 @@ int32_t __fastcall NET_D2GS_CLIENT_Send_0x70(D2QServerStrc * pQServer, uint32_t 
     return 1;
 }
 
+// 1.14d mac: 002ddf73
 void __stdcall NET_D2GS_SERVER_Send_0xAF00() {
     uint8_t aPacket[4];
     aPacket[0] = 0xaf;
@@ -496,10 +515,12 @@ void __stdcall NET_D2GS_SERVER_Send_0xAF00() {
 }
 
 // Wrapper that creates and stores the global QServer instance. Calls NET_QServer_Init with port 4000, three packet modes (setup/in-game/system), and registers four callbacks: packet size classifier, client accepted (0xAF01), client freed (0x70), and single-player packet handler. Stores result in global pQServer variable.
+// 1.14d mac: 002ddfa7
 void __stdcall QSERVER_CreateAndInit(eD2GSConnectionType neD2GSConnectionType, eD2GSGameType eD2GameType) {
     gpQServer = Fog::Src::NET_QServer_Init(neD2GSConnectionType, 3, 4000, eD2GameType, NET_D2GS_CLIENT_CheckIfPacketSizeIsCorrect, NET_D2GS_SERVER_Send_0xAF01, NET_D2GS_CLIENT_Send_0x70, HandleIncomingPacketBuffer);
 }
 
+// 1.14d mac: 002dd7a0
 BOOL __stdcall NET_D2GS_CLIENT_CheckIfConnectionTypeIsSinglePlayer() {
     if (nD2GSConnectionType == CONNECTIONTYPE_SINGLEPLAYER) {
       return 1;
@@ -512,16 +533,19 @@ int Unreferenced_0052b800() {
     return (uint32_t)(nD2GSConnectionType == CONNECTIONTYPE_SINGLEPLAYERUNCAPPED);
 }
 
+// 1.14d mac: 002dd7bd
 void __fastcall NET_D2GS_CLIENT_SetD2GSConnectionType(eD2GSConnectionType neD2GSConnectionType) {
     nD2GSConnectionType = neD2GSConnectionType;
 }
 
 // JMP thunk
+// 1.14d mac: 002dd8ec
 int __stdcall WSAGetLastError() {
     return ::WSAGetLastError();
 }
 
 // Determines the expected wire size of an inbound D2GS client packet. Reads opcode = pBytes[0]; if 0 bytes or opcode > 0xB4 returns 0 (invalid). Looks up NET_D2GS_CLIENT_INCOMING_SIZE[opcode] into *pExpectedSize: 0 = unknown (return 0), positive = fixed size (return 1). A negative (sentinel) table entry means variable-length: switches on opcode to compute the true size from header fields (e.g. 0x16/0x5b ushort@+1, 0x3e byte@+1, 0xae clamped ushort+3, 0xaf name-length, 0x94 (count+2)*3, 0x26 three SSTR string lengths). Returns 1 if the size was resolved (and the full packet is present in pBytesSize), 0 if truncated/invalid.
+// 1.14d mac: 002dd8fe
 size_t __fastcall NET_D2GS_CLIENT_GetIncomingPacketSizeFromTableAndVariableSize(char * pBytes, size_t pBytesSize, uint32_t * pExpectedSize) {
     uint16_t wRawLen;
     uint32_t nStrLen1;

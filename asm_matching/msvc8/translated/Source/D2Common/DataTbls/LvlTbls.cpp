@@ -91,6 +91,7 @@ static D2AutoMapLvlTbls * pAutoMapLvlTbls = 0; D2_STATIC_GUARD(pAutoMapLvlTbls, 
 namespace D2Common { namespace DATATBLS { namespace LvlTbls {
 
 // Builds the 142-column field-descriptor table for Levels.txt (palette/act/teleport flags, monster levels and densities per difficulty, object groups/probabilities, the mon/nmon/umon/cmon spawn lists and their counts, themes, sound env, waypoint, and the LevelName/LevelWarp/EntryFile strings) and compiles it into sgtDataTable.pTxtLevels via CompileTxt (row stride 0x220). Halts via Fog ErrorManager if more than 0x3ff levels. Post-compile per level row: converts LevelName/LevelWarp keys to wide strings via the string table, and counts the populated entries in the mon/nmon/umon lists (terminated by a negative id, max 0x19), storing the three counts in bytes preceding the mon array. __fastcall, pMemory = data-table pool. Called once at data-table load.
+// 1.14d mac: 00144de6
 void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
     uint16_t* pWVar2;
     int nMonCount;
@@ -310,6 +311,7 @@ void __fastcall TXT_AllocTxt_levels(D2PoolManagerStrc * pMemory) {
     } while (i < MonsterTbls::sgtDataTable.nTxtLevelsSize);
 }
 
+// 1.14d mac: 0014502d
 D2LevelsTxt * __stdcall TXT_Levels_GetLine(eD2LevelId eLevel) {
     if ((int)eLevel > 0 && (int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
       return ITEMS::Items::sgptDataTable->pTxtLevels + eLevel;
@@ -318,6 +320,7 @@ D2LevelsTxt * __stdcall TXT_Levels_GetLine(eD2LevelId eLevel) {
     return nullptr;
 }
 
+// 1.14d mac: 0014505d
 uint8_t __stdcall LEVEL_CanHaveRain(eD2LevelId eLevel) {
     if ((int)eLevel > 0 && (int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
       return ITEMS::Items::sgptDataTable->pTxtLevels[eLevel].Rain;
@@ -326,6 +329,7 @@ uint8_t __stdcall LEVEL_CanHaveRain(eD2LevelId eLevel) {
     return '\0';
 }
 
+// 1.14d mac: 00145094
 uint8_t __stdcall LVLTBLS_GetNoPer(uint32_t nLevelId) {
     if ((int)nLevelId > 0 && (int)nLevelId < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
       return ITEMS::Items::sgptDataTable->pTxtLevels[nLevelId].NoPer;
@@ -334,6 +338,7 @@ uint8_t __stdcall LVLTBLS_GetNoPer(uint32_t nLevelId) {
     return 0;
 }
 
+// 1.14d mac: 001450cb
 uint8_t __stdcall LEVEL_CanHaveMud(eD2LevelId eLevel) {
     if ((int)eLevel > 0 && (int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
       return ITEMS::Items::sgptDataTable->pTxtLevels[eLevel].Mud;
@@ -342,6 +347,7 @@ uint8_t __stdcall LEVEL_CanHaveMud(eD2LevelId eLevel) {
     return '\0';
 }
 
+// 1.14d mac: 00145102
 void __stdcall LVLTBLS_FreeLevelsTxt() {
     if (ITEMS::Items::sgptDataTable->pTxtLevels) {
       DataTbls::UnloadBin(ITEMS::Items::sgptDataTable->pTxtLevels);
@@ -352,6 +358,7 @@ void __stdcall LVLTBLS_FreeLevelsTxt() {
     ITEMS::Items::sgptDataTable->nTxtLevelsSize = 0;
 }
 
+// 1.14d mac: 00145139
 int32_t __stdcall TXT_Levels_GetMonLvlForDifficulty(eD2LevelId eLevel, eD2Difficulty nDifficulty, BOOL bIsExpansion) {
     if (!(nDifficulty < (DIFFICULTY_HELL | DIFFICULTY_NIGHTMARE))) {
       return 1;
@@ -396,12 +403,14 @@ static void LVLTBLS_BuildPortalLevelArray(D2LevelDefsTxt * pTxtLevelDefs) {
     }
 }
 
+// 1.14d mac: 0014518c
 eD2LevelId * __fastcall GetPortalLevelArrayFromPortalFlags(uint32_t * pnPortalLevelCount) {
     *pnPortalLevelCount = nPortalLevelCount;
     return gpPortalLevelArray;
 }
 
 // Loads and compiles the leveldefs.txt data table. Builds a stack array of D2BinFieldInputStrc field descriptors mapping each leveldefs column (QuestFlag, Layer, SizeX/Y per difficulty, Offset, Depend, DrlgType, LevelType, SubType/Theme/Waypoint/Shrine, Vis0-7, Warp0-7, light RGB/Intensity, Portal, Position, SaveMonsters, LOSDraw) to its struct offset and field type, then calls CompileTxt to parse the file into sgtDataTable.pTxtLevelDefs. Finally calls LVLTBLS_BuildPortalLevelArray to derive the portal-level lookup. Allocates from the supplied D2PoolManagerStrc; one-time table init at startup.
+// 1.14d mac: 001451a8
 void __fastcall TXT_AllocTxt_leveldefs(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc leveldefs[43] = {
       {"QuestFlag", FIELDTYPE_INT, 0, 0, 0},
@@ -453,6 +462,7 @@ void __fastcall TXT_AllocTxt_leveldefs(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\LvlTbls.cpp
+// 1.14d mac: 00145371
 void __stdcall LVLTBLS_FreeLevelDefsTxt() {
     if (MonsterTbls::sgtDataTable.pTxtLevelDefs) {
       DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtLevelDefs);
@@ -464,6 +474,7 @@ void __stdcall LVLTBLS_FreeLevelDefsTxt() {
     D2_FREE_POOL_AT(nullptr, gpPortalLevelArray, ".\\DATATBLS\\LvlTbls.cpp", 0x1d9);
 }
 
+// 1.14d mac: 001453d0
 D2LevelDefsTxt * __fastcall TXT_LevelDefs_GetLine(eD2LevelId eLevel) {
     if ((int)eLevel >= 0 && (int)eLevel < ITEMS::Items::sgptDataTable->nTxtLevelsSize) {
       return MonsterTbls::sgtDataTable.pTxtLevelDefs + eLevel;
@@ -473,6 +484,7 @@ D2LevelDefsTxt * __fastcall TXT_LevelDefs_GetLine(eD2LevelId eLevel) {
 }
 
 // Converts all forward slashes '/' in a level path string to backslashes '\\' in-place, then prepends the data directory prefix via wsprintfA. Used to normalize DS1/DT1 file paths loaded from level text tables to Windows path format.
+// 1.14d mac: 001454d9
 static void __fastcall LVLTBLS_FixPathSlashes(char * szPathPrefix, char * szText) {
     int i;
     char szFormatBuf[60];
@@ -499,6 +511,7 @@ static void __fastcall LVLTBLS_FixPathSlashes(char * szPathPrefix, char * szText
 }
 
 // Loads and compiles lvltypes.txt into the global pTxtLvlTypes / nTxtLvlTypesSize table. Builds a D2BinFieldInputStrc schema describing the row layout: 32 "File N" ASCII path fields (0x3b bytes each), plus Act (char) and Expansion (int), terminated by an END field; row stride 0x788. Calls CompileTxt to parse the txt via pMemory pool, then post-processes every row converting forward to back slashes in all 32 file-path strings via LVLTBLS_FixPathSlashes. Part of D2Common data-table init.
+// 1.14d mac: 00145408
 void __fastcall TXT_AllocTxt_lvltypes(D2PoolManagerStrc * pMemory) {
     int nRowIdx;
     int nFileIdx;
@@ -555,6 +568,7 @@ void __fastcall TXT_AllocTxt_lvltypes(D2PoolManagerStrc * pMemory) {
     }
 }
 
+// 1.14d mac: 0014555a
 void __stdcall DATATBLS_UnloadLevelTypesTxt() {
     DataTbls::UnloadBin(pTxtLvlTypes);
 }
@@ -568,6 +582,7 @@ D2LvlTypesTxt * __stdcall TXT_LvlTypes_GetLine(int32_t nLvlTypeId) {
     return pTxtLvlTypes + nLvlTypeId;
 }
 
+// 1.14d mac: 001455c8
 BOOL __stdcall TXT_LvlTypes_CheckIfTypeIsAssignedToAct(int32_t nLvlTypeId, char nAct) {
     if (!pTxtLvlTypes) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x251);
@@ -581,6 +596,7 @@ BOOL __stdcall TXT_LvlTypes_CheckIfTypeIsAssignedToAct(int32_t nLvlTypeId, char 
     return 0;
 }
 
+// 1.14d mac: 001455f6
 void __stdcall LVLTBLS_GetLvlTypeFilename(int32_t nLvlType, int32_t nFileIndex, uint8_t * szFilename) {
     if (!pTxtLvlTypes) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x251);
@@ -596,6 +612,7 @@ void __stdcall LVLTBLS_GetLvlTypeFilename(int32_t nLvlType, int32_t nFileIndex, 
 
 // Loads and compiles the lvlprest.txt data table (preset-area level definitions) via CompileTxt, populating the field schema (Def, LevelId, Populate, sizes, AutoMap, Expansion flag, File1-File6 ASCII paths, Dt1Mask, etc.) into sgtDataTable.pTxtLvlPrest. When nParam!=0 also allocates pTxtLvlTbls (6 DRLG-file pointers per row) and, for each row visible in the current game mode (expansion rows skipped in classic), normalizes file path slashes and allocates a D2DrlgFileStrc for each non-empty File path. Side effects: sets global table pointers and size.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
+// 1.14d mac: 0014562f
 void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoadDrlgFiles) {
     uint32_t nFileIdx;
     D2BinFieldInputStrc lvlprest[24] = {
@@ -655,6 +672,7 @@ void __fastcall TXT_AllocTxt_lvlprest(D2PoolManagerStrc * pMemory, int32_t bLoad
 }
 
 // @sourcefile .\DATATBLS\LvlTbls.cpp
+// 1.14d mac: 0014580a
 void __stdcall TXT_LvlTbls_Free() {
     int i;
     if (pTxtLvlTbls) {
@@ -685,6 +703,7 @@ D2LvlPrestTxt * __stdcall TXT_LvlPrest_GetLine(int32_t nLvlPrestId) {
     return nullptr;
 }
 
+// 1.14d mac: 001458eb
 D2LvlPrestTxt * __fastcall TXT_LvlPrest_FindLineByLevelId(eD2LevelId eLevel) {
     int i = 0;
     if (ITEMS::Items::sgptDataTable->nTxtLvlPrestSize > 0) {
@@ -703,6 +722,7 @@ D2LvlPrestTxt * __fastcall TXT_LvlPrest_FindLineByLevelId(eD2LevelId eLevel) {
 }
 
 // Parses and compiles the lvlwarp.txt data table into the global pTxtLvlWarp array. Defines 12 fields (Id, SelectX/Y, SelectDX/DY, ExitWalkX/Y, OffsetX/Y, LitVersion, Tiles, Direction) with their struct offsets, then calls CompileTxt to allocate and populate the binary record array from the text file.
+// 1.14d mac: 00145938
 void __fastcall TXT_AllocTxt_lvlwarp(D2PoolManagerStrc * pMemory) {
     int nTxtLvlWarpSize_lcl;
     D2BinFieldInputStrc lvlwarp[13] = {
@@ -724,6 +744,7 @@ void __fastcall TXT_AllocTxt_lvlwarp(D2PoolManagerStrc * pMemory) {
     nTxtLvlWarpSize = nTxtLvlWarpSize_lcl;
 }
 
+// 1.14d mac: 001459c9
 void __stdcall TXT_LvlWarp_Free() {
     DataTbls::UnloadBin(pTxtLvlWarp);
 }
@@ -757,6 +778,7 @@ D2LvlWarpTxt * __fastcall TXT_LvlWarp_Setup(int32_t nWarpId, uint8_t nDirection)
 }
 
 // Compiles lvlmaze.txt into the global sgpTxtLvlMaze table. Defines 7 integer fields (Level, Rooms, Rooms(N), Rooms(H), SizeX, SizeY, Merge) plus an END sentinel, then calls CompileTxt to parse and store the maze generation parameters for each level.
+// 1.14d mac: 00145a9d
 void __fastcall TXT_AllocTxt_lvlmaze(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc lvlmaze[8] = {
       {"Level", FIELDTYPE_INT, 0, 0, 0},
@@ -771,6 +793,7 @@ void __fastcall TXT_AllocTxt_lvlmaze(D2PoolManagerStrc * pMemory) {
     sgpTxtLvlMaze = (D2LvlMazeTxt*)DataTbls::CompileTxt(pMemory, "lvlmaze", lvlmaze, &nTxtLvlMazeSize, 0x1c);
 }
 
+// 1.14d mac: 00145b22
 void __stdcall TXT_FreeTxt_LvlMaze() {
     DataTbls::UnloadBin(sgpTxtLvlMaze);
 }
@@ -793,6 +816,7 @@ D2LvlMazeTxt * __fastcall TXT_LvlMaze_FindLineByLevelId(int32_t nLevelId) {
 
 // Loads and compiles the lvlsub.txt data table into sgpTxtLvlSub via CompileTxt, defining the column layout (Type, File, CheckAll, BordType, GridSize, Dt1Mask, and Prob/Trials/Max for sub-types 0-4, plus Expansion). Builds gpnLvlSubTypeToIndex, a Type->first-row-index lookup sized to the max Type id. When DRLG preset files are needed (nParam or bGametypeIsOBNetHost set), allocates gpaDrlgLvlSubPresetFiles and preloads each row's preset .ds1 file via AllocDrlgFile (fixing path slashes, skipping expansion-only rows in classic), halting on load failure. Called once during data-table init; no return value.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
+// 1.14d mac: 00145bc6
 void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam, BOOL bGametypeIsOBNetHost) {
     int nPrevSubType;
     D2BinFieldInputStrc lvlsub[23] = {
@@ -898,6 +922,7 @@ void __fastcall TXT_AllocTxt_lvlsub(D2PoolManagerStrc * pMemory, int32_t nParam,
 
 // Frees all resources associated with the LvlSub (level sub-preset) table. Releases each preset DS1 file handle in gpaDrlgLvlSubPresetFiles, frees the file array, calls DRLGMAZE_FreeRoomPresetData on each sgpTxtLvlSub entry, unloads the compiled bin, and frees the gpnLvlSubTypeToIndex lookup array. Nulls all pointers on completion.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
+// 1.14d mac: 00145e52
 void __stdcall TXT_FreeTxt_LvlSub() {
     int i;
     if (gpaDrlgLvlSubPresetFiles) {
@@ -933,6 +958,7 @@ void __stdcall TXT_FreeTxt_LvlSub() {
     gpnLvlSubTypeToIndex = 0;
 }
 
+// 1.14d mac: 00145f5a
 D2LvlSubTxt * __fastcall TXT_LvlSub_GetLineFromSubType(int32_t nSubType) {
     if (nSubType < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3f1);
@@ -952,6 +978,7 @@ D2LvlSubTxt * __fastcall TXT_LvlSub_GetLineFromSubType(int32_t nSubType) {
 
 // Allocates and populates the pExpansionLvlTbls array (one D2ExpansionLvlTblsTxt per LvlTypes row, 0x1000 bytes each). For each LvlTypes row iterates up to 32 File[] entries (stride 60 bytes); skips entries whose filename starts with "0" and skips expansion-only tiles in classic mode. Calls TILEPROJECT_AllocSlot for each valid tile file.
 // @sourcefile .\DATATBLS\LvlTbls.cpp
+// 1.14d mac: 00145ffc
 void __fastcall LVLTBLS_LoadLvlTypeTileLibraries(D2PoolManagerStrc * pMemory) {
     if (!pTxtLvlTypes) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x410);
@@ -978,6 +1005,7 @@ void __fastcall LVLTBLS_LoadLvlTypeTileLibraries(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\LvlTbls.cpp
+// 1.14d mac: 00146136
 void __stdcall LVLTBLS_FreeLvlTypeTileLibraries() {
     if (!gpLvlTypeTileLibraries) {
       return;
@@ -1672,6 +1700,7 @@ static int32_t LVLTBLS_GetAutomapTileId(char * szTileName) {
 
 // Loads and compiles automap.txt into the runtime AutoMap level tables. Initializes the data-table seed, declares the column schema (LevelName, TileName, Style, Start/EndSequence, Cel1-4), and compiles it via CompileTxt. Allocates a 32-byte-per-row AutoMapLvlTbls array, then per row resolves the automap level id and tile id, copies style/sequence and cel fields, and counts the valid (non -1) cels (halts if a row has zero cels). Then resets the gpaAutoMapRelated index table to -1 and builds, per level type, the start index + count of contiguous same-type rows. Side effects: allocates server memory, fills global automap tables; unrecoverable-halt on bad rows. Server-side D2Common DataTbls (LvlTbls).
 // @sourcefile .\DATATBLS\LvlTbls.cpp
+// 1.14d mac: 0014617b
 void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
     // Static local variables (originally global data)
     static int nTxtAutoMapSize; D2_STATIC_GUARD_BSS(nTxtAutoMapSize, "D2Common::DATATBLS::LvlTbls::TXT_AllocTxt_automap::nTxtAutoMapSize");
@@ -1764,6 +1793,7 @@ void __fastcall TXT_AllocTxt_automap(D2PoolManagerStrc * pMemory) {
     return;
 }
 
+// 1.14d mac: 00146543
 int32_t __fastcall GetRandomCellNo(int32_t nLevelType, int32_t nOrientation, int32_t nIndex, int32_t nSubIndex) {
     if (!nLevelType) {
       return -1;
@@ -1792,6 +1822,7 @@ int32_t __fastcall GetRandomCellNo(int32_t nLevelType, int32_t nOrientation, int
 }
 
 // @sourcefile .\DATATBLS\LvlTbls.cpp
+// 1.14d mac: 0014664e
 void __stdcall FreeAutoMapLvlTbls() {
     if (pAutoMapLvlTbls) {
       D2_FREE_POOL_AT(nullptr, pAutoMapLvlTbls, ".\\DATATBLS\\LvlTbls.cpp", 0x551);

@@ -84,6 +84,7 @@ typedef uint8_t (__fastcall *fpLevelDataFn2)(D2DrlgLevelStrc * pDrlgLevel, int n
 namespace D2Common { namespace Drlg { namespace OutJung {
 
 // Populates jungle-area outdoor levels (Spider Forest 0x4C, Flayer Jungle 0x4D, Great Marsh 0x4E) by iterating preset-grid cells from pLevel->pAutomapEx. Applies per-difficulty SizeX/SizeY from LevelDefs.txt, spawns special presets at row/column boundaries using a seed-derived random offset, and calls SpawnOutdoorLevelPresetEx for each non-zero preset id. Halts on invalid preset count (>2 specials) or null automap pointer.
+// 1.14d mac: 00156d6c
 void __fastcall BuildJungle(D2DrlgLevelStrc * pLevel) {
     // Static local variables (originally global data)
     static int gaOutJungSpecialPresetRandOffsets[6][3] = {
@@ -155,6 +156,7 @@ void __fastcall BuildJungle(D2DrlgLevelStrc * pLevel) {
 namespace D2Common { namespace Drlg {
 
 // Places border presets (Type A pattern) for Act 3 Kurast outdoor levels. Spawns north/south edge presets (0x25D-0x25E) with special portal variants, east/west walls (0x25F-0x260), and four corner presets (0x261-0x264). Called by BuildKurast.
+// 1.14d mac: 0015701b
 void __fastcall DRLGOUTJUNG_BuildKurastDocktownBorders(D2DrlgLevelStrc * pLevel) {
     int nXIter;
     int nYIter;
@@ -183,6 +185,7 @@ void __fastcall DRLGOUTJUNG_BuildKurastDocktownBorders(D2DrlgLevelStrc * pLevel)
 }
 
 // Places border presets (Type B pattern) for Act 3 Kurast outdoor levels. Similar to Type A but with different preset IDs (0x26B-0x272) and swapped portal placement logic on the borders. Called by BuildKurast.
+// 1.14d mac: 00157268
 void __fastcall DRLGOUTJUNG_BuildKurastUpperBorders(D2DrlgLevelStrc * pLevel) {
     int nIter;
     int nX = pLevel->sCoordinatesAndSize.WorldSize.x / 8 - 1;
@@ -206,6 +209,7 @@ void __fastcall DRLGOUTJUNG_BuildKurastUpperBorders(D2DrlgLevelStrc * pLevel) {
 }
 
 // Places border presets (Type C pattern) for Act 3 Kurast outdoor levels. Uses preset IDs 0x27C-0x283. The north edge has centered portal variants while the south edge uses offset-based variants. Called by BuildKurast.
+// 1.14d mac: 00157487
 void __fastcall DRLGOUTJUNG_BuildKurastCausewayBorders(D2DrlgLevelStrc * pLevel) {
     int nIter;
     const int nX = pLevel->sCoordinatesAndSize.WorldSize.x / 8 - 1;
@@ -238,6 +242,7 @@ namespace D2Common { namespace Drlg { namespace OutJung {
 
 // DRLG outdoor-jungle generator: scatters random level presets (preset ids nLevelPrestId1..nLevelPrestId2) across every cell of the level's DRLG grid. Allocates a temp (x,y) cell list from the server memory pool, Fisher-Yates shuffles it with the level seed, then for each cell rolls a random preset id in range and, if TestOutdoorLevelPreset passes, places it via SpawnOutdoorLevelPresetEx. Stops after a4 placements (if a4>0). Frees the temp buffer on exit. Side-effects: advances pLevel->sSeed, spawns DS1 presets into the level.
 // @sourcefile .\DRLG\OutJung.cpp
+// 1.14d mac: 001576d1
 void __fastcall SpawnRandomPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestId1, int32_t nLevelPrestId2, int32_t a4) {
     int32_t nY;
     BOOL bCanSpawn;

@@ -13,6 +13,7 @@ template<> TSExplicitList<::MappingEntryNode, -572662307>* TSGrowableArray<TSExp
     return this->m_data + nIndex;
 }
 
+// 1.14d mac: 00199282 TSLink<MappingEntryNode>::NextLink
 template<> TSLink<::MappingEntryNode>* TSLink<MappingEntryNode>::NextLink(intptr_t nLinkOffset) {
     intptr_t nNextOffset = this->m_next;
     if (nNextOffset < 0) {

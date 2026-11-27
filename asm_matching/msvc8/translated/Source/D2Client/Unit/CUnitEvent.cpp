@@ -28,6 +28,7 @@ typedef int32_t (__fastcall *fnCUnitEventCallback)(int nClientEvent, D2UnitStrc 
 namespace D2Client { namespace UNIT { namespace CUnitEvent {
 
 // @sourcefile .\UNIT\CUnitEvent.cpp
+// 1.14d mac: 0012b43d
 void __fastcall FreeEventList(D2UnitStrc * pUnit) {
     int32_t nNull;
     D2CUnitEventStrc* pPrevEvent;
@@ -51,6 +52,7 @@ void __fastcall FreeEventList(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNIT\CUnitEvent.cpp
+// 1.14d mac: 0012b4a1
 D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, int nClientEvent, uint32_t dwEventData1, uint32_t dwEventData2, fnCUnitEventCallback pfnCallback, int nEventType, int nEventState) {
     if (!pUnit) {
       return nullptr;
@@ -75,6 +77,7 @@ D2CUnitEventStrc * __fastcall CUNITEVENT_Alloc(D2UnitStrc * pUnit, int nClientEv
 }
 
 // @sourcefile .\UNIT\CUnitEvent.cpp
+// 1.14d mac: 0012b541
 void __fastcall CUNITEVENT_RemoveByTypeAndState(D2UnitStrc * pUnit, int32_t nEventType, int32_t nEventState) {
     if (!pUnit) {
       return;

@@ -8,7 +8,13 @@
 #include "Source/Fog/Src/Safesock.h"
 #include "Source/Storm/Storm.h"
 #include "Source/D2Headers/d2_platform.h"
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x1a8, "D2QSSocketStrc is 0x1a8 bytes on 32-bit");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x194, "D2QSSocketStrc is 0x194 bytes on 32-bit");
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -20,7 +26,13 @@ static_assert(sizeof(void*) != 4 || sizeof(D2QSSocketStrc) == 0x194, "D2QSSocket
 #define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
 #endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(::D2QSSocketStrc) == 0x1a8, "D2_NEW_AT(D2QSSocketStrc): the 32-bit layout must be the 0x1a8 bytes 1.14d allocates");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(::D2QSSocketStrc) == 0x194, "D2_NEW_AT(D2QSSocketStrc): the 32-bit layout must be the 0x194 bytes 1.14d allocates");
+#endif
 
 #ifndef D2_FREE_AT
 #define D2_FREE_AT(p, szFile, nLine) Fog::Memory::FreeClientMemory((p), (szFile), (nLine), 0)
@@ -34,6 +46,7 @@ typedef int (__fastcall *fpD2QSSocketPacketHandler)(uint8_t * pPacketBuf, int nP
 
 namespace Fog { namespace Src { namespace D2QSSocket {
 
+// 1.14d mac: 002ed249
 void __stdcall QSSOCKET_SetCallbackHandler1(D2QSSocketStrc * pQSSocket, void * fpCallback, void * pContext) {
     if (!pQSSocket) {
       return;
@@ -85,6 +98,7 @@ BOOL __stdcall QSSOCKET_SendWithTimeout(D2QSSocketStrc * pQSSocket, char * pBuff
     return 0;
 }
 
+// 1.14d mac: 002ed547
 int __stdcall ReadBytesFromSocket(D2QSSocketStrc * pMCPQSocket, char * pOutBuf, int nMaxBytes) {
     if (!pMCPQSocket) {
       return 0;
@@ -169,6 +183,7 @@ void __stdcall QSSOCKET_SetCallbackHandler2(D2QSSocketStrc * pQSSocket, int nHea
 }
 
 // NOTE: Register param types inferred (medium confidence): pQSSocketStrc (ESI): D2QSSocketStrc *
+// 1.14d mac: 002ed69a
 static void __stdcall QSSOCKET_BlockSocket(D2QSSocketStrc * pQSSocketStrc) {
     if (!pQSSocketStrc) {
       return;
@@ -186,6 +201,7 @@ static void __stdcall QSSOCKET_BlockSocket(D2QSSocketStrc * pQSSocketStrc) {
 }
 
 // Thread-safe socket close with critical section protection
+// 1.14d mac: 002edbea
 static void __stdcall CloseSocket(D2QSSocketStrc * pQServer) {
     if (!pQServer) {
       return;
@@ -204,6 +220,7 @@ static void __stdcall CloseSocket(D2QSSocketStrc * pQServer) {
 }
 
 // Socket receive loop, passed as thread proc to Fog::Safesock::Create_Flag0
+// 1.14d mac: 002ed89d
 int __stdcall ReceiveLoopCallback(D2QSSocketStrc * pQSSocket) {
     uint32_t nBytesRecv;
     uint32_t nBufferSpace;
@@ -271,6 +288,7 @@ DWORD __stdcall QSSOCKET_ThreadEntryPoint(D2QSSocketStrc * lpThreadParam) {
     return 1;
 }
 
+// 1.14d mac: 002ed57c
 void __stdcall NET_MCP_CLIENT_CreateConnectionThread(D2QSSocketStrc * NET_MCP_CLIENT_D2QSSocket) {
     if (!(NET_MCP_CLIENT_D2QSSocket && !NET_MCP_CLIENT_D2QSSocket->hThread)) {
       return;
@@ -279,7 +297,11 @@ void __stdcall NET_MCP_CLIENT_CreateConnectionThread(D2QSSocketStrc * NET_MCP_CL
     /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ NET_MCP_CLIENT_D2QSSocket->bStopRequested = 0;
     HANDLE pvVar1 = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPCSTR)0x0);
     NET_MCP_CLIENT_D2QSSocket->pEvent = pvVar1;
+#if !defined(_WIN32) && D2_OS_MAC
+    pvVar1 = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)QSSOCKET_ThreadEntryPoint, NET_MCP_CLIENT_D2QSSocket, 0, &NET_MCP_CLIENT_D2QSSocket->dwThreadId, "(LPTHREAD_START_ROUTINE)sConnect");
+#else
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pvVar1 = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)QSSOCKET_ThreadEntryPoint, NET_MCP_CLIENT_D2QSSocket, 0, &NET_MCP_CLIENT_D2QSSocket->dwThreadId);
+#endif
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ NET_MCP_CLIENT_D2QSSocket->hThread = pvVar1;
     DWORD DVar2 = WaitForSingleObject(pvVar1, 0);
     while (DVar2) {
@@ -288,6 +310,8 @@ void __stdcall NET_MCP_CLIENT_CreateConnectionThread(D2QSSocketStrc * NET_MCP_CL
     }
 }
 
+#if !D2_OS_MAC
+// The Mac binary has one thread-starting function, QSSOCKET_StartConnectThread (002ed57c).
 HANDLE __stdcall QSSOCKET_Initialize(D2QSSocketStrc * pQSSocket) {
     if (!pQSSocket) {
       return (HANDLE)0x0;
@@ -303,7 +327,9 @@ HANDLE __stdcall QSSOCKET_Initialize(D2QSSocketStrc * pQSSocket) {
     pQSSocket->hThread = hHandle;
     return hHandle;
 }
+#endif
 
+// 1.14d mac: 002ed688
 void __stdcall D2QSSOCKET_BlockSocketIfValid(D2QSSocketStrc * pQSSocket) {
     if (!pQSSocket) {
       return;
@@ -313,6 +339,7 @@ void __stdcall D2QSSOCKET_BlockSocketIfValid(D2QSSocketStrc * pQSSocket) {
 }
 
 // @sourcefile .\Src\D2QSSocket.cpp
+// 1.14d mac: 002ed6e8
 D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort, char * szName) {
     char cCurChar;
     int32_t dwErrorCode;
@@ -351,6 +378,7 @@ D2QSSocketStrc * __stdcall STRUCT_D2QSSocket_Init(char * szIpAddress, int nPort,
 }
 
 // @sourcefile .\Src\D2QSSocket.cpp
+// 1.14d mac: 002ed812
 void __stdcall FreeD2QSSocket(D2QSSocketStrc * pSocket) {
     if (!pSocket) {
       return;
@@ -376,6 +404,7 @@ DWORD __stdcall QSSOCKET_WaitForEvent(D2QSSocketStrc * pQSSocket, DWORD dwTimeou
     return DVar1;
 }
 
+// 1.14d mac: 002ed887
 D2NetDataStrc * __stdcall NET_D2QSocket_GetSafesock(D2QSSocketStrc * pQSSocket) {
     if (!pQSSocket) {
       return nullptr;

@@ -349,6 +349,7 @@ void __stdcall AUTOMAP_OnKeyDownEnd_NoOp(D2UIMouseMsgStrc * pMsg) {
 
 }
 
+// 1.14d mac: 000979d8
 void __stdcall AUTOMAP_SetupPosition() {
     // Static local variables (originally global data)
     static int gnAutomapPanelOffsetX; D2_STATIC_GUARD_BSS(gnAutomapPanelOffsetX, "D2Client::UI::Automap::AUTOMAP_SetupPosition::gnAutomapPanelOffsetX");
@@ -398,6 +399,7 @@ void __stdcall AUTOMAP_SetupPosition() {
     }
 }
 
+// 1.14d mac: 00097951
 void __fastcall AUTOMAP_CenterOnPlayer(int32_t bForceCenter) {
     if (!(nAutoMapCenters || bForceCenter)) {
       return;
@@ -420,6 +422,7 @@ void __fastcall AUTOMAP_CenterOnPlayer(int32_t bForceCenter) {
     }
 }
 
+// 1.14d mac: 00097b18
 int32_t __stdcall AUTOMAP_GetFade() {
     if (MiniMapType == 1 && nAutoMapFade == 1) {
       nAutoMapFade = bAutoMapFade ? 0 : 2;
@@ -428,6 +431,7 @@ int32_t __stdcall AUTOMAP_GetFade() {
     return nAutoMapFade;
 }
 
+// 1.14d mac: 00097b63
 int32_t __fastcall AUTOMAP_SetFade(int32_t nAutomapFade) {
     if (MiniMapType == 1 && nAutomapFade == 1) {
       nAutomapFade = bAutoMapFade ? 0 : 2;
@@ -440,20 +444,24 @@ int32_t __fastcall AUTOMAP_SetFade(int32_t nAutomapFade) {
     return nAutomapFade;
 }
 
+// 1.14d mac: 00097bda
 int32_t __stdcall AUTOMAP_GetCenters() {
     return nAutoMapCenters;
 }
 
+// 1.14d mac: 00097beb
 int32_t __fastcall AUTOMAP_SetCenters(int32_t nAutoMapCenters) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "AutoMap Centers", 0, nAutoMapCenters);
     Automap::nAutoMapCenters = nAutoMapCenters;
     return nAutoMapCenters;
 }
 
+// 1.14d mac: 00097c2f
 int32_t __stdcall AUTOMAP_GetLeft() {
     return AutoMapLeft;
 }
 
+// 1.14d mac: 00097c40
 int32_t __fastcall AUTOMAP_SetLeft(int32_t nAutoMapLeft) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "AutoMap Left", 0, nAutoMapLeft);
     AutoMapLeft2 = nAutoMapLeft;
@@ -462,20 +470,24 @@ int32_t __fastcall AUTOMAP_SetLeft(int32_t nAutoMapLeft) {
     return nAutoMapLeft;
 }
 
+// 1.14d mac: 00097c90
 BOOL __stdcall AUTOMAP_GetParty() {
     return nAutoMapParty;
 }
 
+// 1.14d mac: 00097ca1
 int32_t __fastcall AUTOMAP_SetParty(int32_t nAutoMapParty) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "AutoMap Party", 0, nAutoMapParty);
     Automap::nAutoMapParty = nAutoMapParty;
     return nAutoMapParty;
 }
 
+// 1.14d mac: 00097ce5
 int32_t __stdcall AUTOMAP_GetPartyNames() {
     return AutoMapPartyNames;
 }
 
+// 1.14d mac: 00097cf6
 int32_t __fastcall AUTOMAP_SetPartyNames(int32_t nAutoMapPartyNames) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "AutoMap Party Names", 0, nAutoMapPartyNames);
     AutoMapPartyNames = nAutoMapPartyNames;
@@ -660,6 +672,7 @@ int __fastcall Unreferenced_00457ac0(D2AutomapCellStrc * pCellA, D2AutomapCellSt
 // using wWeight as the balance factor (-1, 0, +1).
 // Duplicate cells at the same position with equivalent priority are rejected.
 // Source: .\\UI\\automap.cpp
+// 1.14d mac: 0009bc97
 int32_t __fastcall AUTOMAP_InsertCellIntoTree(D2AutomapCellStrc * pAutomapCell1, D2AutomapCellStrc * * pAutomapCell2) {
     int32_t nInserted;
     D2AutomapCellStrc* pNode = *pAutomapCell2;
@@ -722,6 +735,7 @@ int32_t __fastcall AUTOMAP_InsertCellIntoTree(D2AutomapCellStrc * pAutomapCell1,
 }
 
 // @sourcefile .\UI\automap.cpp
+// 1.14d mac: 00097d3a
 D2AutomapCellStrc * __stdcall AUTOMAP_AllocCell() {
     D2AutomapStrc* pPrevBlock;
     D2AutomapStrc* pNewListHead;
@@ -783,6 +797,7 @@ D2AutomapCellStrc * __stdcall AUTOMAP_AllocCell() {
 // and inserts the cell into the AVL tree. Wall tiles (type >= 15)
 // get a Y offset of +24 pixels.
 // Source: .\\UI\\automap.cpp
+// 1.14d mac: 0009c08a
 static void __stdcall AUTOMAP_RevealTile(D2DrlgTileDataStrc * pTileData, D2RoomExStrc * pRoomEx, D2AutomapCellStrc * * pAutomapCell) {
     int32_t nLevelType;
     int32_t nOrientation;
@@ -847,6 +862,7 @@ void __stdcall AUTOMAP_AddCellByCoords(int16_t nCellNo, int16_t nPixelX, int16_t
     AUTOMAP_InsertCellIntoTree(pAutomapCellLocal, pAutomapCell1);
 }
 
+// 1.14d mac: 0009c234
 static void __stdcall AUTOMAP_AddCellForUnit(int32_t nCellNo, D2AutomapCellStrc * * pAutomapCell, D2UnitStrc * pUnit) {
     D2AutomapCellStrc* pAutomapCell1 = AUTOMAP_AllocCell();
     int32_t nTargetX = D2Common::Units::GetScreenX(pUnit) / 10 + 1;
@@ -873,6 +889,7 @@ static void __stdcall AUTOMAP_AddCellForUnit(int32_t nCellNo, D2AutomapCellStrc 
     exit(-1);
 }
 
+// 1.14d mac: 0009b2c0
 HANDLE __stdcall AUTOMAP_GetMapFileHandle() {
     HANDLE hFile;
     char szRealmPath[260];
@@ -1017,6 +1034,7 @@ static void AUTOMAP_SaveLayerToFile(D2AutomapFileEntryStrc * pEntry) {
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
 }
 
+// 1.14d mac: 0009b247
 void __fastcall AUTOMAP_CalcCellTreeSize(D2AutomapCellStrc * pAutomapCell, uint32_t * nSize) {
     for (; pAutomapCell; pAutomapCell = pAutomapCell->pMore) {
       AUTOMAP_CalcCellTreeSize(pAutomapCell->pLess, nSize);
@@ -1026,6 +1044,7 @@ void __fastcall AUTOMAP_CalcCellTreeSize(D2AutomapCellStrc * pAutomapCell, uint3
     }
 }
 
+// 1.14d mac: 0009b271
 void __fastcall AUTOMAP_SerializeCellTree(D2AutomapCellStrc * pAutomapCell) {
     for (; pAutomapCell; pAutomapCell = pAutomapCell->pMore) {
       AUTOMAP_SerializeCellTree(pAutomapCell->pLess);
@@ -1040,6 +1059,7 @@ void __fastcall AUTOMAP_SerializeCellTree(D2AutomapCellStrc * pAutomapCell) {
 }
 
 // @sourcefile .\UI\automap.cpp
+// 1.14d mac: 0009a8f7
 void __stdcall AUTOMAP_SaveCurrentLayer() {
     D2AutomapFileEntryStrc sEntry;
     D2AutomapLayerStrc* pLayerEx;
@@ -1119,6 +1139,7 @@ void __stdcall AUTOMAP_SaveCurrentLayer() {
 }
 
 // @sourcefile .\UI\automap.cpp
+// 1.14d mac: 0009afa3
 void __stdcall AUTOMAP_FreeCurrentLayerCells() {
     D2AutomapLayerStrc* pSavedLayer = sgpAutomapLayerEx;
     D2AutomapStrc* pMemoryToFree = sgpAutomapCellList;
@@ -1405,6 +1426,7 @@ void __stdcall AUTOMAP_AllocLayer(int32_t nLayer) {
 }
 
 // @sourcefile .\UI\automap.cpp
+// 1.14d mac: 00097f65
 static D2AutomapLayerStrc * AUTOMAP_AddLayer(int32_t nLayer) {
     D2AutomapLayerStrc* pLayer;
     D2AutomapLayerStrc* spAutomap;
@@ -1528,6 +1550,7 @@ void __stdcall AUTOMAP_RevealUnitsInRoom(D2RoomStrc * pRoom, D2AutomapCellStrc *
 // Floor tiles go into pFloors tree, wall tiles into pWalls tree.
 // Then calls AUTOMAP_RevealUnitsInRoom to add object/monster markers.
 // Source: .\\UI\\automap.cpp
+// 1.14d mac: 00098881
 void __stdcall AUTOMAP_RevealRoom(D2RoomStrc * pRoom, int32_t bForceReveal, D2AutomapLayerStrc * pAutomapLayer) {
     int* pnTileFlags;
     uint32_t nTileCount = 0;
@@ -1579,6 +1602,7 @@ void __stdcall AUTOMAP_RevealRoom(D2RoomStrc * pRoom, int32_t bForceReveal, D2Au
 // to avoid updating every single frame.
 // Source: .\\UI\\automap.cpp
 // @blizzard AutoMapUpdate
+// 1.14d mac: 00097e26
 void __stdcall AUTOMAP_Update() {
     // Static local variables (originally global data)
     static int nAutoMapLastPlayerY; D2_STATIC_GUARD_BSS(nAutoMapLastPlayerY, "D2Client::UI::Automap::AUTOMAP_Update::nAutoMapLastPlayerY");
@@ -1654,10 +1678,12 @@ void __stdcall AUTOMAP_Update() {
     }
 }
 
+// 1.14d mac: 00098a8d
 void __stdcall AUTOMAP_SetRefreshDelay() {
     nAutoMapRevealDelay = 2;
 }
 
+// 1.14d mac: 00098aa2
 void __stdcall AUTOMAP_RevealRoomCallback(D2RoomStrc * pRoom) {
     int nLayer = sgpAutomapLayerEx ? sgpAutomapLayerEx->nLayer : -1;
     int nLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
@@ -1671,6 +1697,7 @@ void __stdcall AUTOMAP_RevealRoomCallback(D2RoomStrc * pRoom) {
     AUTOMAP_AddLayer(nLayer);
 }
 
+// 1.14d mac: 00098b04
 void __stdcall AUTOMAP_RevealTownCallback(eD2LevelId eLevel, uint32_t nCellNo, int32_t nX, int32_t nY) {
     // Static local variables (originally global data)
     static int gaLuthGoleinTownCells[12] = {
@@ -1814,6 +1841,7 @@ void __stdcall AUTOMAP_RevealTownCallback(eD2LevelId eLevel, uint32_t nCellNo, i
 }
 
 // Recursively draws automap cell tree using AVL node traversal. Applies fade effects, draws tiles with alpha based on game state. Checks viewport clipping and player proximity for highlight.
+// 1.14d mac: 0009b92e
 void __fastcall AUTOMAP_DrawCellTree(D2AutomapCellStrc * pCell, D2AutomapDrawCtxStrc * apDC6Layers) {
     uint32_t eBorderType;
     int32_t eFade;
@@ -2495,6 +2523,7 @@ void __stdcall AUTOMAP_DrawDifficulty() {
     return;
 }
 
+// 1.14d mac: 0009b048
 void Unreferenced_0045a280() {
     DC6** ppDVar1 = pAutoMapDC6;
     do {
@@ -2507,6 +2536,7 @@ void Unreferenced_0045a280() {
     } while ((intptr_t)ppDVar1 < (intptr_t)((char*)&pAutoMapDC6 + sizeof(pAutoMapDC6)));
 }
 
+// 1.14d mac: 0009a64d
 void __stdcall AUTOMAP_LoadDC6Sprites() {
     BOOL bIsExpansion;
     char szPath[260];
@@ -2570,6 +2600,7 @@ void __stdcall AUTOMAP_LoadDC6Sprites() {
 // Reads registry settings: AutoMapFade, Centers, Party, PartyNames, Left.
 // Called once from InitializeUI.
 // Source: .\\UI\\automap.cpp
+// 1.14d mac: 0009a4f4
 void __stdcall AUTOMAP_Init() {
     // Static local variables (originally global data)
     static uint32_t gnAutoMapInitialZoomLevel[98] = {
@@ -2717,6 +2748,7 @@ void __stdcall AUTOMAP_Init() {
 // Called from FreeDraw during game cleanup.
 // Source: .\\UI\\automap.cpp
 // @sourcefile .\UI\automap.cpp
+// 1.14d mac: 0009a888
 void __stdcall AUTOMAP_Free() {
     AUTOMAP_SaveCurrentLayer();
     AUTOMAP_FreeCurrentLayerCells();
@@ -2746,6 +2778,7 @@ void __stdcall AUTOMAP_Free() {
 // Teal=pet, DarkGreen=ally pet, White=NPC, Gray=unknown, Yellow=waypoint/portal.
 // Called when loading an act (palette changes per act).
 // Source: .\\UI\\automap.cpp
+// 1.14d mac: 0009b082
 void __stdcall AUTOMAP_InitPaletteColors() {
     // Static local variables (originally global data)
     static uint8_t nAutoMapColorGray; D2_STATIC_GUARD_BSS(nAutoMapColorGray, "D2Client::UI::Automap::AUTOMAP_InitPaletteColors::nAutoMapColorGray");
@@ -2765,10 +2798,12 @@ void __stdcall AUTOMAP_InitPaletteColors() {
     nAutoMapColorGreen = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0xff, 0);
 }
 
+// 1.14d mac: 0009b1f9
 int __stdcall AUTOMAP_GetMiniMapType() {
     return MiniMapType;
 }
 
+// 1.14d mac: 0009b20a
 void __fastcall AUTOMAP_SetMiniMapType(int32_t nMiniMapType) {
     if (nMiniMapType == MiniMapType) {
       return;
@@ -2788,6 +2823,7 @@ void __fastcall AUTOMAP_SetMiniMapType(int32_t nMiniMapType) {
     AUTOMAP_CenterOnPlayer(1);
 }
 
+// 1.14d mac: 0009b79e
 static void __stdcall AUTOMAP_DrawTextCentered(uint8_t byColor, char * szText, int32_t nCenterX, int32_t nBaseY) {
     uint16_t wTextWide[23];
     char cCurChar;
@@ -2807,6 +2843,7 @@ static void __stdcall AUTOMAP_DrawTextCentered(uint8_t byColor, char * szText, i
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 0009b88d
 static void __stdcall AUTOMAP_DrawXMarker(int32_t nX, DWORD nColor, int32_t nY) {
     if (MiniMapType == 1) {
       nX--;
@@ -3075,6 +3112,7 @@ void __stdcall AUTOMAP_DrawPlayersAndParty() {
 // draws player/party markers, then draws text overlays
 // (game password, level name, version, difficulty, server IP, expansion tag).
 // Source: .\\UI\\automap.cpp
+// 1.14d mac: 00098dcc
 void __stdcall AUTOMAP_Draw() {
     if (!GAME::Game::sgpDrlgAct) {
       return;
@@ -3114,6 +3152,7 @@ void __stdcall AUTOMAP_Draw() {
 }
 
 // JMP thunk
+// 1.14d mac: 000dc0cb
 BOOL __stdcall AUTOMAP_GetParty_ForEscMenuItem() {
     return ::D2Client::UI::Automap::AUTOMAP_GetParty();
 }

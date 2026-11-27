@@ -84,11 +84,13 @@ static char * gnExcelRecordFieldNotFound = (char*)"\?\?\?"; D2_STATIC_GUARD(gnEx
 namespace Fog { namespace Src { namespace Excel {
 
 // @sourcefile .\Src\Excel\Excel.cpp
+// 1.14d mac: 002f13e3
 void __stdcall TXT_FreeBinFieldExcel(D2BinFieldExcelStrc * pBinFieldExcel) {
     D2_FREE_AT(pBinFieldExcel->pD2Archive, ".\\Src\\Excel\\Excel.cpp", 0x9a);
     D2_FREE_POOL_AT(nullptr, pBinFieldExcel, ".\\Src\\Excel\\Excel.cpp", 0x9b);
 }
 
+// 1.14d mac: 002f1443
 uint32_t __stdcall TXT_GetLinesCountFromBinFieldExcel(D2BinFieldExcelStrc * pBinFieldExcel) {
     return pBinFieldExcel->nLinesCount;
 }
@@ -243,6 +245,7 @@ int __stdcall FOG_ParseBinField(short * pOutMapping, D2BinFieldExcelStrc * pBinF
     return nErrorAddress;
 }
 
+// 1.14d mac: 002f26a6
 D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLine) {
     D2TxtLinkStrc* structTxtLink = (D2TxtLinkStrc*)Memory::AllocServerMemory(nullptr, sizeof(D2TxtLinkStrc), szFile, nLine, 0);
     memset(structTxtLink, 0, sizeof(*structTxtLink));
@@ -250,6 +253,7 @@ D2TxtLinkStrc * __stdcall STRUCT_CreateTxtLinkStrc(char * szFile, int nLine) {
 }
 
 // @sourcefile .\Src\Excel\Excel.cpp
+// 1.14d mac: 002f2774
 void __fastcall STRUCT_FreeTxtLinkNode(D2TxtLinkNodeStrc * pTxtLinkNode) {
     if (pTxtLinkNode->pPrevious) {
       STRUCT_FreeTxtLinkNode(pTxtLinkNode->pPrevious);
@@ -262,6 +266,7 @@ void __fastcall STRUCT_FreeTxtLinkNode(D2TxtLinkNodeStrc * pTxtLinkNode) {
 }
 
 // @sourcefile .\Src\Excel\Excel.cpp
+// 1.14d mac: 002f26f1
 void __stdcall STRUCT_FreeTxtLink(D2TxtLinkStrc * pTxtLink) {
     if (!pTxtLink) {
       return;
@@ -285,6 +290,7 @@ void __stdcall STRUCT_FreeTxtLink(D2TxtLinkStrc * pTxtLink) {
     D2_FREE_POOL_AT(nullptr, pTxtLink, ".\\Src\\Excel\\Excel.cpp", 0x360);
 }
 
+// 1.14d mac: 002f256e
 int32_t __stdcall GetClassIdFromName(D2TxtLinkStrc * pTxtLink, uint32_t pItemsTxt, uint32_t dwParam3) {
     int nMid;
     int nHigh = pTxtLink->nRecords;
@@ -360,6 +366,7 @@ BOOL __stdcall FOG_GetTxtLinkRecord(D2TxtLinkStrc * pTxtLink, int nRecordId, cha
     return 0;
 }
 
+// 1.14d mac: 002f225c
 uint32_t __stdcall FOG_AddTxtLinkRecord(D2TxtLinkStrc * pTxtLink, uint32_t nItemCode) {
     int nMidIndex;
     int nLowIndex;
@@ -459,6 +466,7 @@ char * __stdcall FOG_ParseIntField(D2TxtLinkStrc * pTxtLink, int nLinkIndex, int
     return pRecord;
 }
 
+// 1.14d mac: 002f25b2
 int32_t __stdcall GetLinkNodeIndex(D2TxtLinkStrc * pLink, char * szItemCode, uint32_t dwParam3) {
     int nCmpResult;
     int32_t iVar1;
@@ -493,6 +501,7 @@ int32_t __stdcall GetLinkNodeIndex(D2TxtLinkStrc * pLink, char * szItemCode, uin
     return -1;
 }
 
+// 1.14d mac: 002f2858
 static void __fastcall FOG_ValidateBytePtr(uint8_t * pbyte, uint8_t * pKey) {
     int nCmpResult = *(int*)pbyte;
     do {
@@ -520,6 +529,7 @@ static void __fastcall FOG_ValidateBytePtr(uint8_t * pbyte, uint8_t * pKey) {
 }
 
 // @sourcefile .\Src\Excel\Excel.cpp
+// 1.14d mac: 002f2398
 int __stdcall FOG_ParseStringField(D2TxtLinkStrc * pTxtLink, char * szText) {
     int nRecordIndex;
     if (!pTxtLink) {
@@ -544,6 +554,7 @@ int __stdcall FOG_ParseStringField(D2TxtLinkStrc * pTxtLink, char * szText) {
     }
 }
 
+// 1.14d mac: 002f2477
 int __fastcall FOG_ParseTxtLink(D2TxtLinkStrc * pTxtLink, char * szText) {
     uint8_t* pKey;
     if (!pTxtLink) {
@@ -1329,5 +1340,92 @@ void __stdcall TXT_ParseDataAndPutIntoStructure(D2BinFieldExcelStrc * pBinFieldE
       exit(-1);
     }
 }
+
+#if !defined(_WIN32) && D2_OS_MAC
+// A 20-byte record whose first field is a key; the table walkers below stop at the first zero key.
+struct D2ExcelRecord20Strc {
+    /* 0x00 */ int nKey;
+    /* 0x04 */ int anValues[4];
+};
+static_assert(sizeof(D2ExcelRecord20Strc) == 0x14, "the table records are 0x14 bytes");
+
+// The head of a table of D2ExcelRecord20Strc: the record count at +4 and the records from +0x18.
+struct D2ExcelTable20Strc {
+    /* 0x00 */ int nReserved;
+    /* 0x04 */ int nCount;
+    /* 0x08 */ int anReserved[4];
+    /* 0x18 */ D2ExcelRecord20Strc aRecords[1];
+};
+static_assert(offsetof(D2ExcelTable20Strc, aRecords) == 0x18, "the records start at +0x18");
+
+// 1.14d mac: 002f2675
+void EXCEL_WalkTable20(D2ExcelTable20Strc* pTable) {
+    if (pTable->nCount) {
+      const D2ExcelRecord20Strc* pRecord = pTable->aRecords;
+      int nKey;
+      do {
+        nKey = pRecord->nKey;
+        pRecord++;
+      } while (nKey);
+    }
+}
+
+// A link table entry: a 4-character code (blank padded) and the index it stands for.
+struct D2ExcelLinkEntryStrc {
+    /* 0x00 */ char szCode[4];
+    /* 0x04 */ int nIndex;
+};
+static_assert(sizeof(D2ExcelLinkEntryStrc) == 8, "the link entries are 8 bytes");
+
+// 1.14d mac: 002f268e
+void __stdcall TXT_SwapTableRecords(const void * pFieldSizes, void * pData, int32_t nRows, int32_t nRecordSize) {
+    // The binary only walks the field-size table (8-byte entries, ended by a zero size).
+    const int* pEntry = (const int*)pFieldSizes;
+    if (*pEntry) {
+      do {
+        pEntry += 2;
+      } while (*pEntry);
+    }
+}
+
+// The linker: the entry count, and the table of D2ExcelLinkEntryStrc at +8.
+struct D2ExcelLinkerStrc {
+    /* 0x00 */ int nCount;
+    /* 0x04 */ int nReserved;
+    /* 0x08 */ D2ExcelLinkEntryStrc* pTable;
+};
+static_assert(offsetof(D2ExcelLinkerStrc, pTable) == 8, "the link table pointer is at +8");
+
+// 1.14d mac: 002f27cd
+int FOG_GetStringFromLinkIndex(D2ExcelLinkerStrc* pLinker, int nIndex, char* szCode) {
+    D2ExcelLinkEntryStrc* pTable = pLinker->pTable;
+    int bResult = 0;
+    if (pTable && nIndex >= 0 && nIndex < pLinker->nCount) {
+      int nNext = 0;
+      int i;
+      do {
+        i = nNext;
+        if (pLinker->nCount <= i) {
+          return 0;
+        }
+
+        nNext = i + 1;
+      } while (pTable[i].nIndex != nIndex);
+
+      char cCode = pTable[i].szCode[0];
+      szCode[0] = cCode != ' ' ? cCode : '\0';
+      cCode = pTable[i].szCode[1];
+      szCode[1] = cCode != ' ' ? cCode : '\0';
+      cCode = pTable[i].szCode[2];
+      szCode[2] = cCode != ' ' ? cCode : '\0';
+      cCode = pTable[i].szCode[3];
+      szCode[3] = cCode != ' ' ? cCode : '\0';
+      szCode[4] = '\0';
+      bResult = 1;
+    }
+
+    return bResult;
+}
+#endif
 
 }}} // namespace Fog::Src::Excel

@@ -13,6 +13,7 @@
 namespace D2Game { namespace Monster { namespace AI { namespace BloodRaven {
 
 // Tail-calls MONSTERAI_ExecuteLifecycleTransition (already fixed to return int32_t) as its final statement, dropping the result.
+// 1.14d mac: 001a37bc
 int32_t __fastcall AI_BloodRaven_MoveRandomNearTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, uint32_t nRadius) {
     uint32_t nOffsetX;
     D2ModeChangeStrc sMonsterKillArgs;

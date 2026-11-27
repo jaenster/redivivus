@@ -27,7 +27,12 @@
 #define D2_NEW_AT(T, szFile, nLine) ((T*)D2_ALLOC_AT(sizeof(T), (szFile), (nLine)))
 #endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The 1.14d Mac allocates and zeroes 0x58 bytes in CallSounds (002e8c21) and SOUNDSMP_ReleaseInterfaces (002e8e43).
+static_assert(sizeof(void*) != 4 || sizeof(::D2SoundSmpStrc) == 0x58, "D2_NEW_AT(D2SoundSmpStrc): the 32-bit Mac layout must be the 0x58 bytes 1.14d Mac allocates");
+#else
 static_assert(sizeof(void*) != 4 || sizeof(::D2SoundSmpStrc) == 0x60, "D2_NEW_AT(D2SoundSmpStrc): the 32-bit layout must be the 0x60 bytes 1.14d allocates");
+#endif
 
 
 static uint8_t gEAXPropertyGuid_Obstruction[16] = {
@@ -166,6 +171,7 @@ void __fastcall SOUNDSMP_WriteToBuffer(D2SoundSmpStrc * ppSoundSmp, int nWritePo
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gSoundSmpCs);
 }
 
+// 1.14d mac: 002e8b38
 BOOL __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWriteOffset, uint32_t nBytesToClear) {
     void* pLockedBuf = 0;
     if (!pSoundSmp) {
@@ -186,6 +192,35 @@ BOOL __fastcall SOUNDSMP_ClearBuffer(IDirectSoundBuffer * pSoundSmp, DWORD dwWri
     return 1;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002e8cf1
+// The Mac sample has no 3D buffer and no EAX set: one CreateSoundBuffer, never the 3D caps
+// (0x14), and the sample-param case keeps only the pan control the |= adds. The Mac passes
+// pSoundSmp in ECX and nFlags in EDX (clang's internal fastcc).
+static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc * pSoundSmp) {
+    WAVEFORMATEX tWaveFormat;
+    SOUNDSMP_InitWaveFormat(&tWaveFormat, (WORD)((nFlags & 1) + 1));
+    DSBUFFERDESC tBufferDesc;
+    memset(&tBufferDesc, 0, sizeof(tBufferDesc));
+    tBufferDesc.dwSize = sizeof(tBufferDesc);
+    uint32_t nBufSize = (nFlags & 1) * 0x20000 + 0x20000;
+    if (!g_nSoundSampleParam) {
+      tBufferDesc.dwFlags = 0xa0;
+    }
+    tBufferDesc.dwFlags |= 0x40;
+    tBufferDesc.dwBufferBytes = nBufSize;
+    tBufferDesc.lpwfxFormat = &tWaveFormat;
+    IDirectSound* pDSDevice = SOUND_GetDirectSoundDevice();
+    HRESULT nHResult = pDSDevice->lpVtbl->CreateSoundBuffer(pDSDevice, &tBufferDesc, (void**)&pSoundSmp->pDSBuffer, nullptr);
+    if (nHResult >= 0) {
+      pSoundSmp->dwFlags = nFlags;
+      pSoundSmp->nBufSize = nBufSize;
+      pSoundSmp->nHalfBufSize = nBufSize >> 1;
+      pSoundSmp->nLoopEnd = -1;
+    }
+    return nHResult >= 0;
+}
+#else
 static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc * pSoundSmp) {
     WAVEFORMATEX tWaveFormat;
     uint32_t dwEaxCapabilities;
@@ -252,8 +287,10 @@ static BOOL __stdcall SOUNDSMP_CreateSoundBuffer(uint32_t nFlags, D2SoundSmpStrc
     pSoundSmp->nLoopEnd = -1;
     return 1;
 }
+#endif
 
 // @sourcefile .\Src\D2SoundSmp.cpp
+// 1.14d mac: 002e8c21
 D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSampleParam) {
     g_nSoundSampleParam = dwSampleParam;
     if (nSoundFlags & 2) {
@@ -281,6 +318,7 @@ D2SoundSmpStrc * __fastcall CallSounds(uint32_t nSoundFlags, uint32_t dwSamplePa
     return pSoundSmp;
 }
 
+// 1.14d mac: 002e9163
 BOOL __fastcall SOUNDSMP_LoadWavDataIntoBuffer(D2SoundSmpStrc * ppSoundSmp, int * pWavData, uint32_t nWavDataSize) {
     WAVEFORMATEX waveFormat;
     if (!(ppSoundSmp && ppSoundSmp->pDSBuffer && pWavData && nWavDataSize)) {
@@ -331,6 +369,7 @@ BOOL __fastcall SOUNDSMP_Play(D2SoundSmpStrc * ppSoundSmp) {
     return 1;
 }
 
+// 1.14d mac: 002e937a
 int32_t __fastcall SOUNDSMP_IsPlaying(D2SoundSmpStrc * pSound) {
     if (pSound && pSound->pDSBuffer) {
       return pSound->bIsPlaying;
@@ -340,6 +379,7 @@ int32_t __fastcall SOUNDSMP_IsPlaying(D2SoundSmpStrc * pSound) {
     exit(-1);
 }
 
+// 1.14d mac: 002e93bd
 uint32_t __fastcall SOUNDSMP_GetStatus(D2SoundSmpStrc * ppSoundSmp) {
     DWORD dwStatus;
     if (ppSoundSmp && ppSoundSmp->pDSBuffer) {
@@ -384,6 +424,7 @@ void __fastcall SOUNDSMP_SetVolume(D2SoundSmpStrc * ppSoundSmp, int nVolume) {
 
 // Returns pSoundSmp->nVolume, the value SOUNDSMP_SetVolume stores; halts (line 740) on NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 002e9432
 int __fastcall SOUNDSMP_GetVolume(D2SoundSmpStrc * pSoundSmp) {
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2e4);
@@ -393,6 +434,7 @@ int __fastcall SOUNDSMP_GetVolume(D2SoundSmpStrc * pSoundSmp) {
     return pSoundSmp->nVolume;
 }
 
+// 1.14d mac: 002e8f8c
 void __fastcall SOUNDSMP_SetPan(D2SoundSmpStrc * ppSoundSmp, int32_t nPan) {
     if (!ppSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ef);
@@ -410,20 +452,27 @@ void __fastcall SOUNDSMP_SetPan(D2SoundSmpStrc * ppSoundSmp, int32_t nPan) {
     ppSoundSmp->pDSBuffer->lpVtbl->SetPan(ppSoundSmp->pDSBuffer, nDSPan);
 }
 
+// 1.14d mac: 002e9470
+// The Mac has no 3D buffer: only the checks remain.
 void __fastcall SOUNDSMP_Set3DPosition(D2SoundSmpStrc * pThis, int, float nSoundHandle, float fY, float pD2SoundsTxt) {
     if (pThis && pThis->pDSBuffer) {
+#if !defined(_WIN32) && D2_OS_MAC
+      return;
+#else
       if (!(pThis->dwFlags & 2)) {
         return;
       }
 
       pThis->pDS3DBuffer->lpVtbl->SetPosition(pThis->pDS3DBuffer, nSoundHandle, fY, pD2SoundsTxt, 0);
       return;
+#endif
     }
 
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x302);
     exit(-1);
 }
 
+// 1.14d mac: 002e94ae
 uint32_t __fastcall SOUNDSMP_GetStreamProgress(D2SoundSmpStrc * pSound) {
     BOOL bStreamInfoOk;
     uint32_t nStreamSizeBytes;
@@ -449,6 +498,7 @@ uint32_t __fastcall SOUNDSMP_GetStreamProgress(D2SoundSmpStrc * pSound) {
     return 0;
 }
 
+// 1.14d mac: 002e9536
 void __fastcall SOUNDSMP_SetFrequency(D2SoundSmpStrc * pSound, BOOL bLoop) {
     if (!pSound) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x32f);
@@ -458,6 +508,7 @@ void __fastcall SOUNDSMP_SetFrequency(D2SoundSmpStrc * pSound, BOOL bLoop) {
     pSound->bLooping = bLoop;
 }
 
+// 1.14d mac: 002e9579
 void __fastcall SOUNDSMP_SetMinDistance(D2SoundSmpStrc * pSound, uint32_t nMinBufSize) {
     if (!pSound) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x33a);
@@ -467,6 +518,8 @@ void __fastcall SOUNDSMP_SetMinDistance(D2SoundSmpStrc * pSound, uint32_t nMinBu
     pSound->nMinBufSize = nMinBufSize;
 }
 
+// 1.14d mac: 002e9049
+// The Mac sample has no EAX set: it only stores the level SOUNDSMP_SetVolume attenuates by.
 void __fastcall SOUNDSMP_SetEaxObstruction(D2SoundSmpStrc * pSoundSmp, float fObstruction) {
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x345);
@@ -474,6 +527,7 @@ void __fastcall SOUNDSMP_SetEaxObstruction(D2SoundSmpStrc * pSoundSmp, float fOb
     }
 
     pSoundSmp->fEaxObstruction = fObstruction;
+#if !(!defined(_WIN32) && D2_OS_MAC)
     if (!pSoundSmp->pEaxInterface) {
       return;
     }
@@ -487,14 +541,18 @@ void __fastcall SOUNDSMP_SetEaxObstruction(D2SoundSmpStrc * pSoundSmp, float fOb
     float fVar2 = SOUNDSMP_ClampVolume(0.0, 1.0, fObstruction);
     int nEaxLevel = (int)fVar2;
     pSoundSmp->pEaxInterface->lpVtbl->Set(pSoundSmp->pEaxInterface, gEAXPropertyGuid_Obstruction, 7, nullptr, 0, &nEaxLevel, 4);
+#endif
 }
 
 // Set the EAX room-level obstruction on the 3D sound buffer; clamps to -10000 for DS3D or passes a float to the EAX property set
+// 1.14d mac: 002e95bc
+// The Mac sample has no EAX set: only the check remains, SOUND_GetEAXEnabledFlag is not read.
 void __fastcall SOUNDSMP_SetEaxRoomLevel(D2SoundSmpStrc * pSoundSmp, float fParam) {
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x359);
       exit(-1);
     }
+#if !(!defined(_WIN32) && D2_OS_MAC)
 
     DWORD DVar1 = SOUND_GetEAXEnabledFlag();
     if (DVar1) {
@@ -518,8 +576,10 @@ void __fastcall SOUNDSMP_SetEaxRoomLevel(D2SoundSmpStrc * pSoundSmp, float fPara
     int nEaxLevel = (int)fVar2;
     pSoundSmp->pEaxInterface->lpVtbl->Set(pSoundSmp->pEaxInterface, gEAXPropertyGuid_Obstruction, 5, nullptr, 0, &nEaxLevel, 4);
     pSoundSmp->pEaxInterface->lpVtbl->Set(pSoundSmp->pEaxInterface, gEAXPropertyGuid_Obstruction, 4, nullptr, 0, &nEaxLevel, 4);
+#endif
 }
 
+// 1.14d mac: 002e95f4
 uint32_t __fastcall SOUNDSMP_IsStreaming(D2SoundSmpStrc * pSound) {
     if (!pSound) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x37a);
@@ -529,6 +589,7 @@ uint32_t __fastcall SOUNDSMP_IsStreaming(D2SoundSmpStrc * pSound) {
     return (uint32_t)(pSound->pStreamFile != 0);
 }
 
+// 1.14d mac: 002e9778
 void __fastcall SOUNDSMP_StartFade(D2SoundSmpStrc * pSoundSmp, uint32_t dwTargetVolume, int32_t nFadeDuration) {
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x39e);
@@ -578,11 +639,13 @@ void __fastcall SOUNDSMP_SetGlobalVolume(uint32_t nVolume) {
     exit(-1);
 }
 
+// 1.14d mac: 002e96c6
 uint32_t __stdcall SOUNDSMP_GetEffectiveVolume() {
     IDirectSound* dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     return dwSpeakerFlag ? gnSoundGlobalVolume : 0;
 }
 
+// 1.14d mac: 002e97f7
 BOOL __fastcall SOUNDSMP_OpenAndStreamFile(struct D2SoundSmpStrc * pSoundSmp, char * szText, int32_t nLooping, int32_t bIsLooping) {
     int32_t nLine;
     D2MPQFileStrc* pArchive;
@@ -611,6 +674,7 @@ BOOL __fastcall SOUNDSMP_OpenAndStreamFile(struct D2SoundSmpStrc * pSoundSmp, ch
     return 1;
 }
 
+// 1.14d mac: 002e92f2
 void __fastcall SOUNDSMP_CancelStream(D2SoundSmpStrc * ppnParam) {
     if (ppnParam && ppnParam->pDSBuffer) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
@@ -630,6 +694,7 @@ void __fastcall SOUNDSMP_CancelStream(D2SoundSmpStrc * ppnParam) {
     exit(-1);
 }
 
+// 1.14d mac: 002e8ac3
 void __fastcall SOUNDSMP_Stop(D2SoundSmpStrc * ppnParam) {
     if (ppnParam && ppnParam->pDSBuffer) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
@@ -647,6 +712,7 @@ void __fastcall SOUNDSMP_Stop(D2SoundSmpStrc * ppnParam) {
     exit(-1);
 }
 
+// 1.14d mac: 002e9639
 void __fastcall CleanupSoundBuffer(uint32_t nFadeTimeMs) {
     IDirectSound* dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     if (!dwSpeakerFlag) {
@@ -710,8 +776,11 @@ BOOL __fastcall SOUNDSMP_CheckBufferLost(D2SoundSmpStrc * ppnParam) {
 
 // The local holding the EAX interface was typed IUnknown *. It is IKsPropertySet *, the declared type
 // of D2SoundSmpStrc.pEaxInterface, which is what the assignment reads.
+// 1.14d mac: 002e8e43
+// The Mac sample holds only the sound buffer.
 static void SOUNDSMP_ReleaseInterfaces(D2SoundSmpStrc * ppnParam) {
     SOUNDSMP_Stop(ppnParam);
+#if !(!defined(_WIN32) && D2_OS_MAC)
     IKsPropertySet* pInterface = ppnParam->pEaxInterface;
     if (pInterface) {
       pInterface->lpVtbl->Release(pInterface);
@@ -723,6 +792,7 @@ static void SOUNDSMP_ReleaseInterfaces(D2SoundSmpStrc * ppnParam) {
       This->lpVtbl->Release(This);
       ppnParam->pDS3DBuffer = 0;
     }
+#endif
 
     IDirectSoundBuffer* This_00 = ppnParam->pDSBuffer;
     if (This_00) {
@@ -734,6 +804,7 @@ static void SOUNDSMP_ReleaseInterfaces(D2SoundSmpStrc * ppnParam) {
 }
 
 // @sourcefile .\Src\D2SoundSmp.cpp
+// 1.14d mac: 002e8db5
 void __fastcall SOUNDSMP_Destroy(D2SoundSmpStrc * pSoundSmp) {
     if (!pSoundSmp) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x211);
@@ -747,8 +818,13 @@ void __fastcall SOUNDSMP_Destroy(D2SoundSmpStrc * pSoundSmp) {
     D2_FREE_AT(pSoundSmp, ".\\Src\\D2SoundSmp.cpp", 0x21d);
 }
 
+// 1.14d mac: 002e8e7e
+// The Mac has no 3D buffer: no distances, no 3D position; the pan is centred through
+// SOUNDSMP_SetPan(0x80) for every sample.
 void __fastcall SOUNDSMP_Reset(D2SoundSmpStrc * pSoundSmp) {
+#if !(!defined(_WIN32) && D2_OS_MAC)
     IDirectSound3DBuffer* This;
+#endif
     DWORD DVar1;
     if (!pSoundSmp || !pSoundSmp->pDSBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x226);
@@ -777,6 +853,9 @@ void __fastcall SOUNDSMP_Reset(D2SoundSmpStrc * pSoundSmp) {
       }
 
       pSoundSmp->pDSBuffer->lpVtbl->SetCurrentPosition(pSoundSmp->pDSBuffer, 0);
+#if !defined(_WIN32) && D2_OS_MAC
+      SOUNDSMP_SetPan(pSoundSmp, 0x80);
+#else
       This = pSoundSmp->pDS3DBuffer;
       if (This) {
         This->lpVtbl->SetMaxDistance(This, 100.0, 0);
@@ -787,6 +866,7 @@ void __fastcall SOUNDSMP_Reset(D2SoundSmpStrc * pSoundSmp) {
       } else {
         pSoundSmp->pDSBuffer->lpVtbl->SetPan(pSoundSmp->pDSBuffer, 0);
       }
+#endif
 
       SOUNDSMP_SetEaxObstruction(pSoundSmp, 0.0);
       SOUNDSMP_SetVolume(pSoundSmp, 0xff);
@@ -796,6 +876,7 @@ void __fastcall SOUNDSMP_Reset(D2SoundSmpStrc * pSoundSmp) {
 }
 
 // lpStartAddress parameter of CreateThread
+// 1.14d mac: 002e8547
 DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam) {
     // Static local variables (originally global data)
     static uint32_t gbWindowIsMinimized; D2_STATIC_GUARD_BSS(gbWindowIsMinimized, "D2Sound::Src::D2SoundSmp::D2SOUNDSMP_SoundUpdateThreadProc::gbWindowIsMinimized");
@@ -831,7 +912,12 @@ DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam) {
       /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gSoundSmpCs);
       __frame0.nPrevMinimized = gbWindowIsMinimized;
       hWnd = D2gfx::D2GFX::GetHwnd();
+      #if D2_OS_MAC
+      // 1.14d mac: 00031564, the layer's IsIconic stub
+      gbWindowIsMinimized = Wnd_ReturnZero();
+#else
       /* HWND hWnd for IsIconic */ gbWindowIsMinimized = IsIconic(hWnd);
+#endif
       bMusicOn = D2SoundFast::SOUND_GetMusicEnabled();
       ppSoundSmp = gpSoundSampleList;
       if (bMusicOn) {
@@ -940,6 +1026,7 @@ DWORD __stdcall D2SOUNDSMP_SoundUpdateThreadProc(void * lpThreadParam) {
     } while (true);
 }
 
+// 1.14d mac: 002e849a
 void __stdcall SOUNDSMP_CreateSoundThread() {
     DWORD dwThreadId;
     if (ghSoundThread) {
@@ -948,7 +1035,11 @@ void __stdcall SOUNDSMP_CreateSoundThread() {
     }
 
     /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ ghSoundThreadStopEvent = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 1, 0, (LPCSTR)0x0);
+#if !defined(_WIN32) && D2_OS_MAC
+    ghSoundThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)D2SOUNDSMP_SoundUpdateThreadProc, (LPVOID)0x0, 0, &dwThreadId, "sSampleThreadProc");
+#else
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ ghSoundThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)D2SOUNDSMP_SoundUpdateThreadProc, (LPVOID)0x0, 0, &dwThreadId);
+#endif
 }
 
 float __stdcall SOUNDSMP_LogVolumeToLinear(float fVolume) {
@@ -972,6 +1063,7 @@ float SOUNDSMP_LinearToLogNoParam(float fValue, float fValue2) {
 }
 
 // No register arguments: EAX is first written by FNSTSW AX at 00516607 and only carries the x87 status word (1.14d asm).
+// 1.14d mac: 002e9cdf
 float __stdcall SOUNDSMP_ClampVolume(float fValue, float fMax, float fInput) {
     long double fVar1 = (long double)fInput;
     if (fVar1 <= (long double)fValue + (long double)9.999999747378752e-05) {
@@ -1029,6 +1121,7 @@ static int * __stdcall SOUNDSMP_FindWavChunk(uint32_t * pRemainingSize, uint32_t
     return nullptr;
 }
 
+// 1.14d mac: 002e9d7d
 void __fastcall SOUNDSMP_InitWaveFormat(WAVEFORMATEX * pWaveFormat, WORD nChannels) {
     memset(pWaveFormat, 0, sizeof(*pWaveFormat));
     pWaveFormat->nBlockAlign = nChannels * 2;
@@ -1075,6 +1168,7 @@ int * __fastcall SOUNDSMP_ParseWavHeader(int * pWavData, uint32_t * pDataSize, W
     return nullptr;
 }
 
+// 1.14d mac: 002e9ee5
 void __fastcall SOUNDSMP_CalculateVolumeAndPan(uint32_t * pnVolume, uint32_t * pnPan, float fDeltaX, float fDeltaY, float fDeltaZ) {
     int nLongResult;
     long double fVolumeDivisor = sqrt((double)(fDeltaZ * fDeltaZ + fDeltaY * fDeltaY + fDeltaX * fDeltaX));

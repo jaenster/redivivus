@@ -31,6 +31,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2UnitDataPlayerArenaStrc) == 0x8, 
 
 namespace D2Game { namespace GAME { namespace Arena {
 
+// 1.14d mac: 001a7689
 static inline bool __stdcall ARENA_TestFlag(::SGAMEDATA * pGame, uint32_t dwFlagMask) {
     if (!pGame->pArenaCtrl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27);
@@ -42,6 +43,7 @@ static inline bool __stdcall ARENA_TestFlag(::SGAMEDATA * pGame, uint32_t dwFlag
 
 // @sourcefile .\GAME\Arena.cpp
 // EDX nArena: 0 from GAME_CreateBattleNetGame, the arena argument from GAME_CreateSingleplayerGame; not read here.
+// 1.14d mac: 001a6f6a
 void __fastcall AllocArenaControl(::SGAMEDATA * pGame, int32_t nArena, eD2ArenaFlags eArenaFlags, uint8_t nTemplate) {
     D2ArenaControlStrc* pArenaCtrl = D2_NEW_POOL_AT(pGame->pMemoryPool, D2ArenaControlStrc, ".\\GAME\\Arena.cpp", 0x32);
     memset(pArenaCtrl, 0, sizeof(D2ArenaControlStrc));
@@ -51,6 +53,7 @@ void __fastcall AllocArenaControl(::SGAMEDATA * pGame, int32_t nArena, eD2ArenaF
 }
 
 // @sourcefile .\GAME\Arena.cpp
+// 1.14d mac: 001a6fd8
 void __fastcall FreeArenaControl(::SGAMEDATA * pGame) {
     if (!pGame->pArenaCtrl) {
       return;
@@ -61,6 +64,7 @@ void __fastcall FreeArenaControl(::SGAMEDATA * pGame) {
 }
 
 // @sourcefile .\GAME\Arena.cpp
+// 1.14d mac: 001a702b
 void __fastcall AllocPlayerArena(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerArenaStrc* pArena = D2_NEW_POOL_AT(pGame->pMemoryPool, D2UnitDataPlayerArenaStrc, ".\\GAME\\Arena.cpp", 0x47);
     memset(pArena, 0, sizeof(*pArena));
@@ -74,6 +78,7 @@ void __fastcall AllocPlayerArena(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\GAME\Arena.cpp
+// 1.14d mac: 001a70b7
 void __fastcall FreePlayerArena(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (!pPlayerData) {
@@ -88,6 +93,7 @@ void __fastcall FreePlayerArena(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     pPlayerData->pArena = 0;
 }
 
+// 1.14d mac: 001a7136
 eD2LevelId __fastcall GetTownLevelFromArenaCtrl(::SGAMEDATA * pGame) {
     if (!pGame->pArenaCtrl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 99);
@@ -109,6 +115,7 @@ static inline int __stdcall ARENA_GetArenaTxtRecord(::SGAMEDATA * pGame) {
 }
 
 // Adjusts an arena participant's score by the modifier indexed by nParam (0-6) from the arena's ArenaTxt record. Cases 0/1/3/4/6 add the flat column value; cases 2/5 add a percentage of the opposing unit's current score. Sets the score-dirty flag and links the unit to the update list. Halts with an internal error if pUnit2 is null, not a player, the game has no arena control, or nParam is out of range.
+// 1.14d mac: 001a7289
 static void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nScoreType, DWORD dwParam) {
     D2ArenaTxt* pArenaTxt;
     D2UnitDataPlayerArenaStrc* pArenaData;
@@ -169,6 +176,7 @@ static void __stdcall ARENA_ApplyScoreModifier(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Server-side PvP/PK Arena scoring handler invoked when a unit dies. No-op unless the game has an active D2ArenaControlStrc. Reads each combatant's D2UnitDataPlayerArenaStrc and adjusts nScore from the ArenaTxt record for the relevant outcome: suicide (self-kill), player-kill / player-death (with flat dwPlayerKill/dwPlayerDeath plus a percentage of the opponent's score), and monster-kill / monster-death. On each adjustment sets bScoreDirty, OR's ARENAFLAG_ScoresDirty into the control flags, and calls ROOM_LinkUnitToUpdateList to schedule a score sync. Missing arena data on an expected player triggers ERROR_UnrecoverableInternalError_Halt with the source line.
+// 1.14d mac: 001a7179
 void __fastcall SERVER_ARENA_KillHandler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pVictim) {
     D2UnitDataPlayerStrc* pPlayerData;
     D2ArenaTxt* pArenaTxt;
@@ -383,6 +391,7 @@ void __fastcall ARENA_ClearUpdateFlag(::SGAMEDATA * pGame) {
     *peVar1 &= ~ARENAFLAG_ScoresDirty;
 }
 
+// 1.14d mac: 001a7506
 static int ARENA_IsScoreDirty(D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     if (!pPlayerData->pArena) {
@@ -404,6 +413,7 @@ static void __stdcall UpdatePlayerKillCount(D2ClientStrc * pClient, D2UnitStrc *
     SCmd::NET_D2GS_SERVER_Send_0x65_SCORE_UPDATE(pClient, !pUnit ? -1 : pUnit->nUnitGUID, (uint16_t)pArenaData->nScore);
 }
 
+// 1.14d mac: 001a75b8
 static void __stdcall ARENA_BroadcastKillToPlayers(::SGAMEDATA * pGame, int32_t nBroadcastMode, D2ClientStrc * pClient) {
     D2UnitDataPlayerStrc* pPlayerData;
     D2UnitStrc* pKillerUnit = Clients::CLIENTS_GetControlUnit(pClient, 0);
@@ -461,6 +471,7 @@ void __fastcall ARENA_UpdatePlayerKillState(::SGAMEDATA * pGame, D2ClientStrc * 
     ARENA_BroadcastKillToPlayers(pGame, 0, pClient);
 }
 
+// 1.14d mac: 001a762f
 void __fastcall ARENA_BroadcastScoreOnJoin(::SGAMEDATA * pGame, D2ClientStrc * pClient) {
     ARENA_BroadcastKillToPlayers(pGame, 1, pClient);
     D2UnitStrc* pUnit = Clients::CLIENTS_GetControlUnit(pClient, 1);
@@ -480,6 +491,7 @@ uint32_t __fastcall ARENA_GetClientUpdateFlag(::SGAMEDATA * pGame) {
     return (uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 2 & 1;
 }
 
+// 1.14d mac: 001a76d4
 uint32_t __fastcall ARENA_IsArenaLevel(::SGAMEDATA * pGame) {
     if (!pGame->pArenaCtrl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27);
@@ -489,6 +501,7 @@ uint32_t __fastcall ARENA_IsArenaLevel(::SGAMEDATA * pGame) {
     return (uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 1 & 1;
 }
 
+// 1.14d mac: 001a76e5
 uint32_t __fastcall ARENA_IsNoCubeRecipes(::SGAMEDATA * pGame) {
     if (!pGame->pArenaCtrl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x27);
@@ -501,6 +514,7 @@ uint32_t __fastcall ARENA_IsNoCubeRecipes(::SGAMEDATA * pGame) {
     return 0;
 }
 
+// 1.14d mac: 001a76f6
 eD2ArenaFlags __fastcall ARENA_GetFlags(::SGAMEDATA * pGame) {
     if (!pGame->pArenaCtrl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x139);
@@ -535,6 +549,7 @@ void __fastcall ARENA_SetOrClearFlags(::SGAMEDATA * pGame, uint32_t value, BOOL 
     pArenaCtrl->eArenaFlags &= ~value;
 }
 
+// 1.14d mac: 001a773a D2Game::GAME::Arena::NullSub
 BOOL __fastcall NullSub(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     return 0;
 }
@@ -561,10 +576,12 @@ BOOL __fastcall ARENA_IsFlag0x80Set(::SGAMEDATA * pGame) {
     return (uint32_t)((uint8_t)(char)pGame->pArenaCtrl->eArenaFlags >> 7);
 }
 
+// 1.14d mac: 001a7741
 uint32_t __fastcall ARENA_IsArenaMode(::SGAMEDATA * pGame) {
     return ARENA_TestFlag(pGame, 0x100);
 }
 
+// 1.14d mac: 001a7752
 uint32_t __fastcall ARENA_GetTemplate(::SGAMEDATA * pGame) {
     if (!pGame->pArenaCtrl) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x172);

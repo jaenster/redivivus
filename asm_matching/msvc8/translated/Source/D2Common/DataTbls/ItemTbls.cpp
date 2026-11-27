@@ -64,6 +64,7 @@ static D2BooksTableStrc pTxtBooks = {0}; D2_STATIC_GUARD(pTxtBooks, "pTxtBooks")
 
 namespace D2Common { namespace DATATBLS { namespace ItemTbls {
 
+// 1.14d mac: 001425b6
 int32_t __fastcall ITEMTBLS_ParseItemStatCostOrBase(char * szFieldValue, int32_t * pResultType, int32_t nFieldType, int32_t nTableId) {
     int32_t nStatId;
     if (!(nFieldType == 1 && nTableId == 3)) {
@@ -94,6 +95,7 @@ int32_t __fastcall ITEMTBLS_ParseItemStatCostOrBase(char * szFieldValue, int32_t
     return 0;
 }
 
+// 1.14d mac: 0014269c
 void __fastcall ITEMTBLS_CompileItemCodeExpression(char * szExpression, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
     uint32_t nByteCodeLen;
     uint32_t nCompiledLen;
@@ -118,6 +120,7 @@ void __fastcall ITEMTBLS_CompileItemCodeExpression(char * szExpression, char * p
 
 // Loads and compiles items.txt into the engine's runtime ItemsTxt table. Builds the ~194-field D2BinFieldInputStrc schema (code/version/type/damage/req/inv/vendor min-max/quality columns, with code/string/sound/stat/state link resolvers and calc-string compilers), then compiles the weapons, armor and misc .txt files separately and memcpy-merges them into one contiguous sgpTxtItems array (sgpTxtWeapons/sgpTxtArmor/sgpTxtMisc point into it). Registers each item code in the items code link (FillUpTxtLinkSub0x08) unless bUseTxt, saves the itemscode bin, and builds sgpTxtItemsVersion: a short index table of all rows whose version==0 (classic items). __fastcall(pMemory).
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00142777
 void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
     int nTxtByteOffset;
     int i;
@@ -368,6 +371,7 @@ void __fastcall TXT_AllocTxt_items(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00142a9e
 void __stdcall TXT_FreeTxt_Items() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.sTxtItemsLink);
     if (gsItemsTable.pItems) {
@@ -382,10 +386,12 @@ void __stdcall TXT_FreeTxt_Items() {
 
 // Returns the items.txt table record - the 32 bytes at 0096ca58 holding {nSize, pItems, pWeapons, nWeaponsSize, pArmor, nArmorSize, pMisc, nMiscSize}, not a lone int.
 // Callers index the whole record off the return: ITEMDROP_RollNormalItemClass at 00555fcc reads [ESI+8], [ESI+4] and [ESI+0x10]; SUNITPROXY_BuildNpcItemTables at 00536d79 reads [EDI] and [EDI+4]. With only nSize named the emitter produced eight independent globals whose relative layout the linker chooses, so every member past the first was garbage - and this record drives which items a vendor's stock is built from.
+// 1.14d mac: 00142b37
 D2ItemsTableStrc * __stdcall TXT_Items_GetSize() {
     return &gsItemsTable;
 }
 
+// 1.14d mac: 00142b48
 uint32_t __stdcall DATATBLS_MapOldItemIndexToCurrent(int32_t nOldItemIndex) {
     if (!(nOldItemIndex < gsItemsTable.nSize)) {
       return -1;
@@ -401,6 +407,7 @@ uint32_t __stdcall DATATBLS_MapOldItemIndexToCurrent(int32_t nOldItemIndex) {
     return (uint32_t)gpItemIndexOldToCurrent[nOldItemIndex];
 }
 
+// 1.14d mac: 00142ba4
 D2ItemsTxt * __stdcall TXT_Items_GetLine(uint32_t nItemClassId) {
     if (nItemClassId >= (uint32_t)gsItemsTable.nSize) {
       return nullptr;
@@ -413,6 +420,7 @@ D2ItemsTxt * __stdcall TXT_Items_GetLine(uint32_t nItemClassId) {
     return gsItemsTable.pItems + nItemClassId;
 }
 
+// 1.14d mac: 00142bfd
 D2ItemsTxt * __stdcall ConvertItemCodeToClassIdAndGetItemsTxtLine(uint32_t dwItemCode, int * pClassId) {
     int32_t nItemClassId = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.sTxtItemsLink, dwItemCode, 0);
     if (nItemClassId < 0) {
@@ -424,12 +432,14 @@ D2ItemsTxt * __stdcall ConvertItemCodeToClassIdAndGetItemsTxtLine(uint32_t dwIte
     return gsItemsTable.pItems + nItemClassId;
 }
 
+// 1.14d mac: 00142c52
 int32_t __stdcall TXT_Items_ConvertItemCodeToItemClassId(uint32_t szTag) {
     int32_t nClassId = Fog::Src::Excel::GetClassIdFromName(MonsterTbls::sgtDataTable.sTxtItemsLink, szTag, 0);
     return nClassId;
 }
 
 // TXT field linker: resolves a string value to an integer ID by trying in order: numeric parse, skills.txt lookup, monstypes.txt lookup, states.txt lookup. Writes the resolved ID (or 0 on failure) to nRecordBase+nFieldOffset. Used when a skills.txt/itemtypes.txt field can reference any of those three tables.
+// 1.14d mac: 00142c86
 void __fastcall ITEMTBLS_ParseSkillMonTypeOrStateId(char * szValue, char * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
     char cFirstChar;
     int32_t nId;
@@ -475,6 +485,7 @@ void __fastcall ITEMTBLS_ParseSkillMonTypeOrStateId(char * szValue, char * pReco
 
 // Loads and concatenates the magicsuffix/magicprefix/automagic .txt files into a single pTxtMagicAffixes table. Builds a D2BinFieldInputStrc descriptor array (name/spawnable/level/itypeN/etypeN/modNcode..max, etc.), calls DataTbls::CompileTxt for each of the three files (0x90-byte rows), allocates one combined server buffer (count*0x90), memcpys the three blocks in order (suffix, prefix, automagic), frees the temporaries, then resolves each row's display-name string id via STRTABLE_LookupString. Sets global nTxtMagicAffixesSize/pTxtMagicAffixes. Part of D2Common item-data table initialization.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00142d63
 void __fastcall TXT_AllocTxt_MagicAffixes(D2PoolManagerStrc * pMemory) {
     int nTxtMagicSuffixSize;
     int nTxtMagicPrefixSize;
@@ -543,6 +554,7 @@ void __fastcall TXT_AllocTxt_MagicAffixes(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00142f92
 void __stdcall ITEMTBLS_FreeMagicAffixes() {
     if (gsMagicAffixTable.pTable) {
       D2_FREE_POOL_AT(nullptr, gsMagicAffixTable.pTable, ".\\DATATBLS\\ItemTbls.cpp", 0x2b7);
@@ -553,10 +565,12 @@ void __stdcall ITEMTBLS_FreeMagicAffixes() {
 
 // Returns the magic-affix table record - the 20-byte run at 0096ca7c holding {nSize, pTable, pSuffixStart, pPrefixStart, pAutoMagicStart}, not a lone int.
 // ITEMMOD_RollMagicAffix/Classic picks its candidate range straight out of this record: automagic uses [pAutoMagicStart, pTable + nSize*0x90), prefix uses [pPrefixStart, pAutoMagicStart), suffix uses [pSuffixStart, pPrefixStart). With only the first dword named, the emitter produced five independent globals the linker may lay out in any order, so every one of those ranges was garbage.
+// 1.14d mac: 00142fe3
 D2MagicAffixTableStrc * __stdcall TXT_MagicAffixes_GetTableInfo() {
     return &gsMagicAffixTable;
 }
 
+// 1.14d mac: 00142ff4
 D2MagicAffixTxt * __stdcall TXT_magicaffixes_GetLine(int32_t nAffixIndex) {
     if (!gsMagicAffixTable.pTable) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2c8);
@@ -571,6 +585,7 @@ D2MagicAffixTxt * __stdcall TXT_magicaffixes_GetLine(int32_t nAffixIndex) {
 
 // Loads and compiles the rare-affix data tables. Defines the shared field schema (name, version, itype1-7, etype1-4 with itemtypes linker) and compiles both raresuffix.txt and rareprefix.txt via CompileTxt (row stride 0x48), then allocates one combined buffer (pTxtRareAffixes = suffix rows followed by prefix rows) and frees the temporaries. Finally resolves each row's name string into its string-table id (STRTABLE_LookupString) stored at row offset 0xc. Populates globals pTxtRareAffixes/pTxtRareSuffix/pTxtRarePrefix and nTxtRareAffixesSize.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00143058
 void __fastcall TXT_AllocTxt_RareAffixes(D2PoolManagerStrc * pMemory) {
     int nTxtRareSuffixSize;
     int nTxtRarePrefixSize;
@@ -607,6 +622,7 @@ void __fastcall TXT_AllocTxt_RareAffixes(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00143209
 void __stdcall ITEMTBLS_FreeRareAffixes() {
     if (gsRareAffixTable.pTable) {
       D2_FREE_POOL_AT(nullptr, gsRareAffixTable.pTable, ".\\DATATBLS\\ItemTbls.cpp", 0x30b);
@@ -617,11 +633,13 @@ void __stdcall ITEMTBLS_FreeRareAffixes() {
 
 // Returns the rare-affix table record - the 16-byte run at 0096caa0 holding {nSize, pTable, pSuffixStart, pPrefixStart}, not a lone int.
 // Ghidra had only the first dword named (nTxtRareAffixesSize) and this returned &that, so every caller reached the other three fields as [1]/[2]/[3] off an int*. The emitter then produced four independent C++ globals whose relative layout the linker chooses freely, and GetMaxToRoll read pRareAffixTableInfo[2] as a row pointer when it was really whatever the linker put next - 0x7D on the recompiled build. Opening a merchant's window generates the vendor stock, which rolls rare affixes, so the first click on TRADE/REPAIR faulted in ITEMMOD_CanApplyAffix reading *(uint16_t*)(0x7D + 0xe).
+// 1.14d mac: 0014325a
 D2RareAffixTableStrc * __stdcall TXT_RareAffixes_GetTableInfo() {
     return &gsRareAffixTable;
 }
 
 // Returns rare affix group line for given 1-based index (72 bytes/entry). Used for rare item name generation (GetItemName).
+// 1.14d mac: 0014326b
 D2RareAffixTxt * __stdcall TXT_RareAffixes_GetLine(int32_t nIndex) {
     if (nIndex <= gsRareAffixTable.nSize && nIndex > 0) {
       if (!gsRareAffixTable.pTable) {
@@ -637,6 +655,7 @@ D2RareAffixTxt * __stdcall TXT_RareAffixes_GetLine(int32_t nIndex) {
 
 // Loads and compiles uniqueitems.txt into sgtDataTable.pTxtUniqueItems (record stride 0x14C). Builds the column-binding descriptor: index, version, enabled/ladder/nolimit/carry1 bit flags, code (item base), rarity, lvl, lvl req, chr/inv transform colors, flippyfile/invfile graphics, cost mult/add, drop/use sounds, and the 12 prop/par/min/max modifier groups (props linked to the Properties table, par parsed via ITEMTBLS_ParseSkillMonTypeOrStateId). Creates the unique-items txt-link, calls CompileTxt, and error-halts if more than 0x7FFE rows. Then for each record: writes its sequential index, parses the index string field, and resolves the display-name string-table id (defaulting to 0x1507 if not found). __stdcall(void). Side effect: populates the global unique-items data table.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 001432c7
 void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
     uint16_t* pStringLookup;
     char* pCurRecord;
@@ -736,6 +755,7 @@ void __fastcall TXT_AllocTxt_uniqueitems(D2PoolManagerStrc * pMemory) {
     } while (nIdx < MonsterTbls::sgtDataTable.nTxtUniqueItemsSize);
 }
 
+// 1.14d mac: 00143433
 void __stdcall ITEMTBLS_FreeUniqueItems() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtUniqueItemsLink);
     DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtUniqueItems);
@@ -744,6 +764,7 @@ void __stdcall ITEMTBLS_FreeUniqueItems() {
 
 // Builds the field-descriptor tables for SetItems.txt (and the embedded Sets.txt schema) and compiles both into the global sgtDataTable bin tables via CompileTxt. Wires record links (pTxtSets/pTxtSetItems) and property/parameter linkers (ITEMTBLS_ParseSkillMonTypeOrStateId). Post-compile: assigns each set-item record its row id, resolves its display string id (default 0x1507 if missing), and back-links each set-item into its parent Sets record (max 6 per set), copying version. Halts via Fog ErrorManager if a table exceeds 0x7fff rows. Called once at data-table load.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00143470
 void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
     int nSetIdx;
     uint16_t* pStringLookup;
@@ -975,6 +996,7 @@ void __fastcall TXT_AllocTxt_setitems(D2PoolManagerStrc * pMemory) {
     }
 }
 
+// 1.14d mac: 00143656
 void __stdcall ITEMTBLS_FreeSetsAndSetItems() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtSetsLink);
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtSetItemsLink);
@@ -985,6 +1007,7 @@ void __stdcall ITEMTBLS_FreeSetsAndSetItems() {
 }
 
 // Compiles QualityItems.txt into the in-memory pTxtQualityItems table during data-table init. Declares the column schema (nummods, mod1/2 code+param+min+max, effect1/effect2 strings, and the per-equipment-type applicability flags armor/weapon/shield/scepter/wand/staff/bow/boots/gloves/belt) with field types and struct offsets, linking mod codes to the Properties table, then calls DataTbls::CompileTxt (record size 0x70). Post-process: for each row resolves the effect1/effect2 string-table keys via STRTABLE_LookupString and writes the looked-up string indices back into the record. Side effect: sets the global pTxtQualityItems / nTxtQualityItemsSize. Allocates from pMemory.
+// 1.14d mac: 001436b9
 void __fastcall TXT_AllocTxt_qualityitems(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc qualityitems[22] = {
       {"nummods", FIELDTYPE_CHAR, 0, 10, 0},
@@ -1029,16 +1052,19 @@ void __fastcall TXT_AllocTxt_qualityitems(D2PoolManagerStrc * pMemory) {
     } while (nIdx < nTxtQualityItemsSize.nSize);
 }
 
+// 1.14d mac: 001437c6
 void __stdcall DATATBLS_UnloadQualityItemsTxt() {
     DataTbls::UnloadBin(nTxtQualityItemsSize.pTable);
 }
 
 // Returns pointer to nTxtQualityItemsSize global. Used for unique/set item lookup.
+// 1.14d mac: 001437e5
 D2QualityItemsTableStrc * __stdcall TXT_QualityItems_GetTableInfo() {
     return &nTxtQualityItemsSize;
 }
 
 // Returns D2QualityItemsTxt* for given index. Used for unique/set item table lookup.
+// 1.14d mac: 001437f6
 D2QualityItemsTxt * __stdcall TXT_QualityItems_GetLine(int32_t nIndex) {
     if (!(nIndex < nTxtQualityItemsSize.nSize && nIndex != -1)) {
       return nullptr;
@@ -1059,6 +1085,7 @@ D2QualityItemsTxt * __stdcall TXT_QualityItems_GetLine(int32_t nIndex) {
 }
 
 // Compiles the gems.txt data table into the runtime pTxtGems array via CompileTxt with a 42-field schema (gem name/letter/code plus weapon/helm/shield mod triplets). For each row, resolves the 3-char gem letter code to a string-table index (STRTABLE_LookupString) stored at +0x2c, and links each gem to its owning item record: writes 0xFFFFFFFF placeholder gem-offset into the item's szCode area (+0x70) and sets sgpTxtItems[code].dwGemOffset to the gem's row index. Called once during item data-table init.
+// 1.14d mac: 0014387c
 void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
     int nGemsSize;
     char szGemCode[4];
@@ -1130,6 +1157,7 @@ void __fastcall TXT_AllocTxt_gems(D2PoolManagerStrc * pMemory) {
     }
 }
 
+// 1.14d mac: 001439e3
 void __stdcall DATATBLS_UnloadGemsTxt() {
     DataTbls::UnloadBin(nTxtGemsSize.pTable);
 }
@@ -1139,6 +1167,7 @@ void * __stdcall DATATBLS_GetGemDataTables() {
 }
 
 // Returns gem/rune table line for given index (192 bytes/entry). Used for socketed item property application.
+// 1.14d mac: 00143a02
 D2GemsTxt * __stdcall TXT_Gems_GetLine(int32_t nIndex) {
     if (!(nIndex < nTxtGemsSize.nSize && nIndex != -1)) {
       return nullptr;
@@ -1159,6 +1188,7 @@ D2GemsTxt * __stdcall TXT_Gems_GetLine(int32_t nIndex) {
 }
 
 // Defines the binary field schema for books.txt (name/KEY_WORD, scrollspellcode/RAW4, bookspellcode/RAW4, pSpell/INT, scrollskill/NAME_INT, bookskill/NAME_INT, spellicon/CHAR, basecost/INT, costpercharge/INT) and calls CompileTxt to parse it into pTxtBooks. In: pMemory pool.
+// 1.14d mac: 00143a8b
 void __fastcall TXT_AllocTxt_books(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc books[10] = {
       {"name", FIELDTYPE_KEY_WORD, 0, 0, (void*)DataTbls::DATATBLS_LookupStringId},
@@ -1175,17 +1205,20 @@ void __fastcall TXT_AllocTxt_books(D2PoolManagerStrc * pMemory) {
     gsBooksTable.pTable = (D2BooksTxt*)DataTbls::CompileTxt(pMemory, "books", books, &gsBooksTable.nSize, 0x20);
 }
 
+// 1.14d mac: 00143b10
 void __stdcall DATATBLS_UnloadBooksTxt() {
     DataTbls::UnloadBin(gsBooksTable.pTable);
 }
 
 // Returns the books.txt table record - the 8 bytes at 0096cc60 holding {nSize, pTable}, not a lone int.
 // ITEMMOD_GetScrollBookIndex reads both members off the returned pointer: 005c256f MOV EAX,[ESI] is the count it returns when nothing matches, 005c2575 MOV EDX,[ESI+0x4] with a TEST is the null-check on the table base, and 005c2584 ADD EDX,0x1c reaches the first row's code field. With only nSize named the emitter produced two independent globals whose order the linker chooses, so [1] was whatever it placed next.
+// 1.14d mac: 00143b2f
 D2BooksTableStrc * __stdcall TXT_Books_GetTableInfo() {
     return &gsBooksTable;
 }
 
 // Returns book table line for given index (32 bytes/entry). Used for scroll/book skill ID lookup.
+// 1.14d mac: 00143b40
 D2BooksTxt * __stdcall TXT_Books_GetLine(int32_t nIndex) {
     if (!(nIndex < gsBooksTable.nSize && nIndex != -1)) {
       return nullptr;
@@ -1205,6 +1238,7 @@ D2BooksTxt * __stdcall TXT_Books_GetLine(int32_t nIndex) {
     return nullptr;
 }
 
+// 1.14d mac: 00143bc6
 void __fastcall TXT_AllocTxt_lowqualityitems(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aFieldDefs[2] = {
       {"Name", FIELDTYPE_ASCII, 0x1f, 0, 0},
@@ -1223,16 +1257,19 @@ void __fastcall TXT_AllocTxt_lowqualityitems(D2PoolManagerStrc * pMemory) {
     } while (nIdx < nTxtLowQualityItemsSize.nSize);
 }
 
+// 1.14d mac: 00143ca9
 void __stdcall DATATBLS_UnloadLowQualityItemsTxt() {
     DataTbls::UnloadBin(nTxtLowQualityItemsSize.pTable);
 }
 
 // Returns pointer to nTxtLowQualityItemsSize global. Used for crude/damaged quality item lookup.
+// 1.14d mac: 00143cc8
 D2LowQualityItemsTableStrc * __stdcall TXT_LowQualityItems_GetTableInfo() {
     return &nTxtLowQualityItemsSize;
 }
 
 // Returns low quality item table line for given index (34 bytes/entry). Used for crude/damaged quality application.
+// 1.14d mac: 00143cd9
 D2LowQualityItemsTxt * __stdcall TXT_LowQualityItems_GetLine(int32_t nIndex) {
     if (!(nIndex < nTxtLowQualityItemsSize.nSize && nIndex != -1)) {
       return nullptr;
@@ -1253,6 +1290,7 @@ D2LowQualityItemsTxt * __stdcall TXT_LowQualityItems_GetLine(int32_t nIndex) {
 }
 
 // Loads and compiles the ItemRatio.txt data table. Builds a D2BinFieldInputStrc field-definition array (Version, Uber, Class Specific, then Unique/Rare/Set/Magic/HiQuality/Normal drop-chance + Divisor + Min columns at their struct offsets) and passes it to DataTbls::CompileTxt with row size 0x44, storing the parsed table into the global pTxtItemRatio and its row count into nTxtItemRatioSize. Allocates from the supplied D2PoolManagerStrc. Called once during data-table init.
+// 1.14d mac: 00143d5f
 void __fastcall TXT_AllocTxt_itemratio(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aFieldDefs[20] = {
       {"Version", FIELDTYPE_SHORT, 0, 0x40, 0},
@@ -1279,6 +1317,7 @@ void __fastcall TXT_AllocTxt_itemratio(D2PoolManagerStrc * pMemory) {
     pTxtItemRatio = (D2ItemRatioTxt*)DataTbls::CompileTxt(pMemory, "itemratio", aFieldDefs, &nTxtItemRatioSize, 0x44);
 }
 
+// 1.14d mac: 00143de4
 void __stdcall DATATBLS_UnloadItemRatioTxt() {
     DataTbls::UnloadBin(pTxtItemRatio);
 }
@@ -1288,6 +1327,7 @@ void * __stdcall DATATBLS_GetItemRatioDataTables() {
 }
 
 // QualityRatio.txt row lookup. Returns quality upgrade chance ratios for treasure class calculations. Used by ITEM_RollItemQuality to apply TC quality bonuses during quality cascade.
+// 1.14d mac: 00143e03
 D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint32_t dwUnused, uint16_t nQualityTier) {
     uint16_t wMinVal;
     int nBestMatchIdx = -1;
@@ -1323,6 +1363,7 @@ D2ItemRatioTxt * __stdcall TXT_QualityRatio_GetLine(uint32_t nItemClassId, uint3
     return pTxtItemRatio + nBestMatchIdx;
 }
 
+// 1.14d mac: 00143ecb
 int SORT_ItemDescPriority(const D2ItemStatCostDescPriorityStrc * pEntry1, const D2ItemStatCostDescPriorityStrc * pEntry2) {
     if (pEntry1->nDescPriority < pEntry2->nDescPriority) {
       return -1;
@@ -1333,6 +1374,7 @@ int SORT_ItemDescPriority(const D2ItemStatCostDescPriorityStrc * pEntry1, const 
 
 // Builds the itemstatcost.txt field-descriptor array (52 columns) and compiles it into the in-memory ItemStatCost table via DataTbls::CompileTxt (record size 0x144), enforcing a max of 0x1FF stats (fatal error otherwise). Then post-processes op-relationships: clears each stat's aOpBaseDependents arrays to -1, derives the charged-skill-level bit count (clamped 1..8, default 6) and its mask, and for every stat with an op walks its op-base/op-stat references to populate the dependency graph (aOpBaseDependents, aOpRelations, bHasOpBaseDependencies/bHasOp4Or5Dependency flags) plus special-case stat flag bits. Finally collects stats with a nonzero descpriority, qsorts them via SORT_ItemDescPriority, and allocates/stores the sorted pItemStatCostDescPriority list. __fastcall, pMemory in ECX.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00143eeb
 void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
     uint8_t bVar2;
     int nDepSlotIdx;
@@ -1590,6 +1632,7 @@ void __fastcall TXT_AllocTxt_itemstatcost(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 001443e3
 void __stdcall ITEMTBLS_FreeItemStatCost() {
     if (MonsterTbls::sgtDataTable.pTxtItemStatCost) {
       DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtItemStatCost);
@@ -1611,6 +1654,7 @@ void __stdcall ITEMTBLS_FreeItemStatCost() {
 
 // Loads and compiles the properties.txt data table. Builds a 30-entry D2BinFieldInputStrc schema mapping the txt columns (code, set1..7, val1..7, func1..7, stat1..7 linked to ItemStatCost) to D2PropertiesTxt field offsets/types, creates the txt link record, then calls DataTbls::CompileTxt to parse properties into sgtDataTable.pTxtProperties and store the row count in nTxtPropertiesSize. pMemory is the pool allocator. One-time table init at startup.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 0014447e
 void __fastcall TXT_AllocTxt_properties(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aFieldDefs[30] = {
       {"code", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtPropertiesLink},
@@ -1648,11 +1692,13 @@ void __fastcall TXT_AllocTxt_properties(D2PoolManagerStrc * pMemory) {
     MonsterTbls::sgtDataTable.pTxtProperties = (D2PropertiesTxt*)DataTbls::CompileTxt(pMemory, "properties", aFieldDefs, &MonsterTbls::sgtDataTable.nTxtPropertiesSize, 0x2e);
 }
 
+// 1.14d mac: 001444ec
 void __stdcall ITEMTBLS_FreeProperties() {
     DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtProperties);
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtPropertiesLink);
 }
 
+// 1.14d mac: 0014471e
 int TXT_Gamble_SortFunction(const D2GambleTxt * pEntry1, const D2GambleTxt * pEntry2) {
     if ((uint32_t)pEntry1->nLevel > (uint32_t)pEntry2->nLevel) {
       return 1;
@@ -1665,6 +1711,7 @@ int TXT_Gamble_SortFunction(const D2GambleTxt * pEntry1, const D2GambleTxt * pEn
 
 // One-time loader for gamble.txt. Compiles the binary "gamble" table (code field only), resolves each item code to a class id via the items link, then sorts the entries by level and builds two side-tables: GambleTable (sorted class-id array) and the per-level row counts (anLevelLimit) (per-level upper-bound cache for [1..99]).
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 0014451f
 void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc gamble[2] = {
       {"code", FIELDTYPE_RAW4, 0, 0, 0},
@@ -1710,6 +1757,7 @@ void __fastcall TXT_AllocTxt_gamble(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00144738
 void __stdcall FreeGambleTable() {
     if (!nTxtGambleSize.pTable) {
       return;
@@ -1720,6 +1768,7 @@ void __stdcall FreeGambleTable() {
     nTxtGambleSize.nSize = 0;
 }
 
+// 1.14d mac: 00144793
 D2GambleTableStrc * __stdcall GetGambleTableSize() {
     return &nTxtGambleSize;
 }
@@ -1763,6 +1812,7 @@ BOOL __fastcall ITEMTBLS_CheckItemTypeRecursive(int32_t nItemTypeId, int32_t nTa
 
 // Loads and compiles the itemtypes.txt data table at startup. Builds the 36-entry field-definition array (code/equiv1-2/bodyloc/shoots/quiver/maxsock/class/storepage/invgfx1-6/etc., with code/bodyloc/class/storepage columns linked to their lookup tables), creates the itemtypes TxtLink, and calls CompileTxt to populate sgtDataTable.pTxtItemTypes (record size 0xE4) and its row count. Then allocates and fills pTxtItemTypesUnknown, a per-type bitmap (ceil(count/32) dwords per type) where bit j is set if type j is a recursive subtype of type i (via ITEMTBLS_CheckItemTypeRecursive), giving fast item-type ancestry tests.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00144883
 void __fastcall TXT_AllocTxt_itemtypes(D2PoolManagerStrc * pMemory) {
     BOOL _bIsSubtype;
     bool bIsSubtype;
@@ -1851,12 +1901,14 @@ void __fastcall TXT_AllocTxt_itemtypes(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00144a7c
 void __stdcall ITEMTBLS_FreeItemTypes() {
     D2_FREE_POOL_AT(nullptr, MonsterTbls::sgtDataTable.pTxtItemTypesUnknown, ".\\DATATBLS\\ItemTbls.cpp", 0x8a7);
     DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtItemTypes);
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtItemTypesLink);
 }
 
+// 1.14d mac: 00144c29
 static BOOL __stdcall ITEMTBLS_CheckIfDataFileExists(char * szFileName, D2PoolManagerStrc * pPoolManagerStrc, char * szFileExt) {
     D2MPQFileStrc* pFile;
     char szFilePath[260];
@@ -1872,6 +1924,7 @@ static BOOL __stdcall ITEMTBLS_CheckIfDataFileExists(char * szFileName, D2PoolMa
 
 // Builds the Runes.txt (rune word) data table for D2Common. Defines the column schema (name, rune name, complete/server flags, itype1-6/etype1-3 item-type filters linked to ItemTypes, rune1-6 base codes linked to Items, and 7 t1code/param/min/max stat triplets linked to Properties), loads "runessrv" (.txt/.bin/.xls, halting via Fog ErrorManager if none found), compiles it into pTxtRunes (stride 0x120, count nTxtRunesSize), then resolves each row's "complete" string-table key into its string id at offset 0x82. ECX = pool manager. No return.
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00144ae1
 void __fastcall TXT_AllocTxt_runes(D2PoolManagerStrc * pMemory) {
     uint16_t* pStringOut;
     D2BinFieldInputStrc aFieldDefs[48] = {
@@ -1955,16 +2008,19 @@ void __fastcall TXT_AllocTxt_runes(D2PoolManagerStrc * pMemory) {
     }
 }
 
+// 1.14d mac: 00144ccc
 void __stdcall ITEMTBLS_FreeRunes() {
     DataTbls::UnloadBin(nTxtRunesSize.pTable);
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtRunesLink);
 }
 
+// 1.14d mac: 00144cff
 D2RunesTxtTableStrc * __stdcall TXT_GetRuneTableSize() {
     return &nTxtRunesSize;
 }
 
 // @sourcefile .\DATATBLS\ItemTbls.cpp
+// 1.14d mac: 00144d10
 void __stdcall ITEMTBLS_CopyRunewordRecord(int32_t nRunewordId, char * pSourceRecord) {
     if (nTxtRunesSize.nSize <= nRunewordId) {
       size_t nNewAllocSize = (nRunewordId * 9 + 9) * 0x20;

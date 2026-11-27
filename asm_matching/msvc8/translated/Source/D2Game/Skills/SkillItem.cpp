@@ -360,6 +360,7 @@ static D2ItemSpellStrc ITEMSPELLFUNCS[31] = {
 namespace D2Game { namespace SKILLS { namespace SkillItem {
 
 // Seed-deterministically rolls up to 3 unique monster GFX-component sets ("champion pack" members) into a D2MonsterRegionFieldStrc. Looks up the monster's MonStats2 to get the per-component variant counts; clamps the requested champion count to the free slots (max 3 minus existing pad count). Seeds an initial component set if none exists, picks one or two eligible components (those with >1 variant) at random, then for each new champion fills all 16 component-variant bytes from the seed RNG (power-of-two counts use a mask, others use modulo), comparing against existing slots (16-byte memcmp) and retrying up to 3 times to avoid duplicate appearances. Advances *pSeed in place; increments pMonData->pad per added member. Stack-guarded; halts via Fog ErrorManager on null pSeed/pMonData.
+// 1.14d mac: 001d955f
 void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStrc * pMonData, int32_t nNumChampions) {
     uint8_t byCompCount;
     D2MonStats2Txt* pMonStats2;
@@ -571,6 +572,7 @@ void __stdcall SEED_RollChampionPack(D2SeedStrc * pSeed, D2MonsterRegionFieldStr
 }
 
 // Selects a random monster type from a D2MonsterRegionStrc using weighted random selection on the region's rarity table. On Normal difficulty with nParam!=0, picks from the level's unique-monster (umon) list instead. Handles spawn-replacement: if the chosen monster has a spawn entry and placespawn!=0, probabilistically substitutes the spawn variant. Writes the chosen D2MonStatsTxt pointer to ppMonStatLine and returns the class index, or returns 0/NULL if the region is empty.
+// 1.14d mac: 001d9914
 int32_t __fastcall MONREGION_RollRandomMonsterType(::SGAMEDATA * pGame, D2MonsterRegionStrc * pMonsterRegion, D2RoomStrc * pRoom, D2MonStatsTxt * * ppMonStatLine, uint8_t byBaseClassChance, int32_t bUseUMon) {
     D2LevelsTxt* pLevelsTxt;
     uint32_t nRandRarity;
@@ -638,6 +640,7 @@ int32_t __fastcall MONREGION_RollRandomMonsterType(::SGAMEDATA * pGame, D2Monste
     return nRarityBucket;
 }
 
+// 1.14d mac: 001d9abe
 int * __fastcall RollRoomSeed(D2RoomStrc * pRoom) {
     D2SeedStrc* pSeed = pRoom ? &pRoom->sSeed : 0;
     D2_SeedRoll(pSeed);
@@ -645,6 +648,7 @@ int * __fastcall RollRoomSeed(D2RoomStrc * pRoom) {
 }
 
 // Determines how many unique/boss monsters to spawn for pMonterRegion in pRoom. If current unique count is below nBossMin and the room density roll (spawned/total rooms) passes, returns 0 (skip). If below nBossMax and a 6% roll passes, returns 0. Otherwise returns 1 (spawn normal) or 2 (spawn extra) based on a 35% random threshold using the room seed.
+// 1.14d mac: 001d9af1
 int32_t __fastcall MONSTERREGION_CheckSpawnDensity(D2MonsterRegionStrc * pMonterRegion, D2RoomStrc * pRoom) {
     D2SeedStrc* pSeed;
     int nTotalLevelRooms;
@@ -691,6 +695,7 @@ int32_t __fastcall MONSTERREGION_CheckSpawnDensity(D2MonsterRegionStrc * pMonter
 }
 
 // @sourcefile .\SKILLS\SkillItem.cpp
+// 1.14d mac: 0025ae2c
 BOOL __fastcall SKILLITEM_ItemSpellInit_UseStackable(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     D2Common::ITEMS::Items::ITEM_EditItemData_eItemFlag(pItem, ITEMFLAG_CURSOR, 1);
     int nSpellIcon = D2Common::ITEMS::Items::ITEM_GetSpellIcon(pItem);
@@ -725,6 +730,7 @@ static D2InventoryStrc * SKILLITEM_FindItemInInventory(D2UnitStrc * pUnit, D2Uni
 }
 
 // @sourcefile .\SKILLS\SkillItem.cpp
+// 1.14d mac: 00258c86
 static void SKILLITEM_ClearCursorFlagAndNotifyClient(D2UnitStrc * pUnit) {
     D2UnitStrc* pUnitTmp;
     BOOL bHasCursorFlag;
@@ -744,6 +750,7 @@ static void SKILLITEM_ClearCursorFlagAndNotifyClient(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\SKILLS\SkillItem.cpp
+// 1.14d mac: 0025aeb8
 BOOL __fastcall SKILLITEM_IdentifyScrollSpell(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     BOOL bIsTrading = PLAYER::PlayerTrade::IsInteractingWithPlayer(pGame, pUnit, 1);
     if (bIsTrading) {
@@ -766,6 +773,7 @@ BOOL __fastcall SKILLITEM_IdentifyScrollSpell(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // Server handler for the Town Portal scroll spell (player units only). If the caster is in town or Uber Tristram, plays the fail sound and returns 0. Otherwise destroys any existing portal pair, spawns a new Town Portal object (obj 0x3B) at the caster's position via SERVER_SpawnPortal, records the portal GUID on the player, rebinds any previous portal owner, fires quest callbacks, and sends CMD 0x7C to the client. Returns 1 on successful portal creation.
 // @sourcefile .\SKILLS\SkillItem.cpp
+// 1.14d mac: 0025af65
 BOOL __fastcall SKILLITEM_TownPortalScrollSpell(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     eAct nAct;
     D2RoomStrc* pRoom;
@@ -834,6 +842,7 @@ BOOL __fastcall SKILLITEM_TownPortalScrollSpell(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Applies a consumed potion/consumable item's effects to pUnit. Looks up the item's ItemsTxt line, computes the effect duration (ITEMS_SearchItemCodeTable) and its state, then iterates the item's up-to-3 stat columns: each stat value is difficulty-scaled (potion value/regen), optionally doubled by a random crit roll vs the relevant attribute, and value-shifted. Instant stats (hp/mana) are added directly (capped at maxstat, with blood-golem leech for life); over-time stats are blended into a state-backed timed stat list (allocating/attaching one and scheduling regen/expire events). If HP changed on a player it sends the 0xAB hp-percent update when the delta exceeds 4. pItem is the consumed item unit (its +4 nClassId selects the ItemsTxt row).
+// 1.14d mac: 0025b174
 BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     uint32_t nItemClassId;
     D2ItemStatCostTxt* pStatCost;
@@ -1007,6 +1016,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffects(::SGAMEDATA * pGame, D2UnitStrc * pU
 }
 
 // Applies a consumable/charm item's regen-and-stat effects to a unit. Reads the item's ItemsTxt (state + up to 3 stat entries), scales each value by valshift (mana/hp regen pre-shifted by 8), and either adds the stat instantly (clamped to its maxstat) or, for timed buffs, allocates/refreshes a state stat-list on the unit averaging the new value with any remaining buff. Player hitpoint/hpregen gains route through BloodGolemLifeLeech; on hp change for players, sends a 0xAB hp-percent update packet. Server-side. Returns bApplied: TRUE if any stat was applied (EAX from [EBP-0x1c] at 005beaa6).
+// 1.14d mac: 0025b6ab
 BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     uint32_t nItemClassId;
     D2ItemStatCostTxt* pStatCost;
@@ -1154,6 +1164,7 @@ BOOL __fastcall ITEM_ApplyConsumableEffectsSimple(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Item-skill handler that restores a percentage of capped stats (e.g. healing/mana/rejuvenation potions). Looks up the item's ItemsTxt row, reads its state (wState) and a duration via ITEMS_SearchItemCodeTable. Iterates up to 3 stat slots encoded in the item's szCode block: for each, scales the stat's max value by a percent (D2ApplyPercent), applies BloodGolemLifeLeech adjustment when restoring HP/HP-regen on a player. If duration<=0 the restore is instant (STATLIST_AddUnitStat, clamped to max). If duration>0 it instead attaches/refreshes a timed state-list, blending the buffed amount over remaining frames and registering regen timer events. After processing all slots, if HP was modified on a player it sends the new HP-percent (UnitQueuePacket 0xAB) and updates UNITSTAT_last_sent_hp_pct. Returns bApplied: TRUE if any stat was applied (EAX from [EBP-0x24] at 005bed90).
+// 1.14d mac: 0025bb09
 BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     uint32_t nItemDuration;
     uint32_t nPercent;
@@ -1285,6 +1296,7 @@ BOOL __fastcall ITEM_ApplyPercentRestoration(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Applies timed buff stats from a consumable item (e.g. potions with duration) to pUnit. Looks up the item's TXT row, validates the associated state, computes stacked duration (existing remaining frames + new duration), allocates or reuses a stat-list for the state, sets a game-event timer for expiry, then iterates the item's three stat/calc pairs adding each to the stat list. Handles stamina fill-to-max as a special case for UNITSTAT_staminarecoverybonus.
+// 1.14d mac: 0025c23f
 BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     uint32_t nItemDuration;
     D2ItemStatCostTxt* pStatCost;
@@ -1366,6 +1378,7 @@ BOOL __fastcall ITEM_ApplyTimedBuffStats(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Clears then reapplies timed buff states associated with an item (e.g. charged/triggered skill effects). Iterates wCState1/wCState2 from the item's ItemsTxt row: for each valid state, removes the existing statlist and clears the state on the unit, then calls ITEM_ApplyTimedBuffStats to reapply. Returns non-zero if any buff was applied.
+// 1.14d mac: 0025bfc1
 BOOL __fastcall ITEM_RefreshBuffStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     uint32_t nItemClassId;
     D2StatListExStrc* pStatList;
@@ -1414,6 +1427,7 @@ BOOL __fastcall ITEM_RefreshBuffStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     return bRefreshApplied;
 }
 
+// 1.14d mac: 0025c1c4
 BOOL __fastcall SKILLITEM_pSpell08_AddItemValueToStat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     eD2UnitStat eUnitStat = D2Common::ITEMS::Items::ITEM_GetItemData_nFileIndex(pItem);
     if (!((int)eUnitStat >= 0 && (int)eUnitStat < D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
@@ -1431,6 +1445,7 @@ BOOL __fastcall SKILLITEM_pSpell08_AddItemValueToStat(::SGAMEDATA * pGame, D2Uni
 
 // Handles the Personalize item spell (Ear/Charsi imbue interaction). Verifies pUnit is a player, checks if they are trading with an Inscriber object (classId 0x10B). If so, clears interact info and sends TradeAction 0x11. Sets interact info to mode 4 with the target item GUID, then sends TradeAction 0x15 and calls ITEMMODE_CheckItemLevel.
 // @sourcefile .\SKILLS\SkillItem.cpp
+// 1.14d mac: 0025c0c7
 BOOL __fastcall SKILLITEM_pSpell07_OpenCube(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     D2ClientStrc* pClient;
     int32_t nInteractGUID;
@@ -1474,6 +1489,7 @@ BOOL __fastcall SKILLITEM_pSpell07_OpenCube(::SGAMEDATA * pGame, D2UnitStrc * pU
 // fails for pItem's class (-1 when pItem is NULL); otherwise casts SKILL_FireBall at level 1 with
 // SKILL_CastOnTargetUnit at GetTargetEx's unit, or with MONSTERAI_CastItemEffectSkill at the path
 // target coords (GetXSP1/GetYSP1), and returns that BOOL. pTarget/nX/nY/eSkill are unused (table signature).
+// 1.14d mac: 0025c4db
 BOOL __fastcall ITEM_CastFireballOnTarget(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     uint32_t nItemClassId;
     BOOL BVar1;
@@ -1501,6 +1517,7 @@ BOOL __fastcall ITEM_CastFireballOnTarget(::SGAMEDATA * pGame, D2UnitStrc * pUni
     return BVar1;
 }
 
+// 1.14d mac: 0025c585
 BOOL __fastcall SKILLITEM_CastExplosivePotionSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int nX, int nY, eD2Skills eSkill) {
     uint32_t nItemClassId = !pItem ? -1 : pItem->nClassId;
     D2ItemsTxt* pItemTxt = D2Common::DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
@@ -1521,6 +1538,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 }
 // Resolves and invokes the item-spell handler for using a book/scroll/charged item. Determines the spell index: for Book/Scroll item types it reads the Books.txt line (via magic-suffix) else falls back to Items.txt dwPSpell. Indexes the global ITEMSPELLFUNCS table; if not flagged ITEMFLAG_CURSOR runs the pSpellInit callback, otherwise sets the cursor flag and runs pSpellDestroy. Clears the cursor flag and notifies the client when a callback returns 0. Returns 0 on early reject/handled-init; returns the destroy callback result otherwise.
 // @sourcefile .\SKILLS\SkillItem.cpp
+// 1.14d mac: 00258a80
 int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pItem, D2UnitStrc * pTarget, int32_t nX, int32_t nY) {
     // Static local variables (originally global data)
     static int ITEMSPELLFUNCS_SIZE = 0x1f; D2_STATIC_GUARD(ITEMSPELLFUNCS_SIZE, "D2Game::SKILLS::SkillItem::SKILLITEM_DispatchItemSpell::ITEMSPELLFUNCS_SIZE");
@@ -1600,6 +1618,7 @@ int32_t __fastcall SKILLITEM_DispatchItemSpell(::SGAMEDATA * pGame, D2UnitStrc *
 // Body continues at 005bf3e9, the JNZ target of 005bf3e1 - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'SKILL_UseScrollOrBookFromInventory'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'SKILL_UseScrollOrBookFromInventory':
 // Scans the player's inventory item list for a book or scroll whose spell (Books.txt spell column) matches the requested spell id at *(nParam+8). For scrolls matches at +8; for books matches at +0xc and requires quantity>0. On a hit, reads the item's inventory grid type: grid 1 routes to SpecialItemsBonuses, grid 2 routes to SERVER_UseItemAtCoords (with the item's GUID and dynamic-path X/Y). Returns 1 if a matching item was used, 0 otherwise. Server-side helper for casting a spell from a scroll/tome in the inventory.
+// 1.14d mac: 00258d5a
 BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pItem;
     uint32_t bIsItemType;
@@ -1680,6 +1699,7 @@ BOOL __fastcall Skills_SrvDoFunc_113_UseScrollOrBook(::SGAMEDATA * pGame, D2Unit
     return 0;
 }
 
+// 1.14d mac: 00258f7e
 void __fastcall SKILL_ProcessPeriodicAuraTick(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!(pSkillTxt && pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5] && pSkillTxt->aurastate >= 0 && (int)pSkillTxt->aurastate < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize)) {
@@ -1696,6 +1716,7 @@ void __fastcall SKILL_ProcessPeriodicAuraTick(::SGAMEDATA * pGame, D2UnitStrc * 
     SkillsServer::SKILL_SpawnMissileFunction(pGame, pUnit, eSkill, nSkillLvl, 1, 1, 0);
 }
 
+// 1.14d mac: 002590be
 void __fastcall SKILL_DeactivateAura(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nOwnerGUID, eD2Skills eSkill) {
     D2SkillsTxt* pSkillTxt = pUnit && (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!(pSkillTxt && pSkillTxt->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[5])) {
@@ -1725,6 +1746,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
     return p->eUnitFlags >> 2 & 1;
 }
 
+// 1.14d mac: 0025919b
 BOOL __fastcall ITEMEVENT_PhysDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     if (!pUnit || !pTarget) {
@@ -1748,6 +1770,7 @@ BOOL __fastcall ITEMEVENT_PhysDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
     return 1;
 }
 
+// 1.14d mac: 0025925e
 BOOL __fastcall ITEMEVENT_LightningDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     if (!pUnit || !pTarget) {
@@ -1771,6 +1794,7 @@ BOOL __fastcall ITEMEVENT_LightningDamageOnAttacked(::SGAMEDATA * pGame, uint32_
     return 1;
 }
 
+// 1.14d mac: 00259321
 BOOL __fastcall ITEMEVENT_FireDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     if (!pUnit || !pTarget) {
@@ -1794,6 +1818,7 @@ BOOL __fastcall ITEMEVENT_FireDamageOnAttacked(::SGAMEDATA * pGame, uint32_t nUn
     return 1;
 }
 
+// 1.14d mac: 002593e4
 BOOL __fastcall ITEMEVENT_ColdDamageWithFreezeLength(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2UnitStrc* pAttacker = pUnit;
@@ -1826,6 +1851,7 @@ BOOL __fastcall ITEMEVENT_ColdDamageWithFreezeLength(::SGAMEDATA * pGame, uint32
     return 1;
 }
 
+// 1.14d mac: 002594f9
 BOOL __fastcall ITEMEVENT_Knockback(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!(pUnit && pTarget && pDamage)) {
       return 0;
@@ -1859,6 +1885,7 @@ BOOL __fastcall ITEMEVENT_Knockback(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2
     return 0;
 }
 
+// 1.14d mac: 002595fb
 BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     uint32_t _bIsUndead;
     bool bIsUndead;
@@ -1886,6 +1913,7 @@ BOOL __fastcall ITEMEVENT_ChanceToFear(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 }
 
 // Item hit-event handler for "Chance to cast Dim Vision on striking". Only applies to monster targets. Reads the item's proc chance stat, computes an effective % from attacker/target levels, rolls the unit seed; on success calls SKILLNEC_ApplyDimVision with a duration scaled by how much the roll was beaten. Halves effective % when param1==6 (ranged hit). Returns 1 if Dim Vision was applied.
+// 1.14d mac: 002596af
 BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if ((pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER) == 0) {
       return 0;
@@ -1916,6 +1944,7 @@ BOOL __fastcall ITEMEVENT_ChanceToDimVision(::SGAMEDATA * pGame, uint32_t nUnitE
     return 1;
 }
 
+// 1.14d mac: 002597f3
 BOOL __fastcall ITEMEVENT_DamageToMana(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER && pDamage && pDamage->dwDmgTotal > 0)) {
       return 0;
@@ -1944,6 +1973,7 @@ BOOL __fastcall ITEMEVENT_DamageToMana(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 }
 
 // Item hit-event handler for "Freeze Target" modifier. Reads freeze level from the item stat, computes a chance % from attacker/target levels (reduced by 1/3 for ranged hits, param1==6). On a successful seed roll, calculates freeze duration (25–250 frames) proportional to the margin, fills a D2DamageStrc with dwFrzLength, and applies it via DAMAGE_ApplyDamageToUnit. Returns 1 if freeze was applied.
+// 1.14d mac: 00259990
 BOOL __fastcall ITEMEVENT_FreezeTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     if (!pUnit || !pTarget) {
@@ -1984,6 +2014,7 @@ BOOL __fastcall ITEMEVENT_FreezeTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     return 1;
 }
 
+// 1.14d mac: 00259b06
 int32_t __fastcall SKILLITEM_CalculateOpenWoundsHpRegen(int32_t nLevel, int * pValues) {
     if (nLevel <= 1 || !pValues) {
       return 0;
@@ -2005,6 +2036,7 @@ int32_t __fastcall SKILLITEM_CalculateOpenWoundsHpRegen(int32_t nLevel, int * pV
 }
 
 // Item-event handler that applies the Open Wounds on-hit effect. Reads the proc chance from ITEM_GetMinimalStatValueShifted, rolls the unit's seed against it, then computes a level-scaled HP-regen-drain magnitude (via SKILLITEM_CalculateStaminaPotionValue with a 5-tier table). Halves damage for players (non-attack hit) or undead monsters. Applies STATE_openwounds via SetStateWithExpiryTime with UNITSTAT_hpregen as the drain stat for 200 frames.
+// 1.14d mac: 00259b8a
 BOOL __fastcall ITEMEVENT_OpenWounds(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     uint32_t bIsUndead;
     D2StateExArgStrc sStateArg;
@@ -2063,6 +2095,7 @@ BOOL __fastcall ITEMEVENT_OpenWounds(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
 }
 
 // Item-event handler that applies the Crushing Blow effect. Reads the chance from ITEM_GetMinimalStatValueShifted and rolls against the unit seed. Computes the divisor (1/4 vs monsters, 1/8 vs bosses/champions, 1/10 vs players/mercs) scaled by player-count multiplier; doubles for open wounds (param1==6). Reduces target HP by (current_HP / divisor) after subtracting physical resistance, clamped to 1 HP minimum. Sets an overlay (0x93) and marks the damage-result struct (pParam+4 |= 2) if the target would die.
+// 1.14d mac: 00259d2d
 BOOL __fastcall ITEMEVENT_CrushingBlow(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     uint32_t bIsBoss;
     uint32_t nNewHP;
@@ -2140,6 +2173,7 @@ BOOL __fastcall ITEMEVENT_CrushingBlow(::SGAMEDATA * pGame, uint32_t nUnitEvent,
     return 1;
 }
 
+// 1.14d mac: 0025a009
 BOOL __fastcall ITEMEVENT_ReplenishManaFlat(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!pUnit || !pTarget || pUnit->eUnitType != UNIT_PLAYER) {
       return 0;
@@ -2163,6 +2197,7 @@ BOOL __fastcall ITEMEVENT_ReplenishManaFlat(::SGAMEDATA * pGame, uint32_t nUnitE
     return 1;
 }
 
+// 1.14d mac: 0025a0d4
 BOOL __fastcall ITEMEVENT_ReplenishLifeFlat(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!pUnit || !pTarget) {
       return 0;
@@ -2186,6 +2221,7 @@ BOOL __fastcall ITEMEVENT_ReplenishLifeFlat(::SGAMEDATA * pGame, uint32_t nUnitE
     return 1;
 }
 
+// 1.14d mac: 0025a196
 BOOL __fastcall ITEMEVENT_LifeDrainDemon(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!pUnit || !pTarget || !D2Common::Monsters::MONSTERS::IsDemon(pTarget)) {
       return 0;
@@ -2211,6 +2247,7 @@ BOOL __fastcall ITEMEVENT_LifeDrainDemon(::SGAMEDATA * pGame, uint32_t nUnitEven
 
 // Server-side item hit-event handler that applies a slow state to a target. Reads the slow percentage from the item's stat (via ITEM_GetMinimalStatValueShifted). Clamps the slow to 50% for players/bosses/mercs/champions, 75% for normal monsters, 90% for others. Applies STATE_slowed with UNITSTAT_velocitypercent, attackrate, and other_animrate for 750 frames. Returns 1 if state was successfully applied.
 // @sourcefile .\SKILLS\SkillItem.cpp
+// 1.14d mac: 0025a268
 BOOL __fastcall ITEMEVENT_SlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!pUnit || !pTarget) {
       return 0;
@@ -2286,6 +2323,7 @@ BOOL __fastcall ITEMEVENT_SlowTarget(::SGAMEDATA * pGame, uint32_t nUnitEvent, D
 }
 
 // Item hit-event handler for "Cast on Attack" procs. Reads proc chance and proc skill/level from the item stat encoding. Only fires when pParam indicates an attack swing (bit 0x20 clear or pParam null). Rolls unit seed against chance; on success spawns the proc skill on the target unit via SKILL_CastOnTargetUnit, or at the caster's position via MONSTERAI_CastItemEffectSkill if no target. Self-targeted skills (flags4 bit 0x20) cast on pTarget instead.
+// 1.14d mac: 0025a3f5
 BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     
     if (!pUnit) {
@@ -2331,6 +2369,7 @@ BOOL __fastcall ITEMEVENT_CastOnAttack(::SGAMEDATA * pGame, uint32_t nUnitEvent,
 }
 
 // Item hit-event handler for "Cast when Striking" procs. Reads proc chance and proc skill/level from the item stat encoding. Only fires when pParam bit 0x4 (striking flag) is set. Rolls unit seed against chance; on success casts the proc skill on pTarget via SKILL_CastOnTargetUnit, or at the caster's position via MONSTERAI_CastItemEffectSkill if no target. Returns 1 if the skill was cast.
+// 1.14d mac: 0025a586
 BOOL __fastcall ITEMEVENT_SkillOnGetHit(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!pUnit) {
       return 0;
@@ -2366,6 +2405,7 @@ BOOL __fastcall ITEMEVENT_SkillOnGetHit(::SGAMEDATA * pGame, uint32_t nUnitEvent
     return 1;
 }
 
+// 1.14d mac: 0025a6ce
 BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     
     if (!pUnit) {
@@ -2403,6 +2443,7 @@ BOOL __fastcall ITEMEVENT_CastOnDeath(::SGAMEDATA * pGame, uint32_t nUnitEvent, 
     return 1;
 }
 
+// 1.14d mac: 0025a807
 BOOL __fastcall ITEMEVENT_SetRestInPeace(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     if (pUnit && pTarget) {
       D2Common::DATATBLS::ItemStats::SetState(pTarget, STATE_restinpeace, 1);
@@ -2425,6 +2466,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 // Item reanimate event callback (not the Necromancer Revive skill): validates the corpse (consumable check, MonStats bounds), removes its collision, spawns a monster of class nMonsterClassId in a nearby room, sets ISREVIVE flags and STATE_revive, attaches minion AI, assigns the owner (GUID in nOwnerGUID) and schedules AI-think and expiry events. Returns 1 on success, 0 on any validation failure.
+// 1.14d mac: 0025a83e
 BOOL __fastcall SKILLITEM_ReanimateMonsterCallback(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pAttacker, D2UnitStrc * pTarget, D2DamageStrc * pDamage, int32_t nMonsterClassId, int32_t nOwnerGUID) {
     D2ModeChangeStrc sKillStrc;
     D2UnitStrc* pOwnerUnit = nullptr;
@@ -2498,6 +2540,7 @@ BOOL __fastcall SKILLITEM_ReanimateMonsterCallback(::SGAMEDATA * pGame, uint32_t
 }
 
 // Takes the address of a function whose signature changed in the 1167 issue batch.
+// 1.14d mac: 0025ad22
 BOOL __fastcall ITEMEVENT_ReviveMonster(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, uint32_t eSkill, int32_t nSkillLvl) {
     if (!(pUnit && (pTarget ? pTarget->eUnitType : UNIT_COUNT) == UNIT_MONSTER)) {
       return 0;
@@ -2537,6 +2580,7 @@ BOOL __fastcall ITEMEVENT_ReviveMonster(::SGAMEDATA * pGame, uint32_t nUnitEvent
 }
 
 // Item hit-event handler that retaliates by launching a missile at the owner of pTarget. Resolves the target's owner via GetOwnerUnit, checks hostility via UNITS_CheckIfCanAttackTarget, then reads the skill's srvmissilea. Only fires if pTarget's missile has the retaliating flag (flags2 bit 1). Creates a missile aimed at the owner's position with UNITFLAG_SKSRVDOFUNC set. Returns 1 if the missile was launched.
+// 1.14d mac: 00271e68
 BOOL __fastcall ITEMEVENT_LaunchMissileOnOwner(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pUnitSaved = pUnit;
     if (!pUnit || !pTarget) {
@@ -2586,6 +2630,7 @@ BOOL __fastcall ITEMEVENT_LaunchMissileOnOwner(::SGAMEDATA * pGame, uint32_t nUn
     return 0;
 }
 
+// 1.14d mac: 00271ff7
 BOOL __fastcall ITEMEVENT_ApplyFreezeDamage(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     short int sCltOverlay;
@@ -2620,6 +2665,7 @@ BOOL __fastcall ITEMEVENT_ApplyFreezeDamage(::SGAMEDATA * pGame, uint32_t nUnitE
     return 1;
 }
 
+// 1.14d mac: 00272145
 BOOL __fastcall ITEMEVENT_ApplyHitDamage(::SGAMEDATA * pGame, uint32_t nUnitEvent, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDamage, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     short int sCltOverlay;

@@ -20,6 +20,7 @@ static void __stdcall DRLGROOMEX_SetFlagsFromNearCount(D2RoomExStrc * pRoomEx) {
     pRoomEx->eRoomExFlags = Environment::gnTimeRates[pRoomEx->nDrlgRoomsExNearCount];
 }
 
+// 1.14d mac: 00142504
 int __fastcall ITEMTBLS_CalcExpr_ParseTokenType(char * szKey) {
     int32_t nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "min", 0x20);
     if (!nCmpResult) {
@@ -40,11 +41,13 @@ int __fastcall ITEMTBLS_CalcExpr_ParseTokenType(char * szKey) {
     return nCmpResult ? -1 : 3;
 }
 
+// 1.14d mac: 001425ac
 int __fastcall ITEMTBLS_CalcExpr_GetConstTwo(int nFunctionIndex) {
     return 2;
 }
 
 // Callback used by missile calc VM evaluator; maps calc opcode/context to GetSpecialParamValue.
+// 1.14d mac: 0018d5f4
 int32_t __fastcall MISSILE_CalcVMCallback_GetSpecialParam(uint32_t nCalcOp, D2MissileCalcContextStrc * pCalcCtx) {
     if (!pCalcCtx) {
       return 0;

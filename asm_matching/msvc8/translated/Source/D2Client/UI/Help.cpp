@@ -51,6 +51,7 @@ static void __stdcall SetSeenHelpMenu(BOOL bSeenHelpMenu) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Help Menu", 1, bSeenHelpMenu);
 }
 
+// 1.14d mac: 000a5c84
 void __stdcall LoadBorder() {
     char* pFilename;
     DWORD dwResolutionMode;
@@ -231,6 +232,7 @@ void __stdcall DrawWhiteBulletXpac() {
     D2gfx::D2GFX::D2GFX_DrawLine(0x2e8, 0x1e6, 0x2e8, 0x214, 0xff, 0xff);
 }
 
+// 1.14d mac: 000a83ba
 void __stdcall DrawSellBtn() {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, sizeof(sGfxData));
@@ -246,6 +248,7 @@ void __stdcall DrawSellBtn() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, 0x20d, 0x38, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000a5de6
 void __stdcall HELP_DrawDarkOverlay() {
     Party::SetRedToBlack();
     Engine::Gfx::D2GFX_DrawSolidRectExBySize(0, 0, ui::ScreenSizeX, Inv::ScreenSizeY - 0x31, (uint32_t)nColor.rgbBlue, DRAW_TRANSPARENT);
@@ -268,6 +271,7 @@ void __stdcall FreeHelpBorder() {
     HelpYellowBullet = 0;
 }
 
+// 1.14d mac: 000a8545
 void __stdcall INPUT_HelpCloseButtonDown(D2UIMouseMsgStrc * pMsg) {
     int nMouseX = pMsg->uLParam.sMousePos.nMouseX;
     int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
@@ -293,6 +297,7 @@ void __stdcall INPUT_HelpCloseButtonDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000a871a
 void __stdcall HELP_MiniPanelKeyNoOp(D2UIMouseMsgStrc * pMsg) {
 
 }
@@ -350,6 +355,7 @@ void __stdcall HELP_DrawHelpButtonTooltip() {
     D2Win::Src::D2WinFont::DRAW_text(wszTooltip, ui::ScreenSizeX - nTextWidth / 2 - 0x3a, Inv::ScreenSizeY - 0xc5, 0, 0);
 }
 
+// 1.14d mac: 000a871f
 void __stdcall HELP_DrawHelpButton() {
     D2GfxDataStrc sGfxData;
     if (ui::GetUIFlag(UI_SKILLTREE) || ui::GetUIFlag(UI_SKILLSELECT) || ui::GetUIFlag(UI_INVENTORY) || ui::GetUIFlag(UI_NPCSHOP) || ui::GetUIFlag(UI_MPTRADE) || ui::GetUIFlag(UI_STASH)) {
@@ -374,6 +380,7 @@ void __stdcall HELP_DrawHelpButton() {
     ui::SetUIFlag(UI_HELPSCREENBTN, UI_RESET, 0);
 }
 
+// 1.14d mac: 000a8adf
 void __stdcall INPUT_HelpScrollButtonDown(D2UIMouseMsgStrc * pMsg) {
     if (gpHelpScrollButtonUp) {
       return;
@@ -393,6 +400,7 @@ void __stdcall INPUT_HelpScrollButtonDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000a8b7d
 void __stdcall INPUT_HelpScrollButtonUp(D2UIMouseMsgStrc * pMsg) {
     if (gpHelpScrollButtonUp) {
       return;
@@ -416,6 +424,7 @@ void __stdcall INPUT_HelpScrollButtonUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000a5d2d
 int32_t __fastcall HELP_CenterTextAndGetX(uint16_t nStringId, int32_t nCenterX) {
     int i;
     uint16_t wszText[100];
@@ -865,6 +874,7 @@ void __stdcall DRAW_UI_HelpClassic() {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 000a5e3d
 void __stdcall DrawBackgroundHelpMenu() {
     BOOL bMiniPanelShown = ui::GetUIFlag(UI_MINIPANEL);
     if (!bMiniPanelShown) {
@@ -889,6 +899,7 @@ void __stdcall DrawBackgroundHelpMenu() {
     DRAW_UI_HelpClassic();
 }
 
+// 1.14d mac: 000a85b6
 void __stdcall INPUT_HelpCloseButtonUp(D2UIMouseMsgStrc * pMsg) {
     int nMouseX = pMsg->uLParam.sMousePos.nMouseX;
     int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
@@ -919,6 +930,7 @@ void __stdcall INPUT_HelpCloseButtonUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000a86bf
 void __stdcall HELP_OnEscapeOrSpace(D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_HELPSCREEN, UI_RESET, 0);
     if (!gbMiniPanel) {
@@ -929,6 +941,7 @@ void __stdcall HELP_OnEscapeOrSpace(D2UIMouseMsgStrc * pMsg) {
     gbMiniPanel = 0;
 }
 
+// 1.14d mac: 000a8680
 void __fastcall HELP_SetUIVarW(eD2UIvars eUIVar, eD2UIvarsSetType eUIVarSetType, uint32_t dwArg1) {
     DWORD dwUnused;
     ui::SetUIFlag(eUIVar, eUIVarSetType, dwUnused);

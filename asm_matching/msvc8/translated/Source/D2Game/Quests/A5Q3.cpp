@@ -43,6 +43,7 @@ namespace D2Game { namespace Quests { namespace QUESTS { namespace A5Q3 {
 // Q33_NotifyQuestState: per-player completion broadcaster passed to QUEST_SetStateAndBroadcast.
 // Pushes log update (0x21) to a player ONLY when the quest is genuinely freshly done:
 // (Completed || FinishedInPreviousGame) && !JustCompleted && !CannotCompleteQuestInGame. Otherwise no-op.
+// 1.14d mac: 0023f111
 BOOL __fastcall Q33_NotifyQuestState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -64,6 +65,7 @@ BOOL __fastcall Q33_NotifyQuestState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, vo
 // Q33_UpdateQuestStep (PrisonOfIce): per-unit iterator callback. If quest not Completed and not yet RewardAwaits,
 // mirrors the in-memory quest stateFlag into the player's QuestRecord bits: stateFlag==2 -> set Step0x02 (talked to Malah / intro),
 // stateFlag==3 -> set Step0x03 (Anya found/in progress).
+// 1.14d mac: 00244dfa
 BOOL __fastcall Q33_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -95,6 +97,7 @@ BOOL __fastcall Q33_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
 // Q33_Callback_02 (PrisonOfIce, state-2 quest handler). Fires on interaction with Malah (MonStatsId 0x201).
 // If Malah was talked to -> advance to stateFlag 1 (broadcast). If quest active && Scroll-of-Resistance collected && prev<4
 // -> advance to stateFlag 4 (Anya freed / scroll obtained), broadcasting via Q33_NotifyQuestState.
+// 1.14d mac: 0023d951
 void __fastcall Q33_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nTargetClassId = !pQuestArgs->pTarget ? -1 : pQuestArgs->pTarget->nClassId;
     D2QuestDataA5Q3Strc* pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
@@ -118,6 +121,7 @@ void __fastcall Q33_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 // Q33_SendQuestStatePacket (PrisonOfIce): sends 0x5D quest-state packet (header 0x21,0x20) to the unit's client.
 // Used as the AI-sub clear callback when the frozen-Anya monster (0x20f) is killed.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q3.cpp
+// 1.14d mac: 00245156
 void __fastcall Q33_SendQuestStatePacket(D2UnitStrc * pUnit) {
     D2GSPacketSrv0x5D aPacketBuf;
     memset(&aPacketBuf, 0, sizeof(aPacketBuf));
@@ -139,6 +143,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 // Q33_OnFrozenAnyaKilled (PrisonOfIce): iterator callback over the frozen-Anya monster placeholder (classId 0x20f).
 // If it still has an AI sub, clears it (Q33_SendQuestStatePacket cb). Otherwise forces Dead skill + lifecycle transition
 // (kills it) and marks pA5Q3->field_0xE3=1. Used when reward is granted to despawn the captive Anya monster.
+// 1.14d mac: 00244e9f
 BOOL __fastcall Q33_OnFrozenAnyaKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2MonsterAiStrc* pMonsterAi;
     D2ModeChangeStrc sKillInfo;
@@ -169,6 +174,7 @@ BOOL __fastcall Q33_OnFrozenAnyaKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 // Q33_SequenceFilter (PrisonOfIce): the quest's fpSequenceFilter. While quest active and stateFlag<5, bootstraps
 // stateFlag 0->1. Once past that, chains to the next quest's sequence filter (nSequenceQuestId) so dependent quests
 // (Betrayal of Harrogath) get re-evaluated. Halts on IsBadCodePtr of the chained fn ptr.
+// 1.14d mac: 0023e589
 bool __fastcall Q33_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag < 5 && pQuestData->bIsNotIntroduction != '\0') {
       if (!pQuestData->nStateFlag) {
@@ -196,6 +202,7 @@ bool __fastcall Q33_SequenceFilter(D2QuestDataStrc * pQuestData) {
 // Q33_SpawnAnyaAndPortal (PrisonOfIce): when the frozen-Anya OBJECT exists, spawns the rescued-Anya MONSTER (0x200)
 // at its coords, hands over the preset/DRLG map AI, then creates a town portal OBJECT (classId 0xbd) in a nearby room.
 // Records GUIDs in pA5Q3. Re-runs Q33_SequenceFilter afterward. Drives the post-rescue Anya escort/portal sequence.
+// 1.14d mac: 0023ee27
 static void __stdcall Q33_SpawnAnyaAndPortal(D2QuestDataStrc * pQuestData, D2QuestDataA5Q3Strc * pA5Q3) {
     int nPosX;
     int nPosY;
@@ -262,6 +269,7 @@ static void __stdcall Q33_SpawnAnyaAndPortal(D2QuestDataStrc * pQuestData, D2Que
 // Q33_KillMonsterHelper (PrisonOfIce): generic helper to instantly kill a monster — clears AI sub, zeroes path,
 // fires AITHINK timer, sets hitpoints=0, applies Dead skill + lifecycle transition, relinks to update list.
 // Used to despawn quest monsters (frozen/rescued Anya placeholders).
+// 1.14d mac: 0023cd94
 static void __fastcall A5Q3_KillMonsterInstantly(D2UnitStrc * pUnitStrc, ::SGAMEDATA * * pGameStrc) {
     D2MonsterAiStrc* pMonsterAi;
     D2ModeChangeStrc sKillInfo;
@@ -290,6 +298,7 @@ static void __fastcall A5Q3_KillMonsterInstantly(D2UnitStrc * pUnitStrc, ::SGAME
 // Q33_CleanupQuestMonsters (PrisonOfIce): tears down the spawned Anya quest units. For the rescued-Anya monster (0x200)
 // and the second Anya unit (0x202): finds it (or removes the inactive record), clears AI sub, applies Dead + lifecycle
 // transition, frees DRLG/collision and removes from room. Clears the spawned/active flags in pA5Q3.
+// 1.14d mac: 00244f66
 static void Q33_CleanupQuestMonsters(D2QuestDataStrc * pQuestData) {
     D2UnitStrc* pAnyaUnit;
     BOOL bHasAiSubsystem;
@@ -389,6 +398,7 @@ void __fastcall Q33_KillAnyaMonsterTimer(::SGAMEDATA * pGame, D2UnitStrc * pObje
 //    if Step0x08 already set -> Completed; set Step0x10 (reward-once guard).
 //  - 0x4ea3 path: Anya rescued from portal -> SetStateFlag 4, cleanup monsters, broadcast stateFlag 3.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q3.cpp
+// 1.14d mac: 0023da12
 void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static D2Quest33RewardListStrc D2Quest33RewardListStrc_NIGHTMARE = {
@@ -714,6 +724,7 @@ void __fastcall Q33_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
 // Q33_PropagateCompleteToParty (PrisonOfIce): iterator cb. If this player has JustCompleted set, propagate completion
 // to every party member via Q33_SetCompleteForPartyMember. Spreads the "Anya rescued" credit across the party.
+// 1.14d mac: 0023f54c
 BOOL __fastcall Q33_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_PrisonOfIce, QUESTSTATE_JustCompleted);
@@ -731,6 +742,7 @@ BOOL __fastcall Q33_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * p
 // Q33_SetCannotComplete (PrisonOfIce): iterator cb. For players who have NOT made progress (not Completed, not
 // RewardAwaits, not JustCompleted) it sets CannotCompleteQuestInGame and pushes a 0x21 quest-state packet — locks
 // out players who joined too late to get credit this game.
+// 1.14d mac: 0023f5c9
 BOOL __fastcall Q33_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -754,6 +766,7 @@ BOOL __fastcall Q33_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 // offer Scroll-of-Resistance gossip (idx 3) if player lacks it; else offer reward gossip (idx 5) when Completed/FinishedPrev
 // && Step0x08 && !Step0x07. If !RewardAwaits: pick gossip idx from gdwQuestCallbackAddressQ33[stateFlag] (intro chatter).
 // If RewardAwaits: Anya(0x200) gated on !Step0x09, Malah(0x201) gated on Step0x08, default gossip idx 5.
+// 1.14d mac: 0023d610
 void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQuestCallbackAddressQ33[7] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x5 }; D2_STATIC_GUARD(gdwQuestCallbackAddressQ33, "D2Game::Quests::QUESTS::A5Q3::Q33_Callback00_NpcActivate::gdwQuestCallbackAddressQ33");
@@ -869,6 +882,7 @@ void __fastcall Q33_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
 // Q33_Callback_10 (PrisonOfIce, state-0xa handler): on player leave/cleanup, removes the player GUID from both quest
 // GUID lists; if the player still holds the "ice " Scroll-of-Resistance quest item, decrements the held-scroll counter.
+// 1.14d mac: 0023d34b
 void __fastcall Q33_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, nPlayerGUID);
@@ -894,6 +908,7 @@ void __fastcall Q33_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // stateFlag<5: mark every player CannotComplete (Q33_SetCannotComplete) and set stateFlag=6. nodes 0x71/0x72 advance via
 // SetStateFlag 3 + cleanup. (Decompiler duplicated the shared tail across branches.)
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q3.cpp
+// 1.14d mac: 0023d3c1
 void __fastcall Q33_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestStateResult;
@@ -970,6 +985,7 @@ void __fastcall Q33_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // fpActiveFilter callback for A5Q3 Prison of Ice: decides per-NPC whether a quest interaction icon is shown. Malah (0x201): show if RewardAwaits and Step0x08 not set; hide if Completed or RewardAwaits without active state; show on stateFlag==1; gate on scroll count when stateFlag==4. Frozen Anya monster (0x20f): show only while quest is active (bIsNotIntroduction), stateFlag<=4, and the player does not carry the ice scroll. Rescued Anya (0x200): show if RewardAwaits and Step0x09 not set.
+// 1.14d mac: 0023ce82
 bool __fastcall Q33_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL bQuestStateResult;
     int nScrollCountOrStepState;
@@ -1044,6 +1060,7 @@ bool __fastcall Q33_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // AddBonusResistances (PrisonOfIce reward effect): allocates a stat list and grants +nBonusValue to all four resistances
 // (fire/light/cold/poison) on the player, then sends the four attribute updates. This is the Scroll of Resistance reward.
+// 1.14d mac: 0023cfdb
 void __fastcall AddBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nBonusValue) {
     D2StatListExStrc* pStatsEx = (D2StatListExStrc*)D2Common::Stats::StatsEx::AllocStatList(pGame->pMemoryPool, 0, 0, !pUnit ? UNIT_COUNT : pUnit->eUnitType, !pUnit ? -1 : pUnit->nUnitGUID);
     if (!pStatsEx) {
@@ -1063,6 +1080,7 @@ void __fastcall AddBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uin
 
 // CalculateBonusResistances (PrisonOfIce reward applicator): sums +10 all-res for each difficulty (Normal/NM/Hell record
 // pools 1/2/3) where the player has Step0x07 set (Scroll-of-Resistance used). Applies total via AddBonusResistances on join.
+// 1.14d mac: 0023d11b
 void __fastcall CalculateBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL _bHasScrollQuestState;
     bool bHasScrollQuestState;
@@ -1097,6 +1115,7 @@ void __fastcall CalculateBonusResistances(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // Q33_Callback_13 (PrisonOfIce, state-0xd / load handler): seeds in-memory stateFlag from QuestRecord on game load.
 // If Completed/FinishedInPreviousGame -> mark done (field_0x84=2, field_0x88=1). Else from Step0x03/Step0x02 bits derive
 // stateFlag 2/3 and prev; if the player holds the scroll, jump to stateFlag 3 / prev 4.
+// 1.14d mac: 0023e1f0
 void __fastcall Q33_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA5Q3Strc* pA5Q3Data = pQuestData->pQuestSpecificData.pA5Q3;
     if (ITEMS::Items::Drop::HasQuestItem(pQuestData->pGame, pQuestArgs->pPlayer, 0x20656369)) {
@@ -1130,6 +1149,7 @@ void __fastcall Q33_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // Q33_Callback_14 (PrisonOfIce, state-0xe handler): tracks held scroll count. Then, once quest is no longer in intro
 // or stateFlag>4, if the Betrayal-of-Harrogath quest is active and PrisonOfIce is not RewardAwaits/Step0x06/Completed,
 // sets QUEST_BetrayalOfHaggorath CannotCompleteQuestInGame — Nihlathak quest is locked until Anya is rescued.
+// 1.14d mac: 0023e2f8
 void __fastcall Q33_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20656369);
     if (pScrollItem) {
@@ -1172,6 +1192,7 @@ void __fastcall Q33_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 // Q33_CheckPlayerHasScrollOfResistance (PrisonOfIce): party-iterator cb. If the player holds the "ice " scroll quest item,
 // sets the shared flag pA5Q3->field_0xE2=1 (note: reads the quest data via QUESTINT_ToolsOfTheTrade internal-no which the
 // union aliases here). Used to test whether anyone in the party still carries the Scroll of Resistance.
+// 1.14d mac: 0023d1d0
 void __fastcall Q33_CheckPlayerHasScrollOfResistance(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pScrollItem = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20656369);
     if (!pScrollItem) {
@@ -1208,6 +1229,7 @@ static uint32_t Q33_CheckPartyHasScrollOfResistance(D2QuestDataStrc * pQuestData
 }
 
 // A5Q3 (Prison of Ice) fpStatusFilter callback. Writes a quest-log display sub-state byte into *nUnknown based on the player's per-difficulty bit-buffer. If Completed: returns true with *nUnknown=0. If RewardAwaits/JustCompleted: maps Step0x08/Step0x09 flags to values 5/6/0xd. Otherwise: checks party for Scroll of Resistance (4), CannotComplete (0xc), or falls back to nStateFlagPrev. Always returns true.
+// 1.14d mac: 0023e3e7
 bool __fastcall Q33_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     bool bQuestStateResult;
     *pbyStatusCode = '\0';
@@ -1268,6 +1290,7 @@ bool __fastcall Q33_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 // nQuestIdReal=QUEST_PrisonOfIce, state handlers (00/02/03/0a/0b/0d/0e), NPC gossip table (Malah 0x201 str 0x4e94),
 // fpStatusFilter/fpActiveFilter/fpSequenceFilter, nInitNo=5, nSequenceQuestId chain. Zeros Anya state fields.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q3.cpp
+// 1.14d mac: 0023d219
 void __fastcall Q33_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGameTmp = pQuestData->pGame;
@@ -1305,6 +1328,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 
 // SpawnFrozenAnya (PrisonOfIce): creates the frozen-Anya OBJECT (classId 0x22e) at the unit's coords once, marking it
 // resurrect/init and storing its GUID. On failure retries via a +0x19-frame timer event. This is the ice-block Anya.
+// 1.14d mac: 0023e797
 void __fastcall SpawnFrozenAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
@@ -1329,6 +1353,7 @@ void __fastcall SpawnFrozenAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // Objects_InitFn67 (PrisonOfIce object init): records the frozen-Anya object GUID; if not yet spawned, schedules the
 // SpawnFrozenAnya timer event (+0x19 frames). Init hook for the ice-block object placement.
+// 1.14d mac: 0023e8e0
 void __fastcall Objects_InitFn67_DrehyaStartOutsideTown(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     int32_t nFrozenAnyaGUID;
@@ -1354,6 +1379,7 @@ void __fastcall Objects_InitFn67_DrehyaStartOutsideTown(D2ObjectInitFnArg * pIni
 
 // Objects_InitFn68 (PrisonOfIce object init): records an object GUID and, once, spawns the Frozenstein/guard monster
 // (classId 0x202) near coords, taking over its DRLG map AI from the preset. Sets the spawned flag in pA5Q3.
+// 1.14d mac: 0023e961
 void __fastcall Objects_InitFn68_NihlathakStartInTown(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataA5Q3Strc* pQuestSpecificData;
@@ -1392,6 +1418,7 @@ void __fastcall Objects_InitFn68_NihlathakStartInTown(D2ObjectInitFnArg * pInitA
 
 // Objects_InitFn69 (PrisonOfIce object init): once Anya-extra-state is set, spawns the SuperUnique boss (Frozenstein,
 // SuperUniques row 0x3c -> preset act value) via SpawnMonster, recording its GUID. Guards Anya's prison.
+// 1.14d mac: 0023ea38
 void __fastcall Objects_InitFn69_NihlathakStartOutsideTown(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_PrisonOfIce);
     if (!pQuestData) {
@@ -1486,6 +1513,7 @@ BOOL __fastcall Q33_GetAnyaCoordinates(::SGAMEDATA * pGame, int, int32_t * pOutC
 
 // Q33_SpawnPortalNearAnya (PrisonOfIce): creates the town-portal OBJECT (classId 0xbd) at stored coords in a nearby
 // valid room (nudging coords +3 if none found), once. Records portal GUID. The portal Anya uses to return to Harrogath.
+// 1.14d mac: 0023ebb4
 BOOL __fastcall Q33_SpawnPortalNearAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pPortalUnit;
     D2QuestDataA5Q3Strc* pQuestSpecificA1Q4b;
@@ -1521,6 +1549,7 @@ BOOL __fastcall Q33_SpawnPortalNearAnya(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 
 // Q33_GetAnyaOrPortalCoords (PrisonOfIce): if Anya-state set, outputs the stored Anya position (or live coords if not
 // yet stored) into pPoint. Returns 1 on success.
+// 1.14d mac: 0023ed2c
 BOOL __fastcall Q33_GetAnyaOrPortalCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, POINT * pPoint) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
     if (!pQuestData) {
@@ -1543,6 +1572,7 @@ BOOL __fastcall Q33_GetAnyaOrPortalCoords(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // Q33_StoreAnyaPosition (PrisonOfIce): captures the rescued-Anya unit's current coords into pA5Q3->sAnyaPosition and
 // sets the position-valid flag.
+// 1.14d mac: 0023ed9a
 BOOL __fastcall Q33_StoreAnyaPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
     if (!pQuestData) {
@@ -1557,6 +1587,7 @@ BOOL __fastcall Q33_StoreAnyaPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 
 // Q33_StartAnyaRescuePhase (PrisonOfIce): sets bAnyaReachable=1, nAnyaState=2 and calls Q33_SpawnAnyaAndPortal to begin
 // the rescued-Anya + portal sequence.
+// 1.14d mac: 0023ede6
 void __fastcall Q33_StartAnyaRescuePhase(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataA5Q3Strc* pA5Q3Data;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
@@ -1592,6 +1623,7 @@ BOOL __fastcall Q33_IsAnyaInTown(::SGAMEDATA * pGame) {
 
 // Q33_IsFrozenAnyaAlive (PrisonOfIce): returns true while the frozen-Anya placeholder has not been killed flag set
 // (aPlayerGUID[0x1c]==0). Used to gate rescue interaction.
+// 1.14d mac: 0023f077
 uint32_t __fastcall Q33_IsFrozenAnyaAlive(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
     if (!pQuestData) {
@@ -1603,6 +1635,7 @@ uint32_t __fastcall Q33_IsFrozenAnyaAlive(::SGAMEDATA * pGame) {
 
 // Q33_OnNpcNotifyPlayers (PrisonOfIce): when quest active and prev<2, broadcasts stateFlag 2 (Anya's prison
 // found / Malah-told) via Q33_NotifyQuestState.
+// 1.14d mac: 0023f0ad
 void __fastcall Q33_OnNpcNotifyPlayers(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_PrisonOfIce);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev < 2)) {
@@ -1615,6 +1648,7 @@ void __fastcall Q33_OnNpcNotifyPlayers(::SGAMEDATA * pGame) {
 
 // Objects_InitFn74 (PrisonOfIce object init): records the (Anya prison/cave entrance) object GUID; if quest active and
 // prev<2, broadcasts stateFlag 2 (prison discovered) via Q33_NotifyQuestState.
+// 1.14d mac: 0023f1be
 void __fastcall Objects_InitFn74_FrozenAnya(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_PrisonOfIce);
@@ -1640,6 +1674,7 @@ void __fastcall Objects_InitFn74_FrozenAnya(D2ObjectInitFnArg * pInitArg) {
 // MONSTER (classId 0x20f). Step1: stop/derender the ice object. Step2: spawn the Anya monster at the object's coords, take
 // over its DRLG map AI, delete the ice object, store GUIDs, mark bShieldDropActive, re-run Q33_SequenceFilter. Plays the
 // "Anya thaws out of the ice" sequence after the Scroll of Resistance is used.
+// 1.14d mac: 0023f677
 uint8_t __fastcall Q33_TransformFrozenAnya(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2UnitStrc* pAnyaMonster;
     D2MapAIStrc** ppMapAi;
@@ -1689,6 +1724,7 @@ uint8_t __fastcall Q33_TransformFrozenAnya(::SGAMEDATA * pGame, D2QuestDataStrc 
 // stateFlag 5, NotifyPlayers 0x10, propagate to party, mark latecomers CannotComplete, kick off Q33_TransformFrozenAnya
 // timer and toggle the room's has-portal flag. This is the core "rescue Anya" completion.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q3.cpp
+// 1.14d mac: 0023f23e
 BOOL __fastcall OBJOP_A5Q3_RescueAnyaFromPortal(D2ObjectOperateFnArg * pOperation) {
     BOOL bQuestStateResult;
     int32_t nTransformCoord;

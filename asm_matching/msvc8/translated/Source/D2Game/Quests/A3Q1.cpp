@@ -33,6 +33,7 @@ namespace D2Game { namespace Quests { namespace QUESTS { namespace A3Q1 {
 // Objects_InitFn49 — object-init for the QUEST_SpokeToHratli (Q17) helper monster, NOT Lam Esen.
 // NOTE: despite the A3Q1 namespace this whole file is Lam Esen's Tome (QUEST_LamEsensTome / publicly "A3Q2"); only the first few fns (InitFn49/50, Q17_*) belong to SpokeToHratli and merely share this TU.
 // Role: if SpokeToHratli quest data exists and its record state 0xd (JustCompleted) is NOT yet set, lazily spawn the unique Q17 monster (monstats 0xfd, Neutral) and cache its GUID in the quest-specific struct so it is only spawned once.
+// 1.14d mac: 0022c0d0
 void __fastcall Objects_InitFn49_HratliStart(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pSpawnedMonster;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_SpokeToHratli);
@@ -87,6 +88,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 }
 
 // Objects_InitFn50 — (QUEST_SpokeToHratli helper, not Lam Esen). Second-stage init for the Q17 monster: records Charsi-notified flag + monster GUIDs, then — only if record state 0xd (JustCompleted) IS set and the monster was not yet taken — spawns the unique monster (monstats 0xfd), flags it ISRESURRECT|ISINIT, and transplants the DRLG preset map-AI file onto it. Reads SpokeToHratli record state; writes only the quest-specific struct, not the player quest record.
+// 1.14d mac: 0022c18d
 void __fastcall Objects_InitFn50_HratliEnd(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pMonster;
     D2MapAIStrc** ppMonsterMapAi;
@@ -152,6 +154,7 @@ void __fastcall Q17_SetupHratliMapAi(void * pThis, int, D2MapAIStrc * pMapAI) {
 }
 
 // Q18_ActiveFilter — Lam Esen's Tome (QUEST_LamEsensTome). Decides whether the quest is "active" for gossip on Alkor (target monstats 0xfe = Alkor). Returns true if: quest in-progress (nStateFlag==1) and the player's record shows the quest NOT Completed and NOT FinishedInPreviousGame; OR the player currently carries Lam Esen's Tome item (code 0x20626262). Read-only.
+// 1.14d mac: 0022c2a6
 bool __fastcall Q18_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     D2UnitStrc* pTomeItem;
     if (nTargetClassId == 0xfe) {
@@ -178,6 +181,7 @@ bool __fastcall Q18_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // Q18_InitObjectMode — Lam Esen's Tome. Sets the render/update mode of the associated object: default mode 2 when a flag byte is clear, otherwise a mode read from the quest data table. No quest-state record access.
+// 1.14d mac: 0022c329
 void __fastcall Q18_InitObjectMode(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pObjectInitFnArg) {
     if (!pQuestData) {
       return;
@@ -191,6 +195,7 @@ void __fastcall Q18_InitObjectMode(D2QuestDataStrc * pQuestData, D2ObjectInitFnA
 }
 
 // Q18_PlayerNotifyCompleted — Lam Esen's Tome. Broadcast callback (passed to QUEST_SetStateAndBroadcast). For the given player, if the quest is Completed/FinishedInPreviousGame AND it has the JustCompleted or CannotCompleteQuestInGame transient flag set, push a quest update (msg 0xf) to that player; otherwise no-op. Read-only on the record.
+// 1.14d mac: 0022c975
 BOOL __fastcall Q18_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -213,6 +218,7 @@ BOOL __fastcall Q18_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Q18_PlayerUpdateTomeState — Lam Esen's Tome. Per-player sync callback (run via IteratePlayerOrMonsterUnits). If the player has neither Completed nor RewardAwaits set, and the live quest data nStateFlag is 2 or 3 (tome found / returning), persist QUESTSTATE_Step0x02 into that player's record so the journal/UI reflects in-progress.
+// 1.14d mac: 00234f3f
 BOOL __fastcall Q18_PlayerUpdateTomeState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_LamEsensTome, QUESTSTATE_Completed);
@@ -240,6 +246,7 @@ BOOL __fastcall Q18_PlayerUpdateTomeState(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Q18_Callback_00 — Lam Esen's Tome, state-0 gossip handler. Chooses which Alkor gossip line to show: if quest Completed and NOT JustCompleted, bail (already done). If player carries the Tome -> line 3 ("bring it to me"). Else if Completed and player participated -> line 4 (thanks). Else (intro active) -> line indexed by nStateFlag via gdwQ16QuestStateMessages. Emits the line via AddGossipMessageOnMonster. Read-only on record.
+// 1.14d mac: 0022c508
 void __fastcall Q18_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQ16QuestStateMessages[6] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gdwQ16QuestStateMessages, "D2Game::Quests::QUESTS::A3Q1::Q18_Callback00_NpcActivate::gdwQ16QuestStateMessages");
@@ -301,6 +308,7 @@ void __fastcall Q18_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // CompleteQuestStates — Lam Esen's Tome, per-player completion writer (run via IteratePlayerOrMonsterUnits when Alkor is handed the tome). For each player who is in a room and is in Act III and not already Completed/RewardAwaits, persist the three completion flags JustCompleted + Completed + RewardAwaits into the record, then send full quest info to the unit. This is the actual "quest done" commit.
+// 1.14d mac: 00235085
 BOOL __fastcall CompleteQuestStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestState;
@@ -342,6 +350,7 @@ BOOL __fastcall CompleteQuestStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
 }
 
 // RewardStatPoints — Lam Esen's Tome reward grant (run via IteratePlayerOrMonsterUnits, after CompleteQuestStates). If the player's record has RewardAwaits set, grant +5 stat points (UNITSTAT_statpts) — Lam Esen's reward — send quest update 0xf, then clear RewardAwaits so the reward is one-time. (NOTE: real-game Lam Esen reward is +5 stat points, matching code; the task's "Golden Bird +20 life" does not apply to this TU.)
+// 1.14d mac: 0023516a
 BOOL __fastcall RewardStatPoints(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -357,6 +366,7 @@ BOOL __fastcall RewardStatPoints(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void *
 }
 
 // LockCompletingQuest — Lam Esen's Tome (run via IteratePlayerOrMonsterUnits). For any player who is neither Completed nor RewardAwaits at the moment the quest finalizes in this game, persist QUESTSTATE_CannotCompleteQuestInGame so latecomers cannot re-trigger completion/reward in the current game session.
+// 1.14d mac: 002351f6
 BOOL __fastcall LockCompletingQuest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -374,12 +384,14 @@ BOOL __fastcall LockCompletingQuest(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
 }
 
 // JMP thunk
+// 1.14d mac: 0022d15e
 void __fastcall Q18_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::D2Game::Quests::QUESTS::SetRewardAndFinishFlags(pQuestData, pQuestArgs);
 }
 
 // Q18_Callback_03 — Lam Esen's Tome, state-3 handler (Alkor dialog progression). On gossip index 0x4f during intro with nStateFlag==0, bumps nStateFlag to 1 (quest started). On text-control 0x4b: removes the player from the GUID list and, if nStateFlag==2 and the player record is not yet Completed, broadcasts state 1, sets live state flag to 3 (a3q1.cpp:0x166), and re-syncs every player via Q18_PlayerUpdateTomeState. Reads record (Completed); writes only nStateFlag + GUID list.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
+// 1.14d mac: 0022cea1
 void __fastcall Q18_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel == 0x4f && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag < 1) {
@@ -447,6 +459,7 @@ void __fastcall QUEST_StateHandler_PlayTomeHandInSound(D2QuestDataStrc * pQuestD
 
 // Q18_Callback_11 — Lam Esen's Tome, NPC-message handler for Alkor (monstats 0xfe). Only runs if record not yet Completed. msg 0x225: accept quest -> set live state 2 (a3q1.cpp:0x1a1), broadcast state 1, sync all players. msg 0x234 (hand in tome): if not Completed and player carries the Tome, remove it, mark bTomePickedUp + install the QUEST_StateHandler_PlayTomeHandInSound handler; then if bCanComplete run the completion pipeline over all players (CompleteQuestStates -> RewardStatPoints -> LockCompletingQuest), broadcast state 0xd (JustCompleted), add player to GUID list; if JustCompleted now set, advance to live state 5 and fire the sequence filter to unlock the next quest. The quest's terminal/commit path.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
+// 1.14d mac: 0022c636
 void __fastcall Q18_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA3Q1Strc* pA3Q1Data = pQuestData->pQuestSpecificData.pA3Q1;
     short int nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
@@ -517,6 +530,7 @@ void __fastcall Q18_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 
 // Q18_Callback_04 — Lam Esen's Tome, state-4 handler ("tome acquired"). On the tome being picked up during an active (non-intro) quest: debug-print "tome acquired", broadcast state 2, set live state flag to 4 (a3q1.cpp:0x26c), and add the picking player to the quest GUID sub-list. No player quest-record bits touched.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
+// 1.14d mac: 0022cd50
 void __fastcall Q18_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA3Q1Strc* pA3Q1Data = pQuestData->pQuestSpecificData.pA3Q1;
     if (pQuestData->bIsNotIntroduction == '\0') {
@@ -532,6 +546,7 @@ void __fastcall Q18_Callback04_ItemPickedUp(D2QuestDataStrc * pQuestData, D2Ques
 
 // Q18_Callback_05 — Lam Esen's Tome, state-5 handler (counterpart to _04). Removes the player from the quest GUID sub-list (e.g. tome dropped/left) and, if active, sets live state flag back to 3 (a3q1.cpp:0x281) and broadcasts state 1. No record-bit writes.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
+// 1.14d mac: 0022ce0f
 void __fastcall Q18_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestSpecificDataUnion t2_c3 = pQuestData->pQuestSpecificData;
     int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
@@ -548,6 +563,7 @@ void __fastcall Q18_Callback05_ItemDropped(D2QuestDataStrc * pQuestData, D2Quest
 // A3Q1 Lam Esen's Tome operate fn (OperateFn 28). When the source unit is dead/absent and the attacker has not completed the quest, drops the tome (item code 0x20626262) via ITEM_RewardItemToDrop, installs the gossip/NPC handlers (Q18_Callback_00/_11), advances the state flag to 3 and broadcasts state 1. If already completed it only plays a sound.
 // Slot from objects.txt OperateFn 28.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
+// 1.14d mac: 0022c369
 BOOL __fastcall OBJOP_A3Q1_ActivateLamEsensTome(D2ObjectOperateFnArg * pOperation) {
     D2ObjectOperateFnArg* pDropCountOut;
     D2QuestDataA3Q1Strc* pA1Q3Data;
@@ -602,6 +618,7 @@ BOOL __fastcall OBJOP_A3Q1_ActivateLamEsensTome(D2ObjectOperateFnArg * pOperatio
 }
 
 // Q18_Callback_09 — Lam Esen's Tome, state-9 handler. Decrements a pending-update counter (nViperAmuletUpdateFlag, reused field) and, when it reaches 0 during an active quest with bSunDarkened set and live state < 4, marks initialized and broadcasts state 8. No quest-record bits. (Field names inherited from a sibling quest struct; here they gate a deferred object-update.)
+// 1.14d mac: 0022d167
 void __fastcall Q18_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA3Q1Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA3Q1;
     int32_t* pnPlayersInArea = &pA2Q3Data->nPlayersInArea;
@@ -616,6 +633,7 @@ void __fastcall Q18_Callback09_PlayerDroppedWithQuestItem(D2QuestDataStrc * pQue
 }
 
 // Q18_Callback_14 — Lam Esen's Tome, state-0xe handler (counterpart to _09). If the player carries the Tome, increments the pending-update counter; on the first increment during an active quest that was initialized, clears the flag and broadcasts state 2. No quest-record bits.
+// 1.14d mac: 0022d0d6
 void __fastcall Q18_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA3Q1Strc* pA2Q3Data = pQuestData->pQuestSpecificData.pA3Q1;
     D2UnitStrc* pTomeItem = ITEMS::Items::Drop::HasQuestItem(pQuestArgs->pGame, pQuestArgs->pPlayer, 0x20626262);
@@ -634,6 +652,7 @@ void __fastcall Q18_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 }
 
 // A3Q1 Lam Esen's Tome, state-0xd (load/join reconcile) handler. Reads the player's quest record: if Completed, sets JustCompleted transient and returns. If player carries the Tome (0x20626262), sets nStateFlag=4/prev=2 and registers the player in the GUID list. Otherwise restores nStateFlag from record bits: Step0x03 -> 3, Step0x02 -> 2 (prev=1). Writes only in-memory state and the one transient JustCompleted bit.
+// 1.14d mac: 0022cfd1
 void __fastcall Q18_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -677,6 +696,7 @@ void __fastcall Q18_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // Q18_SequenceFilter — Lam Esen's Tome quest-chain link. Once this quest is fully complete (live nStateFlag==5, or not in intro), looks up the next quest (nSequenceQuestId = QUEST_BladeOfTheOldReligion) and invokes its sequence filter, propagating quest unlock down the chain. Halts via Fog ErrorManager if the next filter pointer is bad. No quest-record bits.
+// 1.14d mac: 0022ccd1
 bool __fastcall Q18_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
       return true;
@@ -698,6 +718,7 @@ bool __fastcall Q18_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // Q18_CheckPlayerHasTome — Lam Esen's Tome, per-party-member predicate (called by ExecuteFunctionForEveryPartyMember from Q18_StatusFilter). If this party member carries the Tome item (0x20626262), set the shared bTaintedSunStartedFailed flag (reused as "someone in party has the tome") in the Lam Esen quest data. Read-only on quest record.
+// 1.14d mac: 00234fda
 void __fastcall Q18_CheckPlayerHasTome(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pTomeItem = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, 0x20626262);
     if (!pTomeItem) {
@@ -709,6 +730,7 @@ void __fastcall Q18_CheckPlayerHasTome(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // Q18_StatusFilter — Lam Esen's Tome, journal/log status resolver. Computes the quest log icon/state byte (*nUnknown) for a player: 0 if Act III not yet reachable (QUEST_AbleGoToAct3 not Completed) or not started; if Completed -> 0xb, +2 if JustCompleted; 2 if the player or any party member holds the Tome; during an active quest -> 1 (in progress), or 8/9 when the special condition is met, or 0xc/1 in the late stage based on act. Reads the record extensively (AbleGoToAct3, LamEsensTome Completed/JustCompleted); no writes.
+// 1.14d mac: 0022cb64
 bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
@@ -771,6 +793,7 @@ bool __fastcall Q18_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 
 // Q18_InitData — Lam Esen's Tome constructor. Zeroes the state-handler table, wires NPC gossip table, sets nQuestIdReal=QUEST_LamEsensTome, nInitNo=4, the status/active/sequence filters, nSequenceQuestId=QUEST_BladeOfTheOldReligion, allocates the 0xA0 quest-specific struct, and registers the state-handler callbacks (idx 0,3,4,5,9,0xb,0xd,0xe,10 -> Q18_Callback_*). Defaults bCanComplete=true. No quest-record access.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q1.cpp
+// 1.14d mac: 0022ca22
 void __fastcall Q18_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->pNpcMessages = A3Q1::aNpcGossipData;

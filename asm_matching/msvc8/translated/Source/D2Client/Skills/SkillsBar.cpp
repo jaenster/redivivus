@@ -25,6 +25,7 @@
 
 namespace D2Client { namespace SKILLS { namespace SkillsBar {
 
+// 1.14d mac: 000877b8
 BOOL __fastcall Skills_CltStFunc_CheckTargetCorpseForRevive(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pTarget) {
@@ -35,6 +36,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetCorpseForRevive(D2UnitStrc * pUnit, 
     return (uint32_t)(bIsCorpseSelectable != 0);
 }
 
+// 1.14d mac: 000877e6
 BOOL __fastcall Skills_CltDoFunc_Bar_BloodParticlesOnTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pTarget) {
@@ -48,6 +50,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_BloodParticlesOnTarget(D2UnitStrc * pUnit, 
     return 1;
 }
 
+// 1.14d mac: 0008782e
 BOOL __fastcall Skills_CltStFunc_AllocStatListByCltCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -60,6 +63,7 @@ BOOL __fastcall Skills_CltStFunc_AllocStatListByCltCalc(D2UnitStrc * pUnit, eD2S
 }
 
 // Client DoFunc for Barbarian Double Swing. Before nSeqFrame reaches 0x600: plays the hit-class swing sound and steers the unit's dynamic path toward the confirmed target. After 0x600: searches for the nearest valid target via SKILL_FindClosestTargetWithStats (range 3, excluding current target) and steers toward it, implementing the second-swing target redirect.
+// 1.14d mac: 000878a0
 BOOL __fastcall Skills_CltDoFunc_Bar_DoubleSwing_Sound(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pConfirmedTarget;
     if ((int)(pUnit->nSeqFrame & 0xffffff00U) < 0x600) {
@@ -87,6 +91,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_DoubleSwing_Sound(D2UnitStrc * pUnit, eD2Sk
 }
 
 // Client DoFunc for Barbarian throwing skills (Throw, Double Throw). Retrieves the equipped throwable weapon. Sets UNITFLAG_SKSRVDOFUNC past frame 0x8FF. Validates the item is throwable (item type or UNITSTAT_item_throwable stat). Reads wMissileType from the item's txt entry; if the item is a MissilePotion uses MISSILE_CreateFromUnitWithOffset directly, otherwise calls Skills::MakeMissile.
+// 1.14d mac: 000879c9
 BOOL __fastcall Skills_CltDoFunc_Bar_ThrowItem(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t _bIsThrowableItem;
     uint8_t byThrowableHigh;
@@ -127,6 +132,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_ThrowItem(D2UnitStrc * pUnit, eD2Skills eSk
     return 1;
 }
 
+// 1.14d mac: 00087af6
 BOOL __fastcall Skills_CltStFunc_CheckTargetIsSelectableCorpse(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pTarget) {
@@ -137,6 +143,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsSelectableCorpse(D2UnitStrc * pUni
     return (uint32_t)(bIsSelectableCorpse != 0);
 }
 
+// 1.14d mac: 00087b24
 BOOL __fastcall Skills_CltDoFunc_Bar_SoftMonster_BloodParticles(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pTarget) {
@@ -157,6 +164,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_SoftMonster_BloodParticles(D2UnitStrc * pUn
 
 // Client do-func 41: Grim Ward. Confirms the target is a usable corpse, finds a free nearby coordinate, picks the size-based cltmissile (small/normal/large from MonStats2) and spawns it plus MISSILE_Corpseexplosion there. Sets UNITFLAG_SKSRVDOFUNC on the player.
 // Slot from skills.txt cltdofunc 41.
+// 1.14d mac: 00087b7e
 BOOL __fastcall Skills_CltDoFunc_Bar_GrimWard(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     POINT nFreeCoordTmp;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -368,6 +376,7 @@ static BOOL __stdcall SKILL_CanUseAtLocation(D2UnitStrc * pUnit, int32_t nX, int
 
 // Skill client-state setup func for a teleport/leap-to-location skill: computes and commits the destination into the unit's current D2SkillStrc params. For the local player, aborts if uninterruptable or already casting this very skill. For non-monsters it reads the requested coords (GetCooordinates), checks SKILL_CanUseAtLocation and SKILL_ValidateTeleportDestination. For monsters it targets the confirmed target's mirrored position (2*target - self) or the requested coords. Snaps to a free cell, adds the unit's collision footprint at the destination, stores dest in SKILL param1/param2 (param3/param4 = target type/GUID for monsters), sets skill flags 0x1080 and rebuilds the active-skill stat list. Returns TRUE if a valid destination was set, else FALSE.
 // @sourcefile .\SKILLS\SkillsBar.cpp
+// 1.14d mac: 00087e7f
 BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     bool bValidDest;
     BOOL eUnitState;
@@ -475,6 +484,7 @@ BOOL __fastcall Skills_CltStFunc_SetupLeapTeleportDest(D2UnitStrc * pUnit, eD2Sk
 }
 
 // @sourcefile .\SKILLS\SkillsBar.cpp
+// 1.14d mac: 00088633
 int32_t __fastcall SKILL_SetupLeapPath(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     if (!pDynamicPath) {
@@ -512,6 +522,7 @@ int32_t __fastcall SKILL_SetupLeapPath(D2UnitStrc * pUnit, D2SkillStrc * pSkill)
 }
 
 // Creates the client-side arc particle effect for Barbarian Leap. Computes remaining distance to destination (skill param1/param2), derives frame count from velocity, looks up the Z arc offset from the gaLeapArcParticleOffsetZ table based on distance, clamps to 500 minimum, allocates a particle on pUnit, sets its upward velocity offset, and initializes the projectile arc over nLeapFrames frames.
+// 1.14d mac: 0008877a
 void __fastcall SKILL_CreateLeapArcParticle(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     // Static local variables (originally global data)
     static D2LeapArcSegmentStrc gaLeapArcParticleOffsetZ[2] = {
@@ -629,6 +640,7 @@ static void __stdcall CLIENT_UpdateSkillMissilePosition(D2SkillStrc * pSkill, in
 }
 
 // Teleport/leap landing fixup: removes stale collision at the target tile and resets the unit's dynamic-path collision type, pattern and path type.
+// 1.14d mac: 00088993
 static void __stdcall PATH_ResetCollisionOnLanding(int32_t nY, int32_t nX, D2UnitStrc * pUnit) {
     eD2UnitType eUnitTypeLocal = !pUnit ? UNIT_COUNT : pUnit->eUnitType;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
@@ -663,6 +675,7 @@ static void __stdcall PATH_ResetCollisionOnLanding(int32_t nY, int32_t nX, D2Uni
 }
 
 // Client-side skill cast feedback for a unit (pDynamicPath is treated as the casting unit). Reads the active skill's param1/param2 (target X/Y) and the unit's shifted Z. If the unit has landed (Z==0) at the cast target it plays the skill sound, clears the position vector, optionally adds the dust overlay, plays a footstep sound (and a paladin chat sound / missile-position update for specific anim modes). Otherwise it sets the unit's sequence frame to a per-state value (jump/charge based on anim mode and distance to target) and bumps nUnitWidth. Returns 1 when the cast effect completed, 0 while still animating. Custom-register convention.
+// 1.14d mac: 00088bdb
 static BOOL __stdcall CLIENT_PlaySkillSound(D2SkillStrc * pSkill, int32_t bAddDust, D2UnitStrc * pUnit) {
     int nUnitTypeOrMode;
     uint32_t nDistToTarget;
@@ -754,6 +767,7 @@ static BOOL __stdcall CLIENT_PlaySkillSound(D2SkillStrc * pSkill, int32_t bAddDu
 }
 
 // Client-side landing handler for Barbarian Leap (and general teleport). Checks whether the unit's current collision type already matches the expected post-land type; if not, reads the destination X/Y from skill param1/param2 (or from path if no active skill), removes the stale collision at that position, teleports the unit to the destination via CLIENT_TeleportUnitToPosition, then calls SKILLS_PlaySkillSound to restore collision/path state.
+// 1.14d mac: 00088881
 void __fastcall SKILL_HandleTeleportLanding(D2UnitStrc * pUnit) {
     uint16_t nCollisionHigh;
     int nDestX;
@@ -797,6 +811,7 @@ void __fastcall SKILL_HandleTeleportLanding(D2UnitStrc * pUnit) {
 }
 
 // Client-side do-function for the Barbarian Leap skill arc particle phase. Retrieves the skill and its flags; if the sound flag (0x100) is set, plays the skill sound. Depending on skill flags and the unit's current animation coord state, either sets up the leap path and creates the arc particle, sets the SKILL_SetFlags(0x1000) pending flag, or plays the landing sound using the server path target coordinates.
+// 1.14d mac: 00088ac2
 BOOL __fastcall Skills_CltDoFunc_Bar_Leap_ArcParticle(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nSrvPathX;
     int32_t nSrvPathY;
@@ -868,6 +883,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 
 // Client-side state function for Barbarian Leap Attack teleport targeting. For the local player, checks that the unit is not in an uninterruptable state and the skill is not already flagged active. Calls SKILL_FindTeleportPosition to locate a valid destination near the confirmed target; on success, registers the collision tile, stores destination coords in skill params 1-2, stores target type/GUID in params 3-4, sets skill flags 0x1080, and creates the active skill stat list. If already in melee range, triggers the melee hit message instead. Plays sound 0x13 when no position is found.
 // @sourcefile .\SKILLS\SkillsBar.cpp
+// 1.14d mac: 00089061
 BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bFoundPos;
     bool bFoundPos;
@@ -936,6 +952,7 @@ BOOL __fastcall Skills_CltStFunc_FindTeleportPositionForTarget(D2UnitStrc * pUni
 }
 
 // Client skill CltDoFunc for the Barbarian Leap/Leap-Attack: drives target acquisition, cast sound, and the leap arc particle. On the sound/init pass (skill flag 0x100) plays the cast sound, resolves the leap target from SKILL_GetParam3/4 or finds the closest target, faces it and plays the appropriate hit-class cast sound. Depending on the skill flags, either arms a pending state (flag 0x1000) or sets up the leap path and creates the leap arc particle (SKILL_SetupLeapPath / SKILL_CreateLeapArcParticle); the flag-2 branch plays the landing skill sound at the server-path destination. Returns TRUE when it performed work.
+// 1.14d mac: 0008921d
 BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     eD2UnitType eUnitType;
     D2UnitStrc* pTargetUnit;
@@ -999,6 +1016,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_LeapAttack_ArcParticle(D2UnitStrc * pUnit, 
 }
 
 // Renders pUnit at a rotated facing direction for skill animation (e.g. Whirlwind dual-weapon draw). Rotates the unit's dynamic-path direction by +0x2A (full) or +0x15 (half) steps depending on bHalfRotation, computes screen position in both perspective and orthographic modes, calls DRAW_WORLD_Unit_1 to draw the unit, then restores the original direction.
+// 1.14d mac: 0008940a
 void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nGamma, int32_t bHalfRotation) {
     int nScreenY;
     int nScreenX;
@@ -1030,6 +1048,7 @@ void __fastcall SKILL_DrawUnitAtRotatedAngle(D2UnitStrc * pUnit, uint32_t nGamma
 // Client start-func 31: Whirlwind. Computes and commits the whirlwind destination by pathfinding: validates unit, skill and server path; for the local player rejects when the skill is already active or the unit cannot be interrupted; with a confirmed target in melee range it forwards a 0x16 unit message instead. Otherwise sets collision pattern 0xc01 and path type 7 and runs the path calculation.
 // Slot from skills.txt cltstfunc 31.
 // @sourcefile .\SKILLS\SkillsBar.cpp
+// 1.14d mac: 00089505
 BOOL __fastcall Skills_CltStFunc_CalcWhirlwindDestViaPathfind(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t _bPathFound;
     bool bPathFound;
@@ -1134,6 +1153,7 @@ BOOL __fastcall Skills_CltStFunc_CalcWhirlwindDestViaPathfind(D2UnitStrc * pUnit
     return 0;
 }
 
+// 1.14d mac: 000897e4
 BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_EndCollision(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nY;
     uint32_t nSkillFlags;
@@ -1168,6 +1188,7 @@ BOOL __fastcall Skills_CltDoFunc_Bar_Whirlwind_EndCollision(D2UnitStrc * pUnit, 
     return 0;
 }
 
+// 1.14d mac: 0008991c
 void __fastcall SKILL_StopAndClearSound(D2UnitStrc * pUnit, eD2Skills eSkill) {
     D2SkillStrc* pSkill = D2Common::Skills::SKILLS_GetSkillByEnum(pUnit, eSkill);
     if (pSkill) {

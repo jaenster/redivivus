@@ -78,6 +78,7 @@ static D2BNetClientCallbacksStrc sgBNetClientCallbacks = {
 namespace Bnclient { namespace BNGatewayAccess {
 
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+// 1.14d mac: 00054e6e
 int32_t __fastcall GetSystemTimeZone(D2BNetGatewayAccessStr * pGatewayAccess, int) {
     int32_t nTimeZoneBias;
     _TIME_ZONE_INFORMATION tziInfo;
@@ -92,6 +93,7 @@ int32_t __fastcall GetSystemTimeZone(D2BNetGatewayAccessStr * pGatewayAccess, in
 }
 
 // @sourcefile .\BNetGW.cpp
+// 1.14d mac: 00054b4c
 void __stdcall SaveAndUnload(D2BNetGatewayAccessStr * pGatewayAccess) {
     if (pGatewayAccess->bDirty && pGatewayAccess->pGatewayData) {
       Bnet::BnetLog_WriteLine("Recording gateway list selection");
@@ -121,6 +123,7 @@ void __stdcall SaveAndUnload(D2BNetGatewayAccessStr * pGatewayAccess) {
     pGatewayAccess->pRealmsData = 0;
 }
 
+// 1.14d mac: 00054f80
 char * __fastcall Nth(D2BNetGatewayAccessStr * pThis, int, int nIndex) {
     int nFieldIdx;
     int nTargetField;
@@ -144,11 +147,13 @@ char * __fastcall Nth(D2BNetGatewayAccessStr * pThis, int, int nIndex) {
     return szResult;
 }
 
+// 1.14d mac: 00054f46
 char * __stdcall DNS(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
     char* pGatewayEntry = vc8_thiscall(Nth)(pGatewayAccess, nIndex);
     return pGatewayEntry;
 }
 
+// 1.14d mac: 00054efc
 int32_t __stdcall GMT(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
     char* szGatewayEntry = vc8_thiscall(Nth)(pGatewayAccess, nIndex);
     if (*szGatewayEntry != '\0') {
@@ -162,6 +167,7 @@ int32_t __stdcall GMT(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
     return nGmtBias;
 }
 
+// 1.14d mac: 00054ff6
 char * __stdcall Name(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
     char* pEntry = vc8_thiscall(Nth)(pGatewayAccess, nIndex);
     if (*pEntry) {
@@ -173,6 +179,7 @@ char * __stdcall Name(D2BNetGatewayAccessStr * pGatewayAccess, int nIndex) {
     return pEntry;
 }
 
+// 1.14d mac: 00055048
 char * __stdcall Realm(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nIndex) {
     char* pGatewayEntry = vc8_thiscall(Nth)(pGatewayAccess, nIndex);
     char* szRealmsCursor = (char*)pGatewayAccess->pRealmsData;
@@ -192,6 +199,7 @@ char * __stdcall Realm(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nIndex) 
     return "";
 }
 
+// 1.14d mac: 00054f50
 void __stdcall SetCurGateway(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nGatewayIdx) {
     /* 0x118150  19  ?SetCurGateway@BNGatewayAccess@@QAGXH@Z */ if (!(pGatewayAccess->pGatewayData && nGatewayIdx >= 1 && nGatewayIdx <= pGatewayAccess->nGatewayCount)) {
       return;
@@ -211,6 +219,7 @@ void __stdcall SetCurGateway(D2BNetGatewayAccessStr * pGatewayAccess, int32_t nG
 // Load falls to UpdateGatewaysFromIni -> assert (see 0x518850).
 // An "Override.." value name sets bIsOverride=1 @0x51827f.
 // @sourcefile .\BNetGW.cpp
+// 1.14d mac: 000550d4
 void __fastcall GetGatewayList(D2BNetGatewayAccessStr * pThis, int, char * szText) {
     bool bRegReadResult;
     DWORD dwRegDataSize;
@@ -254,6 +263,7 @@ void __fastcall GetGatewayList(D2BNetGatewayAccessStr * pThis, int, char * szTex
     pThis->nFormatVersion = 0;
 }
 
+// 1.14d mac: 00054afa
 void __fastcall GetBattlenetGatewayList(D2BNetGatewayAccessStr * nGatewayAccess) {
     /* 0x118270  7  ?GetBattlenetGatewayList@BNGatewayAccess@@AAEXXZ */ nGatewayAccess->bIsOverride = 0;
     vc8_thiscall(GetGatewayList)(nGatewayAccess, "Override Battle.net gateways");
@@ -265,6 +275,7 @@ void __fastcall GetBattlenetGatewayList(D2BNetGatewayAccessStr * nGatewayAccess)
     vc8_thiscall(GetGatewayList)(nGatewayAccess, "Diablo II Battle.net gateways");
 }
 
+// 1.14d mac: 00054a8e
 void __fastcall GetBattlenetRealmsList(D2BNetGatewayAccessStr * nGatewayAccess) {
     uint32_t _bFileLoaded;
     bool bFileLoaded;
@@ -293,6 +304,7 @@ static uint32_t * __stdcall WritingDefaultGatewayList(DWORD * pdwFileSize) {
     return pFileData;
 }
 
+// 1.14d mac: 00054cac
 void __fastcall WriteDefaultGatewayList(char * szText) {
     char* szTextCopy;
     /* 0x118360  23  ?WriteDefaultGatewayList@BNGatewayAccess@@AAEXXZ */ Bnet::BnetLog_WriteLine("Writing default gateway list");
@@ -335,6 +347,7 @@ char * __fastcall SkipEOL(D2BNetGatewayAccessStr * pGatewayAccess, int, char * s
     return szText1;
 }
 
+// 1.14d mac: 00055674
 char * __fastcall FindSection(D2BNetGatewayAccessStr * pThis, int, char * szText1, char * szText2) {
     size_t nIniLen = strlen(szText1);
     size_t nSectionNameLen = strlen(szText2);
@@ -360,6 +373,7 @@ char * __fastcall FindSection(D2BNetGatewayAccessStr * pThis, int, char * szText
 }
 
 // Registers: pGatewayAccess in ECX (__thiscall) is passed by the callers but not read.
+// 1.14d mac: 00055762
 char * __fastcall FindKey(D2BNetGatewayAccessStr * pGatewayAccess, int, char * szText1, char * szText2) {
     char* pSrc = szText1;
     char* pEnd = pSrc + strlen(pSrc);
@@ -384,6 +398,7 @@ char * __fastcall FindKey(D2BNetGatewayAccessStr * pGatewayAccess, int, char * s
     return nullptr;
 }
 
+// 1.14d mac: 00054d3a
 void __fastcall PickClosestZone(D2BNetGatewayAccessStr * pThis, int, int32_t nGmtMinutes) {
     uint32_t pGatewayEntry;
     long int nGmtOffset;
@@ -441,6 +456,7 @@ void __fastcall PickClosestZone(D2BNetGatewayAccessStr * pThis, int, int32_t nGm
 }
 
 // BNGatewayAccess::Load — Battle.net gateway-list loader. Asserts (ERROR_Halt, line 0x6c) when the registry gateway list isn't a 3n+1 entry count (missing/contended registry in a shared wineprefix).
+// 1.14d mac: 000548a0
 void __stdcall Load(D2BNetGatewayAccessStr * pGatewayAccess) {
     uint32_t pStrLen;
     uint32_t nCurGateway;
@@ -536,6 +552,7 @@ void __stdcall Load(D2BNetGatewayAccessStr * pGatewayAccess) {
 // (FindSection @0x5183f0 -> NULL -> BNetGW.cpp:0x277 at call site 0x5188a7 -> 0xc0000005)
 // on a bad/empty buffer — the crash the 2nd shared-wineprefix client hits via the BNFTP path.
 // @sourcefile .\BNetGW.cpp
+// 1.14d mac: 0005521e
 void __stdcall UpdateGatewaysFromIni(D2BNetGatewayAccessStr * pClientSideData, char * szText) {
     uint32_t nSize;
     uint32_t nIniVersion;

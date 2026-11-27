@@ -52,6 +52,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2PresetUnitStrc) == 0x20, "D2_NEW_
 namespace D2Common { namespace Drlg { namespace DrlgRoom {
 
 // Find destination room via warp tile links: scan src room's tile grid for a tile whose shadow level id matches eLevel, then follow its room link and locate the reverse link tile to fetch orth pointer and destination RoomEx. Initializes destination room on demand.
+// 1.14d mac: 00150e69
 D2RoomStrc * __fastcall DRLGWARP_GetWarpDestinationRoom(D2RoomExStrc * pRoomEx, eD2LevelId eLevel, int * ppOrth, D2LvlWarpTxt * * ppRoomEx) {
     D2DrlgRoomExRoomTileNodeStrc* pDVar1 = pRoomEx->pRoomTileNodes;
     while (true) {
@@ -98,6 +99,7 @@ void __fastcall DRLGWARP_SetAllWarpTilesSelectValue(D2RoomExStrc * pRoomEx, BOOL
     }
 }
 
+// 1.14d mac: 00150ec8
 void __fastcall DRLGWARP_UpdateWarpRoomExSelect(D2RoomExStrc * pRoomEx, eD2LevelId eLevel) {
     D2DrlgRoomExRoomTileNodeStrc* pTileGrid = pRoomEx->pRoomTileNodes;
     while (pTileGrid) {
@@ -127,6 +129,7 @@ void __fastcall DRLGWARP_UpdateWarpRoomExSelect(D2RoomExStrc * pRoomEx, eD2Level
     }
 }
 
+// 1.14d mac: 00150f0a
 void __fastcall DRLGWARP_UpdateWarpRoomExDeselect(D2RoomExStrc * pRoomEx, eD2LevelId eLevel) {
     D2DrlgRoomExRoomTileNodeStrc* pTileGrid = pRoomEx->pRoomTileNodes;
     while (pTileGrid) {
@@ -377,6 +380,7 @@ static D2RoomExStrc * DRLGWARP_ValidateWarpFlagsAgainstVis(D2DrlgLevelStrc * pLe
 //   then random room as fallback.
 // Outputs world X/Y and returns the D2RoomStrc.
 // Callers: FindActSpawnLocation, SpawnUnit
+// 1.14d mac: 00150f4c
 D2RoomStrc * __fastcall DRLGSPAWN_FindSpawnLocationInLevel(D2DrlgStrc * pDrlg, eD2LevelId eLevel, int32_t nSpawnTypeOrMode, int * pX, int * pY) {
     D2RoomExStrc* pFoundRoomEx;
     D2LevelDefsTxt* pLevelDefs = DATATBLS::LvlTbls::TXT_LevelDefs_GetLine(eLevel);
@@ -425,6 +429,7 @@ D2RoomStrc * __fastcall DRLGSPAWN_FindSpawnLocationInLevel(D2DrlgStrc * pDrlg, e
 
 // Allocates and initializes a new D2RoomExStrc for the given level with the specified preset type.
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 0014f704
 D2RoomExStrc * __fastcall DRLGROOMEX_AllocRoomEx(D2DrlgLevelStrc * pLevel, int nPresetType) {
     D2RoomExStrc* pRoomEx = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2RoomExStrc, ".\\DRLG\\DrlgRoom.cpp", 0x20);
     memset(pRoomEx, 0, sizeof(D2RoomExStrc));
@@ -471,6 +476,7 @@ void __fastcall FreeDrlgRoomEx(D2RoomExStrc * pRoomEx, int32_t nUnused, uint32_t
 }
 
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 0014f81c
 void __fastcall DRLGROOMEX_FreeDrlgRoomTile(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx) {
     D2DrlgRoomExRoomTileNodeStrc* pTileGrid = pRoomEx->pRoomTileNodes;
     while (pTileGrid) {
@@ -483,6 +489,7 @@ void __fastcall DRLGROOMEX_FreeDrlgRoomTile(D2PoolManagerStrc * pMemory, D2RoomE
 }
 
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 0014fa19
 void __fastcall FreeRoomData(D2PoolManagerStrc * pMemory, D2DrlgOrthStrc * pDrlgRoomData) {
     D2DrlgOrthStrc* pNextRoomData = pDrlgRoomData;
     while (pNextRoomData) {
@@ -494,6 +501,7 @@ void __fastcall FreeRoomData(D2PoolManagerStrc * pMemory, D2DrlgOrthStrc * pDrlg
 
 // Allocates a D2DrlgOrthStrc (nType=1, room link) connecting pRoomEx to pDrlgRoomEx2. Checks if connection already exists (matching pRoomEx pointer at offset 0). Prepends to pRoomEx->pOrth linked list.
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 0014fa69
 void __fastcall DRLGROOMEX_AllocNodesFromRoomExToRoomEx(D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomEx2, int32_t neDrlgDirection) {
     for (D2DrlgOrthStrc* pOrth = pRoomEx->pOrth; pOrth; pOrth = pOrth->pNext) {
       if (pOrth->pLink.pRoomEx == pDrlgRoomEx2) {
@@ -512,6 +520,7 @@ void __fastcall DRLGROOMEX_AllocNodesFromRoomExToRoomEx(D2RoomExStrc * pRoomEx, 
 }
 
 // Creates bidirectional D2DrlgOrthStrc links between two rooms. Allocates A->B with eDirection, then B->A with the opposite direction ((eDirection-2) & 3).
+// 1.14d mac: 0014fafe
 void __fastcall DRLGROOMEX_AllocNodesForBothRoomEx(D2RoomExStrc * pRoomExA, D2RoomExStrc * pRoomExB, int32_t eDirection) {
     DRLGROOMEX_AllocNodesFromRoomExToRoomEx(pRoomExA, pRoomExB, eDirection);
     DRLGROOMEX_AllocNodesFromRoomExToRoomEx(pRoomExB, pRoomExA, eDirection - 2U & 3);
@@ -519,6 +528,7 @@ void __fastcall DRLGROOMEX_AllocNodesForBothRoomEx(D2RoomExStrc * pRoomExA, D2Ro
 
 // Finds and removes a D2DrlgOrthStrc node from pRoomEx->pOrth linked list that has nType==1 and points to pDrlgRoomExTarget. Frees the removed node.
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 0014fb3e
 void __fastcall DRLGROOMEX_FreeOrthToRoomEx(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomExTarget) {
     D2DrlgOrthStrc* pOrthPrev = pRoomEx->pOrth;
     D2DrlgOrthStrc* pOrthCurrent = pOrthPrev->pNext;
@@ -551,6 +561,7 @@ void __fastcall DRLGROOMEX_FindReplaceAndFreeSub00ForBothRoomEx(D2PoolManagerStr
 }
 
 // Sorting comparator: compares orths by direction first, then by coordinate for that direction.
+// 1.14d mac: 00150844
 BOOL __fastcall DRLGORTH_CompareByDirectionAndCoord(D2DrlgOrthStrc * pOrth1, D2DrlgOrthStrc * pOrth2) {
     eDrlgDirection eDir1 = pOrth1->neDrlgDirection;
     if ((int)pOrth2->neDrlgDirection > (int)eDir1) {
@@ -620,6 +631,7 @@ static void __stdcall DRLGORTH_InsertSorted(D2DrlgOrthStrc * * pRoomEx, D2DrlgOr
 
 // Allocates a D2DrlgOrthStrc (nType=0, level link) connecting pRoomEx to another level. The orth node stores pLevel pointer, direction, and a pointer to the level's sCoordinatesAndSize. Inserts into pRoomEx->pOrth sorted linked list via DRLGROOMEX_ReplaceSub00.
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 0014fbc0
 void __fastcall AllocDrlgOrth(D2DrlgOrthStrc * * pRoomEx, D2DrlgLevelStrc * pLevel, eDrlgDirection neDrlgDirection, BOOL bIsDrlgTypePresetArea) {
     D2DrlgOrthStrc* pOrth = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgOrthStrc, ".\\DRLG\\DrlgRoom.cpp", 0x15f);
     memset(pOrth, 0, sizeof(D2DrlgOrthStrc));
@@ -631,6 +643,7 @@ void __fastcall AllocDrlgOrth(D2DrlgOrthStrc * * pRoomEx, D2DrlgLevelStrc * pLev
     DRLGORTH_InsertSorted(pRoomEx, pOrth);
 }
 
+// 1.14d mac: 0014fc8a
 BOOL __fastcall DRLGCOORDS_IsWithinDistance(D2DrlgCoordsStrc * pCoords, D2DrlgCoordsStrc * pCoords2, int32_t nSize, int * nX, int * nY) {
     int nX1 = pCoords->WorldPosition.x;
     int nX2 = pCoords2->WorldPosition.x;
@@ -654,6 +667,7 @@ BOOL __fastcall DRLGCOORDS_IsWithinDistance(D2DrlgCoordsStrc * pCoords, D2DrlgCo
     return 1;
 }
 
+// 1.14d mac: 0014fce8
 int __fastcall DRLGROOM_CoordsWithinDistance(D2DrlgCoordsStrc * pCoords1, D2DrlgCoordsStrc * pCoords2, int32_t nDistance) {
     D2DrlgCoordsStrc* pCoords1Copy;
     BOOL nResult = DRLGCOORDS_IsWithinDistance(pCoords1, pCoords2, nDistance, (int*)&pCoords1Copy, &nDistance);
@@ -686,6 +700,7 @@ BOOL __fastcall DRLGCOORDS_IsAdjacentOrOverlapping(D2DrlgCoordsStrc * pDrlgCoord
     return nDistY == 0 && nDistX <= nMaxDist;
 }
 
+// 1.14d mac: 0014fd90
 BOOL __fastcall DRLGROOM_IsRoomClearOfOthers(D2DrlgLevelStrc * pLevel, D2RoomExStrc * pRoomEx, D2RoomExStrc * pDrlgRoomEx2, int32_t nDistance) {
     for (D2RoomExStrc* pRoomExIter = pLevel->pRoomExFirst; pRoomExIter; pRoomExIter = pRoomExIter->pRoomExNext) {
       if (pRoomExIter != pRoomEx && pRoomExIter != pDrlgRoomEx2) {
@@ -717,12 +732,14 @@ BOOL __fastcall DRLGROOM_IsRoomClearOfOthers(D2DrlgLevelStrc * pLevel, D2RoomExS
 }
 
 // NOTE: Register params: pLevelData (ECX): D2DrlgLevelStrc *, pRoomEx (EDX): D2RoomExStrc *
+// 1.14d mac: 0014fdf2
 void __fastcall AddRoomExToLevel(D2DrlgLevelStrc * pLevelData, D2RoomExStrc * pRoomEx) {
     pRoomEx->pRoomExNext = pLevelData->pRoomExFirst;
     pLevelData->nRoomExCount++;
     pLevelData->pRoomExFirst = pRoomEx;
 }
 
+// 1.14d mac: 0014fe09
 BOOL __fastcall AreXYInsideCoordinates(D2DrlgCoordsStrc * pDrlgCoords, int32_t nX, int32_t nY) {
     int nPosX = pDrlgCoords->WorldPosition.x;
     if (nX < nPosX) {
@@ -737,6 +754,7 @@ BOOL __fastcall AreXYInsideCoordinates(D2DrlgCoordsStrc * pDrlgCoords, int32_t n
     return (uint32_t)(nY < pDrlgCoords->WorldSize.y + nPosY);
 }
 
+// 1.14d mac: 0014fe3e
 uint32_t __fastcall DRLGCOORDS_IsPointInside(D2DrlgCoordsStrc * pDrlgCoords, int32_t nX, int32_t nY) {
     int nPosX = pDrlgCoords->WorldPosition.x;
     if (nX < nPosX) {
@@ -774,6 +792,7 @@ uint32_t __fastcall DRLGROOMEX_CheckWorldCoordsInRoomBounds(D2DrlgCoordsStrc * p
     return (uint32_t)(nWorldY < nRoomPosScaled + nExtent * 4 + nExtent);
 }
 
+// 1.14d mac: 0014fe76
 uint32_t __fastcall CheckLOSDraw(D2RoomExStrc * pRoomEx) {
     switch (pRoomEx->nPresetType) {
       case 1:
@@ -794,6 +813,7 @@ uint32_t __fastcall CheckLOSDraw(D2RoomExStrc * pRoomEx) {
 // Returns whether a RoomEx is preset type 1 and has the outdoor border flag.
 // Delegates to DRLGOUTROOM_HasOutdoorBorderFlag if nPresetType == 1.
 // Caller: DRLGROOM_HasOutdoorBorder
+// 1.14d mac: 0014fe9c
 uint32_t __fastcall DRLGROOMEX_IsPresetWithOutdoorBorder(D2RoomExStrc * pRoomEx) {
     uint32_t bHasOutdoorBorder;
     switch (pRoomEx->nPresetType) {
@@ -809,14 +829,17 @@ uint32_t __fastcall DRLGROOMEX_IsPresetWithOutdoorBorder(D2RoomExStrc * pRoomEx)
     }
 }
 
+// 1.14d mac: 0014feb2
 uint32_t __fastcall GetWaypointFlags(D2RoomExStrc * pRoomEx) {
     return pRoomEx->eRoomExFlags & 0x30000;
 }
 
+// 1.14d mac: 0014fec2
 eD2LevelId __fastcall GetLevelId(D2RoomExStrc * pRoomEx) {
     return pRoomEx->pLevel->eD2LevelId;
 }
 
+// 1.14d mac: 0014fed3
 eD2LevelId __fastcall DRLGWARP_GetWarpDestinationLevel(D2RoomExStrc * pRoomEx, eD2LevelId eLevel) {
     int pOrth;
     D2LvlWarpTxt* pRoomExDest;
@@ -841,6 +864,7 @@ eD2LevelId __fastcall DRLGWARP_GetWarpDestinationLevel(D2RoomExStrc * pRoomEx, e
     }
 }
 
+// 1.14d mac: 0014ff89
 eD2LevelId __fastcall GetLevelIdFromPopulatedRoomEx(D2RoomExStrc * pRoomEx) {
     if (!pRoomEx) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x26b);
@@ -853,6 +877,7 @@ eD2LevelId __fastcall GetLevelIdFromPopulatedRoomEx(D2RoomExStrc * pRoomEx) {
     return pRoomEx->pLevel->eD2LevelId;
 }
 
+// 1.14d mac: 0014ffd5 D2Common::Drlg::DrlgRoom::HasWaypoint
 BOOL __fastcall HasWaypoint(D2RoomExStrc * pRoomEx) {
     if (!pRoomEx) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x276);
@@ -933,10 +958,12 @@ static void __stdcall DefineRoomsNear(D2PoolManagerStrc * pMemory, D2RoomExStrc 
     }
 }
 
+// 1.14d mac: 0015001a
 int32_t __fastcall GetRoomsNearCount(D2RoomExStrc * pRoomEx) {
     return pRoomEx->nDrlgRoomsExNearCount;
 }
 
+// 1.14d mac: 00150025
 int32_t __fastcall GetRealRoomsNearCount(D2RoomExStrc * pRoomEx, D2RoomStrc * * ppRoomList) {
     int32_t iNullFill;
     int nIndex;
@@ -988,6 +1015,7 @@ static void DRLGROOM_FlagRoomExBorderingTown(D2RoomExStrc * pRoomEx) {
 
 // Grows pDrlgRoomEx->ppDrlgRoomsExNear by 1, appends pRoom, and reorders the near-room list. Halts on realloc failure.
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 00150750
 static void __stdcall DRLGROOMEX_ResizeArrayAndAddNewNearRoom(D2RoomExStrc * pDrlgRoomEx, D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoom) {
     pDrlgRoomEx->nDrlgRoomsExNearCount++;
     D2RoomExStrc** ppNewNearRooms = (D2RoomExStrc**)D2_REALLOC_POOL_AT(pMemory, pDrlgRoomEx->ppDrlgRoomsExNear, pDrlgRoomEx->nDrlgRoomsExNearCount * sizeof(D2RoomExStrc*), ".\\DRLG\\DrlgRoom.cpp", 0x314);
@@ -1015,6 +1043,7 @@ static void __stdcall DRLGROOMEX_AllocRoomTile(D2RoomExStrc * pLinkedRoomEx, uin
 }
 
 // Searches dst level rooms for a matching warp flag bit (dstVisSlot+4). If warpDestLevel is valid, immediately link rooms and allocate a room tile. Otherwise, link only if room bounding boxes are within 6 tiles in X/Y. Returns 1 if link added, else 0.
+// 1.14d mac: 00150620
 static BOOL __stdcall DRLGROOMEX_LinkNearRoomByDirection(uint8_t dstVisSlot, D2RoomExStrc * pRoomEx, D2PoolManagerStrc * pMemory, uint8_t srcVisSlot, int32_t warpDestLevel, D2RoomExStrc * pDstRoomExIter) {
     int nGapX;
     int nGapY;
@@ -1051,6 +1080,7 @@ static BOOL __stdcall DRLGROOMEX_LinkNearRoomByDirection(uint8_t dstVisSlot, D2R
 
 // Allocates a D2PresetUnitStrc, initializes fields, and optionally links it into pRoomEx->pPresetUnit list.
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 00150410
 D2PresetUnitStrc * __fastcall AllocPresetUnit(D2RoomExStrc * pRoomEx, D2PoolManagerStrc * pMemory, eD2UnitType eUnitType, int32_t nMonStatsId, BOOL bUseMonStatsMaybe, int32_t nPosX, int32_t nPosY) {
     D2PresetUnitStrc* pPresetUnit = D2_NEW_POOL_AT(pMemory, D2PresetUnitStrc, ".\\DRLG\\DrlgRoom.cpp", 0x3b6);
     memset(pPresetUnit, 0, sizeof(*pPresetUnit));
@@ -1082,6 +1112,7 @@ D2PresetUnitStrc * __fastcall GetPresetUnits(D2RoomExStrc * pRoomEx) {
     return pRoomEx->pPresetUnit;
 }
 
+// 1.14d mac: 001504c3 D2Common::Drlg::DrlgRoom::SetRoom
 void __fastcall SetRoom(D2RoomExStrc * pRoomEx, D2RoomStrc * pRoom) {
     pRoomEx->pRoom = pRoom;
 }
@@ -1100,6 +1131,7 @@ int __fastcall Unreferenced_0066c020(D2RoomExStrc * pRoomEx) {
 }
 
 // Retrieves the Vis array from the level definitions for the given level ID. Returns pointer to 8-entry vis array.
+// 1.14d mac: 0015051e
 int * __fastcall DRLGWARP_GetVisArrayFromLevelId(D2DrlgStrc * pDrlg, eD2LevelId eLevelId) {
     D2LevelDefsTxt* pLevelDefs;
     D2DrlgActWarpsInfoStrc* pWarpsInfo = pDrlg->pWarpsInfo;
@@ -1147,6 +1179,7 @@ D2DrlgStrc * __fastcall GetDrlgFromRoomEx(D2RoomExStrc * pRoomEx) {
 
 // Fully tears down a D2RoomExStrc: frees tile data, nearby-room pointer array, outdoor or preset area data (by nPresetType), all preset units, all orth links (bidirectionally removing cross-references for type-1 orths), detaches the room from the level's linked list (decrementing nRoomExCount), frees room tiles and coord list, then frees the RoomEx struct itself from the pool.
 // @sourcefile .\DRLG\DrlgRoom.cpp
+// 1.14d mac: 0014f879
 void __fastcall DRLGROOMEX_FreeDrlgRoomEx(D2RoomExStrc * pRoomEx) {
     D2RoomExStrc* pRoomExNext;
     D2DrlgOrthStrc* pOrthCurrent;
@@ -1288,6 +1321,7 @@ void __stdcall DRLGROOMEX_LinkNearRoomsByVis(D2PoolManagerStrc * pMemory, D2Room
 }
 
 // Defines near rooms, then for each vis flag bit (0x10..0x800) links rooms across levels via DRLGROOMEX_LinkNearRoomsByVis unless in level 0x85. Finally sets town-related flag based on near rooms.
+// 1.14d mac: 00150081
 void __fastcall DRLGROOMEX_InitNearRoomsAndVisTiles(D2PoolManagerStrc * pMemory, D2RoomExStrc * pRoomEx) {
     uint8_t visSlot;
     DefineRoomsNear(pMemory, pRoomEx);

@@ -93,6 +93,7 @@ template<> ::TCELENTRY * TSList<TCELENTRY, TSGetLink<TCELENTRY>>::RawNext(::TCEL
     return (::TCELENTRY*)this->m_terminator.m_next;
 }
 
+// 1.14d mac: 0012bf30 TSList<TCELENTRY, TSGetLink<TCELENTRY>>::UnlinkAll
 template<> __declspec(noinline) inline void TSList<TCELENTRY, TSGetLink<TCELENTRY>>::UnlinkAll() {
     TSLink<::TCELENTRY>** pBackLink;
     TSLink<::TCELENTRY>* pNext;

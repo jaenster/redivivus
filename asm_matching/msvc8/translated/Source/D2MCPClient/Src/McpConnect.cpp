@@ -106,6 +106,7 @@ HANDLE __stdcall GetMCPThread() {
     return MCPThread;
 }
 
+// 1.14d mac: 002cc9fd
 void __stdcall FreeMCP() {
     if (MCPD2QSSocket) {
       Fog::Src::D2QSSocket::FreeD2QSSocket(MCPD2QSSocket);
@@ -124,6 +125,7 @@ void __stdcall FreeMCP() {
     pMCPEventHandle = (HANDLE)0x0;
 }
 
+// 1.14d mac: 002cca7a
 int32_t __stdcall HasPeerName() {
     sockaddr sPeerAddr;
     D2NetDataStrc* pNetData = Fog::Src::D2QSSocket::NET_D2QSocket_GetSafesock(MCPD2QSSocket);
@@ -151,54 +153,67 @@ BOOL __stdcall NET_MCP_CLIENT_ReadAndParsePacket() {
     return 1;
 }
 
+// 1.14d mac: 002ccb4e
 char * __stdcall GetD2GSConnectIp() {
     return D2GSConnectIp;
 }
 
+// 1.14d mac: 002ccb5f
 int16_t __stdcall GetD2GSRequestId() {
     return D2GSRequestId;
 }
 
+// 1.14d mac: 002ccb71
 int32_t __stdcall GetD2GSGameToken() {
     return D2GSGameToken;
 }
 
+// 1.14d mac: 002ccb96
 int32_t __stdcall GetD2GSJoinResult() {
     return D2GSJoinResult;
 }
 
+// 1.14d mac: 002ccba7
 BOOL __stdcall MCPSTATE_GetConnectionEstablished() {
     return g_bMCPConnectionEstablished;
 }
 
+// 1.14d mac: 002ccbb8
 void __stdcall MCPSTATE_SetConnectionEstablished(BOOL bEstablished) {
     g_bMCPConnectionEstablished = bEstablished;
 }
 
+// 1.14d mac: 002ccbcc
 BOOL __stdcall MCPSTATE_GetCharLogonSuccess() {
     return g_bMCPCharLogonSuccess;
 }
 
+// 1.14d mac: 002ccbdd
 void __stdcall MCPSTATE_SetCharLogonSuccess(BOOL bSuccess) {
     g_bMCPCharLogonSuccess = bSuccess;
 }
 
+// 1.14d mac: 002ccbf1
 BOOL __stdcall MCPSTATE_GetJoinGameSuccess() {
     return g_bMCPJoinGameSuccess;
 }
 
+// 1.14d mac: 002ccc02
 void __stdcall MCPSTATE_SetJoinGameSuccess(BOOL bSuccess) {
     g_bMCPJoinGameSuccess = bSuccess;
 }
 
+// 1.14d mac: 002ccc16
 BOOL __stdcall MCPSTATE_GetCreateGameSuccess() {
     return g_bMCPCreateGameSuccess;
 }
 
+// 1.14d mac: 002ccc27
 void __stdcall MCPSTATE_SetCreateGameSuccess(BOOL bSuccess) {
     g_bMCPCreateGameSuccess = bSuccess;
 }
 
+// 1.14d mac: 002ccc3b
 void __stdcall MCPSTATE_SetListGameSuccess(BOOL bSuccess) {
     g_bMCPListGameSuccess = bSuccess;
 }
@@ -211,6 +226,7 @@ BOOL __stdcall MCPSTATE_GetCharDeleteSuccess() {
     return g_bMCPCharDeleteSuccess;
 }
 
+// 1.14d mac: 002ccc4f
 void __stdcall MCPSTATE_SetCharDeleteSuccess(BOOL bSuccess) {
     g_bMCPCharDeleteSuccess = bSuccess;
 }
@@ -234,6 +250,7 @@ int32_t __stdcall MCPCONNECT_GetGameNameAndPassword(char * pGameNameOut, char * 
     return g_nMCPGameDifficulty;
 }
 
+// 1.14d mac: 002ccc63
 void __stdcall MCPCONNECT_SetGameNameAndPassword(int32_t nDifficulty, char * szGameName, char * szPassword) {
     char ch;
     int nCopyDelta;
@@ -242,10 +259,12 @@ void __stdcall MCPCONNECT_SetGameNameAndPassword(int32_t nDifficulty, char * szG
     g_nMCPGameDifficulty = nDifficulty;
 }
 
+// 1.14d mac: 002ccca9
 D2McpGameInfoStrc * __stdcall MCPCONNECT_GetCharSelectBuffer() {
     return &g_CharSelectBuffer;
 }
 
+// 1.14d mac: 002cccba
 void __stdcall MCPCONNECT_ClearCharSelectBuffer() {
     memset(&g_CharSelectBuffer, 0, sizeof(D2McpGameInfoStrc));
 }
@@ -254,6 +273,7 @@ uint32_t __stdcall MCPSTATE_GetCharUpgradeSuccess() {
     return g_bMCPCharUpgradeSuccess;
 }
 
+// 1.14d mac: 002ccce1
 void __stdcall MCPSTATE_SetCharUpgradeSuccess(BOOL bSuccess) {
     g_bMCPCharUpgradeSuccess = bSuccess;
 }
@@ -262,6 +282,7 @@ uint32_t __stdcall MCPSTATE_GetCharCreateSuccess() {
     return g_bMCPCharCreateSuccess;
 }
 
+// 1.14d mac: 002cccf5
 void __stdcall MCPSTATE_SetCharCreateSuccess(BOOL bSuccess) {
     g_bMCPCharCreateSuccess = bSuccess;
 }
@@ -274,14 +295,17 @@ void __stdcall MCPSTATE_SetD2GSConnectReady(BOOL bReady) {
     g_bMCPD2GSConnectReady = bReady;
 }
 
+// 1.14d mac: 002ccd1d
 uint32_t __stdcall MCPCONNECT_GetD2GSGameHash() {
     return D2GSGameHash;
 }
 
+// 1.14d mac: 002ccd2e
 void __stdcall MCPCONNECT_SendCharCreate(char * szCharName, uint32_t dwArg1, uint32_t dwArg2) {
     NET_MCP_CLIENT_Send_0x02_CharCreate(szCharName, dwArg1, (WORD)dwArg2);
 }
 
+// 1.14d mac: 002ccd37
 void __stdcall thunk_NET_MCP_CLIENT_Send_0x07_CharLogon(char * szText) {
     NET_MCP_CLIENT_Send_0x07_CharLogon(szText);
 }
@@ -290,22 +314,27 @@ uint32_t __stdcall MCPSTATE_GetJoinTimestamp() {
     return g_nMCPJoinTimestamp;
 }
 
+// 1.14d mac: 002ccd51
 void __stdcall MCPSTATE_SetJoinTimestamp(uint32_t nJoinTimestamp) {
     g_nMCPJoinTimestamp = nJoinTimestamp;
 }
 
+// 1.14d mac: 002ccd65
 BOOL __stdcall getIsMPCJoinSuccesfull() {
     return IsMcpGameJoinSuccesful;
 }
 
+// 1.14d mac: 002ccd76
 void __stdcall SetIsMPCJoinSuccesfull(BOOL bSuccess) {
     IsMcpGameJoinSuccesful = bSuccess;
 }
 
+// 1.14d mac: 002ccd8a
 void * __stdcall MCPCONNECT_GetCharListPacket() {
     return CharListPacket;
 }
 
+// 1.14d mac: 002ccd9b
 void __stdcall CopyCharListToGlobal(char * pBytes, uint32_t nSize) {
     uint8_t* pszCursor;
     if (CharListPacket) {
@@ -422,6 +451,7 @@ void __stdcall McpConnectionLoop(int * pnParam) {
 }
 
 // lpStartAddress parameter of CreateThread
+// 1.14d mac: 002cc84f
 uint32_t __stdcall ThreadHandler() {
     char bySendByte;
     char* szIpAddress = Fog::Src::Safesock::NET_MakeIPV4AddressHumanFriendly(gMCPConnectionState[4]);
@@ -452,15 +482,21 @@ uint32_t __stdcall ThreadHandler() {
     return 0;
 }
 
+// 1.14d mac: 002cc7ce
 void __stdcall MCPCONNECT_CreateThread(uint32_t * pSrcState) {
     if (MCPThread) {
       return;
     }
 
     memcpy(gMCPConnectionState, pSrcState, sizeof(gMCPConnectionState));
+#if !defined(_WIN32) && D2_OS_MAC
+    MCPThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)ThreadHandler, (LPVOID)0x0, 0, (LPDWORD)&pSrcState, "(LPTHREAD_START_ROUTINE)sMCPConnect");
+#else
     MCPThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)ThreadHandler, (LPVOID)0x0, 0, (LPDWORD)&pSrcState);
+#endif
 }
 
+// 1.14d mac: 002cd117
 static char * __stdcall STRING_GetStringLength(char * szDest, char * szText, uint32_t * pnLength, uint32_t nMaxLength) {
     int nCopyDelta;
     char byChar;
@@ -477,6 +513,7 @@ static char * __stdcall STRING_GetStringLength(char * szDest, char * szText, uin
     return szDest + (int)(nStrLen + 1);
 }
 
+// 1.14d mac: 002ccfd4
 int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnStartupInfo) {
     MCPPacketClt0x01 mcp0x01;
     int32_t nLine;
@@ -510,6 +547,7 @@ int32_t __fastcall NET_MCP_CLIENT_Send_0x01_StartUp(int * pnStartupInfo) {
     return nLine;
 }
 
+// 1.14d mac: 002cd183
 void __fastcall NET_MCP_CLIENT_Send_0x02_CharCreate(char * szCharName, DWORD dwCharClassFlags, WORD dwUnused) {
     MCP_CHARCREATE mcp0x02;
     SetD2GSJoinResult(0);
@@ -528,6 +566,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x02_CharCreate(char * szCharName, DWORD dwC
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &mcp0x02.nPacketId, (uint16_t)nPacketSize);
 }
 
+// 1.14d mac: 002cd262
 void __fastcall NET_MCP_CLIENT_Send_0x07_CharLogon(char * szText) {
     char byPacketId[1028];
     SetD2GSJoinResult(0);
@@ -567,6 +606,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x03_CreateGame(mcp0x03data * pMcpData, int1
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, &sPacket.nPacketId, (uint16_t)nPacketSize);
 }
 
+// 1.14d mac: 002cd44c
 void __fastcall NET_MCP_CLIENT_Send_0x04_JoinGame(char * szGameName, char * szGamePassword, uint16_t nRequestId) {
     MCPPacketCltStr byPacketId;
     SetD2GSJoinResult(0);
@@ -585,6 +625,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x04_JoinGame(char * szGameName, char * szGa
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&byPacketId, (uint16_t)nPacketSize);
 }
 
+// 1.14d mac: 002cd52c
 void __fastcall NET_MCP_CLIENT_Send_0x05_GameList(char * szText, uint16_t wRequestIdArg) {
     MCPPacketClt0x05 sPacket;
     SetD2GSJoinResult(0);
@@ -598,6 +639,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x05_GameList(char * szText, uint16_t wReque
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (short int)pStrLen);
 }
 
+// 1.14d mac: 002cd5d9
 void __fastcall NET_MCP_CLIENT_Send_0x06_GameInfo(char * szText, uint16_t wRequestIdArg) {
     MCPPacketCltStr byPacketId;
     SetD2GSJoinResult(0);
@@ -724,6 +766,7 @@ void __stdcall NET_MCP_CLIENT_Send_0x10() {
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
+// 1.14d mac: 002cd7b1
 void __fastcall NET_MCP_CLIENT_Send_0x11_RequestLadderData(uint8_t nLadderFilterMode, uint16_t wRequestId) {
     uint8_t aPacketFrame[4];
     SetD2GSJoinResult(0);
@@ -733,6 +776,7 @@ void __fastcall NET_MCP_CLIENT_Send_0x11_RequestLadderData(uint8_t nLadderFilter
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)aPacketFrame, 4);
 }
 
+// 1.14d mac: 002cd801
 void __stdcall NET_MCP_CLIENT_Send_0x12_MOTD() {
     uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
@@ -740,6 +784,7 @@ void __stdcall NET_MCP_CLIENT_Send_0x12_MOTD() {
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)(dwPacketBuf + 3), 1);
 }
 
+// 1.14d mac: 002cd843
 void __stdcall NET_MCP_CLIENT_Send_0x13_CancelGameCreate() {
     uint8_t dwPacketBuf[4];
     SetD2GSJoinResult(0);
@@ -748,6 +793,7 @@ void __stdcall NET_MCP_CLIENT_Send_0x13_CancelGameCreate() {
 }
 
 // Tail-calls NET_MCP_CLIENT_Send and returns that BOOL in EAX; its only caller tests EAX to decide whether the realm character-list request failed. Typed void, that decision came from an uninitialised local.
+// 1.14d mac: 002cd885
 int __stdcall NET_MCP_CLIENT_Send_0x19_CharList2() {
     MCPPacketClt0x19 tPacket;
     SetD2GSJoinResult(0);
@@ -774,28 +820,33 @@ void __fastcall NET_MCP_CLIENT_Send_0x16_CharRank(char * szText, uint32_t dwFiel
     Fog::Src::D2QSSocket::NET_MCP_CLIENT_Send(MCPD2QSSocket, (char*)&sPacket, (uint16_t)nPacketSize);
 }
 
+// 1.14d mac: 002cbdc7
 BOOL __fastcall NET_MCP_CLIENT_IncomingReturn(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cc749
 BOOL __fastcall MCP_INCOMING_SetD2GSJoinResultAndSignal(char * pPacket) {
     SetD2GSJoinResult(*(int32_t*)(pPacket + 1));
     /* HANDLE hEvent for SetEvent */ SetEvent(pMCPEventHandle);
     return 1;
 }
 
+// 1.14d mac: 002cbdd1
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x02(char * pBytes, uint32_t nSize) {
     SetD2GSJoinResult(*(int32_t*)(pBytes + 1));
     MCPSTATE_SetConnectionEstablished(1);
     return 1;
 }
 
+// 1.14d mac: 002cbdfb
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x07(char * pBytes, uint32_t nSize) {
     SetD2GSJoinResult(*(int32_t*)(pBytes + 1));
     MCPSTATE_SetCharLogonSuccess(1);
     return 1;
 }
 
+// 1.14d mac: 002cbe25
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, uint32_t nSize) {
     uint32_t dwGameToken = *(uint32_t*)(pBytes + 3);
     if (*(uint16_t*)(pBytes + 1) == nMcpPacketSequence) {
@@ -807,6 +858,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x03(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cbe75
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, uint32_t nSize) {
     int nGameToken = pBytes->nGameToken; // steer-ok: packet fields are read together on entry, before the request-id test
     int nGameIp = pBytes->nGameIp; // steer-ok: packet fields are read together on entry, before the request-id test
@@ -832,6 +884,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x04(MCPPacketSrv0x04 * pBytes, uint32_t 
     return 1;
 }
 
+// 1.14d mac: 002cc12e
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, uint32_t nSize) {
     char cByte;
     int nCopyOffset = *(int*)(pBytes + 3);
@@ -888,6 +941,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x06(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cc23f
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x08(char * pBytes, uint32_t nSize) {
     if (g_pfnMCPCallback1) {
       (*g_pfnMCPCallback1)(*(uint16_t*)(pBytes + 1), pBytes + 3);
@@ -896,6 +950,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x08(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cc272
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x09(char * pBytes, uint32_t nSize) {
     if (g_pfnMCPCallback2) {
       (*g_pfnMCPCallback2)(*(uint16_t*)(pBytes + 1), pBytes + 4);
@@ -904,6 +959,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x09(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cc2a5
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x0A(char * pBytes, uint32_t nSize) {
     if (*(uint16_t*)(pBytes + 1) == nMcpPacketSequence) {
       SetD2GSJoinResult(*(int32_t*)(pBytes + 3));
@@ -913,18 +969,21 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x0A(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cc2e4
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x18(char * pBytes, uint32_t nSize) {
     SetD2GSJoinResult(*(int32_t*)(pBytes + 1));
     MCPSTATE_SetCreateGameSuccess(1);
     return 1;
 }
 
+// 1.14d mac: 002cc30e
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x0B(char * pBytes, uint32_t nSize) {
     SetD2GSJoinResult(*(int32_t*)(pBytes + 1));
     MCPSTATE_SetListGameSuccess(1);
     return 1;
 }
 
+// 1.14d mac: 002cc338
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x0C(char * pBytes, uint32_t nSize) {
     SetD2GSJoinResult(*(int32_t*)(pBytes + 1));
     MCPSTATE_SetCharDeleteSuccess(1);
@@ -932,6 +991,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x0C(char * pBytes, uint32_t nSize) {
 }
 
 // Handles incoming MCP packet 0x0E. Parses the null-terminated string starting at offset 1 of the packet data and forwards it with its computed length.
+// 1.14d mac: 002cc362
 bool __fastcall NET_MCP_CLIENT_Incoming0x0E(char * pBytes, uint32_t nSize) {
     char cByte;
     char* szGameName = pBytes + 1;
@@ -941,18 +1001,21 @@ bool __fastcall NET_MCP_CLIENT_Incoming0x0E(char * pBytes, uint32_t nSize) {
     return true;
 }
 
+// 1.14d mac: 002cc39c
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x0D(char * pBytes, uint32_t nSize) {
     SetD2GSJoinResult(*(int32_t*)(pBytes + 1));
     MCPSTATE_SetCharUpgradeSuccess(1);
     return 1;
 }
 
+// 1.14d mac: 002cc3c6
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x0F(char * pBytes, uint32_t nSize) {
     SetD2GSJoinResult(*(int32_t*)(pBytes + 1));
     MCPSTATE_SetCharCreateSuccess(1);
     return 1;
 }
 
+// 1.14d mac: 002cc3f0
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x10(char * pBytes, uint32_t nSize) {
     uint32_t dwGameToken = *(uint32_t*)(pBytes + 1); // steer-ok: generated form, kept as emitted
     uint32_t dwGameHash = *(uint32_t*)(pBytes + 5); // steer-ok: generated form, kept as emitted
@@ -978,6 +1041,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x10(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cc48d
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x11(char * pBytes, uint32_t nSize) {
     // Static local variables (originally global data)
     static int gnMCPGameListWriteOffset; D2_STATIC_GUARD_BSS(gnMCPGameListWriteOffset, "D2MCPClient::McpConnect::NET_MCP_CLIENT_Incoming0x11::gnMCPGameListWriteOffset");
@@ -1045,6 +1109,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x11(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cc664
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x12(char * pBytes, uint32_t nSize) {
     if (nSize < 2) {
       return 0;
@@ -1056,17 +1121,20 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x12(char * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 002cc6ae
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x14(char * pBytes, uint32_t nSize) {
     MCPSTATE_SetJoinTimestamp(*(uint32_t*)(pBytes + 1));
     SetIsMPCJoinSuccesfull(1);
     return 1;
 }
 
+// 1.14d mac: 002cc6d8
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x17(char * pBytes, uint32_t nSize) {
     CopyCharListToGlobal(pBytes, nSize);
     return 1;
 }
 
+// 1.14d mac: 002cc6fa
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x19(char * pBytes, uint32_t nSize) {
     CopyCharListToGlobal(pBytes, nSize);
     return 1;
@@ -1076,6 +1144,7 @@ BOOL __fastcall NET_MCP_CLIENT_Incoming0x19(char * pBytes, uint32_t nSize) {
 // Table: Src::McpConnect::INCOMING at 0x0070ED00 (26 entries)
 // Packet format: Size(2, LE) | Data(...) - first byte of data is packet type
 // Validates *pBytes <= 0x19, calls handler from pointer table.
+// 1.14d mac: 002cc71c
 BOOL __fastcall HandleIncomingPacket(char * pBytes, uint32_t nSize) {
     // Static local variables (originally global data)
     static D2NET_CLIENT_MCPtoCLT INCOMING[26] = {
@@ -1166,11 +1235,13 @@ BOOL __fastcall MCPCONNECT_SocketCallback_Dispatch(uint8_t * pPacketBuf, int nPa
     return BVar1;
 }
 
+// 1.14d mac: 002cc78c
 void __fastcall MCPCONNECT_SetGameListCallbacks(pfnMCPGameListEntry pfnEntryCallback, pfnVoidNoArgCallback pfnCompleteCallback) {
     g_pfnMCPGameListCallback = pfnEntryCallback;
     g_pfnMCPGameListCompleteCallback = pfnCompleteCallback;
 }
 
+// 1.14d mac: 002cc7a9
 void __fastcall MCPCONNECT_SetMessageCallback(pfnMCPMessage pfnCallback) {
     g_pfnMCPMessageCallback = pfnCallback;
 }
@@ -1216,6 +1287,7 @@ void __stdcall MCPCONNECT_SanitizeWideString(uint16_t * wszText) {
 // => realm game list = N per-game 0x05 packets + a final 0x05 packet with token=-2.
 // This is NOT one concatenated packet, and NOT BNCS SID_GETADVLISTEX (that path is TCP/IP
 // only, via OOGUTIL_RequestGameListFromServer / g_pBNetGameListData).
+// 1.14d mac: 002cbf10
 BOOL __fastcall NET_MCP_CLIENT_Incoming0x05(char * pBytes, uint32_t nSize) {
     char* pCursor2;
     char szServerName[1024];

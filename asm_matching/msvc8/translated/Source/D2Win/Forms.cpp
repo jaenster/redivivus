@@ -19,6 +19,7 @@ typedef BOOL (__stdcall *fpListEntryCallback)(D2ControlMsg * pControlMsg);
 namespace D2Win { namespace Forms {
 
 // Registers window message/command/key handler based on type. Type 0 = message handler (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Register* function.
+// 1.14d mac: 0004fa60
 void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, int32_t nMessage, pfnSEvtHandler pCallback) {
     if (!hHandle) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x13);
@@ -54,6 +55,7 @@ void __fastcall D2WIN_RegisterWindowHandler(HWND hHandle, int32_t nHandlerType, 
 }
 
 // Unregisters window message/command/key handler. Type 0 = message (rejects 0x111/0x101/0x100), type 1 = command, type 2 = key up, type 3 = key down. Forwards to appropriate WND_Unregister* function.
+// 1.14d mac: 0004fb84
 void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType, uint32_t nMessage, pfnSEvtHandler pCallback) {
     if (!hHandle) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x30);
@@ -89,6 +91,7 @@ void __fastcall D2WIN_UnregisterWindowHandler(HWND hHandle, int32_t nHandlerType
 }
 
 // Registers multiple window handlers from array. Each array entry contains {type, message, callback} triplet. Iterates array and calls RegisterWindowHandler for each entry.
+// 1.14d mac: 0004fca8
 void __fastcall D2WIN_RegisterWindowHandlerArray(HWND hHandle, D2WinWndHandlerStrc * pHandlerArray, int32_t nHandlerCount) {
     if (!hHandle) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4d);
@@ -101,6 +104,7 @@ void __fastcall D2WIN_RegisterWindowHandlerArray(HWND hHandle, D2WinWndHandlerSt
 }
 
 // Unregisters multiple window handlers from array. Iterates array and calls UnregisterWindowHandler for each {type, message, callback} triplet.
+// 1.14d mac: 0004fd14
 void __fastcall D2WIN_UnregisterWindowHandlerArray(HWND hHandle, D2WinWndHandlerStrc * pHandlerArray, int32_t nHandlerCount) {
     if (!hHandle) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a);

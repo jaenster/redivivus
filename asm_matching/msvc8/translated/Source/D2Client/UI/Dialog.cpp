@@ -140,6 +140,7 @@ D2DialogStrc * __stdcall DIALOG_GetActualDialog() {
     return gpDialogActual;
 }
 
+// 1.14d mac: 000a41f4
 static void UI_ScrollNpcMenuList(int32_t nScrollDelta, D2DialogStrc * pDialog) {
     if (pDialog->nClickableCount <= 1) {
       return;
@@ -161,6 +162,7 @@ static void UI_ScrollNpcMenuList(int32_t nScrollDelta, D2DialogStrc * pDialog) {
     pDialog->nSelectedLine = iSelectedIndex;
 }
 
+// 1.14d mac: 000a4aa2
 static int32_t DIALOG_HandleMouseUpEvent(D2DialogStrc * pDialog, D2UIMouseMsgStrc * pMsg) {
     int nEntryY;
     if (!pDialog) {
@@ -195,6 +197,7 @@ static int32_t DIALOG_HandleMouseUpEvent(D2DialogStrc * pDialog, D2UIMouseMsgStr
     return -1;
 }
 
+// 1.14d mac: 000a4a16
 static int __stdcall DIALOG_HandleMouseDownEvent(D2DialogStrc * pDialog, D2UIMouseMsgStrc * pMsg) {
     int32_t nErrorLine;
     if (!pDialog) {
@@ -214,6 +217,7 @@ static int __stdcall DIALOG_HandleMouseDownEvent(D2DialogStrc * pDialog, D2UIMou
     return 0;
 }
 
+// 1.14d mac: 000a4998
 void __stdcall INPUT_DialogClickHandler(D2UIMouseMsgStrc * pMsg) {
     D2DialogSubStrc* pDVar1;
     int nSubResult;
@@ -240,6 +244,7 @@ void __stdcall INPUT_DialogClickHandler(D2UIMouseMsgStrc * pMsg) {
     DIALOG_HandleMouseDownEvent(pDialog, pMsg);
 }
 
+// 1.14d mac: 000a42aa
 void __stdcall INPUT_DialogMouseUp(D2UIMouseMsgStrc * pMsg) {
     int nResult;
     DWORD dwTickCount;
@@ -317,6 +322,7 @@ void __stdcall INPUT_DialogMouseUp(D2UIMouseMsgStrc * pMsg) {
     pDialog->nDrawMode = 0;
 }
 
+// 1.14d mac: 000a43c1
 void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
     D2DialogSubStrc* pDVar1;
     ::UIWidget* self;
@@ -401,6 +407,7 @@ void __stdcall INPUT_DialogMouseDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000a4bc8
 static void __stdcall DIALOG_HandleEscapeKeyEvent(int32_t bInvokeDialogFunc, D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -422,6 +429,7 @@ static void __stdcall DIALOG_HandleEscapeKeyEvent(int32_t bInvokeDialogFunc, D2U
     ui::UI_UpdateCursorAnimationTimer();
 }
 
+// 1.14d mac: 000a4266
 void __stdcall INPUT_DialogEscapeKey(D2UIMouseMsgStrc * pMsg) {
     D2DialogStrc* pDialogActual = gpDialogActual;
     if (!gpDialogActual->dwExtraParam3) {
@@ -435,6 +443,7 @@ void __stdcall INPUT_DialogEscapeKey(D2UIMouseMsgStrc * pMsg) {
     DIALOG_HandleEscapeKeyEvent((uint32_t)!pDialogActual->dwExtraParam2, pMsg);
 }
 
+// 1.14d mac: 000a4132
 void __stdcall INPUT_DialogMouseWheel(D2UIMouseMsgStrc * pMsg) {
     int nSubResult;
     int nScrollTicks;
@@ -478,6 +487,7 @@ void __stdcall INPUT_DialogMouseWheel(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000a4890
 void __stdcall INPUT_DialogConfirm(D2UIMouseMsgStrc * pMsg) {
     D2DialogStrc* pDialog = gpDialogActual;
     if (gpDialogActual) {
@@ -507,6 +517,7 @@ void __stdcall INPUT_DialogConfirm(D2UIMouseMsgStrc * pMsg) {
     ui::UI_UpdateCursorAnimationTimer();
 }
 
+// 1.14d mac: 000a46aa
 void __stdcall INPUT_DialogNavigateUp(D2UIMouseMsgStrc * pMsg) {
     int nSubResult;
     pMsg->bHandled = 1;
@@ -538,6 +549,7 @@ void __stdcall INPUT_DialogNavigateUp(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000a473e
 void __stdcall INPUT_DialogNavigateDown(D2UIMouseMsgStrc * pMsg) {
     int nSubResult;
     pMsg->bHandled = 1;
@@ -569,6 +581,7 @@ void __stdcall INPUT_DialogNavigateDown(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000a4582
 void __stdcall INPUT_DialogPageUp(D2UIMouseMsgStrc * pMsg) {
     int nSubResult;
     pMsg->bHandled = 1;
@@ -600,6 +613,7 @@ void __stdcall INPUT_DialogPageUp(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000a4616
 void __stdcall INPUT_DialogPageDown(D2UIMouseMsgStrc * pMsg) {
     int nSubResult;
     pMsg->bHandled = 1;
@@ -631,6 +645,7 @@ void __stdcall INPUT_DialogPageDown(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000a4b41
 static int DIALOG_HandleEnterKeyEvent(void * pDialog, uint32_t nKeyCode) {
     uint32_t dwCmdBound;
     if (!*(int*)((char*)pDialog + 0x20)) {
@@ -655,6 +670,7 @@ static int DIALOG_HandleEnterKeyEvent(void * pDialog, uint32_t nKeyCode) {
     return 0;
 }
 
+// 1.14d mac: 000a47d2
 void __stdcall INPUT_DialogEnterKey(D2UIMouseMsgStrc * pMsg) {
     fpDialogFunc pfnCallback;
     pMsg->bHandled = 1;
@@ -694,6 +710,7 @@ void __stdcall INPUT_DialogEnterKey(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000a48db
 void __stdcall INPUT_DialogKeyHandler(D2UIMouseMsgStrc * pMsg) {
     int iResult;
     D2DialogSubStrc* pDialogSub;
@@ -735,10 +752,12 @@ void __stdcall INPUT_DialogKeyHandler(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000a31ef
 void __stdcall DIALOG_InitializeSystem() {
     gnDialogStructAllocCount = 0;
 }
 
+// 1.14d mac: 000a3201
 void __stdcall DIALOG_CleanupSystem() {
     if (gnDialogStructAllocCount) {
       _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIDialogFlagInit, 0xe);
@@ -769,6 +788,7 @@ static void Unreferenced_004b7bc0(D2DialogStrc * pDialog) {
     pDialog->nHighlightStyle = 2;
 }
 
+// 1.14d mac: 000a32a7
 void __fastcall AllocDialogSub(D2DialogStrc * pDialog, void * pVtable, int32_t nParam2, int32_t nParam3) {
     if (!pDialog) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x355);
@@ -782,6 +802,7 @@ void __fastcall AllocDialogSub(D2DialogStrc * pDialog, void * pVtable, int32_t n
     pDialog->pDialogSub->pWidget = (UIWidget*)pVtable;
 }
 
+// 1.14d mac: 000a35c4
 void __stdcall DIALOG_RegisterHandler() {
     uint16_t uVar1;
     uint32_t nKeyCode = CmdTbl::CMD_IsCommandBound(0x26, 1);
@@ -805,6 +826,7 @@ void __stdcall DIALOG_RegisterHandler() {
     gsUIDialogFlagInit[1].nMessageOrKeyCode = (int32_t)uVar1;
 }
 
+// 1.14d mac: 000a3326
 D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, fpDialogFunc nfpDialogFunc, fpDialogFunc fpDialogFunc2, int32_t nBackgroundId, int32_t nExtraParam) {
     // Static local variables (originally global data)
     static char * gaszDialogBackgroundNames[1] = { s_dialogbackground_00727498 }; D2_STATIC_GUARD(gaszDialogBackgroundNames, "D2Client::UI::Dialog::AllocDialogStrcWithBackground::gaszDialogBackgroundNames");
@@ -881,6 +903,7 @@ D2DialogStrc * __fastcall AllocDialogStrcWithBackground(int32_t nX, int32_t nY, 
     return pDialog;
 }
 
+// 1.14d mac: 000a364d
 D2DialogStrc * __fastcall AllocDialogStrc(int32_t nX, int32_t nY, fpDialogFunc fpDialogFunc1, fpDialogFunc fpDialogFunc2, int32_t nExtraParam1, int32_t nLayoutMode, int32_t nAutoLayout, int32_t nWidth, int32_t nHeight, int32_t nExtraParam2, int32_t nExtraParam3) {
     ui::UI_RegisterAutoMapEventHandlers(0);
     Inv::INV_SetInventoryActive(0);
@@ -934,6 +957,7 @@ D2DialogStrc * __fastcall AllocDialogStrc(int32_t nX, int32_t nY, fpDialogFunc f
     return pDialog;
 }
 
+// 1.14d mac: 000a3807
 void __fastcall FreeDialogStrc(D2DialogStrc * pDialog) {
     D2DialogSubStrc* pNextSub;
     D2DialogStrc* pPrevDialogNode;
@@ -1050,6 +1074,7 @@ void __fastcall DIALOG_DrawBackground(D2DialogStrc * pDialog) {
     }
 }
 
+// 1.14d mac: 000a3be3
 void __fastcall DIALOG_SetSelectedLine(D2DialogStrc * pDialog, int32_t nSubIndex) {
     if (!pDialog) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e7);
@@ -1090,6 +1115,7 @@ void __fastcall DIALOG_SetSelectedLine(D2DialogStrc * pDialog, int32_t nSubIndex
 }
 
 // Sets D2DialogStrc::nHighlightStyle (0x5C): 1=text highlight color, 2=animated cursor icons flanking selected line
+// 1.14d mac: 000a3ce0
 void __fastcall DIALOG_SetHighlightStyle(D2DialogStrc * pDialog, int32_t nStyle) {
     if (!pDialog) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x51e);
@@ -1201,6 +1227,7 @@ void __fastcall DIALOG_RecalculateLayout(D2DialogStrc * pDialog) {
     }
 }
 
+// 1.14d mac: 000a410d
 int32_t __fastcall DIALOG_GetSelectedIndex(D2DialogStrc * pDialog) {
     if (pDialog) {
       return pDialog->nSelectedLine;
@@ -1228,10 +1255,12 @@ void __fastcall Unreferenced_004b85b0(D2DialogStrc * pDialog, RECT * pRect) {
     pRect->right = pDialog->nBackgroundWidth + pDialog->pCoords2.x;
 }
 
+// 1.14d mac: 000a4121
 int __stdcall GetDialogCounter() {
     return gnDialogCounter_b;
 }
 
+// 1.14d mac: 000a3d21
 void __fastcall AddStringData(D2DialogStrc * pDialog, uint16_t * szString, uint32_t nYPos, uint32_t nColor, int32_t nLineType, uint32_t nFont, fpDialogFunc pfnOnClick, int32_t nCallbackParam) {
     RECT nDialogX;
     int32_t nErrLine;

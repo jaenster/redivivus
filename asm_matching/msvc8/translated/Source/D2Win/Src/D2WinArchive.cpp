@@ -21,6 +21,7 @@
 namespace D2Win { namespace Src { namespace D2WinArchive {
 
 // @sourcefile .\Src\D2WinArchive.cpp
+// 1.14d mac: 0004272d
 DC6 * __fastcall IMAGE_LoadDC6(char * szFilename, BOOL bUseDccExtension) {
     char szFullPath[260];
     strcpy(szFullPath, szFilename);
@@ -43,6 +44,7 @@ int * __fastcall D2WINARCHIVE_LoadImageFromArchive(char * szText, uint32_t * pnS
 }
 
 // @sourcefile .\Src\D2WinArchive.cpp
+// 1.14d mac: 000427eb
 void __fastcall IMAGE_FreeImage(DC6 * pDC6) {
     D2CMP::SRC::CelCmp::DeleteCellFile(pDC6);
     if (!pDC6) {
@@ -76,6 +78,7 @@ int Unreferenced_004fab60() {
     return (uint32_t)(iVar1 == 1);
 }
 
+// 1.14d mac: 00042831
 BOOL __stdcall MPQ_LoadAllDataMpqFiles() {
     D2WinArchive::MPQ_d2data = D2Hell::ARCHIVE_LoadMPQ("d2data.mpq", 0, nullptr, 1000);
     MPQ_d2sfx = D2Hell::ARCHIVE_LoadMPQ("d2sfx.mpq", 0, nullptr, 1000);
@@ -102,10 +105,12 @@ BOOL __stdcall MPQ_LoadAllDataMpqFiles() {
     }
 }
 
+// 1.14d mac: 00042b6d
 D2PoolManagerStrc * __stdcall ReturnZero() {
     return nullptr;
 }
 
+// 1.14d mac: 00042b74
 uint32_t __stdcall D2WINARCHIVE_GetArchiveHandle() {
     char szInstallPath[260];
     Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, 0x104);
@@ -125,6 +130,7 @@ uint32_t __stdcall D2WINARCHIVE_GetArchiveHandle() {
     return (uint32_t)!bFileNotFound;
 }
 
+// 1.14d mac: 00042ded
 BOOL __fastcall MPQ_LoadVideoMpqFiles(::fpRequiredUserAction nfpRequiredUserAction, int32_t nZero, BOOL bExpansion) {
     BOOL bDirectMode = Fog::Source::SFile::GetUseDirectCommand();
     if (bDirectMode) {
@@ -174,6 +180,7 @@ void __stdcall MPQ_UnloadAllMediaMpqFiles() {
     MPQ_d2Xvideo = 0;
 }
 
+// 1.14d mac: 000429bf
 void __stdcall MPQ_UnloadAllDataMpqFiles() {
     if (D2WinArchive::MPQ_d2data) {
       D2Hell::ARCHIVE_FreeMpqFile(D2WinArchive::MPQ_d2data);

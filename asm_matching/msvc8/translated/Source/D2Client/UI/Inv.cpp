@@ -316,6 +316,7 @@ void __stdcall InitializeiInventoryPages() {
     }
 }
 
+// 1.14d mac: 000ab875
 void __stdcall InitializeColors() {
     gaInvHighlightColors[0] = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0x80, 0, 0);
     gaInvHighlightColors[1] = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0, 0x80, 0);
@@ -324,6 +325,7 @@ void __stdcall InitializeColors() {
     gaInvHighlightColors[4] = D2Win::Src::D2WinPalette::D2GFX_GetColorFromCurrentPallete(0x80, 0x40, 0x40);
 }
 
+// 1.14d mac: 000bf2a5
 static void __stdcall DrawItemSolidBackground(uint8_t nItemHeight, uint8_t nItemWidth, int32_t nCellX, int32_t nColorIndex, int32_t nCellY, D2GridScreenCoordinates * pCoords) {
     int nStartX;
     int nStartY;
@@ -347,6 +349,7 @@ static void __stdcall DrawItemSolidBackground(uint8_t nItemHeight, uint8_t nItem
     } while (nCellY < nEndRow);
 }
 
+// 1.14d mac: 000ba247
 static void INV_DrawBodySlotHighlight(D2InventoryEntryStrc * pSlotRect, int32_t nColorIndex) {
     if (nColorIndex == 2) {
       return;
@@ -385,6 +388,7 @@ static BOOL __stdcall IsInTradePage2ScreenRange(int32_t nX, int32_t nY) {
     return 0;
 }
 
+// 1.14d mac: 000b5bf7
 static BOOL IsInBankPageScreenRange(int32_t nX, int32_t nY) {
     if (GAME::Game::CLIENT_CheckExpansion()) {
       if (nX > pBigBankPageGridScreenCoordinates.nPixelLeft && nX <= pBigBankPageGridScreenCoordinates.nRight && nY >= pBigBankPageGridScreenCoordinates.nTop && nY <= pBigBankPageGridScreenCoordinates.nBottom) {
@@ -495,6 +499,7 @@ BOOL __stdcall INV_IsPlayerInventoryMode() {
     return 1;
 }
 
+// 1.14d mac: 000bc008
 void __stdcall INV_DrawSocketedItems(D2UnitStrc * pUnit, D2GridScreenCoordinates * pGridCoords, int32_t nBaseX, int32_t nBaseY) {
     // Static local variables (originally global data)
     static D2SocketOffsetStrc gaSocketOffsets[48][6] = {
@@ -1028,6 +1033,7 @@ static BOOL INV_IsQuestItemConsumable(D2ItemsTxt * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 000afd3b
 void __stdcall DRAW_UI_InventoryContent(D2UnitStrc * pUnit) {
     eInventoryPage ePageCurrent;
     uint8_t nMaxSockets;
@@ -1228,6 +1234,7 @@ void __stdcall DRAW_UI_InventoryContent(D2UnitStrc * pUnit) {
     INV_DrawGridPlacementHighlight(pInventory, pPlayerUnit_lcl, (uint32_t)((uint32_t)((uint32_t)((int32_t)((uint32_t)((uintptr_t)pCoords >> 8) << 8) >> 8) & 0xffffffu) << 8 | (uint32_t)(uint8_t)CurrentInventoryPage), nGridIndex, pCoords);
 }
 
+// 1.14d mac: 000b4f8a
 static uint32_t __fastcall ITEM_CanTheseBeSocketed(D2UnitStrc * pUnit, D2UnitStrc * pTargetItem) {
     D2InventoryStrc* pInventory;
     if (pUnit && pTargetItem && g_nCurrentInventoryPage != 10 && g_nCurrentInventoryPage != 0xb
@@ -1523,6 +1530,7 @@ static uint16_t * INV_GetInventoryPageName(uint32_t nPageIndex) {
     exit(-1);
 }
 
+// 1.14d mac: 000bd4a2
 static void __stdcall INV_FormatEtherealSocketedText(D2UnitStrc * pUnit, uint16_t * wszText) {
     uint16_t wszTmp[16];
     uint16_t wszCount[10];
@@ -1601,6 +1609,7 @@ static BOOL INV_FormatPlayerNameOnItem(uint16_t * wszText, D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 000acb60
 static BOOL __stdcall INV_FormatPlayerNameWithBase(uint16_t * wszText1, uint16_t * wszText2, D2UnitStrc * pUnit) {
     int i;
     uint16_t* pwFillIter;
@@ -1655,6 +1664,7 @@ static void __stdcall INV_FormatQuantityText(D2ItemsTxt * pQualityRecord, uint16
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwLocaleStr);
 }
 
+// 1.14d mac: 000bd1ea
 static void INV_FormatDurabilityText(uint16_t * wszText, D2UnitStrc * pUnit) {
     uint16_t wszNumBuf[10];
     char szNumBuffer[12];
@@ -1711,6 +1721,7 @@ static void INV_FormatDurabilityText(uint16_t * wszText, D2UnitStrc * pUnit) {
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwDurabilitySuffix);
 }
 
+// 1.14d mac: 000bd3c4
 static void __stdcall INV_FormatStackCountText(int32_t nStackCount, uint16_t * wszText) {
     uint16_t wszNumBuffer[10];
     char szNumBuffer[12];
@@ -1736,6 +1747,7 @@ static void __stdcall INV_FormatStackCountText(int32_t nStackCount, uint16_t * w
 }
 
 // Writes the item's required strength (ItemsTxt nReqStr + nReqAdjust) as label + value; empty when the sum is < 1. Callers gate it on the requirement being non-zero and colour it red when unmet.
+// 1.14d mac: 000bd788
 static void __stdcall INV_FormatReqStrText(D2ItemsTxt * pItemsTxt, int32_t nReqAdjust, uint16_t * wszText) {
     uint16_t wszNumBuffer[10];
     char szNumBuffer[12];
@@ -1767,6 +1779,7 @@ static void __stdcall INV_FormatReqStrText(D2ItemsTxt * pItemsTxt, int32_t nReqA
 }
 
 // Writes the item's required dexterity (ItemsTxt wReqDex + nReqAdjust) as label + value; empty when the sum is < 1. Callers gate it on the requirement being non-zero and colour it red when unmet.
+// 1.14d mac: 000bd695
 static void __stdcall INV_FormatReqDexText(D2ItemsTxt * pItemsTxt, int32_t nReqAdjust, uint16_t * wszText) {
     uint16_t wszNumBuffer[10];
     char szNumBuffer[12];
@@ -1797,6 +1810,7 @@ static void __stdcall INV_FormatReqDexText(D2ItemsTxt * pItemsTxt, int32_t nReqA
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorSuffix);
 }
 
+// 1.14d mac: 000bef90
 static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat eMinDmgStat, eD2UnitStat eMaxDmgStat, int * pnOutMin, int * pnOutMax, int * pbOutModified, D2UnitStrc * pItem) {
     *pnOutMin = 1;
     *pnOutMax = 2;
@@ -1856,6 +1870,7 @@ static void __stdcall INV_CalcWeaponDamageRange(D2UnitStrc * pUnit, eD2UnitStat 
 }
 
 // Formats weapon damage text for item tooltips, handling one-handed, two-handed, barbarian dual-wield, throwable, and missile potion damage display. Calculates min/max damage based on weapon type, applies color coding for modified stats, and formats elemental damage for missile potions with duration scaling.
+// 1.14d mac: 000bd87b
 void __stdcall szPrintfBuffer(D2UnitStrc * pUnit, uint16_t * wszText) {
     int32_t nElemMinDamage;
     int32_t nElemDuration;
@@ -2074,6 +2089,7 @@ void __stdcall szPrintfBuffer(D2UnitStrc * pUnit, uint16_t * wszText) {
     return;
 }
 
+// 1.14d mac: 000be922
 static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt * pItemsTxt, D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill;
     BOOL eHolyShieldState;
@@ -2137,6 +2153,7 @@ static void __stdcall INV_FormatBlockChanceText(uint16_t * wszText, D2ItemsTxt *
 }
 
 // Formats defense range text for shields and boots, displaying min-max defense values. For shields, checks if Holy Shield skill is active and adds its defense bonus to both min and max values before formatting the output string.
+// 1.14d mac: 000be6de
 static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt * pStatRecord, uint16_t * wszText) {
     uint16_t wszNumber[10];
     char szNumber[12];
@@ -2184,6 +2201,7 @@ static void __stdcall INV_FormatDefenseRangeText(D2UnitStrc * pUnit, D2ItemsTxt 
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, pwColorSuffix);
 }
 
+// 1.14d mac: 000beae1
 void __stdcall INV_FormatArmorClassText(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, uint16_t * wszText) {
     uint16_t wszArmorValue[10];
     char szNumBuffer[12];
@@ -2290,6 +2308,7 @@ static void AppendQuanity(uint16_t * wszText, D2UnitStrc * pUnit) {
     D2Lang::Unicode::UNISYS::AppendToBuffer(wszText, wszText2);
 }
 
+// 1.14d mac: 000be4b0
 static void __stdcall INV_FormatAttackSpeedText(uint16_t * wszText, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint16_t uint16_t_ARRAY_00721e88[19] = {
@@ -2706,6 +2725,7 @@ static D2UnitStrc * GetSetItem(int32_t nId, D2InventoryStrc * pInventory) {
     return pCarriedItem;
 }
 
+// 1.14d mac: 000b679b
 static BOOL __stdcall INV_IsMouseInRect(int32_t nLeftX, int32_t nBottomY, int32_t nWidth, int32_t nHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -2716,6 +2736,7 @@ static BOOL __stdcall INV_IsMouseInRect(int32_t nLeftX, int32_t nBottomY, int32_
     return 0;
 }
 
+// 1.14d mac: 000b507a
 static BOOL INV_IsMouseOverWeaponSwapSlot(int32_t nX, int32_t nY) {
     if (nX >= gaPlayerBodySlotScreenCoords[5].nLeft && nX <= gaPlayerBodySlotScreenCoords[5].nRight && nY >= gaPlayerBodySlotScreenCoords[5].nTop - 0x18 && nY < gaPlayerBodySlotScreenCoords[5].nTop) {
       return 1;
@@ -2727,6 +2748,7 @@ static BOOL INV_IsMouseOverWeaponSwapSlot(int32_t nX, int32_t nY) {
     return 0;
 }
 
+// 1.14d mac: 000acc27
 void __stdcall INV_LoadBodySlotImages() {
     gpInvMercHelmetSlotImage = ui::ARCHIVE_LoadOverlayImageUsedInGame("Panel\\inv_armor");
     gpInvMercArmorSlotImage = ui::ARCHIVE_LoadOverlayImageUsedInGame("Panel\\inv_belt");
@@ -2752,6 +2774,7 @@ void __stdcall INV_LoadBodySlotImages() {
     gpInvMercBodyImage = 0;
 }
 
+// 1.14d mac: 000acd34
 void __stdcall INV_FreeBodySlotImages() {
     if (gpInvCubeImage4) {
       Core::Archive::DC6_FreeAndDelete(gpInvCubeImage4);
@@ -2834,6 +2857,7 @@ int32_t __stdcall INV_GetGoldButtonX() {
     return gnPanelOffsetX + 0x110;
 }
 
+// 1.14d mac: 000b0624
 int32_t __stdcall INV_GetGoldButtonY() {
     BOOL bExpansion = GAME::Game::CLIENT_CheckExpansion();
     if (!bExpansion) {
@@ -2946,6 +2970,7 @@ static void __stdcall INV_CalcGridCellFromMouse(D2UnitStrc * pUnit, int32_t nMou
     *pnRow = (int)nRow < 0 ? 0 : nRow;
 }
 
+// 1.14d mac: 000b3c98
 int __stdcall INV_CheckActionThrottle() {
     DWORD dwNow;
     eD2GSGameType eGameType = GAME::Game::CLIENT_GetD2GSGameType();
@@ -2994,6 +3019,7 @@ int __stdcall INV_IsCurrentInventoryPage1Or2() {
 
 namespace D2Client { namespace UI { namespace Inv {
 
+// 1.14d mac: 000b43b7
 static BOOL INV_IsMouseOverGoldButton(int32_t nX, int32_t nY) {
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
     pCursorItem_lcl = D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pCursorItem_lcl->pInventory);
@@ -3004,6 +3030,7 @@ static BOOL INV_IsMouseOverGoldButton(int32_t nX, int32_t nY) {
     return 0;
 }
 
+// 1.14d mac: 000b442d
 BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nMouseX, int32_t nMouseY) {
     if (nMouseX >= ui::ScreenSizeX - gnPanelOffsetX - 0x12e && nMouseX <= ui::ScreenSizeX - gnPanelOffsetX - 0x10e && nMouseY >= gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY <= gnPanelOffsetY - 0x40 + ScreenSizeY) {
       return 1;
@@ -3012,6 +3039,7 @@ BOOL __fastcall INV_IsMouseOverCloseButton(int32_t nMouseX, int32_t nMouseY) {
     return 0;
 }
 
+// 1.14d mac: 000b5172
 static void __stdcall INV_HandleHighResDropClick(int32_t nMouseY, D2UIMouseMsgStrc * pMsg, int32_t nMouseX) {
     DWORD eResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (eResMode != 2) {
@@ -3044,6 +3072,7 @@ static void __stdcall INV_HandleHighResDropClick(int32_t nMouseY, D2UIMouseMsgSt
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000b5231
 void __stdcall INV_HandleInventoryRightClick(D2UIMouseMsgStrc * pMsg) {
     int32_t nY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     int32_t nX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
@@ -3083,6 +3112,7 @@ void __stdcall INV_HandleInventoryRightClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000b592a
 static void __stdcall INV_UpdateItemUnderCursor(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, D2UnitStrc * pCursorItem, uint32_t nMouseX, int32_t nMouseY, uint32_t nPage, D2GridScreenCoordinates * pGridLayout) {
     int nCellX;
     int nCellY;
@@ -3215,6 +3245,7 @@ static void __stdcall INV_UpdateBodySlotUnderCursor(int32_t nBodyLoc, D2UnitStrc
     }
 }
 
+// 1.14d mac: 000b5338
 void __stdcall INV_HandleMouseMove(D2UIMouseMsgStrc * pMsg) {
     uint32_t bIsDead;
     D2UnitStrc* pCursorItem_lcl;
@@ -3375,6 +3406,7 @@ void __stdcall INV_HandleMouseMove(D2UIMouseMsgStrc * pMsg) {
     CurrentInventoryPage = bySavedPage;
 }
 
+// 1.14d mac: 000b5ded
 static int32_t __stdcall ClickItemRight(int32_t nMouseX, int32_t nMouseY, uint8_t nPage, D2UnitStrc * pPlayer, D2InventoryStrc * pInventory) {
     uint32_t nCol;
     uint32_t nRowOffset;
@@ -3479,6 +3511,7 @@ static int32_t __stdcall ClickItemRight(int32_t nMouseX, int32_t nMouseY, uint8_
 }
 
 // Resets the shop/inventory panel UI state. Fifty-six bytes whose only writes are stores to globals through EAX, so it preserves ECX. Typed __stdcall, the decompiler treated ECX as killed by the call, and INV_HandleShopLeftClick carries its button-loop stride there across two calls to this function - the stride became an unassigned local and the shop button scan advanced by garbage.
+// 1.14d mac: 000b60f8
 void __fastcall INV_ResetHoverAndContextState() {
     gaInventoryItemSlots = -1;
     gaInventoryState = -1;
@@ -3492,6 +3525,7 @@ void __fastcall INV_ResetHoverAndContextState() {
     gpInvHoveredItem = 0;
 }
 
+// 1.14d mac: 000b6161
 void __fastcall INV_ClearItemDescription(D2UnitStrc * pUnit) {
     if (pItemToDescribe != pUnit) {
       return;
@@ -3509,6 +3543,7 @@ void __fastcall INV_ClearItemDescription(D2UnitStrc * pUnit) {
     gpInvHoveredItem = 0;
 }
 
+// 1.14d mac: 000af740
 void __stdcall INV_SetShopPageFromNpc(uint8_t byPage) {
     D2UnitStrc* pCarriedItem;
     D2NpcShopTabStrc* pTabState;
@@ -3583,6 +3618,7 @@ void __stdcall INV_SetShopPageFromNpc(uint8_t byPage) {
     gaNpcShopTabs[nNextPage].nSelected = 1;
 }
 
+// 1.14d mac: 000b61d5
 void __stdcall INV_ResetInventoryState() {
     g_nCurrentInventoryPage = 0;
     CurrentInventoryPage = 0;
@@ -3597,15 +3633,18 @@ void __stdcall INV_ResetInventoryState() {
     gdwInvLastActionTickCount = 0;
 }
 
+// 1.14d mac: 000b6648
 void __stdcall INV_SetRefreshFlag() {
     gbInvNeedsRefresh = 1;
 }
 
+// 1.14d mac: 000b665a
 void __stdcall INV_SetMercInventoryMode() {
     CurrentInventoryPage = 0;
     g_nCurrentInventoryPage = 0x13;
 }
 
+// 1.14d mac: 000b6a8c
 static void __stdcall INV_HandleShopAction(DWORD nAction, D2UnitStrc * pTarget, D2UnitStrc * pUnit, DWORD dwSell, DWORD dwParam2, DWORD bSkipConfirm, DWORD dwMode) {
     if (!pTarget) {
       return;
@@ -3622,6 +3661,7 @@ static void __stdcall INV_HandleShopAction(DWORD nAction, D2UnitStrc * pTarget, 
     Cursor::ITEM_SetItemOnHand(nullptr);
 }
 
+// 1.14d mac: 000b60ae
 int __stdcall INV_EnterShopMode() {
     gaNpcShopButtons[0].nDrawCallback = 0;
     gaNpcShopButtons[1].nDrawCallback = 0;
@@ -3634,6 +3674,7 @@ int __stdcall INV_EnterShopMode() {
     return 1;
 }
 
+// 1.14d mac: 000b6676
 void __stdcall INV_ReturnToShopFromRepair() {
     if (g_nCurrentInventoryPage != 5) {
       return;
@@ -3649,6 +3690,7 @@ void __stdcall INV_ReturnToShopFromRepair() {
     Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
 }
 
+// 1.14d mac: 000b6693
 void __stdcall INV_SetRepairMode() {
     if (g_nCurrentInventoryPage != 5) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ea1);
@@ -3658,6 +3700,7 @@ void __stdcall INV_SetRepairMode() {
     g_nCurrentInventoryPage = 6;
 }
 
+// 1.14d mac: 000b66db
 BOOL __stdcall INV_TrySetRepairMode() {
     if (g_nCurrentInventoryPage == 6) {
       return 0;
@@ -3667,6 +3710,7 @@ BOOL __stdcall INV_TrySetRepairMode() {
     return 1;
 }
 
+// 1.14d mac: 000b6705
 void __stdcall INV_SelectDefaultNpcButton() {
     gnInvShopButton = -1;
     for (int nButtonIdx = 0; nButtonIdx < gaNpcShopButtonTable[0]; nButtonIdx++) {
@@ -3686,10 +3730,12 @@ void __stdcall INV_SelectDefaultNpcButton() {
     Cursor::ITEM_SetItemOnHand(pCursorItem_lcl);
 }
 
+// 1.14d mac: 000b6744
 void __stdcall INV_SetIdentifyMode() {
     g_nCurrentInventoryPage = 7;
 }
 
+// 1.14d mac: 000b6759
 void __stdcall INV_ExitIdentifyMode() {
     if (g_nCurrentInventoryPage != 7) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1ed3);
@@ -4116,6 +4162,7 @@ int Unreferenced_00488890() {
     return 1;
 }
 
+// 1.14d mac: 000b6afc
 BOOL __stdcall INV_CanReturnToShop() {
     if (g_nCurrentInventoryPage == 1 || g_nCurrentInventoryPage == 2 || g_nCurrentInventoryPage == 4 || g_nCurrentInventoryPage == 3) {
       D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();
@@ -4135,6 +4182,7 @@ BOOL __stdcall INV_CanReturnToShop() {
     }
 }
 
+// 1.14d mac: 000b6b5a
 void __stdcall INV_HandleShopEscapeKey(D2UIMouseMsgStrc * pMsg) {
     if (!(g_nCurrentInventoryPage == 1 || g_nCurrentInventoryPage == 2 || g_nCurrentInventoryPage == 3 || g_nCurrentInventoryPage == 4 || g_nCurrentInventoryPage == 9)) {
       return;
@@ -4168,6 +4216,7 @@ void __stdcall INV_HandleShopEscapeKey(D2UIMouseMsgStrc * pMsg) {
     gaInventorySelectState = -1;
 }
 
+// 1.14d mac: 000b6c50
 void __stdcall INV_HandleShopMouseMove(D2UIMouseMsgStrc * pMsg) {
     D2InventoryStrc* pInventory;
     int32_t nMsg;
@@ -4209,6 +4258,7 @@ void __stdcall INV_HandleShopMouseMove(D2UIMouseMsgStrc * pMsg) {
     INV_HandleMouseMove(pUnderMouse);
 }
 
+// 1.14d mac: 000b7515
 void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
     BOOL BVar1;
     int nButtonCount;
@@ -4346,6 +4396,7 @@ void __stdcall INV_HandleShopLeftClick(D2UIMouseMsgStrc * pMsg) {
     npcmenu::NPCMENU_CloseShopUI();
 }
 
+// 1.14d mac: 000b78ca
 void __stdcall INV_ConsumeInputEvent(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -4359,6 +4410,7 @@ static void INV_UpdateNpcButtonHighlightState(uint32_t nSelection) {
     gaNpcShopButtons[3].nDrawCallback = (uint32_t)(gaNpcShopButtons[3].wCurrentSelection == nSelection);
 }
 
+// 1.14d mac: 000b78e4
 void __stdcall INV_HandleShopEnterKey(D2UIMouseMsgStrc * pMsg) {
     BOOL bChatboxActive = ui::UI_GetFlag(UI_CHATBOX);
     if (bChatboxActive) {
@@ -4388,6 +4440,7 @@ void __stdcall INV_HandleShopRightClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000b7947
 void __stdcall INV_HandleShopReturnAction() {
     int nItemType;
     int32_t nInteractedUnitGuid;
@@ -4449,6 +4502,7 @@ BOOL __stdcall INV_HandleInventoryMouseMove(D2UIMouseMsgStrc * pMsg) {
     return FALSE;
 }
 
+// 1.14d mac: 000b7b3c
 BOOL __stdcall INV_HandleInventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
@@ -4491,6 +4545,7 @@ BOOL __fastcall INV_HandleInventoryLeftDown(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Loads shop tab UI images (invshop1.dc6, invshop2.dc6, invshop3.dc6) from DATA\GLOBAL directory. Constructs file paths using format strings from global text pool and loads DC6 graphics via IMAGE_LoadDC6Ex. Third tab only loads in Expansion mode.
+// 1.14d mac: 000b7c57
 void __stdcall INV_LoadShopTabImages() {
     char szPathBuffer[260];
     if (!UI_GFX) {
@@ -4519,6 +4574,7 @@ void __stdcall INV_LoadShopTabImages() {
     gpInvShopTab2Image = Core::Archive::IMAGE_LoadDC6Ex(szPathBuffer, 0);
 }
 
+// 1.14d mac: 000b7d81
 void __stdcall INV_FreeShopTabImages() {
     if (gpInvShopTabImage) {
       Core::Archive::DC6_FreeAndDelete(gpInvShopTabImage);
@@ -4543,6 +4599,7 @@ void __stdcall INV_FreeShopTabImages() {
 }
 
 // Initializes trade mode UI. Clears gbInventoryDragInProgress flag, sets up trade window inventory grids, loads partner inventory data. Called when trade UI opens.
+// 1.14d mac: 000b7e0b
 void __fastcall INV_InitTradeMode(int32_t nTradeMode) {
     if (gbInvTradeWindowOpen || gbInvTradeWindowOpen2) {
       Sound::SOUND_PlaySound(SOUND_CURSOR_ERROR, nullptr, 0, 0, 0);
@@ -4572,6 +4629,7 @@ void __fastcall INV_InitTradeMode(int32_t nTradeMode) {
     gbInvTradeCancelClicked = 0;
 }
 
+// 1.14d mac: 000b8315
 static BOOL __stdcall INV_IsMouseOverAcceptTradeBtn(int32_t nMouseX, int32_t nMouseY) {
     if (nMouseX > gnPanelOffsetX + 0xdf && nMouseX < gnPanelOffsetX + 0xff && nMouseY > gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY < gnPanelOffsetY - 0x40 + ScreenSizeY) {
       return 1;
@@ -4580,6 +4638,7 @@ static BOOL __stdcall INV_IsMouseOverAcceptTradeBtn(int32_t nMouseX, int32_t nMo
     return 0;
 }
 
+// 1.14d mac: 000b8367
 static BOOL INV_IsMouseOverCancelTradeBtn(int32_t nMouseY, int32_t nMouseX) {
     if (nMouseX > gnPanelOffsetX + 0x113 && nMouseX < gnPanelOffsetX + 0x133 && nMouseY > gnPanelOffsetY - 0x60 + ScreenSizeY && nMouseY < gnPanelOffsetY - 0x40 + ScreenSizeY) {
       return 1;
@@ -4588,6 +4647,7 @@ static BOOL INV_IsMouseOverCancelTradeBtn(int32_t nMouseY, int32_t nMouseX) {
     return 0;
 }
 
+// 1.14d mac: 000b7f42
 void __stdcall INV_HandleTradeMouseMove(D2UIMouseMsgStrc * pMsg) {
     if (g_nCurrentInventoryPage != 0xb) {
       return;
@@ -4605,6 +4665,7 @@ void __stdcall INV_HandleTradeMouseMove(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Handles left-click in trade window. Sets/clears gbInventoryDragInProgress based on cursor state. Picks up item from trade grid or places item, sends trade update packet to partner.
+// 1.14d mac: 000b83b9
 void __stdcall INV_HandleTradeLeftClick(D2UIMouseMsgStrc * pMsg) {
     if (g_nCurrentInventoryPage != 0xb) {
       gShopTradeUIState = 0;
@@ -4719,6 +4780,7 @@ void __stdcall INV_HandleTradeRightClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000b85ee
 void __stdcall INV_HandleTradeEscapeKey(D2UIMouseMsgStrc * pMsg) {
     if (g_nCurrentInventoryPage != 0xb) {
       return;
@@ -4735,6 +4797,7 @@ void __stdcall INV_HandleTradeEscapeKey(D2UIMouseMsgStrc * pMsg) {
     Trade::TRADE_CloseTrade();
 }
 
+// 1.14d mac: 000b863d
 void __fastcall INV_PlayTradeStatusSound(int32_t bLocalAcceptState, int32_t bPartnerAcceptState) {
     if ((gbInvTradeWindowOpen || gbInvTradeWindowOpen2) && (!bLocalAcceptState || !bPartnerAcceptState)) {
       Sound::SOUND_PlaySound(SOUND_CURSOR_ERROR, nullptr, 0, 0, 0);
@@ -4746,6 +4809,7 @@ void __fastcall INV_PlayTradeStatusSound(int32_t bLocalAcceptState, int32_t bPar
     gbInvTradeWindowOpen2 = bPartnerAcceptState;
 }
 
+// 1.14d mac: 000b86e5
 BOOL __stdcall INV_IsShopBuySellMode() {
     if (g_nCurrentInventoryPage != 1 && g_nCurrentInventoryPage != 2 && g_nCurrentInventoryPage != 3) {
       return 0;
@@ -4754,10 +4818,12 @@ BOOL __stdcall INV_IsShopBuySellMode() {
     return 1;
 }
 
+// 1.14d mac: 000b86ff
 uint32_t __stdcall INV_IsRepairMode() {
     return (uint32_t)(g_nCurrentInventoryPage == 4);
 }
 
+// 1.14d mac: 000b871a
 BOOL __stdcall INV_GetGambleFlag() {
     return gbInvGambleMode;
 }
@@ -4771,6 +4837,7 @@ void __stdcall INV_StashOpened() {
     g_nCurrentInventoryPage = 0xc;
 }
 
+// 1.14d mac: 000b8754
 void __fastcall INV_StashOpenedWithGold(int nTransactionType) {
     gbInvGoldDialogOpen = 1;
     if (g_nCurrentInventoryPage == 0xd) {
@@ -4780,6 +4847,7 @@ void __fastcall INV_StashOpenedWithGold(int nTransactionType) {
     ui::SetUIFlag(UI_CHATBOX, UI_RESET, 0);
 }
 
+// 1.14d mac: 000b879e
 void __fastcall INV_SetInventoryActive(int32_t bActive) {
     gnInventoryActiveUnitId = bActive;
     if (bActive) {
@@ -4798,6 +4866,7 @@ void __fastcall INV_SetInventoryActive(int32_t bActive) {
     gpInvHoveredItem = 0;
 }
 
+// 1.14d mac: 000b8bcc
 static BOOL INV_IsMouseOverStashCloseBtn(int32_t nMouseX, int32_t nMouseY) {
     int nBottomY;
     BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
@@ -4821,6 +4890,7 @@ static BOOL INV_IsMouseOverStashCloseBtn(int32_t nMouseX, int32_t nMouseY) {
     return 1;
 }
 
+// 1.14d mac: 000b8c52
 static BOOL INV_IsMouseOverStashGoldBtn(int32_t nMouseY, int32_t nMouseX) {
     int nBtnBound;
     BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
@@ -4861,6 +4931,7 @@ void Unreferenced_00489a10() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 0x12, 0, 0);
 }
 
+// 1.14d mac: 000b8814
 void __stdcall INV_HandleStashMouseMove(D2UIMouseMsgStrc * pMsg) {
     if (g_nCurrentInventoryPage != 0xc && g_nCurrentInventoryPage != 0xd) {
       return;
@@ -4883,6 +4954,7 @@ void __stdcall INV_HandleStashMouseMove(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Handles left-click in stash window. Sets/clears gbInventoryDragInProgress based on cursor state. Picks up item from stash grid or places item, sends stash update packet to server.
+// 1.14d mac: 000b8cce
 void __stdcall INV_HandleStashLeftClick(D2UIMouseMsgStrc * pMsg) {
     BOOL nHitTest;
     if (g_nCurrentInventoryPage != 0xc && g_nCurrentInventoryPage != 0xd) {
@@ -4993,6 +5065,7 @@ void __stdcall INV_PanelKeyNoOp_Unref_00489cd0(D2UIMouseMsgStrc * pMsg) {
 
 }
 
+// 1.14d mac: 000b8f24
 void __stdcall INV_HandleStashEscapeKey(D2UIMouseMsgStrc * pMsg) {
     if (g_nCurrentInventoryPage != 0xc) {
       return;
@@ -5020,6 +5093,7 @@ void __stdcall INV_HandleStashEscapeKey(D2UIMouseMsgStrc * pMsg) {
     gpInvHoveredItem = 0;
 }
 
+// 1.14d mac: 000b9012
 void __stdcall INV_HandleStashRightClick(D2UIMouseMsgStrc * pMsg) {
     if (!(pMsg->uLParam.nLParam & 0x40000000U)) {
       ui::UI_ToggleBeltRows();
@@ -5030,6 +5104,7 @@ void __stdcall INV_HandleStashRightClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000b90fa
 void __fastcall INV_SetStashNpcGuid(D2UnitStrc * pUnit) {
     if ((!pUnit ? -1 : pUnit->nClassId) != 0x10b) {
       return;
@@ -5051,6 +5126,7 @@ void __fastcall INV_SetStashNpcGuid(D2UnitStrc * pUnit) {
     gnStashNpcGuid = pUnit->nUnitGUID;
 }
 
+// 1.14d mac: 000b9087
 void __stdcall CloseStash2() {
     DWORD bWasStashOpen = ui::SetUIFlag(UI_STASH, UI_SET, 0);
     if (!bWasStashOpen) {
@@ -5068,6 +5144,7 @@ void __stdcall CloseStash2() {
 }
 
 // Loads stash UI images (invstash.dc6 and invstashex.dc6 for Expansion) from DATA\GLOBAL directory. Clears the inventory overlay flag and constructs file paths using format strings from global text pool before loading DC6 graphics via IMAGE_LoadDC6Ex.
+// 1.14d mac: 000b9175
 void __stdcall INV_LoadStashImages() {
     char szPathBuffer[260];
     gbInvOverlayFlag = 0;
@@ -5086,6 +5163,7 @@ void __stdcall INV_LoadStashImages() {
     gpInvStashImage2 = Core::Archive::IMAGE_LoadDC6Ex(szPathBuffer, 0);
 }
 
+// 1.14d mac: 000b923e
 void __stdcall INV_FreeStashImages() {
     if (g_nCurrentInventoryPage == 0xc || g_nCurrentInventoryPage == 0xd) {
       g_nCurrentInventoryPage = 0;
@@ -5104,6 +5182,7 @@ void __stdcall INV_FreeStashImages() {
     gpInvStashImage2 = 0;
 }
 
+// 1.14d mac: 000b92e1
 void __stdcall CloseStash() {
     if (g_nCurrentInventoryPage == 0xc || g_nCurrentInventoryPage == 0xd) {
       g_nCurrentInventoryPage = 0;
@@ -5121,6 +5200,7 @@ void __stdcall CloseStash() {
     gpInvStashImage2 = 0;
 }
 
+// 1.14d mac: 000b0660
 static BOOL __stdcall INV_IsMouseOverTransmuteBtn(int32_t nX, int32_t nY) {
     if (nX > gnPanelOffsetX + 0x113 && nX < gnPanelOffsetX + 0x13b && nY > gnPanelOffsetY - 100 + ScreenSizeY && nY < gnPanelOffsetY - 0x3c + ScreenSizeY) {
       return 1;
@@ -5129,6 +5209,7 @@ static BOOL __stdcall INV_IsMouseOverTransmuteBtn(int32_t nX, int32_t nY) {
     return 0;
 }
 
+// 1.14d mac: 000b06b2
 static BOOL CheckSomeCoords(int32_t nX, int32_t nY) {
     if (nX > gnPanelOffsetX + 0x90 && nX < gnPanelOffsetX + 0xb8 && nY > gnPanelOffsetY - 0xdf + ScreenSizeY && nY < gnPanelOffsetY - 0xb7 + ScreenSizeY) {
       return 1;
@@ -5137,6 +5218,7 @@ static BOOL CheckSomeCoords(int32_t nX, int32_t nY) {
     return 0;
 }
 
+// 1.14d mac: 000b99a0
 void __stdcall CloseCube() {
     gpInvCubeImage1 = 0;
     ui::SetUIFlag(UI_CUBE, UI_RESET, 0);
@@ -5160,6 +5242,7 @@ void __fastcall Transmute(int32_t nParam) {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 0x18, 0, 0);
 }
 
+// 1.14d mac: 000b9360
 void __stdcall INV_HandleCubeMouseMove(D2UIMouseMsgStrc * pMsg) {
     if (g_nCurrentInventoryPage != 0xe) {
       return;
@@ -5180,6 +5263,7 @@ void __stdcall INV_HandleCubeMouseMove(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Handles left-click in cube window. Sets/clears gbInventoryDragInProgress based on cursor state. Picks up item from cube grid or places item, validates cube placement rules.
+// 1.14d mac: 000b974f
 void __stdcall INV_HandleCubeLeftClick(D2UIMouseMsgStrc * pMsg) {
     BOOL nHitTest;
     if (g_nCurrentInventoryPage != 0xe) {
@@ -5294,6 +5378,7 @@ void __stdcall INV_HandleCubeRightClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000b9a4d
 void __stdcall INV_HandleCubeEscapeKey(D2UIMouseMsgStrc * pMsg) {
     if (g_nCurrentInventoryPage != 0xe) {
       return;
@@ -5332,6 +5417,7 @@ void __stdcall INV_HandleCubeEscapeKey(D2UIMouseMsgStrc * pMsg) {
 // Sole caller is NET_D2GS_CLIENT_Incoming0x77, subcommand 0x15.
 // 0048a050 (CloseCube) is the close - SetUIFlag(UI_CUBE, UI_RESET, 0), plus the client-to-server
 // 0x4F/0x17 notify and the stash-NPC interact.
+// 1.14d mac: 000b9b0f
 void __stdcall OpenCube() {
     DWORD bWasCubeOpen = ui::SetUIFlag(UI_CUBE, UI_SET, 0);
     if (!bWasCubeOpen) {
@@ -5348,6 +5434,7 @@ void __stdcall OpenCube() {
     gbInvCubeWithdrawClicked = 0;
 }
 
+// 1.14d mac: 000b9b7b
 void __stdcall INV_LoadCubeImages() {
     char szPathBuffer[260];
     gbInvOverlayFlag = 0;
@@ -5359,6 +5446,7 @@ void __stdcall INV_LoadCubeImages() {
     gpInvCubeBgImage = Core::Archive::IMAGE_LoadDC6Ex(szPathBuffer, 0);
 }
 
+// 1.14d mac: 000b9bfb
 void __stdcall INV_FreeCubeImages() {
     if (g_nCurrentInventoryPage == 0xe) {
       g_nCurrentInventoryPage = 0;
@@ -5372,6 +5460,7 @@ void __stdcall INV_FreeCubeImages() {
     gpInvCubeBgImage = 0;
 }
 
+// 1.14d mac: 000b9c43
 void __fastcall INV_StartCubeTransmuteAnim(int32_t nMenuActionId) {
     BOOL bAlreadyDone;
     char szPathBuffer[260];
@@ -5428,6 +5517,7 @@ void __stdcall INV_FreeItemGfxCache() {
 }
 
 // EDI is not an argument: the body never reads it.
+// 1.14d mac: 000b9dbc
 void INV_HandleGambleMessage() {
     D2Packet0x5aEventStructure byMsgType;
     g_nCurrentInventoryPage = 1;
@@ -5445,6 +5535,7 @@ void __stdcall INV_ResetOverlayFlag() {
     gbInvOverlayFlag = 0;
 }
 
+// 1.14d mac: 000b9e2e
 void __stdcall INV_ResetShopState() {
     gShopTradeUIState = 0;
     g_nCurrentInventoryPage = 0;
@@ -5465,10 +5556,12 @@ void __stdcall INV_SetItemDescPending() {
     gpInvItemDescPending = 1;
 }
 
+// 1.14d mac: 000b9e9a
 void __stdcall INV_ClearItemDescPending() {
     gpInvItemDescPending = 0;
 }
 
+// 1.14d mac: 000b9eac
 void __stdcall INV_ToggleExpansionTab() {
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     if (!bIsExpansion) {
@@ -5483,6 +5576,7 @@ void __stdcall INV_ToggleExpansionTab() {
     gbInvExpansionTabVisible = (uint32_t)!gbInvExpansionTabVisible;
 }
 
+// 1.14d mac: 000b50d7
 void __stdcall INV_SwapWeaponSet() {
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
     if (!bIsExpansion) {
@@ -6112,6 +6206,7 @@ void __stdcall INV_DrawHirelingEmptySlots(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 000ba02f
 static int32_t __stdcall INV_CanHirelingEquipItem(D2UnitStrc * pUnit, D2UnitStrc * pItem, bool * pbSlotMatch) {
     int32_t nMercClassId;
     eD2ItemTypes eItemType;
@@ -6243,6 +6338,7 @@ static int32_t __stdcall INV_CanHirelingEquipItem(D2UnitStrc * pUnit, D2UnitStrc
     return bCanEquip;
 }
 
+// 1.14d mac: 000b9ee5
 void __fastcall INV_DrawHirelingCursorHighlight(D2UnitStrc * pUnit) {
     int nMouseX;
     int nMouseY;
@@ -6328,6 +6424,7 @@ static void INV_DrawHirelingEquippedItems(D2UnitStrc * pMercUnit) {
     }
 }
 
+// 1.14d mac: 000ba2b4
 D2UnitStrc * Unreferenced_0048b640() {
     int32_t iVar2 = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (iVar2 != -1) {
@@ -6342,6 +6439,7 @@ D2UnitStrc * Unreferenced_0048b640() {
     return nullptr;
 }
 
+// 1.14d mac: 000bb6a4
 void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
     int nScreenBottom;
     int nMouseX;
@@ -6393,6 +6491,7 @@ void __stdcall INV_HandleMercInvLeftDown(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Handles left-click events in mercenary inventory UI. Checks for close button click, then iterates through mercenary equipment slots to handle item equipping/unequipping. Validates item compatibility with mercenary, removes items client-side, sends 0x61 packet to server, and plays appropriate success/failure sounds.
+// 1.14d mac: 000bb7c9
 void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
     int iMouseX;
     int iMouseY;
@@ -6505,6 +6604,7 @@ void __stdcall INV_HandleMercInvLeftClick(D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 0);
 }
 
+// 1.14d mac: 000bbafe
 void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
     int32_t nMercGuid = GAME::RosterPets::GetRosterPetGUID(UNIT::Player::GetPlayerUnit_UI(), 7, 0);
     if (nMercGuid == -1) {
@@ -6560,12 +6660,14 @@ void __stdcall INV_HandleMercInvMouseMove(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000bbd2e
 void __fastcall CloseScrollOfWhatever(uint16_t * pThis, int, int32_t nColor) {
     D2Lang::Unicode::UNISYS::STRING_CopyWideString(gpInvRecipeScrollImage, pThis);
     gbInvRecipeScrollOpen = nColor;
     ui::SetUIFlag(UI_RECIPESCROLL, UI_SET, 0);
 }
 
+// 1.14d mac: 000bbd7b
 void __stdcall INV_DrawRecipeScroll() {
     D2GfxDataStrc sGfxData;
     BOOL bResult = GAME::Game::CLIENT_CheckExpansion();
@@ -6595,6 +6697,7 @@ void __stdcall INV_DrawRecipeScroll() {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 000bbf76
 void __stdcall INV_HandleRecipeScrollClick(D2UIMouseMsgStrc * pMsg) {
     int nBottomBound = ScreenSizeY - 0x31;
     int nRightBound = ui::ScreenSizeX / 2;
@@ -6615,6 +6718,7 @@ void __stdcall INV_PanelKeyNoOp(D2UIMouseMsgStrc * pMsg) {
 
 }
 
+// 1.14d mac: 000ab380
 void __fastcall INV_ExtractTextBetweenBrackets(uint16_t * wszText, short * wszDelimStart) {
     uint16_t wszExtracted[100];
     uint16_t wszCloseDelim[2] = {0x5b, 0};
@@ -7245,6 +7349,7 @@ void __fastcall GetItemName(D2UnitStrc * pUnit, uint16_t * wBuffer, int nSize) {
     ui::AppendAsWideChar(pwOutBuffer, 4);
 }
 
+// 1.14d mac: 000bcf68
 static void __stdcall INV_FormatItemTooltipWithCost(uint16_t * wszSrc, uint16_t * wszDest) {
     BOOL bIsEthereal;
     uint16_t* pwLocaleStr;
@@ -7799,6 +7904,7 @@ void __stdcall INV_ShowTransmogrifyTooltip() {
     }
 }
 
+// 1.14d mac: 000b0cac
 void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
     D2UnitStrc* pCursorItem_lcl;
     BOOL bFlagCheck;
@@ -8442,6 +8548,7 @@ void __stdcall LoadItemDesc(D2UnitStrc * pUnit, int32_t bUsePlayer) {
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(szItemDescription, nInventoryContextMode, nTextHeight + pInventoryContextUi, nTmpResult, 1);
 }
 
+// 1.14d mac: 000acef9
 void __stdcall DRAW_UI_Inventory() {
     // Static local variables (originally global data)
     static uint32_t gnHirelingHeadSlotImageSizeWidth = 0x0; D2_STATIC_GUARD(gnHirelingHeadSlotImageSizeWidth, "D2Client::UI::Inv::DRAW_UI_Inventory::gnHirelingHeadSlotImageSizeWidth");
@@ -8967,6 +9074,7 @@ void __stdcall DRAW_UI_Inventory() {
     LoadItemDesc(pSlotItem, nDrawTextWidth);
 }
 
+// 1.14d mac: 000b4483
 static BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, DWORD x, DWORD y, DWORD targetItem, D2InventoryLayout * pInvLayout, uint8_t nPage) {
     SHORT sCtrlKeyState;
     uint16_t nTargetSuffix;
@@ -9383,6 +9491,7 @@ static BOOL __stdcall ClickItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInven
     return 1;
 }
 
+// 1.14d mac: 000bc548
 uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t nBodySlot) {
     BOOL BVar1;
     eD2PlayerClassIDDWORD eVar2;
@@ -9632,6 +9741,7 @@ uint32_t __fastcall EQUIP_ItemRight(D2UnitStrc * pUnit, D2InventoryStrc * pInven
 }
 
 // Handles left-click equip action for inventory items. Checks equipment restrictions and sends network packets.
+// 1.14d mac: 000bca58
 uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t nBodySlot) {
     BOOL BVar1;
     eD2PlayerClassIDDWORD eVar2;
@@ -9880,6 +9990,7 @@ uint32_t __fastcall EQUIP_ItemLeft(D2UnitStrc * pUnit, D2InventoryStrc * pInvent
     return bReturnValue;
 }
 
+// 1.14d mac: 000bc1d9
 uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t bodyLocation) {
     int bResult;
     int32_t nEquipAction;
@@ -10018,6 +10129,7 @@ uint32_t __fastcall EQUIP_ItemDefault(D2UnitStrc * pUnit, D2InventoryStrc * pInv
     return bReturnValue;
 }
 
+// 1.14d mac: 000b3cf8
 void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
     // Static local variables (originally global data)
     static D2BodyClickTable BodyClickTable = {
@@ -10271,6 +10383,7 @@ void __stdcall ClickItemHandler(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000b5c72
 void __stdcall INPUT_InventoryRightClick(D2UIMouseMsgStrc * pMsg) {
     if (GAME::Game::GAMEDATA_GetExitFlag3() || UNIT::Player::IsPlayerDead()) {
       pMsg->bHandled = 0;
@@ -10324,6 +10437,7 @@ void __stdcall INPUT_InventoryRightClick(D2UIMouseMsgStrc * pMsg) {
     }
 }
 
+// 1.14d mac: 000b6238
 void __stdcall SelectDefaultTabForNPC() {
     D2NpcShopTabStrc* pTabState;
     int nTabCount;
@@ -10388,6 +10502,7 @@ void __stdcall SelectDefaultTabForNPC() {
     }
 }
 
+// 1.14d mac: 000b67e1
 void __stdcall INV_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
     D2UIMouseMsgStrc* pUnderMouseArg;
     D2UnitStrc* pMyUnit;
@@ -10511,6 +10626,7 @@ void __stdcall INV_HandleRightClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMouseMsg);
 }
 
+// 1.14d mac: 000b6d92
 void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
     // Frame slots -12..-4 are ONE object: &nNpcTopY is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -10769,6 +10885,7 @@ void __stdcall INPUT_InventoryLeftClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pUnderMouse2);
 }
 
+// 1.14d mac: 000b7ac5
 BOOL __stdcall INPUT_InventoryMouseMove(D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseY = (int32_t)pMsg->uLParam.sMousePos.nMouseY;
     int32_t nMouseX = (int32_t)pMsg->uLParam.sMousePos.nMouseX;
@@ -10786,6 +10903,7 @@ BOOL __stdcall INPUT_InventoryMouseMove(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Input handler for trade screen left-click. Maps mouse coords to trade grid, calls INV_HandleTradeLeftClick. Clears gbInventoryDragInProgress on cancel, sets on drag start.
+// 1.14d mac: 000b807a
 void __stdcall INPUT_TradeScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
     if (g_nCurrentInventoryPage != 0xb) {
       return;
@@ -10884,6 +11002,7 @@ void __stdcall INPUT_TradeScreenLeftClick(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Input handler for stash left-click. Maps mouse coords to stash grid, calls INV_HandleStashLeftClick. Clears gbInventoryDragInProgress on cancel, sets on drag start. Handles page switching.
+// 1.14d mac: 000b88d2
 void __stdcall INPUT_StashLeftClick(D2UIMouseMsgStrc * pMsg) {
     BOOL bInRange;
     if (g_nCurrentInventoryPage != 0xc && g_nCurrentInventoryPage != 0xd) {
@@ -10981,6 +11100,7 @@ void __stdcall INPUT_StashLeftClick(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000b903d
 void __stdcall INPUT_WeaponSwap(D2UIMouseMsgStrc * pMsg) {
     BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
     if (!bIsExpansion) {
@@ -10999,6 +11119,7 @@ void __stdcall INPUT_WeaponSwap(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Input handler for cube left-click. Maps mouse coords to cube grid, calls INV_HandleCubeLeftClick. Clears gbInventoryDragInProgress on cancel, sets on drag start. Handles transmute button.
+// 1.14d mac: 000b9430
 void __stdcall INPUT_CubeLeftClick(D2UIMouseMsgStrc * pMsg) {
     if (g_nCurrentInventoryPage != 0xe) {
       return;
@@ -11115,6 +11236,7 @@ void __stdcall INPUT_CubeLeftClick(D2UIMouseMsgStrc * pMsg) {
     gbInventoryDragInProgress = 0;
 }
 
+// 1.14d mac: 000ba313
 void __stdcall DrawMercInventory() {
     D2GfxDataStrc sGfxData;
     BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();

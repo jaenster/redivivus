@@ -203,6 +203,8 @@ int gnProfileUserExpansionFlag = 0; D2_GLOBAL_GUARD(gnProfileUserExpansionFlag, 
 
 namespace D2Multi { namespace OOGUtilities {
 
+// Not in the 1.14d Mac binary: it has no registry.
+#if !D2_OS_MAC
 static uint32_t __stdcall LAUNCHER_ReadRegistryValue(LPCSTR szSubKey, LPCSTR szValueName, LPBYTE pbData, DWORD dwDataSize, LPDWORD pdwDataSize) {
     DWORD dwValueType;
     HKEY hKey;
@@ -222,6 +224,7 @@ static uint32_t __stdcall LAUNCHER_ReadRegistryValue(LPCSTR szSubKey, LPCSTR szV
     /* HKEY hKey for RegCloseKey */ lStatus = RegCloseKey(hKey);
     return (uint32_t)!lStatus;
 }
+#endif
 
 int __stdcall OOG_DisableControlCallback(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&pGameListCache->sControl, 1);
@@ -229,6 +232,7 @@ int __stdcall OOG_DisableControlCallback(D2ControlMsg * pControlMsg) {
 }
 
 // Edit-box key filter installed via D2WINEDITBOX_SetMaxLength @004fdad0 (set site 00441087) into D2WinEditBox+0x268 (fpFilterCallback). Clears the TCP/IP game-list selection then returns 1. Signature proven by RET 0xc (3 stack args, callee cleans).
+// 1.14d mac: 002d471f
 int __stdcall EDITBOX_Cb_D2WINTEXTBOX_SetSelectedLine(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar) {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpCtlChannelList, -1);
     return 1;
@@ -244,9 +248,16 @@ int __stdcall OOG_WaitMCPThreadDonePump(int nFrameIndex) {
     return 1;
 }
 
+// 1.14d mac: 002d098a
 int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
     D2MCPClient::McpConnect::NET_MCP_CLIENT_ReadAndParsePacket();
     BOOL bCharLogonSuccess = D2MCPClient::McpConnect::MCPSTATE_GetCharLogonSuccess();
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac build tests only bit 0 of the restore result.
+    if (!bCharLogonSuccess && D2MCPClient::McpConnect::HasPeerName() && !(gnMCPConnectionRestoreResult & 1)) {
+      return 1;
+    }
+#else
     if (!bCharLogonSuccess) {
       int32_t bHasPeerName;
       bHasPeerName = D2MCPClient::McpConnect::HasPeerName();
@@ -254,6 +265,7 @@ int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
         return 1;
       }
     }
+#endif
 
     D2MCPClient::McpConnect::MCPSTATE_SetCharLogonSuccess(0);
     D2Win::Src::D2WinMain::D2WINMAIN_ClearMessageLoopFlag();
@@ -261,6 +273,25 @@ int __stdcall OOG_PollMCPCharLogonPump(int nFrameIndex) {
 }
 
 // Opens a URL in the default system browser by querying registry for .html file association. Reads "SOFTWARE\\Classes\\.html" to get file type, then reads "SOFTWARE\\Classes\\{type}\\shell\\open\\command" to get the command line. Appends the URL to the command string, creates a process via CreateProcessA with NORMAL_PRIORITY_CLASS flag, and closes process handles. Shows error dialog (locale 5340) if registry lookup fails. Uses 1024-byte buffers for registry paths and 1025-byte buffer for final command line construction.
+#if D2_OS_MAC
+// 1.14d mac: 002cdd63
+int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
+    char* pszUrl;
+    pszUrl = pNetworkUnknown->pfnSendQueryAdURL(ghBannerAdProcess);
+    if (!pszUrl || !*pszUrl) {
+      return 1;
+    }
+
+    if (::STORM_LaunchURL(pszUrl)) {
+      pNetworkUnknown->pfnSendClickAd(ghBannerAdProcess, 1);
+      ChatDlg::UIMENU_DrawTitleOnCenterSmaller(D2Lang::StrTable::strtable::GetLocaleString(0x14dc), nullptr);
+      return 0;
+    }
+
+    pNetworkUnknown->pfnSendClickAd(ghBannerAdProcess, 0);
+    return 1;
+}
+#else
 int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
     char szFileType[2048];
     char szRegistryCommandPath[1024];
@@ -304,6 +335,7 @@ int __stdcall OOGUTIL_OpenBrowserWithURL(D2ControlMsg * pControlMsg) {
     pNetworkUnknown->pfnSendClickAd(ghBannerAdProcess, (uint32_t)!bLaunched);
     return 1;
 }
+#endif
 
 // Opens the Create/Join Channels dialog: title 0x148d "Create/Join Channels", labels 0x148e "Channel Name" and 0x148f "Channels", the channel-name edit box gpCtlChannelNameEditBox (submit OOGUTIL_JoinChannelFromInput) prefilled with gszCurrentChannelName, the OK button gpCtlChannelOkButton and the channel list gpCtlChannelList filled with the two channel names saved in the multiplayer ini data, then the names returned by pfnSendGetChannelList.
 // Provenance: asm 00440fc0; forms gaPredefinedForms_b[0x38..0x3f]; called from CHATDLG_DestroyFormsAndOpenChannelDialog, the OnPress of the lobby CHANNEL button.
@@ -370,6 +402,7 @@ void __stdcall OOGUTIL_OpenChannelDialog() {
     } while (true);
 }
 
+// 1.14d mac: 002cffdc
 void __fastcall OOGUTIL_JoinChannelAndDestroyForms(char * szChannelName) {
     pNetworkUnknown->pfnSendJoinChannel(szChannelName, 0, 0);
     ChatDlg::CHATDLG_DestroyAllForms();
@@ -380,6 +413,7 @@ void __fastcall OOGUTIL_JoinChannelAndDestroyForms(char * szChannelName) {
     gpChatFormList = 0;
 }
 
+// 1.14d mac: 002ce1d4
 int __stdcall OOGUTIL_JoinChannelFromInput(D2ControlStrc * dwUnused) {
     BOOL bVisible = D2Win::Src::D2WinMain::D2WINMAIN_GetControlVisible(gpCtlChannelOkButton);
     if (!bVisible) {
@@ -396,6 +430,7 @@ int __stdcall OOGUTIL_JoinChannelFromInput(D2ControlStrc * dwUnused) {
     return 1;
 }
 
+// 1.14d mac: 002cddf2
 int __stdcall OOGUTIL_JoinDefaultChannel(D2ControlMsg * pControlMsg) {
     char szDefaultChannel[32];
     BOOL nIsConnected = pNetworkUnknown->pfnIsSocketConnected();
@@ -421,6 +456,7 @@ int __stdcall OOGUTIL_JoinDefaultChannel(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002ce27c
 int __stdcall OOGUTIL_HandleChannelListDoubleClick(D2ControlMsg * pControlMsg) {
     // Static local variables (originally global data)
     static int32_t gaOOGUtilChannelListLangNames = -0x2; D2_STATIC_GUARD(gaOOGUtilChannelListLangNames, "D2Multi::OOGUtilities::OOGUTIL_HandleChannelListDoubleClick::gaOOGUtilChannelListLangNames");
@@ -455,6 +491,7 @@ int __stdcall OOGUTIL_HandleChannelListDoubleClick(D2ControlMsg * pControlMsg) {
     return 0;
 }
 
+// 1.14d mac: 002d0828
 void __stdcall AbleToJoinGameOrBanned(int32_t bBanned) {
     uint16_t* pwszMessage;
     if (bBanned) {
@@ -506,6 +543,7 @@ void Unreferenced_004414c0() {
     AbleToJoinGameOrBanned(bBanned);
 }
 
+// 1.14d mac: 002d0056
 int __stdcall JoinOrCreateGame(DWORD dwUnused) {
     // Static local variables (originally global data)
     static unsigned int gdwLastGameInfoPollTick; D2_STATIC_GUARD_BSS(gdwLastGameInfoPollTick, "D2Multi::OOGUtilities::JoinOrCreateGame::gdwLastGameInfoPollTick");
@@ -753,6 +791,7 @@ int __stdcall JoinOrCreateGame(DWORD dwUnused) {
 }
 
 // Attempts to restore MCP connection: displays connection message, creates thread if peer data exists, sends CharLogon packet. Returns 1 on success, 0 on failure.
+// 1.14d mac: 002d09d1
 uint32_t __stdcall OOGMENU_RestoreMCPConnection() {
     if (D2IniData_multiplayer->szCharacterRealm[0] == '\0') {
       return 1;
@@ -800,6 +839,7 @@ uint32_t __stdcall OOGMENU_RestoreMCPConnection() {
     return 0;
 }
 
+// 1.14d mac: 002d21fe
 int32_t __fastcall fAPPMODE_multiplayer_ReturnAppMode_Caller(D2IniConfigStrc * pD2IniConfig) {
     D2IniData_multiplayer = pD2IniConfig;
     D2Win::D2GFX::UI_Init();
@@ -809,6 +849,7 @@ int32_t __fastcall fAPPMODE_multiplayer_ReturnAppMode_Caller(D2IniConfigStrc * p
     return gnOpenBNetMode;
 }
 
+// 1.14d mac: 002d269b
 int __stdcall CHAT_SendOutOfGameMessage() {
     uint16_t* wszTitle;
     if (gszOogChatInputBuffer[0] == '/') {
@@ -838,12 +879,14 @@ int __stdcall CHAT_SendOutOfGameMessage() {
 
 // OnPress of the OK button (form 0x27, record 0070d5a0, string 0x13ee) of the chat password/CD-key warning popup that OOGUTIL_SendChatMessage opens: calls CHAT_SendOutOfGameMessage (the caller already emptied gszOogChatInputBuffer) and closes the popup (FORMS_DestroyListEx); returns 1.
 // Provenance: asm 004428b0..004428bf (RET 4); popup built by UIMENU_DrawTitleAndSubtitleOnCenterScreen, called only from OOGUTIL_SendChatMessage.
+// 1.14d mac: 002ce1ba
 BOOL __stdcall OOGUTIL_OnPressChatWarningOk(D2ControlMsg * pControlMsg) {
     CHAT_SendOutOfGameMessage();
     ChatDlg::FORMS_DestroyListEx();
     return 1;
 }
 
+// 1.14d mac: 002cded4
 int __stdcall OOGUTIL_SendChatMessageWide(uint16_t * wszText) {
     char szTokenCopy[256];
     char szMultiByte[256];
@@ -874,6 +917,7 @@ int __fastcall Unreferenced_00442a70(uint32_t * pFlags, int nValue) {
     return uVar1;
 }
 
+// 1.14d mac: 002d7894
 char * __fastcall OOGUTIL_GetStringEnd(char * szText) {
     if (!szText) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xad);
@@ -892,6 +936,7 @@ char * __fastcall OOGUTIL_GetStringEnd(char * szText) {
     }
 }
 
+// 1.14d mac: 002d78d7
 uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars) {
     uint8_t byLevelDigit = *pszLevelChars;
     int nMaxLevelDiff = (D2IniData_multiplayer->eCTEMP_eD2PlayerStatus >> 8 & 0x1f) / 5 + 1;
@@ -910,6 +955,7 @@ uint32_t __fastcall OOGUTIL_CheckCharacterLevel(uint8_t * pszLevelChars) {
 // display cache (stride 0x3b per entry, count=nGameListDifficultyFilter). Dedups on (u16)pGameInfo[+8]=gameid.
 // Copies: +8 gameid -> gwGameListCacheEntryPort; +0x14 -> gwOOGLobbyScreenState; +0x1c -> gszLanGameListEntryName;
 // +0x2c -> gszLanGameListEntryDescription. Called once per incoming MCP 0x05 game packet from JoinOrCreateGame.
+// 1.14d mac: 002d7ca6
 void __fastcall OOGMENU_AddGameToCache(D2McpGameInfoStrc * pGameInfo) {
     int nCount = nGameListDifficultyFilter;
     for (int nIndex = 0; nIndex < nCount; nIndex++) {
@@ -926,6 +972,7 @@ void __fastcall OOGMENU_AddGameToCache(D2McpGameInfoStrc * pGameInfo) {
     nGameListDifficultyFilter = nCount + 1;
 }
 
+// 1.14d mac: 002d7a8f
 void __stdcall OOGMENU_RefreshGameListDisplay() {
     D2GameListEntryStrc* pEntry;
     uint8_t szSelectedName[256];
@@ -999,6 +1046,7 @@ void __fastcall OOGUTIL_SetPendingJoinGame(char * szText, uint16_t wRequestId) {
     gnPendingGameInfoCharIndex = (uint32_t)wRequestId;
 }
 
+// 1.14d mac: 002d81ce
 void __stdcall OOGMENU_RequestGameInfo() {
     if (gnPendingGameInfoCharIndex == -1) {
       return;
@@ -1031,6 +1079,7 @@ static void OOGUTIL_ShowGameListEntryDetails(int32_t nEntryIndex) {
 }
 
 // Displays game details in the lobby textbox. Shows game description, elapsed time (HH:MM:SS), level restrictions (single level or range), max players, and iterates through all players to display their names and levels with class-specific formatting (Amazon/Sorceress/Necromancer/Paladin/Barbarian/Druid/Assassin). All formatted strings are written to a 256-byte buffer before being added to the display.
+// 1.14d mac: 002d85e8
 void __fastcall OOGMENU_DisplayGameDetails(D2McpGameInfoStrc * pGameInfo) {
     uint16_t* pwCurPlayerLevel;
     char (*szText)[16];
@@ -1133,6 +1182,7 @@ void __fastcall OOGMENU_DisplayGameDetails(D2McpGameInfoStrc * pGameInfo) {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ScrollToLine(gpOogGameListDetailsPanelControl, 0);
 }
 
+// 1.14d mac: 002d8998
 void __stdcall UIMENU_DestroyLobbyAndJoinGameForms() {
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpOOGJoinGameButton);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpOogGamePasswordEditControl);
@@ -1164,6 +1214,7 @@ void __stdcall OOGUTIL_LoadMaxPlayersSetting() {
     }
 }
 
+// 1.14d mac: 002da003
 void __stdcall OOGUTIL_UpdateGameListFilter() {
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpCtlCreateGameDlgBackground);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpCtlCreateGameDlgTitle);
@@ -1199,6 +1250,7 @@ void __stdcall OOGUTIL_UpdateGameListFilter() {
     ChatDlg::LAUNCHER_RestoreFocusToControl();
 }
 
+// 1.14d mac: 002da225
 void __stdcall OOGUTIL_ParseMaxPlayersEditBox() {
     char szAscii[8];
     uint16_t* pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
@@ -1206,6 +1258,7 @@ void __stdcall OOGUTIL_ParseMaxPlayersEditBox() {
     atoi(szAscii);
 }
 
+// 1.14d mac: 002da315
 void __stdcall OOGUTIL_Unused4() {
     char szAscii[8];
     uint16_t* pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
@@ -1215,6 +1268,7 @@ void __stdcall OOGUTIL_Unused4() {
 
 // OnPress of the create-game max-players up button gUIGameListMaxPlayersUpButton: reads gUIGameListMaxPlayersEditBox, adds 1 while below 8 and writes it back through gszOogMaxPlayersText; returns 1.
 // Provenance: asm 004433c0 (RET 4); fpOnPressCallback of form record 0070de70.
+// 1.14d mac: 002da1cd
 BOOL __stdcall OOGUTIL_OnPressMaxPlayersUp(D2ControlMsg * pControlMsg) {
     char szValue[8];
     uint16_t* pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
@@ -1231,6 +1285,7 @@ BOOL __stdcall OOGUTIL_OnPressMaxPlayersUp(D2ControlMsg * pControlMsg) {
 
 // OnPress of the create-game max-players down button gUIGameListMaxPlayersDownButton: reads gUIGameListMaxPlayersEditBox, subtracts 1 while above 1 and writes it back through gszOogMaxPlayersText; returns 1.
 // Provenance: asm 00443420 (RET 4); fpOnPressCallback of form record 0070dea0.
+// 1.14d mac: 002da265
 BOOL __stdcall OOGUTIL_OnPressMaxPlayersDown(D2ControlMsg * pControlMsg) {
     char szValue[8];
     uint16_t* pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUIGameListMaxPlayersEditBox->sControl);
@@ -1247,6 +1302,7 @@ BOOL __stdcall OOGUTIL_OnPressMaxPlayersDown(D2ControlMsg * pControlMsg) {
 
 // OnPress of the create-game level-restriction up button gUIGameListLevelRestrictionUpButton: reads gUILevelRestrictionEditBox, adds 1 while below 99 and writes it back through gszOogLevelRestrictionText; returns 1.
 // Provenance: asm 00443480 (RET 4); fpOnPressCallback of form record 0070ded0.
+// 1.14d mac: 002da2bd
 BOOL __stdcall OOGUTIL_OnPressLevelRestrictionUp(D2ControlMsg * pControlMsg) {
     char szValue[8];
     uint16_t* pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
@@ -1263,6 +1319,7 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionUp(D2ControlMsg * pControlMsg) {
 
 // OnPress of the create-game level-restriction down button gUIGameListLevelRestrictionDownButton: reads gUILevelRestrictionEditBox, subtracts 1 while above 0 and writes it back through gszOogLevelRestrictionText; returns 1.
 // Provenance: asm 004434e0 (RET 4); fpOnPressCallback of form record 0070df00.
+// 1.14d mac: 002da355
 BOOL __stdcall OOGUTIL_OnPressLevelRestrictionDown(D2ControlMsg * pControlMsg) {
     char szValue[8];
     uint16_t* pwszValue = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gUILevelRestrictionEditBox->sControl);
@@ -1277,6 +1334,7 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionDown(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002d9d29
 BOOL __stdcall OOGUTIL_SendPasswordPacket(DWORD dwParam1, DWORD dwParam2, char * szText) {
     switch (*szText) {
       case ' ':
@@ -1302,6 +1360,7 @@ BOOL __stdcall OOGUTIL_SendPasswordPacket(DWORD dwParam1, DWORD dwParam2, char *
     return 0;
 }
 
+// 1.14d mac: 002d8084
 BOOL __stdcall OOGUTIL_IsFirstCharPrintableAscii(DWORD dwParam1, DWORD dwParam2, char * szText) {
     if (*szText >= ' ' && *szText < 0x80) {
       return 1;
@@ -1310,6 +1369,7 @@ BOOL __stdcall OOGUTIL_IsFirstCharPrintableAscii(DWORD dwParam1, DWORD dwParam2,
     return 0;
 }
 
+// 1.14d mac: 002d9d8d
 BOOL __stdcall OOGUTIL_FilterPrintableAsciiChar(DWORD dwParam1, DWORD dwParam2, char * szText) {
     if (*szText >= ' ' && *szText < 0x80) {
       return 1;
@@ -1318,6 +1378,7 @@ BOOL __stdcall OOGUTIL_FilterPrintableAsciiChar(DWORD dwParam1, DWORD dwParam2, 
     return 0;
 }
 
+// 1.14d mac: 002d8c89
 void __stdcall OOGUTIL_RefreshGameList() {
     char szValue[256];
     BOOL bNameValid;
@@ -1372,6 +1433,7 @@ void __stdcall OOGUTIL_RefreshGameList() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gUIGameListCreateButton, 0);
 }
 
+// 1.14d mac: 002d814d
 void __stdcall OOGUTIL_SetJoinGameError() {
     char szPassword[256];
     char cChar;
@@ -1388,6 +1450,7 @@ void __stdcall OOGUTIL_SetJoinGameError() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlGameListStatus, bHasPassword);
 }
 
+// 1.14d mac: 002da3ac
 int __stdcall OOGUTIL_EnterChatPumpCallback(int nFrameIndex) {
     uint32_t bTmp;
     BOOL nResult = pNetworkUnknown->pfnGetEnterChatResponseFlags(&bTmp);
@@ -1398,11 +1461,13 @@ int __stdcall OOGUTIL_EnterChatPumpCallback(int nFrameIndex) {
     return 1;
 }
 
+// 1.14d mac: 002da932
 int __stdcall UIMENU_TitleClickCallback(void * pUnused) {
     gnMCPCreateGamePendingFlag = 1;
     return 1;
 }
 
+// 1.14d mac: 002da3df
 int __stdcall OOG_PollMCPJoinD2GSPump(int nFrameIndex) {
     D2MCPClient::McpConnect::NET_MCP_CLIENT_ReadAndParsePacket();
     BOOL bMPCJoinSuccessful = D2MCPClient::McpConnect::getIsMPCJoinSuccesfull();
@@ -1423,6 +1488,7 @@ int __stdcall OOG_PollMCPJoinD2GSPump(int nFrameIndex) {
 
 // OnPress handler of the wait-in-line dialog button (form record 0070eb30, FORM_Button, string 0x13ef, created by UIMENU_WaitInLine): restores the lobby buttons (CHATDLG_UpdateButtonVisibility), sends MCP 0x13 CancelGameCreate (CHATDLG_CancelGameCreate) and destroys the create-game/wait forms (OOGUTIL_UpdateGameListFilter); returns 1.
 // Provenance: 1.14d asm 004438c0..004438d4, RET 4.
+// 1.14d mac: 002da41e
 BOOL __stdcall OOGUTIL_OnPressWaitInLineCancel(D2ControlMsg * pControlMsg) {
     ChatDlg::CHATDLG_UpdateButtonVisibility();
     ChatDlg::CHATDLG_CancelGameCreate();
@@ -1430,6 +1496,7 @@ BOOL __stdcall OOGUTIL_OnPressWaitInLineCancel(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002da94c
 int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, D2LanGameEntryStrc * pEntry) {
     bool bDiffMatch;
     uint8_t byCopy;
@@ -1502,6 +1569,7 @@ int32_t __fastcall OOGUTIL_HandleGameListEntry(char * szText1, char * szText2, D
     return 0;
 }
 
+// 1.14d mac: 002d83ea
 int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * pControl) {
     char* pbEntryName;
     char aGameName[256];
@@ -1568,12 +1636,14 @@ int __stdcall OOGUTIL_ProcessGameListEntry(D2ControlStrc * pControl) {
 
 // OnPress handler that does nothing and returns 1.
 // Provenance: asm 00443c10 (MOV EAX,1; RET 4); fpOnPressCallback of the four 15x16 FORM_Button records 0070d7e0, 0070d810, 0070d840, 0070d870 (gaPredefinedForms_b).
+// 1.14d mac: 002dab20
 BOOL __stdcall OOGUTIL_OnPressNoAction(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
 // OnPress handler of the create-game Normal difficulty button gUIGameListDifficultyNormalButton (FORM_Button, toggle flag 0x2): presses it and releases the Nightmare and Hell buttons with D2WINBUTTON_SetPressed, then sets CreateGameDifflevel and D2IniData_multiplayer->nDifficulty (+0x210) to 0; returns 1.
 // Provenance: asm 00443c20..00443c62 (RET 4); fpOnPressCallback of form record 0070dd50, which had no function.
+// 1.14d mac: 002dab2a
 BOOL __stdcall OOGUTIL_OnPressDifficultyNormal(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNormalButton, 1);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNightmareButton, 0);
@@ -1585,6 +1655,7 @@ BOOL __stdcall OOGUTIL_OnPressDifficultyNormal(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the create-game Nightmare difficulty button gUIGameListDifficultyNightmareButton (FORM_Button, toggle flag 0x2): presses it and releases the Normal and Hell buttons with D2WINBUTTON_SetPressed, then sets CreateGameDifflevel and D2IniData_multiplayer->nDifficulty (+0x210) to 1; returns 1.
 // Provenance: asm 00443c70..00443cb5 (RET 4); fpOnPressCallback of form record 0070dd80, which had no function.
+// 1.14d mac: 002dab9d
 BOOL __stdcall OOGUTIL_OnPressDifficultyNightmare(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNormalButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNightmareButton, 1);
@@ -1596,6 +1667,7 @@ BOOL __stdcall OOGUTIL_OnPressDifficultyNightmare(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the create-game Hell difficulty button gUIGameListDifficultyHellButton (FORM_Button, toggle flag 0x2): presses it and releases the Normal and Nightmare buttons with D2WINBUTTON_SetPressed, then sets CreateGameDifflevel and D2IniData_multiplayer->nDifficulty (+0x210) to 2; returns 1.
 // Provenance: asm 00443cc0..00443d05 (RET 4); fpOnPressCallback of form record 0070ddb0, which had no function.
+// 1.14d mac: 002dac10
 BOOL __stdcall OOGUTIL_OnPressDifficultyHell(D2ControlMsg * pControlMsg) {
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNormalButton, 0);
     D2Win::Src::D2WinButton::D2WINBUTTON_SetPressed(gUIGameListDifficultyNightmareButton, 0);
@@ -1615,6 +1687,7 @@ static void __stdcall OOGUTIL_SetProfileUser(int nHardcoreFlag, int nExpansionFl
     gnProfileUserExpansionFlag = nExpansionFlag;
 }
 
+// 1.14d mac: 002daf4a
 void __stdcall UIMENU_PlayerProfileLabels() {
     // Static local variables (originally global data)
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e860 = {
@@ -1692,6 +1765,7 @@ void __stdcall UIMENU_PlayerProfileLabels() {
 
 // Destroys the profile dialog: the view forms (gnProfileDialogMode 1) or the edit forms (mode 2), then the shared labels and the OK and ladder buttons; resets the mode to 0 and restores the lobby panel and focus. Does nothing but the restore when no dialog is open.
 // Provenance: asm 00443e10..00443ea0; the forms are the ones OOGUTIL_CreateViewProfileDialog / OOGUTIL_CreateEditProfileDialog create.
+// 1.14d mac: 002db278
 void __stdcall OOGUTIL_CloseProfileDialog() {
     if (gnProfileDialogMode) {
       if (gnProfileDialogMode == 1) {
@@ -1753,6 +1827,7 @@ void __fastcall OOGUTIL_GetProfileCharacterName(char * szDest) {
 
 // OnPress callback of the profile dialog's close button (FORMS_PredefinedFormStrc_0070e920, label string 0x13ef).
 // Closes the profile forms (OOGUTIL_ClearGameList) and returns 1. Entry proven by the fpOnPressCallback pointer at 0070e940 (RET 0x4).
+// 1.14d mac: 002db452
 BOOL __stdcall OOGUTIL_OnPressProfileClose(D2ControlMsg * pControlMsg) {
     OOGUTIL_CloseProfileDialog();
     return 1;
@@ -1785,6 +1860,7 @@ BOOL __stdcall OOGUTIL_OnPressProfileOK(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002db56c
 int __stdcall UIMENU_DialogWindowChatCommands() {
     // Static local variables (originally global data)
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e9e0 = {
@@ -2122,6 +2198,7 @@ int __stdcall UIMENU_DialogWindowChatCommands() {
 
 // Destroys the four chat-commands dialog forms created by UIMENU_DialogWindowChatCommands (background, title, text box, OK button), clears gnGameListFilterState and makes gpCtlLobbyGameModePanel the fourth form again (D2WINMAIN_SetFormFourth); returns 1.
 // Provenance: 1.14d asm 00444e20; callers CHATDLG_OnPressChatCommandsOK and CHATDLG_DestroyAllForms.
+// 1.14d mac: 002dc863
 int __stdcall OOGUTIL_DestroyChatCommandsDialog() {
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm(&gpChatCommandsBackground);
     D2Win::Src::D2WinMain::FORMS_DestroyAnyForm((D2ControlStrc**)&gpChatCommandsTitle);
@@ -2132,6 +2209,7 @@ int __stdcall OOGUTIL_DestroyChatCommandsDialog() {
     return 1;
 }
 
+// 1.14d mac: 002d7931
 void __stdcall OOGUTIL_RequestGameListFromServer() {
     uint32_t bLevelOk;
     uint8_t* pbCursor;
@@ -2282,11 +2360,13 @@ BOOL __stdcall OOGUTIL_SendGamePassword(DWORD dwParam1, DWORD dwParam2, char * s
     return BVar1;
 }
 
+// 1.14d mac: 002d806f
 int __stdcall EDITBOX_Cb_OOGUTIL_SetJoinGameError(void * pUnknown) {
     OOGUTIL_SetJoinGameError();
     return 1;
 }
 
+// 1.14d mac: 002d821b
 int __stdcall OOGUTIL_HandleGameCreation(D2ControlMsg * pControlMsg) {
     // Static local variables (originally global data)
     static int32_t gaOOGUtilGameCreationLangNames = -0x2; D2_STATIC_GUARD(gaOOGUtilGameCreationLangNames, "D2Multi::OOGUtilities::OOGUTIL_HandleGameCreation::gaOOGUtilGameCreationLangNames");
@@ -2339,6 +2419,7 @@ int __stdcall OOGUTIL_HandleGameCreation(D2ControlMsg * pControlMsg) {
 
 // Applies the state of gUIGameListLevelRestrictionCheckbox to the create-game dialog: checked makes gUILevelRestrictionEditBox and gUIGameListLevelRestrictionUp/DownButton visible and active and gUIGameListLevelRestrictionInactiveImage/InactiveArrowButton inactive, unchecked the reverse; re-sets string 0x148b on gUIGameListLevelRestrictionLabel and 0x148c ("Levels") on gUIGameListLevelRestrictionLevelsLabel (alignment 4 checked, 5 unchecked), then calls OOGUTIL_RefreshGameList.
 // Provenance: asm 004451c0..004452fb; the argument-less twin of OOGUTIL_OnPressLevelRestrictionCheckbox, called twice from OOGUTIL_LoadLevelRestrictionSetting.
+// 1.14d mac: 002d8a54
 void __stdcall OOGUTIL_UpdateLevelRestrictionControls() {
     int32_t nTextAlign;
     BOOL bLevelRestrictionChecked = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
@@ -2494,6 +2575,7 @@ BOOL __stdcall OOGUTIL_OnTimerRefreshWaitInLine(D2ControlMsg * pControlMsg) {
 
 // OnPress handler of the create-game level-restriction checkbox gUIGameListLevelRestrictionCheckbox (FORM_Button, toggle flag 0x2). Same body as OOGUTIL_UpdateLevelRestrictionControls: checked makes gUILevelRestrictionEditBox and gUIGameListLevelRestrictionUp/DownButton visible and active and gUIGameListLevelRestrictionInactiveImage/InactiveArrowButton inactive, unchecked the reverse; re-sets string 0x148b on gUIGameListLevelRestrictionLabel and 0x148c ("Levels") on gUIGameListLevelRestrictionLevelsLabel (alignment 4 checked, 5 unchecked), then calls OOGUTIL_RefreshGameList; returns 1.
 // Provenance: asm 00445550..00445691 (RET 4); fpOnPressCallback of form record 0070dcf0, created at 00446240 and stored in 00798c40.
+// 1.14d mac: 002d9dc8
 BOOL __stdcall OOGUTIL_OnPressLevelRestrictionCheckbox(D2ControlMsg * pControlMsg) {
     int32_t nTextAlign;
     BOOL bLevelRestrictionChecked = D2Win::Src::D2WinButton::D2WINBUTTON_IsPressed(gUIGameListLevelRestrictionCheckbox);
@@ -2525,16 +2607,19 @@ BOOL __stdcall OOGUTIL_OnPressLevelRestrictionCheckbox(D2ControlMsg * pControlMs
     return 1;
 }
 
+// 1.14d mac: 002d9d78
 int __stdcall EDITBOX_Cb_OOGUTIL_RefreshGameList(void * pUnknown) {
     OOGUTIL_RefreshGameList();
     return 1;
 }
 
+// 1.14d mac: 002d9d9e
 int __stdcall OOGUTILITIES_EditBoxInput_RefreshGameList_ForMaxPlayers(void * pUnknown) {
     OOGUTIL_RefreshGameList();
     return 1;
 }
 
+// 1.14d mac: 002d9db3
 int __stdcall OOGUTILITIES_EditBoxInput_RefreshGameList_ForLevelRestriction(void * pUnknown) {
     OOGUTIL_RefreshGameList();
     return 1;
@@ -2694,6 +2779,7 @@ BOOL __stdcall NET_MCP_CLIENT_PrepareGameCreatePacket(D2ControlStrc * pControl) 
 
 // Opens the editable profile dialog for the logged-in account (D2IniData_multiplayer->szLastBnetAccount). CHATDLG_ReadUserProfile reads the current sex, location and description; on success the edit forms are created (gnProfileDialogMode = 2) with edit limits 8, 40 and 200, focus goes to the sex box (all empty) or the description box, and OOGUTIL_SetProfileUser records szCharacterName and the hardcore/expansion flags. OOGUTIL_OnPressProfileOK writes the edits back.
 // Provenance: asm 00445a80..; called from COMCALLBACK_HandleUserListClick (00448d3d) when the clicked account is the logged-in one.
+// 1.14d mac: 002dac83
 void __fastcall OOGUTIL_CreateEditProfileDialog(char * szCharacterName, int nHardcoreFlag, int nExpansionFlag) {
     // Static local variables (originally global data)
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e680 = {
@@ -2802,6 +2888,7 @@ void __fastcall OOGUTIL_CreateEditProfileDialog(char * szCharacterName, int nHar
 
 // Opens the read-only profile dialog for another chat user. szUserName is the clicked "Character*Account" string; OOGUTIL_GetAccountName takes the account, CHATDLG_ReadUserProfile reads its sex, location and description, and on success the view forms are created (gnProfileDialogMode = 1), the description is shown one CR LF line at a time, and OOGUTIL_SetProfileUser records szCharacterName and the hardcore/expansion flags for the ladder button.
 // Provenance: asm 00445c70..; called from COMCALLBACK_HandleUserListClick (00448d60) when the clicked account is not the logged-in one.
+// 1.14d mac: 002db04d
 void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szCharacterName, int nHardcoreFlag, int nExpansionFlag) {
     // Static local variables (originally global data)
     static FORMS_PredefinedFormStrc FORMS_PredefinedFormStrc_0070e770 = {
@@ -2901,6 +2988,7 @@ void __fastcall OOGUTIL_CreateViewProfileDialog(char * szUserName, char * szChar
     OOGUTIL_SetProfileUser(nHardcoreFlag, nExpansionFlag, szCharacterName);
 }
 
+// 1.14d mac: 002d7d45
 void __stdcall UIMENU_JoinGame() {
     // Static local variables (originally global data)
     static uint32_t gdwJoinGameListRefreshTick; D2_STATIC_GUARD_BSS(gdwJoinGameListRefreshTick, "D2Multi::OOGUtilities::UIMENU_JoinGame::gdwJoinGameListRefreshTick");
@@ -2960,6 +3048,7 @@ void __stdcall UIMENU_JoinGame() {
 
 // Opens the Battle.net CREATE GAME dialog (title string 0x141e): if isServerDown() returns -1 shows "Server Down" (0x1413) instead; if an MCP join is in progress runs UIMENU_WaitInLine instead. Otherwise creates the dialog forms (game name edit box, max players when HasPeerName(), level restriction, difficulty) and loads LVL_REST and MAX_PLAYER via OOGUTIL_LoadLevelRestrictionSetting and OOGUTIL_LoadMaxPlayersSetting.
 // Provenance: asm 00445ff0; called from CHATDLG_DestroyFormsAndOpenCreateGameDialog, the OnPress of the lobby CREATE button (gaPredefinedForms_b[6], string 0x14c0).
+// 1.14d mac: 002d9107
 void __stdcall OOGUTIL_OpenCreateGameDialog() {
     uint16_t* pwszLocale;
     int bRegReadOk = ChatDlg::isServerDown();
@@ -3136,6 +3225,7 @@ char * OOGUTIL_StrChr(uint32_t * szString, int nChar) {
 
 // Returns the account part of a Battle.net user string "Character*Account": the text after '*', or szUserName itself when there is no '*' or nothing follows it.
 // Provenance: SStrChr(szUserName,'*') at 00446820; OOGUTIL_SendChatMessage whispers "/whisper *%s" with its result (00442905).
+// 1.14d mac: 002d47d3
 char * __fastcall OOGUTIL_GetAccountName(char * szUserName) {
     char* pszAccountName;
     char* pszSep = Storm::Source::SSTR::SStrChr(szUserName, '*');
@@ -3147,6 +3237,7 @@ char * __fastcall OOGUTIL_GetAccountName(char * szUserName) {
     return pszAccountName;
 }
 
+// 1.14d mac: 002d4802
 void __fastcall OOGUTIL_CopyChannelName(char * szText1, char * szText2) {
     if (*szText1 != '*') {
       char* pszChannel;
@@ -3161,6 +3252,7 @@ void __fastcall OOGUTIL_CopyChannelName(char * szText1, char * szText2) {
     Storm::Source::SSTR::SStrCopy(szText2, szText1, 0x7fffffff);
 }
 
+// 1.14d mac: 002d53ae
 int __stdcall OOGUTIL_ValidateUsername1(D2ControlMsg * pControlMsg) {
     char szMessage[256];
     uint16_t* pwszInput = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpChatDlgInputEditBox->sControl);
@@ -3179,6 +3271,7 @@ int __stdcall OOGUTIL_ValidateUsername1(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002d5437
 int __stdcall OOGUTIL_ValidateUsername2(D2ControlMsg * pControlMsg) {
     char szMessage[256];
     uint16_t* pwszInput = D2Win::Src::D2WinEditBox::FORMS_TextInput_GetValue(&gpChatDlgInputEditBox->sControl);
@@ -3197,6 +3290,7 @@ int __stdcall OOGUTIL_ValidateUsername2(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002d577e
 int __stdcall OOGUTIL_ValidateUsername3(D2ControlMsg * pControlMsg) {
     DWORD dwTickNow;
     char szFormattedMsg[300];
@@ -3243,6 +3337,7 @@ int __stdcall OOGUTIL_ValidateUsername4(DWORD dwParam) {
     return 1;
 }
 
+// 1.14d mac: 002d6dc3
 void __stdcall OOGUTIL_AppendChatText(uint16_t * wszText) {
     uint16_t* pwszMatch;
     int32_t nTotalLen;
@@ -3279,5 +3374,29 @@ int __fastcall OOGUTIL_ValidateStringFilter(DWORD dwUnused, char * szText) {
     ChatDlg::FORMS_DisplayBattleNetNews(wszNewsText);
     return 1;
 }
+
+#if !defined(_WIN32) && D2_OS_MAC
+// Game name edit box key filter: clears the game list selection, then accepts letters, digits,
+// space, apostrophe, hyphen and underscore.
+// 1.14d mac: 002d7ffc
+int __stdcall EDITBOX_Cb_OOGUTIL_FilterGameNameChar(::D2WinEditBox * pEditBox, int nTextLen, char * pKeyChar) {
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetSelectedLine(gpOOGGameListTextBox, -1);
+    uint32_t nKey = (uint32_t)(int)*pKeyChar;
+    int nAccepted = 1;
+    if (nKey < '_') {
+      if (nKey == ' ' || nKey == '\'' || nKey == '-') {
+        return 1;
+      }
+    } else if (nKey == '_') {
+      return 1;
+    }
+
+    if ((uint8_t)(nKey - '0') > 9 && (uint8_t)(nKey - 'A') > 25) {
+      nAccepted = (uint8_t)(nKey - 'a') < 26;
+    }
+
+    return nAccepted;
+}
+#endif
 
 }} // namespace D2Multi::OOGUtilities

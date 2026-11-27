@@ -50,6 +50,7 @@ static uint32_t gnTextBoxLineSpacing = 0x4; D2_STATIC_GUARD(gnTextBoxLineSpacing
 
 namespace D2Win { namespace Src { namespace D2WinTextBox {
 
+// 1.14d mac: 0004dd90
 static void D2WINTEXTBOX_ComputeLineSpacingForLanguage(int32_t nFontIndex) {
     int32_t nPrevFont;
     uint32_t nLangCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
@@ -102,6 +103,7 @@ static void D2WINTEXTBOX_ComputeLineSpacingForLanguage(int32_t nFontIndex) {
 }
 
 // @sourcefile .\Src\D2WinTextBox.cpp
+// 1.14d mac: 0004dfb5
 BOOL __fastcall D2WINTEXTBOX_ClearAllLines(::D2WinTextBox * pTextBox) {
     int nColIdx;
     D2WinTextBoxLineStrc* pNextLineNode;
@@ -154,6 +156,7 @@ int __fastcall D2WINTEXTBOX_SetLinePadding(::D2WinTextBox * pnTextBox, int32_t n
 }
 
 // @sourcefile .\Src\D2WinTextBox.cpp
+// 1.14d mac: 0004ead1
 int __fastcall D2WINTEXTBOX_SetLineCellTextW(::D2WinTextBox * pnTextBox, uint16_t * wszText, int32_t nRow, int32_t nCol) {
     int nLineNode;
     uint16_t* wszAllocDst;
@@ -198,6 +201,7 @@ int __fastcall D2WINTEXTBOX_SetLineCellTextW(::D2WinTextBox * pnTextBox, uint16_
 }
 
 // @sourcefile .\Src\D2WinTextBox.cpp
+// 1.14d mac: 0004ec70
 void __fastcall D2WINTEXTBOX_ClearLineRow(::D2WinTextBox * pTextBox, int32_t nRow) {
     D2WinTextBoxLineStrc* pCurLineNode;
     D2WinTextBoxLineStrc* nLineCount;
@@ -251,6 +255,7 @@ void __fastcall D2WINTEXTBOX_ClearLineRow(::D2WinTextBox * pTextBox, int32_t nRo
     }
 }
 
+// 1.14d mac: 0004eda1
 int32_t __fastcall D2WINTEXTBOX_GetLineCount(::D2WinTextBox * pTextBox) {
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x23e);
@@ -265,6 +270,7 @@ int32_t __fastcall D2WINTEXTBOX_GetLineCount(::D2WinTextBox * pTextBox) {
     }
 }
 
+// 1.14d mac: 0004ee03
 int32_t __fastcall D2WINTEXTBOX_GetScrollPosition(::D2WinTextBox * pTextBox) {
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x24a);
@@ -279,6 +285,7 @@ int32_t __fastcall D2WINTEXTBOX_GetScrollPosition(::D2WinTextBox * pTextBox) {
     }
 }
 
+// 1.14d mac: 0004ee65
 int32_t __fastcall D2WINTEXTBOX_GetSelectedLine(::D2WinTextBox * pTextBox) {
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x256);
@@ -308,6 +315,7 @@ void __fastcall D2WINTEXTBOX_SetSelectedLine(::D2WinTextBox * pTextBox, int32_t 
     }
 }
 
+// 1.14d mac: 0004ef42
 BOOL __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTargetLine) {
     int nLineIndex;
     D2WinTextBoxLineStrc* pNextLineNode;
@@ -351,6 +359,7 @@ BOOL __fastcall D2WINTEXTBOX_ScrollToLine(::D2WinTextBox * pTextBox, int32_t nTa
     }
 }
 
+// 1.14d mac: 0004de99
 int32_t __fastcall D2WINTEXTBOX_GetVisibleLineCount(::D2WinTextBox * pTextBox) {
     int iVar1;
     int nHeight;
@@ -371,6 +380,7 @@ int32_t __fastcall D2WINTEXTBOX_GetVisibleLineCount(::D2WinTextBox * pTextBox) {
     }
 }
 
+// 1.14d mac: 0004efeb
 uint16_t * __fastcall D2WINTEXTBOX_GetSelectedLineText(::D2WinTextBox * pnTextBox) {
     int nSelectedLine;
     D2WinTextBoxLineStrc* pLineNode;
@@ -448,6 +458,7 @@ uint16_t * __fastcall D2WINTEXTBOX_GetLineCellValue(::D2WinTextBox * pTextBox, i
     }
 }
 
+// 1.14d mac: 0004f18d
 void __fastcall D2WINTEXTBOX_SetColumnCount(::D2WinTextBox * pTextBox, int32_t nColumnCount) {
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2dd);
@@ -476,6 +487,7 @@ void __fastcall D2WINTEXTBOX_SetColumnCount(::D2WinTextBox * pTextBox, int32_t n
     }
 }
 
+// 1.14d mac: 0004f248
 void __fastcall D2WINTEXTBOX_SetColumnWidth(::D2WinTextBox * pTextBox, int32_t nColumnIndex, int32_t nColumnWidth) {
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2ef);
@@ -512,6 +524,7 @@ void __fastcall D2WINTEXTBOX_SetColumnAlignment(::D2WinTextBox * pTextBox, int32
     }
 }
 
+// 1.14d mac: 0004f369
 int32_t __fastcall D2WINTEXTBOX_GetLastLineIndex(::D2WinTextBox * pTextBox) {
     D2WinTextBoxLineStrc* pCurLineNode;
     if (!pTextBox) {
@@ -562,6 +575,7 @@ void __stdcall D2WINTEXTBOX_Unused_HaltLine814() {
     exit(-1);
 }
 
+// 1.14d mac: 0004f3e0
 BOOL __fastcall D2WINTEXTBOX_SetLineColor(::D2WinTextBox * pTextBox, int32_t nRow, int32_t dwColor) {
     D2WinTextBoxLineStrc* pCurLineNode;
     int nLineIndex;
@@ -651,6 +665,7 @@ static int32_t __stdcall D2WINTEXTBOX_TruncateStringToFitWidth(int32_t nMaxWidth
     return nCharsKept;
 }
 
+// 1.14d mac: 0004d4b9 D2Win::Src::D2WinTextBox::Draw
 BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
     int iVar2;
     uint8_t bVar3;
@@ -852,6 +867,7 @@ BOOL __fastcall Draw(::D2WinTextBox * pTextBox) {
     }
 }
 
+// 1.14d mac: 0004daf4 D2Win::Src::D2WinTextBox::Push
 BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     uint32_t uFontHeight;
     uint32_t uSelectedRow;
@@ -897,6 +913,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     }
 }
 
+// 1.14d mac: 0004dc03 D2Win::Src::D2WinTextBox::Key
 BOOL __stdcall Key(D2ControlMsg * pControlMsg) {
     int32_t nVisibleLines;
     uint32_t uPageDownTarget;
@@ -1048,6 +1065,7 @@ int __fastcall D2WINTEXTBOX_GetScrollbarMaxValue(::D2WinTextBox * pTextBox) {
     }
 }
 
+// 1.14d mac: 0004f4fb
 void __fastcall D2WINTEXTBOX_SetScrollbarMaxRange(::D2WinTextBox * pTextBox, uint32_t nMaxValue) {
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x582);
@@ -1079,6 +1097,7 @@ int __fastcall D2WINTEXTBOX_RefreshScrollbar(::D2WinTextBox * pTextBox) {
     }
 }
 
+// 1.14d mac: 0004f5de
 void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pTextBox, int32_t nPosition) {
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x596);
@@ -1095,6 +1114,7 @@ void __fastcall D2WINTEXTBOX_SetScrollbarPosition(::D2WinTextBox * pTextBox, int
 }
 
 // MISNAMED: not a callback setter. Forwards its second argument verbatim to D2WINSCROLLBAR_SetLinkedTextBox(D2WinScrollbar*, D2WinTextBox*), so it is a D2WinTextBox pointer, not an int.
+// 1.14d mac: 0004f654
 void __fastcall D2WINTEXTBOX_SetScrollbarLinkedTextBox(::D2WinTextBox * pTextBox, ::D2WinTextBox * pLinkedTextBox) {
     if (!pTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x5a0);
@@ -1160,6 +1180,7 @@ int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox) {
 }
 
 // @sourcefile .\Src\D2WinTextBox.cpp
+// 1.14d mac: 0004d2a0
 ::D2WinTextBox * __fastcall D2WinTextBox(int32_t nPosX, int32_t nPosY, int32_t nWidth, int32_t nHeight, int32_t nFormType, int32_t pStyleDC6, DC6 * pDC6, OnPress pOnPress, uint32_t dwStyleFlags, int * pnScrollSize, int * pnScrollbarRect) {
     uint32_t dwState;
     ::D2WinScrollbar* pScrollbar;
@@ -1242,6 +1263,7 @@ int __fastcall D2WINTEXTBOX_GetScrollbarStyle(::D2WinTextBox * pTextBox) {
     return pNew;
 }
 
+// 1.14d mac: 0004df38
 void __fastcall FORMS_DestroyD2WinTextBox(::D2WinTextBox * pWinTextBox) {
     if (!pWinTextBox) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xcb);
@@ -1262,6 +1284,7 @@ void __fastcall FORMS_DestroyD2WinTextBox(::D2WinTextBox * pWinTextBox) {
 }
 
 // @sourcefile .\Src\D2WinTextBox.cpp
+// 1.14d mac: 0004e1b5
 BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nLineStyle, bool bIndent, int nAlignment) {
     BOOL _uResult;
     bool uResult;
@@ -1400,6 +1423,7 @@ BOOL __fastcall SetText(::D2WinTextBox * pTextBox, uint16_t * szText, int32_t nL
 }
 
 // @sourcefile .\Src\D2WinTextBox.cpp
+// 1.14d mac: 0004e8f9
 int __fastcall D2WINTEXTBOX_AddLines(::D2WinTextBox * pTextBox, uint16_t * wszText, int nRepeatCount, int32_t nLineStyle, bool bIndent) {
     uint16_t* pAllocedText;
     int32_t nLine;
@@ -1442,6 +1466,7 @@ int __fastcall D2WINTEXTBOX_AddLines(::D2WinTextBox * pTextBox, uint16_t * wszTe
     }
 }
 
+// 1.14d mac: 0004ea50
 void __fastcall D2WINTEXTBOX_SetLineCellTextA(::D2WinTextBox * pTextBox, char * szText, int32_t nRowIndex, int32_t nColIndex) {
     int nClearCount;
     uint16_t* pBufCursor;
@@ -1544,6 +1569,7 @@ BOOL __fastcall D2WINTEXTBOX_WordWrapAndSetText(::D2WinTextBox * pTextBox, uint1
     }
 }
 
+// 1.14d mac: 0004e105
 void __fastcall D2WINTEXTBOX_SetTextFromAnsiSimple(::D2WinTextBox * pTextBox, char * szText) {
     int nClearCount;
     uint16_t* pBufCursor;
@@ -1561,6 +1587,7 @@ void __fastcall D2WINTEXTBOX_SetTextFromAnsiSimple(::D2WinTextBox * pTextBox, ch
     D2WinTextBox::SetText(pTextBox, wszWorkBuf, 4, false, 0);
 }
 
+// 1.14d mac: 0004e80a
 void __fastcall D2WINTEXTBOX_SetTextFromAnsi(::D2WinTextBox * pTextBox, char * szText, int32_t nLineStyle) {
     int nClearCount;
     uint16_t* pBufCursor;

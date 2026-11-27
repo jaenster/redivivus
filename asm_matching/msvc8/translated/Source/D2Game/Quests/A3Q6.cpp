@@ -46,6 +46,7 @@ uint8_t __fastcall Q23_IsBlackenedTempleNotDone(::SGAMEDATA * pGame) {
 // [The Guardian (Q23)] Predicate: returns 0 if the unit is in Durance of Hate Level 2, OR if the prior
 // Blackened-Temple quest AI flag is already active; else returns !bJerhynAiActive. Gates whether to keep
 // running the Mephisto approach/spawn logic on Durance L2.
+// 1.14d mac: 002326cf
 uint32_t __fastcall Q23_CheckDuranceOfHateLevel2(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheBlackenedTemple);
     D2RoomStrc* pUnitRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -66,6 +67,7 @@ uint32_t __fastcall Q23_CheckDuranceOfHateLevel2(::SGAMEDATA * pGame, D2UnitStrc
 // [The Guardian (Q23)] NPC gossip active-filter. Decides if Mephisto-quest gossip lines are offered:
 // returns true when the quest is Completed, OR target is the generic NPC (0xff), OR no state flag set,
 // falling through to also check the Step0x11 ("quest finalized / Act4 unlocked") state.
+// 1.14d mac: 00232723
 bool __fastcall Q23_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     bool bResult;
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Completed);
@@ -79,6 +81,7 @@ bool __fastcall Q23_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // Per-player iterator callback for A3Q6 The Guardian: syncs an individual player's QuestRecord journal sub-steps to the shared quest's nStateFlag/nStateFlagPrev. Skips players whose quest is already Completed or at Step0x11. Maps nStateFlag 2→Step0x02, 3→Step0x03; for state 4/5 further branches on nStateFlagPrev (2/3/4) to write Step0x04-Step0x09, reflecting which Cain/Ormus dialog steps Mephisto-quest progress has reached.
+// 1.14d mac: 00233feb
 BOOL __fastcall Q23_PlayerUpdateGuardianSteps(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     uint8_t byStateFlagPrev;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
@@ -146,6 +149,7 @@ BOOL __fastcall Q23_PlayerUpdateGuardianSteps(::SGAMEDATA * pGame, D2UnitStrc * 
 // JustCompleted(0xd) + Completed(0) + Step0x11(0x0b, "Act4 unlocked / quest finalized"), then calls
 // SetClientStatus(3) to flag the client as able-to-progress (the gate that opens travel to Pandemonium/Act4).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q6.cpp
+// 1.14d mac: 0023280d
 static void __stdcall Q23_SetGuardianQuestComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer) {
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_JustCompleted);
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheGuardian, QUESTSTATE_Completed);
@@ -157,6 +161,7 @@ static void __stdcall Q23_SetGuardianQuestComplete(::SGAMEDATA * pGame, D2UnitSt
 // Durance of Hate Level 3 (Mephisto's level) and hasn't yet completed/finalized the quest, calls
 // Q23_SetGuardianQuestComplete to mark JustCompleted/Completed/Step0x11 and bumps the participation
 // counter. This is how the killing-area players get individual quest credit.
+// 1.14d mac: 00234130
 BOOL __fastcall Q23_PlayerCheckDuranceLevel3Complete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     BOOL _bQuestState;
     bool bQuestState;
@@ -188,6 +193,7 @@ BOOL __fastcall Q23_PlayerCheckDuranceLevel3Complete(::SGAMEDATA * pGame, D2Unit
 // (Completed OR FinishedInPreviousGame=0xf) AND a notify state is pending (JustCompleted=0xd OR
 // CannotCompleteQuestInGame=0xe), push quest-update packet 0x14 to the player's client so the journal
 // and "Act4 available" UI refresh. Otherwise no-op.
+// 1.14d mac: 00233838
 BOOL __fastcall Q23_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -212,6 +218,7 @@ BOOL __fastcall Q23_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // Guardian quest record (Completed, Step0x11) and the shared nStateFlag, then picks which Cain/Ormus
 // gossip line (index via gdwQ20QuestStateMessages) to push onto the target monster/NPC. Drives the
 // "go kill Mephisto" / "you've done it" dialog depending on progress.
+// 1.14d mac: 00232ea7
 void __fastcall Q23_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQ20QuestStateMessages[8] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 }; D2_STATIC_GUARD(gdwQ20QuestStateMessages, "D2Game::Quests::QUESTS::A3Q6::Q23_Callback00_NpcActivate::gdwQ20QuestStateMessages");
@@ -276,6 +283,7 @@ void __fastcall Q23_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 // Q23_SequenceFilter/Callback_03). When the generic NPC (classId 0xff) is interacted with and
 // bAcceptedQuest is set, broadcasts quest state 2 (QUEST_SetStateAndBroadcast(2)), clears bAcceptedQuest
 // and disarms itself. Advances the Mephisto-quest dialog past acceptance.
+// 1.14d mac: 00233f79
 void __fastcall Q23_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0xff)) {
       return;
@@ -299,6 +307,7 @@ void __fastcall Q23_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 // ids: >0x61 arms the slot[2] accept callback; 100/0x66 broadcast states 3/4. Branches pick journal
 // string ids (0x16c/0x170/0x194/0x1aa/0x1ae) by Lam Esen completion.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q6.cpp
+// 1.14d mac: 002331dc
 void __fastcall Q23_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestStateFlag;
@@ -404,6 +413,7 @@ void __fastcall Q23_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // JustCompleted set, broadcast state 0xd, set flag 7 (str 0x1e7), then UnsetQuestState(Step0x11) and add
 // the player to the participation GUID list. Resends the NPC gossip packet.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q6.cpp
+// 1.14d mac: 00232fe6
 void __fastcall Q23_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL _bQuestState;
     bool bQuestState;
@@ -469,6 +479,7 @@ void __fastcall Q23_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // JMP thunk
+// 1.14d mac: 002336c1
 void __fastcall Q23_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::D2Game::Quests::QUESTS::SetRewardAndFinishFlags(pQuestData, pQuestArgs);
 }
@@ -476,6 +487,7 @@ void __fastcall Q23_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // [The Guardian (Q23)] Quest timer callback (armed by Callback_08 after Mephisto dies). Broadcasts
 // quest state 4 if not already at stateFlagPrev 4, and clears the bBloodRavenKilled/scratch flag in the
 // A3Q6 quest-specific struct. Used to drive the post-kill cinematic/state settle.
+// 1.14d mac: 00234336
 uint8_t __fastcall Q23_QuestUpdate(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2QuestDataA3Q6Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q6;
     if (pQuestData->nStateFlagPrev != 4) {
@@ -490,6 +502,7 @@ uint8_t __fastcall Q23_QuestUpdate(::SGAMEDATA * pGame, D2QuestDataStrc * pQuest
 // [The Guardian (Q23)] Party-member iterator: for each party member NOT yet Completed who is physically
 // in Act III, mark the Guardian quest complete (Q23_SetGuardianQuestComplete) and bump participation
 // count. Gives nearby party members Mephisto-kill credit. (Called via ExecuteFunctionForEveryPartyMember.)
+// 1.14d mac: 00232783
 void __fastcall Q23_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -520,6 +533,7 @@ void __fastcall Q23_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
 
 // [The Guardian (Q23)] Per-player iterator: if THIS player just completed (JustCompleted set), find
 // their party and propagate Mephisto-kill completion to every party member via Q23_PartyMember_SetCompleted.
+// 1.14d mac: 002341d1
 BOOL __fastcall Q23_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     /* GetQuestState(Guardian=0x16, JustCompleted=0x0d): only propagate from a
                          player who just completed */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
@@ -539,6 +553,7 @@ BOOL __fastcall Q23_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc *
 // (finalized), set QUESTSTATE_CannotCompleteQuestInGame(0xe) and push update packet 0x14. This marks
 // players who were NOT present for the Mephisto kill so they get the "can't complete in this game" journal
 // entry rather than credit.
+// 1.14d mac: 0023424e
 BOOL __fastcall Q23_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -558,6 +573,7 @@ BOOL __fastcall Q23_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
 
 // [The Guardian (Q23)] Per-player iterator: if THIS player just completed (JustCompleted), play the
 // quest-complete moo/sound event (0x42) on them. Cosmetic completion feedback.
+// 1.14d mac: 002342df
 BOOL __fastcall Q23_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     /* GetQuestState(Guardian=0x16, JustCompleted=0x0d): only play sound for players
                          who just completed */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
@@ -578,6 +594,7 @@ BOOL __fastcall Q23_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStr
 // drops one shield (the soulstone item) PER participating player. Finally notifies clients (event 0xb).
 // Killing Mephisto here is what opens Act 4.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q6.cpp
+// 1.14d mac: 00232b87
 void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL _bQuestState;
     bool bQuestState;
@@ -650,6 +667,7 @@ void __fastcall Q23_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // L3 (nMephistoApproachMode==2). Scans the room for a player within range 0x12; transitions Mephisto's
 // anim mode (Death->Neutral wake, Neutral->Walk + drop collision) and re-arms the event (id 7) ~0x18
 // frames later to keep him advancing. Pure scripted-cinematic movement, no quest-state writes.
+// 1.14d mac: 002328a9
 void __fastcall Q23_TimerCallback_MephistoApproach(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     uint32_t nDist;
     eD2MonsterAnimMode eAnimMode;
@@ -694,6 +712,7 @@ void __fastcall Q23_TimerCallback_MephistoApproach(D2QuestDataStrc * pQuestData,
 // Durance bridge / portal object). Records its GUID into the A3Q6 quest-specific struct, sets its update
 // flag, and schedules an event (id 7) if not in final state. No quest-state record writes. (Field names
 // bSunDarkened/nViperAmuletUpdateFlag are union-alias artifacts; this is the Mephisto-quest object.)
+// 1.14d mac: 0023298c
 void __fastcall Objects_InitFn45_MephistoBridge(D2ObjectInitFnArg * pInitArg) {
     int32_t nObjectGUID;
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheGuardian);
@@ -721,6 +740,7 @@ void __fastcall Objects_InitFn45_MephistoBridge(D2ObjectInitFnArg * pInitArg) {
 // [The Guardian (Q23)] Object init fn (InitFn44): second scripted object for the Mephisto quest. If on
 // Outer Steppes just sets update flag 2; otherwise records the object GUID into the A3Q6 quest struct and
 // sets its update flag. No quest-state record writes. (bMalusTaken/nMalusGUID are union-alias artifacts.)
+// 1.14d mac: 00232a18
 void __fastcall Objects_InitFn44_HellGatePortal(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pDVar2 = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheGuardian);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pInitArg->pRoom);
@@ -740,6 +760,7 @@ void __fastcall Objects_InitFn44_HellGatePortal(D2ObjectInitFnArg * pInitArg) {
 
 // [The Guardian (Q23)] fpSequenceFilter: when the player has the intro done (bIsNotIntroduction) but no
 // state flag yet, sets nStateFlag=1 and arms slot[2] (Q23_Callback_02). Bootstraps the acceptance step.
+// 1.14d mac: 002336ca
 bool __fastcall Q23_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction != '\0') {
       pQuestData->nStateFlag = 1;
@@ -754,6 +775,7 @@ bool __fastcall Q23_SequenceFilter(D2QuestDataStrc * pQuestData) {
 // shared nStateFlag/nStateFlagPrev so the Mephisto quest resumes at the right dialog stage. If already
 // Completed/Step0x11 OR the AbleGoToAct4 quest is done, it instead sets game-wide JustCompleted and marks
 // the act-progress field (skips reconstruction). Maps each saved step to the matching (flag,prevFlag) pair.
+// 1.14d mac: 002334e0
 void __fastcall Q23_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -840,6 +862,7 @@ void __fastcall Q23_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // [0xb]=Callback_11 (accept/finalize), [0xd]=Callback_13 (reload rebuild); fpSequenceFilter, fpActiveFilter.
 // Sets nQuestIdReal=QUEST_TheGuardian (this confirms the file is "The Guardian", kill Mephisto, opens Act4).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q6.cpp
+// 1.14d mac: 00232a8a
 void __fastcall Q23_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;

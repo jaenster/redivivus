@@ -25,6 +25,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2SoundListNodeStrc) == 0x8, "D2_NE
 namespace D2Sound { namespace D2SoundUntil {
 
 // NOTE: Register params: pListHead (ECX): void *, pItem (EDX): void *
+// 1.14d mac: 002e9ffc
 void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, intptr_t pItem) {
     intptr_t* pNewNode = (intptr_t*)D2_ALLOC_AT(sizeof(D2SoundListNodeStrc), ".\\Src\\D2SoundUtil.cpp", 0xd5);
     memset(pNewNode, 0, sizeof(D2SoundListNodeStrc));
@@ -34,6 +35,7 @@ void __fastcall SOUND_sD2SoundSmp_Alloc(void * pListHead, intptr_t pItem) {
     *(intptr_t**)pListHead = (intptr_t*)pNewNode;
 }
 
+// 1.14d mac: 002ea056
 void __fastcall SOUND_sD2SoundSmp_Free(D2SoundListNodeStrc * * ppListHead, intptr_t nSearchValue) {
     D2SoundListNodeStrc* pMemoryToFree;
     D2SoundListNodeStrc* pHead = *ppListHead;
@@ -66,6 +68,7 @@ void __fastcall SOUND_sD2SoundSmp_Free(D2SoundListNodeStrc * * ppListHead, intpt
     D2_FREE_AT(pMemoryToFree, ".\\Src\\D2SoundUtil.cpp", 0xf1);
 }
 
+// 1.14d mac: 002ea0b9
 BOOL __fastcall SOUNDUTIL_FindInLinkedList(D2SoundListNodeStrc * pNode, intptr_t nSearchValue) {
     while (true) {
       if (!pNode) {
@@ -124,6 +127,7 @@ void __fastcall SOUNDUTIL_FreeLinkedList(D2SoundListNodeStrc * * ppListHead) {
     } while (true);
 }
 
+// 1.14d mac: 002ea100
 void __fastcall SOUNDUTIL_AppendToLinkedList(D2SoundListNodeStrc * * ppListHead, intptr_t dwNodeValue) {
     D2SoundListNodeStrc* pNewNode = D2_NEW_AT(D2SoundListNodeStrc, ".\\Src\\D2SoundUtil.cpp", 0x120);
     memset(pNewNode, 0, sizeof(*pNewNode));
@@ -139,6 +143,8 @@ void __fastcall SOUNDUTIL_AppendToLinkedList(D2SoundListNodeStrc * * ppListHead,
 }
 
 // Maps file szText read-only and copies the size-prefixed blob located at image base + the dword at e_lfanew header (signature dword 0x454c 'LE', checked at 00516b61) +0xb8 (size at +8, data at +0xc) into pBuffer; returns TRUE on success, last error 0x7a when *pnBufferSize is too small.
+// Not in the 1.14d Mac binary: it reads the version resource of a Windows driver file.
+#if !D2_OS_MAC
 BOOL __fastcall SOUNDUTIL_ReadVersionResource(LPCSTR szText, uint32_t * pnBufferSize, void * pBuffer) {
     uint32_t* pnBufferSizeSaved;
     HANDLE hFileSaved;
@@ -260,5 +266,15 @@ BOOL __fastcall SOUNDUTIL_GetFileVersionInfo(LPCSTR szText, uint32_t * pnFileVer
     *pnFileVerLS = (uint32_t)(uint16_t)pVerInfo->dwFileVersionLS;
     return 1;
 }
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002ea0da
+void __fastcall SOUND_FreeAllSoundSmps(D2SoundListNodeStrc * * ppListHead) {
+    while (*ppListHead) {
+      SOUND_sD2SoundSmp_Free(ppListHead, (intptr_t)(*ppListHead)->nItemKey);
+    }
+}
+#endif
 
 }} // namespace D2Sound::D2SoundUntil

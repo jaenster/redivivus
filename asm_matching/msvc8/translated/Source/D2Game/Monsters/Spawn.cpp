@@ -21,6 +21,7 @@
 
 namespace D2Game { namespace Monsters { namespace Spawn {
 
+// 1.14d mac: 001de31e
 static void __stdcall GetRoomCorners(D2RoomStrc * pRoom, int * pnRight, int * pnLeft, int * pnTop, int * pnBottom, D2RoomCoordListStrc * pCoordList) {
     D2DrlgRoomCoordsStrc pDrlgRoomCoords;
     if (!pCoordList) {
@@ -93,6 +94,7 @@ static BOOL __stdcall CheckWarpSpawnCoords(D2RoomStrc * pRoom, ::SGAMEDATA * pGa
 }
 
 // Tries up to 20 times (nTryCount &lt; 20) to find a valid spawn position for a monster in pRoom. Each attempt draws a random (nX, nY) from the room's seed within the room bounding box. If nParam!=0 it additionally validates the position via CheckWarpSpawnCoords. On success calls SpawnMonster at that location (optionally using pCoordList for grid-index matching), writes the position to *pX/*pY, and returns TRUE. Returns FALSE after 20 failed attempts.
+// 1.14d mac: 001de05c
 BOOL __fastcall SPAWN_FindRandomPositionForMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2RoomCoordListStrc * pCoordList, uint32_t nClassId, int * pX, int * pY, int32_t bCheckWarpDistance) {
     int32_t nGridIdx;
     D2UnitStrc* pSpawnedUnit;
@@ -321,6 +323,7 @@ static BOOL __stdcall SPAWN_SpawnMonsterFormation(::SGAMEDATA * pGame, D2RoomStr
     return _bSuccess;
 }
 
+// 1.14d mac: 001df0a4
 static void __stdcall MONSTER_SetMinionsForBoss(D2RoomCoordListStrc * pRoomCoordList, int32_t nMinionClassId, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t _bIsBossType;
     bool bIsBossType;
@@ -490,6 +493,7 @@ static D2UnitStrc * __stdcall SPAWN_SpawnMonsterWithCollisionObj(::SGAMEDATA * p
 }
 
 // High-level monster-spawn dispatcher resolving a presets/level "monster code" (nMonCode) into one or more actual monster spawns. If nMonCode indexes past MonStats it is treated as a unique-monster or super-unique index (SPAWN_UniqueMonster). For a plain monster id it applies quest/difficulty class overrides (e.g. Bloody Foothills siege/Nihlathak cases, classIds 0x1F2/0x205/0x1C5/0x211) then spawns via SPAWN_SpawnMonsterWithCollisionObj. For special preset codes it switches: code 2 = roll+spawn a random unique pack for the room's monster region; 3 = champion boss with minions; 4/5/8 = fixed classIds; 10/0xB = swamp/sewer critter by area+difficulty; 0x18/0x1A = act-boss minion groups (normal only); 0x11..0x20 = scripted named/boss spawns (with resurrect/event handling for classIds 0x1B6 etc, setting UNITFLAG_ISRESURRECT). Returns the spawned D2UnitStrc* (or null for group/pack codes and on failure).
+// 1.14d mac: 001de3b6
 D2UnitStrc * __fastcall SpawnMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nMonCode, int32_t nX, int32_t nY, int32_t nAnimMode) {
     int32_t nResolvedClassId;
     eD2LevelId eRoomLevelId;
@@ -816,6 +820,7 @@ BOOL __fastcall CheckIfBaseIsFallenOrScarabAndSet(int32_t nMonstatId) {
 }
 
 // Server-side: populates a freshly-loaded room with monsters per the level's MonsterRegion density. Clamps the region monster density to 10000, then walks the room's coord-list nodes; for each spawnable rect it computes density slots ((w/3)*(h/3)) and rolls the game seed per slot against density. On a hit it rolls a random monster type (MONREGION_RollRandomMonsterType) and spawns either a unique pack (SpawnUniquePack + boss minions), a formation (SPAWN_SpawnMonsterFormation), or a normal group with minions (SPAWN_SpawnMonsterWithMinions, group size from MonStats MinGrp/MaxGrp, gated by sparsePopulate roll). Increments the region's nRoomsWithMonsters if anything spawned. Mutates pGame->pGameSeed.
+// 1.14d mac: 001df152
 void __fastcall MONSTER_SpawnRoomMonsters(::SGAMEDATA * pGame, D2RoomStrc * pRoom) {
     int* pGroupOffsetTable;
     D2UnitStrc* pFormationUnit;
@@ -990,6 +995,7 @@ static void __stdcall MONSTER_InitWanderingForLevel(::SGAMEDATA * pGame, eD2Leve
     MONSTER_InitWanderingMonsterRegion(pMonsterRegion, pGame, pLevelsTxt, pRoom);
 }
 
+// 1.14d mac: 001df94d
 void __fastcall MONSTER_TrySpawnWanderingMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom) {
     if ((D2_SeedRoll(pRoom ? &pRoom->sSeed : nullptr) & 0x7fff) || pRoom->nClientsCount) {
       return;

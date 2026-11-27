@@ -146,6 +146,7 @@ static D2GroundItemLabelStrc gaGroundItemLabels[32] = {0}; D2_STATIC_GUARD(gaGro
 
 namespace D2Client { namespace UI { namespace ShowItems {
 
+// 1.14d mac: 000dcd60
 BOOL __fastcall UI_DrawGroundItemTooltip(int * pnX, int * pnY, int * pnRight, int * pnBottom, int32_t nPlacementMode, int32_t nMaxX, int32_t nMinX) {
     int nOverlapDelta;
     BOOL bOverlapX;
@@ -237,6 +238,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p)
 }
 
 // @sourcefile .\UI\showitems.cpp
+// 1.14d mac: 000dceef
 void __stdcall DRAW_AltItems() {
     uint16_t* wszText;
     uint8_t nMaxSockets;

@@ -281,6 +281,7 @@ FILETIME lpFileTime_008818ac = FILETIME(); D2_GLOBAL_GUARD(lpFileTime_008818ac, 
 
 namespace Bnclient { namespace Cache {
 
+// 1.14d mac: 00059616
 static uint32_t CACHE_ComputeCRC32(int32_t nByteLen, uint8_t * pbData) {
     int _bParamsValid;
     bool bParamsValid;
@@ -331,6 +332,7 @@ static void CACHE_EncryptBlock(uint32_t dwKey, uint32_t nByteLen, uint32_t * pdw
     }
 }
 
+// 1.14d mac: 00059da0
 static LPFILETIME CACHE_GetFileTime(uint32_t nSecondsFromNow) {
     // Static local variables (originally global data)
     static uint32_t gdwCacheLastTickCount; D2_STATIC_GUARD_BSS(gdwCacheLastTickCount, "Bnclient::Cache::CACHE_GetFileTime::gdwCacheLastTickCount");
@@ -460,6 +462,7 @@ static uint32_t __stdcall CACHE_FindHashEntry(uint32_t nLocale, char * szText) {
     return nFoundHashSlot;
 }
 
+// 1.14d mac: 00059e8b
 static void CACHE_RemoveEntry(char * szText) {
     uint32_t* pBlockIdxField;
     uint32_t nHashSlot = CACHE_FindHashEntry(0, szText);
@@ -482,6 +485,24 @@ static void CACHE_RemoveEntry(char * szText) {
     gpCacheBlockTable = pCacheBlockTable;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+static void CACHE_BuildFilePath(LPSTR szText) {
+    HANDLE hModule = GetModuleHandle(nullptr);
+    GetModuleFileName(hModule, szText, 0x104);
+    char* pcSeparator = strchr(szText, 0x5c);
+    char* pcLast;
+    do {
+      pcLast = pcSeparator;
+      if (!pcLast) {
+        goto append_cache_dir;
+      }
+      pcSeparator = strchr(pcLast + 1, 0x5c);
+    } while (pcSeparator);
+    *pcLast = '\0';
+    append_cache_dir:
+    Storm::Source::SSTR::SStrPack(szText, "\\Battle.net Cache", 0x104);
+}
+#else
 static void CACHE_BuildFilePath(LPSTR szText) {
     int nHResult = SHGetFolderPathA(0, 0x23, 0, 0, szText);
     if (nHResult) {
@@ -495,8 +516,10 @@ static void CACHE_BuildFilePath(LPSTR szText) {
     /* LPSECURITY_ATTRIBUTES lpSecurityAttributes for CreateDirectoryA */ /* LPCSTR lpPathName for CreateDirectoryA */ CreateDirectoryA(szText, (LPSECURITY_ATTRIBUTES)0x0);
     Storm::Source::SSTR::SStrPack(szText, "\\bncache.dat", 0x104);
 }
+#endif
 
 // Closes and deletes the Fog cache file. Closes ghCacheFileHandle if open, builds cache file path to %APPDATA%\Blizzard Entertainment\Diablo II\bncache.dat, and deletes it via DeleteFileA.
+// 1.14d mac: 0005967b
 void __stdcall CACHE_DeleteFile() {
     char szFilePath[260];
     if (ghCacheFileHandle != (HANDLE)-1) {
@@ -511,6 +534,7 @@ void __stdcall CACHE_DeleteFile() {
 
 // Frees all Fog cache resources. Closes ghCacheFileHandle if open (setting to INVALID_HANDLE_VALUE), frees global hash table if allocated, and resets all cache state.
 // @sourcefile .\CACHE.CPP
+// 1.14d mac: 00058b8f
 void __stdcall CACHE_FreeAll() {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881894);
     gbCacheIsOpen = 0;
@@ -540,6 +564,7 @@ void __stdcall CACHE_FreeAll() {
 
 // @sourcefile .\CACHE.CPP
 // EDX dwSize: callers pass the cached block's size; not read here.
+// 1.14d mac: 00058cb5
 int __fastcall CACHE_FreeMem(void * pMem, uint32_t dwSize) {
     if (!pMem) {
       return 0;
@@ -551,6 +576,7 @@ int __fastcall CACHE_FreeMem(void * pMem, uint32_t dwSize) {
 
 // Opens the Fog cache file for reading/writing. Creates %APPDATA%\Blizzard Entertainment\Diablo II\bncache.dat if missing, reads hash table header, validates magic/version, allocates hash table memory. Sets ghCacheFileHandle to opened file handle or INVALID_HANDLE_VALUE on error.
 // @sourcefile .\CACHE.CPP
+// 1.14d mac: 00058cf8
 int32_t __stdcall CACHE_Open() {
     int nErrorCode;
     uint32_t nCrc32;
@@ -752,6 +778,7 @@ int32_t __stdcall CACHE_Open() {
     return 1;
 }
 
+// 1.14d mac: 00059e25
 void __stdcall CACHE_Rebuild() {
     char szFilePath[260];
     if (gbCacheIsOpen) {
@@ -767,6 +794,7 @@ void __stdcall CACHE_Rebuild() {
 
 // Reads cached data from bncache.dat using key lookup, validates CRC32, and returns decrypted data buffer
 // @sourcefile .\CACHE.CPP
+// 1.14d mac: 000596e5
 BOOL __fastcall CACHE_ReadData(char * szKey, FILETIME * pFileTimeOut, uint32_t * * ppDataBuf, LPDWORD pDataSizeOut) {
     D2BnCacheBlockEntryStrc* pDVar2;
     uint32_t nHashSlot;
@@ -946,6 +974,7 @@ BOOL __fastcall CACHE_ReadData(char * szKey, FILETIME * pFileTimeOut, uint32_t *
 
 // Writes data to Fog cache file. Encrypts data using CACHE_EncryptBlock, computes CRC32, seeks to entry offset in ghCacheFileHandle, writes encrypted data. Updates hash table entry with file time, size, and offset.
 // @sourcefile .\CACHE.CPP
+// 1.14d mac: 0005a010
 BOOL __fastcall CACHE_WriteData(char * szCacheKey, LPCVOID pDataToWrite, uint32_t nDataSize, FILETIME * pFileTime, uint32_t nExpiryTime, int32_t nCacheExpiry) {
     LPFILETIME pCurrentFileTime;
     uint32_t nHashKey;

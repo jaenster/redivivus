@@ -31,6 +31,7 @@ D2Srp * __fastcall SRP_ConstructContext(D2Srp * pSrp) {
 // calls srand(dwSeed) then rand(), SHA1s those 12 bytes into aRandomPoolA (this+0xc), copies
 // the 20-byte digest to aRandomPoolB (this+0x20), and clears aOutputBuffer (20 bytes) and nBytesAvailable.
 // Provenance: 1.14d asm 00527dd0..00527e60 (SHA1_Update(ctx, &sSeedEntropy, 0xc) at 00527e0c..00527e14).
+// 1.14d mac: 002f8bca
 void __fastcall SRP_InitializeRandomState(D2Srp * pThis, int, uint32_t dwSeed) {
     D2SrpSeedEntropyStrc sSeedEntropy;
     D2BnSha1ContextStrc aShaCtx;
@@ -46,6 +47,7 @@ void __fastcall SRP_InitializeRandomState(D2Srp * pThis, int, uint32_t dwSeed) {
     pThis->nBytesAvailable = 0;
 }
 
+// 1.14d mac: 002f8c94
 void __fastcall SRP_ExtractSessionKeyBytes(D2Srp * * pThis, int, void * pDst, uint32_t nBytes) {
     D2Srp* nSrpBase;
     D2BnSha1ContextStrc aShaCtx;
@@ -102,6 +104,7 @@ void __fastcall SRP_ComputeScramblingParam(D2Srp * pThis, int, BigData * * ppBas
 }
 
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
+// 1.14d mac: 002f8ed2
 void __fastcall SRP_HashBigNumToU32(D2Srp * pSrp, int, BigData * * ppBigNum, uint32_t * pdwOut) {
     D2BnSha1ContextStrc sha1Ctx;
     uint8_t bigIntBytes[32];
@@ -221,6 +224,7 @@ void __fastcall SRP_ComputeClientProof(D2Srp * pThis, int, char * szUsername, vo
 }
 
 // Registers: pSrp in ECX (__thiscall) is passed by the callers but not read.
+// 1.14d mac: 002f92a4
 void __fastcall SRP_ComputeServerProof(D2Srp * pSrp, int, void * pClientPublic, void * pClientProof, void * pSessionKey, uint8_t * pHashOut) {
     D2BnSha1ContextStrc sha1Ctx;
     SHA1::SHA1Init(&sha1Ctx);
@@ -235,6 +239,7 @@ BOOL __fastcall SRP_IsContextInitialized(D2Srp * pSrp) {
 }
 
 // @sourcefile .\SRP.cpp
+// 1.14d mac: 002f933a
 D2Srp * * __fastcall SRP_CreateContext(D2Srp * * ppSrp) {
     D2Srp* pAllocated = (D2Srp*)Storm::Source::SMem::SMemAlloc(sizeof(D2Srp), ".\\SRP.cpp", 0x157, 0);
     *ppSrp = pAllocated ? SRP_ConstructContext(pAllocated) : 0;
@@ -292,6 +297,7 @@ void __fastcall SRP_FreeParameters(D2Srp * * ppSrp) {
     (*ppSrp)->bInitialized = 0;
 }
 
+// 1.14d mac: 002f946c
 void __fastcall SRP_ClientGenerateVerifier(void * pThis, int, char * szUsername, uint32_t * szPassword, uint32_t * pSaltOut, void * pVerifierOut) {
     vc8_thiscall(SRP_ExtractSessionKeyBytes)((D2Srp**)pThis, pSaltOut, 0x20);
     BigData* pPasswordHash;
@@ -304,6 +310,7 @@ void __fastcall SRP_ClientGenerateVerifier(void * pThis, int, char * szUsername,
     SHA::SHA1_BigIntFree(pVerifier);
 }
 
+// 1.14d mac: 002f9508
 void __fastcall SRP_GenerateAccountCredentials(D2Srp * * pThis, int, D2SrpCredentialsStrc * pCreds, char * szUsername, char * szPassword) {
     Storm::Source::SSTR::SStrCopy(pCreds->szUsername, szUsername, 0x7fffffff);
     Storm::Source::SSTR::SStrCopy(pCreds->szPassword, szPassword, 0x7fffffff);
@@ -352,6 +359,7 @@ BOOL __fastcall SRP_ClientKeyExchange(D2Srp * * pThis, int, D2SrpCredentialsStrc
     }
 }
 
+// 1.14d mac: 002f9748
 BOOL __fastcall SRP_ClientVerifyServerProof(D2Srp * * pThis, int, D2SrpCredentialsStrc * pSrpContext, uint8_t * pServerProof) {
     int nCmpSign;
     int nCmpDiff;
@@ -486,6 +494,7 @@ void __fastcall SRP_ComputeFinalProof(D2Srp * * ppSrp, int, D2SrpServerSessionSt
     vc8_thiscall(SRP_ComputeServerProof)(*ppSrp, pContext->aClientPublicKey_A, pContext->aClientProof_M1, pContext->aSessionKey_K, pContext->aServerProof_M2);
 }
 
+// 1.14d mac: 002f9330
 void __stdcall SRP_GlobalInit() {
     SRP_CreateContext(&g_pSrpContext);
     atexit(SRP_AtexitCleanup);

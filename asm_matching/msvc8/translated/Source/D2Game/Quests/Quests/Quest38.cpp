@@ -14,6 +14,7 @@
 namespace D2Game { namespace Quests { namespace QUESTS { namespace Quest38 {
 
 // Quest 38 (Duriel quest, Act 2) NPC dialogue callback. Checks whether a spoken NPC message index matches a known "first-time spoken" message for each Act 2 NPC (Warriv, Drognan, Fara, Greiz, Elzix, Geglash, Lysander, Meshif). If it does, calls PLAYER_SetSpokenWithNPC to record that the player has heard this NPC's intro, driving quest-info updates and conversation-state tracking.
+// 1.14d mac: 00221adf
 void __fastcall Q38_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     eD2MonsterClassId nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     uint16_t wMessageIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
@@ -62,6 +63,7 @@ void __fastcall Q38_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q5 "Sisters to the Slaughter" (or equivalent Act II quest) gossip callback (index 0): maps Act II NPC class IDs (Warriv, Greiz, Lysander, Drognan, Fara, Elzix, Geglash, Meshif) to expected player classes. If the player has not yet spoken with the NPC (PLAYER_CheckIfSpokenWithNPC), queues a class-matched (flag=1) or generic (flag=0) gossip message via AddGossipMessageOnMonster. Mirrors the Q37 pattern for Act II NPCs.
+// 1.14d mac: 00221c94
 void __fastcall Q38_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     eD2MonsterClassId nMonStatsId;
     int nPlayerClassId;
@@ -117,16 +119,19 @@ void __fastcall Q38_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nMonStatsId, 0);
 }
 
+// 1.14d mac: 00221da0
 bool __fastcall Q38_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     *pbyStatusCode = '\0';
     return false;
 }
 
+// 1.14d mac: 00221dad
 bool __fastcall Q38_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     return false;
 }
 
 // InitData for quest slot 38, an act-intro "ActIntroduced" pseudo-quest (nQuestIdReal=QUEST_ActIntroduced). Zeroes the 0x3c state-handler table, installs state-0 handler Q38_Callback_00 (NPC gossip while pending) and state-0xb handler Q38_Callback_11 (dialog complete), points pNpcMessages at aNpcGossipData, marks the slot active, and wires Q38_StatusFilter/Q38_ActiveFilter. Not a journaled player quest.
+// 1.14d mac: 00221a58
 void __fastcall Q38_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q38_Callback00_NpcActivate;

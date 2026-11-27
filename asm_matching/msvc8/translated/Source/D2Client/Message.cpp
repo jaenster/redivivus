@@ -83,6 +83,7 @@ LRESULT __stdcall WndProcB(HWND hWnd, uint32_t uMsg, WPARAM wParam, LPARAM lPara
 }
 
 // Windows message pump + optional per-tick callback. If no messages, call callback each tick; exit when callback returns nonzero or WM_QUIT.
+// 1.14d mac: 0005e2ee
 int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
     uint32_t nCallbackResult;
     tagMSG msg;
@@ -103,11 +104,15 @@ int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
       /* UINT wRemoveMsg for PeekMessageA */ /* UINT wMsgFilterMax for PeekMessageA */ /* UINT wMsgFilterMin for PeekMessageA */ /* HWND hWnd for PeekMessageA */ /* LPMSG lpMsg for PeekMessageA */ bHasMessage = PeekMessageA(&msg, (HWND)0x0, 0, 0, 0);
       if (bHasMessage) {
         /* UINT wMsgFilterMax for GetMessageA */ /* UINT wMsgFilterMin for GetMessageA */ /* HWND hWnd for GetMessageA */ /* LPMSG lpMsg for GetMessageA */ getMessageResult = GetMessageA(&msg, (HWND)0x0, 0, 0);
+#if !defined(_WIN32) && D2_OS_MAC
+        // The Mac pump has no accelerator tables (0005e2ee).
+#else
         if (getMessageResult && GAME::Game::ghAccelTable) {
           lpMsg = &msg;
           hAccTable = GAME::Game::ghAccelTable;
           /* HWND hWnd for TranslateAcceleratorA */ TranslateAcceleratorA(D2gfx::D2GFX::GetHwnd(), hAccTable, lpMsg);
         }
+#endif
 
         /* MSG * lpMsg for TranslateMessage */ TranslateMessage(&msg);
         /* MSG * lpMsg for DispatchMessageA */ DispatchMessageA(&msg);
@@ -134,6 +139,7 @@ int32_t __fastcall MessageGameLoop(::fpGameLoopFunction nfpGameLoopFunction) {
 }
 
 // Registers a Windows event handler (message/command/keyup/keydown) based on eEventType. Filters out WM_COMMAND (0x111) from generic message handlers.
+// 1.14d mac: 0005e3d9
 void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, pfnSEvtHandler pfnHandler) {
     if (!hWnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x110);
@@ -170,6 +176,7 @@ void __fastcall MESSAGE_RegisterEventHandler(HWND hWnd, int32_t eEventType, int3
 }
 
 // Unregisters a Windows event handler (message/command/keyup/keydown) based on eEventType. Filters out WM_COMMAND (0x111) from generic message handlers.
+// 1.14d mac: 0005e4b8
 void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, int32_t nMessageOrKeyCode, pfnSEvtHandler pfnHandler) {
     if (!hWnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x131);
@@ -206,6 +213,7 @@ void __fastcall MESSAGE_UnregisterEventHandler(HWND hWnd, int32_t eEventType, in
 }
 
 // Iterates D2UIFlagInitStrc array and registers nCount event handlers via MESSAGE_RegisterEventHandler. Used during UI state initialization.
+// 1.14d mac: 0005e598
 void __fastcall MESSAGE_RegisterEventHandlerBatch(HWND hWnd, D2UIFlagInitStrc * pEventHandlers, int32_t nCount) {
     if (!hWnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x153);
@@ -218,6 +226,7 @@ void __fastcall MESSAGE_RegisterEventHandlerBatch(HWND hWnd, D2UIFlagInitStrc * 
 }
 
 // Iterates D2UIFlagInitStrc array and unregisters nCount event handlers via MESSAGE_UnregisterEventHandler. Used during UI state cleanup.
+// 1.14d mac: 0005e604
 void __fastcall MESSAGE_UnregisterEventHandlerBatch(HWND hWnd, D2UIFlagInitStrc * pEventHandlers, int32_t nCount) {
     if (!hWnd) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x166);
@@ -268,6 +277,7 @@ void __fastcall MESSAGE_UnregisterWindowMessageHandlers(HWND hWnd) {
 }
 
 // Gets the current HWND and snapshots all registered event handlers. Used for save/restore state during modal dialogs.
+// 1.14d mac: 0005e670
 void __stdcall MESSAGE_SnapshotEventHandlers() {
     HWND hWnd = D2gfx::D2GFX::GetHwnd();
     Storm::WindowHandle::SMsgPushRegisterState(hWnd);

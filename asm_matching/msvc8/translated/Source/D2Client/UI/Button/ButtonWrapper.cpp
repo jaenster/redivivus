@@ -162,6 +162,7 @@ void __fastcall Destructor(::ButtonWrapper * pThis, int) {
     }
 }
 
+// 1.14d mac: 0009c750 D2Client::UI::Button::ButtonWrapper::ScalarDeletingDestructor
 ::ButtonWrapper * __fastcall ScalarDeletingDestructor(::ButtonWrapper * pThis, int, uint32_t nFlags) {
     vc8_thiscall(ButtonWrapper::Destructor)(pThis);
     if (nFlags & 1 && pThis) {
@@ -171,64 +172,77 @@ void __fastcall Destructor(::ButtonWrapper * pThis, int) {
     return pThis;
 }
 
+// 1.14d mac: 0009c824 D2Client::UI::Button::ButtonWrapper::OnMouseWheel
 int __fastcall OnMouseWheel(::ButtonWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseWheel)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c844 D2Client::UI::Button::ButtonWrapper::OnMouseDown
 int __fastcall OnMouseDown(::ButtonWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseDown)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c864 D2Client::UI::Button::ButtonWrapper::OnMouseUp
 int __fastcall OnMouseUp(::ButtonWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseUp)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c884 D2Client::UI::Button::ButtonWrapper::OnMouseMove
 int __fastcall OnMouseMove(::ButtonWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseMove)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c8a4 D2Client::UI::Button::ButtonWrapper::Draw
 void __fastcall Draw(::ButtonWrapper * pThis, int) {
     vc8_thiscall(pThis->pImplementation->pVtable->Draw)(pThis->pImplementation);
 }
 
+// 1.14d mac: 0009c8be D2Client::UI::Button::ButtonWrapper::OnChar
 int __fastcall OnChar(::ButtonWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnChar)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c8de D2Client::UI::Button::ButtonWrapper::OnDownArrow
 int __fastcall OnDownArrow(::ButtonWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnDownArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c8fe D2Client::UI::Button::ButtonWrapper::OnUpArrow
 int __fastcall OnUpArrow(::ButtonWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnUpArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c91e D2Client::UI::Button::ButtonWrapper::OnRightArrow
 int __fastcall OnRightArrow(::ButtonWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnRightArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c93e D2Client::UI::Button::ButtonWrapper::OnLeftArrow
 int __fastcall OnLeftArrow(::ButtonWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnLeftArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 0009c95e D2Client::UI::Button::ButtonWrapper::GetValue
 int __fastcall GetValue(::ButtonWrapper * pThis, int) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->GetValue)(pThis->pImplementation);
     return nResult;
 }
 
+// 1.14d mac: 0009c978 D2Client::UI::Button::ButtonWrapper::SetAccelerator
 void __fastcall SetAccelerator(::ButtonWrapper * pThis, int, BOOL bEnable) {
     vc8_thiscall(pThis->pImplementation->pVtable->SetAccelerator)(pThis->pImplementation, bEnable);
 }
 
+// 1.14d mac: 0009c7ae D2Client::UI::Button::ButtonWrapper::Constructor
 ::ButtonWrapper * __fastcall Constructor(::ButtonWrapper * pThis, int, int nPosX, int nPosY, int nButtonKind, fpButtonOnActivate pfnOnActivate) {
     pfnEHHandlerRoutine pExcHandler = __GSHandlerCheck_EH_6ca103; // steer-ok: generated form, kept as emitted
     void* pPrevExceptionList = ExceptionList;
@@ -249,3 +263,14 @@ void __fastcall SetAccelerator(::ButtonWrapper * pThis, int, BOOL bEnable) {
 }
 
 }}}} // namespace D2Client::UI::Button::ButtonWrapper
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client { namespace UI { namespace Button { namespace ButtonWrapper {
+
+// 1.14d mac: 0009c7a4
+void __stdcall BUTTON_ConstructWrapper(::ButtonWrapper * pButton, int nPosX, int nPosY, int nButtonKind, fpButtonOnActivate pfnOnActivate) {
+    vc8_thiscall(Constructor)(pButton, nPosX, nPosY, nButtonKind, pfnOnActivate);
+}
+
+}}}} // namespace D2Client::UI::Button::ButtonWrapper
+#endif

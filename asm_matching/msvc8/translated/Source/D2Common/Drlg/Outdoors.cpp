@@ -315,6 +315,7 @@ BOOL __stdcall DRLGOUTDOOR_PlaceRandomBorderSubTiles(D2UnkOutdoorStrc * pOutdoor
 }
 
 // Checks that applying the LvlSub patch doesn’t conflict with existing floor/wall/shadow cells; returns false if any flagged tiles overlap and existing grids already set the same flags.
+// 1.14d mac: 001646f1
 BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nRoomX, int32_t nRoomY, D2DrlgWallLayerGridsStrc * pDrlgUnkn, int * pnGroupEntry, D2LvlSubTxt * pLvlSubTxt) {
     uint32_t uFlags;
     int nWallLayerIter;
@@ -346,6 +347,7 @@ BOOL __stdcall DRLGOUTDOOR_CheckSubTileOverlap(int32_t nRoomX, int32_t nRoomY, D
 }
 
 // Finds adjacent level in vis array, returns bitmask (1 shifted by index+4).
+// 1.14d mac: 0015440c
 int32_t __fastcall DRLGOUTDOOR_GetAdjacentLevelVisMask(D2DrlgLevelStrc * pLevel, D2DrlgLevelStrc * pAdjacentLevel) {
     int* pVisArray = DrlgRoom::DRLGWARP_GetVisArrayFromLevelId(pLevel->pDrlg, pLevel->eD2LevelId);
     int nIndex = 0;
@@ -365,6 +367,7 @@ int32_t __fastcall DRLGOUTDOOR_GetAdjacentLevelVisMask(D2DrlgLevelStrc * pLevel,
 }
 
 // Given a vertex position on the outdoor level grid, determines which edge direction it lies on (N/S/E/W corner), then searches the level's orthogonal link list for a matching neighbor in that direction whose world-coordinate bounds contain the vertex. If found and the link type is 0, returns the adjacent level's visibility mask via DRLGOUTDOOR_GetAdjacentLevelVisMask; otherwise returns 0.
+// 1.14d mac: 00154461
 int32_t __fastcall GetOutLinkVisFlag(D2DrlgLevelStrc * pLevel, D2DrlgVertexStrc * pDrlgVertex) {
     // Static local variables (originally global data)
     static int gnOutdoorsGridHeightByLevel[8] = { -0x4, 0x4, 0x4, -0x4, 0xc, 0x4, 0x4, 0xc }; D2_STATIC_GUARD(gnOutdoorsGridHeightByLevel, "D2Common::Drlg::Outdoors::GetOutLinkVisFlag::gnOutdoorsGridHeightByLevel");
@@ -417,6 +420,7 @@ int32_t __fastcall GetOutLinkVisFlag(D2DrlgLevelStrc * pLevel, D2DrlgVertexStrc 
 }
 
 // Checks grid flags for 0x200 and returns D2DrlgCoordStrc from secondary layer.
+// 1.14d mac: 0015453a
 int32_t __fastcall DRLGOUTDOOR_GetPresetCoordFromGrid(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     uint32_t uFlags = DrlgGrid::GetGridFlags(&pLevelData->sGridOutdoor, nX, nY);
@@ -428,12 +432,14 @@ int32_t __fastcall DRLGOUTDOOR_GetPresetCoordFromGrid(D2DrlgLevelStrc * pLevel, 
     return nCoords;
 }
 
+// 1.14d mac: 00154586
 void __fastcall AlterAdjacentPresetGridCells(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {
     D2DrlgLevelDataWildernessLevel* nGridIdx = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     DrlgGrid::AlterGridFlag(&nGridIdx->sGridPreset, nX, nY, 0, 3);
     DrlgGrid::AlterGridFlag(&nGridIdx->sGridOutdoor, nX, nY, 0, 3);
 }
 
+// 1.14d mac: 001545e9
 void __fastcall SetBlankGridCell(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {
     D2DrlgLevelDataWildernessLevel* nGridIdx = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     DrlgGrid::AlterGridFlag(&nGridIdx->sGridPreset, nX, nY, 0, 3);
@@ -445,6 +451,7 @@ void __fastcall SetBlankGridCell(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t n
 // returns TRUE if bit 10 (0x400 = preset flag) is NOT set.
 // Called as a validation callback during Act 5 secondary border placement
 // via DRLGOUTROOM_PlaceAct5SecondaryBorder -> AddSecondaryBorder.
+// 1.14d mac: 0015464c
 BOOL __fastcall DRLGOUTDOOR_IsGridCellPresetFree(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {
     D2DrlgLevelDataUnion t2_c2 = pLevel->pDrlgLevelData;
     uint32_t uFlags = (uint32_t)DrlgGrid::GetGridFlags(&t2_c2.pDrlgLevelOutdoorsData->sGridOutdoor, nX, nY) >> 10;
@@ -452,6 +459,7 @@ BOOL __fastcall DRLGOUTDOOR_IsGridCellPresetFree(D2DrlgLevelStrc * pLevel, int32
 }
 
 // Tests grid flags against 0x1b81, returns 1 if cell is available.
+// 1.14d mac: 0015467f
 BOOL __fastcall DRLGOUTDOOR_IsGridCellEmpty(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY) {
     D2DrlgLevelDataUnion t2_c2 = pLevel->pDrlgLevelData;
     uint32_t uFlags = DrlgGrid::GetGridFlags(&t2_c2.pDrlgLevelOutdoorsData->sGridOutdoor, nX, nY);
@@ -550,6 +558,7 @@ static int32_t DRLGOUTDOOR_AllocPresetFileTracker(int32_t nLevelPrestId, D2DrlgL
 }
 
 // Spawns an outdoor level preset at the given grid coordinates with specified preset ID and file index.
+// 1.14d mac: 001547b4
 void __fastcall SpawnOutdoorLevelPresetEx(D2DrlgLevelStrc * pLevel, int nX, int nY, int nPresetId, int nFileIndex, int bFlag) {
     D2DrlgLevelDataWildernessLevel* pOutdoorsData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     int nGridSizeX = Preset::GetSizeX(nPresetId) / 8;
@@ -574,6 +583,7 @@ void __fastcall SpawnOutdoorLevelPresetEx(D2DrlgLevelStrc * pLevel, int nX, int 
 }
 
 // Outdoor DRLG preset placement: scans all interior grid cells of pLevel (using the level's RNG seed for a randomized start offset) for a spot where TestOutdoorLevelPreset succeeds, picking the candidate cell whose Manhattan-ish weighted distance from the level's reference coord (pDrlgCoord) is greatest (i.e. farthest away). On success calls SpawnOutdoorLevelPresetEx at the best cell and returns TRUE; returns FALSE if no valid cell found. Mutates pLevel->sSeed as it draws randoms.
+// 1.14d mac: 00154a37
 BOOL __fastcall SpawnPresetFarAway(D2DrlgLevelStrc * pLevel, D2DrlgCoordStrc * pDrlgCoord, int32_t nLvlPrestId, int32_t nRand, int32_t nOffset, char nFlags) {
     D2DrlgLevelDataWildernessLevel* pOutdoors = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     int nWorldX = pLevel->sCoordinatesAndSize.WorldPosition.x;
@@ -625,6 +635,7 @@ BOOL __fastcall SpawnPresetFarAway(D2DrlgLevelStrc * pLevel, D2DrlgCoordStrc * p
 }
 
 // Outdoor DRLG preset placement that tries cells in a fully randomized order: builds a shuffle table of every interior grid cell, Fisher-Yates-shuffles it using pLevel->sSeed, then walks the shuffled cells calling TestOutdoorLevelPreset and, on the first cell that passes, calls SpawnOutdoorLevelPresetEx and returns TRUE. Returns FALSE if no cell is valid. Mutates pLevel->sSeed. Contrast with SpawnPresetFarAway which picks the farthest valid cell instead of the first random one.
+// 1.14d mac: 00154c58
 BOOL __fastcall SpawnOutdoorLevelPreset(D2DrlgLevelStrc * pLevel, int32_t nLevelPrestId, int32_t nRand, int32_t nOffset, char nFlags) {
     BOOL bCanPlace;
     uint32_t nRandIdxA;
@@ -693,6 +704,7 @@ BOOL __fastcall SpawnOutdoorLevelPreset(D2DrlgLevelStrc * pLevel, int32_t nLevel
 }
 
 // DRLG outdoor generator: tries to place a single outdoor level preset (DS1, nLvlPrestId) at a random valid cell of the level grid, with seed nRand. Builds a shuffled (Fisher-Yates, level-seeded) list of interior grid cells (grid minus a 2-cell border), then scans cells whose grid-flags have the high bit set, testing up to 8 sub-offsets (from gaOutdoorsGridWidthByLevel tables) via TestOutdoorLevelPreset; on the first cell that passes it spawns via SpawnOutdoorLevelPresetEx and returns TRUE. If no shuffled cell works, falls back to SpawnOutdoorLevelPreset and returns its result. Mutates pLevel->sSeed.
+// 1.14d mac: 00154e38
 BOOL __fastcall SpawnRandomOutdoorDS1(D2DrlgLevelStrc * pLevel, int32_t nLvlPrestId, int32_t nRand) {
     // Static local variables (originally global data)
     static uint8_t gaOutdoorsGridWidthByLevel_2[8] = { 0x0, 0xff, 0x1, 0x0, 0xff, 0x1, 0xff, 0x1 }; D2_STATIC_GUARD(gaOutdoorsGridWidthByLevel_2, "D2Common::Drlg::Outdoors::SpawnRandomOutdoorDS1::gaOutdoorsGridWidthByLevel_2");
@@ -787,6 +799,7 @@ BOOL __fastcall SpawnRandomOutdoorDS1(D2DrlgLevelStrc * pLevel, int32_t nLvlPres
 }
 
 // Places the waypoint marker tile on an outdoor DRLG level. For the Cold Plains level (id 3) it first looks for the visited-warp direction toward the level and scans the outdoor grid for a cell matching that warp-direction bit and the walkable flag (0x400), nudging the chosen cell off the edges, then stamps the waypoint via AlterGridFlag (sets 0x20000 in the layout grid and 0x800 in the collision grid). Otherwise it builds a list of interior cells, seed-shuffles them (Fisher-Yates using the level seed LCG), and picks the first cell whose collision flags clear mask 0x1b81, marking it as the waypoint (0x10000 / 0x800). Pure side effect on the level's DRLG grid data; advances the level seed.
+// 1.14d mac: 001550f8
 void __fastcall SpawnAct12Waypoint(D2DrlgLevelStrc * pLevel) {
     int* pVisArray;
     uint32_t nGridHeight;
@@ -921,6 +934,7 @@ void __fastcall SpawnAct12Waypoint(D2DrlgLevelStrc * pLevel) {
 }
 
 // DRLG outdoor decorator that scatters up to nShrines special tiles into a wilderness level grid. Builds a list of all interior (x,y) cells, Fisher-Yates shuffles it using the level seed, then walks the shuffled cells placing a shrine/decoration where the collision grid is clear (flags & 0x1b81 == 0): writes a per-style grid value (gnOutdoorsGridWidthByLevel[style]) into one grid and sets flag 0x1000 in the collision grid, cycling the 0..3 style index each placement. Stops once nShrines are placed or cells exhausted. Mutates pLevel grids and seed; no return.
+// 1.14d mac: 00155463
 void __fastcall SpawnAct12Shrines(D2DrlgLevelStrc * pLevel, int32_t nShrines) {
     uint32_t nRandIdxA;
     int nCellX;
@@ -1098,6 +1112,7 @@ D2DrlgVertexStrc * __fastcall Unreferenced_00675290(D2DrlgLevelStrc * pLevel, in
     return pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData->pAdjacentVertices[nIndex];
 }
 
+// 1.14d mac: 00155717
 void __fastcall AddAct124SecondaryBorder(D2DrlgLevelStrc * pLevel, int32_t nLvlSubId, int32_t nLevelPrestId) {
     D2UnkOutdoorStrc sBorderParams;
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
@@ -1118,6 +1133,7 @@ void __fastcall AddAct124SecondaryBorder(D2DrlgLevelStrc * pLevel, int32_t nLvlS
 }
 
 // @sourcefile .\DRLG\Outdoors.cpp
+// 1.14d mac: 001557a7
 void __fastcall DRLGLEVEL_InitializeWithWildernessLevel(D2DrlgLevelStrc * pLevel) {
     D2DrlgLevelDataWildernessLevel* pDrlgLevelOutdoorsData = D2_NEW_POOL_AT(pLevel->pDrlg->pMemoryPool, D2DrlgLevelDataWildernessLevel, ".\\DRLG\\Outdoors.cpp", 0x34c);
     pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData = pDrlgLevelOutdoorsData;
@@ -1125,6 +1141,7 @@ void __fastcall DRLGLEVEL_InitializeWithWildernessLevel(D2DrlgLevelStrc * pLevel
 }
 
 // Top-level outdoor level generator. Converts world-size tile coordinates to 8-tile grid units, initialises four DrlgGrid structures (outdoor, preset, and two auxiliary grids), builds the vertex mesh, simplifies outdoor points, then dispatches to the act-specific initialiser (InitAct1-5OutdoorLevel) before calling DRLGOUTDOOR_CreateOutdoorRoomExGrid. Level 0x86 (Harrogath Exterior) is forced to use the Act 2 (desert) path.
+// 1.14d mac: 00155806
 void __fastcall DRLGOUTDOOR_GenerateLevel(D2DrlgLevelStrc * pLevel) {
     D2PoolManagerStrc* pMemory = pLevel->pDrlg->pMemoryPool;
     D2DrlgLevelDataWildernessLevel* pDrlgLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
@@ -1173,6 +1190,7 @@ void __fastcall DRLGOUTDOOR_GenerateLevel(D2DrlgLevelStrc * pLevel) {
 }
 
 // @sourcefile .\DRLG\Outdoors.cpp
+// 1.14d mac: 00155c34
 void __fastcall DRLGOUTDOOR_FreeOutdoorLevelData(D2DrlgLevelStrc * pLevel, BOOL bKeepRoomData) {
     D2DrlgLevelDataWildernessLevel* pDVar1 = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
     D2PoolManagerStrc* pMemory = pLevel->pDrlg->pMemoryPool;
@@ -1296,6 +1314,7 @@ static void BuildChaosSanctuary(D2DrlgLevelStrc * pLevel) {
     } while ((int)nPresetIdx < 0x19);
 }
 
+// 1.14d mac: 0015689c
 void __fastcall InitAct4OutdoorLevel(D2DrlgLevelStrc * pLevel) {
     if (pLevel->eD2LevelId == 0x6c) {
       OutPlace::SetOutGridLinkFlags(pLevel);

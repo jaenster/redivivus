@@ -523,6 +523,7 @@ uint32_t __stdcall STRTABLE_HashString(char * szText, uint32_t nBucketCount) {
     return nHash % nBucketCount;
 }
 
+// 1.14d mac: 002b914c
 uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex) {
     uint16_t* pResult;
     uint16_t wParamHigh;
@@ -555,6 +556,7 @@ uint16_t * __fastcall GetLocaleString(uint16_t nStringIndex) {
 }
 
 // @sourcefile .\StrTable\strtable.cpp
+// 1.14d mac: 002b9227
 uint16_t * __fastcall STRTABLE_GetTranslatedString(uint8_t * pbKey) {
     int nCmp;
     uint8_t* pbKeyCopy;
@@ -713,6 +715,7 @@ uint16_t __stdcall STRTABLE_LookupString(uint8_t * pbKey, uint16_t * * ppwszText
     }
 }
 
+// 1.14d mac: 002b95a0
 uint16_t * __fastcall STRTABLE_GetStringByKey(uint8_t * szKey) {
     uint16_t* pwszText = 0;
     STRTABLE_LookupString(szKey, &pwszText);
@@ -720,6 +723,7 @@ uint16_t * __fastcall STRTABLE_GetStringByKey(uint8_t * szKey) {
 }
 
 // @sourcefile .\StrTable\strtable.cpp
+// 1.14d mac: 002b95c7
 void __stdcall STRINGTABLE_FreeStringTables() {
     if (!gpStringTableBase) {
       return;
@@ -789,6 +793,7 @@ uint16_t __fastcall Unreferenced_00525010(uint16_t wValue) {
     return wValue;
 }
 
+// 1.14d mac: 002b9832
 void __stdcall STRTABLE_CalculateCRC(uint16_t * pwCRC, uint8_t * pBuffer, uint32_t nOffset, uint32_t nEndOffset) {
     if (nOffset >= nEndOffset) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3ea);
@@ -843,7 +848,12 @@ uint32_t __stdcall MISC_GetLanguageCode() {
     return gnLanguageCode;
 }
 
+// 1.14d mac: 002b9950
 uint32_t __stdcall STRTABLE_GetRegistryLanguage() {
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac reads no Control Panel language: the game's own language file decides.
+    return 0;
+#else
     // Static local variables (originally global data)
     static char gszRegistryLanguage[256] = {0}; D2_STATIC_GUARD(gszRegistryLanguage, "D2Lang::StrTable::strtable::STRTABLE_GetRegistryLanguage::gszRegistryLanguage");
 
@@ -877,6 +887,7 @@ uint32_t __stdcall STRTABLE_GetRegistryLanguage() {
     }
 
     return 0;
+#endif
 }
 
 void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat) {
@@ -915,6 +926,7 @@ void __stdcall TABLES_GetLangAbbreviation(char * szOutAbbrev, int32_t nFormat) {
     }
 }
 
+// 1.14d mac: 002b9add
 void __stdcall STRTABLE_FormatNumber(uint16_t * wszText, uint32_t nValue, int32_t nMaxLen) {
     uint16_t wszFallback[2];
     char szDigits[64];
@@ -1152,6 +1164,7 @@ static void STRTABLE_LoadAbbreviationSymbols() {
 }
 
 // Loads and validates a .tbl string table. Takes ONE argument, the filename, in EDX - all three callers (00525b33, 00525cc5, 00525e54) set EDX only and never touch ECX. The PUSH ECX at 00525923 is MSVC's local-allocation idiom, not a parameter; read as one, it produced a phantom ECX argument that callers passed uninitialised, and that phantom is the local the CRC is computed into and compared against the file's stored CRC.
+// 1.14d mac: 002b9055
 static uint16_t * __fastcall STRTABLE_LoadStringTableFile(char * szFileName) {
     uint32_t wComputedCRC;
     D2StringTableTblFileStrc* pArchive = (D2StringTableTblFileStrc*)D2Hell::D2FILE_AllocAndLoadD2File((D2PoolManagerStrc*)MPQ_d2data, szFileName, nullptr, ".\\StrTable\\strtable.cpp", 0xc0);
@@ -1182,6 +1195,7 @@ static uint16_t * __fastcall STRTABLE_LoadStringTableFile(char * szFileName) {
 }
 
 // @sourcefile .\StrTable\strtable.cpp
+// 1.14d mac: 002b87a2
 int __fastcall TABLES_LoadStrings(D2PoolManagerStrc * pPoolManager, char * szText, int32_t isXpac) {
     int32_t pszUtf8Chars;
     uint32_t dwEcxOut;

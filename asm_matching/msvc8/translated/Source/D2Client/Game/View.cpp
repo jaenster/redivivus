@@ -83,6 +83,7 @@ static uint32_t gnFrameDrawCounter = 0; D2_STATIC_GUARD(gnFrameDrawCounter, "gnF
 
 namespace D2Client { namespace GAME { namespace View {
 
+// 1.14d mac: 000624ea
 void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * pOutIntensity, uint8_t * pOutRed, uint8_t * pOutGreen, uint8_t * pOutBlue) {
     int nCellX = (nWorldX >> 3) - D2Client::Draw::LightMap::gnLightmapWorldRefreshFlag;
     int nCellY = (nWorldY >> 3) - D2Client::Draw::LightMap::gnLightmapBufferState;
@@ -109,10 +110,12 @@ void __fastcall DRAW_CoordIsInCoord(int32_t nWorldX, int32_t nWorldY, uint8_t * 
     *pOutBlue = t2_r0->nBlue;
 }
 
+// 1.14d mac: 00062570
 void __stdcall DrawLight() {
     D2gfx::D2GFX::D2GFX_DrawLight((DWORD*)gLightMapBuffer, (DWORD*)D2Client::Draw::LightMap::gaLightMapCells, D2Client::Draw::LightMap::gpLightMap->nGridX, D2Client::Draw::LightMap::gpLightMap->nGridY);
 }
 
+// 1.14d mac: 0006101a
 void __stdcall VIEW_Init() {
     D2Common::DUNGEON::Dungeon::SetActCallbackFunc(Game::sgpDrlgAct, (::ACTCALLBACKFN)D2Client::Draw::LightMap::ACTCALLBACKFN);
     gnLightmapInterpolationState[1] = 0;
@@ -121,6 +124,7 @@ void __stdcall VIEW_Init() {
     }
 }
 
+// 1.14d mac: 0007c521
 uint8_t * __stdcall VIEW_AllocByteTable(uint32_t nDim, int32_t nSteps) {
     uint8_t* pTable = (uint8_t*)D2Hell::D2MEM_VirtualAlloc(nDim * nDim * nSteps + 3);
     uint8_t* pWrite = pTable;
@@ -243,6 +247,7 @@ void __fastcall Unreferenced_00475de0(LPVOID pMemory) {
     D2Hell::D2MEM_VirtualFree(pMemory);
 }
 
+// 1.14d mac: 0007c2b1
 void __stdcall VIEW_InitLookupTables() {
     if (gpViewPalPointerTable32x8) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xca);
@@ -288,6 +293,7 @@ void __stdcall VIEW_FreeDC6Images() {
 }
 
 // Frees all five global palette lookup tables (gpViewPalPointerTable32x8, gpViewPalByteTable32x16, gpViewPalByteTable16x32, gpViewPalPointerTable32x32, gpViewPalByteTable32x40) via D2MEM_VirtualFree, NULLs them, resets gnSoundShakeVolume to 0, and calls VIEW_FreeDC6Images. Halts with an internal error if any table is NULL while an earlier one is not.
+// 1.14d mac: 0007c5c3
 void __stdcall VIEW_FreeLookupTables() {
     if (!gpViewPalPointerTable32x8) {
       return;
@@ -333,11 +339,13 @@ void __stdcall VIEW_FreeLookupTables() {
 }
 
 // @sourcefile .\GAME\View.cpp
+// 1.14d mac: 0007c913
 void __fastcall FreeGameView(D2GameViewStrc * pGameView) {
     Wall2::FreeWall2(pGameView);
     D2_FREE_AT(pGameView, ".\\GAME\\View.cpp", 0x141);
 }
 
+// 1.14d mac: 0007c908
 void __fastcall SetFlag0x1(D2GameViewStrc * pGameView) {
     pGameView->nFlags |= 1;
 }
@@ -369,6 +377,7 @@ void __fastcall VIEW_GetViewRect(D2GameViewStrc * pGameView, int * pLeft, int * 
     *pBottom = pGameView->pView.bottom;
 }
 
+// 1.14d mac: 0007ca15
 void __fastcall SetCenterXY(D2GameViewStrc * pGameView, uint32_t x, uint32_t y) {
     if (!(pGameView->nCenterX != x || pGameView->nCenterY != y)) {
       return;
@@ -403,6 +412,7 @@ void __fastcall VIEW_ConvertViewCoordsToIsometric(D2GameViewStrc * pGameView, in
     }
 }
 
+// 1.14d mac: 0007ca52
 void __fastcall GAMEVIEW_PrepareScene(D2GameViewStrc * pGameView, uint32_t nFlags) {
     if (!pGameView) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1dd);
@@ -420,6 +430,7 @@ void __fastcall GAMEVIEW_PrepareScene(D2GameViewStrc * pGameView, uint32_t nFlag
     pGameView->nFlags &= -2;
 }
 
+// 1.14d mac: 0007db33
 void __stdcall VIEW_GenerateRandomViewParams(int32_t nStarIndex, int32_t bRespawn) {
     int32_t* const pStarX = &gaArcaneStarXPos[nStarIndex];
     D2SeedStrc* pStarSeed = gpArcaneStarsSeed;
@@ -676,6 +687,7 @@ void __stdcall VIEW_ToggleFrameDrawCounter() {
 }
 
 // Adjusts the looping screen-shake rumble sound (SOUND_BABOONDEMON_HIT_4) to match the current shake intensity. Converts nShakeIntensity (0–20) to a 0–255 target volume, starts the channel if not already playing, stops it if volume reaches 0, otherwise ramps the current volume toward the target by ±6 per call via SOUND_SetChannelPriority.
+// 1.14d mac: 0007d9d7
 static void SHAKE_UpdateShakeSoundVolume(int32_t nShakeIntensity) {
     uint32_t nNewVolume;
     uint32_t nTargetVolume;
@@ -728,6 +740,7 @@ static void SHAKE_UpdateShakeSoundVolume(int32_t nShakeIntensity) {
     gnSoundShakeVolume = 0;
 }
 
+// 1.14d mac: 0007dae9
 void __fastcall SetShake(int32_t nAmplitude, int32_t nArg3, int32_t nArg1, int32_t nArg2) {
     if (!nArg1) {
       return;
@@ -740,6 +753,7 @@ void __fastcall SetShake(int32_t nAmplitude, int32_t nArg3, int32_t nArg1, int32
     SHAKE_Amplitude = nAmplitude;
 }
 
+// 1.14d mac: 0007d83b
 BOOL __fastcall SHAKE_GetShake(int * pShakeX, int * pShakeY) {
     if (!SHAKE_Amplitude) {
       return 0;
@@ -750,6 +764,7 @@ BOOL __fastcall SHAKE_GetShake(int * pShakeX, int * pShakeY) {
     return 1;
 }
 
+// 1.14d mac: 0007dac0
 void __stdcall SHAKE_Reset() {
     SHAKE_Amplitude = 0;
     SHAKE_OFFSET_X = 0;
@@ -758,6 +773,7 @@ void __stdcall SHAKE_Reset() {
 
 // Allocates and initializes a D2GameViewStrc (0xEABC bytes) for the game renderer. Validates that the three required palette tables are non-NULL (halts otherwise), calls SetRect to zero the viewport, copies palette table pointers into the struct, stubs and resets wall data, sets the active flag (nFlags|=1), and resets gnLastLightmapUpdateFrame. Returns the new view struct.
 // @sourcefile .\GAME\View.cpp
+// 1.14d mac: 0007c7e2
 D2GameViewStrc * __stdcall AllocGameView() {
     D2GameViewStrc* pGameView;
     uint8_t* pPalByteTable16x32;
@@ -799,6 +815,7 @@ D2GameViewStrc * __stdcall AllocGameView() {
 // The guard constants 1/8/2 sit on the same struct field. TVIEWDATA == D2GameViewStrc.
 // @wasnamed Draw_AnythingInTheWorldNonUI
 // Already-documented — existing description is detailed and accurate (6-layer world rendering pipeline: background FX, underfloor, floor tiles, shadows, units, roofs/weather; handles perspective scale, lightmap updates, level-specific FX for Arcane Sanctuary and Arreat Summit).
+// 1.14d mac: 0007cab5
 void __fastcall ViewDraw2(D2GameViewStrc * pGameView) {
     uint32_t _bPerspective;
     bool bPerspective;
@@ -882,6 +899,7 @@ void __fastcall ViewDraw2(D2GameViewStrc * pGameView) {
 }
 
 // Applies screen-shake offset to the camera center point. Computes shake magnitude from elapsed ticks using a three-phase envelope (fade-in over Arg3, sustain over Arg1, fade-out over Arg2). Rolls random X/Y offsets from the player unit seed and adds them to *pCenterX/*pCenterY. Updates the global shake-sound volume proportionally; zeros shake state when the envelope expires.
+// 1.14d mac: 0007d873
 void __fastcall SHAKE_AdjustCenterByShake(uint32_t * pCenterX, uint32_t * pCenterY) {
     const uint32_t nTicks = GetTickCount() - SHAKE_StartTickcount;
     const uint32_t nFadeIn = SHAKE_Arg3;
@@ -1000,6 +1018,7 @@ static void __stdcall WALL2_DrawUnderFloorTiles(D2GameViewStrc * pViewData, D2Wa
 }
 
 // Draws all wall tiles in DRLG with alpha blending. Iterates wall tile linked list, applies alpha fading effects, checks viewport clipping, calls D2GFX_DrawTransWallTile for blended tiles.
+// 1.14d mac: 00062b96
 void __stdcall WALL2_DrawWallTilesWithAlpha(D2Wall2CellStrc * pWall2Cell, uint32_t eRenderPass, D2GameViewStrc * pCameraView) {
     uint8_t byMaskedIntensity;
     int32_t nPosX;
@@ -1329,6 +1348,7 @@ BOOL __stdcall SOUND_IsDirectSoundAvailable() {
     return DVar1;
 }
 
+// 1.14d mac: 000945e7
 BOOL __stdcall SOUND_IsEaxAvailable() {
     if (!GAME::Sound::pAudioMixerInterface) {
       return 0;

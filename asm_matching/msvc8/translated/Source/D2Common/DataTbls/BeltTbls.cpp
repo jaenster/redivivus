@@ -16,6 +16,7 @@ D2BeltsTxt * pTxtBelts = 0; D2_GLOBAL_GUARD(pTxtBelts, "D2Common::DATATBLS::Belt
 namespace D2Common { namespace DATATBLS { namespace BeltsTbls {
 
 // Builds the D2BinFieldInputStrc schema for belts.txt and compiles it via DataTbls::CompileTxt into the pTxtBelts table. Schema: numboxes plus 16 belt box screen rectangles (boxN left/right/top/bottom) defining the in-belt potion slot layout per belt type. Record stride 0x108. Asserts the produced record count divided by 2 equals 7 (NUM_BELT_STATS across the resolution variants), else fatal Fog error. Called once during data-table init; allocates from the passed D2PoolManagerStrc.
+// 1.14d mac: 0013b276
 void __fastcall LoadBeltsTxt(D2PoolManagerStrc * pMemory) {
     int nTxtBeltsSize;
     D2BinFieldInputStrc belts[66] = {
@@ -95,6 +96,7 @@ void __fastcall LoadBeltsTxt(D2PoolManagerStrc * pMemory) {
     exit(-1);
 }
 
+// 1.14d mac: 0013b328
 void __stdcall FreeBeltsTxt() {
     DataTbls::UnloadBin(pTxtBelts);
 }
@@ -115,6 +117,7 @@ static D2BeltsTxt * __stdcall TXT_Belts_GetLine(int nIndex) {
     }
 }
 
+// 1.14d mac: 0013b347
 void __stdcall GetBeltsLine(int32_t nIndex, int32_t bHigherRes, D2BeltsTxt * pRecord) {
     int32_t iLoop;
     uint8_t byPadByte0;
@@ -129,6 +132,7 @@ void __stdcall GetBeltsLine(int32_t nIndex, int32_t bHigherRes, D2BeltsTxt * pRe
     *pRecord = *pSrcEntry;
 }
 
+// 1.14d mac: 0013b3bb
 void __stdcall GetInvRectFromBeltsTxt(int32_t nIndex, int32_t bHigherRes, int32_t * pInvRect, int32_t nBoxId) {
     D2BeltsEntryStrc* pBeltEntry;
     if (!pTxtBelts) {

@@ -29,6 +29,7 @@ typedef int (__fastcall *fpMissileSrvDoFuncData)(D2UnitStrc * pUnit, void * pCon
 namespace D2Client { namespace SKILLS { namespace SkillsEMon {
 
 // Enhanced-monster skill client do-func: creates a client missile that travels perpendicular to the direction of the primary missile. Resolves missile type via SKILLSASS_GetCltMissileByAuraLevel, computes direction delta from caster to target, creates the missile, then rotates the direction 90 degrees (swaps/negates X/Y) by setting TargetX/TargetY on the missile unit.
+// 1.14d mac: 0008a5e3
 BOOL __fastcall Skills_CltDoFunc_EMon_PerpendicularMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int nTargetY;
@@ -73,6 +74,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_PerpendicularMissile(D2UnitStrc * pUnit, e
 }
 
 // Client skill CltDoFunc: spawns a falling/arcing missile with a Z-axis trajectory for an EMon (enemy/missile) skill. Validates eSkill and the skill's cltmissilea/cltmissileb missile ids, faces and aims at the confirmed target (or the cast coordinates), then builds a D2SkillArgStrc and creates the missile via MakeMissile. Computes initial Z (from cltcalc[0] + particle pos), per-frame Z step and anim speed from cltcalc[1]+missile Param2/AnimLen, randomly picks missile a/b via the unit seed, applies a randomized velocity offset from gnSkillEMonFallingMissileZ, and sets the missile's particle position/offset vectors. Returns TRUE on spawn, FALSE otherwise.
+// 1.14d mac: 0008a750
 BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     // Static local variables (originally global data)
     static uint32_t gnSkillEMonFallingMissileZ[6] = { 0xfffffffe, 0xffffffff, 0x0, 0x1, 0x2, 0x0 }; D2_STATIC_GUARD(gnSkillEMonFallingMissileZ, "D2Client::SKILLS::SkillsEMon::Skills_CltDoFunc_EMon_FallingMissileWithZ::gnSkillEMonFallingMissileZ");
@@ -171,6 +173,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_FallingMissileWithZ(D2UnitStrc * pUnit, eD
 }
 
 // Client DoFunc for EMon skills that fire a missile at the owner's coordinates with a Z-axis arc. Resolves missile ID via aura level, creates the missile at owner coords, then sets its initial Z position (cltcalc[1] + particle Z offset) and a per-frame Z decrement so the projectile arcs down over its flight. Returns TRUE on success.
+// 1.14d mac: 0008ab5f
 BOOL __fastcall Skills_CltDoFunc_EMon_MissileAtOwnerWithZ(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nPosZShifted;
     int nZStep;
@@ -218,6 +221,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_MissileAtOwnerWithZ(D2UnitStrc * pUnit, eD
     return 0;
 }
 
+// 1.14d mac: 0008acdd
 BOOL __fastcall Skills_CltStFunc_CastBaalTauntMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxtBase) {
@@ -240,6 +244,7 @@ BOOL __fastcall Skills_CltStFunc_CastBaalTauntMissile(D2UnitStrc * pUnit, eD2Ski
 }
 
 // Client StFunc that casts a missile displaced by the monster's upgrade-skill screen offset. Reads the caster's monster offset (X/Y) via MONSTERS_GetUpgradeSkillsAndCount, converts map coords to screen, then positions the missile's particle vector and step-offset so it appears to originate from the offset origin. Uses cltcalc[0] for Z. Returns TRUE if missile was created.
+// 1.14d mac: 0008ada8
 BOOL __fastcall Skills_CltStFunc_CastMissileWithPositionOffset(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nZCalc;
     int nMissileRange;
@@ -297,6 +302,7 @@ BOOL __fastcall Skills_CltStFunc_CastMissileWithPositionOffset(D2UnitStrc * pUni
     return 0;
 }
 
+// 1.14d mac: 0008af7d
 BOOL __fastcall Skills_CltStFunc_SpawnCltMissileAtSelf(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -311,6 +317,7 @@ BOOL __fastcall Skills_CltStFunc_SpawnCltMissileAtSelf(D2UnitStrc * pUnit, eD2Sk
     return 1;
 }
 
+// 1.14d mac: 0008b06d
 BOOL __fastcall Skills_CltDoFunc_EMon_CastAttackMissileB(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -327,6 +334,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_CastAttackMissileB(D2UnitStrc * pUnit, eD2
     return 1;
 }
 
+// 1.14d mac: 0008b160
 BOOL __fastcall Skills_CltDoFunc_EMon_OffsetParticleMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTargetUnit;
     int32_t nSpriteOffsetX;
@@ -393,6 +401,7 @@ static int __stdcall SKILLSEMON_CltSetReviveGfx(eMissilesId eMissileId, eD2Skill
 }
 
 // Client-side helper: creates a missile at the unit's current map position (reads X/Y from static or dynamic path), inherits the unit's facing direction, and clears the path's 0x40 flag. If nParam is non-zero, marks the missile dead immediately (used for visual-only effects). Returns TRUE on success.
+// 1.14d mac: 0008b3c1
 static BOOL __stdcall SKILLSEMON_CltCreateMissileAtUnit(eMissilesId neMissilesId, eD2Skills eSkill, int32_t nSkillLevel, int32_t bSetDead, D2UnitStrc * pUnit) {
     int nY;
     int nX;
@@ -430,6 +439,7 @@ static BOOL __stdcall SKILLSEMON_CltCreateMissileAtUnit(eMissilesId neMissilesId
     return 1;
 }
 
+// 1.14d mac: 0008b23e
 BOOL __fastcall Skills_CltStFunc_SetSrvDoFlagAndReviveGfx(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -454,6 +464,7 @@ BOOL __fastcall Skills_CltStFunc_SetSrvDoFlagAndReviveGfx(D2UnitStrc * pUnit, eD
     return 1;
 }
 
+// 1.14d mac: 0008b48c
 BOOL __fastcall Skills_CltDoFunc_EMon_ScreenShake(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     int nDuration = !pSkillsTxt ? 0 : pSkillsTxt->Param[0];
@@ -468,6 +479,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_ScreenShake(D2UnitStrc * pUnit, eD2Skills 
 }
 
 // Client-side enchant/event-monster skill DoFunc that spawns a delayed chain of missiles along the line from the caster to its target coordinates. Validates the skill and its cltmissileb missile record, gets the target coords (GetCooordinates) and line distance, then steps along the line at Param1 spacing casting cltmissileb missiles (CastAttack), each given an increasing total/current-frame delay (Param2 step) and set NODRAW so they activate sequentially. Finally fires the primary cltmissilea missile (CastAttackWithDistanceCheck), offsetting its activation frame by the accumulated chain delay so it lands after the line. Returns TRUE on success.
+// 1.14d mac: 0008b5ae
 BOOL __fastcall Skills_CltDoFunc_EMon_DelayedLineMissileChain(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pMissile;
     int32_t nChainBaseTotalFrames;
@@ -566,6 +578,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_DelayedLineMissileChain(D2UnitStrc * pUnit
     return 1;
 }
 
+// 1.14d mac: 0008b943
 BOOL __fastcall Skills_CltStFunc_SetTimedDurationAndInfernoState(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxtBase = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxtBase) {
@@ -593,6 +606,7 @@ BOOL __fastcall Skills_CltStFunc_SetTimedDurationAndInfernoState(D2UnitStrc * pU
 }
 
 // Client DoFunc for EMon Inferno-style skills with Z elevation. Checks the skill's Param1 against the current game entry index to decide whether to clear the STATE_inferno state or create an inferno missile via SKILLSSOR_CltCreateInfernoMissile. If created, sets particle Z from cltcalc[0] and enables reverse direction. Clears UNITFLAG_SKSRVDOFUNC on success.
+// 1.14d mac: 0008ba20
 BOOL __fastcall Skills_CltDoFunc_EMon_InfernoWithZ(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -625,6 +639,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_InfernoWithZ(D2UnitStrc * pUnit, eD2Skills
 }
 
 // Client StFunc: reads the confirmed target unit's map X/Y position and stores them into the current skill's Param1/Param2. Used by EMon skills so subsequent DoFunc calls can fire missiles at the remembered target coordinates rather than the live target position.
+// 1.14d mac: 0008bb4d
 BOOL __fastcall Skills_CltStFunc_SetParamsFromTargetPositionEMon(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nPosX;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
@@ -662,6 +677,7 @@ BOOL __fastcall Skills_CltStFunc_SetParamsFromTargetPositionEMon(D2UnitStrc * pU
 }
 
 // Client DoFunc that fires the skill's cltmissilea (and optionally cltmissileb) at the map coordinates stored in skill Param1/Param2 (set by Skills_CltStFunc_SetParamsFromTargetPositionEMon). Plays prgsound on the primary missile. Returns TRUE if at least the primary missile was created.
+// 1.14d mac: 0008bbf2
 BOOL __fastcall Skills_CltDoFunc_EMon_MissileAtParam(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -707,6 +723,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 0008bd4e
 BOOL __fastcall Skills_CltStFunc_CheckReviveCorpseSetParams(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
@@ -732,6 +749,7 @@ BOOL __fastcall Skills_CltStFunc_CheckReviveCorpseSetParams(D2UnitStrc * pUnit, 
     return 0;
 }
 
+// 1.14d mac: 0008be1a
 BOOL __fastcall Skills_CltDoFunc_EMon_MissileAtParamSP1(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -759,6 +777,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_MissileAtParamSP1(D2UnitStrc * pUnit, eD2S
     return 0;
 }
 
+// 1.14d mac: 0008bf07
 BOOL __fastcall Skills_CltDoFunc_EMon_HomingToOwner(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pOwnerUnit = UNIT::CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (!pOwnerUnit) {
@@ -780,6 +799,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 0008c2b8
 int __fastcall SKILLSCLT_CheckSkillIsValid(D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MISSILE) {
       return 0;
@@ -794,6 +814,7 @@ namespace D2Client { namespace SKILLS { namespace SkillsEMon {
 
 // Client-side do-function for the Evil Monster vine-attack skill. Ensures the monster has a SKILL_VineAttack skill entry (creating it if absent), then increments the hit-count param. In Neutral anim mode fires a collision-based hit (MISSILE_ClientHitExplode) when range or hit-count threshold is reached, then selects missile type cltmissiled; in Walk mode picks randomly between cltmissilec variants. Spawns the chosen missile via SKILLSEMON_CltCreateMissileAtUnit when the fire condition is met, resetting params.
 // @sourcefile .\SKILLS\SkillsEMon.cpp
+// 1.14d mac: 0008bf38
 BOOL __fastcall Skills_CltDoFunc_EMon_VineAttack(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nRandMod;
     D2UnitStrc* pHitUnit;
@@ -868,6 +889,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_VineAttack(D2UnitStrc * pUnit, eD2Skills e
     return 1;
 }
 
+// 1.14d mac: 0008c2da
 BOOL __fastcall Skills_CltDoFunc_EMon_BloodAndMissileB(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -895,6 +917,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_BloodAndMissileB(D2UnitStrc * pUnit, eD2Sk
 }
 
 // Client-side skill effect for extra-monster wall/row missile skills (e.g. Inferno Wall). Resolves the aura-level missile via SKILLSASS_GetCltMissileByAuraLevel, computes a perpendicular unit vector from caster to target, then spawns nRowMissileCount missiles evenly distributed along that perpendicular line. Sets inferno frame count on each missile. Checks for STATE_inferno on the caster after spawning and applies a sequence frame override (frame 8) if active.
+// 1.14d mac: 0008c3aa
 BOOL __fastcall Skills_CltDoFunc_EMon_WallMissileRow(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bGotCoords;
     int32_t nRowMissileCount;
@@ -962,6 +985,7 @@ BOOL __fastcall Skills_CltDoFunc_EMon_WallMissileRow(D2UnitStrc * pUnit, eD2Skil
     return 0;
 }
 
+// 1.14d mac: 0008c60e
 BOOL __fastcall Skills_CltDoFunc_EMon_PerpendicularMissile2(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nCoordX;
     int nCoordY;

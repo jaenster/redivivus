@@ -10,10 +10,18 @@
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The 1.14d Mac keeps the inverse as a byte nothing writes: SOUND_GetHardwareAccelerationFlag (002e76e9)
+// returns it XOR 1, and the Mac has no driver scan to clear it.
+static bool gbSoundHardwareAccelerationOff = false; D2_STATIC_GUARD(gbSoundHardwareAccelerationOff, "gbSoundHardwareAccelerationOff");
+#else
 static uint32_t gnSoundHardwareAcceleration = 0x1; D2_STATIC_GUARD(gnSoundHardwareAcceleration, "gnSoundHardwareAcceleration");
+#endif
 
 namespace D2Sound {
 
+// Not in the 1.14d Mac binary: the DirectSoundEnumerate callback of the Windows driver scan.
+#if !(!defined(_WIN32) && D2_OS_MAC)
 BOOL __stdcall SOUND_DetectLegacySoundDrivers(int nUnused, char * szDeviceName, char * szDriverVxd, DWORD dwUnused) {
     if (!nUnused || g_bSoundDriverScanComplete) {
       return 1;
@@ -47,36 +55,60 @@ BOOL __stdcall SOUND_DetectLegacySoundDrivers(int nUnused, char * szDeviceName, 
     g_bSoundDriverScanComplete = 1;
     return 1;
 }
+#endif
 
 DWORD __stdcall SOUND_GetLanguageCode() {
     return LanguageCode;
 }
 
+// 1.14d mac: 002e76ab
 IDirectSound * __stdcall SOUND_GetDirectSoundDevice() {
     return gpDirectSound;
 }
 
+// 1.14d mac: 002e76bc
+// The Mac has no primary-buffer 3D mode.
 DWORD __stdcall SOUND_GetPrimaryBufferModeFlag() {
+#if !defined(_WIN32) && D2_OS_MAC
+    return 0;
+#else
     return gbDSoundPrimaryBufferMode;
+#endif
 }
 
+// 1.14d mac: 002e76c3
 DWORD __stdcall SOUND_GetSound3DFlag() {
     return gbSound3DEnabled;
 }
 
+// 1.14d mac: 002e76d5
+// On the Mac the quality is a byte that is set only for EAX 2; the getter doubles it.
 DWORD __stdcall SOUND_GetSoundQualityFlag() {
+#if !defined(_WIN32) && D2_OS_MAC
+    return gnSoundQualityMode * 2;
+#else
     return gnSoundQualityMode;
+#endif
 }
 
+// Not in the 1.14d Mac binary: its only reader, SOUNDSMP_SetEaxRoomLevel, does not read it there.
+#if !(!defined(_WIN32) && D2_OS_MAC)
 DWORD __stdcall SOUND_GetEAXEnabledFlag() {
     return g_bEAXEnabled;
 }
+#endif
 
+// 1.14d mac: 002e76e9
 DWORD __stdcall SOUND_GetHardwareAccelerationFlag() {
+#if !defined(_WIN32) && D2_OS_MAC
+    return gbSoundHardwareAccelerationOff ^ 1;
+#else
     return gnSoundHardwareAcceleration;
+#endif
 }
 
 // Toggles EAX environment preset. Sets gpDirectSoundEAXInterface property based on param (1=generic, else=custom -10000 volume). Calls IDirectSound3DListener::Set() with EAX property GUIDs. Returns success flag.
+// 1.14d mac: 002e76fe
 BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
     HRESULT hResult;
     if (!Sound::gpDirectSoundEAXInterface) {
@@ -105,6 +137,7 @@ BOOL __fastcall SOUND_ToggleEAXEnvironmentPreset(int nPresetType) {
     return 1;
 }
 
+// 1.14d mac: 002e7bbd
 char * __fastcall SOUND_GetDirectSoundErrorString(int hResult) {
     switch (hResult) {
       case -0x7787fff6:

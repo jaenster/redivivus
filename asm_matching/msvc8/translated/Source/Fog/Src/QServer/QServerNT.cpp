@@ -26,6 +26,7 @@ struct QServer;
 
 namespace Fog { namespace Src { namespace QServer { namespace QServerNT {
 
+// 1.14d mac: 002f6d2b
 void __fastcall AwaitAndClose(D2QServerStrc * pQserver) {
     HANDLE aWaitHandles[8];
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQserver->csClientLifecycle);
@@ -117,6 +118,7 @@ static BOOL __stdcall BeginAsyncReadForClient(D2QServerStrc * pQServer, D2QServe
     }
 }
 
+// 1.14d mac: 002f7042
 static D2QServerClientPacketStrc * __stdcall NET_QServerClientPacket_CreateStructAndCopyBytesThere(D2QServerClientConnectionStrc * pQServerClient, char * pBytes, uint32_t nSize) {
     D2QServerClientPacketStrc* pNewPacket = (D2QServerClientPacketStrc*)D2_ALLOC_AT(nSize + sizeof(D2QServerClientPacketStrc), ".\\Src\\QServer\\QServerNT.cpp", 0x440);
     memcpy(pNewPacket + 1, pBytes, nSize);
@@ -227,7 +229,9 @@ static SOCKET __stdcall AcceptConnection(D2QServerStrc * pQServer, sockaddr * pS
       exit(-1);
     }
 
+    #if !D2_OS_MAC
     /* DWORD NumberOfConcurrentThreads for CreateIoCompletionPort */ /* ULONG_PTR CompletionKey for CreateIoCompletionPort */ /* HANDLE ExistingCompletionPort for CreateIoCompletionPort */ /* HANDLE FileHandle for CreateIoCompletionPort */ CreateIoCompletionPort(FileHandle, pQServer->aIoCompletionPorts[nWorkerIndex], pClient->nClientToken, 0);
+#endif
     /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&pQServer->aWorkerTelemetry[nWorkerIndex].qpcStampAfterAttachIocp);
     bBeginReadOk2 = BeginAsyncReadForClient(pQServer, pClient);
     pCsTelemetryLocal = pCsTelemetry;
@@ -299,6 +303,7 @@ static int __stdcall PopAndFreeCompletedSendPacket(D2QServerClientConnectionStrc
 }
 
 // Accept thread entry point for QServer network listener. Polls listening socket with select(), accepts incoming client connections via AcceptConnection(), and periodically sweeps expired hacklist entries to enforce IP-based rate limiting. Telemetry tracks performance of each accept operation substage (hacklist check, connection limit, IP rate, IOCP attachment, initial recv).
+// 1.14d mac: 002f62f5
 DWORD __stdcall AcceptThreadMain(D2QServerWorkerThreadContextStrc * lpThreadParam) {
     DWORD dwNextSweepTick;
     uint32_t dwQpcDelta;
@@ -345,10 +350,12 @@ DWORD __stdcall AcceptThreadMain(D2QServerWorkerThreadContextStrc * lpThreadPara
         }
         if (nStopFlag) {
           /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&qpcStart);
+          #if !D2_OS_MAC
           /* HANDLE hThread for GetThreadPriority */ nStopFlag = GetThreadPriority(pQServer->aAcceptThreadHandles[nWorkerIndex]);
           if (nStopFlag != 0x7fffffff) {
             /* int nPriority for SetThreadPriority */ /* HANDLE hThread for SetThreadPriority */ SetThreadPriority(pQServer->aAcceptThreadHandles[nWorkerIndex], nStopFlag);
           }
+#endif
 
           AcceptConnection(pQServer, &addrClient, nWorkerIndex, &nAddrLen);
           /* LARGE_INTEGER * lpPerformanceCount for QueryPerformanceCounter */ QueryPerformanceCounter(&qpcEnd);
@@ -412,6 +419,7 @@ DWORD __stdcall AcceptThreadMain(D2QServerWorkerThreadContextStrc * lpThreadPara
     return 1;
 }
 
+// 1.14d mac: 002f6e47
 BOOL __fastcall SendToClientLocal(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pQServerClient, char * pBytes, int nSize) {
     int nWsaError;
     CRITICAL_SECTION* lpCriticalSection = &pQServerClient->clientLock;
@@ -453,6 +461,19 @@ BOOL __fastcall SendToClientLocal(D2QServerStrc * pQServer, D2QServerClientConne
 }
 
 // NOTE: Register params: pQServer (ECX): D2QServerStrc *, nWorkerIndex (EDX): int
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac binary has no completion port: its pump (002f70c5) only waits out the tick window.
+int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWorkerIndex, uint32_t dwTimeoutMs) {
+    DWORD dwTickNow = GetTickCount();
+    DWORD dwTickStart = GetTickCount();
+    while (dwTickNow - dwTickStart < 0x65 && GetLastError() != 0x102) {
+      ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x3c8);
+      exit(-1);
+    }
+    return 0;
+}
+#endif
+#if !D2_OS_MAC
 int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWorkerIndex, uint32_t dwTimeoutMs) {
     D2QServerClientPacketStrc* pMemoryToFree;
     BOOL bGqcsResult;
@@ -585,8 +606,10 @@ int __fastcall PumpIoCompletionQueueForWorker(D2QServerStrc * pQServer, int nWor
 
     return bReceivedData;
 }
+#endif
 
 // lpStartAddress parameter of CreateThread
+// 1.14d mac: 002f6c7f
 DWORD __stdcall IoWorkerThreadMain(D2QServerWorkerThreadContextStrc * lpThreadParam) {
     D2QServerStrc* pQServer = lpThreadParam->pQServer;
     int nWorkerIndex = lpThreadParam->nWorkerIndex;
@@ -631,6 +654,7 @@ int __fastcall PumpIoCompletionQueues(D2QServerStrc * pQServer, uint32_t dwTimeo
     return 1;
 }
 
+// 1.14d mac: 002f5fcb
 SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     int nResult;
     D2QServerWorkerThreadContextStrc* pThreadArgs;
@@ -638,11 +662,13 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     sockaddr bindAddr;
     uint32_t* pIocp2;
     uint32_t nPortLocal = nPort;
+#if !D2_OS_MAC
     HANDLE pIocp = CreateIoCompletionPort((HANDLE)-1, (HANDLE)0x0, 0, 0);
     if (!pIocp) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x4e);
       exit(-1);
     }
+#endif
 
     SOCKET hListenSocket = socket(2, 1, 0);
     if (hListenSocket == -1) {
@@ -677,14 +703,20 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
 
     nResult = pQServer->nListeningWorkers;
     pQServer->nListeningWorkers = nResult + 1;
+#if !D2_OS_MAC
     pQServer->aIoCompletionPorts[nResult] = pIocp;
+#endif
     pQServer->aListenPorts[nResult] = (u_short)nPortLocal;
     pQServer->aListenSockets[nResult] = hListenSocket;
     pQServer->aWorkerSlotValues[nResult] = 1;
     pThreadArgs = (D2QServerWorkerThreadContextStrc*)D2_ALLOC_AT(sizeof(D2QServerWorkerThreadContextStrc), ".\\Src\\QServer\\QServerNT.cpp", 0xa2);
     /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pThreadArgs->pQServer = pQServer;
     pThreadArgs->nWorkerIndex = nResult;
+#if !defined(_WIN32) && D2_OS_MAC
+    hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)AcceptThreadMain, pThreadArgs, 0, (LPDWORD)(pQServer->aAcceptThreadIds + nResult), "sAcceptThread");
+#else
     hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)AcceptThreadMain, pThreadArgs, 0, (LPDWORD)(pQServer->aAcceptThreadIds + nResult));
+#endif
     pQServer->aAcceptThreadHandles[nResult] = hThread;
     ErrorManager::StubHook1(pQServer->aAcceptThreadIds[nResult], hThread);
     if (pQServer->bUseDedicatedIoWorkers) {
@@ -692,7 +724,11 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
       /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pThreadArgs->pQServer = pQServer;
       pThreadArgs->nWorkerIndex = nResult;
       pIocp2 = (uint32_t*)(pQServer->aIoWorkerThreadIds + nResult);
+#if !defined(_WIN32) && D2_OS_MAC
+      hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)pIocp2, "sReadThread");
+#else
       hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)IoWorkerThreadMain, pThreadArgs, 0, (LPDWORD)pIocp2);
+#endif
       pQServer->aIoWorkerThreadHandles[nResult] = hThread;
       ErrorManager::StubHook1(*pIocp2, hThread);
     }
@@ -700,6 +736,7 @@ SOCKET __fastcall StartListening(D2QServerStrc * pQServer, uint32_t nPort) {
     return hListenSocket;
 }
 
+// 1.14d mac: 002f5fb5
 SOCKET __fastcall CreateSocketLocal(D2QServerStrc * pQServer, int nPort) {
     WSADATA wsaData;
     /* LPWSADATA lpWSAData for WSAStartup */ /* WORD wVersionRequired for WSAStartup */ pQServer->nPerIpConnectionLimit = 1;
@@ -713,5 +750,21 @@ SOCKET __fastcall CreateSocketLocal(D2QServerStrc * pQServer, int nPort) {
 }
 
 static void * keep_006c2810 = (0 ? (PopAndFreeCompletedSendPacket(*(D2QServerClientConnectionStrc * *)0), (void *)0) : (void *)0);
+
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac binary's wait loop of the NT server file: it runs for 100 ms unless the last error is
+// WAIT_TIMEOUT, halting at line 0x3c8 on every pass.
+// 1.14d mac: 002f70c5
+int32_t QSERVER_WaitLoopMac() {
+    DWORD dwStart = GetTickCount();
+    DWORD dwNow = GetTickCount();
+    while (dwStart - dwNow < 0x65 && GetLastError() != 0x102) {
+      fp_fatal("Unrecoverable internal error %08x line %d", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3c8);
+      dwNow = GetTickCount();
+    }
+
+    return 0;
+}
+#endif
 
 }}}} // namespace Fog::Src::QServer::QServerNT

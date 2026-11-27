@@ -26,11 +26,13 @@
 
 namespace D2Client { namespace SKILLS { namespace SkillsAma {
 
+// 1.14d mac: 0008451d
 BOOL __fastcall Skills_CltStFunc_CheckThrowableAmmo(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL nCheckResult = Skills::SKILLS_CltCheckThrowableAmmo(pUnit);
     return (uint32_t)(nCheckResult != 0);
 }
 
+// 1.14d mac: 0008453b
 BOOL __fastcall Skills_CltStFunc_SetParam1Zero(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
@@ -42,6 +44,7 @@ BOOL __fastcall Skills_CltStFunc_SetParam1Zero(D2UnitStrc * pUnit, eD2Skills eSk
 }
 
 // Client-side start function for Amazon throwable/guided skills. First verifies the player has throwable ammo. Then finds the best target: uses the confirmed target if one exists, otherwise calls SKILL_FindClosestTargetWithStats within aurarange. Clamps the final param (target count or spread) between calc[0] and calc[2] results, stores it in skill param1. Sets skill param2/param3 to the target's unit type and GUID (or 1/-1 for no target) and orients the player's path toward the target. Returns 0 if no ammo or skill txt is missing.
+// 1.14d mac: 0008456e
 BOOL __fastcall Skills_CltStFunc_CheckAmmoFindClosestTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bHasAmmo = Skills::SKILLS_CltCheckThrowableAmmo(pUnit);
     if (!bHasAmmo) {
@@ -91,6 +94,7 @@ BOOL __fastcall Skills_CltStFunc_CheckAmmoFindClosestTarget(D2UnitStrc * pUnit, 
 static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit);
 static inline int GetGUIDInline(D2UnitStrc * pUnit);
 // Client Start handler for Amazon melee skills. Finds the closest valid melee target within GetMeleeRangePlusFour: uses the confirmed target if available, otherwise SKILL_FindClosestTargetWithStats. Caps the travel distance to the skill's calc[0] value, sets SKILL param1 (distance), then writes the target's position into the path direction and stores the target type/GUID into SKILL param2/param3. Returns TRUE on success.
+// 1.14d mac: 000847c8
 BOOL __fastcall Skills_CltStFunc_FindClosestMeleeTargetSetParams(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTargetX;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -147,6 +151,7 @@ BOOL __fastcall Skills_CltStFunc_FindClosestMeleeTargetSetParams(D2UnitStrc * pU
 }
 
 // Client StFunc for Amazon melee skills (e.g. Jab, Impale). Validates skill bounds and retrieves current skill. Computes melee range, searches for a confirmed or nearest target via SKILL_FindClosestTargetWithStats. If no target, clears param1 and returns. Otherwise stores the skill calc[0] result in param1, steers the unit's path toward the target, and stores target eUnitType in param2 and GUID in param3 for use by the DoFunc.
+// 1.14d mac: 000849d7
 BOOL __fastcall Skills_CltStFunc_FindMeleeTargetSetCalcParam(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTargetX;
     D2SkillsTxt* pSkillTxt = nullptr;
@@ -197,6 +202,7 @@ BOOL __fastcall Skills_CltStFunc_FindMeleeTargetSetCalcParam(D2UnitStrc * pUnit,
     return 1;
 }
 
+// 1.14d mac: 00084bb2
 BOOL __fastcall Skills_CltDoFunc_Ama_PlayDoSound(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (pUnit->nActionFrame == 3) {
       D2SkillsTxt* pSkillTxt = nullptr;
@@ -218,6 +224,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_PlayDoSound(D2UnitStrc * pUnit, eD2Skills e
 }
 
 // Client-side do-function for the Amazon Multi Shot skill. Selects the missile type from cltmissilea/cltmissileb based on weapon class, computes the arrow count via calc[0], then fans out nArrowCount missiles in a line perpendicular to the target direction, spacing them by a scaled perpendicular unit vector. Sets UNITFLAG_SKSRVDOFUNC on the caster and returns TRUE on success.
+// 1.14d mac: 00084c7f
 BOOL __fastcall Skills_CltDoFunc_Ama_MultiShotArrows(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int nDirY;
@@ -279,6 +286,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_MultiShotArrows(D2UnitStrc * pUnit, eD2Skil
 }
 
 // Client DoFunc for Amazon Guided Arrow. Sets UNITFLAG_SKSRVDOFUNC, resolves target coords via GetCoordinates, selects missile via SKILLSASS_GetCltMissileByAuraLevel. If target present uses flag 0x20, otherwise 0x420 (no-lock). Spawns missile via MakeMissile, sets TargetX to mode 1 (locked) or 2 (free-flight), and encodes the relative target offset into TargetY as a packed short pair for the homing system.
+// 1.14d mac: 00084ed1
 BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTargetX;
     int nTargetY;
@@ -331,6 +339,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_GuidedArrow(D2UnitStrc * pUnit, eD2Skills e
 }
 
 // Client DoFunc for Amazon linear missile spray skills (e.g. Multiple Shot variant). Validates skill/missile indices, resolves the confirmed target position, evaluates calc[0] for missile count, then fires that many missiles in a line from caster toward target using SKILLSMON_SetMissilePathLinear. Returns TRUE if any missiles were launched.
+// 1.14d mac: 00085088
 BOOL __fastcall Skills_CltDoFunc_Ama_LinearMissileSpray(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -379,6 +388,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 // Client-side do-function for the Amazon Strafe skill. Each call fires one missile (cltmissilea or cltmissileb based on weapon class) toward the current or nearest valid target within aura range, decrements the remaining shot counter (SKILL_GetParam1), and if shots remain, finds the next closest target (excluding the one just shot), redirects the unit's dynamic path toward it, and updates the stored target GUID/type in skill params 2/3. Returns FALSE when no target or no shots left.
+// 1.14d mac: 00085297
 BOOL __fastcall Skills_CltDoFunc_Ama_Strafe(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int pCltMissileId;
     eMissilesId eMissileId;
@@ -467,6 +477,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 // Client do-func 21: Fend, also used by Zeal and Fury. Each call advances one hit of the multi-hit sequence: re-targets the nearest valid melee target when the stored one is out of range, decrements the remaining hit count (param 1), rotates the path toward the next target, applies the per-hit damage reduction and plays the hit sound. Returns 1 while hits remain.
 // Slot from skills.txt cltdofunc 21.
 // @sourcefile .\SKILLS\SkillsAma.cpp
+// 1.14d mac: 0008562e
 BOOL __fastcall Skills_CltDoFunc_Ama_Fend(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bInMeleeRange;
     int nExcludeGUID;
@@ -519,6 +530,7 @@ BOOL __fastcall Skills_CltDoFunc_Ama_Fend(D2UnitStrc * pUnit, eD2Skills eSkill, 
 }
 
 // Client DoFunc for Amazon piercing shot skill. Finds the confirmed primary target, then searches within calc[0] range for a secondary target nearby (excluding the primary by GUID). If a secondary is found, spawns a missile aimed at the secondary with a pierce-range of calc[1] set via SetTargetX. Returns TRUE on success.
+// 1.14d mac: 000858b9
 BOOL __fastcall Skills_CltDoFunc_Ama_PiercingShot(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;

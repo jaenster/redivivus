@@ -30,6 +30,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game { namespace Quests { namespace QUESTS { namespace A1Q5 {
 
 // A1Q5 "Forgotten Tower" — removes a player from one of two in-quest GUID tracking lists (selected by nListSelector 0/1). Searches the list in nListBase for nPlayerGUID; if found, swaps it with the tail entry and decrements the count. Returns 1 if found+removed, 0 if not present. Used to deregister players who leave or are re-synced.
+// 1.14d mac: 00220e5e
 static BOOL __stdcall Q05_RemovePlayerFromTrackingList(int32_t nListSelector, D2QuestDataA1Q5Strc * nListBase, int32_t nPlayerGUID) {
     int i;
     if (nListSelector) {
@@ -82,6 +83,7 @@ static uint32_t __stdcall QUEST_IsPlayerGUIDInTrackingList(D2QuestDataA1Q5Strc *
     return 0;
 }
 
+// 1.14d mac: 0021dfad
 BOOL __fastcall Q05_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -101,6 +103,7 @@ BOOL __fastcall Q05_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // A1Q5 "Forgotten Tower" — on-join sync callback. Reads the joining player's persisted quest record; if the tower is not yet Completed or RewardAwaits, inspects the shared quest nStateFlag/nStateFlagPrev and re-applies the matching SetQuestState (Step0x02–0x06) to the player's bit buffer so late-joiners see the correct journal progress. No loot or reward granted here.
+// 1.14d mac: 0021e03e
 BOOL __fastcall Q05_SyncQuestStepToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -145,6 +148,7 @@ BOOL __fastcall Q05_SyncQuestStepToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // Act 1 Quest 5 (The Forgotten Tower / Cairn Stones) quest message callback. Driven by pQuestArgs message/NPC indices: on the intro message (0x7f) advances the quest state machine and syncs the step to players (Q05_SyncQuestStepToPlayer); on the relevant NPC+message pairs, if the player has just completed Forgotten Tower it runs the quest sequence filter and bookkeeps the per-player Cairn-stone object GUID list in the A1Q4 quest-specific data (finds the player's stone slot, compacts the GUID array, updates tree-object counters). No return; side-effects quest state and broadcasts.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
+// 1.14d mac: 0021ea08
 void __fastcall Q05_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL bResult;
     int iStoneIdx;
@@ -229,6 +233,7 @@ void __fastcall Q05_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A1Q5 (The Forgotten Tower) quest callback slot 0xA: removes the triggering player from two participation lists in the quest's D2QuestDataA1Q3Strc. First calls QUESTGUID_RemovePlayerFromList on the extended list (+0x1e offset), then manually compacts the two inline arrays (at offsets 8 and -5) by swapping the found entry with the last and decrementing the count. Used when a player leaves or is removed from the quest's tracked participant set.
+// 1.14d mac: 0021ee18
 void __fastcall Q05_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUIDRemove;
     int nPlayerGUID;
@@ -272,6 +277,7 @@ void __fastcall Q05_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 }
 
 // A1Q5 (Forgotten Tower) NPC-talk gossip callback (handler slot 0). Only runs once the quest intro is past. Looks up the talking player's quest record for QUEST_ForgottenTower (Completed/JustCompleted), and resolves the target NPC class id and player GUID. Scans the quest-specific per-player GUID lists to pick which gossip line to play, then calls AddGossipMessageOnMonster to make the NPC speak the appropriate line (completion line, or the initial-mask line from gdwQuestDataIntialMask indexed by stateFlag). Pure dialog selection; no quest-state mutation.
+// 1.14d mac: 0021ec8d
 void __fastcall Q05_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQuestDataIntialMask[6] = { -0x1, -0x1, 0x0, 0x1, 0x2, 0x3 }; D2_STATIC_GUARD(gdwQuestDataIntialMask, "D2Game::Quests::QUESTS::A1Q5::Q05_Callback00_NpcActivate::gdwQuestDataIntialMask");
@@ -363,6 +369,7 @@ void __fastcall Unreferenced_00594db0(void * pQuestData, void * pArg) {
 // GUID into the quest's shared player-list (so the rune/gold reward isn't double-granted), then marks
 // this player's record QUESTSTATE_Completed + QUESTSTATE_JustCompleted. Does NOT itself drop loot;
 // it stamps quest state so the kill/loot path treats the tower as cleared for this player.
+// 1.14d mac: 00220b04
 BOOL __fastcall Q05_SetRewardForPlayersInTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     int nPlayerGUID;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
@@ -415,6 +422,7 @@ BOOL __fastcall Q05_SetRewardForPlayersInTower(::SGAMEDATA * pGame, D2UnitStrc *
 // Plays the object's open animation (SetEvent) when the operator unit is null/dead, makes sure the quest exists and is past introduction, sends the NPC-info packet (0x7f) to the operator and moves the quest state flag to 2 (quest log entry granted), setting bTalkedToNPC on the first transition.
 // Slot from objects.txt OperateFn 6.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
+// 1.14d mac: 0021debb
 BOOL __fastcall OBJOP_A1Q5_ReadTowerTome(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
@@ -441,6 +449,7 @@ BOOL __fastcall OBJOP_A1Q5_ReadTowerTome(D2ObjectOperateFnArg * pOperation) {
 }
 
 // A1Q5 (Forgotten Tower) per-player completion iterator callback (invoked from Q05_OnTowerComplete for each player). Skips players already Completed. If the player is in LEVEL_TowerCellarLevel5: sets JustCompleted+Completed, clears RewardAwaits, fires attach-sound event 0x25, and appends the player GUID into the quest's bounded reward-GUID array (capacity 0xc). Players outside the tower level receive QUESTSTATE_CannotCompleteQuestInGame instead.
+// 1.14d mac: 00220d49
 BOOL __fastcall Q05_MarkCompleteForPlayersInTower(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     int32_t nPlayerGUID;
     uint16_t nRewardPlayerCount;
@@ -509,6 +518,7 @@ static void __fastcall Q05_OnTowerComplete(D2QuestDataStrc * pQuestData) {
 
 // A1Q5 "Tools of the Trade" (Horadric Malus) quest-state handler slot[3]. On dialog index 0x14: advances state 0->2 (sets flag); on index 0x19: advances toward state 3. Broadcasts the new quest state to all players via QUEST_SetStateAndBroadcast and re-syncs each player with Q05_SyncQuestStepToPlayer. In the non-intro path (pTextControl==1) at state 2 it finalizes once the player's quest record shows Completed, and at state 5 removes the player from the tracking list and deactivates the quest when no objects remain.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
+// 1.14d mac: 0021e7e2
 void __fastcall Q05_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nNewLevel = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
     int nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
@@ -590,6 +600,7 @@ void __fastcall Q05_CheckAndUpdateOnAreaEntry(::SGAMEDATA * pGame, D2UnitStrc * 
     }
 }
 
+// 1.14d mac: 0021f1b6
 bool __fastcall Q05_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag < 2 && pQuestData->bIsNotIntroduction == '\x01') {
       return true;
@@ -613,6 +624,7 @@ bool __fastcall Q05_SequenceFilter(D2QuestDataStrc * pQuestData) {
     return false;
 }
 
+// 1.14d mac: 0021e140
 bool __fastcall Q05_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     D2QuestDataA1Q5Strc* pQuestDataEx = pQuestData->pQuestSpecificData.pA1Q5;
     int nUnitGUID = !pUnit ? -1 : pUnit->nUnitGUID;
@@ -629,6 +641,7 @@ bool __fastcall Q05_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
     return false;
 }
 
+// 1.14d mac: 00220c7c
 BOOL __fastcall Q05_SetCannotCompleteInGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -641,6 +654,7 @@ BOOL __fastcall Q05_SetCannotCompleteInGame(::SGAMEDATA * pGame, D2UnitStrc * pU
     return 0;
 }
 
+// 1.14d mac: 0021e188
 void __fastcall Q05_SetPartyMemberRewardStates(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -668,6 +682,7 @@ void __fastcall Q05_SetPartyMemberRewardStates(::SGAMEDATA * pGame, D2UnitStrc *
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_ForgottenTower, QUESTSTATE_Completed);
 }
 
+// 1.14d mac: 00220bff
 BOOL __fastcall Q05_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_ForgottenTower, QUESTSTATE_JustCompleted);
@@ -682,6 +697,7 @@ BOOL __fastcall Q05_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
     return 0;
 }
 
+// 1.14d mac: 0021e21e
 void __fastcall Q05_SetCompletionForTrackedPlayers(::SGAMEDATA * pGame, D2QuestGUIDStrc * pQuestGUIDBase, eD2Quests eQuest, int32_t nSoundId) {
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bCompleted;
@@ -711,6 +727,7 @@ void __fastcall Q05_SetCompletionForTrackedPlayers(::SGAMEDATA * pGame, D2QuestG
     } while (i < (int)(uint32_t)pQuestGUIDBase->nPlayerCount);
 }
 
+// 1.14d mac: 00220cf0
 uint8_t __fastcall Q05_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2QuestDataA1Q5Strc* pA1Q4Data = pQuestData->pQuestSpecificData.pA1Q5;
     if (pQuestData->nStateFlag == 5) {
@@ -729,6 +746,7 @@ uint8_t __fastcall Q05_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStr
 // (falls back to the chest's own coords). Marks the effect as fired (+0x119=1), then for each chest
 // launches a SKILL_Attack missile aimed at the chest and toggles its room portal flag — this drives
 // the gold/treasure-burst visual from the Countess's chests. No quest-state changes here (pure FX).
+// 1.14d mac: 0021e35e
 void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, D2QuestDataA1Q5Strc * pA1Q5Data) {
     D2UnitStrc* pChestUnit;
     D2RoomStrc* pNearbyRoom;
@@ -812,6 +830,7 @@ void __stdcall Q05_SpawnCountessDeathEffect(D2QuestDataStrc * pQuestData, D2Ques
 // if the reward has been distributed (bRewardDistributed) but the death animation hasn't yet played
 // (bDeathEffectPlayed==false), schedules event 7 on the unit ~10 frames out to play the final
 // death/treasure animation. No quest-record state changes; gates purely on A1Q5-specific flags.
+// 1.14d mac: 0021e2f8
 void __fastcall Q05_TriggerCountessDeathEffect(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     Q05_SpawnCountessDeathEffect(pQuestData, pQuestData->pQuestSpecificData.pA1Q5);
     if (!(pQuestData->pQuestSpecificData.pA1Q5->bRewardDistributed && !pQuestData->pQuestSpecificData.pA1Q5->bDeathEffectPlayed)) {
@@ -823,6 +842,7 @@ void __fastcall Q05_TriggerCountessDeathEffect(D2QuestDataStrc * pQuestData, D2U
 
 // A1Q5 "Forgotten Tower" — quest callback slot 8, fired on the Countess's death. Records the Countess's death coordinates into quest-specific data. If the quest is past the intro gate (bIsNotIntroduction): advances shared state to nStateFlag=5, marks bQuestCompleted and bRewardDistributed, iterates all players to mark completion and set rewards (Q05_MarkCompleteForPlayersInTower, Q05_SetRewardForPlayersInTower, Q05_PropagateRewardToParty, Q05_SetCannotCompleteInGame), broadcasts QUESTSTATE_JustCompleted, arms the completion-notify timer, and (conditionally) registers callback slot 10 for multi-player reward distribution. Also triggers Q05_SpawnCountessDeathEffect and, if the death effect hasn't played yet, schedules a deferred game event.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
+// 1.14d mac: 0021ee76
 void __fastcall Q05_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     short int nRewardPlayerCount;
     D2QuestDataA1Q5Strc* pA1Q5Data = pQuestData->pQuestSpecificData.pA1Q5;
@@ -861,6 +881,7 @@ void __fastcall Q05_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A1Q5 "Forgotten Tower" — quest callback slot 13 (game-load re-sync). Reads the joining player's persisted quest record; if the quest is already Completed or FinishedInPreviousGame, returns immediately. Otherwise reconstructs the volatile nStateFlag/nStateFlagPrev pair by priority-checking Step0x06, Step0x05, Step0x03, Step0x02 so that the quest controller resumes at the correct sub-step after a game reload. Mirror of Q05_SyncQuestStepToPlayer but sets both state fields.
+// 1.14d mac: 0021f099
 void __fastcall Q05_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -915,6 +936,7 @@ void __fastcall Q05_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 
 // A1Q5 (The Forgotten Tower) per-game quest registration. Zeroes the state-handler table then wires the per-state callbacks: [0]=Callback_00 (gossip), [3]=Callback_03 (area/tower entry), [8]=Callback_08 (Countess/clear), [0xa]=Callback_10 (player left), [0xb]=Callback_11 (Akara dialog/turn-in), [0xd]=Callback_13 (reload). Sets nQuestIdReal=QUEST_ForgottenTower, installs the NPC gossip table (aNpcGossipData), fpActiveFilter=Q05_ActiveFilter, fpSequenceFilter=Q05_SequenceFilter, nSequenceQuestId=QUEST_ToolsOfTheTrade (next quest), nInitNo=4, fpStatusFilter=null. Allocates the 0x120-byte A1Q5-specific data from the game memory pool, zeroes it, and inits its GUID player-count list (QUESTGUID_SetPlayerCountToZero). Pure registration; no quest-record state I/O.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q5.cpp
+// 1.14d mac: 0021e6ca
 void __fastcall Q05_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -941,6 +963,7 @@ void __fastcall Q05_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // A1Q6 (Sisters to the Slaughter) object init-fn 04. Marks the quest object (Andariel-related) as updatable while the Forgotten Tower quest is still in its intro phase (!bIsNotIntroduction). Halts if quest data missing. No quest-state transitions.
+// 1.14d mac: 0021f244
 void __fastcall Objects_InitFn04_TowerTome(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_ForgottenTower);
     if (pQuestData) {

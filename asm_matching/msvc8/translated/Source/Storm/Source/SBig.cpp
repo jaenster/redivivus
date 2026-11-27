@@ -605,6 +605,7 @@ void __fastcall SBIG_ArrayByteAltSetCapacity(TSGrowableArray_Uc * pArray, int, i
 // @module-history Pass 5 established the module: this function sits in the contiguous COMDAT run 00420eb0-00421d80 that SBig.cpp instantiates, and it was moved out of D2Client::WindowHandle into Storm::Source::SBig with a mechanical WND_ -> SBIG_ prefix swap, its descriptive tail left unverified. Pass 6 bound the tail.
 // @oracle-method CONFIRMED. n*4 sizing, SMemReAlloc flag 0x10 with the alloc/copy/free fallback. Matches the block the oracle inlines into .SetCount__29TSGrowableArray<Ui,8TSCD<Ui>>FUi @1009b120. Dword instantiation, SMem tag 0x708874.
 // @struct The container header is {+0 m_alloc, +4 m_count, +8 m_data, +0xc m_chunk}. BigBuffer extends it with {+0x10 m_offset}, proven by the oracle's .Count__9BigBuffer being m_count - m_offset. The Ghidra type still called D2WndBitSetStrc IS BigBuffer; it is not a bitset. Chunk cap = 256/sizeof(element).
+// 1.14d mac: 0005caba Storm::Source::SBig::TSFixedArray_Ui_ReallocData
 void __fastcall TSFixedArray_Ui_ReallocData(BigBuffer * pArray, int, uint32_t nCapacity) {
     uint32_t* pOldBuffer = pArray->pData;
     pArray->nCapacity = nCapacity;

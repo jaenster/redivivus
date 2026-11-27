@@ -70,6 +70,7 @@ D2MonPropTxt * __fastcall MONSTER_GetMonPropTxtRecord(int32_t nClassId) {
     return nullptr;
 }
 
+// 1.14d mac: 001d6e83
 void __fastcall SetAiState(D2UnitStrc * pMonster, int nAiState) {
     if (!(pMonster && pMonster->eUnitType == UNIT_MONSTER && pMonster->pUnitData.pUnitDataMonster)) {
       return;
@@ -86,6 +87,7 @@ int __fastcall GetAiState(D2UnitStrc * pUnit) {
     return pUnit->pUnitData.pUnitDataMonster->nAiState;
 }
 
+// 1.14d mac: 001d6ec1
 void __fastcall SetLevelId(D2UnitStrc * pUnit, eD2LevelId eLevel) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -94,6 +96,7 @@ void __fastcall SetLevelId(D2UnitStrc * pUnit, eD2LevelId eLevel) {
     pUnit->pUnitData.pUnitDataMonster->eLevelId = eLevel;
 }
 
+// 1.14d mac: 001d6edf
 eD2LevelId __fastcall GetMonsterArea(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return LEVEL_None;
@@ -102,6 +105,7 @@ eD2LevelId __fastcall GetMonsterArea(D2UnitStrc * pUnit) {
     return pUnit->pUnitData.pUnitDataMonster->eLevelId;
 }
 
+// 1.14d mac: 001d6efc
 uint32_t __fastcall GetMonsterFlags(D2UnitStrc * pUnit, uint16_t eFlag) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return 0;
@@ -110,6 +114,7 @@ uint32_t __fastcall GetMonsterFlags(D2UnitStrc * pUnit, uint16_t eFlag) {
     return (uint32_t)((pUnit->pUnitData.pUnitDataMonster->nSummonerFlags & eFlag) != 0);
 }
 
+// 1.14d mac: 001d6f24
 void __fastcall SetUnsetSummonerFlags(D2UnitStrc * pUnit, uint16_t nSummonerFlag, BOOL bSetUnset) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -128,6 +133,7 @@ void __fastcall SetUnsetSummonerFlags(D2UnitStrc * pUnit, uint16_t nSummonerFlag
 }
 
 // @sourcefile .\MONSTER\Monster.cpp
+// 1.14d mac: 001d7a85
 void __fastcall MONSTER_SetVelocityAndTransition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetX, int32_t nTargetY, uint32_t dwParam) {
     D2MonStatsTxt* pMonStatsTxt;
     eD2MonsterAnimMode nUnitMode;
@@ -154,6 +160,7 @@ void __fastcall MONSTER_SetVelocityAndTransition(::SGAMEDATA * pGame, D2UnitStrc
     MonsterMode::MONSTERAI_ExecuteLifecycleTransition(pGame, &killData, 1);
 }
 
+// 1.14d mac: 001d7b2a
 void __fastcall FreeMonsters(::SGAMEDATA * pGame) {
     D2UnitStrc* pNextUnit;
     D2UnitStrc** ppBucket = pGame->pUnitList[1];
@@ -214,6 +221,7 @@ static inline int dummy_ClampIndex(int nIndex) {
     return nIndex;
 }
 
+// 1.14d mac: 001d7c5e
 void __fastcall MONSTERAI_RescheduleThink(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     if (!pUnit) {
@@ -247,6 +255,7 @@ void __fastcall MONSTERAI_RescheduleThink(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 }
 
+// 1.14d mac: 001d7dcb
 void __fastcall MONSTER_RemoveAiAndRegenTimers(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_AITHINK, 0);
     GAME::Event::EVENT_RemoveUnitTimersByType(pGame, pUnit, UNITEVENTCALLBACK_STATREGEN, 0);
@@ -310,6 +319,7 @@ void __fastcall MONSTER_InitLevelDifficultyScaling(::SGAMEDATA * pGame, D2Monste
 }
 
 // Randomises the 16 visual component slots of a monster unit. Two paths: if pMonRegionField is 0 or its byte[3] is 0, iterates all 16 component indices via GetComponentsData and seeds each slot by RNG (power-of-two fast-path uses bitmask; otherwise modulo). Writes results into pUnitData->szCharName+4. If pMonRegionField has a count in byte[3], uses RANDOM_RandomNumberSelector to pick one appearance entry from the pMonRegionField table and writes it into pUnitData->sSeed/nPlayerGUID/nModSeed fields. No-ops on null unit or non-monster.
+// 1.14d mac: 001d7ef2
 void __fastcall MONSTER_RollComponentAppearance(D2MonsterRegionFieldStrc * pMonRegionField, D2UnitStrc * pUnit) {
     D2SeedStrc DVar2;
     uint32_t nRollResult;
@@ -398,6 +408,7 @@ BOOL __fastcall CheckComponents(D2UnitStrc * pUnit) {
 }
 
 // Creates an item from a class-code entry (ppItemId) and equips it to a monster unit at the body location encoded in the entry. Allocates inventory if needed, sets ITEMFLAG_MONSTER, calls SERVER_EquipItemToBodyLoc, and initialises durability to max. Frees the item unit if equipping fails.
+// 1.14d mac: 001d80c7
 void __fastcall MONSTER_CreateAndEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MonEquipEntryStrc * ppItemId, int32_t nItemLevel, eD2ItemQuality eQuality) {
     bool bEquipSuccess;
     int32_t nItemClassId;
@@ -718,6 +729,7 @@ static void __stdcall MONSTER_InitStats(::SGAMEDATA * pGame, D2RoomStrc * pRoom,
 }
 
 // Completes monster unit initialization after allocation. Sets ISVALIDTARGET|TARGETABLE flags and GUID; clears the timer list; allocates and links AiGeneral, AiParam (MonsterNameStrc), and MonsterAI structs into D2UnitDataMonsterStrc; caches the MonStatsTxt pointer; calls InitializeSpawnCount and MONSTER_InitStats to populate combat stats; attaches the correct AI function; records the room's level ID; and either initializes the animation frame (live monster) or calls FreeCombatAndChangeAnimMode for Death/Kick modes. Also attaches quest hooks via AttachToUnit.
+// 1.14d mac: 001d6f53
 void __fastcall STRUCT_FillDataMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, D2UnitStrc * pUnit, int32_t dwUnitGUID) {
     D2MonStatsTxt* pMonStatsTxt;
     D2AiGeneralStrc* pAiGeneralInit;
@@ -778,6 +790,7 @@ void __fastcall STRUCT_FillDataMonster(::SGAMEDATA * pGame, D2RoomStrc * pRoom, 
     UNIT::SUnit::InitAnimFrame(pUnit);
 }
 
+// 1.14d mac: 001d8004
 BOOL __fastcall MONSTER_TransformMonsterClass(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nMonStatId, DWORD nUpdateFlags) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_MONSTER) {
       D2MonStatsTxt* pMonStatsTxt;

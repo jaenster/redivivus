@@ -33,6 +33,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2AnimDataStrc) == 0x4a4, "D2_NEW_A
 namespace D2Common { namespace DATATBLS { namespace AnimTbls {
 
 // @sourcefile .\DATATBLS\AnimTbls.cpp
+// 1.14d mac: 00139c96
 D2AnimDataStrc * __fastcall TXT_AllocTxt_AnimTbls(D2PoolManagerStrc * pMemory) {
     char szFilePath[260];
     D2AnimDataStrc* pAnimTbls = D2_NEW_POOL_AT(nullptr, D2AnimDataStrc, ".\\DATATBLS\\AnimTbls.cpp", 0x83);
@@ -58,6 +59,7 @@ D2AnimDataStrc * __fastcall TXT_AllocTxt_AnimTbls(D2PoolManagerStrc * pMemory) {
 // and server memory (record struct itself).
 // Source: .\\DATATBLS\\AnimTbls.cpp
 // @sourcefile .\DATATBLS\AnimTbls.cpp
+// 1.14d mac: 00139d8c
 void __fastcall ANIMDATA_FreeAnimDataRecord(D2AnimDataStrc * pAnimData) {
     if (!pAnimData) {
       return;
@@ -92,6 +94,7 @@ static BOOL __stdcall ANIMDATA_CompareNames(uint32_t * pdwName1, uint32_t * pdwN
 // byte-sum hash, then walks the hash bucket comparing 8-byte names.
 // Returns pointer to the matching record or NULL.
 // Source: .\\DATATBLS\\AnimTbls.cpp
+// 1.14d mac: 00139e8d
 static D2AnimDataRecordStrc * ANIMDATA_GetRecordByNameHash(LPSTR szCofName) {
     char* pszChar;
     for (pszChar = szCofName; *pszChar; pszChar++) {
@@ -140,6 +143,7 @@ static D2AnimDataRecordStrc * ANIMDATA_GetRecordByNameHash(LPSTR szCofName) {
 // Gets the AnimData record for a unit. Builds the composit animation
 // name via COMPOSIT_BuildCofPath, then looks it up via ANIMDATA_GetRecordByNameHash.
 // Called by SetAnimData and composit rendering code.
+// 1.14d mac: 00139df0
 D2AnimDataRecordStrc * __fastcall ANIMDATA_GetAnimDataForUnit(D2UnitStrc * pUnit, uint32_t nClassId, uint32_t nCofMode, uint32_t nWeaponClass, D2InventoryStrc * pInventory) {
     D2AnimDataStrc* pDVar1;
     char szCofName[8];
@@ -172,6 +176,7 @@ void __stdcall ANIMDATA_SetAnimSpeedForUnit(D2UnitStrc * pUnit, int32_t nAnimSpe
 // record by name. The trigger frame is the first non-zero byte in the
 // per-frame event array (up to 0x90 bytes). Returns 1 on success, 0 on
 // fallback to default record.
+// 1.14d mac: 00139f7c
 BOOL __stdcall ANIMDATA_GetFramesSpeedAndTrigger(char * pszName, uint32_t * pnFrameCount, int * pnAnimSpeed, uint32_t * pnTriggerFrame) {
     uint32_t nFrameIndex;
     D2AnimDataRecordStrc* pRecord = ANIMDATA_GetRecordByNameHash(pszName);

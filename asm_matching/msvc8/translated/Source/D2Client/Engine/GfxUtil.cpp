@@ -224,6 +224,7 @@ uint8_t __fastcall GFXUTIL_GetCompositePaletteIndex(D2UnitStrc * pUnit, uint8_t 
     return 0;
 }
 
+// 1.14d mac: 00069b9c
 void __stdcall InitializeModeTokens() {
     D2PlrTypeModeTxt* pPlrModeTxt;
     D2MonModeTxt* pMonModeTxt;
@@ -354,6 +355,7 @@ void __fastcall GFXUTIL_FreeGfxNodeList(D2GfxUtilNodeStrc * * ppListHead, int * 
 }
 
 // NOTE: Register param types inferred (medium confidence): pUnitStrc (ECX): D2UnitStrc *, eUnitType (EDX): eD2UnitType
+// 1.14d mac: 00069d8c
 int32_t __fastcall GFXUTIL_GetUnitToken(D2UnitStrc * pUnitStrc, eD2UnitType eUnitType, int nId) {
     D2ObjTypeTxt* pTokenLine;
     switch (eUnitType) {
@@ -411,6 +413,7 @@ void __fastcall GFXUTIL_NormalizeItemMode(D2UnitStrc * pUnitStrc, uint32_t * pnM
 }
 
 // NOTE: Register param types inferred (medium confidence): pUnitStrc (ECX): D2UnitStrc *, pInventory (EDX): D2InventoryStrc *
+// 1.14d mac: 00069e0d
 void __fastcall GFXUTIL_GetArmorAppearanceFromTorso(D2UnitStrc * pUnitStrc, D2InventoryStrc * pInventory, BOOL bCheckBroken, uint8_t * pOutAppearance) {
     BOOL BVar1;
     uint32_t nItemClassId;
@@ -442,6 +445,7 @@ void __fastcall GFXUTIL_GetArmorAppearanceFromTorso(D2UnitStrc * pUnitStrc, D2In
     }
 }
 
+// 1.14d mac: 0006a99f
 uint32_t __fastcall GFXUTIL_IsDC6BlockOnScreen(DC6Block * pDC6Block, int32_t nDrawX, int32_t nScreenY, BOOL bFlipped) {
     int32_t nHeight = D2CMP::SRC::CelCmp::GetDC6Height(pDC6Block);
     int nY = D2CMP::SRC::CelCmp::GetDC6OffsetY(pDC6Block) + nScreenY;
@@ -643,6 +647,7 @@ static int32_t GFXUTIL_GetBodyLocWeaponToken(int32_t nBodyLoc, D2UnitStrc * pUni
 
 // Returns 1 if the unit supports animation mode nMode (0–15), 0 otherwise. Accounts for shape-shift/transform GFX overrides via SKILLS_GetStateTransformGfx. For players, always accepts modes 0–4, 8, 9. For monsters, checks the MonStats2 bitmask (HD/TR/LG/RA/LA/RH/LH/SH flags). For objects, checks ObjectsTxt->Mode[nMode+0x12]. Items accept mode 1 only.
 // @sourcefile .\ENGINE\GfxUtil.cpp
+// 1.14d mac: 0006aa25
 BOOL __fastcall GFXUTIL_UnitHasAnimMode(D2UnitStrc * pUnit, uint32_t nMode) {
     D2MonStats2Txt* pMonStats2;
     D2ObjectsTxt* pObjectsTxt;
@@ -748,10 +753,12 @@ static int32_t __stdcall GFXUTIL_GetNumDirectionsForUnit(D2UnitStrc * pUnit, eD2
     return nNumDirections;
 }
 
+// 1.14d mac: 0006ae26
 void * __fastcall GFXUTIL_Identity(void * pData) {
     return pData;
 }
 
+// 1.14d mac: 0006ae2e
 uint32_t __fastcall GFXUTIL_GetCofFrameCount(uint8_t * pbCof, uint32_t nComponent) {
     uint32_t nResult = 0;
     if (pbCof && (int)nComponent < 0x10) {
@@ -768,6 +775,7 @@ uint32_t __fastcall GFXUTIL_GetCofFrameCount(uint8_t * pbCof, uint32_t nComponen
     return nResult;
 }
 
+// 1.14d mac: 0006ae6b
 uint32_t __fastcall GFXUTIL_GetCofAnimSpeed(uint8_t * pbCof, uint32_t nComponent) {
     uint32_t nResult = 0;
     if (pbCof && (int)nComponent < 0x10) {
@@ -784,6 +792,7 @@ uint32_t __fastcall GFXUTIL_GetCofAnimSpeed(uint8_t * pbCof, uint32_t nComponent
     return nResult;
 }
 
+// 1.14d mac: 0006aea8
 uint32_t __fastcall GFXUTIL_GetCofDirection(uint8_t * pbCof, uint32_t nComponent) {
     uint32_t nResult = 0;
     if (pbCof && (int)nComponent < 0x10) {
@@ -800,6 +809,7 @@ uint32_t __fastcall GFXUTIL_GetCofDirection(uint8_t * pbCof, uint32_t nComponent
     return nResult;
 }
 
+// 1.14d mac: 0006aee5
 uint8_t * __fastcall GFXUTIL_GetCofLayerData(uint8_t * pbCof, int32_t nDirection, int32_t nLayerOffset) {
     if (!pbCof) {
       return nullptr;
@@ -808,6 +818,7 @@ uint8_t * __fastcall GFXUTIL_GetCofLayerData(uint8_t * pbCof, int32_t nDirection
     return pbCof + ((uint32_t)pbCof[1] * nDirection + 9 + nLayerOffset) * (uint32_t)*pbCof + (uint32_t)pbCof[1] + 0x1c;
 }
 
+// 1.14d mac: 0006af14
 uint32_t __fastcall GFXUTIL_GetCofDrawOrder(uint8_t * pbCof, uint32_t nComponent) {
     if (!pbCof) {
       return 5;
@@ -827,6 +838,7 @@ uint32_t __fastcall GFXUTIL_GetCofDrawOrder(uint8_t * pbCof, uint32_t nComponent
     return 5;
 }
 
+// 1.14d mac: 0006af54
 int __fastcall GFXUTIL_IsValidUnitType(D2UnitStrc * pUnit) {
     if (pUnit && (int)pUnit->eUnitType >= 0 && (int)pUnit->eUnitType <= 2) {
       return 1;
@@ -835,6 +847,7 @@ int __fastcall GFXUTIL_IsValidUnitType(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0006af6b
 uint8_t __fastcall GFXUTIL_GetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nComponent) {
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
@@ -844,6 +857,7 @@ uint8_t __fastcall GFXUTIL_GetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nComp
     return pGfxInfo->nComponentFlags[nComponent * 2];
 }
 
+// 1.14d mac: 0006af92
 void __fastcall GFXUTIL_SetGfxInfoComponent(D2UnitStrc * pUnit, int32_t nComponentIndex, uint8_t byComponentVal) {
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
@@ -896,6 +910,7 @@ static void GFXUTIL_ConvertDirectionBits(int32_t nFromDirs, int32_t nToDirs, uin
     }
 }
 
+// 1.14d mac: 0006afb5
 void __fastcall GFXUTIL_CalcDirectionAndFrame(D2UnitStrc * pUnit, int32_t nAnimDir, int32_t nTypeId, int32_t nCofComponent, uint32_t * pnDirection, uint32_t * pnFrameHandler, int * pnNumDirections, uint32_t nNumDirs, int32_t nAnimMode) {
     int32_t _cNumDirs;
     char cNumDirs;
@@ -917,6 +932,7 @@ void __fastcall GFXUTIL_CalcDirectionAndFrame(D2UnitStrc * pUnit, int32_t nAnimD
 }
 
 // @sourcefile .\ENGINE\GfxUtil.cpp
+// 1.14d mac: 0006b3c7
 BOOL __fastcall GFXUTIL_GetEtherealTransparency(D2UnitStrc * pUnit, int32_t nComponent, uint32_t * pOutTransTable, uint32_t nItemClassId) {
     BOOL _bIsEthereal;
     bool bIsEthereal;
@@ -1045,6 +1061,7 @@ BOOL __fastcall GFXUTIL_GetEtherealTransparency(D2UnitStrc * pUnit, int32_t nCom
 }
 
 // @sourcefile .\ENGINE\GfxUtil.cpp
+// 1.14d mac: 0006b675
 uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(D2UnitStrc * pUnit, int32_t nBodyLoc, uint8_t * pDefaultColor) {
     BOOL _bIsBrokenOrDisabled;
     bool bIsBrokenOrDisabled;
@@ -1094,6 +1111,7 @@ uint8_t * __fastcall GFXUTIL_GetItemColorForBodyLoc(D2UnitStrc * pUnit, int32_t 
     return pDefaultColor;
 }
 
+// 1.14d mac: 0006b801
 uint32_t __fastcall GFXUTIL_GetUnitCofDirectionOnScreen(D2UnitStrc * pUnit, uint32_t nUnitDirection) {
     int nScreenX;
     int nScreenY;
@@ -1377,6 +1395,7 @@ static BOOL __stdcall GFXUTIL_BuildCofParams(D2UnitStrc * pUnit, D2GfxDataStrc *
     }
 }
 
+// 1.14d mac: 00069f2b
 int32_t __fastcall DC6_AssignParams(D2GfxDataStrc * pGfxData, D2UnitStrc * pUnit, DC6 * pDC6, int32_t nDirection, int32_t nFrameNumber, int * pnOutItemClassId, uint8_t nComponentType, int32_t nMode) {
     pGfxData->pDC6 = pDC6;
     pGfxData->nDirection = nDirection;
@@ -1463,6 +1482,7 @@ found:
     return 1;
 }
 
+// 1.14d mac: 0006ab78
 int32_t __fastcall GFXUTIL_InitAndBuildMonsterCofParams(D2GfxDataStrc * pGfxData, int32_t nDirection, int32_t nFrameNumber, uint8_t nComponentType, int32_t nAnimMode, int32_t nWeaponClass, D2CofTextureCacheEntryStrc * pCofFile, short * pComponentTable, D2MonStatsTxt * pMonStatsTxt, int32_t nComponentRow) {
     pGfxData->nDirection = nDirection;
     pGfxData->nFrameNumber = nFrameNumber;
@@ -1470,6 +1490,7 @@ int32_t __fastcall GFXUTIL_InitAndBuildMonsterCofParams(D2GfxDataStrc * pGfxData
     return GFXUTIL_BuildMonsterCofParams(pCofFile, nWeaponClass, pGfxData, nAnimMode, pComponentTable, pMonStatsTxt, nComponentRow);
 }
 
+// 1.14d mac: 0006b2b0
 int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pbyLayerCount, uint8_t * pLayerArray, int * pOutMaxY, int32_t nPaletteShift, uint32_t nFrame) {
     int nSpriteLoaded;
     int32_t nOffsetY;
@@ -1520,6 +1541,7 @@ int32_t __fastcall GFXUTIL_CalcMaxSpriteHeight(D2UnitStrc * pUnit, uint8_t * pby
     return nLoadedCount;
 }
 
+// 1.14d mac: 0006ba1e
 int32_t __fastcall GFXUTIL_GetOverlayFrameDelay(D2UnitStrc * pUnit, D2GfxUnknown_0xa8 * pOverlayEntry) {
     D2GfxDataStrc sGfxData;
     int nOutItemClassId;
@@ -1544,6 +1566,7 @@ int32_t __fastcall GFXUTIL_GetOverlayFrameDelay(D2UnitStrc * pUnit, D2GfxUnknown
     return sGfxData.nFrameCount << 8;
 }
 
+// 1.14d mac: 00069e89
 void __fastcall GFXUTIL_GetOverlayDimensions(D2UnitStrc * pUnit, int nPaletteShift, uint32_t nAnimMode, uint32_t * pOutWidth, uint32_t * pOutHeight) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, sizeof(sGfxData));
@@ -1567,6 +1590,7 @@ void __fastcall GFXUTIL_GetOverlayDimensions(D2UnitStrc * pUnit, int nPaletteShi
     *pOutHeight = nHeight;
 }
 
+// 1.14d mac: 0006a894
 uint32_t __fastcall GFXUTIL_IsUnitSpriteOnScreen(D2UnitStrc * pUnit, int32_t nWorldX, int32_t nWorldY) {
     D2GfxDataStrc sGfxData;
     int nFrameMetrics2;

@@ -73,11 +73,31 @@ static D2SoundWavCacheEntryStrc * gpWavFileCacheListHead = 0; D2_STATIC_GUARD(gp
 
 namespace D2Sound { namespace Src { namespace D2SoundFast {
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The 1.14d Mac counts the ambient tables at compile time: the two-count check folds away and
+// the index check compares against 8.
+#define SOUND_AMBIENT_ENTRY_COUNT ((int32_t)(sizeof(gaAmbientSoundEntryTable) / sizeof(gaAmbientSoundEntryTable[0])))
+#endif
+
+// 1.14d mac: 002e9c5b
 static D2AmbientSoundEntryStrc * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
     if (!gbAmbientSoundLangInitialized) {
       gbAmbientSoundLangInitialized = 1;
       gnAmbientSoundLanguageCode = SOUND_GetLanguageCode();
     }
+#if !defined(_WIN32) && D2_OS_MAC
+    if (!(nIndex < SOUND_AMBIENT_ENTRY_COUNT)) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
+      exit(-1);
+    }
+
+    D2AmbientSoundEntryStrc* pAmbientEntry = gaAmbientSoundEntryTable;
+    if (!gnAmbientSoundLanguageCode) {
+      pAmbientEntry = gAmbientSoundTable;
+    }
+
+    return pAmbientEntry + nIndex;
+#else
     if (gnAmbientSoundEntryCount != gnAmbientSoundCount) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x52);
       exit(-1);
@@ -98,8 +118,10 @@ static D2AmbientSoundEntryStrc * SOUND_GetAmbientSoundEntry(int32_t nIndex) {
       pAmbientEntry = gAmbientSoundTable + nIndex;
       return pAmbientEntry;
     }
+#endif
 }
 
+// 1.14d mac: 002e9ac4
 BOOL __stdcall SOUND_IsAmbientStreaming() {
     if (gpMusicStreamBuffer) {
       uint32_t bIsStreaming;
@@ -112,6 +134,15 @@ BOOL __stdcall SOUND_IsAmbientStreaming() {
     return 0;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Inlined on the 1.14d Mac (SOUND_SetMusicEnabled 002e9a28, SOUND_PlayNextAmbientSound 002e9af1):
+// eight SOUND_GetAmbientSoundEntry calls.
+void __stdcall SOUND_ResetAmbientSoundFlags() {
+    for (int i = 0; i < SOUND_AMBIENT_ENTRY_COUNT; i++) {
+      SOUND_GetAmbientSoundEntry(i)->bPlayed = 0;
+    }
+}
+#else
 void __stdcall SOUND_ResetAmbientSoundFlags() {
     int i = 0;
     if (gnAmbientSoundEntryCount <= 0) {
@@ -145,7 +176,9 @@ void __stdcall SOUND_ResetAmbientSoundFlags() {
       pEntry->bPlayed = 0;
     } while (i < gnAmbientSoundEntryCount);
 }
+#endif
 
+// 1.14d mac: 002e9a28
 void __fastcall SOUND_SetMusicEnabled(int32_t nEnabled) {
     if (nEnabled && !gnMusicEnabled) {
       SOUND_ResetAmbientSoundFlags();
@@ -155,10 +188,12 @@ void __fastcall SOUND_SetMusicEnabled(int32_t nEnabled) {
     gnMusicEnabled = nEnabled;
 }
 
+// 1.14d mac: 002e9cce
 BOOL __stdcall SOUND_GetMusicEnabled() {
     return gnMusicEnabled;
 }
 
+// 1.14d mac: 002e99e9 D2Sound::Src::D2SoundFast::SOUND_StopMusic
 void __stdcall SOUND_StopMusic() {
     if (!gpMusicStreamBuffer) {
       return;
@@ -173,6 +208,7 @@ void __stdcall SOUND_StopMusic() {
     D2SoundSmp::SOUNDSMP_Stop(gpMusicStreamBuffer);
 }
 
+// 1.14d mac: 002e9a73
 void __stdcall SOUND_FadeOutMusic() {
     if (!gpMusicStreamBuffer) {
       return;
@@ -187,6 +223,72 @@ void __stdcall SOUND_FadeOutMusic() {
     D2SoundSmp::SOUNDSMP_StartFade(gpMusicStreamBuffer, 0, 200);
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002e9952
+// Not a function of its own on Windows, where SOUND_PlayNextAmbientSound inlines it.
+static BOOL SOUNDSTRM_PlayMusicFile(char * szFile, int32_t bIsLooping) {
+    if (gpMusicStreamBuffer && D2SoundSmp::SOUNDSMP_GetEffectiveVolume() && !D2SoundSmp::SOUNDSMP_IsStreaming(gpMusicStreamBuffer) && szFile) {
+      D2SoundSmp::SOUNDSMP_Reset(gpMusicStreamBuffer);
+      D2SoundSmp::SOUNDSMP_SetVolume(gpMusicStreamBuffer, 0x6e);
+      if (D2SoundSmp::SOUNDSMP_OpenAndStreamFile(gpMusicStreamBuffer, szFile, 0, bIsLooping)) {
+        return 1;
+      }
+    }
+
+    return 0;
+}
+
+// 1.14d mac: 002e9af1
+// The ambient count is the compile-time 8 and the play step is SOUNDSTRM_PlayMusicFile.
+int __stdcall SOUND_PlayNextAmbientSound() {
+    D2AmbientSoundEntryStrc* pAmbientEntry;
+    int32_t nAmbientIdx;
+    EnterCriticalSection(&gSoundSmpCs);
+    if (!gpMusicStreamBuffer || !D2SoundSmp::SOUNDSMP_GetEffectiveVolume() || gpMusicStreamBuffer && D2SoundSmp::SOUNDSMP_IsStreaming(gpMusicStreamBuffer)) {
+      LeaveCriticalSection(&gSoundSmpCs);
+      return 0;
+    }
+
+    bool bResetDone = false;
+    while (true) {
+      for (nAmbientIdx = 0; nAmbientIdx < SOUND_AMBIENT_ENTRY_COUNT; nAmbientIdx++) {
+        if (!SOUND_GetAmbientSoundEntry(nAmbientIdx)->bPlayed) {
+          goto play_unplayed_track;
+        }
+      }
+      if (bResetDone) {
+        gnMusicEnabled = 0;
+        LeaveCriticalSection(&gSoundSmpCs);
+        return 0;
+      }
+
+      SOUND_ResetAmbientSoundFlags();
+      bResetDone = true;
+      play_unplayed_track:
+      if (gbSoundFastPathActive) {
+        pAmbientEntry = SOUND_GetAmbientSoundEntry(0);
+        gbSoundFastPathActive = 0;
+      } else {
+        int nRandIdx = rand() % SOUND_AMBIENT_ENTRY_COUNT;
+        pAmbientEntry = SOUND_GetAmbientSoundEntry(nRandIdx);
+        while (pAmbientEntry->bPlayed) {
+          nRandIdx++;
+          if (nRandIdx >= SOUND_AMBIENT_ENTRY_COUNT) {
+            nRandIdx = 0;
+          }
+
+          pAmbientEntry = SOUND_GetAmbientSoundEntry(nRandIdx);
+        }
+      }
+
+      pAmbientEntry->bPlayed = 1;
+      if (SOUNDSTRM_PlayMusicFile(pAmbientEntry->szFilename, 0)) {
+        LeaveCriticalSection(&gSoundSmpCs);
+        return 1;
+      }
+    }
+}
+#else
 int __stdcall SOUND_PlayNextAmbientSound() {
     uint32_t dwVolume;
     D2AmbientSoundEntryStrc* pAmbientEntry;
@@ -291,7 +393,10 @@ int __stdcall SOUND_PlayNextAmbientSound() {
       }
     } while (true);
 }
+#endif
 
+// 1.14d mac: 002e8120
+// The Mac accepts a "Sound Mixer" value up to 3.
 void __stdcall SOUND_LoadRegistrySettings() {
     uint32_t dwRegValue;
     g_nSoundMusicVolume = 0x32;
@@ -301,7 +406,11 @@ void __stdcall SOUND_LoadRegistrySettings() {
     g_nSoundNpcSpeech = 2;
     g_nSoundOptionsMusic = 1;
     int bReadMasterVol = Storm::Source::SReg::SRegLoadValue("Diablo II", "Sound Mixer", 0, (int32_t*)&dwRegValue);
+#if !defined(_WIN32) && D2_OS_MAC
+    if (bReadMasterVol && dwRegValue < 4) {
+#else
     if (bReadMasterVol && dwRegValue < 3) {
+#endif
       g_nSoundMixerType = dwRegValue;
     }
 
@@ -333,16 +442,19 @@ void __stdcall SOUND_LoadRegistrySettings() {
     g_nSoundOptionsMusic = dwRegValue;
 }
 
+// 1.14d mac: 002e829c
 int32_t __stdcall SOUND_GetSoundMixer() {
     return g_nSoundMixerType;
 }
 
+// 1.14d mac: 002e82ad D2Sound::Src::D2SoundFast::SOUND_SetSoundMixer
 int32_t __fastcall SOUND_SetSoundMixer(int32_t nMixerType) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Sound Mixer", 0, nMixerType);
     g_nSoundMixerType = nMixerType;
     return nMixerType;
 }
 
+// 1.14d mac: 002e82f1
 int __stdcall SOUND_GetMasterVolume() {
     return g_nSoundMasterVolume;
 }
@@ -353,16 +465,19 @@ int32_t __fastcall SOUND_SetMasterVolume(int32_t nVolume) {
     return nVolume;
 }
 
+// 1.14d mac: 002e8346
 int __stdcall SOUND_GetMusicVolume() {
     return g_nSoundMusicVolume;
 }
 
+// 1.14d mac: 002e8357
 int32_t __fastcall SOUND_SetMusicVolume(int32_t nVolume) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Music Volume", 0, nVolume);
     g_nSoundMusicVolume = nVolume;
     return nVolume;
 }
 
+// 1.14d mac: 002e839b
 int __stdcall SOUND_GetPositionalBias() {
     return g_nSoundPositionalBias;
 }
@@ -373,6 +488,7 @@ int32_t __fastcall SOUND_SetPositionalBias(int32_t nBias) {
     return nBias;
 }
 
+// 1.14d mac: 002e83f0
 int __stdcall SOUND_GetNpcSpeech() {
     return g_nSoundNpcSpeech;
 }
@@ -383,16 +499,19 @@ int32_t __fastcall SOUND_SetNpcSpeech(int32_t nNpcSpeech) {
     return nNpcSpeech;
 }
 
+// 1.14d mac: 002e8445
 int __stdcall SOUND_GetOptionsMusic() {
     return g_nSoundOptionsMusic;
 }
 
+// 1.14d mac: 002e8456
 int32_t __fastcall SOUND_SetOptionsMusic(int32_t nOptionsMusic) {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Options Music", 0, nOptionsMusic);
     g_nSoundOptionsMusic = nOptionsMusic;
     return nOptionsMusic;
 }
 
+// 1.14d mac: 002e7d7b
 void __stdcall SOUND_InitSoundEffectBuffers() {
     IDirectSound* dwSpeakerFlag = SOUND_GetDirectSoundDevice();
     if (!(dwSpeakerFlag && !gnSoundEffectSampleCount)) {
@@ -413,6 +532,7 @@ void __stdcall SOUND_InitSoundEffectBuffers() {
 }
 
 // @sourcefile .\Src\D2SoundFast.cpp
+// 1.14d mac: 002e7ed1
 void __fastcall SOUND_LoadWavFile(char * szText) {
     WAVEFORMATEX sWaveFormat;
     uint32_t nAllocSize;
@@ -525,6 +645,7 @@ void Unreferenced_00514ff0() {
     } while ((intptr_t)ppDVar1 < (intptr_t)&gpaSoundEffectBuffers + 32);
 }
 
+// 1.14d mac: 002e80b6
 void __stdcall SOUND_FadeOutAllSoundEffects() {
     if (!gnSoundEffectSampleCount) {
       return;
@@ -547,6 +668,7 @@ int __stdcall SOUND_IsSoundEffectsInitialized() {
 }
 
 // @sourcefile .\Src\D2SoundFast.cpp
+// 1.14d mac: 002e7df1
 void __stdcall SOUND_FreeSoundEffectBuffers() {
     if (!gnSoundEffectSampleCount) {
       return;
@@ -584,4 +706,4 @@ void Unreferenced_00515110() {
 
 }
 
-}}} // namespace D2Sound::Src::D2SoundFast
+} // namespace D2Sound::Src::D2SoundFast

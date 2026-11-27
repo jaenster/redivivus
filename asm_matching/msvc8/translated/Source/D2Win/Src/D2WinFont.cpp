@@ -72,6 +72,7 @@ static uint16_t gwFontHeightDefault[2] = {0}; D2_STATIC_GUARD(gwFontHeightDefaul
 namespace D2Win { namespace Src { namespace D2WinFont {
 
 // Constructs full font file path: DATA\LOCAL\Font\{language}\{fontname}. Special case for Korean chat font (index 13). Uses global language code and font name table.
+// 1.14d mac: 000473cf
 static void __stdcall D2WINFONT_BuildFontPath(char * szPathOut, int32_t nFontIndex, int32_t nBufferSize) {
     char szBasePath[260];
     char cCurChar;
@@ -117,6 +118,7 @@ static void __stdcall GetFontTablePath(int32_t nBufSize, int32_t nFontIndex, LPS
 }
 
 // @sourcefile .\Src\D2WinFont.cpp
+// 1.14d mac: 000474ec
 static void InitFontCache(int32_t nFontIndex) {
     char szFontTablePath[80];
     GetFontTablePath(0x4f, nFontIndex, szFontTablePath);
@@ -133,6 +135,7 @@ static void InitFontCache(int32_t nFontIndex) {
 }
 
 // @sourcefile .\Src\D2WinFont.cpp
+// 1.14d mac: 00047651
 void __stdcall D2WINFONT_FreeFontCache() {
     void** ppFontTable = &gaFontCache[0].pFontTable;
     do {
@@ -152,6 +155,7 @@ void __stdcall D2WINFONT_FreeFontCache() {
     gpMonsterIndicatorDC6 = 0;
 }
 
+// 1.14d mac: 000472e8
 D2FontGlyphStrc * __fastcall FONT_GetCharWidthCallback(uint16_t wCharCode) {
     if (wCharCode > 0xff) {
       return gaFontCache[gnLastUsedFontId].pGlyphs;
@@ -160,6 +164,7 @@ D2FontGlyphStrc * __fastcall FONT_GetCharWidthCallback(uint16_t wCharCode) {
     return gaFontCache[gnLastUsedFontId].pGlyphs + wCharCode;
 }
 
+// 1.14d mac: 00047327
 D2FontGlyphStrc * __fastcall D2WINFONT_LookupGlyphEntry(uint16_t wCharCode) {
     D2FontCacheEntryStrc* pCache = &gaFontCache[gnLastUsedFontId];
     int nIterations = 0;
@@ -184,6 +189,7 @@ D2FontGlyphStrc * __fastcall D2WINFONT_LookupGlyphEntry(uint16_t wCharCode) {
     return pCache->pGlyphs + 0x1f;
 }
 
+// 1.14d mac: 0004781b
 int32_t __fastcall D2WINFONT_GetStringPixelWidthN(uint16_t * pwszString, int32_t nMaxChars) {
     D2FontGlyphStrc* pGlyphEntry;
     int nCharPos = 0;
@@ -225,6 +231,7 @@ int32_t __fastcall D2WINFONT_GetStringPixelWidthN(uint16_t * pwszString, int32_t
     return nLastLineWidth;
 }
 
+// 1.14d mac: 000478ad
 int32_t __fastcall D2WINFONT_GetStringPixelWidth(uint16_t * pwszString, int32_t nSize) {
     int nCount = 0;
     int nWidth = 0;
@@ -244,12 +251,14 @@ int32_t __fastcall D2WINFONT_GetStringPixelWidth(uint16_t * pwszString, int32_t 
     return nWidth;
 }
 
+// 1.14d mac: 00047910
 int32_t __fastcall DRAW_text0(uint16_t * wszText) {
     int32_t nResult = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
     nResult = D2WINFONT_GetStringPixelWidth(wszText, nResult);
     return nResult;
 }
 
+// 1.14d mac: 00047ff3
 static int32_t TEXT_CalculateTextWidth(uint16_t * szBuffer) {
     if (!szBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x20d);
@@ -297,6 +306,7 @@ static int32_t TEXT_CalculateTextWidth(uint16_t * szBuffer) {
     return nLineWidth;
 }
 
+// 1.14d mac: 00048dea
 static int32_t D2WINFONT_GetFirstLinePixelWidth(uint16_t * pwszString) {
     if (!pwszString) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x23c);
@@ -330,6 +340,7 @@ static int32_t D2WINFONT_GetFirstLinePixelWidth(uint16_t * pwszString) {
     return nPixelWidth;
 }
 
+// 1.14d mac: 000480ef
 static int32_t TEXT_CalculateTextHeight(uint16_t * szBuffer) {
     if (!szBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x25e);
@@ -353,6 +364,7 @@ static int32_t TEXT_CalculateTextHeight(uint16_t * szBuffer) {
     return (int)((uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight * gnFontIdLarge * nLineCount) / 10;
 }
 
+// 1.14d mac: 00047934
 uint32_t __stdcall D2WINFONT_GetCurrentFontHeight() {
     return (uint32_t)gaFontCache[gnLastUsedFontId].pFontTableHeader->nLineHeight;
 }
@@ -363,6 +375,7 @@ static void __stdcall D2WINFONT_DrawSolidRectFromBottomLeft(int32_t nX, DRAWMODE
 }
 
 // Core wide string renderer. Processes color codes (0xFF prefix), newlines (0x0A), glyph lookup via gpfnFontGetCharWidth callback, horizontal centering if enabled. Draws each character glyph from font DC6.
+// 1.14d mac: 0004817d
 static void __stdcall D2WINFONT_DrawWideString(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nWidth, GLOBALPALLETE eGlobalPalette, int32_t bCenterHorizontally) {
     int32_t nLineWidth;
     D2FontGlyphStrc* nLinePixelWidth2;
@@ -506,6 +519,7 @@ static void __stdcall D2WINFONT_DrawWideStringWithDrawMode(int32_t nX, uint16_t 
 }
 
 // Renders wide string with vertical crop region (startY, endY). Used for scrollable text boxes. Handles color codes, image glyphs (0xFFÿ prefix), newlines. Checks renderer mode and applies vertical clipping per glyph.
+// 1.14d mac: 00047954
 void __fastcall D2WINFONT_DrawVerticalCroppedText(uint16_t * wszText, int32_t nX, uint32_t nY, int32_t nUnused, int32_t nCropStartY, int32_t nCropHeight) {
     uint16_t wCharCode;
     int32_t nCmpResult;
@@ -592,6 +606,7 @@ void __fastcall D2WINFONT_DrawVerticalCroppedText(uint16_t * wszText, int32_t nX
 }
 
 // Right-to-left text renderer (for RTL languages). Draws glyphs from right edge backwards with horizontal bounds checking. Processes color codes, newlines. Returns pointer to last glyph data.
+// 1.14d mac: 00047bd0
 void __fastcall D2WINFONT_DrawTickerText(uint16_t * wszText, int32_t nXStart, int32_t nY, GLOBALPALLETE eGlobalPalette, uint32_t nScrollOffsetX, uint32_t nClipWidth) {
     int32_t nGlyphCmp;
     D2FontGlyphStrc* pGlyphEntry;
@@ -700,6 +715,7 @@ static void D2WINFONT_DrawWideStringSimple(int32_t nX, uint16_t * wszText, int32
     }
 }
 
+// 1.14d mac: 00048370
 void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltipX, int32_t nTooltipY, int32_t nTooltipColor, int32_t nCenterFlag) {
     if (!wszBuffer) {
       memset(DisplayedTooltip.wszString, 0, sizeof(DisplayedTooltip.wszString));
@@ -733,11 +749,13 @@ void __fastcall TEXT_TooltipSetAttributes(uint16_t * wszBuffer, int32_t nTooltip
 }
 
 // Sets tooltip attributes (text, position, size, alignment) and custom field 0x810. Wrapper around TEXT_TooltipSetAttributes.
+// 1.14d mac: 000483f5
 void __fastcall D2WINFONT_SetTooltipAttributesWithCustomField(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nColor, int32_t nAlignment, int32_t nBarFill) {
     TEXT_TooltipSetAttributes(wszText, nX, nY, nColor, nAlignment);
     DisplayedTooltip.nLoadProgress = nBarFill;
 }
 
+// 1.14d mac: 00048438
 void __fastcall DRAW_text(uint16_t * wMessage, int32_t nX, int32_t nY, int32_t dwColor, BOOL bMultiLineCenter) {
     int32_t nTextWidth = 0;
     if (bMultiLineCenter) {
@@ -749,6 +767,7 @@ void __fastcall DRAW_text(uint16_t * wMessage, int32_t nX, int32_t nY, int32_t d
 }
 
 // Draws text with optional background box. If bDrawBackground is non-zero, calculates text width and adds 8px padding. Forwards to DrawWideStringWithDrawMode.
+// 1.14d mac: 00048480
 void __fastcall D2WINFONT_DrawTextWithOptionalBackground(uint16_t * wszText, int32_t nX, int32_t nY, GLOBALPALLETE eGlobalPalette, int32_t bDrawBackground, DRAWMODE eDrawMode) {
     int32_t nTextWidth = 0;
     if (bDrawBackground) {
@@ -774,6 +793,7 @@ void __fastcall D2WINFONT_DrawWideStringSimpleThunk(uint16_t * wszText, int32_t 
 }
 
 // Draws text with background rectangle. Calculates text dimensions, clamps to screen bounds, draws solid rect, then renders centered text. Used for tooltips and popups.
+// 1.14d mac: 00048689
 void __fastcall D2WINFONT_DrawTextWithBackgroundRect(uint16_t * wszText, uint32_t nX, int32_t nY, DWORD dwBackgroundColor, DRAWMODE eDrawMode, GLOBALPALLETE eGlobalPalette) {
     int nPaddedY;
     int nScreenWidth;
@@ -806,6 +826,7 @@ void __fastcall D2WINFONT_DrawTextWithBackgroundRect(uint16_t * wszText, uint32_
 }
 
 // Draws text with simple background rect (no padding). Clamps to screen bounds, draws solid rect exactly text width, renders text. Simpler variant of DrawTextWithBackgroundRect.
+// 1.14d mac: 0004876f
 void __fastcall D2WINFONT_DrawTextWithSimpleBackground(uint16_t * wszText, int32_t nX, int32_t nY, DWORD dwBackgroundColor, DRAWMODE eDrawMode, GLOBALPALLETE eGlobalPalette) {
     int nScreenHeight[2];
     int nScreenWidth;
@@ -828,6 +849,7 @@ void __fastcall D2WINFONT_DrawTextWithSimpleBackground(uint16_t * wszText, int32
     D2WINFONT_DrawWideString(wszText, nX, nYEnd - 2, nTextWidth, eGlobalPalette, 1);
 }
 
+// 1.14d mac: 00048836
 void __fastcall TEXT_CalcTextDimensions(uint16_t * szBuffer, int * nSizeX, int * nSizeY) {
     int32_t nStrLen = TEXT_CalculateTextWidth(szBuffer);
     *nSizeX = nStrLen;
@@ -836,6 +858,7 @@ void __fastcall TEXT_CalcTextDimensions(uint16_t * szBuffer, int * nSizeX, int *
 }
 
 // Validates character code against font character set bitmask. Uses table at aFontNames[14+]. Returns 1 if character is valid in current font, 0 otherwise. 0xFF always returns 0 (reserved for color codes).
+// 1.14d mac: 0004885c
 BOOL __fastcall D2WINFONT_IsFontCharacterValid(uint8_t nCharCode) {
     // Static local variables (originally global data)
     static uint32_t gaFontCharValidBits[8] = { 0x0, 0xffffffff, 0xffffffff, 0x7fffffff, 0x60000, 0xffffffff, 0xffffffff, 0xffffffff }; D2_STATIC_GUARD(gaFontCharValidBits, "D2Win::Src::D2WinFont::D2WINFONT_IsFontCharacterValid::gaFontCharValidBits");
@@ -852,6 +875,7 @@ BOOL __fastcall D2WINFONT_IsFontCharacterValid(uint8_t nCharCode) {
 }
 
 // Draws text with background rect offset by -4px horizontally. Calculates text height, clamps to screen, draws inset rectangle, renders text. Used for UI tooltips with padding.
+// 1.14d mac: 0004888d
 void __fastcall D2WINFONT_DrawTextWithOffsetBackground(uint16_t * wszText, int32_t nX, int32_t nY, int32_t nWidth, DWORD dwBackgroundColor, DRAWMODE eDrawMode, GLOBALPALLETE eGlobalPalette) {
     int nScreenHeight;
     int nScreenWidth;
@@ -876,6 +900,7 @@ void __fastcall D2WINFONT_DrawTextWithOffsetBackground(uint16_t * wszText, int32
     D2WINFONT_DrawWideString(wszText, nTextHeight, nYEnd - 2, 0, eGlobalPalette, 0);
 }
 
+// 1.14d mac: 00048970
 void __fastcall IMAGE_DrawDC6ImageOnScreen(DC6 * pDC6, int32_t nPosX, int32_t nPoxY, int32_t nAlignment, DRAWMODE eDrawMode, GLOBALPALLETE nGlobalPaletteShift) {
     int32_t nFrameWidthPx;
     uint32_t nFrameIdx;
@@ -996,6 +1021,7 @@ void __fastcall D2WINFONT_DrawTextWithProgressBar(uint16_t * wszText, uint32_t n
 }
 
 // @sourcefile .\Src\D2WinFont.cpp
+// 1.14d mac: 00048a74
 void __fastcall D2WINFONT_FreeWordWrapList(void * * ppNodeList) {
     while (ppNodeList) {
       void** ppNextNode;
@@ -1007,6 +1033,7 @@ void __fastcall D2WINFONT_FreeWordWrapList(void * * ppNodeList) {
 }
 
 // @sourcefile .\Src\D2WinFont.cpp
+// 1.14d mac: 00048d48
 D2TextLineStrc * __stdcall D2WINFONT_AllocWordWrapNode(uint16_t * pwszText, uint32_t nSize, int32_t bTrimLeadingSpace) {
     uint16_t* pText = pwszText;
     D2TextLineStrc* pNode = D2_NEW_AT(D2TextLineStrc, ".\\Src\\D2WinFont.cpp", 0x588);
@@ -1029,6 +1056,7 @@ D2TextLineStrc * __stdcall D2WINFONT_AllocWordWrapNode(uint16_t * pwszText, uint
 }
 
 // @sourcefile .\Src\D2WinFont.cpp
+// 1.14d mac: 00048adb
 D2TextLineStrc * __fastcall D2WINFONT_WordWrapString(uint16_t * wszText, int * pnLineCount, int32_t nMaxWidth) {
     D2TextLineStrc* pNode;
     uint16_t* pNodeText;
@@ -1204,6 +1232,7 @@ intptr_t __fastcall Unreferenced_00502c40(intptr_t param_1) {
     return param_1;
 }
 
+// 1.14d mac: 0004701c
 void __stdcall D2WINFONT_InitFontSystem() {
     char szFontPath[80];
     uint32_t nLangCode;
@@ -1276,6 +1305,7 @@ void __stdcall D2WINFONT_InitFontSystem() {
     D2Lang::UTF8_ConvertToWideChar((uint16_t*)gnFontTableCharWidthCache, szFontPath, 2);
 }
 
+// 1.14d mac: 000476db
 int32_t __fastcall SetAndReturnLastFont(int32_t nFontId) {
     // Static local variables (originally global data)
     static unsigned int gdwFontCacheLastEvictionTick; D2_STATIC_GUARD_BSS(gdwFontCacheLastEvictionTick, "D2Win::Src::D2WinFont::SetAndReturnLastFont::gdwFontCacheLastEvictionTick");
@@ -1331,6 +1361,7 @@ int32_t __fastcall SetAndReturnLastFont(int32_t nFontId) {
     return pReturnFont;
 }
 
+// 1.14d mac: 00047d81
 void __stdcall Draw_UnitNameUnderCursor() {
     uint32_t nDrawX;
     uint32_t extraout_var;

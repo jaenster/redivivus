@@ -27,6 +27,13 @@
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/Engine.data.h"
 #include "Source/D2Common/DataTbls/MonsterTbls.inline.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include <Carbon/Carbon.h>
+// 1.14d mac: 00035351
+bool STORM_IsCDVolume(short nVRefNum);
+// 1.14d mac: 002b692a
+int FUN_002b692a(void);
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -93,6 +100,7 @@ void __fastcall LOADER_SetScreenResolutionMode(BOOL bConnectionLost) {
     gaScreenResolutionModeArray = bConnectionLost;
 }
 
+// 1.14d mac: 000aac00
 static BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY, int32_t nRectWidth, int32_t nRectHeight) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -103,6 +111,7 @@ static BOOL __stdcall UI_IsMouseInRect(int32_t nRectLeftX, int32_t nRectBottomY,
     return 0;
 }
 
+// 1.14d mac: 000aa908
 void __stdcall DrawPopupOk(int32_t bDiscPrompt) {
     D2GfxDataStrc sGfxData;
     memset(&sGfxData, 0, sizeof(sGfxData));
@@ -148,6 +157,7 @@ void __stdcall LOADER_DrawInsertDiscMessage() {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nPrevFont);
 }
 
+// 1.14d mac: 000aa6e6
 void __fastcall LOADER_DrawInsertDiscScreen(int32_t nUnused) {
     int32_t nSceneState = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
     if (nSceneState) {
@@ -169,6 +179,7 @@ void __fastcall LOADER_DrawInsertDiscScreen(int32_t nUnused) {
     D2gfx::D2GFX::D2GFX_EndScene();
 }
 
+// 1.14d mac: 000aab72
 void __stdcall INPUT_CharScreenOkDown(D2UIMouseMsgStrc * pMsg) {
     int nLeftX = UI::Inv::gnPanelOffsetX + 0x110;
     int nBottomY = 0x136 - UI::Inv::gnPanelOffsetY;
@@ -190,6 +201,7 @@ void __stdcall INPUT_CharScreenOkDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000aac40
 void __stdcall INPUT_CharScreenOkUp(D2UIMouseMsgStrc * pMsg) {
     int nMouseY;
     int nLeftEdge;
@@ -218,6 +230,7 @@ void __stdcall INPUT_CharScreenOkUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000aacac
 void __stdcall INPUT_CharScreenOkForce(D2UIMouseMsgStrc * pMsg) {
     gbCharScreenOkPressed = 1;
     gnCharScreenInputState = 0;
@@ -228,6 +241,7 @@ void __stdcall INPUT_CharScreenOkForce(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Escape handler for the char-screen OK dialog: clears gbCharScreenOkPressed.
+// 1.14d mac: 000aace5
 void __stdcall INPUT_CharScreenOkCancel(D2UIMouseMsgStrc * pMsg) {
     gbCharScreenOkPressed = 0;
 }
@@ -270,6 +284,7 @@ int Unreferenced_00460170() {
     return 1;
 }
 
+// 1.14d mac: 000aad48
 void __fastcall LOADER_DrawConnectionLostScreen(int32_t nUnused) {
     int32_t nSceneState = D2gfx::D2GFX::D2GFX_EndCutSceneReturnSceneState();
     if (nSceneState) {
@@ -291,6 +306,7 @@ void __fastcall LOADER_DrawConnectionLostScreen(int32_t nUnused) {
     D2gfx::D2GFX::D2GFX_EndScene();
 }
 
+// 1.14d mac: 000ab09f
 void __stdcall INPUT_CharScreenDualButtonDown(D2UIMouseMsgStrc * pMsg) {
     int nButtonX = UI::Inv::gnPanelOffsetX + 0xce;
     int nButtonY = 0x136 - UI::Inv::gnPanelOffsetY;
@@ -326,6 +342,7 @@ void __stdcall INPUT_CharScreenDualButtonDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ab157
 void __stdcall INPUT_CharScreenDualButtonUp(D2UIMouseMsgStrc * pMsg) {
     gnCharScreenOkButtonPressed = 0;
     gnConnectionLostScreenState = 0;
@@ -360,6 +377,7 @@ void __stdcall INPUT_CharScreenDualButtonUp(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000ab210
 void __stdcall INPUT_CharScreenDualButtonForce(D2UIMouseMsgStrc * pMsg) {
     gbCharScreenOkButtonConfirmed = 1;
     gnCharScreenInputState = 0;
@@ -370,10 +388,12 @@ void __stdcall INPUT_CharScreenDualButtonForce(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Escape handler for the char-screen dual-button dialog: sets gbCharScreenCancelPressed.
+// 1.14d mac: 000ab249
 void __stdcall INPUT_CharScreenDualButtonCancel(D2UIMouseMsgStrc * pMsg) {
     gbCharScreenCancelPressed = 1;
 }
 
+// 1.14d mac: 000aaa74
 void __stdcall LOADER_FreePopupImages() {
     if (IMG_popupok_DiscPrompt) {
       Core::Archive::DC6_FreeAndDelete((DC6*)IMG_popupok_DiscPrompt);
@@ -391,10 +411,63 @@ void __stdcall LOADER_FreePopupImages() {
     UI::ui::PALETTE_LoadLoadingScreenPalette();
 }
 
+// 1.14d mac: 000ab25b
 void __fastcall LOADER_SetConnectionLostFlag(BOOL bConnectionLost) {
     gbConnectionLost = bConnectionLost;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// True when a mounted volume of that name is a CD volume (the disc check of the insert-disc loop).
+// 1.14d mac: 000ab26f
+BOOL __fastcall LOADER_IsNamedVolumeMounted(char * szVolumeName) {
+    HParamBlockRec tParam;
+    Str255 szVolumeEntry;
+    Str255 szWanted;
+    size_t nLength = strlen(szVolumeName);
+    memcpy(szWanted + 1, szVolumeName, nLength + 1);
+    szWanted[0] = (unsigned char)nLength;
+    tParam.volumeParam.ioVolIndex = 1;
+    tParam.volumeParam.ioVRefNum = 0;
+    tParam.volumeParam.ioNamePtr = szVolumeEntry;
+    short nStatus = PBHGetVInfoSync(&tParam);
+    if (nStatus == 0) {
+      short nVolIndex = 2;
+      do {
+        if (EqualString(szVolumeEntry, szWanted, false, false) && STORM_IsCDVolume(tParam.volumeParam.ioVRefNum)) {
+          return 1;
+        }
+
+        tParam.volumeParam.ioVRefNum = 0;
+        tParam.volumeParam.ioNamePtr = szVolumeEntry;
+        tParam.volumeParam.ioVolIndex = nVolIndex;
+        nStatus = PBHGetVInfoSync(&tParam);
+        nVolIndex++;
+      } while (nStatus == 0);
+    }
+
+    return 0;
+}
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac keeps the insert-disc loop alive only while the game disc is not mounted: each pass
+// draws the screen, then looks for the Play Disc (Lord of Destruction for the expansion); once
+// found it sets the done flag, otherwise it asks the Mac shell to unmount the other volumes.
+// 1.14d mac: 000aa68a
+uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused) {
+    GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING();
+    LOADER_DrawInsertDiscScreen(0);
+    Sound::SoundHdr::DRAW_AfterDraw();
+    const char* szVolumeName = Fog::D2CheckExpansionGame() ? "Lord of Destruction" : "Diablo II Play Disc";
+    if (LOADER_IsNamedVolumeMounted((char*)szVolumeName)) {
+      gbCharScreenOkPressed = 1;
+    } else {
+      ::FUN_002b692a();
+    }
+
+    return gbCharScreenOkPressed & 1;
+}
+#else
 // Simple UI draw loop used by MessageGameLoop (clear, palette, popup/ok/cancel, cursor).
 // Returns nonzero to exit.
 // @abi __stdcall uint32_t(uint32_t dwUnused). Ends RET 4 - exactly one stack parameter and no
@@ -424,6 +497,7 @@ uint32_t __stdcall fpGameLoopFunction(uint32_t dwUnused) {
     Sound::SoundHdr::DRAW_AfterDraw();
     return (uint32_t)(gbCharScreenOkPressed != 0);
 }
+#endif
 
 BOOL fpRequiredUserAction() {
     uint32_t dwActPalIdx;
@@ -454,6 +528,7 @@ BOOL __fastcall ENGINE_RunDrawModeGameLoop(int32_t nDrawMode) {
 }
 
 // Alternate draw mode game loop with different event handler table and loop function
+// 1.14d mac: 000aaffc
 static uint32_t ENGINE_RunDrawModeGameLoopAlt(int32_t nDrawMode, uint32_t dwRetVal) {
     GAME::Game::GAMEDATA_SetDrawFunction(nDrawMode);
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUIEngineFlagInit2, 4);
@@ -520,6 +595,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
+// 1.14d mac: 00121391
 void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     BOOL eState;
     uint32_t nCount;
@@ -548,6 +624,7 @@ void __stdcall CLIENT_PreloadMonsterCofsInAdjacentRooms() {
     }
 }
 
+// 1.14d mac: 00120ddc
 void __fastcall CLIENT_UpdateUnitLightRadius(D2UnitStrc * pUnit, int32_t nRadiusBonus) {
     D2MonStats2Txt* pMonStats2;
     uint32_t nLightRadius;

@@ -64,6 +64,7 @@ namespace D2Common { namespace DATATBLS { namespace FieldTbls {
 // offset lookup tables used for automap/collision field stepping.
 // Source: .\\DATATBLS\\FieldTbls.cpp
 // @sourcefile .\DATATBLS\FieldTbls.cpp
+// 1.14d mac: 00140e1e
 int __stdcall FIELDTBLS_InitFieldData(D2ExpFieldFileStrc * pArchive, uint32_t dwUnused) {
     // Static local variables (originally global data)
     static int gnFieldDataTableDirectionOffset0; D2_STATIC_GUARD_BSS(gnFieldDataTableDirectionOffset0, "D2Common::DATATBLS::FieldTbls::FIELDTBLS_InitFieldData::gnFieldDataTableDirectionOffset0");
@@ -108,6 +109,7 @@ int __stdcall FIELDTBLS_InitFieldData(D2ExpFieldFileStrc * pArchive, uint32_t dw
 // Frees the global field table data and zeroes all field dimensions/offsets.
 // Source: .\\DATATBLS\\FieldTbls.cpp
 // @sourcefile .\DATATBLS\FieldTbls.cpp
+// 1.14d mac: 00140f01
 int __stdcall FIELDTBLS_FreeFieldData() {
     if (gpFieldDataTable) {
       D2_FREE_POOL_AT(nullptr, gpFieldDataTable, ".\\DATATBLS\\FieldTbls.cpp", 0x5b);
@@ -133,6 +135,7 @@ void __stdcall FIELDTBLS_GetFieldCenterOffsets(uint32_t * pdwHalfWidth, uint32_t
 // FIELDTBLS_FreePoint @ 0066a500. It is NOT a constructor: it takes no `this`, it
 // allocates its own storage and returns it.
 // @sourcefile .\DATATBLS\FieldTbls.cpp
+// 1.14d mac: 00140f7f
 POINT * __stdcall FIELDTBLS_AllocPoint() {
     POINT* pPoint = D2_NEW_POOL_AT(nullptr, POINT, ".\\DATATBLS\\FieldTbls.cpp", 0x87);
     if (!pPoint) {
@@ -148,6 +151,7 @@ POINT * __stdcall FIELDTBLS_AllocPoint() {
 // It is NOT a destructor: a destructor does not free its own storage, and this takes the
 // pointer as an ordinary __stdcall stack parameter.
 // @sourcefile .\DATATBLS\FieldTbls.cpp
+// 1.14d mac: 00140ff9
 void __stdcall FIELDTBLS_FreePoint(POINT * pPoint) {
     if (!pPoint) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x93);
@@ -157,6 +161,7 @@ void __stdcall FIELDTBLS_FreePoint(POINT * pPoint) {
     D2_FREE_POOL_AT(nullptr, pPoint, ".\\DATATBLS\\FieldTbls.cpp", 0x94);
 }
 
+// 1.14d mac: 0014105e
 void __stdcall SetXY(POINT * pPoint, LONG nX, LONG nY) {
     if (!pPoint) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa1);
@@ -229,6 +234,7 @@ BOOL __stdcall FIELDTBLS_TracePathCheckCollision(POINT * pPoint, D2RoomStrc * pR
 // FIELDTBLS_InitFieldData to parse it into global field tables.
 // Source: .\\DATATBLS\\FieldTbls.cpp
 // @sourcefile .\DATATBLS\FieldTbls.cpp
+// 1.14d mac: 00140d95
 void __fastcall FIELDTBLS_LoadExpFieldFile(D2PoolManagerStrc * pMemory) {
     uint32_t nFileSize;
     char szFilePath[260];

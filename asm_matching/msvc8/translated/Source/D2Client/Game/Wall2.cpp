@@ -202,6 +202,7 @@ static int UNIT_CenterYCoordsDiv5 = 0; D2_STATIC_GUARD(UNIT_CenterYCoordsDiv5, "
 
 namespace D2Client { namespace GAME { namespace Wall2 {
 
+// 1.14d mac: 00126df8
 void __fastcall WALL2_InitUnitGfx(D2UnitStrc * pUnit) {
     int32_t nLine;
     D2GfxInfoStrc* pGfxInfo = Engine::Gfx::AllocGfxInfo();
@@ -357,6 +358,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_18(D2UnitStrc * p
 }
 
 // Client-side world-render entry for a single unit. Performs visibility culling first: skips drawing if the no-draw flag is set, a dead player whose body has no playerbody state, or a player/merc with attached/invis state; honors perspective bounds and a line-of-sight check. Computes screen X/Y (perspective-scaled with world offsets, or target X/Y otherwise) then dispatches by unit type to the gfx draw routine DRAW_WORLD_Unit_1: players run the whip/leap skill-trail pre/post hooks; monsters pass an IsMonsterGhostly palette-shift flag and run charge-trail hooks; missiles apply the MissilesTxt x/y/z offsets. On a successful draw sets UNITFLAG_AUTOMAP on the unit. Restores the default perspective factor on exit when perspective was active.
+// 1.14d mac: 00126ea2
 void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nDrawLayer) {
     uint32_t bInViewBounds;
     int32_t nAnimMode;
@@ -491,6 +493,7 @@ void __fastcall DRAW_WORLD_Unit(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t nD
     }
 }
 
+// 1.14d mac: 00097339
 void __stdcall WALL2_ResetAmbientSound() {
     if (ClientModeInGame::D2IniData_client->bNOSOUND) {
       return;
@@ -512,6 +515,7 @@ void __stdcall WALL2_ResetAmbientSound() {
 }
 
 // Per-frame ambient/level music driver (called with the current GetTickCount). Resolves the current level's SoundEnviron line (via SoundHdr GetSoundEnv) to a Song id, gated by the global song-id range; tracks level changes (gdwAmbientMusicLevelChangeTick / geAmbientMusicLevelId). Honors master+music volume (stops music when either is 0), and after a debounce delay switches/starts the ambient track (SOUND_PlaySound/StopMusic/FadeOutMusic). Also services the scripted sound-sequence state machine (gbSoundSequenceActive: pending sequence sound, delayed player sound keyed off the client recording index, and end-of-sequence fade-out) and stores the resumed music position back into the SoundHdr global-2 table. Client-side audio; no game-state mutation.
+// 1.14d mac: 0009660b
 void __fastcall WALL2_UpdateAmbientMusic(uint32_t nTickCount) {
     int nTmpResult;
     D2UnitStrc* pUnit;
@@ -647,6 +651,7 @@ void __fastcall WALL2_UpdateAmbientMusic(uint32_t nTickCount) {
 }
 
 // Schedules a cutscene/ambient sound sequence for deferred playback. Stops any active ambient music and saves the current block offset, then records the sequence sound ID, resume index (recordingIdx + nParam1), end index (recordingIdx + nSequenceDuration), a delayed secondary sound ID, and its play index (recordingIdx + nParam2). Sets gbSoundSequenceActive and gbPendingSoundSequencePlay/gbPendingDelayedSoundPlay flags for the game loop to act on.
+// 1.14d mac: 000976a7
 void __fastcall WALL2_ScheduleSoundSequence(uint32_t dwSoundId, int32_t nResumeOffset, int32_t nSequenceDuration, int32_t nBlockIdx, uint32_t dwDelayedSoundId, int32_t nDelayedSoundOffset, uint32_t bPlayDelayed) {
     int pStopHandle;
     uint32_t nActiveSoundId;
@@ -683,6 +688,7 @@ void __fastcall WALL2_ScheduleSoundSequence(uint32_t dwSoundId, int32_t nResumeO
     gnSoundSequenceEndIndex = nRecordingIdx + nSequenceDuration;
 }
 
+// 1.14d mac: 00097777
 void __fastcall WALL2_UpdateScheduledSound(int32_t nDelayedSoundOffset, int32_t bPlayDelayed) {
     if (!gbSoundSequenceActive) {
       return;
@@ -717,6 +723,7 @@ static void WALL2_AllocDrawList(D2GameViewStrc * pGameView) {
     pGameView->sWall2.nWall2GridHeight = nGridHeight;
 }
 
+// 1.14d mac: 0007dc88
 void __fastcall ResetWall2Data(D2GameViewStrc * pGameView) {
     pGameView->sWall2.nWall2GridDim = 0;
     pGameView->sWall2.nWall2EntryCount = 0;
@@ -725,6 +732,7 @@ void __fastcall ResetWall2Data(D2GameViewStrc * pGameView) {
 }
 
 // @sourcefile .\GAME\Wall2.cpp
+// 1.14d mac: 0007dcb5
 void __fastcall FreeWall2(D2GameViewStrc * pGameView) {
     D2Wall2CellStrc* pMemoryToFree = pGameView->sWall2.pWall2;
     if (pMemoryToFree) {
@@ -1056,6 +1064,7 @@ static void __stdcall WALL2_AddRoofTile(D2Wall2DrawListStrc * pDrawList, D2Wall2
 }
 
 // Appends a tile to the cell's pShadowPassList and sets pass-mask bit 3. Called for every tile from DRLGROOM_GetRoofTilesFromRoom and for wall tiles whose flags bits 14..16 are clear.
+// 1.14d mac: 0007ec22
 static void __stdcall WALL2_AddShadowPassTile(D2Wall2CellStrc * pWall2Cell, D2RoomStrc * pRoom, D2DrlgTileDataStrc * pTileData, D2Wall2DrawListStrc * pDrawList) {
     D2Wall2DrawEntryStrc* pCurNode;
     uint32_t nEntryIdx = pDrawList->nWall2EntryCount;
@@ -1089,6 +1098,7 @@ static void __stdcall WALL2_AddShadowPassTile(D2Wall2CellStrc * pWall2Cell, D2Ro
 }
 
 // Inserts a unit draw entry (type 0) into the cell's shadow-pass list. Mirrors WALL2_InsertUnitDrawBelow but appends to pWall2Cell->pShadowPassList (+0x10) and sets pass-mask bit 3 (pDrawList->dwWall2PassMask). Resolves unit world position from its dynamic path (or its static path for object, item and tile units - types 2, 4, 5) and appends to the list tail.
+// 1.14d mac: 0007ecc3
 static void __stdcall WALL2_InsertUnitDraw(D2Wall2CellStrc * pWall2Cell, D2UnitStrc * pUnit, D2Wall2DrawListStrc * pDrawList) {
     int nUnitPos;
     D2Wall2DrawEntryStrc* pDVar2;
@@ -1199,6 +1209,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p)
 }
 
 // Client-side draw-list builder for a single dungeon room within the wall2 (low-perspective wall/roof culling) view. Given pRoom and pnParam (game-view ptr + screen cull rectangle), early-rejects rooms outside the minimap rect, then walks the room's wall tiles and roof tiles: for each on-screen tile it computes iso grid coords (DRLG_OrthToIsoCoordsDiv160), clears the grid cell's dwFlags, and dispatches to WALL2_AddShadowPassTile/AddRoofTile/AddLowerWallTile/AddWallTile by tile type/flags. Then (when pnParam[6]==0) inserts each unit in the room into its grid cell (draw/draw-below/shadow) based on alive state and unit flags. Halts via Fog error if a unit's grid index is out of range. Always returns 1.
+// 1.14d mac: 0007e086
 BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawContextStrc * pDrawContext) {
     int nRoofHeightIdx2;
     int nScreenYAdj;
@@ -1332,6 +1343,7 @@ BOOL __stdcall WALL2_CollectRoomTilesAndUnits(D2RoomStrc * pRoom, D2Wall2DrawCon
 }
 
 // Client render-prep: rebuilds the per-frame "wall2" tile/unit draw list for the given game view. Allocates the draw list, computes the visible screen rect (expanding by 0x30 in perspective mode) and caches it in the RECT_* globals, then resets the wall2 entry/alloc counters and zero-fills the grid cell array. Maps the view center to iso grid coords (DRLG_OrthToIsoCoordsDiv160), seeds each grid cell's iso row/col, caches the local player's tile coords (UNIT_CenterX/YCoordsDiv5, gnPlayerTileGridIndex), then walks the current room tree via CallRoomCallback(WALL2_CollectRoomTilesAndUnits) to gather drawable tiles/units. Halts via Fog error if the wall2 buffer or the player unit is missing. Side effects: mutates view draw-list fields and several render globals.
+// 1.14d mac: 0007dd1c
 void __fastcall WALL2_BuildSceneDrawList(D2GameViewStrc * pGameView, uint32_t nTickCount) {
     // Static local variables (originally global data)
     static int RECT_left; D2_STATIC_GUARD_BSS(RECT_left, "D2Client::GAME::Wall2::WALL2_BuildSceneDrawList::RECT_left");

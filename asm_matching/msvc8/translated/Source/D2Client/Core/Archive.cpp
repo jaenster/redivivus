@@ -17,6 +17,7 @@
 namespace D2Client { namespace Core { namespace Archive {
 
 // @sourcefile .\CORE\ARCHIVE.CPP
+// 1.14d mac: 0005cf38
 DC6 * __fastcall IMAGE_LoadDC6Ex(char * szFilename, BOOL bUseDccExtension) {
     char aFullName[260];
     strcpy(aFullName, szFilename);
@@ -28,6 +29,7 @@ DC6 * __fastcall IMAGE_LoadDC6Ex(char * szFilename, BOOL bUseDccExtension) {
 }
 
 // @sourcefile .\CORE\ARCHIVE.CPP
+// 1.14d mac: 0005cffd
 DC6 * __fastcall IMAGE_LoadWeatherDC6ToPointer(char * szFilename, uint32_t * pnSize, BOOL bUseDccExtension) {
     char aFullName[260];
     strcpy(aFullName, szFilename);
@@ -39,6 +41,7 @@ DC6 * __fastcall IMAGE_LoadWeatherDC6ToPointer(char * szFilename, uint32_t * pnS
 }
 
 // @sourcefile .\CORE\ARCHIVE.CPP
+// 1.14d mac: 0005d0c1
 void __fastcall DC6_FreeAndDelete(DC6 * pDC6) {
     D2CMP::SRC::CelCmp::DeleteCellFile(pDC6);
     if (!pDC6) {

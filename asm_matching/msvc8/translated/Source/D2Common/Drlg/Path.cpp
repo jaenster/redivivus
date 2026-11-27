@@ -483,6 +483,7 @@ int32_t __stdcall DRLGPATH_GetApproxDistancePacked(uint32_t nPackedCoord1, uint3
 // The index is used to look up direction bytes and path vectors from static tables
 // at 0x6f1648 (3-byte direction entries) and 0x6f1518 (12-byte path vector entries).
 // Takes params via fastcall: ECX=y2, EDX=x1, stack=y1, stack=x2.
+// 1.14d mac: 00182349
 static int32_t __stdcall DRLGPATH_GetDirectionIndex(int32_t nY2, int32_t nX1, int32_t nY1, int32_t nX2) {
     int nAbsDeltaX = nX2 - nX1;
     int nAbsDeltaY = nY2 - nY1;
@@ -530,6 +531,7 @@ clamp_y:
 // Each uint32 encodes x in low 16 bits and y in high 16 bits.
 // Same 5x5 grid clamping logic as DRLGPATH_GetDirectionIndex, producing index 0-24
 // for lookup into direction and path vector tables.
+// 1.14d mac: 001823d1
 int32_t __stdcall DRLGPATH_GetDirectionIndexPacked(uint32_t nPackedFrom, uint32_t nPackedTo) {
     int nAbsDeltaX = (int)(uint16_t)nPackedTo - (int)(uint16_t)nPackedFrom;
     int nAbsDeltaY = (int)(nPackedTo >> 0x10) - (int)(nPackedFrom >> 0x10);
@@ -597,6 +599,7 @@ int __fastcall DRLGPATH_GetPathDirection(int32_t nX1, int32_t nY1, int32_t nX2, 
 }
 
 // Returns the primary path direction vector (first dword of 12-byte entry) between two packed coordinate points. Packed variant of DRLGPATH_GetPathDirection. Called only by the DRLG A* path search: DRLGPATH_AStarExpandNode and DRLGPATH_FindPathAStar.
+// 1.14d mac: 001824a6
 int __stdcall DRLGPATH_GetPathDirectionPacked(uint32_t nPackedFrom, uint32_t nPackedTo) {
     int32_t nDirIndex = DRLGPATH_GetDirectionIndexPacked(nPackedFrom, nPackedTo);
     return gPathDirectionTable[nDirIndex * 3];
@@ -616,6 +619,7 @@ void __fastcall DRLGPATH_GetPathDirectionTriplet(int32_t nX1, int32_t nY1, int32
 // Returns all 3 path direction vectors (3 dwords from 12-byte table entry at 0x6f1518)
 // between two packed coordinate points. Writes primary + 2 alternates to output array.
 // Called by PathTypeFunc_02 and outdoor room linking functions.
+// 1.14d mac: 001824e1
 void __fastcall DRLGPATH_GetPathDirectionTripletPacked(int * paDirOut, int, uint32_t nPackedSrc, uint32_t nPackedDst) {
     int32_t nDirIndex = DRLGPATH_GetDirectionIndexPacked(nPackedSrc, nPackedDst);
     *paDirOut = gPathDirectionTable[nDirIndex * 3];
@@ -696,6 +700,7 @@ uint32_t __fastcall DRLGPATH_UpdatePathVelocityAndDirection(uint32_t * pPathData
 // Repeatedly right-shifts both values until each fits within [-0x10000, 0x10000].
 // Used by DRLGPATH_StepPathWithCollisionCheck to keep velocity components in
 // a safe range for fixed-point iteration.
+// 1.14d mac: 0018258c
 void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnStepX, int * pnStepY) {
     if (*pnStepX >= 0) {
       while (*pnStepX > 0x10000) {
@@ -722,6 +727,7 @@ void __fastcall DRLGPATH_NormalizeFixedPointPair(int * pnStepX, int * pnStepY) {
 }
 
 // Wrapper that computes the bounding box for A* search by merging the current room and (optionally) the next room extents, padding 10 tiles on any axis that didn't change, then delegates to DRLGPATH_FindPathAStar. nIdaStarVariable is doubled on entry (IDA* depth scaling). Returns the path length from the inner call.
+// 1.14d mac: 0017e67f
 int32_t __fastcall PATH_FindPathAStar(D2PathTypeArg * pPathTypeArg) {
     int32_t nPathLen;
     int nAStarResult;
@@ -915,6 +921,7 @@ D2DrlgPathNodeStrc * __fastcall DRLGPATH_AllocPathNode(D2DrlgPathSearchCtxStrc *
 }
 
 // Attempts to expand a neighbor node in the A* search. Checks if the node exists in open or closed lists, creates new nodes as needed, and updates costs if a better path is found. Links the node as a child of the parent (up to 8 children).
+// 1.14d mac: 0017e166
 static BOOL __stdcall DRLGPATH_TryExpandNeighborNode(D2DrlgPathSearchCtxStrc * nOpenList, uint32_t nPackedNeighbor, uint32_t nPackedTarget, D2DrlgPathNodeStrc * pParentNode) {
     short int nEdgeCost;
     D2DrlgPathNodeStrc* pNewNode;
@@ -1209,6 +1216,7 @@ static int32_t DRLGPATH_CheckSurroundingCollisions(D2PathTypeArg * pPathTypeArg)
 }
 
 // Fallback A* used when the greedy directional search does not reach the destination and the squared distance is under 0x145. The whole search state is ONE 0x32EC-byte frame object whose base is handed to every helper, which then reach the rest by byte offset: DRLGPATH_AllocPathNode takes the pool count at base+0x2FC4 and node n at base+0x404+n*0x38; DRLGPATH_InsertNodeSorted and PopBestNodeFromOpenList use the closed buckets at base+0x200 and the sorted head at base+0x400; DRLGPATH_PropagateNodeCosts uses the queue at base+0x2FC8 and its count at base+0x32E8. Split into separate locals the helpers wrote nodes over unrelated stack and read the list head out of garbage, which faulted on every player move long enough to need the A* fallback and on NPC paths.
+// 1.14d mac: 0017d7ec
 int32_t __fastcall PATH_FindPathAStarLocalPool(D2PathTypeArg * pPathTypeArg) {
     int32_t nExtractResult;
     D2DrlgPathSearchCtxStrc abyOpenList;

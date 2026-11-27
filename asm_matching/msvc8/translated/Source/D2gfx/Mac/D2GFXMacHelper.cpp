@@ -20,13 +20,13 @@ void D2GFX_SetPaletteTable(uint8_t** ppPaletteTables);
 void FUN_002b36b6(void);
 void FUN_002b35e9(int nWidth, int nHeight);
 
-// 1.14d mac: 005c8a6c
-MacSurface g_tSurface;
 // 1.14d mac: 0053fd74
 int g_nRowTableWidth;
 // 1.14d mac: 0053fd78
 // Three pointers, then the 49 shift tables.
 uint8_t* g_apPaletteTables[72];
+// 1.14d mac: 005c8a6c
+MacSurface g_tSurface;
 // 1.14d mac: 005c8a7c
 uint8_t** g_ppPaletteTables;
 // 1.14d mac: 005c8a80
@@ -55,13 +55,9 @@ void fpFillYBufferTable(void* pBits, int nPitch, int nHeight, int n0C) {
 void PALETTE_InitColorLookupTables(uint8_t** ppPaletteTables) {
     SMemCopy(g_apPaletteTables, ppPaletteTables, sizeof(g_apPaletteTables));
     g_ppPaletteTables = g_apPaletteTables;
-    int nOffset = 0;
-    uint8_t** ppShift = &g_apPaletteTables[3];
-    do {
-        SMemCopy(&g_abShiftTables[0][0] + nOffset, *ppShift, sizeof(g_abShiftTables[0]));
-        ppShift++;
-        nOffset += 0x100;
-    } while (nOffset != 0x3100);
+    for (int i = 0; i < 49; i++) {
+        SMemCopy(g_abShiftTables[i], g_apPaletteTables[i + 3], sizeof(g_abShiftTables[i]));
+    }
 }
 
 // 1.14d mac: 002b1983

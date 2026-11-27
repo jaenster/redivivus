@@ -38,6 +38,7 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 namespace D2Win { namespace Src { namespace D2WinAccountList {
 
 // Frees all account list entries. Validates form type FORM_AccountList (8), iterates linked list at field 0x40, frees each 0x34-offset node.
+// 1.14d mac: 000426bf
 void __fastcall D2WINACCOUNTLIST_FreeAllEntries(::D2WinAccountList * pAccountList) {
     D2WinAccountListEntry* pNextEntry;
     if (pAccountList->sControl.neD2FormType != FORM_AccountList) {
@@ -132,6 +133,7 @@ BOOL __fastcall D2WINACCOUNTLIST_GetSelectedAccountName(::D2WinAccountList * pAc
     return 0;
 }
 
+// 1.14d mac: 000425ad D2Win::Src::D2WinAccountList::Push
 BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     D2WinAccountListEntry* pCurEntry;
     int nEntryIdx;
@@ -167,6 +169,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     return 0;
 }
 
+// 1.14d mac: 00042677
 void __fastcall FORMS_DestroyD2WinAccountList(::D2WinAccountList * pAccountList) {
     if (pAccountList->sControl.neD2FormType != FORM_AccountList) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50);
@@ -177,6 +180,7 @@ void __fastcall FORMS_DestroyD2WinAccountList(::D2WinAccountList * pAccountList)
     D2WinMain::FORMS_DestroyControl(&pAccountList->sControl);
 }
 
+// 1.14d mac: 0004239f D2Win::Src::D2WinAccountList::Draw
 BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
     uint32_t nFontHeight;
     int nEntryCount;
@@ -229,6 +233,7 @@ BOOL __fastcall Draw(::D2WinAccountList * pAccountList) {
     return 0;
 }
 
+// 1.14d mac: 000422a7
 ::D2WinAccountList * __fastcall D2WinAccountList(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, int32_t nUserData, uint32_t * pdwFontData) {
     uint32_t dwControlState;
     ::D2WinAccountList* pNewList = D2_NEW_AT(::D2WinAccountList, ".\\Src\\D2WinAccountList.cpp", 0x24);

@@ -26,6 +26,7 @@ void __stdcall NET_GetLocalIPAddressString(char * szIpAddressOut) {
 }
 
 // @sourcefile .\SRC\D2Net.cpp
+// 1.14d mac: 002dd7d1
 uint32_t __fastcall NET_D2GS_CLIENT_ExtractPacketSize(LPCRITICAL_SECTION * lpCriticalSection, D2OnePacketClientStrc * * pD2OnePacketClient, char * pBytes, uint32_t nSize) {
     DWORD dwTick;
     uint32_t nPacketSize;
@@ -49,6 +50,7 @@ uint32_t __fastcall NET_D2GS_CLIENT_ExtractPacketSize(LPCRITICAL_SECTION * lpCri
 }
 
 // @sourcefile .\SRC\D2Net.cpp
+// 1.14d mac: 002dd882
 BOOL __fastcall NET_D2GS_CLIENT_FreeAllClientD2Packets(LPCRITICAL_SECTION lpCriticalSection, D2OnePacketClientStrc * * pD2PacketClient) {
     EnterCriticalSection(lpCriticalSection);
     while (*pD2PacketClient) {

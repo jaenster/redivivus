@@ -24,6 +24,7 @@ static D2InventoryTxt * pTxtInventory = 0; D2_STATIC_GUARD(pTxtInventory, "pTxtI
 namespace D2Common { namespace DATATBLS { namespace TokTbls {
 
 // Builds the D2BinFieldInputStrc schema describing inventory.txt (the equipment/inventory grid layout panel) and compiles it via DataTbls::CompileTxt into the pTxtInventory table. Fields map per body-location screen rectangles (invLeft/Right/Top/Bottom, gridX/Y, gridBox W/H, and per-slot rArm/torso/lArm/head/neck/rHand/lHand/belt/feet/gloves left/right/top/bottom/width/height). Asserts the produced record count is exactly 0x20 (else fatal Fog error). Called once during table init; allocates from the passed D2PoolManagerStrc.
+// 1.14d mac: 0014228b
 void __fastcall TXT_AllocTxt_inventory(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc inventory[73] = {
       {"invLeft", FIELDTYPE_INT, 0, 0, 0},
@@ -109,12 +110,14 @@ void __fastcall TXT_AllocTxt_inventory(D2PoolManagerStrc * pMemory) {
     exit(-1);
 }
 
+// 1.14d mac: 0014233b
 void __stdcall FreeInventoryTable() {
     DataTbls::UnloadBin(pTxtInventory);
 }
 
 // nIndex in EAX: returns &pTxtInventory[nIndex], or NULL when nIndex > nTxtInventorySize (the bound is inclusive in the binary). Halts (InvTbls.cpp line 127, sgptInventoryInitStats) when the table is not loaded.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 001423bb
 static D2InventoryTxt * __stdcall TXT_Inventory_GetLine(uint32_t nIndex) {
     if (!pTxtInventory) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7f);
@@ -127,6 +130,7 @@ static D2InventoryTxt * __stdcall TXT_Inventory_GetLine(uint32_t nIndex) {
     return pTxtInventory + nIndex;
 }
 
+// 1.14d mac: 0014235a
 void __stdcall GetInvDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2InventoryScreenCoordinates * pOutput) {
     uint32_t nTxtIndex = nScreenMode * 0x10 + neInventoryPage;
     if (!pTxtInventory) {
@@ -149,6 +153,7 @@ void __stdcall GetInvDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2
 }
 
 // Fills a D2GridScreenCoordinates struct with grid layout data for the given inventory page and screen mode. Indexes pTxtInventory by (nScreenMode*16 + eInventoryPage) and copies gridX/Y, pixel bounds (left/right/top/bottom), and cell size (width/height). Halts with an internal error if the table is null or index is out of range.
+// 1.14d mac: 00142413
 void __stdcall GetGridDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2GridScreenCoordinates * pOutput) {
     uint32_t nTxtIndex = nScreenMode * 0x10 + neInventoryPage;
     if (!pTxtInventory) {
@@ -167,6 +172,7 @@ void __stdcall GetGridDimensions(int32_t neInventoryPage, int32_t nScreenMode, D
     }
 }
 
+// 1.14d mac: 00142477
 void __stdcall GetBodyDimensions(int32_t neInventoryPage, int32_t nScreenMode, D2InventoryEntryStrc * pOutput, eInventoryBodyLoc eBodyLoc) {
     D2InventoryEntryStrc* pDVar1;
     uint8_t byHeight;

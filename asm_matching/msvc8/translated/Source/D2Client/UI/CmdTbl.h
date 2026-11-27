@@ -98,6 +98,9 @@ void __stdcall WindowsKeyPressedEvent(struct D2UIMouseMsgStrc * pMsg);
 // Dispatches key command by scanning g_KeyBindingsTable for matching target and valid command index (0-56). Validates function pointer via IsBadCodePtr, invokes handler from gCmdHandlerTable, then queues the command and clears skill selection. Skips execution if gKeyBindingTable._1156_4_ is 2 and command has no parameter.
 void __stdcall INPUT_DispatchKeyCommand(struct D2UIMouseMsgStrc * pMsg);
 void __fastcall CMD_ToggleKeyConfigMode(int32_t nEnable, int32_t bUpdateUIHandlers);
+#if !defined(_WIN32) && D2_OS_MAC
+void CMD_DisableKeyConfigMode();
+#endif
 void __stdcall CMD_LoadUserKeyBindings();
 void __stdcall CMD_InitKeyBindings();
 void __stdcall CMD_ExitKeyConfigMode();

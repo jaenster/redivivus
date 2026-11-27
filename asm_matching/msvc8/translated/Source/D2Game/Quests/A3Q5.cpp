@@ -32,6 +32,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game { namespace Quests { namespace QUESTS { namespace A3Q5 {
 
 // Q21_CheckGoldenBirdDropConditions (GOLDEN BIRD helper, Q1/internal Q21) — gate that arms the Jade Figurine drop on a boss/Council kill. Returns 1 if the bird drop should be armed: requires bIsNotIntroduction, bBirdDropEnabled, bCanDropBird, AND that the "Blade of the Old Religion" (Gidbinn) quest has NOT failed its Tainted-Sun start. On success: attaches the Golden Bird quest to the killed unit, installs Q21_Callback_08 as handler[8], clears bCanDropBird, sets bBossKillTracking, records killer GUID. No GetQuestState/SetQuestState here.
+// 1.14d mac: 00230eab
 BOOL __fastcall Q21_CheckGoldenBirdDropConditions(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     D2QuestDataA3Q4Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q4;
     if (!(pQuestData->bIsNotIntroduction != '\0' && pQuestSpecificData->bBirdDropEnabled && pQuestSpecificData->bCanDropBird == '\x01')) {
@@ -52,6 +53,7 @@ BOOL __fastcall Q21_CheckGoldenBirdDropConditions(D2QuestDataStrc * pQuestData, 
 }
 
 // Q22_OnCouncilMemberKilled (BLACKENED TEMPLE / Travincal council, internal Q22) — on-death notifier for a tracked Council member. Reads quest-specific data off the game (offset 0x18); if its byte[2] tracking flag is set and the killer's GUID (param2 unit field [0xc], -1 if none) matches the recorded killer GUID at [4], clears tracking byte[2] and sets the "kill confirmed" byte[1]. No quest-record state calls (operates on the in-memory D2QuestDataA3Q5Strc council-kill bookkeeping).
+// 1.14d mac: 002310ac
 void __fastcall Q22_OnCouncilMemberKilled(D2QuestDataStrc * pQuestData, D2UnitStrc * pKillerUnit) {
     D2QuestDataA3Q4Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA3Q4;
     if (pQuestSpecificData->bBossKillTracking != 1) {
@@ -67,6 +69,7 @@ void __fastcall Q22_OnCouncilMemberKilled(D2QuestDataStrc * pQuestData, D2UnitSt
 }
 
 // Q22_IsGoldenBirdQuestActive — returns 1 if the Golden Bird quest data exists and its bBloodRavenKilled-aliased flag is set. Cross-quest probe used by Blackened Temple flow; pure read of in-memory quest-specific data, no quest-record state calls.
+// 1.14d mac: 002310db
 BOOL __fastcall Q22_IsGoldenBirdQuestActive(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheGoldenBird);
     if (pQuestData && pQuestData->pQuestSpecificData.pA3Q4->bBirdDropped != '\0') {
@@ -77,6 +80,7 @@ BOOL __fastcall Q22_IsGoldenBirdQuestActive(::SGAMEDATA * pGame) {
 }
 
 // Q22_ClearGoldenBirdQuestFlag — clears the Golden Bird quest's in-memory flag (bBloodRavenKilled alias). Cross-quest reset helper; no quest-record state calls.
+// 1.14d mac: 0023110c
 void __fastcall Q21_ClearGoldenBirdQuestFlag(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheGoldenBird);
     if (!pQuestData) {
@@ -87,6 +91,7 @@ void __fastcall Q21_ClearGoldenBirdQuestFlag(::SGAMEDATA * pGame) {
 }
 
 // Q22_ActiveFilter (BLACKENED TEMPLE, real quest id 0x15=21) — fpActiveFilter: decides whether the quest log entry is "active"/should react for a given target. Returns false once the quest is Completed. Otherwise: target 0xff (special/self) is active while internal nStateFlag!=0; target 0xf5 (Ormus NPC class) is active only when quest is at Step0x04 AND Jerhyn/Ormus AI not yet active (bJerhynAiActive==0). Read-only quest-record probe.
+// 1.14d mac: 00231134
 bool __fastcall Q22_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL bQuestState = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
     if (bQuestState) {
@@ -111,6 +116,7 @@ bool __fastcall Q22_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // Q22_PlayerUpdateBlackenedTempleState (BLACKENED TEMPLE) — per-player quest-log resync, called via IteratePlayerOrMonsterUnits after key transitions. If the player has not yet Completed the quest: when the live quest data's internal nStateFlag is 2 or 3, advance the player's record to Step0x02; if the Viper/Compelling-Orb amulet has been initialized (byte[5] at quest data 0x18), advance to Step0x03. Drives the on-screen quest log toward the council-kill stage.
 // State transitions (player record): Completed gate -> set Step0x02, set Step0x03.
+// 1.14d mac: 002313d1
 BOOL __fastcall Q22_PlayerUpdateBlackenedTempleState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pBitBuffer = GetQuestBitBufferInline(pGame, pUnit);
     BOOL bCompleted = D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_Completed);
@@ -137,6 +143,7 @@ BOOL __fastcall Q22_PlayerUpdateBlackenedTempleState(::SGAMEDATA * pGame, D2Unit
 
 // Q22_PlayerCheckNearTravincal (BLACKENED TEMPLE) — proximity-completion check run per player after the Travincal council is slain. Only acts if the player's record is not Completed and not yet at Step0x04, and the player is in Act III in the same or an adjacent room as the recorded council-quest unit (sQuestGUID.aPlayerGUID[0]). When near: if Khalim's Will is already done it sets the record straight to Completed, otherwise to Step0x04 (go assemble/use Khalim's Will), then marks JustCompleted to fire the log/notification.
 // State flow: requires !Completed && !Step0x04 -> set Completed|Step0x04, set JustCompleted.
+// 1.14d mac: 00234510
 BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     int _bSameOrAdjacentRoom;
     D2QuestDataStrc* pQuestDataBlackenedTemple;
@@ -219,6 +226,7 @@ BOOL __fastcall Q22_PlayerCheckNearTravincal(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Q22_PlayerNotifyCompleted (BLACKENED TEMPLE) — completion-notify callback passed to QUEST_SetStateAndBroadcast. Sends quest-update packet 0x13 to the player only when the quest record shows it is (Completed OR FinishedInPreviousGame) AND has a pending JustCompleted or CannotCompleteQuestInGame flag set; otherwise returns without notifying. Read-only quest-record probe.
+// 1.14d mac: 00231324
 BOOL __fastcall Q22_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -241,6 +249,7 @@ BOOL __fastcall Q22_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Q22_Callback_00 (BLACKENED TEMPLE) — quest-state[0] gossip/menu handler. Picks which gossip line an NPC (target class) speaks based on quest progress. If the quest's nQuestIdReal record is NOT at Step0x04: when the quest is Completed it requires the player to have participated; for live nStateFlag>5 it shows line 6 only if a JustCompleted flag is pending; otherwise (intro stage, nStateFlag<=5) it maps nStateFlag through the gdwQ19QuestStateMessages[] table to a gossip line. If the record IS at Step0x04: shows line 5 unless Jerhyn/Ormus AI already active. Emits via AddGossipMessageOnMonster. Read-only quest-record probes.
+// 1.14d mac: 00231f46
 void __fastcall Q22_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQ19QuestStateMessages[8] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x5, 0x6 }; D2_STATIC_GUARD(gdwQ19QuestStateMessages, "D2Game::Quests::QUESTS::A3Q5::Q22_Callback00_NpcActivate::gdwQ19QuestStateMessages");
@@ -305,6 +314,7 @@ void __fastcall Q22_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // Q22_Callback_02 (BLACKENED TEMPLE) — quest-state[2] handler. When the target is the special 0xff actor and the in-memory bTaintedSunStartedFailed flag is set, broadcasts live state 2 (via QUEST_SetStateAndBroadcast + Q22_PlayerNotifyCompleted), clears the failed flag, detaches handler[2], and re-syncs all players' quest logs (IteratePlayerOrMonsterUnits -> Q22_PlayerUpdateBlackenedTempleState). No direct quest-record state calls.
+// 1.14d mac: 0023438b
 void __fastcall Q22_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0xff)) {
       return;
@@ -325,6 +335,7 @@ void __fastcall Q22_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 
 // Q22_Callback_03 (BLACKENED TEMPLE) — quest-state[3] gossip/menu handler. On menu index 0x52 in intro with nStateFlag==0: bumps nStateFlag to 1 and arms handler[2]=Q22_Callback_02. On menu index 0x4b (NPC done): removes player from GUID list; if live nStateFlag in {2,3} and record not Completed/Step0x04, broadcasts state 2 (Q22_PlayerNotifyCompleted) when prior flag<3, then advances nStateFlag to 4 or 5 depending on Lam Esen's Tome JustCompleted, and re-syncs all player logs via Q22_PlayerUpdateBlackenedTempleState.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
+// 1.14d mac: 00232384
 void __fastcall Q22_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nState;
     uint32_t nSourceLine;
@@ -376,6 +387,7 @@ void __fastcall Q22_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 
 // Q22_Callback_11 (BLACKENED TEMPLE) — quest-state[0xb] NPC-gossip handler, the main Ormus dialog path. Bails if the quest is already Completed. For special NPC 0xff + msg 0x252: sets nStateFlag 2/3 and the bTaintedSunStartedFailed flag (string varies by Lam Esen's Tome completion). For Ormus (class 0xf5) + msg 0x272, only when at Step0x04: if Khalim's Will is done, strips the 5 Khalim's Will items (eye/heart/brain/flail qf1/qf2) from the player; if a JustCompleted flag is pending and live nStateFlag!=7, marks the quest-record JustCompleted, broadcasts live state 0xd, sets nStateFlag 7, runs the sequence filter, then writes record Completed and clears Step0x04, and adds the player to the completion GUID list. Finally sends the NPC gossip packet.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
+// 1.14d mac: 0023208a
 void __fastcall Q22_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     short int nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
     ::SGAMEDATA* pGame = pQuestArgs->pGame; // steer-ok: the original loads pGame (mov ebx,[esi]) on entry with the NPC and message ids, before the bit-buffer lookup
@@ -437,11 +449,13 @@ void __fastcall Q22_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // JMP thunk
+// 1.14d mac: 00232647
 void __fastcall Q22_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::D2Game::Quests::QUESTS::SetRewardAndFinishFlags(pQuestData, pQuestArgs);
 }
 
 // Q22_SequenceFilter (BLACKENED TEMPLE) — fpSequenceFilter chained to the next quest in the sequence (nSequenceQuestId = QUEST_TheGoldenBird). Only fires once this quest reaches nStateFlag 7 (fully complete) and is past intro; then looks up the sequenced quest's data and invokes its own sequence filter. No quest-record state calls.
+// 1.14d mac: 00232650
 bool __fastcall Q22_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 7 && pQuestData->bIsNotIntroduction != '\0') {
       return true;
@@ -464,6 +478,7 @@ bool __fastcall Q22_SequenceFilter(D2QuestDataStrc * pQuestData) {
 
 // Q22_Callback_13 (BLACKENED TEMPLE) — quest-state[0xd] init/resume handler that reconstructs the live nStateFlag from the player's saved quest record when a game (re)loads. Sets bJerhynAiActive if Khalim's Will is done. If the record is Completed OR at Step0x04, marks the shared record JustCompleted and ends intro. Otherwise reads Lam Esen's Tome completion into pPortalSpawnRoom, then maps record Step0x02/Step0x03 to live nStateFlag (2/3 -> Step0x02 partial; 4/5 -> Step0x03), choosing the value by Lam Esen completion. Pure resume logic; one record write (JustCompleted).
 // State flow: derive live nStateFlag {2,3,4,5} from record steps; record Completed/Step0x04 -> SetQuestRecordState JustCompleted + end intro.
+// 1.14d mac: 00232501
 void __fastcall Q22_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame; // steer-ok: the original loads pGame before calling GetPlayerData; VC8 leaves the operands of the subscript unsequenced
     D2QuestDataA3Q5Strc* pLamEsenResult = pQuestData->pQuestSpecificData.pA3Q5;
@@ -524,6 +539,7 @@ void __fastcall Q22_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // Q22_TrackCouncilKill (BLACKENED TEMPLE) — records a Travincal Council member kill. Looks up the live quest data; marks council-tracking active (byte[5]@0x18), and if fewer than 6 distinct killer GUIDs are logged, appends the killer's GUID (dedup) and bumps the count (offset 0x30/0x34). On first qualifying kill (state transition gates on nStateFlag/nStateFlagPrev) broadcasts live state 1 or 3 via Q22_PlayerNotifyCompleted, then advances nStateFlag to 4 or 5 (by Lam Esen's Tome completion) and re-syncs all player quest logs.
 // State flow: log council kill; broadcast live state 1/3; nStateFlag -> 4/5 by Lam Esen.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
+// 1.14d mac: 002311ac
 void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, D2UnitStrc * pKillerUnit) {
     int _nBroadcastState;
     uint8_t nBroadcastState;
@@ -592,6 +608,7 @@ void __fastcall Q22_TrackCouncilKill(::SGAMEDATA * pGame, D2UnitStrc * pKillerUn
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pQuestData->pGame, 0, nullptr, (::fpExecuteOnUnitFunction)Q22_PlayerUpdateBlackenedTempleState);
 }
 
+// 1.14d mac: 00231470
 void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -630,6 +647,7 @@ void __fastcall Q22_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
     D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
 }
 
+// 1.14d mac: 002346cb
 BOOL __fastcall Q22_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
@@ -644,6 +662,7 @@ BOOL __fastcall Q22_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc *
     return 0;
 }
 
+// 1.14d mac: 00234748
 BOOL __fastcall Q22_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -659,6 +678,7 @@ BOOL __fastcall Q22_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
     return 0;
 }
 
+// 1.14d mac: 002347d9
 BOOL __fastcall Q22_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TheBlackenedTemple, QUESTSTATE_JustCompleted);
@@ -670,6 +690,7 @@ BOOL __fastcall Q22_PartyMember_PlayCompleteSound(::SGAMEDATA * pGame, D2UnitStr
 }
 
 // Q22_PlayerCheckKhalimsWillItems (BLACKENED TEMPLE) — per-player tally callback (IteratePlayerOrMonsterUnits). For Act III players whose Khalim's Will is not Completed and who lack the flail items "qf1"/"qf2", increments the Khalim's-Will-needed counter (field 0x3c); also increments a separate counter (0x40) for players missing the "box " (Khalim's Will assembly box). Drives how many quest items the council drop must spawn. Read-only quest-record probe.
+// 1.14d mac: 00234423
 BOOL __fastcall Q22_PlayerCheckKhalimsWillItems(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pPlayerData;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -716,6 +737,7 @@ BOOL __fastcall Q22_PlayerCheckKhalimsWillItems(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Q22_PlayerCompleteKhalimsWill (BLACKENED TEMPLE / Khalim's Will sub-quest) — party callback run when the Compelling Orb is shattered. If Khalim's Will already Completed for the player, just strips the 5 quest items. Otherwise, for an Act III player: sets Khalim's Will record Completed + JustCompleted, removes the 5 items (unless mid-trade), and if the Blackened Temple record is at Step0x04 but not yet Completed, promotes it straight to Completed.
 // State flow: set Khalim's Will Completed + JustCompleted; if Blackened Temple at Step0x04 -> set Completed.
+// 1.14d mac: 00231550
 void __fastcall Q22_PlayerCompleteKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -770,6 +792,7 @@ void __fastcall Q22_PlayerCompleteKhalimsWill(::SGAMEDATA * pGame, D2UnitStrc * 
 
 // A3Q5 Compelling Orb operate fn (OperateFn 53, Travincal): the player smashes the orb with Khalim's Will (flail 'qf2'). Needs Khalim's Will equipped and two uses (counter at 0x38); on the second use it completes Khalim's Will, removes the flail, promotes The Blackened Temple from step 4 to completed and triggers the orb effect.
 // Slot from objects.txt OperateFn 53.
+// 1.14d mac: 00231721
 BOOL __fastcall OBJOP_A3Q5_SmashCompellingOrb(D2ObjectOperateFnArg * pOperation) {
     if (!pOperation->sArg.pVictim || pOperation->sArg.pVictim->eAnimMode.ePlayerMode == Death) {
       D2UnitStrc* pWeapon = D2Common::INVENTORY::Inventory::GetEquipedWeapon(pOperation->pAttacker->pInventory);
@@ -818,6 +841,7 @@ BOOL __fastcall OBJOP_A3Q5_SmashCompellingOrb(D2ObjectOperateFnArg * pOperation)
 }
 
 // Objects_InitFn53 (BLACKENED TEMPLE) — object InitFn for the Compelling Orb altar. If Jerhyn/Ormus AI is active (bJerhynAiActive in quest-specific data), sets the object's update flag 2 (post-completion appearance). No quest-record state calls.
+// 1.14d mac: 00231a0b
 void __fastcall Objects_InitFn53_MephistoDoor(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheBlackenedTemple);
     if (!pQuestData->pQuestSpecificData.pA3Q5->bJerhynAiActive) {
@@ -828,6 +852,7 @@ void __fastcall Objects_InitFn53_MephistoDoor(D2ObjectInitFnArg * pInitArg) {
 }
 
 // Objects_InitFn60 (BLACKENED TEMPLE) — object InitFn that spawns the Compelling-Orb amulet/guardian. If the in-memory init flag (field_0x0C) is set, marks the object updated. If the amulet hasn't been spawned yet (bHasViperAmulet false), spawns monster class 0x16e (the orb/amulet unit) Neutral, flags it, records its GUID, and marks bHasViperAmulet. No quest-record state calls.
+// 1.14d mac: 00231a49
 void __fastcall Objects_InitFn60_CompellingOrb(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TheBlackenedTemple);
     D2QuestDataA2Q2Strc* pQuestSpecificData = (D2QuestDataA2Q2Strc*)pQuestData->pQuestSpecificData.pA2Q2;
@@ -851,6 +876,7 @@ void __fastcall Objects_InitFn60_CompellingOrb(D2ObjectInitFnArg * pInitArg) {
 // Q22_Callback_08 (BLACKENED TEMPLE) — quest-state[8] boss/Council-kill drop handler, installed by Q22_InitData. On killing a Council member (target != orb class 0x16e): first pass tallies how many players still need Khalim's Will items (Q22_PlayerCheckKhalimsWillItems), then on the appropriate kill drops the needed Khalim's Will body-part items (code "qf1") and bumps the Khalim's Will quest's orb count, or on the next kill drops the "box " (assembly box) as shields. Once all required drops are done and !intro: records the council-quest unit GUID, advances live nStateFlag to 6 (broadcast state 4) or 7 (broadcast state 0xd / done) depending on whether Khalim's Will is needed, propagates completion to the whole party (3 Iterate callbacks), and marks the shared Blackened Temple record JustCompleted. On the orb unit itself, sets the no-target-cursor flag.
 // State flow: drop Khalim items per player; nStateFlag -> 6/7, broadcast state 4/0xd; SetQuestRecordState JustCompleted.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
+// 1.14d mac: 00231bf4
 void __fastcall Q22_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int _byBroadcastState;
     int32_t nCouncilKillsRemaining;
@@ -968,6 +994,7 @@ bool __fastcall Q22_StatusFilter(D2QuestDataStrc * pThis, int, uint32_t param_1,
 
 // Q22_InitData (BLACKENED TEMPLE) — quest constructor. Allocates 0x50-byte quest-specific data, installs the NPC gossip table (Ormus msg 0x252, menu), and wires the state-handler vtable: [0]=Q22_Callback_00 (gossip), [2]=set later by cb3, [3]=Q22_Callback_03, [8]=Q22_Callback_08 (council-kill drops), [0xb]=Q22_Callback_11 (Ormus dialog/complete), [0xd]=Q22_Callback_13 (load/resume), [10]=Q22_Callback_10 (participation). Sets fpSequenceFilter=Q22_SequenceFilter, nSequenceQuestId=QUEST_TheGoldenBird, fpActiveFilter=Q22_ActiveFilter, fpStatusFilter=null, nInitNo=6, and crucially nQuestIdReal=QUEST_TheBlackenedTemple (0x15) — confirming this file = quest "The Blackened Temple" (Travincal council kill). No quest-record state calls.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a3q5.cpp
+// 1.14d mac: 00231add
 void __fastcall Q22_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->pNpcMessages = A3Q5::aNpcGossipData;

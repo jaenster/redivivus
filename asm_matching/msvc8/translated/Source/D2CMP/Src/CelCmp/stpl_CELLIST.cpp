@@ -363,6 +363,7 @@ template<> void TSGrowableArray<TSExplicitList<CELLIST, -572662307>>::Destructor
     ((TSGrowableArray<::CELLIST>*)this)->Destructor();
 }
 
+// 1.14d mac: 001af15c
 template<> __declspec(noinline) inline uint32_t TSExportTableSimple<CELLIST, HCELLIST__*, 0>::GenerateUniqueHandle() {
     while (true) {
       uint32_t& nSequence = this->nSequence;
@@ -1060,6 +1061,7 @@ template<> void TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCrit
 }
 
 // Tail-calls TSHASH_InsertCelListEntry and returns straight through; that callee computes pNewEntry via a vtable factory call and leaves it in EAX at its own RET, so this wrapper's real EAX at exit is the new cel-list entry pointer.
+// 1.14d mac: 001aefdc
 template<> ::CELLIST * TSExportTableSync<CELLIST, HCELLIST__*, HLOCKEDCELLIST__*, CCritSect, 0>::NewLock(uint32_t * pHandle, int32_t * pLockedHandle) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&this->tSync.m_critsect);
     *pLockedHandle = 1;

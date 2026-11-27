@@ -6,6 +6,9 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/File.data.h"
 #include "Source/D2Headers/D2Arch.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include <sys/stat.h>
+#endif
 
 // A general register is a DWORD on x86 and a DWORD64 on x64.
 #if D2_ARCH_X86
@@ -29,7 +32,12 @@ typedef void (__fastcall *fnCrashOutputLine)(::Report * pReport, char * szString
 #endif
 #ifndef RECON_FPTD_pfnFogExceptionFilter
 #define RECON_FPTD_pfnFogExceptionFilter
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac exception callback returns nothing (1.14d mac 002ee625).
+typedef void (__fastcall *pfnFogExceptionFilter)(D2CrashReportStrc * pExceptionReport, void * pUserContext);
+#else
 typedef int (__fastcall *pfnFogExceptionFilter)(D2CrashReportStrc * pExceptionReport, void * pUserContext);
+#endif
 #endif
 
 pfnFogExceptionFilter gpCurrentExceptionFilter = (pfnFogExceptionFilter)0; D2_GLOBAL_GUARD(gpCurrentExceptionFilter, "gpCurrentExceptionFilter");
@@ -47,6 +55,8 @@ void __stdcall CONTAINER_InitializeBuffer(void * pBuffer, int32_t nTypeSize, int
     }
 }
 
+// The crash-handler entry points, thread enumeration and wide-character path functions are Windows-only: the 1.14d Mac binary hands UTF-8 paths straight to the C library and has a Mach exception server for crashes. That code is under `#if !D2_OS_MAC`.
+#if !D2_OS_MAC
 void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputCallback, ::Report * pReport) {
     int nWritten;
     int nChunkLen;
@@ -149,7 +159,9 @@ void __fastcall CRASH_DumpRegisters(DWORD dwThreadId, fnCrashOutputLine pOutputC
       }
     }
 }
+#endif
 
+#if !D2_OS_MAC
 void __fastcall CRASH_EnumerateThreads(fnCrashOutputLine pOutputCallback, ::Report * pReport, DWORD dwSkipThreadId) {
     uint32_t dwCurrentPid;
     THREADENTRY32 threadEntry;
@@ -173,7 +185,9 @@ void __fastcall CRASH_EnumerateThreads(fnCrashOutputLine pOutputCallback, ::Repo
 
     /* HANDLE hObject for CloseHandle */ CloseHandle(hObject);
 }
+#endif
 
+#if !D2_OS_MAC
 static void CRASH_GetExceptionName(char * szText, DWORD dwExceptionCode) {
     DWORD nMsgLen;
     const char* pszName;
@@ -268,7 +282,9 @@ format_message:
 
     strncpy_s(szText, 0x100, "unknown exception", -1);
 }
+#endif
 
+#if !D2_OS_MAC
 // FOG top-level unhandled-exception filter (SetUnhandledExceptionFilter target) — shows the Blizzard "application encountered an unexpected error" crash dialog.
 // It returns LONG: 00403eb0 XOR EAX,EAX reaches the RET 0x4 at
 // 00403ec0 and 00403f3a MOV EAX,ECX reaches the one at 00403f49, so EAX carries the filter disposition
@@ -300,7 +316,9 @@ LONG __stdcall ERRORMANAGER_UnhandledExceptionFilter(_EXCEPTION_POINTERS * pExce
 
     return nFilterResult != 1 ? 0x1U : 0xffffffff;
 }
+#endif
 
+#if !D2_OS_MAC
 void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void * pContext, uint32_t nUnused) {
     // Static local variables (originally global data)
     static LPTOP_LEVEL_EXCEPTION_FILTER gpPreviousExceptionFilter = nullptr; D2_STATIC_GUARD(gpPreviousExceptionFilter, "Fog::File::CRASH_SetExceptionHandler::gpPreviousExceptionFilter");
@@ -319,6 +337,7 @@ void __fastcall CRASH_SetExceptionHandler(pfnFogExceptionFilter pfnFilter, void 
                          SetUnhandledExceptionFilter */ gpPreviousExceptionFilter = SetUnhandledExceptionFilter(ERRORMANAGER_UnhandledExceptionFilter);
     }
 }
+#endif
 
 static bool __stdcall FILETOOLS_ExtractDirectory(char * szDest, uint32_t nDestSize, char * szSrcPath) {
     char* pLastSep = 0;
@@ -415,10 +434,12 @@ bool __fastcall STRING_AppendBlizzardErrorSubfolderToPath(int nUnused, char * sz
     return pEnd < 0x400;
 }
 
+#if !D2_OS_MAC
 static LPWSTR Unreferenced_00404100(LPWSTR szString, uint16_t wChar) {
     LPWSTR pszLastChar = wcsrchr(szString, wChar);
     return pszLastChar;
 }
+#endif
 
 static size_t STRING_CopyStringBounded(char * szDest, char * szSrc, int32_t nDestSize) {
     char* pSrcScan = szSrc;
@@ -487,6 +508,7 @@ int STRING_FormatVarArgs(char * szDest, int32_t nDestSize, char * szFormat, ...)
     return nWritten;
 }
 
+#if !D2_OS_MAC
 bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicationName, LPCSTR szCommandLine) {
     int nConverted;
     uint16_t wszCommandLine[32768];
@@ -516,7 +538,17 @@ bool __fastcall FILETOOLS_StartApplicationWithCommandLine_UTF8(LPCSTR lpApplicat
 
     return false;
 }
+#endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 00008850
+// UTF-8 paths go straight to stat; there is no wide-character conversion.
+bool __stdcall FILETOOLS_CheckIfFileExists_UTF8(LPCSTR lpMultiByteStr) {
+    struct stat tStat;
+    return stat(lpMultiByteStr, &tStat) != -1;
+}
+#endif
+#if !D2_OS_MAC
 bool __stdcall FILETOOLS_CheckIfFileExists_UTF8(LPCSTR lpMultiByteStr) {
     _WIN32_FIND_DATAW findData;
     uint16_t wszPath[262];
@@ -534,7 +566,9 @@ bool __stdcall FILETOOLS_CheckIfFileExists_UTF8(LPCSTR lpMultiByteStr) {
     /* HANDLE hFindFile for FindClose */ FindClose(hFindFile);
     return true;
 }
+#endif
 
+#if !D2_OS_MAC
 FILE * __stdcall FILETOOLS_OpenFile_WriteMode_UTF8(LPCSTR lpMultiByteStr) {
     FILE* pFVar1;
     uint16_t wszPath[260];
@@ -552,7 +586,9 @@ FILE * __stdcall FILETOOLS_OpenFile_WriteMode_UTF8(LPCSTR lpMultiByteStr) {
     pFVar1 = _wfopen(wszPath, wszMode);
     return pFVar1;
 }
+#endif
 
+#if !D2_OS_MAC
 void __stdcall FILETOOLS_CopyFile_UTF8(LPCSTR szSrcPath, LPCSTR szDestPath) {
     uint16_t wszSrc[260];
     uint16_t wszDest[260];
@@ -565,7 +601,9 @@ void __stdcall FILETOOLS_CopyFile_UTF8(LPCSTR szSrcPath, LPCSTR szDestPath) {
       }
     }
 }
+#endif
 
+#if !D2_OS_MAC
 // Writes the process temp path into the caller's buffer and reports success. The result is a single byte in AL (XOR AL,AL / the sole caller does TEST AL,AL); EDX is never written, so declaring an 8-byte return invented a high dword out of nothing.
 bool FILETOOLS_GetTempPath_UTF8(LPSTR szDest) {
     uint16_t wszTempPath[260];
@@ -577,7 +615,9 @@ bool FILETOOLS_GetTempPath_UTF8(LPSTR szDest) {
     int nConverted = WideCharToMultiByte(0xfde9, 0, (LPCWSTR)wszTempPath, nPathLen + 1, szDest, 0x400, (LPCSTR)0x0, (LPBOOL)0x0);
     return nConverted != 0;
 }
+#endif
 
+#if !D2_OS_MAC
 // Recursively creates a directory path (CreateDirectoryW, then split at the last separator and
 // retry).
 // @evidence lpPathName was LPCWSTR and is written through: the body stores L'\0' over the last
@@ -617,7 +657,9 @@ bool __fastcall FILETOOLS_CreateDirectoryW(LPWSTR lpPathName) {
     bCreated = CreateDirectoryW(lpPathName, (LPSECURITY_ATTRIBUTES)0x0);
     return bCreated != 0;
 }
+#endif
 
+#if !D2_OS_MAC
 bool __stdcall FILETOOLS_CreateFolder_UTF8(LPCSTR szPathName) {
     uint16_t wszPath[260];
     int nConverted = MultiByteToWideChar(0xfde9, 0, szPathName, -1, (LPWSTR)wszPath, 0x104);
@@ -628,7 +670,9 @@ bool __stdcall FILETOOLS_CreateFolder_UTF8(LPCSTR szPathName) {
     bool bCreated = FILETOOLS_CreateDirectoryW((LPWSTR)wszPath);
     return bCreated;
 }
+#endif
 
+#if !D2_OS_MAC
 static bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext) {
     pContext->ContextFlags = 0x1003f;
     DWORD dwCurrentTid = GetCurrentThreadId();
@@ -654,8 +698,11 @@ static bool DEBUG_CaptureThreadContext(uint32_t dwThreadId, LPCONTEXT pContext) 
     /* HANDLE hObject for CloseHandle */ CloseHandle(hThread);
     return bGotContext;
 }
+#endif
 
 static void * keep_00403fa0 = (0 ? (FILETOOLS_ExtractDirectory(*(char * *)0, *(uint32_t *)0, *(char * *)0), (void *)0) : (void *)0);
+#if !D2_OS_MAC
 static void * keep_00404100 = (0 ? (Unreferenced_00404100(*(LPWSTR *)0, *(uint16_t *)0), (void *)0) : (void *)0);
+#endif
 
 }} // namespace Fog::File

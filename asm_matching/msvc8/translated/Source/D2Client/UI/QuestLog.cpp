@@ -1044,6 +1044,7 @@ static int32_t __fastcall QUESTLOG_FindQuestIndexById(int32_t nQuestId) {
 }
 
 // Populates quest log entry description text based on quest state. Scans gQuestIconsPerActTable to identify act, reads quest completion/reward/step states via GetQuestState, and formats locale strings based on 20+ quest-specific branches. For Den of Evil (quest 0xe82), appends monster count to description using a 10-wchar buffer and sprintf("%d"). Handles special cases: Prison of Ice step 8/9, Arcane Sanctuary completion, Betrayal of Haggorath step 4, and singleplayer vs multiplayer text variants.
+// 1.14d mac: 000d6e1a
 static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
     BOOL bArcaneState;
     uint32_t nQuestStepIdx;
@@ -1388,6 +1389,7 @@ static void QUESTLOG_PopulateQuestEntry(D2QuestLogEntryStrc * pEntry) {
     pEntry->nDisplayState = (uint32_t)(bStateResult != 0);
 }
 
+// 1.14d mac: 000d7b80
 static void QUESTLOG_SetActiveAct(int32_t nActIndex) {
     BOOL bQuestCompleted;
     eD2Quests eQuestId;
@@ -1465,6 +1467,7 @@ static void QUESTLOG_SetActiveAct(int32_t nActIndex) {
     return;
 }
 
+// 1.14d mac: 000d80eb
 void __stdcall QUESTLOG_SetActiveActFromPlayerRoom() {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
@@ -1512,6 +1515,7 @@ void __stdcall QUESTLOG_ResetState() {
 }
 
 // Lazy-loads all quest log DC6 image assets on first call. Checks INV_GetItemDescDirtyFlag to avoid redundant loads, then conditionally loads 6 DC6 files via IMAGE_LoadDC6Ex: questbackground, questtabs (classic vs expansion variant), questsockets, questdone, invps, and questlast. All file paths are sprintf-formatted into a 260-byte buffer using format strings from gTxtCompilationMemPool.pOverflow with "DATA\\GLOBAL" directory prefix.
+// 1.14d mac: 000d698e
 void __stdcall LoadQuestimages() {
     char szPathBuffer[260];
     uint8_t bAlreadyLoaded = INV_GetItemDescDirtyFlag();
@@ -1553,6 +1557,7 @@ void __stdcall LoadQuestimages() {
     gQuestLog.questlast = Core::Archive::IMAGE_LoadDC6Ex(szPathBuffer, 0);
 }
 
+// 1.14d mac: 000d5c1a
 void __stdcall FreeQuestImages() {
     if (gQuestLog.questbackground) {
       Core::Archive::DC6_FreeAndDelete(gQuestLog.questbackground);
@@ -1591,6 +1596,7 @@ void __stdcall FreeQuestImages() {
 }
 
 // JMP thunk
+// 1.14d mac: 000d5c11
 void __stdcall QUESTLOG_FreeQuestImages_Thunk() {
     ::D2Client::UI::QuestLog::FreeQuestImages();
 }
@@ -1633,6 +1639,7 @@ static bool QUESTLOG_HitTestOpenButton(int32_t nPanelX, int32_t nPanelY) {
     return false;
 }
 
+// 1.14d mac: 000d6938
 int __stdcall CloseQuestLogWeird(DWORD bAdjustMouse) {
     if (gQuestLog.bQuestLogOpen == 2) {
       gQuestLog.bQuestLogOpen = 0;
@@ -1684,6 +1691,7 @@ static int32_t __stdcall QUESTLOG_HitTestActTab(uint32_t nY, uint32_t nX) {
     return -1;
 }
 
+// 1.14d mac: 000d7890
 void __fastcall QUESTLOG_AcknowledgeNewQuests(int32_t nAct) {
     D2BitBufferStrc* pBitBuffer;
     int nIndex = 0;
@@ -1704,6 +1712,7 @@ void __fastcall QUESTLOG_AcknowledgeNewQuests(int32_t nAct) {
     } while (nIndex < gQuestLog.nQuestLogQuestCount);
 }
 
+// 1.14d mac: 000d8f07
 int __fastcall QUESTLOG_ScrollCompleteCallback_ClearButton(void * pUserParam, uint32_t nReason, int bDismissed) {
     gQuestLog.bQuestLogButtonDown = 0;
     Text::TEXT_SetScrollCompleteCallback(nullptr, pUserParam);
@@ -1741,6 +1750,7 @@ static void QUESTLOG_ShowQuestDescription(uint32_t nActIndex) {
     gQuestLog.bQuestLogButtonDown = 1;
 }
 
+// 1.14d mac: 000d80ac
 void __stdcall QUESTLOG_OnCloseClick(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -1756,6 +1766,7 @@ void __stdcall QUESTLOG_OnCloseClick(D2UIMouseMsgStrc * pMsg) {
     gQuestLog.bQuestLogScreenOpen = GetTickCount();
 }
 
+// 1.14d mac: 000d8190
 void __fastcall QUESTLOG_HandleSpecialPacket(D2GSPacketSrv0x50 * pPacket) {
     switch (pPacket->nMessageType) {
       case 1:
@@ -1779,6 +1790,7 @@ void __stdcall QUESTLOG_CloseAndFreeImages() {
     FreeQuestImages();
 }
 
+// 1.14d mac: 000d864b
 static uint32_t QUESTLOG_GetDrawPosition(int32_t nBorderType) {
     DWORD nResolutionMode_lcl;
     BOOL bUIFlag = ui::GetUIFlag(UI_NEWSTATS);
@@ -1809,6 +1821,7 @@ static uint32_t QUESTLOG_GetDrawPosition(int32_t nBorderType) {
     }
 }
 
+// 1.14d mac: 000d8287
 bool __stdcall QUESTLOG_IsPointInQuestLog(int32_t nX, int32_t nY) {
     int nOffsetX;
     int nOffsetX2;
@@ -1831,6 +1844,7 @@ bool __stdcall QUESTLOG_IsPointInQuestLog(int32_t nX, int32_t nY) {
     return false;
 }
 
+// 1.14d mac: 000d8201
 void __stdcall QUESTLOG_OnQuestLogMouseDown(D2UIMouseMsgStrc * pMsg) {
     const int nMouseX = pMsg->uLParam.sMousePos.nMouseX;
     const int nMouseY = pMsg->uLParam.sMousePos.nMouseY;
@@ -1847,6 +1861,7 @@ void __stdcall QUESTLOG_OnQuestLogMouseDown(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
+// 1.14d mac: 000d83f9
 void __stdcall QUESTLOG_DrawQuestLogButton() {
     int nMouseY;
     D2GfxDataStrc sGfxData;
@@ -1922,6 +1937,7 @@ void __stdcall QUESTLOG_DrawQuestLogButton() {
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nTextX + 3, iVar2 - 4, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000d86c9
 void __fastcall QUESTLOG_SelectQuestByIndex(int32_t nQuestId) {
     int nActIndex = -1;
     for (int nIndex = 0; nIndex < (int)(sizeof(gaQuestInfoTable) / sizeof(gaQuestInfoTable[0])); nIndex++) {
@@ -1938,6 +1954,7 @@ void __fastcall QUESTLOG_SelectQuestByIndex(int32_t nQuestId) {
     gQuestLogSelectedQuestByAct[gaQuestInfoTable[nActIndex].nAct] = gaQuestInfoTable[nActIndex].nQuestIndexInAct;
 }
 
+// 1.14d mac: 000d8b98
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->nClassId == 0x92)) {
       return;
@@ -1946,6 +1963,7 @@ void __fastcall QUESTLOG_ClearMissileFlagCb_Missile146(D2UnitStrc * pUnit) {
     pUnit->eUnitFlags &= ~UNITFLAG_TARGETABLE;
 }
 
+// 1.14d mac: 000d8bb4
 void __fastcall QUESTLOG_ClearMissileFlagCb_Missile527(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->nClassId == 0x20f)) {
       return;
@@ -1955,6 +1973,7 @@ void __fastcall QUESTLOG_ClearMissileFlagCb_Missile527(D2UnitStrc * pUnit) {
 }
 
 // QuestLog.cpp - Client handler for 0x5D quest state packets, plays sounds and updates UI
+// 1.14d mac: 000d8701
 void __fastcall QUESTLOG_HandleQuestStatePacket(uint32_t dwUnused, D2GSPacketClt0x5D * pPacket) {
     DWORD nSetFlagResult;
     D2BitBufferStrc* pBitBuffer;
@@ -2133,6 +2152,7 @@ void __stdcall QUESTLOG_ResetNpcDialogState() {
     gQuestLog.bQuestLogOpen = 0;
 }
 
+// 1.14d mac: 000d5bf0
 void __stdcall QUESTLOG_ResetQuestFilterArrays() {
     int i = 0;
     do {
@@ -2142,6 +2162,7 @@ void __stdcall QUESTLOG_ResetQuestFilterArrays() {
     } while (i < 0x29);
 }
 
+// 1.14d mac: 000d8bf1
 void __stdcall QUESTLOG_ResetQuestSelections() {
     gQuestLogSelectedQuestByAct[0] = -1;
     gQuestLogSelectedQuestByAct[1] = -1;
@@ -2150,6 +2171,7 @@ void __stdcall QUESTLOG_ResetQuestSelections() {
     gQuestLogSelectedQuestByAct[4] = -1;
 }
 
+// 1.14d mac: 000d8d5d
 void __stdcall QUESTLOG_PlayLevelUpCinematic() {
     if (gQuestLog.bQuestLogLevelUpCinematicPlayed != '\0') {
       return;
@@ -2159,6 +2181,7 @@ void __stdcall QUESTLOG_PlayLevelUpCinematic() {
     Engine::Gfx::GFX_PrecacheMonsterAllModes(0xd3, 1);
 }
 
+// 1.14d mac: 000d8d92
 void __stdcall QUESTLOG_PlayActBossCinematic() {
     if (gQuestLog.bQuestLogBossCinematicPlayed != '\0') {
       return;
@@ -2170,15 +2193,18 @@ void __stdcall QUESTLOG_PlayActBossCinematic() {
     Engine::Gfx::GFX_PrecacheMonsterAllModes(0x21b, 0);
 }
 
+// 1.14d mac: 000d8def
 void __fastcall QUESTLOG_SetZooSpawnFlag(uint32_t nZooSpawnCounter) {
     gQuestLog.bZooSpawnArmed = 1;
     gQuestLog.nZooSpawnCounter = nZooSpawnCounter;
 }
 
+// 1.14d mac: 000d8e0a
 uint8_t __stdcall QUESTLOG_GetZooSpawnFlag() {
     return gQuestLog.bZooSpawnArmed;
 }
 
+// 1.14d mac: 000d8e1c
 bool QUESTLOG_FindZooDummyMonster() {
     if (gQuestLog.bZooMonsterSpawned != '\0') {
       D2UnitStrc* pMonster;
@@ -2191,6 +2217,7 @@ bool QUESTLOG_FindZooDummyMonster() {
     return false;
 }
 
+// 1.14d mac: 000d8e57
 void __fastcall QUESTLOG_SpawnZooDummyMonsters(int32_t nSpawnX, int32_t nSpawnY) {
     if (!gQuestLog.bZooSpawnArmed) {
       return;
@@ -2231,6 +2258,7 @@ uint8_t * __fastcall Unreferenced_004a3200(uint8_t * pData) {
 }
 
 // Loads quest icons for an act from gQuestIconsPerActTable. Reads act index, iterates quest icon range per act, loads DC6 files to global quest icon array. Handles expansion/classic quest sets.
+// 1.14d mac: 000d6b91
 void __stdcall QUESTLOG_LoadQuestIconsForAct(int nActIndex, int32_t bResetSelection) {
     // Static local variables (originally global data)
     static char * gaszQuestIconNames[27] = {
@@ -2354,6 +2382,7 @@ void __stdcall QUESTLOG_LoadQuestIconsForAct(int nActIndex, int32_t bResetSelect
     }
 }
 
+// 1.14d mac: 000d5abc
 void __stdcall GameOverWtf() {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "GAMEOVER", 0, 0);
     gQuestLog.bQuestLogOpen = 0;
@@ -2392,6 +2421,7 @@ void __stdcall GameOverWtf() {
 }
 
 // Draws quest log UI. Uses gQuestIconsPerActTable to map act to quest icon ranges, draws quest list with completion status, highlights selected quest. Main rendering loop for quest UI panel.
+// 1.14d mac: 000d5cfe
 void __stdcall DRAW_UI_Quest() {
     // Static local variables (originally global data)
     static int gQuestUIDescInitE = 0x10e; D2_STATIC_GUARD(gQuestUIDescInitE, "D2Client::UI::QuestLog::DRAW_UI_Quest::gQuestUIDescInitE");
@@ -2855,6 +2885,7 @@ void __fastcall QUESTLOG_ToggleQuestScreen(DWORD bAdjustMouse) {
     }
 }
 
+// 1.14d mac: 000d812a
 void __fastcall NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS(char * pBytes) {
     memcpy(&gQuestLog.aQuestLogStateBuffer, pBytes, 0x2a);
     gQuestLog.bQuestLogWindowOpen = '\0';
@@ -2868,6 +2899,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x52_QUESTSTATUS(char * pBytes) {
     QUESTLOG_LoadQuestIconsForAct(gQuestLog.nQuestLogActiveAct_b, 1);
 }
 
+// 1.14d mac: 000d836e
 void __stdcall QUESTLOG_OnButtonMouseUp(D2UIMouseMsgStrc * pMsg) {
     uint32_t nMouseX = (uint32_t)pMsg->uLParam.sMousePos.nMouseX;
     bool bVar1 = QUESTLOG_IsPointInQuestLog(nMouseX, (uint32_t)pMsg->uLParam.sMousePos.nMouseY);
@@ -2886,6 +2918,7 @@ void __stdcall QUESTLOG_OnButtonMouseUp(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Checks quest availability by index. Scans gQuestIconsPerActTable to map index to quest ID, validates quest state (not just completed, reward awaits, can complete). Returns 1 if quest is available for interaction.
+// 1.14d mac: 000d8c2e
 BOOL __fastcall QUESTLOG_IsQuestAvailableForInteraction(int32_t nQuestIconIndex) {
     D2QuestLogEntryStrc byQuestEntryHdr;
     uint32_t bQuestAvail = GetQuestAvailabilityByIndex(0, nQuestIconIndex);
@@ -3026,5 +3059,14 @@ void StaticInit_gaQuestLogPanelRects() {
 void StaticInit_gQuestLog() {
     SkillDesc::SKILLDESC_InitMissileBuffers(&gQuestLog);
 }
+
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 000d8bd0
+void __stdcall QUESTLOG_ClearOpenState1() {
+    if (gQuestLog.bQuestLogOpen == 1) {
+      gQuestLog.bQuestLogOpen = 0;
+    }
+}
+#endif
 
 }}} // namespace D2Client::UI::QuestLog

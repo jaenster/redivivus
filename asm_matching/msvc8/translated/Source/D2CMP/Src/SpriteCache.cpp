@@ -87,7 +87,7 @@ static_assert(sizeof(void*) != 4 || sizeof(D2GfxHashTableStrc) == 0x10000, "the 
 static uint32_t gbSpriteCacheConversionEnabled = 0; D2_STATIC_GUARD(gbSpriteCacheConversionEnabled, "gbSpriteCacheConversionEnabled");
 static D2GfxMemoryStrc D2GfxMemoryStrc_0089db60 = {0}; D2_STATIC_GUARD(D2GfxMemoryStrc_0089db60, "D2GfxMemoryStrc_0089db60");
 static_assert(sizeof(void*) != 4 || sizeof(D2LRUCacheStrc) == 0x34, "memset(sizeof(D2LRUCacheStrc)): the 32-bit layout must be the 0x34 bytes 1.14d clears");
-static_assert(sizeof(void*) != 4 || sizeof(D2GfxMemoryStrc) == 0x50, "memset(sizeof(D2GfxMemoryStrc)): the 32-bit layout must be the 0x50 bytes 1.14d clears");
+static_assert(sizeof(void*) != 4 || sizeof(D2GfxMemoryStrc) == 0x50 - 0x18 + sizeof(CRITICAL_SECTION), "memset(sizeof(D2GfxMemoryStrc)): the 32-bit layout must be the 0x50 bytes 1.14d clears (0x64 on the Mac, whose critical section is a 0x2c-byte pthread mutex)");
 static_assert(sizeof(D2CelFileCacheEntryStrc) == 0xc0, "LRUCACHE_GetOrAlloc(sizeof(D2CelFileCacheEntryStrc)): the layout must be the 0xc0 bytes 1.14d allocates");
 static_assert(sizeof(void*) != 4 || sizeof(D2CelCacheBlockStrc) == 0xb8, "SPRITECACHE_AllocEntry2(sizeof(D2CelCacheBlockStrc)): the 32-bit layout must be the 0xb8 bytes 1.14d allocates");
 static_assert(sizeof(void*) != 4 || sizeof(D2GfxCellNodeStrc) == 0x2c, "D2_ALLOC_POOL_AT(n * sizeof(D2GfxCellNodeStrc)): the 32-bit cel frame record must be the 0x2c bytes 1.14d allocates");
@@ -1834,6 +1834,11 @@ void __stdcall GFX_InitCelDataCache(D2PoolManagerStrc * nFlags, uint32_t dwCache
     }
 
     GFX_AllocSpriteCache(&D2GfxMemoryStrc_0089db60, nFlags, dwCacheBytes, (fnSpriteCacheEntryRelease)SPRITECACHE_ReleaseHashEntry);
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac build hands Storm the eviction callback for the cel cache.
+    extern uint32_t SPRITECACHE_EvictCelCacheEntry();
+    ::STORM_StoreValue((uint32_t)(uintptr_t)SPRITECACHE_EvictCelCacheEntry);
+#endif
 }
 
 void __stdcall SPRITECACHE_Shutdown(int32_t bReleaseMemory) {
@@ -2165,3 +2170,30 @@ BOOL __stdcall SPRITECACHE_PrecacheSpriteSync(D2GfxDataStrc * pGfxData) {
 }
 
 }}} // namespace D2CMP::SRC::SpriteCache
+#if !defined(_WIN32) && D2_OS_MAC
+
+namespace D2CMP { namespace SRC { namespace SpriteCache {
+
+// The cel cache record is 0x64 bytes on the Mac (a 0x2c-byte pthread mutex); the word the binary keeps
+// at +0x64, right behind it, is a decode-in-progress counter that SPRITECACHE_DecodeFrameByIndex
+// raises and lowers. It is declared next to the record rather than as a member so the record's
+// layout, which the shared code clears with memset(sizeof), stays the one 1.14d clears.
+static_assert(sizeof(D2GfxMemoryStrc) == 0x64, "Mac D2GfxMemoryStrc: the cel cache's decode counter sits at +0x64, right after the 0x64-byte record");
+// 1.14d mac: 0051d094
+uint32_t gnCelCacheDecodeCounter;
+
+// 1.14d mac: 0013268b
+// Eviction callback registered in GFX_InitCelDataCache: frees the oldest cel cache entry and returns
+// the number of bytes it held, or 0 when nothing could be freed. Old entries are preferred while no decode runs.
+uint32_t SPRITECACHE_EvictCelCacheEntry() {
+    uint32_t nFreedSize = 0;
+    D2SpriteCacheEntryStrc* pEntry = SPRITECACHE_EvictEntry(&D2GfxMemoryStrc_0089db60, nullptr, gnCelCacheDecodeCounter == 0);
+    if (pEntry) {
+      nFreedSize = pEntry->nSize;
+    }
+    return nFreedSize;
+}
+
+}}} // namespace D2CMP::SRC::SpriteCache
+
+#endif

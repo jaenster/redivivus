@@ -21,6 +21,7 @@ static_assert(sizeof(void*) != 4 || sizeof(D2DataArrayStrc) == 0x120, "D2_ALLOC_
 namespace Fog { namespace Src { namespace DataArrays {
 
 // @sourcefile .\Src\DataArrays.cpp
+// 1.14d mac: 002edd12
 D2DataArrayStrc * __fastcall FOG_CreateDataArray(char * pszName, int numObjects, int nObjectSize) {
     D2DataArrayStrc* local_EAX_31 = (D2DataArrayStrc*)D2_ALLOC_AT(numObjects * nObjectSize + sizeof(D2DataArrayStrc), ".\\Src\\DataArrays.cpp", 0x34);
     if (local_EAX_31) {
@@ -36,11 +37,13 @@ D2DataArrayStrc * __fastcall FOG_CreateDataArray(char * pszName, int numObjects,
 }
 
 // @sourcefile .\Src\DataArrays.cpp
+// 1.14d mac: 002eddae
 void __fastcall FreeWeatherPointer(void * pDataArray) {
     memset(pDataArray, 0, 0x120);
     D2_FREE_AT(pDataArray, ".\\Src\\DataArrays.cpp", 0x4c);
 }
 
+// 1.14d mac: 002ede0e
 void __fastcall FOG_InitDataArray(D2DataArrayStrc * pDataArray) {
     if (!pDataArray->bInitialized) {
       ErrorManager::ERROR_UnrecoverableInternalError_Halt("", ErrorManager::GetInstructionPointer(), 0x68);
@@ -56,6 +59,7 @@ void __fastcall FOG_InitDataArray(D2DataArrayStrc * pDataArray) {
     }
 }
 
+// 1.14d mac: 002ede99
 uint32_t __fastcall FOG_GetMissileField(D2DataArrayStrc * pMissilesTxt) {
     uint32_t nMissileSlot = -1;
     if (!pMissilesTxt->bInitialized) {
@@ -97,6 +101,7 @@ uint32_t __fastcall FOG_GetMissileField(D2DataArrayStrc * pMissilesTxt) {
 
 // Returns the entry of pDataArray addressed by nHandle (high word = slot index, low word = the entry's 16-bit id; low word 0 matches any), or NULL for handle -1, an empty slot or an id mismatch. Halts (lines 219/222) on an index outside numObjects or an uninitialised array.
 // Provenance: asm 006bcc10..006bcc83 (+0x100 numObjects, +0x108 bInitialized, pData + index * nObjectSize); the argument is a D2DataArrayStrc.
+// 1.14d mac: 002ee03b
 short * __fastcall FOG_GetDataArrayEntry(D2DataArrayStrc * pDataArray, int nHandle) {
     short* pEntry = nullptr;
     if (nHandle != -1) {
@@ -121,6 +126,7 @@ short * __fastcall FOG_GetDataArrayEntry(D2DataArrayStrc * pDataArray, int nHand
 
 // Returns FOG_GetDataArrayEntry(pDataArray, nHandle); halts (line 253) when that returns NULL.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 002edfed
 short * __fastcall FOG_GetDataArrayEntryOrHalt(D2DataArrayStrc * pDataArray, int nHandle) {
     short int* pEntry = FOG_GetDataArrayEntry(pDataArray, nHandle);
     if (!pEntry) {
@@ -131,6 +137,7 @@ short * __fastcall FOG_GetDataArrayEntryOrHalt(D2DataArrayStrc * pDataArray, int
     return pEntry;
 }
 
+// 1.14d mac: 002eddf8
 void __fastcall FOG_CloseDataArray(D2DataArrayStrc * pDataArray) {
     pDataArray->bInitialized = 1;
     FOG_InitDataArray(pDataArray);

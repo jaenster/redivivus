@@ -43,6 +43,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game { namespace Quests { namespace QUESTS { namespace A4Q2 {
 
 // [A4Q3 Terror's End — kill Diablo] Q26 Izual-kill notify (shared A4Q1 helper reused here): on Izual death, if The Fallen Angel quest is in intro state and step<2, advance its internal nStateFlag to 2 and broadcast via Q26_PlayerNotifyCompleted. NOTE: Q26_* belong to A4Q1 (Izual); they live here because A4Q2.cpp bundles the Act4 Diablo questline.
+// 1.14d mac: 00235fb3
 void __fastcall Q26_NotifyIzualKilledToPlayers(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheFallenAngel);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev < 2)) {
@@ -54,6 +55,7 @@ void __fastcall Q26_NotifyIzualKilledToPlayers(::SGAMEDATA * pGame) {
 }
 
 // [A4Q1 Izual helper] Per-unit IterateAllUnits callback: if this unit is within collision-distance 5 of the tracked target (Izual), set the "near" flag in the iteration context.
+// 1.14d mac: 00236126
 void __fastcall Q26_CheckIzualProximity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2QuestDataA4Q1Strc * pQuestSpecificData) {
     int32_t nCollisionDist = D2Common::Collision::GetCollisionDistance(pUnit, pQuestSpecificData->pIzualUnit);
     if (nCollisionDist >= 5) {
@@ -82,11 +84,13 @@ BOOL __fastcall Q26_CheckIzualNearPlayer(::SGAMEDATA * pGame, D2UnitStrc * pIzua
 }
 
 // [A4Q1 Izual helper] Plays the Izual-complete sound to every player/monster unit in the game.
+// 1.14d mac: 00236151
 void __fastcall Q26_PlayIzualCompleteSoundToAll(::SGAMEDATA * pGame) {
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)A4Q1::Q26_PartyMember_PlayCompleteSound);
 }
 
 // [A4Q3 Terror's End] ActiveFilter for the Tyrael/Hadriel gossip NPCs (classId 0x16f=Tyrael, 0xf6=Hadriel/Hand-of-Justice angel). Decides whether a quest gossip entry is currently "active" for the NPC, gated on QUEST_TerrorsEnd states: Completed/FinishedInPreviousGame plus the per-NPC dialog-tracking steps 0x06/0x07 (classic) and 0x08/0x09 (expansion).
+// 1.14d mac: 002361de
 bool __fastcall Q27_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0x16f) {
       if (!D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_Completed) && !D2Common::QuestRecord::GetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_FinishedInPreviousGame) && pQuestData->nStateFlag == 1) {
@@ -115,6 +119,7 @@ bool __fastcall Q27_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 
 // [A4Q3 Terror's End] SequenceFilter: when the quest log is first opened and quest not yet started (nStateFlag==0) but introduced, bump internal nStateFlag to 1 (quest now in-progress / step0x02 displayable).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
+// 1.14d mac: 00237153
 bool __fastcall Q27_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (!pQuestData->nStateFlag && pQuestData->bIsNotIntroduction == '\x01') {
       QUEST_SetStateFlag(pQuestData, 1, "d:\\diablo2\\Diablo2\\Source\\D2Game/Quests/a4q2.cpp", 0x91);
@@ -124,6 +129,7 @@ bool __fastcall Q27_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // [A4Q3 Terror's End] Per-player: mirror the internal nStateFlag progress into the persisted QUEST_TerrorsEnd record. nStateFlag 2 -> set Step0x02; nStateFlag 3 -> Step0x03 (if prev set) else Step0x04. No-op once quest Completed.
+// 1.14d mac: 00239574
 BOOL __fastcall Q27_PlayerUpdateTerrorsEndState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -156,6 +162,7 @@ BOOL __fastcall Q27_PlayerUpdateTerrorsEndState(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // [A4Q3 Terror's End — expansion] Spawn the red Pandemonium town portal (object class 0x236) next to Diablo's corpse / Tyrael: find a spawnable tile +5x from target, CreateUnit the portal, clear bExpansionPortalCheck and set bPortalSpawned. This is the portal back to the Pandemonium Fortress shown after Diablo dies in LoD.
+// 1.14d mac: 00239611
 static void __stdcall Q27_SpawnDiabloPortal(D2QuestArgStrc * pQuestArgs, D2QuestDataA4Q2Strc * pQuestSpecificData) {
     D2UnitStrc* pPortalUnit;
     D2RoomStrc** pRoomsNear;
@@ -186,6 +193,7 @@ static void __stdcall Q27_SpawnDiabloPortal(D2QuestArgStrc * pQuestArgs, D2Quest
 
 // A4Q2 \"Terror's End\" — NPC gossip dispatch (callback slot 0x0b). Routes Tyrael (NPC 0x16f) and Hadriel (0xf6) dialog string IDs to quest effects: Tyrael str 0x2a9 sets bTyraelTalked, bumps nStateFlag=2, updates all players; str 0x2ac clears Step0x07; str 20000 (expansion) sets Step0x09 and spawns the Pandemonium portal via Q27_SpawnDiabloPortal. Hadriel str 0x2ad clears Step0x06; str 0x4e21 sets Step0x08.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
+// 1.14d mac: 00236e00
 void __fastcall Q27_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     eD2QuestState eQuestState;
     ::SGAMEDATA* pGame;
@@ -231,6 +239,7 @@ void __fastcall Q27_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // [A4Q3 Terror's End] Gossip-text builder (callback slot 0x00). Reads QUEST_TerrorsEnd states (Completed/JustCompleted + per-NPC steps 0x06-0x09) plus internal nStateFlag and emits the appropriate Tyrael(0x16f)/Hadriel(0xf6) gossip line for the current quest stage. Classic vs expansion paths differ.
+// 1.14d mac: 00236adb
 void __fastcall Q27_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQ14QuestStateMessages[5] = { -0x1, 0x0, 0x1, -0x1, -0x1 }; D2_STATIC_GUARD(gdwQ14QuestStateMessages, "D2Game::Quests::QUESTS::A4Q2::Q27_Callback00_NpcActivate::gdwQ14QuestStateMessages");
@@ -319,6 +328,7 @@ void __fastcall Q27_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // [A4Q3 Terror's End] Per-player: if QUEST_TerrorsEnd not yet Completed, mark it CannotCompleteQuestInGame (you joined after Diablo was already killed) and send quest-state packet 0x17. Iterated over party on Diablo death.
+// 1.14d mac: 00239917
 BOOL __fastcall Q27_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -334,6 +344,7 @@ BOOL __fastcall Q27_PartyMember_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStr
 
 // [A4Q3 Terror's End] Per-player: if QUEST_TerrorsEnd is JustCompleted, send 0x5D quest-state update (quest 0x17, state 2) to that client and queue the completion sound/event. nParam is the SGAMEDATA (nDifficulty at +0x6d).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
+// 1.14d mac: 0023998b
 BOOL __fastcall Q27_PlayerCheckCompletionSendState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TerrorsEnd, QUESTSTATE_JustCompleted);
@@ -367,6 +378,7 @@ static void __fastcall Q27_InitPandemoniumAndSendState(::SGAMEDATA * pGame, D2Un
 
 // [A4Q3 Terror's End] Player-enters-game handler. Cancels interaction, stores pPlayerUnit into the A4Q2 quest-specific struct. If QUEST_TerrorsEnd is JustCompleted -> warp to Pandemonium Fortress + send 0x5D state packet (Diablo already dead this game). Otherwise send 0x50 quest-special packet (quest 0x17). Stack-cookie guarded (DEFAULT_SECURITY_COOKIE).
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
+// 1.14d mac: 00239457
 BOOL __fastcall Q27_PlayerEnterGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2ClientStrc* pClient;
     D2GSPacketSrv0x50 sPacket50;
@@ -478,6 +490,7 @@ uint8_t __fastcall QuitGameAfterDia(::SGAMEDATA * pGame, D2QuestDataStrc * pQues
 
 // [A4Q3 Terror's End] Mark QUEST_TerrorsEnd done for one player's record: set JustCompleted + Completed, clear step states. Classic (non-expansion): also set steps 0x06/0x07 and bump client status to 4 (act complete / go-to-credits). Increments a counter in the A4Q2 quest struct.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
+// 1.14d mac: 002364ae
 static void __stdcall Q27_SetTerrorsEndCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer) {
     /* SetQuestState(TerrorsEnd, JustCompleted=0xd) — Diablo just died self game
                           */ D2Common::QuestRecord::SetQuestState(pBitBuffer, QUEST_TerrorsEnd, QUESTSTATE_JustCompleted);
@@ -503,6 +516,7 @@ static void __stdcall Q27_SetTerrorsEndCompleted(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // [A4Q3 Terror's End] Party-member callback: if QUEST_TerrorsEnd not Completed for this player and they are physically in Act IV, complete the quest via Q27_SetTerrorsEndCompleted. nParam is the SGAMEDATA.
+// 1.14d mac: 0023643e
 void __fastcall Q27_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -526,6 +540,7 @@ void __fastcall Q27_PartyMember_SetCompleted(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // [A4Q3 Terror's End] If this player has QUEST_TerrorsEnd JustCompleted, propagate completion to every party member (ExecuteFunctionForEveryPartyMember -> Q27_PartyMember_SetCompleted).
+// 1.14d mac: 0023989a
 BOOL __fastcall Q27_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
     BOOL BVar2 = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_TerrorsEnd, QUESTSTATE_JustCompleted);
@@ -541,6 +556,7 @@ BOOL __fastcall Q27_PropagateCompletionToParty(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // [A4Q3 Terror's End] Per-player notify: send quest-update packet (quest 0x17) only when the quest is Completed/FinishedInPreviousGame AND freshly transitioned (JustCompleted or CannotCompleteQuestInGame); otherwise no-op. Used as the broadcast callback for QUEST_SetStateAndBroadcast.
+// 1.14d mac: 002396e4
 BOOL __fastcall Q27_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -561,6 +577,7 @@ BOOL __fastcall Q27_PlayerNotifyCompleted(::SGAMEDATA * pGame, D2UnitStrc * pUni
 
 // [A4Q3 Terror's End] Gossip-choice handler (callback slot 0x03). On dialog index 0x67 (when nStateFlag==2) or 0x6c: if not yet Completed, bump internal nStateFlag to 3 and, if step not previously set, transition to RewardAwaits (state 1) broadcasting Q27_PlayerNotifyCompleted; then push record states via Q27_PlayerUpdateTerrorsEndState. This is Tyrael describing/accepting the kill-Diablo task.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
+// 1.14d mac: 00236954
 void __fastcall Q27_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL BVar3;
     int nDialogIndex = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
@@ -597,6 +614,7 @@ void __fastcall Q27_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // [A4Q3 Terror's End] Talk-to-Tyrael handler (callback slot 0x02). When talking to Tyrael (0x16f): if bTyraelTalked, transition quest to RewardAwaits (state 1) via broadcast and clear the flag; in expansion, if bExpansionPortalCheck set and portal not yet spawned, spawn the Pandemonium portal.
+// 1.14d mac: 00236d73
 void __fastcall Q27_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x16f)) {
       return;
@@ -628,6 +646,7 @@ void __stdcall Q27_EnableHarrogathWaypoint(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // [A4Q3 Terror's End — expansion] Callback slot 0x0e. Cleanup: if Step0x09 (Diablo portal/go-to-act5 flag) is set but QUEST_AbleGoToAct5 not yet Completed, clear Step0x09. Keeps the portal-state flag consistent.
+// 1.14d mac: 002370d8
 void __fastcall Q27_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     if (!pGame->bExpansion) {
@@ -650,6 +669,7 @@ void __fastcall Q27_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 }
 
 // [A4Q3 Terror's End] Load/restore handler (callback slot 0x0d). Expansion: same Step0x09 vs QUEST_AbleGoToAct5 cleanup as slot 0x0e. Then, if quest not Completed/FinishedInPreviousGame, rebuild the in-memory nStateFlag/nStateFlagPrev from persisted record steps: Step0x04 -> (3,prev2); Step0x03 -> (3,prev1); Step0x02 -> (2,prev1).
+// 1.14d mac: 00236fa9
 void __fastcall Q27_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL bQuestStateFlag;
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
@@ -703,6 +723,7 @@ void __fastcall Q27_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // [A4Q3 Terror's End] Per-player: if QUEST_TerrorsEnd not Completed and the player's room is the room (or adjacent to the room) where Diablo died, and quest is not Completed/RewardAwaits, complete it via Q27_SetTerrorsEndCompleted. Credits the kill only to players near the corpse.
+// 1.14d mac: 00239791
 BOOL __fastcall Q27_PlayerCheckNearDiablo(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc** ppAdjacentRooms;
     uint32_t nAdjacentRoomCount;
@@ -753,6 +774,7 @@ BOOL __fastcall Q27_PlayerCheckNearDiablo(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // [A4Q3 Terror's End] Getter: returns the "all five Chaos Sanctuary seals activated" flag (field_0x13) from the A4Q2 quest-specific struct.
+// 1.14d mac: 00236592
 BOOL __fastcall Q27_GetAllSealsActivated(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TerrorsEnd);
     if (pQuestData) {
@@ -763,6 +785,7 @@ BOOL __fastcall Q27_GetAllSealsActivated(::SGAMEDATA * pGame) {
 }
 
 // [A4Q3 Terror's End] All-seals-activated trigger. Sets the seals-done flag, notifies players (event 0xc), then walks every room of Act IV's Chaos Sanctuary and force-kills all neutral living monsters (except Diablo 0xf3) — i.e. clears the seal bosses' minions when the final seal is hit, summoning Diablo.
+// 1.14d mac: 00237244
 static void __stdcall Q27_ActivateAllSealsKillChaos(D2QuestDataA4Q2Strc * pQuestSpecificData, ::SGAMEDATA * pGame) {
     D2UnitStrc* pUnit;
     D2RoomStrc* pRoom;
@@ -805,6 +828,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 // [A4Q3 Terror's End] Monster-kill handler (callback slot 0x08). If the killed unit is Diablo (0xf3): notify (classic), record Diablo's room, mark quest completed in the A4Q2 struct, set state 0xd (JustCompleted) & broadcast, then iterate players to credit/propagate completion and send state (Q27_PlayerCheckNearDiablo / PropagateCompletionToParty / SetCannotComplete / CheckCompletionSendState), and arm the QuitGameAfterDia timer. If a non-Diablo seal-boss dies: count it; once 3 bosses + all 5 seals are down, trigger Q27_ActivateAllSealsKillChaos and arm the spawn-Diablo timer.
+// 1.14d mac: 002366c8
 void __fastcall Q27_Callback_08_KillHandler(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2RoomStrc* pDiabloRoom;
     DWORD dwKillTick;
@@ -889,6 +913,7 @@ void __fastcall Q27_Callback_08_KillHandler(D2QuestDataStrc * pQuestData, D2Ques
 
 // [A4Q3 Terror's End] Quest init. Allocates the 0x4c-byte A4Q2 quest-specific struct, wires callback slots (0x00 gossip-text, 0x02 talk-Tyrael, 0x03 gossip-choice, 0x08 monster-kill, 0x0b NPC-gossip, 0x0d load, 0x0e cleanup), installs NPC gossip table (Tyrael 0x16f / string 0x2a9), sets nQuestIdReal=QUEST_TerrorsEnd, nInitNo=4, ActiveFilter=Q27_ActiveFilter, SequenceFilter=Q27_SequenceFilter.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
+// 1.14d mac: 002365bf
 void __fastcall Q27_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pSVar1 = pQuestData->pGame;
@@ -913,6 +938,7 @@ void __fastcall Q27_InitData(D2QuestDataStrc * pQuestData) {
 }
 
 // [A4Q3 Terror's End] Object init-fn (seal object): records which seal/lever was touched into the A4Q2 struct; if all 5 seals + 3 bosses are accounted for, triggers Q27_ActivateAllSealsKillChaos and arms the spawn-Diablo timer (QuitGameAfterDia).
+// 1.14d mac: 0023719a
 void __fastcall Objects_InitFn55_DiabloStartPoint(D2ObjectInitFnArg * pInitArg) {
     int nSealObjectId;
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_TerrorsEnd);
@@ -958,11 +984,13 @@ void __fastcall Objects_InitFn55_DiabloStartPoint(D2ObjectInitFnArg * pInitArg) 
     AddQuestTimer(pQuestData, QuitGameAfterDia, 1);
 }
 
+// 1.14d mac: 00237504
 void __fastcall Objects_InitFn56_Seal(D2ObjectInitFnArg * pInitArg) {
 
 }
 
 // [A4Q3 Terror's End] Object operate-fn for the 5 Chaos Sanctuary seal objects (class 0x188-0x18c). On activation sets the corresponding per-seal flag in the A4Q2 struct; once all 5 seals + 3 seal-bosses are done, calls Q27_ActivateAllSealsKillChaos (summon Diablo) and arms the spawn timer.
+// 1.14d mac: 002377b9
 BOOL __fastcall OBJOP_A4Q2_DiabloSealActivateKillChaos(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
     if (!pVictim || pVictim->eAnimMode.ePlayerMode == Death) {
@@ -1028,6 +1056,7 @@ uint8_t __fastcall Q27_IsDiabloSpawned(::SGAMEDATA * pGame) {
 
 // A4Q3 — OBJOP_A4Q2_PandemoniumFortressGate: operate handler for the Act4 Pandemonium Fortress gate to Act5. Gate is locked until Terror's End (QUEST_TerrorsEnd: Diablo dead) is Completed or JustCompleted; else plays the locked "can't" sound and returns. Once unlocked AND player is in Act IV: sets QUEST_AbleGoToAct5 Completed+JustCompleted (first time only), sends the 0x5D quest-state and 0x61 can-go-to-act packets, loads/portals the player to Harrogath (LEVEL_Harrogath, act 5), resyncs quest info, and unlocks the Harrogath waypoint. Expansion-only.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a4q2.cpp
+// 1.14d mac: 00237a9a
 BOOL __fastcall OBJOP_A4Q2_PandemoniumFortressGate(D2ObjectOperateFnArg * pOperation) {
     int32_t nTradeTick;
     ::SGAMEDATA* pGame = pOperation->sArg.pGame;

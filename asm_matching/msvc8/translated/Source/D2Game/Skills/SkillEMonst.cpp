@@ -32,6 +32,7 @@
 
 namespace D2Game { namespace SKILLS { namespace SkillEMonst {
 
+// 1.14d mac: 00276383
 void __fastcall SKILLEMONST_ApplyReflectedDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, D2DamageStrc * pCombatEntry) {
     int nPercent;
     const int nThornsPercent = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pAttacker, UNITSTAT_thorns_percent, 0);
@@ -57,6 +58,7 @@ void __fastcall SKILLEMONST_ApplyReflectedDamage(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Server do-function for skill 125 (Catapult Fire Bomb, Act 5 siege engine). Resolves the charge-up missile, gets the target/cursor position, computes the delta vector from the unit's current position to the target, spawns the firebomb missile with flags=2 (lobbed), then sets the missile's TargetX/Y to the rotated delta vector (perpendicular). Returns 1 on success, 0 on invalid skill or out-of-range missile ID.
+// 1.14d mac: 00255d0d
 BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     uint32_t nTargetX;
@@ -97,6 +99,7 @@ BOOL __fastcall Skills_SrvDoFunc_125_CatapultFireBomb(::SGAMEDATA * pGame, D2Uni
     return 0;
 }
 
+// 1.14d mac: 00255e88
 BOOL __fastcall SKILLEMONST_SrvStFn59_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTable = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTable) {
@@ -123,6 +126,7 @@ BOOL __fastcall SKILLEMONST_SrvStFn59_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Server do-function for Baal's Tentacle Grab (skill 126). Locks the caster's dynamic path onto the current target, fills a D2SkillArgStrc with the srvmissilea missile (velocity scaled by VelLev * nSkillLvl), spawns the tentacle missile via CreatingMissile, sets its distance/frame counts from calc[1]+Param2, and schedules an ENDANIM or MODECHANGE timer event depending on whether the inferno state is still active.
+// 1.14d mac: 00255f65
 BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
@@ -186,6 +190,7 @@ BOOL __fastcall Skills_SrvDoFunc_126_ImpInferno(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Server do-strike-function for monster skill slot 60 (life/mana-leeching melee strike). Performs a to-hit check via SKILLS_CalcToHitAndApply; on hit, calculates physical damage, adds a % bonus from calc[0], appends life-leech from calc[1] and mana-leech from calc[2] to the damage struct, then applies via DAMAGE_CalculateAndApplyDamage with flag 0x80. Returns 1 if a target was found, 0 otherwise.
+// 1.14d mac: 002562f2
 BOOL __fastcall SKILLEMONST_SrvStFn60_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     int nLifeLeech;
@@ -225,6 +230,7 @@ BOOL __fastcall SKILLEMONST_SrvStFn60_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Server skill handler for Nihlathak's Corpse Explosion (skill 127). Finds the target unit via GetTargetEx, sets UNITFLAG_SKSRVDOFUNC, then checks for an existing combat entry. If the kill flag (bit 0 of entry+4) is set, heals the owner (or Nihlathak himself if no owner) by calc[0]% of the damage dealt, clamped to [1, max-hp]. Then processes the combat queue entry to apply the actual explosion damage. Returns TRUE if the combat entry existed.
+// 1.14d mac: 00256595
 BOOL __fastcall Skills_SrvDoFunc_127_SuckBlood(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nValue;
     int nTargetHp;
@@ -293,6 +299,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 // SrvDoFunc 128: monster-side summon skill. Gets the skill's target unit, calculates a game-frame deadline via calc[0], issues CreateMinion AI command, and optionally applies srvoverlay to the target. Returns FALSE if no valid target or caster is not a monster.
+// 1.14d mac: 002567c6
 BOOL __fastcall Skills_SrvDoFunc_128_MonsterCreateMinion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2AiCmdArgumentsStrc sAiCmd;
     D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -332,6 +339,7 @@ BOOL __fastcall Skills_SrvDoFunc_128_MonsterCreateMinion(::SGAMEDATA * pGame, D2
 // targetable flags, replaces any ACTIVESTATE timer and fires one immediately with
 // (eSkill, nSkillLevel) as the timer args, then re-attaches the AI.
 // eSkill/nSkillLevel: the only caller, Skills_SrvDoFunc_129, passes its eSkill and nSkillLvl.
+// 1.14d mac: 002568ec
 void __fastcall SKILLEMONST_AttachToHost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pHostUnit, eD2Skills eSkill, int32_t nSkillLevel) {
     if (!(pUnit && pHostUnit)) {
       return;
@@ -369,6 +377,7 @@ void __fastcall SKILLEMONST_AttachToHost(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Detaches a parasite monster (MonStats id 0x1EC) from its host (ids 0x1B3 or 0x1B9): clears STATE_attached, nulls owner links on both units, and either kills the parasite if below 10% HP or re-enables its targetable flags, fires ACTIVESTATE timer, and reattaches its AI function.
+// 1.14d mac: 00256a75
 void __fastcall SKILLEMONST_DetachFromHost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pHostUnit, int32_t nEventParam, int32_t nSkillLvl) {
     if (!(pUnit && pHostUnit)) {
       return;
@@ -411,6 +420,7 @@ void __fastcall SKILLEMONST_DetachFromHost(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // SrvDoFunc 129: parasite attach/detach dispatch. If unit already has an owner, relocates it to target coords and calls SKILLEMONST_DetachFromHost. If no target exists, falls back to SrvDoFunc_098 teleport. Otherwise relocates unit onto the target and calls SKILLEMONST_AttachToHost.
+// 1.14d mac: 00256c12
 BOOL __fastcall Skills_SrvDoFunc_129_AttachOrDetachFromHost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     bool bRelocated;
     BOOL bIsDead;
@@ -458,6 +468,7 @@ BOOL __fastcall Skills_SrvDoFunc_129_AttachOrDetachFromHost(::SGAMEDATA * pGame,
     return 0;
 }
 
+// 1.14d mac: 00256e19
 BOOL __fastcall SKILLEMONST_SrvStFn61_SelfResurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -500,6 +511,7 @@ static int __stdcall SKILLSOR_GetMeteorSubMissileCount(eMissilesId eMissileId, :
     return 1;
 }
 
+// 1.14d mac: 00256e62
 BOOL __fastcall Skills_SrvDoFunc_130_SpawnSubMissiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
@@ -602,6 +614,7 @@ static void __stdcall SKILLEMONST_TransformMonsterClass(D2UnitStrc * pUnit, DWOR
 }
 
 // SrvDoFunc 131: on a living monster target with base id 0x1C5, rolls a random percent against calc[0] and, if the target lacks auratargetstate, calls SKILLEMONST_TransformMonsterClass; otherwise falls through to SKILLEMONST_ApplyAuraBuff. Returns FALSE if target is dead or skill record invalid.
+// 1.14d mac: 00256fb2
 BOOL __fastcall Skills_SrvDoFunc_131_ConditionalTransformOrBuff(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
@@ -638,6 +651,7 @@ BOOL __fastcall Skills_SrvDoFunc_131_ConditionalTransformOrBuff(::SGAMEDATA * pG
     return 0;
 }
 
+// 1.14d mac: 00257446
 BOOL __fastcall Skills_SrvDoFunc_132_FireClassUpgradedMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -659,6 +673,7 @@ BOOL __fastcall Skills_SrvDoFunc_132_FireClassUpgradedMissile(::SGAMEDATA * pGam
     return 0;
 }
 
+// 1.14d mac: 00257526
 BOOL __fastcall SKILLMONST_CanImpregnateTarget(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int32_t nAlignment;
     if (!(pTarget && pTarget->eUnitType == UNIT_MONSTER)) {
@@ -694,6 +709,7 @@ BOOL __fastcall SKILLMONST_CanImpregnateTarget(D2UnitStrc * pUnit, D2UnitStrc * 
     return 0;
 }
 
+// 1.14d mac: 002576b4
 void __fastcall SKILLEMONST_OnDeathSpawnExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nStatListParam) {
     D2SkillsTxt* pSkillRecord;
     short int sSummonId;
@@ -723,6 +739,7 @@ void __fastcall SKILLEMONST_OnDeathSpawnExpire(D2UnitStrc * pUnit, eD2States eSt
     Monster::Create::SpawnMonsterBase(UNIT::SUnit::GetGamePointer(pUnit), pUnit, nSummonMonStatsId, eSpawnAnimMode, 1, 0);
 }
 
+// 1.14d mac: 002575de
 BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -753,6 +770,7 @@ BOOL __fastcall Skills_SrvDoFunc_133_SetDeathSpawnState(::SGAMEDATA * pGame, D2U
     return 1;
 }
 
+// 1.14d mac: 00257791
 BOOL __fastcall Skills_SrvDoFunc_134_AreaExplosionAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillRecord;
     D2DamageStrc sDamage;
@@ -782,6 +800,7 @@ BOOL __fastcall Skills_SrvDoFunc_134_AreaExplosionAttack(::SGAMEDATA * pGame, D2
     return 0;
 }
 
+// 1.14d mac: 002578ea
 BOOL __fastcall SKILLEMONST_SrvStFn62_MinionSpawner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t eSpawnAnimMode;
     int32_t nSpawnX;
@@ -800,6 +819,7 @@ BOOL __fastcall SKILLEMONST_SrvStFn62_MinionSpawner(::SGAMEDATA * pGame, D2UnitS
 }
 
 // SrvDoFunc 135: spawns a monster using coordinates and class id stored in the active skill's params 1-4. Finds the nearest valid room, calls SpawnMonster twice (first with radius -1, then 4 on failure), marks the spawn with NOXP|NOTC flags, sets it as owned by caster, and applies sumoverlay.
+// 1.14d mac: 0025797f
 BOOL __fastcall Skills_SrvDoFunc_135_SpawnMinionFromParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     short int sSumOverlay;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -840,6 +860,7 @@ BOOL __fastcall Skills_SrvDoFunc_135_SpawnMinionFromParams(::SGAMEDATA * pGame, 
 }
 
 // Server DoFunc for skill 136 (monster fire-speed-scaled missile). Reads srvmissilea from the skill txt record, resolves the target or cursor position, spawns a missile via SKILLS_CreateMissileAtTarget, then scales the missile's total-frame lifetime proportionally to the distance to the cursor (closer targets get fewer frames so the missile appears to travel at a consistent visual speed). Returns 1 on success, 0 if skill/missile record is invalid or no target found.
+// 1.14d mac: 00257ba5
 BOOL __fastcall Skills_SrvDoFunc_136_FireSpeedScaledMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nCursorX;
     uint32_t nCursorY;
@@ -887,6 +908,7 @@ set_frames:
     return 1;
 }
 
+// 1.14d mac: 00257d4e
 BOOL __fastcall Skills_SrvDoFunc_137_CorpseConsumptionAura(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillRecord = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillRecord) {
@@ -912,6 +934,7 @@ BOOL __fastcall Skills_SrvDoFunc_137_CorpseConsumptionAura(::SGAMEDATA * pGame, 
 }
 
 // Server SrvDoFunc for skill 138: fires a line of missiles perpendicular to the aim direction. Computes the perpendicular unit vector from caster to cursor, then spawns calc[0] missiles evenly spread along that perpendicular axis, each using the calc[1] total-frames value. Also checks the inferno state and advances the unit's sequence frame if active.
+// 1.14d mac: 00257e4b
 BOOL __fastcall Skills_SrvDoFunc_138_FirePerpendicularMissileLine(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int32_t nDirY;
@@ -963,6 +986,7 @@ BOOL __fastcall Skills_SrvDoFunc_138_FirePerpendicularMissileLine(::SGAMEDATA * 
     return 1;
 }
 
+// 1.14d mac: 0025808d
 BOOL __fastcall Skills_SrvDoFunc_139_FireOrthogonalMissile(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nCursorX;
     uint32_t nCursorY;
@@ -1000,6 +1024,7 @@ BOOL __fastcall Skills_SrvDoFunc_139_FireOrthogonalMissile(::SGAMEDATA * pGame, 
 }
 
 // SrvStFunc 63: monster-only skill that fires a missile at the target corpse. Checks the target lacks STATE_corpse_noselect, marks it with that state, creates a missile from srvmissilea using the owner as attacker and the corpse as the missile target, then sends a unit message packet to the caster.
+// 1.14d mac: 00258213
 BOOL __fastcall SKILLEMONST_SrvStFn63_CorpseCycler(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -1044,6 +1069,7 @@ BOOL __fastcall SKILLEMONST_SrvStFn63_CorpseCycler(::SGAMEDATA * pGame, D2UnitSt
     return 0;
 }
 
+// 1.14d mac: 0025837f
 BOOL __fastcall Skills_SrvDoFunc_147_ReturnToOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pOwner = UNIT::SUnit::GetOwnerUnit(pGame, pUnit);
     if (pOwner) {
@@ -1064,6 +1090,7 @@ static void __stdcall Unreferenced_005d2b40(D2UnitStrc * pUnit) {
 }
 
 // Applies a Blood Mana HP cost of nParam to pUnit. If HP is sufficient, deducts it and removes the STATE_blood_mana stat list when remaining HP falls below the skill's Param[4] threshold (in fixed-point). If HP is insufficient, forces HP to 0x100 (minimum alive) and removes the stat list.
+// 1.14d mac: 002583b3
 int __fastcall SKILLEMONST_ProcessBloodMana(D2UnitStrc * pUnit, int32_t nHpCost) {
     D2SkillsTxt* pSkillRecord;
     D2StatListExStrc* pBloodManaStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, STATE_blood_mana);
@@ -1101,6 +1128,7 @@ int __fastcall SKILLEMONST_ProcessBloodMana(D2UnitStrc * pUnit, int32_t nHpCost)
 }
 
 // Server-side skill DoFunc 140: scatters a difficulty-scaled number of minion monsters around the caster. Advances the caster unit's RNG seed; the spawn count is (2 + difficulty + seedLow mod 3). Determines the base spawn position from the caster's (or its current target's) static/dynamic path X/Y, then loops spawning monsters at randomized +-9 tile offsets via SpawnMonster, snapping each to a valid nearby room (DRLGROOM_FindBetterNearbyRoom). Each spawned minion is flagged NOXP|NOTC, given AI think mode 0xF (RestartAiThink), and has its owner stored as the caster. Returns 0 if pUnit is null, else 1.
+// 1.14d mac: 002584e5
 BOOL __fastcall Skills_SrvDoFunc_140_BaalTentacle(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nMonStatsId;
     eD2MonsterAnimMode eSpawnAnimMode;
@@ -1194,6 +1222,7 @@ BOOL __fastcall Skills_SrvDoFunc_140_BaalTentacle(::SGAMEDATA * pGame, D2UnitStr
     return 1;
 }
 
+// 1.14d mac: 0025890a
 BOOL __fastcall fpBaalWaveFunction(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, D2UnitStrc * pUnit, int32_t nSkillLvl, uint32_t dwParam) {
     BOOL _bResult;
     bool bResult;
@@ -1203,6 +1232,7 @@ BOOL __fastcall fpBaalWaveFunction(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, 
 }
 
 // SrvDoFunc 141: initiates Baal's corpse explosion wave. Builds a D2BaalWaveParamStrc from the caster's position, sets skill to SKILL_BaalCorpseExplode, computes wave distance from Param[4]+Param[5]*(lvl-1), assigns fpBaalWaveFunction callback, then calls SKILLS_ForEachUnitBaalWave to propagate the wave.
+// 1.14d mac: 00258808
 BOOL __fastcall Skills_SrvDoFunc_141_BaalCorpseExplosionWave(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillRecord;
     D2BaalWaveParamStrc sBaalWaveParam;

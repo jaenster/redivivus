@@ -73,6 +73,7 @@ D2TileLibraryHeaderStrc * __stdcall TILEPROJECT_FindLibraryOfTile(D2TileLibraryE
     } while (true);
 }
 
+// 1.14d mac: 001320db
 void __fastcall PALETTE_LoadFromFile(char * szPaletteName, int32_t nPaletteSet) {
     int nPrefixWords;
     char* pFullPathEnd;
@@ -105,6 +106,7 @@ void __fastcall PALETTE_LoadFromFile(char * szPaletteName, int32_t nPaletteSet) 
     }
 }
 
+// 1.14d mac: 0013204b
 void __stdcall PALETTE_InitItemPalettes() {
     PALETTE_LoadFromFile("grey", 1);
     PALETTE_LoadFromFile("grey2", 2);
@@ -116,6 +118,7 @@ void __stdcall PALETTE_InitItemPalettes() {
     PALETTE_LoadFromFile("invgreybrown", 8);
 }
 
+// 1.14d mac: 0013223f
 void __stdcall PALETTE_SetAct(int32_t nAct) {
     // Static local variables (originally global data)
     static uint32_t nPalleteAct = 0x1; D2_STATIC_GUARD(nPalleteAct, "D2CMP::Pallete::PALETTE_SetAct::nPalleteAct");
@@ -127,6 +130,7 @@ void __stdcall PALETTE_SetAct(int32_t nAct) {
     nPalleteAct = nAct;
 }
 
+// 1.14d mac: 00132244
 uint8_t * __stdcall PALETTE_GetItemPalette(int32_t nPaletteSet, int32_t nRow) {
     if (nPaletteSet < 9 && nRow < 0x15 && nPaletteSet && (nPaletteSet <= 2 || nPaletteSet > 4)) {
       return gaItemPaletteData + (nPaletteSet * 0x69 + nRow) * 0x100;

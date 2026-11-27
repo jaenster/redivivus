@@ -34,6 +34,7 @@ namespace D2Game { namespace Quests { namespace QUESTS { namespace A5Q2 {
 // update packet to the player when the quest has reached a terminal-ish state -- i.e. is Completed(0)
 // OR FinishedInPreviousGame(0xf), AND is NOT in the transient JustCompleted(0xd)/CannotComplete(0xe)
 // states. Otherwise no-op. Reads QuestRecord bits for QUEST_RescueOnMountArreat.
+// 1.14d mac: 0023c144
 BOOL __fastcall Q32_NotifyQuestState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -56,6 +57,7 @@ BOOL __fastcall Q32_NotifyQuestState(::SGAMEDATA * pGame, D2UnitStrc * pUnit, vo
 // Fires when the target is Qual-Kehk (classId 0x203) and prisoners-killed-by-monsters (nPrisonersKilledByMonsters)
 // is still < 5 and the in-progress flag (field_0x84) is set. Transitions quest stateFlag back to 1 ("log/active"),
 // clears field_0x84 and detaches itself (handler[2]=null) so it runs once. Broadcasts via Q32_NotifyQuestState.
+// 1.14d mac: 0023b9c5
 void __fastcall Q32_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x203)) {
       return;
@@ -77,6 +79,7 @@ void __fastcall Q32_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 // RewardAwaits(1), copies the server quest stateFlag into the player's QuestRecord step bits:
 // stateFlag==2 -> set Step0x02, stateFlag==3 -> set Step0x03. These step bits let the client UI show
 // progress and let Q32_Callback_13 restore stateFlag on re-entry.
+// 1.14d mac: 002451b1
 BOOL __fastcall Q32_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -113,6 +116,7 @@ BOOL __fastcall Q32_UpdateQuestStep(::SGAMEDATA * pGame, D2UnitStrc * pUnit, voi
 // else 3 (the runner-up tiers of how many barbarians survived). Grants reward shield item(s) from aQ32RewardItemCodes;
 // on success sets Completed(0), clears RewardAwaits + all step bits, records player GUID, sends 0x5D quest-state packet.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q2.cpp
+// 1.14d mac: 0023ba46
 void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static uint32_t aQ32RewardItemCodes[3] = { 0x20373072, 0x20383072, 0x20393072 }; D2_STATIC_GUARD(aQ32RewardItemCodes, "D2Game::Quests::QUESTS::A5Q2::Q32_Callback11_ScrollMessage::aQ32RewardItemCodes");
@@ -191,6 +195,7 @@ void __fastcall Q32_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 // Else if this player already participated -> line 4. Else maps server stateFlag through gdwQuestCallbackAddressQ32[]
 // to a line index; special-case: index 2 + target Qual-Kehk(0x203) + player has Step0x04 bit -> line 5
 // ("you freed them" branch). Emits via AddGossipMessageOnMonster.
+// 1.14d mac: 0023b832
 void __fastcall Q32_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static uint32_t gdwQuestCallbackAddressQ32[37] = {
@@ -292,6 +297,7 @@ void __fastcall Q32_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 // JustCompleted(0xd) + RewardAwaits(1), then records the survival tier as a step bit based on the quest's
 // field_0xAC counter: 0xf->Step0x05 (all/most freed), 0xe->Step0x06, else->Step0x07 (fewest freed).
 // This is how rescue credit (and the reward tier) propagates to nearby party members.
+// 1.14d mac: 0023b0cb
 void __fastcall Q32_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -345,6 +351,7 @@ void __fastcall Q32_SetCompleteForPartyMember(::SGAMEDATA * pGame, D2UnitStrc * 
 // Q32_Callback_10 (A5Q2 Rescue on Mount Arreat) -- state-handler slot[0xa], player-leave/cleanup.
 // Removes the leaving player's GUID (or -1 sentinel for server/no-player) from both the quest's main
 // participant GUID list (sQuestGUID) and the A5Q2-specific GUID list. No QuestRecord changes.
+// 1.14d mac: 0023b42b
 void __fastcall Q32_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nPlayerGUID = !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID;
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, nPlayerGUID);
@@ -357,6 +364,7 @@ void __fastcall Q32_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // sets CannotCompleteQuestInGame(0xe) and pushes a 0x20 quest-state packet. Used when too many barbarian
 // prisoners were killed (>=5 lost) so the quest can no longer be completed this game session. nParam is the
 // player unit (byte[0x6d] = nDifficulty used to index pQuestRecordPool).
+// 1.14d mac: 0023c8d3
 BOOL __fastcall Q32_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -379,6 +387,7 @@ BOOL __fastcall Q32_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 // There are 3 barricade groups, each holding up to 5 caged barbarian-prisoner unit GUIDs (a 3x5 table at
 // A5Q2-data+0xb0). Given a prisoner/barricade unit (nParam2, GUID at [0xc]), returns the group index 0..2
 // that contains its GUID, or -1 if not found. Used everywhere to map a unit back to its barricade group.
+// 1.14d mac: 0023b1e9
 int32_t __fastcall Q32_FindBarricadeGroup(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     int32_t* pPrisonerGUIDSlot;
     D2QuestDataA5Q2Strc* pA5Q2 = pQuestData->pQuestSpecificData.pA5Q2;
@@ -413,6 +422,7 @@ int32_t __fastcall Q32_FindBarricadeGroup(D2QuestDataStrc * pQuestData, D2UnitSt
 // 'all dead' byte at +0x54); if untracked, increment field_0xA8 = total prisoners-killed-by-monsters. When
 // field_0xA8 exceeds 4, broadcasts stateFlag 0xc ("failed/wussie" branch) and runs Q32_SetCannotComplete on
 // all players (quest can no longer be completed -> state 0xe).
+// 1.14d mac: 0023b67e
 void __fastcall Q32_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nBarricadeGroup;
     int nPrisonerIdx;
@@ -515,6 +525,7 @@ void __fastcall Q32_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 // neither Completed(0) nor RewardAwaits(1), advances stateFlag->3, re-syncs step bits, and (if fresh) broadcasts
 // stateFlag 1. Drives progression from "talked to Qual-Kehk" toward "barricades reached".
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q2.cpp
+// 1.14d mac: 0023b47e
 void __fastcall Q32_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestArgs->sQuestArgs.sLevelChange.nNewLevel - 0x6fU <= 1 && pQuestData->bIsNotIntroduction != '\0' && pQuestData->pQuestSpecificData.pA5Q2->nPrisonersKilledByMonsters < 5) {
       bool bStateFlagAdvanced;
@@ -572,6 +583,7 @@ void __fastcall Q32_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // RewardAwaits(1); if stateFlag==0 returns true only if RewardAwaits(1) (so he offers the reward dialog).
 // For caged barbarian prisoner (0x216): active (true) only while quest not Completed(0) and not RewardAwaits(1),
 // i.e. the prisoners exist/are interactable until the quest is essentially done. Reads player QuestRecord only.
+// 1.14d mac: 0023b234
 bool __fastcall Q32_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     BOOL bQuestState;
     if (nTargetClassId == 0x203) {
@@ -603,6 +615,7 @@ bool __fastcall Q32_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // and returns (don't unlock the next quest yet). Once done (stateFlag==5), looks up the next quest in the chain
 // (nSequenceQuestId) and invokes ITS sequence filter, propagating the "you may now start the next quest" unlock.
 // No direct QuestRecord writes here.
+// 1.14d mac: 0023be99
 bool __fastcall Q32_SequenceFilter(D2QuestDataStrc * pQuestData) {
     bool bBadPtr;
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
@@ -631,6 +644,7 @@ bool __fastcall Q32_SequenceFilter(D2QuestDataStrc * pQuestData) {
 // Q32_Callback_14 (A5Q2 Rescue on Mount Arreat) -- state-handler slot[0xe].
 // Clears the player's QuestRecord Step0x04 bit for QUEST_RescueOnMountArreat (resets the "barricade freed"
 // transient progress flag). Counterpart to where Step0x04 is set in Q32_OnBarricadeDestroyed.
+// 1.14d mac: 0023be5c
 void __fastcall Q32_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer)->pQuestRecord[pGame->nDifficulty];
@@ -638,6 +652,7 @@ void __fastcall Q32_Callback14_PlayerJoinedGame(D2QuestDataStrc * pQuestData, D2
 }
 
 // A5Q2 (Rescue on Mount Arreat) state-handler slot 0xd — join/load state restore. On player (re)join: first clears the transient Step0x04 bit. Then, if quest is not Completed, FinishedInPreviousGame, or RewardAwaits, rehydrates server stateFlag from persisted step bits: Step0x03 set → stateFlag=3 (stateFlagPrev=1); Step0x02 set → stateFlag=2 (stateFlagPrev=1). Restores in-progress quest progression when a game is created or joined.
+// 1.14d mac: 0023bd6d
 void __fastcall Q32_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -685,6 +700,7 @@ void __fastcall Q32_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // fpActiveFilter=Q32_ActiveFilter, fpSequenceFilter=Q32_SequenceFilter, nSequenceQuestId=QUEST_SpokeToMalachai,
 // and zeroes the participant GUID list.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q2.cpp
+// 1.14d mac: 0023b303
 void __fastcall Q32_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -716,6 +732,7 @@ void __fastcall Q32_InitData(D2QuestDataStrc * pQuestData) {
 // object's room/coords, flagged ISRESURRECT|ISINIT (frozen-in-cage appearance). Stores each spawned GUID into the
 // 3x5 group GUID table (at A5Q2-data+0xb0, indexed by nBarricadeGroupIdx) and attaches the A5Q2 quest to the unit.
 // Stops at 5 prisoners per group. Returns count spawned. No QuestRecord access.
+// 1.14d mac: 0023bf24
 int32_t __fastcall Q32_SpawnBarricadePrisoners(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * nBarricadeObjPtr, int32_t nBarricadeGroupIdx) {
     int32_t nSpawned = 0;
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
@@ -748,6 +765,7 @@ int32_t __fastcall Q32_SpawnBarricadePrisoners(D2QuestDataStrc * pQuestData, D2O
 // barricade (max 3 groups) by (game,object) pair, records the barricade object, then calls Q32_SpawnBarricadePrisoners
 // to populate that group with caged barbarians (field_0xA4 += spawned) and marks the group slot initialized.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a5q2.cpp
+// 1.14d mac: 0023bfe6
 void __fastcall Objects_InitFn62_CagedWussie(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pInitArg->pGame, QUESTINT_RescueOnMountArreat);
     D2QuestDataA5Q2Strc* pA5Q2Data = pQuestData->pQuestSpecificData.pA5Q2;
@@ -784,6 +802,7 @@ void __fastcall Objects_InitFn62_CagedWussie(D2ObjectInitFnArg * pInitArg) {
 // If this player's QuestRecord shows JustCompleted(0xd) for QUEST_RescueOnMountArreat and they're in a party,
 // runs Q32_SetCompleteForPartyMember for every party member -- spreading rescue completion + reward tier to the
 // whole party. No-op for solo/non-just-completed players.
+// 1.14d mac: 0023c856
 BOOL __fastcall Q32_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_RescueOnMountArreat, QUESTSTATE_JustCompleted);
@@ -801,6 +820,7 @@ BOOL __fastcall Q32_PropagateCompleteToParty(::SGAMEDATA * pGame, D2UnitStrc * p
 // Q32_PlayCompletionSound (A5Q2 Rescue on Mount Arreat) -- iterated over players.
 // If the player's QuestRecord shows JustCompleted(0xd), plays the quest-completion sound/event (event sound 0x51,
 // SetupUpdateEvent_AttachEventSound) on that player. nParam = player unit (byte[0x6d]=nDifficulty for pQuestRecordPool index).
+// 1.14d mac: 0023c981
 BOOL __fastcall Q32_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
     BOOL bJustCompleted = D2Common::QuestRecord::GetQuestState(pQuestRecord, QUEST_RescueOnMountArreat, QUESTSTATE_JustCompleted);
@@ -815,6 +835,7 @@ BOOL __fastcall Q32_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // Returns 1 if the given unit (nParam) belongs to a barricade group whose 'all prisoners dead' kill-count byte
 // (group[+0x18] / +0x54) is set, i.e. that group's barbarians were slaughtered. Used by barricade/AI logic to
 // detect a botched ("wussie") group. Quest must be in log (bIsNotIntroduction).
+// 1.14d mac: 0023c1f1
 BOOL __fastcall Q32_CheckWussieBarricade(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RescueOnMountArreat);
     if (pQuestData && pQuestData->bIsNotIntroduction != '\0') {
@@ -832,6 +853,7 @@ BOOL __fastcall Q32_CheckWussieBarricade(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // Maps nBarricadeGroupId to a group via Q32_FindBarricadeGroup, increments that group's kill count
 // (group[+0x18]); when it exceeds 4 (>=5 = whole group of 5 barbarians dead) sets the group's 'all dead'
 // byte (+0x54). No QuestRecord access.
+// 1.14d mac: 0023c246
 void __fastcall Q32_IncrementWussieKillCount(::SGAMEDATA * pGameStrc, int, D2UnitStrc * nBarricadeGroupId) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGameStrc, QUESTINT_RescueOnMountArreat);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0')) {
@@ -862,6 +884,7 @@ void __fastcall Q32_IncrementWussieKillCount(::SGAMEDATA * pGameStrc, int, D2Uni
 // plus the survival-tier step bit (field_0x08==0xf->Step0x05, ==0xe->Step0x06, else Step0x07), then propagates completion
 // to the party (Q32_PropagateCompleteToParty), marks others CannotComplete and plays the completion sound. The three
 // near-identical blocks are CreateUnit-failure fallback retries with relocated portal coords.
+// 1.14d mac: 0023c2a2
 void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pBarricadeUnit) {
     int32_t nCollisionDist;
     D2QuestDataA5Q2Strc* pQuestSpecificData;
@@ -1037,6 +1060,7 @@ void __fastcall Q32_OnBarricadeDestroyed(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 // Computes prisoners still to be freed: spawned total (field_0xA4) minus registered (field_0xAC) minus
 // killed-by-monsters (field_0xA8), clamped to >=0. Also tallies +5 per barricade group not yet initialized
 // (bytes +0x86/0x87/0x88 == 0). Used to gauge quest progress / how many barbarians remain.
+// 1.14d mac: 0023c9d8
 int32_t __fastcall Q32_GetRemainingPrisonersCount(D2QuestDataStrc * pQuestData) {
     D2QuestDataA5Q2Strc* pSpecificData = pQuestData->pQuestSpecificData.pA5Q2;
     int nCount = 0;
@@ -1063,6 +1087,7 @@ int32_t __fastcall Q32_GetRemainingPrisonersCount(D2QuestDataStrc * pQuestData) 
 // anim mode, advances its escort/escape behavior: Neutral->update mode 2 (stand), Walk->count walk ticks toward the
 // portal (>5 sets the 'arrived' flag field_0x10B) then update mode 3, Run->update mode 4. Re-arms the timer
 // (SetEvent +0x19 frames) until the prisoner reaches the portal. No QuestRecord access.
+// 1.14d mac: 0023ca14
 void __fastcall Q32_PrisonerTimerCallback(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
     eD2MonsterAnimMode eAnimMode;
     int nUnitGUID;
@@ -1133,6 +1158,7 @@ void __fastcall Q32_PrisonerTimerCallback(D2QuestDataStrc * pQuestData, D2UnitSt
 // For the barricade group containing nParam, if its portal-spawned flag (group[+0x44]) is set, finds the escape
 // portal unit by GUID (group[+0xe]) and returns it via ppPortalOut (returns 1). Else returns 0. Used to locate
 // the prisoner-escape town portal created by Q32_OnBarricadeDestroyed.
+// 1.14d mac: 0023caf7
 BOOL __fastcall Q32_FindBarricadePortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * * ppPortalOut) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RescueOnMountArreat);
     if (pQuestData) {
@@ -1156,6 +1182,7 @@ BOOL __fastcall Q32_FindBarricadePortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // If quest in log, not already at stateFlagPrev 5, and quest not failed (field_0xA8 < 5), broadcasts server
 // stateFlag 5 (terminal "fully complete, top reward tier" state) via Q32_NotifyQuestState. Triggered when all
 // barbarians were freed without losses.
+// 1.14d mac: 0023cb6c
 void __fastcall Q32_OnWussieAllPrisonersFreed(::SGAMEDATA * pGame, D2UnitStrc * pUnit1, D2UnitStrc * pUnit2) {
     D2QuestDataStrc* pQuestData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_RescueOnMountArreat);
     if (!(pQuestData && pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlagPrev != 5 && pQuestData->pQuestSpecificData.pA5Q2->nPrisonersKilledByMonsters < 5)) {

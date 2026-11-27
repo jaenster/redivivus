@@ -67,6 +67,7 @@ static BOOL __stdcall DRLGROOM_ValidateUnitPosition(int32_t bHaltIfPresent, D2Ro
     }
 }
 
+// 1.14d mac: 0018e268
 void __stdcall ROOM_LinkUnitToUpdateList(D2UnitStrc * pUnit) {
     D2UnitStrc** ppUpdateListHead;
     if (!pUnit) {
@@ -96,6 +97,7 @@ void __stdcall ROOM_LinkUnitToUpdateList(D2UnitStrc * pUnit) {
 }
 
 // Sorts the room's unit linked list (pRoom->pUnitList via pRoomNext) in ascending order of target Y coordinate using an in-place bubble sort. Used to establish rendering/update draw order for units in a room tile.
+// 1.14d mac: 0018e331
 void __stdcall SortUnitListByTargetY(D2RoomStrc * pRoom) {
     int32_t nTargetYCur;
     BOOL bSwapped;
@@ -194,6 +196,7 @@ void __stdcall DRLGROOM_RemoveUnitFromUpdateList(D2UnitStrc * pUnit) {
 }
 
 // DRLGROOM_IsUnitInRoom - Checks whether a unit exists in a given room's unit list by iterating the pRoomFirstUnit chain. Returns 1 if found, 0 otherwise.
+// 1.14d mac: 0018e693
 BOOL __stdcall DRLGROOM_IsUnitInRoom(D2RoomStrc * pRoom, D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x154);
@@ -215,6 +218,7 @@ BOOL __stdcall DRLGROOM_IsUnitInRoom(D2RoomStrc * pRoom, D2UnitStrc * pUnit) {
 }
 
 // DRLGROOM_AddUnitToRoomList - Core function that prepends a unit to a room's unit linked list. Checks collision flags, links via pRoomFirstUnit, increments allied count for players/allied monsters.
+// 1.14d mac: 0018e0b4
 BOOL __stdcall DRLGROOM_AddUnitToRoomList(D2UnitStrc * pUnit, D2RoomStrc * pRoom, eD2UnitType nUnitType) {
     BOOL _bValid;
     bool bValid;
@@ -264,11 +268,13 @@ BOOL __stdcall DRLGROOM_AddUnitToRoomList(D2UnitStrc * pUnit, D2RoomStrc * pRoom
 }
 
 // DRLGROOM_AddUnitToRoom - Adds a unit to a room's unit list. Wrapper for DRLGROOM_AddUnitToRoomList with bUpdate=1. Called by DropItem, AllocDynamicPath, AllocObjectData.
+// 1.14d mac: 0018e314
 void __stdcall DRLGROOM_AddUnitToRoom(D2UnitStrc * pUnit, D2RoomStrc * pRoom) {
     DRLGROOM_AddUnitToRoomList(pUnit, pRoom, UNIT_MONSTER);
 }
 
 // Unlinks pUnit from its current room's unit linked-list and clears its room reference. Walks the room's unit list via pRoomNext, patches the predecessor's link when found, then calls DRLGROOM_DecreaseAlliedCount if the unit is a player or an allied monster. Also removes the unit from the room update list and clears UNITFLAG_ISLINKREFRESHMSG. Halts with an internal error if pUnit is null or if it has a pRoomNext but no room pointer.
+// 1.14d mac: 0018e452
 void __stdcall RemoveUnitFromRoom(D2UnitStrc * pUnit) {
     D2UnitStrc* pFirst;
     D2UnitStrc* pNext;
@@ -329,6 +335,7 @@ void __stdcall RemoveUnitFromRoom(D2UnitStrc * pUnit) {
 }
 
 // DRLGROOM_ClearUnitRoomLink - Clears a unit's association with its current room. For dynamic path units, clears path position. For static path units (objects/items), removes from room and nullifies room pointer.
+// 1.14d mac: 0018e3e3
 void __stdcall DRLGROOM_ClearUnitRoomLink(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd2);

@@ -40,6 +40,7 @@ namespace D2Common { namespace DATATBLS { namespace TokTbls {
 
 // Loads and merges plrtype.txt and plrmode.txt token tables into a single contiguous server allocation. Compiles both tables (fields: name/ASCII, token/RAW4) via CompileTxt, concatenates them, frees the intermediate bins, and stores the combined pointer in pTxtPlrTypeMode1/2/3 with total count in nTxtPlrTypeModeSize.
 // @sourcefile .\DATATBLS\TokTbls.cpp
+// 1.14d mac: 0014b27b
 void __fastcall TXT_AllocTxt_plrmode_plrtype(D2PoolManagerStrc * pMemory) {
     int nTxtPlrModeSize;
     int nTxtPlrTypeSize;
@@ -69,6 +70,7 @@ void __fastcall TXT_AllocTxt_plrmode_plrtype(D2PoolManagerStrc * pMemory) {
 }
 
 // Defines the field schema for the monmode.txt data table and compiles it. Builds a D2BinFieldInputStrc array (name, token, and the per-mode direction-count bytes DT/NU/WL/GH/A1/A2/BL/SC/S1-S4/DD/KB/SQ/RN_Dir) describing each monster animation mode, then calls CompileTxt to load and pack the rows into a struct of stride 0x34. Stores the result and row count into the global pTxtMonMode1/2/3 and nTxtMonModeSize.
+// 1.14d mac: 0014b429
 void __fastcall TXT_AllocTxt_monmode(D2PoolManagerStrc * pMemory) {
     uint32_t nMonModeSize;
     D2BinFieldInputStrc monmode[19] = {
@@ -100,6 +102,7 @@ void __fastcall TXT_AllocTxt_monmode(D2PoolManagerStrc * pMemory) {
 
 // Loads and merges objtype.txt and objmode.txt token tables into a single contiguous server allocation. Mirrors TXT_AllocTxt_plrmode_plrtype but for object tokens; stores combined pointer in pTxtObjTypeMode with count in nTxtObjTypeModeSize.
 // @sourcefile .\DATATBLS\TokTbls.cpp
+// 1.14d mac: 0014b4c6
 void __fastcall TXT_AllocTxt_objtype_objmode(D2PoolManagerStrc * pMemory) {
     int nObjModeSize;
     int nObjTypeSize;
@@ -128,6 +131,7 @@ void __fastcall TXT_AllocTxt_objtype_objmode(D2PoolManagerStrc * pMemory) {
     nTxtObjTypeModeSize = nTotalSize;
 }
 
+// 1.14d mac: 0014b674
 void __fastcall TXT_AllocTxt_composit(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc composit[3] = {
       {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
@@ -137,6 +141,7 @@ void __fastcall TXT_AllocTxt_composit(D2PoolManagerStrc * pMemory) {
     pTxtComposit = (D2CompositTxt*)DataTbls::CompileTxt(pMemory, "composit", composit, nullptr, 0x34);
 }
 
+// 1.14d mac: 0014b736
 void __fastcall TXT_AllocTxt_armtype(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc armtype[3] = {
       {"name", FIELDTYPE_ASCII, 0x1f, 0, 0},
@@ -147,6 +152,7 @@ void __fastcall TXT_AllocTxt_armtype(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\TokTbls.cpp
+// 1.14d mac: 0014b7f8
 void __stdcall FreeTokenTables() {
     if (pTxtPlrTypeMode1) {
       D2_FREE_POOL_AT(nullptr, pTxtPlrTypeMode1, ".\\DATATBLS\\TokTbls.cpp", 0xd6);
@@ -175,6 +181,7 @@ void __stdcall FreeTokenTables() {
     pTxtArmType = 0;
 }
 
+// 1.14d mac: 0014b8db
 D2PlrTypeModeTxt * __stdcall TxtGetPlrTypeModeLine(uint32_t nMode, int32_t nModeIndex) {
     if (nMode >= nTxtPlrTypeModeSize) {
       return nullptr;
@@ -272,6 +279,7 @@ D2ObjTypeTxt * __stdcall TxtGetObjTypeModeLine(uint32_t nId, int32_t nModeIndex)
     }
 }
 
+// 1.14d mac: 0014badc
 D2CompositTxt * __stdcall TxtCompositGetLine(int32_t nId) {
     if (!(pTxtComposit + nId)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x147);
@@ -281,6 +289,7 @@ D2CompositTxt * __stdcall TxtCompositGetLine(int32_t nId) {
     return pTxtComposit + nId;
 }
 
+// 1.14d mac: 0014bb2a
 D2ArmTypeTxt * __stdcall TxtGetArmTypeLine(int32_t nId) {
     if (!(pTxtArmType + nId)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x150);

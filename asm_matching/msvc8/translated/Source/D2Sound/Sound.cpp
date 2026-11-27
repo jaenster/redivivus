@@ -21,13 +21,22 @@
 
 
 static BOOL gbSoundInBackground = 0; D2_STATIC_GUARD(gbSoundInBackground, "gbSoundInBackground");
+#if !(!defined(_WIN32) && D2_OS_MAC)  // the 1.14d Mac takes the EAX set straight from the buffer, no 3D buffer between
 static IDirectSound3DBuffer * gpEAXInterface1 = 0; D2_STATIC_GUARD(gpEAXInterface1, "gpEAXInterface1");
+#endif
 static IDirectSoundBuffer * gpEAXInterface2 = 0; D2_STATIC_GUARD(gpEAXInterface2, "gpEAXInterface2");
 static IDirectSoundBuffer * gpDSoundPrimaryBuffer = 0; D2_STATIC_GUARD(gpDSoundPrimaryBuffer, "gpDSoundPrimaryBuffer");
 // also labelled: lpCriticalSection_SoundPlay, lpCriticalSection_0088174c
 _RTL_CRITICAL_SECTION gSoundSmpCs = {0}; D2_GLOBAL_GUARD(gSoundSmpCs, "gSoundSmpCs");
 static uint32_t gnDirectSoundInitialized = 0; D2_STATIC_GUARD(gnDirectSoundInitialized, "gnDirectSoundInitialized");
 IDirectSound * gpDirectSound = 0; D2_GLOBAL_GUARD(gpDirectSound, "gpDirectSound");
+#if !defined(_WIN32) && D2_OS_MAC
+// Bytes on the 1.14d Mac (see Sound.data.h); gnSoundQualityMode is set only for EAX 2 there.
+bool gbSound3DEnabled = 0; D2_GLOBAL_GUARD(gbSound3DEnabled, "gbSound3DEnabled");
+bool gnSoundQualityMode = 0; D2_GLOBAL_GUARD(gnSoundQualityMode, "gnSoundQualityMode");
+bool g_bEAXEnabled = 0; D2_GLOBAL_GUARD(g_bEAXEnabled, "g_bEAXEnabled");
+static bool gbDirectSoundCritSecInitialized = 0; D2_STATIC_GUARD(gbDirectSoundCritSecInitialized, "gbDirectSoundCritSecInitialized");
+#else
 BOOL gbDSoundPrimaryBufferMode = 0; D2_GLOBAL_GUARD(gbDSoundPrimaryBufferMode, "gbDSoundPrimaryBufferMode");
 BOOL gbSound3DEnabled = 0; D2_GLOBAL_GUARD(gbSound3DEnabled, "gbSound3DEnabled");
 int gnSoundQualityMode = 0; D2_GLOBAL_GUARD(gnSoundQualityMode, "gnSoundQualityMode");
@@ -35,19 +44,23 @@ uint32_t g_bEAXEnabled = 0; D2_GLOBAL_GUARD(g_bEAXEnabled, "g_bEAXEnabled");
 static uint32_t gbDirectSoundCritSecInitialized = 0; D2_STATIC_GUARD(gbDirectSoundCritSecInitialized, "gbDirectSoundCritSecInitialized");
 uint32_t g_bSoundDriverScanComplete = 0; D2_GLOBAL_GUARD(g_bSoundDriverScanComplete, "g_bSoundDriverScanComplete");
 static uint32_t gbDirectSoundDelayWorkaround = 0; D2_STATIC_GUARD(gbDirectSoundDelayWorkaround, "gbDirectSoundDelayWorkaround");
+#endif
 
 namespace D2Sound { namespace Sound {
 
 // Releases EAX interface objects. Calls Release() on gpDirectSoundEAXInterface and two related EAX globals (gpEAXInterface1, gpEAXInterface2), nulling pointers after release. Part of DirectSound shutdown sequence.
+// 1.14d mac: 002e7662
 void __stdcall SOUND_ReleaseEAXInterfaces() {
     if (gpDirectSoundEAXInterface) {
       gpDirectSoundEAXInterface->lpVtbl->Release(gpDirectSoundEAXInterface);
       gpDirectSoundEAXInterface = 0;
     }
+#if !(!defined(_WIN32) && D2_OS_MAC)
     if (gpEAXInterface1) {
       gpEAXInterface1->lpVtbl->Release(gpEAXInterface1);
       gpEAXInterface1 = 0;
     }
+#endif
     if (!gpEAXInterface2) {
       return;
     }
@@ -57,18 +70,26 @@ void __stdcall SOUND_ReleaseEAXInterfaces() {
 }
 
 // Applies EAX environment parameters to gpDirectSoundEAXInterface. Two modes: gnSoundQualityMode==1 (simple: vol/distance/flags), ==2 (full: 14 reverb properties including decay, reflections, room size). Calls Set() on EAX property GUIDs for each param.
+// 1.14d mac: 002e77fe
+// The Mac has only the EAX 2 set (no EAX 1 fallback).
 void __fastcall SOUND_ApplyEAXEnvironment(D2SoundEaxEnvironStrc * pEnviron) {
     D2FloatIntUnion fAttenuation;
     if (!(gbSound3DEnabled && gpDirectSoundEAXInterface)) {
       return;
     }
+#if !(!defined(_WIN32) && D2_OS_MAC)
     if (gnSoundQualityMode == 1) {
       fAttenuation.fValue = Src::D2SoundSmp::SOUNDSMP_ClampAttenuation((float)pEnviron->nRoom);
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 1, nullptr, 0, pEnviron, 4);
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 2, nullptr, 0, &fAttenuation, 4);
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved1, 3, nullptr, 0, &pEnviron->fDecayTime, 4);
     }
+#endif
+#if !defined(_WIN32) && D2_OS_MAC
+    if (gnSoundQualityMode) {
+#else
     if (gnSoundQualityMode == 2) {
+#endif
       fAttenuation.nValue = 0x20;
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 0xb, nullptr, 0, pEnviron, 4);
       gpDirectSoundEAXInterface->lpVtbl->Set(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 0xf, nullptr, 0, &fAttenuation, 4);
@@ -112,6 +133,116 @@ void __stdcall SOUND_ShutdownDirectSound() {
     gbDirectSoundCritSecInitialized = 0;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002e7227
+// The Mac has no primary-buffer 3D mode, no driver-delay workaround and no hardware 3D buffer
+// count check; its EAX set comes straight from the 3D-sound buffer (no IDirectSound3DBuffer
+// between) and only EAX 2 is tried: without it DirectSound shuts down and SOUND_Initialize
+// retries without 3D.
+void __stdcall SOUND_InitDirectSound() {
+    // Static local variables (originally global data)
+    static DSCAPS gDSoundCapsBuffer = {0}; D2_STATIC_GUARD(gDSoundCapsBuffer, "D2Sound::Sound::SOUND_InitDirectSound::gDSoundCapsBuffer");
+
+    char* szErrorMsg;
+    BOOL BVar2;
+    WAVEFORMATEX tSecondaryFormat;
+    ULONG aEAXSupportCaps;
+    if (gbDirectSoundCritSecInitialized) {
+      Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x53);
+      exit(-1);
+    }
+
+    InitializeCriticalSection(&gSoundSmpCs);
+    gbDirectSoundCritSecInitialized = 1;
+    int hResultCall = DirectSoundCreate(0, &gpDirectSound, 0);
+    if (hResultCall < 0) {
+      szErrorMsg = SOUND_GetDirectSoundErrorString(hResultCall);
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("DirectSound error: %s returned on DirectSoundCreate", szErrorMsg);
+      SOUND_ShutdownDirectSound();
+      return;
+    }
+
+    HWND hWnd = D2gfx::D2GFX::GetHwnd();
+    HRESULT hResultDSCall = gpDirectSound->lpVtbl->SetCooperativeLevel(gpDirectSound, hWnd, 2);
+    if (hResultDSCall < 0) {
+      szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("DirectSound error: %s returned on SetCooperativeLevel", szErrorMsg);
+      SOUND_ShutdownDirectSound();
+      return;
+    }
+
+    DSBUFFERDESC tPrimaryBufferDesc;
+    memset(&tPrimaryBufferDesc, 0, sizeof(tPrimaryBufferDesc));
+    tPrimaryBufferDesc.dwSize = sizeof(tPrimaryBufferDesc);
+    tPrimaryBufferDesc.dwFlags = 1;
+    tPrimaryBufferDesc.dwBufferBytes = 0;
+    tPrimaryBufferDesc.lpwfxFormat = 0;
+    hResultDSCall = gpDirectSound->lpVtbl->CreateSoundBuffer(gpDirectSound, &tPrimaryBufferDesc, (void**)&gpDSoundPrimaryBuffer, nullptr);
+    if (hResultDSCall < 0) {
+      szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("........DirectSound progress: %s returned on failed CreateSoundBuffer", szErrorMsg);
+      SOUND_ShutdownDirectSound();
+      return;
+    }
+
+    gDSoundCapsBuffer.dwSize = sizeof(gDSoundCapsBuffer);
+    hResultDSCall = gpDirectSound->lpVtbl->GetCaps(gpDirectSound, &gDSoundCapsBuffer);
+    if (hResultDSCall < 0) {
+      szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("........DirectSound progress: %s returned on failed GetCaps", szErrorMsg);
+      SOUND_ShutdownDirectSound();
+      return;
+    }
+
+    WAVEFORMATEX tPrimaryFormat;
+    memset(&tPrimaryFormat, 0, sizeof(tPrimaryFormat));
+    tPrimaryFormat.wFormatTag = 1;
+    tPrimaryFormat.nChannels = 2;
+    tPrimaryFormat.nSamplesPerSec = 0x5622;
+    tPrimaryFormat.nBlockAlign = 4;
+    tPrimaryFormat.wBitsPerSample = 0x10;
+    tPrimaryFormat.nAvgBytesPerSec = 0x15888;
+    hResultDSCall = gpDSoundPrimaryBuffer->lpVtbl->SetFormat(gpDSoundPrimaryBuffer, &tPrimaryFormat);
+    if (hResultDSCall < 0) {
+      szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
+      Fog::Src::LogManager::LOGFILE_WriteStringToFile("........DirectSound progress: %s returned on failed SetFormat", szErrorMsg);
+      gpDSoundPrimaryBuffer->lpVtbl->Release(gpDSoundPrimaryBuffer);
+      SOUND_ShutdownDirectSound();
+      return;
+    }
+
+    if (gbSound3DEnabled) {
+      Src::D2SoundSmp::SOUNDSMP_InitWaveFormat(&tSecondaryFormat, 1);
+      DSBUFFERDESC tEaxBufferDesc;
+      memset(&tEaxBufferDesc, 0, sizeof(tEaxBufferDesc));
+      tEaxBufferDesc.dwSize = sizeof(tEaxBufferDesc);
+      tEaxBufferDesc.dwBufferBytes = 0x400;
+      tEaxBufferDesc.dwFlags = 0x12;
+      tEaxBufferDesc.lpwfxFormat = &tSecondaryFormat;
+      hResultDSCall = gpDirectSound->lpVtbl->CreateSoundBuffer(gpDirectSound, &tEaxBufferDesc, (void**)&gpEAXInterface2, nullptr);
+      if (hResultDSCall < 0 || gpEAXInterface2->lpVtbl->QueryInterface(gpEAXInterface2, (GUID*)&gIID_IKsPropertySet, (void**)&gpDirectSoundEAXInterface) < 0 || gpDirectSoundEAXInterface->lpVtbl->QuerySupport(gpDirectSoundEAXInterface, gEAXPropertyGuid_Reserved2, 1, &aEAXSupportCaps) < 0 || ((uint8_t)aEAXSupportCaps & 3) != 3 || (BVar2 = SOUND_ToggleEAXEnvironmentPreset(2) , !BVar2)) {
+        SOUND_ReleaseEAXInterfaces();
+        SOUND_ShutdownDirectSound();
+        gnSoundQualityMode = 0;
+        return;
+      }
+
+      gnSoundQualityMode = 1;
+    }
+
+    DSBCAPS sPrimaryBufferCaps;
+    memset(&sPrimaryBufferCaps, 0, sizeof(sPrimaryBufferCaps));
+    sPrimaryBufferCaps.dwSize = sizeof(sPrimaryBufferCaps);
+    gpDSoundPrimaryBuffer->lpVtbl->GetCaps(gpDSoundPrimaryBuffer, &sPrimaryBufferCaps);
+    Src::D2SoundSmp::SOUNDSMP_ClearBuffer(gpDSoundPrimaryBuffer, 0, sPrimaryBufferCaps.dwBufferBytes);
+    gpDSoundPrimaryBuffer->lpVtbl->Play(gpDSoundPrimaryBuffer, 0, 0, 1);
+    Src::D2SoundSmp::SOUNDSMP_CreateSoundThread();
+    SOUND_InitMusicBuffer(gbSoundInBackground);
+    Src::D2SoundFast::SOUND_LoadRegistrySettings();
+    Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
+    gnDirectSoundInitialized = 1;
+}
+#else
 // Initializes DirectSound 8 with EAX 3.0 support - creates primary buffer, configures format, tests environment presets
 void __stdcall SOUND_InitDirectSound() {
     // Static local variables (originally global data)
@@ -140,9 +271,9 @@ void __stdcall SOUND_InitDirectSound() {
     }
 
     IDirectSoundVtbl* pIVar1 = gpDirectSound->lpVtbl;
-    
-    
-    HRESULT hResultDSCall = pIVar1->SetCooperativeLevel(gpDirectSound, (HWND)(D2gfx::D2GFX::GetHwnd()), (uint32_t)(2));
+    uint32_t dwCoopLevel = 2;
+    HWND hWnd = D2gfx::D2GFX::GetHwnd();
+    HRESULT hResultDSCall = pIVar1->SetCooperativeLevel(gpDirectSound, hWnd, dwCoopLevel);
     if (hResultDSCall < 0) {
       szErrorMsg = SOUND_GetDirectSoundErrorString(hResultDSCall);
       Fog::Src::LogManager::LOGFILE_WriteStringToFile("DirectSound error: %s returned on SetCooperativeLevel", szErrorMsg);
@@ -244,7 +375,26 @@ void __stdcall SOUND_InitDirectSound() {
     Src::D2SoundSmp::SOUNDSMP_SetGlobalVolume(0xff);
     gnDirectSoundInitialized = 1;
 }
+#endif
 
+#if D2_OS_MAC
+// 1.14d mac: 002e71c0
+void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackground) {
+    LanguageCode = dwLanguageCode;
+    gbSoundInBackground = bSoundInBackground;
+    if (!gnDirectSoundInitialized) {
+      gbSound3DEnabled = 1;
+      SOUND_InitDirectSound();
+      if (!gnDirectSoundInitialized) {
+        gbSound3DEnabled = 0;
+        SOUND_InitDirectSound();
+        if (!gnDirectSoundInitialized) {
+          Fog::Src::LogManager::LOGFILE_WriteStringToFile("\tCouldn\'t initialize DirectSound");
+        }
+      }
+    }
+}
+#else
 void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackground) {
     // Frame slots -12..-4 are ONE object: &dwVerMinor is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -314,6 +464,7 @@ void __fastcall SOUND_Initialize(uint32_t dwLanguageCode, BOOL bSoundInBackgroun
     Fog::Src::LogManager::LOGFILE_WriteStringToFile("\tCouldn\'t initialize DirectSound");
     D2TraceFmt("SOUND: couldn't initialize DirectSound, the game runs silent");
 }
+#endif
 
 void __fastcall SOUND_InitMusicBuffer(BOOL bSoundInBackground) {
     // Static local variables (originally global data)
@@ -325,6 +476,7 @@ void __fastcall SOUND_InitMusicBuffer(BOOL bSoundInBackground) {
     Src::D2SoundFast::gpMusicStreamBuffer = Src::D2SoundSmp::CallSounds(1, gnMusicBufferSize);
 }
 
+// 1.14d mac: 002e9921
 void __stdcall SOUND_FreeMusicBuffer() {
     if (Src::D2SoundFast::gpMusicStreamBuffer) {
       Src::D2SoundSmp::SOUNDSMP_Destroy(Src::D2SoundFast::gpMusicStreamBuffer);
@@ -347,4 +499,4 @@ void __stdcall SOUND_StopSoundThread() {
     ghSoundThread = (HANDLE)0x0;
 }
 
-}} // namespace D2Sound::Sound
+} // namespace D2Sound::Sound

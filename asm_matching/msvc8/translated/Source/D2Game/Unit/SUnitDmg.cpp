@@ -71,6 +71,7 @@ uint32_t __fastcall DAMAGE_CheckMonsterTypeVsMonsterType(uint32_t nMonTypeA, int
     return 0;
 }
 
+// 1.14d mac: 0027b9fe
 static uint32_t __stdcall DAMAGE_RollPhysicalDamageRange(int32_t nMinPctBonus, D2UnitStrc * pUnit, int32_t nDamageMin, int32_t nDamageRange, int32_t nRangePctBonus, uint32_t nDamageAccum) {
     if (nDamageRange > 0) {
       nDamageMin += D2Common::DATATBLS::DataTbls::D2ApplyPercent(nDamageMin, nMinPctBonus, 100);
@@ -84,6 +85,7 @@ static uint32_t __stdcall DAMAGE_RollPhysicalDamageRange(int32_t nMinPctBonus, D
     return (int)nDamageAccum < 0 ? 0 : nDamageAccum;
 }
 
+// 1.14d mac: 0027c6b0
 static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitStat, eD2UnitStat eStat1, int32_t nMinPctBonus, int32_t nRangePctBonus, uint32_t nDamageAccum, D2UnitStrc * pUnit, eD2UnitStat eStat2) {
     const int nMaxDamage = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, eStat2, 0) << 8;
     if (nMaxDamage < 8) {
@@ -100,6 +102,7 @@ static uint32_t __stdcall DAMAGE_RollElementalDamageWithBonus(eD2UnitStat eUnitS
     return DAMAGE_RollPhysicalDamageRange(nMinPctBonus, pUnit, nMinDamage, nMaxDamage, nRangePctBonus, nDamageAccum);
 }
 
+// 1.14d mac: 0027e3e6
 static int32_t __stdcall DAMAGE_ApplyHealingToUnit(int32_t nHealAmount, D2UnitStrc * pUnit) {
     BOOL _bIsDead;
     bool bIsDead;
@@ -260,6 +263,7 @@ static void __stdcall DAMAGE_ApplyPoison(D2UnitStrc * pUnit, int32_t nPoisonRate
 }
 
 // @sourcefile .\UNIT\SUnitDmg.cpp
+// 1.14d mac: 00281796
 void __fastcall DAMAGE_OnColdExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     BOOL bIsDead = SUnit::CheckForModeZeroDeath(pUnit);
     if (bIsDead) {
@@ -324,6 +328,7 @@ static void __stdcall DAMAGE_ApplyBurning(D2UnitStrc * pUnit, int32_t nBurnRate,
     D2Common::Stats::StatsEx::D2AddStatToStatsListEx(pBurnStatList, UNITSTAT_hpregen, -nBurnRate, 0);
 }
 
+// 1.14d mac: 0027b58c
 int32_t __fastcall DAMAGE_GetMonsterColdEffect(::SGAMEDATA * pGame, D2UnitStrc * pMonster) {
     if (pMonster && pMonster->eUnitType == UNIT_MONSTER) {
       int nVictimClassId;
@@ -339,6 +344,7 @@ int32_t __fastcall DAMAGE_GetMonsterColdEffect(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Applies cold slow to pUnit2 for nParam frames, sourced from attacker pUnit. Looks up MonStats ColdEffect per difficulty; divides duration for cold-immune monsters. Creates or extends STATE_cold stat list (velocity/attack/anim rate penalties), schedules expiry event, and probabilistically sets STATE_shatter on eligible monsters.
 // @sourcefile .\UNIT\SUnitDmg.cpp
+// 1.14d mac: 0027e464
 static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, D2UnitStrc * pUnit2) {
     if (nColdLength <= 0) {
       return;
@@ -394,6 +400,7 @@ static void __stdcall DAMAGE_ApplyCold(D2UnitStrc * pUnit, int32_t nColdLength, 
     D2Common::DATATBLS::ItemStats::SetState(pUnit2, STATE_shatter, 0);
 }
 
+// 1.14d mac: 0027b5dc
 void __fastcall SUNITDMG_StatExpireCallback_ResumeAI(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
     BOOL bIsModeZeroDeath = SUnit::CheckForModeZeroDeath(pUnit);
     uint32_t bStateActive;
@@ -506,6 +513,7 @@ static void __stdcall DAMAGE_ApplyFreeze(D2UnitStrc * pUnit, int32_t nFreezeFram
 }
 
 // Computes the physical damage total in nParam throughout the body; the only caller (DAMAGE_CalculateOffensiveDamage) assigns the never-set local nPhysDmgResult straight from this call's result into pDmgStrc->dwPhysDamage, proving the value is meant to flow back. The final D2ApplyPercent(nParam,...) call (when bParam!=0x80) also drops its own int32_t return, which is this function's true final value.
+// 1.14d mac: 0027b6e8
 uint32_t __fastcall DAMAGE_CalculatePhysicalDamage(D2UnitStrc * pUnit, int32_t bUseWeaponStats, D2UnitStrc * pWeapon, int32_t nMinDmg, int32_t nMaxDmg, int32_t nBonusPercent, uint32_t nFlatDamage, uint8_t byScale) {
     int nDamagePctTotal;
     int nMinPctBoosted;
@@ -670,6 +678,7 @@ static void __stdcall DAMAGE_ApplyMonsterTypeBonusDamage(D2UnitStrc * pUnit, D2D
 }
 
 // Server-side computation of a unit's full outgoing attack damage into pDmgStrc. Recalcs dual-wield/equipped weapon stats for weapon slot nParam, then accumulates: target-AC penetration and demon/undead/monster-type bonus vs monster targets; physical damage with crit/deadly-strike/critical-strike rolls (doubles phys, sets wResultFlags 0x2000); per-element (fire/light/cold/magic) rolls scaled by the bParam attack-rating-percent (0x80=100%); life/mana/stamina leech, poison (+length), cold/stun/burn lengths; and damage-conversion (nConvType) reallocating phys into an element. Dispatches the on-attack unit event and applies monster crit. bParam defaults to 0x80 if 0.
+// 1.14d mac: 0027bbd0
 void __fastcall DAMAGE_CalculateOffensiveDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, D2DamageStrc * pDmgStrc, int32_t bResetWeaponStats, uint8_t byScale) {
     uint32_t uVar1;
     int32_t nStatResult;
@@ -1166,6 +1175,7 @@ static void DAMAGE_ProcessFreezeAndPoisonImmunity(D2DamageContext * pCtx) {
 // KEY: Magic resist NEVER gets difficulty penalty (strongest in Hell).
 // KEY: Absorb happens AFTER resist (less effective than it seems).
 // Table at 0x00732980 (12 entries, 44 bytes): resist/pierce/absorb stats per element.
+// 1.14d mac: 0027c744
 void __fastcall DAMAGE_ApplyDefensiveReduction(::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pUnit, D2DamageStrc * pBypassFlags) {
     // Static local variables (originally global data)
     static D2ResistTableEntry gaDefenseReductionTable[12] = {
@@ -1613,6 +1623,7 @@ static void __stdcall DAMAGE_ApplyLifeAndManaLeech(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Core server-side damage-application routine. Validates the attacker can hit the victim (UNITS_CheckIfCanAttackTarget, town/killable rules) then optionally applies defensive reduction, dispatches hit/got-hit unit events, clamps physical damage to current HP, runs life/mana leech, healing, then subtracts total damage from the victim's hitpoints (clamping the sub-256 remainder to 0). Also applies drain (mana/stamina) and status effects: stun, cold, freeze, poison, burning. Sets wResultFlags death bit (2) when HP reaches 0, otherwise schedules HP-regen events for monsters and clears Assassin charge-up states; dispatches death events on kill. Mutates pDamage and victim stats in place.
+// 1.14d mac: 0027d0d5
 void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pVictim, int32_t bApplyDefenseReduction, D2DamageStrc * pDamage) {
     bool bIsInTown;
     D2RoomStrc* pRoom;
@@ -1739,6 +1750,7 @@ void __fastcall DAMAGE_ApplyDamageToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // @sourcefile .\UNIT\SUnitDmg.cpp
+// 1.14d mac: 0027e73f
 void __fastcall FreeCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2CombatEntryStrc* pNextCombatEntry;
     D2CombatEntryStrc* pPrevCombatEntry;
@@ -1767,6 +1779,7 @@ void __fastcall FreeCombat(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNIT\SUnitDmg.cpp
+// 1.14d mac: 0027e7ce
 void __fastcall DAMAGE_RemoveDamageListEntry(::SGAMEDATA * pGame, D2UnitStrc * pAttacker, D2UnitStrc * pUnit2) {
     if (!(pAttacker && pUnit2 && (D2CombatEntryStrc*)pAttacker->pCombat)) {
       return;
@@ -1812,6 +1825,7 @@ static void __stdcall DAMAGE_AddDamageListEntry(::SGAMEDATA * nGamePtr, D2Damage
 }
 
 // Returns 1 (no knockback) if unit is frozen, damage is pure poison, or total damage is below 256. Otherwise tests whether damage meets a fraction of max HP threshold (divisor varies by elemental type: physical=16, lightning/drain/burn=8, cold=32, poison=64) with probabilistic fallback rolls. Also checks a monster stat flag (index 3) to allow knockback immunity on specific monster types. Returns 0 if knockback should be applied.
+// 1.14d mac: 0027f333
 BOOL __stdcall DAMAGE_ShouldSkipHitRecovery(D2UnitStrc * pUnit, D2DamageStrc * pDamage, int32_t nHitClass) {
     uint32_t uRandRoll;
     uint32_t uRandRoll2;
@@ -1859,6 +1873,7 @@ BOOL __stdcall DAMAGE_ShouldSkipHitRecovery(D2UnitStrc * pUnit, D2DamageStrc * p
     return 0;
 }
 
+// 1.14d mac: 0027eb03
 static void __stdcall DAMAGE_RemoveObjectAtSameCoords(int32_t nClassId, D2UnitStrc * pUnit) {
     POINT ptObjPos;
     POINT ptUnitPos;
@@ -1902,6 +1917,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_31(D2UnitStrc * p) 
 }
 
 // Server-side kill handler for player and monster units. Guards against already-dead or unkillable units (MonStats killable flag). For monsters: optionally removes the unit from its owner's pet list, awards kill XP and arena credit to the attacker, fires the Death lifecycle transition (computing facing direction from attacker position), triggers quest callbacks, and handles objCol-flagged monster cleanup (e.g. removing companion objects at coords 0x23B/0x23C). No-ops on invalid unit types.
+// 1.14d mac: 0027e888
 void __fastcall SERVER_KillMonster(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pAttacker, BOOL bRemoveFromOwner) {
     bool bCanKill;
     D2UnitStrc* pOwner;
@@ -2410,6 +2426,7 @@ static void __stdcall DAMAGE_ReduceEquipmentDurability(::SGAMEDATA * pGame, D2Un
 }
 
 // Resolves a pending deferred-hit combat queue entry between pUnit (attacker) and pVictim. Finds the matching D2CombatEntryStrc, verifies melee range, applies damage via DAMAGE_ApplyDamageToUnit, dispatches hit/defend unit events, applies reflected damage, runs GetHitCalculation, and removes the entry from the queue. No-ops if either unit is null or out of range.
+// 1.14d mac: 0027f48b
 void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pVictim, uint32_t dwParam) {
     BOOL _bInMeleeRange;
     bool bInMeleeRange;
@@ -2498,6 +2515,7 @@ void __fastcall DAMAGE_ProcessCombatQueueEntry(::SGAMEDATA * pGame, D2UnitStrc *
     DAMAGE_RemoveDamageListEntry(pGame, pUnit, pVictim);
 }
 
+// 1.14d mac: 0027f834
 D2DamageStrc * __fastcall DAMAGE_FindCombatEntry(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int32_t nGUID;
     int32_t nDefenderGUID;
@@ -2659,6 +2677,7 @@ static inline D2MonStatsTxt * DAMAGE_GetMonStatsTxt(D2UnitStrc * pUnit) {
 // Negative AC adds to attacker's AR, negative AR adds to defender's AC.
 // Always 5% minimum, 95% maximum hit chance.
 // Checked BEFORE block/dodge/avoid/evade (all independent rolls).
+// 1.14d mac: 0027f881
 BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, int32_t bIsRangedAttack) {
     if (!pUnit2 || !pUnit) {
       return 0;
@@ -2737,6 +2756,7 @@ BOOL __fastcall DAMAGE_RollAttackHit(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, in
     return 0;
 }
 
+// 1.14d mac: 002801d1
 void __fastcall DAMAGE_CalculateAndApplyDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pVictim, D2DamageStrc * pDamage, uint8_t byScale) {
     uint32_t nTotalDamage;
     if (!(pUnit && pVictim)) {
@@ -2766,6 +2786,7 @@ void __fastcall DAMAGE_CalculateAndApplyDamage(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Returns the highest weapon-type-conditional skill damage bonus (stat 0x15C) applicable to the unit's currently equipped weapons (left and right arm slots). Iterates all bonus entries; an entry with ITEMTYPE_None1 matches unconditionally. Returns 0 if unit is null or no matching bonus is found.
+// 1.14d mac: 00281644
 static int32_t DAMAGE_GetPassiveWeaponBlock(D2UnitStrc * pUnit) {
     int i;
     if (!pUnit) {
@@ -2803,6 +2824,7 @@ static int32_t DAMAGE_GetPassiveWeaponBlock(D2UnitStrc * pUnit) {
 }
 
 // Rolls a unit's passive defensive avoidance against an incoming attack. For players in Run/Walk mode (or matching monster mode) rolls passive_evade; otherwise checks dodge (passive_dodge) when nParam==0 or avoid (passive_avoid) when nParam!=0, plus a weapon-class-0xD parry/block path keyed on DAMAGE_GetSkillDamageBonus. Uses the unit RNG seed (advances pUnit->sSeed). Returns a result bitcode: 0x10 (block/parry), 8 (evade), 4 (dodge), 2 (avoid), or 0 (none). __fastcall with pUnit in ESI, attacker pUnit2 in EDI.
+// 1.14d mac: 00280334
 static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int32_t nParryBonus;
     uint32_t nRandRoll;
@@ -2913,6 +2935,7 @@ static uint32_t __stdcall DAMAGE_CheckDefenseEvasion(int32_t bIsMissile, D2UnitS
     return 0;
 }
 
+// 1.14d mac: 002800d8
 uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pDefUnit, int32_t bIsMissile, int32_t bRollBlock) {
     uint32_t uBlockResult;
     if (!bRollBlock) {
@@ -2947,6 +2970,7 @@ uint32_t __fastcall DAMAGE_CheckBlockAndEvasion(::SGAMEDATA * pGame, D2UnitStrc 
 }
 
 // Applies missile hit damage to all units within nRadius of (nCenterX,nCenterY) that pass targeting checks. Builds a UnitFind result set (flags nUnitFlags, default 0x583), skips the owner and owner-owner unless bHitOwner/bHitOwnerOwner are set, requires line-of-sight (COLLISION_LOS), optionally filters through pfnProc callback, then calls MISSMODE_ApplyMissileHitDamage for each hit. Returns 1 if any unit was hit, 0 otherwise.
+// 1.14d mac: 00280611
 void __fastcall DAMAGE_ApplyAreaOfEffectDamage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nCenterX, int32_t nCenterY, int32_t nRadius, D2DamageStrc * pDamage, BOOL bHitOwner, BOOL bHitOwnerOwner, pfnAoEDamageFilter pfnProc, int32_t nUnitFlags) {
     BOOL bBadCodePtr;
     int nCopyIdx;
@@ -3017,11 +3041,13 @@ void __fastcall DAMAGE_ApplyAreaOfEffectDamage(::SGAMEDATA * pGame, D2UnitStrc *
     return;
 }
 
+// 1.14d mac: 00280921
 void __fastcall DAMAGE_AddSkillBonusDamage(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLevel, D2DamageStrc * pDamage) {
     SKILLS::SkillsServer::SKILLS_AddRandomSkillDamage(pUnit, &pDamage->dwHitFlags, eSkill, nSkillLevel);
     SKILLS::SkillsServer::SetDamageOnEvent(pUnit, pDamage, eSkill, nSkillLevel);
 }
 
+// 1.14d mac: 00280969
 void __fastcall SKILL_CalculateDamageForEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget, eD2Skills eSkill, int32_t nSkillLevel, D2DamageStrc * pDamage) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -3150,6 +3176,7 @@ static uint32_t __stdcall CALC_Experience(::SGAMEDATA * pGame, uint32_t nBaseXp,
     return nBaseXp;
 }
 
+// 1.14d mac: 00280d15
 static uint32_t __stdcall SERVER_CalculateExperienceForUnit(::SGAMEDATA * pGame, int32_t nKillerLevel, int32_t baseExperience, D2UnitStrc * pUnit, int32_t nPlayerLevel) {
     eD2PlayerClassID ePlayerClass;
     int32_t nXpAfterLevelPenalty;
@@ -3177,6 +3204,7 @@ static uint32_t __stdcall SERVER_CalculateExperienceForUnit(::SGAMEDATA * pGame,
     return nXpAfterRatio;
 }
 
+// 1.14d mac: 00281222
 static void __stdcall SERVER_PlayerUpdateExperience(::SGAMEDATA * pGame, int32_t nPrevLevel, int32_t nXpGain, D2UnitStrc * pUnit) {
     eD2PlayerClassID ePlayerClass;
     if (!(pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
@@ -3345,6 +3373,7 @@ static D2UnitStrc * __stdcall SERVER_GetOwnerFromMonsterUnit(::SGAMEDATA * pGame
 }
 
 // Sends the mercenary its share of an experience award. Non-standard convention: the experience amount arrives in EAX and the second unit in EDI, with three stack arguments (RET 0xc). Declaring only the stack arguments left the award looking like an unassigned local in the 'if (0 >= x) return' guard, so the merc experience gate ran on whatever EAX happened to hold.
+// 1.14d mac: 00281066
 static void __stdcall SERVER_SEND_MercExperience(int32_t nExperience, D2UnitStrc * pUnit2, ::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nMercLevel) {
     int32_t nMercGUID;
     if (nExperience <= 0) {
@@ -3402,6 +3431,7 @@ static void __stdcall SERVER_SEND_MercExperience(int32_t nExperience, D2UnitStrc
     SUnitEvent::UNITEVENT_DispatchEventsByType(pGame, 0xc, pUnit2, nullptr, nullptr);
 }
 
+// 1.14d mac: 00280a3f
 void __fastcall SERVER_KillExperience(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pVictim) {
     uint32_t nExperience_00;
     if (!(pUnit && pVictim && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER))) {
@@ -3439,6 +3469,7 @@ void __fastcall SERVER_KillExperience(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     }
 }
 
+// 1.14d mac: 00281309
 void __fastcall DAMAGE_AwardKillExperience(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nXpGain) {
     if (!pUnit || (pUnit->eUnitType != UNIT_PLAYER && pUnit->eUnitType != UNIT_MONSTER)) {
       return;
@@ -3456,6 +3487,7 @@ void __fastcall DAMAGE_AwardKillExperience(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Forces a player or mercenary unit to reach nTargetLevel by granting the required XP delta. For players, reads the Experience.txt threshold and calls SERVER_PlayerUpdateExperience with the deficit. For merc monsters, locates the owner's pet data and HirelingTxt record, then calls SERVER_SEND_MercExperience to synchronise. No-ops if unit is already at or above nTargetLevel.
+// 1.14d mac: 00281381
 void __fastcall DAMAGE_SetUnitToLevel(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nTargetLevel) {
     DWORD nTargetXp;
     D2UnitStrc* pOwnerUnit;
@@ -3508,6 +3540,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 
 // Server-side melee hit resolution between attacker pUnit and defender pUnit2. Validates both are player/monster, can attack each other, and are within melee range (range widened by nParam2 + the attacker's melee range; monster attackers get +2). Sets a "moving" flag if a player defender is running, then rolls the attack (DAMAGE_RollAttackHit using nParam1) and checks block/evasion (DAMAGE_CheckBlockAndEvasion), folding the resulting STATE_* flags into a packed uint16 result (hit / block / dodge / evade / parry bits, plus an uninterruptable-stun bit). Returns the packed hit-result word (0 = out of range / cannot attack).
 // Registers: pGame in ECX and pUnit in EDX (__fastcall); EAX is not an input.
+// 1.14d mac: 0027ff34
 uint16_t __fastcall DAMAGE_CalculateHitCheck(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t nToHitBonusExtra, int32_t nExtraRange) {
     uint32_t _bCanAttack;
     BOOL _bInMeleeRange;

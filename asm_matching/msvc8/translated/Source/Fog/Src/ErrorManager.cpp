@@ -20,6 +20,7 @@
 #include "Source/D2Headers/D2Arch.h"
 #if !defined(_WIN32) && D2_OS_MAC
 #include <CoreServices/CoreServices.h>
+#include "Source/MacSpecific/Source/MacShell/MacShell.h"
 #endif
 static_assert(sizeof(void*) != 4 || sizeof(D2BlizzardErrorArgument) == 0x54, "D2BlizzardErrorArgument is 0x54 bytes on 32-bit");
 
@@ -45,6 +46,11 @@ static char * gaErrorTypeNames[12] = {
     (char*)"Deadlock",
     (char*)"\?\?\?"
 }; D2_STATIC_GUARD(gaErrorTypeNames, "gaErrorTypeNames");
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac's critical section is a pthread mutex, set up by InitializeCriticalSection.
+static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {0}; D2_STATIC_GUARD(lpCriticalSection_0074c830, "lpCriticalSection_0074c830");
+#endif
+#if !D2_OS_MAC
 static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {
     /* .DebugInfo = */ nullptr,
     /* .LockCount = */ 0x0,
@@ -53,6 +59,7 @@ static _RTL_CRITICAL_SECTION lpCriticalSection_0074c830 = {
     /* .LockSemaphore = */ nullptr,
     /* .SpinCount = */ 0x0
 }; D2_STATIC_GUARD(lpCriticalSection_0074c830, "lpCriticalSection_0074c830");
+#endif
 static _RTL_CRITICAL_SECTION lpCriticalSection_0074d848 = {0}; D2_STATIC_GUARD(lpCriticalSection_0074d848, "lpCriticalSection_0074d848");
 static uint32_t g_nProjectId = 0; D2_STATIC_GUARD(g_nProjectId, "g_nProjectId");
 static char * szProduct = 0; D2_STATIC_GUARD(szProduct, "szProduct");
@@ -110,15 +117,19 @@ void __fastcall StubHook1_Unref_00407300(uint32_t dwThreadId, HANDLE hThread) {
 
 }
 
+// 1.14d mac: 002ee3ad
 void __stdcall CrashGame() {
     volatile uint32_t* pNull = 0;
     *pNull = (uint32_t)(uintptr_t)pNull;
 }
 
+// 1.14d mac: 002ee3b2
 void __fastcall FILETOOLS_WriteOneStringToFile(::Report * pReport, char * szString) {
     _3rdparty::crashy::Printf(pReport, "%s", szString);
 }
 
+// Process, token, system-info and exception-pointer queries are Windows-only (the Mac bodies differ: WriteCrashReportProcessInfo, DumpLog and CRASH_FillupCrashTxt have their own Mac versions). They are under `#if !D2_OS_MAC`.
+#if !D2_OS_MAC
 DWORD __fastcall GetParentProcessId(int32_t nProcessId) {
     DWORD dwParentProcessId = 0;
     PROCESSENTRY32 procEntry;
@@ -140,7 +151,9 @@ DWORD __fastcall GetParentProcessId(int32_t nProcessId) {
     /* HANDLE hObject for CloseHandle */ CloseHandle(hSnapshot);
     return dwParentProcessId;
 }
+#endif
 
+#if !D2_OS_MAC
 uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, DWORD nBufferSize) {
     uint8_t bResult;
     HANDLE hProcess = OpenProcess(0x410, 0, nProcessId);
@@ -153,7 +166,9 @@ uint8_t __fastcall GetModuleFileNameForProcess(DWORD nProcessId, LPSTR szText, D
     /* HANDLE hObject for CloseHandle */ CloseHandle(hProcess);
     return bResult;
 }
+#endif
 
+#if !D2_OS_MAC
 // Writes process metadata to crash report: application name, inspector tags, admin status via AllocateAndInitializeSid (SECURITY_BUILTIN_DOMAIN_RID + DOMAIN_ALIAS_RID_ADMINS), process/parent/grandparent paths, game/system locale from gaLocaleCodeStrings, and attaches log files (21 slots from InitLogFilePathPointers). Locale lookup uses MISC_GetLanguageCode and STRTABLE_GetRegistryLanguage.
 bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
     // Static local variables (originally global data)
@@ -257,11 +272,78 @@ bool __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
 
     return true;
 }
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+// crashy's Mac reporting entry points, called by the crash writers below (third-party code).
+// 1.14d mac: 000035c0
+void CRASHY_Exit(int nExitCode);
+// 1.14d mac: 000035e9
+uint32_t CRASHY_GetCurrentThread(void);
+// 1.14d mac: 00007d0a
+void CRASHY_WriteModules(fnCrashOutputLine pfnOutput, ::Report* pReport);
+// 1.14d mac: 00007d13
+void CRASHY_WriteThreadBacktrace(uint32_t hThread, void* pContext, fnCrashOutputLine pfnOutput, ::Report* pReport,
+                                 char bIncludeThreadName, char bIncludeStackInfo, int nSkipFrames);
+// 1.14d mac: 00007d53
+void CRASHY_WriteFrameBacktrace(uint32_t hThread, void** apFrameAddrs, uint32_t nCount, fnCrashOutputLine pfnOutput,
+                                ::Report* pReport);
+// 1.14d mac: 00007deb
+void CRASHY_WriteThreadRegisters(uint32_t hThread, fnCrashOutputLine pfnOutput, ::Report* pReport);
+// 1.14d mac: 00007df4
+void CRASHY_WriteOtherThreadBacktraces(fnCrashOutputLine pfnOutput, ::Report* pReport, uint32_t hExcludeThread);
+
+static char* gaMacLanguageNames[15] = {
+    (char*)"English", (char*)"Spanish", (char*)"German", (char*)"French", (char*)"Portuguese",
+    (char*)"Italian", (char*)"Japanese", (char*)"Korean", (char*)"Simplified Chinese",
+    (char*)"Traditional Chinese", (char*)"Polish", (char*)"Russian", (char*)"English with Korean Chat",
+    (char*)"Unknown", (char*)"14"
+}; D2_STATIC_GUARD(gaMacLanguageNames, "Fog::Src::ErrorManager::gaMacLanguageNames");
+
+// 1.14d mac: 002ee3df
+// The Mac report has no process/admin lines; only the application, inspector tags, both locales and the log attachments.
+// The inspector project id is only written once FOG_InitErrorManager has run (g_nProjectId is set there).
+void __fastcall WriteCrashReportProcessInfo(::Report * pReport) {
+    uint8_t* aLogFilePaths[21];
+    if (!vc8_thiscall(_3rdparty::crashy::IsOpen)(pReport)) {
+      return;
+    }
+
+    _3rdparty::crashy::Printf(pReport, "<Application>%s\n", g_szApplicationName);
+    _3rdparty::crashy::Printf(pReport, "<Inspector.ProjectId>%d\n", g_nProjectId ? 0x108 : 0);
+    _3rdparty::crashy::Printf(pReport, "<Inspector.Module>%s\n", g_szModuleName);
+    _3rdparty::crashy::Printf(pReport, "<Inspector.Milestone>%s\n", g_szMilestone);
+    _3rdparty::crashy::Printf(pReport, "<Inspector.BuildNumber>%s\n", g_szBuildNumber);
+    _3rdparty::crashy::Printf(pReport, "<Inspector.Platform>%s\n", g_szPlatform);
+    _3rdparty::crashy::Printf(pReport, "<Inspector.IssueType>%s\n", "Exception");
+    _3rdparty::crashy::Printf(pReport, "<Inspector.Priority>%s\n", "1 - Critical");
+    _3rdparty::crashy::Printf(pReport, "<Inspector.PrimaryAssignment>%s\n", g_szPrimaryAssignment);
+    _3rdparty::crashy::Printf(pReport, "<Inspector.Assignments>%s\n", g_szAssignments);
+    uint32_t nLocaleIdx = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
+    _3rdparty::crashy::Printf(pReport, "<Locale.Game> %s\n", gaMacLanguageNames[nLocaleIdx]);
+    nLocaleIdx = D2Lang::StrTable::strtable::STRTABLE_GetRegistryLanguage();
+    _3rdparty::crashy::Printf(pReport, "<Locale.System> %s\n", gaMacLanguageNames[nLocaleIdx]);
+    _3rdparty::crashy::Printf(pReport, "<Game.Type> %s\n", "Client");
+    _3rdparty::crashy::Printf(pReport, "<Game.Build> %s\n", "79b7ae8fe1e97d05d57ebdc4b65bf012d38c797e");
+    memset(aLogFilePaths, 0, sizeof(aLogFilePaths));
+    LogManager::InitLogFilePathPointers(aLogFilePaths, 0x15);
+    uint32_t nLogIdx = 0;
+    do {
+      uint8_t* szPath = aLogFilePaths[nLogIdx];
+      if (szPath && *szPath) {
+        vc8_thiscall(_3rdparty::crashy::AddAttachment)(pReport, (char*)szPath, '\x01');
+      }
+
+      nLogIdx++;
+    } while (nLogIdx != 0x15);
+}
+#endif
 
 uint8_t Unreferenced_00407dd0() {
     return '\0';
 }
 
+#if !D2_OS_MAC
 void __stdcall InitializeSystemInfo() {
 #if D2_ARCH_X86
     _MEMORYSTATUS memoryStatus;
@@ -307,8 +389,10 @@ void __stdcall InitializeSystemInfo() {
     GetSystemInfo(&gSystemInfo.sWinSystemInfo);
     gSystemInfo.bInitialized = 1;
 }
+#endif
 
 // Registered with atexit. Tears down the Fog error/log subsystem and deletes the two critical sections at 0074c830 and 0074d848. Takes no arguments: the earlier EAX/ESI "parameters" were a callee-save PUSH ESI / POP ESI pair misread as inputs.
+// 1.14d mac: 002ef08e
 void EXIT_AtExit() {
     if (!gbFogErrorManagerInitialized) {
       return;
@@ -326,11 +410,13 @@ void EXIT_AtExit() {
 }
 
 // Registers: dwThreadId (ECX) and hThread (EDX) are passed by the callers but not read.
+// 1.14d mac: 002ef0f2
 void __fastcall StubHook1(uint32_t dwThreadId, HANDLE hThread) {
 
 }
 
 // Registers: nReserved (ECX) is 0 at every call site and not read.
+// 1.14d mac: 002ef0f7
 void __fastcall StubHook2(int32_t nReserved) {
 
 }
@@ -352,11 +438,13 @@ void __fastcall LogStringConditional(int32_t nLogLevel, char * szText) {
     LogManager::LogWithCategoryVarArgs(szText, "%s");
 }
 
+// 1.14d mac: 002ef339
 uint32_t __stdcall GetErrorState() {
     return g_dwErrorState;
 }
 
 // @sourcefile .\Src\ErrorManager.cpp
+// 1.14d mac: 002ef2cc
 char * __fastcall StripPathPrefixToRelative(char * szText) {
     // Static local variables (originally global data)
     static uint32_t g_nPathStripOffset; D2_STATIC_GUARD_BSS(g_nPathStripOffset, "Fog::Src::ErrorManager::StripPathPrefixToRelative::g_nPathStripOffset");
@@ -448,6 +536,7 @@ void OutputDebugStringSimple(char * szText, ...) {
     va_end(__va);
 }
 
+#if !D2_OS_MAC
 void OutputDebugStringIfCapsLock(char * szText, ...) {
     va_list __va;
     va_start(__va, szText);
@@ -462,6 +551,7 @@ void OutputDebugStringIfCapsLock(char * szText, ...) {
     }
     va_end(__va);
 }
+#endif
 
 void FormatDebugOutputVariadic(int bFlags, char * szText, ...) {
     va_list __va;
@@ -475,6 +565,7 @@ void FormatDebugOutputLogOnly(char * szText, ...) {
     FormatDebugOutput(1, szText, __va);
 }
 
+#if !D2_OS_MAC
 // The registered Fog exception filter. Its ABI is measured at the only dispatch,
 // 00403f21 'call dword ptr [gpCurrentExceptionFilter]' with NO pushes: ECX = &crashInfo
 // (00403efd 'lea ecx,[ebp-0x320]') and EDX = the stored context (00403ef5
@@ -583,7 +674,93 @@ int __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
     ExceptionList = pPrevSehFrame;
     return 2;
 }
+#endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002ee625
+// Unlike the Windows filter the Mac one ends the process itself (CRASHY_Exit); it never sets a return value.
+void __fastcall DumpLog(D2CrashReportStrc * pCrashInfo, void * pUserContext) {
+    static int32_t lpAddend_003cec90 = -0x1; D2_STATIC_GUARD(lpAddend_003cec90, "Fog::Src::ErrorManager::DumpLog::lpAddend_003cec90");
+
+    D2BlizzardErrorArgument errorArg;
+    ::Report crashFile;
+    uint32_t nSkipFrames;
+    if (InterlockedIncrement((LONG*)&lpAddend_003cec90) != 0) {
+      return;
+    }
+
+    g_dwErrorState = 1;
+    vc8_thiscall(_3rdparty::crashy::Constructor)(&crashFile);
+    if (!vc8_thiscall(_3rdparty::crashy::Open)(&crashFile, "Crash.txt")) {
+      g_dwErrorState = 0;
+      InterlockedDecrement((LONG*)&lpAddend_003cec90);
+      CRASHY_Exit(-1);
+    } else {
+      WriteCrashReportProcessInfo(&crashFile);
+      _3rdparty::crashy::Printf(&crashFile, "<Inspector.Summary:>\n%s", pCrashInfo->pszExceptionName);
+      if (*pCrashInfo->pszMessage != '\0') {
+        _3rdparty::crashy::Printf(&crashFile, " (%s)", pCrashInfo->pszMessage);
+      }
+
+      _3rdparty::crashy::Printf(&crashFile, "\n<:Inspector.Summary>\n");
+      _3rdparty::crashy::Printf(&crashFile, "<Inspector.Assertion:>\n");
+      if (!pCrashInfo->apFrameAddrs) {
+        nSkipFrames = pCrashInfo->nSkipFrames;
+        if (pCrashInfo->dwThreadId == CRASHY_GetCurrentThread()) {
+          nSkipFrames += 2;
+        }
+        CRASHY_WriteThreadBacktrace(pCrashInfo->dwThreadId, nullptr, FILETOOLS_WriteOneStringToFile, &crashFile, 0, 1, nSkipFrames);
+      } else {
+        nSkipFrames = 0;
+        CRASHY_WriteFrameBacktrace(pCrashInfo->dwThreadId, pCrashInfo->apFrameAddrs, pCrashInfo->nNumFrames, FILETOOLS_WriteOneStringToFile, &crashFile);
+      }
+
+      _3rdparty::crashy::Printf(&crashFile, "<:Inspector.Assertion>\n");
+      _3rdparty::crashy::Printf(&crashFile, "Registers:\n");
+      CRASHY_WriteThreadRegisters(pCrashInfo->dwThreadId, FILETOOLS_WriteOneStringToFile, &crashFile);
+      _3rdparty::crashy::Printf(&crashFile, "Threads:\n");
+      CRASHY_WriteOtherThreadBacktraces(FILETOOLS_WriteOneStringToFile, &crashFile, pCrashInfo->dwThreadId);
+      _3rdparty::crashy::Printf(&crashFile, "<Inspector.DebugModules:>\n");
+      CRASHY_WriteModules(FILETOOLS_WriteOneStringToFile, &crashFile);
+      _3rdparty::crashy::Printf(&crashFile, "<:Inspector.DebugModules>\n");
+      _3rdparty::crashy::Printf(&crashFile, "<Inspector.HashBlock:>\n");
+      _3rdparty::crashy::Printf(&crashFile, "Mac\n%s\n================================================================================\n", pCrashInfo->pszExceptionName);
+      if (!pCrashInfo->apFrameAddrs) {
+        CRASHY_WriteThreadBacktrace(pCrashInfo->dwThreadId, nullptr, FILETOOLS_WriteOneStringToFile, &crashFile, 0, 0, nSkipFrames);
+      } else {
+        CRASHY_WriteFrameBacktrace(pCrashInfo->dwThreadId, pCrashInfo->apFrameAddrs, pCrashInfo->nNumFrames, FILETOOLS_WriteOneStringToFile, &crashFile);
+      }
+
+      _3rdparty::crashy::Printf(&crashFile, "<:Inspector.HashBlock>\n");
+      vc8_thiscall(_3rdparty::crashy::Close)(&crashFile);
+      memset(&errorArg, 0, sizeof(errorArg));
+      errorArg.szProduct = szProduct;
+      uint32_t nAttachIndex = 0;
+      if (crashFile.nAttachmentCount > 0) {
+        char (*pAttachment)[1024] = crashFile.aszAttachmentPaths;
+        do {
+          if (nAttachIndex < 0x10) {
+            errorArg.szAttachment[nAttachIndex] = *pAttachment;
+            errorArg.nAttachmentCount++;
+          }
+
+          nAttachIndex++;
+          pAttachment++;
+        } while ((int)nAttachIndex < crashFile.nAttachmentCount);
+      }
+
+      _3rdparty::crashy::ErrorReportingLaunch(crashFile.szFilePath, &errorArg);
+      g_dwErrorState = 0;
+      InterlockedDecrement((LONG*)&lpAddend_003cec90);
+      CRASHY_Exit(-1);
+    }
+
+    vc8_thiscall(_3rdparty::crashy::Destructor)(&crashFile);
+    return;
+}
+#endif
+
+#if !D2_OS_MAC
 // Fog's implementation of Storm's Blizzard-error callback: writes Crash.txt (summary, line number,
 // thread context, registers, thread list, attachments) and hands it to ErrorReportingLaunch.
 // @abi __fastcall(char *szSummary @ECX, char *szReason @EDX, char **ppszAttachPaths @Stack[0x4],
@@ -690,7 +867,73 @@ void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * *
     vc8_thiscall(_3rdparty::crashy::Destructor)(&crashFile);
     ExceptionList = __frame0.pPrevSehFrame;
 }
+#endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002eea97
+// Same job as the Windows body; the crash writers are crashy's CRASHY_* entry points and there is no exception frame.
+void __fastcall CRASH_FillupCrashTxt(char * szSummary, char * szReason, char * * ppszAttachPaths, uint32_t nAttachPathCount, uint32_t nLineNumber, bool bSilentFlag) {
+    static int32_t lpAddend_003cec94 = -0x1; D2_STATIC_GUARD(lpAddend_003cec94, "Fog::Src::ErrorManager::CRASH_FillupCrashTxt::lpAddend_003cec94");
+
+    D2BlizzardErrorArgument errorArg;
+    ::Report crashFile;
+    vc8_thiscall(_3rdparty::crashy::Constructor)(&crashFile);
+    if (InterlockedIncrement((LONG*)&lpAddend_003cec94) == 0) {
+      g_dwErrorState = 1;
+      if (vc8_thiscall(_3rdparty::crashy::Open)(&crashFile, "Crash.txt")) {
+        WriteCrashReportProcessInfo(&crashFile);
+        _3rdparty::crashy::Printf(&crashFile, "<Inspector.Summary:>\n%s\n<:Inspector.Summary>\n", szSummary);
+        if (nLineNumber != 0) {
+          _3rdparty::crashy::Printf(&crashFile, "<Inspector.LineNumber>%u\n", nLineNumber);
+        }
+
+        _3rdparty::crashy::Printf(&crashFile, "<Inspector.Assertion:>\n");
+        DWORD dwThreadId = GetCurrentThreadId();
+        CRASHY_WriteThreadBacktrace(dwThreadId, nullptr, FILETOOLS_WriteOneStringToFile, &crashFile, 0, 1, 4);
+        _3rdparty::crashy::Printf(&crashFile, "<:Inspector.Assertion>\n");
+        _3rdparty::crashy::Printf(&crashFile, "Registers:\n");
+        CRASHY_WriteThreadRegisters(dwThreadId, FILETOOLS_WriteOneStringToFile, &crashFile);
+        _3rdparty::crashy::Printf(&crashFile, "Threads:\n");
+        CRASHY_WriteOtherThreadBacktraces(FILETOOLS_WriteOneStringToFile, &crashFile, dwThreadId);
+        for (uint32_t nAttach = 0; nAttach != nAttachPathCount; nAttach++) {
+          vc8_thiscall(_3rdparty::crashy::AddAttachment)(&crashFile, ppszAttachPaths[nAttach], '\x01');
+        }
+
+        vc8_thiscall(_3rdparty::crashy::Close)(&crashFile);
+        memset(&errorArg, 0, sizeof(errorArg));
+        errorArg.szProduct = szProduct;
+        errorArg.nFlags = bSilentFlag;
+        uint32_t nAttachIndex = 0;
+        if (crashFile.nAttachmentCount > 0) {
+          char (*pAttachment)[1024] = crashFile.aszAttachmentPaths;
+          do {
+            if (nAttachIndex < 0x10) {
+              errorArg.szAttachment[nAttachIndex] = *pAttachment;
+              errorArg.nAttachmentCount++;
+            }
+
+            nAttachIndex++;
+            pAttachment++;
+          } while ((int)nAttachIndex < crashFile.nAttachmentCount);
+        }
+
+        _3rdparty::crashy::ErrorReportingLaunch(crashFile.szFilePath, &errorArg);
+        g_dwErrorState = 0;
+        InterlockedDecrement((LONG*)&lpAddend_003cec94);
+      } else {
+        g_dwErrorState = 0;
+        InterlockedDecrement((LONG*)&lpAddend_003cec94);
+      }
+    } else {
+      g_dwErrorState = 0;
+      InterlockedDecrement((LONG*)&lpAddend_003cec94);
+    }
+
+    vc8_thiscall(_3rdparty::crashy::Destructor)(&crashFile);
+}
+#endif
+
+// 1.14d mac: 002ef26d
 BOOL __fastcall CheckErrorDuringError(char * szText, int32_t nLine, char * szReason) {
     if (g_dwErrorState) {
       LogManager::LOGMANAGER_TraceToModuleLog("", "\n***** ENCOUNTERED ERROR DURING ERROR HANDLING!!!\n%s,%d\n%s\n*****", StripPathPrefixToRelative(szText), nLine, szReason);
@@ -702,6 +945,7 @@ BOOL __fastcall CheckErrorDuringError(char * szText, int32_t nLine, char * szRea
 
 // Main error handling dispatcher for Fog subsystem. Validates error is not recursive via CheckErrorDuringError, logs the error category, and formats error message with file/line info. For assertion/halt/OOM errors, writes crash report via CRASH_FillupCrashTxt. Uses two 4096-byte buffers: one for vsnprintf formatting the reason (varargs), one for the final "[ErrorType] (reason) failed at file(line)" message. Sets global error state to prevent cascading errors.
 // @sourcefile .\Src\ErrorManager.cpp
+// 1.14d mac: 002ef0fe
 void FOG_ErrorHandler(eFOG_ErrorType eErrorType, char * szFile, int32_t nLine, char * szReasonFormat, ...) {
     va_list __va;
     va_start(__va, szReasonFormat);
@@ -5028,8 +5272,6 @@ _EXCEPTION_DISPOSITION __GSHandlerCheck_EH_6c9bfb(EHExceptionRecord * pException
 // 1.14d mac: 0002c7c3
 void PATH_MakeMacPathToken(char* szOut, const unsigned char* pName, int16_t nVRefNum, int32_t nDirID, int32_t n08,
                            int32_t n0C);
-// 1.14d mac: 002ef69a
-int FOG_AppendBackslash(char* szPath, size_t nSize);
 // 1.14d mac: 0001c806
 int SStrCopy(char* szDest, const char* szSource, int nDestSize);
 // 1.14d mac: 0001ca30
@@ -5045,12 +5287,106 @@ bool FOG_MacGetBlizzardSupportPath(char* szPath, size_t nSize) {
         FSGetCatalogInfo(&tFolderRef, kFSCatInfoVolume | kFSCatInfoNodeID, &tCatalogInfo, NULL, NULL, NULL);
         PATH_MakeMacPathToken(szSupportPath, (const unsigned char*)"\pBlizzard", tCatalogInfo.volume,
                               tCatalogInfo.nodeID, 0, 0);
-        if (FOG_AppendBackslash(szSupportPath, nSize) && Fog::Source::SFile::SafeCreateDirectoryTree(szSupportPath)) {
+        if (Fog::Source::SFile::FOG_AppendBackslash(szSupportPath, nSize) && Fog::Source::SFile::SafeCreateDirectoryTree(szSupportPath)) {
             SStrCopy(szPath, szSupportPath, nSize);
             bResult = SStrLen(szPath) == SStrLen(szSupportPath);
         }
     }
     return bResult;
+}
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002ef34b
+int ERRORMANAGER_ReturnTrue() {
+    return 1;
+}
+
+// 1.14d mac: 002ef3cd
+int ERRORMANAGER_ReturnFalse() {
+    return 0;
+}
+#endif
+
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac binary's crash and error-report entry points live in its own unit and in the crash library.
+// 1.14d mac: 00002e4d
+void CRASH_InitCrashReporter();
+// 1.14d mac: 00002e52
+void ErrorReportingSetSupportPath(const char* szPath);
+// 1.14d mac: 00005cd5
+void CRASHY_SetCrashCallback(void* pfnCallback, void* pContext);
+
+// The crash report's custom message (the second argument of the init call), 0x400 bytes.
+// 1.14d mac: 00553356
+static char gszFogCrashReportCustomMessage[0x400] = {0};
+// "D2 1.14d", the milestone string handed to the crash report.
+// 1.14d mac: 00552f56
+static char gszFogVersionString[16] = {0};
+
+// 1.14d mac: 002eed78
+void FOG_InitErrorManager(void* pUnused, char* szText, int bStoreStartupInfo) {
+    char szSharedSupportPath[0x400];
+    if (gbFogErrorManagerInitialized) {
+      if (bStoreStartupInfo) {
+        Source::SFile::LOGFILE_StoreGameStartupInfo();
+      }
+      return;
+    }
+
+    CRASH_InitCrashReporter();
+    CRASHY_SetCrashCallback((void*)DumpLog, nullptr);
+    if (MAC_GetSharedSupportPath(szSharedSupportPath, sizeof(szSharedSupportPath))) {
+      ErrorReportingSetSupportPath(szSharedSupportPath);
+    }
+
+    g_nProjectId = 1;
+    szProduct = (char*)"Diablo II";
+    g_szApplicationName = (char*)"Diablo II";
+    g_szModuleName = (char*)"Diablo II";
+    sprintf(gszFogVersionString, "D2 %i.%i%c", 1, 14, 'd');
+    g_szMilestone = gszFogVersionString;
+    g_szBuildNumber = (char*)"77";
+    g_szPlatform = (char*)"OSX";
+    g_szPrimaryAssignment = (char*)".ClassicErrorReporter";
+    g_szAssignments = (char*)".ClassicErrorReporter";
+    if (szText) {
+      Storm::Source::SSTR::SStrCopy(gszFogCrashReportCustomMessage, szText, sizeof(gszFogCrashReportCustomMessage));
+    }
+
+    InitializeCriticalSection(&lpCriticalSection_0074c830);
+    InitializeCriticalSection(&lpCriticalSection_0074d848);
+    gbFogErrorManagerInitialized = 1;
+    LogManager::InitHighResTimer();
+    Memory::InitializePoolSystem(nullptr, "Global Pool System", 0x40000, 0x8000);
+    SMem::SMemInitPerfCounters();
+    for (int nBit = 0; nBit < 0x20; nBit++) {
+      uint32_t nMask = 1u << nBit;
+      if (BitBuffer::gadwBitMasks[nBit] != nMask || BitBuffer::gadwInvBitMasks[nBit] != ~nMask) {
+        return;
+      }
+    }
+
+    uint32_t nGestaltResult;
+    gSystemInfo.eOSType = 9;
+    Gestalt('sysv', (SInt32*)&nGestaltResult);
+    gSystemInfo.fOSVersion = (float)(nGestaltResult & 0xf) / 100.0f + (float)(nGestaltResult >> 8 & 0xf) +
+                             (float)(nGestaltResult >> 0xc & 0xf) * 10.0f + (float)(nGestaltResult >> 4 & 0xf) / 10.0f;
+    Gestalt('ram ', (SInt32*)&nGestaltResult);
+    gSystemInfo.dwTotalPhysicalMemory = nGestaltResult;
+    Gestalt('lram', (SInt32*)&nGestaltResult);
+    gSystemInfo.dwUnknown10 = nGestaltResult;
+    memset(&gSystemInfo.sWinSystemInfo, 0, sizeof(gSystemInfo.sWinSystemInfo));
+    gSystemInfo.sWinSystemInfo.dwNumberOfProcessors = 1;
+    gSystemInfo.bInitialized = 1;
+    LogManager::StartLogWriterThread();
+    if (bStoreStartupInfo) {
+      Source::SFile::LOGFILE_StoreGameStartupInfo();
+    }
+
+    atexit(EXIT_AtExit);
+    ERRORMANAGER_ReturnTrue();
+    Storm::Source::SErr::SErrSetBlizzardErrorFunction(CRASH_FillupCrashTxt);
 }
 #endif
 

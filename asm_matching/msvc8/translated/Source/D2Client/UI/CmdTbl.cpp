@@ -660,6 +660,7 @@ static unsigned int gbKeyConfigModeActive = {0}; D2_STATIC_GUARD(gbKeyConfigMode
 
 namespace D2Client { namespace UI { namespace CmdTbl {
 
+// 1.14d mac: 000a0c45
 void __stdcall CMD_ToggleRunMode() {
     GAME::Game::SetRunKeyDown(1);
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_UI();
@@ -686,16 +687,19 @@ void __stdcall CMD_ToggleRunMode() {
     GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x53);
 }
 
+// 1.14d mac: 000a0d12
 void __stdcall CMD_ToggleAlwaysRun() {
     BOOL BVar1 = GAME::Game::GetGlobalAlwaysRun();
     BOOL bNotBVar1 = !BVar1;
     GAME::Game::SetGlobalAlwaysRun(bNotBVar1);
 }
 
+// 1.14d mac: 000a0d32
 void __stdcall CMD_SetClickModifier() {
     GAME::Game::GAMEDATA_SetClickModifier(1);
 }
 
+// 1.14d mac: 000a0f64
 void __stdcall CMD_ShowEscMenu() {
     int nResult = npcmenu::NPCMENU_IsAnyNpcDialogOpen();
     if (nResult) {
@@ -721,6 +725,7 @@ void __stdcall CMD_ShowEscMenu() {
     EscMenu::ESCMENU_ShowMenu(1, 0);
 }
 
+// 1.14d mac: 000a0dbb
 void __stdcall CMD_CyclePrevSkill() {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -735,6 +740,7 @@ void __stdcall CMD_CyclePrevSkill() {
     SpellSel::SPELLSEL_CycleRightHandSkills(-1);
 }
 
+// 1.14d mac: 000a0de4
 void __stdcall CMD_CycleNextSkill() {
     BOOL bExitFlag = GAME::Game::GAMEDATA_GetExitFlag3();
     if (bExitFlag) {
@@ -749,6 +755,7 @@ void __stdcall CMD_CycleNextSkill() {
     SpellSel::SPELLSEL_CycleRightHandSkills(1);
 }
 
+// 1.14d mac: 000a0e16
 void __stdcall CMD_SwapWeaponSet() {
     BOOL bUIFlag = ui::GetUIFlag(UI_NPCSHOP);
     if (bUIFlag) {
@@ -768,6 +775,7 @@ void __stdcall CMD_SwapWeaponSet() {
     Inv::INV_SwapWeaponSet();
 }
 
+// 1.14d mac: 000a0eea
 void __stdcall CMD_ToggleMercInventory() {
     BOOL bIsExpansion = GAME::Game::CLIENT_CheckExpansion();
     if (!bIsExpansion) {
@@ -787,6 +795,7 @@ void __stdcall CMD_ToggleMercInventory() {
     ui::SetUIFlag(UI_MERCINV, UI_TOGGLE, 1);
 }
 
+// 1.14d mac: 000a0fcb
 void __stdcall CMDTBL_InvokeMouseLeftButtonHandler() {
     if (!gpfnMouseLeftButtonHandler) {
       return;
@@ -801,6 +810,7 @@ void __stdcall CMDTBL_InvokeMouseLeftButtonHandler() {
     (*gpfnMouseLeftButtonHandler)();
 }
 
+// 1.14d mac: 000a1020
 void __stdcall CMD_InvokeCallback_0x1144() {
     if (!gpfnMouseLeftButtonAltHandler) {
       return;
@@ -815,6 +825,7 @@ void __stdcall CMD_InvokeCallback_0x1144() {
     (*gpfnMouseLeftButtonAltHandler)();
 }
 
+// 1.14d mac: 000a1075
 void __stdcall CMD_InvokeCallback_0x1152() {
     if (!gpfnMouseMiddleButtonAltHandler) {
       return;
@@ -829,6 +840,7 @@ void __stdcall CMD_InvokeCallback_0x1152() {
     (*gpfnMouseMiddleButtonAltHandler)();
 }
 
+// 1.14d mac: 000a10ca
 void __stdcall CMDTBL_InvokeMouseRightButtonHandler() {
     if (!gpfnMouseRightButtonHandler) {
       return;
@@ -843,6 +855,7 @@ void __stdcall CMDTBL_InvokeMouseRightButtonHandler() {
     (*gpfnMouseRightButtonHandler)();
 }
 
+// 1.14d mac: 000a111f
 void __stdcall CMD_InvokeCallback_0x1148() {
     if (!gpfnMouseRightButtonAltHandler) {
       return;
@@ -857,6 +870,7 @@ void __stdcall CMD_InvokeCallback_0x1148() {
     (*gpfnMouseRightButtonAltHandler)();
 }
 
+// 1.14d mac: 000a1174
 void __stdcall CMDTBL_InvokeMouseMiddleButtonHandler() {
     if (!gpfnMouseMiddleButtonHandler) {
       return;
@@ -871,6 +885,7 @@ void __stdcall CMDTBL_InvokeMouseMiddleButtonHandler() {
     (*gpfnMouseMiddleButtonHandler)();
 }
 
+// 1.14d mac: 000a11c9
 void __fastcall CMD_InvokeCallbackByParam(int32_t nScrollDirection) {
     BOOL bIsBadPtr;
     if (nScrollDirection > 0) {
@@ -938,6 +953,7 @@ int32_t SORT_CompareInts(D2KeyBindStrc * pA, D2KeyBindStrc * pB) {
 }
 
 // Rebuilds derived mouse button bindings (0x100-0x104) from command table. Scans all key bindings and populates gKeyBindingTable slots for left/right/middle/scroll/forward mouse buttons. Invalidates bindings (sets 0xFFFF) if command has no handler or conflicts with mouse-specific restrictions.
+// 1.14d mac: 000a1800
 void __stdcall CMD_RebuildDerivedBindings() {
     int iVar1;
     uint32_t nKeyCode;
@@ -1003,6 +1019,7 @@ void __stdcall CMD_RebuildDerivedBindings() {
 }
 
 // Opens (or creates) the per-character .key save file used for realm character locking. If a realm name is set, first tries the realm subdirectory path (&lt;savepath&gt;\&lt;realm&gt;\&lt;char&gt;.key); on failure falls back to the base save path (&lt;savepath&gt;\&lt;char&gt;.key). Calls Storm CreateFileA with caller-supplied dwDesiredAccess and dwCreationDisposition. Returns the file HANDLE, or INVALID_HANDLE_VALUE if both paths fail.
+// 1.14d mac: 000a2f3f
 static HANDLE GetKeyFileHandle(DWORD dwDesiredAccess, DWORD dwCreationDisposition) {
     HANDLE hFile;
     char szPath[260];
@@ -1031,6 +1048,7 @@ static HANDLE GetKeyFileHandle(DWORD dwDesiredAccess, DWORD dwCreationDispositio
 }
 
 // Serializes the global key-bindings table (g_KeyBindingsTable, 0x474 bytes, 0x11d entries) to two files: the user's active key file (via GetKeyFileHandle) and the install-directory "default.key" fallback. Writes a header with signature 0x5357 and version 0x25 before the binding data.
+// 1.14d mac: 000a1f1e
 void __stdcall CMD_WriteKeyFile() {
     D2KeyFileStrc sKeyFile;
     char szInstallPath[260];
@@ -1052,7 +1070,11 @@ void __stdcall CMD_WriteKeyFile() {
     Fog::Source::SFile::SFILE_Win32CloseHandle(hFile);
     Fog::Source::SFile::SFILE_GetInstallPath(szInstallPath, 0xdc);
     strcat(szInstallPath, "default.key");
+#if !defined(_WIN32) && D2_OS_MAC
+    hFile = Fog::Source::SFile::thunk_CreateFileA(szInstallPath, 0x40000000, 0, nullptr, 2, 0x80, 0);
+#else
     hFile = Fog::Source::SFile::thunk_CreateFileA(szInstallPath, 0x40000000, 0, nullptr, 2, 0x80, nullptr);
+#endif
     if (hFile == (HANDLE)-1) {
       return;
     }
@@ -1111,6 +1133,7 @@ void __stdcall CMD_LoadDefaultKeyBindings(DWORD bUseInstallDir) {
     }
 }
 
+// 1.14d mac: 000a14f7
 void __fastcall CMD_ResetKeyBindingsToDefaults(DWORD bUseInstallDir) {
     int nCount;
     CMD_LoadDefaultKeyBindings(bUseInstallDir);
@@ -1126,6 +1149,7 @@ void __fastcall CMD_ResetKeyBindingsToDefaults(DWORD bUseInstallDir) {
     CMD_RebuildDerivedBindings();
 }
 
+// 1.14d mac: 000a1960
 uint16_t __fastcall CMD_GetKeyForCommand(int32_t nCmdIndex, int32_t nSlot) {
     int nIndex = 0;
     PD2KeyBindSlot pBinding = &g_KeyBindingsTable[0].nSlot;
@@ -1140,6 +1164,7 @@ uint16_t __fastcall CMD_GetKeyForCommand(int32_t nCmdIndex, int32_t nSlot) {
     return g_KeyBindingsTable[nIndex].wKeyCode;
 }
 
+// 1.14d mac: 000a199c
 BOOL __fastcall CMD_IsBindableKey(uint16_t wKeyCode) {
     uint32_t nKeyCode = (uint32_t)wKeyCode;
     {
@@ -1347,6 +1372,7 @@ BOOL __fastcall CMD_IsBindableKey(uint16_t wKeyCode) {
     return 0;
 }
 
+// 1.14d mac: 000a1da8
 BOOL __fastcall CMD_SetKeyBinding(int32_t nCmdIndex, int32_t nSlot, uint32_t nKeyCode, uint16_t * pErrorCode) {
     PD2KeyBindSlot pBinding2;
     int nIndex;
@@ -1404,6 +1430,7 @@ BOOL __fastcall CMD_SetKeyBinding(int32_t nCmdIndex, int32_t nSlot, uint32_t nKe
     return 0;
 }
 
+// 1.14d mac: 000a1ec1
 void __stdcall CMD_AcceptKeyBindings() {
     int nCount;
     D2KeyBindStrc* pSrc = g_KeyBindingsTable;
@@ -1412,11 +1439,13 @@ void __stdcall CMD_AcceptKeyBindings() {
     CMD_RebuildDerivedBindings();
 }
 
+// 1.14d mac: 000a1f0a
 void __stdcall CMD_SaveKeyBindings() {
     CMD_WriteKeyFile();
     CMD_RebuildDerivedBindings();
 }
 
+// 1.14d mac: 000a214f
 void __stdcall CMD_RevertKeyBindings() {
     int nCount;
     uint32_t* pSrc = (uint32_t*)gaKeyBindingsBackup;
@@ -1425,6 +1454,7 @@ void __stdcall CMD_RevertKeyBindings() {
     CMD_RebuildDerivedBindings();
 }
 
+// 1.14d mac: 000a2198
 void __fastcall CMD_UnbindCommand(int32_t nCmdIndex, int32_t nSlot) {
     PD2KeyBindSlot pBinding = &g_KeyBindingsTable[0].nSlot;
     do {
@@ -1436,6 +1466,7 @@ void __fastcall CMD_UnbindCommand(int32_t nCmdIndex, int32_t nSlot) {
     } while ((intptr_t)pBinding < (intptr_t)((char*)&g_KeyBindingsTable + sizeof(g_KeyBindingsTable) + 6));
 }
 
+// 1.14d mac: 000a21cb
 uint32_t __fastcall CMD_IsCommandBound(int32_t nCmdIndex, int32_t nSlot) {
     uint16_t wKeyCode;
     int nIndex = 0;
@@ -1453,6 +1484,7 @@ uint32_t __fastcall CMD_IsCommandBound(int32_t nCmdIndex, int32_t nSlot) {
     return wKeyCode != 0xffff;
 }
 
+// 1.14d mac: 000a2209
 uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot) {
     uint16_t* pName;
     int nIndex = 0;
@@ -1781,6 +1813,7 @@ uint16_t * __fastcall CMD_GetKeyNameForCommand(int32_t nCmdIndex, int32_t nSlot)
     return gwKeyNameBuffer;
 }
 
+// 1.14d mac: 000a2ad0
 uint16_t * __fastcall CMD_GetKeyDescForCommand(int32_t nCmdIndex, int32_t nSlot) {
     uint16_t wKeyCode;
     uint16_t* pWVar1;
@@ -1900,6 +1933,7 @@ uint16_t * __fastcall CMD_GetKeyDescForCommand(int32_t nCmdIndex, int32_t nSlot)
     goto describe_key;
 }
 
+// 1.14d mac: 000a2d94
 void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
     SHORT sKeyState;
     int nCmdIndex;
@@ -1935,6 +1969,7 @@ void __stdcall WindowsKeyPressedEvent(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Dispatches key command by scanning g_KeyBindingsTable for matching target and valid command index (0-56). Validates function pointer via IsBadCodePtr, invokes handler from gCmdHandlerTable, then queues the command and clears skill selection. Skips execution if gKeyBindingTable._1156_4_ is 2 and command has no parameter.
+// 1.14d mac: 000a2e86
 void __stdcall INPUT_DispatchKeyCommand(D2UIMouseMsgStrc * pMsg) {
     int nCmdIndex;
     int nBindingIndex = 0;
@@ -1964,6 +1999,7 @@ void __stdcall INPUT_DispatchKeyCommand(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000a13ea
 void __fastcall CMD_ToggleKeyConfigMode(int32_t nEnable, int32_t bUpdateUIHandlers) {
     // Static local variables (originally global data)
     static D2UIFlagInitStrc gUIFlagCmdTableInit[2] = {
@@ -2006,6 +2042,7 @@ void __fastcall CMD_ToggleKeyConfigMode(int32_t nEnable, int32_t bUpdateUIHandle
     }
 }
 
+// 1.14d mac: 000a1267
 void __stdcall CMD_LoadUserKeyBindings() {
     D2KeyBindStrc* pBindingRow;
     uint16_t* pDstTable;
@@ -2119,6 +2156,7 @@ void __stdcall CMD_ExitKeyConfigMode() {
     _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gsUICmdTblFlagInit, nHandlerCount);
 }
 
+// 1.14d mac: 0007ef4b
 void __fastcall CMD_InitKeyConfigUI(int32_t nFadeInDuration, int32_t nHoldDuration, int32_t nFadeOutDuration, eD2LevelId eLevelId, int32_t bForce) {
     if (!(!gRoomLightPulse.bApplied || bForce)) {
       return;
@@ -2157,3 +2195,14 @@ void StaticInit_gwKeyNameBuffer() {
 }
 
 }}} // namespace D2Client::UI::CmdTbl
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client { namespace UI { namespace CmdTbl {
+
+// 1.14d mac: 000a14d8
+void CMD_DisableKeyConfigMode() {
+    CMD_ToggleKeyConfigMode(0, 0);
+}
+
+}}} // namespace D2Client::UI::CmdTbl
+#endif

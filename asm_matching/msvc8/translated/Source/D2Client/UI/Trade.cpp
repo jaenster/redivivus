@@ -29,6 +29,7 @@ static uint16_t gwszTradePartnerName[16] = {0}; D2_STATIC_GUARD(gwszTradePartner
 
 namespace D2Client { namespace UI { namespace Trade {
 
+// 1.14d mac: 000f49b9
 int __stdcall ConfirmExchange() {
     Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
     Dialog::FreeDialogStrc(Dialog::gpTradeAgreeDialog);
@@ -38,6 +39,7 @@ int __stdcall ConfirmExchange() {
     return 1;
 }
 
+// 1.14d mac: 000f4924
 int __stdcall TRADE_GetPlayerGoldAmount() {
     Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
     Dialog::FreeDialogStrc(Dialog::gpTradeAgreeDialog);
@@ -66,6 +68,7 @@ int __stdcall DrawAgreeToTrade() {
     return 1;
 }
 
+// 1.14d mac: 000f4a43
 int __stdcall TRADE_GetPartnerGoldAmount() {
     Sound::SOUND_PlaySound(SOUND_CURSOR_SELECT, nullptr, 0, 0, 0);
     Dialog::FreeDialogStrc(Dialog::gpTradeCancelDialog);
@@ -91,6 +94,7 @@ void __stdcall TRADE_HandleTradeCancel() {
     Dialog::DIALOG_SetSelectedLine(Dialog::gpTradeCancelDialog, -1);
 }
 
+// 1.14d mac: 000f3f38
 void __stdcall TRADE_CloseTrade() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 2, 0, 0);
     if (g_nTradeWindowState == 7) {
@@ -102,6 +106,7 @@ void __stdcall TRADE_CloseTrade() {
     g_nTradeWindowState = 7;
 }
 
+// 1.14d mac: 000f3f90
 void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(uint8_t * pBytes) {
     D2UnitStrc* pPlayerUnit_lcl;
     int nDialogOrDrawResult;
@@ -270,6 +275,7 @@ void __fastcall NET_D2GS_CLIENT_Incoming0x77_TRADEREQUEST(uint8_t * pBytes) {
     TRADE_CloseTrade();
 }
 
+// 1.14d mac: 000f4678
 void __fastcall TRADE_HandleTradeGoldUpdate(uint8_t * pPacket) {
     char szTraderName[16];
     memcpy(szTraderName, pPacket + 1, 0x10);
@@ -278,16 +284,19 @@ void __fastcall TRADE_HandleTradeGoldUpdate(uint8_t * pPacket) {
     gnTradeGoldUpdateBuffer = *(uint32_t*)(pPacket + 0x11);
 }
 
+// 1.14d mac: 000f46ed
 uint16_t * __stdcall TRADE_GetTradeWindowPtr() {
     return gwszTradePartnerName;
 }
 
+// 1.14d mac: 000f46fe
 void __fastcall AcceptTrade(int32_t nUnused) {
     g_nTradeWindowState = 7;
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 4, *(uint16_t*)((char*)&gnTradePlayerGoldAmount + 2), (int16_t)gnTradePlayerGoldAmount);
     gdwTradeThrottleTimestamp = -1;
 }
 
+// 1.14d mac: 000f4763
 void __stdcall CancelTrade() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT_SHORT_SHORT(0x4f, 7, 0, 0);
     g_nTradeWindowState = 3;

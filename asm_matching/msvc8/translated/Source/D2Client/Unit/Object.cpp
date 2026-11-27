@@ -262,6 +262,7 @@ void __stdcall DIALOG_FreeNpcInteractionDialog() {
     UI::Dialog::gpNpcInteractionDialog = 0;
 }
 
+// 1.14d mac: 0011eefb
 static void __stdcall OBJECT_SetLightRGB(D2UnitStrc * pUnit, uint16_t nRadius, uint8_t byRed, uint8_t byGreen, uint8_t byBlue) {
     D2LightMapStrc* pLightMap = pUnit->uSideData.pClientSide.pLight;
     if (!nRadius) {
@@ -282,6 +283,7 @@ static void __stdcall OBJECT_SetLightRGB(D2UnitStrc * pUnit, uint16_t nRadius, u
     }
 }
 
+// 1.14d mac: 0011ed51
 BOOL __fastcall OBJECT_CheckAutoLight(D2UnitStrc * pUnit, int32_t bSkipCofLoad) {
     D2ObjectsTxt* pTxtLine = pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine;
     if (!pTxtLine->EnvEffect) {
@@ -329,6 +331,7 @@ BOOL __fastcall OBJECT_CheckAutoLight(D2UnitStrc * pUnit, int32_t bSkipCofLoad) 
 }
 
 // Initialises a newly-created object unit: allocates and zeroes a D2UnitDataObjectStrc, links the Objects.txt record, sets UNITFLAG_TARGETABLE/CANBEATTACKED/PREDRAW/DRAWSHADOW from txt flags for the initial anim mode, initialises the static collision path, adds the unit to the room, and sets up auto-lighting (or explicit RGB light from txt). Special-cases class 0x3B (town portal) and 0x3C (portal to Tristram/Stony Field) to store the destination level id.
+// 1.14d mac: 0011ef78
 void __fastcall AllocObjectData(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nXPos, int32_t nYPos, int32_t nClassId, uint8_t nInitMode) {
     uD2UnitMode uVar1;
     eAct nAct;
@@ -452,6 +455,7 @@ void __fastcall OBJECT_AddVisualOverlay(D2UnitStrc * pUnit) {
     Engine::Gfx::GFX_AddOverlayToUnit(pUnit, OVERLAY_multigleam, 3, 0, 0, 0, 0, 0);
 }
 
+// 1.14d mac: 0011f2e9
 void __fastcall FreeObjectData(D2UnitStrc * pUnit) {
     Engine::Gfx::FreeGfxInfo(pUnit);
     if (GAME::Game::sgpDrlgAct) {
@@ -463,6 +467,7 @@ void __fastcall FreeObjectData(D2UnitStrc * pUnit) {
     D2_FREE_AT(pUnit->pUnitData.pUnitDataPlayer, ".\\UNIT\\Object.cpp", 0xfe);
 }
 
+// 1.14d mac: 00120d25
 static void OBJECT_ToggleDoorState(D2UnitStrc * pUnit) {
     uint8_t byStartFrame;
     if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Run) {
@@ -530,6 +535,7 @@ static void OBJECT_AnimateDoorTransition(D2UnitStrc * pUnit) {
 }
 
 // Advances the animation frame of an object unit for one game tick, driven by the object's D2ObjectsTxt data. Handles cyclic vs. non-cyclic animations, door-transition objects, special objects (classId 0xC reverse-playing, 0xBD torch state-machine walk→neutral), spawn-monster triggers on anim end (Neutral→Walk transition), selectable/collision/light-RGB updates, and overlay removal on specific shrine/chest IDs.
+// 1.14d mac: 0011f351
 static void OBJECT_UpdateAnimation(D2UnitStrc * pUnit) {
     int nClassId;
     int* pGfxFrame;
@@ -717,6 +723,7 @@ static void OBJECT_UpdateModeAndProperties(D2UnitStrc * pUnit, D2ServerMessageHa
 }
 
 // Gloaming shrine (nCode=16) server callback: reverses the activating player's character name string as an Easter egg effect
+// 1.14d mac: 00120931
 void __fastcall OBJECT_ShrineGloaming_ReversePlayerName(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pPlayer);
     if (!pPlayerData) {
@@ -728,6 +735,7 @@ void __fastcall OBJECT_ShrineGloaming_ReversePlayerName(D2UnitStrc * pUnit, D2Un
 }
 
 // Spawns a 5×5 grid of Fireball missiles (MISSILE_Fireball) centred on pUnit's position, toggling X/Y offsets from ±5 to ±20 in steps of 5. Missile level is clamped to 1–8 based on pPlayer's level/5. Called server-side for trap objects (e.g. fire towers).
+// 1.14d mac: 0012096b
 void __fastcall OBJECT_SpawnFireballGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     int nLevel;
     D2SkillArgStrc sSkillArg;
@@ -801,6 +809,7 @@ void __fastcall OBJECT_SpawnFireballGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlaye
 }
 
 // Spawns a 6-missile ring of MISSILE_Explosivepotion around pUnit's position in a fixed ±6-tile grid pattern. pPlayer is the owner; skill level (nToHit) is clamped to [1,8] from pPlayer's level/5. Called when an explosive potion object triggers.
+// 1.14d mac: 00120aa9
 void __fastcall OBJECT_SpawnExplosivePotionGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     D2SkillArgStrc sSkillArg;
     int anXOffsets[6] = { -6, -6, 0, 0, 6, 6 };
@@ -851,6 +860,7 @@ void __fastcall OBJECT_SpawnExplosivePotionGrid(D2UnitStrc * pUnit, D2UnitStrc *
 }
 
 // Identical structure to OBJECT_SpawnExplosivePotionGrid but fires MISSILE_Chokinggaspoition. Spawns 6 choking-gas missiles in a ±6-tile ring around pUnit; pPlayer owns them with level-scaled nToHit [1,8]. Called when a choking-gas potion object triggers.
+// 1.14d mac: 00120be7
 void __fastcall OBJECT_SpawnChokingGasGrid(D2UnitStrc * pUnit, D2UnitStrc * pPlayer, D2ShrinesTxt * pShrinesTxt) {
     D2SkillArgStrc sSkillArg;
     int anXOffsets[6] = { -6, -6, 0, 0, 6, 6 };
@@ -977,6 +987,7 @@ static void __stdcall OBJECT_DispatchShrineServerActivate(int * pMessage, D2Unit
     OBJECT_PlayShrineSound(pPlayer, pUnit);
 }
 
+// 1.14d mac: 0011f838
 static void OBJECT_DispatchShrineClientFunc(D2UnitStrc * pUnit) {
     D2ShrinesTxt* pShrinesTxt = D2Common::Units::GetShrineTxtRecordFromObject(pUnit);
     if (!pShrinesTxt) {
@@ -998,12 +1009,14 @@ static void OBJECT_DispatchShrineClientFunc(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0011f807
 void __fastcall SetShrineTextInfo(D2UnitStrc * pUnit) {
     D2ShrinesTxt* pShrinesTxt = D2Common::DATATBLS::ObjectTbls::TXT_Shrines_GetLine((uint32_t)pUnit->pUnitData.pUnitDataObject->nShrineId);
     D2Common::Units::SetShrineTxtRecordInObjectData(pUnit, pShrinesTxt);
     OBJECT_DispatchShrineClientFunc(pUnit);
 }
 
+// 1.14d mac: 0011f8c1
 void __fastcall ObjectMessage(int32_t eMessageType, D2UnitStrc * pUnit, D2ServerMessageHandleStrc * pMessage) {
     BOOL BVar1;
     if (eMessageType != 3) {
@@ -1028,6 +1041,7 @@ void __fastcall ObjectMessage(int32_t eMessageType, D2UnitStrc * pUnit, D2Server
 
 // ClientFn 0x2 handler, slot 2 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Enters mode OP once every 64 calls (counter in dwTickCount, random start 0..63 on first call, flag at +0xc8); on mode ON re-seeds the counter and returns to NU.
 // Provenance: 1.14d asm 004bd730.
+// 1.14d mac: 0011ff9a
 bool __fastcall OBJECT_ClientFn_PeriodicOperate(D2UnitStrc * pUnit) {
     uint32_t DVar1;
     if (!pUnit->eUnitFlagsEx) {
@@ -1053,6 +1067,7 @@ bool __fastcall OBJECT_ClientFn_PeriodicOperate(D2UnitStrc * pUnit) {
 
 // ClientFn 0x3 handler, slot 3 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). OBJECT_ClientFn_PeriodicOperate followed by UpdateUnitSfxOnModeChange.
 // Provenance: 1.14d asm 004bd7c0.
+// 1.14d mac: 00120042
 bool __fastcall OBJECT_ClientFn_PeriodicOperateWithSound(D2UnitStrc * pUnit) {
     uint32_t DVar1;
     if (!pUnit->eUnitFlagsEx) {
@@ -1079,6 +1094,7 @@ bool __fastcall OBJECT_ClientFn_PeriodicOperateWithSound(D2UnitStrc * pUnit) {
 
 // ClientFn 0x4 handler, slot 4 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Every 7..12 s (SEED_RollRange) plays mode S1 from Start[5]; back to NU once the frame reaches FrameCnt[3]-0x100; then UpdateUnitSfxOnModeChange. Returns FALSE.
 // Provenance: 1.14d asm 004bd860.
+// 1.14d mac: 001200f2
 bool __fastcall OBJECT_ClientFn_TimedSpecial1_7to12s(D2UnitStrc * pUnit) {
     int32_t nDelayMs;
     DWORD DVar2 = GetTickCount();
@@ -1105,6 +1121,7 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1_7to12s(D2UnitStrc * pUnit) {
 
 // ClientFn 0x5 handler, slot 5 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Every 23..33 s plays S1 or S2 (seed parity); back to NU at the end of that mode's frames; then UpdateUnitSfxOnModeChange. Returns FALSE.
 // Provenance: 1.14d asm 004bd900.
+// 1.14d mac: 001201ca
 bool __fastcall OBJECT_ClientFn_TimedSpecial1Or2_23to33s(D2UnitStrc * pUnit) {
     D2ObjectsTxt* pDVar1;
     uint32_t DVar2;
@@ -1144,6 +1161,7 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1Or2_23to33s(D2UnitStrc * pUnit) {
 
 // ClientFn 0x6 handler, slot 6 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Every 20..30 s plays mode S1; back to NU when the frame equals the end of the current mode (>= S1); then UpdateUnitSfxOnModeChange. Returns FALSE.
 // Provenance: 1.14d asm 004bd9c0.
+// 1.14d mac: 001202d7
 bool __fastcall OBJECT_ClientFn_TimedSpecial1_20to30s(D2UnitStrc * pUnit) {
     int32_t nDelayMs;
     DWORD DVar2 = GetTickCount();
@@ -1170,6 +1188,7 @@ bool __fastcall OBJECT_ClientFn_TimedSpecial1_20to30s(D2UnitStrc * pUnit) {
 
 // ClientFn 0x7 handler, slot 7 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). From NU: enters OP for 10 s; from OP/ON: back to NU after 4.5..7.5 s (SEED_RollRange).
 // Provenance: 1.14d asm 004bda60.
+// 1.14d mac: 001203b2
 bool __fastcall OBJECT_ClientFn_OperateCycle_10s(D2UnitStrc * pUnit) {
     int32_t nDelayMs;
     DWORD DVar1 = GetTickCount();
@@ -1193,12 +1212,14 @@ bool __fastcall OBJECT_ClientFn_OperateCycle_10s(D2UnitStrc * pUnit) {
 
 // ClientFn 0xb handler, slot 11 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Does nothing; returns TRUE.
 // Provenance: 1.14d asm 004bdaf0.
+// 1.14d mac: 001205b1
 bool __fastcall OBJECT_ClientFn_Nop_0B(D2UnitStrc * pUnit) {
     return true;
 }
 
 // ClientFn 0xa handler, slot 10 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). From NU: enters OP for 3 s; from OP/ON: back to NU after 2.5..7.5 s (SEED_RollRange).
 // Provenance: 1.14d asm 004bdb00.
+// 1.14d mac: 001204fc
 bool __fastcall OBJECT_ClientFn_OperateCycle_3s(D2UnitStrc * pUnit) {
     int32_t nDelayMs;
     DWORD DVar1 = GetTickCount();
@@ -1222,12 +1243,14 @@ bool __fastcall OBJECT_ClientFn_OperateCycle_3s(D2UnitStrc * pUnit) {
 
 // ClientFn 0x1 handler, slot 1 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Does nothing; returns TRUE.
 // Provenance: 1.14d asm 004bdb90.
+// 1.14d mac: 0011ff90
 bool __fastcall OBJECT_ClientFn_Nop_01(D2UnitStrc * pUnit) {
     return true;
 }
 
 // ClientFn 0x9 handler, slot 9 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Once a second, removes the object from the client hash table when the player is more than 25 (GetCollisionDistance) away; returns FALSE when removed.
 // Provenance: 1.14d asm 004bdba0.
+// 1.14d mac: 00120489
 bool __fastcall OBJECT_ClientFn_RemoveWhenPlayerFar(D2UnitStrc * pUnit) {
     int32_t nDistance;
     DWORD DVar1 = GetTickCount();
@@ -1251,6 +1274,7 @@ bool __fastcall OBJECT_ClientFn_RemoveWhenPlayerFar(D2UnitStrc * pUnit) {
 
 // ClientFn 0xc handler, slot 12 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). If the unit is not in mode NU, calls QUESTLOG_PlayActBossCinematic.
 // Provenance: 1.14d asm 004bdbf0.
+// 1.14d mac: 001205bb
 bool __fastcall OBJECT_ClientFn_PlayActBossCinematic(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eAnimMode.ePlayerMode != Death) {
       UI::QuestLog::QUESTLOG_PlayActBossCinematic();
@@ -1261,6 +1285,7 @@ bool __fastcall OBJECT_ClientFn_PlayActBossCinematic(D2UnitStrc * pUnit) {
 
 // ClientFn 0xd handler, slot 13 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Rite of Passage (quest record 0x27): once the quest is started and flag 4 is clear, with the player within 25, stops the player's path and sends UNITMODE_ExecuteSkillAction(0x13, player, 2, guid), then sets mode ON.
 // Provenance: 1.14d asm 004bdc10.
+// 1.14d mac: 001205dd
 bool __fastcall OBJECT_ClientFn_RiteOfPassageAncients(D2UnitStrc * pUnit) {
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
       D2UnitStrc* const pPlayer = Player::GetPlayerUnit_UI();
@@ -1285,6 +1310,7 @@ bool __fastcall OBJECT_ClientFn_RiteOfPassageAncients(D2UnitStrc * pUnit) {
 
 // ClientFn 0x8 handler, slot 8 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). If the unit is not in mode NU, calls QUESTLOG_PlayLevelUpCinematic.
 // Provenance: 1.14d asm 004bdca0.
+// 1.14d mac: 00120467
 bool __fastcall OBJECT_ClientFn_PlayLevelUpCinematic(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eAnimMode.ePlayerMode != Death) {
       UI::QuestLog::QUESTLOG_PlayLevelUpCinematic();
@@ -1295,6 +1321,7 @@ bool __fastcall OBJECT_ClientFn_PlayLevelUpCinematic(D2UnitStrc * pUnit) {
 
 // ClientFn 0xe handler, slot 14 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Every 500 ms calls OBJECT_CheckAutoLight.
 // Provenance: 1.14d asm 004bdcc0.
+// 1.14d mac: 001206c3
 bool __fastcall OBJECT_ClientFn_AutoLightPulse(D2UnitStrc * pUnit) {
     DWORD DVar1 = GetTickCount();
     if (DVar1 > pUnit->dwTickCount) {
@@ -1308,6 +1335,7 @@ bool __fastcall OBJECT_ClientFn_AutoLightPulse(D2UnitStrc * pUnit) {
 
 // ClientFn 0xf handler, slot 15 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). Every 500 ms adds overlay 0x48 to the object while it is in mode NU, removes it otherwise.
 // Provenance: 1.14d asm 004bdcf0.
+// 1.14d mac: 00120705
 bool __fastcall OBJECT_ClientFn_NeutralModeOverlay(D2UnitStrc * pUnit) {
     DWORD DVar1 = GetTickCount();
     if (DVar1 <= pUnit->dwTickCount) {
@@ -1326,6 +1354,7 @@ bool __fastcall OBJECT_ClientFn_NeutralModeOverlay(D2UnitStrc * pUnit) {
     return true;
 }
 
+// 1.14d mac: 00120879
 bool __fastcall OBJECT_ClientFn_ZooKeeper(D2UnitStrc * pUnit) {
     DWORD DVar2 = GetTickCount();
     if (DVar2 > pUnit->dwTickCount) {
@@ -1345,6 +1374,7 @@ bool __fastcall OBJECT_ClientFn_ZooKeeper(D2UnitStrc * pUnit) {
 
 // ClientFn 0x10 handler, slot 16 of gpObjectClientFunctionDispatchTable (called by OBJECT_ExecuteClientFunction). In mode OP at frame Start[1]<<8, switches to mode ON at frame 0 (GFX_LoadUnitModeCof, InitAnimMode).
 // Provenance: 1.14d asm 004bde00.
+// 1.14d mac: 00120797
 bool __fastcall OBJECT_ClientFn_OperateToOpened(D2UnitStrc * pUnit) {
     if (pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral && pUnit->nGfxCurrentFrame == (uint32_t)pUnit->pUnitData.pUnitDataObject->pTxtObjectsLine->Start[1] << 8) {
       pUnit->eAnimMode.ePlayerMode = Walk;
@@ -1356,6 +1386,7 @@ bool __fastcall OBJECT_ClientFn_OperateToOpened(D2UnitStrc * pUnit) {
     return true;
 }
 
+// 1.14d mac: 001207ee
 bool __fastcall OBJECT_ClientFn_Zoo(D2UnitStrc * pUnit) {
     int nSpawnY;
     uint8_t byZooSpawnFlag = UI::QuestLog::QUESTLOG_GetZooSpawnFlag();
@@ -1443,10 +1474,12 @@ void __fastcall WAYPOINT_HandleActivation(uint8_t * pMessage) {
 }
 
 // Returns the object unit's szOwnerName (D2UnitDataObjectStrc+0x28): the town-portal owner shown on hover when the roster has no name.
+// 1.14d mac: 0011ff57
 char * __fastcall OBJECT_GetOwnerName(D2UnitStrc * pUnit) {
     return pUnit->pUnitData.pUnitDataObject->szOwnerName;
 }
 
+// 1.14d mac: 0011ff65
 void __fastcall SetObjectDataOwnerName(D2UnitStrc * pUnit, char * szOwnerName) {
     Storm::Source::SSTR::SStrCopy(pUnit->pUnitData.pUnitDataObject->szOwnerName, szOwnerName, 0x10);
 }
@@ -1464,12 +1497,14 @@ void __fastcall OBJECT_UpdateAndExecuteClient(D2UnitStrc * pUnit) {
     UnitSnd::UpdateUnitSfxOnModeChange(pUnit);
 }
 
+// 1.14d mac: 000c02b2
 void __stdcall TEXT_InitializeMessageLog() {
     char szImagePath[260];
     sprintf(szImagePath, "%s\\ui\\menu\\textslid", "DATA\\GLOBAL");
     gpMessageLogDC6 = Core::Archive::IMAGE_LoadDC6Ex(szImagePath, 0);
 }
 
+// 1.14d mac: 000c031e
 void __stdcall TEXT_CleanupMessageLog() {
     if (!gpMessageLogDC6) {
       return;

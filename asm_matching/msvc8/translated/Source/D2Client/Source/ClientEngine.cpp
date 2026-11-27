@@ -196,6 +196,7 @@ static D2UnitStrc * gaActiveUnitSlots[8] = {0}; D2_STATIC_GUARD(gaActiveUnitSlot
 
 namespace D2Client { namespace Source { namespace ClientEngine {
 
+// 1.14d mac: 0008024f
 void __stdcall CLIENT_QuestEvent_CairnStonesPortal() {
     D2MissilesTxt* pDVar1;
     D2UnitStrc* pUnit = UNIT::Player::GetPlayerUnit_Net();
@@ -226,6 +227,7 @@ void __stdcall CLIENT_QuestEvent_CairnStonesPortal() {
     UI::CmdTbl::CMD_InitKeyConfigUI(nMissileParam1, (int)pDVar1->Range + nMissileParam1 * -2, nMissileParam1, LEVEL_StonyField, 1);
 }
 
+// 1.14d mac: 0007fcd4
 void __stdcall DenOfEvilSpecific(D2RoomStrc * pRoom) {
     uint32_t nRandCoord;
     D2SkillArgStrc sSkillArg;
@@ -267,6 +269,7 @@ void __stdcall DenOfEvilSpecific(D2RoomStrc * pRoom) {
     } while (nMissilesPlaced < 3);
 }
 
+// 1.14d mac: 0008023a
 void __stdcall CLIENT_QuestEvent_DenOfEvilLightReset() {
     gnDenOfEvilLightTimerTick = 0;
 }
@@ -283,6 +286,7 @@ void __stdcall ClientLight_ApplyDenOfEvilLighting() {
     }
 }
 
+// 1.14d mac: 0008037b
 void __stdcall CLIENT_QuestEvent_PlaceHoradricStaff() {
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
     if (!pPlayer) {
@@ -322,6 +326,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 00080565
 void __stdcall CLIENT_QuestEvent_RestoreTaintedSun() {
     int nY;
     int nX;
@@ -362,6 +367,7 @@ void __stdcall CLIENT_QuestEvent_RestoreTaintedSun() {
     D2Common::Units::Missile::SetTargetY(pPlayer, GetGUIDInline(pObject));
 }
 
+// 1.14d mac: 00080640
 void __stdcall CLIENT_QuestEvent_DiabloSpawnInChaosSanctuary() {
     gnDiabloSpawnLightActive = 1;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
@@ -385,6 +391,7 @@ void __stdcall CLIENT_QuestEvent_DiabloSpawnInChaosSanctuary() {
     Engine::Gfx::GFX_PrecacheMonsterAllModes(0xf3, 1);
 }
 
+// 1.14d mac: 00080747
 void __stdcall CLIENT_QuestEvent_HoradricForge() {
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
     if (!pPlayer) {
@@ -414,12 +421,14 @@ void __stdcall CLIENT_QuestEvent_HoradricForge() {
     D2Common::Units::Missile::SetTargetY(pPlayer, 0);
 }
 
+// 1.14d mac: 0008071e
 void __stdcall CLIENT_QuestEvent_StartGameEndCountdown() {
     uint32_t nCurrentTime = Fog::Src::LogManager::LOGMGR_GetHighResolutionTime();
     gnGameEndTime = nCurrentTime + 0x5a;
     gnDiabloSpawnLightTimer = 0;
 }
 
+// 1.14d mac: 0007eff0
 void __fastcall CLIENT_SpawnOverseerControlMissile(D2UnitStrc * pUnit) {
     int nY;
     int32_t nX;
@@ -453,6 +462,7 @@ void __fastcall CLIENT_SpawnOverseerControlMissile(D2UnitStrc * pUnit) {
     D2Common::Units::Missile::SetTargetX(pMissile, 0x19);
 }
 
+// 1.14d mac: 000808a0
 void __stdcall CLIENT_QuestEvent_FreeAnyaFromIce() {
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_Net();
     if (!pPlayer) {
@@ -479,6 +489,7 @@ void __stdcall CLIENT_QuestEvent_FreeAnyaFromIce() {
     D2Common::Units::Missile::SetTargetX(pPlayer, 0x19);
 }
 
+// 1.14d mac: 00080984
 void __stdcall CLIENT_QuestEvent_NihlathakTransformation() {
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (!pPlayer) {
@@ -502,10 +513,12 @@ void __stdcall CLIENT_QuestEvent_NihlathakTransformation() {
     pNihlathak->eUnitFlagsEx |= UNITFLAGEX_NODRAW;
 }
 
+// 1.14d mac: 00080a91
 void __stdcall CLIENT_QuestEvent_WorldstoneShake() {
     gbWorldstoneShouldShake = 1;
 }
 
+// 1.14d mac: 0007f09c
 void __fastcall CLIENT_SpawnAncientDeathMissile(D2UnitStrc * pUnit) {
     int32_t nTargetClassId;
     D2SkillArgStrc sSkillArg;
@@ -622,6 +635,7 @@ void __fastcall HandleIncoming0x89(int32_t nEventId) {
     return;
 }
 
+// 1.14d mac: 0007f236
 void __fastcall CLIENT_BossDeath_BloodRaven(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, sizeof(sSkillArg));
@@ -644,6 +658,7 @@ void __fastcall CLIENT_BossDeath_BloodRaven(D2UnitStrc * pUnit) {
     UNIT::Missile::MakeMissile(&sSkillArg);
 }
 
+// 1.14d mac: 0007f2c6
 void __fastcall CLIENT_SpawnTowerMistEffect(D2UnitStrc * pUnit) {
     int nX;
     int nY;
@@ -709,6 +724,7 @@ void __fastcall CLIENT_SpawnTowerMistEffect(D2UnitStrc * pUnit) {
     D2Common::Units::Missile::SetTargetY(pTarget, 0);
 }
 
+// 1.14d mac: 0007f433
 void __fastcall CLIENT_SpawnOrbMistEffect(D2UnitStrc * pUnit) {
     int32_t nTargetY;
     D2SkillArgStrc sSkillArg;
@@ -775,6 +791,7 @@ void __fastcall CLIENT_SpawnOrbMistEffect(D2UnitStrc * pUnit) {
     D2Common::Units::Missile::SetTargetX(pMissile, pTarget->nUnitGUID);
 }
 
+// 1.14d mac: 0007f5de
 void __fastcall CLIENT_BossDeath_Mephisto(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, sizeof(sSkillArg));
@@ -802,6 +819,7 @@ void __fastcall CLIENT_BossDeath_Mephisto(D2UnitStrc * pUnit) {
     UNIT::Missile::MakeMissile(&sSkillArg);
 }
 
+// 1.14d mac: 0007f69f
 void __fastcall CLIENT_BossDeath_Andariel(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     memset(&sSkillArg, 0, sizeof(sSkillArg));
@@ -887,6 +905,7 @@ void __fastcall CLIENT_BossDeath_Duriel(D2UnitStrc * pBossUnit) {
     UNIT::Missile::CastAttack(pPlayerUnit_lcl, MISSILE_Durieldeathcontrol, nX, nY, SKILL_Attack, 1);
 }
 
+// 1.14d mac: 0007f8a9
 void __fastcall CLIENT_BossDeath_Izual(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     GAME::Wall2::WALL2_ScheduleSoundSequence(0x1253, 0, 0xfa, 0, 0, 0, 0);
@@ -898,10 +917,12 @@ void __fastcall CLIENT_BossDeath_Izual(D2UnitStrc * pUnit) {
     UNIT::Missile::MakeMissile(&sSkillArg);
 }
 
+// 1.14d mac: 0007f92a
 void __fastcall CLIENT_StoreUnitGuidForQuestTracking(D2UnitStrc * pUnit) {
     gnQuestMonsterUnitId = !pUnit ? -1 : GetGUIDInline(pUnit);
 }
 
+// 1.14d mac: 0007f94a
 void __stdcall CLIENT_BossDeath_Baal() {
     int nY;
     int nX;
@@ -960,6 +981,7 @@ int __stdcall CLIENT_GetDenOfEvilLightIntensity(uint8_t * pRed, uint8_t * pGreen
     return 0;
 }
 
+// 1.14d mac: 0007fb61
 int __fastcall ROOM_GetLevelLightColor(D2RoomStrc * pRoom, char * pRed, char * pGreen, char * pBlue) {
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
     if (eLevelId != LEVEL_DenOfEvil) {
@@ -985,6 +1007,7 @@ int __fastcall ROOM_GetLevelLightColor(D2RoomStrc * pRoom, char * pRed, char * p
     return iVar1;
 }
 
+// 1.14d mac: 0007fc76
 void __fastcall DenOfEvilLight(D2RoomStrc * pRoom) {
     if (!pRoom) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x344);
@@ -1000,6 +1023,7 @@ void __fastcall DenOfEvilLight(D2RoomStrc * pRoom) {
 }
 
 // Ticks special light timers; triggers DenOfEvil lighting and clears related state when timers expire.
+// 1.14d mac: 0007fe34
 void __stdcall ClientLight_UpdateLightTimers() {
     if (gRoomLightPulse.bRoomLightPulseActive) {
       ClientLight_UpdateRoomLightPulse();
@@ -1024,6 +1048,7 @@ void __stdcall ClientLight_UpdateLightTimers() {
     gnDiabloSpawnLightTimer = -1;
 }
 
+// 1.14d mac: 0007fae7
 void __fastcall CLIENT_CheckWorldstoneShake(D2RoomStrc * pRoom) {
     // Static local variables (originally global data)
     static uint32_t gbWorldstoneShakeFired; D2_STATIC_GUARD_BSS(gbWorldstoneShakeFired, "D2Client::Source::ClientEngine::CLIENT_CheckWorldstoneShake::gbWorldstoneShakeFired");
@@ -1048,6 +1073,7 @@ void __fastcall CLIENT_CheckWorldstoneShake(D2RoomStrc * pRoom) {
     }
 }
 
+// 1.14d mac: 000801b3
 void __stdcall CLIENT_InitializeQuestStateGlobals() {
     ::DenOfEvilLight = 0;
     gnDenOfEvilLightTimerTick = -1;
@@ -1067,6 +1093,7 @@ void __fastcall CLIENT_SetQuestGameEndTimer(int32_t nSeconds) {
     gnGameEndTime = nHighResTime + nSeconds;
 }
 
+// 1.14d mac: 0007fa06
 void __fastcall CLIENT_SpawnWorldstoneShakeParticle(D2UnitStrc * pUnit) {
     int32_t nClassId = 0x271;
     eD2UnitType eUnitType = UNIT_MISSILE;
@@ -1086,6 +1113,7 @@ void __fastcall CLIENT_SpawnWorldstoneShakeParticle(D2UnitStrc * pUnit) {
 }
 
 // EBX is not an argument: the body never reads it.
+// 1.14d mac: 00080081
 void DRAW_Overlay_SecondsLeftToGame() {
     int nClearCount;
     uint16_t wszText[256];
@@ -1155,6 +1183,7 @@ static void __stdcall ROOM_FindSpawnPositionForMonster(D2RoomStrc * pRoom, int32
     UNIT::CUnit::CreateMissileOrMonster(nMonsterClassId, nSpawnX, nY, UNIT_MONSTER, 0);
 }
 
+// 1.14d mac: 001162c0
 void __fastcall CLIENT_SpawnMonstersAroundUnit(D2UnitStrc * pUnit, int32_t nMonsterClassId, int32_t nSpawnCount) {
     eCollisionFlags eCollision;
     POINT ptCenter;
@@ -1190,6 +1219,7 @@ void __fastcall CLIENT_SpawnMonstersAroundUnit(D2UnitStrc * pUnit, int32_t nMons
     } while (nSpawnCount > 0 && (nAttempts++ , nAttempts < 10));
 }
 
+// 1.14d mac: 001164b5
 void __fastcall DRLGROOM_SpawnRandomMonsters(D2RoomStrc * pRoom) {
     int nSpawnCount;
     uint32_t nGroupSize;
@@ -1239,6 +1269,7 @@ void __fastcall DRLGROOM_SpawnRandomMonsters(D2RoomStrc * pRoom) {
     } while (nSlotIndex < 4);
 }
 
+// 1.14d mac: 00116784
 int32_t __fastcall CLIENT_ForEachUnitInAdjacentRooms(D2UnitStrc * pUnit, D2UnitStrc * * ppBestUnit, int32_t * pnBestValue, fnRoomUnitScanCallback pfnCallback) {
     int32_t nCallbackResult;
     D2RoomStrc** ppAdjacentRooms;
@@ -1263,6 +1294,7 @@ int32_t __fastcall CLIENT_ForEachUnitInAdjacentRooms(D2UnitStrc * pUnit, D2UnitS
     return 0;
 }
 
+// 1.14d mac: 001178c0
 int __fastcall CLIENT_FindClosestDeadUnitCallback(D2UnitStrc * pSourceUnit, D2UnitStrc * pCandidate, D2UnitStrc * * ppBestUnit, int * pnBestDistance) {
     int32_t nDistance;
     if (pSourceUnit != pCandidate && pCandidate && (pCandidate->eUnitType == UNIT_PLAYER || pCandidate->eUnitType == UNIT_MONSTER && pCandidate->nClassId != 0x95 && pCandidate->nClassId != 0x22c)) {
@@ -1280,6 +1312,7 @@ int __fastcall CLIENT_FindClosestDeadUnitCallback(D2UnitStrc * pSourceUnit, D2Un
     return 0;
 }
 
+// 1.14d mac: 00117c8d
 eD2UnitType __fastcall CLIENT_FindNearbyCorpseCallback(D2UnitStrc * pSourceUnit, D2UnitStrc * pCandidate, D2UnitStrc * * ppBestUnit, int * pnBestDistance) {
     int32_t nPlayerDistance;
     uint32_t nRandPick;
@@ -1332,6 +1365,7 @@ void __fastcall CLIENT_RegisterActiveUnitInSlot(D2UnitStrc * nUnitId) {
     } while (nSlotIndex < 8);
 }
 
+// 1.14d mac: 0011682e
 void __fastcall CLIENT_UnregisterActiveUnitFromSlot(D2UnitStrc * nUnitId) {
     D2UnitStrc** pSlot = gaActiveUnitSlots;
     int nSlotIndex = 0;
@@ -1370,6 +1404,7 @@ static D2UnitStrc * __stdcall CLIENT_FindClosestTrackedUnit(D2UnitStrc * pUnit, 
 }
 
 // Sends a monster message whose target is pTarget's unit type and GUID (6 / -1 when pTarget is NULL); asm 0046c77c..0046c795.
+// 1.14d mac: 00117d1a
 static void __stdcall CLIENT_SendMonsterMoveToUnitMessage(int32_t nSenderId, int32_t nSkillLvl, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2ServerMessageHandleStrc sMsgTargetPos;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
@@ -1395,6 +1430,7 @@ static void __stdcall CLIENT_SendMonsterMoveToUnitMessage(int32_t nSenderId, int
     UNIT::Monster::MonsterMessage(nSenderId, pUnit, &sMsgTargetPos);
 }
 
+// 1.14d mac: 00117921
 static uint32_t __stdcall MONSTER_TryMoveTowardTarget(D2UnitStrc * pUnit, uint8_t bMoveStep, int32_t nSenderId, int32_t dwAnimMode, D2UnitStrc * pTarget) {
     uint32_t nTargetX;
     uint32_t nTargetY;
@@ -1471,6 +1507,7 @@ static uint32_t __stdcall MONSTER_TryMoveTowardTarget(D2UnitStrc * pUnit, uint8_
     return 1;
 }
 
+// 1.14d mac: 00117ab8
 static void __stdcall CLIENT_SendMonsterMoveToRandomNearbyPosMessage(uint32_t nOffsetRange, int32_t nSenderId, int32_t nSkillLvl, D2UnitStrc * pUnit) {
     D2ServerMessageHandleStrc sMsg;
     int nMonsterY;
@@ -1532,6 +1569,7 @@ static void __stdcall CLIENT_SendMonsterMoveToTargetMessage(int32_t nTargetX, in
     UNIT::Monster::MonsterMessage(nSenderId, pUnit, &sMsg);
 }
 
+// 1.14d mac: 0011782e
 static void CLIENT_SendMonsterAttackMessage(D2UnitStrc * pUnit) {
     D2ServerMessageHandleStrc sMsg;
     memset(&sMsg, 0, sizeof(sMsg));
@@ -1560,6 +1598,7 @@ static void CLIENT_SendMonsterAttackMessage(D2UnitStrc * pUnit) {
     UNIT::Monster::MonsterMessage(8, pUnit, &sMsg);
 }
 
+// 1.14d mac: 0011779c
 static void CLIENT_SendMonsterWanderMessage(D2UnitStrc * pUnit) {
     D2ServerMessageHandleStrc sMsg;
     memset(&sMsg, 0, sizeof(sMsg));
@@ -1604,6 +1643,7 @@ static void CLIENT_SetMonsterAiTimer(D2UnitStrc * pUnit, int32_t sMonsterAi) {
     *pnAiDelay = sMonsterAi;
 }
 
+// 1.14d mac: 00117bb9
 static uint32_t CLIENT_CheckIfUnitPositionsMatch(D2UnitStrc * pnUnit1, D2UnitStrc * pnUnit2) {
     int nUnit1Y;
     int nUnit2X;
@@ -2156,6 +2196,7 @@ static void MONSTER_ProcessPathCallback(D2UnitStrc * pUnit, D2UnitStrc * pTarget
     CLIENT_SendMonsterMoveToRandomNearbyPosMessage(8, 1, 4, pUnit);
 }
 
+// 1.14d mac: 00116859
 void __stdcall CLIENT_ClearActiveUnitSlotArray() {
     memset(gaActiveUnitSlots, 0, sizeof(gaActiveUnitSlots));
 }
@@ -2168,6 +2209,7 @@ void __stdcall CLIENT_ClearActiveUnitSlotArray() {
 // - Attack (if in range)
 // - Special cases: Corpse seekers, idle wanderers, basic chase
 // Called from CUNIT_UpdateClientFramesAndAI
+// 1.14d mac: 00116880
 void __fastcall CLIENT_DispatchMonsterAiBehavior(D2UnitStrc * pUnit) {
     int32_t nClosestDist;
     int32_t* pnAiDelay;

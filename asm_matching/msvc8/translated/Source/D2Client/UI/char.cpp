@@ -504,6 +504,7 @@ static int32_t __stdcall CHAR_AddClassToHitFactor(D2UnitStrc * pUnit, int32_t nV
 
 // Body continues at 004a7354, the JNZ target of 004a734a - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'UI_FormatStatTooltip'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'UI_FormatStatTooltip':
+// 1.14d mac: 0009e344
 int32_t __stdcall UI_GetStatValueForDisplay(int32_t nUnit) {
     BOOL bIsExpansion;
     D2MonStatsTxt* pMonStatsTxt;
@@ -633,6 +634,7 @@ int32_t __stdcall UI_BuildStatWindowDescriptions() {
     return nMonLevel * nChance * 2 / (D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0) + nMonLevel);
 }
 
+// 1.14d mac: 0009c9e9
 int __fastcall UI_AppendColorCodeToString(uint16_t * pWszString, uint16_t * * pNextLineOut) {
     uint16_t* pCurChar = pWszString;
     *pNextLineOut = 0;
@@ -656,6 +658,7 @@ int __fastcall UI_AppendColorCodeToString(uint16_t * pWszString, uint16_t * * pN
     return 0;
 }
 
+// 1.14d mac: 0009e6ff
 static int INPUT_HighResLeftPanelClick(D2UIMouseMsgStrc * pMsg) {
     DWORD dwResMode = D2gfx::D2GFX::D2GFX_GetResolutionMode();
     if (dwResMode != 2) {
@@ -678,6 +681,7 @@ static int INPUT_HighResLeftPanelClick(D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 0009e52b
 void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
     int32_t nStatPts;
     D2StatScreenButtonStrc* pBtnEntry;
@@ -732,6 +736,7 @@ void __stdcall INPUT_StatScreenMouseDown(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 0;
 }
 
+// 1.14d mac: 0009e782
 void __stdcall INPUT_StatScreenMouseUp(D2UIMouseMsgStrc * pMsg) {
     D2StatScreenButtonStrc* pBtnEntry;
     int nBtnY;
@@ -821,6 +826,7 @@ void __stdcall UI_PrecomputeStatDescriptionWidths() {
     } while (nOffset < 15);
 }
 
+// 1.14d mac: 0009e9b8
 void __stdcall CHAR_FreePanelAssets_NoOp() {
 
 }
@@ -900,6 +906,7 @@ static void __stdcall DRAW_UI_StatWindow_II(int32_t bUpperEnabled, int32_t bLowe
     return;
 }
 
+// 1.14d mac: 0009ca3d
 void __stdcall DRAW_UI_StatWindow_I() {
     // Static local variables (originally global data)
     static D2StatPanelRowStrc gaStatPanelRows[18] = {

@@ -16,6 +16,7 @@ struct QServer;
 
 namespace Fog { namespace Src { namespace QServer { namespace QServer98 {
 
+// 1.14d mac: 002f5f2b
 void __fastcall QSERVER_CloseAllConnections(D2QServerStrc * pQServer) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&pQServer->csClientLifecycle);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ pQServer->aAcceptThreadStopFlags[0] = 1;
@@ -23,6 +24,7 @@ void __fastcall QSERVER_CloseAllConnections(D2QServerStrc * pQServer) {
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ WaitForSingleObject(pQServer->aAcceptThreadHandles[0], 2000);
 }
 
+// 1.14d mac: 002f5f73
 BOOL __fastcall SendToClientOnline(D2QServerStrc * pQServer, D2QServerClientConnectionStrc * pQServerClient, char * pBytes, int nSize) {
     /* int flags for send */ /* int len for send */ /* char * buf for send */ /* SOCKET s for send */ SOCKET socket = pQServerClient->socket;
     int nBytesSent = send(socket, pBytes, nSize, 0);
@@ -42,6 +44,7 @@ static void __fastcall QSERVER_AllocateConnectionStruct(int nSocket, uint32_t nI
     }
 }
 
+// 1.14d mac: 002f57d3
 DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
     // Frame slots -1616..-1568 are ONE object: &nAddrLen is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -333,6 +336,7 @@ DWORD __stdcall SocketThreadMain(void * lpThreadParam) {
     goto check_read_fd;
 }
 
+// 1.14d mac: 002f5583
 BOOL __fastcall CreateSocketOnline(D2QServerStrc * pQServer, u_short nPort) {
     u_short uPortNetOrder;
     int nResult;
@@ -376,7 +380,11 @@ BOOL __fastcall CreateSocketOnline(D2QServerStrc * pQServer, u_short nPort) {
 
         /* LPCSTR lpName for CreateEventA */ /* BOOL bInitialState for CreateEventA */ /* BOOL bManualReset for CreateEventA */ /* LPSECURITY_ATTRIBUTES lpEventAttributes for CreateEventA */ hThread = CreateEventA((LPSECURITY_ATTRIBUTES)0x0, 0, 0, (LPCSTR)0x0);
         /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ pQServer->hEmptyEvent = hThread;
+#if !defined(_WIN32) && D2_OS_MAC
+        hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SocketThreadMain, pQServer, 0, (LPDWORD)pQServer->aAcceptThreadIds, "sServerThread");
+#else
         hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)SocketThreadMain, pQServer, 0, (LPDWORD)pQServer->aAcceptThreadIds);
+#endif
         pQServer->aAcceptThreadHandles[0] = hThread;
         ErrorManager::StubHook1(pQServer->aAcceptThreadIds[0], hThread);
         return 1;

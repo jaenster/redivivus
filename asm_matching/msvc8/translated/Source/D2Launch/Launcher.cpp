@@ -14,6 +14,9 @@
 #include "Source/D2Launch/Src/CharSel.data.h"
 #include "Source/D2Launch/Launcher.data.h"
 #include "Source/D2Launch/Src/MainMenus.data.h"
+#if D2_OS_MAC
+#include "Source/D2gfx/Src/D2GFX.h"
+#endif
 #include "Source/D2Win/D2WinScrollbar.h"
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -59,6 +62,7 @@ BOOL __stdcall CHARSEL_OnPressLoadCharListForPreferredRealm(D2ControlMsg * pCont
     return 1;
 }
 
+// 1.14d mac: 002bcc84
 BOOL __stdcall CHARSEL_HandleRealmChange(D2ControlMsg * pMsg) {
     uint16_t* pwszSelectedRealm = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_GetSelectedLineText(CharSel::gpWinTextBoxRealmSelect);
     D2Lang::WideCharToUTF8(PreferedClosedRealm2, pwszSelectedRealm, 0x100);
@@ -74,6 +78,7 @@ BOOL __stdcall CHARSEL_HandleRealmChange(D2ControlMsg * pMsg) {
     return 1;
 }
 
+// 1.14d mac: 002beb27
 BOOL __stdcall HandleUpdateToExpansion(D2ControlMsg * pControlMsg) {
     uint16_t awszCharName[256];
     uint8_t aszCommandAnsi[256];
@@ -134,6 +139,7 @@ BOOL __stdcall HandleUpdateToExpansion(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002c0289
 BOOL __stdcall LAUNCHER_StartGameWithSelectedCharacter(D2ControlMsg * pControlMsg) {
     uint16_t* pwszErrorMsg;
     uint8_t aszCommandAnsi[256];
@@ -181,6 +187,7 @@ BOOL __stdcall LAUNCHER_StartGameWithSelectedCharacter(D2ControlMsg * pControlMs
     }
 }
 
+// 1.14d mac: 002ba4fc
 int __fastcall LAUNCHER_InitNetworkLobbyQueue(D2IniConfigStrc * pIniConfig) {
     if (!pIniConfig->pBNetClientCallbacks) {
       gpBNetCallbacks = Bnclient::BNCLIENT_GetCallbacks();
@@ -201,6 +208,7 @@ void __stdcall LAUNCHER_ClearBNetCallbacksAndShutdown() {
     Bnclient::thunk_BNMESSQUEUE_Shutdown();
 }
 
+// 1.14d mac: 002ba568
 void __stdcall LAUNCHER_SetBusyFlag() {
     gnBusyFlag = 1;
 }
@@ -209,14 +217,17 @@ void __stdcall LAUNCHER_ClearBusyFlag() {
     gnBusyFlag = 0;
 }
 
+// 1.14d mac: 002ba58c
 BOOL __stdcall LAUNCHER_GetBusyFlag() {
     return gnBusyFlag;
 }
 
+// 1.14d mac: 002ba59e
 BOOL __stdcall LAUNCHER_IsBnetConnectInProgress() {
     return gbLauncherBnetConnectInProgress;
 }
 
+// 1.14d mac: 002ba5b0
 int __stdcall LAUNCHER_CheckRevisionAndShowDialog(int nFrameIndex) {
     int nDownloadProgress = gpBNetCallbacks->pfnGetDownloadProgress();
     if (nDownloadProgress != 0x65) {
@@ -232,6 +243,7 @@ int __stdcall LAUNCHER_CheckRevisionAndShowDialog(int nFrameIndex) {
     return 1;
 }
 
+// 1.14d mac: 002ba636
 int __stdcall LAUNCHER_HandleBnetConnect_1(int nFrameIndex) {
     uint32_t dwResponseCtx;
     BOOL bIsConnected = gpBNetCallbacks->pfnWaitForCreateAccountResponse(&dwResponseCtx);
@@ -253,6 +265,7 @@ int __stdcall LAUNCHER_HandleBnetConnect_1(int nFrameIndex) {
     return 1;
 }
 
+// 1.14d mac: 002ba694
 int __stdcall LAUNCHER_PumpChangePasswordResponse(int nFrameIndex) {
     uint32_t dwResponseCtx;
     BOOL bIsConnected = gpBNetCallbacks->pfnWaitForChangePasswordResponse(&dwResponseCtx);
@@ -274,6 +287,7 @@ int __stdcall LAUNCHER_PumpChangePasswordResponse(int nFrameIndex) {
     return 1;
 }
 
+// 1.14d mac: 002bb2dd
 void __stdcall LAUNCHER_DisconnectFromBnet() {
     if (!gpBNetCallbacks) {
       return;
@@ -288,6 +302,7 @@ void __stdcall LAUNCHER_DisconnectFromBnet() {
 }
 
 // Displays out-of-game error/message dialogs. Error code determines which localized string to show. Custom data used for character names or custom messages.
+// 1.14d mac: 002ba973
 int __fastcall ShowOogErrorDialog(D2OogErrorDataStrc * pErrorData) {
     // Static local variables (originally global data)
     static uint32_t gnBnetAccountLoginFailCount = 0x1; D2_STATIC_GUARD(gnBnetAccountLoginFailCount, "D2Launch::Launcher::ShowOogErrorDialog::gnBnetAccountLoginFailCount");
@@ -591,6 +606,15 @@ uint32_t __stdcall CLIENT_ConnectToBattleNet() {
         }
         Storm::Source::SReg::SRegSaveValue("Diablo II", "UseCmdLine", 0, 1);
         Storm::Source::SReg::SRegSaveValue("Diablo II", "Skip To Open", 0, bSkipToOpen);
+#if D2_OS_MAC
+        // 1.14d mac: 002ba6f5 asks the window to close instead of ending the process
+        gpBNetCallbacks->pfnDisconnect();
+        gnBNetConnectInProgress = 0;
+        pGatewayAccess = (D2BNetGatewayAccessStr*)gpBNetCallbacks->pfnBnetLoadAndReturn();
+        Bnclient::BNGatewayAccess::SaveAndUnload(pGatewayAccess);
+        PostMessage(D2gfx::D2GFX::GetHwnd(), 0x10, 0, 0);
+        return 0;
+#else
         D2Win::D2GFX::D2GFX_ShutdownSpriteCacheAndWindow();
         gpBNetCallbacks->pfnDisconnect();
         gnBNetConnectInProgress = 0;
@@ -598,6 +622,7 @@ uint32_t __stdcall CLIENT_ConnectToBattleNet() {
         Bnclient::BNGatewayAccess::SaveAndUnload(pGatewayAccess);
         TerminateProcess(GetCurrentProcess(), 0);
         return 0;
+#endif
       }
       if (!nResult) {
         gnBNetConnectInProgress = 0;
@@ -766,6 +791,7 @@ static __time32_t __stdcall LAUNCHER_GetTime32(__time32_t * pTime) {
     return _Var1;
 }
 
+// 1.14d mac: 002cb3dd
 void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE nCharacterClass, uint8_t * pAppearanceBuffer, uint16_t wStatusFlags) {
     uint8_t* pbWritePtr;
     memset(&SAVEFILE, 0, sizeof(SAVEFILE));
@@ -809,6 +835,7 @@ void __fastcall LAUNCHER_InitNewCharacterSaveFile(char * szCharacterName, BYTE n
     *pbWritePtr = 0;
 }
 
+// 1.14d mac: 002cb562
 void __fastcall LAUNCHER_MarkCharacterHardcore(int32_t bHardcore) {
     if (!bHardcore) {
       return;
@@ -818,6 +845,7 @@ void __fastcall LAUNCHER_MarkCharacterHardcore(int32_t bHardcore) {
 }
 
 // Writes character save data to a .d2s file in the save directory. Retrieves the save path, constructs the full file path with character name, calculates checksum for the save file header, and writes the entire save structure (0x14f bytes) to disk. Returns 1 on success, 0 if file creation fails.
+// 1.14d mac: 002cb57a
 uint32_t __fastcall LAUNCHER_WriteSaveFileToD2s(char * szCharacterName) {
     char szSavePathBuffer[1024];
     char szFullFilePath[500];
@@ -836,6 +864,7 @@ uint32_t __fastcall LAUNCHER_WriteSaveFileToD2s(char * szCharacterName) {
 }
 
 // Deletes all files associated with a character in the save directory. Constructs a search pattern "savepath\character.*" and iterates through all matching files, skipping directories, deleting each file found. If a subdirectory is specified, creates and operates within that subdirectory. Halts with unrecoverable error if character name is empty.
+// 1.14d mac: 002cb6f2
 void __fastcall LAUNCHER_DeleteCharacterFiles(D2CharSelStrc * pCharSel, char * szSubdirectory) {
     char szSearchPattern[500];
     char szFullFilePath[500];
@@ -977,6 +1006,7 @@ uint32_t __fastcall LAUNCHER_LoadCharacterAppearanceFromD2s(char * szCharacterNa
     return nResult;
 }
 
+// 1.14d mac: 002cbafd
 BOOL __fastcall UpdateSaveFileToExpansion(char * szCharname) {
     // Frame slots -16..-4 are ONE object: &dwExpansionFlag is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.

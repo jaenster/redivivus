@@ -86,6 +86,7 @@ BOOL __stdcall AreUnitsInNeighboredRooms(D2UnitStrc * pUnit, D2UnitStrc * pSrcUn
 }
 
 // Searches all rooms adjacent to pRoom for a unit matching eUnitType and nClassId. Gets the adjacent room list via DRLGROOM_GetAdjacentRoomsList, then iterates each room's pUnitList chain comparing eUnitType and nClassId. Returns the first matching D2UnitStrc*, or NULL if not found. Halts with an internal error if pRoom is null.
+// 1.14d mac: 0018d856
 D2UnitStrc * __stdcall FindUnitInNeighboredRooms(D2RoomStrc * pRoom, eD2UnitType eUnitType, int32_t nClassId) {
     D2RoomStrc** ppAdjacentRooms;
     int nRoom;
@@ -116,6 +117,7 @@ static BOOL CheckRoomIfNotInRange(D2RoomStrc * pRoom, int32_t nX, int32_t nY, in
     return 1;
 }
 
+// 1.14d mac: 0018da25
 static BOOL CheckRoomIfInRange(D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nDistance) {
     D2DrlgRoomCoordsStrc pRoomCoords;
     DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &pRoomCoords);
@@ -162,6 +164,7 @@ int32_t __stdcall GetTestedUnitsFromRoom(D2RoomStrc * pRoom, D2UnitStrc * * ppUn
 }
 
 // Searches all rooms adjacent to pUnit's room for the nearest unit passing a caller-supplied predicate (fpUnitTest). Iterates each room's unit list, computes distance via GetDistanceToXY, and returns the closest unit within nRoomIdx tiles (0 = unlimited). Returns NULL if no candidate passes. Halts on bad function pointer.
+// 1.14d mac: 0018d8e1
 D2UnitStrc * __stdcall GetNearestTestedUnit(D2UnitStrc * pUnit, int32_t nX, int32_t nY, int32_t nRoomIdx, fpUnitTest nfpUnitTest) {
     int32_t nDistToUnit;
     int nDist;
@@ -223,6 +226,7 @@ static void ExpandUnitFinds(D2UnitFindDataStrc * pUnitFindData, D2UnitStrc * pUn
 }
 
 // @sourcefile .\UNITS\UnitFinds.cpp
+// 1.14d mac: 0018da7e
 void __stdcall InitializeUnitFindData(D2PoolManagerStrc * pMemPool, D2UnitFindDataStrc * pUnitFindData, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nDistance, UNITFINDTEST nfpUnitTest, D2UnitFindArgStrc * pUnitFindArg) {
     if (!pUnitFindData) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe2);
@@ -252,6 +256,7 @@ void __stdcall InitializeUnitFindData(D2PoolManagerStrc * pMemPool, D2UnitFindDa
 }
 
 // @sourcefile .\UNITS\UnitFinds.cpp
+// 1.14d mac: 0018db5c
 void __stdcall FreeUnitFindData(D2UnitFindDataStrc * pUnitFindData) {
     if (!(pUnitFindData && pUnitFindData->pUnitsArray)) {
       return;
@@ -262,6 +267,7 @@ void __stdcall FreeUnitFindData(D2UnitFindDataStrc * pUnitFindData) {
 }
 
 // Predicate callback for the unit-find / nearby-unit search system. Tests one candidate pUnit against the search criteria in pUnitFindArg (center nX/nY, radius nDistance, type/state bitmask nFlags). Rejects on: result array full; out of squared range; unit type not enabled by flags; wrong life/death state (flag 0x1000 inverts to require dead); monster undead-only filter (4); missile non-targetable; not attackable (high bit) / not valid target (0x400); in-town exclusion (0x100); and a line-of-sight wall check (0x200) stepping cells via FIELDTBLS_StepFieldTowardsPoint + CheckCollision_BlockPlayerMissile. Optionally invokes a custom fpUnitTest (0x800). On pass, increments pUnitFindArg->nIndex and returns 1; else 0.
+// 1.14d mac: 0018de03
 int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg) {
     BOOL bIsUndead;
     D2MissilesTxt* pMissileTxt;
@@ -419,6 +425,7 @@ int32_t __stdcall TestUnit(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg)
 
 // Searches the room containing pUnitFindData->pRoom and all adjacent rooms for units passing a caller-supplied filter. If the source room is out of the search range only the source room is checked; otherwise DRLGROOM_GetAdjacentRoomsList is used. For each in-range room iterates the room's unit linked-list, calling fpUnitTest (or TestUnit if NULL), accumulating matching units in pUnitFindData->pUnitsArray (auto-expanded via ExpandUnitFinds). Returns and stores the total found count. Aborts with an unrecoverable error if pUnitFindData is NULL or fpUnitTest fails IsBadCodePtr.
 // @blizzard UnitFindCullRange
+// 1.14d mac: 0018dbac
 int32_t __stdcall UNITFINDS_FindCullRange(D2UnitFindDataStrc * pUnitFindData) {
     int bMatches;
     uint32_t nRoomIdx;

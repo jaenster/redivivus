@@ -10,6 +10,7 @@
 
 namespace D2Common { namespace Src { namespace LogManager {
 
+// 1.14d mac: 0017b7f3
 void __fastcall LOGGING_EnableLogFile(BOOL bEnable) {
     Logging::bLOGFILE_ENABLED = bEnable;
     if (bEnable) {

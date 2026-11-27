@@ -58,6 +58,7 @@ static void __stdcall SendCastSkillMsg(D2ClientStrc * pClient, D2UnitStrc * pTar
 }
 
 // Server-side: serialize a monster/NPC unit's current animation state into the appropriate D2GS update packet and send it to one client (pClientSide). Branches on the unit's player/anim mode (Death, Run, TownWalk, Kick, Skill1, Neutral, Walk, etc.) and on whether it has a valid target near the client, choosing the packet opcode (0x67 NpcMove / 0x68 NpcMoveToEntity / 0x69 NpcState / 0x6A NpcStateToEntity / 0x6B NpcAction / 0x6C NpcAttack / 0x6D NpcStop, plus cast-skill msg). Fills move params, HP%, direction, step number, last-hit class, and target position/GUID from the unit's dynamic path. Halts with an internal error if pUnit/pClientSide/path are NULL. __fastcall.
+// 1.14d mac: 001dd82a
 void __fastcall MONSTER_SendUpdateToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClientSide) {
     // Static local variables (originally global data)
     static int gaUnitModeUpdateFields[96] = {

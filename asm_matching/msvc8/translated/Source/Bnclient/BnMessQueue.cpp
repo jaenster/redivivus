@@ -32,6 +32,7 @@ void __stdcall thunk_BNMESSQUEUE_Shutdown() {
 }
 
 // Initializes Battle.net message queue. Resets global queue pointers (nLobbyChatCurrentMessage, nLobbyChatQueueMessages), connection state flag, and critical section for thread-safe queue access.
+// 1.14d mac: 000557ec
 void __stdcall BNMESSQUEUE_Initialize() {
     /* LPCRITICAL_SECTION lpCriticalSection for InitializeCriticalSection */ nLobbyChatCurrentMessage = 0;
     nLobbyChatQueueMessages = 0;
@@ -44,6 +45,7 @@ void __stdcall BNMESSQUEUE_Shutdown() {
     /* LPCRITICAL_SECTION lpCriticalSection for DeleteCriticalSection */ DeleteCriticalSection(&lpCriticalSection_00882004);
 }
 
+// 1.14d mac: 00055848
 int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, uint32_t nSize) {
     ::BnMessQueue* pNewMessage = D2_NEW_AT(::BnMessQueue, ".\\BnMessQueue.cpp", 0x37);
     if (nSize > 0x120) {
@@ -75,6 +77,7 @@ int __fastcall BNMESSQUEUE_EnqueueBytes(int32_t nEventType, char * pBytes, uint3
     return 1;
 }
 
+// 1.14d mac: 0005594b
 BOOL __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage) {
     ::BnMessQueue* pNewMessage = D2_NEW_AT(::BnMessQueue, ".\\BnMessQueue.cpp", 0x5c);
     Storm::Source::SSTR::SStrCopy(pNewMessage->bBuffer, szMessage, 0x120);
@@ -100,6 +103,7 @@ BOOL __fastcall BNMESSQUEUE_EnqueueString(int32_t nEventType, char * szMessage) 
 }
 
 // Dequeues next Battle.net lobby chat message. Thread-safe dequeue from global linked list (nLobbyChatCurrentMessage). Copies message buffer to output, returns data size. Returns 0 if queue empty.
+// 1.14d mac: 00055a29
 uint32_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBufferOut) {
     uint32_t nMessageSize;
     EnterCriticalSection(&lpCriticalSection_00882004);
@@ -119,6 +123,7 @@ uint32_t __fastcall BNMESSQUEUE_DequeueMessage(int * pMessageTypeOut, void * pBu
     return nMessageSize;
 }
 
+// 1.14d mac: 00055ac9
 int __stdcall BNMESSQUEUE_ClearAll() {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     ::BnMessQueue* pBVar1 = nLobbyChatCurrentMessage;
@@ -142,6 +147,7 @@ BOOL __fastcall BNMESSQUEUE_SetStateIfZero(int32_t nState) {
     return 1;
 }
 
+// 1.14d mac: 00055b84
 int __fastcall BNMESSQUEUE_SetStateWithString(int32_t nState, char * szMessage) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     if (!g_nBattleNetConnectionState) {
@@ -160,6 +166,7 @@ BOOL __fastcall SID_SetStateFlag1(int32_t nState) {
     return 1;
 }
 
+// 1.14d mac: 00055c1f
 int __fastcall SID_SetStateFlag2(uintptr_t nData) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00882004);
     _net_sid::g_nBattleNetConnectionData = nData;
@@ -171,6 +178,7 @@ int __fastcall SID_SetStateFlag2(uintptr_t nData) {
 
 namespace Bnclient { namespace _net_sid {
 
+// 1.14d mac: 00055c58
 int __fastcall NET_SID_CLIENT_GetStateAndClear(intptr_t * pOutState) {
     if (!pOutState) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe2);

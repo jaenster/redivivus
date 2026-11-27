@@ -34,6 +34,7 @@ typedef int (__fastcall *UNITFINDTEST)(D2UnitStrc * pUnit, D2UnitFindArgStrc * p
 namespace D2Client { namespace SKILLS {
 
 // Client-side skill handler for Baal's Corpse Explosion (skill 0x11D). Finds all units within the explosion radius centred on pUnit using UnitFinds, then casts MISSILE_Baalcorpseexplodedelay at each corpse position. Randomises the missile start frame using the unit seed to stagger the visual burst. Returns TRUE always.
+// 1.14d mac: 0008c74c
 BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nPosY;
     D2UnitStrc* pCorpse;
@@ -121,6 +122,7 @@ BOOL __fastcall Skills_CltDoFunc_BaalCorpseExplosion(D2UnitStrc * pUnit, eD2Skil
 }
 
 // Spawns a single directed missile as part of a multi-missile/spread skill effect. Advances the owner unit's RNG seed to pick one of 8 directional offsets (gnSkillBaseTableIndex/Offset), derives the spawn X/Y from the owner's static or dynamic path position, and selects a missile id from a 3-entry table at nParam1+0xEA/0xEC/0xEE (seed-randomized choice). Builds a zeroed D2SkillArgStrc, calls MakeMissile, then sets a seed-derived Z position (via D2GetSkillCalc + UNIT_GetModuloFromSeed) and the missile target X/Y to the owner's current position. No return value; nParam1 points to the skill/missile parameter record.
+// 1.14d mac: 0008a007
 static void __stdcall SKILLSCLT_CreateMultiMissileDirected(D2SkillsTxt * pSkillsTxt, eD2Skills eSkill, int32_t nSkillLevel, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int gnSkillBaseTableOffset[8] = { 0x7, 0x5, 0x0, -0x5, -0x7, -0x5, 0x0, 0x5 }; D2_STATIC_GUARD(gnSkillBaseTableOffset, "D2Client::SKILLS::SKILLSCLT_CreateMultiMissileDirected::gnSkillBaseTableOffset");
@@ -245,6 +247,7 @@ static void __stdcall SKILLSCLT_CreateMultiMissileDirected(D2SkillsTxt * pSkills
 }
 
 // Client-side do-function for multi-missile directed skills (e.g. Strafe, multi-shot variants). Validates skill id and txt row, checks room/town status, manages the progressive missile sound (plays if out of town, stops if in town). If not in town, evaluates cltcalc[0] for the repeat count and calls SKILLSCLT_CreateMultiMissileDirected three times per iteration for nSkillLvl calc rounds. Returns 0 if in town or skill invalid, 1 on success.
+// 1.14d mac: 00089ea7
 BOOL __fastcall Skills_CltDoFunc_MultiMissileDirected(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bInTown;
     int32_t nCount;
@@ -292,6 +295,7 @@ BOOL __fastcall Skills_CltDoFunc_MultiMissileDirected(D2UnitStrc * pUnit, eD2Ski
 }
 
 // Client-side skill do-function that spawns two missiles (cltmissilea / cltmissileb) with 3D positional offsets derived from aurarangecalc and the first three cltcalc[] entries. After creation, repositions each missile via SetPosVectorShifted and SetOffsetVector to produce the characteristic paired-projectile-with-Z-axis-spread effect. Returns 1 on success, 0 if skill data or coordinates are invalid.
+// 1.14d mac: 0008a265
 BOOL __fastcall Skills_CltDoFunc_DualMissileWithZ(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pMissile;
     D2SkillArgStrc sSkillArg;
@@ -361,6 +365,7 @@ BOOL __fastcall Skills_CltDoFunc_DualMissileWithZ(D2UnitStrc * pUnit, eD2Skills 
 }
 
 // Client skill do-function: resolves the cast target coordinates then fires two missiles defined by SkillsTxt cltmissilea and cltmissileb at those coordinates. For the second missile, if it spawns successfully, seeds its targetX with the caster's nInitSeed (used for synchronized randomness). Returns TRUE on success, FALSE if coords or skill entry are invalid.
+// 1.14d mac: 0008a4cc
 BOOL __fastcall Skills_CltDoFunc_DualMissileAtCoords(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int nCoordY;
@@ -404,6 +409,7 @@ BOOL __fastcall Skills_CltDoFunc_DualMissileAtCoords(D2UnitStrc * pUnit, eD2Skil
     return 1;
 }
 
+// 1.14d mac: 000865e3
 BOOL __fastcall Skills_CltStFunc_CheckTargetIsMonsterOrPlayer(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTargetUnit = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pTargetUnit) {
@@ -417,6 +423,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetIsMonsterOrPlayer(D2UnitStrc * pUnit
 }
 
 // Client-side helper that spawns up to nCount² missiles of type pMissileId in a circular area of radius nCount around (nCenterX, nCenterY). Uses a seeded PRNG to pick random offsets within the diameter; skips positions outside the circle or without a valid nearby room. Used by client skill effects to display visual missile bursts.
+// 1.14d mac: 00086609
 void __fastcall SKILLSCLT_CreateMissileWithGfx(D2UnitStrc * pUnit, uint32_t nSeed, eMissilesId pMissileId, int32_t nCenterX, int32_t nCenterY, int32_t nCount, eD2Skills eSkill, int32_t nSkillLevel) {
     D2SkillArgStrc sSkillArg;
     D2SeedStrc sSeed;
@@ -444,6 +451,7 @@ void __fastcall SKILLSCLT_CreateMissileWithGfx(D2UnitStrc * pUnit, uint32_t nSee
 }
 
 // Client aura do-function: fires one missile toward the current target (or cursor if no target) with graphics and range determined by the aura's current level via SKILLSASS_GetCltMissileByAuraLevel and SKILLSASS_GetPrgCalcByAuraLevel. Falls back to aurarangecalc from SkillsTxt if prgcalc returns less than 1. Returns FALSE if the skill entry is invalid or missile ID is -1.
+// 1.14d mac: 0008684d
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissileAtTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nPosX;
     int32_t nPosY;
@@ -478,6 +486,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissileAtTarget(D2UnitStrc * pUnit, e
     return 1;
 }
 
+// 1.14d mac: 00087724
 void __fastcall SKILLSCLT_SetMissilePathAndCalc(D2UnitStrc * pUnit, intptr_t nInitSeed) {
     if (!pUnit) {
       return;
@@ -663,6 +672,7 @@ static void __stdcall SKILLSCLT_CltCreateMissileAtTarget(uint32_t dwSeed, uint32
 }
 
 // Builds a serpentine (weaving) pre-computed path for a missile unit, used by skills like Guided Arrow. Caps the path at 0x4D frames, sets path type 10, then for each frame advances the direction by a randomly-seeded amplitude and sign (flipping every gapSkillDamageDescFuncTable[0x89] frames), samples gnSkillSynergiesTableIndex/Offset for X/Y deltas, and writes each resulting (nX, nY) into the missile's path-point array via GetPathPoint.
+// 1.14d mac: 000874e7
 void __fastcall SKILLSCLT_SetMissilePathExtended(D2UnitStrc * pUnit, intptr_t nInitSeed) {
     // Static local variables (originally global data)
     static int gnSkillSynergiesTableOffset[8] = { 0x0, 0x2, 0x2, 0x2, 0x0, -0x2, -0x2, -0x2 }; D2_STATIC_GUARD(gnSkillSynergiesTableOffset, "D2Client::SKILLS::SKILLSCLT_SetMissilePathExtended::gnSkillSynergiesTableOffset");
@@ -905,6 +915,7 @@ static void __stdcall SKILLS_CltCreateMissileSpreadAtTarget_ExtendedPath(uint32_
     } while (nSpreadTableOffset < 0x100);
 }
 
+// 1.14d mac: 000869be
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissilesOnTargetVelocity(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -926,6 +937,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_MissilesOnTargetVelocity(D2UnitStrc *
     return 1;
 }
 
+// 1.14d mac: 00086a6b
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_CltCreateMissileAtTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -954,6 +966,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_CltCreateMissileAtTarget(D2UnitStrc *
     return 1;
 }
 
+// 1.14d mac: 00086ce7
 BOOL __fastcall SKILLS_CltDoFunc_AuraLevelMissileAtTarget_ExtendedPath(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -983,6 +996,7 @@ BOOL __fastcall SKILLS_CltDoFunc_AuraLevelMissileAtTarget_ExtendedPath(D2UnitStr
 }
 
 // Client aura do-function: applies a visual overlay and plays a sound on the confirmed target unit. When SkillsTxt has the aura flag (bit 2) and a valid aurastate, reads the aura stat value to select a tier-1/2/3 overlay and sound from prgoverlay/prgsound. Requires a live target; returns FALSE if none. Used by auras like Conviction, Fanaticism when hitting enemies.
+// 1.14d mac: 00086f63
 BOOL __fastcall Skills_CltDoFunc_AuraState_OverlayOnTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nAuraStat;
     eOverlayId eOverlay;
@@ -1023,6 +1037,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraState_OverlayOnTarget(D2UnitStrc * pUnit, e
 }
 
 // Client aura do-function: same overlay/sound selection logic as AuraState_OverlayOnTarget but applies the effect to the caster (pUnit) rather than the confirmed target. Reads SkillsTxt aura flag, aurastate, and aurastat tier to pick among three prgoverlay/prgsound levels. Returns FALSE if the skill entry is invalid.
+// 1.14d mac: 000870e9
 BOOL __fastcall Skills_CltDoFunc_AuraState_OverlayOnCaster(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nAuraStat;
     eOverlayId eOverlay;
@@ -1098,6 +1113,7 @@ static void __stdcall SKILLSCLT_CreateProjectileMissile(uint32_t dwUnused, uint3
     } while (nX);
 }
 
+// 1.14d mac: 00087244
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_CastAttackAtCoords(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nPosX;
     int32_t nPosY;
@@ -1120,6 +1136,7 @@ BOOL __fastcall Skills_CltDoFunc_AuraLevel_CastAttackAtCoords(D2UnitStrc * pUnit
     return 1;
 }
 
+// 1.14d mac: 000872d7
 BOOL __fastcall Skills_CltDoFunc_AuraLevel_ProjectileMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nTargetX;
     int32_t nTargetY;
@@ -1167,6 +1184,7 @@ uint32_t __fastcall SKILLSCLT_ValidateSkillAndMissile(D2UnitStrc * pUnit, int32_
 }
 
 // Returns the sound duration (in frames) for a monster's charge-skill animation. Looks up the monster unit's MonStats entry, finds the matching skill slot among Skill1..Skill8, and reads the corresponding Skill[N] duration from MonSoundsTxt. Returns 0 if the monster, stats row, or sounds row are invalid; clamps negative durations to 0 via bitmask.
+// 1.14d mac: 00117d8a
 uint32_t __fastcall SKILLSCLT_CalcChargeSkillDuration(D2UnitStrc * pMonUnit, int32_t nSkillId) {
     int nSkillSlot;
     D2MonStatsTxt* pMonStats = nullptr;

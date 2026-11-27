@@ -155,6 +155,7 @@ static uint32_t gnMonsterStateFlagMask2 = 0x2; D2_STATIC_GUARD(gnMonsterStateFla
 namespace D2Game { namespace UNIT { namespace SUnitInactive {
 
 // @sourcefile .\UNIT\SUnitInactive.cpp
+// 1.14d mac: 00283a4b
 static void SUNITINACTIVE_FreeInactiveMonster(::SGAMEDATA * pGame, D2InactiveMonsterRecordStrc * pUnit) {
     if (pUnit->pMapAi) {
       D2Common::Drlg::Preset::DRLGPRESET_FreeSpawnPointList(pGame->pMemoryPool, pUnit->pMapAi);
@@ -374,6 +375,7 @@ static void SUNITINACTIVE_FreeInactiveMonsterList(::SGAMEDATA * pGame, D2Inactiv
 
 // Looks up or allocates a D2InactiveUnitListStrc for the given act and room coordinate (x, pDrlgRoomCoords) in the game's per-act inactive-unit list, which is kept sorted by nX. If nParam==0 returns the found entry or NULL without allocating; if nParam!=0 inserts a fresh node (with empty item/monster/unit sub-lists) into the sorted list and returns it.
 // @sourcefile .\UNIT\SUnitInactive.cpp
+// 1.14d mac: 00283887
 static D2InactiveUnitListStrc * __stdcall SUNITINACTIVE_AllocOrFindInactiveList(::SGAMEDATA * pGame, int32_t nAct, int32_t nY, int32_t bCreate, int32_t x) {
     D2InactiveUnitListStrc* pNextList;
     pNextList = pGame->pInactiveUnitList[nAct];
@@ -421,6 +423,7 @@ static D2InactiveUnitListStrc * __stdcall SUNITINACTIVE_AllocOrFindInactiveList(
     return pResultList;
 }
 
+// 1.14d mac: 002839fb
 static void __stdcall SUNITINACTIVE_AllocInactiveListForRoom(::SGAMEDATA * pGame, int32_t bCreate, D2RoomStrc * pRoom) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     D2Common::DUNGEON::Dungeon::DRLGROOM_GetRoomCoordinates(pRoom, &sRoomCoords);
@@ -1019,6 +1022,7 @@ static void __stdcall SUNITINACTIVE_RoomInitMonsters(::SGAMEDATA * pGame, D2Room
 }
 
 // Returns 1 if a monster of class nParam is dead at the given subtile coordinates. First searches live units in the best nearby room for mode-0/death state; then searches the inactive monster record list (flag bit 2 = dead) for the coordinate bucket. Returns 0 if not found. Halts on null pGame/pRoom or zero coordinates.
+// 1.14d mac: 002836a0
 BOOL __fastcall SUNITINACTIVE_CheckDeadMonsterAtCoords(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nPosX, int32_t nPosY, int32_t nClassId) {
     eAct eActNo;
     bool bIsDead;
@@ -1070,6 +1074,7 @@ BOOL __fastcall SUNITINACTIVE_CheckDeadMonsterAtCoords(::SGAMEDATA * pGame, D2Ro
 }
 
 // @sourcefile .\UNIT\SUnitInactive.cpp
+// 1.14d mac: 00283965
 void __fastcall SUNITINACTIVE_FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct) {
     D2InactiveUnitListStrc* pCurList;
     for (pCurList = pGame->pInactiveUnitList[nAct]; pCurList; pCurList = pCurList->pNext) {
@@ -1096,6 +1101,7 @@ void __fastcall SUNITINACTIVE_FreeUnusedItems(::SGAMEDATA * pGame, int32_t nAct)
 
 // Re-activates a room's saved inactive units when the room is brought into play. First re-inits inactive monsters and restores the inactive item list, then walks the per-room inactive-unit record list. For each record either reattaches an existing unit (flag 0x100: FindUnitFromTable + relocate into room) or recreates it via CreateUnit using the saved type/class/pos/animMode. Objects (type 2) get special restore: shrines (SetEvent respawn timer + SetShrineTxtRecord) and growable objects (replant: compute grown stage from elapsed game frames, set animMode/component, queue grow SetEvents). Frees each consumed record from the game memory pool. Side effects: spawns/relocates units, schedules object events. Server-side D2Common SUnitInactive.
 // @sourcefile .\UNIT\SUnitInactive.cpp
+// 1.14d mac: 00281821
 void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) {
     bool bIsShrine;
     uint8_t bObjectMode;
@@ -1260,6 +1266,7 @@ void __fastcall SUNITINACTIVE_RoomInit(::SGAMEDATA * pGame, D2RoomStrc * pRoom) 
 // Retired notes from 'SUNITINACTIVE_DeactivateUnit':
 // Server-side: snapshots a unit into the game's per-act inactive-unit list before it is removed from an active room (e.g. when a room/level is unloaded). Finds (or allocates+inserts, sorted by room X/Y coords) the D2InactiveUnitListStrc bucket for the unit's room, then serializes the unit. Items are delegated to SUNITINACTIVE_SerializeAndDeactivateItem; all other unit types get a freshly allocated D2InactiveUnitRecordStrc recording position, type, classId, anim mode, GUID, flags and game frame. Objects (type 2) additionally capture shrine timer state, chest spark/drop data, and a name-byte. Register args: pUnit@EAX, pGame@Stack[0x4] (see signature). No return.
 // @sourcefile .\UNIT\SUnitInactive.cpp
+// 1.14d mac: 00282b50
 static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2InactiveUnitListStrc* pDVar1;
     D2InactiveUnitRecordStrc* _Dst;
@@ -1398,6 +1405,7 @@ static void __stdcall SUNITINACTIVE_SaveInactiveUnit(::SGAMEDATA * pGame, D2Unit
 
 // Iterates all 5 acts in pGame->pInactiveUnitList and frees every D2InactiveUnitListStrc node, along with its linked D2InactiveUnitRecordStrc and D2InactiveItemRecordStrc chains and any inactive monster sub-list, releasing all memory back to the game pool.
 // @sourcefile .\UNIT\SUnitInactive.cpp
+// 1.14d mac: 002826c7
 void __fastcall SUNITINACTIVE_FreeAllInactiveLists(::SGAMEDATA * pGame) {
     D2InactiveUnitListStrc* pList;
     D2InactiveUnitListStrc* pFreeList;
@@ -1435,6 +1443,7 @@ void __fastcall SUNITINACTIVE_FreeAllInactiveLists(::SGAMEDATA * pGame) {
 
 // Removes a single inactive unit record from the per-act inactive list by unit type and class ID. For monsters (nUnitType==1) delegates to SUNITINACTIVE_RemoveInactiveMonsterByClassId; for other types walks the linked list and frees the matching D2InactiveUnitRecordStrc from the game memory pool.
 // @sourcefile .\UNIT\SUnitInactive.cpp
+// 1.14d mac: 00283597
 void __fastcall SUNITINACTIVE_RemoveInactiveUnitByTypeAndId(::SGAMEDATA * pGame, uint16_t nUnitType, uint16_t nClassId, uint8_t byActNo) {
     if (nUnitType == 1) {
       SUNITINACTIVE_RemoveInactiveMonsterByClassId(pGame, nClassId, byActNo);
@@ -1579,6 +1588,7 @@ static void __stdcall UNITS_ProcessDeadOrInactiveMonster(::SGAMEDATA * pGame, D2
 }
 
 // Server-side inactive/dead unit processor. Dispatches by unit type: monsters go to UNITS_ProcessDeadOrInactiveMonster; players in body state get saved and deleted; objects are conditionally saved based on Restore/RestoreVirgins txt flags and sparkly-chest state; items and warps are always saved. Fires UNITEVENTCALLBACK_ENDANIM timer trigger for players and objects, then frees non-item units via FreeServerUnit.
+// 1.14d mac: 002827dd
 void __fastcall SUNITINACTIVE_SaveOrFreeUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2ObjectsTxt* pObjectTxt;
     BOOL eState;

@@ -24,6 +24,7 @@ void __stdcall MISC_SafeStrncpy(char * szText, size_t nSize) {
 }
 
 // NOTE: Callee-saved register params inferred (medium confidence): pchar (EBX): char*
+// 1.14d mac: 0017b8f8
 static void __fastcall StoreLogging(FILE * pFile, uint32_t nThreadId, uint32_t nLogLevel, uint32_t nComponent, uint32_t nSubsystem, char * szContext, uint32_t nSequence, char * szFormat, va_list pArgs) {
     SYSTEMTIME sLocalTime;
     char szLogLineBuf[500];
@@ -52,6 +53,7 @@ void LOGGING_FilePrintf(FILE * pFile, uint32_t dwGame, uint32_t dwFrame, uint32_
     StoreLogging(pFile, dwGame, dwFrame, dwClient, dwLogType, szFilename, nLine, szFormatString, __va);
 }
 
+// 1.14d mac: 0017ba7d
 void LOGGING_LogLine(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nLogType, char * szFilename, int32_t nLine, char * szFormatString, ...) {
     va_list __va;
     va_start(__va, szFormatString);
@@ -96,6 +98,7 @@ void StoreGameLogging(int32_t nGame, int32_t nFrame, int32_t nClient, int32_t nL
     }
 }
 
+// 1.14d mac: 0017b828
 int32_t __fastcall LOGGING_OpenLogFile(char * szLogFileName) {
     if (pLOGFILE) {
       return 1;

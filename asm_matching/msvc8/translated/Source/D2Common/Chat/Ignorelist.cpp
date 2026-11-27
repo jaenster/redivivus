@@ -59,6 +59,7 @@ void __stdcall IGNORELIST_Initialize_Unref_0060ac50() {
 
 }
 
+// 1.14d mac: 00197904
 void __stdcall IGNORELIST_Shutdown() {
     if (gpIgnoreList) {
       vc8_thiscall(gpIgnoreList->_vfptr->ScalarDeletingDestructor)(gpIgnoreList, 1);
@@ -144,6 +145,7 @@ void __fastcall IGNORELIST_ExtractSuffix(::IgnoreList * pThis, int, char * szTex
     nDstBuf[nLen] = '\0';
 }
 
+// 1.14d mac: 0019801e
 int __fastcall IGNORELIST_ParsePattern(::IgnoreList * pThis, int, char * szText1, char * szText2, int32_t nBufferSize) {
     if (!szText2) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1a0);
@@ -197,6 +199,7 @@ template<> void TSExplicitList<StringEntryNode, -572662307>::Destructor() {
     pTVar1->m_prevlink = 0;
     pTVar1->m_next = 0;
 }
+// 1.14d mac: 00199f2a TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear
 template<> __declspec(noinline) inline void TSHashTable<MappingEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {
     this->nFullnessIndicator = 0;
     this->tFullList.UnlinkAll();
@@ -313,6 +316,7 @@ TSExplicitList<::MappingEntryNode, -572662307>* __fastcall CopyConstructor_Unref
 namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
 
 // Writes the ignore list to its file: one ignored name pattern per line, then each ignored account prefixed with '!'.
+// 1.14d mac: 0019837e
 int32_t __fastcall SaveToFile(::IgnoreList * pThis, int) {
     intptr_t uEntryOffset;
     intptr_t uAccountEntry;
@@ -520,6 +524,7 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<Strin
 
 namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
 
+// 1.14d mac: 00198a88
 void __fastcall ClearAccountMappings(::IgnoreList * pThis, int) {
     pThis->tAccountMappings.InternalClear(0);
 }
@@ -716,6 +721,7 @@ template<> __declspec(noinline) inline void TSGrowableArray<TSExplicitList<Mappi
 
 namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
 
+// 1.14d mac: 00198aaa
 int32_t __fastcall GetMappedValue(::IgnoreList * pThis, int, char * szKey, char * szOut, int32_t nOutSize) {
     ::MappingEntryNode* pEntry = pThis->tAccountMappings.Ptr(szKey);
     if (pEntry) {
@@ -866,6 +872,7 @@ template<> void TSGrowableArray<TSExplicitList<MappingEntryNode, -572662307>>::R
 
 namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
 
+// 1.14d mac: 00198250
 int32_t __fastcall RemoveByPattern(::IgnoreList * pThis, int, char * szPattern) {
     int _bIsEnabled;
     bool bIsEnabled;
@@ -889,6 +896,7 @@ int32_t __fastcall RemoveByPattern(::IgnoreList * pThis, int, char * szPattern) 
     return 0;
 }
 
+// 1.14d mac: 001988d2
 int32_t __fastcall RemoveByAccountName(::IgnoreList * pThis, int, char * szAccountName) {
     int _bIsEnabled;
     bool bIsEnabled;
@@ -913,6 +921,7 @@ int32_t __fastcall RemoveByAccountName(::IgnoreList * pThis, int, char * szAccou
 }
 
 // Returns whether the account name is on the ignore list. It tail-calls Fog::Debug::GuardStack, which returns its argument, so the result is already in EAX; typed void the reconstruction dropped every return value and callers tested an unassigned local.
+// 1.14d mac: 0019892c
 int32_t __fastcall CheckAccountNameIgnored(::IgnoreList * pThis, int, char * szAccountName) {
     int _bIsEnabled;
     bool bIsEnabled;
@@ -1289,6 +1298,7 @@ template<> __declspec(noinline) inline void TSHashTable<StringEntryNode, HASHKEY
 namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
 
 // Returns whether the player name is on the ignore list. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the result is already in EAX; typed void the reconstruction dropped it.
+// 1.14d mac: 001984e8
 int32_t __fastcall CheckIgnored(::IgnoreList * pThis, int, char * szPlayerName) {
     int32_t _bIsEnabled;
     bool bIsEnabled;
@@ -1899,6 +1909,7 @@ template<> ::MappingEntryNode * TSHashTable<MappingEntryNode, HASHKEY_STRI>::New
 namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreList {
 
 // Adds a name pattern to the ignore list and returns the result. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the value is already in EAX; typed void the reconstruction dropped it.
+// 1.14d mac: 00197ebc
 int32_t __fastcall AddByPattern(::IgnoreList * pThis, int, char * szPattern) {
     ::StringEntryNode* pExistingEntry;
     if (szPattern && *szPattern != '\0') {
@@ -1923,6 +1934,7 @@ int32_t __fastcall AddByPattern(::IgnoreList * pThis, int, char * szPattern) {
 }
 
 // Adds an account name to the ignore list and returns the result. Tail-calls Fog::Debug::GuardStack, which returns its argument, so the value is already in EAX; typed void the reconstruction dropped it.
+// 1.14d mac: 00198768
 int32_t __fastcall AddByAccountName(::IgnoreList * pThis, int, char * szAccountName) {
     ::StringEntryNode* pExistingEntry;
     char cIgnorePrefix[256];
@@ -1946,6 +1958,7 @@ int32_t __fastcall AddByAccountName(::IgnoreList * pThis, int, char * szAccountN
     return 0;
 }
 
+// 1.14d mac: 00197bdc
 void __fastcall LoadFromFile(::IgnoreList * pThis, int) {
     uint32_t nLineLen;
     TSHashTable<::StringEntryNode, ::HASHKEY_STRI>* pHashTable;
@@ -2056,6 +2069,7 @@ namespace D2Common { namespace Chat { namespace Ignorelist { namespace IgnoreLis
 namespace D2Common { namespace Chat { namespace Ignorelist {
 
 // @sourcefile .\Chat\Ignorelist.cpp
+// 1.14d mac: 00198af0
 BOOL __fastcall AddAccountMapping(::IgnoreList * pThis, int, char * szRaw, int32_t nRawLen) {
     int32_t bIsOnline;
     ::MappingEntryNode* pNameEntry;
@@ -2114,6 +2128,7 @@ BOOL __fastcall AddAccountMapping(::IgnoreList * pThis, int, char * szRaw, int32
 
 
 // @sourcefile .\Chat\Ignorelist.cpp
+// 1.14d mac: 0019784c
 void __stdcall MISC_InitIgnorelist() {
     uint32_t nSehState = -1; // steer-ok: generated form, kept as emitted
     pfnEHHandlerRoutine pExceptionLabel = __GSHandlerCheck_EH_6ca4b1; // steer-ok: generated form, kept as emitted
@@ -2131,6 +2146,7 @@ void __stdcall MISC_InitIgnorelist() {
 // 006114e0 (MISC_InitIgnorelist) is the eager init at line 0x41, which stores the
 // allocation into the global and returns nothing.
 // @sourcefile .\Chat\Ignorelist.cpp
+// 1.14d mac: 001978a3
 ::IgnoreList * __stdcall MISC_GetIgnorelist() {
     ::IgnoreList* pNewIgnoreList;
     uint32_t nSehState = -1; // steer-ok: generated form, kept as emitted

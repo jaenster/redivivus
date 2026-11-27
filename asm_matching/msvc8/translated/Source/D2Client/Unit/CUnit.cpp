@@ -228,6 +228,7 @@ typedef void (__fastcall *fnUnitIterCallback)(void * pUnit);
 
 namespace D2Client { namespace UNIT { namespace CUnit {
 
+// 1.14d mac: 000fc60e
 static D2UnitStrc * __stdcall FindUnit(D2UnitStrc * * ppUnitHashTable, int32_t nListIndex, eD2UnitType eUnitType, int32_t nUnitGUID) {
     D2UnitStrc* pCurUnit = ppUnitHashTable[nListIndex];
     while (true) {
@@ -249,11 +250,13 @@ static D2UnitStrc * __stdcall FindUnit(D2UnitStrc * * ppUnitHashTable, int32_t n
     exit(-1);
 }
 
+// 1.14d mac: 000fc5ec
 D2UnitStrc * __fastcall UNITS_FindClientSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
     D2UnitStrc* pUnit = FindUnit(ServerSideUnitHashTables[eUnitType], nUnitGUID & 0x7f, eUnitType, nUnitGUID);
     return pUnit;
 }
 
+// 1.14d mac: 000fc668
 D2UnitStrc * __fastcall UNITS_FindServerSideUnit(int32_t nUnitGUID, eD2UnitType eUnitType) {
     D2UnitStrc* pUnit = FindUnit(ClientSideUnitHashTables[eUnitType], nUnitGUID & 0x7f, eUnitType, nUnitGUID);
     return pUnit;
@@ -267,6 +270,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_10(D2UnitStrc * p
     return p->eUnitFlagsEx >> 10 & 1;
 }
 
+// 1.14d mac: 000fc68a
 D2UnitStrc * __fastcall MISSILE_GetOwnerUnit(D2UnitStrc * pUnit) {
     uint32_t nUnitGUID;
     D2UnitStrc* pOwnerUnit;
@@ -400,6 +404,7 @@ void __fastcall CLIENT_ClearChangedStatFlags_Thunk(D2UnitStrc * pUnit) {
     D2Common::Stats::StatsEx::STATLIST_ClearChangedStatFlags(pUnit);
 }
 
+// 1.14d mac: 000fe6e7
 D2GfxInfoStrc * __fastcall GetGfxInfo(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return nullptr;
@@ -449,6 +454,7 @@ int32_t __fastcall GetPalShiftIndex(D2UnitStrc * pUnit) {
 }
 
 // Tests whether screen point (nClickX, nClickY) falls within the clickable bounding box of a warp unit. Fetches the room's shadow/bounds data, transforms the warp's map position to screen coords, and returns 1 if the point is inside the bounds rectangle defined by pShadowBounds[1..4]. Halts fatally if called on a non-UNIT_WARP unit.
+// 1.14d mac: 000fe78a
 BOOL __fastcall WARP_IsPointInClickArea(D2UnitStrc * pUnit, int32_t nClickX, int32_t nClickY) {
     int nAreaLeft;
     int iVar1;
@@ -475,6 +481,7 @@ BOOL __fastcall WARP_IsPointInClickArea(D2UnitStrc * pUnit, int32_t nClickX, int
     return 0;
 }
 
+// 1.14d mac: 000ff550
 static uint32_t __stdcall CUNIT_IsClickInSpriteBounds(int32_t nClickY, D2UnitStrc * pUnit, D2ObjectsTxt * pObjectsTxt, int32_t nClickX) {
     int nPosX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
     int nPosY = D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit);
@@ -489,6 +496,7 @@ static uint32_t __stdcall CUNIT_IsClickInSpriteBounds(int32_t nClickY, D2UnitStr
 }
 
 // Computes the screen-space bounding rectangle [left, top, right, bottom] for a unit's sprite at the given animation frame and mode. Loads the DC6 cel via SPRITECACHE_GetOrLoadSprite, reads DC6 offset/width/height, maps to target-screen coords, enforces a minimum 32x32 extent, and applies particle-system offsets. Returns 1 on success, 0 if the anim mode is absent or the sprite cannot be loaded.
+// 1.14d mac: 000ff615
 static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t nAnimMode, D2UnitStrc * pUnit, int * pBoundsRect) {
     // Frame slots -12..-4 are ONE object: &nFrameCountOut is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -573,6 +581,7 @@ static uint32_t __stdcall CUNIT_CalculateSpriteBounds(uint32_t nFrame, uint32_t 
 namespace D2Client {
 
 // SelectProc=2 handler: target must be a consumable corpse (basic check). Forwards to D2CheckIfCorpseIsConsumable(pTargetUnit, bCheckDead=0). pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe8a4
 int __fastcall SKILL_SelectProc_IsCorpseConsumableBasic(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     uint32_t bConsumable = D2Common::Skills::D2CheckIfCorpseIsConsumable(pTargetUnit, 0);
     return bConsumable;
@@ -587,6 +596,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 }
 
 // SelectProc=3 handler: target must be a consumable corpse that can be converted and is not monsterId 0x4e (Bone Golem/special). Used for Raise Skeleton-type skills. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe8c2
 int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     if (!pTargetUnit) {
       return 0;
@@ -618,6 +628,7 @@ int __fastcall SKILL_SelectProc_IsConvertibleCorpse(D2UnitStrc * pUnit, D2UnitSt
 namespace D2Client { namespace UNIT { namespace CUnit {
 
 // Calls the skill's SelectProc handler with ECX = pUnit (the caster, loaded at 004642e7) and EDX = pTargetUnit, which is never written here and reaches the handler unchanged (1.14d asm).
+// 1.14d mac: 00100691
 static uint32_t __stdcall SKILL_ExecuteSelectProc(D2UnitStrc * pUnit, eD2Skills eSkill, D2UnitStrc * pTargetUnit) {
     // Static local variables (originally global data)
     static SkillSelectProcFn g_aSkillSelectProcHandlers[7] = { nullptr, &D2Client::SKILL_SelectProc_IsSelectableCorpse2, &D2Client::SKILL_SelectProc_IsCorpseConsumableBasic, &D2Client::SKILL_SelectProc_IsConvertibleCorpse, &D2Client::SKILL_SelectProc_IsCorpseValidForRevive, &D2Client::SKILL_SelectProc_IsSelectableCorpse, &D2Client::SKILL_SelectProc_CanReviveMonster }; D2_STATIC_GUARD(g_aSkillSelectProcHandlers, "D2Client::UNIT::CUnit::SKILL_ExecuteSelectProc::g_aSkillSelectProcHandlers");
@@ -659,6 +670,7 @@ static uint32_t SKILL_CheckActiveSkillSelectProc(D2UnitStrc * pUnit, D2UnitStrc 
     return (uint32_t)(nRightProcResult != 0);
 }
 
+// 1.14d mac: 000fe994
 uint32_t __fastcall IsSelected(D2UnitStrc * pUnit) {
     D2UnitStrc* pSelectedUnit = GAME::Select::GetSelectedUnit();
     if (pSelectedUnit && pSelectedUnit->eUnitType == UNIT_OBJECT) {
@@ -687,6 +699,7 @@ BOOL __fastcall CUNIT_IsPlayerOrMonster(D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 000ff7e0
 void __fastcall SetTargetByTypeAndGUID(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nTargetGUID) {
     D2UnitStrc* pTargetUnit = FindUnit(ServerSideUnitHashTables[eUnitType], nTargetGUID & 0x7f, eUnitType, nTargetGUID);
     D2Common::Units::SetTargetUnitForDynamicUnit(pUnit, pTargetUnit);
@@ -771,6 +784,7 @@ static uint32_t __stdcall SKILL_IsSequenceInputReady(D2UnitStrc * pUnit, D2Skill
 }
 
 // Returns TRUE if the player unit's current animation mode allows an incoming skill-interrupt. Returns FALSE immediately if the player is holding a cursor item. Blocks interrupts during Death, GetHit, Attack, Block, Cast, Throw, Kick, Dead, KnockBack, and class-specific Skill modes (Paladin Skill1, Assassin Skill2, Barb/Assassin/Druid Skill3-4). For Sequence mode, delegates to SKILL_IsSequenceInputReady.
+// 1.14d mac: 000ffac9
 BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     if (D2Common::INVENTORY::Inventory::INVENTORY_GetHandItem(pUnit->pInventory)) {
       return 0;
@@ -824,6 +838,7 @@ BOOL __fastcall PlayerCanBeInterrupted(D2UnitStrc * pUnit, D2SkillStrc * pSkill)
     return 1;
 }
 
+// 1.14d mac: 000ffbcc
 D2RoomStrc * __stdcall GetCurrentRoom() {
     if (pPlayerUnit) {
       D2RoomStrc* pRoom;
@@ -835,6 +850,7 @@ D2RoomStrc * __stdcall GetCurrentRoom() {
 }
 
 // On period-of-day change, refresh object auto-light state across object lists.
+// 1.14d mac: 000ffbf3
 void __stdcall UpdateObjectAutoLightOnPeriodChange() {
     static uint32_t gnCachedPeriodOfDay;
     D2_STATIC_GUARD_BSS(gnCachedPeriodOfDay, "D2Client::UNIT::CUnit::UpdateObjectAutoLightOnPeriodChange::gnCachedPeriodOfDay");
@@ -880,6 +896,7 @@ void __stdcall UpdateObjectAutoLightOnPeriodChange() {
     }
 }
 
+// 1.14d mac: 000ffcf0
 D2ServerCmdStrc * __fastcall GetServerCmd(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8a5);
@@ -889,6 +906,7 @@ D2ServerCmdStrc * __fastcall GetServerCmd(D2UnitStrc * pUnit) {
     return pUnit->pServerCmd;
 }
 
+// 1.14d mac: 000ffd31
 void __fastcall SetServerCmd(D2UnitStrc * pUnit, D2ServerCmdStrc * pServerCmd) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8af);
@@ -898,6 +916,7 @@ void __fastcall SetServerCmd(D2UnitStrc * pUnit, D2ServerCmdStrc * pServerCmd) {
     pUnit->pServerCmd = pServerCmd;
 }
 
+// 1.14d mac: 000ffd77
 void __fastcall CUNIT_ClearDeadSetAttackable(D2UnitStrc * pUnit) {
     eD2UnitFlags eUnitFlags = pUnit->eUnitFlags & ~UNITFLAG_ISDEAD;
     pUnit->eUnitFlags = eUnitFlags;
@@ -912,6 +931,7 @@ void __fastcall CUNIT_ClearDeadSetAttackable(D2UnitStrc * pUnit) {
     pUnit->eUnitFlags = eUnitFlags | UNITFLAG_CANBEATTACKED;
 }
 
+// 1.14d mac: 000ffe00
 void __fastcall SetDeadFlag(D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;
@@ -920,6 +940,7 @@ void __fastcall SetDeadFlag(D2UnitStrc * pUnit) {
     pUnit->eUnitFlags |= UNITFLAG_ISDEAD;
 }
 
+// 1.14d mac: 000fccde
 int __fastcall IsActive(D2UnitStrc * pUnit) {
     if (pUnit->eUnitFlags & UNITFLAG_ISDEAD) {
       return 1;
@@ -950,6 +971,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 }
 
 // Returns true if the unit is in a "dead/dying" animation state, per unit type: player=Dead anim, monster=Kick anim (unless unflatDead flag set), object=DrawUnder flags or Walk+flag, missile=UNITFLAG_ISDEAD, item=Run anim. Returns false for null unit or no match.
+// 1.14d mac: 000ffe13
 int32_t __fastcall IsAlive(D2UnitStrc * pUnit) {
     BOOL _bIsUnflatDead;
     bool bIsUnflatDead;
@@ -989,6 +1011,7 @@ int32_t __fastcall IsAlive(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 000ff8e6
 D2UnitStrc * __fastcall GetConfirmedTargetUnit(D2UnitStrc * pUnit) {
     Path::ConfirmTarget(pUnit);
     if (!pUnit->pPath.pDynamicPath) {
@@ -1000,6 +1023,7 @@ D2UnitStrc * __fastcall GetConfirmedTargetUnit(D2UnitStrc * pUnit) {
     return pTarget;
 }
 
+// 1.14d mac: 000fff1c D2Client::UNIT::CUnit::FreeLightMap
 void __fastcall FreeLightMap(D2UnitStrc * pUnit) {
     D2LightMapStrc* pLightMap = pUnit->uSideData.pClientSide.pLight;
     if (!pLightMap) {
@@ -1010,6 +1034,7 @@ void __fastcall FreeLightMap(D2UnitStrc * pUnit) {
     pUnit->uSideData.pClientSide.pLight = 0;
 }
 
+// 1.14d mac: 000fff40
 void __fastcall CUNIT_IterateServerUnitsWithCallback(fnUnitIterCallback pfnCallback) {
     if (!pfnCallback) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x961);
@@ -1019,6 +1044,7 @@ void __fastcall CUNIT_IterateServerUnitsWithCallback(fnUnitIterCallback pfnCallb
     CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[0], pfnCallback);
 }
 
+// 1.14d mac: 000fffaa
 void __fastcall CUNIT_IterateMissilesWithCallback(fnUnitIterCallback pfnCallback) {
     if (!pfnCallback) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x96c);
@@ -1028,6 +1054,7 @@ void __fastcall CUNIT_IterateMissilesWithCallback(fnUnitIterCallback pfnCallback
     CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[1], pfnCallback);
 }
 
+// 1.14d mac: 00100014
 void __fastcall CUNIT_IterateItemsWithCallback(fnUnitIterCallback pfnCallback) {
     if (!pfnCallback) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x977);
@@ -1052,6 +1079,7 @@ static D2UnitStrc * CUNIT_IterateUntilWarp(int * pUnit) {
     return (D2UnitStrc*)pUnit;
 }
 
+// 1.14d mac: 0010007e
 uint16_t * __fastcall ROOM_GetWarpDestinationName(D2RoomStrc * pRoom, D2UnitStrc * pWarpUnit) {
     eD2LevelId eDestLevel = !pWarpUnit ? ~LEVEL_None : pWarpUnit->nClassId;
     eDestLevel = D2Common::DUNGEON::Dungeon::GetWarpDestinationLevel(pRoom, eDestLevel);
@@ -1166,6 +1194,7 @@ uint16_t * __fastcall GetName(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 00100295
 uint32_t __fastcall DecrementGfxTimer(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa19);
@@ -1180,6 +1209,7 @@ uint32_t __fastcall DecrementGfxTimer(D2UnitStrc * pUnit) {
     return (uint32_t)!eAttachedState;
 }
 
+// 1.14d mac: 001002f5
 void __fastcall CUNIT_SetUnitFlag3(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa34);
@@ -1200,6 +1230,7 @@ uint32_t __fastcall CUNIT_GetStartLight(D2UnitStrc * pUnit) {
     return pUnit->uSideData.pClientSide.dwStartLight;
 }
 
+// 1.14d mac: 00100339
 void __fastcall SetLightRadius(D2UnitStrc * pUnit, int32_t nLightRadiusX) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa4a);
@@ -1260,6 +1291,7 @@ static uint32_t __stdcall CUNIT_IsItemInAnyInventory(D2UnitStrc * pExcludeUnit, 
 // @wasnamed MonsterDiedTrigger
 // @basis behaviour-confirmed and caller-corroborated. The old name was wrong in both halves and was flagged by the preceding pass. Body: null-check, then GFX_AddOverlayToUnit(pUnit, eOverlay, type, 0, nDuration, 0,0,0) with type 1 when nDuration > 0 and type 2 (engine default duration) otherwise, plus a fixed sound for OVERLAY_steallife and OVERLAY_stealmana. Nothing counts, reports or reacts to a death, and the subject is a plain D2UnitStrc, not a monster - MonsterMessage passes non-monster units through five of the six call sites' shared path.
 // "UnitDoOverlay" is a descriptive name taken from the Blizzard packet verb SCMD_UNIT_DOOVERLAY, which names opcode 0x11, whose handler NET_D2GS_CLIENT_Incoming0x11_UnitDoOverlay (0045d11c) is one of this function's six callers.
+// 1.14d mac: 00100598
 void __fastcall UnitDoOverlay(D2UnitStrc * pUnit, eOverlayId eOverlay, uint32_t nDuration) {
     if (!pUnit) {
       return;
@@ -1286,6 +1318,7 @@ void __fastcall UnitDoOverlay(D2UnitStrc * pUnit, eOverlayId eOverlay, uint32_t 
 }
 
 // @sourcefile .\UNIT\CUnit.cpp
+// 1.14d mac: 000ff2f2
 uint32_t __fastcall SKILL_IsTargetOwnedPet(D2UnitStrc * pUnit, int * pnSkillParams) {
     eD2Skills eSkillId;
     D2SkillsTxt* pSkillsTxt;
@@ -1322,6 +1355,7 @@ uint32_t __fastcall SKILL_IsTargetOwnedPet(D2UnitStrc * pUnit, int * pnSkillPara
 }
 // Returns 1 if pUnit has an allied-targeting skill (flags4 bit 2 set in skills.txt) equipped in either hand AND the skill target (pnSkillParams[3]) is in the same party/owned-by the caster. Returns 0 for non-player units unless pnSkillParams[1] matches. Used by skill targeting logic to allow friendly-fire bypass.
 // @sourcefile .\UNIT\CUnit.cpp
+// 1.14d mac: 000ff410
 uint32_t __fastcall SKILL_IsTargetAlliedUnit(D2UnitStrc * pUnit, int * pnSkillParams) {
     eD2Skills eSkillId;
     BOOL bHasAlliedSkill = 0;
@@ -1366,6 +1400,7 @@ uint32_t __fastcall SKILL_IsTargetAlliedUnit(D2UnitStrc * pUnit, int * pnSkillPa
 }
 
 // Single-player only (halts otherwise): copies an incoming server-authoritative dynamic path snapshot onto the corresponding local client unit's path. Resolves the local unit by type/GUID via QSERVER_FindUnitInFirstActiveGame, then bulk-copies coords, screen pos, path points, target/prev/saved targets, velocity/acceleration, distance, direction vectors and the 0x20 path flags from the local path into the server-path buffer (pServerPath), fixing up the room via DRLGROOM_FindBetterNearbyRoom + PATH_GetCollisionTypeAt if the tile changed. Then reconciles animation mode (Neutral/Walk/Run/Town* transitions, town-awareness) and skill-cast flags between the two paths and triggers a unit update. Clears the path's 0x2000 flag on exit. Effectively the SP-loopback bridge keeping client and 'server' unit paths in sync.
+// 1.14d mac: 000fe176
 void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
     DWORD nUnitGUID;
     D2RoomStrc* pBetterRoom;
@@ -1591,6 +1626,7 @@ void __fastcall CLIENT_SyncPathFromServer(D2UnitStrc * pDynamicPath) {
     }
 }
 
+// 1.14d mac: 0010066b
 int16_t __fastcall GetPlayerUnitPartyId(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_PLAYER) {
       int16_t nPartyId;
@@ -1601,6 +1637,7 @@ int16_t __fastcall GetPlayerUnitPartyId(D2UnitStrc * pUnit) {
     return -1;
 }
 
+// 1.14d mac: 000fc7c0
 D2RoomStrc * __fastcall FindRoom(int32_t nX, int32_t nY) {
     D2RoomStrc* pRoom;
     char szErrorMsg[512];
@@ -1886,6 +1923,7 @@ static void FreeAny(D2UnitStrc * pUnit) {
 }
 
 // Frees every unit in all server-side and client-side unit hash tables (128 buckets each, all 5 unit types), following gFreeUnitsOrder. Calls FreeAny on each unit and clears the bucket entry. Called during game teardown.
+// 1.14d mac: 000fdc2f
 void __stdcall FreeAllUnits() {
     // Static local variables (originally global data)
     static eD2UnitType gFreeUnitsOrder[6] = { UNIT_MONSTER, UNIT_PLAYER, UNIT_OBJECT, UNIT_MISSILE, UNIT_ITEM, UNIT_WARP }; D2_STATIC_GUARD(gFreeUnitsOrder, "D2Client::UNIT::CUnit::FreeAllUnits::gFreeUnitsOrder");
@@ -1936,6 +1974,7 @@ void __stdcall FreeAllUnits() {
 }
 
 // Client-side per-frame graphics update: iterates all client unit hash tables (objects, missiles, players, items) calling CLIENT_UpdateUnitFrame, then clears changed-stat flags on selected units/items/players. In singleplayer, also syncs server-side path data to client for players and missiles.
+// 1.14d mac: 000fde8c
 void __stdcall CLIENT_UpdateUnitGfxState() {
     D2UnitStrc* pTmp;
     CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[3], (fnUnitIterCallback)Path::CLIENT_UpdateUnitFrame);
@@ -1985,6 +2024,7 @@ void __stdcall CLIENT_UpdateUnitGfxState() {
     CUNIT_IterateHashTableWithCallback(ServerSideUnitHashTables[1], (fnUnitIterCallback)CLIENT_SyncPathFromServer);
 }
 
+// 1.14d mac: 000ff81f
 void __fastcall FaceTarget(D2UnitStrc * pUnit, int32_t bImmediate) {
     Path::ConfirmTarget(pUnit);
     if (!pUnit->pPath.pDynamicPath) {
@@ -2007,6 +2047,7 @@ void __fastcall FaceTarget(D2UnitStrc * pUnit, int32_t bImmediate) {
 }
 
 // Determines whether pUnit may interact with / target pUnit2 (hostility & targetability check). Returns nonzero if interaction allowed, 0 if not. Resolves pets to their player owner via RosterPets::GetRosterOwnerGUID and charmed/owned units. In town: only allows player-vs-player when ROSTER_CheckPlayerCanLoot permits looting a dead party member. Out of town: rejects self/same-unit; player-vs-player uses loot rights then PlayerList party flag (8); against monsters consults MonStats2 alSel/noSel flags (always-selectable / never-selectable); players may always interact with items and objects; otherwise falls back to Path::IsAllyOf (returns true only if NOT an ally). Also blocks a player from interacting with an enemy pet they don't own.
+// 1.14d mac: 000feff4
 uint32_t __fastcall CanInteractWith(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     DWORD nUnitGUID2;
     uint32_t nPartyFlag;
@@ -2172,15 +2213,18 @@ static void RemoveObject(int32_t nUnitGUID, eD2UnitType eUnitType, D2UnitStrc * 
     FreeAny(pUnit);
 }
 
+// 1.14d mac: 000fc70f
 void __fastcall RemoveObjectFromServerObjectTable(uint32_t nUnitGUID, eD2UnitType eUnitType) {
     CUnit::RemoveObject(nUnitGUID, eUnitType, ServerSideUnitHashTables[eUnitType], nUnitGUID & 0x7f);
 }
 
+// 1.14d mac: 000fc79e
 void __fastcall UNITS_RemoveFromClientHashTable(uint32_t dwUnitGUID, int32_t nUnitType) {
     CUnit::RemoveObject(dwUnitGUID, nUnitType, ClientSideUnitHashTables[nUnitType], dwUnitGUID & 0x7f);
 }
 
 // Inserts a newly allocated unit into the server-side hash table. If insertion fails due to a GUID collision, evicts the existing unit and retries. If the retry also fails, frees pUnit and returns null. Returns pUnit on success.
+// 1.14d mac: 000fd97e
 static D2UnitStrc * FinalizeCreation(D2UnitStrc * pUnit) {
     if (!InsertIntoHashTable(pUnit)) {
       D2UnitStrc* pExisting = FindUnit(ServerSideUnitHashTables[pUnit->eUnitType], pUnit->nUnitGUID & 0x7f, pUnit->eUnitType, pUnit->nUnitGUID);
@@ -2288,6 +2332,7 @@ static D2UnitStrc * __stdcall InitCommonData(D2UnitStrc * pUnit, int32_t nUnitGU
     return pFinalUnit;
 }
 
+// 1.14d mac: 000fcd18
 D2UnitStrc * __fastcall UNIT_CreateWarp(int32_t nUnitGUID, int32_t nClassId, int32_t nX, int32_t nY, eD2UnitType eUnitType, int32_t nItemAnimMode) {
     D2UnitStrc* pUnit = D2Common::Units::AllocUnit(nullptr, eUnitType);
     if (!pUnit) {
@@ -2300,6 +2345,7 @@ D2UnitStrc * __fastcall UNIT_CreateWarp(int32_t nUnitGUID, int32_t nClassId, int
 
 // Allocates and fully initialises a new player unit: sets class/GUID/expansion flag, finds the room at (nX,nY), seeds the unit RNG from the room seed, calls JoinRoomSetup + WALL2_InitUnitGfx + UpdateAnimSpeed, finalises insertion into the hash table, then sets the player name. Returns the new unit or null on failure.
 // @sourcefile .\UNIT\CUnit.cpp
+// 1.14d mac: 000fd004
 D2UnitStrc * __fastcall UNIT_CreatePlayer(int32_t nUnitGuid, int32_t nClassId, int32_t nX, int32_t nY, char * szName) {
     eD2LevelId eLevel;
     uint32_t nNewSeed;
@@ -2351,6 +2397,7 @@ D2UnitStrc * __fastcall UNIT_CreatePlayer(int32_t nUnitGuid, int32_t nClassId, i
     return pUnit;
 }
 
+// 1.14d mac: 000fd07e
 D2UnitStrc * __fastcall CreateObject(int32_t nUnitGUID, int32_t nClassId, int32_t nX, int32_t nY, eD2UnitType eUnitType, int32_t nUnused, int32_t nState, uint8_t nInteraction) {
     D2UnitStrc* pUnit = D2Common::Units::AllocUnit(nullptr, eUnitType);
     if (!pUnit) {
@@ -2371,6 +2418,7 @@ D2UnitStrc * __fastcall CreateObject(int32_t nUnitGUID, int32_t nClassId, int32_
 }
 
 // Client-side monster unit creation from a network create-monster packet. 00466723 is MOV EAX,ESI immediately before the epilogue: it returns the unit it made, and 0045f40c stores that into ESI and tests it. Typed void, the created monster was thrown away and NET_D2GS_CLIENT_Incoming0xAC read an uninitialised pUnit. The SIXTH parameter is real: 00466429 is CMP dword ptr [EBP+0x14],EBX - a client-unit flag at Stack[0x10]. Omitting it made the reconstruction read it as an uninitialised local and take the wrong branch.
+// 1.14d mac: 000fd102
 D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData, uint8_t * pItemSeed, uint8_t * pMonUModList, uint32_t nNameSeed, int16_t nBossId, int32_t bClientUnit) {
     uint8_t byDifficulty;
     D2UnitStrc* pUnit;
@@ -2536,6 +2584,7 @@ D2UnitStrc * __fastcall UNIT_CreateMonster(D2CreateMonsterUnitStrc * pCreateData
     return pUnit;
 }
 
+// 1.14d mac: 000fda3d
 D2UnitStrc * __fastcall CreateMissileOrMonster(int32_t nMonstatId, int32_t nX, int32_t nY, eD2UnitType eUnitType, int32_t nItemAnimMode) {
     // Static local variables (originally global data)
     static uint32_t nNextGUID = 0x1; D2_STATIC_GUARD(nNextGUID, "D2Client::UNIT::CUnit::CreateMissileOrMonster::nNextGUID");
@@ -2573,6 +2622,7 @@ static void ROOM_SpawnPresetUnitAtCoords(D2RoomStrc * pRoom, int * pPresetUnit) 
     CreateMissileOrMonster(pPresetUnit[1], pPresetUnit[2] + sRoomCoords.dwXStart, pPresetUnit[6] + sRoomCoords.dwYStart, pPresetUnit[5], *pPresetUnit);
 }
 
+// 1.14d mac: 000fdb83
 void __fastcall CreateUnitsForMissiles(D2RoomStrc * pRoom) {
     D2PresetUnitStrc* pPresetUnit;
     D2DrlgRoomCoordsStrc sRoomCoords;
@@ -2602,6 +2652,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_7(D2UnitStrc * p)
 
 // Client-side hit-test: determines whether a screen-space click at (nClickX,nClickY) lands on the given unit and whether that unit is a valid selection/interaction target for the local player. Honors split-screen border halves, skips uninteractable/hidden units, validates interactability (CanInteractWith / owned-pet / allied / active-skill select proc), then performs geometric containment using monster hit-test rectangle (monstats2 noGfxHitTest box), object collision/door sprite bounds, item run-mode + hold-alt rules, warp click areas, or per-piece sprite-bounds iteration for multi-piece gfx. Returns nonzero if the click selects the unit, 0 otherwise. pObjectsTxt out-param scratch.
 // @sourcefile .\UNIT\CUnit.cpp
+// 1.14d mac: 000fe9d5
 uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t nClickY, D2ObjectsTxt * pObjectsTxt) {
     POINT pt;
     BOOL bInRect;
@@ -2830,6 +2881,7 @@ uint32_t __fastcall HitTestScreen(D2UnitStrc * pUnit, int32_t nClickX, int32_t n
 }
 
 // Removes all items from pUnit's inventory: for each item, strips its stats from the owner via ITEM_RemoveItemStatsFromOwner, then removes it from the server-side hash table. If bCheckInventory!=0, skips items that are genuinely still in the inventory. Halts on type mismatch or broken inventory linkage.
+// 1.14d mac: 0010037c
 void __fastcall CleanupInventory(D2UnitStrc * pUnit, int32_t bCheckInventory) {
     uint32_t nItemGUID;
     uint32_t bInInventory;

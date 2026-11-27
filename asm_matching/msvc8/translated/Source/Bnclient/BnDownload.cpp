@@ -32,8 +32,28 @@ static unsigned int gbBnetDownloadCancelFlag = {0}; D2_STATIC_GUARD(gbBnetDownlo
 static char lpFileName_00881c58[260] = {0}; D2_STATIC_GUARD(lpFileName_00881c58, "lpFileName_00881c58");
 static LONG lpAddend_00881d5c = 0; D2_STATIC_GUARD(lpAddend_00881d5c, "lpAddend_00881d5c");
 
+#if !defined(_WIN32) && D2_OS_MAC
+#include <sys/stat.h>
+#include <string.h>
+#include "Source/MacSpecific/Source/MacShell/MacShell.h"
+// Mac helpers the prepatch applier calls (Storm Mac, Win32Mac and the Mac cursor guard).
+// 1.14d mac: 00034f87
+int SaveFileFromMemCreateDirs(const unsigned char* pPath, const BYTE* pBuffer, int nSize, unsigned char bResourceFork,
+                              unsigned char bUseTempFolder, unsigned char bParseTrailer);
+// 1.14d mac: 0002cd41
+int PATH_ToPosixPath(const char* szPath, char* szOut, int nOutSize);
+// 1.14d mac: 0001eafe
+unsigned char* c2pstr(char* szString);
+char* PATH_MakeFullPath(char* szFullPath, LPCSTR szPath, DWORD nBufferSize);
+// 1.14d mac: 0003afe5
+void SREG_FlushPrefsFiles();
+// 1.14d mac: 00036d5e
+bool MACCURSOR_CallGuardProc(bool bFlag);
+#endif
+
 namespace Bnclient { namespace BnDownload {
 
+// 1.14d mac: 0005272f
 static void __stdcall BNDOWNLOAD_WriteFileWithTimestamp(LPCSTR pThis, LPCVOID pData, DWORD nNumberOfBytesToWrite, FILETIME * pFileTime) {
     DWORD nBytesWritten;
     HANDLE hFile = Fog::Source::SFile::thunk_CreateFileA(pThis, 0x40000000, 0, (LPSECURITY_ATTRIBUTES)0x0, 2, 0x80, (HANDLE)0x0);
@@ -91,6 +111,7 @@ static BOOL __stdcall NET_CopyDllFromArchive(D2ArchiveStrc * pArchive, LPSTR szT
     return pMpqFile;
 }
 
+// 1.14d mac: 000536a3
 void __stdcall BNDOWNLOAD_SetCancelFlag() {
     gbBnetDownloadCancelFlag = 1;
 }
@@ -99,6 +120,7 @@ uint32_t __stdcall BNDOWNLOAD_HasActiveDownloads() {
     return (uint32_t)((intptr_t)lpAddend_00881d5c > 0);
 }
 
+// 1.14d mac: 00054809
 static BOOL __stdcall NET_RecvExact(SOCKET hSocket, char * pBuffer, uint32_t nLen) {
     int nRecvResult;
     uint32_t nBytesReceived;
@@ -137,6 +159,7 @@ static DWORD BNDOWNLOAD_GetCachedFileSize(LPCSTR szText, FILETIME * pftCompare) 
     return 0;
 }
 
+// 1.14d mac: 000536d0
 int32_t __fastcall BNDOWNLOAD_PerformCheckRevision(uint32_t * pdwVersionOut, uint32_t * pdwChecksumOut, uint8_t * pbResultOut) {
     // Frame slots -1068..-8 are ONE object: &dwAuthResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -258,6 +281,7 @@ void __fastcall BNDOWNLOAD_ExtractFileFromArchive(char * szFileName, D2ArchiveSt
     Storm::Source::SFile::SFileCloseFile(pMpqFile);
 }
 
+#if defined(_WIN32) || !D2_OS_MAC
 static BOOL BNDOWNLOAD_LaunchVerifiedExecutables(LPCSTR szText1, LPCSTR szText2) {
     while (*szText2) {
       if (!D2Hell::D2FILE_VerifyFileSignature(szText2)) {
@@ -272,11 +296,13 @@ static BOOL BNDOWNLOAD_LaunchVerifiedExecutables(LPCSTR szText1, LPCSTR szText2)
 
     return 1;
 }
+#endif
 
 void __fastcall BNDOWNLOAD_UpdateProgressPercent(uint32_t dwUnused, int32_t nBytesDone, uint32_t nTotalSize) {
     gnNetworkSendState = (uint32_t)(nBytesDone * 100) / nTotalSize;
 }
 
+// 1.14d mac: 0005450f
 void __fastcall BNDOWNLOAD_ResetState(uint32_t nResetValue) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&lpCriticalSection_00881f64);
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ gbBnetFtpFileTransferActive[0] = '\0';
@@ -285,15 +311,18 @@ void __fastcall BNDOWNLOAD_ResetState(uint32_t nResetValue) {
     LeaveCriticalSection(&lpCriticalSection_00881f64);
 }
 
+// 1.14d mac: 00054551
 int __stdcall BNDOWNLOAD_GetProgress() {
     return gnNetworkSendState;
 }
 
+// 1.14d mac: 000547be
 int __fastcall BNDOWNLOAD_SetPatchFilename(char * szText) {
     Storm::Source::SSTR::SStrCopy(lpFileName_00881c58, szText, 0x7fffffff);
     return 1;
 }
 
+// 1.14d mac: 000547f1
 uint32_t __stdcall BNDOWNLOAD_HasPatchFilename() {
     return (uint32_t)(lpFileName_00881c58[0] != '\0');
 }
@@ -381,6 +410,7 @@ static int32_t __stdcall BNDOWNLOAD_RecvFileFromSocket(LPCSTR pThis, SOCKET hSoc
 }
 
 // Processes BNet prepatch.lst from downloaded MPQ archive - executes patches, extracts files, launches updates
+#if defined(_WIN32) || !D2_OS_MAC
 int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
     // Frame slots -4020..-3996 are ONE object: &dwAuthResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -590,7 +620,9 @@ int __fastcall BNDOWNLOAD_ProcessPrepatchList(int * pResultOut) {
     *__frame0.pOpenFileOut = -1;
     return 0;
 }
+#endif
 
+#if defined(_WIN32) || !D2_OS_MAC
 int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched) {
     int nResult;
     BNDOWNLOAD_ProcessPrepatchList(&nResult);
@@ -606,7 +638,200 @@ int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched) {
 
     return 0;
 }
+#endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac has no separate list processor: one function reads Prepatch.lst out of each downloaded
+// archive, applies delete/extract/execute lines, registers the patch sources and launches the
+// signed updater programs.
+// 1.14d mac: 00053b62
+int __fastcall BNDOWNLOAD_ApplyPrepatch(BOOL * pbPatcherLaunched) {
+    char szModulePath[260];
+    char cPatches[1024];
+    char aszExecutables[1024];
+    char szFullPath[260];
+    char szPosixPath[1024];
+    char szMessage[256];
+    char szModuleName[260];
+    char szRegValue[260];
+    char szLine[256];
+    char szFileName[260];
+    char szTarget[260];
+    D2ArchiveStrc* pArchive;
+    D2MPQFileStrc* pListFile;
+    D2MPQFileStrc* pEntryFile;
+    uint32_t dwAuthResult;
+    int nResult = 0;
+
+    memset(szModulePath, 0, sizeof(szModulePath));
+    GetModuleFileNameA((HMODULE)0x0, szModulePath, sizeof(szModulePath));
+    szModulePath[sizeof(szModulePath) - 1] = '\0';
+    char* pSlash = szModulePath;
+    char cCurrentChar = szModulePath[0];
+    while (cCurrentChar != '\0') {
+      if (!Storm::Source::SSTR::SStrChr(pSlash + 1, '\\')) {
+        break;
+      }
+
+      pSlash = Storm::Source::SSTR::SStrChr(pSlash + 1, '\\');
+      cCurrentChar = *pSlash;
+    }
+
+    *pSlash = '\0';
+    memset(cPatches, 0, sizeof(cPatches));
+    if (Storm::Source::SReg::SRegLoadData("Patch", "Patches", 2, (LPBYTE)cPatches, sizeof(cPatches) - 2, nullptr) && cPatches[0] != '\0') {
+      char* pExecEnd = aszExecutables;
+      memset(aszExecutables, 0, sizeof(aszExecutables));
+      char* szArchiveName = cPatches;
+      do {
+        if (!Storm::Source::SFile::SFileOpenArchive(szArchiveName, nullptr, 0, &pArchive)) {
+          DeleteFileA(szArchiveName);
+          nResult = -1;
+          goto done;
+        }
+
+        Storm::Source::SFile::SFileAuthenticateArchive(pArchive, &dwAuthResult);
+        if (dwAuthResult && dwAuthResult < 5) {
+          Storm::Source::SFile::SFileCloseArchive(pArchive);
+          DeleteFileA(szArchiveName);
+          nResult = -1;
+          goto done;
+        }
+
+        if (Storm::Source::SFile::SFileOpenFileEx(pArchive, "Prepatch.lst", 0, (void**)&pListFile)) {
+          DWORD nListSize = Storm::Source::SFile::SFileGetFileSize(pListFile, (LPDWORD)0x0);
+          BYTE* pList = (BYTE*)Storm::Source::SMem::SMemAlloc(nListSize, ".\\BnDownload.cpp", 0x4f3, 0);
+          BYTE* pCursor = pList;
+          if (Storm::Source::SFile::SFileReadFile(pListFile, pList, nListSize, nullptr, nullptr) && nListSize != 0) {
+            do {
+              memset(szLine, 0, sizeof(szLine));
+              char* pOut = szLine;
+              while ((uint32_t)(pCursor - pList) < nListSize && pOut - szLine < 0xff) {
+                BYTE c = *pCursor;
+                if (c < 0xe && ((0x2401U >> (c & 0x1f)) & 1)) {
+                  break;
+                }
+
+                *pOut = c;
+                pOut[1] = '\0';
+                pCursor++;
+                pOut++;
+              }
+
+              while ((uint32_t)(pCursor - pList) < nListSize && (*pCursor == 10 || *pCursor == 0xd)) {
+                pCursor++;
+              }
+
+              memset(szFileName, 0, sizeof(szFileName));
+              memset(szFullPath, 0, sizeof(szFullPath));
+              char* pName = Storm::Source::SSTR::SStrChr(szLine, ' ');
+              if (pName) {
+                pName = Storm::Source::SSTR::SStrChr(szLine, ' ');
+                do {
+                  pName++;
+                } while (*pName == ' ');
+                Storm::Source::SSTR::SStrCopy(szFileName, pName, sizeof(szFileName));
+                sprintf(szFullPath, "%s\\%s", szModulePath, pName);
+              }
+
+              if (_strnicmp(szLine, "delete ", 7) == 0) {
+                DeleteFileA(szFullPath);
+              } else if (_strnicmp(szLine, "extract ", 8) == 0) {
+                if (Storm::Source::SFile::SFileOpenFileEx(pArchive, szFileName, 0, (void**)&pEntryFile)) {
+                  DWORD nEntrySize = Storm::Source::SFile::SFileGetFileSize(pEntryFile, (LPDWORD)0x0);
+                  void* pEntry = Storm::Source::SMem::SMemAlloc(nEntrySize, ".\\BnDownload.cpp", 0x5a1, 0);
+                  if (Storm::Source::SFile::SFileReadFile(pEntryFile, pEntry, nEntrySize, nullptr, nullptr)) {
+                    bool bResourceFork = false;
+                    char* pTarget = szFileName;
+                    if (szFileName[2] == '.' && toupper((unsigned char)szFileName[1]) == 'F') {
+                      if (toupper((unsigned char)szFileName[0]) == 'D') {
+                        pTarget = szFileName + 3;
+                      } else {
+                        bResourceFork = toupper((unsigned char)szFileName[0]) == 'R';
+                        if (bResourceFork) {
+                          pTarget = szFileName + 3;
+                        }
+                      }
+                    }
+
+                    c2pstr(pTarget);
+                    SaveFileFromMemCreateDirs((const unsigned char*)pTarget, (const BYTE*)pEntry, nEntrySize, bResourceFork, 0, !bResourceFork);
+                  }
+
+                  Storm::Source::SMem::SMemFree(pEntry, ".\\BnDownload.cpp", 0x5ba, 0);
+                  Storm::Source::SFile::SFileCloseFile(pEntryFile);
+                }
+              } else if (_strnicmp(szLine, "execute ", 8) == 0) {
+                uint32_t nStrLen = Storm::Source::SSTR::SStrCopy(pExecEnd, szFileName, 0x7fffffff);
+                pExecEnd += nStrLen + 1;
+              }
+            } while ((uint32_t)(pCursor - pList) < nListSize);
+          }
+
+          Storm::Source::SMem::SMemFree(pList, ".\\BnDownload.cpp", 0x528, 0);
+          Storm::Source::SFile::SFileCloseFile(pListFile);
+        }
+
+        Storm::Source::SFile::SFileCloseArchive(pArchive);
+        szArchiveName += Storm::Source::SSTR::SStrLen(szArchiveName) + 1;
+      } while (*szArchiveName != '\0');
+
+      Storm::Source::SReg::SRegSaveString("Patch", "Launcher", 2, "Diablo II");
+      char* pValue = szRegValue;
+      if (Fog::D2CheckExpansionGame()) {
+        pValue += sprintf(szRegValue, "%s;", "Diablo II Expansion Data");
+      }
+
+      sprintf(pValue, "%s;%s", "Diablo II Game Data", "Diablo II Sounds");
+      Storm::Source::SReg::SRegSaveString("Patch", "SrcData", 2, szRegValue);
+      Storm::Source::SReg::SRegSaveString("Patch", "DstData", 2, "Diablo II Patch");
+      SREG_FlushPrefsFiles();
+      if (pExecEnd == aszExecutables) {
+        strcpy(aszExecutables, "BNUpdate");
+        pExecEnd = aszExecutables + Storm::Source::SSTR::SStrLen(aszExecutables) + 1;
+      }
+
+      *pExecEnd = '\0';
+      BNGatewayAccess::SaveAndUnload(&BnSend::ActualRealmInfo);
+      nResult = 2;
+      if (aszExecutables[0] != '\0') {
+        MACCURSOR_CallGuardProc(true);
+        if (aszExecutables[0] != '\0') {
+          char* szExecutable = aszExecutables;
+          do {
+            if (!::PATH_MakeFullPath(szFullPath, szExecutable, sizeof(szFullPath))
+                || PATH_ToPosixPath(szFullPath, szPosixPath, sizeof(szPosixPath)) != 0
+                || chmod(szPosixPath, 0x1ed) == -1
+                || MACSEC_IsBlizzardSigned(szPosixPath) != true
+                || !MAC_SpawnProcess(szPosixPath)) {
+              sprintf(szMessage, "The battle.net update program, %s, could not be launched automatically. Please launch it manually when the game quits.", szExecutable);
+              GetModuleFileNameA(GetModuleHandleA(nullptr), szModuleName, sizeof(szModuleName));
+              MessageBoxA(nullptr, szMessage, strrchr(szModuleName, '\\') + 1, 0x40);
+              nResult = -1;
+              goto done;
+            }
+
+            szExecutable += Storm::Source::SSTR::SStrLen(szExecutable) + 1;
+          } while (*szExecutable != '\0');
+          nResult = 2;
+        }
+      }
+    }
+
+done:
+    if (nResult > 1 || nResult < 0) {
+      if (nResult == 2) {
+        *pbPatcherLaunched = 1;
+      }
+
+      return 0;
+    }
+
+    return 1;
+}
+#endif
+
+// 1.14d mac: 00052b80
 uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
     u_short nPort;
     char* pcToken;
@@ -845,6 +1070,7 @@ uint32_t __stdcall BnetDownloadFile_II(void * lpThreadParam) {
     return 0;
 }
 
+// 1.14d mac: 0005251f
 void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t dwDownloadFlags, uint32_t eFileType, uint32_t nOpcode, FILETIME * pFileTime, char * szText1, char * szText2) {
     FILETIME ftCacheTime;
     uint32_t nThreadId;
@@ -897,7 +1123,11 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, szBufferInput, 0x104);
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, szText2, 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_00881d5c);
+#if !defined(_WIN32) && D2_OS_MAC
+    HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId, "DownloadThreadProc");
+#else
     HANDLE hObject = (HANDLE)_beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
+#endif
     if (!hObject) {
       return;
     }
@@ -907,6 +1137,7 @@ void __fastcall BNDOWNLOAD_InitiateFileDownload(int32_t pDownloadCtx, uint32_t d
 
 // Processes downloaded BNFTP files: version info, cache files, ads, bnserver.ini, and ExtraWork DLLs. Handles extraction, loading, and cleanup.
 // EDX nDownloadFlags: download context +0x22c (file download) or 2 (patch download); not read here.
+// 1.14d mac: 000527c1
 void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownloadFlags, uint32_t eFileType, uint32_t pModTime, LPCSTR szSourcePath, char * szDestPath, char * pPoolMgr, void * nSize, int32_t bDeleteSource, int32_t bIsExtraWork) {
     // Frame slots -4672..-4644 are ONE object: &dwStackPad5 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -1148,6 +1379,7 @@ void __fastcall NET_BNFTP_CLIENT_ProcessFile(int32_t nOpcode, uint32_t nDownload
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&lpCriticalSection_00881f64);
 }
 
+// 1.14d mac: 00054562
 uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_t nSize) {
     FILETIME ftCacheTime;
     FILETIME ftZero;
@@ -1209,7 +1441,11 @@ uintptr_t __fastcall BNDOWNLOAD_InitiatePatchDownload(BYTE * pPatchList, uint32_
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szFileName, (char*)pPatchList, 0x104);
     Storm::Source::SSTR::SStrCopy(pThreadCtx->szOutputPath, "", 0x104);
     /* LONG * lpAddend for InterlockedIncrement */ InterlockedIncrement(&lpAddend_00881d5c);
+#if !defined(_WIN32) && D2_OS_MAC
+    uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId, "DownloadThreadProc");
+#else
     uintptr_t nThreadHandle = _beginthreadex(nullptr, 0, BnetDownloadFile_II, pThreadCtx, 0, &nThreadId);
+#endif
     return nThreadHandle;
 }
 

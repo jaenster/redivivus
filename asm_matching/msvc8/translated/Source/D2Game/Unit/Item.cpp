@@ -359,6 +359,7 @@ void __fastcall SendUpdatedItemsToClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     ITEMS::ItemMode::ITEMMODE_ReturnZero3(pGame, pUnit, 1);
 }
 
+// 1.14d mac: 001b5833
 void __fastcall ITEM_ClearFlagsAndCommands(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint32_t gaItemClearFlagTable[8] = { 0x20, 0x2, 0x8, 0x80, 0x40, 0x1, 0x200, 0x40000 }; D2_STATIC_GUARD(gaItemClearFlagTable, "D2Game::UNIT::ITEM_ClearFlagsAndCommands::gaItemClearFlagTable");
@@ -418,6 +419,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_23(D2UnitStrc * p
     return p->eUnitFlagsEx >> 23 & 1;
 }
 
+// 1.14d mac: 001b58ac
 BOOL __fastcall ITEM_HasPendingInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitStrc* pFoundItem;
     if (pUnit && (FlagBit_D2UnitStrc_eUnitFlagsEx_22(pUnit) || FlagBit_D2UnitStrc_eUnitFlagsEx_23(pUnit))) {
@@ -474,6 +476,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_0(D2UnitStrc * p)
 
 // Drains the pending-update queue on pUnit's inventory. For each queued GUID, looks up the item unit and clears body-loc overrides for TAKE/SET/EXCHANGE commands, then calls ITEM_ClearFlagsAndCommands. Recursively processes socketed-item sub-inventories. Finally deletes items marked ITEMCMD_DELETE. Called server-side after inventory transactions to apply deferred state changes.
 // @sourcefile .\INVENTORY\InvMode.cpp
+// 1.14d mac: 001b5919
 void __fastcall ITEM_ProcessInventoryUpdates(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2InventoryStrc* pInventory = pUnit->pInventory;
     if (!pInventory) {
@@ -627,6 +630,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_0(D2UnitStrc * p) {
 }
 
 // Server-side per-unit update flush: emits all pending network packets for one unit to one client (pClient) based on the unit's eUnitFlags/eUnitFlagsEx. Sends a 0x15 reassign packet on UNITFLAGEX_TELEPORTED (with current x/y) and refreshes room visibility; flushes monster update (DOUPDATE), queued unit messages, hover text, proxy/merc inventory items (HASINV), sound, NPC health, and (when nIsNew==0) state/overlay/enchant updates. Reads STATES_HasAnyGfxFlag / STATLIST_HasChangedStats to decide state/overlay sends, and clears UNITFLAG_MONMODEISCHANGING.
+// 1.14d mac: 001dd4dd D2Game::UNIT::Item::PacketUpdateForClient
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nIsNew) {
     int32_t wPosX;
     D2UnitStrc* pPlayer;

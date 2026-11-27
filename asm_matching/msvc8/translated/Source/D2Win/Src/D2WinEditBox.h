@@ -70,6 +70,9 @@ uint32_t __fastcall D2WINEDITBOX_GetTextLength(uint16_t * pwChar);
 void __fastcall FORMS_DestroyD2WinEditBox(::D2WinEditBox * pWinEditBox);
 char * __stdcall D2WINEDITBOX_GetClipboardText();
 BOOL __fastcall D2WINEDITBOX_SetClipboardText(char * szText);
+#if !defined(_WIN32) && D2_OS_MAC
+BOOL __fastcall D2WINEDITBOX_HandleMenuCommand(::D2WinEditBox * pEditBox, uint32_t nCommand);
+#endif
 // Clears the selection: nSelAnchor = -1, nSelCursor = 0. Halts (lines 0x1A4/0x1A6) unless
 // pEditBox is a non-null FORM_EditBox. It does not touch focus.
 void __fastcall D2WINEDITBOX_ClearSelection(::D2WinEditBox * pEditBox);

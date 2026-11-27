@@ -26,7 +26,7 @@ typedef struct HKL__ * HKL;
 
 typedef uint16_t LANGID;
 
-typedef tagCANDIDATELIST * LPCANDIDATELIST;
+typedef struct tagCANDIDATELIST * LPCANDIDATELIST;
 
 #endif // _WIN32
 

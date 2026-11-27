@@ -44,6 +44,7 @@ typedef int (__fastcall *fnSkillCalcMethod)(int32_t nCalcCode, void * pContext);
 namespace D2Common { namespace Units { namespace Missile {
 
 // @sourcefile .\UNITS\Missile.cpp
+// 1.14d mac: 0018afd4
 void __stdcall AllocMissileData(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && !pUnit->pUnitData.pUnitDataMissile)) {
       return;
@@ -56,6 +57,7 @@ void __stdcall AllocMissileData(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNITS\Missile.cpp
+// 1.14d mac: 0018b044
 void __stdcall FreeMissileData(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
@@ -65,6 +67,7 @@ void __stdcall FreeMissileData(D2UnitStrc * pUnit) {
     pUnit->pUnitData.pUnitDataMissile = 0;
 }
 
+// 1.14d mac: 0018b09a
 int32_t __stdcall GetFlags(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return pUnit->pUnitData.pUnitDataMissile->dwMissileFlags;
@@ -73,6 +76,7 @@ int32_t __stdcall GetFlags(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b0b7
 void __stdcall SetFlags(D2UnitStrc * pUnit, int32_t dwFlags) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
@@ -81,6 +85,7 @@ void __stdcall SetFlags(D2UnitStrc * pUnit, int32_t dwFlags) {
     pUnit->pUnitData.pUnitDataMissile->dwMissileFlags = dwFlags;
 }
 
+// 1.14d mac: 0018b0d5
 void __stdcall SetLevel(D2UnitStrc * pUnit, int nLevel) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
@@ -89,6 +94,7 @@ void __stdcall SetLevel(D2UnitStrc * pUnit, int nLevel) {
     pUnit->pUnitData.pUnitDataMissile->nSkillLevel = (int16_t)nLevel;
 }
 
+// 1.14d mac: 0018b0f4 D2Common::Units::Missile::GetLevel
 int32_t __stdcall GetLevel(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return (int)pUnit->pUnitData.pUnitDataMissile->nSkillLevel;
@@ -97,6 +103,7 @@ int32_t __stdcall GetLevel(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b112 D2Common::Units::Missile::SetSkill
 void __stdcall SetSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
@@ -110,6 +117,7 @@ void __stdcall SetSkill(D2UnitStrc * pUnit, eD2Skills eSkill) {
     pUnit->pUnitData.pUnitDataMissile->nSkillNo = (int16_t)eClampedSkill;
 }
 
+// 1.14d mac: 0018b146 D2Common::Units::Missile::GetSkillId
 eD2Skills __stdcall GetSkillId(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return (int)pUnit->pUnitData.pUnitDataMissile->nSkillNo;
@@ -118,6 +126,7 @@ eD2Skills __stdcall GetSkillId(D2UnitStrc * pUnit) {
     return SKILL_Attack;
 }
 
+// 1.14d mac: 0018b164
 void __stdcall SetTotalFrames(D2UnitStrc * pUnit, int32_t nTotalFrames) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
@@ -130,6 +139,7 @@ void __stdcall SetTotalFrames(D2UnitStrc * pUnit, int32_t nTotalFrames) {
     pUnitDataMissile->nTotalFrames = (int16_t)min(max(nTotalFrames, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 }
 
+// 1.14d mac: 0018b19f
 int32_t __stdcall GetTotalFrames(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return (int)pUnit->pUnitData.pUnitDataMissile->nTotalFrames;
@@ -138,6 +148,7 @@ int32_t __stdcall GetTotalFrames(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b1bd
 void __stdcall SetCurrentFrame(D2UnitStrc * pUnit, int32_t nCurrentFrame) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
@@ -150,6 +161,7 @@ void __stdcall SetCurrentFrame(D2UnitStrc * pUnit, int32_t nCurrentFrame) {
     pUnitDataMissile->nCurrentFrame = (int16_t)min(max(nCurrentFrame, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 }
 
+// 1.14d mac: 0018b1f8
 int32_t __stdcall GetCurrentFrame(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return (int)pUnit->pUnitData.pUnitDataMissile->nCurrentFrame;
@@ -158,6 +170,7 @@ int32_t __stdcall GetCurrentFrame(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b216
 int32_t __stdcall GetRemainingFrames(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
       D2UnitDataMissileStrc* pUnitDataMissile;
@@ -170,6 +183,7 @@ int32_t __stdcall GetRemainingFrames(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b23a
 int32_t __stdcall GetClassId(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
       return pUnit->nClassId;
@@ -178,6 +192,7 @@ int32_t __stdcall GetClassId(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b250
 void __stdcall SetOwner(D2UnitStrc * pUnit, D2UnitStrc * pOwner) {
     if ((!pUnit ? UNIT_COUNT : pUnit->eUnitType) != UNIT_MISSILE) {
       return;
@@ -214,6 +229,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     }
     return (int)(-1);
 }
+// 1.14d mac: 0018b2c5
 BOOL __stdcall CheckUnitIfOwner(D2UnitStrc * pMissile, D2UnitStrc * pUnit) {
     int nClassId;
     if (pMissile && pUnit && pMissile->eUnitType == UNIT_MISSILE) {
@@ -231,6 +247,7 @@ BOOL __stdcall CheckUnitIfOwner(D2UnitStrc * pMissile, D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b33f
 void __stdcall SetStreamMissile(D2UnitStrc * pUnit, int nStreamMissile) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
@@ -239,6 +256,7 @@ void __stdcall SetStreamMissile(D2UnitStrc * pUnit, int nStreamMissile) {
     *(uint16_t*)&pUnit->pUnitData.pUnitDataMissile->unk0x04 = (uint16_t)nStreamMissile;
 }
 
+// 1.14d mac: 0018b35e
 int32_t __stdcall GetStreamMissile(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return (int)(short int)pUnit->pUnitData.pUnitDataMissile->unk0x04;
@@ -247,6 +265,7 @@ int32_t __stdcall GetStreamMissile(D2UnitStrc * pUnit) {
     return -1;
 }
 
+// 1.14d mac: 0018b37f
 void __stdcall SetStreamRange(D2UnitStrc * pUnit, int16_t nStreamRange) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
@@ -255,6 +274,7 @@ void __stdcall SetStreamRange(D2UnitStrc * pUnit, int16_t nStreamRange) {
     *(int16_t*)((intptr_t)&pUnit->pUnitData.pUnitDataMissile->unk0x04 + 2) = nStreamRange;
 }
 
+// 1.14d mac: 0018b39e
 int32_t __stdcall GetStreamRange(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return (int)*(short int*)((intptr_t)&pUnit->pUnitData.pUnitDataMissile->unk0x04 + 2);
@@ -263,6 +283,7 @@ int32_t __stdcall GetStreamRange(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b3bc
 int32_t __stdcall GetHitClass(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
       int nMissileClassId;
@@ -276,6 +297,7 @@ int32_t __stdcall GetHitClass(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b408
 void __stdcall SetActivateFrame(D2UnitStrc * pUnit, int32_t nActivateFrame) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
@@ -289,6 +311,7 @@ void __stdcall SetActivateFrame(D2UnitStrc * pUnit, int32_t nActivateFrame) {
     pMissileData->nActivateFrame = (int16_t)min(max(nActivateFrame, -0x8000), 0x7fff); // steer-ok: windef.h min/max macros
 }
 
+// 1.14d mac: 0018b443
 int32_t __stdcall GetActivateFrame(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return (int)pUnit->pUnitData.pUnitDataMissile->nActivateFrame;
@@ -305,6 +328,7 @@ int32_t __stdcall GetAnimSpeed(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b464
 void __stdcall SetAnimSpeed(D2UnitStrc * pUnit, int32_t nAnimSpeed) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE)) {
       return;
@@ -321,6 +345,7 @@ void __fastcall SetStream(D2UnitStrc * pUnit, D2MissileStreamStrc * pStream) {
     pUnit->pUnitData.pUnitDataMissile->pStream = pStream;
 }
 
+// 1.14d mac: 0018b49a
 D2MissileStreamStrc * __fastcall GetStream(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return pUnit->pUnitData.pUnitDataMissile->pStream;
@@ -329,6 +354,7 @@ D2MissileStreamStrc * __fastcall GetStream(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 0018b4b7
 void __stdcall SetTargetX(D2UnitStrc * pUnit, int32_t nTargetX) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
@@ -337,6 +363,7 @@ void __stdcall SetTargetX(D2UnitStrc * pUnit, int32_t nTargetX) {
     pUnit->pUnitData.pUnitDataMissile->nHomeStatus = nTargetX;
 }
 
+// 1.14d mac: 0018b4d5
 int32_t __stdcall GetTargetX(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return pUnit->pUnitData.pUnitDataMissile->nHomeStatus;
@@ -345,6 +372,7 @@ int32_t __stdcall GetTargetX(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0018b4f2
 void __stdcall SetTargetY(D2UnitStrc * pUnit, int32_t nTargetY) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile)) {
       return;
@@ -353,6 +381,7 @@ void __stdcall SetTargetY(D2UnitStrc * pUnit, int32_t nTargetY) {
     pUnit->pUnitData.pUnitDataMissile->sCoords = nTargetY;
 }
 
+// 1.14d mac: 0018b510
 int32_t __stdcall GetTargetY(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE && pUnit->pUnitData.pUnitDataMissile) {
       return pUnit->pUnitData.pUnitDataMissile->sCoords;
@@ -399,6 +428,7 @@ void __stdcall GetHomeType(D2UnitStrc * pUnit, int * nHomeType, int * nHomeGUID)
     *nHomeGUID = -1;
 }
 
+// 1.14d mac: 0018c744
 static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     uint32_t DVar1;
     int nCritChance = Stats::StatsEx::STATSEX_GetCurrentStat(pItem, UNITSTAT_passive_critical_strike, 0);
@@ -429,6 +459,7 @@ static BOOL __stdcall HasBonusStats(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
 
 // Accumulates all elemental damage stats from pUnit into pMissileDamageData, left-shifted by nShift. Reads fire/lightning/magic/cold/poison/life-drain/mana-drain/burning min+max stats and their durations from pUnit via GetStatUnsignedValue, then adds each (shifted) value to the corresponding field of D2MissileDamageDataStrc. Poison length uses skill_poison_override_length if present, otherwise poisonlength+poison_count. Custom register calling convention: pMissileDamageData=ESI, pUnit=EDI, nShift=EBX.
 // nShift is passed in EBX and copied to ECX before each SHL; only CL is used.
+// 1.14d mac: 0018c84d
 static void AddStatsToDamage(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, int32_t nShift) {
     int nStatValue = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_firemindam, 0);
     pMissileDamageData->nFireMinDamage += nStatValue << D2_SHIFT_COUNT(nShift);
@@ -475,6 +506,7 @@ static void AddStatsToDamage(D2MissileDamageDataStrc * pMissileDamageData, D2Uni
 }
 
 // Scales all elemental damage fields in pMissileDamageData by nSrcDamage/128 (arithmetic right-shift by 7 with rounding correction). If nSrcDamage == 0x80 (i.e. factor is exactly 1.0), the function is a no-op. Mutates fire/lightning/magic/cold/poison/life-drain/mana-drain/burning min+max values and their durations in-place. Custom register calling convention: pMissileDamageData=ECX, nSrcDamage=ESI.
+// 1.14d mac: 0018ca8c
 static void CalculateFinalDamage(D2MissileDamageDataStrc * pMissileDamageData, int32_t nSrcDamage) {
     if (nSrcDamage == 0x80) {
       return;
@@ -517,6 +549,7 @@ static void CalculateFinalDamage(D2MissileDamageDataStrc * pMissileDamageData, i
 }
 
 // Returns nSrcDamage scaled by the owner unit's elemental mastery passive stat for nElemType (fire/lightning/cold+freeze/poison). Reads UNITSTAT_passive_*_mastery via GetStatUnsignedValue and applies the percentage via D2ApplyPercent. Returns 0 if no mastery or unknown element.
+// 1.14d mac: 0018c5ee
 static int32_t CalculateMasteryBonus(D2UnitStrc * pUnit, eD2ElementalDamageTypeDWORD nElemType, int32_t nSrcDamage) {
     int nMasteryPercent;
     int32_t nScaledDamage;
@@ -559,6 +592,7 @@ static int32_t CalculateMasteryBonus(D2UnitStrc * pUnit, eD2ElementalDamageTypeD
 }
 
 // Writes all damage stats from a D2MissileDamageDataStrc onto a missile unit via STATLIST_SetUnitStat. Covers physical, fire, lightning, magic, cold, poison, life/mana/stamina drain, stun, burning, demon/undead damage%, target-AC, and bypass flags. Also copies damage-vs-montype bonus layers from the caster (pUnit) to the missile if pUnit is non-null.
+// 1.14d mac: 0018cc13
 void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2MissileDamageDataStrc * pMissileDamageData, int32_t nLevel) {
     uint32_t dwMissileFlags;
     int iBonusLayer;
@@ -635,6 +669,7 @@ void __stdcall SetDamageStats(D2UnitStrc * pUnit, D2UnitStrc * pMissile, D2Missi
 }
 
 // Returns the minimum physical damage for a missile at a given level. Resolves nMissileId and nLevel from the pUnit missile if not provided. Looks up D2MissilesTxt base MinDamage + level breakpoint bonus (MinLevDam1), optionally scales by DmgSymPerCalc calc expression, then shifts result left by HitShift. Returns 0 for non-missile units or invalid missile IDs.
+// 1.14d mac: 0018bf00
 int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t nMissileId, int32_t nLevel) {
     if (pUnit && pUnit->eUnitType != UNIT_MISSILE) {
       return 0;
@@ -669,6 +704,7 @@ int32_t __stdcall GetMinDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
 }
 
 // Returns the maximum physical damage for a missile at a given level. Mirrors GetMinDamage but uses MaxDamage + MaxLevDam1 from D2MissilesTxt. Optionally scales by DmgSymPerCalc, then shifts by HitShift. Returns 0 for non-missile units or invalid missile IDs.
+// 1.14d mac: 0018c095
 int32_t __stdcall GetMaxDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t nMissileId, int32_t nLevel) {
     if (pUnit && pUnit->eUnitType != UNIT_MISSILE) {
       return 0;
@@ -701,6 +737,7 @@ int32_t __stdcall GetMaxDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t 
     return nValue << D2_SHIFT_COUNT(pMissileTxt->HitShift);
 }
 
+// 1.14d mac: 0018d212
 uint8_t __stdcall GetElemTypeFromMissileId(int32_t nMissileId) {
     D2MissilesTxt* pMissilesTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
     if (!pMissilesTxt) {
@@ -711,6 +748,7 @@ uint8_t __stdcall GetElemTypeFromMissileId(int32_t nMissileId) {
 }
 
 // Returns the minimum elemental damage for a missile at a given level. Same structure as GetMinDamage but reads D2MissilesTxt EMin + MinELev1 level breakpoint and EDmgSymPerCalc calc expression. Result is shifted left by HitShift. Returns 0 for non-missile units or invalid IDs.
+// 1.14d mac: 0018c22a
 int32_t __stdcall GetMinElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t nMissileId, int32_t nLevel) {
     if (pUnit && pUnit->eUnitType != UNIT_MISSILE) {
       return 0;
@@ -744,6 +782,7 @@ int32_t __stdcall GetMinElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
 }
 
 // Returns the maximum elemental damage for a missile at a given level. Mirrors GetMinElemDamage but uses EMax + MaxELev1 from D2MissilesTxt. Optionally scales by EDmgSymPerCalc, then shifts by HitShift. Returns 0 for non-missile units or invalid IDs.
+// 1.14d mac: 0018c3bf
 int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int32_t nMissileId, int32_t nLevel) {
     if (pUnit && pUnit->eUnitType != UNIT_MISSILE) {
       return 0;
@@ -776,6 +815,7 @@ int32_t __stdcall GetMaxElemDamage(D2UnitStrc * pUnit, D2UnitStrc * pOwner, int3
     return nValue << D2_SHIFT_COUNT(pMissileTxt->HitShift);
 }
 
+// 1.14d mac: 0018c554
 int32_t __stdcall GetElementalLength(D2UnitStrc * nUnused, D2UnitStrc * pUnit, int32_t nMissileId, int32_t nLevel) {
     int nLevLenBonus;
     D2MissilesTxt* pMissileTxt = nMissileId >= 0 && nMissileId < ITEMS::Items::sgptDataTable->nTxtMissilesSize ? ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileId : nullptr;
@@ -797,6 +837,7 @@ int32_t __stdcall GetElementalLength(D2UnitStrc * nUnused, D2UnitStrc * pUnit, i
 }
 
 // Resolves a numeric parameter from a missile's Missiles.txt row, selected by nParamId. Validates pUnit is a UNIT_MISSILE (or null) and nMissileId is in range, then switch(nParamId) returns either a raw txt column (Param1-5, CltParam1-5, sHitPar/cHitPar 1-3, dParam1-2, level), a computed elemental/physical min/max damage (via GetMin/MaxElemDamage / GetMin/MaxDamage, some >>8 fixed-point), a range (LevRange*level+Range), or a per-level scaling (linear param1+(lvl-1)*param2 or SKILLS_CalcDiminishingReturns). Returns 0 if validation fails or nParamId is unhandled. Used by missile damage/behavior calc.
+// 1.14d mac: 0018d254
 int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, uint8_t nParamId, int32_t nMissileId, int32_t nLevel) {
     int32_t nResult;
     if (pUnit && pUnit->eUnitType != UNIT_MISSILE) {
@@ -946,6 +987,7 @@ int32_t __stdcall GetSpecialParamValue(D2UnitStrc * pUnit, D2UnitStrc * pOwner, 
     return nResult;
 }
 
+// 1.14d mac: 0018d637
 int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t nOperand3, void * pContext) {
     if (nLeft < nRight) {
       return nLeft;
@@ -955,6 +997,7 @@ int __fastcall MISSILE_Min(int nLeft, int nRight, uint32_t nOperand3, void * pCo
     return nLeft;
 }
 
+// 1.14d mac: 0018d647
 int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t nOperand3, void * pContext) {
     if (nLeft > nRight) {
       return nLeft;
@@ -964,6 +1007,7 @@ int __fastcall MISSILE_Max(int nLeft, int nRight, uint32_t nOperand3, void * pCo
     return nLeft;
 }
 
+// 1.14d mac: 0018d657
 int32_t __fastcall GetRandomNumberInRange(int32_t nMin, int32_t nMax, int32_t nUnused, D2MissileRandCalcStrc * pCalc) {
     if (!pCalc) {
       return 0;
@@ -976,6 +1020,7 @@ int32_t __fastcall GetRandomNumberInRange(int32_t nMin, int32_t nMax, int32_t nU
     return nRandResult + nMin;
 }
 
+// 1.14d mac: 0018d6a6
 int32_t __fastcall GetSpecialParamValueForSkillMissile(eD2Skills eSkill, uint8_t nParamId, int32_t nUnused, D2MissileCalcContextStrc * pMissileCalc) {
     if (!pMissileCalc) {
       return 0;
@@ -1002,6 +1047,7 @@ static inline D2UnitDataMissileStrc * GetMissileDataInline(D2UnitStrc * pUnit) {
 }
 
 // Evaluates missile calc expression using missile/owner context and resolved missile id/level; dispatches into the calc VM callback path.
+// 1.14d mac: 0018d148
 int32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * pOwner, uint32_t nCalcExpression, int32_t nMissileId, int32_t nMissileLevel) {
     // Static local variables (originally global data)
     static D2ItemsEventMethodStrc gaMissileCalcMethods[4] = {
@@ -1056,6 +1102,7 @@ int32_t __stdcall MISSILE_EvalMissileCalc(D2UnitStrc * pMissile, D2UnitStrc * pO
 }
 
 // Computes the full damage profile for a missile into a D2MissileDamageDataStrc (zeroed first, 0x7c bytes). Resolves base/elemental damage either from missiles.txt fields (SrcDamage/SrcMissDmg, EType, GetMin/MaxDamage, mastery bonus) or, when the missile carries a skill, from that skill's calc functions (SKILL_CalcMin/MaxDamage, SERVER_Min/MaxDamage, synergy). When SrcDamage applies, folds in the owner's weapon-derived physical damage (mindamage/maxdamage scaled by SrcDamage%, two-handed halving, str/dex item bonuses, throwing/secondary/two-hand weapon-damage stats, blunt-vs-undead bonus) plus damage%, item min/max-damage%, demon/undead/targetAC% and skill bypass-undead/demon/beast flags. When SrcMissDmg applies instead, pulls those stats from pUnit2. Routes elemental min/max/length into the matching fire/light/magic/cold/poison/drain/stun/burning fields, then calls AddStatsToDamage + CalculateFinalDamage. Core server missile-damage calc; no output if the missile/owner is invalid.
+// 1.14d mac: 0018b52f
 void __stdcall EvaluateMissileFormula(D2MissileDamageDataStrc * pMissileDamageData, D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2UnitStrc * pMissile, int32_t nLevel) {
     BOOL _bHasBonusStats;
     int pDVar1;

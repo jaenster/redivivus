@@ -30,6 +30,7 @@
 
 namespace D2Game { namespace SKILLS { namespace SkillAma {
 
+// 1.14d mac: 00245d19
 BOOL __fastcall SKILLAMA_SrvStFn04_ArrowAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bHasAmmo = SkillsServer::SKILLS_CheckThrowableAmmo(pUnit);
     if (!bHasAmmo) {
@@ -41,6 +42,7 @@ BOOL __fastcall SKILLAMA_SrvStFn04_ArrowAttack(::SGAMEDATA * pGame, D2UnitStrc *
     return 1;
 }
 
+// 1.14d mac: 00245d5b
 BOOL __fastcall SKILLAMA_SrvStFn05_Jab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -52,6 +54,7 @@ BOOL __fastcall SKILLAMA_SrvStFn05_Jab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 }
 
 // Amazon skill strike-step handler. Gets the current target, performs an auto-hit check (no ToHit roll), then if hit: reads calc[0] for enhanced-damage bonus, optionally sets elemental conversion (calc[3]/EType), calls SetDamageOnEvent, and applies the damage via DAMAGE_CalculateAndApplyDamage with SrcDam flags.
+// 1.14d mac: 00245dad
 BOOL __fastcall SKILLAMA_SrvStFn06_PowerStrike(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2UnitStrc* pUnit2 = UNIT::SUnit::GetTargetEx(pGame, pUnit);
@@ -121,6 +124,7 @@ static void __stdcall UseQuanityAndDurability(::SGAMEDATA * pGame, int32_t nChan
 }
 
 // Amazon skill strike-step handler. Checks attack validity, then rolls a ToHit check (SKILLS_CalcToHit + DAMAGE_CalculateHitCheck). On hit: computes physical damage via calc[0], optional elemental conversion, calls SetDamageOnEvent, drains weapon quantity/durability via calc[1]/calc[2] (UseQuanityAndDurability), then applies damage with SrcDam=0x80.
+// 1.14d mac: 00245f58
 BOOL __fastcall SKILLAMA_SrvStFn07_Impale(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nDurCost;
     D2DamageStrc sDamage;
@@ -171,6 +175,7 @@ BOOL __fastcall SKILLAMA_SrvStFn07_Impale(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Server state-start function for the Amazon Strafe skill (SrvStFunc index 8). Checks throwable ammo availability; if present, computes aura range, finds or area-sweeps for a target, clamps the hit count to calc[0]/calc[2] bounds, stores the result and target identity in skill params 1-3, and consumes one ammo unit. If no ammo, triggers weapon durability/break checks and returns FALSE.
+// 1.14d mac: 00246364
 BOOL __fastcall SKILLAMA_SrvStFn08_Strafe(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTarget;
     int32_t nCalcMax;
@@ -250,6 +255,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 }
 
 // Amazon melee area-hit strike-step. Computes melee range, tries the explicit target first; if none, sweeps an area for victims via SKILLS_FindNextUnitInAreaByGUID. Stores hit-count in skill param1 and the primary target's type/GUID in param2/param3 for subsequent do-func processing. Returns 1 if skill struct is valid.
+// 1.14d mac: 00246563
 BOOL __fastcall SKILLAMA_SrvStFn09_Fend(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -286,6 +292,7 @@ BOOL __fastcall SKILLAMA_SrvStFn09_Fend(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Amazon melee area-sweep strike-step (variant of SrvStFunc_09). Sweeps the melee range for a first victim via SKILLS_FindNextUnitInAreaByGUID; if none found, clears param1 and returns 0. On success: stores calc[0] value in param1 and the target's type/GUID in param2/param3 for the do-func stage.
+// 1.14d mac: 00246701
 BOOL __fastcall SKILLAMA_SrvStFn37_MultiStrike(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nStoredGUID;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -327,6 +334,7 @@ BOOL __fastcall SKILLAMA_SrvStFn37_MultiStrike(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // Amazon lightning-damage strike-step. After a standard auto-hit check, rolls a random lightning damage value between SERVER_MinDamage and SERVER_MaxDamage, stores it in sDamage.dwLtngDamage, sets enhanced-damage bonus (calc[0]) and optional elemental conversion (calc[3]/EType), then applies via DAMAGE_CalculateAndApplyDamage. Defaults SrcDam to 0x80 if zero.
+// 1.14d mac: 00246863
 BOOL __fastcall SKILLAMA_SrvStFn10_LightningStrike(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int32_t nMaxDmg;
     uint32_t nDamageRoll;
@@ -372,6 +380,7 @@ BOOL __fastcall SKILLAMA_SrvStFn10_LightningStrike(::SGAMEDATA * pGame, D2UnitSt
     return 1;
 }
 
+// 1.14d mac: 00246bfe
 uint32_t __fastcall SKILLAMZ_AuraCallback_InnerSight_SlowMissiles(D2SkillCallbackContextStrc * pContext, D2UnitStrc * pTargetUnit) {
     D2StateExArgStrc sStateArg;
     memset(&sStateArg, 0, sizeof(sStateArg));
@@ -388,6 +397,7 @@ uint32_t __fastcall SKILLAMZ_AuraCallback_InnerSight_SlowMissiles(D2SkillCallbac
     return 1;
 }
 
+// 1.14d mac: 00246a7d
 BOOL __fastcall Skills_SrvDoFunc_006_InnerSight_SlowMissiles(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt;
     D2SkillAuraTargetArgStrc sAuraArgs;
@@ -409,6 +419,7 @@ BOOL __fastcall Skills_SrvDoFunc_006_InnerSight_SlowMissiles(::SGAMEDATA * pGame
 }
 
 // Power Strike do-func: performs the melee hit resolution for the skill. Calculates ToHit, recalculates monster combat stats if caster is UNIT_PLAYER (type==1), applies hit check, sets enhanced-damage (calc[0]) and elemental conversion (calc[3]/EType), calls SetDamageOnEvent, applies damage, then processes the combat queue entry to deliver the hit result.
+// 1.14d mac: 00246c64
 BOOL __fastcall Skills_SrvDoFunc_007_Jab(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2DamageStrc sDamage;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -452,6 +463,7 @@ BOOL __fastcall Skills_SrvDoFunc_007_Jab(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Server skill srvdofunc #8: fan/spread missile launcher (Amazon Strafe-style multishot). Resolves target/cursor position, computes the firing direction toward it, and uses calc[0] as the total arrow count and calc[2] as the center (straight-ahead) count. Picks srvmissilea, or srvmissileb when not bare-handed and valid. Spawns the spread by stepping a perpendicular offset: (count-center)/2 missiles on each side plus the center group, calling Missiles::CreatingMissile per arrow with the skill's per-arrow activation frame (calc[1]). Sets UNITFLAG_SKSRVDOFUNC on the caster. Returns TRUE if the skill/missile resolved, FALSE on invalid skill/missile or no target.
+// 1.14d mac: 00246e75
 BOOL __fastcall Skills_SrvDoFunc_008_MultipleShot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     uint32_t nWeaponClass;
     int iVar1;
@@ -568,6 +580,7 @@ BOOL __fastcall Skills_SrvDoFunc_008_MultipleShot(::SGAMEDATA * pGame, D2UnitStr
     return 0;
 }
 
+// 1.14d mac: 002473f2
 void __fastcall SKILLS_AmazonDamagePercentCallback(D2UnitStrc * pUnit, intptr_t nDamagePercent) {
     if (!nDamagePercent) {
       return;
@@ -578,6 +591,7 @@ void __fastcall SKILLS_AmazonDamagePercentCallback(D2UnitStrc * pUnit, intptr_t 
 }
 
 // Server SrvDoFunc for Guided Arrow (skill 010). Sets UNITFLAG_SKSRVDOFUNC on the caster, selects srvmissilea or srvmissileb depending on weapon class, then spawns the Guided Arrow missile. If a damage-percent calc value is present, attaches the AmazonDamagePercentCallback. Encodes the direction delta (cursor minus caster position) into the missile's TargetY field for homing.
+// 1.14d mac: 002471af
 BOOL __fastcall Skills_SrvDoFunc_010_GuidedArrowLaunch(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -642,6 +656,7 @@ BOOL __fastcall Skills_SrvDoFunc_010_GuidedArrowLaunch(::SGAMEDATA * pGame, D2Un
 }
 
 // Server-side do-function for Amazon Charged Strike (skill 11). Sets UNITFLAG_SKSRVDOFUNC on the caster, retrieves the current target, applies melee combat damage via DAMAGE_ProcessCombatQueueEntry, computes the number of charged bolts from skills.txt calc[0], then reads the charged-bolt missile type accumulated from prior Charge Up hits (SKILLASS_GetChargeUpMissile). If valid, spawns that many charged bolt missiles from the target position outward, each initialised with SKILL_InitChargedBoltPath. Returns 1 on success.
+// 1.14d mac: 00247441
 BOOL __fastcall Skills_SrvDoFunc_011_ChargedStrike(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     if (pUnit) {
       pUnit->eUnitFlags |= UNITFLAG_SKSRVDOFUNC;
@@ -689,6 +704,7 @@ BOOL __fastcall Skills_SrvDoFunc_011_ChargedStrike(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Server do-function continuation for the Amazon Strafe skill (func 012). Each invocation fires one strafe arrow missile toward the current or nearest valid target in the strafe radius, decrements the remaining arrow count (param1), and picks the next target via SKILLS_FindNextUnitInAreaByGUID. Applies AmazonDamagePercentCallback for per-arrow damage scaling. Returns 0 when arrows are exhausted or no target is found.
+// 1.14d mac: 0024769d
 BOOL __fastcall Skills_SrvDoFunc_012_StrafeContinue(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -768,6 +784,7 @@ BOOL __fastcall Skills_SrvDoFunc_012_StrafeContinue(::SGAMEDATA * pGame, D2UnitS
 }
 
 // Server-side hit handler for Amazon Impale/Fend multi-hit sequence. Locates the current target (by stored GUID or by melee-range area search), performs a to-hit/damage calculation with optional elemental conversion, decrements the remaining hit counter (skill param1), then searches for the next target in melee range and updates skill params 2/3 accordingly, scheduling the next swing via SKILLS_SetupAnimTimerPercent. Always returns 0 (result communicated via damage queue).
+// 1.14d mac: 00247a0b
 BOOL __fastcall Skills_SrvDoFunc_013_MultiHitAttack(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bInMeleeRange;
     D2DamageStrc sDamage;
@@ -832,6 +849,7 @@ BOOL __fastcall Skills_SrvDoFunc_013_MultiHitAttack(::SGAMEDATA * pGame, D2UnitS
 
 // Server DoFunc 14: applies the combat-queue damage to pUnit's target, searches calc[0] around the target for the next unit (SKILLS_FindNextUnitInAreaByGUID, after the target's GUID), and when one is found creates the missile SKILLASS_GetChargeUpMissile(pUnit, eSkill) at that unit with SetTargetX(calc[1]). Returns 1 once the missile id is valid, else 0.
 // Provenance: asm 005dbe50..; EBP-0x10 holds pSkillTxt (005dbe7d) then the calc[1] result (005dbf8a).
+// 1.14d mac: 00247d55
 BOOL __fastcall Skills_SrvDoFunc_014_LightningStrike(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     int nTargetX;
     D2SkillArgStrc sSkillArg;
@@ -897,6 +915,7 @@ BOOL __fastcall Skills_SrvDoFunc_014_LightningStrike(::SGAMEDATA * pGame, D2Unit
 }
 
 // Server do-function for Amazon skill 0x0F (Decoy). Looks up the monster class to summon via SKILLS_GetSummonMonsterClassId, spawns it with SKILL_CreateSummon, sets its owner, copies a percentage of the caster's max HP as decoy HP (via calc[2]), copies the caster's level, applies revive/buff logic, schedules a despawn event (calc[1] frames), attaches the unit to the target node table, and sets overlay 0xAB. Returns 1 on success.
+// 1.14d mac: 00247fc1
 BOOL __fastcall Skills_SrvDoFunc_015_SummonDecoy(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -948,6 +967,7 @@ BOOL __fastcall Skills_SrvDoFunc_015_SummonDecoy(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // Summon Valkyrie do-func. Looks up the Valkyrie monster class via SKILLS_GetSummonMonsterClassId, creates the pet unit via SKILL_CreateSummon, then: revives the corpse slot via SKILLNEC_ReviveCorpseAsMinion, applies summon buffs, fires the AI-think timer event, applies the STATE_valkyrie aura state, stores the owner, and adds the unit to the target node table.
+// 1.14d mac: 00248345
 BOOL __fastcall Skills_SrvDoFunc_016_SummonValkyrie(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {

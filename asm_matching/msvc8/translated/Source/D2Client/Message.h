@@ -32,6 +32,7 @@ typedef uint32_t (__stdcall *fpGameLoopFunction)(uint32_t param_1);
 
 typedef struct HACCEL__ * HACCEL;
 
+#if !D2_OS_MAC  // d2_platform.h carries the Mac's
 struct tagMSG {
     /* 0x00 */ HWND hwnd;
     /* 0x04 */ UINT message;
@@ -40,6 +41,7 @@ struct tagMSG {
     /* 0x10 */ DWORD time;
     /* 0x14 */ POINT pt;
 };
+#endif
 
 #endif // _WIN32
 

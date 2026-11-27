@@ -83,7 +83,7 @@ static D2NetDataStrc * g_pBNetSocketData = 0; D2_STATIC_GUARD(g_pBNetSocketData,
 // also labelled: lpAddend_00881bf4
 static LONG Destination_00881bf4 = 0; D2_STATIC_GUARD(Destination_00881bf4, "Destination_00881bf4");
 static uint32_t gbBNetSocketConnected = 0; D2_STATIC_GUARD(gbBNetSocketConnected, "gbBNetSocketConnected");
-static long Target_00881bfc = 0; D2_STATIC_GUARD(Target_00881bfc, "Target_00881bfc");
+static LONG Target_00881bfc = 0; D2_STATIC_GUARD(Target_00881bfc, "Target_00881bfc");
 // also labelled: lpAddend_00881c00
 static LONG Destination_00881c00 = 0; D2_STATIC_GUARD(Destination_00881c00, "Destination_00881c00");
 static uint32_t g_nBNetThreadInitFlag = 0; D2_STATIC_GUARD(g_nBNetThreadInitFlag, "g_nBNetThreadInitFlag");
@@ -111,6 +111,7 @@ int __stdcall NET_SID_CLIENT_Send_0x1E_ClientId2() {
     return 1;
 }
 
+// 1.14d mac: 00056253
 void __fastcall BNSEND_SetServerToken(uint32_t nServerToken) {
     g_nBNetServerToken = nServerToken;
 }
@@ -120,10 +121,12 @@ uint32_t __stdcall BNSEND_GetServerToken() {
     return g_nBNetServerToken;
 }
 
+// 1.14d mac: 00056278
 void __fastcall BNSEND_SetClientToken(DWORD nClientToken) {
     g_nBNetClientToken = nClientToken;
 }
 
+// 1.14d mac: 0005628c
 DWORD __stdcall BNCLIENT_GetBNetClientToken() {
     return g_nBNetClientToken;
 }
@@ -148,6 +151,7 @@ int __fastcall NET_SID_CLIENT_Send_0x29_LogonResponse(char * szText1, char * szT
     return 1;
 }
 
+// 1.14d mac: 0005629d
 int __fastcall NET_SID_CLIENT_Send_0x3A_LogonResponse2(char * szText1, char * szText2) {
     SID_C2S_LogonResponse dwClientToken;
     BnDoubleHashInput dwTickCount;
@@ -168,6 +172,7 @@ int __fastcall NET_SID_CLIENT_Send_0x3A_LogonResponse2(char * szText1, char * sz
     return 1;
 }
 
+// 1.14d mac: 000563c0
 int __fastcall NET_SID_CLIENT_Send_0x3D_CreateAccount2(char * szText1, char * szText2) {
     D2XSHA1Strc sha1Password;
     char szUsername[256];
@@ -182,6 +187,7 @@ int __fastcall NET_SID_CLIENT_Send_0x3D_CreateAccount2(char * szText1, char * sz
     return 1;
 }
 
+// 1.14d mac: 00056476
 int __fastcall NET_SID_CLIENT_Send_0x31_ChangePassword(char * szText1, char * szText2, char * szNewPassword) {
     // Frame slots -596..-8 are ONE object: &dwClientToken is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -289,6 +295,7 @@ int __fastcall NET_SID_CLIENT_Send_0x06_StartVersioning() {
 }
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 00056671
 void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, uint32_t nSize) {
     if (g_pBNetCDKeyHashData) {
       Storm::Source::SMem::SMemFree(g_pBNetCDKeyHashData, ".\\BnSend.cpp", 0x188, 0);
@@ -299,6 +306,7 @@ void __fastcall BNSEND_StoreCDKeyHashData(void * pKeyHashData, uint32_t nSize) {
 }
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 00056628
 void BNSEND_FreeRealmQueryData() {
     if (gpRealmQueryData) {
       D2_FREE_AT(gpRealmQueryData, ".\\BnSend.cpp", 0x19a);
@@ -307,6 +315,7 @@ void BNSEND_FreeRealmQueryData() {
     gpRealmQueryData = 0;
 }
 
+// 1.14d mac: 000566f2
 char * __fastcall NET_SID_CLIENT_Send_0x41_QueryAdURL(uint32_t dwAdId) {
     uint32_t dwAdType = dwAdId;
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x41);
@@ -324,6 +333,7 @@ char * __fastcall NET_SID_CLIENT_Send_0x41_QueryAdURL(uint32_t dwAdId) {
 }
 
 // SID_QUERYREALMS2 (0x40) client request sender. Queries available Battle.net realms. Packet format: empty (no payload). Sends request, waits for 0x40 response containing realm list with names and descriptions. Returns gpRealmQueryData on success, 0 on send failure.
+// 1.14d mac: 00056754
 void * __stdcall NET_SID_CLIENT_Send_0x40_QueryRealms2() {
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(0x40);
     int32_t nSendResult = NET_SID_CLIENT_Send(0x40, nullptr, 0);
@@ -344,6 +354,7 @@ void __stdcall BNSEND_FreeChannelListData() {
     g_pBNetChannelListData = 0;
 }
 
+// 1.14d mac: 0005684a
 char * __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionChar) {
     uint32_t dwChannelFlags = 0;
     BOOL bIsExpansion = BnSend::D2CheckExpansionGame();
@@ -357,6 +368,7 @@ char * __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList(int32_t bIsExpansionCh
     return g_pBNetChannelListData;
 }
 
+// 1.14d mac: 000568b4
 void __fastcall NET_SID_CLIENT_Send_0x0C_JoinChannel(char * szText, int32_t bForceJoin, int32_t nJoinType) {
     // Frame -268..-8 is ONE object: a call writes 260 literal bytes starting at &dwJoinFlags.
     // Separate locals let the compiler reorder them, and the write would run off the frame.
@@ -431,6 +443,7 @@ BOOL __fastcall BNSEND_EncodePacketEscape(char * szText, uint32_t nByteCount) {
     return 1;
 }
 
+// 1.14d mac: 0005698a
 BOOL __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * szText1, char * szText2, char * dwProductCode) {
     int dwProductVersion = BnSend::D2CheckExpansionGame() ? 0x44325850 : 0x44324456;
     NET_SID_CLIENT_Send(0xb, (char*)&dwProductVersion, 4);
@@ -440,11 +453,13 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x0B_GetChannelList_0x0A_EnterChat(char * sz
     return NET_SID_CLIENT_Send(10, szPacketBuf, (uint32_t)(strlen(szPacketBuf) + 1 + strlen(szPacketBuf + strlen(szPacketBuf) + 1) + 1)) >= 0;
 }
 
+// 1.14d mac: 00056a7a
 uint32_t __fastcall NET_SID_CLIENT_Send_0x10_LeaveChat() {
     int32_t nSendResult = NET_SID_CLIENT_Send(0x10, nullptr, 0);
     return (uint32_t)(nSendResult >= 0);
 }
 
+// 1.14d mac: 00056aa7
 void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * szChatText) {
     uint8_t* pbScan;
     int nUtf8Result;
@@ -470,6 +485,7 @@ void __fastcall NET_SID_CLIENT_Send_0x0E_ChatCommand(uint8_t * szChatText) {
     }
 }
 
+// 1.14d mac: 00056b83
 int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd() {
     SID_C2S_CheckAd aGameTag;
     aGameTag.dwPlatformId = 0x49583836;
@@ -482,6 +498,7 @@ int __stdcall NET_SID_CLIENT_Send_0x15_CheckAd() {
 }
 
 // Registers: ECX and EDX are loaded by the only caller but not read.
+// 1.14d mac: 00056bee
 int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoolMgr) {
     // Frame -1300..-8 is ONE Ghidra variable the decompiler printed as 5 locals.
     // Separate locals let the compiler reorder them, so the pieces are one struct.
@@ -505,6 +522,7 @@ int __fastcall NET_SID_CLIENT_Send_0x21_DisplayAd(char * szDestPath, void * pPoo
     return 1;
 }
 
+// 1.14d mac: 00056c83
 BOOL __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * szGamePassword, char * szGameDescription, int32_t nFlags) {
     SID_C2S_StartAdvex3 adwHeader;
     adwHeader.dwState = 0;
@@ -533,6 +551,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x1C_StartAdVex3(char * szGameName, char * s
     return 1;
 }
 
+// 1.14d mac: 00056d9a
 DWORD __stdcall BNCLIENT_SendKeepAlive() {
     NET_SID_CLIENT_Send(2, nullptr, 0);
     return 1;
@@ -544,6 +563,7 @@ uint32_t __fastcall thunk_NET_SID_CLIENT_Send(uint8_t nPacketId, char * szText) 
     return 1;
 }
 
+// 1.14d mac: 00056dc6
 int __stdcall NET_SID_CLIENT_Send_0x1F_LeaveGame() {
     ::IgnoreList* ppIgnoreList = D2Common::Chat::Ignorelist::MISC_GetIgnorelist();
     vc8_thiscall(ppIgnoreList->_vfptr->ClearAccountMappings)(ppIgnoreList);
@@ -551,6 +571,7 @@ int __stdcall NET_SID_CLIENT_Send_0x1F_LeaveGame() {
     return 1;
 }
 
+// 1.14d mac: 00056dff
 BOOL __fastcall BNCLIENT_GetEnterChatResponseFlags(uint32_t * pOutFlags) {
     uint32_t dwFlags = _net_sid::SID_GetPacketResponseFlag(0x1c);
     *pOutFlags = dwFlags;
@@ -567,6 +588,7 @@ void __stdcall BNSEND_FreeGameListData() {
     g_pBNetGameListData = 0;
 }
 
+// 1.14d mac: 00056f78
 void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * szText2, uint32_t dwParam1, uint32_t dwParam2) {
     SID_C2S_GetAdvListEx aPacketBuf;
     aPacketBuf.dwCondition1 = 0;
@@ -591,6 +613,7 @@ void * __fastcall NET_SID_CLIENT_Send_0x09_GetAdvListEx(char * szText1, char * s
     return g_pBNetGameListData;
 }
 
+// 1.14d mac: 000570ab
 BOOL __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szText2) {
     char szData[512];
     int adwHeader[2];
@@ -610,6 +633,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x22_NotifyJoin(char * szText1, char * szTex
 namespace Bnclient {
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 00057161
 void BNSEND_FreeUserProfileData() {
     if (gpBNetWriteUserData) {
       D2_FREE_AT(gpBNetWriteUserData, ".\\BnSend.cpp", 0x3b2);
@@ -623,6 +647,7 @@ void BNSEND_FreeUserProfileData() {
 namespace Bnclient { namespace BnSend {
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 000571aa
 void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, uint32_t nDataSize) {
     if (gpBNetWriteUserData) {
       D2_FREE_AT(gpBNetWriteUserData, ".\\BnSend.cpp", 0x3b2);
@@ -642,6 +667,7 @@ void __fastcall BNSEND_StoreUserProfileData(uint8_t * pbProfileData, uint32_t nD
 }
 
 // SID_LOGONREALMEX (0x3E) client request sender. Computes double-SHA1 password hash for realm logon. Packet format: (DWORD)ClientToken, (BYTE[20])PasswordHash, (STRING)RealmName. Hash computed as SHA1(SHA1(ClientToken, ServerToken, Password)). Sends request, waits for 0x3E response containing MCP server connection info. Increments gnBNetRealmClientToken client token counter.
+// 1.14d mac: 00057223
 void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char * szPassword) {
     // Static local variables (originally global data)
     static uint32_t gnBNetRealmClientToken; D2_STATIC_GUARD_BSS(gnBNetRealmClientToken, "Bnclient::BnSend::NET_SID_CLIENT_Send_0x3E_LogonRealmEx::gnBNetRealmClientToken");
@@ -672,6 +698,7 @@ void * __fastcall NET_SID_CLIENT_Send_0x3E_LogonRealmEx(char * szRealmName, char
     return pUserData;
 }
 
+#if defined(_WIN32) || !D2_OS_MAC
 void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo() {
     _SYSTEMTIME stSystemTime;
     _SYSTEMTIME stLocalTime;
@@ -701,7 +728,9 @@ void __stdcall NET_SID_CLIENT_Send_0x12_LocaleInfo() {
     pszLocaleCursor = pszLocaleCursor + strlen(pszLocaleCursor) + 1;
     NET_SID_CLIENT_Send(0x12, (char*)&ftSystemTime, (uint32_t)(uintptr_t)(pszLocaleCursor + (0x20 - (intptr_t)ftSystemTime.szStrings)));
 }
+#endif
 
+// 1.14d mac: 0005732f
 int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t bRequestType) {
     SID_C2S_ClickAd sPacket;
     sPacket.dwAdId = dwAdId;
@@ -711,6 +740,7 @@ int __fastcall NET_SID_CLIENT_Send_0x16_ClickAd(uint32_t dwAdId, int32_t bReques
 }
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 0005736d
 uint32_t __fastcall NET_SID_CLIENT_Send_0x27_WriteUserData(char * szAccount, uint32_t nCount, char * * pszKeys, char * * pszValues) {
     uint32_t nIdx;
     int nStringsSize = Storm::Source::SSTR::SStrLen(szAccount) + 1;
@@ -739,6 +769,7 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x27_WriteUserData(char * szAccount, uin
 }
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 000574d0
 void __fastcall BNSEND_StoreReadUserData(uint8_t * pbReadData, uint32_t nSize) {
     if (g_pBNetReadUserData) {
       D2_FREE_AT(g_pBNetReadUserData, ".\\BnSend.cpp", 0x4ec);
@@ -749,6 +780,7 @@ void __fastcall BNSEND_StoreReadUserData(uint8_t * pbReadData, uint32_t nSize) {
 }
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 00057551
 uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint32_t nCount, uint32_t nRequestId, char * * pszKeys) {
     uint32_t nIdx;
     uint32_t nLen = Storm::Source::SSTR::SStrLen(szAccount);
@@ -777,6 +809,7 @@ uint32_t __fastcall NET_SID_CLIENT_Send_0x26_ReadUserData(char * szAccount, uint
 }
 
 // Retrieves stored user data from previous SID_READUSERDATA (0x26) response. Copies string array data into output buffers.
+// 1.14d mac: 00057670
 int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestId, char * * ppszOutBufs, int * pnMaxLens) {
     if (!_net_sid::NET_SID_CLIENT_GetRequiredAnswer(0x26)) {
       return 0;
@@ -800,6 +833,7 @@ int __fastcall BNSEND_GetStoredReadUserData(int32_t nKeyCount, int32_t nRequestI
     return 0;
 }
 
+// 1.14d mac: 00057717
 BOOL __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText) {
     uint32_t nStrLen;
     char szEmailBuf[256];
@@ -821,6 +855,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x59_SetEmail(char * szText) {
     }
 }
 
+// 1.14d mac: 00057800
 BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * szText2) {
     int32_t nSendResult;
     uint32_t nSize1;
@@ -858,6 +893,7 @@ BOOL __fastcall NET_SID_CLIENT_Send_0x5A_ResetPassword(char * szText1, char * sz
     return (uint32_t)(nSendResult >= 0);
 }
 
+// 1.14d mac: 00057996
 BOOL __fastcall NET_SID_CLIENT_Send_0x5B_ChangeEmail(char * szText1, char * szText2, char * szNewEmail) {
     uint32_t nLen2;
     int32_t nSendResult;
@@ -920,6 +956,7 @@ BOOL __stdcall NET_SID_CLIENT_Send_0x5D_ReportCrash() {
 }
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 000565d0
 void __fastcall BNSEND_StoreRealmQueryData(uint8_t * pbRealmData, uint32_t nSize) {
     if (gpRealmQueryData) {
       D2_FREE_AT(gpRealmQueryData, ".\\BnSend.cpp", 0x19a);
@@ -931,6 +968,7 @@ void __fastcall BNSEND_StoreRealmQueryData(uint8_t * pbRealmData, uint32_t nSize
 }
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 000567a9
 void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, uint32_t nSize) {
     if (g_pBNetChannelListData) {
       D2_FREE_AT(g_pBNetChannelListData, ".\\BnSend.cpp", 0x1ef);
@@ -942,6 +980,7 @@ void __fastcall BNSEND_StoreChannelListData(uint8_t * pbChannelData, uint32_t nS
 }
 
 // @sourcefile .\BnSend.cpp
+// 1.14d mac: 00056e27
 void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, uint32_t nSize) {
     if (g_pBNetGameListData) {
       D2_FREE_AT(g_pBNetGameListData, ".\\BnSend.cpp", 0x36a);
@@ -952,7 +991,7 @@ void __fastcall BNSEND_StoreGameListData(uint8_t * pbGameData, uint32_t nSize) {
     memcpy(g_pBNetGameListData, pbGameData, nSize);
 }
 
-void BNCLIENT_InterlockedCompareExchange(long * pDestination, LONG nExchange, LONG nComperand) {
+void BNCLIENT_InterlockedCompareExchange(LONG * pDestination, LONG nExchange, LONG nComperand) {
     /* LONG Comperand for InterlockedCompareExchange */ /* LONG Exchange for InterlockedCompareExchange */ /* LONG * Destination for InterlockedCompareExchange */ InterlockedCompareExchange(pDestination, nExchange, nComperand);
 }
 
@@ -967,6 +1006,7 @@ static inline D2NetDataStrc* __stdcall Unreferenced_0051beb0(D2NetDataStrc* nExc
 }
 
 // JMP thunk
+// 1.14d mac: 0004fdee Bnclient::BnSend::D2CheckExpansionGame
 BOOL __stdcall D2CheckExpansionGame() {
     return ::Fog::D2CheckExpansionGame();
 }
@@ -977,6 +1017,7 @@ void __fastcall Unreferenced_0051bed0(int nConnectionState) {
 }
 
 // lpStartAddress parameter of CreateThread
+// 1.14d mac: 00050736
 DWORD __stdcall GetDnsResults(void * lpThreadParam) {
     // Static local variables (originally global data)
     static uint32_t gInAddrBnetLookupAddr; D2_STATIC_GUARD_BSS(gInAddrBnetLookupAddr, "Bnclient::BnSend::GetDnsResults::gInAddrBnetLookupAddr");
@@ -1080,6 +1121,7 @@ DWORD __stdcall GetDnsResults(void * lpThreadParam) {
     return 1;
 }
 
+// 1.14d mac: 000508f7
 void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2) {
     // Static local variables (originally global data)
     static D2DnsThreadParamStrc lpParameter_00881be8 = {0}; D2_STATIC_GUARD(lpParameter_00881be8, "Bnclient::BnSend::GetDnsRecordSync::lpParameter_00881be8");
@@ -1090,7 +1132,12 @@ void __fastcall GetDnsRecordSync(char * * ppszDnsOutput, char * nDnsThreadParam2
     DWORD dwThreadId = 0;
     lpParameter_00881be8.pszOut = (char*)ppszDnsOutput;
     lpParameter_00881be8.pszHost = nDnsThreadParam2;
+#if !defined(_WIN32) && D2_OS_MAC
+    // The Mac layer's CreateThread names the thread (1.14d mac 00050973).
+    HANDLE hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)GetDnsResults, &lpParameter_00881be8, 0, &dwThreadId, "sGetServersList");
+#else
     HANDLE hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)GetDnsResults, &lpParameter_00881be8, 0, &dwThreadId);
+#endif
     int nCancelFlag = InterlockedCompareExchange(&Target_00881bfc, 0, 0);
     /* DWORD dwMilliseconds for WaitForSingleObject */ /* HANDLE hHandle for WaitForSingleObject */ while (true) {
       DWORD dwWaitResult;
@@ -1112,11 +1159,13 @@ void Unreferenced_0051c170() {
     NET_SID_CLIENT_Send_0x33_GetFileTime("bnserver-D2DV.ini", 0x80000004);
 }
 
+// 1.14d mac: 000509c5
 D2BNetGatewayAccessStr * __stdcall BnetLoadAndReturn() {
     BNGatewayAccess::Load(&ActualRealmInfo);
     return &ActualRealmInfo;
 }
 
+// 1.14d mac: 000509e6
 void __fastcall GetBnetIp(char * szText, int32_t nBufferOutputLength) {
     char szRegistryBuf[256];
     *szText = '\0';
@@ -1130,6 +1179,7 @@ void __fastcall GetBnetIp(char * szText, int32_t nBufferOutputLength) {
 }
 
 // Returns current Battle.net connection state into output parameter. Validates param is non-null.
+// 1.14d mac: 00050e4a
 void __fastcall BNSEND_GetConnectionState(uint32_t * pdwOutState) {
     if (!pdwOutState) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x280);
@@ -1139,6 +1189,7 @@ void __fastcall BNSEND_GetConnectionState(uint32_t * pdwOutState) {
     *pdwOutState = g_nBNetConnectionState;
 }
 
+// 1.14d mac: 00050e8d
 int __fastcall BNCLIENT_SendLogonRequest(char * szUsername, char * szPassword) {
     int nSendResult;
     DWORD dwClientToken = BNCLIENT_GetBNetClientToken();
@@ -1162,6 +1213,7 @@ int __fastcall BNCLIENT_SendLogonRequest(char * szUsername, char * szPassword) {
     }
 }
 
+// 1.14d mac: 00050ee8
 BOOL __stdcall BNCLIENT_WaitForLogonResponse() {
     if (_net_sid::SID_GetReadyFlag()) {
       BNMESSQUEUE_SetStateIfZero(0x12);
@@ -1178,6 +1230,7 @@ BOOL __stdcall BNCLIENT_WaitForLogonResponse() {
     return 0;
 }
 
+// 1.14d mac: 00050f2f
 int __fastcall BNCLIENT_SendCreateAccountRequest(char * szUsername, char * szPassword) {
     int nSendResult;
     DWORD dwClientToken = BNCLIENT_GetBNetClientToken();
@@ -1201,6 +1254,7 @@ int __fastcall BNCLIENT_SendCreateAccountRequest(char * szUsername, char * szPas
     }
 }
 
+// 1.14d mac: 00050f8a
 BOOL __fastcall BNCLIENT_WaitForCreateAccountResponse(uint32_t * pOutResponseCount) {
     BOOL bGotAnswer;
     uint32_t nResponseCount = _net_sid::NET_SID_CLIENT_GetResponseCount2();
@@ -1224,6 +1278,7 @@ BOOL __fastcall BNCLIENT_WaitForCreateAccountResponse(uint32_t * pOutResponseCou
     }
 }
 
+// 1.14d mac: 00050fc6
 int __fastcall BNCLIENT_SendChangePasswordRequest(char * szUsername, char * szOldPassword, char * szNewPassword) {
     int nSendResult;
     DWORD dwClientToken = BNCLIENT_GetBNetClientToken();
@@ -1247,6 +1302,7 @@ int __fastcall BNCLIENT_SendChangePasswordRequest(char * szUsername, char * szOl
     }
 }
 
+// 1.14d mac: 0005102b
 BOOL __fastcall BNCLIENT_WaitForChangePasswordResponse(uint32_t * pOutResponseCount) {
     BOOL bGotAnswer;
     uint32_t nResponseCount = _net_sid::NET_SID_CLIENT_GetResponseCount1();
@@ -1270,6 +1326,7 @@ BOOL __fastcall BNCLIENT_WaitForChangePasswordResponse(uint32_t * pOutResponseCo
     }
 }
 
+// 1.14d mac: 00051067
 int __fastcall BNCLIENT_EnterChatAndJoinChannel(char * szUsername, char * szStatstring, char * szAccountName, char * szChannelName, uint32_t dwFlags) {
     BNNEWS_SetNewsChannel(dwFlags & 1);
     _net_sid::NET_SID_CLIENT_ResetRequireResponse(10);
@@ -1289,11 +1346,13 @@ int __fastcall BNCLIENT_EnterChatAndJoinChannel(char * szUsername, char * szStat
     return 1;
 }
 
+// 1.14d mac: 000510fb
 int __stdcall thunk_NET_SID_CLIENT_Send_0x10_LeaveChat() {
     NET_SID_CLIENT_Send_0x10_LeaveChat();
     return 1;
 }
 
+// 1.14d mac: 00050cee
 BOOL __stdcall BNSEND_Disconnect() {
     BNSEND_FreeChannelListData();
     BNSEND_FreeGameListData();
@@ -1358,6 +1417,7 @@ int __fastcall Unreferenced_0051c570(char * szText) {
     return 1;
 }
 
+// 1.14d mac: 00051110
 int32_t __fastcall NET_SID_CLIENT_Send(uint8_t nPacketId, char * pBytes, uint32_t nSizeNoHeader) {
     int32_t nBytesSent;
     uint32_t nAllocaGuard;
@@ -1419,6 +1479,7 @@ void __fastcall BNCLIENT_ParseAndEnqueueChatMessages(char * szMessageText) {
 
 // BATTLE.NET PACKET DISPATCH LOOP
 // Iterates over received network buffer, scanning for 0xFF packet start markers and dispatching complete packets to NET_SID_CLIENT_IncomingPacketHandler. For each packet: validates 4-byte header (0xFF, ID, size_lo, size_hi), checks if buffer contains full packet based on 2-byte little-endian size field, dispatches packet data (excluding 4-byte header) to handler, advances buffer pointer by packet size. Returns pointer to remaining unparsed buffer data for next iteration.
+// 1.14d mac: 00051203
 uint32_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, uint32_t nSize) {
     int nBytesProcessed;
     char* pScanPtr = pBytes;
@@ -1447,6 +1508,7 @@ uint32_t __fastcall NET_SID_CLIENT_IncomingPacketHandlerLoop(char * pBytes, uint
     } while (true);
 }
 
+// 1.14d mac: 00050467
 DWORD __stdcall BnetReadFunction(uint32_t dwThreadParam) {
     DWORD dwResult = 1;
     int32_t nBytesRead;
@@ -1517,6 +1579,7 @@ DWORD __stdcall BnetReadFunction(uint32_t dwThreadParam) {
     return dwResult;
 }
 
+// 1.14d mac: 000506e9
 uint32_t __fastcall BNCLIENT_GetSocketPeerName(sockaddr * pSockAddr, int * pAddrLen) {
     D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     if (pNetData) {
@@ -1529,6 +1592,7 @@ uint32_t __fastcall BNCLIENT_GetSocketPeerName(sockaddr * pSockAddr, int * pAddr
 }
 
 // Thread-safe wrapper around Fog::Safesock::GetSockNameDoesReturn. Returns local socket address info for Battle.net connection. Used by SID_AUTH_INFO sender.
+// 1.14d mac: 00051273
 uint32_t __fastcall BNSEND_GetSocketAddress(sockaddr * pOutAddr, int * pOutAddrLen) {
     D2NetDataStrc* pNetData = (D2NetDataStrc*)InterlockedCompareExchangePointer((PVOID*)&g_pBNetSocketData, 0, 0); // steer-ok: winbase.h InterlockedCompareExchangePointer
     if (pNetData) {
@@ -1540,14 +1604,17 @@ uint32_t __fastcall BNSEND_GetSocketAddress(sockaddr * pOutAddr, int * pOutAddrL
     return 0;
 }
 
+// 1.14d mac: 000512c0
 int32_t __stdcall GET_GameVersion() {
     return 0xe;
 }
 
+// 1.14d mac: 000512ca
 char __stdcall BNCLIENT_GetProtocolVersionChar() {
     return 'G';
 }
 
+// 1.14d mac: 00050692
 BOOL __stdcall BNCLIENT_IsSocketConnected() {
     intptr_t nSIDState[2];
     _net_sid::SID_GetState(nSIDState);
@@ -1563,15 +1630,18 @@ BOOL __stdcall BNCLIENT_IsSocketConnected() {
     return 0;
 }
 
+// 1.14d mac: 000512d4
 DWORD __stdcall BNSEND_GetBNetThreadInitFlag() {
     return g_nBNetThreadInitFlag;
 }
 
+// 1.14d mac: 00050e36
 void __fastcall BNSEND_SetGlobalFlag(DWORD dwThreadInitFlag) {
     g_nBNetThreadInitFlag = dwThreadInitFlag;
 }
 
 // Battle.net connection orchestrator. Manages full logon sequence: server selection via fastest-connect test (select() on 64 candidate sockets, 5-second timeout per batch), protocol init (0x01 byte), SID_AUTHINFO (0x50) handshake, SID_AUTHCHECK (0x51) version/CD-key verification. Uses non-blocking socket multiplexing across up to 32 server candidates. Connection state machine: 2=searching, 3=accessing accounts, 4=checking version. Stores final socket in g_pBNetSocketData via InterlockedCompareExchange.
+// 1.14d mac: 0004fdf7
 BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
     // One server being raced: its host name and the socket opened to it (0x108 bytes on x86).
     struct D2BnServerCandidateStrc {
@@ -1874,6 +1944,7 @@ BOOL __stdcall NET_SID_CLIENT_LogonSequence(char * szServerList) {
 }
 
 // lpStartAddress parameter of CreateThread
+// 1.14d mac: 00050aa7
 int __stdcall BattleConnectFastest() {
     // Static local variables (originally global data)
     static char RealmDNS[256] = {0}; D2_STATIC_GUARD(RealmDNS, "Bnclient::BnSend::BattleConnectFastest::RealmDNS");
@@ -1919,6 +1990,7 @@ int __stdcall BattleConnectFastest() {
     return 1;
 }
 
+// 1.14d mac: 00050c0e
 HANDLE __fastcall ConnectingToBattleNet() {
     HANDLE hThread;
     DWORD dwThreadId;
@@ -1937,7 +2009,12 @@ HANDLE __fastcall ConnectingToBattleNet() {
         _net_sid::SID_InitializeProtocolState();
         _net_sid::NET_SID_CLIENT_InitializeSRP();
         /* LPDWORD lpThreadId for CreateThread */ /* DWORD dwCreationFlags for CreateThread */ /* LPVOID lpParameter for CreateThread */ /* LPTHREAD_START_ROUTINE lpStartAddress for CreateThread */ /* SIZE_T dwStackSize for CreateThread */ /* LPSECURITY_ATTRIBUTES lpThreadAttributes for CreateThread */ g_nBNetThreadInitFlag = 0;
+#if !defined(_WIN32) && D2_OS_MAC
+        // The Mac layer's CreateThread names the thread (1.14d mac 00050cde).
+        hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)BattleConnectFastest, (LPVOID)0x0, 0, &dwThreadId, "(LPTHREAD_START_ROUTINE)BattleConnectFastest");
+#else
         hThread = CreateThread((LPSECURITY_ATTRIBUTES)0x0, 0, (LPTHREAD_START_ROUTINE)BattleConnectFastest, (LPVOID)0x0, 0, &dwThreadId);
+#endif
         return hThread;
       }
     }
@@ -1945,6 +2022,7 @@ HANDLE __fastcall ConnectingToBattleNet() {
     return (HANDLE)0x0;
 }
 
+// 1.14d mac: 0005c2ca
 int __fastcall NET_SID_CLIENT_Send_0x46_NewsInfo(pfnNewsEntryCallback pfnMotdCallback, pfnVoidNoArgCallback pfnNewsCallback) {
     g_pfnNewsChannelCallback = 1;
     g_pfnMotdCallback = pfnMotdCallback;
@@ -2292,6 +2370,7 @@ static void BNSEND_CalculateCDKeyChecksum(char * szCDKey, uint32_t * pOutChecksu
 }
 
 // Decodes 16-character CD key string into three components (Product: 3 hex digits, Public: 7 hex digits, Private: 9 hex digits). Validates checksum and performs character shuffling/XOR transformations. Returns 1 on success, 0 on failure.
+// 1.14d mac: 00055e50
 int __fastcall BNSEND_DecodeCDKeyString(uint32_t * pOutProduct, uint32_t * pOutPublic, char * szCDKey, uint32_t * pOutPrivate) {
     // Frame slots -64..-40 are ONE object: &szProductBuf is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2522,6 +2601,7 @@ int Unreferenced_0051e240() {
     return BVar1;
 }
 
+// 1.14d mac: 00055d39
 void __stdcall BNNEWS_DecodeCDKeys() {
     int bDecodeOk;
     uint32_t nPrivate;
@@ -2569,6 +2649,7 @@ void __fastcall BNSEND_HashCDKeyByType(D2CDKeyHashStrc * pOutHash, uint32_t nTok
     BNSEND_PrepareCDKeyHash(nToken, _net_sid::NET_SID_CLIENT_GetCdKeyByType(nCDKeyType), BNSEND_GetServerToken(), pOutHash);
 }
 
+// 1.14d mac: 00052410
 int __fastcall BNSEND_SendRawBytes(void * pBytes, uint32_t nSize) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&BnDownload::lpCriticalSection_00881f64);
     Storm::Source::SMem::SMemCopy(BnDownload::gbBnetFtpFileTransferActive, pBytes, nSize);
@@ -2577,11 +2658,13 @@ int __fastcall BNSEND_SendRawBytes(void * pBytes, uint32_t nSize) {
     return 1;
 }
 
+// 1.14d mac: 0005246a
 int __fastcall BNSEND_SendString(char * szString) {
     Storm::Source::SSTR::SStrCopy(BnDownload::gszBNetChatInputBuffer, szString, 0x104);
     return 1;
 }
 
+// 1.14d mac: 0005249d
 BOOL __fastcall NET_SID_CLIENT_Send_0x33_GetFileTime(char * szText, uint32_t dwRequestId) {
     SID_C2S_GetFileTime dwFileTimeParam;
     dwFileTimeParam.dwRequestId = dwRequestId;

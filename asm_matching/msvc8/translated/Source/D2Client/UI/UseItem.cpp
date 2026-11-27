@@ -67,6 +67,7 @@ D2NpcCashTabStrc gaNpcCashTabs[2] = {
 
 namespace D2Client { namespace UI { namespace UseItem {
 
+// 1.14d mac: 000fa9e1
 static void ITEM_ToggleHandState(D2UnitStrc * pUnit) {
     if (ui::gnPlayerCashDisplay == 1) {
       ui::gnPlayerCashDisplay = 2;
@@ -107,6 +108,7 @@ BOOL __stdcall TEXT_HandleMouseMove() {
     return 0;
 }
 
+// 1.14d mac: 000fa77e
 void __fastcall TEXT_HandleItemUse(int32_t nMouseX, int32_t nMouseY) {
     int i;
     for (i = 0; i < nCashDisplayItemCount; i++) {
@@ -130,6 +132,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 // @sourcefile .\UI\UseItem.cpp
+// 1.14d mac: 000fa813
 void __stdcall INPUT_UseItemClick(D2UIMouseMsgStrc * pMsg) {
     int nHandled;
     uint32_t uMouseY = (uint32_t)pMsg->uLParam.sMousePos.nMouseY;
@@ -188,6 +191,7 @@ void __stdcall INPUT_UseItemClick(D2UIMouseMsgStrc * pMsg) {
     ITEM_ToggleHandState(pItem);
 }
 
+// 1.14d mac: 000fab45
 void __stdcall INPUT_UseItemPassthrough(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -317,6 +321,7 @@ void __stdcall TEXT_DrawCashDisplay() {
     D2Win::Src::D2WinFont::SetAndReturnLastFont(nSavedFont);
 }
 
+// 1.14d mac: 000fa2fe
 void __stdcall UI_CloseHoradricCubeWindow() {
     ui::gnPlayerCashDisplay = 0;
     D2UnitStrc* pCursorItem_lcl = UNIT::Player::GetPlayerUnit_UI();

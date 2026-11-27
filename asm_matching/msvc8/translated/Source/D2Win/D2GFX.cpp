@@ -26,6 +26,7 @@ static int gnResolutionMode = 0; D2_STATIC_GUARD(gnResolutionMode, "gnResolution
 
 namespace D2Win { namespace D2GFX {
 
+// 1.14d mac: 0004a19f
 BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
     gbGfxWindowCreated = 1;
     BOOL hWnd = D2gfx::D2GFX::D2GFX_CreateWindow(bWindowed, nResolutionMode);
@@ -52,6 +53,7 @@ BOOL __stdcall CreateWindowWithChecks(BOOL bWindowed, int32_t nResolutionMode) {
     return 1;
 }
 
+// 1.14d mac: 0004a28c
 int __stdcall INIT_SetWndProcBGlobalPointer(::WndProcB pWndProcB) {
     D2GFX::pWndProcB = pWndProcB;
     return 1;
@@ -70,6 +72,7 @@ BOOL __stdcall UI_Init() {
     return 1;
 }
 
+// 1.14d mac: 0004a317
 BOOL __stdcall D2GFX_ShutdownSpriteCacheAndWindow() {
     gbGfxWindowCreated = 0;
     ghwndD2GFX_CachedWindow = (HWND)0x0;
@@ -105,6 +108,7 @@ void __stdcall SetResolutionModeWithEndCutScene(int32_t nResolutionMode) {
     D2CMP::SRC::SpriteCache::GFX_InitCelDataCache(nullptr, 0x800000, 0x7d000, 0);
 }
 
+// 1.14d mac: 0004a4dc
 BOOL __stdcall D2GFX_SetVideoMode(int32_t nResolutionMode) {
     // Static local variables (originally global data)
     // also labelled: WindowRect, lpRect_007d5580

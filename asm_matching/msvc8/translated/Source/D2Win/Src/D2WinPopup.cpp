@@ -53,6 +53,7 @@ BOOL __stdcall D2WINPOPUP_Destroy() {
 }
 
 // Returns TRUE if the popup control exists, is of type FORM_Popup (0xb), is active (state & 4), and is visible (state & 1). Used to check if popup is ready for interaction.
+// 1.14d mac: 0004c499
 BOOL __stdcall D2WINPOPUP_IsActiveAndVisible() {
     if (gpD2WinPopupControl) {
       uint32_t uVar1;

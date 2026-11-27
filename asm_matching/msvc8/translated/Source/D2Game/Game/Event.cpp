@@ -55,6 +55,7 @@ static D2TimerStrc * * __stdcall EVENT_GetDispatchBucketForFrame(eD2UnitType eUn
 
 // Allocates a timer pool containing 600 D2TimerStrc slots linked as a free list. Pool size is 0x7088 bytes (600 * 48 bytes per timer + header). Multiple pools are chained together via pNextList when capacity is exhausted. Returns the first available timer from pFirstList.
 // @sourcefile .\GAME\Event.cpp
+// 1.14d mac: 001ab08a
 static D2TimerListStrc * EVENT_AllocTimerPool(::SGAMEDATA * pGame) {
     D2TimerListStrc* pPool = D2_NEW_POOL_AT(pGame->pMemoryPool, D2TimerListStrc, ".\\GAME\\Event.cpp", 0xa9);
     if (!pPool) {
@@ -97,6 +98,7 @@ static D2TimerStrc * __stdcall EVENT_GetTimerOrAllocNew(::SGAMEDATA * pGame, D2T
 }
 
 // Recycles a timer back to the free pool. Unlinks the timer from three data structures: unit timer list (pNextTimerOnUnit chain), dispatch bucket (pActiveTimersByType[nFrame & 0x3F]), and immediate list (pTimerListByType). Sets flag 0x8 if timer is currently executing (defer removal), otherwise immediately returns to pFirstList free pool.
+// 1.14d mac: 001aad59
 static void EVENT_RemoveAndRecycleTimer(D2TimerStrc * pTimer, ::SGAMEDATA * pGame) {
     D2TimerStrc** ppBucket;
     uint32_t nFrame;
@@ -151,6 +153,7 @@ static void EVENT_RemoveAndRecycleTimer(D2TimerStrc * pTimer, ::SGAMEDATA * pGam
 }
 
 // Allocates a timer and attaches it to a unit's timer linked list. Calls EVENT_GetTimerOrAllocNew to obtain a recycled timer, links it via pNextTimerOnUnit (head insertion), and copies the unit's GUID and type to the timer structure. Returns the allocated D2TimerStrc ready for configuration.
+// 1.14d mac: 001abb32
 static D2TimerStrc * EVENT_AllocTimerToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     struct D2TimerQueueStrc* t2_c0 = pGame->pTimerQueue;
     D2TimerStrc* pTimer = EVENT_GetTimerOrAllocNew(pGame, t2_c0);
@@ -186,6 +189,7 @@ static D2TimerStrc * EVENT_AllocTimerToUnit(::SGAMEDATA * pGame, D2UnitStrc * pU
 // nTimerType and, when nArg1 != 0, whose nArg1 (D2TimerStrc+0x14) equals nArg1. It fires
 // nothing; callers that want an immediate run call EVENT_TriggerImmediate afterwards.
 // The 00540e73-00540e8c loop only calls EVENT_RemoveAndRecycleTimer.
+// 1.14d mac: 001aad10
 void __fastcall EVENT_RemoveUnitTimersByType(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD nTimerType, int32_t nArg1) {
     D2TimerStrc* pTimer;
     D2TimerStrc* pNextTimer = UNIT::SUnit::GetTimerList(pUnit);
@@ -198,6 +202,7 @@ void __fastcall EVENT_RemoveUnitTimersByType(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // Removes timers matching both eTimerType and fpTimerFunction from a unit's timer list. Used for custom callback cleanup when a specific timer/callback pair needs cancellation (e.g., map reveal timer removal). Walks pNextTimerOnUnit and calls EVENT_RemoveAndRecycleTimer on matches.
+// 1.14d mac: 001aae97
 void __fastcall EVENT_RemoveCustomTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, fpTimerFunctionUnit nfpTimerFunction) {
     D2TimerStrc* pTimerList;
     D2TimerStrc* pTimerListTemp2 = UNIT::SUnit::GetTimerList(pUnit);
@@ -210,6 +215,7 @@ void __fastcall EVENT_RemoveCustomTimer(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Removes all timers from a unit's timer list by walking pNextTimerOnUnit chain and calling EVENT_RemoveAndRecycleTimer on each. Clears pUnit reference and resets the unit's timer list head to NULL. Called when a unit dies or is freed.
+// 1.14d mac: 001aaede
 void __fastcall EVENT_FreeAllTimersForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2TimerStrc* pTimerList = UNIT::SUnit::GetTimerList(pUnit);
     while (pTimerList) {
@@ -224,6 +230,7 @@ void __fastcall EVENT_FreeAllTimersForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Wrapper around EVENT_FreeAllTimersForUnit that checks if the unit has any timers before clearing. Ensures the unit's timer list is set to NULL regardless of whether timers existed. Called during unit initialization to ensure clean state.
+// 1.14d mac: 001aaf2f
 void __fastcall EVENT_ClearTimerList(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2TimerStrc* pTimerListHead = UNIT::SUnit::GetTimerList(pUnit);
     if (pTimerListHead) {
@@ -244,6 +251,7 @@ void __fastcall EVENT_ClearTimerList(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 // Object::pTimerMethods and Item::pTimerMethods are called at 00586b19 and 00562de9 with
 // MOV EDX / MOV ECX and NO pushes. One typedef was covering both records; do not merge
 // them again.
+// 1.14d mac: 001ab370
 static void __stdcall EVENT_DispatchPlayerTimers(D2TimerQueueStrc * pTimerQueue, ::SGAMEDATA * pGame, D2TimerStrc * pTimer, BOOL bImmediate) {
     fpTimerFunctionUnit nfpTimerFunction;
     pTimerQueue->pTimerTemp = 0;
@@ -290,6 +298,7 @@ static void __stdcall EVENT_DispatchPlayerTimers(D2TimerQueueStrc * pTimerQueue,
 }
 
 // Dispatches monster timers using the same two-mode mechanism as player dispatch (immediate vs frame-matched bucket hash). Calls MONSTEREVENT_DefaultCallback or custom fpTimerFunction for each timer. Drives monster AI state machine, skill casting, regeneration, and death timers.
+// 1.14d mac: 001ab4ca
 static void __stdcall EVENT_DispatchMonsterTimers(D2TimerQueueStrc * pTimerQueue, ::SGAMEDATA * pGame, D2TimerStrc * pTimer, BOOL bImmediate) {
     pTimerQueue->pTimerTemp = 0;
     if (bImmediate) {
@@ -334,6 +343,7 @@ static void __stdcall EVENT_DispatchMonsterTimers(D2TimerQueueStrc * pTimerQueue
 }
 
 // Dispatches object timers (shrines, chests, doors, portals) with the dual immediate/frame-scheduled mode. Calls OBJECTEVENT_DefaultCallback or custom function. Objects use fewer timer types than players/monsters (mainly animation state and interaction cooldowns).
+// 1.14d mac: 001ab624
 static void __stdcall EVENT_DispatchObjectTimers(D2TimerQueueStrc * pTimerQueue, ::SGAMEDATA * pGame, D2TimerStrc * pTimer, BOOL bImmediate) {
     pTimerQueue->pTimerTemp = 0;
     if (bImmediate) {
@@ -378,6 +388,7 @@ static void __stdcall EVENT_DispatchObjectTimers(D2TimerQueueStrc * pTimerQueue,
 }
 
 // Dispatches missile timers which drive projectile physics every frame. Calls MISSILEEVENT_DefaultCallback (→MissileSrvDo mode dispatcher → velocity, collision, hit functions). This is the combat system's firing mechanism. Missiles nearly always use immediate dispatch mode.
+// 1.14d mac: 001ab24f
 static void __stdcall EVENT_DispatchMissileTimers(D2TimerQueueStrc * pTimerQueue, ::SGAMEDATA * pGame, D2TimerStrc * pTimer, BOOL bImmediate) {
     pTimerQueue->pTimerTemp = 0;
     if (bImmediate) {
@@ -422,6 +433,7 @@ static void __stdcall EVENT_DispatchMissileTimers(D2TimerQueueStrc * pTimerQueue
 }
 
 // Dispatches item timers for ground items and equipped items. Calls ITEMEVENT_DefaultCallback or custom handler. Item timers handle durability refresh, quantity refresh (arrows/bolts), and item destruction countdowns.
+// 1.14d mac: 001ab745
 static void __stdcall EVENT_DispatchItemTimers(D2TimerQueueStrc * pTimerQueue, ::SGAMEDATA * pGame, D2TimerStrc * pTimer, BOOL bImmediate) {
     pTimerQueue->pTimerTemp = 0;
     if (bImmediate) {
@@ -467,6 +479,7 @@ static void __stdcall EVENT_DispatchItemTimers(D2TimerQueueStrc * pTimerQueue, :
 
 // Frees the entire timer queue infrastructure on game shutdown. Walks pTimerList chain to free all timer pools (each 0x7088 bytes), then frees the D2TimerQueueStrc itself (0xA20 bytes) and sets pGame->pTimerQueue to NULL. Called by GAME_DestroyGame.
 // @sourcefile .\GAME\Event.cpp
+// 1.14d mac: 001aaf6a
 void __fastcall EVENT_FreeTimerQueue(::SGAMEDATA * pGame) {
     D2TimerQueueStrc* pMemoryToFree = pGame->pTimerQueue;
     if (!pMemoryToFree) {
@@ -487,6 +500,7 @@ void __fastcall EVENT_FreeTimerQueue(::SGAMEDATA * pGame) {
 
 // Initializes the event/timer system for a new game. Frees any existing timer queue, allocates D2TimerQueueStrc (0xA20 = 5 unit types * 64 frame buckets * 4 bytes + metadata), allocates first 600-timer pool, and sets pGame->pTimerQueue. Called by GAME_CreateBattleNetGame and GAME_CreateSingleplayerGame.
 // @sourcefile .\GAME\Event.cpp
+// 1.14d mac: 001ab00f
 void __fastcall EVENT_AllocTimerQueue(::SGAMEDATA * pGame) {
     D2TimerListStrc* pFirstTimerPool;
     if (pGame->pTimerQueue) {
@@ -501,6 +515,7 @@ void __fastcall EVENT_AllocTimerQueue(::SGAMEDATA * pGame) {
 }
 
 // Main timer dispatch loop called every game frame at 25 FPS. Iterates all 5 unit types (missile→player→monster→object→item) and processes both immediate timers (pTimerListByType) and frame-scheduled timers (pActiveTimersByType bucket hash). Each unit type calls its type-specific dispatcher which invokes default callbacks or custom fpTimerFunction handlers.
+// 1.14d mac: 001ab110
 void __fastcall EVENT_DispatchAllTimers(::SGAMEDATA * pGame) {
     uint32_t nFrameBucket = pGame->dwGameFrame % 64;
     D2TimerQueueStrc* pTimerQueue = pGame->pTimerQueue;
@@ -518,6 +533,7 @@ void __fastcall EVENT_DispatchAllTimers(::SGAMEDATA * pGame) {
 }
 
 // Checks if a timer of the specified type already exists on a unit. Walks the unit's timer linked list (pNextTimerOnUnit) and returns the earliest scheduled frame number if a matching timer type is found, 0 if not found. Used to prevent duplicate timers on units.
+// 1.14d mac: 001ab866
 int32_t __fastcall EVENT_GetTimerFrame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType) {
     D2TimerStrc* pTimer = UNIT::SUnit::GetTimerList(pUnit);
     int nBestFrame = 0;
@@ -538,6 +554,7 @@ int32_t __fastcall EVENT_GetTimerFrame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
 
 // Internal core function that allocates and enqueues a timer for immediate execution (nFrame=-1). Validates nTimerType < 15, allocates via EVENT_AllocTimerToUnit, sets flag 0x4, stores callback/args, then inserts at head of pTimerListByType bucket using aTimerIndexUnitTypeLookupTable to map unit type to bucket index.
 // @sourcefile .\GAME\Event.cpp
+// 1.14d mac: 001aba72
 static void __stdcall EVENT_TriggerTimerInternal(fpTimerFunctionUnit nfpTimerFunction, int32_t nArg1, int32_t nArg2, D2UnitStrc * pUnit, int32_t nTimerType, ::SGAMEDATA * pGame) {
     eD2UnitType eUnitType;
     D2TimerStrc* pPrevHead;
@@ -571,6 +588,7 @@ static void __stdcall EVENT_TriggerTimerInternal(fpTimerFunctionUnit nfpTimerFun
 }
 
 // Triggers a timer for immediate execution without going through the scheduler. Calls EVENT_TriggerTimerInternal with NULL fpFunction (use default callback), nTimerType < 15 enforced. Used when animation ends or mode changes need instant callback invocation.
+// 1.14d mac: 001aba40
 void __fastcall EVENT_TriggerImmediate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD nTimerType, int32_t nArg1, int32_t nArg2) {
     EVENT_TriggerTimerInternal(nullptr, nArg1, nArg2, pUnit, nTimerType, pGame);
 }
@@ -588,6 +606,7 @@ void __fastcall EVENT_TriggerWithCallback(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // pTimerQueue->pDispatchedTimersByType[idx][nFrame & 0x3F] (idx = aTimerIndexUnitTypeLookupTable[unit type])
 // and makes it the pActiveTimersByType[idx][nFrame & 0x3F] head if that bucket is empty.
 // Called by SetEvent and SetEventMapReveal.
+// 1.14d mac: 001ab8f2
 static void __stdcall SetEventInternal(eD2TimerTypeDWORD eTimerType, ::SGAMEDATA * pGame, int32_t nFrame, D2UnitStrc * pUnit, fpTimerFunctionUnit fpFunction, int32_t nArg1, int32_t nArg2) {
     D2TimerStrc** ppDispatchBucket;
     uint32_t nFrameBucket;
@@ -645,11 +664,13 @@ static void __stdcall SetEventInternal(eD2TimerTypeDWORD eTimerType, ::SGAMEDATA
 }
 
 // Public API for scheduling a delayed timer. Calculates absolute frame number (dwGameFrame + nDelay), calls SetEventInternal with NULL fpFunction (use type's default callback). Most heavily used timer entry point (265+ call sites). Used for skill durations, regen ticks, mode transitions, etc.
+// 1.14d mac: 001ab8b9 D2Game::GAME::Event::SetEvent
 void __fastcall SetEvent(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int eTimerType, int nDelay, int32_t nArg1, int32_t nArg2) {
     SetEventInternal(eTimerType, pGame, nDelay, pUnit, nullptr, nArg1, nArg2);
 }
 
 // Specialized variant of SetEvent that accepts a custom fpTimerFunction callback. Used for map reveal timer which needs a specific callback (PLAYER_CancelMapReveal). Calls SetEventInternal with non-NULL fpFunction, overriding the default type dispatcher.
+// 1.14d mac: 001abafa
 void __fastcall SetEventMapReveal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2TimerTypeDWORD eTimerType, int32_t nFrame, fpTimerFunctionUnit fpFunction, int32_t nArg1, int32_t nArg2) {
     SetEventInternal(eTimerType, pGame, nFrame, pUnit, fpFunction, nArg1, nArg2);
 }

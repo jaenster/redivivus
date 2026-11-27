@@ -44,6 +44,7 @@ static uint32_t gnMiniPanelHoverState = 0; D2_STATIC_GUARD(gnMiniPanelHoverState
 
 namespace D2Client { namespace UI { namespace MiniPanel {
 
+// 1.14d mac: 000daa99 D2Client::UI::MiniPanel::SetGlobalAlwaysRun
 void __stdcall SetGlobalAlwaysRun() {
     int32_t nResult = 0;
     Storm::Source::SReg::SRegLoadValue("Diablo II", "Always Run", 0, &nResult);
@@ -55,6 +56,7 @@ void __stdcall UpdateGlobalAlwaysRun() {
     Storm::Source::SReg::SRegSaveValue("Diablo II", "Always Run", 0, nValue);
 }
 
+// 1.14d mac: 000dae51
 static void MINIPANEL_DrawBackground(int32_t nPanelSection) {
     int nXOffset;
     D2GfxDataStrc sGfxData;
@@ -103,6 +105,7 @@ void __stdcall MINIPANEL_DrawButton(int32_t nFrameNumber, int32_t nPositionX, in
     D2gfx::D2GFX::D2GFX_DrawImage(&sGfxData, nPositionX, nPositionY, -1, DRAW_SOLID, nullptr);
 }
 
+// 1.14d mac: 000daf53
 static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {
     int bSinglePlayer = gbMiniPanelSinglePlayer;
     int nButtonCount = 8;
@@ -157,6 +160,7 @@ static void MINIPANEL_CalculateButtonPositions(int32_t bIsExpansion) {
     }
 }
 
+// 1.14d mac: 000db05c
 void __stdcall MINIPANEL_DrawAllButtons(int32_t bVisible) {
     D2GfxDataStrc sGfxData2;
     D2GfxDataStrc sGfxData;
@@ -341,6 +345,7 @@ int __fastcall Unreferenced_0047ec20(int param_1) {
     return 0;
 }
 
+// 1.14d mac: 000db66a
 static void MINIPANEL_HandleButtonClick(int32_t nButtonId) {
     BOOL _bFlagActive;
     eD2GSGameType eGameType;
@@ -503,6 +508,7 @@ void __stdcall INPUT_MiniPanelMouseUp(D2UIMouseMsgStrc * pMsg) {
     gnMiniPanelClickedButton = 0;
 }
 
+// 1.14d mac: 000db8d4
 void __stdcall INPUT_MiniPanelMouseDown(D2UIMouseMsgStrc * pMsg) {
     BOOL bEscMenuOpen;
     eD2GSGameType eGameType;
@@ -609,6 +615,7 @@ void __stdcall INPUT_MiniPanelMouseDown(D2UIMouseMsgStrc * pMsg) {
     Storm::SMsgBreakHandlerChain(pMsg);
 }
 
+// 1.14d mac: 000dba87
 void __stdcall MINIPANEL_Init() {
     int nButtonCount;
     if (GAME::Game::CLIENT_GetD2GSGameType() != GAMETYPE_SINGLEPLAYER) {
@@ -630,6 +637,7 @@ void __stdcall MINIPANEL_Init() {
     }
 }
 
+// 1.14d mac: 000dbb0b
 void __stdcall MINIPANEL_Shutdown() {
     BOOL bRegValue = FALSE;
     if (!gaEscMenuUIFlags[0x15].nSavedState) {
@@ -649,6 +657,7 @@ void __stdcall MINIPANEL_Shutdown() {
     gpMiniPanelButtonsDC6 = 0;
 }
 
+// 1.14d mac: 000dbb8a
 BOOL __fastcall MINIPANEL_IsMouseInArea(int32_t nMouseX, int32_t nMouseY) {
     if (nMouseX > ui::ScreenSizeX / 2 - 0x4a && nMouseX < ui::ScreenSizeX / 2 + 0x47 && nMouseY < Inv::ScreenSizeY - 0x32 && nMouseY > Inv::ScreenSizeY - 0x45) {
       return 1;
@@ -657,6 +666,7 @@ BOOL __fastcall MINIPANEL_IsMouseInArea(int32_t nMouseX, int32_t nMouseY) {
     return 0;
 }
 
+// 1.14d mac: 000dbbd9
 void __stdcall SetupMiniPanel() {
     int32_t nResolution;
     int bReadOk = Storm::Source::SReg::SRegLoadValue("Diablo II", "Resolution", 0, &nResolution);
@@ -779,6 +789,7 @@ static void __stdcall MINIPANEL_ShowTooltip(int32_t nX, int32_t nY, int32_t nBut
     D2Win::Src::D2WinFont::TEXT_TooltipSetAttributes(wszTooltip, nX - 3, nY - 0x1a, 0, 1);
 }
 
+// 1.14d mac: 000db141
 static void MINIPANEL_HandleMouseHover(int32_t nLayout) {
     int nMouseX = Cursor::GetMouseX();
     int nMouseY = Cursor::GetMouseY();
@@ -809,6 +820,7 @@ static void MINIPANEL_HandleMouseHover(int32_t nLayout) {
     }
 }
 
+// 1.14d mac: 000dab1f
 void __stdcall DRAW_UI_MiniPanel() {
     D2GfxDataStrc sGfxData;
     int nButtonX;

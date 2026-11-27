@@ -26,6 +26,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2BitBufferStrc) == 0x14, "D2_NEW_A
 
 namespace D2Common { namespace QuestRecord {
 
+// 1.14d mac: 00184ac7
 BOOL __stdcall GetQuestState(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId, eD2QuestState eQuestState) {
     if (!pBitBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1f);
@@ -36,6 +37,7 @@ BOOL __stdcall GetQuestState(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId, e
     return (uint32_t)(bResult != 0);
 }
 
+// 1.14d mac: 00184b23
 void __stdcall SetQuestState(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId, eD2QuestState eQuestState) {
     if (!pBitBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x29);
@@ -45,6 +47,7 @@ void __stdcall SetQuestState(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId, e
     Fog::BitBuffer::SetBitAtOffset((char*)pBitBuffer->pBuffer, nQuestId * 0x10 + eQuestState);
 }
 
+// 1.14d mac: 00184b77
 void __stdcall UnsetQuestState(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId, eD2QuestState eQuestState) {
     if (!pBitBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x34);
@@ -54,6 +57,7 @@ void __stdcall UnsetQuestState(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId,
     Fog::BitBuffer::UnsetBitAtOffset((char*)pBitBuffer->pBuffer, nQuestId * 0x10 + eQuestState);
 }
 
+// 1.14d mac: 00184bcb
 void __stdcall UnsetQuestStepStates(D2BitBufferStrc * pBitBuffer, eD2Quests nQuestId) {
     if (!pBitBuffer) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x3e);
@@ -68,6 +72,7 @@ void __stdcall UnsetQuestStepStates(D2BitBufferStrc * pBitBuffer, eD2Quests nQue
 }
 
 // @sourcefile .\QuestRecord\QuestRecord.cpp
+// 1.14d mac: 00184c2a
 D2BitBufferStrc * __stdcall CreateBitBuffer(D2PoolManagerStrc * pMemory) {
     D2BitBufferStrc* pBitBuffer = D2_NEW_POOL_AT(pMemory, D2BitBufferStrc, ".\\QuestRecord\\QuestRecord.cpp", 0x50);
     uint8_t* pBytes = (uint8_t*)D2_ALLOC_POOL_AT(pMemory, 0x60, ".\\QuestRecord\\QuestRecord.cpp", 0x51);
@@ -77,6 +82,7 @@ D2BitBufferStrc * __stdcall CreateBitBuffer(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\QuestRecord\QuestRecord.cpp
+// 1.14d mac: 00184cbc
 void __stdcall FreeQuestRecordPool(D2PoolManagerStrc * pMemory, D2BitBufferStrc * pBitBuffer) {
     if (!pBitBuffer) {
       return;
@@ -88,6 +94,7 @@ void __stdcall FreeQuestRecordPool(D2PoolManagerStrc * pMemory, D2BitBufferStrc 
 
 // Copies the 0x60-byte quest record from szText into pBitBuffer (0x18 dwords; halts if nSize != 0x60). If nParam is non-zero, for each 16-bit quest slot (bit offsets 0..0x2ae, stride 16) clears QUESTSTATE_JustCompleted (13) and QUESTSTATE_CannotCompleteQuestInGame (14) and sets QUESTSTATE_FinishedInPreviousGame (15) when QUESTSTATE_RewardAwaits (1) is set.
 // Bit numbers from the 1.14d asm 0065c50e-0065c54d (ESI = slot base + 14) and the program's eD2QuestState enum.
+// 1.14d mac: 00184d25
 void __stdcall ReadQuestRecordFromBuffer(D2BitBufferStrc * pBitBuffer, char * szText, int16_t nSize, int32_t bResetQuestFlags) {
     if (nSize != 0x60) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x6e);
@@ -109,6 +116,7 @@ void __stdcall ReadQuestRecordFromBuffer(D2BitBufferStrc * pBitBuffer, char * sz
     }
 }
 
+// 1.14d mac: 00184de0
 void __stdcall CopyQuestBitBuffer(D2BitBufferStrc * pBitBuffer, uint8_t * pOutputBuffer, int16_t nLength, uint32_t dwParam) {
     /* Input is an array of 96 bytes (=24 uints) */ if (nLength != 0x60) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x84);

@@ -46,6 +46,7 @@ typedef void (__stdcall *pfnVoidNoArgCallback)();
 
 namespace Bnclient { namespace BnSend {
 
+// 1.14d mac: 0005c273
 void __fastcall BNNEWS_SetNewsChannel(int bIsClassic) {
     if (g_pfnNewsChannelCallback) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x2f);
@@ -181,6 +182,7 @@ void __stdcall BNNEWS_SaveToCache() {
 }
 
 // Calls g_pfnMotdCallback(dwEntryId in ECX, szMessage in EDX) once per unread news entry.
+// 1.14d mac: 0005c580
 void __stdcall BNNEWS_InvokeCallbacks() {
     if (g_pfnNewsCallback) {
       (*g_pfnNewsCallback)();
@@ -210,6 +212,7 @@ void __fastcall TSFixedArray_Ui_Destructor_Unref_0051d570(void * pArray) {
     Storm::Source::SMem::SMemFree(*(void**)((char*)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
 }
 
+// 1.14d mac: 0005ca08
 void * __fastcall BNNEWS_DestroyNewsTable(D2BnNewsTableStrc * pNewsTable, int, uint8_t bFreeMemory) {
     if (pNewsTable->pEntries) {
       Storm::Source::SMem::SMemFree(pNewsTable->pEntries, s___AUItem_NewsTable___0072ff8c, -2, 0);
@@ -285,6 +288,7 @@ static inline uint32_t D2_RoundUp(uint32_t n, uint32_t g) {
     return n;
 }
 
+// 1.14d mac: 0005ca4a
 void __fastcall BNNEWS_EnsureCapacityWithGrowth(uint32_t * pNewsTable, int, uint32_t dwAdditionalCount, int bGrow) {
     dwAdditionalCount = dwAdditionalCount + pNewsTable[1];
     if (dwAdditionalCount <= *pNewsTable) {
@@ -319,6 +323,7 @@ void __fastcall Unreferenced_0051d730(void * pArray) {
     Storm::Source::SMem::SMemFree(*(void**)((char*)pArray + 8), s___AUItem_NewsTable___0072ff8c, -2, 0);
 }
 
+// 1.14d mac: 0005c5f4
 BOOL __stdcall BNNEWS_Shutdown() {
     g_pfnMotdCallback = 0;
     g_pfnNewsCallback = 0;
@@ -383,6 +388,7 @@ void __fastcall BNNEWS_SetNewsEntryCount(D2BnNewsTableStrc * pNewsTable, int, ui
 
 // BATTLE.NET NEWS PARSER (SID_NEWS_INFO 0x46)
 // Parses news entries from Battle.net packet containing: count(1), unknown(4), motd_timestamp(4), timestamp(4), then array of entries. Each entry: entry_id(4), message(null-terminated). Maintains sorted cache (up to 256 entries) in gpBNetNewsCache, each 0x408 bytes with entry_id at +4 and message at +8. Special case: entry_id=0 triggers callback g_pfnMotdCallback for MOTD. Sorts by entry_id descending, calculates first unread index (g_nFirstUnreadNewsIndex) based on motd_timestamp, saves to disk cache, and invokes UI callbacks.
+// 1.14d mac: 0005c676
 BOOL __fastcall NET_SID_CLIENT_Incoming0x46(char * pBytes, uint32_t nSize) {
     int iVar1;
     uint32_t* puVar2;

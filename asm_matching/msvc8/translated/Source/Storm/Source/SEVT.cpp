@@ -920,6 +920,7 @@ int __stdcall SEvtBreakHandlerChain(void * pUnderMouse) {
 }
 
 // Unlinks a node from the list, frees its memory, and returns the masked count value. Combines unlinking logic with memory cleanup and count extraction. Always deallocates via SMemFree after unlinking.
+// 1.14d mac: 00011dc6
 BREAKCMD * __fastcall LINKEDLIST_UnlinkFreeAndGetCount(StormLinkedListStrc * pListHead, int, StormLinkStrc * pNode) {
     StormLinkStrc* nNextNode = pNode;
     if (!pNode) {

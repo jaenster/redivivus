@@ -532,6 +532,7 @@ static int g_SMemLastTickCount = 0; D2_STATIC_GUARD(g_SMemLastTickCount, "g_SMem
 
 namespace Fog { namespace SMem {
 
+// 1.14d mac: 002eca4d
 int32_t __stdcall FOG_GetLowestSetBitIndex(uint32_t dwBits) {
     if (!dwBits) {
       return -1;
@@ -554,6 +555,7 @@ int32_t __stdcall FOG_GetLowestSetBitIndex(uint32_t dwBits) {
     return -1;
 }
 
+// 1.14d mac: 002f3406
 void __stdcall SMemInitPerfCounters() {
     // Static local variables (originally global data)
     static uint32_t gnSMemPerfTicksPerMicrosecond; D2_STATIC_GUARD_BSS(gnSMemPerfTicksPerMicrosecond, "Fog::SMem::SMemInitPerfCounters::gnSMemPerfTicksPerMicrosecond");
@@ -592,6 +594,7 @@ DWORD __stdcall GetTickCount() {
     return ::GetTickCount();
 }
 
+// 1.14d mac: 002f712a
 uint16_t __stdcall HashForName(char * szText) {
     // Static local variables (originally global data)
     static uint16_t gwSMemAllocDebugFlags[256] = {

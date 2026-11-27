@@ -141,6 +141,7 @@ int __stdcall COMPOSIT_GetItemTypeIndex(int32_t iItemType) {
 }
 
 // Resolves a unit's weapon-class token - the hth/1hs/2hs four-character code that forms the last component of every COF and AnimData name. Returns the token itself and writes the matching weapon-class INDEX through pnParam. Monsters take BaseW from MonStats2, objects and unarmed units take hth, and a player's is resolved from the equipped weapons: dual-wield pairs for the Assassin and Barbarian get the 1js/1jt/1st/1ss/2ht combinations, everything else comes from the item's own WClass or 2HandedWClass by handedness. The two by-handedness returns save the token in EDX across the GetItemTypeIndex call, which is why this function needs its callee typed __stdcall_edxsafe.
+// 1.14d mac: 00139548
 uint32_t __stdcall COMPOSIT_ResolveWeaponClass(D2UnitStrc * pUnit, int32_t nUnitType, int32_t nClassIndex, int32_t nMode, D2InventoryStrc * pInventory, int32_t * pnWeaponClassIndex) {
     int32_t nRightAnimClass;
     int32_t nLeftAnimClass;
@@ -307,6 +308,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_3(D2UnitStrc * p)
 }
 
 // @sourcefile .\COMPOSIT\Composit.cpp
+// 1.14d mac: 00139aa0
 uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2InventoryStrc * pInventory, uint32_t * pnWeaponClassIndex, int32_t nMode, int32_t bIgnoreTransform) {
     D2UnitStrc* pOrigUnit = pUnit;
     if (!pUnit) {
@@ -330,6 +332,7 @@ uint32_t __stdcall COMPOSIT_GetWeaponClassWithTransform(D2UnitStrc * pUnit, D2In
     return nWeaponClassCode;
 }
 
+// 1.14d mac: 00139b58
 BOOL __stdcall DoesBodyHaveAppearanceColors(int32_t nBodyIndex) {
     if (nBodyIndex != 1 && nBodyIndex != 2 && nBodyIndex != 3 && nBodyIndex != 4 && nBodyIndex != 8 && nBodyIndex != 9) {
       return 0;
@@ -339,6 +342,7 @@ BOOL __stdcall DoesBodyHaveAppearanceColors(int32_t nBodyIndex) {
 }
 
 // @sourcefile .\COMPOSIT\Composit.cpp
+// 1.14d mac: 00139b7c
 BOOL __stdcall COMPOSIT_HasWeaponDrawn(D2UnitStrc * pUnit) {
     D2UnitStrc* pOrigUnit = pUnit;
     int32_t nWeaponClassIndex = 0;
@@ -359,6 +363,7 @@ BOOL __stdcall COMPOSIT_HasWeaponDrawn(D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 00139bcb
 uint32_t __stdcall COMPOSIT_GetBodyPartTransform(eD2BodyLocDWORD nBodyIndex, uint8_t * pbyTransforms) {
     if (!((int)nBodyIndex < 0x10)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x265);
@@ -385,6 +390,7 @@ uint32_t __stdcall COMPOSIT_GetBodyPartTransform(eD2BodyLocDWORD nBodyIndex, uin
 }
 
 // Builds the .COF animation filename for a composite-rendered unit (player/monster/object) into szOutCofPath via wsprintfA. Selects the type token, mode token and weapon-class token based on nCompType: 0=player (plrtype/plrmode txt tokens, plus weapon-class resolution and player composite overrides), 1=monster (monstats Code + monmode token, compositeDeath flag handling, monster overrides), 2=object (objtype/objmode tokens). Each 4-char token is space-stripped (0x20 bytes blanked). Calls COMPOSIT_ResolveWeaponClass to fill *pOutWeaponClass (the hth/1hs/2hs etc. weapon-class code). bBuildFullPath selects a directory-prefixed format string vs a bare one. pInventory supplies equipped-weapon info for class resolution. Writes the path string; no return.
+// 1.14d mac: 00138fd4
 void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uint32_t nItemCode, uint32_t nCompType, D2InventoryStrc * pInventory, LPSTR szOutCofPath, int32_t * pOutWeaponClass, int32_t bBuildFullPath, uint32_t bSpecialHandling) {
     // Static local variables (originally global data)
     static D2CofPathOverrideStrc gaPlayerCompositeOverrideGfx[2] = {
@@ -594,6 +600,7 @@ void __stdcall COMPOSIT_BuildCofPath(D2UnitStrc * pUnit, uint32_t nPlrClass, uin
 }
 
 // @sourcefile .\COMPOSIT\Composit.cpp
+// 1.14d mac: 001399c7
 void __stdcall COMPOSIT_GetCofPathWithTransform(D2UnitStrc * pUnit, LPSTR szText, int * pnWeaponClass, int32_t bBuildFullPath, uint32_t bSpecialHandling, D2InventoryStrc * pInventory, uint32_t nModeOverride) {
     D2UnitStrc* pOrigUnit = pUnit;
     if (!pUnit) {

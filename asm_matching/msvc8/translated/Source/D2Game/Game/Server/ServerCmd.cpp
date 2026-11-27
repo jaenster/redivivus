@@ -12,6 +12,7 @@
 
 namespace D2Game { namespace GAME { namespace Server { namespace ServerCmd {
 
+// 1.14d mac: 001b4784
 void __fastcall WriteValueBySize(D2BitBufferStrc * pBitBuffer, uint32_t nValue) {
     if (nValue < 0x100) {
       Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 0, 1);
@@ -54,6 +55,7 @@ void thunk_NET_D2GS_SERVER_SendPacketToClient(char * szText, uint32_t nSize) {
     D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', dwRetAddr, szText, nSize);
 }
 
+// 1.14d mac: 001b033e
 int __fastcall SERVERCMD_SendBufferToClient(int32_t nClientId, uint16_t wGuildFlags, uint16_t wUniqueCode, char * szPlayerName) {
     D2GSPacketSrv0xB2 sPacket;
     sPacket.nGuildFlags = wGuildFlags;
@@ -64,16 +66,19 @@ int __fastcall SERVERCMD_SendBufferToClient(int32_t nClientId, uint16_t wGuildFl
     return nSendResult;
 }
 
+// 1.14d mac: 001b03b8
 void __fastcall NET_D2GS_SERVER_Send_0xB0_ConnectionTerminated(int32_t nClientId) {
     uint8_t nPacketId = 0xb0;
     D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\0', nClientId, (char*)&nPacketId, 1);
 }
 
+// 1.14d mac: 001b03e9
 void __fastcall SERVERCMD_SendSingleBytePacket(int32_t nClientId) {
     uint8_t nPacketId = 6;
     D2Net::Game::Server::NET_D2GS_SERVER_SendPacketToClient('\x01', nClientId, (char*)&nPacketId, 1);
 }
 
+// 1.14d mac: 001b041a
 void __fastcall NET_D2GS_SERVER_Send_0xB4_ConnectionRefused(int32_t nClientId, int32_t nReason) {
     D2GSPacketSrv0xB4 sPacket;
     sPacket.nPacketId = 0xb4;

@@ -23,6 +23,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 }
 
 // A1Q7 (hidden slot, nQuestIdReal=QUEST_UnknownDuplicate2): SpokeTo-Akara gossip pseudo-quest, NOT the Cow Level. Q07_Callback_00 = idle-gossip handler (state index 0). Target must be Akara (nClassId 0x10a). Drives Akara's chatter that is gated on the Den of Evil (Q1) progress: if Q1 not yet Completed/JustCompleted/RewardAwaits for this player AND not flagged JustCompleted-in-game AND Q1 is past its intro -> emit a seeded gossip line (modulo-2 variant). Otherwise advance player RNG seed and emit a different seeded gossip line (modulo-3 +2). No quest state is ever WRITTEN here; this slot only reads Q1 state to pick flavor text. Sets no rewards, spawns nothing.
+// 1.14d mac: 0022032d
 void __fastcall Q07_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL bQuestState;
     uint32_t nGossipVariantMod2;
@@ -63,16 +64,19 @@ void __fastcall Q07_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A1Q7 Q07_Callback_08: quest-state handler for state index 8. STUB / no-op (empty body). Registered into sStateFunctions[8] by Q07_InitData but does nothing; this pseudo-quest never reaches/uses state 8.
+// 1.14d mac: 00220471
 void __fastcall Q07_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
 
 }
 
 // A1Q7 Q07_StatusFilter: always returns false. This hidden Akara-gossip slot has no quest-log/status-panel entry, so it never reports a displayable status. Trivial stub.
+// 1.14d mac: 00220476
 bool __fastcall Q07_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 
 // A1Q7 Q07_ActiveFilter: decides whether this slot's Akara gossip is "active" (selectable). Mirror of Callback_00's gate. Active (return true) ONLY when target is Akara (0x10a), Q1 DenOfEvil is past intro, Q1 not flagged JustCompleted-in-game (record state 0xd), and for THIS player Q1 is not Completed/JustCompleted/RewardAwaits — i.e. while the Den of Evil quest is still open. Once Q1 is finished, returns false and Akara stops offering this chatter. Reads only; writes no state.
+// 1.14d mac: 0022047d
 bool __fastcall Q07_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     int nQ1RecordState;
     D2UnitDataPlayerStrc* pPlayerData;
@@ -113,6 +117,7 @@ bool __fastcall Q07_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // A1Q7 Q07_InitData: registers this hidden Act 1 slot. Zeroes sStateFunctions (0x3c bytes), installs Q07_Callback_00 at state[0] and Q07_Callback_08 at state[8], points pNpcMessages at aNpcGossipData (1 entry: Akara 0x10a, string 0x3b, menu=1), marks bIsActive, clears state flags, sets nQuestIdReal=QUEST_UnknownDuplicate2, and installs Q07_StatusFilter / Q07_ActiveFilter. Confirms slot identity: a SpokeTo-Akara gossip pseudo-quest, not a real journal quest.
+// 1.14d mac: 002202ad
 void __fastcall Q07_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q07_Callback00_NpcActivate;

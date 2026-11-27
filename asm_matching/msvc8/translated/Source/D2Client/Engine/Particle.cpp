@@ -29,6 +29,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2ParticleStrc) == 0x4c, "D2_NEW_AT
 namespace D2Client { namespace Engine { namespace Particle {
 
 // @sourcefile .\ENGINE\Particle.cpp
+// 1.14d mac: 0006babe
 void __stdcall AllocParticle(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -44,6 +45,7 @@ void __stdcall AllocParticle(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Particle.cpp
+// 1.14d mac: 0006bb4d
 void __stdcall FreeParticle(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -54,6 +56,7 @@ void __stdcall FreeParticle(D2UnitStrc * pUnit) {
     Gfx::SetParticle(pUnit, nullptr);
 }
 
+// 1.14d mac: 0006bba3
 int32_t __stdcall PARTICLE_GetX(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (pParticle) {
@@ -63,6 +66,7 @@ int32_t __stdcall PARTICLE_GetX(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0006bbc4
 int32_t __stdcall PARTICLE_GetY(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (pParticle) {
@@ -72,6 +76,7 @@ int32_t __stdcall PARTICLE_GetY(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0006bbe5
 int32_t __stdcall PARTICLE_GetScreenZ(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (pParticle) {
@@ -99,6 +104,7 @@ int32_t __stdcall PARTICLE_GetPosYShifted(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0006bc4e
 int32_t __stdcall PARTICLE_GetPosZShifted(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (pParticle) {
@@ -135,6 +141,7 @@ int32_t __stdcall PARTICLE_GetPosZRaw(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0006bc93
 void __stdcall SetPosVectorShifted(D2UnitStrc * pUnit, int32_t nPosX, int32_t nPosY, int32_t nPosZ) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -146,6 +153,7 @@ void __stdcall SetPosVectorShifted(D2UnitStrc * pUnit, int32_t nPosX, int32_t nP
     pParticle->nPosZ = nPosZ << 0xb;
 }
 
+// 1.14d mac: 0006bcc8
 void __stdcall SetOffsetVector(D2UnitStrc * pUnit, int32_t nOffsetX, int32_t nOffsetY, int32_t nOffsetZ, BOOL bShifted) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -163,6 +171,7 @@ void __stdcall SetOffsetVector(D2UnitStrc * pUnit, int32_t nOffsetX, int32_t nOf
     pParticle->pOffsets[0].nOffsetZ = nOffsetZ;
 }
 
+// 1.14d mac: 0006bd10
 void __stdcall PARTICLE_SetVelocityOffset(D2UnitStrc * pUnit, int32_t nVelX, int32_t nVelY, int32_t nVelZ, int32_t bShifted) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -180,6 +189,7 @@ void __stdcall PARTICLE_SetVelocityOffset(D2UnitStrc * pUnit, int32_t nVelX, int
     pParticle->pOffsets[1].nOffsetZ = nVelZ;
 }
 
+// 1.14d mac: 0006bd58
 void __stdcall PARTICLE_SetBoundsOffset(D2UnitStrc * pUnit, int32_t nBoundX, int32_t nBoundY, int32_t nBoundZ, int32_t bShifted) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -197,6 +207,7 @@ void __stdcall PARTICLE_SetBoundsOffset(D2UnitStrc * pUnit, int32_t nBoundX, int
     pParticle->pOffsets[2].nOffsetZ = nBoundZ;
 }
 
+// 1.14d mac: 0006bda0
 void __stdcall PARTICLE_SetBounceParams(D2UnitStrc * pUnit, int32_t nDurationFrames, int32_t nZAnimScale) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -208,6 +219,7 @@ void __stdcall PARTICLE_SetBounceParams(D2UnitStrc * pUnit, int32_t nDurationFra
     pParticle->nZAnimScale = nZAnimScale;
 }
 
+// 1.14d mac: 0006bdc9
 int32_t __stdcall PARTICLE_GetBounceCount(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (pParticle) {
@@ -217,6 +229,7 @@ int32_t __stdcall PARTICLE_GetBounceCount(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0006bdea
 void __fastcall PARTICLE_ClearLifetimeFlag(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -226,6 +239,7 @@ void __fastcall PARTICLE_ClearLifetimeFlag(D2UnitStrc * pUnit) {
     pParticle->nFlags &= -3;
 }
 
+// 1.14d mac: 0006be07
 void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
     int _bySpriteLayer;
     int* pX;
@@ -365,6 +379,7 @@ void __stdcall PARTICLE_UpdatePosition(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0006c0f0
 void __fastcall PARTICLE_InitProjectile(D2UnitStrc * pUnit, int32_t nInitialHeight, int32_t nBounceCount) {
     int nClampedBounceCount;
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
@@ -391,6 +406,7 @@ void __fastcall PARTICLE_InitProjectile(D2UnitStrc * pUnit, int32_t nInitialHeig
     pParticle->pOffsets[0].nOffsetZ = (-pParticle->nPosZ - pParticle->pOffsets[1].nOffsetZ * nClampedBounceCount * nClampedBounceCount / 2) / nClampedBounceCount;
 }
 
+// 1.14d mac: 0006c174
 void __fastcall PARTICLE_SetAttachedToOwner(D2UnitStrc * pUnit, BOOL bReset) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -404,6 +420,7 @@ void __fastcall PARTICLE_SetAttachedToOwner(D2UnitStrc * pUnit, BOOL bReset) {
     pParticle->nFlags &= -17;
 }
 
+// 1.14d mac: 0006c1a1
 void __stdcall PARTICLE_SetStopped(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -422,6 +439,7 @@ BOOL __stdcall PARTICLE_IsStopped(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0006c1be
 void __stdcall PARTICLE_SetStoppedWithFade(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {
@@ -431,6 +449,7 @@ void __stdcall PARTICLE_SetStoppedWithFade(D2UnitStrc * pUnit) {
     pParticle->nFlags = pParticle->nFlags & 0xfffffffeU | 8;
 }
 
+// 1.14d mac: 0006c1e2
 BOOL __stdcall PARTICLE_IsStoppedOrFading(D2UnitStrc * pUnit) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (pParticle && pParticle->nFlags & 1U && !(pParticle->nFlags & 8U)) {
@@ -440,6 +459,7 @@ BOOL __stdcall PARTICLE_IsStoppedOrFading(D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 0006c20d
 void __fastcall PARTICLE_SetReverseDirection(D2UnitStrc * pUnit, BOOL bReset) {
     D2ParticleStrc* pParticle = Gfx::GetParticleFromUnit(pUnit);
     if (!pParticle) {

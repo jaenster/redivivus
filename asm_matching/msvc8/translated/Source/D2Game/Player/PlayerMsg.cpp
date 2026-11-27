@@ -699,6 +699,7 @@ D2WaypointStrc * __fastcall GetWaypointsForCurrentDifficulty(::SGAMEDATA * pGame
 }
 
 static inline int GetGUIDInline(D2UnitStrc * pUnit);
+// 1.14d mac: 001fed6c
 void __fastcall UpgradeLifeAndHitClass(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     uint32_t wPosY;
     uint32_t wPosX;
@@ -741,6 +742,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
+// 1.14d mac: 001fee3d
 void __fastcall SendReassignPlayer(D2UnitStrc * pUnitStrc, D2ClientStrc * pClient, uint8_t bWarpFade) {
     uint32_t wPosY;
     uint32_t wPosX;
@@ -767,6 +769,7 @@ void __fastcall SendReassignPlayer(D2UnitStrc * pUnitStrc, D2ClientStrc * pClien
 
 // Broadcasts the player's current skill cast to nearby clients. If the skill has a valid target unit visible to the client, sends packet 0x4C (target-entity cast). Otherwise sends packet 0x4D (XY cast) using the caster's SP1 path coordinates. Skips if the skill has flag bit 2 set and the caster is the client's own player unit.
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 0020680d
 void __fastcall SendUnitCast0x4d(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, ::SGAMEDATA * pGameParam) {
     uint32_t dwCasterGUID;
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
@@ -855,6 +858,7 @@ void __fastcall SendPlayerMoveOrObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, 
     GAME::SCmd::NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(pClient, '\x0f', '\0', dwTargetGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nMoveModeByte, (uint16_t)dwTargetY, wTargetY, byReserved, wPosX, wPosY);
 }
 
+// 1.14d mac: 0020697d
 void __fastcall SendPlayerMove(::SGAMEDATA * pGame, D2UnitStrc * pUnitRaw, D2ClientStrc * pClient, int32_t nModeIndex) {
     D2DynamicPathStrc* pDynamicPath = pUnitRaw->pPath.pDynamicPath;
     uint8_t byHitClass = (uint8_t)pUnitRaw->dwLastHitClass;
@@ -864,6 +868,7 @@ void __fastcall SendPlayerMove(::SGAMEDATA * pGame, D2UnitStrc * pUnitRaw, D2Cli
     GAME::SCmd::NET_D2GS_SERVER_Send_0x0F_UNITCHANGE_XYPOS(pClient, '\x0f', '\0', dwUnitGUID, (uint8_t)gaPlayerModeNetMsgTable[nModeIndex].nMoveModeByte, D2Common::PATH::DynamicPath::GetXSP1(pDynamicPath), D2Common::PATH::DynamicPath::GetYSP1(pDynamicPath), byHitClass, nPosX, nPosY);
 }
 
+// 1.14d mac: 00206726
 void __fastcall SendPlayerStop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, eD2MonsterAnimMode eAnimMode) {
     int32_t dwMoveMode = gaPlayerModeNetMsgTable[eAnimMode].nMoveModeByte; // steer-ok: the original loads it before the life-percentage call; folded, 00548350 goes from INSN_COUNT_MATCH to OUR-2 (measured)
     uint8_t nLastHitClass = (uint8_t)pUnit->dwLastHitClass;
@@ -871,6 +876,7 @@ void __fastcall SendPlayerStop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2Client
     GAME::SCmd::NET_D2GS_SERVER_Send_0x0D_UNITCHANGE_XY(pClient, '\r', '\0', pUnit->nUnitGUID, (uint8_t)dwMoveMode, D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit), D2Common::Units::GetYPosFromDynamicPathUnitInline(pUnit), nLastHitClass, nLifePct);
 }
 
+// 1.14d mac: 00206421
 void __fastcall PLRMSG_SendPlayerStopToOtherClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nModeIndex) {
     if (pUnit == GAME::Clients::CLIENTS_GetControlUnit(pClient, 0)) {
       return;
@@ -884,6 +890,7 @@ void __fastcall PLRMSG_SendPlayerStopToOtherClient(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Reads pUnit->eAnimMode.ePlayerMode and indexes gaPlayerModeNetMsgTable @0x007319e8 (D2PlayerModeNetMsgStrc, stride 12, 20 entries - one per eD2PlayerAnimMode value), then calls that mode's pfnSend to push the matching network message to nearby clients when a player's animation state changes.
+// 1.14d mac: 001feef8
 void __fastcall DispatchPlayerModeNetMsg(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     int _bPtrInvalid;
     bool bPtrInvalid;
@@ -910,6 +917,7 @@ void __fastcall DispatchPlayerModeNetMsg(::SGAMEDATA * pGameStrc, D2UnitStrc * p
 }
 
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 001fef6a
 void __fastcall SendAttributeUpdate(D2UnitStrc * pUnit, uint16_t nStatId, uint32_t dwStatValue, D2UnitStrc * pOwnerUnit) {
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pOwnerUnit, ".\\PLAYER\\PlrMsg.cpp", 0x153);
     if (!pClient) {
@@ -993,6 +1001,7 @@ static uint8_t GetMPRegen(D2UnitStrc * pUnit) {
 
 // Server-side per-tick player vitals/position delta sync. For player pUnit observed by pUnit2's client, reads HP/mana/stamina/gold/exp stats and current XY (plus velocity from dynamic path), then sends the cheapest matching update packet vs the cached D2PlayerBasicsData: 0x18 PlayerHPMP if regen changed, else 0x95 LifeManaUpdate if HP/mana changed, else 0x96 WalkVerify for position; suppresses tiny HP changes (<10% delta) unless bForceUpdate; also fires 0x19 gold and 0x1A/1B/1C experience packets on change. Updates the cached basics and SkipTick throttle. Returns 1 if anything updated, 0 if skipped/invalid.
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 001ff012
 BOOL __fastcall NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, int32_t bForceUpdate) {
     uint32_t dwGold;
     int lifeShort;
@@ -1129,6 +1138,7 @@ BOOL __fastcall NET_D2GS_SERVER_Send_LifeManaStaminaLocationUpdate(D2UnitStrc * 
     return 1;
 }
 
+// 1.14d mac: 001ff602
 void __fastcall SendInitUpdateAttributes(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     // Static local variables (originally global data)
     static eD2UnitStat geInitAttrStatFirst[6] = { UNITSTAT_velocitypercent, UNITSTAT_attackrate, UNITSTAT_level, UNITSTAT_strength, UNITSTAT_dexterity, (eD2UnitStat)-1 }; D2_STATIC_GUARD(geInitAttrStatFirst, "D2Game::PLAYER::PlayerMsg::SendInitUpdateAttributes::geInitAttrStatFirst");
@@ -1182,6 +1192,7 @@ uint32_t __fastcall PLAYER_AreInDifferentActs(D2UnitStrc * pUnit, D2UnitStrc * p
 }
 
 // Server-side interact/pickup dispatcher: given a source player pUnit, a target eUnitType and its uuid, resolves the target via FindUnitFromTable and acts based on type and distance. PLAYER: pickup corpse if dead+not-trading else open trade (or walk if >8). MONSTER: trigger NPC AI think/interact if interact+npc, begin NPC interaction when close, else walk. OBJECT: validate range/LOS then Interact(mode 2) or walk. ITEM: SERVER_PickToCursor/SERVER_PickToInventory (per bSetting) when adjacent and unobstructed, else walk. WARP: TakeStairs when adjacent. Beyond ~0x33 tiles it bails. Returns eD2ServerIncomingStatus (OK / BAD_PARAMS / BAD_TARGET).
+// 1.14d mac: 001ff682
 eD2ServerIncomingStatus __fastcall SERVER_InteractOrPick(D2UnitStrc * pUnit, eD2UnitType eUnitType, uint32_t uuid, BOOL bSetting, ::SGAMEDATA * pGame) {
     D2ObjectsTxt* pObjectTxt;
     D2UnitStrc* pTargetUnit;
@@ -1420,6 +1431,7 @@ static eD2ServerIncomingStatus __stdcall CloseEnoughToInteract(::SGAMEDATA * pGa
     return eVar2;
 }
 
+// 1.14d mac: 0020016e
 eD2ServerIncomingStatus __fastcall SERVER_IsItemOnCursor(::SGAMEDATA * pThis, int, D2UnitStrc * pUnit, uint32_t dwItemGUID) {
     if (!pThis) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x463);
@@ -1437,6 +1449,7 @@ eD2ServerIncomingStatus __fastcall SERVER_IsItemOnCursor(::SGAMEDATA * pThis, in
     return SERVERSTATUS_BAD_TARGET;
 }
 
+// 1.14d mac: 00205507
 eD2ServerIncomingStatus __fastcall IsPlayerTheOwner(::SGAMEDATA * pThis, int, D2UnitStrc * pOwner, uint32_t nItemGid) {
     if (!pThis) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x47a);
@@ -1472,6 +1485,7 @@ eD2ServerIncomingStatus __fastcall ItemBelongsToUnit(::SGAMEDATA * pThis, int, D
     return (uint32_t)!bBelongs;
 }
 
+// 1.14d mac: 00205a2c
 static eD2ServerIncomingStatus __stdcall ItemIsOfPlayerAndNotOnCursor(uint32_t nItemGid, D2UnitStrc * pPlayer, ::SGAMEDATA * pGame) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4a8);
@@ -1506,6 +1520,7 @@ static int32_t __stdcall PLRMSG_CheckWeaponSlotEmpty(D2UnitStrc * pUnit, int32_t
     return (uint32_t)!pBodyItem;
 }
 
+// 1.14d mac: 00205ab6
 eD2ServerIncomingStatus __fastcall ItemBelongsToInventoryOf(::SGAMEDATA * pThis, int, D2UnitStrc * pPlayer, uint32_t nItemGid) {
     if (!pThis) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x4e8);
@@ -1525,6 +1540,7 @@ eD2ServerIncomingStatus __fastcall ItemBelongsToInventoryOf(::SGAMEDATA * pThis,
 }
 
 // Validates that an item (by GID) is accessible to the acting player for an interaction. Looks up the item unit; for ground/dropped states (Death/Neutral/Walk/GetHit modes) delegates to ItemIsOfPlayerAndNotOnCursor. For the Run mode (item on ground in another act area) calls IsOtherAct and CheckIfCoordsAreInRange (range 10). Returns 0 on success or a non-zero eD2ServerIncomingStatus error code (SERVERSTATUS_BAD_TARGET if item not found).
+// 1.14d mac: 00205866
 static uint32_t __stdcall IsAccessableCheck(DWORD nItemGid, ::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x503);
@@ -1722,6 +1738,7 @@ static int32_t __stdcall PlayerCanInteractWithWaypoint(::SGAMEDATA * pGame, uint
 
 // Movement-packet range validator with anti-cheat reassign. Reads target (nX, nY) from raw packet bytes, calls CheckIfCoordsAreInRange(range=0x32). If out of range and more than 25 frames have elapsed since last frame-stamp, sends packet 0x15 (ReassignPlayer) to snap the client back to the server-authoritative position. If in range, stamps nGameFrame and writes nX/nY to outNx/outNy for further processing. Returns SERVERSTATUS_OK on success.
 // Returns a FULL 32-bit value, not a one-byte enum. All four return paths write the whole of EAX - MOV EAX,0x3 at 0054970f, MOV EAX,0x2 at 00549728, XOR EAX,EAX at 005497d3 and MOV EAX,EBX at 005497b3, where EBX can be OR EBX,0xffffffff (-1) from 00549789.
+// 1.14d mac: 00205d15
 static int32_t __stdcall CheckIfInrangeAndReassign(::SGAMEDATA * pGame, uint32_t pUnit2, uint16_t * outNx, uint16_t * outNy, D2UnitStrc * pUnit, uint8_t * pPacket) {
     uint32_t pUnitId;
     bool bReassign;
@@ -1767,6 +1784,7 @@ static int32_t __stdcall CheckIfInrangeAndReassign(::SGAMEDATA * pGame, uint32_t
 // C->S Packet 0x01 - Walk to XY (5 bytes)
 // [op:1][x:u16][y:u16]
 // Calls MoveToLocation(mode=2).
+// 1.14d mac: 002002f9
 eD2ServerIncomingStatus __fastcall SCMD_0x01_WalkToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x01_WalkToLocation * pPacket, uint32_t nSize) {
     uint16_t nX;
     uint16_t nY;
@@ -1779,6 +1797,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x01_WalkToLocation(::SGAMEDATA * pGame,
     return (eD2ServerIncomingStatus)nStatus;
 }
 
+// 1.14d mac: 00205b33
 static eD2ServerIncomingStatus __stdcall AnyPacketClickOnMap(::SGAMEDATA * pGame, uint32_t nSize, eD2UnitType * peUnitTypeOut, uint32_t * nSizeEx, D2UnitStrc * pUnit, uint8_t * pPacket) {
     *peUnitTypeOut = UNIT_PLAYER;
     *nSizeEx = 0;
@@ -1803,6 +1822,7 @@ static eD2ServerIncomingStatus __stdcall AnyPacketClickOnMap(::SGAMEDATA * pGame
 }
 
 // Handles C→S packet 0x02 (Walk To Entity, 9 bytes: [op][unitType:u32][GUID:u32]). Validates packet size, unit type < 6, and proximity via CloseEnoughToInteract(range=0x32). If valid and in range, calls PLRMODES_StartModeID with walk mode 2 targeting the entity. Returns SERVERSTATUS_OK on success, error codes for bad size/type/range.
+// 1.14d mac: 0020036c
 eD2ServerIncomingStatus __fastcall SCMD_0x02_WalkToEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x02_WalkToEntity * pPacket, uint32_t nSize) {
     eD2UnitType nPacket;
     eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&nPacket, &nSize, pUnit, &pPacket->nCmd);
@@ -1817,6 +1837,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x02_WalkToEntity(::SGAMEDATA * pGame, D
 // C->S Packet 0x03 - Run to XY (5 bytes)
 // [op:1][x:u16][y:u16]
 // Calls MoveToLocation(mode=3).
+// 1.14d mac: 002003dd
 eD2ServerIncomingStatus __fastcall SCMD_0x03_RunToLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x03_RunToLocation * pPacket, uint32_t nSize) {
     uint16_t nX;
     uint16_t nY;
@@ -1832,6 +1853,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x03_RunToLocation(::SGAMEDATA * pGame, 
 // C->S Packet 0x04 - Run to Unit (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Validates range 0x32, calls StartModeID(mode=3).
+// 1.14d mac: 00200450
 eD2ServerIncomingStatus __fastcall SCMD_0x04_RunToEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x04_RunToEntity * pPacket, uint32_t nSize) {
     eD2UnitType nPacket;
     eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&nPacket, &nSize, pUnit, &pPacket->nCmd);
@@ -1845,6 +1867,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x04_RunToEntity(::SGAMEDATA * pGame, D2
 
 // For dual-wielding players using SKILL_Attack, checks both weapon slots are valid non-broken non-missile weapons. If so, swaps to SKILL_LeftHandSwing on odd strikes (param4 cycles 0→5→0) to alternate hands. Returns pSkill unchanged for all other skills or single-weapon setups. Halts on missing LeftHandSwing skill data.
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 00206141
 static D2SkillStrc * __stdcall GetDualSwingSkill(D2SkillStrc * pSkill, D2UnitStrc * pPlayer) {
     D2SkillStrc* pResultSkill = pSkill;
     BOOL BVar1;
@@ -1887,6 +1910,7 @@ static D2SkillStrc * __stdcall GetDualSwingSkill(D2SkillStrc * pSkill, D2UnitStr
 }
 
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 00205584
 void __fastcall PLAYER_SendInventoryFullMessage(D2UnitStrc * pUnit) {
     D2Packet0x5aEventStructure sEventPacket;
     memset(&sEventPacket, 0, sizeof(sEventPacket));
@@ -1899,6 +1923,7 @@ void __fastcall PLAYER_SendInventoryFullMessage(D2UnitStrc * pUnit) {
 }
 
 // Validates player is alive, resolves dual-swing skill alternation via GetDualSwingSkill, checks skill usability (falling back to SKILL_Attack if skill has flag4 bit4 set and CanUseSkill returns 1-2 or 4). On success calls PLRMODES_MoveToLocation with the resolved skill mode; on mana-full sends inventory-full message. Returns SERVERSTATUS_OK or SERVERSTATUS_BAD_DATA.
+// 1.14d mac: 0020629c
 static eD2ServerIncomingStatus __stdcall CastSkillOnLocation(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2SkillStrc * pSkill, int32_t nTargetX, int32_t nTargetY) {
     int32_t nCanUseSkill;
     D2SkillsTxt* pSkillsTxt;
@@ -1946,6 +1971,7 @@ eD2ServerIncomingStatus __stdcall CastSkillOnLocation_Extern(D2UnitStrc * pUnit,
 
 // Server-side skill dispatch for player targeting an entity. Resolves dual-swing substitution, checks skill usability (SKILLS_CanUseSkill), and if a skill is blocked by a flags4 condition falls back to SKILL_Attack. On usability==0 with a valid mode, looks up the target unit, follows attached-unit ownership, validates melee/range weapon class against target proximity, then routes to StartModeID or PLRMODES_StartModeID. Returns 0 on success, 2 on failure.
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 00205f1e
 static int __stdcall PLAYER_ProcessSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2SkillStrc * pSkill, eD2UnitType eUnitType, DWORD nTargetGUID, int32_t bMoveToTarget) {
     int32_t nSkillWeaponClass;
     eD2Skills eSkillId;
@@ -2008,6 +2034,7 @@ static int __stdcall PLAYER_ProcessSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc
 // C->S Packet 0x05 - Left Skill on Location (5 bytes)
 // [op:1][x:u16][y:u16]
 // Gets left skill, increments pierce_idx, CastSkillOnLocation.
+// 1.14d mac: 002004c1
 eD2ServerIncomingStatus __fastcall SCMD_0x05_LeftSkillOnLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x05_LeftSkillOnLocation * pPacket, uint32_t nSize) {
     uint16_t nX;
     uint16_t nY;
@@ -2028,6 +2055,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x05_LeftSkillOnLocation(::SGAMEDATA * p
 // C->S Packet 0x06 - Left Skill on Unit (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Left skill on target, approach=1 (walk to target).
+// 1.14d mac: 00200570
 eD2ServerIncomingStatus __fastcall SCMD_0x06_LeftSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x06_LeftSkillOnEntity * pPacket, uint32_t nSize) {
     eD2UnitType nPacket;
     eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&nPacket, &nSize, pUnit, &pPacket->nCmd);
@@ -2050,6 +2078,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x06_LeftSkillOnEntity(::SGAMEDATA * pGa
 // C->S Packet 0x07 - Left Skill on Unit, Shift (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Left skill on target, approach=0 (hold position).
+// 1.14d mac: 00200625
 eD2ServerIncomingStatus __fastcall SCMD_0x07_LeftSkillOnEntityEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x07_LeftSkillOnEntityEx * pPacket, uint32_t nSize) {
     eD2UnitType nPacket;
     eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, (eD2UnitType*)&nPacket, &nSize, pUnit, &pPacket->nCmd);
@@ -2072,6 +2101,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x07_LeftSkillOnEntityEx(::SGAMEDATA * p
 // C->S Packet 0x08 - Left Skill on Location, Repeat (5 bytes)
 // [op:1][x:u16][y:u16]
 // Held mouse: extra validation then delegates to handler 0x05.
+// 1.14d mac: 002006da
 eD2ServerIncomingStatus __fastcall SCMD_0x08_LeftSkillOnLocationEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x08_LeftSkillOnLocationEx * pPacket, uint32_t nSize) {
     uint16_t nX;
     uint16_t nY;
@@ -2091,6 +2121,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x08_LeftSkillOnLocationEx(::SGAMEDATA *
 // C->S Packet 0x09 - Left Skill on Unit, Repeat (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held mouse: delegates to handler 0x06.
+// 1.14d mac: 0020074b
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x09_LeftSkillOnEntityEx2 * pPacket, uint32_t nSize) {
     eD2UnitType eUnitType;
     uint32_t nUnitGUID;
@@ -2110,6 +2141,7 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x09_CheckRangeThenLeftSkillOnEntit
 // C->S Packet 0x0A - Left Skill on Unit, Repeat+Shift (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held+shift: delegates to handler 0x07.
+// 1.14d mac: 002007bc
 eD2ServerIncomingStatus __fastcall SCMD_0x0A_LeftSkillOnEntityEx3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0A_LeftSkillOnEntityEx3 * pPacket, uint32_t nSize) {
     eD2UnitType eUnitType;
     uint32_t nUnitGUID;
@@ -2129,6 +2161,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0A_LeftSkillOnEntityEx3(::SGAMEDATA * 
 // C->S Packet 0x0B - Keepalive/Noop (1 byte)
 // [op:1]
 // Validates size==1, does nothing.
+// 1.14d mac: 0020082d
 eD2ServerIncomingStatus __fastcall SCMD_0x0B_Keepalive(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0B_Keepalive * pPacket, uint32_t nSize) {
     return PLAYERMSG_GetMessageType(1, nSize);
 }
@@ -2136,6 +2169,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0B_Keepalive(::SGAMEDATA * pGame, D2Un
 // C->S Packet 0x0C - Right Skill on Location (5 bytes)
 // [op:1][x:u16][y:u16]
 // Gets right skill, increments pierce_idx, CastSkillOnLocation.
+// 1.14d mac: 00200841
 eD2ServerIncomingStatus __fastcall SCMD_0x0C_RightSkillOnLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0C_RightSkillOnLocation * pPacket, uint32_t nSize) {
     uint16_t nX;
     uint16_t nY;
@@ -2156,6 +2190,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0C_RightSkillOnLocation(::SGAMEDATA * 
 // C->S Packet 0x0D - Right Skill on Unit (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Right skill on target, approach=1 (walk to target).
+// 1.14d mac: 002008f0
 eD2ServerIncomingStatus __fastcall SCMD_0x0D_RightSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0D_RightSkillOnEntity * pPacket, uint32_t nSize) {
     eD2UnitType eTargetType;
     eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eTargetType, &nSize, pUnit, &pPacket->nCmd);
@@ -2177,6 +2212,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0D_RightSkillOnEntity(::SGAMEDATA * pG
 // C->S Packet 0x0E - Right Skill on Unit, Shift (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Right skill on target, approach=0 (hold position).
+// 1.14d mac: 002009a5
 eD2ServerIncomingStatus __fastcall SCMD_0x0E_RightSkillOnEntityEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0E_RightSkillOnEntityEx * pPacket, uint32_t nSize) {
     eD2UnitType eTargetType;
     eD2ServerIncomingStatus nStatus = AnyPacketClickOnMap(pGame, nSize, &eTargetType, &nSize, pUnit, &pPacket->nCmd);
@@ -2198,6 +2234,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0E_RightSkillOnEntityEx(::SGAMEDATA * 
 // C->S Packet 0x0F - Right Skill on Location, Repeat (5 bytes)
 // [op:1][x:u16][y:u16]
 // Held mouse: delegates to handler 0x0C.
+// 1.14d mac: 00200a5a
 eD2ServerIncomingStatus __fastcall SCMD_0x0F_RightSkillOnLocationEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x0F_RightSkillOnLocationEx * pPacket, uint32_t nSize) {
     uint16_t nX;
     uint16_t nY;
@@ -2217,6 +2254,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x0F_RightSkillOnLocationEx(::SGAMEDATA 
 // C->S Packet 0x10 - Right Skill on Unit, Repeat (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held mouse: delegates to handler 0x0D.
+// 1.14d mac: 00200acb
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x10_RightSkillOnEntityEx2 * pPacket, uint32_t nSize) {
     eD2UnitType eUnitType;
     uint32_t nUnitGUID;
@@ -2236,6 +2274,7 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x10_CheckRangeThenRightSkillOnEnti
 // C->S Packet 0x11 - Right Skill on Unit, Repeat+Shift (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Held+shift: delegates to handler 0x0E.
+// 1.14d mac: 00200b3c
 eD2ServerIncomingStatus __fastcall SCMD_0x11_RightSkillOnEntityEx3(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x11_RightSkillOnEntityEx3 * pPacket, uint32_t nSize) {
     eD2UnitType eUnitType;
     uint32_t nUnitGUID;
@@ -2255,6 +2294,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x11_RightSkillOnEntityEx3(::SGAMEDATA *
 // C->S Packet 0x12 - Cancel Channeled Skill (1 byte)
 // [op:1]
 // Clears STATE_inferno to stop channeled skills.
+// 1.14d mac: 00200bad
 eD2ServerIncomingStatus __fastcall SCMD_0x12_CancelChanneledSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x12_CancelChanneledSkill * pPacket, uint32_t nSize) {
     if (nSize != 1) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -2269,6 +2309,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x12_CancelChanneledSkill(::SGAMEDATA * 
 // Max msg=256, name=16. Allocates D2HoverTextStrc with language code and timed expiry.
 // Frees existing hover text, sets UNITFLAG_HASTXTMSG, schedules FREEHOVER event at expiry frame.
 // Input sanitized via STRING_CutStringBeginingTillFoundString — filtered messages silently dropped.
+// 1.14d mac: 00200c45
 eD2ServerIncomingStatus __fastcall SCMD_0x14_OverheadMessage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x14_OverheadMessage * pPacket, uint32_t nSize) {
     char* pEscapeChar;
     D2HoverTextStrc* pHoverText;
@@ -2330,6 +2371,7 @@ static BOOL __stdcall CHAT_IsInteractingWithOtherPlayer(D2UnitStrc * pUnit, ::SG
 }
 
 // ForEachClient callback for public chat broadcast. Checks squelch/mute flags and ignore list between sender and recipient, then sends 0x26 chat packet if not blocked.
+// 1.14d mac: 001ffcac
 void __fastcall CHAT_BroadcastToClient(D2ClientStrc * pClient, D2ChatBroadcastCtx * pContext) {
     D2UnitStrc* pRecipient;
     uint32_t nSquelchFlags;
@@ -2367,6 +2409,7 @@ void __fastcall CHAT_BroadcastToClient(D2ClientStrc * pClient, D2ChatBroadcastCt
 }
 
 // ForEachClient callback for whisper delivery. Compares each client's character name to the target name. If matched and not squelched, delivers whisper via 0x26 packet and sets g_bWhisperDelivered=1. If matched but squelched, sets g_bWhisperSquelched=1.
+// 1.14d mac: 001ffdeb
 void __fastcall CHAT_DeliverWhisper(D2ClientStrc * pClient, D2ChatBroadcastCtx * pContext) {
     D2UnitStrc* pRecipient;
     uint32_t nSquelchFlags;
@@ -2401,6 +2444,7 @@ void __fastcall CHAT_DeliverWhisper(D2ClientStrc * pClient, D2ChatBroadcastCtx *
 }
 
 // JMP thunk
+// 1.14d mac: 001ffed5
 void __fastcall NET_D2GS_SERVER_Send_0x26_Chat(D2ClientStrc * pClient, D2GSPacketSrv0x26 * pPacket) {
     ::D2Game::GAME::SCmd::NET_D2GS_SERVER_Send_0x26_CHATSTART(pClient, pPacket);
 }
@@ -2413,6 +2457,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x26_Chat(D2ClientStrc * pClient, D2GSPacke
 // Whisper error responses via 0x5A event: type 4 = player not in game, type 0xD = player found but squelched.
 // Successful whisper echoed back to sender via 0x26 packet. Source: .\PLAYER\PlrMsg.cpp
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 00200df5
 eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x15_ChatMessage * pPacket, uint32_t nSize) {
     fpForEachClientFn pfnChatCallback;
     uint32_t* pMsgBufDst;
@@ -2535,6 +2580,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x15_ChatMessage(::SGAMEDATA * pGame, D2
 }
 
 // Builds a 0x26 chat packet inline on the stack using a D2UnitStrc as raw packet buffer, then broadcasts to all clients via ForEachClient. dwParam is packed into the locale/color byte of the 0x26 header.
+// 1.14d mac: 001ffede
 void __fastcall PrepareClientMessage(::SGAMEDATA * pGame, char * szMessage, uint8_t nColor) {
     D2GSPacketSrv0x26 aPacketBuf;
     aPacketBuf.nPacketId = '&';
@@ -2564,6 +2610,7 @@ void __fastcall CHAT_BroadcastMessageToAllClients(::SGAMEDATA * pGame, uint32_t 
 }
 
 // Iterates all clients in pGame via ForEachClient, broadcasting a 0x5A EventMessages packet built from nParam (pointer to message data). First measures the embedded character name string (capped at 16 chars); skips broadcast if name exceeds that limit. Side-effect: sends to every player in the game session.
+// 1.14d mac: 001fff8c
 void __fastcall BroadcastEventMessage(::SGAMEDATA * pGame, D2Packet0x5aEventStructure * pEventData) {
     int nNameLen;
     char* szName = pEventData->szName1;
@@ -2583,6 +2630,7 @@ void __fastcall BroadcastEventMessage(::SGAMEDATA * pGame, D2Packet0x5aEventStru
 // C->S 0x13 Entity Interact (9 bytes)
 // [op:1][unitType:u32][GUID:u32]
 // Validates unitType<=UNIT_WARP, calls SERVER_InteractOrPick(bSetting=0).
+// 1.14d mac: 00200be8
 eD2ServerIncomingStatus __fastcall SCMD_0x13_InteractWithEntity(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x13_InteractWithEntity * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -2600,6 +2648,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x13_InteractWithEntity(::SGAMEDATA * pG
 // C->S 0x16 Entity Interact Extended (13 bytes)
 // [op:1][unitType:u32][GUID:u32][bSetting:BOOL]
 // Prevents self-interaction on player units.
+// 1.14d mac: 00201232
 eD2ServerIncomingStatus __fastcall SCMD_0x16_InteractWithEntityEx(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x16_PickUpItem * pPacket, uint32_t nSize) {
     if (nSize != 0xd) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -2625,6 +2674,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x16_InteractWithEntityEx(::SGAMEDATA * 
 }
 
 // C2S packet 0x17 handler (5 bytes): [opcode:1][itemGUID:u32]. Drops item from cursor to ground. Validates item is on cursor via SERVER_IsItemOnCursor, checks player is not in active trade, then calls SERVER_DropItemFromPlayer which finds a collision-free tile near the player and spawns the item. Special handling for Horadric Cube (clears cube contents) and socketed items (sets ITEMFLAG_RELOAD).
+// 1.14d mac: 002012a9
 eD2ServerIncomingStatus __fastcall SCMD_0x17_DropItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x17_DropItem * pPacket, uint32_t nSize) {
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -2654,6 +2704,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x17_DropItem(::SGAMEDATA * pGame, D2Uni
 // [op:1][itemGUID:u32][x:u32][y:u32][bufferId:u32]
 // bufferId: 0=inventory, 2/3=trade(requires trade check), 4=stash(requires town).
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 001fffd8
 eD2ServerIncomingStatus __fastcall SCMD_0x18_ItemToInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x18_InsertItemToBuffer * pPacket, uint32_t nSize) {
     D2RoomStrc* pRoom;
     BOOL bIsRoomInTown;
@@ -2729,6 +2780,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x18_ItemToInventory(::SGAMEDATA * pGame
 // C->S 0x19 Pick Up Item to Inventory (5 bytes)
 // [op:1][itemGUID:u32]
 // Direct-to-inventory pickup, skips cursor. Rejects corpse items.
+// 1.14d mac: 00201326
 eD2ServerIncomingStatus __fastcall SCMD_0x19_PickUpToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x19_RemoveItemFromBuffer * pPacket, uint32_t nSize) {
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -2768,6 +2820,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x19_PickUpToCursor(::SGAMEDATA * pGame,
 // C->S 0x1A Equip Item (9 bytes)
 // [op:1][itemGUID:u32][bodyLoc:u8][pad:3]
 // Cursor item to body location (1-10). Handles weapon swap, sockets.
+// 1.14d mac: 00201434
 eD2ServerIncomingStatus __fastcall SCMD_0x1A_EquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x1A_EquipItem * pPacket, uint32_t nSize) {
     uint32_t nBodyLoc;
     if (nSize != 9) {
@@ -2798,6 +2851,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1A_EquipItem(::SGAMEDATA * pGame, D2Un
 // C->S 0x1B Unequip Item (9 bytes)
 // [op:1][itemGUID:u32][bodyLoc:u8][pad:3]
 // Body location to cursor. Weapon swap logic, socket handling, sound events.
+// 1.14d mac: 002014e7
 eD2ServerIncomingStatus __fastcall SCMD_0x1B_EquipToSwapSlot(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x1B_UnequipItem * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -2826,6 +2880,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1B_EquipToSwapSlot(::SGAMEDATA * pGame
 // C->S 0x1C Unequip to Inventory (3 bytes)
 // [op:1][bodyLoc:u16]
 // Removes equipped item at bodyLoc directly into inventory. Belt(8) checks trade state.
+// 1.14d mac: 0020157a
 eD2ServerIncomingStatus __fastcall SCMD_0x1C_UnequipToCursor(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x1C_UnequipToCursor * pPacket, uint32_t nSize) {
     int nTradeCheckResult;
     if (nSize != 3) {
@@ -2854,6 +2909,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1C_UnequipToCursor(::SGAMEDATA * pGame
 }
 
 // Server handler for client packet 0x1D (9 bytes): swap the cursor item with an equipped body-location slot. Validates packet size, confirms the item identified by dwItemGUID is on the cursor (SERVER_IsItemOnCursor), validates bodyLoc is in [1..9], then retrieves the currently equipped item at that slot. For bodyLoc 8 (two-hand weapon slot), checks trade restrictions via PLAYERTRADE_CheckNoEquippedTradeItems. Calls SERVER_Swap2HandItem to perform the actual swap; returns SERVERSTATUS_BAD_PARAMS if the swap produces an unexpected secondary output item. Returns SERVERSTATUS_OK on success.
+// 1.14d mac: 0020164e
 eD2ServerIncomingStatus __fastcall SCMD_0x1D_SwapBodyItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x1D_Swap2HandItem * pPacket, uint32_t nSize) {
     int32_t nTradeCheck;
     BOOL nSwapResult;
@@ -2898,6 +2954,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1D_SwapBodyItem(::SGAMEDATA * pGame, D
 // C->S 0x1E Weapon Swap Slot (9 bytes)
 // [op:1][cursorGUID:u32][bodyLoc:u8][pad:3]
 // Only accepts bodyLoc 4(R_ARM) or 5(L_ARM). Alternate weapon set.
+// 1.14d mac: 00201760
 eD2ServerIncomingStatus __fastcall SCMD_0x1E_EquipToWeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x1E_RemoveItemFromBelt * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -2942,6 +2999,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1E_EquipToWeaponSwap(::SGAMEDATA * pGa
 // C->S 0x1F Use Item (17 bytes)
 // [op:1][cursorItemGUID:u32][targetItemGUID:u32][targetUnitGUID:u32][arg:u32]
 // Uses cursor item on target item/unit. Rejects corpse/merc pages.
+// 1.14d mac: 0020184f
 eD2ServerIncomingStatus __fastcall SCMD_0x1F_SwapCursorAndGridItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x1F_SwapCursorAndGridItem * pPacket, uint32_t nSize) {
     uint32_t nUseResult;
     if (nSize != 0x11) {
@@ -2995,6 +3053,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x1F_SwapCursorAndGridItem(::SGAMEDATA *
 // C->S 0x20 Use Item (13 bytes)
 // [op:1][itemGUID:u32][x:u32][y:u32]
 // Books, scrolls, quest items. Hardcoded: ass=+1skill, xyz=+20HP, tr2=resist, toa=respec.
+// 1.14d mac: 00201979
 eD2ServerIncomingStatus __fastcall SCMD_0x20_UseItemAtLocation(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x20_UseItemAtLocation * pPacket, uint32_t nSize) {
     if (nSize != 0xd) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3024,6 +3083,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x20_UseItemAtLocation(::SGAMEDATA * pGa
 }
 
 // C->S 0x27 Apply Scroll to Item (9B). Packet: [op:1][itemGUID:u32][scrollGUID:u32]. Identify scroll on item, or merge stackables.
+// 1.14d mac: 00201ebd
 eD2ServerIncomingStatus __fastcall SCMD_0x27_UseItemOnItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x27_UseItemOnItem * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3054,6 +3114,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x27_UseItemOnItem(::SGAMEDATA * pGame, 
 // C->S 0x21 Stack Items (9 bytes)
 // [op:1][srcGUID:u32][dstGUID:u32]
 // Merges stackable items (arrows, scrolls).
+// 1.14d mac: 00201ab2
 eD2ServerIncomingStatus __fastcall SCMD_0x21_MergeStackables(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x21_MergeStackables * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3086,6 +3147,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x21_MergeStackables(::SGAMEDATA * pGame
 // C->S 0x22 Unstack Item - STUB (5 bytes)
 // [op:1][itemGUID:u32]
 // RemoveStackItem returns 0 - dead code in 1.14d.
+// 1.14d mac: 00201b37
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x22_RemoveStackItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x22_ItemToBelt * pPacket, uint32_t nSize) {
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3107,6 +3169,7 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x22_RemoveStackItem(::SGAMEDATA * 
 }
 
 // C->S 0x23 Item to Belt (9B). Packet: [op:1][itemGUID:u32][beltSlot:u32]. Cursor item to belt slot.
+// 1.14d mac: 00201b9a
 eD2ServerIncomingStatus __fastcall SCMD_0x23_ItemToBelt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x23_ItemToBelt * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3131,6 +3194,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x23_ItemToBelt(::SGAMEDATA * pGame, D2U
 }
 
 // C->S 0x24 Item from Belt (5B). Packet: [op:1][itemGUID:u32]. Belt item to cursor.
+// 1.14d mac: 00201c19
 eD2ServerIncomingStatus __fastcall SCMD_0x24_ItemFromBelt(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x24_ItemFromBelt * pPacket, uint32_t nSize) {
     BOOL nResult;
     if (nSize != 5) {
@@ -3163,6 +3227,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x24_ItemFromBelt(::SGAMEDATA * pGame, D
 }
 
 // C->S 0x25 Swap Belt Item (9B). Packet: [op:1][cursorGUID:u32][beltGUID:u32]. Swap cursor with belt item.
+// 1.14d mac: 00201cbb
 eD2ServerIncomingStatus __fastcall SCMD_0x25_SwapBeltItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x25_SwapBeltItem * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3193,6 +3258,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x25_SwapBeltItem(::SGAMEDATA * pGame, D
 // C->S 0x26 Use Item at Player Coords (13 bytes)
 // [op:1][itemGUID:u32][arg:u32][unk0x09:u32]
 // Uses item at player's current X/Y (range check 50). arg forwarded to SERVER_UseItemAtCoords.
+// 1.14d mac: 00201d42
 eD2ServerIncomingStatus __fastcall SCMD_0x26_UseItemAtPlayerCoords(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x26_UseItemAtPlayerCoords * pPacket, uint32_t nSize) {
     int nUnitPosY;
     if (nSize != 0xd) {
@@ -3240,6 +3306,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x26_UseItemAtPlayerCoords(::SGAMEDATA *
 }
 
 // C->S 0x28 Socket Item (9B). Packet: [op:1][gemGUID:u32][socketableGUID:u32]. Insert gem/rune/jewel into sockets. Handles runeword logic.
+// 1.14d mac: 00201f44
 eD2ServerIncomingStatus __fastcall SCMD_0x28_SocketItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x28_SocketItem * pPacket, uint32_t nSize) {
     D2UnitStrc* pInteractUnit;
     eD2UnitType eInteractUnitType;
@@ -3276,6 +3343,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x28_SocketItem(::SGAMEDATA * pGame, D2U
 }
 
 // C->S 0x29 Split Stack (9B). Packet: [op:1][stackGUID:u32][targetGUID:u32]. Remove item from stack.
+// 1.14d mac: 002020a0
 eD2ServerIncomingStatus __fastcall SCMD_0x29_ScrollIntoBook(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x29_ScrollIntoBook * pPacket, uint32_t nSize) {
     uint32_t dwBookGUID;
     if (nSize != 9) {
@@ -3305,6 +3373,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x29_ScrollIntoBook(::SGAMEDATA * pGame,
 }
 
 // C->S 0x2A Item to Cube (9B). Packet: [op:1][cursorGUID:u32][cubeGUID:u32]. Place cursor item into Horadric Cube.
+// 1.14d mac: 00202127
 eD2ServerIncomingStatus __fastcall SCMD_0x2A_ItemToCube(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2A_ItemToCube * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3334,17 +3403,20 @@ eD2ServerIncomingStatus __fastcall SCMD_0x2A_ItemToCube(::SGAMEDATA * pGame, D2U
 
 // C->S 0x2C NPC Buy (stub)
 // Always returns SERVERSTATUS_BAD_PARAMS in 1.14d.
+// 1.14d mac: 002021ae
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2C_ReturnBadParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2C_DeadStub * pPacket, uint32_t nSize) {
     return SERVERSTATUS_BAD_PARAMS;
 }
 
 // C->S 0x2D NPC Sell (stub)
 // Always returns SERVERSTATUS_BAD_PARAMS in 1.14d.
+// 1.14d mac: 002021b8
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2D_ReturnBadParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2D_DeadStub * pPacket, uint32_t nSize) {
     return SERVERSTATUS_BAD_PARAMS;
 }
 
 // If target level is in the same act as the player, spawns a red portal (object 0x3B) at player position-5 X. If target is LEVEL_None, loads current act's town. If target is a different act, calls InitLevel directly. Used by SCMD handlers that warp the player to a new area.
+// 1.14d mac: 002001e9
 void __fastcall LoadAreaOrSpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId eLevel, int32_t nMasks) {
     eAct eTargetAct = D2Common::Drlg::GetActNoFromLevelNumber(eLevel);
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -3368,6 +3440,7 @@ void __fastcall LoadAreaOrSpawnPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit, e
 
 // C->S 0x2E NPC Identify (stub)
 // Always returns SERVERSTATUS_OK in 1.14d.
+// 1.14d mac: 002021c2
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2E_ReturnOk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2E_DeadStub * pPacket, uint32_t nSize) {
     return SERVERSTATUS_OK;
 }
@@ -3375,6 +3448,7 @@ eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x2E_ReturnOk(::SGAMEDATA * pGame, 
 // C->S 0x2F NPC Repair/Interact (9 bytes)
 // [op:1][unk0x01:u32][npcGUID:u32]
 // Validates NPC target, range <=10, triggers NPC AI state change.
+// 1.14d mac: 002021c9
 eD2ServerIncomingStatus __fastcall SCMD_0x2F_NpcInteract(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x2F_NpcInteract * pPacket, uint32_t nSize) {
     int32_t nNpcPosY;
     D2MonsterAiStrc* pNpcAi;
@@ -3413,6 +3487,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x2F_NpcInteract(::SGAMEDATA * pGame, D2
 }
 
 // C->S 0x30 NPC Cancel Dialog (9B). Packet: [op:1][pad:u32][npcGUID:u32]. Close NPC dialog, frees AI state, triggers quest callback.
+// 1.14d mac: 00202257
 eD2ServerIncomingStatus __fastcall SCMD_0x30_NpcCancelDialog(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x30_NpcCancelDialog * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3437,6 +3512,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x30_NpcCancelDialog(::SGAMEDATA * pGame
 }
 
 // C->S 0x31 handler for NPC gossip interaction packet; validates length and forwards NPC GUID + gossip option id to QUEST_OnNpcGossip.
+// 1.14d mac: 002022e5
 eD2ServerIncomingStatus __fastcall SCMD_0x31_NpcGossip(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x31_NpcGossip * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3447,6 +3523,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x31_NpcGossip(::SGAMEDATA * pGame, D2Un
 }
 
 // C->S 0x32 NPC Buy (17B). Packet: [op:1][npcGUID:u32][itemGUID:u32][flags:u32][cost:u32]. Bit-packed flags: bit31=special, high16=param1, low16=param2. SUNITNPC.CPP.
+// 1.14d mac: 0020232b
 eD2ServerIncomingStatus __fastcall SCMD_0x32_NpcBuyConfirm(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x32_NpcBuyConfirm * pPacket, uint32_t nSize) {
     if (nSize != 0x11) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3458,6 +3535,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x32_NpcBuyConfirm(::SGAMEDATA * pGame, 
 }
 
 // C->S 0x33 handler for NPC sell transaction packet; validates packet length and forwards GUIDs/mode/param to SUNITNPC_SellItem.
+// 1.14d mac: 0020239b
 eD2ServerIncomingStatus __fastcall SCMD_0x33_NpcSell(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x33_NpcSell * pBytes, uint32_t nSize) {
     if (nSize != 0x11) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3470,6 +3548,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x33_NpcSell(::SGAMEDATA * pGame, D2Unit
 }
 
 // C->S 0x35 NPC Repair (17B). Packet: [op:1][npcGUID:u32][itemGUID:u32][params:8B]. Repair item at smithy. Checks durability, ethereal.
+// 1.14d mac: 0020242d
 eD2ServerIncomingStatus __fastcall SCMD_0x35_NpcRepair(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x35_NpcRepair * pPacket, uint32_t nSize) {
     if (nSize != 0x11) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3480,6 +3559,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x35_NpcRepair(::SGAMEDATA * pGame, D2Un
 }
 
 // C->S 0x34 NPC Identify Items (5B). Packet: [op:1][npcGUID:u32]. Batch identify at Cain. Iterates inventory, charges gold.
+// 1.14d mac: 002023f1
 eD2ServerIncomingStatus __fastcall SCMD_0x34_CainIdentify(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x34_CainIdentify * pPacket, uint32_t nSize) {
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3491,6 +3571,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x34_CainIdentify(::SGAMEDATA * pGame, D
 }
 
 // C->S 0x36 Hire Mercenary (9B). Packet: [op:1][npcGUID:u32][mercId:u32]. Hire merc, rolls stats, checks gold.
+// 1.14d mac: 00202485
 eD2ServerIncomingStatus __fastcall SCMD_0x36_HireMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x36_HireMerc * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3500,6 +3581,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x36_HireMerc(::SGAMEDATA * pGame, D2Uni
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 00204e80
 eD2ServerIncomingStatus __fastcall SCMD_0x62_ResurrectMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x62_ResurrectMerc * pPacket, uint32_t nSize) {
     if (!pGame->bExpansion) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3514,6 +3596,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x62_ResurrectMerc(::SGAMEDATA * pGame, 
 }
 
 // C->S 0x37 Gamble Confirm (5B). Packet: [op:1][itemGUID:u32]. Reveal gambled item.
+// 1.14d mac: 002024cb
 eD2ServerIncomingStatus __fastcall SCMD_0x37_GambleConfirm(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x37_GambleConfirm * pPacket, uint32_t nSize) {
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3535,6 +3618,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x37_GambleConfirm(::SGAMEDATA * pGame, 
 }
 
 // C->S 0x38 NPC Menu Select (13B). Packet: [op:1][npcGUID:u32][menuId:u32][params:4B]. Select NPC menu option (trade/identify/repair/gamble/hire/quest).
+// 1.14d mac: 00202540
 eD2ServerIncomingStatus __fastcall SCMD_0x38_NpcMenuSelect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x38_NpcMenuSelect * pPacket, uint32_t nSize) {
     eD2UnitType eTargetUnitType;
     if (nSize != 0xd) {
@@ -3553,11 +3637,13 @@ eD2ServerIncomingStatus __fastcall SCMD_0x38_NpcMenuSelect(::SGAMEDATA * pGame, 
 }
 
 // C->S 0x39 DISABLED. Stub - always returns BAD_PARAMS.
+// 1.14d mac: 00202707
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x39_ReturnBadParams(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pBytes, uint32_t nSize) {
     return SERVERSTATUS_BAD_PARAMS;
 }
 
 // C->S 0x3A Add Stat Point (3B). Packet: [op:1][statId:u16]. Stat 0-15, supports repeat count up to 100.
+// 1.14d mac: 00202711
 eD2ServerIncomingStatus __fastcall SCMD_0x3A_AllocStatPoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3A_AllocStatPoint * pPacket, uint32_t nSize) {
     if (nSize != 3) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3582,6 +3668,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3A_AllocStatPoint(::SGAMEDATA * pGame,
 
 // C->S 0x3B Add Skill Point (3B). Packet: [op:1][skillId:u16]. Validates skill exists and can be leveled.
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 0020277a
 eD2ServerIncomingStatus __fastcall SCMD_0x3B_AllocSkillPoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3B_AllocSkillPoint * pPacket, uint32_t nSize) {
     int nSkillMaxLevel;
     uint8_t bySkillArg;
@@ -3630,6 +3717,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3B_AllocSkillPoint(::SGAMEDATA * pGame
 }
 
 // C->S 0x3C Select Skill (9B). Packet: [op:1][skillId:u32][??:u32]. Bit 31 of skillId = left(1)/right(0) slot.
+// 1.14d mac: 00202907
 eD2ServerIncomingStatus __fastcall SCMD_0x3C_SelectSkill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3C_SelectSkill * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3659,6 +3747,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3C_SelectSkill(::SGAMEDATA * pGame, D2
 }
 
 // C2S packet 0x3D handler (5 bytes): [opcode:1][objectGUID:u32]. Activates interactive objects (doors, shrines, chests, waypoints, quest objects). Validates player is within 10 tiles via CloseEnoughToInteract, then calls OBJECT_UpdateCollisionOnModeChange to transition the object's state (door opens, chest unlocks, shrine triggers). Client sends this when left-clicking an interactable object.
+// 1.14d mac: 002029c9
 eD2ServerIncomingStatus __fastcall SCMD_0x3D_ActivateObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3D_ActivateObject * pPacket, uint32_t nSize) {
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3675,6 +3764,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3D_ActivateObject(::SGAMEDATA * pGame,
 }
 
 // C->S 0x3E Quest Item Interact (5B). Packet: [op:1][unitGUID:u32]. Validates same act, range 10, calls QUEST_HandleClientQuestMessage.
+// 1.14d mac: 00202b75
 eD2ServerIncomingStatus __fastcall SCMD_0x3E_QuestItemPickup(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3E_QuestItemPickup * pPacket, uint32_t nSize) {
     eAct eActItem;
     D2RoomStrc* pRoom;
@@ -3744,6 +3834,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_10(D2UnitStrc * p) 
 }
 
 // C->S 0x3F Play Emote (3B). Packet: [op:1][emoteId:u16]. Values 0x19-0x20 only. Blocked if unit has flag bit 10.
+// 1.14d mac: 00202d41
 eD2ServerIncomingStatus __fastcall SCMD_0x3F_PlayEmote(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x3F_PlayEmote * pPacket, uint32_t nSize) {
     if (nSize != 3) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3759,6 +3850,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x3F_PlayEmote(::SGAMEDATA * pGame, D2Un
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 00202d9b
 eD2ServerIncomingStatus __fastcall SCMD_0x40_RefreshQuestData(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x40_RefreshQuestData * pPacket, uint32_t nSize) {
     if (nSize != 1) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3770,6 +3862,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x40_RefreshQuestData(::SGAMEDATA * pGam
 
 // Server-side handler for client packet 0x41 (Resurrect). Validates packet size=1 and that the player unit is in Dead mode. Restores HP/mana/stamina to txt-table max, sets UNITFLAG_TARGETABLE, briefly toggles STATE_uninterruptable, warps the player to the act town (InitLevel + PLRMODES_MoveToLocation), and reselects their left/right skills. Disconnects flagged clients (file-flag 4). Returns SERVERSTATUS_OK.
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 00202dcd
 eD2ServerIncomingStatus __fastcall SCMD_0x41_Resurrect(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x41_Resurrect * pPacket, uint32_t nSize) {
     eAct nAct;
     D2RoomStrc* pRoom;
@@ -3826,6 +3919,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x41_Resurrect(::SGAMEDATA * pGame, D2Un
 }
 
 // C->S 0x5D party-screen toggle (7B): [op:1][action:1][on/off:1][playerGUID:4]. Rejected when ARENA_IsNoCubeRecipes is set; action > 10 is bad data. Dispatches through PARTYSCREEN_DispatchAction with the on/off byte (loot, mute, squelch, hostile).
+// 1.14d mac: 00203e3d
 eD2ServerIncomingStatus __fastcall SCMD_0x5D_PartyScreenToggle(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2GSPacketClt0x5D_PartyScreenToggle * pPacket, uint32_t nSize) {
     if (nSize != 7) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3846,6 +3940,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x5D_PartyScreenToggle(::SGAMEDATA * pGa
 }
 
 // C->S 0x5E party-screen action (6B): [op:1][action:1][playerGUID:4]. Rejected when ARENA_IsNoCubeRecipes is set; action > 10 is bad data. Dispatches through PARTYSCREEN_DispatchAction with 0 (invite, cancel, accept, leave).
+// 1.14d mac: 00203ea8
 eD2ServerIncomingStatus __fastcall SCMD_0x5E_PartyScreenAction(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2GSPacketClt0x5E_PartyScreenAction * pPacket, uint32_t nSize) {
     if (nSize != 6) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3863,14 +3958,17 @@ eD2ServerIncomingStatus __fastcall SCMD_0x5E_PartyScreenAction(::SGAMEDATA * pGa
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 00203052
 eD2ServerIncomingStatus __fastcall SCMD_0x42_StaffInOrifice1(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pBytes, uint32_t nSize) {
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 00203059
 eD2ServerIncomingStatus __fastcall SCMD_0x43_StaffInOrifice2(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pBytes, uint32_t nSize) {
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 00203060
 eD2ServerIncomingStatus __fastcall SCMD_0x44_StaffInOrifice(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x44_StaffInOrifice * pPacket, uint32_t nSize) {
     DWORD dwPlayerGUID;
     if (nSize != 0x11) {
@@ -3903,10 +4001,12 @@ eD2ServerIncomingStatus __fastcall SCMD_0x44_StaffInOrifice(::SGAMEDATA * pGame,
     return (eD2ServerIncomingStatus)eVar1;
 }
 
+// 1.14d mac: 00203294
 eD2ServerIncomingStatus __fastcall SCMD_0x45_Unused(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pBytes, uint32_t nSize) {
     return SERVERSTATUS_BAD_PARAMS;
 }
 
+// 1.14d mac: 00205629
 static eD2ServerIncomingStatus __stdcall CanInteractWithMerc(int32_t nCmdArg1, int32_t nCmdArg2, int32_t nCmdId, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, uint32_t nMercGUID) {
     D2AiCmdArgumentsStrc sAiCmdArgs;
     D2UnitStrc* pMercUnit = UNIT::SUnit::FindUnitFromTable(pGame, UNIT_MONSTER, nMercGUID);
@@ -3928,6 +4028,7 @@ static eD2ServerIncomingStatus __stdcall CanInteractWithMerc(int32_t nCmdArg1, i
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 0020329e
 eD2ServerIncomingStatus __fastcall SCMD_0x46_NpcInteractMerc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x46_NpcInteractMerc * pPacket, uint32_t nSize) {
     if (nSize != 0xd) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3949,6 +4050,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x46_NpcInteractMerc(::SGAMEDATA * pGame
 }
 
 // C2S packet 0x47 handler (13 bytes): [opcode:1][mercGUID:u32][targetX:u16][pad:2][targetY:u16][pad:2]. Issues an AI command to the player's mercenary. Validates the unit is the player's hired merc (PETTYPE_hireable), player is within 50 units of target coords, then resets AI state and injects a new command with the target coordinates. Sent when player directs their merc to a location.
+// 1.14d mac: 00203494
 eD2ServerIncomingStatus __fastcall SCMD_0x47_CommandMercenary(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x47_CommandMercenary * pPacket, uint32_t nSize) {
     if (nSize != 0xd) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3967,6 +4069,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x47_CommandMercenary(::SGAMEDATA * pGam
 }
 
 // C2S 0x48 (1 byte), sent by the client's ExitGamePlayCutScene 0x00482ef0 when an act cutscene ends; clears the cutscene-pending flag at player data +0x4c that the server set before S2C 0x61.
+// 1.14d mac: 0020357c
 eD2ServerIncomingStatus __fastcall SCMD_0x48_CutsceneOver(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x48_CutsceneOver * pPacket, uint32_t nSize) {
     if (nSize != 1) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -3981,6 +4084,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x48_CutsceneOver(::SGAMEDATA * pGame, D
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 002035bc
 eD2ServerIncomingStatus __fastcall SCMD_0x49_TakeWaypoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x49_TakeWaypoint * pPacket, uint32_t nSize) {
     D2UnitStrc* pWaypointUnit;
     if (nSize != 9) {
@@ -4013,6 +4117,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x49_TakeWaypoint(::SGAMEDATA * pGame, D
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 002039c8
 eD2ServerIncomingStatus __fastcall SCMD_0x4D_ResetNpcIntroFlag(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x4D_ResetNpcIntroFlag * pPacket, uint32_t nSize) {
     eD2ServerIncomingStatus eResult = SERVERSTATUS_BAD_PARAMS;
     if (nSize != 3) {
@@ -4027,6 +4132,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4D_ResetNpcIntroFlag(::SGAMEDATA * pGa
     return eResult;
 }
 
+// 1.14d mac: 002038d4
 eD2ServerIncomingStatus __fastcall SCMD_0x4B_ForceUnitUpdate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x4B_ForceUnitUpdate * pPacket, uint32_t nSize) {
     if (nSize != 9) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -4058,6 +4164,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4B_ForceUnitUpdate(::SGAMEDATA * pGame
 // C->S 0x4C Transmogrify Item 2 (5 bytes)
 // [op:1][itemGUID:u32]
 // Looks up item (0xFFFFFFFF allowed) and calls SkillsServer::Transmorgify.
+// 1.14d mac: 00203964
 eD2ServerIncomingStatus __fastcall SCMD_0x4C_TransmogrifyItem2(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x4C_TransmogrifyItem2 * pPacket, uint32_t nSize) {
     if (nSize != 5) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -4076,6 +4183,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4C_TransmogrifyItem2(::SGAMEDATA * pGa
 // C->S 0x4F Click Button (7 bytes)
 // [op:1][buttonId:u16][param:u32]
 // Dispatches to PlayerTrade::ClickButton. buttonId 0x18 triggers cube transmute (PreCubeSetup).
+// 1.14d mac: 00203a20
 eD2ServerIncomingStatus __fastcall SCMD_0x4F_ClickButton(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x4F_ClickButton * pPacket, uint32_t nSize) {
     if (nSize != 7) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -4087,6 +4195,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x4F_ClickButton(::SGAMEDATA * pGame, D2
     return PlayerTrade::ClickButton(pGame, pUnit, nButton, MAKELONG(wParamHigh, wParamLow));
 }
 
+// 1.14d mac: 00203a70
 eD2ServerIncomingStatus __fastcall SCMD_0x50_DropGold(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x50_DropGold * pPacket, uint32_t nSize) {
     BOOL nDropResult;
     if (nSize != 9) {
@@ -4107,6 +4216,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x50_DropGold(::SGAMEDATA * pGame, D2Uni
     return (nDropResult ? 0xfffffffdU : 0) + SERVERSTATUS_BAD_PARAMS;
 }
 
+// 1.14d mac: 00203ae8
 eD2ServerIncomingStatus __fastcall SCMD_0x51_SetHotkey(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x51_SetHotkey * pPacket, uint32_t nSize) {
     eD2Skills eSkill;
     if (nSize != 9) {
@@ -4131,11 +4241,13 @@ eD2ServerIncomingStatus __fastcall SCMD_0x51_SetHotkey(::SGAMEDATA * pGame, D2Un
     return SERVERSTATUS_BAD_PARAMS;
 }
 
+// 1.14d mac: 00203bb8
 eD2ServerIncomingStatus __fastcall SCMD_0x52_Unused(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x52_Unused * pPacket, uint32_t nSize) {
     return SERVERSTATUS_BAD_PARAMS;
 }
 
 // C->S 0x53 Start Running (1B). Packet: [op:1]. If the player is walking (mode 2) and has stamina (stat 10 != 0), sets mode 3 (Run). Sent by CMD_ToggleRunMode 0x00469000; 0x54 is the opposite.
+// 1.14d mac: 00203bc2
 eD2ServerIncomingStatus __fastcall SCMD_0x53_StartRunning(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x53_StartRunning * pPacket, uint32_t nSize) {
     if (nSize != 1) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -4152,6 +4264,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x53_StartRunning(::SGAMEDATA * pGame, D
 }
 
 // C->S 0x54 Stop Running (1B). Packet: [op:1]. If the player is in mode 3 (Run), sets mode 2 (Walk). Sent by the client's CMD_StopRun.
+// 1.14d mac: 00203c26
 eD2ServerIncomingStatus __fastcall SCMD_0x54_StopRunning(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x54_StopRunning * pPacket, uint32_t nSize) {
     if (nSize != 1) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -4163,6 +4276,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x54_StopRunning(::SGAMEDATA * pGame, D2
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 00203c6c
 eD2ServerIncomingStatus __fastcall SCMD_0x58_MarkQuestDone(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x58_MarkQuestDone * pPacket, uint32_t nSize) {
     eD2ServerIncomingStatus eStatus = SERVERSTATUS_BAD_PARAMS;
     if (nSize != 3) {
@@ -4181,6 +4295,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x58_MarkQuestDone(::SGAMEDATA * pGame, 
 }
 
 // C->S 0x59 Command NPC (17 bytes): [op:1][unitType:u32][unitGUID:u32][x:u32][y:u32]. Finds target unit within distance 0x32, verifies it is an interactable NPC (MonStats interact+npc flags), clears its path, fires AITHINK event, schedules next AI tick at gameFrame+1, and sets AI args 1/2/3 to 0x28/Y/X to direct the NPC toward the requested coordinates.
+// 1.14d mac: 00203ccb
 eD2ServerIncomingStatus __fastcall SCMD_0x59_CommandNPC(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x59_CommandNPC * pPacket, uint32_t nSize) {
     if (nSize != 0x11) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -4352,6 +4467,7 @@ static BOOL __stdcall RelocateAndApplySyncWarp(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Client-to-server position sync correction. When client detects desync with server position, sends [x:u16, y:u16]. Distance 15-45: validates walkable path then relocates instantly via SUNIT_RelocateUnit. Distance 5-14 or 46+: falls through to normal walk/run. Distance 0-4: rejected. On BNet, rate-limited: 5+ sync warps in 90 seconds triggers randomized lockout (50% 60s, 25% 2min, 25% 3min) via STATE_sync_warped.
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 00203f13
 eD2ServerIncomingStatus __fastcall SCMD_0x5F_SyncPosition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pPacket, uint32_t nSize) {
     BOOL bDead;
     uint32_t bPathReachable;
@@ -4413,6 +4529,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x5F_SyncPosition(::SGAMEDATA * pGame, D
     return SERVERSTATUS_OK;
 }
 
+// 1.14d mac: 002043da
 eD2ServerIncomingStatus __fastcall SCMD_0x60_WeaponSwap(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x60_WeaponSwap * pPacket, uint32_t nSize) {
     if (nSize != 1) {
       return SERVERSTATUS_BAD_PARAMS;
@@ -4693,6 +4810,7 @@ static void __stdcall MERC_CanEquipItem(D2UnitStrc * pUnit, ::SGAMEDATA * pGame,
 // C->S 0x61 Merc Equip Item (3 bytes, Expansion only)
 // [op:1][bodyLoc:u16]
 // If cursor empty and bodyLoc!=0, equip/unequip merc item. Otherwise validate cursor item vs merc.
+// 1.14d mac: 00204451
 eD2ServerIncomingStatus __fastcall SCMD_0x61_MercEquipItem(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x61_MercEquipItem * pPacket, uint32_t nSize) {
     bool bIsQuestItemFlag;
     BOOL bInTrade;
@@ -4762,6 +4880,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x61_MercEquipItem(::SGAMEDATA * pGame, 
 // [op:1][itemGUID:u32]
 // Moves belt-compatible item from inventory to belt if allowed; sends 0x9C/0x9D updates.
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 00204ec7
 eD2ServerIncomingStatus __fastcall SCMD_0x63_ItemToBeltAuto(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x63_ItemToBeltAuto * pPacket, uint32_t nSize) {
     bool bIsBeltable;
     BOOL bFoundSlot;
@@ -4869,6 +4988,7 @@ eD2ServerIncomingStatus __fastcall SCMD_0x63_ItemToBeltAuto(::SGAMEDATA * pGame,
     return SERVERSTATUS_BAD_DATA;
 }
 
+// 1.14d mac: 00205241
 eD2ServerIncomingStatus __fastcall PLRMSG_Cmd0x66_WardenResponse_ReturnOk(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2GSPacketClt0x66_WardenStub * pPacket, uint32_t nSize) {
     return SERVERSTATUS_OK;
 }
@@ -4942,6 +5062,7 @@ eD2ServerIncomingStatus __fastcall NET_D2GS_SERVER_HandleIncomingPacketAfterClie
 
 // Broadcasts a PvP kill-message (opcode 0x5a) to the game when a player is killed. Resolves the killer: if a monster, walks up to its owner player. Copies victim and killer names into fixed-length buffers (16 chars each); for monster killers it stores the boss number instead of a name. For player killers it encodes the killer's char name. Calls BroadcastEventMessage to send the assembled packet to all clients. Halts with an internal error if pVictim is not a player unit.
 // @sourcefile .\PLAYER\PlrMsg.cpp
+// 1.14d mac: 0020535c
 void __fastcall PLAYERMSG_BroadcastPlayerSlain(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pVictim) {
     D2Packet0x5aEventStructure packet0x5a;
     char szKillerName[16];
@@ -5005,6 +5126,7 @@ void __fastcall PLAYERMSG_BroadcastPlayerSlain(::SGAMEDATA * pGame, D2UnitStrc *
     BroadcastEventMessage(pGame, &packet0x5a);
 }
 
+// 1.14d mac: 002063ae
 void __fastcall SendPlayerStopAndAtributeUpdate(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient, int32_t nStopReason) {
     SendPlayerStop(pGame, pUnit, pClient, nStopReason);
     D2UnitStrc* pClientUnit = GAME::Clients::CLIENTS_GetControlUnit(pClient, 0);
@@ -5019,5 +5141,12 @@ void __fastcall SendPlayerStopAndAtributeUpdate(::SGAMEDATA * pGame, D2UnitStrc 
 static void * keep_005492a0 = (0 ? (Unreferenced_005492a0(*(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_005492c0 = (0 ? (PLRMSG_CheckWeaponSlotEmpty(*(D2UnitStrc * *)0, *(int32_t *)0), (void *)0) : (void *)0);
 static void * keep_00549410 = (0 ? (MONSTER_FindNearbyAllyUnit(*(::SGAMEDATA * *)0, *(int32_t *)0, *(D2UnitStrc * * *)0, *(D2UnitStrc * *)0, *(DWORD *)0), (void *)0) : (void *)0);
+
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 00205604
+void __fastcall PLRMSG_ClearStateOnExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatList) {
+    D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
+}
+#endif
 
 }}} // namespace D2Game::PLAYER::PlayerMsg

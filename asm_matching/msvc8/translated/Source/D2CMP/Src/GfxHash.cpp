@@ -34,6 +34,7 @@ namespace D2CMP { namespace SRC { namespace GfxHash {
 // Unlinks hash entry pEntry from its bucket (pHashTable->apBuckets[pEntry->nHashKey] -> pEntry->pNext), frees the cache block's
 // async frame buffer (+0x20 -> tDecode) and the entry itself. The entry node struct (+0 hash, +0x20 cache block, +0x28/+0x2c links) is untyped.
 // @sourcefile .\SRC\GfxHash.cpp
+// 1.14d mac: 001318ac
 void __fastcall GFXHASH_UnlinkCacheEntry(D2GfxHashTableStrc * pHashTable, int, D2PoolManagerStrc * pMemory, D2GfxHashEntryStrc * pEntry) {
     pfnCelPixelDataFree pFreeCallback;
     uint8_t* pFrameData;
@@ -104,6 +105,7 @@ void __fastcall GFXHASH_UnlinkCacheEntry(D2GfxHashTableStrc * pHashTable, int, D
     D2_FREE_POOL_AT(pMemory, pEntry, ".\\SRC\\GfxHash.cpp", 0x8e);
 }
 
+// 1.14d mac: 001315e5
 void __fastcall GFXHASH_InitHashTable(D2GfxHashTableStrc * pHashTable) {
     memset(pHashTable, 0, sizeof(*pHashTable));
 }
@@ -261,6 +263,7 @@ D2GfxHashEntryStrc * __fastcall GFXHASH_FindEntryByGfxData(D2GfxHashTableStrc * 
 }
 
 // @sourcefile .\SRC\GfxHash.cpp
+// 1.14d mac: 001317dc
 D2GfxHashEntryStrc * __fastcall GFX_AllocCacheEntry(D2PoolManagerStrc * pMemory, D2GfxHashTableStrc * pHashTable, D2CelCacheBlockStrc * pCacheBlock, D2GfxDataStrc * pGfxData, D2CelFileCacheEntryStrc * pCelEntry) {
     D2GfxHashEntryStrc* pNewEntry = D2_NEW_POOL_AT(pMemory, D2GfxHashEntryStrc, ".\\SRC\\GfxHash.cpp", 0xef);
     D2GfxDataStrc* nGfxDataSaved = pGfxData;

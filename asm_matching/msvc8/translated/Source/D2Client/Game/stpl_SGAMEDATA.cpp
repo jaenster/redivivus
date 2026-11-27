@@ -441,6 +441,7 @@ template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* TSExportTableSimp
 }
 
 // @blizzard TSExportTableSimple<SGAMEDATA,HSGAMEDATA__*,0> scalar deleting destructor (STORM.H)
+// 1.14d mac: 00072b0c TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::ScalarDeletingDestructor
 template<> TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* __fastcall TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::ScalarDeletingDestructor(TSExportTableSimple<::SGAMEDATA, HSGAMEDATA__*, 0>* pThis, int, uint32_t dwFlags) {
     pThis->Destructor();
     if (dwFlags & 1 && pThis) {
@@ -467,3 +468,35 @@ template<> TSExportTableSync<::SGAMEDATA, HSGAMEDATA__*, HSGAMEDATALOCK__*, CCri
 // Static data members
 
 template<> void * TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::vftable[4] = { (void*)&TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalDelete, (void*)&TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::InternalNew, (void*)&TSExportTableSimple<SGAMEDATA, HSGAMEDATA__*, 0>::ScalarDeletingDestructor, (void*)&TSHashTableReuse<SGAMEDATA, HASHKEY_NONE, 0>::Destroy };
+
+
+#if !defined(_WIN32) && D2_OS_MAC
+// TSLink<SGAMEDATA>::Unlink: takes the link out of the list it is in and clears it.
+static void SGAMEDATA_UnlinkSelf(TSLink<::SGAMEDATA> * pLink) {
+    TSLink<::SGAMEDATA>* pPrev = pLink->m_prevlink;
+    if (!pPrev) {
+      return;
+    }
+
+    TSLink<::SGAMEDATA>** ppNext = (TSLink<::SGAMEDATA>**)D2_StormNextLink(pLink, -1);
+    *ppNext = pPrev;
+    pLink->m_prevlink->m_next = pLink->m_next;
+    pLink->m_prevlink = 0;
+    pLink->m_next = 0;
+}
+
+// The Mac build's destructor of TSGrowableArray<SGAMEDATA>: unlinks both links of every element and frees the block.
+// 1.14d mac: 000726d6
+void __stdcall SGAMEDATA_FreeElementBlock(TSGrowableArray<::SGAMEDATA> * pArray) {
+    ::SGAMEDATA* pData = pArray->m_data;
+    for (uint32_t nIndex = 0; nIndex < pArray->m_count; nIndex++) {
+      SGAMEDATA_UnlinkSelf(&pData[nIndex].m_linktofull);
+      SGAMEDATA_UnlinkSelf(&pData[nIndex].m_linktoslot);
+      pData = pArray->m_data;
+    }
+
+    if (pData) {
+      Storm::Source::SMem::SMemFree(pData, "nothing", -2, 0);
+    }
+}
+#endif

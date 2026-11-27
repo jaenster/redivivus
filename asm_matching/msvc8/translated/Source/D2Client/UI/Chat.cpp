@@ -24,6 +24,12 @@
 #include "Source/D2Client/D2ClientRoot.h"
 #include "Source/D2Client/UI/Chat.data.h"
 #include "Source/D2Client/UI/Help.data.h"
+#if !defined(_WIN32) && D2_OS_MAC
+#include "Source/MacSpecific/Source/MacShell/MacShell.h"
+// The text the Text Services Manager delivers for the chat line (Mac only, no Windows twin).
+void CHAT_OnIMEInputText(const char* szText, bool bFixed, int* pnRange);
+void MAC_DisposeTSMDocument(void);
+#endif
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
 
@@ -124,6 +130,9 @@ void __stdcall CHAT_InitEmpty_Unref_00477970() {
 
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
+#else
 // @sourcefile .\UI\chat.cpp
 static void CHAT_HandleIMECandidateList(HIMC hImc) {
     DWORD dwListCount;
@@ -145,7 +154,11 @@ static void CHAT_HandleIMECandidateList(HIMC hImc) {
     D2_FREE_AT(gpIMECandidateList, ".\\UI\\chat.cpp", 0xf2);
     gpIMECandidateList = (LPCANDIDATELIST)0x0;
 }
+#endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
+#else
 // @sourcefile .\UI\chat.cpp
 void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
@@ -254,7 +267,11 @@ void __stdcall INPUT_HandleIMENotify(D2UIMouseMsgStrc * pMsg) {
 
     ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hImc);
 }
+#endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
+#else
 uint8_t __stdcall CHAT_CheckIMELanguage() {
     LANGID nLangId;
     if (gnLanguageCode == 9) {
@@ -274,12 +291,25 @@ uint8_t __stdcall CHAT_CheckIMELanguage() {
 
     return ImmIsIME(GetKeyboardLayout(0)) != 0;
 }
+#endif
 
 void __stdcall CHAT_ResetIMEState(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac builds a TSM document for the Asian languages instead of querying the Win32 IME.
+// 1.14d mac: 0009e9bd
+void __stdcall CHAT_InitIME() {
+    _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagChatInit, 4);
+    gnLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
+    if (gnLanguageCode - 6 < 4) {
+      ::MAC_SetTSMInputCallback(::CHAT_OnIMEInputText);
+      ::MAC_CreateTSMDocument();
+    }
+}
+#else
 void __stdcall CHAT_InitIME() {
     _Message::MESSAGE_RegisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagChatInit, 4);
     gnLanguageCode = D2Lang::StrTable::strtable::MISC_GetLanguageCode();
@@ -366,7 +396,20 @@ void __stdcall CHAT_InitIME() {
 
     ImmReleaseContext(D2gfx::D2GFX::GetHwnd(), hIMC);
 }
+#endif
 
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac has no Imm* input method manager: it drops the chat handlers and, for the Asian
+// languages, the Text Services Manager document and its input hook.
+// 1.14d mac: 0009ebad (CHAT_ShutdownInput in the Mac database)
+void __stdcall CHAT_ShutdownIME() {
+    _Message::MESSAGE_UnregisterEventHandlerBatch(D2gfx::D2GFX::GetHwnd(), gUIFlagChatInit, 4);
+    if ((unsigned)(gnLanguageCode - 6) < 4) {
+      ::MAC_DisposeTSMDocument();
+      ::MAC_SetTSMInputCallback(nullptr);
+    }
+}
+#else
 // @sourcefile .\UI\chat.cpp
 void __stdcall CHAT_ShutdownIME() {
     DWORD dwSentenceMode;
@@ -398,7 +441,9 @@ void __stdcall CHAT_ShutdownIME() {
     D2_FREE_AT(gpIMECandidateList, ".\\UI\\chat.cpp", 0x29d);
     gpIMECandidateList = (LPCANDIDATELIST)0x0;
 }
+#endif
 
+// 1.14d mac: 000a01d3
 static int32_t __stdcall CHAT_CompareCaseInsensitive(char * szText1, char * szText2) {
     int nUpper1;
     int nUpper2;
@@ -458,6 +503,7 @@ static void CHAT_DrawCursor(int32_t nPosY, int32_t nPosX, int32_t nColor) {
     gnIMECursorVisible = 1;
 }
 
+// 1.14d mac: 0009ebfe
 void __stdcall CHAT_InitEmpty() {
 
 }
@@ -495,6 +541,9 @@ void __stdcall CHAT_DrawIMEComposition(int32_t nPosX, int32_t nPosY) {
     CHAT_DrawCursor(nY, nLen + nX - 0x83 + nWidthComposition, 4);
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
+#else
 void __stdcall CHAT_DrawIMECandidates() {
     int nWideCount;
     DWORD dwOffset;
@@ -560,7 +609,9 @@ void __stdcall CHAT_DrawIMECandidates() {
       dwIndex++;
     } while (dwIndex < (int)nEndIndex);
 }
+#endif
 
+// 1.14d mac: 0009ec08
 void __stdcall DRAW_UI_ChatInput() {
     int i;
     uint16_t wszInputCopy[258];
@@ -709,6 +760,7 @@ static void __fastcall CHAT_AddToHistory(uint16_t * pwSrc) {
     memcpy(gaChatHistoryBuffer[gnChatHistoryReadIndex], pwSrc, sizeof(gaChatHistoryBuffer[0]));
 }
 
+// 1.14d mac: 0009f0f1
 void __stdcall CHAT_ScrollHistory(int32_t nDirection) {
     const int nOldIndex = gnChatHistoryScrollIndex;
     gnChatHistoryScrollIndex += nDirection;
@@ -802,6 +854,7 @@ BOOL __stdcall CHAT_ParseCommand(char * * ppszText, uint8_t * pbCommandType, cha
     } while (true);
 }
 
+// 1.14d mac: 0009efb8
 void __stdcall CHAT_CheckChatboxBounds(D2UIMouseMsgStrc * pMsg) {
     if (!((int)(uint32_t)pMsg->uLParam.sMousePos.nMouseY > Inv::ScreenSizeY - 0x31)) {
       return;
@@ -810,6 +863,7 @@ void __stdcall CHAT_CheckChatboxBounds(D2UIMouseMsgStrc * pMsg) {
     ui::SetUIFlag(UI_CHATBOX, UI_RESET, 0);
 }
 
+// 1.14d mac: 0009effb
 void __stdcall INPUT_HandleChatScroll(D2UIMouseMsgStrc * pMsg) {
     pMsg->bHandled = 1;
     pMsg->dwResult = 0;
@@ -847,6 +901,7 @@ int32_t __fastcall CHAT_IsWideStringASCII(uint16_t * wszText) {
     return (uint32_t)((uint32_t)((uint32_t)uHighBits & 0xffffffu) << 8 | (uint32_t)(uint8_t)1);
 }
 
+// 1.14d mac: 0009fd27
 void __stdcall CHAT_InitHistoryIndices() {
     gnChatHistoryReadIndex = 7;
     gnChatHistoryWriteIndex = 7;
@@ -884,6 +939,7 @@ static void CHAT_ExtractWhisperPrefix(char * szInput, char * szOutPrefix) {
     Storm::Source::SSTR::SStrCopy(szOutPrefix, szInput, 0x7fffffff);
 }
 
+// 1.14d mac: 0009fd63
 void __stdcall CHAT_ClearInput() {
     memset(gwszChatInputText, 0, 0x202);
     gnChatInputTextCursorPosition = 0;
@@ -891,6 +947,7 @@ void __stdcall CHAT_ClearInput() {
 }
 
 // Routes incoming BNet chat packet by type - handles whispers, emotes, broadcasts, system messages
+// 1.14d mac: 0009fdb6
 BOOL __stdcall CHAT_ProcessBattleNetMessage() {
     uint8_t* pbyWhisperTarget;
     uint8_t* pbyPrefixScan;
@@ -1024,6 +1081,7 @@ BOOL __stdcall CHAT_ProcessBattleNetMessage() {
     return 1;
 }
 
+// 1.14d mac: 000a04f0
 static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
     char szUsageMessage[256];
     MessageStrc MStack_124;
@@ -1061,6 +1119,7 @@ static BOOL CHAT_HandleResignCommand(char * szCommandName, char * szInput) {
     return 1;
 }
 
+// 1.14d mac: 000a0289
 static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szCommandName, char * szInput) {
     // Static local variables (originally global data)
     static char gszChatWhisperTargetName[2] = " "; D2_STATIC_GUARD(gszChatWhisperTargetName, "D2Client::UI::Chat::CHAT_HandleWhisperCommand::gszChatWhisperTargetName");
@@ -1145,6 +1204,7 @@ static BOOL __stdcall CHAT_HandleWhisperCommand(int32_t bInGame, char * szComman
     return 1;
 }
 
+// 1.14d mac: 000a024d
 static void __stdcall CHAT_ExtractCommandParameter(int32_t nMaxLength, char * szInput, char * szOutParam) {
     char* pSpace = Storm::Source::SSTR::SStrChr(szInput, ' ');
     if (pSpace) {
@@ -1378,6 +1438,7 @@ static void __fastcall ChatCommandProcessor(uint16_t * pwInputMessage, int, char
     ui::SetUIFlag(UI_CHATBOX, UI_RESET, 0);
 }
 
+// 1.14d mac: 0009f13d
 void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
     uint16_t** ppWVar2;
     BOOL bIsValidChar;
@@ -1420,8 +1481,13 @@ void __stdcall INPUT_HandleChatCharInput(D2UIMouseMsgStrc * pMsg) {
             nTrimmedLen = D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText + nScanIdx);
             if (nTrimmedLen) {
               CHAT_AddToHistory(gwszChatInputText + nScanIdx);
-              /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ WideCharToMultiByte(0, 0x250, (LPCWSTR)gwszChatInputText, -1, szMultiByteText, 0x100, (LPCSTR)0x0, (LPBOOL)0x0);
-              ChatCommandProcessor(gwszChatInputText, 0, szMultiByteText, nScanIdx);
+              /* LPBOOL lpUsedDefaultChar for WideCharToMultiByte */ /* LPCSTR lpDefaultChar for WideCharToMultiByte */ /* int cbMultiByte for WideCharToMultiByte */ /* LPSTR lpMultiByteStr for WideCharToMultiByte */ /* int cchWideChar for WideCharToMultiByte */ /* LPCWSTR lpWideCharStr for WideCharToMultiByte */ /* DWORD dwFlags for WideCharToMultiByte */ /* UINT CodePage for WideCharToMultiByte */ 
+#if !defined(_WIN32) && D2_OS_MAC
+              MAC_ConvertUnicodeToText((const char*)gwszChatInputText, szMultiByteText, D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(gwszChatInputText), 0x101, -0x80);
+#else
+              WideCharToMultiByte(0, 0x250, (LPCWSTR)gwszChatInputText, -1, szMultiByteText, 0x100, (LPCSTR)0x0, (LPBOOL)0x0);
+#endif
+              ChatCommandProcessor(gwszChatInputText, szMultiByteText, nScanIdx);
               goto consume_message;
             }
           }
@@ -1509,3 +1575,36 @@ void StaticInit_gwcImeCompositionBuffer() {
 }
 
 }}} // namespace D2Client::UI::Chat
+#if !defined(_WIN32) && D2_OS_MAC
+// The marked text of an unfinished TSM composition: before, converted range, after.
+static uint16_t gwszMacIMEMarkedText[261] = {0}; D2_STATIC_GUARD(gwszMacIMEMarkedText, "gwszMacIMEMarkedText");
+
+// The Text Services Manager callback. A finished text is appended to the chat line; an unfinished
+// one is kept apart as marked text, with the converted range between marker colours 4 and 1.
+// The text is UTF-16 (the MacShell.h callback type is declared over char).
+// 1.14d mac: 0009ea1a
+void CHAT_OnIMEInputText(const char* szText, bool bAppend, int* pnRange) {
+    uint16_t* wszText = (uint16_t*)szText;
+    uint16_t wszBefore[260];
+    uint16_t wszRange[260];
+    uint16_t wszAfter[260];
+    if (!bAppend) {
+      memset(wszBefore, 0, sizeof(D2Client::UI::Chat::gwszChatInputText));
+      memset(wszRange, 0, sizeof(D2Client::UI::Chat::gwszChatInputText));
+      memset(wszAfter, 0, sizeof(D2Client::UI::Chat::gwszChatInputText));
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszBefore, wszText, pnRange[0]);
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(wszRange, wszText + pnRange[0], pnRange[1] - pnRange[0]);
+      D2Lang::Unicode::UNISYS::STRING_CopyWideString(wszAfter, wszText + pnRange[1]);
+      D2Client::UI::ui::AppendAsWideChar(wszBefore, 4);
+      D2Client::UI::ui::AppendAsWideChar(wszRange, 1);
+      D2Client::UI::ui::AppendAsWideChar(wszAfter, 4);
+      D2Lang::Unicode::UNISYS::WSTRING_PutWideCharIntoBuffer(gwszMacIMEMarkedText, wszBefore, 0x100);
+      D2Lang::Unicode::UNISYS::UNICODE_AppendWideStringN(gwszMacIMEMarkedText, wszRange, 0x100);
+      D2Lang::Unicode::UNISYS::UNICODE_AppendWideStringN(gwszMacIMEMarkedText, wszAfter, 0x100);
+    } else {
+      D2Lang::Unicode::UNISYS::UNICODE_AppendWideStringN(D2Client::UI::Chat::gwszChatInputText, wszText, 0x100);
+      gnChatInputTextLength += D2Lang::Unicode::UNISYS::STRING_GetWideStringLength(wszText);
+      gwszMacIMEMarkedText[0] = 0;
+    }
+}
+#endif

@@ -31,6 +31,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 // Otherwise, once forge is done, if Terror's End (Act4 Q4 / Diablo kill, QUESTINT_TerrorsEnd) quest-data is
 // missing or its per-game flag field_0x14==0 (Diablo not yet slain / portal-to-Harrogath not opened) ->
 // show the post-forge "go kill Diablo / move to Act 5" gossip line (idx 1). Reads only; no state writes.
+// 1.14d mac: 002391df
 void __fastcall Q30_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(GetClassIdInline(pQuestArgs->pTarget) == 0x198)) {
       return;
@@ -63,6 +64,7 @@ void __fastcall Q30_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 
 // Q30_StatusFilter — stub, always returns false. Q30 (internal "Spoke to Malachai") contributes no
 // entry to the in-game Quest Log status panel; its dialog is driven purely via the active-filter gossip path.
+// 1.14d mac: 002392cb
 bool __fastcall Q30_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
@@ -73,6 +75,7 @@ bool __fastcall Q30_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUni
 //  (b) Terror's End (Act4 Q4 / Diablo, id 0x1a) is NOT yet JustCompleted AND NOT Completed -> Diablo not killed yet.
 // i.e. Tyrael keeps an active gossip line throughout Act 4 until Diablo is dead; once Diablo is slain AND forge
 // done, returns false (Q30 dialog no longer offered -> the Act4->Act5 move-on prompt takes over). Read-only.
+// 1.14d mac: 002392d2
 bool __fastcall Q30_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestState;
@@ -114,6 +117,7 @@ bool __fastcall Q30_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // nQuestIdReal=QUEST_SpokeToMalachai (internal Q30, the hidden Act-4 Tyrael Act4->Act5 transition slot;
 // NOT one of the 3 public Act-4 quests). Wires fpStatusFilter=Q30_StatusFilter, fpActiveFilter=Q30_ActiveFilter.
 // No quest-state reads/writes here — pure registration.
+// 1.14d mac: 00239164
 void __fastcall Q30_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q30_Callback00_NpcActivate;

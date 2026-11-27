@@ -155,6 +155,7 @@ void __fastcall Destructor(::SpinnerWrapper * pThis, int) {
     }
 }
 
+// 1.14d mac: 000ee9ba D2Client::UI::Spinner::SpinnerWrapper::ScalarDeletingDestructor
 ::SpinnerWrapper * __fastcall ScalarDeletingDestructor(::SpinnerWrapper * pThis, int, uint32_t nFlags) {
     vc8_thiscall(SpinnerWrapper::Destructor)(pThis);
     if (nFlags & 1 && pThis) {
@@ -164,65 +165,78 @@ void __fastcall Destructor(::SpinnerWrapper * pThis, int) {
     return pThis;
 }
 
+// 1.14d mac: 000eea8e D2Client::UI::Spinner::SpinnerWrapper::OnMouseWheel
 int __fastcall OnMouseWheel(::SpinnerWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseWheel)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeaae D2Client::UI::Spinner::SpinnerWrapper::OnMouseDown
 int __fastcall OnMouseDown(::SpinnerWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseDown)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeace D2Client::UI::Spinner::SpinnerWrapper::OnMouseUp
 int __fastcall OnMouseUp(::SpinnerWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseUp)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeaee D2Client::UI::Spinner::SpinnerWrapper::OnMouseMove
 int __fastcall OnMouseMove(::SpinnerWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseMove)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeb0e D2Client::UI::Spinner::SpinnerWrapper::Draw
 void __fastcall Draw(::SpinnerWrapper * pThis, int) {
     vc8_thiscall(pThis->pImplementation->pVtable->Draw)(pThis->pImplementation);
 }
 
+// 1.14d mac: 000eeb28 D2Client::UI::Spinner::SpinnerWrapper::OnChar
 int __fastcall OnChar(::SpinnerWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnChar)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeb48 D2Client::UI::Spinner::SpinnerWrapper::OnDownArrow
 int __fastcall OnDownArrow(::SpinnerWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnDownArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeb68 D2Client::UI::Spinner::SpinnerWrapper::OnUpArrow
 int __fastcall OnUpArrow(::SpinnerWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnUpArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeb88 D2Client::UI::Spinner::SpinnerWrapper::OnRightArrow
 int __fastcall OnRightArrow(::SpinnerWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnRightArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eeba8 D2Client::UI::Spinner::SpinnerWrapper::OnLeftArrow
 int __fastcall OnLeftArrow(::SpinnerWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnLeftArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000eebc8 D2Client::UI::Spinner::SpinnerWrapper::GetValue
 int __fastcall GetValue(::SpinnerWrapper * pThis, int) {
     int nSpinnerValue = vc8_thiscall(pThis->pImplementation->pVtable->GetValue)(pThis->pImplementation);
     return nSpinnerValue;
 }
 
+// 1.14d mac: 000eebe2 D2Client::UI::Spinner::SpinnerWrapper::GetRepeatDelta
 int __fastcall GetRepeatDelta(::SpinnerWrapper * pThis, int, int nUnused) {
     int nRepeatDelta = vc8_thiscall(pThis->pImplementation->pVtable->GetRepeatDelta)(pThis->pImplementation);
     return nRepeatDelta;
 }
 
+// 1.14d mac: 000eea18 D2Client::UI::Spinner::SpinnerWrapper::Constructor
 ::SpinnerWrapper * __fastcall Constructor(::SpinnerWrapper * pThis, int, int nPosX, int nPosY, BOOL bHorizontal, fpSpinnerRepeatAction pfnRepeatAction) {
     pfnEHHandlerRoutine puExcHandler = SehHandler_6ca203; // steer-ok: generated form, kept as emitted
     void* pExcList = ExceptionList;
@@ -241,5 +255,12 @@ int __fastcall GetRepeatDelta(::SpinnerWrapper * pThis, int, int nUnused) {
     ExceptionList = pExcList;
     return pThis;
 }
+
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 000eea0e
+void SPINNER_ConstructWrapper(::SpinnerWrapper * pSpinner, int nPosX, int nPosY, BOOL bHorizontal, fpSpinnerRepeatAction pfnRepeatAction) {
+    vc8_thiscall(Constructor)(pSpinner, nPosX, nPosY, bHorizontal, pfnRepeatAction);
+}
+#endif
 
 }}}} // namespace D2Client::UI::Spinner::SpinnerWrapper

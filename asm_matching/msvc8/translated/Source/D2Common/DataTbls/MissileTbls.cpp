@@ -56,6 +56,7 @@ static void MISSILETBLS_PadCodeTo4Chars(char * szText1, char * szText2) {
     szText2[3] = cLastChar;
 }
 
+// 1.14d mac: 0014669f
 int32_t __fastcall MapMissilesTxtKeywordToNumber(char * szKey) {
     int32_t nCmpResult = Storm::Source::SSTR::SStrCmpI(szKey, "min", 0x20);
     if (!nCmpResult) {
@@ -82,6 +83,7 @@ int32_t __fastcall MapMissilesTxtKeywordToNumber(char * szKey) {
 }
 
 // Validates and resolves a calc-code string (szText) for a missile table column. For nCalcType==1: looks up the code in the skills link table (nLinkType==3) or missiles link table (nLinkType==4); sets *pdwParam=1 on a successful lookup, 0 on fallback via GetClassIdFromName on the misc-calc link. For other nCalcType values: packs the up-to-4-char string into a uint32 and calls GetClassIdFromName on the miss-calc link, always setting *pdwParam=0.
+// 1.14d mac: 00146770
 int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolvedToConstant, int nAST, int nKeywordNumber) {
     char cFourthChar;
     int32_t nCalcId;
@@ -149,6 +151,7 @@ int __fastcall MISSILETBLS_ValidateCalcCode(char * szText, int * pOutHasResolved
     return nCalcId;
 }
 
+// 1.14d mac: 00146928
 void __fastcall MissileCalcLinker(char * pSrc, void * pRecord, int32_t nOffset, int32_t nSize, int32_t nTxtRow, int32_t nTxtColumn) {
     uint32_t nCalcCodeSize;
     int32_t nParsedLen;
@@ -219,6 +222,7 @@ static __inline void __stdcall MISSILETBLS_ValidateAndClampField(uint32_t eField
 
 // Builds the 147-column field-descriptor table for Missiles.txt (boolean bit-flags packed at offset 4, client/server Do/Hit/Dmg function-pointer columns, param/calc columns wired through MissileCalcLinker, sub-missile and overlay name links, damage/elemental-damage-by-level rows, velocity/accel, graphics, and collision columns) and compiles it into sgtDataTable.pTxtMissiles via CompileTxt (row stride 0x1a4). Post-compile: clamps each row's CollideType into 0..8. Finally serializes the compiled missile code table to a bin file via TXT_SaveTableToBinFile ("misscode"). __fastcall, pMemory = data-table pool. Called once at data-table load.
 // @sourcefile .\DATATBLS\MissileTbls.cpp
+// 1.14d mac: 001469f9
 void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc missiles[147] = {
       {"Missile", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtMissilesLink},
@@ -379,6 +383,7 @@ void __fastcall TXT_AllocTxt_missiles(D2PoolManagerStrc * pMemory) {
 }
 
 // @sourcefile .\DATATBLS\MissileTbls.cpp
+// 1.14d mac: 00146b5b
 void __stdcall MISSILETBLS_FreeTxt() {
     if (MonsterTbls::sgtDataTable.pMissCode) {
       D2_FREE_POOL_AT(nullptr, MonsterTbls::sgtDataTable.pMissCode, ".\\DATATBLS\\MissileTbls.cpp", 0x19e);
@@ -397,6 +402,7 @@ void __stdcall MISSILETBLS_FreeTxt() {
     MonsterTbls::sgtDataTable.nTxtMissilesSize = 0;
 }
 
+// 1.14d mac: 00146be8
 int32_t __stdcall MISSILETBLS_CalculateVelocity(int32_t nMissileId, int32_t nLevel) {
     D2MissilesTxt* pMissileTxt;
     pMissileTxt = nMissileId >= 0 && nMissileId < MonsterTbls::sgtDataTable.nTxtMissilesSize ? MonsterTbls::sgtDataTable.pTxtMissiles + nMissileId : nullptr;

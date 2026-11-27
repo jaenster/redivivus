@@ -238,6 +238,7 @@ static int32_t __stdcall UTF8_GetNextCharWidth(uint8_t * pUtf8, int32_t nMaxByte
 }
 
 // Counts UTF-8 characters in string. Iterates via GetNextCharWidth, handles variable-width encoding. Returns character count (not byte count).
+// 1.14d mac: 002b8570
 int32_t __fastcall UTF8_GetStringLength(char * szUtf8, int32_t nMaxBytes) {
     int32_t nCharCount = 0;
     while (nMaxBytes > 0 && *szUtf8) {
@@ -263,6 +264,7 @@ void __fastcall UTF8_EncodeCodePoint(uint16_t * pCodePoint) {
     EncodeUTF8CodePoint(*pCodePoint, abUtf8Buf);
 }
 
+// 1.14d mac: 002b83b6
 uint16_t * __fastcall UTF8_ConvertToWideChar(uint16_t * wszText, char * szText, int32_t nMaxWideChars) {
     char cCurChar;
     int nWideCharIdx = 0;
@@ -301,6 +303,7 @@ uint16_t * __fastcall UTF8_ConvertToWideChar(uint16_t * wszText, char * szText, 
 }
 
 // Converts a wide character (UTF-16) string to UTF-8. Returns pointer to destination buffer.
+// 1.14d mac: 002b84a2
 char * __fastcall WideCharToUTF8(char * pDest, uint16_t * pSrc, int nMaxBytes) {
     int nBytesWritten = 0;
     while (*pSrc != L'\0') {

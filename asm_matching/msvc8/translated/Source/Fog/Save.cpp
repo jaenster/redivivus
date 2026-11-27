@@ -8,6 +8,7 @@
 
 namespace Fog { namespace Save {
 
+// 1.14d mac: 002eca03
 DWORD __stdcall CalculateChecksum(uint8_t * pSaveFile, int32_t nSize) {
     int nIndex;
     DWORD dwChecksum = 0;
@@ -291,6 +292,7 @@ int32_t __stdcall SAVE_CalculateChecksum(uint8_t * pbData, int32_t nSize) {
     return nChecksum;
 }
 
+// 1.14d mac: 002ee0ea
 int __stdcall SAVEFILE_ReadEncodedInt14Bit(uint8_t * pBuffer) {
     return (pBuffer[1] & 0x7f) * 0x80 + (*pBuffer & 0x7f);
 }

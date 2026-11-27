@@ -49,6 +49,7 @@ static BOOL STATES_IsUnitTransformable(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\UNIT\PlrSkills.cpp
+// 1.14d mac: 0012480a
 void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(D2UnitStrc * pUnit, uint32_t nGamma) {
     BOOL _bIsTransformable;
     bool bIsTransformable;
@@ -84,11 +85,13 @@ void __fastcall PLRSKILLS_CheckSkillWhipAndLeap(D2UnitStrc * pUnit, uint32_t nGa
 }
 
 // JMP thunk
+// 1.14d mac: 001248ee
 void __fastcall PLRSKILLS_DrawChargeTrailIfPrimary(D2UnitStrc * pUnit, uint32_t nGamma) {
     ::D2Client::UNIT::PlrSkills::PLRSKILLS_CheckSkillWhipAndLeap(pUnit, nGamma);
 }
 
 // @sourcefile .\UNIT\PlrSkills.cpp
+// 1.14d mac: 001248f7
 void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(D2UnitStrc * pUnit, uint32_t nGamma) {
     BOOL _bIsTransformable;
     bool bIsTransformable;
@@ -124,10 +127,12 @@ void __fastcall PLRSKILLS_DrawSkillTrail_Secondary(D2UnitStrc * pUnit, uint32_t 
 }
 
 // JMP thunk
+// 1.14d mac: 001249db
 void __fastcall PLRSKILLS_DrawChargeTrailIfSecondary(D2UnitStrc * pUnit, uint32_t nGamma) {
     ::D2Client::UNIT::PlrSkills::PLRSKILLS_DrawSkillTrail_Secondary(pUnit, nGamma);
 }
 
+// 1.14d mac: 00124de9
 static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nOverlayId) {
     int i;
     if (nOverlayId == -1) {
@@ -140,6 +145,7 @@ static void __stdcall STATES_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nOver
     }
 }
 
+// 1.14d mac: 00125f1b
 void __fastcall PLRSKILLS_StateSetFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2States eState) {
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!(pDVar1 && pDVar1->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
@@ -160,6 +166,7 @@ void __fastcall PLRSKILLS_StateSetFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2
     Engine::Gfx::GFX_AddOverlayToUnit(pUnit, pDVar1->pgsvoverlay - 1 + nStatValue, 3, 0, 0, 0, 0, 0);
 }
 
+// 1.14d mac: 0012614d
 void __fastcall PLRSKILLS_StateRemFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2States eState) {
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!(pDVar1 && pDVar1->aFlagBytes[0] & (uint8_t)Fog::BitBuffer::gadwBitMasks[4] && pDVar1->pgsvoverlay > 0 && (int)pDVar1->pgsvoverlay < D2Common::ITEMS::Items::sgptDataTable->nTxtOverlaySize && pDVar1->stat >= 0 && (int)pDVar1->stat <= D2Common::ITEMS::Items::sgptDataTable->nTxtItemStatCostSize)) {
@@ -173,6 +180,7 @@ void __fastcall PLRSKILLS_StateRemFn01_ProgressiveCharge(D2UnitStrc * pUnit, eD2
     } while (nOverlayIdx < 3);
 }
 
+// 1.14d mac: 0012603f
 void __fastcall PLRSKILLS_StateSetFn02_CloakOfShadows(D2UnitStrc * pUnit, eD2States eState) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -197,6 +205,7 @@ void __fastcall PLRSKILLS_StateSetFn02_CloakOfShadows(D2UnitStrc * pUnit, eD2Sta
 }
 
 // @sourcefile .\UNIT\PlrSkills.cpp
+// 1.14d mac: 001249e4
 void __fastcall PLRSKILLS_StateSetFn03_Blaze(D2UnitStrc * pUnit, eD2States eState) {
     int nCurSkillLvl;
     D2UnitStrc* pPlayerUnit_lcl = Player::GetPlayerUnit_UI();
@@ -231,6 +240,7 @@ void __fastcall PLRSKILLS_StateSetFn03_Blaze(D2UnitStrc * pUnit, eD2States eStat
     D2Common::Skills::AddSkill(pUnit, eSkill, nSkillLevel, 0, ".\\UNIT\\PlrSkills.cpp", 0x120);
 }
 
+// 1.14d mac: 00124b43
 void __fastcall PLRSKILLS_StateSetFn04_SourceUnit(D2UnitStrc * pUnit, eD2States eState) {
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
     if (!pStatList) {
@@ -246,10 +256,12 @@ void __fastcall PLRSKILLS_StateSetFn04_SourceUnit(D2UnitStrc * pUnit, eD2States 
     D2Common::Units::StoreOwnerInfo(pUnit, eUnitType, nOwnerId);
 }
 
+// 1.14d mac: 00124bb3
 void __fastcall PLRSKILLS_StateRemFn02_SourceUnit(D2UnitStrc * pUnit, eD2States eState) {
     D2Common::Units::StoreOwner(pUnit, nullptr);
 }
 
+// 1.14d mac: 00124bd1
 void __fastcall PLRSKILLS_StateSetFn05_ChangeClass(D2UnitStrc * pUnit, eD2States eState) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
@@ -289,6 +301,7 @@ static int32_t __stdcall STATES_CalcDamageSeverityTier(int32_t nMax, int32_t nVa
 }
 
 // State removal callback (index 03) invoked when a buff/state expires on a unit. Reads the castoverlay and all four overlay IDs from the D2StatesTxt entry for eState, then calls STATES_RemoveOverlayById three times each for castoverlay, overlay[0], overlay[1] (triple removal, likely for multi-layer overlays), and once each for overlay[2] and overlay[3]. Skips any overlay with a negative (invalid) ID.
+// 1.14d mac: 00124cce
 void __fastcall PLRSKILLS_StateRemFn03_BoneArmor(D2UnitStrc * pUnit, eD2States eState) {
     int32_t nCastOverlay;
     int nOverlay2;
@@ -350,6 +363,7 @@ void __fastcall PLRSKILLS_StateRemFn03_BoneArmor(D2UnitStrc * pUnit, eD2States e
 }
 
 // Bone Armor state update callback. Computes a 3-tier armor tier from current vs. max bone armor values (UNITSTAT_bonearmor/bonearmormax), stores the new tier in shortparam1, then adds or removes tier-keyed overlays via GFX_AddOverlayToUnit / STATES_RemoveOverlayById. Called each tick while Bone Armor state is active.
+// 1.14d mac: 00124e29
 void __fastcall PLRSKILLS_StateSetFn06_BoneArmor(D2UnitStrc * pUnit, eD2States eState) {
     D2StatesTxt* pStatesTxt = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pStatesTxt) {
@@ -416,6 +430,7 @@ static int32_t __stdcall PLRSKILLS_CalcDamageSeverityTier_Unreferenced(int32_t n
 }
 
 // State-removal overlay cleanup: reads overlay[0..2] from the states.txt row for eState and removes each valid overlay (and overlay+1) from pUnit via STATES_RemoveOverlayById. Called as part of the state removal pipeline (RemFunc slot 5).
+// 1.14d mac: 001250c1
 void __fastcall PLRSKILLS_StateRemFn05_CycloneArmor(D2UnitStrc * pUnit, eD2States eState) {
     int32_t nOverlay1;
     int nOverlay3;
@@ -456,6 +471,7 @@ void __fastcall PLRSKILLS_StateRemFn05_CycloneArmor(D2UnitStrc * pUnit, eD2State
 }
 
 // State set-callback for Bone Armor (and similar tiered-overlay states). Reads current bonearmor and bonearmormax stats from the state's stat list to compute a tier (1–3) based on remaining fraction. Compares to the previously stored tier (shortparam1). If tier increased, calls States_RemFunc05 then adds the appropriate overlay+lightning-overlay pairs via GFX_AddOverlayToUnit. If tier decreased, removes the no-longer-applicable overlays via STATES_RemoveOverlayById. Up to three overlay slots (pDVar1->overlay[0..2]) are supported.
+// 1.14d mac: 00125182
 void __fastcall PLRSKILLS_StateSetFn08_CycloneArmor(D2UnitStrc * pUnit, eD2States eState) {
     D2StatesTxt* pStatesTxt = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pStatesTxt) {
@@ -514,6 +530,7 @@ void __fastcall PLRSKILLS_StateSetFn08_CycloneArmor(D2UnitStrc * pUnit, eD2State
     }
 }
 
+// 1.14d mac: 001254d0
 void __fastcall PLRSKILLS_StateSetFn07_Hurricane(D2UnitStrc * pUnit, eD2States eState) {
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
     if (!pStatList) {
@@ -534,6 +551,7 @@ void __fastcall PLRSKILLS_StateSetFn07_Hurricane(D2UnitStrc * pUnit, eD2States e
     Sound::SOUND_PlaySound((int)sPrgSound, pUnit, 0, 0, 0);
 }
 
+// 1.14d mac: 00125569
 void __fastcall PLRSKILLS_StateRemFn04_Hurricane(D2UnitStrc * pUnit, eD2States eState) {
     D2StatListExStrc* pStatList = D2Common::Stats::StatsEx::GetStatsByState(pUnit, eState);
     if (!pStatList) {
@@ -559,14 +577,17 @@ void __fastcall PLRSKILLS_StateRemFn04_Hurricane(D2UnitStrc * pUnit, eD2States e
     Sound::SOUND_StopUnitSoundByIndex(nSoundHandle, pUnit, 1);
 }
 
+// 1.14d mac: 00125602
 void __fastcall PLRSKILLS_StateSetFn09_ShrineSkill(D2UnitStrc * pUnit, eD2States eState) {
     D2Common::Skills::SKILLS_UpdateAllPassiveSkills(pUnit);
 }
 
+// 1.14d mac: 0012560b
 void __fastcall PLRSKILLS_StateRemFn06_ShrineSkill(D2UnitStrc * pUnit, eD2States eState) {
     D2Common::Skills::SKILLS_UpdateAllPassiveSkills(pUnit);
 }
 
+// 1.14d mac: 00125614
 void __fastcall PLRSKILLS_StateSetFn10_Redeemed(D2UnitStrc * pUnit, eD2States eState) {
     D2SkillArgStrc sSkillArg;
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
@@ -596,6 +617,7 @@ void __fastcall PLRSKILLS_StateSetFn10_Redeemed(D2UnitStrc * pUnit, eD2States eS
 }
 
 // @sourcefile .\UNIT\PlrSkills.cpp
+// 1.14d mac: 001256f6
 void __fastcall PLRSKILLS_StateRemFn07_Uninterruptable(D2UnitStrc * pUnit, eD2States eState) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return;
@@ -628,6 +650,7 @@ void __fastcall PLRSKILLS_StateRemFn07_Uninterruptable(D2UnitStrc * pUnit, eD2St
     D2Common::Collision::RemoveCollision_Type(pNestRoom, nX, nY, COLLISION_PATTERN_SMALL_UNIT_PRESENCE, 0x100);
 }
 
+// 1.14d mac: 001258e5
 void __fastcall PLRSKILLS_StateSetFn11_VineBeast(D2UnitStrc * pUnit, eD2States eState) {
     if (!pUnit) {
       return;
@@ -636,6 +659,7 @@ void __fastcall PLRSKILLS_StateSetFn11_VineBeast(D2UnitStrc * pUnit, eD2States e
     pUnit->eUnitFlagsEx |= UNITFLAGEX_NODRAW;
 }
 
+// 1.14d mac: 001258f8
 void __fastcall PLRSKILLS_StateSetFn12_Invis(D2UnitStrc * pUnit, eD2States eState) {
     if (!pUnit) {
       return;
@@ -645,6 +669,7 @@ void __fastcall PLRSKILLS_StateSetFn12_Invis(D2UnitStrc * pUnit, eD2States eStat
     pUnit->eUnitFlags |= UNITFLAG_DRAWSHADOW;
 }
 
+// 1.14d mac: 00125912
 void __fastcall PLRSKILLS_StateRemFn08_Invis(D2UnitStrc * pUnit, eD2States eState) {
     if (!pUnit) {
       return;
@@ -654,21 +679,25 @@ void __fastcall PLRSKILLS_StateRemFn08_Invis(D2UnitStrc * pUnit, eD2States eStat
     pUnit->eUnitFlags &= ~UNITFLAG_DRAWSHADOW;
 }
 
+// 1.14d mac: 0012592c
 void __fastcall PLRSKILLS_StateSetFn13_Attached(D2UnitStrc * pUnit, eD2States eState) {
     Engine::Particle::AllocParticle(pUnit);
     Engine::Particle::PARTICLE_SetAttachedToOwner(pUnit, 1);
 }
 
+// 1.14d mac: 00125954
 void __fastcall PLRSKILLS_StateRemFn09_Attached(D2UnitStrc * pUnit, eD2States eState) {
     Engine::Particle::PARTICLE_SetAttachedToOwner(pUnit, 0);
     Engine::Particle::SetPosVectorShifted(pUnit, 0, 0, 0);
 }
 
 // JMP thunk
+// 1.14d mac: 00125994
 void __fastcall PLRSKILLS_StateRemFn10_Pregnant(D2UnitStrc * pUnit) {
     ::D2Client::UNIT::MonUnique::MONUNIQUE_PregnantCorpseBurst(pUnit);
 }
 
+// 1.14d mac: 0012599d
 void __fastcall PLRSKILLS_StateSetFn14_Shapeshift(D2UnitStrc * pUnit, eD2States eState) {
     D2ServerMessageHandleStrc sMsg;
     memset(&sMsg, 0, sizeof(sMsg));
@@ -678,6 +707,7 @@ void __fastcall PLRSKILLS_StateSetFn14_Shapeshift(D2UnitStrc * pUnit, eD2States 
     D2Common::PATH::DynamicPath::PATH_SetNewDirection(pUnit->pPath.pDynamicPath, 0);
 }
 
+// 1.14d mac: 00125a52
 void __fastcall PLRSKILLS_StateSetFn15_Revive(D2UnitStrc * pUnit, eD2States eState) {
     UnitMode::UNITMODE_SetAnimMode(pUnit, eD2PlayerAnimMode_ns::Neutral);
     if (pUnit) {
@@ -688,6 +718,7 @@ void __fastcall PLRSKILLS_StateSetFn15_Revive(D2UnitStrc * pUnit, eD2States eSta
 }
 
 // State overlay update function for Frenzy (state func 16). Reads the Frenzy stack count (UNITSTAT_skill_frenzy) and calculates the maximum overlay count from the skill's calc[1] expression. Iterates overlay ranges from pTxtStates->overlay[0..1] and overlay[2..3], adding the correct overlay for the current stack tier and removing all others, so the visual effect steps proportionally with Frenzy stacks.
+// 1.14d mac: 00125a81
 void __fastcall PLRSKILLS_StateSetFn16_StackOverlay(D2UnitStrc * pUnit, eD2States eState) {
     int bHasOverlay;
     int nOverlayIdx;
@@ -768,6 +799,7 @@ void __fastcall PLRSKILLS_StateSetFn16_StackOverlay(D2UnitStrc * pUnit, eD2State
     } while (nSkillLvl < nModLvl);
 }
 
+// 1.14d mac: 00125d05
 void __fastcall PLRSKILLS_StateRemFn11_StackOverlay(D2UnitStrc * pUnit, eD2States eState) {
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
     if (!pDVar1) {
@@ -793,6 +825,7 @@ void __fastcall PLRSKILLS_StateRemFn11_StackOverlay(D2UnitStrc * pUnit, eD2State
     }
 }
 
+// 1.14d mac: 00125dbf
 void __fastcall PLRSKILLS_StateSetFn17_RestInPeace(D2UnitStrc * pUnit, eD2States eState) {
     D2SkillArgStrc sSkillArg;
     D2StatesTxt* pDVar1 = (int)eState >= 0 && (int)eState < D2Common::ITEMS::Items::sgptDataTable->nTxtStatesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtStates + eState : nullptr;
@@ -814,6 +847,7 @@ void __fastcall PLRSKILLS_StateSetFn17_RestInPeace(D2UnitStrc * pUnit, eD2States
     Missile::MakeMissile(&sSkillArg);
 }
 
+// 1.14d mac: 00125e54
 void __fastcall PLRSKILLS_StateSetFn18_CorpseExp(D2UnitStrc * pUnit, eD2States eState) {
     D2SkillArgStrc sSkillArg;
     Monster::MONSTER_SpawnBloodParticles(pUnit, 5, 0);
@@ -835,6 +869,7 @@ void __fastcall PLRSKILLS_StateSetFn18_CorpseExp(D2UnitStrc * pUnit, eD2States e
     Missile::MakeMissile(&sSkillArg);
 }
 
+// 1.14d mac: 00125f04
 void __fastcall PLRSKILLS_StateSetFn19RemFn12_SkillDelay(D2UnitStrc * pUnit, eD2States eState) {
     GAME::Game::GAME_SetSkillDelayEndFrame(0);
 }
@@ -946,6 +981,7 @@ void __fastcall STATES_AddStateOverlays(D2UnitStrc * pUnit, eD2States eState) {
     Engine::Gfx::GFX_AddOverlayToUnit(pUnit, eOverlay2, 3, 0, 0, 0, 0, 0);
 }
 
+// 1.14d mac: 00126814
 static void STATES_ResetUnitGfxAndMode(D2UnitStrc * pUnit) {
     Engine::Gfx::GFX_FreeAllModesGfxInfo(pUnit);
     if (pUnit) {
@@ -1015,6 +1051,7 @@ void __fastcall STATES_SetStateOnUnit(D2UnitStrc * pUnit, eD2States eState) {
 
 // Removes eState from pUnit: if a matching stat-list exists, removes and recalculates stats then frees it, plays offsound, clears the state bit, updates color-shift, adds the removerlay overlay (random 1-of-N selection), removes overlay[0..1], and if transform!=0 resets gfx/anim mode. Calls UpdateAnimSpeed at the end.
 // @sourcefile .\UNIT\PlrSkills.cpp
+// 1.14d mac: 0012687f
 void __fastcall PLRSKILLS_RemoveStateFromUnit(D2UnitStrc * pUnit, eD2States eState) {
     eD2States eFoundState;
     uint32_t nRandom1ofN;
@@ -1081,6 +1118,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 // @sourcefile .\UNIT\PlrSkills.cpp
+// 1.14d mac: 00126a61
 D2StatListExStrc * __fastcall NET_D2GS_CLIENT_HandleAddSTatUnit(D2UnitStrc * pUnit, D2StatListExStrc * pStatList, eD2States eState, eD2UnitStat eUnitStat, eD2Skills eSkill, uint32_t nLayer) {
     if (!pUnit) {
       return nullptr;
@@ -1176,6 +1214,7 @@ void __fastcall STATES_DispatchSetFunc(D2UnitStrc * pUnit, eD2States eState) {
 }
 
 // Dispatches the removal function for a state being stripped from pUnit. Looks up the state's remfunc index in D2StatesTxt, bounds-checks against STATESREMFUNC table (max 0x1e entries), calls the matching removal callback if non-null, then removes any unit-event of type 1 tied to the state if a matching stat-list exists. Validates pUnit non-null and eState in-range before any action.
+// 1.14d mac: 00126d1a
 void __fastcall STATES_DispatchRemFunc(D2UnitStrc * pUnit, eD2States eState) {
     // Static local variables (originally global data)
     static D2StatesRemFunc STATESREMFUNC[30] = {
@@ -1230,6 +1269,7 @@ void __fastcall STATES_DispatchRemFunc(D2UnitStrc * pUnit, eD2States eState) {
     CUnitEvent::CUNITEVENT_RemoveByTypeAndState(pUnit, 1, eState);
 }
 
+// 1.14d mac: 00126db2
 int32_t __fastcall PLRSKILLS_CanUseSkillCheck(D2UnitStrc * pUnit, D2SkillStrc * pSkill) {
     uint32_t nMaxEntries;
     int32_t nCanUse = D2Common::Skills::SKILLS_CanUseSkill(pUnit, pSkill);

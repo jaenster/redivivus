@@ -65,6 +65,7 @@ static int32_t gnLoadScreenAnimFrame = 0; D2_STATIC_GUARD(gnLoadScreenAnimFrame,
 
 namespace D2Client { namespace UI { namespace Draw {
 
+// 1.14d mac: 000f99cb
 void __stdcall LoadingsScreen() {
     char szPath[260];
     ui::CleanupAfterLoadingAct();
@@ -234,6 +235,7 @@ skip_toggle:
     return;
 }
 
+// 1.14d mac: 000f4beb
 void __stdcall InitializeUI() {
     D2UnitStrc* pPlayer;
     int bIsActive;
@@ -422,6 +424,7 @@ void __stdcall InitializeUI() {
     exit(-1);
 }
 
+// 1.14d mac: 000f5410
 void __stdcall FreeDraw() {
     BOOL bWasGameUiOpen = GFX_bShowUIFlag.Game;
     BOOL bIsExpansion = Fog::D2CheckExpansionGame();
@@ -486,7 +489,11 @@ void __stdcall FreeDraw() {
       DC6_EnteredAreaName = 0;
     }
 
+#if !defined(_WIN32) && D2_OS_MAC
+    CmdTbl::CMD_DisableKeyConfigMode();
+#else
     CmdTbl::CMD_ExitKeyConfigMode();
+#endif
     EscMenu::ESCMENU_Shutdown();
     ui::CONTROLCONFIG_Cleanup();
 }
@@ -495,6 +502,7 @@ void __stdcall FreeDraw() {
 // All 38 UI panels: inventory, stats, skills, menus, tooltips, automap, chat.
 // GFX_bShowUIFlag controls visibility. UI drawn in screen space (not world).
 // EDI is not an argument: never read; the callee DRAW_UI_NPC_INTERACTION does not take it either.
+// 1.14d mac: 000f76ce
 void __fastcall DRAW_UI(D2GameViewStrc * pGameView) {
     uint32_t eBorderType;
     int bIsActive;
@@ -756,16 +764,19 @@ void __fastcall CLIENT_AdjustMemoryBudget(D2PoolManagerStrc * pMemory, int32_t b
     Engine::Gfx::GFX_InitCofSystem(0x200000);
 }
 
+// 1.14d mac: 0005d2d3
 void __fastcall GFX_ShutdownSpriteCacheAndCofSystem(int32_t nMemoryPoolHandle) {
     D2CMP::SRC::SpriteCache::SPRITECACHE_Init(nMemoryPoolHandle);
     D2CMP::SRC::SpriteCache::SPRITECACHE_Shutdown(nMemoryPoolHandle);
     Engine::Gfx::GFX_ShutdownCofSystem();
 }
 
+// 1.14d mac: 0005d2fa
 void __fastcall DRAW_NoOp(int32_t nScreenMode) {
 
 }
 
+// 1.14d mac: 000d2dda
 void __stdcall DRAW_PfHandlerCallback_CloseActivePanels(D2UIMouseMsgStrc * pMsg) {
     ui::UI_CloseActivePanels(1, 0);
 }

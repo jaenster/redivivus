@@ -9,7 +9,13 @@
 #include "Source/D2Headers/d2_platform.h"
 #include "Source/Fog/Memory.data.h"
 #include "Source/D2Headers/D2Arch.h"
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac layer's critical section is a pthread mutex (0x2c bytes, not 0x18).
+static_assert(sizeof(void*) != 4 || sizeof(D2MemoryManagerStrc) == 0xd858, "the pool system is cleared whole: 0xd858 bytes on 32-bit");
+#endif
+#if !D2_OS_MAC
 static_assert(sizeof(void*) != 4 || sizeof(D2MemoryManagerStrc) == 0xbea4, "the pool system is cleared whole: 0xbea4 bytes on 32-bit");
+#endif
 static_assert(sizeof(void*) != 4 || sizeof(D2PoolBlockStrc) == 0x18, "malloc(... + sizeof(D2PoolBlockStrc)): the 32-bit layout must be the 0x18 bytes 1.14d allocates");
 
 #define DEFAULT_SECURITY_COOKIE 0xBB40E64E
@@ -53,6 +59,8 @@ D2MemoryManagerStrc pGlobalPoolSystem = {0}; D2_GLOBAL_GUARD(pGlobalPoolSystem, 
 
 namespace Fog { namespace Memory {
 
+// The 1.14d Mac binary has no out-of-memory report: its memory status is the Gestalt value LOGFILE_StoreGameStartupInfo prints.
+#if !D2_OS_MAC
 void OutOfMemoryHandler(char * format, ...) {
     va_list __va;
     va_start(__va, format);
@@ -78,6 +86,7 @@ void OutOfMemoryHandler(char * format, ...) {
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "available virtual:  %s", szAvailVirtual);
     Src::LogManager::LOGMANAGER_TraceToModuleLog("", "");
 }
+#endif
 
 static int32_t ComputeSizeClassIndex(int32_t nSize) {
     if (nSize <= 0x10) {
@@ -559,6 +568,7 @@ void __fastcall Free(D2PoolManagerStrc * pMemory, void * * pStruct, char * szFil
     FreeTrackedAllocation(pManager, *pStruct, szFile, Line0);
 }
 
+// 1.14d mac: 002f33f5
 void InitializeMemoryManagers(D2PoolManagerStrc * pMemory) {
     D2PoolBlockStrc* _Memory;
     D2PoolBlockStrc* pNextBlock;
@@ -610,6 +620,7 @@ void InitializeMemoryManagers(D2PoolManagerStrc * pMemory) {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pManager->pSync);
 }
 
+// 1.14d mac: 002f33f0
 void FreeMemoryPool(D2PoolManagerStrc * pMemory) {
     void* pBlockHeader;
     D2PoolBlockStrc* pNextBlock;
@@ -694,7 +705,9 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
       if ((int)pGlobalPoolSystem.nManagers >= 8) {
         /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&pGlobalPoolSystem.pSync);
         OutOfMemoryHandler("Insufficient pre-allocated pool systems");
+#if !D2_OS_MAC
         /* ULONG_PTR * lpArguments for RaiseException */ /* DWORD nNumberOfArguments for RaiseException */ /* DWORD dwExceptionFlags for RaiseException */ /* DWORD dwExceptionCode for RaiseException */ RaiseException(0xe0000001, 0, 0, nullptr);
+#endif
         return;
       }
 
@@ -779,6 +792,7 @@ void InitializePoolSystem(D2PoolManagerStrc * * pPoolManager, char * szName, int
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(lpCriticalSection);
 }
 
+// 1.14d mac: 002f33fa
 void SetPoolIdForMemoryManager(D2PoolManagerStrc * pMemory, int32_t nPoolId) {
     if (!pMemory) {
       pMemory = pGlobalPoolSystem.pManagers;
@@ -952,6 +966,7 @@ void __fastcall FOG_SetServerMemHeap(pfnBlizzardError pfnFunc) {
     gpServerMemHeap = (uint32_t)(uintptr_t)pfnFunc;
 }
 
+// 1.14d mac: 002f3336
 void * __fastcall AllocClientMemory(size_t nAllocSize, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemory = Memory::Alloc(nullptr, nAllocSize, szFile, nLine);
     if (!pMemory) {
@@ -961,6 +976,7 @@ void * __fastcall AllocClientMemory(size_t nAllocSize, char * szFile, int32_t nL
     return pMemory;
 }
 
+// 1.14d mac: 002f333f
 BOOL __fastcall FreeClientMemory(void * pMemoryToFree, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemPtr = pMemoryToFree;
     Memory::Free(nullptr, &pMemPtr, szFile, nLine);
@@ -977,6 +993,7 @@ void * __fastcall ReAllocClientMemory(void * pMemory, size_t nSize, char * szFil
 }
 
 // Allocates server-side memory from the pool manager. Returns void* to allocated memory. Calls FOG_ErrorHandler on allocation failure.
+// 1.14d mac: 002f3348
 void * __fastcall AllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, size_t nSize, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemory = Memory::Alloc(gpServerMemHeap ? (D2PoolManagerStrc*)pPoolManagerStrc : nullptr, nSize, szFile, nLine);
     if (!pMemory) {
@@ -986,6 +1003,7 @@ void * __fastcall AllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, size_t
     return pMemory;
 }
 
+// 1.14d mac: 002f338c
 BOOL __fastcall FreeServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void * pMemoryToFree, char * szFile, int32_t nLine, int32_t nNull) {
     void* pMemPtr = pMemoryToFree;
     Memory::Free(gpServerMemHeap ? (D2PoolManagerStrc*)pPoolManagerStrc : nullptr, &pMemPtr, szFile, nLine);
@@ -993,6 +1011,7 @@ BOOL __fastcall FreeServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void * pM
 }
 
 // Reallocates server-side memory to a new size. Returns void* to reallocated memory block. Calls FOG_ErrorHandler on reallocation failure.
+// 1.14d mac: 002f33b7
 void * __fastcall ReAllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void * pMemory, size_t nNewSize, char * szFile, int nLine, int nUnused) {
     void* pResult = ReAlloc(gpServerMemHeap ? (D2PoolManagerStrc*)pPoolManagerStrc : nullptr, pMemory, nNewSize, szFile, nLine);
     if (!pResult) {
@@ -1001,5 +1020,18 @@ void * __fastcall ReAllocServerMemory(D2PoolManagerStrc * pPoolManagerStrc, void
 
     return pResult;
 }
+
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac binary keeps two empty memory-manager hooks that return 0; MSVC folded them away.
+// 1.14d mac: 002f33e9
+int32_t MEMORY_HookReturnsZeroA() {
+    return 0;
+}
+
+// 1.14d mac: 002f33ff
+int32_t MEMORY_HookReturnsZeroB() {
+    return 0;
+}
+#endif
 
 }} // namespace Fog::Memory

@@ -95,6 +95,7 @@ static uint16_t pBetaRealmNames[7][256] = {0}; D2_STATIC_GUARD(pBetaRealmNames, 
 
 namespace D2Launch { namespace CharSel {
 
+// 1.14d mac: 002c0e4c
 static BOOL CHARSEL_FindRealmByName(char * szText) {
     for (int i = 0;; i++) {
       char* szRealmName = i < MainMenus::MAINMENU_GetRealmCount() ? MainMenus::MAINMENU_GetRealmName(i) : nullptr;
@@ -109,6 +110,7 @@ static BOOL CHARSEL_FindRealmByName(char * szText) {
 
 // Looks up SStrHash(szName, 0, 0) in the gpRealmCharListCache list (entry +0 hash, +4 value, +8 expiry tick, +0xc next) and returns the cached data copy (entry +4, as stored by CHARSEL_CacheRealmData) of the first entry whose hash matches and whose expiry tick is >= GetTickCount(); 0 if none.
 // Provenance: asm 00437a70..00437aa8; unreferenced in 1.14d.
+// 1.14d mac: 002bc7d4
 void * __fastcall CHARSEL_GetCachedRealmData(char * szName) {
     uint32_t nHash = Storm::Source::SSTR::SStrHash(szName, 0, 0);
     DWORD dwNowTick = GetTickCount();
@@ -128,6 +130,7 @@ void * __fastcall CHARSEL_GetCachedRealmData(char * szName) {
 }
 
 // @sourcefile .\Src\CharSel.cpp
+// 1.14d mac: 002bc82c
 void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, uint32_t nDataSize) {
     void* pCopy;
     DWORD dwTick;
@@ -157,6 +160,7 @@ void __fastcall CHARSEL_CacheRealmData(char * szRealmName, void * pData, uint32_
 }
 
 // @sourcefile .\Src\CharSel.cpp
+// 1.14d mac: 002bc960
 void __stdcall CHARSEL_FreeCachedRealmData() {
     D2RealmCharListCacheEntryStrc* pObject = gpRealmCharListCache;
     while (pObject) {
@@ -211,6 +215,7 @@ static void CHARSEL_SelectRealmInDropdown(char * szText) {
     }
 }
 
+// 1.14d mac: 002bd0b6
 char * __stdcall GetPreferedRealm() {
     return PreferredClosedRealm;
 }
@@ -265,6 +270,7 @@ void __fastcall Unreferenced_00437f30(char * pszFilename) {
     *pcVar2 = '\0';
 }
 
+// 1.14d mac: 002c137d
 static void CHARSEL_GetClassNameString(int nClassId, uint16_t * wszText) {
     uint16_t* pwszName;
     switch (nClassId) {
@@ -319,6 +325,7 @@ static BOOL __stdcall CHARSEL_ClassHasAlternateDeath(int nPlayerClass) {
 }
 
 // @sourcefile .\Src\CharSel.cpp
+// 1.14d mac: 002bd155
 void __stdcall CHARSEL_DestroySelectedChar() {
     if (!gpCharSelPendingEntry) {
       return;
@@ -746,6 +753,7 @@ void __stdcall DRAW_LocalCharsInSelectionScreen0() {
 }
 
 // @sourcefile .\Src\CharSel.cpp
+// 1.14d mac: 002bd359
 static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharacterName, char * aSaveData, uint32_t dwRealmParam, FILETIME ftLastWriteTime) {
     int nEquipIndexPrev;
     D2CharSelCompStrc* pCharSelComp;
@@ -943,6 +951,7 @@ static BOOL __stdcall SAVEFILE_ParseSaveData(char * szRealmName, char * szCharac
 }
 
 // @sourcefile .\Src\CharSel.cpp
+// 1.14d mac: 002bd0c7
 void __stdcall CHARSEL_DestroyAllCharEntries() {
     D2CharSelStrc* pMemoryToFree = D2CharSelStrcFirst;
     while (pMemoryToFree) {
@@ -968,6 +977,7 @@ void __stdcall CHARSEL_DestroyAllCharEntries() {
     gpCharSelPendingEntry = 0;
 }
 
+// 1.14d mac: 002bd1c3
 int __fastcall Unreferenced_00438f40(char * szName) {
     int nLen = (int)strlen(szName);
     if (nLen >= 2 && nLen <= 15 && szName[nLen - 1] != '-' && *szName != '_') {
@@ -1071,6 +1081,7 @@ int __stdcall CHARSEL_UpdateSelectionExpansion() {
 }
 
 // @sourcefile .\Src\CharSel.cpp
+// 1.14d mac: 002bdd54
 BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
     uint16_t* pwszLocaleStr;
     D2CharSelCompStrc* pCharSelComp;
@@ -1282,6 +1293,7 @@ BOOL __stdcall CHARSEL_UpdateSelectedCharDisplay() {
     return 1;
 }
 
+// 1.14d mac: 002be786
 void __fastcall UIMENU_SelectDifficultySinglePlayerOrTcpip(int32_t nCharLevel, int32_t bExpansion) {
     MainMenus::FORMS_DestroyList();
     D2ControlStrc* pFormControl = MainMenus::FORMS_CreateAnyFormFromList(0xac);
@@ -1304,6 +1316,7 @@ void __fastcall UIMENU_SelectDifficultySinglePlayerOrTcpip(int32_t nCharLevel, i
     MainMenus::FORMS_CreateAnyFormFromList(0xad);
 }
 
+// 1.14d mac: 002bda5d
 BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
     int nCharWalkIdx;
     BOOL bIsExpansion;
@@ -1391,6 +1404,7 @@ BOOL __stdcall SelectCharHandler(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002be8ab
 void __fastcall UIMENU_CALLBACK_SetDificultySingleplayerTcpIp(D2ControlMsg * pControlMsg, int byDifficulty) {
     char szRealmName[256];
     if (nSelectedCharIndex == -1) {
@@ -1418,21 +1432,25 @@ void __fastcall UIMENU_CALLBACK_SetDificultySingleplayerTcpIp(D2ControlMsg * pCo
     MainMenus::SelectedCharBnetSingleTcpIp(pSelectedChar, pSelectedChar->nCharacterFlags, pSelectedChar->ePlayerClassID, szRealmName);
 }
 
+// 1.14d mac: 002be97a
 BOOL __stdcall UIMENU_Callback_NormalButtonSingleplayerTcpIp(D2ControlMsg * pControlMsg) {
     UIMENU_CALLBACK_SetDificultySingleplayerTcpIp(pControlMsg, 0);
     return 1;
 }
 
+// 1.14d mac: 002be997
 BOOL __stdcall UIMENU_Callback_NightmareButtonSingleplayerTcpIp(D2ControlMsg * pControlMsg) {
     UIMENU_CALLBACK_SetDificultySingleplayerTcpIp(pControlMsg, 1);
     return 1;
 }
 
+// 1.14d mac: 002be9b4
 BOOL __stdcall UIMENU_Callback_HellButtonSingleplayerTcpIp(D2ControlMsg * pControlMsg) {
     UIMENU_CALLBACK_SetDificultySingleplayerTcpIp(pControlMsg, 2);
     return 1;
 }
 
+// 1.14d mac: 002be9d1
 BOOL __stdcall MAINMENU_OnPressShowExpansionCreditsPage(D2ControlMsg * pControlMsg) {
     ::D2WinTextBox* pTextBox;
     BOOL bIsExpansionGame = Fog::D2CheckExpansionGame();
@@ -1456,6 +1474,7 @@ BOOL __stdcall MAINMENU_OnPressShowExpansionCreditsPage(D2ControlMsg * pControlM
     return 1;
 }
 
+// 1.14d mac: 002beb09
 BOOL __stdcall MAINMENU_OnPressDestroyFormListIfExpansion(D2ControlMsg * pControlMsg) {
     BOOL BVar1 = Fog::D2CheckExpansionGame();
     if (BVar1) {
@@ -1479,16 +1498,19 @@ void __stdcall UIMENU_AreYouSureWouWantToDeleteThisCharacter() {
     D2Win::Src::D2WinTextBox::SetText(pDVar2, D2Lang::StrTable::strtable::GetLocaleString(0x142b), 0, (bool)0, 0);
 }
 
+// 1.14d mac: 002c01a9
 BOOL __stdcall CHARSEL_OnPressDestroyFormList(D2ControlMsg * pControlMsg) {
     MainMenus::FORMS_DestroyList();
     return 1;
 }
 
+// 1.14d mac: 002c01be
 BOOL __stdcall CHARSEL_OnPressConfirmDeleteCharacter(D2ControlMsg * pControlMsg) {
     UIMENU_AreYouSureWouWantToDeleteThisCharacter();
     return 1;
 }
 
+// 1.14d mac: 002c03a1
 BOOL __stdcall CHARSEL_OnPressScrollCharListUp(D2ControlMsg * pControlMsg) {
     if (g_nCharSelNavigationIndex > 0) {
       g_nCharSelNavigationIndex--;
@@ -1502,6 +1524,7 @@ BOOL __stdcall CHARSEL_OnPressScrollCharListUp(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002c03e3
 BOOL __stdcall CHARSEL_OnPressScrollCharListDown(D2ControlMsg * pControlMsg) {
     if (g_nCharSelNavigationIndex + gnCharSelScreenSlotCount < TotalCurrentChars) {
       if (nSelectedCharIndex < TotalCurrentChars - 1) {
@@ -1516,6 +1539,7 @@ BOOL __stdcall CHARSEL_OnPressScrollCharListDown(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002c0434
 BOOL __stdcall MAINMENU_CharSelScrollbarCallback(D2ControlStrc * pControl) {
     int nScrollPos = D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar);
     if (gpCharSelScrollbar == nScrollPos) {
@@ -1540,6 +1564,7 @@ void __stdcall CHARSEL_ScrollCharList(int32_t nScrollDelta) {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetScrollbarPosition(gpCtlCharSelScrollbar, D2Win::Src::D2WinTextBox::D2WINTEXTBOX_RefreshScrollbar(gpCtlCharSelScrollbar) + nScrollDelta);
 }
 
+// 1.14d mac: 002c049e
 BOOL __stdcall CHARSEL_HandleKeyNavExpansion(D2ControlMsg * pKeyMsg) {
     uint32_t nNewSelectedIndex;
     uint32_t nCandidateIndex;
@@ -1670,6 +1695,7 @@ BOOL __stdcall CHARSEL_HandleKeyNavExpansion(D2ControlMsg * pKeyMsg) {
     return 1;
 }
 
+// 1.14d mac: 002c06a4
 BOOL __stdcall CHARSEL_HandleKeyNavClassic(D2ControlMsg * pKeyMsg) {
     if (Fog::D2CheckExpansionGame()) {
       return CHARSEL_HandleKeyNavExpansion(pKeyMsg);
@@ -1716,6 +1742,7 @@ BOOL __stdcall CHARSEL_HandleKeyNavClassic(D2ControlMsg * pKeyMsg) {
     return 0;
 }
 
+// 1.14d mac: 002c09ca
 static void CHARSEL_SetStatusMessage(int32_t nStatusCode) {
     uint16_t wLocaleStrId;
     switch (nStatusCode) {
@@ -1747,6 +1774,7 @@ static void CHARSEL_SetStatusMessage(int32_t nStatusCode) {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_SetLineColor(gpWinTextBoxRealmSelect, -1, 4);
 }
 
+// 1.14d mac: 002c0961
 void __stdcall CHARSEL_ShowWaitTimeout() {
     D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelStatusTextBox);
     DWORD dwCurrentTick = GetTickCount();
@@ -1757,6 +1785,7 @@ void __stdcall CHARSEL_ShowWaitTimeout() {
     D2Win::Src::D2WinTextBox::SetText(gpCharSelStatusTextBox, D2Lang::StrTable::strtable::GetLocaleString(0x2b39), 4, false, 0);
 }
 
+// 1.14d mac: 002c0c44
 BOOL __stdcall CHARSEL_InitRealmSelection() {
     uint16_t wErrorStrId;
     gnCharSelBNetLoadState = 0;
@@ -1805,6 +1834,7 @@ fail:
 }
 
 // @sourcefile .\Src\CharSel.cpp
+// 1.14d mac: 002c11e5
 int __stdcall CHARSEL_CreateCharEntry(uint16_t * wszCharName, uint16_t * wszCommandString, int32_t nEntryType, uint8_t ePlayerClass) {
     int nAnimMode;
     D2CharSelStrc* pCharSel = D2_NEW_AT(D2CharSelStrc, ".\\Src\\CharSel.cpp", 0xbaf);
@@ -1860,6 +1890,7 @@ int __stdcall CHARSEL_CreateCharEntry(uint16_t * wszCharName, uint16_t * wszComm
     return 1;
 }
 
+// 1.14d mac: 002c0bdd
 void __stdcall CHARSEL_AddCreateNewEntry() {
     uint16_t* pwszTitle = D2Lang::StrTable::strtable::GetLocaleString(0x1419);
     uint16_t wCommandStrId = 0x141b;
@@ -1910,6 +1941,7 @@ void __stdcall CHARSEL_ClearCharDetailUI() {
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpControlCharSelImage->sControl, 0);
 }
 
+// 1.14d mac: 002bca45
 void __stdcall CHARSEL_ResetCharListUI() {
     BOOL bDownArrowVisible = TotalCurrentChars <= 0 || nSelectedCharIndex <= gnCharSelLoadMoreEntryIndex ? 0 : 1;
     D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelDownArrow->sControl, bDownArrowVisible);
@@ -1976,6 +2008,7 @@ void __stdcall UIMENU_ChangeHavingMultipleRealmsAsia123() {
     gnCharSelSelectedIndex = 1;
 }
 
+// 1.14d mac: 002bc9e2
 BOOL __stdcall ChangeClosedRealmChoice(D2ControlMsg * pControlMsg) {
     Storm::Source::SSTR::SStrCopy(PreferredClosedRealm, PreferedClosedRealm2, 0x7fffffff);
     Storm::Source::SReg::SRegSaveString("Diablo II", "Preferred Realm", 0, PreferredClosedRealm);
@@ -1988,6 +2021,7 @@ BOOL __stdcall ChangeClosedRealmChoice(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002bcdf8
 BOOL __stdcall CHARSEL_OpenRealmChangeDialog(D2ControlMsg * pControlMsg) {
     Storm::Source::SSTR::SStrCopy(PreferedClosedRealm2, PreferredClosedRealm, 0x7fffffff);
     UIMENU_ChangeHavingMultipleRealmsAsia123();
@@ -2036,6 +2070,7 @@ BOOL __stdcall CHARSEL_HandleCharListClick(D2ControlMsg * pControlMsg) {
     return 1;
 }
 
+// 1.14d mac: 002c0a8a
 void __stdcall CHARSEL_ParseRealmCharList(char * szRealmName, char * szText, int32_t bShouldCache) {
     char cVar1;
     uint16_t* pwszHeader;
@@ -2104,6 +2139,7 @@ void __stdcall CHARSEL_ParseRealmCharList(char * szRealmName, char * szText, int
     CHARSEL_UpdateSelectedCharDisplay();
 }
 
+// 1.14d mac: 002c07c4
 BOOL __stdcall CHARSEL_OnPressPumpRealmCharListLoad(D2ControlMsg * pControlMsg) {
     char* szText;
     switch (gnCharSelBNetLoadState) {
@@ -2185,6 +2221,7 @@ static void CHARSEL_RequestRealmCharList(char * szRealmName) {
     gszPendingRealmName = szRealmName;
 }
 
+// 1.14d mac: 002bcb7c
 void __fastcall CHARSEL_LoadCharList(char * szText) {
     gnCharSelLoadedCharCount = 0;
     if (MainMenus::OogCurrentCharSelectionMode == CHAR_SELECTION_BNET) {
@@ -2432,5 +2469,34 @@ namespace D2Launch { namespace CharSel {
 // Initialized scalars
 
 D2CharSelStrc * D2CharSelStrcFirst = 0; D2_GLOBAL_GUARD(D2CharSelStrcFirst, "D2Launch::CharSel::D2CharSelStrcFirst");
+
+#if !defined(_WIN32) && D2_OS_MAC
+// 1.14d mac: 002bcb53
+BOOL __stdcall CHARSEL_ReloadCharListForPreferredRealm() {
+    CHARSEL_LoadCharList(PreferredClosedRealm);
+    CHARSEL_ResetCharListUI();
+    return 1;
+}
+
+// 1.14d mac: 002bcce5
+void __stdcall CHARSEL_ClearSelectionScreen() {
+    CHARSEL_DestroySelectedChar();
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpaCharSelectDisplay);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelDeleteButton);
+    D2Win::Src::D2WinTextBox::D2WINTEXTBOX_ClearAllLines(gpCharSelExpansionToggle);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelDownArrow->sControl, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlCharSelDeleteButton, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCharSelExitButton, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCtlCharSelOKButton->sControl, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpCtlCharSelectGameTypeBtn, 0);
+    D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpaCharSelCharacterList->sControl, 0);
+    if (!Fog::D2CheckExpansionGame()) {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlActive(&gpControlCharSelImage->sControl, 0);
+    } else {
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(&gpCharSelScreenControl->sControl, 0);
+      D2Win::Src::D2WinMain::D2WINMAIN_SetControlVisible(gpControlCharSelArrows, 0);
+    }
+}
+#endif
 
 }} // namespace D2Launch::CharSel

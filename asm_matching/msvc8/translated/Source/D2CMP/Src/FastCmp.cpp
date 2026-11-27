@@ -207,6 +207,7 @@ uint8_t * __fastcall FASTCMP_SkipRLERows(uint8_t * pbRLEData, int32_t nRowsToSki
     return pbRLEData;
 }
 
+// 1.14d mac: 0012ed3a
 void __fastcall FASTCMP_DecompressRLE(uint8_t * pImageHeader, uint8_t * pbDstBuffer, int32_t nRowCount, int32_t nDstPitch) {
     uint8_t* pbNextRow = pbDstBuffer + nDstPitch;
     while (true) {
@@ -233,6 +234,7 @@ void __fastcall FASTCMP_DecompressRLE(uint8_t * pImageHeader, uint8_t * pbDstBuf
     }
 }
 
+// 1.14d mac: 0012ed9b
 void __fastcall FASTCMP_DecompressRLEWithClip(uint8_t * pImageHeader, uint8_t * nDstPitch, int32_t nRowCount, int32_t pbDstBuffer, int32_t nDrawStartX, int32_t nDrawEndX, int32_t nImageWidth) {
     int32_t nRowStartX = nDrawStartX;
     uint8_t* pNextRowBase = nDstPitch + pbDstBuffer;
@@ -276,6 +278,7 @@ void __fastcall FASTCMP_DecompressRLEWithClip(uint8_t * pImageHeader, uint8_t * 
     }
 }
 
+// 1.14d mac: 0012ee21
 void __fastcall FASTCMP_DecompressRLEWithBlend(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRows, int32_t nStride, uint8_t * nBlendTableBase, uint8_t * nBlendTableOffset) {
     uint8_t* pbNextRow = pbDst + nStride;
     for (;;) {
@@ -331,6 +334,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend(uint8_t * pbSrcStream, uint8_t * 
     }
 }
 
+// 1.14d mac: 0012f108
 void __fastcall FASTCMP_DecompressRLEWithBlendAndClip(uint8_t * pRLEData, uint8_t * nDstBase, int32_t nRows, int32_t nStride, int32_t nClipStartX, int32_t nDrawStartX, int32_t nDrawEndX, uint8_t * pPaletteTrans, uint8_t * nBlendTableOffset) {
     uint8_t bRLEToken;
     int nRunLen;
@@ -432,6 +436,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlendAndClip(uint8_t * pRLEData, uint8_
     }
 }
 
+// 1.14d mac: 0012f41c
 void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbSrcStream, uint8_t * pDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable1, uint8_t * pLookupTable2) {
     uint8_t* pbNextRow = pDst + nDstPitch;
     for (;;) {
@@ -487,6 +492,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup2(uint8_t * pbSrcStream, uint8_t 
     }
 }
 
+// 1.14d mac: 0012f64c
 void __fastcall FASTCMP_DecompressRLEWithLookup2AndClip(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pLookupTable1, uint8_t * pLookupTable2) {
     uint8_t bRLEToken;
     int nRunLen;
@@ -742,6 +748,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip(uint8_t * pbSrcStream, u
     }
 }
 
+// 1.14d mac: 0012fcd8
 void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pLookupTable, uint8_t * pBlendTable) {
     uint8_t* pbNextRow = pbDst + nDstPitch;
     for (;;) {
@@ -797,6 +804,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend2(uint8_t * pbSrcStream, uint8_t *
     }
 }
 
+// 1.14d mac: 0012ffc0
 void __fastcall FASTCMP_DecompressRLEWithBlend2AndClip(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pLookupTable, uint8_t * pBlendTable) {
     uint8_t bRLEToken;
     int nRunLen;
@@ -1051,6 +1059,7 @@ void __fastcall FASTCMP_DecompressRLEWithLookup1AndClip_v2(uint8_t * pbSrcStream
     }
 }
 
+// 1.14d mac: 001306cc
 void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbSrcStream, uint8_t * pbDst, int32_t nRowCount, int32_t nDstPitch, uint8_t * pBlendTable) {
     uint8_t* pbNextRow = pbDst + nDstPitch;
     for (;;) {
@@ -1106,6 +1115,7 @@ void __fastcall FASTCMP_DecompressRLEWithBlend3(uint8_t * pbSrcStream, uint8_t *
     }
 }
 
+// 1.14d mac: 0013093c
 void __fastcall FASTCMP_DecompressRLEWithBlend3AndClip(uint8_t * pbSrcStream, uint8_t * pDstBuffer, int32_t nRowCount, int32_t nDstPitch, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint8_t * pBlendTable) {
     int nRunLen;
     uint32_t nClipCount;
@@ -1215,6 +1225,7 @@ BOOL __stdcall D2GFX_ToggleLowQuality_Unref_00608520() {
 }
 
 // Decompress RLE image data - dispatcher to choose optimal decompression path
+// 1.14d mac: 00130c01
 void __fastcall FASTCMP_DecompressRLEDispatcher(uint8_t * pImageHeader, uint8_t * pbDecompressedOutput, int32_t nDrawX, int32_t nClipLeft, int32_t nClipRight, uint32_t nDstPitch, int32_t nStartRow, int32_t nRowCount, uint8_t * pLookupTable1, uint8_t * pBlendTable, uint8_t * pLookupTable2) {
     uint8_t* pbRLEData;
     uint32_t nCopyCount;

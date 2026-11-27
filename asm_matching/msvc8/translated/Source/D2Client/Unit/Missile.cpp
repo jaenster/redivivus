@@ -285,6 +285,7 @@ static BOOL __stdcall MISSILE_CheckLineOfSight(int32_t nDeltaX, D2RoomStrc * pRo
     return !D2Common::Collision::TestCollision(pRoom, &ptSource, &ptTarget, 4);
 }
 
+// 1.14d mac: 0010885a
 void __fastcall MISSILE_InitializeVisual(D2UnitStrc * pUnit, intptr_t pSourceUnit) {
     uint32_t nRandFrame;
     int nClassId;
@@ -338,6 +339,7 @@ static int32_t MISSILE_GetPoisonNovaRadius(D2MissilesTxt * pMissileTxtRaw, int32
     return 1;
 }
 
+// 1.14d mac: 0010e7ce
 int32_t __fastcall MISSILE_CltHitFn10_ProgOverlay(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     if (!(pTarget && pUnit)) {
       return 1;
@@ -445,6 +447,7 @@ static BOOL MISSILE_RetargetClosest(D2UnitStrc * pUnit) {
 }
 
 // Client-side hit function for missile type 013 (homing/seeking). Returns 1 (no-hit) if owner is missing/active, missile is in a town room, or targeting flags are ambiguous. If target-lock flag (bit 1) is set and the colliding target differs from the locked target, returns 0 (miss). If retarget flag (bit 1 of nTargetFlags) is set and no frames remain, calls MISSILE_RetargetClosest and returns result. Used as CltHitFunc dispatch entry.
+// 1.14d mac: 0010ea24
 int32_t __fastcall MISSILE_CltHitFn13_Homing(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     BOOL bIsInTown;
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
@@ -482,6 +485,7 @@ int32_t __fastcall MISSILE_CltHitFn13_Homing(D2UnitStrc * pUnit, D2UnitStrc * pT
     return 1;
 }
 
+// 1.14d mac: 0011072b
 int32_t __fastcall MISSILE_CltHitFn34_MephistoDoNotDraw(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (pOwner) {
@@ -491,6 +495,7 @@ int32_t __fastcall MISSILE_CltHitFn34_MephistoDoNotDraw(D2UnitStrc * pUnit, D2Un
     return 1;
 }
 
+// 1.14d mac: 00110960
 void __fastcall MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall(D2UnitStrc * pUnit, intptr_t nParam) {
     int nDistance;
     if (!pUnit) {
@@ -514,6 +519,7 @@ void __fastcall MISSILE_SetPathFromTotalFrames_ForCatapultChargedBall(D2UnitStrc
 }
 
 // Client-side hit function for missile type 046 (spiral sub-missile burst). On collision, spawns a circular grid of sub-missiles (HitSubMissile1) centred on the missile's position using SKILLS_CreateMissilespiralGrid. Sub-missile count = (level-1)*HitPar2+HitPar1, falling back to skill calc[3] if less than 1. Uses MISSILES_SetPathFromTotalFramesCallbackAlt as the path callback. Always returns 1.
+// 1.14d mac: 001109e0
 int32_t __fastcall MISSILE_CltHitFn46_CatapultChargedBall(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -558,6 +564,7 @@ int32_t __fastcall MISSILE_CltHitFn46_CatapultChargedBall(D2UnitStrc * pUnit, D2
     return 1;
 }
 
+// 1.14d mac: 0011104f
 int32_t __fastcall MISSILE_CltHitFn51_LightTrailJavelin(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
     int nClassId;
@@ -582,6 +589,7 @@ int32_t __fastcall MISSILE_CltHitFn51_LightTrailJavelin(D2UnitStrc * pUnit, D2Un
     return 1;
 }
 
+// 1.14d mac: 0011170e
 int32_t __fastcall MISSILE_CltHitFn61_WorldStoneShake(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     if (!pTarget) {
       GAME::View::SHAKE_Reset();
@@ -591,10 +599,12 @@ int32_t __fastcall MISSILE_CltHitFn61_WorldStoneShake(D2UnitStrc * pUnit, D2Unit
     return 0;
 }
 
+// 1.14d mac: 0011172d
 void __fastcall LIGHTMAP_SetQualityLevel(int nQualityLastCheck) {
     gnLightmapQualityLastCheck = nQualityLastCheck;
 }
 
+// 1.14d mac: 00111741 D2Client::UNIT::Missile::LIGHTMAP_GetQualityLevel
 int __stdcall LIGHTMAP_GetQualityLevel() {
     return gnLightmapQualityLastCheck;
 }
@@ -615,6 +625,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_2(D2UnitStrc * p) {
     return p->eUnitFlags >> 2 & 1;
 }
 
+// 1.14d mac: 00116233
 static uint32_t __stdcall MISSILE_CanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * pUnit1, D2MissilesTxt * pMissileTxt, D2UnitStrc * pUnit2) {
     if (!FlagBit_D2UnitStrc_eUnitFlags_3(pUnit1)) {
       return 0;
@@ -634,6 +645,7 @@ static uint32_t __stdcall MISSILE_CanHitTarget(D2UnitStrc * pUnit, D2UnitStrc * 
     return 1;
 }
 
+// 1.14d mac: 00116163
 int32_t __fastcall Missiles_SrvDoFuncData_02(D2UnitStrc * pUnit, D2MissileCltCollideCtxStrc * pCtx) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_MONSTER) {
       return 0;
@@ -643,6 +655,7 @@ int32_t __fastcall Missiles_SrvDoFuncData_02(D2UnitStrc * pUnit, D2MissileCltCol
     return (uint32_t)(bCanHit != 0);
 }
 
+// 1.14d mac: 00116113
 int32_t __fastcall Missiles_SrvDoFuncData_01(D2UnitStrc * pUnit, D2MissileCltCollideCtxStrc * pCtx) {
     const int nUnitType = pUnit ? (int)pUnit->eUnitType : -1;
     if (nUnitType == UNIT_MONSTER && D2Common::Stats::StatsEx::STATSEX_GetAlignment(pUnit) == 2) {
@@ -655,6 +668,7 @@ int32_t __fastcall Missiles_SrvDoFuncData_01(D2UnitStrc * pUnit, D2MissileCltCol
     return MISSILE_CanHitTarget(pCtx->pMissile, pUnit, pCtx->pMissileTxt, pCtx->pOwner) != 0;
 }
 
+// 1.14d mac: 0011619d
 int32_t __fastcall Missiles_SrvDoFuncData_03(D2UnitStrc * pUnit, D2MissileCltCollideCtxStrc * pCtx) {
     if ((pUnit && (pUnit->eUnitType == UNIT_PLAYER || pUnit->eUnitType == UNIT_MONSTER)) == 0) {
       return 0;
@@ -664,6 +678,7 @@ int32_t __fastcall Missiles_SrvDoFuncData_03(D2UnitStrc * pUnit, D2MissileCltCol
     return (uint32_t)(bCanHit != 0);
 }
 
+// 1.14d mac: 001161d9
 int32_t __fastcall Missiles_SrvDoFuncData_07(D2UnitStrc * pUnit, D2MissileCltCollideCtxStrc * pCtx) {
     if (pUnit && pUnit->eUnitType == UNIT_MISSILE) {
       int nClassId;
@@ -677,6 +692,7 @@ int32_t __fastcall Missiles_SrvDoFuncData_07(D2UnitStrc * pUnit, D2MissileCltCol
     return 0;
 }
 
+// 1.14d mac: 00111752
 void __fastcall MISSILE_InitMissileUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, int32_t nX, int32_t nY, uint32_t nFlags) {
     int nMissileClassId;
     D2MissilesTxt* pMissileTxt = pUnit && (nMissileClassId = pUnit->nClassId) >= 0 && nMissileClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nMissileClassId : nullptr;
@@ -704,6 +720,7 @@ void __fastcall MISSILE_InitMissileUnit(D2UnitStrc * pUnit, D2RoomStrc * pRoom, 
     pUnit->eUnitFlags = pUnit->eUnitFlags & ~(UNITFLAG_ISVALIDTARGET | UNITFLAG_TARGETABLE) | UNITFLAG_DRAWSHADOW;
 }
 
+// 1.14d mac: 0011187b
 void __fastcall MISSILE_FreeClientMissile(D2UnitStrc * pUnit) {
     D2Common::Units::MissileStream::FreeMissileStream(pUnit);
     D2Common::Units::Missile::FreeMissileData(pUnit);
@@ -745,6 +762,7 @@ static void MISSILE_UpdateLightFlicker(D2UnitStrc * pUnitRaw) {
 }
 
 static inline int GetGUIDInline(D2UnitStrc * pUnit);
+// 1.14d mac: 00114eb3
 int32_t __fastcall MISSILE_CltHitFn40_HealingBolt(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     if (!pTarget) {
       return 1;
@@ -815,6 +833,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) 
 
 namespace D2Client {
 
+// 1.14d mac: 00115abe
 void __fastcall MISSILES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
@@ -823,6 +842,7 @@ void __fastcall MISSILES_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2St
 
 namespace D2Client { namespace UNIT { namespace Missile {
 
+// 1.14d mac: 001083e1
 void __fastcall MISSILE_RemoveClientSide(D2UnitStrc * pUnit) {
     short int sTravelSound;
     if (!pUnit) {
@@ -898,6 +918,7 @@ static void __stdcall MISSILE_CalculatePierceCount(D2UnitStrc * pUnit, D2UnitStr
 }
 
 // Constructs and spawns a missile unit from a D2SkillArgStrc request. Resolves spawn position (explicit X/Y or owner/source unit position), finds the containing room, computes velocity from missiles.txt Vel/VelLev scaled by skill level (with slowmissiles state applied), determines the target (unit, fixed point, or direction next to caster), then creates a UNIT_MISSILE via CreateMissileOrMonster. Sets anim frames/speed, path velocities/acceleration/max-velocity, owner, skill, level, pierce count, lightmap, optional particle/projectile init, plays the travel sound, and dispatches unique-monster mod attacks. Returns the new missile unit, or NULL on any failure (bad txt index, no room, no path). Used by the skill/missile firing pipeline.
+// 1.14d mac: 00106914 D2Client::UNIT::Missile::MakeMissile
 D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
     int nY;
     D2RoomStrc* pRoom;
@@ -1190,6 +1211,7 @@ D2UnitStrc * __fastcall MakeMissile(D2SkillArgStrc * pSkillArg) {
     return pDVar6;
 }
 
+// 1.14d mac: 0010966e
 D2UnitStrc * __fastcall CastAttack(D2UnitStrc * pUnit, eMissilesId nMissileId, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel) {
     D2SkillArgStrc pSkillArg;
     if (!pUnit) {
@@ -1211,6 +1233,7 @@ D2UnitStrc * __fastcall CastAttack(D2UnitStrc * pUnit, eMissilesId nMissileId, i
 // @wasnamed MakeMissile - one name on two different functions.
 // @evidence Builds a D2SkillArgStrc (flags 0x20) then calls 004cd540, which is the real
 // D2SkillArgStrc constructor.
+// 1.14d mac: 0010c7fd
 D2UnitStrc * __fastcall MakeMissileAtXY(D2UnitStrc * pUnit, eMissilesId neMissilesId, int32_t nX, int32_t nY, eD2Skills eSkill, int32_t nSkillLevel) {
     D2SkillArgStrc sSkillArg;
     if (!pUnit) {
@@ -1239,6 +1262,7 @@ D2UnitStrc * __fastcall MakeMissileAtXY(D2UnitStrc * pUnit, eMissilesId neMissil
 }
 
 // Creates a missile of type nMissileId from pUnit's position plus (nOffsetX, nOffsetY), aimed at (nTargetX, nTargetY). If target coords are zero, resolves them via Skills::GetCoordinates. Resolves owner (player/monster direct, or via MISSILE_GetOwnerUnit for other types). Fills D2SkillArgStrc with flags 0x521, skill, level, particle range (default 30), and calls MakeMissile. Returns the new missile unit or null on failure.
+// 1.14d mac: 0010d415
 D2UnitStrc * __fastcall MISSILE_CreateFromUnitWithOffset(D2UnitStrc * pUnit, eMissilesId nMissileId, int32_t nOffsetX, int32_t nOffsetY, uint32_t nTargetX, uint32_t nTargetY, eD2Skills eSkill, int32_t nSkillLevel, int32_t nParticleParam) {
     D2SkillArgStrc sSkillArg;
     if (!pUnit) {
@@ -1285,6 +1309,7 @@ D2UnitStrc * __fastcall MISSILE_CreateFromUnitWithOffset(D2UnitStrc * pUnit, eMi
     return pOwner;
 }
 
+// 1.14d mac: 00115ae3
 D2UnitStrc * __fastcall MISSILE_CreateAtOwnerCoords(D2UnitStrc * pUnit, eMissilesId nMissileId, eD2Skills eSkill, int32_t nSkillLevel) {
     D2SkillArgStrc sSkillArg;
     int nTargetY;
@@ -1320,6 +1345,7 @@ D2UnitStrc * __fastcall MISSILE_CreateAtOwnerCoords(D2UnitStrc * pUnit, eMissile
 }
 
 // Server-side: scatters missiles over a circular area around a source missile/unit (e.g. nova/meteor-rain style effects). Iterates a square grid of half-extent nRadius around the unit's current position, keeping only tiles within radius (distance^2 <= nRadius^2) that are not wall-blocked (TestCollision) and not in town. For each valid tile it advances the unit's RNG seed, picks a random missile id from the pMissileIdArray[nMissileArraySize] (modulo / power-of-two mask), sets up a D2SkillArgStrc (owner, skill id, level, target x/y) and, with probability gated by nChanceThreshold (roll < threshold out of 100), fires MakeMissile. nChanceDivisor!=0 adds a per-tile frame-delay offset (flag 0x8001). Consumes the unit seed for all rolls.
+// 1.14d mac: 00106556
 void __fastcall MISSILE_SpawnAreaOfEffect(D2UnitStrc * pUnit, int32_t * pMissileIds, uint32_t nMissileArraySize, int32_t nRadius, int32_t nChanceDivisor, int32_t nChanceThreshold) {
     BOOL bCollides;
     uint32_t nMissileIdx;
@@ -1425,6 +1451,7 @@ void __fastcall MISSILE_SpawnAreaOfEffect(D2UnitStrc * pUnit, int32_t * pMissile
 }
 
 // Spawns a trailing child missile (nMissileId) at pUnit's current position, inheriting skill/level from the parent. Only fires if pUnit has non-zero 8-direction path flags. Sets nTotalFrames in sSkillArg when nTotalFrames>0 (flag 0x8005), and sets nSubLoopMult = level*2-2. nSubLoopParam>0 ORs in flag 0x8. Handles static/dynamic/null path for position lookup. Used for continuous-trail effects (e.g. Hydra fire, Bone Spirit tail).
+// 1.14d mac: 00107ebb
 void __fastcall MISSILE_CreateTrailMissile(D2UnitStrc * pUnit, eMissilesId nMissileId, int32_t nTotalFrames, int32_t nSubLoopParam) {
     D2SkillArgStrc sSkillArg;
     uint32_t uPathFlags = D2Common::PATH::Path::Get8FlagsFromDynamicPath(pUnit->pPath.pDynamicPath);
@@ -1474,6 +1501,7 @@ void __fastcall MISSILE_CreateTrailMissile(D2UnitStrc * pUnit, eMissilesId nMiss
 }
 
 // Spawns nCount child missiles of type nMissileId at random positions within a square of half-width nRadius centred on the parent missile unit. Only fires on frame 0 or when a seeded RNG check against nSpawnInterval passes. Positions are clamped symmetrically around the centre. The skill argument is initialised from the parent's owner, skill ID, and level; each child is created via MakeMissile.
+// 1.14d mac: 0010807d
 void __fastcall MISSILE_SpawnRandomScatter(D2UnitStrc * pUnit, uint32_t nSpawnInterval, int32_t nCount, int32_t nRadius, eMissilesId nMissileId) {
     uint32_t nRandSpawnCheck;
     uint32_t nRandX;
@@ -1541,6 +1569,7 @@ void __fastcall MISSILE_SpawnRandomScatter(D2UnitStrc * pUnit, uint32_t nSpawnIn
 }
 
 // Spawns one child missile (nMissileId) at a random offset within nRadius around pUnit every nInterval remaining-frames. Seeds pUnit->sSeed from (currentX + remainingFrames) for deterministic randomness, picks random offsets via RANDOM_RandomNumberSelector, and checks COLLIDE_WALL before spawning. Returns the new missile unit or null if interval not due, no owner, no room, or collision blocked. Used for periodic area-scatter effects.
+// 1.14d mac: 00108eaa
 D2UnitStrc * __fastcall MISSILE_CreatePeriodicTrail(D2UnitStrc * pUnit, int32_t nRadius, int32_t nInterval, eMissilesId nMissileId) {
     D2SkillArgStrc sSkillArg;
     if (nInterval <= 0) {
@@ -1585,6 +1614,7 @@ D2UnitStrc * __fastcall MISSILE_CreatePeriodicTrail(D2UnitStrc * pUnit, int32_t 
     return pOwner;
 }
 
+// 1.14d mac: 001090ac
 void __fastcall MISSILE_SetupFallingZPos(D2UnitStrc * pUnit) {
     int nStartZ;
     int nClassId;
@@ -1616,6 +1646,7 @@ void __fastcall MISSILE_SetupFallingZPos(D2UnitStrc * pUnit) {
     return;
 }
 
+// 1.14d mac: 0010ab73
 void __fastcall MISSILE_SetupDescentAnim(D2UnitStrc * pUnit) {
     int nClassId;
     D2MissilesTxt* pMissileTxt;
@@ -1641,6 +1672,7 @@ void __fastcall MISSILE_SetupDescentAnim(D2UnitStrc * pUnit) {
 }
 
 // Spawns a child missile (nMissileId) at a random offset within nRadius tiles of the parent missile pUnit2, using the parent's seed RNG. Avoids spawning exactly at origin by nudging X by +1 if both offsets resolve to zero. Sets the new missile's TargetX/TargetY to the chosen offset and returns the new missile unit pointer.
+// 1.14d mac: 0010b47f
 static D2UnitStrc * __stdcall MISSILE_CreateRandomOffset(D2UnitStrc * pUnit, eMissilesId nMissileId, int32_t nRadius, D2UnitStrc * pUnit2) {
     uint32_t nRandX;
     D2SkillArgStrc sSkillArg;
@@ -1676,6 +1708,7 @@ static D2UnitStrc * __stdcall MISSILE_CreateRandomOffset(D2UnitStrc * pUnit, eMi
 }
 
 // Spawns up to 8 child shatter missiles from a parent missile unit. nCount controls spread range (clamped: spreadRange = nCount*7, max 8 missiles). For each child: calls MakeMissile with the parent's skill/level, then randomises X/Y offset within the spread range and Z offset within MissilesTxt.CltParam2, applies position via SetPosVectorShifted and velocity offset via CltParam1/CltParam3. Used by ice/bone shatter skill effects.
+// 1.14d mac: 0010b966
 void __fastcall MISSILE_CreateMultiShatter(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId nMissileId, int32_t nCount) {
     uint32_t nRandX;
     uint32_t nRandY;
@@ -1717,6 +1750,7 @@ void __fastcall MISSILE_CreateMultiShatter(D2UnitStrc * pUnit, D2UnitStrc * pUni
 }
 
 // Spawns a sub-missile and handles periodic sound/particle effects for a parent missile. Every other frame (or every 16th frame at low levels), spawns 1–4 child missiles via MakeMissile with a random positional offset scaled by skill level. Also triggers CltSubMissile1 shatter and plays ProgSound at frame 0x13B if configured in MissilesTxt.
+// 1.14d mac: 0010bb95
 void __fastcall MISSILE_CreateSubWithSound(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId nMissileId, int nGameFrame, int32_t nLevel) {
     int nPosX;
     int nSpawnCountByLevel;
@@ -1793,6 +1827,7 @@ void __fastcall MISSILE_CreateSubWithSound(D2UnitStrc * pUnit, D2UnitStrc * pUni
 }
 
 // Creates one client-side sub-missile at a random reachable point within nRadius tiles of pUnit2, owned by pUnit. Validates/selects the missile row (optionally randomizing within the row's CltSubMissile1 range via the unit seed). Builds a D2SkillArgStrc (owner, skill id, level from pUnit2's missile), then up to 4 times rolls a random (x,y) offset inside the circle, resolves the room and checks player-missile collision; on a clear tile it spawns the sub-missile via MakeMissile and attaches a client particle with pos/offset vectors scaled by the missile-row z-offset fields (doubled when nRadius==6). No return value; gives up after 4 failed placements.
+// 1.14d mac: 0010bdaa
 void __fastcall MISSILE_CreateRandomSubInRadius(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId pChosenMissileTxt, int32_t nRadius) {
     int nPosX;
     int32_t iVar1;
@@ -1897,6 +1932,7 @@ void __fastcall MISSILE_CreateRandomSubInRadius(D2UnitStrc * pUnit, D2UnitStrc *
     } while (true);
 }
 
+// 1.14d mac: 0010c174
 void __fastcall MISSILE_CreatePeriodicAreaSub(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId nMissileId, uint32_t nGameFrame) {
     uint32_t uFrameMask;
     if (nGameFrame >= 0xc9 && nGameFrame <= 0xe0) {
@@ -1913,6 +1949,7 @@ void __fastcall MISSILE_CreatePeriodicAreaSub(D2UnitStrc * pUnit, D2UnitStrc * p
     MISSILE_CreateRandomSubInRadius(pUnit, pUnit2, nMissileId, 0x14);
 }
 
+// 1.14d mac: 0010d040
 void __fastcall MISSILE_CreateDirectionalSub(D2UnitStrc * pUnit, eMissilesId nMissileId) {
     int32_t nSkillLevel = D2Common::Units::Missile::GetLevel(pUnit);
     D2UnitStrc* pNewMissile = MakeMissileAtXY(pUnit, nMissileId, 0, 0, D2Common::Units::Missile::GetSkillId(pUnit), nSkillLevel);
@@ -1924,6 +1961,7 @@ void __fastcall MISSILE_CreateDirectionalSub(D2UnitStrc * pUnit, eMissilesId nMi
 }
 
 // Spawns copies of a missile in a filled circular area of radius nRadius centered at (nCenterX, nCenterY), sampling every nStep tiles. Each candidate cell within the circle's bounding box is tested with the Euclidean circle equation; a probabilistic nChance filter (power-of-2 optimised RNG on pUnit->sSeed) skips a fraction of hits. For surviving cells, optionally randomises the missile start frame from pTxtMissiles, finds the nearest valid room via DRLGROOM_FindBetterNearbyRoom, and calls MakeMissile. Used by area-of-effect skills (e.g. Blizzard, Meteor splash).
+// 1.14d mac: 0010dfc2
 void __fastcall MISSILE_SpawnMissilesInArea(D2UnitStrc * pUnit, int32_t nCenterX, int32_t nCenterY, int32_t nRadius, eMissilesId nMissileId, eD2Skills eSkill, int32_t nSkillLevel, int32_t nChance, int32_t nStep) {
     D2RoomStrc* pRoom;
     uint32_t nRandResult;
@@ -2001,6 +2039,7 @@ void __fastcall MISSILE_SpawnMissilesInArea(D2UnitStrc * pUnit, int32_t nCenterX
     } while (iOffsetYCur <= nRadius);
 }
 
+// 1.14d mac: 0010a15c
 void __fastcall MISSILE_CreatePatternAtUnitPos(D2UnitStrc * pUnit, int32_t nRadius, eMissilesId nMissileId, eD2Skills eSkill, int32_t nSkillLevel, uint32_t nChance, int32_t nStep) {
     int nPosY;
     int32_t nPosX;
@@ -2026,6 +2065,7 @@ void __fastcall MISSILE_CreatePatternAtUnitPos(D2UnitStrc * pUnit, int32_t nRadi
 }
 
 // Spawns a full 360-degree burst of missiles around pUnit using precomputed spread tables (gaRadialBurstMissileSpreadY/X). Iterates 0x40 entries stepping by nStep for the primary ring (velocity from MissileTxt.Param1) and, if nSecondaryCount > 0, a secondary ring of 0x3C entries stepping by nSecondaryCount (velocity from Param2). Copies skill ID and level from the source missile. No-ops for MISSILE_Arrow.
+// 1.14d mac: 0010e239
 void __fastcall MISSILE_CreateRadialBurst(D2UnitStrc * pUnit, eMissilesId nMissileId, int32_t nSecondaryCount, int32_t nStep, int32_t nSubLoopMult) {
     // Static local variables (originally global data)
     static int gaRadialBurstMissileSpreadConst2[16] = {
@@ -2140,6 +2180,7 @@ void __fastcall MISSILE_CreateRadialBurst(D2UnitStrc * pUnit, eMissilesId nMissi
 }
 
 // Client-side hit function for missile type 064 (spread sub-missile fan). On valid owner/missile/CltHitSubMissile1, spawns up to 8 sub-missiles using fixed offset tables (gaSubMissileOffsets_Clt064 / gaSubMissileSpread_Clt064), stepping by HitPar1*4 bytes per iteration. Sets TargetX/TargetY on each spawned missile to the corresponding spread vector. Always returns 1.
+// 1.14d mac: 0011580f
 int32_t __fastcall MISSILE_CltHitFn64_Unused(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     // Static local variables (originally global data)
     static int gaSubMissileSpread_Clt064[8] = { 0x0, 0x10, 0x10, 0x10, 0x0, -0x10, -0x10, -0x10 }; D2_STATIC_GUARD(gaSubMissileSpread_Clt064, "D2Client::UNIT::Missile::MISSILE_CltHitFn64_Unused::gaSubMissileSpread_Clt064");
@@ -2190,6 +2231,7 @@ int32_t __fastcall MISSILE_CltHitFn64_Unused(D2UnitStrc * pUnit, D2UnitStrc * pT
     return 1;
 }
 
+// 1.14d mac: 0010e3ee
 int32_t __fastcall MISSILE_CltHitFn01_FireExplosion(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nClassId;
     D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
@@ -2202,6 +2244,7 @@ int32_t __fastcall MISSILE_CltHitFn01_FireExplosion(D2UnitStrc * pUnit, D2UnitSt
     return 1;
 }
 
+// 1.14d mac: 0010e490
 int32_t __fastcall MISSILE_CltHitFn02_GasCloud(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nClassId;
     D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
@@ -2214,6 +2257,7 @@ int32_t __fastcall MISSILE_CltHitFn02_GasCloud(D2UnitStrc * pUnit, D2UnitStrc * 
 }
 
 // Client-side hit function for missile type 003 (dual sub-missile on hit). Spawns CltHitSubMissile1 unconditionally. If CltHitSubMissile2 is valid, picks a random sub-missile ID in [CltHitSubMissile2, CltHitSubMissile3] via SEED_RollRangeInclusive, spawns it, then immediately marks it dead (SetDeadFlag) — used for visual-only secondary effects. Always returns 1.
+// 1.14d mac: 0010e509
 int32_t __fastcall MISSILE_CltHitFn03_PotionExplode(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -2241,6 +2285,7 @@ int32_t __fastcall MISSILE_CltHitFn03_PotionExplode(D2UnitStrc * pUnit, D2UnitSt
 }
 
 // Client-side missile hit function (index 9). Guards against null/out-of-range missile and target. If the missile's cHitPar1 flag is set and the target is an allied/owned unit, plays a progress overlay. Otherwise, restricts hits to players (cHitPar2==0) or undead/demon monsters based on cHitPar2. On a valid hit, if CltHitSubMissile1 is defined, spawns a sub-missile (Teethexplode). Returns 1 on hit/handled, 0 if the target type is rejected.
+// 1.14d mac: 0010e642
 int32_t __fastcall MISSILE_CltHitFn09_HolyBolt(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
     D2MissilesTxt* pMissileTxt = pUnit && pUnit->nClassId >= 0 && pUnit->nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + pUnit->nClassId : nullptr;
@@ -2301,6 +2346,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
 }
 
 // Client missile hit callback that spawns an area-of-effect burst of up to three sub-missiles listed in CltHitSubMissile1-3 of the missile txt record. Computes the spawn radius from SHitCalc1 (falling back to Range + LevRange*(level-1)) and the sub-missile count from cHitPar1 (or skill calc[0] if cHitPar1 &lt; 1). Calls MISSILE_SpawnAreaOfEffect to place them. Always returns 1.
+// 1.14d mac: 0010e862
 int32_t __fastcall MISSILE_CltHitFn12_ImmolationArrow(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int32_t aSubMissileIds[3];
     int nClassId;
@@ -2349,6 +2395,7 @@ int32_t __fastcall MISSILE_CltHitFn12_ImmolationArrow(D2UnitStrc * pUnit, D2Unit
 }
 
 // Client hit-function for missile class 014. On impact: spawns CltHitSubMissile1 if defined; then for CltHitSubMissile2 rolls pUnit's seed to pick a spread pattern index (0–2), iterates the pattern array (gaSubMissileSpread_Clt014 / gaMissileHitFunc014SpreadData), spawning sub-missiles with randomised direction offsets (±0–7 octants) around the impact point. Always returns 1.
+// 1.14d mac: 0010ed92
 int32_t __fastcall MISSILE_CltHitFn14_IceShatter(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     // Static local variables (originally global data)
     static int gnMissileMovementSpeedByType[8] = { 0x0, 0x1, 0x1, 0x1, 0x0, -0x1, -0x1, -0x1 }; D2_STATIC_GUARD(gnMissileMovementSpeedByType, "D2Client::UNIT::Missile::MISSILE_CltHitFn14_IceShatter::gnMissileMovementSpeedByType");
@@ -2423,6 +2470,7 @@ int32_t __fastcall MISSILE_CltHitFn14_IceShatter(D2UnitStrc * pUnit, D2UnitStrc 
 }
 
 // Client-side hit function for chain/bouncing missile types. On impact, reads the remaining bounce count from targetX; if > 1, searches for the nearest valid enemy (excluding the just-hit target) within the range defined by cHitPar1 or aurarangecalc, then spawns a new missile aimed at it with the bounce counter decremented by 1 and SetOwner set to the struck target. Applies ProgOverlay to the target if configured. Always returns 1.
+// 1.14d mac: 0010efaf
 int32_t __fastcall MISSILE_CltHitFn16_ChainLightning(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int32_t nSkillLvl;
     D2SkillsTxt* pSkillTxt;
@@ -2488,6 +2536,7 @@ int32_t __fastcall MISSILE_CltHitFn16_ChainLightning(D2UnitStrc * pUnit, D2UnitS
 }
 
 // Client-side missile hit-function #18: on impact, spawns up to four configured sub-missile groups from the missile's hit position. Validates the missile's class id and resolves its skill/level and owner. For each of CltHitSubMissile1..4 (when >= 0) it fires cHitPar1/cHitPar3 counts of sub-missiles via MakeMissile, scattering spawn positions using the gaMissileHitFunc018Spread* / gaSubMissileSpread*_Clt018 offset tables (indexed modulo 5 or 0x12). Sub-missile 2 is single, given a skill-derived lifetime (Param[2]+(lvl-1)*Param[3]) and a light radius of 0xc when it has a client-side light. Returns 1.
+// 1.14d mac: 0010f273
 int32_t __fastcall MISSILE_CltHitFn18_MeteorCenter(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     // Static local variables (originally global data)
     static int gaSubMissileSpreadX_Clt018[18] = {
@@ -2643,6 +2692,7 @@ int32_t __fastcall MISSILE_CltHitFn18_MeteorCenter(D2UnitStrc * pUnit, D2UnitStr
     return 1;
 }
 
+// 1.14d mac: 0010f59e
 int32_t __fastcall MISSILE_CltHitFn19_RandomSubMissile(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nClassId;
     D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
@@ -2662,6 +2712,7 @@ int32_t __fastcall MISSILE_CltHitFn19_RandomSubMissile(D2UnitStrc * pUnit, D2Uni
     return 1;
 }
 
+// 1.14d mac: 0010f66e
 int32_t __fastcall MISSILE_CltHitFn24_BoneSpear(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nClassId;
     if (!pTarget) {
@@ -2680,6 +2731,7 @@ int32_t __fastcall MISSILE_CltHitFn24_BoneSpear(D2UnitStrc * pUnit, D2UnitStrc *
     return 1;
 }
 
+// 1.14d mac: 0010f945
 BOOL __fastcall MISSILE_SkillFuncCreateAtTarget(D2fpSkillFuncArg * pArg, D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     D2fpSkillFuncSub* pSub = pArg->pSub;
@@ -2721,6 +2773,7 @@ BOOL __fastcall MISSILE_SkillFuncCreateAtTarget(D2fpSkillFuncArg * pArg, D2UnitS
 }
 
 // Client-side missile hit handler (index 025). On hit, iterates all units within an aura-radius around the missile's position and spawns a sub-missile (CltHitSubMissile1) at each valid target. Radius and count are computed from the owning skill's aurarangecalc/calc[0]; aurafilter defaults to 0xa783 if not set in SkillsTxt.
+// 1.14d mac: 0010f701
 int32_t __fastcall MISSILE_CltHitFn25_LightningFury(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     // Frame slots -52..-44 are ONE object: &sSkillFunc is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2799,6 +2852,7 @@ int32_t __fastcall MISSILE_CltHitFn25_LightningFury(D2UnitStrc * pUnit, D2UnitSt
     return 1;
 }
 
+// 1.14d mac: 0010fc4a
 BOOL __fastcall MISSILE_SkillFuncCreateAtTargetB(D2fpSkillFuncArg * pArg, D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     D2fpSkillFuncSub* pSub = pArg->pSub;
@@ -2840,6 +2894,7 @@ BOOL __fastcall MISSILE_SkillFuncCreateAtTargetB(D2fpSkillFuncArg * pArg, D2Unit
 }
 
 // Client-side missile hit function for missile class 026 (aura/nova sub-missile explosion). Resolves the missile's owner and skill, looks up the target unit by GUID/type stored in missile target fields, then calls SKILL_ForEachUnitInRadius with MISSILE_SkillFuncCreateAtTargetB to spawn hit sub-missiles around the impact point. Always returns 1.
+// 1.14d mac: 0010fa0b
 int32_t __fastcall MISSILE_CltHitFn26_FistOfHeavensDelay(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nClassId;
     D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
@@ -2893,6 +2948,7 @@ int32_t __fastcall MISSILE_CltHitFn26_FistOfHeavensDelay(D2UnitStrc * pUnit, D2U
 }
 
 // Spawns 8 (or fewer, step-controlled) directional missiles of type nMissileId from pUnit2's position, owned by pUnit. Iterates ga8DirectionalMissileSpreadX/Y offset tables stepping by nStep*4 bytes (up to 8 entries = 0x20 bytes). Sets velocity override from MissilesTxt[nMissileId].Param1<<7 and nSubLoopMult=level-1. Returns 1 on success, 0 if nMissileId is out of range.
+// 1.14d mac: 0010fd10
 uint32_t __fastcall MISSILE_Create8DirectionalClient(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, eMissilesId nMissileId, eD2Skills eSkill, int32_t nSkillLevel, int32_t nStep) {
     // Static local variables (originally global data)
     static int ga8DirectionalMissileSpreadY[8] = { 0x0, 0x2, 0x2, 0x2, 0x0, -0x2, -0x2, -0x2 }; D2_STATIC_GUARD(ga8DirectionalMissileSpreadY, "D2Client::UNIT::Missile::MISSILE_Create8DirectionalClient::ga8DirectionalMissileSpreadY");
@@ -2947,6 +3003,7 @@ uint32_t __fastcall MISSILE_Create8DirectionalClient(D2UnitStrc * pUnit, D2UnitS
     return 1;
 }
 
+// 1.14d mac: 0010fe54
 int32_t __fastcall MISSILE_CltHitFn28_PantherPotGreen(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -2970,6 +3027,7 @@ int32_t __fastcall MISSILE_CltHitFn28_PantherPotGreen(D2UnitStrc * pUnit, D2Unit
 }
 
 // Client-side missile hit callback (index 029): on impact, spawns the sub-missile defined in D2MissilesTxt.CltHitSubMissile1. Computes the sub-missile count from skill calc[0] (minimum 5), copies the parent missile's direction to the child, and sets owner/position/level from the parent. Returns 1 always.
+// 1.14d mac: 0010ff20
 int32_t __fastcall MISSILE_CltHitFn29_GrimWard(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
     int nClassId;
@@ -3018,6 +3076,7 @@ int32_t __fastcall MISSILE_CltHitFn29_GrimWard(D2UnitStrc * pUnit, D2UnitStrc * 
 }
 
 // Client-side missile hit handler #030: on impact, spawns a fan of CltHitSubMissile1 sub-missiles from the parent missile. Validates pUnit and its missiles.txt row, requires CltHitSubMissile1 set and a resolvable owner. Builds a D2SkillArgStrc (owner/skill/level from the parent missile, txtno=CltHitSubMissile1) and iterates the global Clt030 X/Y spread tables in steps of cHitPar1 (min 1) up to 64 entries; for each MakeMissile call it also seeds the sub-missile's TargetX/TargetY from the spread offset. Always returns 1. __fastcall: pUnit(ECX), pTarget(EDX). pTarget is unused.
+// 1.14d mac: 001100e8
 int32_t __fastcall MISSILE_CltHitFn30_FrozenOrb(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     // Static local variables (originally global data)
     static int gaSubMissileSpreadY_Clt030[64] = {
@@ -3202,6 +3261,7 @@ int32_t __fastcall MISSILE_CltHitFn30_FrozenOrb(D2UnitStrc * pUnit, D2UnitStrc *
 }
 
 // Client-side missile hit handler #004: identical structure to CltHitFunc_030 but uses its own Clt004 spread tables. On impact spawns a fan of CltHitSubMissile1 sub-missiles from the parent. Validates pUnit and its missiles.txt row, requires CltHitSubMissile1 set and a resolvable owner; builds a D2SkillArgStrc (owner/skill/level/txtno=CltHitSubMissile1) and walks the global Clt004 X/Y spread tables in steps of cHitPar1 (min 1) up to 64 entries, calling MakeMissile and seeding each sub-missile's TargetX/TargetY. Always returns 1. __fastcall: pUnit(ECX), pTarget(EDX) unused.
+// 1.14d mac: 00110236
 int32_t __fastcall MISSILE_CltHitFn04_Unused(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     // Static local variables (originally global data)
     static int gaSubMissileSpreadY_Clt004[64] = {
@@ -3385,6 +3445,7 @@ int32_t __fastcall MISSILE_CltHitFn04_Unused(D2UnitStrc * pUnit, D2UnitStrc * pT
     return 1;
 }
 
+// 1.14d mac: 00110384
 int32_t __fastcall MISSILE_CltHitFn32_FireHead(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nClassId;
     D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
@@ -3413,6 +3474,7 @@ int32_t __fastcall MISSILE_CltHitFn32_FireHead(D2UnitStrc * pUnit, D2UnitStrc * 
 }
 
 // Client-side hit function for missile type 033 (scatter/multi-shot on impact). On hit, spawns CltHitSubMissile1 sub-missiles around the impact point. The spread count comes from CltHitPar1 (default modulo 3). Each sub-missile gets a pseudo-random offset derived from the missile's own seed and a direction angle clamped so it never fires straight back. Requires a valid owner unit; no-ops and returns 1 if any precondition fails.
+// 1.14d mac: 0011051b
 int32_t __fastcall MISSILE_CltHitFn33_MephistoFlyingRocks(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -3453,6 +3515,7 @@ int32_t __fastcall MISSILE_CltHitFn33_MephistoFlyingRocks(D2UnitStrc * pUnit, D2
 }
 
 // Client-side hit function for missile type 036 (wall-collision area effect). Returns 0 if a real target was hit (pTarget != null). If no target, checks for wall/player-blocking collision (CheckCollision_BlockAll_Width with COLLISION_UNIT_SIZE_BIG) at missile position; if no collision, spawns an area-of-effect burst via MISSILE_SpawnAreaOfEffect using MissilesTxt.Param1 as the radius. Always returns 1.
+// 1.14d mac: 00110751
 int32_t __fastcall MISSILE_CltHitFn36_HellMeteorDown(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     // Static local variables (originally global data)
     static char gaMissile036_AoeSpawnData[2] = { 'E', '\x00' }; D2_STATIC_GUARD(gaMissile036_AoeSpawnData, "D2Client::UNIT::Missile::MISSILE_CltHitFn36_HellMeteorDown::gaMissile036_AoeSpawnData");
@@ -3498,6 +3561,7 @@ int32_t __fastcall MISSILE_CltHitFn36_HellMeteorDown(D2UnitStrc * pUnit, D2UnitS
     return 1;
 }
 
+// 1.14d mac: 00110868
 int32_t __fastcall MISSILE_CltHitFn44_InAirLanding(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2DynamicPathStrc* pDynamicPath;
     if (pTarget) {
@@ -3524,6 +3588,7 @@ int32_t __fastcall MISSILE_CltHitFn44_InAirLanding(D2UnitStrc * pUnit, D2UnitStr
 }
 
 // Client-side hit function for missile type 047 (random-scatter + secondary missile). Computes sub-missile count = (level-1)*HitPar2+HitPar1 (fallback: skill calc[3], min 1). Calls SKILL_SpawnRandomMissilesInArea with CltHitSubMissile1 for the scatter burst, count/4 as the area radius. If CltHitSubMissile2 is valid, also spawns one direct missile at missile's current position. Always returns 1.
+// 1.14d mac: 00110b9a
 int32_t __fastcall MISSILE_CltHitFn47_CatapultSpikeBall(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillsTxt* pSkillTxt;
     int nClassId;
@@ -3563,6 +3628,7 @@ int32_t __fastcall MISSILE_CltHitFn47_CatapultSpikeBall(D2UnitStrc * pUnit, D2Un
 }
 
 // Molten Boulder splash/debris spawner. Resolves the missile's owner and source position (static or dynamic path). Spawns nSplashCount randomly-scattered Moltenboulder-flyingrocks missiles around the impact point (seeded from the missile's RNG, requiring distance>3 from origin), then, if nDebrisMissileId>=0, spawns a fixed ring of debris missiles using the gaRockDebrisSpreadConstY/gaRockDebrisSpreadTableX offset tables. All sub-missiles inherit the owner, skill id and skill level. No return value.
+// 1.14d mac: 00110dfa
 static void __stdcall MISSILE_CreateFlyingRockDebris(D2UnitStrc * pMissileUnit, int32_t nSplashCount, int32_t nVelocity, int32_t nDebrisCount, eMissilesId nDebrisMissileId) {
     // Static local variables (originally global data)
     static int gaRockDebrisSpreadConstY[18] = {
@@ -3679,6 +3745,7 @@ static void __stdcall MISSILE_CreateFlyingRockDebris(D2UnitStrc * pMissileUnit, 
     }
 }
 
+// 1.14d mac: 00110d8c
 int32_t __fastcall MISSILE_CltHitFn50_CatapultMeteorBall(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nClassId;
     D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
@@ -3691,6 +3758,7 @@ int32_t __fastcall MISSILE_CltHitFn50_CatapultMeteorBall(D2UnitStrc * pUnit, D2U
 }
 
 // Client hit handler for missile 052 (flying rock / boulder type). On impact with a large monster (MonStats2 large flag), spawns CltHitSubMissile1 via CastAttack at impact position, then calls MISSILE_CreateFlyingRockDebris using HitPar1/2/SubMissile2/3. Returns 0 immediately if target is not a large monster.
+// 1.14d mac: 00111198
 int32_t __fastcall MISSILE_CltHitFn52_MoltenBoulder(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int32_t nLevel;
     eD2Skills eSkill;
@@ -3729,6 +3797,7 @@ int32_t __fastcall MISSILE_CltHitFn52_MoltenBoulder(D2UnitStrc * pUnit, D2UnitSt
 }
 
 // Client hit handler for missile 053. Spawns CltHitSubMissile1 as a bouncing projectile at the missile's impact position; sets bounce params (HitPar1/2), initialises projectile rotation (HitPar3), and clears its lifetime flag. Uses MakeMissile with the full D2SkillArgStrc including SP1 target coords for direction.
+// 1.14d mac: 001153e5
 int32_t __fastcall MISSILE_CltHitFn53_MoltenBoulderEmerge(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
     int nClassId;
@@ -3777,6 +3846,7 @@ int32_t __fastcall MISSILE_CltHitFn53_MoltenBoulderEmerge(D2UnitStrc * pUnit, D2
     return 1;
 }
 
+// 1.14d mac: 00111357
 int32_t __fastcall MISSILE_CltHitFn54_VinesTrail(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nClassId;
     D2MissilesTxt* pMissilesTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
@@ -3797,6 +3867,7 @@ int32_t __fastcall MISSILE_CltHitFn54_VinesTrail(D2UnitStrc * pUnit, D2UnitStrc 
 }
 
 // Client hit handler for missile 055. On impact, spawns up to three sub-missiles (CltHitSubMissile1/2/3) via MakeMissile, all inheriting the owner, skill, level, and parent missile reference. Requires a valid owner; bails if owner is null.
+// 1.14d mac: 001113bd
 int32_t __fastcall MISSILE_CltHitFn55_FallingRock(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
     int nClassId;
@@ -3831,6 +3902,7 @@ int32_t __fastcall MISSILE_CltHitFn55_FallingRock(D2UnitStrc * pUnit, D2UnitStrc
     return 1;
 }
 
+// 1.14d mac: 001114a0
 int32_t __fastcall MISSILE_CltHitFn56_RecyclerVine(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2MissilesTxt* pMissileTxt;
     D2UnitStrc* pOwnerUnit;
@@ -3864,6 +3936,7 @@ int32_t __fastcall MISSILE_CltHitFn56_RecyclerVine(D2UnitStrc * pUnit, D2UnitStr
     return 1;
 }
 
+// 1.14d mac: 00111576
 int32_t __fastcall MISSILE_CltHitFn57_BaalSpawnMonsters(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nClassId;
     D2MissilesTxt* pMissileTxt = pUnit && (nClassId = pUnit->nClassId) >= 0 && nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nClassId : nullptr;
@@ -3879,6 +3952,7 @@ int32_t __fastcall MISSILE_CltHitFn57_BaalSpawnMonsters(D2UnitStrc * pUnit, D2Un
 }
 
 // Client hit handler for missile 060. Spawns CltHitSubMissile1 at the impact point, then spawns CltHitSubMissile2 with a Z-position offset (SetPosVectorShifted) controlled by HitPar1. Both sub-missiles inherit the parent's owner, skill, and level.
+// 1.14d mac: 0011162c
 int32_t __fastcall MISSILE_CltHitFn60_Nihlithak(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
     int nClassId;
@@ -3968,6 +4042,7 @@ static void __stdcall MISSILE_CreateRandomOffsetHit(int32_t nRadius, eMissilesId
 }
 
 // Client hit handler for ice-break missiles (031). Only fires when pTarget is NULL (terrain hit). Selects a melt sub-missile (Icebreaksmallmelt or Icebreaklargemelt) based on the missile's class ID (0x110/0x111/0x112/0x1a1), spawns it via CastAttack at the impact position, then copies the parent's direction and sets animation speed 0x80.
+// 1.14d mac: 00114996
 int32_t __fastcall MISSILE_CltHitFn31_IceBreak(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int32_t nX;
     D2DynamicPathStrc* pDynamicPath;
@@ -4074,6 +4149,7 @@ void __fastcall MISSILE_CreateTowardObject(int32_t nObjectId, int, D2UnitStrc * 
     D2Common::Units::Missile::SetTargetY(pTargetObject, nUnitY - nObjectY);
 }
 
+// 1.14d mac: 00114f98
 int32_t __fastcall MISSILE_CltHitFn42_HfFragment1(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int32_t nTargetX;
     D2SkillArgStrc sSkillArg;
@@ -4097,6 +4173,7 @@ int32_t __fastcall MISSILE_CltHitFn42_HfFragment1(D2UnitStrc * pUnit, D2UnitStrc
 }
 
 // Client hit handler for missile 043 (Hffragment / hellfire). Spawns a MISSILE_Hffragment3 sub-missile at the impact position using the range from missile TXT entry 0x175; applies a random Y-target offset derived from the parent missile's seed; sets target X from the parent. Flags 0x8005 mark it as a special fragment.
+// 1.14d mac: 00115017
 int32_t __fastcall MISSILE_CltHitFn43_HfFragment2(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2UnitStrc* pNewMissile;
     int32_t nTargetX;
@@ -4246,6 +4323,7 @@ static void __stdcall MISSILE_CreateCircularRing(D2UnitStrc * pUnit, int32_t nTa
 // Body continues at 004d1be4, the JZ target of 004d1bdb - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named 'MISSILE_CreateMultiFromSeed'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from 'MISSILE_CreateMultiFromSeed':
 // Spawns a burst of N sub-missiles (skill missile 0x15d) scattered within +-10 around the source missile's position, where N is read as the missile's TargetX. Re-seeds the missile RNG (low=TargetY, high=0x29a) for deterministic scatter; each sub-missile offset is derived from the seed via mod-20 (-10..+9). Skips spawning when the offset lands exactly on the origin. Successfully created sub-missiles get SKILLSMON_SetMissilePathLinear applied. Sub-missiles inherit owner, skill id and skill level. Returns 1.
+// 1.14d mac: 00114acf
 int32_t __fastcall MISSILE_CltHitFn37_RadamentHandOfGod(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SeedStrc DVar1;
     D2UnitStrc* pUnit_00;
@@ -4325,6 +4403,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 }
 
 // Client missile hit callback for missile index 0x38 (Tainted Sun Ball chain). When pTarget is null (terrain hit): looks up the orbiting sun-ball missile by GUID stored in TargetX, builds a D2SkillArgStrc from the triggering missile's position/level/frame, spawns a new MISSILE_Taintedsunball, and stores the sun-ball GUID in the new missile's TargetX for tracking.
+// 1.14d mac: 00114c88
 int32_t __fastcall MISSILE_CltHitFn38_TaintedSunFlash(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
     eD2UnitType eUnitType;
@@ -4396,6 +4475,7 @@ int32_t __fastcall MISSILE_CltHitFn38_TaintedSunFlash(D2UnitStrc * pUnit, D2Unit
     return 1;
 }
 
+// 1.14d mac: 00114df0
 int32_t __fastcall MISSILE_CltHitFn39_QueenDeathGlob(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SeedStrc* pSeed = &pUnit->sSeed;
     if ((int)D2_SeedRollLimited(pSeed, 2) > 0) {
@@ -4414,6 +4494,7 @@ int32_t __fastcall MISSILE_CltHitFn39_QueenDeathGlob(D2UnitStrc * pUnit, D2UnitS
     return 1;
 }
 
+// 1.14d mac: 00114f03
 int32_t __fastcall MISSILE_CltHitFn41_DurielDeathRock(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     if (pTarget) {
       return 0;
@@ -4427,6 +4508,7 @@ int32_t __fastcall MISSILE_CltHitFn41_DurielDeathRock(D2UnitStrc * pUnit, D2Unit
 }
 
 // Creates a missile aimed in the direction a monster is facing, used for upgrade/transform attacks. Retrieves upgrade skill direction vector via MONSTERS_GetUpgradeSkillsAndCount, randomises spawn position near pUnit2's location using its seed (±10 tiles), creates the missile via MakeMissile, then sets its particle position and offset vectors using the facing direction converted to screen space. Asserts missile Range == 25.
+// 1.14d mac: 00115eba
 static void __stdcall MISSILE_CreateAtMonsterFacing(D2UnitStrc * pUnit, eMissilesId nMissileId, D2UnitStrc * pUnit2) {
     D2MissilesTxt* pMissileTxt;
     D2SkillArgStrc sSkillArg;
@@ -4474,6 +4556,7 @@ static void __stdcall MISSILE_CreateAtMonsterFacing(D2UnitStrc * pUnit, eMissile
 }
 
 // Spawns a randomized debris missile around a source unit (pUnit2), used for the Nihlathak debris/swoosh effect. Advances pUnit2's RNG seed to pick one of four cardinal offset directions from the source position and a random depth offset, then selects one of MISSILE_Nehlithakdebris1..4 (or Nehlithakswoosh) via seed % 30. Builds a D2SkillArgStrc (owner=pUnit, skill/level taken from pUnit2) and calls MakeMissile; on success sets the new missile's shifted Z position and its target X/Y to the source unit's current position. No return value.
+// 1.14d mac: 00115cb9
 static void __stdcall MISSILE_CreateRandomCardinal(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     int32_t aOffsetX[4] = { 1, 0, -1, 0 };
     int32_t aOffsetY[4] = { 0, 1, 0, -1 };
@@ -4553,6 +4636,7 @@ static void __stdcall MISSILE_CreateBaalLightningBolt(D2UnitStrc * pUnit, D2Unit
     Engine::Particle::SetPosVectorShifted(pNewMissile, 0, 0, -10);
 }
 
+// 1.14d mac: 00115b76
 static void __stdcall MISSILE_CreateDebrisWithCollision(int32_t nPosX, D2UnitStrc * pUnit, int32_t nPosY) {
     D2SkillArgStrc sSkillArg;
     int32_t eCollisionFlag = 1;
@@ -4586,6 +4670,7 @@ static void __stdcall MISSILE_CreateDebrisWithCollision(int32_t nPosX, D2UnitStr
 }
 
 // Client per-frame handler for missile 066 (Uber area debris/shockwave). Only active when the owner is in an Uber level (level IDs 0x83–0x84). Tracks owner with PATH_SetPathTarget, occasionally triggers a screen-shake (SetShake), and every ~10 frames spawns a debris missile at a seeded random offset. Removes the missile client-side if owner is absent or outside Uber areas.
+// 1.14d mac: 001147f2
 void __fastcall MISSILE_CltDoFn66_WorldStoneShake(D2UnitStrc * pUnit) {
     eD2LevelId eLevelId;
     int32_t nTargetX;
@@ -4632,6 +4717,7 @@ void __fastcall MISSILE_CltDoFn66_WorldStoneShake(D2UnitStrc * pUnit) {
 }
 
 // Missile hit-function #48: the Freezing Arrow / cold-catapult explosion burst. On impact at the firing unit's position it spawns a central Freezingarrowexp1 missile, then loops over a fixed 4-point offset table (the aExplosionOffsets array, +1/0/-1 deltas) spawning a Freezingarrowexp2 aimed at each offset (PATH_SetDirectionToTarget) plus a CatapultColdExplosion missile at that tile. Each catapult explosion has its total frame count and velocity randomized using the firing unit's RNG seed (the standard *0x6ac690c5 LCG, power-of-two masked or modulo), and a client particle projectile (PARTICLE_InitProjectile) is initialized for it. Always returns 1. Drives the staggered multi-tile cold explosion visual/damage pattern.
+// 1.14d mac: 00115174
 int32_t __fastcall MISSILE_CltHitFn48_CatapultColdBall(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     uint32_t nRandFrames;
     int nTargetY;
@@ -4802,6 +4888,7 @@ static void __stdcall MISSILE_CreateSteamVent(D2UnitStrc * pUnit, int32_t nX, in
 }
 
 // Client hit handler for missile 062. Seeds the missile's RNG from the current X position, then spawns CltHitSubMissile1 at a randomly offset target position within ±HitPar1 tiles of the impact point. The scatter radius is controlled by cHitPar1 (default 1). Requires a valid owner.
+// 1.14d mac: 00115563
 int32_t __fastcall MISSILE_CltHitFn62_BaalTauntLightning(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2SkillArgStrc sSkillArg;
     D2MissilesTxt* pMissileTxt = nullptr;
@@ -4839,6 +4926,7 @@ int32_t __fastcall MISSILE_CltHitFn62_BaalTauntLightning(D2UnitStrc * pUnit, D2U
     return 1;
 }
 
+// 1.14d mac: 00115790
 int32_t __fastcall MISSILE_CltHitFn63_BaalTauntPoison(D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     int nBurstCount;
     D2MissilesTxt* pMissileTxt = pUnit && (nBurstCount = pUnit->nClassId) >= 0 && nBurstCount < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + nBurstCount : nullptr;
@@ -4856,6 +4944,7 @@ int32_t __fastcall MISSILE_CltHitFn63_BaalTauntPoison(D2UnitStrc * pUnit, D2Unit
 }
 
 // Client-side per-frame update for a missile unit. Looks up the unit's Missiles.txt row by classId; on invalid row removes the missile client-side. Applies light flicker, resolves the owning room (falling back to a nearby room from the unit's path X/Y), and removes the missile if it is in town and the flags2 town-allowed bit (0x4) is clear. Finally dispatches to the missile's CltDoFunc handler via the MISSILESCLTDOFUNCS table.
+// 1.14d mac: 00115949
 void __fastcall MISSILE_ClientFrameUpdate(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int MISSILESCLTDOFUNCS_SIZE = 0x5b; D2_STATIC_GUARD(MISSILESCLTDOFUNCS_SIZE, "D2Client::UNIT::Missile::MISSILE_ClientFrameUpdate::MISSILESCLTDOFUNCS_SIZE");
@@ -5006,6 +5095,7 @@ void __fastcall MISSILE_ClientFrameUpdate(D2UnitStrc * pUnit) {
 }
 
 // Client-side missile collision/explosion resolver. Given the missile pUnit and an optional pTarget (NULL = environment/wall hit), looks up the missile's MissilesTxt row and runs hit logic: enforces NextHit/justhit dedup, owner/CollideFriend interaction checks, and pierce decrement (item_pierce stat / STATE_pierce). On a real hit it fires the per-missile CltHitFunc callback, plays HitSound, and spawns the ExplosionMissile child (positioning it at the missile, stopping it, and setting its facing direction). Stops the travel sound, validates the light map, and removes the missile from the client/server object table when its lifetime ends. Returns the spawned explosion unit (or NULL). __fastcall.
+// 1.14d mac: 001076a6
 D2UnitStrc * __fastcall MISSILE_ClientHitExplode(D2UnitStrc * pUnit, D2UnitStrc * pTarget, int32_t bForceExplode) {
     // Static local variables (originally global data)
     static int MISSILESCLTHITFUNCS_SIZE = 0x51; D2_STATIC_GUARD(MISSILESCLTHITFUNCS_SIZE, "D2Client::UNIT::Missile::MISSILE_ClientHitExplode::MISSILESCLTHITFUNCS_SIZE");
@@ -5241,6 +5331,7 @@ D2UnitStrc * __fastcall MISSILE_ClientHitExplode(D2UnitStrc * pUnit, D2UnitStrc 
     return pExplosion;
 }
 
+// 1.14d mac: 0010c648
 void __fastcall MISSILE_CltDoFn43_FollowOwner(D2UnitStrc * pUnit) {
     D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (!pOwner) {
@@ -5261,6 +5352,7 @@ void __fastcall MISSILE_CltDoFn43_FollowOwner(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame missile DoFunc (handler variant 001). Validates the missile's class id against missiles.txt, flags whether the local player owns it, then runs the per-tick missile loop: clears NODRAW after InitSteps frames, explodes immediately if the particle is stopped/fading, advances the animation (honoring LoopAnim/SubLoop/SubStart/SubStop), moves the missile along its path by the client step count, decrements remaining frames (explodes at 0), applies CltSrcTown town-cutoff behavior, and on collision (wall/block) explodes. For ClientCol missiles it walks the per-step collision coords calling the anim-mode collision function to find a hit unit, exploding on the first active target. Loops once more for the local player on the final frame.
+// 1.14d mac: 00107b24
 void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
     int _bIsActive;
     D2PathPointStrc* pDVar1;
@@ -5426,6 +5518,7 @@ void __fastcall MISSILE_CltDoFn01_BasicMissile(D2UnitStrc * pUnit) {
     MISSILE_ClientHitExplode(pUnit, nullptr, 1);
 }
 
+// 1.14d mac: 001075e0
 void __fastcall MISSILE_CltDoFn02_GroundSplat(D2UnitStrc * pUnit) {
     uint32_t bAtEndOfCycle = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
     if (bAtEndOfCycle) {
@@ -5446,6 +5539,7 @@ void __fastcall MISSILE_CltDoFn02_GroundSplat(D2UnitStrc * pUnit) {
     MISSILE_ClientHitExplode(pUnit, nullptr, 0);
 }
 
+// 1.14d mac: 00107fba
 void __fastcall MISSILE_CltDoFn03_TrailOnStep(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt;
     int nClassId;
@@ -5466,6 +5560,7 @@ void __fastcall MISSILE_CltDoFn03_TrailOnStep(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 00108277
 void __fastcall MISSILE_CltDoFn04_PoisonCloud(D2UnitStrc * pUnit) {
     int nClassId;
     D2MissilesTxt* pMissileTxt;
@@ -5484,6 +5579,7 @@ void __fastcall MISSILE_CltDoFn04_PoisonCloud(D2UnitStrc * pUnit) {
     return;
 }
 
+// 1.14d mac: 001082eb
 void __fastcall MISSILE_CltDoFn05_FireWall(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -5510,6 +5606,7 @@ void __fastcall MISSILE_CltDoFn05_FireWall(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame missile do-function 006: on path expiry, spawns a CltSubMissile chosen randomly from up to three candidates in the missile txt record (CltSubMissile1/2/3), copies precision position from the parent, then falls through to CltDoFunc_001 for standard movement. Removes the missile if no valid sub-missile is defined.
+// 1.14d mac: 00108491
 void __fastcall MISSILE_CltDoFn06_FireWallMaker(D2UnitStrc * pUnit) {
     int32_t nPosX;
     int32_t nY;
@@ -5588,6 +5685,7 @@ void __fastcall MISSILE_CltDoFn06_FireWallMaker(D2UnitStrc * pUnit) {
 }
 
 // Client per-frame handler for homing/seeking missiles (007). Confirms and validates the tracked target; periodically recalculates the path toward the target (every CltParam1 frames, default 5) when within collision distance 4–24. Removes the missile if in town. Falls through to Missiles_CltDoFunc_001 for standard motion.
+// 1.14d mac: 00108748
 void __fastcall MISSILE_CltDoFn07_Homing(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -5628,6 +5726,7 @@ void __fastcall MISSILE_CltDoFn07_Homing(D2UnitStrc * pUnit) {
 }
 
 // Client per-frame handler for missile 008. After InitSteps frames have elapsed, if the dynamic path reports a collision, spawns CltSubMissile1 at the current position with nSubLoopMult copies (CltParam1, min 1) and a custom init callback (MISSILE_InitializeVisual). Falls through to Missiles_CltDoFunc_001; removes client-side if missile data is invalid.
+// 1.14d mac: 00108995
 void __fastcall MISSILE_CltDoFn08_LightningTrail(D2UnitStrc * pUnit) {
     int32_t nRemainingFrames;
     uint32_t uCollFlags;
@@ -5676,6 +5775,7 @@ void __fastcall MISSILE_CltDoFn08_LightningTrail(D2UnitStrc * pUnit) {
 }
 
 // Per-frame client missile update (DoFunc 9) for an expanding light/aura missile (e.g. a Nova/Frozen-Orb-style growing light). Validates the missile's MissilesTxt row, owner skill, and CltSubMissile1. Computes a max light radius from the skill calc (clamped 1..60) and grows the attached light map's radius by 1 on a cadence of 60/maxRadius frames. On the missile's first frame it spawns CltSubMissile1 (and optionally CltSubMissile2) child missiles via MakeMissile, positioning them with offset vectors from CltParam1/2/3. Near the end of life it stops the loop sound and plays ProgSound, then runs Missiles_CltDoFunc_001. Removes the missile client-side on validation failure. __fastcall, no return.
+// 1.14d mac: 00108b03
 void __fastcall MISSILE_CltDoFn09_MeteorCenter(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt;
     D2UnitStrc* pOwner;
@@ -5788,6 +5888,7 @@ void __fastcall MISSILE_CltDoFn09_MeteorCenter(D2UnitStrc * pUnit) {
 }
 
 // Client per-frame handler for trail-spawning missiles (010). Selects a random sub-missile ID from the CltSubMissile1–2 range, computes trail step count and delay from the skill level and CltParam2/3, then spawns a periodic trail missile via MISSILE_CreatePeriodicTrail and sets up its falling Z position. Removes client-side if missile TXT is invalid.
+// 1.14d mac: 0010918c
 void __fastcall MISSILE_CltDoFn10_MonBlizzCenter(D2UnitStrc * pUnit) {
     uint32_t nRandOffset;
     int32_t nDelay;
@@ -5842,6 +5943,7 @@ void __fastcall MISSILE_CltDoFn10_MonBlizzCenter(D2UnitStrc * pUnit) {
     return;
 }
 
+// 1.14d mac: 00109298
 void __fastcall MISSILE_CltDoFn11_DieAtAnimEnd(D2UnitStrc * pUnit) {
     uint32_t bAtEndOfCycle = D2Common::Units::IsAtEndOfFrameCycle(pUnit);
     if (bAtEndOfCycle) {
@@ -5853,6 +5955,7 @@ void __fastcall MISSILE_CltDoFn11_DieAtAnimEnd(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 001092c8
 void __fastcall MISSILE_CltDoFn12_ScreenShake(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt;
     int nArg3;
@@ -5878,6 +5981,7 @@ void __fastcall MISSILE_CltDoFn12_ScreenShake(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick function for missile type 067. Checks up to three CltSubMissile slots (CltSubMissile1/2/3): when the missile's remaining frame count matches the corresponding CltParam, fires the sub-missile via CastAttack at the current missile position using the owner unit, current skill/level. Falls through to Missiles_CltDoFunc_001 for standard motion. Removes the missile client-side if the missile txt entry is missing.
+// 1.14d mac: 001093a3
 void __fastcall MISSILE_CltDoFn67_Unused(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -5903,6 +6007,7 @@ void __fastcall MISSILE_CltDoFn67_Unused(D2UnitStrc * pUnit) {
 }
 
 // Client per-frame handler for skill-driven trail missiles (013). Looks up the missile's associated skill in D2SkillsTxt and evaluates calc[0]/calc[1] for the trail period and delay. Selects a random sub-missile from CltSubMissile1–2, then spawns a periodic trail missile. Removes client-side if skill data is absent or calc results are zero.
+// 1.14d mac: 001096cd
 void __fastcall MISSILE_CltDoFn13_Blizzard(D2UnitStrc * pUnit) {
     // The four values live in one frame group: the original keeps them adjacent in this order.
     struct __frame0_t {
@@ -5959,6 +6064,7 @@ void __fastcall MISSILE_CltDoFn13_Blizzard(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame missile do-function 014: homing/tracking behaviour. Every CltParam3 frames (default 5), if the target is within CltParam4 collision distance, nudges the missile position by CltParam5 steps toward the target via SetSP1 + PATH_CalculatePath, then falls through to CltDoFunc_001. Removes the missile if owner or missile txt is invalid.
+// 1.14d mac: 0010984c
 void __fastcall MISSILE_CltDoFn14_Unused(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = nullptr;
     if (pUnit) {
@@ -6015,6 +6121,7 @@ void __fastcall MISSILE_CltDoFn14_Unused(D2UnitStrc * pUnit) {
 }
 
 // Per-frame client missile update (DoFunc 15) for a homing/tracking missile. Validates the missile's MissilesTxt row and owner; removes the missile client-side once its target-X counter falls below -CltParam2. While moving it acquires a target (path target or owner's confirmed target) and, on a CltParam3-frame cadence within CltParam4 collision range, nudges the missile's path toward the target by CltParam5 steps and recomputes the path. On a CltParam1 cadence it spawns CltSubMissile1 child missiles via MakeMissile. Falls through to Missiles_CltDoFunc_001 for the standard per-frame advance. __fastcall, no return.
+// 1.14d mac: 00109aad
 void __fastcall MISSILE_CltDoFn15_FingerMageSpider(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt;
     D2UnitStrc* pOwner;
@@ -6100,6 +6207,7 @@ void __fastcall MISSILE_CltDoFn15_FingerMageSpider(D2UnitStrc * pUnit) {
 }
 
 // Client per-frame handler for missile 016. On collision (nonzero 8-flags), spawns CltSubMissile1 at the current position; a 1-in-4 RNG roll sets flag 0x4000 (alternate visual variant). Requires a valid owner. Falls through to Missiles_CltDoFunc_001 for standard movement.
+// 1.14d mac: 00109e8b
 void __fastcall MISSILE_CltDoFn16_DiabWallMaker(D2UnitStrc * pUnit) {
     D2UnitStrc* pOwner;
     uint32_t uRandMod;
@@ -6142,6 +6250,7 @@ void __fastcall MISSILE_CltDoFn16_DiabWallMaker(D2UnitStrc * pUnit) {
 }
 
 // Client per-frame handler for area-pattern stream missiles (017). While remaining frames &lt; CltParam1 and every 3 frames, spawns a ring/pattern of sub-missiles via MISSILE_CreatePatternAtUnitPos using the current stream range and density (doubles when range &gt; 4). Removes client-side when stream range reaches zero.
+// 1.14d mac: 0010a045
 void __fastcall MISSILE_CltDoFn17_CurseCenter(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -6181,6 +6290,7 @@ void __fastcall MISSILE_CltDoFn17_CurseCenter(D2UnitStrc * pUnit) {
 }
 
 // Client per-frame handler for bouncing/ricocheting missiles (018). After InitSteps frames, on collision spawns CltSubMissile1 at the impact position inheriting direction, precision X/Y, and Z-position from the parent missile. Always falls through to Missiles_CltDoFunc_001 for continued movement (no remove-on-hit).
+// 1.14d mac: 0010a200
 void __fastcall MISSILE_CltDoFn18_BoneSpear(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -6218,6 +6328,7 @@ void __fastcall MISSILE_CltDoFn18_BoneSpear(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame missile DoFunc #019: periodically spawns a trailing sub-missile while rotating its spread direction. Validates pUnit and its missiles.txt row; if CltSubMissile1 is set, every CltParam1 frames (interval, default 1) builds a D2SkillArgStrc seeded with the owner/skill/level and CltSubMissile1, looks up an X/Y spread offset from the global missile spread tables (index = TargetX & 0x3f), advances TargetX by CltParam2, calls MakeMissile, then chains to CltDoFunc_001. If validation fails, removes the client-side missile. __fastcall, pUnit in ECX.
+// 1.14d mac: 0010a3d5
 void __fastcall MISSILE_CltDoFn19_FrozenOrb(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int gnMissileSpreadTableX[64] = {
@@ -6397,6 +6508,7 @@ void __fastcall MISSILE_CltDoFn19_FrozenOrb(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick for a curving/spiraling missile (e.g. Guided Arrow style). Every CltParam2 frames while remaining frames < CltParam1, recomputes the midpoint between the missile's stored target deltas and the unit's current position, updates SP1 to the new waypoint, recalculates the path, and stores the updated direction offsets. Falls through to CltDoFunc_001 for normal movement; removes the missile client-side if the txt record is invalid.
+// 1.14d mac: 0010a529
 void __fastcall MISSILE_CltDoFn20_FrozenOrbNova(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt;
     int32_t nFrameInterval;
@@ -6441,6 +6553,7 @@ void __fastcall MISSILE_CltDoFn20_FrozenOrbNova(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame do-function for missile type 021. On the first frame (TargetX==0), spawns a CltSubMissile1 child missile at a seeded random offset within +/-CltParam1 tiles of the owner, storing the chosen X/Y offsets into the child's TargetX/Y; if both offsets are zero a non-zero fallback is forced. Decrements TargetX each frame as a countdown, then delegates movement to Missiles_CltDoFunc_001. Removes the missile client-side if the TXT record or sub-missile index is invalid.
+// 1.14d mac: 0010a696
 void __fastcall MISSILE_CltDoFn21_BrDeathControl(D2UnitStrc * pUnit) {
     int nClassId;
     uint32_t uRandVal;
@@ -6505,6 +6618,7 @@ void __fastcall MISSILE_CltDoFn21_BrDeathControl(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick for missile 022 (Weave/Tornado-style). Spawns a sub-missile via CltSubMissile1 on collision-flag hit, then every CltParam1 frames randomly perturbs the missile's direction by rotating (targetX,targetY) 90 degrees and scaling by 3/4. Falls through to Missiles_CltDoFunc_001 for standard movement.
+// 1.14d mac: 0010a8c8
 void __fastcall MISSILE_CltDoFn22_BrDeathLightningBolt(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     D2MissilesTxt* pMissileTxt = pUnit && pUnit->nClassId >= 0 && pUnit->nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + pUnit->nClassId : nullptr;
@@ -6560,6 +6674,7 @@ void __fastcall MISSILE_CltDoFn22_BrDeathLightningBolt(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 0010ab42
 void __fastcall MISSILE_CltDoFn23_DenOfEvilLight(D2UnitStrc * pUnit) {
     int32_t nCurrentFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
     if (nCurrentFrame < 100) {
@@ -6570,6 +6685,7 @@ void __fastcall MISSILE_CltDoFn23_DenOfEvilLight(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick for missile func 024 (appears to be a Thunderstorm / chain-lightning style missile). Within the CltParam1..Range-CltParam1 frame window, periodically spawns a CltSubMissile1 trail via MISSILE_CreatePeriodicTrail and sets up descent animation. In a secondary frame window (CltParam1..CltParam1+0x7D), iterates room objects with classId 0x11-0x15 (lightning rods/pylons): spawns CltSubMissile1 attacks at each, and every 8 frames fires CltSubMissile2 as a chained missile between two rod units, randomly cycling the target rod. Falls through to Missiles_CltDoFunc_001 each frame; removes missile if MissilesTxt lookup fails.
+// 1.14d mac: 0010ac53
 void __fastcall MISSILE_CltDoFn24_CairnStones(D2UnitStrc * pUnit) {
     D2UnitStrc* pOwner;
     D2UnitStrc* pTrailMissile;
@@ -6647,6 +6763,7 @@ void __fastcall MISSILE_CltDoFn24_CairnStones(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame do-function for missile type 025 (periodic scatter spawner). Every CltParam3 frames (default 1), spawns a CltSubMissile1 child missile at the parent's current position offset by a seeded random displacement: X/Y each within +/-CltParam1 tiles, plus an additional +/-CltParam2 base offset drawn separately. The child is aimed at the base position (nX/nY) with the random offset applied to nUnitX/Y. Delegates movement to Missiles_CltDoFunc_001; removes client-side on invalid TXT.
+// 1.14d mac: 0010af64
 void __fastcall MISSILE_CltDoFn25_Mist(D2UnitStrc * pUnit) {
     uint32_t uRandX;
     uint32_t uRandY;
@@ -6712,6 +6829,7 @@ void __fastcall MISSILE_CltDoFn25_Mist(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame DoFunc for missile class 26. Each tick decrements two countdown timers (stored in TargetX/TargetY). On CltSubMissile1 timer expiry spawns a random-offset sub-missile via MISSILE_CreateRandomOffset; on CltSubMissile2 expiry spawns a secondary missile at a seeded random displacement (range = CltParam3) via MakeMissile, carrying a random orientation counter. Falls through to Missiles_CltDoFunc_001 for standard motion.
+// 1.14d mac: 0010b1cc
 void __fastcall MISSILE_CltDoFn26_MephistoDeathControl(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -6772,6 +6890,7 @@ void __fastcall MISSILE_CltDoFn26_MephistoDeathControl(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame DoFunc for missile class 27 (homing/turning projectile). Every CltParam1 frames, uses a seeded RNG to randomly rotate the missile direction 90° left, right, or straight. When path flags are set and CltSubMissile1 is valid, spawns a trailing sub-missile. Recalculates the dynamic path toward the new target after each turn. Falls through to Missiles_CltDoFunc_001.
+// 1.14d mac: 0010b5da
 void __fastcall MISSILE_CltDoFn27_BossFireWallMaker(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt;
     uint32_t uPathFlags;
@@ -6838,6 +6957,7 @@ void __fastcall MISSILE_CltDoFn27_BossFireWallMaker(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for a burst/spread missile (e.g. multi-bolt). When remaining frames == CltParam1, resolves the owner unit, then fires 4 sub-missiles (CltSubMissile1) in a cross pattern defined by gaMissile028SpreadTableX/Y, each offset from the owner's current position. Falls through to CltDoFunc_001; removes client-side if txt or CltSubMissile1 invalid.
+// 1.14d mac: 0010b7fd
 void __fastcall MISSILE_CltDoFn28_MephistoDoNotDraw(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int gaMissile028SpreadTableY[4] = { 0x0, -0x1, 0x0, 0x1 }; D2_STATIC_GUARD(gaMissile028SpreadTableY, "D2Client::UNIT::Missile::MISSILE_CltDoFn28_MephistoDoNotDraw::gaMissile028SpreadTableY");
@@ -6884,6 +7004,7 @@ void __fastcall MISSILE_CltDoFn28_MephistoDoNotDraw(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for the Poison Nova missile. Each frame: spawns nova-ring sub-missiles (CltSubMissile1) via MISSILE_CreateSubWithSound using a radius computed from remaining frames; at intervals (CltParam1) spawns random-offset sub-missiles (CltSubMissile2); at frame 90 triggers a screen shake scaled by CltParam2; in the late phase spawns periodic area sub-missiles (CltSubMissile3). Falls through to CltDoFunc_001.
+// 1.14d mac: 0010c1e5
 void __fastcall MISSILE_CltDoFn29_AndyControl(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -6926,6 +7047,7 @@ void __fastcall MISSILE_CltDoFn29_AndyControl(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for a delayed burst missile (e.g. Blizzard shard emitter). Activates when remaining frames == CltParam1 (sets TargetY flag). Once active, every CltParam2 frames fires one sub-missile (CltSubMissile1) aimed at a random offset (±CltParam3 tiles) from the missile's current position, using seeded RNG. Falls through to CltDoFunc_001.
+// 1.14d mac: 0010c3db
 void __fastcall MISSILE_CltDoFn30_TowerChestSpawner(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     D2MissilesTxt* pMissileTxt = pUnit && (int)pUnit->nClassId >= 0 && (int)pUnit->nClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMissilesSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMissiles + pUnit->nClassId : nullptr;
@@ -6964,6 +7086,7 @@ void __fastcall MISSILE_CltDoFn30_TowerChestSpawner(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for Paladin Holy Bolt homing missile. Validates the missile belongs to the owner's current active skill (via gnPaladinSkillIndexTable). On collision (8-flags set), spawns a sub-missile (CltSubMissile1) and re-targets the path toward the owner via PATH_SetPathTarget. Removes the missile from the client hash if the skill check fails or owner is missing.
+// 1.14d mac: 0010c6b3
 void __fastcall MISSILE_CltDoFn44_Distraction(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -6989,6 +7112,7 @@ void __fastcall MISSILE_CltDoFn44_Distraction(D2UnitStrc * pUnit) {
     CUnit::UNITS_RemoveFromClientHashTable(!pUnit ? -1 : pUnit->nUnitGUID, !pUnit ? UNIT_COUNT : pUnit->eUnitType);
 }
 
+// 1.14d mac: 0010c876
 void __fastcall MISSILE_CltDoFn45_DistractionFog(D2UnitStrc * pUnit) {
     int nClassId;
     if (pUnit) {
@@ -7006,6 +7130,7 @@ void __fastcall MISSILE_CltDoFn45_DistractionFog(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for a bouncing/wall-reflect missile. On the first two frames, computes perpendicular direction from SP1 offset and stores in TargetX/Y. On collision (8-flags set), spawns two mirrored sub-missiles (CltSubMissile1) using the stored perpendicular direction and its negative, with nSubLoopMult=CltParam1. Falls through to CltDoFunc_001; removes from client hash if txt or static path invalid.
+// 1.14d mac: 0010c8fa
 void __fastcall MISSILE_CltDoFn46_LightningTrailingJavelin(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt;
     int32_t nPosX;
@@ -7057,6 +7182,7 @@ void __fastcall MISSILE_CltDoFn46_LightningTrailingJavelin(D2UnitStrc * pUnit) {
     CUnit::UNITS_RemoveFromClientHashTable(!pUnit ? -1 : pUnit->nUnitGUID, !pUnit ? UNIT_COUNT : pUnit->eUnitType);
 }
 
+// 1.14d mac: 0010cae5
 void __fastcall MISSILE_CltDoFn68_SucFireball(D2UnitStrc * pUnit) {
     uint32_t uCollFlags;
     D2SkillArgStrc sSkillArg;
@@ -7088,6 +7214,7 @@ void __fastcall MISSILE_CltDoFn68_SucFireball(D2UnitStrc * pUnit) {
     MISSILE_RemoveClientSide(pUnit);
 }
 
+// 1.14d mac: 0010cc1b
 void __fastcall MISSILE_CltDoFn47_MoltenBoulder(D2UnitStrc * pUnit) {
     int32_t nPrevBounceCount;
     int32_t nTargetX;
@@ -7117,6 +7244,7 @@ void __fastcall MISSILE_CltDoFn47_MoltenBoulder(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame missile tick function (DoFunc index 048). Each frame, if the missile's remaining-frame count is divisible by the skill's calc[1] interval, spawns CltSubMissile1 (and optionally CltSubMissile2) at a random offset (radius from calc[0]) around the missile's current position, after verifying the target cell is collision-free. Falls through to Missiles_CltDoFunc_001 for standard movement; removes the missile if its txt entry or owner is invalid.
+// 1.14d mac: 0010cce7
 void __fastcall MISSILE_CltDoFn48_EruptionCenter(D2UnitStrc * pUnit) {
     eCollisionFlags eCollisionResult;
     D2MissilesTxt* pMissileTxt;
@@ -7199,6 +7327,7 @@ void __fastcall MISSILE_CltDoFn48_EruptionCenter(D2UnitStrc * pUnit) {
     MISSILE_RemoveClientSide(pUnit);
 }
 
+// 1.14d mac: 0010d0ac
 void __fastcall MISSILE_CltDoFn49_Vines(D2UnitStrc * pUnit) {
     int32_t nRemainingFrames;
     int nFrameInterval;
@@ -7225,6 +7354,7 @@ void __fastcall MISSILE_CltDoFn49_Vines(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame DoFunc for missile class 50 (aura-pulse emitter). While remaining frames fall between CltParam3 and CltParam4, and every nSpawnInterval frames, spawns a CltSubMissile1 child missile at a seeded random offset within aurarange of the emitter's position. Range and interval are resolved from skill calcs if the txt params are zero. Falls through to Missiles_CltDoFunc_001.
+// 1.14d mac: 0010d13b
 void __fastcall MISSILE_CltDoFn50_Volcano(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -7274,6 +7404,7 @@ void __fastcall MISSILE_CltDoFn50_Volcano(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick function for missile type 051 (Teeth / multi-phase explode). At CltParam1 remaining frames, spawns CltSubMissile1 at the missile's position plus CltParam3 randomly scattered copies within CltParam4-tile radius. At CltParam2 remaining frames, hides the owner unit (NODRAW) and spawns CltSubMissile2 with a prog-sound. Delegates to Missiles_CltDoFunc_001 for base movement. Removes the missile if the txt entry is invalid.
+// 1.14d mac: 0010d550
 void __fastcall MISSILE_CltDoFn51_RecyclerDelay(D2UnitStrc * pUnit) {
     int32_t nOriginX;
     int32_t nPosY;
@@ -7343,6 +7474,7 @@ void __fastcall MISSILE_CltDoFn51_RecyclerDelay(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for a splitting missile (e.g. forked lightning). On collision (dynamic path 8-flags set), reads the missile's stored TargetX/Y direction and spawns two mirrored sub-missiles (CltSubMissile1) — one in the stored direction and one in the exact opposite — both referencing the original missile as pMissile. Falls through to CltDoFunc_001; removes client-side if owner or txt invalid.
+// 1.14d mac: 0010d8cc
 void __fastcall MISSILE_CltDoFn52_WakeMaker(D2UnitStrc * pUnit) {
     D2UnitStrc* pOwner;
     uint32_t uCollFlags;
@@ -7385,6 +7517,7 @@ void __fastcall MISSILE_CltDoFn52_WakeMaker(D2UnitStrc * pUnit) {
     MISSILE_RemoveClientSide(pUnit);
 }
 
+// 1.14d mac: 0010d9ed
 void __fastcall MISSILE_CltDoFn53_TigerFury(D2UnitStrc * pUnit) {
     uint32_t uCollFlags;
     D2SkillArgStrc sSkillArg;
@@ -7414,6 +7547,7 @@ void __fastcall MISSILE_CltDoFn53_TigerFury(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick for missile 056 (multi-stage burst). Counts valid CltSubMissile/CltParam2 pairs (up to 3). Before CltParam1 frames have elapsed, randomly selects one sub-missile slot (power-of-2 mask or modulo) and if its interval matches remaining frames, spawns a sub-missile via MakeMissile and immediately explodes it client-side. Falls through to Missiles_CltDoFunc_001; removes on invalid class.
+// 1.14d mac: 0010daae
 void __fastcall MISSILE_CltDoFn56_BaalTauntControl(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt;
     int32_t nRemainingFrames;
@@ -7493,6 +7627,7 @@ void __fastcall MISSILE_CltDoFn56_BaalTauntControl(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame do-function for missile type 057 (owner-tracking repeating spawner). Each frame: runs Missiles_CltDoFunc_043 for base movement, fetches the owner's current coordinates via GetCooordinates, increments a spawn counter (TargetY) up to the cap in TargetX, then spawns a CltSubMissile1 child missile at the owner's position with path type 0xE and recalculates its path. Resets TargetY to 0 after spawn and delegates to Missiles_CltDoFunc_001. Removes client-side if owner is gone or TXT invalid.
+// 1.14d mac: 0010dc57
 void __fastcall MISSILE_CltDoFn57_BladeShield(D2UnitStrc * pUnit) {
     BOOL _bHasCoords;
     bool bHasCoords;
@@ -7551,6 +7686,7 @@ void __fastcall MISSILE_CltDoFn57_BladeShield(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick for missile 058 (spiraling/oscillating trajectory). Every Param1 frames, reads a seeded direction bias stored in TargetX/TargetY, randomly flips it via the missile seed, computes a perpendicular offset, advances the missile position by that offset, recalculates the path, and then calls the standard frame-advance func (CltDoFunc_001). Removes the missile if data table entry is missing.
+// 1.14d mac: 0010dddb
 void __fastcall MISSILE_CltDoFn58_RoyalStrikeChaosIce(D2UnitStrc * pUnit) {
     D2MissilesTxt* pMissileTxt = 0;
     if (pUnit) {
@@ -7604,6 +7740,7 @@ void __fastcall MISSILE_CltDoFn58_RoyalStrikeChaosIce(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 00112b87
 void __fastcall MISSILE_CltDoFn37_DiabloAppears(D2UnitStrc * pUnit) {
     int32_t nCurrentFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
     if (nCurrentFrame == 0x96) {
@@ -7617,6 +7754,7 @@ void __fastcall MISSILE_CltDoFn37_DiabloAppears(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 00113050
 void __fastcall MISSILE_CltDoFn41_HfSpirit(D2UnitStrc * pUnit) {
     int32_t nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
     switch (nRemainingFrames) {
@@ -7637,6 +7775,7 @@ void __fastcall MISSILE_CltDoFn41_HfSpirit(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 00112e0c
 void __fastcall MISSILE_CltDoFn40_HfFragment3(D2UnitStrc * pUnit) {
     int32_t nMissileClassId;
     D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
@@ -7658,6 +7797,7 @@ void __fastcall MISSILE_CltDoFn40_HfFragment3(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 00112de7
 void __fastcall MISSILE_CltDoFn39_HfFragment(D2UnitStrc * pUnit) {
     D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
     if (pOwner) {
@@ -7667,6 +7807,7 @@ void __fastcall MISSILE_CltDoFn39_HfFragment(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 00112bff
 void __fastcall MISSILE_CltDoFn38_HfControl(D2UnitStrc * pUnit) {
     int32_t nUnitGUID = D2Common::Units::Missile::GetTargetX(pUnit);
     int32_t nRemainingFrames = D2Common::Units::Missile::GetRemainingFrames(pUnit);
@@ -7684,6 +7825,7 @@ void __fastcall MISSILE_CltDoFn38_HfControl(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for Izual's mist aura missile. Every frame calls MISSILE_CreateRandomOffsetHit (radius 10, MISSILE_IzualMistLoop). In the window between (Range-Param2) and (Range-Param1) frames, spawns a MISSILE_IzualLightning sub-missile near the owner with seeded RNG position scatter (±5), then sets a randomised vertical velocity offset and initialises it as a projectile particle with no lifetime. Always falls through to CltDoFunc_001.
+// 1.14d mac: 001130b8
 void __fastcall MISSILE_CltDoFn42_IzualControl(D2UnitStrc * pUnit) {
     uint32_t nRandSpread;
     int32_t nOwnerPosX;
@@ -7728,6 +7870,7 @@ void __fastcall MISSILE_CltDoFn42_IzualControl(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame missile DoFunc (variant 031), e.g. Horadric/Diablo-light cinematic effect. Reads current animation frame; at frame 0x96 triggers a screen shake. Walks gaMissile031SpreadRangeData (descending thresholds from 0x145, step 0x19) and at each matching frame spawns a Horadriclight sub-missile at the unit's position plus a table offset (via MakeMissile), then sets its direction/total/current frames. For frames <0xA5 on even frames it spawns a Horadriclightning missile with particle pos/offset vectors; for frames <0x96 it spawns a Dust missile at a pseudo-random jittered offset (using the unit RNG seed) and sets its anim speed. Always tail-calls Missiles_CltDoFunc_001. Pure visual/client logic; resolves position from dynamic or static path depending on unit type.
+// 1.14d mac: 001118e8
 void __fastcall MISSILE_CltDoFn31_HoradricStaff(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static D2Missile031SpreadStrc gaMissile031SpreadRangeData[7] = {
@@ -7942,6 +8085,7 @@ void __fastcall MISSILE_CltDoFn31_HoradricStaff(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick for missile 032 (Radament Hand of God spread pattern). Looks up the current frame in a spread table (gaMissile032SpreadConstData) to determine spawn interval and angle; when the frame matches, spawns a MISSILE_Radamenthandofgod child missile at the current position owned by the missile's owner unit, encoding spread angle in TargetX. Calls CltDoFunc_001 to advance the frame.
+// 1.14d mac: 00111d8b
 void __fastcall MISSILE_CltDoFn32_RadamentDeath(D2UnitStrc * pUnit) {
     eD2Skills eSkillId;
     D2UnitStrc* pOwner;
@@ -8001,6 +8145,7 @@ void __fastcall MISSILE_CltDoFn32_RadamentDeath(D2UnitStrc * pUnit) {
 }
 
 // Client-side missile DoFunc 33 (per-frame missile update; appears to drive a Horadric/sunflash-style emitter, e.g. the Horadric Cube light effect). Reads the missile's current frame, walks the gaMissile033 angle/timing lookup tables to pick the active phase. On phase-cadence frames it spawns a burst of MISSILE_Taintedsunflash child missiles at randomized offsets (RNG from the unit seed) around the emitter's position, inheriting the owner, skill id, and level via a D2SkillArgStrc, linking each new missile's target to the parent GUID. Adjusts the emitter's light radius by frame (3 early, 2 mid). On the first frame, finds the client-side object via its target-Y GUID and adds OVERLAY_horadric_light plus a light map (AllocLightMap) to it. Finally chains to Missiles_CltDoFunc_001 for the base per-frame behavior. Client/visual only; no return value.
+// 1.14d mac: 00111ea6
 void __fastcall MISSILE_CltDoFn33_TaintedSunControl(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int gaMissile033AngleLookupTableY[15] = {
@@ -8132,6 +8277,7 @@ void __fastcall MISSILE_CltDoFn33_TaintedSunControl(D2UnitStrc * pUnit) {
 }
 
 // Client missile do-func 0x22 (homing/seeking missile that tracks another missile unit). Reads the missile's target-Y as a state machine value and target-X as the tracked missile's server unit id (UNITS_FindServerSideUnit, UNIT_MISSILE). Advances PRNG from the unit seed for a small random variance, then per state: state 0 stops/fades and offsets when within collision distance; state 1 reflects/rotates SP1 toward the target with set velocities (0x179e/0xa00); state 3 snaps SP1 to the target (0x17a7/0x200). When the tracked target's state changes it transitions to states 2/3/4, each setting particle fade, bounds offset (seeded modulo 0x28), reverse-direction, recomputing the dynamic path, then chaining to Missiles_CltDoFunc_001. Always falls through to Missiles_CltDoFunc_001 to continue base missile processing.
+// 1.14d mac: 00112176
 void __fastcall MISSILE_CltDoFn34_TaintedSunBall(D2UnitStrc * pUnit) {
     int32_t nCollisionDist;
     int16_t sTargetPosY;
@@ -8259,6 +8405,7 @@ void __fastcall MISSILE_CltDoFn34_TaintedSunBall(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for a Queen (Andariel/Spider) death projectile emitter. Every 8 frames (frame & 3 == 0) fires one MISSILE_Queendeathglob sub-missile at a seeded random offset (±6 X, ±6.5 Y tiles) from the missile's current position, inheriting the parent's skill ID and level. Falls through to CltDoFunc_001.
+// 1.14d mac: 00112781
 void __fastcall MISSILE_CltDoFn35_QueenDeathCenter(D2UnitStrc * pUnit) {
     D2SkillArgStrc sSkillArg;
     uint32_t nCurrentFrame = D2Common::Units::Missile::GetCurrentFrame(pUnit);
@@ -8282,6 +8429,7 @@ void __fastcall MISSILE_CltDoFn35_QueenDeathCenter(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick for missile 036 (Exploding Arrow flight). At frame 0x145 triggers a screen shake. Each frame consults a spread-data table (gaMissile036ClientSpreadData) to decide spawn intervals, emitting MISSILE_Explodingarrowexp sparks and MISSILE_Durieldeathrock rocks at random offsets around the current position using a stepped RNG. Falls through to Missiles_CltDoFunc_001.
+// 1.14d mac: 001128bb
 void __fastcall MISSILE_CltDoFn36_DurielDeathControl(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static D2Missile036SpreadStrc gaMissile036ClientSpreadData[5] = {
@@ -8384,6 +8532,7 @@ void __fastcall MISSILE_CltDoFn36_DurielDeathControl(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 00113b5f
 void __fastcall MISSILE_CltDoFn61_OverseerControl(D2UnitStrc * pUnit) {
     int32_t nRemainingFrames;
     D2UnitStrc* pOwner = CUnit::MISSILE_GetOwnerUnit(pUnit);
@@ -8410,6 +8559,7 @@ void __fastcall MISSILE_CltDoFn61_OverseerControl(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame tick handler (index 062) for Baal's Nehlithak tentacle attack. Each frame: spawns two random cardinal sub-missiles; every 20 frames (while >60 remain) also spawns a Baal lightning bolt. At frame 25 remaining, fires both the light-hole (MISSILE_Nehlithakholelight) and the hole itself (MISSILE_Nehlithakhole) at position+2. Falls through to CltDoFunc_001 for standard movement.
+// 1.14d mac: 00113c15
 void __fastcall MISSILE_CltDoFn62_NehlithakControl(D2UnitStrc * pUnit) {
     int nPosX;
     int32_t nLevel;
@@ -8472,6 +8622,7 @@ void __fastcall MISSILE_CltDoFn62_NehlithakControl(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 00113efb
 void __fastcall MISSILE_CltDoFn63_NehlithakOrbit(D2UnitStrc * pUnit) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     int32_t nCurX = D2Common::Units::GetXPosFromDynamicPathUnitInline(pUnit);
@@ -8484,6 +8635,7 @@ void __fastcall MISSILE_CltDoFn63_NehlithakOrbit(D2UnitStrc * pUnit) {
 }
 
 // Per-frame client missile update for Baal-fx missile type 064 (Baal head / spirit spawns). Resolves the missile owner; if absent falls back to MISSILE_CltDoFn01_BasicMissile. Walks gaBaalFxSpiritSpawnSchedule (D2BaalFxSpiritSpawnStrc[5]) by current frame, and on matching frames spawns a randomized child spirit missile (MISSILE_BaalfxSpirit1) at a seed-randomized offset via MakeMissile. Sets target-X by frame threshold, and at scripted frame counts (0x145/0x177/0x1a9/0x1c2) casts the Baal-head appear/head missiles at the unit position via CastAttack. If a target-Y flag is set, finds a nearby monster and creates collision debris at seed-randomized offsets. Advances the missile's RNG seed throughout. Tail-calls MISSILE_CltDoFn01_BasicMissile.
+// 1.14d mac: 00113faf
 void __fastcall MISSILE_CltDoFn64_BaalFxControl(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     // also labelled: gaMissile064ClientSpreadY
@@ -8715,6 +8867,7 @@ static D2BaalFxSpiritSpawnStrc gaBaalFxSpiritSpawnSchedule[5] = {
 }
 
 // Client-side do-function for Paladin Holy Bolt / Fist-of-the-Heavens orbiting missile (func 065). Tracks a parent missile via TargetX/TargetY slots; if the parent has advanced its state it computes a perpendicular orbit offset, updates the dynamic-path SP1 and recalculates the path. Falls through to CltDoFunc_001 each tick. Side-effects: velocity and SP1 mutation on the missile's DynamicPath.
+// 1.14d mac: 001144be
 void __fastcall MISSILE_CltDoFn65_BaalFxSpirit(D2UnitStrc * pUnit) {
     D2SeedStrc* pSeed = &pUnit->sSeed;
     int32_t nState = D2Common::Units::Missile::GetTargetY(pUnit);
@@ -8765,6 +8918,7 @@ void __fastcall MISSILE_CltDoFn65_BaalFxSpirit(D2UnitStrc * pUnit) {
     MISSILE_CltDoFn01_BasicMissile(pUnit);
 }
 
+// 1.14d mac: 00113a51
 void __fastcall MISSILE_CltDoFn59_WorldStoneChip(D2UnitStrc * pUnit) {
     int32_t nMinZ = -D2Common::Units::Missile::GetTargetX(pUnit);
     int32_t nMaxZ = D2Common::Units::Missile::GetTargetY(pUnit);
@@ -8778,6 +8932,7 @@ void __fastcall MISSILE_CltDoFn59_WorldStoneChip(D2UnitStrc * pUnit) {
 }
 
 // Client-side per-frame do-function for Anya's ice-magic missile (missile 054). On the final frame (nRemainingFrames==0) casts MISSILE_AnyaIcemagic at the missile position. Spawns 1, 4, or 8 MISSILE_Anyasteam1 particle missiles per frame depending on remaining-frame thresholds, applying random velocity offsets from the missile's seed. Creates a steam-vent every 7 frames. At frame 5 triggers a screen shake (magnitude 3, dur 600, freq 4000/3000). Delegates animation to Missiles_CltDoFunc_001.
+// 1.14d mac: 00113487
 void __fastcall MISSILE_CltDoFn54_AnyaCenter(D2UnitStrc * pUnit) {
     int nSpawnIter;
     int32_t nSkillLvl;
@@ -8863,6 +9018,7 @@ void __fastcall MISSILE_CltDoFn54_AnyaCenter(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for the Ancient Warriors death cloud emitter. Every 3 remaining frames, advances the missile's seed twice and fires one MISSILE_AncientDeathCloud sub-missile; origin is the missile's current tile (±1 random offset from seed LSB), and the sub-missile target is a seeded ±10-tile random scatter from that origin. Falls through to CltDoFunc_001.
+// 1.14d mac: 0011389c
 void __fastcall MISSILE_CltDoFn55_AncientDeathCenter(D2UnitStrc * pUnit) {
     int nPosXTmp;
     eD2UnitType eUnitType;
@@ -8916,6 +9072,7 @@ void __fastcall MISSILE_CltDoFn55_AncientDeathCenter(D2UnitStrc * pUnit) {
 }
 
 // Client-side tick for a rotating/orbiting missile. Every other remaining frame (odd frames skipped), recomputes SP1 by rotating the missile's current position around its stored TargetX/Y pivot using a 90-degree perpendicular offset, then calls PATH_CalculatePath to follow the updated waypoint — effectively making the missile orbit its target point. Falls through to CltDoFunc_001.
+// 1.14d mac: 00113a9b
 void __fastcall MISSILE_CltDoFn60_Hurricane(D2UnitStrc * pUnit) {
     if (!((int)D2Common::Units::Missile::GetRemainingFrames(pUnit) % 2)) {
       D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;

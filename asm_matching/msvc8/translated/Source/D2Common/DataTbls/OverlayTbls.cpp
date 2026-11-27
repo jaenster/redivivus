@@ -34,6 +34,7 @@ uint32_t gaOverlayVariantCodes2[12] = {
 namespace D2Common { namespace DATATBLS { namespace OverlayTbls {
 
 // Compiles Overlay.txt into the in-memory overlay table during data-table init. Declares the column schema (overlay name, filename, version, Frames, PreDraw, 1ofN, Dir, animrate, Beta, X/Yoffset, height/range/light fields, Trans, RGB color, NumDirections, LocalBlood) with field types and struct offsets, creates the overlay TxtLink lookup (STRUCT_CreateTxtLinkStrc) into sgtDataTable.pTxtOverlayLink, then calls DataTbls::CompileTxt (record size 0x84) storing the result in sgtDataTable.pTxtOverlay / nTxtOverlaySize. Allocates from pMemory. (Several column-name string literals decompile as raw global addresses; they are the in-binary .rdata column names.)
+// 1.14d mac: 0014af34
 void __fastcall TXT_AllocTxt_overlay(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc aFieldDefs[26] = {
       {"overlay", FIELDTYPE_NAME_I_WORD, 0, 0, &MonsterTbls::sgtDataTable.pTxtOverlayLink},
@@ -67,6 +68,7 @@ void __fastcall TXT_AllocTxt_overlay(D2PoolManagerStrc * pMemory) {
     MonsterTbls::sgtDataTable.pTxtOverlay = (D2OverlayTxt*)DataTbls::CompileTxt(pMemory, "overlay", aFieldDefs, &MonsterTbls::sgtDataTable.nTxtOverlaySize, 0x84);
 }
 
+// 1.14d mac: 0014afe1
 void __stdcall OVERLAYTBLS_FreeOverlayTables() {
     Fog::Src::Excel::STRUCT_FreeTxtLink(MonsterTbls::sgtDataTable.pTxtOverlayLink);
     DataTbls::UnloadBin(MonsterTbls::sgtDataTable.pTxtOverlay);
@@ -142,6 +144,7 @@ uint32_t __stdcall OVERLAYTBLS_GetLightRadiusAndRGB(int32_t nOverlayId, int * pn
     return 1;
 }
 
+// 1.14d mac: 0014b01e
 int32_t __stdcall OVERLAYTBLS_Get1ofN(int32_t nOverlayId) {
     D2OverlayTxt* pOverlayTxt = nOverlayId >= 0 && nOverlayId < ITEMS::Items::sgptDataTable->nTxtOverlaySize ? ITEMS::Items::sgptDataTable->pTxtOverlay + nOverlayId : nullptr;
     if (!pOverlayTxt) {
@@ -197,6 +200,7 @@ int __fastcall Unreferenced_00664800(int nMonStatsId, int nIndex) {
 }
 
 // Resolves the graphic-component (DCC/COF token) for one of a monster's render components by index and variant. Validates the unit is a monster, reads its MonStats2 component table, bounds-checks the variant, and looks up the base comp-code via DATATBLS_GetCompCodeByIndex. For Act II monsters it may override the component from the gnOverlayTblsCount / gnOverlayTblsMaxId tables depending on the monster's validated base class id (special-cases base id 0xaa). Returns the resolved component token (cast as D2UnitStrc*), or NULL for non-monsters / out-of-range component or variant.
+// 1.14d mac: 0017bf6d
 uint32_t __stdcall MONSTER_GetComponentOverlay(D2UnitStrc * pUnit, uint32_t nComponentIdx, uint32_t nVariantIdx) {
     // Static local variables (originally global data)
     static uint32_t * gnOverlayTblsCount[16] = {

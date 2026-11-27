@@ -32,6 +32,7 @@ namespace D2Game { namespace Quests { namespace QUESTS { namespace A1Q2 {
 // Returns true if the quest has been introduced (bIsNotIntroduction) AND the
 // status flag has advanced past the "boss killed" stage (nStateFlag > 3, i.e.
 // the reward/turn-in stages 4/5). Used to gate whether the quest is finalizable.
+// 1.14d mac: 00218472
 bool __fastcall QuestDataBool(D2QuestDataStrc * pQuestData) {
     if (pQuestData->bIsNotIntroduction != '\0' && pQuestData->nStateFlag >= 4) {
       return true;
@@ -47,6 +48,7 @@ bool __fastcall QuestDataBool(D2QuestDataStrc * pQuestData) {
 // CannotCompleteQuestInGame -- i.e. push the "done" log entry exactly once.
 // QuestRecord state ids: 0=Completed, 0xf=FinishedInPreviousGame,
 // 0xd=JustCompleted, 0xe=CannotCompleteInGame.
+// 1.14d mac: 0022127a
 BOOL __fastcall Q02_NotifyQuestStateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -108,6 +110,7 @@ BOOL __fastcall Q02_SyncQuestStepToPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUni
 // QUEST_SetStateAndBroadcast(1,...) (status flag 1 = quest given/active),
 // clears bAcceptedQuest, detaches this slot-2 handler (one-shot), then
 // re-syncs every player's quest step (Q02_SyncQuestStepToPlayer).
+// 1.14d mac: 00218cf3
 void __fastcall Q02_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0x96)) {
       return;
@@ -128,6 +131,7 @@ void __fastcall Q02_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2Que
 
 // A1Q2 (Sisters' Burial Grounds) NPC-gossip callback slot 0xb, handling Kashya (NPC 0x96). Msg 0x51: player accepts the quest — sets bAcceptedQuest, advances stateFlag to 2, re-syncs all players' journal steps via Q02_SyncQuestStepToPlayer, sends gossip packet. Msg 0x5c: reward turn-in — only if RewardAwaits; broadcasts JustCompleted state, marks Completed, clears RewardAwaits, records the player GUID, and calls HireMercFromNpc(0x96) to grant the rogue mercenary reward.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q2.cpp
+// 1.14d mac: 00218a9b
 void __fastcall Q02_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nLine;
     short int nNpcNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
@@ -191,6 +195,7 @@ void __fastcall Q02_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 //   else, status flag 1..3 (in progress, not Completed) -> line from
 //     lookup table {.,0,1,2,3,4} indexed by nStateFlag (the in-progress chatter).
 // State ids: 0=Completed, 1=RewardAwaits.
+// 1.14d mac: 0021898b
 void __fastcall Q02_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQuestCallbackAddressQ38[6] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gdwQuestCallbackAddressQ38, "D2Game::Quests::QUESTS::A1Q2::Q02_Callback00_NpcActivate::gdwQuestCallbackAddressQ38");
@@ -230,6 +235,7 @@ void __fastcall Q02_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, iTargetId, nMessageIndex);
 }
 
+// 1.14d mac: 002216db
 uint8_t __fastcall Q02_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     pQuestData->nQuestPacketFlags = '\0';
     QUEST_SetStateAndBroadcast(pQuestData, 3, nullptr, (::fpExecuteOnUnitFunction)Q02_NotifyQuestStateToPlayer, 1);
@@ -239,6 +245,7 @@ uint8_t __fastcall Q02_TimerNotifyCompletion(::SGAMEDATA * pGame, D2QuestDataStr
 // A1Q2 quest-state handler slot 0xa (Q02_Callback_10): player-leaves cleanup.
 // Removes the player's GUID from this quest's participant list
 // (QUESTGUID_RemovePlayerFromList); uses -1 when no player unit is present.
+// 1.14d mac: 00218cc4
 void __fastcall Q02_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     QUESTGUID_RemovePlayerFromList(&pQuestData->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
@@ -251,6 +258,7 @@ void __fastcall Q02_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2
 // QuestRecord -- this is what makes the reward (rogue merc) claimable from Kashya.
 // Looks up Blood Raven via nBloodRavenGUID stashed by Q02_Callback_08.
 // State ids: 0=Completed,1=RewardAwaits,2=JustCompleted.
+// 1.14d mac: 002213e1
 BOOL __fastcall Q02_SetRewardForNearbyPlayers(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2RoomStrc* pBloodRavenRoom;
     uint32_t nRoomIdx;
@@ -311,6 +319,7 @@ BOOL __fastcall Q02_SetRewardForNearbyPlayers(::SGAMEDATA * pGame, D2UnitStrc * 
     return 0;
 }
 
+// 1.14d mac: 0021848d
 void __fastcall fpExecuteOnUnitFunction(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -349,6 +358,7 @@ void __fastcall fpExecuteOnUnitFunction(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // notifies the client (QUEST_SendQuestStatePacket). These players must re-do the
 // kill in a future game.
 // State ids: 0=Completed,1=RewardAwaits,0xe=CannotCompleteQuestInGame.
+// 1.14d mac: 002215f2
 BOOL __fastcall Q02_SetCannotCompleteInGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -369,6 +379,7 @@ BOOL __fastcall Q02_SetCannotCompleteInGame(::SGAMEDATA * pGame, D2UnitStrc * pU
 // A1Q2 completion-sound trigger, iterated over players. If the player's record
 // has QUESTSTATE_JustCompleted (id 0xd) set this session, plays the quest-done
 // fanfare via SetupUpdateEvent_AttachEventSound(event 0x22).
+// 1.14d mac: 00221683
 BOOL __fastcall Q02_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     /* GetQuestState(QUESTSTATE_JustCompleted=0xd): play fanfare only for players
                          credited self session */ D2BitBufferStrc* pQuestRecord = D2Common::Units::GetPlayerData(pUnit)->pQuestRecord[pGame->nDifficulty];
@@ -384,6 +395,7 @@ BOOL __fastcall Q02_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 // QUESTSTATE_JustCompleted (id 0xd) set, runs fpExecuteOnUnitFunction over every
 // member of that player's party (ExecuteFunctionForEveryPartyMember) so partied
 // players also get quest credit for the Blood Raven kill.
+// 1.14d mac: 00221575
 BOOL __fastcall Q02_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     /* GetQuestState(QUESTSTATE_JustCompleted=0xd): only propagate from a player
                          credited self session */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
@@ -415,6 +427,7 @@ BOOL __fastcall Q02_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
 //     set bBloodRavenKilled/bNotifiedCompletion
 //   - QUEST_SetQuestRecordState(JustCompleted=0xd) on the killing player's record.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q2.cpp
+// 1.14d mac: 00218830
 void __fastcall Q02_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nTargetGUID;
     if (pQuestData->bIsNotIntroduction == '\0') {
@@ -447,6 +460,7 @@ void __fastcall Q02_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 
 // A1Q2 Sisters' Burial Grounds, state-fn slot 3. Handles area-entry trigger (index 0x11): if quest introduced and nStateFlag&lt;3, advances nStateFlag to 3 and broadcasts state 2 (Q02_NotifyQuestStateToPlayer), then syncs step bits to all players. Also handles player-leaves path (pTextControl==1): removes player from participant list and, if nStateFlag==2 and not Completed/RewardAwaits, advances nStateFlag to 3 and resyncs steps.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q2.cpp
+// 1.14d mac: 002186d8
 void __fastcall Q02_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nOldLevel;
     nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
@@ -500,6 +514,7 @@ void __fastcall Q02_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 // has been given (status flag != 0) and reward is not yet awaiting, or (b) reward
 // is awaiting (RewardAwaits id 1) -> ready to turn in.
 // State ids: 0=Completed, 1=RewardAwaits.
+// 1.14d mac: 00218540
 bool __fastcall Q02_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     /* If target is Kashya */ if (nTargetClassId == 0x96) {
       BOOL bIsQuestInState;
@@ -533,6 +548,7 @@ bool __fastcall Q02_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 // (nSequenceQuestId = QUEST_TheSearchForCain / A1Q3) by invoking its
 // fpSequenceFilter.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q2.cpp
+// 1.14d mac: 00218e62
 bool __fastcall Q02_SequenceFilter(D2QuestDataStrc * pQuestData) {
     bool bResult;
     D2QuestDataStrc* pNextQuestData;
@@ -561,6 +577,7 @@ bool __fastcall Q02_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // A1Q2 Sisters' Burial Grounds, state-0xd (load/join reconcile) handler. Restores in-memory nStateFlag/nStateFlagPrev from persisted QuestRecord step bits for a joining or loading player. Skips if Completed or FinishedInPreviousGame. Step0x04 -> nStateFlag=3/prev=2; Step0x03 -> nStateFlag=3/prev=1; Step0x02 -> nStateFlag=2/prev=1. Reads record only.
+// 1.14d mac: 00218d8b
 void __fastcall Q02_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -610,6 +627,7 @@ void __fastcall Q02_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 // 0x51), nQuestIdReal=QUEST_SistersBurialGrounds, nSequenceQuestId=
 // QUEST_TheSearchForCain (A1Q3), and zeroes the progress flags.
 // @sourcefile d:\diablo2\Diablo2\Source\D2Game/Quests/a1q2.cpp
+// 1.14d mac: 002185cb
 void __fastcall Q02_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;

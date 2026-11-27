@@ -13,21 +13,28 @@
 // Mac-only: the guard is spelled `#if !defined(_WIN32) && D2_OS_MAC`.
 #include "D2GFXMac.h"
 
+#include <stdlib.h>
+
 #if !defined(_WIN32) && D2_OS_MAC
 
 void fp_fatal(const char* szFormat, ...);
 // 1.14d mac: 002ef085
 void* FOG_GetFramePointer(void);
 
-// The blend tables of the Mac renderer: an alpha of 0xC0 and up takes the first, 0x80 the
-// second, 0x40 the third, below that nothing is drawn.
-extern uint8_t** g_ppBlendTables;
+// The palette-table set (D2GFXMacHelper.cpp): its first three entries are the blend tables,
+// taken for an alpha of 0xC0 and up, 0x80 and up, 0x40 and up; below that nothing is drawn.
+extern uint8_t** g_ppPaletteTables;
 
 // 1.14d mac: 00547e98
-// Clip rectangles: [0..2] the bottom, left and right of the whole surface; [3] a flag,
-// then bottom, left, right of the ground tile bounds and the bottom of its inner bounds, and
-// the same set again for the wall tile bounds.
-int g_anClip[17];
+// The surface's clip: rows below nBottom and columns outside [nLeft, nRight) are not drawn.
+MacClipBounds g_tSurfaceClip;
+// 1.14d mac: 00547ea4
+// Where a floor tile's origin must lie to be drawn at all (tOuter) and to be drawn unclipped
+// (tInner); bTall lets it start 32 rows above the top.
+MacTileClip g_tGroundClip;
+// 1.14d mac: 00547ec0
+// The same for a wall block.
+MacTileClip g_tWallClip;
 // 1.14d mac: 00547edc
 // Row offsets from 32 rows above the surface; entry n + 32 is row n.
 int g_anRowOffsets[732];
@@ -35,12 +42,25 @@ int g_anRowOffsets[732];
 // The light grid: 32 columns by 32 rows by 32 shades.
 uint8_t g_abLightGrid[0x8000];
 
+// A floor block is a diamond of 15 rows: where each row starts in the destination, how many
+// pixels it has, and where it starts in the packed source.
 // 1.14d mac: 003c8090
-extern int g_anTileRowDest[15];
+int g_anTileRowDest[15] = {14, 12, 10, 8, 6, 4, 2, 0, 2, 4, 6, 8, 10, 12, 14};
 // 1.14d mac: 003c80cc
-extern uint32_t g_anTileRowWidth[15];
+uint32_t g_anTileRowWidth[15] = {4, 8, 12, 16, 20, 24, 28, 32, 28, 24, 20, 16, 12, 8, 4};
 // 1.14d mac: 003c8108
-extern int g_anTileRowSrc[15];
+int g_anTileRowSrc[15] = {0, 4, 12, 24, 40, 60, 84, 112, 144, 172, 196, 216, 232, 244, 252};
+
+// A run-length row's run header: pixels to skip, then pixels that follow.
+struct MacRunHeader {
+    uint8_t nSkip;
+    uint8_t nCount;
+};
+
+// Whether a tile's origin lies in the bounds, rows from nTop.
+static inline bool MacTileInBounds(const MacClipBounds* pBounds, int nTop, int nX, int nY) {
+    return nTop <= nY && nY < pBounds->nBottom && pBounds->nLeft <= nX && nX < pBounds->nRight;
+}
 
 #define FRAMEPOINTER_FATAL(nLine) fp_fatal("Unrecoverable internal error %08x line %d", FOG_GetFramePointer(), nLine)
 
@@ -84,7 +104,7 @@ void FUN_002b1ca9(const uint8_t* pSrc, uint8_t* pDest, int nLightX, int nLightXS
         uint32_t nWidth = *pnWidth;
         for (uint32_t i = 0; i < nWidth; i++) {
             pDestRow[nDestOffset + i] =
-                g_abMacShadeTable[pSrc[nSrcOffset + i] + g_abLightGrid[nDestOffset + i + nLightOffset] * 0x100];
+                MAC_SHIFT_TABLES[pSrc[nSrcOffset + i] + g_abLightGrid[nDestOffset + i + nLightOffset] * 0x100];
         }
         nLightY += nLightYStep;
         nLightX += nLightXStep;
@@ -204,69 +224,69 @@ void FUN_002b24c4(const uint8_t* pSrc, uint8_t* pDest, int nLightX, int nLightXS
                 uint8_t* pDst = pDest;
                 switch (nRun) {
                 case 32:
-                    pDst[nSkip + 31] = g_abMacShadeTable[pSrc[33] + pLight[nSkip + 31] * 0x100];
+                    pDst[nSkip + 31] = MAC_SHIFT_TABLES[pSrc[33] + pLight[nSkip + 31] * 0x100];
                 case 31:
-                    pDst[nSkip + 30] = g_abMacShadeTable[pSrc[32] + pLight[nSkip + 30] * 0x100];
+                    pDst[nSkip + 30] = MAC_SHIFT_TABLES[pSrc[32] + pLight[nSkip + 30] * 0x100];
                 case 30:
-                    pDst[nSkip + 29] = g_abMacShadeTable[pSrc[31] + pLight[nSkip + 29] * 0x100];
+                    pDst[nSkip + 29] = MAC_SHIFT_TABLES[pSrc[31] + pLight[nSkip + 29] * 0x100];
                 case 29:
-                    pDst[nSkip + 28] = g_abMacShadeTable[pSrc[30] + pLight[nSkip + 28] * 0x100];
+                    pDst[nSkip + 28] = MAC_SHIFT_TABLES[pSrc[30] + pLight[nSkip + 28] * 0x100];
                 case 28:
-                    pDst[nSkip + 27] = g_abMacShadeTable[pSrc[29] + pLight[nSkip + 27] * 0x100];
+                    pDst[nSkip + 27] = MAC_SHIFT_TABLES[pSrc[29] + pLight[nSkip + 27] * 0x100];
                 case 27:
-                    pDst[nSkip + 26] = g_abMacShadeTable[pSrc[28] + pLight[nSkip + 26] * 0x100];
+                    pDst[nSkip + 26] = MAC_SHIFT_TABLES[pSrc[28] + pLight[nSkip + 26] * 0x100];
                 case 26:
-                    pDst[nSkip + 25] = g_abMacShadeTable[pSrc[27] + pLight[nSkip + 25] * 0x100];
+                    pDst[nSkip + 25] = MAC_SHIFT_TABLES[pSrc[27] + pLight[nSkip + 25] * 0x100];
                 case 25:
-                    pDst[nSkip + 24] = g_abMacShadeTable[pSrc[26] + pLight[nSkip + 24] * 0x100];
+                    pDst[nSkip + 24] = MAC_SHIFT_TABLES[pSrc[26] + pLight[nSkip + 24] * 0x100];
                 case 24:
-                    pDst[nSkip + 23] = g_abMacShadeTable[pSrc[25] + pLight[nSkip + 23] * 0x100];
+                    pDst[nSkip + 23] = MAC_SHIFT_TABLES[pSrc[25] + pLight[nSkip + 23] * 0x100];
                 case 23:
-                    pDst[nSkip + 22] = g_abMacShadeTable[pSrc[24] + pLight[nSkip + 22] * 0x100];
+                    pDst[nSkip + 22] = MAC_SHIFT_TABLES[pSrc[24] + pLight[nSkip + 22] * 0x100];
                 case 22:
-                    pDst[nSkip + 21] = g_abMacShadeTable[pSrc[23] + pLight[nSkip + 21] * 0x100];
+                    pDst[nSkip + 21] = MAC_SHIFT_TABLES[pSrc[23] + pLight[nSkip + 21] * 0x100];
                 case 21:
-                    pDst[nSkip + 20] = g_abMacShadeTable[pSrc[22] + pLight[nSkip + 20] * 0x100];
+                    pDst[nSkip + 20] = MAC_SHIFT_TABLES[pSrc[22] + pLight[nSkip + 20] * 0x100];
                 case 20:
-                    pDst[nSkip + 19] = g_abMacShadeTable[pSrc[21] + pLight[nSkip + 19] * 0x100];
+                    pDst[nSkip + 19] = MAC_SHIFT_TABLES[pSrc[21] + pLight[nSkip + 19] * 0x100];
                 case 19:
-                    pDst[nSkip + 18] = g_abMacShadeTable[pSrc[20] + pLight[nSkip + 18] * 0x100];
+                    pDst[nSkip + 18] = MAC_SHIFT_TABLES[pSrc[20] + pLight[nSkip + 18] * 0x100];
                 case 18:
-                    pDst[nSkip + 17] = g_abMacShadeTable[pSrc[19] + pLight[nSkip + 17] * 0x100];
+                    pDst[nSkip + 17] = MAC_SHIFT_TABLES[pSrc[19] + pLight[nSkip + 17] * 0x100];
                 case 17:
-                    pDst[nSkip + 16] = g_abMacShadeTable[pSrc[18] + pLight[nSkip + 16] * 0x100];
+                    pDst[nSkip + 16] = MAC_SHIFT_TABLES[pSrc[18] + pLight[nSkip + 16] * 0x100];
                 case 16:
-                    pDst[nSkip + 15] = g_abMacShadeTable[pSrc[17] + pLight[nSkip + 15] * 0x100];
+                    pDst[nSkip + 15] = MAC_SHIFT_TABLES[pSrc[17] + pLight[nSkip + 15] * 0x100];
                 case 15:
-                    pDst[nSkip + 14] = g_abMacShadeTable[pSrc[16] + pLight[nSkip + 14] * 0x100];
+                    pDst[nSkip + 14] = MAC_SHIFT_TABLES[pSrc[16] + pLight[nSkip + 14] * 0x100];
                 case 14:
-                    pDst[nSkip + 13] = g_abMacShadeTable[pSrc[15] + pLight[nSkip + 13] * 0x100];
+                    pDst[nSkip + 13] = MAC_SHIFT_TABLES[pSrc[15] + pLight[nSkip + 13] * 0x100];
                 case 13:
-                    pDst[nSkip + 12] = g_abMacShadeTable[pSrc[14] + pLight[nSkip + 12] * 0x100];
+                    pDst[nSkip + 12] = MAC_SHIFT_TABLES[pSrc[14] + pLight[nSkip + 12] * 0x100];
                 case 12:
-                    pDst[nSkip + 11] = g_abMacShadeTable[pSrc[13] + pLight[nSkip + 11] * 0x100];
+                    pDst[nSkip + 11] = MAC_SHIFT_TABLES[pSrc[13] + pLight[nSkip + 11] * 0x100];
                 case 11:
-                    pDst[nSkip + 10] = g_abMacShadeTable[pSrc[12] + pLight[nSkip + 10] * 0x100];
+                    pDst[nSkip + 10] = MAC_SHIFT_TABLES[pSrc[12] + pLight[nSkip + 10] * 0x100];
                 case 10:
-                    pDst[nSkip + 9] = g_abMacShadeTable[pSrc[11] + pLight[nSkip + 9] * 0x100];
+                    pDst[nSkip + 9] = MAC_SHIFT_TABLES[pSrc[11] + pLight[nSkip + 9] * 0x100];
                 case 9:
-                    pDst[nSkip + 8] = g_abMacShadeTable[pSrc[10] + pLight[nSkip + 8] * 0x100];
+                    pDst[nSkip + 8] = MAC_SHIFT_TABLES[pSrc[10] + pLight[nSkip + 8] * 0x100];
                 case 8:
-                    pDst[nSkip + 7] = g_abMacShadeTable[pSrc[9] + pLight[nSkip + 7] * 0x100];
+                    pDst[nSkip + 7] = MAC_SHIFT_TABLES[pSrc[9] + pLight[nSkip + 7] * 0x100];
                 case 7:
-                    pDst[nSkip + 6] = g_abMacShadeTable[pSrc[8] + pLight[nSkip + 6] * 0x100];
+                    pDst[nSkip + 6] = MAC_SHIFT_TABLES[pSrc[8] + pLight[nSkip + 6] * 0x100];
                 case 6:
-                    pDst[nSkip + 5] = g_abMacShadeTable[pSrc[7] + pLight[nSkip + 5] * 0x100];
+                    pDst[nSkip + 5] = MAC_SHIFT_TABLES[pSrc[7] + pLight[nSkip + 5] * 0x100];
                 case 5:
-                    pDst[nSkip + 4] = g_abMacShadeTable[pSrc[6] + pLight[nSkip + 4] * 0x100];
+                    pDst[nSkip + 4] = MAC_SHIFT_TABLES[pSrc[6] + pLight[nSkip + 4] * 0x100];
                 case 4:
-                    pDst[nSkip + 3] = g_abMacShadeTable[pSrc[5] + pLight[nSkip + 3] * 0x100];
+                    pDst[nSkip + 3] = MAC_SHIFT_TABLES[pSrc[5] + pLight[nSkip + 3] * 0x100];
                 case 3:
-                    pDst[nSkip + 2] = g_abMacShadeTable[pSrc[4] + pLight[nSkip + 2] * 0x100];
+                    pDst[nSkip + 2] = MAC_SHIFT_TABLES[pSrc[4] + pLight[nSkip + 2] * 0x100];
                 case 2:
-                    pDst[nSkip + 1] = g_abMacShadeTable[pSrc[3] + pLight[nSkip + 1] * 0x100];
+                    pDst[nSkip + 1] = MAC_SHIFT_TABLES[pSrc[3] + pLight[nSkip + 1] * 0x100];
                 case 1:
-                    pDst[nSkip + 0] = g_abMacShadeTable[pSrc[2] + pLight[nSkip + 0] * 0x100];
+                    pDst[nSkip + 0] = MAC_SHIFT_TABLES[pSrc[2] + pLight[nSkip + 0] * 0x100];
                 }
                 pLight += nSkip + nRun;
                 pDest += nSkip + nRun;
@@ -301,7 +321,7 @@ void FUN_002b2a08(int nX, int nY, const uint8_t* pSrc, uint8_t* pDest, const uin
                 if (pRun[1] == 0 && pRun[0] == 0) {
                     break;
                 }
-                if (g_anClip[0] <= nRow + nY) {
+                if (g_tSurfaceClip.nBottom <= nRow + nY) {
                     return;
                 }
                 if (nRow + nY < 0) {
@@ -309,14 +329,14 @@ void FUN_002b2a08(int nX, int nY, const uint8_t* pSrc, uint8_t* pDest, const uin
                     pRunDst = pRunDst + nSkip + nRun;
                 } else {
                     int nPos = ((int)(pRunDst + nSkip) - (int)pDestRow) + nX;
-                    int nEnd = g_anClip[2] - nPos;
+                    int nEnd = g_tSurfaceClip.nRight - nPos;
                     if (nEnd < 0) {
                         nEnd = 0;
                     }
                     if ((int)nRun < nEnd) {
                         nEnd = nRun;
                     }
-                    int nStart = g_anClip[1] - nPos;
+                    int nStart = g_tSurfaceClip.nLeft - nPos;
                     if (nStart < 0) {
                         nStart = 0;
                     }
@@ -427,7 +447,7 @@ void FUN_002b2da8(int nX, int nY, const uint8_t* pSrc, uint8_t* pDest, int nLigh
                 if (pRun[1] == 0 && pRun[0] == 0) {
                     break;
                 }
-                if (g_anClip[0] <= nRow + nY) {
+                if (g_tSurfaceClip.nBottom <= nRow + nY) {
                     return;
                 }
                 if (nRow + nY < 0) {
@@ -436,14 +456,14 @@ void FUN_002b2da8(int nX, int nY, const uint8_t* pSrc, uint8_t* pDest, int nLigh
                     pNextLight = pLight + nSkip + nRun;
                 } else {
                     int nPos = ((int)(pRunDst + nSkip) - (int)pDestRow) + nX;
-                    int nEnd = g_anClip[2] - nPos;
+                    int nEnd = g_tSurfaceClip.nRight - nPos;
                     if (nEnd < 0) {
                         nEnd = 0;
                     }
                     if ((int)nRun < nEnd) {
                         nEnd = nRun;
                     }
-                    int nStart = g_anClip[1] - nPos;
+                    int nStart = g_tSurfaceClip.nLeft - nPos;
                     if (nStart < 0) {
                         nStart = 0;
                     }
@@ -458,69 +478,69 @@ void FUN_002b2da8(int nX, int nY, const uint8_t* pSrc, uint8_t* pDest, int nLigh
                         int nDest = nStart + nSkip;
                         switch (nVisible) {
                         case 32:
-                            pRunDst[nDest + 31] = g_abMacShadeTable[pRun[nStart + 33] + pLight[nSkip + 31] * 0x100];
+                            pRunDst[nDest + 31] = MAC_SHIFT_TABLES[pRun[nStart + 33] + pLight[nSkip + 31] * 0x100];
                         case 31:
-                            pRunDst[nDest + 30] = g_abMacShadeTable[pRun[nStart + 32] + pLight[nSkip + 30] * 0x100];
+                            pRunDst[nDest + 30] = MAC_SHIFT_TABLES[pRun[nStart + 32] + pLight[nSkip + 30] * 0x100];
                         case 30:
-                            pRunDst[nDest + 29] = g_abMacShadeTable[pRun[nStart + 31] + pLight[nSkip + 29] * 0x100];
+                            pRunDst[nDest + 29] = MAC_SHIFT_TABLES[pRun[nStart + 31] + pLight[nSkip + 29] * 0x100];
                         case 29:
-                            pRunDst[nDest + 28] = g_abMacShadeTable[pRun[nStart + 30] + pLight[nSkip + 28] * 0x100];
+                            pRunDst[nDest + 28] = MAC_SHIFT_TABLES[pRun[nStart + 30] + pLight[nSkip + 28] * 0x100];
                         case 28:
-                            pRunDst[nDest + 27] = g_abMacShadeTable[pRun[nStart + 29] + pLight[nSkip + 27] * 0x100];
+                            pRunDst[nDest + 27] = MAC_SHIFT_TABLES[pRun[nStart + 29] + pLight[nSkip + 27] * 0x100];
                         case 27:
-                            pRunDst[nDest + 26] = g_abMacShadeTable[pRun[nStart + 28] + pLight[nSkip + 26] * 0x100];
+                            pRunDst[nDest + 26] = MAC_SHIFT_TABLES[pRun[nStart + 28] + pLight[nSkip + 26] * 0x100];
                         case 26:
-                            pRunDst[nDest + 25] = g_abMacShadeTable[pRun[nStart + 27] + pLight[nSkip + 25] * 0x100];
+                            pRunDst[nDest + 25] = MAC_SHIFT_TABLES[pRun[nStart + 27] + pLight[nSkip + 25] * 0x100];
                         case 25:
-                            pRunDst[nDest + 24] = g_abMacShadeTable[pRun[nStart + 26] + pLight[nSkip + 24] * 0x100];
+                            pRunDst[nDest + 24] = MAC_SHIFT_TABLES[pRun[nStart + 26] + pLight[nSkip + 24] * 0x100];
                         case 24:
-                            pRunDst[nDest + 23] = g_abMacShadeTable[pRun[nStart + 25] + pLight[nSkip + 23] * 0x100];
+                            pRunDst[nDest + 23] = MAC_SHIFT_TABLES[pRun[nStart + 25] + pLight[nSkip + 23] * 0x100];
                         case 23:
-                            pRunDst[nDest + 22] = g_abMacShadeTable[pRun[nStart + 24] + pLight[nSkip + 22] * 0x100];
+                            pRunDst[nDest + 22] = MAC_SHIFT_TABLES[pRun[nStart + 24] + pLight[nSkip + 22] * 0x100];
                         case 22:
-                            pRunDst[nDest + 21] = g_abMacShadeTable[pRun[nStart + 23] + pLight[nSkip + 21] * 0x100];
+                            pRunDst[nDest + 21] = MAC_SHIFT_TABLES[pRun[nStart + 23] + pLight[nSkip + 21] * 0x100];
                         case 21:
-                            pRunDst[nDest + 20] = g_abMacShadeTable[pRun[nStart + 22] + pLight[nSkip + 20] * 0x100];
+                            pRunDst[nDest + 20] = MAC_SHIFT_TABLES[pRun[nStart + 22] + pLight[nSkip + 20] * 0x100];
                         case 20:
-                            pRunDst[nDest + 19] = g_abMacShadeTable[pRun[nStart + 21] + pLight[nSkip + 19] * 0x100];
+                            pRunDst[nDest + 19] = MAC_SHIFT_TABLES[pRun[nStart + 21] + pLight[nSkip + 19] * 0x100];
                         case 19:
-                            pRunDst[nDest + 18] = g_abMacShadeTable[pRun[nStart + 20] + pLight[nSkip + 18] * 0x100];
+                            pRunDst[nDest + 18] = MAC_SHIFT_TABLES[pRun[nStart + 20] + pLight[nSkip + 18] * 0x100];
                         case 18:
-                            pRunDst[nDest + 17] = g_abMacShadeTable[pRun[nStart + 19] + pLight[nSkip + 17] * 0x100];
+                            pRunDst[nDest + 17] = MAC_SHIFT_TABLES[pRun[nStart + 19] + pLight[nSkip + 17] * 0x100];
                         case 17:
-                            pRunDst[nDest + 16] = g_abMacShadeTable[pRun[nStart + 18] + pLight[nSkip + 16] * 0x100];
+                            pRunDst[nDest + 16] = MAC_SHIFT_TABLES[pRun[nStart + 18] + pLight[nSkip + 16] * 0x100];
                         case 16:
-                            pRunDst[nDest + 15] = g_abMacShadeTable[pRun[nStart + 17] + pLight[nSkip + 15] * 0x100];
+                            pRunDst[nDest + 15] = MAC_SHIFT_TABLES[pRun[nStart + 17] + pLight[nSkip + 15] * 0x100];
                         case 15:
-                            pRunDst[nDest + 14] = g_abMacShadeTable[pRun[nStart + 16] + pLight[nSkip + 14] * 0x100];
+                            pRunDst[nDest + 14] = MAC_SHIFT_TABLES[pRun[nStart + 16] + pLight[nSkip + 14] * 0x100];
                         case 14:
-                            pRunDst[nDest + 13] = g_abMacShadeTable[pRun[nStart + 15] + pLight[nSkip + 13] * 0x100];
+                            pRunDst[nDest + 13] = MAC_SHIFT_TABLES[pRun[nStart + 15] + pLight[nSkip + 13] * 0x100];
                         case 13:
-                            pRunDst[nDest + 12] = g_abMacShadeTable[pRun[nStart + 14] + pLight[nSkip + 12] * 0x100];
+                            pRunDst[nDest + 12] = MAC_SHIFT_TABLES[pRun[nStart + 14] + pLight[nSkip + 12] * 0x100];
                         case 12:
-                            pRunDst[nDest + 11] = g_abMacShadeTable[pRun[nStart + 13] + pLight[nSkip + 11] * 0x100];
+                            pRunDst[nDest + 11] = MAC_SHIFT_TABLES[pRun[nStart + 13] + pLight[nSkip + 11] * 0x100];
                         case 11:
-                            pRunDst[nDest + 10] = g_abMacShadeTable[pRun[nStart + 12] + pLight[nSkip + 10] * 0x100];
+                            pRunDst[nDest + 10] = MAC_SHIFT_TABLES[pRun[nStart + 12] + pLight[nSkip + 10] * 0x100];
                         case 10:
-                            pRunDst[nDest + 9] = g_abMacShadeTable[pRun[nStart + 11] + pLight[nSkip + 9] * 0x100];
+                            pRunDst[nDest + 9] = MAC_SHIFT_TABLES[pRun[nStart + 11] + pLight[nSkip + 9] * 0x100];
                         case 9:
-                            pRunDst[nDest + 8] = g_abMacShadeTable[pRun[nStart + 10] + pLight[nSkip + 8] * 0x100];
+                            pRunDst[nDest + 8] = MAC_SHIFT_TABLES[pRun[nStart + 10] + pLight[nSkip + 8] * 0x100];
                         case 8:
-                            pRunDst[nDest + 7] = g_abMacShadeTable[pRun[nStart + 9] + pLight[nSkip + 7] * 0x100];
+                            pRunDst[nDest + 7] = MAC_SHIFT_TABLES[pRun[nStart + 9] + pLight[nSkip + 7] * 0x100];
                         case 7:
-                            pRunDst[nDest + 6] = g_abMacShadeTable[pRun[nStart + 8] + pLight[nSkip + 6] * 0x100];
+                            pRunDst[nDest + 6] = MAC_SHIFT_TABLES[pRun[nStart + 8] + pLight[nSkip + 6] * 0x100];
                         case 6:
-                            pRunDst[nDest + 5] = g_abMacShadeTable[pRun[nStart + 7] + pLight[nSkip + 5] * 0x100];
+                            pRunDst[nDest + 5] = MAC_SHIFT_TABLES[pRun[nStart + 7] + pLight[nSkip + 5] * 0x100];
                         case 5:
-                            pRunDst[nDest + 4] = g_abMacShadeTable[pRun[nStart + 6] + pLight[nSkip + 4] * 0x100];
+                            pRunDst[nDest + 4] = MAC_SHIFT_TABLES[pRun[nStart + 6] + pLight[nSkip + 4] * 0x100];
                         case 4:
-                            pRunDst[nDest + 3] = g_abMacShadeTable[pRun[nStart + 5] + pLight[nSkip + 3] * 0x100];
+                            pRunDst[nDest + 3] = MAC_SHIFT_TABLES[pRun[nStart + 5] + pLight[nSkip + 3] * 0x100];
                         case 3:
-                            pRunDst[nDest + 2] = g_abMacShadeTable[pRun[nStart + 4] + pLight[nSkip + 2] * 0x100];
+                            pRunDst[nDest + 2] = MAC_SHIFT_TABLES[pRun[nStart + 4] + pLight[nSkip + 2] * 0x100];
                         case 2:
-                            pRunDst[nDest + 1] = g_abMacShadeTable[pRun[nStart + 3] + pLight[nSkip + 1] * 0x100];
+                            pRunDst[nDest + 1] = MAC_SHIFT_TABLES[pRun[nStart + 3] + pLight[nSkip + 1] * 0x100];
                         case 1:
-                            pRunDst[nDest + 0] = g_abMacShadeTable[pRun[nStart + 2] + pLight[nSkip + 0] * 0x100];
+                            pRunDst[nDest + 0] = MAC_SHIFT_TABLES[pRun[nStart + 2] + pLight[nSkip + 0] * 0x100];
                         }
                     }
                     pRunDst = pNextDst;
@@ -539,30 +559,30 @@ void FUN_002b2da8(int nX, int nY, const uint8_t* pSrc, uint8_t* pDest, int nLigh
 // 1.14d mac: 002b35e9
 // Sets the clip rectangles of the tile blitters from the surface size.
 void FUN_002b35e9(int nWidth, int nHeight) {
-    g_anClip[4] = nHeight - 0x2f;
+    int nBottom = nHeight - 0x2f;
+    int nLeft = 0;
     if (g_nMacScreenSide == 2) {
-        g_anClip[8] = nWidth / 2;
-    } else {
-        g_anClip[8] = 0;
-        if (g_nMacScreenSide == 1) {
-            nWidth = nWidth - nWidth / 2;
-        }
+        nLeft = nWidth / 2;
+    } else if (g_nMacScreenSide == 1) {
+        nWidth -= nWidth / 2;
     }
-    g_anClip[3] = 1;
-    g_anClip[5] = g_anClip[8] - 0x20;
-    g_anClip[6] = nWidth;
-    g_anClip[7] = nHeight - 0x3f;
-    g_anClip[9] = nWidth - 0x20;
-    g_anClip[10] = 1;
-    g_anClip[11] = g_anClip[4];
-    g_anClip[12] = g_anClip[8] - 0x20;
-    g_anClip[13] = nWidth;
-    g_anClip[14] = nHeight - 0x4f;
-    g_anClip[15] = g_anClip[8];
-    g_anClip[16] = nWidth - 0x20;
-    g_anClip[0] = g_anClip[4];
-    g_anClip[1] = g_anClip[8];
-    g_anClip[2] = nWidth;
+    g_tGroundClip.bTall = true;
+    g_tGroundClip.tOuter.nBottom = nBottom;
+    g_tGroundClip.tOuter.nLeft = nLeft - 32;
+    g_tGroundClip.tOuter.nRight = nWidth;
+    g_tGroundClip.tInner.nBottom = nHeight - 0x3f;
+    g_tGroundClip.tInner.nLeft = nLeft;
+    g_tGroundClip.tInner.nRight = nWidth - 32;
+    g_tWallClip.bTall = true;
+    g_tWallClip.tOuter.nBottom = nBottom;
+    g_tWallClip.tOuter.nLeft = nLeft - 32;
+    g_tWallClip.tOuter.nRight = nWidth;
+    g_tWallClip.tInner.nBottom = nHeight - 0x4f;
+    g_tWallClip.tInner.nLeft = nLeft;
+    g_tWallClip.tInner.nRight = nWidth - 32;
+    g_tSurfaceClip.nBottom = nBottom;
+    g_tSurfaceClip.nLeft = nLeft;
+    g_tSurfaceClip.nRight = nWidth;
 }
 
 // 1.14d mac: 002b36b6
@@ -587,10 +607,10 @@ void FUN_002b38f3(const uint8_t* pSrc, int nX, int nY, uint8_t nLight);
 // Slot nfpDrawVisTile: an unshaded run-length wall block, 32 rows, with a clipped path.
 void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY) {
     int nTop = 0;
-    if (g_anClip[10] != 0) {
+    if (g_tWallClip.bTall != 0) {
         nTop = -0x20;
     }
-    if (nX < g_anClip[13] && (nY < g_anClip[11] && nTop <= nY) && g_anClip[12] <= nX) {
+    if (MacTileInBounds(&g_tWallClip.tOuter, nTop, nX, nY)) {
         uint8_t* pBase = (uint8_t*)g_tSurface.pBits;
         if (pBase == 0) {
             FRAMEPOINTER_FATAL(0x2f4);
@@ -598,7 +618,7 @@ void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY) {
         }
         uint8_t* pDst = g_anRowOffsets[nY + 32] + nX + pBase;
         uint8_t* pDestRow = pDst;
-        if (nX < g_anClip[16] && (nY < g_anClip[14] && -1 < nY) && g_anClip[15] <= nX) {
+        if (MacTileInBounds(&g_tWallClip.tInner, 0, nX, nY)) {
             int nRows = 0x20;
             do {
                 while (true) {
@@ -631,7 +651,7 @@ void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY) {
                     if (pRun[1] == 0 && pRun[0] == 0) {
                         break;
                     }
-                    if (g_anClip[0] <= nRow + nY) {
+                    if (g_tSurfaceClip.nBottom <= nRow + nY) {
                         return;
                     }
                     if (nRow + nY < 0) {
@@ -639,14 +659,14 @@ void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY) {
                         pNext = pRun + nRun + 2;
                     } else {
                         int nPos = ((int)(pRunStart + nSkip) - (int)pDestRow) + nX;
-                        int nEnd = g_anClip[2] - nPos;
+                        int nEnd = g_tSurfaceClip.nRight - nPos;
                         if (nEnd < 0) {
                             nEnd = 0;
                         }
                         if ((int)nRun < nEnd) {
                             nEnd = nRun;
                         }
-                        int nStart = g_anClip[1] - nPos;
+                        int nStart = g_tSurfaceClip.nLeft - nPos;
                         if (nStart < 0) {
                             nStart = 0;
                         }
@@ -673,22 +693,21 @@ void fpDrawVisTile(const uint8_t* pSrc, int nX, int nY) {
 // A 32-row run-length wall block with one light level: the unclipped blit when it lies wholly
 // inside the clip rectangle, the clipped one otherwise.
 void FUN_002b38f3(const uint8_t* pSrc, int nX, int nY, uint8_t nLight) {
-    int nTop = 0;
-    if (g_anClip[10] != 0) {
-        nTop = -0x20;
+    int nTop = g_tWallClip.bTall ? -32 : 0;
+    if (!MacTileInBounds(&g_tWallClip.tOuter, nTop, nX, nY)) {
+        return;
     }
-    if (nX < g_anClip[13] && (nY < g_anClip[11] && nTop <= nY) && g_anClip[12] <= nX) {
-        int nRowOffset = g_anRowOffsets[nY + 32];
-        uint8_t* pBase = (uint8_t*)g_tSurface.pBits;
-        if (pBase == 0) {
-            FRAMEPOINTER_FATAL(0x373);
-        }
-        uint8_t* pDest = pBase + nRowOffset + nX;
-        if (nX < g_anClip[16] && (nY < g_anClip[14] && -1 < nY) && g_anClip[15] <= nX) {
-            FUN_002b224c(pSrc, pDest, g_abMacShadeTable + (nLight & 0xf8) * 0x20, 0x20);
-        } else {
-            FUN_002b2a08(nX, nY, pSrc, pDest, g_abMacShadeTable + (nLight & 0xf8) * 0x20, 0x20);
-        }
+    int nOffset = g_anRowOffsets[nY + 32] + nX;
+    uint8_t* pBits = (uint8_t*)g_tSurface.pBits;
+    uint8_t* pShift = g_abShiftTables[nLight >> 3];
+    if (pBits == 0) {
+        FRAMEPOINTER_FATAL(0x373);
+    }
+    uint8_t* pDest = pBits + nOffset;
+    if (MacTileInBounds(&g_tWallClip.tInner, 0, nX, nY)) {
+        FUN_002b224c(pSrc, pDest, pShift, 32);
+    } else {
+        FUN_002b2a08(nX, nY, pSrc, pDest, pShift, 32);
     }
 }
 
@@ -718,13 +737,10 @@ void fpDrawWallTile(const uint8_t* pSrc, int nX, int nY, const uint32_t* pCorner
         }
         if (9 < nAbsY + nAbs1 + nAbsX) {
             int nTop = 0;
-            if (g_anClip[10] != 0) {
+            if (g_tWallClip.bTall != 0) {
                 nTop = -0x20;
             }
-            if (g_anClip[13] <= nX) {
-                return;
-            }
-            if ((g_anClip[11] <= nY || nY < nTop) || nX < g_anClip[12]) {
+            if (!MacTileInBounds(&g_tWallClip.tOuter, nTop, nX, nY)) {
                 return;
             }
             uint8_t* pBase = (uint8_t*)g_tSurface.pBits;
@@ -733,7 +749,7 @@ void fpDrawWallTile(const uint8_t* pSrc, int nX, int nY, const uint32_t* pCorner
                 pBase = (uint8_t*)g_tSurface.pBits;
             }
             uint8_t* pDest = g_anRowOffsets[nY + 32] + nX + pBase;
-            if (nX < g_anClip[16] && (nY < g_anClip[14] && -1 < nY) && g_anClip[15] <= nX) {
+            if (MacTileInBounds(&g_tWallClip.tInner, 0, nX, nY)) {
                 FUN_002b24c4(pSrc, pDest, nLightX, nStepX, nLight1 << 5, nStepY, 0x20, 8);
                 return;
             }
@@ -748,244 +764,219 @@ void fpDrawWallTile(const uint8_t* pSrc, int nX, int nY, const uint32_t* pCorner
     fpDrawVisTile(pSrc, nX, nY);
 }
 
-// The blend table of an alpha: 0xC0 and up the first, 0x80 the second, 0x40 the third; below
-// that nothing is drawn (NULL).
-static uint8_t** MacBlendTableSlot(uint8_t nAlpha) {
-    if (nAlpha < 0xc0) {
-        if ((char)nAlpha < '\0') {
-            return g_ppBlendTables + 1;
-        }
-        if (nAlpha < 0x40) {
-            return 0;
-        }
-        return g_ppBlendTables + 2;
-    }
-    return g_ppBlendTables;
-}
-
 // 1.14d mac: 002b3be5
 // Slot nfpDrawBlendedVisTile: a run-length wall block alpha-blended through a blend table
 // chosen by the alpha byte, with a clipped path.
 void fpDrawBlendedVisTile(const uint8_t* pSrc, int nX, int nY, uint8_t nAlpha) {
-    uint8_t** ppTable = MacBlendTableSlot(nAlpha);
-    if (ppTable == 0) {
+    uint8_t** ppTable;
+    if (nAlpha >= 0xc0) {
+        ppTable = &g_ppPaletteTables[0];
+    } else if (nAlpha >= 0x80) {
+        ppTable = &g_ppPaletteTables[1];
+    } else if (nAlpha >= 0x40) {
+        ppTable = &g_ppPaletteTables[2];
+    } else {
         return;
     }
-    int nTop = 0;
-    if (g_anClip[10] != 0) {
-        nTop = -0x20;
+    int nTop = g_tWallClip.bTall ? -32 : 0;
+    if (!MacTileInBounds(&g_tWallClip.tOuter, nTop, nX, nY)) {
+        return;
     }
-    if (nX < g_anClip[13] && (nY < g_anClip[11] && nTop <= nY) && g_anClip[12] <= nX) {
-        const uint8_t* pBlend = *ppTable;
-        uint8_t* pBase = (uint8_t*)g_tSurface.pBits;
-        if (pBase == 0) {
-            FRAMEPOINTER_FATAL(0x3f8);
-            pBase = (uint8_t*)g_tSurface.pBits;
-        }
-        uint8_t* pDestRow = g_anRowOffsets[nY + 32] + nX + pBase;
-        if (nX < g_anClip[16] && (nY < g_anClip[14] && -1 < nY) && g_anClip[15] <= nX) {
-            int nRows = 0x20;
+    const uint8_t* pBlend = *ppTable;
+    MacSurface* pSurface = &g_tSurface;
+    uint8_t* pBits = (uint8_t*)pSurface->pBits;
+    if (pBits == 0) {
+        FRAMEPOINTER_FATAL(0x3f8);
+        pBits = (uint8_t*)pSurface->pBits;
+    }
+    uint8_t* pDestRow = g_anRowOffsets[nY + 32] + nX + pBits;
+    if (MacTileInBounds(&g_tWallClip.tInner, 0, nX, nY)) {
+        int nRows = 32;
+        do {
             uint8_t* pDst = pDestRow;
-            do {
-                while (true) {
-                    const uint8_t* pRun = pSrc;
-                    uint8_t nSkip = pRun[0];
-                    uint32_t nRun = pRun[1];
-                    pSrc = pRun + 2;
-                    if (pRun[1] == 0 && nSkip == 0) {
-                        break;
-                    }
-                    pDst += nSkip;
-                    for (uint32_t i = 0; i < nRun; i++) {
-                        *pDst = pBlend[(*pDst << 8) | *pSrc];
-                        pDst++;
-                        pSrc++;
-                    }
+            while (true) {
+                uint32_t nSkip = pSrc[0];
+                uint32_t nRun = pSrc[1];
+                pSrc += sizeof(MacRunHeader);
+                if (nSkip == 0 && nRun == 0) {
+                    break;
                 }
-                pDestRow += g_tSurface.nPitch;
-                nRows--;
-                pDst = pDestRow;
-            } while (nRows != 0);
-        } else {
-            int nRow = 0;
-            do {
-                uint8_t* pDst = pDestRow;
-                const uint8_t* pRun;
-                while (true) {
-                    pRun = pSrc;
-                    uint32_t nSkip = pRun[0];
-                    uint32_t nRun = pRun[1];
-                    if (pRun[1] == 0 && pRun[0] == 0) {
-                        break;
-                    }
-                    if (g_anClip[0] <= nRow + nY) {
-                        return;
-                    }
-                    if (nRow + nY < 0) {
-                        pSrc = pRun + nRun + 2;
-                        pDst = pDst + nSkip + nRun;
-                    } else {
-                        int nPos = ((int)(pDst + nSkip) - (int)pDestRow) + nX;
-                        int nEnd = g_anClip[2] - nPos;
-                        if (nEnd < 0) {
-                            nEnd = 0;
-                        }
-                        if ((int)nRun < nEnd) {
-                            nEnd = nRun;
-                        }
-                        int nStart = g_anClip[1] - nPos;
-                        if (nStart < 0) {
-                            nStart = 0;
-                        }
-                        int nVisible = nEnd - nStart;
-                        if (nVisible < 0) {
-                            nVisible = 0;
-                        }
-                        pSrc = pRun + nRun + 2;
-                        uint8_t* pNextDst = pDst + nRun + nSkip;
-                        if (nVisible != 0) {
-                            const uint8_t* pPixel = pRun + nStart + 2;
-                            uint8_t* pPlot = pDst + nStart + nSkip;
-                            while (pPixel < pRun + nVisible + 2 + nStart) {
-                                *pPlot = pBlend[(*pPlot << 8) | *pPixel];
-                                pPlot++;
-                                pPixel++;
-                            }
-                        }
-                        pDst = pNextDst;
-                    }
+                pDst += nSkip;
+                const uint8_t* pEnd = pSrc + nRun;
+                while (pSrc < pEnd) {
+                    *pDst = pBlend[(*pDst << 8) | *pSrc];
+                    pDst++;
+                    pSrc++;
                 }
-                pDestRow += g_tSurface.nPitch;
-                pSrc = pRun + 2;
-                nRow++;
-            } while (nRow < 0x20);
+            }
+            pDestRow += pSurface->nPitch;
+        } while (--nRows != 0);
+        return;
+    }
+    for (int nRow = 0; nRow < 32; nRow++) {
+        int nRowY = nRow + nY;
+        uint8_t* pDst = pDestRow;
+        while (true) {
+            uint32_t nSkip = pSrc[0];
+            uint32_t nRun = pSrc[1];
+            if (nSkip == 0 && nRun == 0) {
+                break;
+            }
+            if (nRowY >= g_tSurfaceClip.nBottom) {
+                return;
+            }
+            if (nRowY < 0) {
+                pSrc += nRun + sizeof(MacRunHeader);
+                pDst += nSkip + nRun;
+                continue;
+            }
+            int nPos = (pDst + nSkip) - pDestRow + nX;
+            int nEnd = g_tSurfaceClip.nRight - nPos;
+            if (nEnd < 0) {
+                nEnd = 0;
+            }
+            if (nEnd > (int)nRun) {
+                nEnd = nRun;
+            }
+            int nStart = g_tSurfaceClip.nLeft - nPos;
+            if (nStart < 0) {
+                nStart = 0;
+            }
+            int nVisible = nEnd - nStart;
+            if (nVisible < 0) {
+                nVisible = 0;
+            }
+            const uint8_t* pRun = pSrc + sizeof(MacRunHeader);
+            uint8_t* pRunDst = pDst + nSkip;
+            pSrc += nRun + sizeof(MacRunHeader);
+            pDst += nSkip + nRun;
+            if (nVisible != 0) {
+                for (int i = nStart; i < nVisible + nStart; i++) {
+                    pRunDst[i] = pBlend[(pRunDst[i] << 8) | pRun[i]];
+                }
+            }
         }
+        pDestRow += pSurface->nPitch;
+        pSrc += sizeof(MacRunHeader);
     }
 }
 
 // 1.14d mac: 002b3e8b
 // Slot nfpDrawRoofTile: a run-length wall block that is alpha-blended and lit from the light
-// grid.
+// grid, the light coordinates stepped per row from the four corner lights. The clipped path
+// starts a run's light at its first pixel, not at its first visible one.
 void fpDrawRoofTile(const uint8_t* pSrc, int nX, int nY, const int* pCornerLights, uint8_t nAlpha) {
-    uint8_t** ppTable = MacBlendTableSlot(nAlpha);
-    if (ppTable == 0) {
+    uint8_t** ppTable;
+    if (nAlpha >= 0xc0) {
+        ppTable = &g_ppPaletteTables[0];
+    } else if (nAlpha >= 0x80) {
+        ppTable = &g_ppPaletteTables[1];
+    } else if (nAlpha >= 0x40) {
+        ppTable = &g_ppPaletteTables[2];
+    } else {
         return;
     }
-    int nTop = 0;
-    if (g_anClip[10] != 0) {
-        nTop = -0x20;
+    int nTop = g_tWallClip.bTall ? -32 : 0;
+    if (!MacTileInBounds(&g_tWallClip.tOuter, nTop, nX, nY)) {
+        return;
     }
-    if (nX < g_anClip[13] && (nY < g_anClip[11] && nTop <= nY) && g_anClip[12] <= nX) {
-        int nLight0 = pCornerLights[0];
-        int nLight1 = pCornerLights[1];
-        int nLight2 = pCornerLights[2];
-        int nLight3 = pCornerLights[3];
-        const uint8_t* pBlend = *ppTable;
-        int nLightY = nLight1 << 5;
-        uint32_t nLightX = nLight0 << 5;
-        uint8_t* pBase = (uint8_t*)g_tSurface.pBits;
-        if (pBase == 0) {
-            FRAMEPOINTER_FATAL(0x48b);
-            pBase = (uint8_t*)g_tSurface.pBits;
-        }
-        int nStepY = nLight2 - nLight1;
-        int nStepX = nLight3 - nLight0;
-        uint8_t* pDestRow = g_anRowOffsets[nY + 32] + nX + pBase;
-        const uint8_t* pLight = g_abLightGrid + (nLightY >> 8) * 0x20 + (nLightX & 0x3fffff00) * 4;
-        int nRow;
-        if (nX < g_anClip[16]) {
-            if ((nY < g_anClip[14] && -1 < nY) && g_anClip[15] <= nX) {
-                int nRows = 0x20;
-                uint8_t* pDst = pDestRow;
-                do {
-                    while (true) {
-                        const uint8_t* pRun = pSrc;
-                        uint32_t nSkip = pRun[0];
-                        uint32_t nRun = pRun[1];
-                        pSrc = pRun + 2;
-                        if (pRun[1] == 0 && pRun[0] == 0) {
-                            break;
-                        }
-                        pLight += nSkip;
-                        pDst += nSkip;
-                        for (uint32_t i = 0; i < nRun; i++) {
-                            *pDst = pBlend[(g_abMacShadeTable[*pSrc + *pLight * 0x100] << 8) | *pDst];
-                            pDst++;
-                            pLight++;
-                            pSrc++;
-                        }
-                    }
-                    nLightY += nStepY;
-                    nLightX += nStepX;
-                    pDestRow += g_tSurface.nPitch;
-                    nRows--;
-                    pLight = g_abLightGrid + (nLightY >> 8) * 0x20 + (nLightX & 0x3fffff00) * 4;
-                    pDst = pDestRow;
-                } while (nRows != 0);
-                return;
-            }
-            nRow = 0;
-        } else {
-            nRow = 0;
-        }
+    int nLight0 = pCornerLights[0];
+    int nLight1 = pCornerLights[1];
+    int nLight2 = pCornerLights[2];
+    int nLight3 = pCornerLights[3];
+    const uint8_t* pBlend = *ppTable;
+    int nLightY = nLight1 << 5;
+    uint32_t nLightX = nLight0 << 5;
+    MacSurface* pSurface = &g_tSurface;
+    uint8_t* pBits = (uint8_t*)pSurface->pBits;
+    if (pBits == 0) {
+        FRAMEPOINTER_FATAL(0x48b);
+        pBits = (uint8_t*)pSurface->pBits;
+    }
+    int nStepY = nLight2 - nLight1;
+    int nStepX = nLight3 - nLight0;
+    uint8_t* pDestRow = g_anRowOffsets[nY + 32] + nX + pBits;
+    const uint8_t* pLight = g_abLightGrid + (nLightX >> 8) * 0x400 + (nLightY >> 8) * 0x20;
+    if (MacTileInBounds(&g_tWallClip.tInner, 0, nX, nY)) {
+        int nRows = 32;
         do {
             uint8_t* pDst = pDestRow;
-            const uint8_t* pRun;
             while (true) {
-                pRun = pSrc;
-                uint32_t nSkip = pRun[0];
-                uint32_t nRun = pRun[1];
-                if (pRun[1] == 0 && pRun[0] == 0) {
+                uint32_t nSkip = pSrc[0];
+                uint32_t nRun = pSrc[1];
+                pSrc += sizeof(MacRunHeader);
+                if (nSkip == 0 && nRun == 0) {
                     break;
                 }
-                if (g_anClip[0] <= nRow + nY) {
-                    return;
-                }
-                if (nRow + nY < 0) {
-                    pLight += nSkip + nRun;
-                    pSrc = pRun + nRun + 2;
-                    pDst = pDst + nSkip + nRun;
-                } else {
-                    const uint8_t* pRunLight = pLight + nSkip;
-                    int nPos = ((int)(pDst + nSkip) - (int)pDestRow) + nX;
-                    int nEnd = g_anClip[2] - nPos;
-                    if (nEnd < 0) {
-                        nEnd = 0;
-                    }
-                    if ((int)nRun < nEnd) {
-                        nEnd = nRun;
-                    }
-                    int nStart = g_anClip[1] - nPos;
-                    if (nStart < 0) {
-                        nStart = 0;
-                    }
-                    int nVisible = nEnd - nStart;
-                    if (nVisible < 0) {
-                        nVisible = 0;
-                    }
-                    pSrc = pRun + nRun + 2;
-                    pLight = pLight + nRun + nSkip;
-                    uint8_t* pNextDst = pDst + nRun + nSkip;
-                    if (nVisible != 0) {
-                        const uint8_t* pPixel = pRun + nStart + 2;
-                        uint8_t* pPlot = pDst + nStart + nSkip;
-                        while (pPixel < pRun + nVisible + 2 + nStart) {
-                            *pPlot = pBlend[(g_abMacShadeTable[*pPixel + *pRunLight * 0x100] << 8) | *pPlot];
-                            pPlot++;
-                            pRunLight++;
-                            pPixel++;
-                        }
-                    }
-                    pDst = pNextDst;
+                pLight += nSkip;
+                pDst += nSkip;
+                const uint8_t* pEnd = pSrc + nRun;
+                while (pSrc < pEnd) {
+                    *pDst = pBlend[(g_abShiftTables[*pLight][*pSrc] << 8) | *pDst];
+                    pDst++;
+                    pLight++;
+                    pSrc++;
                 }
             }
             nLightY += nStepY;
             nLightX += nStepX;
-            pLight = g_abLightGrid + (nLightY >> 8) * 0x20 + (nLightX & 0x3fffff00) * 4;
-            pDestRow += g_tSurface.nPitch;
-            pSrc = pRun + 2;
-            nRow++;
-        } while (nRow < 0x20);
+            pLight = g_abLightGrid + (nLightX >> 8) * 0x400 + (nLightY >> 8) * 0x20;
+            pDestRow += pSurface->nPitch;
+        } while (--nRows != 0);
+        return;
+    }
+    for (int nRow = 0; nRow < 32; nRow++) {
+        int nRowY = nRow + nY;
+        uint8_t* pDst = pDestRow;
+        while (true) {
+            uint32_t nSkip = pSrc[0];
+            uint32_t nRun = pSrc[1];
+            if (nSkip == 0 && nRun == 0) {
+                break;
+            }
+            if (nRowY >= g_tSurfaceClip.nBottom) {
+                return;
+            }
+            if (nRowY < 0) {
+                pSrc += nRun + sizeof(MacRunHeader);
+                pDst += nSkip + nRun;
+                pLight += nSkip + nRun;
+                continue;
+            }
+            const uint8_t* pRunLight = pLight + nSkip;
+            int nPos = (pDst + nSkip) - pDestRow + nX;
+            int nEnd = g_tSurfaceClip.nRight - nPos;
+            if (nEnd < 0) {
+                nEnd = 0;
+            }
+            if (nEnd > (int)nRun) {
+                nEnd = nRun;
+            }
+            int nStart = g_tSurfaceClip.nLeft - nPos;
+            if (nStart < 0) {
+                nStart = 0;
+            }
+            int nVisible = nEnd - nStart;
+            if (nVisible < 0) {
+                nVisible = 0;
+            }
+            const uint8_t* pRun = pSrc + sizeof(MacRunHeader);
+            uint8_t* pRunDst = pDst + nSkip;
+            pSrc += nRun + sizeof(MacRunHeader);
+            pLight += nRun + nSkip;
+            pDst += nRun + nSkip;
+            if (nVisible != 0) {
+                for (int i = nStart; i < nVisible + nStart; i++) {
+                    pRunDst[i] = pBlend[(g_abShiftTables[*pRunLight][pRun[i]] << 8) | pRunDst[i]];
+                    pRunLight++;
+                }
+            }
+        }
+        nLightY += nStepY;
+        nLightX += nStepX;
+        pLight = g_abLightGrid + (nLightX >> 8) * 0x400 + (nLightY >> 8) * 0x20;
+        pDestRow += pSurface->nPitch;
+        pSrc += sizeof(MacRunHeader);
     }
 }
 
@@ -993,9 +984,9 @@ void fpDrawRoofTile(const uint8_t* pSrc, int nX, int nY, const int* pCornerLight
 // A 15-row floor sub-block with one light level.
 void FUN_002b4270(const MacGroundBlock* pBlock, uint8_t* pDest, uint8_t nLight) {
     if ((pBlock->nFlags & 4) == 0) {
-        FUN_002b1a44(pBlock->pData, pDest, g_abMacShadeTable + (nLight & 0xf8) * 0x20);
+        FUN_002b1a44(pBlock->pData, pDest, g_abShiftTables[nLight >> 3]);
     } else {
-        FUN_002b224c(pBlock->pData, pDest, g_abMacShadeTable + (nLight & 0xf8) * 0x20, 0xf);
+        FUN_002b224c(pBlock->pData, pDest, g_abShiftTables[nLight >> 3], 0xf);
     }
 }
 
@@ -1014,208 +1005,161 @@ void FUN_002b42cf(const MacGroundBlock* pBlock, uint8_t* pDest, int* pCornerLigh
 }
 
 // 1.14d mac: 002b4354
-// A 15-row floor sub-block with one light level, clipped against the clip rectangle;
+// A 15-row floor sub-block with one light level, clipped against the surface clip;
 // run-length blocks go to the clipped run-length blitter.
 void FUN_002b4354(const MacGroundBlock* pBlock, int nX, int nY, uint8_t* pDest, uint8_t nLight) {
-    if ((pBlock->nFlags & 4) == 0) {
-        uint8_t* pDestRow = pDest;
-        int nRowEnd0 = g_anClip[0] - nY;
-        if (0xf < nRowEnd0) {
-            nRowEnd0 = 0xf;
+    int nShift = nLight >> 3;
+    if (pBlock->nFlags & 4) {
+        FUN_002b2a08(nX, nY, pBlock->pData, pDest, g_abShiftTables[nShift], 15);
+        return;
+    }
+    int nRowEnd = g_tSurfaceClip.nBottom - nY;
+    if (nRowEnd > 15) {
+        nRowEnd = 15;
+    }
+    int nRow = nY < 0 ? -nY : 0;
+    if (nRow >= nRowEnd) {
+        return;
+    }
+    MacSurface* pSurface = &g_tSurface;
+    pDest += pSurface->nPitch * nRow;
+    for (; nRow < nRowEnd; nRow++) {
+        int nRowX = g_anTileRowDest[nRow] + nX;
+        int nEnd = g_tSurfaceClip.nRight - nRowX;
+        if (nEnd < 0) {
+            nEnd = 0;
         }
-        uint32_t nRow = nY >> 0x1f & -nY;
-        if ((int)nRow < nRowEnd0) {
-            uint32_t nBelow = (nY - 1) - g_anClip[0];
-            uint32_t nRowEnd = 0xf;
-            if (-0x10 < (int)nBelow) {
-                nRowEnd = ~nBelow;
+        if (nEnd > (int)g_anTileRowWidth[nRow]) {
+            nEnd = g_anTileRowWidth[nRow];
+        }
+        int nStart = g_tSurfaceClip.nLeft - nRowX;
+        if (nStart < 0) {
+            nStart = 0;
+        }
+        int nCount = nEnd - nStart;
+        if (nCount < 0) {
+            nCount = 0;
+        }
+        if (nCount != 0) {
+            int nSrc = g_anTileRowSrc[nRow] + nStart;
+            const uint8_t* pData = pBlock->pData;
+            uint8_t* pPlot = pDest + g_anTileRowDest[nRow] + nStart;
+            for (const uint8_t* pPixel = pData + nSrc; pPixel < pData + nSrc + nCount; pPixel++) {
+                *pPlot++ = g_abShiftTables[nShift][*pPixel];
             }
-            int nPitch = g_tSurface.nPitch;
-            int nOffset = nPitch * nRow;
-            do {
-                pDestRow = pDestRow + nOffset;
-                int nDestOffset = g_anTileRowDest[nRow] + nX;
-                int nEnd = g_anClip[2] - nDestOffset;
-                if (nEnd < 0) {
-                    nEnd = 0;
-                }
-                if ((int)g_anTileRowWidth[nRow] < nEnd) {
-                    nEnd = g_anTileRowWidth[nRow];
-                }
-                int nStart = g_anClip[1] - nDestOffset;
-                if (nStart < 0) {
-                    nStart = 0;
-                }
-                int nCount = nEnd - nStart;
-                if (nCount < 0) {
-                    nCount = 0;
-                }
-                if (nCount != 0) {
-                    int nSrcStart = g_anTileRowSrc[nRow] + nStart;
-                    if (nSrcStart < nCount + nSrcStart) {
-                        const uint8_t* pData = pBlock->pData;
-                        const uint8_t* pPixel = nSrcStart + pData;
-                        uint8_t* pPlot = nStart + g_anTileRowDest[nRow] + pDestRow;
-                        do {
-                            *pPlot = g_abMacShadeTable[*pPixel + (nLight >> 3) * 0x100];
-                            pPlot++;
-                            pPixel++;
-                        } while (pPixel < nCount + nSrcStart + pData);
-                        nPitch = g_tSurface.nPitch;
-                    }
-                }
-                nRow++;
-                nOffset = nPitch;
-            } while (nRow != nRowEnd);
         }
-    } else {
-        FUN_002b2a08(nX, nY, pBlock->pData, pDest, g_abMacShadeTable + (nLight >> 3) * 0x100, 0xf);
+        pDest += pSurface->nPitch;
     }
 }
 
 // 1.14d mac: 002b44c2
-// A 15-row floor sub-block lit per pixel, clipped against the clip rectangle; the four
-// corner lights give the start and steps, run-length blocks go to the clipped lit blitter.
+// A 15-row floor sub-block lit per pixel, clipped against the surface clip; the four corner
+// lights give the start and steps, run-length blocks go to the clipped lit blitter. A row's
+// light starts at the row's first pixel, not at its first visible one.
 void FUN_002b44c2(const MacGroundBlock* pBlock, int nX, int nY, uint8_t* pDest, int* pCornerLights) {
     int nStepY = pCornerLights[2] - pCornerLights[1];
     int nStepX = pCornerLights[3] - pCornerLights[0];
     int nLightY = pCornerLights[1] << 4;
     uint32_t nLightX = pCornerLights[0] << 4;
-    if ((pBlock->nFlags & 4) == 0) {
-        int nRowEnd0 = g_anClip[0] - nY;
-        if (0xf < nRowEnd0) {
-            nRowEnd0 = 0xf;
+    if (pBlock->nFlags & 4) {
+        FUN_002b2da8(nX, nY, pBlock->pData, pDest, nLightX, nStepX, nLightY, nStepY, 15, 7);
+        return;
+    }
+    int nRowEnd = g_tSurfaceClip.nBottom - nY;
+    if (nRowEnd > 15) {
+        nRowEnd = 15;
+    }
+    int nRow = nY < 0 ? -nY : 0;
+    if (nRow >= nRowEnd) {
+        return;
+    }
+    MacSurface* pSurface = &g_tSurface;
+    pDest += pSurface->nPitch * nRow;
+    for (; nRow < nRowEnd; nRow++) {
+        int nRowX = g_anTileRowDest[nRow] + nX;
+        int nEnd = g_tSurfaceClip.nRight - nRowX;
+        if (nEnd < 0) {
+            nEnd = 0;
         }
-        uint32_t nRow = nY >> 0x1f & -nY;
-        if ((int)nRow < nRowEnd0) {
-            uint32_t nBelow = (nY - 1) - g_anClip[0];
-            uint32_t nRowEnd = 0xf;
-            if (-0x10 < (int)nBelow) {
-                nRowEnd = ~nBelow;
-            }
-            int nPitch = g_tSurface.nPitch;
-            uint8_t* pDestRow = pDest + nPitch * nRow;
-            while (true) {
-                int nDestOffset = g_anTileRowDest[nRow];
-                int nEnd = g_anClip[2] - (nDestOffset + nX);
-                if (nEnd < 0) {
-                    nEnd = 0;
-                }
-                if ((int)g_anTileRowWidth[nRow] < nEnd) {
-                    nEnd = g_anTileRowWidth[nRow];
-                }
-                int nStart = g_anClip[1] - (nDestOffset + nX);
-                if (nStart < 0) {
-                    nStart = 0;
-                }
-                int nCount = nEnd - nStart;
-                if (nCount < 0) {
-                    nCount = 0;
-                }
-                if (nCount != 0) {
-                    int nSrcStart = g_anTileRowSrc[nRow] + nStart;
-                    if (nSrcStart < nCount + nSrcStart) {
-                        const uint8_t* pData = pBlock->pData;
-                        const uint8_t* pPixel = nSrcStart + pData;
-                        uint8_t* pPlot = nStart + nDestOffset + pDestRow;
-                        const uint8_t* pLight = g_abLightGrid + nDestOffset + (nLightY >> 7) * 0x20 + (nLightX & 0x1fffff80) * 8;
-                        do {
-                            *pPlot = g_abMacShadeTable[*pPixel + *pLight * 0x100];
-                            pPlot++;
-                            pLight++;
-                            pPixel++;
-                        } while (pPixel < nCount + nSrcStart + pData);
-                        nPitch = g_tSurface.nPitch;
-                    }
-                }
-                nRow++;
-                if (nRow == nRowEnd) {
-                    break;
-                }
-                pDestRow = pDestRow + nPitch;
-                nLightX = nLightX + nStepX;
-                nLightY = nLightY + nStepY;
+        if (nEnd > (int)g_anTileRowWidth[nRow]) {
+            nEnd = g_anTileRowWidth[nRow];
+        }
+        int nStart = g_tSurfaceClip.nLeft - nRowX;
+        if (nStart < 0) {
+            nStart = 0;
+        }
+        int nCount = nEnd - nStart;
+        if (nCount < 0) {
+            nCount = 0;
+        }
+        if (nCount != 0) {
+            int nSrc = g_anTileRowSrc[nRow] + nStart;
+            const uint8_t* pData = pBlock->pData;
+            uint8_t* pPlot = pDest + g_anTileRowDest[nRow] + nStart;
+            const uint8_t* pLight = g_abLightGrid + (nLightX >> 7) * 0x400 + (nLightY >> 7) * 0x20 + g_anTileRowDest[nRow];
+            for (const uint8_t* pPixel = pData + nSrc; pPixel < pData + nSrc + nCount; pPixel++) {
+                *pPlot++ = g_abShiftTables[*pLight++][*pPixel];
             }
         }
-    } else {
-        FUN_002b2da8(nX, nY, pBlock->pData, pDest, nLightX, nStepX, nLightY, nStepY, 0xf, 7);
+        pDest += pSurface->nPitch;
+        nLightX += nStepX;
+        nLightY += nStepY;
     }
 }
 
 // 1.14d mac: 002b4696
 // Slot nfpDrawGroundTile: walks the tile's sub-blocks, takes their corner lights from the
-// light data and hands each to the floor-block helper that fits.
+// light data and hands each to the floor-block helper that fits. The light data is a grid
+// of 12-byte cells, 8 to a row; a sub-block's cell is at (nLightX + 1, nLightY + 1).
 void fpDrawGroundTile(const MacGroundTile* pTile, int nScreenX, int nScreenY, const uint8_t* pLights) {
-    if (0 < pTile->nBlocks) {
-        uint8_t* pBase = (uint8_t*)g_tSurface.pBits;
-        int nPitch = g_tSurface.nPitch;
-        int nRowBase = nPitch * nScreenY;
-        int nBlock = 0;
-        int nOffset = 0;
-        while (true) {
-            const MacGroundBlock* pBlockArray = pTile->pBlocks;
-            const MacGroundBlock* pBlock = (const MacGroundBlock*)((const uint8_t*)pBlockArray + nOffset);
-            if ((pBlock->nFlags & 1) != 0) {
-                int nTop = 0;
-                if (g_anClip[3] != 0) {
-                    nTop = -0x10;
-                }
-                int nY = pBlock->nY + nScreenY;
-                int nX = pBlock->nX + nScreenX;
-                if (nX < g_anClip[6] && (nY < g_anClip[4] && nTop <= nY) && g_anClip[5] <= nX) {
-                    int nCell = (pBlock->nLightX + pBlock->nLightY * 8) * 0xc;
-                    uint8_t nLight = pLights[nCell + 0x6c];
-                    bool bPerPixel = false;
-                    uint32_t anCorner[4];
-                    if (D2GFXRenderedData[2] == 0) {
-                        uint32_t nLight1 = pLights[nCell + 0x78];
-                        uint32_t nLight3 = pLights[nCell + 0xd8];
-                        int nDiffX = nLight3 - nLight1;
-                        uint32_t nLight2 = pLights[nCell + 0xcc];
-                        uint32_t nLight0 = nLight;
-                        int nDiffY = nLight2 - nLight0;
-                        int nDiff1 = nLight1 - nLight0;
-                        int nAbs1 = -nDiff1;
-                        if (0 < nDiff1) {
-                            nAbs1 = nDiff1;
-                        }
-                        int nAbsY = -nDiffY;
-                        if (0 < nDiffY) {
-                            nAbsY = nDiffY;
-                        }
-                        int nAbsX = -nDiffX;
-                        if (0 < nDiffX) {
-                            nAbsX = nDiffX;
-                        }
-                        if (9 < nAbsX + nAbsY + nAbs1) {
-                            anCorner[0] = pLights[nCell + 0x60] + nLight0 + pLights[nCell + 0xc0] + nLight2 >> 2;
-                            anCorner[1] = nLight0 + nLight1 + pLights[nCell + 0xc] + pLights[nCell + 0x18] >> 2;
-                            anCorner[2] = pLights[nCell + 0x84] + nLight1 + nLight2 + pLights[nCell + 0xe4] >> 2;
-                            anCorner[3] = nLight3 + nLight2 + pLights[nCell + 300] + pLights[nCell + 0x138] >> 2;
-                            nLight = 0;
-                            bPerPixel = true;
-                        }
-                    }
-                    uint8_t* pDest = pBase + nScreenX + pBlock->nX + nRowBase + pBlock->nY * nPitch;
-                    if (nX < g_anClip[9] && (nY < g_anClip[7] && -1 < nY) && g_anClip[8] <= nX) {
-                        if (bPerPixel) {
-                            FUN_002b42cf(pBlock, pDest, (int*)anCorner);
-                        } else {
-                            FUN_002b4270(pBlock, pDest, nLight);
-                        }
-                    } else if (bPerPixel) {
-                        FUN_002b44c2(pBlock, nX, nY, pDest, (int*)anCorner);
-                    } else {
-                        FUN_002b4354(pBlock, nX, nY, pDest, nLight);
-                    }
-                }
+    if (pTile->nBlocks <= 0) {
+        return;
+    }
+    MacSurface* pSurface = &g_tSurface;
+    uint8_t* pBits = (uint8_t*)pSurface->pBits;
+    int nScreenOffset = pSurface->nPitch * nScreenY + nScreenX;
+    for (int nBlock = 0; nBlock < pTile->nBlocks; nBlock++) {
+        const MacGroundBlock* pBlock = &pTile->pBlocks[nBlock];
+        if (!(pBlock->nFlags & 1)) {
+            continue;
+        }
+        int nBlockX = pBlock->nX;
+        int nBlockY = pBlock->nY;
+        int nTop = g_tGroundClip.bTall ? -16 : 0;
+        int nY = nBlockY + nScreenY;
+        int nX = nBlockX + nScreenX;
+        if (!MacTileInBounds(&g_tGroundClip.tOuter, nTop, nX, nY)) {
+            continue;
+        }
+        const uint8_t* pCell = pLights + (pBlock->nLightX + pBlock->nLightY * 8) * 12;
+        uint8_t nLight = pCell[0x6c];
+        bool bPerPixel = false;
+        uint32_t anCorner[4];
+        if (D2GFXRenderedData[2] == 0) {
+            uint32_t nLight1 = pCell[0x78];
+            uint32_t nLight3 = pCell[0xd8];
+            uint32_t nLight2 = pCell[0xcc];
+            uint32_t nLight0 = nLight;
+            if (abs((int)(nLight1 - nLight0)) + abs((int)(nLight2 - nLight0)) + abs((int)(nLight3 - nLight1)) >= 10) {
+                anCorner[0] = (pCell[0x60] + nLight0 + pCell[0xc0] + nLight2) >> 2;
+                anCorner[1] = (nLight0 + nLight1 + pCell[0x0c] + pCell[0x18]) >> 2;
+                anCorner[2] = (pCell[0x84] + nLight1 + nLight2 + pCell[0xe4]) >> 2;
+                anCorner[3] = (nLight3 + nLight2 + pCell[0x12c] + pCell[0x138]) >> 2;
+                nLight = 0;
+                bPerPixel = true;
             }
-            nBlock++;
-            if (pTile->nBlocks <= nBlock) {
-                break;
+        }
+        uint8_t* pDest = nBlockY * pSurface->nPitch + nScreenOffset + nBlockX + pBits;
+        if (MacTileInBounds(&g_tGroundClip.tInner, 0, nX, nY)) {
+            if (bPerPixel) {
+                FUN_002b42cf(pBlock, pDest, (int*)anCorner);
+            } else {
+                FUN_002b4270(pBlock, pDest, nLight);
             }
-            nOffset += 0x14;
-            nPitch = g_tSurface.nPitch;
+        } else if (bPerPixel) {
+            FUN_002b44c2(pBlock, nX, nY, pDest, (int*)anCorner);
+        } else {
+            FUN_002b4354(pBlock, nX, nY, pDest, nLight);
         }
     }
 }

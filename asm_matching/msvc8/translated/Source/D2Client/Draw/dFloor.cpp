@@ -42,6 +42,7 @@ BOOL __stdcall DRAW_ShouldDrawEdges(int32_t nParam) {
 
 // TRUE when left <= nX < right and top <= nY < bottom; halts (dFloor.cpp line 118, ptRect) on a NULL rect.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 0005fdfe
 static BOOL __stdcall DFLOOR_IsPointInRect(RECT * pRect, int nX, int nY) {
     if (!pRect) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x76);
@@ -60,6 +61,7 @@ static void * keep_004dde40 = (0 ? (DFLOOR_IsPointInRect(*(RECT * *)0, *(int *)0
 
 namespace D2Client { namespace GAME { namespace Draw {
 
+// 1.14d mac: 0005f8ae
 void __fastcall DRAW_UpdateTileVisibilityBounds(D2DrawFloorStrc * pDrawFloor, int, D2DrlgTileDataStrc * pActSub18, int32_t nWorldX, int32_t nWorldY) {
     pActSub18->nFlags |= 0x20000;
     if (!pDrawFloor->bPerspectiveHasEffectOnSprite) {
@@ -164,6 +166,7 @@ static void __stdcall DRAW_CalcRoofLightGridOrtho(D2GfxLightExStrc * pLightEntry
 }
 
 // Populates a 6×6 grid of D2GfxLightExStrc entries for orthographic roof lighting. Reads the act's ambient light intensity and RGB color via DRLGENV_GetIntensityFromAct / DRLGENV_GetLightColorFromAct. Adjusts nScreenX by ±ScreenSizeX/4 for split-screen sides (nSplitSide 1/2). For each grid cell (skipping interior cells when bBorderOnly), sets screen-space X/Y position and either samples dynamic light (outdoor: DRAW_CoordIsInCoord) or fills with the flat ambient color (indoor). Output is written into the pParam array.
+// 1.14d mac: 000601b5
 void __stdcall DRAW_CalcRoofLightOrtho(D2GfxLightExStrc * pLightGrid, int32_t nScreenX, int32_t nScreenY, int32_t nTileX, int32_t nTileY, int32_t nIndoorFlag, int32_t nSplitSide, int32_t bBorderOnly) {
     int nHalfWidthAdj;
     int nRowY;
@@ -261,6 +264,7 @@ static void __stdcall DRAW_CalcRoofLightGridPerspective(D2GfxLightExStrc * pLigh
 }
 
 // Fills a 6×6 grid of D2GfxLightExStrc light entries for a roof tile in perspective (3D) mode. Reads ambient intensity and RGB colour from the act DRLG environment, then for each grid point calls D2GFX_AdjustPerspectivePosition (depth != 0) or DRAW_CoordIsInCoord (depth == 0, orthographic fallback) to compute screen-space XY. Applies a horizontal split-screen offset when nSplitSide is 1 (left half) or 2 (right half). bBorderOnly restricts writes to the 4 border rows/columns.
+// 1.14d mac: 0005ff42
 void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * pLightBuffer, int32_t nTileX, int32_t nTileY, int32_t nDepth, int32_t nSplitSide, int32_t bBorderOnly) {
     int nRow;
     int nCol;
@@ -331,6 +335,7 @@ void __stdcall DRAW_CalcRoofLightPerspective(uint8_t * pLightBuffer, int32_t nTi
 }
 
 // Renders a single floor tile during the game draw pass. Skips tiles with flags 0x408 (hidden/special) or outside the extended view rect, and skips non-zero-orientation tiles. Computes a per-tile light intensity array (8x8 for software render, 6x6 for 3D) via GetIntensityFlagsForTile or DRAW_CalcRoofLight* variants (ortho vs perspective, normal vs grid-lit). Calls D2GFX_DrawGroundTile to blit. For wet-floor tiles (flag 0x2) may spawn weather splashes or bubbles via WEATHER_Spawn*. Updates tile visibility bounds after drawing.
+// 1.14d mac: 0005f8ea
 void __fastcall DrawFloorTile(D2DrawFloorStrc * pFloor, int, D2DrlgTileDataStrc * pTileData, void * pParam, int32_t nScreenX, int32_t nScreenY, int32_t nWorldX, int32_t nWorldY) {
     D2GfxLightExStrc* pLightEx;
     int nColIter;
@@ -413,6 +418,7 @@ void __fastcall DrawFloorTile(D2DrawFloorStrc * pFloor, int, D2DrlgTileDataStrc 
     vc8_thiscall(DRAW_UpdateTileVisibilityBounds)(pFloor, pTileData, nWorldX, nWorldY);
 }
 
+// 1.14d mac: 00060346
 void __fastcall DRAW_DrawEdgeFloorTile(D2DrawFloorStrc * pDrawFloor, int, int32_t nWorldX, int32_t nParam) {
     D2DrlgTileDataStrc* pTileData;
     int32_t nScreenX = nWorldX;
@@ -434,6 +440,7 @@ void __fastcall DRAW_DrawEdgeFloorTile(D2DrawFloorStrc * pDrawFloor, int, int32_
     vc8_thiscall(DrawFloorTile)(pDrawFloor, pTileData, (void*)0x1, nScreenX, nScreenY, nWorldX, nParam);
 }
 
+// 1.14d mac: 00060402
 void __fastcall DrawSubTile(D2DrawFloorStrc * pDrawFloor, int, int32_t nTileX, int32_t nTileY, int32_t nStepX, int32_t nStepY) {
     int nWorldX = nTileX / 5 * 5;
     int nWorldY = nTileY / 5 * 5;
@@ -597,6 +604,7 @@ void __fastcall DrawFloorByViewAndFloor(D2DrawFloorStrc * pDrawFloor, int, D2Gam
 }
 
 // Renders roof tiles for current game view with lighting intensity flags and alpha blending
+// 1.14d mac: 00060489
 void __fastcall dRoofDraw(D2GameViewStrc * pGameView) {
     int nFadeCalc;
     uint32_t nRoofFlags;

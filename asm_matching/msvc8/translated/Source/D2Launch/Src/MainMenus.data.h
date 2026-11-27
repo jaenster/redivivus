@@ -111,7 +111,13 @@ extern DC6 * gaDC6CharCreateNecromancerSel[3];
 extern DC6 * gaDC6CharCreateSorceressSel[3];
 extern DC6 * DC6_FrontEnd_barbarian_bafws;
 extern DC6 * DC6_FrontEnd_paladin_pafws;
+#if !defined(_WIN32) && D2_OS_MAC
+extern uint8_t gbCinematicsMenuShown;
+extern uint8_t fpInsertPlayCd;
+extern uint8_t gbCdCheckPassed[25];
+#else
 extern uint32_t gbCinematicsMenuShown;
 extern uint32_t fpInsertPlayCd;
 extern uint32_t gbCdCheckPassed[25];
+#endif
 extern int gbCreateCharDialogShown;

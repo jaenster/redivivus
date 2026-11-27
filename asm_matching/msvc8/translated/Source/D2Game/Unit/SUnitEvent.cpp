@@ -31,6 +31,7 @@ typedef BOOL (__fastcall *D2ItemStatCostItemEventFunc)(::SGAMEDATA * pGame, uint
 namespace D2Game { namespace UNIT { namespace SUnitEvent {
 
 // @sourcefile .\UNIT\SUnitEvent.cpp
+// 1.14d mac: 002b0b11
 void __fastcall UNITEVENT_FreeAllEvents(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;
@@ -48,6 +49,7 @@ void __fastcall UNITEVENT_FreeAllEvents(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 }
 
 // @sourcefile .\UNIT\SUnitEvent.cpp
+// 1.14d mac: 002b0b7b
 D2SUnitEventStrc * __fastcall SUNITEVENT_Alloc(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t nUnitEvent, eD2Skills eSkill, int32_t nSkillLevel, D2ItemStatCostItemEventFunc fpItemEventFunc, int32_t nQueueNo, int32_t nOwnerKey) {
     if (!pUnit) {
       return nullptr;
@@ -76,6 +78,7 @@ D2SUnitEventStrc * __fastcall SUNITEVENT_Alloc(::SGAMEDATA * pGame, D2UnitStrc *
 // unlinked and freed. Callers cancel aura, curse and buff events (DefaultExpireFunction, SKILLNEC_OnCurseExpire, ...).
 // It sets nothing; the loop at 005c0b70 only removes matches.
 // @sourcefile .\UNIT\SUnitEvent.cpp
+// 1.14d mac: 002b0c22
 void __fastcall SUNITEVENT_RemoveEventsByQueueAndOwner(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nQueueNo, int32_t nOwnerKey) {
     if (!pUnit) {
       return;
@@ -105,6 +108,7 @@ void __fastcall SUNITEVENT_RemoveEventsByQueueAndOwner(::SGAMEDATA * pGame, D2Un
     }
 }
 
+// 1.14d mac: 002b0cc4
 D2SUnitEventStrc * __fastcall UNITEVENT_FindByCallbackParams(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, int32_t nQueueNo, int32_t nOwnerKey, eD2Skills eSkill) {
     if (!pUnit) {
       return nullptr;
@@ -123,6 +127,7 @@ D2SUnitEventStrc * __fastcall UNITEVENT_FindByCallbackParams(::SGAMEDATA * pGame
 
 // Iterates pUnit's pSrvUnitEventList and invokes fpItemEventFunc of every entry whose nUnitEvent matches eEventType, passing pGame, eEventType, pUnit, pOtherUnit, pDamage, eSkill and nSkillLevel. Sets the executing flag during the call; after, frees the entry if it was marked for removal or has nQueueNo==0 (one-shot). Returns the last callback's return value, or 0 if pUnit is null.
 // @sourcefile .\UNIT\SUnitEvent.cpp
+// 1.14d mac: 002b0d05
 int32_t __fastcall UNITEVENT_DispatchEventsByType(::SGAMEDATA * pGame, uint32_t eEventType, D2UnitStrc * pUnit, D2UnitStrc * pOtherUnit, D2DamageStrc * pDamage) {
     D2SUnitEventStrc* pMemoryToFree;
     if (!pUnit) {

@@ -31,6 +31,7 @@ typedef BOOL (__fastcall *fpExecuteOnUnitFunction)(::SGAMEDATA * pGame, D2UnitSt
 namespace D2Game { namespace Quests { namespace QUESTS { namespace A2Q1 {
 
 // A2Q1: send the act-2 "quest update" UI/log notification (event 8) to a player, but only when the quest is in a finished-ish state that hasn't yet been surfaced. Fires only if (Completed OR FinishedInPreviousGame) AND NOT JustCompleted AND NOT CannotCompleteQuestInGame. Otherwise returns without notifying. Used as the broadcast callback when transitioning to Completed/RewardAwaits.
+// 1.14d mac: 00222db2
 BOOL __fastcall Q09_NotifyRadamentComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -50,6 +51,7 @@ BOOL __fastcall Q09_NotifyRadamentComplete(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // A2Q1 fpActiveFilter: decides whether Atma (monster class 0xb0) should offer/continue this quest in her NPC menu. Returns false if quest already Completed. Returns true if the quest is freshly available (bIsNotIntroduction set, nStateFlag==1, not FinishedInPreviousGame) OR if RewardAwaits (player owed the Book of Skill). Otherwise false. nTargetClassId is the NPC being interacted with.
+// 1.14d mac: 002220ff
 bool __fastcall Q09_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0xb0) {
       BOOL bQuestState;
@@ -74,11 +76,13 @@ bool __fastcall Q09_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // JMP thunk
+// 1.14d mac: 002229e2
 void __fastcall Q09_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::D2Game::Quests::QUESTS::SetRewardAndFinishFlags(pQuestData, pQuestArgs);
 }
 
 // A2Q1 callback[2]: Radament-proximity retrigger. When the event target is Atma (class 0xb0) and the quest-specific field_0x08 flag (A2Q1 bSpokeToAtma-area marker) == 1, advances quest to state 1 and broadcasts via QUEST_SetStateAndBroadcast (notify fn = Q09_NotifyRadamentComplete), clears the marker, and unhooks itself (state-handler[2]=null) so it runs once.
+// 1.14d mac: 002229eb
 void __fastcall Q09_Callback02_NpcDeactivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (!(pQuestArgs->pTarget && (short int)pQuestArgs->pTarget->nClassId == 0xb0)) {
       return;
@@ -130,6 +134,7 @@ BOOL __fastcall Q09_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A2Q1 callback[0xb]: Atma reward-dialog handler (gossip message events). Only for target NPC Atma (0xb0). msg 0x130 = player accepted the quest from Atma: sets bSpokeToAtma, advances nStateFlag to 2, mirrors state into all players' records (Q09_UpdateQuestRecord). msg 0x14e = player returns after the kill: requires RewardAwaits. If NOT JustCompleted yet, runs the sequence filter to unlock the next quest. If JustCompleted, finalizes: broadcasts state 0xd (Q09_NotifyRadamentComplete), unhooks handler[2], sets nStateFlag=5, runs sequence filter, then for non-intro pushes QUESTSTATE_JustCompleted to the quest record. Both reward branches then SetQuestState Completed + UnsetQuestState RewardAwaits and add the player to the participation GUID list. Always ends with QUEST_SendNpcGossipPacket.
+// 1.14d mac: 00222743
 void __fastcall Q09_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataStrc* pSeqQuestData;
     int32_t nErrorLine;
@@ -208,6 +213,7 @@ void __fastcall Q09_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q1 callback[0]: pick which gossip/quest-log line Atma speaks. Reads JustCompleted/Completed/RewardAwaits for the player. If RewardAwaits -> line 3 (come collect the book). Else if this player already participated in the kill -> line 4. Else, if not Completed and nStateFlag in 1..3 (or JustCompleted), looks up gdwQ09QuestStateMessages[nStateFlag] and, if valid (<9, !=0xffffffff), speaks that intro/progress line. AddGossipMessageOnMonster renders the chosen line.
+// 1.14d mac: 00222611
 void __fastcall Q09_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     // Static local variables (originally global data)
     static int32_t gdwQ09QuestStateMessages[7] = { -0x1, 0x0, 0x1, 0x2, 0x3, 0x4, 0x0 }; D2_STATIC_GUARD(gdwQ09QuestStateMessages, "D2Game::Quests::QUESTS::A2Q1::Q09_Callback00_NpcActivate::gdwQ09QuestStateMessages");
@@ -252,6 +258,7 @@ void __fastcall Q09_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A2Q1: party-share variant of the Radament reward. Called via ExecuteFunctionForEveryPartyMember from Q09_CheckRadamentKillAndReward. Grants the reward only to members who are not already Completed/RewardAwaits AND are physically in an Act II level (room->levelId->act == ACT_II), i.e. nearby party members in act 2. Transition: SetQuestState JustCompleted (0xd) -> RewardAwaits (1) -> Step0x05, then sends quest info to the unit.
+// 1.14d mac: 00222190
 void __fastcall Q09_SetRadamentRewardOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -287,6 +294,7 @@ void __fastcall Q09_SetRadamentRewardOnPartyMember(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // A2Q1: mark the quest as CannotCompleteQuestInGame for players who were NOT eligible for the kill reward. Run per-player right after Radament dies (after Q09_CheckRadamentKillAndReward). If the player has neither Completed nor RewardAwaits, sets QUESTSTATE_CannotCompleteQuestInGame and sends quest-state packet (event 8). This locks out players who missed the kill / weren't present from grabbing the book this game.
+// 1.14d mac: 0022b996
 BOOL __fastcall Q09_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -303,6 +311,7 @@ BOOL __fastcall Q09_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A2Q1: per-player reward grant when Radament dies. Run via IteratePlayerOrMonsterUnits over all players; only credits players in (or adjacent to) the room where Radament was killed (pRadamentRoom stored in A1Q1-aliased quest GUID slot). If the player has not already Completed nor has RewardAwaits, transitions: SetQuestState JustCompleted (0xd) -> RewardAwaits (1) -> Step0x05 (book-not-yet-read marker), pushes quest info to the unit, then propagates the same reward to every party member via Q09_SetRadamentRewardOnPartyMember. local_8 = "player was near the kill".
+// 1.14d mac: 0022b7b4
 BOOL __fastcall Q09_CheckRadamentKillAndReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     uint16_t nPartyId;
     D2QuestDataStrc* pRadamentRoom;
@@ -367,6 +376,7 @@ BOOL __fastcall Q09_CheckRadamentKillAndReward(::SGAMEDATA * pGame, D2UnitStrc *
     return 0;
 }
 
+// 1.14d mac: 0022bae0
 uint8_t __fastcall Q09_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2QuestDataA2Q1Strc* pA2Q1Data = pQuestData->pQuestSpecificData.pA2Q1;
     if (pQuestData->nStateFlag == 4) {
@@ -379,6 +389,7 @@ uint8_t __fastcall Q09_OnEndCallback(::SGAMEDATA * pGame, D2QuestDataStrc * pQue
 }
 
 // A2Q1: Book-of-Skill drop accounting + completion sound. Run per-player after Radament's death. If quest is in Step0x05 (reward earned, book not yet consumed) AND the player does NOT currently hold the Book of Skill quest item (code 0x20737361 = 'ass '), increments the pending book-drop counter (A2Q1 nBookOfSkillDropCount, via the A1Q1-aliased GUID slot) so the death handler drops a (re)book. Separately, if the quest is JustCompleted (0xd), plays the quest-complete sound event 0x32 on the player.
+// 1.14d mac: 0022ba27
 BOOL __fastcall Q09_CheckBookOfSkillAndSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitStrc* pBookItem;
     BOOL BVar3 = D2Common::QuestRecord::GetQuestState(GetQuestBitBufferInline(pGame, pUnit), QUEST_RadamentsLair, QUESTSTATE_Step0x05);
@@ -402,6 +413,7 @@ BOOL __fastcall Q09_CheckBookOfSkillAndSound(::SGAMEDATA * pGame, D2UnitStrc * p
 }
 
 // A2Q1 callback[8]: Radament death handler (the actual quest-objective trigger). For an active (non-intro) quest: debug-logs, advances nStateFlag to 4, pushes QUESTSTATE_JustCompleted to the quest record, records Radament's room (pRadamentRoom in the A1Q3-aliased scratch), unhooks handler[2]. Then iterates all players: Q09_CheckRadamentKillAndReward (grant reward to nearby), Q09_SetCannotComplete (lock out absent), Q09_CheckBookOfSkillAndSound (tally how many Book-of-Skill copies must drop). Schedules Q09_OnEndCallback timer (0xc) once. Finally sets the target's dropItemCode to 0x20737361 ('ass '=Book of Skill) and drops that many shield-type reward items so each eligible player can get a book.
+// 1.14d mac: 00222466
 void __fastcall Q09_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int32_t nDropItemCode;
     int nBookDropCount;
@@ -436,6 +448,7 @@ void __fastcall Q09_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q1 callback[3]: Atma introduction-reply handler. Triggered when the gossip control id == 0x28 (player finished Atma's intro speech). Removes the player from the pending-gossip GUID list. If quest is at nStateFlag==2 (introduced) and not yet Completed/RewardAwaits, advances to nStateFlag 3 (objective active: go kill Radament) and mirrors state into all players' records via Q09_UpdateQuestRecord.
+// 1.14d mac: 0022238d
 void __fastcall Q09_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestArgs->sQuestArgs.sLevelChange.nOldLevel != 0x28) {
       return;
@@ -465,11 +478,13 @@ void __fastcall Q09_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A2Q1 on-player-join hook: no-op (ret). A2Q1 does its join-time record reconciliation in callback[0xd] (Q09_Callback_13) instead, so this slot is intentionally empty.
+// 1.14d mac: 0022226a
 void __fastcall Q09_OnPlayerJoinNoop(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit) {
 
 }
 
 // A2Q1 fpSequenceFilter: chain into the next quest's sequence filter once this quest is at its terminal state (nStateFlag==5) or already past intro. Looks up the sequence-successor quest (nSequenceQuestId = QUEST_TheSummoner) and tail-calls its fpSequenceFilter, with an IsBadCodePtr guard that halts on a corrupt pointer. Drives the act-2 quest-availability chain forward.
+// 1.14d mac: 00222c24
 bool __fastcall Q09_SequenceFilter(D2QuestDataStrc * pQuestData) {
     if (pQuestData->nStateFlag != 5 && pQuestData->bIsNotIntroduction != '\0') {
       return true;
@@ -491,6 +506,7 @@ bool __fastcall Q09_SequenceFilter(D2QuestDataStrc * pQuestData) {
 }
 
 // A2Q1 callback[0xd]: on-join-game state reconciliation from the persisted quest record. Branches on the stored record bits for this player: (a) Completed -> if Step0x05 set (book earned) but player no longer holds the Book of Skill item, clears Completed/RewardAwaits/FinishedInPreviousGame/Step0x05 (book was lost, re-allow); then pushes JustCompleted, marks intro done, nStateFlag=0. (b) FinishedInPreviousGame -> if RewardAwaits, sets bRewardPending so Atma still hands over the book this game; nStateFlag=0, intro done. (c) Step0x04 -> nStateFlag=3,prev=2. (d) Step0x03 -> nStateFlag=3,prev=1. (e) Step0x02 -> nStateFlag=2,prev=1. Restores live engine state from saved bits when a player enters.
+// 1.14d mac: 00222a5d
 void __fastcall Q09_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -554,6 +570,7 @@ void __fastcall Q09_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // A2Q1 (Radament's Lair) quest record init. Zeroes the 0x3c state-fn table, marks quest active with nStateFlag=1 (introduction/not-started). Wires the callback dispatch table indexed by gossip/state event: [0]=Q09_Callback_00 (gossip-line picker), [2]=Q09_Callback_02 (Radament-near retrigger), [3]=Q09_Callback_03 (Atma intro reply), [8]=Q09_Callback_08 (Radament death), [0xa]=noop thunk, [0xb]=Q09_Callback_11 (Atma reward dialog), [0xd]=Q09_Callback_13 (join-game state sync). Sets nSequenceQuestId=QUEST_TheSummoner (next quest in seq), fpSequenceFilter=Q09_SequenceFilter, fpActiveFilter=Q09_ActiveFilter, nQuestIdReal=QUEST_RadamentsLair. Allocs the 0x14-byte D2QuestDataA2Q1Strc scratch (bRadamentKilled/bSpokeToAtma/nBookOfSkillDropCount/bRewardPending/pRadamentRoom) and zeroes it.
+// 1.14d mac: 0022226f
 void __fastcall Q09_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->bIsActive = '\x01';

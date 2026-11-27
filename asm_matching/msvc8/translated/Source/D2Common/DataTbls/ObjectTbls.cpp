@@ -22,6 +22,7 @@ static int nTxtObjGroupSize = 0; D2_STATIC_GUARD(nTxtObjGroupSize, "nTxtObjGroup
 namespace D2Common { namespace DATATBLS { namespace ObjectTbls {
 
 // Builds the field-descriptor table for Objects.txt (158 columns: name, animation frame counts/deltas, per-mode flags, components, parms, draw/AI function indices, etc.) and compiles it into the global sgpTxtObjects bin table via CompileTxt (row stride 0x1c0). Post-compile per row: zeroes the wide-name buffer, resolves the localized display name from the string table into it, and left-shifts the eight FrameCnt fields by 8 (fixed-point scale). Side-effects: writes sgpTxtObjects / nTxtObjectsSize. __fastcall, pMemory = the data-table memory pool. Called once at data-table load.
+// 1.14d mac: 0014ab5d
 void __fastcall TXT_AllocTxt_objects(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc objects[158] = {
       {"Name", FIELDTYPE_ASCII, 0x3f, 0, 0},
@@ -206,6 +207,7 @@ void __fastcall TXT_AllocTxt_objects(D2PoolManagerStrc * pMemory) {
     } while (nObjIdx < nTxtObjectsSize);
 }
 
+// 1.14d mac: 0014ac81
 D2ObjectsTxt * __stdcall TXT_Objects_GetLine(int32_t nClassId) {
     if (!(nClassId < nTxtObjectsSize)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xdd);
@@ -219,12 +221,14 @@ D2ObjectsTxt * __stdcall TXT_Objects_GetLine(int32_t nClassId) {
     return sgpTxtObjects + nClassId;
 }
 
+// 1.14d mac: 0014acef
 void __stdcall TXT_FreeTxt_Objects() {
     DataTbls::UnloadBin(sgpTxtObjects);
     sgpTxtObjects = 0;
     nTxtObjectsSize = 0;
 }
 
+// 1.14d mac: 0014ad22
 void __stdcall OBJECTTBLS_FreeObjGroupTxt() {
     DataTbls::UnloadBin(pTxtObjGroup);
     pTxtObjGroup = 0;
@@ -232,6 +236,7 @@ void __stdcall OBJECTTBLS_FreeObjGroupTxt() {
 }
 
 // Builds the static D2BinFieldInputStrc field-descriptor table for objgroup.txt (8 object slots: ID0-7 INT, DENSITY0-7 CHAR, PROB0-7 CHAR, plus SHRINES and WELLS CHAR), each entry naming the column, its field type and byte offset within the record. Passes the table to DataTbls::CompileTxt(pMemory, "objgroup", ..., recordSize=0x34) to parse/compile objgroup.txt into the global pTxtObjGroup array (count in nTxtObjGroupSize). Called once during data-table load; pMemory is the pool allocator.
+// 1.14d mac: 0014ad55
 void __fastcall TXT_AllocTxt_objgroup(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc objgroup[27] = {
       {"ID0", FIELDTYPE_INT, 0, 0, 0},
@@ -266,6 +271,7 @@ void __fastcall TXT_AllocTxt_objgroup(D2PoolManagerStrc * pMemory) {
 }
 
 // Returns the D2ObjGroupTxt record at the given index, or NULL if the index is out of range (>= nTxtObjGroupSize).
+// 1.14d mac: 0014adda
 D2ObjGroupTxt * __stdcall DATATBLS_GetObjGroupTxtRecord(int32_t nIndex) {
     if (nTxtObjGroupSize > nIndex) {
       return pTxtObjGroup + nIndex;
@@ -275,6 +281,7 @@ D2ObjGroupTxt * __stdcall DATATBLS_GetObjGroupTxtRecord(int32_t nIndex) {
 }
 
 // Initialises and compiles the shrines.txt binary table into sgtDataTable. Declares an 11-entry D2BinFieldInputStrc descriptor array mapping shrines columns (Code, Arg0, Arg1, Duration in frames, reset time in minutes, rarity, view name, niftyphrase, effectclass, LevelMin) to their offsets within D2ShrinesTxt (row size 0xB8), then calls CompileTxt to parse and store the result in pTxtShrines/nTxtShrinesSize.
+// 1.14d mac: 0014adfd
 void __fastcall TXT_AllocTxt_shrines(D2PoolManagerStrc * pMemory) {
     D2BinFieldInputStrc shrines[11] = {
       {"Code", FIELDTYPE_CHAR, 0, 0, 0},
@@ -292,6 +299,7 @@ void __fastcall TXT_AllocTxt_shrines(D2PoolManagerStrc * pMemory) {
     pTxtShrines = (D2ShrinesTxt*)DataTbls::CompileTxt(pMemory, "shrines", shrines, &nTxtShrinesSize, 0xb8);
 }
 
+// 1.14d mac: 0014ae82
 D2ShrinesTxt * __stdcall TXT_Shrines_GetLine(int32_t nShrineId) {
     if (!(nShrineId < nTxtShrinesSize)) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x15f);
@@ -305,10 +313,12 @@ D2ShrinesTxt * __stdcall TXT_Shrines_GetLine(int32_t nShrineId) {
     return pTxtShrines + nShrineId;
 }
 
+// 1.14d mac: 0014aef0
 int32_t __stdcall GetShrinesSize() {
     return nTxtShrinesSize;
 }
 
+// 1.14d mac: 0014af01
 void __stdcall TXT_Shrines_Free() {
     DataTbls::UnloadBin(pTxtShrines);
     pTxtShrines = 0;

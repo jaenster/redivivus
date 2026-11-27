@@ -119,6 +119,7 @@ static void __stdcall DRLGPATH_InsertWaypointsIntoBuffer(int32_t nInsertIdx, D2P
 }
 
 // Main pathfinding function for PathTypeFunc_15. Uses a dual-scanner approach: two independent directional scanners advance from the start toward the path endpoints. Handles loop detection, waypoint insertion, and selects the better of the two scan results based on squared distance to the target. Returns the best path length found.
+// 1.14d mac: 0018289c
 int32_t __fastcall DRLGPATH_FindPathDualScan(D2PathTypeArg * pPathTypeArg, D2PathPointStrc * pPoints, D2PathPointStrc tStartPos, int * pnCurIndex, int * pnPointCount, int32_t nMaxSteps, uint32_t nInitDir) {
     // Static local variables (originally global data)
     static int gaPathDualScanDirTableY_B[16] = {
@@ -369,6 +370,7 @@ int32_t __fastcall DRLGPATH_FindPathDualScan(D2PathTypeArg * pPathTypeArg, D2Pat
 }
 
 // Simplifies a path by removing redundant collinear waypoints. Iterates through the input path, comparing consecutive direction deltas. Points that continue in the same direction are skipped. Diagonal shortcuts (where both dx and dy change simultaneously) are also compressed. Returns the simplified point count.
+// 1.14d mac: 00182eb8
 int32_t __fastcall DRLGPATH_SimplifyCollinearWaypoints(D2PathPointStrc * pDstPoints, D2PathPointStrc * pSrcPoints, D2PathPointStrc tStart, int32_t nPointCount) {
     int nDeltaX;
     int nDeltaY;
@@ -417,6 +419,7 @@ int32_t __fastcall DRLGPATH_SimplifyCollinearWaypoints(D2PathPointStrc * pDstPoi
 }
 
 // Pathfinding entry point for units that cannot reach their target directly (path type fallback). Builds a Bresenham waypoint list from the unit's current packed position toward the destination. For each waypoint, checks collision via CheckCollision_BlockPlayer_Type; on blockage, delegates to DRLGPATH_FindPathDualScan to find the best reachable point. After traversal, simplifies collinear waypoints via DRLGPATH_SimplifyCollinearWaypoints and returns the resulting waypoint count. Only valid for PLAYER or MONSTER unit owners; halts otherwise.
+// 1.14d mac: 00182fd8
 int32_t __fastcall PATH_FindPathTowardFallback(D2PathTypeArg * pPathTypeArg) {
     int32_t nDualScanLen;
     int32_t nPrevPointIdx;

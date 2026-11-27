@@ -15,6 +15,7 @@
 
 namespace D2CMP {
 
+// 1.14d mac: 00134c52
 void __fastcall SPRITECACHE_LRU_FreeEntryCallback(D2LRUCacheNodeStrc * pEntry) {
     D2TileLibraryEntryStrc* pCacheData = (D2TileLibraryEntryStrc*)pEntry->pUserData;
     if (gpfnSpriteCacheFreeEntry) {
@@ -32,6 +33,7 @@ void __fastcall SPRITECACHE_LRU_FreeEntryCallback(D2LRUCacheNodeStrc * pEntry) {
     pCacheData->pLruNode = 0;
 }
 
+// 1.14d mac: 00132439
 void __fastcall SPRITECACHE_LRU_RemoveCacheEntryCallback(D2LRUCacheNodeStrc * pEntry) {
     D2CelDataHashEntryStrc* pEntry_00 = (D2CelDataHashEntryStrc*)pEntry->pUserData;
     pEntry_00->pData = 0;

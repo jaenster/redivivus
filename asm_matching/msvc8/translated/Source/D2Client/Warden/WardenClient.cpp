@@ -790,6 +790,9 @@ static BOOL __stdcall WARDEN_ResolveAndLoadModule(void * pRc4Key, uint8_t * pMod
     return bCacheReadSuccess;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build loads no Warden module.
+#else
 BOOL __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize) {
     _FILETIME fileTime;
     if (!sgpUnknownSequence) {
@@ -800,6 +803,7 @@ BOOL __stdcall WARDEN_DownloadModule(char * szKey, void * pData, uint32_t nSize)
     BOOL bResult = sgpUnknownSequence->pfnCacheWriteData(szKey, pData, nSize, &fileTime, -1, -1);
     return bResult;
 }
+#endif
 
 void __fastcall SendPacket(::WardenClient * pThis, int, void * pData, uint32_t nLen) {
     GAME::Msg::NET_D2GS_CLIENT_Send_0x66(pData, nLen);
@@ -810,6 +814,9 @@ bool __fastcall CheckModule(::WardenClient * pThis, int, uint8_t * pModuleHash, 
     return bResult;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build loads no Warden module.
+#else
 void __fastcall LoadModule(::WardenClient * pThis, int, uint8_t * pModuleHash, void * pData, uint32_t nSize) {
     char szModuleFile[40];
     _FILETIME fileTime;
@@ -829,6 +836,7 @@ void __fastcall LoadModule(::WardenClient * pThis, int, uint8_t * pModuleHash, v
     /* LPFILETIME lpSystemTimeAsFileTime for GetSystemTimeAsFileTime */ GetSystemTimeAsFileTime(&fileTime);
     sgpUnknownSequence->pfnCacheWriteData(szModuleFile, pData, nSize, &fileTime, -1, -1);
 }
+#endif
 
 // @sourcefile .\WARDEN\WardenClient.cpp
 void * __fastcall AllocateMemory(::WardenClient * pThis, int, uint32_t nSize) {

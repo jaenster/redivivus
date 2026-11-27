@@ -56,6 +56,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2TileProjectStrc) == 0x110, "memse
 namespace D2CMP { namespace SRC { namespace TileProjects {
 
 // @sourcefile .\SRC\TileProjects.cpp
+// 1.14d mac: 001356b5 D2CMP::SRC::TileProjects::Free
 void __stdcall Free() {
     D2TileProjectStrc* pMemoryToFree = gpTileProjectListHead;
     while (pMemoryToFree) {
@@ -103,6 +104,7 @@ D2TileLibraryHashStrc * __stdcall TILEPROJECT_GetProjectId(char * szText) {
 }
 
 // @sourcefile .\SRC\TileProjects.cpp
+// 1.14d mac: 0013574f D2CMP::SRC::TileProjects::Alloc
 D2TileLibraryHeaderStrc * __stdcall Alloc(D2TileLibraryHashStrc * * ppHash, char * szFilename) {
     int nNameCopyOffset;
     char cNameChar;

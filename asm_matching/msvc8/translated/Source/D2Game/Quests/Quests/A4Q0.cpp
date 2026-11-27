@@ -40,11 +40,13 @@ void __fastcall Q25_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // Q25_StatusFilter — stub: always returns false. QUEST_SpokeToTyrael has no status-bar/visibility logic of its own.
+// 1.14d mac: 002353ca
 bool __fastcall Q25_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 
 // Q25_ActiveFilter — returns true (quest interaction active) only for target class 0x16f (Tyrael) while QUEST_SpokeToTyrael is not yet Completed; false otherwise. Governs whether the quest icon/interaction shows on Tyrael.
+// 1.14d mac: 002353d1
 bool __fastcall Q25_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0x16f) {
       BOOL BVar1;
@@ -59,6 +61,7 @@ bool __fastcall Q25_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // A4Q0 / internal Q25 = QUEST_SpokeToTyrael (Act 4 Pandemonium Fortress "Speak to Tyrael" pseudo-quest, the act-intro talk gate). InitData for the quest slot: zeroes the 0x3c state-fn table, installs state-0 handler Q25_Callback_00 (gossip while not yet done) and state-0xb handler Q25_Callback_11 (Tyrael dialog -> complete), points pNpcMessages at aNpcGossipData (single entry: MonStat 0x16f=Tyrael, string 0x298, menu), marks the quest active, sets nQuestIdReal=QUEST_SpokeToTyrael, and wires StatusFilter/ActiveFilter. NPC id 0x16f throughout = Tyrael; record-state slot pushed to QuestRecord fns is 0x18.
+// 1.14d mac: 00235270
 void __fastcall Q25_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q25_Callback00_NpcActivate;

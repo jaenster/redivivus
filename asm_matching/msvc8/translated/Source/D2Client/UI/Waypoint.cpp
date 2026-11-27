@@ -190,11 +190,13 @@ void __stdcall FreeUiImages() {
     WaypointWaygateIcons = 0;
 }
 
+// 1.14d mac: 000fb320
 void __stdcall InitializeWaypoints() {
     D2Client::Waypoint::pWaypoint = D2Common::Waypoints::Alloc(nullptr);
     D2Client::Waypoint::bNeedAllocation = false;
 }
 
+// 1.14d mac: 000fbd68
 void __stdcall WAYPOINT_SendClosePacket() {
     if (D2Client::Waypoint::bNeedAllocation) {
       return;
@@ -215,6 +217,7 @@ void __stdcall WAYPOINT_SendClosePacket() {
     D2Client::Waypoint::bNeedAllocation = true;
 }
 
+// 1.14d mac: 000fb34a
 void __stdcall WAYPOINT_Shutdown() {
     D2RoomStrc* pRoom;
     if (!D2Client::Waypoint::bNeedAllocation) {
@@ -237,6 +240,7 @@ void __stdcall WAYPOINT_Shutdown() {
     FreeUiImages();
 }
 
+// 1.14d mac: 000fc417
 static void Waypoint_SetWaypointArea(int32_t nAct) {
     BOOL bQuestComplete;
     eD2Quests eQuestId;
@@ -290,6 +294,7 @@ static void Waypoint_SetWaypointArea(int32_t nAct) {
     WaypointCurrentSelectedAct = nAct;
 }
 
+// 1.14d mac: 000fbe19
 void __stdcall WAYPOINT_PopulateList() {
     // Static local variables (originally global data)
     static uint8_t gaWaypointVisited[55] = {
@@ -459,6 +464,7 @@ void __stdcall Unreferenced_0049c980() {
     WAYPOINT_PopulateList();
 }
 
+// 1.14d mac: 000fb436
 void __stdcall DRAW_UI_Waypoint() {
     BOOL _bIsExpansionCheck;
     bool bIsExpansionCheck;
@@ -651,6 +657,7 @@ void __stdcall DRAW_UI_Waypoint() {
     D2Win::Src::D2WinFont::DRAW_text(pwszText, Inv::gnPanelOffsetX - nMouseX / 2 + 0xa0, 0x30 - Inv::gnPanelOffsetY, 0, 0);
 }
 
+// 1.14d mac: 000fbd00
 void __stdcall INPUT_WaypointTravel(D2UIMouseMsgStrc * pMsg) {
     D2RoomStrc* pRoom;
     if (!((pMsg->uMsg != 0x102 || pMsg->nWParam != 9) && (pMsg->uMsg != 0x104 || pMsg->nWParam != 0x73))) {
@@ -695,6 +702,7 @@ void __stdcall WAYPOINT_SendOpenPacket() {
     D2Client::Waypoint::bNeedAllocation = true;
 }
 
+// 1.14d mac: 000fbd71
 void __fastcall WAYPOINT_Init(uint8_t * pPacket) {
     D2RoomStrc* pRoom;
     eD2LevelId eLevel;
@@ -781,6 +789,7 @@ void __stdcall INPUT_WaypointMouseUp(D2UIMouseMsgStrc * pMsg) {
     ClickingDownOnWaypointEntry = -1;
 }
 
+// 1.14d mac: 000fc1e0
 void __stdcall INPUT_WaypointMouseDown(D2UIMouseMsgStrc * pMsg) {
     int32_t nMouseX = pMsg->uLParam.sMousePos.nMouseX;
     int32_t nMouseY = pMsg->uLParam.sMousePos.nMouseY;

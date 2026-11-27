@@ -106,6 +106,7 @@ void TriggerEndGameCongratsExit() {
     D2CLIENT_ExitVar3 = 1;
 }
 
+// 1.14d mac: 000aa9df
 BOOL __stdcall LOADER_RunInsertDiscPopup() {
     Engine::gbCharScreenOkPressed = 0;
     D2Win::Src::D2WinPalette::D2WINPALETTE_SetPaletteIndex(0);
@@ -124,6 +125,7 @@ BOOL __stdcall LOADER_RunInsertDiscPopup() {
     return 1;
 }
 
+// 1.14d mac: 000aacf7
 uint32_t __stdcall LOADER_PopupGameLoopCallback(uint32_t dwArg1) {
     GAME::Msg::NET_D2GS_CLIENT_Send_0x6D_PING();
     Engine::LOADER_DrawConnectionLostScreen(1);
@@ -136,6 +138,7 @@ uint32_t __stdcall LOADER_PopupGameLoopCallback(uint32_t dwArg1) {
 }
 
 // SelectProc=1 handler: target must be a selectable corpse (type 2). Thunk that pushes pTargetUnit and calls SKILLS_IsSelectableCorpse2. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe88e
 int __fastcall SKILL_SelectProc_IsSelectableCorpse2(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     int bIsSelectableCorpse = D2Common::Skills::SKILLS_IsSelectableCorpse2(pTargetUnit);
     return bIsSelectableCorpse;
@@ -150,18 +153,21 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 }
 
 // SelectProc=4 handler: target must be a corpse valid for revive (Necromancer Revive). Thunk forwarding to SKILLS_IsCorpseValidForRevive. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe952
 int __fastcall SKILL_SelectProc_IsCorpseValidForRevive(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     uint32_t bValid = D2Common::Skills::SKILLS_IsCorpseValidForRevive(pTargetUnit);
     return bValid;
 }
 
 // SelectProc=6 handler: target must be a living monster that can be revived. Thunk forwarding to SKILL_CanReviveMonster. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe97e
 int __fastcall SKILL_SelectProc_CanReviveMonster(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     uint32_t bCanRevive = D2Common::Skills::SKILL_CanReviveMonster(pTargetUnit);
     return bCanRevive;
 }
 
 // SelectProc=5 handler: target must be a selectable corpse (primary type). Thunk forwarding to SKILLS_IsSelectableCorpse. pUnit (ECX) is the caster and is not read; pTargetUnit (EDX) is the unit under the cursor, which SKILL_CheckActiveSkillSelectProc puts in EDX (00464335) and SKILL_ExecuteSelectProc passes through to the CALL at 004642f1.
+// 1.14d mac: 000fe968
 int __fastcall SKILL_SelectProc_IsSelectableCorpse(D2UnitStrc * pUnit, D2UnitStrc * pTargetUnit) {
     int bSelectable = D2Common::Skills::SKILLS_IsSelectableCorpse(pTargetUnit);
     return bSelectable;
@@ -181,14 +187,17 @@ BOOL __fastcall ITEM_IsQuestItem(D2UnitStrc * pItem, D2UnitFindArgStrc * pUnitFi
 }
 
 // Key-command handler: toggles the character screen. Reached only through gaCmdBindings[].pfnHandler, whose funcdef is __stdcall, and every one of its 56 sibling handlers is __stdcall. Left as "unknown" it emitted as cdecl and was the single strict compile error in globals.cpp.
+// 1.14d mac: 000a0823
 void __stdcall CMD_ToggleCharScreen() {
     UI::ui::SetUIFlag(UI_STATSCREEN, UI_TOGGLE, 1);
 }
 
+// 1.14d mac: 000a084a
 void __stdcall CMD_ToggleInventory() {
     UI::ui::SetUIFlag(UI_INVENTORY, UI_TOGGLE, 1);
 }
 
+// 1.14d mac: 000a0871
 void __stdcall CMD_TogglePartyScreen() {
     eD2GSGameType eGameType = GAME::Game::CLIENT_GetD2GSGameType();
     if (eGameType == GAMETYPE_SINGLEPLAYER) {
@@ -198,10 +207,12 @@ void __stdcall CMD_TogglePartyScreen() {
     UI::ui::SetUIFlag(UI_PARTYSCREEN, UI_TOGGLE, 1);
 }
 
+// 1.14d mac: 000a08a1
 void __stdcall CMD_ToggleMsgLog() {
     UI::ui::SetUIFlag(UI_MSGLOG, UI_TOGGLE, 0);
 }
 
+// 1.14d mac: 000a08c8
 void __stdcall CMD_ToggleQuestLog() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -216,6 +227,7 @@ void __stdcall CMD_ToggleQuestLog() {
     UI::QuestLog::QUESTLOG_ToggleQuestScreen(1);
 }
 
+// 1.14d mac: 000a08f1
 void __stdcall CMD_ToggleChatBox() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -225,6 +237,7 @@ void __stdcall CMD_ToggleChatBox() {
     UI::ui::SetUIFlag(UI_CHATBOX, UI_TOGGLE, 0);
 }
 
+// 1.14d mac: 000a09b9
 void __stdcall CMD_ToggleAutomap() {
     UI::ui::SetUIFlag(UI_AUTOMAP, UI_TOGGLE, 0);
     BOOL BVar1 = UI::ui::GetUIFlag(UI_AUTOMAP);
@@ -235,38 +248,45 @@ void __stdcall CMD_ToggleAutomap() {
     UI::Automap::AUTOMAP_CenterOnPlayer(0);
 }
 
+// 1.14d mac: 000a09fc
 void __stdcall CMD_AutomapCenterOnPlayer() {
     UI::Automap::AUTOMAP_CenterOnPlayer(1);
 }
 
+// 1.14d mac: 000a0a13
 void __stdcall CMD_AutomapCycleFade() {
     int32_t nCurrentFade = UI::Automap::AUTOMAP_GetFade();
     uint32_t nAutomapFade = (int)(nCurrentFade + 1U) % 4;
     UI::Automap::AUTOMAP_SetFade(nAutomapFade);
 }
 
+// 1.14d mac: 000a0a41
 void __stdcall CMD_AutomapToggleParty() {
     BOOL BVar1 = UI::Automap::AUTOMAP_GetParty();
     BOOL bNotBVar1 = !BVar1;
     UI::Automap::AUTOMAP_SetParty(bNotBVar1);
 }
 
+// 1.14d mac: 000a0a61
 void __stdcall CMD_AutomapTogglePartyNames() {
     int32_t bPartyNames = UI::Automap::AUTOMAP_GetPartyNames();
     BOOL bNotPartyNames = !bPartyNames;
     UI::Automap::AUTOMAP_SetPartyNames(bNotPartyNames);
 }
 
+// 1.14d mac: 000a0e5a
 void __stdcall CMD_AutomapToggleLeft() {
     int32_t bLeft = UI::Automap::AUTOMAP_GetLeft();
     BOOL bNotLeft = !bLeft;
     UI::Automap::AUTOMAP_SetLeft(bNotLeft);
 }
 
+// 1.14d mac: 000a0a81
 void __stdcall CMD_ToggleSkillTree() {
     UI::ui::SetUIFlag(UI_SKILLTREE, UI_TOGGLE, 1);
 }
 
+// 1.14d mac: 000a0aa8
 void __stdcall CMD_ToggleSkillSelect() {
     UI::ui::SetUIFlag(UI_SKILLSELECT, UI_TOGGLE, 0);
     UI::SpellSel::SPELLSEL_SetMouseHandFlag(0);
@@ -274,6 +294,7 @@ void __stdcall CMD_ToggleSkillSelect() {
 
 // Skill hotkey slot nSlot (ESI): ignored while exiting or dead, and slots above 8 need the expansion. With the skill-select UI open it calls SPELLSEL_HandleSkillSelection, otherwise SPELLSEL_ActivateSkillSlot. The range assert (View.cpp line 252) tests nSlot < 0 && nSlot > 15 and can never fire.
 // Unreferenced in 1.14d (entry: aligned start after padding); was undefined code hidden by a CALL_RETURN override on its halt call. Lines from docs/data/win-assert-oracle.tsv.
+// 1.14d mac: 000a3180
 static void __stdcall CMD_SelectSkillHotkeySlot(int nSlot) {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -305,6 +326,7 @@ static void __stdcall CMD_SelectSkillHotkeySlot(int nSlot) {
     return;
 }
 
+// 1.14d mac: 000a0adb
 void __stdcall CMD_ActivateSkillSlot_F1() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -325,6 +347,7 @@ void __stdcall CMD_ActivateSkillSlot_F1() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(0);
 }
 
+// 1.14d mac: 000a0ae6
 void __stdcall CMD_ActivateSkillSlot_F2() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -345,6 +368,7 @@ void __stdcall CMD_ActivateSkillSlot_F2() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(1);
 }
 
+// 1.14d mac: 000a0af4
 void __stdcall CMD_ActivateSkillSlot_F3() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -365,6 +389,7 @@ void __stdcall CMD_ActivateSkillSlot_F3() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(2);
 }
 
+// 1.14d mac: 000a0b02
 void __stdcall CMD_ActivateSkillSlot_F4() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -385,6 +410,7 @@ void __stdcall CMD_ActivateSkillSlot_F4() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(3);
 }
 
+// 1.14d mac: 000a0b10
 void __stdcall CMD_ActivateSkillSlot_F5() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -405,6 +431,7 @@ void __stdcall CMD_ActivateSkillSlot_F5() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(4);
 }
 
+// 1.14d mac: 000a0b1e
 void __stdcall CMD_ActivateSkillSlot_F6() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -425,6 +452,7 @@ void __stdcall CMD_ActivateSkillSlot_F6() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(5);
 }
 
+// 1.14d mac: 000a0b2c
 void __stdcall CMD_ActivateSkillSlot_F7() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -445,6 +473,7 @@ void __stdcall CMD_ActivateSkillSlot_F7() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(6);
 }
 
+// 1.14d mac: 000a0b3a
 void __stdcall CMD_ActivateSkillSlot_F8() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -465,6 +494,7 @@ void __stdcall CMD_ActivateSkillSlot_F8() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(7);
 }
 
+// 1.14d mac: 000a0e7a
 void __stdcall CMD_ActivateSkillSlot_F9() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -485,6 +515,7 @@ void __stdcall CMD_ActivateSkillSlot_F9() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(8);
 }
 
+// 1.14d mac: 000a0e88
 void __stdcall CMD_ActivateSkillSlot_F10() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -510,6 +541,7 @@ void __stdcall CMD_ActivateSkillSlot_F10() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(9);
 }
 
+// 1.14d mac: 000a0e96
 void __stdcall CMD_ActivateSkillSlot_F11() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -535,6 +567,7 @@ void __stdcall CMD_ActivateSkillSlot_F11() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(10);
 }
 
+// 1.14d mac: 000a0ea4
 void __stdcall CMD_ActivateSkillSlot_F12() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -560,6 +593,7 @@ void __stdcall CMD_ActivateSkillSlot_F12() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(0xb);
 }
 
+// 1.14d mac: 000a0eb2
 void __stdcall CMD_ActivateSkillSlot_F13() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -585,6 +619,7 @@ void __stdcall CMD_ActivateSkillSlot_F13() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(0xc);
 }
 
+// 1.14d mac: 000a0ec0
 void __stdcall CMD_ActivateSkillSlot_F14() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -610,6 +645,7 @@ void __stdcall CMD_ActivateSkillSlot_F14() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(0xd);
 }
 
+// 1.14d mac: 000a0ece
 void __stdcall CMD_ActivateSkillSlot_F15() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -635,6 +671,7 @@ void __stdcall CMD_ActivateSkillSlot_F15() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(0xe);
 }
 
+// 1.14d mac: 000a0edc
 void __stdcall CMD_ActivateSkillSlot_F16() {
     BOOL BVar1 = GAME::Game::GAMEDATA_GetExitFlag3();
     if (BVar1) {
@@ -660,38 +697,47 @@ void __stdcall CMD_ActivateSkillSlot_F16() {
     UI::SpellSel::SPELLSEL_ActivateSkillSlot(0xf);
 }
 
+// 1.14d mac: 000a0b6c
 void __stdcall thunk_NET_D2GS_CLIENT_Send_SHORT_Walk() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('?', 0x19);
 }
 
+// 1.14d mac: 000a0baa
 void __stdcall thunk_NET_D2GS_CLIENT_Send_SHORT_WalkToEntity() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('?', 0x1b);
 }
 
+// 1.14d mac: 000a0bc9
 void __stdcall thunk_NET_D2GS_CLIENT_Send_SHORT_Run() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('?', 0x1c);
 }
 
+// 1.14d mac: 000a0be8
 void __stdcall thunk_NET_D2GS_CLIENT_Send_SHORT_RunToEntity() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('?', 0x1d);
 }
 
+// 1.14d mac: 000a0c07
 void __stdcall thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnLoc() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('?', 0x1e);
 }
 
+// 1.14d mac: 000a0c26
 void __stdcall thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnEntity() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('?', 0x1f);
 }
 
+// 1.14d mac: 000a0f45
 void __stdcall thunk_NET_D2GS_CLIENT_Send_SHORT_LeftSkillOnLocEx() {
     GAME::Msg::NET_D2GS_CLIENT_Send_SHORT('?', 0x20);
 }
 
+// 1.14d mac: 000a0d60
 void __stdcall CMD_SetHoldAlt() {
     UI::ui::SetUIFlag(UI_HOLDALT, UI_SET, 0);
 }
 
+// 1.14d mac: 000a0cbe
 void __stdcall CMD_StopRun() {
     BOOL _bAlwaysRun;
     bool bAlwaysRun;
@@ -710,10 +756,12 @@ void __stdcall CMD_StopRun() {
     GAME::Msg::NET_D2GS_CLIENT_Send_CMD(0x54);
 }
 
+// 1.14d mac: 000a0d49
 void __stdcall CMD_ClearClickModifier() {
     GAME::Game::GAMEDATA_SetClickModifier(0);
 }
 
+// 1.14d mac: 000a0d87
 void __stdcall CMD_ReleaseHoldAltAndClearSelection() {
     UI::ui::SetUIFlag(UI_HOLDALT, UI_RESET, 0);
     GAME::Select::ClearSelectedUnit();
@@ -769,21 +817,25 @@ int32_t __fastcall RNG_GetRandomInRangeWithMin(uint32_t * pSeed, int32_t nMin, i
 }
 
 // Returns 1 if the current arena level flag (bit 1 of CLIENT_ArenaFlags) is set, indicating the active level is designated as an arena level.
+// 1.14d mac: 0006c23a
 int32_t __stdcall CLIENT_IsArenaLevel() {
     return (uint8_t)(uint8_t)CLIENT_ArenaFlags >> 1 & 1;
 }
 
 // Returns the global CLIENT_ArenaFlags bitmask controlling arena mode, arena level, and default-active state for the current game client context.
+// 1.14d mac: 0006c250
 eD2ArenaFlags __stdcall CLIENT_GetArenaFlags() {
     return CLIENT_ArenaFlags;
 }
 
 // Overwrites the global CLIENT_ArenaFlags with the provided eArenaFlags value, setting the full arena mode/level bitmask for the client.
+// 1.14d mac: 0006c261
 void __fastcall CLIENT_SetArenaFlags(eD2ArenaFlags eArenaFlags) {
     CLIENT_ArenaFlags = eArenaFlags;
 }
 
 // Sets or clears the ARENAFLAG_DefaultActive bit in CLIENT_ArenaFlags. bSet!=0 clears the bit (marks client as not default-active); bSet==0 sets the bit.
+// 1.14d mac: 0006c275
 void __fastcall CLIENT_ToggleDefaultActiveFlag(int32_t bSet) {
     if (bSet) {
       CLIENT_ArenaFlags &= ~ARENAFLAG_DefaultActive;
@@ -814,16 +866,19 @@ int Unreferenced_0047aa00() {
 
 // Stores the default player class id (global 0x00712f00) that CLIENT_GetDefaultCharClass returns.
 // Provenance: only writer of 0x00712f00, paired with the getter's only read; sole caller ClientInit_PlayerClassId.
+// 1.14d mac: 0006c29b
 void __fastcall CLIENT_SetDefaultCharClass(eD2PlayerClassIDDWORD dwValue) {
     eD2PlayerClassIDDWORD_00712f00 = dwValue;
 }
 
 // Returns the default player class ID stored in global _eD2PlayerClassID_00712f00, used when creating a new character without an explicit class selection.
+// 1.14d mac: 0006c2af
 eD2PlayerClassIDDWORD __stdcall CLIENT_GetDefaultCharClass() {
     return eD2PlayerClassIDDWORD_00712f00;
 }
 
 // Returns 1 if arena mode is active (bit 8 of CLIENT_ArenaFlags is set), indicating the game session is running in arena/PvP mode.
+// 1.14d mac: 0006c2c0
 uint32_t __stdcall CLIENT_IsArenaMode() {
     return CLIENT_ArenaFlags >> 8 & 1;
 }
@@ -838,6 +893,9 @@ int __fastcall Unreferenced_0047aa40(uint16_t * pChar) {
     return 0;
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build has no Imm* input method manager (its IME is Text Services Manager, MAC_SetTSMInputCallback).
+#else
 void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
     int32_t nNewLen;
     int32_t nCompLen;
@@ -924,6 +982,7 @@ void __stdcall INPUT_HandleIMEComposition(D2UIMouseMsgStrc * pMsg) {
     pMsg->dwResult = 0;
     Storm::SMsgBreakHandlerChain(pMsg);
 }
+#endif
 
 void __stdcall INPUT_HandleIMEStartComposition(D2UIMouseMsgStrc * pMsg) {
     gaChatInputBuffer = '\x01';
@@ -956,14 +1015,17 @@ void __stdcall INPUT_HandleIMEEndComposition(D2UIMouseMsgStrc * pMsg) {
 }
 
 // Small callback/thunk that reads a party names field from ECX+0x124 and forwards it to AUTOMAP_SetPartyNames.
+// 1.14d mac: 000dc0d4
 void __fastcall AUTOMAP_UpdatePartyNamesCallback(D2EscMenuItemStrc * pItem, D2UIMouseMsgStrc * pMsg) {
     UI::Automap::AUTOMAP_SetPartyNames(pItem->nImageIndex);
 }
 
+// 1.14d mac: 0011e7c0
 void __fastcall MONUNIQUE_Clt_SpawnPainWormDeathExplosion(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {
     UNIT::MonUnique::MONUNIQUE_PregnantCorpseBurst(pUnit);
 }
 
+// 1.14d mac: 000f47a4
 void __fastcall TRADE_HandleTradeComplete(int32_t nValue, char bIsGoldAmount) {
     if (bIsGoldAmount != '\0') {
       gnTradePlayerGoldAmount = nValue;
@@ -973,14 +1035,17 @@ void __fastcall TRADE_HandleTradeComplete(int32_t nValue, char bIsGoldAmount) {
     gnTradeAcceptedFlags = nValue;
 }
 
+// 1.14d mac: 000f47c6
 int __stdcall D2CLIENT_GetTradeAcceptedFlags() {
     return gnTradeAcceptedFlags;
 }
 
+// 1.14d mac: 000f47d7
 int __stdcall D2CLIENT_GetTradePlayerGoldAmount() {
     return gnTradePlayerGoldAmount;
 }
 
+// 1.14d mac: 000f47e8
 void __fastcall TRADE_SendGoldToPartner(uint32_t nGoldAmount) {
     if (UI::Trade::g_nTradeWindowState != 4 && UI::Trade::g_nTradeWindowState != 5 && UI::Trade::g_nTradeWindowState != 6) {
       uint32_t nPlayerGold = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(UNIT::Player::GetPlayerUnit_UI(), UNITSTAT_gold, 0);
@@ -999,6 +1064,7 @@ void __fastcall TRADE_SendGoldToPartner(uint32_t nGoldAmount) {
     UI::Trade::g_nTradeWindowState = 3;
 }
 
+// 1.14d mac: 000f489d
 int __stdcall TRADE_IsTradeThrottled() {
     if (UI::Trade::g_nTradeWindowState == 7) {
       DWORD dwTickCount;
@@ -1021,6 +1087,7 @@ int __stdcall TRADE_IsTradeThrottled() {
     return 0;
 }
 
+// 1.14d mac: 000f3b11
 void __stdcall SHOP_CleanupAssets() {
     UI::ui::UI_CloseTradeWindow(0);
 }
@@ -1056,6 +1123,7 @@ void __fastcall NET_D2GS_CLIENT_Handle0x50_QuestSpecial(D2GSPacketSrv0x50 * pPac
 }
 
 // Handles GS→client packet 0x5E (quest availability update): copies 37 bytes (9 dwords + 1 byte) from packet payload into aQuestAvailabilityPacket global buffer, then sets bReceivedQuestAvailabilityPacket=1.
+// 1.14d mac: 0007ee6c
 void __fastcall NET_D2GS_CLIENT_Incoming0x5E_QUESTPICKS(char * pBytes) {
     memcpy(aQuestAvailabilityPacket, pBytes + 1, sizeof(aQuestAvailabilityPacket));
     bReceivedQuestAvailabilityPacket = 1;
@@ -1065,6 +1133,7 @@ int __stdcall Unreferenced_004b92d0(int param_1) {
     return bReceivedQuestAvailabilityPacket;
 }
 
+// 1.14d mac: 0007eea6
 uint32_t __stdcall GetQuestAvailabilityByIndex(int32_t nUnused, int32_t nQuestIndex) {
     if (!bReceivedQuestAvailabilityPacket) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x60);
@@ -1092,6 +1161,7 @@ int __stdcall TEXT_EmptyCallback() {
     return 0;
 }
 
+// 1.14d mac: 000fa22c
 void __stdcall TEXT_InitializeTextSystem() {
     UI::ui::gnPlayerCashDisplay = 0;
     UI::ui::gnNpcShopActiveTab = 0;
@@ -1127,6 +1197,7 @@ int __stdcall TEXT_EmptyCallback_Unref_004c2530() {
     return 0;
 }
 
+// 1.14d mac: 001288b4
 void __stdcall SOUND_ClearGlobalState() {
     UNIT::UnitSnd::gnSoundLastInitTick = 0;
     UNIT::UnitSnd::gdwSoundChannelIndex = 0;
@@ -1136,6 +1207,7 @@ void __stdcall SOUND_ClearGlobalState() {
     memset(UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags, 0, sizeof(UNIT::UnitSnd::gaLevelAmbientMusicPlayedFlags));
 }
 
+// 1.14d mac: 0006291c
 void __stdcall DRAW_WORLD_SetWarpFadeTimer() {
     DWORD dwTickCount = GetTickCount();
     gdwWarpFadeExpireTime = dwTickCount + 500;
@@ -1149,6 +1221,7 @@ void __stdcall DRAW_WORLD_SetWarpFadeTimer() {
 // confirms it: the final call of the pass.
 // @wasnamed DRAW_WORLD_FadeEffectJustWarped
 // Draws the post-warp black fade-out over the play area, ramping alpha down over 500 ms.
+// 1.14d mac: 0006293d
 void __stdcall dSceneTransitionDraw() {
     if (!gdwWarpFadeExpireTime) {
       return;
@@ -1176,10 +1249,12 @@ void __stdcall dSceneTransitionDraw() {
     D2gfx::D2GFX::D2GFX_DrawSolidRectAlpha(nXStart, 0, nXEnd, nYEnd, 0, nTimeRemaining * 0xff / 500);
 }
 
+// 1.14d mac: 00062a07
 void __stdcall DRAW_WORLD_ClearWarpFadeTimer() {
     gdwWarpFadeExpireTime = 0;
 }
 
+// 1.14d mac: 0012b5ca
 int __fastcall CUNITEVENT_DispatchCallbacks(int nClientEvent, D2UnitStrc * pOwnerUnit, D2UnitStrc * pMissile, uint32_t dwParam4) {
     if (!pOwnerUnit) {
       return 0;
@@ -1197,6 +1272,7 @@ int __fastcall CUNITEVENT_DispatchCallbacks(int nClientEvent, D2UnitStrc * pOwne
     return dwResult;
 }
 
+// 1.14d mac: 0011ed04
 int32_t __fastcall UI_GetDialogLineCount(int16_t nDialogId) {
     // Static local variables (originally global data)
     static uint32_t gnUIDialogLineCountA[1730] = {
@@ -2965,6 +3041,9 @@ pfnWardenCreateInterface __fastcall WARDEN_DecryptBuffer(D2WardenModuleStrc * pp
     return (pfnWardenCreateInterface)(pContext + pExportTable[nOrdinal - pImage->nOrdinalBase]);
 }
 
+#if !defined(_WIN32) && D2_OS_MAC
+// Windows-only: the Mac build loads no Warden module (no VirtualProtect, no x86 module image).
+#else
 // Decrypt Warden anti-cheat module data using RSA/crypto operations
 uint32_t __fastcall WARDEN_DecryptModule(D2WardenModuleStrc * pModule, uint32_t nInputSize, uint32_t * pHeader, uint32_t nOutputSize) {
     FARPROC pProcAddress;
@@ -3136,6 +3215,7 @@ uint32_t __fastcall WARDEN_DecryptModule(D2WardenModuleStrc * pModule, uint32_t 
 
     return (uint32_t)!nIterCount;
 }
+#endif
 
 // RC4 key schedule: fills pRc4State's 256-byte S-box with 0..255, zeroes the i/j bytes at +0x100/+0x101, then swaps S[i] with S[j], j += S[i] + pKey[i % nKeyLength].
 // The only caller, WARDEN_DecryptAndLoadModule, passes a 0x10-byte key; 1.14d asm 004e09c0..004e0a1a.
@@ -3164,6 +3244,7 @@ void __fastcall WARDEN_RC4Init(D2RC4StateStrc * pRc4State, int, uint8_t * pKey, 
     } while (nNextIdx < 0x100);
 }
 
+// 1.14d mac: 000923e4
 void __fastcall SKILLSSOR_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * pStatListEx) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }
@@ -3176,6 +3257,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 000861ed
 void __fastcall SKILLSASS_StatExpireCallback_ClearState(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * nParam) {
     D2Common::DATATBLS::ItemStats::SetState(pUnit, eState, 0);
 }

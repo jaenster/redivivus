@@ -3721,10 +3721,12 @@ static void SetInteractedUnitInfo(D2UnitStrc * pUnit) {
     _Interaction::bInteractingWithNpc = 0;
 }
 
+// 1.14d mac: 000c5293
 int32_t __stdcall GetInteractedUnitClassId() {
     return _Interaction::nCurrentInteractedNpcClassId;
 }
 
+// 1.14d mac: 000c632c
 void __stdcall NPCMENU_SelectRandomDialogOption(D2NPCSpeechStrc * pSpeech) {
     int* const pnGossip = &pSpeech->nGossip;
     int nRetryCount = 10;
@@ -3769,6 +3771,7 @@ void __stdcall NPCMENU_RandomizeAllNpcDialogs() {
     gbNpcMenuRandomDialogSeed = 1;
 }
 
+// 1.14d mac: 000c5302
 uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind) {
     // Static local variables (originally global data)
     static int32_t gnNpcDialogOptionData_725c04 = 0x2; D2_STATIC_GUARD(gnNpcDialogOptionData_725c04, "D2Client::UI::npcmenu::NPCMENU_FindNextUnhandledMessage::gnNpcDialogOptionData_725c04");
@@ -3808,6 +3811,7 @@ uint16_t __fastcall NPCMENU_FindNextUnhandledMessage(int16_t nMsgTypeToFind) {
     } while (true);
 }
 
+// 1.14d mac: 000cb42d
 int __fastcall NPCMENU_ScrollCompleteShowNextMessage(void * pUserParam, uint32_t nReason, int bDismissed) {
     D2UnitStrc* pDVar1;
     if (gnNpcMenuActiveMode == '\x01') {
@@ -3881,6 +3885,7 @@ static bool inline_NPC_IsInteractableSideNpc(int32_t nNpcClassId) {
     return true;
 }
 
+// 1.14d mac: 000cb17c
 int __stdcall NPCMENU_ShowSelectedDialogOption() {
     D2GSPacketSrv0x27_TextStrc* pOverheadText;
     int32_t nSelectedIndex = Dialog::DIALOG_GetSelectedIndex(Dialog::gpNpcGossipDialog);
@@ -3918,6 +3923,7 @@ int __stdcall NPCMENU_ShowSelectedDialogOption() {
     return 0;
 }
 
+// 1.14d mac: 000cb2c7
 int __stdcall NPCMENU_ShowGossipDialog() {
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
@@ -3940,6 +3946,7 @@ int __stdcall NPCMENU_ShowGossipDialog() {
     return 1;
 }
 
+// 1.14d mac: 000cb37a
 int __stdcall NPCMENU_ShowIntroduceDialog() {
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
@@ -3962,6 +3969,7 @@ int __stdcall NPCMENU_ShowIntroduceDialog() {
     return 1;
 }
 
+// 1.14d mac: 000c99d3
 static int NPCMENU_CalculateDialogPosition(POINT * pPoint) {
     enum { LEFT, TOP, RIGHT, BOTTOM };
     int aViewBounds[4];
@@ -4019,6 +4027,7 @@ BOOL __stdcall CheckSpeachVersusInteractedUnit() {
     return 0;
 }
 
+// 1.14d mac: 000ca92d
 int __stdcall NPCMENU_EmptyDialogDrawHandler() {
     return 0;
 }
@@ -4044,6 +4053,7 @@ int __stdcall NPCMENU_RequestMercResurrect() {
     return 1;
 }
 
+// 1.14d mac: 000caa58
 void __stdcall NPCMENU_HireMerc() {
     POINT ptDialogPos;
     GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT(0x36, gnNpcMenuMercHireCost2, (uint32_t)(uint16_t)D2Client::Merc::D2MercForHire[gnNpcMenuMercHireCost1].nNameStringId);
@@ -4074,6 +4084,7 @@ static BOOL NPCMENU_IsItemIdentified(D2UnitStrc * pUnit) {
     return BVar1;
 }
 
+// 1.14d mac: 000c7c19
 static int NPCMENU_CanItemBeRepaired(D2UnitStrc * pUnit) {
     int nCurrentDurability;
     int nMaxStack;
@@ -4150,6 +4161,7 @@ int __stdcall NPCMENU_CainIdentifyOptionCallback() {
     return 1;
 }
 
+// 1.14d mac: 000c5ca6
 void __stdcall NPCMENU_CloseAllDialogs() {
     if (Dialog::gpNpcGossipDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcGossipDialog);
@@ -4271,6 +4283,7 @@ void __stdcall NPCMENU_InitializeMenuOptions() {
     NPC::D2NpcMenuOptions[0x26].nOptionsCount = 3;
 }
 
+// 1.14d mac: 000c5ddc
 void __fastcall SubmitItem(DWORD dwItemId) {
     gnNpcMenuActiveContainer = 0;
     GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x38, 0, _Interaction::nCurrentInteractedNpcGUID, dwItemId);
@@ -4290,6 +4303,7 @@ void __fastcall NPCMENU_ValidateNpcForShop(D2UnitStrc * pUnit) {
     Engine::Gfx::GFX_RemoveOverlayById(pUnit, 0, 0x48);
 }
 
+// 1.14d mac: 000c5f91
 void __stdcall NPCMENU_Initialize() {
     char szDc6Path[260];
     gnNpcMenuDialogY = 0;
@@ -4357,6 +4371,7 @@ void __stdcall NPCMENU_Initialize() {
     gbNpcMenuShopTransactionActive = 0;
 }
 
+// 1.14d mac: 000c60c7
 void __stdcall NPCMENU_Cleanup() {
     D2Common::QuestRecord::FreeQuestRecordPool(nullptr, gpNpcMenuBitBuffer);
     D2Common::QuestRecord::FreeQuestRecordPool(nullptr, gpGameQuestRecord);
@@ -4410,6 +4425,7 @@ void __stdcall NPCMENU_Cleanup() {
     Dialog::gpNpcActionConfirmDialog = 0;
 }
 
+// 1.14d mac: 000c6570
 void __fastcall NPCMENU_SetTransactionMode(D2GSPacketSrv0x50 * pMsg) {
     if (!pMsg) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfc6);
@@ -4428,6 +4444,7 @@ void __fastcall NPCMENU_SetTransactionMode(D2GSPacketSrv0x50 * pMsg) {
     gbNpcMenuTransactionMode2 = pMsg->nMessageType;
 }
 
+// 1.14d mac: 000c65eb
 void __fastcall NPCMENU_ReadGameQuestRecord(uint8_t * pQuestBits) {
     D2Common::QuestRecord::ReadQuestRecordFromBuffer(gpGameQuestRecord, (char*)pQuestBits, 0x60, 0);
 }
@@ -4437,6 +4454,7 @@ void __stdcall thunk_SetInventoryNeedsRefresh() {
     ::D2Client::UI::Inv::INV_SetRefreshFlag();
 }
 
+// 1.14d mac: 000c7cdd
 void __stdcall NPCMENU_ExecuteShopTransaction(int32_t bSkipConfirm, uint8_t byMode) {
     // Static local variables (originally global data)
     static int gbNpcMenuExecutingTransaction; D2_STATIC_GUARD_BSS(gbNpcMenuExecutingTransaction, "D2Client::UI::npcmenu::NPCMENU_ExecuteShopTransaction::gbNpcMenuExecutingTransaction");
@@ -4584,6 +4602,7 @@ void __stdcall NPCMENU_CancelShopTransaction() {
     GAME::Select::ClearSelectedUnit();
 }
 
+// 1.14d mac: 000c860d
 void __stdcall NPCMENU_HandleTransactionComplete() {
     DWORD dwTickCount = GetTickCount();
     if (dwTickCount - gbNpcMenuShopTransactionActive > 0x3e8) {
@@ -4617,6 +4636,7 @@ void __stdcall NPCMENU_HandleTransactionComplete() {
     GAME::Select::ClearSelectedUnit();
 }
 
+// 1.14d mac: 000c85dc
 void __fastcall NPCMENU_OnCursorItemRemoved(int32_t nUnitGUID) {
     if (!(gnNpcMenuActiveContainer && D2GSPacketSrv0x2A_007c0d87.nResult == 1 && nUnitGUID == D2GSPacketSrv0x2A_007c0d87.nUnitGUID)) {
       return;
@@ -4625,6 +4645,7 @@ void __fastcall NPCMENU_OnCursorItemRemoved(int32_t nUnitGUID) {
     NPCMENU_HandleTransactionComplete();
 }
 
+// 1.14d mac: 000c8690
 void __fastcall NPCMENU_OnItemRemovedFromContainer(int32_t nUnitGUID) {
     if (!(gnNpcMenuActiveContainer && D2GSPacketSrv0x2A_007c0d87.nResult == 1 && nUnitGUID == D2GSPacketSrv0x2A_007c0d87.nUnitGUID)) {
       return;
@@ -4633,6 +4654,7 @@ void __fastcall NPCMENU_OnItemRemovedFromContainer(int32_t nUnitGUID) {
     NPCMENU_HandleTransactionComplete();
 }
 
+// 1.14d mac: 000c86c1
 void __fastcall NPCMENU_OnItemUnequip(int32_t nUnitGUID) {
     if (!(gnNpcMenuActiveContainer && D2GSPacketSrv0x2A_007c0d87.nResult == 1 && nUnitGUID == D2GSPacketSrv0x2A_007c0d87.nUnitGUID)) {
       return;
@@ -4641,6 +4663,7 @@ void __fastcall NPCMENU_OnItemUnequip(int32_t nUnitGUID) {
     NPCMENU_HandleTransactionComplete();
 }
 
+// 1.14d mac: 000c86fb
 void __fastcall NPCMENU_OnItemPutInContainer(int32_t nUnitGUID) {
     if (!(gnNpcMenuActiveContainer && !D2GSPacketSrv0x2A_007c0d87.nResult && nUnitGUID == D2GSPacketSrv0x2A_007c0d87.nUnitGUID)) {
       return;
@@ -4649,6 +4672,7 @@ void __fastcall NPCMENU_OnItemPutInContainer(int32_t nUnitGUID) {
     NPCMENU_HandleTransactionComplete();
 }
 
+// 1.14d mac: 000c872d
 void __fastcall NPCMENU_OnItemPutInBelt(int32_t nUnitGUID) {
     if (!(gnNpcMenuActiveContainer && !D2GSPacketSrv0x2A_007c0d87.nResult && nUnitGUID == D2GSPacketSrv0x2A_007c0d87.nUnitGUID)) {
       return;
@@ -4657,6 +4681,7 @@ void __fastcall NPCMENU_OnItemPutInBelt(int32_t nUnitGUID) {
     NPCMENU_HandleTransactionComplete();
 }
 
+// 1.14d mac: 000c8736
 void __fastcall NPCMENU_OnItemInShop(int32_t nUnitGUID) {
     D2UnitStrc* pSelectedUnit = GAME::Select::GetSelectedUnit();
     if (!(pSelectedUnit && _Interaction::bInteractingWithNpc)) {
@@ -4672,6 +4697,7 @@ void __fastcall NPCMENU_OnItemInShop(int32_t nUnitGUID) {
     Inv::INV_ResetHoverAndContextState();
 }
 
+// 1.14d mac: 000c8797
 BOOL __fastcall NPCMENU_CalculateItemTransactionCost(D2UnitStrc * pUnit, int32_t nTransactionMode, int * pTransactionCost, uint16_t * pszBuffer, int32_t nBufferMaxLen) {
     uint8_t bVar1;
     D2UnitStrc* pNpcUnit;
@@ -4888,6 +4914,7 @@ static int32_t NPCMENU_FindMenuIndexByNpcId(D2UnitStrc * pNpcUnit) {
     return 0;
 }
 
+// 1.14d mac: 000cb7c6
 BOOL __stdcall NPCMENU_ConfirmTransactionCallback() {
     if (gnNpcMenuTransactionType == 5) {
       if (Dialog::gpNpcTransactionConfirmDialog) {
@@ -4931,6 +4958,7 @@ int __stdcall NPCMENU_ConfirmTransactionReturn() {
     return 1;
 }
 
+// 1.14d mac: 000c80e7
 void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     uint16_t* pszDialogStr;
     uint16_t nStrId;
@@ -5053,17 +5081,20 @@ void __stdcall NPCMENU_ShowTransactionConfirmDialog() {
     Dialog::AddStringData(Dialog::gpNpcTransactionConfirmDialog, D2Lang::StrTable::strtable::GetLocaleString(0xd11), 0xf, 0, 0, 1, pfnReturnOnClick, dwDialogArg1);
 }
 
+// 1.14d mac: 000c8c9d
 BOOL __fastcall GetInteractedUnitGuid(int * pNpcGUID) {
     *pNpcGUID = _Interaction::nCurrentInteractedNpcGUID;
     return _Interaction::bInteractingWithNpc;
 }
 
 // Returns gpNpcMenuBitBuffer, the NPC menu's quest record.
+// 1.14d mac: 000c8cfd
 D2BitBufferStrc * __stdcall GetQuestInfo() {
     return gpNpcMenuBitBuffer;
 }
 
 // Resets the NPC menu: nMercNameId = -1, NPCMENU_Cleanup, NPCMENU_Initialize, clears gbNpcMenuRandomDialogSeed and the two flag bytes (+0x11, bUpdated) of every D2NPCSpeech entry.
+// 1.14d mac: 000c8d1f
 void __stdcall ResetNPCSpeeches() {
     nMercNameId = -1;
     NPCMENU_Cleanup();
@@ -5085,6 +5116,7 @@ void __stdcall ResetNPCSpeeches() {
 
 // Returns 1 when the player is interacting with an NPC that still exists client-side and the NPC UI state (nUnknownUiRelatedMaybe) is 1, the NPC menu/talk state. Otherwise 0.
 // Callers: INPUT_StatScreenButtonDown and INPUT_SkillTreeButtonDown.
+// 1.14d mac: 000c8fa3
 int __stdcall NPCMENU_IsNpcMenuStateActive() {
     if (_Interaction::bInteractingWithNpc) {
       D2UnitStrc* pNpcUnit;
@@ -5098,6 +5130,7 @@ int __stdcall NPCMENU_IsNpcMenuStateActive() {
 }
 
 // Returns 1 when any NPC menu dialog is open: transaction confirm, trade error, transaction wait, interaction, talk, action confirm, merc list or main menu. Otherwise 0.
+// 1.14d mac: 000c8ff0
 int __stdcall NPCMENU_IsAnyNpcDialogOpen() {
     if (!Dialog::gpNpcTransactionConfirmDialog && !Dialog::gpNpcTradeErrorDialog && !Dialog::gpNpcTransactionWaitDialog && !Dialog::gpNpcInteractionDialog && !Dialog::gpNpcGossipDialog && !Dialog::gpNpcActionConfirmDialog && !Dialog::gpNpcMercListDialog && !Dialog::gpNpcMainMenuDialog) {
       return 0;
@@ -5107,12 +5140,14 @@ int __stdcall NPCMENU_IsAnyNpcDialogOpen() {
 }
 
 // Returns gnNpcMenuShopMode.
+// 1.14d mac: 000c9031
 int __stdcall NPCMENU_GetCurrentShopMode() {
     return gnNpcMenuShopMode;
 }
 
 // Packet S->C 0x91 body, called by NET_D2GS_CLIENT_Incoming0x91_WELCOME_BACK.
 // Reads 12 word NPC class ids from the packet at +2. For each id below the MonStats count, sets bUpdated = 1 on every D2NPCSpeech entry with that nNpcID. Nothing in it is about trade or money.
+// 1.14d mac: 000c9042
 void __fastcall NPCMENU_MarkNpcSpeechesUpdated(D2GSPacketSrv0x91 * pBytes) {
     int nCount = D2NPCSpeechCount;
     for (int i = 0; i < 12; i++) {
@@ -5154,6 +5189,7 @@ int __stdcall NPCMENU_ItemServiceOptionCallback() {
 
 // Charsi (monstats 154) menu row 3: adds option string 4017 (Upgrade, "Imbue") with the item-service callback 004b35b0.
 // NPC quest table entry 3: quest 3, state flag 1 (Tools of the Trade).
+// 1.14d mac: 000cba08
 int __stdcall NPCMENU_EnableCharsiImbueOption() {
     NPC::D2NpcMenuOptions[3].nOptionsCount = 4;
     NPC::D2NpcMenuOptions[3].nOptionCallback[2] = NPCMENU_ItemServiceOptionCallback;
@@ -5163,6 +5199,7 @@ int __stdcall NPCMENU_EnableCharsiImbueOption() {
 
 // Larzuk (monstats 511) menu row 39: adds option string 22748 (Addsocketsui) with the item-service callback 004b35b0.
 // NPC quest table entry 5: quest 35, state flag 1 (Siege on Harrogath).
+// 1.14d mac: 000cba66
 int __stdcall NPCMENU_EnableLarzukSocketOption() {
     NPC::D2NpcMenuOptions[0x27].nOptionsCount = 4;
     NPC::D2NpcMenuOptions[0x27].nOptionCallback[2] = NPCMENU_ItemServiceOptionCallback;
@@ -5172,6 +5209,7 @@ int __stdcall NPCMENU_EnableLarzukSocketOption() {
 
 // Anya (monstats 512) menu row 41: adds option string 22749 (Personalizeui) with the item-service callback 004b35b0.
 // NPC quest table entry 6: quest 38, state flag 1 (Betrayal of Harrogath).
+// 1.14d mac: 000cba95
 int __stdcall NPCMENU_EnableAnyaPersonalizeOption() {
     NPC::D2NpcMenuOptions[0x29].nOptionsCount = 5;
     NPC::D2NpcMenuOptions[0x29].nOptionCallback[3] = NPCMENU_ItemServiceOptionCallback;
@@ -5194,6 +5232,7 @@ void __fastcall NPCMENU_ClearHireListAndStopNpcSound(int32_t nNpcGuid) {
     gnNpcMenuNpcSoundIndex = 0;
 }
 
+// 1.14d mac: 000c778e
 int __fastcall ShopAction(D2UnitStrc * pUnit, D2UnitStrc * pItem, DWORD dwSell, DWORD unk, DWORD dwItemCost, DWORD dwMode, DWORD _2, DWORD _3) {
     uint8_t bVar1;
     BOOL bGambleEnabled;
@@ -5415,6 +5454,7 @@ void __fastcall NPCMENU_OnItemEquip(int32_t nItemGUID) {
     NPCMENU_HandleTransactionComplete();
 }
 
+// 1.14d mac: 000c6441
 void __fastcall NPCMENU_CloseNpcInteraction(int32_t nNpcGUID) {
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
     if (pPlayer) {
@@ -5458,6 +5498,7 @@ void __fastcall NPCMENU_CloseNpcInteraction(int32_t nNpcGUID) {
     UNIT::UnitMode::UNITMODE_SetAnimMode(pPlayer, eD2PlayerAnimMode_ns::Neutral);
 }
 
+// 1.14d mac: 000c8f70
 void __fastcall NPCMENU_CloseScrollAndInteraction(int32_t nNpcGUID) {
     NPCMENU_CloseNpcInteraction(nNpcGUID);
     D2UnitStrc* pNpcUnit = UNIT::CUnit::UNITS_FindClientSideUnit(nNpcGUID, UNIT_MONSTER);
@@ -5468,6 +5509,7 @@ void __fastcall NPCMENU_CloseScrollAndInteraction(int32_t nNpcGUID) {
     pNpcUnit->eUnitFlags |= UNITFLAG_TARGETABLE;
 }
 
+// 1.14d mac: 000c9ca4
 int __stdcall NPCMENU_OpenNpcShop() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -5489,6 +5531,7 @@ int __stdcall NPCMENU_OpenNpcShop() {
     return 1;
 }
 
+// 1.14d mac: 000c52ad
 void __stdcall NPCMENU_CloseAndResetAll() {
     _Interaction::geNpcUiState = NPCUI_NONE;
     Inv::INV_ResetHoverAndContextState();
@@ -5496,6 +5539,7 @@ void __stdcall NPCMENU_CloseAndResetAll() {
     ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
 }
 
+// 1.14d mac: 000c624e
 void __fastcall NPCMENU_HandlePlayerInteractionEnd(D2UnitStrc * pUnit) {
     D2NPCSpeechStrc* pCurrentSpeech;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
@@ -5543,6 +5587,7 @@ void __stdcall NPCMENU_CloseShopUI() {
     ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
 }
 
+// 1.14d mac: 000c7710
 void __fastcall CloseNPCInteract() {
     if (_Interaction::geNpcUiState == NPCUI_MENU) {
       gnNpcMenuActiveMode = 0;
@@ -5584,6 +5629,7 @@ void __stdcall NPCMENU_CloseStashUI() {
     ui::SetUIFlag(UI_NPCMENU, UI_RESET, 0);
 }
 
+// 1.14d mac: 000cb060
 int __stdcall NPCMENU_CloseGossipDialog() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
@@ -5601,6 +5647,7 @@ int __stdcall NPCMENU_CloseGossipDialog() {
 }
 
 // Returns 0 while gnNpcMenuActiveMode is set. Otherwise frees gpNpcActionConfirmDialog, sets the NPC UI state to none, resets inventory hover, closes the NPC interaction and resets UI_NPCMENU; returns 1. fpDialogFunc2 of the action-confirm dialog, also called by its OK handler.
+// 1.14d mac: 000cbe7a
 int __stdcall NPCMENU_CloseConfirmDialogAndInteraction() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
@@ -5617,6 +5664,7 @@ int __stdcall NPCMENU_CloseConfirmDialogAndInteraction() {
     return 1;
 }
 
+// 1.14d mac: 000cb509
 static void __stdcall NPCMENU_SendCainIdentifyItems(char bUseGossip, int32_t nSpeechIndex) {
     D2UnitStrc* pNpcUnit;
     pNpcUnit = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
@@ -5657,11 +5705,13 @@ static void __stdcall NPCMENU_SendCainIdentifyItems(char bUseGossip, int32_t nSp
 // player class 4, 0xB for 0x202 + 2, 0xA for 0x203 + 3, else pBank[0x1A] match -> 1, else 0)
 // and passes flag 0 (NPCMENU_CainIdentifyCallback). Both are reached only as data from the callback
 // table - 004b597c points here, 004b5956 points at 004b41e0.
+// 1.14d mac: 000cb153
 BOOL __stdcall NPCMENU_ShowCurrentGossipCallback() {
     NPCMENU_SendCainIdentifyItems('\x01', gpNpcCurrentSpeech->nGossip);
     return 1;
 }
 
+// 1.14d mac: 000cb0a8
 int __stdcall NPCMENU_CainIdentifyCallback() {
     int nPlayerClass;
     D2UnitStrc* pPlayer = UNIT::Player::GetPlayerUnit_UI();
@@ -5706,6 +5756,7 @@ int __stdcall NPCMENU_CainIdentifyCallback() {
 
 // OK handler of the NPC action confirm dialog (NPCMENU_ShowNpcActionConfirmDialog).
 // Closes the dialog and the NPC interaction (NPCMENU_EmptyDrawCallback2), then sends C->S 0x38 (action 0, NPC GUID, 0). For Akara this performs the respec. Returns 1.
+// 1.14d mac: 000cbec2
 BOOL __stdcall NPCMENU_ConfirmDialogOkCallback() {
     NPCMENU_CloseConfirmDialogAndInteraction();
     GAME::Msg::NET_D2GS_CLIENT_Send_INT_INT_INT(0x38, 0, _Interaction::nCurrentInteractedNpcGUID, 0);
@@ -5714,6 +5765,7 @@ BOOL __stdcall NPCMENU_ConfirmDialogOkCallback() {
 
 // "trade" (3396 NPCMenuTrade) and "trade/repair" (3334 NPCMenuTradeRepair) option callback: used by every vendor row; also used by NPCMENU_OpenInteractionDialog.
 // Stops the NPC sound and frees the interaction dialog. If the NPC unit exists and has an inventory: sets the NPC UI state to 3, gnNpcMenuShopMode = 0, sets UI_NPCSHOP and sends C->S 0x38 (action 1, NPC GUID, 0) to open the vendor; the player becomes gpNpcShopOwnerUnit. Otherwise closes the interaction. Returns 1.
+// 1.14d mac: 000c9bb6
 int __stdcall NPCMENU_TradeOptionCallback() {
     if (gnNpcMenuNpcSoundIndex) {
       if (gnNpcMenuNpcClassId) {
@@ -5747,6 +5799,7 @@ int __stdcall NPCMENU_TradeOptionCallback() {
 }
 
 // EDI is not an argument: saved at 004b4464 PUSH EDI before any read.
+// 1.14d mac: 000c5986
 void DRAW_UI_NPC_INTERACTION() {
     D2UnitStrc* pNpcUnit;
     eD2GSGameType eD2GameType;
@@ -5846,6 +5899,7 @@ void DRAW_UI_NPC_INTERACTION() {
     return;
 }
 
+// 1.14d mac: 000c9ae0
 int __stdcall NPCMENU_GambleDrawCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -5859,6 +5913,7 @@ int __stdcall NPCMENU_GambleDrawCallback() {
     return 1;
 }
 
+// 1.14d mac: 000c9b17
 int __stdcall NPCMENU_GambleMouseCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -5872,6 +5927,7 @@ int __stdcall NPCMENU_GambleMouseCallback() {
     return 1;
 }
 
+// 1.14d mac: 000cc282
 int __stdcall NPCMENU_RepairDrawCallback() {
     if (Dialog::gpNpcMainMenuDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcMainMenuDialog);
@@ -5886,6 +5942,7 @@ int __stdcall NPCMENU_RepairDrawCallback() {
     return 1;
 }
 
+// 1.14d mac: 000cc2dc
 int __stdcall NPCMENU_RepairMouseCallback() {
     if (Dialog::gpNpcMainMenuDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcMainMenuDialog);
@@ -5900,6 +5957,7 @@ int __stdcall NPCMENU_RepairMouseCallback() {
     return 1;
 }
 
+// 1.14d mac: 000cc336
 int __stdcall NPCMENU_TradeDrawCallback() {
     if (Dialog::gpNpcMainMenuDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcMainMenuDialog);
@@ -5938,6 +5996,7 @@ int __stdcall NPCMENU_TradeDrawCallback() {
     return 1;
 }
 
+// 1.14d mac: 000c92be
 void __stdcall NPCMENU_OpenInteractionDialog() {
     uint8_t cDifficulty;
     D2UnitStrc* pNpcUnit;
@@ -6183,6 +6242,7 @@ int __stdcall NPCMENU_GetCurrentMenuId() {
 
 namespace D2Client { namespace UI { namespace npcmenu {
 
+// 1.14d mac: 000cbf8b
 void __stdcall NPCMENU_ShowMainMenuDialog() {
     int nCharIdx;
     uint16_t wCurChar;
@@ -6312,6 +6372,7 @@ void __stdcall NPCMENU_OpenInteraction(D2UnitStrc * pUnit) {
 
 // Warriv's "Go East" menu option (string 3382 WarrivMenu1b): frees the NPC dialog, resets hover state, closes the NPC interaction, closes UI_NPCMENU, and sends C->S 0x38 (action 0, npc GUID, level 40 Lut Gholein). Returns 1.
 // Evidence: stored into D2NpcMenuOptions row 13 (npc 155 Warriv) slot 1 by NPCMENU_EnableWarrivGoEastOption; PUSH 0x28 = level 40; same shape as 004b52c0 (Warriv act 2, string 3383 WarrivMenu1c, level 1).
+// 1.14d mac: 000cbf48
 int __stdcall NPCMENU_WarrivGoEastOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6328,6 +6389,7 @@ int __stdcall NPCMENU_WarrivGoEastOptionCallback() {
 
 // Meshif's "Sail East" menu option (string 3384 MeshifMenuEast): frees the NPC dialog, resets hover state, closes the NPC interaction, closes UI_NPCMENU, and sends C->S 0x38 (action 0, npc GUID, level 75 Kurast Docks). Returns 1.
 // Evidence: stored into D2NpcMenuOptions row 15 (npc 210 Meshif) slot 1 by NPCMENU_EnableMeshifSailEastOption; PUSH 0x4b = level 75; same shape as 004b5260 (Meshif act 3, string 3385 MeshifMenuWest, level 40).
+// 1.14d mac: 000cbf05
 int __stdcall NPCMENU_MeshifSailEastOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6344,6 +6406,7 @@ int __stdcall NPCMENU_MeshifSailEastOptionCallback() {
 
 // Tyrael's "Travel to Harrogath" menu option (string 22738 Travel_To_Harrogath): frees the NPC dialog, resets hover state, closes the NPC interaction, closes UI_NPCMENU, and sends C->S 0x38 (action 0, npc GUID, level 109 Harrogath). Returns 1.
 // Evidence: stored into D2NpcMenuOptions row 21 (npc 367 Tyrael) slot 1 by NPCMENU_EnableTyraelTravelToHarrogathOption; PUSH 0x6d = level 109.
+// 1.14d mac: 000cbb31
 int __stdcall NPCMENU_TyraelTravelToHarrogathOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6361,6 +6424,7 @@ int __stdcall NPCMENU_TyraelTravelToHarrogathOptionCallback() {
 // Meshif's (Act 3, monstats 264 meshif2) "sail west" (3385 MeshifMenuWest) option callback: D2NpcMenuOptions row 30, slot 1.
 // Frees the NPC interaction dialog, resets the NPC UI state, closes the NPC interaction and the NPC menu UI flag, then sends C->S 0x38 (action 0, NPC GUID, level 40 = Lut Gholein) to travel. Returns 1.
 // Same body as the other travel option callbacks; only the level id differs.
+// 1.14d mac: 000ca8ea
 int __stdcall NPCMENU_MeshifSailWestOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6377,6 +6441,7 @@ int __stdcall NPCMENU_MeshifSailWestOptionCallback() {
 
 // Warriv's (Act 2, monstats 175 warriv2) "go west" (3383 WarrivMenu1c) option callback: D2NpcMenuOptions row 14, slot 1.
 // Frees the NPC interaction dialog, resets the NPC UI state, closes the NPC interaction and the NPC menu UI flag, then sends C->S 0x38 (action 0, NPC GUID, level 1 = Rogue Encampment) to travel. Returns 1.
+// 1.14d mac: 000ca70e
 int __stdcall NPCMENU_WarrivGoWestOptionCallback() {
     if (Dialog::gpNpcInteractionDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcInteractionDialog);
@@ -6391,6 +6456,7 @@ int __stdcall NPCMENU_WarrivGoWestOptionCallback() {
     return 1;
 }
 
+// 1.14d mac: 000c6621
 void __fastcall NPCMENU_HandleQuestItemPacket(uint8_t byUnitType, int32_t nUnitGUID) {
     D2UnitStrc* pInteractedUnit;
     pInteractedUnit = 0;
@@ -6674,6 +6740,7 @@ void __stdcall NPCMENU_HandleTradeRejected() {
     NPCMENU_OpenInteractionDialog();
 }
 
+// 1.14d mac: 000cafec
 int __stdcall NPCMENU_MercDrawCallback1() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
@@ -6690,6 +6757,7 @@ int __stdcall NPCMENU_MercDrawCallback1() {
 
 // Cancel handler of the NPC action confirm dialog (NPCMENU_ShowNpcActionConfirmDialog); also the dialog's first callback.
 // Returns 0 if gnNpcMenuActiveMode is set. Otherwise frees the confirm dialog (gpNpcRepairDialog), plays sound 1, clears the pointer and reopens the NPC menu (NPCMENU_OpenInteractionDialog). Returns 1.
+// 1.14d mac: 000cbe06
 int __stdcall NPCMENU_ConfirmDialogCancelCallback() {
     if (gnNpcMenuActiveMode != '\0') {
       return 0;
@@ -6707,6 +6775,7 @@ int __stdcall NPCMENU_ConfirmDialogCancelCallback() {
 // Builds the NPC talk dialog (gpNpcGossipDialog) titled with the localized string nTitleStringId, for D2NPCSpeech[nSpeechIdx]: "introduction" (3399, unless the entry has bNoIntro), "gossip" (3395), the overhead message log, "about the merchants" (3392) for NPC 201, "Horadric Cube" (2231) for the Cain classes, and "cancel" (3400).
 // Halts if the talk dialog is already open. Sends no packet.
 // void __stdcall, two stack arguments (RET 8). Callers: NPCMENU_TalkOptionCallback and NPCMENU_RequestGamble, both with 3381 "talk".
+// 1.14d mac: 000cabce
 void __stdcall NPCMENU_ShowTalkDialog(uint16_t nTitleStringId, int32_t nSpeechIdx) {
     D2UnitStrc* pPlayerUnit_lcl;
     D2UnitStrc* pSocketedItem;
@@ -6838,6 +6907,7 @@ int __stdcall NPCMENU_ShowAkaraRespecConfirm_Unused() {
     return 1;
 }
 
+// 1.14d mac: 000c926b
 int __stdcall NPCMENU_MercListDrawCallback() {
     if (Dialog::gpNpcMercListDialog) {
       Dialog::FreeDialogStrc(Dialog::gpNpcMercListDialog);
@@ -6853,6 +6923,7 @@ int __stdcall NPCMENU_MercListDrawCallback() {
     return 1;
 }
 
+// 1.14d mac: 000c9d69
 int __stdcall NPCMENU_BuildMercHireMenu() {
     uint8_t bVar1;
     BOOL bIsExpansion;
@@ -7092,6 +7163,7 @@ int __stdcall NPCMENU_BuildMercHireMenu() {
     return 1;
 }
 
+// 1.14d mac: 000c53af
 void __fastcall NPCMENU_HandleTradePacket(D2GSPacketSrv0x2A * pPacket) {
     D2GSPacketSrv0x2A_007c0d87 = *pPacket;
     uint16_t wStatLayer = 0;
@@ -7114,6 +7186,7 @@ void __fastcall NPCMENU_HandleTradePacket(D2GSPacketSrv0x2A * pPacket) {
 
 // Kashya (monstats 150) menu row 11: adds option string 3397 (NPCMenuHire, "Hire") with callback NPCMENU_BuildMercHireMenu (count 2->3). Returns 1.
 // Called from the NPC quest table (entry 2: quest 2, state flag 0, Sisters' Burial Grounds) and from NPCMENU_HandleMenuSelection when the player level is 8 or more.
+// 1.14d mac: 000cb97b
 int __stdcall NPCMENU_EnableKashyaHireOption() {
     NPC::D2NpcMenuOptions[0xb].nOptionsCount = 3;
     NPC::D2NpcMenuOptions[0xb].nOptionCallback[1] = NPCMENU_BuildMercHireMenu;
@@ -7122,6 +7195,7 @@ int __stdcall NPCMENU_EnableKashyaHireOption() {
 }
 
 // bAddTradeOption: 0 removes the trade option from the NPC's menu, nonzero inserts it (before the hire option).
+// 1.14d mac: 000c90fb
 static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t nNpcMenuOptionId) {
     D2NpcMenuOptionFunc* pdwCallbackSlot;
     int nOptionsCount;
@@ -7232,6 +7306,7 @@ static BOOL __stdcall NPCMENU_ConfigureMenuOption(BOOL bAddTradeOption, int32_t 
 
 // Warriv (monstats 155) menu row 13: adds option string 3382 (WarrivMenu1b, "Go East") with callback 004b5140.
 // NPC quest table entry 0: quest 6, state flag 0 (Sisters to the Slaughter).
+// 1.14d mac: 000cb9aa
 int __stdcall NPCMENU_EnableWarrivGoEastOption() {
     NPC::D2NpcMenuOptions[0xd].nOptionsCount = 3;
     NPC::D2NpcMenuOptions[0xd].nOptionCallback[1] = NPCMENU_WarrivGoEastOptionCallback;
@@ -7241,6 +7316,7 @@ int __stdcall NPCMENU_EnableWarrivGoEastOption() {
 
 // Meshif (monstats 210) menu row 15: adds option string 3384 (MeshifMenuEast) with callback 004b51a0.
 // NPC quest table entry 1: quest 14, state flag 0 (The Seven Tombs).
+// 1.14d mac: 000cb9d9
 int __stdcall NPCMENU_EnableMeshifSailEastOption() {
     NPC::D2NpcMenuOptions[0xf].nOptionsCount = 3;
     NPC::D2NpcMenuOptions[0xf].nOptionCallback[1] = NPCMENU_MeshifSailEastOptionCallback;
@@ -7250,6 +7326,7 @@ int __stdcall NPCMENU_EnableMeshifSailEastOption() {
 
 // Qual-Kehk (monstats 515) menu row 43: adds option string 3397 (NPCMenuHire) with callback NPCMENU_BuildMercHireMenu.
 // NPC quest table entry 7: quest 36, state flag 0 (Rescue on Mount Arreat).
+// 1.14d mac: 000cbac4
 int __stdcall NPCMENU_EnableQualKehkHireOption() {
     NPC::D2NpcMenuOptions[0x2b].nOptionsCount = 3;
     NPC::D2NpcMenuOptions[0x2b].nOptionCallback[1] = NPCMENU_BuildMercHireMenu;
@@ -7259,6 +7336,7 @@ int __stdcall NPCMENU_EnableQualKehkHireOption() {
 
 // Tyrael (monstats 367) menu row 21: if CLIENT_CheckExpansion, adds option string 22738 (Travel_To_Harrogath) with callback 004b5200. Always returns 1.
 // NPC quest table entry 8: quest 28, state flag 0.
+// 1.14d mac: 000cbaf3
 int __stdcall NPCMENU_EnableTyraelTravelToHarrogathOption() {
     BOOL BVar1 = GAME::Game::CLIENT_CheckExpansion();
     if (BVar1) {
@@ -7270,6 +7348,7 @@ int __stdcall NPCMENU_EnableTyraelTravelToHarrogathOption() {
     return 1;
 }
 
+// 1.14d mac: 000c7347
 static void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static D2NpcQuestCallbackEntry gaNpcMenuQuestCallbackTable[9] = {
@@ -7485,6 +7564,7 @@ static void __stdcall NPCMENU_HandleMenuSelection(int32_t bReopenMenu, D2UnitStr
     gnNpcMenuNpcClassId = 0;
 }
 
+// 1.14d mac: 000c9090
 void __fastcall SetPlayersMercInfo(uint16_t wMercNameId, int32_t nReviveCost) {
     nMercNameId = wMercNameId;
     D2Client::Merc::nMercReviveCost = nReviveCost;
@@ -7499,6 +7579,7 @@ void __fastcall SetPlayersMercInfo(uint16_t wMercNameId, int32_t nReviveCost) {
     NPCMENU_ConfigureMenuOption(0, 0x2b);
 }
 
+// 1.14d mac: 000c924e
 void __stdcall NPCMENU_RefreshMenuDialog() {
     if (!gpNpcMenuMercListBox) {
       return;
@@ -7516,6 +7597,7 @@ void __stdcall NPCMENU_RefreshMenuDialog() {
     NPCMENU_OpenInteractionDialog();
 }
 
+// 1.14d mac: 000c6f93
 int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int32_t nScrollState) {
     D2UnitStrc* pNpcUnit;
     int32_t nMenuIndex;
@@ -7598,6 +7680,7 @@ int __fastcall NPCMENU_OnScrollComplete(void * pUserParam, int32_t nReason, int3
 // "talk" (3381 TalkMenu) option callback: slot 0 of every NPC menu row that has a talk option; also used by NPCMENU_OpenInteractionDialog.
 // If the player is interacting with an NPC that still exists: frees the interaction dialog, sets the NPC UI state to 1, picks the NPC's D2NPCSpeech entry (CheckSpeachVersusInteractedUnit), stores it in g_nNpcTradeMenuState and opens the talk dialog (NPCMENU_ShowTalkDialog(3381, speech index)). Returns 1.
 // Otherwise closes the interaction and returns 0. Sends no packet.
+// 1.14d mac: 000c9b4e
 int __stdcall NPCMENU_TalkOptionCallback() {
     int nNpcSpeechIdx;
     D2UnitStrc* pNpcUnit;
@@ -7623,6 +7706,7 @@ int __stdcall NPCMENU_TalkOptionCallback() {
 
 // Akara's "Reset Stat/Skill Points" option callback (stored by NPCMENU_EnableAkaraRespecOption, row 0 slot 2). If the interacted NPC still exists: frees the NPC dialog, CheckSpeachVersusInteractedUnit, then opens the respec confirmation dialog (NPCMENU_ShowNpcActionConfirmDialog(11168), an OK/Cancel dialog builder) and returns 1.
 // Otherwise closes the NPC interaction, clears UI_NPCMENU and returns 0.
+// 1.14d mac: 000cbbf0
 int __stdcall NPCMENU_AkaraRespecOptionCallback() {
     D2UnitStrc* pNpcUnit;
     pNpcUnit = _Interaction::bInteractingWithNpc ? UNIT::CUnit::UNITS_FindClientSideUnit(_Interaction::nCurrentInteractedNpcGUID, UNIT_MONSTER) : 0;
@@ -7646,6 +7730,7 @@ int __stdcall NPCMENU_AkaraRespecOptionCallback() {
 
 // Akara (monstats 148) menu row 0: adds option string 11168 (respec) with callback NPCMENU_AkaraRespecOptionCallback.
 // NPC quest table entry 4: quest 1, state flag 0 (Den of Evil).
+// 1.14d mac: 000cba37
 int __stdcall NPCMENU_EnableAkaraRespecOption() {
     NPC::D2NpcMenuOptions[0].nOptionsCount = 4;
     NPC::D2NpcMenuOptions[0].nOptionCallback[2] = NPCMENU_AkaraRespecOptionCallback;
@@ -7653,6 +7738,7 @@ int __stdcall NPCMENU_EnableAkaraRespecOption() {
     return 1;
 }
 
+// 1.14d mac: 000c6737
 void __fastcall UI_HandleNpcInteractionPacket(uint8_t nUpdateType, int32_t nUnitGUID, char * pQuestBuffer, uint8_t nActionType) {
     uint16_t nMessage;
     bool bIsSideNpc;

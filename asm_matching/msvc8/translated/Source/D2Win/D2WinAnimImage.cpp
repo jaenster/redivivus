@@ -42,11 +42,13 @@ typedef BOOL (__fastcall *Draw)(D2ControlStrc * pControl);
 
 namespace D2Win {
 
+// 1.14d mac: 0003e8d4
 void __fastcall FORMS_DestroyD2WinAnimImage(::D2WinAnimImage * pWinAnimImage) {
     Src::D2WinMain::FORMS_DestroyControl(&pWinAnimImage->sControl);
 }
 
 // Returns the current animation state (field 0x14) from D2WinAnimImage. Validates form type is FORM_Image (2).
+// 1.14d mac: 0003e8dd
 int32_t __fastcall D2WINANIMIMAGE_GetCurrentState(::D2WinAnimImage * pAnimImage) {
     if (pAnimImage->sControl.neD2FormType != FORM_Image) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x50);
@@ -57,6 +59,7 @@ int32_t __fastcall D2WINANIMIMAGE_GetCurrentState(::D2WinAnimImage * pAnimImage)
 }
 
 // Attempts to transition animation from state 3 (loaded) to state 4 (playing). Resets frame counter and updates tick timestamp. Returns 1 if transitioned, 0 if already playing or stopped.
+// 1.14d mac: 0003e91c
 BOOL __fastcall D2WINANIMIMAGE_TryAdvanceToPlaying(::D2WinAnimImage * pAnimImage) {
     DWORD dwTick;
     if (pAnimImage->sControl.neD2FormType != FORM_Image) {
@@ -77,6 +80,7 @@ BOOL __fastcall D2WINANIMIMAGE_TryAdvanceToPlaying(::D2WinAnimImage * pAnimImage
     return 1;
 }
 
+// 1.14d mac: 0003e7e2
 BOOL __fastcall D2WINANIMIMAGE_HitTest(::D2WinAnimImage * pAnimImage) {
     D2GfxDataStrc sGfxData;
     int nPosX;
@@ -184,6 +188,7 @@ static BOOL D2WINANIMIMAGE_UpdateFrame(::D2WinAnimImage * pAnimImage) {
     return 1;
 }
 
+// 1.14d mac: 0003e418 D2Win::D2WinAnimImage::Draw
 BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
     DC6Block* pFirstDC6Block;
     int pDC6Block;
@@ -282,6 +287,7 @@ BOOL __fastcall Draw(::D2WinAnimImage * pAnimImage) {
     return 1;
 }
 
+// 1.14d mac: 0003e75e D2Win::D2WinAnimImage::Push
 BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
     BOOL nOnPressResult;
     ::D2WinAnimImage* pAnimImage = (::D2WinAnimImage*)pControlMsg->pControl;
@@ -308,6 +314,7 @@ BOOL __stdcall Push(D2ControlMsg * pControlMsg) {
 
 // Sets bAnimate (+0x5c): while it is 0, Draw keeps nCurrentFrame where it is. Returns 1; halts if the control is not FORM_Image.
 // Provenance: asm 00500810 (RET 8); callers pass 0 for create-account forms 6 and 7 (004303a2, 004325c5).
+// 1.14d mac: 0003e987
 BOOL __stdcall D2WINANIMIMAGE_SetAnimate(::D2WinAnimImage * pAnimImage, BOOL bAnimate) {
     if (pAnimImage->sControl.neD2FormType != FORM_Image) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x183);
@@ -319,6 +326,7 @@ BOOL __stdcall D2WINANIMIMAGE_SetAnimate(::D2WinAnimImage * pAnimImage, BOOL bAn
 }
 
 // @sourcefile .\D2WinAnimImage.cpp
+// 1.14d mac: 0003e30a
 ::D2WinAnimImage * __fastcall D2WinAnimImage(int32_t nPosX, int32_t nPosY, int32_t nSizeX, int32_t nSizeY, DC6 * pDC6, int32_t nStaticFrameDelay, OnPress pfnOnPress, FORMS_AnimFrameStrc * pAnimFrames, DRAWMODE eDrawMode, fpD2WinAnimImageNotify pfnOnStateChange) {
     uint32_t dwState;
     DWORD dwTick;

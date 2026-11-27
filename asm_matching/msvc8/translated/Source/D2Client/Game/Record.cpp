@@ -92,6 +92,7 @@ void __stdcall AllocGameRecord() {
     gpCurrentGameRecord = pRecord;
 }
 
+// 1.14d mac: 000744c4
 void __stdcall AddGameEntry(uint32_t uMsg, WPARAM wParam, LPARAM lParam) {
     if (gpCurrentGameRecord->nEntrySize >= 500) {
       AllocGameRecord();
@@ -225,6 +226,7 @@ void __stdcall LoadGameRecordFromFile() {
 }
 
 // @sourcefile .\GAME\Record.cpp
+// 1.14d mac: 000746be
 void __stdcall FreeGameRecord() {
     D2GameRecordStrc* pRecord = gsGameRecordContext.pNext;
     while (pRecord) {
@@ -234,6 +236,7 @@ void __stdcall FreeGameRecord() {
     }
 }
 
+// 1.14d mac: 0007470b
 void __fastcall GAME_ReplayRecordedWindowMessage(D2GameRecordEntryStrc * pIndex) {
     // Frame slots -12..-4 are ONE object: &nOutResult1 is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -256,6 +259,7 @@ void __fastcall GAME_ReplayRecordedWindowMessage(D2GameRecordEntryStrc * pIndex)
     Storm::WindowHandle::SMsgDispatchMessage(D2gfx::D2GFX::GetHwnd(), pIndex->uMsg, pIndex->wParam, pIndex->lParam, pOutResult1, pOutResult2);
 }
 
+// 1.14d mac: 0007478d
 void __stdcall SetupRecording() {
     if (NotRecording) {
       NotRecording = 0;
@@ -267,10 +271,12 @@ void __stdcall SetupRecording() {
     D2Game::GAME::Server::GAME_SetForcedGameSeed(lpBuffer_007a2768.dwSeed);
 }
 
+// 1.14d mac: 00074981
 BOOL __stdcall IsNotRecording() {
     return NotRecording;
 }
 
+// 1.14d mac: 00074993
 void __stdcall CallCloseRecordingFunction(LPCSTR szFile, int nLine, LPCSTR szExpression) {
     SaveGameRecordToFile();
     if (!CleanUpFn) {
@@ -280,6 +286,7 @@ void __stdcall CallCloseRecordingFunction(LPCSTR szFile, int nLine, LPCSTR szExp
     (*CleanUpFn)(szFile, nLine, szExpression);
 }
 
+// 1.14d mac: 000749b7
 void __stdcall SetCleanupFunction() {
     SettedUp = 1;
     CleanUpFn = D2Hell::RegisterExitFunction(CallCloseRecordingFunction);
@@ -297,10 +304,12 @@ BOOL __stdcall IsRecording() {
     return gbIsRecording;
 }
 
+// 1.14d mac: 00074a07
 BOOL __stdcall IsPlaybackActive() {
     return gbIsPlaybackActive;
 }
 
+// 1.14d mac: 00074a19
 void __stdcall StopRecordingSetFlags() {
     if (gbIsRecording) {
       gbIsRecording = 0;
@@ -360,3 +369,24 @@ void __stdcall RecordCurrentStep() {
 }
 
 }}} // namespace D2Client::GAME::Record
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client { namespace GAME { namespace Record {
+
+// 00445a74
+static uint8_t gbRecordFlagA = 0;
+// 00445a59
+static uint8_t gbRecordFlagB = 0;
+
+// 1.14d mac: 000749e3
+void __stdcall RECORD_SetFlagA() {
+    gbRecordFlagA = 1;
+}
+
+// 1.14d mac: 000749f5
+BOOL __stdcall RECORD_GetFlagB() {
+    return gbRecordFlagB;
+}
+
+}}} // namespace D2Client::GAME::Record
+#endif

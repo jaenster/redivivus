@@ -1215,7 +1215,6 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
     char nPetType;
     D2PetTypeTxt* pSkillTxt;
     short int* pSrvPrgFunc;
-    void** pMemory2;
     __frame0.pSkillsLink = 0;
     __frame0.pMonStatsLink = 0;
     __frame0.pSkillDescLink = 0;
@@ -1687,7 +1686,6 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
       nCounter = 0;
       MonsterTbls::sgtDataTable.nPassiveSkillsCount = 0;
       if (MonsterTbls::sgtDataTable.nTxtSkillsCount > 0) {
-        pMemory2 = 0;
         do {
           pSrvPrgFunc = MonsterTbls::sgtDataTable.pTxtSkills->srvprgfunc;
           nPetType = MonsterTbls::sgtDataTable.pTxtSkills[nCounter].charclass;
@@ -1700,7 +1698,6 @@ void __stdcall TXT_AllocTxt_skill_skilldesc(D2PoolManagerStrc * pMemory) {
             MonsterTbls::sgtDataTable.nPassiveSkillsCount++;
           }
 
-          pMemory2 = &((D2PoolManagerStrc*)pMemory2)->pPools[0xb].pSync.OwningThread;
           nCounter++;
         } while (nCounter < MonsterTbls::sgtDataTable.nTxtSkillsCount);
       }
@@ -2194,3 +2191,19 @@ D2AnimDataStrc * __stdcall LOGGING_GetLogFile() {
 }
 
 }}} // namespace D2Common::DATATBLS::DataTbls
+
+#if !defined(_WIN32) && D2_OS_MAC
+#include "Source/Fog/Src/Excel/Excel.h"
+
+namespace D2Common { namespace DATATBLS { namespace DataTbls {
+
+// 1.14d mac: 001401ca
+void DATATBLS_SwapTableRecords(const void * pFieldSizes, int32_t nRows, void * pData, int32_t nRecordSize) {
+    if (gbTxtAllocCountHeader == 0) {
+      return;
+    }
+    Fog::Src::Excel::TXT_SwapTableRecords(pFieldSizes, pData, nRows, nRecordSize);
+}
+
+}}} // namespace D2Common::DATATBLS::DataTbls
+#endif

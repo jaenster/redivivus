@@ -99,6 +99,7 @@ void __fastcall Q13_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A2Q5 "The Summoner" - completion notifier. If the quest is in a "done"-ish state (Completed OR FinishedInPreviousGame) but NOT (JustCompleted OR CannotCompleteQuestInGame), it does nothing (return 0). Otherwise it sends quest-update packet 0xc to the player (QUEST_SendQuestUpdateToPlayer), pushing the current quest status/log to the client. Used as the post-state callback when the quest transitions to JustCompleted (0xd) / Cain step (4).
+// 1.14d mac: 00227f33
 BOOL __fastcall Q13_NotifySummonerComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -121,6 +122,7 @@ BOOL __fastcall Q13_NotifySummonerComplete(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // A2Q5 "The Summoner" - quest-record sync on load/init. If neither Completed nor RewardAwaits is set for this player, and the live server quest data exists with nStateFlag != 0 (quest has been started/introduced), it sets QuestRecord Step0x02 (state 2) - marking the "quest in progress" bit in the player's saved record. Brings a freshly-loaded player's quest log in line with the active game state.
+// 1.14d mac: 00227fe0
 BOOL __fastcall Q13_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
@@ -141,6 +143,7 @@ BOOL __fastcall Q13_UpdateQuestRecord(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A2Q5 "The Summoner" - reward turn-in / gossip handler (sStateFunctions[0xb]). Fires when the player talks to an Arcane Sanctuary spirit (msg ids 0x1a3-0x1ad). If RewardAwaits is set: when JustCompleted is also set this is the moment of fresh completion -> broadcast state 0xd via QUEST_SetStateAndBroadcast (notify=Q13_NotifySummonerComplete), mark the server quest record JustCompleted (SetQuestRecordState 0x544720), and set the state flag to 3 (final stage). Then add this player to the participation GUID list, and in the per-player record set Completed and clear RewardAwaits. Finally sends the NPC gossip packet. This is the canonical Summoner-quest completion path.
+// 1.14d mac: 00227b59
 void __fastcall Q13_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     uint16_t nMessageId = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
     if (!(nMessageId == 0x1ab || nMessageId == 0x1a8 || nMessageId == 0x1a3 || nMessageId == 0x1a7 || nMessageId == 0x1a6 || nMessageId == 0x1aa || nMessageId == 0x1ad || nMessageId == 0x1a9 || nMessageId == 0x1a5 || nMessageId == 0x1a4 || nMessageId == 0x1ac)) {
@@ -178,6 +181,7 @@ void __fastcall Q13_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q5 "The Summoner" - per-player kill-credit check (iterated over players when the Summoner dies). Determines if this player is in the Summoner's room or an adjacent room (pA2Q5->sQuestGUID.aPlayerGUID[1] holds the Summoner room ptr); checks the room and its DRLG adjacent-room list. If the player is in/near the Summoner room AND the quest is not already Completed/RewardAwaits, it sets JustCompleted (0xd) and RewardAwaits (1) in the player's record - granting kill credit and arming the reward. (Halts with internal error 0x10d/0x11c if quest data or room is missing.)
+// 1.14d mac: 0022b104
 BOOL __fastcall Q13_CheckSummonerKillAndReward(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pDVar4;
     uint32_t iAdjacentRoom;
@@ -231,11 +235,13 @@ BOOL __fastcall Q13_CheckSummonerKillAndReward(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // JMP thunk
+// 1.14d mac: 00227cb0
 void __fastcall Q13_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::D2Game::Quests::QUESTS::SetRewardAndFinishFlags(pQuestData, pQuestArgs);
 }
 
 // A2Q5 "The Summoner" - per-player completion-sound trigger. If this player's record has JustCompleted (0xd) set and the player is currently in the Arcane Sanctuary (level 0x4a), it attaches the quest-complete "Moo" update event/sound (event 0x33) to the player. Cosmetic feedback on Summoner kill. nParam is the quest data ptr; [nParam+0x6d] is the difficulty index into pQuestRecordPool.
+// 1.14d mac: 0022b37f
 BOOL __fastcall Q13_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     eD2LevelId eLevelId;
     /* GetQuestState(TheSummoner, JustCompleted=0xd): only play sound on a fresh
@@ -256,6 +262,7 @@ BOOL __fastcall Q13_PlayCompletionSound(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // A2Q5 "The Summoner" - quest-timer end callback (scheduled by Callback_08 via AddQuestTimer). First invocation: sets pA2Q5->bCainSaved flag and iterates players running Q13_PlayCompletionSound (play the completion jingle). Second invocation (flag already set): clears eFlags and broadcasts quest state 4 (post-kill stage; notify=Q13_NotifySummonerComplete), then clears field_0x08. Drives the delayed completion sequence after the Summoner dies.
+// 1.14d mac: 0022b081
 uint8_t __fastcall Q13_OnEndCallbackAndNotify(::SGAMEDATA * pGame, D2QuestDataStrc * pQuestData) {
     D2QuestDataA2Q5Strc* pQuestSpecificData = pQuestData->pQuestSpecificData.pA2Q5;
     if (!pQuestSpecificData->bCompletionSoundPlayed) {
@@ -271,6 +278,7 @@ uint8_t __fastcall Q13_OnEndCallbackAndNotify(::SGAMEDATA * pGame, D2QuestDataSt
 }
 
 // A2Q5 "The Summoner" - party-reward propagation (callback per party member via ExecuteFunctionForEveryPartyMember). For each member whose record is not already Completed/RewardAwaits, if they are physically in Act II (level's act == ACT_II), it grants them the kill: sets JustCompleted (0xd) and RewardAwaits (1). Shares Summoner completion with nearby party members.
+// 1.14d mac: 0022782e
 void __fastcall Q13_SetSummonerRewardOnPartyMember(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2QuestDataStrc* pPlayerData = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheSummoner);
     if (!pPlayerData) {
@@ -311,6 +319,7 @@ void __fastcall Q13_SetSummonerRewardOnPartyMember(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // A2Q5 "The Summoner" - per-player party fan-out (iterated over players when Summoner dies). If this player's record has JustCompleted (0xd) set (i.e. they got kill credit) and they belong to a party (partyId != -1), run Q13_SetSummonerRewardOnPartyMember over every party member to share the completion.
+// 1.14d mac: 0022b271
 BOOL __fastcall Q13_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     /* GetQuestState(TheSummoner, JustCompleted=0xd): only fan out reward if self
                          player just got the kill */ D2BitBufferStrc* pQuestRecord = GetQuestBitBufferInline(pGame, pUnit);
@@ -327,6 +336,7 @@ BOOL __fastcall Q13_PropagateRewardToParty(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // A2Q5 "The Summoner" - "cannot complete in this game" marker (iterated over players when Summoner dies). For any player who did NOT earn the kill (record not Completed and not RewardAwaits), it sets CannotCompleteQuestInGame (0xe) and sends quest-state packet 0xc to that player. Tells absent players the Summoner is already dead so they can't complete the quest this session. nParam=quest data ptr; [nParam+0x6d]=difficulty index.
+// 1.14d mac: 0022b2ee
 BOOL __fastcall Q13_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2UnitDataPlayerStrc* pDVar1 = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pDVar1->pQuestRecord[pGame->nDifficulty];
@@ -347,6 +357,7 @@ BOOL __fastcall Q13_SetCannotComplete(::SGAMEDATA * pGame, D2UnitStrc * pUnit, v
 }
 
 // A2Q5 "The Summoner" - Summoner-death event handler (sStateFunctions[8]). When the quest is introduced/active: debug-print, set state flag 2, record the Summoner's room (pA2Q5->pRadamentRoom/sQuestGUID), and on first death schedule the end-callback timer (Q13_OnEndCallbackAndNotify). Then fans out over all players running the three credit/notify passes: Q13_CheckSummonerKillAndReward (grant credit to nearby), Q13_PropagateRewardToParty (share with party), Q13_SetCannotComplete (lock out absent players). Always notifies clients of event 7 at the end. (Reused A2Q1/A1Q4 struct fields named for Radament/Cain - here they hold Summoner room/kill state.)
+// 1.14d mac: 00227d42
 void __fastcall Q13_Callback08_MonsterKilled(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2RoomStrc* pDVar2;
     if (pQuestData->bIsNotIntroduction != '\0') {
@@ -381,6 +392,7 @@ void __fastcall Q13_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A2Q5 "The Summoner" - state-0xd handler (sStateFunctions[0xd]), quest-log/progress sync on entering region. If the player's record (queried via pQuestData->nQuestIdReal) is neither Completed nor FinishedInPreviousGame, but the per-player TheSummoner record has Step0x02 (state 2, "in progress") set, it bumps the live quest data to nStateFlag=1 / nStateFlagPrev=2, advancing the in-game quest stage to match the saved progress. Read-only on the bit record (no Set/Unset).
+// 1.14d mac: 00227cb9
 void __fastcall Q13_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -407,6 +419,7 @@ void __fastcall Q13_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // A2Q5 "The Summoner" - quest init/registration (nInitNo=2). Allocates the A2Q5-specific data struct (0xc bytes), zeroes the state-function table, installs the Arcane Sanctuary NPC gossip message table, and wires the handlers: fpActiveFilter=Q13_ActiveFilter, fpQuestStateHandler[0]=Callback_00, [3]=Callback_03, [8]=Callback_08 (Summoner death), [0xa]=Callback_10 (participation tracking), [0xb]=Callback_11 (reward turn-in), [0xd]=Callback_13 (progress sync). Sets nQuestIdReal=TheSummoner (0xd), bIsActive, nStateFlag=0, and clears the per-quest kill/room fields. No GetQuestState/SetQuestState here.
+// 1.14d mac: 002278f9
 void __fastcall Q13_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->pNpcMessages = A2Q5::aNpcGossipData;

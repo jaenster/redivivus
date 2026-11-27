@@ -293,6 +293,7 @@ D2InventoryStrc * __fastcall CLIENT_GetEffectiveInventory(D2UnitStrc * pUnit, in
     return pUnit->pInventory;
 }
 
+// 1.14d mac: 000695f4
 static uint32_t GFX_HashTextureName(char * pArchive) {
     char DVar1;
     int nLen = (int)strlen(pArchive);
@@ -305,6 +306,7 @@ static uint32_t GFX_HashTextureName(char * pArchive) {
     return ((nHash >> 8 ^ nHash) >> 0x10 ^ nHash >> 8 ^ nHash) & 0x1ff;
 }
 
+// 1.14d mac: 000695a0
 static void GFX_ExtractFilenameFromPath(char * szPath, char * szOutFilename) {
     char* pcEnd = szPath;
     pcEnd = pcEnd + strlen(pcEnd) + 1;
@@ -326,6 +328,7 @@ static void GFX_ExtractFilenameFromPath(char * szPath, char * szOutFilename) {
     szOutFilename[nLen] = '\0';
 }
 
+// 1.14d mac: 0006938b
 void * __stdcall GFX_FindTextureInCache(D2CofCacheStrc * pTextureCache, char * szPath) {
     uint32_t nHash;
     uint32_t nHashUnused;
@@ -352,6 +355,7 @@ void * __stdcall GFX_FindTextureInCache(D2CofCacheStrc * pTextureCache, char * s
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00069427
 static void * __stdcall GFX_LoadCofFile(D2CofCacheStrc * pTextureCache, char * szPath) {
     char* pcSrcFile;
     uint8_t* pLoadedFile;
@@ -532,6 +536,7 @@ static void GFX_SyncStateOverlayPriority(D2GfxUnknown_0xa8 * pOverlay, D2GfxInfo
     } while (true);
 }
 
+// 1.14d mac: 000643c0
 static void __stdcall GFX_RemoveStateOverlayAndReprioritize(D2UnitStrc * pUnit, D2GfxInfoStrc * pGfxInfo, D2GfxUnknown_0xa8 * pOverlay) {
     BOOL _bHasHideState;
     D2GfxUnknown_0xa8* pDVar1;
@@ -609,6 +614,7 @@ static void __stdcall GFX_RemoveStateOverlayAndReprioritize(D2UnitStrc * pUnit, 
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 000644e7
 void __stdcall GFX_RemoveOverlayFromUnit(D2UnitStrc * pUnit, D2GfxUnknown_0xa8 * pOverlay) {
     D2GfxUnknown_0xa8* pMemoryToFree;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
@@ -643,6 +649,7 @@ void __stdcall GFX_RemoveOverlayFromUnit(D2UnitStrc * pUnit, D2GfxUnknown_0xa8 *
     D2_FREE_AT(pMemoryToFree, ".\\ENGINE\\Gfx.cpp", 0x1e1);
 }
 
+// 1.14d mac: 00063d90
 BOOL __fastcall GFX_HasOverlayOfType(D2UnitStrc * pUnit, int32_t nOverlayType) {
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
@@ -691,6 +698,7 @@ void __fastcall GFX_SetOverlayFrame(D2UnitStrc * pUnit, int32_t nOverlayId, int3
     } while (true);
 }
 
+// 1.14d mac: 00063df5
 void __fastcall GFX_DrawOverlayOnUnit(D2UnitStrc * pUnit, int32_t nOverlayId, int32_t nScreenX, int32_t nScreenY) {
     D2GfxDataStrc sGfxData;
     int nAssignResult;
@@ -742,6 +750,7 @@ void __fastcall GFX_DrawOverlayOnUnit(D2UnitStrc * pUnit, int32_t nOverlayId, in
     }
 }
 
+// 1.14d mac: 00066730
 void __stdcall DRAW_UNIT_States(D2UnitStrc * pUnit, int32_t nBlendMode, int32_t bSecondPass, int32_t nScreenX, int32_t nScreenY, int32_t bRaiseY) {
     D2GfxDataStrc sGfxData;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
@@ -834,6 +843,7 @@ void __stdcall DRAW_UNIT_States_HaltTail(int nLine) {
     exit(-1);
 }
 
+// 1.14d mac: 000649f0
 uint8_t * __fastcall GFX_GetGfxInfoCofData(D2UnitStrc * pUnit, int32_t pAnimMode) {
     D2GfxInfoUnkStrc* pCur;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
@@ -850,6 +860,7 @@ uint8_t * __fastcall GFX_GetGfxInfoCofData(D2UnitStrc * pUnit, int32_t pAnimMode
     return nullptr;
 }
 
+// 1.14d mac: 00064a27
 D2GfxInfoUnkStrc * __fastcall GFX_FindGfxInfoByModeAndWeapon(D2UnitStrc * pUnit, int32_t nWeaponParam, int nAnimMode) {
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
@@ -954,6 +965,7 @@ static BOOL __stdcall GFX_FindOrEvictGfxInfoEntry(int32_t nWeaponParam, D2GfxInf
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00069668
 static uint8_t * __stdcall GFX_LoadCompositCof(uint8_t * * pnOutCofData, uint32_t nAnimMode, D2UnitStrc * pUnit) {
     BOOL BVar1;
     D2InventoryStrc* pInventory;
@@ -1029,6 +1041,7 @@ static uint8_t * __stdcall GFX_LoadCompositCof(uint8_t * * pnOutCofData, uint32_
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00069a64
 static void GFX_LoadMonsterModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
     eD2UnitType eUnitType;
     int32_t nAnimMode;
@@ -1065,6 +1078,7 @@ static void GFX_LoadMonsterModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00064d30
 static void GFX_LoadObjectModeCof(D2UnitStrc * pUnit, uint32_t nComponent) {
     uint8_t* nCofDataResult;
     eD2UnitType eUnitType;
@@ -1166,6 +1180,7 @@ static void GFX_FreeOverlayList(D2GfxInfoStrc * pGfxInfo) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00065075
 D2GfxInfoStrc * __stdcall AllocGfxInfo() {
     D2GfxInfoStrc* pGfxInfo = D2_NEW_AT(D2GfxInfoStrc, ".\\ENGINE\\Gfx.cpp", 0x804);
     if (!pGfxInfo) {
@@ -1180,6 +1195,7 @@ D2GfxInfoStrc * __stdcall AllocGfxInfo() {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 000650f5
 void __fastcall FreeGfxInfo(D2UnitStrc * pUnit) {
     D2GfxInfoUnkStrc* pNext;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
@@ -1200,6 +1216,7 @@ void __fastcall FreeGfxInfo(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 000651e7
 void __fastcall GFX_FreeUnitGfxInfoList(D2UnitStrc * pUnit) {
     D2GfxInfoUnkStrc* pNext;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
@@ -1219,6 +1236,7 @@ void __fastcall GFX_FreeUnitGfxInfoList(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00065267
 void __fastcall GFX_FreeNonBaseGfxInfoEntries(D2UnitStrc * pUnit) {
     D2GfxInfoUnkStrc* pCurrent;
     D2GfxInfoUnkStrc* pNext;
@@ -1248,6 +1266,7 @@ void __fastcall GFX_FreeNonBaseGfxInfoEntries(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00065f56
 static uint8_t GFX_GetUnitHealthBarColor(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static uint8_t gbHealthBarColorGreen; D2_STATIC_GUARD_BSS(gbHealthBarColorGreen, "D2Client::Engine::Gfx::GFX_GetUnitHealthBarColor::gbHealthBarColorGreen");
@@ -1306,6 +1325,7 @@ static uint8_t GFX_GetUnitHealthBarColor(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00066524
 uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     uint32_t nGoldAmount;
     D2GfxDataStrc sGfxData;
@@ -1353,10 +1373,12 @@ uint32_t __fastcall DrawItemGfx(D2UnitStrc * pUnit, int32_t nX, int32_t nY) {
     return 1;
 }
 
+// 1.14d mac: 00067787
 void __fastcall D2GFX_DrawSolidRectExBySize(int32_t nStartX, int32_t nStartY, int32_t nSizeX, int32_t nSizeY, int32_t nColor, DRAWMODE nDrawMode) {
     D2gfx::D2GFX::D2GFX_DrawSolidRectEx(nStartX, nStartY, nSizeX + nStartX, nSizeY + nStartY, nColor, nDrawMode);
 }
 
+// 1.14d mac: 000677c5
 void __fastcall GFX_FreeAllModesGfxInfo(D2UnitStrc * pUnit) {
     int nMode = 0;
     do {
@@ -1365,6 +1387,7 @@ void __fastcall GFX_FreeAllModesGfxInfo(D2UnitStrc * pUnit) {
     } while (nMode < 0x10);
 }
 
+// 1.14d mac: 00067882
 void __fastcall GFX_SetAllGfxInfoFlags(D2UnitStrc * pUnit, uint8_t byFlag) {
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
@@ -1379,6 +1402,7 @@ void __fastcall GFX_SetAllGfxInfoFlags(D2UnitStrc * pUnit, uint8_t byFlag) {
     } while (nComponent < 0x14);
 }
 
+// 1.14d mac: 00067bb1
 D2ParticleStrc * __fastcall GetParticleFromUnit(D2UnitStrc * pUnit) {
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (pGfxInfo) {
@@ -1388,6 +1412,7 @@ D2ParticleStrc * __fastcall GetParticleFromUnit(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 00067bd2
 void __fastcall SetParticle(D2UnitStrc * pUnit, D2ParticleStrc * pParticle) {
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
     if (!pGfxInfo) {
@@ -1398,6 +1423,7 @@ void __fastcall SetParticle(D2UnitStrc * pUnit, D2ParticleStrc * pParticle) {
 }
 
 // nPreDraw is never read here; every caller still loads EDX (12 pass 0, GFX_AddOverlayToUnit passes pOverlayTxt->PreDraw).
+// 1.14d mac: 00067bf2
 void __fastcall GFX_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nPreDraw, int32_t nOverlayId) {
     if (!pUnit) {
       return;
@@ -1426,6 +1452,7 @@ void __fastcall GFX_RemoveOverlayById(D2UnitStrc * pUnit, int32_t nPreDraw, int3
     }
 }
 
+// 1.14d mac: 00067ca5
 void __fastcall GFX_RemoveAllOverlays(D2UnitStrc * pUnit) {
     D2GfxUnknown_0xa8* pNextOverlay;
     D2GfxInfoStrc* pGfxInfo = UNIT::CUnit::GetGfxInfo(pUnit);
@@ -1478,6 +1505,7 @@ int32_t __fastcall GFX_GetPalShiftIndex(D2GfxInfoStrc * pGfxInfo) {
     return pGfxInfo->nPalShiftIndex;
 }
 
+// 1.14d mac: 00067ecb
 void __fastcall GFX_ClearAllModeFlags(D2UnitStrc * pUnit, int32_t nMaxMode) {
     int nComponent;
     uint32_t nComponentPlayer;
@@ -1526,6 +1554,7 @@ void __fastcall GFX_ClearAllModeFlags(D2UnitStrc * pUnit, int32_t nMaxMode) {
 }
 
 // Builds the COF archive path for a monster COF name index and loads it. The index is a single byte: the prologue does MOVZX EAX, CL before indexing the name table at 0x6d6c30, so the upper 24 bits of ECX are dead.
+// 1.14d mac: 00068325
 void __fastcall GFX_LoadMonsterCofArchive(uint8_t nCofNameIndex) {
     // Static local variables (originally global data)
     static char * gpszMonsterCofNameTable[5] = { (char*)"cmncof_a1.d2", (char*)"cmncof_a2.d2", (char*)"cmncof_a3.d2", (char*)"cmncof_a4.d2", (char*)"cmncof_a6.d2" }; D2_STATIC_GUARD(gpszMonsterCofNameTable, "D2Client::Engine::Gfx::GFX_LoadMonsterCofArchive::gpszMonsterCofNameTable");
@@ -1536,6 +1565,7 @@ void __fastcall GFX_LoadMonsterCofArchive(uint8_t nCofNameIndex) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 0006847c
 static void GFX_FreeUnusedCofEntries(D2CofCacheStrc * pCacheTable) {
     D2CofTextureCacheEntryStrc* pMemoryToFree;
     D2CofTextureCacheEntryStrc** ppBucketHead = pCacheTable->apBuckets;
@@ -1558,6 +1588,7 @@ static void GFX_FreeUnusedCofEntries(D2CofCacheStrc * pCacheTable) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00064f8d
 void __fastcall GFX_FreePlayerCofCache(int32_t nParam) {
     GFX_FreeUnusedCofEntries(&gPlayerCofCache);
     gnCofCacheMemUsage -= gPlayerCofCache.nCacheEntryCount;
@@ -1569,6 +1600,7 @@ void __fastcall GFX_FreePlayerCofCache(int32_t nParam) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00065001
 void GFX_FreeMonsterCofCache() {
     GFX_FreeUnusedCofEntries(&gMonsterCofCache);
     gnCofCacheMemUsage -= gMonsterCofCache.nCacheEntryCount;
@@ -1739,6 +1771,7 @@ static void __stdcall GFX_PrecacheMonsterCofSprites(D2MonStatsTxt * pMonStatsTxt
     }
 }
 
+// 1.14d mac: 00068515
 void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFlags) {
     D2MonStatsTxt* pMonStats = nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize ? D2Common::ITEMS::Items::sgptDataTable->pTxtMonStats + nMonsterClassId : nullptr;
     if (!pMonStats) {
@@ -1767,6 +1800,7 @@ void __fastcall GFX_PrecacheMonsterAllModes(int32_t nMonsterClassId, int32_t nFl
 
 namespace D2Client { namespace Units {
 
+// 1.14d mac: 00068bfe
 void __fastcall IfPlayer(D2UnitStrc * pUnit) {
     int bIsActive = UNIT::CUnit::IsActive(pUnit);
     if (!(!bIsActive && pUnit && pUnit->eUnitType == UNIT_PLAYER)) {
@@ -1780,6 +1814,7 @@ void __fastcall IfPlayer(D2UnitStrc * pUnit) {
 
 namespace D2Client { namespace Engine { namespace Gfx {
 
+// 1.14d mac: 00068c43
 int __stdcall GFX_GetGfxMemory() {
     // Static local variables (originally global data)
     static int gnGfxMemory; D2_STATIC_GUARD_BSS(gnGfxMemory, "D2Client::Engine::Gfx::GFX_GetGfxMemory::gnGfxMemory");
@@ -1787,19 +1822,23 @@ int __stdcall GFX_GetGfxMemory() {
     return gnGfxMemory;
 }
 
+// 1.14d mac: 00068c4a
 int __stdcall GFX_GetCofCacheMemUsage() {
     return gnCofCacheMemUsage;
 }
 
+// 1.14d mac: 00068c5b
 int __stdcall GFX_GetCofCacheMemLimit() {
     return gnCofCacheMemLimit;
 }
 
+// 1.14d mac: 00068c6e
 D2MonsterCofStatusEntryStrc * __fastcall GFX_GetModeStatusEntry(int32_t nClassId) {
     return g_pMonsterSpriteCofStatusTable + nClassId;
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00064bd1
 static void GFX_LoadMonsterModeCofByState(D2UnitStrc * pUnit, uint32_t nAnimMode) {
     eD2UnitType eUnitType;
     int nClassId;
@@ -1837,6 +1876,7 @@ static void GFX_LoadMonsterModeCofByState(D2UnitStrc * pUnit, uint32_t nAnimMode
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00064afb
 D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(D2UnitStrc * pUnit, int32_t nWeaponClass, int nAnimMode) {
     D2GfxInfoUnkStrc* pGfxInfo;
     int nClassId;
@@ -1880,6 +1920,7 @@ D2GfxInfoUnkStrc * __fastcall GFX_EnsureUnitCofLoaded(D2UnitStrc * pUnit, int32_
 }
 
 // Loads unit sprite COF and precaches sprites asynchronously. Returns GfxInfoUnk on success, 0 on failure, or 0xffffffff on cache miss. Custom convention: nAsyncBlockId (stack), pUnit (EAX), pWeaponClass (EBX) - already documented in this comment but never applied to the signature, so both registers reached the reconstruction as uninitialised locals.
+// 1.14d mac: 00068fa1
 static D2GfxInfoUnkStrc * __stdcall GFX_AsyncLoadUnitSprites(int32_t nAsyncBlockId, D2UnitStrc * pUnit, int nAnimMode) {
     // Frame slots -52..-20 are ONE object: &nFrameResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2035,6 +2076,7 @@ static void __stdcall GFX_AsyncLoadMonsterSprites(int32_t nAsyncBlockId, int32_t
     g_pMonsterSpriteCofStatusTable[nClassId].nModeLoadStatus[nModeIndex] = 1;
 }
 
+// 1.14d mac: 00068d66
 static void __stdcall GFX_PrecacheMonsterModeSprites(int32_t nAsyncBlockId, D2UnitStrc * pUnit) {
     const int nClassId = (int)Source::ClientEngine::CLIENT_GetEffectiveClassId(pUnit);
     if (nClassId < 0 || nClassId >= D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize) {
@@ -2098,6 +2140,7 @@ static void __stdcall GFX_AsyncLoadPlayerSprites(int32_t nAsyncBlockId, int32_t 
 
 // Iterate units in adjacent rooms; update gfx/anim state, may show loading UI while streaming.
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 000678dd
 static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
     // Static local variables (originally global data)
     static uint32_t gaNearbyPlayerCofUpdateQueue[8] = { 0x5, 0x6, 0x1, 0x2, 0x3, 0x7, 0xa, 0x4 }; D2_STATIC_GUARD(gaNearbyPlayerCofUpdateQueue, "D2Client::Engine::Gfx::Gfx_UpdateNearbyUnitGfx::gaNearbyPlayerCofUpdateQueue");
@@ -2176,6 +2219,7 @@ static void Gfx_UpdateNearbyUnitGfx(int32_t bShowLoadingUi) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00064e66
 void __fastcall GFX_InitCofSystem(int nCofCacheMemLimit) {
     gnGfxThrottleUpdateFrame = 0;
     gnCofCacheMemLimit = nCofCacheMemLimit;
@@ -2190,6 +2234,7 @@ void __fastcall GFX_InitCofSystem(int nCofCacheMemLimit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00064f32
 void GFX_ShutdownCofSystem() {
     GFX_FreeUnusedCofEntries(&gPlayerCofCache);
     gnCofCacheMemUsage -= gPlayerCofCache.nCacheEntryCount;
@@ -2373,6 +2418,7 @@ void __fastcall GFX_AddOverlayToUnit(D2UnitStrc * pUnit, eOverlayId eOverlay, in
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00067e08
 void __fastcall GFX_LoadUnitModeCof(D2UnitStrc * pUnit, int32_t nUnused) {
     // Frame slots -20..-12 are ONE object: &nCompositResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2422,6 +2468,7 @@ void __fastcall GFX_LoadUnitModeCof(D2UnitStrc * pUnit, int32_t nUnused) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00067fcb
 void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int32_t * pOffsetX, int32_t * pOffsetY) {
     // Frame slots -32..-16 are ONE object: &nFrameResult is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2492,6 +2539,7 @@ void __fastcall GFX_GetUnitSpriteOffset(D2UnitStrc * pUnit, int byComponent, int
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 000681ad
 BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, int32_t nTestX, int32_t nTestY) {
     uint8_t* pData;
     BOOL nCofIdentity;
@@ -2553,6 +2601,7 @@ BOOL __fastcall GFX_IsUnitInsideBounds(D2UnitStrc * pUnit, int32_t nOriginX, int
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00065583
 BOOL __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t nOriginY, uint32_t nUnused, int32_t bCenterAdjust) {
     BOOL pCofIdentity;
     D2UnitStrc* pOwnerUnit;
@@ -2617,6 +2666,7 @@ BOOL __fastcall GFX_IsUnitOnScreen(D2UnitStrc * pUnit, int32_t nOriginX, int32_t
 }
 
 // Registers: nAct (ECX) is passed by the caller but not read.
+// 1.14d mac: 00068bc7
 void __fastcall GFX_UpdateGfxThrottled(int32_t nAct) {
     gnGfxThrottleUpdateFrameCountDynamic = 1;
     Gfx_UpdateNearbyUnitGfx(0);
@@ -2636,6 +2686,7 @@ void __fastcall GFX_UpdateGfxThrottled(int32_t nAct) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00068c86
 void __fastcall ANIM_ResetMonsterFrameCache(D2UnitStrc * pUnit) {
     int32_t nSceneState;
     int nClassId;
@@ -2665,6 +2716,7 @@ void __fastcall ANIM_ResetMonsterFrameCache(D2UnitStrc * pUnit) {
     GFX_PrecacheMonsterModeSprites(bShowLoadingUi, pUnit);
 }
 
+// 1.14d mac: 00063f9f
 void __fastcall GFX_UpdateOverlayAnimations(D2UnitStrc * pUnit) {
     uint32_t pEffectiveAnimMode;
     BOOL eActiveState;
@@ -3120,6 +3172,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_5(D2UnitStrc * p) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 0006530e
 BOOL __fastcall GFX_DrawUnitShadow(D2UnitStrc * pUnit) {
     uint32_t nBorderType;
     D2GfxDataStrc sGfxData;
@@ -3462,6 +3515,7 @@ int32_t __fastcall DrawUnitShadows(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00065d21
 BOOL __fastcall GFX_DrawUnitColoredShape(D2UnitStrc * pUnit) {
     uint8_t byHealthColor;
     uint32_t nBorderType;
@@ -3561,6 +3615,7 @@ BOOL __fastcall GFX_DrawUnitColoredShape(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 000660ec
 BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
     // Frame slots -12..-4 are ONE object: &nScreenY is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -3716,6 +3771,7 @@ BOOL __fastcall GFX_DrawUnitSelectionShape(D2UnitStrc * pUnit) {
 }
 
 // @sourcefile .\ENGINE\Gfx.cpp
+// 1.14d mac: 00066a50
 BOOL __fastcall DRAW_WORLD_Unit_1(D2UnitStrc * pUnit, uint32_t nGamma, uint32_t bIsSelected, DRAWMODE nScreenY, int32_t pPalShift, int32_t bDrawStates) {
     uint8_t byDirection;
     D2GfxInfoUnkStrc* pGfxResult;

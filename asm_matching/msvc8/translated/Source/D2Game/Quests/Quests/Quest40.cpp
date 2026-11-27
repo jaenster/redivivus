@@ -27,6 +27,7 @@ uint32_t __fastcall TXT_SuperUniquesHardcoded_GetSuperUniqueIndex(uint32_t nHard
 }
 
 // Quest 40 (Act V Nihlathak/Anya rescue) gossip handler [0]. Dispatches NPC gossip lines for Drehya, Malah, Nihlathak Town NPC, and Qualkehk based on the NPC's monster class ID. Checks whether the player has already spoken with each NPC via PLAYER_CheckIfSpokenWithNPC and selects the appropriate gossip variant (0=default, 1=alt, 2=idx) via AddGossipMessageOnMonster. Silent for unrecognised NPCs.
+// 1.14d mac: 0023a060
 void __fastcall Q40_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     eD2MonsterClassId nMonStatsId;
     int nPlayerClassId;
@@ -82,11 +83,13 @@ void __fastcall Q40_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
     AddGossipMessageOnMonster(pQuestData, pQuestArgs->sQuestArgs.sNpcActivate.pTextControl, nMonStatsId, 0);
 }
 
+// 1.14d mac: 0023a178
 bool __fastcall Q40_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     *pbyStatusCode = '\0';
     return false;
 }
 
+// 1.14d mac: 0023a185
 bool __fastcall Q40_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0x201) {
       BOOL bSpokenWithNpc;
@@ -100,6 +103,7 @@ bool __fastcall Q40_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // Quest 40 (Siege on Harrogath) NPC-gossip callback. Dispatches on monster-class ID and dialog message index. For Drehya, Malah, Town (Korlic?), Qualkehk, and Deckard Cain: if the matching message index is spoken, calls PLAYER_SetSpokenWithNPC. Special Malah path also fetches the SiegeOnHaggorath quest data and sets nStateFlag=1 on first introduction (gate: bIsNotIntroduction && nStateFlag==0).
+// 1.14d mac: 00239f2f
 void __fastcall Q40_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     eD2MonsterClassId nMonStatsId = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel;
     uint16_t nMsgIndex = pQuestArgs->sQuestArgs.sNpcMessage.nMessageIndex;
@@ -137,6 +141,7 @@ void __fastcall Q40_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // Quest-slot initializer for internal quest 40 (nQuestIdReal=QUEST_ActIntroduced, the "act intro" gossip pseudo-quest). Zeroes the 0x3C-byte state-function table on the D2QuestDataStrc, installs the gossip dispatch handlers (slot 0 = Q40_Callback_00, slot 0xB = Q40_Callback_11), points pNpcMessages at the act's aNpcGossipData, marks the quest active with cleared state flags, sets no per-game scratch (pQuestSpecificData=NULL), and registers the status/active filters (Q40_StatusFilter/Q40_ActiveFilter). No journal/reward; a dialog gate only.
+// 1.14d mac: 00239ea8
 void __fastcall Q40_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     pQuestData->sStateFunctions.fpQuestStateHandler[0] = Q40_Callback00_NpcActivate;
@@ -160,6 +165,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 }
 
 // Object init callback for Quest 40 (Prison of Ice, A5Q3). Records the initialized object's GUID and coords into the A5Q3 quest-specific data. If the trigger count reaches 2, fires Q33_SequenceFilter; if the Tristram portal has not yet been initialized, spawns a monster near the object's coords and transfers its DRLG map AI file. Also fires a timed event if the BetrayalOfHaggorath quest completion flag is set.
+// 1.14d mac: 0023e614
 void __fastcall Objects_InitFn66_DrehyaStartInTown(D2ObjectInitFnArg * pInitArg) {
     D2UnitStrc* pSpawnedUnit;
     int32_t nObjectGUID;

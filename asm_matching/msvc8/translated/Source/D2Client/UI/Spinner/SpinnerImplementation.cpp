@@ -145,6 +145,7 @@ typedef _EXCEPTION_DISPOSITION (*pfnEHHandlerRoutine)(EHExceptionRecord * pExcep
 
 namespace D2Client { namespace UI { namespace Spinner { namespace SpinnerImplementation {
 
+// 1.14d mac: 000ee644 D2Client::UI::Spinner::SpinnerImplementation::Destructor
 void __fastcall Destructor(::SpinnerImplementation * pThis, int) {
     struct EhState0 {
       ::SpinnerImplementation* pThis;
@@ -160,6 +161,7 @@ void __fastcall Destructor(::SpinnerImplementation * pThis, int) {
     Core::Archive::DC6_FreeAndDelete(pThis->pDC6);
 }
 
+// 1.14d mac: 000ee67c D2Client::UI::Spinner::SpinnerImplementation::Draw
 void __fastcall Draw(::SpinnerImplementation * pThis, int) {
     D2GfxDataStrc sGfxData;
     if (pThis->bDownPressed || pThis->bUpPressed) {
@@ -196,6 +198,7 @@ BOOL __fastcall IsMouseOnDownButton(::SpinnerImplementation * pThis, int, D2UIMo
     return 0;
 }
 
+// 1.14d mac: 000ee7a6 D2Client::UI::Spinner::SpinnerImplementation::GetValue
 int __fastcall GetValue(::SpinnerImplementation * pThis, int) {
     if (pThis->bUpPressed) {
       return 1;
@@ -204,6 +207,7 @@ int __fastcall GetValue(::SpinnerImplementation * pThis, int) {
     return pThis->bDownPressed ? 2 : 0;
 }
 
+// 1.14d mac: 000ee7c6 D2Client::UI::Spinner::SpinnerImplementation::GetRepeatDelta
 int __fastcall GetRepeatDelta(::SpinnerImplementation * pThis, int) {
     uint32_t dwElapsed;
     if (!pThis->bUpPressed && !pThis->bDownPressed) {
@@ -244,6 +248,7 @@ int __fastcall GetRepeatDelta(::SpinnerImplementation * pThis, int) {
     return 1;
 }
 
+// 1.14d mac: 000ee874 D2Client::UI::Spinner::SpinnerImplementation::OnMouseWheel
 int __fastcall OnMouseWheel(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
     short int nWheelDelta;
     nWheelDelta = *(short int*)((intptr_t)&pMsg->nWParam + 2);
@@ -267,6 +272,7 @@ int __fastcall OnMouseWheel(::SpinnerImplementation * pThis, int, D2UIMouseMsgSt
     return 1;
 }
 
+// 1.14d mac: 000ee8d2 D2Client::UI::Spinner::SpinnerImplementation::OnMouseDown
 int __fastcall OnMouseDown(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
     DWORD dwNow;
     pThis->bMouseCaptured = 1;
@@ -297,6 +303,7 @@ int __fastcall OnMouseDown(::SpinnerImplementation * pThis, int, D2UIMouseMsgStr
     return 0;
 }
 
+// 1.14d mac: 000ee94a D2Client::UI::Spinner::SpinnerImplementation::OnMouseUp
 int __fastcall OnMouseUp(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
     if (pThis->bMouseCaptured) {
       pThis->nRepeatStep = 0;
@@ -314,30 +321,37 @@ int __fastcall OnMouseUp(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc 
     return 0;
 }
 
+// 1.14d mac: 000ee98a D2Client::UI::Spinner::SpinnerImplementation::OnChar
 int __fastcall OnChar(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee992 D2Client::UI::Spinner::SpinnerImplementation::OnMouseMove
 int __fastcall OnMouseMove(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee99a D2Client::UI::Spinner::SpinnerImplementation::OnUpArrow
 int __fastcall OnUpArrow(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee9a2 D2Client::UI::Spinner::SpinnerImplementation::OnDownArrow
 int __fastcall OnDownArrow(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee9aa D2Client::UI::Spinner::SpinnerImplementation::OnRightArrow
 int __fastcall OnRightArrow(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee9b2 D2Client::UI::Spinner::SpinnerImplementation::OnLeftArrow
 int __fastcall OnLeftArrow(::SpinnerImplementation * pThis, int, D2UIMouseMsgStrc * pMsg) {
     return 0;
 }
 
+// 1.14d mac: 000ee4d6 D2Client::UI::Spinner::SpinnerImplementation::Constructor
 ::SpinnerImplementation * __fastcall Constructor(::SpinnerImplementation * pThis, int, int nPosX, int nPosY, BOOL bHorizontal, fpSpinnerRepeatAction pfnRepeatAction) {
     char szPath[260];
     D2GfxDataStrc celQueryBuf;
@@ -383,6 +397,7 @@ int __fastcall OnLeftArrow(::SpinnerImplementation * pThis, int, D2UIMouseMsgStr
     return pThis;
 }
 
+// 1.14d mac: 000ee620 D2Client::UI::Spinner::SpinnerImplementation::ScalarDeletingDestructor
 ::SpinnerImplementation * __fastcall ScalarDeletingDestructor(::SpinnerImplementation * pThis, int, uint32_t nFlags) {
     vc8_thiscall(SpinnerImplementation::Destructor)(pThis);
     if (nFlags & 1 && pThis) {

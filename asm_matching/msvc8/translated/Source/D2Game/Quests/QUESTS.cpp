@@ -134,6 +134,7 @@ int __fastcall Unreferenced_00543560(int nIndex) {
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 0021321c
 void __fastcall FreeQuestDataList(::SGAMEDATA * pGame, D2UnitQuestDataListStrc * pQuestDataList) {
     while (pQuestDataList) {
       D2UnitQuestDataListStrc* pNext;
@@ -164,6 +165,7 @@ static BOOL __stdcall QUEST_AttachToUnit(::SGAMEDATA * pGame, D2QuestDataStrc * 
     return 1;
 }
 
+// 1.14d mac: 0021326f
 D2QuestDataStrc * __fastcall GetQuestDataByQuestNoInternal(::SGAMEDATA * pGame, eD2QuestsInternal eQuestNoInternal) {
     D2QuestDataStrc* pQuestData;
     struct D2QuestControlStrc* t2_c0 = pGame->pQuestControl;
@@ -197,6 +199,7 @@ int * __fastcall Unreferenced_00543690(intptr_t param_1, int param_2) {
 }
 
 // Looks up quest data by internal quest ID and attaches it to a unit. For QUESTINT_TheSearchForCain attaches to the cage object (classId 0x3d) and calls Q04_SetRescueTrigger; for QUESTINT_RadamentsLair attaches to Radament (0xe5); for QUESTINT_TheSummoner runs Q14 join noop on the Summoner (0xfa). Falls through to QUEST_AttachToUnit for all others.
+// 1.14d mac: 0021334b
 BOOL __fastcall QUEST_AttachToUnitByQuestId(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2QuestsInternal nQuestNoInternal) {
     eD2UnitType eUnitType;
     BOOL bAttached;
@@ -257,6 +260,7 @@ void __fastcall AddGossipMessageOnMonster(D2QuestDataStrc * pQuestData, D2GSPack
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 002137cc
 void __fastcall FreeQuestControl(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pNextQuestData;
     D2QuestControlStrc* pMemoryToFree = pGame->pQuestControl;
@@ -287,6 +291,7 @@ void __fastcall FreeQuestControl(::SGAMEDATA * pGame) {
     D2_FREE_POOL_AT(pGame->pMemoryPool, pMemoryToFree, ".\\QUESTS\\QUESTS.CPP", 0x1ec);
 }
 
+// 1.14d mac: 002138ea
 D2SeedStrc * __fastcall GetQuestControlSeed(::SGAMEDATA * pGame) {
     if (pGame->pQuestControl) {
       return &pGame->pQuestControl->sSeed;
@@ -296,6 +301,7 @@ D2SeedStrc * __fastcall GetQuestControlSeed(::SGAMEDATA * pGame) {
     exit(-1);
 }
 
+// 1.14d mac: 00213b35
 static void __stdcall QUEST_DispatchBroadcast(bool bFlag1, uint8_t bFlag2, D2QuestArgStrc * pQuestArg) {
     eD2LevelId eLevelId;
     BOOL bIsBadPtr;
@@ -328,6 +334,7 @@ static void __stdcall QUEST_DispatchBroadcast(bool bFlag1, uint8_t bFlag2, D2Que
     }
 }
 
+// 1.14d mac: 00213a76
 static void __stdcall QUEST_DispatchToUnit(BOOL bForce, D2QuestArgStrc * pCall) {
     BOOL bIsBadPtr;
     D2UnitQuestDataListStrc* pList = pCall->pTarget->uSideData.pServerSide.pQuestEventList;
@@ -353,6 +360,7 @@ static void __stdcall QUEST_DispatchToUnit(BOOL bForce, D2QuestArgStrc * pCall) 
 }
 
 // Called server-side when any monster dies. Resolves the effective killer (falls back to the first client in SP if killer is null, or traces a minion back to its owner). Checks if the dead monster is a super-unique with a quest-relevant hcIdx or a special class ID (Diablo seal infectors 0xF2/0xF3, Baal 0x220, super-unique 0x187), then dispatches a QUEST_EVENT=8 (monster killed) to the resolved player unit via QUEST_DispatchToUnit.
+// 1.14d mac: 00213930
 void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pKiller) {
     uint32_t _bIsSuperUnique;
     bool bIsSuperUnique;
@@ -441,6 +449,7 @@ void __fastcall QUEST_OnMonsterKilled(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
     QUEST_DispatchToUnit(bForce, &questArg2);
 }
 
+// 1.14d mac: 00213b01
 void __fastcall QUEST_OnPlayerEnteredArea(::SGAMEDATA * pGame, int32_t ePreviousLevelId, int32_t eEnteredLevelId, D2UnitStrc * pUnit) {
     D2QuestArgStrc questArg;
     questArg.pGame = pGame;
@@ -452,6 +461,7 @@ void __fastcall QUEST_OnPlayerEnteredArea(::SGAMEDATA * pGame, int32_t ePrevious
 }
 
 // Quest system hook called when a player disconnects. Iterates all items in the player's inventory looking for carried quest items (pItemTxt-&gt;bQuest != 0); for each found quest item fires fpQuestStateHandler[9] (the disconnect event handler) of the matching quest data node, validating the callback pointer with IsBadCodePtr first (halts on bad ptr). After the item loop, broadcasts quest event 10 (QUEST_EVENT_DISCONNECT_POST) to all quests via QUEST_DispatchBroadcast.
+// 1.14d mac: 00213bf6
 void __fastcall QUEST_OnPlayerDisconnect(::SGAMEDATA * pGame, D2UnitStrc * pPlayer) {
     QUESTCALLBACKFN lpfn;
     D2UnitStrc* pNextItem;
@@ -532,6 +542,7 @@ void __fastcall QUEST_OnUnitInteraction_Unused(::SGAMEDATA * pGame, D2UnitStrc *
 }
 
 // NOTE: Register param types inferred (medium confidence): pClient (ECX): D2ClientStrc *, pUnitStrc (EDX): D2UnitStrc *
+// 1.14d mac: 00213ced
 void __fastcall QUEST_OnNpcInteraction(D2ClientStrc * pClient, D2UnitStrc * pUnitStrc, D2UnitStrc * pUnit, D2GSPacketSrv0x27_TextStrc * pGSPacketSrv0x27_Text) {
     D2QuestArgStrc questArg;
     questArg.pGame = GAME::Clients::CLIENT_GetGame(pClient);
@@ -548,6 +559,7 @@ void __fastcall QUEST_OnNpcInteraction(D2ClientStrc * pClient, D2UnitStrc * pUni
 //   MOV [EBP-0x14],EAX  -> questArg.pTarget (the one stack argument, [EBP+8])
 //   MOV [EBP-0x10],EDX  -> questArg.pPlayer (EDX)
 // Declaring only the stack argument left pGame and pPlayer as uninitialised locals and split the struct into loose dwTmp slots, so the broadcast received a garbage game pointer and a garbage player.
+// 1.14d mac: 00213d2c
 void __fastcall QUEST_OnNpcDeactivate(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pTarget) {
     D2QuestArgStrc DStack_20;
     DStack_20.pGame = pGame;
@@ -557,6 +569,7 @@ void __fastcall QUEST_OnNpcDeactivate(::SGAMEDATA * pGame, D2UnitStrc * pPlayer,
     QUEST_DispatchBroadcast(true, '\x01', &DStack_20);
 }
 
+// 1.14d mac: 00213d5d
 void __fastcall QUEST_OnItemPickedUp(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pUnit) {
     D2QuestArgStrc questArg;
     questArg.pGame = pGame;
@@ -566,6 +579,7 @@ void __fastcall QUEST_OnItemPickedUp(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, 
     QUEST_DispatchToUnit(FALSE, &questArg);
 }
 
+// 1.14d mac: 00213d8b
 void __fastcall QUEST_OnItemDropped(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, D2UnitStrc * pUnit) {
     D2QuestArgStrc questArg;
     questArg.pGame = pGame;
@@ -586,6 +600,7 @@ void __fastcall QUEST_OnItemEvent_Unused(::SGAMEDATA * pGame, D2UnitStrc * pTarg
 
 // Advances the quest tick counter and fires/reschedules/frees expired quest timers in pQuestControl->pTimer.
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 00213dbc
 void __fastcall QUEST_ProcessQuestTimers(::SGAMEDATA * pGame) {
     uint8_t bTimerDone;
     BOOL bIsBadPtr;
@@ -642,6 +657,7 @@ void __fastcall QUEST_ProcessQuestTimers(::SGAMEDATA * pGame) {
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 00213f25
 void __fastcall AddQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE fpQuestUpdate, int32_t nTimeout) {
     D2QuestControlStrc* pQuestControl = pQuestData->pGame->pQuestControl;
     if (!pQuestControl) {
@@ -663,6 +679,7 @@ void __fastcall AddQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE fpQuestU
 }
 
 // Determines the display byte to write into the quest-log packet for a single quest. Reads QUESTSTATE_JustCompleted and QUESTSTATE_CannotCompleteQuestInGame from the bit buffer, applies special-case logic for TheSearchForCain (Cain rescued check) and TheTaintedSun, and writes the resulting state byte into pQuestData2->nQuestNoInternal for the caller to pack into the log packet.
+// 1.14d mac: 00213fc7
 void __fastcall QUEST_GetQuestLogDisplayState(D2QuestDataStrc * pQuestData, uint8_t * pQuestData2, D2BitBufferStrc * pBitBuffer) {
     BOOL bCannotComplete = D2Common::QuestRecord::GetQuestState(pBitBuffer, pQuestData->nQuestIdReal, QUESTSTATE_CannotCompleteQuestInGame);
     if (pQuestData->nStateFlag >= pQuestData->nInitNo) {
@@ -693,6 +710,7 @@ void __fastcall QUEST_GetQuestLogDisplayState(D2QuestDataStrc * pQuestData, uint
     }
 }
 
+// 1.14d mac: 002134d1
 void __fastcall QUEST_DebugPrint(::SGAMEDATA * pGame, char * szMessage, char * szFile, int32_t nLine) {
     if (!DEBUGPRINT) {
       return;
@@ -737,6 +755,7 @@ static void __stdcall QUEST_RemoveItemFromInventory(D2InventoryStrc * pInventory
     }
 }
 
+// 1.14d mac: 00214410
 void __fastcall QUEST_RemoveQuestItemFromPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t dwItemCode) {
     D2UnitStrc* pItem = ITEMS::Items::Drop::HasQuestItem(pGame, pUnit, dwItemCode);
     if (!pItem) {
@@ -819,11 +838,13 @@ void __fastcall QUEST_SendQuestUpdateToPlayer(::SGAMEDATA * pGame, D2UnitStrc * 
     GAME::SCmd::NET_D2GS_SERVER_Send_0x5D_QuestState(pClient, &sPacket);
 }
 
+// 1.14d mac: 00214550
 void __stdcall QUEST_SendQuestUpdateToPlayer_HaltTail(int nLine) {
     Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), nLine);
     exit(-1);
 }
 
+// 1.14d mac: 002146d5
 void __fastcall QUEST_SetStateAndBroadcast(D2QuestDataStrc * pQuestData, int nPrevStateFlag, D2UnitStrc * pUnit, ::fpExecuteOnUnitFunction fpFunction, uint8_t bExecute) {
     pQuestData->nStateFlagPrev = (uint8_t)nPrevStateFlag;
     if (bExecute != 1) {
@@ -838,6 +859,7 @@ void __fastcall QUEST_SetStateAndBroadcast(D2QuestDataStrc * pQuestData, int nPr
     exit(-1);
 }
 
+// 1.14d mac: 0021473e
 void __fastcall QUEST_SetStateFlag(D2QuestDataStrc * pQuestData, int32_t nState, char * szSourceFile, uint32_t nSourceLine) {
     char szDebugMsg[128];
     /* LPCSTR param_2 for wsprintfA */ /* LPSTR param_1 for wsprintfA */ pQuestData->nStateFlag = (uint8_t)nState;
@@ -847,6 +869,7 @@ void __fastcall QUEST_SetStateFlag(D2QuestDataStrc * pQuestData, int32_t nState,
     }
 }
 
+// 1.14d mac: 002147c6
 void __fastcall QUEST_OnNpcGossip(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, uint32_t nNpcGUID, uint16_t nGossipIndex) {
     D2QuestArgStrc questArg;
     questArg.pGame = pGame;
@@ -903,6 +926,7 @@ int32_t __stdcall QUEST_GetQuestSpecificDataPtr(::SGAMEDATA * pGame) {
     return pGame->pQuestControl->bPickedSet;
 }
 
+// 1.14d mac: 00214e08
 uint32_t __stdcall CheckIntroductionFlagByInternalQuestId(::SGAMEDATA * pGame, eD2QuestsInternal nQuestNoInternal) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7c3);
@@ -944,6 +968,7 @@ void __fastcall NET_D2GS_SERVER_Send_0x29_GAMEQUESTRECORD_Prepare(::SGAMEDATA * 
 
 // Server-side handler that determines whether an NPC wants to initiate a quest interaction with a player unit. Validates that pUnit is a player and that the target NPC's MonStats.interact flag is set. Iterates the game's quest list for the player's current act; for each quest calls fpActiveFilter to check eligibility against the player's quest record. On first match, sends packet 0x8A (NpcWantsInteract) to the client and returns 1. Triggers fatal error if called with bad state (null quest-set, bad function pointer, null player data, null quest record).
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 00214e8a
 uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pNpcUnit) {
     D2QuestDataStrc* pQuestData;
     uint8_t nClientAct;
@@ -1018,6 +1043,7 @@ uint32_t __fastcall QUEST_NpcWantsInteract(::SGAMEDATA * pGame, D2UnitStrc * pUn
 }
 
 // Sets a quest record state in the game quest tracking system. Validates quest control pointer and updates the quest state via the quest record interface.
+// 1.14d mac: 0021510d
 void __fastcall QUEST_SetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuest, eD2QuestState eState) {
     if (!pGame->pQuestControl->bPickedSet) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x820);
@@ -1027,6 +1053,7 @@ void __fastcall QUEST_SetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuest,
     D2Common::QuestRecord::SetQuestState(pGame->pQuestControl->pQuestFlags, eQuest, eState);
 }
 
+// 1.14d mac: 0021516b
 int __fastcall QUEST_GetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuestId, int32_t nUnused) {
     if (!pGame->pQuestControl->bPickedSet) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x82c);
@@ -1037,6 +1064,7 @@ int __fastcall QUEST_GetQuestRecordState(::SGAMEDATA * pGame, eD2Quests eQuestId
     return bQuestState;
 }
 
+// 1.14d mac: 002151c9
 void __fastcall QUEST_DispatchMonsterCreateToA2Q4(::SGAMEDATA * pGame, D2RoomStrc * pRoom, int32_t nX, int32_t nY, int32_t nMonsterClassId) {
     if (!(nMonsterClassId >= 0 && nMonsterClassId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
       return;
@@ -1074,6 +1102,7 @@ uint32_t __fastcall QUEST_GetSistersToTheSlaughterSpecificFlag(::SGAMEDATA * pGa
     exit(-1);
 }
 
+// 1.14d mac: 0021520d
 void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD dwItemGUID) {
     BOOL _bHoldingItem;
     bool bHoldingItem;
@@ -1103,6 +1132,7 @@ void __fastcall QUEST_HandleClientQuestMessage(::SGAMEDATA * pGame, D2UnitStrc *
     A2Q6::Q14_SendTombLevelInfo(pGame, pUnit);
 }
 
+// 1.14d mac: 0021528c
 void __fastcall Objects_InitFn18_JerhynPosition(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData;
     D2QuestControlStrc* pQuestCtrl = pInitArg->pGame->pQuestControl;
@@ -1118,6 +1148,7 @@ void __fastcall Objects_InitFn18_JerhynPosition(D2ObjectInitFnArg * pInitArg) {
     }
 }
 
+// 1.14d mac: 002152c3
 void __fastcall Objects_InitFn19_JerhynPosition(D2ObjectInitFnArg * pInitArg) {
     D2QuestDataStrc* pQuestData;
     D2QuestControlStrc* pQuestCtrl = pInitArg->pGame->pQuestControl;
@@ -1133,6 +1164,7 @@ void __fastcall Objects_InitFn19_JerhynPosition(D2ObjectInitFnArg * pInitArg) {
     }
 }
 
+// 1.14d mac: 002152fa
 void __fastcall Objects_InitFn20_TaintedSunAltar(D2ObjectInitFnArg * pInitArg) {
     D2QuestControlStrc* pQuestCtrl = pInitArg->pGame->pQuestControl;
     if (pQuestCtrl) {
@@ -1153,6 +1185,7 @@ void __fastcall Objects_InitFn20_TaintedSunAltar(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::ChangeAnimMode(pUnit, 2);
 }
 
+// 1.14d mac: 00215350
 void __fastcall Objects_InitFn15_Malus(D2ObjectInitFnArg * pInitArg) {
     D2QuestControlStrc* pQuestCtrl = pInitArg->pGame->pQuestControl;
     if (pQuestCtrl) {
@@ -1173,6 +1206,7 @@ void __fastcall Objects_InitFn15_Malus(D2ObjectInitFnArg * pInitArg) {
     D2Common::Units::ChangeAnimMode(pUnit, 2);
 }
 
+// 1.14d mac: 002153a6
 void __fastcall Objects_InitFn07_CainGibbet(D2ObjectInitFnArg * pInitArg) {
     D2QuestControlStrc* pQuestCtrl = pInitArg->pGame->pQuestControl;
     if (pQuestCtrl) {
@@ -1355,6 +1389,7 @@ void __fastcall QUESTS_DispatchObjectEvent(::SGAMEDATA * pGame, D2UnitStrc * pOb
     }
 }
 
+// 1.14d mac: 002157cd
 void __fastcall Objects_InitFn23_LamEsenTome(D2ObjectInitFnArg * pInitArg) {
     D2QuestControlStrc* pQuestCtrl = pInitArg->pGame->pQuestControl;
     if (pQuestCtrl) {
@@ -1371,6 +1406,7 @@ void __fastcall Objects_InitFn23_LamEsenTome(D2ObjectInitFnArg * pInitArg) {
     exit(-1);
 }
 
+// 1.14d mac: 0021582d
 void __fastcall QUEST_CheckGoldenBirdDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2QuestDataStrc* pQuestData;
     int nMonClassId;
@@ -1400,6 +1436,7 @@ void __fastcall QUEST_CheckGoldenBirdDrop(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
+// 1.14d mac: 002158ed
 void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
     D2UnitQuestDataListStrc* pQuestEventList = pUnit->uSideData.pServerSide.pQuestEventList;
     if (!pQuestEventList) {
@@ -1421,6 +1458,7 @@ void __fastcall QUEST_OnGoldenBirdCouncilKilled(::SGAMEDATA * pGameStrc, D2UnitS
     A3Q5::Q22_OnCouncilMemberKilled(pQuestData, pUnit);
 }
 
+// 1.14d mac: 0021717e
 static void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * pNpcIdArray, D2UnitStrc * pUnit, int32_t nNpcIdCount) {
     int i;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
@@ -1431,6 +1469,7 @@ static void __stdcall QUEST_MarkNPCsAsIntroduced(::SGAMEDATA * pGame, int32_t * 
 }
 
 // Marks all NPCs in the destination act as already-introduced (spoken-with) for pUnit when an act transition occurs. Switches on eActNo (ACT_I through ACT_V; ACT_IV is a no-op) and iterates the corresponding NPCINTRO_ListActN table, calling INTRONPC_SetSpokenWithNPC_Intro2 for each entry. Ensures the player does not see first-meeting NPC intros upon entering the new act.
+// 1.14d mac: 002163d0
 static void QUEST_SetActNpcIntroFlags(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eAct eActNo) {
     D2UnitDataPlayerStrc* pPlayerData;
     int* pNpcListIter;
@@ -1483,6 +1522,7 @@ static void QUEST_SetActNpcIntroFlags(::SGAMEDATA * pGame, D2UnitStrc * pUnit, e
     }
 }
 
+// 1.14d mac: 00215f2c
 static BOOL __stdcall INTRONPC_FillInPacketWithIntroNpcIds(D2UnitDataPlayerInteractedNPCStrc * pInteractedNPCs, int * aNpcList, int32_t nListSize, D2GSPacketSrv0x91 * pD2GSPacketSrv0x91) {
     BOOL bNeedSend = 0;
     memset(pD2GSPacketSrv0x91->nNpcID, 0xff, sizeof(pD2GSPacketSrv0x91->nNpcID));
@@ -1506,6 +1546,7 @@ static BOOL __stdcall INTRONPC_FillInPacketWithIntroNpcIds(D2UnitDataPlayerInter
 // Builds and sends packet 0x91 (NpcGossip) to the player's client for a given act, listing which intro NPCs the player has already spoken with. Selects the act-specific NPC list (Acts I/II/III/V), calls INTRONPC_FillInPacketWithIntroNpcIds to populate the packet, and sends it only if at least one NPC entry needs to be communicated.
 // @sourcefile .\QUESTS\QUESTS.CPP
 // @returns void: EAX at the epilogue is leftover from the last call, and all four call sites in IterateNpcIntroUnits (void) discard it. Found by KierTaylor on the Mac twin (Redivivus proposal #1215).
+// 1.14d mac: 00215e54
 void __fastcall INTRONPC_FillInPacketWithIntroNpcIdsInAct(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eAct nActNo) {
     D2GSPacketSrv0x91 pD2GSPacketSrv0x91;
     BOOL bNeedToBeSent;
@@ -1562,6 +1603,7 @@ uint32_t __fastcall Unreferenced_005451b0(D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 00216607
 void __fastcall QUESTGUID_AddPlayerToList(D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID) {
     if (pQuestGUID->nPlayerCount >= 0x20) {
       return;
@@ -1576,6 +1618,7 @@ void __fastcall QUESTGUID_AddPlayerToList(D2QuestGUIDStrc * pQuestGUID, int32_t 
     pQuestGUID->nPlayerCount++;
 }
 
+// 1.14d mac: 0021663c
 BOOL __fastcall QUESTGUID_RemovePlayerFromList(D2QuestGUIDStrc * pQuestGUID, int32_t nPlayerGUID) {
     int nPlayerCount = pQuestGUID->nPlayerCount;
     for (int nSearchIdx = 0; nSearchIdx < pQuestGUID->nPlayerCount; nSearchIdx++) {
@@ -1595,6 +1638,7 @@ BOOL __fastcall QUESTGUID_RemovePlayerFromList(D2QuestGUIDStrc * pQuestGUID, int
 // Returns 1 if iValue is one of the first nPlayerCount entries of
 // pQuestGUID->aPlayerGUID, else 0. ECX is a D2QuestGUIDStrc (int[32] at +0, word count at +0x80);
 // every caller passes a quest data block's sQuestGUID member.
+// 1.14d mac: 00216696
 BOOL __fastcall QUESTGUID_SearchForValueInIntArray32(D2QuestGUIDStrc * pQuestGUID, int32_t iValue) {
     for (int nSearchIdx = 0; nSearchIdx < pQuestGUID->nPlayerCount; nSearchIdx++) {
       /* If the value is found, stop and return 1 */ if (pQuestGUID->aPlayerGUID[nSearchIdx] == iValue) {
@@ -1605,6 +1649,7 @@ BOOL __fastcall QUESTGUID_SearchForValueInIntArray32(D2QuestGUIDStrc * pQuestGUI
     return 0;
 }
 
+// 1.14d mac: 002166c5
 BOOL __fastcall QUEST_HasPlayerParticipated(D2QuestDataStrc * pQuestData, int32_t nPlayerGUID) {
     int nSearchIdx;
     for (nSearchIdx = 0; nSearchIdx < (int32_t)pQuestData->sQuestGUID.nPlayerCount; nSearchIdx++) {
@@ -1620,6 +1665,7 @@ int __fastcall Unreferenced_005452f0(intptr_t param_1) {
     return (uint32_t)*(uint16_t*)(param_1 + 0x80);
 }
 
+// 1.14d mac: 002166f8
 void __fastcall QUESTGUID_SetPlayerCountToZero(D2QuestGUIDStrc * pQuestGUID) {
     pQuestGUID->nPlayerCount = 0;
 }
@@ -1627,6 +1673,7 @@ void __fastcall QUESTGUID_SetPlayerCountToZero(D2QuestGUIDStrc * pQuestGUID) {
 // @wasnamed QUESTGUID_RemovePlayerFromList - one name on two different functions.
 // @evidence Takes D2QuestDataStrc + D2QuestArgStrc, resolves the player
 // GUID (-1 if none) and delegates to 00545240. A wrapper, not the list operation itself.
+// 1.14d mac: 00216709
 void __fastcall QUESTGUID_RemovePlayerFromQuest(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     if (pQuestData->sQuestGUID.nPlayerCount <= 0) {
       return;
@@ -1636,6 +1683,7 @@ void __fastcall QUESTGUID_RemovePlayerFromQuest(D2QuestDataStrc * pQuestData, D2
 }
 
 // Searches outward from a candidate POINT in expanding rings (up to nSearchIterations passes, stride 2) for a map tile that passes a collision-vector check (eCollisionFlags) within nScanRadius. Steps across nearby rooms via DRLGROOM_FindBetterNearbyRoom when the search position leaves the current room. On success writes the adjusted tile coordinates back into pPoint and the containing room into *pRoomsNear; on failure sets *pRoomsNear to NULL.
+// 1.14d mac: 00215b48
 void __fastcall FindSpawnableLocation(D2RoomStrc * pRoom, POINT * pPoint, uint32_t nScanRadius, int32_t neCollisionFlags, D2RoomStrc * * pRoomsNear, int32_t nMaxTries, int32_t nSearchIterations) {
     eCollisionFlags wCollisionResult;
     D2RoomStrc* pCandidateRoom;
@@ -1727,6 +1775,7 @@ void __fastcall Unreferenced_005454e0(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     ITEMS::Items::Drop::ITEM_DeleteItemAndFreeUnit(pGame, pUnit);
 }
 
+// 1.14d mac: 00216744
 void __fastcall SetRewardAndFinishFlags(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestData->pGame;
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pQuestArgs->pPlayer);
@@ -1746,12 +1795,14 @@ void __fastcall SetRewardAndFinishFlags(D2QuestDataStrc * pQuestData, D2QuestArg
 
 // Sends quest state information to a specific unit (player). Retrieves quest control by difficulty, constructs a quest info packet, and sends to the player client.
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 0021439b
 void __fastcall QUEST_SendQuestInfoToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pUnit);
     D2BitBufferStrc* pBitBuffer = pPlayerData->pQuestRecord[pGame->nDifficulty];
     GAME::SCmd::NET_D2GS_SERVER_Send_0x28_PlayerQuestInfo(UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xca7), 0x28, '\x06', 0, pBitBuffer, 0);
 }
 
+// 1.14d mac: 002167d6
 void __fastcall QUEST_SetSuccessFinishStates(::SGAMEDATA * pGame, D2QuestGUIDStrc * pQuestGUID, eD2Quests eQuestId, int32_t nSoundId) {
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bQuestState;
@@ -1785,6 +1836,7 @@ void __fastcall QUEST_SetSuccessFinishStates(::SGAMEDATA * pGame, D2QuestGUIDStr
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 002168d0
 void __fastcall QUEST_SendNpcInfoPacket(D2UnitStrc * pUnit, D2UnitStrc * pNpcUnit, short wNpcClassId) {
     D2GSPacketSrv0x27 packet;
     D2ClientStrc* pClient = UNIT::SUnit::SUNIT_GetClient(pUnit, ".\\QUESTS\\QUESTS.CPP", 0xcca);
@@ -1805,6 +1857,7 @@ void __fastcall QUEST_SendNpcInfoPacket(D2UnitStrc * pUnit, D2UnitStrc * pNpcUni
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 0021697d
 BOOL __fastcall QUESTS_SendQuestInfoAndEventTrigger(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pArg) {
     D2GSPacketClt0x89 DStack_8;
     DStack_8.nPacketId = 0x89;
@@ -1816,12 +1869,14 @@ BOOL __fastcall QUESTS_SendQuestInfoAndEventTrigger(::SGAMEDATA * pGame, D2UnitS
     return 0;
 }
 
+// 1.14d mac: 00216939
 void __fastcall NotifyPlayersAboutEvent(::SGAMEDATA * pGame, uint8_t nEventId) {
     pGame->pQuestControl->nEventId = nEventId;
     UNIT::SUnit::IteratePlayerOrMonsterUnits(pGame, 0, nullptr, (::fpExecuteOnUnitFunction)QUESTS_SendQuestInfoAndEventTrigger);
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 002169df
 void __fastcall QUEST_SendNpcGossipPacket(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pTarget) {
     D2GSPacketSrv0x27 sPacket0x27Buf;
     D2QuestArgStrc sQuestArgsBuf;
@@ -1858,6 +1913,7 @@ BOOL __fastcall IsPortalFromDuriel(::SGAMEDATA * pGame, POINT * pPoint, eD2Level
     return 0;
 }
 
+// 1.14d mac: 00216ad5
 BOOL __fastcall QUESTS_OpenQuestChest(D2ObjectOperateFnArg * pOperation) {
     POINT sCoords;
     D2UnitStrc* pObjectUnit = pOperation->sArg.pVictim;
@@ -1886,6 +1942,7 @@ BOOL __fastcall QUESTS_OpenQuestChest(D2ObjectOperateFnArg * pOperation) {
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 00216b93
 void __fastcall SendQuestState(D2UnitStrc * pUnit, int32_t nQuestId) {
     D2GSPacketSrv0x5D sPacket;
     memset(&sPacket, 0, sizeof(sPacket));
@@ -1897,6 +1954,7 @@ void __fastcall SendQuestState(D2UnitStrc * pUnit, int32_t nQuestId) {
 }
 
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 00216bf2
 void __fastcall QUEST_SendQuestStatePacket(D2UnitStrc * pUnit, int bQuestId, uint8_t bReasoned) {
     eD2LevelId eLevel;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -1924,11 +1982,13 @@ void __fastcall QUEST_SendQuestStatePacket(D2UnitStrc * pUnit, int bQuestId, uin
 }
 
 // Registers: pQuestData (ECX) and pQuestArgs (EDX) are passed by the quest callbacks but not read.
+// 1.14d mac: 00216c86
 void __fastcall QUEST_StubEmpty(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs, uint32_t nUnused) {
 
 }
 
 // Quest helper that spawns a monster (nMonstatClassId) at or near a desired tile (nSpawnX,nSpawnY) in pRoom. First nudges the point inward if it lies outside the room's DRLG bounds (up to 0x15 diagonal steps), then FindSpawnableLocation searches for a collision-free spot (COLLIDE_MONSTER) and SpawnMonsters as Neutral. On failure it retries with a wider search radius, optionally relocating to a better nearby room (DRLGROOM_FindBetterNearbyRoom), up to ~0x14 attempts, finally falling back to the original coords. If bSetResurrectFlag is set, ORs UNITFLAG_ISRESURRECT|UNITFLAG_ISINIT onto the spawned monster. No return; side effect is the created monster unit.
+// 1.14d mac: 00216c8b
 D2UnitStrc * __fastcall QUEST_SpawnMonsterNearCoords(::SGAMEDATA * pGame, int32_t nSpawnX, int32_t nSpawnY, D2RoomStrc * pRoom, int32_t bSetResurrectFlag, uint32_t nMonstatClassId) {
     D2DrlgRoomCoordsStrc sRoomCoords;
     POINT sSpawnPoint;
@@ -2029,6 +2089,7 @@ void __fastcall QUEST_OnUniqueMonsterSpawned(::SGAMEDATA * pGame, D2UnitStrc * p
     A5Q5::Q35_Noop(pGame, pUnit);
 }
 
+// 1.14d mac: 00216fd5
 uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId eSourceLevelId, eD2LevelId eDestLevelId) {
     uint32_t nCheckResult;
     uint32_t nResult;
@@ -2055,6 +2116,7 @@ uint32_t __fastcall QUEST_CheckSpecialLevelCondition(::SGAMEDATA * pGame, D2Unit
     return 0;
 }
 
+// 1.14d mac: 00217047
 D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, POINT * pPoint, int32_t nType, int32_t nSuperUnique) {
     int32_t nMonstatClassId = D2Common::DATATBLS::MonsterTbls::MONSTERTBLS_MapSuperUniqueId(nType, nSuperUnique);
     D2RoomStrc* pRoom = D2Common::Collision::DRLGROOM_FindBetterNearbyRoom(D2Common::Units::UNITS_GetRoom(pUnit), pPoint->x, pPoint->y);
@@ -2067,6 +2129,7 @@ D2UnitStrc * __fastcall QUEST_SpawnSuperUniqueAtPoint(::SGAMEDATA * pGame, D2Uni
     return nullptr;
 }
 
+// 1.14d mac: 00217143
 void __fastcall QUEST_DispatchPresetObjectLoad(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2MapAIStrc * pMapAI) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_OBJECT) {
       return;
@@ -2092,6 +2155,7 @@ void __fastcall QUEST_DispatchPresetObjectLoad(::SGAMEDATA * pGame, D2UnitStrc *
     }
 }
 
+// 1.14d mac: 002132c9
 void __fastcall AttachToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2RoomStrc * pRoom, BOOL bExpectedResult) {
     BOOL nAttachResult;
     bool bAttachFailed;
@@ -2138,6 +2202,7 @@ static void __stdcall QUEST_InitializeQuestDataStruct(::SGAMEDATA * pGame, uint3
 
 // Builds the game's quest-state object graph at game creation. Allocates one 0xF8-byte D2QuestDataStrc per entry in aQuestInitDataExtended (the real act quests) and per entry in QuestInitDataSimple (sub-quests/QUESTINT_SimpleQuest1+), linking them into a singly-linked list via pPrev, stamping nAct/nQuestNoInternal/pGame and calling each entry's fpQuestInit/fpQuestData callback (validated with IsBadCodePtr). Then allocates the 0x24-byte D2QuestControlStrc head (pQuestData=list, fresh seed derived from the game seed with nSeedHigh=0x29A, a quest-flag BitBuffer) and stores it in pGame->pQuestControl. Halts via ERROR_UnrecoverableInternalError on a bad callback pointer.
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 00213579
 void __fastcall AllocQuestControl(::SGAMEDATA * pGame) {
     // Static local variables (originally global data)
     static D2QuestInitDataSimple QuestInitDataSimple[4] = {
@@ -2287,6 +2352,7 @@ void __fastcall RemoveQuestTimer(D2QuestDataStrc * pQuestData, QUESTUPDATE pQues
 
 // Resends a player's full quest state to their client (called on (re)entering a game / quest log refresh). Sends the raw quest-record bitfield via the 0x28 PlayerQuestInfo packet, then walks the game's quest-data linked list computing each quest's display state into a 0x29-byte per-quest array using each quest's fpStatusFilter callback (or QUEST_GetQuestLogDisplayState fallback). Builds and conditionally sends a 0x50 QuestSpecial packet carrying Act1 Den-of-Evil monsters-left, Act5 RescueOnMountArreat barbarians-left, and (once the Summoner is dead and Act2 reached) Tal Rasha's tomb symbol level id. Finally sends the assembled 0x52 PlayerQuestLog packet. Halts via ErrorManager on a malformed quest list / bad filter pointer.
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 002140d8
 void __fastcall RefreshQuestDataForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     // Frame slots -69..-9 are ONE object: &byStatusFilter is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2402,6 +2468,7 @@ void __fastcall RefreshQuestDataForUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 
 // Server-side quest initialization run when a player joins/enters the game. On first call (bPickedSet==0) it picks the quest set: for fresh games (nExperienceFrame==0) handles reconnect carry-over of completed quests (gbQuestReconnectMode), fires each quest's join-init handler (state-fn index 0xD), then runs the act-quest sequence filters (Den of Evil, Radament, Golden Bird, Fallen Angel, Siege/Haggorath) via fpSequenceFilter. On subsequent calls fires handler index 0xE. Always sends the client its quest UI state: 0x5E (quest availability per extended quest's bIsNotIntroduction), 0x28 (PlayerQuestInfo from the difficulty's quest record), 0x29 (quest-log prep), and 0x89 (unique events) if Den-of-Evil QuestDataBool is set. Halts via ERROR_UnrecoverableInternalError on bad handler pointers.
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 00214836
 void __fastcall QUEST_OnPlayerJoinGame(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nExperienceFrame) {
     D2UnitDataPlayerStrc* pPlayerData;
     BOOL bBadCodePtr;
@@ -2646,6 +2713,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 
 // Quest reward delivery: creates an item from a 4-char item code at the given level and quality, sets full durability, and attempts to place it directly into the player's inventory. If inventory is full and bMustDrop is set, finds a nearby spawnable floor tile and drops it there instead; otherwise deletes the item. Returns the created item unit, or null on failure.
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 0021593f
 D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t szRewardCode, int32_t nRewardLevel, eD2ItemQuality eQuality, BOOL bMustDrop) {
     int _bInventoryPlaced;
     bool bInventoryPlaced;
@@ -2700,6 +2768,7 @@ D2UnitStrc * __fastcall ITEM_RewardItemInInventory(::SGAMEDATA * pGame, D2UnitSt
 
 // Server-side act-travel gate triggered when a player talks to a caravan/escort NPC. Branches on the NPC monster class: Warriv (Act1->2) marks QUEST_AbleGoToAct2 Completed+JustCompleted, sends quest info, and pushes SCMD 0x61 CanGoToAct(2); if Sisters quest just completed it also fires that quest's handler[3] (with IsBadCodePtr guard) and force-starts A1Q4. Meshif (Act2->3) completes The Horadric Staff (removing 'msf '/'vip ' staff items), marks AbleGoToAct3, grants Act II reward, sends CanGoToAct(3). Tyrael (Act4->5, expansion only) marks AbleGoToAct5, grants reward, sends quest-state 0x5D then CanGoToAct(5). Guarded by dwTradeTick so each transition packet sends once.
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 00215fba
 void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pMonster, int32_t nDestinationAct, int32_t nUnused) {
     D2UnitDataPlayerStrc* pPlayerDataSaved;
     QUESTCALLBACKFN lpfn;
@@ -2826,6 +2895,7 @@ void __fastcall QUEST_ProcessActTransition(::SGAMEDATA * pGame, D2UnitStrc * pUn
 
 // Act change through the Act 4 portal. For level 0x66 (Durance of Hate level 3): if not already allowed into Act 4, marks QUEST_KhalimsWill Completed+JustCompleted, removes all five Khalim's-body-part quest items from inventory, grants the Act 3 transition reward, and sends a 0x28 quest-info packet plus a 0x61 CanGoToAct(4) packet to the client. For any other level delegates to Q24_HandleKhalimsWillCompletion (game-wide broadcast path).
 // @sourcefile .\QUESTS\QUESTS.CPP
+// 1.14d mac: 00216450
 void __fastcall QUEST_HellPortalActChange(::SGAMEDATA * pGame, D2UnitStrc * pUnit, eD2LevelId nLevelId, D2UnitStrc * pObject) {
     D2UnitStrc* pQuestItem;
     D2ClientStrc* pClient;
@@ -2884,6 +2954,7 @@ void __fastcall QUEST_HellPortalActChange(::SGAMEDATA * pGame, D2UnitStrc * pUni
     }
 }
 
+// 1.14d mac: 0023cbdc
 BOOL __fastcall Q32_CheckNearbyPrisoners(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pUnitFallback) {
     D2ClientStrc* pClient;
     uint32_t nRoomIndex;
@@ -2928,6 +2999,7 @@ static void __stdcall QUEST_AddPlayerGUIDToTrackingList(uint32_t nPlayerGUID, in
 }
 
 // A2Q4 (The Seven Tombs) quest timer callback that manages Jerhyn's replacement cycle: if Jerhyn's monster AI is still active it clears it (or removes the object unit if AI is absent), then once bShouldSpawnJerhyn is false spawns the Jerhyn NPC (classId 0xc9) at a position offset relative to whether the Seven Tombs quest has progressed, recording the spawn GUID and coordinates in the quest-specific data.
+// 1.14d mac: 00226a56
 static void __stdcall ReplaceJerhyn(D2RoomStrc * pRoom, D2QuestDataStrc * pQuestData, POINT * pPoint) {
     D2UnitStrc* pSevenTombsData;
     BOOL nHasAi;
@@ -2986,6 +3058,7 @@ static void __stdcall ReplaceJerhyn(D2RoomStrc * pRoom, D2QuestDataStrc * pQuest
 }
 
 // A2Q4 - Callback_03 (quest state 3 handler). Index 0x4a: advance stateFlag to 4 (if <4) and broadcast state 4 via QUEST_SetStateAndBroadcast, then persist via UpdateQuestRecord. Index 0x32: directly set record Step0x08+Step0x07. For the Jerhyn (0x28) path: tear down/respawn Jerhyn's monster AI, optionally ReplaceJerhyn at his location, remove player from the participation list, and if not Completed(0)/RewardAwaits(1) and stateFlag==3 advance to 4 + persist.
+// 1.14d mac: 0022626f
 void __fastcall Q12_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     int nOldLevel = pQuestArgs->sQuestArgs.sLevelChange.nOldLevel; // steer-ok: the original reads the old level on entry and spills it, before the new-level compare
     int nLevelId = pQuestArgs->sQuestArgs.sLevelChange.nNewLevel;
@@ -3062,6 +3135,7 @@ void __fastcall Q12_Callback03_ChangedLevel(D2QuestDataStrc * pQuestData, D2Ques
 }
 
 // A2Q4 - InitData. Quest registration/init. Allocates the A2Q4 quest-specific data block (0x48), zeroes state functions, wires the gossip table and the state-handler callbacks (0->Callback_00, 2->Callback_02, 3->Callback_03, 0xa->Callback_10, 0xb->Callback_11, 0xd->Callback_13), sets nQuestIdReal=TheArcaneSanctuary, fpActiveFilter=Q12_ActiveFilter, fpSequenceFilter=Q12_SequenceFilter, nSequenceQuestId=TheSummoner, and clears the Summoner/sun sub-flags.
+// 1.14d mac: 00225c09
 void __fastcall Q12_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pGame = pQuestData->pGame;
@@ -3092,6 +3166,7 @@ void __fastcall Q12_InitData(D2QuestDataStrc * pQuestData) {
     pA2Q3Data->bAtmaSpokeToJerhyn = '\0';
 }
 
+// 1.14d mac: 002267ee
 void __fastcall PlaceJerhyn(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pObjectInitArg) {
     POINT nSpawnX;
     D2QuestDataA2Q4Strc* pA2Q4Data = pQuestData->pQuestSpecificData.pA2Q4;
@@ -3127,6 +3202,7 @@ void __fastcall PlaceJerhyn(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pO
     pA2Q4Data->nJerhynMonsterGUID = pSevenTombsData->nUnitGUID;
 }
 
+// 1.14d mac: 00226934
 void __fastcall QUEST_PlaceGuardInFrontOfJerhyn(D2QuestDataStrc * pQuestData, D2ObjectInitFnArg * pObjectInitArg) {
     D2RoomStrc* pRoom;
     int32_t nY;
@@ -3163,6 +3239,7 @@ void __fastcall QUEST_PlaceGuardInFrontOfJerhyn(D2QuestDataStrc * pQuestData, D2
     ReplaceJerhyn(pObjectInitArg->pRoom, pQuestData, &pPoint);
 }
 
+// 1.14d mac: 00226e57
 BYTE __fastcall QUEST_CheckJerhynShouldBlock(::SGAMEDATA * pGame) {
     D2QuestDataStrc* pRadamentsLairQuest;
     D2QuestDataStrc* pArcaneSanctuaryQuest = GetQuestDataByQuestNoInternal(pGame, QUESTINT_TheArcaneSanctuary);
@@ -3187,6 +3264,7 @@ BOOL __fastcall QUEST_ShouldBlockJerhyn(::SGAMEDATA * pGame) {
 }
 
 // A2Q7 server AI logic for the Jerhyn NPC, gating his movement to the palace and the Duriel reveal. Out-params *pdwParam1/*pdwParam2 tell the caller the desired idle/move outcome. Bails (idle: 1,0) unless the Arcane Sanctuary quest is in progress and Seven Tombs is appropriately staged. When conditions hold it walks Jerhyn toward the recorded target coords (WalkToCoords), and once close locates the Duriel-tomb portal object, finds free neighbouring-room coordinates and relocates Jerhyn there (SUNIT_RelocateUnit), updating the A2Q4 quest-specific data flag bytes that track his progress.
+// 1.14d mac: 00226f57
 void __fastcall QUEST_JerhynNpcAILogic(::SGAMEDATA * pGame, D2UnitStrc * pUnit, BOOL * pbRunDefaultAi, BOOL * pbDelayNextMove) {
     uint8_t uVar1;
     D2UnitStrc* pDurielPortalUnit;

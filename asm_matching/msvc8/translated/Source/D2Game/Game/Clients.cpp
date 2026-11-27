@@ -187,6 +187,7 @@ void __stdcall DeleteCriticalSections() {
     gQServerClientTablesInitialized = 0;
 }
 
+// 1.14d mac: 001a7db3
 D2ClientStrc * __fastcall GetClientByToken(uint32_t nToken) {
     /* LPCRITICAL_SECTION lpCriticalSection for EnterCriticalSection */ EnterCriticalSection(&gQServerClientByIdCs);
     D2ClientStrc* pClient = QServerClientBucketById[nToken & 0xff];
@@ -205,10 +206,12 @@ D2ClientStrc * __fastcall GetClientByToken(uint32_t nToken) {
     return pClient;
 }
 
+// 1.14d mac: 001a7e07
 void __stdcall LeaveCriticalSection_ClientById() {
     /* LPCRITICAL_SECTION lpCriticalSection for LeaveCriticalSection */ LeaveCriticalSection(&gQServerClientByIdCs);
 }
 
+// 1.14d mac: 001a7e26
 D2ClientStrc * __fastcall SERVER_GetClientFromGmeByClientId(::SGAMEDATA * pGame, int32_t nClientNo) {
     if (!pGame) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xe9);
@@ -231,6 +234,7 @@ D2ClientStrc * __fastcall SERVER_GetClientFromGmeByClientId(::SGAMEDATA * pGame,
 }
 
 // @blizzard ClientGetControlUnit
+// 1.14d mac: 001a7e82
 D2UnitStrc * __stdcall CLIENTS_GetControlUnit(D2ClientStrc * pClient, int32_t alwaysZero) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xfb);
@@ -254,6 +258,7 @@ D2UnitStrc * __stdcall CLIENTS_GetControlUnit(D2ClientStrc * pClient, int32_t al
     return pPlayer;
 }
 
+// 1.14d mac: 001a7f11
 void __fastcall SERVER_LinkServerPlayerUnitToClient(D2ClientStrc * pClient, D2UnitStrc * pUnit) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x114);
@@ -280,6 +285,7 @@ static void __stdcall CLIENT_SendHandshakePacket0x0B(D2ClientStrc * pClient, D2U
     SCmd::NET_D2GS_SERVER_Send_CMD_BYTE_INT(pClient, 0xb, !pUnit ? 6 : pUnit->eUnitType, GetGUIDInline(pUnit));
 }
 
+// 1.14d mac: 001a8442
 void __fastcall SetCientFlag0x01(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x206);
@@ -289,6 +295,7 @@ void __fastcall SetCientFlag0x01(D2ClientStrc * pClient) {
     pClient->fClientFlags |= 1;
 }
 
+// 1.14d mac: 001a8b44
 void __fastcall SetGameDataHook(::SGAMEDATA * pGame) {
     pGame->nClientsCount = 0;
     pGame->pClient = 0;
@@ -330,6 +337,7 @@ static void Unreferenced_00537ab0(D2RoomStrc * pRoom2, D2RoomStrc * pRoom1) {
 }
 
 // @sourcefile .\GAME\Clients.cpp
+// 1.14d mac: 001a949c
 void __fastcall FreeClientList(::SGAMEDATA * pGame) {
     D2ClientStrc* pClient = pGame->pClient;
     while (pClient) {
@@ -352,6 +360,7 @@ static void __stdcall CLIENT_UpdatePortalFlags(D2ClientStrc * gameContext) {
 }
 
 // Server-side handler invoked when a client's active room changes (pRoom = new room). If different from the client's current room, swaps room data/active-room-ex between the old and new levels, then diffs the adjacency lists: reveals and streams units for newly-adjacent rooms (CLIENT_RevealRoomAndSendUnits) and clears/hides map for rooms no longer adjacent (RoomClearForClientAndHideMap), re-resolving the client's player unit and issuing a movement/position packet update when the client's own room is cleared. Updates pClient->pRoom and OR-merges the new level's portal flag into the player's explored-portal flags. Custom calling convention: pClient in ESI, pRoom on stack.
+// 1.14d mac: 001a9add
 static void __stdcall GAME_OnClientRoomChange(D2RoomStrc * pRoom, D2ClientStrc * pClient) {
     int nOldRoomIdx;
     if (!(pClient && pClient->pGame)) {
@@ -625,6 +634,7 @@ static void __stdcall CLIENT_PopulateVisibilityPacketBuffer(D2UnitProximityNodeS
 }
 
 // Builds a proximity-sorted list of up to nParam units from all adjacent rooms around the client's current room and serialises them into the client's packet buffer. Gets the player unit's world position, iterates every unit in adjacent rooms via CLIENT_AddUnitToProximitySortedList, then calls CLIENT_PopulateVisibilityPacketBuffer. Halts fatally if pClient->pRoom is null or the adjacent-room list is unavailable.
+// 1.14d mac: 001a94f5
 void __fastcall GAME_CollectNearbyUnitPositions(D2ClientStrc * pClient, uint32_t nUnitLimit) {
     D2UnitProximityNodeStrc aProximityNodes[55];
     int32_t pnMaxDist;
@@ -719,6 +729,7 @@ void __fastcall UpdateSingleClient(::SGAMEDATA * pGame, D2ClientStrc * pClient) 
     D2Common::Unit::ROOM_LinkUnitToUpdateList(pUnit);
 }
 
+// 1.14d mac: 001a9cac
 BOOL __fastcall IsClientInGame(::SGAMEDATA * pGame, int32_t nClientid) {
     D2ClientStrc* pClientIter = pGame->pClient;
     while (true) {
@@ -735,6 +746,7 @@ BOOL __fastcall IsClientInGame(::SGAMEDATA * pGame, int32_t nClientid) {
     return 1;
 }
 
+// 1.14d mac: 001a83eb
 void __fastcall CLIENT_SetRoom(D2ClientStrc * pClient, D2RoomStrc * pRoom) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x79f);
@@ -758,6 +770,7 @@ D2RoomStrc * __fastcall CLIENT_GetRoom(D2ClientStrc * pClient) {
     return pClient->pRoom;
 }
 
+// 1.14d mac: 001a9d1a
 void __fastcall AttachUnitType(D2ClientStrc * pClient, uint32_t * pUnitDesc) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7ce);
@@ -774,6 +787,7 @@ void __fastcall AttachUnitType(D2ClientStrc * pClient, uint32_t * pUnitDesc) {
     pClient->dwAttachedUnitGUID = dwAttachedGUID;
 }
 
+// 1.14d mac: 001a83a9
 uint8_t __fastcall GetAct(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7df);
@@ -784,6 +798,7 @@ uint8_t __fastcall GetAct(D2ClientStrc * pClient) {
 }
 
 // Sets the current act (0-4) for a client connection. Called during game join flow and act transitions. Validates act range (must be 0-4) before updating client structure, halts on invalid act.
+// 1.14d mac: 001a9d7f
 void __fastcall CLIENT_SetAct(D2ClientStrc * pClient, uint8_t nAct) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7ea);
@@ -799,6 +814,7 @@ void __fastcall CLIENT_SetAct(D2ClientStrc * pClient, uint8_t nAct) {
     }
 }
 
+// 1.14d mac: 001a9de9
 void __fastcall ClientSetDwSaveTo1(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x7f5);
@@ -923,6 +939,7 @@ void __fastcall RemoveUnitForClient(D2ClientStrc * pClient, D2UnitStrc * pUnit) 
     }
 }
 
+// 1.14d mac: 001a9eb5
 int32_t __fastcall GetClientNo(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x870);
@@ -932,6 +949,7 @@ int32_t __fastcall GetClientNo(D2ClientStrc * pClient) {
     return pClient->nClientNo;
 }
 
+// 1.14d mac: 001a9ef2
 int __stdcall ReturnFFFFFFFF() {
     return -1;
 }
@@ -940,6 +958,7 @@ void __fastcall ReturnVoid(D2ClientStrc * pClient, int nUnused, int nParam) {
 
 }
 
+// 1.14d mac: 001a8863
 uint32_t __fastcall GetPlayerClassId(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x8b8);
@@ -949,18 +968,22 @@ uint32_t __fastcall GetPlayerClassId(D2ClientStrc * pClient) {
     return (uint32_t)pClient->nClass;
 }
 
+// 1.14d mac: 001a9f01
 void __fastcall SetClassOfClient(D2ClientStrc * pClient, int nClass) {
     pClient->nClass = (uint8_t)nClass;
 }
 
+// 1.14d mac: 001a9f0f
 void __fastcall SetFileFlags(D2ClientStrc * pClient, int16_t nCharStatus) {
     pClient->nCharacterStatus = nCharStatus;
 }
 
+// 1.14d mac: 001a8db9
 uint32_t __fastcall GetCharacterStatus(D2ClientStrc * pClient) {
     return (uint32_t)pClient->nCharacterStatus;
 }
 
+// 1.14d mac: 001a9f1f
 void __fastcall SetFlagIf(D2ClientStrc * pClient, uint16_t nFlag, BOOL nSet) {
     if (nSet) {
       pClient->nCharacterStatus |= nFlag;
@@ -970,10 +993,12 @@ void __fastcall SetFlagIf(D2ClientStrc * pClient, uint16_t nFlag, BOOL nSet) {
     pClient->nCharacterStatus &= ~nFlag;
 }
 
+// 1.14d mac: 001a88e2
 uint32_t __fastcall CLIENT_TestFileFlags(D2ClientStrc * pClient, uint16_t fFileFlag) {
     return (uint32_t)(pClient->nCharacterStatus & fFileFlag);
 }
 
+// 1.14d mac: 001a9f3d
 void __fastcall SetClientStatus(D2ClientStrc * pClient, int32_t nQuestProgress, int32_t nDifficulty) {
     uint32_t nDifficultyBase = (pClient->nCharacterStatus & 0x20 | 0x80) >> 5;
     if ((int)(nDifficultyBase * nDifficulty + nQuestProgress) < (int)(pClient->nCharacterStatus >> 8 & 0x1f)) {
@@ -984,6 +1009,7 @@ void __fastcall SetClientStatus(D2ClientStrc * pClient, int32_t nQuestProgress, 
 }
 
 // Sets client connection state (0=Initial, 1=GameCreated, 2=LoadingAct, 3=WaitingRooms, 4=FullyPlaying, 5/6=ChangingAct teardown). Simple state machine transition with validation. Part of 6-state join flow from Initial through FullyPlaying.
+// 1.14d mac: 001a8b01
 void __fastcall CLIENT_SetConnectionState(D2ClientStrc * pClient, int32_t nConnectionState) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x973);
@@ -993,6 +1019,7 @@ void __fastcall CLIENT_SetConnectionState(D2ClientStrc * pClient, int32_t nConne
     pClient->ConnectionState = nConnectionState;
 }
 
+// 1.14d mac: 001a9fb9
 void __fastcall SetGolem(D2ClientStrc * pClient, int32_t nGolemGUID) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x97e);
@@ -1013,6 +1040,7 @@ int __fastcall CLIENT_GetGolemGUID(D2ClientStrc * pClient) {
     return pClient->dwGolemGUID;
 }
 
+// 1.14d mac: 001a9fff
 void __fastcall SetCreateTime(D2ClientStrc * pClient, __time32_t nCreateTime) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x994);
@@ -1022,6 +1050,7 @@ void __fastcall SetCreateTime(D2ClientStrc * pClient, __time32_t nCreateTime) {
     pClient->dwCreateTime = nCreateTime;
 }
 
+// 1.14d mac: 001aa045
 int32_t __fastcall GetCreateTime(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x99f);
@@ -1031,6 +1060,7 @@ int32_t __fastcall GetCreateTime(D2ClientStrc * pClient) {
     return pClient->dwCreateTime;
 }
 
+// 1.14d mac: 001a9f78
 ::SGAMEDATA * __fastcall CLIENT_GetGame(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9aa);
@@ -1040,6 +1070,7 @@ int32_t __fastcall GetCreateTime(D2ClientStrc * pClient) {
     return pClient->pGame;
 }
 
+// 1.14d mac: 001a9cd6
 BOOL __fastcall IsUnitNearClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
     if (!pRoom) {
@@ -1057,6 +1088,7 @@ BOOL __fastcall IsUnitNearClient(D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     return 0;
 }
 
+// 1.14d mac: 001a88a2
 char * __fastcall GetCharName(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x9ed);
@@ -1083,6 +1115,7 @@ void __fastcall ARENA_SetClientDead(D2ClientStrc * pClient, int32_t isDeadMaybe)
     pClient->fClientFlags &= -5;
 }
 
+// 1.14d mac: 001aa086
 uint32_t __fastcall ARENA_IsClientDead(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xa05);
@@ -1195,6 +1228,7 @@ void __fastcall SendPongByClientId(uint32_t nClientId, int32_t dwSendTick, int32
     return;
 }
 
+// 1.14d mac: 001aa310
 BOOL __fastcall NET_D2GS_SERVER_GetPlayerNameByClientId(int32_t nClientId, char * szPlayerName) {
     int _bNotFound;
     bool bNotFound;
@@ -1240,6 +1274,7 @@ int32_t __fastcall GetClientId(char * szCharName) {
     return nFoundClientId;
 }
 
+// 1.14d mac: 001aa39a
 BOOL __fastcall CLIENTS_IsCharacterNameFree(char * szCharName, char * szCharNameOut) {
     int bNotFound = 1;
     int nBucket = (uint16_t)Fog::SMem::HashForName(szCharName) & 0xff;
@@ -1261,6 +1296,7 @@ BOOL __fastcall CLIENTS_IsCharacterNameFree(char * szCharName, char * szCharName
 
 // Appends an incoming save-data chunk to the client's in-progress save buffer. Looks up the client by nClientId in the QServer bucket table (under critical section), allocates pSaveGame on the first chunk, memcpys the chunk, advances nSaveOpenSize. When nSaveOpenSize reaches nTotalSize the save is complete: sets fClientFlags bit 3, runs PLAYERSAVE_CRC32MissileTable, and returns 1. Returns 0 if the QServer tables are uninitialised or the client is not found.
 // @sourcefile .\GAME\Clients.cpp
+// 1.14d mac: 001aa430
 int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, uint32_t size, uint32_t nTotalSize, uint32_t dwSaveFlags, uint32_t dwParam1, uint32_t dwParam2) {
     D2SaveFileHeaderStrc* pSaveBuffer;
     uint32_t pSavePacketList;
@@ -1301,6 +1337,7 @@ int __fastcall CLIENT_AccumulateSaveData(uint32_t nClientId, void * buffer, uint
     return bComplete;
 }
 
+// 1.14d mac: 001aa57c
 D2SaveFileHeaderStrc * __fastcall GetSaveGame(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb55);
@@ -1310,6 +1347,7 @@ D2SaveFileHeaderStrc * __fastcall GetSaveGame(D2ClientStrc * pClient) {
     return pClient->pSaveGame;
 }
 
+// 1.14d mac: 001aa5bd
 uint32_t __fastcall GetSaveGameSize(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb5f);
@@ -1320,6 +1358,7 @@ uint32_t __fastcall GetSaveGameSize(D2ClientStrc * pClient) {
 }
 
 // @sourcefile .\GAME\Clients.cpp
+// 1.14d mac: 001aa5fe
 void __fastcall CopySafeBuffer(D2ClientStrc * pClient, void * pSaveBuffer, uint32_t nSaveSize) {
     D2SaveFileHeaderStrc* pNewSaveGame;
     if (!pClient) {
@@ -1340,6 +1379,7 @@ void __fastcall CopySafeBuffer(D2ClientStrc * pClient, void * pSaveBuffer, uint3
 }
 
 // @sourcefile .\GAME\Clients.cpp
+// 1.14d mac: 001aa6f0
 void __fastcall DeleteCurrentSave(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb7d);
@@ -1356,6 +1396,7 @@ void __fastcall DeleteCurrentSave(D2ClientStrc * pClient) {
     pClient->nSaveCurrentSize = 0;
 }
 
+// 1.14d mac: 001aa793
 void __fastcall CLIENTS_ResetSaveTransferState(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb91);
@@ -1367,6 +1408,7 @@ void __fastcall CLIENTS_ResetSaveTransferState(D2ClientStrc * pClient) {
     pClient->nFileSize = 0;
 }
 
+// 1.14d mac: 001aa7e9
 BOOL __fastcall CLIENT_HasSaveData(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xb9e);
@@ -1379,6 +1421,7 @@ BOOL __fastcall CLIENT_HasSaveData(D2ClientStrc * pClient) {
     return 0;
 }
 
+// 1.14d mac: 001aa83d
 void __fastcall GAMECLIENT_SetFlags0x20(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbaf);
@@ -1388,6 +1431,7 @@ void __fastcall GAMECLIENT_SetFlags0x20(D2ClientStrc * pClient) {
     pClient->fClientFlags |= 0x20;
 }
 
+// 1.14d mac: 001aa87f
 uint32_t __fastcall CLIENT_GetSaveCompleteFlag(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xbba);
@@ -1397,14 +1441,17 @@ uint32_t __fastcall CLIENT_GetSaveCompleteFlag(D2ClientStrc * pClient) {
     return (uint8_t)((uint8_t)pClient->fClientFlags >> 5) & 1;
 }
 
+// 1.14d mac: 001aa8c6
 D2ClientStrc * __fastcall GetFirstClientOfGame(::SGAMEDATA * pGame) {
     return pGame->pClient;
 }
 
+// 1.14d mac: 001aa8d4 D2Game::GAME::Clients::GetNext
 D2ClientStrc * __fastcall GetNext(D2ClientStrc * pClient) {
     return pClient->pNext;
 }
 
+// 1.14d mac: 001aa8e2
 void __fastcall SetGotkeyInfo(D2ClientStrc * pClient, int32_t nHotkey, uint16_t wSkillId, uint8_t byHand, int32_t nItemGUID) {
     if (!pClient) {
       return;
@@ -1415,6 +1462,7 @@ void __fastcall SetGotkeyInfo(D2ClientStrc * pClient, int32_t nHotkey, uint16_t 
     pClient->pHotKeys[nHotkey].nItemGUID = nItemGUID;
 }
 
+// 1.14d mac: 001aa914
 void __fastcall GetHotKey(D2ClientStrc * pClient, int32_t nHotKeyIndex, int * nSkillId, uint32_t * pSkillType, int * nItemGUID) {
     if (!pClient) {
       return;
@@ -1425,10 +1473,12 @@ void __fastcall GetHotKey(D2ClientStrc * pClient, int32_t nHotKeyIndex, int * nS
     *nItemGUID = pClient->pHotKeys[nHotKeyIndex].nItemGUID;
 }
 
+// 1.14d mac: 001a8dc5
 uint16_t __fastcall GetGuildFlags(D2ClientStrc * pClient) {
     return pClient->wGuildFlags;
 }
 
+// 1.14d mac: 001aa94f
 void __fastcall SetGuildFlags(D2ClientStrc * pClient, short nGuildFlags) {
     pClient->wGuildFlags = nGuildFlags;
 }
@@ -1437,32 +1487,38 @@ void __fastcall GetGuildTag(D2ClientStrc * pClient, char * pDest) {
     *(uint32_t*)pDest = *(uint32_t*)pClient->szGuildTag;
 }
 
+// 1.14d mac: 001aa962
 void __fastcall SetGuildTag(D2ClientStrc * pClient, char * szGuildTag) {
     *(uint32_t*)pClient->szGuildTag = *(uint32_t*)szGuildTag;
 }
 
+// 1.14d mac: 001aa975
 void __fastcall GetGuildName(D2ClientStrc * pClient, char * szGuildName) {
     char cChar;
     char* pcSrc = pClient->szGuildName;
     strcpy(szGuildName, pcSrc);
 }
 
+// 1.14d mac: 001aa997
 void __fastcall SetGuildName(D2ClientStrc * pClient, char * szGuildName) {
     strcpy(pClient->szGuildName, szGuildName);
 }
 
+// 1.14d mac: 001a8dd4
 void __fastcall GetGuildInfo(D2ClientStrc * pClient, uint8_t * pGuildInfo1, uint8_t * pGuildInfo2, uint8_t * pGuildInfo3) {
     *pGuildInfo1 = pClient->nGuildInfo[0];
     *pGuildInfo2 = pClient->nGuildInfo[1];
     *pGuildInfo3 = pClient->nGuildInfo[2];
 }
 
+// 1.14d mac: 001aa9b9
 void __fastcall SetGuildInfo(D2ClientStrc * pClient, uint8_t byGuildInfo1, uint8_t byGuildInfo2, uint8_t byGuildInfo3) {
     pClient->nGuildInfo[0] = byGuildInfo1;
     pClient->nGuildInfo[1] = byGuildInfo2;
     pClient->nGuildInfo[2] = byGuildInfo3;
 }
 
+// 1.14d mac: 001aa9dc
 void __fastcall SetExperienceLoss(D2ClientStrc * pClient, int32_t nExpLoss) {
     if (nExpLoss < 0) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xc5e);
@@ -1472,10 +1528,12 @@ void __fastcall SetExperienceLoss(D2ClientStrc * pClient, int32_t nExpLoss) {
     pClient->nExpLoss = nExpLoss;
 }
 
+// 1.14d mac: 001aaa22
 int32_t __fastcall GetExperienceLoss(D2ClientStrc * pClient) {
     return pClient->nExpLoss;
 }
 
+// 1.14d mac: 001aaa30
 BYTE __fastcall HasWeaponSwapped(D2ClientStrc * pClient) {
     return pClient->bWeaponSwap;
 }
@@ -1495,6 +1553,7 @@ void __fastcall SERVER_PutPacketInQueueList(D2ClientStrc * pClient, D2PacketList
     pClient->pPacketList = pPacketList;
 }
 
+// 1.14d mac: 001aaa83
 void __fastcall CLIENT_SetPacketList(D2ClientStrc * pClient, D2PacketListStrc * pPacketList) {
     pPacketList->pNext = 0;
     if (!pClient->pDispatchList) {
@@ -1506,6 +1565,7 @@ void __fastcall CLIENT_SetPacketList(D2ClientStrc * pClient, D2PacketListStrc * 
     pClient->pDispatchList = pPacketList;
 }
 
+// 1.14d mac: 001aaabf
 D2PacketListStrc * __fastcall CLIENT_ClearDispatchList(D2ClientStrc * pClient) {
     D2PacketListStrc* pDispatchList = pClient->pDispatchList;
     if (pClient->pPacketList == pDispatchList) {
@@ -1519,30 +1579,37 @@ D2PacketListStrc * __fastcall CLIENT_ClearDispatchList(D2ClientStrc * pClient) {
     return pDispatchList;
 }
 
+// 1.14d mac: 001aaaf9
 D2PacketListStrc * __fastcall CLIENT_GetPacketList(D2ClientStrc * pClient) {
     return pClient->pPacketList;
 }
 
+// 1.14d mac: 001aab07
 D2PacketListStrc * __fastcall CLIENT_GetDispatchList(D2ClientStrc * pClient) {
     return pClient->pDispatchList;
 }
 
+// 1.14d mac: 001aab15
 void __fastcall GetAccountName(D2ClientStrc * pClient, char * szText) {
     Storm::Source::SSTR::SStrCopy(szText, pClient->szAccName, 0x32);
 }
 
+// 1.14d mac: 001aab3d
 void __fastcall GetClientContainer(D2ClientStrc * pClient, uint32_t * pdwPlayerData) {
     *pdwPlayerData = pClient->dwPlayerData;
 }
 
+// 1.14d mac: 001aab4d
 void __fastcall GetRealm(D2ClientStrc * pClient, uint32_t * pdwRealm) {
     *pdwRealm = pClient->pRealm;
 }
 
+// 1.14d mac: 001aab5d
 void __fastcall SetRealm(D2ClientStrc * pClient, uint32_t dwRealm) {
     pClient->pRealm = dwRealm;
 }
 
+// 1.14d mac: 001aab6b
 D2PlayerBasicsData * __fastcall CLIENT_GetPlayerBasicsData(D2ClientStrc * pClient) {
     if (!pClient) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xd10);
@@ -1553,6 +1620,7 @@ D2PlayerBasicsData * __fastcall CLIENT_GetPlayerBasicsData(D2ClientStrc * pClien
 }
 
 // @sourcefile .\GAME\Clients.cpp
+// 1.14d mac: 001aabae
 void __fastcall RecordSyncWarpTimestamp(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nSlotIdx;
     int* pWarpFrameSlot;
@@ -1583,6 +1651,7 @@ void __fastcall RecordSyncWarpTimestamp(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
 }
 
 // @sourcefile .\GAME\Clients.cpp
+// 1.14d mac: 001aac62
 BOOL __fastcall CheckSyncWarpRateExceeded(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int nSlotIdx;
     int* pWarpFrameSlot;
@@ -1702,6 +1771,7 @@ void __fastcall CLIENT_PlacePlayerInRoom(D2ClientStrc * pClient, D2UnitStrc * pU
 }
 
 // Main client join handler: validates expansion/hardcore compatibility, loads or creates player unit, sends handshake packet (0x0B), portal flags (0x5F), stats, items, hotkeys, selected skills (left/right), life/mana/stamina. Computes A5Q3 resist bonuses if expansion. Returns error code on validation failure (kicks client). State 1→loading character data.
+// 1.14d mac: 001a8484
 int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, ::SGAMEDATA * pGame, int32_t bLoadFromSave, D2RoomStrc * pRoom, uint32_t nX, uint32_t nY) {
     eD2ArenaFlags eArenaFlags;
     eD2ArenaFlags eArenaFlagsCheck;
@@ -1823,6 +1893,7 @@ int32_t __fastcall CLIENT_LoadCharacterAndSendGameData(D2ClientStrc * pClient, :
 
 // Allocates and initializes D2ClientStrc (1304 bytes). Sets client ID, 180-second timeout, class (arena template override), char/account names, language. Initializes 16 hotkey slots to -1, zeroes packet lists. Inserts into game's client linked list and two hash tables (by ID and name). Max 8 clients per game. Returns new client or null if full.
 // @sourcefile .\GAME\Clients.cpp
+// 1.14d mac: 001a88f5
 D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, uint8_t nClass, char * pCharName, char * szAccountName, uint32_t dwPlayerData, uint8_t nLanguageId, uint32_t dwUnused1, uint32_t dwUnused2) {
     D2ClientStrc* pClient;
     DWORD dwTick;
@@ -1883,6 +1954,7 @@ D2ClientStrc * __fastcall CreateClient(::SGAMEDATA * pGame, uint32_t nClientId, 
 }
 
 // Serializes a client's character header/appearance block into the save/wire buffer pbParam (used in the player save & "exit game" cleanup path). Writes a 0x0E length tag, then the player's level, two SaveCharAppearance blobs (head+body, 0xFF-padded), class code (nClassId+1, wrapped), a level byte, char status (sets the death-flag bit 8 when dead and bit 4 set), guild flags, 3 guild-info bytes (0->0xFF), and the 4-byte guild tag. Returns (in the guarded value) the buffer pointer when the record is invalid (bad level/class/status or wrong length), having zeroed the first byte; otherwise null. __fastcall(pClient, pbParam).
+// 1.14d mac: 001a8b8b
 void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc * pClient, uint8_t * pPreview) {
     uint8_t bClassCode;
     int nClassId;
@@ -1996,6 +2068,7 @@ void __fastcall CLIENTS_FillCharacterPreviewInfo(D2ClientStrc * pClient, uint8_t
 
 // Removes client from game and cleans up all resources. Optionally saves player (bSavePlayer), removes from hash tables (by ID and name), broadcasts 0x5A PlayerLeave event, frees player unit and pets, notifies quests, frees memory pools. Called on disconnect, timeout, or kick.
 // @sourcefile .\GAME\Clients.cpp
+// 1.14d mac: 001a8e10
 void __fastcall CleanUpClient(::SGAMEDATA * pGame, uint32_t nClientId, int32_t bSavePlayer) {
     uint16_t uVar1;
     char* szSrcName;
@@ -2329,6 +2402,7 @@ void __fastcall UnusedUpdateFunctionForUnits(D2RoomStrc * pRoom, D2ClientStrc * 
     }
 }
 
+// 1.14d mac: 001afa46
 void __fastcall FreePendingDrlgDeletes(::SGAMEDATA * pGame) {
     D2RoomStrc* pRoom;
     D2DrlgActStrc** ppAct = pGame->pAct;

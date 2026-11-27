@@ -38,6 +38,7 @@ void __fastcall Destructor(::ListBoxWrapper * pThis, int) {
     ExceptionList = pPrevExceptionList;
 }
 
+// 1.14d mac: 000c1b52 D2Client::UI::ListBox::ListBoxWrapper::ScalarDeletingDestructor
 ::ListBoxWrapper * __fastcall ScalarDeletingDestructor(::ListBoxWrapper * pThis, int, uint32_t nFlags) {
     vc8_thiscall(ListBoxWrapper::Destructor)(pThis);
     if (nFlags & 1 && pThis) {
@@ -47,78 +48,94 @@ void __fastcall Destructor(::ListBoxWrapper * pThis, int) {
     return pThis;
 }
 
+// 1.14d mac: 000c1c42 D2Client::UI::ListBox::ListBoxWrapper::OnDownArrow
 int __fastcall OnDownArrow(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnDownArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000c1c62 D2Client::UI::ListBox::ListBoxWrapper::OnUpArrow
 int __fastcall OnUpArrow(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnUpArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000c1c82 D2Client::UI::ListBox::ListBoxWrapper::OnRightArrow
 int __fastcall OnRightArrow(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnRightArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000c1ca2 D2Client::UI::ListBox::ListBoxWrapper::OnLeftArrow
 int __fastcall OnLeftArrow(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnLeftArrow)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000c1cc2 D2Client::UI::ListBox::ListBoxWrapper::OnMouseDown
 int __fastcall OnMouseDown(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseDown)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000c1ce2 D2Client::UI::ListBox::ListBoxWrapper::OnMouseUp
 int __fastcall OnMouseUp(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseUp)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000c1d02 D2Client::UI::ListBox::ListBoxWrapper::OnMouseMove
 int __fastcall OnMouseMove(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseMove)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000c1d22 D2Client::UI::ListBox::ListBoxWrapper::OnChar
 int __fastcall OnChar(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnChar)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000c1d42 D2Client::UI::ListBox::ListBoxWrapper::GetValue
 int __fastcall GetValue(::ListBoxWrapper * pThis, int) {
     int nValue = vc8_thiscall(pThis->pImplementation->pVtable->GetValue)(pThis->pImplementation);
     return nValue;
 }
 
+// 1.14d mac: 000c1d5c D2Client::UI::ListBox::ListBoxWrapper::Draw
 void __fastcall Draw(::ListBoxWrapper * pThis, int) {
     vc8_thiscall(pThis->pImplementation->pVtable->Draw)(pThis->pImplementation);
 }
 
+// 1.14d mac: 000c1d76 D2Client::UI::ListBox::ListBoxWrapper::AddItem
 void __fastcall AddItem(::ListBoxWrapper * pThis, int, uint16_t * wszLine0, uint16_t * wszLine1, uint16_t * wszLine2, uint16_t * wszLine3, uint16_t * wszLine4, uint16_t * wszLine5, uint32_t dwItemData, int nColor, BOOL bUseDefaultColor, int nFont) {
     vc8_thiscall(pThis->pImplementation->pVtable->AddItem)(pThis->pImplementation, wszLine0, wszLine1, wszLine2, wszLine3, wszLine4, wszLine5, dwItemData, nColor, bUseDefaultColor, nFont);
 }
 
+// 1.14d mac: 000c1dd6
 uint32_t __fastcall GetItemUserData(::ListBoxWrapper * pThis, int, int nIndex) {
     uint32_t dwUserData = vc8_thiscall(ListBoxImplementation::GetItemUserData)(pThis->pImplementation, nIndex);
     return dwUserData;
 }
 
+// 1.14d mac: 000c1df6 D2Client::UI::ListBox::ListBoxWrapper::GetItemCount
 int __fastcall GetItemCount(::ListBoxWrapper * pThis, int) {
     int nItemCount = vc8_thiscall(pThis->pImplementation->pVtable->GetItemCount)(pThis->pImplementation);
     return nItemCount;
 }
 
+// 1.14d mac: 000c1e10 D2Client::UI::ListBox::ListBoxWrapper::Clear
 void __fastcall Clear(::ListBoxWrapper * pThis, int) {
     vc8_thiscall(pThis->pImplementation->pVtable->Clear)(pThis->pImplementation);
 }
 
+// 1.14d mac: 000c1e2a D2Client::UI::ListBox::ListBoxWrapper::OnMouseWheel
 int __fastcall OnMouseWheel(::ListBoxWrapper * pThis, int, D2UIMouseMsgStrc * pMsg) {
     int nResult = vc8_thiscall(pThis->pImplementation->pVtable->OnMouseWheel)(pThis->pImplementation, pMsg);
     return nResult;
 }
 
+// 1.14d mac: 000c1bae
 ::ListBoxWrapper * __fastcall Constructor(::ListBoxWrapper * pThis, int, int nPosX, int nPosY, int nWidth, int nHeight, int nItemSpacing, int nDefaultColor, int nDefaultFont, fpListBoxItemActivated pfnOnItemActivated, bool bTallRows) {
     pfnEHHandlerRoutine pSehHandler = SehHandler_6ca263; // steer-ok: generated form, kept as emitted
     void* pPrevSehFrame = ExceptionList;

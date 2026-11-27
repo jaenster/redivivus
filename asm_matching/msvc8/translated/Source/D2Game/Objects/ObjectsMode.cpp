@@ -322,6 +322,7 @@ static int SHRINESCOUNT = 0x18; D2_STATIC_GUARD(SHRINESCOUNT, "SHRINESCOUNT");
 namespace D2Game { namespace Objects { namespace ObjectsMode {
 
 // Drives day/night state transitions for ambient objects (e.g. torches, braziers). For class 399 objects, advances their animation frame using a seeded RNG and schedules the next frame event. For all others, queries the current period-of-day from the act environment: period 0 (night) activates the object and schedules re-check in 1000 frames; periods 1-2 (day transitions) schedule re-check in 600 frames; day period deactivates the object. Called per-game-tick by the object-mode update path.
+// 1.14d mac: 001eedfd
 void __fastcall OBJMODE_UpdateDayNightState(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2RoomStrc* pRoom;
     D2SeedStrc* pSeed;
@@ -386,6 +387,7 @@ void __fastcall OBJMODE_UpdateDayNightState(::SGAMEDATA * pGame, D2UnitStrc * pU
     return;
 }
 
+// 1.14d mac: 001ef192
 void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     eD2LevelId nLevelId2 = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(D2Common::Units::UNITS_GetRoom(pUnit));
     eD2LevelId eLevel = LEVEL_InfernalPit;
@@ -414,6 +416,7 @@ void __fastcall OBJMODE_CreateRedPortal(::SGAMEDATA * pGame, D2UnitStrc * pUnit)
     D2Common::DUNGEON::Dungeon::ToggleHasPortalFlagRoom(D2Common::Units::UNITS_GetRoom(pPortalUnit), 0);
 }
 
+// 1.14d mac: 001ee871
 void __fastcall OBJMODE_OpenObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eAnimMode.eMissileCollision == COLLIDE_BLOCK_PLAYER)) {
       return;
@@ -432,6 +435,7 @@ void __fastcall OBJMODE_OpenObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2Common::Units::RemoveCollision_Vector(pUnit);
 }
 
+// 1.14d mac: 001eed24
 void __fastcall OBJMODE_DeactivateShrine(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL bIsShrine = D2Common::Units::IsShrine(pUnit);
     if (!bIsShrine) {
@@ -448,6 +452,7 @@ void __fastcall OBJMODE_DeactivateShrine(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Advances the fill-progress animation for fillable objects (e.g. Mana Wells, Healing Wells). Reads Components[0] as the current fill level, increments it each tick, then recomputes SetupUpdateFlag based on the ratio of current level to the doubled/default txt sizes. Halts with an unrecoverable error if fill level exceeds its expected bounds. Used by the object-mode update tick to drive incremental fill visuals.
+// 1.14d mac: 001ee8b9
 void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint8_t byComponent = pUnit->pUnitData.pUnitDataObject->nShrineId;
     D2ObjectsTxt* pObjectTxt = D2Common::Units::GetObjectTxtRecordFromObject(pUnit);
@@ -481,6 +486,7 @@ void __fastcall OBJMODE_UpdateFillProgress(::SGAMEDATA * pGame, D2UnitStrc * pUn
     }
 }
 
+// 1.14d mac: 001eed6d
 void __fastcall OBJMODE_UpdateHoverTextExpiry(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (!pUnit) {
       return;
@@ -503,6 +509,7 @@ void __fastcall OBJMODE_UpdateHoverTextExpiry(::SGAMEDATA * pGame, D2UnitStrc * 
     GAME::Event::SetEvent(pGame, pUnit, 6, nExpireFrame, 0, 0);
 }
 
+// 1.14d mac: 001f54d7
 static void __stdcall OBJMODE_TriggerProximityEffect(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     int32_t nClassIdOrDist;
     POINT ptUnitCoords;
@@ -525,6 +532,7 @@ static void __stdcall OBJMODE_TriggerProximityEffect(::SGAMEDATA * pGame, D2Unit
     }
 }
 
+// 1.14d mac: 001ee7c5
 void __fastcall OBJMODE_UpdateTrapObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eAnimMode.ePlayerMode == eD2PlayerAnimMode_ns::Neutral) {
       pUnit->eAnimMode.ePlayerMode = Walk;
@@ -538,6 +546,7 @@ void __fastcall OBJMODE_UpdateTrapObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 }
 
 // Routes a chest-open event to the appropriate operate-callback based on chest type (Components[0] & 0x7f) and level ID. Type 8 in Act 4+ levels, type 3 in Act 1-3 outside TowerCellarLevel5, and types 1/4 in Act 1-3 all redirect to gapObjectOperateCallbacks[2] (special chest handler). All other types dispatch through gapObjectOperateCallbacks[chestType] directly. Halts via ERROR_UnrecoverableInternalError_Halt if any callback pointer fails IsBadCodePtr.
+// 1.14d mac: 001eebaa
 void __fastcall OBJMODE_DispatchChestType(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     BOOL bBadCallback;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -591,6 +600,7 @@ void __fastcall OBJMODE_DispatchChestType(::SGAMEDATA * pGame, D2UnitStrc * pUni
 }
 
 // Per-frame server update for a proximity-triggered object (e.g. trap/shrine reacting to nearby players), driven by a 3-state machine stored in the object's data byte at szCharName[4] (0=idle,1=armed,2=fired). Scans the object's room for live players within collision range: in idle/armed it either plays the activation event (REFRESHVENDOR sound, -> mark armed) or, when already activated, runs MONSTERAI_CalculateCounterAttackDamage against the player (the trap's hit) and transitions to fired+update-flag; state 2 clears the update flag and returns to idle. Reschedules its own update event (event 3) using the object's txt FrameCnt timing (~0x19 frames when active, ~0xf otherwise).
+// 1.14d mac: 001eea02
 void __fastcall OBJMODE_UpdateProximityStateMachine(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint32_t nNextEventFrame;
     D2UnitStrc* pTarget;
@@ -663,6 +673,7 @@ void __fastcall OBJMODE_UpdateProximityStateMachine(::SGAMEDATA * pGame, D2UnitS
 }
 
 // JMP thunk
+// 1.14d mac: 001eedf4
 void __fastcall QUEST_DispatchObjectActivation(::SGAMEDATA * pGame, D2UnitStrc * pObject) {
     ::D2Game::Quests::QUESTS::QUESTS_DispatchObjectEvent(pGame, pObject);
 }
@@ -741,6 +752,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_0(D2UnitStrc * p)
     return p->eUnitFlagsEx >> 0 & 1;
 }
 
+// 1.14d mac: 001ef346 D2Game::Objects::ObjectsMode::PacketUpdateForClient
 void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     if (pUnit) {
       if (FlagBit_D2UnitStrc_eUnitFlags_0(pUnit)) {
@@ -761,6 +773,7 @@ void __fastcall PacketUpdateForClient(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D
 }
 
 // @sourcefile .\OBJECTS\ObjMode.cpp
+// 1.14d mac: 001f3960
 static void OBJMODE_WarpPlayerToObject(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, D2RoomStrc * pRoom) {
     D2DrlgRoomCoordsStrc roomCoords;
     POINT ptCoords;
@@ -794,6 +807,7 @@ static void OBJMODE_WarpPlayerToObject(D2UnitStrc * pUnit, D2UnitStrc * pUnit2, 
 
 // Object operate-fn of a teleport pad: looks for another object of the victim's classId in the victim's room, then in its adjacent rooms, and warps the operating player to the first one found (OBJMODE_WarpPlayerToObject). Always returns 0.
 // @evidence UNIT_OBJECT test 00581c2a, same-classId test 00581c33. Contributor proposal #102; old name kept as a label.
+// 1.14d mac: 001f278e
 BOOL __fastcall OBJOP_UseTeleportPad(D2ObjectOperateFnArg * pOperation) {
     int nTargetClassId;
     D2RoomStrc** pAdjRooms;
@@ -843,6 +857,7 @@ BOOL __fastcall OBJOP_UseTeleportPad(D2ObjectOperateFnArg * pOperation) {
     return 0;
 }
 
+// 1.14d mac: 001f2952
 BOOL __fastcall OBJOP_ExplodingTrap(D2ObjectOperateFnArg * pOperation) {
     D2ObjectsTxt* pObjectTxt;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
@@ -860,6 +875,7 @@ BOOL __fastcall OBJOP_ExplodingTrap(D2ObjectOperateFnArg * pOperation) {
 }
 
 // Object-operate handler that opens or closes a door unit, enforcing a 500ms tick debounce. Reads the victim's current anim mode: Walk/TownNeutral → check open-collision; if clear, block the path and set mode 0 (open); if blocked in both states and not TownNeutral, set mode 5 (close). TownWalk → check equipment restrictions; if locked, play sound and return. Death → remove collision and set mode 2. Updates dwTickCount on any mode change.
+// 1.14d mac: 001f154a
 BOOL __fastcall OBJOP_ToggleDoor(D2ObjectOperateFnArg * pOperation) {
     eCollisionFlags nCollisionClose;
     BOOL nEquipCheckResult;
@@ -924,6 +940,7 @@ BOOL __fastcall OBJOP_ToggleDoor(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f1f62
 BOOL __fastcall OBJOP_UseStairway(D2ObjectOperateFnArg * pOperation) {
     D2RoomStrc* pRoom;
     eD2ObjectAnimMode eAnimMode;
@@ -978,6 +995,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
 }
 
 // Object operate-fn for waygate interaction. If the waygate is in Death mode (inactive/just activated), marks it updated and schedules its opening animation. If in Walk mode (active), searches the waygate's room and adjacent rooms for the first UNIT_WARP and calls TakeStairs on the attacking player to warp them. Returns 1 on success.
+// 1.14d mac: 001ef401
 BOOL __fastcall OBJOP_UseWaygate(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
     D2ObjectsTxt* pObjectTxt;
@@ -1044,6 +1062,7 @@ BOOL __fastcall OBJOP_UseWaygate(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f3138
 BOOL __fastcall OBJOP_OpenTimedDoor(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
     POINT ptCoords;
@@ -1087,6 +1106,7 @@ BOOL __fastcall OBJOP_OpenTimedDoor(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001ef3d3
 BOOL __fastcall OBJOP_UseStairAlias(D2ObjectOperateFnArg * pOperation) {
     BOOL bWaygateResult;
     D2UnitStrc* pVictimUnit = pOperation->sArg.pVictim;
@@ -1104,6 +1124,7 @@ BOOL __fastcall OBJOP_UseStairAlias(D2ObjectOperateFnArg * pOperation) {
 }
 
 // Object operate-fn for breakable containers (barrels, chests that shatter). Returns 1 early if the object is alive (not in Death mode). Otherwise marks the object updated, removes its collision, clears or sets UNITFLAG_TARGETABLE based on the txt Selectable flag for the current anim mode, and if Mode[2] is set schedules the opening animation frame event. Always returns 1.
+// 1.14d mac: 001f285e
 BOOL __fastcall OBJOP_OpenSlimeDoor(D2ObjectOperateFnArg * pOperation) {
     if (!pOperation->sArg.pVictim || pOperation->sArg.pVictim->eAnimMode.ePlayerMode == Death) {
       D2Common::Units::ChangeAnimMode(pOperation->sArg.pVictim, 1);
@@ -1127,6 +1148,7 @@ BOOL __fastcall OBJOP_OpenSlimeDoor(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f3602
 static BOOL __stdcall OBJMODE_CheckSpawnMonsterFromSkeletonActRestriction(int32_t nMonClassId, D2RoomStrc * pRoom) {
     eD2LevelId eLevel;
     if (nMonClassId == 0xea && pRoom) {
@@ -1141,6 +1163,7 @@ static BOOL __stdcall OBJMODE_CheckSpawnMonsterFromSkeletonActRestriction(int32_
     return 1;
 }
 
+// 1.14d mac: 001f3636
 static void OBJMODE_SpawnMonsterFromObject(D2ObjectModeArg * pObjectModeArg, int32_t nMonsterId, eD2MonsterAnimMode eMonsterAnimMode) {
     eD2LevelId eLevel;
     if (!(nMonsterId >= 0 && nMonsterId < D2Common::ITEMS::Items::sgptDataTable->nTxtMonStatsSize)) {
@@ -1170,6 +1193,7 @@ static void OBJMODE_SpawnMonsterFromObject(D2ObjectModeArg * pObjectModeArg, int
     Monster::Create::SpawnMonsterBase(pObjectModeArg->pGame, pObjectModeArg->pVictim, nMonsterId, eMonsterAnimMode, 3, 0);
 }
 
+// 1.14d mac: 001f356c
 void __fastcall OBJMODE_SpawnRandomMonsters(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2ObjectOperateFnArg sOperation;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pUnit);
@@ -1188,6 +1212,7 @@ void __fastcall OBJMODE_SpawnRandomMonsters(::SGAMEDATA * pGame, D2UnitStrc * pU
     }
 }
 
+// 1.14d mac: 001f378a
 void __fastcall OBJMODE_SpawnCompanionChests(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2DrlgRoomCoordsStrc roomCoords;
     POINT ptCoords;
@@ -1207,6 +1232,7 @@ void __fastcall OBJMODE_SpawnCompanionChests(::SGAMEDATA * pGame, D2UnitStrc * p
     UNIT::SUnit::SetSparklyChestFlag(UNIT::SUnit::CreateUnit(UNIT_OBJECT, 0xa0, nChestPosX, ptCoords.y, pGame, D2Common::Units::UNITS_GetRoom(pUnit), 1, 1, 0), '\x02');
 }
 
+// 1.14d mac: 001f388b
 static void OBJMODE_SpawnMonsterAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nClassId) {
     POINT ptCoords;
     D2RoomStrc* pFreeRoom;
@@ -1230,18 +1256,22 @@ static void OBJMODE_SpawnMonsterAtObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit
     Monster::Create::SpawnMonsterAtRoomPos(pGame, pFreeRoom, ptCoords.x, ptCoords.y, nClassId, eD2MonsterAnimMode_ns::Neutral, 3, 8);
 }
 
+// 1.14d mac: 001f3716
 void __fastcall OBJMODE_SpawnSiegeMonsterA(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     OBJMODE_SpawnMonsterAtObject(pGame, pUnit, 0x14a);
 }
 
+// 1.14d mac: 001f3733
 void __fastcall OBJMODE_SpawnSiegeMonsterB(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     OBJMODE_SpawnMonsterAtObject(pGame, pUnit, 0x146);
 }
 
+// 1.14d mac: 001f3750
 void __fastcall OBJMODE_SpawnSiegeMonsterC(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     OBJMODE_SpawnMonsterAtObject(pGame, pUnit, 0x149);
 }
 
+// 1.14d mac: 001f376d
 void __fastcall OBJMODE_SpawnSiegeMonsterD(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     OBJMODE_SpawnMonsterAtObject(pGame, pUnit, 0x171);
 }
@@ -1306,6 +1336,7 @@ static BOOL OBJMODE_CheckInventoryHasItemType(eD2ItemTypes eItemType, D2UnitStrc
 // Obelisk operate fn (OperateFn 17). If the object is closed and the player is not trading, checks the player's inventory for a gem; without one it plays a sound, with one it sets the interact target, marks the object open (update flag 3) and sends SCMD 0x58 to open the UI. When open and matching the current interaction it closes it.
 // Slot from objects.txt OperateFn 17.
 // @sourcefile .\OBJECTS\ObjMode.cpp
+// 1.14d mac: 001f202f
 BOOL __fastcall OBJOP_UseObelisk(D2ObjectOperateFnArg * pOperation) {
     BOOL _bHasGemInInventory;
     bool bHasGemInInventory;
@@ -1355,6 +1386,7 @@ BOOL __fastcall OBJOP_UseObelisk(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f4faf
 uint32_t __fastcall UNIT_IsAlive(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFindArg) {
     uint32_t bAlive = 1;
     if (!pUnit) {
@@ -1370,6 +1402,7 @@ uint32_t __fastcall UNIT_IsAlive(D2UnitStrc * pUnit, D2UnitFindArgStrc * pUnitFi
 }
 
 // Returns 1 if pUnit is a valid targetable monster for pUnit2 (e.g. for shrine/object counter-attack targeting). Checks: pUnit != pUnit2, is UNIT_MONSTER, not an ally of pUnit2, neutral alignment, not dead, in Neutral or Walk anim mode, has the required monster stat flag (index 2), has a non-zero Height in MonStats2, and is neither a boss nor flagged by MonStatFlag bit 7 nor of type 0x1F. Returns 0 otherwise.
+// 1.14d mac: 001f4e83
 uint32_t __fastcall OBJECT_CanTargetMonster(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     BOOL _bIsAlly;
     bool bIsAlly;
@@ -1445,6 +1478,7 @@ D2StatListExStrc * __fastcall ApplyShrineBonus(D2UnitStrc * pUnit, D2UnitStrc * 
     return pDVar1;
 }
 
+// 1.14d mac: 001f3b76
 void __fastcall Shrines_HealthBoostFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int nCurrentHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pArguments->pAttacker, UNITSTAT_hitpoints, 0);
     int32_t nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pArguments->pAttacker);
@@ -1455,6 +1489,7 @@ void __fastcall Shrines_HealthBoostFunction(D2ObjectOperateFnArg * pArguments, D
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pArguments->pAttacker, UNITSTAT_hitpoints, nMaxHp - nCurrentHp, 0);
 }
 
+// 1.14d mac: 001f3bd5
 void __fastcall Shrines_ManaBoostFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int nCurrentMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pArguments->pAttacker, UNITSTAT_mana, 0);
     int32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pArguments->pAttacker);
@@ -1465,6 +1500,7 @@ void __fastcall Shrines_ManaBoostFunction(D2ObjectOperateFnArg * pArguments, D2S
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pArguments->pAttacker, UNITSTAT_mana, nMaxMana - nCurrentMana, 0);
 }
 
+// 1.14d mac: 001f3b55
 void __fastcall Shrines_RefillFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int nCurrentStat = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pArguments->pAttacker, UNITSTAT_hitpoints, 0);
     int32_t nMaxStat = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pArguments->pAttacker);
@@ -1481,6 +1517,7 @@ void __fastcall Shrines_RefillFunction(D2ObjectOperateFnArg * pArguments, D2Shri
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pArguments->pAttacker, UNITSTAT_mana, nMaxStat - nCurrentStat, 0);
 }
 
+// 1.14d mac: 001f3c34
 void __fastcall Shrines_HealthExchangeFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int nCurrentHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pArguments->pAttacker, UNITSTAT_hitpoints, 0) >> 8;
     uint32_t uHpDelta = (pTxtShrines->dwArg0 * nCurrentHp / 100) << 8;
@@ -1488,6 +1525,7 @@ void __fastcall Shrines_HealthExchangeFunction(D2ObjectOperateFnArg * pArguments
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pArguments->pAttacker, UNITSTAT_mana, pTxtShrines->dwArg1 * uHpDelta / 100, 0);
 }
 
+// 1.14d mac: 001f3cce
 void __fastcall Shrines_ManaExchangeFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int nCurrentMana = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pArguments->pAttacker, UNITSTAT_mana, 0);
     uint32_t uManaDelta = pTxtShrines->dwArg0 * nCurrentMana / 100;
@@ -1495,6 +1533,7 @@ void __fastcall Shrines_ManaExchangeFunction(D2ObjectOperateFnArg * pArguments, 
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pArguments->pAttacker, UNITSTAT_hitpoints, pTxtShrines->dwArg1 * uManaDelta / 100, 0);
 }
 
+// 1.14d mac: 001f4117
 void __fastcall Shrines_ShrineOfEnirhsFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     D2UnitDataPlayerStrc* pPlayerData = D2Common::Units::GetPlayerData(pArguments->pAttacker);
     if (!pPlayerData) {
@@ -1505,6 +1544,7 @@ void __fastcall Shrines_ShrineOfEnirhsFunction(D2ObjectOperateFnArg * pArguments
     strncpy(pPlayerData->szCharName, _strrev(pPlayerData->szCharName), nNameLen);
 }
 
+// 1.14d mac: 001f4154
 void __fastcall Shrines_PortalShrineFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     uint32_t _eStack_8;
     POINT ptAttackerCoords;
@@ -1529,6 +1569,7 @@ void __fastcall Shrines_PortalShrineFunction(D2ObjectOperateFnArg * pArguments, 
 }
 
 // Two GuardStack tails: GuardStack(1) after successful spawn/removal, GuardStack(nReturnValue) where nReturnValue is explicitly set to 0 (no spawn spot) or 1 (spawned) elsewhere.
+// 1.14d mac: 001f4ff6
 static BOOL __stdcall Shrines_GemShrine_SpawnGem(int32_t nItemClassId, D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2) {
     BOOL BVar1;
     POINT ptUnitCoords;
@@ -1586,6 +1627,7 @@ static BOOL __stdcall Shrines_GemShrine_SpawnGem(int32_t nItemClassId, D2UnitStr
 }
 
 // Gem Shrine activation handler. Iterates the activating player's gem inventory (type 0x14) and upgrades the first upgradeable gem by spawning its BetterGem entry via Shrines_GemShrine_SpawnGem. If no upgrade is possible (no gems or all already max-grade), picks a random chipped gem type (gcw/gcr/gcg/gcb/gcy/gcv) by seeding on the player unit and spawns it. Halts with an internal error if a gem item code fails to resolve.
+// 1.14d mac: 001f4222
 void __fastcall Shrines_GemShrineFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int32_t nItemClassId;
     BOOL bGemSpawnSucceeded;
@@ -1653,6 +1695,7 @@ void __fastcall Shrines_GemShrineFunction(D2ObjectOperateFnArg * pArguments, D2S
 }
 
 // Server-side activation effect for a Storm/Tempest shrine (operate handler, D2ObjectOperateFnArg + ShrinesTxt). Two-phase: (1) finds all alive units within ShrinesTxt.dwArg1 tiles of the operating unit via InitializeUnitFindData/FindAllMatchingUnitsInNeighboredRooms and drains a percentage (dwArg0-based, ~ /100) of each monster/player target's hitpoints via STATLIST_AddUnitStat; (2) spawns a 5x5 ring/grid of MISSILE_Fireball missiles around the unit (offsets -5..+25 step 5, alternating sides), owned by pAttacker, with missile level capped 1..8 from the owner's level/5. No return.
+// 1.14d mac: 001f4397
 void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     BOOL bIsDead;
     int nHpReduction;
@@ -1775,6 +1818,7 @@ void __fastcall Shrines_StormShrineFunction(D2ObjectOperateFnArg * pArguments, D
     } while (uSlotC.nRingOffset < 0x19);
 }
 
+// 1.14d mac: 001f46a3
 void __fastcall Shrines_WarpingShrineFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int nAttackerPosY;
     int32_t nAttackerPosX;
@@ -1807,6 +1851,7 @@ void __fastcall Shrines_WarpingShrineFunction(D2ObjectOperateFnArg * pArguments,
 }
 
 // Operate handler for an exploding/gizzard shrine (D2ObjectOperateFnArg + D2ShrinesTxt). Uses the shrine victim's RNG seed to roll a count between dwArg0..dwArg1, then spawns that many "opm " (mana potion) items near the attacker via FindBestSpotToSpawnItem + ITEM_CreateItemInstance (quantity 1, mode 3), linking each to the room update list. Then fires a fixed ring of 6 missiles (CreatingMissile) at offsets (+/-6,-6) around the shrine's position, with skill level = clamp(attacker level/5, 1..8). Server-side object operate effect; no return.
+// 1.14d mac: 001f4757
 void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     D2RoomStrc* pSpawnRoom;
     int nLevel;
@@ -1921,6 +1966,7 @@ void __fastcall Shrines_ExplodingShrineFunction(D2ObjectOperateFnArg * pArgument
 }
 
 // Object operate handler for a Poison shrine. Using the shrine unit's seed, spawns dwArg0..dwArg1 random potion items ("gpm" item code) at the best free spot near the attacker via FindBestSpotToSpawnItem + ITEM_CreateItemInstance (quantity 1, DOUPDATE). Then fires 6 poison missiles in a fixed offset spread (the aMissileOffsets ring) centered on the shrine, with skill level scaled by attacker level/5 (clamped 1..8). Side effect: advances the shrine seed.
+// 1.14d mac: 001f4aed
 void __fastcall Shrines_PoisonShrineFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     D2RoomStrc* pSpawnRoom;
     int nLevel;
@@ -2072,6 +2118,7 @@ static void __stdcall SKILL_GetAttackRateForWeapon(D2UnitStrc * pUnit, D2SkillSt
 }
 
 // Returns a shrine's effective stat bonus for the given unit stat. For most stats (resistances, stamina, experience, etc.) returns nParam unchanged. For UNITSTAT_tohit, computes the attack rate via SKILL_GetAttackRateForWeapon. For UNITSTAT_mindamage, resolves whether to use primary or secondary min-damage stat based on dual-wield handedness, then fetches the raw stat value and scales it as (statValue * nParam) / 100.
+// 1.14d mac: 001f5203
 static int32_t __stdcall OBJMODE_GetModifiedStatValueFromShrine(eD2UnitStat eUnitStat, int32_t nBoostValue, D2UnitStrc * pUnit) {
     D2SkillStrc* pSkill;
     D2UnitStrc* pWeaponBySkill;
@@ -2122,6 +2169,7 @@ static int32_t __stdcall OBJMODE_GetModifiedStatValueFromShrine(eD2UnitStat eUni
     return (int)(eUnitStat * nBoostValue) / 100;
 }
 
+// 1.14d mac: 001f3e45
 void __fastcall Shrines_CombatBoostFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int32_t nLine;
     uint8_t byShrineCode = pTxtShrines->nCode;
@@ -2135,12 +2183,14 @@ void __fastcall Shrines_CombatBoostFunction(D2ObjectOperateFnArg * pArguments, D
     D2Common::Stats::StatsEx::STATLIST_SetStatValue(pStatEx, UNITSTAT_tohit, nLine, 0);
 }
 
+// 1.14d mac: 001f5465
 void __fastcall SHRINE_OnStaminaExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     SKILLS::SkillsServer::DefaultExpireFunction(pUnit, eState, dwParam);
     int32_t nValue = D2Common::Stats::StatsEx::STATLIST_GetMaxStaminaFromUnit(pUnit);
     D2Common::Stats::StatsEx::STATLIST_SetUnitStat(pUnit, UNITSTAT_stamina, nValue, 0);
 }
 
+// 1.14d mac: 001f3fd0
 void __fastcall Shrines_StaminaBoostFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int32_t pvStatValue;
     uint32_t uShrineCode = (uint32_t)pTxtShrines->nCode;
@@ -2157,6 +2207,7 @@ void __fastcall Shrines_StaminaBoostFunction(D2ObjectOperateFnArg * pArguments, 
     D2Common::Stats::StatsEx::STATLIST_SetStatValue(pStatEx, UNITSTAT_staminarecoverybonus, 1000, 0);
 }
 
+// 1.14d mac: 001f3d62
 void __fastcall Shrines_StatBoostFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     int32_t nModifiedStatValue;
     uint32_t uShrineIdx = (uint32_t)pTxtShrines->nCode;
@@ -2177,11 +2228,13 @@ void __fastcall SKILLS_UpdatePassivesAndPets_Thunk(::SGAMEDATA * pGame, D2UnitSt
     SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets((D2UnitStrc*)pGame);
 }
 
+// 1.14d mac: 001f54af
 void __fastcall SHRINE_OnSkillExpire(D2UnitStrc * pUnit, eD2States eState, D2StatListExStrc * dwParam) {
     SKILLS::SkillsServer::DefaultExpireFunction(pUnit, eState, dwParam);
     SKILLS::SkillsServer::SKILLS_UpdatePassivesAndPets(pUnit);
 }
 
+// 1.14d mac: 001f3f36
 void __fastcall Shrines_SkillBoostFunction(D2ObjectOperateFnArg * pArguments, D2ShrinesTxt * pTxtShrines) {
     D2StateExArgStrc stateArg;
     memset(&stateArg, 0, sizeof(stateArg));
@@ -2199,6 +2252,7 @@ void __fastcall Shrines_SkillBoostFunction(D2ObjectOperateFnArg * pArguments, D2
 }
 
 // Object operate-handler invoked when a player activates a shrine. Guards against re-use (bails if already activated or wrong anim mode), records the activating player's GUID, marks the object dirty/update, and builds+attaches a floating hover-text label (shrine name string). Then looks up the shrine's D2ShrinesTxt record and dispatches its specific effect via OBJECTSHRINEFUNCTION[nCode].fpShrineHandler (falling back to Shrines_RefillFunction if none), validating the pointer with IsBadCodePtr. Schedules the shrine-reset event (nResetTimeInMins) and an object anim event. Returns Fog::GuardStack result (BOOL).
+// 1.14d mac: 001f092d
 BOOL __fastcall OBJOP_ActivateShrine(D2ObjectOperateFnArg * pOperation) {
     D2HoverTextStrc* pHoverText;
     D2ShrinesTxt* pTxtShrines_lcl;
@@ -2289,6 +2343,7 @@ BOOL __fastcall OBJOP_ActivateShrine(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f2a10
 BOOL __fastcall OBJOP_SpawnRewardItem(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
@@ -2307,6 +2362,7 @@ BOOL __fastcall OBJOP_SpawnRewardItem(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f3020
 BOOL __fastcall OBJOP_TimedDestructible(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!(!pUnit || pUnit->eAnimMode.ePlayerMode == Death)) {
@@ -2338,6 +2394,7 @@ BOOL __fastcall OBJOP_TimedDestructible(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f21b6
 BOOL __fastcall OBJOP_OpenSecretDoor(D2ObjectOperateFnArg * pOperation) {
     D2ObjectsTxt* pTxtObjects;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
@@ -2359,6 +2416,7 @@ BOOL __fastcall OBJOP_OpenSecretDoor(D2ObjectOperateFnArg * pOperation) {
 }
 
 // Object operate-fn that drops a randomized quest item reward from a chest object. If the object is already opened (Death mode or null), marks it updated, clears UNITFLAG_TARGETABLE, and uses the operation seed to randomly select one of four item codes ('tsc ', 'ics ', 'tbk ', 'ibk ') based on a 20-bucket seed threshold. Sets dwDropItemCode on the victim and calls ITEM_RewardItemToDrop with ITEMTYPE_Shield to spawn the chosen item. Always returns 1.
+// 1.14d mac: 001f2684
 BOOL __fastcall OBJOP_SearchBookshelf(D2ObjectOperateFnArg * pOperation) {
     POINT ptPos;
     int32_t nDropArg;
@@ -2395,6 +2453,7 @@ BOOL __fastcall OBJOP_SearchBookshelf(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f224e
 BOOL __fastcall OBJOP_SpawnArmorDrop(D2ObjectOperateFnArg * pOperation) {
     int32_t nDropLevel;
     int32_t nPlayerGUID;
@@ -2418,6 +2477,7 @@ BOOL __fastcall OBJOP_SpawnArmorDrop(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f22d9
 BOOL __fastcall OBJOP_SpawnWeaponDrop(D2ObjectOperateFnArg * pOperation) {
     POINT ptPos;
     int32_t nDropLevel;
@@ -2486,6 +2546,7 @@ static int OBJMODE_ApplyCounterAttackToNearbyUnits(D2ObjectOperateFnArg * ppGame
     return 0;
 }
 
+// 1.14d mac: 001f13d8
 BOOL __fastcall OBJOP_DetonateExplosiveBarrel(D2ObjectOperateFnArg * pOperation) {
     ::SGAMEDATA* pGame;
     D2ObjectsTxt* pTxtObjects;
@@ -2507,6 +2568,7 @@ BOOL __fastcall OBJOP_DetonateExplosiveBarrel(D2ObjectOperateFnArg * pOperation)
     return 0;
 }
 
+// 1.14d mac: 001f1783
 BOOL __fastcall OBJOP_ActivateSimple(D2ObjectOperateFnArg * pOperation) {
     eD2ObjectAnimMode eAnimMode;
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
@@ -2532,6 +2594,7 @@ BOOL __fastcall OBJOP_ActivateSimple(D2ObjectOperateFnArg * pOperation) {
     return 0;
 }
 
+// 1.14d mac: 001f1728
 BOOL __fastcall OBJOP_OperateFunction11(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pUnit = pOperation->sArg.pVictim;
     if (!pUnit || pUnit->eAnimMode.ePlayerMode == Death) {
@@ -2549,6 +2612,7 @@ BOOL __fastcall OBJOP_OperateFunction11(D2ObjectOperateFnArg * pOperation) {
 }
 
 // Server entry-point for a player interacting with a world object. Looks up the object unit by nUnitId/pUId, reads its ObjectsTxt record, and guards against interaction while the player is trading, has interact state set, or is holding a cursor item (except for class 0x10b). Dispatches to OBJECTSOPERATEFN[pTxt->OperateFn] with a fully populated D2ObjectOperateFnArg. Skips classes 0x79, 0x7a, and 0x16. Halts with an unrecoverable error if OperateFn >= 0x65.
+// 1.14d mac: 001ef9ca
 BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nUnitId, DWORD pUId, int * pTxt) {
     *pTxt = 1;
     D2UnitStrc* pUnit_00 = UNIT::SUnit::FindUnitFromTable(pGame, nUnitId & 0xffff, pUId);
@@ -2583,6 +2647,7 @@ BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
     return 0;
 }
 
+// 1.14d mac: 001efb2a
 ::SGAMEDATA * __fastcall Interact(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t nObjectType, DWORD nGid) {
     BOOL bInRange;
     D2UnitStrc* pObject = UNIT::SUnit::FindUnitFromTable(pGame, nObjectType & 0xffff, nGid);
@@ -2611,6 +2676,7 @@ BOOL __fastcall InteractWithObject(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint
     return pResultFlags;
 }
 
+// 1.14d mac: 001efbcb
 void __fastcall OBJECT_UpdateCollisionOnModeChange(::SGAMEDATA * pGame, D2UnitStrc * pPlayer, DWORD nGid) {
     eCollisionFlags wCollisionResult;
     POINT ptPos;
@@ -2656,6 +2722,7 @@ static inline eD2PlayerAnimMode GetAnimModeInline(D2UnitStrc * pUnit) {
     }
     return (eD2PlayerAnimMode)0;
 }
+// 1.14d mac: 001f2b13
 BOOL __fastcall OBJOP_A2Q4_ArcaneSanctuaryPortal(D2ObjectOperateFnArg * pOperation) {
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
     eD2LevelId eLevelId = D2Common::DUNGEON::Dungeon::DRLGROOM_GetLevelIdFromRoom(pRoom);
@@ -2681,6 +2748,7 @@ BOOL __fastcall OBJOP_A2Q4_ArcaneSanctuaryPortal(D2ObjectOperateFnArg * pOperati
 }
 
 // Object operate-fn (index 46): activates the portal to Act 4 (Pandemonium Fortress). Guards: victim object must be alive (not Death mode) and the attacker must have QUEST_TheGuardian in JustCompleted or Completed state. Calls QUEST_HandleKhalimsWillCompletion, and if the victim is in DuranceOfHateLevel3 also unlocks the ThePandemoniumFortress waypoint and calls InitLevel to load Act 4. Returns 0.
+// 1.14d mac: 001f2de1
 BOOL __fastcall Objects_OperateFn46_PortalToAct4(D2ObjectOperateFnArg * pOperation) {
     int32_t nWaypointId;
     D2RoomStrc* pRoom = D2Common::Units::UNITS_GetRoom(pOperation->sArg.pVictim);
@@ -2707,6 +2775,7 @@ BOOL __fastcall Objects_OperateFn46_PortalToAct4(D2ObjectOperateFnArg * pOperati
     return 0;
 }
 
+// 1.14d mac: 001efce0
 void __fastcall OBJMODE_ClearObjectUnitLink(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pObject) {
     D2UnitStrc* pLinkedUnit;
     if (!(pObject && pObject->nClassId == 0x151)) {
@@ -2724,6 +2793,7 @@ void __fastcall OBJMODE_ClearObjectUnitLink(::SGAMEDATA * pGame, D2UnitStrc * pU
 
 // Object operate-handler #15: a player activating a town/level portal object. Validates the attacker (not trading/busy, hostility/party checks vs portal owner, 5s hostile-attack cooldown). For a blue town portal (objclass 0x3b) it spawns/locates the destination level via Dungeon::SpawnUnit and checks the matching quest-completion flag; otherwise teleports to the linked portal unit's position. Finds free destination coordinates (GetFreeCoordinates_WithNeighboorRooms), relocates the attacker (SUNIT_RelocateUnit) and broadcasts a 0x0D PlayerStop. For a red portal (objclass 0x3c) consumes/frees both portal endpoints (Arreat-summit special-case) or schedules a close event. Sets STATE_just_portaled and a 0x4b-frame stat-list cooldown. Halts with an unrecoverable error if relocation fails. Always returns FALSE.
 // @sourcefile .\OBJECTS\ObjMode.cpp
+// 1.14d mac: 001f18a3
 BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
     // Frame slots -16..-4 are ONE object: &nSpawnPosY is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2985,6 +3055,7 @@ BOOL __fastcall Objects_OperateFn15_Portal(D2ObjectOperateFnArg * pOperation) {
 }
 
 // Object-operate callback that activates a portal object (e.g. Duriel's lair portal or a Rift). Only processes UNIT_PLAYER attackers; halts otherwise. Sets portal flags |= 5 on the victim object. Determines destination level (LEVEL_DurielsLair for classId 100, or Components[0] for classId 0x179). Calls SpawnUnit on the destination act, finds free collision-safe coordinates, then relocates the attacking player to that position via SUNIT_RelocateUnit. Halts with an internal error if the act index is out of range, no room is found, or relocation fails.
+// 1.14d mac: 001f2c16
 BOOL __fastcall OBJOP_ActivatePortalObject(D2ObjectOperateFnArg * pOperation) {
     BOOL bRelocated;
     eAct eDestAct;
@@ -3058,6 +3129,7 @@ BOOL __fastcall OBJOP_ActivatePortalObject(D2ObjectOperateFnArg * pOperation) {
 
 // Object operate callback invoked when a player interacts with a waypoint object. Unlocks the corresponding waypoint in the player's per-difficulty save data via FindWaypointIdByLevelId/EnableWaypoint, then either plays the activation animation (if the object is in Death/Neutral mode) or opens the waypoint menu packet (NET_D2GS_SERVER_Send_0x63_WaypointMenu) and sets the player's interact-info if the player is idle/walking and not trade-busy.
 // @sourcefile .\OBJECTS\ObjMode.cpp
+// 1.14d mac: 001eff9a
 BOOL __fastcall OBJOP_ActivateWaypoint(D2ObjectOperateFnArg * pOperation) {
     int32_t bPlayerBusy;
     D2ClientStrc* pClient;
@@ -3114,6 +3186,7 @@ BOOL __fastcall OBJOP_ActivateWaypoint(D2ObjectOperateFnArg * pOperation) {
 }
 
 // @sourcefile .\OBJECTS\ObjMode.cpp
+// 1.14d mac: 001efd3d
 void __fastcall TakeWaypoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nwpId, uint16_t nWaypointMasks) {
     int nSpawnX;
     int nSpawnY;
@@ -3181,6 +3254,7 @@ void __fastcall TakeWaypoint(::SGAMEDATA * pGame, D2UnitStrc * pUnit, DWORD nwpI
     ObjectsRgn::AllocObjectControlSub0x1110(pGame, pUnit, pRoomOther);
 }
 
+// 1.14d mac: 001f063e
 uint32_t __fastcall OBJMODE_ShrineManaRefill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nBoostAmount) {
     int32_t nMaxMana = D2Common::Stats::StatsEx::STATLIST_GetMaxManaFromUnit(pUnit);
     int nValue = nMaxMana + nBoostAmount * 0x100;
@@ -3189,26 +3263,31 @@ uint32_t __fastcall OBJMODE_ShrineManaRefill(::SGAMEDATA * pGame, D2UnitStrc * p
     return 1;
 }
 
+// 1.14d mac: 001f06a1
 uint32_t __fastcall OBJMODE_ShrineEnergyBoost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nBoostAmount) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_energy, nBoostAmount, 0);
     return 1;
 }
 
+// 1.14d mac: 001f06d3
 uint32_t __fastcall OBJMODE_ShrineDexterityBoost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nBoostAmount) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_dexterity, nBoostAmount, 0);
     return 1;
 }
 
+// 1.14d mac: 001f0705
 uint32_t __fastcall OBJMODE_ShrineVitalityBoost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nBoostAmount) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_vitality, nBoostAmount, 0);
     return 1;
 }
 
+// 1.14d mac: 001f0737
 uint32_t __fastcall OBJMODE_ShrineStrengthBoost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nBoostAmount) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_strength, nBoostAmount, 0);
     return 1;
 }
 
+// 1.14d mac: 001f0769
 uint32_t __fastcall OBJMODE_ShrineHealthRefill(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nBoostAmount) {
     int32_t nMaxHp = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
     int nValue = nMaxHp + nBoostAmount * 0x100;
@@ -3217,6 +3296,7 @@ uint32_t __fastcall OBJMODE_ShrineHealthRefill(::SGAMEDATA * pGame, D2UnitStrc *
     return 1;
 }
 
+// 1.14d mac: 001f07cc
 uint32_t __fastcall OBJMODE_ShrineSkillPointBoost(::SGAMEDATA * pGame, D2UnitStrc * pUnit, int32_t nBoostAmount) {
     D2Common::Stats::StatsEx::STATLIST_AddUnitStat(pUnit, UNITSTAT_newskills, nBoostAmount, 0);
     return 1;
@@ -3464,6 +3544,7 @@ void __fastcall OBJMODE_HandleObjectDeactivation(::SGAMEDATA * pGame, D2UnitStrc
 }
 
 // NOTE: Register param types inferred (medium confidence): pGameStrc (ECX): SGAMEDATA *, pUnit (EDX): D2UnitStrc *
+// 1.14d mac: 001f04b2
 void __fastcall OBJMODE_OnWaypointFinish(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->nClassId : -1) == 0x151) {
       D2TimerArgStrc* pTimerArg;
@@ -3532,6 +3613,7 @@ void __stdcall OBJMODE_FinalizePortalLink_HaltTail(int nLine) {
     exit(-1);
 }
 
+// 1.14d mac: 001f3a53
 void __stdcall OBJECT_HandleUnitRevival(D2UnitStrc * pUnit, bool * pbRevived) {
     int nCurHp = D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_hitpoints, 0);
     int32_t nValue = D2Common::Stats::StatsEx::STATLIST_GetMaxLifeFromUnit(pUnit);
@@ -3621,6 +3703,7 @@ static BOOL __stdcall OBJMODE_ApplyWellHealing(::SGAMEDATA * pGame, D2ObjectsTxt
     return eHealed;
 }
 
+// 1.14d mac: 001f2364
 BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
     int nDefaultSize;
     eD2UnitType eHealedType;
@@ -3654,6 +3737,7 @@ BOOL __fastcall OBJOP_ActivateHealingWell(D2ObjectOperateFnArg * pOperation) {
 }
 
 // Spawns a single item drop near a unit. Converts a 4-char item code to a class ID, finds the best nearby open spawn tile via FindBestSpotToSpawnItem, and calls ITEM_CreateItemInstance with the given quality and a level derived from the source unit. No-ops silently if the item code is invalid or no spawn tile is found.
+// 1.14d mac: 001f04f7
 D2UnitStrc * __fastcall SpawnDrop(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint32_t sCode, eD2ItemQuality eItemQuality) {
     D2UnitStrc* pDVar1;
     POINT ptUnitPos;
@@ -3727,6 +3811,7 @@ D2UnitStrc * __fastcall OBJMODE_DropItemAtPosition(::SGAMEDATA * pGame, D2UnitSt
 }
 
 // Server-side loot roll for an opened chest object. Resolves the chest's room level, determines act and difficulty-scaled monster level tier, selects the appropriate treasure class via RollTreasureClass, and calls SERVER_ITEM_RollItemToDrop to generate up to 6 drop items. Returns the first dropped item unit, or NULL on any lookup failure.
+// 1.14d mac: 001ef7bc
 D2UnitStrc * * __fastcall RollChestDrops(D2ObjectOperateFnArg * pUnitKill, eD2ItemQuality eQuality) {
     // Static local variables (originally global data)
     static eD2LevelId eLevelId_ActLevels[5][2] = {
@@ -3804,6 +3889,7 @@ D2UnitStrc * * __fastcall RollChestDrops(D2ObjectOperateFnArg * pUnitKill, eD2It
 }
 
 // Drives the death/destruction sequence of an object unit based on its current animation mode. In Neutral mode, schedules a death event 10 frames out. In Walk mode, increments a hit-count component; on the first hit triggers a proximity effect and re-schedules; on the second hit rolls chest drops and schedules the final death animation. In Run mode, marks the unit destroyed immediately (update flag 4). No-ops for any other mode.
+// 1.14d mac: 001eefed
 void __fastcall KillUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     uint8_t byHitCount;
     int32_t nClassId;
@@ -3862,6 +3948,7 @@ void __fastcall KillUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // Object operate callback for missile-killed barrel/urn-type objects. Early-exits if the victim is not already in Death mode. Rolls three gold drops via RollChestDrops, then queries the victim's max HP and MP char-codes: for each non-zero code it stores dwDropItemCode and calls ITEM_RewardItemToDrop twice (HP then MP). After drops, either queues an open animation (Mode[1] flag) or marks the object destroyed and clears UNITFLAG_TARGETABLE. Halts with an error if char-codes are unexpectedly zero.
+// 1.14d mac: 001ef579
 void __fastcall SERVER_MissleKilled(D2ObjectOperateFnArg * pKill) {
     POINT ptPos;
     int32_t nDropArg;
@@ -3913,6 +4000,7 @@ void __fastcall SERVER_MissleKilled(D2ObjectOperateFnArg * pKill) {
 
 // Server-side object-operate handler for opening a sparkly/special chest (and the Hardcore corpse/necro variant). Validates the chest is in its death/opened anim, then rolls its loot table via RollChestDrops using seed RNG: special classes (e.g. classId 0x18d) roll a weighted item-type bucket (body part / bow/crossbow quiver / gold piles), with retry loops to guarantee at least some magic-or-better drops; the necro-flagged variant (Components[0] bit 0x80) gates on the attacker class and forces extra gold/potion (gld/hp3/mp3) SpawnDrop bursts. Finally sets the chest's opened update-flag (immediate or timed via SetEvent on FrameCnt), clears UNITFLAG_TARGETABLE, drops any attached reward item, and dispatches the operate callback. Returns 1.
 // @sourcefile .\OBJECTS\ObjMode.cpp
+// 1.14d mac: 001f0c8c
 BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
     D2SeedStrc* pDVar1;
     ::SGAMEDATA* pGame;
@@ -4192,6 +4280,7 @@ BOOL __fastcall OBJOP_OpenSparklyChest(D2ObjectOperateFnArg * pOperation) {
 }
 
 // Object operate callback for trapped chests. If the chest object is in Death/pre-open state, rolls chest drops; on a successful roll, marks it open (update flag 1), clears UNITFLAG_TARGETABLE, schedules the open animation event, then probabilistically (seed mod 10000) spawns a monster via OBJMODE_SpawnMonsterFromObject. Removes collision if the txt HasCollision[1] flag is clear, then dispatches any operate sub-callbacks. Always returns TRUE.
+// 1.14d mac: 001f07fe
 BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc** ppDropResult;
     D2RoomStrc* pRoom;
@@ -4233,6 +4322,7 @@ BOOL __fastcall OBJOP_OpenChestSpawnMonster(D2ObjectOperateFnArg * pOperation) {
 }
 
 // Object-operate callback for boss chests that can spawn a unique monster pack. If the chest is in Death mode or null, rolls drops via RollChestDrops (ITEMTYPE_None1). On success: marks object as updated, clears UNITFLAG_TARGETABLE, schedules an animation-end event, then rolls (via chest Parm+0x1e threshold from seed) whether to spawn a unique pack. If yes, finds the first monster-region entry for the chest's level with GetSomeMonsterStatFlag==2 (unique-capable) and calls SpawnUniquePack. Finally removes collision if HasCollision[1] is false and dispatches the operate callback. Always returns 1.
+// 1.14d mac: 001f3269
 BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(D2ObjectOperateFnArg * pOperation) {
     D2UnitStrc* pVictim = pOperation->sArg.pVictim;
     if (!(!pVictim || pVictim->eAnimMode.ePlayerMode == Death)) {
@@ -4277,6 +4367,7 @@ BOOL __fastcall OBJOP_OpenBossChestSpawnUniques(D2ObjectOperateFnArg * pOperatio
     return 1;
 }
 
+// 1.14d mac: 001f3b09
 D2UnitStrc * * __fastcall OBJMODE_RollChestDrops(D2ObjectOperateFnArg * pOperateArg) {
     D2SeedStrc* pSeedPtr = pOperateArg->pSeed;
     uint32_t seedNext = D2_SeedRoll(pSeedPtr);
@@ -4289,6 +4380,7 @@ D2UnitStrc * * __fastcall OBJMODE_RollChestDrops(D2ObjectOperateFnArg * pOperate
     return nullptr;
 }
 
+// 1.14d mac: 001f0bb5
 BOOL __fastcall OBJOP_OpenChestNoMonster(D2ObjectOperateFnArg * pOperation) {
     D2RoomStrc* pRoom;
     D2ObjectsTxt* pTxtObjects;
@@ -4323,6 +4415,7 @@ BOOL __fastcall OBJOP_OpenChestNoMonster(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001f17c3
 BOOL __fastcall OBJOP_OpenContainer(D2ObjectOperateFnArg * pOperation) {
     D2RoomStrc* pRoom;
     D2ObjectsTxt* pTxtObjects;
@@ -4350,6 +4443,7 @@ BOOL __fastcall OBJOP_OpenContainer(D2ObjectOperateFnArg * pOperation) {
     return 1;
 }
 
+// 1.14d mac: 001ef12e
 void __fastcall OBJMODE_RollChestLoot(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
     D2ObjectOperateFnArg sOperation;
     sOperation.sArg.pGame = pGame;
@@ -4362,6 +4456,7 @@ void __fastcall OBJMODE_RollChestLoot(::SGAMEDATA * pGame, D2UnitStrc * pUnit) {
 }
 
 // OperateFn for trap-chest objects. When the chest object is in Death mode (closed/triggered): if the operating player has the Kick skill, sets the chest as skill target and starts the Kick mode via PLRMODES_StartModeID. Clears UNITFLAG_TARGETABLE and removes collision on the chest. Rolls two seeds: one to conditionally spawn a monster (OBJMODE_SpawnMonsterFromObject, p < 1/10000), one to drop items (RollChestDrops, p < 21%). Schedules an object-mode event after FrameCnt[1] frames. When chest returns to Neutral, clears player interact info.
+// 1.14d mac: 001f125c
 BOOL __fastcall OBJOP_OpenTrapChestSkillTrigger(D2ObjectOperateFnArg * pOperation) {
     D2RoomStrc* pRoom;
     D2SkillStrc* pSkill;
@@ -4424,6 +4519,7 @@ BOOL __fastcall OBJOP_OpenTrapChestSkillTrigger(D2ObjectOperateFnArg * pOperatio
 }
 
 // Object operate callback for an unlocked (no-lock) chest. Advances the chest's D2SeedStrc RNG, then on a roll below 90/100 calls RollChestDrops (ITEMTYPE_None1) and sets update-flag 5 on success. On a failed roll (empty chest): sets update-flag 1 and schedules two game events — a frame-delayed open-animation event and a loot-despawn event 20 frames later. Returns 0 in all paths.
+// 1.14d mac: 001f2f01
 BOOL __fastcall OBJOP_OpenUnlockedChest(D2ObjectOperateFnArg * pOperation) {
     int32_t nClassId;
     D2ObjectsTxt* pTxtObjects;

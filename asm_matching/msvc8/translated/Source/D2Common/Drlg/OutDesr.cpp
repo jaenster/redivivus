@@ -120,6 +120,7 @@ D2TombCanyonPresetRegionStrc gaTombCanyonPresetOffsets = {
 namespace D2Common { namespace Drlg { namespace OutDesr {
 
 // Given an array of nVariants preset IDs, rolls the level seed to pick a starting index, then iterates all variants calling SpawnOutdoorLevelPreset for each. If bIterateFiles is set, expands each preset ID to all its LvlPrest file entries and spawns each file separately.
+// 1.14d mac: 00154308
 static void __stdcall PlacePresetVariants(D2DrlgLevelStrc * pLevel, D2LvlPrestId * pLevelPrestIds, uint32_t nVariants, BOOL bIterateFiles) {
     D2LvlPrestTxt* pLvlPrest;
     int nRandVariantIdx;
@@ -346,12 +347,14 @@ static void PlaceCliffs(D2DrlgLevelStrc * pLevel) {
     } while (nEntriesLeft);
 }
 
+// 1.14d mac: 0015408c
 static void AddAct124SecondaryBorderSubId213(D2DrlgLevelStrc * pLevel) {
     Outdoors::AddAct124SecondaryBorder(pLevel, 2, 0x16c);
     Outdoors::AddAct124SecondaryBorder(pLevel, 1, 0x16c);
     Outdoors::AddAct124SecondaryBorder(pLevel, 3, 0x16c);
 }
 
+// 1.14d mac: 001540e3
 void __fastcall AddExits(D2DrlgLevelStrc * pLevel) {
     int32_t nLine;
     switch (pLevel->eD2LevelId) {
@@ -463,6 +466,7 @@ static void PlaceTombEntriesInCanyon(D2DrlgLevelStrc * pLevel) {
     Outdoors::SpawnOutdoorLevelPresetEx(pLevel, 4, 4, 0x18a, -1, 0);
 }
 
+// 1.14d mac: 00154277
 static void PlaceFillsInCanyon(D2DrlgLevelStrc * pLevel) {
     D2LvlPrestId nPresetId0[7];
     nPresetId0[0] = LVLPREST_ACT_2_DESERT_FILL_BONE_1;
@@ -477,6 +481,7 @@ static void PlaceFillsInCanyon(D2DrlgLevelStrc * pLevel) {
 }
 
 // DRLG outdoor-level generator dispatcher for Act 2 wilderness levels. Applies common outdoor setup (SetOutGridLinkFlags, PlaceAct1245OutdoorBorders) then switches on pLevel->eD2LevelId to run the per-level placement for Rocky Waste (0x29), Dry Hills (0x2a), Far Oasis (0x2b), Lost City (0x2c), Canyon of the Magi (0x2e), etc.: placing cliffs/ruins/tomb-entries/preset variants, secondary borders, exits, waypoints, Act1/2 shrines, and level-specific fills. Level 0x86 spawns an extra outdoor preset. Out-of-range/intermediate ids fall through to a no-op return.
+// 1.14d mac: 00153bbc
 void __fastcall InitAct2OutdoorLevel(D2DrlgLevelStrc * pLevel) {
     D2LvlPrestId nPresetId0[2];
     OutPlace::SetOutGridLinkFlags(pLevel);

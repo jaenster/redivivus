@@ -22,6 +22,7 @@ static_assert(sizeof(void*) != 4 || sizeof(::D2QuestDataA2Q0Strc) == 0x84, "D2_N
 namespace D2Game { namespace Quests { namespace QUESTS { namespace A2Q0 {
 
 // A2Q0 (slot 0) = QUEST_SpokeToJerhyn — Act2 "Spoke to Jerhyn" pseudo-quest gating Act3 travel. State-handler 0x0b (gossip-complete). NPC 0xc9=Jerhyn: when his completion dialog (msg 0xfd) fires, mark SpokeToJerhyn done on this difficulty's QuestRecord and flag JustCompleted (triggers Warriv->Act3 travel). NPC 0xf4=Meshif (boat to Act3): on msg 0x7d add this player's GUID (or -1 if none) to the A2Q0 quest-GUID player list (tracks who heard the boat offer).
+// 1.14d mac: 00221e8e
 void __fastcall Q08_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pPlayerData;
     short int nNPCNo = pQuestArgs->sQuestArgs.sNpcMessage.nNPCNo;
@@ -41,6 +42,7 @@ void __fastcall Q08_Callback11_ScrollMessage(D2QuestDataStrc * pQuestData, D2Que
 }
 
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x00 (gossip-select / NPC-talk entry). Branches on target NPC classId. Jerhyn (0xc9): if SpokeToJerhyn not yet Completed, queue his gossip line (string 0). Meshif (0xf4, boat to Act3): only if QUEST_TheSearchForCain is CannotCompleteQuestInGame (Cain already freed elsewhere) AND this player isn't already in the A2Q0 GUID list -> queue Meshif gossip (string 1) and remove player from the A1Q4 (Cain) list. Read-only quest gating; no state writes.
+// 1.14d mac: 00221f2d
 void __fastcall Q08_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     BOOL BVar1;
     int nTargetClassId;
@@ -84,11 +86,13 @@ void __fastcall Q08_Callback00_NpcActivate(D2QuestDataStrc * pQuestData, D2Quest
 }
 
 // A2Q0 QUEST_SpokeToJerhyn — fpStatusFilter. Always returns false: this pseudo-quest has no journal/status entry to filter.
+// 1.14d mac: 002220be
 bool __fastcall Q08_StatusFilter(D2QuestDataStrc * pQuestData, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2BitBufferStrc * pBitBufferEx, BYTE * pbyStatusCode) {
     return false;
 }
 
 // A2Q0 QUEST_SpokeToJerhyn — fpActiveFilter. For Jerhyn (nTargetClassId 0xc9): quest is "active" (return true) only while SpokeToJerhyn is not yet Completed. All other NPCs / completed -> false.
+// 1.14d mac: 002220c5
 bool __fastcall Q08_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetClassId, D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2UnitStrc * pUnitEx) {
     if (nTargetClassId == 0xc9) {
       BOOL BVar1;
@@ -103,12 +107,14 @@ bool __fastcall Q08_ActiveFilter(D2QuestDataStrc * pQuestData, int32_t nTargetCl
 }
 
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x0a (player leave/cleanup). Removes the player's GUID (or -1) from the A2Q0 quest-GUID player list (counterpart to Callback_11's add-to-list).
+// 1.14d mac: 0022202f
 void __fastcall Q08_Callback10_PlayerLeavesGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     D2QuestDataA2Q0Strc* t2_c0 = pQuestData->pQuestSpecificData.pA2Q0;
     QUESTGUID_RemovePlayerFromList(&t2_c0->sQuestGUID, !pQuestArgs->pPlayer ? -1 : pQuestArgs->pPlayer->nUnitGUID);
 }
 
 // A2Q0 QUEST_SpokeToJerhyn — state-handler 0x0d (re-sync on join/refresh). If SpokeToJerhyn is already Completed for this difficulty, re-broadcast JustCompleted so the Warriv->Act3 travel option is (re)opened for the player.
+// 1.14d mac: 0022205e
 void __fastcall Q08_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D2QuestArgStrc * pQuestArgs) {
     ::SGAMEDATA* pGame = pQuestArgs->pGame;
     /* GetQuestState(rec, QUEST_SpokeToJerhyn, QUESTSTATE_Completed=0) — if
@@ -123,6 +129,7 @@ void __fastcall Q08_Callback13_PlayerStartedGame(D2QuestDataStrc * pQuestData, D
 }
 
 // A2Q0 QUEST_SpokeToJerhyn — InitData (quest registration). Zeroes state-fn table, wires handlers: [0]=Callback_00 (talk/gossip), [0x0a]=Callback_10 (player leave), [0x0b]=Callback_11 (Jerhyn-complete + Meshif add), [0x0d]=Callback_13 (rejoin re-sync). Sets NPC gossip table (Jerhyn 0xc9 / string 0xfd), nQuestIdReal=QUEST_SpokeToJerhyn, status+active filters; allocs 0x84-byte A2Q0 quest data and zeroes its GUID player-count.
+// 1.14d mac: 00221db4
 void __fastcall Q08_InitData(D2QuestDataStrc * pQuestData) {
     memset(&pQuestData->sStateFunctions, 0, sizeof(pQuestData->sStateFunctions));
     ::SGAMEDATA* pSVar1 = pQuestData->pGame;

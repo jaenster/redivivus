@@ -157,6 +157,7 @@
 
 namespace D2Client { namespace UNIT { namespace Path {
 
+// 1.14d mac: 001272e8
 void __fastcall ConfirmTarget(D2UnitStrc * pUnit) {
     D2UnitStrc* pDataTargetUnit;
     D2UnitStrc* pSetTargetUnit;
@@ -192,10 +193,12 @@ void __fastcall ConfirmTarget(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0012739b
 void __fastcall thunk_PATH_SnapPositionToTile(D2UnitStrc * pUnit) {
     D2Common::PATH::Path::PATH_SnapPositionToTile(pUnit->pPath.pDynamicPath);
 }
 
+// 1.14d mac: 001273b4
 uint32_t __fastcall PATH_SetTargetAndCalculate(D2UnitStrc * pUnit, int nTargetX, int nTargetY) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2Common::PATH::DynamicPath::SetSP1(pDynamicPath, (int16_t)nTargetX, (int16_t)nTargetY);
@@ -337,6 +340,7 @@ void __fastcall PATH_MoveUnitToPoint(D2UnitStrc * pUnit, uint16_t nX, uint16_t n
     D2Common::PATH::Path::PATH_MoveUnitToRoomPosition(pUnit->pPath.pDynamicPath, pUnit, pRoom, nX, (uint16_t)nClickYSaved);
 }
 
+// 1.14d mac: 00127a5c
 uint32_t __fastcall PATH_SetTargetUnitAndCalculate(D2UnitStrc * pUnit, eD2UnitType eUnitType, int32_t nTargetUnitId) {
     D2DynamicPathStrc* pDynamicPath = pUnit->pPath.pDynamicPath;
     D2UnitStrc* pTargetUnit = CUnit::UNITS_FindClientSideUnit(nTargetUnitId, eUnitType);
@@ -349,6 +353,7 @@ uint32_t __fastcall PATH_SetTargetUnitAndCalculate(D2UnitStrc * pUnit, eD2UnitTy
     return bPathResult;
 }
 
+// 1.14d mac: 00127aaf
 uint32_t __fastcall PATH_StepAndCreateTrailEffects(D2UnitStrc * pUnit) {
     ConfirmTarget(pUnit);
     eD2States eState = D2Common::DATATBLS::ItemStats::UNIT_GetUnitState(pUnit, STATE_blaze);
@@ -391,6 +396,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlags_21(D2UnitStrc * p) 
 }
 
 // Per-frame client-side unit update dispatcher. Skips units with a pending-removal flag and sends packet 0x4B if flagged. For valid units: removes timed-out stat lists, updates particle position and overlay animations, then dispatches to the per-type frame handler (player mode, monster nameplate, object, missile, or item animation). After dispatch, resolves the unit via client/server hash table and flushes its incoming packet buffer.
+// 1.14d mac: 00127b18
 void __fastcall CLIENT_UpdateUnitFrame(D2UnitStrc * pDynamicPath) {
     eD2UnitType eUnitType;
     int32_t nUnitGUID;

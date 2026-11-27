@@ -106,6 +106,7 @@ D2ItemTypesTxt * __fastcall ItemTypes_GetLine(int32_t nItemType) {
     return nullptr;
 }
 
+// 1.14d mac: 0016f76d
 uint32_t __stdcall ITEMMODS_EvaluateItemFormula(D2UnitStrc * pUnit, D2UnitStrc * pItem, uint32_t nOffset) {
     // Static local variables (originally global data)
     static D2ItemsEventMethodStrc aItemsEventMethod[4] = {
@@ -143,6 +144,7 @@ uint32_t __stdcall ITEMMODS_EvaluateItemFormula(D2UnitStrc * pUnit, D2UnitStrc *
 }
 
 // @sourcefile .\ITEMS\Items.cpp
+// 1.14d mac: 0016f7e7
 void __stdcall STRUCT_CreateDataItem(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return;
@@ -160,6 +162,7 @@ void __stdcall STRUCT_CreateDataItem(D2PoolManagerStrc * pMemory, D2UnitStrc * p
 }
 
 // @sourcefile .\ITEMS\Items.cpp
+// 1.14d mac: 0016f876
 void __stdcall ITEMDATA_Free(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return;
@@ -173,6 +176,7 @@ void __stdcall ITEMDATA_Free(D2PoolManagerStrc * pMemory, D2UnitStrc * pUnit) {
     D2_FREE_POOL_AT(pMemory, pUnit->pUnitData.pUnitDataItem, ".\\ITEMS\\Items.cpp", 0x10a);
 }
 
+// 1.14d mac: 0016f8cf
 eD2BodyLoc __stdcall GetBodyLocation(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->eBodyLoc;
@@ -181,6 +185,7 @@ eD2BodyLoc __stdcall GetBodyLocation(D2UnitStrc * pUnit) {
     return BODYLOC_NONE;
 }
 
+// 1.14d mac: 0016f8ef
 void __stdcall SetBodyLoc(D2UnitStrc * pUnit, eD2BodyLoc eBodyLoc) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -189,6 +194,7 @@ void __stdcall SetBodyLoc(D2UnitStrc * pUnit, eD2BodyLoc eBodyLoc) {
     pUnit->pUnitData.pUnitDataItem->eBodyLoc = eBodyLoc;
 }
 
+// 1.14d mac: 0016f90d
 D2SeedStrc * __stdcall GetItemSeed(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return &pUnit->pUnitData.pUnitDataItem->sSeed;
@@ -197,6 +203,7 @@ D2SeedStrc * __stdcall GetItemSeed(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 0016f92c
 void __stdcall ResetItemSeed(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -205,6 +212,7 @@ void __stdcall ResetItemSeed(D2UnitStrc * pUnit) {
     Seed::SEED_InitDefault(&pUnit->pUnitData.pUnitDataItem->sSeed);
 }
 
+// 1.14d mac: 0016f955
 int32_t __stdcall GetModSeed(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->nModSeed;
@@ -213,6 +221,7 @@ int32_t __stdcall GetModSeed(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0016f972
 void __stdcall SetModSeed(D2UnitStrc * pUnit, int32_t nModSeed) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x187);
@@ -232,6 +241,7 @@ void __stdcall SetModSeed(D2UnitStrc * pUnit, int32_t nModSeed) {
 }
 
 // Returns nQuality from D2UnitDataItemStrc. Returns 2 (NORMAL) if unit is null, not an item, or has no item data. Thirty-seven bytes reading the unit from [EBP+8] and touching EAX only, so it preserves ECX; CalculateTransactionCost_Impl carries a magic-or-better flag there across this call.
+// 1.14d mac: 0016fa01
 int __stdcall GetItemQuality(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->eQuality;
@@ -240,6 +250,7 @@ int __stdcall GetItemQuality(D2UnitStrc * pUnit) {
     return 2;
 }
 
+// 1.14d mac: 0016fa20
 void __stdcall SetItemQuality(D2UnitStrc * pUnit, eD2ItemQuality eItemQuality) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -248,6 +259,7 @@ void __stdcall SetItemQuality(D2UnitStrc * pUnit, eD2ItemQuality eItemQuality) {
     pUnit->pUnitData.pUnitDataItem->eQuality = eItemQuality;
 }
 
+// 1.14d mac: 0016fa3d
 int16_t __stdcall GetMagicPrefix(D2UnitStrc * pUnit, int32_t nIndex) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->wMagicPrefix[nIndex];
@@ -256,6 +268,7 @@ int16_t __stdcall GetMagicPrefix(D2UnitStrc * pUnit, int32_t nIndex) {
     return 0;
 }
 
+// 1.14d mac: 0016fa62
 void __stdcall SetMagixPrefix(D2UnitStrc * pUnit, int16_t wMagicPrefix, int32_t nIndex) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -265,6 +278,7 @@ void __stdcall SetMagixPrefix(D2UnitStrc * pUnit, int16_t wMagicPrefix, int32_t 
 }
 
 // Returns nAutoMagic (offset 0x36) from D2UnitDataItemStrc. Returns 0 if unit is null, not an item, or has no item data.
+// 1.14d mac: 0016fa86
 uint16_t __stdcall GetAutoMagic(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->wAutoMagic;
@@ -273,6 +287,7 @@ uint16_t __stdcall GetAutoMagic(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0016faa7
 void __stdcall SetAutoMagic(D2UnitStrc * pUnit, int16_t wAutoMagic) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -282,6 +297,7 @@ void __stdcall SetAutoMagic(D2UnitStrc * pUnit, int16_t wAutoMagic) {
 }
 
 // Returns magic suffix ID at nIndex (offset 0x3E + nIndex*2) from D2UnitDataItemStrc. Returns 0 if unit is null, not an item, or has no item data.
+// 1.14d mac: 0016fac7
 uint16_t __stdcall GetMagicSuffix(D2UnitStrc * pUnit, int nIndex) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->wMagicSuffix[nIndex];
@@ -290,6 +306,7 @@ uint16_t __stdcall GetMagicSuffix(D2UnitStrc * pUnit, int nIndex) {
     return 0;
 }
 
+// 1.14d mac: 0016faec
 void __stdcall SetMagicSuffix(D2UnitStrc * pUnit, int16_t wMagicSuffix, int32_t nIndex) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -298,6 +315,7 @@ void __stdcall SetMagicSuffix(D2UnitStrc * pUnit, int16_t wMagicSuffix, int32_t 
     pUnit->pUnitData.pUnitDataItem->wMagicSuffix[nIndex] = wMagicSuffix;
 }
 
+// 1.14d mac: 0016fb10
 int16_t __stdcall GetRarePrefix(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->wRarePrefix;
@@ -314,6 +332,7 @@ void __stdcall SetRarePrefix(D2UnitStrc * pUnit, int16_t wRarePrefix) {
     pUnit->pUnitData.pUnitDataItem->wRarePrefix = wRarePrefix;
 }
 
+// 1.14d mac: 0016fb51
 int16_t __stdcall GetRareSuffix(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->wRareSuffix;
@@ -330,6 +349,7 @@ void __stdcall SetRareSuffix(D2UnitStrc * pUnit, int16_t wRareSuffix) {
     pUnit->pUnitData.pUnitDataItem->wRareSuffix = wRareSuffix;
 }
 
+// 1.14d mac: 0016fb92
 BOOL __stdcall CheckItemFlag(D2UnitStrc * pUnit, eD2ItemFlag neD2ItemFlag, int32_t nLine, char * szText) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->dwItemFlags & neD2ItemFlag;
@@ -338,6 +358,7 @@ BOOL __stdcall CheckItemFlag(D2UnitStrc * pUnit, eD2ItemFlag neD2ItemFlag, int32
     return 0;
 }
 
+// 1.14d mac: 0016fbb2
 void __stdcall ITEM_EditItemData_eItemFlag(D2UnitStrc * pUnit, eD2ItemFlag eItemFlag, BOOL bSet) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return;
@@ -355,6 +376,7 @@ void __stdcall ITEM_EditItemData_eItemFlag(D2UnitStrc * pUnit, eD2ItemFlag eItem
     pItemDataPtr->dwItemFlags &= ~eItemFlag;
 }
 
+// 1.14d mac: 0016fbde
 eD2ItemFlag __stdcall ITEM_GetItemData_eD2ItemFlag(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->dwItemFlags;
@@ -363,6 +385,7 @@ eD2ItemFlag __stdcall ITEM_GetItemData_eD2ItemFlag(D2UnitStrc * pUnit) {
     return ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD);
 }
 
+// 1.14d mac: 0016fbfb
 uint32_t __stdcall ITEM_CheckItemData_eD2ItemCmd(D2UnitStrc * pUnit, eD2ItemCmd eItemCmd) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->eItemCmd & eItemCmd;
@@ -371,6 +394,7 @@ uint32_t __stdcall ITEM_CheckItemData_eD2ItemCmd(D2UnitStrc * pUnit, eD2ItemCmd 
     return 0;
 }
 
+// 1.14d mac: 0016fc1b
 void __stdcall ITEM_EditItemData_eD2ItemCmd(D2UnitStrc * pUnit, eD2ItemCmd eItemCmd, BOOL bRemove) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return;
@@ -396,6 +420,7 @@ eD2ItemCmd __stdcall ITEM_GetItemData_eD2ItemCmd(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0016fc48
 int32_t __stdcall ITEM_GetItemData_nItemLevel(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
       D2UnitDataItemStrc* temp_5f060235c5;
@@ -420,6 +445,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
+// 1.14d mac: 0016fc73
 void __stdcall ITEM_SetItemData_nItemLevel(D2UnitStrc * pUnit, int32_t nLevel) {
     if (!(GetTypeInline(pUnit) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -431,6 +457,7 @@ void __stdcall ITEM_SetItemData_nItemLevel(D2UnitStrc * pUnit, int32_t nLevel) {
     pUnit->pUnitData.pUnitDataItem->nItemLevel = nLevel;
 }
 
+// 1.14d mac: 0016fc9b
 eInventoryPage __stdcall ITEM_GetContainingInventoryPage(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->ePage;
@@ -439,6 +466,7 @@ eInventoryPage __stdcall ITEM_GetContainingInventoryPage(D2UnitStrc * pUnit) {
     return INVPAGE_None;
 }
 
+// 1.14d mac: 0016fcbb
 void __stdcall ITEM_SetItemData_ePage(D2UnitStrc * pUnit, eInventoryPage ePage) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -455,6 +483,7 @@ uint8_t __stdcall ITEM_GetItemData_eExchangePage(D2UnitStrc * pUnit) {
     return 0xff;
 }
 
+// 1.14d mac: 0016fcd9
 void __stdcall ITEM_SetItemData_eExchangePage(D2UnitStrc * pUnit, uint8_t eExchangePage) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -463,6 +492,7 @@ void __stdcall ITEM_SetItemData_eExchangePage(D2UnitStrc * pUnit, uint8_t eExcha
     pUnit->pUnitData.pUnitDataItem->eExchangePage = eExchangePage;
 }
 
+// 1.14d mac: 0016fcf7
 uint8_t __stdcall ITEM_GetItemData_ePreviousPage(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->ePreviousPage;
@@ -471,6 +501,7 @@ uint8_t __stdcall ITEM_GetItemData_ePreviousPage(D2UnitStrc * pUnit) {
     return 0xff;
 }
 
+// 1.14d mac: 0016fd17
 void __stdcall ITEM_SetItemData_ePreviousPage(D2UnitStrc * pUnit, uint8_t ePreviousPage) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -479,6 +510,7 @@ void __stdcall ITEM_SetItemData_ePreviousPage(D2UnitStrc * pUnit, uint8_t ePrevi
     pUnit->pUnitData.pUnitDataItem->ePreviousPage = ePreviousPage;
 }
 
+// 1.14d mac: 0016fd35
 char * __stdcall ITEM_GetItemData_szPlayerName(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->szPlayerName;
@@ -487,6 +519,7 @@ char * __stdcall ITEM_GetItemData_szPlayerName(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 0016fd54
 void __stdcall ITEMS_SetPlayerName(D2UnitStrc * pItem, char * szName) {
     if (!(pItem && pItem->eUnitType == UNIT_ITEM && pItem->pUnitData.pUnitDataItem)) {
       return;
@@ -502,6 +535,7 @@ void __stdcall ITEMS_SetPlayerName(D2UnitStrc * pItem, char * szName) {
     } while (cCh != 0);
 }
 
+// 1.14d mac: 0016fd84
 uint8_t __stdcall ITEM_GetItemData_nEarLevel(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->nEarLevel;
@@ -510,6 +544,7 @@ uint8_t __stdcall ITEM_GetItemData_nEarLevel(D2UnitStrc * pUnit) {
     return '\x01';
 }
 
+// 1.14d mac: 0016fda4
 void __stdcall ITEM_SetItemData_nEarLevel(D2UnitStrc * pUnit, uint8_t nEarLevel) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -518,6 +553,7 @@ void __stdcall ITEM_SetItemData_nEarLevel(D2UnitStrc * pUnit, uint8_t nEarLevel)
     pUnit->pUnitData.pUnitDataItem->nEarLevel = nEarLevel;
 }
 
+// 1.14d mac: 0016fdc2
 uint8_t __stdcall ITEM_GetItemData_bVariant(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->bVariant;
@@ -526,6 +562,7 @@ uint8_t __stdcall ITEM_GetItemData_bVariant(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0016fde2
 void __stdcall ITEM_SetItemData_bVariant(D2UnitStrc * pUnit, BYTE bVariant) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem)) {
       return;
@@ -543,6 +580,7 @@ int32_t __stdcall ITEMS_GetAmmoTypeFromItemType(int32_t nItemType) {
     return (int)pItemTypesTxt->shoots;
 }
 
+// 1.14d mac: 001700fb
 int32_t __stdcall ITEMTYPE_IsQuiver(int32_t nItemType) {
     D2ItemTypesTxt* pItemTypesTxt = nItemType >= 0 && nItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + nItemType : nullptr;
     if (!pItemTypesTxt) {
@@ -561,6 +599,7 @@ BOOL __stdcall ITEMTYPE_IsAutostack(int32_t nItemType) {
     return (uint32_t)pItemTypesTxt->autostack;
 }
 
+// 1.14d mac: 001704c7
 int32_t __stdcall ITEM_GetItemsTxt_dwWClass(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -595,6 +634,7 @@ int32_t __stdcall ITEM_GetItemsTxt_dw2HandedWClass(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00170597
 uint32_t __stdcall ITEM_GetItemsTxt_szCode(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     if (!pUnit) {
@@ -615,6 +655,7 @@ uint32_t __stdcall ITEM_GetItemsTxt_szCode(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00170637
 int32_t __stdcall ITEM_GetItemsTxt_dwAlternateGfxIfExists(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     if (!pUnit) {
@@ -638,6 +679,7 @@ int32_t __stdcall ITEM_GetItemsTxt_dwAlternateGfxIfExists(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 001706e1
 uint8_t __stdcall ITEM_GetItemsTxt_bComponent(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     if (!pUnit) {
@@ -658,6 +700,7 @@ uint8_t __stdcall ITEM_GetItemsTxt_bComponent(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00170782
 void __stdcall ITEM_GetItemsTxt_nWidthAndHeight(D2UnitStrc * pUnit, char * pWidth, char * pHeight, char * szSourceFile, int32_t dwUnused2) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return;
@@ -673,6 +716,7 @@ void __stdcall ITEM_GetItemsTxt_nWidthAndHeight(D2UnitStrc * pUnit, char * pWidt
     *pHeight = pItemsTxt->bInvHeight;
 }
 
+// 1.14d mac: 00170829
 eD2ItemTypes __stdcall TXT_Items_GetType(uint32_t nItemClassId) {
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     if (!pItemsTxt) {
@@ -683,6 +727,7 @@ eD2ItemTypes __stdcall TXT_Items_GetType(uint32_t nItemClassId) {
     return (int)pItemsTxt->wType;
 }
 
+// 1.14d mac: 00170875
 uint8_t __stdcall ITEM_GetItemsTxt_nLevel(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     if (!pUnit) {
@@ -703,10 +748,12 @@ uint8_t __stdcall ITEM_GetItemsTxt_nLevel(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00170916
 uint32_t __stdcall ITEMFLAG_CheckFlag(eD2ItemFlag neD2ItemFlag, eD2ItemFlag eD2ItemFlag2) {
     return neD2ItemFlag & eD2ItemFlag2;
 }
 
+// 1.14d mac: 00170921
 void __stdcall ITEM_SetServerSideFlag(uint32_t * bFlagsByte, uint32_t nFlagMask, int32_t bSet) {
     if (bSet) {
       *bFlagsByte |= nFlagMask;
@@ -716,6 +763,7 @@ void __stdcall ITEM_SetServerSideFlag(uint32_t * bFlagsByte, uint32_t nFlagMask,
     *bFlagsByte &= ~nFlagMask;
 }
 
+// 1.14d mac: 00170ee2
 int32_t __stdcall IITEM_GetItemsTxt_dwNormCode(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x797);
@@ -750,6 +798,7 @@ static int __stdcall ITEMS_AccumulateAffixLevelRequirement(int nMaxLvlReq, D2Mag
     return nMaxLvlReq;
 }
 
+// 1.14d mac: 001715d5
 BOOL __stdcall TXT_ItemTypes_CheckIfTypeIsThrowable(int32_t nItemType) {
     D2ItemTypesTxt* pItemTypesTxt = nItemType >= 0 && nItemType < sgptDataTable->nTxtItemTypesSize ? sgptDataTable->pTxtItemTypes + nItemType : nullptr;
     if (!pItemTypesTxt) {
@@ -759,6 +808,7 @@ BOOL __stdcall TXT_ItemTypes_CheckIfTypeIsThrowable(int32_t nItemType) {
     return (uint32_t)pItemTypesTxt->throwable;
 }
 
+// 1.14d mac: 0017166a
 uint32_t __stdcall ITEM_GetItemsTxt_wMissileType(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
       D2ItemsTxt* pItemsTxt;
@@ -802,6 +852,7 @@ BOOL __stdcall HasWeaponClass(D2UnitStrc * pUnit, int32_t dwWClass) {
     return 0;
 }
 
+// 1.14d mac: 001716c8
 BOOL __stdcall TXT_Items_Getb2Handed(uint32_t nClassId) {
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nClassId);
     if (!pItemsTxt) {
@@ -825,6 +876,7 @@ BOOL __stdcall IsTwoHanded(D2UnitStrc * pUnit) {
 }
 
 // Returns bStackable from D2ItemsTxt for the given item unit. Halts if ItemsTxt lookup fails.
+// 1.14d mac: 0017173a
 BOOL __stdcall IsStackable(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
       D2ItemsTxt* pItemsTxt;
@@ -842,6 +894,7 @@ BOOL __stdcall IsStackable(D2UnitStrc * pUnit) {
 }
 
 // Tests whether two item units are the "same kind" of potion for stacking/auto-fill purposes. Returns 1 immediately if the two items share a class id; otherwise looks up each item's ItemsTxt line and checks whether BOTH item codes appear together within the same potion-code group. Scans three configured code-group tables (health, mana, and a third group) held in UINT_ARRAY_00744660 (each preceded by a count); returns 1 if both items fall into any one group, else 0. Returns 0 if either unit pointer is null.
+// 1.14d mac: 001717ec
 BOOL __stdcall ITEM_CheckIfBothItemsAreSameTypeOfPotions(D2UnitStrc * pUnit, D2UnitStrc * pItemEx) {
     // Static local variables (originally global data)
     static uint32_t gadwRejuvPotionCodes[2] = { 0x206c7672, 0x20737672 }; D2_STATIC_GUARD(gadwRejuvPotionCodes, "D2Common::ITEMS::Items::ITEM_CheckIfBothItemsAreSameTypeOfPotions::gadwRejuvPotionCodes");
@@ -917,6 +970,7 @@ static inline int GetClassIdInline(D2UnitStrc * pUnit) {
     return (int)(-1);
 }
 
+// 1.14d mac: 00171932
 BOOL __stdcall INVENTORY_CheckIfItemCanBeAutoBelted(D2InventoryStrc * pInventory, D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     BOOL BVar1;
@@ -944,6 +998,7 @@ BOOL __stdcall INVENTORY_CheckIfItemCanBeAutoBelted(D2InventoryStrc * pInventory
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
+// 1.14d mac: 001719f6
 int32_t __stdcall IsUseable(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
       D2ItemsTxt* pItemsTxt;
@@ -960,6 +1015,7 @@ int32_t __stdcall IsUseable(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00171a50
 int32_t __stdcall IsUnique(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     if (!pUnit) {
@@ -980,6 +1036,7 @@ int32_t __stdcall IsUnique(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00171af1
 int32_t __stdcall IsQuestItem(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     if (!pUnit) {
@@ -1001,6 +1058,7 @@ int32_t __stdcall IsQuestItem(D2UnitStrc * pUnit) {
 }
 
 // Computes the repair-price premium for all charged-skill stats (stat 0xCC) on an item. For each charged stat, if charges are not full, adds (maxCharges-curCharges)/maxCharges * (skillLevelCost * multiplier + costmult/costadd from Skills.txt) to the total. Returns total modifier to be added to item sell/repair price.
+// 1.14d mac: 00171b92
 int32_t __fastcall ITEMS_CalcChargedSkillPriceModifier(D2UnitStrc * pUnit, int32_t nMultiplier) {
     D2SkillsTxt* pSkillsTxt;
     int nCostTmp;
@@ -1043,6 +1101,7 @@ int32_t __fastcall ITEMS_CalcChargedSkillPriceModifier(D2UnitStrc * pUnit, int32
 
 // Adds an item's stat-driven cost to its three prices. Copies the item's stats (up to 511), and for each nonzero stat (shifted by ItemStatCost valshift) takes cost multiply/add from its ItemStatCost row by encode: 1 = SkillsTxt costmult/costadd of the stat's skill, 2/3 = same for a charged skill (packed sub-index), 4 = ITEMMODS_CalculateRepairCost min/max average, otherwise ItemStatCost multiply/add. The per-stat cost scales the incoming sell price (>>10), buy price (>>12 for skill encodes, >>10 otherwise) and repair price (>>10); each sum is divided by nDivisor and added to *pnSellPrice, *pnBuyPrice and *pnRepairPrice.
 // Provenance: 1.14d asm 00628e70; sole caller ITEMS_CalcTransactionCost 0062f81a passes (pItem, &nSellPrice, &nBuyPrice, &nRepairPrice, nMaxStack).
+// 1.14d mac: 00171d23
 void __fastcall ITEM_AddStatCostsToPrices(D2UnitStrc * pItem, int * pnSellPrice, int * pnBuyPrice, int * pnRepairPrice, uint32_t nDivisor) {
     int nCostAdd;
     int nCostTmp;
@@ -1332,6 +1391,7 @@ int __stdcall ITEM_GetMaxStack(D2UnitStrc * pUnit) {
     return nMaxStack;
 }
 
+// 1.14d mac: 00173d4b
 int32_t __stdcall TXT_Items_GetSpawnStack(uint32_t nItemClassId) {
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     if (!pItemsTxt) {
@@ -1342,6 +1402,7 @@ int32_t __stdcall TXT_Items_GetSpawnStack(uint32_t nItemClassId) {
     return pItemsTxt->dwSpawnStack;
 }
 
+// 1.14d mac: 00173d96
 int32_t __stdcall ITEM_GetItemsTxt_dwSpawnStack(D2UnitStrc * pUnit) {
     int32_t nLine;
     if (!pUnit) {
@@ -1361,6 +1422,7 @@ int32_t __stdcall ITEM_GetItemsTxt_dwSpawnStack(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00173e0b
 int32_t __stdcall TXT_Items_GetMinStack(uint32_t nItemClassId) {
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     if (!pItemsTxt) {
@@ -1371,6 +1433,7 @@ int32_t __stdcall TXT_Items_GetMinStack(uint32_t nItemClassId) {
     return pItemsTxt->dwMinStack;
 }
 
+// 1.14d mac: 00173e56
 int32_t __stdcall ITEM_GetItemsTxt_dwMinStack(D2UnitStrc * pUnit) {
     int32_t nLine;
     if (!pUnit) {
@@ -1450,6 +1513,7 @@ bool __stdcall ITEM_GetItemsTxt_bQntWarning(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00174069
 int16_t __stdcall ITEM_GetItemsTxt_wStrBonus(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 100;
@@ -1464,6 +1528,7 @@ int16_t __stdcall ITEM_GetItemsTxt_wStrBonus(D2UnitStrc * pUnit) {
     return pItemsTxt->nStrBonus;
 }
 
+// 1.14d mac: 001740a9
 int16_t __stdcall ITEM_GetItemsTxt_wDexBonus(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 100;
@@ -1488,6 +1553,7 @@ BOOL __stdcall TXT_Items_GetHavInv(uint32_t nItemClassId) {
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
+// 1.14d mac: 001740ea
 int32_t __stdcall ITEM_GetItemsTxt_bHasInv(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -1502,6 +1568,7 @@ int32_t __stdcall ITEM_GetItemsTxt_bHasInv(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00170036
 uint32_t __stdcall ITEM_CheckIfItemHasDurability(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -1531,6 +1598,7 @@ bool __stdcall TXT_Items_GetGemSockets(uint32_t nItemClassId) {
     return pItemsTxt->bGemSockets;
 }
 
+// 1.14d mac: 00174230
 int32_t __stdcall ITEM_GetSocketsCount(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0xea6);
@@ -1577,6 +1645,7 @@ uint32_t __stdcall ITEM_GetItemsTxt_bGemApplyType(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00170e1e
 uint32_t __stdcall TXT_ItemTypes_CheckEquivalence(uint32_t nItemClassId, eD2ItemTypes eItemType) {
     if ((int)eItemType < 0 || (int)eItemType >= sgptDataTable->nTxtItemTypesSize) {
       return 0;
@@ -1603,6 +1672,7 @@ uint32_t __stdcall TXT_ItemTypes_CheckEquivalence(uint32_t nItemClassId, eD2Item
     return 0;
 }
 
+// 1.14d mac: 0017474d
 uint32_t __stdcall ITEMS_CheckItemTypeEquivalence(eD2ItemTypes eItemType1, eD2ItemTypes eItemType2) {
     if ((int)eItemType1 >= 0 && (int)eItemType1 < sgptDataTable->nTxtItemTypesSize && (int)eItemType2 >= 0 && (int)eItemType2 < sgptDataTable->nTxtItemTypesSize) {
       return *(uint32_t*)((uint8_t*)sgptDataTable->pTxtItemTypesUnknown + (sgptDataTable->nItemTypesEquivRowDwords * eItemType1 + ((int)eItemType2 >> 5)) * 4) & Fog::BitBuffer::gadwBitMasks[eItemType2 & ITEMTYPE_Hammer];
@@ -1612,6 +1682,7 @@ uint32_t __stdcall ITEMS_CheckItemTypeEquivalence(eD2ItemTypes eItemType1, eD2It
 }
 
 // @blizzard ITEMSIsA
+// 1.14d mac: 00173807
 uint32_t __stdcall ITEMS_IsA(D2UnitStrc * pUnit, eD2ItemTypes eItemType) {
     D2ItemsTxt* pItemsTxt;
     short int eType2;
@@ -1639,6 +1710,7 @@ uint32_t __stdcall ITEMS_IsA(D2UnitStrc * pUnit, eD2ItemTypes eItemType) {
     return 0;
 }
 
+// 1.14d mac: 001747a7
 uint32_t __stdcall TXT_Items_GetBitFieldAnd0x01(uint32_t nItemClassId) {
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     if (!pItemsTxt) {
@@ -1649,6 +1721,7 @@ uint32_t __stdcall TXT_Items_GetBitFieldAnd0x01(uint32_t nItemClassId) {
     return pItemsTxt->dwBitfield1 & 1;
 }
 
+// 1.14d mac: 001747f5
 uint32_t __stdcall TXT_Items_GetBitFieldAnd0x02(uint32_t nItemClassId) {
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     if (!pItemsTxt) {
@@ -1669,6 +1742,7 @@ uint32_t __stdcall TXT_Items_GetBitFieldAnd0x04(uint32_t nItemClassId) {
     return pItemsTxt->dwBitfield1 & 4;
 }
 
+// 1.14d mac: 00174845
 uint32_t __stdcall TXT_Items_IsNotQuestOrHammerType(uint32_t nItemClassId) {
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     if (!pItemsTxt) {
@@ -1683,6 +1757,7 @@ uint32_t __stdcall TXT_Items_IsNotQuestOrHammerType(uint32_t nItemClassId) {
 }
 
 // Returns dwFileIndex (offset 0x28) from D2UnitDataItemStrc. Halts if unit is null, not an item, or has no item data.
+// 1.14d mac: 001738c1
 int __stdcall ITEM_GetItemData_nFileIndex(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1070);
@@ -1700,6 +1775,7 @@ int __stdcall ITEM_GetItemData_nFileIndex(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 001748a1
 void __stdcall ITEM_SetItemData_nFileIndex(D2UnitStrc * pUnit, DWORD dwFileIndex) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x107c);
@@ -1718,6 +1794,7 @@ void __stdcall ITEM_SetItemData_nFileIndex(D2UnitStrc * pUnit, DWORD dwFileIndex
     }
 }
 
+// 1.14d mac: 00174930
 void __stdcall ITEM_GetItemData_0x1Cand0x20(D2UnitStrc * pUnit, int * pnParam1, int * pnParam2) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM) {
       D2UnitDataItemStrc* pItemData;
@@ -1751,6 +1828,7 @@ void __stdcall ITEM_SetItemData_0x1Cand0x20(D2UnitStrc * pUnit, int32_t pWaypoin
     pItemData->unk0x20 = pWaypoint1;
 }
 
+// 1.14d mac: 00174968
 void __stdcall ITEM_SetItemData_nPlayerGUID(D2UnitStrc * pUnit, int32_t nPlayerGUID) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x10bc);
@@ -1786,6 +1864,7 @@ int32_t __stdcall ITEM_GetItemData_nPlayerGUID(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00174b05
 BOOL __stdcall TXT_Items_CheckIfHasClass(uint32_t nItemClassId) {
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     if (!pItemsTxt) {
@@ -1802,6 +1881,7 @@ BOOL __stdcall TXT_Items_CheckIfHasClass(uint32_t nItemClassId) {
     return (uint32_t)((uint8_t)pItemTypesTxt->_class < 7);
 }
 
+// 1.14d mac: 00174b55
 int16_t __stdcall ITEM_GetWeaponAnimClass(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static D2ItemWeaponClassCodeStrc gaItemWeaponClassCodes[8] = {
@@ -1895,6 +1975,7 @@ int32_t __stdcall ITEM_CheckItemsTxt_bTransmogrify(D2UnitStrc * pUnit) {
 
 // Returns 1 when the unit is an item whose quality is Magic or better (quality in [4,9]), 0 otherwise.
 // Returns a FULL 32-bit value: the only two paths are MOV EAX,0x1 at 0062a113 and XOR EAX,EAX at 0062a11c.
+// 1.14d mac: 001739eb
 int32_t __stdcall ITEM_CheckItemData_ItemQualityIsMagicOrBetter(D2UnitStrc * pUnit) {
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       if ((int)pUnit->pUnitData.pUnitDataItem->eQuality >= 4 && (int)pUnit->pUnitData.pUnitDataItem->eQuality <= 9) {
@@ -1915,6 +1996,7 @@ BOOL __stdcall ITEM_CheckItemData_eD2ItemFlag_Monster(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00174cd4
 uint8_t __stdcall ITEM_GetItemsTxt_bHitClass(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     if (!pUnit) {
@@ -1935,6 +2017,7 @@ uint8_t __stdcall ITEM_GetItemsTxt_bHitClass(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00174d75
 int32_t __stdcall BARBARIAN_CheckItemData_b1or2Handed_isTrue(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     if (!pItem) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x119b);
@@ -1970,6 +2053,7 @@ static char ITEMS_ValidateItemQualityCode(int32_t nCode, uint32_t nQuality) {
     return (char)nPacked;
 }
 
+// 1.14d mac: 00175426
 static BOOL ITEMS_HasSocketedItems(D2UnitStrc * pItem) {
     D2InventoryStrc* pInventory = pItem->pInventory;
     D2UnitStrc* pCurItem = INVENTORY::Inventory::INVENTORY_GetFirstItem(pInventory);
@@ -1990,6 +2074,7 @@ static BOOL ITEMS_HasSocketedItems(D2UnitStrc * pItem) {
     return 1;
 }
 
+// 1.14d mac: 00175516
 static BOOL ITEMS_GetCompactSaveFlag(D2UnitStrc * pItem) {
     uint32_t nItemClassId;
     if (!pItem) {
@@ -2015,6 +2100,7 @@ static BOOL QualityCanHaveSockets(eD2ItemQuality eQuality) {
     return 0;
 }
 
+// 1.14d mac: 00175a1c
 BOOL __stdcall ITEM_ValidateItemQuantity(D2UnitStrc * pUnit) {
     if (pUnit) {
       int nQuantity = Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_quantity, 0);
@@ -2037,12 +2123,14 @@ BOOL __stdcall ITEM_ValidateItemQuantity(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00175aa1
 BOOL __stdcall ReturnFalse(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     return 0;
 }
 
 // Returns a bitmask of which set-item slots (by setIndex) the player has equipped from the same set as pItem. Iterates all equipped/body-loc items; for each set-quality, non-disabled, non-broken item from the same set, sets bit (1 &lt;&lt; setIndex). Returns 0 if pItem is not a set item or unit has no inventory.
 // @sourcefile .\ITEMS\Items.cpp
+// 1.14d mac: 00175aa8
 uint32_t __stdcall ITEMS_GetEquippedSetItemsMask(D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t bIncludeItem) {
     D2UnitStrc* pCurItem;
     D2UnitStrc* pCarriedItem;
@@ -2102,6 +2190,7 @@ static inline D2UnitDataItemStrc * GetItemDataInline(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 00175c1f
 D2SetItemsTxt * __stdcall GetSetItemsLine(D2UnitStrc * pUnit) {
     if (!(GetTypeInline(pUnit) == UNIT_ITEM && GetItemDataInline(pUnit) && GetItemDataInline(pUnit)->eQuality == QUALITY_SET)) {
       return nullptr;
@@ -2115,6 +2204,7 @@ D2SetItemsTxt * __stdcall GetSetItemsLine(D2UnitStrc * pUnit) {
     return nullptr;
 }
 
+// 1.14d mac: 00175c78
 BOOL __stdcall ITEM_CheckIfItemIsNotBrokenAndNotDisabled(D2UnitStrc * pUnit) {
     if (pUnit && !(GetTypeInline(pUnit) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem ? pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_BROKEN : 0) && !(GetTypeInline(pUnit) == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem ? pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_DISABLED : 0)) {
       return 1;
@@ -2138,6 +2228,7 @@ static inline eInventoryPage GetContainingInventoryPageInline(D2UnitStrc * pUnit
 }
 
 // Counts unidentified items in a player's inventory and equipped slots. Iterates all inventory slots; counts carried items on INVENTORY_GRID_TYPE_INVENTORY pages (INVPAGE_INVENTORY or INVPAGE_CUBE) and body-loc slots whose ITEMFLAG_IDENTIFIED is not set. Returns the count.
+// 1.14d mac: 00175d39
 int32_t __stdcall PLAYER_GetUnidentifiedItemsCount(D2UnitStrc * pUnit) {
     int32_t iVar1;
     int32_t nCount = 0;
@@ -2169,6 +2260,7 @@ int32_t __stdcall PLAYER_GetUnidentifiedItemsCount(D2UnitStrc * pUnit) {
     return nCount;
 }
 
+// 1.14d mac: 00175dc6
 int32_t __stdcall ITEMS_GetBonusLifeBasedOnClass(D2UnitStrc * pPlayer, int32_t nValue) {
     int32_t nResult = nValue;
     if (pPlayer && pPlayer->eUnitType == UNIT_PLAYER) {
@@ -2188,6 +2280,7 @@ int32_t __stdcall ITEMS_GetBonusLifeBasedOnClass(D2UnitStrc * pPlayer, int32_t n
     return nResult;
 }
 
+// 1.14d mac: 00175e18
 int32_t __stdcall ITEMS_GetBonusManaBasedOnClass(D2UnitStrc * pPlayer, int32_t nValue) {
     int32_t nResult = nValue;
     if (pPlayer && pPlayer->eUnitType == UNIT_PLAYER) {
@@ -2207,6 +2300,7 @@ int32_t __stdcall ITEMS_GetBonusManaBasedOnClass(D2UnitStrc * pPlayer, int32_t n
     return nResult;
 }
 
+// 1.14d mac: 0017377c
 uint16_t __stdcall ITEM_GetItemData_wItemVersion(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x1504);
@@ -2224,6 +2318,7 @@ uint16_t __stdcall ITEM_GetItemData_wItemVersion(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 00175e52
 void __stdcall ITEM_SetItemData_wItemVersion(D2UnitStrc * pUnit, int16_t wItemVersion) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x150f);
@@ -2243,6 +2338,7 @@ void __stdcall ITEM_SetItemData_wItemVersion(D2UnitStrc * pUnit, int16_t wItemVe
 }
 
 // Calculates frames-per-attack for a weapon held by pUnit. Builds the COF path from unit/inventory state, looks up frame count and animation speed via ANIMDATA, then computes (frames&lt;&lt;8) / (((IAS+baseAttackRate+100)*animSpeed)/100). Halts with internal error if item is not a weapon or COF data is missing.
+// 1.14d mac: 00175ee3
 int __stdcall ITEM_CalcWeaponAttackSpeed(D2UnitStrc * pUnit, D2UnitStrc * pItem) {
     // Frame slots -28..-8 are ONE object: &nWClass is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2297,6 +2393,7 @@ int __stdcall ITEM_CalcWeaponAttackSpeed(D2UnitStrc * pUnit, D2UnitStrc * pItem)
 }
 
 // Checks whether all charged-skill stats (stat 0xCC) on pItem are at full charges. Returns true if the item has at least one charged stat and all are fully charged. Optionally writes a 4-byte result struct to pOutFullyCharged: byte[0]=hasChargedSkills, byte[1..3]=false if any charge is depleted.
+// 1.14d mac: 0016febd
 BOOL __stdcall ITEMS_CheckChargedSkillFullyCharged(D2UnitStrc * pItem, BOOL * pOutFullyCharged) {
     int _bResult;
     int _bHasCharged;
@@ -2335,6 +2432,7 @@ BOOL __stdcall ITEMS_CheckChargedSkillFullyCharged(D2UnitStrc * pItem, BOOL * pO
     return _bResult;
 }
 
+// 1.14d mac: 00173cd5
 uint32_t __stdcall ITEM_GetItemData_eD2ItemFlag_IsEthereal(D2UnitStrc * pUnit) {
     if (pUnit && pUnit->eUnitType == UNIT_ITEM && pUnit->pUnitData.pUnitDataItem) {
       return pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_ETHEREAL;
@@ -2535,6 +2633,7 @@ static int __stdcall ITEMS_DeserializeItemHeader(int32_t bIsOnGround, uint32_t n
 }
 
 // Reads one item stat from a bit-buffer during .d2s / stash deserialization. Applies legacy file-version fixups (versions below 0x58/0x5a/0x5d remap specific stats and narrow their bit-widths), reads the param-lo nibble if the stat has a size field, then calls D2AddStatToStatsListEx to append the decoded stat to pStatList.
+// 1.14d mac: 0017b1c1
 static void __stdcall ITEMS_DeserializeSingleStat(uint32_t nFileVersion, eD2UnitStat eUnitStat, D2BitBufferStrc * pBitBuffer, D2StatListExStrc * pStatList, D2ItemStatCostTxt * pItemStatCost, int32_t nStatIndex) {
     uint32_t uVar1;
     int32_t nSaveParamBits = pItemStatCost->saveAdd[nStatIndex + 2];
@@ -2629,6 +2728,7 @@ static void __stdcall ITEMS_DeserializeSingleStat(uint32_t nFileVersion, eD2Unit
 }
 
 // Deserializes the header fields of a D2 item from a packed bit-stream into a D2UnitDataItemDetailsStrc. Reads flags (32 bits), skips 10 bits (version + destination prefix), decodes the 3-bit destination: if stored/socketed (3 or 5) reads 16-bit x/y grid coords; otherwise reads body-loc, x, y, and inventory page. Handles the BODYPART (ear) special case for the item code tag, applies a legacy "nec " -> "neg " fixup for saves pre-version 0x5D, converts the 4-char code to a classId, and reads the socket count for non-compact non-crude items.
+// 1.14d mac: 00176113
 BOOL __stdcall ReadInfoFromStreamVersioned(uint8_t * pBytesAfterId, size_t size, BOOL isSave, D2UnitDataItemDetailsStrc * itemData, int32_t nFileVersion) {
     D2BitBufferStrc bitBuffer;
     Fog::BitBuffer::InitBitBuffer(&bitBuffer, pBytesAfterId, (uint32_t)size);
@@ -2924,6 +3024,7 @@ static void __stdcall SerializeSimpleItem(D2UnitStrc * pItem, D2BitBufferStrc * 
     Fog::BitBuffer::WriteValueToBitBuffer(pBitBuffer, 0, nErrLine);
 }
 
+// 1.14d mac: 001795d5
 int32_t __stdcall ITEM_GetTxtSetItems_setIndex(D2UnitStrc * pUnit) {
     if (!(GetTypeInline(pUnit) == UNIT_ITEM && GetItemDataInline(pUnit) && GetItemDataInline(pUnit)->eQuality == QUALITY_SET)) {
       return -1;
@@ -2938,6 +3039,7 @@ int32_t __stdcall ITEM_GetTxtSetItems_setIndex(D2UnitStrc * pUnit) {
     return -1;
 }
 
+// 1.14d mac: 0016ff60
 eD2ItemTypes __stdcall ITEM_GetItemData_wType(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x67d);
@@ -2952,6 +3054,7 @@ eD2ItemTypes __stdcall ITEM_GetItemData_wType(D2UnitStrc * pUnit) {
     return eItemType;
 }
 
+// 1.14d mac: 00170cbc
 static void __stdcall ITEMS_SumSocketedItemStats(eD2UnitStat eUnitStat, int * pOutTotal, D2UnitStrc * pItem) {
     D2UnitStrc* pUnit_00;
     eD2PlayerAnimMode eAnimMode;
@@ -2977,6 +3080,7 @@ static void __stdcall ITEMS_SumSocketedItemStats(eD2UnitStat eUnitStat, int * pO
     }
 }
 
+// 1.14d mac: 00170da0
 uint32_t __stdcall ITEMS_CheckIfUpgradeable(uint32_t nItemClassId) {
     D2ItemsTxt* pItemsTxt = DATATBLS::ItemTbls::TXT_Items_GetLine(nItemClassId);
     uint32_t bIsArmorOrWeapon = TXT_ItemTypes_CheckEquivalence(nItemClassId, ITEMTYPE_AnyArmor);
@@ -3022,6 +3126,7 @@ uint32_t __stdcall ITEM_ValidateAndGetClass(D2UnitStrc * pUnit) {
 }
 
 // Computes the effective required character level to use an item (pUnit), optionally relative to a player (pUnit2) for class-specific affix requirements. Takes the max over: the item-quality contribution (magic prefix/suffix/automagic, set/unique/crafted lvlReq, rare affix level requirements using classlevelreq when the affix is class-restricted and matches the player class), the base Items.txt level requirement, the requirements of all socketed/contained items (recursive), the reqlevel of any +skill stats on the item (stat 0x6b) and +skilltab stats (stat 0x61, +6 unless the tab matches the player's class), plus the item_levelreq stat bonus. Returns the clamped (>=0) result. __fastcall, recursive over inventory contents.
+// 1.14d mac: 00170f69
 uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     uint16_t wItemVersion;
     eD2ItemQuality uAffix;
@@ -3291,12 +3396,14 @@ uint32_t __fastcall ITEM_CalcRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUni
     return nMaxLvlReq + nIdx <= 0 ? 0 : nMaxLvlReq + nIdx;
 }
 
+// 1.14d mac: 00170d2f
 uint32_t __stdcall ITEM_GetRequiredLevel(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     uint32_t nRequiredLevel = ITEM_CalcRequiredLevel(pUnit, pUnit2);
     return nRequiredLevel;
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
+// 1.14d mac: 00171612
 int32_t __stdcall ITEM_GetTxtItemTypes_throwable(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -3311,6 +3418,7 @@ int32_t __stdcall ITEM_GetTxtItemTypes_throwable(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00171794
 int32_t __stdcall ITEM_GetTxtItemTypes_beltable(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -3326,6 +3434,7 @@ int32_t __stdcall ITEM_GetTxtItemTypes_beltable(D2UnitStrc * pUnit) {
 }
 
 // Returns the spell-icon index for a scroll or book item (used for skill-icon display). For scrolls/books reads the icon byte from the Books.txt entry indexed by wMagicSuffix[0]; for other item types returns bSpellIcon from Items.txt. Returns -1 when TXT_Books_GetLine fails (0062bbb3). Halts on null or non-item unit.
+// 1.14d mac: 00173ece
 int __stdcall ITEM_GetSpellIcon(D2UnitStrc * pUnit) {
     D2ItemsTxt* pItemsTxt;
     uint32_t nBookTxtIdx;
@@ -3368,6 +3477,7 @@ int __stdcall ITEM_GetSpellIcon(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0017411b
 int32_t __stdcall ITEM_GetTxtItemTypes_staffmods(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 7;
@@ -3382,6 +3492,7 @@ int32_t __stdcall ITEM_GetTxtItemTypes_staffmods(D2UnitStrc * pUnit) {
     return 7;
 }
 
+// 1.14d mac: 00174179
 uint8_t __stdcall ITEM_GetMaxSockCount(D2UnitStrc * pUnit) {
     uint8_t byMaxSockets;
     int nLvlMaxSock;
@@ -3418,6 +3529,7 @@ uint8_t __stdcall ITEM_GetMaxSockCount(D2UnitStrc * pUnit) {
 }
 
 // Determines and assigns the socket count for an item unit during socketing. Computes the maximum allowed sockets from the item's grid area (width*height, capped at 6), then clamps further by item quality (magic=4, rare=2, crafted/tampered=3, set/unique use existing stat or force 1). Calls ITEM_GetMaxSockCount for a hard cap, rolls the final count, sets ITEMFLAG_SOCKETED, and writes UNITSTAT_item_numsockets via STATLIST_SetUnitStat.
+// 1.14d mac: 001742ac D2Common::ITEMS::Items::ITEM_RollSocketCount
 void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, int nMaxSocksRandom) {
     eD2ItemQuality nQuality;
     D2UnitStrc* pUnit_00 = pUnit;
@@ -3504,6 +3616,7 @@ void __stdcall ITEM_RollSocketCount(D2UnitStrc * pUnit, int nMaxSocksRandom) {
 }
 
 // Sets the socket count on an item, clamping to [1, min(6, itemArea, ITEM_GetMaxSockCount)]. Only acts on UNIT_ITEM with nonzero grid area (width*height). Sets ITEMFLAG_SOCKETED on item flags and writes UNITSTAT_item_numsockets via STATLIST_SetUnitStat.
+// 1.14d mac: 001743fc
 void __stdcall ITEM_SetSocketCount(D2UnitStrc * pUnit, int nSockCount) {
     D2UnitStrc* pUnit_00 = pUnit;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
@@ -3544,6 +3657,7 @@ void __stdcall ITEM_SetSocketCount(D2UnitStrc * pUnit, int nSockCount) {
     Stats::StatsEx::STATLIST_SetUnitStat(pUnit_00, UNITSTAT_item_numsockets, nSockCount, 0);
 }
 
+// 1.14d mac: 00174572
 uint32_t __stdcall ITEM_IsSocketable(D2UnitStrc * pUnit) {
     uint32_t bIsSocketFiller = ITEMS_IsA(pUnit, ITEMTYPE_SocketFiller);
     return bIsSocketFiller;
@@ -3683,6 +3797,7 @@ D2RuneTableStrc * __stdcall CalculateRunewordByItem(D2UnitStrc * pItem) {
     return nullptr;
 }
 
+// 1.14d mac: 00173c78
 int32_t __stdcall TXT_ItemTypes_CheckClass(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -3698,6 +3813,7 @@ int32_t __stdcall TXT_ItemTypes_CheckClass(D2UnitStrc * pUnit) {
 }
 
 // Returns a full 32-bit value: every return path writes all of EAX (MOV EAX,imm32 / XOR EAX,EAX / MOVZX EAX,<narrow>).
+// 1.14d mac: 00170d3e
 eD2PlayerClassIDDWORD __stdcall TXT_ItemTypes_GetClass(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return CLASS_COUNT;
@@ -3718,6 +3834,7 @@ eD2PlayerClassIDDWORD __stdcall TXT_ItemTypes_GetClass(D2UnitStrc * pUnit) {
 }
 
 // Resolves the display/transform color (palette index) of an item and writes the raw transform-color code to *pColor. Priority order: (1) owner-unit states whose itemtype matches the item (states.txt itemtrans) override the color; otherwise by quality: magic/rare scan the item's prefix/suffix and automagic affixes for the first MagicAffix with a valid transformcolor; set uses SetItems.txt chrtransform/invtransform; unique uses UniqueItems.txt chrtransform/invtransform; normal socketed items derive color from the first socketed gem (Gems.txt). nTransType selects char (0) vs inventory (nonzero) palette via PALETTE_GetItemPalette, combining the item's bTransform/bInvTrans base. Returns the palette pointer/index, or 0 if no color applies. __stdcall.
+// 1.14d mac: 00174e30
 uint8_t * __stdcall GetItemColor(D2UnitStrc * pUnit, D2UnitStrc * pItem, char * pColor, int32_t nTransType) {
     uint8_t cTransColor;
     BOOL eUnitState;
@@ -3946,6 +4063,7 @@ static D2_FORCEINLINE uint32_t FlagBit_D2UnitStrc_eUnitFlagsEx_25(D2UnitStrc * p
 
 // Returns 1 if pUnit is a valid target for the Imbue quest reward (Charsi). Rejects: NULL (fatal error), gold, monster-dropped items (ITEMFLAG_MONSTER set), non-equippable item types. For equippable items also rejects: non-ethereal throwables, quest items (except "leg"), items with sockets or socket flag, and quality other than normal (not set/unique/magic/rare/crafted/tempered).
 // @sourcefile .\ITEMS\Items.cpp
+// 1.14d mac: 0017533c
 BOOL __stdcall IsValidImbumeItem(D2UnitStrc * pUnit) {
     eD2ItemTypes eItemType;
     D2ItemsTxt* pItemsTxt;
@@ -4002,6 +4120,7 @@ BOOL __stdcall IsValidImbumeItem(D2UnitStrc * pUnit) {
 
 // Returns true if the item is eligible to receive a custom player name. Rejects gold, body-parts, quivers, broken items, items already named (ITEMFLAG_PLAYERNAME set), compact-save items, and items whose Items.txt bNameable flag is false.
 // @sourcefile .\ITEMS\Items.cpp
+// 1.14d mac: 00175463
 BOOL __stdcall ITEM_CheckIfItemCanBeNamed(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", Fog::Src::ErrorManager::GetInstructionPointer(), 0x67d);
@@ -4020,6 +4139,7 @@ BOOL __stdcall ITEM_CheckIfItemCanBeNamed(D2UnitStrc * pUnit) {
 
 // Returns true if the item is eligible to receive sockets (e.g. via Larzuk quest or cube recipe). Rejects gold, quest items (unless code is 'leg'), items that already have socketed children, already have ITEMFLAG_SOCKETED, or have ITEM_GetMaxSockCount==0. Returns true only when current socket count is 0.
 // @sourcefile .\ITEMS\Items.cpp
+// 1.14d mac: 0017556b
 BOOL __stdcall ITEM_CheckIfItemCanHaveSockets(D2UnitStrc * pUnit) {
     if (!pUnit) {
       Fog::Src::ErrorManager::ERROR_UnrecoverableInternalError_Halt("", (void*)Fog::Src::ErrorManager::GetInstructionPointer(), 0x67d);
@@ -4037,6 +4157,7 @@ BOOL __stdcall ITEM_CheckIfItemCanHaveSockets(D2UnitStrc * pUnit) {
 }
 
 // Tests whether two item units are "identical enough" to be socketed/stacked together. Returns TRUE only if both items match on: class id, item quality (defaulting to 2 if not an item or no item data), file index (variant), stackable flag (must be stackable), ethereal flag, both qualities can-have-sockets, all damage stats (min/max, secondary min/max, throw min/max), and both have zero sockets. Returns FALSE on any mismatch. Pure comparison predicate, no side effects.
+// 1.14d mac: 00175780
 BOOL __stdcall ITEMS_AreStackablesEqual(D2UnitStrc * pItem1, D2UnitStrc * pItem2) {
     int nClassId2;
     eD2ItemQuality pItemData2;
@@ -4130,6 +4251,7 @@ BOOL __stdcall ITEMS_AreStackablesEqual(D2UnitStrc * pItem1, D2UnitStrc * pItem2
 }
 
 // Item-load helper called by ITEM_DeserializeFromBitBuffer: given an eD2UnitStat percent-stat selector (item_armor_percent 0x10/0x1f, item_maxdamage_percent 0x11/0x16, item_mindamage_percent 0x12/0x15), resolves the corresponding absolute base value from the item's D2ItemsTxt caps (dwMaxAc, nMaxDam/n2HandMaxDam/nMaxMisDam, nMinDam/n2HandMinDam/nMinMisDam) and writes it onto pUnit via STATLIST_SetUnitStat (UNITSTAT_armorclass / max/mindamage, secondary, and throw variants). Not a cube recipe transform.
+// 1.14d mac: 0017af04
 static void __stdcall ITEM_ResolvePercentStatToBaseValue(eD2UnitStat nRecipeType, D2UnitStrc * pUnit) {
     uint32_t bIsType;
     int32_t nCurStat;
@@ -4243,6 +4365,7 @@ static void __stdcall ITEM_ResolvePercentStatToBaseValue(eD2UnitStat nRecipeType
 }
 
 // Canonical D2 item bit-stream reader: deserializes one item from a D2BitBufferStrc into pUnit's item data + stat list (inverse of SerializeComplexItem). Reads version(10b), location code (ground=X/Y 16b each; else bodyloc+cell+inv page), item code (resolved to ClassId), flags, quality (switch over eD2ItemQuality decoding magic/set/rare/unique/crafted affix IDs, automod, charm), GUID/level/personalized char name, runeword and ear/bodypart data, then base stats (gold, defense, weapon min/max dmg with ethereal*3/2 and low-quality*3/4 scaling, durability) and a property/stat-list loop (9-bit stat IDs, grouped set/charge/on-hit-skill/skill-tab stats) via STATLIST_SetUnitStat. Field bit widths gated by item save/wire version (nParam2: <0x5d/<0x60 compact). __stdcall; returns 1 on success, -1 on parse error.
+// 1.14d mac: 001768b4
 int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, uint32_t nParam1, int32_t bIsExtended, uint32_t * pnSocketedItemCount, uint32_t nFileVersion) {
     int16_t wAffixAdj;
     uint32_t nCoord;
@@ -5375,11 +5498,13 @@ int32_t __stdcall ITEM_DeserializeFromBitBuffer(D2UnitStrc * pUnit, D2BitBufferS
     return (uint32_t)!bError * 2 - 1;
 }
 
+// 1.14d mac: 001760e0
 void __stdcall ExtractItemDetails(uint8_t * pBytesAfterId, size_t size, BOOL isSave, D2UnitDataItemDetailsStrc * itemData) {
     ReadInfoFromStreamVersioned(pBytesAfterId, size, isSave, itemData, 0x60);
 }
 
 // Deserialises an item unit from a binary save-data bit buffer into pUnit. Validates the 0x4D4A ("JM") magic header when nParam1 is set, reads the 32-bit item flags word, strips invalid flags, resets all affix/prefix/suffix fields on the unit to clean state, then delegates to ITEM_DeserializeFromBitBuffer (full items) or ITEMS_DeserializeItemHeader (compact items). Returns the number of bits consumed.
+// 1.14d mac: 00176299
 int32_t __stdcall ITEM_LoadFromSaveData(D2UnitStrc * pUnit, uint8_t * pSaveData, size_t nSize, uint32_t bCheckHeader, uint32_t * pnSocketedItemCount, uint32_t nVersion, int * pUnitDataItemDetails) {
     BOOL bIsExtended = FALSE;
     int32_t nBitsConsumed;
@@ -5481,6 +5606,7 @@ int32_t __stdcall ITEM_LoadFromSaveData(D2UnitStrc * pUnit, uint8_t * pSaveData,
 }
 
 // Returns 1 if pUnit (item) is replenishable (throwable, stackable, non-ethereal, and its ItemTypesTxt entry has the repair flag set). Returns 0 for non-item units or items that fail any condition. Halts on null pUnit.
+// 1.14d mac: 0016ffad
 static BOOL ITEM_IsReplenishable(D2UnitStrc * pUnit) {
     eD2ItemTypes eItemType;
     int32_t nErrLine;
@@ -5514,6 +5640,7 @@ static BOOL ITEM_IsReplenishable(D2UnitStrc * pUnit) {
 }
 
 // Returns 1 if the item unit can be repaired at an NPC. Checks: must be an identified, non-ethereal item whose ItemTypesTxt entry has the repair flag, is not replenishable, and has durability. Also passes if the item's charged skills are not fully charged.
+// 1.14d mac: 0016fe00
 uint32_t __stdcall ITEM_CanBeRepaired(D2UnitStrc * pUnit) {
     D2UnitStrc* pItemUnit = pUnit;
     if ((pUnit ? pUnit->eUnitType : UNIT_COUNT) != UNIT_ITEM) {
@@ -5555,6 +5682,7 @@ uint32_t __stdcall ITEM_CanBeRepaired(D2UnitStrc * pUnit) {
     return (uint32_t)(bHasDurabilityFlag != 0);
 }
 
+// 1.14d mac: 001700a3
 int32_t __stdcall ITEM_GetTxtItemTypes_shoots(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -5569,6 +5697,7 @@ int32_t __stdcall ITEM_GetTxtItemTypes_shoots(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00170138
 int32_t __stdcall ITEM_GetTxtItemTypes_quiver(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -5583,6 +5712,7 @@ int32_t __stdcall ITEM_GetTxtItemTypes_quiver(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00170191
 uint32_t __stdcall ITEM_GetTxtItemTypes_autostack(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -5597,6 +5727,7 @@ uint32_t __stdcall ITEM_GetTxtItemTypes_autostack(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 001701e9
 uint32_t __stdcall ITEM_GetTxtItemTypes_reload(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -5611,6 +5742,7 @@ uint32_t __stdcall ITEM_GetTxtItemTypes_reload(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00170241
 uint32_t __stdcall ITEM_GetTxtItemTypes_reequip(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -5625,6 +5757,7 @@ uint32_t __stdcall ITEM_GetTxtItemTypes_reequip(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00170299
 uint8_t __stdcall ITEM_GetTxtItemTypes_storepage(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0xff;
@@ -5644,6 +5777,7 @@ uint8_t __stdcall ITEM_GetTxtItemTypes_storepage(D2UnitStrc * pUnit) {
     return bStorePage;
 }
 
+// 1.14d mac: 001702f1
 uint8_t __stdcall ITEM_GetTxtItemTypes_varinvgfx(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -5658,6 +5792,7 @@ uint8_t __stdcall ITEM_GetTxtItemTypes_varinvgfx(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00170349
 D2Row_char_32 * __stdcall ITEM_GetTxtItemTypes_invgfx(D2UnitStrc * pUnit, uint32_t nGfxIndex) {
     // Static local variables (originally global data)
     static char * gpszItemNoInvGfx = (char*)""; D2_STATIC_GUARD(gpszItemNoInvGfx, "D2Common::ITEMS::Items::ITEM_GetTxtItemTypes_invgfx::gpszItemNoInvGfx");
@@ -5675,6 +5810,7 @@ D2Row_char_32 * __stdcall ITEM_GetTxtItemTypes_invgfx(D2UnitStrc * pUnit, uint32
     return (D2Row_char_32*)(char (*)[32])gpszItemNoInvGfx;
 }
 
+// 1.14d mac: 001703bc
 uint32_t __stdcall ITEM_GetTxtItemTypes_rare(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -5689,6 +5825,7 @@ uint32_t __stdcall ITEM_GetTxtItemTypes_rare(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 00170414
 uint32_t __stdcall ITEM_GetTxtItemTypes_magic(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -5703,6 +5840,7 @@ uint32_t __stdcall ITEM_GetTxtItemTypes_magic(D2UnitStrc * pUnit) {
     return 0;
 }
 
+// 1.14d mac: 0017046c
 uint32_t __stdcall ITEM_GetTxtItemTypes_normal(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_ITEM)) {
       return 1;
@@ -5717,6 +5855,7 @@ uint32_t __stdcall ITEM_GetTxtItemTypes_normal(D2UnitStrc * pUnit) {
     return 1;
 }
 
+// 1.14d mac: 001707be
 void __stdcall ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(D2UnitStrc * pUnit, eD2BodyLoc * nBodyLoc1, eD2BodyLoc * nBodyLoc2) {
     D2ItemTypesTxt* pItemTypesTxt;
     if (!pUnit || pUnit->eUnitType != UNIT_ITEM) {
@@ -5739,6 +5878,7 @@ void __stdcall ITEM_GetTxtItemTypes_BodyLoc1andBodyLoc2(D2UnitStrc * pUnit, eD2B
 }
 
 // Checks whether pCharUnit meets the strength/dexterity/level/class requirements to equip item pUnit. Reads Items.txt reqstr/reqdex, applies the item_req_percent stat modifier and the -10 ethereal reduction, compares against the character's strength/dexterity (optionally subtracting socketed-item contributions when bIncludeSocketedStats) and required level (ITEM_CalcRequiredLevel vs unit level). Optional out-params pnStrength/pnDexterity/pnLevel each receive the per-requirement pass flag (1/0). Also enforces class restriction (item type class vs char class, with Assassin/Druid hand-to-hand and Barbarian exceptions) and book-quantity. Returns 1 if fully equippable, else 0.
+// 1.14d mac: 0017093c
 BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCharUnit, int32_t bIncludeSocketedStats, int * pnStrength, int * pnDexterity, int * pnLevel) {
     int _bStrOk;
     int _bDexOk;
@@ -5853,6 +5993,7 @@ BOOL __stdcall ITEM_CheckEquipRequirements(D2UnitStrc * pUnit, D2UnitStrc * pCha
     return 0;
 }
 
+// 1.14d mac: 00171560
 int32_t __stdcall ITEMS_CheckBodyLocationFit(D2UnitStrc * pItem, uint32_t eBodyLoc) {
     if ((pItem ? pItem->eUnitType : UNIT_COUNT) == UNIT_ITEM) {
       uint8_t nBodyLoc1 = 0;
@@ -5870,6 +6011,7 @@ int32_t __stdcall ITEMS_CheckBodyLocationFit(D2UnitStrc * pItem, uint32_t eBodyL
 }
 
 // Adjusts buy/sell/repair prices in-place for items whose type has a staffmods class restriction. Iterates the item's skill-bonus stat list (stat 0x6b), and for each qualifying skill entry scales the price deltas using the skill's costmult/costadd fields and the skill level (2*lvl-1). The accumulated deltas are divided by nDivisor before being added to *pBuy, *pSell, and *pRepair. No-ops if pItem is null, not an item unit, or the item type has no staffmods class.
+// 1.14d mac: 00173a13
 static void __stdcall ITEMS_CalcStaffModsPriceModifier(int * pBuy, int * pSell, int * pRepair, uint32_t nDivisor, D2UnitStrc * pItem) {
     D2SkillsTxt* pSkillTxt;
     int nCostMult;
@@ -6480,12 +6622,14 @@ int32_t __fastcall ITEMS_CalcTransactionCost(D2UnitStrc * pUnit, D2UnitStrc * pI
     goto apply_price_mods;
 }
 
+// 1.14d mac: 00173cf7
 int32_t __stdcall CalculateTransactionCost_Thunk(D2UnitStrc * pUnit, D2UnitStrc * pItem, int32_t nDifficulty, D2BitBufferStrc * pQuestBitBuffer, int32_t nNpcId, int32_t nTransactionType) {
     int32_t nCost = ITEMS_CalcTransactionCost(pUnit, pItem, nDifficulty, pQuestBitBuffer, nNpcId, nTransactionType);
     return nCost;
 }
 
 // Takes only pItem. The prologue's PUSH ECX reserves the 4-byte slot for the second body location byte ([EBP-1]); ECX is not an argument.
+// 1.14d mac: 00174a81
 uint32_t __stdcall ITEMS_GetRequiredBodyType(D2UnitStrc * pItem) {
     if (!(pItem && pItem->eUnitType == UNIT_ITEM)) {
       return 0;
@@ -6508,6 +6652,7 @@ uint32_t __stdcall ITEMS_GetRequiredBodyType(D2UnitStrc * pItem) {
 }
 
 // Computes the total gold cost to repair (and restock replenishable/charged items in) all 13 equipped slots of a player. For each slot item that needs repair, restocking, or recharging, calls CalculateTransactionCost with mode 3 and accumulates the sum. Invokes an optional pfnCallback after pricing each item. Returns total cost, or 0 if the player or inventory is null.
+// 1.14d mac: 00175623
 int32_t __stdcall ITEMS_CalculateRepairAllCost(::SGAMEDATA * unk, D2UnitStrc * pPlayer, int32_t nNpcId, int32_t nDifficulty, D2BitBufferStrc * pBitBuffer, pfnItemTransactionCb pfnCallback) {
     uint32_t bCanRepair;
     int32_t nRepairCost;
@@ -6570,6 +6715,7 @@ int32_t __stdcall ITEMS_CalculateRepairAllCost(::SGAMEDATA * unk, D2UnitStrc * p
     return nTotalCost;
 }
 
+// 1.14d mac: 00175cb6
 uint32_t __stdcall ITEM_IsActiveCharm(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     if (!(pUnit && (pUnit->eUnitType != UNIT_ITEM || (!pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_BROKEN) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD)) && (!pUnit->pUnitData.pUnitDataItem || (pUnit->pUnitData.pUnitDataItem->dwItemFlags & ITEMFLAG_DISABLED) == ~(ITEMFLAG_TAGGED | ITEMFLAG_DROW | ITEMFLAG_CURSED | ITEMFLAG_STAFFMODS | ITEMFLAG_MAGICAL | ITEMFLAG_RUNEWORD | ITEMFLAG_CRUDE | ITEMFLAG_PLAYERNAME | ITEMFLAG_SAVED | ITEMFLAG_ETHEREAL | ITEMFLAG_COMPACT | ITEMFLAG_100000 | ITEMFLAG_SERVER | ITEMFLAG_RESTRICT | ITEMFLAG_BEGINNER | ITEMFLAG_BODYPART | ITEMFLAG_HARDCORE | ITEMFLAG_DISABLED | ITEMFLAG_NEW | ITEMFLAG_MONSTER | ITEMFLAG_SOCKETED | ITEMFLAG_SORTED | ITEMFLAG_RESTORED | ITEMFLAG_BROKEN | ITEMFLAG_TAKEN | ITEMFLAG_ADDED | ITEMFLAG_REMOVED | ITEMFLAG_IDENTIFIED | ITEMFLAG_IGNORE | ITEMFLAG_CURSOR | ITEMFLAG_BOUGHT | ITEMFLAG_RELOAD))))) {
       return 0;
@@ -6594,6 +6740,7 @@ uint32_t __stdcall ITEM_IsActiveCharm(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
 }
 
 // Serialize item data to bit buffer including properties, stats, and identification flags
+// 1.14d mac: 0017963c
 void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pBitBuffer, D2StatListExStrc * pStatListEx, uint32_t bIncludeNorm) {
     eInventoryPage eVar2;
     int iVar3;
@@ -7592,6 +7739,7 @@ void __stdcall SerializeComplexItem(D2UnitStrc * pItemUnit, D2BitBufferStrc * pB
 }
 
 // Serializes a single item unit to a bit buffer for network/save transmission. Writes the 0x4d4a item header (if pStatListEx present), item flags word, then delegates to SerializeComplexItem or SerializeSimpleItem based on COMPACT flag. Recursively serializes socketed child items when bAllItems is set. bIsCrude forces the CRUDE flag.
+// 1.14d mac: 00178e76
 void __fastcall SerializeItemToBitBuffer(D2UnitStrc * pUnit, D2BitBufferStrc * pBitBuffer, D2StatListExStrc * pStatListEx, BOOL bAllItems, BOOL bIsCrude) {
     uint32_t dwFlags = !pUnit || pUnit->eUnitType != UNIT_ITEM || !pUnit->pUnitData.pUnitDataItem ? 0 : pUnit->pUnitData.pUnitDataItem->dwItemFlags;
     dwFlags = dwFlags & 0xfff7ffff | 0x800000;
@@ -7629,6 +7777,7 @@ void __fastcall SerializeItemToBitBuffer(D2UnitStrc * pUnit, D2BitBufferStrc * p
     Fog::BitBuffer::GetNextPositon(pBitBuffer);
 }
 
+// 1.14d mac: 00178e20
 int32_t __stdcall SerializeItem(D2UnitStrc * pUnit, uint8_t * pBitStream, size_t nBitStreamSize, D2StatListExStrc * pStatListEx, BOOL bAllItems, BOOL bIsCrude) {
     D2BitBufferStrc bitBuffer;
     Fog::BitBuffer::InitBitBuffer(&bitBuffer, pBitStream, (uint32_t)nBitStreamSize);

@@ -15,7 +15,12 @@
 
 // Forward declarations
 struct D2CrashReportStrc;
+#if !defined(_WIN32) && D2_OS_MAC
+// The Mac exception callback returns nothing (1.14d mac 002ee625).
+typedef void (__fastcall *pfnFogExceptionFilter)(D2CrashReportStrc * pExceptionReport, void * pUserContext);
+#else
 typedef int (__fastcall *pfnFogExceptionFilter)(D2CrashReportStrc * pExceptionReport, void * pUserContext);
+#endif
 
 extern pfnFogExceptionFilter gpCurrentExceptionFilter;
 extern void * gpCurrentExceptionContext;

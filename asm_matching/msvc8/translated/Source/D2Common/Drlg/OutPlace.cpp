@@ -1011,6 +1011,7 @@ int gaOutPlaceAdjacentRoadIndex[81] = {
 namespace D2Common { namespace Drlg { namespace OutPlace {
 
 // Looks up road preset ID from direction data tables.
+// 1.14d mac: 00158400
 int32_t __fastcall DRLGOUTPLACE_GetRoadPresetId(int32_t nDirX, int32_t nDirY, int32_t nRoadType) {
     int32_t nDirection = gaRoadPresetDirectionLookup[nDirX + nDirY * 3 + 4];
     if (nRoadType >= 4) {
@@ -1021,6 +1022,7 @@ int32_t __fastcall DRLGOUTPLACE_GetRoadPresetId(int32_t nDirX, int32_t nDirY, in
 }
 
 // Extended road preset lookup with directional offsets.
+// 1.14d mac: 00158441
 int32_t __fastcall DRLGOUTPLACE_GetAdjacentRoadPresetId(int32_t nDirX, int32_t nDirY, int32_t nPrevDirX, int32_t nPrevDirY, int32_t nRoadType) {
     if (nDirX < 0) {
       nDirX += -2;
@@ -1045,6 +1047,7 @@ int32_t __fastcall DRLGOUTPLACE_GetAdjacentRoadPresetId(int32_t nDirX, int32_t n
 }
 
 // Iterates all four border edges of an outdoor DRLG level grid, scanning inward from each edge and marking contiguous non-solid cells with flag 0x100 (blank/border) until a solid cell is encountered. Used during outdoor level generation to suppress tile rendering at level boundaries.
+// 1.14d mac: 001584bf
 void __fastcall SetBlankBorderGridCells(D2DrlgLevelStrc * pLevel) {
     int32_t nGridX;
     int32_t nScanX;
@@ -1104,6 +1107,7 @@ void __fastcall SetBlankBorderGridCells(D2DrlgLevelStrc * pLevel) {
     }
 }
 
+// 1.14d mac: 001585c4
 void __fastcall SetOutGridLinkFlags(D2DrlgLevelStrc * pLevel) {
     int32_t nLinkVisFlag;
     D2DrlgLevelDataWildernessLevel* pLevelData = pLevel->pDrlgLevelData.pDrlgLevelOutdoorsData;
@@ -1123,6 +1127,7 @@ void __fastcall SetOutGridLinkFlags(D2DrlgLevelStrc * pLevel) {
 }
 
 // DRLG outdoor wilderness border/road generator: walks the level's polygon outline (linked list of D2DrlgVertexStrc edges) and stamps edge presets, corner presets and grid border flags into the outdoor preset grid. For each edge it picks a road/border preset type from the level type (case 2 dirt, 0x10, 0x1b, 0x1f siege-grid-division) and direction lookup tables (gaRoadPresetDirectionLookup / gaOutPlaceRoadPresetLookup / gRoadPresetIdLookupTable), then spawns presets along the edge via SpawnOutdoorLevelPresetEx and flags cells via AlterGridFlag. Has act-specific corner handling for acts I/II/IV/V (and special-cases level 0x11) plus joint/corner presets at each vertex. Finishes with SetBlankBorderGridCells. Used during outdoor level layout for acts 1,2,4,5.
+// 1.14d mac: 00158666
 void __fastcall PlaceAct1245OutdoorBorders(D2DrlgLevelStrc * pLevel) {
     // Static local variables (originally global data)
     static int gnOutPlaceGridHeightByAct[10] = {
@@ -1666,6 +1671,7 @@ static void DRLGLEVEL_AllocOrthForAdjacentLevel(D2DrlgLevelStrc * pLevelData, eD
     DrlgRoom::AllocDrlgOrth(&pLevelDataBase->pOrthData, pLevel, eDirection, (uint32_t)(pLevel->eDrlgType == 2));
 }
 
+// 1.14d mac: 0015ae54
 static void __stdcall DRLGLEVEL_AllocDrlgLevelFromLevelIdToLevelId(D2DrlgStrc * pDrlg, eD2LevelId eLevel, eD2LevelId nLevelIdStart) {
     int* pVisArray;
     int* pWarpIds;
@@ -2557,6 +2563,7 @@ static void DRLGActMisc_InitAct5(D2DrlgStrc * pDrlg) {
 
 // Act-specific level setup dispatcher: moves pDrlg to EAX and tail-jumps through a 5-entry table to DRLGActMisc_InitAct1..InitAct5 by nActNo; nActNo above 4 returns.
 // 1.14d: jump table at 00678afc, stubs 00678ae1..00678af5.
+// 1.14d mac: 00158be4
 void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(D2DrlgStrc * pDrlg, eAct nActNo) {
     switch (nActNo) {
       case ACT_I:
@@ -2577,6 +2584,7 @@ void __fastcall DRLGACTMISC_AllocDrlgLevelForAct(D2DrlgStrc * pDrlg, eAct nActNo
     }
 }
 
+// 1.14d mac: 0015bffc
 D2RoomExStrc * __fastcall DRLGOUTROOM_CreateOutdoorRoomEx(D2DrlgLevelStrc * pLevel, int32_t nX, int32_t nY, int32_t nWidth, int32_t nHeight, int32_t dwRoomFlags, int32_t dwOutdoorFlags, int32_t dwOutdoorFlagsEx, int32_t dwDT1Mask) {
     D2RoomExStrc* pRoomEx = DrlgRoom::DRLGROOMEX_AllocRoomEx(pLevel, 1);
     pRoomEx->sCoords.WorldPosition.x = nX;
@@ -2598,6 +2606,7 @@ D2RoomExStrc * __fastcall DRLGOUTROOM_CreateOutdoorRoomEx(D2DrlgLevelStrc * pLev
 }
 
 // Selects and spawns border tiles and random preset rooms for the three Kurast outdoor levels (Docktown 0x4F, Upper Kurast 0x50, Causeway 0x51) and the spider-cavern placeholder (0x52). Dispatches to level-specific border builders then places fixed and randomly-seeded DS1 preset files.
+// 1.14d mac: 00157958
 void __fastcall BuildKurast(D2DrlgLevelStrc * pLevel) {
     int nLevelWidthCells = pLevel->eD2LevelId;
     switch (nLevelWidthCells) {
@@ -2654,6 +2663,7 @@ void __fastcall BuildKurast(D2DrlgLevelStrc * pLevel) {
     }
 }
 
+// 1.14d mac: 00157d10
 void __fastcall BuildTravincal(D2DrlgLevelStrc * pLevel) {
     if (pLevel->eD2LevelId != 0x53) {
       return;

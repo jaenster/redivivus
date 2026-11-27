@@ -32,6 +32,7 @@ typedef void (__fastcall *pfnMonUniqueModInit)(D2UnitStrc * pUnit, int32_t eModi
 
 namespace D2Client { namespace UNIT { namespace MonUnique {
 
+// 1.14d mac: 0011c888 D2Client::UNIT::MonUnique::GetMonUModList
 uint8_t * __fastcall GetMonUModList(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return nullptr;
@@ -48,6 +49,7 @@ uint16_t __fastcall Unreferenced_004ac760(D2UnitStrc * pUnit) {
     return pUnit->pUnitData.pUnitDataMonster->nNameSeed;
 }
 
+// 1.14d mac: 0011c8a7
 void __fastcall SetNameSeed(D2UnitStrc * pUnit, uint16_t nNameSeed) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -56,6 +58,7 @@ void __fastcall SetNameSeed(D2UnitStrc * pUnit, uint16_t nNameSeed) {
     pUnit->pUnitData.pUnitDataMonster->nNameSeed = nNameSeed;
 }
 
+// 1.14d mac: 0011c8c7
 void __fastcall SetBossId(D2UnitStrc * pUnit, int16_t nBossId) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -64,6 +67,7 @@ void __fastcall SetBossId(D2UnitStrc * pUnit, int16_t nBossId) {
     pUnit->pUnitData.pUnitDataMonster->nBossNo = nBossId;
 }
 
+// 1.14d mac: 0011c8e7
 int16_t __fastcall GetBossId(D2UnitStrc * pUnit) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return 0;
@@ -73,6 +77,7 @@ int16_t __fastcall GetBossId(D2UnitStrc * pUnit) {
 }
 
 // Registers: pUnit in ECX; nTypeFlagMask in DX is tested against the monster's type flags (callers pass 2, 8, 0x80).
+// 1.14d mac: 0011c908
 BOOL __fastcall CheckMonTypeForMonster(D2UnitStrc * pUnit, uint16_t nTypeFlagMask) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER ? pUnit->pUnitData.pUnitDataMonster : 0)) {
       return 0;
@@ -81,6 +86,7 @@ BOOL __fastcall CheckMonTypeForMonster(D2UnitStrc * pUnit, uint16_t nTypeFlagMas
     return (uint32_t)((pUnit->pUnitData.pUnitDataMonster->eMonsterType & nTypeFlagMask) != 0);
 }
 
+// 1.14d mac: 0011c930
 void __fastcall SetUnsetMonsterType(D2UnitStrc * pUnit, uint16_t eMonsterType, BOOL bSetUnset) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -98,6 +104,7 @@ void __fastcall SetUnsetMonsterType(D2UnitStrc * pUnit, uint16_t eMonsterType, B
     pMonData->eMonsterType &= ~eMonsterType;
 }
 
+// 1.14d mac: 0011c95f
 void __fastcall MONSTER_SetUniqueMonsterFlag0x100(D2UnitStrc * pUnit, int32_t bApply) {
     if (!(pUnit && pUnit->eUnitType == UNIT_MONSTER)) {
       return;
@@ -294,6 +301,7 @@ void __fastcall DefineSuperMonster(D2UnitStrc * pUnit, int32_t eModifier, int32_
 }
 
 // Applies the Bish/Bosh unique-monster modifier: frees any existing light map on pUnit, then allocates a new colored light (radius 7, alpha 0xFF). If the monster has the spectral-hit quest flag set (byte6 bit 2 of quest record), derives RGB from the unit seed; otherwise reads RGB from MonStats2 txt. Stores the new light map and updates the unit's light radius. No-op if bApply == 0.
+// 1.14d mac: 0011cdf0
 void __fastcall MONUNIQUE_ApplyModifierBishbosh(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply) {
     D2LightMapStrc* pLightMap;
     int nClassId;
@@ -343,6 +351,7 @@ static inline eD2UnitType GetTypeInline(D2UnitStrc * pUnit) {
     return (eD2UnitType)6;
 }
 
+// 1.14d mac: 0011d318
 void __fastcall MONUNIQUE_Clt_ClearMonsterOverride(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply) {
     if (!(GetTypeInline(pUnit) == UNIT_MONSTER && pUnit->pUnitData.pUnitDataMonster)) {
       return;
@@ -355,6 +364,7 @@ void __fastcall MONUNIQUE_Clt_ClearMonsterOverride(D2UnitStrc * pUnit, int32_t e
 
 namespace D2Client { namespace UNIT { namespace MonUnique {
 
+// 1.14d mac: 0011d337
 void __fastcall MONUNIQUE_ApplyModifierBloodRaven(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply) {
     if (!bApply) {
       return;
@@ -365,6 +375,7 @@ void __fastcall MONUNIQUE_ApplyModifierBloodRaven(D2UnitStrc * pUnit, int32_t eM
 }
 
 // Applies a unique/champion monster resistance modifier to a unit (eModifier = the monster modifier/affix id). For mod 0x1c (stone skin) also doubles armorclass. Reads the unit's current fire/light/cold/poison/magic/damage resists and counts how many are already >=100 (maxed); if 2+ are maxed it skips additive mods (prevents over-stacking). mod 8 = +40 cold/fire/light (cold-resistant style), mod 0x1b = +20 to those, mods 9/0x12/0x11/0x17 = +75 single elemental resist, 0x19 = +20 magic resist, 0x1c = +50 damage resist. Does nothing unless bApply is non-zero. Mutates unit stats via STATLIST_SetUnitStat and returns nothing. __fastcall: pUnit in ECX, eModifier in EDX, bApply on the stack.
+// 1.14d mac: 0011cf31
 void __fastcall SetResistances(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply) {
     int nFireRes;
     if (!bApply) {
@@ -473,6 +484,7 @@ void __fastcall SetResistances(D2UnitStrc * pUnit, int32_t eModifier, int32_t bA
 }
 
 // Dispatches unique/champion modifier init callbacks for a monster unit. Iterates gapMonUniqueModInitFuncs for all active global modifiers, then iterates the unit's MonUModList (up to 9 entries) calling the corresponding init function with the champion flag. Guards: pUnit must be non-null, UNIT_MONSTER, have valid pUnitDataMonster with a non-empty MonUModList.
+// 1.14d mac: 0011c994
 void __fastcall MONUNIQUE_ApplyModifierEffects(D2UnitStrc * pUnit) {
     // Static local variables (originally global data)
     static int gaMonUniqueBaseModIds[4] = { 0x1, 0x2, 0x3, 0x4 }; D2_STATIC_GUARD(gaMonUniqueBaseModIds, "D2Client::UNIT::MonUnique::MONUNIQUE_ApplyModifierEffects::gaMonUniqueBaseModIds");
@@ -564,6 +576,7 @@ void __fastcall MONUNIQUE_ApplyModifierEffects(D2UnitStrc * pUnit) {
     } while (i < 9);
 }
 
+// 1.14d mac: 0011e35b
 void __fastcall MakeFireExposionAttack(D2UnitStrc * pUnit, int32_t nUMod, int32_t bApply) {
     int nFrameCount;
     if (!bApply) {
@@ -586,6 +599,7 @@ void __fastcall MakeFireExposionAttack(D2UnitStrc * pUnit, int32_t nUMod, int32_
     Sound::SOUND_PlaySound(SOUND_NECROMANCER_NEEDMANA_1, pUnit, 0, 0, 0);
 }
 
+// 1.14d mac: 0011d829
 void __fastcall MakeMonsterCorpseExplodeAttack(D2UnitStrc * pUnit, int32_t nUMod, int32_t bApply) {
     int nFrameCount;
     int nCurFrame;
@@ -624,6 +638,7 @@ void __fastcall MakeMonsterCorpseExplodeAttack(D2UnitStrc * pUnit, int32_t nUMod
 
 namespace D2Client {
 
+// 1.14d mac: 0011df22
 void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {
     /* @data MONUNIQUE_DispatchDeathEffect_body
                          @wasnamed MONUNIQUE_DispatchDeathEffect
@@ -709,6 +724,7 @@ void __fastcall MONUNIQUE_DispatchDeathEffect(D2UnitStrc * pUnit, int32_t nUMod,
 
 namespace D2Client { namespace UNIT { namespace MonUnique {
 
+// 1.14d mac: 0011dabf
 void __fastcall MONUNIQUE_SpawnDeathMissile(D2UnitStrc * pUnit, int32_t eModifier, int32_t bApply) {
     int32_t nVelocity;
     int32_t nTotalFrames;
@@ -740,6 +756,7 @@ void __fastcall MONUNIQUE_SpawnDeathMissile(D2UnitStrc * pUnit, int32_t eModifie
     SKILLS::Skills::SKILL_SpawnMissilesAtTarget(pUnit, pUnit, MISSILE_Coldunique, ~MISSILE_Arrow, SKILL_Attack, D2Common::Stats::StatsEx::STATSEX_GetCurrentStat(pUnit, UNITSTAT_level, 0), nVelocity);
 }
 
+// 1.14d mac: 0011dc9a
 void __fastcall MONUNIQUE_DurielDeathAndSpawn(D2UnitStrc * pUnit, int32_t nUMod, int32_t nParam2) {
     int nCurrentFrame;
     uint32_t sNewSeed;
@@ -773,6 +790,7 @@ void __fastcall MONUNIQUE_DurielDeathAndSpawn(D2UnitStrc * pUnit, int32_t nUMod,
 }
 
 // Fires a ring of 4 directional missiles (N/S/E/W, 2 copies each = 8 total) from a unique monster. Skips MISSILE_Lightunique unless the monster has the 0x100 unique-type flag. For each of 4 cardinal directions, places sSkillArg.nUnitX/Y at unitPos + direction offset and calls MakeMissile twice (pMissileEx index 0 and 1). Uses SKILLSMON_SetMissilePathLinear for all except MISSILE_Queenpoisoncloud. nToHit defaults to 1 if passed as 0.
+// 1.14d mac: 0011e7c9
 static void __stdcall MONUNIQUE_SpawnDirectionalMissiles(D2UnitStrc * pUnit, eMissilesId eMissileId, int32_t nToHit) {
     int nPosX;
     int nPosY;
@@ -821,6 +839,7 @@ static void __stdcall MONUNIQUE_SpawnDirectionalMissiles(D2UnitStrc * pUnit, eMi
     } while (nDir < 4);
 }
 
+// 1.14d mac: 0011de0f
 void __fastcall MONUNIQUE_ApplyModifierGriswold(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {
     D2UnitStrc* nFrameCount;
     if (!bIsChampion) {
@@ -836,6 +855,7 @@ void __fastcall MONUNIQUE_ApplyModifierGriswold(D2UnitStrc * pUnit, int32_t nUMo
     MONUNIQUE_SpawnDirectionalMissiles(pUnit, MISSILE_Lightunique, nLevel);
 }
 
+// 1.14d mac: 0011de76
 void __fastcall MONUNIQUE_ApplyModifierTheSmith(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {
     if (!(bIsChampion && (!pUnit || pUnit->eAnimMode.ePlayerMode != eD2PlayerAnimMode_ns::Run))) {
       return;
@@ -845,6 +865,7 @@ void __fastcall MONUNIQUE_ApplyModifierTheSmith(D2UnitStrc * pUnit, int32_t nUMo
     MONUNIQUE_SpawnDirectionalMissiles(pUnit, MISSILE_Lightunique, nLevel);
 }
 
+// 1.14d mac: 0011debf
 void __fastcall MONUNIQUE_SpawnBugLightning(D2UnitStrc * pUnit, int32_t nUMod, int32_t nParam2) {
     int nFrameCount;
     int nCurFrame;
@@ -858,6 +879,7 @@ void __fastcall MONUNIQUE_SpawnBugLightning(D2UnitStrc * pUnit, int32_t nUMod, i
 }
 
 // Nihlathak unique-modifier callback invoked when a missile he owns hits. When bIsChampion is non-zero and the unit is a missile whose txt has no MULTISHOT-owner flag, fires two flanking sub-missiles offset ±1 tile orthogonally from the original target direction using MakeMissile. Temporarily sets MONTYPE bit 0x80 on the owner monster to suppress recursion, then clears it.
+// 1.14d mac: 0011e0b9
 void __fastcall MONUNIQUE_ApplyModifierNihlathak(D2UnitStrc * pUnit, int32_t nUMod, int32_t bIsChampion) {
     uint32_t nMissileTargetY;
     D2SeedStrc sSeed;
@@ -929,6 +951,7 @@ void __fastcall MONUNIQUE_ApplyModifierNihlathak(D2UnitStrc * pUnit, int32_t nUM
     *pMonTypeFlags &= 0xff7f;
 }
 
+// 1.14d mac: 0011e503
 void __fastcall MONUNIQUE_SpawnExplodingArrowDeath(D2UnitStrc * pUnit, int32_t nUMod, uint32_t nParam2) {
     int nPosY;
     int32_t nPosX;
@@ -961,6 +984,7 @@ void __fastcall MONUNIQUE_SpawnExplodingArrowDeath(D2UnitStrc * pUnit, int32_t n
 }
 
 // Per-frame callback for suicide-exploder monsters (e.g. Flesh Beast). Fires only at Death animation frame 4. Reads the monster's treasure class index (difficulty-adjusted) to decide the explosion type: index 1 spawns MISSILE_Suicidefireexplode, index>=2 spawns MISSILE_Suicideiceexplode. Always spawns MISSILE_Suicidecorpseexplode at the unit's position as the secondary corpse-burst effect.
+// 1.14d mac: 0011e5bd
 void __fastcall MONUNIQUE_SpawnSuicideExplosion(D2UnitStrc * pUnit, int32_t nUMod, uint32_t nParam2) {
     int32_t nPosY;
     eMissilesId eMissileId;
@@ -1023,6 +1047,7 @@ void __fastcall MONUNIQUE_SpawnSuicideExplosion(D2UnitStrc * pUnit, int32_t nUMo
     Missile::MakeMissileAtXY(pUnit, MISSILE_Suicidecorpseexplode, nPosY, nClassId, SKILL_Attack, 1);
 }
 
+// 1.14d mac: 0011d3a5
 void __fastcall MONUNIQUE_PregnantCorpseBurst(D2UnitStrc * pUnit) {
     int nPosX;
     int nPosY;

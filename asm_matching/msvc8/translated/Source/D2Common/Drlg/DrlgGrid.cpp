@@ -106,6 +106,7 @@ void __fastcall ResetGrid_Unref_0060e290(D2DrlgGridStrc * pDrlgGrid) {
 }
 
 // Recursive 4-directional flood-fill on grid cells.
+// 1.14d mac: 0014f4a2
 void __fastcall DRLGGRID_FloodFillGridCoords(D2DrlgCoordIndexCtxStrc * pFloodFillContext, int nX, int nY, int nDirection) {
     // Static local variables (originally global data)
     static int gaFloodFillDirDeltaX[8] = { 0x1, 0x0, 0x0, 0x1, -0x1, 0x0, 0x0, -0x1 }; D2_STATIC_GUARD(gaFloodFillDirDeltaX, "D2Common::Drlg::DrlgGrid::DRLGGRID_FloodFillGridCoords::gaFloodFillDirDeltaX");
@@ -229,31 +230,38 @@ void __fastcall DRLGGRID_FloodFillGridCoords(D2DrlgCoordIndexCtxStrc * pFloodFil
     }
 }
 
+// 1.14d mac: 0014e712
 void __fastcall OverwriteFlag(int * pFlag, int32_t nFlag) {
     *pFlag = nFlag;
 }
 
+// 1.14d mac: 0014e6eb
 void __fastcall OrFlag(int * pFlag, int32_t nFlag) {
     *pFlag |= nFlag;
 }
 
+// 1.14d mac: 0014e6f8
 void __fastcall AndFlag(int * pFlag, int32_t nFlag) {
     *pFlag &= nFlag;
 }
 
+// 1.14d mac: 0014e705
 void __fastcall XorFlag(int * pFlag, int32_t nFlag) {
     *pFlag ^= nFlag;
 }
 
+// 1.14d mac: 0014e71f
 void __fastcall OverwriteFlagIfZero(int * pFlag, int32_t nFlag) {
     *pFlag = *pFlag ? *pFlag : nFlag;
 }
 
+// 1.14d mac: 0014e731
 void __fastcall AndNegatedFlag(int * pFlag, int32_t nFlag) {
     *pFlag &= ~nFlag;
 }
 
 // Returns 1 if grid pointer is non-null and has data.
+// 1.14d mac: 0014debf
 BOOL __fastcall DRLGGRID_IsGridValid(D2DrlgGridStrc * pDrlgGrid) {
     if (pDrlgGrid && pDrlgGrid->pCellsFlags) {
       return 1;
@@ -276,6 +284,7 @@ static inline eD2GridCellFlags * __stdcall DRLGGRID_GetCellAddress(D2DrlgGridStr
 }
 
 // Applies a flag operation (set/clear/xor) to a single grid cell (nX,nY).
+// 1.14d mac: 0014defe
 void __fastcall AlterGridFlag(D2DrlgGridStrc * pDrlgGrid, int32_t nX, int32_t nY, int32_t nFlag, int32_t eOperation) {
     (*apFlagOperations[eOperation])((int*)DRLGGRID_GetCellAddress(pDrlgGrid, nY, nX), nFlag);
 }
@@ -290,11 +299,13 @@ eD2GridCellFlags * __fastcall GetOffset(D2DrlgGridStrc * pGrid1, uint32_t nOffse
 }
 
 // Returns the grid flags at the specified (nX, nY) coordinates in the DRLG grid.
+// 1.14d mac: 0014df52
 int __fastcall GetGridFlags(D2DrlgGridStrc * pGrid, int nX, int nY) {
     return pGrid->pCellsFlags[pGrid->pCellsRowOffsets[nY] + nX];
 }
 
 // Applies a flag operation (set/clear/xor) across all cells in the grid using the operation table apFlagOperations[eOperation].
+// 1.14d mac: 0014df6b
 void __fastcall AlterAllGridFlags(D2DrlgGridStrc * pDrlgGrid, int32_t nFlag, int32_t eOperation) {
     int32_t nXIdx;
     int32_t nYIdx = 0;
@@ -316,6 +327,7 @@ void __fastcall AlterAllGridFlags(D2DrlgGridStrc * pDrlgGrid, int32_t nFlag, int
     } while (nYIdx < pDrlgGrid->nHeight);
 }
 
+// 1.14d mac: 0014dfe5
 void __fastcall FlagOperations(D2DrlgGridStrc * pGrid, int32_t nOpIndex, int32_t nCount) {
     eD2GridCellFlags* pTopRowCell = pGrid->pCellsFlags + *pGrid->pCellsRowOffsets;
     eD2GridCellFlags* pBottomRowCell = pGrid->pCellsFlags + pGrid->pCellsRowOffsets[pGrid->nHeight - 1];
@@ -347,6 +359,7 @@ void __fastcall DRLGGRID_ApplyFlagToBorderCells(D2DrlgGridStrc * pDrlgGrid, int 
 }
 
 // Bresenham-like walk between vertices applying flags to each grid cell.
+// 1.14d mac: 0014e0cc
 void __fastcall DRLGGRID_SetEdgeGridFlags(D2DrlgGridStrc * pDrlgGrid, D2DrlgVertexStrc * pEdge, int nFlag, int eOperation, BOOL bIncludeEndpoints) {
     int nY;
     int nX;
@@ -408,6 +421,7 @@ void __fastcall DRLGGRID_SetEdgeGridFlags(D2DrlgGridStrc * pDrlgGrid, D2DrlgVert
 }
 
 // Bresenham line with perpendicular width, bounds-checked.
+// 1.14d mac: 0014e231
 void __fastcall DRLGGRID_SetLineFlagsWithWidth(D2DrlgGridStrc * pDrlgGrid, D2DrlgVertexStrc * pEdge, D2DrlgCoordsStrc * pDrlgCoords, int nFlag, int eOperation, int nLineWidth) {
     BOOL _bInside;
     bool bInside;
@@ -525,6 +539,7 @@ void * __fastcall Unreferenced_0067cb60(D2DrlgGridStrc * pDstGrid, D2DrlgGridStr
 }
 
 // @sourcefile .\DRLG\DrlgGrid.cpp
+// 1.14d mac: 0014e4bb
 void __fastcall DRLGGRID_InitGridCells(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight) {
     int nRow;
     pDrlgGrid->nWidth = nWidth;
@@ -543,6 +558,7 @@ void __fastcall DRLGGRID_InitGridCells(D2PoolManagerStrc * pMemory, D2DrlgGridSt
     pDrlgGrid->bIsSubGrid = 0;
 }
 
+// 1.14d mac: 0014e551
 void __fastcall FillGrid(D2DrlgGridStrc * pDrlgGrid, int32_t nWidth, int32_t nHeight, int * pCellPos, int * pCellRowOffsets) {
     pDrlgGrid->nWidth = nWidth;
     pDrlgGrid->nHeight = nHeight;
@@ -586,6 +602,7 @@ void __fastcall DRLGGRID_AllocGrid(D2PoolManagerStrc * pMemory, D2DrlgGridStrc *
 
 // Initializes a sub-grid view into parent cell flags using the tile data window; allocates row offsets with the parent stride.
 // @sourcefile .\DRLG\DrlgGrid.cpp
+// 1.14d mac: 0014e5a7
 void __fastcall DRLGGRID_InitGridFromTileData(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * pGrid, eD2GridCellFlags * pParentCells, D2DrlgCoordStrc * pTileData, int nParentRowStride) {
     int nRow;
     pGrid->nWidth = pTileData->nWidth;
@@ -603,6 +620,7 @@ void __fastcall DRLGGRID_InitGridFromTileData(D2PoolManagerStrc * pMemory, D2Drl
 }
 
 // Builds a sub-grid view into an external cell flag array using the provided coordinate window and row stride.
+// 1.14d mac: 0014e631
 void __fastcall FillExternalCellFlags(D2DrlgGridStrc * pDrlgGrid, D2DrlgMapStrc * pCellPos, D2DrlgCoordStrc * pDrlgCoord, int32_t nWidth, int * pCellFlags) {
     int nRowIdx;
     pDrlgGrid->nWidth = pDrlgCoord->nWidth;
@@ -619,6 +637,7 @@ void __fastcall FillExternalCellFlags(D2DrlgGridStrc * pDrlgGrid, D2DrlgMapStrc 
 }
 
 // @sourcefile .\DRLG\DrlgGrid.cpp
+// 1.14d mac: 0014e683
 void __fastcall DRLGGRID_FreeGrid(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * pGrid) {
     if (pGrid->pCellsRowOffsets) {
       D2_FREE_POOL_AT(pMemory, pGrid->pCellsRowOffsets, ".\\DRLG\\DrlgGrid.cpp", 0x218);
@@ -629,6 +648,7 @@ void __fastcall DRLGGRID_FreeGrid(D2PoolManagerStrc * pMemory, D2DrlgGridStrc * 
 }
 
 // Clears grid metadata (flags/row offsets) and marks grid as unused.
+// 1.14d mac: 0014e6d6
 void __fastcall ResetGrid(D2DrlgGridStrc * pDrlgGrid) {
     pDrlgGrid->pCellsFlags = 0;
     pDrlgGrid->pCellsRowOffsets = 0;

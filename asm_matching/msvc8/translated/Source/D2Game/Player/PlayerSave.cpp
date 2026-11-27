@@ -151,6 +151,7 @@
 namespace D2Game { namespace PLAYER { namespace PlayerSave {
 
 // Reconstructs a D2UnitStrc item from a D2UnknownItemRelatedStruct loaded out of a save file. Fills a D2ItemGenContextStrc (format, level, classId, position, quality, seeds, flags, item code string) and calls ITEM_CreateItemInstance, then sets the item's file index and page. Called during player load to restore inventory items.
+// 1.14d mac: 00206d88
 static D2UnitStrc * PLRSAVE_CreateItemFromSaveData(::SGAMEDATA * pGame, D2UnknownItemRelatedStruct * pItemRelated) {
     D2ItemGenContextStrc sItemGenCtx;
     memset(&sItemGenCtx, 0, sizeof(sItemGenCtx));
@@ -186,6 +187,7 @@ static D2UnitStrc * PLRSAVE_CreateItemFromSaveData(::SGAMEDATA * pGame, D2Unknow
 
 // Restores a single item from player save data into the live game. Calls PLRSAVE_CreateItemFromSaveData to instantiate the item unit, then dispatches on its eAnimMode (repurposed as storage-location enum): Death=inventory grid placement, Neutral=body-location equip, Walk=belt slot, GetHit=quest-reward copy, TownWalk=socketed-inside-item placement. Sets *ppItemOut on success and writes the storage type to *pnParam. Returns 0 on success, 0xC on failure.
 // @sourcefile .\PLAYER\PlrSave.cpp
+// 1.14d mac: 00206a90
 int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnknownItemRelatedStruct * pItemUnknownStructure, D2UnitStrc * * ppItemOut, uint32_t * pnStorageTypeOut) {
     int32_t nItemGUID;
     int bRestored;
@@ -264,6 +266,7 @@ int __fastcall PLRSAVE_RestoreItemFromSaveData(::SGAMEDATA * pGame, D2UnitStrc *
 
 // Server-side: restores one saved item onto a player by its saved animMode (storage location), dispatching: Death/default=drop to ground at the item's path position (SERVER_ItemToInventory); Neutral=equip to its body-loc (SERVER_EquipItemToBodyLoc); Walk=place in belt (ITEM_TryPlaceInBelt at the item's X); GetHit=copy into player inventory and apply as a quest reward (ITEMMODE_ApplyQuestReward); TownWalk=nest into the container item identified by eBodyLocation (PutItemInItem, container GUID at +0xc). Run/TownNeutral and any mode > TownWalk fail. Returns 0 on success, 0xc on failure. Used during character load to repopulate a player's items.
 // @sourcefile .\PLAYER\PlrSave.cpp
+// 1.14d mac: 00206eb1
 int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2UnitStrc * pSourceItem, D2UnitStrc * eBodyLocation) {
     eD2ItemAnimMode eAnimMode;
     int nPlaceResult;
@@ -332,6 +335,7 @@ int __fastcall PLRSAVE_RestoreItemToUnit(::SGAMEDATA * pGame, D2UnitStrc * pUnit
 
 // Server-side: re-instates one saved item onto a loaded player during character load. Recreates the item via PLRSAVE_CreateItemFromSaveData, then by the item's animMode places it: Death=drop to ground at recorded pos (SERVER_ItemToInventory); Neutral=equip to its saved body-loc (validates via INVENTORY_GetItemAtBodyLoc, puts in inv slot 3, or 4 for swapped weapon set, clears TARGETABLE/ISRESURRECT, refreshes inv, fires QUEST_OnItemPickedUp); TownWalk=nest into a container item (PutItemInItem). Returns 0 on success, 0xd on any failure. Writes the placed item back into pGame2->nToken (container cursor) and the storage-type byte into *pnParam.
 // @sourcefile .\PLAYER\PlrSave.cpp
+// 1.14d mac: 002090c1
 static int __stdcall PLRSAVE_RestoreEquippedItem(::SGAMEDATA * pGame, D2UnknownItemRelatedStruct * pItemUnknownStructure, D2UnitStrc * * pGame2, uint32_t * pnStorageType, D2UnitStrc * pUnit) {
     int32_t nItemGUID;
     eD2BodyLoc eBodyLoc;
@@ -427,6 +431,7 @@ static int __stdcall PLRSAVE_RestoreEquippedItem(::SGAMEDATA * pGame, D2UnknownI
 
 // Restores an item from a save onto a body location.
 // @sourcefile .\PLAYER\PlrSave.cpp
+// 1.14d mac: 0020961b
 static int __stdcall PLRSAVE_RestoreItemToBodyLoc(D2UnitStrc * pUnit, ::SGAMEDATA * pGame, D2UnitStrc * pUnit2, D2UnitStrc * pParentItem) {
     eD2BodyLoc eBodyLoc;
     eD2ItemAnimMode eAnimMode;
@@ -714,6 +719,7 @@ int __fastcall SAVE_SerializeInventoryItems(::SGAMEDATA * pGame, D2UnitStrc * pU
     return nSerializedSize;
 }
 
+// 1.14d mac: 00207f3e
 int32_t __fastcall GetCopyInventory(::SGAMEDATA * pGameStrc, D2UnitStrc * pUnit, uint16_t * pBuffer, int32_t nBufSize, int32_t bParam1, int32_t bParam2, int32_t bParam3) {
     if (bParam1 && pUnit && pUnit->eUnitType == UNIT_PLAYER) {
       int32_t pCopiedInventory;
@@ -837,6 +843,7 @@ char * __fastcall PLAYERSAVE_ByteArrayToHexString(char * szOut, uint8_t * pbyDat
 }
 
 // Computes a CRC32 over a D2MissilesTxt row for save-file integrity. For rows with packed flags > 0x5B, temporarily zeros out server-side function IDs (pSrvDoFunc/pSrvHitFunc), sub-missiles, sounds, and extra hit flags before hashing, then restores them — ensuring the CRC covers only data that is stable across patches.
+// 1.14d mac: 00207fa7
 uint32_t __fastcall PLAYERSAVE_CalculateChecksum(D2SaveFileHeaderStrc * pSaveHeader, int32_t nSize) {
     uint32_t nFieldCount = pSaveHeader->dwFileVersion;
     uint32_t savedFuncIds = 0;
@@ -1081,6 +1088,7 @@ static void __stdcall SaveToBuffer(::SGAMEDATA * pGame, int32_t nSaveParam, D2Un
 
 // Top-level player save dispatcher. Clears UNITFLAGEX_UPDATEINV, detects if the player is currently trading (interact with another UNIT_PLAYER), then routes to SaveToBuffer (OBNet/LAN), SaveToFile (SP without BNet service), or SaveToFileBnet (BNet) based on game type and BattleNetServerService pointer.
 // @sourcefile .\PLAYER\PlrSave.cpp
+// 1.14d mac: 00207168
 BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, char * pCharName, BOOL bUnknown) {
     BOOL _bHasInteractInfo;
     bool bHasInteractInfo;
@@ -1126,6 +1134,7 @@ BOOL __fastcall SaveGameAllGameTypes(::SGAMEDATA * pGame, D2UnitStrc * pUnit, ch
     return _bHasInteractInfo;
 }
 
+// 1.14d mac: 00208524
 static void __stdcall SERVER_InitPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit, D2ClientStrc * pClient) {
     GAME::Clients::SERVER_LinkServerPlayerUnitToClient(pClient, pUnit);
     UNIT::SUnit::SetClient(pUnit, pClient);
@@ -1141,6 +1150,7 @@ static void __stdcall SERVER_InitPlayer(::SGAMEDATA * pGame, D2UnitStrc * pUnit,
 }
 
 // Creates fresh player unit for new character. Allocates unit from class ID, initializes base stats, creates starter items (potions/weapons/armor per CharStartItems.txt), sets default left/right attack skills and starting skill if present (e.g. Fire Bolt for Sorc). Notifies quests of player join. Returns unit via ppUnitOut.
+// 1.14d mac: 0020a7a1
 static BOOL __stdcall SERVER_CreatePlayerUnit(::SGAMEDATA * pGameStrc, D2ClientStrc * pClient, D2UnitStrc * * ppUnitOut) {
     D2SkillStrc* pDVar1;
     D2SkillStrc* pStartSkill;
@@ -1174,6 +1184,7 @@ static BOOL __stdcall SERVER_CreatePlayerUnit(::SGAMEDATA * pGameStrc, D2ClientS
 }
 
 // Parses and validates a legacy/single-player save-game character block when a client loads into the game, then instantiates the player unit. Copies the 0x82-byte save header from param_1_00, checks the magic (0xAA55AA55) and size, validates the char name matches the client's, and enforces expansion/hardcore/difficulty-progression rules (calling GuardStack with a distinct error code on each rejection). On success it applies guild tag/name/info and weapon-swap/class flags to the client, sets the act, restores the single-player init seed when applicable, creates the UNIT_PLAYER unit (CreateUnit + SERVER_InitPlayer) and sends the init-unit packet, then writes out skill-tab/skill-list counts, remaps the 8 hotkey + left/right skill-hotkey entries, and reports the skill list size via the out-params. *pdwParam signals a Battle.net redirect/abort path. Stack-guarded.
+// 1.14d mac: 00208027
 int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClient, int * pnSaveFile, D2UnitStrc * * ppPlayer, uint32_t * pdwParam, uint32_t * pnSaveVersion, uint32_t * pnSkillTabCount, uint32_t * pnSkillCount, uint32_t * pnLeftSkillId, uint32_t * pnRightSkillId, uint32_t * pnSkillListSize) {
     uint16_t wDifficultyBits;
     eD2ArenaFlags eArenaFlags;
@@ -1378,6 +1389,7 @@ int __fastcall _oldSaveGameLoadingPart(::SGAMEDATA * pGame, D2ClientStrc * pClie
     return 1;
 }
 
+// 1.14d mac: 002085ae
 int __fastcall _oldSaveGameLoadingPart2(D2UnitStrc * pUnit, int * pnSaveData, uint32_t dwUnused, uint32_t * pnBytesConsumed) {
     D2SaveFileQuestsStrc questDataBuf;
     *pnBytesConsumed = 0;
@@ -1399,6 +1411,7 @@ int __fastcall _oldSaveGameLoadingPart2(D2UnitStrc * pUnit, int * pnSaveData, ui
     return 0;
 }
 
+// 1.14d mac: 0020864e
 int __fastcall _oldSaveGameLoadingPart3(D2UnitStrc * pUnit, uint32_t * pdwSaveData, uint32_t dwUnused, uint32_t * pnBytesConsumed) {
     D2SaveFileWaypointsStrc aWaypointBlock;
     int16_t wWaypointVersion;
@@ -1427,6 +1440,7 @@ int __fastcall _oldSaveGameLoadingPart3(D2UnitStrc * pUnit, uint32_t * pdwSaveDa
     return 3;
 }
 
+// 1.14d mac: 002086e0
 int __fastcall _oldSaveGameLoadingPart4(D2UnitStrc * pUnit, uint32_t * pdwSaveCursor, uint32_t dwUnused, uint32_t * pnBytesConsumed) {
     D2SaveFileNpcStrc aIntroBlock;
     *pnBytesConsumed = 0;
@@ -1444,6 +1458,7 @@ int __fastcall _oldSaveGameLoadingPart4(D2UnitStrc * pUnit, uint32_t * pdwSaveCu
     return 0;
 }
 
+// 1.14d mac: 00208772
 int __fastcall _oldSaveGameLoadingPart5(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * pwStatData, int32_t nStatCount, uint32_t dwUnused, int * pnBytesConsumed) {
     int32_t nStatValue;
     *pnBytesConsumed = 0;
@@ -1491,6 +1506,7 @@ void __stdcall PLAYERSAVE_RestoreSkillLevel(D2UnitStrc * pUnit, eD2Skills eSkill
 
 // Body continues at 00532eb7, the JZ target of 00532eaa - a branch, not a call. Ghidra had a CALL_RETURN flow override there and a separate function named '_oldSaveGameLoadingPart6_part1'; that made EBP look like a parameter and turned this frame's locals into wild pointers.
 // Retired notes from '_oldSaveGameLoadingPart6_part1':
+// 1.14d mac: 002088b3
 int __fastcall _oldSaveGameLoadingPart6(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2UnitStrc * pUnit, uint8_t * pSkillSection, uint32_t dwUnused, uint32_t nFormat, uint32_t * pnBytesConsumed) {
     *pnBytesConsumed = 0;
     if (*(short int*)pSkillSection != 0x6669) {
@@ -1833,6 +1849,7 @@ int __fastcall PLRSAVE_RestoreItemsFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
 }
 
 // Deserializes a save-file item list from the bit stream and rebuilds the units. pItem must be the 'JM' list header (count follows); iterates nItemCount items, parsing each with ReadInfoFromStreamVersioned + ITEM_CreateFromSaveData (format eItemFormat), then attaching it to pUnit via PLRSAVE_RestoreItemToUnit or, when bUsePageHandler set, SetPageAndQuestHandler. For each item also reads its socketed/contained items (usedSockets) and attaches them to the parent. Frees units that fail to restore, and strips items whose runeword no longer validates. Writes bytes-consumed back through ppnShort. Returns 0 on success, 0xe on a parse/format error.
+// 1.14d mac: 0020937f
 int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * pUnit, uint8_t * pItem, uint32_t eItemFormat, int32_t nStreamEnd, int32_t bUsePageHandler, uint32_t * ppnBytesConsumed) {
     eD2ItemFlag eItemFlags;
     D2RuneTableStrc* pRuneTable;
@@ -1928,6 +1945,7 @@ int __fastcall PLRSAVE_LoadItemListFromStream(::SGAMEDATA * pGame, D2UnitStrc * 
     return 0;
 }
 
+// 1.14d mac: 0020989c
 int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, D2UnitStrc * pUnit, void * pItemData, uint32_t eFormat, int32_t nStreamEnd, int32_t bUsePageHandler, uint32_t * ppnShort) {
     int nResult;
     if (eFormat == 0x47) {
@@ -1943,6 +1961,7 @@ int __fastcall PLRSAVE_DispatchItemLoadByFormat(::SGAMEDATA * pGame, D2UnitStrc 
 
 // Creates a player corpse unit during save-game loading. Allocates a UNIT_PLAYER ghost with UNITFLAG_CANBEATTACKED cleared and STATE_playerbody set, copies client/name/seed from the live unit, sets inventory owner GUID, then restores the corpse's items from the save stream (either PLRSAVE_RestoreItemsFromStream for format 0x47 or PLRSAVE_LoadItemListFromStream for 0x48-0x60). On success appends an inventory notification and sends 0x8E CorpseAssign.
 // @sourcefile .\PLAYER\PlrSave.cpp
+// 1.14d mac: 002098fe
 static int32_t __stdcall _oldSaveGameLoadingPart7_part1(uint8_t * pCorpseData, uint32_t nFormat, int32_t nSize, uint32_t * pnBytesConsumed, D2UnitStrc * pUnit, ::SGAMEDATA * pGame) {
     char* szCharName;
     int32_t nItemLoadResult;
@@ -2034,6 +2053,7 @@ int __fastcall Unreferenced_00533a60(int param_1, int param_2) {
 }
 
 // Lookup table function: given a character class index (wParam, 0x00–0x1b) and a character level (nParam), returns the base experience-point threshold (or similar save-load scalar) for that class/level bracket. All paths return a constant or one of two bracket constants selected by level comparison. Part of the old save-game loading path (PlayerSave), used when reconstructing character progression data from .d2s files.
+// 1.14d mac: 00209b60
 int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelingId, int32_t nLevel) {
     switch (wHirelingId) {
       case 0:
@@ -2115,6 +2135,7 @@ int32_t __fastcall _oldSaveGameLoadingPart8_part1_part1(uint16_t wHirelingId, in
     return nLevel >= 0x19 ? 0xc8 : 100;
 }
 
+// 1.14d mac: 00209cf4
 uint32_t __fastcall _oldSaveGameLoadingPart8_part1(::SGAMEDATA * pGame, uint16_t wHirelingId, uint32_t dwExperience) {
     int nMercLevel = 1;
     uint32_t nExpThreshold = _oldSaveGameLoadingPart8_part1_part1(wHirelingId, nMercLevel + 1) * (nMercLevel + 2) * (nMercLevel + 1) * 3;
@@ -2305,6 +2326,7 @@ int __stdcall _oldSaveGameLoadingPart9(D2UnitStrc * pUnit, uint8_t * pbParam, ui
 }
 
 // Loads a player from a legacy/old-format save file (D2SaveFileHeaderStrc) and creates/restores the player unit. Validates min size (0x82), parses the header via _oldSaveGameLoadingPart, then walks the file sequentially through _oldSaveGameLoadingPart2..9 (stats, then skills, items, corpse, waypoints), advancing a cursor by the byte count each part writes back through ppUnit. Clamps gold/goldbank to inventory/stash limits, restores hp/mana and re-selects left/right skills, recomputes next-level exp (TXT_Experience), and sends a weapon-switch packet (0x97) if the client had weapons swapped. Out: *ppUnit = the loaded D2UnitStrc. Returns 0 on success or a nonzero error code. NOTE: nLoadResult/nNewCharFlags are read before assignment in the decompile — likely set via the out-params of _oldSaveGameLoadingPart (stale-snapshot artifact).
+// 1.14d mac: 00209d77
 int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, D2UnitStrc * * ppUnit, D2RoomStrc * dwParam6, uint32_t dwParam7, uint32_t dwParam8) {
     // Frame slots -28..-20 are ONE object: &nSavedHp is passed out and the callee reaches the rest by byte offset.
     // Separate locals let the compiler reorder them, so the run is one struct.
@@ -2470,6 +2492,7 @@ int32_t __fastcall SEVER_loadFrom_Old_Savegame(::SGAMEDATA * pGame, D2ClientStrc
     return iVar1;
 }
 
+// 1.14d mac: 0020a91b
 int32_t __fastcall SERVER_LoadPlayerFromSaveFile(::SGAMEDATA * pGame, D2ClientStrc * pClient, D2SaveFileHeaderStrc * pSavefile, uint32_t nSavefileSize, D2UnitStrc * * ppUnit, D2RoomStrc * pRoom, uint32_t nSpawnX, uint32_t nSpawnY) {
     int32_t nResult;
     if (nSavefileSize < 8) {
@@ -2570,6 +2593,7 @@ static int32_t __stdcall CLIENT_LoadPlayerFromNetworkSave(::SGAMEDATA * pGame, D
 }
 
 // Loads player from save or creates new character. Dispatches to disk loader (SP/LAN), network loader (BNet), or fresh character creator based on game type and bLoadFromSave. After unit creation, updates passive skills and returns status. Called during join flow before placing unit in world.
+// 1.14d mac: 0020a9b6
 BOOL __fastcall CLIENT_LoadOrCreatePlayerUnit(::SGAMEDATA * pGame, D2ClientStrc * pClient, char * pClientCharName, BOOL bLoadFromSave, D2UnitStrc * * ppUnitOut, D2RoomStrc * pRoomOrNull, uint32_t nX, uint32_t nY) {
     BOOL bResult;
     /* This is the loader for battle net. unkBool is always 1 from the path of

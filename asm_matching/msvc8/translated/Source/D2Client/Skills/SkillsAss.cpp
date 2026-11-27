@@ -25,6 +25,7 @@
 
 namespace D2Client { namespace SKILLS { namespace SkillsAss {
 
+// 1.14d mac: 00085ae9
 BOOL __fastcall Skills_CltStFunc_CheckTargetLivingAndOutOfTown(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pUnit_00 = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pUnit_00) {
@@ -48,6 +49,7 @@ BOOL __fastcall Skills_CltStFunc_CheckTargetLivingAndOutOfTown(D2UnitStrc * pUni
     return 0;
 }
 
+// 1.14d mac: 00085b50
 BOOL __fastcall Skills_CltDoFunc_Ass_Melee_TargetValidate(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pUnit_00 = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pUnit_00) {
@@ -77,6 +79,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_Melee_TargetValidate(D2UnitStrc * pUnit, eD
     return 1;
 }
 
+// 1.14d mac: 00085b80
 BOOL __fastcall Skills_CltStFunc_SetParam1FromCalc(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -98,6 +101,7 @@ BOOL __fastcall Skills_CltStFunc_SetParam1FromCalc(D2UnitStrc * pUnit, eD2Skills
     return 1;
 }
 
+// 1.14d mac: 00085c30
 BOOL __fastcall Skills_CltDoFunc_Ass_Blade_DecrementCharge(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillStrc* pSkill = D2Common::Units::GetCurrentSkill(pUnit);
     if (!pSkill) {
@@ -119,6 +123,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_Blade_DecrementCharge(D2UnitStrc * pUnit, e
     return 1;
 }
 
+// 1.14d mac: 00085c90
 int32_t __fastcall SKILLSASS_GetCltMissileByAuraLevel(D2UnitStrc * pUnit, int32_t nSkillId) {
     D2SkillsTxt* pSkillTxt = nSkillId >= 0 && nSkillId < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + nSkillId : nullptr;
     if (!pSkillTxt) {
@@ -143,6 +148,7 @@ int32_t __fastcall SKILLSASS_GetCltMissileByAuraLevel(D2UnitStrc * pUnit, int32_
 }
 
 // Assassin skill helper: returns the appropriate progressive-calc value (prgcalc[0..2]) for a charge-up/aura skill based on the current aura level stored in the active state's aurastat[0]. If the skill is not an aura (flags bit 2 clear) or the state is absent, falls back to prgcalc[0].
+// 1.14d mac: 00085d6e
 uint32_t __fastcall SKILLSASS_GetPrgCalcByAuraLevel(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -167,6 +173,7 @@ uint32_t __fastcall SKILLSASS_GetPrgCalcByAuraLevel(D2UnitStrc * pUnit, eD2Skill
     return D2Common::Skills::D2GetSkillCalc(pUnit, pSkillTxt->prgcalc[0], eSkill, nSkillLvl);
 }
 
+// 1.14d mac: 00085e98
 BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileRandom(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillTxt) {
@@ -191,6 +198,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileRandom(D2UnitStrc * p
     return 1;
 }
 
+// 1.14d mac: 00085f79
 BOOL __fastcall Skills_CltStFunc_CheckAuraStateInactive(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     short int sAuraState;
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
@@ -207,6 +215,7 @@ BOOL __fastcall Skills_CltStFunc_CheckAuraStateInactive(D2UnitStrc * pUnit, eD2S
 }
 
 // Client-side function that initialises or refreshes the Assassin charge-up state (STATE_inferno) on a unit. On first charge: plays the skill's progress overlay and sound, allocates a permanent stat list, attaches it with SKILLSASS_StatExpireCallback_ClearState as the expire callback, and sets STATE_inferno. On subsequent charges: advances the sequence frame (seqinput - 1), resets the frame counter to 0x800, and refreshes the stat list timeout to 7 frames. Returns 1 on success, 0 if the skill txt entry is missing or alloc fails.
+// 1.14d mac: 00085fe4
 BOOL __fastcall SKILLSASS_CltSetChargeUpState(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nUnused) {
     D2SkillStrc* pSkill;
     short int nPrgOverlay;
@@ -252,12 +261,14 @@ BOOL __fastcall SKILLSASS_CltSetChargeUpState(D2UnitStrc * pUnit, eD2Skills eSki
     return 1;
 }
 
+// 1.14d mac: 00086212
 BOOL __fastcall Skills_CltStFunc_SetChargeUpState(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     BOOL bResult = SKILLSASS_CltSetChargeUpState(pUnit, eSkill, nSkillLvl);
     return bResult;
 }
 
 // Client-side DoFunc for the Assassin charge-up aura level skill. Clears UNITFLAG_SKSRVDOFUNC, resolves the aura-level missile via SKILLSASS_GetCltMissileByAuraLevel, and if the charge counter (skill param1) is zero spawns a client missile at the unit's position with a shifted particle effect. Decrements the charge counter via SKILL_SetParam1; advances the unit sequence frame if the inferno state is active.
+// 1.14d mac: 0008622f
 BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int nUnitY;
@@ -327,6 +338,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_SpawnMissileCharge(D2UnitStrc * p
     return 1;
 }
 
+// 1.14d mac: 000863c2
 BOOL __fastcall Skills_CltStFunc_AllocStatListByParam3(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillsTxt* pSkillsTxt = (int)eSkill >= 0 && (int)eSkill < D2Common::ITEMS::Items::sgptDataTable->nTxtSkillsCount ? D2Common::ITEMS::Items::sgptDataTable->pTxtSkills + eSkill : nullptr;
     if (!pSkillsTxt) {
@@ -338,6 +350,7 @@ BOOL __fastcall Skills_CltStFunc_AllocStatListByParam3(D2UnitStrc * pUnit, eD2Sk
     return 1;
 }
 
+// 1.14d mac: 0008641b
 BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_CastAttackTarget(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2UnitStrc* pTargetUnit = UNIT::CUnit::GetConfirmedTargetUnit(pUnit);
     if (!pTargetUnit) {
@@ -363,6 +376,7 @@ BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_CastAttackTarget(D2UnitStrc * pUn
 }
 
 // Assassin skill client do-func: spawns a client-side stream missile for a charge-up aura. Resolves caster coordinates, computes aura range via aurarangecalc, creates a missile from cltmissilea at the caster's position, then configures it with the stream-missile type (cltmissileb) and calculated range.
+// 1.14d mac: 000864a9
 BOOL __fastcall Skills_CltDoFunc_Ass_AuraLevel_StreamMissile(D2UnitStrc * pUnit, eD2Skills eSkill, int32_t nSkillLvl) {
     D2SkillArgStrc sSkillArg;
     int nPosY;

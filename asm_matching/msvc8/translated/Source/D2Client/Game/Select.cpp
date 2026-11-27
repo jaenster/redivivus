@@ -205,10 +205,12 @@ static uint32_t gbSelectExclusionActive = 0; D2_STATIC_GUARD(gbSelectExclusionAc
 
 namespace D2Client { namespace GAME { namespace Select {
 
+// 1.14d mac: 0007afcb
 int __stdcall SELECT_GetConstant13_X() {
     return gnSelectConstant13_X;
 }
 
+// 1.14d mac: 0007afdc
 int __stdcall SELECT_GetConstant13_Y() {
     return gnSelectConstant13_Y;
 }
@@ -228,6 +230,7 @@ static inline int GetGUIDInline(D2UnitStrc * pUnit) {
 }
 
 // Client-side unit-selection setter (__fastcall via EAX:pUnit). Updates D2Client::_Selection state to the hovered/clicked pUnit. Handles NPC overhead-text menu selection, deselect of a previously selected warp (UpdateWarpRoomDeselect), and per-type selection effects: monster (caches attackable non-NPC monster class into gnSelectConstant13_X/Y), object door (debounced 500ms, sends 'AoF'/0x3d highlight-door packet to GS via NET_D2GS_CLIENT_Send_INT), and warp (UpdateWarpRoomSelect + view dirty flag). No return; mutates global selection state and may emit a network message.
+// 1.14d mac: 0007b052
 static void SetSelectedUnit_I(D2UnitStrc * pUnit) {
     D2UnitStrc* pLookupUnit;
     BOOL bIsDoor;
@@ -327,11 +330,13 @@ static void SetSelectedUnit_I(D2UnitStrc * pUnit) {
     }
 }
 
+// 1.14d mac: 0007afb2
 void __stdcall ClearSelectedUnit() {
     _Selection::bCanSelectUnit = 0;
     _Selection::bHasSelectedUnit = 0;
 }
 
+// 1.14d mac: 0007b366
 void __stdcall SetCanBeSelectedToFalse() {
     _Selection::bCanSelectUnit = 0;
 }
@@ -513,6 +518,7 @@ static uint32_t __stdcall SELECT_IsUnitBehindDoor(D2UnitStrc * pUnit, D2UnitStrc
     return 0;
 }
 
+// 1.14d mac: 0007b9fe
 static int32_t SELECT_GetDistanceSquared(D2UnitStrc * pUnit, D2UnitStrc * pUnit2) {
     const int32_t nDiffX = D2Common::Units::GetScreenX(pUnit) - D2Common::Units::GetScreenX(pUnit2);
     const int32_t nDiffY = D2Common::Units::GetScreenY(pUnit) - D2Common::Units::GetScreenY(pUnit2);
@@ -523,6 +529,7 @@ int __stdcall SELECT_HasSelectedUnit() {
     return _Selection::bHasSelectedUnit;
 }
 
+// 1.14d mac: 0007ba49
 void __fastcall SELECT_SetPetSeedTimestamp(D2UnitStrc * bEnabled, D2UnitStrc * pUnit, int32_t nTimestamp) {
     if (!(bEnabled && pUnit)) {
       return;
@@ -532,6 +539,7 @@ void __fastcall SELECT_SetPetSeedTimestamp(D2UnitStrc * bEnabled, D2UnitStrc * p
     pSeed->nState = nTimestamp;
 }
 
+// 1.14d mac: 0007ba72
 void __fastcall SELECT_SetExclusionRect(RECT * pRect) {
     if (pRect) {
       gnSelectExclusionRectLeft = pRect->left;
@@ -749,6 +757,7 @@ static D2UnitStrc * __stdcall SELECT_GetTargetCoords(int * pnOutX, D2UnitStrc * 
 }
 
 // Client-side skill targeting resolver (D2Game::Game::Select). Given a candidate target unit and the requested cast position (*pX/*pY), returns the unit/coords the skill should actually act on. If the candidate is an already-active player it is kept as-is; otherwise (for non-flags4&1 skills) the candidate is dropped and its dynamic-path coords are substituted. If the requested position equals the local player's own position, it is nudged to the tile in front of the player (GetPositionNextToPlayerDirection). Suppresses targeting while moving for certain bUseFlags combos. Finally, if the player can use the skill (PLRSKILLS_CanUseSkillCheck) it applies skill-flag-driven target selection: flag 0x40 -> SKILL_FindTargetInRange, flag 0x20 + bAllowDirectional -> facing-direction target, flag 0x80 -> ground coords. Returns the resolved target unit (may be null) and writes resolved coords back through pX/pY.
+// 1.14d mac: 0007baac D2Client::GAME::Select::SKILL_ValidateTarget
 D2UnitStrc * __fastcall SKILL_ValidateTarget(D2SkillStrc * pSkill, D2UnitStrc * pUnit, int32_t * pX, int32_t * pY, uint8_t bUseFlags, int32_t bAllowDirectional) {
     int nUnitCoord;
     int32_t nPosOrResult;
@@ -826,11 +835,13 @@ D2UnitStrc * __fastcall SKILL_ValidateTarget(D2SkillStrc * pSkill, D2UnitStrc * 
     return pUnit;
 }
 
+// 1.14d mac: 0007c24c
 void __stdcall SELECT_InitConstants() {
     gnSelectConstant13_X = 0x13;
     gnSelectConstant13_Y = 0x13;
 }
 
+// 1.14d mac: 0007af3f
 D2UnitStrc * __stdcall GetSelectedUnit() {
     if (_Selection::bHasSelectedUnit) {
       D2UnitStrc* pUnit = UNIT::CUnit::UNITS_FindClientSideUnit(_Selection::nSelectedUnitGUID, _Selection::eSelectedUnitType);
@@ -850,6 +861,7 @@ D2UnitStrc * __stdcall GetSelectedUnit() {
     return nullptr;
 }
 
+// 1.14d mac: 0007afed
 void __fastcall SELECT_UpdateUnitSelection(D2UnitStrc * pUnit) {
     if (pUnit) {
       if (UNIT::CUnit::HitTestScreen(pUnit, 0, 0, nullptr)) {
@@ -867,6 +879,7 @@ void __fastcall SELECT_UpdateUnitSelection(D2UnitStrc * pUnit) {
 }
 
 // Client-side hover/selection update: recomputes which unit the cursor is over. No-op while bCanSelectUnit lock is set. Reads mouse via SELECT_HandleMouseInput; if the currently selected unit still passes HitTestScreen it is kept. Otherwise scans the player's room plus adjacent rooms, hit-testing every candidate and choosing the best by per-unit-type priority (gnSelectTimeout), with special handling: skips items when suppressed, demotes dead monsters and attached-state monsters, resolves OBJECT vs door occlusion (SELECT_IsUnitBehindDoor / SELECT_IsDoorBlockingUnit), and breaks ties by squared distance to the player. Commits the winner via SetSelectedUnit_I. Resets the warp double-click id when the player changes room.
+// 1.14d mac: 0007b378
 void __stdcall SELECT_UpdateSelectedUnit() {
     // Static local variables (originally global data)
     static int gnSelectTimeout[6] = { 0x0, 0x0, -0x6, 0x0, -0x4, 0x0 }; D2_STATIC_GUARD(gnSelectTimeout, "D2Client::GAME::Select::SELECT_UpdateSelectedUnit::gnSelectTimeout");
@@ -1077,3 +1090,18 @@ void __stdcall SELECT_UpdateSelectedUnit() {
 }
 
 }}} // namespace D2Client::GAME::Select
+
+#if !defined(_WIN32) && D2_OS_MAC
+namespace D2Client { namespace GAME { namespace Select {
+
+// 1.14d mac: 0007c26b
+bool __stdcall SELECT_IsValueOne(int * pnValue) {
+    bool bResult = false;
+    if (pnValue) {
+      bResult = *pnValue == 1;
+    }
+    return bResult;
+}
+
+}}} // namespace D2Client::GAME::Select
+#endif

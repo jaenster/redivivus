@@ -133,6 +133,7 @@ template<> ::StringEntryNode * TSExplicitList<StringEntryNode, -572662307>::Next
     return (::StringEntryNode*)(nFirstLink <= 0 ? 0 : nFirstLink);
 }
 
+// 1.14d mac: 00198f16 TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink
 template<> __declspec(noinline) inline void TSHashTable<StringEntryNode, HASHKEY_STRI>::Unlink(::StringEntryNode * pNode) {
     if (pNode->m_linktoslot.m_next) {
       TSLink<::StringEntryNode>* pLink = &pNode->m_linktoslot;
@@ -162,6 +163,7 @@ template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::Delete(::StringEntry
     vc8_thiscall(this->pVtable->InternalDelete)(this, pNode);
 }
 
+// 1.14d mac: 00199d26 TSExplicitList<StringEntryNode, -572662307>::UnlinkAll
 template<> __declspec(noinline) inline void TSExplicitList<StringEntryNode, -572662307>::UnlinkAll() {
     while (true) {
       intptr_t nNode = this->m_terminator.m_next > 0 ? this->m_terminator.m_next : 0;
@@ -239,6 +241,7 @@ template<> void TSHashObject<StringEntryNode, HASHKEY_STRI>::Destructor() {
     pSlotLink->m_next = 0;
 }
 
+// 1.14d mac: 00199fe6 TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear
 template<> void TSHashTable<StringEntryNode, HASHKEY_STRI>::InternalClear(int32_t bUnlinkOnly) {
     this->nFullnessIndicator = 0;
     this->tFullList.UnlinkAll();
