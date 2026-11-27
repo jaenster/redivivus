@@ -51,6 +51,9 @@ void operator delete(void* pMem) throw();
 #define STORM_LIST_LINK_AFTER 1
 #define STORM_LIST_LINK_BEFORE 2
 
+// The original's copies of these templates are hidden: a static initialiser reaches their
+// destructors by address, not through a non-lazy pointer.
+
 // ---- TSLink ----
 
 template<class T>
@@ -137,22 +140,33 @@ public:
             SetLinkOffset(nLinkOffset);
         }
     }
-    TSLink<T>* Link(T* pNode) { return pNode ? (TSLink<T>*)((intptr_t)pNode + m_linkoffset) : &m_terminator; }
+    TSLink<T>* Link(T* pNode) { return pNode ? (TSLink<T>*)((intptr_t)pNode + LinkOffset()) : &m_terminator; }
+    // A list of a fixed offset ignores the field; the unset sentinel defers to it.
+    int LinkOffset() { return OFFSET == STORM_LIST_OFFSET_UNSET ? m_linkoffset : OFFSET; }
     T* Head() { return m_terminator.Next(); }
+    bool IsEmpty() { return TSLink<T>::IsTerminator(m_terminator.m_next); }
     T* Next(T* pNode) { return Link(pNode)->Next(); }
     void UnlinkNode(T* pNode) { Link(pNode)->Unlink(); }
     void UnlinkAll();
     void LinkNode(T* pNode, uint32_t nLinkType, T* pExisting);
     T* NewNode(uint32_t nLinkType, uint32_t nExtraBytes, uint32_t dwFlags);
-    // Unlinks the node, frees it, and returns the node after it.
+    // Destroys the node (its destructor unlinks it), frees it, and returns the node after it.
     T* DeleteNode(T* pNode) {
         T* pNext = Next(pNode);
-        UnlinkNode(pNode);
         pNode->~T();
         SMemFree(pNode, "", -2, 0);
         return pNext;
     }
+    void DeleteAll();
 };
+
+template<class T, int OFFSET>
+void TSExplicitList<T, OFFSET>::DeleteAll() {
+    T* pNode;
+    while ((pNode = Head()) != NULL) {
+        DeleteNode(pNode);
+    }
+}
 
 template<class T, int OFFSET>
 void TSExplicitList<T, OFFSET>::UnlinkAll() {
@@ -601,5 +615,6 @@ T* TSHashTable<T, TKey>::Ptr(const char* szKey) {
     }
     return NULL;
 }
+
 
 #endif  // D2_OS_MAC

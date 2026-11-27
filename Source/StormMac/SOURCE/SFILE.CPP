@@ -404,10 +404,10 @@ SFILE_STATIC int32_t SFILE_GetStreamPosition(D2StormAudioStreamRec* pStream) {
 BOOL SFileDdaInitialize(IDirectSound* pDirectSound) {
     if (pDirectSound == NULL) {
         SErrSetLastError(0x57);
-    } else {
-        s_pDirectSound = pDirectSound;
+        return 0;
     }
-    return pDirectSound != NULL;
+    s_pDirectSound = pDirectSound;
+    return 1;
 }
 
 // 1.14d mac: 0001344b
@@ -605,13 +605,13 @@ SFILE_STATIC void SFILE_BuildDefaultBasePath(void) {
 int SFileGetFileName(D2MPQFileStrc* pFile, char* szText, int32_t nBufferSize) {
     if (szText == NULL) {
         SErrSetLastError(0x57);
-    } else {
-        *szText = '\0';
-        SFILE_LOCK();
-        SStrCopy(szText, pFile->szFileName, nBufferSize);
-        SFILE_UNLOCK();
+        return 0;
     }
-    return szText != NULL;
+    *szText = '\0';
+    SFILE_LOCK();
+    SStrCopy(szText, pFile->szFileName, nBufferSize);
+    SFILE_UNLOCK();
+    return 1;
 }
 
 // 1.14d mac: 00013b40
@@ -641,7 +641,7 @@ uint32_t SFileLoadFile(const char* szFileName, void** ppOutBuffer, DWORD* pdwOut
     if ((s_dwDirectAccessFlags & 2) == 0) {
         nDiskScope = s_dwDirectAccessFlags & 1;
     }
-    uint32_t nNoSource = !(s_dwDirectAccessFlags != 0 || s_tArchiveList.Head() != NULL);
+    uint32_t nNoSource = !((s_dwDirectAccessFlags != 0) | !s_tArchiveList.IsEmpty());
     return SFileLoadFileEx2(NULL, szFileName, ppOutBuffer, pdwOutSize, nExtraPadBytes, nNoSource | nDiskScope,
                             nReadCtx, 0);
 }
@@ -785,7 +785,7 @@ int32_t SFileOpenFile(const char* szFileName, D2MPQFileStrc** ppFile) {
     if ((s_dwDirectAccessFlags & 2) == 0) {
         nDiskScope = s_dwDirectAccessFlags & 1;
     }
-    uint32_t nNoSource = !(s_dwDirectAccessFlags != 0 || s_tArchiveList.Head() != NULL);
+    uint32_t nNoSource = !((s_dwDirectAccessFlags != 0) | !s_tArchiveList.IsEmpty());
     return SFileOpenFileEx(NULL, szFileName, nNoSource | nDiskScope, ppFile);
 }
 
@@ -844,10 +844,10 @@ BOOL SFileSetIoErrorMode(int32_t nErrorMode, void* pfnErrorHandler) {
 int32_t SFileUnloadFile(void* pFile) {
     if (pFile == NULL) {
         SErrSetLastError(0x57);
-    } else {
-        SMemFree(pFile, SFILE_FILE, 0x12ee, 0);
+        return 0;
     }
-    return pFile != NULL;
+    SMemFree(pFile, SFILE_FILE, 0x12ee, 0);
+    return 1;
 }
 
 SFILE_STATIC uint32_t SFILE_InternalReadAligned(D2MPQFileStrc* pMPQFile, uint32_t nAlignedOffset, void* pBuffer,
@@ -1008,7 +1008,7 @@ D2MPQFileStrc::~D2MPQFileStrc() {
     m_link.Unlink();
 }
 
-// 1.14d mac: 00016a72 (the mutex destructor)
+// 1.14d mac: 00016a72 SFileCritSect::~SFileCritSect[D2]
 SFileCritSect::~SFileCritSect() {
     pthread_mutex_destroy(&m_tMutex);
 }
@@ -1718,7 +1718,7 @@ SFILE_STATIC uint32_t SFILE_InternalReadFile(uint32_t nUnused, uint32_t nOffset,
     return nResult;
 }
 
-// 1.14d mac: 00017484
+// 1.14d mac: 00017484 D2StormAudioStreamRec::~D2StormAudioStreamRec[D2]
 D2StormAudioStreamRec::~D2StormAudioStreamRec() {
     if (pMpqFile != NULL) {
         if (--pMpqFile->nRefCount == 0) {
@@ -1731,7 +1731,7 @@ D2StormAudioStreamRec::~D2StormAudioStreamRec() {
     m_link.Unlink();
 }
 
-// 1.14d mac: 000174ec
+// 1.14d mac: 000174ec D2StormAsyncOpStrc::~D2StormAsyncOpStrc[D2]
 D2StormAsyncOpStrc::~D2StormAsyncOpStrc() {
     if (pFile != NULL) {
         if (--pFile->nRefCount == 0) {

@@ -111,7 +111,7 @@ struct D2MPQFileStrc {
     uint32_t nChecksumState;                 // 0x150
     uint32_t nExpectedFileSize;              // 0x154
 
-    D2MPQFileStrc() {}
+    D2MPQFileStrc() : szFilePath(NULL), hFile(NULL), pArchive(NULL), pSectorTable(NULL), pReadBuffer(NULL) {}
     __attribute__((noinline)) ~D2MPQFileStrc();
 };
 
@@ -163,8 +163,7 @@ struct D2StormAsyncOpStrc {
     __attribute__((noinline)) ~D2StormAsyncOpStrc();
 };
 // What cancelling a request leaves for the I/O thread to signal.
-struct SFileEventNode {
-    TSLink<SFileEventNode> m_link;  // 0x00
+struct SFileEventNode : TSLinkedNode<SFileEventNode> {  // m_link at 0x00
     HANDLE hEvent;                  // 0x08
 };
 
