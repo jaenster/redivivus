@@ -450,10 +450,10 @@ void __fastcall D2GFXHELPER_DrawGroundTileDispatch1(D2GroundSubTileStrc * pSubTi
 }
 
 void __fastcall D2GFXHELPER_DrawGroundTileDispatch2(D2GroundSubTileStrc * nSubTilePtr, uint8_t * pDst, int * pLightCorners) {
-    int nDeltaX = pLightCorners[3] - *pLightCorners;
-    int nDeltaY = pLightCorners[2] - pLightCorners[1];
     int nLightY = *pLightCorners << 4;
+    int nDeltaX = pLightCorners[3] - *pLightCorners;
     int nLightX = pLightCorners[1] << 4;
+    int nDeltaY = pLightCorners[2] - pLightCorners[1];
     if (nSubTilePtr->wFormat & 4) {
       D2GFX::D2GFX_DrawWallTileWithPerspective(nSubTilePtr->pPixelData, pDst, nLightY, nDeltaX, nLightX, nDeltaY, 0xf, 7);
       return;
