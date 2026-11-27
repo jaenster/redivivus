@@ -1320,13 +1320,9 @@ BOOL __stdcall MessagePump(pfnFramePump pfnFrameCallback)
 }
 
 void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {
-    uint32_t Y;
-    bool bXOutOfRange;
-    tagTRACKMOUSEEVENT sTrackMouseEvent;
-    int nScreenHeight;
-    D2UIMouseMsgStrc* pDVar1 = phWnd;
     if (!gbMouseInWindow) {
-      /* LPTRACKMOUSEEVENT lpEventTrack for TrackMouseEvent */ sTrackMouseEvent.cbSize = sizeof(sTrackMouseEvent);
+      tagTRACKMOUSEEVENT sTrackMouseEvent;
+      sTrackMouseEvent.cbSize = sizeof(sTrackMouseEvent);
       sTrackMouseEvent.dwFlags = 2;
       sTrackMouseEvent.hwndTrack = phWnd->hWnd;
       sTrackMouseEvent.dwHoverTime = 0;
@@ -1334,32 +1330,32 @@ void __stdcall MOUSE_CaptureMousePosition(D2UIMouseMsgStrc * phWnd) {
       gbMouseInWindow = 1;
     }
 
-    int nRawX = (int)pDVar1->uLParam.sMousePos.nMouseX;
-    uint32_t nRawY = (uint32_t)pDVar1->uLParam.sMousePos.nMouseY;
+    int nMouseX = phWnd->uLParam.sMousePos.nMouseX;
+    int nMouseY = phWnd->uLParam.sMousePos.nMouseY;
     gbCursorVisible = 1;
     D2gfx::D2GFX::UpdateOSCursorVisibilty(1);
-    int nScreenWidth;
-    D2gfx::D2GFX::D2GFX_GetScreenSize(&nScreenWidth, &nScreenHeight);
-    int nPhWnd = nScreenWidth - 1;
-    nScreenHeight--;
-    uint32_t bWindowActive = D2gfx::D2GFX::D2GFX_IsWindowActive();
-    if (bWindowActive) {
-      int nClampedX;
-      nClampedX = nRawX;
-      if (nRawX > nPhWnd) {
-        nClampedX = nPhWnd;
+    int nMaxX;
+    int nMaxY;
+    D2gfx::D2GFX::D2GFX_GetScreenSize(&nMaxX, &nMaxY);
+    nMaxX--;
+    nMaxY--;
+    if (D2gfx::D2GFX::D2GFX_IsWindowActive()) {
+      BOOL bClamped = FALSE;
+      if (nMouseX > nMaxX) {
+        nMouseX = nMaxX;
+        bClamped = TRUE;
       }
-
-      Y = nScreenHeight;
-      if ((int)nRawY > nScreenHeight || (bXOutOfRange = nPhWnd < nRawX , nRawX = nClampedX , Y = nRawY , bXOutOfRange)) {
-        /* int Y for SetCursorPos */ /* int X for SetCursorPos */ SetCursorPos(nClampedX, Y);
-        nRawX = nClampedX;
-        nRawY = Y;
+      if (nMouseY > nMaxY) {
+        nMouseY = nMaxY;
+        bClamped = TRUE;
+      }
+      if (bClamped) {
+        SetCursorPos(nMouseX, nMouseY);
       }
     }
 
-    nPosY = nRawY;
-    nPosX = nRawX;
+    nPosY = nMouseY;
+    nPosX = nMouseX;
 }
 
 void __stdcall INPUT_FormEscapeKey(D2UIMouseMsgStrc * pMsg) {
