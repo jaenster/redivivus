@@ -17,7 +17,10 @@ import { fileURLToPath } from "node:url";
 const HERE = dirname(fileURLToPath(import.meta.url));
 const REPO = resolve(HERE, "../..");
 const BINARY_SHA256 = "1e8dd6dd3d19019cbaa29270f4abfb04960fcf1ce5d341fa520863b0d640d177";
-const SOURCE_ROOTS = ["Source/StormMac", "Source/MacSpecific"];
+// Every tree a Mac tag may stand in: StormMac and MacSpecific, the Mac renderer (Source/D2OpenGL/Src)
+// and the D2_OS_MAC blocks of the shared code. A tagged file the Mac build does not compile has no
+// object to compare; it still names its functions and globals for the references of the rest.
+const SOURCE_ROOTS = ["Source", "Redivivus"];
 
 // ---- arguments ----
 const argv = process.argv.slice(2);
@@ -160,7 +163,9 @@ function walk(d: string): string[] {
 for (const root of SOURCE_ROOTS) {
     for (const file of walk(join(REPO, root)).filter((f) => /\.(cpp|c|h|hpp)$/.test(f)).sort()) {
         let pend: number | null = null;
-        const lines = readFileSync(file, "utf8").split("\n");
+        const text = readFileSync(file, "utf8");
+        if (!text.includes("1.14d mac:")) continue;
+        const lines = text.split("\n");
         for (let li = 0; li < lines.length; li++) {
             const l = lines[li];
             const m = /^\s*\/\/ 1\.14d mac: ([0-9a-f]{8})\b(?:\s+(\S+))?/.exec(l);
@@ -465,10 +470,16 @@ for (const e of entries) {
 }
 const rows: string[] = ["file\taddr\tname\tstatus\tinsns\tunverified\tdetail"];
 let same = 0, total = 0;
+const noObject: string[] = [];
 const pct = (n: number, d: number) => (d ? (100 * n / d).toFixed(1) : "0.0") + "%";
 for (const [file, es] of byFile) {
     const objPath = join(buildDir, "CMakeFiles/d2_mac_objs.dir", file + ".o");
-    if (!existsSync(objPath)) { console.log(`${file}: no object at ${objPath}`); continue; }
+    if (!existsSync(objPath)) {
+        noObject.push(file);
+        if (verbose) console.log(`${file}: no object at ${objPath}`);
+        for (const e of es) rows.push([file, e.addr.toString(16).padStart(8, "0"), e.name, "NOOBJ", 0, 0, "not built by d2_mac_objs"].join("\t"));
+        continue;
+    }
     const obj = loadObject(objPath);
     let fs = 0, ft = 0;
     for (const e of es) {
@@ -482,5 +493,6 @@ for (const [file, es] of byFile) {
     }
     console.log(`== ${file}: ${fs}/${ft} same (${pct(fs, ft)})`);
 }
+if (noObject.length) console.log(`== ${noObject.length} tagged files have no Mac object (not built by d2_mac_objs; -v lists them)`);
 console.log(`== total ${same}/${total} instruction-identical (${pct(same, total)})`);
 if (tsvOut) writeFileSync(tsvOut, rows.join("\n") + "\n");

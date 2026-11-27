@@ -1,0 +1,61 @@
+# The Mac-only regions of DiabloII_macho 1.14d, cut into units. Read by coverage.ts.
+#
+# lo, hi       the unit's address range, [lo, hi), the clean program's addresses (imagebase 0x1000)
+# kind         fixed: every function in the unit gets `file`
+#              anchors: a function's file is its own __FILE__ literal, else the file of the nearest anchored
+#                function before and after it in the unit when both agree, else "<before>|<after>";
+#                `file` is the folder used where no anchor is on one side
+#              override: one function (lo only) keeps its unit for bracketing but takes this class and file
+# class        blizzard-mac | third-party | shared. In a shared unit a function is shared when it has a
+#              Windows twin, shared-unpaired when the pairer found it a body candidate on Windows, and
+#              blizzard-mac (a D2_OS_MAC addition to a shared file) when it found none
+# file         the original path below Diablo2/Source (Mac folder names with their spaces); "?" for a file
+#              no evidence names
+# redivivus    where the source lives in this repo when that is not the original path with spaces dropped
+#              (a unit whose original file name is unknown); "-" for code that is not reconstructed here
+# evidence     why
+#
+# Sources: the binary's __FILE__ literals (mac-seam notes, 2026-11-27), Source/StormMac/README.md (the
+# Win32 Mac units pinned against the PPC Storm 1.10 beta), docs/analysis/mac-only-inventory.md,
+# stormmac-refine.md ("What has no PPC counterpart") and the clean program's names.
+lo	hi	kind	class	file	redivivus	evidence
+00002e00	00002e3e	fixed	third-party	crt1.o (start)	-	the Mach-O entry, the CRT start stub
+00002e3e	00003242	fixed	shared	?	-	Fog error-reporting glue: ErrorReportingLaunch pairs with Fog::System
+00003242	000035c0	fixed	third-party	3rdParty/crashy/?	-	crashy::Report, shared with Windows Fog::_3rdparty::crashy
+000035c0	00008fc0	fixed	third-party	3rdParty/crashy/?	-	CRASHY_*: Mach exception ports, MIG mach_exc_server, signal thread
+00008fc0	000095fc	fixed	third-party	3rdParty/crashy/contrib/mach_star/mach_override/mach_override.c	-	__FILE__ 0030d797 in 00009047
+000095fc	0001e2fd	anchors	blizzard-mac	StormMac/Storm Mac/SOURCE/?		Storm proper, __FILE__ STORM/SBig/SBLT/SBMP/SCMD/SCODE/SCOMP/SEVT/SFILE/SGDI/SNET/SSTR/SSignature/STRANS/SVID
+0001e2fd	000216b0	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim (Storm::Win32Mac): Mem_*, FPMessageBox, WIN32MAC_Initialize, Edit_WndProc; beta files FPMem/fp_assert/MessageBox/WinCompat
+000216b0	00021a94	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_events.cpp	Source/StormMac/README.md: a beta unit linked before Win32_Files.cpp, name unrecorded
+00021a94	00022ca8	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Files.cpp		beta __sinit_Win32_Files_cpp, same functions in the same order
+00022ca8	00025660	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim: GDI on QuickDraw, input, ListBox
+00025660	000257bc	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_closehandle.cpp	Source/StormMac/README.md, name unrecorded
+000257bc	00026d14	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_handles.cpp	Source/StormMac/README.md: ends with the static initialiser 00026c70
+00026d14	000289b8	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim: GetAsyncKeyState, ListBox_WndProc, heap
+000289b8	00028e09	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_memory.cpp	Source/StormMac/README.md, name unrecorded
+00028e09	00029968	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_messages.cpp	Source/StormMac/README.md, name unrecorded
+00029968	00029b68	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_priv.cpp	Source/StormMac/README.md, name unrecorded
+00029b68	0002b1fe	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_Process.cpp		beta __sinit_Win32_Process_cpp, same order
+0002b1fe	0002bdea	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim: MessageBox, sockets stubs, Interlocked
+0002bdea	0002c0ee	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?	Source/StormMac/Win32Mac/Source/Win32/unknown_threads.cpp	Source/StormMac/README.md: a beta unit linked before Win32_utils.cpp
+0002c0ee	0002c670	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_TimeAndDate.cpp		beta __sinit_Win32_TimeAndDate_cpp, same order
+0002c670	0002eae0	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/Win32_utils.cpp		__FILE__ 0030ece4 + its static initialiser 0002ea70
+0002eae0	00033cef	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac shim: window manager, regions, keyboard, DirectDraw/IDirectSound COM shims
+00033cef	00036035	fixed	blizzard-mac	StormMac/Storm Mac/?		SaveFileFromMem (a PPC Storm module), InternetConfig, StormMacInit, Dlg_* Carbon menus
+00036035	000360c2	anchors	blizzard-mac	StormMac/Storm Mac/SOURCE/?		__FILE__ SDRAW_VidDriver.CPP in 00036035
+000360c2	00036830	fixed	blizzard-mac	StormMac/Storm Mac/Win32 Mac/Source/Win32/?		Win32 Mac: PathToFSSpecCreateDirs, MemFile2
+00036830	00036dc7	fixed	blizzard-mac	StormMac/Storm Mac/?		MACCURSOR_*, MACDISPLAY_*
+00036dc7	00036fd3	fixed	third-party	MoreFiles/IterateDirectory.c	-	Apple MoreFiles sample code: IterateDirectory, IterateDirectoryLevel, FSpIterateDirectory
+00036fd3	000371f9	fixed	blizzard-mac	StormMac/Storm Mac/?		Accel_DeleteAcceleratorList, MACCURSOR_InitCursor, MACDISPLAY_FindBestDisplayMode
+000371f9	00039fdf	fixed	third-party	3rdParty/zlib/?	-	zlib 1.2.8 (version string, "invalid distance code"), pairs with Windows Storm::_3rdparty::zlib
+00039fdf	0003a696	fixed	third-party	3rdParty/blast/blast.c	-	PKWare DCL decoder blast.c (Mark Adler): blast, blast_construct, blast_bits, blast_decode
+0003a696	0003e30a	anchors	blizzard-mac	StormMac/Storm Mac/SOURCE/?		SReg plus its Mac backend, __FILE__ SRegMac.mm; stpl.h template instances
+0019a59a	0019f900	anchors	blizzard-mac	MacSpecific/Source/Mac Shell/?		Mac shell, __FILE__ GameSetup.cpp, D2FlamingLogo.cpp; the Baal AI starts at 0019f926
+0019ebbe		override	shared	?	-	ApplicationMain: paired with Windows 00405c30; the Mac calls are D2_OS_MAC blocks in the shared body
+002b0e04	002b1888	anchors	blizzard-mac	MacSpecific/Source/CD2Textures/?		__FILE__ CD2Textures.cpp in 4 functions
+002b1888	002b78f4	anchors	shared	?		D2gfx on the Mac: software tile drawers, the renderer dispatchers with Mac slots 11-13 and 16-21, MACGFX_*, MACSEC_*
+002de2d0	002e710f	anchors	blizzard-mac	D2OpenGL/Src/?		the Mac GL renderer, __FILE__ COGLAGPTextures/oglBlocks/oglPerspective/oglSmack/oglSprite/oglVertex
+002ef7cd	002ef7ce	fixed	blizzard-mac	Fog/Src/ErrorManager.cpp		FOG_MacGetBlizzardSupportPath: a D2_OS_MAC addition, between ErrorManager.cpp __FILE__ users
+002f7324	002f744e	fixed	blizzard-mac	?		MACDISPLAY_SetGammaRamp, MACDISPLAY_RestoreGammaRamp, linked inside Fog
+002f97bc	0030a84a	fixed	third-party	RAD/Bink/?	-	RAD Bink for Mac: Ooura FFT, Bink audio, codec, Sound Manager and Thread Manager I/O
+0030a84a	0030a969	fixed	blizzard-mac	?		MAC_SpawnProcess (posix_spawn launcher), MAC_GetSharedSupportPath (NSBundle)
