@@ -863,6 +863,81 @@ struct tagWINDOWPLACEMENT { UINT length; UINT flags; UINT showCmd; POINT ptMinPo
 typedef tagWINDOWPLACEMENT WINDOWPLACEMENT;
 typedef GUID IID;
 #endif // _WIN32
+#if !defined(_WIN32) && D2_OS_MAC
+// The Win32 entry points the shared code calls that Storm's Win32-on-Mac layer
+// implements, under the layer's own names (Win32_Files.cpp, Win32_Process.cpp,
+// Win32_TimeAndDate.cpp, Win32_GDI.cpp, Win32_Window.cpp, Win32_Rect.cpp).
+HANDLE FindFirstFile(const char* szPattern, _WIN32_FIND_DATAA* pFindData);
+BOOL FindNextFile(HANDLE hFind, _WIN32_FIND_DATAA* pFindData);
+BOOL FindClose(HANDLE hFind);
+BOOL DeleteFile(LPCSTR szFileName);
+DWORD GetTempPath(DWORD nBufferLength, char* szBuffer);
+UINT GetTempFileName(LPCSTR szPathName, LPCSTR szPrefix, UINT uUnique, char* szTempFileName);
+BOOL FileTimeToSystemTime(const FILETIME* pFileTime, SYSTEMTIME* pSystemTime);
+BOOL FileTimeToLocalFileTime(const FILETIME* pFileTime, FILETIME* pLocalFileTime);
+BOOL GetCursorPos(POINT* pPoint);
+BOOL SetCursorPos(int nX, int nY);
+BOOL GetWindowRect(HWND hWnd, RECT* pRect);
+HWND GetDesktopWindow(void);
+BOOL AdjustWindowRectEx(void* pRect, DWORD dwStyle, BOOL bMenu, DWORD dwExStyle);
+BOOL UpdateWindow(HWND hWnd);
+HWND SetFocus(HWND hWnd);
+BOOL PtInRect(RECT* pRect, POINT tPoint);
+LRESULT DefWindowProc(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+struct WNDCLASS {
+    UINT style;
+    WNDPROC lpfnWndProc;
+    int cbClsExtra;
+    int cbWndExtra;
+    int hInstance;
+    int hIcon;
+    int hCursor;
+    int hbrBackground;
+    LPCSTR lpszMenuName;
+    LPCSTR lpszClassName;
+};
+ATOM RegisterClass(const WNDCLASS* pClass);
+BOOL UnregisterClass(LPCSTR szClassName);
+// 00024c76: the layer's LoadCursor, a stub that returns 0.
+int LoadCursor(int hInstance, int nCursorId);
+HWND CreateWindowEx(DWORD dwExStyle, LPCSTR szClassName, LPCSTR szWindowName, DWORD dwStyle, int nX, int nY, int nWidth,
+                    int nHeight, HWND hWndParent, int hMenu, int hInstance, int lpParam);
+// The layer's ShowCursor (00024c7e) leaves the host's display count in eax, which the shared
+// code's show/hide loops read.
+int ShowCursor(BOOL bShow);
+#define HWND_NOTOPMOST ((HWND)-2)
+BOOL GetDiskFreeSpaceEx(LPCSTR szDirectory, uint64_t* pnFreeBytesAvailable, uint64_t* pnTotalBytes,
+                        uint64_t* pnTotalFreeBytes);
+BOOL PostMessage(HWND hWnd, UINT uMsg, WPARAM wParam, LPARAM lParam);
+int GetDateFormat(DWORD Locale, DWORD dwFlags, const SYSTEMTIME* lpDate, LPCSTR lpFormat, char* lpDateStr, int cchDate);
+int Wnd_ReturnZero(void);
+// StormMac/SOURCE/SVID.cpp; callers read LaunchURL's result, left in eax.
+int STORM_LaunchURL(char* szURL);
+struct IDirectSound;
+int32_t DirectSoundCreate(void* lpGuid, IDirectSound** ppDS, void* pUnkOuter);
+// The layer's message (Win32_Messages.cpp), 0x1C bytes.
+struct tagMSG {
+    HWND hwnd;
+    UINT message;
+    WPARAM wParam;
+    LPARAM lParam;
+    DWORD time;
+    POINT pt;
+};
+BOOL PeekMessage(tagMSG* pMsg, HWND hWnd, UINT nMsgFilterMin, UINT nMsgFilterMax, UINT wRemoveMsg);
+BOOL GetMessage(tagMSG* pMsg, HWND hWnd, UINT nMsgFilterMin, UINT nMsgFilterMax);
+BOOL TranslateMessage(const tagMSG* pMsg);
+LONG DispatchMessage(const tagMSG* pMsg);
+#define PeekMessageA PeekMessage
+#define GetMessageA GetMessage
+#define DispatchMessageA DispatchMessage
+#define FindFirstFileA FindFirstFile
+#define FindNextFileA FindNextFile
+#define DeleteFileA DeleteFile
+#define GetTempPathA GetTempPath
+#define GetTempFileNameA GetTempFileName
+#define DefWindowProcA DefWindowProc
+#endif
 #ifdef __cplusplus
 extern "C" IMAGE_DOS_HEADER __ImageBase;
 #else
