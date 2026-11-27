@@ -127,6 +127,18 @@ Program `DiabloII_macho` v218. `cmake --build build-mac --target d2_mac_objs`
 builds with 0 errors (74 warnings); D2OpenGL and CD2Textures are not in that
 target and do not compile under the Mac flags yet (the shared headers clash with
 the SDK's `FILE` and lack `errno_t`, and `MacSdkOnWin32.h` wants `windows.h`).
+They compile in `d2_mac_objs` since: `MacSdkOnWin32.h` takes the 10.7 SDK on the Mac,
+and `cmake/mac-cxx.ts` (the target's compiler launcher) rewrites the shared tree's C++17
+nested namespace definitions, which clang-425 cannot parse, for the units that reach them.
+
+The rest of the shared tree (D2Common, D2Game, D2Client, Fog, Storm ...) is in the Mac
+binary but not in `d2_mac_objs`. Through the launcher it stops on the Win32 surface, not
+on the language: the module headers' `#ifndef _WIN32` type stubs are Windows layouts
+declared after their first use (Fog.h needs `in_addr`, `_SYSTEM_INFO`, `__time32_t`
+before Safesock.h and SFile.h define them) and clash with the Mac C library (`timeval`,
+`fd_set`), and the bodies call Win32 API that neither `d2_platform.h`'s stub nor
+`Win32Mac.h` declares (registry, WinSock, SEH `CONTEXT`, IME). Measured 2026-11-27 over
+the 453 shared units: 1935 distinct error sites, 68 of them in headers.
 
 |class|functions|bytes|with a body|
 |-|-|-|-|
