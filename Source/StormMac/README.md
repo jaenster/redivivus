@@ -17,7 +17,7 @@ The original folder names contain spaces. They are kept without them:
 |here|original|
 |-|-|
 |`Source/StormMac/`|`StormMac/Storm Mac/`|
-|`Source/StormMac/SOURCE/`|`Storm Mac/SOURCE/` (Storm proper: SBig.cpp, SBLT.CPP, SCMD.CPP, SFILE.CPP, SRegMac.mm, IOUnit/... - nothing reconstructed yet)|
+|`Source/StormMac/SOURCE/`|`Storm Mac/SOURCE/` (Storm proper: STORM.CPP, SBig.cpp, SBLT.CPP, SBMP.CPP, SCMD.CPP, SCODE.CPP, SCOMP.CPP, SERR.CPP, SEVT.CPP reconstructed; SFILE.CPP, SRegMac.mm, IOUnit/... not yet)|
 |`Source/StormMac/H/`|`Storm Mac/H/` (stpl.h)|
 |`Source/StormMac/Win32Mac/Source/Win32/`|`Storm Mac/Win32 Mac/Source/Win32/` (the Win32-on-Mac layer; Win32_utils.cpp, WinCompat.cpp)|
 
@@ -91,3 +91,22 @@ decides, the boundary is chosen as follows.
 |`SDRAW_VidDriver.cpp`|00036035|`SDrawDestroy`|
 
 Extensions are lowercase `.cpp` because the compare and coverage tools scan only that.
+||||||| parent of 5099e7ad (feat(mac): SCOMP, SERR and SEVT sources of the Mac Storm project)
+
+## Storm SOURCE, STORM.CPP through SEVT.CPP (1.14d 000095fc..00011fdb)
+
+File names keep the case of their `__FILE__` literals (`SBig.cpp`, `SBLT.CPP`, `SCMD.CPP`). Each
+file ends at its static initialiser (SCMD_InitStaticLists, SCODE_InitStaticLists,
+SCOMP_InitStatics, SERR_InitStatics, SEVT_InitStatics), which closes a translation unit, and
+the list-template instantiations before it belong to that file.
+
+|file|1.14d range|boundary decision|
+|-|-|-|
+|`STORM.CPP`|000095fc..00009d29|operators and STORM_Alloc carry its `__FILE__`; StormDestroy, the system options, the CRC32, the RSA key calls and the log header have no literal and sit between its last and SBig.cpp's first function|
+|`unknown_sha1.cpp`|00009d2e..0000a56e|the SHA-1 class is a unit of its own in the PPC Storm; no 1.14d literal names it|
+|`SBig.cpp`|0000a629..0000bf46|the exports in alphabetical order up to SBigNew's `__FILE__` (line 0x51e), then the BigBuffer routines and the array templates|
+|`SBLT.CPP`|0000c000|SBltDestroy only|
+|`SBMP.CPP`|0000c0ae..0000d43d|the row copy, the TGA helpers and the PCX decoder have no literal and are called from SBMP's functions only|
+|`SCMD.CPP`|0000d43e..0000e5cf|ends with SCMD_InitStaticLists|
+|`SCODE.CPP`|0000e610..0000eb41|ends with SCODE_InitStaticLists|
+|`SCOMP.CPP`, `SERR.CPP`, `SEVT.CPP`|0000eb42..00011f70+|each ends with its static initialiser|

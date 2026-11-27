@@ -204,8 +204,6 @@ void CryptRSA_Prepare(uint32_t** ppKey, const void* pModulus, uint32_t nModulusL
     SBigFromBinary(ppKey[1], pExponent, nExponentLen);
 }
 
-// 1.14d mac: 000099a0
-// The big number as bytes, the rest of the buffer zeroed.
 uint8_t* SSIGNATURE_RsaExportZeroPadded(uint32_t** ppBig, uint8_t* pOutBuf, uint32_t nBufLen);
 
 // 1.14d mac: 000098dc
@@ -222,6 +220,8 @@ void CryptRSA_Process(uint32_t** pKey, uint8_t* pData, uint32_t nSize) {
     SBigDel(pInput);
 }
 
+// 1.14d mac: 000099a0
+// The big number as bytes, the rest of the buffer zeroed.
 uint8_t* SSIGNATURE_RsaExportZeroPadded(uint32_t** ppBig, uint8_t* pOutBuf, uint32_t nBufLen) {
     uint32_t nWritten;
     SBigToBinaryBuffer(*ppBig, pOutBuf, nBufLen, &nWritten);
