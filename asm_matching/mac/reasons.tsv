@@ -257,10 +257,9 @@ addr	name	reason_class	detail
 0001e564	FPMessageBox	data-guess	ours string/global refs resolve to unknown [PIC ?] while orig uses s_szLogoMaskFiles offsets; switch lowered differently
 0001e94c	MAC_ConvertNewlinesToReturns	data-guess	only difference is two string refs: orig s_szLogoMaskFiles+1ccc/1cdc, ours unresolved [PIC ?]
 0001e9fb	MAC_OutputDebugStringF	data-guess	orig has lea s_szLogoMaskFiles+1cec and a byte store of 0 to ebp-0x11, ours has an unresolved [PIC ?] lea and omits that store
-0001eabd	MAC_GetMicroseconds64	wrong	orig returns the argument (mov eax,esi after the thunk call), ours returns the thunk's eax with no reload.
-0001eb3a	MAC_GetMicroseconds	wrong	orig stores 0 to two out-params (mov dword [R],0 twice) and tests s_nClockState against 1 with three jne; ours has no zero stores.
-0001eba1	MAC_GetMilliseconds	wrong	orig stores 0 to two out-params and has a cmp 1 state test; ours stores a result to a stack slot and lacks the zero stores.
-0001ec40	WIN32MAC_Initialize	semantic-guess	orig takes lea of struct+0x58; ours stores dwords directly to +0x58 and +0x5c; frame 0x16c vs 0x17c.
+0001eb3a	MAC_GetMicroseconds	sched	orig keeps the inner `if (state==0)` re-test (test cl,cl after test ecx,ecx) and branches 0 first; clang425 folds the re-test in ours
+0001eba1	MAC_GetMilliseconds	sched	same as MAC_GetMicroseconds, whose body is inlined here
+0001ec40	WIN32MAC_Initialize	stack-layout	5/62(orig) 66(ours): ours 'sub esp, 0x17c' orig 'sub esp, 0x16c'
 0001ed6c	Edit_WndProc	wrong	callee sets differ: orig-only GetStockObject, ours-only GetSystemMetrics; SetProp/RemoveProp/Priv_Alloc appear only on the orig side of the call lists.
 00020a74	Edit_On_EM_SETSEL	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 00020aff	Edit_Scroll	regalloc	orig keeps ecx in edi and adds to a stack slot; ours spills ecx to [ebp-0x6c] and reloads; calls identical.
@@ -274,42 +273,38 @@ addr	name	reason_class	detail
 00021443	Edit_TextFitsInClient	stack-layout	same instructions; frame size or local offsets differ
 000214f2	Edit_RestoreEditDataBackup	wrong	only literal difference: orig moves 0x12 where ours moves 0x11.
 0002160c	Edit_CopySelectionToClipboard	semantic-guess	orig has not R and a cmovl/cmovg pair; ours has two cmovle and stores to stack slots instead.
-0002190a	MsgWaitForMultipleObjects	wrong	orig tests a byte flag against 0 and writes 0/1 to it; ours writes a dword 1 and uses a 0xffffffff value orig lacks.
-00021ad7	CreateFile	semantic-guess	frame 0xcc vs 0xbc; orig stores 0x57/0xb7 to stack where ours keeps them in regs; ours has sbb and xor 0x12000003 that orig lacks.
+0002190a	MsgWaitForMultipleObjects	regalloc	6/132(orig) 137(ours): ours 'mov ebx, dword ptr [ebp + 0x14]' orig 'mov esi, dword ptr [ebp + 0x14]'
+00021ad7	CreateFile	stack-layout	5/271(orig) 267(ours): ours 'sub esp, 0xbc' orig 'sub esp, 0xcc'
 00021fc6	WriteFile	sched	same instructions in a different order
-000220ca	SetFilePointer	semantic-guess	same instructions except orig mov R,R versus ours jmp out; branch block order differs (cmp 2 vs cmp 1 path).
-00022222	DeleteFile	semantic-guess	frame 0xd0 vs 0xcc, ours saves ebx where orig saves edi; one je vs jne branch sense inverted.
-0002232a	GetFileAttributes	semantic-guess	orig extracts attribute bits with and 1 / and 0x10 / shl / shr and cmp offset start; ours uses and 0x11 and cmp 0x2e00.
-000226f8	CreateDirectory	semantic-guess	orig movsx's a byte before a store at -0x114; ours uses a 0xffd0 constant and -0x115 offset with no movsx.
-000227f8	FindFirstFile	semantic-guess	orig calls an unnamed ? where ours calls _FSpIterateDirectory; the dot-dot string stores are byte-equivalent.
-00022a33	FindFile_MatchCallback	semantic-guess	field compare operands swapped: orig cmp reg,[+0x8] with setge, ours cmp reg,[+0x4] with setle; equivalent.
-00022b6a	FindNextFile	semantic-guess	orig cmp reg,[+0x4] with jge; ours cmp [+0x4],reg with jle; same comparison with operands swapped.
-00022c53	FindClose	semantic-guess	orig reloads [esi+0x54] for the second use; ours caches the pointer in edi, one fewer load.
-00022ca8	GDI_NewHDC	semantic-guess	ours adds a jmp and a second g_hDCList read plus two reg moves; orig has none of these.
+000220ca	SetFilePointer	regalloc	30/85(orig) 85(ours): ours 'mov eax, dword ptr [ebp + 0x14]' orig 'mov ecx, dword ptr [ebp + 0x14]'
+00022222	DeleteFile	regalloc	2/65(orig) 67(ours): ours 'push ebx' orig 'push edi'
+0002232a	GetFileAttributes	sched	16/74(orig) 68(ours): ours 'jne #39' orig 'jne #61'
+000226f8	CreateDirectory	sched	16/72(orig) 70(ours): ours 'je #59' orig 'je #61'
+000227f8	FindFirstFile	unverified-ref	instructions identical; 1 reference the compare cannot verify
+00022a33	FindFile_MatchCallback	regalloc	6/103(orig) 104(ours): ours 'mov edi, dword ptr [ebp + 0x8]' orig 'mov ebx, dword ptr [ebp + 0x8]'
+00022b6a	FindNextFile	regalloc	11/74(orig) 74(ours): ours 'mov ecx, dword ptr [eax + 0x54]' orig 'mov edx, dword ptr [eax + 0x54]'
+00022c53	FindClose	regalloc	5/26(orig) 24(ours): ours 'mov esi, dword ptr [ebp + 0x8]' orig 'mov edi, dword ptr [ebp + 0x8]'
+00022ca8	GDI_NewHDC	sched	14/57(orig) 61(ours): ours 'je #52' orig 'je #50'
 00022e2d	GDI_DeleteHDC	regalloc	same instructions modulo register choice
 00022f56	DeleteObject	data-guess	switch jump-table displacement +0x1cc in orig vs +0x1c8 in ours, plus a movzx only in orig.
-00023150	GDI_InitStockObjects	wrong	constant 0x40 stored to g_hScratchPixMap-2 in ours but to g_rcScratchGWorld+4 in orig; the two word stores are swapped.
-00023821	GDI_PickMacFont	wrong	ours returns with ret 0x4 (callee pops args) where orig uses plain ret; table bases also differ (0x22e1 vs 0x2fe615).
-00023f14	CombineRgn	semantic-guess	orig dispatches with a jmp through a jump table; ours uses a compare chain; same callee set.
+00023150	GDI_InitStockObjects	stack-layout	5/286(orig) 289(ours): ours 'sub esp, 0x43c' orig 'sub esp, 0x42c'
+00023821	GDI_PickMacFont	regalloc	7/86(orig) 87(ours): ours 'pop ebx' orig 'pop edi'
+00023f14	CombineRgn	regalloc	switch with a jump table and per-case lock sequences now matches orig (161 vs 163 insns); register choice and frame size differ
 0002415c	GDI_IsRgnEmpty	regalloc	same instructions modulo register choice
-0002432c	ExtSelectClipRgn	wrong	orig calls CombineRgn twice (second with a mov R,[R+0x10] load); ours calls it once.
+0002432c	ExtSelectClipRgn	sched	9/55(orig) 53(ours): ours 'je #46' orig 'je #48'
 00024419	SelectObject	data-guess	jump-table displacement +0xa9 in orig vs +0xa6 in ours, with an alignment nop in orig.
-000244f0	GDI_GetObjectType	semantic-guess	orig uses a compare-and-branch chain; ours computes results with sete/cmove/shl bit tricks.
-00024665	ReleaseDC	semantic-guess	orig returns via branch and mov 1 / xor; ours produces a bool with setne/movzx and an extra test.
 00024694	SetTextColor	inline	orig calls GDI_ColorToPaletteIndex out-of-line; ours inlines the palette lookup (g_adwSystemPalette, cmp 0x13/0x9).
 00024733	GDI_ColorToPaletteIndex	data-guess	orig indexes a byte table at PIC string p with -0xeb/-0xec offsets; ours scans g_adwSystemPalette, so table and algorithm differ.
 000247a8	SetBkColor	inline	orig calls GDI_ColorToPaletteIndex out-of-line; ours inlines its g_adwSystemPalette lookup with cmp 0x13/0x9 range checks
 00024820	GetRegionData	regalloc	same calls and ops; orig compares reg with reg after a load, ours compares directly against memory (one mov vs cmp-mem difference)
 000249a9	GetSysColor	crt-idiom	orig assembles RGB from three byte loads with shl/or; ours does one dword load masked with 0xffffff
-00024a33	GDI_FillRect	semantic-guess	same callees; orig counts up with inc/jle while ours counts down with dec/js, plus differing byte and dword loads
-00024be3	GetCursorPos	wrong	same callee and args; orig returns the BOOL via movzx eax,al while ours omits the movzx after the hook call
-00024c17	SetCursorPos	wrong	orig calls ShowCursor via PIC import; ours calls through an indirect slot [eax+0x5c] and omits movzx after the call
-00024c4f	GetSystemMetrics	semantic-guess	same selection logic; orig uses branches and jumps, ours uses xor/test/cmove for the width case
-00024d6a	GDI_GetFontHeight	sched	same loads and adds; orig reads fields 0x34 then 0x30, ours 0x30 then 0x34
+00024a33	GDI_FillRect	sched	19/114(orig) 112(ours): ours 'je #105' orig 'je #107'
+00024c17	SetCursorPos	pic-ref	instructions identical; the compare reads [eax+0x5c] after the PIC pop in orig as a PIC reference (ShowCursor) although eax holds g_pHostHooks
+00024c4f	GetSystemMetrics	sched	6/15(orig) 15(ours): ours 'jne #10' orig 'jne #9'
 00024da7	GetTextMetrics	sched	same stores and calls reordered; field order swapped, cmove/cmovne with swapped 0x190/0x2bc constants is equivalent
-00024f03	GDI_DrawLine	wrong	orig looks up colour bytes from g_abSysColorEntry; ours passes constants 0x800000/0xffffff under a flag test and has a stack guard; call sequence differs
-00025356	GDI_ExpandMonoGWorldToBytes	semantic-guess	same callees; orig has dec/add loop with stores, ours has inc/je loop with lea and extra loads
-000255ed	GDI_AddDirtyRect	semantic-guess	same calls; orig jumps over the g_hDirtyRgn store, ours reloads g_hDirtyRgn into esi and stores it back
+00024f03	GDI_DrawLine	stack-layout	5/294(orig) 288(ours): ours 'sub esp, 0xac' orig 'sub esp, 0x9c'
+00025356	GDI_ExpandMonoGWorldToBytes	regalloc	7/231(orig) 236(ours): ours 'pop edi' orig 'pop esi'
+000255ed	GDI_AddDirtyRect	regalloc	29/37(orig) 37(ours): ours 'mov esi, dword ptr [PIC g_hDirtyRgn+0]' orig 'jmp #31'
 00025a77	AllocModuleHandle	inline	orig calls GetWin32HandlePtr out-of-line; ours inlines its deque index math (mul 0xba2e8ba3, imul 0xb8)
 00025ab0	HandleTableMutex::~HandleTableMutex[D1]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 00025c36	std::__1::deque<Win32HandleObject,std::__1::allocator<Win32HandleObject>>::__erase_to_end	eh	orig has __ZSt9terminatev landing path and MemFree; ours calls delete instead and has no terminate
@@ -317,7 +312,7 @@ addr	name	reason_class	detail
 00025e3a	std::__1::__deque_base<Win32HandleObject,std::__1::allocator<Win32HandleObject>>::end	regalloc	same compares and loads; orig loads [esi+0x8] into a reg then cmp reg,reg, ours cmp mem,reg
 00025e8c	std::__1::deque<Win32HandleObject,std::__1::allocator<Win32HandleObject>>::__add_back_capacity	eh	orig has terminate calls and MemAlloc/MemFree; ours calls new/delete; landing-pad set differs
 00026a42	std::__1::__split_buffer<Win32HandleObject*,std::__1::allocator<Win32HandleObject*>&>::~__split_buffer[D2]	eh	orig has __ZSt9terminatev and MemFree in the destructor; ours calls delete
-00026ade	std::__1::__split_buffer<Win32HandleObject*,std::__1::allocator<Win32HandleObject*>&>::__split_buffer[C2]	wrong	orig calls MemAlloc(size,0) for the buffer; ours calls operator new with no flags argument
+00026ade	std::__1::__split_buffer<Win32HandleObject*,std::__1::allocator<Win32HandleObject*>&>::__split_buffer[C2]	sched	13/32(orig) 31(ours): ours 'je #18' orig 'je #19'
 00026b36	std::__1::__split_buffer<Win32HandleObject*,std::__1::allocator<Win32HandleObject*>>::~__split_buffer[D2]	eh	orig has __ZSt9terminatev and MemFree in the destructor; ours calls delete
 00026b7c	std::__1::__deque_base<Win32HandleObject,std::__1::allocator<Win32HandleObject>>::~__deque_base[D2]	eh	orig has __ZSt9terminatev and MemFree in the destructor; ours calls delete
 00026bc2	std::__1::__deque_base<Win32HandleObject,std::__1::allocator<Win32HandleObject>>::clear	eh	orig has __ZSt9terminatev and MemFree in clear; ours calls delete
@@ -333,22 +328,21 @@ addr	name	reason_class	detail
 00028427	ListBox_FindString	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 000286f8	LISTBOX_DeleteString	semantic-guess	same calls; orig and ours use different branch shape and the -1 constant lives in a different register
 0002890b	LISTBOX_MoveSelection	semantic-guess	same SetSelection call; orig uses jne/jmp, ours uses je plus an extra local store
-000289ee	Mem_HandleAlloc	semantic-guess	same allocs and copy; ours calls _memcpy where orig calls SMemCopy and derives the 0x100 flag with sete/shl
-00028b01	Mem_Priv_FreeMasterPointer	semantic-guess	same MemFree call; ours uses cmov and extra locals where orig branches
-00028cab	VirtualAlloc	semantic-guess	same MemAlloc and fp_fatal; orig computes sete/or booleans, ours branches with jne
+000289ee	Mem_HandleAlloc	stack-layout	5/88(orig) 87(ours): ours 'sub esp, 0x1c' orig 'sub esp, 0xc'
+00028b01	Mem_Priv_FreeMasterPointer	regalloc	8/56(orig) 58(ours): ours 'mov dword ptr [ebp - 0x1c], eax' orig 'mov dword ptr [ebp - 0x18], eax'
+00028cab	VirtualAlloc	regalloc	2/48(orig) 44(ours): ours 'push edi' orig 'push ebx'
 00028e09	MSG_PeekQueuedMessage	regalloc	same compares and loads; orig loads [ebp+0x18] into edi then cmp reg,reg, ours cmp mem directly
 00028f1b	Msg_FillMouseMsgFromPoint	semantic-guess	same callees but WindowFromPoint is called first in orig and last in ours, with an extra store and a different branch target (jne #29 vs #28)
 0002934e	Wnd_FindWindowNeedingPaint	wrong	orig steps the list pointer by 0x54 and the next-link by 0x58, ours uses 0x50 and 0x5c (struct field offsets differ)
 000297df	MSG_EnqueueMessage	semantic-guess	orig uses cmovg where ours uses cmovle on the same tick/queue check and zeroes ecx early; select polarity unverified
 00029af1	CLIPBOARD_GetText	regalloc	orig loads [ebp+0xc] into edx before the cmp while ours compares the memory operand directly; same calls and ops
-00029b86	LoadLibraryEx	wrong	orig calls PATH_ToPosixPath and _dlopen, ours calls _DetachResource and _HLockHi instead
-00029e86	GetProcAddress	semantic-guess	same calls and count; orig uses cmove where ours branches (jne), and jump-table targets differ
+00029b86	LoadLibraryEx	regalloc	7/186(orig) 178(ours): ours 'pop ebx' orig 'pop ecx'
+00029e86	GetProcAddress	sched	20/87(orig) 87(ours): ours 'jmp #80' orig 'jmp #57'
 0002a1d0	GetCurrentDirectory	regalloc	orig loads [ebp+0xc] into edx before cmp 0x28 while ours compares memory directly; same calls and ops
 0002a9a9	GetTempFileName	pic-ref	same calls and code shape; string and global displacements differ (lea 0x2e371e vs 0x5d6, global 0x36b686 vs 0x140d)
 0002ab8e	GetCommandLine	pic-ref	same code; six lea of PIC string offsets resolve to s_szLogoMaskFiles+N in orig but are unnamed PIC refs in ours
-0002af55	GetLocaleInfo	wrong	orig tests the langid against 0x3 (je) where ours tests 0x7 before the 0x5 check; the constant differs
+0002af55	GetLocaleInfo	sched	36/86(orig) 90(ours): ours 'jne #88' orig 'jne #84'
 0002b05d	LOCALE_BuildLangIdFromMac	pic-ref	same calls; or-table lookup uses displacement 0x2f6fed in orig vs 0x696 in ours, with registers swapped
-0002b177	LOCALE_GetUserLocaleId	semantic-guess	orig tail-jumps to LOCALE_BuildLangIdFromMac, ours calls it then movzx ax and returns
 0002b180	LOCALE_GetDefaultLangId	pic-ref	identical except the table displacement in the or-lookup (0x2f6eca orig vs 0x5bd ours)
 0002b1fe	Rect_PinPtInRect	semantic-guess	rect-pin logic reproduced with different boolean structure (orig cmov/setg chain, ours branches and setl); same intent, not instruction-derived
 0002b2e1	IntersectRect	semantic-guess	ours zero-initialises the output rect at entry and uses cmove with a 0x1c frame where orig uses branches and 0xc
@@ -360,28 +354,28 @@ addr	name	reason_class	detail
 0002b88c	Text_CalculateLineBreaks	semantic-guess	same calls; select compares are inverted (cmove/cmovle vs cmovne/cmovg) and a frame slot moves from 0x30 to 0x34
 0002ba27	GetTextExtentExPointA	semantic-guess	same calls; orig tests a pointer with cmp/je/sete/test where ours uses or with memory; locals shift from 0x48 to 0x58
 0002bbc3	ExtTextOut	semantic-guess	same calls; orig spills three values to the stack and has an extra jmp, ours does add reg,reg in registers
-0002bdea	THREAD_Create	wrong	orig stores the 7th argument ([ebp+0x1c]) into field +0x58, ours stores literal 0
-0002bf09	CreateThread	wrong	orig passes an extra zero stack argument at [esp+0x14] to THREAD_Create, ours omits it
-0002bf49	_beginthreadex	wrong	orig passes an extra zero stack argument at [esp+0x14] to THREAD_Create, ours omits it
+0002bdea	THREAD_Create	inline	orig keeps the 8th parameter (constant 0 at both callers) un-propagated into static fastcc THREAD_Create; clang425 ipsccp folds it in ours
+0002bf09	CreateThread	inline	same cause as THREAD_Create: callee takes the constant as a real argument in orig
+0002bf49	_beginthreadex	inline	same cause as THREAD_Create: callee takes the constant as a real argument in orig
 0002c670	Win32MacMutex::~Win32MacMutex[D1]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0002c71b	PATH_IsMacPathToken	semantic-guess	same code; orig has separate pop ebp/ret return paths where ours shares the exit and clears eax early
-0002c935	FilepathToFSSpec	semantic-guess	same calls; ours tests a global byte (cmp byte [S],0; jne) and stores an extra guard copy that orig does not have
-0002cf23	HANDLE_RemoveFromList	semantic-guess	same calls; orig does address arithmetic with and -4 and lea x*5 that ours lacks, plus an extra spill
-0002d3ef	PATHCACHE_ResolveFSSpec	wrong	orig compares count against 2 (jle), ours against 3; ours also references a vtable and a __FILE__ assert string that orig lacks
+0002c71b	PATH_IsMacPathToken	regalloc	2/29(orig) 27(ours): ours 'mov ecx, dword ptr [ebp + 0x8]' orig 'mov eax, dword ptr [ebp + 0x8]'
+0002c935	FilepathToFSSpec	regalloc	9/287(orig) 286(ours): ours 'mov dword ptr [ebp - 0x2b8], eax' orig 'mov eax, dword ptr [eax]'
+0002cf23	HANDLE_RemoveFromList	regalloc	7/51(orig) 45(ours): ours 'pop ebx' orig 'pop esi'
+0002d3ef	PATHCACHE_ResolveFSSpec	regalloc	7/275(orig) 253(ours): ours 'pop eax' orig 'pop esi'
 0002d7c7	PATHCACHE_ScanDirectory	stack-layout	frame 0x2fc vs 0x2ec with local offsets shifted (ebp-0x2dc vs ebp-0x2c0); otherwise the same calls
 0002dbc6	TSGrowableArray<PathCacheDir>::~TSGrowableArray[D2]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0002dd06	TSHashTable<FileLocation,HASHKEY_STRI>::Ptr	semantic-guess	same hash calls; loop and branch shape differs (orig has three jmps, ours je and or to memory) with register swaps
+0002dd06	TSHashTable<FileLocation,HASHKEY_STRI>::Ptr	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 13/73(orig) 71(ours): ours 'mov ecx, dword ptr [esi + 0x1c]' orig 'mov edi, eax'
 0002df10	TSHashTable<FileLocation,HASHKEY_STRI>::InitializeTableSlots	regalloc	ours spills eax to [ebp-0x10] and keeps esi+ebx in edi, orig uses esi+ebx directly; same stores and calls
-0002df7c	TSHashTable<FileLocation,HASHKEY_STRI>::MonitorFullness	semantic-guess	same GrowListArray call; orig computes a boolean via and/sete/or, ours uses cmovne on the same fullness test
-0002e0d2	TSHashTable<FileLocation,HASHKEY_STRI>::GrowListArray	wrong	ours increments a global counter (inc dword [S]) and compares ebx with -1, orig increments only a register
-0002e296	TSGrowableArray<TSExplicitList<FileLocation,-572662307>>::SetCount	semantic-guess	same calls; size arithmetic written differently (add 4 then lea 2x-4 in orig vs lea 2x+4 then lea 2x in ours)
-0002e342	TSExplicitList<FileLocation,-572662307>::UnlinkAll	semantic-guess	same calls; orig loads *esi into a temp then adds, ours folds the load into add and the loop branch layout differs
-0002e400	TSGrowableArray<TSExplicitList<FileLocation,-572662307>>::ReallocData	semantic-guess	same callees; pointer math differs (lea [edi-4] vs lea [edi+4]) and min() uses cmova with swapped operands
+0002df7c	TSHashTable<FileLocation,HASHKEY_STRI>::MonitorFullness	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 6/77(orig) 69(ours): ours 'mov ecx, dword ptr [ebp + 0x8]' orig 'mov ebx, dword ptr [ebp + 0x8]'
+0002e0d2	TSHashTable<FileLocation,HASHKEY_STRI>::GrowListArray	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 8/147(orig) 151(ours): ours 'mov dword ptr [ebp - 0x24], ebx' orig 'mov dword ptr [ebp - 0x18], 0xdddddddd'
+0002e296	TSGrowableArray<TSExplicitList<FileLocation,-572662307>>::SetCount	sched	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 10/64(orig) 60(ours): ours 'jae #36' orig 'jae #38'
+0002e342	TSExplicitList<FileLocation,-572662307>::UnlinkAll	sched	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 13/33(orig) 32(ours): ours 'jmp #23' orig 'jmp #24'
+0002e400	TSGrowableArray<TSExplicitList<FileLocation,-572662307>>::ReallocData	sched	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 14/101(orig) 100(ours): ours 'jbe #28' orig 'jbe #29'
 0002e548	TSHashTable<FileLocation,HASHKEY_STRI>::InternalDelete	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0002e664	TSHashTable<FileLocation,HASHKEY_STRI>::InternalClear	semantic-guess	same callees except the indirect call through [eax] in orig vs [ecx] in ours; loop loads and index arithmetic are folded differently
+0002e664	TSHashTable<FileLocation,HASHKEY_STRI>::InternalClear	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 11/68(orig) 65(ours): ours 'mov ecx, dword ptr [esi + 0x18]' orig 'mov edx, dword ptr [esi + 0x18]'
 0002e720	TSGrowableArray<TSExplicitList<FileLocation,-572662307>>::~TSGrowableArray[D2]	eh	orig calls __ZSt9terminatev on a path that ours lacks; ours has an unresolved call target in its place
 0002e7a0	TSHashTable<FileLocation,HASHKEY_STRI>::~TSHashTable[D2]	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
-0002e916	TSGrowableArray<PathCacheDir>::ReallocData	semantic-guess	only difference is cmova vs cmovb with swapped mov operands computing min(edi,ebx); same result
+0002e916	TSGrowableArray<PathCacheDir>::ReallocData	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 55/101(orig) 101(ours): ours 'mov ecx, ebx' orig 'mov ecx, edi'
 0002ea70	_GLOBAL__I_a	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0002eae0	DefWindowProc	wrong	orig calls Wnd_GetTopParent, GetStockObject x2, EndPaint, GetClientRect; ours calls GetSystemMetrics x2, ReleaseDC, _strcpy instead and dispatch constants differ (0x202 vs 0x111 ordering)
 0002ef4a	Proc_ButtonWndProc	wrong	callee set differs: orig GetCapture, GetClientRect, EndPaint; ours ReleaseDC plus an extra SendMessage; frame 0xcc vs 0xbc; cmp constants 0x86/0xef vs 0x4/0xf0
@@ -419,40 +413,35 @@ addr	name	reason_class	detail
 00031874	Wnd_MarkOwnedWindows	semantic-guess	same recursive call; ours saves ebx, zeroes esi and uses a 0xc frame vs orig 0x10, with an extra jmp in orig
 000318bf	Wnd_InvalidateRectRecursive	crt-idiom	same callees; orig copies RECT fields with 8-byte movsd (xmm) while ours copies them dword by dword through GPRs
 00031a84	Win32VirtualKey_From_MacScanCode	semantic-guess	cmp 0x19/jbe and cmp 0x1a/jb are the same bound; orig loads the map byte with mov, ours with movzx; zero store scheduled differently
-00031b0d	NewEmptyStripRgn	wrong	orig tail-jumps to Rgn_NewStripRgn with 0 in ecx, ours makes a stack-arg call in a framed function; calling convention differs
-00031b18	Rgn_NewStripRgn	semantic-guess	same calls; orig tests hRegions with cmp on memory and keeps ecx in esi, ours loads hRegions into ecx and adds an extra jmp
-00031ce9	Rgn_SetStripRgnRect	semantic-guess	same ResizeStripRgn call; ours tests the subtraction sign with je/jns/js where orig uses jle on the sub results
-00031e3b	GetStripRgnRects	semantic-guess	no calls on either side; orig materialises booleans with setne/neg, ours uses cmovg/cmovl/not and a different test order
-00031f41	Rgn_ResizeStripRgn	wrong	ours lacks the signed rounding bias (sar 0x1f, shr 0x1d) that orig adds before masking, and uses different and/shl constants; differs for negative input
-00032025	Rgn_CompactStripRgn	semantic-guess	same hRegions slot fetch with +0x10/+0x18 offsets; ours reorders the empty-case branch and loads, same values
-000321d6	Rgn_CombineRgns	wrong	ours has an extra indirect call through [ebp+0xc] (4 callback calls vs 3 in orig)
-00032689	Rgn_UnionBandProc	semantic-guess	same AddRectToStripRgn calls; comparison operands swapped (jl vs jg) and the branch shape differs
-00032754	Rgn_IntersectStripRgn	semantic-guess	same CombineRgns call; ours inverts the NULL/equality tests (jne/je) into a different branch layout
-000327ca	Rgn_IntersectBandProc	semantic-guess	orig uses cmovge/cmovle for min/max, ours uses cmp+jg and a mov; same AddRectToStripRgn call
-000328fd	Rgn_SubtractBandProc	semantic-guess	same AddRectToStripRgn call; ours has extra stores and jg/jge/jne branches where orig uses cmovle
+00031b0d	NewEmptyStripRgn	inline	orig tail-calls (jmp) the static fastcc Rgn_NewStripRgn(0); ours keeps it non-static fastcall (a static one gets the constant 0 folded in) so no sibcall
+00031b18	Rgn_NewStripRgn	inline	orig keeps nCapacity as a real fastcc parameter (both callers pass 0); ours is explicit fastcall because a static copy gets the 0 folded; body then differs in register choice
+00031ce9	Rgn_SetStripRgnRect	regalloc	7/70(orig) 69(ours): ours 'pop ebx' orig 'pop edi'
+00031e3b	GetStripRgnRects	sched	orig keeps the (pRects!=0)&(hRgn!=0) as setne/and before the nMax test, hRgn stays tested in the inlined lock; ours folds it
+00031f41	Rgn_ResizeStripRgn	sched	one store: orig writes pNew (edi) into the handle slot on the allocation-failure path, ours stores the folded constant 0
+00032025	Rgn_CompactStripRgn	regalloc	2/22(orig) 24(ours): ours 'push esi' orig 'test ecx, ecx'
+000321d6	Rgn_CombineRgns	sched	callback call sites now match (3); merge/compact loops are 26 insns longer in ours and the register assignment differs from insn 8
+00032689	Rgn_UnionBandProc	regalloc	13/82(orig) 84(ours): ours 'xor ecx, ecx' orig 'xor eax, eax'
+00032754	Rgn_IntersectStripRgn	sched	10/49(orig) 49(ours): ours 'je #37' orig 'je #31'
+000327ca	Rgn_IntersectBandProc	regalloc	6/72(orig) 71(ours): ours 'mov edi, dword ptr [ebp + 0x14]' orig 'mov ebx, dword ptr [ebp + 0x14]'
+000328fd	Rgn_SubtractBandProc	sched	8/73(orig) 78(ours): ours 'je #72' orig 'je #67'
 000329b1	Rgn_DestroyAllRegions	regalloc	same instructions modulo register choice and PIC references
-00032a2d	Rgn_AddRectToStripRgn	wrong	orig calls Rgn_ResizeStripRgn twice, ours once; a call with side effects is missing
-00032b50	DirectDrawCreate	semantic-guess	orig tests each arg with cmp/jne then test; ours folds both into one or/jne; same condition
-00032b83	DirectSoundCreate	semantic-guess	same new and IDirectSound_Construct calls; ours folds the NULL tests into or/jne and selects the return via cmove
+00032a2d	Rgn_AddRectToStripRgn	regalloc	same operations; orig reloads nRects and spills the bounds temporaries (frame 0x2c), ours keeps them in registers
+00032b50	DirectDrawCreate	sched	orig keeps `lpGuid==0 && pUnkOuter==0` as two compare-and-branch; ours merges them into one or
+00032b83	DirectSoundCreate	sched	orig keeps the two null tests as separate branches and loads the error code first; ours merges them into one or
 00032bcd	DirectSound_SetMinVolumeDelay	stack-layout	same instructions; frame size or local offsets differ
-00032c68	IDirectSound_SndChannelCallback	semantic-guess	orig tests signature 0x5348 first, ours 0x4d48 first; the 0x2001/jae vs 0x2000/jbe pair is the same boundary with the branch inverted
+00032c68	IDirectSound_SndChannelCallback	regalloc	11/151(orig) 150(ours): ours 'cmp ax, 0x4d48' orig 'cmp ax, 0x5348'
 00032e78	IDirectSound_Destroy	eh	orig has two __ZSt9terminatev calls (landing pads) that ours lacks; orig also pushes ebx
 00032f64	IDirectSound_CreateSoundBuffer	eh	orig has __Unwind_Resume and four delete landing-pad calls that ours lacks
 000330c8	IDirectSoundBuffer_Release	eh	landing-pad tail differs (orig 1 insns, ours 0); body pic-ref: same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0003314e	IDirectSoundBuffer_Stop	regalloc	same calls; orig has two extra reg-to-stack stores (spill-like) while ours keeps the value in ecx instead of eax
-000332c6	IDirectSoundBuffer_Lock	semantic-guess	same LockMemFile2 call; orig clamps with jbe branches, ours with cmovbe pairs
+000332c6	IDirectSoundBuffer_Lock	regalloc	16/54(orig) 54(ours): ours 'mov eax, dword ptr [ebp + 0x10]' orig 'mov edi, dword ptr [ebp + 0x10]'
 00033344	IDirectSoundBuffer_Play	data-guess	"ours loads double literals from guessed label IKsPropertySet_Set+d/+15 where orig uses p""""; frame 0x4c vs 0x3c and word-store vs movsd pattern follow"
-00033632	IDirectSound_AcquireSoundChannel	wrong	ours passes args to GetFreeChannelFromPool in ecx/edx and [esp]; orig pushes all three on the stack, so argument passing differs
-000336ae	IDirectSoundBuffer_UpdatePanAndVolume	wrong	ours takes this from ecx while orig reads [ebp+8]; orig stores 0x2e as a word and ours as a dword; ours uses fld/fisttp where orig uses cvttss2si
-000337e4	IDirectSound_GetFreeChannelFromPool	wrong	ours reads its arguments from ecx/edx while orig reads [ebp+0xc] and [ebp+0x10]; parameter passing differs
-00033862	IDirectSound_ReleaseSoundChannel	wrong	ours reads the element pointer from ecx and the count from edx, orig loads them from [ebp+8]/[ebp+0xc]; argument passing differs
-00033912	IDirectSoundBuffer_SetPan	wrong	orig stores this to [esp] before calling UpdatePanAndVolume, ours passes it in ecx; calling convention mismatch
-0003395c	IDirectSoundBuffer_SetVolume	wrong	ours passes the this pointer to UpdatePanAndVolume in ecx while orig stores it to [esp]; calling convention mismatch
-00033a24	_stricmp	semantic-guess	same two tolower calls; ours uses cmp+jl twice where orig uses jl and jg once; same result
-00033a6f	_strnicmp	semantic-guess	same tolower calls and loop; compare written as cmp/jl with swapped operands instead of jg
-00033b7c	_itoa	semantic-guess	same strrev call; ours selects the digit with cmovl on constants 0x30/0x37, orig with a branch; abs value via swapped cmovl
-00033bd9	_ui64toa	semantic-guess	same umoddi3/udivdi3/strrev calls; frame 0x2c vs 0x1c and cmov vs branch digit select
-00033c5f	_ultoa	semantic-guess	same strrev and div; ours selects the digit with cmov, orig with a branch
+000336ae	IDirectSoundBuffer_UpdatePanAndVolume	sched	same operations; orig computes the second pow argument before scaling the left level, frame 0x5c vs 0x4c
+000337e4	IDirectSound_GetFreeChannelFromPool	sched	9/48(orig) 46(ours): ours 'jle #40' orig 'jle #42'
+00033a24	_stricmp	regalloc	13/32(orig) 33(ours): ours 'movsx ebx, al' orig 'inc esi'
+00033a6f	_strnicmp	regalloc	7/35(orig) 35(ours): ours 'mov edi, dword ptr [ebp + 0x8]' orig 'cmp esi, dword ptr [ebp + 0x10]'
+00033b7c	_itoa	regalloc	6/43(orig) 37(ours): ours 'mov ecx, dword ptr [ebp + 0x8]' orig 'mov eax, dword ptr [ebp + 0x8]'
+00033bd9	_ui64toa	stack-layout	5/51(orig) 50(ours): ours 'sub esp, 0x2c' orig 'sub esp, 0x1c'
+00033c5f	_ultoa	regalloc	6/36(orig) 31(ours): ours 'mov esi, dword ptr [ebp + 0x10]' orig 'mov edi, dword ptr [ebp + 0x10]'
 00033cef	GetFileTypeAndCreatorForPath	wrong	tag constants differ: orig ladder compares 0x4c4f46 and 0x54656d70 ('Temp'), ours 0x4c4f47 and 0x576d7071; the type tables differ
 00033f9a	GetApplicationInformation	semantic-guess	same calls; orig copies the GetProcessInformation result with mov si,ax before test and uses jne, ours tests ax directly with je/jmp
 0003411f	LaunchURL	stack-layout	buffers sit at ebp-0x154 in orig and ebp-0x110 in ours (frame 0x16c vs 0x170); orig calls __memmove_chk where ours calls memmove
@@ -473,9 +462,9 @@ addr	name	reason_class	detail
 00035f34	Dlg_HandleEditMenuCommand	wrong	ours calls _TEToScrap an extra time after _DialogCut and has one fewer _GetDialogKeyboardFocusItem call than orig
 00036035	SDrawDestroy	data-guess	orig stores byte to g_dwDriverPitch and g_dwDriverWidth, ours stores dword; orig calls Storm_ReturnTrue where ours calls SDRAW_AlwaysTrue
 000360c2	PathToFSSpecCreateDirs	crt-idiom	orig uses fortify _chk wrappers (___strncpy_chk, ___memcpy_chk) with object sizes 0x40/0xff, ours plain strncpy/memcpy; local buffer offset also differs
-0003645d	AllocateMemFile2	semantic-guess	same calls; ternary on the flag written inverted (cmovne with 0x500 first vs cmove with 0x100 first), same values
-00036580	FreeMemFile2	wrong	orig passes flags (([esi+0x98] & 4) << 8) to MemFree; ours passes constant 0
-0003661b	LockMemFile2	wrong	orig has a second FPMessageBox+ExitProcess error path with its own arguments; ours has only one
+0003645d	AllocateMemFile2	sched	14/77(orig) 76(ours): ours 'jle #69' orig 'jle #70'
+00036580	FreeMemFile2	sched	9/44(orig) 41(ours): ours 'je #33' orig 'je #36'
+0003661b	LockMemFile2	sched	10/97(orig) 92(ours): ours 'je #85' orig 'je #90'
 0003685e	MACDISPLAY_Init	wrong	orig writes [g_pHostHooks+0x1c..0x2c] from the args; ours reads g_pDisplayDriver+0x30 and writes a flag byte at +1 of a different struct
 00036ba1	MACDISPLAY_GetBounds	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 00036bf4	MACDISPLAY_SetPaletteEntries	pic-ref	same memmove; orig lea uses global base 0x3bdd68 plus offset, ours uses bare offset 0x7bd with no base symbol
@@ -483,26 +472,26 @@ addr	name	reason_class	detail
 00036d19	MACDISPLAY_SelectDriver	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 00036d5e	MACCURSOR_CallGuardProc	regalloc	same ops; orig loads the arg into cl then movzx ecx,cl, ours folds into one movzx ecx,byte; return block laid out differently
 00036ffe	MACDISPLAY_FindBestDisplayMode	pic-ref	orig leas string literal s_szLogoMaskFiles+1d8c, ours leas unresolved [PIC ?]; locals sit 8 bytes higher in ours and 0.0 stored as two dword writes
-0003a9a0	SRegLoadValue	semantic-guess	same tests of arg and *arg; orig loads byte into al then tests, ours uses cmp byte ptr directly
-0003abad	SRegSaveString	semantic-guess	same tests of arg and *arg; orig loads byte into al then tests, ours uses cmp byte ptr directly
+0003a9a0	SRegLoadValue	regalloc	null/empty checks now in orig order; orig loads the first character into al and tests it, ours fuses cmp byte
+0003abad	SRegSaveString	regalloc	null/empty checks now in orig order; orig loads the first character into al and tests it, ours fuses cmp byte
 0003ade0	SREG_LoadPrefsFile	regalloc	orig stores constants 0 and 1 straight to a stack slot; ours keeps the flag in a register with spill/reload and movzx/xor return
 0003afe5	SREG_FlushPrefsFiles	pic-ref	orig reads unresolved [PIC ?] globals where ours names g_szBattleNetPrefsFolder+8/18/28/38 and s_tRegistry; vtable ref differs; GetShared/GetUser calls reordered
 0003b53a	SREG_GetUserPrefsFolder	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
 0003b5ed	SREG_GetSharedPrefsFolder	pic-ref	same instructions; a PIC data reference or call target resolves to a different symbol/offset
-0003b786	SREG_WriteEscapedData	semantic-guess	same 7 fputc calls; orig compares char to 0x25 three times with a sete/or flag, ours uses a jne chain with mov 0x25
-0003b8c9	SREG_Destroy	semantic-guess	same calls; ours folds the (count==0)|(count&1) test into cmovne and drops orig's spilled copies; body is 22 insns shorter
+0003b786	SREG_WriteEscapedData	regalloc	9/101(orig) 93(ours): ours 'mov edi, edx' orig 'mov ebx, ecx'
+0003b8c9	SREG_Destroy	regalloc	loop structure now matches; register assignment and one spilled flag differ
 0003b98f	SREG_ReadEscapedData	eh	both have __Unwind_Resume landing pads; orig calls __ZSt9terminatev twice, ours calls unresolved '?' twice
-0003bbc4	TSHashTable<RegistryEntry,HASHKEY_STRI>::Ptr	semantic-guess	same SStrHashHT/SStrCmpI calls; ours spills a bool to stack and uses a different branch layout for the bucket walk
-0003bd30	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::Ptr	semantic-guess	same SStrHashHT/SStrCmpI calls; ours spills a bool to stack and uses a different branch layout for the bucket walk
+0003bbc4	TSHashTable<RegistryEntry,HASHKEY_STRI>::Ptr	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 13/73(orig) 71(ours): ours 'mov ecx, dword ptr [esi + 0x1c]' orig 'mov edi, eax'
+0003bd30	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::Ptr	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 13/73(orig) 71(ours): ours 'mov ecx, dword ptr [esi + 0x1c]' orig 'mov edi, eax'
 0003bdf6	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::InternalClear	regalloc	same loads of [esi+0x1c] and 12*i+8 bucket entry; bucket pointer held in different registers, indirect call through [eax] vs [ecx]
 0003beb2	TSExplicitList<RegistryFileEntry,-572662307>::UnlinkAll	regalloc	same loop and Unlink call; orig loads [esi] into ecx then add, ours folds add eax,[esi] into one instruction
 0003bf74	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::InternalClear	regalloc	same loads of [esi+0x1c] and 12*i+8 bucket entry; bucket pointer held in different registers, indirect call through [eax] vs [ecx]
 0003c030	TSExplicitList<WriteRegistryEntry,-572662307>::UnlinkAll	regalloc	same loop and Unlink call; orig loads [esi] into ecx then add, ours folds add eax,[esi] into one instruction
 0003c176	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::InitializeTableSlots	regalloc	Same calls and stores; ours keeps lea result in edi and spills eax to [ebp-0x10], orig recomputes esi+ebx-4 address.
-0003c1e2	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::MonitorFullness	semantic-guess	Prefix matches; orig builds the boolean with and/sete/movzx/or while ours uses cmovne, and a bucket load differs (lea+[+4] vs [+8] load).
-0003c338	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::GrowListArray	semantic-guess	Same calls; ours adds explicit cmp ebx,-1 with je and a memory-resident counter (inc [S]) where orig tests flags from inc.
+0003c1e2	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::MonitorFullness	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 6/77(orig) 69(ours): ours 'mov ecx, dword ptr [ebp + 0x8]' orig 'mov ebx, dword ptr [ebp + 0x8]'
+0003c338	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::GrowListArray	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 8/147(orig) 151(ours): ours 'mov dword ptr [ebp - 0x24], ebx' orig 'mov dword ptr [ebp - 0x18], 0xdddddddd'
 0003c4fc	WriteRegistryEntry::~WriteRegistryEntry[D2]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
-0003c57c	TSGrowableArray<TSExplicitList<WriteRegistryEntry,-572662307>>::SetCount	semantic-guess	Same calls; capacity arithmetic uses lea [R+R+4] in ours vs add/add/lea [R+R-4] in orig (-4 vs +4 bias).
+0003c57c	TSGrowableArray<TSExplicitList<WriteRegistryEntry,-572662307>>::SetCount	sched	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 10/64(orig) 60(ours): ours 'jae #36' orig 'jae #38'
 0003c69a	TSGrowableArray<TSExplicitList<WriteRegistryEntry,-572662307>>::ReallocData	regalloc	Same calls and arithmetic in different order; orig uses mov from [S] where ours folds it into add; one cmova/cmovb flip with swapped operands.
 0003c7e2	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::~TSHashTable[D2]	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
 0003c85a	TSHashTable<WriteRegistryEntry,HASHKEY_STRI>::InternalDelete	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
@@ -512,21 +501,21 @@ addr	name	reason_class	detail
 0003cc30	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::InternalDelete	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0003cd42	TSGrowableArray<TSExplicitList<RegistryFileEntry,-572662307>>::~TSGrowableArray[D2]	eh	Orig has a call to __ZSt9terminatev (noexcept dtor landing pad) that ours does not; ours calls an unnamed target instead.
 0003ced0	TSHashTable<RegistryEntry,HASHKEY_STRI>::~TSHashTable[D2]	unverified-ref	2 reference(s) only one side can resolve; every other instruction identical
-0003cf48	TSHashTable<RegistryEntry,HASHKEY_STRI>::InternalClear	semantic-guess	Same virtual call and unlink; bucket slot read is a direct indexed load in orig, lea then load in ours, and loop test shape differs.
+0003cf48	TSHashTable<RegistryEntry,HASHKEY_STRI>::InternalClear	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 11/68(orig) 65(ours): ours 'mov ecx, dword ptr [esi + 0x18]' orig 'mov edx, dword ptr [esi + 0x18]'
 0003d004	TSHashTable<RegistryEntry,HASHKEY_STRI>::InternalDelete	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
 0003d0da	TSGrowableArray<TSExplicitList<RegistryEntry,-572662307>>::~TSGrowableArray[D2]	eh	Orig has a call to __ZSt9terminatev (noexcept dtor landing pad) that ours does not; ours calls an unnamed target instead.
 0003d27e	TSExplicitList<RegistryEntry,-572662307>::UnlinkAll	regalloc	Same ops; orig loads [esi] into ecx then adds, ours folds the load into add eax,[esi].
-0003d2ca	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::Ptr	semantic-guess	Same SStrHashHT and SStrCmpI calls; probe loop branch structure is rebuilt (orig jmp chain, ours je and different reg use).
+0003d2ca	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::Ptr	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 13/73(orig) 71(ours): ours 'mov ecx, dword ptr [esi + 0x1c]' orig 'mov edi, eax'
 0003d40a	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::InitializeTableSlots	regalloc	Same calls and stores; ours keeps lea result in edi and spills eax to [ebp-0x10], orig recomputes address.
-0003d476	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::MonitorFullness	semantic-guess	Prefix matches; orig builds the boolean with and/sete/movzx/or while ours uses cmovne, and a bucket load differs.
-0003d54a	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::GrowListArray	semantic-guess	Same calls; ours adds explicit cmp ebx,-1 with je and a memory-resident counter where orig tests flags from inc.
-0003d70e	TSGrowableArray<TSExplicitList<RegistryFileEntry,-572662307>>::SetCount	semantic-guess	Same calls; capacity arithmetic uses lea [R+R+4] in ours vs add/add/lea [R+R-4] in orig (-4 vs +4 bias).
+0003d476	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::MonitorFullness	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 6/77(orig) 69(ours): ours 'mov ecx, dword ptr [ebp + 0x8]' orig 'mov ebx, dword ptr [ebp + 0x8]'
+0003d54a	TSHashTable<RegistryFileEntry,HASHKEY_STRI>::GrowListArray	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 8/147(orig) 151(ours): ours 'mov dword ptr [ebp - 0x24], ebx' orig 'mov dword ptr [ebp - 0x18], 0xdddddddd'
+0003d70e	TSGrowableArray<TSExplicitList<RegistryFileEntry,-572662307>>::SetCount	sched	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 10/64(orig) 60(ours): ours 'jae #36' orig 'jae #38'
 0003d82c	TSGrowableArray<TSExplicitList<RegistryFileEntry,-572662307>>::ReallocData	regalloc	Same calls and arithmetic in different order; orig mov from [S] where ours folds into add; cmova/cmovb flip with swapped operands.
 0003d9e8	TSGrowableArray<unsignedchar>::ReallocData	regalloc	Same min() over two unsigned values; orig cmova from ebx into ecx, ours cmovb from edx into ecx, operands swapped.
 0003db36	TSHashTable<RegistryEntry,HASHKEY_STRI>::InitializeTableSlots	regalloc	Same calls and stores; ours keeps lea result in edi and spills eax to [ebp-0x10], orig recomputes address.
-0003dba2	TSHashTable<RegistryEntry,HASHKEY_STRI>::MonitorFullness	semantic-guess	Prefix matches; orig builds the boolean with and/sete/movzx/or while ours uses cmovne, and a bucket load differs.
-0003dc76	TSHashTable<RegistryEntry,HASHKEY_STRI>::GrowListArray	semantic-guess	Same calls; ours adds explicit cmp ebx,-1 with je and a memory-resident counter where orig tests flags from inc.
-0003de3a	TSGrowableArray<TSExplicitList<RegistryEntry,-572662307>>::SetCount	semantic-guess	Same calls; capacity arithmetic uses lea [R+R+4] in ours vs add/add/lea [R+R-4] in orig (-4 vs +4 bias).
+0003dba2	TSHashTable<RegistryEntry,HASHKEY_STRI>::MonitorFullness	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 6/77(orig) 69(ours): ours 'mov ecx, dword ptr [ebp + 0x8]' orig 'mov ebx, dword ptr [ebp + 0x8]'
+0003dc76	TSHashTable<RegistryEntry,HASHKEY_STRI>::GrowListArray	regalloc	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 8/147(orig) 151(ours): ours 'mov dword ptr [ebp - 0x24], ebx' orig 'mov dword ptr [ebp - 0x18], 0xdddddddd'
+0003de3a	TSGrowableArray<TSExplicitList<RegistryEntry,-572662307>>::SetCount	sched	body is a template of the shared Source/StormMac/H/stpl.h (outside this set); 10/64(orig) 60(ours): ours 'jae #36' orig 'jae #38'
 0003df58	TSGrowableArray<TSExplicitList<RegistryEntry,-572662307>>::ReallocData	regalloc	Same calls and arithmetic in different order; orig mov from [S] where ours folds into add; cmova/cmovb flip with swapped operands.
 0003e0a0	_GLOBAL__I_a	pic-ref	Static init stores hit s_pSharedPrefsURL-offsets in orig but SREG_GetUserPrefsFolder-offsets in ours; atexit dtor and vtable addresses taken as lea fn in orig vs mov of &sym in ours.
 0003e294	StormMacRuntime::~StormMacRuntime[D1]	unverified-ref	1 reference(s) only one side can resolve; every other instruction identical
